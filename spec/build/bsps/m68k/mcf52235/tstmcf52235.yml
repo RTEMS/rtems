@@ -6,18 +6,13 @@ actions:
     cdtest: exclude
     fileio: exclude
     fsdosfsformat01: exclude
-    ftp01: exclude
     iostream: exclude
-    loopback: exclude
-    mghttpd01: exclude
     monitor02: exclude
     paranoia: exclude
-    pppd: exclude
     sp16: exclude
     sptimecounter02: exclude
     sptimecounter03: exclude
     syscall01: exclude
-    telnetd01: exclude
     tmcontext01: exclude
     tmfine01: exclude
     top: exclude

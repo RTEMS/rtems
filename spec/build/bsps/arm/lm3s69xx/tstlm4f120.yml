@@ -4,12 +4,8 @@ actions:
     block08: exclude
     capture: exclude
     fileio: exclude
-    ftp01: exclude
     iostream: exclude
-    loopback: exclude
-    mghttpd01: exclude
     ostream: exclude
-    pppd: exclude
     psxaio01: exclude
     psxaio02: exclude
     psxaio03: exclude
@@ -23,7 +19,6 @@ actions:
     spregionerr01: exclude
     sptimecounter02: exclude
     sptimecounter03: exclude
-    telnetd01: exclude
     tmcontext01: exclude
     top: exclude
     utf8proc01: exclude

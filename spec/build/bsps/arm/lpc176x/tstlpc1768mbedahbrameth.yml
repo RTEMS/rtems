@@ -19,7 +19,6 @@ actions:
     fsdosfswrite01: exclude
     fsrfsbitmap01: exclude
     fstat: exclude
-    ftp01: exclude
     ftrylockfile: exclude
     funlockfile: exclude
     getlogin: exclude
@@ -40,7 +39,6 @@ actions:
     iostream: exclude
     kill: exclude
     longjmp: exclude
-    loopback: exclude
     lseek: exclude
     lstat: exclude
     malloc: exclude
@@ -50,7 +48,6 @@ actions:
     mdosfsfsscandir01: exclude
     mdosfsfsstatvfs: exclude
     mdosfsfstime: exclude
-    mghttpd01: exclude
     mimfsfserror: exclude
     mimfsfslink: exclude
     mimfsfspatheval: exclude
@@ -67,7 +64,6 @@ actions:
     open: exclude
     pipe: exclude
     posixmemalign: exclude
-    pppd: exclude
     psxaio01: exclude
     psxaio02: exclude
     psxaio03: exclude
@@ -113,7 +109,6 @@ actions:
     sptimecounter03: exclude
     sptls02: exclude
     stat: exclude
-    telnetd01: exclude
     tm21: exclude
     tmcontext01: exclude
     tmfine01: exclude

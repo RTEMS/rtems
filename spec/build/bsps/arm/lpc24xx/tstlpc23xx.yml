@@ -13,9 +13,7 @@ actions:
     fsdosfswrite01: exclude
     fsrfsbitmap01: exclude
     fsrofs01: exclude
-    ftp01: exclude
     iostream: exclude
-    loopback: exclude
     math: exclude
     mathf: exclude
     mdosfsfserror: exclude
@@ -24,11 +22,9 @@ actions:
     mdosfsfsscandir01: exclude
     mdosfsfsstatvfs: exclude
     mdosfsfstime: exclude
-    mghttpd01: exclude
     monitor: exclude
     monitor02: exclude
     paranoia: exclude
-    pppd: exclude
     psxaio01: exclude
     psxaio02: exclude
     psxaio03: exclude
@@ -50,7 +46,6 @@ actions:
     sptls02: exclude
     syscall01: exclude
     tar01: exclude
-    telnetd01: exclude
     termios: exclude
     tmcontext01: exclude
     tmfine01: exclude

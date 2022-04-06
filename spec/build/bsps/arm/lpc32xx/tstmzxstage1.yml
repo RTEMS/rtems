@@ -3,11 +3,8 @@ actions:
 - set-test-state:
     fileio: exclude
     fsdosfssync01: exclude
-    ftp01: exclude
     iostream: exclude
-    mghttpd01: exclude
     monitor02: exclude
-    pppd: exclude
     rcxx01: exclude
     rtems: exclude
     sp71: exclude

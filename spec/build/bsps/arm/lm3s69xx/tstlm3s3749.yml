@@ -6,16 +6,12 @@ actions:
     fileio: exclude
     fsdosfsformat01: exclude
     fsrfsbitmap01: exclude
-    ftp01: exclude
     iostream: exclude
-    loopback: exclude
     math: exclude
     mdosfsfserror: exclude
     mdosfsfsrdwr: exclude
-    mghttpd01: exclude
     monitor02: exclude
     paranoia: exclude
-    pppd: exclude
     psxmsgq01: exclude
     rcxx01: exclude
     record01: exclude
@@ -24,7 +20,6 @@ actions:
     spcxx01: exclude
     sptls02: exclude
     syscall01: exclude
-    telnetd01: exclude
     ttest01: exclude
     utf8proc01: exclude
 build-type: option

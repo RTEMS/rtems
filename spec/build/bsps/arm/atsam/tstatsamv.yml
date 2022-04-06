@@ -4,7 +4,6 @@ actions:
     fileio: exclude
     flashdisk01: exclude
     fsdosfsname01: exclude
-    ftp01: exclude
     jffs2fserror: exclude
     jffs2fslink: exclude
     jffs2fspatheval: exclude
@@ -14,8 +13,6 @@ actions:
     jffs2fssymlink: exclude
     jffs2fstime: exclude
     linpack: exclude
-    mghttpd01: exclude
-    pppd: exclude
     psxconfig01: exclude
     record02: exclude
     sp16: exclude

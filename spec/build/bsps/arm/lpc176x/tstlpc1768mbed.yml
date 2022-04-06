@@ -4,11 +4,7 @@ actions:
     block08: exclude
     capture: exclude
     fileio: exclude
-    ftp01: exclude
     iostream: exclude
-    loopback: exclude
-    mghttpd01: exclude
-    pppd: exclude
     psxaio01: exclude
     psxaio02: exclude
     psxsignal07: exclude
@@ -19,7 +15,6 @@ actions:
     sp48: exclude
     sptimecounter02: exclude
     sptimecounter03: exclude
-    telnetd01: exclude
     tmcontext01: exclude
     tmfine01: exclude
     top: exclude
