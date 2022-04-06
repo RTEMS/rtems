@@ -13,5 +13,7 @@ install: []
 links:
 - role: build-dependency
   uid: grp
+- role: build-dependency
+  uid: ../../tstsmallmem
 source: []
 type: build
