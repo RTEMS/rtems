@@ -49,8 +49,10 @@
 #define shell_std_debug(...)
 #endif
 
+#define SHELL_MAGIC rtems_build_name('S', 'E', 'N', 'V')
+
 const rtems_shell_env_t rtems_global_shell_env = {
-  .magic         = rtems_build_name('S', 'E', 'N', 'V'),
+  .magic         = SHELL_MAGIC,
   .managed       = false,
   .devname       = CONSOLE_DEVICE_NAME,
   .taskname      = "RTSH",
@@ -1020,7 +1022,7 @@ bool rtems_shell_main_loop(
 
   rtems_shell_init_environment();
 
-  if (shell_env->magic != rtems_build_name('S', 'E', 'N', 'V')) {
+  if (shell_env->magic != SHELL_MAGIC) {
     rtems_error(0, "invalid shell environment passed to the main loop)");
     return false;
   }
@@ -1171,7 +1173,7 @@ static rtems_status_code rtems_shell_run (
     name = rtems_build_name(
       task_name[0], task_name[1], task_name[2], task_name[3]);
   else
-    name = rtems_build_name( 'S', 'E', 'N', 'V' );
+    name = SHELL_MAGIC;
 
   sc = rtems_task_create(
     name,
