@@ -66,8 +66,8 @@ void  SystemInit_ExtMemCtl(void)
   GPIOD->AFR[1]  = 0xCCCCCCCC;
   /* Configure PDx pins in Alternate function mode */  
   GPIOD->MODER   = 0xAAAAFAFA;
-  /* Configure PDx pins speed to VERY_HIGH */  
-  GPIOD->OSPEEDR = 0xFFFFFF0F;
+  /* Configure PDx pins speed to 100 MHz */  
+  GPIOD->OSPEEDR = 0xFFFF0F0F;
   /* Configure PDx pins Output type to push-pull */  
   GPIOD->OTYPER  = 0x00000000;
   /* Configure PDx pins in Pull-up */
@@ -78,8 +78,8 @@ void  SystemInit_ExtMemCtl(void)
   GPIOE->AFR[1]  = 0xCCCCCCCC;
   /* Configure PEx pins in Alternate function mode */ 
   GPIOE->MODER   = 0xAAAABEBA;
-  /* Configure PEx pins speed to VERY_HIGH */ 
-  GPIOE->OSPEEDR = 0xFFFFFFFF;
+  /* Configure PEx pins speed to 100 MHz */ 
+  GPIOE->OSPEEDR = 0xFFFFC3CF;
   /* Configure PEx pins Output type to push-pull */  
   GPIOE->OTYPER  = 0x00000000;
   /* Configure PEx pins in Pull-up */
@@ -90,7 +90,7 @@ void  SystemInit_ExtMemCtl(void)
   GPIOF->AFR[1]  = 0xCCCCC000;
   /* Configure PFx pins in Alternate function mode */   
   GPIOF->MODER   = 0xAABFFAAA;
-  /* Configure PFx pins speed to VERY_HIGH */ 
+  /* Configure PFx pins speed to 100 MHz */ 
   GPIOF->OSPEEDR = 0xFFC00FFF;
   /* Configure PFx pins Output type to push-pull */  
   GPIOF->OTYPER  = 0x00000000;
@@ -102,7 +102,7 @@ void  SystemInit_ExtMemCtl(void)
   GPIOG->AFR[1]  = 0xC0000C0C;
   /* Configure PGx pins in Alternate function mode */ 
   GPIOG->MODER   = 0xBFEEFAAA;
-  /* Configure PGx pins speed to VERY_HIGH */ 
+  /* Configure PGx pins speed to 100 MHz */ 
   GPIOG->OSPEEDR = 0xC0330FFF;
   /* Configure PGx pins Output type to push-pull */  
   GPIOG->OTYPER  = 0x00000000;
@@ -114,7 +114,7 @@ void  SystemInit_ExtMemCtl(void)
   GPIOH->AFR[1]  = 0xCCCCCCCC;
   /* Configure PHx pins in Alternate function mode */ 
   GPIOH->MODER   = 0xAAAAABFF;
-  /* Configure PHx pins speed to VERY_HIGH */ 
+  /* Configure PHx pins speed to 100 MHz */ 
   GPIOH->OSPEEDR = 0xFFFFFC00;
   /* Configure PHx pins Output type to push-pull */  
   GPIOH->OTYPER  = 0x00000000;
@@ -126,7 +126,7 @@ void  SystemInit_ExtMemCtl(void)
   GPIOI->AFR[1]  = 0x00000CC0;
   /* Configure PIx pins in Alternate function mode */ 
   GPIOI->MODER   = 0xFFEBAAAA;
-  /* Configure PIx pins speed to VERY_HIGH */ 
+  /* Configure PIx pins speed to 100 MHz */ 
   GPIOI->OSPEEDR = 0x003CFFFF;
   /* Configure PIx pins Output type to push-pull */  
   GPIOI->OTYPER  = 0x00000000;
@@ -164,7 +164,7 @@ void  SystemInit_ExtMemCtl(void)
     WriteRecoveryTime    = 2  -> 1     WWWW     TWR
     RPDelay              = 2  -> 1     PPPP     TRP
     RCDDelay             = 2  -> 1     CCCC     TRCD              */
-
+  #if 0
   FMC_Bank5_6_R->SDCR[0] = 0x00005965;  // 0000 0000 0000 0000 0101 1001 0110 0101  Bank 1
                                         //                      PPB KKWL LNMM RRCC
   FMC_Bank5_6_R->SDCR[1] = 0x00005965;  // 0000 0000 0000 0000 0101 1001 0110 0101  Bank 2  // CAS Latency = 2
@@ -174,6 +174,7 @@ void  SystemInit_ExtMemCtl(void)
                                         //      CCCC PPPP WWWW RRRR SSSS EEEE LLLL          // mit CAS Latency = 2 (s.o.)
   FMC_Bank5_6_R->SDTR[1] = 0x01010351;  // 0000 0001 0000 0001 0000 0011 0101 0001  Bank 2
                                         //      CCCC      WWWW      SSSS EEEE LLLL
+  #endif
   #if 0
   FMC_Bank5_6_R->SDTR[0] = 0x00206000;  // 0000 0000 0010 0000 0110 0000 0000 0000  Bank 1  // Original + 1 bei allen Werten,
                                         //      CCCC PPPP WWWW RRRR SSSS EEEE LLLL          // mit CAS Latency = 3 (s.o.)
@@ -187,6 +188,10 @@ void  SystemInit_ExtMemCtl(void)
   FMC_Bank5_6_R->SDTR[1] = 0x020306B1;  // 0000 0010 0000 0011 0000 0110 1011 0001  Bank 2
                                         //      CCCC      WWWW      SSSS EEEE LLLL
   #endif
+  FMC_Bank5_6_R->SDCR[0] = 0x00001800;
+  FMC_Bank5_6_R->SDCR[1] = 0x00000165;
+  FMC_Bank5_6_R->SDTR[0] = 0x00105000;
+  FMC_Bank5_6_R->SDTR[1] = 0x01010351;
   
   /* SDRAM initialization sequence */
 
