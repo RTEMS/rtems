@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
 #
