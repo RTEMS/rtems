@@ -1010,6 +1010,31 @@ static bool shell_main_loop(
   return result;
 }
 
+bool rtems_shell_run_main_loop(
+  rtems_shell_env_t *shell_env,
+  bool               interactive,
+  FILE              *line_editor_output
+)
+{
+  bool result;
+
+  if (shell_env->magic != SHELL_MAGIC) {
+    return false;
+  }
+
+  if (!rtems_shell_init_user_env()) {
+    return false;
+  }
+
+  if (!rtems_shell_set_shell_env(shell_env)) {
+    return false;
+  }
+
+  result = shell_main_loop(shell_env, interactive, line_editor_output);
+  rtems_shell_clear_shell_env();
+  return result;
+}
+
 bool rtems_shell_main_loop(
   rtems_shell_env_t *shell_env
 )

@@ -254,6 +254,31 @@ bool rtems_shell_main_loop(
   rtems_shell_env_t *rtems_shell_env
 );
 
+/**
+ * @brief Runs the shell main loop.
+ *
+ * The caller shall initialize the shell environment.  It is recommended that
+ * the caller duplicates the current shell environment using
+ * rtems_shell_dup_current_env() and then performs the required customization.
+ * Shell commands will use the stdin, stdout, and stderr file streams set up by
+ * the caller.
+ *
+ * @param interactive indicates if the shell main loop interfaces with an
+ *   interactive user.  For an interactive user, a welcome message using
+ *   "/etc/motd" is presented and command prompt is displayed.
+ *
+ * @param[in, out] line_editor_output is the optional line editor output file
+ *   stream.  It may be NULL, to disable the line editor output.
+ *
+ * @return Returns true, if no error occurred and a shell exit was requested,
+ *   otherwise false.
+ */
+bool rtems_shell_run_main_loop(
+  rtems_shell_env_t *shell_env,
+  bool               interactive,
+  FILE              *line_editor_output
+);
+
 extern const rtems_shell_env_t rtems_global_shell_env;
 
 rtems_shell_env_t *rtems_shell_get_current_env(void);
