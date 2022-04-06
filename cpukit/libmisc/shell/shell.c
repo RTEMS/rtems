@@ -200,6 +200,8 @@ static bool rtems_shell_set_shell_env(
   rtems_shell_env_key_handle *handle;
   int eno;
 
+  rtems_shell_init_environment();
+
   handle = malloc(sizeof(rtems_shell_env_key_handle));
   if (handle == NULL) {
     rtems_error(0, "no memory for shell env key handle)");
@@ -1019,8 +1021,6 @@ bool rtems_shell_main_loop(
   FILE           *stdinToClose = NULL;
   FILE           *stdoutToClose = NULL;
   FILE           *line_editor_output;
-
-  rtems_shell_init_environment();
 
   if (shell_env->magic != SHELL_MAGIC) {
     rtems_error(0, "invalid shell environment passed to the main loop)");
