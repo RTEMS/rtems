@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
  /*
   * Copyright 2011, Alin Rus <alin.codejunkie@gmail.com>
   *
