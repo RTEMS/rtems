@@ -329,7 +329,7 @@ SECTIONS {
 		bsp_section_rtemsstack_begin = .;
 		*(SORT_BY_ALIGNMENT (SORT_BY_NAME (.rtemsstack*)))
 		bsp_section_rtemsstack_end = .;
-	} > REGION_WORK AT > REGION_WORK
+	} > REGION_STACK AT > REGION_STACK
 	bsp_section_rtemsstack_size = bsp_section_rtemsstack_end - bsp_section_rtemsstack_begin;
 
 	.noinit (NOLOAD) : ALIGN_WITH_INPUT {
