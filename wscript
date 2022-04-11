@@ -248,6 +248,8 @@ class Item(object):
                         self.uid, value, e
                     )
                 )
+        if isinstance(value, list):
+            return [self.substitute(ctx, subvalue) for subvalue in value]
         return value
 
     def get(self, ctx, name):
@@ -272,10 +274,10 @@ class Item(object):
         if target is None:
             target = os.path.splitext(source)[0] + ".o"
         bld(
-            asflags=self.data["asflags"],
-            cppflags=self.data["cppflags"],
+            asflags=self.substitute(bld, self.data["asflags"]),
+            cppflags=self.substitute(bld, self.data["cppflags"]),
             features="asm_explicit_target asm c",
-            includes=bic.includes + self.data["includes"],
+            includes=bic.includes + self.substitute(bld, self.data["includes"]),
             source=[source],
             target=target,
         )
@@ -285,10 +287,10 @@ class Item(object):
         if target is None:
             target = os.path.splitext(source)[0] + ".o"
         bld(
-            cflags=self.data["cflags"],
-            cppflags=cppflags + self.data["cppflags"],
+            cflags=self.substitute(bld, self.data["cflags"]),
+            cppflags=cppflags + self.substitute(bld, self.data["cppflags"]),
             features="c",
-            includes=bic.includes + self.data["includes"],
+            includes=bic.includes + self.substitute(bld, self.data["includes"]),
             rule="${CC} ${CFLAGS} ${CPPFLAGS} ${DEFINES_ST:DEFINES} ${CPPPATH_ST:INCPATHS} -c ${SRC[0]} -o ${TGT}",
             source=[source] + deps,
             target=target,
@@ -299,10 +301,10 @@ class Item(object):
         if target is None:
             target = os.path.splitext(source)[0] + ".o"
         bld(
-            cppflags=cppflags + self.data["cppflags"],
-            cxxflags=self.data["cxxflags"],
+            cppflags=cppflags + self.substitute(bld, self.data["cppflags"]),
+            cxxflags=self.substitute(bld, self.data["cxxflags"]),
             features="cxx",
-            includes=bic.includes + self.data["includes"],
+            includes=bic.includes + self.substitute(bld, self.data["includes"]),
             rule="${CXX} ${CXXFLAGS} ${CPPFLAGS} ${DEFINES_ST:DEFINES} ${CPPPATH_ST:INCPATHS} -c ${SRC[0]} -o ${TGT}",
             source=[source] + deps,
             target=target,
@@ -574,11 +576,11 @@ class ObjectsItem(Item):
 
     def do_build(self, bld, bic):
         bld.objects(
-            asflags=self.data["cppflags"],
-            cflags=self.data["cflags"],
-            cppflags=self.data["cppflags"],
-            cxxflags=self.data["cxxflags"],
-            includes=bic.includes + self.data["includes"],
+            asflags=self.substitute(bld, self.data["cppflags"]),
+            cflags=self.substitute(bld, self.data["cflags"]),
+            cppflags=self.substitute(bld, self.data["cppflags"]),
+            cxxflags=self.substitute(bld, self.data["cxxflags"]),
+            includes=bic.includes + self.substitute(bld, self.data["includes"]),
             source=self.data["source"],
             target=self.uid,
         )
@@ -599,10 +601,10 @@ class BSPItem(Item):
 
     def do_build(self, bld, bic):
         bld(
-            cflags=self.data["cflags"],
-            cppflags=self.data["cppflags"],
+            cflags=self.substitute(bld, self.data["cflags"]),
+            cppflags=self.substitute(bld, self.data["cppflags"]),
             features="c cstlib",
-            includes=bic.includes + self.data["includes"],
+            includes=bic.includes + self.substitute(bld, self.data["includes"]),
             install_path="${BSP_LIBDIR}",
             source=self.data["source"],
             target="rtemsbsp",
@@ -620,11 +622,11 @@ class LibraryItem(Item):
 
     def do_build(self, bld, bic):
         bld(
-            cflags=self.data["cflags"],
-            cppflags=self.data["cppflags"],
-            cxxflags=self.data["cxxflags"],
+            cflags=self.substitute(bld, self.data["cflags"]),
+            cppflags=self.substitute(bld, self.data["cppflags"]),
+            cxxflags=self.substitute(bld, self.data["cxxflags"]),
             features="c cxx cstlib",
-            includes=bic.includes + self.data["includes"],
+            includes=bic.includes + self.substitute(bld, self.data["includes"]),
             install_path=self.data["install-path"],
             source=self.data["source"],
             target=self.get(bld, "target"),
@@ -648,13 +650,13 @@ class TestProgramItem(Item):
 
     def do_build(self, bld, bic):
         bld(
-            cflags=self.data["cflags"],
-            cppflags=bld.env[self.cppflags] + self.data["cppflags"],
-            cxxflags=self.data["cxxflags"],
+            cflags=self.substitute(bld, self.data["cflags"]),
+            cppflags=bld.env[self.cppflags] + self.substitute(bld, self.data["cppflags"]),
+            cxxflags=self.substitute(bld, self.data["cxxflags"]),
             features=self.data["features"],
-            includes=bic.includes + self.data["includes"],
+            includes=bic.includes + self.substitute(bld, self.data["includes"]),
             install_path=None,
-            ldflags=bic.ldflags + self.data["ldflags"],
+            ldflags=bic.ldflags + self.substitute(bld, self.data["ldflags"]),
             source=self.data["source"],
             start_files=True,
             stlib=self.data["stlib"],
