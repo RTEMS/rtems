@@ -73,6 +73,8 @@ const char rtems_test_name[] = "FatalStartOnNotOnlineProcessor";
 
 #define FATAL_SYSINIT_RUN ScoreSmpValFatalStartOnNotOnlineProcessor_Run
 
+#define CONFIGURE_IDLE_TASK_BODY _CPU_Thread_Idle_body
+
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 2
