@@ -127,7 +127,12 @@ RTEMS_SYSINIT_ITEM(
   { .fatal = TestSuiteFatalExtension }
 
 #if !defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE)
+
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+
+#if !defined(CONFIGURE_IDLE_TASK_BODY)
+
+#define CONFIGURE_IDLE_TASK_BODY IdleBody
 
 void *IdleBody( uintptr_t ignored )
 {
@@ -136,8 +141,9 @@ void *IdleBody( uintptr_t ignored )
   rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, 1 );
 }
 
-#define CONFIGURE_IDLE_TASK_BODY IdleBody
-#endif
+#endif /* CONFIGURE_IDLE_TASK_BODY */
+
+#endif /* CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION */
 
 #define CONFIGURE_INIT
 
