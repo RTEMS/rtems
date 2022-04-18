@@ -561,7 +561,11 @@ class StartFileItem(Item):
         super(StartFileItem, self).__init__(uid, data)
 
     def do_build(self, bld, bic):
-        tgt = self.asm(bld, bic, self.data["source"], self.get(bld, "target"))
+        source = self.data["source"]
+        if os.path.splitext(source[0])[1] == ".S":
+            tgt = self.asm(bld, bic, source, self.get(bld, "target"))
+        else:
+            tgt = self.cc(bld, bic, source, self.get(bld, "target"))
         node = bld.bldnode.make_node(tgt)
         try:
             bld.start_files.append(node)
