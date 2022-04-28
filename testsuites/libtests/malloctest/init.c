@@ -141,9 +141,13 @@ static void test_heap_default_init(void)
 
 static void test_free( void *addr )
 {
+  uint32_t failed_allocs;
+
   rtems_test_assert( _Heap_Free( &TestHeap, addr ) );
 
+  failed_allocs = TestHeap.stats.failed_allocs;
   _Heap_Protection_free_all_delayed_blocks( &TestHeap );
+  rtems_test_assert( failed_allocs == TestHeap.stats.failed_allocs );
 }
 
 static void test_heap_cases_1(void)

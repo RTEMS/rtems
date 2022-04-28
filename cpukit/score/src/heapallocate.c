@@ -93,6 +93,15 @@
 
     return search_again;
   }
+
+  void _Heap_Protection_free_all_delayed_blocks( Heap_Control *heap )
+  {
+    bool search_again;
+
+    do {
+      search_again = _Heap_Protection_free_delayed_blocks( heap, 0 );
+    } while ( search_again );
+  }
 #endif
 
 #ifdef RTEMS_HEAP_DEBUG
