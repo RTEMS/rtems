@@ -44,7 +44,7 @@ int  pppread(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args);
 int  pppwrite(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args);
 int  pppioctl(struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args);
 int  pppinput(int c, struct rtems_termios_tty *tty);
-int  pppstart(struct rtems_termios_tty *tp);
+int  pppstart(struct rtems_termios_tty *tp, int len);
 
 /*
  * Define the PPP line discipline.
@@ -116,7 +116,7 @@ int  pppinput(int c, struct rtems_termios_tty *tty)
   return 0;
 }
 
-int  pppstart(struct rtems_termios_tty *tp)
+int  pppstart(struct rtems_termios_tty *tp, int len)
 {
   puts( "pppstart called" );
   return 0;
