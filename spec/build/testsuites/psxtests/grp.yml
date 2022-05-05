@@ -15,6 +15,12 @@ ldflags:
 - -Wl,--wrap=putchar
 links:
 - role: build-dependency
+  uid: ../optbin2c
+- role: build-dependency
+  uid: ../optgzip
+- role: build-dependency
+  uid: ../optxz
+- role: build-dependency
   uid: libpsxhdrs
 - role: build-dependency
   uid: psx01

@@ -14,15 +14,15 @@ ldflags:
 - -Wl,--wrap=putchar
 links:
 - role: build-dependency
-  uid: optbin2c
+  uid: ../optbin2c
 - role: build-dependency
-  uid: optgzip
+  uid: ../optgzip
+- role: build-dependency
+  uid: ../optxz
 - role: build-dependency
   uid: optrtemsld
 - role: build-dependency
   uid: optrtemssyms
-- role: build-dependency
-  uid: optxz
 - role: build-dependency
   uid: block01
 - role: build-dependency
