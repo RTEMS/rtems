@@ -75,7 +75,7 @@ extern "C" {
   { \
     _Scheduler_priority_SMP_Initialize, \
     _Scheduler_default_Schedule, \
-    _Scheduler_priority_SMP_Yield, \
+    _Scheduler_priority_affinity_SMP_Yield, \
     _Scheduler_priority_affinity_SMP_Block, \
     _Scheduler_priority_affinity_SMP_Unblock, \
     _Scheduler_priority_affinity_SMP_Update_priority, \
@@ -124,6 +124,12 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
  * @param[in, out] node The scheduler node of the thread.
  */
 void _Scheduler_priority_affinity_SMP_Block(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  Scheduler_Node          *node
+);
+
+void _Scheduler_priority_affinity_SMP_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node

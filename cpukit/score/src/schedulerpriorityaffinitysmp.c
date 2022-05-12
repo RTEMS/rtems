@@ -619,6 +619,24 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
   );
 }
 
+void _Scheduler_priority_affinity_SMP_Yield(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  Scheduler_Node          *node
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  _Scheduler_SMP_Yield(
+    context,
+    thread,
+    node,
+    _Scheduler_priority_SMP_Extract_from_ready,
+    _Scheduler_priority_affinity_SMP_Enqueue,
+    _Scheduler_priority_affinity_SMP_Enqueue_scheduled
+  );
+}
+
 Status_Control _Scheduler_priority_affinity_SMP_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
