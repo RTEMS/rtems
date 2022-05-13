@@ -631,6 +631,7 @@ void _Scheduler_priority_affinity_SMP_Yield(
     context,
     thread,
     node,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_affinity_SMP_Enqueue,
     _Scheduler_priority_affinity_SMP_Enqueue_scheduled
