@@ -32,7 +32,6 @@
 #include <stm32h7/hal.h>
 
 const RCC_OscInitTypeDef stm32h7_config_oscillator = {
-#ifdef STM32H7B3xxQ
   .OscillatorType = RCC_OSCILLATORTYPE_HSE,
   .HSEState = RCC_HSE_ON,
   .HSIState = RCC_HSI_OFF,
@@ -47,23 +46,4 @@ const RCC_OscInitTypeDef stm32h7_config_oscillator = {
   .PLL.PLLQ = 2,
   .PLL.PLLVCOSEL = RCC_PLL1VCOWIDE,
   .PLL.PLLRGE = RCC_PLL1VCIRANGE_1,
-#else
-  .OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_HSE
-    | RCC_OSCILLATORTYPE_LSE | RCC_OSCILLATORTYPE_HSI48,
-  .HSEState = RCC_HSE_ON,
-  .LSEState = RCC_LSE_ON,
-  .HSIState = RCC_HSI_DIV1,
-  .HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT,
-  .HSI48State = RCC_HSI48_ON,
-  .PLL.PLLState = RCC_PLL_ON,
-  .PLL.PLLSource = RCC_PLLSOURCE_HSE,
-  .PLL.PLLM = 5,
-  .PLL.PLLN = 192,
-  .PLL.PLLP = 2,
-  .PLL.PLLQ = 12,
-  .PLL.PLLR = 2,
-  .PLL.PLLRGE = RCC_PLL1VCIRANGE_2,
-  .PLL.PLLVCOSEL = RCC_PLL1VCOWIDE,
-  .PLL.PLLFRACN = 0
-#endif
 };
