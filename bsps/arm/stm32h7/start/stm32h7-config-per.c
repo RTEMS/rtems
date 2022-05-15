@@ -32,22 +32,6 @@
 #include <stm32h7/hal.h>
 
 const RCC_PeriphCLKInitTypeDef stm32h7_config_peripheral_clocks = {
-#ifdef STM32H7B3xxQ
-  /* for stm32h7b3i-dk BSP we provide only minimalistic peripheral
-     configuration just to make available U(S)ARTs working */
-  .PeriphClockSelection = RCC_PERIPHCLK_USART3
-    | RCC_PERIPHCLK_USART1,
-  .PLL2.PLL2M = 24,
-  .PLL2.PLL2N = 200,
-  .PLL2.PLL2P = 0,
-  .PLL2.PLL2Q = 2,
-  .PLL2.PLL2R = 0,
-  .PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2,
-  .PLL2.PLL2VCOSEL = RCC_PLL2VCOMEDIUM,
-  .PLL2.PLL2FRACN = 0,
-  .Usart234578ClockSelection = RCC_USART234578CLKSOURCE_D2PCLK1,
-  .Usart16ClockSelection = RCC_USART16CLKSOURCE_D2PCLK2,
-#else
   .PeriphClockSelection = RCC_PERIPHCLK_RTC | RCC_PERIPHCLK_USART3
     | RCC_PERIPHCLK_FDCAN | RCC_PERIPHCLK_USART1 | RCC_PERIPHCLK_I2C1
     | RCC_PERIPHCLK_USB | RCC_PERIPHCLK_FMC | RCC_PERIPHCLK_RNG,
@@ -75,5 +59,4 @@ const RCC_PeriphCLKInitTypeDef stm32h7_config_peripheral_clocks = {
   .UsbClockSelection = RCC_USBCLKSOURCE_PLL3,
   .RTCClockSelection = RCC_RTCCLKSOURCE_LSE,
   .RngClockSelection = RCC_RNGCLKSOURCE_HSI48
-#endif
 };

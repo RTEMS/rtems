@@ -37,11 +37,7 @@ const RCC_ClkInitTypeDef stm32h7_config_clocks = {
     | RCC_CLOCKTYPE_D3PCLK1 | RCC_CLOCKTYPE_D1PCLK1,
   .SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK,
   .SYSCLKDivider = RCC_SYSCLK_DIV1,
-#ifdef STM32H7B3xxQ
-  .AHBCLKDivider = RCC_HCLK_DIV1,
-#else
   .AHBCLKDivider = RCC_HCLK_DIV2,
-#endif
   .APB3CLKDivider = RCC_APB3_DIV2,
   .APB1CLKDivider = RCC_APB1_DIV2,
   .APB2CLKDivider = RCC_APB2_DIV2,
