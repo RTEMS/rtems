@@ -14,9 +14,9 @@ links:
 - role: build-dependency
   uid: grp
 source:
-- bsps/arm/stm32h7/start/stm32h7-config-clk.c
-- bsps/arm/stm32h7/start/stm32h7-config-osc.c
-- bsps/arm/stm32h7/start/stm32h7-config-per.c
-- bsps/arm/stm32h7/start/system_stm32h7xx.c
-- bsps/arm/stm32h7/start/ext-mem-ctl.c
+- bsps/arm/stm32h7/boards/stm/stm32h743i-eval/stm32h7-config-clk.c
+- bsps/arm/stm32h7/boards/stm/stm32h743i-eval/stm32h7-config-osc.c
+- bsps/arm/stm32h7/boards/stm/stm32h743i-eval/stm32h7-config-per.c
+- bsps/arm/stm32h7/boards/stm/stm32h743i-eval/system_stm32h7xx.c
+- bsps/arm/stm32h7/boards/stm/stm32h743i-eval/ext-mem-ctl.c
 type: build
