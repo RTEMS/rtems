@@ -3,7 +3,10 @@ actions:
 - env-assign: null
 build-type: option
 default: 0
-default-by-variant: []
+default-by-variant:
+- value: 33554432
+  variants:
+  - arm/stm32h757i-eval
 enabled-by: true
 format: '{:#010x}'
 links: []
