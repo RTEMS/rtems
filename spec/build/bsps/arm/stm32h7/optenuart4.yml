@@ -3,7 +3,10 @@ actions:
 - define-condition: null
 build-type: option
 default: true
-default-by-variant: []
+default-by-variant:
+- value: false
+  variants:
+  - arm/stm32h757i-eval
 enabled-by: true
 format: '{}'
 links: []
