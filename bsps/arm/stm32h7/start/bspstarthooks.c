@@ -102,6 +102,7 @@ void bsp_start_hook_0(void)
     SystemInit_ExtMemCtl();
   }
 
+#if __CORTEX_M == 0x07U
   if ((SCB->CCR & SCB_CCR_IC_Msk) == 0) {
     SCB_EnableICache();
   }
@@ -111,12 +112,15 @@ void bsp_start_hook_0(void)
   }
 
   _ARMV7M_MPU_Setup(stm32h7_config_mpu_region, stm32h7_config_mpu_region_count);
+#endif
 }
 
 void bsp_start_hook_1(void)
 {
   bsp_start_copy_sections_compact();
+#if __CORTEX_M == 0x07U
   SCB_CleanDCache();
   SCB_InvalidateICache();
+#endif
   bsp_start_clear_bss();
 }
