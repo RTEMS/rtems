@@ -29,6 +29,13 @@
 #define LIBBSP_ARM_STM32H7_CHIP_H
 
 #include <stm32h7xx.h>
+#if defined(CORE_CM7) || defined(BOOT_CORE_DEFINE_NOT_NEEDED)
+/* M7 is a default core of the H7 family */
 #include <core_cm7.h>
+#elif defined(CORE_CM4)
+#include <core_cm4.h>
+#else
+#error "Boot core definition missing!"
+#endif
 
 #endif /* LIBBSP_ARM_STM32H7_CHIP_H */
