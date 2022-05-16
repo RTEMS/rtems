@@ -13,8 +13,9 @@ format: '{}'
 links: []
 name: STM32H7_DEFAULT_LINKCMDS
 description: |
-  The default linker command file.  Must be either linkcmds.flash or
-  linkcmds.sdram.
+  The default linker command file.  Must be either linkcmds.flash,
+  linkcmds.sdram, linkcmds.sram, linkcmds.sram_sdram
+  or linkcmds.flash_sdram
 type: build
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:

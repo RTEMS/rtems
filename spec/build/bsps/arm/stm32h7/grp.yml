@@ -118,6 +118,12 @@ links:
 - role: build-dependency
   uid: linkcmdssdram
 - role: build-dependency
+  uid: linkcmdssram
+- role: build-dependency
+  uid: linkcmdssramsdram
+- role: build-dependency
+  uid: linkcmdsflashsdram
+- role: build-dependency
   uid: ../../bspopts
 type: build
 use-after: []

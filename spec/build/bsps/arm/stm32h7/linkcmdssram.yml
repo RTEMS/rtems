@@ -1,0 +1,49 @@
+build-type: script
+do-build: |
+  bld.install_as("${BSP_LIBDIR}/linkcmds.sram", "linkcmds.sram")
+do-configure: |
+  content = """INCLUDE linkcmds.memory
+
+  REGION_ALIAS ("REGION_START", SRAM_AXI);
+  REGION_ALIAS ("REGION_VECTOR", SRAM_AXI);
+  REGION_ALIAS ("REGION_TEXT", SRAM_AXI);
+  REGION_ALIAS ("REGION_TEXT_LOAD", SRAM_AXI);
+  REGION_ALIAS ("REGION_RODATA", SRAM_AXI);
+  REGION_ALIAS ("REGION_RODATA_LOAD", SRAM_AXI);
+  REGION_ALIAS ("REGION_DATA", SRAM_AXI);
+  REGION_ALIAS ("REGION_DATA_LOAD", SRAM_AXI);
+  REGION_ALIAS ("REGION_FAST_TEXT", ITCM);
+  REGION_ALIAS ("REGION_FAST_TEXT_LOAD", ITCM);
+  REGION_ALIAS ("REGION_FAST_DATA", DTCM);
+  REGION_ALIAS ("REGION_FAST_DATA_LOAD", DTCM);
+  REGION_ALIAS ("REGION_BSS", SRAM_AXI);
+  REGION_ALIAS ("REGION_WORK", SRAM_AXI);
+  REGION_ALIAS ("REGION_STACK", SRAM_AXI);
+  REGION_ALIAS ("REGION_NOCACHE", SRAM_1);
+  REGION_ALIAS ("REGION_NOCACHE_LOAD", SRAM_AXI);
+
+  bsp_vector_table_in_start_section = 1;
+  """
+
+  if conf.env.STM32H7_ENABLE_MPU_ALIGNMENT:
+      content += """
+  bsp_align_text_and_rodata_end_to_power_of_2 = 1;
+  """
+
+  content += """
+  INCLUDE linkcmds.armv7m
+  """
+  f = conf.bldnode.make_node(
+      conf.env.VARIANT + "/linkcmds.sram"
+  )
+  f.parent.mkdir()
+  f.write(content)
+  conf.env.append_value("cfg_files", f.abspath())
+enabled-by: true
+links: []
+prepare-build: null
+prepare-configure: null
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
