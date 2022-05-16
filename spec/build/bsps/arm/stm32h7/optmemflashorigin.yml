@@ -2,18 +2,17 @@ actions:
 - get-integer: null
 - env-assign: null
 build-type: option
-default: 0x200000
+default: 0x8000000
 default-by-variant:
-default-by-variant:
-- value: 0x100000
+- value: 0x8100000
   variants:
   - arm/stm32h757i-eval-m4
 enabled-by: true
 format: '{:#010x}'
 links: []
-name: STM32H7_MEMORY_FLASH_SIZE
+name: STM32H7_MEMORY_FLASH_ORIGIN
 description: |
-  Size of the internal flash in bytes.
+  Origin address of the internal flash.
 type: build
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:

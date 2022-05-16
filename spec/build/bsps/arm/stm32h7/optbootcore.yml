@@ -11,6 +11,9 @@ default-by-variant:
 - value: CORE_CM7
   variants:
   - arm/stm32h757i-eval
+- value: CORE_CM4
+  variants:
+  - arm/stm32h757i-eval-m4
 enabled-by: true
 format: '{}'
 links: []

@@ -8,7 +8,14 @@ default:
 - -mcpu=cortex-m7
 - -mfpu=fpv5-d16
 - -mfloat-abi=hard
-default-by-variant: []
+default-by-variant:
+- value:
+  - -mthumb
+  - -mcpu=cortex-m4
+  - -mfpu=fpv4-sp-d16
+  - -mfloat-abi=hard
+  variants:
+  - arm/stm32h757i-eval-m4
 enabled-by: true
 links: []
 name: ABI_FLAGS
