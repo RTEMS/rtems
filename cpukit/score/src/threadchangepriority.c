@@ -135,11 +135,15 @@ static void _Thread_Priority_do_perform_actions(
   priority_aggregation = _Priority_Actions_move( &queue_context->Priority.Actions );
 
   do {
+#if defined(RTEMS_SMP)
     Priority_Aggregation *next_aggregation;
+#endif
     Priority_Node        *priority_action_node;
     Priority_Action_type  priority_action_type;
 
+#if defined(RTEMS_SMP)
     next_aggregation = _Priority_Get_next_action( priority_aggregation );
+#endif
 
     priority_action_node = priority_aggregation->Action.node;
     priority_action_type = priority_aggregation->Action.type;
@@ -198,8 +202,12 @@ static void _Thread_Priority_do_perform_actions(
         break;
     }
 
+#if defined(RTEMS_SMP)
     priority_aggregation = next_aggregation;
-  } while ( _Priority_Actions_is_valid( priority_aggregation ) );
+  } while ( priority_aggregation != NULL );
+#else
+  } while ( false );
+#endif
 
   if ( !_Priority_Actions_is_empty( &queue_context->Priority.Actions ) ) {
     _Thread_queue_Context_add_priority_update( queue_context, the_thread );

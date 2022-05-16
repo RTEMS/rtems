@@ -404,8 +404,12 @@ static void _Thread_queue_Priority_priority_actions(
         break;
     }
 
+#if defined(RTEMS_SMP)
     priority_aggregation = _Priority_Get_next_action( priority_aggregation );
-  } while ( _Priority_Actions_is_valid( priority_aggregation ) );
+  } while ( priority_aggregation != NULL );
+#else
+  } while ( false );
+#endif
 }
 
 static void _Thread_queue_Priority_do_initialize(
@@ -734,14 +738,18 @@ static void _Thread_queue_Priority_inherit_priority_actions(
   priority_aggregation = _Priority_Actions_move( priority_actions );
 
   do {
+#if defined(RTEMS_SMP)
     Priority_Aggregation        *next_aggregation;
+#endif
     Scheduler_Node              *scheduler_node;
     size_t                       scheduler_index;
     Thread_queue_Priority_queue *priority_queue;
     Scheduler_Node              *scheduler_node_of_owner;
     Priority_Action_type         priority_action_type;
 
+#if defined(RTEMS_SMP)
     next_aggregation = _Priority_Get_next_action( priority_aggregation );
+#endif
 
     scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY( priority_aggregation );
     scheduler_index = _Thread_queue_Scheduler_index( scheduler_node );
@@ -797,8 +805,12 @@ static void _Thread_queue_Priority_inherit_priority_actions(
         break;
     }
 
+#if defined(RTEMS_SMP)
     priority_aggregation = next_aggregation;
-  } while ( _Priority_Actions_is_valid( priority_aggregation ) );
+  } while ( priority_aggregation != NULL );
+#else
+  } while ( false );
+#endif
 }
 
 static void _Thread_queue_Priority_inherit_do_initialize(

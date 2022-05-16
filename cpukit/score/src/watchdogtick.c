@@ -83,9 +83,13 @@ void _Watchdog_Tick( Per_CPU_Control *cpu )
   Thread_Control                     *executing;
   const Thread_CPU_budget_operations *cpu_budget_operations;
 
+#ifdef RTEMS_SMP
   if ( _Per_CPU_Is_boot_processor( cpu ) ) {
+#endif
     ++_Watchdog_Ticks_since_boot;
+#ifdef RTEMS_SMP
   }
+#endif
 
   _ISR_lock_ISR_disable_and_acquire( &cpu->Watchdog.Lock, &lock_context );
 
