@@ -45,6 +45,13 @@ const ARMV7M_MPU_Region_config stm32h7_config_mpu_region [] = {
         | ARMV7M_MPU_RASR_TEX(0x1) | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_B
         | ARMV7M_MPU_RASR_ENABLE,
     }, {
+      .begin = stm32h7_memory_sdram_2_begin,
+      .end = stm32h7_memory_sdram_2_end,
+      .rasr = ARMV7M_MPU_RASR_XN
+        | ARMV7M_MPU_RASR_AP(0x3)
+        | ARMV7M_MPU_RASR_TEX(0x1) | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_B
+        | ARMV7M_MPU_RASR_ENABLE,
+    }, {
       .begin = bsp_section_start_begin,
       .end = bsp_section_text_end,
       .rasr = ARMV7M_MPU_RASR_AP(0x5)
