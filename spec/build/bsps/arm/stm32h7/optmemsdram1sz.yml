@@ -8,6 +8,7 @@ default-by-variant:
   variants:
   - arm/stm32h7b3i-dk
   - arm/stm32h757i-eval
+  - arm/stm32h757i-eval-m4
 enabled-by: true
 format: '{:#010x}'
 links: []

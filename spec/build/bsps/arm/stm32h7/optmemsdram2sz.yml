@@ -7,6 +7,7 @@ default-by-variant:
 - value: 33554432
   variants:
   - arm/stm32h757i-eval
+  - arm/stm32h757i-eval-m4
 enabled-by: true
 format: '{:#010x}'
 links: []
