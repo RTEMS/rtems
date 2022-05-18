@@ -30,3 +30,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
+#if !defined(_SYS_CPUSET_H_) || !defined(_KERNEL)
+#error "must be included via <sys/cpuset.h> in kernel space"
+#endif

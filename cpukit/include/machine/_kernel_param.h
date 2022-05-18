@@ -36,6 +36,10 @@
 #include <sys/time.h>
 #include <sys/priority.h>
 
+#if !defined(_SYS_PARAM_H_) || !defined(_KERNEL)
+#error "must be included via <sys/param.h> in kernel space"
+#endif
+
 #ifndef FALSE
 #define	FALSE	0
 #endif
