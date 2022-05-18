@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
@@ -9,7 +11,7 @@
  */
 
 /*
- * Copyright (C) 2012 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2012 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
