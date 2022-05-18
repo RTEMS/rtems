@@ -1,5 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @brief This header file provides type definitions for the kernel space
+ *   (_KERNEL is defined before including <sys/types.h>).
+ */
+
 /*
  * Copyright (C) 2016 embedded brains GmbH
  *

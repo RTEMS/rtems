@@ -32,6 +32,13 @@
  * $FreeBSD: head/sys/sys/uio.h 331621 2018-03-27 15:20:03Z brooks $
  */
 
+/**
+ * @file
+ *
+ * @brief This header file provides device driver I/O definitions for the
+ *   kernel space (_KERNEL is defined before including <sys/uio.h>).
+ */
+
 #if !defined(_SYS_UIO_H_) || !defined(_KERNEL)
 #error "must be included via <sys/uio.h> in kernel space"
 #endif

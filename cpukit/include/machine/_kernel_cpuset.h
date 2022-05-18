@@ -1,9 +1,10 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief
+ * @brief This header file provides CPU set definitions for the kernel space
+ *   (_KERNEL is defined before including <sys/cpuset.h>).
  */
 
 /*

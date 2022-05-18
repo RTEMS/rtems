@@ -34,6 +34,13 @@
  * $FreeBSD$
  */
 
+/**
+ * @file
+ *
+ * @brief This header file provides time definitions for the kernel space
+ *   (_KERNEL is defined before including <sys/time.h>).
+ */
+
 #if !defined(_SYS_TIME_H_) || !defined(_KERNEL)
 #error "must be included via <sys/time.h> in kernel space"
 #endif

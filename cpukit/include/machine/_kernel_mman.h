@@ -1,7 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
+ * @file
  *
+ * @brief This header file provides memory map definitions for the kernel space
+ *   (_KERNEL is defined before including <sys/mman.h>).
+ */
+
+/*
  * Copyright (C) 2016 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without

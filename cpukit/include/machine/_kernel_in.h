@@ -32,6 +32,13 @@
  * $FreeBSD: head/sys/netinet/in.h 326023 2017-11-20 19:43:44Z pfg $
  */
 
+/**
+ * @file
+ *
+ * @brief This header file provides IPv4 definitions for the kernel space
+ *   (_KERNEL is defined before including <netinet/in.h>).
+ */
+
 #if !defined(_NETINET_IN_H_) || !defined(_KERNEL)
 #error "must be included via <netinet/in.h> in kernel space"
 #endif

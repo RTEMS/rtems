@@ -31,6 +31,13 @@
  *	$KAME: in6.h,v 1.89 2001/05/27 13:28:35 itojun Exp $
  */
 
+/**
+ * @file
+ *
+ * @brief This header file provides IPv6 definitions for the kernel space
+ *   (_KERNEL is defined before including <netinet6/in6.h>).
+ */
+
 #if !defined(_NETINET6_IN6_H_) || !defined(_KERNEL)
 #error "must be included via <netinet6/in6.h> in kernel space"
 #endif
