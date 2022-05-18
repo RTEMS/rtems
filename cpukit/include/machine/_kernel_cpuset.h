@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 1989-1998 On-Line Applications Research Corporation (OAR).
+ * Copyright (C) 2016 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
