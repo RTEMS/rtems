@@ -115,6 +115,13 @@ atomic_thread_fence_rel(void)
 }
 
 static inline u_int
+atomic_load_int(Atomic_Uint *i)
+{
+
+	return (_Atomic_Load_uint(i, ATOMIC_ORDER_RELAXED));
+}
+
+static inline u_int
 atomic_load_acq_int(Atomic_Uint *i)
 {
 

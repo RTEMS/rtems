@@ -24,12 +24,19 @@
 #include <sys/_ffcounter.h>
 #include <sys/ioccom.h>
 #include <sys/time.h>
+#ifdef __rtems__
+#include <rtems/score/atomic.h>
+#endif /* __rtems__ */
 
 #define PPS_API_VERS_1	1
 
 typedef int pps_handle_t;	
 
+#ifndef __rtems__
 typedef unsigned pps_seq_t;
+#else /* __rtems__ */
+typedef Atomic_Uint	pps_seq_t;
+#endif /* __rtems__ */
 
 typedef struct ntp_fp {
 	unsigned int	integral;
