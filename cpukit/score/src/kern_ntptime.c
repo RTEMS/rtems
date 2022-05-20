@@ -73,9 +73,11 @@ __FBSDID("$FreeBSD$");
 struct thread;
 #endif /* __rtems__ */
 
+#ifndef __rtems__
 #ifdef PPS_SYNC
 FEATURE(pps_sync, "Support usage of external PPS signal by kernel PLL");
 #endif
+#endif /* __rtems__ */
 
 /*
  * Single-precision macros for 64-bit machines
@@ -374,7 +376,6 @@ SYSCTL_NODE(_kern, OID_AUTO, ntp_pll, CTLFLAG_RW | CTLFLAG_MPSAFE, 0,
 SYSCTL_PROC(_kern_ntp_pll, OID_AUTO, gettime, CTLTYPE_OPAQUE | CTLFLAG_RD |
     CTLFLAG_MPSAFE, 0, sizeof(struct ntptimeval) , ntp_sysctl, "S,ntptimeval",
     "");
-#endif /* __rtems__ */
 
 #ifdef PPS_SYNC
 SYSCTL_INT(_kern_ntp_pll, OID_AUTO, pps_shiftmax, CTLFLAG_RW,
@@ -391,6 +392,7 @@ SYSCTL_S64(_kern_ntp_pll, OID_AUTO, time_freq, CTLFLAG_RD | CTLFLAG_MPSAFE,
     &time_freq, 0,
     "Frequency offset (ns/sec)");
 #endif
+#endif /* __rtems__ */
 
 /*
  * ntp_adjtime() - NTP daemon application interface
