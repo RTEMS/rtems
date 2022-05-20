@@ -1904,7 +1904,6 @@ SYSCTL_PROC(_kern_timecounter, OID_AUTO, choice,
     "Timecounter hardware detected");
 #endif /* __rtems__ */
 
-#ifndef __rtems__
 /*
  * RFC 2783 PPS-API implementation.
  */
@@ -2276,9 +2275,6 @@ pps_event(struct pps_state *pps, int event)
 	(*pps->wakeup)(pps);
 #endif /* __rtems__ */
 }
-#else /* __rtems__ */
-/* FIXME: https://devel.rtems.org/ticket/2349 */
-#endif /* __rtems__ */
 
 /*
  * Timecounters need to be updated every so often to prevent the hardware
