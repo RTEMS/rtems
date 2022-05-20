@@ -350,6 +350,8 @@ links:
 - role: build-dependency
   uid: spporterr01
 - role: build-dependency
+  uid: sppps01
+- role: build-dependency
   uid: spprintk
 - role: build-dependency
   uid: spprivenv01
