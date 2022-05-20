@@ -538,16 +538,6 @@ kern_ntp_adjtime(struct thread *td, struct timex *ntv, int *retvalp)
 	ntv->jitcnt = pps_jitcnt;
 	ntv->stbcnt = pps_stbcnt;
 #endif /* PPS_SYNC */
-#ifdef __rtems__
-	ntv->ppsfreq = 0;
-	ntv->jitter = 0;
-	ntv->shift = 0;
-	ntv->stabil = 0;
-	ntv->jitcnt = 0;
-	ntv->calcnt = 0;
-	ntv->errcnt = 0;
-	ntv->stbcnt = 0;
-#endif /* __rtems__ */
 	retval = ntp_is_time_error(time_status) ? TIME_ERROR : time_state;
 	NTP_UNLOCK();
 

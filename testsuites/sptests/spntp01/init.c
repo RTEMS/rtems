@@ -81,7 +81,7 @@ T_TEST_CASE( NTP )
   T_eq_long( tx.tolerance, 32500000 );
   T_eq_long( tx.ppsfreq, 0 );
   T_eq_long( tx.jitter, 0 );
-  T_eq_int( tx.shift, 0 );
+  T_eq_int( tx.shift, 2 );
   T_eq_long( tx.stabil, 0 );
   T_eq_long( tx.jitcnt, 0 );
   T_eq_long( tx.calcnt, 0 );

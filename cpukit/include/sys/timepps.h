@@ -26,6 +26,7 @@
 #include <sys/time.h>
 #ifdef __rtems__
 #include <rtems/score/atomic.h>
+#define	PPS_SYNC
 #endif /* __rtems__ */
 
 #define PPS_API_VERS_1	1
