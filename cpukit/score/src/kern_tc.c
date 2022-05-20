@@ -1917,9 +1917,15 @@ abi_aware(struct pps_state *pps, int vers)
 static int
 pps_fetch(struct pps_fetch_args *fapi, struct pps_state *pps)
 {
+#ifndef __rtems__
 	int err, timo;
+#else /* __rtems__ */
+	int err;
+#endif /* __rtems__ */
 	pps_seq_t aseq, cseq;
+#ifndef __rtems__
 	struct timeval tv;
+#endif /* __rtems__ */
 
 	if (fapi->tsformat && fapi->tsformat != PPS_TSFMT_TSPEC)
 		return (EINVAL);
@@ -1932,6 +1938,7 @@ pps_fetch(struct pps_fetch_args *fapi, struct pps_state *pps)
 	 * sleep a long time.
 	 */
 	if (fapi->timeout.tv_sec || fapi->timeout.tv_nsec) {
+#ifndef __rtems__
 		if (fapi->timeout.tv_sec == -1)
 			timo = 0x7fffffff;
 		else {
@@ -1939,10 +1946,12 @@ pps_fetch(struct pps_fetch_args *fapi, struct pps_state *pps)
 			tv.tv_usec = fapi->timeout.tv_nsec / 1000;
 			timo = tvtohz(&tv);
 		}
+#endif /* __rtems__ */
 		aseq = atomic_load_int(&pps->ppsinfo.assert_sequence);
 		cseq = atomic_load_int(&pps->ppsinfo.clear_sequence);
 		while (aseq == atomic_load_int(&pps->ppsinfo.assert_sequence) &&
 		    cseq == atomic_load_int(&pps->ppsinfo.clear_sequence)) {
+#ifndef __rtems__
 			if (abi_aware(pps, 1) && pps->driver_mtx != NULL) {
 				if (pps->flags & PPSFLAG_MTX_SPIN) {
 					err = msleep_spin(pps, pps->driver_mtx,
@@ -1963,6 +1972,11 @@ pps_fetch(struct pps_fetch_args *fapi, struct pps_state *pps)
 			} else if (err != 0) {
 				return (err);
 			}
+#else /* __rtems__ */
+			_Assert(pps->wait != NULL);
+			err = (*pps->wait)(pps, fapi->timeout);
+			return (err);
+#endif /* __rtems__ */
 		}
 	}
 
@@ -2058,9 +2072,31 @@ pps_ioctl(u_long cmd, caddr_t data, struct pps_state *pps)
 	}
 }
 
+#ifdef __rtems__
+static int
+default_wait(struct pps_state *pps, struct timespec timeout)
+{
+
+	(void)pps;
+	(void)timeout;
+
+	return (ETIMEDOUT);
+}
+
+static void
+default_wakeup(struct pps_state *pps)
+{
+
+	(void)pps;
+}
+#endif /* __rtems__ */
 void
 pps_init(struct pps_state *pps)
 {
+#ifdef __rtems__
+	pps->wait = default_wait;
+	pps->wakeup = default_wakeup;
+#endif /* __rtems__ */
 	pps->ppscap |= PPS_TSFMT_TSPEC | PPS_CANWAIT;
 	if (pps->ppscap & PPS_CAPTUREASSERT)
 		pps->ppscap |= PPS_OFFSETASSERT;
@@ -2227,7 +2263,12 @@ pps_event(struct pps_state *pps, int event)
 #endif
 
 	/* Wakeup anyone sleeping in pps_fetch().  */
+#ifndef __rtems__
 	wakeup(pps);
+#else /* __rtems__ */
+	_Assert(pps->wakeup != NULL);
+	(*pps->wakeup)(pps);
+#endif /* __rtems__ */
 }
 #else /* __rtems__ */
 /* FIXME: https://devel.rtems.org/ticket/2349 */

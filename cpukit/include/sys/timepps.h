@@ -164,6 +164,30 @@ struct pps_state {
 	int		ppscap;
 	struct timecounter *ppstc;
 	unsigned	ppscount[3];
+#ifdef __rtems__
+	/**
+	 * @brief  Wait for an event.
+	 *
+	 * Called internally when time_pps_fetch() is used.
+	 * It is initialized by pps_init() to a handler which just returns ETIMEDOUT.
+	 *
+	 * @param pps is the pointer to the object.
+	 *
+	 * @param timeout
+	 *
+	 * @retval 0 A wakeup event was received.
+	 *
+	 * @retval ETIMEDOUT A timeout occurred while waiting for the event.
+	 */
+	int (*wait)(struct pps_state *pps, struct timespec timeout);
+
+	/**
+	 * @brief Wakeup the tasks waiting for an event.
+	 *
+	 * @param pps is the pointer to the object.
+	 */
+	void (*wakeup)(struct pps_state *pps);
+#endif /* __rtems__ */
 	/*
 	 * The following fields are valid if the driver calls pps_init_abi().
 	 */
