@@ -1513,7 +1513,6 @@ unlock:
 #endif /* __rtems__ */
 }
 
-#ifndef __rtems__
 /* Report the frequency of the current timecounter. */
 uint64_t
 tc_getfrequency(void)
@@ -1522,6 +1521,7 @@ tc_getfrequency(void)
 	return (timehands->th_counter->tc_frequency);
 }
 
+#ifndef __rtems__
 static bool
 sleeping_on_old_rtc(struct thread *td)
 {

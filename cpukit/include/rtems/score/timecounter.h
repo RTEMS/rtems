@@ -292,6 +292,14 @@ void _Timecounter_Set_NTP_update_second(
  */
 void _Timecounter_NTP_update_second(int64_t *adjustment, time_t *newsec);
 
+/**
+ * @brief Gets the frequency in Hz of the current timecounter at some time
+ *   point during the call.
+ *
+ * @return Returns the frequency in Hz.
+ */
+uint64_t _Timecounter_Get_frequency(void);
+
 /** @} */
 
 #ifdef __cplusplus

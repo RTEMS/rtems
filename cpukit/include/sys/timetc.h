@@ -16,6 +16,10 @@
 #ifndef _KERNEL
 #error "no user-serviceable parts inside"
 #endif
+#else /* __rtems__ */
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 #endif /* __rtems__ */
 
 /*-
@@ -36,6 +40,7 @@ struct vdso_timehands32;
 typedef u_int timecounter_get_t(struct timecounter *);
 #else /* __rtems__ */
 typedef uint32_t timecounter_get_t(struct timecounter *);
+#define	tc_getfrequency _Timecounter_Get_frequency
 #endif /* __rtems__ */
 typedef void timecounter_pps_t(struct timecounter *);
 typedef uint32_t timecounter_fill_vdso_timehands_t(struct vdso_timehands *,
@@ -104,4 +109,9 @@ void	cpu_tick_calibration(void);
 SYSCTL_DECL(_kern_timecounter);
 #endif
 
+#ifdef __rtems__
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+#endif /* __rtems__ */
 #endif /* !_SYS_TIMETC_H_ */
