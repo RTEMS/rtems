@@ -27,6 +27,10 @@
 #ifdef __rtems__
 #include <rtems/score/atomic.h>
 #define	PPS_SYNC
+#define hardpps _Timecounter_Discipline
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 #endif /* __rtems__ */
 
 #define PPS_API_VERS_1	1
@@ -295,4 +299,9 @@ time_pps_kcbind(pps_handle_t handle, const int kernel_consumer,
 
 #endif /* KERNEL */
 
+#ifdef __rtems__
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+#endif /* __rtems__ */
 #endif /* !_SYS_TIMEPPS_H_ */

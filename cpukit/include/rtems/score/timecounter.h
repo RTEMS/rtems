@@ -300,6 +300,23 @@ void _Timecounter_NTP_update_second(int64_t *adjustment, time_t *newsec);
  */
 uint64_t _Timecounter_Get_frequency(void);
 
+/**
+ * @brief Updates the timecounter frequency adjustment used by
+ * _Timecounter_Set_NTP_update_second().
+ *
+ * This function is part of the time synchronization using a PPS
+ * (Pulse Per Second) signal.
+ *
+ * When an event (a rising or falling edge of the PPS signal) occurs, the
+ * functions pps_capture() and pps_event() are executed. Only if the kernel
+ * consumer is configured to be PPS_KC_HARDPPS, the timecounter is disciplined.
+ *
+ * @param[in] tsp is the time at PPS event
+ *
+ * @param[i] nsec is the time in nanoseconds from the last PPS event
+ */
+void _Timecounter_Discipline(struct timespec *tsp, long nsec);
+
 /** @} */
 
 #ifdef __cplusplus
