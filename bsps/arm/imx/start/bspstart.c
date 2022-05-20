@@ -14,6 +14,7 @@
 #include <bsp/linker-symbols.h>
 #include <dev/clock/arm-generic-timer.h>
 #include <libcpu/arm-cp15.h>
+#include <arm/freescale/imx/imx6ul_ccmreg.h>
 
 #include <libfdt.h>
 
@@ -161,6 +162,24 @@ static void imx_find_gic(const void *fdt)
 #endif
 }
 
+static void imx_ccm_enable_eth2_clk(void)
+{
+  const void *fdt = bsp_fdt_get();
+
+  if (imx_is_imx6(fdt)) {
+    int node;
+    volatile imx6ul_ccm_analog *ccm_analog = NULL;
+
+    node = fdt_node_offset_by_compatible(fdt, -1, "fsl,imx6ul-anatop");
+    if (node >= 0) {
+        ccm_analog = imx_get_reg_of_node(fdt, node);
+    }
+    if (ccm_analog != NULL) {
+        ccm_analog->pll_enet_set = IMX6UL_CCM_ANALOG_PLL_ENET_ENET2_125M_EN;
+    }
+  }
+}
+
 void bsp_start(void)
 {
   imx_find_gic(bsp_fdt_get());
@@ -169,4 +188,5 @@ void bsp_start(void)
     bsp_section_nocacheheap_begin,
     (uintptr_t) bsp_section_nocacheheap_size
   );
+  imx_ccm_enable_eth2_clk();
 }
