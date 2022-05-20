@@ -56,12 +56,17 @@
 #define	timecounter _Timecounter
 #define	time_second _Timecounter_Time_second
 #define	time_uptime _Timecounter_Time_uptime
+
 #include <rtems/score/timecounterimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/atomic.h>
 #include <rtems/score/smp.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/rtems/clock.h>
+
+#define	ENOIOCTL EINVAL
+#define	KASSERT(exp, arg) _Assert(exp)
 #endif /* __rtems__ */
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD$");
@@ -90,6 +95,7 @@ __FBSDID("$FreeBSD$");
 #include <sys/vdso.h>
 #endif /* __rtems__ */
 #ifdef __rtems__
+#include <errno.h>
 #include <limits.h>
 #include <string.h>
 #include <rtems.h>
