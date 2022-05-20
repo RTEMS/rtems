@@ -58,6 +58,9 @@ __FBSDID("$FreeBSD$");
 #include <sys/time.h>
 #include <sys/timex.h>
 #include <sys/timetc.h>
+#ifdef __rtems__
+#define	_KERNEL
+#endif /* __rtems__ */
 #include <sys/timepps.h>
 #ifndef __rtems__
 #include <sys/syscallsubr.h>
