@@ -74,8 +74,24 @@ __FBSDID("$FreeBSD$");
 #define	ntp_update_second _Timecounter_NTP_update_second
 #define	time_uptime _Timecounter_Time_uptime
 struct thread;
-static __inline long lmax(long a, long b) { return (a > b ? a : b); }
-static __inline quad_t qmin(quad_t a, quad_t b) { return (a < b ? a : b); }
+
+static inline long
+lmax(long a, long b)
+{
+
+	if (a > b)
+		return (a);
+	return (b);
+}
+
+static inline quad_t
+qmin(quad_t a, quad_t b)
+{
+
+	if (a < b)
+	       return (a);
+	return (b);
+}
 #endif /* __rtems__ */
 
 #ifndef __rtems__
