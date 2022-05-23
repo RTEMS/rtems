@@ -1,11 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
-- get-boolean: null
+- get-integer: null
 - define-condition: null
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
+default: 0
 default-by-variant: []
 description: |
   device type for /dev/console, use 0 for USART and 1 for UART (default USART)
