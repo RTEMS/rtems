@@ -43,6 +43,10 @@
 
 #include "tmacros.h"
 
+#ifndef _REENT_CLEANUP
+#define _REENT_CLEANUP(ptr) ((ptr)->__cleanup)
+#endif
+
 const char rtems_test_name[] = "NEWLIB 1";
 
 static const char stdio_file_path[] = "/stdio-file";
@@ -129,7 +133,6 @@ static void test_lrand48(void)
 static void stdio_file_worker(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
-  struct _reent *reent = _REENT;
   FILE *output;
   char buf[1] = { 'x' };
   size_t n;
@@ -137,7 +140,7 @@ static void stdio_file_worker(rtems_task_argument arg)
   test_rand();
   test_lrand48();
 
-  rtems_test_assert(reent->__cleanup == NULL);
+  rtems_test_assert(_REENT_CLEANUP(_REENT) == NULL);
 
   output = stdout = fopen(&stdio_file_path[0], "r+");
   rtems_test_assert(stdout != NULL);
@@ -145,9 +148,9 @@ static void stdio_file_worker(rtems_task_argument arg)
   /*
    * Check newlib's __sinit does not touch our assigned file pointer.
    */
-  rtems_test_assert(reent->__cleanup == NULL);
+  rtems_test_assert(_REENT_CLEANUP(_REENT) == NULL);
   rtems_test_assert(fflush(stdout) == 0);
-  rtems_test_assert(reent->__cleanup != NULL);
+  rtems_test_assert(_REENT_CLEANUP(_REENT) != NULL);
   rtems_test_assert(stdout == output);
 
   n = fwrite(&buf[0], sizeof(buf), 1, stdout);

@@ -159,7 +159,8 @@ struct Thread_Configured_control {
   #if CONFIGURE_MAXIMUM_THREAD_NAME_SIZE > 1
     char name[ CONFIGURE_MAXIMUM_THREAD_NAME_SIZE ];
   #endif
-  #ifdef _CONFIGURE_ENABLE_NEWLIB_REENTRANCY
+  #if defined(_CONFIGURE_ENABLE_NEWLIB_REENTRANCY) && \
+    !defined(_REENT_THREAD_LOCAL)
     struct _reent Newlib;
   #endif
 };
@@ -175,7 +176,8 @@ const Thread_Control_add_on _Thread_Control_add_ons[] = {
     ),
     offsetof( Thread_Configured_control, API_RTEMS )
   }
-  #ifdef _CONFIGURE_ENABLE_NEWLIB_REENTRANCY
+  #if defined(_CONFIGURE_ENABLE_NEWLIB_REENTRANCY) && \
+    !defined(_REENT_THREAD_LOCAL)
     , {
       offsetof(
         Thread_Configured_control,

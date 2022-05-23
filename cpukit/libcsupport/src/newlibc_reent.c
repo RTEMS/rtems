@@ -29,6 +29,7 @@
 #include <rtems/libcsupport.h>
 #include <rtems/score/threadimpl.h>
 
+#ifndef _REENT_THREAD_LOCAL
 bool newlib_create_hook(
   rtems_tcb *current_task RTEMS_UNUSED,
   rtems_tcb *creating_task
@@ -38,12 +39,17 @@ bool newlib_create_hook(
 
   return true;
 }
+#endif
 
 void newlib_terminate_hook(
   rtems_tcb *current_task
 )
 {
+#ifdef _REENT_THREAD_LOCAL
+  _reclaim_reent(NULL);
+#else
   _reclaim_reent(current_task->libc_reent);
+#endif
 }
 
 #endif

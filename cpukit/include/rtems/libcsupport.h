@@ -96,27 +96,33 @@ extern int malloc_info(Heap_Information_block *the_info);
 /*
  *  Prototypes required to install newlib reentrancy user extension
  */
+
+#ifdef _REENT_THREAD_LOCAL
+#define _NEWLIB_CREATE_HOOK NULL
+#else
 bool newlib_create_hook(
   rtems_tcb *current_task,
   rtems_tcb *creating_task
 );
+#define _NEWLIB_CREATE_HOOK newlib_create_hook
+#endif
 
 void newlib_terminate_hook(
   rtems_tcb *current_task
 );
 
 #define RTEMS_NEWLIB_EXTENSION \
-{ \
-  newlib_create_hook,     /* rtems_task_create  */ \
-  0,                      /* rtems_task_start   */ \
-  0,                      /* rtems_task_restart */ \
-  0,                      /* rtems_task_delete  */ \
-  0,                      /* task_switch  */ \
-  0,                      /* task_begin   */ \
-  0,                      /* task_exitted */ \
-  0,                      /* fatal        */ \
-  newlib_terminate_hook   /* thread terminate */ \
-}
+  { \
+    _NEWLIB_CREATE_HOOK,  /* thread_create    */ \
+    NULL,                 /* thread_start     */ \
+    NULL,                 /* thread_restart   */ \
+    NULL,                 /* thread_delete    */ \
+    NULL,                 /* thread_switch    */ \
+    NULL,                 /* thread_begin     */ \
+    NULL,                 /* thread_exitted   */ \
+    NULL,                 /* fatal            */ \
+    newlib_terminate_hook /* thread_terminate */ \
+  }
 
 typedef struct {
   uint32_t active_barriers;

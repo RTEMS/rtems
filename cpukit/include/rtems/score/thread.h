@@ -921,8 +921,12 @@ struct _Thread_Control {
    */
   Context_Control_fp                   *fp_context;
 #endif
+
+#ifndef _REENT_THREAD_LOCAL
   /** This field points to the newlib reentrancy structure for this thread. */
   struct _reent                        *libc_reent;
+#endif
+
   /** This array contains the API extension area pointers. */
   void                                 *API_Extensions[ THREAD_API_LAST + 1 ];
 

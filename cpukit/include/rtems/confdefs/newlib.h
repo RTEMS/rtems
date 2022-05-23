@@ -57,7 +57,8 @@
 extern "C" {
 #endif
 
-#ifdef _CONFIGURE_ENABLE_NEWLIB_REENTRANCY
+#if defined(_CONFIGURE_ENABLE_NEWLIB_REENTRANCY) && \
+  !defined(_REENT_THREAD_LOCAL)
   struct _reent *__getreent( void )
   {
     return _Thread_Get_executing()->libc_reent;
