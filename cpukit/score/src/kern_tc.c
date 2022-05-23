@@ -1980,7 +1980,8 @@ pps_fetch(struct pps_fetch_args *fapi, struct pps_state *pps)
 #else /* __rtems__ */
 			_Assert(pps->wait != NULL);
 			err = (*pps->wait)(pps, fapi->timeout);
-			return (err);
+			if (err != 0)
+				return (err);
 #endif /* __rtems__ */
 		}
 	}
