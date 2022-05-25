@@ -66,6 +66,12 @@ T_TEST_CASE( WaitPPSEventDefaultHandler )
   pps_init_abi( &pps_dev.pps );
   pps_dev.pps.ppsparam.mode = PPS_CAPTUREASSERT;
 
+  /* If no timeout is requested, pps_fetch() doesn't call the default handler */
+  memset( &fetch, 0, sizeof( fetch ) );
+  status = pps_ioctl( PPS_IOC_FETCH, (caddr_t)&fetch, &pps_dev.pps );
+  T_eq_int( status, 0 );
+
+  fetch.timeout.tv_sec = 1;
   status = pps_ioctl( PPS_IOC_FETCH, (caddr_t)&fetch, &pps_dev.pps );
   T_eq_int( status, ETIMEDOUT );
 }
