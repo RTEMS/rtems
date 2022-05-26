@@ -55,6 +55,7 @@ Christian Mauderer         christian.mauderer@embedded-brains.de
 Hesham Almatary            heshamelmatary@gmail.com
 Vijay Kumar Banerjee       vijay@rtems.org
 Jan Sommer                 jan@rtems.org
+Karel Gardas               karel@functional.vision
 
 Localized Write Permission
 ==========================
@@ -62,7 +63,7 @@ sparc                      Daniel Hellstrom (daniel@gaisler.com)
 beagle                     Ben Gras (beng@rtems.org)
 tms570                     Pavel Pisa (pisa@cmp.felk.cvut.cz)
 raspberrypi                Pavel Pisa (pisa@cmp.felk.cvut.cz)
-x86_64                     TBD
+x86_64                     Karel Gardas (karel@functional.vision)
 beagle                     Vijay Kumar Banerjee (vijay@rtems.org)
 
 Emeritus Maintainers
