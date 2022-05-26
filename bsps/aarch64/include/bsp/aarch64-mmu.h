@@ -362,7 +362,8 @@ aarch64_mmu_enable( void )
 
   /* CPUECTLR_EL1.SMPEN is already set on ZynqMP and is not writable */
 
-  /* Invalidate cache */
+  /* Flush and invalidate cache */
+  rtems_cache_flush_entire_data();
   rtems_cache_invalidate_entire_data();
 
   /* Enable MMU and cache */
