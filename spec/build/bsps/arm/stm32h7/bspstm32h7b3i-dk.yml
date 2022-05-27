@@ -21,4 +21,5 @@ source:
 - bsps/arm/stm32h7/boards/stm/stm32h7b3i-dk/stm32h7-config-per.c
 - bsps/arm/stm32h7/boards/stm/stm32h7b3i-dk/system_stm32h7xx.c
 - bsps/arm/stm32h7/boards/stm/stm32h7b3i-dk/ext-mem-ctl.c
+- bsps/arm/shared/cache/cache-v7m.c
 type: build

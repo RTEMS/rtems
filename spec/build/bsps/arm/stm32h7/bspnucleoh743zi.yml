@@ -19,4 +19,5 @@ source:
 - bsps/arm/stm32h7/boards/stm/nucleo-h743zi/stm32h7-config-per.c
 - bsps/arm/stm32h7/boards/stm/nucleo-h743zi/system_stm32h7xx.c
 - bsps/arm/stm32h7/boards/stm/nucleo-h743zi/ext-mem-ctl.c
+- bsps/arm/shared/cache/cache-v7m.c
 type: build

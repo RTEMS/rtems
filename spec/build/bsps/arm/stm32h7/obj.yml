@@ -171,7 +171,6 @@ install:
   - bsps/arm/stm32h7/include/stm32h7/mpu-config.h
 links: []
 source:
-- bsps/arm/shared/cache/cache-v7m.c
 - bsps/arm/shared/clock/clock-armv7m.c
 - bsps/arm/shared/cpucounter/cpucounter-armv7m.c
 - bsps/arm/shared/irq/irq-armv7m.c
