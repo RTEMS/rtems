@@ -138,6 +138,13 @@ static rtems_task Init(rtems_task_argument argument)
  */
 #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
 
+/*
+ * This test requires full control over the present thread-local objects.  This
+ * is necessary for the custom stack allocator below.  In certain Newlib
+ * configurations, the Newlib reentrancy support may add thread-local objects.
+ */
+#define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
 #define CONFIGURE_MAXIMUM_TASKS TASK_COUNT
 
 #define CONFIGURE_TASK_STACK_ALLOCATOR_INIT task_stack_init

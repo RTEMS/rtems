@@ -68,6 +68,13 @@ static void Init(rtems_task_argument arg)
  */
 #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
 
+/*
+ * This test requires full control over the present thread-local objects.  In
+ * certain Newlib configurations, the Newlib reentrancy support may add
+ * thread-local objects.
+ */
+#define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
 #define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

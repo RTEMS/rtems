@@ -26,7 +26,7 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  spstkalloc01
+test set name:  spstkalloc02
 
 The test expects that no thread-local object is present.
 
