@@ -3,16 +3,26 @@
 /**
  * @file
  *
- * Trivial File Transfer Protocol file system (TFTP client) for RFC 1350.
+ * @ingroup RTEMSImplTFTPFS
  *
- * Transfer file to/from remote host
+ * @brief This source file contains the implementation of
+ *   a Trivial File Transfer Protocol (TFTP) client library.
+ *
+ * The code in this file provides the ability to read files from and
+ * to write files to remote servers using the Trivial File Transfer
+ * Protocol (TFTP). It is used by the @ref tftpfs.c "TFTP file system" and
+ * tested through its test suite. The
+ * following RFCs are implemented:
+ *
+ *   + RFC 1350 "The TFTP Protocol (Revision 2)"
+ *   + RFC 2347 "TFTP Option Extension"
+ *   + RFC 2348 "TFTP Blocksize Option"
+ *   + RFC 7440 "TFTP Windowsize Option"
  */
 
 /*
- * Copyright (c) 1998 Eric Norum <eric@norum.ca>
- *
- * Modifications to support reference counting in the file system are
- * Copyright (c) 2012 embedded brains GmbH.
+ * Copyright (C) 1998 W. Eric Norum <eric@norum.ca>
+ * Copyright (C) 2012, 2022 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -42,29 +52,21 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <errno.h>
 #include <malloc.h>
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <rtems.h>
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
 #include <rtems/tftp.h>
-#include <rtems/thread.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#ifdef RTEMS_NETWORKING
-#include <rtems/rtems_bsdnet.h>
-#endif
-
-#ifdef RTEMS_TFTP_DRIVER_DEBUG
-int rtems_tftp_driver_debug = 1;
-#endif
+#include "tftp_driver.h"
 
 /*
  * Range of UDP ports to try
@@ -75,9 +77,21 @@ int rtems_tftp_driver_debug = 1;
  * Default limits
  */
 #define PACKET_FIRST_TIMEOUT_MILLISECONDS  400L
-#define PACKET_TIMEOUT_MILLISECONDS        6000L
-#define OPEN_RETRY_LIMIT                   10
-#define IO_RETRY_LIMIT                     10
+#define TFTP_WINDOW_SIZE_MIN               1
+#define TFTP_BLOCK_SIZE_MIN                8
+#define TFTP_BLOCK_SIZE_MAX                65464
+
+#define TFTP_BLOCK_SIZE_OPTION             "blksize"
+#define TFTP_WINDOW_SIZE_OPTION            "windowsize"
+#define TFTP_DECIMAL_BASE                  10
+
+#define TFTP_DEFAULT_SERVER_PORT           69
+
+/*
+ * These values are suggested by RFC 7440.
+ */
+#define TFTP_RFC7440_DATA_RETRANSMISSIONS  6
+#define TFTP_RFC7440_TIMEOUT_MILLISECONDS  1000
 
 /*
  * TFTP opcodes
@@ -87,11 +101,46 @@ int rtems_tftp_driver_debug = 1;
 #define TFTP_OPCODE_DATA    3
 #define TFTP_OPCODE_ACK     4
 #define TFTP_OPCODE_ERROR   5
+#define TFTP_OPCODE_OACK    6
 
 /*
- * Largest data transfer
+ * TFTP error codes
  */
-#define TFTP_BUFSIZE        512
+#define TFTP_ERROR_CODE_NOT_DEFINED 0
+#define TFTP_ERROR_CODE_NOT_FOUND   1
+#define TFTP_ERROR_CODE_NO_ACCESS   2
+#define TFTP_ERROR_CODE_DISK_FULL   3
+#define TFTP_ERROR_CODE_ILLEGAL     4
+#define TFTP_ERROR_CODE_UNKNOWN_ID  5
+#define TFTP_ERROR_CODE_FILE_EXISTS 6
+#define TFTP_ERROR_CODE_NO_USER     7
+#define TFTP_ERROR_CODE_OPTION_NEGO 8
+
+/*
+ * Special return values for process_*_packet() functions
+ * (other return values are POSIX errors)
+ */
+#define GOT_EXPECTED_PACKET 0
+#define GOT_DUPLICATE_OF_CURRENT_PACKET -1
+#define GOT_OLD_PACKET -2
+#define GOT_FIRST_OUT_OF_ORDER_PACKET -3
+
+/*
+ * Special argument value for getPacket()
+ */
+#define GET_PACKET_DONT_WAIT -1
+
+/*
+ * Special return value for prepare_*_packet_for_sending() functions
+ * (other return values are the length of the packet to be send)
+ */
+#define DO_NOT_SEND_PACKET 0
+
+#define PKT_SIZE_FROM_BLK_SIZE(_blksize) ((_blksize) + 2 * sizeof (uint16_t))
+#define BLK_SIZE_FROM_PKT_SIZE(_pktsize) ((_pktsize) - 2 * sizeof (uint16_t))
+#define MUST_SEND_OPTIONS(_options) (\
+    (_options).block_size  != TFTP_RFC1350_BLOCK_SIZE || \
+    (_options).window_size != TFTP_RFC1350_WINDOW_SIZE )
 
 /*
  * Packets transferred between machines
@@ -102,7 +151,7 @@ union tftpPacket {
      */
     struct tftpRWRQ {
         uint16_t      opcode;
-        char                filename_mode[TFTP_BUFSIZE];
+        char          filename_mode[];
     } tftpRWRQ;
 
     /*
@@ -111,7 +160,7 @@ union tftpPacket {
     struct tftpDATA {
         uint16_t      opcode;
         uint16_t      blocknum;
-        uint8_t       data[TFTP_BUFSIZE];
+        uint8_t       data[];
     } tftpDATA;
 
     /*
@@ -123,12 +172,20 @@ union tftpPacket {
     } tftpACK;
 
     /*
+     * OACK packet
+     */
+    struct tftpOACK {
+        uint16_t      opcode;
+        char          options[];
+    } tftpOACK;
+
+    /*
      * ERROR packet
      */
     struct tftpERROR {
         uint16_t      opcode;
         uint16_t      errorCode;
-        char                errorMessage[TFTP_BUFSIZE];
+        char          errorMessage[];
     } tftpERROR;
 };
 
@@ -137,14 +194,55 @@ union tftpPacket {
  */
 struct tftpStream {
     /*
-     * Buffer for storing most recently-received packet
+     * Buffer for storing packets for sending and receiving.  Can point
+     * to the same address when only one buffer is needed for reading.
      */
-    union tftpPacket    pkbuf;
+    union tftpPacket *receive_buf;
+    union tftpPacket *send_buf;
 
     /*
-     * Last block number transferred
+     * Current block number - i.e. the block currently send or received
      */
     uint16_t      blocknum;
+
+    /*
+     * Size of the data area in a DATA single packet.
+     */
+    size_t block_size;
+
+    /*
+     * The maximum size of a packet.  It depends linearly on the block_size.
+     * The receive_buf and (the packets in) the send_buf are of this size.
+     */
+    size_t packet_size;
+
+    /*
+     * The number of packets which can be stored in the send buffer.
+     * During option negotiation and for reading a file from the server
+     * only a buffer for a single packet is needed.  In those cases, this
+     * value is always one.  When a file is written to the server,
+     * the value equals the window size:
+     *     send_buf_size_in_pkts == server_options.window_size
+     *
+     * Packet N is stored in
+     *     send_buf + packet_size * (N % send_buf_size_in_pkts)
+     */
+    uint16_t send_buf_size_in_pkts;
+
+    /*
+     * When writing files with windowsize > 1, the number of the completely
+     * filled packet with the highest block number in the send buffer.
+     * When the user calls write(), the data will be written into
+     * the block after this one.
+     */
+    uint16_t blocknum_last_filled;
+
+    /*
+     * When writing files with windowsize > 1, the number of the packet
+     * which is the last one in the whole file (i.e. the user
+     * called close()).  This block is never full (but maybe empty).
+     */
+    uint16_t blocknum_eof_block;
 
     /*
      * Data transfer socket
@@ -155,6 +253,9 @@ struct tftpStream {
 
     /*
      * Indices into buffer
+     * In case of sending a file with windowsize > 1, these values apply
+     * only to the packet with the highest number in the send buffer
+     * (blocknum_last_filled + 1).
      */
     int     nleft;
     int     nused;
@@ -163,143 +264,161 @@ struct tftpStream {
      * Flags
      */
     int     firstReply;
-    int     eof;
-    int     writing;
+    bool    at_eof;
+    bool    is_for_reading;
+
+    /*
+     * Function pointers and members for use by communicate_with_server().
+     */
+    ssize_t (*prepare_packet_for_sending) (
+        struct tftpStream *tp,
+        bool force_retransmission,
+        union tftpPacket **send_buf,
+        bool *wait_for_packet_reception,
+        const void *create_packet_data
+    );
+    int (*process_data_packet) (struct tftpStream *tp, ssize_t len);
+    int (*process_ack_packet) (struct tftpStream *tp, ssize_t len);
+    int (*process_oack_packet) (struct tftpStream *tp, ssize_t len);
+    int (*process_error_packet) (struct tftpStream *tp, ssize_t len);
+    int retransmission_error_code;
+    bool ignore_out_of_order_packets;
+    int32_t blocknum_of_first_packet_of_window;
+    int error;
+
+    /*
+     * Configuration and TFTP options
+     *
+     *     * config.options are options desired by the user (i.e. the values
+     *       send to the server).
+     *     * server_options are the options agreed by the server
+     *       (the option values actually used for the transfer of data).
+     */
+    tftp_net_config config;
+    tftp_options server_options;
 };
 
 /*
- * Flags for filesystem info.
+ * Forward declaration cannot be avoided.
  */
-#define TFTPFS_VERBOSE (1 << 0)
+static ssize_t prepare_data_packet_for_sending (
+    struct tftpStream *tp,
+    bool force_retransmission,
+    union tftpPacket **send_buf,
+    bool *wait_for_packet_reception,
+    const void *path_name
+);
+static ssize_t prepare_ack_packet_for_sending (
+    struct tftpStream *tp,
+    bool force_retransmission,
+    union tftpPacket **send_buf,
+    bool *wait_for_packet_reception,
+    const void *path_name
+);
 
 /*
- * TFTP File system info.
+ * Calculate the address of packet N in the send buffer
  */
-typedef struct tftpfs_info_s {
-  uint32_t flags;
-  rtems_mutex tftp_mutex;
-  int nStreams;
-  struct tftpStream ** volatile tftpStreams;
-} tftpfs_info_t;
-
-#define tftpfs_info_mount_table(_mt) ((tftpfs_info_t*) ((_mt)->fs_info))
-#define tftpfs_info_pathloc(_pl)     ((tftpfs_info_t*) ((_pl)->mt_entry->fs_info))
-#define tftpfs_info_iop(_iop)        (tftpfs_info_pathloc (&((_iop)->pathinfo)))
+static union tftpPacket *get_send_buffer_packet (
+    struct tftpStream *tp,
+    uint16_t packet_num
+)
+{
+    return (union tftpPacket *) ( ( (char *) tp->send_buf) + tp->packet_size *
+        (packet_num % tp->send_buf_size_in_pkts) );
+}
 
 /*
- * Number of streams open at the same time
+ * Create read or write request
  */
-
-static const rtems_filesystem_operations_table  rtems_tftp_ops;
-static const rtems_filesystem_file_handlers_r   rtems_tftp_handlers;
-
-static bool rtems_tftp_is_directory(
+static size_t create_request (
+    union tftpPacket *send_buf,
+    size_t data_size,
+    bool is_for_reading,
     const char *path,
-    size_t pathlen
+    const tftp_options *options
 )
 {
-    return path [pathlen - 1] == '/';
-}
+  size_t res_size;
+  char *cur = send_buf->tftpRWRQ.filename_mode;
 
-int rtems_tftpfs_initialize(
-  rtems_filesystem_mount_table_entry_t *mt_entry,
-  const void                           *data
-)
-{
-  const char *device = mt_entry->dev;
-  size_t devicelen = strlen (device);
-  tftpfs_info_t *fs = NULL;
-  char *root_path;
+  send_buf->tftpRWRQ.opcode = htons (
+      is_for_reading ? TFTP_OPCODE_RRQ : TFTP_OPCODE_WRQ
+  );
 
-  if (devicelen == 0) {
-    root_path = malloc (1);
-    if (root_path == NULL)
-      goto error;
-    root_path [0] = '\0';
+  res_size = snprintf (cur, data_size, "%s%c%s", path, 0, "octet");
+  if (res_size >= data_size) {
+     return -1;
   }
-  else {
-    root_path = malloc (devicelen + 2);
-    if (root_path == NULL)
-      goto error;
+  res_size++;
+  data_size -= res_size;
+  cur += res_size;
 
-    root_path = memcpy (root_path, device, devicelen);
-    root_path [devicelen] = '/';
-    root_path [devicelen + 1] = '\0';
-  }
-
-  fs = malloc (sizeof (*fs));
-  if (fs == NULL)
-    goto error;
-  fs->flags = 0;
-  fs->nStreams = 0;
-  fs->tftpStreams = 0;
-
-  mt_entry->fs_info = fs;
-  mt_entry->mt_fs_root->location.node_access = root_path;
-  mt_entry->mt_fs_root->location.handlers = &rtems_tftp_handlers;
-  mt_entry->ops = &rtems_tftp_ops;
-
-  /*
-   *  Now allocate a semaphore for mutual exclusion.
-   *
-   *  NOTE:  This could be in an fsinfo for this filesystem type.
-   */
-
-  rtems_mutex_init (&fs->tftp_mutex, "TFTPFS");
-
-  if (data) {
-      char* config = (char*) data;
-      char* token;
-      char* saveptr;
-      token = strtok_r (config, " ", &saveptr);
-      while (token) {
-          if (strcmp (token, "verbose") == 0)
-              fs->flags |= TFTPFS_VERBOSE;
-          token = strtok_r (NULL, " ", &saveptr);
+  if (options->block_size != TFTP_RFC1350_BLOCK_SIZE) {
+      res_size = snprintf (
+          cur,
+          data_size,
+          "%s%c%"PRIu16,
+          TFTP_BLOCK_SIZE_OPTION,
+          0,
+          options->block_size
+      );
+      if (res_size >= data_size) {
+          return -1;
       }
+      res_size++;
+      data_size -= res_size;
+      cur += res_size;
   }
 
-  return 0;
+  if (options->window_size != TFTP_RFC1350_WINDOW_SIZE) {
+      res_size = snprintf (
+          cur,
+          data_size,
+          "%s%c%"PRIu16,
+          TFTP_WINDOW_SIZE_OPTION,
+          0,
+          options->window_size
+      );
+      if (res_size >= data_size) {
+          return -1;
+      }
+      res_size++;
+      data_size -= res_size;
+      cur += res_size;
+  }
 
-error:
-
-  free (fs);
-  free (root_path);
-
-  rtems_set_errno_and_return_minus_one (ENOMEM);
+  return cur - (char *)send_buf;
 }
 
-/*
- * Release a stream and clear the pointer to it
- */
-static void
-releaseStream (tftpfs_info_t *fs, int s)
+static bool parse_decimal_number (
+    char **pos,
+    size_t *remain,
+    long min,
+    long max,
+    uint16_t *variable
+)
 {
-    if (fs->tftpStreams[s] && (fs->tftpStreams[s]->socket >= 0))
-        close (fs->tftpStreams[s]->socket);
-    rtems_mutex_lock (&fs->tftp_mutex);
-    free (fs->tftpStreams[s]);
-    fs->tftpStreams[s] = NULL;
-    rtems_mutex_unlock (&fs->tftp_mutex);
-}
+    long value;
+    const char *start = *pos;
+    if (*remain < 2) {
+        return false;
+    }
+    value = strtoul(start, pos, TFTP_DECIMAL_BASE);
+    if (value < min || value > max || **pos != 0) {
+        return false;
+    }
+    *variable = (uint16_t) value;
+    (*pos)++;
+    *remain -= *pos - start;
 
-static void
-rtems_tftpfs_shutdown (rtems_filesystem_mount_table_entry_t* mt_entry)
-{
-  tftpfs_info_t *fs = tftpfs_info_mount_table (mt_entry);
-  int            s;
-  for (s = 0; s < fs->nStreams; s++)
-      releaseStream (fs, s);
-  rtems_mutex_destroy (&fs->tftp_mutex);
-  free (fs);
-  free (mt_entry->mt_fs_root->location.node_access);
+    return true;
 }
 
 /*
  * Map error message
  */
-static int
-tftpErrno (struct tftpStream *tp)
+static int tftpErrno (uint16_t error_code)
 {
     unsigned int tftpError;
     static const int errorMap[] = {
@@ -311,9 +430,10 @@ tftpErrno (struct tftpStream *tp)
         ENXIO,
         EEXIST,
         ESRCH,
+        ENOTSUP, /* Error: Option negotiation failed (RFC 2347) */
     };
 
-    tftpError = ntohs (tp->pkbuf.tftpERROR.errorCode);
+    tftpError = ntohs (error_code);
     if (tftpError < (sizeof errorMap / sizeof errorMap[0]))
         return errorMap[tftpError];
     else
@@ -321,25 +441,87 @@ tftpErrno (struct tftpStream *tp)
 }
 
 /*
- * Send a message to make the other end shut up
+ * Parse options from an OACK packet
  */
-static void
-sendStifle (struct tftpStream *tp, struct sockaddr_in *to)
+static bool parse_options (
+    union tftpPacket *receive_buf,
+    size_t packet_size,
+    tftp_options *options_in,
+    tftp_options *options_out
+)
+{
+    char *pos = receive_buf->tftpOACK.options;
+    size_t remain   = packet_size - sizeof (receive_buf->tftpOACK.opcode);
+
+    /*
+     * Make sure there is a 0 byte in the end before comparing strings
+     */
+    if (remain > 0 && pos[remain - 1] != 0) {
+        return false;
+    }
+
+    while (remain > 0) {
+      if (strcasecmp(pos, TFTP_BLOCK_SIZE_OPTION) == 0 &&
+          options_in->block_size != TFTP_RFC1350_BLOCK_SIZE) {
+          remain -= sizeof (TFTP_BLOCK_SIZE_OPTION);
+          pos    += sizeof (TFTP_BLOCK_SIZE_OPTION);
+          if (!parse_decimal_number (
+              &pos,
+              &remain,
+              TFTP_BLOCK_SIZE_MIN,
+              options_in->block_size,
+              &options_out->block_size)) {
+              return false;
+          };
+
+      } else if (strcasecmp(pos, TFTP_WINDOW_SIZE_OPTION) == 0 &&
+          options_in->window_size != TFTP_RFC1350_WINDOW_SIZE) {
+          remain -= sizeof (TFTP_WINDOW_SIZE_OPTION);
+          pos    += sizeof (TFTP_WINDOW_SIZE_OPTION);
+          if (!parse_decimal_number (
+              &pos,
+              &remain,
+              TFTP_WINDOW_SIZE_MIN,
+              options_in->window_size,
+              &options_out->window_size)) {
+              return false;
+          };
+
+      } else {
+         return false; /* Unknown option */
+      }
+    }
+
+    return true;
+}
+
+/*
+ * Send an error message
+ */
+static void send_error (
+    struct tftpStream *tp,
+    struct sockaddr_in *to,
+    uint8_t error_code,
+    const char *error_message
+)
 {
     int len;
     struct {
         uint16_t      opcode;
         uint16_t      errorCode;
-        char                errorMessage[12];
+        char          errorMessage[80];
     } msg;
 
     /*
      * Create the error packet (Unknown transfer ID).
      */
     msg.opcode = htons (TFTP_OPCODE_ERROR);
-    msg.errorCode = htons (5);
-    len = sizeof msg.opcode + sizeof msg.errorCode + 1;
-    len += sprintf (msg.errorMessage, "GO AWAY");
+    msg.errorCode = htons (error_code);
+    len = snprintf (msg.errorMessage, sizeof (msg.errorMessage), error_message);
+    if (len >= sizeof (msg.errorMessage)) {
+      len = sizeof (msg.errorMessage) - 1;
+    }
+    len += sizeof (msg.opcode) + sizeof (msg.errorCode) + 1;
 
     /*
      * Send it
@@ -348,32 +530,47 @@ sendStifle (struct tftpStream *tp, struct sockaddr_in *to)
 }
 
 /*
- * Wait for a data packet
+ * Send a message to make the other end shut up
  */
-static int
+static void sendStifle (struct tftpStream *tp, struct sockaddr_in *to)
+{
+    send_error (tp, to, TFTP_ERROR_CODE_UNKNOWN_ID, "GO AWAY");
+}
+
+/*
+ * Wait for a packet
+ */
+static ssize_t
 getPacket (struct tftpStream *tp, int retryCount)
 {
-    int len;
+    ssize_t len;
     struct timeval tv;
+    int flags = 0;
 
-    if (retryCount == 0) {
-        tv.tv_sec = PACKET_FIRST_TIMEOUT_MILLISECONDS / 1000L;
-        tv.tv_usec = (PACKET_FIRST_TIMEOUT_MILLISECONDS % 1000L) * 1000L;
+    if (retryCount == GET_PACKET_DONT_WAIT) {
+        flags = MSG_DONTWAIT;
+    } else if (retryCount == 0) {
+        tv.tv_sec = tp->config.first_timeout / 1000L;
+        tv.tv_usec = (tp->config.first_timeout % 1000L) * 1000L;
+        setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
+    } else {
+        tv.tv_sec = tp->config.timeout / 1000L;
+        tv.tv_usec = (tp->config.timeout % 1000L) * 1000L;
+        setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
     }
-    else {
-        tv.tv_sec = PACKET_TIMEOUT_MILLISECONDS / 1000L;
-        tv.tv_usec = (PACKET_TIMEOUT_MILLISECONDS % 1000L) * 1000L;
-    }
-    setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
     for (;;) {
         union {
             struct sockaddr s;
             struct sockaddr_in i;
         } from;
         socklen_t fromlen = sizeof from;
-        len = recvfrom (tp->socket, &tp->pkbuf,
-                        sizeof tp->pkbuf, 0,
-                        &from.s, &fromlen);
+        len = recvfrom (tp->socket,
+            tp->receive_buf,
+            tp->packet_size,
+            flags,
+            &from.s,
+            &fromlen
+        );
         if (len < 0)
             break;
         if (from.i.sin_addr.s_addr == tp->farAddress.sin_addr.s_addr) {
@@ -391,397 +588,706 @@ getPacket (struct tftpStream *tp, int retryCount)
          */
         sendStifle (tp, &from.i);
     }
-    tv.tv_sec = 0;
-    tv.tv_usec = 0;
-    setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
-#ifdef RTEMS_TFTP_DRIVER_DEBUG
-    if (rtems_tftp_driver_debug) {
-        if (len >= (int) sizeof tp->pkbuf.tftpACK) {
-            int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
-            switch (opcode) {
-            default:
-                printf ("TFTP: OPCODE %d\n", opcode);
-                break;
-
-            case TFTP_OPCODE_DATA:
-                printf ("TFTP: RECV %d\n", ntohs (tp->pkbuf.tftpDATA.blocknum));
-                break;
-
-            case TFTP_OPCODE_ACK:
-                printf ("TFTP: GOT ACK %d\n", ntohs (tp->pkbuf.tftpACK.blocknum));
-                break;
-            }
-        }
-        else {
-            printf ("TFTP: %d-byte packet\n", len);
-        }
+    if (retryCount != GET_PACKET_DONT_WAIT) {
+        tv.tv_sec = 0;
+        tv.tv_usec = 0;
+        setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
     }
-#endif
     return len;
 }
 
-/*
- * Send an acknowledgement
- */
-static int
-sendAck (struct tftpStream *tp)
+static int process_unexpected_packet (struct tftpStream *tp, ssize_t len)
 {
-#ifdef RTEMS_TFTP_DRIVER_DEBUG
-    if (rtems_tftp_driver_debug)
-        printf ("TFTP: ACK %d\n", tp->blocknum);
-#endif
+    (void) len;
+    send_error (
+        tp,
+        &tp->farAddress,
+        TFTP_ERROR_CODE_ILLEGAL,
+        "Got packet with unexpected opcode from server"
+    );
+    return EPROTO;
+}
+
+static int process_malformed_packet (struct tftpStream *tp, ssize_t len)
+{
+    (void) len;
+    send_error (
+        tp,
+        &tp->farAddress,
+        TFTP_ERROR_CODE_ILLEGAL,
+        "Got malformed packet from server"
+    );
+    return EPROTO;
+}
+
+static int process_error_packet (struct tftpStream *tp, ssize_t len)
+{
+    (void) len;
+    return tftpErrno (tp->receive_buf->tftpERROR.errorCode);
+}
+
+/*
+ * When an RRQ or a WRQ with options is sent and the server responds with
+ * an error, this function will trigger a re-sent of an RRQ or WRQ
+ * without options (falling back to old RFC1350).
+ *
+ * If someone wants to change the implementation to force using options
+ * (i.e. prevent fallback to RFC1350), at least these points must be
+ * considered:
+ *
+ *     * Use `process_error_packet()` instead of
+ *       `process_error_packet_option_negotiation()`
+ *     * React to DATA and ACK packets, which are an immediate response to
+ *       an RRQ or a WRQ with options, with an error packet.
+ *     * Check the option values in the OACK whether they are in the
+ *       desired range.
+ */
+static int process_error_packet_option_negotiation (
+    struct tftpStream *tp, ssize_t len
+)
+{
+    (void) len;
+    /*
+     * Setting tp->config.options causes an RRQ or a WRQ to be created without
+     * options.
+     * Setting tp->server_option is defensive programming as these fields
+     * should already have these values.
+     */
+    tp->config.options.block_size  = TFTP_RFC1350_BLOCK_SIZE;
+    tp->config.options.window_size = TFTP_RFC1350_WINDOW_SIZE;
+    tp->server_options.block_size  = TFTP_RFC1350_BLOCK_SIZE;
+    tp->server_options.window_size = TFTP_RFC1350_WINDOW_SIZE;
+
+    tp->process_error_packet = process_error_packet;
+    /*
+     * GOT_FIRST_OUT_OF_ORDER_PACKET will trigger a re-send of the RRQ or WRQ.
+     */
+    return GOT_FIRST_OUT_OF_ORDER_PACKET;
+}
+
+static int process_data_packet (struct tftpStream *tp, ssize_t len)
+{
+    ssize_t plen;
+    int32_t pkt_blocknum;
+    union tftpPacket *send_buf;
+
+    if (len < sizeof (tp->receive_buf->tftpACK)) {
+        return process_malformed_packet (tp, len);
+    }
+    pkt_blocknum = (int32_t) ntohs (tp->receive_buf->tftpACK.blocknum);
+    if (pkt_blocknum == 0) {
+        return process_malformed_packet (tp, len);
+    }
+
+    /*
+     * In case of reading a file from the server:
+     * If the latest ACK packet(s) did not reach the server, the server
+     * starts the window from the last ACK it received.  This if-clause
+     * ensures, the client sends an ACK after having seen `windowsize`
+     * packets.
+     */
+    if (pkt_blocknum < tp->blocknum_of_first_packet_of_window &&
+        pkt_blocknum >= (int32_t) tp->blocknum + 1 -
+            (int32_t) tp->server_options.window_size) {
+        tp->blocknum_of_first_packet_of_window = pkt_blocknum;
+    }
+    if (!tp->ignore_out_of_order_packets &&
+       pkt_blocknum > (int32_t) tp->blocknum + 1) {
+        tp->ignore_out_of_order_packets = true;
+        return GOT_FIRST_OUT_OF_ORDER_PACKET;
+    } else if (pkt_blocknum == (int32_t) tp->blocknum) {
+      /*
+       * In case of reading a file from the server:
+       * If the last ACK packet send by the client did not reach the
+       * server, the server re-sends all packets of the window.  In this
+       * case, the client must re-send the ACK packet after having
+       * received the last packet of the window (even through it has
+       * already received that packet before).
+       * GOT_OLD_PACKET would wrongly suppress this.
+       */
+      return GOT_DUPLICATE_OF_CURRENT_PACKET;
+    } else if (pkt_blocknum != (int32_t) tp->blocknum + 1) {
+        return GOT_OLD_PACKET;
+    }
+    tp->ignore_out_of_order_packets = false;
+
+    tp->blocknum++;
+    tp->nused = 0; /* Only for 2nd, 3rd, 4th DATA packet received */
+    tp->nleft = BLK_SIZE_FROM_PKT_SIZE (len);
+    tp->at_eof = (tp->nleft < tp->server_options.block_size);
+    /*
+     * After the last DATA packet, the client must send a final ACK
+     */
+    if (tp->at_eof) {
+        plen = prepare_ack_packet_for_sending (tp, true, &send_buf, NULL, NULL);
+
+        /*
+         * Send it. Errors during send will not matter for this last ACK.
+         */
+        sendto (
+            tp->socket,
+            send_buf,
+            plen,
+            0,
+            (struct sockaddr *) &tp->farAddress,
+            sizeof (tp->farAddress)
+        );
+    }
+    tp->prepare_packet_for_sending = prepare_ack_packet_for_sending;
+    return GOT_EXPECTED_PACKET;
+}
+
+static int process_ack_packet (struct tftpStream *tp, ssize_t len)
+{
+    uint16_t blocknum_ack;
+    if (len < sizeof (tp->receive_buf->tftpACK)) {
+        return process_malformed_packet (tp, len);
+    }
+    blocknum_ack = ntohs (tp->receive_buf->tftpACK.blocknum);
+    if ((int32_t) blocknum_ack == tp->blocknum_of_first_packet_of_window - 1 &&
+        blocknum_ack != 0
+    ) {
+        tp->blocknum = tp->blocknum_of_first_packet_of_window;
+        return GOT_DUPLICATE_OF_CURRENT_PACKET;
+    }
+    if ((int32_t) blocknum_ack < tp->blocknum_of_first_packet_of_window ||
+        blocknum_ack > tp->blocknum_last_filled) {
+        return GOT_OLD_PACKET;
+    }
+    tp->blocknum = blocknum_ack + 1;
+    tp->blocknum_of_first_packet_of_window = (int32_t) tp->blocknum;
+    tp->prepare_packet_for_sending = prepare_data_packet_for_sending;
+    return GOT_EXPECTED_PACKET;
+}
+
+static ssize_t prepare_data_packet_for_sending (
+    struct tftpStream *tp,
+    bool force_retransmission,
+    union tftpPacket **send_buf,
+    bool *wait_for_packet_reception,
+    const void *not_used
+)
+{
+    (void) not_used;
+    ssize_t len;
+    *send_buf = get_send_buffer_packet (tp, tp->blocknum);
+
+    len = PKT_SIZE_FROM_BLK_SIZE (
+        (tp->blocknum == tp->blocknum_eof_block) ? tp->nused : tp->block_size
+    );
+    (*send_buf)->tftpDATA.opcode   = htons (TFTP_OPCODE_DATA);
+    (*send_buf)->tftpDATA.blocknum = htons (tp->blocknum);
+
+    /*
+     * If the client sends the last packet of a window,
+     * it must wait for an ACK and - in case no ACK is received - begin
+     * a retransmission with the first packet of the window.
+     * Note that the last DATA block for the whole transfer is also
+     * a "last packet of a window".
+     */
+    if ((int32_t) tp->blocknum + 1 >=
+        tp->blocknum_of_first_packet_of_window + tp->send_buf_size_in_pkts ||
+        tp->blocknum == tp->blocknum_eof_block) {
+        tp->blocknum = (uint16_t) tp->blocknum_of_first_packet_of_window;
+    } else {
+        tp->blocknum++;
+        *wait_for_packet_reception = false;
+    }
+
+    tp->process_data_packet  = process_unexpected_packet;
+    tp->process_ack_packet   = process_ack_packet;
+    tp->process_oack_packet  = process_unexpected_packet;
+    tp->process_error_packet = process_error_packet;
+
+    /*
+     * Our last packet won't necessarily be acknowledged!
+     */
+    if (tp->blocknum == tp->blocknum_eof_block) {
+        tp->retransmission_error_code = 0;
+    }
+
+    return len;
+}
+
+static ssize_t prepare_ack_packet_for_sending (
+    struct tftpStream *tp,
+    bool force_retransmission,
+    union tftpPacket **send_buf,
+    bool *wait_for_packet_reception,
+    const void *path_name
+)
+{
+    (void) wait_for_packet_reception;
+    if (!force_retransmission &&
+        tp->blocknum_of_first_packet_of_window - 1 +
+        (int32_t) tp->server_options.window_size > (int32_t) tp->blocknum) {
+      return DO_NOT_SEND_PACKET;
+    }
+    tp->blocknum_of_first_packet_of_window = (int32_t) tp->blocknum + 1;
 
     /*
      * Create the acknowledgement
      */
-    tp->pkbuf.tftpACK.opcode = htons (TFTP_OPCODE_ACK);
-    tp->pkbuf.tftpACK.blocknum = htons (tp->blocknum);
+    *send_buf = tp->send_buf;
+    (*send_buf)->tftpACK.opcode   = htons (TFTP_OPCODE_ACK);
+    (*send_buf)->tftpACK.blocknum = htons (tp->blocknum);
 
-    /*
-     * Send it
-     */
-    if (sendto (tp->socket, (char *)&tp->pkbuf, sizeof tp->pkbuf.tftpACK, 0,
-                                    (struct sockaddr *)&tp->farAddress,
-                                    sizeof tp->farAddress) < 0)
-        return errno;
-    return 0;
+    tp->process_data_packet  = process_data_packet;
+    tp->process_ack_packet   = process_unexpected_packet;
+    tp->process_oack_packet  = process_unexpected_packet;
+    tp->process_error_packet = process_error_packet;
+
+    return sizeof (tp->send_buf->tftpACK);
 }
 
-/*
- * Convert a path to canonical form
- */
-static void
-fixPath (char *path)
+static int process_oack_packet (struct tftpStream *tp, ssize_t len)
 {
-    char *inp, *outp, *base;
-
-    outp = inp = path;
-    base = NULL;
-    for (;;) {
-        if (inp[0] == '.') {
-            if (inp[1] == '\0')
-                break;
-            if (inp[1] == '/') {
-                inp += 2;
-                continue;
-            }
-            if (inp[1] == '.') {
-                if (inp[2] == '\0') {
-                    if ((base != NULL) && (outp > base)) {
-                        outp--;
-                        while ((outp > base) && (outp[-1] != '/'))
-                            outp--;
-                    }
-                    break;
-                }
-                if (inp[2] == '/') {
-                    inp += 3;
-                    if (base == NULL)
-                        continue;
-                    if (outp > base) {
-                        outp--;
-                        while ((outp > base) && (outp[-1] != '/'))
-                            outp--;
-                    }
-                    continue;
-                }
-            }
-        }
-        if (base == NULL)
-            base = inp;
-        while (inp[0] != '/') {
-            if ((*outp++ = *inp++) == '\0')
-                return;
-        }
-        *outp++ = '/';
-        while (inp[0] == '/')
-            inp++;
+    if (!parse_options(tp->receive_buf,
+        len,
+        &tp->config.options,
+        &tp->server_options)) {
+        send_error (
+            tp,
+            &tp->farAddress,
+            TFTP_ERROR_CODE_OPTION_NEGO,
+            "Bad options, option values or malformed OACK packet"
+        );
+        return EPROTO;
     }
-    *outp = '\0';
-    return;
-}
-
-static void rtems_tftp_eval_path(rtems_filesystem_eval_path_context_t *self)
-{
-    int eval_flags = rtems_filesystem_eval_path_get_flags (self);
-
-    if ((eval_flags & RTEMS_FS_MAKE) == 0) {
-        int rw = RTEMS_FS_PERMS_READ | RTEMS_FS_PERMS_WRITE;
-
-        if ((eval_flags & rw) != rw) {
-            rtems_filesystem_location_info_t *currentloc =
-                rtems_filesystem_eval_path_get_currentloc (self);
-            char *current = currentloc->node_access;
-            size_t currentlen = strlen (current);
-            const char *path = rtems_filesystem_eval_path_get_path (self);
-            size_t pathlen = rtems_filesystem_eval_path_get_pathlen (self);
-            size_t len = currentlen + pathlen;
-
-            rtems_filesystem_eval_path_clear_path (self);
-
-            current = realloc (current, len + 1);
-            if (current != NULL) {
-                memcpy (current + currentlen, path, pathlen);
-                current [len] = '\0';
-                if (!rtems_tftp_is_directory (current, len)) {
-                    fixPath (current);
-                }
-                currentloc->node_access = current;
-            } else {
-                rtems_filesystem_eval_path_error (self, ENOMEM);
-            }
-        } else {
-            rtems_filesystem_eval_path_error (self, EINVAL);
-        }
+    if (tp->is_for_reading) {
+        /*
+         * Since no DATA packet has been received yet, tell
+         * tftp_read() there is no data left.
+         */
+        tp->nleft = 0;
+        tp->prepare_packet_for_sending = prepare_ack_packet_for_sending;
     } else {
-        rtems_filesystem_eval_path_error (self, EIO);
+        tp->blocknum_of_first_packet_of_window = 1;
+        tp->blocknum = (uint16_t) tp->blocknum_of_first_packet_of_window;
+        tp->prepare_packet_for_sending = prepare_data_packet_for_sending;
     }
+    return GOT_EXPECTED_PACKET;
 }
 
-/*
- * The routine which does most of the work for the IMFS open handler
- */
-static int rtems_tftp_open_worker(
-    rtems_libio_t *iop,
-    char          *full_path_name,
-    int            oflag
+static ssize_t prepare_request_packet_for_sending (
+    struct tftpStream *tp,
+    bool force_retransmission,
+    union tftpPacket **send_buf,
+    bool *wait_for_packet_reception,
+    const void *path_name
 )
 {
-    tftpfs_info_t        *fs;
-    struct tftpStream    *tp;
-    int                  retryCount;
-    struct in_addr       farAddress;
-    int                  s;
-    int                  len;
-    char                 *cp1;
-    char                 *cp2;
-    char                 *remoteFilename;
-    rtems_interval       now;
-    char                 *hostname;
+    (void) wait_for_packet_reception;
+    ssize_t len;
+    *send_buf = tp->send_buf;
+    len = create_request (
+        *send_buf,
+        tp->block_size,
+        tp->is_for_reading,
+        path_name,
+        &tp->config.options
+    );
 
-    /*
-     * Get the file system info.
-     */
-    fs = tftpfs_info_iop (iop);
-
-    /*
-     * Extract the host name component
-     */
-    if (*full_path_name == '/')
-      full_path_name++;
-
-    hostname = full_path_name;
-    cp1 = strchr (full_path_name, ':');
-    if (!cp1) {
-#ifdef RTEMS_NETWORKING
-        hostname = "BOOTP_HOST";
-#endif
+    if (len < 0) {
+        tp->error = ENAMETOOLONG;
     } else {
-        *cp1 = '\0';
-        ++cp1;
+        tp->process_data_packet  = tp->is_for_reading ?
+            process_data_packet : process_unexpected_packet;
+        tp->process_ack_packet   = tp->is_for_reading ?
+            process_unexpected_packet : process_ack_packet;
+        tp->process_oack_packet  = MUST_SEND_OPTIONS(tp->config.options) ?
+            process_oack_packet : process_unexpected_packet;
+        tp->process_error_packet = MUST_SEND_OPTIONS(tp->config.options) ?
+            process_error_packet_option_negotiation : process_error_packet;
     }
 
     /*
-     * Convert hostname to Internet address
+     * getPacket() will change these values when the first packet is
+     * received.  Yet, this first packet may be an unexpected one
+     * (e.g. an ERROR or having a wrong block number).
+     * If a second, third, forth, ... RRQ/WRQ is to be sent, it should
+     * be directed to the server port again and not to the port the
+     * first unexpected packet came from.
      */
-#ifdef RTEMS_NETWORKING
-    if (strcmp (hostname, "BOOTP_HOST") == 0)
-        farAddress = rtems_bsdnet_bootp_server_address;
-    else
-#endif
-    if (inet_aton (hostname, &farAddress) == 0) {
-        struct hostent *he = gethostbyname(hostname);
-        if (he == NULL)
-            return ENOENT;
-        memcpy (&farAddress, he->h_addr, sizeof (farAddress));
-    }
+    tp->farAddress.sin_port = htons (tp->config.server_port);
+    tp->firstReply          = 1;
 
-    /*
-     * Extract file pathname component
-     */
-#ifdef RTEMS_NETWORKING
-    if (strcmp (cp1, "BOOTP_FILE") == 0) {
-        cp1 = rtems_bsdnet_bootp_boot_file_name;
-    }
-#endif
-    if (*cp1 == '\0')
-        return ENOENT;
-    remoteFilename = cp1;
-    if (strlen (remoteFilename) > (TFTP_BUFSIZE - 10))
-        return ENOENT;
+    return len;
+}
 
-    /*
-     * Find a free stream
-     */
-    rtems_mutex_lock (&fs->tftp_mutex);
-    for (s = 0 ; s < fs->nStreams ; s++) {
-        if (fs->tftpStreams[s] == NULL)
-        break;
-    }
-    if (s == fs->nStreams) {
-        /*
-         * Reallocate stream pointers
-         * Guard against the case where realloc() returns NULL.
-         */
-        struct tftpStream **np;
+/*
+ * Conduct one communication step with the server. For windowsize == 1,
+ * one step is:
+ *   a) Send a packet to the server
+ *   b) Receive a reply packet from the server
+ *   c) Handle errors (if any)
+ *   d) If no packet has been received from the server and the maximum
+ *      retransmission count has not yet been reached, start over with a)
+ * The flow of packets (i.e. which packet to send and which packet(s) to
+ * expect from the server) is controlled by function pointers found in
+ * struct tftpStream.
+ *
+ * Besides of handling errors and retransmissions, the essential data exchange
+ * follows these patterns:
+ *
+ * Connection establishment and option negotiation:
+ *   * Send RRQ/WRQ (read or write request packet)
+ *   * Receive OACK (read and write) or ACK (write only) or DATA (read only)
+ *
+ * Read step with windowsize == 1:
+ *   * Send ACK packet
+ *   * Receive DATA packet
+ * Sending the very last ACK packet for a "read" session is treated as a
+ * special case.
+ *
+ * Write step with windowsize == 1:
+ *   * Send DATA packet
+ *   * Receive ACK packet
+ *
+ * A windowsize lager than one makes thinks more complicated.
+ * In this case, a step normally only receives (read) or only sends (write)
+ * a packet.  The sending or receiving of the ACK packets is skipped normally
+ * and happens only at the last step of the window (in which case this last
+ * step is similar to the windowsize == 1 case):
+ *
+ * Normal read step with windowsize > 1:
+ *   * Receive DATA packet
+ * Last read step of a window with windowsize > 1:
+ *   * Send ACK packet
+ *   * Receive DATA packet
+ *
+ * Normal write step with windowsize > 1:
+ *   * Send DATA packet
+ *   * Check for an ACK packet but do not wait for it
+ * Last write step of a window with windowsize > 1:
+ *   * Send DATA packet
+ *   * Receive ACK packet
+ *
+ * The "normal write step for windowsize > 1" checks whether an ACK packet
+ * has been received after each sending of a DATA packet.  Package lost and
+ * exchanges in the network can give rise to situations in which the server
+ * sends more than a single ACK packet during a window.  If these packets
+ * are not reacted on immediately, the network would be flooded with
+ * surplus packets.  (An example where two ACK packets appear in a window
+ * appears in test case "read_file_windowsize_trouble" where the client/server
+ * roles are exchanged.)
+ */
+static int communicate_with_server (
+    struct tftpStream    *tp,
+    const void *create_packet_data
+)
+{
+    ssize_t len;
+    uint16_t opcode;
+    union tftpPacket *send_buf;
+    bool received_duplicated_or_old_package = false;
+    bool force_retransmission = false;
+    bool wait_for_packet_reception;
+    int retryCount = 0;
+    while (tp->error == 0) {
 
-        np = realloc (fs->tftpStreams, ++fs->nStreams * sizeof *fs->tftpStreams);
-        if (np == NULL) {
-            rtems_mutex_unlock (&fs->tftp_mutex);
-            return ENOMEM;
+        if (!received_duplicated_or_old_package) {
+            wait_for_packet_reception = true;
+            len = tp->prepare_packet_for_sending (
+                tp,
+                force_retransmission,
+                &send_buf,
+                &wait_for_packet_reception,
+                create_packet_data
+                );
+            if (len < 0) {
+                if (tp->error == 0) {
+                    tp->error = EIO;
+                }
+                break;
+            }
+
+            if (len != DO_NOT_SEND_PACKET) {
+                /*
+                 * Send the packet
+                 */
+                if (sendto (tp->socket, send_buf, len, 0,
+                            (struct sockaddr *)&tp->farAddress,
+                            sizeof tp->farAddress) < 0) {
+                    tp->error = EIO;
+                    break;
+                }
+            }
         }
-        fs->tftpStreams = np;
+        received_duplicated_or_old_package = false;
+        force_retransmission = false;
+
+        /*
+         * Get reply
+         */
+        len = getPacket (
+            tp,
+            wait_for_packet_reception ? retryCount : GET_PACKET_DONT_WAIT
+        );
+        if (len >= (int) sizeof (tp->receive_buf->tftpDATA.opcode)) {
+            opcode = ntohs (tp->receive_buf->tftpDATA.opcode);
+            switch (opcode) {
+            case TFTP_OPCODE_DATA:
+                tp->error = tp->process_data_packet (tp, len);
+                break;
+            case TFTP_OPCODE_ACK:
+                tp->error = tp->process_ack_packet (tp, len);
+                break;
+            case TFTP_OPCODE_OACK:
+                tp->error = tp->process_oack_packet (tp, len);
+                break;
+            case TFTP_OPCODE_ERROR:
+                tp->error = tp->process_error_packet (tp, len);
+                break;
+            default:
+                tp->error = process_unexpected_packet (tp, len);
+                break;
+            }
+            if (tp->error == GOT_EXPECTED_PACKET) {
+                break;
+            } else if (tp->error == GOT_DUPLICATE_OF_CURRENT_PACKET) {
+                tp->error = 0;
+            } else if (tp->error == GOT_OLD_PACKET) {
+                received_duplicated_or_old_package = true;
+                tp->error = 0;
+            } else if (tp->error <= GOT_FIRST_OUT_OF_ORDER_PACKET) {
+                force_retransmission = true;
+                tp->error = 0;
+            } /* else ... tp->error > 0 means "exit this function with error" */
+        } else if (len >= 0) {
+            tp->error = process_malformed_packet (tp, len);
+        } else if (len < 0 && !wait_for_packet_reception) {
+            tp->error = 0;
+            break;
+        } else {
+            /*
+             * Timeout or other problems to receive packets
+             * Attempt a retransmission
+             */
+            if (++retryCount >= (int) tp->config.retransmissions) {
+                tp->error = tp->retransmission_error_code;
+                break;
+            }
+            force_retransmission = true;
+        }
     }
-    tp = fs->tftpStreams[s] = malloc (sizeof (struct tftpStream));
-    rtems_mutex_unlock (&fs->tftp_mutex);
-    if (tp == NULL)
-        return ENOMEM;
-    iop->data0 = s;
-    iop->data1 = tp;
+
+    return tp->error;
+}
+
+/*
+ * Allocate and initialize an struct tftpStream object.
+ *
+ * This function does not check whether the config values are in valid ranges.
+ */
+static struct tftpStream *create_stream(
+    const tftp_net_config *config,
+    const struct in_addr *farAddress,
+    bool is_for_reading
+)
+{
+    struct tftpStream *tp = NULL;
+    tp = malloc (sizeof (struct tftpStream));
+    if (tp == NULL) {
+        return NULL;
+    }
+
+    /*
+     * Initialize fields accessed by _Tftp_Destroy().
+     */
+    tp->receive_buf = NULL;
+    tp->send_buf    = NULL;
+    tp->socket      = 0;
+
+    /*
+     * Allocate send and receive buffer for exchange of RRQ/WRQ and ACK/OACK.
+     */
+    tp->block_size  = TFTP_RFC1350_BLOCK_SIZE;
+    tp->packet_size = PKT_SIZE_FROM_BLK_SIZE (tp->block_size);
+    tp->receive_buf = malloc (tp->packet_size);
+    if (tp->receive_buf == NULL) {
+      _Tftp_Destroy (tp);
+      return NULL;
+    }
+    tp->send_buf = tp->receive_buf;
+    tp->send_buf_size_in_pkts = 1;
 
     /*
      * Create the socket
      */
     if ((tp->socket = socket (AF_INET, SOCK_DGRAM, 0)) < 0) {
-        releaseStream (fs, s);
-        return ENOMEM;
+        _Tftp_Destroy (tp);
+        return NULL;
     }
 
     /*
-     * Bind the socket to a local address
+     * Setup configuration and options
      */
-    retryCount = 0;
-    now = rtems_clock_get_ticks_since_boot();
-    for (;;) {
-        int try = (now + retryCount) % 10;
-
-        tp->myAddress.sin_family = AF_INET;
-        tp->myAddress.sin_port = htons (UDP_PORT_BASE + fs->nStreams * try + s);
-        tp->myAddress.sin_addr.s_addr = htonl (INADDR_ANY);
-        if (bind (tp->socket, (struct sockaddr *)&tp->myAddress, sizeof tp->myAddress) >= 0)
-            break;
-        if (++retryCount == 10) {
-            releaseStream (fs, s);
-            return EBUSY;
-        }
+    if ( config == NULL ) {
+      tftp_initialize_net_config (&tp->config);
+    } else {
+      tp->config = *config;
     }
+
+    /*
+     * If the server does not confirm our option values later on,
+     * use numbers from the original RFC 1350 for the actual transfer.
+     */
+    tp->server_options.block_size  = TFTP_RFC1350_BLOCK_SIZE;
+    tp->server_options.window_size = TFTP_RFC1350_WINDOW_SIZE;
 
     /*
      * Set the UDP destination to the TFTP server
      * port on the remote machine.
      */
-    tp->farAddress.sin_family = AF_INET;
-    tp->farAddress.sin_addr = farAddress;
-    tp->farAddress.sin_port = htons (69);
+    tp->farAddress.sin_family              = AF_INET;
+    tp->farAddress.sin_addr                = *farAddress;
+    tp->farAddress.sin_port                = htons (tp->config.server_port);
 
-    /*
-     * Start the transfer
-     */
-    tp->firstReply = 1;
-    retryCount = 0;
-    for (;;) {
-        /*
-         * Create the request
-         */
-        if ((oflag & O_ACCMODE) == O_RDONLY) {
-            tp->writing = 0;
-            tp->pkbuf.tftpRWRQ.opcode = htons (TFTP_OPCODE_RRQ);
-        }
-        else {
-            tp->writing = 1;
-            tp->pkbuf.tftpRWRQ.opcode = htons (TFTP_OPCODE_WRQ);
-        }
-        cp1 = (char *) tp->pkbuf.tftpRWRQ.filename_mode;
-        cp2 = (char *) remoteFilename;
-        while ((*cp1++ = *cp2++) != '\0')
-            continue;
-        cp2 = "octet";
-        while ((*cp1++ = *cp2++) != '\0')
-            continue;
-        len = cp1 - (char *)&tp->pkbuf.tftpRWRQ;
+    tp->nleft                              = 0;
+    tp->nused                              = 0;
+    tp->blocknum                           = 0;
+    tp->blocknum_last_filled               = 0;
+    tp->blocknum_eof_block                 = UINT16_MAX;
+    tp->firstReply                         = 1;
+    tp->at_eof                             = false;
+    tp->is_for_reading                     = is_for_reading;
 
-        /*
-         * Send the request
-         */
-        if (sendto (tp->socket, (char *)&tp->pkbuf, len, 0,
-                    (struct sockaddr *)&tp->farAddress,
-                    sizeof tp->farAddress) < 0) {
-            releaseStream (fs, s);
-            return EIO;
-        }
+    tp->prepare_packet_for_sending         = prepare_request_packet_for_sending;
+    tp->process_data_packet                = process_unexpected_packet;
+    tp->process_ack_packet                 = process_unexpected_packet;
+    tp->process_oack_packet                = process_unexpected_packet;
+    tp->process_error_packet               = process_error_packet;
+    tp->retransmission_error_code          = EIO;
+    tp->ignore_out_of_order_packets        = false;
+    tp->blocknum_of_first_packet_of_window = INT32_MIN;
+    tp->error                              = 0;
 
-        /*
-         * Get reply
-         */
-        len = getPacket (tp, retryCount);
-        if (len >= (int) sizeof tp->pkbuf.tftpACK) {
-            int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
-            if (!tp->writing
-             && (opcode == TFTP_OPCODE_DATA)
-             && (ntohs (tp->pkbuf.tftpDATA.blocknum) == 1)) {
-                tp->nused = 0;
-                tp->blocknum = 1;
-                tp->nleft = len - 2 * sizeof (uint16_t  );
-                tp->eof = (tp->nleft < TFTP_BUFSIZE);
-                if (sendAck (tp) != 0) {
-                    releaseStream (fs, s);
-                    return EIO;
-                }
-                break;
-            }
-            if (tp->writing
-             && (opcode == TFTP_OPCODE_ACK)
-             && (ntohs (tp->pkbuf.tftpACK.blocknum) == 0)) {
-                tp->nused = 0;
-                tp->blocknum = 1;
-                break;
-            }
-            if (opcode == TFTP_OPCODE_ERROR) {
-                int e = tftpErrno (tp);
-                releaseStream (fs, s);
-                return e;
-            }
-        }
-
-        /*
-         * Keep trying
-         */
-        if (++retryCount >= OPEN_RETRY_LIMIT) {
-            releaseStream (fs, s);
-            return EIO;
-        }
-    }
-    return 0;
+    return tp;
 }
 
-static int rtems_tftp_open(
-    rtems_libio_t *iop,
-    const char    *new_name,
-    int            oflag,
-    mode_t         mode
+/*
+ * Change the size of the receive and send buffer to match the options
+ * values acknowledged by the server.
+ */
+static struct tftpStream *reallocate_stream_buffer(struct tftpStream *tp)
+{
+    tp->block_size = tp->server_options.block_size;
+    tp->packet_size = PKT_SIZE_FROM_BLK_SIZE (tp->block_size);
+    /*
+     * Defensive programming
+     */
+    if (tp->receive_buf == tp->send_buf) {
+        tp->send_buf = NULL;
+    } else {
+       free (tp->send_buf);
+    }
+
+    tp->receive_buf = realloc (tp->receive_buf, tp->packet_size);
+    if (tp->is_for_reading) {
+        tp->send_buf = tp->receive_buf;
+    } else {
+        tp->send_buf_size_in_pkts = tp->server_options.window_size;
+        tp->send_buf = malloc (
+            tp->send_buf_size_in_pkts * tp->packet_size
+        );
+    }
+
+    if (tp->receive_buf == NULL || tp->send_buf == NULL) {
+      sendStifle (tp,  &tp->farAddress);
+      _Tftp_Destroy (tp);
+      return NULL;
+    }
+    return tp;
+}
+
+/*
+ * Convert hostname to an Internet address
+ */
+static struct in_addr *get_ip_address(
+    const char     *hostname,
+    struct in_addr *farAddress
 )
 {
-    tftpfs_info_t *fs;
-    char          *full_path_name;
-    int           err;
+        struct hostent *he = gethostbyname(hostname);
+        if (he == NULL) {
+            return NULL;
+        }
+        memcpy (farAddress, he->h_addr, sizeof (*farAddress));
+  return farAddress;
+}
 
-    full_path_name = iop->pathinfo.node_access;
+void tftp_initialize_net_config (tftp_net_config *config)
+{
+  static const tftp_net_config default_config = {
+    .retransmissions = TFTP_RFC7440_DATA_RETRANSMISSIONS,
+    .server_port     = TFTP_DEFAULT_SERVER_PORT,
+    .timeout         = TFTP_RFC7440_TIMEOUT_MILLISECONDS,
+    .first_timeout   = PACKET_FIRST_TIMEOUT_MILLISECONDS,
+    .options = {
+      .block_size    = TFTP_DEFAULT_BLOCK_SIZE,
+      .window_size   = TFTP_DEFAULT_WINDOW_SIZE
+    }
+  };
 
-    if (rtems_tftp_is_directory (full_path_name, strlen (full_path_name))) {
-        rtems_set_errno_and_return_minus_one (ENOTSUP);
+  if (config != NULL) {
+    memcpy (config, &default_config, sizeof (default_config));
+  }
+}
+
+int tftp_open(
+    const char               *hostname,
+    const char               *path,
+    bool                      is_for_reading,
+    const tftp_net_config    *config,
+    void                    **tftp_handle
+)
+{
+    struct tftpStream    *tp;
+    struct in_addr       farAddress;
+    int                  err;
+
+    /*
+     * Check parameters
+     */
+    if (tftp_handle == NULL) {
+      return EINVAL;
+    }
+    *tftp_handle = NULL;
+    if (hostname == NULL || path == NULL) {
+        return EINVAL;
+    }
+    if (config != NULL && (
+        config->options.window_size < TFTP_WINDOW_SIZE_MIN ||
+        config->options.block_size  < TFTP_BLOCK_SIZE_MIN  ||
+        config->options.block_size  > TFTP_BLOCK_SIZE_MAX  ) ) {
+        return EINVAL;
     }
 
     /*
-     * Get the file system info.
+     * Create tftpStream structure
      */
-    fs = tftpfs_info_iop (iop);
+    if (get_ip_address( hostname, &farAddress ) == NULL) {
+        return ENOENT;
+    }
+    tp = create_stream( config, &farAddress, is_for_reading );
+    if (tp == NULL) {
+        return ENOMEM;
+    }
 
-    if (fs->flags & TFTPFS_VERBOSE)
-      printf ("TFTPFS: %s\n", full_path_name);
+    /*
+     * Send RRQ or WRQ and wait for reply
+     */
+    tp->prepare_packet_for_sending = prepare_request_packet_for_sending;
+    err = communicate_with_server (tp, path);
+    if ( err != 0 ) {
+        _Tftp_Destroy (tp);
+        return err;
+    }
 
-    err = rtems_tftp_open_worker (iop, full_path_name, oflag);
-    if (err != 0) {
-       rtems_set_errno_and_return_minus_one (err);
+    *tftp_handle = reallocate_stream_buffer ( tp );
+    if( *tftp_handle == NULL ) {
+        return ENOMEM;
     }
 
     return 0;
@@ -790,19 +1296,19 @@ static int rtems_tftp_open(
 /*
  * Read from a TFTP stream
  */
-static ssize_t rtems_tftp_read(
-    rtems_libio_t *iop,
+ssize_t tftp_read(
+    void          *tftp_handle,
     void          *buffer,
     size_t         count
 )
 {
     char              *bp;
-    struct tftpStream *tp = iop->data1;
-    int               retryCount;
+    struct tftpStream *tp = tftp_handle;
     int               nwant;
+    int               err;
 
-    if (!tp)
-        rtems_set_errno_and_return_minus_one( EIO );
+    if (tp == NULL || !tp->is_for_reading || buffer == NULL)
+        return -EIO;
 
     /*
      * Read till user request is satisfied or EOF is reached
@@ -816,7 +1322,7 @@ static ssize_t rtems_tftp_read(
                 ncopy = nwant;
             else
                 ncopy = tp->nleft;
-            memcpy (bp, &tp->pkbuf.tftpDATA.data[tp->nused], ncopy);
+            memcpy (bp, &tp->receive_buf->tftpDATA.data[tp->nused], ncopy);
             tp->nused += ncopy;
             tp->nleft -= ncopy;
             bp += ncopy;
@@ -824,39 +1330,29 @@ static ssize_t rtems_tftp_read(
             if (nwant == 0)
                 break;
         }
-        if (tp->eof)
+        if (tp->at_eof) {
             break;
+        }
 
         /*
          * Wait for the next packet
          */
-        retryCount = 0;
-        for (;;) {
-            int len = getPacket (tp, retryCount);
-            if (len >= (int)sizeof tp->pkbuf.tftpACK) {
-                int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
-                uint16_t   nextBlock = tp->blocknum + 1;
-                if ((opcode == TFTP_OPCODE_DATA)
-                 && (ntohs (tp->pkbuf.tftpDATA.blocknum) == nextBlock)) {
-                    tp->nused = 0;
-                    tp->nleft = len - 2 * sizeof (uint16_t);
-                    tp->eof = (tp->nleft < TFTP_BUFSIZE);
-                    tp->blocknum++;
-                    if (sendAck (tp) != 0)
-                        rtems_set_errno_and_return_minus_one (EIO);
-                    break;
-                }
-                if (opcode == TFTP_OPCODE_ERROR)
-                    rtems_set_errno_and_return_minus_one (tftpErrno (tp));
-            }
-
-            /*
-             * Keep trying?
-             */
-            if (++retryCount == IO_RETRY_LIMIT)
-                rtems_set_errno_and_return_minus_one (EIO);
-            if (sendAck (tp) != 0)
-                rtems_set_errno_and_return_minus_one (EIO);
+        tp->retransmission_error_code = -EIO;
+        err = communicate_with_server(tp, NULL);
+        if (err == tp->retransmission_error_code) {
+          return -EIO;
+        }
+        /*
+         * If communicate_with_server() returns an error, either
+         *    * an error message from the server was received or
+         *    * an error message was already sent to the server
+         * Setting tp->at_eof true, prevents all further calls to
+         * communicate_with_server() and suppresses the sending of
+         * an error message to the server by tftp_close().
+         */
+        if (err != 0) {
+            tp->at_eof = true;
+            return -err;
         }
     }
     return count - nwant;
@@ -864,101 +1360,110 @@ static ssize_t rtems_tftp_read(
 
 /*
  * Flush a write buffer and wait for acknowledgement
+ *
+ * This function returns only if there is at least one packet buffer free
+ * in the tp->send_buf.  This ensures that tftp_write() can store
+ * further data for sending in this free packet buffer.
+ *
+ * When the end of file has been reached (i.e. tftp_close() called this
+ * function), this function returns only after all packets
+ * in the write buffer have been send and acknowledged (or if an error
+ * occurred).
  */
 static int rtems_tftp_flush (struct tftpStream *tp)
 {
-    int wlen, rlen;
-    int retryCount = 0;
+    int err;
 
-    wlen = tp->nused + 2 * sizeof (uint16_t  );
-    for (;;) {
-        tp->pkbuf.tftpDATA.opcode = htons (TFTP_OPCODE_DATA);
-        tp->pkbuf.tftpDATA.blocknum = htons (tp->blocknum);
-#ifdef RTEMS_TFTP_DRIVER_DEBUG
-        if (rtems_tftp_driver_debug)
-            printf ("TFTP: SEND %d (%d)\n", tp->blocknum, tp->nused);
-#endif
-        if (sendto (tp->socket, (char *)&tp->pkbuf, wlen, 0,
-                                        (struct sockaddr *)&tp->farAddress,
-                                        sizeof tp->farAddress) < 0)
-            return EIO;
-        rlen = getPacket (tp, retryCount);
-        /*
-         * Our last packet won't necessarily be acknowledged!
-         */
-        if ((rlen < 0) && (tp->nused < sizeof tp->pkbuf.tftpDATA.data))
-                return 0;
-        if (rlen >= (int)sizeof tp->pkbuf.tftpACK) {
-            int opcode = ntohs (tp->pkbuf.tftpACK.opcode);
-            if ((opcode == TFTP_OPCODE_ACK)
-             && (ntohs (tp->pkbuf.tftpACK.blocknum) == tp->blocknum)) {
-                tp->nused = 0;
-                tp->blocknum++;
-                return 0;
-            }
-            if (opcode == TFTP_OPCODE_ERROR)
-                return tftpErrno (tp);
-        }
-
-        /*
-         * Keep trying?
-         */
-        if (++retryCount == IO_RETRY_LIMIT)
-            return EIO;
+    if (tp->at_eof) {
+        return 0;
     }
+
+    do {
+        err = communicate_with_server(tp, NULL);
+        /*
+         * If communicate_with_server() returns an error, either
+         *    * an error message from the server was received or
+         *    * an error message was already sent to the server
+         * Setting tp->at_eof true, prevents all further calls to
+         * communicate_with_server() and suppresses the sending of
+         * an error message to the server by tftp_close().
+         */
+        if (err != 0) {
+            tp->at_eof = true;
+            return err;
+        }
+    } while(
+         (int32_t) tp->blocknum_last_filled + 1 >=
+         tp->blocknum_of_first_packet_of_window + tp->send_buf_size_in_pkts ||
+         /*
+          * tp->blocknum_eof_block == tp->blocknum_last_filled
+          * holds only true when the user invoked tftp_close().
+          */
+         (tp->blocknum_eof_block == tp->blocknum_last_filled &&
+         tp->blocknum_of_first_packet_of_window <=
+         (int32_t) tp->blocknum_eof_block)
+    );
+
+    return 0;
 }
 
 /*
  * Close a TFTP stream
  */
-static int rtems_tftp_close(
-    rtems_libio_t *iop
+int tftp_close(
+    void *tftp_handle
 )
 {
-    tftpfs_info_t     *fs;
-    struct tftpStream *tp = iop->data1;
+    struct tftpStream *tp = tftp_handle;
     int                e = 0;
 
-    /*
-     * Get the file system info.
-     */
-    fs = tftpfs_info_iop (iop);
+    if (tp == NULL) {
+        return 0;
+    }
 
-    if (!tp)
-        rtems_set_errno_and_return_minus_one (EIO);
-
-    if (tp->writing)
+    if (!tp->is_for_reading) {
+        tp->blocknum_last_filled++;
+        tp->blocknum_eof_block = tp->blocknum_last_filled;
         e = rtems_tftp_flush (tp);
-    if (!tp->eof && !tp->firstReply) {
+        tp->at_eof = true;
+    }
+    if (!tp->at_eof && !tp->firstReply) {
         /*
          * Tell the other end to stop
          */
         rtems_interval ticksPerSecond;
-        sendStifle (tp, &tp->farAddress);
+        send_error (
+            tp,
+            &tp->farAddress,
+            TFTP_ERROR_CODE_NO_USER,
+            "User (client) stopped reading or "
+            "server stopped sending packets (timeout)"
+        );
         ticksPerSecond = rtems_clock_get_ticks_per_second();
         rtems_task_wake_after (1 + ticksPerSecond / 10);
     }
-    releaseStream (fs, iop->data0);
-    if (e)
-        rtems_set_errno_and_return_minus_one (e);
-    return 0;
+    _Tftp_Destroy (tp);
+    return e;
 }
 
-static ssize_t rtems_tftp_write(
-    rtems_libio_t   *iop,
+ssize_t tftp_write(
+    void            *tftp_handle,
     const void      *buffer,
     size_t           count
 )
 {
     const char        *bp;
-    struct tftpStream *tp = iop->data1;
+    struct tftpStream *tp = tftp_handle;
     int               nleft, nfree, ncopy;
+    int               err;
+    union tftpPacket *send_buf;
 
     /*
      * Bail out if an error has occurred
      */
-    if (!tp->writing)
-        rtems_set_errno_and_return_minus_one (EIO);
+    if (tp == NULL || tp->is_for_reading || tp->at_eof || buffer == NULL) {
+        return -EIO;
+    }
 
     /*
      * Write till user request is satisfied
@@ -970,119 +1475,45 @@ static ssize_t rtems_tftp_write(
     bp = buffer;
     nleft = count;
     while (nleft) {
-        nfree = sizeof tp->pkbuf.tftpDATA.data - tp->nused;
+        nfree = tp->block_size - tp->nused;
         if (nleft < nfree)
             ncopy = nleft;
         else
             ncopy = nfree;
-        memcpy (&tp->pkbuf.tftpDATA.data[tp->nused], bp, ncopy);
+        send_buf = get_send_buffer_packet (tp, tp->blocknum_last_filled + 1);
+        memcpy (&send_buf->tftpDATA.data[tp->nused], bp, ncopy);
         tp->nused += ncopy;
         nleft -= ncopy;
         bp += ncopy;
-        if (tp->nused == sizeof tp->pkbuf.tftpDATA.data) {
-            int e = rtems_tftp_flush (tp);
-            if (e) {
-                tp->writing = 0;
-                rtems_set_errno_and_return_minus_one (e);
+        if (tp->nused == tp->block_size) {
+            tp->blocknum_last_filled++;
+            err = rtems_tftp_flush (tp);
+            if (err) {
+                return -err;
             }
+            tp->nused = 0;
         }
     }
     return count;
 }
 
-/*
- * Dummy version to let fopen(xxxx,"w") work properly.
- */
-static int rtems_tftp_ftruncate(
-    rtems_libio_t   *iop RTEMS_UNUSED,
-    off_t            count RTEMS_UNUSED
+void _Tftp_Destroy(
+    void *tftp_handle
 )
 {
-    return 0;
-}
-
-static int rtems_tftp_fstat(
-    const rtems_filesystem_location_info_t *loc,
-    struct stat                            *buf
-)
-{
-    const char *path = loc->node_access;
-    size_t pathlen = strlen (path);
-
-    buf->st_mode = S_IRWXU | S_IRWXG | S_IRWXO
-        | (rtems_tftp_is_directory (path, pathlen) ? S_IFDIR : S_IFREG);
-
-    return 0;
-}
-
-static int rtems_tftp_clone(
-    rtems_filesystem_location_info_t *loc
-)
-{
-    int rv = 0;
-
-    loc->node_access = strdup (loc->node_access);
-
-    if (loc->node_access == NULL) {
-        errno = ENOMEM;
-        rv = -1;
+    struct tftpStream *tp = tftp_handle;
+    if (tp == NULL) {
+        return;
     }
 
-    return rv;
+    if (tp->socket >= 0) {
+        close (tp->socket);
+    }
+
+    if (tp->receive_buf == tp->send_buf) {
+        tp->send_buf = NULL;
+    }
+    free (tp->receive_buf);
+    free (tp->send_buf);
+    free (tp);
 }
-
-static void rtems_tftp_free_node_info(
-    const rtems_filesystem_location_info_t *loc
-)
-{
-    free (loc->node_access);
-}
-
-static bool rtems_tftp_are_nodes_equal(
-  const rtems_filesystem_location_info_t *a,
-  const rtems_filesystem_location_info_t *b
-)
-{
-  return strcmp (a->node_access, b->node_access) == 0;
-}
-
-static const rtems_filesystem_operations_table  rtems_tftp_ops = {
-    .lock_h = rtems_filesystem_default_lock,
-    .unlock_h = rtems_filesystem_default_unlock,
-    .eval_path_h = rtems_tftp_eval_path,
-    .link_h = rtems_filesystem_default_link,
-    .are_nodes_equal_h = rtems_tftp_are_nodes_equal,
-    .mknod_h = rtems_filesystem_default_mknod,
-    .rmnod_h = rtems_filesystem_default_rmnod,
-    .fchmod_h = rtems_filesystem_default_fchmod,
-    .chown_h = rtems_filesystem_default_chown,
-    .clonenod_h = rtems_tftp_clone,
-    .freenod_h = rtems_tftp_free_node_info,
-    .mount_h = rtems_filesystem_default_mount,
-    .unmount_h = rtems_filesystem_default_unmount,
-    .fsunmount_me_h = rtems_tftpfs_shutdown,
-    .utimens_h = rtems_filesystem_default_utimens,
-    .symlink_h = rtems_filesystem_default_symlink,
-    .readlink_h = rtems_filesystem_default_readlink,
-    .rename_h = rtems_filesystem_default_rename,
-    .statvfs_h = rtems_filesystem_default_statvfs
-};
-
-static const rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
-   .open_h = rtems_tftp_open,
-   .close_h = rtems_tftp_close,
-   .read_h = rtems_tftp_read,
-   .write_h = rtems_tftp_write,
-   .ioctl_h = rtems_filesystem_default_ioctl,
-   .lseek_h = rtems_filesystem_default_lseek,
-   .fstat_h = rtems_tftp_fstat,
-   .ftruncate_h = rtems_tftp_ftruncate,
-   .fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
-   .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
-   .fcntl_h = rtems_filesystem_default_fcntl,
-   .kqfilter_h = rtems_filesystem_default_kqfilter,
-   .mmap_h = rtems_filesystem_default_mmap,
-   .poll_h = rtems_filesystem_default_poll,
-   .readv_h = rtems_filesystem_default_readv,
-   .writev_h = rtems_filesystem_default_writev
-};
