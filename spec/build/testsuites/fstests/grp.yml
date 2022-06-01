@@ -138,6 +138,8 @@ links:
   uid: mrfsfssymlink
 - role: build-dependency
   uid: mrfsfstime
+- role: build-dependency
+  uid: tftpfs
 type: build
 use-after: []
 use-before:
