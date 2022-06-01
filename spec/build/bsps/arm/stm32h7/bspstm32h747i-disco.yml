@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: stm32h747i-disco
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2022 Karel Gardas <karel@functional.vision>
+cppflags: []
+enabled-by: true
+family: stm32h7
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: grp
+- role: build-dependency
+  uid: tststm32h757i-eval
+source:
+- bsps/arm/stm32h7/boards/stm/stm32h747i-disco/stm32h7-config-clk.c
+- bsps/arm/stm32h7/boards/stm/stm32h747i-disco/stm32h7-config-osc.c
+- bsps/arm/stm32h7/boards/stm/stm32h747i-disco/stm32h7-config-per.c
+- bsps/arm/stm32h7/boards/stm/stm32h747i-disco/system_stm32h7xx.c
+- bsps/arm/shared/cache/cache-v7m.c
+type: build

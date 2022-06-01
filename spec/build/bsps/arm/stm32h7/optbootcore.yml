@@ -11,6 +11,7 @@ default-by-variant:
 - value: CORE_CM7
   variants:
   - arm/stm32h757i-eval
+  - arm/stm32h747i-disco
 - value: CORE_CM4
   variants:
   - arm/stm32h757i-eval-m4
