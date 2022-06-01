@@ -11,6 +11,7 @@ default-by-variant:
   - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
+  - arm/nucleo-h743zi
 enabled-by: true
 format: '{:#010x}'
 links: []
