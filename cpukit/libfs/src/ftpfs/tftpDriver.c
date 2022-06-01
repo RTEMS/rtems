@@ -233,12 +233,12 @@ int rtems_tftpfs_initialize(
   fs->flags = 0;
   fs->nStreams = 0;
   fs->tftpStreams = 0;
-  
+
   mt_entry->fs_info = fs;
   mt_entry->mt_fs_root->location.node_access = root_path;
   mt_entry->mt_fs_root->location.handlers = &rtems_tftp_handlers;
   mt_entry->ops = &rtems_tftp_ops;
-  
+
   /*
    *  Now allocate a semaphore for mutual exclusion.
    *
@@ -258,7 +258,7 @@ int rtems_tftpfs_initialize(
           token = strtok_r (NULL, " ", &saveptr);
       }
   }
-  
+
   return 0;
 
 error:
@@ -563,7 +563,7 @@ static int rtems_tftp_open_worker(
      * Get the file system info.
      */
     fs = tftpfs_info_iop (iop);
-    
+
     /*
      * Extract the host name component
      */
@@ -595,7 +595,7 @@ static int rtems_tftp_open_worker(
             return ENOENT;
         memcpy (&farAddress, he->h_addr, sizeof (farAddress));
     }
-    
+
     /*
      * Extract file pathname component
      */
@@ -803,7 +803,7 @@ static ssize_t rtems_tftp_read(
 
     if (!tp)
         rtems_set_errno_and_return_minus_one( EIO );
-    
+
     /*
      * Read till user request is satisfied or EOF is reached
      */
@@ -918,15 +918,15 @@ static int rtems_tftp_close(
     tftpfs_info_t     *fs;
     struct tftpStream *tp = iop->data1;
     int                e = 0;
-    
+
     /*
      * Get the file system info.
      */
     fs = tftpfs_info_iop (iop);
-    
-    if (!tp) 
+
+    if (!tp)
         rtems_set_errno_and_return_minus_one (EIO);
-    
+
     if (tp->writing)
         e = rtems_tftp_flush (tp);
     if (!tp->eof && !tp->firstReply) {
