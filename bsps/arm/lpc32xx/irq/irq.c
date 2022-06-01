@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2009, 2022 embedded brains GmbH
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -23,12 +23,8 @@
 #include <bsp/linker-symbols.h>
 #include <bsp/mmu.h>
 
-/*
- * Mask out SIC 1 and 2 IRQ request. There is no need to mask out the FIQ,
- * since a pending FIQ would be a fatal error.  The default handler will be
- * invoked in this case.
- */
-#define LPC32XX_MIC_STATUS_MASK (~0x3U)
+/* Mask out SIC 1 and 2 IRQ/FIQ requests */
+#define LPC32XX_MIC_STATUS_MASK 0x3ffffffcU
 
 typedef union {
   struct {
@@ -211,7 +207,14 @@ lpc32xx_irq_activation_type lpc32xx_irq_get_activation_type(rtems_vector_number 
 
 void bsp_interrupt_dispatch(void)
 {
-  uint32_t status = lpc32xx.mic.sr & LPC32XX_MIC_STATUS_MASK;
+  /*
+   * Do not dispatch interrupts configured as FIQ.  Use the corresponding
+   * interrupt type register to mask these interrupts.  The status register may
+   * indicate an interrupt configured for FIQ before the FIQ exception is
+   * serviced by the processor.
+   */
+  uint32_t status = (lpc32xx.mic.sr & ~lpc32xx.mic.itr) &
+    LPC32XX_MIC_STATUS_MASK;
   uint32_t er_mic = lpc32xx.mic.er;
   uint32_t er_sic_1 = lpc32xx.sic_1.er;
   uint32_t er_sic_2 = lpc32xx.sic_2.er;
@@ -223,11 +226,11 @@ void bsp_interrupt_dispatch(void)
   if (status != 0) {
     vector = lpc32xx_irq_get_index(status);
   } else {
-    status = lpc32xx.sic_1.sr;
+    status = lpc32xx.sic_1.sr & ~lpc32xx.sic_1.itr;
     if (status != 0) {
       vector = lpc32xx_irq_get_index(status) + LPC32XX_IRQ_MODULE_SIC_1;
     } else {
-      status = lpc32xx.sic_2.sr;
+      status = lpc32xx.sic_2.sr & ~lpc32xx.sic_2.itr;
       if (status != 0) {
         vector = lpc32xx_irq_get_index(status) + LPC32XX_IRQ_MODULE_SIC_2;
       } else {
