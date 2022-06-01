@@ -24,6 +24,7 @@ default-by-variant:
 - value: STM32H747xx
   variants:
   - arm/stm32h747i-disco
+  - arm/stm32h747i-disco-m4
 enabled-by: true
 format: '{}'
 links: []

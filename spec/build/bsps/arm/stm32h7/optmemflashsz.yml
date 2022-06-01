@@ -8,6 +8,7 @@ default-by-variant:
 - value: 0x100000
   variants:
   - arm/stm32h757i-eval-m4
+  - arm/stm32h747i-disco-m4
 enabled-by: true
 format: '{:#010x}'
 links: []
