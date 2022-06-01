@@ -3,7 +3,10 @@ actions:
 - define-unquoted: null
 build-type: option
 default: stm32h7_usart1_instance
-default-by-variant: []
+default-by-variant:
+- value: stm32h7_usart3_instance
+  variants:
+  - arm/nucleo-h743zi
 enabled-by: true
 format: '{}'
 links: []
