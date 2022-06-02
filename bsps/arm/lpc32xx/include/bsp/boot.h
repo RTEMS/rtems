@@ -19,8 +19,6 @@
 
 #include <stdint.h>
 
-#include <bsp/nand-mlc.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -87,7 +85,7 @@ typedef union {
     uint8_t d12;
     uint8_t reserved_12 [463];
   } field;
-  uint32_t data [MLC_SMALL_DATA_WORD_COUNT];
+  uint32_t data [128];
 } lpc32xx_boot_block;
 
 void lpc32xx_setup_boot_block(
