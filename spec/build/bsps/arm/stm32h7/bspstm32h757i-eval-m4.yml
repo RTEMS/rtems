@@ -16,6 +16,7 @@ links:
 - role: build-dependency
   uid: tststm32h757i-eval
 source:
+- bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-bspstarthooks.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-config-clk.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-config-osc.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-config-per.c
