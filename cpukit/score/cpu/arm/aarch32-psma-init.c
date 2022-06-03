@@ -153,7 +153,7 @@ size_t _AArch32_PMSA_Map_sections_to_regions(
         }
       }
 
-      if ( end <= region_base ) {
+      if ( base <= region_base ) {
         size_t i;
 
         if ( region_used >= region_max ) {
