@@ -45,7 +45,7 @@
 #include <rtems/score/aarch32-system-registers.h>
 #include <rtems/score/cpu.h>
 
-#define AARCH32_PSMA_REGION_MAX \
+#define AARCH32_PMSA_REGION_MAX \
   ( ( AARCH32_MPUIR_REGION_MASK >> AARCH32_MPUIR_REGION_SHIFT ) + 1 )
 
 static void _AArch32_PMSA_Configure(
@@ -196,7 +196,7 @@ void _AArch32_PMSA_Initialize(
   size_t                      section_count
 )
 {
-  AArch32_PMSA_Region regions[ AARCH32_PSMA_REGION_MAX ];
+  AArch32_PMSA_Region regions[ AARCH32_PMSA_REGION_MAX ];
   size_t region_max;
   size_t region_used;
 
