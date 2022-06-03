@@ -51,7 +51,6 @@ void bsp_start_hook_0(void)
     stm32h7_init_peripheral_clocks();
     HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSI, RCC_MCODIV_1);
     HAL_Init();
-    SystemInit_ExtMemCtl();
   }
 
 #if __CORTEX_M == 0x07U
