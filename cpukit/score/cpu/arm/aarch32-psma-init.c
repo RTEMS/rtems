@@ -133,16 +133,16 @@ size_t _AArch32_PMSA_Map_sections_to_regions(
       if ( attr == region_attr ) {
         uint32_t region_end;
 
-        if ( end == region_base ) {
-          /* Extend the region region */
+        if ( end - region_base <= AARCH32_PMSA_MIN_REGION_ALIGN ) {
+          /* Extend the region */
           regions[ ri ].base = base;
           break;
         }
 
         region_end = region_limit + AARCH32_PMSA_MIN_REGION_ALIGN;
 
-        if ( base == region_end ) {
-          /* Extend the region region */
+        if ( region_end - base <= AARCH32_PMSA_MIN_REGION_ALIGN ) {
+          /* Extend the region */
           regions[ ri ].limit = limit;
           break;
         }
