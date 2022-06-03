@@ -744,7 +744,7 @@ class OptionItem(Item):
         return value
 
     def _assert_aligned(self, conf, cic, value, arg):
-        if value % arg != 0:
+        if value is not None and value % arg != 0:
             conf.fatal(
                 "Value '{}' for option '{}' is not aligned by '{}'".format(
                     value, self.data["name"], arg
@@ -753,7 +753,7 @@ class OptionItem(Item):
         return value
 
     def _assert_eq(self, conf, cic, value, arg):
-        if value != arg:
+        if value is not None and value != arg:
             conf.fatal(
                 "Value '{}' for option '{}' is not equal to {}".format(
                     value, self.data["name"], arg
@@ -762,7 +762,7 @@ class OptionItem(Item):
         return value
 
     def _assert_ge(self, conf, cic, value, arg):
-        if value < arg:
+        if value is not None and value < arg:
             conf.fatal(
                 "Value '{}' for option '{}' is not greater than or equal to {}".format(
                     value, self.data["name"], arg
@@ -771,7 +771,7 @@ class OptionItem(Item):
         return value
 
     def _assert_gt(self, conf, cic, value, arg):
-        if value <= arg:
+        if value is not None and value <= arg:
             conf.fatal(
                 "Value '{}' for option '{}' is not greater than {}".format(
                     value, self.data["name"], arg
@@ -780,7 +780,7 @@ class OptionItem(Item):
         return value
 
     def _assert_in_interval(self, conf, cic, value, arg):
-        if value < arg[0] or value > arg[1]:
+        if value is not None and (value < arg[0] or value > arg[1]):
             conf.fatal(
                 "Value '{}' for option '{}' is not in closed interval [{}, {}]".format(
                     value, self.data["name"], arg[0], arg[1]
@@ -805,7 +805,7 @@ class OptionItem(Item):
         )
 
     def _assert_le(self, conf, cic, value, arg):
-        if value > arg:
+        if value is not None and value > arg:
             conf.fatal(
                 "Value '{}' for option '{}' is not less than or equal to {}".format(
                     value, self.data["name"], arg
@@ -814,7 +814,7 @@ class OptionItem(Item):
         return value
 
     def _assert_lt(self, conf, cic, value, arg):
-        if value >= arg:
+        if value is not None and value >= arg:
             conf.fatal(
                 "Value '{}' for option '{}' is not less than {}".format(
                     value, self.data["name"], arg
@@ -823,7 +823,7 @@ class OptionItem(Item):
         return value
 
     def _assert_ne(self, conf, cic, value, arg):
-        if value == arg:
+        if value is not None and value == arg:
             conf.fatal(
                 "Value '{}' for option '{}' is not unequal to {}".format(
                     value, self.data["name"], arg
@@ -832,7 +832,7 @@ class OptionItem(Item):
         return value
 
     def _assert_power_of_two(self, conf, cic, value, arg):
-        if value <= 0 or (value & (value - 1)) != 0:
+        if value is not None and (value <= 0 or (value & (value - 1)) != 0):
             conf.fatal(
                 "Value '{}' for option '{}' is not a power of two".format(
                     value, self.data["name"]
