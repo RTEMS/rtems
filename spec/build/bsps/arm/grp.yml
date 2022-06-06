@@ -9,6 +9,7 @@ install:
   source:
   - bsps/arm/include/cmsis_gcc.h
   - bsps/arm/include/core_cm7.h
+  - bsps/arm/include/core_cm4.h
   - bsps/arm/include/core_cmFunc.h
   - bsps/arm/include/core_cmInstr.h
   - bsps/arm/include/core_cmSimd.h
