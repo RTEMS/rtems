@@ -20,8 +20,6 @@
 #ifndef __tm27_h
 #define __tm27_h
 
-#include <assert.h>
-
 #include <rtems.h>
 
 #include <bsp/lpc32xx.h>
@@ -30,37 +28,59 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-static void Install_tm27_vector(void (*handler)(rtems_vector_number))
+#define LPC32XX_TM27_TIMER (&lpc32xx.timer_2)
+
+#define LPC32XX_TM27_IRQ LPC32XX_IRQ_TIMER_2
+
+static inline void Install_tm27_vector(void (*handler)(rtems_vector_number))
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  static rtems_interrupt_entry entry;
+  volatile lpc_timer *timer = LPC32XX_TM27_TIMER;
 
-  LPC32XX_SW_INT = 0;
+  LPC32XX_TIMCLK_CTRL1 |= 1U << 4;
 
-  sc = rtems_interrupt_handler_install(
-    LPC32XX_IRQ_SW,
-    "SW",
-    RTEMS_INTERRUPT_UNIQUE,
+  timer->tcr = LPC_TIMER_TCR_RST;
+  timer->ctcr = 0x0;
+  timer->pr = 0x0;
+  timer->ir = 0xff;
+  timer->mcr = LPC_TIMER_MCR_MR0_INTR | LPC_TIMER_MCR_MR0_STOP |
+    LPC_TIMER_MCR_MR0_RST;
+  timer->ccr = 0x0;
+  timer->emr = 0x0;
+  timer->mr0 = 0x1;
+
+  rtems_interrupt_entry_initialize(
+    &entry,
     (rtems_interrupt_handler) handler,
-    NULL
+    NULL,
+    "tm27"
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  (void) rtems_interrupt_entry_install(
+    LPC32XX_TM27_IRQ,
+    RTEMS_INTERRUPT_SHARED,
+    &entry
+  );
 }
 
-static void Cause_tm27_intr(void)
+static inline void Cause_tm27_intr(void)
 {
-  LPC32XX_SW_INT = 0x1;
+  volatile lpc_timer *timer = LPC32XX_TM27_TIMER;
+
+  timer->tcr = LPC_TIMER_TCR_EN;
 }
 
-static void Clear_tm27_intr(void)
+static inline void Clear_tm27_intr(void)
 {
-  LPC32XX_SW_INT = 0;
-  lpc32xx_irq_set_priority(LPC32XX_IRQ_SW, LPC32XX_IRQ_PRIORITY_LOWEST);
+  volatile lpc_timer *timer = LPC32XX_TM27_TIMER;
+
+  timer->ir = LPC_TIMER_IR_MR0;
+  lpc32xx_irq_set_priority(LPC32XX_TM27_IRQ, LPC32XX_IRQ_PRIORITY_LOWEST);
 }
 
-static void Lower_tm27_intr(void)
+static inline void Lower_tm27_intr(void)
 {
-  bsp_interrupt_vector_enable(LPC32XX_IRQ_SW);
-  lpc32xx_irq_set_priority(LPC32XX_IRQ_SW, LPC32XX_IRQ_PRIORITY_HIGHEST);
+  bsp_interrupt_vector_enable(LPC32XX_TM27_IRQ);
+  lpc32xx_irq_set_priority(LPC32XX_TM27_IRQ, LPC32XX_IRQ_PRIORITY_HIGHEST);
 }
 
 #endif /* __tm27_h */
