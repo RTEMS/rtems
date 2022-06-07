@@ -41,6 +41,14 @@ static lpc32xx_irq_fields lpc32xx_irq_priority_masks [LPC32XX_IRQ_PRIORITY_COUNT
 
 static lpc32xx_irq_fields lpc32xx_irq_enable;
 
+static const lpc32xx_irq_fields lpc32xx_irq_is_valid = {
+  .field = {
+    .mic = 0x3fffeff8U,
+    .sic_1 = 0xffde71d6U,
+    .sic_2 = 0x9fdc9fffU
+  }
+};
+
 static inline bool lpc32xx_irq_priority_is_valid(unsigned priority)
 {
   return priority <= LPC32XX_IRQ_PRIORITY_LOWEST;
@@ -84,6 +92,16 @@ static inline void lpc32xx_irq_clear_bit_in_register(unsigned index, unsigned re
   *reg &= ~(1U << bit);
 }
 
+static inline bool lpc32xx_irq_is_bit_set_in_field(
+  unsigned index,
+  const lpc32xx_irq_fields *fields
+)
+{
+  LPC32XX_IRQ_BIT_OPS_DEFINE;
+
+  return fields->fields_table [module] & (1U << bit);
+}
+
 static inline void lpc32xx_irq_set_bit_in_field(unsigned index, lpc32xx_irq_fields *fields)
 {
   LPC32XX_IRQ_BIT_OPS_DEFINE;
@@ -96,6 +114,15 @@ static inline void lpc32xx_irq_clear_bit_in_field(unsigned index, lpc32xx_irq_fi
   LPC32XX_IRQ_BIT_OPS_DEFINE;
 
   fields->fields_table [module] &= ~(1U << bit);
+}
+
+bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
+{
+  if (vector >= BSP_INTERRUPT_VECTOR_COUNT) {
+    return false;
+  }
+
+  return lpc32xx_irq_is_bit_set_in_field(vector, &lpc32xx_irq_is_valid);
 }
 
 static inline unsigned lpc32xx_irq_get_index(uint32_t val)

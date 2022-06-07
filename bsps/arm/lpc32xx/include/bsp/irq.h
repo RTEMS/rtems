@@ -136,7 +136,11 @@ extern "C" {
 
 #define BSP_INTERRUPT_VECTOR_COUNT (LPC32XX_IRQ_SYSCLK + 1)
 
+#define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+
 #define LPC32XX_IRQ_COUNT BSP_INTERRUPT_VECTOR_COUNT
+
+bool bsp_interrupt_is_valid_vector(rtems_vector_number vector);
 
 void lpc32xx_irq_set_priority(rtems_vector_number vector, unsigned priority);
 
