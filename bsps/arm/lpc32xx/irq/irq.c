@@ -334,8 +334,12 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
   rtems_interrupt_disable(level);
-  lpc32xx_irq_set_bit_in_register(vector, LPC32XX_IRQ_OFFSET_ER);
-  lpc32xx_irq_set_bit_in_field(vector, &lpc32xx_irq_enable);
+
+  if (!lpc32xx_irq_is_bit_set_in_field(vector, &lpc32xx_irq_enable)) {
+    lpc32xx_irq_set_bit_in_field(vector, &lpc32xx_irq_enable);
+    lpc32xx_irq_set_bit_in_register(vector, LPC32XX_IRQ_OFFSET_ER);
+  }
+
   rtems_interrupt_enable(level);
 
   return RTEMS_SUCCESSFUL;
