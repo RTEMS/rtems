@@ -71,6 +71,8 @@ static void CallWithinISRHandler( rtems_vector_number vector )
   (void) vector;
   ctx = &CallWithinISRInstance;
 
+  Clear_tm27_intr();
+
   while ( true ) {
     rtems_interrupt_lock_context lock_context;
     CallWithinISRRequest        *request;
