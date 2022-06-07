@@ -290,6 +290,24 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  bool is_sw_irq;
+
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(attributes != NULL);
+
+  attributes->is_maskable =
+    !lpc32xx_irq_is_bit_set_in_register(vector, LPC32XX_IRQ_OFFSET_ITR);
+  attributes->can_enable = true;
+  attributes->maybe_enable = true;
+  attributes->can_disable = true;
+  attributes->maybe_disable = true;
+  is_sw_irq = vector == LPC32XX_IRQ_SW;
+  attributes->can_raise = is_sw_irq;
+  attributes->can_raise_on = is_sw_irq;
+  attributes->can_clear = is_sw_irq;
+  attributes->can_get_affinity = true;
+  attributes->can_set_affinity = true;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -300,20 +318,36 @@ rtems_status_code bsp_interrupt_is_pending(
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
-  *pending = false;
-  return RTEMS_UNSATISFIED;
+
+  *pending = lpc32xx_irq_is_bit_set_in_register(vector, LPC32XX_IRQ_OFFSET_RSR);
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+
+  if (vector != LPC32XX_IRQ_SW) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  LPC32XX_SW_INT = 0x1;
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+
+  if (vector != LPC32XX_IRQ_SW) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  LPC32XX_SW_INT = 0x0;
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_is_enabled(
@@ -323,8 +357,10 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
-  *enabled = false;
-  return RTEMS_UNSATISFIED;
+
+  *enabled = lpc32xx_irq_is_bit_set_in_field(vector, &lpc32xx_irq_enable);
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
