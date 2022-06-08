@@ -300,12 +300,25 @@ static void gicv3_init_dist(volatile gic_dist *dist)
   }
 }
 
+/*
+ * A better way to access these registers than special opcodes
+ */
+#define isb() __asm __volatile("isb" : : : "memory")
+
+#define  WRITE_SPECIALREG(reg, _val)                                    \
+  __asm __volatile("msr  " __STRING(reg) ", %0" : : "r"((uint64_t)_val))
+
+#define  gic_icc_write(reg, val)            \
+do {                                        \
+  WRITE_SPECIALREG(icc_ ##reg ##_el1, val); \
+  isb();                                    \
+} while (0)
+
 static void gicv3_init_cpu_interface(uint32_t cpu_index)
 {
   uint32_t sre_value = 0x7;
   WRITE_SR(ICC_SRE, sre_value);
   WRITE_SR(ICC_PMR, GIC_CPUIF_ICCPMR_PRIORITY(0xff));
-  WRITE_SR(ICC_BPR0, GIC_CPUIF_ICCBPR_BINARY_POINT(0x0));
 
   volatile gic_redist *redist = gicv3_get_redist(cpu_index);
   uint32_t waker = redist->icrwaker;
@@ -322,8 +335,7 @@ static void gicv3_init_cpu_interface(uint32_t cpu_index)
   }
 
   /* Enable interrupt groups 0 and 1 */
-  WRITE_SR(ICC_IGRPEN0, 0x1);
-  WRITE_SR(ICC_IGRPEN1, 0x1);
+  gic_icc_write(IGRPEN1, 1);
   WRITE_SR(ICC_CTLR, 0x0);
 }
 
