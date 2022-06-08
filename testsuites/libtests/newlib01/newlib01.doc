@@ -19,3 +19,6 @@ concepts:
   - Check that exit procedures provide proper resource cleanup. Ensure that
     a file opened from a worker task--but that is not assigned to a stdio
     stream--is not closed during thread termination.
+  - Check that the state of random number generators is thread-specific, they
+    are properly initialized, and return the expected sequence for default
+    seed values.
