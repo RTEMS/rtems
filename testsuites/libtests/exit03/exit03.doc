@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: exit03
+
+directives:
+
+  exit()
+
+concepts:
+
+  Ensure exit() in a C++ application  works.

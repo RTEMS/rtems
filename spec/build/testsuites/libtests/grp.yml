@@ -114,6 +114,8 @@ links:
 - role: build-dependency
   uid: exit02
 - role: build-dependency
+  uid: exit03
+- role: build-dependency
   uid: fcntl
 - role: build-dependency
   uid: flashdisk01

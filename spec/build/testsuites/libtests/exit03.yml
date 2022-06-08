@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2022 Chris Johns (Contemporary Software)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cxx cxxprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/libtests/exit03/init.c
+- testsuites/libtests/exit03/stdio.cc
+stlib: []
+target: testsuites/libtests/exit03.exe
+type: build
+use-after: []
+use-before: []

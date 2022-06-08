@@ -1,0 +1,5 @@
+caught exception
+IO on std::cout
+IO on std::cerr
+
+*** END OF TEST EXIT 3 ***
