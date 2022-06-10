@@ -2138,9 +2138,11 @@ pps_capture(struct pps_state *pps)
 	pps->capffth = fftimehands;
 #endif
 	pps->capcount = th->th_counter->tc_get_timecount(th->th_counter);
+#if defined(RTEMS_SMP)
 	atomic_thread_fence_acq();
 	if (pps->capgen != th->th_generation)
 		pps->capgen = 0;
+#endif
 }
 
 void
@@ -2165,7 +2167,11 @@ pps_event(struct pps_state *pps, int event)
 	if ((event & pps->ppsparam.mode) == 0)
 		return;
 	/* If the timecounter was wound up underneath us, bail out. */
+#if defined(RTEMS_SMP)
 	if (pps->capgen == 0 || pps->capgen !=
+#else
+	if (pps->capgen !=
+#endif
 	    atomic_load_acq_int(&pps->capth->th_generation))
 		return;
 
