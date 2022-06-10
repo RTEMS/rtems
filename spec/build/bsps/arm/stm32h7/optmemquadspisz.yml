@@ -2,10 +2,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
 - env-assign: null
+- define-unquoted: null
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
+- enabled-by:
+  - arm/stm32h757i-eval
+  - arm/stm32h757i-eval-m4
+  value: 0x08000000
 - enabled-by: true
   value: 0x00000000
 description: |
