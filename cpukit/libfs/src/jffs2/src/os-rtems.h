@@ -56,7 +56,7 @@ static inline unsigned int full_name_hash(const void *salt, const unsigned char 
 #define jffs2_can_mark_obsolete(c) (1)
 
 #define JFFS2_INODE_INFO(i) (&(i)->jffs2_i)
-#define OFNI_EDONI_2SFFJ(f)  ((struct _inode *) ( ((char *)f) - ((char *)(&((struct _inode *)NULL)->jffs2_i)) ) )
+#define OFNI_EDONI_2SFFJ(f) RTEMS_CONTAINER_OF(f, struct _inode, jffs2_i)
 
 #define ITIME(sec) (sec)
 #define I_SEC(tv) (tv)
