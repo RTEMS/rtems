@@ -172,7 +172,7 @@ AArch64_start_set_vector_base(void)
   /*
    * Do not use bsp_vector_table_begin == 0, since this will get optimized away.
   */
-  if (bsp_vector_table_end != bsp_vector_table_size) {
+  if (&bsp_vector_table_end[0] != &bsp_vector_table_size[0]) {
     __asm__ volatile (
       "msr VBAR_EL1, %[vtable]\n"
       : : [vtable] "r" (bsp_start_vector_table_begin)
