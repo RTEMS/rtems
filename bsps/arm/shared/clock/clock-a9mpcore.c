@@ -129,7 +129,7 @@ static void a9mpcore_clock_initialize(void)
   volatile a9mpcore_gt *gt = A9MPCORE_GT;
   uint64_t periphclk = a9mpcore_clock_periphclk();
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
-  uint32_t interval = (uint32_t) ((periphclk * us_per_tick) / 1000000);
+  uint32_t interval = (uint32_t) ((periphclk * us_per_tick) / 1000000) - 1;
   uint64_t cmpval;
 
   gt->ctrl &= A9MPCORE_GT_CTRL_TMR_EN;
