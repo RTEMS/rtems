@@ -117,7 +117,11 @@ retry:
 		if (clen == 0)
 			clen = 1;
 		else if (clen == (size_t)-1 || (clen == (size_t)-2 &&
+#ifndef __rtems__
 		    buf == peekbuf)) {
+#else /* __rtems__ */
+		    &buf[0] == &peekbuf[0])) {
+#endif /* __rtems__ */
 			memset(&pr->mbstate, 0, sizeof(pr->mbstate));
 			wc = *p;
 			clen = 1;

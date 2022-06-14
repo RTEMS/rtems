@@ -165,7 +165,7 @@ void MD5Update (
    ends with the desired message digest in mdContext->digest[0...15].
  */
 void MD5Final (
-  unsigned char hash[],
+  unsigned char hash[16],
   MD5_CTX *mdContext )
 {
   UINT4 in[16];

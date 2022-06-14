@@ -55,7 +55,9 @@
 #if defined(__linux__) || defined(__rtems__)
 #include <sys/ioctl.h>
 #include <termios.h>
+#ifndef O_BINARY
 #define O_BINARY 0
+#endif
 static int linux_console;
 #endif
 
