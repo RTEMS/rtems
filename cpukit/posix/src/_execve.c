@@ -43,9 +43,9 @@
 #endif
 
 /*
- *  Needed to get the prototype for this newlib helper method
+ *  Needed to get the prototype for this libc helper method
  */
-#define _COMPILING_NEWLIB
+#define _LIBC
 
 #include <errno.h>
 #include <rtems/seterr.h>

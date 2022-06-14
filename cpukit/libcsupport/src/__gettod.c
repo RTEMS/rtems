@@ -41,7 +41,7 @@
 /*
  *  Needed to get the prototype for the newlib helper method
  */
-#define _COMPILING_NEWLIB
+#define _LIBC
 
 #include <sys/time.h>
 #include <reent.h>
