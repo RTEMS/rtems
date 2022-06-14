@@ -167,8 +167,10 @@ void _CPU_ISR_install_vector(
   CPU_ISR_handler *old_handler
 )
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
   /* Redirection table starts at the end of the vector table */
-  CPU_ISR_handler *table = (CPU_ISR_handler *) (MAX_EXCEPTIONS * 4);
+  CPU_ISR_handler volatile  *table = (CPU_ISR_handler *) (MAX_EXCEPTIONS * 4);
 
   CPU_ISR_handler current_handler = table [vector];
 
@@ -181,6 +183,7 @@ void _CPU_ISR_install_vector(
   if (current_handler != new_handler) {
     table [vector] = new_handler;
   }
+#pragma GCC diagnostic pop
 }
 
 void _CPU_Initialize( void )
