@@ -45,8 +45,8 @@ int test( void )
   fd_set readfds;
   fd_set writefds;
   fd_set errorfds;
-  struct timespec timeout;
-  sigset_t sigmask;
+  struct timespec timeout = { 0 };
+  sigset_t sigmask = { 0 };
 
   return_value = pselect(nfds, &readfds, &writefds, &errorfds, &timeout, &sigmask);
   return return_value;

@@ -44,7 +44,7 @@ ssize_t test(void);
 ssize_t test(void)
 {
   int           sockfd = 4;
-  struct msghdr msg;
+  struct msghdr msg = { 0 };
   int           flags = 7;
 
 

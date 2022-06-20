@@ -45,7 +45,7 @@ int test( void );
 
 int test( void )
 {
-  pthread_mutexattr_t attribute;
+  pthread_mutexattr_t attribute = { 0 };
   int                 prioceiling = 0;
   int                 result;
 

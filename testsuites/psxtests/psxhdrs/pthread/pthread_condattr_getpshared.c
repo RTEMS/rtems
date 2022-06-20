@@ -45,7 +45,7 @@ int test( void );
 
 int test( void )
 {
-  pthread_condattr_t attribute;
+  pthread_condattr_t attribute = { 0 };
   int                pshared;
   int                result;
 

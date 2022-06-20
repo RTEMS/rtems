@@ -46,7 +46,7 @@ int test( void );
 int test( void )
 {
   clockid_t        clock_id = 0;
-  struct timespec  tp;
+  struct timespec  tp = { 0 };
   int              result;
 
   result = clock_settime( clock_id, &tp );

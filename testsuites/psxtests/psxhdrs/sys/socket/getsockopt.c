@@ -48,7 +48,7 @@ int test(void)
   int              optname = 67;
   int              value;
   void            *optval = &value;
-  socklen_t        optlen;
+  socklen_t        optlen = { 0 };
 
   return getsockopt(sockfd, level, optname, optval, &optlen);
 }

@@ -32,7 +32,7 @@ int test(void);
 int test(void)
 {
   int af = 0;
-  struct in_addr addr;
+  struct in_addr addr = { 0 };
   char *dst = "string";
 
   const char *ret = inet_ntop(af, &addr, dst, sizeof(dst));

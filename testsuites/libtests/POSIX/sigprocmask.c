@@ -15,7 +15,8 @@
 int main(void)
 {
   int rc;
-  sigset_t set1, set2;
+  sigset_t set1 = { 0 };
+  sigset_t set2 = { 0 };
 
   rc = sigprocmask(SIG_BLOCK, &set1, &set2);
   (void) rc;

@@ -42,7 +42,7 @@ int test( void );
 
 int test( void )
 {
-  gid_t grouplist[ 20 ];
+  gid_t grouplist[ 20 ] = { 0 } ;
   int   gidsetsize;
   int   result;
 

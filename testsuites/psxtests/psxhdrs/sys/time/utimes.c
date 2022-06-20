@@ -5,7 +5,7 @@
 
 /*
  * SPDX-License-Identifier: BSD-2-Clause
- * 
+ *
  * Copyright (C) 2018, Zenon
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,8 +41,8 @@ int test(void);
 int test(void)
 {
   int callback;
-  struct timeval tv;
-  
-  callback = utimes(NULL, &tv);
+  struct timeval tv[2] = { 0 };
+
+  callback = utimes(NULL, &tv[0]);
   return (callback == -1);
 }

@@ -42,7 +42,7 @@ int test( void );
 int test( void )
 {
   char      *buffer_pointer;
-  struct tm  timestruct;
+  struct tm  timestruct = { 0 };
   char       buffer[ 80 ];
 
   buffer_pointer = asctime_r( &timestruct, buffer );

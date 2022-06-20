@@ -45,8 +45,8 @@ int test( void );
 
 int test( void )
 {
-  pthread_mutexattr_t attribute;
-  int                 protocol;
+  pthread_mutexattr_t attribute = { 0 };
+  int                 protocol = 0;
   int                 result;
 
   result = pthread_mutexattr_getprotocol( &attribute, &protocol );

@@ -45,8 +45,8 @@ int test( void );
 
 int test( void )
 {
-  pthread_mutex_t mutex;
-  int             prioceiling;
+  pthread_mutex_t mutex = { 0 };
+  int             prioceiling = 0;
   int             result;
 
   result = pthread_mutex_getprioceiling( &mutex, &prioceiling );

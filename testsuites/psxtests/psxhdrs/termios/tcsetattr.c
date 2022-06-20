@@ -43,7 +43,7 @@ int test( void )
   int result;
   int fildes = 0;
   int optional_actions = 0;
-  struct termios term;
+  struct termios term = { 0 };
 
   result = tcsetattr(fildes, optional_actions, &term);
 

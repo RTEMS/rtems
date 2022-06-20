@@ -5,7 +5,7 @@
 
 /*
  * SPDX-License-Identifier: BSD-2-Clause
- * 
+ *
  * Copyright (C) 2018, Zenon
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@ int test(void);
 
 int test(void){
   int i0, i1;
-  char c;
+  char c = '\0';
 
   i0 = 0;
   i1 = 0;

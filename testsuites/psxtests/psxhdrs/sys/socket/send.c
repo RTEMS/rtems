@@ -44,7 +44,7 @@ ssize_t test(void);
 ssize_t test(void)
 {
   int     sockfd = 4;
-  int     buffer;
+  int     buffer = 0;
   void   *buf = &buffer;
   size_t  len = sizeof(buffer);
   int     flags = 7;

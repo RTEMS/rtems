@@ -44,7 +44,7 @@ int test( void )
   size_t    length;
   size_t    max_length;
   char      buffer[ 80 ];
-  struct tm timestruct;
+  struct tm timestruct = { 0 };
 
   max_length = sizeof( buffer );
 

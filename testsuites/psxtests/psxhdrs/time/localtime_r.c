@@ -41,7 +41,7 @@ int test( void );
 
 int test( void )
 {
-  time_t     time;
+  time_t     time = { 0 };
   struct tm *timestruct_pointer;
   struct tm  timestruct;
 

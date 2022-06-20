@@ -42,7 +42,7 @@ int test( void );
 int test( void )
 {
   char     *buffer;
-  time_t    time;
+  time_t    time = { 0 };
 
   buffer = ctime( &time );
 

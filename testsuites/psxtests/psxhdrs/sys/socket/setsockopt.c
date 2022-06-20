@@ -46,7 +46,7 @@ int test(void)
   int              sockfd = 4;
   int              level = SOL_SOCKET;
   int              optname = 67;
-  int              value;
+  int              value = 0;
   void            *optval = &value;
   socklen_t        optlen = sizeof(value);
 

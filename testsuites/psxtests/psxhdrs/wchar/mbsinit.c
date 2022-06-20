@@ -5,7 +5,7 @@
 
 /*
  * SPDX-License-Identifier: BSD-2-Clause
- * 
+ *
  * Copyright (C) 2018, Zenon
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@ int test(void);
 
 int test(void)
 {
-  const mbstate_t state;
+  const mbstate_t state = { 0 };
 
   return mbsinit(&state);
 }

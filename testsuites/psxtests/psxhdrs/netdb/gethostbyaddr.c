@@ -43,7 +43,7 @@
  int test( void )
  {
    struct hostent *host;
-   struct in_addr ipv4addr;
+   struct in_addr ipv4addr = { 0 };
 
    host = gethostbyaddr( &ipv4addr, sizeof(ipv4addr), AF_INET );
 

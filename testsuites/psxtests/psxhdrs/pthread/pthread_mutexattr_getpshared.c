@@ -45,8 +45,8 @@ int test( void );
 
 int test( void )
 {
-  pthread_mutexattr_t attribute;
-  int                 pshared;
+  pthread_mutexattr_t attribute = { 0 };
+  int                 pshared = 0;
   int                 result;
 
   result = pthread_mutexattr_getpshared( &attribute, &pshared );

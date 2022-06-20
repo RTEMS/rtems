@@ -14,7 +14,7 @@
 
 int main(void)
 {
-  struct iovec iov;
+  struct iovec iov = { 0 };
   int count = 4;
   ssize_t ret;
 

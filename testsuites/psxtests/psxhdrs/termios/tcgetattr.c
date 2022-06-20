@@ -42,7 +42,7 @@ int test( void )
 {
   int result;
   int fildes = 0;
-  struct termios term;
+  struct termios term = { 0 };
 
   result = tcgetattr(fildes, &term);
 

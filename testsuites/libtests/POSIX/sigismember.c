@@ -14,7 +14,7 @@
 
 int main(void)
 {
-  sigset_t set;
+  sigset_t set = { 0 };
   int status;
   status = sigismember(&set, 21);
 

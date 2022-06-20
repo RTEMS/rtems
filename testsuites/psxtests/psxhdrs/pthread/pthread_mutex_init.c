@@ -43,7 +43,7 @@ int test( void );
 int test( void )
 {
   pthread_mutex_t     mutex = PTHREAD_MUTEX_INITIALIZER;
-  pthread_mutexattr_t attribute;
+  pthread_mutexattr_t attribute = { 0 };
   int result;
 
   result = pthread_mutex_init( &mutex, &attribute );

@@ -1133,7 +1133,7 @@ void verify_with_threads(void)
 
 void validate_mq_setattr(void)
 {
-  struct mq_attr  attr;
+  struct mq_attr  attr = { 0 };
   struct mq_attr  save_attr[ NUMBER_OF_TEST_QUEUES ];
   int             status;
   int            i;

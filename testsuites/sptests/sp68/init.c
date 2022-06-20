@@ -166,7 +166,7 @@ static void obtain_callback(rtems_id timer_id, void *arg)
 static void release_callback(rtems_id timer_id, void *arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  char buf [1];
+  char buf [1] = { 0 };
   size_t size = sizeof(buf);
   uint32_t released = 0;
 

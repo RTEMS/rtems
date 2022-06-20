@@ -44,7 +44,7 @@ int test(void);
 int test(void)
 {
   int              sockfd = 4;
-  struct  sockaddr addr;
+  struct  sockaddr addr = { 0 };
   socklen_t        addrlen = sizeof(addr);
 
   return bind(sockfd, &addr, addrlen);

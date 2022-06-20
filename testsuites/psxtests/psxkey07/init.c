@@ -55,6 +55,7 @@ rtems_task Test_Thread(rtems_task_argument argument)
   int *value_p, *value_p2;
 
   value_p = malloc( sizeof( int ) );
+  rtems_test_assert(value_p != NULL);
   sc = pthread_setspecific( Key, value_p );
   rtems_test_assert( !sc );
 
@@ -119,7 +120,7 @@ rtems_task Init(rtems_task_argument argument)
     pthread_mutex_lock( &mutex1 );
 
     rc = rtems_task_create(
-      rtems_build_name( 'T', 'E', 'S', 'T' ), 
+      rtems_build_name( 'T', 'E', 'S', 'T' ),
       1,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,

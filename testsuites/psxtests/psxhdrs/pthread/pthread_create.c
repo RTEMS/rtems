@@ -53,7 +53,7 @@ void *test_task(
 int test( void )
 {
   pthread_t       thread;
-  pthread_attr_t  attribute;
+  pthread_attr_t  attribute = { 0 };
   void           *arg = NULL;
   int             result;
 

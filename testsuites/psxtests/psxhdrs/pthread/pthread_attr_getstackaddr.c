@@ -47,7 +47,7 @@ int test( void );
 
 int test( void )
 {
-  pthread_attr_t  attribute;
+  pthread_attr_t  attribute = { 0 };
   void           *stackaddr;
   int             result;
 

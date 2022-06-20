@@ -43,7 +43,7 @@ int test( void );
 int test( void )
 {
   int result;
-  const struct utimbuf buff;
+  const struct utimbuf buff = { 0 };
   const char *path = "/tmp/myfile";
 
   result = utime(path, &buff);

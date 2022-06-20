@@ -41,7 +41,7 @@ int test( void );
 int test( void )
 {
   int result;
-  struct termios term;
+  struct termios term = { 0 };
   speed_t speed = B0;
 
   result = cfsetispeed(&term, speed);

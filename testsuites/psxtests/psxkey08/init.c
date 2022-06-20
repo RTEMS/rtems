@@ -51,7 +51,7 @@ static rtems_name name1, name2;
 
 static rtems_task test_task(rtems_task_argument arg)
 {
-  rtems_status_code sc;
+  rtems_status_code sc = 0;
   const void *value_p;
   const void *value_p2;
 

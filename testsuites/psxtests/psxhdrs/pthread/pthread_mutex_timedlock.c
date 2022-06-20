@@ -46,7 +46,7 @@ int test( void );
 int test( void )
 {
   pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-  struct timespec timeout;
+  struct timespec timeout = { 0 };
   int result;
 
   result = pthread_mutex_timedlock( &mutex, &timeout );

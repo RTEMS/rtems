@@ -42,7 +42,7 @@ int test( void )
 {
 	int return_value;
 	int fd = 1;
-	struct timespec times[2];
+	struct timespec times[2] = { 0 };
 
 
 	return_value = futimens(fd, times);

@@ -40,7 +40,7 @@ int test( void );
 
 int test( void )
 {
-  struct termios term;
+  struct termios term = { 0 };
   speed_t rate;
 
   rate = cfgetospeed(&term);

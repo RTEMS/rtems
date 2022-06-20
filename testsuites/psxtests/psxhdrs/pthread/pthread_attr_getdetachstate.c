@@ -42,8 +42,8 @@ int test( void );
 
 int test( void )
 {
-  pthread_attr_t  attribute;
-  int             state;
+  pthread_attr_t  attribute = { 0 };
+  int             state = 0;
   int             result;
 
   result = pthread_attr_getdetachstate( &attribute, &state );

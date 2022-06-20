@@ -46,8 +46,8 @@ int test( void );
 
 int test( void )
 {
-  pthread_attr_t  attribute;
-  size_t          size;
+  pthread_attr_t  attribute = { 0 };
+  size_t          size = 0;
   int             result;
 
   result = pthread_attr_getstacksize( &attribute, &size );

@@ -44,11 +44,11 @@ ssize_t test(void);
 ssize_t test(void)
 {
   int              sockfd = 4;
-  int              buffer;
+  int              buffer = 0;
   const void      *buf = &buffer;
   size_t           len = sizeof(buffer);
   int              flags = 7;
-  struct  sockaddr dest_addr;
+  struct  sockaddr dest_addr = { 0 };
   socklen_t        addrlen = sizeof(dest_addr);
 
   return sendto(sockfd, buf, len, flags, &dest_addr, addrlen);

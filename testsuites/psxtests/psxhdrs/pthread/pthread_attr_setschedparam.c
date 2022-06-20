@@ -42,8 +42,8 @@ int test( void );
 
 int test( void )
 {
-  pthread_attr_t      attr;
-  struct sched_param  param;
+  pthread_attr_t      attr = { 0 };
+  struct sched_param  param = { 0 };
   int                 result;
 
   result = pthread_attr_setschedparam( &attr, &param );

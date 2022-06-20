@@ -39,6 +39,11 @@
 #define FATAL_ERROR_EXPECTED_SOURCE RTEMS_FATAL_SOURCE_INVALID_HEAP_FREE
 #define FATAL_ERROR_EXPECTED_ERROR  1
 
+/*
+ * Disable for the specific test case.
+ */
+#pragma GCC diagnostic ignored "-Wfree-nonheap-object"
+
 static void force_error(void)
 {
   uintptr_t invalid = 1;
