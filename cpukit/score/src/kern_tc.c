@@ -2079,6 +2079,18 @@ pps_ioctl(u_long cmd, caddr_t data, struct pps_state *pps)
 }
 
 #ifdef __rtems__
+/*
+ * The real implementation of hardpps() is defined in kern_ntptime.c.  Use it
+ * only if the NTP support is needed by the application.
+ */
+RTEMS_WEAK void
+hardpps(struct timespec *tsp, long nsec)
+{
+
+	(void)tsp;
+	(void)nsec;
+}
+
 static int
 default_wait(struct pps_state *pps, struct timespec timeout)
 {
