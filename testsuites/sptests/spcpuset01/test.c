@@ -83,9 +83,19 @@ void test_cpu_nand_case_1(size_t cpu1, size_t cpu2)
 {
   size_t i;
 
+  /*
+   * FreeBSD renamed CPU_NAND to CPU_ANDNOT.  This change was included in
+   * Newlib at some point in time.
+   */
+#ifdef __BIT_ANDNOT2
+   /*  ANDNOT set1 and set2 */
+  DPRINT( "Exercise CPU_ANDNOT with bits %zd,%zd\n", cpu1, cpu2 );
+  CPU_ANDNOT(&set3, &set1, &set2);
+#else
    /*  NAND set1 and set2 */
   DPRINT( "Exercise CPU_NAND with bits %zd,%zd\n", cpu1, cpu2 );
   CPU_NAND(&set3, &set1, &set2);
+#endif
 
   /* test if all bits clear except cpu1 */
   for (i=0 ; i<CPU_SETSIZE ; i++) {
