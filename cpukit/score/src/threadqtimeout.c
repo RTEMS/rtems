@@ -132,7 +132,7 @@ void _Thread_queue_Add_timeout_monotonic_timespec(
 {
   struct timespec now;
 
-  _Timecounter_Getnanouptime( &now );
+  _Timecounter_Nanouptime( &now );
   _Thread_queue_Add_timeout_timespec(
     queue,
     the_thread,
@@ -152,7 +152,7 @@ void _Thread_queue_Add_timeout_realtime_timespec(
 {
   struct timespec now;
 
-  _Timecounter_Getnanotime( &now );
+  _Timecounter_Nanotime( &now );
   _Thread_queue_Add_timeout_timespec(
     queue,
     the_thread,

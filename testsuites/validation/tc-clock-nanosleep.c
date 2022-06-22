@@ -325,14 +325,20 @@ static void Worker( rtems_task_argument arg )
 
   while ( true ) {
     T_scheduler_log *log;
+    uint32_t         counter;
 
     SuspendSelf();
 
     log = T_scheduler_record_4( &ctx->scheduler_log );
     T_null( log );
 
-    _Timecounter_Getnanotime( &ctx->now_realtime );
-    _Timecounter_Getnanouptime( &ctx->now_monotonic );
+    counter = GetTimecountCounter();
+    _Timecounter_Nanotime( &ctx->now_realtime );
+    SetTimecountCounter( counter );
+
+    counter = GetTimecountCounter();
+    _Timecounter_Nanouptime( &ctx->now_monotonic );
+    SetTimecountCounter( counter );
 
     ctx->status = clock_nanosleep(
       ctx->clock_id,
