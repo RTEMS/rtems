@@ -228,22 +228,6 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_And(
 }
 
 /**
- * @brief Performs a bitwise a = b & ~c.
- *
- * @param[out] a The processor mask that is set by this operation.
- * @param b The first parameter of the operation.
- * @param c The second parameter of the operation.
- */
-RTEMS_INLINE_ROUTINE void _Processor_mask_Nand(
-  Processor_mask       *a,
-  const Processor_mask *b,
-  const Processor_mask *c
-)
-{
-  BIT_NAND2( CPU_MAXIMUM_PROCESSORS, a, b, c );
-}
-
-/**
  * @brief Performs a bitwise a = b | c.
  *
  * @param[out] a The processor mask that is set by this operation.
