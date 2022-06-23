@@ -47,6 +47,62 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/*
+ * Recent Newlib versions provide the bitset defines in the system reserved
+ * namespace.
+ */
+#ifndef __BIT_AND2
+#define __BIT_AND2 BIT_AND2
+#endif
+#ifndef __BIT_CLR
+#define __BIT_CLR BIT_CLR
+#endif
+#ifndef __BIT_CMP
+#define __BIT_CMP BIT_CMP
+#endif
+#ifndef __BIT_COPY
+#define __BIT_COPY BIT_COPY
+#endif
+#ifndef __BIT_COUNT
+#define __BIT_COUNT BIT_COUNT
+#endif
+#ifndef __BITSET_DEFINE
+#define __BITSET_DEFINE BITSET_DEFINE
+#endif
+#ifndef __BIT_EMPTY
+#define __BIT_EMPTY BIT_EMPTY
+#endif
+#ifndef __BIT_FILL
+#define __BIT_FILL BIT_FILL
+#endif
+#ifndef __BIT_FLS
+#define __BIT_FLS BIT_FLS
+#endif
+#ifndef __BIT_ISSET
+#define __BIT_ISSET BIT_ISSET
+#endif
+#ifndef __BIT_OR2
+#define __BIT_OR2 BIT_OR2
+#endif
+#ifndef __BIT_OVERLAP
+#define __BIT_OVERLAP BIT_OVERLAP
+#endif
+#ifndef __BIT_SET
+#define __BIT_SET BIT_SET
+#endif
+#ifndef __BIT_SETOF
+#define __BIT_SETOF BIT_SETOF
+#endif
+#ifndef __BIT_SUBSET
+#define __BIT_SUBSET BIT_SUBSET
+#endif
+#ifndef __BIT_XOR2
+#define __BIT_XOR2 BIT_XOR2
+#endif
+#ifndef __BIT_ZERO
+#define __BIT_ZERO BIT_ZERO
+#endif
+
 /**
  * @defgroup RTEMSScoreProcessorMask Processor Mask
  *
@@ -65,7 +121,7 @@ extern "C" {
  * @brief A bit map which is large enough to provide one bit for each processor
  * in the system.
  */
-typedef BITSET_DEFINE( Processor_mask, CPU_MAXIMUM_PROCESSORS ) Processor_mask;
+typedef __BITSET_DEFINE( Processor_mask, CPU_MAXIMUM_PROCESSORS ) Processor_mask;
 
 /**
  * @brief Sets the bits of the mask to zero, also considers CPU_MAXIMUM_PROCESSORS.
@@ -74,7 +130,7 @@ typedef BITSET_DEFINE( Processor_mask, CPU_MAXIMUM_PROCESSORS ) Processor_mask;
  */
 RTEMS_INLINE_ROUTINE void _Processor_mask_Zero( Processor_mask *mask )
 {
-  BIT_ZERO( CPU_MAXIMUM_PROCESSORS, mask );
+  __BIT_ZERO( CPU_MAXIMUM_PROCESSORS, mask );
 }
 
 /**
@@ -87,7 +143,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Zero( Processor_mask *mask )
  */
 RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_zero( const Processor_mask *mask )
 {
-  return BIT_EMPTY( CPU_MAXIMUM_PROCESSORS, mask );
+  return __BIT_EMPTY( CPU_MAXIMUM_PROCESSORS, mask );
 }
 
 /**
@@ -97,7 +153,7 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_zero( const Processor_mask *mask )
  */
 RTEMS_INLINE_ROUTINE void _Processor_mask_Fill( Processor_mask *mask )
 {
-  BIT_FILL( CPU_MAXIMUM_PROCESSORS, mask );
+  __BIT_FILL( CPU_MAXIMUM_PROCESSORS, mask );
 }
 
 /**
@@ -110,7 +166,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Assign(
   Processor_mask *dst, const Processor_mask *src
 )
 {
-  BIT_COPY( CPU_MAXIMUM_PROCESSORS, src, dst );
+  __BIT_COPY( CPU_MAXIMUM_PROCESSORS, src, dst );
 }
 
 /**
@@ -124,7 +180,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Set(
   uint32_t        index
 )
 {
-  BIT_SET( CPU_MAXIMUM_PROCESSORS, index, mask );
+  __BIT_SET( CPU_MAXIMUM_PROCESSORS, index, mask );
 }
 
 /**
@@ -138,7 +194,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Clear(
   uint32_t        index
 )
 {
-  BIT_CLR( CPU_MAXIMUM_PROCESSORS, index, mask );
+  __BIT_CLR( CPU_MAXIMUM_PROCESSORS, index, mask );
 }
 
 /**
@@ -155,7 +211,7 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_set(
   uint32_t              index
 )
 {
-  return BIT_ISSET( CPU_MAXIMUM_PROCESSORS, index, mask );
+  return __BIT_ISSET( CPU_MAXIMUM_PROCESSORS, index, mask );
 }
 
 /**
@@ -172,7 +228,7 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_equal(
   const Processor_mask *b
 )
 {
-  return !BIT_CMP( CPU_MAXIMUM_PROCESSORS, a, b );
+  return !__BIT_CMP( CPU_MAXIMUM_PROCESSORS, a, b );
 }
 
 /**
@@ -190,7 +246,7 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Has_overlap(
   const Processor_mask *b
 )
 {
-  return BIT_OVERLAP( CPU_MAXIMUM_PROCESSORS, a, b );
+  return __BIT_OVERLAP( CPU_MAXIMUM_PROCESSORS, a, b );
 }
 
 /**
@@ -208,7 +264,7 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_subset(
   const Processor_mask *small
 )
 {
-  return BIT_SUBSET( CPU_MAXIMUM_PROCESSORS, big, small );
+  return __BIT_SUBSET( CPU_MAXIMUM_PROCESSORS, big, small );
 }
 
 /**
@@ -224,7 +280,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_And(
   const Processor_mask *c
 )
 {
-  BIT_AND2( CPU_MAXIMUM_PROCESSORS, a, b, c );
+  __BIT_AND2( CPU_MAXIMUM_PROCESSORS, a, b, c );
 }
 
 /**
@@ -240,7 +296,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Or(
   const Processor_mask *c
 )
 {
-  BIT_OR2( CPU_MAXIMUM_PROCESSORS, a, b, c );
+  __BIT_OR2( CPU_MAXIMUM_PROCESSORS, a, b, c );
 }
 
 /**
@@ -256,7 +312,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Xor(
   const Processor_mask *c
 )
 {
-  BIT_XOR2( CPU_MAXIMUM_PROCESSORS, a, b, c );
+  __BIT_XOR2( CPU_MAXIMUM_PROCESSORS, a, b, c );
 }
 
 /**
@@ -268,7 +324,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Xor(
  */
 RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_Count( const Processor_mask *a )
 {
-  return (uint32_t) BIT_COUNT( CPU_MAXIMUM_PROCESSORS, a );
+  return (uint32_t) __BIT_COUNT( CPU_MAXIMUM_PROCESSORS, a );
 }
 
 /**
@@ -280,7 +336,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_Count( const Processor_mask *a )
  */
 RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_Find_last_set( const Processor_mask *a )
 {
-  return (uint32_t) BIT_FLS( CPU_MAXIMUM_PROCESSORS, a );
+  return (uint32_t) __BIT_FLS( CPU_MAXIMUM_PROCESSORS, a );
 }
 
 /**
@@ -331,7 +387,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_From_index(
   uint32_t        index
 )
 {
-  BIT_SETOF( CPU_MAXIMUM_PROCESSORS, (int) index, mask );
+  __BIT_SETOF( CPU_MAXIMUM_PROCESSORS, (int) index, mask );
 }
 
 typedef enum {
