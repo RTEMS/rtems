@@ -7,6 +7,8 @@
 #ifndef _LIBCPU_BYTEORDER_H
 #define _LIBCPU_BYTEORDER_H
 
+#include <stdint.h>
+
 static inline void st_le32(volatile uint32_t   *addr, uint32_t   value)
 {
   *(addr)=value ;
