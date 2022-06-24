@@ -13,6 +13,8 @@ install: []
 links:
 - role: build-dependency
   uid: grp
+- role: build-dependency
+  uid: tststm32h757i-eval
 source:
 - bsps/arm/stm32h7/boards/stm/nucleo-h743zi/stm32h7-bspstarthooks.c
 - bsps/arm/stm32h7/boards/stm/nucleo-h743zi/stm32h7-config-clk.c
