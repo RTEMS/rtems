@@ -520,9 +520,9 @@ class GroupItem(Item):
     def prepare_build(self, bld, bic):
         return BuildItemContext(
             bic.includes + self.substitute(bld, self.data["includes"]),
-            bic.cppflags,
-            bic.cflags,
-            bic.cxxflags,
+            bic.cppflags + self.substitute(bld, self.data["cppflags"]),
+            bic.cflags + self.substitute(bld, self.data["cflags"]),
+            bic.cxxflags + self.substitute(bld, self.data["cxxflags"]),
             self.data["use-before"] + bic.use + self.data["use-after"],
             bic.ldflags + self.substitute(bld, self.data["ldflags"]),
             bic.objects,

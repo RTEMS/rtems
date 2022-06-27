@@ -1,7 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: group
+cflags: []
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
 enabled-by: true
 includes: []
 install: []
@@ -11,7 +14,7 @@ links:
   uid: grp
 - role: build-dependency
   uid: tstzu3eg
-- role : build-dependency
+- role: build-dependency
   uid: objcadencei2c
 type: build
 use-after: []

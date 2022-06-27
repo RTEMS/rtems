@@ -1,7 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: group
+cflags: []
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+cppflags: []
+cxxflags: []
 enabled-by: true
 includes: []
 install: []
