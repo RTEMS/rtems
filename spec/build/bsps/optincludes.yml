@@ -3,6 +3,7 @@ actions:
 - set-value: |
     bsps/include bsps/${ARCH}/include bsps/${ARCH}/${BSP_FAMILY}/include
 - substitute: null
+- split: null
 - env-assign: null
 build-type: option
 copyrights:

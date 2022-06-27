@@ -615,7 +615,7 @@ class BSPItem(Item):
     def prepare_build(self, bld, bic):
         return BuildItemContext(
             bic.includes
-            + bld.env.BSP_INCLUDES.split()
+            + bld.env.BSP_INCLUDES
             + self.substitute(bld, self.data["includes"]),
             self.substitute(bld, self.data["cppflags"]),
             self.substitute(bld, self.data["cflags"]),
