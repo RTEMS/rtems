@@ -3,8 +3,6 @@ actions:
 - get-string: null
 - split: null
 - env-assign: null
-- env-append: CFLAGS
-- env-append: CXXFLAGS
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
@@ -15,7 +13,7 @@ default:
 - -ffunction-sections
 default-by-variant: []
 description: |
-  Optimization flags passed to the C and C++ compiler
+  Default optimization flags for C and C++ compilers.
 enabled-by: true
 links: []
 name: OPTIMIZATION_FLAGS

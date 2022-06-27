@@ -1,10 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: group
-cflags: []
+cflags:
+- ${TEST_OPTIMIZATION_FLAGS}
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
-cxxflags: []
+cxxflags:
+- ${TEST_OPTIMIZATION_FLAGS}
 enabled-by: true
 includes:
 - ${BSP_INCLUDES}

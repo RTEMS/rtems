@@ -8,6 +8,12 @@ include-headers: []
 install-path: ${BSP_INCLUDEDIR}
 links:
 - role: build-dependency
+  uid: optbspoptflags
+- role: build-dependency
+  uid: optcpukitoptflags
+- role: build-dependency
+  uid: opttestoptflags
+- role: build-dependency
   uid: optabi
 - role: build-dependency
   uid: optasflags
@@ -17,6 +23,8 @@ links:
   uid: optfatalverb
 - role: build-dependency
   uid: optincludes
+- role: build-dependency
+  uid: optcflags
 - role: build-dependency
   uid: optlinkflags
 - role: build-dependency

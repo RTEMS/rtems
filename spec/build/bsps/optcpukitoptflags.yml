@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- substitute: null
+- split: null
+- env-assign: null
+build-type: option
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+default: ${OPTIMIZATION_FLAGS}
+default-by-variant: []
+description: |
+  Optimization flags passed to C and C++ compilers for the CPU kit.
+enabled-by: true
+format: '{}'
+links: []
+name: CPUKIT_OPTIMIZATION_FLAGS
+type: build

@@ -625,7 +625,7 @@ class BSPItem(Item):
             + bld.env.BSP_INCLUDES
             + self.substitute(bld, self.data["includes"]),
             self.substitute(bld, self.data["cppflags"]),
-            self.substitute(bld, self.data["cflags"]),
+            bld.env.BSP_CFLAGS + self.substitute(bld, self.data["cflags"]),
             [],
             [],
             [],
