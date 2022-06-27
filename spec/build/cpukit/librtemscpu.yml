@@ -640,6 +640,7 @@ source:
 - cpukit/libcsupport/src/ftruncate.c
 - cpukit/libcsupport/src/ftrylockfile.c
 - cpukit/libcsupport/src/funlockfile.c
+- cpukit/libcsupport/src/gcovfork.c
 - cpukit/libcsupport/src/getchark.c
 - cpukit/libcsupport/src/getdents.c
 - cpukit/libcsupport/src/getegid.c
