@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-assign: null
+build-type: option
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- --coverage
+- -fprofile-info-section=.rtemsroset.gcov_info.content
+- -fprofile-update=atomic
+default-by-variant: []
+description: |
+  Compiler flags recommended for components which should generate coverage
+  information.
+enabled-by: RTEMS_GCOV_COVERAGE
+links: []
+name: COVERAGE_COMPILER_FLAGS
+type: build

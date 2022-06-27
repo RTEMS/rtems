@@ -150,7 +150,7 @@ void __wrap__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
     halt_code = code;
     longjmp( before_terminate, 1 );
   } else {
-#if defined(RTEMS_COVERAGE)
+#if defined(RTEMS_GCOV_COVERAGE)
     rtems_test_gcov_dump_info();
 #endif
     __real__CPU_Fatal_halt( source, code );

@@ -65,7 +65,7 @@ extern "C" {
 
 #define TEST_SCHEDULER_D_NAME rtems_build_name( 'D', ' ', ' ', ' ' )
 
-#if defined( __OPTIMIZE__ ) && !defined( RTEMS_COVERAGE )
+#if defined( __OPTIMIZE__ ) && !defined( RTEMS_GCOV_COVERAGE )
 #define TEST_BASE_STACK_SIZE RTEMS_MINIMUM_STACK_SIZE
 #else
 #define TEST_BASE_STACK_SIZE ( 4 * RTEMS_MINIMUM_STACK_SIZE )

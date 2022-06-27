@@ -11,7 +11,8 @@ enabled-by: true
 includes:
 - ${BSP_INCLUDES}
 install: []
-ldflags: []
+ldflags:
+- ${COVERAGE_LINKER_FLAGS}
 links:
 - role: build-dependency
   uid: optada

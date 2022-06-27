@@ -1,17 +1,16 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
-- set-value: |
-    ${BSP_OPTIMIZATION_FLAGS} ${COVERAGE_COMPILER_FLAGS}
-- substitute: null
-- split: null
-- env-assign: null
+- get-boolean: null
+- env-enable: null
+- define-condition: null
 build-type: option
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
-default: null
+default: false
 default-by-variant: []
-description: ''
+description: |
+  Enable the code and branch coverage support.
 enabled-by: true
 links: []
-name: BSP_CFLAGS
+name: RTEMS_GCOV_COVERAGE
 type: build

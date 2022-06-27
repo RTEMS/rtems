@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-assign: null
+build-type: option
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- -Wl,--wrap=_CPU_Fatal_halt
+- -Wl,--wrap=bsp_reset
+- -Wl,--start-group
+- -lrtemsbsp
+- -lrtemscpu
+- -lrtemstest
+- -lgcov
+- -Wl,--end-group
+default-by-variant: []
+description: |
+  Linker flags recommended for executables which contain modules with coverage
+  information.
+enabled-by: RTEMS_GCOV_COVERAGE
+links: []
+name: COVERAGE_LINKER_FLAGS
+type: build

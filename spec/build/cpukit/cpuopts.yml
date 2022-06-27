@@ -68,6 +68,16 @@ links:
 - role: build-dependency
   uid: optsztime
 - role: build-dependency
+  uid: optcoverage
+- role: build-dependency
+  uid: optcoveragecflags
+- role: build-dependency
+  uid: optnocoveragecflags
+- role: build-dependency
+  uid: optcoverageldflags
+- role: build-dependency
+  uid: optnocoverageldflags
+- role: build-dependency
   uid: optversion
 target: cpukit/include/rtems/score/cpuopts.h
 type: build
