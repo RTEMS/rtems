@@ -115,6 +115,9 @@ class Template(string.Template):
     idpattern = "[_A-Za-z][_A-Za-z0-9:#]*"
 
 
+_VAR_PATTERN = re.compile("\$\{?(" + Template.idpattern + ")\}?$")
+
+
 def _is_enabled_op_and(enabled, enabled_by):
     for next_enabled_by in enabled_by:
         if not _is_enabled(enabled, next_enabled_by):
@@ -249,17 +252,21 @@ class Item(object):
                     )
                 )
         if isinstance(value, list):
-            return [self.substitute(ctx, subvalue) for subvalue in value]
+            more = []
+            for item in value:
+                if isinstance(item, str):
+                    m = _VAR_PATTERN.match(item)
+                else:
+                    m = None
+                if m:
+                    more.extend(ctx.env[m.group(1).strip("{}")])
+                else:
+                    more.append(self.substitute(ctx, item))
+            return more
         return value
 
     def get(self, ctx, name):
         return self.substitute(ctx, self.data[name])
-
-    def get_values(self, ctx, name):
-        more = []
-        for value in self.data[name]:
-            more.extend(self.substitute(ctx, value).split())
-        return more
 
     def install_target(self, bld):
         install_path = self.data["install-path"]
@@ -512,12 +519,12 @@ class GroupItem(Item):
 
     def prepare_build(self, bld, bic):
         return BuildItemContext(
-            bic.includes + self.get_values(bld, "includes"),
+            bic.includes + self.substitute(bld, self.data["includes"]),
             bic.cppflags,
             bic.cflags,
             bic.cxxflags,
             self.data["use-before"] + bic.use + self.data["use-after"],
-            bic.ldflags + self.get_values(bld, "ldflags"),
+            bic.ldflags + self.substitute(bld, self.data["ldflags"]),
             bic.objects,
         )
 
