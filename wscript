@@ -112,7 +112,7 @@ class EnvWrapper(object):
 
 
 class Template(string.Template):
-    idpattern = "[_a-z][_a-z0-9:#]*"
+    idpattern = "[_A-Za-z][_A-Za-z0-9:#]*"
 
 
 def _is_enabled_op_and(enabled, enabled_by):
