@@ -36,6 +36,8 @@
 #include <crypt.h>
 #include <string.h>
 
+#include <rtems/stackchk.h>
+
 #include "tmacros.h"
 
 const char rtems_test_name[] = "CRYPT 1";
@@ -234,18 +236,20 @@ static void Init(rtems_task_argument arg)
   test_sha512();
   test_generic();
 
+  rtems_test_assert(!rtems_stack_checker_is_blown());
   TEST_END();
   rtems_test_exit(0);
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+#define CONFIGURE_STACK_CHECKER_ENABLED
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_INIT_TASK_STACK_SIZE (2 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_INIT_TASK_STACK_SIZE (8 * RTEMS_MINIMUM_STACK_SIZE)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
