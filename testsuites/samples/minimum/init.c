@@ -81,7 +81,12 @@ static void *Init( uintptr_t ignored )
  *  demonstrates that the user can specify how small of a minimum
  *  stack they want.
  */
+#ifdef RTEMS_GCOV_COVERAGE
+#define CONFIGURE_MINIMUM_TASK_STACK_SIZE \
+  (CPU_STACK_MINIMUM_SIZE - CPU_STACK_ALIGNMENT)
+#else
 #define CONFIGURE_MINIMUM_TASK_STACK_SIZE 512
+#endif
 
 /*
  * Keep the interrupt/initialization stack as is.  Otherwise, the test may fail
