@@ -52,10 +52,7 @@ static void zynq_debug_console_init(void)
 
 static void zynq_debug_console_early_init(char c)
 {
-  rtems_termios_device_context *base =
-    &zynq_uart_instances[BSP_CONSOLE_MINOR].base;
-
-  zynq_uart_initialize(base);
+  zynq_debug_console_init();
   zynq_debug_console_out(c);
 }
 
