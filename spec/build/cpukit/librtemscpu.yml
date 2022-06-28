@@ -1403,6 +1403,9 @@ source:
 - cpukit/score/src/debugisthreaddispatchingallowed.c
 - cpukit/score/src/freechain.c
 - cpukit/score/src/futex.c
+- cpukit/score/src/gcovdumpinfobase64.c
+- cpukit/score/src/gcovdumpinfo.c
+- cpukit/score/src/gcovinfoset.c
 - cpukit/score/src/hash.c
 - cpukit/score/src/heap.c
 - cpukit/score/src/heapallocate.c

@@ -56,6 +56,7 @@
 #include <setjmp.h>
 #include <string.h>
 #include <rtems/bspIo.h>
+#include <rtems/test-info.h>
 #include <rtems/score/atomic.h>
 #include <rtems/score/io.h>
 #include <rtems/score/percpu.h>
@@ -150,7 +151,7 @@ void __wrap__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
     longjmp( before_terminate, 1 );
   } else {
 #if defined(RTEMS_COVERAGE)
-    _IO_Dump_gcov_info( rtems_put_char, NULL );
+    rtems_test_gcov_dump_info();
 #endif
     __real__CPU_Fatal_halt( source, code );
   }

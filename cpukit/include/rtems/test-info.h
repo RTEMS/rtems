@@ -331,6 +331,12 @@ RTEMS_NO_RETURN void rtems_test_run(
   const RTEMS_TEST_STATE state
 );
 
+/**
+ * @brief Dumps the gcov information as a base64 encoded gcfn and gcda data
+ *   stream using rtems_put_char().
+ */
+void rtems_test_gcov_dump_info( void );
+
 /** @} */
 
 #ifdef __cplusplus
