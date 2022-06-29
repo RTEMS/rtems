@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2014, 2022 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,7 +29,8 @@
 #include "config.h"
 #endif
 
-#include <stdio.h>
+#include <rtems/bspIo.h>
+#include <rtems/sysinit.h>
 
 #include "tmacros.h"
 
@@ -45,7 +46,7 @@ static const volatile uint32_t read_only_small = 0x601dc0feUL;
 
 static void check_tls_item(uint32_t expected)
 {
-  printf("TLS item = %i\n", tls_item);
+  printk("TLS item = %i\n", tls_item);
   rtems_test_assert(tls_item == expected);
 }
 
@@ -97,16 +98,27 @@ static void test(void)
   check_tls_item(5);
 }
 
-static void Init(rtems_task_argument arg)
+static void test_idle_during_system_init(void)
 {
   TEST_BEGIN();
 
+  check_tls_item(123);
+}
+
+static void Init(rtems_task_argument arg)
+{
   test();
 
   TEST_END();
 
   rtems_test_exit(0);
 }
+
+RTEMS_SYSINIT_ITEM(
+  test_idle_during_system_init,
+  RTEMS_SYSINIT_IDLE_THREADS,
+  RTEMS_SYSINIT_ORDER_LAST
+);
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER

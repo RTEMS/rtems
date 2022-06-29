@@ -166,6 +166,23 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
   __asm__ volatile ( "nop" );
 }
 
+/**
+ * @brief Uses the thread-local storage area of the context.
+ *
+ * Some architectures may use dedicated registers to reference the thread-local
+ * storage area of the associated thread.  This function should set these
+ * registers to the values defined by the specified processor context.
+ *
+ * @param context is the processor context defining the thread-local storage
+ *   area to use.
+ */
+RTEMS_INLINE_ROUTINE void _CPU_Use_thread_local_storage(
+  const Context_Control *context
+)
+{
+  (void) context;
+}
+
 #ifdef __cplusplus
 }
 #endif

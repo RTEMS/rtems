@@ -160,6 +160,19 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
   __asm__ volatile ( "nop" );
 }
 
+RTEMS_INLINE_ROUTINE void _CPU_Use_thread_local_storage(
+  const Context_Control *context
+)
+{
+#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
+  __asm__ volatile (
+    "mcr p15, 0, %0, c13, c0, 3" : : "r" ( context->thread_id ) : "memory"
+  );
+#else
+  (void) context;
+#endif
+}
+
 #ifdef __cplusplus
 }
 #endif

@@ -40,6 +40,7 @@
 #endif
 
 #include <rtems/score/threadidledata.h>
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
@@ -124,4 +125,8 @@ void _Thread_Create_idle( void )
       _Thread_Create_idle_for_CPU( cpu );
     }
   }
+
+  _CPU_Use_thread_local_storage(
+    &_Per_CPU_Get_executing( _Per_CPU_Get() )->Registers
+  );
 }

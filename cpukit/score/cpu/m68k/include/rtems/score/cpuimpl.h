@@ -78,6 +78,17 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
   __asm__ volatile ( "nop" );
 }
 
+RTEMS_INLINE_ROUTINE void _CPU_Use_thread_local_storage(
+  const Context_Control *context
+)
+{
+  /*
+   * There is nothing to do since the thread-local storage area is obtained by
+   * calling __m68k_read_tp().
+   */
+  (void) context;
+}
+
 #ifdef __cplusplus
 }
 #endif

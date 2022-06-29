@@ -70,6 +70,18 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
   __asm__ volatile ( "nop" );
 }
 
+RTEMS_INLINE_ROUTINE void _CPU_Use_thread_local_storage(
+  const Context_Control *context
+)
+{
+   register uint32_t r23 __asm__( "r23" );
+
+   r23 = context->r23;
+
+   /* Make sure that the register assignment is not optimized away */
+   __asm__ volatile ( "" : : "r" ( r23 ) );
+}
+
 #ifdef __cplusplus
 }
 #endif

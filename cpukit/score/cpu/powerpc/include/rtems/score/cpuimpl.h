@@ -283,6 +283,22 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
   __asm__ volatile ( "nop" );
 }
 
+RTEMS_INLINE_ROUTINE void _CPU_Use_thread_local_storage(
+  const Context_Control *context
+)
+{
+#ifdef __powerpc64__
+   register uintptr_t tp __asm__( "13" );
+#else
+   register uintptr_t tp __asm__( "2" );
+#endif
+
+   tp = ppc_get_context( context )->tp;
+
+   /* Make sure that the register assignment is not optimized away */
+   __asm__ volatile ( "" : : "r" ( tp ) );
+}
+
 #ifdef __cplusplus
 }
 #endif

@@ -80,6 +80,32 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
   __asm__ volatile ( "nop" );
 }
 
+RTEMS_INLINE_ROUTINE void _CPU_Use_thread_local_storage(
+  const Context_Control *context
+)
+{
+  uint32_t tmp;
+  uint32_t cpu_index;
+
+#ifdef RTEMS_SMP
+  cpu_index = _CPU_SMP_Get_current_processor();
+#else
+  cpu_index = 0;
+#endif
+
+  __asm__ volatile (
+    "movl " RTEMS_XSTRING( I386_CONTEXT_CONTROL_GS_0_OFFSET ) "(%2), %0\n"
+    "movl %0, _Global_descriptor_table+24(,%1,8)\n"
+    "movl " RTEMS_XSTRING( I386_CONTEXT_CONTROL_GS_1_OFFSET ) "(%2), %0\n"
+    "movl %0, _Global_descriptor_table+28(,%1,8)\n"
+    "leal 24(,%1,8), %0\n"
+    "movl %0, %%gs\n"
+    : "=&r" ( tmp )
+    : "r" ( cpu_index ), "r" ( context )
+    : "memory"
+  );
+}
+
 #ifdef __cplusplus
 }
 #endif
