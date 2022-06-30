@@ -74,14 +74,11 @@ extern "C" {
  *
  * @return Previous section flags of the first modified entry.
  */
-static inline uint32_t lpc32xx_set_translation_table_entries(
+uint32_t lpc32xx_set_translation_table_entries(
   const void *begin,
   const void *end,
   uint32_t section_flags
-)
-{
-  return arm_cp15_set_translation_table_entries(begin, end, section_flags);
-}
+);
 
 /** @} */
 

@@ -48,6 +48,7 @@ source:
 - bsps/arm/lpc32xx/start/bspstart.c
 - bsps/arm/lpc32xx/start/bspstarthooks.c
 - bsps/arm/lpc32xx/start/emc.c
+- bsps/arm/lpc32xx/start/mmu.c
 - bsps/arm/lpc32xx/start/restart.c
 - bsps/arm/lpc32xx/start/system-clocks.c
 - bsps/arm/lpc32xx/start/timer.c
