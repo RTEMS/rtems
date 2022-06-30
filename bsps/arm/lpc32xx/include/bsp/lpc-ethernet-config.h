@@ -100,7 +100,7 @@ static char *lpc_eth_config_alloc_table_area(size_t size)
 static void lpc_eth_config_free_table_area(char *table_area)
 {
   /* FIXME: Type */
-  free(table_area, (int) 0xdeadbeef);
+  free(table_area, NULL);
 }
 
 /** @} */
