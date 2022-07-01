@@ -25,9 +25,11 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <rtems/test-info.h>
+#include <rtems/sysinit.h>
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <stdexcept>
 
 #ifdef RTEMS_TEST_IO_STREAM
@@ -44,13 +46,6 @@ extern rtems_task main_task(rtems_task_argument);
 
 static int num_inst = 0;
 
-static void check_begin_of_test(void)
-{
-  if ( num_inst == 0 ) {
-    TEST_BEGIN();
-  }
-}
-
 static void check_end_of_test(void)
 {
   if ( num_inst == 0 ) {
@@ -62,7 +57,6 @@ class AClass {
 public:
   AClass(const char *p = "LOCAL" ) : ptr( p )
     {
-        check_begin_of_test();
         num_inst++;
         printf(
           "%s: Hey I'm in base class constructor number %d for %p.\n",
@@ -104,7 +98,6 @@ class BClass : public AClass {
 public:
   BClass(const char *p = "LOCAL" ) : AClass( p )
     {
-        check_begin_of_test();
         num_inst++;
         printf(
           "%s: Hey I'm in derived class constructor number %d for %p.\n",
@@ -244,3 +237,36 @@ rtems_task main_task(
     printf( "Global Dtors should be called after this line....\n" );
     exit(0);
 }
+
+static void early_exception()
+{
+    try
+    {
+      throw "early exception";
+    }
+    catch( const char *e )
+    {
+      rtems_test_assert(strcmp(e, "early exception") == 0);
+      throw "early exception 2";
+    }
+}
+
+static void test_exceptions_during_system_init()
+{
+    TEST_BEGIN();
+
+    try
+    {
+      early_exception();
+    }
+    catch( const char *e )
+    {
+      rtems_test_assert(strcmp(e, "early exception 2") == 0);
+    }
+}
+
+RTEMS_SYSINIT_ITEM(
+    test_exceptions_during_system_init,
+    RTEMS_SYSINIT_IDLE_THREADS,
+    RTEMS_SYSINIT_ORDER_LAST
+);
