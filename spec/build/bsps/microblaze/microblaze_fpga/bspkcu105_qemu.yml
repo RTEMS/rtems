@@ -12,13 +12,13 @@ includes: []
 install: []
 links:
 - role: build-dependency
-  uid: grp
-- role: build-dependency
   uid: linkcmds
 - role: build-dependency
   uid: tstkcu105_qemu
 - role: build-dependency
   uid: ../../opto0
+- role: build-dependency
+  uid: grp
 source:
 - bsps/microblaze/microblaze_fpga/start/bspreset.c
 type: build
