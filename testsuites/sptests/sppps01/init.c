@@ -46,6 +46,7 @@ const char rtems_test_name[] = "SPPPS 1";
 struct test_pps_device {
   struct pps_state pps;
   rtems_id task_waiting;
+  int wokenup;
 };
 
 typedef struct {
@@ -59,9 +60,9 @@ T_TEST_CASE( WaitPPSEventDefaultHandler )
   struct test_pps_device pps_dev;
   struct pps_fetch_args fetch;
 
+  memset( &pps_dev, 0, sizeof( pps_dev ) );
   pps_dev.task_waiting = RTEMS_INVALID_ID;
 
-  memset( &pps_dev.pps, 0, sizeof( pps_dev.pps ) );
   pps_dev.pps.ppscap = PPS_CAPTUREBOTH;
   pps_init_abi( &pps_dev.pps );
   pps_dev.pps.ppsparam.mode = PPS_CAPTUREASSERT;
@@ -74,6 +75,48 @@ T_TEST_CASE( WaitPPSEventDefaultHandler )
   fetch.timeout.tv_sec = 1;
   status = pps_ioctl( PPS_IOC_FETCH, (caddr_t)&fetch, &pps_dev.pps );
   T_eq_int( status, ETIMEDOUT );
+}
+
+static void fake_wakeup(struct pps_state *pps)
+{
+  struct test_pps_device *pps_dev;
+
+  pps_dev = RTEMS_CONTAINER_OF( pps, struct test_pps_device, pps );
+  pps_dev->wokenup++;
+}
+
+T_TEST_CASE( PPSEventEarlyReturns )
+{
+  struct test_pps_device pps_dev;
+
+  memset( &pps_dev, 0, sizeof( pps_dev ) );
+  pps_dev.task_waiting = RTEMS_INVALID_ID;
+
+  pps_dev.pps.ppscap = PPS_CAPTUREBOTH;
+  pps_init_abi( &pps_dev.pps );
+  pps_dev.pps.wakeup = fake_wakeup;
+  pps_dev.pps.ppsparam.mode = PPS_CAPTUREASSERT;
+
+  pps_capture( &pps_dev.pps );
+  /* Trigger event with a different event than the one previously selected */
+  pps_event( &pps_dev.pps, PPS_CAPTURECLEAR );
+  T_eq_int( pps_dev.wokenup, 0 );
+
+  pps_dev.pps.ppsparam.mode = PPS_CAPTURECLEAR;
+
+  /* Wait th_generation to be updated */
+  rtems_task_wake_after(1);
+  pps_event( &pps_dev.pps, PPS_CAPTURECLEAR );
+  T_eq_int( pps_dev.wokenup, 0 );
+
+  /* Save current timecounter in pps_state object */
+  pps_capture( &pps_dev.pps );
+  pps_event( &pps_dev.pps, PPS_CAPTURECLEAR );
+  T_eq_int( pps_dev.wokenup, 0 );
+
+  pps_capture( &pps_dev.pps );
+  pps_event( &pps_dev.pps, PPS_CAPTURECLEAR );
+  T_eq_int( pps_dev.wokenup, 1 );
 }
 
 static void wakeup(struct pps_state *pps)
@@ -120,7 +163,7 @@ static void pps_task(rtems_task_argument arg)
   sc = rtems_event_send( ctx->main_task, PPS_EVENT_RECEIVED );
   T_rsc_success( sc );
 
-  rtems_task_delete(rtems_task_self());
+  rtems_task_exit();
 }
 
 T_TEST_CASE( WakeupTaskWithPPSEvent )
@@ -134,11 +177,11 @@ T_TEST_CASE( WakeupTaskWithPPSEvent )
   rtems_task_priority pps_task_prio = 1;
   rtems_event_set out;
 
+  memset( &pps_dev, 0, sizeof( pps_dev ) );
   pps_dev.task_waiting = RTEMS_INVALID_ID;
   ctx.pps_dev = &pps_dev;
   ctx.main_task = rtems_task_self();
 
-  memset( &pps_dev.pps, 0, sizeof( pps_dev.pps ) );
   pps_dev.pps.ppscap = PPS_CAPTUREBOTH;
   pps_init_abi( &pps_dev.pps );
   pps_dev.pps.wait = wait;
