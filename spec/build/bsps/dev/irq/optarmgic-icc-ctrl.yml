@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0
+default-by-variant: []
+description: |
+  Defines the initial value of the ICC_CTRL register of the ARM GIC CPU
+  Interface.  The value is optional.  If it is not defined, then the register
+  is not initialized.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: BSP_ARM_GIC_ICC_CTRL
+type: build
