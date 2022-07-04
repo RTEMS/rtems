@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While a thread is not a ${/glossary/scheduledtask:/term}, while the thread is
+  in the set of ${/glossary/readytask:/plural} of an
+  ${/glossary/scheduler-eligible:/term}, when a help request is reconsidered
+  for the thread on the scheduler, the thread shall not get removed from the
+  set of ${/glossary/readytask:/plural} of the scheduler.
+type: requirement
