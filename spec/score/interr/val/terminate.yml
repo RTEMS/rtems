@@ -222,6 +222,7 @@ test-header: null
 test-includes:
 - bsp.h
 - rtems/bspIo.h
+- rtems/test-info.h
 - rtems/score/atomic.h
 - rtems/score/io.h
 - rtems/score/percpu.h
@@ -275,8 +276,8 @@ test-support: |
       halt_code = code;
       longjmp( before_terminate, 1 );
     } else {
-  #if defined(RTEMS_COVERAGE)
-      _IO_Dump_gcov_info( rtems_put_char, NULL );
+  #if defined(RTEMS_GCOV_COVERAGE)
+      rtems_test_gcov_dump_info();
   #endif
       __real__CPU_Fatal_halt( source, code );
     }
