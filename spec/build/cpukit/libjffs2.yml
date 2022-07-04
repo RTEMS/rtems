@@ -1,11 +1,13 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: library
 cflags:
+- ${COVERAGE_COMPILER_FLAGS}
 - -Wno-pointer-sign
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []
-cxxflags: []
+cxxflags:
+- ${COVERAGE_COMPILER_FLAGS}
 enabled-by: true
 includes:
 - cpukit/libfs/src/jffs2/include
