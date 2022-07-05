@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While a thread least recently used the
+  ${/glossary/floatingpointcoprocessor:/term}, when the thread resources are
+  freed, the thread-specific resources used by the
+  ${/glossary/floatingpointcoprocessor:/term} shall be freed.
+type: requirement

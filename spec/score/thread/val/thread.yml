@@ -78,6 +78,43 @@ test-actions:
   links:
   - role: validation
     uid: ../req/cancel-killer
+- action-brief: |
+    Delete a thread which least recently used the
+    ${/glossary/floatingpointcoprocessor:/term}.
+  action-code: |
+    rtems_status_code sc;
+
+    SetSelfPriority( PRIO_NORMAL );
+    sc = rtems_task_create(
+      rtems_build_name( 'W', 'O', 'R', 'K'),
+      PRIO_HIGH,
+      TEST_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_FLOATING_POINT,
+      &ctx->worker_id
+    );
+    T_rsc_success( sc );
+  checks:
+  - brief: |
+      Start the worker thread.  Let it use the
+      ${/glossary/floatingpointcoprocessor:/term}.
+    code: |
+      StartTask( ctx->worker_id, FloatingPointTask, ctx );
+    links: []
+  - brief: |
+      Delete the worker thread and free the thread resources.
+    code: |
+      DeleteTask( ctx->worker_id );
+      KillZombies();
+    links:
+    - role: validation
+      uid: ../req/free-fpu-owner
+  - brief: |
+      Clean up all used resources.
+    code: |
+      RestoreRunnerPriority();
+    links: []
+  links: []
 test-brief: |
   Tests general thread behaviour.
 test-context:
@@ -91,6 +128,11 @@ test-context:
   description: null
   member: |
     rtems_id killer_id
+- brief: |
+    This member contains a floating-point object.
+  description: null
+  member: |
+    volatile double fp_obj
 test-context-support: null
 test-description: null
 test-header: null
@@ -99,6 +141,7 @@ test-includes:
 - rtems/score/statesimpl.h
 - rtems/score/threadimpl.h
 test-local-includes:
+- ts-config.h
 - tx-support.h
 test-setup: null
 test-stop: null
@@ -120,6 +163,29 @@ test-support: |
   {
     (void) arg;
     SuspendSelf();
+  }
+
+  static void GoBackToRunner( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    SetPriority( ctx->worker_id, PRIO_LOW );
+  }
+
+  static void FloatingPointTask( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+    ctx->fp_obj *= 1.23;
+
+    /*
+     * We use an interrupt to go back to the runner since on some
+     * architectures, the floating-point context is only saved during interrupt
+     * processing and not for synchronous thread switches.
+     */
+    CallWithinISR( GoBackToRunner, ctx );
   }
 
   static void KillerTask( rtems_task_argument arg )
