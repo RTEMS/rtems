@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: RTEMS_SMP
+enabled-by: true
 functional-type: action
 links:
 - role: interface-function
@@ -66,28 +66,24 @@ references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
+  rtems_status_code sc;
+
   ctx->interrupt_occurred = false;
   ctx->entry_counter = 0;
   ctx->fatal_counter = 0;
   ctx->fatal_source = RTEMS_FATAL_SOURCE_LAST;
   ctx->fatal_code = UINT32_MAX;
 
-  if ( *ctx->first == NULL ) {
-    rtems_status_code sc;
+  (void) rtems_interrupt_vector_enable( ctx->test_vector );
 
-    (void) rtems_interrupt_vector_enable( ctx->test_vector );
+  sc = rtems_interrupt_raise( ctx->test_vector );
+  T_rsc_success( sc );
 
-    sc = rtems_interrupt_raise( ctx->test_vector );
-    T_rsc_success( sc );
-
-    while ( !ctx->interrupt_occurred ) {
-      /* Wait */
-    }
-
-    Disable( ctx );
-  } else {
-    bsp_interrupt_spurious( ctx->test_vector );
+  while ( !ctx->interrupt_occurred ) {
+    /* Wait */
   }
+
+  Disable( ctx );
 test-brief: null
 test-cleanup: null
 test-context:
