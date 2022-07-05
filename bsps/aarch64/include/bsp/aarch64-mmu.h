@@ -145,8 +145,8 @@ BSP_START_TEXT_SECTION static inline rtems_status_code
 aarch64_mmu_page_table_alloc( uint64_t **page_table )
 {
   /* First page table is already in use as TTB0 */
-  static uintptr_t *current_page_table =
-    (uintptr_t *) bsp_translation_table_base;
+  static uintptr_t current_page_table =
+    (uintptr_t) bsp_translation_table_base;
 
   current_page_table += MMU_PAGE_SIZE;
   *page_table = (uint64_t *) current_page_table;
