@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021, 2022 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -55,6 +55,7 @@
 #include <rtems.h>
 #include <rtems/test-scheduler.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/schedulersmp.h>
 #include <rtems/score/threadimpl.h>
 
 #include "tx-support.h"
@@ -213,6 +214,24 @@
  *
  *   - Clean up all used resources.
  *
+ * - Create three worker threads and a mutex.  Use the mutex and the worker to
+ *   check that a not scheduled thread does not get removed from the set of
+ *   ready threads of a scheduler when a help request is reconsidered.
+ *
+ *   - Prevent that worker B can perform a post-switch cleanup.
+ *
+ *   - Give worker C a lower priority than worker B.  Worker B will try to
+ *     finish the thread dispatch by doing a post-switch cleanup.  The
+ *     post-switch cleanup cannot progress since the runner owns the thread
+ *     state lock.  Wait until the other processor waits on the thread state
+ *     lock of worker B.
+ *
+ *   - Give worker C a higher priority than worker B.  Let worker B do its
+ *     post-switch cleanup which will carry out the reconsider help requests
+ *     for a not scheduled thread.
+ *
+ *   - Clean up all used resources.
+ *
  * @{
  */
 
@@ -250,7 +269,17 @@ typedef struct {
   /**
    * @brief This member contains the worker busy status.
    */
-  volatile bool busy[ WORKER_COUNT ];;
+  volatile bool busy[ WORKER_COUNT ];
+
+  /**
+   * @brief This member contains an ISR lock context.
+   */
+  ISR_lock_Context lock_context;
+
+  /**
+   * @brief This member contains a counter.
+   */
+  uint32_t counter;
 
   /**
    * @brief If this member is true, then the worker shall be in the busy loop.
@@ -684,6 +713,51 @@ static void CleanupOwnerBlocked( Context *ctx )
   SendEvents( ctx->worker_id[ WORKER_B ], EVENT_RELEASE );
   SetScheduler( ctx->worker_id[ WORKER_A ], SCHEDULER_A_ID, PRIO_HIGH );
   SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_A_ID, PRIO_HIGH );
+}
+
+static void ReconsiderHelpRequestB(
+  void                    *arg,
+  const T_scheduler_event *event,
+  T_scheduler_when         when
+)
+{
+  Context *ctx;
+
+  (void) when;
+  ctx = arg;
+
+  if ( event->operation == T_SCHEDULER_RECONSIDER_HELP_REQUEST ) {
+    Scheduler_SMP_Node *node;
+
+    node = (Scheduler_SMP_Node *) event->node;
+    T_eq_int( node->state, SCHEDULER_SMP_NODE_READY );
+    ++ctx->counter;
+  }
+}
+
+static void ReleaseThreadLockB(
+  void                    *arg,
+  const T_scheduler_event *event,
+  T_scheduler_when         when
+)
+{
+  Context *ctx;
+
+  ctx = arg;
+
+  if (
+    when == T_SCHEDULER_AFTER &&
+    event->operation == T_SCHEDULER_UPDATE_PRIORITY
+  ) {
+    Thread_Control *worker_b;
+
+    T_scheduler_set_event_handler( ReconsiderHelpRequestB, ctx );
+
+    worker_b = GetThread( ctx->worker_id[ WORKER_B ] );
+    T_eq_int( worker_b->Scheduler.state, THREAD_SCHEDULER_READY );
+
+    _Thread_State_release_critical( worker_b, &ctx->lock_context );
+  }
 }
 
 static void Worker( rtems_task_argument arg, WorkerIndex worker )
@@ -1233,6 +1307,64 @@ static void ScoreSchedSmpValSmp_Action_16( ScoreSchedSmpValSmp_Context *ctx )
 }
 
 /**
+ * @brief Create three worker threads and a mutex.  Use the mutex and the
+ *   worker to check that a not scheduled thread does not get removed from the
+ *   set of ready threads of a scheduler when a help request is reconsidered.
+ */
+static void ScoreSchedSmpValSmp_Action_17( ScoreSchedSmpValSmp_Context *ctx )
+{
+  Thread_Control *worker_b;
+
+  SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_B_ID, PRIO_NORMAL );
+  SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_B_ID, PRIO_HIGH );
+  SendAndSync( ctx, WORKER_B, EVENT_OBTAIN );
+  SendEvents( ctx->worker_id[ WORKER_A ], EVENT_OBTAIN );
+  SetPriority( ctx->worker_id[ WORKER_A ], PRIO_LOW );
+  MakeBusy( ctx, WORKER_B );
+  WaitForBusy( ctx, WORKER_B );
+  MakeBusy( ctx, WORKER_C );
+  WaitForBusy( ctx, WORKER_C );
+
+  /*
+   * Prevent that worker B can perform a post-switch cleanup.
+   */
+  worker_b = GetThread( ctx->worker_id[ WORKER_B ] );
+  _Thread_State_acquire( worker_b, &ctx->lock_context );
+  _ISR_lock_ISR_enable( &ctx->lock_context );
+
+  /*
+   * Give worker C a lower priority than worker B.  Worker B will try to finish
+   * the thread dispatch by doing a post-switch cleanup.  The post-switch
+   * cleanup cannot progress since the runner owns the thread state lock.  Wait
+   * until the other processor waits on the thread state lock of worker B.
+   */
+  SetPriority( ctx->worker_id[ WORKER_C ], PRIO_LOW );
+  TicketLockWaitForOthers( &worker_b->Join_queue.Queue.Lock, 1 );
+
+  /*
+   * Give worker C a higher priority than worker B.  Let worker B do its
+   * post-switch cleanup which will carry out the reconsider help requests for
+   * a not scheduled thread.
+   */
+  ctx->counter = 0;
+  T_scheduler_set_event_handler( ReleaseThreadLockB, ctx );
+  SetPriority( ctx->worker_id[ WORKER_C ], PRIO_HIGH );
+  T_scheduler_set_event_handler( NULL, NULL );
+  T_eq_u32( ctx->counter, 4 );
+
+  /*
+   * Clean up all used resources.
+   */
+  StopBusy( ctx, WORKER_B );
+  StopBusy( ctx, WORKER_C );
+  SendAndSync( ctx, WORKER_B, EVENT_RELEASE );
+  SetPriority( ctx->worker_id[ WORKER_A ], PRIO_HIGH );
+  SendEvents( ctx->worker_id[ WORKER_A ], EVENT_RELEASE );
+  SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_A_ID, PRIO_HIGH );
+  SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_A_ID, PRIO_HIGH );
+}
+
+/**
  * @fn void T_case_body_ScoreSchedSmpValSmp( void )
  */
 T_TEST_CASE_FIXTURE( ScoreSchedSmpValSmp, &ScoreSchedSmpValSmp_Fixture )
@@ -1258,6 +1390,7 @@ T_TEST_CASE_FIXTURE( ScoreSchedSmpValSmp, &ScoreSchedSmpValSmp_Fixture )
   ScoreSchedSmpValSmp_Action_14( ctx );
   ScoreSchedSmpValSmp_Action_15( ctx );
   ScoreSchedSmpValSmp_Action_16( ctx );
+  ScoreSchedSmpValSmp_Action_17( ctx );
 }
 
 /** @} */
