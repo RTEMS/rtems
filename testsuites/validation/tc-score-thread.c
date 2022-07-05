@@ -56,6 +56,7 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 
+#include "ts-config.h"
 #include "tx-support.h"
 
 #include <rtems/test.h>
@@ -86,6 +87,14 @@
  *
  *   - Clean up all used resources.
  *
+ * - Delete a thread which least recently used the floating point coprocessor.
+ *
+ *   - Start the worker thread.  Let it use the floating point coprocessor.
+ *
+ *   - Delete the worker thread and free the thread resources.
+ *
+ *   - Clean up all used resources.
+ *
  * @{
  */
 
@@ -102,6 +111,11 @@ typedef struct {
    * @brief This member contains the killer task identifier.
    */
   rtems_id killer_id;
+
+  /**
+   * @brief This member contains a floating-point object.
+   */
+  volatile double fp_obj;
 } ScoreThreadValThread_Context;
 
 static ScoreThreadValThread_Context
@@ -124,6 +138,29 @@ static void WorkerTask( rtems_task_argument arg )
 {
   (void) arg;
   SuspendSelf();
+}
+
+static void GoBackToRunner( void *arg )
+{
+  Context *ctx;
+
+  ctx = arg;
+  SetPriority( ctx->worker_id, PRIO_LOW );
+}
+
+static void FloatingPointTask( rtems_task_argument arg )
+{
+  Context *ctx;
+
+  ctx = (Context *) arg;
+  ctx->fp_obj *= 1.23;
+
+  /*
+   * We use an interrupt to go back to the runner since on some
+   * architectures, the floating-point context is only saved during interrupt
+   * processing and not for synchronous thread switches.
+   */
+  CallWithinISR( GoBackToRunner, ctx );
 }
 
 static void KillerTask( rtems_task_argument arg )
@@ -217,6 +254,42 @@ static void ScoreThreadValThread_Action_0( ScoreThreadValThread_Context *ctx )
 }
 
 /**
+ * @brief Delete a thread which least recently used the floating point
+ *   coprocessor.
+ */
+static void ScoreThreadValThread_Action_1( ScoreThreadValThread_Context *ctx )
+{
+  rtems_status_code sc;
+
+  SetSelfPriority( PRIO_NORMAL );
+  sc = rtems_task_create(
+    rtems_build_name( 'W', 'O', 'R', 'K'),
+    PRIO_HIGH,
+    TEST_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_FLOATING_POINT,
+    &ctx->worker_id
+  );
+  T_rsc_success( sc );
+
+  /*
+   * Start the worker thread.  Let it use the floating point coprocessor.
+   */
+  StartTask( ctx->worker_id, FloatingPointTask, ctx );
+
+  /*
+   * Delete the worker thread and free the thread resources.
+   */
+  DeleteTask( ctx->worker_id );
+  KillZombies();
+
+  /*
+   * Clean up all used resources.
+   */
+  RestoreRunnerPriority();
+}
+
+/**
  * @fn void T_case_body_ScoreThreadValThread( void )
  */
 T_TEST_CASE_FIXTURE( ScoreThreadValThread, &ScoreThreadValThread_Fixture )
@@ -226,6 +299,7 @@ T_TEST_CASE_FIXTURE( ScoreThreadValThread, &ScoreThreadValThread_Fixture )
   ctx = T_fixture_context();
 
   ScoreThreadValThread_Action_0( ctx );
+  ScoreThreadValThread_Action_1( ctx );
 }
 
 /** @} */
