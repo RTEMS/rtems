@@ -174,31 +174,6 @@ uint32_t _CPU_ISR_Get_level( void )
   return ( level & AARCH64_PSTATE_I ) != 0;
 }
 
-void _CPU_ISR_install_vector(
-  uint32_t         vector,
-  CPU_ISR_handler  new_handler,
-  CPU_ISR_handler *old_handler
-)
-{
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Warray-bounds"
-  /* Redirection table starts at the end of the vector table */
-  CPU_ISR_handler *table = (CPU_ISR_handler *) (MAX_EXCEPTIONS * 4);
-
-  CPU_ISR_handler current_handler = table [vector];
-
-  /* The current handler is now the old one */
-  if (old_handler != NULL) {
-    *old_handler = current_handler;
-  }
-
-  /* Write only if necessary to avoid writes to a maybe read-only memory */
-  if (current_handler != new_handler) {
-    table [vector] = new_handler;
-  }
-#pragma GCC diagnostic pop
-}
-
 void _CPU_Initialize( void )
 {
   /* Do nothing */

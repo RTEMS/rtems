@@ -306,12 +306,6 @@ void _CPU_Initialize( void );
 
 typedef void ( *CPU_ISR_handler )( void );
 
-void _CPU_ISR_install_vector(
-  uint32_t         vector,
-  CPU_ISR_handler  new_handler,
-  CPU_ISR_handler *old_handler
-);
-
 /**
  * @brief CPU switch context.
  */
