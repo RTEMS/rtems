@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2014, 2022 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -46,25 +46,20 @@ rtems_status_code rtems_scheduler_ident(
   rtems_id   *id
 )
 {
-  rtems_status_code sc;
+  size_t i;
 
-  if ( id != NULL ) {
-    size_t n = _Scheduler_Count;
-    size_t i;
-
-    sc = RTEMS_INVALID_NAME;
-
-    for ( i = 0 ; i < n && sc == RTEMS_INVALID_NAME ; ++i ) {
-      const Scheduler_Control *scheduler = &_Scheduler_Table[ i ];
-
-      if ( scheduler->name == name ) {
-        *id = _Scheduler_Build_id( i );
-        sc = RTEMS_SUCCESSFUL;
-      }
-    }
-  } else {
-    sc = RTEMS_INVALID_ADDRESS;
+  if ( id == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
   }
 
-  return sc;
+  for ( i = 0; i < _Scheduler_Count; ++i ) {
+    const Scheduler_Control *scheduler = &_Scheduler_Table[ i ];
+
+    if ( scheduler->name == name ) {
+      *id = _Scheduler_Build_id( i );
+      return RTEMS_SUCCESSFUL;
+    }
+  }
+
+  return RTEMS_INVALID_NAME;
 }
