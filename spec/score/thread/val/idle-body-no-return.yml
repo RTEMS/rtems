@@ -1,0 +1,99 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Create threads which execute an thread idle body.  Check that the thread
+    idle body does not return.  If it would return, then an
+    ${/score/interr/if/thread-exitted:/name} fatal error would occur.
+  action-code: |
+    SetSelfPriority( PRIO_NORMAL );
+  checks:
+  - brief: |
+      Check that the CPU port thread idle body does not return.
+    code: |
+      CheckIdleBody( ctx, CPUThreadIdleBody );
+    links:
+    - role: validation
+      uid: ../req/idle-body-no-return
+  - brief: |
+      Where the BSP provides an idle thread body, check that it does not
+      return.
+    code: |
+      #if defined(BSP_IDLE_TASK_BODY)
+      CheckIdleBody( ctx, BSPIdleTaskBody );
+      #endif
+    links:
+    - role: validation
+      uid: ../req/idle-body-no-return
+  - brief: |
+      Clean up all used resources.
+    code: |
+      RestoreRunnerPriority();
+    links: []
+  links: []
+test-brief: |
+  Tests thread idle body behaviour.
+test-context:
+- brief: |
+    This member contains a counter.
+  description: null
+  member: |
+    uint32_t counter;
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- bsp.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void CheckIdleBody( Context *ctx, rtems_task_entry entry )
+  {
+    rtems_id id;
+
+    ctx->counter = 0;
+    id = CreateTask( "WORK", PRIO_LOW );
+    StartTask( id, entry, ctx );
+
+    while ( ctx->counter == 0 ) {
+      rtems_status_code sc;
+
+      sc = rtems_task_wake_after( 1 );
+      T_rsc_success( sc );
+    }
+
+    T_eq_u32( ctx->counter, 1 );
+    DeleteTask( id );
+  }
+
+  static void CPUThreadIdleBody( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+    ++ctx->counter;
+
+    (void) _CPU_Thread_Idle_body( 0 );
+  }
+
+  #if defined(BSP_IDLE_TASK_BODY)
+  static void BSPIdleTaskBody( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+    ++ctx->counter;
+
+    (void) BSP_IDLE_TASK_BODY( 0 );
+  }
+  #endif
+test-target: testsuites/validation/tc-thread-idle-body-no-return.c
+test-teardown: null
+type: test-case
