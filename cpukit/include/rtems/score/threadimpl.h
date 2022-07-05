@@ -778,6 +778,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Priority_change(
   );
 }
 
+#if defined(RTEMS_SMP)
 /**
  * @brief Replaces the victim priority node with the replacement priority node
  * in the corresponding thread priority aggregation.
@@ -795,6 +796,7 @@ void _Thread_Priority_replace(
   Priority_Node  *victim_node,
   Priority_Node  *replacement_node
 );
+#endif
 
 /**
  * @brief Updates the priority of all threads in the set

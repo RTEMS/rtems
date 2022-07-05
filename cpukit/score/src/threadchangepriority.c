@@ -360,6 +360,7 @@ void _Thread_Priority_changed(
   );
 }
 
+#if defined(RTEMS_SMP)
 void _Thread_Priority_replace(
   Thread_Control *the_thread,
   Priority_Node  *victim_node,
@@ -375,6 +376,7 @@ void _Thread_Priority_replace(
     replacement_node
   );
 }
+#endif
 
 void _Thread_Priority_update( Thread_queue_Context *queue_context )
 {
