@@ -9,12 +9,10 @@ enabled-by: RTEMS_SMP
 features: c cprogram
 includes: []
 ldflags:
-- -Wl,--wrap=bsp_interrupt_handler_default
 - -Wl,--wrap=_Scheduler_EDF_SMP_Yield
 links: []
 source:
 - testsuites/validation/tc-acfg-scheduler-edf-smp.c
-- testsuites/validation/tc-bsp-interrupt-spurious.c
 - testsuites/validation/tc-intr-smp-only.c
 - testsuites/validation/tc-scheduler-smp-only.c
 - testsuites/validation/tc-sched-smp.c

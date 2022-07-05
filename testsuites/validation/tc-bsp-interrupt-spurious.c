@@ -63,7 +63,7 @@
  * @defgroup RTEMSTestCaseBspReqInterruptSpurious \
  *   spec:/bsp/req/interrupt-spurious
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
  *
  * @{
  */
@@ -416,28 +416,24 @@ static void BspReqInterruptSpurious_Action(
   BspReqInterruptSpurious_Context *ctx
 )
 {
+  rtems_status_code sc;
+
   ctx->interrupt_occurred = false;
   ctx->entry_counter = 0;
   ctx->fatal_counter = 0;
   ctx->fatal_source = RTEMS_FATAL_SOURCE_LAST;
   ctx->fatal_code = UINT32_MAX;
 
-  if ( *ctx->first == NULL ) {
-    rtems_status_code sc;
+  (void) rtems_interrupt_vector_enable( ctx->test_vector );
 
-    (void) rtems_interrupt_vector_enable( ctx->test_vector );
+  sc = rtems_interrupt_raise( ctx->test_vector );
+  T_rsc_success( sc );
 
-    sc = rtems_interrupt_raise( ctx->test_vector );
-    T_rsc_success( sc );
-
-    while ( !ctx->interrupt_occurred ) {
-      /* Wait */
-    }
-
-    Disable( ctx );
-  } else {
-    bsp_interrupt_spurious( ctx->test_vector );
+  while ( !ctx->interrupt_occurred ) {
+    /* Wait */
   }
+
+  Disable( ctx );
 }
 
 static const BspReqInterruptSpurious_Entry

@@ -8,9 +8,11 @@ cxxflags: []
 enabled-by: true
 features: c cprogram
 includes: []
-ldflags: []
+ldflags:
+- -Wl,--wrap=bsp_interrupt_handler_default
 links: []
 source:
+- testsuites/validation/tc-bsp-interrupt-spurious.c
 - testsuites/validation/tc-intr-clear.c
 - testsuites/validation/tc-intr-entry-install.c
 - testsuites/validation/tc-intr-entry-remove.c
