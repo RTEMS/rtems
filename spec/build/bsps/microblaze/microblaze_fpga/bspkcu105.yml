@@ -12,8 +12,6 @@ includes: []
 install: []
 links:
 - role: build-dependency
-  uid: linkcmds
-- role: build-dependency
   uid: tstkcu105_qemu
 - role: build-dependency
   uid: ../../opto0

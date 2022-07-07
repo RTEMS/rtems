@@ -57,6 +57,8 @@ links:
 - role: build-dependency
   uid: ../../objmem
 - role: build-dependency
+  uid: linkcmds
+- role: build-dependency
   uid: ../../bspopts
 type: build
 use-after: []
