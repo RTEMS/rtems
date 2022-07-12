@@ -50,15 +50,34 @@ pre-conditions:
     test-code: |
       *ctx->first = NULL;
     text: |
-      While the pointer to the first interrupt entry of the interrupt vector
-      specified by the ``vector`` parameter is equal to ${/c/if/null:/name}.
+      While the first loaded value of the pointer to the first interrupt entry
+      of the interrupt vector specified by the ``vector`` parameter is equal to
+      ${/c/if/null:/name}.
   - name: Entry
     test-code: |
       *ctx->first = &ctx->entry;
     text: |
-      While the pointer to the first interrupt entry of the interrupt vector
-      specified by the ``vector`` parameter references an object of type
-      ${/rtems/intr/if/entry:/name}.
+      While the first loaded value of the pointer to the first interrupt entry
+      of the interrupt vector specified by the ``vector`` parameter references
+      an object of type ${/rtems/intr/if/entry:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: FirstAgain
+  states:
+  - name: 'Null'
+    test-code: |
+      ctx->first_again = NULL;
+    text: |
+      While the second loaded value of the pointer to the first interrupt entry
+      of the interrupt vector specified by the ``vector`` parameter is equal to
+      ${/c/if/null:/name}.
+  - name: Entry
+    test-code: |
+      ctx->first_again = &ctx->entry;
+    text: |
+      While the second loaded value of the pointer to the first interrupt entry
+      of the interrupt vector specified by the ``vector`` parameter references
+      an object of type ${/rtems/intr/if/entry:/name}.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -66,24 +85,32 @@ references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
-  rtems_status_code sc;
-
   ctx->interrupt_occurred = false;
   ctx->entry_counter = 0;
   ctx->fatal_counter = 0;
   ctx->fatal_source = RTEMS_FATAL_SOURCE_LAST;
   ctx->fatal_code = UINT32_MAX;
 
-  (void) rtems_interrupt_vector_enable( ctx->test_vector );
+  #if defined(RTEMS_SMP)
+  if ( *ctx->first == NULL && ctx->first_again != NULL ) {
+    *ctx->first = ctx->first_again;
+    bsp_interrupt_spurious( ctx->test_vector );
+  } else
+  #endif
+  {
+    rtems_status_code sc;
 
-  sc = rtems_interrupt_raise( ctx->test_vector );
-  T_rsc_success( sc );
+    (void) rtems_interrupt_vector_enable( ctx->test_vector );
 
-  while ( !ctx->interrupt_occurred ) {
-    /* Wait */
+    sc = rtems_interrupt_raise( ctx->test_vector );
+    T_rsc_success( sc );
+
+    while ( !ctx->interrupt_occurred ) {
+      /* Wait */
+    }
+
+    Disable( ctx );
   }
-
-  Disable( ctx );
 test-brief: null
 test-cleanup: null
 test-context:
@@ -138,6 +165,12 @@ test-context:
   description: null
   member: |
     rtems_interrupt_entry **first
+- brief: |
+    This member references an interrupt entry for the first entry of the
+    interrupt vector or is NULL.
+  description: null
+  member: |
+    rtems_interrupt_entry *first_again
 test-context-support: null
 test-description: null
 test-header: null
@@ -254,6 +287,7 @@ transition-map:
   pre-conditions:
     First:
     - 'Null'
+    FirstAgain: N/A
 - enabled-by: true
   post-conditions:
     Result: Dispatch
@@ -261,5 +295,26 @@ transition-map:
     FatalCode: N/A
   pre-conditions:
     First:
+    - Entry
+    FirstAgain: N/A
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Result: FatalError
+    FatalSource: SpuriousInterrupt
+    FatalCode: Vector
+  pre-conditions:
+    First:
+    - 'Null'
+    FirstAgain:
+    - 'Null'
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Result: Dispatch
+    FatalSource: N/A
+    FatalCode: N/A
+  pre-conditions:
+    First:
+    - 'Null'
+    FirstAgain:
     - Entry
 type: requirement
