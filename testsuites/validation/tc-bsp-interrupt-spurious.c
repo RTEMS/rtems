@@ -75,6 +75,12 @@ typedef enum {
 } BspReqInterruptSpurious_Pre_First;
 
 typedef enum {
+  BspReqInterruptSpurious_Pre_FirstAgain_Null,
+  BspReqInterruptSpurious_Pre_FirstAgain_Entry,
+  BspReqInterruptSpurious_Pre_FirstAgain_NA
+} BspReqInterruptSpurious_Pre_FirstAgain;
+
+typedef enum {
   BspReqInterruptSpurious_Post_Result_FatalError,
   BspReqInterruptSpurious_Post_Result_Dispatch,
   BspReqInterruptSpurious_Post_Result_NA
@@ -93,6 +99,7 @@ typedef enum {
 typedef struct {
   uint8_t Skip : 1;
   uint8_t Pre_First_NA : 1;
+  uint8_t Pre_FirstAgain_NA : 1;
   uint8_t Post_Result : 2;
   uint8_t Post_FatalSource : 1;
   uint8_t Post_FatalCode : 1;
@@ -153,11 +160,23 @@ typedef struct {
    */
   rtems_interrupt_entry **first;
 
+  /**
+   * @brief This member references an interrupt entry for the first entry of
+   *   the interrupt vector or is NULL.
+   */
+  rtems_interrupt_entry *first_again;
+
   struct {
+    /**
+     * @brief This member defines the pre-condition indices for the next
+     *   action.
+     */
+    size_t pci[ 2 ];
+
     /**
      * @brief This member defines the pre-condition states for the next action.
      */
-    size_t pcs[ 1 ];
+    size_t pcs[ 2 ];
 
     /**
      * @brief If this member is true, then the test action loop is executed.
@@ -191,8 +210,15 @@ static const char * const BspReqInterruptSpurious_PreDesc_First[] = {
   "NA"
 };
 
+static const char * const BspReqInterruptSpurious_PreDesc_FirstAgain[] = {
+  "Null",
+  "Entry",
+  "NA"
+};
+
 static const char * const * const BspReqInterruptSpurious_PreDesc[] = {
   BspReqInterruptSpurious_PreDesc_First,
+  BspReqInterruptSpurious_PreDesc_FirstAgain,
   NULL
 };
 
@@ -271,8 +297,9 @@ static void BspReqInterruptSpurious_Pre_First_Prepare(
   switch ( state ) {
     case BspReqInterruptSpurious_Pre_First_Null: {
       /*
-       * While the pointer to the first interrupt entry of the interrupt vector
-       * specified by the ``vector`` parameter is equal to NULL.
+       * While the first loaded value of the pointer to the first interrupt
+       * entry of the interrupt vector specified by the ``vector`` parameter is
+       * equal to NULL.
        */
       *ctx->first = NULL;
       break;
@@ -280,15 +307,46 @@ static void BspReqInterruptSpurious_Pre_First_Prepare(
 
     case BspReqInterruptSpurious_Pre_First_Entry: {
       /*
-       * While the pointer to the first interrupt entry of the interrupt vector
-       * specified by the ``vector`` parameter references an object of type
-       * rtems_interrupt_entry.
+       * While the first loaded value of the pointer to the first interrupt
+       * entry of the interrupt vector specified by the ``vector`` parameter
+       * references an object of type rtems_interrupt_entry.
        */
       *ctx->first = &ctx->entry;
       break;
     }
 
     case BspReqInterruptSpurious_Pre_First_NA:
+      break;
+  }
+}
+
+static void BspReqInterruptSpurious_Pre_FirstAgain_Prepare(
+  BspReqInterruptSpurious_Context       *ctx,
+  BspReqInterruptSpurious_Pre_FirstAgain state
+)
+{
+  switch ( state ) {
+    case BspReqInterruptSpurious_Pre_FirstAgain_Null: {
+      /*
+       * While the second loaded value of the pointer to the first interrupt
+       * entry of the interrupt vector specified by the ``vector`` parameter is
+       * equal to NULL.
+       */
+      ctx->first_again = NULL;
+      break;
+    }
+
+    case BspReqInterruptSpurious_Pre_FirstAgain_Entry: {
+      /*
+       * While the second loaded value of the pointer to the first interrupt
+       * entry of the interrupt vector specified by the ``vector`` parameter
+       * references an object of type rtems_interrupt_entry.
+       */
+      ctx->first_again = &ctx->entry;
+      break;
+    }
+
+    case BspReqInterruptSpurious_Pre_FirstAgain_NA:
       break;
   }
 }
@@ -416,39 +474,62 @@ static void BspReqInterruptSpurious_Action(
   BspReqInterruptSpurious_Context *ctx
 )
 {
-  rtems_status_code sc;
-
   ctx->interrupt_occurred = false;
   ctx->entry_counter = 0;
   ctx->fatal_counter = 0;
   ctx->fatal_source = RTEMS_FATAL_SOURCE_LAST;
   ctx->fatal_code = UINT32_MAX;
 
-  (void) rtems_interrupt_vector_enable( ctx->test_vector );
+  #if defined(RTEMS_SMP)
+  if ( *ctx->first == NULL && ctx->first_again != NULL ) {
+    *ctx->first = ctx->first_again;
+    bsp_interrupt_spurious( ctx->test_vector );
+  } else
+  #endif
+  {
+    rtems_status_code sc;
 
-  sc = rtems_interrupt_raise( ctx->test_vector );
-  T_rsc_success( sc );
+    (void) rtems_interrupt_vector_enable( ctx->test_vector );
 
-  while ( !ctx->interrupt_occurred ) {
-    /* Wait */
+    sc = rtems_interrupt_raise( ctx->test_vector );
+    T_rsc_success( sc );
+
+    while ( !ctx->interrupt_occurred ) {
+      /* Wait */
+    }
+
+    Disable( ctx );
   }
-
-  Disable( ctx );
 }
 
 static const BspReqInterruptSpurious_Entry
 BspReqInterruptSpurious_Entries[] = {
-  { 0, 0, BspReqInterruptSpurious_Post_Result_FatalError,
+  { 0, 0, 1, BspReqInterruptSpurious_Post_Result_Dispatch,
+    BspReqInterruptSpurious_Post_FatalSource_NA,
+    BspReqInterruptSpurious_Post_FatalCode_NA },
+#if defined(RTEMS_SMP)
+  { 0, 0, 0, BspReqInterruptSpurious_Post_Result_FatalError,
     BspReqInterruptSpurious_Post_FatalSource_SpuriousInterrupt,
     BspReqInterruptSpurious_Post_FatalCode_Vector },
-  { 0, 0, BspReqInterruptSpurious_Post_Result_Dispatch,
+#else
+  { 0, 0, 1, BspReqInterruptSpurious_Post_Result_FatalError,
+    BspReqInterruptSpurious_Post_FatalSource_SpuriousInterrupt,
+    BspReqInterruptSpurious_Post_FatalCode_Vector },
+#endif
+#if defined(RTEMS_SMP)
+  { 0, 0, 0, BspReqInterruptSpurious_Post_Result_Dispatch,
     BspReqInterruptSpurious_Post_FatalSource_NA,
     BspReqInterruptSpurious_Post_FatalCode_NA }
+#else
+  { 0, 0, 1, BspReqInterruptSpurious_Post_Result_FatalError,
+    BspReqInterruptSpurious_Post_FatalSource_SpuriousInterrupt,
+    BspReqInterruptSpurious_Post_FatalCode_Vector }
+#endif
 };
 
 static const uint8_t
 BspReqInterruptSpurious_Map[] = {
-  0, 1
+  1, 2, 0, 0
 };
 
 static size_t BspReqInterruptSpurious_Scope( void *arg, char *buf, size_t n )
@@ -490,11 +571,25 @@ static inline BspReqInterruptSpurious_Entry BspReqInterruptSpurious_PopEntry(
   ];
 }
 
+static void BspReqInterruptSpurious_SetPreConditionStates(
+  BspReqInterruptSpurious_Context *ctx
+)
+{
+  ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
+
+  if ( ctx->Map.entry.Pre_FirstAgain_NA ) {
+    ctx->Map.pcs[ 1 ] = BspReqInterruptSpurious_Pre_FirstAgain_NA;
+  } else {
+    ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
+  }
+}
+
 static void BspReqInterruptSpurious_TestVariant(
   BspReqInterruptSpurious_Context *ctx
 )
 {
   BspReqInterruptSpurious_Pre_First_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  BspReqInterruptSpurious_Pre_FirstAgain_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   BspReqInterruptSpurious_Action( ctx );
   BspReqInterruptSpurious_Post_Result_Check( ctx, ctx->Map.entry.Post_Result );
   BspReqInterruptSpurious_Post_FatalSource_Check(
@@ -522,12 +617,19 @@ T_TEST_CASE_FIXTURE(
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = BspReqInterruptSpurious_Pre_First_Null;
-    ctx->Map.pcs[ 0 ] < BspReqInterruptSpurious_Pre_First_NA;
-    ++ctx->Map.pcs[ 0 ]
+    ctx->Map.pci[ 0 ] = BspReqInterruptSpurious_Pre_First_Null;
+    ctx->Map.pci[ 0 ] < BspReqInterruptSpurious_Pre_First_NA;
+    ++ctx->Map.pci[ 0 ]
   ) {
-    ctx->Map.entry = BspReqInterruptSpurious_PopEntry( ctx );
-    BspReqInterruptSpurious_TestVariant( ctx );
+    for (
+      ctx->Map.pci[ 1 ] = BspReqInterruptSpurious_Pre_FirstAgain_Null;
+      ctx->Map.pci[ 1 ] < BspReqInterruptSpurious_Pre_FirstAgain_NA;
+      ++ctx->Map.pci[ 1 ]
+    ) {
+      ctx->Map.entry = BspReqInterruptSpurious_PopEntry( ctx );
+      BspReqInterruptSpurious_SetPreConditionStates( ctx );
+      BspReqInterruptSpurious_TestVariant( ctx );
+    }
   }
 }
 
