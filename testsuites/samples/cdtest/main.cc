@@ -238,6 +238,17 @@ rtems_task main_task(
     exit(0);
 }
 
+/*
+ * Exceptions during system initialization work only on targets which do not
+ * need a registration of exception frames during the global construction.  In
+ * particular, targets which use the DWARF2 unwinder cannot use exceptions
+ * during system initialization.
+ */
+#if defined(__arm__)
+#define CAN_DO_EXCEPTIONS_DURING_SYSINIT
+#endif
+
+#ifdef CAN_DO_EXCEPTIONS_DURING_SYSINIT
 static void early_exception()
 {
     try
@@ -250,11 +261,13 @@ static void early_exception()
       throw "early exception 2";
     }
 }
+#endif
 
 static void test_exceptions_during_system_init()
 {
     TEST_BEGIN();
 
+#ifdef CAN_DO_EXCEPTIONS_DURING_SYSINIT
     try
     {
       early_exception();
@@ -263,6 +276,7 @@ static void test_exceptions_during_system_init()
     {
       rtems_test_assert(strcmp(e, "early exception 2") == 0);
     }
+#endif
 }
 
 RTEMS_SYSINIT_ITEM(
