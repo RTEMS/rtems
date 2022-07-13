@@ -51,14 +51,16 @@ void _Objects_Free_unlimited(
 
   if ( _Objects_Is_auto_extend( information ) ) {
     Objects_Maximum objects_per_block;
-    Objects_Maximum block;
-    Objects_Maximum inactive;
+    Objects_Maximum index;
 
     objects_per_block = information->objects_per_block;
-    block = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
+    index = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
 
-    if ( block > objects_per_block ) {
-      block /= objects_per_block;
+    if ( _Objects_Is_in_allocated_block( index, objects_per_block ) ) {
+      Objects_Maximum block;
+      Objects_Maximum inactive;
+
+      block = index / objects_per_block;
 
       ++information->inactive_per_block[ block ];
 

@@ -912,6 +912,25 @@ RTEMS_INLINE_ROUTINE void _Objects_Free(
 }
 
 /**
+ * @brief Returns true, if the object associated with the zero-based index is
+ *   contained in an allocated block of objects, otherwise false.
+ *
+ * @param index is the zero-based object index.
+ * @param objects_per_block is the object count per block.
+ *
+ * @retval true The object associated with the zero-based index is in an
+ *   allocated block of objects.
+ * @retval false Otherwise.
+ */
+RTEMS_INLINE_ROUTINE bool _Objects_Is_in_allocated_block(
+  Objects_Maximum index,
+  Objects_Maximum objects_per_block
+)
+{
+  return index >= objects_per_block;
+}
+
+/**
  * @brief Activate the object.
  *
  * This function must be only used in case this objects information supports
@@ -926,15 +945,17 @@ RTEMS_INLINE_ROUTINE void _Objects_Activate_unlimited(
 )
 {
   Objects_Maximum objects_per_block;
-  Objects_Maximum block;
+  Objects_Maximum index;
 
   _Assert( _Objects_Is_auto_extend( information ) );
 
   objects_per_block = information->objects_per_block;
-  block = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
+  index = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
 
-  if ( block > objects_per_block ) {
-    block /= objects_per_block;
+  if ( _Objects_Is_in_allocated_block( index, objects_per_block ) ) {
+    Objects_Maximum block;
+
+    block = index / objects_per_block;
 
     information->inactive_per_block[ block ]--;
     information->inactive--;
