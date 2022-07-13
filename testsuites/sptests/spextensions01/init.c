@@ -30,6 +30,11 @@ static int active_extensions = 2;
 
 static rtems_id master_task;
 
+static bool before_initialization(void)
+{
+  return _System_state_Is_before_initialization(_System_state_Get());
+}
+
 static bool before_multitasking(void)
 {
   return _System_state_Is_before_multitasking(_System_state_Get());
@@ -61,9 +66,13 @@ static void assert_life_protected_thread_context(void)
 
 static void assert_allocator_protected_thread_context(void)
 {
-  assert(_Thread_Dispatch_is_enabled() || before_multitasking());
+  assert(
+    _Thread_Dispatch_is_enabled() ||
+    before_initialization() ||
+    before_multitasking()
+  );
   assert(_RTEMS_Allocator_is_owner());
-  assert(life_protected() || before_multitasking());
+  assert(life_protected());
 }
 
 static void assert_thread_dispatch_disabled_context(void)
