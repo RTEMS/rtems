@@ -46,14 +46,22 @@ Objects_Maximum _Objects_Active_count(
   const Objects_Information *information
 )
 {
-  Objects_Maximum inactive;
-  Objects_Maximum maximum;
+  Objects_Maximum   active;
+  Objects_Maximum   index;
+  Objects_Maximum   maximum;
+  Objects_Control **local_table;
 
   _Assert( _Objects_Allocator_is_owner() );
 
-  inactive = (Objects_Maximum)
-    _Chain_Node_count_unprotected( &information->Inactive );
+  active = 0;
   maximum  = _Objects_Get_maximum_index( information );
+  local_table = information->local_table;
 
-  return maximum - inactive;
+  for ( index = 0; index < maximum; ++index ) {
+    if ( local_table[ index ] != NULL ) {
+      ++active;
+    }
+  }
+
+  return active;
 }
