@@ -1,0 +1,14 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spunlimited01
+
+directives:
+
+  - _Objects_Activate_unlimited()
+  - _Objects_Free_unlimited()
+
+concepts:
+
+  - Create and delete objects with the unlimited objects support in a certain
+    order.  Ensure that only blocks with free objects are reclaimed during a
+    shrink operation.

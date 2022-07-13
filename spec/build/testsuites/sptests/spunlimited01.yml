@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags:
+- -Wl,--wrap=_Workspace_Free
+links: []
+source:
+- testsuites/sptests/spunlimited01/init.c
+stlib: []
+target: testsuites/sptests/spunlimited01.exe
+type: build
+use-after: []
+use-before: []
