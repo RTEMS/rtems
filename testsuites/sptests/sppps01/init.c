@@ -105,7 +105,7 @@ T_TEST_CASE( PPSEventEarlyReturns )
   pps_dev.pps.ppsparam.mode = PPS_CAPTURECLEAR;
 
   /* Wait th_generation to be updated */
-  rtems_task_wake_after(1);
+  rtems_task_wake_after( 2 );
   pps_event( &pps_dev.pps, PPS_CAPTURECLEAR );
   T_eq_int( pps_dev.wokenup, 0 );
 
