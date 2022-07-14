@@ -191,7 +191,7 @@ SECTIONS
     } >sram
 
     .noinit (NOLOAD) : {
-        *(.noinit*)
+        *(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
     } >sram
 
     .rtemsstack (NOLOAD) : {

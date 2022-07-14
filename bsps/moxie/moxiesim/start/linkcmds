@@ -231,7 +231,7 @@ SECTIONS
   _bss_end__ = . ; __bss_end__ = . ; __end__ = . ;
   PROVIDE (end = .);
   .noinit (NOLOAD) : {
-    *(.noinit*)
+    *(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
   }
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))

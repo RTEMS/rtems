@@ -206,7 +206,7 @@ SECTIONS
   . = ALIGN(32 / 8);
   _end = .; PROVIDE (end = .);
   .noinit (NOLOAD) : {
-    *(.noinit*)
+    *(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
   }
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))

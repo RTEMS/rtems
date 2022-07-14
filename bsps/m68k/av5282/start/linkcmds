@@ -203,7 +203,7 @@ SECTIONS
         } >ram
 
         .noinit (NOLOAD) : {
-                *(.noinit*)
+                *(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
         } >ram
 
         .rtemsstack (NOLOAD) : {

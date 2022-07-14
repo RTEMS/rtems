@@ -210,7 +210,7 @@ SECTIONS
         } > dram
 
         .noinit (NOLOAD) : {
-                *(.noinit*)
+                *(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
         } > dram
 
         .rtemsstack (NOLOAD) : {

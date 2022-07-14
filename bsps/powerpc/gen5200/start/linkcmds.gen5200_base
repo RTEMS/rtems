@@ -296,7 +296,7 @@ SECTIONS {
 	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_start;
 
 	.noinit (NOLOAD) : {
-		*(.noinit*)
+		*(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
 	} > RAM
 
 	.rtemsstack (NOLOAD) : {

@@ -268,7 +268,7 @@ SECTIONS
     } > onchip_memory_0
 
     .noinit (NOLOAD) : {
-        *(.noinit*)
+        *(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
     } > onchip_memory_0
 
     .rtemsstack (NOLOAD) : {

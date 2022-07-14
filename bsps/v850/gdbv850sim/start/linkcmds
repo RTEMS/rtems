@@ -193,7 +193,7 @@ SECTIONS
 	*(COMMON)
   }
   .noinit (NOLOAD) : {
-    *(.noinit*)
+    *(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
   }
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))

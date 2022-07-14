@@ -252,7 +252,7 @@ SECTIONS
   } > sdram
 
   .noinit (NOLOAD) : {
-    *(.noinit*)
+    *(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
   } > sdram
 
   .rtemsstack (NOLOAD) : {
