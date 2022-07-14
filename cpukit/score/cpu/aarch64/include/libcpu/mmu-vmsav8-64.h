@@ -60,7 +60,6 @@ extern "C" {
 #define MMU_PAGE_BITS           12
 #define MMU_PAGE_SIZE           ( 1 << MMU_PAGE_BITS )
 #define MMU_BITS_PER_LEVEL      9
-#define MMU_TOP_LEVEL_PAGE_BITS ( 2 * MMU_BITS_PER_LEVEL + MMU_PAGE_BITS )
 
 #define AARCH64_MMU_FLAGS_BASE \
   ( MMU_DESC_VALID | MMU_DESC_SH_INNER | MMU_DESC_AF )

@@ -37,16 +37,20 @@
 #ifndef LIBBSP_AARCH64_SHARED_AARCH64_MMU_H
 #define LIBBSP_AARCH64_SHARED_AARCH64_MMU_H
 
-#include <bsp/start.h>
+#include <bsp/fatal.h>
 #include <bsp/linker-symbols.h>
-#include <rtems/score/aarch64-system-registers.h>
-#include <bspopts.h>
+#include <bsp/start.h>
 #include <bsp/utility.h>
+#include <bspopts.h>
 #include <libcpu/mmu-vmsav8-64.h>
+#include <rtems/score/aarch64-system-registers.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/* AArch64 uses levels 0, 1, 2, and 3 */
+#define MMU_MAX_SUBTABLE_PAGE_BITS ( 3 * MMU_BITS_PER_LEVEL + MMU_PAGE_BITS )
 
 typedef struct {
   uintptr_t begin;
@@ -216,15 +220,15 @@ aarch64_mmu_get_sub_table(
 
 BSP_START_TEXT_SECTION static inline rtems_status_code aarch64_mmu_map_block(
   uint64_t *page_table,
-  uintptr_t root_address,
-  uintptr_t addr,
+  uint64_t root_address,
+  uint64_t addr,
   uint64_t size,
-  uint32_t level,
+  int8_t level,
   uint64_t flags
 )
 {
   uint32_t shift = ( 2 - level ) * MMU_BITS_PER_LEVEL + MMU_PAGE_BITS;
-  uintptr_t granularity = 1 << shift;
+  uint64_t granularity = 1LLU << shift;
   uint64_t page_flag = 0;
 
   if ( level == 2 ) {
@@ -233,7 +237,7 @@ BSP_START_TEXT_SECTION static inline rtems_status_code aarch64_mmu_map_block(
 
   while ( size > 0 ) {
     uintptr_t index = aarch64_mmu_get_index( root_address, addr, shift );
-    uintptr_t block_bottom = RTEMS_ALIGN_DOWN( addr, granularity );
+    uint64_t block_bottom = RTEMS_ALIGN_DOWN( addr, granularity );
     uint64_t chunk_size = granularity;
 
     /* check for perfect block match */
@@ -270,7 +274,7 @@ BSP_START_TEXT_SECTION static inline rtems_status_code aarch64_mmu_map_block(
     }
 
     /* Deal with any subtable modification  */
-    uintptr_t new_root_address = root_address + index * granularity;
+    uint64_t new_root_address = root_address + index * granularity;
     uint64_t *sub_table = NULL;
     rtems_status_code sc;
 
@@ -311,6 +315,33 @@ BSP_START_DATA_SECTION extern const aarch64_mmu_config_entry
 BSP_START_DATA_SECTION extern const size_t
   aarch64_mmu_config_table_size;
 
+/* Get the maximum number of bits supported by this hardware */
+BSP_START_TEXT_SECTION static inline uint64_t
+aarch64_mmu_get_cpu_pa_bits( void )
+{
+  uint64_t id_reg = _AArch64_Read_id_aa64mmfr0_el1();
+
+  switch ( AARCH64_ID_AA64MMFR0_EL1_PARANGE_GET( id_reg ) ) {
+  case 0:
+	  return 32;
+  case 1:
+	  return 36;
+  case 2:
+	  return 40;
+  case 3:
+	  return 42;
+  case 4:
+	  return 44;
+  case 5:
+	  return 48;
+  case 6:
+	  return 52;
+  default:
+	  return 48;
+  }
+  return 48;
+}
+
 BSP_START_TEXT_SECTION static inline void
 aarch64_mmu_set_translation_table_entries(
   uint64_t *ttb,
@@ -320,14 +351,19 @@ aarch64_mmu_set_translation_table_entries(
   /* Force alignemnt to 4k page size */
   uintptr_t begin = RTEMS_ALIGN_DOWN( config->begin, MMU_PAGE_SIZE );
   uintptr_t end = RTEMS_ALIGN_UP( config->end, MMU_PAGE_SIZE );
+  uint64_t max_mappable = 1LLU << aarch64_mmu_get_cpu_pa_bits();
   rtems_status_code sc;
+
+  if ( begin >= max_mappable || end > max_mappable ) {
+    bsp_fatal( BSP_FATAL_MMU_ADDRESS_INVALID );
+  }
 
   sc = aarch64_mmu_map_block(
     ttb,
     0x0,
     begin,
     end - begin,
-    0,
+    -1,
     config->flags
   );
 
@@ -347,7 +383,7 @@ BSP_START_TEXT_SECTION static inline void aarch64_mmu_setup_translation_table(
   aarch64_mmu_page_table_set_blocks(
     ttb,
     (uintptr_t) NULL,
-    MMU_TOP_LEVEL_PAGE_BITS,
+    MMU_MAX_SUBTABLE_PAGE_BITS,
     0
   );
 
@@ -390,10 +426,11 @@ aarch64_mmu_disable( void )
 BSP_START_TEXT_SECTION static inline void aarch64_mmu_setup( void )
 {
   /* Set TCR */
-  /* 128GB/36 bits mappable (64-0x1c) */
+  /* 256TB/48 bits mappable (64-0x10) */
   _AArch64_Write_tcr_el1(
-    AARCH64_TCR_EL1_T0SZ( 0x1c ) | AARCH64_TCR_EL1_IRGN0( 0x1 ) |
-    AARCH64_TCR_EL1_ORGN0( 0x1 ) | AARCH64_TCR_EL1_SH0( 0x3 ) | AARCH64_TCR_EL1_TG0( 0x0 )
+    AARCH64_TCR_EL1_T0SZ( 0x10 ) | AARCH64_TCR_EL1_IRGN0( 0x1 ) |
+    AARCH64_TCR_EL1_ORGN0( 0x1 ) | AARCH64_TCR_EL1_SH0( 0x3 ) |
+    AARCH64_TCR_EL1_TG0( 0x0 ) | AARCH64_TCR_EL1_IPS( 0x5ULL )
   );
 
   /* Set MAIR */

@@ -47,6 +47,11 @@ rtems_status_code aarch64_mmu_map(
 )
 {
   rtems_status_code sc;
+  uint64_t max_mappable = 1LLU << aarch64_mmu_get_cpu_pa_bits();
+
+  if ( addr >= max_mappable || (addr + size) > max_mappable ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
 
   aarch64_mmu_disable();
   sc = aarch64_mmu_map_block(
@@ -54,7 +59,7 @@ rtems_status_code aarch64_mmu_map(
     0x0,
     addr,
     size,
-    0,
+    -1,
     flags
   );
   _AARCH64_Data_synchronization_barrier();
