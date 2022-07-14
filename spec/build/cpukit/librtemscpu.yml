@@ -1435,6 +1435,7 @@ source:
 - cpukit/score/src/memoryallocate.c
 - cpukit/score/src/memorydirtyfreeareas.c
 - cpukit/score/src/memoryfill.c
+- cpukit/score/src/memorynoinit.c
 - cpukit/score/src/memoryzerobeforeuse.c
 - cpukit/score/src/memoryzerofreeareas.c
 - cpukit/score/src/mutex.c

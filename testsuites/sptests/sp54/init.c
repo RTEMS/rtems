@@ -37,6 +37,10 @@
 #include "config.h"
 #endif
 
+#include <rtems/sysinit.h>
+#include <rtems/score/memory.h>
+#include <rtems/score/thread.h>
+
 #include <tmacros.h>
 
 const char rtems_test_name[] = "SP 54";
@@ -47,12 +51,6 @@ static void *Init( uintptr_t ignored )
   rtems_task_priority                  pri;
   rtems_id                             id;
   const rtems_api_configuration_table *config;
-
-  /*
-   *  It is possible that since this thread prints and there is no idle
-   *  task, that the system could fail miserably. :(
-   */
-  TEST_BEGIN();
 
   puts( "Init - use valid id of API class with no objects" );
   status = rtems_task_set_priority(
@@ -79,6 +77,44 @@ static void *Init( uintptr_t ignored )
   TEST_END();
   rtems_test_exit(0);
 }
+
+static void check_dirty_memory( void )
+{
+  unsigned char *p;
+
+  TEST_BEGIN();
+
+  p = _Memory_Allocate( _Memory_Get(), sizeof( *p ), RTEMS_ALIGNOF( *p ) );
+  rtems_test_assert( p != NULL );
+  rtems_test_assert( *p == 0xcf );
+
+  p = (unsigned char *) _Thread_Information.Objects.local_table;
+  rtems_test_assert( *p == 0xcf );
+}
+
+RTEMS_SYSINIT_ITEM(
+  check_dirty_memory,
+  RTEMS_SYSINIT_DIRTY_MEMORY,
+  RTEMS_SYSINIT_ORDER_LAST
+);
+
+static void check_zero_workspace_automatically( void )
+{
+  unsigned char *p;
+
+  p = _Memory_Allocate( _Memory_Get(), sizeof( *p ), RTEMS_ALIGNOF( *p ) );
+  rtems_test_assert( p != NULL );
+  rtems_test_assert( *p == 0 );
+
+  p = (unsigned char *) _Thread_Information.Objects.local_table;
+  rtems_test_assert( *p == 0 );
+}
+
+RTEMS_SYSINIT_ITEM(
+  check_zero_workspace_automatically,
+  RTEMS_SYSINIT_ZERO_MEMORY,
+  RTEMS_SYSINIT_ORDER_LAST
+);
 
 /* configuration information */
 

@@ -10,7 +10,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2019 embedded brains GmbH
+ * Copyright (C) 2019, 2022 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -351,6 +351,18 @@ void _Memory_Zero_free_areas( void );
  * @brief Dirty all free memory areas of the system.
  */
 void _Memory_Dirty_free_areas( void );
+
+/**
+ * @brief This symbol marks the begin of the non-initialized section used by
+ *   RTEMS.
+ */
+extern char _Memory_Noinit_begin[];
+
+/**
+ * @brief This symbol marks the end of the non-initialized section used by
+ *   RTEMS.
+ */
+extern char _Memory_Noinit_end[];
 
 /** @} */
 

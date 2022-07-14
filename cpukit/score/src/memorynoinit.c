@@ -3,14 +3,14 @@
  *
  * @ingroup RTEMSScoreMemory
  *
- * @brief This source file contains the implementation of
- *   _Memory_Dirty_free_areas().
+ * @brief This source file contains the definition of ::_Memory_Noinit_begin
+ *   and ::_Memory_Noinit_end.
  */
 
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2020, 2022 embedded brains GmbH
+ * Copyright (C) 2022 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -40,14 +40,6 @@
 
 #include <rtems/score/memory.h>
 
-#include <string.h>
+RTEMS_SECTION( ".noinit.rtems.begin" ) char _Memory_Noinit_begin[ 0 ];
 
-void _Memory_Dirty_free_areas( void )
-{
-  _Memory_Fill( _Memory_Get(), 0xcf );
-  memset(
-    _Memory_Noinit_begin,
-    0xcf,
-    (uintptr_t) _Memory_Noinit_end - (uintptr_t) _Memory_Noinit_begin
-  );
-}
+RTEMS_SECTION( ".noinit.rtems.end" ) char _Memory_Noinit_end[ 0 ];
