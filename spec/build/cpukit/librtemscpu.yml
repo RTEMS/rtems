@@ -396,6 +396,7 @@ install:
   - cpukit/include/rtems/score/schedulersmp.h
   - cpukit/include/rtems/score/schedulersmpimpl.h
   - cpukit/include/rtems/score/schedulerstrongapa.h
+  - cpukit/include/rtems/score/scheduleruniimpl.h
   - cpukit/include/rtems/score/semaphoreimpl.h
   - cpukit/include/rtems/score/smp.h
   - cpukit/include/rtems/score/smpbarrier.h

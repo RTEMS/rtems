@@ -41,7 +41,7 @@
 #include <rtems/score/schedulerpriority.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/prioritybitmapimpl.h>
-#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/scheduleruniimpl.h>
 #include <rtems/score/thread.h>
 
 #ifdef __cplusplus
@@ -231,33 +231,21 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Scheduler_priority_Ready_queue_first(
 }
 
 /**
- * @brief Scheduling decision logic.
+ * @brief Gets the highest priority ready thread of the scheduler.
  *
- * This kernel routine implements scheduling decision logic
- * for priority-based scheduling.
- *
- * @param[in, out] scheduler The scheduler instance.
- * @param the_thread This parameter is unused.
- * @param force_dispatch Indicates whether the dispatch happens also if
- *      the currently executing thread is set as not preemptible.
+ * @param scheduler is the scheduler.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  bool                     force_dispatch
+RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Get_highest_ready(
+  const Scheduler_Control *scheduler
 )
 {
   Scheduler_priority_Context *context =
     _Scheduler_priority_Get_context( scheduler );
-  Thread_Control *heir = (Thread_Control *)
-    _Scheduler_priority_Ready_queue_first(
-      &context->Bit_map,
-      &context->Ready[ 0 ]
-    );
 
-  ( void ) the_thread;
-
-  _Scheduler_Update_heir( heir, force_dispatch );
+  return (Thread_Control *) _Scheduler_priority_Ready_queue_first(
+    &context->Bit_map,
+    &context->Ready[ 0 ]
+  );
 }
 
 /**

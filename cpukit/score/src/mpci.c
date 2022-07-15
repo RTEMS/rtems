@@ -162,7 +162,7 @@ static void _MPCI_Create_server( void )
   memset( &config, 0, sizeof( config ) );
   config.scheduler = &_Scheduler_Table[ 0 ];
   config.name = _Objects_Build_name( 'M', 'P', 'C', 'I' );
-  config.priority = PRIORITY_PSEUDO_ISR;
+  config.priority = PRIORITY_MINIMUM;
   config.is_fp = CPU_ALL_TASKS_ARE_FP;
   config.stack_size = _Stack_Minimum()
     + _MPCI_Configuration.extra_mpci_receive_server_stack

@@ -59,5 +59,8 @@ void _Scheduler_priority_Yield(
     _Chain_Append_unprotected( ready_chain, &the_thread->Object.Node );
   }
 
-  _Scheduler_priority_Schedule_body( scheduler, the_thread, true );
+  _Scheduler_uniprocessor_Yield(
+    scheduler,
+    _Scheduler_priority_Get_highest_ready
+  );
 }

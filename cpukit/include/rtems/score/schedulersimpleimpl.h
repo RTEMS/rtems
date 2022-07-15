@@ -39,7 +39,7 @@
 
 #include <rtems/score/schedulersimple.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/scheduleruniimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -133,28 +133,18 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Extract(
 }
 
 /**
- * @brief Scheduling decision logic.
+ * @brief Gets the highest priority ready thread of the scheduler.
  *
- * This kernel routine implements scheduling decision logic for the simple scheduler.
- *
- * @param[in, out] scheduler The scheduler instance.
- * @param the_thread This parameter is unused.
- * @param force_dispatch Indicates whether the dispatch happens also if
- *      the currently executing thread is set as not preemptible.
+ * @param scheduler is the scheduler.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_simple_Schedule_body(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  bool                     force_dispatch
+RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_simple_Get_highest_ready(
+  const Scheduler_Control *scheduler
 )
 {
   Scheduler_simple_Context *context =
     _Scheduler_simple_Get_context( scheduler );
-  Thread_Control *heir = (Thread_Control *) _Chain_First( &context->Ready );
 
-  ( void ) the_thread;
-
-  _Scheduler_Update_heir( heir, force_dispatch );
+  return (Thread_Control *) _Chain_First( &context->Ready );
 }
 
 /** @} */

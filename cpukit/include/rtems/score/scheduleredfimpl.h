@@ -39,7 +39,7 @@
 #define _RTEMS_SCORE_SCHEDULEREDFIMPL_H
 
 #include <rtems/score/scheduleredf.h>
-#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/scheduleruniimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -216,30 +216,23 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Extract_body(
 }
 
 /**
- * @brief Schedules the next ready thread as the heir.
+ * @brief Gets the highest priority ready thread of the scheduler.
  *
- * @param scheduler The scheduler instance to schedule the minimum of the context of.
- * @param the_thread This parameter is not used.
- * @param force_dispatch Indicates whether the current heir is blocked even if it is
- *      not set as preemptible.
+ * @param scheduler is the scheduler.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Schedule_body(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  bool                     force_dispatch
+RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_EDF_Get_highest_ready(
+  const Scheduler_Control *scheduler
 )
 {
   Scheduler_EDF_Context *context;
   RBTree_Node           *first;
   Scheduler_EDF_Node    *node;
 
-  (void) the_thread;
-
   context = _Scheduler_EDF_Get_context( scheduler );
   first = _RBTree_Minimum( &context->Ready );
   node = RTEMS_CONTAINER_OF( first, Scheduler_EDF_Node, Node );
 
-  _Scheduler_Update_heir( node->Base.owner, force_dispatch );
+  return node->Base.owner;
 }
 
 /** @} */

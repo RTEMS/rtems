@@ -49,11 +49,11 @@ void _Scheduler_priority_Block(
   Scheduler_Node          *node
 )
 {
-  _Scheduler_Generic_block(
+  _Scheduler_uniprocessor_Block(
     scheduler,
     the_thread,
     node,
     _Scheduler_priority_Extract_body,
-    _Scheduler_priority_Schedule_body
+    _Scheduler_priority_Get_highest_ready
   );
 }

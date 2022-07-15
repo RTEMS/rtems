@@ -71,5 +71,8 @@ void _Scheduler_EDF_Update_priority(
 
   _Scheduler_EDF_Extract( context, the_node );
   _Scheduler_EDF_Enqueue( context, the_node, insert_priority );
-  _Scheduler_EDF_Schedule_body( scheduler, the_thread, false );
+  _Scheduler_uniprocessor_Schedule(
+    scheduler,
+    _Scheduler_EDF_Get_highest_ready
+  );
 }

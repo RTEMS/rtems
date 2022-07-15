@@ -84,7 +84,7 @@ RTEMS_INLINE_ROUTINE int _POSIX_Priority_Get_maximum(
  * Thus, SuperCore has priorities run in the opposite sense of the POSIX API.
  *
  * Let N be the maximum priority of this scheduler instance.   The SuperCore
- * priority zero is system reserved (PRIORITY_PSEUDO_ISR).  There are only
+ * priority zero is system reserved (PRIORITY_MINIMUM).  There are only
  * N - 1 POSIX API priority levels since a thread at SuperCore priority N would
  * never run because of the idle threads.  This is necessary because GNAT maps
  * the lowest Ada task priority to the lowest thread priority.  The lowest

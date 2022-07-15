@@ -669,40 +669,6 @@ Status_Control _Scheduler_Set_affinity(
 );
 
 /**
- * @brief Blocks the thread.
- *
- * @param scheduler The scheduler instance.
- * @param the_thread The thread to block.
- * @param node The corresponding scheduler node.
- * @param extract Method to extract the thread.
- * @param schedule Method for scheduling threads.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Scheduler_Node          *node,
-  void                  ( *extract )(
-                             const Scheduler_Control *,
-                             Thread_Control *,
-                             Scheduler_Node *
-                        ),
-  void                  ( *schedule )(
-                             const Scheduler_Control *,
-                             Thread_Control *,
-                             bool
-                        )
-)
-{
-  ( *extract )( scheduler, the_thread, node );
-
-  /* TODO: flash critical section? */
-
-  if ( _Thread_Is_heir( the_thread ) ) {
-    ( *schedule )( scheduler, the_thread, true );
-  }
-}
-
-/**
  * @brief Gets the number of processors of the scheduler.
  *
  * @param scheduler The scheduler instance to get the number of processors of.
@@ -950,37 +916,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Discard_idle_thread(
   _Thread_Dispatch_update_heir( _Per_CPU_Get(), cpu, the_thread );
 }
 #endif
-
-/**
- * @brief Updates the heir.
- *
- * @param[in, out] new_heir The new heir.
- * @param force_dispatch Indicates whether the dispatch happens also if the
- *      currently running thread is set as not preemptible.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
-  Thread_Control *new_heir,
-  bool            force_dispatch
-)
-{
-  Thread_Control *heir = _Thread_Heir;
-
-  if ( heir != new_heir && ( heir->is_preemptible || force_dispatch ) ) {
-#if defined(RTEMS_SMP)
-    /*
-     * We need this state only for _Thread_Get_CPU_time_used_locked().  Cannot
-     * use _Scheduler_Thread_change_state() since THREAD_SCHEDULER_BLOCKED to
-     * THREAD_SCHEDULER_BLOCKED state changes are illegal for the real SMP
-     * schedulers.
-     */
-    heir->Scheduler.state = THREAD_SCHEDULER_BLOCKED;
-    new_heir->Scheduler.state = THREAD_SCHEDULER_SCHEDULED;
-#endif
-    _Thread_Update_CPU_time_used( heir, _Thread_Get_CPU( heir ) );
-    _Thread_Heir = new_heir;
-    _Thread_Dispatch_necessary = true;
-  }
-}
 
 /**
  * @brief Sets a new scheduler.

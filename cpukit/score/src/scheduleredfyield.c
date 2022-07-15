@@ -55,5 +55,5 @@ void _Scheduler_EDF_Yield(
 
   _Scheduler_EDF_Extract( context, the_node );
   _Scheduler_EDF_Enqueue( context, the_node, the_node->priority );
-  _Scheduler_EDF_Schedule_body( scheduler, the_thread, true );
+  _Scheduler_uniprocessor_Yield( scheduler, _Scheduler_EDF_Get_highest_ready );
 }

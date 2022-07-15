@@ -173,7 +173,7 @@ static rtems_status_code _Timer_server_Initiate(
   }
 
   if ( priority == RTEMS_TIMER_SERVER_DEFAULT_PRIORITY ) {
-    priority = PRIORITY_PSEUDO_ISR;
+    priority = PRIORITY_MINIMUM;
   }
 
   /*

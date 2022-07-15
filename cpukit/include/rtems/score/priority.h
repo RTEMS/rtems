@@ -96,13 +96,6 @@ typedef uint64_t Priority_Control;
 #define PRIORITY_MINIMUM      0
 
 /**
- * @brief The priority value of pseudo-ISR threads.
- *
- * Examples are the MPCI and timer server threads.
- */
-#define PRIORITY_PSEUDO_ISR   PRIORITY_MINIMUM
-
-/**
  * @brief The default lowest (least important) thread priority value.
  *
  * This value is CPU port dependent.

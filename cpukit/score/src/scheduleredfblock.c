@@ -47,11 +47,11 @@ void _Scheduler_EDF_Block(
   Scheduler_Node          *node
 )
 {
-  _Scheduler_Generic_block(
+  _Scheduler_uniprocessor_Block(
     scheduler,
     the_thread,
     node,
     _Scheduler_EDF_Extract_body,
-    _Scheduler_EDF_Schedule_body
+    _Scheduler_EDF_Get_highest_ready
   );
 }

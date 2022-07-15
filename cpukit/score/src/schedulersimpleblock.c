@@ -47,11 +47,11 @@ void _Scheduler_simple_Block(
   Scheduler_Node          *node
 )
 {
-  _Scheduler_Generic_block(
+  _Scheduler_uniprocessor_Block(
     scheduler,
     the_thread,
     node,
     _Scheduler_simple_Extract,
-    _Scheduler_simple_Schedule_body
+    _Scheduler_simple_Get_highest_ready
   );
 }

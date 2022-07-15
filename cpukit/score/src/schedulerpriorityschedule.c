@@ -46,5 +46,8 @@ void _Scheduler_priority_Schedule(
   Thread_Control          *the_thread
 )
 {
-  _Scheduler_priority_Schedule_body( scheduler, the_thread, false );
+  _Scheduler_uniprocessor_Schedule(
+    scheduler,
+    _Scheduler_priority_Get_highest_ready
+  );
 }

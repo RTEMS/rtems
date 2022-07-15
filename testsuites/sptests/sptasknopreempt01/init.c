@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2015, 2022 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,12 +37,7 @@ static bool did_run;
 
 static void do_not_run(rtems_task_argument arg)
 {
-#if 0
   rtems_test_assert(0);
-#else
-  did_run = true;
-  rtems_task_suspend(RTEMS_SELF);
-#endif
 }
 
 static void test(void)
@@ -64,9 +59,9 @@ static void test(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   /*
-   * This will start a pseudo interrupt task pre-empting the non-preemtive
-   * executing task.  Later the high priority do_not_run() task is scheduled.
-   * See also https://devel.rtems.org/ticket/2365.
+   * This will start a task with a priority of PRIORITY_MINIMUM.  Check that
+   * this task and the test task did not preempt the current task.  See also
+   * https://devel.rtems.org/ticket/2365.
    */
   sc = rtems_timer_initiate_server(
     RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
@@ -75,8 +70,7 @@ static void test(void)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  /* This is probably a bug and not a feature */
-  rtems_test_assert(did_run);
+  rtems_test_assert(!did_run);
 
   sc = rtems_task_delete(task);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -98,6 +92,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TASKS 3
 
 #define CONFIGURE_INIT_TASK_PRIORITY 2
+
+#define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

@@ -58,5 +58,8 @@ void _Scheduler_simple_Yield(
   insert_priority = (unsigned int) _Thread_Get_priority( the_thread );
   insert_priority = SCHEDULER_PRIORITY_APPEND( insert_priority );
   _Scheduler_simple_Insert( &context->Ready, the_thread, insert_priority );
-  _Scheduler_simple_Schedule_body( scheduler, the_thread, false );
+  _Scheduler_uniprocessor_Yield(
+    scheduler,
+    _Scheduler_simple_Get_highest_ready
+  );
 }
