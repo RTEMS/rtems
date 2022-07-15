@@ -108,6 +108,10 @@ LINKER_SYMBOL(bsp_section_rtemsstack_begin)
 LINKER_SYMBOL(bsp_section_rtemsstack_end)
 LINKER_SYMBOL(bsp_section_rtemsstack_size)
 
+LINKER_SYMBOL(bsp_section_noinit_begin)
+LINKER_SYMBOL(bsp_section_noinit_end)
+LINKER_SYMBOL(bsp_section_noinit_size)
+
 LINKER_SYMBOL(bsp_section_work_begin)
 LINKER_SYMBOL(bsp_section_work_end)
 LINKER_SYMBOL(bsp_section_work_size)

@@ -92,6 +92,10 @@ typedef struct {
     .end = (uintptr_t) bsp_section_rtemsstack_end, \
     .flags = AARCH64_MMU_DATA_RW_CACHED \
   }, { \
+    .begin = (uintptr_t) bsp_section_noinit_begin, \
+    .end = (uintptr_t) bsp_section_noinit_end, \
+    .flags = AARCH64_MMU_DATA_RW_CACHED \
+  }, { \
     .begin = (uintptr_t) bsp_section_work_begin, \
     .end = (uintptr_t) bsp_section_work_end, \
     .flags = AARCH64_MMU_DATA_RW_CACHED \
