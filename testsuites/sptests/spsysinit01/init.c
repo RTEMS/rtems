@@ -341,13 +341,13 @@ LAST(RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE)
 
 FIRST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
 {
-  assert(_Semaphore_Information.initial_objects[0].id == 0);
+  assert(info_not_init(&_Semaphore_Information));
   next_step(CLASSIC_SEMAPHORE_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
 {
-  assert(_Semaphore_Information.initial_objects[0].id != 0);
+  assert(info_is_init(&_Semaphore_Information, 1));
   next_step(CLASSIC_SEMAPHORE_POST);
 }
 
