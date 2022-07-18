@@ -226,6 +226,8 @@ static void *POSIX_Init( void *argument )
 
   puts( "Init: pthread_create - SUCCESSFUL" );
 
+  pthread_setschedprio( pthread_self(), SS_PRIO_LOW );
+
   /* Align with clock tick */
   sleep( 1 );
 

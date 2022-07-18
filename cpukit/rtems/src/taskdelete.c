@@ -40,6 +40,7 @@
 #endif
 
 #include <rtems/rtems/tasksimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/threadimpl.h>
 
 rtems_status_code rtems_task_delete(
@@ -47,12 +48,13 @@ rtems_status_code rtems_task_delete(
 )
 {
   Thread_Control       *the_thread;
-  Thread_Close_context  context;
+  Thread_queue_Context  queue_context;
   Per_CPU_Control      *cpu_self;
   Thread_Control       *executing;
+  Status_Control        status;
 
-  _Thread_queue_Context_initialize( &context.Base );
-  the_thread = _Thread_Get( id, &context.Base.Lock_context.Lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  the_thread = _Thread_Get( id, &queue_context.Lock_context.Lock_context );
 
   if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -67,23 +69,22 @@ rtems_status_code rtems_task_delete(
   cpu_self = _Per_CPU_Get();
 
   if ( _Per_CPU_Is_ISR_in_progress( cpu_self ) ) {
-    _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
+    _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
     return RTEMS_CALLED_FROM_ISR;
   }
 
   executing = _Per_CPU_Get_executing( cpu_self );
 
   if ( the_thread == executing ) {
-    _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
+    _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
 
     /*
      * The Classic tasks are neither detached nor joinable.  In case of
      * self deletion, they are detached, otherwise joinable by default.
      */
     _Thread_Exit( NULL, THREAD_LIFE_TERMINATING | THREAD_LIFE_DETACHED );
-  } else {
-    _Thread_Close( the_thread, executing, &context );
   }
 
-  return RTEMS_SUCCESSFUL;
+  status = _Thread_Close( the_thread, executing, &queue_context );
+  return _Status_Get( status );
 }

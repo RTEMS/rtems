@@ -4,6 +4,8 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
+ * Copyright (C) 2022 embedded brains GmbH
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -36,6 +38,119 @@
 
 const char rtems_test_name[] = "PSX 8";
 
+static void *async_join_thread( void *arg )
+{
+  pthread_t *th;
+  int        eno;
+  int        type;
+
+  th = arg;
+
+  type = PTHREAD_CANCEL_ASYNCHRONOUS;
+  eno = pthread_setcanceltype( type, &type );
+  rtems_test_assert( eno == 0 );
+  rtems_test_assert( type == PTHREAD_CANCEL_DEFERRED );
+
+  (void) pthread_join( *th, NULL );
+  rtems_test_assert( 0 );
+}
+
+static void test_join_deadlock( void )
+{
+  pthread_t td;
+  pthread_t self;
+  int       eno;
+  void     *value;
+
+  self = pthread_self();
+
+  eno = pthread_create( &td, NULL, async_join_thread, &self );
+  rtems_test_assert( eno == 0 );
+
+  sched_yield();
+
+  eno = pthread_join( td, NULL );
+  rtems_test_assert( eno == EDEADLK );
+
+  eno = pthread_cancel( td );
+  rtems_test_assert( eno == 0 );
+
+  value = NULL;
+  eno = pthread_join( td, &value );
+  rtems_test_assert( eno == 0 );
+  rtems_test_assert( value == PTHREAD_CANCELED );
+}
+
+typedef struct {
+  pthread_t protected_join;
+  pthread_t deleter;
+  rtems_status_code delete_status;
+} delete_deadlock_context;
+
+static void *protected_join_thread( void *arg )
+{
+  delete_deadlock_context *ctx;
+  int                      state;
+  int                      eno;
+  void                    *value;
+
+  ctx = arg;
+
+  state = PTHREAD_CANCEL_DISABLE;
+  eno = pthread_setcancelstate( state, &state );
+  rtems_test_assert( eno == 0 );
+  rtems_test_assert( state == PTHREAD_CANCEL_ENABLE );
+
+  value = NULL;
+  eno = pthread_join( ctx->deleter, &value );
+  rtems_test_assert( eno == 0 );
+  rtems_test_assert( value == &ctx->deleter );
+
+  state = PTHREAD_CANCEL_ENABLE;
+  eno = pthread_setcancelstate( state, &state );
+  rtems_test_assert( eno == 0 );
+  rtems_test_assert( state == PTHREAD_CANCEL_DISABLE );
+
+  pthread_testcancel();
+  rtems_test_assert( 0 );
+}
+
+static void *deleter_thread( void *arg )
+{
+  delete_deadlock_context *ctx;
+
+  ctx = arg;
+  ctx->delete_status = rtems_task_delete( ctx->protected_join );
+  return &ctx->deleter;
+}
+
+static void test_delete_deadlock( void )
+{
+  delete_deadlock_context ctx;
+  int                     eno;
+  void                   *value;
+
+  ctx.delete_status = RTEMS_NOT_IMPLEMENTED;
+
+  eno = pthread_create(
+    &ctx.protected_join,
+    NULL,
+    protected_join_thread,
+    &ctx
+  );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_create( &ctx.deleter, NULL, deleter_thread, &ctx );
+  rtems_test_assert( eno == 0 );
+
+  value = NULL;
+  eno = pthread_join( ctx.protected_join, &value );
+  rtems_test_assert( eno == 0 );
+  rtems_test_assert( value == NULL );
+
+  rtems_test_assert( ctx.delete_status == RTEMS_INCORRECT_STATE );
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -53,6 +168,9 @@ void *POSIX_Init(
 
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08" PRIxpthread_t "\n", Init_id );
+
+  test_join_deadlock();
+  test_delete_deadlock();
 
   puts( "Init: pthread_detach - ESRCH (invalid id)" );
   status = pthread_detach( (pthread_t) -1 );

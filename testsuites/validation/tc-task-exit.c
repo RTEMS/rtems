@@ -55,6 +55,7 @@
 #include <rtems.h>
 #include <rtems/test-scheduler.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/threaddispatch.h>
 
 #include "tx-support.h"
@@ -116,10 +117,10 @@ typedef enum {
 } RtemsTaskReqExit_Post_TerminateExtensions;
 
 typedef enum {
-  RtemsTaskReqExit_Post_Block_Yes,
-  RtemsTaskReqExit_Post_Block_Nop,
-  RtemsTaskReqExit_Post_Block_NA
-} RtemsTaskReqExit_Post_Block;
+  RtemsTaskReqExit_Post_Zombie_Yes,
+  RtemsTaskReqExit_Post_Zombie_No,
+  RtemsTaskReqExit_Post_Zombie_NA
+} RtemsTaskReqExit_Post_Zombie;
 
 typedef enum {
   RtemsTaskReqExit_Post_ID_Valid,
@@ -143,7 +144,7 @@ typedef struct {
   uint32_t Post_DeleteExtensions : 1;
   uint32_t Post_RestartExtensions : 1;
   uint32_t Post_TerminateExtensions : 2;
-  uint32_t Post_Block : 2;
+  uint32_t Post_Zombie : 2;
   uint32_t Post_ID : 2;
   uint32_t Post_Delete : 2;
 } RtemsTaskReqExit_Entry;
@@ -644,9 +645,9 @@ static void RtemsTaskReqExit_Post_TerminateExtensions_Check(
   }
 }
 
-static void RtemsTaskReqExit_Post_Block_Check(
-  RtemsTaskReqExit_Context   *ctx,
-  RtemsTaskReqExit_Post_Block state
+static void RtemsTaskReqExit_Post_Zombie_Check(
+  RtemsTaskReqExit_Context    *ctx,
+  RtemsTaskReqExit_Post_Zombie state
 )
 {
   const T_scheduler_event *event;
@@ -655,20 +656,28 @@ static void RtemsTaskReqExit_Post_Block_Check(
   index = 0;
 
   switch ( state ) {
-    case RtemsTaskReqExit_Post_Block_Yes: {
+    case RtemsTaskReqExit_Post_Zombie_Yes: {
       /*
-       * The calling task shall be blocked exactly once by the
-       * rtems_task_exit() call.
+       * The thread state of the calling task shall be set to the zombie state
+       * by the rtems_task_exit() call.
        */
       event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
       T_eq_int( event->operation, T_SCHEDULER_BLOCK );
       T_eq_u32( event->thread->Object.id, ctx->worker_id );
+      T_eq_u32( event->thread->current_state, STATES_ZOMBIE );
 
       if ( ctx->terminating ) {
+        /* The thread waiting for the worker exit was unblocked */
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
         T_eq_u32( event->thread->Object.id, ctx->deleter_id );
 
+        /* Inherited priority was removed */
+        event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+        T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
+        T_eq_u32( event->thread->Object.id, ctx->worker_id );
+
+        /* The deleter task suspended itself */
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_BLOCK );
         T_eq_u32( event->thread->Object.id, ctx->deleter_id );
@@ -679,15 +688,16 @@ static void RtemsTaskReqExit_Post_Block_Check(
       break;
     }
 
-    case RtemsTaskReqExit_Post_Block_Nop: {
+    case RtemsTaskReqExit_Post_Zombie_No: {
       /*
-       * No task shall be blocked by the rtems_task_exit() call.
+       * The thread state of the calling task shall be not modified by the
+       * rtems_task_exit() call.
        */
       T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
       break;
     }
 
-    case RtemsTaskReqExit_Post_Block_NA:
+    case RtemsTaskReqExit_Post_Zombie_NA:
       break;
   }
 }
@@ -859,13 +869,13 @@ RtemsTaskReqExit_Entries[] = {
     RtemsTaskReqExit_Post_DeleteExtensions_Nop,
     RtemsTaskReqExit_Post_RestartExtensions_Nop,
     RtemsTaskReqExit_Post_TerminateExtensions_Yes,
-    RtemsTaskReqExit_Post_Block_Yes, RtemsTaskReqExit_Post_ID_Invalid,
+    RtemsTaskReqExit_Post_Zombie_Yes, RtemsTaskReqExit_Post_ID_Invalid,
     RtemsTaskReqExit_Post_Delete_NextAllocate },
   { 0, 0, 0, 0, 0, RtemsTaskReqExit_Post_FatalError_Yes,
     RtemsTaskReqExit_Post_DeleteExtensions_Nop,
     RtemsTaskReqExit_Post_RestartExtensions_Nop,
     RtemsTaskReqExit_Post_TerminateExtensions_Nop,
-    RtemsTaskReqExit_Post_Block_Nop, RtemsTaskReqExit_Post_ID_Valid,
+    RtemsTaskReqExit_Post_Zombie_No, RtemsTaskReqExit_Post_ID_Valid,
     RtemsTaskReqExit_Post_Delete_Nop }
 };
 
@@ -931,7 +941,7 @@ static void RtemsTaskReqExit_TestVariant( RtemsTaskReqExit_Context *ctx )
     ctx,
     ctx->Map.entry.Post_TerminateExtensions
   );
-  RtemsTaskReqExit_Post_Block_Check( ctx, ctx->Map.entry.Post_Block );
+  RtemsTaskReqExit_Post_Zombie_Check( ctx, ctx->Map.entry.Post_Zombie );
   RtemsTaskReqExit_Post_ID_Check( ctx, ctx->Map.entry.Post_ID );
   RtemsTaskReqExit_Post_Delete_Check( ctx, ctx->Map.entry.Post_Delete );
 }

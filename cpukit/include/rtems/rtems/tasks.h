@@ -413,8 +413,8 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
 /**
  * @ingroup RTEMSAPIClassicTasks
  *
- * @brief This constant variable provides the lowest (least important) task
- *   priority of the first configured scheduler.
+ * @brief This runtime constant represents the lowest (least important) task
+ *   priority of the scheduler with index zero.
  */
 #define RTEMS_MAXIMUM_PRIORITY _RTEMS_Maximum_priority()
 
@@ -1031,13 +1031,25 @@ rtems_status_code rtems_task_restart(
  * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
  *   interrupt context.
  *
+ * @retval ::RTEMS_INCORRECT_STATE The task termination procedure was started,
+ *   however, waiting for the terminating task would have resulted in a
+ *   deadlock.
+ *
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The task resided on a remote node.
  *
  * @par Notes
  * @parblock
- * RTEMS stops the execution of the task and reclaims the stack memory, any
- * allocated delay or timeout timers, the TCB, and, if the task is
- * #RTEMS_FLOATING_POINT, its floating point context area. RTEMS explicitly
+ * The task deletion is done in several steps.  Firstly, the task is marked as
+ * terminating.  While the task life of the terminating task is protected, it
+ * executes normally until it disables the task life protection or it deletes
+ * itself.  A terminating task will eventually stop its normal execution and
+ * start its termination procedure.  The procedure executes in the context of
+ * the terminating task.  The task termination procedure involves the
+ * destruction of POSIX key values and running the task termination user
+ * extensions.  Once complete the execution of the task is stopped and
+ * task-specific resources are reclaimed by the system, such as the stack
+ * memory, any allocated delay or timeout timers, the TCB, and, if the task is
+ * #RTEMS_FLOATING_POINT, its floating point context area.  RTEMS explicitly
  * does not reclaim the following resources: region segments, partition
  * buffers, semaphores, timers, or rate monotonic periods.
  *
@@ -1049,10 +1061,12 @@ rtems_status_code rtems_task_restart(
  * resources and delete itself by restarting it with a special argument or by
  * sending it a message, an event, or a signal.
  *
- * Deletion of the current task (#RTEMS_SELF) will force RTEMS to select
+ * Deletion of the calling task (#RTEMS_SELF) will force RTEMS to select
  * another task to execute.
  *
- * The TCB for the deleted task is reclaimed by RTEMS.
+ * When a task deletes another task, the calling task waits until the task
+ * termination procedure of the task being deleted has completed.  The
+ * terminating task inherits the eligible priorities of the calling task.
  *
  * When a global task is deleted, the task identifier must be transmitted to
  * every node in the system for deletion from the local copy of the global

@@ -380,15 +380,23 @@ RTEMS_NO_RETURN void _Thread_Exit(
 );
 
 /**
- * @brief Joins the currently executing thread with the given thread to wait
- *      for.
+ * @brief Joins the currently executing thread with the thread.
  *
- * @param[in, out] the_thread The thread to wait for.
- * @param waiting_for_join The states control for the join.
- * @param[in, out] executing The currently executing thread.
- * @param queue_context The thread queue context.
+ * @param[in, out] the_thread is the thread to join.
+ *
+ * @param waiting_for_join is the thread state for the currently executing
+ *   thread.
+ *
+ * @param[in, out] executing is the currently executing thread.
+ *
+ * @param queue_context[in, out] is the thread queue context.  The caller shall
+ *   have acquired the thread state lock using the thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The operation was successful.
+ *
+ * @retval STATUS_DEADLOCK A deadlock occurred.
  */
-void _Thread_Join(
+Status_Control _Thread_Join(
   Thread_Control       *the_thread,
   States_Control        waiting_for_join,
   Thread_Control       *executing,
@@ -396,22 +404,40 @@ void _Thread_Join(
 );
 
 /**
+ * @brief Indicates the resulting state of _Thread_Cancel().
+ */
+typedef enum {
+  /**
+   * @brief Indicates that the thread cancel operation is done.
+   */
+  THREAD_CANCEL_DONE,
+
+  /**
+   * @brief Indicates that the thread cancel operation is in progress.
+   *
+   * The cancelled thread is terminating.  It may be joined.
+   */
+  THREAD_CANCEL_IN_PROGRESS
+} Thread_Cancel_state;
+
+/**
  * @brief Cancels the thread.
  *
- * @param[in, out] the_thread The thread to cancel.
- * @param executing The currently executing thread.
- * @param exit_value The exit value for the thread.
- */
-void _Thread_Cancel(
-  Thread_Control *the_thread,
-  Thread_Control *executing,
-  void           *exit_value
-);
+ * @param[in, out] the_thread is the thread to cancel.
 
-typedef struct {
-  Thread_queue_Context  Base;
-  Thread_Control       *cancel;
-} Thread_Close_context;
+ * @param[in, out] executing is the currently executing thread.
+
+ * @param[in, out] life_states_to_clear is the set of thread life states to
+ *   clear for the thread to cancel.
+
+ * @param exit_value is the exit value for the thread to cancel.
+ */
+Thread_Cancel_state _Thread_Cancel(
+  Thread_Control   *the_thread,
+  Thread_Control   *executing,
+  Thread_Life_state life_states_to_clear,
+  void             *exit_value
+);
 
 /**
  * @brief Closes the thread.
@@ -420,14 +446,21 @@ typedef struct {
  * case the executing thread is not terminated, then this function waits until
  * the terminating thread reached the zombie state.
  *
- * @param the_thread The thread to close.
- * @param executing The currently executing thread.
- * @param[in, out] context The thread close context.
+ * @param the_thread is the thread to close.
+ *
+ * @param[in, out] executing is the currently executing thread.
+ *
+ * @param[in, out] queue_context is the thread queue context.  The caller shall
+ *   have disabled interrupts using the thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The operation was successful.
+ *
+ * @retval STATUS_DEADLOCK A deadlock occurred.
  */
-void _Thread_Close(
+Status_Control _Thread_Close(
   Thread_Control       *the_thread,
   Thread_Control       *executing,
-  Thread_Close_context *context
+  Thread_queue_Context *queue_context
 );
 
 /**

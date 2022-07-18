@@ -298,6 +298,7 @@ static bool _Thread_Try_initialize(
   the_thread->Start.is_preemptible        = config->is_preemptible;
   the_thread->Start.cpu_budget_operations = config->cpu_budget_operations;
   the_thread->Start.stack_free            = config->stack_free;
+  the_thread->Join_queue.Queue.owner      = the_thread;
 
   _Thread_Timer_initialize( &the_thread->Timer, cpu );
   _Thread_Initialize_scheduler_and_wait_nodes( the_thread, config );

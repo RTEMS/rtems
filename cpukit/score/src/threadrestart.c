@@ -14,7 +14,7 @@
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014, 2021 embedded brains GmbH.
+ * Copyright (C) 2014, 2022 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -55,7 +55,7 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-#define THREAD_JOIN_TQ_OPERATIONS &_Thread_queue_Operations_priority
+#define THREAD_JOIN_TQ_OPERATIONS &_Thread_queue_Operations_priority_inherit
 
 static void _Thread_Life_action_handler(
   Thread_Control   *executing,
@@ -69,31 +69,6 @@ Thread_Zombie_registry _Thread_Zombies = {
 #endif
   .Chain = CHAIN_INITIALIZER_EMPTY( _Thread_Zombies.Chain )
 };
-
-static void _Thread_Raise_real_priority(
-  Thread_Control   *the_thread,
-  Priority_Control  priority
-)
-{
-  Thread_queue_Context queue_context;
-
-  _Thread_queue_Context_initialize( &queue_context );
-  _Thread_queue_Context_clear_priority_updates( &queue_context );
-  _Thread_Wait_acquire( the_thread, &queue_context );
-
-  if ( priority < the_thread->Real_priority.priority ) {
-    _Thread_Priority_change(
-      the_thread,
-      &the_thread->Real_priority,
-      priority,
-      PRIORITY_GROUP_LAST,
-      &queue_context
-    );
-  }
-
-  _Thread_Wait_release( the_thread, &queue_context );
-  _Thread_Priority_update( &queue_context );
-}
 
 typedef struct {
   Thread_queue_Context  Base;
@@ -388,18 +363,37 @@ static void _Thread_Remove_life_change_request( Thread_Control *the_thread )
   _Thread_State_release( the_thread, &lock_context );
 }
 
-void _Thread_Join(
+static void _Thread_Clear_waiting_for_join_at_exit(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+)
+{
+  (void) the_thread;
+  (void) cpu_self;
+  (void) queue_context;
+  _Thread_Clear_state( queue->owner, STATES_WAITING_FOR_JOIN_AT_EXIT );
+}
+
+Status_Control _Thread_Join(
   Thread_Control       *the_thread,
   States_Control        waiting_for_join,
   Thread_Control       *executing,
   Thread_queue_Context *queue_context
 )
 {
-  _Assert( the_thread != executing );
   _Assert( _Thread_State_is_owner( the_thread ) );
 
   executing->Wait.return_argument = NULL;
-
+  _Thread_queue_Context_set_enqueue_callout(
+    queue_context,
+    _Thread_Clear_waiting_for_join_at_exit
+  );
+  _Thread_queue_Context_set_deadlock_callout(
+    queue_context,
+    _Thread_queue_Deadlock_status
+  );
   _Thread_queue_Context_set_thread_state( queue_context, waiting_for_join );
   _Thread_queue_Enqueue(
     &the_thread->Join_queue.Queue,
@@ -407,6 +401,7 @@ void _Thread_Join(
     executing,
     queue_context
   );
+  return _Thread_Wait_get_status( executing );
 }
 
 static void _Thread_Set_exit_value(
@@ -435,15 +430,15 @@ static void _Thread_Try_life_change_request(
   }
 }
 
-void _Thread_Cancel(
-  Thread_Control *the_thread,
-  Thread_Control *executing,
-  void           *exit_value
+Thread_Cancel_state _Thread_Cancel(
+  Thread_Control   *the_thread,
+  Thread_Control   *executing,
+  Thread_Life_state life_states_to_clear,
+  void             *exit_value
 )
 {
-  ISR_lock_Context   lock_context;
-  Thread_Life_state  previous;
-  Per_CPU_Control   *cpu_self;
+  ISR_lock_Context  lock_context;
+  Thread_Life_state previous;
 
   _Assert( the_thread != executing );
 
@@ -452,60 +447,55 @@ void _Thread_Cancel(
   _Thread_Set_exit_value( the_thread, exit_value );
   previous = _Thread_Change_life_locked(
     the_thread,
-    0,
+    life_states_to_clear,
     THREAD_LIFE_TERMINATING,
     0
   );
 
-  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
-
   if ( _States_Is_dormant( the_thread->current_state ) ) {
     _Thread_State_release( the_thread, &lock_context );
     _Thread_Make_zombie( the_thread );
-  } else {
-    Priority_Control priority;
-
-    _Thread_Try_life_change_request( the_thread, previous, &lock_context );
-    priority = _Thread_Get_priority( executing );
-    _Thread_Raise_real_priority( the_thread, priority );
+    return THREAD_CANCEL_DONE;
   }
 
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_Try_life_change_request( the_thread, previous, &lock_context );
+  return THREAD_CANCEL_IN_PROGRESS;
 }
 
-static void _Thread_Close_enqueue_callout(
-  Thread_queue_Queue   *queue,
+Status_Control _Thread_Close(
   Thread_Control       *the_thread,
-  Per_CPU_Control      *cpu_self,
+  Thread_Control       *executing,
   Thread_queue_Context *queue_context
 )
 {
-  Thread_Close_context *context;
+  Per_CPU_Control    *cpu_self;
+  Thread_Cancel_state cancel_state;
 
-  context = (Thread_Close_context *) queue_context;
-  _Thread_Cancel( context->cancel, the_thread, NULL );
-}
-
-void _Thread_Close(
-  Thread_Control       *the_thread,
-  Thread_Control       *executing,
-  Thread_Close_context *context
-)
-{
-  context->cancel = the_thread;
-  _Thread_queue_Context_set_enqueue_callout(
-    &context->Base,
-    _Thread_Close_enqueue_callout
+  cpu_self = _Thread_Dispatch_disable_critical(
+    &queue_context->Lock_context.Lock_context
   );
+  _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
+
+  cancel_state =
+    _Thread_Cancel( the_thread, executing, THREAD_LIFE_DETACHED, NULL );
+
+  if ( cancel_state == THREAD_CANCEL_DONE ) {
+    _Thread_Dispatch_enable( cpu_self );
+    return STATUS_SUCCESSFUL;
+  }
+
+  _ISR_lock_ISR_disable( &queue_context->Lock_context.Lock_context );
+  _Thread_Dispatch_unnest( cpu_self );
   _Thread_State_acquire_critical(
     the_thread,
-    &context->Base.Lock_context.Lock_context
+    &queue_context->Lock_context.Lock_context
   );
-  _Thread_Join(
+
+  return _Thread_Join(
     the_thread,
     STATES_WAITING_FOR_JOIN,
     executing,
-    &context->Base
+    queue_context
   );
 }
 

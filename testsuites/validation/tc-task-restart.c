@@ -1424,7 +1424,7 @@ static void RtemsTaskReqRestart_Post_State_Check(
         T_eq_ptr( event->thread, ctx->worker_tcb );
       }
 
-      if ( !ctx->real_priority_is_initial ) {
+      if ( !ctx->real_priority_is_initial && !ctx->terminating ) {
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
         T_eq_ptr( event->thread, ctx->worker_tcb );
@@ -1464,7 +1464,7 @@ static void RtemsTaskReqRestart_Post_State_Check(
         }
       }
 
-      if ( !ctx->real_priority_is_initial ) {
+      if ( !ctx->real_priority_is_initial && !ctx->terminating ) {
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
         T_eq_ptr( event->thread, ctx->worker_tcb );
@@ -1504,7 +1504,7 @@ static void RtemsTaskReqRestart_Post_State_Check(
         }
       }
 
-      if ( !ctx->real_priority_is_initial ) {
+      if ( !ctx->real_priority_is_initial && !ctx->terminating ) {
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
         T_eq_ptr( event->thread, ctx->worker_tcb );

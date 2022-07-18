@@ -75,7 +75,7 @@ int pthread_cancel( pthread_t thread )
   } else {
     _Thread_Dispatch_disable_with_CPU( cpu_self, &lock_context );
     _ISR_lock_ISR_enable( &lock_context );
-    _Thread_Cancel( the_thread, executing, PTHREAD_CANCELED );
+    (void) _Thread_Cancel( the_thread, executing, 0, PTHREAD_CANCELED );
     _Thread_Dispatch_enable( cpu_self );
   }
   return 0;
