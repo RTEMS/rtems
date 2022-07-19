@@ -124,7 +124,7 @@ rtems_rtl_symbol_global_add (rtems_rtl_obj*       obj,
       return false;
     }
     ++count;
-    s += l + sizeof (unsigned long) + 1;
+    s += l + sizeof (void *) + 1;
   }
 
   /*
