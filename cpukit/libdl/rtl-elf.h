@@ -51,7 +51,7 @@ extern "C" {
 /*
  * Do not add '()'. Leave plain.
  */
-#if defined(__powerpc64__) || defined(__arch64__) || (__riscv_xlen == 64)
+#if defined(__powerpc64__) || defined(__aarch64__) || (__riscv_xlen == 64)
 #define ELFSIZE 64
 #else
 #define ELFSIZE 32
