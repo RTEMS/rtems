@@ -146,7 +146,7 @@ static void test_delete_deadlock( void )
   value = NULL;
   eno = pthread_join( ctx.protected_join, &value );
   rtems_test_assert( eno == 0 );
-  rtems_test_assert( value == NULL );
+  rtems_test_assert( value == PTHREAD_CANCELED );
 
   rtems_test_assert( ctx.delete_status == RTEMS_INCORRECT_STATE );
 }

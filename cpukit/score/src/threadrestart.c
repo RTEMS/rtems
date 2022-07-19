@@ -55,6 +55,8 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
+#include <pthread.h>
+
 #define THREAD_JOIN_TQ_OPERATIONS &_Thread_queue_Operations_priority_inherit
 
 static void _Thread_Life_action_handler(
@@ -433,8 +435,7 @@ static void _Thread_Try_life_change_request(
 Thread_Cancel_state _Thread_Cancel(
   Thread_Control   *the_thread,
   Thread_Control   *executing,
-  Thread_Life_state life_states_to_clear,
-  void             *exit_value
+  Thread_Life_state life_states_to_clear
 )
 {
   ISR_lock_Context  lock_context;
@@ -444,7 +445,7 @@ Thread_Cancel_state _Thread_Cancel(
 
   _Thread_State_acquire( the_thread, &lock_context );
 
-  _Thread_Set_exit_value( the_thread, exit_value );
+  _Thread_Set_exit_value( the_thread, PTHREAD_CANCELED );
   previous = _Thread_Change_life_locked(
     the_thread,
     life_states_to_clear,
@@ -476,8 +477,7 @@ Status_Control _Thread_Close(
   );
   _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
 
-  cancel_state =
-    _Thread_Cancel( the_thread, executing, THREAD_LIFE_DETACHED, NULL );
+  cancel_state = _Thread_Cancel( the_thread, executing, THREAD_LIFE_DETACHED );
 
   if ( cancel_state == THREAD_CANCEL_DONE ) {
     _Thread_Dispatch_enable( cpu_self );

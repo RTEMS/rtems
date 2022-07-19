@@ -429,14 +429,11 @@ typedef enum {
 
  * @param[in, out] life_states_to_clear is the set of thread life states to
  *   clear for the thread to cancel.
-
- * @param exit_value is the exit value for the thread to cancel.
  */
 Thread_Cancel_state _Thread_Cancel(
   Thread_Control   *the_thread,
   Thread_Control   *executing,
-  Thread_Life_state life_states_to_clear,
-  void             *exit_value
+  Thread_Life_state life_states_to_clear
 );
 
 /**
