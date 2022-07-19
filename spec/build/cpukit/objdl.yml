@@ -29,6 +29,8 @@ install:
   - cpukit/include/rtems/rtl/rtl.h
 links:
 - role: build-dependency
+  uid: objdlaarch64
+- role: build-dependency
   uid: objdlarm
 - role: build-dependency
   uid: objdli386
