@@ -2,17 +2,24 @@ Import from:
 
 git://git.kernel.org/pub/scm/utils/dtc/dtc.git
 
-Commit:
+commit ed310803ea893ed0a8bba9c4ff0d9eb0063a8bef
+Author: Luca Weiss <luca@z3ntu.xyz>
+Date:   Tue Apr 19 21:45:38 2022 +0200
 
-17739b7ef510917471409d71fb45d8eaf6a1e1fb
+    pylibfdt: add FdtRo.get_path()
 
-Date:
+    Add a new Python method wrapping fdt_get_path() from the C API.
 
-Thu Dec 9 07:14:20 2021 +0100
+    Also add a test for the new method.
+
+    Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+    Message-Id: <20220419194537.63170-1-luca@z3ntu.xyz>
+    Reviewed-by: Simon Glass <sjg@chromium.org>
+    Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
 
 Commands to generate update patches:
 
-git format-patch 17739b7ef510917471409d71fb45d8eaf6a1e1fb -- libfdt/fdt_addresses.c libfdt/fdt.c libfdt/fdt_empty_tree.c libfdt/fdt.h libfdt/fdt_ro.c libfdt/fdt_rw.c libfdt/fdt_strerror.c libfdt/fdt_sw.c libfdt/fdt_wip.c libfdt/libfdt_env.h libfdt/libfdt.h libfdt/libfdt_internal.h libfdt/TODO
+git format-patch ed310803ea893ed0a8bba9c4ff0d9eb0063a8bef -- libfdt/fdt_addresses.c libfdt/fdt.c libfdt/fdt_empty_tree.c libfdt/fdt.h libfdt/fdt_ro.c libfdt/fdt_rw.c libfdt/fdt_strerror.c libfdt/fdt_sw.c libfdt/fdt_wip.c libfdt/libfdt_env.h libfdt/libfdt.h libfdt/libfdt_internal.h libfdt/TODO
 sed -i 's%/libfdt/fdt.h%/cpukit/include/fdt.h%g' 00*
 sed -i 's%/libfdt/libfdt.h%/cpukit/include/libfdt.h%g' 00*
 sed -i 's%/libfdt/libfdt_env.h%/cpukit/include/libfdt_env.h%g' 00*
