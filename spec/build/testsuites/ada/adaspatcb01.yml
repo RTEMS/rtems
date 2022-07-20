@@ -10,6 +10,7 @@ cflags: []
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
+cxxflags: []
 enabled-by:
 - RTEMS_POSIX_API
 includes: []
