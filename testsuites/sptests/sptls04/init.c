@@ -9,7 +9,7 @@
 /*
  * This test program runs also on GNU/Linux and FreeBSD.  Use
  *
- * cc init.c && ./a.out
+ * cc init.c tls.c && ./a.out
  *
  * to run it.
  */
@@ -17,6 +17,8 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include "sptls04.h"
 
 #ifdef __rtems__
 
@@ -30,9 +32,9 @@
 
 #endif /* __rtems__ */
 
-static __thread int i;
+static _Thread_local int i;
 
-static __thread int j;
+static _Thread_local int j;
 
 static __attribute__((__constructor__)) void con(void)
 {
@@ -43,6 +45,7 @@ static void test(void)
 {
   rtems_test_assert(i == 1);
   rtems_test_assert(j == 0);
+  rtems_test_assert(k == 2);
 }
 
 #ifdef __rtems__

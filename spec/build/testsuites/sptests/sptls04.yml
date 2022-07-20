@@ -12,6 +12,7 @@ ldflags: []
 links: []
 source:
 - testsuites/sptests/sptls04/init.c
+- testsuites/sptests/sptls04/tls.c
 stlib: []
 target: testsuites/sptests/sptls04.exe
 type: build
