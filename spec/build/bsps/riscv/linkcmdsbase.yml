@@ -319,7 +319,7 @@ content: |
 
     .noinit (NOLOAD) : ${LINKCMDS_ALIGN_DIRECTIVE} {
       bsp_section_noinit_begin = .;
-      *(.noinit*)
+      *(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
       bsp_section_noinit_end = .;
     } > REGION_WORK AT > REGION_WORK
     bsp_section_noinit_size = bsp_section_noinit_end - bsp_section_noinit_begin;
