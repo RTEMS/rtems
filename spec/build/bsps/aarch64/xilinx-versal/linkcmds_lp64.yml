@@ -4,7 +4,8 @@ content: |
   /* SPDX-License-Identifier: BSD-2-Clause */
 
   /*
-   * Copyright (C) 2021 Gedare Bloom <gedare@rtems.org> 
+   * Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
+   * Copyright (C) 2022 Chris Johns <chrisj@rtems.org>
    *
    * Redistribution and use in source and binary forms, with or without
    * modification, are permitted provided that the following conditions
@@ -28,10 +29,41 @@ content: |
    * POSSIBILITY OF SUCH DAMAGE.
    */
 
+  /*
+   * The RAM supports 32G of DDR4 or LPDDR memory using DDRMC0.
+   *
+   * The DDR Conroller (DDRC) has two regions R0 and R1. R0 is
+   * in the A32 address space and R1 is in the A64 address space.
+   */
+  DDRMC0_REGION_0_BASE = 0x00000000000;
+  DDRMC0_REGION_0_LENGTH = 0x00080000000;
+  DDRMC0_REGION_1_BASE = 0x00800000000;
+  DDRMC0_REGION_1_LENGTH = 0x01000000000;
+
+  BSP_RAM_BASE = ${BSP_XILINX_VERSAL_RAM_BASE};
+
+  BSP_R0_RAM_BASE = DDRMC0_REGION_0_BASE;
+  BSP_R0_RAM_LENGTH =
+     ${BSP_XILINX_VERSAL_RAM_LENGTH} >= DDRMC0_REGION_0_LENGTH ?
+         DDRMC0_REGION_0_LENGTH - BSP_RAM_BASE : ${BSP_XILINX_VERSAL_RAM_LENGTH};
+  BSP_R0_RAM_END = BSP_RAM_BASE + BSP_R0_RAM_LENGTH;
+
+  BSP_R1_RAM_BASE = DDRMC0_REGION_1_BASE;
+  BSP_R1_RAM_LENGTH =
+     ${BSP_XILINX_VERSAL_RAM_LENGTH} >= DDRMC0_REGION_0_LENGTH ?
+         ${BSP_XILINX_VERSAL_RAM_LENGTH} - DDRMC0_REGION_0_LENGTH : 0;
+
+  AARCH64_MMU_TT_PAGES_SIZE = 0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES};
+
   MEMORY {
-    RAM       : ORIGIN = ${BSP_XILINX_VERSAL_RAM_BASE} + ${BSP_XILINX_VERSAL_LOAD_OFFSET}, LENGTH = ${BSP_XILINX_VERSAL_RAM_LENGTH} - ${BSP_XILINX_VERSAL_LOAD_OFFSET} - ${BSP_XILINX_VERSAL_NOCACHE_LENGTH} - (0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES})
-    NOCACHE   : ORIGIN = ${BSP_XILINX_VERSAL_RAM_BASE} + ${BSP_XILINX_VERSAL_RAM_LENGTH} - (0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES}) - ${BSP_XILINX_VERSAL_NOCACHE_LENGTH}, LENGTH = ${BSP_XILINX_VERSAL_NOCACHE_LENGTH}
-    RAM_MMU   : ORIGIN = ${BSP_XILINX_VERSAL_RAM_BASE} + ${BSP_XILINX_VERSAL_RAM_LENGTH} - (0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES}), LENGTH = 0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES}
+    RAM       : ORIGIN = BSP_RAM_BASE + ${BSP_XILINX_VERSAL_LOAD_OFFSET},
+                LENGTH = BSP_R0_RAM_LENGTH - ${BSP_XILINX_VERSAL_LOAD_OFFSET} - ${BSP_XILINX_VERSAL_NOCACHE_LENGTH} - AARCH64_MMU_TT_PAGES_SIZE
+    RAM1      : ORIGIN = BSP_R1_RAM_BASE,
+                LENGTH = BSP_R1_RAM_LENGTH
+    NOCACHE   : ORIGIN = BSP_RAM_BASE + BSP_R0_RAM_LENGTH - AARCH64_MMU_TT_PAGES_SIZE - ${BSP_XILINX_VERSAL_NOCACHE_LENGTH},
+                LENGTH = ${BSP_XILINX_VERSAL_NOCACHE_LENGTH}
+    RAM_MMU   : ORIGIN = BSP_R0_RAM_END - AARCH64_MMU_TT_PAGES_SIZE,
+                LENGTH = AARCH64_MMU_TT_PAGES_SIZE
   }
 
   REGION_ALIAS ("REGION_START",          RAM);
@@ -58,6 +90,11 @@ content: |
 
   bsp_vector_table_in_start_section = 1;
 
+  bsp_r0_ram_base = DDRMC0_REGION_0_BASE;
+  bsp_r0_ram_end = ORIGIN (RAM) + LENGTH (RAM);
+  bsp_r1_ram_base = ORIGIN (RAM1);
+  bsp_r1_ram_end = ORIGIN (RAM1) + LENGTH (RAM1);
+
   bsp_translation_table_base = ORIGIN (RAM_MMU);
   bsp_translation_table_end = ORIGIN (RAM_MMU) + LENGTH (RAM_MMU);
 
@@ -66,7 +103,8 @@ content: |
 
   INCLUDE linkcmds.base
 copyrights:
-- Copyright (C) 2021 Gedare Bloom <gedare@rtems.org> 
+- Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
+- Copyright (C) 2022 Chris Johns <chrisj@rtems.org>
 enabled-by: true
 install-path: ${BSP_LIBDIR}
 links: []

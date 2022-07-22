@@ -38,6 +38,9 @@
 #include <bsp/aarch64-mmu.h>
 #include <libcpu/mmu-vmsav8-64.h>
 
+#include <rtems/malloc.h>
+#include <rtems/sysinit.h>
+
 BSP_START_DATA_SECTION static const aarch64_mmu_config_entry
 versal_mmu_config_table[] = {
   AARCH64_MMU_DEFAULT_SECTIONS,
@@ -57,6 +60,29 @@ versal_mmu_config_table[] = {
     .begin = 0xff000000U,
     .end = 0xffc00000U,
     .flags = AARCH64_MMU_DEVICE
+  }, { /* DDRMC0_region1_mem, if not used size is 0 and ignored */
+    .begin = (uintptr_t) bsp_r1_ram_base,
+    .end = (uintptr_t) bsp_r1_ram_end,
+    .flags = AARCH64_MMU_DATA_RW_CACHED
+  }
+};
+
+/*
+ * Create an MMU table to get the R1 base and end. This avoids
+ * relocation errors as the R1 addresses are in the upper A64 address
+ * space.
+ *
+ * The versal_mmu_config_table table cannot be used because the regions
+ * in that table have no identifiers to indicate which region is the
+ * the DDRMC0_region1_mem region.
+ */
+static const struct mem_region {
+  uintptr_t begin;
+  uintptr_t end;
+} bsp_r1_region[] = {
+  { /* DDRMC0_region1_mem, if not used size is 0 and ignored */
+    .begin = (uintptr_t) bsp_r1_ram_base,
+    .end = (uintptr_t) bsp_r1_ram_end,
   }
 };
 
@@ -78,3 +104,26 @@ versal_setup_mmu_and_cache( void )
 
   aarch64_mmu_enable();
 }
+
+void bsp_r1_heap_extend(void);
+void bsp_r1_heap_extend(void)
+{
+  const struct mem_region* r1 = &bsp_r1_region[0];
+  if (r1->begin != r1->end) {
+    rtems_status_code sc =
+      rtems_heap_extend((void*) r1->begin, r1->end - r1->begin);
+    if (sc != RTEMS_SUCCESSFUL) {
+      bsp_fatal(BSP_FATAL_HEAP_EXTEND_ERROR);
+    }
+  }
+}
+
+/*
+ * Initialise after the IDLE thread exists so the protected heap
+ * extend call has a valid context.
+ */
+RTEMS_SYSINIT_ITEM(
+  bsp_r1_heap_extend,
+  RTEMS_SYSINIT_IDLE_THREADS,
+  RTEMS_SYSINIT_ORDER_LAST
+);
