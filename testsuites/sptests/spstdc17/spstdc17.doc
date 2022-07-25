@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spstdc17
+
+directives:
+
+  - Header file <rtems.h>
+  - Header file <rtems/confdefs.h>
+
+concepts:
+
+  - Ensure that the API header files are compatible with the C17 standard.

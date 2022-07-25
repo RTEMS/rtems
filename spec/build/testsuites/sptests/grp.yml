@@ -395,6 +395,8 @@ links:
 - role: build-dependency
   uid: spsize
 - role: build-dependency
+  uid: spstdc17
+- role: build-dependency
   uid: spstdthreads01
 - role: build-dependency
   uid: spstkalloc
