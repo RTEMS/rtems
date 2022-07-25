@@ -70,7 +70,7 @@ void rtems_test_fatal_extension(
  * @brief Initial extension for tests.
  */
 #define RTEMS_TEST_INITIAL_EXTENSION \
-  { NULL, NULL, NULL, NULL, NULL, NULL, NULL, rtems_test_fatal_extension }
+  { NULL, NULL, NULL, NULL, NULL, NULL, NULL, rtems_test_fatal_extension, NULL }
 
 /**
  * @brief Test states.
