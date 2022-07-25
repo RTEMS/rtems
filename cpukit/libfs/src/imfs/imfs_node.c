@@ -41,7 +41,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/imfs.h>
+#include <rtems/imfsimpl.h>
 
 IMFS_jnode_t *IMFS_initialize_node(
   IMFS_jnode_t *node,

@@ -3,14 +3,12 @@
 /**
  * @file
  *
- * @ingroup IMFS
- *
- * @brief IMFS Change Owner
+ * @brief This header file contains interfaces used by the implementation of
+ *   the In-Memory File System.
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
- *  On-Line Applications Research Corporation (OAR).
+ * Copyright (C) 2013, 2018 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,30 +32,61 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
+#ifndef _RTEMS_IMFSIMPL_H
+#define _RTEMS_IMFSIMPL_H
+
+#include <rtems/imfs.h>
+#include <rtems/score/timecounter.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#include <rtems/imfsimpl.h>
+/**
+ * @addtogroup IMFS
+ *
+ * @{
+ */
 
-#include <unistd.h>
-
-#include <rtems/libio_.h>
-
-int IMFS_chown(
-  const rtems_filesystem_location_info_t *loc,
-  uid_t owner,
-  gid_t group
-)
+static inline time_t _IMFS_get_time( void )
 {
-  IMFS_jnode_t *jnode;
+  struct bintime now;
 
-  jnode = (IMFS_jnode_t *) loc->node_access;
+  /* Use most efficient way to get the time in seconds (CLOCK_REALTIME) */
+  _Timecounter_Getbintime( &now );
 
-  jnode->st_uid = owner;
-  jnode->st_gid = group;
-
-  IMFS_update_ctime( jnode );
-
-  return 0;
+  return now.sec;
 }
+
+static inline void IMFS_update_atime( IMFS_jnode_t *jnode )
+{
+  jnode->stat_atime = _IMFS_get_time();
+}
+
+static inline void IMFS_update_mtime( IMFS_jnode_t *jnode )
+{
+  jnode->stat_mtime = _IMFS_get_time();
+}
+
+static inline void IMFS_update_ctime( IMFS_jnode_t *jnode )
+{
+  jnode->stat_ctime = _IMFS_get_time();
+}
+
+static inline void IMFS_mtime_ctime_update( IMFS_jnode_t *jnode )
+{
+  time_t now;
+
+  now = _IMFS_get_time();
+
+  jnode->stat_mtime = now;
+  jnode->stat_ctime = now;
+}
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _RTEMS_IMFSIMPL_H */

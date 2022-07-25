@@ -110,6 +110,7 @@ install:
   - cpukit/include/rtems/fsmount.h
   - cpukit/include/rtems/ide_part_table.h
   - cpukit/include/rtems/imfs.h
+  - cpukit/include/rtems/imfsimpl.h
   - cpukit/include/rtems/init.h
   - cpukit/include/rtems/inttypes.h
   - cpukit/include/rtems/io.h

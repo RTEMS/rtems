@@ -37,7 +37,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/imfs.h>
+#include <rtems/imfsimpl.h>
 
 int IMFS_add_node( const char *path, IMFS_jnode_t *node, void *arg )
 {

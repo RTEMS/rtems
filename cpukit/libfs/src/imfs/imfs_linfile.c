@@ -38,7 +38,7 @@
 
 #include <string.h>
 
-#include <rtems/imfs.h>
+#include <rtems/imfsimpl.h>
 
 static ssize_t IMFS_linfile_read(
   rtems_libio_t *iop,

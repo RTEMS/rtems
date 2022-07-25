@@ -38,7 +38,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/imfs.h>
+#include <rtems/imfsimpl.h>
 
 static const IMFS_node_control IMFS_node_control_hard_link;
 

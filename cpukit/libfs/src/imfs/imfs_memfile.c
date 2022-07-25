@@ -38,7 +38,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/imfs.h>
+#include <rtems/imfsimpl.h>
 
 #include <stdlib.h>
 #include <string.h>

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @brief Header File for the In-Memory File System
+ * @brief This header file defines the API of the In-Memory File System.
  */
 
 /*
@@ -39,7 +39,6 @@
 
 #include <rtems/libio_.h>
 #include <rtems/pipe.h>
-#include <rtems/score/timecounter.h>
 
 /**
  * @brief In-Memory File System Support.
@@ -370,41 +369,6 @@ static inline IMFS_file_t *IMFS_iop_to_file( const rtems_libio_t *iop )
 static inline IMFS_memfile_t *IMFS_iop_to_memfile( const rtems_libio_t *iop )
 {
   return (IMFS_memfile_t *) iop->pathinfo.node_access;
-}
-
-static inline time_t _IMFS_get_time( void )
-{
-  struct bintime now;
-
-  /* Use most efficient way to get the time in seconds (CLOCK_REALTIME) */
-  _Timecounter_Getbintime( &now );
-
-  return now.sec;
-}
-
-static inline void IMFS_update_atime( IMFS_jnode_t *jnode )
-{
-  jnode->stat_atime = _IMFS_get_time();
-}
-
-static inline void IMFS_update_mtime( IMFS_jnode_t *jnode )
-{
-  jnode->stat_mtime = _IMFS_get_time();
-}
-
-static inline void IMFS_update_ctime( IMFS_jnode_t *jnode )
-{
-  jnode->stat_ctime = _IMFS_get_time();
-}
-
-static inline void IMFS_mtime_ctime_update( IMFS_jnode_t *jnode )
-{
-  time_t now;
-
-  now = _IMFS_get_time();
-
-  jnode->stat_mtime = now;
-  jnode->stat_ctime = now;
 }
 
 typedef struct {
