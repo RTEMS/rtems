@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2015 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 glossary-type: term
 links:
@@ -11,5 +11,6 @@ text: |
   A simple approach to extend the priority inheritance protocol for
   clustered scheduling is priority boosting.  In case a mutex is owned by a
   task of another cluster, then the priority of the owner task is raised to
-  an artificially high priority, the pseudo-interrupt priority.
+  an artificially high priority.  This approach is not used in RTEMS, see also
+  ${omip:/term}.
 type: glossary
