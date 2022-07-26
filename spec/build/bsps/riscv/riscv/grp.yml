@@ -21,6 +21,8 @@ links:
 - role: build-dependency
   uid: ../../optgcc
 - role: build-dependency
+  uid: ../optextirqmax
+- role: build-dependency
   uid: ../grp
 - role: build-dependency
   uid: ../optrambegin
@@ -34,8 +36,6 @@ links:
   uid: objsmp
 - role: build-dependency
   uid: ../../objmem
-- role: build-dependency
-  uid: optextirqmax
 - role: build-dependency
   uid: ../../optfdtcpyro
 - role: build-dependency

@@ -31,7 +31,7 @@ links:
 - role: build-dependency
   uid: ../../objmem
 - role: build-dependency
-  uid: optextirqmax
+  uid: ../optextirqmax
 - role: build-dependency
   uid: ../grp
 - role: build-dependency
