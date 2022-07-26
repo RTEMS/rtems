@@ -67,21 +67,20 @@ post-conditions:
       not be in the zombie state after the ${../if/delete:/name} call.
   test-epilogue: null
   test-prologue: null
-- name: RealPriority
+- name: TaskPriority
   states:
-  - name: Raised
+  - name: Raise
     test-code: |
       T_eq_u32( ctx->worker_priority, PRIO_ULTRA_HIGH );
     text: |
-      The ${/glossary/priority-real:/term} of the task specified by the
-      ${../if/delete:/params[0]/name} parameter shall be raised to the
-      ${/glossary/priority-current:/term} of the caller of
-      ${../if/delete:/name}.
+      Each priority of the calling task which is higher than the highest
+      priority of the task specified by the ${../if/delete:/params[0]/name}
+      parameter shall be made the highest priority of the task.
   - name: Nop
     test-code: |
       T_eq_u32( ctx->worker_priority, PRIO_NORMAL );
     text: |
-      The ${/glossary/priority-real:/term} of the task specified by the
+      The priorities of the task specified by the
       ${../if/delete:/params[0]/name} parameter shall not be changed by the
       ${../if/delete:/name} call.
   test-epilogue: null
@@ -290,20 +289,19 @@ pre-conditions:
   test-prologue: null
 - name: CallerPriority
   states:
-  - name: Higher
+  - name: Vital
     test-code: |
-      ctx->deleter_has_higher_priority = true;
+      ctx->vital_deleter_priority = true;
     text: |
-      While the ${/glossary/priority-current:/term} of the task calling
-      ${../if/delete:/name} is higher than the ${/glossary/priority-real:/term}
-      of the task specified by the ${../if/delete:/params[0]/name} parameter.
-  - name: LowerEqual
+      While at least one priority of the calling task is higher than the
+      highest priority of the task specified by the
+      ${../if/delete:/params[0]/name} parameter.
+  - name: Dispensable
     test-code: |
-      ctx->deleter_has_higher_priority = false;
+      ctx->vital_deleter_priority = false;
     text: |
-      While the ${/glossary/priority-current:/term} of the task calling
-      ${../if/delete:/name} is lower than or equal to the
-      ${/glossary/priority-real:/term} of the task specified by the
+      While all priorities of the calling task are lower than or equal to the
+      highest priority of the task specified by the
       ${../if/delete:/params[0]/name} parameter.
   test-epilogue: null
   test-prologue: null
@@ -657,11 +655,11 @@ test-context:
   member: |
     bool timer_active
 - brief: |
-    If this member is true, then the deleter shall have a higher current
-    priority than the real priority of the worker.
+    If this member is true, then the deleter shall have a vital priority for
+    the worker.
   description: null
   member: |
-    bool deleter_has_higher_priority
+    bool vital_deleter_priority
 - brief: |
     If this member is true, then thread dispatching is disabled by the worker
     task before the ${../if/delete:/name} call.
@@ -759,7 +757,7 @@ test-support: |
       ctx->worker_state = ctx->worker_tcb->current_state;
       ctx->worker_life_state = ctx->worker_tcb->Life.state;
       ctx->worker_priority =
-        SCHEDULER_PRIORITY_UNMAP( ctx->worker_tcb->Real_priority.priority );
+        SCHEDULER_PRIORITY_UNMAP( _Thread_Get_priority( ctx->worker_tcb ) );
       CopyExtensionCalls( &ctx->calls, &ctx->calls_after_restart );
       GetTaskTimerInfoByThread( ctx->worker_tcb, &ctx->worker_timer_info );
     }
@@ -998,7 +996,7 @@ test-support: |
     ctx = (Context *) arg;
 
     if ( ctx != NULL ) {
-      if ( !ctx->deleter_has_higher_priority ) {
+      if ( !ctx->vital_deleter_priority ) {
         SetPriority( ctx->runner_id, PRIO_LOW );
         SetSelfPriorityNoYield( PRIO_NORMAL );
       }
@@ -1156,7 +1154,7 @@ transition-map:
           Suspended: 'Yes'
       then: 'No'
     - else: 'Yes'
-    RealPriority: Nop
+    TaskPriority: Nop
     State:
     - specified-by: State
     Timer:
@@ -1231,12 +1229,12 @@ transition-map:
       then-specified-by: Suspended
     - else: 'No'
     Zombie: 'No'
-    RealPriority:
+    TaskPriority:
     - if:
         pre-conditions:
           Context: Task
-          CallerPriority: Higher
-      then: Raised
+          CallerPriority: Vital
+      then: Raise
     - else: Nop
     State:
     - if:
@@ -1292,7 +1290,7 @@ transition-map:
     Dormant: N/A
     Suspended: N/A
     Zombie: N/A
-    RealPriority: N/A
+    TaskPriority: N/A
     State: N/A
     Timer: N/A
     Restarting: N/A
@@ -1320,19 +1318,8 @@ transition-map:
         pre-conditions:
           Context: Interrupt
       then: CalledFromISR
-    - if:
-        pre-conditions:
-          Context: Task
-          ThreadDispatch: Disabled
-      then: NoReturn
     - else: Ok
-    FatalError:
-    - if:
-        pre-conditions:
-          Context: Task
-          ThreadDispatch: Disabled
-      then: 'Yes'
-    - else: Nop
+    FatalError: Nop
     Dormant: 'Yes'
     Suspended:
     - specified-by: Suspended
@@ -1342,7 +1329,7 @@ transition-map:
           Context: Interrupt
       then: 'No'
     - else: 'Yes'
-    RealPriority: Nop
+    TaskPriority: Nop
     State: Ready
     Timer: Inactive
     Restarting: 'No'
