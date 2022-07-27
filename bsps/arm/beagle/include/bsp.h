@@ -116,19 +116,19 @@ read16(uint32_t address)
 /* Data synchronization barrier */
 static inline void dsb(void)
 {
-    asm volatile("dsb" : : : "memory");
+    __asm__ volatile("dsb" : : : "memory");
 }
 
 /* Instruction synchronization barrier */
 static inline void isb(void)
 {
-    asm volatile("isb" : : : "memory");
+    __asm__ volatile("isb" : : : "memory");
 }
 
 /* flush data cache */
 static inline void flush_data_cache(void)
 {
-    asm volatile(
+    __asm__ volatile(
         "mov r0, #0\n"
         "mcr p15, #0, r0, c7, c10, #4\n"
         : /* No outputs */
@@ -229,7 +229,7 @@ static inline uint32_t read_sctlr(void)
 {
     uint32_t ctl;
 
-    asm volatile("mrc p15, 0, %[ctl], c1, c0, 0 @ Read SCTLR\n\t"
+    __asm__ volatile("mrc p15, 0, %[ctl], c1, c0, 0 @ Read SCTLR\n\t"
         : [ctl] "=r" (ctl));
     return ctl;
 }
@@ -237,7 +237,7 @@ static inline uint32_t read_sctlr(void)
 /* Write System Control Register */
 static inline void write_sctlr(uint32_t ctl)
 {
-    asm volatile("mcr p15, 0, %[ctl], c1, c0, 0 @ Write SCTLR\n\t"
+    __asm__ volatile("mcr p15, 0, %[ctl], c1, c0, 0 @ Write SCTLR\n\t"
         : : [ctl] "r" (ctl));
     isb();
 }
@@ -247,7 +247,7 @@ static inline uint32_t read_actlr(void)
 {
     uint32_t ctl;
 
-    asm volatile("mrc p15, 0, %[ctl], c1, c0, 1 @ Read ACTLR\n\t"
+    __asm__ volatile("mrc p15, 0, %[ctl], c1, c0, 1 @ Read ACTLR\n\t"
             : [ctl] "=r" (ctl));
     return ctl;
 }
@@ -255,7 +255,7 @@ static inline uint32_t read_actlr(void)
 /* Write Auxiliary Control Register */
 static inline void write_actlr(uint32_t ctl)
 {
-    asm volatile("mcr p15, 0, %[ctl], c1, c0, 1 @ Write ACTLR\n\t"
+    __asm__ volatile("mcr p15, 0, %[ctl], c1, c0, 1 @ Write ACTLR\n\t"
         : : [ctl] "r" (ctl));
     isb();
 }
@@ -263,7 +263,7 @@ static inline void write_actlr(uint32_t ctl)
 /* Write Translation Table Base Control Register */
 static inline void write_ttbcr(uint32_t bcr)
 {
-        asm volatile("mcr p15, 0, %[bcr], c2, c0, 2 @ Write TTBCR\n\t"
+        __asm__ volatile("mcr p15, 0, %[bcr], c2, c0, 2 @ Write TTBCR\n\t"
                         : : [bcr] "r" (bcr));
 
         isb();
@@ -274,7 +274,7 @@ static inline uint32_t read_dacr(void)
 {
         uint32_t dacr;
 
-        asm volatile("mrc p15, 0, %[dacr], c3, c0, 0 @ Read DACR\n\t"
+        __asm__ volatile("mrc p15, 0, %[dacr], c3, c0, 0 @ Read DACR\n\t"
                         : [dacr] "=r" (dacr));
 
         return dacr;
@@ -284,7 +284,7 @@ static inline uint32_t read_dacr(void)
 /* Write Domain Access Control Register */
 static inline void write_dacr(uint32_t dacr)
 {
-        asm volatile("mcr p15, 0, %[dacr], c3, c0, 0 @ Write DACR\n\t"
+        __asm__ volatile("mcr p15, 0, %[dacr], c3, c0, 0 @ Write DACR\n\t"
                         : : [dacr] "r" (dacr));
 
         isb();
@@ -295,16 +295,16 @@ static inline void refresh_tlb(void)
     dsb();
 
     /* Invalidate entire unified TLB */
-    asm volatile("mcr p15, 0, %[zero], c8, c7, 0 @ TLBIALL\n\t"
+    __asm__ volatile("mcr p15, 0, %[zero], c8, c7, 0 @ TLBIALL\n\t"
         : : [zero] "r" (0));
 
     /* Invalidate all instruction caches to PoU.
      * Also flushes branch target cache. */
-    asm volatile("mcr p15, 0, %[zero], c7, c5, 0"
+    __asm__ volatile("mcr p15, 0, %[zero], c7, c5, 0"
         : : [zero] "r" (0));
 
     /* Invalidate entire branch predictor array */
-    asm volatile("mcr p15, 0, %[zero], c7, c5, 6"
+    __asm__ volatile("mcr p15, 0, %[zero], c7, c5, 6"
         : : [zero] "r" (0)); /* flush BTB */
 
     dsb();
@@ -316,7 +316,7 @@ static inline uint32_t read_ttbr0(void)
 {
     uint32_t bar;
 
-    asm volatile("mrc p15, 0, %[bar], c2, c0, 0 @ Read TTBR0\n\t"
+    __asm__ volatile("mrc p15, 0, %[bar], c2, c0, 0 @ Read TTBR0\n\t"
         : [bar] "=r" (bar));
 
     return bar & ARM_TTBR_ADDR_MASK;
@@ -328,7 +328,7 @@ static inline uint32_t read_ttbr0_unmasked(void)
 {
     uint32_t bar;
 
-    asm volatile("mrc p15, 0, %[bar], c2, c0, 0 @ Read TTBR0\n\t"
+    __asm__ volatile("mrc p15, 0, %[bar], c2, c0, 0 @ Read TTBR0\n\t"
         : [bar] "=r" (bar));
 
     return bar;
@@ -344,7 +344,7 @@ static inline void write_ttbr0(uint32_t bar)
        base address of the l1 page table. We therefore add the
        flags here and remove them in the read_ttbr0 */
     uint32_t v  =  (bar  & ARM_TTBR_ADDR_MASK ) | ARM_TTBR_FLAGS_CACHED;
-    asm volatile("mcr p15, 0, %[bar], c2, c0, 0 @ Write TTBR0\n\t"
+    __asm__ volatile("mcr p15, 0, %[bar], c2, c0, 0 @ Write TTBR0\n\t"
         : : [bar] "r" (v));
 
     refresh_tlb();

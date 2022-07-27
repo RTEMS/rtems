@@ -345,7 +345,7 @@ static inline uint32_t _OR1K_mfspr(uint32_t reg)
 {
    uint32_t spr_value;
 
-   asm volatile (
+   __asm__ volatile (
      "l.mfspr  %0, %1, 0;\n\t"
      : "=r" (spr_value) : "r" (reg));
 
@@ -354,7 +354,7 @@ static inline uint32_t _OR1K_mfspr(uint32_t reg)
 
 static inline void _OR1K_mtspr(uint32_t reg, uint32_t value)
 {
-   asm volatile (
+   __asm__ volatile (
      "l.mtspr  %1, %0, 0;\n\t"
      :: "r" (value), "r" (reg)
    );
@@ -386,12 +386,12 @@ static inline void _OR1K_mtspr(uint32_t reg, uint32_t value)
 
 static inline void _OR1K_Sync_mem( void )
 {
-  asm volatile("l.msync");
+  __asm__ volatile("l.msync");
 }
 
 static inline void _OR1K_Sync_pipeline( void )
 {
-  asm volatile("l.psync");
+  __asm__ volatile("l.psync");
 }
 
 /**
@@ -402,7 +402,7 @@ static inline void _OR1K_Sync_pipeline( void )
  *
  */
 #define _OR1KSIM_CPU_Halt() \
-	asm volatile ("l.nop 0xc")
+	__asm__ volatile ("l.nop 0xc")
 
 #ifdef __cplusplus
 }

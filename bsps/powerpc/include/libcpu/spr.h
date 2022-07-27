@@ -51,20 +51,20 @@ static inline unsigned long _read_##reg(void) \
 static inline unsigned long _read_MSR(void)
 {
 	unsigned long val;
-	asm volatile("mfmsr %0" : "=r" (val));
+	__asm__ volatile("mfmsr %0" : "=r" (val));
 	return val;
 }
 
 static inline void _write_MSR(unsigned long val)
 {
-	asm volatile("mtmsr %0" : : "r" (val));
+	__asm__ volatile("mtmsr %0" : : "r" (val));
 	return;
 }
 
 static inline unsigned long _read_SR(void * va)
 {
 	unsigned long val;
-	asm volatile (
+	__asm__ volatile (
 		".machine \"push\"\n"
 		".machine \"any\"\n"
 		"mfsrin %0,%1\n"
@@ -77,7 +77,7 @@ static inline unsigned long _read_SR(void * va)
 
 static inline void _write_SR(unsigned long val, void * va)
 {
-	asm volatile (
+	__asm__ volatile (
 		".machine \"push\"\n"
 		".machine \"any\"\n"
 		"mtsrin %0,%1\n"

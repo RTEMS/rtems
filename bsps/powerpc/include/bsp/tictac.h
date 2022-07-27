@@ -38,7 +38,7 @@
 static inline void tic(void)
 {
 	uint32_t tmp;
-	asm volatile (
+	__asm__ volatile (
 		"mftb 0;"
 		"stw 0, ppc_tic_tac@sdarel(13);"
 		: "=r" (tmp)
@@ -52,7 +52,7 @@ static inline uint32_t tac(void)
 {
 	uint32_t ticks;
 	uint32_t tmp;
-	asm volatile (
+	__asm__ volatile (
 		"mftb %0;"
 		"lwz %1, ppc_tic_tac@sdarel(13);"
 		"subf %0, %1, %0;"
@@ -67,7 +67,7 @@ static inline uint32_t tac(void)
 static inline void boom(void)
 {
 	uint32_t tmp;
-	asm volatile (
+	__asm__ volatile (
 		"mftb 0;"
 		"stw 0, ppc_boom_bam@sdarel(13);"
 		: "=r" (tmp)
@@ -81,7 +81,7 @@ static inline uint32_t bam(void)
 {
 	uint32_t ticks;
 	uint32_t tmp;
-	asm volatile (
+	__asm__ volatile (
 		"mftb %0;"
 		"lwz %1, ppc_boom_bam@sdarel(13);"
 		"subf %0, %1, %0;"
