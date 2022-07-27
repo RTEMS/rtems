@@ -200,7 +200,7 @@ static rtems_task Init(rtems_task_argument argument);
 #include <rtems/confdefs.h>
 
 typedef struct RTEMS_ALIGNED(RTEMS_PARTITION_ALIGNMENT) {
-  uint64_t data [16];
+  uint64_t data [32];
 } area;
 
 #if CONFIGURE_MAXIMUM_PARTITIONS > 0
