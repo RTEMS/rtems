@@ -1149,8 +1149,7 @@ Thread_Information name##_Information = { \
 Objects_Control *_Thread_Allocate_unlimited( Objects_Information *information );
 
 #define THREAD_INFORMATION_DEFINE( name, api, cls, max ) \
-static RTEMS_SECTION( ".noinit.rtems.content.local_table" ) \
-Objects_Control * \
+static Objects_Control * \
 name##_Local_table[ _Objects_Maximum_per_allocation( max ) ]; \
 static RTEMS_SECTION( ".noinit.rtems.content.objects" ) \
 Thread_Configured_control \

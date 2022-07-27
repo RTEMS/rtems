@@ -447,8 +447,7 @@ Objects_Information name##_Information = { \
  *   multiprocessing (RTEMS_MULTIPROCESSING) is enabled.
  */
 #define OBJECTS_INFORMATION_DEFINE( name, api, cls, type, max, nl, ex ) \
-static RTEMS_SECTION( ".noinit.rtems.content.local_table" ) \
-Objects_Control * \
+static Objects_Control * \
 name##_Local_table[ _Objects_Maximum_per_allocation( max ) ]; \
 static RTEMS_SECTION( ".noinit.rtems.content.objects" ) \
 type \
