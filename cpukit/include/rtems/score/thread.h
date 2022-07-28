@@ -1151,10 +1151,10 @@ Objects_Control *_Thread_Allocate_unlimited( Objects_Information *information );
 #define THREAD_INFORMATION_DEFINE( name, api, cls, max ) \
 static Objects_Control * \
 name##_Local_table[ _Objects_Maximum_per_allocation( max ) ]; \
-static RTEMS_SECTION( ".noinit.rtems.content.objects" ) \
+static RTEMS_SECTION( ".noinit.rtems.content.objects." #name ) \
 Thread_Configured_control \
 name##_Objects[ _Objects_Maximum_per_allocation( max ) ]; \
-static RTEMS_SECTION( ".noinit.rtems.content.objects" ) \
+static RTEMS_SECTION( ".noinit.rtems.content.objects." #name ) \
 Thread_queue_Configured_heads \
 name##_Heads[ _Objects_Maximum_per_allocation( max ) ]; \
 Thread_Information name##_Information = { \
