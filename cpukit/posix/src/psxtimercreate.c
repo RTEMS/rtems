@@ -51,6 +51,31 @@
 #include <rtems/seterr.h>
 #include <rtems/sysinit.h>
 
+RTEMS_WEAK int _POSIX_Timer_Is_allowed(
+  clockid_t clock_id
+)
+{
+  int rc = 0;
+
+  /*
+   * Allow timer_create(CLOCK_REALTIME. ...) per POSIX by default
+   * on CLOCK_REALTIME or CLOCK_MONOTONIC.
+   *
+   * But per the FACE Technical Standard, POSIX timers should not be
+   * allowed on CLOCK_REALTIME for safety reasons. If the application
+   * configures that it wants the FACE behavior, then this method
+   * is overridden by <rtems/confdefs/timer.h>.
+   */
+
+  if (  clock_id != CLOCK_REALTIME ) {
+    if ( clock_id != CLOCK_MONOTONIC ) {
+      rc  = EINVAL;
+    }
+  }
+
+  return rc;
+}
+
 int timer_create(
   clockid_t        clock_id,
   struct sigevent *__restrict evp,
@@ -58,9 +83,11 @@ int timer_create(
 )
 {
   POSIX_Timer_Control *ptimer;
+  int                  rc;
 
-  if (  clock_id != CLOCK_REALTIME && clock_id != CLOCK_MONOTONIC )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+  rc = _POSIX_Timer_Is_allowed( clock_id );
+  if ( rc != 0 )
+    rtems_set_errno_and_return_minus_one( rc );
 
   if ( !timerid )
     rtems_set_errno_and_return_minus_one( EINVAL );

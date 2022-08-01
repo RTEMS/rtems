@@ -240,6 +240,8 @@ links:
 - role: build-dependency
   uid: psxtimer02
 - role: build-dependency
+  uid: psxtimer_face01
+- role: build-dependency
   uid: psxtimes01
 - role: build-dependency
   uid: psxualarm

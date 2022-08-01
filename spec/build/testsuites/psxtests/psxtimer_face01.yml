@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2022. On-Line Applications Research Corporation (OAR).
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_POSIX_API
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/psxtests/psxtimer_face01/psxtimer.c
+stlib: []
+target: testsuites/psxtests/psxtimer_face01.exe
+type: build
+use-after: []
+use-before: []

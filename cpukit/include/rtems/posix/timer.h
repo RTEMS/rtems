@@ -94,6 +94,24 @@ extern Objects_Information _POSIX_Timer_Information;
     NULL \
   )
 
+/**
+ * @brief Follow POSIX or FACE Technical Standard on timer_create
+ *
+ * POSIX allows for the creation of timers based on CLOCK_REALTIME.
+ * This is viewed as a safety issue by the FACE Technical Standard
+ * and required to return an error. These are conflicting behaviors.
+ * This method is instanced by configuration when FACE conformant
+ * behavior is desired by the application.
+ *
+ * @param[in] clock_id is the clock ID to validate
+ *
+ * @return 0 if @a clock_id is allowed for use. Otherwise an errno value.
+ */
+int _POSIX_Timer_Is_allowed(
+  clockid_t clock_id
+);
+
+
 /** @} */
 
 #ifdef __cplusplus

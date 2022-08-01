@@ -64,6 +64,7 @@
 #include <rtems/confdefs/clock.h>
 #include <rtems/confdefs/console.h>
 #include <rtems/confdefs/extensions.h>
+#include <rtems/confdefs/face.h>
 #include <rtems/confdefs/inittask.h>
 #include <rtems/confdefs/initthread.h>
 #include <rtems/confdefs/iodrivers.h>
