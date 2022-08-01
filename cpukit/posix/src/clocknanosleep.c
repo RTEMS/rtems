@@ -82,6 +82,15 @@ int clock_nanosleep(
     rmtp = NULL;
   } else {
     absolute = false;
+
+    /*
+     * A relative CLOCK_REALTIME time out shall not be affected by
+     * CLOCK_REALTIME changes through clock_settime().  Since our
+     * CLOCK_REALTIME is basically just CLOCK_MONOTONIC plus an offset, we can
+     * simply use the CLOCK_MONOTONIC watchdog for relative CLOCK_REALTIME time
+     * outs.
+     */
+    clock_id = CLOCK_MONOTONIC;
   }
 
   if ( clock_id == CLOCK_REALTIME ) {

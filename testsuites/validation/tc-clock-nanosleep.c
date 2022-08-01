@@ -659,16 +659,10 @@ static void CReqClockNanosleep_Post_Expire_Check(
     case CReqClockNanosleep_Post_Expire_Relative: {
       /*
        * The timer of the calling task shall expire at the time point specified
-       * by the sum of the current time of the clock specified by the
-       * ``clock_id`` parameter and the interval specified by the ``rqtp``
-       * parameter.
+       * by the sum of the current time of the clock specified by
+       * CLOCK_MONOTONIC and the interval specified by the ``rqtp`` parameter.
        */
-      if ( ctx->clock_id == CLOCK_REALTIME ) {
-        expire = ctx->now_realtime;
-      } else {
-        expire = ctx->now_monotonic;
-      }
-
+      expire = ctx->now_monotonic;
       expire.tv_sec += ctx->rqtp_obj.tv_sec;
       expire.tv_nsec += ctx->rqtp_obj.tv_nsec;
 
@@ -855,12 +849,20 @@ CReqClockNanosleep_Entries[] = {
     CReqClockNanosleep_Post_Expire_Last,
     CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Nop },
   { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
-    CReqClockNanosleep_Post_Timer_Realtime,
-    CReqClockNanosleep_Post_Expire_Last,
+    CReqClockNanosleep_Post_Timer_Monotonic,
+    CReqClockNanosleep_Post_Expire_Absolute,
     CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Nop },
   { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
     CReqClockNanosleep_Post_Timer_Monotonic,
-    CReqClockNanosleep_Post_Expire_Absolute,
+    CReqClockNanosleep_Post_Expire_Last,
+    CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Zero },
+  { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
+    CReqClockNanosleep_Post_Timer_Monotonic,
+    CReqClockNanosleep_Post_Expire_Relative,
+    CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Zero },
+  { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
+    CReqClockNanosleep_Post_Timer_Monotonic,
+    CReqClockNanosleep_Post_Expire_Relative,
     CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Nop },
   { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
     CReqClockNanosleep_Post_Timer_Inactive, CReqClockNanosleep_Post_Expire_NA,
@@ -868,41 +870,21 @@ CReqClockNanosleep_Entries[] = {
     CReqClockNanosleep_Post_RMTp_Zero },
   { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
     CReqClockNanosleep_Post_Timer_Realtime,
+    CReqClockNanosleep_Post_Expire_Last,
+    CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Nop },
+  { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
+    CReqClockNanosleep_Post_Timer_Realtime,
     CReqClockNanosleep_Post_Expire_Absolute,
-    CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Nop },
-  { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
-    CReqClockNanosleep_Post_Timer_Monotonic,
-    CReqClockNanosleep_Post_Expire_Last,
-    CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Zero },
-  { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
-    CReqClockNanosleep_Post_Timer_Monotonic,
-    CReqClockNanosleep_Post_Expire_Relative,
-    CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Zero },
-  { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
-    CReqClockNanosleep_Post_Timer_Monotonic,
-    CReqClockNanosleep_Post_Expire_Relative,
-    CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Nop },
-  { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
-    CReqClockNanosleep_Post_Timer_Realtime,
-    CReqClockNanosleep_Post_Expire_Last,
-    CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Zero },
-  { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
-    CReqClockNanosleep_Post_Timer_Realtime,
-    CReqClockNanosleep_Post_Expire_Relative,
-    CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Zero },
-  { 0, 0, 0, 0, 0, 0, 0, CReqClockNanosleep_Post_Status_Zero,
-    CReqClockNanosleep_Post_Timer_Realtime,
-    CReqClockNanosleep_Post_Expire_Relative,
     CReqClockNanosleep_Post_Scheduler_Block, CReqClockNanosleep_Post_RMTp_Nop }
 };
 
 static const uint8_t
 CReqClockNanosleep_Map[] = {
-  6, 6, 8, 8, 10, 10, 6, 6, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 7, 2, 13, 8, 14, 15, 11, 6, 7, 2, 7, 2, 7, 2, 7, 2, 3,
-  0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 6, 6, 9, 9, 12, 12, 6, 6, 2, 2,
-  2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 2, 16,
-  9, 17, 18, 11, 6, 7, 2, 7, 2, 7, 2, 7, 2, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0,
+  6, 6, 8, 8, 9, 9, 6, 6, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 7, 2, 10, 8, 11, 12, 13, 6, 7, 2, 7, 2, 7, 2, 7, 2, 3, 0,
+  3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 6, 6, 14, 14, 15, 15, 6, 6, 2, 2,
+  2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 2, 10,
+  8, 11, 12, 13, 6, 7, 2, 7, 2, 7, 2, 7, 2, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0,
   3, 0, 3, 0, 4, 4, 4, 4, 5, 5, 5, 5, 4, 4, 4, 4, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 5, 5, 5, 5, 4, 4, 4, 4, 5, 5, 5, 5,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
