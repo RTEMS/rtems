@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*
+/**
+ * @file POSIX Timer Test #2
  *
  *  This is a simple real-time applications which contains 3 periodic tasks.
  *
@@ -12,8 +13,10 @@
  *
  *  The share data is protected with a POSIX mutex.
  *
- *  Other POSIX facilities such as timers, condition, .. is also used
- *
+ *  Other POSIX facilities such as timers, condition, .. are also used.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
