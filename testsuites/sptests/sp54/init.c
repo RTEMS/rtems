@@ -88,7 +88,7 @@ static void check_dirty_memory( void )
   rtems_test_assert( p != NULL );
   rtems_test_assert( *p == 0xcf );
 
-  p = (unsigned char *) _Thread_Information.Objects.local_table;
+  p = (unsigned char *) _Thread_Information.Objects.initial_objects;
   rtems_test_assert( *p == 0xcf );
 }
 
@@ -106,7 +106,7 @@ static void check_zero_workspace_automatically( void )
   rtems_test_assert( p != NULL );
   rtems_test_assert( *p == 0 );
 
-  p = (unsigned char *) _Thread_Information.Objects.local_table;
+  p = (unsigned char *) _Thread_Information.Objects.initial_objects;
   rtems_test_assert( *p == 0 );
 }
 
