@@ -50,6 +50,174 @@ static void check_enosys(int status)
   rtems_test_exit(0);
 }
 
+static void wait_ticks( rtems_interval ticks )
+{
+  /*
+   * Avoid any clock related sleep calls
+   */
+  rtems_test_assert( rtems_task_wake_after( ticks ) == RTEMS_SUCCESSFUL );
+}
+
+struct clock_context;
+typedef struct clock_context clock_context;
+typedef void (*clock_sleeper)(clock_context* ctx);
+struct clock_context {
+  const char* name;
+  int instance;
+  rtems_id tid;
+  int counter;
+  int result;
+  rtems_interval ticks;
+  struct timespec tspec;
+  clock_sleeper sleeper;
+};
+
+static void clock_context_init(
+  clock_context* ctx, const char* name, int instance,
+  time_t secs, long nsecs, clock_sleeper sleeper)
+{
+  memset( ctx, 0, sizeof( *ctx ) );
+  ctx->name = name;
+  ctx->instance = instance;
+  ctx->tspec.tv_sec = secs;
+  ctx->tspec.tv_nsec = nsecs;
+  ctx->sleeper = sleeper;
+}
+
+static void test_nanosleep( clock_context* ctx )
+{
+  if ( nanosleep ( &ctx->tspec, NULL ) < 0 )
+  {
+    ctx->result = errno;
+  }
+}
+
+static void test_clock_nanosleep_realtime( clock_context* ctx )
+{
+  if ( clock_nanosleep ( CLOCK_REALTIME, 0, &ctx->tspec, NULL ) < 0 )
+  {
+    ctx->result = errno;
+  }
+}
+
+static void test_clock_nanosleep_monotonic( clock_context* ctx )
+{
+  if ( clock_nanosleep ( CLOCK_MONOTONIC, 0, &ctx->tspec, NULL ) < 0 )
+  {
+    ctx->result = errno;
+  }
+}
+
+static void test_clock_check( clock_context* ctx, const rtems_interval ticks_per_sec )
+{
+  const long tick_period_nsec = 1000000000LLU / ticks_per_sec;
+  rtems_interval ticks =
+    (((ctx->tspec.tv_sec * 1000000000LLU) + ctx->tspec.tv_nsec) / tick_period_nsec) + 1;
+  rtems_test_assert( ctx->result == 0 );
+  printf(
+    "clock: %s: sec=%llu nsec=%li ticks=%u expected-ticks=%u\n",
+    ctx->name, ctx->tspec.tv_sec, ctx->tspec.tv_nsec, ctx->ticks, ticks);
+  rtems_test_assert( ctx->ticks == ticks );
+}
+
+static void task_clock( rtems_task_argument arg )
+{
+  clock_context* ctx = (clock_context*) arg;
+  rtems_interval start = rtems_clock_get_ticks_since_boot();
+  rtems_interval end;
+  ctx->result = 0;
+  ctx->sleeper( ctx );
+  end = rtems_clock_get_ticks_since_boot();
+  ctx->ticks = end - start;
+  ++ctx->counter;
+  rtems_task_delete( RTEMS_SELF );
+}
+
+static void test_start_task( clock_context* ctx )
+{
+  rtems_status_code sc;
+  sc = rtems_task_create(
+    rtems_build_name( 'C', 'R', 'T', '0' + ctx->instance ),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &ctx->tid
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  sc = rtems_task_start( ctx->tid, task_clock, (rtems_task_argument) ctx );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+}
+
+static void test_settime_and_sleeping_step( int step )
+{
+  const rtems_interval ticks_per_sec = rtems_clock_get_ticks_per_second();
+  struct timespec tv;
+
+  clock_context ns_ctx;
+  clock_context cnr_ctx;
+  clock_context cnm_ctx;
+
+  printf( "\nClock settime while sleeping: step=%i\n", step );
+
+  clock_context_init(
+    &ns_ctx, "nanosleep", 0, 0, 500000000,
+    test_nanosleep );
+  clock_context_init(
+    &cnr_ctx, "clock_nanosleep(CLOCK_REALTIME)", 0, 0, 500000000,
+    test_clock_nanosleep_realtime );
+  clock_context_init(
+    &cnm_ctx, "clock_nanosleep(CLOCK_MONOTONIC)", 0, 0, 500000000,
+    test_clock_nanosleep_monotonic );
+
+  /* Sat, 01 Jan 2000 00:00:00 GMT */
+  tv.tv_sec = 946684800;
+  tv.tv_nsec = 0;
+  rtems_test_assert( clock_settime( CLOCK_REALTIME, &tv ) == 0 );
+
+  wait_ticks( 1 );
+
+  test_start_task( &ns_ctx );
+  test_start_task( &cnr_ctx );
+  test_start_task( &cnm_ctx );
+
+  wait_ticks( 2 );
+
+  /*
+   * Jump forwards 1 second
+   */
+  if ( step != 0 )
+  {
+    tv.tv_sec = 946684800 + step;
+    tv.tv_nsec = 0;
+    rtems_test_assert( clock_settime( CLOCK_REALTIME, &tv ) == 0 );
+  }
+
+  while (true)
+  {
+    int counts = 0;
+    wait_ticks( ticks_per_sec /  4 );
+    counts += ns_ctx.counter;
+    counts += cnr_ctx.counter;
+    counts += cnm_ctx.counter;
+    if (counts == 3)
+    {
+      break;
+    }
+  }
+
+  test_clock_check( &ns_ctx, ticks_per_sec );
+  test_clock_check( &cnr_ctx, ticks_per_sec );
+  test_clock_check( &cnm_ctx, ticks_per_sec );
+}
+
+static void test_settime_and_sleeping( void )
+{
+  test_settime_and_sleeping_step( 0 );
+  test_settime_and_sleeping_step( 1 );
+  test_settime_and_sleeping_step( -1 );
+}
+
 typedef struct {
   int counter;
   struct timespec delta;
@@ -358,6 +526,8 @@ static rtems_task Init(
     }
   #endif
 
+  test_settime_and_sleeping( );
+
   TEST_END();
   rtems_test_exit(0);
 }
@@ -370,7 +540,7 @@ static rtems_task Init(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MAXIMUM_TASKS             2
+#define CONFIGURE_MAXIMUM_TASKS             4
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
