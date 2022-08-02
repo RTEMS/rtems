@@ -82,6 +82,7 @@ source:
 - cpukit/libmisc/shell/main_rm.c
 - cpukit/libmisc/shell/main_rmdir.c
 - cpukit/libmisc/shell/main_rtc.c
+- cpukit/libmisc/shell/main_rtems.c
 - cpukit/libmisc/shell/main_rtrace.c
 - cpukit/libmisc/shell/main_setenv.c
 - cpukit/libmisc/shell/main_sleep.c

@@ -110,6 +110,7 @@ extern rtems_shell_cmd_t rtems_shell_STACKUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_PERIODUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_PROFREPORT_Command;
 extern rtems_shell_cmd_t rtems_shell_WKSPACE_INFO_Command;
+extern rtems_shell_cmd_t rtems_shell_RTEMS_Command;
 extern rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command;
 extern rtems_shell_cmd_t rtems_shell_RTRACE_Command;
 #if RTEMS_NETWORKING
@@ -488,6 +489,11 @@ extern rtems_shell_alias_t * const rtems_shell_Initial_aliases[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_WKSPACE_INFO)) || \
         defined(CONFIGURE_SHELL_COMMAND_WKSPACE_INFO)
       &rtems_shell_WKSPACE_INFO_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_RTEMS)) || \
+        defined(CONFIGURE_SHELL_COMMAND_RTEMS)
+      &rtems_shell_RTEMS_Command,
     #endif
 
     /*
