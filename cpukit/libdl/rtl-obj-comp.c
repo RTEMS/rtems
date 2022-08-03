@@ -115,7 +115,7 @@ rtems_rtl_obj_comp_read (rtems_rtl_obj_comp* comp,
   }
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_COMP))
-    printf ("rtl:  comp: %2d: fd=%d length=%zu level=%u offset=%" PRIdoff_t " area=[%"
+    printf ("rtl:  comp: %2d: fd=%d length=%zu level=%zu offset=%" PRIdoff_t " area=[%"
             PRIdoff_t ",%" PRIdoff_t "] read=%" PRIu32 " size=%zu\n",
             comp->fd, comp->cache->fd, length, comp->level, comp->offset,
             comp->offset, comp->offset + length,
@@ -143,7 +143,7 @@ rtems_rtl_obj_comp_read (rtems_rtl_obj_comp* comp,
       if ((comp->level - buffer_level) != 0)
       {
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_COMP))
-          printf ("rtl:  comp: copy-down: level=%u length=%zu\n",
+          printf ("rtl:  comp: copy-down: level=%zu length=%zu\n",
                   comp->level, comp->level - buffer_level);
 
         memmove (comp->buffer,
@@ -221,7 +221,7 @@ rtems_rtl_obj_comp_read (rtems_rtl_obj_comp* comp,
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_COMP))
         printf ("rtl:  comp: expand: offset=%" PRIdoff_t \
-                " level=%u read=%" PRIu32 "\n",
+                " level=%zu read=%" PRIu32 "\n",
                 comp->offset, comp->level, comp->read);
     }
   }

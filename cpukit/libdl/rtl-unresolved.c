@@ -810,8 +810,8 @@ rtems_rtl_unresolved_dump_iterator (rtems_rtl_unresolv_rec* rec,
   case rtems_rtl_trampoline_reloc:
     if (dd->show_relocs)
       printf (" %3zu: 2:reloc%c: obj:%s name:%2d: sect:%d\n",
-              rec->type == rtems_rtl_unresolved_reloc ? 'R' : 'T',
               dd->rec,
+              rec->type == rtems_rtl_unresolved_reloc ? 'R' : 'T',
               rec->rec.reloc.obj == NULL ? "resolved" : rec->rec.reloc.obj->oname,
               rec->rec.reloc.name,
               rec->rec.reloc.sect);

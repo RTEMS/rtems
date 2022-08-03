@@ -406,7 +406,7 @@ typedef struct
   const rtems_rtl_obj_print* print;     /**< The print data. */
   bool                       first;     /**< Is this the first line printed. */
   bool                       show_name; /**< Show the object name. */
-  size_t                     indent;    /**< The indent. */
+  int                        indent;    /**< The indent. */
 } rtems_rtl_dep_data;
 
 static bool
@@ -849,7 +849,7 @@ rtems_rtl_shell_archive (const rtems_printer* printer, int argc, char* argv[])
 
   while (!rtems_chain_is_tail (&rtl->archives.archives, node))
   {
-    #define SYM_DUPLICATE (1 << ((8 * sizeof (size_t)) - 1))
+    #define SYM_DUPLICATE (((size_t) 1) << ((8 * sizeof (size_t)) - 1))
 
     rtems_rtl_archive* archive = (rtems_rtl_archive*) node;
 

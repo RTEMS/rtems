@@ -1171,7 +1171,7 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
         rtems_chain_set_off_chain (&osym->node);
         memcpy (string, name, strlen (name) + 1);
         osym->name = string;
-        osym->value = (uint8_t*) value;
+        osym->value = (void*) (intptr_t) value;
         osym->data = symbol.st_shndx;
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
