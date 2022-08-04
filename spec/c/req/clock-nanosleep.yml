@@ -69,12 +69,7 @@ post-conditions:
       the ``rqtp`` parameter.
   - name: Relative
     test-code: |
-      if ( ctx->clock_id == CLOCK_REALTIME ) {
-        expire = ctx->now_realtime;
-      } else {
-        expire = ctx->now_monotonic;
-      }
-
+      expire = ctx->now_monotonic;
       expire.tv_sec += ctx->rqtp_obj.tv_sec;
       expire.tv_nsec += ctx->rqtp_obj.tv_nsec;
 
@@ -87,8 +82,9 @@ post-conditions:
       T_eq_long( ctx->timer_info.expire_timespec.tv_nsec, expire.tv_nsec );
     text: |
       The timer of the calling task shall expire at the time point specified by
-      the sum of the current time of the clock specified by the ``clock_id``
-      parameter and the interval specified by the ``rqtp`` parameter.
+      the sum of the current time of the clock specified by
+      ${../if/clock-monotonic:/name} and the interval specified by the ``rqtp``
+      parameter.
   test-epilogue: null
   test-prologue: |
     struct timespec expire;
@@ -463,7 +459,7 @@ transition-map:
        pre-conditions:
          RQTpSec: PastOrNow
       then: Inactive
-    - specified-by: ClockId
+    - else: Monotonic
     Expire:
     - if:
        pre-conditions:
