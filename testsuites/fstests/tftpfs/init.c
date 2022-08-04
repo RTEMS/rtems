@@ -919,7 +919,7 @@ T_TEST_CASE( tftp_read_null_buffer )
  */
 T_TEST_CASE( tftp_write_null_tftp_handle )
 {
-  char data_buffer[10];
+  char data_buffer[10] = { 0 };
   ssize_t res;
 
   res = tftp_write(
