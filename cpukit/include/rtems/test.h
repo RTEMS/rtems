@@ -2464,6 +2464,8 @@ T_thread_switch_log *T_thread_switch_record_10(T_thread_switch_log_10 *);
 
 void T_report_hash_sha256(T_event, const char *);
 
+void T_report_hash_sha256_update(char c);
+
 void T_check_heap(T_event, const char *);
 
 #ifdef __rtems__

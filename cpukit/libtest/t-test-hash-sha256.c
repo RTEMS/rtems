@@ -44,6 +44,15 @@ typedef struct {
 
 static T_report_hash_sha256_context T_report_hash_sha256_instance;
 
+void
+T_report_hash_sha256_update(char c)
+{
+	T_report_hash_sha256_context *ctx;
+
+	ctx = &T_report_hash_sha256_instance;
+	SHA256_Update(&ctx->sha256, &c, sizeof(c));
+}
+
 static void
 T_report_hash_sha256_putchar(int c, void *arg)
 {
