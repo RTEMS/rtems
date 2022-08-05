@@ -127,11 +127,8 @@ int clock_nanosleep(
       struct timespec actual_end;
       struct timespec planned_end;
 
-      if ( clock_id == CLOCK_REALTIME ) {
-        _Timecounter_Nanotime( &actual_end );
-      } else {
-        _Timecounter_Nanouptime( &actual_end );
-      }
+      _Assert( clock_id == CLOCK_MONOTONIC );
+      _Timecounter_Nanouptime( &actual_end );
 
       _Watchdog_Ticks_to_timespec(
         executing->Timer.Watchdog.expire,
