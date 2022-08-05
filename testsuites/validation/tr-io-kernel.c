@@ -82,7 +82,9 @@
  */
 static void RtemsIoValKernel_Action_0( void )
 {
+  T_report_hash_sha256_update( 'X' );
   ( *BSP_output_char )( 'X' );
+  T_report_hash_sha256_update( '\n' );
   ( *BSP_output_char )( '\n' );
 }
 
