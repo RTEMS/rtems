@@ -52,6 +52,11 @@ install:
 - destination: ${BSP_INCLUDEDIR}/dev/spi
   source:
   - cpukit/include/dev/spi/spi.h
+- destination: ${BSP_INCLUDEDIR}/dev/can
+  source:
+  - cpukit/include/dev/can/can.h
+  - cpukit/include/dev/can/can-msg.h
+  - cpukit/include/dev/can/canqueueimpl.h
 - destination: ${BSP_INCLUDEDIR}/linux
   source:
   - cpukit/include/linux/i2c-dev.h
@@ -535,6 +540,7 @@ source:
 - cpukit/dev/serial/sc16is752-spi.c
 - cpukit/dev/serial/sc16is752.c
 - cpukit/dev/spi/spi-bus.c
+- cpukit/dev/can/can.c
 - cpukit/dtc/libfdt/fdt.c
 - cpukit/dtc/libfdt/fdt_addresses.c
 - cpukit/dtc/libfdt/fdt_empty_tree.c
