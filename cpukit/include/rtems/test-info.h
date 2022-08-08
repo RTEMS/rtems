@@ -108,14 +108,14 @@ typedef enum
 /**
  * @brief Prints a begin of test message using printf().
  *
- * @returns As specified by printf().
+ * @return As specified by printf().
  */
 int rtems_test_begin(const char* name, const RTEMS_TEST_STATE state);
 
 /**
  * @brief Prints an end of test message using printf().
  *
- * @returns As specified by printf().
+ * @return As specified by printf().
  */
 int rtems_test_end(const char* name);
 
@@ -128,7 +128,7 @@ RTEMS_NO_RETURN void rtems_test_exit(int status);
 /**
  * @brief Prints via the RTEMS printer.
  *
- * @returns As specified by printf().
+ * @return As specified by printf().
  */
 int rtems_test_printf(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
 
