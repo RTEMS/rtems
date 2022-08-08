@@ -12,4 +12,5 @@ install: []
 links: []
 source:
 - cpukit/libdl/rtl-mdreloc-arm.c
+- cpukit/libdl/rtl-unwind-arm.c
 type: build
