@@ -3,7 +3,12 @@
 /**
  * @file
  *
- * This file defines the interface to RTEMS extensions to the Malloc Family.
+ * @ingroup MallocSupport
+ *
+ * @ingroup RTEMSAPIMalloc
+ *
+ * @brief This header file defines interfaces to support and use dynamic memory
+ *   allocation.
  */
 
 /*
@@ -46,11 +51,13 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup MallocSupport Malloc Support
+ * @defgroup MallocSupport Malloc Support
  *
- *  @ingroup libcsupport
+ * @ingroup libcsupport
  *
- *  @brief RTEMS extensions to the Malloc Family
+ * @brief This group contains interfaces to support dynamic memory allocation.
+ *
+ * @{
  */
 
 /**
@@ -63,8 +70,6 @@ extern Heap_Control *RTEMS_Malloc_Heap;
 
 void _Malloc_Initialize( void );
 
-void rtems_heap_set_sbrk_amount( ptrdiff_t sbrk_amount );
-
 typedef void *(*rtems_heap_extend_handler)(
   Heap_Control *heap,
   size_t alloc_size
@@ -74,19 +79,6 @@ typedef void *(*rtems_heap_extend_handler)(
  *  @brief RTEMS Extend Heap via Sbrk
  */
 void *rtems_heap_extend_via_sbrk(
-  Heap_Control *heap,
-  size_t alloc_size
-);
-
-/**
- * @brief Greedy allocate that empties the sbrk memory
- *
- * Afterwards all the sbrk avialable memory will have been allocated
- * to the provided heap.
- *
- * @see rtems_heap_extend_via_sbrk().
- */
-void rtems_heap_sbrk_greedy_allocate(
   Heap_Control *heap,
   size_t alloc_size
 );
@@ -103,6 +95,34 @@ extern const rtems_heap_extend_handler rtems_malloc_extend_handler;
  */
 typedef void (*rtems_malloc_dirtier_t)(void *, size_t);
 extern rtems_malloc_dirtier_t rtems_malloc_dirty_helper;
+
+/** @} */
+
+/**
+ * @defgroup RTEMSAPIMalloc Dynamic Memory Allocation
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @brief This group contains non-standard interfaces to use dynamic memory
+ *   allocation.
+ *
+ * @{
+ */
+
+void rtems_heap_set_sbrk_amount( ptrdiff_t sbrk_amount );
+
+/**
+ * @brief Greedy allocate that empties the sbrk memory
+ *
+ * Afterwards all the sbrk avialable memory will have been allocated
+ * to the provided heap.
+ *
+ * @see rtems_heap_extend_via_sbrk().
+ */
+void rtems_heap_sbrk_greedy_allocate(
+  Heap_Control *heap,
+  size_t alloc_size
+);
 
 /**
  *  @brief Dirty Memory Function
@@ -250,6 +270,8 @@ void *rtems_heap_greedy_allocate_all_except_largest(
  * rtems_heap_greedy_allocate_all_except_largest().
  */
 void rtems_heap_greedy_free( void *opaque );
+
+/** @} */
 
 #ifdef __cplusplus
 }
