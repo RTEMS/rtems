@@ -1,4 +1,6 @@
-*** BEGIN OF TEST PSXTIMER 2 ***
-*** TEST VERSION: 6.0.0.1c6ac88f938f4b135f3bbffc4b19bbc540508c80
-*** END OF TEST PSXTIMER 2 ***
-
+*** BEGIN OF TEST FACE 1 ***
+timer_create - CLOCK_REALTIME forbidden - EPERM
+timer_create - CLOCK_PROCESS_CPUTIME_ID not allowed - EINVAL
+timer_create - OK
+timer_delete - OK
+*** END OF TEST PSXTIMER FACE 1 ***

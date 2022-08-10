@@ -54,16 +54,50 @@ static void *POSIX_Init (
   timer_t           timer;
 
   /*
-   *  If these are not filled in correctly, we don't pass its error checking.
+   *  If these are not filled in correctly, we do not execute pass the
+   *  error checking for a NULL event pointer.
    */
   event.sigev_notify = SIGEV_SIGNAL;
   event.sigev_signo = SIGUSR1;
 
   TEST_BEGIN();
 
+  /*
+   * When FACE timer behavior is configured, creating a POSIX timer
+   * using CLOCK_REALTIME is not allowed.
+   */
   puts( "timer_create - CLOCK_REALTIME forbidden - EPERM" );
   status = timer_create( CLOCK_REALTIME, &event, &timer );
   fatal_posix_service_status_errno( status, EPERM, "not allowed" );
+
+  /*
+   * When FACE timer behavior is configured, creating a POSIX timer
+   * on a value other than CLOCK_REALTIME or CLOCK_MONOTONIC is not allowed.
+   */
+  puts( "timer_create - CLOCK_PROCESS_CPUTIME_ID not allowed - EINVAL" );
+  status = timer_create( CLOCK_PROCESS_CPUTIME_ID, &event, &timer );
+  fatal_posix_service_status_errno( status, EINVAL, "invalid clock" );
+
+  /*
+   * When FACE timer behavior is configured, creating a POSIX timer
+   * on CLOCK_MONOTONIC allowed.
+   */
+  puts( "timer_create - OK" );
+  status = timer_create( CLOCK_MONOTONIC, &event, &timer );
+  posix_service_failed( status, "timer_create OK" );
+
+  /*
+   * Delete the previously created timer.
+   */
+  puts( "timer_delete - OK" );
+  status = timer_delete(  timer );
+  posix_service_failed( status, "timer_delete ok" );
+
+  /*
+   */
+  puts( "timer_create - CLOCK_MONOTONIC is allowed - OK" );
+  status = timer_create( CLOCK_MONOTONIC, &event, &timer );
+  posix_service_failed( status, "timer_create ok" );
 
   TEST_END();
   rtems_test_exit (0);

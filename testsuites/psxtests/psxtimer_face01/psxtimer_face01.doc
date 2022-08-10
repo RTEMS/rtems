@@ -36,4 +36,14 @@ directives:
 concepts:
 
 + This test exercises the CONFIGURE_POSIX_TIMERS_FACE_BEHAVIOR configure
-  option which alters the behavior of timer_create().
+  option which alters the behavior of timer_create(). 
+
+  - With CONFIGURE_POSIX_TIMERS_FACE_BEHAVIOR defined, timer_create()
+    returns EPERM to indicate this is not allowed.
+
+  - With CONFIGURE_POSIX_TIMERS_FACE_BEHAVIOR defined, timer_create()
+    for CLOCK_MONOTONIC is allowed.
+
+  - With CONFIGURE_POSIX_TIMERS_FACE_BEHAVIOR defined, timer_create()
+    for any other clock value is an error.
+
