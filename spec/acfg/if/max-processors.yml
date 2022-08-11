@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
 copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 1988, 2022 On-Line Applications Research Corporation (OAR)
 default-value: 1
 description: |
   The value of this configuration option defines the maximum number of
@@ -24,7 +24,7 @@ notes: |
   If there are more processors available than configured, the rest will be
   ignored.
 
-  This configuration option is only evaluated in SMP configurations (e.g. RTEMS
-  was built with the ``--enable-smp`` build configuration option).  In all
-  other configurations it has no effect.
+  This configuration option is only evaluated in SMP configurations of RTEMS
+  (e.g. RTEMS was built with the SMP build configuration option enabled).
+  In all other configurations it has no effect.
 type: interface

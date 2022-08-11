@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: feature
 copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 1988, 2022 On-Line Applications Research Corporation (OAR)
 default: |
   If this configuration option is undefined, then the multiprocessing services
   are not initialized.
@@ -20,7 +20,7 @@ links:
 name: CONFIGURE_MP_APPLICATION
 notes: |
   This configuration option shall be undefined if the multiprocessing support
-  is not enabled (e.g. RTEMS was built without the ``--enable-multiprocessing``
-  build configuration option).  Otherwise a compile time error in the
+  is not enabled (e.g. RTEMS was built without the multiprocessing build
+  configuration option enabled).  Otherwise a compile time error in the
   configuration file will occur.
 type: interface

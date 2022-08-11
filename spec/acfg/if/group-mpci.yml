@@ -1,13 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 1988, 2022 On-Line Applications Research Corporation (OAR)
 description: |
-  This section describes multiprocessing related configuration options.  The
-  options are only used if RTEMS was built with the ``--enable-multiprocessing``
-  build configuration option.  Additionally, this class of configuration options
-  are only applicable if the configuration option ${mp-appl:/name}
-  is defined.  The multiprocessing (MPCI) support must not be confused with the
-  SMP support.
+  This section describes multiprocessing related configuration options.
+  The options are only used if RTEMS was built when the multiprocessing
+  build configuration option is enabled. The multiprocessing configuration
+  is distinct from the SMP configuration.  Additionally, this class of
+  configuration options are only applicable if the configuration option
+  ${mp-appl:/name} is defined.  The multiprocessing (MPCI)
+  support must not be confused with the SMP support.
 enabled-by: true
 index-entries: []
 interface-type: appl-config-group
