@@ -96,6 +96,10 @@ extern "C" {
  * @parblock
  * The following constraints apply to this directive:
  *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
+ *
  * * The directive should be called by boot_card() only.
  *
  * * The directive will not return to the caller.
@@ -119,6 +123,10 @@ RTEMS_NO_RETURN void rtems_initialize_executive( void );
  * @par Constraints
  * @parblock
  * The following constraints apply to this directive:
+ *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
  *
  * * The directive may be called from within any runtime context.
  *

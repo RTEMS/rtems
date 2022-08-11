@@ -440,6 +440,15 @@ typedef uint32_t rtems_event_set;
 /**
  * @brief This event set constant represents the reserved system event for a
  *   network socket close.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this constant:
+ *
+ * * The constant is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the constant.
+ * @endparblock
  */
 #define RTEMS_EVENT_SYSTEM_NETWORK_CLOSE RTEMS_EVENT_26
 
@@ -448,6 +457,15 @@ typedef uint32_t rtems_event_set;
 /**
  * @brief This event set constant represents the reserved system event for a
  *   network socket buffer wait usage.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this constant:
+ *
+ * * The constant is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the constant.
+ * @endparblock
  */
 #define RTEMS_EVENT_SYSTEM_NETWORK_SBWAIT RTEMS_EVENT_24
 
@@ -456,6 +474,15 @@ typedef uint32_t rtems_event_set;
 /**
  * @brief This event set constant represents the reserved system event for a
  *   network socket sleep.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this constant:
+ *
+ * * The constant is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the constant.
+ * @endparblock
  */
 #define RTEMS_EVENT_SYSTEM_NETWORK_SOSLEEP RTEMS_EVENT_25
 
@@ -533,6 +560,15 @@ rtems_status_code rtems_event_system_send(
 /**
  * @brief This event set constant represents the reserved system event for
  *   server thread usage, for example the timer or interrupt server.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this constant:
+ *
+ * * The constant is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the constant.
+ * @endparblock
  */
 #define RTEMS_EVENT_SYSTEM_SERVER RTEMS_EVENT_30
 
@@ -541,6 +577,15 @@ rtems_status_code rtems_event_system_send(
 /**
  * @brief This event set constant represents the reserved system event to
  *   resume a server thread, for example the timer or interrupt server.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this constant:
+ *
+ * * The constant is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the constant.
+ * @endparblock
  */
 #define RTEMS_EVENT_SYSTEM_SERVER_RESUME RTEMS_EVENT_29
 
@@ -549,6 +594,15 @@ rtems_status_code rtems_event_system_send(
 /**
  * @brief This event set constant represents the reserved system event for
  *   transient usage.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this constant:
+ *
+ * * The constant is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the constant.
+ * @endparblock
  */
 #define RTEMS_EVENT_SYSTEM_TRANSIENT RTEMS_EVENT_31
 
@@ -560,6 +614,10 @@ rtems_status_code rtems_event_system_send(
  * @par Constraints
  * @parblock
  * The following constraints apply to this directive:
+ *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
  *
  * * The directive may be called from within device driver initialization
  *   context.
@@ -594,6 +652,10 @@ static inline void rtems_event_transient_clear( void )
  * @parblock
  * The following constraints apply to this directive:
  *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
+ *
  * * The directive may be called from within device driver initialization
  *   context.
  *
@@ -627,6 +689,10 @@ static inline rtems_status_code rtems_event_transient_receive(
  * @par Constraints
  * @parblock
  * The following constraints apply to this directive:
+ *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
  *
  * * The directive may be called from within interrupt context.
  *

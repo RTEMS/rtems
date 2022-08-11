@@ -180,6 +180,10 @@ RTEMS_NO_RETURN static inline void rtems_fatal(
  * @parblock
  * The following constraints apply to this directive:
  *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
+ *
  * * The directive may be called from within any runtime context.
  *
  * * The directive will not return to the caller.
@@ -209,6 +213,15 @@ RTEMS_NO_RETURN RTEMS_PRINTFLIKE( 1, 2 ) void rtems_panic(
  *
  * The exception frame is printed in an architecture-dependent format using
  * printk().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
+ * @endparblock
  */
 static inline void rtems_exception_frame_print(
   const rtems_exception_frame *frame
@@ -235,6 +248,10 @@ static inline void rtems_exception_frame_print(
  * @parblock
  * The following constraints apply to this directive:
  *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
+ *
  * * The directive may be called from within any runtime context.
  * @endparblock
  */
@@ -258,6 +275,10 @@ const char *rtems_fatal_source_text( rtems_fatal_source fatal_source );
  * @par Constraints
  * @parblock
  * The following constraints apply to this directive:
+ *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
  *
  * * The directive may be called from within any runtime context.
  * @endparblock
@@ -285,6 +306,10 @@ const char *rtems_internal_error_text( rtems_fatal_code internal_error_code );
  * @par Constraints
  * @parblock
  * The following constraints apply to this directive:
+ *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
  *
  * * The directive may be called from within any runtime context.
  *
