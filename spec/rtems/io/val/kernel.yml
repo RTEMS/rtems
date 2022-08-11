@@ -7,7 +7,9 @@ test-actions:
 - action-brief: |
     Call the function referenced by ${../if/bsp-output-char:/name}.
   action-code: |
+    T_report_hash_sha256_update( 'X' );
     ( *BSP_output_char )( 'X' );
+    T_report_hash_sha256_update( '\n' );
     ( *BSP_output_char )( '\n' );
   checks: []
   links:
