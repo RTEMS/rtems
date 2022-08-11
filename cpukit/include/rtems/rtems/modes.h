@@ -161,6 +161,15 @@ extern "C" {
  * @par Notes
  * This task mode constant is used by bindings from languages other than C and
  * C++.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this object:
+ *
+ * * The constant is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the constant.
+ * @endparblock
  */
 extern const uint32_t rtems_interrupt_mask;
 
@@ -187,6 +196,15 @@ typedef uint32_t rtems_mode;
  *
  * @par Notes
  * This function is used by bindings from languages other than C and C++.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
+ * @endparblock
  */
 rtems_mode rtems_interrupt_level_body( uint32_t level );
 

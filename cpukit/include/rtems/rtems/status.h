@@ -298,6 +298,15 @@ typedef enum {
  * @retval EPERM The status code was ::RTEMS_NOT_OWNER_OF_RESOURCE.
  *
  * @retval ETIMEDOUT The status code was ::RTEMS_TIMEOUT.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
+ * @endparblock
  */
 int rtems_status_code_to_errno( rtems_status_code status_code );
 

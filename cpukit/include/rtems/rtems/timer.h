@@ -82,6 +82,15 @@ extern "C" {
  * @ingroup RTEMSAPIClassicTimer
  *
  * @brief This timer class bit indicates that the timer is not dormant.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this constant:
+ *
+ * * The constant is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the constant.
+ * @endparblock
  */
 #define TIMER_CLASS_BIT_NOT_DORMANT 0x4
 
@@ -92,6 +101,15 @@ extern "C" {
  *
  * @brief This timer class bit indicates that the timer routine executes in a
  *   task context.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this constant:
+ *
+ * * The constant is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the constant.
+ * @endparblock
  */
 #define TIMER_CLASS_BIT_ON_TASK 0x2
 
@@ -101,6 +119,15 @@ extern "C" {
  * @ingroup RTEMSAPIClassicTimer
  *
  * @brief This timer class bit indicates that the timer uses a time of day.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this constant:
+ *
+ * * The constant is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the constant.
+ * @endparblock
  */
 #define TIMER_CLASS_BIT_TIME_OF_DAY 0x1
 
@@ -207,6 +234,10 @@ typedef struct {
  * @par Constraints
  * @parblock
  * The following constraints apply to this directive:
+ *
+ * * The directive is not included in the pre-qualified feature set of RTEMS.
+ *   Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the directive.
  *
  * * The directive may be called from within interrupt context.
  *
