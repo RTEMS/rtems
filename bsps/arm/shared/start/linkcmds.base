@@ -152,7 +152,7 @@ SECTIONS {
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.data.rel.ro : ALIGN_WITH_INPUT {
 		*(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
-		*(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
+		*(.data.rel.ro .data.rel.ro.* .gnu.linkonce.d.rel.ro.*)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.jcr : ALIGN_WITH_INPUT {
 		KEEP (*(.jcr))

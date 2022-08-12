@@ -204,7 +204,7 @@ SECTIONS {
 		KEEP (*(.eh_frame))
 		*(.gcc_except_table .gcc_except_table.*)
 		KEEP (*(.jcr))
-		*(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*) *(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
+		*(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*) *(.data.rel.ro .data.rel.ro.* .gnu.linkonce.d.rel.ro.*)
 		*(.fixup)
 		*(.got1)
 		*(.got2)
