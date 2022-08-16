@@ -218,12 +218,19 @@ void T_check_null(const T_check_context_msg *, const void *);
 
 void T_check_not_null(const T_check_context_msg *, const void *);
 
+/*
+ * This was added to address the following warning.
+ * warning: 'a' may be used uninitialized
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #define T_flags_not_null(a, flags, sa)					\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
 	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT }, sa };	\
 	T_check_not_null(&T_check_instance, a);				\
 }
+#pragma GCC diagnostic pop
 
 void T_check_eq_mem(const T_check_context_msg *, const void *, const void *,
     size_t);
