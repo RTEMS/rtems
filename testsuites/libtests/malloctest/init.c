@@ -60,8 +60,15 @@ static void test_realloc(void)
   for (i=2 ; i<2048 ; i++) {
     p2 = realloc(p1, i);
     if (p2 != p1)
+/*
+ * This was added to address the following warning.
+ * warning: pointer 'p1' may be used after 'realloc'
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuse-after-free"
       printf( "realloc - failed grow in place: "
               "%p != realloc(%p,%zu)\n", p1, p2, i);
+#pragma GCC diagnostic pop
     p1 = p2;
   }
   free(p1);
@@ -71,8 +78,15 @@ static void test_realloc(void)
   for (i=2047 ; i>=1; i--)  {
     p2 = realloc(p1, i);
     if (p2 != p1)
-      printf( "realloc - failed shrink in place: "
+/*
+ * This was added to address the following warning.
+ * warning: pointer 'p1' may be used after 'realloc'
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuse-after-free"
+       printf( "realloc - failed shrink in place: "
               "%p != realloc(%p,%zu)\n", p1, p2, i);
+#pragma GCC diagnostic pop
     p1 = p2;
   }
   free(p1);
@@ -84,8 +98,15 @@ static void test_realloc(void)
   p2 = malloc(32);
   p3 = realloc(p1, 64);
   if (p3 == p1 || p3 == NULL)
-    printf(
+/*
+ * This was added to address the following warning.
+ * warning: pointer may be used after 'realloc'
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuse-after-free"
+     printf(
       "realloc - failed non-in place: realloc(%p,%d) = %p\n", p1, 64, p3);
+#pragma GCC diagnostic pop
   free(p3);
   free(p2);
 
@@ -122,7 +143,14 @@ static void test_realloc(void)
   /*
    *  Realloc with a bad pointer to force a point
    */
-  p4 = realloc( test_realloc, 32 );
+/*
+ * This was added to address the following warning.
+ * warning: 'realloc' called on unallocated object
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wfree-nonheap-object"
+   p4 = realloc( test_realloc, 32 );
+#pragma GCC diagnostic pop
 
   p4 = _realloc_r( NULL, NULL, 1 );
 }
@@ -1528,8 +1556,15 @@ static void test_early_malloc( void )
 
   free( q );
 
+/*
+ * This was added to address the following warning.
+ * warning: pointer 'q' used after 'free'
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuse-after-free"
   r = realloc( q, 128 );
   rtems_test_assert( r == q );
+#pragma GCC diagnostic pop
 
   s = malloc( 1 );
   rtems_test_assert( s != NULL );
