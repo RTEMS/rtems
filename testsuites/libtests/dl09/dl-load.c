@@ -171,7 +171,7 @@ static void dl_object_open (object_def* od, objects* o)
   if (od->space != 0)
   {
     o->space = malloc (od->space);
-    printf("space alloc: %s: %d: %p\n", od->name, od->space, o->space);
+    printf("space alloc: %s: %zd: %p\n", od->name, od->space, o->space);
     rtems_test_assert (o->space != NULL);
   }
   dl_load_dump ();
