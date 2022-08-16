@@ -262,6 +262,13 @@ typedef struct Per_CPU_Job {
 /**
  * @brief Per-CPU statistics.
  */
+
+/*
+ * This was added to address the following warning:
+ * warning: struct has no members
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 typedef struct {
 #if defined( RTEMS_PROFILING )
   /**
@@ -330,6 +337,7 @@ typedef struct {
   uint64_t total_interrupt_time;
 #endif /* defined( RTEMS_PROFILING ) */
 } Per_CPU_Stats;
+#pragma GCC diagnostic pop
 
 /**
  * @brief Per-CPU watchdog header index.
