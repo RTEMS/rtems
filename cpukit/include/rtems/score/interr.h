@@ -38,6 +38,8 @@
 #ifndef _RTEMS_SCORE_INTERR_H
 #define _RTEMS_SCORE_INTERR_H
 
+#include <limits.h>
+
 #include <rtems/score/cpu.h>
 
 /**
@@ -175,7 +177,7 @@ typedef enum {
    * This enum value ensures that the enum type needs at least 32-bits for
    * architectures with short enums.
    */
-  RTEMS_FATAL_SOURCE_LAST = 0xffffffff
+  RTEMS_FATAL_SOURCE_LAST = INT_MAX
 } Internal_errors_Source;
 
 /**
