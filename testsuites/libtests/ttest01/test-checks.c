@@ -90,8 +90,8 @@ T_TEST_CASE(step_assert_eq_ptr)
 
 T_TEST_CASE(check_eq_ptr)
 {
-	int a;
-	int b;
+	int a = 0;
+	int b = 0;
 
 	T_eq_ptr(&a, &a);
 	T_eq_ptr(&a, &b);
@@ -115,8 +115,8 @@ T_TEST_CASE(step_assert_ne_ptr)
 
 T_TEST_CASE(check_ne_ptr)
 {
-	int a;
-	int b;
+	int a = 0;
+	int b = 0;
 
 	T_ne_ptr(&a, &b);
 	T_ne_ptr(&a, &a);
@@ -162,7 +162,7 @@ T_TEST_CASE(step_assert_not_null)
 
 T_TEST_CASE(check_not_null)
 {
-	int a;
+	int a = 0;
 
 	T_not_null(&a);
 	T_not_null(NULL);
