@@ -147,7 +147,15 @@ const size_t _Thread_Maximum_TLS_size =
   CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE;
 
 struct Thread_Configured_control {
+/*
+ * This was added to address the following warning.
+ * warning: invalid use of structure with flexible array member
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
   Thread_Control Control;
+#pragma GCC diagnostic pop
+
   #if CONFIGURE_MAXIMUM_USER_EXTENSIONS > 0
     void *extensions[ CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1 ];
   #endif
@@ -211,7 +219,14 @@ const size_t _Thread_Control_add_on_count =
 
 #ifdef RTEMS_SMP
   struct Thread_queue_Configured_heads {
+/*
+ * This was put in to address the following warning.
+ * warning: invalid use of structure with flexible array member
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
     Thread_queue_Heads Heads;
+#pragma GCC diagnostic pop
       Thread_queue_Priority_queue Priority[ _CONFIGURE_SCHEDULER_COUNT ];
   };
 
