@@ -43,6 +43,7 @@
 #endif
 #include <rtems/score/aarch64.h>
 #include <libcpu/vectors.h>
+#include <limits.h>
 
 /**
  * @addtogroup RTEMSScoreCPUAArch64
@@ -156,7 +157,14 @@
 extern "C" {
 #endif
 
+/*
+   This is to fix the following warning
+   ISO C does not support 'uint128_t' types
+*/
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 typedef unsigned __int128 uint128_t;
+#pragma GCC diagnostic pop
 
 typedef struct {
   uint64_t register_x19;
@@ -404,7 +412,7 @@ typedef enum {
   AARCH64_EXCEPTION_LEL32_FIQ = 14,
   AARCH64_EXCEPTION_LEL32_SERROR = 15,
   MAX_EXCEPTIONS = 16,
-  AARCH64_EXCEPTION_MAKE_ENUM_64_BIT = 0xffffffffffffffff
+  AARCH64_EXCEPTION_MAKE_ENUM_64_BIT = INT_MAX
 } AArch64_symbolic_exception_name;
 
 #define VECTOR_POINTER_OFFSET 0x78
@@ -432,7 +440,15 @@ static inline void* AArch64_set_exception_handler(
   *vector_address = handler;
 
   /* return now-previous vector pointer */
-  return (void*)current_vector_pointer;
+
+/*
+ * This was put in to fix the following warning:
+ * warning: ISO C forbids conversion of function pointer to object pointer type.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+ return (void*)current_vector_pointer;
+#pragma GCC diagnostic pop
 }
 
 typedef struct {
