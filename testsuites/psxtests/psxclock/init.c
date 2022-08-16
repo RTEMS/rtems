@@ -115,7 +115,7 @@ static void test_clock_check( clock_context* ctx, const rtems_interval ticks_per
     (((ctx->tspec.tv_sec * 1000000000LLU) + ctx->tspec.tv_nsec) / tick_period_nsec) + 1;
   rtems_test_assert( ctx->result == 0 );
   printf(
-    "clock: %s: sec=%llu nsec=%li ticks=%u expected-ticks=%u\n",
+    "clock: %s: sec=%" PRIdtime_t" nsec=%li ticks=%u expected-ticks=%u\n",
     ctx->name, ctx->tspec.tv_sec, ctx->tspec.tv_nsec, ctx->ticks, ticks);
   rtems_test_assert( ctx->ticks == ticks );
 }
