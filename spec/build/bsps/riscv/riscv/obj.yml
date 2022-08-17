@@ -28,6 +28,7 @@ source:
 - bsps/riscv/riscv/irq/irq.c
 - bsps/riscv/riscv/start/bsp_fatal_halt.c
 - bsps/riscv/riscv/start/bspstart.c
+- bsps/riscv/shared/start/bspgetworkarea.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
