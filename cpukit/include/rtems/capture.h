@@ -838,7 +838,7 @@ rtems_capture_task_flags (rtems_tcb* tcb)
 static inline rtems_capture_control*
 rtems_capture_task_control (rtems_tcb* tcb)
 {
-  return tcb->Capture.control;
+  return (rtems_capture_control*) tcb->Capture.control;
 }
 
 /**
@@ -853,7 +853,7 @@ rtems_capture_task_control (rtems_tcb* tcb)
 static inline uint32_t
 rtems_capture_task_control_flags (rtems_tcb* tcb)
 {
-  rtems_capture_control*  control = tcb->Capture.control;
+  rtems_capture_control*  control = rtems_capture_task_control (tcb);
   if (!control)
     return 0;
   return control->flags;

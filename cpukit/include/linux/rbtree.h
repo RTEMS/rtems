@@ -30,6 +30,10 @@
 
 #include <rtems/score/rbtree.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define rb_node RBTree_Node
 
 #define rb_left Node.rbe_left
@@ -109,7 +113,7 @@ static inline struct rb_node *rb_last( struct rb_root *root )
 
 static inline void rb_replace_node(
   struct rb_node *victim,
-  struct rb_node *replacement, 
+  struct rb_node *replacement,
   struct rb_root *root
 )
 {
@@ -150,5 +154,9 @@ static inline struct rb_node *rb_parent( struct rb_node *node )
     ); \
     node = next \
   )
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _LINUX_RBTREE_H */

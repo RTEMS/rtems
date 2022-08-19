@@ -403,7 +403,7 @@ RTEMS_INLINE_ROUTINE bool _Priority_Less(
   const Priority_Control *the_left;
   const Priority_Node    *the_right;
 
-  the_left = left;
+  the_left = (const Priority_Control*) left;
   the_right = RTEMS_CONTAINER_OF( right, Priority_Node, Node.RBTree );
 
   return *the_left < the_right->priority;
