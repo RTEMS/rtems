@@ -11,6 +11,7 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/pci
   source:
+  - cpukit/include/pci.h
   - cpukit/include/pci/access.h
   - cpukit/include/pci/cfg.h
   - cpukit/include/pci/cfg_auto.h

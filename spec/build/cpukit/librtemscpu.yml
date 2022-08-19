@@ -23,7 +23,6 @@ install:
   - cpukit/include/md5.h
   - cpukit/include/memory.h
   - cpukit/include/mqueue.h
-  - cpukit/include/pci.h
   - cpukit/include/poll.h
   - cpukit/include/rtems.h
   - cpukit/include/sha256.h
@@ -220,7 +219,6 @@ install:
   - cpukit/include/rtems/posix/barrierimpl.h
   - cpukit/include/rtems/posix/condimpl.h
   - cpukit/include/rtems/posix/key.h
-  - cpukit/include/rtems/posix/keyimpl.h
   - cpukit/include/rtems/posix/mmanimpl.h
   - cpukit/include/rtems/posix/mqueue.h
   - cpukit/include/rtems/posix/mqueueimpl.h
