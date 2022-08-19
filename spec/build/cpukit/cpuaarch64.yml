@@ -13,6 +13,9 @@ install:
   source:
   - cpukit/score/cpu/aarch64/include/libcpu/mmu-vmsav8-64.h
   - cpukit/score/cpu/aarch64/include/libcpu/vectors.h
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/score/cpu/aarch64/include/machine/elf_machdep.h
 - destination: ${BSP_INCLUDEDIR}/rtems
   source:
   - cpukit/score/cpu/aarch64/include/rtems/asm.h
