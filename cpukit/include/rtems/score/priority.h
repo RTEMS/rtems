@@ -24,11 +24,11 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/rbtree.h>
 
-struct _Scheduler_Control;
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct _Scheduler_Control;
 
 /**
  * @defgroup RTEMSScorePriority Priority Handler
