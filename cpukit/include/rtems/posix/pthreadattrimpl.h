@@ -91,7 +91,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Get_sched_param_sporadic(
 #if defined(RTEMS_POSIX_API)
   const POSIX_API_Control *api;
 
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  api = (const POSIX_API_Control*) the_thread->API_Extensions[ THREAD_API_POSIX ];
   param->sched_ss_low_priority = _POSIX_Priority_From_core(
     scheduler,
     api->Sporadic.Low_priority.priority

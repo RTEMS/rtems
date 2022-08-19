@@ -120,7 +120,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Less(
   Priority_Control          prio_left;
   Priority_Control          prio_right;
 
-  the_left = left;
+  the_left = (const Priority_Control*) left;
   the_right = RTEMS_CONTAINER_OF( right, Scheduler_EDF_Node, Node );
 
   prio_left = *the_left;
@@ -148,7 +148,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Priority_less_equal(
   Priority_Control          prio_left;
   Priority_Control          prio_right;
 
-  the_left = left;
+  the_left = (const Priority_Control*) left;
   the_right = RTEMS_CONTAINER_OF( right, Scheduler_EDF_Node, Node );
 
   prio_left = *the_left;

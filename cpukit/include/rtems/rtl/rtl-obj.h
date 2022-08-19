@@ -250,7 +250,7 @@ struct rtems_rtl_obj
   size_t              tramps_size;  /**< Size of the trampoline memory. */
   void*               tramp_brk;    /**< Trampoline memory allocator. MD
                                      *   relocators can take memory from the
-                                     *   break upto the size. */
+                                     *   break up to the size. */
   size_t              tramp_relocs; /**< Number of slots reserved for
                                      *   relocs. The remainder are for
                                      *   unresolved symbols. */
@@ -352,7 +352,7 @@ static inline bool rtems_rtl_obj_text_inside (const rtems_rtl_obj* obj,
 {
   return
     (address >= obj->text_base) &&
-    (address < (obj->text_base + obj->text_size));
+    ((char*) address < ((char*) obj->text_base + obj->text_size));
 }
 
 /**
@@ -393,11 +393,23 @@ static inline bool rtems_rtl_obj_has_symbol (const rtems_rtl_obj*     obj,
  * @param size The size to be allocated.
  * @retval bool Returns @true if the space is available.
  */
+static inline size_t rtems_rtl_obj_tramp_avail_space (const rtems_rtl_obj* obj)
+{
+  return (char*) obj->tramp_brk - (char*) obj->trampoline;
+}
+
+/**
+ * Is there space in the trampoline memory for a trapoline.
+ *
+ * @param obj The object file's descriptor to check for available space.
+ * @param size The size to be allocated.
+ * @retval bool Returns @true if the space is available.
+ */
 static inline bool rtems_rtl_obj_has_tramp_space (const rtems_rtl_obj* obj,
                                                   const size_t         size)
 {
   return (obj->trampoline != NULL &&
-          ((obj->tramp_brk - obj->trampoline) + size) <= obj->tramps_size);
+          (rtems_rtl_obj_tramp_avail_space (obj) + size) <= obj->tramps_size);
 }
 
 /**
@@ -421,7 +433,7 @@ static inline size_t rtems_rtl_obj_trampoline_slots (const rtems_rtl_obj* obj)
 static inline size_t rtems_rtl_obj_trampolines (const rtems_rtl_obj* obj)
 {
   return obj->trampoline == NULL || obj->tramp_size == 0 ?
-    0 : (obj->tramp_brk - obj->trampoline) / obj->tramp_size;
+    0 : rtems_rtl_obj_tramp_avail_space (obj) / obj->tramp_size;
 }
 
 /**

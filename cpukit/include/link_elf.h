@@ -13,6 +13,10 @@
 #include <stdint.h>
 #include <rtems/rtl/rtl-obj-fwd.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum sections
 {
   rap_text = 0,
@@ -76,4 +80,8 @@ int _rtld_linkmap_add (rtems_rtl_obj* obj);
  * Remove link map from the list.
  */
 void _rtld_linkmap_delete (rtems_rtl_obj* obj);
+
+#ifdef __cplusplus
+}
+#endif
 #endif	/* _LINK_ELF_H_ */

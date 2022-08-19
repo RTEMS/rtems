@@ -107,7 +107,7 @@ extern struct r_debug _rtld_debug;
  * Debugger break function. Call when debugging to have it read the _rtld_debug
  * variable.
  */
-extern void _rtld_debug_state (void);
+void _rtld_debug_state (void);
 
 /**
  * The type of constructor/destructor function.

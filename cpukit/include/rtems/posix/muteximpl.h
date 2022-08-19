@@ -4,8 +4,8 @@
  * @file
  *
  * @brief Private Inlined Routines for POSIX Mutex's.
- * 
- * This include file contains the static inline implementation of the private 
+ *
+ * This include file contains the static inline implementation of the private
  * inlined routines for POSIX mutex's.
  */
 
@@ -123,7 +123,7 @@ RTEMS_INLINE_ROUTINE POSIX_Mutex_Protocol _POSIX_Mutex_Get_protocol(
   unsigned long flags
 )
 {
-  return flags & POSIX_MUTEX_PROTOCOL_MASK;
+  return (POSIX_Mutex_Protocol) (flags & POSIX_MUTEX_PROTOCOL_MASK);
 }
 
 RTEMS_INLINE_ROUTINE bool _POSIX_Mutex_Is_recursive(
@@ -465,4 +465,3 @@ bool _POSIX_Mutex_Auto_initialization( POSIX_Mutex_Control *the_mutex );
 
 #endif
 /*  end of include file */
-

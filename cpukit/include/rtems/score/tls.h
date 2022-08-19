@@ -241,7 +241,7 @@ static inline void *_TLS_TCB_at_area_begin_initialize( void *tls_area )
 {
   void *tls_block = (char *) tls_area
     + _TLS_Get_thread_control_block_area_size( (uintptr_t) _TLS_Alignment );
-  TLS_Thread_control_block *tcb = tls_area;
+  TLS_Thread_control_block *tcb = (TLS_Thread_control_block*) tls_area;
   uintptr_t aligned_size = _TLS_Align_up( (uintptr_t) _TLS_Size );
   TLS_Dynamic_thread_vector *dtv = (TLS_Dynamic_thread_vector *)
     ((char *) tls_block + aligned_size);
