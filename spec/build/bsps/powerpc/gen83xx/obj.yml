@@ -11,7 +11,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/powerpc/gen83xx/include/bsp.h
-  - bsps/powerpc/gen83xx/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/powerpc/gen83xx/include/bsp/hwreg_vals.h

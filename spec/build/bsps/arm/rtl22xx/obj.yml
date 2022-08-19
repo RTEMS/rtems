@@ -12,7 +12,6 @@ install:
   source:
   - bsps/arm/rtl22xx/include/bsp.h
   - bsps/arm/rtl22xx/include/lpc22xx.h
-  - bsps/arm/rtl22xx/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/rtl22xx/include/bsp/irq.h

@@ -14,7 +14,6 @@ install:
   source:
   - bsps/arm/csb336/include/bsp.h
   - bsps/arm/csb336/include/mc9328mxl.h
-  - bsps/arm/csb336/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/csb336/include/bsp/irq.h

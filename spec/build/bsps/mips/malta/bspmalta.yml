@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/mips/malta/include/bsp.h
-  - bsps/mips/malta/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/mips/malta/include/bsp/irq.h

@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/sparc64/niagara/include/bsp.h
-  - bsps/sparc64/niagara/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/sparc64/niagara/include/bsp/irq.h

@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/powerpc/ss555/include/bsp.h
-  - bsps/powerpc/ss555/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/powerpc/ss555/include/bsp/irq.h

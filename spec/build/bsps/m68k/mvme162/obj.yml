@@ -12,7 +12,6 @@ install:
   source:
   - bsps/m68k/mvme162/include/bsp.h
   - bsps/m68k/mvme162/include/page_table.h
-  - bsps/m68k/mvme162/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/m68k/mvme162/include/bsp/irq.h

@@ -11,7 +11,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/arm/stm32h7/include/bsp.h
-  - bsps/arm/stm32h7/include/tm27.h
   - bsps/arm/stm32h7/include/chip.h
   - bsps/arm/stm32h7/include/stm32_assert_template.h
   - bsps/arm/stm32h7/include/stm32h742xx.h

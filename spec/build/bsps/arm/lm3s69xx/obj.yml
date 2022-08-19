@@ -11,7 +11,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/arm/lm3s69xx/include/bsp.h
-  - bsps/arm/lm3s69xx/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/lm3s69xx/include/bsp/io.h

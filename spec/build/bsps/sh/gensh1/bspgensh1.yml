@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/sh/gensh1/include/bsp.h
-  - bsps/sh/gensh1/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/sh/gensh1/include/bsp/irq.h

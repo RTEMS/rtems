@@ -12,7 +12,6 @@ install:
   source:
   - bsps/riscv/griscv/include/amba.h
   - bsps/riscv/griscv/include/bsp.h
-  - bsps/riscv/griscv/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/riscv/griscv/include/bsp/irq.h

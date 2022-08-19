@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/powerpc/beatnik/include/bsp.h
-  - bsps/powerpc/beatnik/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/powerpc/beatnik/include/bsp/VMEConfig.h

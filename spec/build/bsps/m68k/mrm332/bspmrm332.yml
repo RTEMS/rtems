@@ -14,7 +14,6 @@ install:
   source:
   - bsps/m68k/mrm332/include/bsp.h
   - bsps/m68k/mrm332/include/mrm332.h
-  - bsps/m68k/mrm332/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/m68k/mrm332/include/bsp/irq.h

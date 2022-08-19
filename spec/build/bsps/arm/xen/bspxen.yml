@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/arm/xen/include/bsp.h
-  - bsps/arm/xen/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/xen/include/bsp/irq.h

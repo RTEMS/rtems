@@ -14,7 +14,6 @@ install:
   source:
   - bsps/arm/edb7312/include/bsp.h
   - bsps/arm/edb7312/include/ep7312.h
-  - bsps/arm/edb7312/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/edb7312/include/bsp/irq.h

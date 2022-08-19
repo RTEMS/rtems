@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/m68k/mcf5329/include/bsp.h
-  - bsps/m68k/mcf5329/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/m68k/mcf5329/include/bsp/irq.h

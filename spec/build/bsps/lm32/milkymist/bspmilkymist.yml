@@ -14,7 +14,6 @@ install:
   source:
   - bsps/lm32/milkymist/include/bsp.h
   - bsps/lm32/milkymist/include/system_conf.h
-  - bsps/lm32/milkymist/include/tm27.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/lm32/milkymist/start/linkcmds

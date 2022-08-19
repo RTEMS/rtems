@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/mips/csb350/include/bsp.h
-  - bsps/mips/csb350/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/mips/csb350/include/bsp/irq.h

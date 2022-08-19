@@ -22,7 +22,6 @@ install:
   - bsps/arm/csb337/include/font8x16.h
   - bsps/arm/csb337/include/sed1356.h
   - bsps/arm/csb337/include/sed1356_16bit.h
-  - bsps/arm/csb337/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/csb337/include/bsp/irq.h

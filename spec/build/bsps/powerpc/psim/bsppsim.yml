@@ -14,7 +14,6 @@ install:
   source:
   - bsps/powerpc/psim/include/bsp.h
   - bsps/powerpc/psim/include/psim.h
-  - bsps/powerpc/psim/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/powerpc/psim/include/bsp/irq.h

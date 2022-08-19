@@ -13,7 +13,6 @@ install:
   - bsps/i386/pc386/include/bsp.h
   - bsps/i386/pc386/include/crt.h
   - bsps/i386/pc386/include/edid.h
-  - bsps/i386/pc386/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/i386/pc386/include/bsp/bspimpl.h

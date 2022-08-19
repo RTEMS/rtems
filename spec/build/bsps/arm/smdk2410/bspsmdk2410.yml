@@ -17,7 +17,6 @@ install:
   - bsps/arm/smdk2410/include/s3c2410.h
   - bsps/arm/smdk2410/include/s3c24xx.h
   - bsps/arm/smdk2410/include/smc.h
-  - bsps/arm/smdk2410/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/smdk2410/include/bsp/irq.h

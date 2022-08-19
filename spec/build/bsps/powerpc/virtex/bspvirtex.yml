@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/powerpc/virtex/include/bsp.h
-  - bsps/powerpc/virtex/include/tm27.h
   - bsps/powerpc/virtex/include/xiltemac.h
   - bsps/powerpc/virtex/include/xparameters_dflt.h
 - destination: ${BSP_INCLUDEDIR}/bsp

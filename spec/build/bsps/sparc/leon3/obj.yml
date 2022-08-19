@@ -13,7 +13,6 @@ install:
   - bsps/sparc/leon3/include/amba.h
   - bsps/sparc/leon3/include/bsp.h
   - bsps/sparc/leon3/include/leon.h
-  - bsps/sparc/leon3/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/sparc/leon3/include/bsp/irq.h

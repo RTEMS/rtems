@@ -11,7 +11,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/aarch64/xilinx-versal/include/bsp.h
-  - bsps/aarch64/xilinx-versal/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/aarch64/xilinx-versal/include/bsp/irq.h

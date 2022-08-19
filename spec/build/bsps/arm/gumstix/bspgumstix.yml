@@ -15,7 +15,6 @@ install:
   - bsps/arm/gumstix/include/bsp.h
   - bsps/arm/gumstix/include/ffuart.h
   - bsps/arm/gumstix/include/pxa255.h
-  - bsps/arm/gumstix/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/gumstix/include/bsp/irq.h

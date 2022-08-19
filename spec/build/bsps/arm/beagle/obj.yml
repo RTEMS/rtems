@@ -11,7 +11,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/arm/beagle/include/bsp.h
-  - bsps/arm/beagle/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/beagle/include/bsp/bbb-gpio.h

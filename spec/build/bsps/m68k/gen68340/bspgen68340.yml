@@ -18,7 +18,6 @@ install:
   - bsps/m68k/gen68340/include/m68340.h
   - bsps/m68k/gen68340/include/m68340.inc
   - bsps/m68k/gen68340/include/m68349.inc
-  - bsps/m68k/gen68340/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/m68k/gen68340/include/bsp/irq.h

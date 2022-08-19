@@ -12,7 +12,6 @@ install:
   source:
   - bsps/sparc/leon2/include/bsp.h
   - bsps/sparc/leon2/include/leon.h
-  - bsps/sparc/leon2/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/sparc/leon2/include/bsp/at697_pci.h

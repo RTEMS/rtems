@@ -11,7 +11,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/sh/shsim/include/bsp.h
-  - bsps/sh/shsim/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/sh/shsim/include/bsp/irq.h

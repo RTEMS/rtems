@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/powerpc/mvme3100/include/bsp.h
-  - bsps/powerpc/mvme3100/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/powerpc/mvme3100/include/bsp/VMEConfig.h

@@ -14,7 +14,6 @@ install:
   source:
   - bsps/sh/gensh4/include/bsp.h
   - bsps/sh/gensh4/include/sdram.h
-  - bsps/sh/gensh4/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/sh/gensh4/include/bsp/irq.h

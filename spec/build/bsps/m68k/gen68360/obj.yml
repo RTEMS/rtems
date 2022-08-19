@@ -11,7 +11,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/m68k/gen68360/include/bsp.h
-  - bsps/m68k/gen68360/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/m68k/gen68360/include/bsp/irq.h

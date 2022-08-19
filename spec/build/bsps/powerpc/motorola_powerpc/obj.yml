@@ -11,7 +11,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/powerpc/motorola_powerpc/include/bsp.h
-  - bsps/powerpc/motorola_powerpc/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/powerpc/motorola_powerpc/include/bsp/VMEConfig.h

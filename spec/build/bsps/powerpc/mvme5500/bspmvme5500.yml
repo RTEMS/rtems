@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/powerpc/mvme5500/include/bsp.h
-  - bsps/powerpc/mvme5500/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/powerpc/mvme5500/include/bsp/GT64260TWSI.h

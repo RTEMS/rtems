@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/arm/xilinx-zynqmp/include/bsp.h
-  - bsps/arm/xilinx-zynqmp/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/xilinx-zynqmp/include/bsp/irq.h

@@ -88,7 +88,6 @@ install:
   - bsps/arm/imxrt/include/MIMXRT1052_features.h
   - bsps/arm/imxrt/include/MIMXRT1052.h
   - bsps/arm/imxrt/include/system_MIMXRT1052.h
-  - bsps/arm/imxrt/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/arm/freescale/imx
   source:
   - bsps/arm/include/arm/freescale/imx/imx_iomuxreg.h

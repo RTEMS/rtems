@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/powerpc/mpc8260ads/include/bsp.h
-  - bsps/powerpc/mpc8260ads/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/powerpc/mpc8260ads/include/bsp/irq.h

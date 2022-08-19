@@ -17,7 +17,6 @@ install:
   - bsps/x86_64/amd64/include/clock.h
   - bsps/x86_64/amd64/include/pic.h
   - bsps/x86_64/amd64/include/start.h
-  - bsps/x86_64/amd64/include/tm27.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/x86_64/amd64/start/linkcmds

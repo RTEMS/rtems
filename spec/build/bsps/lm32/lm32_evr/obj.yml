@@ -12,7 +12,6 @@ install:
   source:
   - bsps/lm32/lm32_evr/include/bsp.h
   - bsps/lm32/lm32_evr/include/system_conf.h
-  - bsps/lm32/lm32_evr/include/tm27.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/lm32/lm32_evr/start/linkcmds

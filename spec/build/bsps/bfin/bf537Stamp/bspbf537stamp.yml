@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/bfin/bf537Stamp/include/bsp.h
-  - bsps/bfin/bf537Stamp/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/bfin/bf537Stamp/include/bsp/irq.h

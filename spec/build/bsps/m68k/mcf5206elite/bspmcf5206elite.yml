@@ -17,7 +17,6 @@ install:
   - bsps/m68k/mcf5206elite/include/i2c.h
   - bsps/m68k/mcf5206elite/include/i2cdrv.h
   - bsps/m68k/mcf5206elite/include/nvram.h
-  - bsps/m68k/mcf5206elite/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/m68k/mcf5206elite/include/bsp/irq.h

@@ -14,7 +14,6 @@ install:
   source:
   - bsps/bfin/eZKit533/include/bsp.h
   - bsps/bfin/eZKit533/include/cplb.h
-  - bsps/bfin/eZKit533/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/bfin/eZKit533/include/bsp/irq.h

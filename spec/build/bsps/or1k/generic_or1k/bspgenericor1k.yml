@@ -13,7 +13,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/or1k/generic_or1k/include/bsp.h
-  - bsps/or1k/generic_or1k/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/or1k/generic_or1k/include/bsp/generic_or1k.h
