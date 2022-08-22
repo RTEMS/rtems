@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2022 Chris Johns <chris@contemporary.software>
+default: 99999001
+default-by-variant: []
+description: |
+  Versal i2c1 clock frequency in Hz. This is the frequency after the signal
+  has been processed using the values passed to the I2C1_REF_CTRL register.
+enabled-by: true
+format: '{}'
+links: []
+name: VERSAL_CLOCK_I2C1
+type: build

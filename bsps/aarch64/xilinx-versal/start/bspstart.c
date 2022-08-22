@@ -38,6 +38,18 @@
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
 
+#include <rtems/score/basedefs.h>
+
+RTEMS_WEAK uint32_t versal_clock_i2c0(void)
+{
+  return VERSAL_CLOCK_I2C0;
+}
+
+RTEMS_WEAK uint32_t versal_clock_i2c1(void)
+{
+  return VERSAL_CLOCK_I2C1;
+}
+
 void bsp_start( void )
 {
   bsp_interrupt_initialize();

@@ -33,6 +33,10 @@ links:
 - role: build-dependency
   uid: optramori
 - role: build-dependency
+  uid: optclki2c0
+- role: build-dependency
+  uid: optclki2c1
+- role: build-dependency
   uid: optclkuart
 - role: build-dependency
   uid: optconminor

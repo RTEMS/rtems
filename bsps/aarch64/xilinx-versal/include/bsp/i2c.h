@@ -1,15 +1,8 @@
-/* SPDX-License-Identifier: BSD-2-Clause */
-
-/**
- * @file
- *
- * @ingroup RTEMSBSPsAArch64XilinxVersal
- *
- * @brief This header file provides the core BSP definitions
- */
-
 /*
- * Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (C) 2022 Chris Johns <chris@contemporary.software>
+ * Copyright (C) 2014 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,62 +26,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_AARCH64_XILINX_VERSAL_BSP_H
-#define LIBBSP_AARCH64_XILINX_VERSAL_BSP_H
+#ifndef LIBBSP_ARM_XILINX_VERSAL_I2C_H
+#define LIBBSP_ARM_XILINX_VERSAL_I2C_H
 
-/**
- * @addtogroup RTEMSBSPsAArch64
- *
- * @{
- */
-
-#include <bspopts.h>
-
-#ifndef ASM
-
-#include <bsp/default-initial-extension.h>
-#include <bsp/linker-symbols.h>
-#include <bsp/start.h>
-
-#include <rtems.h>
+#include <dev/i2c/cadence-i2c.h>
+#include <bsp/irq.h>
+#include <bsp.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_ARM_GIC_CPUIF_BASE 0xf9040000
-#define BSP_ARM_GIC_DIST_BASE 0xf9000000
-#define BSP_ARM_GIC_REDIST_BASE 0xf9080000
+static inline int versal_register_i2c_0(void)
+{
+  return i2c_bus_register_cadence(
+    "/dev/i2c-0",
+    0x00FF020000,
+    versal_clock_i2c0(),
+    VERSAL_IRQ_I2C_0
+  );
+}
 
-#define BSP_RESET_SMC
-
-/*
- * DDRMC mapping
- */
-LINKER_SYMBOL(bsp_r0_ram_base)
-LINKER_SYMBOL(bsp_r0_ram_end)
-LINKER_SYMBOL(bsp_r1_ram_base)
-LINKER_SYMBOL(bsp_r1_ram_end)
-
-/**
- * @brief Versal specific set up of the MMU.
- *
- * Provide in the application to override the defaults in the BSP.
- */
-BSP_START_TEXT_SECTION void versal_setup_mmu_and_cache(void);
-
-void versal_debug_console_flush(void);
-
-uint32_t versal_clock_i2c0(void);
-
-uint32_t versal_clock_i2c1(void);
+static inline int versal_register_i2c_1(void)
+{
+  return i2c_bus_register_cadence(
+    "/dev/i2c-1",
+    0x00FF030000,
+    versal_clock_i2c1(),
+    VERSAL_IRQ_I2C_1
+  );
+}
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* ASM */
-
-/** @} */
-
-#endif /* LIBBSP_AARCH64_XILINX_VERSAL_BSP_H */
+#endif /* LIBBSP_ARM_XILINX_VERSAL_I2C_H */
