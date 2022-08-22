@@ -1,19 +1,19 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-arch: aarch64
-bsp: xilinx_versal_ilp32_vck190
-build-type: bsp
+build-type: group
 cflags: []
 copyrights:
-- Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
+- Copyright (C) 2022 Chris Johns <chris@contemporary.software>
 cppflags: []
+cxxflags: []
 enabled-by: true
-family: xilinx-versal
 includes: []
 install: []
+ldflags: []
 links:
 - role: build-dependency
-  uid: grp_vck190
+  uid: grp
 - role: build-dependency
-  uid: linkcmds_ilp32
-source: []
+  uid: tstaiedge
 type: build
+use-after: []
+use-before: []

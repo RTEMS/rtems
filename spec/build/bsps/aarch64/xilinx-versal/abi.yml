@@ -5,16 +5,10 @@ actions:
 - env-append: null
 build-type: option
 copyrights:
-- Copyright (C) 2021 Gedare Bloom 
+- Copyright (C) 2021 Gedare Bloom
 default:
 - -mcpu=cortex-a72
-default-by-variant:
-- value:
-  - -mcpu=cortex-a72
-  - -mabi=ilp32
-  variants:
-  - aarch64/xilinx_versal_ilp32_qemu
-  - aarch64/xilinx_versal_ilp32_vck190
+default-by-variant: []
 description: |
   ABI flags
 enabled-by: true

@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    # expected to produce a fatal-error when run
+    minimum: exclude
+
+build-type: option
+copyrights:
+- Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links: []
+type: build

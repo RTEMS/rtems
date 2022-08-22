@@ -4,13 +4,12 @@ actions:
 - define: null
 build-type: option
 copyrights:
-- Copyright (C) 2021 Gedare Bloom <gedare@rtems.org> 
-default: 24000000
+- Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
+default: 100000000
 default-by-variant:
-- value: 100000000
+- value: 24000000
   variants:
-  - aarch64/xilinx_versal_ilp32.*
-  - aarch64/xilinx_versal_lp64.*
+  - aarch64/xilinx_versal_qemu
 description: |
   Versal UART clock frequency in Hz
 enabled-by: true

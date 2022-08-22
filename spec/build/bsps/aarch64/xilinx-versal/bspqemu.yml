@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: aarch64
-bsp: xilinx_versal_lp64_qemu
+bsp: xilinx_versal_qemu
 build-type: bsp
 cflags: []
 copyrights:
-- Copyright (C) 2021 Gedare Bloom 
+- Copyright (C) 2021 Gedare Bloom
 cppflags: []
 enabled-by: true
 family: xilinx-versal

@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: aarch64
-bsp: xilinx_versal_ilp32_qemu
+bsp: xilinx_versal_aiedge
 build-type: bsp
 cflags: []
 copyrights:
-- Copyright (C) 2021 Gedare Bloom 
+- Copyright (C) 2022 Chris Johns <chris@contemporary.software>
 cppflags: []
 enabled-by: true
 family: xilinx-versal
@@ -12,8 +12,8 @@ includes: []
 install: []
 links:
 - role: build-dependency
-  uid: grp_qemu
+  uid: grp_aiedge
 - role: build-dependency
-  uid: linkcmds_ilp32
+  uid: linkcmds_lp64
 source: []
 type: build
