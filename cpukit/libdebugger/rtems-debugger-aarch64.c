@@ -34,7 +34,9 @@
 #include <inttypes.h>
 #include <stdlib.h>
 
-/* Defined by linkcmds.base */
+/* Defined by linkcmds.base. This should be taken from <bsp/linker-symbols.h> */
+extern char bsp_section_start_begin[];
+extern char bsp_section_start_end[];
 extern char bsp_section_text_begin[];
 extern char bsp_section_text_end[];
 extern char bsp_section_fast_text_begin[];
@@ -1231,6 +1233,8 @@ static rtems_status_code rtems_debugger_target_set_text_writable(
   bool writable
 )
 {
+  uintptr_t         start_begin = (uintptr_t) bsp_section_start_begin;
+  uintptr_t         start_end = (uintptr_t) bsp_section_start_end;
   uintptr_t         text_begin = (uintptr_t) bsp_section_text_begin;
   uintptr_t         text_end = (uintptr_t) bsp_section_text_end;
   uintptr_t         fast_text_begin = (uintptr_t) bsp_section_fast_text_begin;
@@ -1240,6 +1244,23 @@ static rtems_status_code rtems_debugger_target_set_text_writable(
 
   if ( !writable ) {
     mmu_flags = AARCH64_MMU_CODE_CACHED;
+  }
+
+  target_printk(
+    "[} MMU edit: start_begin: 0x%016" PRIxPTR
+    " start_end: 0x%016" PRIxPTR "\n",
+    start_begin,
+    start_end
+  );
+  sc = aarch64_mmu_map(
+    start_begin,
+    start_end - start_begin,
+    mmu_flags
+  );
+
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    target_printk( "[} MMU edit failed\n" );
+    return sc;
   }
 
   target_printk(
