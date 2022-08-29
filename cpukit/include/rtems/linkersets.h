@@ -92,7 +92,7 @@ extern "C" {
   extern RTEMS_LINKER_SET_ALIGN( type ) type RTEMS_LINKER_SET_END( set )[]
 
 #define RTEMS_LINKER_RWSET( set, type ) \
-  RTEMS_LINKER_SET_ALIGN( type ) type RTEMS_LINKER_SET_BEGIN( set )[ 1 ] \
+  RTEMS_LINKER_SET_ALIGN( type ) type RTEMS_LINKER_SET_BEGIN( set )[ 0 ] \
   RTEMS_SECTION( ".rtemsrwset." #set ".begin" ) RTEMS_USED; \
   RTEMS_LINKER_SET_ALIGN( type ) type RTEMS_LINKER_SET_END( set )[ 0 ] \
   RTEMS_SECTION( ".rtemsrwset." #set ".end" ) RTEMS_USED
