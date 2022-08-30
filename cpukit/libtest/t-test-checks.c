@@ -30,27 +30,27 @@
 #include <inttypes.h>
 
 void
-T_check_eq_ptr(const T_check_context_msg *t, const void *a, const void *e)
+T_check_eq_ptr(const T_check_context_msg *t, uintptr_t a, uintptr_t e)
 {
 	T_check(&t->base, a == e, "%s", t->msg);
 }
 
 void
-T_check_ne_ptr(const T_check_context_msg *t, const void *a, const void *e)
+T_check_ne_ptr(const T_check_context_msg *t, uintptr_t a, uintptr_t e)
 {
 	T_check(&t->base, a != e, "%s", t->msg);
 }
 
 void
-T_check_null(const T_check_context_msg *t, const void *a)
+T_check_null(const T_check_context_msg *t, uintptr_t a)
 {
-	T_check(&t->base, a == NULL, "%s == NULL", t->msg);
+	T_check(&t->base, a == 0, "%s == NULL", t->msg);
 }
 
 void
-T_check_not_null(const T_check_context_msg *t, const void *a)
+T_check_not_null(const T_check_context_msg *t, uintptr_t a)
 {
-	T_check(&t->base, a != NULL, "%s != NULL", t->msg);
+	T_check(&t->base, a != 0, "%s != NULL", t->msg);
 }
 
 void

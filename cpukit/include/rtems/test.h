@@ -187,50 +187,43 @@ extern const T_check_context T_special;
     T_flags_true(flags, \
     (a) != (T_VA_ARGS_FIRST(__VA_ARGS__)) T_VA_ARGS_MORE(__VA_ARGS__))
 
-void T_check_eq_ptr(const T_check_context_msg *, const void *, const void *);
+void T_check_eq_ptr(const T_check_context_msg *, uintptr_t, uintptr_t);
 
 #define T_flags_eq_ptr(a, e, flags, sa, se)				\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
 	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT },		\
 	    sa " == " se };						\
-	T_check_eq_ptr(&T_check_instance, a, e);			\
+	T_check_eq_ptr(&T_check_instance, (uintptr_t)a, (uintptr_t)e);	\
 }
 
-void T_check_ne_ptr(const T_check_context_msg *, const void *, const void *);
+void T_check_ne_ptr(const T_check_context_msg *, uintptr_t, uintptr_t);
 
 #define T_flags_ne_ptr(a, e, flags, sa, se)				\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
 	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT },		\
 	    sa " != " se };						\
-	T_check_ne_ptr(&T_check_instance, a, e);			\
+	T_check_ne_ptr(&T_check_instance, (uintptr_t)a, (uintptr_t)e);	\
 }
 
-void T_check_null(const T_check_context_msg *, const void *);
+void T_check_null(const T_check_context_msg *, uintptr_t);
 
 #define T_flags_null(a, flags, sa)					\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
 	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT }, sa };	\
-	T_check_null(&T_check_instance, a);				\
+	T_check_null(&T_check_instance, (uintptr_t)a);			\
 }
 
-void T_check_not_null(const T_check_context_msg *, const void *);
+void T_check_not_null(const T_check_context_msg *, uintptr_t);
 
-/*
- * This was added to address the following warning.
- * warning: 'a' may be used uninitialized
- */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #define T_flags_not_null(a, flags, sa)					\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
 	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT }, sa };	\
-	T_check_not_null(&T_check_instance, a);				\
+	T_check_not_null(&T_check_instance, (uintptr_t)a);		\
 }
-#pragma GCC diagnostic pop
 
 void T_check_eq_mem(const T_check_context_msg *, const void *, const void *,
     size_t);
