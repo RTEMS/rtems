@@ -79,6 +79,11 @@ typedef struct {
   rtems_id queue_id;
 
   /**
+   * @brief This member provides a message to send.
+   */
+  long message;
+
+  /**
    * @brief This member provides a worker identifier.
    */
   rtems_id worker_id;
@@ -152,7 +157,6 @@ static void Worker( rtems_task_argument arg )
     rtems_event_set   events;
     rtems_status_code sc;
     T_ticks           ticks;
-    uint64_t          message;
 
     sc = rtems_event_receive(
       RTEMS_ALL_EVENTS,
@@ -168,11 +172,10 @@ static void Worker( rtems_task_argument arg )
     }
 
     if ( ( events & EVENT_SEND ) != 0 ) {
-      message = 0;
       sc = rtems_message_queue_send(
         ctx->queue_id,
-        &message,
-        sizeof( message )
+        &ctx->message,
+        sizeof( ctx->message )
       );
       ticks = T_tick();
       T_quiet_rsc_success( sc );
@@ -183,6 +186,7 @@ static void Worker( rtems_task_argument arg )
     }
 
     if ( ( events & EVENT_RECEIVE ) != 0 ) {
+      long   message;
       size_t size;
 
       sc = rtems_message_queue_receive(
@@ -508,12 +512,10 @@ static bool RtemsMessageReqPerfReceiveWaitTimed_Teardown_Wrap(
  */
 static void RtemsMessageReqPerfSend_Body( RtemsMessageValPerf_Context *ctx )
 {
-  uint64_t message;
-
   ctx->status = rtems_message_queue_send(
     ctx->queue_id,
-    &message,
-    sizeof( message )
+    &ctx->message,
+    sizeof( ctx->message )
   );
 }
 
@@ -589,12 +591,10 @@ static void RtemsMessageReqPerfSendOther_Body(
   RtemsMessageValPerf_Context *ctx
 )
 {
-  uint64_t message;
-
   ctx->status = rtems_message_queue_send(
     ctx->queue_id,
-    &message,
-    sizeof( message )
+    &ctx->message,
+    sizeof( ctx->message )
   );
 }
 
@@ -676,13 +676,11 @@ static void RtemsMessageReqPerfSendOtherCpu_Body(
   RtemsMessageValPerf_Context *ctx
 )
 {
-  uint64_t message;
-
   ctx->begin = T_tick();
   ctx->status = rtems_message_queue_send(
     ctx->queue_id,
-    &message,
-    sizeof( message )
+    &ctx->message,
+    sizeof( ctx->message )
   );
 }
 
@@ -770,13 +768,11 @@ static void RtemsMessageReqPerfSendPreempt_Body(
   RtemsMessageValPerf_Context *ctx
 )
 {
-  uint64_t message;
-
   ctx->begin = T_tick();
   ctx->status = rtems_message_queue_send(
     ctx->queue_id,
-    &message,
-    sizeof( message )
+    &ctx->message,
+    sizeof( ctx->message )
   );
 }
 
