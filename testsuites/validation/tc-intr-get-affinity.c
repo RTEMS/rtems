@@ -244,6 +244,9 @@ static void CheckGetAffinity(
   rtems_status_code sc;
   cpu_set_t         set[ 2 ];
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+
   if ( attr->can_get_affinity ) {
     CPU_ZERO_S( sizeof( ctx->cpuset_obj ), ctx->cpuset_obj );
   } else {
@@ -265,6 +268,8 @@ static void CheckGetAffinity(
     T_rsc( sc, RTEMS_UNSATISFIED );
     T_true( CPU_EQUAL_S( sizeof( set ), ctx->cpuset_obj, set ) );
   }
+
+#pragma GCC diagnostic pop
 }
 
 static void RtemsIntrReqGetAffinity_Pre_Vector_Prepare(
@@ -565,6 +570,9 @@ static void RtemsIntrReqGetAffinity_Action(
       ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
     }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+
     CPU_FILL_S( sizeof( ctx->cpuset_obj ), ctx->cpuset_obj );
 
     ctx->status = rtems_interrupt_get_affinity(
@@ -583,6 +591,8 @@ static void RtemsIntrReqGetAffinity_Action(
     }
 
     T_true( CPU_EQUAL_S( sizeof( set ), ctx->cpuset_obj, set ) );
+
+#pragma GCC diagnostic pop
   }
 }
 
