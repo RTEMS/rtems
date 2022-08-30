@@ -225,12 +225,10 @@ test-body:
   brief: |
     Send a message.
   code: |
-    uint64_t message;
-
     ctx->status = rtems_message_queue_send(
       ctx->queue_id,
-      &message,
-      sizeof( message )
+      &ctx->message,
+      sizeof( ctx->message )
     );
   description: null
 test-cleanup: null

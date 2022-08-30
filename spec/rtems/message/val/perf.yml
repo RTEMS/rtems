@@ -18,6 +18,11 @@ test-context:
   member: |
     rtems_id queue_id
 - brief: |
+    This member provides a message to send.
+  description: null
+  member: |
+    long message
+- brief: |
     This member provides a worker identifier.
   description: null
   member: |
@@ -90,7 +95,6 @@ test-support: |
       rtems_event_set   events;
       rtems_status_code sc;
       T_ticks           ticks;
-      uint64_t          message;
 
       sc = rtems_event_receive(
         RTEMS_ALL_EVENTS,
@@ -106,11 +110,10 @@ test-support: |
       }
 
       if ( ( events & EVENT_SEND ) != 0 ) {
-        message = 0;
         sc = rtems_message_queue_send(
           ctx->queue_id,
-          &message,
-          sizeof( message )
+          &ctx->message,
+          sizeof( ctx->message )
         );
         ticks = T_tick();
         T_quiet_rsc_success( sc );
@@ -121,6 +124,7 @@ test-support: |
       }
 
       if ( ( events & EVENT_RECEIVE ) != 0 ) {
+        long   message;
         size_t size;
 
         sc = rtems_message_queue_receive(
