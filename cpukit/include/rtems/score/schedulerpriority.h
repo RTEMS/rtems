@@ -94,7 +94,7 @@ typedef struct {
   /**
    * @brief One ready queue per priority level.
    */
-  Chain_Control Ready[ 1 ];
+  Chain_Control Ready[ RTEMS_ZERO_LENGTH_ARRAY ];
 } Scheduler_priority_Context;
 
 /**

@@ -234,7 +234,17 @@ extern "C" {
 #endif
 
 #ifdef CONFIGURE_SCHEDULER
+  /*
+   * Ignore these warnings:
+   *
+   * - invalid use of structure with flexible array member
+   *
+   * - struct has no members
+   */
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wpedantic"
   CONFIGURE_SCHEDULER;
+  #pragma GCC diagnostic pop
 #endif
 
 const Scheduler_Control _Scheduler_Table[] = {
