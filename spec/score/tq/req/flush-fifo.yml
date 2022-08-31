@@ -18,76 +18,149 @@ post-conditions:
   - name: Nop
     test-code: |
       /* Event receive */
+      i = 0;
       T_eq_ptr( GetUnblock( ctx, &i )->thread, GetTCB( ctx, TQ_BLOCKER_A ) );
       T_eq_ptr( GetUnblock( ctx, &i ), &T_scheduler_event_null );
     text: |
-      No operation shall be performed.
-  - name: TryExtract
+      No thread queue extraction operation shall be performed.
+  - name: ExtractAll
     test-code: |
-      event = GetUnblock( ctx, &i );
-      T_eq_ptr( event->executing, NULL );
-      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_B ) );
-
-      event = GetUnblock( ctx, &i );
-      T_eq_ptr( event->executing, NULL );
-      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_C ) );
-
-      event = GetUnblock( ctx, &i );
-      T_eq_ptr( event->executing, GetTCB( ctx, TQ_BLOCKER_D ) );
-      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_D ) );
-
-      T_eq_ptr( GetUnblock( ctx, &i ), &T_scheduler_event_null );
+      extracted_threads = CheckExtractions( ctx );
+      T_eq_sz( extracted_threads, ctx->tq_ctx->how_many );
     text: |
-      The enqueued threads of the thread queue may be extracted in
+      The enqueued threads shall be extracted from the thread queue in
       ${/glossary/fifo:/term} order.
-  test-epilogue: |
+  - name: ExtractPartial
+    test-code: |
+      extracted_threads = CheckExtractions( ctx );
+      T_lt_sz( extracted_threads, ctx->tq_ctx->how_many );
+    text: |
+      The enqueued threads which precede in ${/glossary/fifo:/term} order the
+      enqueued thread for which the flush filter returned ${/c/if/null:/name}
+      shall be extracted from the thread queue in ${/glossary/fifo:/term}
+      order.
+  test-epilogue: null
   test-prologue: |
-    size_t                   i;
-    const T_scheduler_event *event;
-
-    i = 0;
+    size_t   i;
+    uint32_t extracted_threads;
 pre-conditions:
-- name: Queue
+- name: MayStop
   states:
-  - name: Empty
+  - name: 'Yes'
+    test-code: |
+      if ( !ctx->may_stop ) {
+        ${.:skip}
+      }
+    text: |
+      Where the flush filter may return ${/c/if/null:/name}.
+  - name: 'No'
+    test-code: |
+      if ( ctx->may_stop ) {
+        ${.:skip}
+      }
+    text: |
+      Where the flush filter does not return ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: QueueEmpty
+  states:
+  - name: 'Yes'
     test-code: |
       ctx->tq_ctx->how_many = 0;
     text: |
       While the thread queue is empty.
-  - name: NonEmpty
+  - name: 'No'
     test-code: |
       ctx->tq_ctx->how_many = 3;
     text: |
       While the thread queue has at least one enqueued thread.
   test-epilogue: null
   test-prologue: null
+- name: Stop
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->stop = true;
+    text: |
+      While the flush filter returns ${/c/if/null:/name} for an enqueued
+      thread.
+  - name: 'No'
+    test-code: |
+      ctx->stop = false;
+    text: |
+      While the flush filter does not return ${/c/if/null:/name} for an
+      enqueued thread.
+  test-epilogue: null
+  test-prologue: null
+- name: WaitState
+  states:
+  - name: Blocked
+    test-code: |
+      ctx->intend_to_block = false;
+    text: |
+      While the least recently enqueued thread on the thread queue is in the
+      blocked wait state.
+  - name: IntendToBlock
+    test-code: |
+      ctx->intend_to_block = true;
+    text: |
+      While the least recently enqueued thread on the thread queue is in the
+      intend to block wait state.
+  test-epilogue: null
+  test-prologue: null
 rationale: null
 references: []
 requirement-type: functional
-skip-reasons: {}
+skip-reasons:
+  NoStop: |
+    The flush filter does not return ${/c/null:/name}.
 test-action: |
+  uint32_t flush_count;
+
   TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_PREPARE );
 
   if ( ctx->tq_ctx->how_many > 0 ) {
     TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_ENQUEUE );
     TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_ENQUEUE );
-    T_scheduler_set_event_handler( SchedulerEvent, ctx );
+
+    if ( ctx->intend_to_block ) {
+      T_scheduler_set_event_handler( SchedulerEvent, ctx );
+    }
+
     TQSend( ctx->tq_ctx, TQ_BLOCKER_D, TQ_EVENT_ENQUEUE );
+
+    if ( !ctx->intend_to_block ) {
+      BlockerAFlush( ctx );
+    }
   } else {
-    TQSchedulerRecordStart( ctx->tq_ctx );
-    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_FLUSH_ALL );
+    BlockerAFlush( ctx );
   }
 
+  flush_count = ctx->tq_ctx->flush_count;
   TQSchedulerRecordStop( ctx->tq_ctx );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_FLUSH_ALL );
   TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_DONE );
+  ctx->tq_ctx->flush_count = flush_count;
 test-brief: null
 test-cleanup: null
 test-context:
 - brief: |
+    If this member is true, then the flush filter shall return
+    ${/c/if/null:/name}.
+  description: null
+  member: |
+    bool stop
+- brief: |
+    If this member is true, then the least recently enqueued thread shall be in
+    the intend to block wait state.
+  description: null
+  member: |
+    bool intend_to_block
+- brief: |
     This member contains the call within ISR request.
   description: null
   member: |
-    CallWithinISRRequest request;
+    CallWithinISRRequest request
 test-context-support: null
 test-description: null
 test-header:
@@ -102,6 +175,11 @@ test-header:
     dir: inout
     name: tq_ctx
     specifier: TQContext *${.:name}
+  - description: |
+      is true, if a partial flush is supported.
+    dir: null
+    name: may_stop
+    specifier: bool ${.:name}
   target: testsuites/validation/tr-tq-flush-fifo.h
 test-includes: []
 test-local-includes:
@@ -111,6 +189,7 @@ test-prepare: null
 test-setup:
   brief: null
   code: |
+    ctx->request.arg = ctx;
     TQReset( ctx->tq_ctx );
     TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_ULTRA_HIGH );
     TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_VERY_HIGH );
@@ -131,13 +210,24 @@ test-support: |
     return ctx->tq_ctx->worker_tcb[ worker ];
   }
 
-  static void Flush( void *arg )
+  static void BlockerAFlush( Context *ctx )
+  {
+    TQSchedulerRecordStart( ctx->tq_ctx );
+
+    if ( ctx->stop ) {
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_FLUSH_PARTIAL );
+    } else {
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_FLUSH_ALL );
+    }
+  }
+
+  static void InterruptFlush( void *arg )
   {
     Context *ctx;
 
     ctx = arg;
     TQSchedulerRecordStart( ctx->tq_ctx );
-    TQFlush( ctx->tq_ctx, true );
+    TQFlush( ctx->tq_ctx, !ctx->stop );
   }
 
   static void SchedulerEvent(
@@ -154,11 +244,69 @@ test-support: |
       when == T_SCHEDULER_BEFORE &&
       event->operation == T_SCHEDULER_BLOCK
     ) {
-      ctx->request.handler = Flush;
-      ctx->request.arg = ctx;
-      CallWithinISRSubmit( &ctx->request );
       T_scheduler_set_event_handler( NULL, NULL );
+      ctx->request.handler = InterruptFlush;
+      CallWithinISRSubmit( &ctx->request );
     }
+  }
+
+  static uint32_t CheckExtractions( Context *ctx )
+  {
+    uint32_t                 extracted_threads;
+    size_t                   i;
+    const T_scheduler_event *event;
+
+    extracted_threads = 0;
+    i = 0;
+
+    if ( !ctx->intend_to_block ) {
+      /* Event receive */
+      T_eq_ptr( GetUnblock( ctx, &i )->thread, GetTCB( ctx, TQ_BLOCKER_A ) );
+    }
+
+    event = GetUnblock( ctx, &i );
+
+    if ( event != &T_scheduler_event_null ) {
+      if ( ctx->intend_to_block ) {
+        T_eq_ptr( event->executing, NULL );
+      } else {
+        T_eq_ptr( event->executing, GetTCB( ctx, TQ_BLOCKER_A ) );
+      }
+
+      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_B ) );
+      ++extracted_threads;
+    }
+
+    event = GetUnblock( ctx, &i );
+
+    if ( event != &T_scheduler_event_null ) {
+      if ( ctx->intend_to_block ) {
+        T_eq_ptr( event->executing, NULL );
+      } else {
+        T_eq_ptr( event->executing, GetTCB( ctx, TQ_BLOCKER_A ) );
+      }
+
+      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_C ) );
+      ++extracted_threads;
+    }
+
+    event = GetUnblock( ctx, &i );
+
+    if ( event != &T_scheduler_event_null ) {
+      if ( ctx->intend_to_block ) {
+        T_eq_ptr( event->executing, GetTCB( ctx, TQ_BLOCKER_D ) );
+      } else {
+        T_eq_ptr( event->executing, GetTCB( ctx, TQ_BLOCKER_A ) );
+      }
+
+      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_D ) );
+      ++extracted_threads;
+    }
+
+    T_eq_ptr( GetUnblock( ctx, &i ), &T_scheduler_event_null );
+    T_eq_u32( extracted_threads, ctx->tq_ctx->flush_count );
+
+    return extracted_threads;
   }
 test-target: testsuites/validation/tr-tq-flush-fifo.c
 test-teardown:
@@ -173,12 +321,40 @@ transition-map:
   post-conditions:
     Operation: Nop
   pre-conditions:
-    Queue:
-    - Empty
+    MayStop: all
+    QueueEmpty:
+    - 'Yes'
+    Stop: N/A
+    WaitState: N/A
 - enabled-by: true
   post-conditions:
-    Operation: TryExtract
+    Operation: ExtractAll
   pre-conditions:
-    Queue:
-    - NonEmpty
+    MayStop: all
+    QueueEmpty:
+    - 'No'
+    Stop:
+    - 'No'
+    WaitState: all
+- enabled-by: true
+  post-conditions:
+    Operation: ExtractPartial
+  pre-conditions:
+    MayStop:
+    - 'Yes'
+    QueueEmpty:
+    - 'No'
+    Stop:
+    - 'Yes'
+    WaitState: all
+- enabled-by: true
+  post-conditions: NoStop
+  pre-conditions:
+    MayStop:
+    - 'No'
+    QueueEmpty:
+    - 'No'
+    Stop:
+    - 'Yes'
+    WaitState: all
 type: requirement

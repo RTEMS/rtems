@@ -31,7 +31,7 @@ post-conditions:
       ${../../status/if/not-defined:/name}.
   - name: FlushFIFO
     test-code: |
-      ${/score/tq/req/flush-fifo:/test-run}( &ctx->tq_ctx );
+      ${/score/tq/req/flush-fifo:/test-run}( &ctx->tq_ctx, false );
     text: |
       The calling task shall flush the semaphore as specified by
       ${/score/tq/req/flush-fifo}.

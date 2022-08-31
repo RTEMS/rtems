@@ -8,12 +8,8 @@ links:
   uid: ../if/futex-wake
 - role: function-implementation
   uid: /score/tq/req/flush-fifo
-- role: function-implementation
-  uid: /score/tq/req/flush-filter-stop
 - role: requirement-refinement
   uid: futex
-- role: validation
-  uid: /score/tq/req/flush-filter-stop
 post-conditions:
 - name: Result
   states:
@@ -32,43 +28,28 @@ post-conditions:
       /* This state is checked by Enqueue() */
     text: |
       No thread shall be extracted from the thread queue of the futex object.
-  - name: Partial
+  - name: 'Yes'
     test-code: |
-      /* This state is checked by Flush() */
+      ${/score/tq/req/flush-fifo:/test-run}( &ctx->tq_ctx, true );
     text: |
       The first count threads specified by the ``count`` parameter shall be
       extracted from the thread queue of the futex object in
       ${/glossary/fifo:/term} order.
-  - name: All
-    test-code: |
-      ${/score/tq/req/flush-fifo:/test-run}( &ctx->tq_ctx );
-    text: |
-      All threads shall be extracted from the thread queue of the futex object
-      in ${/glossary/fifo:/term} order.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
 - name: Count
   states:
-  - name: Negative
+  - name: NegativeOrZero
     test-code: |
       /* This state is prepared by Enqueue() */
     text: |
-      While the ``count`` parameter is less than zero.
-  - name: Partial
+      While the ``count`` parameter is less or equal to than zero.
+  - name: Positive
     test-code: |
       /* This state is prepared by Flush() */
     text: |
-      While the ``count`` parameter is greater than or equal to zero,
-      while the ``count`` parameter is less than the count of threads enqueued
-      on the thread queue of the futex object.
-  - name: All
-    test-code: |
-      /* This state is prepared by Flush() */
-    text: |
-      While the ``count`` parameter is greater than or equal to zero,
-      while the ``count`` parameter is greater than or equal to the count of
-      threads enqueued on the thread queue of the futex object.
+      While the ``count`` parameter is greater than zero.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -155,20 +136,18 @@ test-support: |
   {
     Context *ctx;
     int      count;
-    int      how_many;
 
-    (void) all;
+    (void) thread_count;
 
     ctx = ToContext( tq_ctx );
-    how_many = (int) ctx->tq_ctx.how_many;
 
-    count = _Futex_Wake( &ctx->futex, 1 );
-    T_eq_int( count, how_many > 0 ? 1 : 0 );
+    if ( all ) {
+      count = _Futex_Wake( &ctx->futex, INT_MAX );
+    } else {
+      count = _Futex_Wake( &ctx->futex, 1 );
+    }
 
-    count = _Futex_Wake( &ctx->futex, INT_MAX );
-    T_eq_int( count, how_many > 1 ? how_many - 1 : 0 );
-
-    return thread_count;
+    return (uint32_t) count;
   }
 test-target: testsuites/validation/tc-futex-wake.c
 test-teardown:
@@ -184,14 +163,12 @@ transition-map:
     Flush: 'No'
   pre-conditions:
     Count:
-    - Negative
+    - NegativeOrZero
 - enabled-by: true
   post-conditions:
     Result: Count
-    Flush:
-    - specified-by: Count
+    Flush: 'Yes'
   pre-conditions:
     Count:
-    - Partial
-    - All
+    - Positive
 type: requirement
