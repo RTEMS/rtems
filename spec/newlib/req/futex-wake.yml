@@ -151,11 +151,13 @@ test-support: |
     return STATUS_BUILD( 0, eno );
   }
 
-  static void Flush( TQContext *tq_ctx )
+  static uint32_t Flush( TQContext *tq_ctx, uint32_t thread_count, bool all )
   {
     Context *ctx;
     int      count;
     int      how_many;
+
+    (void) all;
 
     ctx = ToContext( tq_ctx );
     how_many = (int) ctx->tq_ctx.how_many;
@@ -165,6 +167,8 @@ test-support: |
 
     count = _Futex_Wake( &ctx->futex, INT_MAX );
     T_eq_int( count, how_many > 1 ? how_many - 1 : 0 );
+
+    return thread_count;
   }
 test-target: testsuites/validation/tc-futex-wake.c
 test-teardown:

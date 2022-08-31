@@ -75,7 +75,7 @@ test-action: |
     TQSend( ctx->tq_ctx, TQ_BLOCKER_D, TQ_EVENT_ENQUEUE );
   } else {
     TQSchedulerRecordStart( ctx->tq_ctx );
-    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_FLUSH );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_FLUSH_ALL );
   }
 
   TQSchedulerRecordStop( ctx->tq_ctx );
@@ -137,7 +137,7 @@ test-support: |
 
     ctx = arg;
     TQSchedulerRecordStart( ctx->tq_ctx );
-    TQFlush( ctx->tq_ctx );
+    TQFlush( ctx->tq_ctx, true );
   }
 
   static void SchedulerEvent(
