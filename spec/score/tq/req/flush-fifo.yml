@@ -113,7 +113,7 @@ references: []
 requirement-type: functional
 skip-reasons:
   NoStop: |
-    The flush filter does not return ${/c/null:/name}.
+    The flush filter does not return ${/c/if/null:/name}.
 test-action: |
   uint32_t flush_count;
 
