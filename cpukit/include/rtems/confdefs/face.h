@@ -51,9 +51,10 @@
 
 #ifdef CONFIGURE_INIT
 
-#include <rtems/posix/timer.h>
-
 #ifdef CONFIGURE_POSIX_TIMERS_FACE_BEHAVIOR
+
+  #include <rtems/posix/timer.h>
+
   int _POSIX_Timer_Is_allowed(
     clockid_t clock_id
   )
