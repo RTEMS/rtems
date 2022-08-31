@@ -64,14 +64,33 @@ extern "C" {
  */
 
 typedef enum {
-  ScoreTqReqFlushFifo_Pre_Queue_Empty,
-  ScoreTqReqFlushFifo_Pre_Queue_NonEmpty,
-  ScoreTqReqFlushFifo_Pre_Queue_NA
-} ScoreTqReqFlushFifo_Pre_Queue;
+  ScoreTqReqFlushFifo_Pre_MayStop_Yes,
+  ScoreTqReqFlushFifo_Pre_MayStop_No,
+  ScoreTqReqFlushFifo_Pre_MayStop_NA
+} ScoreTqReqFlushFifo_Pre_MayStop;
+
+typedef enum {
+  ScoreTqReqFlushFifo_Pre_QueueEmpty_Yes,
+  ScoreTqReqFlushFifo_Pre_QueueEmpty_No,
+  ScoreTqReqFlushFifo_Pre_QueueEmpty_NA
+} ScoreTqReqFlushFifo_Pre_QueueEmpty;
+
+typedef enum {
+  ScoreTqReqFlushFifo_Pre_Stop_Yes,
+  ScoreTqReqFlushFifo_Pre_Stop_No,
+  ScoreTqReqFlushFifo_Pre_Stop_NA
+} ScoreTqReqFlushFifo_Pre_Stop;
+
+typedef enum {
+  ScoreTqReqFlushFifo_Pre_WaitState_Blocked,
+  ScoreTqReqFlushFifo_Pre_WaitState_IntendToBlock,
+  ScoreTqReqFlushFifo_Pre_WaitState_NA
+} ScoreTqReqFlushFifo_Pre_WaitState;
 
 typedef enum {
   ScoreTqReqFlushFifo_Post_Operation_Nop,
-  ScoreTqReqFlushFifo_Post_Operation_TryExtract,
+  ScoreTqReqFlushFifo_Post_Operation_ExtractAll,
+  ScoreTqReqFlushFifo_Post_Operation_ExtractPartial,
   ScoreTqReqFlushFifo_Post_Operation_NA
 } ScoreTqReqFlushFifo_Post_Operation;
 
@@ -79,8 +98,10 @@ typedef enum {
  * @brief Runs the parameterized test case.
  *
  * @param[in,out] tq_ctx is the thread queue test context.
+ *
+ * @param may_stop is true, if a partial flush is supported.
  */
-void ScoreTqReqFlushFifo_Run( TQContext *tq_ctx );
+void ScoreTqReqFlushFifo_Run( TQContext *tq_ctx, bool may_stop );
 
 /** @} */
 

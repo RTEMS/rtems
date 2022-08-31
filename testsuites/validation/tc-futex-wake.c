@@ -70,9 +70,8 @@
  */
 
 typedef enum {
-  NewlibReqFutexWake_Pre_Count_Negative,
-  NewlibReqFutexWake_Pre_Count_Partial,
-  NewlibReqFutexWake_Pre_Count_All,
+  NewlibReqFutexWake_Pre_Count_NegativeOrZero,
+  NewlibReqFutexWake_Pre_Count_Positive,
   NewlibReqFutexWake_Pre_Count_NA
 } NewlibReqFutexWake_Pre_Count;
 
@@ -83,8 +82,7 @@ typedef enum {
 
 typedef enum {
   NewlibReqFutexWake_Post_Flush_No,
-  NewlibReqFutexWake_Post_Flush_Partial,
-  NewlibReqFutexWake_Post_Flush_All,
+  NewlibReqFutexWake_Post_Flush_Yes,
   NewlibReqFutexWake_Post_Flush_NA
 } NewlibReqFutexWake_Post_Flush;
 
@@ -147,9 +145,8 @@ static NewlibReqFutexWake_Context
   NewlibReqFutexWake_Instance;
 
 static const char * const NewlibReqFutexWake_PreDesc_Count[] = {
-  "Negative",
-  "Partial",
-  "All",
+  "NegativeOrZero",
+  "Positive",
   "NA"
 };
 
@@ -189,18 +186,18 @@ static uint32_t Flush( TQContext *tq_ctx, uint32_t thread_count, bool all )
 {
   Context *ctx;
   int      count;
-  int      how_many;
+
+  (void) thread_count;
 
   ctx = ToContext( tq_ctx );
-  how_many = (int) ctx->tq_ctx.how_many;
 
-  count = _Futex_Wake( &ctx->futex, 1 );
-  T_eq_int( count, how_many > 0 ? 1 : 0 );
+  if ( all ) {
+    count = _Futex_Wake( &ctx->futex, INT_MAX );
+  } else {
+    count = _Futex_Wake( &ctx->futex, 1 );
+  }
 
-  count = _Futex_Wake( &ctx->futex, INT_MAX );
-  T_eq_int( count, how_many > 1 ? how_many - 1 : 0 );
-
-  return thread_count;
+  return (uint32_t) count;
 }
 
 static void NewlibReqFutexWake_Pre_Count_Prepare(
@@ -209,29 +206,17 @@ static void NewlibReqFutexWake_Pre_Count_Prepare(
 )
 {
   switch ( state ) {
-    case NewlibReqFutexWake_Pre_Count_Negative: {
+    case NewlibReqFutexWake_Pre_Count_NegativeOrZero: {
       /*
-       * While the ``count`` parameter is less than zero.
+       * While the ``count`` parameter is less or equal to than zero.
        */
       /* This state is prepared by Enqueue() */
       break;
     }
 
-    case NewlibReqFutexWake_Pre_Count_Partial: {
+    case NewlibReqFutexWake_Pre_Count_Positive: {
       /*
-       * While the ``count`` parameter is greater than or equal to zero, while
-       * the ``count`` parameter is less than the count of threads enqueued on
-       * the thread queue of the futex object.
-       */
-      /* This state is prepared by Flush() */
-      break;
-    }
-
-    case NewlibReqFutexWake_Pre_Count_All: {
-      /*
-       * While the ``count`` parameter is greater than or equal to zero, while
-       * the ``count`` parameter is greater than or equal to the count of
-       * threads enqueued on the thread queue of the futex object.
+       * While the ``count`` parameter is greater than zero.
        */
       /* This state is prepared by Flush() */
       break;
@@ -277,21 +262,12 @@ static void NewlibReqFutexWake_Post_Flush_Check(
       break;
     }
 
-    case NewlibReqFutexWake_Post_Flush_Partial: {
+    case NewlibReqFutexWake_Post_Flush_Yes: {
       /*
        * The first count threads specified by the ``count`` parameter shall be
        * extracted from the thread queue of the futex object in FIFO order.
        */
-      /* This state is checked by Flush() */
-      break;
-    }
-
-    case NewlibReqFutexWake_Post_Flush_All: {
-      /*
-       * All threads shall be extracted from the thread queue of the futex
-       * object in FIFO order.
-       */
-      ScoreTqReqFlushFifo_Run( &ctx->tq_ctx );
+      ScoreTqReqFlushFifo_Run( &ctx->tq_ctx, true );
       break;
     }
 
@@ -357,14 +333,12 @@ NewlibReqFutexWake_Entries[] = {
   { 0, 0, NewlibReqFutexWake_Post_Result_Count,
     NewlibReqFutexWake_Post_Flush_No },
   { 0, 0, NewlibReqFutexWake_Post_Result_Count,
-    NewlibReqFutexWake_Post_Flush_Partial },
-  { 0, 0, NewlibReqFutexWake_Post_Result_Count,
-    NewlibReqFutexWake_Post_Flush_All }
+    NewlibReqFutexWake_Post_Flush_Yes }
 };
 
 static const uint8_t
 NewlibReqFutexWake_Map[] = {
-  0, 1, 2
+  0, 1
 };
 
 static size_t NewlibReqFutexWake_Scope( void *arg, char *buf, size_t n )
@@ -421,7 +395,7 @@ T_TEST_CASE_FIXTURE( NewlibReqFutexWake, &NewlibReqFutexWake_Fixture )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = NewlibReqFutexWake_Pre_Count_Negative;
+    ctx->Map.pcs[ 0 ] = NewlibReqFutexWake_Pre_Count_NegativeOrZero;
     ctx->Map.pcs[ 0 ] < NewlibReqFutexWake_Pre_Count_NA;
     ++ctx->Map.pcs[ 0 ]
   ) {
