@@ -185,7 +185,7 @@ static Status_Control Enqueue( TQContext *tq_ctx, TQWait wait )
   return STATUS_BUILD( 0, eno );
 }
 
-static void Flush( TQContext *tq_ctx )
+static uint32_t Flush( TQContext *tq_ctx, uint32_t thread_count, bool all )
 {
   Context *ctx;
   int      count;
@@ -199,6 +199,8 @@ static void Flush( TQContext *tq_ctx )
 
   count = _Futex_Wake( &ctx->futex, INT_MAX );
   T_eq_int( count, how_many > 1 ? how_many - 1 : 0 );
+
+  return thread_count;
 }
 
 static void NewlibReqFutexWake_Pre_Count_Prepare(

@@ -228,12 +228,16 @@ static Status_Control Enqueue( TQContext *tq_ctx, TQWait wait )
   return STATUS_BUILD( STATUS_SUCCESSFUL, 0 );
 }
 
-static void Flush( TQContext *tq_ctx )
+static uint32_t Flush( TQContext *tq_ctx, uint32_t thread_count, bool all )
 {
   rtems_status_code sc;
 
+  (void) all;
+
   sc = rtems_semaphore_flush( tq_ctx->thread_queue_id );
   T_rsc_success( sc );
+
+  return thread_count;
 }
 
 static void RtemsSemReqFlush_Pre_Class_Prepare(

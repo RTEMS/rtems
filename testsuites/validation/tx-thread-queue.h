@@ -120,23 +120,24 @@ typedef enum {
   TQ_EVENT_MUTEX_B_OBTAIN = RTEMS_EVENT_10,
   TQ_EVENT_MUTEX_B_RELEASE = RTEMS_EVENT_11,
   TQ_EVENT_BUSY_WAIT = RTEMS_EVENT_12,
-  TQ_EVENT_FLUSH = RTEMS_EVENT_13,
-  TQ_EVENT_SCHEDULER_RECORD_START = RTEMS_EVENT_14,
-  TQ_EVENT_SCHEDULER_RECORD_STOP = RTEMS_EVENT_15,
-  TQ_EVENT_TIMEOUT = RTEMS_EVENT_16,
-  TQ_EVENT_MUTEX_NO_PROTOCOL_OBTAIN = RTEMS_EVENT_17,
-  TQ_EVENT_MUTEX_NO_PROTOCOL_RELEASE = RTEMS_EVENT_18,
-  TQ_EVENT_ENQUEUE_FATAL = RTEMS_EVENT_19,
-  TQ_EVENT_MUTEX_C_OBTAIN = RTEMS_EVENT_20,
-  TQ_EVENT_MUTEX_C_RELEASE = RTEMS_EVENT_21,
-  TQ_EVENT_MUTEX_FIFO_OBTAIN = RTEMS_EVENT_22,
-  TQ_EVENT_MUTEX_FIFO_RELEASE = RTEMS_EVENT_23,
-  TQ_EVENT_ENQUEUE_TIMED = RTEMS_EVENT_24,
-  TQ_EVENT_MUTEX_D_OBTAIN = RTEMS_EVENT_25,
-  TQ_EVENT_MUTEX_D_RELEASE = RTEMS_EVENT_26,
-  TQ_EVENT_PIN = RTEMS_EVENT_27,
-  TQ_EVENT_UNPIN = RTEMS_EVENT_28,
-  TQ_EVENT_COUNT = RTEMS_EVENT_29
+  TQ_EVENT_FLUSH_ALL = RTEMS_EVENT_13,
+  TQ_EVENT_FLUSH_PARTIAL = RTEMS_EVENT_14,
+  TQ_EVENT_SCHEDULER_RECORD_START = RTEMS_EVENT_15,
+  TQ_EVENT_SCHEDULER_RECORD_STOP = RTEMS_EVENT_16,
+  TQ_EVENT_TIMEOUT = RTEMS_EVENT_17,
+  TQ_EVENT_MUTEX_NO_PROTOCOL_OBTAIN = RTEMS_EVENT_18,
+  TQ_EVENT_MUTEX_NO_PROTOCOL_RELEASE = RTEMS_EVENT_19,
+  TQ_EVENT_ENQUEUE_FATAL = RTEMS_EVENT_20,
+  TQ_EVENT_MUTEX_C_OBTAIN = RTEMS_EVENT_21,
+  TQ_EVENT_MUTEX_C_RELEASE = RTEMS_EVENT_22,
+  TQ_EVENT_MUTEX_FIFO_OBTAIN = RTEMS_EVENT_23,
+  TQ_EVENT_MUTEX_FIFO_RELEASE = RTEMS_EVENT_24,
+  TQ_EVENT_ENQUEUE_TIMED = RTEMS_EVENT_25,
+  TQ_EVENT_MUTEX_D_OBTAIN = RTEMS_EVENT_26,
+  TQ_EVENT_MUTEX_D_RELEASE = RTEMS_EVENT_27,
+  TQ_EVENT_PIN = RTEMS_EVENT_28,
+  TQ_EVENT_UNPIN = RTEMS_EVENT_29,
+  TQ_EVENT_COUNT = RTEMS_EVENT_30
 } TQEvent;
 
 typedef enum {
@@ -263,6 +264,12 @@ typedef struct TQContext {
   uint32_t how_many;
 
   /**
+   * @brief This this member contains the count of the least recently flushed
+   *   threads.
+   */
+  uint32_t flush_count;
+
+  /**
    * @brief This this member provides a context to jump back to before the
    *   enqueue.
    */
@@ -290,8 +297,13 @@ typedef struct TQContext {
 
   /**
    * @brief This member provides the thread queue flush handler.
+   *
+   * The second parameter specifies the count of enqueued threads.  While the
+   * third parameter is true, all enqueued threads shall be extracted,
+   * otherwise the thread queue shall be partially flushed.  The handler shall
+   * return the count of flushed threads.
    */
-  void ( *flush )( struct TQContext * );
+  uint32_t ( *flush )( struct TQContext *, uint32_t, bool );
 
   /**
    * @brief This member provides the get owner handler.
@@ -390,7 +402,7 @@ void TQEnqueueDone( TQContext *ctx );
 
 Status_Control TQSurrender( TQContext *ctx );
 
-void TQFlush( TQContext *ctx );
+void TQFlush( TQContext *ctx, bool flush_all );
 
 rtems_tcb *TQGetOwner( TQContext *ctx );
 

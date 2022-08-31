@@ -147,7 +147,7 @@ static void Flush( void *arg )
 
   ctx = arg;
   TQSchedulerRecordStart( ctx->tq_ctx );
-  TQFlush( ctx->tq_ctx );
+  TQFlush( ctx->tq_ctx, true );
 }
 
 static void SchedulerEvent(
@@ -288,7 +288,7 @@ static void ScoreTqReqFlushFifo_Action( ScoreTqReqFlushFifo_Context *ctx )
     TQSend( ctx->tq_ctx, TQ_BLOCKER_D, TQ_EVENT_ENQUEUE );
   } else {
     TQSchedulerRecordStart( ctx->tq_ctx );
-    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_FLUSH );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_FLUSH_ALL );
   }
 
   TQSchedulerRecordStop( ctx->tq_ctx );

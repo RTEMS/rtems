@@ -333,8 +333,12 @@ static void Worker( rtems_task_argument arg, TQWorkerKind worker )
       _Thread_Dispatch_direct( cpu_self );
     }
 
-    if ( ( events & TQ_EVENT_FLUSH ) != 0 ) {
-      TQFlush( ctx );
+    if ( ( events & TQ_EVENT_FLUSH_ALL ) != 0 ) {
+      TQFlush( ctx, true );
+    }
+
+    if ( ( events & TQ_EVENT_FLUSH_PARTIAL ) != 0 ) {
+      TQFlush( ctx, false );
     }
 
     if ( ( events & TQ_EVENT_ENQUEUE_DONE ) != 0 ) {
@@ -647,9 +651,9 @@ Status_Control TQSurrender( TQContext *ctx )
   return ( *ctx->surrender )( ctx );
 }
 
-void TQFlush( TQContext *ctx )
+void TQFlush( TQContext *ctx, bool flush_all )
 {
-  ( *ctx->flush )( ctx );
+  ctx->flush_count = ( *ctx->flush )( ctx, ctx->how_many, flush_all );
 }
 
 rtems_tcb *TQGetOwner( TQContext *ctx )
