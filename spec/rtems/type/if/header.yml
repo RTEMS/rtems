@@ -24,6 +24,8 @@ links:
   uid: /score/mpci/if/header
 - role: interface-placement
   uid: /if/domain
+- role: interface-ingroup
+  uid: ../../req/group
 path: rtems/rtems/types.h
 prefix: cpukit/include
 type: interface

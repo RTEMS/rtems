@@ -10,6 +10,8 @@ interface-type: header-file
 links:
 - role: interface-placement
   uid: /if/domain
+- role: interface-ingroup
+  uid: ../../req/group
 path: rtems/rtems/status.h
 prefix: cpukit/include
 type: interface

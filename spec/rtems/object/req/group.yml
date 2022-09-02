@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+identifier: RTEMSImplClassicObject
+links:
+- role: requirement-refinement
+  uid: ../../req/group
+non-functional-type: design-group
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The software architecture shall have a component containing the object
+  support implementation.
+type: requirement

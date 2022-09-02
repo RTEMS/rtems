@@ -8,6 +8,8 @@ interface-type: header-file
 links:
 - role: interface-placement
   uid: /score/if/domain
+- role: interface-ingroup
+  uid: group
 path: rtems/malloc.h
 prefix: cpukit/include
 type: interface

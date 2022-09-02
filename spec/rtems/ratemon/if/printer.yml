@@ -9,4 +9,6 @@ links:
   uid: header
 - role: interface-target
   uid: ../../io/if/printer
+- role: interface-ingroup
+  uid: ../req/group
 type: interface
