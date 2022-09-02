@@ -7,6 +7,8 @@ interface-type: unspecified
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup
+  uid: group
 name: _Watchdog_Ticks_since_boot
 references: []
 type: interface

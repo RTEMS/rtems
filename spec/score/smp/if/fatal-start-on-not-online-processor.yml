@@ -7,6 +7,8 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: header-impl
+- role: interface-ingroup
+  uid: group
 name: SMP_FATAL_START_ON_NOT_ONLINE_PROCESSOR
 references: []
 type: interface

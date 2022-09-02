@@ -17,6 +17,8 @@ interface-type: function
 links:
 - role: interface-placement
   uid: /rtems/task/if/header
+- role: interface-ingroup
+  uid: group
 name: _RTEMS_Maximum_priority
 notes: null
 params: []

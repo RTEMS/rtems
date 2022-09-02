@@ -7,6 +7,8 @@ interface-type: unspecified
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup
+  uid: group
 name: MPCI_get_packet_entry
 references: []
 type: interface

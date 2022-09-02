@@ -7,6 +7,8 @@ interface-type: unspecified-function
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup
+  uid: group
 name: _SMP_Get_processor_maximum
 references: []
 type: interface

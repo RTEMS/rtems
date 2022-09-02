@@ -28,6 +28,8 @@ interface-type: function
 links:
 - role: interface-placement
   uid: /rtems/basedefs/if/header
+- role: interface-ingroup
+  uid: group
 name: RTEMS_DEQUALIFY_types_not_compatible
 notes: null
 params: []

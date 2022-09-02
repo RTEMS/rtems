@@ -7,6 +7,8 @@ interface-type: unspecified
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup
+  uid: group
 name: STATUS_MUTEX_CEILING_VIOLATED
 references: []
 type: interface

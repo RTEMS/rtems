@@ -7,6 +7,8 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup
+  uid: group
 name: CONTEXT_FP_SIZE
 references: []
 type: interface

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+identifier: RTEMSScoreISR
+links:
+- role: interface-ingroup
+  uid: ../../if/group
+non-functional-type: design-group
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The super core shall have a component containing the interrupt service
+  support.
+type: requirement

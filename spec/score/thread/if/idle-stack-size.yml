@@ -7,6 +7,8 @@ interface-type: unspecified
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup
+  uid: group
 name: _Thread_Idle_stack_size
 references: []
 type: interface

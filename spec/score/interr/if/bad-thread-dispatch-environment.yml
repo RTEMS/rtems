@@ -7,6 +7,8 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup
+  uid: group
 name: INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
 references:
 - identifier: internal_errors

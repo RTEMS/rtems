@@ -7,6 +7,8 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup
+  uid: group
 name: INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_STICKY_FROM_BAD_STATE
 references:
 - identifier: internal_errors

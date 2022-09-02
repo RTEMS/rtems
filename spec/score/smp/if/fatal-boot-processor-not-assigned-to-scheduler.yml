@@ -7,6 +7,8 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: header-impl
+- role: interface-ingroup
+  uid: group
 name: SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER
 references: []
 type: interface

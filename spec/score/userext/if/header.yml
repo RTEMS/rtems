@@ -10,6 +10,8 @@ interface-type: header-file
 links:
 - role: interface-placement
   uid: ../../if/domain
+- role: interface-ingroup
+  uid: group
 path: rtems/score/userextdata.h
 prefix: cpukit/include
 type: interface

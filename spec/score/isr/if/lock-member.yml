@@ -7,6 +7,8 @@ interface-type: unspecified
 links:
 - role: interface-placement
   uid: header-3
+- role: interface-ingroup
+  uid: group
 name: ISR_LOCK_MEMBER
 references: []
 type: interface

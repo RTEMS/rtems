@@ -18,6 +18,8 @@ interface-type: macro
 links:
 - role: interface-placement
   uid: /rtems/basedefs/if/header
+- role: interface-ingroup
+  uid: group
 name: _Assert_Unreachable
 notes: null
 params: []
