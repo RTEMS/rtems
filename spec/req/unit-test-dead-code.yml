@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: root
+non-functional-type: design
+rationale: |
+  In general, dead code should be avoided.  For justified exceptions it is
+  acceptable, for example to avoid hard to maintain deviations from the RTEMS
+  mainline code.  For these exceptions, unit tests may be used to achieve the
+  code and branch coverage goals.
+references: []
+requirement-type: non-functional
+text: |
+  Unit tests may be used to test code which is not testable through the
+  ${/glossary/api:/term}.
+type: requirement

@@ -2,7 +2,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-links: []
+links:
+- role: requirement-refinement
+  uid: /req/unit-test-dead-code
 test-actions:
 - action-brief: |
     Call get_config_max() indirectly through

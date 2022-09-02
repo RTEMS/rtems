@@ -3,7 +3,9 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2010 Gedare Bloom
 enabled-by: true
-links: []
+links:
+- role: requirement-refinement
+  uid: /req/unit-test-data-structures
 test-actions:
 - action-brief: |
     Call _RBTree_Initialize_one() and check the tree properties.

@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: root
+non-functional-type: design
+rationale: |
+  Implementations to support data structures such as red-black trees a
+  sufficiently complex to require unit tests.  Testing through the API is
+  impractical.
+references: []
+requirement-type: non-functional
+text: |
+  Unit tests may be used to test code which implements reusable data
+  structures.
+type: requirement
