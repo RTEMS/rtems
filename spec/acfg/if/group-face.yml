@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
+description: |
+  This section describes configuration options related to adapting
+  RTEMS behavior to be aligned with the FACE Technical Standard.
+  The FACE Technical Standard is a product of the FACE Consortium
+  which operates under the Open Group. The FACE Consortium was founded
+  by avionics organizations to improve the portability of cockpit software
+  across various platforms. It addresses technical and business concerns.
+
+  Most important from an RTEMS perspective, the FACE Technical Standard
+  defines four POSIX profiles: Security, Safety Base, Safety Extended, and
+  the General Purpose Profile. Each has an increasingly larger subset of
+  POSIX APIs. In the Security and Safety profiles, ARINC 653 is required.
+  It is optional in the General Purpose Profile.
+
+  The RTEMS Project has been tracking alignment with the FACE POSIX profiles
+  and they are included in the "RTEMS POSIX 1003.1 Compliance Guide."
+enabled-by: true
+index-entries: []
+interface-type: appl-config-group
+links:
+- role: interface-placement
+  uid: ../../if/domain
+- role: requirement-refinement
+  uid: ../../req/applconfig
+name: FACE Technical Standard Related Configuration
+text: ''
+type: interface
