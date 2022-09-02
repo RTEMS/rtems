@@ -19,6 +19,8 @@ interface-type: function
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup-hidden
+  uid: group
 - role: constraint
   uid: /constraint/directive-ctx-isr
 - role: constraint

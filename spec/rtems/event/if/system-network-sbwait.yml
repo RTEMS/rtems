@@ -15,6 +15,8 @@ interface-type: define
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup-hidden
+  uid: group
 name: RTEMS_EVENT_SYSTEM_NETWORK_SBWAIT
 notes: null
 type: interface
