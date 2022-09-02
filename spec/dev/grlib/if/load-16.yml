@@ -7,6 +7,8 @@ interface-type: unspecified-function
 links:
 - role: interface-placement
   uid: io-header
+- role: interface-ingroup
+  uid: group
 name: grlib_load_16
 references: []
 type: interface
