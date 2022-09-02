@@ -6,7 +6,7 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
 definition:
-  default: ${/score/if/maximum-priority:/name}()
+  default: ${maximum-priority-impl:/name}()
   variants: []
 description: null
 enabled-by: true

@@ -18,7 +18,7 @@ links:
 - role: interface-placement
   uid: /rtems/task/if/header
 - role: interface-ingroup
-  uid: group
+  uid: ../req/group
 name: _RTEMS_Maximum_priority
 notes: null
 params: []

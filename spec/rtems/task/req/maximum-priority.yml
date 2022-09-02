@@ -5,6 +5,8 @@ enabled-by: true
 links:
 - role: interface-function
   uid: ../if/maximum-priority
+- role: interface-function
+  uid: ../if/maximum-priority-impl
 functional-type: function
 rationale: null
 references: []
