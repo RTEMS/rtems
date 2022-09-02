@@ -18,6 +18,16 @@ interface-type: function
 links:
 - role: interface-placement
   uid: header
+- role: interface-ingroup-hidden
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
 name: rtems_clock_tick
 notes: |
   The directive is a legacy interface.  It should not be called by applications

@@ -22,6 +22,8 @@ links:
 - role: interface-ingroup-hidden
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-isr
 - role: constraint
   uid: /constraint/directive-ctx-devinit
