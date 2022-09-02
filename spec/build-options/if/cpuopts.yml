@@ -8,6 +8,8 @@ interface-type: header-file
 links:
 - role: interface-placement
   uid: domain
+- role: interface-ingroup
+  uid: group
 path: rtems/score/cpuopts.h
 prefix: ''
 type: interface

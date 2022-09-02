@@ -3,10 +3,10 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified
+interface-type: unspecified-define
 links:
-- role: interface-placement
-  uid: container
+- role: interface-ingroup
+  uid: group
 name: __RTEMS_ADA__
 references: []
 type: interface

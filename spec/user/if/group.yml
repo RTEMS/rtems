@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+identifier: Compiler
+links:
+- role: requirement-refinement
+  uid: /req/external-interface
+non-functional-type: design-group
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The used user-provided interfaces shall be specified.
+type: requirement

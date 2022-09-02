@@ -5,8 +5,8 @@ enabled-by: true
 index-entries: []
 interface-type: unspecified
 links:
-- role: interface-placement
-  uid: container
+- role: interface-ingroup
+  uid: group
 name: __builtin_types_compatible_p
 references: []
 type: interface
