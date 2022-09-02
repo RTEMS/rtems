@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassic
+ *
  * @brief This header file provides types used by the Classic API.
  */
 

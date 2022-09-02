@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassic
+ *
  * @brief This header file defines the Multiprocessing Manager API.
  */
 

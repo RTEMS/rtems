@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicCache
+ *
  * @brief This header file defines the Cache Manager API.
  */
 

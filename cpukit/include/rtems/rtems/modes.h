@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicModes
+ *
  * @brief This header file provides the task modes API of the Task Manager.
  */
 

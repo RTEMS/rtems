@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicDPMem
+ *
  * @brief This header file defines the Dual-Ported Memory Manager API.
  */
 

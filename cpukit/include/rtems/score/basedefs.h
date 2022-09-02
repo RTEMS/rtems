@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScore
+ *
  * @brief This header file provides basic definitions used by the API and the
  *   implementation.
  */
@@ -426,6 +428,8 @@ extern "C" {
 /* Generated from spec:/score/if/assert-unreachable */
 
 /**
+ * @ingroup RTEMSScore
+ *
  * @brief Asserts that this program point is unreachable.
  */
 #if defined(RTEMS_DEBUG)
@@ -438,6 +442,8 @@ extern "C" {
   /* Generated from spec:/score/if/dequalify-types-not-compatible */
 
   /**
+   * @ingroup RTEMSScore
+   *
    * @brief A not implemented function to trigger compile time errors with an
    *   error message.
    */

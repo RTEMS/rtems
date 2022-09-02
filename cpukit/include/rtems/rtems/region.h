@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicRegion
+ *
  * @brief This header file defines the Region Manager API.
  */
 

@@ -283,6 +283,25 @@ typedef struct {
   rtems_task_argument argument;
 } rtems_initialization_tasks_table;
 
+/* Generated from spec:/rtems/task/if/maximum-priority-impl */
+
+/**
+ * @ingroup RTEMSImplClassicTask
+ *
+ * @brief Returns the maximum priority of the scheduler with index zero.
+ */
+rtems_task_priority _RTEMS_Maximum_priority( void );
+
+/* Generated from spec:/rtems/task/if/maximum-priority */
+
+/**
+ * @ingroup RTEMSAPIClassicTasks
+ *
+ * @brief This runtime constant represents the lowest (least important) task
+ *   priority of the scheduler with index zero.
+ */
+#define RTEMS_MAXIMUM_PRIORITY _RTEMS_Maximum_priority()
+
 /* Generated from spec:/rtems/task/if/minimum-priority */
 
 /**
@@ -400,23 +419,6 @@ typedef bool( *rtems_task_visitor )( rtems_tcb *, void * );
  *   yield the processor.
  */
 #define RTEMS_YIELD_PROCESSOR WATCHDOG_NO_TIMEOUT
-
-/* Generated from spec:/score/if/maximum-priority */
-
-/**
- * @brief Returns the maximum priority of the scheduler with index zero.
- */
-rtems_task_priority _RTEMS_Maximum_priority( void );
-
-/* Generated from spec:/rtems/task/if/maximum-priority */
-
-/**
- * @ingroup RTEMSAPIClassicTasks
- *
- * @brief This runtime constant represents the lowest (least important) task
- *   priority of the scheduler with index zero.
- */
-#define RTEMS_MAXIMUM_PRIORITY _RTEMS_Maximum_priority()
 
 /* Generated from spec:/rtems/task/if/create */
 

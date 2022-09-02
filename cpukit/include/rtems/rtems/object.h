@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicObject
+ *
  * @brief This header file provides the Object Services API.
  */
 

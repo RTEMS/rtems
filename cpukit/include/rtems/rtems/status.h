@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassic
+ *
  * @brief This header file provides the status codes of Classic API directives
  *   and support functions.
  */
