@@ -104,9 +104,15 @@ void *POSIX_Init(
   sc = fork();
   check_enosys( sc );
 
-  puts( "pthread_atfork -- ENOSYS" );
+  /*
+   * The behavior of pthread_atfork() in single process environments was
+   * undefined by POSIX but the fACE Technical Standard required returning
+   * 0. Before ticket #4713, this did return ENOSYS. Just leaving this test
+   * case here for convenience.
+   */
+  puts( "pthread_atfork -- 0" );
   sc = pthread_atfork( NULL, NULL, NULL );
-  check_enosys( sc );
+  rtems_test_assert( !sc );
 
   puts( "pthread_getcpuclockid -- ENOSYS" );
   sc = pthread_getcpuclockid( 0, NULL );

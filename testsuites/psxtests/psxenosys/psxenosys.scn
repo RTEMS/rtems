@@ -9,7 +9,7 @@ execv -- ENOSYS
 execve -- ENOSYS
 execvp -- ENOSYS
 fork -- ENOSYS
-pthread_atfork -- ENOSYS
+pthread_atfork -- 0
 pthread_getcpuclockid -- ENOSYS
 sched_setparam -- ENOSYS
 sched_getparam -- ENOSYS
