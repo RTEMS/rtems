@@ -11,6 +11,8 @@ interface-type: struct
 links:
 - role: interface-placement
   uid: header-4
+- role: interface-ingroup
+  uid: group-print-support-rtems
 name: rtems_printer
 notes: null
 type: interface
