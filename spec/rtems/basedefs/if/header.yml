@@ -25,6 +25,8 @@ links:
   uid: /c/if/stdint
 - role: interface-placement
   uid: /if/domain
+- role: interface-ingroup
+  uid: /score/if/group
 path: rtems/score/basedefs.h
 prefix: cpukit/include
 type: interface
