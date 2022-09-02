@@ -1135,6 +1135,18 @@ static inline bool rtems_clock_tick_before( rtems_interval ticks )
  * @par Notes
  * The directive is a legacy interface.  It should not be called by
  * applications directly.  A Clock Driver may call this directive.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ * @endparblock
  */
 rtems_status_code rtems_clock_tick( void );
 
