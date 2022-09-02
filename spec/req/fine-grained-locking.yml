@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
+enabled-by: RTEMS_SMP
 links:
 - role: requirement-refinement
   uid: root
