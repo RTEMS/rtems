@@ -7,6 +7,8 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: stdbool
+- role: interface-ingroup
+  uid: group
 name: 'true'
 references: []
 type: interface

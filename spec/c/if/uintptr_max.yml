@@ -7,6 +7,8 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: stdint
+- role: interface-ingroup
+  uid: group
 name: UINTPTR_MAX
 references:
 - identifier: https://en.cppreference.com/w/c/types/integer

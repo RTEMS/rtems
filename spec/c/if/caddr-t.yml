@@ -7,6 +7,8 @@ interface-type: unspecified-type
 links:
 - role: interface-placement
   uid: sys-types
+- role: interface-ingroup
+  uid: group
 name: caddr_t
 references: []
 type: interface

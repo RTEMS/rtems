@@ -7,6 +7,8 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: errno-header
+- role: interface-ingroup
+  uid: group
 name: ENOTSUP
 references: []
 type: interface

@@ -7,6 +7,8 @@ interface-type: unspecified-type
 links:
 - role: interface-placement
   uid: sys-cpuset
+- role: interface-ingroup
+  uid: group
 name: cpu_set_t
 references: []
 type: interface

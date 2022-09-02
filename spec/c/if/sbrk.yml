@@ -7,6 +7,8 @@ interface-type: unspecified-function
 links:
 - role: interface-placement
   uid: unistd
+- role: interface-ingroup
+  uid: group
 name: sbrk
 references: []
 type: interface

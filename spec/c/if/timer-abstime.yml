@@ -7,6 +7,8 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: time
+- role: interface-ingroup
+  uid: group
 name: TIMER_ABSTIME
 references:
 - identifier: https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html

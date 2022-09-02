@@ -12,6 +12,8 @@ interface-type: struct
 links:
 - role: interface-placement
   uid: time
+- role: interface-ingroup
+  uid: group
 name: bintime
 notes: null
 type: interface

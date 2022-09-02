@@ -7,6 +7,8 @@ interface-type: unspecified-type
 links:
 - role: interface-placement
   uid: stdarg
+- role: interface-ingroup
+  uid: group
 name: va_list
 references:
 - identifier: https://en.cppreference.com/w/c/variadic/va_list

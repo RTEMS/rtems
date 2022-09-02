@@ -7,6 +7,8 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: stddef
+- role: interface-ingroup
+  uid: group
 name: 'NULL'
 references:
 - identifier: https://en.cppreference.com/w/c/types/NULL

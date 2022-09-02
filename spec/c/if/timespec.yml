@@ -7,6 +7,8 @@ interface-type: unspecified-type
 links:
 - role: interface-placement
   uid: sys-impl-timespec
+- role: interface-ingroup
+  uid: group
 name: struct timespec
 references:
 - identifier: https://en.cppreference.com/w/c/chrono/timespec

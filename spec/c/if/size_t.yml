@@ -7,6 +7,8 @@ interface-type: unspecified-type
 links:
 - role: interface-placement
   uid: stddef
+- role: interface-ingroup
+  uid: group
 name: size_t
 references:
 - identifier: https://en.cppreference.com/w/c/types/size_t

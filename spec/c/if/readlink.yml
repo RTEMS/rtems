@@ -7,6 +7,8 @@ interface-type: unspecified-function
 links:
 - role: interface-placement
   uid: sys-stat
+- role: interface-ingroup
+  uid: group
 name: readlink
 references: []
 type: interface

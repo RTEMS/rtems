@@ -7,6 +7,8 @@ interface-type: unspecified
 links:
 - role: interface-placement
   uid: stddef
+- role: interface-ingroup
+  uid: group
 name: offsetof
 references: []
 type: interface

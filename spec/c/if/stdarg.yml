@@ -8,6 +8,8 @@ interface-type: header-file
 links:
 - role: interface-placement
   uid: domain
+- role: interface-ingroup
+  uid: group
 path: stdarg.h
 prefix: ''
 type: interface
