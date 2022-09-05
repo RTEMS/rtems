@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  not: ASM
+links:
+- role: requirement-refinement
+  uid: ../../if/group
+- role: interface-function
+  uid: ../if/dequalify-types-not-compatible
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where ${/compiler/if/gnuc:/name} is defined, calling
+  ${../if/dequalify-types-not-compatible:/name} shall result in a compiler
+  error.
+type: requirement

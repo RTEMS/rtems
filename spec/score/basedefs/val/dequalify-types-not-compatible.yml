@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  not: ASM
+links:
+- role: validation
+  uid: ../req/dequalify-types-not-compatible
+method: by-inspection
+references:
+- identifier: cpukit/include/rtems/score/basedefs.h
+  hash: hO8SO332I1esseBr2urALTDJl2Q7DkECceODU1hr18U=
+  type: file
+text: |
+  Inspection of the referenced ${/glossary/sourcecode:/term} file showed that
+  calling ${../if/dequalify-types-not-compatible:/name} where
+  ${/compiler/if/gnuc:/name} is defined, will result in a compiler error.
+type: validation

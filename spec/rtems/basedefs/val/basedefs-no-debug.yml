@@ -1,0 +1,58 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Expand and stringify ${../if/unreachable:/name}.
+  action-code: |
+    const char *s;
+
+    s = RTEMS_XSTRING( RTEMS_UNREACHABLE() );
+  checks:
+  - brief: |
+      Check that the string is equal to the expected statement.
+    code: |
+      T_step_true(
+        ${step},
+        IsEqualIgnoreWhiteSpace(
+          s,
+          "do{__builtin_unreachable();do{}while(0);}while(0)"
+        )
+      );
+    links:
+    - role: validation
+      uid: ../req/unreachable-gnuc
+  links: []
+- action-brief: |
+    Expand and stringify ${/score/basedefs/if/assert-unreachable:/name}.
+  action-code: |
+    const char *s;
+
+    s = RTEMS_XSTRING( _Assert_Unreachable() );
+  checks:
+  - brief: |
+      Check that the string is equal to the expected statement.
+    code: |
+      T_step_true( ${step}, IsEqualIgnoreWhiteSpace( s, "do{}while(0)" ) );
+    links:
+    - role: validation
+      uid: /score/basedefs/req/assert-unreachable
+  links: []
+test-brief: |
+  Tests the basedefs macros where RTEMS_DEBUG is disabled.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-basedefs-no-debug.c
+test-teardown: null
+type: test-case

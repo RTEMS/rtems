@@ -29,7 +29,7 @@ links:
 - role: interface-placement
   uid: /rtems/basedefs/if/header
 - role: interface-ingroup
-  uid: group
+  uid: ../../if/group
 name: RTEMS_DEQUALIFY_types_not_compatible
 notes: null
 params: []

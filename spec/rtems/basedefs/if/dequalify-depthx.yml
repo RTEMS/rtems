@@ -19,7 +19,7 @@ definition:
           ${typeof-refx:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
         ) || ${/compiler/if/builtin-types-compatible-p:/name}( ${.:/params[1]/name}, void * ),
       (${.:/params[1]/name}) ( ${.:/params[2]/name} ),
-      ${/score/if/dequalify-types-not-compatible:/name}() )
+      ${/score/basedefs/if/dequalify-types-not-compatible:/name}() )
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null

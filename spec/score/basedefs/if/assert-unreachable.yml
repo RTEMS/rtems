@@ -19,7 +19,7 @@ links:
 - role: interface-placement
   uid: /rtems/basedefs/if/header
 - role: interface-ingroup
-  uid: group
+  uid: ../../if/group
 name: _Assert_Unreachable
 notes: null
 params: []

@@ -5,12 +5,12 @@ copyrights:
 - Copyright (C) 2016 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: |
-    ${/score/if/assert-unreachable:/name}()
+    ${/score/basedefs/if/assert-unreachable:/name}()
   variants:
   - definition: |
       do {
         ${/compiler/if/builtin-unreachable:/name}();
-        ${/score/if/assert-unreachable:/name}();
+        ${/score/basedefs/if/assert-unreachable:/name}();
       } while ( 0 )
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})

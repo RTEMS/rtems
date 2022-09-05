@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: unreachable-0
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where ${/compiler/if/gnuc:/name} is defined, the ${../if/unreachable:/name}
+  macro shall expand to a statement which contains a call to
+  ${/compiler/if/builtin-unreachable:/name} followed by a call to
+  ${/score/basedefs/if/assert-unreachable:/name}.
+type: requirement
