@@ -16,12 +16,16 @@ test-code: |
 
   #define CONFIGURE_MAXIMUM_PROCESSORS 1
 
+  #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
+    RTEMS_SCHEDULER_TABLE_PRIORITY( a, TEST_SCHEDULER_A_NAME )
+
   #include "ts-default.h"
 test-description: |
   Two test suites of this configuration are provided to limit test run
   duration.
 test-includes: []
-test-local-includes: []
+test-local-includes:
+- ts-config.h
 test-suite-name: ValidationOneCpu1
 test-target: testsuites/validation/ts-validation-one-cpu-1.c
 type: test-suite

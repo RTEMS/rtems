@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  not: RTEMS_SMP
+links:
+- role: validation
+  uid: ../req/scheduler-edf-smp-no-smp
+method: by-inspection
+references:
+- identifier: cpukit/include/rtems/scheduler.h
+  hash: jS_Dp1UFQrh0kgBrYi56gmkqmkEWrDSGV-tRxHfLbo4=
+  type: file
+text: |
+  Inspection of the referenced ${/glossary/sourcecode:/term} file showed that
+  using ${../if/scheduler-edf-smp:/name} where ${/build-options/if/smp:/name}
+  is not defined will result in a C preprocessor error.
+type: validation

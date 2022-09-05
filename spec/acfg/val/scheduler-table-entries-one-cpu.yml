@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Check the effect of the application configuration option.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the ${/acfg/if/scheduler-table-entries:/name} application
+      configuration option resulted in the expected system setting using
+      ${/rtems/task/if/maximum-priority:/name}.
+    code: |
+      T_eq_u32( RTEMS_MAXIMUM_PRIORITY, 63 );
+    links:
+    - role: validation
+      uid: ../req/scheduler-table-entries
+  links: []
+test-brief: |
+  Tests the effect of ${/acfg/if/scheduler-table-entries:/name} the application
+  configuration options in a configuration with only one processor.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-acfg-scheduler-table-entries-one-cpu.c
+test-teardown: null
+type: test-case

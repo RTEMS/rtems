@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: RTEMS_SMP
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  not: RTEMS_SMP
 functional-type: function
 links:
 - role: interface-function
@@ -12,6 +13,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The application configuration option shall make the
-  ${/doc/if/scheduler-smp-edf:/name} algorithm available to the application.
+  Using the ${../if/scheduler-edf-smp:/name} application configuration option
+  in an application configuration shall result in a C preprocessor error.
 type: requirement
