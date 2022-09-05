@@ -11,6 +11,7 @@ includes: []
 ldflags: []
 links: []
 source:
+- testsuites/validation/tc-acfg-scheduler-table-entries-one-cpu.c
 - testsuites/validation/tc-task-construct.c
 - testsuites/validation/ts-validation-one-cpu-1.c
 stlib: []

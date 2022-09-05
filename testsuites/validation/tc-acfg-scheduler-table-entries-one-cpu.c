@@ -3,11 +3,11 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu1
+ * @ingroup RTEMSTestCaseAcfgValSchedulerTableEntriesOneCpu
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -52,34 +52,51 @@
 #include "config.h"
 #endif
 
-#include "ts-config.h"
+#include <rtems.h>
 
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationOneCpu1 \
- *   spec:/testsuites/validation-one-cpu-1
+ * @defgroup RTEMSTestCaseAcfgValSchedulerTableEntriesOneCpu \
+ *   spec:/acfg/val/scheduler-table-entries-one-cpu
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu1
  *
- * @brief This general purpose validation test suite provides enough resources
- *   to run basic tests with exactly one processor and without a Clock Driver.
+ * @brief Tests the effect of CONFIGURE_SCHEDULER_TABLE_ENTRIES the application
+ *   configuration options in a configuration with only one processor.
  *
- * Two test suites of this configuration are provided to limit test run
- * duration.
+ * This test case performs the following actions:
+ *
+ * - Check the effect of the application configuration option.
+ *
+ *   - Check that the CONFIGURE_SCHEDULER_TABLE_ENTRIES application
+ *     configuration option resulted in the expected system setting using
+ *     RTEMS_MAXIMUM_PRIORITY.
  *
  * @{
  */
 
-const char rtems_test_name[] = "ValidationOneCpu1";
+/**
+ * @brief Check the effect of the application configuration option.
+ */
+static void AcfgValSchedulerTableEntriesOneCpu_Action_0( void )
+{
+  /* Nothing to do */
 
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+  /*
+   * Check that the CONFIGURE_SCHEDULER_TABLE_ENTRIES application configuration
+   * option resulted in the expected system setting using
+   * RTEMS_MAXIMUM_PRIORITY.
+   */
+  T_eq_u32( RTEMS_MAXIMUM_PRIORITY, 63 );
+}
 
-#define CONFIGURE_MAXIMUM_PROCESSORS 1
-
-#define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-  RTEMS_SCHEDULER_TABLE_PRIORITY( a, TEST_SCHEDULER_A_NAME )
-
-#include "ts-default.h"
+/**
+ * @fn void T_case_body_AcfgValSchedulerTableEntriesOneCpu( void )
+ */
+T_TEST_CASE( AcfgValSchedulerTableEntriesOneCpu )
+{
+  AcfgValSchedulerTableEntriesOneCpu_Action_0();
+}
 
 /** @} */
