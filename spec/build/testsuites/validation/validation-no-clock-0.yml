@@ -9,7 +9,9 @@ enabled-by: true
 features: c cprogram
 includes: []
 ldflags: []
-links: []
+links:
+- role: build-dependency
+  uid: objnodebug
 source:
 - testsuites/validation/tc-acfg.c
 - testsuites/validation/tc-attr.c
