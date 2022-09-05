@@ -17,6 +17,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: group-face
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_POSIX_TIMERS_FACE_BEHAVIOR
 notes: null
 type: interface
