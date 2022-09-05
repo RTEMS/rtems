@@ -425,7 +425,7 @@ extern "C" {
  */
 #define RTEMS_XCONCAT( _x, _y ) RTEMS_CONCAT( _x, _y )
 
-/* Generated from spec:/score/if/assert-unreachable */
+/* Generated from spec:/score/basedefs/if/assert-unreachable */
 
 /**
  * @ingroup RTEMSScore
@@ -439,7 +439,7 @@ extern "C" {
 #endif
 
 #if !defined(ASM)
-  /* Generated from spec:/score/if/dequalify-types-not-compatible */
+  /* Generated from spec:/score/basedefs/if/dequalify-types-not-compatible */
 
   /**
    * @ingroup RTEMSScore
