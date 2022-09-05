@@ -132,6 +132,10 @@
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_EDF_SMP
+  #ifndef RTEMS_SMP
+    #error "CONFIGURE_SCHEDULER_EDF_SMP cannot be used if RTEMS_SMP is disabled"
+  #endif
+
   #include <rtems/score/scheduleredfsmp.h>
 
   #ifndef CONFIGURE_MAXIMUM_PROCESSORS
@@ -198,6 +202,10 @@
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
+  #ifndef RTEMS_SMP
+    #error "CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP cannot be used if RTEMS_SMP is disabled"
+  #endif
+
   #include <rtems/score/schedulerpriorityaffinitysmp.h>
 
   #define SCHEDULER_PRIORITY_AFFINITY_SMP_CONTEXT_NAME( name ) \
@@ -230,6 +238,10 @@
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_PRIORITY_SMP
+  #ifndef RTEMS_SMP
+    #error "CONFIGURE_SCHEDULER_PRIORITY_SMP cannot be used if RTEMS_SMP is disabled"
+  #endif
+
   #include <rtems/score/schedulerprioritysmp.h>
 
   #define SCHEDULER_PRIORITY_SMP_CONTEXT_NAME( name ) \
@@ -262,6 +274,10 @@
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_STRONG_APA
+  #ifndef RTEMS_SMP
+    #error "CONFIGURE_SCHEDULER_STRONG_APA cannot be used if RTEMS_SMP is disabled"
+  #endif
+
   #include <rtems/score/schedulerstrongapa.h>
 
   #ifndef CONFIGURE_MAXIMUM_PROCESSORS
@@ -324,6 +340,10 @@
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_SIMPLE_SMP
+  #ifndef RTEMS_SMP
+    #error "CONFIGURE_SCHEDULER_SIMPLE_SMP cannot be used if RTEMS_SMP is disabled"
+  #endif
+
   #include <rtems/score/schedulersimplesmp.h>
 
   #define SCHEDULER_SIMPLE_SMP_CONTEXT_NAME( name ) \
