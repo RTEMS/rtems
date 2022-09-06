@@ -12,26 +12,6 @@
  * @ingroup bsp_linker
  *
  * @brief MZX stage-1 program memory map.
- *
- * <table>
- *   <tr><th>Region Name</th><th>Region Begin</th><th>Region Size</th></tr>
- *   <tr><td>RAM_INT</td><td>0x08000000</td><td>232k</td></tr>
- *   <tr><td>RAM_MMU</td><td>0x0803a000</td><td>16k</td></tr>
- *   <tr><td>RAM_VEC</td><td>0x0803d000</td><td>8k</td></tr>
- * </table>
- *
- * <table>
- *   <tr><th>Section Name</th><th>Section Runtime Region</th><th>Section Load Region</th></tr>
- *   <tr><td>.start</td><td>RAM_INT</td><td></td></tr>
- *   <tr><td>.vector</td><td>RAM_INT</td><td></td></tr>
- *   <tr><td>.text</td><td>RAM_INT</td><td>RAM_INT</td></tr>
- *   <tr><td>.rodata</td><td>RAM_INT</td><td>RAM_INT</td></tr>
- *   <tr><td>.data</td><td>RAM_INT</td><td>RAM_INT</td></tr>
- *   <tr><td>.fast</td><td>RAM_INT</td><td>RAM_INT</td></tr>
- *   <tr><td>.bss</td><td>RAM_INT</td><td></td></tr>
- *   <tr><td>.work</td><td>RAM_INT</td><td></td></tr>
- *   <tr><td>.stack</td><td>RAM_INT</td><td></td></tr>
- * </table>
  */
 
 MEMORY {
