@@ -72,6 +72,7 @@ source:
 - testsuites/validation/tc-sched-yield.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tc-score-thread.c
+- testsuites/validation/tc-score-tq.c
 - testsuites/validation/tc-sem-create.c
 - testsuites/validation/tc-sem-flush.c
 - testsuites/validation/tc-sem-ident.c
