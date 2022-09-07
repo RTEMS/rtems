@@ -3,7 +3,7 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified-define
+interface-type: unspecified-enumerator
 links:
 - role: interface-placement
   uid: header-impl

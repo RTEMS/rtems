@@ -3,7 +3,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified
+interface-type: unspecified-macro
 links:
 - role: interface-placement
   uid: domain
