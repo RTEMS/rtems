@@ -12,8 +12,6 @@ interface-type: group
 links:
 - role: requirement-refinement
   uid: /req/api
-- role: interface-placement
-  uid: domain
 name: C and POSIX
 text: |
   The ${/glossary/api:/term} shall provide interfaces specified by

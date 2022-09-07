@@ -5,6 +5,8 @@ enabled-by: true
 index-entries: []
 interface-type: unspecified-define
 links:
+- role: interface-placement
+  uid: cpuopts
 - role: interface-ingroup
   uid: group
 name: RTEMS_SMP

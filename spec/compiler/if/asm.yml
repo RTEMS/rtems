@@ -5,6 +5,8 @@ enabled-by: true
 index-entries: []
 interface-type: unspecified
 links:
+- role: interface-placement
+  uid: domain
 - role: interface-ingroup
   uid: group
 name: __asm__
