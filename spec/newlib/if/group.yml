@@ -1,17 +1,15 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: |
-  This group contains Newlib interfaces.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-description: null
 enabled-by: true
 identifier: Newlib
-index-entries: []
-interface-type: group
 links:
 - role: requirement-refinement
   uid: /req/api
-name: Newlib
+non-functional-type: design-group
+rationale: null
+references: []
+requirement-type: non-functional
 text: |
   The ${/glossary/api:/term} shall provide interfaces defined by Newlib.
-type: interface
+type: requirement
