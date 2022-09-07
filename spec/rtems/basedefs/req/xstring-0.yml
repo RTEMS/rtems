@@ -2,15 +2,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/xstring
-non-functional-type: interface
 rationale: |
   The exact rules on how this string is build are defined by the C
   standard and are too complex to be repeated in this requirement.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   The macro ${../if/xstring:/name} shall apply all possible C
   pre-processor substitutions to its argument values before

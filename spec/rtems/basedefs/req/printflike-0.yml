@@ -2,16 +2,16 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/printflike
-non-functional-type: interface
 rationale: |
   Counting of arguments starts at 1 from the left with the
   exception of non-static C++ methods where the counting starts with
   2 due to the implicit ``this`` argument.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler,
   and the ${../if/printflike:/name} macro is used as last part of a

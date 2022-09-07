@@ -2,13 +2,13 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/define-global-symbol
-non-functional-type: interface
 rationale: null
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   The macro ${../if/define-global-symbol:/name} shall define
   a global symbol of ``void`` pointer type with the value being an address.

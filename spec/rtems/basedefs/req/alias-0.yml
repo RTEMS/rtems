@@ -2,13 +2,13 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/alias
-non-functional-type: interface
 rationale: null
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When argument ${../if/alias:/params[0]/name} is a name of a function,
   and the macro ${../if/alias:/name} call is in the same compilation unit

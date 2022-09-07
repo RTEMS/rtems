@@ -2,14 +2,14 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/dequalify-depthx
-non-functional-type: interface
 rationale: |
   ${../if/dequalify-depthx:/name} checks for incompatible pointer types.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the argument value of ${../if/dequalify-depthx:/params[0]/name} consists
   of a sequence of *i* ``*`` and the types of both other arguments both

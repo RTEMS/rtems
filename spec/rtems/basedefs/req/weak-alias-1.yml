@@ -2,17 +2,17 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/weak-alias
-non-functional-type: interface
 rationale: |
   The other function at global scope with the same name as
   ``newname`` can possibly be defined in
   another compilation unit and linked with the compilation
   unit containing the function defined with ${../if/weak-alias:/name}.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler,
   and the produced target file format is ELF or a.out,

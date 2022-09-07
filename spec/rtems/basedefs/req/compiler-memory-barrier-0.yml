@@ -2,10 +2,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/compiler-memory-barrier
-non-functional-type: interface
 rationale: |
   A Full Software Memory Barrier prevents the compiler to move loads and
   stores (in any direction) beyond the point where the barrier is in the
@@ -13,7 +13,7 @@ rationale: |
   This is a compile time only barrier. The CPU optimizations can still
   move instructions over the barrier at run-time.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler,
   the ${../if/compiler-memory-barrier:/name} macro shall

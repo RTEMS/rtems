@@ -2,17 +2,17 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/typeof-refx
-non-functional-type: interface
 rationale: |
   From the GNU C compiler documentation:
   The operand of ${../if/typeof-refx:/params[1]/name} is evaluated for
   its side effects if and only if it is an expression of variably
   modified type or the name of such a type.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the argument value of ${../if/typeof-refx:/params[0]/name} consists
   of a sequence of *i* ``*`` and the type of the other argument

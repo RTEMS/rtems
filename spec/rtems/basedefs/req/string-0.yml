@@ -2,15 +2,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/string
-non-functional-type: interface
 rationale: |
   The exact rules on how this string is build are defined by the C standard
   and are too complex to be repeated in this requirement.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   The ${../if/string:/name} macro shall result in a string formed by
   the C pre-processor ``#`` operator placed before the formal parameter.

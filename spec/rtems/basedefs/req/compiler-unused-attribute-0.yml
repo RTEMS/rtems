@@ -2,13 +2,13 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/compiler-unused-attribute
-non-functional-type: interface
 rationale: null
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   The macro ${../if/compiler-unused-attribute:/name} shall
   have exactly the same effect as the macro ${../if/unused:/name}.

@@ -2,13 +2,13 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/get-ticks-per-second
-non-functional-type: interface
 rationale: null
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   The directive shall return the number of configured clock ticks per second as
   defined by the ${/acfg/if/microseconds-per-tick:/name} application

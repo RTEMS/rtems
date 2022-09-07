@@ -2,16 +2,16 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/no-return
-non-functional-type: interface
 rationale: |
   The GNU C compiler can optimize such a function without regard to what would
   happen if it ever did return. Declaring a function ${../if/no-return:/name}
   also avoids spurious warnings of uninitialized variables.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler starting at version 2.5
   or the ``__cplusplus`` symbol is defined with version ``201103L`` or higher

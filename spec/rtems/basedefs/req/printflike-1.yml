@@ -2,10 +2,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/printflike
-non-functional-type: interface
 rationale: |
   This case is for functions where the arguments are not available
   to be checked (such as ``vprintf``). The compiler will only check
@@ -15,7 +15,7 @@ rationale: |
   exception of non-static C++ methods where the counting starts with
   2 due to the implicit ``this`` argument.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler,
   and the ${../if/printflike:/name} macro is used as last part of a

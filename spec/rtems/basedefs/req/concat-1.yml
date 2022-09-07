@@ -2,15 +2,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/concat
-non-functional-type: interface
 rationale: |
   There should be no additional character before, between or after the
   arguments in the result.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   The macro ${../if/concat:/name} shall result in only those
   characters which also appear in its argument values.

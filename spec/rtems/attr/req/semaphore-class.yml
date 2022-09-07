@@ -2,13 +2,13 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/semaphore-class
-non-functional-type: interface
 rationale: null
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   The ${../if/semaphore-class:/name} constant shall be equal to the bitwise or
   of ${../if/binary-semaphore:/name}, ${../if/counting-semaphore:/name}, and

@@ -2,15 +2,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/define-global-symbol
-non-functional-type: interface
 rationale: |
   See also ${../if/declare-global-symbol:/name}.
   *File scope* excludes for example a placement in a function body.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the macro ${../if/define-global-symbol:/name} appears at file scope,
   and argument ${../if/define-global-symbol:/params[0]/name} after undergoing

@@ -2,16 +2,16 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/predict-false
-non-functional-type: interface
 rationale: |
   Example: ``if ( ${../if/predict-false:/name}( -1 == i ) ) { ... }``.
   The GNU C compiler uses this information for branch optimization.
   ``builtin-expect-probability`` defaults to 90%.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler,
   and the ${../if/predict-false:/name} macro is used as a conditional

@@ -2,10 +2,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/return-address
-non-functional-type: interface
 rationale: |
   From the GNU C compiler documentation:
 
@@ -21,7 +21,7 @@ rationale: |
   Under these circumstances it is at least difficult to specify
   what the actual result of this macro is.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler,
   the ${../if/return-address:/name} macro shall evaluate to the

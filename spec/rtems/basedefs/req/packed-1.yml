@@ -2,16 +2,16 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/packed
-non-functional-type: interface
 rationale: |
   The effect of the ${../if/packed:/name} macro is not propagated into any
   structure, union or C++ class which is member of the structure, union or
   C++ class declaration to which the macro is attached.
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler,
   and the ${../if/packed:/name} macro is attached to a

@@ -2,10 +2,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+functional-type: function
 links:
 - role: interface-function
   uid: ../if/inline-routine
-non-functional-type: interface
 rationale: |
   ``inline`` and ``__inline__`` have the same effect at least for the
   GNU C compiler. ``__inline__`` works even if the GNU C compiler
@@ -17,7 +17,7 @@ rationale: |
   file, consider ``extern inline`` instead (see the compiler
   documentation).
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   The ${../if/inline-routine:/name} macro shall evaluate
   to the keywords ``static inline`` or ``static __inline__``
