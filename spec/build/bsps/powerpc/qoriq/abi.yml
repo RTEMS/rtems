@@ -16,11 +16,13 @@ default-by-variant:
 - value:
   - -mcpu=e6500
   - -m64
+  - -mvrsave
   variants:
   - powerpc/qoriq_e6500_64
 - value:
   - -mcpu=e6500
   - -m32
+  - -mvrsave
   - -msdata=sysv
   variants:
   - powerpc/qoriq_e6500_32
