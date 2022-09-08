@@ -1293,43 +1293,26 @@ static inline uint32_t CPU_swap_u32(
 typedef uint32_t CPU_Counter_ticks;
 
 /**
- * @brief Returns the current CPU counter frequency in Hz.
+ * @brief Gets the current CPU counter frequency in Hz.
  *
- * @return The current CPU counter frequency in Hz.
+ * @return Returns the current CPU counter frequency in Hz.
  */
 uint32_t _CPU_Counter_frequency( void );
 
 /**
- * @brief Returns the current CPU counter value.
+ * @brief Gets the current CPU counter value.
  *
- * A CPU counter is some free-running counter.  It ticks usually with a
- * frequency close to the CPU or system bus clock.  The board support package
- * must ensure that this function works before the RTEMS initialization.
- * Otherwise invalid profiling statistics will be gathered.
+ * A CPU counter should be some monotonically increasing free-running counter.
+ * It ticks usually with a frequency close to the CPU or system bus clock.  The
+ * counter should not be affected by power saving states so that it can be used
+ * for timestamps.  The CPU counter should be initialized at the
+ * RTEMS_SYSINIT_CPU_COUNTER initialization step if necessary.  If
+ * RTEMS_PROFILING is enabled, the CPU counter may have to work very early in
+ * the system initialization to avoid invalid profiling statistics.
  *
- * @return The current CPU counter value.
+ * @return Returns the current CPU counter value.
  */
 CPU_Counter_ticks _CPU_Counter_read( void );
-
-/**
- * @brief Returns the difference between the second and first CPU counter
- * value.
- *
- * This operation may be carried out as a modulo operation depending on the
- * range of the CPU counter device.
- *
- * @param[in] second The second CPU counter value.
- * @param[in] first The first CPU counter value.
- *
- * @return Returns second minus first modulo counter period.
- */
-static inline CPU_Counter_ticks _CPU_Counter_difference(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-)
-{
-  return second - first;
-}
 
 #ifdef RTEMS_SMP
   /**

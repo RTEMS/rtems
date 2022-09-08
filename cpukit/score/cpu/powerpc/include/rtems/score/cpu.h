@@ -742,14 +742,6 @@ static inline CPU_Counter_ticks _CPU_Counter_read( void )
   return value;
 }
 
-static inline CPU_Counter_ticks _CPU_Counter_difference(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-)
-{
-  return second - first;
-}
-
 #endif /* ASM */
 
 

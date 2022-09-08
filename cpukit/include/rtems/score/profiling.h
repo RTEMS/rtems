@@ -129,10 +129,7 @@ static inline void _Profiling_Thread_dispatch_enable(
   if ( new_thread_dispatch_disable_level == 0 ) {
     Per_CPU_Stats *stats = &cpu->Stats;
     CPU_Counter_ticks now = _CPU_Counter_read();
-    CPU_Counter_ticks delta = _CPU_Counter_difference(
-      now,
-      stats->thread_dispatch_disabled_instant
-    );
+    CPU_Counter_ticks delta = now - stats->thread_dispatch_disabled_instant;
 
     stats->total_thread_dispatch_disabled_time += delta;
 

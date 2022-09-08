@@ -235,7 +235,7 @@ static inline void _SMP_lock_Stats_acquire_end(
 
   second = _CPU_Counter_read();
   stats_context->acquire_instant = second;
-  delta = _CPU_Counter_difference( second, acquire_context->first );
+  delta = second - acquire_context->first;
 
   ++stats->usage_count;
 
@@ -270,7 +270,7 @@ static inline void _SMP_lock_Stats_release_update(
   stats = stats_context->stats;
   first = stats_context->acquire_instant;
   second = _CPU_Counter_read();
-  delta = _CPU_Counter_difference( second, first );
+  delta = second - first;
 
   stats->total_section_time += delta;
 

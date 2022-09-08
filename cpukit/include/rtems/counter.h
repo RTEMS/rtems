@@ -99,20 +99,20 @@ static inline rtems_counter_ticks rtems_counter_read( void )
  * @brief Returns the difference between the second and first CPU counter
  * value.
  *
- * This operation may be carried out as a modulo operation depending on the
- * range of the CPU counter device.
+ * This function is provided for backward compatibility.
+ * You may use "second - first" directly in the code.
  *
  * @param[in] second The second CPU counter value.
  * @param[in] first The first CPU counter value.
  *
- * @return Returns second minus first modulo counter period.
+ * @return Returns second minus first.
  */
 static inline rtems_counter_ticks rtems_counter_difference(
   rtems_counter_ticks second,
   rtems_counter_ticks first
 )
 {
-  return _CPU_Counter_difference( second, first );
+  return second - first;
 }
 
 /**

@@ -621,14 +621,6 @@ uint32_t _CPU_Counter_frequency( void );
 
 CPU_Counter_ticks _CPU_Counter_read( void );
 
-static inline CPU_Counter_ticks _CPU_Counter_difference(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-)
-{
-  return second - first;
-}
-
 #if (M68K_HAS_FPSP_PACKAGE == 1)
 /*
  *  Hooks for the Floating Point Support Package (FPSP) provided by Motorola

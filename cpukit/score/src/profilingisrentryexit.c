@@ -54,10 +54,7 @@ void _Profiling_Outer_most_interrupt_entry_and_exit(
   _Assert( cpu->isr_nest_level == 1 );
 
   stats = &cpu->Stats;
-  delta = _CPU_Counter_difference(
-    interrupt_exit_instant,
-    interrupt_entry_instant
-  );
+  delta = interrupt_exit_instant - interrupt_entry_instant;
   ++stats->interrupt_count;
   stats->total_interrupt_time += delta;
 
