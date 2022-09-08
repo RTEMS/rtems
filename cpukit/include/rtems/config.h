@@ -61,6 +61,7 @@
 #include <stdint.h>
 #include <rtems/rtems/config.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/cpuopts.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/memory.h>
 #include <rtems/score/object.h>
