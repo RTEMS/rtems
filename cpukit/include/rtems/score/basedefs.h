@@ -474,12 +474,18 @@ extern "C" {
     ( const_cast<_type>( _var ) )
 #elif defined(__GNUC__)
   #define RTEMS_DEQUALIFY_DEPTHX( _ptr_level, _type, _var ) \
-    __builtin_choose_expr( __builtin_types_compatible_p( \
+    __builtin_choose_expr( \
+      __builtin_types_compatible_p( \
         RTEMS_TYPEOF_REFX( _ptr_level, _var ), \
         RTEMS_TYPEOF_REFX( _ptr_level, _type ) \
-      ) || __builtin_types_compatible_p( _type, void * ), \
-    (_type) ( _var ), \
-    RTEMS_DEQUALIFY_types_not_compatible() )
+      ) || \
+      __builtin_types_compatible_p( \
+        _type, \
+        void * \
+      ), \
+      (_type) ( _var ), \
+      RTEMS_DEQUALIFY_types_not_compatible() \
+    )
 #else
   #define RTEMS_DEQUALIFY_DEPTHX( _ptr_level, _type, _var ) \
     ( (_type) (uintptr_t) (const volatile void *)( _var ) )
