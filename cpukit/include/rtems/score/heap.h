@@ -431,7 +431,7 @@ uintptr_t _Heap_No_extend(
  *
  * @return The @a value aligned to the given @a alignment, rounded up.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_up(
+static inline uintptr_t _Heap_Align_up(
   uintptr_t value,
   uintptr_t alignment
 )
@@ -452,7 +452,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_up(
  *
  * @return The minimal Heap Block size for the given @a page_size.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Min_block_size( uintptr_t page_size )
+static inline uintptr_t _Heap_Min_block_size( uintptr_t page_size )
 {
   return _Heap_Align_up( sizeof( Heap_Block ), page_size );
 }
@@ -464,7 +464,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Min_block_size( uintptr_t page_size )
  *
  * @return The worst case overhead to manage a memory area.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Area_overhead(
+static inline uintptr_t _Heap_Area_overhead(
   uintptr_t page_size
 )
 {
@@ -493,7 +493,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Area_overhead(
  *
  * @return The size with administration and alignment overhead for one allocation.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Size_with_overhead(
+static inline uintptr_t _Heap_Size_with_overhead(
   uintptr_t page_size,
   uintptr_t size,
   uintptr_t alignment

@@ -72,7 +72,7 @@ extern "C" {
  * @retval false The executing thread is inside a thread dispatch critical
  * section and dispatching is not allowed.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_is_enabled(void)
+static inline bool _Thread_Dispatch_is_enabled(void)
 {
   bool enabled;
 
@@ -96,7 +96,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_is_enabled(void)
  *
  * @return The value of the thread dispatch level.
  */
-RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_get_disable_level(void)
+static inline uint32_t _Thread_Dispatch_get_disable_level(void)
 {
   return _Thread_Dispatch_disable_level;
 }
@@ -106,7 +106,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_get_disable_level(void)
  *
  * This routine initializes the thread dispatching subsystem.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
+static inline void _Thread_Dispatch_initialization( void )
 {
   _Thread_Dispatch_disable_level = 1;
 }
@@ -180,7 +180,7 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level );
  *
  * @return The current processor.
  */
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_with_CPU(
+static inline Per_CPU_Control *_Thread_Dispatch_disable_with_CPU(
   Per_CPU_Control        *cpu_self,
   const ISR_lock_Context *lock_context
 )
@@ -207,7 +207,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_with_CPU(
  *
  * @return The current processor.
  */
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_critical(
+static inline Per_CPU_Control *_Thread_Dispatch_disable_critical(
   const ISR_lock_Context *lock_context
 )
 {
@@ -219,7 +219,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_critical(
  *
  * @return The current processor.
  */
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable( void )
+static inline Per_CPU_Control *_Thread_Dispatch_disable( void )
 {
   Per_CPU_Control  *cpu_self;
   ISR_lock_Context  lock_context;
@@ -251,7 +251,7 @@ void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self );
  *
  * @param[in, out] cpu_self The current processor.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Dispatch_unnest( Per_CPU_Control *cpu_self )
+static inline void _Thread_Dispatch_unnest( Per_CPU_Control *cpu_self )
 {
   _Assert( cpu_self->thread_dispatch_disable_level > 0 );
   --cpu_self->thread_dispatch_disable_level;
@@ -263,7 +263,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_unnest( Per_CPU_Control *cpu_self )
  * @param[in, out] cpu_self The current processor.
  * @param[in, out] cpu_target The target processor to request a thread dispatch.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Dispatch_request(
+static inline void _Thread_Dispatch_request(
   Per_CPU_Control *cpu_self,
   Per_CPU_Control *cpu_target
 )

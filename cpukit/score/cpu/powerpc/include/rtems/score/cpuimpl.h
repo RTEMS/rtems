@@ -273,17 +273,17 @@ void _CPU_Context_volatile_clobber( uintptr_t pattern );
 
 void _CPU_Context_validate( uintptr_t pattern );
 
-RTEMS_INLINE_ROUTINE void _CPU_Instruction_illegal( void )
+static inline void _CPU_Instruction_illegal( void )
 {
   __asm__ volatile ( ".long 0" );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
+static inline void _CPU_Instruction_no_operation( void )
 {
   __asm__ volatile ( "nop" );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_Use_thread_local_storage(
+static inline void _CPU_Use_thread_local_storage(
   const Context_Control *context
 )
 {

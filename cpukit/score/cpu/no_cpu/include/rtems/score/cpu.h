@@ -695,7 +695,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
  * @retval true Interrupts are enabled in the ISR level.
  * @retval false Otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
   return false;
 }

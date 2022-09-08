@@ -177,12 +177,12 @@ typedef struct {
   (void) _level; /* Prevent -Wunused-but-set-variable */    \
 }
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled(uint32_t level)
+static inline bool _CPU_ISR_Is_enabled(uint32_t level)
 {
   return (level & EFLAGS_INTR_ENABLE) != 0;
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_ISR_Set_level(uint32_t new_level)
+static inline void _CPU_ISR_Set_level(uint32_t new_level)
 {
   if ( new_level ) {
     amd64_disable_interrupts();
@@ -192,7 +192,7 @@ RTEMS_INLINE_ROUTINE void _CPU_ISR_Set_level(uint32_t new_level)
   }
 }
 
-RTEMS_INLINE_ROUTINE uint32_t _CPU_ISR_Get_level(void)
+static inline uint32_t _CPU_ISR_Get_level(void)
 {
   uint64_t rflags;
 

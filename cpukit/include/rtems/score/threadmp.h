@@ -145,7 +145,7 @@ void _Thread_MP_Free_proxy( Thread_Control *the_thread );
  * @retval false The object if is not valid or the thread MP with this object
  *      id is not remote.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_MP_Is_remote( Objects_Id id )
+static inline bool _Thread_MP_Is_remote( Objects_Id id )
 {
   Objects_Information *information;
 

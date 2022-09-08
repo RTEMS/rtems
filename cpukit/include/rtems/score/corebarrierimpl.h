@@ -89,7 +89,7 @@ void _CORE_barrier_Initialize(
  *
  * @param[out] the_barrier The barrier to destroy.
  */
-RTEMS_INLINE_ROUTINE void _CORE_barrier_Destroy(
+static inline void _CORE_barrier_Destroy(
   CORE_barrier_Control *the_barrier
 )
 {
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Destroy(
  * @param[in, out] the_barrier The barrier to acquire.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_barrier_Acquire_critical(
+static inline void _CORE_barrier_Acquire_critical(
   CORE_barrier_Control *the_barrier,
   Thread_queue_Context *queue_context
 )
@@ -116,7 +116,7 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Acquire_critical(
  * @param[in, out] the_barrier The barrier to release.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_barrier_Release(
+static inline void _CORE_barrier_Release(
   CORE_barrier_Control *the_barrier,
   Thread_queue_Context *queue_context
 )
@@ -157,7 +157,7 @@ Status_Control _CORE_barrier_Seize(
  *
  * @return The number of unblocked threads.
  */
-RTEMS_INLINE_ROUTINE uint32_t _CORE_barrier_Surrender(
+static inline uint32_t _CORE_barrier_Surrender(
   CORE_barrier_Control *the_barrier,
   Thread_queue_Context *queue_context
 )
@@ -176,7 +176,7 @@ RTEMS_INLINE_ROUTINE uint32_t _CORE_barrier_Surrender(
  * @param[in, out] the_barrier The barrier to flush.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_barrier_Flush(
+static inline void _CORE_barrier_Flush(
   CORE_barrier_Control *the_barrier,
   Thread_queue_Context *queue_context
 )

@@ -99,7 +99,7 @@ int _POSIX_Message_queue_Send_support(
   Thread_queue_Enqueue_callout  enqueue_callout
 );
 
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *
+static inline POSIX_Message_queue_Control *
   _POSIX_Message_queue_Allocate_unprotected( void )
 {
   return (POSIX_Message_queue_Control *)
@@ -112,7 +112,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *
  *  This routine frees a message queue control block to the
  *  inactive chain of free message queue control blocks.
  */
-RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free(
+static inline void _POSIX_Message_queue_Free(
   POSIX_Message_queue_Control *the_mq
 )
 {
@@ -120,7 +120,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free(
 }
 
 
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get(
+static inline POSIX_Message_queue_Control *_POSIX_Message_queue_Get(
   Objects_Id            id,
   Thread_queue_Context *queue_context
 )
@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get(
  *  This method converts a POSIX message priority to the priorities used
  *  by the Score.
  */
-RTEMS_INLINE_ROUTINE CORE_message_queue_Submit_types
+static inline CORE_message_queue_Submit_types
   _POSIX_Message_queue_Priority_to_core(
   unsigned int priority
 )
@@ -154,7 +154,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Submit_types
  *  This method converts a POSIX message priority from the priorities used
  *  by the Score.
  */
-RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
+static inline unsigned int _POSIX_Message_queue_Priority_from_core(
   CORE_message_queue_Submit_types priority
 )
 {
@@ -165,7 +165,7 @@ RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
 /**
  *  @brief POSIX Message Queue Remove from Namespace
  */
-RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Namespace_remove (
+static inline void _POSIX_Message_queue_Namespace_remove (
   POSIX_Message_queue_Control *the_mq
 )
 {
@@ -175,7 +175,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Namespace_remove (
   );
 }
 
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *
+static inline POSIX_Message_queue_Control *
 _POSIX_Message_queue_Get_by_name(
   const char                *name,
   size_t                    *name_length_p,

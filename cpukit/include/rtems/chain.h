@@ -166,7 +166,7 @@ rtems_status_code rtems_chain_get_with_wait(
  * @param[in] number_nodes is the number of nodes that will be in the chain
  * @param[in] node_size is the size of each node
  */
-RTEMS_INLINE_ROUTINE void rtems_chain_initialize(
+static inline void rtems_chain_initialize(
   rtems_chain_control *the_chain,
   void                *starting_address,
   size_t               number_nodes,
@@ -188,7 +188,7 @@ RTEMS_INLINE_ROUTINE void rtems_chain_initialize(
  *
  * @param[in] the_chain is the chain to be initialized.
  */
-RTEMS_INLINE_ROUTINE void rtems_chain_initialize_empty(
+static inline void rtems_chain_initialize_empty(
   rtems_chain_control *the_chain
 )
 {
@@ -203,7 +203,7 @@ RTEMS_INLINE_ROUTINE void rtems_chain_initialize_empty(
  *
  * @param[in] node the node set to off chain.
  */
-RTEMS_INLINE_ROUTINE void rtems_chain_set_off_chain(
+static inline void rtems_chain_set_off_chain(
   rtems_chain_node *node
 )
 {
@@ -218,7 +218,7 @@ RTEMS_INLINE_ROUTINE void rtems_chain_set_off_chain(
  *
  * @param[in] the_node The chain node to initialize.
  */
-RTEMS_INLINE_ROUTINE void rtems_chain_initialize_node(
+static inline void rtems_chain_initialize_node(
   rtems_chain_node *node
 )
 {
@@ -236,7 +236,7 @@ RTEMS_INLINE_ROUTINE void rtems_chain_initialize_node(
  * @retval true The node is off chain.
  * @retval false The node is not off chain.
  */
-RTEMS_INLINE_ROUTINE bool rtems_chain_is_node_off_chain(
+static inline bool rtems_chain_is_node_off_chain(
   const rtems_chain_node *node
 )
 {
@@ -253,7 +253,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_node_off_chain(
  * @retval true The chain node pointer is NULL.
  * @retval false The chain node pointer is not NULL.
  */
-RTEMS_INLINE_ROUTINE bool rtems_chain_is_null_node(
+static inline bool rtems_chain_is_null_node(
   const rtems_chain_node *the_node
 )
 {
@@ -269,7 +269,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_null_node(
  *
  * @return This method returns the permanent node of the chain.
  */
-RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_head(
+static inline rtems_chain_node *rtems_chain_head(
   rtems_chain_control *the_chain
 )
 {
@@ -285,7 +285,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_head(
  *
  * @return This method returns the permanent head node of the chain.
  */
-RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_head(
+static inline const rtems_chain_node *rtems_chain_immutable_head(
   const rtems_chain_control *the_chain
 )
 {
@@ -301,7 +301,7 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_head(
  *
  * @return This method returns the permanent tail node of the chain.
  */
-RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_tail(
+static inline rtems_chain_node *rtems_chain_tail(
   rtems_chain_control *the_chain
 )
 {
@@ -317,7 +317,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_tail(
  *
  * @return This method returns the permanent tail node of the chain.
  */
-RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_tail(
+static inline const rtems_chain_node *rtems_chain_immutable_tail(
   const rtems_chain_control *the_chain
 )
 {
@@ -334,7 +334,7 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_tail(
  *
  * @return This method returns the first node of the chain.
  */
-RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_first(
+static inline rtems_chain_node *rtems_chain_first(
   const rtems_chain_control *the_chain
 )
 {
@@ -351,7 +351,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_first(
  *
  * @return This method returns the first node of the chain.
  */
-RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_first(
+static inline const rtems_chain_node *rtems_chain_immutable_first(
   const rtems_chain_control *the_chain
 )
 {
@@ -368,7 +368,7 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_first(
  *
  * @return This method returns the last node of the chain.
  */
-RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_last(
+static inline rtems_chain_node *rtems_chain_last(
   const rtems_chain_control *the_chain
 )
 {
@@ -385,7 +385,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_last(
  *
  * @return This method returns the last node of the chain.
  */
-RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_last(
+static inline const rtems_chain_node *rtems_chain_immutable_last(
   const rtems_chain_control *the_chain
 )
 {
@@ -401,7 +401,7 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_last(
  *
  * @return This method returns the next node on the chain.
  */
-RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_next(
+static inline rtems_chain_node *rtems_chain_next(
   const rtems_chain_node *the_node
 )
 {
@@ -417,7 +417,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_next(
  *
  * @return This method returns the next node on the chain.
  */
-RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_next(
+static inline const rtems_chain_node *rtems_chain_immutable_next(
   const rtems_chain_node *the_node
 )
 {
@@ -433,7 +433,7 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_next(
  *
  * @return This method returns the previous node on the chain.
  */
-RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_previous(
+static inline rtems_chain_node *rtems_chain_previous(
   const rtems_chain_node *the_node
 )
 {
@@ -449,7 +449,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_previous(
  *
  * @return This method returns the previous node on the chain.
  */
-RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_previous(
+static inline const rtems_chain_node *rtems_chain_immutable_previous(
   const rtems_chain_node *the_node
 )
 {
@@ -468,7 +468,7 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_previous(
  * @retval true @a left is equal to @a right.
  * @retval false @a left is not equal to @a right
  */
-RTEMS_INLINE_ROUTINE bool rtems_chain_are_nodes_equal(
+static inline bool rtems_chain_are_nodes_equal(
   const rtems_chain_node *left,
   const rtems_chain_node *right
 )
@@ -487,7 +487,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_are_nodes_equal(
  * @retval true The chain is empty.
  * @retval false The chain is not empty.
  */
-RTEMS_INLINE_ROUTINE bool rtems_chain_is_empty(
+static inline bool rtems_chain_is_empty(
   const rtems_chain_control *the_chain
 )
 {
@@ -506,7 +506,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_empty(
  * @retval true @a the_node is the first node on a chain.
  * @retval false @a the_node is not the first node on a chain.
  */
-RTEMS_INLINE_ROUTINE bool rtems_chain_is_first(
+static inline bool rtems_chain_is_first(
   const rtems_chain_node *the_node
 )
 {
@@ -524,7 +524,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_first(
  * @retval true @a the_node is the last node on a chain.
  * @retval false @a the_node is not the last node on a chain
  */
-RTEMS_INLINE_ROUTINE bool rtems_chain_is_last(
+static inline bool rtems_chain_is_last(
   const rtems_chain_node *the_node
 )
 {
@@ -542,7 +542,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_last(
  * @retval true The chain has only one node.
  * @retval false The chain has more than one nodes.
  */
-RTEMS_INLINE_ROUTINE bool rtems_chain_has_only_one_node(
+static inline bool rtems_chain_has_only_one_node(
   const rtems_chain_control *the_chain
 )
 {
@@ -561,7 +561,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_has_only_one_node(
  * @retval true @a the_node is the head of @a the_chain.
  * @retval false @a the_node is not the head of @a the_chain.
  */
-RTEMS_INLINE_ROUTINE bool rtems_chain_is_head(
+static inline bool rtems_chain_is_head(
   const rtems_chain_control *the_chain,
   const rtems_chain_node *the_node
 )
@@ -581,7 +581,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_head(
  * @retval true @a the_node is the tail of @a the_chain.
  * @retval false @a the_node is not the tail of @a the_chain.
  */
-RTEMS_INLINE_ROUTINE bool rtems_chain_is_tail(
+static inline bool rtems_chain_is_tail(
   const rtems_chain_control *the_chain,
   const rtems_chain_node *the_node
 )
@@ -610,7 +610,7 @@ void rtems_chain_extract(
  * NOTE: It does NOT disable interrupts to ensure the atomicity of the
  * append operation.
  */
-RTEMS_INLINE_ROUTINE void rtems_chain_extract_unprotected(
+static inline void rtems_chain_extract_unprotected(
   rtems_chain_node *the_node
 )
 {
@@ -636,7 +636,7 @@ rtems_chain_node *rtems_chain_get(
 /**
  * @brief See _Chain_Get_unprotected().
  */
-RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get_unprotected(
+static inline rtems_chain_node *rtems_chain_get_unprotected(
   rtems_chain_control *the_chain
 )
 {
@@ -646,7 +646,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get_unprotected(
 /**
  * @brief See _Chain_Get_first_unprotected().
  */
-RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get_first_unprotected(
+static inline rtems_chain_node *rtems_chain_get_first_unprotected(
   rtems_chain_control *the_chain
 )
 {
@@ -670,7 +670,7 @@ void rtems_chain_insert(
 /**
  * @brief See _Chain_Insert_unprotected().
  */
-RTEMS_INLINE_ROUTINE void rtems_chain_insert_unprotected(
+static inline void rtems_chain_insert_unprotected(
   rtems_chain_node *after_node,
   rtems_chain_node *the_node
 )
@@ -699,7 +699,7 @@ void rtems_chain_append(
  * NOTE: It does NOT disable interrupts to ensure the atomicity of the
  * append operation.
  */
-RTEMS_INLINE_ROUTINE void rtems_chain_append_unprotected(
+static inline void rtems_chain_append_unprotected(
   rtems_chain_control *the_chain,
   rtems_chain_node    *the_node
 )
@@ -734,7 +734,7 @@ void rtems_chain_prepend(
  * NOTE: It does NOT disable interrupts to ensure the atomicity of the
  *       prepend operation.
  */
-RTEMS_INLINE_ROUTINE void rtems_chain_prepend_unprotected(
+static inline void rtems_chain_prepend_unprotected(
   rtems_chain_control *the_chain,
   rtems_chain_node    *the_node
 )
@@ -795,7 +795,7 @@ bool rtems_chain_get_with_empty_check(
  *
  * @return The node count of the chain.
  */
-RTEMS_INLINE_ROUTINE size_t rtems_chain_node_count_unprotected(
+static inline size_t rtems_chain_node_count_unprotected(
   const rtems_chain_control *chain
 )
 {

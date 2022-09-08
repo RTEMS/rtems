@@ -39,7 +39,7 @@ typedef struct {
 
 const char *rtems_pty_initialize(rtems_pty_context *pty, uintptr_t unique);
 
-RTEMS_INLINE_ROUTINE const char *rtems_pty_get_path(const rtems_pty_context *pty)
+static inline const char *rtems_pty_get_path(const rtems_pty_context *pty)
 {
   return pty->name;
 }

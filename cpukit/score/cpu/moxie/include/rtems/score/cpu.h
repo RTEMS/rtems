@@ -317,7 +317,7 @@ typedef struct {
     _CPU_ISR_Disable( _isr_cookie ); \
   } while (0)
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
   return true;
 }

@@ -78,7 +78,7 @@ typedef enum {
  *
  * @param[out] actions The actions to be initialized empty.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Actions_initialize_empty(
+static inline void _Priority_Actions_initialize_empty(
   Priority_Actions *actions
 )
 {
@@ -93,7 +93,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Actions_initialize_empty(
  * @param node The action node for the @a actions to be initialized.
  * @param type The action type for the @a actions to be initialized.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Actions_initialize_one(
+static inline void _Priority_Actions_initialize_one(
   Priority_Actions     *actions,
   Priority_Aggregation *aggregation,
   Priority_Node        *node,
@@ -117,7 +117,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Actions_initialize_one(
  * @retval true The priority actions @a actions is empty.
  * @retval false The priority actions @a actions is empty.
  */
-RTEMS_INLINE_ROUTINE bool _Priority_Actions_is_empty(
+static inline bool _Priority_Actions_is_empty(
   const Priority_Actions *actions
 )
 {
@@ -131,7 +131,7 @@ RTEMS_INLINE_ROUTINE bool _Priority_Actions_is_empty(
  *
  * @return The former actions of @a actions that were moved.
  */
-RTEMS_INLINE_ROUTINE Priority_Aggregation *_Priority_Actions_move(
+static inline Priority_Aggregation *_Priority_Actions_move(
   Priority_Actions *actions
 )
 {
@@ -149,7 +149,7 @@ RTEMS_INLINE_ROUTINE Priority_Aggregation *_Priority_Actions_move(
  * @param[in, out] actions The priority actions to add actions to.
  * @param[out] aggregation The actions to add to @a actions.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Actions_add(
+static inline void _Priority_Actions_add(
   Priority_Actions     *actions,
   Priority_Aggregation *aggregation
 )
@@ -170,7 +170,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Actions_add(
  * @param[out] node The priority node to be initialized.
  * @param priority The priority to initialize @a node to.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Node_initialize(
+static inline void _Priority_Node_initialize(
   Priority_Node    *node,
   Priority_Control  priority
 )
@@ -185,7 +185,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Node_initialize(
  * @param[out] node The priority node to set the priority of.
  * @param priority The new priority for @a node.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Node_set_priority(
+static inline void _Priority_Node_set_priority(
   Priority_Node    *node,
   Priority_Control  priority
 )
@@ -198,7 +198,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Node_set_priority(
  *
  * @param[in, out] node The priority node to set inactive.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Node_set_inactive(
+static inline void _Priority_Node_set_inactive(
   Priority_Node *node
 )
 {
@@ -213,7 +213,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Node_set_inactive(
  * @retval true The priority node is active.
  * @retval false The priority node is inactive.
  */
-RTEMS_INLINE_ROUTINE bool _Priority_Node_is_active(
+static inline bool _Priority_Node_is_active(
   const Priority_Node *node
 )
 {
@@ -225,7 +225,7 @@ RTEMS_INLINE_ROUTINE bool _Priority_Node_is_active(
  *
  * @param[out] aggregation The priority aggregaton to initialize empty.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Initialize_empty(
+static inline void _Priority_Initialize_empty(
   Priority_Aggregation *aggregation
 )
 {
@@ -246,7 +246,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Initialize_empty(
  * @param[out] aggregation The priority aggregaton to initialize.
  * @param node The priority node to initialize @a aggregation with.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Initialize_one(
+static inline void _Priority_Initialize_one(
   Priority_Aggregation *aggregation,
   Priority_Node        *node
 )
@@ -270,7 +270,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Initialize_one(
  * @retval true The priority aggregation is empty.
  * @retval false The priority aggregation is not empty.
  */
-RTEMS_INLINE_ROUTINE bool _Priority_Is_empty(
+static inline bool _Priority_Is_empty(
   const Priority_Aggregation *aggregation
 )
 {
@@ -284,7 +284,7 @@ RTEMS_INLINE_ROUTINE bool _Priority_Is_empty(
  *
  * @return The priority of @a aggregation.
  */
-RTEMS_INLINE_ROUTINE Priority_Control _Priority_Get_priority(
+static inline Priority_Control _Priority_Get_priority(
   const Priority_Aggregation *aggregation
 )
 {
@@ -298,7 +298,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _Priority_Get_priority(
  *
  * @return The scheduler of @a aggregation.
  */
-RTEMS_INLINE_ROUTINE const Scheduler_Control *_Priority_Get_scheduler(
+static inline const Scheduler_Control *_Priority_Get_scheduler(
   const Priority_Aggregation *aggregation
 )
 {
@@ -316,7 +316,7 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Priority_Get_scheduler(
  *
  * @return The minimum node of @a aggregation
  */
-RTEMS_INLINE_ROUTINE Priority_Node *_Priority_Get_minimum_node(
+static inline Priority_Node *_Priority_Get_minimum_node(
   const Priority_Aggregation *aggregation
 )
 {
@@ -329,7 +329,7 @@ RTEMS_INLINE_ROUTINE Priority_Node *_Priority_Get_minimum_node(
  * @param[out] aggregation The priority aggregation to set the action node of.
  * @param node The new priority node for @a aggregation.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Set_action_node(
+static inline void _Priority_Set_action_node(
   Priority_Aggregation *aggregation,
   Priority_Node        *node
 )
@@ -343,7 +343,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Set_action_node(
  * @param[out] aggregation The priority aggregation to set the action type of.
  * @param type The new action type for @a aggregation.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Set_action_type(
+static inline void _Priority_Set_action_type(
   Priority_Aggregation *aggregation,
   Priority_Action_type  type
 )
@@ -359,7 +359,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Set_action_type(
  * @param node The new action node for @a aggregation.
  * @param type The new action type for @a aggregation.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Set_action(
+static inline void _Priority_Set_action(
   Priority_Aggregation *aggregation,
   Priority_Node        *node,
   Priority_Action_type  type
@@ -378,7 +378,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Set_action(
  * @return Returns the next action of the priority aggregation or NULL if there
  *   is no next action.
  */
-RTEMS_INLINE_ROUTINE Priority_Aggregation *_Priority_Get_next_action(
+static inline Priority_Aggregation *_Priority_Get_next_action(
   const Priority_Aggregation *aggregation
 )
 {
@@ -395,7 +395,7 @@ RTEMS_INLINE_ROUTINE Priority_Aggregation *_Priority_Get_next_action(
  * @retval true The priority on the left hand side of the comparison is smaller.
  * @retval false The priority on the left hand side of the comparison is greater of equal.
  */
-RTEMS_INLINE_ROUTINE bool _Priority_Less(
+static inline bool _Priority_Less(
   const void        *left,
   const RBTree_Node *right
 )
@@ -422,7 +422,7 @@ RTEMS_INLINE_ROUTINE bool _Priority_Less(
  * @retval true The inserted node with its priority is the minimum of the RBTree.
  * @retval false The inserted node with its priority is not the minimum of the RBTree.
  */
-RTEMS_INLINE_ROUTINE bool _Priority_Plain_insert(
+static inline bool _Priority_Plain_insert(
   Priority_Aggregation *aggregation,
   Priority_Node        *node,
   Priority_Control      priority
@@ -444,7 +444,7 @@ RTEMS_INLINE_ROUTINE bool _Priority_Plain_insert(
  * @param[in,  out] aggregation The aggregation to extract the node from.
  * @param node The node to be extracted.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Plain_extract(
+static inline void _Priority_Plain_extract(
   Priority_Aggregation *aggregation,
   Priority_Node        *node
 )
@@ -461,7 +461,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Plain_extract(
  * @param[in, out] aggregation The aggregation to change the node in.
  * @param node The node that has a new priority and will be reinserted in the aggregation.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Plain_changed(
+static inline void _Priority_Plain_changed(
   Priority_Aggregation *aggregation,
   Priority_Node        *node
 )
@@ -499,7 +499,7 @@ typedef void ( *Priority_Remove_handler )(
  * @param actions Is ignored by the method.
  * @param arg Is ignored by the method.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Change_nothing(
+static inline void _Priority_Change_nothing(
   Priority_Aggregation *aggregation,
   Priority_Group_order  group_order,
   Priority_Actions     *actions,
@@ -521,7 +521,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Change_nothing(
  * @param actions Is ignored by the method.
  * @param arg Is ignored by the method.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Remove_nothing(
+static inline void _Priority_Remove_nothing(
   Priority_Aggregation *aggregation,
   Priority_Actions     *actions,
   void                 *arg
@@ -545,7 +545,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Remove_nothing(
  * @param arg Arguments for @a change that is used if the node is the new
  *      minimum.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Non_empty_insert(
+static inline void _Priority_Non_empty_insert(
   Priority_Aggregation    *aggregation,
   Priority_Node           *node,
   Priority_Actions        *actions,
@@ -576,7 +576,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Non_empty_insert(
  *      insert and @a node is the new minimum of the aggregation.
  * @param arg The arguments for @a change.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Insert(
+static inline void _Priority_Insert(
   Priority_Aggregation    *aggregation,
   Priority_Node           *node,
   Priority_Actions        *actions,
@@ -610,7 +610,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Insert(
  * @param change Is called in the case that the minimal node was extracted.
  * @param arg The arguments for @a remove and @a change.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Extract(
+static inline void _Priority_Extract(
   Priority_Aggregation    *aggregation,
   Priority_Node           *node,
   Priority_Actions        *actions,
@@ -650,7 +650,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Extract(
  * @param change Is called in the case that the minimal node was extracted.
  * @param arg The arguments for @a change.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Extract_non_empty(
+static inline void _Priority_Extract_non_empty(
   Priority_Aggregation    *aggregation,
   Priority_Node           *node,
   Priority_Actions        *actions,
@@ -685,7 +685,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Extract_non_empty(
  * @param change Is called if the minimal priority is incorrectly set after the change.
  * @param arg The arguments for @a change.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Changed(
+static inline void _Priority_Changed(
   Priority_Aggregation    *aggregation,
   Priority_Node           *node,
   Priority_Group_order     group_order,
@@ -721,7 +721,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Changed(
  * @param[out] replacement The node that replaces @a victim.  It obtains its priority
  *      from @a victim.
  */
-RTEMS_INLINE_ROUTINE void _Priority_Replace(
+static inline void _Priority_Replace(
   Priority_Aggregation *aggregation,
   Priority_Node        *victim,
   Priority_Node        *replacement

@@ -97,14 +97,14 @@ rtems_status_code _Message_queue_Submit(
  *  This routine deallocates a message queue control block into
  *  the inactive chain of free message queue control blocks.
  */
-RTEMS_INLINE_ROUTINE void _Message_queue_Free (
+static inline void _Message_queue_Free (
   Message_queue_Control *the_message_queue
 )
 {
   _Objects_Free( &_Message_queue_Information, &the_message_queue->Object );
 }
 
-RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Get(
+static inline Message_queue_Control *_Message_queue_Get(
   Objects_Id            id,
   Thread_queue_Context *queue_context
 )
@@ -117,7 +117,7 @@ RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Get(
   );
 }
 
-RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Allocate( void )
+static inline Message_queue_Control *_Message_queue_Allocate( void )
 {
   return (Message_queue_Control *)
     _Objects_Allocate( &_Message_queue_Information );

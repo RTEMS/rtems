@@ -76,10 +76,10 @@
 
 /* Only the mc68030 has a data cache; it is writethrough only. */
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_flush_1_data_line(const void * d_addr) {}
-RTEMS_INLINE_ROUTINE void _CPU_cache_flush_entire_data(void) {}
+static inline void _CPU_cache_flush_1_data_line(const void * d_addr) {}
+static inline void _CPU_cache_flush_entire_data(void) {}
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_1_data_line(
+static inline void _CPU_cache_invalidate_1_data_line(
   const void * d_addr
 )
 {
@@ -88,27 +88,27 @@ RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_1_data_line(
   _CPU_CACR_OR(0x00000400);
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_entire_data(void)
+static inline void _CPU_cache_invalidate_entire_data(void)
 {
   _CPU_CACR_OR( 0x00000800 );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_freeze_data(void)
+static inline void _CPU_cache_freeze_data(void)
 {
   _CPU_CACR_OR( 0x00000200 );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_unfreeze_data(void)
+static inline void _CPU_cache_unfreeze_data(void)
 {
   _CPU_CACR_AND( 0xFFFFFDFF );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_enable_data(void)
+static inline void _CPU_cache_enable_data(void)
 {
   _CPU_CACR_OR( 0x00000100 );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_disable_data(void)
+static inline void _CPU_cache_disable_data(void)
 {
   _CPU_CACR_AND( 0xFFFFFEFF );
 }
@@ -117,7 +117,7 @@ RTEMS_INLINE_ROUTINE void _CPU_cache_disable_data(void)
 
 /* Both the 68020 and 68030 have instruction caches */
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_1_instruction_line(
+static inline void _CPU_cache_invalidate_1_instruction_line(
   const void * d_addr
 )
 {
@@ -126,27 +126,27 @@ RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_1_instruction_line(
   _CPU_CACR_OR( 0x00000004 );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_entire_instruction(void)
+static inline void _CPU_cache_invalidate_entire_instruction(void)
 {
   _CPU_CACR_OR( 0x00000008 );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_freeze_instruction(void)
+static inline void _CPU_cache_freeze_instruction(void)
 {
   _CPU_CACR_OR( 0x00000002);
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_unfreeze_instruction(void)
+static inline void _CPU_cache_unfreeze_instruction(void)
 {
   _CPU_CACR_AND( 0xFFFFFFFD );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_enable_instruction(void)
+static inline void _CPU_cache_enable_instruction(void)
 {
   _CPU_CACR_OR( 0x00000001 );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_disable_instruction(void)
+static inline void _CPU_cache_disable_instruction(void)
 {
   _CPU_CACR_AND( 0xFFFFFFFE );
 }
@@ -155,12 +155,12 @@ RTEMS_INLINE_ROUTINE void _CPU_cache_disable_instruction(void)
 #elif ( defined(__mc68040__) || defined (__mc68060__) )
 
 /* Cannot be frozen */
-RTEMS_INLINE_ROUTINE void _CPU_cache_freeze_data(void) {}
-RTEMS_INLINE_ROUTINE void _CPU_cache_unfreeze_data(void) {}
-RTEMS_INLINE_ROUTINE void _CPU_cache_freeze_instruction(void) {}
-RTEMS_INLINE_ROUTINE void _CPU_cache_unfreeze_instruction(void) {}
+static inline void _CPU_cache_freeze_data(void) {}
+static inline void _CPU_cache_unfreeze_data(void) {}
+static inline void _CPU_cache_freeze_instruction(void) {}
+static inline void _CPU_cache_unfreeze_instruction(void) {}
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_flush_1_data_line(
+static inline void _CPU_cache_flush_1_data_line(
   const void * d_addr
 )
 {
@@ -168,7 +168,7 @@ RTEMS_INLINE_ROUTINE void _CPU_cache_flush_1_data_line(
   __asm__ volatile ( "cpushl %%dc,(%0)" :: "a" (p_address) );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_1_data_line(
+static inline void _CPU_cache_invalidate_1_data_line(
   const void * d_addr
 )
 {
@@ -176,44 +176,44 @@ RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_1_data_line(
   __asm__ volatile ( "cinvl %%dc,(%0)" :: "a" (p_address) );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_flush_entire_data(void)
+static inline void _CPU_cache_flush_entire_data(void)
 {
   __asm__ volatile ( "cpusha %%dc" :: );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_entire_data(void)
+static inline void _CPU_cache_invalidate_entire_data(void)
 {
   __asm__ volatile ( "cinva %%dc" :: );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_enable_data(void)
+static inline void _CPU_cache_enable_data(void)
 {
   _CPU_CACR_OR( 0x80000000 );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_disable_data(void)
+static inline void _CPU_cache_disable_data(void)
 {
   _CPU_CACR_AND( 0x7FFFFFFF );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_1_instruction_line(
+static inline void _CPU_cache_invalidate_1_instruction_line(
   const void * i_addr )
 {
   void * p_address = (void *)  _CPU_virtual_to_physical( i_addr );
   __asm__ volatile ( "cinvl %%ic,(%0)" :: "a" (p_address) );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_invalidate_entire_instruction(void)
+static inline void _CPU_cache_invalidate_entire_instruction(void)
 {
   __asm__ volatile ( "cinva %%ic" :: );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_enable_instruction(void)
+static inline void _CPU_cache_enable_instruction(void)
 {
   _CPU_CACR_OR( 0x00008000 );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_cache_disable_instruction(void)
+static inline void _CPU_cache_disable_instruction(void)
 {
   _CPU_CACR_AND( 0xFFFF7FFF );
 }

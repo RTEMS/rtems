@@ -62,7 +62,7 @@ extern "C" {
  *
  * @return See _Objects_Get().
  */
-RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get(
+static inline Partition_Control *_Partition_Get(
   Objects_Id         id,
   ISR_lock_Context  *lock_context
 )
@@ -81,7 +81,7 @@ RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get(
  *
  * @param[in, out] lock_context is the lock context set up by _Partition_Get().
  */
-RTEMS_INLINE_ROUTINE void _Partition_Acquire_critical(
+static inline void _Partition_Acquire_critical(
   Partition_Control *the_partition,
   ISR_lock_Context  *lock_context
 )
@@ -96,7 +96,7 @@ RTEMS_INLINE_ROUTINE void _Partition_Acquire_critical(
  *
  * @param[in, out] lock_context is the lock context set up by _Partition_Get().
  */
-RTEMS_INLINE_ROUTINE void _Partition_Release(
+static inline void _Partition_Release(
   Partition_Control *the_partition,
   ISR_lock_Context  *lock_context
 )

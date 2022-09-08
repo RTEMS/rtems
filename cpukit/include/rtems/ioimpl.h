@@ -70,7 +70,7 @@ void _IO_Initialize_all_drivers( void );
 
 ISR_LOCK_DECLARE( extern, _IO_Driver_registration_lock )
 
-RTEMS_INLINE_ROUTINE void _IO_Driver_registration_acquire(
+static inline void _IO_Driver_registration_acquire(
   ISR_lock_Context *lock_context
 )
 {
@@ -80,7 +80,7 @@ RTEMS_INLINE_ROUTINE void _IO_Driver_registration_acquire(
   );
 }
 
-RTEMS_INLINE_ROUTINE void _IO_Driver_registration_release(
+static inline void _IO_Driver_registration_release(
   ISR_lock_Context *lock_context
 )
 {

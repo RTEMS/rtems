@@ -608,7 +608,7 @@ typedef struct {
 
 #ifndef ASM
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
   return ( level & MSR_EE ) != 0;
 }

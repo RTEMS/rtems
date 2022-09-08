@@ -59,7 +59,7 @@
 
 extern const int _POSIX_Get_by_name_error_table[ 3 ];
 
-RTEMS_INLINE_ROUTINE int _POSIX_Get_by_name_error(
+static inline int _POSIX_Get_by_name_error(
   Objects_Get_by_name_error error
 )
 {
@@ -67,19 +67,19 @@ RTEMS_INLINE_ROUTINE int _POSIX_Get_by_name_error(
   return _POSIX_Get_by_name_error_table[ error ];
 }
 
-RTEMS_INLINE_ROUTINE int _POSIX_Get_error( Status_Control status )
+static inline int _POSIX_Get_error( Status_Control status )
 {
   return STATUS_GET_POSIX( status );
 }
 
-RTEMS_INLINE_ROUTINE int _POSIX_Get_error_after_wait(
+static inline int _POSIX_Get_error_after_wait(
   const Thread_Control *executing
 )
 {
   return _POSIX_Get_error( _Thread_Wait_get_status( executing ) );
 }
 
-RTEMS_INLINE_ROUTINE int _POSIX_Zero_or_minus_one_plus_errno(
+static inline int _POSIX_Zero_or_minus_one_plus_errno(
   Status_Control status
 )
 {
@@ -97,7 +97,7 @@ RTEMS_INLINE_ROUTINE int _POSIX_Zero_or_minus_one_plus_errno(
  *
  * http://pubs.opengroup.org/onlinepubs/9699919799/functions/V2_chap02.html#tag_15_09_09
  */
-RTEMS_INLINE_ROUTINE bool _POSIX_Is_valid_pshared( int pshared )
+static inline bool _POSIX_Is_valid_pshared( int pshared )
 {
   return pshared == PTHREAD_PROCESS_PRIVATE ||
     pshared == PTHREAD_PROCESS_SHARED;

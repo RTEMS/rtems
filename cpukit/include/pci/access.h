@@ -134,32 +134,32 @@ extern int pci_access_drv_register(struct pci_access_drv *drv);
 extern void pci_modify_cmdsts(pci_dev_t dev, uint32_t mask, uint32_t val);
 
 /* Enable Memory in command register */
-RTEMS_INLINE_ROUTINE void pci_mem_enable(pci_dev_t dev)
+static inline void pci_mem_enable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_MEMEN, PCIM_CMD_MEMEN);
 }
 
-RTEMS_INLINE_ROUTINE void pci_mem_disable(pci_dev_t dev)
+static inline void pci_mem_disable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_MEMEN, 0);
 }
 
-RTEMS_INLINE_ROUTINE void pci_io_enable(pci_dev_t dev)
+static inline void pci_io_enable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_PORTEN, PCIM_CMD_PORTEN);
 }
 
-RTEMS_INLINE_ROUTINE void pci_io_disable(pci_dev_t dev)
+static inline void pci_io_disable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_PORTEN, 0);
 }
 
-RTEMS_INLINE_ROUTINE void pci_master_enable(pci_dev_t dev)
+static inline void pci_master_enable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_BUSMASTEREN, PCIM_CMD_BUSMASTEREN);
 }
 
-RTEMS_INLINE_ROUTINE void pci_master_disable(pci_dev_t dev)
+static inline void pci_master_disable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_BUSMASTEREN, 0);
 }
@@ -185,25 +185,25 @@ extern void pci_io_w16(uint32_t adr, uint16_t data);
 extern void pci_io_w32(uint32_t adr, uint32_t data);
 
 /* Translate PCI address into CPU accessible address */
-RTEMS_INLINE_ROUTINE int pci_pci2cpu(uint32_t *address, int type)
+static inline int pci_pci2cpu(uint32_t *address, int type)
 {
 	return pci_access_ops.translate(address, type, 0);
 }
 
 /* Translate CPU accessible address into PCI address (for DMA) */
-RTEMS_INLINE_ROUTINE int pci_cpu2pci(uint32_t *address, int type)
+static inline int pci_cpu2pci(uint32_t *address, int type)
 {
 	return pci_access_ops.translate(address, type, 1);
 }
 
 /*** Read/Write a register over PCI Memory Space ***/
 
-RTEMS_INLINE_ROUTINE uint8_t pci_ld8(volatile uint8_t *addr)
+static inline uint8_t pci_ld8(volatile uint8_t *addr)
 {
 	return *addr;
 }
 
-RTEMS_INLINE_ROUTINE void pci_st8(volatile uint8_t *addr, uint8_t val)
+static inline void pci_st8(volatile uint8_t *addr, uint8_t val)
 {
 	*addr = val;
 }

@@ -402,7 +402,7 @@ static inline void arm_interrupt_flash( uint32_t level )
 #define _CPU_ISR_Flash( _isr_cookie ) \
   arm_interrupt_flash( _isr_cookie )
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
 #if defined(ARM_MULTILIB_ARCH_V4)
   return ( level & 0x80 ) == 0;

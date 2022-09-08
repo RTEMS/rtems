@@ -62,7 +62,7 @@ extern "C" {
  *  This function allocates a barrier control block from
  *  the inactive chain of free barrier control blocks.
  */
-RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Allocate( void )
+static inline Barrier_Control *_Barrier_Allocate( void )
 {
   return (Barrier_Control *) _Objects_Allocate( &_Barrier_Information );
 }
@@ -73,7 +73,7 @@ RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Allocate( void )
  *  This routine frees a barrier control block to the
  *  inactive chain of free barrier control blocks.
  */
-RTEMS_INLINE_ROUTINE void _Barrier_Free (
+static inline void _Barrier_Free (
   Barrier_Control *the_barrier
 )
 {
@@ -81,7 +81,7 @@ RTEMS_INLINE_ROUTINE void _Barrier_Free (
   _Objects_Free( &_Barrier_Information, &the_barrier->Object );
 }
 
-RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Get(
+static inline Barrier_Control *_Barrier_Get(
   Objects_Id            id,
   Thread_queue_Context *queue_context
 )

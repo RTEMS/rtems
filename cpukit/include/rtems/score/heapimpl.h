@@ -156,7 +156,7 @@ void *_Heap_Allocate_aligned_with_boundary(
  * @retval pointer The starting address of the allocated memory area.
  * @retval NULL No memory is available of the parameters are inconsistent.
  */
-RTEMS_INLINE_ROUTINE void *_Heap_Allocate_aligned(
+static inline void *_Heap_Allocate_aligned(
   Heap_Control *heap,
   uintptr_t size,
   uintptr_t alignment
@@ -177,7 +177,7 @@ RTEMS_INLINE_ROUTINE void *_Heap_Allocate_aligned(
  * @retval pointer The starting address of the allocated memory area.
  * @retval NULL No memory is available of the parameters are inconsistent.
  */
-RTEMS_INLINE_ROUTINE void *_Heap_Allocate( Heap_Control *heap, uintptr_t size )
+static inline void *_Heap_Allocate( Heap_Control *heap, uintptr_t size )
 {
   return _Heap_Allocate_aligned_with_boundary( heap, size, 0, 0 );
 }
@@ -440,7 +440,7 @@ Heap_Block *_Heap_Block_allocate(
  * @param[in, out] heap The heap control.
  * @param fraction The fraction is one divided by this fraction value.
  */
-RTEMS_INLINE_ROUTINE void _Heap_Protection_set_delayed_free_fraction(
+static inline void _Heap_Protection_set_delayed_free_fraction(
   Heap_Control *heap,
   uintptr_t fraction
 )
@@ -460,7 +460,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Protection_set_delayed_free_fraction(
  *
  * @return The head of the free list.
  */
-RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_head( Heap_Control *heap )
+static inline Heap_Block *_Heap_Free_list_head( Heap_Control *heap )
 {
   return &heap->free_list;
 }
@@ -472,7 +472,7 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_head( Heap_Control *heap )
  *
  * @return The tail of the free list.
  */
-RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_tail( Heap_Control *heap )
+static inline Heap_Block *_Heap_Free_list_tail( Heap_Control *heap )
 {
   return &heap->free_list;
 }
@@ -484,7 +484,7 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_tail( Heap_Control *heap )
  *
  * @return The first block of the free list.
  */
-RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_first( Heap_Control *heap )
+static inline Heap_Block *_Heap_Free_list_first( Heap_Control *heap )
 {
   return _Heap_Free_list_head(heap)->next;
 }
@@ -496,7 +496,7 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_first( Heap_Control *heap )
  *
  * @return The last block of the free list.
  */
-RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_last( Heap_Control *heap )
+static inline Heap_Block *_Heap_Free_list_last( Heap_Control *heap )
 {
   return _Heap_Free_list_tail(heap)->prev;
 }
@@ -506,7 +506,7 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_last( Heap_Control *heap )
  *
  * @param block The block to be removed.
  */
-RTEMS_INLINE_ROUTINE void _Heap_Free_list_remove( Heap_Block *block )
+static inline void _Heap_Free_list_remove( Heap_Block *block )
 {
   Heap_Block *next = block->next;
   Heap_Block *prev = block->prev;
@@ -521,7 +521,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Free_list_remove( Heap_Block *block )
  * @param old_block The block in the free list to replace.
  * @param new_block The block that should replace @a old_block.
  */
-RTEMS_INLINE_ROUTINE void _Heap_Free_list_replace(
+static inline void _Heap_Free_list_replace(
   Heap_Block *old_block,
   Heap_Block *new_block
 )
@@ -542,7 +542,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Free_list_replace(
  * @param block_before The block that is already in the free list.
  * @param new_block The block to be inserted after @a block_before.
  */
-RTEMS_INLINE_ROUTINE void _Heap_Free_list_insert_after(
+static inline void _Heap_Free_list_insert_after(
   Heap_Block *block_before,
   Heap_Block *new_block
 )
@@ -561,7 +561,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Free_list_insert_after(
  * @param block_before The block that is already in the free list.
  * @param new_block The block to be inserted before @a block_before.
  */
-RTEMS_INLINE_ROUTINE void _Heap_Free_list_insert_before(
+static inline void _Heap_Free_list_insert_before(
   Heap_Block *block_next,
   Heap_Block *new_block
 )
@@ -583,7 +583,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Free_list_insert_before(
  * @retval true The value is aligned to the given alignment.
  * @retval false The value is not aligned to the given alignment.
  */
-RTEMS_INLINE_ROUTINE bool _Heap_Is_aligned(
+static inline bool _Heap_Is_aligned(
   uintptr_t value,
   uintptr_t alignment
 )
@@ -599,7 +599,7 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_aligned(
  *
  * @return The aligned value, truncated.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_down(
+static inline uintptr_t _Heap_Align_down(
   uintptr_t value,
   uintptr_t alignment
 )
@@ -615,7 +615,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_down(
  *
  * @return The address of the block which is @a offset away from @a block.
  */
-RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_at(
+static inline Heap_Block *_Heap_Block_at(
   const Heap_Block *block,
   uintptr_t offset
 )
@@ -630,7 +630,7 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_at(
  *
  * @return The address of the previous block.
  */
-RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Prev_block(
+static inline Heap_Block *_Heap_Prev_block(
   const Heap_Block *block
 )
 {
@@ -644,7 +644,7 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Prev_block(
  *
  * @return The first address after the heap header.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Alloc_area_of_block(
+static inline uintptr_t _Heap_Alloc_area_of_block(
   const Heap_Block *block
 )
 {
@@ -659,7 +659,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Alloc_area_of_block(
  *
  * @return The Starting address of the corresponding block of the allocatable area.
  */
-RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_of_alloc_area(
+static inline Heap_Block *_Heap_Block_of_alloc_area(
   uintptr_t alloc_begin,
   uintptr_t page_size
 )
@@ -675,7 +675,7 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_of_alloc_area(
  *
  * @return The block size.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Block_size( const Heap_Block *block )
+static inline uintptr_t _Heap_Block_size( const Heap_Block *block )
 {
   return block->size_and_flag & ~HEAP_PREV_BLOCK_USED;
 }
@@ -686,7 +686,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Block_size( const Heap_Block *block )
  * @param[in, out] block The block of which the size shall be set.
  * @param size The new size of the block.
  */
-RTEMS_INLINE_ROUTINE void _Heap_Block_set_size(
+static inline void _Heap_Block_set_size(
   Heap_Block *block,
   uintptr_t size
 )
@@ -705,7 +705,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Block_set_size(
  * @retval true The previous block is used.
  * @retval false The previous block is not used.
  */
-RTEMS_INLINE_ROUTINE bool _Heap_Is_prev_used( const Heap_Block *block )
+static inline bool _Heap_Is_prev_used( const Heap_Block *block )
 {
   return block->size_and_flag & HEAP_PREV_BLOCK_USED;
 }
@@ -718,7 +718,7 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_prev_used( const Heap_Block *block )
  * @retval true The block is used.
  * @retval false The block is not used.
  */
-RTEMS_INLINE_ROUTINE bool _Heap_Is_used(
+static inline bool _Heap_Is_used(
   const Heap_Block *block
 )
 {
@@ -736,7 +736,7 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_used(
  * @retval true The block is free.
  * @retval false The block is not free.
  */
-RTEMS_INLINE_ROUTINE bool _Heap_Is_free(
+static inline bool _Heap_Is_free(
   const Heap_Block *block
 )
 {
@@ -752,7 +752,7 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_free(
  * @retval true The block is part of the heap.
  * @retval false The block is not part of the heap.
  */
-RTEMS_INLINE_ROUTINE bool _Heap_Is_block_in_heap(
+static inline bool _Heap_Is_block_in_heap(
   const Heap_Control *heap,
   const Heap_Block *block
 )
@@ -774,7 +774,7 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_block_in_heap(
  *
  * @param[in, out] heap The heap to set the last block size of.
  */
-RTEMS_INLINE_ROUTINE void _Heap_Set_last_block_size( Heap_Control *heap )
+static inline void _Heap_Set_last_block_size( Heap_Control *heap )
 {
   _Heap_Block_set_size(
     heap->last_block,
@@ -791,7 +791,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Set_last_block_size( Heap_Control *heap )
  *
  * @return The size of the allocatable area in @a heap in bytes.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Get_size( const Heap_Control *heap )
+static inline uintptr_t _Heap_Get_size( const Heap_Control *heap )
 {
   return heap->stats.size;
 }
@@ -805,7 +805,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Get_size( const Heap_Control *heap )
  * @retval a If a > b.
  * @retval b If b >= a
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Max( uintptr_t a, uintptr_t b )
+static inline uintptr_t _Heap_Max( uintptr_t a, uintptr_t b )
 {
   return a > b ? a : b;
 }
@@ -819,7 +819,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Max( uintptr_t a, uintptr_t b )
  * @retval a If a < b.
  * @retval b If b <= a
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Min( uintptr_t a, uintptr_t b )
+static inline uintptr_t _Heap_Min( uintptr_t a, uintptr_t b )
 {
   return a < b ? a : b;
 }

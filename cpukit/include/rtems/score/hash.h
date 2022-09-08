@@ -84,7 +84,7 @@ typedef struct {
  *
  * @return Returns the hash value as a NUL-terminated string.
  */
-RTEMS_INLINE_ROUTINE const char *_Hash_Get_string( const Hash_Control *hash )
+static inline const char *_Hash_Get_string( const Hash_Control *hash )
 {
   return &hash->chars[ 0 ];
 }
@@ -114,7 +114,7 @@ typedef struct {
  *
  * @param[out] context is the hash context to initialize.
  */
-RTEMS_INLINE_ROUTINE void _Hash_Initialize( Hash_Context *context )
+static inline void _Hash_Initialize( Hash_Context *context )
 {
   SHA256_Init( &context->Context );
 }
@@ -128,7 +128,7 @@ RTEMS_INLINE_ROUTINE void _Hash_Initialize( Hash_Context *context )
  *
  * @param size is the size of the data in bytes.
  */
-RTEMS_INLINE_ROUTINE void _Hash_Add_data(
+static inline void _Hash_Add_data(
   Hash_Context *context,
   const void   *begin,
   size_t        size
@@ -144,7 +144,7 @@ RTEMS_INLINE_ROUTINE void _Hash_Add_data(
  *
  * @param str is the string to add.
  */
-RTEMS_INLINE_ROUTINE void _Hash_Add_string(
+static inline void _Hash_Add_string(
   Hash_Context *context,
   const char   *str
 )

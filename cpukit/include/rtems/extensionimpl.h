@@ -54,19 +54,19 @@ extern "C" {
  * @{
  */
 
-RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Allocate( void )
+static inline Extension_Control *_Extension_Allocate( void )
 {
   return (Extension_Control *) _Objects_Allocate( &_Extension_Information );
 }
 
-RTEMS_INLINE_ROUTINE void _Extension_Free (
+static inline void _Extension_Free (
   Extension_Control *the_extension
 )
 {
   _Objects_Free( &_Extension_Information, &the_extension->Object );
 }
 
-RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Get( Objects_Id id )
+static inline Extension_Control *_Extension_Get( Objects_Id id )
 {
   return (Extension_Control *)
     _Objects_Get_no_protection( id, &_Extension_Information );

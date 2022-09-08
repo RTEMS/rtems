@@ -316,7 +316,7 @@ static inline void or1k_interrupt_enable(uint32_t level)
       _OR1K_mtspr(CPU_OR1K_SPR_SR, (_level & ~CPU_OR1K_SPR_SR_IEE)); \
     } while(0)
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
   return ( level & CPU_OR1K_SPR_SR ) != 0;
 }
@@ -468,7 +468,7 @@ void _CPU_ISR_install_raw_handler(
 
 typedef void ( *CPU_ISR_handler )( uint32_t );
 
-RTEMS_INLINE_ROUTINE void _CPU_ISR_install_vector(
+static inline void _CPU_ISR_install_vector(
   uint32_t         vector,
   CPU_ISR_handler  new_handler,
   CPU_ISR_handler *old_handler

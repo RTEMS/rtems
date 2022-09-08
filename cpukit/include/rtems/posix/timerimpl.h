@@ -76,7 +76,7 @@ extern "C" {
  *  This function allocates a timer control block from
  *  the inactive chain of free timer control blocks.
  */
-RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Allocate( void )
+static inline POSIX_Timer_Control *_POSIX_Timer_Allocate( void )
 {
   return (POSIX_Timer_Control *) _Objects_Allocate( &_POSIX_Timer_Information );
 }
@@ -87,7 +87,7 @@ RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Allocate( void )
  *  This routine frees a timer control block to the
  *  inactive chain of free timer control blocks.
  */
-RTEMS_INLINE_ROUTINE void _POSIX_Timer_Free (
+static inline void _POSIX_Timer_Free (
   POSIX_Timer_Control *the_timer
 )
 {
@@ -105,7 +105,7 @@ void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog );
  *  is set to OBJECTS_LOCAL.  Otherwise, location is set
  *  to OBJECTS_ERROR and the returned value is undefined.
  */
-RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
+static inline POSIX_Timer_Control *_POSIX_Timer_Get (
   timer_t            id,
   ISR_lock_Context  *lock_context
 )
@@ -117,7 +117,7 @@ RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
   );
 }
 
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_POSIX_Timer_Acquire_critical(
+static inline Per_CPU_Control *_POSIX_Timer_Acquire_critical(
   POSIX_Timer_Control *ptimer,
   ISR_lock_Context    *lock_context
 )
@@ -130,7 +130,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_POSIX_Timer_Acquire_critical(
   return cpu;
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Timer_Release(
+static inline void _POSIX_Timer_Release(
   Per_CPU_Control  *cpu,
   ISR_lock_Context *lock_context
 )

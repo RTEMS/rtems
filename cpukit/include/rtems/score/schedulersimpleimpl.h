@@ -58,7 +58,7 @@ extern "C" {
  *
  * @return The context of @a scheduler.
  */
-RTEMS_INLINE_ROUTINE Scheduler_simple_Context *
+static inline Scheduler_simple_Context *
   _Scheduler_simple_Get_context( const Scheduler_Control *scheduler )
 {
   return (Scheduler_simple_Context *) _Scheduler_Get_context( scheduler );
@@ -76,7 +76,7 @@ RTEMS_INLINE_ROUTINE Scheduler_simple_Context *
  * @retval true @a to_insert is smaller or equal than the priority of @a next.
  * @retval false @a to_insert is greater than the priority of @a next.
  */
-RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Priority_less_equal(
+static inline bool _Scheduler_simple_Priority_less_equal(
   const void       *key,
   const Chain_Node *to_insert,
   const Chain_Node *next
@@ -99,7 +99,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Priority_less_equal(
  * @param[in, out] to_insert The node to insert into @a chain.
  * @param insert_priority The priority to insert @a to_insert with.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert(
+static inline void _Scheduler_simple_Insert(
   Chain_Control  *chain,
   Thread_Control *to_insert,
   unsigned int    insert_priority
@@ -120,7 +120,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert(
  * @param[in, out] the_thread The thread of which to extract the node out of its chain.
  * @param node This parameter is unused.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_simple_Extract(
+static inline void _Scheduler_simple_Extract(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -137,7 +137,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Extract(
  *
  * @param scheduler is the scheduler.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_simple_Get_highest_ready(
+static inline Thread_Control *_Scheduler_simple_Get_highest_ready(
   const Scheduler_Control *scheduler
 )
 {

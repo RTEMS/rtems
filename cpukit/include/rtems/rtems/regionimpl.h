@@ -66,7 +66,7 @@ extern "C" {
  *  This function allocates a region control block from
  *  the inactive chain of free region control blocks.
  */
-RTEMS_INLINE_ROUTINE Region_Control *_Region_Allocate( void )
+static inline Region_Control *_Region_Allocate( void )
 {
   return (Region_Control *) _Objects_Allocate( &_Region_Information );
 }
@@ -77,7 +77,7 @@ RTEMS_INLINE_ROUTINE Region_Control *_Region_Allocate( void )
  *  This routine frees a region control block to the
  *  inactive chain of free region control blocks.
  */
-RTEMS_INLINE_ROUTINE void _Region_Free (
+static inline void _Region_Free (
   Region_Control *the_region
 )
 {
@@ -85,7 +85,7 @@ RTEMS_INLINE_ROUTINE void _Region_Free (
   _Objects_Free( &_Region_Information, &the_region->Object );
 }
 
-RTEMS_INLINE_ROUTINE Region_Control *_Region_Get_and_lock( Objects_Id id )
+static inline Region_Control *_Region_Get_and_lock( Objects_Id id )
 {
   Region_Control *the_region;
 
@@ -103,7 +103,7 @@ RTEMS_INLINE_ROUTINE Region_Control *_Region_Get_and_lock( Objects_Id id )
   return NULL;
 }
 
-RTEMS_INLINE_ROUTINE void _Region_Unlock( Region_Control *the_region )
+static inline void _Region_Unlock( Region_Control *the_region )
 {
   (void) the_region;
   _RTEMS_Unlock_allocator();
@@ -116,7 +116,7 @@ RTEMS_INLINE_ROUTINE void _Region_Unlock( Region_Control *the_region )
  *  If successful, it returns the address of the allocated segment.
  *  Otherwise, it returns NULL.
  */
-RTEMS_INLINE_ROUTINE void *_Region_Allocate_segment (
+static inline void *_Region_Allocate_segment (
   Region_Control *the_region,
   uintptr_t       size
 )
@@ -129,7 +129,7 @@ RTEMS_INLINE_ROUTINE void *_Region_Allocate_segment (
  *
  *  This function frees the_segment to the_region.
  */
-RTEMS_INLINE_ROUTINE bool _Region_Free_segment (
+static inline bool _Region_Free_segment (
   Region_Control *the_region,
   void           *the_segment
 )

@@ -124,7 +124,7 @@ void _CORE_RWLock_Initialize(
  *
  * @param[out] the_rwlock is the RWLock to destroy.
  */
-RTEMS_INLINE_ROUTINE void _CORE_RWLock_Destroy(
+static inline void _CORE_RWLock_Destroy(
   CORE_RWLock_Control *the_rwlock
 )
 {
@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Destroy(
  *
  * @return The executing thread.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_CORE_RWLock_Acquire(
+static inline Thread_Control *_CORE_RWLock_Acquire(
   CORE_RWLock_Control  *the_rwlock,
   Thread_queue_Context *queue_context
 )
@@ -165,7 +165,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_RWLock_Acquire(
  * @param[in, out] the_rwlock The RWlock to release.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_RWLock_Release(
+static inline void _CORE_RWLock_Release(
   CORE_RWLock_Control  *the_rwlock,
   Thread_queue_Context *queue_context
 )

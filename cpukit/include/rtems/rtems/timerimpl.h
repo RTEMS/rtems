@@ -80,7 +80,7 @@ extern Timer_server_Control *volatile _Timer_server;
  *  This function allocates a timer control block from
  *  the inactive chain of free timer control blocks.
  */
-RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Allocate( void )
+static inline Timer_Control *_Timer_Allocate( void )
 {
   return (Timer_Control *) _Objects_Allocate( &_Timer_Information );
 }
@@ -91,14 +91,14 @@ RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Allocate( void )
  *  This routine frees a timer control block to the
  *  inactive chain of free timer control blocks.
  */
-RTEMS_INLINE_ROUTINE void _Timer_Free (
+static inline void _Timer_Free (
   Timer_Control *the_timer
 )
 {
   _Objects_Free( &_Timer_Information, &the_timer->Object );
 }
 
-RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get(
+static inline Timer_Control *_Timer_Get(
   Objects_Id         id,
   ISR_lock_Context  *lock_context
 )
@@ -110,7 +110,7 @@ RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get(
   );
 }
 
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_Timer_Acquire_critical(
+static inline Per_CPU_Control *_Timer_Acquire_critical(
   Timer_Control    *the_timer,
   ISR_lock_Context *lock_context
 )
@@ -123,7 +123,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Timer_Acquire_critical(
   return cpu;
 }
 
-RTEMS_INLINE_ROUTINE void _Timer_Release(
+static inline void _Timer_Release(
   Per_CPU_Control  *cpu,
   ISR_lock_Context *lock_context
 )
@@ -132,7 +132,7 @@ RTEMS_INLINE_ROUTINE void _Timer_Release(
   _ISR_lock_ISR_enable( lock_context );
 }
 
-RTEMS_INLINE_ROUTINE bool _Timer_Is_interval_class(
+static inline bool _Timer_Is_interval_class(
   Timer_Classes the_class
 )
 {
@@ -142,7 +142,7 @@ RTEMS_INLINE_ROUTINE bool _Timer_Is_interval_class(
   return ( the_class & mask ) == TIMER_CLASS_BIT_NOT_DORMANT;
 }
 
-RTEMS_INLINE_ROUTINE bool _Timer_Is_on_task_class(
+static inline bool _Timer_Is_on_task_class(
   Timer_Classes the_class
 )
 {
@@ -152,14 +152,14 @@ RTEMS_INLINE_ROUTINE bool _Timer_Is_on_task_class(
   return ( the_class & mask ) == mask;
 }
 
-RTEMS_INLINE_ROUTINE Per_CPU_Watchdog_index _Timer_Watchdog_header_index(
+static inline Per_CPU_Watchdog_index _Timer_Watchdog_header_index(
   Timer_Classes the_class
 )
 {
   return (Per_CPU_Watchdog_index) ( the_class & TIMER_CLASS_BIT_TIME_OF_DAY );
 }
 
-RTEMS_INLINE_ROUTINE Watchdog_Interval _Timer_Get_CPU_ticks(
+static inline Watchdog_Interval _Timer_Get_CPU_ticks(
   const Per_CPU_Control *cpu
 )
 {
@@ -199,7 +199,7 @@ void _Timer_Routine_adaptor( Watchdog_Control *the_watchdog );
 
 void _Timer_server_Routine_adaptor( Watchdog_Control *the_watchdog );
 
-RTEMS_INLINE_ROUTINE void _Timer_server_Acquire_critical(
+static inline void _Timer_server_Acquire_critical(
   Timer_server_Control *timer_server,
   ISR_lock_Context     *lock_context
 )
@@ -207,7 +207,7 @@ RTEMS_INLINE_ROUTINE void _Timer_server_Acquire_critical(
   _ISR_lock_Acquire( &timer_server->Lock, lock_context );
 }
 
-RTEMS_INLINE_ROUTINE void _Timer_server_Release_critical(
+static inline void _Timer_server_Release_critical(
   Timer_server_Control *timer_server,
   ISR_lock_Context     *lock_context
 )

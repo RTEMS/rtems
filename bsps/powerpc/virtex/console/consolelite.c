@@ -57,28 +57,28 @@
 
 
 
-RTEMS_INLINE_ROUTINE uint32_t xlite_uart_control(uint32_t base)
+static inline uint32_t xlite_uart_control(uint32_t base)
 {
   uint32_t c = *((volatile uint32_t*)(base+CTRL_REG));
   return c;
 }
 
 
-RTEMS_INLINE_ROUTINE uint32_t xlite_uart_status(uint32_t base)
+static inline uint32_t xlite_uart_status(uint32_t base)
 {
   uint32_t c = *((volatile uint32_t*)(base+STAT_REG));
   return c;
 }
 
 
-RTEMS_INLINE_ROUTINE uint32_t xlite_uart_read(uint32_t base)
+static inline uint32_t xlite_uart_read(uint32_t base)
 {
   uint32_t c = *((volatile uint32_t*)(base+RECV_REG));
   return c;
 }
 
 
-RTEMS_INLINE_ROUTINE void xlite_uart_write(uint32_t base, char ch)
+static inline void xlite_uart_write(uint32_t base, char ch)
 {
   *(volatile uint32_t*)(base+TRAN_REG) = (uint32_t)ch;
   return;

@@ -190,7 +190,7 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_ne_driver_attach
 extern int rtems_ne_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 
-RTEMS_INLINE_ROUTINE const char* bsp_cmdline_arg(const char* arg)
+static inline const char* bsp_cmdline_arg(const char* arg)
 {
   return rtems_bsp_cmdline_get_param_raw(arg);
 }

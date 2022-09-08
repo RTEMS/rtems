@@ -98,7 +98,7 @@ typedef struct {
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_init ( void )
+static inline qos_rv qres_init ( void )
 {
   return _Scheduler_CBS_Initialize();
 }
@@ -110,7 +110,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_init ( void )
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_cleanup ( void )
+static inline qos_rv qres_cleanup ( void )
 {
   return _Scheduler_CBS_Cleanup();
 }
@@ -122,7 +122,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_cleanup ( void )
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_create_server (
+static inline qos_rv qres_create_server (
   qres_params_t *params,
   qres_sid_t    *server_id
 )
@@ -141,7 +141,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_create_server (
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_attach_thread (
+static inline qos_rv qres_attach_thread (
   qres_sid_t server_id,
   pid_t      pid,
   tid_t      task_id
@@ -157,7 +157,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_attach_thread (
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_detach_thread (
+static inline qos_rv qres_detach_thread (
   qres_sid_t server_id,
   pid_t      pid,
   tid_t      task_id
@@ -173,7 +173,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_detach_thread (
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_destroy_server (
+static inline qos_rv qres_destroy_server (
   qres_sid_t server_id
 )
 {
@@ -188,7 +188,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_destroy_server (
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_get_sid (
+static inline qos_rv qres_get_sid (
   pid_t       pid,
   tid_t       task_id,
   qres_sid_t *server_id
@@ -204,7 +204,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_get_sid (
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_get_params (
+static inline qos_rv qres_get_params (
   qres_sid_t     server_id,
   qres_params_t *params
 )
@@ -222,7 +222,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_get_params (
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_set_params (
+static inline qos_rv qres_set_params (
   qres_sid_t     server_id,
   qres_params_t *params
 )
@@ -240,7 +240,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_set_params (
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_get_exec_time (
+static inline qos_rv qres_get_exec_time (
   qres_sid_t    server_id,
   qres_time_t  *exec_time,
   qres_atime_t *abs_time
@@ -256,7 +256,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_get_exec_time (
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_get_curr_budget (
+static inline qos_rv qres_get_curr_budget (
   qres_sid_t   server_id,
   qres_time_t *current_budget
 )
@@ -272,7 +272,7 @@ RTEMS_INLINE_ROUTINE qos_rv qres_get_curr_budget (
  *
  *  @return status code.
  */
-RTEMS_INLINE_ROUTINE qos_rv qres_get_appr_budget (
+static inline qos_rv qres_get_appr_budget (
   qres_sid_t   server_id,
   qres_time_t *appr_budget
 )

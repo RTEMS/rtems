@@ -81,7 +81,7 @@ void _CORE_semaphore_Initialize(
  * @param[in, out] the_semaphore The semaphore to acquire.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_semaphore_Acquire_critical(
+static inline void _CORE_semaphore_Acquire_critical(
   CORE_semaphore_Control *the_semaphore,
   Thread_queue_Context   *queue_context
 )
@@ -97,7 +97,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Acquire_critical(
  * @param[in, out] the_semaphore The semaphore to release.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_semaphore_Release(
+static inline void _CORE_semaphore_Release(
   CORE_semaphore_Control *the_semaphore,
   Thread_queue_Context   *queue_context
 )
@@ -114,7 +114,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Release(
  * @param operations The thread queue operations.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
+static inline void _CORE_semaphore_Destroy(
   CORE_semaphore_Control        *the_semaphore,
   const Thread_queue_Operations *operations,
   Thread_queue_Context          *queue_context
@@ -145,7 +145,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
  * @retval STATUS_SUCCESSFUL The unit was successfully freed to the semaphore.
  * @retval STATUS_MAXIMUM_COUNT_EXCEEDED The maximum number of units was exceeded.
  */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Surrender(
+static inline Status_Control _CORE_semaphore_Surrender(
   CORE_semaphore_Control        *the_semaphore,
   const Thread_queue_Operations *operations,
   uint32_t                       maximum_count,
@@ -187,7 +187,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Surrender(
  *
  * @return the current count of this semaphore.
  */
-RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
+static inline uint32_t  _CORE_semaphore_Get_count(
   const CORE_semaphore_Control *the_semaphore
 )
 {
@@ -214,7 +214,7 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
  *      calling thread not willing to wait.
  * @retval STATUS_TIMEOUT A timeout occurred.
  */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Seize(
+static inline Status_Control _CORE_semaphore_Seize(
   CORE_semaphore_Control        *the_semaphore,
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,

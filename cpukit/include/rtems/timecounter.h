@@ -86,7 +86,7 @@ extern "C" {
  * }
  * @endcode
  */
-RTEMS_INLINE_ROUTINE void rtems_timecounter_install(
+static inline void rtems_timecounter_install(
   struct timecounter *tc
 )
 {
@@ -96,7 +96,7 @@ RTEMS_INLINE_ROUTINE void rtems_timecounter_install(
 /**
  * @copydoc _Timecounter_Tick()
  */
-RTEMS_INLINE_ROUTINE void rtems_timecounter_tick(void)
+static inline void rtems_timecounter_tick(void)
 {
   _Timecounter_Tick();
 }
@@ -219,7 +219,7 @@ void rtems_timecounter_simple_install(
  *
  * @return The scaled value.
  */
-RTEMS_INLINE_ROUTINE uint32_t rtems_timecounter_simple_scale(
+static inline uint32_t rtems_timecounter_simple_scale(
   const rtems_timecounter_simple *tc,
   uint32_t value
 )
@@ -235,7 +235,7 @@ RTEMS_INLINE_ROUTINE uint32_t rtems_timecounter_simple_scale(
  * @param[in] at_tick The method to perform work under timecounter lock
  * protection at this tick, e.g. clear a pending flag.
  */
-RTEMS_INLINE_ROUTINE void rtems_timecounter_simple_downcounter_tick(
+static inline void rtems_timecounter_simple_downcounter_tick(
   rtems_timecounter_simple         *tc,
   rtems_timecounter_simple_get      get,
   rtems_timecounter_simple_at_tick  at_tick
@@ -264,7 +264,7 @@ RTEMS_INLINE_ROUTINE void rtems_timecounter_simple_downcounter_tick(
  * @param[in] at_tick The method to perform work under timecounter lock
  * protection at this tick, e.g. clear a pending flag.
  */
-RTEMS_INLINE_ROUTINE void rtems_timecounter_simple_upcounter_tick(
+static inline void rtems_timecounter_simple_upcounter_tick(
   rtems_timecounter_simple         *tc,
   rtems_timecounter_simple_get      get,
   rtems_timecounter_simple_at_tick  at_tick
@@ -291,7 +291,7 @@ RTEMS_INLINE_ROUTINE void rtems_timecounter_simple_upcounter_tick(
  * @param[in] is_pending The method which indicates if the interrupt of the
  * simple timecounter is pending.
  */
-RTEMS_INLINE_ROUTINE uint32_t rtems_timecounter_simple_downcounter_get(
+static inline uint32_t rtems_timecounter_simple_downcounter_get(
   struct timecounter                  *tc_base,
   rtems_timecounter_simple_get         get,
   rtems_timecounter_simple_is_pending  is_pending
@@ -322,7 +322,7 @@ RTEMS_INLINE_ROUTINE uint32_t rtems_timecounter_simple_downcounter_get(
  * @param[in] is_pending The method which indicates if the interrupt of the
  * simple timecounter is pending.
  */
-RTEMS_INLINE_ROUTINE uint32_t rtems_timecounter_simple_upcounter_get(
+static inline uint32_t rtems_timecounter_simple_upcounter_get(
   struct timecounter                  *tc_base,
   rtems_timecounter_simple_get         get,
   rtems_timecounter_simple_is_pending  is_pending

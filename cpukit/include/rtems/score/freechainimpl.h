@@ -68,7 +68,7 @@ typedef void *( *Freechain_Allocator )( size_t size );
  * @param number_nodes The initial number of nodes.
  * @param node_size The node size.
  */
-RTEMS_INLINE_ROUTINE void _Freechain_Initialize(
+static inline void _Freechain_Initialize(
   Freechain_Control   *freechain,
   void                *initial_nodes,
   size_t               number_nodes,
@@ -88,7 +88,7 @@ RTEMS_INLINE_ROUTINE void _Freechain_Initialize(
  *
  * @param freechain The freechain control.
  */
-RTEMS_INLINE_ROUTINE bool _Freechain_Is_empty(
+static inline bool _Freechain_Is_empty(
   const Freechain_Control *freechain
 )
 {
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE bool _Freechain_Is_empty(
  *
  * @param freechain The freechain control.
  */
-RTEMS_INLINE_ROUTINE void *_Freechain_Pop( Freechain_Control *freechain )
+static inline void *_Freechain_Pop( Freechain_Control *freechain )
 {
   return _Chain_Get_first_unprotected( &freechain->Free );
 }
@@ -113,7 +113,7 @@ RTEMS_INLINE_ROUTINE void *_Freechain_Pop( Freechain_Control *freechain )
  * @param freechain The freechain control.
  * @param node The node to push back.  The node shall not be @c NULL.
  */
-void RTEMS_INLINE_ROUTINE _Freechain_Push(
+void static inline _Freechain_Push(
   Freechain_Control *freechain,
   void              *node
 )

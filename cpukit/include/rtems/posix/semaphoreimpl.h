@@ -53,7 +53,7 @@ extern "C" {
  */
 #define POSIX_SEMAPHORE_MAGIC 0x5d367fe7UL
 
-RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
+static inline POSIX_Semaphore_Control *
   _POSIX_Semaphore_Allocate_unprotected( void )
 {
   return (POSIX_Semaphore_Control *)
@@ -66,31 +66,31 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
  *  This routine frees a semaphore control block to the
  *  inactive chain of free semaphore control blocks.
  */
-RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
+static inline void _POSIX_Semaphore_Free (
   POSIX_Semaphore_Control *the_semaphore
 )
 {
   _Objects_Free( &_POSIX_Semaphore_Information, &the_semaphore->Object );
 }
 
-RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get(
+static inline POSIX_Semaphore_Control *_POSIX_Semaphore_Get(
   sem_t *sem
 )
 {
   return RTEMS_CONTAINER_OF( sem, POSIX_Semaphore_Control, Semaphore );
 }
 
-RTEMS_INLINE_ROUTINE bool _POSIX_Semaphore_Is_named( const sem_t *sem )
+static inline bool _POSIX_Semaphore_Is_named( const sem_t *sem )
 {
   return sem->_Semaphore._Queue._name != NULL;
 }
 
-RTEMS_INLINE_ROUTINE bool _POSIX_Semaphore_Is_busy( const sem_t *sem )
+static inline bool _POSIX_Semaphore_Is_busy( const sem_t *sem )
 {
   return sem->_Semaphore._Queue._heads != NULL;
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Initialize(
+static inline void _POSIX_Semaphore_Initialize(
   sem_t        *sem,
   const char   *name,
   unsigned int  value
@@ -100,7 +100,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Initialize(
   _Semaphore_Initialize_named( &sem->_Semaphore, name, value );
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Destroy( sem_t *sem )
+static inline void _POSIX_Semaphore_Destroy( sem_t *sem )
 {
   sem->_flags = 0;
   _Semaphore_Destroy( &sem->_Semaphore );
@@ -116,7 +116,7 @@ void _POSIX_Semaphore_Delete( POSIX_Semaphore_Control *the_semaphore );
 /**
  *  @brief POSIX Semaphore Namespace Remove
  */
-RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Namespace_remove (
+static inline void _POSIX_Semaphore_Namespace_remove (
   POSIX_Semaphore_Control *the_semaphore
 )
 {
@@ -126,7 +126,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Namespace_remove (
   );
 }
 
-RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get_by_name(
+static inline POSIX_Semaphore_Control *_POSIX_Semaphore_Get_by_name(
   const char                *name,
   size_t                    *name_length_p,
   Objects_Get_by_name_error *error

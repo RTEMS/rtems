@@ -87,7 +87,7 @@ typedef enum {
  */
 extern const pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
 
-RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Mutex_Acquire(
+static inline Thread_Control *_POSIX_Mutex_Acquire(
   POSIX_Mutex_Control  *the_mutex,
   Thread_queue_Context *queue_context
 )
@@ -108,7 +108,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Mutex_Acquire(
   return executing;
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Release(
+static inline void _POSIX_Mutex_Release(
   POSIX_Mutex_Control  *the_mutex,
   Thread_queue_Context *queue_context
 )
@@ -119,28 +119,28 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Release(
   );
 }
 
-RTEMS_INLINE_ROUTINE POSIX_Mutex_Protocol _POSIX_Mutex_Get_protocol(
+static inline POSIX_Mutex_Protocol _POSIX_Mutex_Get_protocol(
   unsigned long flags
 )
 {
   return (POSIX_Mutex_Protocol) (flags & POSIX_MUTEX_PROTOCOL_MASK);
 }
 
-RTEMS_INLINE_ROUTINE bool _POSIX_Mutex_Is_recursive(
+static inline bool _POSIX_Mutex_Is_recursive(
   unsigned long flags
 )
 {
   return ( flags & POSIX_MUTEX_RECURSIVE ) != 0;
 }
 
-RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Mutex_Get_owner(
+static inline Thread_Control *_POSIX_Mutex_Get_owner(
   const POSIX_Mutex_Control *the_mutex
 )
 {
   return the_mutex->Recursive.Mutex.Queue.Queue.owner;
 }
 
-RTEMS_INLINE_ROUTINE bool _POSIX_Mutex_Is_locked(
+static inline bool _POSIX_Mutex_Is_locked(
   const POSIX_Mutex_Control *the_mutex
 )
 {
@@ -155,7 +155,7 @@ Status_Control _POSIX_Mutex_Seize_slow(
   Thread_queue_Context          *queue_context
 );
 
-RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Set_owner(
+static inline void _POSIX_Mutex_Set_owner(
   POSIX_Mutex_Control *the_mutex,
   Thread_Control      *owner
 )
@@ -163,7 +163,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Set_owner(
   the_mutex->Recursive.Mutex.Queue.Queue.owner = owner;
 }
 
-RTEMS_INLINE_ROUTINE bool _POSIX_Mutex_Is_owner(
+static inline bool _POSIX_Mutex_Is_owner(
   const POSIX_Mutex_Control *the_mutex,
   const Thread_Control      *the_thread
 )
@@ -185,7 +185,7 @@ static Status_Control _POSIX_Mutex_Lock_nested(
   }
 }
 
-RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Seize(
+static inline Status_Control _POSIX_Mutex_Seize(
   POSIX_Mutex_Control           *the_mutex,
   unsigned long                  flags,
   const Thread_queue_Operations *operations,
@@ -222,7 +222,7 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Seize(
   );
 }
 
-RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Surrender(
+static inline Status_Control _POSIX_Mutex_Surrender(
   POSIX_Mutex_Control           *the_mutex,
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
@@ -265,7 +265,7 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Surrender(
   return STATUS_SUCCESSFUL;
 }
 
-RTEMS_INLINE_ROUTINE const Scheduler_Control *_POSIX_Mutex_Get_scheduler(
+static inline const Scheduler_Control *_POSIX_Mutex_Get_scheduler(
   const POSIX_Mutex_Control *the_mutex
 )
 {
@@ -276,7 +276,7 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_POSIX_Mutex_Get_scheduler(
 #endif
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Set_priority(
+static inline void _POSIX_Mutex_Set_priority(
   POSIX_Mutex_Control  *the_mutex,
   Priority_Control      priority_ceiling,
   Thread_queue_Context *queue_context
@@ -301,14 +301,14 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Set_priority(
   }
 }
 
-RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Mutex_Get_priority(
+static inline Priority_Control _POSIX_Mutex_Get_priority(
   const POSIX_Mutex_Control *the_mutex
 )
 {
   return the_mutex->Priority_ceiling.priority;
 }
 
-RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_set_owner(
+static inline Status_Control _POSIX_Mutex_Ceiling_set_owner(
   POSIX_Mutex_Control  *the_mutex,
   Thread_Control       *owner,
   Thread_queue_Context *queue_context
@@ -347,7 +347,7 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_set_owner(
   return STATUS_SUCCESSFUL;
 }
 
-RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_seize(
+static inline Status_Control _POSIX_Mutex_Ceiling_seize(
   POSIX_Mutex_Control   *the_mutex,
   unsigned long          flags,
   Thread_Control        *executing,
@@ -395,7 +395,7 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_seize(
   );
 }
 
-RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_surrender(
+static inline Status_Control _POSIX_Mutex_Ceiling_surrender(
   POSIX_Mutex_Control  *the_mutex,
   Thread_Control       *executing,
   Thread_queue_Context *queue_context

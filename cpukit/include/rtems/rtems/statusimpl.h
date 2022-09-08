@@ -63,14 +63,14 @@ extern "C" {
  * @{
  */
 
-RTEMS_INLINE_ROUTINE rtems_status_code _Status_Get(
+static inline rtems_status_code _Status_Get(
   Status_Control status
 )
 {
   return (rtems_status_code) STATUS_GET_CLASSIC( status );
 }
 
-RTEMS_INLINE_ROUTINE rtems_status_code _Status_Get_after_wait(
+static inline rtems_status_code _Status_Get_after_wait(
   const Thread_Control *executing
 )
 {

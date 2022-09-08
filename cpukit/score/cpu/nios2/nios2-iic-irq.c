@@ -60,7 +60,7 @@ void __Exception_Handler(CPU_Exception_frame *efr);
 
 register unsigned long  *stack_ptr __asm__ ("sp");
 
-RTEMS_INLINE_ROUTINE void __IIC_Handler(void)
+static inline void __IIC_Handler(void)
 {
   uint32_t active;
   uint32_t mask;

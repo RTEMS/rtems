@@ -186,12 +186,12 @@ static inline void riscv_interrupt_enable( uint32_t level )
       riscv_interrupt_disable(); \
     } while(0)
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( unsigned long level )
+static inline bool _CPU_ISR_Is_enabled( unsigned long level )
 {
   return ( level & RISCV_MSTATUS_MIE ) != 0;
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_ISR_Set_level( uint32_t level )
+static inline void _CPU_ISR_Set_level( uint32_t level )
 {
   if ( ( level & CPU_MODES_INTERRUPT_MASK) == 0 ) {
     __asm__ volatile (

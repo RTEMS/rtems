@@ -65,7 +65,7 @@ extern "C" {
  * @param area_size The size of the heap area.
  * @param page_size The page size for the heap.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Protected_heap_Initialize(
+static inline uintptr_t _Protected_heap_Initialize(
   Heap_Control *heap,
   void *area_begin,
   uintptr_t area_size,
@@ -131,7 +131,7 @@ void *_Protected_heap_Allocate_aligned_with_boundary(
  * @retval pointer The starting address of the allocated memory area.
  * @retval NULL No memory is available of the parameters are inconsistent.
  */
-RTEMS_INLINE_ROUTINE void *_Protected_heap_Allocate_aligned(
+static inline void *_Protected_heap_Allocate_aligned(
   Heap_Control *heap,
   uintptr_t size,
   uintptr_t alignment
@@ -154,7 +154,7 @@ RTEMS_INLINE_ROUTINE void *_Protected_heap_Allocate_aligned(
  * @retval pointer The starting address of the allocated memory area.
  * @retval NULL No memory is available of the parameters are inconsistent.
  */
-RTEMS_INLINE_ROUTINE void *_Protected_heap_Allocate(
+static inline void *_Protected_heap_Allocate(
   Heap_Control *heap,
   uintptr_t size
 )

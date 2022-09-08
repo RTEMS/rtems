@@ -393,7 +393,7 @@ void CPU_delay( uint32_t   microseconds );
 #define _CPU_ISR_Flash( _level) \
   sh_flash_interrupts( _level)
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
   sh_get_interrupt_level( level );
   return level == 0;

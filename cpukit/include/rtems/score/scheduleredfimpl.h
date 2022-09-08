@@ -67,7 +67,7 @@ extern "C" {
  *
  * @return The scheduler context of @a scheduler.
  */
-RTEMS_INLINE_ROUTINE Scheduler_EDF_Context *
+static inline Scheduler_EDF_Context *
   _Scheduler_EDF_Get_context( const Scheduler_Control *scheduler )
 {
   return (Scheduler_EDF_Context *) _Scheduler_Get_context( scheduler );
@@ -80,7 +80,7 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Context *
  *
  * @return The EDF scheduler node of @a the_thread.
  */
-RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
+static inline Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
   Thread_Control *the_thread
 )
 {
@@ -94,7 +94,7 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
  *
  * @return The corresponding scheduler EDF node.
  */
-RTEMS_INLINE_ROUTINE Scheduler_EDF_Node * _Scheduler_EDF_Node_downcast(
+static inline Scheduler_EDF_Node * _Scheduler_EDF_Node_downcast(
   Scheduler_Node *node
 )
 {
@@ -110,7 +110,7 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Node * _Scheduler_EDF_Node_downcast(
  * @retval true @a left is less than the priority of @a right.
  * @retval false @a left is greater or equal than the priority of @a right.
  */
-RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Less(
+static inline bool _Scheduler_EDF_Less(
   const void        *left,
   const RBTree_Node *right
 )
@@ -138,7 +138,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Less(
  * @retval true @a left is less or equal than the priority of @a right.
  * @retval false @a left is greater than the priority of @a right.
  */
-RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Priority_less_equal(
+static inline bool _Scheduler_EDF_Priority_less_equal(
   const void        *left,
   const RBTree_Node *right
 )
@@ -165,7 +165,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Priority_less_equal(
  * @param node The node to be inserted.
  * @param insert_priority The priority with which the node will be inserted.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Enqueue(
+static inline void _Scheduler_EDF_Enqueue(
   Scheduler_EDF_Context *context,
   Scheduler_EDF_Node    *node,
   Priority_Control       insert_priority
@@ -185,7 +185,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Enqueue(
  * @param[in, out] context The context to extract the node from.
  * @param[in, out] node The node to extract.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Extract(
+static inline void _Scheduler_EDF_Extract(
   Scheduler_EDF_Context *context,
   Scheduler_EDF_Node    *node
 )
@@ -200,7 +200,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Extract(
  * @param the_thread The thread is not used in this method.
  * @param[in, out] node The node to be extracted.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Extract_body(
+static inline void _Scheduler_EDF_Extract_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -220,7 +220,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Extract_body(
  *
  * @param scheduler is the scheduler.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_EDF_Get_highest_ready(
+static inline Thread_Control *_Scheduler_EDF_Get_highest_ready(
   const Scheduler_Control *scheduler
 )
 {

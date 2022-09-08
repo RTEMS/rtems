@@ -123,7 +123,7 @@ rtems_status_code _Event_Surrender(
  *
  * @param event is the event control block to initialize.
  */
-RTEMS_INLINE_ROUTINE void _Event_Initialize( Event_Control *event )
+static inline void _Event_Initialize( Event_Control *event )
 {
   event->pending_events = 0;
 }
@@ -136,7 +136,7 @@ RTEMS_INLINE_ROUTINE void _Event_Initialize( Event_Control *event )
  * @return Returns true, if there are no posted events in the event set,
  *   otherwise false.
  */
-RTEMS_INLINE_ROUTINE bool _Event_sets_Is_empty(
+static inline bool _Event_sets_Is_empty(
   rtems_event_set the_event_set
 )
 {
@@ -150,7 +150,7 @@ RTEMS_INLINE_ROUTINE bool _Event_sets_Is_empty(
  *
  * @param the_event_set[in, out] is the event set.
  */
-RTEMS_INLINE_ROUTINE void _Event_sets_Post(
+static inline void _Event_sets_Post(
   rtems_event_set  the_new_events,
   rtems_event_set *the_event_set
 )
@@ -168,7 +168,7 @@ RTEMS_INLINE_ROUTINE void _Event_sets_Post(
  * @return Return the events of the event condition which are posted in the
  *   event set.
  */
-RTEMS_INLINE_ROUTINE rtems_event_set _Event_sets_Get(
+static inline rtems_event_set _Event_sets_Get(
   rtems_event_set the_event_set,
   rtems_event_set the_event_condition
 )
@@ -186,7 +186,7 @@ RTEMS_INLINE_ROUTINE rtems_event_set _Event_sets_Get(
  * @return Returns the event set with all event cleared specified by the event
  *   mask.
  */
-RTEMS_INLINE_ROUTINE rtems_event_set _Event_sets_Clear(
+static inline rtems_event_set _Event_sets_Clear(
  rtems_event_set the_event_set,
  rtems_event_set the_mask
 )

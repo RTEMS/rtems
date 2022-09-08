@@ -396,7 +396,7 @@ Objects_Information *_Objects_Get_information_id(
  * @retval true The object has a string name.
  * @retval false The object does not have a string name.
  */
-RTEMS_INLINE_ROUTINE bool _Objects_Has_string_name(
+static inline bool _Objects_Has_string_name(
   const Objects_Information *information
 )
 {
@@ -471,7 +471,7 @@ Status_Control _Objects_Set_name(
  * @param information The corresponding object information table.
  * @param[out] the_object The object to operate upon.
  */
-RTEMS_INLINE_ROUTINE void _Objects_Namespace_remove_u32(
+static inline void _Objects_Namespace_remove_u32(
   const Objects_Information *information,
   Objects_Control           *the_object
 )
@@ -523,7 +523,7 @@ Objects_Maximum _Objects_Active_count(
  *
  * @return The number of objects per block of @a information.
  */
-RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Extend_size(
+static inline Objects_Maximum _Objects_Extend_size(
   const Objects_Information *information
 )
 {
@@ -538,7 +538,7 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Extend_size(
  * @retval true The specified api value is valid.
  * @retval false The specified api value is not valid.
  */
-RTEMS_INLINE_ROUTINE bool _Objects_Is_api_valid(
+static inline bool _Objects_Is_api_valid(
   uint32_t   the_api
 )
 {
@@ -556,7 +556,7 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_api_valid(
  * @retval true The specified node is the local node.
  * @retval false The specified node is not the local node.
  */
-RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
+static inline bool _Objects_Is_local_node(
   uint32_t   node
 )
 {
@@ -573,7 +573,7 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
  *
  * @note On a single processor configuration, this always returns true.
  */
-RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
+static inline bool _Objects_Is_local_id(
 #if defined(RTEMS_MULTIPROCESSING)
   Objects_Id id
 #else
@@ -597,7 +597,7 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
  * @retval true The specified object IDs are equal.
  * @retval false The specified object IDs are not equal.
  */
-RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
+static inline bool _Objects_Are_ids_equal(
   Objects_Id left,
   Objects_Id right
 )
@@ -614,7 +614,7 @@ RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
  *
  * @return The corresponding ID with the minimum index.
  */
-RTEMS_INLINE_ROUTINE Objects_Id _Objects_Get_minimum_id( Objects_Id id )
+static inline Objects_Id _Objects_Get_minimum_id( Objects_Id id )
 {
   id &= ~OBJECTS_INDEX_MASK;
   id += (Objects_Id) OBJECTS_INDEX_MINIMUM << OBJECTS_INDEX_START_BIT;
@@ -628,7 +628,7 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Get_minimum_id( Objects_Id id )
  *
  * @return The maximum index of the specified object class.
  */
-RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_maximum_index(
+static inline Objects_Maximum _Objects_Get_maximum_index(
   const Objects_Information *information
 )
 {
@@ -641,7 +641,7 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_maximum_index(
  * @retval NULL No inactive object is available.
  * @retval object An inactive object.
  */
-RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_inactive(
+static inline Objects_Control *_Objects_Get_inactive(
   Objects_Information *information
 )
 {
@@ -657,7 +657,7 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_inactive(
  * @retval true The automatic object extension (unlimited objects) is enabled.
  * @retval false The automatic object extension (unlimited objects) is not enabled.
  */
-RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Is_auto_extend(
+static inline Objects_Maximum _Objects_Is_auto_extend(
   const Objects_Information *information
 )
 {
@@ -678,7 +678,7 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Is_auto_extend(
  *       or delete/destroy operations.
  */
 
-RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
+static inline void _Objects_Set_local_object(
   const Objects_Information *information,
   uint32_t                   index,
   Objects_Control           *the_object
@@ -711,7 +711,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
  *       or delete/destroy operations.
  */
 
-RTEMS_INLINE_ROUTINE void _Objects_Invalidate_Id(
+static inline void _Objects_Invalidate_Id(
   const Objects_Information *information,
   Objects_Control           *the_object
 )
@@ -738,7 +738,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Invalidate_Id(
  *
  * @return Returns the identifier of the object which is now valid.
  */
-RTEMS_INLINE_ROUTINE Objects_Id _Objects_Open_u32(
+static inline Objects_Id _Objects_Open_u32(
   const Objects_Information *information,
   Objects_Control           *the_object,
   uint32_t                   name
@@ -769,7 +769,7 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Open_u32(
  *
  * @param name is the name of the object to open.
  */
-RTEMS_INLINE_ROUTINE void _Objects_Open_string(
+static inline void _Objects_Open_string(
   const Objects_Information *information,
   Objects_Control           *the_object,
   const char                *name
@@ -802,7 +802,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
  *
  * @see _Objects_Allocator_unlock() and _Objects_Allocate().
  */
-RTEMS_INLINE_ROUTINE void _Objects_Allocator_lock( void )
+static inline void _Objects_Allocator_lock( void )
 {
   _RTEMS_Lock_allocator();
 }
@@ -814,7 +814,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Allocator_lock( void )
  * previous thread life protection state and thus may not return if the
  * executing thread was restarted or deleted in the mean-time.
  */
-RTEMS_INLINE_ROUTINE void _Objects_Allocator_unlock( void )
+static inline void _Objects_Allocator_unlock( void )
 {
   _RTEMS_Unlock_allocator();
 }
@@ -825,7 +825,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Allocator_unlock( void )
  * @retval true The allocator is the owner of the object allocator mutex.
  * @retval false The allocato is not the owner of the object allocator mutex.
  */
-RTEMS_INLINE_ROUTINE bool _Objects_Allocator_is_owner( void )
+static inline bool _Objects_Allocator_is_owner( void )
 {
   return _RTEMS_Allocator_is_owner();
 }
@@ -845,7 +845,7 @@ RTEMS_INLINE_ROUTINE bool _Objects_Allocator_is_owner( void )
  *
  * @see _Objects_Allocate() and _Objects_Free().
  */
-RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Allocate_unprotected(
+static inline Objects_Control *_Objects_Allocate_unprotected(
   Objects_Information *information
 )
 {
@@ -901,7 +901,7 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Allocate_unprotected(
  * }
  * @endcode
  */
-RTEMS_INLINE_ROUTINE void _Objects_Free(
+static inline void _Objects_Free(
   Objects_Information *information,
   Objects_Control     *the_object
 )
@@ -922,7 +922,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Free(
  *   allocated block of objects.
  * @retval false Otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Objects_Is_in_allocated_block(
+static inline bool _Objects_Is_in_allocated_block(
   Objects_Maximum index,
   Objects_Maximum objects_per_block
 )
@@ -939,7 +939,7 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_in_allocated_block(
  * @param information The object information block.
  * @param the_object The object to activate.
  */
-RTEMS_INLINE_ROUTINE void _Objects_Activate_unlimited(
+static inline void _Objects_Activate_unlimited(
   Objects_Information *information,
   Objects_Control     *the_object
 )
@@ -971,7 +971,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Activate_unlimited(
  * @param information The object information block.
  * @param extend The object information extend handler.
  */
-RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Allocate_with_extend(
+static inline Objects_Control *_Objects_Allocate_with_extend(
   Objects_Information   *information,
   void                ( *extend )( Objects_Information * )
 )

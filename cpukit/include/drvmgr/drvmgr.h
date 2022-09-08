@@ -485,7 +485,7 @@ extern union drvmgr_key_value *drvmgr_dev_key_get(
 /*** DRIVER INTERACE USED TO REQUEST INFORMATION/SERVICES FROM BUS DRIVER ***/
 
 /*! Get parent bus */
-RTEMS_INLINE_ROUTINE struct drvmgr_bus *drvmgr_get_parent(
+static inline struct drvmgr_bus *drvmgr_get_parent(
 	struct drvmgr_dev *dev)
 {
 	if (dev)
@@ -495,7 +495,7 @@ RTEMS_INLINE_ROUTINE struct drvmgr_bus *drvmgr_get_parent(
 }
 
 /*! Get Driver of device */
-RTEMS_INLINE_ROUTINE struct drvmgr_drv *drvmgr_get_drv(struct drvmgr_dev *dev)
+static inline struct drvmgr_drv *drvmgr_get_drv(struct drvmgr_dev *dev)
 {
 	if (dev)
 		return dev->drv;

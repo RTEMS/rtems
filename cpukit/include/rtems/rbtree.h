@@ -139,7 +139,7 @@ void rtems_rbtree_initialize(
  *
  * This routine initializes @a the_rbtree to contain zero nodes.
  */
-RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize_empty(
+static inline void rtems_rbtree_initialize_empty(
   rtems_rbtree_control *the_rbtree
 )
 {
@@ -152,7 +152,7 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize_empty(
  * This function sets the next and previous fields of the @a node to NULL
  * indicating the @a node is not part of any rbtree.
  */
-RTEMS_INLINE_ROUTINE void rtems_rbtree_set_off_tree(
+static inline void rtems_rbtree_set_off_tree(
   rtems_rbtree_node *node
 )
 {
@@ -165,7 +165,7 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_set_off_tree(
  * This function returns true if the @a node is not on a rbtree. A @a node is
  * off rbtree if the next and previous fields are set to NULL.
  */
-RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_node_off_tree(
+static inline bool rtems_rbtree_is_node_off_tree(
   const rtems_rbtree_node *node
 )
 {
@@ -177,7 +177,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_node_off_tree(
  *
  * This function returns a pointer to the root node of @a the_rbtree.
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_root(
+static inline rtems_rbtree_node *rtems_rbtree_root(
   const rtems_rbtree_control *the_rbtree
 )
 {
@@ -187,7 +187,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_root(
 /**
  * @copydoc _RBTree_Minimum()
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_min(
+static inline rtems_rbtree_node *rtems_rbtree_min(
   const rtems_rbtree_control *the_rbtree
 )
 {
@@ -197,7 +197,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_min(
 /**
  * @copydoc _RBTree_Maximum()
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_max(
+static inline rtems_rbtree_node *rtems_rbtree_max(
   const rtems_rbtree_control *the_rbtree
 )
 {
@@ -209,7 +209,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_max(
  *
  * This function returns a pointer to the left child node of @a the_node.
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_left(
+static inline rtems_rbtree_node *rtems_rbtree_left(
   const rtems_rbtree_node *the_node
 )
 {
@@ -221,7 +221,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_left(
  *
  * This function returns a pointer to the right child node of @a the_node.
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_right(
+static inline rtems_rbtree_node *rtems_rbtree_right(
   const rtems_rbtree_node *the_node
 )
 {
@@ -231,7 +231,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_right(
 /**
  * @copydoc _RBTree_Parent()
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_parent(
+static inline rtems_rbtree_node *rtems_rbtree_parent(
   const rtems_rbtree_node *the_node
 )
 {
@@ -244,7 +244,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_parent(
  * This function returns true if there a no nodes on @a the_rbtree and
  * false otherwise.
  */
-RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_empty(
+static inline bool rtems_rbtree_is_empty(
   const rtems_rbtree_control *the_rbtree
 )
 {
@@ -257,7 +257,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_empty(
  * This function returns true if @a the_node is the min node on @a the_rbtree 
  * and false otherwise.
  */
-RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_min(
+static inline bool rtems_rbtree_is_min(
   const rtems_rbtree_control *the_rbtree,
   const rtems_rbtree_node *the_node
 )
@@ -271,7 +271,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_min(
  * This function returns true if @a the_node is the max node on @a the_rbtree 
  * and false otherwise.
  */
-RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_max(
+static inline bool rtems_rbtree_is_max(
   const rtems_rbtree_control *the_rbtree,
   const rtems_rbtree_node *the_node
 )
@@ -282,28 +282,28 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_max(
 /**
  * @copydoc _RBTree_Is_root()
  */
-RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_root(
+static inline bool rtems_rbtree_is_root(
   const rtems_rbtree_node *the_node
 )
 {
   return _RBTree_Is_root( the_node );
 }
 
-RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_equal(
+static inline bool rtems_rbtree_is_equal(
   rtems_rbtree_compare_result compare_result
 )
 {
   return compare_result == 0;
 }
 
-RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_greater(
+static inline bool rtems_rbtree_is_greater(
   rtems_rbtree_compare_result compare_result
 )
 {
   return compare_result > 0;
 }
 
-RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_lesser(
+static inline bool rtems_rbtree_is_lesser(
   rtems_rbtree_compare_result compare_result
 )
 {
@@ -334,7 +334,7 @@ rtems_rbtree_node* rtems_rbtree_find(
 /**
  * @copydoc _RBTree_Predecessor()
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_predecessor(
+static inline rtems_rbtree_node* rtems_rbtree_predecessor(
   const rtems_rbtree_node *node
 )
 {
@@ -344,7 +344,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_predecessor(
 /**
  * @copydoc _RBTree_Successor()
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_successor(
+static inline rtems_rbtree_node* rtems_rbtree_successor(
   const rtems_rbtree_node *node
 )
 {
@@ -354,7 +354,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_successor(
 /**
  * @copydoc _RBTree_Extract()
  */
-RTEMS_INLINE_ROUTINE void rtems_rbtree_extract(
+static inline void rtems_rbtree_extract(
   rtems_rbtree_control *the_rbtree,
   rtems_rbtree_node *the_node
 )
@@ -374,7 +374,7 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_extract(
  * @retval NULL The tree is empty.
  * @retval node A node with the minimal key value on the tree.
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_min(
+static inline rtems_rbtree_node *rtems_rbtree_get_min(
   rtems_rbtree_control *the_rbtree
 )
 {
@@ -399,7 +399,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_min(
  * @retval NULL The tree is empty.
  * @retval node A node with the maximal key value on the tree.
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_max(
+static inline rtems_rbtree_node *rtems_rbtree_get_max(
   rtems_rbtree_control *the_rbtree
 )
 {
@@ -419,7 +419,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_max(
  * without changing the tree.  If @a the_rbtree is empty, 
  * then NULL is returned.
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_min(
+static inline rtems_rbtree_node *rtems_rbtree_peek_min(
   const rtems_rbtree_control *the_rbtree
 )
 {
@@ -433,7 +433,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_min(
  * without changing the tree.  If @a the_rbtree is empty, 
  * then NULL is returned.
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_max(
+static inline rtems_rbtree_node *rtems_rbtree_peek_max(
   const rtems_rbtree_control *the_rbtree
 )
 {

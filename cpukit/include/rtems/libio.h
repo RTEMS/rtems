@@ -1905,7 +1905,7 @@ typedef struct rtems_termios_callbacks {
   int    outputUsesInterrupts;
 } rtems_termios_callbacks;
 
-RTEMS_INLINE_ROUTINE void rtems_termios_initialize( void )
+static inline void rtems_termios_initialize( void )
 {
   /* Nothing to do, provided for backward compatibility */
 }

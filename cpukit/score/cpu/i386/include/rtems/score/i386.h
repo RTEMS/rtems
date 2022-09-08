@@ -223,7 +223,7 @@ void *i386_Physical_to_logical(
  * @param[in] offset used with \p segment to compute physical address
  * @retval    physical address
  */
-RTEMS_INLINE_ROUTINE void *i386_Real_to_physical(
+static inline void *i386_Real_to_physical(
     uint16_t segment,
     uint16_t offset)
 {
@@ -577,7 +577,7 @@ extern segment_descriptors* i386_get_gdt_entry (uint16_t sgmnt_selector);
  * @param[in]  gdt_entry pointer to entry from which base should be retrieved
  * @retval base address from GDT entry
 */
-RTEMS_INLINE_ROUTINE void* i386_base_gdt_entry (segment_descriptors* gdt_entry)
+static inline void* i386_base_gdt_entry (segment_descriptors* gdt_entry)
 {
     return (void*)(gdt_entry->base_address_15_0 |
             (gdt_entry->base_address_23_16<<16) |

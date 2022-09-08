@@ -63,7 +63,7 @@ extern "C" {
  * @param _seconds The seconds portion of the timestamp.
  * @param _nanoseconds The nanoseconds portion of the timestamp.
  */
-RTEMS_INLINE_ROUTINE void _Timestamp_Set(
+static inline void _Timestamp_Set(
   Timestamp_Control *_time,
   time_t             _seconds,
   long               _nanoseconds
@@ -86,7 +86,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Set(
  * @param[out] _time The timestamp instance to zero.
  */
 
-RTEMS_INLINE_ROUTINE void _Timestamp_Set_to_zero(
+static inline void _Timestamp_Set_to_zero(
   Timestamp_Control *_time
 )
 {
@@ -105,7 +105,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Set_to_zero(
  * @retval false @a _lhs is greater or equal than @a rhs.
  */
 
-RTEMS_INLINE_ROUTINE bool _Timestamp_Less_than(
+static inline bool _Timestamp_Less_than(
   const Timestamp_Control *_lhs,
   const Timestamp_Control *_rhs
 )
@@ -125,7 +125,7 @@ RTEMS_INLINE_ROUTINE bool _Timestamp_Less_than(
  * @retval false @a _lhs is less or equal than @a _rhs.
  */
 
-RTEMS_INLINE_ROUTINE bool _Timestamp_Greater_than(
+static inline bool _Timestamp_Greater_than(
   const Timestamp_Control *_lhs,
   const Timestamp_Control *_rhs
 )
@@ -145,7 +145,7 @@ RTEMS_INLINE_ROUTINE bool _Timestamp_Greater_than(
  * @retval false @a _lhs is not equal to @a _rhs.
  */
 
-RTEMS_INLINE_ROUTINE bool _Timestamp_Equal_to(
+static inline bool _Timestamp_Equal_to(
   const Timestamp_Control *_lhs,
   const Timestamp_Control *_rhs
 )
@@ -162,7 +162,7 @@ RTEMS_INLINE_ROUTINE bool _Timestamp_Equal_to(
  * @param[in, out] _time The base time to be added to.
  * @param _add points The timestamp to add to the first argument.
  */
-RTEMS_INLINE_ROUTINE void _Timestamp_Add_to(
+static inline void _Timestamp_Add_to(
   Timestamp_Control *_time,
   const Timestamp_Control *_add
 )
@@ -181,7 +181,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Add_to(
  * @param[out] _result Contains the difference between starting and ending
  *      time after the method call.
  */
-RTEMS_INLINE_ROUTINE void _Timestamp_Subtract(
+static inline void _Timestamp_Subtract(
   const Timestamp_Control *_start,
   const Timestamp_Control *_end,
   Timestamp_Control       *_result
@@ -201,7 +201,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Subtract(
  * @param[out] _ival_percentage The integer portion of the average.
  * @param[out] _fval_percentage The thousandths of percentage.
  */
-RTEMS_INLINE_ROUTINE void _Timestamp_Divide(
+static inline void _Timestamp_Divide(
   const Timestamp_Control *_lhs,
   const Timestamp_Control *_rhs,
   uint32_t                *_ival_percentage,
@@ -231,7 +231,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Divide(
  *
  * @return The seconds portion of @a _time.
  */
-RTEMS_INLINE_ROUTINE time_t _Timestamp_Get_seconds(
+static inline time_t _Timestamp_Get_seconds(
   const Timestamp_Control *_time
 )
 {
@@ -247,7 +247,7 @@ RTEMS_INLINE_ROUTINE time_t _Timestamp_Get_seconds(
  *
  * @return The nanoseconds portion of @a _time.
  */
-RTEMS_INLINE_ROUTINE uint32_t _Timestamp_Get_nanoseconds(
+static inline uint32_t _Timestamp_Get_nanoseconds(
   const Timestamp_Control *_time
 )
 {
@@ -267,7 +267,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Timestamp_Get_nanoseconds(
  *
  * @return The time in nanoseconds.
  */
-RTEMS_INLINE_ROUTINE uint64_t _Timestamp_Get_as_nanoseconds(
+static inline uint64_t _Timestamp_Get_as_nanoseconds(
   const Timestamp_Control *_time
 )
 {
@@ -284,7 +284,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Timestamp_Get_as_nanoseconds(
  * @param _timestamp The timestamp.
  * @param[out] _timespec The timespec to be filled in by the method.
  */
-RTEMS_INLINE_ROUTINE void _Timestamp_To_timespec(
+static inline void _Timestamp_To_timespec(
   const Timestamp_Control *_timestamp,
   struct timespec         *_timespec
 )
@@ -298,7 +298,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_To_timespec(
  * @param _timestamp The timestamp.
  * @param[out] _timeval The timeval to be filled in by the method.
  */
-RTEMS_INLINE_ROUTINE void _Timestamp_To_timeval(
+static inline void _Timestamp_To_timeval(
   const Timestamp_Control *_timestamp,
   struct timeval          *_timeval
 )

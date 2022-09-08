@@ -78,7 +78,7 @@ typedef enum {
   SEMAPHORE_DISCIPLINE_FIFO
 } Semaphore_Discipline;
 
-RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Get_flags(
+static inline uintptr_t _Semaphore_Get_flags(
   const Semaphore_Control *the_semaphore
 )
 {
@@ -86,7 +86,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Get_flags(
   return (uintptr_t) the_semaphore->Object.Node.previous;
 }
 
-RTEMS_INLINE_ROUTINE void _Semaphore_Set_flags(
+static inline void _Semaphore_Set_flags(
   Semaphore_Control *the_semaphore,
   uintptr_t          flags
 )
@@ -95,14 +95,14 @@ RTEMS_INLINE_ROUTINE void _Semaphore_Set_flags(
   the_semaphore->Object.Node.previous = (Chain_Node *) flags;
 }
 
-RTEMS_INLINE_ROUTINE Semaphore_Variant _Semaphore_Get_variant(
+static inline Semaphore_Variant _Semaphore_Get_variant(
   uintptr_t flags
 )
 {
   return (Semaphore_Variant) ( flags & 0x7 );
 }
 
-RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Set_variant(
+static inline uintptr_t _Semaphore_Set_variant(
   uintptr_t         flags,
   Semaphore_Variant variant
 )
@@ -110,14 +110,14 @@ RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Set_variant(
   return flags | variant;
 }
 
-RTEMS_INLINE_ROUTINE Semaphore_Discipline _Semaphore_Get_discipline(
+static inline Semaphore_Discipline _Semaphore_Get_discipline(
   uintptr_t flags
 )
 {
   return (Semaphore_Discipline) ( ( flags >> 3 ) & 0x1 );
 }
 
-RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Set_discipline(
+static inline uintptr_t _Semaphore_Set_discipline(
   uintptr_t            flags,
   Semaphore_Discipline discipline
 )
@@ -126,20 +126,20 @@ RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Set_discipline(
 }
 
 #if defined(RTEMS_MULTIPROCESSING)
-RTEMS_INLINE_ROUTINE bool _Semaphore_Is_global(
+static inline bool _Semaphore_Is_global(
   uintptr_t flags
 )
 {
   return ( flags & 0x10 ) != 0;
 }
 
-RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Make_global( uintptr_t flags )
+static inline uintptr_t _Semaphore_Make_global( uintptr_t flags )
 {
   return flags | 0x10;
 }
 #endif
 
-RTEMS_INLINE_ROUTINE const Thread_queue_Operations *_Semaphore_Get_operations(
+static inline const Thread_queue_Operations *_Semaphore_Get_operations(
   uintptr_t flags
 )
 {
@@ -163,7 +163,7 @@ RTEMS_INLINE_ROUTINE const Thread_queue_Operations *_Semaphore_Get_operations(
  *  This function allocates a semaphore control block from
  *  the inactive chain of free semaphore control blocks.
  */
-RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Allocate( void )
+static inline Semaphore_Control *_Semaphore_Allocate( void )
 {
   return (Semaphore_Control *) _Objects_Allocate( &_Semaphore_Information );
 }
@@ -175,14 +175,14 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Allocate( void )
  *  This routine frees a semaphore control block to the
  *  inactive chain of free semaphore control blocks.
  */
-RTEMS_INLINE_ROUTINE void _Semaphore_Free (
+static inline void _Semaphore_Free (
   Semaphore_Control *the_semaphore
 )
 {
   _Objects_Free( &_Semaphore_Information, &the_semaphore->Object );
 }
 
-RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get(
+static inline Semaphore_Control *_Semaphore_Get(
   Objects_Id            id,
   Thread_queue_Context *queue_context
 )

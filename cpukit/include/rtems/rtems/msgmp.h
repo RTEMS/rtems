@@ -99,7 +99,7 @@ typedef struct {
 #define MESSAGE_QUEUE_MP_PACKET_SIZE \
   offsetof(Message_queue_MP_Packet, buffer)
 
-RTEMS_INLINE_ROUTINE bool _Message_queue_MP_Is_remote( Objects_Id id )
+static inline bool _Message_queue_MP_Is_remote( Objects_Id id )
 {
   return _Objects_MP_Is_remote( id, &_Message_queue_Information );
 }

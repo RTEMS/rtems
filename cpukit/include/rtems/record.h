@@ -112,7 +112,7 @@ void _Record_Thread_terminate(
   struct _Thread_Control *executing
 );
 
-RTEMS_INLINE_ROUTINE unsigned int _Record_Index(
+static inline unsigned int _Record_Index(
   const Record_Control *control,
   unsigned int          index
 )
@@ -120,17 +120,17 @@ RTEMS_INLINE_ROUTINE unsigned int _Record_Index(
   return index & control->mask;
 }
 
-RTEMS_INLINE_ROUTINE unsigned int _Record_Head( const Record_Control *control )
+static inline unsigned int _Record_Head( const Record_Control *control )
 {
   return _Atomic_Load_uint( &control->head, ATOMIC_ORDER_RELAXED );
 }
 
-RTEMS_INLINE_ROUTINE unsigned int _Record_Tail( const Record_Control *control )
+static inline unsigned int _Record_Tail( const Record_Control *control )
 {
   return control->tail;
 }
 
-RTEMS_INLINE_ROUTINE bool _Record_Is_overflow(
+static inline bool _Record_Is_overflow(
   const Record_Control *control,
   unsigned int          tail,
   unsigned int          head
@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE bool _Record_Is_overflow(
   return head - tail >= control->mask + 1U;
 }
 
-RTEMS_INLINE_ROUTINE unsigned int _Record_Capacity(
+static inline unsigned int _Record_Capacity(
   const Record_Control *control,
   unsigned int          tail,
   unsigned int          head
@@ -148,7 +148,7 @@ RTEMS_INLINE_ROUTINE unsigned int _Record_Capacity(
   return ( tail - head - 1U ) & control->mask;
 }
 
-RTEMS_INLINE_ROUTINE rtems_counter_ticks _Record_Now( void )
+static inline rtems_counter_ticks _Record_Now( void )
 {
   return rtems_counter_read();
 }
@@ -498,7 +498,7 @@ void _Record_Exit_10(
  *   context may have an arbitrary content at function entry.
  * @param cpu_self The control of the current processor.
  */
-RTEMS_INLINE_ROUTINE void rtems_record_prepare_critical(
+static inline void rtems_record_prepare_critical(
   rtems_record_context  *context,
   const Per_CPU_Control *cpu_self
 )
@@ -524,7 +524,7 @@ RTEMS_INLINE_ROUTINE void rtems_record_prepare_critical(
  *
  * @see rtems_record_produce().
  */
-RTEMS_INLINE_ROUTINE void rtems_record_prepare( rtems_record_context *context )
+static inline void rtems_record_prepare( rtems_record_context *context )
 {
   uint32_t               level;
   const Per_CPU_Control *cpu_self;
@@ -549,7 +549,7 @@ RTEMS_INLINE_ROUTINE void rtems_record_prepare( rtems_record_context *context )
  * @param event The record event without a time stamp for the item.
  * @param data The record data for the item.
  */
-RTEMS_INLINE_ROUTINE void rtems_record_add(
+static inline void rtems_record_add(
   rtems_record_context *context,
   rtems_record_event    event,
   rtems_record_data     data
@@ -575,7 +575,7 @@ RTEMS_INLINE_ROUTINE void rtems_record_add(
  * @param context The record context initialized via
  *   rtems_record_prepare_critical().
  */
-RTEMS_INLINE_ROUTINE void rtems_record_commit_critical( rtems_record_context *context )
+static inline void rtems_record_commit_critical( rtems_record_context *context )
 {
   _Atomic_Store_uint(
     &context->control->head,
@@ -589,7 +589,7 @@ RTEMS_INLINE_ROUTINE void rtems_record_commit_critical( rtems_record_context *co
  *
  * @param context The record context initialized via rtems_record_prepare().
  */
-RTEMS_INLINE_ROUTINE void rtems_record_commit( rtems_record_context *context )
+static inline void rtems_record_commit( rtems_record_context *context )
 {
   rtems_record_commit_critical( context );
   RTEMS_COMPILER_MEMORY_BARRIER();

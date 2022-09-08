@@ -60,7 +60,7 @@ extern "C" {
  */
 extern const pthread_attr_t _POSIX_Threads_Default_attributes;
 
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes(
+static inline void _POSIX_Threads_Copy_attributes(
   pthread_attr_t        *dst_attr,
   const pthread_attr_t  *src_attr
 )
@@ -72,7 +72,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes(
   dst_attr->affinityset = &dst_attr->affinitysetpreallocated;
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
+static inline void _POSIX_Threads_Initialize_attributes(
   pthread_attr_t  *attr
 )
 {
@@ -82,7 +82,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
   );
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Get_sched_param_sporadic(
+static inline void _POSIX_Threads_Get_sched_param_sporadic(
   const Thread_Control    *the_thread,
   const Scheduler_Control *scheduler,
   struct sched_param      *param

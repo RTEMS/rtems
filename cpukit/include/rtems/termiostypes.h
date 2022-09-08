@@ -129,7 +129,7 @@ void rtems_termios_device_lock_release_default(
  *   string persistent throughout the life time of this lock.  The name is only
  *   used if profiling is enabled.
  */
-RTEMS_INLINE_ROUTINE void rtems_termios_device_context_initialize(
+static inline void rtems_termios_device_context_initialize(
   rtems_termios_device_context *context,
   const char                   *name
 )
@@ -448,7 +448,7 @@ rtems_status_code rtems_termios_device_install(
  *
  * @param[in] tty The Termios control.
  */
-RTEMS_INLINE_ROUTINE void *rtems_termios_get_device_context(
+static inline void *rtems_termios_get_device_context(
   const rtems_termios_tty *tty
 )
 {
@@ -462,7 +462,7 @@ RTEMS_INLINE_ROUTINE void *rtems_termios_get_device_context(
  * @param[in] lock_context The local interrupt lock context for an acquire and
  *   release pair.
  */
-RTEMS_INLINE_ROUTINE void rtems_termios_device_lock_acquire(
+static inline void rtems_termios_device_lock_acquire(
   rtems_termios_device_context *context,
   rtems_interrupt_lock_context *lock_context
 )
@@ -477,7 +477,7 @@ RTEMS_INLINE_ROUTINE void rtems_termios_device_lock_acquire(
  * @param[in] lock_context The local interrupt lock context for an acquire and
  *   release pair.
  */
-RTEMS_INLINE_ROUTINE void rtems_termios_device_lock_release(
+static inline void rtems_termios_device_lock_release(
   rtems_termios_device_context *context,
   rtems_interrupt_lock_context *lock_context
 )

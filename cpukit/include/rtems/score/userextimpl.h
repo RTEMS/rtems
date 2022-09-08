@@ -123,7 +123,7 @@ void _User_extensions_Add_set(
  *
  * @param extension The user extension to add.
  */
-RTEMS_INLINE_ROUTINE void _User_extensions_Add_API_set(
+static inline void _User_extensions_Add_API_set(
   User_extensions_Control *extension
 )
 {
@@ -136,7 +136,7 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Add_API_set(
  * @param[in, out] extension The user extension to add.
  * @param extension_table Is set as callouts for @a extension.
  */
-RTEMS_INLINE_ROUTINE void _User_extensions_Add_set_with_table(
+static inline void _User_extensions_Add_set_with_table(
   User_extensions_Control     *extension,
   const User_extensions_Table *extension_table
 )

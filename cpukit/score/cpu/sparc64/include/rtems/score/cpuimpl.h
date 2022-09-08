@@ -56,29 +56,29 @@ extern "C" {
 
 RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error );
 
-RTEMS_INLINE_ROUTINE void _CPU_Context_volatile_clobber( uintptr_t pattern )
+static inline void _CPU_Context_volatile_clobber( uintptr_t pattern )
 {
   /* TODO */
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_Context_validate( uintptr_t pattern )
+static inline void _CPU_Context_validate( uintptr_t pattern )
 {
   while (1) {
     /* TODO */
   }
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_Instruction_illegal( void )
+static inline void _CPU_Instruction_illegal( void )
 {
   __asm__ volatile ( "unimp" );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
+static inline void _CPU_Instruction_no_operation( void )
 {
   __asm__ volatile ( "nop" );
 }
 
-RTEMS_INLINE_ROUTINE void _CPU_Use_thread_local_storage(
+static inline void _CPU_Use_thread_local_storage(
   const Context_Control *context
 )
 {

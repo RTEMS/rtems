@@ -81,7 +81,7 @@ typedef Scheduler_CBS_Parameters rtems_cbs_parameters;
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_initialize ( void )
+static inline int rtems_cbs_initialize ( void )
 {
   return _Scheduler_CBS_Initialize();
 }
@@ -93,7 +93,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_initialize ( void )
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_cleanup ( void )
+static inline int rtems_cbs_cleanup ( void )
 {
   return _Scheduler_CBS_Cleanup();
 }
@@ -105,7 +105,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_cleanup ( void )
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_create_server (
+static inline int rtems_cbs_create_server (
   rtems_cbs_parameters     *params,
   rtems_cbs_budget_overrun  budget_overrun_callback,
   rtems_cbs_server_id      *server_id
@@ -125,7 +125,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_create_server (
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_attach_thread (
+static inline int rtems_cbs_attach_thread (
   rtems_cbs_server_id server_id,
   rtems_id            task_id
 )
@@ -140,7 +140,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_attach_thread (
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_detach_thread (
+static inline int rtems_cbs_detach_thread (
   rtems_cbs_server_id server_id,
   rtems_id            task_id
 )
@@ -155,7 +155,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_detach_thread (
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_destroy_server (
+static inline int rtems_cbs_destroy_server (
   rtems_cbs_server_id server_id
 )
 {
@@ -170,7 +170,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_destroy_server (
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_get_server_id (
+static inline int rtems_cbs_get_server_id (
   rtems_id             task_id,
   rtems_cbs_server_id *server_id
 )
@@ -185,7 +185,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_get_server_id (
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_get_parameters (
+static inline int rtems_cbs_get_parameters (
   rtems_cbs_server_id   server_id,
   rtems_cbs_parameters *params
 )
@@ -200,7 +200,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_get_parameters (
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_set_parameters (
+static inline int rtems_cbs_set_parameters (
   rtems_cbs_server_id   server_id,
   rtems_cbs_parameters *params
 )
@@ -215,7 +215,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_set_parameters (
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_get_execution_time (
+static inline int rtems_cbs_get_execution_time (
   rtems_cbs_server_id    server_id,
   time_t                *exec_time,
   time_t                *abs_time
@@ -231,7 +231,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_get_execution_time (
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_get_remaining_budget (
+static inline int rtems_cbs_get_remaining_budget (
   rtems_cbs_server_id  server_id,
   time_t              *remaining_budget
 )
@@ -247,7 +247,7 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_get_remaining_budget (
  *
  * @return status code.
  */
-RTEMS_INLINE_ROUTINE int rtems_cbs_get_approved_budget (
+static inline int rtems_cbs_get_approved_budget (
   rtems_cbs_server_id  server_id,
   time_t              *appr_budget
 )

@@ -374,7 +374,7 @@ static inline uint32_t _TOD_Seconds_since_epoch( void )
  *
  * @param[out] time The timeval to be filled in by the method.
  */
-RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
+static inline void _TOD_Get_timeval(
   struct timeval *time
 )
 {
@@ -402,7 +402,7 @@ Status_Control _TOD_Adjust(
  * @retval true The time is set.
  * @retval false The time is not set.
  */
-RTEMS_INLINE_ROUTINE bool _TOD_Is_set( void )
+static inline bool _TOD_Is_set( void )
 {
   return _TOD.is_set;
 }

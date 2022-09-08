@@ -128,7 +128,7 @@ typedef __BITSET_DEFINE( Processor_mask, CPU_MAXIMUM_PROCESSORS ) Processor_mask
  *
  * @param[out] mask The mask to set to zero.
  */
-RTEMS_INLINE_ROUTINE void _Processor_mask_Zero( Processor_mask *mask )
+static inline void _Processor_mask_Zero( Processor_mask *mask )
 {
   __BIT_ZERO( CPU_MAXIMUM_PROCESSORS, mask );
 }
@@ -141,7 +141,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Zero( Processor_mask *mask )
  * @retval true The mask is zero.
  * @retval false The mask is not zero.
  */
-RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_zero( const Processor_mask *mask )
+static inline bool _Processor_mask_Is_zero( const Processor_mask *mask )
 {
   return __BIT_EMPTY( CPU_MAXIMUM_PROCESSORS, mask );
 }
@@ -151,7 +151,7 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_zero( const Processor_mask *mask )
  *
  * @param[out] mask The mask to fill
  */
-RTEMS_INLINE_ROUTINE void _Processor_mask_Fill( Processor_mask *mask )
+static inline void _Processor_mask_Fill( Processor_mask *mask )
 {
   __BIT_FILL( CPU_MAXIMUM_PROCESSORS, mask );
 }
@@ -162,7 +162,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Fill( Processor_mask *mask )
  * @param[out] dst The mask to copy @a src to.
  * @param src The mask to copy to @a dst.
  */
-RTEMS_INLINE_ROUTINE void _Processor_mask_Assign(
+static inline void _Processor_mask_Assign(
   Processor_mask *dst, const Processor_mask *src
 )
 {
@@ -175,7 +175,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Assign(
  * @param[out] mask The mask to set the bit of.
  * @param index The index of the bit that shall be set.
  */
-RTEMS_INLINE_ROUTINE void _Processor_mask_Set(
+static inline void _Processor_mask_Set(
   Processor_mask *mask,
   uint32_t        index
 )
@@ -189,7 +189,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Set(
  * @param[out] mask The mask to clear the bit of.
  * @param index The index of the bit that shall be cleared.
  */
-RTEMS_INLINE_ROUTINE void _Processor_mask_Clear(
+static inline void _Processor_mask_Clear(
   Processor_mask *mask,
   uint32_t        index
 )
@@ -206,7 +206,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Clear(
  * @retval true The specified index bit is set.
  * @retval false The specified index bit is not set.
  */
-RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_set(
+static inline bool _Processor_mask_Is_set(
   const Processor_mask *mask,
   uint32_t              index
 )
@@ -223,7 +223,7 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_set(
  * @retval true The processor sets a and b are equal.
  * @retval false The processor sets a and b are not equal.
  */
-RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_equal(
+static inline bool _Processor_mask_Is_equal(
   const Processor_mask *a,
   const Processor_mask *b
 )
@@ -241,7 +241,7 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_equal(
  * @retval true The intersection of the processor sets a and b is non-empty.
  * @retval false The intersection of the processor sets a and b is empty.
  */
-RTEMS_INLINE_ROUTINE bool _Processor_mask_Has_overlap(
+static inline bool _Processor_mask_Has_overlap(
   const Processor_mask *a,
   const Processor_mask *b
 )
@@ -259,7 +259,7 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Has_overlap(
  * @retval true @a small is a subset of @a big.
  * @retval false @a small is not a subset of @a big.
  */
-RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_subset(
+static inline bool _Processor_mask_Is_subset(
   const Processor_mask *big,
   const Processor_mask *small
 )
@@ -274,7 +274,7 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_subset(
  * @param b The first parameter of the AND-operation.
  * @param c The second parameter of the AND-operation.
  */
-RTEMS_INLINE_ROUTINE void _Processor_mask_And(
+static inline void _Processor_mask_And(
   Processor_mask       *a,
   const Processor_mask *b,
   const Processor_mask *c
@@ -290,7 +290,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_And(
  * @param b The first parameter of the OR-operation.
  * @param c The second parameter of the OR-operation.
  */
-RTEMS_INLINE_ROUTINE void _Processor_mask_Or(
+static inline void _Processor_mask_Or(
   Processor_mask       *a,
   const Processor_mask *b,
   const Processor_mask *c
@@ -306,7 +306,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Or(
  * @param b The first parameter of the XOR-operation.
  * @param c The second parameter of the XOR-operation.
  */
-RTEMS_INLINE_ROUTINE void _Processor_mask_Xor(
+static inline void _Processor_mask_Xor(
   Processor_mask       *a,
   const Processor_mask *b,
   const Processor_mask *c
@@ -322,7 +322,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_Xor(
  *
  * @return The number of set bits in @a a.
  */
-RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_Count( const Processor_mask *a )
+static inline uint32_t _Processor_mask_Count( const Processor_mask *a )
 {
   return (uint32_t) __BIT_COUNT( CPU_MAXIMUM_PROCESSORS, a );
 }
@@ -334,7 +334,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_Count( const Processor_mask *a )
  *
  * @return The last set of @a a.
  */
-RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_Find_last_set( const Processor_mask *a )
+static inline uint32_t _Processor_mask_Find_last_set( const Processor_mask *a )
 {
   return (uint32_t) __BIT_FLS( CPU_MAXIMUM_PROCESSORS, a );
 }
@@ -348,7 +348,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_Find_last_set( const Processor_mas
  *
  * @return The subset containing the specified index as an unsigned 32-bit integer.
  */
-RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_To_uint32_t(
+static inline uint32_t _Processor_mask_To_uint32_t(
   const Processor_mask *mask,
   uint32_t              index
 )
@@ -366,7 +366,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_To_uint32_t(
  * @param bits The bits for creating the mask.
  * @param index The index to which the mask is relative.
  */
-RTEMS_INLINE_ROUTINE void _Processor_mask_From_uint32_t(
+static inline void _Processor_mask_From_uint32_t(
   Processor_mask *mask,
   uint32_t        bits,
   uint32_t        index
@@ -382,7 +382,7 @@ RTEMS_INLINE_ROUTINE void _Processor_mask_From_uint32_t(
  * @param[out] The mask that is created.
  * @param index The specified index.
  */
-RTEMS_INLINE_ROUTINE void _Processor_mask_From_index(
+static inline void _Processor_mask_From_index(
   Processor_mask *mask,
   uint32_t        index
 )
@@ -405,7 +405,7 @@ typedef enum {
  * @retval true At most partial loss can be guaranteed.
  * @retval false The status indicates more than partial loss.
  */
-RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_at_most_partial_loss(
+static inline bool _Processor_mask_Is_at_most_partial_loss(
   Processor_mask_Copy_status status
 )
 {
@@ -452,7 +452,7 @@ Processor_mask_Copy_status _Processor_mask_Copy(
  * @retval PROCESSOR_MASK_COPY_INVALID_SIZE One of the arguments sizes
  *      is invalid (bigger than the size of a long).
  */
-RTEMS_INLINE_ROUTINE Processor_mask_Copy_status _Processor_mask_To_cpu_set_t(
+static inline Processor_mask_Copy_status _Processor_mask_To_cpu_set_t(
   const Processor_mask *src,
   size_t                dst_size,
   cpu_set_t            *dst
@@ -482,7 +482,7 @@ RTEMS_INLINE_ROUTINE Processor_mask_Copy_status _Processor_mask_To_cpu_set_t(
  * @retval PROCESSOR_MASK_COPY_INVALID_SIZE One of the arguments sizes
  *      is invalid (bigger than the size of a long).
  */
-RTEMS_INLINE_ROUTINE Processor_mask_Copy_status _Processor_mask_From_cpu_set_t(
+static inline Processor_mask_Copy_status _Processor_mask_From_cpu_set_t(
   Processor_mask  *dst,
   size_t           src_size,
   const cpu_set_t *src

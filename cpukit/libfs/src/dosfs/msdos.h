@@ -72,12 +72,12 @@ typedef struct msdos_fs_info_s
     rtems_dosfs_convert_control      *converter;
 } msdos_fs_info_t;
 
-RTEMS_INLINE_ROUTINE void msdos_fs_lock(msdos_fs_info_t *fs_info)
+static inline void msdos_fs_lock(msdos_fs_info_t *fs_info)
 {
     rtems_recursive_mutex_lock(&fs_info->vol_mutex);
 }
 
-RTEMS_INLINE_ROUTINE void msdos_fs_unlock(msdos_fs_info_t *fs_info)
+static inline void msdos_fs_unlock(msdos_fs_info_t *fs_info)
 {
     rtems_recursive_mutex_unlock(&fs_info->vol_mutex);
 }

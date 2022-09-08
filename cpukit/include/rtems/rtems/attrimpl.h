@@ -80,7 +80,7 @@ extern "C" {
  *  This function sets the requested new_attributes in the attribute_set
  *  passed in.  The result is returned to the user.
  */
-RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Set (
+static inline rtems_attribute _Attributes_Set (
    rtems_attribute new_attributes,
    rtems_attribute attribute_set
 )
@@ -95,7 +95,7 @@ RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Set (
  *  This function clears the requested new_attributes in the attribute_set
  *  passed in.  The result is returned to the user.
  */
-RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Clear (
+static inline rtems_attribute _Attributes_Clear (
    rtems_attribute attribute_set,
    rtems_attribute mask
 )
@@ -110,7 +110,7 @@ RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Clear (
  *  This function returns TRUE if the floating point attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_floating_point(
+static inline bool _Attributes_Is_floating_point(
   rtems_attribute attribute_set
 )
 {
@@ -125,7 +125,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_floating_point(
  *  This function returns TRUE if the global object attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_global(
+static inline bool _Attributes_Is_global(
   rtems_attribute attribute_set
 )
 {
@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_global(
  *  This function returns TRUE if the priority attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_priority(
+static inline bool _Attributes_Is_priority(
   rtems_attribute attribute_set
 )
 {
@@ -153,7 +153,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_priority(
  *  This function returns TRUE if the binary semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_binary_semaphore(
+static inline bool _Attributes_Is_binary_semaphore(
   rtems_attribute attribute_set
 )
 {
@@ -167,7 +167,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_binary_semaphore(
  *  This function returns TRUE if the simple binary semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_simple_binary_semaphore(
+static inline bool _Attributes_Is_simple_binary_semaphore(
   rtems_attribute attribute_set
 )
 {
@@ -182,7 +182,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_simple_binary_semaphore(
  *  This function returns TRUE if the counting semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_counting_semaphore(
+static inline bool _Attributes_Is_counting_semaphore(
   rtems_attribute attribute_set
 )
 {
@@ -196,7 +196,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_counting_semaphore(
  *  This function returns TRUE if the priority inheritance attribute
  *  is enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_inherit_priority(
+static inline bool _Attributes_Is_inherit_priority(
   rtems_attribute attribute_set
 )
 {
@@ -210,7 +210,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_inherit_priority(
  * The protocols are RTEMS_INHERIT_PRIORITY, RTEMS_PRIORITY_CEILING and
  * RTEMS_MULTIPROCESSOR_RESOURCE_SHARING.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Has_at_most_one_protocol(
+static inline bool _Attributes_Has_at_most_one_protocol(
   rtems_attribute attribute_set
 )
 {
@@ -227,7 +227,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Has_at_most_one_protocol(
  *  This function returns TRUE if the priority ceiling attribute
  *  is enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_priority_ceiling(
+static inline bool _Attributes_Is_priority_ceiling(
   rtems_attribute attribute_set
 )
 {
@@ -241,7 +241,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_priority_ceiling(
  *  This function returns TRUE if the Multiprocessor Resource Sharing Protocol
  *  attribute is enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_multiprocessor_resource_sharing(
+static inline bool _Attributes_Is_multiprocessor_resource_sharing(
   rtems_attribute attribute_set
 )
 {
@@ -255,7 +255,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_multiprocessor_resource_sharing(
  *  This function returns TRUE if the barrier automatic release
  *  attribute is enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_barrier_automatic(
+static inline bool _Attributes_Is_barrier_automatic(
   rtems_attribute attribute_set
 )
 {
@@ -269,7 +269,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_barrier_automatic(
  *  This function returns TRUE if the system task attribute
  *  is enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Attributes_Is_system_task(
+static inline bool _Attributes_Is_system_task(
   rtems_attribute attribute_set
 )
 {

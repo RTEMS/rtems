@@ -69,7 +69,7 @@ extern "C" {
  *
  * @return This method returns the resulting address.
  */
-RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
+static inline void *_Addresses_Add_offset (
   const void *base,
   uintptr_t   offset
 )
@@ -90,7 +90,7 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
  * @return This method returns the resulting address.
  */
 
-RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
+static inline void *_Addresses_Subtract_offset (
   const void *base,
   uintptr_t   offset
 )
@@ -109,7 +109,7 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
  *
  * @return This method returns the resulting address.
  */
-RTEMS_INLINE_ROUTINE intptr_t _Addresses_Subtract(
+static inline intptr_t _Addresses_Subtract(
   const void *left,
   const void *right
 )
@@ -129,7 +129,7 @@ RTEMS_INLINE_ROUTINE intptr_t _Addresses_Subtract(
  * @retval true The @a address is aligned.
  * @retval false The @a address is not aligned.
  */
-RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned(
+static inline bool _Addresses_Is_aligned(
   const void *address
 )
 {
@@ -152,7 +152,7 @@ RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned(
  * @retval true The @a address is within the memory range specified
  * @retval false The @a address is not within the memory range specified.
  */
-RTEMS_INLINE_ROUTINE bool _Addresses_Is_in_range (
+static inline bool _Addresses_Is_in_range (
   const void *address,
   const void *base,
   const void *limit
@@ -174,7 +174,7 @@ RTEMS_INLINE_ROUTINE bool _Addresses_Is_in_range (
  *
  * @return Returns the aligned address.
  */
-RTEMS_INLINE_ROUTINE void *_Addresses_Align_up(
+static inline void *_Addresses_Align_up(
   void *address,
   size_t alignment
 )
@@ -196,7 +196,7 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Align_up(
  *
  * @return Returns the aligned address.
  */
-RTEMS_INLINE_ROUTINE void *_Addresses_Align_down(
+static inline void *_Addresses_Align_down(
   void *address,
   size_t alignment
 )

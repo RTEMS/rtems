@@ -34,7 +34,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <rtems/score/basedefs.h>
-#define EDID_INLINE_ROUTINE     RTEMS_INLINE_ROUTINE
+#define EDID_INLINE_ROUTINE     static inline
 
 /*  VESA Enhanced Extended Display Identification Data (E-EDID) Proposed
     Release A, March 27, 2007 */

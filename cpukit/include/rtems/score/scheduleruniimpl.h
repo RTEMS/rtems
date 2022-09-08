@@ -57,7 +57,7 @@ extern "C" {
  * @param[in, out] heir is the current heir thread.
  * @param[in, out] new_heir is the new heir thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Update_heir(
+static inline void _Scheduler_uniprocessor_Update_heir(
   Thread_Control *heir,
   Thread_Control *new_heir
 )
@@ -86,7 +86,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Update_heir(
  *
  * @param[in, out] new_heir is the new heir thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Update_heir_if_necessary(
+static inline void _Scheduler_uniprocessor_Update_heir_if_necessary(
   Thread_Control *new_heir
 )
 {
@@ -104,7 +104,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Update_heir_if_necessary(
  * @param[in, out] heir is the current heir thread.
  * @param[in, out] new_heir is the new heir thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Update_heir_if_preemptible(
+static inline void _Scheduler_uniprocessor_Update_heir_if_preemptible(
   Thread_Control *heir,
   Thread_Control *new_heir
 )
@@ -123,7 +123,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Update_heir_if_preemptible(
  * @param extract is the handler to extract the thread.
  * @param get_highest_ready is the handler to get the highest ready thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Block(
+static inline void _Scheduler_uniprocessor_Block(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node,
@@ -154,7 +154,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Block(
  * @param the_thread is the thread.
  * @param priority is the priority of the thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Unblock(
+static inline void _Scheduler_uniprocessor_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Priority_Control         priority
@@ -181,7 +181,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Unblock(
  * @param scheduler is the scheduler.
  * @param get_highest_ready is the handler to get the highest ready thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Schedule(
+static inline void _Scheduler_uniprocessor_Schedule(
   const Scheduler_Control *scheduler,
   Thread_Control       *( *get_highest_ready )( const Scheduler_Control * )
 )
@@ -201,7 +201,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Schedule(
  * @param scheduler is the scheduler.
  * @param get_highest_ready is the handler to get the highest ready thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_uniprocessor_Yield(
+static inline void _Scheduler_uniprocessor_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control       *( *get_highest_ready )( const Scheduler_Control * )
 )

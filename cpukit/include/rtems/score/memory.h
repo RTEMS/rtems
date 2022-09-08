@@ -115,7 +115,7 @@ typedef struct {
  *
  * @return The memory area count.
  */
-RTEMS_INLINE_ROUTINE size_t _Memory_Get_count(
+static inline size_t _Memory_Get_count(
   const Memory_Information *information
 )
 {
@@ -130,7 +130,7 @@ RTEMS_INLINE_ROUTINE size_t _Memory_Get_count(
  *
  * @return The memory area of the specified index.
  */
-RTEMS_INLINE_ROUTINE Memory_Area *_Memory_Get_area(
+static inline Memory_Area *_Memory_Get_area(
   const Memory_Information *information,
   size_t                    index
 )
@@ -146,7 +146,7 @@ RTEMS_INLINE_ROUTINE Memory_Area *_Memory_Get_area(
  * @param begin The begin of the memory area.
  * @param end The end of the memory area.
  */
-RTEMS_INLINE_ROUTINE void _Memory_Initialize(
+static inline void _Memory_Initialize(
   Memory_Area *area,
   void        *begin,
   void        *end
@@ -164,7 +164,7 @@ RTEMS_INLINE_ROUTINE void _Memory_Initialize(
  * @param begin The begin of the memory area.
  * @param size The size of the memory area in bytes.
  */
-RTEMS_INLINE_ROUTINE void _Memory_Initialize_by_size(
+static inline void _Memory_Initialize_by_size(
   Memory_Area *area,
   void        *begin,
   uintptr_t    size
@@ -182,7 +182,7 @@ RTEMS_INLINE_ROUTINE void _Memory_Initialize_by_size(
  *
  * @return The memory area begin.
  */
-RTEMS_INLINE_ROUTINE const void *_Memory_Get_begin( const Memory_Area *area )
+static inline const void *_Memory_Get_begin( const Memory_Area *area )
 {
   return area->begin;
 }
@@ -193,7 +193,7 @@ RTEMS_INLINE_ROUTINE const void *_Memory_Get_begin( const Memory_Area *area )
  * @param area The memory area.
  * @param begin The memory area begin.
  */
-RTEMS_INLINE_ROUTINE void _Memory_Set_begin(
+static inline void _Memory_Set_begin(
   Memory_Area *area,
   const void  *begin
 )
@@ -208,7 +208,7 @@ RTEMS_INLINE_ROUTINE void _Memory_Set_begin(
  *
  * @return The memory area end.
  */
-RTEMS_INLINE_ROUTINE const void *_Memory_Get_end( const Memory_Area *area )
+static inline const void *_Memory_Get_end( const Memory_Area *area )
 {
   return area->end;
 }
@@ -219,7 +219,7 @@ RTEMS_INLINE_ROUTINE const void *_Memory_Get_end( const Memory_Area *area )
  * @param area The memory area.
  * @param end The memory area end.
  */
-RTEMS_INLINE_ROUTINE void _Memory_Set_end(
+static inline void _Memory_Set_end(
   Memory_Area *area,
   const void  *end
 )
@@ -234,7 +234,7 @@ RTEMS_INLINE_ROUTINE void _Memory_Set_end(
  *
  * @return The memory area size in bytes.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Memory_Get_size( const Memory_Area *area )
+static inline uintptr_t _Memory_Get_size( const Memory_Area *area )
 {
   return (uintptr_t) area->end - (uintptr_t) area->begin;
 }
@@ -246,7 +246,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Memory_Get_size( const Memory_Area *area )
  *
  * @return The free memory area begin the memory area.
  */
-RTEMS_INLINE_ROUTINE void *_Memory_Get_free_begin( const Memory_Area *area )
+static inline void *_Memory_Get_free_begin( const Memory_Area *area )
 {
   return area->free;
 }
@@ -257,7 +257,7 @@ RTEMS_INLINE_ROUTINE void *_Memory_Get_free_begin( const Memory_Area *area )
  * @param area The memory area.
  * @param begin The free memory area begin the memory area.
  */
-RTEMS_INLINE_ROUTINE void _Memory_Set_free_begin(
+static inline void _Memory_Set_free_begin(
   Memory_Area *area,
   void        *begin
 )
@@ -272,7 +272,7 @@ RTEMS_INLINE_ROUTINE void _Memory_Set_free_begin(
  *
  * @return The free memory area size in bytes of the memory area.
  */
-RTEMS_INLINE_ROUTINE uintptr_t _Memory_Get_free_size( const Memory_Area *area )
+static inline uintptr_t _Memory_Get_free_size( const Memory_Area *area )
 {
   return (uintptr_t) area->end - (uintptr_t) area->free;
 }
@@ -285,7 +285,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _Memory_Get_free_size( const Memory_Area *area )
  * @param consume The bytes to consume from the free memory area of the memory
  *   area.
  */
-RTEMS_INLINE_ROUTINE void _Memory_Consume(
+static inline void _Memory_Consume(
   Memory_Area *area,
   uintptr_t    consume
 )

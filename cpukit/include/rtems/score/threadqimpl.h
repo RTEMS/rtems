@@ -166,7 +166,7 @@ void _Thread_queue_Deadlock_fatal( Thread_Control *the_thread );
  *
  * @param[out] queue_context The thread queue context to initialize.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
+static inline void _Thread_queue_Context_initialize(
   Thread_queue_Context *queue_context
 )
 {
@@ -191,7 +191,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
  *
  * @see _Thread_queue_Enqueue().
  */
-RTEMS_INLINE_ROUTINE void
+static inline void
 _Thread_queue_Context_set_thread_state(
   Thread_queue_Context *queue_context,
   States_Control        thread_state
@@ -208,7 +208,7 @@ _Thread_queue_Context_set_thread_state(
  *
  * @see _Thread_queue_Enqueue().
  */
-RTEMS_INLINE_ROUTINE void
+static inline void
 _Thread_queue_Context_set_timeout_ticks(
   Thread_queue_Context *queue_context,
   Watchdog_Interval     ticks
@@ -229,7 +229,7 @@ _Thread_queue_Context_set_timeout_ticks(
  *
  * @see _Thread_queue_Enqueue().
  */
-RTEMS_INLINE_ROUTINE void
+static inline void
 _Thread_queue_Context_set_timeout_argument(
   Thread_queue_Context *queue_context,
   const void           *arg,
@@ -248,7 +248,7 @@ _Thread_queue_Context_set_timeout_argument(
  *
  * @see _Thread_queue_Enqueue().
  */
-RTEMS_INLINE_ROUTINE void
+static inline void
 _Thread_queue_Context_set_enqueue_callout(
   Thread_queue_Context         *queue_context,
   Thread_queue_Enqueue_callout  enqueue_callout
@@ -264,7 +264,7 @@ _Thread_queue_Context_set_enqueue_callout(
  *
  * @see _Thread_queue_Enqueue().
  */
-RTEMS_INLINE_ROUTINE void
+static inline void
 _Thread_queue_Context_set_enqueue_do_nothing_extra(
   Thread_queue_Context *queue_context
 )
@@ -281,7 +281,7 @@ _Thread_queue_Context_set_enqueue_do_nothing_extra(
  *
  * @see _Thread_queue_Enqueue().
  */
-RTEMS_INLINE_ROUTINE void
+static inline void
 _Thread_queue_Context_set_enqueue_timeout_ticks(
   Thread_queue_Context *queue_context,
   Watchdog_Interval     ticks
@@ -304,7 +304,7 @@ _Thread_queue_Context_set_enqueue_timeout_ticks(
  *
  * @see _Thread_queue_Enqueue().
  */
-RTEMS_INLINE_ROUTINE void
+static inline void
 _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
   Thread_queue_Context  *queue_context,
   const struct timespec *timeout,
@@ -330,7 +330,7 @@ _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
  *
  * @see _Thread_queue_Enqueue().
  */
-RTEMS_INLINE_ROUTINE void
+static inline void
 _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
   Thread_queue_Context  *queue_context,
   const struct timespec *timeout,
@@ -356,7 +356,7 @@ _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
  *
  * @see _Thread_queue_Enqueue().
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_deadlock_callout(
+static inline void _Thread_queue_Context_set_deadlock_callout(
   Thread_queue_Context          *queue_context,
   Thread_queue_Deadlock_callout  deadlock_callout
 )
@@ -370,7 +370,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_deadlock_callout(
  * @param[out] queue_context The thread queue context to clear the priority
  * update count.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Context_clear_priority_updates(
+static inline void _Thread_queue_Context_clear_priority_updates(
   Thread_queue_Context *queue_context
 )
 {
@@ -385,7 +385,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_clear_priority_updates(
  *
  * @return The priority update count of @a queue_context.
  */
-RTEMS_INLINE_ROUTINE size_t _Thread_queue_Context_get_priority_updates(
+static inline size_t _Thread_queue_Context_get_priority_updates(
   const Thread_queue_Context *queue_context
 )
 {
@@ -399,7 +399,7 @@ RTEMS_INLINE_ROUTINE size_t _Thread_queue_Context_get_priority_updates(
  *      update count of.
  * @param update_count The priority update count.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Context_restore_priority_updates(
+static inline void _Thread_queue_Context_restore_priority_updates(
   Thread_queue_Context *queue_context,
   size_t                update_count
 )
@@ -415,7 +415,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_restore_priority_updates(
  *      array.
  * @param the_thread The thread for the priority update.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Context_add_priority_update(
+static inline void _Thread_queue_Context_add_priority_update(
   Thread_queue_Context *queue_context,
   Thread_Control       *the_thread
 )
@@ -443,7 +443,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_add_priority_update(
  * @param[out] queue_context The thread queue context to set the ISR level of.
  * @param level The ISR level to set @a queue_context to.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_ISR_level(
+static inline void _Thread_queue_Context_set_ISR_level(
   Thread_queue_Context *queue_context,
   ISR_Level             level
 )
@@ -461,7 +461,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_ISR_level(
  *
  * @return The current processor.
  */
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_queue_Dispatch_disable(
+static inline Per_CPU_Control *_Thread_queue_Dispatch_disable(
   Thread_queue_Context *queue_context
 )
 {
@@ -480,7 +480,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_queue_Dispatch_disable(
  *   objects with multiprocessing (MP) support.
  */
 #if defined(RTEMS_MULTIPROCESSING)
-RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_MP_callout(
+static inline void _Thread_queue_Context_set_MP_callout(
   Thread_queue_Context    *queue_context,
   Thread_queue_MP_callout  mp_callout
 )
@@ -500,7 +500,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_MP_callout(
  *
  * @param[out] gate The gate to close.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_close(
+static inline void _Thread_queue_Gate_close(
   Thread_queue_Gate *gate
 )
 {
@@ -513,7 +513,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_close(
  * @param[in, out] chain The chain to add the gate to.
  * @param gate The gate to add to the chain.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_add(
+static inline void _Thread_queue_Gate_add(
   Chain_Control     *chain,
   Thread_queue_Gate *gate
 )
@@ -526,7 +526,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_add(
  *
  * @param[out] gate The gate to open.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_open(
+static inline void _Thread_queue_Gate_open(
   Thread_queue_Gate *gate
 )
 {
@@ -540,7 +540,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_open(
  *
  * @param gate The gate to wait for.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_wait(
+static inline void _Thread_queue_Gate_wait(
   Thread_queue_Gate *gate
 )
 {
@@ -555,7 +555,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_wait(
  *
  * @param[out] heads The thread queue heads to initialize.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Heads_initialize(
+static inline void _Thread_queue_Heads_initialize(
   Thread_queue_Heads *heads
 )
 {
@@ -579,7 +579,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Heads_initialize(
  * @param[out] queue The thread queue queue to initialize.
  * @param name The name for the @a queue.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(
+static inline void _Thread_queue_Queue_initialize(
   Thread_queue_Queue *queue,
   const char         *name
 )
@@ -599,7 +599,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(
  * @param lock_stats The lock statistics.
  * @param[out] lock_context The interrupt lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_do_acquire_critical(
+static inline void _Thread_queue_Queue_do_acquire_critical(
   Thread_queue_Queue *queue,
 #if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
   SMP_lock_Stats     *lock_stats,
@@ -635,7 +635,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_do_acquire_critical(
  * @param queue The thread queue queue to release in a critical section.
  * @param[out] lock_context The interrupt lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release_critical(
+static inline void _Thread_queue_Queue_release_critical(
   Thread_queue_Queue *queue,
   ISR_lock_Context   *lock_context
 )
@@ -657,7 +657,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release_critical(
  * @param queue The thread queue queue to release.
  * @param[out] lock_context The interrupt lock context to enable interrupts.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release(
+static inline void _Thread_queue_Queue_release(
   Thread_queue_Queue *queue,
   ISR_lock_Context   *lock_context
 )
@@ -697,7 +697,7 @@ void _Thread_queue_Do_acquire_critical(
   ISR_lock_Context     *lock_context
 );
 #else
-RTEMS_INLINE_ROUTINE void _Thread_queue_Do_acquire_critical(
+static inline void _Thread_queue_Do_acquire_critical(
   Thread_queue_Control *the_thread_queue,
   ISR_lock_Context     *lock_context
 )
@@ -713,7 +713,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Do_acquire_critical(
  * @param the_thread_queue The thread queue control to acquire.
  * @param[out] lock_context The interrupt lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire_critical(
+static inline void _Thread_queue_Acquire_critical(
   Thread_queue_Control *the_thread_queue,
   Thread_queue_Context *queue_context
 )
@@ -736,7 +736,7 @@ void _Thread_queue_Acquire(
   Thread_queue_Context *queue_context
 );
 #else
-RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire(
+static inline void _Thread_queue_Acquire(
   Thread_queue_Control *the_thread_queue,
   Thread_queue_Context *queue_context
 )
@@ -755,7 +755,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire(
  * @retval false The thread queue control is not the owner of the lock.
  */
 #if defined(RTEMS_DEBUG)
-RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_lock_owner(
+static inline bool _Thread_queue_Is_lock_owner(
   const Thread_queue_Control *the_thread_queue
 )
 {
@@ -779,7 +779,7 @@ void _Thread_queue_Do_release_critical(
   ISR_lock_Context     *lock_context
 );
 #else
-RTEMS_INLINE_ROUTINE void _Thread_queue_Do_release_critical(
+static inline void _Thread_queue_Do_release_critical(
   Thread_queue_Control *the_thread_queue,
   ISR_lock_Context     *lock_context
 )
@@ -796,7 +796,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Do_release_critical(
  * @param the_thread_queue The thread queue control to release.
  * @param[out] queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Release_critical(
+static inline void _Thread_queue_Release_critical(
   Thread_queue_Control *the_thread_queue,
   Thread_queue_Context *queue_context
 )
@@ -819,7 +819,7 @@ void _Thread_queue_Release(
   Thread_queue_Context *queue_context
 );
 #else
-RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
+static inline void _Thread_queue_Release(
   Thread_queue_Control *the_thread_queue,
   Thread_queue_Context *queue_context
 )
@@ -1107,7 +1107,7 @@ void _Thread_queue_Surrender_sticky(
  * @retval true @a queue is empty.
  * @retval false @a queue is not empty.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_empty(
+static inline bool _Thread_queue_Is_empty(
   const Thread_queue_Queue *queue
 )
 {
@@ -1305,7 +1305,7 @@ void _Thread_queue_Initialize(
  *
  * @param[out] the_thread_queue The thread queue to destroy.
  */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(
+static inline void _Thread_queue_Destroy(
   Thread_queue_Control *the_thread_queue
 )
 {

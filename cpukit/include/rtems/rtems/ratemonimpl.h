@@ -74,13 +74,13 @@ extern "C" {
  *  This function allocates a period control block from
  *  the inactive chain of free period control blocks.
  */
-RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Allocate( void )
+static inline Rate_monotonic_Control *_Rate_monotonic_Allocate( void )
 {
   return (Rate_monotonic_Control *)
     _Objects_Allocate( &_Rate_monotonic_Information );
 }
 
-RTEMS_INLINE_ROUTINE void _Rate_monotonic_Acquire_critical(
+static inline void _Rate_monotonic_Acquire_critical(
   Rate_monotonic_Control *the_period,
   ISR_lock_Context       *lock_context
 )
@@ -88,7 +88,7 @@ RTEMS_INLINE_ROUTINE void _Rate_monotonic_Acquire_critical(
   _ISR_lock_Acquire( &the_period->Lock, lock_context );
 }
 
-RTEMS_INLINE_ROUTINE void _Rate_monotonic_Release(
+static inline void _Rate_monotonic_Release(
   Rate_monotonic_Control *the_period,
   ISR_lock_Context       *lock_context
 )
@@ -96,7 +96,7 @@ RTEMS_INLINE_ROUTINE void _Rate_monotonic_Release(
   _ISR_lock_Release_and_ISR_enable( &the_period->Lock, lock_context );
 }
 
-RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Get(
+static inline Rate_monotonic_Control *_Rate_monotonic_Get(
   Objects_Id        id,
   ISR_lock_Context *lock_context
 )
@@ -137,14 +137,14 @@ void _Rate_monotonic_Cancel(
   ISR_lock_Context       *lock_context
 );
 
-RTEMS_INLINE_ROUTINE void _Rate_monotonic_Reset_min_time(
+static inline void _Rate_monotonic_Reset_min_time(
   Timestamp_Control *min_time
 )
 {
   _Timestamp_Set( min_time, 0x7fffffff, 0x7fffffff );
 }
 
-RTEMS_INLINE_ROUTINE void _Rate_monotonic_Reset_statistics(
+static inline void _Rate_monotonic_Reset_statistics(
   Rate_monotonic_Control *the_period
 )
 {

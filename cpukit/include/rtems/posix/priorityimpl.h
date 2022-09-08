@@ -68,7 +68,7 @@ extern "C" {
  *
  * @return The maximum POSIX API priority for this scheduler instance.
  */
-RTEMS_INLINE_ROUTINE int _POSIX_Priority_Get_maximum(
+static inline int _POSIX_Priority_Get_maximum(
   const Scheduler_Control *scheduler
 )
 {

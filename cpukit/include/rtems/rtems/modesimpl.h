@@ -64,7 +64,7 @@ extern "C" {
  *  This function returns TRUE if mode_set indicates that Asynchronous
  *  Signal Processing is disabled, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Modes_Is_asr_disabled (
+static inline bool _Modes_Is_asr_disabled (
   rtems_mode mode_set
 )
 {
@@ -77,7 +77,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_asr_disabled (
  *  This function returns TRUE if mode_set indicates that preemption
  *  is enabled, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Modes_Is_preempt (
+static inline bool _Modes_Is_preempt (
   rtems_mode mode_set
 )
 {
@@ -90,7 +90,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_preempt (
  *  This function returns TRUE if mode_set indicates that timeslicing
  *  is enabled, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Modes_Is_timeslice (
+static inline bool _Modes_Is_timeslice (
   rtems_mode mode_set
 )
 {
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_timeslice (
  *
  *  This function returns the interrupt level portion of the mode_set.
  */
-RTEMS_INLINE_ROUTINE ISR_Level _Modes_Get_interrupt_level (
+static inline ISR_Level _Modes_Get_interrupt_level (
   rtems_mode mode_set
 )
 {
@@ -119,7 +119,7 @@ RTEMS_INLINE_ROUTINE ISR_Level _Modes_Get_interrupt_level (
  * @return Returns true, if support for the interrupt level is implemented,
  *   otherwise returns false.
  */
-RTEMS_INLINE_ROUTINE bool _Modes_Is_interrupt_level_supported(
+static inline bool _Modes_Is_interrupt_level_supported(
   rtems_mode mode_set
 )
 {
@@ -142,7 +142,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_interrupt_level_supported(
  * @return Returns true, if support for the preempt mode is implemented,
  *   otherwise returns false.
  */
-RTEMS_INLINE_ROUTINE bool _Modes_Is_preempt_mode_supported(
+static inline bool _Modes_Is_preempt_mode_supported(
   rtems_mode            mode_set,
   const Thread_Control *the_thread
 )
@@ -162,7 +162,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_preempt_mode_supported(
  *
  * @param[out] the_thread is the thread to apply the timeslice mode.
  */
-RTEMS_INLINE_ROUTINE void _Modes_Apply_timeslice_to_thread(
+static inline void _Modes_Apply_timeslice_to_thread(
   rtems_mode      mode_set,
   Thread_Control *the_thread
 )

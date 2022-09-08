@@ -129,7 +129,7 @@ extern "C" {
   decl \
   RTEMS_SECTION( ".rtemsrwset." #set ".content" )
 
-RTEMS_INLINE_ROUTINE uintptr_t _Linker_set_Obfuscate( const void *ptr )
+static inline uintptr_t _Linker_set_Obfuscate( const void *ptr )
 {
   uintptr_t addr;
 

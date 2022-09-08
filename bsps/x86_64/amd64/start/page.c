@@ -83,7 +83,7 @@ uint64_t get_mask_for_bits(uint8_t start, uint8_t end)
   return mask;
 }
 
-RTEMS_INLINE_ROUTINE void assert_0s_from_bit(uint64_t entry, uint8_t bit_pos)
+static inline void assert_0s_from_bit(uint64_t entry, uint8_t bit_pos)
 {
   /* Confirm that bit_pos:64 are all 0s */
   assert((entry & get_mask_for_bits(bit_pos, 64)) == 0);

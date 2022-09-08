@@ -54,7 +54,7 @@ typedef struct {
   CORE_RWLock_Control RWLock;
 } POSIX_RWLock_Control;
 
-RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Get(
+static inline POSIX_RWLock_Control *_POSIX_RWLock_Get(
   pthread_rwlock_t *rwlock
 )
 {

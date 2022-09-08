@@ -70,7 +70,7 @@ extern Freechain_Control _POSIX_Keys_Keypool;
  * the inactive chain of free keys control blocks.
  */
 
-RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
+static inline POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
 {
   return (POSIX_Keys_Control *) _Objects_Allocate( &_POSIX_Keys_Information );
 }
@@ -81,20 +81,20 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
  * This routine frees a keys control block to the
  * inactive chain of free keys control blocks.
  */
-RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free(
+static inline void _POSIX_Keys_Free(
   POSIX_Keys_Control *the_key
 )
 {
   _Objects_Free( &_POSIX_Keys_Information, &the_key->Object );
 }
 
-RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get( pthread_key_t key )
+static inline POSIX_Keys_Control *_POSIX_Keys_Get( pthread_key_t key )
 {
   return (POSIX_Keys_Control *)
     _Objects_Get_no_protection( (Objects_Id) key, &_POSIX_Keys_Information );
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_acquire(
+static inline void _POSIX_Keys_Key_value_acquire(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_acquire(
   _ISR_lock_ISR_disable_and_acquire( &the_thread->Keys.Lock, lock_context );
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_release(
+static inline void _POSIX_Keys_Key_value_release(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -112,7 +112,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_release(
 
 POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_allocate( void );
 
-RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_free(
+static inline void _POSIX_Keys_Key_value_free(
   POSIX_Keys_Key_value_pair *key_value_pair
 )
 {
@@ -120,7 +120,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_free(
   _Freechain_Put( &_POSIX_Keys_Keypool, key_value_pair );
 }
 
-RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Key_value_equal(
+static inline bool _POSIX_Keys_Key_value_equal(
   const void        *left,
   const RBTree_Node *right
 )
@@ -134,7 +134,7 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Key_value_equal(
   return *the_left == the_right->key;
 }
 
-RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Key_value_less(
+static inline bool _POSIX_Keys_Key_value_less(
   const void        *left,
   const RBTree_Node *right
 )
@@ -148,12 +148,12 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Key_value_less(
   return *the_left < the_right->key;
 }
 
-RTEMS_INLINE_ROUTINE void *_POSIX_Keys_Key_value_map( RBTree_Node *node )
+static inline void *_POSIX_Keys_Key_value_map( RBTree_Node *node )
 {
   return POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node );
 }
 
-RTEMS_INLINE_ROUTINE POSIX_Keys_Key_value_pair *_POSIX_Keys_Key_value_find(
+static inline POSIX_Keys_Key_value_pair *_POSIX_Keys_Key_value_find(
   pthread_key_t         key,
   const Thread_Control *the_thread
 )
@@ -167,7 +167,7 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Key_value_pair *_POSIX_Keys_Key_value_find(
   );
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_insert(
+static inline void _POSIX_Keys_Key_value_insert(
   pthread_key_t              key,
   POSIX_Keys_Key_value_pair *key_value_pair,
   Thread_Control            *the_thread

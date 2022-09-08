@@ -57,7 +57,7 @@ extern "C" {
  * This implementation should be used by BSPs which provide exactly one memory
  * area via _Memory_Get() to implement _Workspace_Handler_initialization().
  */
-RTEMS_INLINE_ROUTINE void _Workspace_Initialize_for_one_area( void )
+static inline void _Workspace_Initialize_for_one_area( void )
 {
   uintptr_t                 page_size;
   uintptr_t                 wkspace_size;

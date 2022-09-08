@@ -75,7 +75,7 @@ rtems_status_code _RTEMS_tasks_Create(
   RTEMS_tasks_Prepare_stack  prepare_stack
 );
 
-RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate(void)
+static inline Thread_Control *_RTEMS_tasks_Allocate(void)
 {
   _Objects_Allocator_lock();
 
@@ -99,7 +99,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate(void)
  *
  * @return The corresponding SuperCore priority.
  */
-RTEMS_INLINE_ROUTINE Priority_Control _RTEMS_Priority_To_core(
+static inline Priority_Control _RTEMS_Priority_To_core(
   const Scheduler_Control *scheduler,
   rtems_task_priority      priority,
   bool                    *valid
@@ -119,7 +119,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _RTEMS_Priority_To_core(
  *
  * @return The corresponding RTEMS API priority.
  */
-RTEMS_INLINE_ROUTINE rtems_task_priority _RTEMS_Priority_From_core(
+static inline rtems_task_priority _RTEMS_Priority_From_core(
   const Scheduler_Control *scheduler,
   Priority_Control         priority
 )

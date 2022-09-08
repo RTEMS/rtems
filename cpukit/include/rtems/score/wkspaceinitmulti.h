@@ -57,7 +57,7 @@ extern "C" {
  * memory area via _Memory_Get() to implement
  * _Workspace_Handler_initialization().
  */
-RTEMS_INLINE_ROUTINE void _Workspace_Initialize_for_multiple_areas( void )
+static inline void _Workspace_Initialize_for_multiple_areas( void )
 {
   const Memory_Information             *mem;
   Heap_Initialization_or_extend_handler init_or_extend;

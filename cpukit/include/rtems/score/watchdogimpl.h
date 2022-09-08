@@ -114,7 +114,7 @@ typedef enum {
  *
  * @param[out] header The header to initialize.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Header_initialize(
+static inline void _Watchdog_Header_initialize(
   Watchdog_Header *header
 )
 {
@@ -129,7 +129,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Header_initialize(
  *
  * @return The first of @a header.
  */
-RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Header_first(
+static inline Watchdog_Control *_Watchdog_Header_first(
   const Watchdog_Header *header
 )
 {
@@ -141,7 +141,7 @@ RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Header_first(
  *
  * @param header The watchdog header to destroy.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Header_destroy(
+static inline void _Watchdog_Header_destroy(
   Watchdog_Header *header
 )
 {
@@ -163,7 +163,7 @@ void _Watchdog_Tick( struct Per_CPU_Control *cpu );
  *
  * @return The RB_COLOR of @a the_watchdog.
  */
-RTEMS_INLINE_ROUTINE Watchdog_State _Watchdog_Get_state(
+static inline Watchdog_State _Watchdog_Get_state(
   const Watchdog_Control *the_watchdog
 )
 {
@@ -176,7 +176,7 @@ RTEMS_INLINE_ROUTINE Watchdog_State _Watchdog_Get_state(
  * @param[out] the_watchdog The watchdog to set the state of.
  * @param state The state to set the watchdog to.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Set_state(
+static inline void _Watchdog_Set_state(
   Watchdog_Control *the_watchdog,
   Watchdog_State    state
 )
@@ -191,7 +191,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Set_state(
  *
  * @return The cpu of the watchdog.
  */
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_Watchdog_Get_CPU(
+static inline Per_CPU_Control *_Watchdog_Get_CPU(
   const Watchdog_Control *the_watchdog
 )
 {
@@ -208,7 +208,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Watchdog_Get_CPU(
  * @param[out] the_watchdog The watchdog to set the cpu of.
  * @param cpu The cpu to be set as @a the_watchdog's cpu.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Set_CPU(
+static inline void _Watchdog_Set_CPU(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu
 )
@@ -228,7 +228,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Set_CPU(
  *
  * @param[out] the_watchdog The uninitialized watchdog.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Preinitialize(
+static inline void _Watchdog_Preinitialize(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu
 )
@@ -250,7 +250,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Preinitialize(
  * @param[out] the_watchdog The watchdog to initialize.
  * @param routing The service routine for @a the_watchdog.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Initialize(
+static inline void _Watchdog_Initialize(
   Watchdog_Control               *the_watchdog,
   Watchdog_Service_routine_entry  routine
 )
@@ -332,7 +332,7 @@ void _Watchdog_Remove(
  * @retval 0 The now time is greater than or equal to the expiration time of
  * the watchdog.
  */
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Cancel(
+static inline uint64_t _Watchdog_Cancel(
   Watchdog_Header  *header,
   Watchdog_Control *the_watchdog,
   uint64_t          now
@@ -362,7 +362,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Cancel(
  * @retval true The watchdog is scheduled.
  * @retval false The watchdog is inactive.
  */
-RTEMS_INLINE_ROUTINE bool _Watchdog_Is_scheduled(
+static inline bool _Watchdog_Is_scheduled(
   const Watchdog_Control *the_watchdog
 )
 {
@@ -381,7 +381,7 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_scheduled(
  * @param first is the current first watchdog which should be removed
  *   afterwards.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Next_first(
+static inline void _Watchdog_Next_first(
   Watchdog_Header        *header,
   const Watchdog_Control *first
 )
@@ -450,7 +450,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Next_first(
  * @retval true The timespec is a valid timespec.
  * @retval false The timespec is invalid.
  */
-RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_timespec(
+static inline bool _Watchdog_Is_valid_timespec(
   const struct timespec *ts
 )
 {
@@ -466,7 +466,7 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_timespec(
  * @retval true The timespec is a valid interval timespec.
  * @retval false The timespec is invalid.
  */
-RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_interval_timespec(
+static inline bool _Watchdog_Is_valid_interval_timespec(
   const struct timespec *ts
 )
 {
@@ -483,7 +483,7 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_interval_timespec(
  * @retval pointer Pointer to the now timespec.
  * @retval NULL @a delta is not a valid interval timespec.
  */
-RTEMS_INLINE_ROUTINE const struct timespec * _Watchdog_Future_timespec(
+static inline const struct timespec * _Watchdog_Future_timespec(
   struct timespec       *now,
   const struct timespec *delta
 )
@@ -521,7 +521,7 @@ RTEMS_INLINE_ROUTINE const struct timespec * _Watchdog_Future_timespec(
  * @retval true @a ts is too far in the future.
  * @retval false @a ts is not too far in the future.
  */
-RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_timespec(
+static inline bool _Watchdog_Is_far_future_timespec(
   const struct timespec *ts
 )
 {
@@ -535,7 +535,7 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_timespec(
  *
  * @return @a seconds converted to ticks.
  */
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_seconds(
+static inline uint64_t _Watchdog_Ticks_from_seconds(
   uint32_t seconds
 )
 {
@@ -553,7 +553,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_seconds(
  *
  * @return @a ts converted to ticks.
  */
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
+static inline uint64_t _Watchdog_Ticks_from_timespec(
   const struct timespec *ts
 )
 {
@@ -577,7 +577,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
  *
  * @param[out] ts is the timespec to return the converted ticks.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Ticks_to_timespec(
+static inline void _Watchdog_Ticks_to_timespec(
   uint64_t         ticks,
   struct timespec *ts
 )
@@ -593,7 +593,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Ticks_to_timespec(
  *
  * @return @a sbt converted to ticks.
  */
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_sbintime( int64_t sbt )
+static inline uint64_t _Watchdog_Ticks_from_sbintime( int64_t sbt )
 {
   uint64_t ticks = ( sbt >> 32 ) << WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
 
@@ -608,7 +608,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_sbintime( int64_t sbt )
  * @param cpu The cpu to acquire the watchdog lock of.
  * @param lock_context The lock context.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_acquire_critical(
+static inline void _Watchdog_Per_CPU_acquire_critical(
   Per_CPU_Control  *cpu,
   ISR_lock_Context *lock_context
 )
@@ -622,7 +622,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_acquire_critical(
  * @param cpu The cpu to release the watchdog lock of.
  * @param lock_context The lock context.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_release_critical(
+static inline void _Watchdog_Per_CPU_release_critical(
   Per_CPU_Control  *cpu,
   ISR_lock_Context *lock_context
 )
@@ -640,7 +640,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_release_critical(
  *
  * @return The new expiration time of the watchdog.
  */
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_ticks(
+static inline uint64_t _Watchdog_Per_CPU_insert_ticks(
   Watchdog_Control  *the_watchdog,
   Per_CPU_Control   *cpu,
   Watchdog_Interval  ticks
@@ -672,7 +672,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_ticks(
  *
  * @return The expiration time of the watchdog.
  */
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert(
+static inline uint64_t _Watchdog_Per_CPU_insert(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu,
   Watchdog_Header  *header,
@@ -696,7 +696,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert(
  * @param cpu The cpu to remove the watchdog from.
  * @param[in, out] The scheduled watchdogs.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove(
+static inline void _Watchdog_Per_CPU_remove(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu,
   Watchdog_Header  *header
@@ -717,7 +717,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove(
  *
  * @param[in, out] the_watchdog The watchdog to remove.
  */
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_ticks(
+static inline void _Watchdog_Per_CPU_remove_ticks(
   Watchdog_Control *the_watchdog
 )
 {

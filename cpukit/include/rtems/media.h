@@ -343,7 +343,7 @@ typedef rtems_status_code (*rtems_media_worker)(
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_NO_MEMORY Not enough resources.
  */
-RTEMS_INLINE_ROUTINE rtems_status_code rtems_media_initialize(void)
+static inline rtems_status_code rtems_media_initialize(void)
 {
   return RTEMS_SUCCESSFUL;
 }

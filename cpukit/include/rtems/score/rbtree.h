@@ -103,7 +103,7 @@ typedef RB_HEAD(RBTree_Control, RBTree_Node) RBTree_Control;
  *
  * @see _RBTree_Is_node_off_tree().
  */
-RTEMS_INLINE_ROUTINE void _RBTree_Set_off_tree( RBTree_Node *the_node )
+static inline void _RBTree_Set_off_tree( RBTree_Node *the_node )
 {
   RB_COLOR( the_node, Node ) = -1;
 }
@@ -118,7 +118,7 @@ RTEMS_INLINE_ROUTINE void _RBTree_Set_off_tree( RBTree_Node *the_node )
  *
  * @see _RBTree_Set_off_tree().
  */
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_node_off_tree(
+static inline bool _RBTree_Is_node_off_tree(
   const RBTree_Node *the_node
 )
 {
@@ -144,7 +144,7 @@ void _RBTree_Insert_color(
  *
  * @param[out] the_node The red-black tree node to initialize.
  */
-RTEMS_INLINE_ROUTINE void _RBTree_Initialize_node( RBTree_Node *the_node )
+static inline void _RBTree_Initialize_node( RBTree_Node *the_node )
 {
 #if defined(RTEMS_DEBUG)
   _RBTree_Set_off_tree( the_node );
@@ -160,7 +160,7 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_node( RBTree_Node *the_node )
  * @param[out] parent The parent node.
  * @param[out] link The child node link of the parent node.
  */
-RTEMS_INLINE_ROUTINE void _RBTree_Add_child(
+static inline void _RBTree_Add_child(
   RBTree_Node  *child,
   RBTree_Node  *parent,
   RBTree_Node **link
@@ -221,7 +221,7 @@ RTEMS_INLINE_ROUTINE void _RBTree_Add_child(
  * }
  * @endcode
  */
-RTEMS_INLINE_ROUTINE void _RBTree_Insert_with_parent(
+static inline void _RBTree_Insert_with_parent(
   RBTree_Control  *the_rbtree,
   RBTree_Node     *the_node,
   RBTree_Node     *parent,
@@ -261,7 +261,7 @@ void _RBTree_Extract(
  *
  * @see _RBTree_Is_root().
  */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Root(
+static inline RBTree_Node *_RBTree_Root(
   const RBTree_Control *the_rbtree
 )
 {
@@ -276,7 +276,7 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Root(
  * @retval pointer Pointer to the root node.
  * @retval NULL The tree is empty.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Root_reference(
+static inline RBTree_Node **_RBTree_Root_reference(
   RBTree_Control *the_rbtree
 )
 {
@@ -291,7 +291,7 @@ RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Root_reference(
  * @retval pointer Pointer to the root node.
  * @retval NULL The tree is empty.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node * const *_RBTree_Root_const_reference(
+static inline RBTree_Node * const *_RBTree_Root_const_reference(
   const RBTree_Control *the_rbtree
 )
 {
@@ -310,7 +310,7 @@ RTEMS_INLINE_ROUTINE RBTree_Node * const *_RBTree_Root_const_reference(
  * @retval parent The parent of this node.
  * @retval undefined The node is the root node or not part of a tree.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Parent(
+static inline RBTree_Node *_RBTree_Parent(
   const RBTree_Node *the_node
 )
 {
@@ -326,7 +326,7 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Parent(
  *
  * @return This method returns the left node on the rbtree.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Left(
+static inline RBTree_Node *_RBTree_Left(
   const RBTree_Node *the_node
 )
 {
@@ -341,7 +341,7 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Left(
  *
  * @return This method returns a reference to the left child pointer on the rbtree.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Left_reference(
+static inline RBTree_Node **_RBTree_Left_reference(
   RBTree_Node *the_node
 )
 {
@@ -357,7 +357,7 @@ RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Left_reference(
  *
  * @return This method returns the right node on the rbtree.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Right(
+static inline RBTree_Node *_RBTree_Right(
   const RBTree_Node *the_node
 )
 {
@@ -372,7 +372,7 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Right(
  *
  * @return This method returns a reference to the right child pointer on the rbtree.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Right_reference(
+static inline RBTree_Node **_RBTree_Right_reference(
   RBTree_Node *the_node
 )
 {
@@ -390,7 +390,7 @@ RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Right_reference(
  * @retval true There are no nodes on @a the_rbtree.
  * @retval false There are nodes on @a the_rbtree.
  */
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_empty(
+static inline bool _RBTree_Is_empty(
   const RBTree_Control *the_rbtree
 )
 {
@@ -411,7 +411,7 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_empty(
  *
  * @see _RBTree_Root().
  */
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_root(
+static inline bool _RBTree_Is_root(
   const RBTree_Node *the_node
 )
 {
@@ -425,7 +425,7 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_root(
  *
  * @param[out] the_rbtree The rbtree to initialize.
  */
-RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
+static inline void _RBTree_Initialize_empty(
   RBTree_Control *the_rbtree
 )
 {
@@ -439,7 +439,7 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
  * @param[out] the_rbtree The red-black tree control.
  * @param[out] the_node The one and only node.
  */
-RTEMS_INLINE_ROUTINE void _RBTree_Initialize_one(
+static inline void _RBTree_Initialize_one(
   RBTree_Control *the_rbtree,
   RBTree_Node    *the_node
 )
@@ -523,7 +523,7 @@ void _RBTree_Replace_node(
  * @retval false The inserted node is not the new minimum node according to the
  *   specified less order function.
  */
-RTEMS_INLINE_ROUTINE bool _RBTree_Insert_inline(
+static inline bool _RBTree_Insert_inline(
   RBTree_Control *the_rbtree,
   RBTree_Node    *the_node,
   const void     *key,
@@ -572,7 +572,7 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Insert_inline(
  * @retval object An object with the specified key.
  * @retval NULL No object with the specified key exists in the red-black tree.
  */
-RTEMS_INLINE_ROUTINE void *_RBTree_Find_inline(
+static inline void *_RBTree_Find_inline(
   const RBTree_Control *the_rbtree,
   const void           *key,
   bool               ( *equal )( const void *, const RBTree_Node * ),

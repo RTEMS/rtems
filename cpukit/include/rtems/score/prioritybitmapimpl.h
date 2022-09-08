@@ -72,7 +72,7 @@ extern const unsigned char _Bitfield_Leading_zeros[256];
  *
  * @see _Priority_Bits_index() and _Priority_Mask().
  */
-RTEMS_INLINE_ROUTINE unsigned int _Bitfield_Find_first_bit(
+static inline unsigned int _Bitfield_Find_first_bit(
   unsigned int value
 )
 {
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE unsigned int _Bitfield_Find_first_bit(
  *
  * @return The priority bit mask.
  */
-RTEMS_INLINE_ROUTINE Priority_bit_map_Word _Priority_Mask(
+static inline Priority_bit_map_Word _Priority_Mask(
   unsigned int bit_number
 )
 {
@@ -121,7 +121,7 @@ RTEMS_INLINE_ROUTINE Priority_bit_map_Word _Priority_Mask(
  *
  * @return The corresponding array index into the priority bit map.
  */
-RTEMS_INLINE_ROUTINE unsigned int _Priority_Bits_index(
+static inline unsigned int _Priority_Bits_index(
   unsigned int bit_number
 )
 {
@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE unsigned int _Priority_Bits_index(
  *
  * @return The major portion of the priority.
  */
-RTEMS_INLINE_ROUTINE unsigned int _Priority_Major( unsigned int the_priority )
+static inline unsigned int _Priority_Major( unsigned int the_priority )
 {
   return the_priority / 16;
 }
@@ -151,7 +151,7 @@ RTEMS_INLINE_ROUTINE unsigned int _Priority_Major( unsigned int the_priority )
  *
  * @return The minor portion of the priority.
  */
-RTEMS_INLINE_ROUTINE unsigned int _Priority_Minor( unsigned int the_priority )
+static inline unsigned int _Priority_Minor( unsigned int the_priority )
 {
   return the_priority % 16;
 }
@@ -161,7 +161,7 @@ RTEMS_INLINE_ROUTINE unsigned int _Priority_Minor( unsigned int the_priority )
  *
  * @param[out] bit_map The bit map to initialize.
  */
-RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize(
+static inline void _Priority_bit_map_Initialize(
   Priority_bit_map_Control *bit_map
 )
 {
@@ -176,7 +176,7 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize(
  * @param[out] bit_map The bit map to be altered by @a bit_map_info.
  * @param bit_map_info The information with which to alter @a bit_map.
  */
-RTEMS_INLINE_ROUTINE void _Priority_bit_map_Add (
+static inline void _Priority_bit_map_Add (
   Priority_bit_map_Control     *bit_map,
   Priority_bit_map_Information *bit_map_info
 )
@@ -193,7 +193,7 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Add (
  * @param[out] bit_map The bit map to be altered by @a bit_map_info.
  * @param bit_map_info The information with which to alter @a bit_map.
  */
-RTEMS_INLINE_ROUTINE void _Priority_bit_map_Remove (
+static inline void _Priority_bit_map_Remove (
   Priority_bit_map_Control     *bit_map,
   Priority_bit_map_Information *bit_map_info
 )
@@ -210,7 +210,7 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Remove (
  *
  * @return The highest portion of the bitmap.
  */
-RTEMS_INLINE_ROUTINE unsigned int _Priority_bit_map_Get_highest(
+static inline unsigned int _Priority_bit_map_Get_highest(
   const Priority_bit_map_Control *bit_map
 )
 {
@@ -232,7 +232,7 @@ RTEMS_INLINE_ROUTINE unsigned int _Priority_bit_map_Get_highest(
  * @retval true The Priority queue bit map is empty
  * @retval false The Priority queue bit map is not empty.
  */
-RTEMS_INLINE_ROUTINE bool _Priority_bit_map_Is_empty(
+static inline bool _Priority_bit_map_Is_empty(
   const Priority_bit_map_Control *bit_map
 )
 {
@@ -248,7 +248,7 @@ RTEMS_INLINE_ROUTINE bool _Priority_bit_map_Is_empty(
  * @param new_priority The new priority for the initialization
  *      of the bit map information.
  */
-RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize_information(
+static inline void _Priority_bit_map_Initialize_information(
   Priority_bit_map_Control     *bit_map,
   Priority_bit_map_Information *bit_map_info,
   unsigned int                  new_priority

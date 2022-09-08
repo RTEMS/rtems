@@ -92,14 +92,14 @@ extern Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
  *  Internal routines
  */
 
-RTEMS_INLINE_ROUTINE void _POSIX_signals_Acquire(
+static inline void _POSIX_signals_Acquire(
   Thread_queue_Context *queue_context
 )
 {
   _Thread_queue_Acquire( &_POSIX_signals_Wait_queue, queue_context );
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_signals_Release(
+static inline void _POSIX_signals_Release(
   Thread_queue_Context *queue_context
 )
 {

@@ -372,7 +372,7 @@ void _CORE_message_queue_Insert_message(
  * @retval STATUS_MESSAGE_QUEUE_WAIT_IN_ISR The caller is in an ISR, do not block!
  * @retval STATUS_TIMEOUT A timeout occurred.
  */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Send(
+static inline Status_Control _CORE_message_queue_Send(
   CORE_message_queue_Control       *the_message_queue,
   const void                       *buffer,
   size_t                            size,
@@ -408,7 +408,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Send(
  * @retval STATUS_MESSAGE_QUEUE_WAIT_IN_ISR The caller is in an ISR, do not block!
  * @retval STATUS_TIMEOUT A timeout occurred.
  */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Urgent(
+static inline Status_Control _CORE_message_queue_Urgent(
   CORE_message_queue_Control       *the_message_queue,
   const void                       *buffer,
   size_t                            size,
@@ -433,7 +433,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Urgent(
  * @param[in, out] the_message_queue Rhe message queue to acquire.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Acquire(
+static inline void _CORE_message_queue_Acquire(
   CORE_message_queue_Control *the_message_queue,
   Thread_queue_Context       *queue_context
 )
@@ -447,7 +447,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Acquire(
  * @param[in, out] the_message_queue The message queue to acquire critical.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Acquire_critical(
+static inline void _CORE_message_queue_Acquire_critical(
   CORE_message_queue_Control *the_message_queue,
   Thread_queue_Context       *queue_context
 )
@@ -461,7 +461,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Acquire_critical(
  * @param[in, out] the_message_queue The message queue to release.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Release(
+static inline void _CORE_message_queue_Release(
   CORE_message_queue_Control *the_message_queue,
   Thread_queue_Context       *queue_context
 )
@@ -479,7 +479,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Release(
  * @param[out] destination The destination messag buffer to copy the source to.
  * @param size The size of the source buffer.
  */
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Copy_buffer (
+static inline void _CORE_message_queue_Copy_buffer (
   const void *source,
   void       *destination,
   size_t      size
@@ -499,7 +499,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Copy_buffer (
  * @retval pointer The allocated message buffer.
  * @retval NULL The inactive message buffer chain is empty.
  */
-RTEMS_INLINE_ROUTINE CORE_message_queue_Buffer *
+static inline CORE_message_queue_Buffer *
 _CORE_message_queue_Allocate_message_buffer (
     CORE_message_queue_Control *the_message_queue
 )
@@ -517,7 +517,7 @@ _CORE_message_queue_Allocate_message_buffer (
  * @param[in, out] the_message_queue The message queue to free the message buffer to.
  * @param[out] the_message The message to be freed.
  */
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Free_message_buffer (
+static inline void _CORE_message_queue_Free_message_buffer (
   CORE_message_queue_Control *the_message_queue,
   CORE_message_queue_Buffer  *the_message
 )
@@ -538,7 +538,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Free_message_buffer (
  * @note It encapsulates the optional behavior that message priority is
  *       disabled if no API requires it.
  */
-RTEMS_INLINE_ROUTINE int _CORE_message_queue_Get_message_priority (
+static inline int _CORE_message_queue_Get_message_priority (
   const CORE_message_queue_Buffer *the_message
 )
 {
@@ -560,7 +560,7 @@ RTEMS_INLINE_ROUTINE int _CORE_message_queue_Get_message_priority (
  * @retval pointer The first message if the message queue is not empty.
  * @retval NULL The message queue is empty.
  */
-RTEMS_INLINE_ROUTINE
+static inline
   CORE_message_queue_Buffer *_CORE_message_queue_Get_pending_message (
   CORE_message_queue_Control *the_message_queue
 )
@@ -581,7 +581,7 @@ RTEMS_INLINE_ROUTINE
    * @retval true Notification is enabled on this message queue.
    * @retval false Notification is not enabled on this message queue.
    */
-  RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_notify_enabled (
+  static inline bool _CORE_message_queue_Is_notify_enabled (
     CORE_message_queue_Control *the_message_queue
   )
   {
@@ -599,7 +599,7 @@ RTEMS_INLINE_ROUTINE
  * @param[out] the_handler The notification information for the message queue.
  */
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
-  RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_notify (
+  static inline void _CORE_message_queue_Set_notify (
     CORE_message_queue_Control        *the_message_queue,
     CORE_message_queue_Notify_Handler  the_handler
   )
@@ -627,7 +627,7 @@ RTEMS_INLINE_ROUTINE
  * @retval thread The Thread_Control for the first locked thread, if there is a locked thread.
  * @retval NULL There are pending messages or no thread waiting to receive.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Dequeue_receiver(
+static inline Thread_Control *_CORE_message_queue_Dequeue_receiver(
   CORE_message_queue_Control      *the_message_queue,
   const void                      *buffer,
   size_t                           size,

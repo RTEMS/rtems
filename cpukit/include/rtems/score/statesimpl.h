@@ -171,7 +171,7 @@ extern "C" {
  *
  * @return This method returns the updated states value.
  */
-RTEMS_INLINE_ROUTINE States_Control _States_Set (
+static inline States_Control _States_Set (
   States_Control states_to_set,
   States_Control current_state
 )
@@ -190,7 +190,7 @@ RTEMS_INLINE_ROUTINE States_Control _States_Set (
  *
  * @return This method returns the updated states value.
  */
-RTEMS_INLINE_ROUTINE States_Control _States_Clear (
+static inline States_Control _States_Clear (
   States_Control states_to_clear,
   States_Control current_state
 )
@@ -209,7 +209,7 @@ RTEMS_INLINE_ROUTINE States_Control _States_Clear (
  * @retval true The state is ready.
  * @retval false The state is not ready.
  */
-RTEMS_INLINE_ROUTINE bool _States_Is_ready (
+static inline bool _States_Is_ready (
   States_Control the_states
 )
 {
@@ -227,7 +227,7 @@ RTEMS_INLINE_ROUTINE bool _States_Is_ready (
  * @retval true DORMANT state is set in @a the_states.
  * @retval false DORMANT state is not set in @a the_states.
  */
-RTEMS_INLINE_ROUTINE bool _States_Is_dormant (
+static inline bool _States_Is_dormant (
   States_Control the_states
 )
 {
@@ -245,7 +245,7 @@ RTEMS_INLINE_ROUTINE bool _States_Is_dormant (
  * @retval true SUSPENDED state is set in @a the_states.
  * @retval false SUSPENDED state is not set in @a the_states.
  */
-RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
+static inline bool _States_Is_suspended (
   States_Control the_states
 )
 {
@@ -263,7 +263,7 @@ RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
  * @retval true WAITING_FOR_TIME state is set in @a the_states.
  * @retval false WAITING_FOR_TIME state is not set in @a the_states.
  */
-RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_rpc_reply (
+static inline bool _States_Is_waiting_for_rpc_reply (
   States_Control the_states
 )
 {
@@ -281,7 +281,7 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_rpc_reply (
  * @retval true WAITING_FOR_JOIN_AT_EXIT state is set in @a the_states.
  * @retval false WAITING_FOR_JOIN_AT_EXIT state is not set in @a the_states.
  */
-RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_join_at_exit(
+static inline bool _States_Is_waiting_for_join_at_exit(
   States_Control the_states
 )
 {
@@ -299,7 +299,7 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_join_at_exit(
  * @retval true @a the_states is interruptible.
  * @retval false @a the_states is not interruptible.
  */
-RTEMS_INLINE_ROUTINE bool _States_Is_interruptible_by_signal (
+static inline bool _States_Is_interruptible_by_signal (
   States_Control the_states
 )
 {
@@ -320,7 +320,7 @@ RTEMS_INLINE_ROUTINE bool _States_Is_interruptible_by_signal (
  * @retval false The state indicates that the task is not blocked waiting on a
  *      local resource.
  */
-RTEMS_INLINE_ROUTINE bool _States_Is_locally_blocked (
+static inline bool _States_Is_locally_blocked (
   States_Control the_states
 )
 {

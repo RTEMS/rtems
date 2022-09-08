@@ -100,7 +100,7 @@ extern "C" {
  *
  * @param priority is the initial priority of the node.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
+static inline void _Scheduler_Node_do_initialize(
   const struct _Scheduler_Control *scheduler,
   Scheduler_Node                  *node,
   Thread_Control                  *the_thread,
@@ -132,7 +132,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
  *
  * @param[in, out] node is the node to destroy.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_destroy(
+static inline void _Scheduler_Node_do_destroy(
   const struct _Scheduler_Control *scheduler,
   Scheduler_Node                  *node
 )
@@ -153,7 +153,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_destroy(
  *
  * @return The scheduler of the node.
  */
-RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Node_get_scheduler(
+static inline const Scheduler_Control *_Scheduler_Node_get_scheduler(
   const Scheduler_Node *node
 )
 {
@@ -167,7 +167,7 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Node_get_scheduler(
  *
  * @return The owner of the node.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_owner(
+static inline Thread_Control *_Scheduler_Node_get_owner(
   const Scheduler_Node *node
 )
 {
@@ -181,7 +181,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_owner(
  *
  * @return The priority of the node.
  */
-RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Node_get_priority(
+static inline Priority_Control _Scheduler_Node_get_priority(
   Scheduler_Node *node
 )
 {
@@ -214,7 +214,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Node_get_priority(
  * @param group_order is the priority group order, see #PRIORITY_GROUP_FIRST
  *   and #PRIORITY_GROUP_LAST.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_priority(
+static inline void _Scheduler_Node_set_priority(
   Scheduler_Node      *node,
   Priority_Control     new_priority,
   Priority_Group_order group_order
@@ -243,7 +243,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_priority(
  *
  * @return The user of the node.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_user(
+static inline Thread_Control *_Scheduler_Node_get_user(
   const Scheduler_Node *node
 )
 {
@@ -256,7 +256,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_user(
  * @param[out] node The node to set the user of.
  * @param user The new user for @a node.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_user(
+static inline void _Scheduler_Node_set_user(
   Scheduler_Node *node,
   Thread_Control *user
 )
@@ -271,7 +271,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_user(
  *
  * @return The idle thread of @a node.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_idle(
+static inline Thread_Control *_Scheduler_Node_get_idle(
   const Scheduler_Node *node
 )
 {
@@ -285,7 +285,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_idle(
  *
  * @param idle is the idle thread to use.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_idle_user(
+static inline void _Scheduler_Node_set_idle_user(
   Scheduler_Node *node,
   Thread_Control *idle
 )

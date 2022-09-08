@@ -61,7 +61,7 @@ extern "C" {
  *  This routine allocates a port control block from the inactive chain
  *  of free port control blocks.
  */
-RTEMS_INLINE_ROUTINE Dual_ported_memory_Control
+static inline Dual_ported_memory_Control
    *_Dual_ported_memory_Allocate ( void )
 {
   return (Dual_ported_memory_Control *)
@@ -75,14 +75,14 @@ RTEMS_INLINE_ROUTINE Dual_ported_memory_Control
  *  This routine frees a port control block to the inactive chain
  *  of free port control blocks.
  */
-RTEMS_INLINE_ROUTINE void _Dual_ported_memory_Free (
+static inline void _Dual_ported_memory_Free (
    Dual_ported_memory_Control *the_port
 )
 {
   _Objects_Free( &_Dual_ported_memory_Information, &the_port->Object );
 }
 
-RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get(
+static inline Dual_ported_memory_Control *_Dual_ported_memory_Get(
   Objects_Id        id,
   ISR_lock_Context *lock_context
 )

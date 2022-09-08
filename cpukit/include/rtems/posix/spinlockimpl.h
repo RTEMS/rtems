@@ -62,7 +62,7 @@ typedef struct {
   ISR_Level interrupt_state;
 } POSIX_Spinlock_Control;
 
-RTEMS_INLINE_ROUTINE POSIX_Spinlock_Control *_POSIX_Spinlock_Get(
+static inline POSIX_Spinlock_Control *_POSIX_Spinlock_Get(
   pthread_spinlock_t *lock
 )
 {

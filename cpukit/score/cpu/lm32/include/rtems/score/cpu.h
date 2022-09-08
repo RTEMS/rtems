@@ -456,7 +456,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define _CPU_ISR_Flash( _isr_cookie ) \
   lm32_flash_interrupts( _isr_cookie );
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
   return ( level & 0x0001 ) != 0;
 }
@@ -612,7 +612,7 @@ void _CPU_Initialize(void);
 
 typedef void ( *CPU_ISR_raw_handler )( void );
 
-RTEMS_INLINE_ROUTINE void _CPU_ISR_install_raw_handler(
+static inline void _CPU_ISR_install_raw_handler(
   uint32_t             vector,
   CPU_ISR_raw_handler  new_handler,
   CPU_ISR_raw_handler *old_handler

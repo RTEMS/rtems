@@ -260,7 +260,7 @@ static inline void AArch64_interrupt_flash( uint64_t isr_cookie )
 #define _CPU_ISR_Flash( _isr_cookie ) \
   AArch64_interrupt_flash( _isr_cookie )
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint64_t isr_cookie )
+static inline bool _CPU_ISR_Is_enabled( uint64_t isr_cookie )
 {
   return ( isr_cookie & AARCH64_PSTATE_I ) == 0;
 }

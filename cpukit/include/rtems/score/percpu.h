@@ -755,7 +755,7 @@ static inline bool _Per_CPU_Is_boot_processor(
 #endif
 }
 
-RTEMS_INLINE_ROUTINE void _Per_CPU_Acquire_all(
+static inline void _Per_CPU_Acquire_all(
   ISR_lock_Context *lock_context
 )
 {
@@ -782,7 +782,7 @@ RTEMS_INLINE_ROUTINE void _Per_CPU_Acquire_all(
 #endif
 }
 
-RTEMS_INLINE_ROUTINE void _Per_CPU_Release_all(
+static inline void _Per_CPU_Release_all(
   ISR_lock_Context *lock_context
 )
 {
@@ -959,7 +959,7 @@ void _Per_CPU_Wait_for_job(
  *
  * @return The thread control block of the executing thread.
  */
-RTEMS_INLINE_ROUTINE struct _Thread_Control *_Thread_Get_executing( void )
+static inline struct _Thread_Control *_Thread_Get_executing( void )
 {
   struct _Thread_Control *executing;
 

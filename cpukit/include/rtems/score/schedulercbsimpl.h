@@ -57,7 +57,7 @@ extern "C" {
  *
  * @return Pointer to the scheduler node of @a the_thread.
  */
-RTEMS_INLINE_ROUTINE Scheduler_CBS_Node *_Scheduler_CBS_Thread_get_node(
+static inline Scheduler_CBS_Node *_Scheduler_CBS_Thread_get_node(
   Thread_Control *the_thread
 )
 {
@@ -71,7 +71,7 @@ RTEMS_INLINE_ROUTINE Scheduler_CBS_Node *_Scheduler_CBS_Thread_get_node(
  *
  * @return CBS Node pointer to @a node.
  */
-RTEMS_INLINE_ROUTINE Scheduler_CBS_Node *_Scheduler_CBS_Node_downcast(
+static inline Scheduler_CBS_Node *_Scheduler_CBS_Node_downcast(
   Scheduler_Node *node
 )
 {

@@ -54,7 +54,7 @@ extern "C" {
  * memory area via _Memory_Get() to implement
  * _Workspace_Malloc_initialize_separate().
  */
-RTEMS_INLINE_ROUTINE Heap_Control *_Malloc_Initialize_for_multiple_areas(
+static inline Heap_Control *_Malloc_Initialize_for_multiple_areas(
   Heap_Control *heap
 )
 {

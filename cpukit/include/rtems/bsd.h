@@ -54,7 +54,7 @@ extern "C" {
 /**
  * @copydoc _Timecounter_Bintime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_bintime( struct bintime *bt )
+static inline void rtems_bsd_bintime( struct bintime *bt )
 {
   _Timecounter_Bintime( bt );
 }
@@ -62,7 +62,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_bintime( struct bintime *bt )
 /**
  * @copydoc _Timecounter_Nanotime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_nanotime( struct timespec *ts )
+static inline void rtems_bsd_nanotime( struct timespec *ts )
 {
   _Timecounter_Nanotime( ts );
 }
@@ -70,7 +70,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_nanotime( struct timespec *ts )
 /**
  * @copydoc _Timecounter_Microtime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_microtime( struct timeval *tv )
+static inline void rtems_bsd_microtime( struct timeval *tv )
 {
   _Timecounter_Microtime( tv );
 }
@@ -78,7 +78,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_microtime( struct timeval *tv )
 /**
  * @copydoc _Timecounter_Binuptime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_binuptime( struct bintime *bt )
+static inline void rtems_bsd_binuptime( struct bintime *bt )
 {
   _Timecounter_Binuptime( bt );
 }
@@ -86,7 +86,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_binuptime( struct bintime *bt )
 /**
  * @copydoc _Timecounter_Nanouptime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_nanouptime( struct timespec *ts )
+static inline void rtems_bsd_nanouptime( struct timespec *ts )
 {
   _Timecounter_Nanouptime( ts );
 }
@@ -94,7 +94,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_nanouptime( struct timespec *ts )
 /**
  * @copydoc _Timecounter_Microtime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_microuptime( struct timeval *tv )
+static inline void rtems_bsd_microuptime( struct timeval *tv )
 {
   _Timecounter_Microuptime( tv );
 }
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_microuptime( struct timeval *tv )
 /**
  * @copydoc _Timecounter_Getbintime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_getbintime( struct bintime *bt )
+static inline void rtems_bsd_getbintime( struct bintime *bt )
 {
   _Timecounter_Getbintime( bt );
 }
@@ -110,7 +110,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_getbintime( struct bintime *bt )
 /**
  * @copydoc _Timecounter_Getnanotime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_getnanotime( struct timespec *ts )
+static inline void rtems_bsd_getnanotime( struct timespec *ts )
 {
   _Timecounter_Getnanotime( ts );
 }
@@ -118,7 +118,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_getnanotime( struct timespec *ts )
 /**
  * @copydoc _Timecounter_Getmicrotime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_getmicrotime( struct timeval *tv )
+static inline void rtems_bsd_getmicrotime( struct timeval *tv )
 {
   _Timecounter_Getmicrotime( tv );
 }
@@ -126,7 +126,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_getmicrotime( struct timeval *tv )
 /**
  * @copydoc _Timecounter_Getbinuptime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_getbinuptime( struct bintime *bt )
+static inline void rtems_bsd_getbinuptime( struct bintime *bt )
 {
   _Timecounter_Getbinuptime( bt );
 }
@@ -134,7 +134,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_getbinuptime( struct bintime *bt )
 /**
  * @copydoc _Timecounter_Getnanouptime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_getnanouptime( struct timespec *ts )
+static inline void rtems_bsd_getnanouptime( struct timespec *ts )
 {
   _Timecounter_Getnanouptime( ts );
 }
@@ -142,7 +142,7 @@ RTEMS_INLINE_ROUTINE void rtems_bsd_getnanouptime( struct timespec *ts )
 /**
  * @copydoc _Timecounter_Getmicrouptime()
  */
-RTEMS_INLINE_ROUTINE void rtems_bsd_getmicrouptime( struct timeval *tv )
+static inline void rtems_bsd_getmicrouptime( struct timeval *tv )
 {
   _Timecounter_Getmicrouptime( tv );
 }

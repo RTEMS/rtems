@@ -85,7 +85,7 @@ typedef struct {
   Objects_Id                      proxy_id;
 }   Partition_MP_Packet;
 
-RTEMS_INLINE_ROUTINE bool _Partition_MP_Is_remote( Objects_Id id )
+static inline bool _Partition_MP_Is_remote( Objects_Id id )
 {
   return _Objects_MP_Is_remote( id, &_Partition_Information );
 }

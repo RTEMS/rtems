@@ -39,7 +39,7 @@ extern "C" {
 
 #define BSP_INTERRUPT_VECTOR_COUNT 1
 
-RTEMS_INLINE_ROUTINE rtems_status_code bsp_interrupt_set_affinity(
+static inline rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number   vector,
   const Processor_mask *affinity
 )
@@ -49,7 +49,7 @@ RTEMS_INLINE_ROUTINE rtems_status_code bsp_interrupt_set_affinity(
   return RTEMS_SUCCESSFUL;
 }
 
-RTEMS_INLINE_ROUTINE rtems_status_code bsp_interrupt_get_affinity(
+static inline rtems_status_code bsp_interrupt_get_affinity(
   rtems_vector_number  vector,
   Processor_mask      *affinity
 )

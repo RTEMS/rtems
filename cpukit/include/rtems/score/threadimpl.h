@@ -468,7 +468,7 @@ Status_Control _Thread_Close(
  * @retval true The thread is currently in the ready state.
  * @retval false The thread is currently not ready.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_ready( const Thread_Control *the_thread )
+static inline bool _Thread_Is_ready( const Thread_Control *the_thread )
 {
   return _States_Is_ready( the_thread->current_state );
 }
@@ -595,7 +595,7 @@ void _Thread_Handler( void );
  * @param the_thread The thread to acquire the lock context.
  * @param lock_context The lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_State_acquire_critical(
+static inline void _Thread_State_acquire_critical(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -609,7 +609,7 @@ RTEMS_INLINE_ROUTINE void _Thread_State_acquire_critical(
  * @param the_thread The thread to acquire the lock context.
  * @param lock_context The lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_State_acquire(
+static inline void _Thread_State_acquire(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -626,7 +626,7 @@ RTEMS_INLINE_ROUTINE void _Thread_State_acquire(
  *
  * @return The currently executing thread.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Thread_State_acquire_for_executing(
+static inline Thread_Control *_Thread_State_acquire_for_executing(
   ISR_lock_Context *lock_context
 )
 {
@@ -645,7 +645,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_State_acquire_for_executing(
  * @param the_thread The thread to release the lock context.
  * @param lock_context The lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_State_release_critical(
+static inline void _Thread_State_release_critical(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -659,7 +659,7 @@ RTEMS_INLINE_ROUTINE void _Thread_State_release_critical(
  * @param[in, out] the_thread The thread to release the lock context.
  * @param[out] lock_context The lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_State_release(
+static inline void _Thread_State_release(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -677,7 +677,7 @@ RTEMS_INLINE_ROUTINE void _Thread_State_release(
  * @retval false The thread is not owner of the lock of the join queue.
  */
 #if defined(RTEMS_DEBUG)
-RTEMS_INLINE_ROUTINE bool _Thread_State_is_owner(
+static inline bool _Thread_State_is_owner(
   const Thread_Control *the_thread
 )
 {
@@ -791,7 +791,7 @@ void _Thread_Priority_changed(
  *
  * @see _Thread_Wait_acquire().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Priority_change(
+static inline void _Thread_Priority_change(
   Thread_Control       *the_thread,
   Priority_Node        *priority_node,
   Priority_Control      new_priority,
@@ -876,7 +876,7 @@ void _Thread_Priority_update_ignore_sticky( Thread_Control *the_thread );
  * @retval true The left priority is less in the intuitive sense.
  * @retval false The left priority is greater or equal in the intuitive sense.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Priority_less_than(
+static inline bool _Thread_Priority_less_than(
   Priority_Control left,
   Priority_Control right
 )
@@ -893,7 +893,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Priority_less_than(
  *
  * @return The highest priority in the intuitive sense of priority.
  */
-RTEMS_INLINE_ROUTINE Priority_Control _Thread_Priority_highest(
+static inline Priority_Control _Thread_Priority_highest(
   Priority_Control left,
   Priority_Control right
 )
@@ -913,7 +913,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _Thread_Priority_highest(
  * @return Returns the thread object information associated with the API of the
  *   object identifier.
  */
-RTEMS_INLINE_ROUTINE Objects_Information *_Thread_Get_objects_information_by_id(
+static inline Objects_Information *_Thread_Get_objects_information_by_id(
   Objects_Id id
 )
 {
@@ -941,7 +941,7 @@ RTEMS_INLINE_ROUTINE Objects_Information *_Thread_Get_objects_information_by_id(
  *
  * @return Returns the thread object information of the thread.
  */
-RTEMS_INLINE_ROUTINE Thread_Information *_Thread_Get_objects_information(
+static inline Thread_Information *_Thread_Get_objects_information(
   Thread_Control *the_thread
 )
 {
@@ -985,7 +985,7 @@ Objects_Id _Thread_Self_id( void );
  *
  * @return The cpu of the thread's scheduler.
  */
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Get_CPU(
+static inline Per_CPU_Control *_Thread_Get_CPU(
   const Thread_Control *thread
 )
 {
@@ -1004,7 +1004,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Get_CPU(
  * @param[out] thread The thread.
  * @param cpu The cpu to set.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Set_CPU(
+static inline void _Thread_Set_CPU(
   Thread_Control *thread,
   Per_CPU_Control *cpu
 )
@@ -1028,7 +1028,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Set_CPU(
  * @retval true @a the_thread is the currently executing one.
  * @retval false @a the_thread is not the currently executing one.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_executing (
+static inline bool _Thread_Is_executing (
   const Thread_Control *the_thread
 )
 {
@@ -1048,7 +1048,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_executing (
  * @retval true @a the_thread is the currently executing one.
  * @retval false @a the_thread is not the currently executing one.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_on_a_processor(
+static inline bool _Thread_Is_executing_on_a_processor(
   const Thread_Control *the_thread
 )
 {
@@ -1067,7 +1067,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_on_a_processor(
  * @retval true @a the_thread is the heir.
  * @retval false @a the_thread is not the heir.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_heir (
+static inline bool _Thread_Is_heir (
   const Thread_Control *the_thread
 )
 {
@@ -1083,7 +1083,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_heir (
  *
  * @param[in, out] the_thread The thread to unblock.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Unblock (
+static inline void _Thread_Unblock (
   Thread_Control *the_thread
 )
 {
@@ -1106,7 +1106,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Unblock (
  *      loaded in the floating point unit.
  */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-RTEMS_INLINE_ROUTINE bool _Thread_Is_allocated_fp (
+static inline bool _Thread_Is_allocated_fp (
   const Thread_Control *the_thread
 )
 {
@@ -1132,7 +1132,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_allocated_fp (
  *
  * @param executing The currently executing thread.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Save_fp( Thread_Control *executing )
+static inline void _Thread_Save_fp( Thread_Control *executing )
 {
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #if ( CPU_USE_DEFERRED_FP_SWITCH != TRUE )
@@ -1147,7 +1147,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Save_fp( Thread_Control *executing )
  *
  * @param executing The currently executing thread.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Restore_fp( Thread_Control *executing )
+static inline void _Thread_Restore_fp( Thread_Control *executing )
 {
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
@@ -1172,7 +1172,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Restore_fp( Thread_Control *executing )
  * point context is now longer associated with an active thread.
  */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-RTEMS_INLINE_ROUTINE void _Thread_Deallocate_fp( void )
+static inline void _Thread_Deallocate_fp( void )
 {
   _Thread_Allocated_fp = NULL;
 }
@@ -1187,7 +1187,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Deallocate_fp( void )
  * @retval true Dispatching is disabled.
  * @retval false Dispatching is enabled.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_context_switch_necessary( void )
+static inline bool _Thread_Is_context_switch_necessary( void )
 {
   return ( _Thread_Dispatch_necessary );
 }
@@ -1197,7 +1197,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_context_switch_necessary( void )
  *
  * @return The maximum number of internal threads.
  */
-RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_maximum_internal_threads(void)
+static inline uint32_t _Thread_Get_maximum_internal_threads(void)
 {
   /* Idle threads */
   uint32_t maximum_internal_threads =
@@ -1219,7 +1219,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_maximum_internal_threads(void)
  * @retval pointer Pointer to the allocated Thread_Control.
  * @retval NULL The operation failed.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
+static inline Thread_Control *_Thread_Internal_allocate( void )
 {
   return (Thread_Control *)
     _Objects_Allocate_unprotected( &_Thread_Information.Objects );
@@ -1238,7 +1238,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
  * @see _Thread_Dispatch(), _Thread_Start_multitasking() and
  * _Thread_Dispatch_update_heir().
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_heir_and_make_it_executing(
+static inline Thread_Control *_Thread_Get_heir_and_make_it_executing(
   Per_CPU_Control *cpu_self
 )
 {
@@ -1258,7 +1258,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_heir_and_make_it_executing(
  *      used.
  * @param cpu The cpu.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Update_CPU_time_used(
+static inline void _Thread_Update_CPU_time_used(
   Thread_Control  *the_thread,
   Per_CPU_Control *cpu
 )
@@ -1280,7 +1280,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Update_CPU_time_used(
  * @param heir The new heir for @a cpu_for_heir.
  */
 #if defined( RTEMS_SMP )
-RTEMS_INLINE_ROUTINE void _Thread_Dispatch_update_heir(
+static inline void _Thread_Dispatch_update_heir(
   Per_CPU_Control *cpu_self,
   Per_CPU_Control *cpu_for_heir,
   Thread_Control  *heir
@@ -1337,7 +1337,7 @@ Timestamp_Control _Thread_Get_CPU_time_used_after_last_reset(
  *
  * @param[out] action_control The action control to initialize.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Action_control_initialize(
+static inline void _Thread_Action_control_initialize(
   Thread_Action_control *action_control
 )
 {
@@ -1349,7 +1349,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Action_control_initialize(
  *
  * @param[out] action The Thread_Action to initialize.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Action_initialize(
+static inline void _Thread_Action_initialize(
   Thread_Action *action
 )
 {
@@ -1368,7 +1368,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Action_initialize(
  *
  * @param handler is the handler for the action.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
+static inline void _Thread_Add_post_switch_action(
   Thread_Control        *the_thread,
   Thread_Action         *action,
   Thread_Action_handler  handler
@@ -1401,7 +1401,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
  *
  * @param[in, out] action is the action to add.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Append_post_switch_action(
+static inline void _Thread_Append_post_switch_action(
   Thread_Control *the_thread,
   Thread_Action  *action
 )
@@ -1423,7 +1423,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Append_post_switch_action(
  * @retval true @a life_state is restarting.
  * @retval false @a life_state is not restarting.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_life_restarting(
+static inline bool _Thread_Is_life_restarting(
   Thread_Life_state life_state
 )
 {
@@ -1438,7 +1438,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_restarting(
  * @retval true @a life_state is terminating.
  * @retval false @a life_state is not terminating.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_life_terminating(
+static inline bool _Thread_Is_life_terminating(
   Thread_Life_state life_state
 )
 {
@@ -1453,7 +1453,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_terminating(
  * @retval true @a life_state allows life change.
  * @retval false @a life_state does not allow life change.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_life_change_allowed(
+static inline bool _Thread_Is_life_change_allowed(
   Thread_Life_state life_state
 )
 {
@@ -1469,7 +1469,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_change_allowed(
  * @retval true @a life_state is life changing.
  * @retval false @a life_state is not life changing.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_life_changing(
+static inline bool _Thread_Is_life_changing(
   Thread_Life_state life_state
 )
 {
@@ -1485,7 +1485,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_changing(
  * @retval true @a life_state is joinable.
  * @retval false @a life_state is not joinable.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_joinable(
+static inline bool _Thread_Is_joinable(
   const Thread_Control *the_thread
 )
 {
@@ -1498,7 +1498,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_joinable(
  *
  * @param[in, out] the_thread The thread to increase the resource count of.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Resource_count_increment(
+static inline void _Thread_Resource_count_increment(
   Thread_Control *the_thread
 )
 {
@@ -1514,7 +1514,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Resource_count_increment(
  *
  * @param[in, out] the_thread The thread to decrement the resource count of.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Resource_count_decrement(
+static inline void _Thread_Resource_count_decrement(
   Thread_Control *the_thread
 )
 {
@@ -1537,7 +1537,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Resource_count_decrement(
  * @retval true The thread owns resources.
  * @retval false The thread does not own resources.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
+static inline bool _Thread_Owns_resources(
   const Thread_Control *the_thread
 )
 {
@@ -1552,7 +1552,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
  *
  * @return The thread's home scheduler.
  */
-RTEMS_INLINE_ROUTINE const Scheduler_Control *_Thread_Scheduler_get_home(
+static inline const Scheduler_Control *_Thread_Scheduler_get_home(
   const Thread_Control *the_thread
 )
 {
@@ -1571,7 +1571,7 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Thread_Scheduler_get_home(
  *
  * @return The thread's home node.
  */
-RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_home_node(
+static inline Scheduler_Node *_Thread_Scheduler_get_home_node(
   const Thread_Control *the_thread
 )
 {
@@ -1593,7 +1593,7 @@ RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_home_node(
  *
  * @return The scheduler node with the specified index.
  */
-RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_node_by_index(
+static inline Scheduler_Node *_Thread_Scheduler_get_node_by_index(
   const Thread_Control *the_thread,
   size_t                scheduler_index
 )
@@ -1616,7 +1616,7 @@ RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_node_by_index(
  * @param the_thread The thread to acquire the lock context.
  * @param lock_context The lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Scheduler_acquire_critical(
+static inline void _Thread_Scheduler_acquire_critical(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -1630,7 +1630,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_acquire_critical(
  * @param the_thread The thread to release the lock context.
  * @param lock_context The lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Scheduler_release_critical(
+static inline void _Thread_Scheduler_release_critical(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -1652,7 +1652,7 @@ void _Thread_Scheduler_process_requests( Thread_Control *the_thread );
  * @param[in, out] scheduler_node The scheduler node for the request.
  * @param request The request to add.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_request(
+static inline void _Thread_Scheduler_add_request(
   Thread_Control         *the_thread,
   Scheduler_Node         *scheduler_node,
   Scheduler_Node_request  request
@@ -1695,7 +1695,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_request(
  * @param[in, out] the_thread The thread to add the wait node to.
  * @param scheduler_node The scheduler node which provides the wait node.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_wait_node(
+static inline void _Thread_Scheduler_add_wait_node(
   Thread_Control *the_thread,
   Scheduler_Node *scheduler_node
 )
@@ -1718,7 +1718,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_wait_node(
  * @param the_thread The thread to add the request to remove a wait node.
  * @param scheduler_node The scheduler node to remove a wait node from.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Scheduler_remove_wait_node(
+static inline void _Thread_Scheduler_remove_wait_node(
   Thread_Control *the_thread,
   Scheduler_Node *scheduler_node
 )
@@ -1743,7 +1743,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_remove_wait_node(
  *
  * @return The priority of the thread.
  */
-RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_priority(
+static inline Priority_Control _Thread_Get_priority(
   const Thread_Control *the_thread
 )
 {
@@ -1760,7 +1760,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_priority(
  *
  * @return The unmapped priority of the thread.
  */
-RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_unmapped_priority(
+static inline Priority_Control _Thread_Get_unmapped_priority(
   const Thread_Control *the_thread
 )
 {
@@ -1774,7 +1774,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_unmapped_priority(
  *
  * @return The unmapped real priority of the thread.
  */
-RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_unmapped_real_priority(
+static inline Priority_Control _Thread_Get_unmapped_real_priority(
   const Thread_Control *the_thread
 )
 {
@@ -1791,7 +1791,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_unmapped_real_priority(
  *
  * @see _Thread_Wait_release_default_critical().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default_critical(
+static inline void _Thread_Wait_acquire_default_critical(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -1810,7 +1810,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default_critical(
  *
  * @see _Thread_Wait_release_default().
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Wait_acquire_default_for_executing(
+static inline Thread_Control *_Thread_Wait_acquire_default_for_executing(
   ISR_lock_Context *lock_context
 )
 {
@@ -1832,7 +1832,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Wait_acquire_default_for_executing(
  *
  * @see _Thread_Wait_release_default().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default(
+static inline void _Thread_Wait_acquire_default(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -1851,7 +1851,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default(
  * @param lock_context The lock context used for the corresponding lock
  *   acquire.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_release_default_critical(
+static inline void _Thread_Wait_release_default_critical(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -1867,7 +1867,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release_default_critical(
  * @param[out] lock_context The lock context used for the corresponding lock
  *   acquire.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_release_default(
+static inline void _Thread_Wait_release_default(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
@@ -1886,7 +1886,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release_default(
  * @param the_thread The thread to remove the request from.
  * @param queue_lock_context The queue lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request_locked(
+static inline void _Thread_Wait_remove_request_locked(
   Thread_Control            *the_thread,
   Thread_queue_Lock_context *queue_lock_context
 )
@@ -1907,7 +1907,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request_locked(
  * @param queue The queue that acquires.
  * @param queue_lock_context The queue lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_queue_critical(
+static inline void _Thread_Wait_acquire_queue_critical(
   Thread_queue_Queue        *queue,
   Thread_queue_Lock_context *queue_lock_context
 )
@@ -1925,7 +1925,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_queue_critical(
  * @param queue The queue that releases.
  * @param queue_lock_context The queue lock context.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_release_queue_critical(
+static inline void _Thread_Wait_release_queue_critical(
   Thread_queue_Queue        *queue,
   Thread_queue_Lock_context *queue_lock_context
 )
@@ -1945,7 +1945,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release_queue_critical(
  * @param[in, out] queue_context The thread queue context for the corresponding
  *   _Thread_Wait_release_critical().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_critical(
+static inline void _Thread_Wait_acquire_critical(
   Thread_Control       *the_thread,
   Thread_queue_Context *queue_context
 )
@@ -2001,7 +2001,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_critical(
  * @param[in, out] queue_context The thread queue context for the corresponding
  *   _Thread_Wait_release().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire(
+static inline void _Thread_Wait_acquire(
   Thread_Control       *the_thread,
   Thread_queue_Context *queue_context
 )
@@ -2020,7 +2020,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire(
  * @param[in, out] queue_context The thread queue context used for corresponding
  *   _Thread_Wait_acquire_critical().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_release_critical(
+static inline void _Thread_Wait_release_critical(
   Thread_Control       *the_thread,
   Thread_queue_Context *queue_context
 )
@@ -2062,7 +2062,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release_critical(
  * @param[in, out] queue_context The thread queue context used for corresponding
  *   _Thread_Wait_acquire().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_release(
+static inline void _Thread_Wait_release(
   Thread_Control       *the_thread,
   Thread_queue_Context *queue_context
 )
@@ -2085,7 +2085,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release(
  *
  * @see _Thread_Wait_claim_finalize() and _Thread_Wait_restore_default().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_claim(
+static inline void _Thread_Wait_claim(
   Thread_Control     *the_thread,
   Thread_queue_Queue *queue
 )
@@ -2114,7 +2114,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_claim(
  * @param[in, out] the_thread The thread.
  * @param operations The corresponding thread queue operations.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_claim_finalize(
+static inline void _Thread_Wait_claim_finalize(
   Thread_Control                *the_thread,
   const Thread_queue_Operations *operations
 )
@@ -2133,7 +2133,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_claim_finalize(
  * @param[in, out] queue_lock_context The thread queue lock context used for
  *   corresponding _Thread_Wait_acquire().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request(
+static inline void _Thread_Wait_remove_request(
   Thread_Control            *the_thread,
   Thread_queue_Lock_context *queue_lock_context
 )
@@ -2162,7 +2162,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request(
  *
  * @see _Thread_Wait_claim().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default(
+static inline void _Thread_Wait_restore_default(
   Thread_Control *the_thread
 )
 {
@@ -2221,7 +2221,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default(
  *
  * @param the_thread The thread.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_tranquilize(
+static inline void _Thread_Wait_tranquilize(
   Thread_Control *the_thread
 )
 {
@@ -2239,7 +2239,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_tranquilize(
  * @param queue_context The thread queue context used for corresponding
  *   _Thread_Wait_acquire().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_cancel(
+static inline void _Thread_Wait_cancel(
   Thread_Control       *the_thread,
   Thread_queue_Context *queue_context
 )
@@ -2326,7 +2326,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_cancel(
  * @param[in, out] the_thread The thread to set the wait flags of.
  * @param flags The flags to set.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_flags_set(
+static inline void _Thread_Wait_flags_set(
   Thread_Control    *the_thread,
   Thread_Wait_flags  flags
 )
@@ -2345,7 +2345,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_flags_set(
  *
  * @return The thread's wait flags.
  */
-RTEMS_INLINE_ROUTINE Thread_Wait_flags _Thread_Wait_flags_get(
+static inline Thread_Wait_flags _Thread_Wait_flags_get(
   const Thread_Control *the_thread
 )
 {
@@ -2363,7 +2363,7 @@ RTEMS_INLINE_ROUTINE Thread_Wait_flags _Thread_Wait_flags_get(
  *
  * @return The thread's wait flags.
  */
-RTEMS_INLINE_ROUTINE Thread_Wait_flags _Thread_Wait_flags_get_acquire(
+static inline Thread_Wait_flags _Thread_Wait_flags_get_acquire(
   const Thread_Control *the_thread
 )
 {
@@ -2390,7 +2390,7 @@ RTEMS_INLINE_ROUTINE Thread_Wait_flags _Thread_Wait_flags_get_acquire(
  * @retval true The wait flags were equal to the expected wait flags.
  * @retval false The wait flags were not equal to the expected wait flags.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_release(
+static inline bool _Thread_Wait_flags_try_change_release(
   Thread_Control    *the_thread,
   Thread_Wait_flags  expected_flags,
   Thread_Wait_flags  desired_flags
@@ -2430,7 +2430,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_release(
  * @retval true The wait flags were equal to the expected wait flags.
  * @retval false The wait flags were not equal to the expected wait flags.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_acquire(
+static inline bool _Thread_Wait_flags_try_change_acquire(
   Thread_Control    *the_thread,
   Thread_Wait_flags  expected_flags,
   Thread_Wait_flags  desired_flags
@@ -2484,7 +2484,7 @@ Objects_Id _Thread_Wait_get_id( const Thread_Control *the_thread );
  *
  * @param the_thread The thread to get the status of the wait return code of.
  */
-RTEMS_INLINE_ROUTINE Status_Control _Thread_Wait_get_status(
+static inline Status_Control _Thread_Wait_get_status(
   const Thread_Control *the_thread
 )
 {
@@ -2518,7 +2518,7 @@ void _Thread_Timeout( Watchdog_Control *the_watchdog );
  * @param [in, out] timer The timer to initialize.
  * @param cpu The cpu for the operation.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Timer_initialize(
+static inline void _Thread_Timer_initialize(
   Thread_Timer_information *timer,
   Per_CPU_Control          *cpu
 )
@@ -2535,7 +2535,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Timer_initialize(
  * @param cpu The cpu for the operation.
  * @param ticks The ticks to add to the timeout ticks.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Add_timeout_ticks(
+static inline void _Thread_Add_timeout_ticks(
   Thread_Control    *the_thread,
   Per_CPU_Control   *cpu,
   Watchdog_Interval  ticks
@@ -2561,7 +2561,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Add_timeout_ticks(
  * @param routine The watchdog routine for the thread.
  * @param expire Expiration for the watchdog.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Timer_insert_realtime(
+static inline void _Thread_Timer_insert_realtime(
   Thread_Control                 *the_thread,
   Per_CPU_Control                *cpu,
   Watchdog_Service_routine_entry  routine,
@@ -2586,7 +2586,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Timer_insert_realtime(
  *
  * @param[in, out] the_thread The thread to remove the watchdog from.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Timer_remove( Thread_Control *the_thread )
+static inline void _Thread_Timer_remove( Thread_Control *the_thread )
 {
   ISR_lock_Context lock_context;
 
@@ -2612,7 +2612,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Timer_remove( Thread_Control *the_thread )
  *      if necessary.
  * @param queue The thread queue.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Remove_timer_and_unblock(
+static inline void _Thread_Remove_timer_and_unblock(
   Thread_Control     *the_thread,
   Thread_queue_Queue *queue
 )
@@ -2683,7 +2683,7 @@ void _Thread_Do_unpin(
  *
  * @param executing The currently executing thread.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Pin( Thread_Control *executing )
+static inline void _Thread_Pin( Thread_Control *executing )
 {
 #if defined(RTEMS_SMP)
   _Assert( executing == _Thread_Get_executing() );
@@ -2700,7 +2700,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Pin( Thread_Control *executing )
  * @param executing The currently executing thread.
  * @param cpu_self The cpu for the operation.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Unpin(
+static inline void _Thread_Unpin(
   Thread_Control  *executing,
   Per_CPU_Control *cpu_self
 )
@@ -2752,7 +2752,7 @@ extern "C" {
  *
  * @param status is the thread wait status.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Timer_remove_and_continue(
+static inline void _Thread_Timer_remove_and_continue(
   Thread_Control *the_thread,
   Status_Control  status
 )

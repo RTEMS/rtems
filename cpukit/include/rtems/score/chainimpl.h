@@ -121,7 +121,7 @@ size_t _Chain_Node_count_unprotected( const Chain_Control *chain );
  *
  * @param[out] node The node to set off chain.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Set_off_chain(
+static inline void _Chain_Set_off_chain(
   Chain_Node *node
 )
 {
@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Set_off_chain(
  *
  * @param[out] the_node The chain node to initialize.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Initialize_node( Chain_Node *the_node )
+static inline void _Chain_Initialize_node( Chain_Node *the_node )
 {
 #if defined(RTEMS_DEBUG)
   _Chain_Set_off_chain( the_node );
@@ -159,7 +159,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Initialize_node( Chain_Node *the_node )
  * @retval true The @a node is off chain.
  * @retval false The @a node is not off chain.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Is_node_off_chain(
+static inline bool _Chain_Is_node_off_chain(
   const Chain_Node *node
 )
 {
@@ -178,7 +178,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_node_off_chain(
  * @retval true @a left and @a right are equal.
  * @retval false @a left and @a right are not equal.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Are_nodes_equal(
+static inline bool _Chain_Are_nodes_equal(
   const Chain_Node *left,
   const Chain_Node *right
 )
@@ -195,7 +195,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Are_nodes_equal(
  *
  * @return This method returns the permanent head node of the chain.
  */
-RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Head(
+static inline Chain_Node *_Chain_Head(
   Chain_Control *the_chain
 )
 {
@@ -211,7 +211,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Head(
  *
  * @return This method returns the permanent head node of the chain.
  */
-RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_head(
+static inline const Chain_Node *_Chain_Immutable_head(
   const Chain_Control *the_chain
 )
 {
@@ -227,7 +227,7 @@ RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_head(
  *
  * @return This method returns the permanent tail node of the chain.
  */
-RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Tail(
+static inline Chain_Node *_Chain_Tail(
   Chain_Control *the_chain
 )
 {
@@ -243,7 +243,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Tail(
  *
  * @return This method returns the permanent tail node of the chain.
  */
-RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_tail(
+static inline const Chain_Node *_Chain_Immutable_tail(
   const Chain_Control *the_chain
 )
 {
@@ -260,7 +260,7 @@ RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_tail(
  *
  * @return This method returns the first node of the chain.
  */
-RTEMS_INLINE_ROUTINE Chain_Node *_Chain_First(
+static inline Chain_Node *_Chain_First(
   const Chain_Control *the_chain
 )
 {
@@ -277,7 +277,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_First(
  *
  * @return This method returns the first node of the chain.
  */
-RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_first(
+static inline const Chain_Node *_Chain_Immutable_first(
   const Chain_Control *the_chain
 )
 {
@@ -294,7 +294,7 @@ RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_first(
  *
  * @return This method returns the last node of the chain.
  */
-RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Last(
+static inline Chain_Node *_Chain_Last(
   const Chain_Control *the_chain
 )
 {
@@ -311,7 +311,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Last(
  *
  * @return This method returns the last node of the chain.
  */
-RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_last(
+static inline const Chain_Node *_Chain_Immutable_last(
   const Chain_Control *the_chain
 )
 {
@@ -327,7 +327,7 @@ RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_last(
  *
  * @return This method returns the next node on the chain.
  */
-RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Next(
+static inline Chain_Node *_Chain_Next(
   const Chain_Node *the_node
 )
 {
@@ -343,7 +343,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Next(
  *
  * @return This method returns the next node on the chain.
  */
-RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_next(
+static inline const Chain_Node *_Chain_Immutable_next(
   const Chain_Node *the_node
 )
 {
@@ -359,7 +359,7 @@ RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_next(
  *
  * @return This method returns the previous node on the chain.
  */
-RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Previous(
+static inline Chain_Node *_Chain_Previous(
   const Chain_Node *the_node
 )
 {
@@ -375,7 +375,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Previous(
  *
  * @return This method returns the previous node on the chain.
  */
-RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_previous(
+static inline const Chain_Node *_Chain_Immutable_previous(
   const Chain_Node *the_node
 )
 {
@@ -393,7 +393,7 @@ RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_previous(
  * @retval true There are no nodes on @a the_chain.
  * @retval false There are nodes on @a the_chain.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Is_empty(
+static inline bool _Chain_Is_empty(
   const Chain_Control *the_chain
 )
 {
@@ -413,7 +413,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_empty(
  * @retval true @a the_node is the first node on a chain.
  * @retval false @a the_node is not the first node on a chain.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Is_first(
+static inline bool _Chain_Is_first(
   const Chain_Node *the_node
 )
 {
@@ -432,7 +432,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_first(
  * @retval true @a the_node is the last node on a chain.
  * @retval false @a the_node is not the last node on a chain.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Is_last(
+static inline bool _Chain_Is_last(
   const Chain_Node *the_node
 )
 {
@@ -450,7 +450,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_last(
  * @retval true There is only one node on @a the_chain.
  * @retval false There is more than one node on @a the_chain.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Has_only_one_node(
+static inline bool _Chain_Has_only_one_node(
   const Chain_Control *the_chain
 )
 {
@@ -470,7 +470,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Has_only_one_node(
  * @retval true @a the_node is the head of @a the_chain.
  * @retval false @a the_node is not the head of @a the_chain.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Is_head(
+static inline bool _Chain_Is_head(
   const Chain_Control *the_chain,
   const Chain_Node    *the_node
 )
@@ -490,7 +490,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_head(
  * @retval true @a the_node is the tail of @a the_chain.
  * @retval false @a the_node is not the tail of @a the_chain.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Is_tail(
+static inline bool _Chain_Is_tail(
   const Chain_Control *the_chain,
   const Chain_Node    *the_node
 )
@@ -505,7 +505,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_tail(
  *
  * @param[out] the_chain The chain to be initialized.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Initialize_empty(
+static inline void _Chain_Initialize_empty(
   Chain_Control *the_chain
 )
 {
@@ -528,7 +528,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Initialize_empty(
  * @param[out] the_chain The chain to be initialized to contain exactly the specified node.
  * @param[out] the_node The one and only node of the chain to be initialized.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Initialize_one(
+static inline void _Chain_Initialize_one(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )
@@ -558,7 +558,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Initialize_one(
  *
  * @param[out] the_node The node to be extracted.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Extract_unprotected(
+static inline void _Chain_Extract_unprotected(
   Chain_Node *the_node
 )
 {
@@ -592,7 +592,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Extract_unprotected(
  * @note This routine assumes that there is at least one node on the chain
  *       and always returns a node even if it is the Chain Tail.
  */
-RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Get_first_unprotected(
+static inline Chain_Node *_Chain_Get_first_unprotected(
   Chain_Control *the_chain
 )
 {
@@ -630,7 +630,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Get_first_unprotected(
  * @note It does NOT disable interrupts to ensure the atomicity of the
  *       get operation.
  */
-RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Get_unprotected(
+static inline Chain_Node *_Chain_Get_unprotected(
   Chain_Control *the_chain
 )
 {
@@ -653,7 +653,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Get_unprotected(
  * @note It does NOT disable interrupts to ensure the atomicity
  *       of the extract operation.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Insert_unprotected(
+static inline void _Chain_Insert_unprotected(
   Chain_Node *after_node,
   Chain_Node *the_node
 )
@@ -680,7 +680,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Insert_unprotected(
  * @note It does NOT disable interrupts to ensure the atomicity of the
  *       append operation.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Append_unprotected(
+static inline void _Chain_Append_unprotected(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )
@@ -711,7 +711,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Append_unprotected(
  *
  * @see _Chain_Append_unprotected() and _Chain_Is_node_off_chain().
  */
-RTEMS_INLINE_ROUTINE void _Chain_Append_if_is_off_chain_unprotected(
+static inline void _Chain_Append_if_is_off_chain_unprotected(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )
@@ -732,7 +732,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Append_if_is_off_chain_unprotected(
  * @note It does NOT disable interrupts to ensure the atomicity of the
  *       prepend operation.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Prepend_unprotected(
+static inline void _Chain_Prepend_unprotected(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )
@@ -754,7 +754,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Prepend_unprotected(
  * @retval true The chain was empty before.
  * @retval false The chain contained at least one node before.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Append_with_empty_check_unprotected(
+static inline bool _Chain_Append_with_empty_check_unprotected(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )
@@ -780,7 +780,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Append_with_empty_check_unprotected(
  * @retval true The chain was empty before.
  * @retval false The chain contained at least one node before.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Prepend_with_empty_check_unprotected(
+static inline bool _Chain_Prepend_with_empty_check_unprotected(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )
@@ -810,7 +810,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Prepend_with_empty_check_unprotected(
  * @retval true The chain is empty now.
  * @retval false The chain contains at least one node now.
  */
-RTEMS_INLINE_ROUTINE bool _Chain_Get_with_empty_check_unprotected(
+static inline bool _Chain_Get_with_empty_check_unprotected(
   Chain_Control *the_chain,
   Chain_Node **the_node
 )
@@ -865,7 +865,7 @@ typedef bool ( *Chain_Node_order )(
  *   variable.
  * @param order The order relation.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Insert_ordered_unprotected(
+static inline void _Chain_Insert_ordered_unprotected(
   Chain_Control    *the_chain,
   Chain_Node       *to_insert,
   const void       *key,
@@ -954,7 +954,7 @@ typedef struct {
  *
  * @param[out] the_registry The chain iterator registry to be initialized.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Iterator_registry_initialize(
+static inline void _Chain_Iterator_registry_initialize(
   Chain_Iterator_registry *the_registry
 )
 {
@@ -973,7 +973,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Iterator_registry_initialize(
  * @param[in, out] the_registry the chain iterator registry.
  * @param[out] the_node_to_extract The node that will be extracted.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Iterator_registry_update(
+static inline void _Chain_Iterator_registry_update(
   Chain_Iterator_registry *the_registry,
   Chain_Node              *the_node_to_extract
 )
@@ -1060,7 +1060,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Iterator_registry_update(
  *   implementation is unfit for use in performance relevant components, due to
  *   the linear time complexity in _Chain_Iterator_registry_update().
  */
-RTEMS_INLINE_ROUTINE void _Chain_Iterator_initialize(
+static inline void _Chain_Iterator_initialize(
   Chain_Control            *the_chain,
   Chain_Iterator_registry  *the_registry,
   Chain_Iterator           *the_iterator,
@@ -1092,7 +1092,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Iterator_initialize(
  *
  * @return The next node in the iterator direction
  */
-RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Iterator_next(
+static inline Chain_Node *_Chain_Iterator_next(
   const Chain_Iterator *the_iterator
 )
 {
@@ -1109,7 +1109,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Iterator_next(
  * @param[out] the_iterator The chain iterator.
  * @param[out] the_node The new iterator position.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Iterator_set_position(
+static inline void _Chain_Iterator_set_position(
   Chain_Iterator *the_iterator,
   Chain_Node     *the_node
 )
@@ -1124,7 +1124,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Iterator_set_position(
  *
  * @param[out] the_iterator The chain iterator.
  */
-RTEMS_INLINE_ROUTINE void _Chain_Iterator_destroy(
+static inline void _Chain_Iterator_destroy(
   Chain_Iterator *the_iterator
 )
 {

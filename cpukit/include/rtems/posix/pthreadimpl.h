@@ -61,7 +61,7 @@ extern "C" {
 #define PTHREAD_MINIMUM_STACK_SIZE _POSIX_Threads_Minimum_stack_size
 
 #if defined(RTEMS_POSIX_API)
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
+static inline void _POSIX_Threads_Sporadic_timer_insert(
   Thread_Control    *the_thread,
   POSIX_API_Control *api
 )
@@ -109,7 +109,7 @@ int _POSIX_Thread_Translate_sched_param(
   Thread_Configuration     *config
 );
 
-RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate(void)
+static inline Thread_Control *_POSIX_Threads_Allocate(void)
 {
   _Objects_Allocator_lock();
 

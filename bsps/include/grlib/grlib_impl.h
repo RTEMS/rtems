@@ -66,24 +66,24 @@ extern "C" {
 
 #if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x050000)
 
-RTEMS_INLINE_ROUTINE void *grlib_malloc(size_t size)
+static inline void *grlib_malloc(size_t size)
 {
  return rtems_malloc(size);
 }
 
-RTEMS_INLINE_ROUTINE void *grlib_calloc(size_t nelem, size_t elsize)
+static inline void *grlib_calloc(size_t nelem, size_t elsize)
 {
  return rtems_calloc(nelem, elsize);
 }
 
 #else
 
-RTEMS_INLINE_ROUTINE void *grlib_malloc(size_t size)
+static inline void *grlib_malloc(size_t size)
 {
  return malloc(size);
 }
 
-RTEMS_INLINE_ROUTINE void *grlib_calloc(size_t nelem, size_t elsize)
+static inline void *grlib_calloc(size_t nelem, size_t elsize)
 {
  return calloc(nelem, elsize);
 }
@@ -92,7 +92,7 @@ RTEMS_INLINE_ROUTINE void *grlib_calloc(size_t nelem, size_t elsize)
 
 #ifdef __sparc__
 
-RTEMS_INLINE_ROUTINE unsigned char grlib_read_uncached8(unsigned int address)
+static inline unsigned char grlib_read_uncached8(unsigned int address)
 {
        unsigned char tmp;
        __asm__ (" lduba [%1]1, %0 "
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE unsigned char grlib_read_uncached8(unsigned int address)
        return tmp;
 }
 
-RTEMS_INLINE_ROUTINE unsigned short grlib_read_uncached16(unsigned int addr) {
+static inline unsigned short grlib_read_uncached16(unsigned int addr) {
        unsigned short tmp;
        __asm__ (" lduha [%1]1, %0 "
          : "=r"(tmp)
@@ -112,7 +112,7 @@ RTEMS_INLINE_ROUTINE unsigned short grlib_read_uncached16(unsigned int addr) {
 }
 
 
-RTEMS_INLINE_ROUTINE unsigned int grlib_read_uncached32(unsigned int address)
+static inline unsigned int grlib_read_uncached32(unsigned int address)
 {
 	unsigned int tmp;
 	__asm__ (" lda [%1]1, %0 "
@@ -122,7 +122,7 @@ RTEMS_INLINE_ROUTINE unsigned int grlib_read_uncached32(unsigned int address)
 	return tmp;
 }
 
-RTEMS_INLINE_ROUTINE uint64_t grlib_read_uncached64(uint64_t *address)
+static inline uint64_t grlib_read_uncached64(uint64_t *address)
 {
 	uint64_t tmp;
 	__asm__ (" ldda [%1]1, %0 "
@@ -147,7 +147,7 @@ static __inline__ unsigned short grlib_read_uncached16(unsigned int address) {
 	return tmp;
 }
 
-RTEMS_INLINE_ROUTINE unsigned int grlib_read_uncached32(unsigned int address)
+static inline unsigned int grlib_read_uncached32(unsigned int address)
 {
 	unsigned int tmp = (*(volatile unsigned int *)(address));
 	return tmp;

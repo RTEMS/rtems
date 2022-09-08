@@ -273,7 +273,7 @@ typedef enum {
  *
  * @return An object Id constructed from the arguments.
  */
-RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
+static inline Objects_APIs _Objects_Get_API(
   Objects_Id id
 )
 {
@@ -287,7 +287,7 @@ RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
  *
  * @return The class portion of the ID.
  */
-RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_class(
+static inline uint32_t _Objects_Get_class(
   Objects_Id id
 )
 {
@@ -302,7 +302,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_class(
  *
  * @return Returns the node portion of an object ID.
  */
-RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_node(
+static inline uint32_t _Objects_Get_node(
   Objects_Id id
 )
 {
@@ -316,7 +316,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_node(
  *
  * @return Returns the index portion of the specified object ID.
  */
-RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
+static inline Objects_Maximum _Objects_Get_index(
   Objects_Id id
 )
 {

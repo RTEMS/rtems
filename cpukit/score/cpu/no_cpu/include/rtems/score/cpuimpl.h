@@ -151,7 +151,7 @@ void _CPU_Context_validate( uintptr_t pattern );
  *
  * This function is used only in test sptests/spfatal26.
  */
-RTEMS_INLINE_ROUTINE void _CPU_Instruction_illegal( void )
+static inline void _CPU_Instruction_illegal( void )
 {
   __asm__ volatile ( ".word 0" );
 }
@@ -161,7 +161,7 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_illegal( void )
  *
  * This function is used only in test sptests/spcache01.
  */
-RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
+static inline void _CPU_Instruction_no_operation( void )
 {
   __asm__ volatile ( "nop" );
 }
@@ -176,7 +176,7 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
  * @param context is the processor context defining the thread-local storage
  *   area to use.
  */
-RTEMS_INLINE_ROUTINE void _CPU_Use_thread_local_storage(
+static inline void _CPU_Use_thread_local_storage(
   const Context_Control *context
 )
 {

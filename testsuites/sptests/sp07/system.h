@@ -111,7 +111,7 @@ TEST_EXTERN int Task_restarted[ RTEMS_ARRAY_SIZE( Task_id ) ];
 
 TEST_EXTERN int Task_deleted[ RTEMS_ARRAY_SIZE( Task_id ) ];
 
-RTEMS_INLINE_ROUTINE void assert_extension_counts( const int *table, int tasks )
+static inline void assert_extension_counts( const int *table, int tasks )
 {
   size_t i;
 

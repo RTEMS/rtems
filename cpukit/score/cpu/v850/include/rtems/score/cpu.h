@@ -346,7 +346,7 @@ typedef struct {
     __asm__ __volatile__( "di" ); \
   } while (0)
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
   return ( level & V850_PSW_INTERRUPT_DISABLE_MASK )
     != V850_PSW_INTERRUPT_DISABLE;

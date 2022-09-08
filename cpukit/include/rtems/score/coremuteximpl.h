@@ -65,7 +65,7 @@ extern "C" {
  *
  * @param[out] the_mutex The mutex to initialize.
  */
-RTEMS_INLINE_ROUTINE void _CORE_mutex_Initialize(
+static inline void _CORE_mutex_Initialize(
   CORE_mutex_Control *the_mutex
 )
 {
@@ -77,7 +77,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Initialize(
  *
  * @param[out] the_mutex the mutex to destroy.
  */
-RTEMS_INLINE_ROUTINE void _CORE_mutex_Destroy( CORE_mutex_Control *the_mutex )
+static inline void _CORE_mutex_Destroy( CORE_mutex_Control *the_mutex )
 {
   _Thread_queue_Destroy( &the_mutex->Wait_queue );
 }
@@ -88,7 +88,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Destroy( CORE_mutex_Control *the_mutex )
  * @param[in, out] the_mutex The mutex to acquire critical.
  * @param queue_context The queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_mutex_Acquire_critical(
+static inline void _CORE_mutex_Acquire_critical(
   CORE_mutex_Control   *the_mutex,
   Thread_queue_Context *queue_context
 )
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Acquire_critical(
  * @param[in, out] the_mutex The mutex to release.
  * @param queue_context The queue context.
  */
-RTEMS_INLINE_ROUTINE void _CORE_mutex_Release(
+static inline void _CORE_mutex_Release(
   CORE_mutex_Control   *the_mutex,
   Thread_queue_Context *queue_context
 )
@@ -117,7 +117,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Release(
  *
  * @return The owner of the mutex.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_CORE_mutex_Get_owner(
+static inline Thread_Control *_CORE_mutex_Get_owner(
   const CORE_mutex_Control *the_mutex
 )
 {
@@ -135,7 +135,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_mutex_Get_owner(
  * @retval true The mutex is locked.
  * @retval false The mutex is not locked.
  */
-RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
+static inline bool _CORE_mutex_Is_locked(
   const CORE_mutex_Control *the_mutex
 )
 {
@@ -168,7 +168,7 @@ Status_Control _CORE_mutex_Seize_slow(
  * @param[out] the_mutex The mutex to set the owner from.
  * @param owner The new owner of the mutex.
  */
-RTEMS_INLINE_ROUTINE void _CORE_mutex_Set_owner(
+static inline void _CORE_mutex_Set_owner(
   CORE_mutex_Control *the_mutex,
   Thread_Control     *owner
 )
@@ -185,7 +185,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Set_owner(
  * @retval true @a the_thread is the owner of @a the_mutex.
  * @retval false @a the_thread is not the owner of @a the_mutex.
  */
-RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_owner(
+static inline bool _CORE_mutex_Is_owner(
   const CORE_mutex_Control *the_mutex,
   const Thread_Control     *the_thread
 )
@@ -198,7 +198,7 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_owner(
  *
  * @param[out] the_mutex The recursive mutex to initialize.
  */
-RTEMS_INLINE_ROUTINE void _CORE_recursive_mutex_Initialize(
+static inline void _CORE_recursive_mutex_Initialize(
   CORE_recursive_mutex_Control *the_mutex
 )
 {
@@ -213,7 +213,7 @@ RTEMS_INLINE_ROUTINE void _CORE_recursive_mutex_Initialize(
  *
  * @return STATUS_SUCCESSFUL, this method is always successful.
  */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_nested(
+static inline Status_Control _CORE_recursive_mutex_Seize_nested(
   CORE_recursive_mutex_Control *the_mutex
 )
 {
@@ -236,7 +236,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_nested(
  * @retval _Thread_Wait_get_status The status of the executing thread.
  * @retval STATUS_UNAVAILABLE The calling thread is not willing to wait.
  */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize(
+static inline Status_Control _CORE_recursive_mutex_Seize(
   CORE_recursive_mutex_Control  *the_mutex,
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
@@ -286,7 +286,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize(
  * @retval STATUS_SUCCESSFUL @a the_mutex is successfully surrendered.
  * @retval STATUS_NOT_OWNER The executing thread does not own @a the_mutex.
  */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Surrender(
+static inline Status_Control _CORE_recursive_mutex_Surrender(
   CORE_recursive_mutex_Control  *the_mutex,
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
@@ -339,7 +339,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Surrender(
  *      Only needed if RTEMS_SMP is defined
  * @param priority_ceiling The priority ceiling for the initialized mutex.
  */
-RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Initialize(
+static inline void _CORE_ceiling_mutex_Initialize(
   CORE_ceiling_mutex_Control *the_mutex,
   const Scheduler_Control    *scheduler,
   Priority_Control            priority_ceiling
@@ -359,7 +359,7 @@ RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Initialize(
  *
  * @return The scheduler of the mutex. If RTEMS_SMP is not defined, the first entry of the _Scheduler_Table is returned.
  */
-RTEMS_INLINE_ROUTINE const Scheduler_Control *
+static inline const Scheduler_Control *
 _CORE_ceiling_mutex_Get_scheduler(
   const CORE_ceiling_mutex_Control *the_mutex
 )
@@ -377,7 +377,7 @@ _CORE_ceiling_mutex_Get_scheduler(
  * @param[out] the_mutex The ceiling mutex to set the priority of.
  * @param priority_ceiling The new priority ceiling of the mutex.
  */
-RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Set_priority(
+static inline void _CORE_ceiling_mutex_Set_priority(
   CORE_ceiling_mutex_Control *the_mutex,
   Priority_Control            priority_ceiling
 )
@@ -412,7 +412,7 @@ RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Set_priority(
  *
  * @return The priority ceiling of @a the_mutex.
  */
-RTEMS_INLINE_ROUTINE Priority_Control _CORE_ceiling_mutex_Get_priority(
+static inline Priority_Control _CORE_ceiling_mutex_Get_priority(
   const CORE_ceiling_mutex_Control *the_mutex
 )
 {
@@ -430,7 +430,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _CORE_ceiling_mutex_Get_priority(
  * @retval STATUS_MUTEX_CEILING_VIOLATED The owners wait priority
  *          is smaller than the priority of the ceiling mutex.
  */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Set_owner(
+static inline Status_Control _CORE_ceiling_mutex_Set_owner(
   CORE_ceiling_mutex_Control *the_mutex,
   Thread_Control             *owner,
   Thread_queue_Context       *queue_context
@@ -484,7 +484,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Set_owner(
  *          is smaller than the priority of the ceiling mutex.
  * @retval other Return value of @a nested.
  */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Seize(
+static inline Status_Control _CORE_ceiling_mutex_Seize(
   CORE_ceiling_mutex_Control    *the_mutex,
   Thread_Control                *executing,
   bool                           wait,
@@ -544,7 +544,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Seize(
  * @retval STATUS_SUCCESSFUL The ceiling mutex was successfullysurrendered.
  * @retval STATUS_NOT_OWNER The executing thread is not the owner of @a the_mutex.
  */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Surrender(
+static inline Status_Control _CORE_ceiling_mutex_Surrender(
   CORE_ceiling_mutex_Control *the_mutex,
   Thread_Control             *executing,
   Thread_queue_Context       *queue_context

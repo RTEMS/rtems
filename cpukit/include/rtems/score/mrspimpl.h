@@ -64,7 +64,7 @@ extern "C" {
  * @param mrsp The MrsP control for the operation.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _MRSP_Acquire_critical(
+static inline void _MRSP_Acquire_critical(
   MRSP_Control         *mrsp,
   Thread_queue_Context *queue_context
 )
@@ -78,7 +78,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Acquire_critical(
  * @param mrsp The MrsP control for the operation.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _MRSP_Release(
+static inline void _MRSP_Release(
   MRSP_Control         *mrsp,
   Thread_queue_Context *queue_context
 )
@@ -93,7 +93,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Release(
  *
  * @return The owner of the Mrsp control.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_MRSP_Get_owner(
+static inline Thread_Control *_MRSP_Get_owner(
   const MRSP_Control *mrsp
 )
 {
@@ -106,7 +106,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_MRSP_Get_owner(
  * @param[out] mrsp The MrsP control to set the owner of.
  * @param owner The desired new owner for @a mrsp.
  */
-RTEMS_INLINE_ROUTINE void _MRSP_Set_owner(
+static inline void _MRSP_Set_owner(
   MRSP_Control   *mrsp,
   Thread_Control *owner
 )
@@ -122,7 +122,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Set_owner(
  *
  * @return The priority of the MrsP control.
  */
-RTEMS_INLINE_ROUTINE Priority_Control _MRSP_Get_priority(
+static inline Priority_Control _MRSP_Get_priority(
   const MRSP_Control      *mrsp,
   const Scheduler_Control *scheduler
 )
@@ -140,7 +140,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _MRSP_Get_priority(
  * @param schedulger The corresponding scheduler.
  * @param new_priority The new priority for the MrsP control
  */
-RTEMS_INLINE_ROUTINE void _MRSP_Set_priority(
+static inline void _MRSP_Set_priority(
   MRSP_Control            *mrsp,
   const Scheduler_Control *scheduler,
   Priority_Control         new_priority
@@ -165,7 +165,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Set_priority(
  * @retval STATUS_MUTEX_CEILING_VIOLATED The wait priority of the thread
  *      exceeds the ceiling priority.
  */
-RTEMS_INLINE_ROUTINE Status_Control _MRSP_Raise_priority(
+static inline Status_Control _MRSP_Raise_priority(
   MRSP_Control         *mrsp,
   Thread_Control       *thread,
   Priority_Node        *priority_node,
@@ -207,7 +207,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Raise_priority(
  * @param priority_node The priority node to remove from the thread
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _MRSP_Remove_priority(
+static inline void _MRSP_Remove_priority(
   Thread_Control       *thread,
   Priority_Node        *priority_node,
   Thread_queue_Context *queue_context
@@ -229,7 +229,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Remove_priority(
  * @param[out] thread The thread to replace the priorities.
  * @param ceiling_priority The node to be replaced.
  */
-RTEMS_INLINE_ROUTINE void _MRSP_Replace_priority(
+static inline void _MRSP_Replace_priority(
   MRSP_Control   *mrsp,
   Thread_Control *thread,
   Priority_Node  *ceiling_priority
@@ -257,7 +257,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Replace_priority(
  * @retval STATUS_MUTEX_CEILING_VIOLATED The wait priority of the executing
  *      thread exceeds the ceiling priority.
  */
-RTEMS_INLINE_ROUTINE Status_Control _MRSP_Claim_ownership(
+static inline Status_Control _MRSP_Claim_ownership(
   MRSP_Control         *mrsp,
   Thread_Control       *executing,
   Thread_queue_Context *queue_context
@@ -300,7 +300,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Claim_ownership(
  * @retval STATUS_INVALID_NUMBER The MrsP control is initially locked.
  * @retval STATUS_NO_MEMORY There is not enough memory to allocate.
  */
-RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
+static inline Status_Control _MRSP_Initialize(
   MRSP_Control            *mrsp,
   const Scheduler_Control *scheduler,
   Priority_Control         ceiling_priority,
@@ -361,7 +361,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
  * @retval STATUS_DEADLOCK A deadlock occurred.
  * @retval STATUS_TIMEOUT A timeout occurred.
  */
-RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
+static inline Status_Control _MRSP_Wait_for_ownership(
   MRSP_Control         *mrsp,
   Thread_Control       *executing,
   Thread_queue_Context *queue_context
@@ -439,7 +439,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
  * @retval STATUS_MUTEX_CEILING_VIOLATED The current priority of the executing
  *   thread exceeds the ceiling priority of the mutex.
  */
-RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
+static inline Status_Control _MRSP_Seize(
   MRSP_Control         *mrsp,
   Thread_Control       *executing,
   bool                  wait,
@@ -478,7 +478,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
  * @retval STATUS_SUCCESSFUL The operation succeeded.
  * @retval STATUS_NOT_OWNER The executing thread does not own the MrsP control.
  */
-RTEMS_INLINE_ROUTINE Status_Control _MRSP_Surrender(
+static inline Status_Control _MRSP_Surrender(
   MRSP_Control         *mrsp,
   Thread_Control       *executing,
   Thread_queue_Context *queue_context
@@ -530,7 +530,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Surrender(
  * @retval STATUS_RESOURCE_IN_USE The MrsP control is in use,
  *      it cannot be destroyed.
  */
-RTEMS_INLINE_ROUTINE Status_Control _MRSP_Can_destroy( MRSP_Control *mrsp )
+static inline Status_Control _MRSP_Can_destroy( MRSP_Control *mrsp )
 {
   if ( _MRSP_Get_owner( mrsp ) != NULL ) {
     return STATUS_RESOURCE_IN_USE;
@@ -545,7 +545,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Can_destroy( MRSP_Control *mrsp )
  * @param[in, out] The mrsp that is about to be destroyed.
  * @param queue_context The thread queue context.
  */
-RTEMS_INLINE_ROUTINE void _MRSP_Destroy(
+static inline void _MRSP_Destroy(
   MRSP_Control         *mrsp,
   Thread_queue_Context *queue_context
 )

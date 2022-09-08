@@ -53,7 +53,7 @@ extern int pci_dev_irq(pci_dev_t dev);
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-RTEMS_INLINE_ROUTINE int pci_interrupt_register(int irq, const char *info,
+static inline int pci_interrupt_register(int irq, const char *info,
 						pci_isr isr, void *arg)
 {
 	return rtems_interrupt_handler_install(irq, info,
@@ -68,7 +68,7 @@ RTEMS_INLINE_ROUTINE int pci_interrupt_register(int irq, const char *info,
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-RTEMS_INLINE_ROUTINE int pci_interrupt_unregister(int irq, pci_isr isr,
+static inline int pci_interrupt_unregister(int irq, pci_isr isr,
 						  void *arg)
 {
 	return rtems_interrupt_handler_remove(irq, isr, arg);
@@ -85,7 +85,7 @@ RTEMS_INLINE_ROUTINE int pci_interrupt_unregister(int irq, pci_isr isr,
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-RTEMS_INLINE_ROUTINE void pci_interrupt_unmask(int irq)
+static inline void pci_interrupt_unmask(int irq)
 {
 	BSP_shared_interrupt_unmask(irq);
 }
@@ -101,7 +101,7 @@ RTEMS_INLINE_ROUTINE void pci_interrupt_unmask(int irq)
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-RTEMS_INLINE_ROUTINE void pci_interrupt_mask(int irq)
+static inline void pci_interrupt_mask(int irq)
 {
 	BSP_shared_interrupt_mask(irq);
 }
@@ -115,7 +115,7 @@ RTEMS_INLINE_ROUTINE void pci_interrupt_mask(int irq)
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-RTEMS_INLINE_ROUTINE void pci_interrupt_clear(int irq)
+static inline void pci_interrupt_clear(int irq)
 {
 	BSP_shared_interrupt_clear(irq);
 }

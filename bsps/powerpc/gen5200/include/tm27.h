@@ -34,7 +34,7 @@ static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
                                               (rtems_irq_disable) nullFunc,
                                               (rtems_irq_is_enabled) nullFunc};
 
-RTEMS_INLINE_ROUTINE void Install_tm27_vector(void (*_handler)(void))
+static inline void Install_tm27_vector(void (*_handler)(void))
 {
   clockIrqData.hdl = _handler;
   if (!BSP_install_rtems_irq_handler (&clockIrqData)) {

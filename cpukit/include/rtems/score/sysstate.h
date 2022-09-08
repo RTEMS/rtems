@@ -95,7 +95,7 @@ extern System_state_Codes _System_state_Current;
  *
  * @param state The state to set.
  */
-RTEMS_INLINE_ROUTINE void _System_state_Set (
+static inline void _System_state_Set (
   System_state_Codes state
 )
 {
@@ -107,7 +107,7 @@ RTEMS_INLINE_ROUTINE void _System_state_Set (
  *
  * @return The current system state.
  */
-RTEMS_INLINE_ROUTINE System_state_Codes _System_state_Get ( void )
+static inline System_state_Codes _System_state_Get ( void )
 {
   return _System_state_Current;
 }
@@ -120,7 +120,7 @@ RTEMS_INLINE_ROUTINE System_state_Codes _System_state_Get ( void )
  * @retval true @a state is before initialization.
  * @retval false @a state is not before initialization.
  */
-RTEMS_INLINE_ROUTINE bool _System_state_Is_before_initialization (
+static inline bool _System_state_Is_before_initialization (
   System_state_Codes state
 )
 {
@@ -135,7 +135,7 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_before_initialization (
  * @retval true @a state is before multitasking.
  * @retval false @a state is not before multitasking.
  */
-RTEMS_INLINE_ROUTINE bool _System_state_Is_before_multitasking (
+static inline bool _System_state_Is_before_multitasking (
   System_state_Codes state
 )
 {
@@ -150,7 +150,7 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_before_multitasking (
  * @retval true @a state is up.
  * @retval false @a state is not up.
  */
-RTEMS_INLINE_ROUTINE bool _System_state_Is_up (
+static inline bool _System_state_Is_up (
   System_state_Codes state
 )
 {
@@ -165,7 +165,7 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_up (
  * @retval true @a state is terminated.
  * @retval false @a state is not terminated.
  */
-RTEMS_INLINE_ROUTINE bool _System_state_Is_terminated (
+static inline bool _System_state_Is_terminated (
   System_state_Codes state
 )
 {

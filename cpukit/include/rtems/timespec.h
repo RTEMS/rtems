@@ -64,7 +64,7 @@ extern "C" {
  * @retval true The timespec is valid.
  * @retval false The timespec is not valid.
  */
-RTEMS_INLINE_ROUTINE bool rtems_timespec_is_valid(
+static inline bool rtems_timespec_is_valid(
   const struct timespec *time
 )
 {
@@ -83,7 +83,7 @@ RTEMS_INLINE_ROUTINE bool rtems_timespec_is_valid(
  * @retval false @a lhs is not less than @a rhs.
  * 
  */
-RTEMS_INLINE_ROUTINE bool rtems_timespec_less_than(
+static inline bool rtems_timespec_less_than(
   const struct timespec *lhs,
   const struct timespec *rhs
 )
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE bool rtems_timespec_less_than(
  *
  * @return This method returns the number of seconds @a time increased by.
  */
-RTEMS_INLINE_ROUTINE uint32_t rtems_timespec_add_to(
+static inline uint32_t rtems_timespec_add_to(
   struct timespec       *time,
   const struct timespec *add
 )
@@ -120,7 +120,7 @@ RTEMS_INLINE_ROUTINE uint32_t rtems_timespec_add_to(
  *
  * @return This method returns the number of ticks computed.
  */
-RTEMS_INLINE_ROUTINE uint32_t rtems_timespec_to_ticks(
+static inline uint32_t rtems_timespec_to_ticks(
   const struct timespec *time
 )
 {
@@ -137,7 +137,7 @@ RTEMS_INLINE_ROUTINE uint32_t rtems_timespec_to_ticks(
  * @param[in] ticks is the number of ticks to convert
  */
 
-RTEMS_INLINE_ROUTINE void rtems_timespec_from_ticks(
+static inline void rtems_timespec_from_ticks(
   uint32_t         ticks,
   struct timespec *time
 )
@@ -157,7 +157,7 @@ RTEMS_INLINE_ROUTINE void rtems_timespec_from_ticks(
  *
  * @return This method fills in @a result.
  */
-RTEMS_INLINE_ROUTINE void rtems_timespec_subtract(
+static inline void rtems_timespec_subtract(
   const struct timespec *start,
   const struct timespec *end,
   struct timespec       *result
@@ -179,7 +179,7 @@ RTEMS_INLINE_ROUTINE void rtems_timespec_subtract(
  *
  * @return This method fills in @a result.
  */
-RTEMS_INLINE_ROUTINE void rtems_timespec_divide_by_integer(
+static inline void rtems_timespec_divide_by_integer(
   const struct timespec *time,
   uint32_t               iterations,
   struct timespec       *result
@@ -201,7 +201,7 @@ RTEMS_INLINE_ROUTINE void rtems_timespec_divide_by_integer(
  *
  * @return This method fills in @a result.
  */
-RTEMS_INLINE_ROUTINE void rtems_timespec_divide(
+static inline void rtems_timespec_divide(
   const struct timespec *lhs,
   const struct timespec *rhs,
   uint32_t              *ival_percentage,
@@ -221,7 +221,7 @@ RTEMS_INLINE_ROUTINE void rtems_timespec_divide(
  * @param[in] _seconds is the seconds portion of the timespec
  * @param[in] _nanoseconds is the nanoseconds portion of the timespec
  */
-RTEMS_INLINE_ROUTINE void rtems_timespec_set(
+static inline void rtems_timespec_set(
   struct timespec *_time,
   time_t _seconds,
   uint32_t _nanoseconds
@@ -238,7 +238,7 @@ RTEMS_INLINE_ROUTINE void rtems_timespec_set(
  *
  * @param[in] _time points to the timespec instance to zero.
  */
-RTEMS_INLINE_ROUTINE void rtems_timespec_zero( 
+static inline void rtems_timespec_zero( 
   struct timespec *_time
 )
 {
@@ -254,7 +254,7 @@ RTEMS_INLINE_ROUTINE void rtems_timespec_zero(
  *
  * @return The seconds portion of @a _time.
  */
-RTEMS_INLINE_ROUTINE time_t rtems_timespec_get_seconds(
+static inline time_t rtems_timespec_get_seconds(
   struct timespec *_time
 )
 {
@@ -270,7 +270,7 @@ RTEMS_INLINE_ROUTINE time_t rtems_timespec_get_seconds(
  *
  * @return The nanoseconds portion of @a _time.
  */
-RTEMS_INLINE_ROUTINE uint32_t rtems_timespec_get_nanoseconds(
+static inline uint32_t rtems_timespec_get_nanoseconds(
   struct timespec *_time
 )
 {
@@ -288,7 +288,7 @@ RTEMS_INLINE_ROUTINE uint32_t rtems_timespec_get_nanoseconds(
  * @retval true @a _lhs is greater than @a _rhs.
  * @retval false @a _lhs is not greater than @a _rhs.
  */
-RTEMS_INLINE_ROUTINE bool rtems_timespec_greater_than(
+static inline bool rtems_timespec_greater_than(
   const struct timespec *_lhs,
   const struct timespec *_rhs
 )
@@ -306,7 +306,7 @@ RTEMS_INLINE_ROUTINE bool rtems_timespec_greater_than(
  * @retval true @a lhs is equal to @a rhs.
  * @retval false @a lhs is not equal to @a rhs.
  */
-RTEMS_INLINE_ROUTINE bool rtems_timespec_equal_to(
+static inline bool rtems_timespec_equal_to(
   const struct timespec *lhs,
   const struct timespec *rhs
 )

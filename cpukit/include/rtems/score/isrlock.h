@@ -172,7 +172,7 @@ typedef struct {
  * @param[out] context The ISR lock context.
  * @param level The ISR level.
  */
-RTEMS_INLINE_ROUTINE void _ISR_lock_Context_set_level(
+static inline void _ISR_lock_Context_set_level(
   ISR_lock_Context *context,
   ISR_Level         level
 )

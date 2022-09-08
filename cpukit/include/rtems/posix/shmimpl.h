@@ -50,7 +50,7 @@ extern "C" {
  * @{
  */
 
-RTEMS_INLINE_ROUTINE POSIX_Shm_Control *_POSIX_Shm_Allocate_unprotected( void )
+static inline POSIX_Shm_Control *_POSIX_Shm_Allocate_unprotected( void )
 {
   return (POSIX_Shm_Control *)
     _Objects_Allocate_unprotected( &_POSIX_Shm_Information );
@@ -61,14 +61,14 @@ RTEMS_INLINE_ROUTINE POSIX_Shm_Control *_POSIX_Shm_Allocate_unprotected( void )
  *
  * This routine frees a shm control block.
  */
-RTEMS_INLINE_ROUTINE void _POSIX_Shm_Free (
+static inline void _POSIX_Shm_Free (
   POSIX_Shm_Control *the_shm
 )
 {
   _Objects_Free( &_POSIX_Shm_Information, &the_shm->Object );
 }
 
-RTEMS_INLINE_ROUTINE POSIX_Shm_Control *_POSIX_Shm_Get_by_name(
+static inline POSIX_Shm_Control *_POSIX_Shm_Get_by_name(
   const char                *name,
   size_t                    *name_length_p,
   Objects_Get_by_name_error *error
@@ -82,7 +82,7 @@ RTEMS_INLINE_ROUTINE POSIX_Shm_Control *_POSIX_Shm_Get_by_name(
   );
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Shm_Update_atime(
+static inline void _POSIX_Shm_Update_atime(
   POSIX_Shm_Control *shm
 )
 {
@@ -91,7 +91,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Shm_Update_atime(
   shm->atime = now.tv_sec;
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Shm_Update_mtime_ctime(
+static inline void _POSIX_Shm_Update_mtime_ctime(
   POSIX_Shm_Control *shm
 )
 {

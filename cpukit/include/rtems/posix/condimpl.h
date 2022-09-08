@@ -82,7 +82,7 @@ static inline POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get(
   return (POSIX_Condition_variables_Control *) cond;
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Initialize(
+static inline void _POSIX_Condition_variables_Initialize(
   POSIX_Condition_variables_Control *the_cond,
   const pthread_condattr_t          *the_attr
 )
@@ -102,14 +102,14 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Initialize(
   the_cond->flags = flags;
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Destroy(
+static inline void _POSIX_Condition_variables_Destroy(
   POSIX_Condition_variables_Control *the_cond
 )
 {
   the_cond->flags = ~the_cond->flags;
 }
 
-RTEMS_INLINE_ROUTINE clockid_t _POSIX_Condition_variables_Get_clock(
+static inline clockid_t _POSIX_Condition_variables_Get_clock(
   unsigned long flags
 )
 {
@@ -120,7 +120,7 @@ RTEMS_INLINE_ROUTINE clockid_t _POSIX_Condition_variables_Get_clock(
   return CLOCK_REALTIME;
 }
 
-RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Condition_variables_Acquire(
+static inline Thread_Control *_POSIX_Condition_variables_Acquire(
   POSIX_Condition_variables_Control *the_cond,
   Thread_queue_Context              *queue_context
 )
@@ -140,7 +140,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Condition_variables_Acquire(
   return executing;
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Release(
+static inline void _POSIX_Condition_variables_Release(
   POSIX_Condition_variables_Control *the_cond,
   Thread_queue_Context              *queue_context
 )

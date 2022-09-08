@@ -61,7 +61,7 @@ extern "C" {
  *
  * @return The context of the scheduler.
  */
-RTEMS_INLINE_ROUTINE Scheduler_priority_Context *
+static inline Scheduler_priority_Context *
   _Scheduler_priority_Get_context( const Scheduler_Control *scheduler )
 {
   return (Scheduler_priority_Context *) _Scheduler_Get_context( scheduler );
@@ -74,7 +74,7 @@ RTEMS_INLINE_ROUTINE Scheduler_priority_Context *
  *
  * @return The scheduler node of @a the_thread.
  */
-RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Thread_get_node(
+static inline Scheduler_priority_Node *_Scheduler_priority_Thread_get_node(
   Thread_Control *the_thread
 )
 {
@@ -88,7 +88,7 @@ RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Thread_get_nod
  *
  * @return The priority node.
  */
-RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Node_downcast(
+static inline Scheduler_priority_Node *_Scheduler_priority_Node_downcast(
   Scheduler_Node *node
 )
 {
@@ -103,7 +103,7 @@ RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Node_downcast(
  * @param[out] ready_queues The ready queue to initialize.
  * @param maximum_priority The maximum priority in the ready queue.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
+static inline void _Scheduler_priority_Ready_queue_initialize(
   Chain_Control    *ready_queues,
   Priority_Control  maximum_priority
 )
@@ -124,7 +124,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
  * @param[in, out] ready_queue The ready queue.
  * @param[out] bit_map The priority bit map of the scheduler instance.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
+static inline void _Scheduler_priority_Ready_queue_enqueue(
   Chain_Node                     *node,
   Scheduler_priority_Ready_queue *ready_queue,
   Priority_bit_map_Control       *bit_map
@@ -145,7 +145,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
  * @param[in, out] ready_queue The ready queue.
  * @param[out] bit_map The priority bit map of the scheduler instance.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
+static inline void _Scheduler_priority_Ready_queue_enqueue_first(
   Chain_Node                     *node,
   Scheduler_priority_Ready_queue *ready_queue,
   Priority_bit_map_Control       *bit_map
@@ -164,7 +164,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
  * @param[in, out] ready_queue The ready queue.
  * @param[out] bit_map The priority bit map of the scheduler instance.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
+static inline void _Scheduler_priority_Ready_queue_extract(
   Chain_Node                     *node,
   Scheduler_priority_Ready_queue *ready_queue,
   Priority_bit_map_Control       *bit_map
@@ -188,7 +188,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
  * @param the_thread The thread of which the node will be extracted.
  * @param[in, out] The node which preserves the ready queue.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Extract_body(
+static inline void _Scheduler_priority_Extract_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -217,7 +217,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Extract_body(
  *
  * @return This method returns the first node.
  */
-RTEMS_INLINE_ROUTINE Chain_Node *_Scheduler_priority_Ready_queue_first(
+static inline Chain_Node *_Scheduler_priority_Ready_queue_first(
   Priority_bit_map_Control *bit_map,
   Chain_Control            *ready_queues
 )
@@ -235,7 +235,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Scheduler_priority_Ready_queue_first(
  *
  * @param scheduler is the scheduler.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Get_highest_ready(
+static inline Thread_Control *_Scheduler_priority_Get_highest_ready(
   const Scheduler_Control *scheduler
 )
 {
@@ -257,7 +257,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Get_highest_ready(
  * @param bit_map The priority bit map of the scheduler instance.
  * @param ready_queues The ready queues of the scheduler instance.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_update(
+static inline void _Scheduler_priority_Ready_queue_update(
   Scheduler_priority_Ready_queue *ready_queue,
   unsigned int                    new_priority,
   Priority_bit_map_Control       *bit_map,

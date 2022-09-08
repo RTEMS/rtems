@@ -54,7 +54,7 @@ extern "C" {
  * This implementation should be used by BSPs which provide exactly one memory
  * area via _Memory_Get() to implement _Workspace_Malloc_initialize_separate().
  */
-RTEMS_INLINE_ROUTINE Heap_Control *_Malloc_Initialize_for_one_area(
+static inline Heap_Control *_Malloc_Initialize_for_one_area(
   Heap_Control *heap
 )
 {

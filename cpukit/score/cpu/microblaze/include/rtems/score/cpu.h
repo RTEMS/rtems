@@ -264,7 +264,7 @@ void _CPU_ISR_Set_level( uint32_t level );
 
 uint32_t _CPU_ISR_Get_level( void );
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
   return ( level & MICROBLAZE_MSR_IE ) != 0;
 }
