@@ -66,14 +66,19 @@ static void _Per_CPU_Data_initialize( void )
   size = RTEMS_LINKER_SET_SIZE( _Per_CPU_Data );
 
   if ( size > 0 ) {
+    char                     *data_begin;
     const Memory_Information *mem;
     Per_CPU_Control          *cpu;
     uint32_t                  cpu_index;
     uint32_t                  cpu_max;
 
+    /* Prevent an out of bounds warning in the memcpy() below */
+    data_begin = RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data );
+    RTEMS_OBFUSCATE_VARIABLE( data_begin );
+
     mem = _Memory_Get();
     cpu = _Per_CPU_Get_by_index( 0 );
-    cpu->data = RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data );
+    cpu->data = data_begin;
 
     cpu_max = rtems_configuration_get_maximum_processors();
 
@@ -85,7 +90,7 @@ static void _Per_CPU_Data_initialize( void )
         _Internal_error( INTERNAL_ERROR_NO_MEMORY_FOR_PER_CPU_DATA );
       }
 
-      memcpy( cpu->data, RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data ), size);
+      memcpy( cpu->data, data_begin, size);
     }
   }
 }
