@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: deadlock
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the owner of the thread queue is enqueued on another thread queue
+  owned by a thread other than the calling thread, and so on, while the
+  owner of the last thread queue of this dependency chain is enqueued on a
+  thread queue which is not owned by a thread, the deadlock detection shall
+  return with no deadlock detected.
+type: requirement

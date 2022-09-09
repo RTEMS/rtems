@@ -1,0 +1,82 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Use two worker threads to provoke a deadlock detection involving a thread
+    queue with no owner.
+  action-code: |
+    TQReset( &ctx->tq_ctx );
+  checks:
+  - brief: |
+      Let blocker A obtain mutex A.
+    code: |
+      TQSend( &ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_A_OBTAIN );
+    links: []
+  - brief: |
+      Let blocker A block on a counting semaphore.
+    code: |
+      TQSend( &ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_D_OBTAIN );
+    links: []
+  - brief: |
+      Let blocker B block on mutex A.  The deadlock detection will stop since
+      blocker A blocks on the counting semaphore which has no owner.
+    code: |
+      TQSend( &ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_OBTAIN );
+    links:
+    - role: validation
+      uid: ../req/deadlock-no-owner
+  - brief: |
+      Clean up all used resources.
+    code: |
+      TQMutexRelease( &ctx->tq_ctx, TQ_MUTEX_D );
+      TQSend( &ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_A_RELEASE );
+      TQSend( &ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_RELEASE );
+    links: []
+  links: []
+test-brief: |
+  Tests special thread queue behaviour.
+test-context:
+- brief: |
+    This member contains the thread queue test context.
+  description: null
+  member: |
+    TQContext tq_ctx
+test-context-support: null
+test-description: null
+test-header: null
+test-includes: []
+test-local-includes:
+- tx-support.h
+- tx-thread-queue.h
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    SetSelfPriority( PRIO_NORMAL );
+    TQInitialize( &ctx->tq_ctx );
+
+    /* Replace mutex D with a counting semaphore */
+    DeleteMutex( ctx->tq_ctx.mutex_id[ TQ_MUTEX_D ] );
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'C', 'S', 'E', 'M' ),
+      0,
+      RTEMS_COUNTING_SEMAPHORE | RTEMS_PRIORITY,
+      0,
+      &ctx->tq_ctx.mutex_id[ TQ_MUTEX_D ]
+    );
+    T_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-score-tq.c
+test-teardown:
+  brief: null
+  code: |
+    TQDestroy( &ctx->tq_ctx );
+    RestoreRunnerPriority();
+  description: null
+type: test-case
