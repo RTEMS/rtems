@@ -392,7 +392,7 @@ static void DoAction( void *ctx_in )
   );
 }
 
-static void WorkerTask( unsigned int argument )
+static void WorkerTask( rtems_task_argument argument )
 {
   Context *ctx = (Context *) argument;
   if ( ctx != NULL ) {
