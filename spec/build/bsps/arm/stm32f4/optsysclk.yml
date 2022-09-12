@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 16000000
-default-by-variant:
-- value: 8000000
-  variants:
-  - arm/stm32f105rc
+default:
+- enabled-by: arm/stm32f105rc
+  value: 8000000
+- enabled-by: true
+  value: 16000000
 description: |
   SYSCLK frequency in Hz
 enabled-by: true

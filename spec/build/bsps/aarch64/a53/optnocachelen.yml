@@ -7,8 +7,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
-default: 0x00100000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x00100000
 description: |
   length of nocache RAM region
 enabled-by: true

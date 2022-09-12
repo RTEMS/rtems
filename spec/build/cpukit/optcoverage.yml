@@ -6,8 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant: []
+default:
+- enabled-by: true
+  value: false
 description: |
   Enable the code and branch coverage support.
 enabled-by: true

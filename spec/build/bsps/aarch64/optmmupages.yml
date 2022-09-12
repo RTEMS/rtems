@@ -8,8 +8,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research (OAR)
-default: 0x00000040
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x00000040
 description: |
   Defines the number of MMU translation table pages to provide.
 enabled-by: true

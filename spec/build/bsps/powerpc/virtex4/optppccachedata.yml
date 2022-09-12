@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant: []
+default:
+- enabled-by: true
+  value: true
 description: |
   If defined, then the PowerPC specific code in RTEMS will use data cache instructions to optimize the context switch code.  This code can conflict with debuggers or emulators.  It is known to break the Corelis PowerPC emulator with at least some combinations of PowerPC 603e revisions and emulator versions.  The BSP actually contains the call that enables this.
 enabled-by: true

@@ -5,20 +5,16 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 8000000
-default-by-variant:
-- value: 40000000
-  variants:
+default:
+- enabled-by:
   - powerpc/gwlcfm
-- value: 40000000
-  variants:
   - powerpc/mpc5643l_evb
-- value: 25000000
-  variants:
-  - powerpc/mpc5668g
-- value: 40000000
-  variants:
   - powerpc/mpc5674fevb
+  value: 40000000
+- enabled-by: powerpc/mpc5668g
+  value: 25000000
+- enabled-by: true
+  value: 8000000
 description: |
   None
 enabled-by: true

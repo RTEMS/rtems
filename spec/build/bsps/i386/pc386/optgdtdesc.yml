@@ -15,8 +15,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0
 description: |
   Defines how many descriptors in GDT may be allocated for application or driver usage.
 enabled-by: true

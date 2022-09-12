@@ -26,8 +26,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: is42s16100e-7bli
-default-by-variant: []
+default:
+- enabled-by: true
+  value: is42s16100e-7bli
 description: |
   SDRAM variant. Known chips are "is42s16100e-7bli", "is42s16320f-7bl",
   "mt48lc16m16a2p-6a". You can also set this to "custom-<RAM_SIZE>" (for example

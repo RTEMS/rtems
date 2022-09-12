@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-default: ( GPIO_PIN_8 | GPIO_PIN_9 )
-default-by-variant: []
+default:
+- enabled-by: true
+  value: ( GPIO_PIN_8 | GPIO_PIN_9 )
 description: |
   GPIO pins used for the USART3 pin configuration.
 enabled-by: true

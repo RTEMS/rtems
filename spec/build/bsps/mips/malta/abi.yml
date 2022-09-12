@@ -7,10 +7,11 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -march=24kf1_1
-- -Wa,-xgot
-- -G0
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -march=24kf1_1
+  - -Wa,-xgot
+  - -G0
 description: |
   ABI flags
 enabled-by: true

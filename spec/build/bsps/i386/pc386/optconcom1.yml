@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant: []
+default:
+- enabled-by: true
+  value: false
 description: |
   Determines, whether the console will be associated with the standard VGA display or with the COM1 serial port.  Currently only the VGA display and COM1 support printk.
 enabled-by: true

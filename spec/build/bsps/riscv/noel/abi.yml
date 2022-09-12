@@ -7,38 +7,34 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -march=rv32ima
-- -mabi=ilp32
-default-by-variant:
-- value:
+- enabled-by: riscv/noel64imafdc
+  value:
   - -march=rv64imafdc
   - -mabi=lp64d
-  variants:
-  - riscv/noel64imafdc
-- value:
+- enabled-by: riscv/noel64imafd
+  value:
   - -march=rv64imafd
   - -mabi=lp64d
-  variants:
-  - riscv/noel64imafd
-- value:
+- enabled-by: riscv/noel64imac
+  value:
   - -march=rv64imac
   - -mabi=lp64
-  variants:
-  - riscv/noel64imac
-- value:
+- enabled-by: []
+  value:
   - -march=rv64im
   - -mabi=lp64
-  variants: []
-- value:
+- enabled-by: riscv/noel32imafd
+  value:
   - -march=rv32imafd
   - -mabi=ilp32d
-  variants:
-  - riscv/noel32imafd
-- value:
+- enabled-by: riscv/noel32im
+  value:
   - -march=rv32im
   - -mabi=ilp32
-  variants:
-  - riscv/noel32im
+- enabled-by: true
+  value:
+  - -march=rv32ima
+  - -mabi=ilp32
 description: |
   ABI flags
 enabled-by: true

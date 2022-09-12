@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 1
-default-by-variant:
-- value: 2
-  variants:
-  - powerpc/mpc5674fevb
+default:
+- enabled-by: powerpc/mpc5674fevb
+  value: 2
+- enabled-by: true
+  value: 1
 description: |
   system clock divider
 enabled-by: true

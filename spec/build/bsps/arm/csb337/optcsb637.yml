@@ -5,14 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
+default:
+- enabled-by:
   - arm/kit637_v6
-- value: true
-  variants:
   - arm/csb637
+  value: true
+- enabled-by: true
+  value: false
 description: |
   If defined, this indicates that the BSP is being built for the csb637 variant.
 enabled-by: true

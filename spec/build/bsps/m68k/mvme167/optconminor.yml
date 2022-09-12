@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant: []
+default:
+- enabled-by: true
+  value: true
 description: |
   Port to use for the RTEMS console.  0 - /dev/tty0, Serial Port 1/Console on the MVME712M.  1 - /dev/tty1, Serial Port 2/TTY01 on the MVME712M.  2 - /dev/tty2, Serial Port 3 on the MVME712M.  3 - /dev/tty3, Serial Port 4 on the MVME712M.
 enabled-by: true

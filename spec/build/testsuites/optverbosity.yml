@@ -16,8 +16,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: Normal
-default-by-variant: []
+default:
+- enabled-by: true
+  value: Normal
 description: |
   Sets the test verbosity of the RTEMS Test Framework.  Valid values are
   "Verbose", "Normal", and "Quiet".  For normal test runs you can use a

@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: CONS_CHN_SMC1
-default-by-variant: []
+default:
+- enabled-by: true
+  value: CONS_CHN_SMC1
 description: |
   (BSP--console driver) Must be defined to be one of CONS_CHN_SMC1, CONS_CHN_SMC2, CONS_CHN_SCC1, CONS_CHN_SCC2, CONS_CHN_SCC3, or CONS_CHN_SCC4.  Determines which device will be registered as /dev/console.
 enabled-by: true

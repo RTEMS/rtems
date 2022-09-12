@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
-default: false
-default-by-variant: []
+default:
+- enabled-by: true
+  value: false
 description: |
   If set to true, and AARCH64_GENERIC_TIMER_USE_VIRTUAL is false, then
   the clock driver uses the Physical Secure Timer of the AARCH64

@@ -203,11 +203,11 @@ class Item(object):
     def get_enabled_by(self):
         return self.data["enabled-by"]
 
-    def defaults(self, enable, variant, family):
-        if _is_enabled(enable, self.get_enabled_by()):
+    def defaults(self, enabled):
+        if _is_enabled(enabled, self.get_enabled_by()):
             for p in self.links():
-                p.defaults(enable, variant, family)
-            self.do_defaults(variant, family)
+                p.defaults(enabled)
+            self.do_defaults(enabled)
 
     def configure(self, conf, cic):
         if _is_enabled(conf.env.ENABLE, self.get_enabled_by()):
@@ -223,7 +223,7 @@ class Item(object):
                 p.build(bld, bic)
             self.do_build(bld, bic)
 
-    def do_defaults(self, variant, family):
+    def do_defaults(self, enabled):
         return
 
     def prepare_configure(self, conf, cic):
@@ -750,25 +750,12 @@ class OptionItem(Item):
     def __init__(self, uid, data):
         super(OptionItem, self).__init__(uid, data)
 
-    @staticmethod
-    def _is_variant(variants, variant):
-        for pattern in variants:
-            if re.match(pattern + "$", variant):
-                return True
-        return False
-
-    def default_value(self, variant, family):
-        value = self.data["default"]
-        for default in self.data["default-by-variant"]:
-            if OptionItem._is_variant(default["variants"], variant):
+    def default_value(self, enabled):
+        value = None
+        for default in self.data["default"]:
+            if _is_enabled(enabled, default["enabled-by"]):
                 value = default["value"]
                 break
-        else:
-            family = "bsps/" + family
-            for default in self.data["default-by-variant"]:
-                if OptionItem._is_variant(default["variants"], family):
-                    value = default["value"]
-                    break
         if value is None:
             return value
         if isinstance(value, list):
@@ -777,8 +764,8 @@ class OptionItem(Item):
             return value
         return self.data["format"].format(value)
 
-    def do_defaults(self, variant, family):
-        value = self.default_value(variant, family)
+    def do_defaults(self, enabled):
+        value = self.default_value(enabled)
         if value is None:
             return
         description = self.data["description"]
@@ -961,7 +948,7 @@ class OptionItem(Item):
             value = cic.cp.getboolean(conf.variant, name)
             cic.add_option(name)
         except configparser.NoOptionError:
-            value = self.default_value(conf.env.ARCH_BSP, conf.env.ARCH_FAMILY)
+            value = self.default_value(conf.env.ENABLE)
         except ValueError as ve:
             conf.fatal("Invalid value for configuration option {}: {}".format(
                 name, ve))
@@ -976,7 +963,7 @@ class OptionItem(Item):
             value = cic.cp.get(conf.variant, name)
             cic.add_option(name)
         except configparser.NoOptionError:
-            value = self.default_value(conf.env.ARCH_BSP, conf.env.ARCH_FAMILY)
+            value = self.default_value(conf.env.ENABLE)
             if value is None:
                 return value
         try:
@@ -993,7 +980,7 @@ class OptionItem(Item):
             cic.add_option(name)
             value = no_unicode(value)
         except configparser.NoOptionError:
-            value = self.default_value(conf.env.ARCH_BSP, conf.env.ARCH_FAMILY)
+            value = self.default_value(conf.env.ENABLE)
         return value
 
     def _get_string_command_line(self, conf, cic, value, arg):
@@ -1661,9 +1648,10 @@ def bspdefaults(ctx):
 COMPILER = {}""".format(variant, compiler))
                 enable = [compiler, arch, variant]
                 bsp_item = bsps[arch][bsp]
-                family = arch + "/" + bsp_item.data["family"]
-                items[top_group].defaults(enable, variant, family)
-                bsp_item.defaults(enable, variant, family)
+                family = "bsps/" + arch + "/" + bsp_item.data["family"]
+                enabled = [compiler, arch, family, variant]
+                items[top_group].defaults(enabled)
+                bsp_item.defaults(enabled)
     if first:
         no_matches_error(ctx, white_list)
 

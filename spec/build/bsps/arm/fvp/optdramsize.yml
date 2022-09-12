@@ -7,11 +7,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x02000000
-default-by-variant:
-- value: 0x01fffc00
-  variants:
-  - arm/fvp_cortex_r52
+default:
+- enabled-by: arm/fvp_cortex_r52
+  value: 0x01fffc00
+- enabled-by: true
+  value: 0x02000000
 description: |
   Defines the size in bytes of the DRAM.  Increasing the size may increase the
   startup time of the FVP.  The size must take the size of the NULL pointer

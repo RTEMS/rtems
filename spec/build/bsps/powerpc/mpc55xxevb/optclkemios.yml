@@ -5,17 +5,15 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 23
-default-by-variant:
-- value: null
-  variants:
+default:
+- enabled-by:
   - powerpc/mpc5643l_evb
-- value: null
-  variants:
   - powerpc/mpc5668g
-- value: 31
-  variants:
-  - powerpc/mpc5674fevb
+  value: null
+- enabled-by: powerpc/mpc5674fevb
+  value: 31
+- enabled-by: true
+  value: 23
 description: |
   selects the eMIOS channel for the RTEMS system tick (the default is the last channel)
 enabled-by: true

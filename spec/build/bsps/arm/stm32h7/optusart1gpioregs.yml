@@ -5,17 +5,18 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-default: GPIOD
-default-by-variant:
-- value: GPIOA
-  variants:
+default:
+- enabled-by:
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
   - arm/stm32h7b3i-dk
-- value: GPIOB
-  variants:
+  value: GPIOA
+- enabled-by:
   - arm/stm32h757i-eval
   - arm/stm32h757i-eval-m4
+  value: GPIOB
+- enabled-by: true
+  value: GPIOD
 description: |
   GPIO registers used for the USART1 pin configuration.
 enabled-by: true

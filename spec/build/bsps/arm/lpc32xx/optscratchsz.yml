@@ -5,13 +5,14 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
-default-by-variant:
-- value: 4096
-  variants:
+default:
+- enabled-by:
   - arm/lpc32xx_mzx
   - arm/lpc32xx_mzx_stage_1
   - arm/lpc32xx_mzx_stage_2
+  value: 4096
+- enabled-by: true
+  value: 0
 description: |
   size of scratch area
 enabled-by: true

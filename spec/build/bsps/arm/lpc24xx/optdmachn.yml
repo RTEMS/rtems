@@ -5,10 +5,8 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 2
-default-by-variant:
-- value: 8
-  variants:
+default:
+- enabled-by:
   - arm/lpc1768_mbed
   - arm/lpc1768_mbed_ahb_ram
   - arm/lpc1768_mbed_ahb_ram_eth
@@ -16,10 +14,11 @@ default-by-variant:
   - arm/lpc17xx_ea_rom_int
   - arm/lpc17xx_plx800_ram
   - arm/lpc17xx_plx800_rom_int
-- value: 8
-  variants:
   - arm/lpc40xx_ea_ram
   - arm/lpc40xx_ea_rom_int
+  value: 8
+- enabled-by: true
+  value: 2
 description: |
   DMA channel count
 enabled-by: true

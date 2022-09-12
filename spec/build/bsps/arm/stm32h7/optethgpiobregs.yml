@@ -5,11 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-default: null
-default-by-variant:
-- value: GPIO_PIN_13
-  variants:
-  - arm/nucleo-h743zi
+default:
+- enabled-by: arm/nucleo-h743zi
+  value: GPIO_PIN_13
 description: |
   GPIO B pins used for the ETH pin configuration.
 enabled-by: true

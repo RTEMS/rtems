@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant: []
+default:
+- enabled-by: true
+  value: false
 description: |
   Whether to copy data from ROM to RAM in start.S
 enabled-by: true

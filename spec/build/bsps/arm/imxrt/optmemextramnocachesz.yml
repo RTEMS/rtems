@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00100000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x00100000
 description: |
   Size of the nocache area at the end of the external RAM in bytes.  Must not be
   bigger than IMXRT_MEMORY_EXTRAM_SIZE.

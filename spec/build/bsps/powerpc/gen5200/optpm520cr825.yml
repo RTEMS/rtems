@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/pm520_cr825
+default:
+- enabled-by: powerpc/pm520_cr825
+  value: true
+- enabled-by: true
+  value: false
 description: |
   enable settings for PM520 CR825
 enabled-by: true

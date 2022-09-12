@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/mcp750
+default:
+- enabled-by: powerpc/mcp750
+  value: true
+- enabled-by: true
+  value: false
 description: |
   Define when mpc750 -- undefined for others
 enabled-by: true

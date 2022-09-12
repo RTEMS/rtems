@@ -7,8 +7,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mbe32
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -mbe32
 description: |
   TMS570-specific flags passed to the linker.
 enabled-by: true

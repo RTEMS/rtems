@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/gwlcfm
+default:
+- enabled-by: powerpc/gwlcfm
+  value: true
+- enabled-by: true
+  value: false
 description: |
   if defined, use custom settings for GWLCFM board
 enabled-by: true

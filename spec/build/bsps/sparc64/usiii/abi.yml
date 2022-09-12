@@ -7,10 +7,11 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -DSUN4U
-- -DUS3
-- -mcpu=ultrasparc3
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -DSUN4U
+  - -DUS3
+  - -mcpu=ultrasparc3
 description: |
   ABI flags
 enabled-by: true

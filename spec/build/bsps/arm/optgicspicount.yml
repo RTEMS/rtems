@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 64
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 64
 description: |
   Defines the count of Shared Peripheral Interrupts (SPIs) supported by the
   interrupt controller.

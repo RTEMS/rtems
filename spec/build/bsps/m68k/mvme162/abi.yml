@@ -7,9 +7,10 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mcpu=68040
-- -msoft-float
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -mcpu=68040
+  - -msoft-float
 description: |
   ABI flags
 enabled-by: true

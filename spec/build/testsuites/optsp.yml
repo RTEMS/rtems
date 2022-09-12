@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant: []
+default:
+- enabled-by: true
+  value: false
 description: |
   Build the single-processor test programs (may be also enabled by BUILD_TESTS)
 enabled-by: true

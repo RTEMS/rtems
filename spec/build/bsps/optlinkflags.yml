@@ -6,8 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-default: []
-default-by-variant: []
+default:
+- enabled-by: true
+  value: []
 description: |
   Flags passed to the linker.
 enabled-by: true

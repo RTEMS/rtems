@@ -5,13 +5,14 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: USB_OTG_VBUS_POWER_WITH_CHARGE_PUMP
-  variants:
+default:
+- enabled-by:
   - arm/lpc32xx_mzx
   - arm/lpc32xx_mzx_stage_1
   - arm/lpc32xx_mzx_stage_2
+  value: USB_OTG_VBUS_POWER_WITH_CHARGE_PUMP
+- enabled-by: true
+  value: false
 description: |
   USB OTG transceiver VBUS policy
 enabled-by: true

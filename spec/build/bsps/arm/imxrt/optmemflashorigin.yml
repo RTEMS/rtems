@@ -6,8 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x60000000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x60000000
 description: |
   Origin of the external flash memory.  That can be for example a flash
   connected to FlexSPI or to SEMC.  The default value is for a HyperFlash

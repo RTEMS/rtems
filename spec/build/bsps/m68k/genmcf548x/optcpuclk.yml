@@ -5,14 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 100000000
-default-by-variant:
-- value: 132000000
-  variants:
-  - m68k/COBRA5475
-- value: 100000000
-  variants:
-  - m68k/m5484FireEngine
+default:
+- enabled-by: m68k/COBRA5475
+  value: 132000000
+- enabled-by: true
+  value: 100000000
 description: |
   The bus clock to be used inside the mcf54xx
 enabled-by: true

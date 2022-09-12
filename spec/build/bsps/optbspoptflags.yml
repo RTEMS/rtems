@@ -7,8 +7,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
-default: ${OPTIMIZATION_FLAGS}
-default-by-variant: []
+default:
+- enabled-by: true
+  value: ${OPTIMIZATION_FLAGS}
 description: |
   Optimization flags passed to C and C++ compilers for the BSP.
 enabled-by: true

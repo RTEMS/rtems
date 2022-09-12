@@ -5,13 +5,14 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant:
-- value: false
-  variants:
+default:
+- enabled-by:
   - arm/lm3s6965_qemu
   - arm/realview_pbx_a9_qemu
   - arm/xilinx_zynq_a9_qemu
+  value: false
+- enabled-by: true
+  value: true
 description: |
   enable instruction cache
 enabled-by: true

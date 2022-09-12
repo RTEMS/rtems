@@ -5,23 +5,19 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 5554
-default-by-variant:
-- value: 5516
-  variants:
-  - powerpc/gwlcfm
-- value: 5566
-  variants:
-  - powerpc/mpc5566evb
-- value: 5643
-  variants:
-  - powerpc/mpc5643l_evb
-- value: 5668
-  variants:
-  - powerpc/mpc5668g
-- value: 5674
-  variants:
-  - powerpc/mpc5674fevb
+default:
+- enabled-by: powerpc/gwlcfm
+  value: 5516
+- enabled-by: powerpc/mpc5566evb
+  value: 5566
+- enabled-by: powerpc/mpc5643l_evb
+  value: 5643
+- enabled-by: powerpc/mpc5668g
+  value: 5668
+- enabled-by: powerpc/mpc5674fevb
+  value: 5674
+- enabled-by: true
+  value: 5554
 description: |
   specifies the chip type in use (e.g. 5554 for MPC5554)
 enabled-by: true

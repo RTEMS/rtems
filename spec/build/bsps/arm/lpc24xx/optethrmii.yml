@@ -5,14 +5,15 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
+default:
+- enabled-by:
   - arm/lpc17xx_ea_ram
   - arm/lpc17xx_ea_rom_int
   - arm/lpc40xx_ea_ram
   - arm/lpc40xx_ea_rom_int
+  value: true
+- enabled-by: true
+  value: false
 description: |
   enable RMII for Ethernet
 enabled-by: true

@@ -7,9 +7,10 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -Dppc405
-- -mcpu=405
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -Dppc405
+  - -mcpu=405
 description: |
   ABI flags
 enabled-by: true

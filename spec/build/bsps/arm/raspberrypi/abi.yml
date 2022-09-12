@@ -7,16 +7,16 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -march=armv7-a
-- -mthumb
-- -mfpu=neon
-- -mfloat-abi=hard
-- -mtune=cortex-a7
-default-by-variant:
-- value:
+- enabled-by: arm/raspberrypi
+  value:
   - -mcpu=arm1176jzf-s
-  variants:
-  - arm/raspberrypi
+- enabled-by: true
+  value:
+  - -march=armv7-a
+  - -mthumb
+  - -mfpu=neon
+  - -mfloat-abi=hard
+  - -mtune=cortex-a7
 description: |
   ABI flags
 enabled-by: true

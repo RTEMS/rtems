@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
-default: bsp/microblaze-dtb.h
-default-by-variant: []
+default:
+- enabled-by: true
+  value: bsp/microblaze-dtb.h
 description: |
   the path to the header file containing the device tree binary. See the BSP
   documentation for more information.

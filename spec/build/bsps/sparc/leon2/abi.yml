@@ -7,13 +7,13 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mcpu=leon
-default-by-variant:
-- value:
+- enabled-by: sparc/at697f
+  value:
   - -mcpu=leon
   - -mfix-at697f
-  variants:
-  - sparc/at697f
+- enabled-by: true
+  value:
+  - -mcpu=leon
 description: |
   ABI flags
 enabled-by: true

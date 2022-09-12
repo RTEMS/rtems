@@ -5,10 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant:
-- value: false
-  variants: []
+default:
+- enabled-by: []
+  value: false
+- enabled-by: true
+  value: true
 description: |
   if defined, do low level initialization
 enabled-by: true

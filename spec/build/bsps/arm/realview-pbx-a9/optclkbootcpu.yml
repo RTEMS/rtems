@@ -5,13 +5,14 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
+default:
+- enabled-by:
   - arm/lm3s6965_qemu
   - arm/realview_pbx_a9_qemu
   - arm/xilinx_zynq_a9_qemu
+  value: true
+- enabled-by: true
+  value: false
 description: |
   If defined, then do the clock tick processing on the boot processor on behalf of all other processors.
 enabled-by: true

@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant: []
+default:
+- enabled-by: true
+  value: false
 description: |
   If defined, selects whether 'early_hw_init()' is called from 'start.S'; 'bsp_hw_init()' is always called from 'bspstart.c'
 enabled-by: true

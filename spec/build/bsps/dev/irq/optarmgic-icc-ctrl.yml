@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00000000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x00000000
 description: |
   Defines the initial value of the ICC_CTRL register of the ARM GIC CPU
   Interface.  The value is optional.  If it is not defined, then the register

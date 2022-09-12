@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 48
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 48
 description: |
   transmit eDMA channel for SMSC9218I network interface
 enabled-by: true

@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
-default-by-variant:
-- value: 1
-  variants:
-  - riscv/mpfs64imafdc
+default:
+- enabled-by: riscv/mpfs64imafdc
+  value: 1
+- enabled-by: true
+  value: 0
 description: |
   boot hartid (processor number) of risc-v cpu (default 0)
 enabled-by: riscv

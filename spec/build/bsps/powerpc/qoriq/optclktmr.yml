@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
-default-by-variant:
-- value: 4
-  variants:
-  - powerpc/qoriq_core_1
+default:
+- enabled-by: powerpc/qoriq_core_1
+  value: 4
+- enabled-by: true
+  value: 0
 description: |
   global timer used for system clock, 0..3 maps to A0..A3, and 4..7 maps to B0..B3
 enabled-by: true

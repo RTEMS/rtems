@@ -7,8 +7,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom
 default:
-- -mcpu=cortex-a72
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -mcpu=cortex-a72
 description: |
   ABI flags
 enabled-by: true

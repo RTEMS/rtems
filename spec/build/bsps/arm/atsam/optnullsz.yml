@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00000000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x00000000
 description: |
   Size of the NULL pointer protection area in bytes.  This memory area reduces
   the size of the ITCM available to the application.

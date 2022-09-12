@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x0001ff00
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x0001ff00
 description: |
   Size of the ITCM in bytes.  Note that these sizes depend on fuses or software
   settings done by a bootloader (together with DTCM and OCRAM).  The ITCM size

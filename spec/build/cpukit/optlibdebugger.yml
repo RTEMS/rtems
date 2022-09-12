@@ -5,8 +5,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 Chris Johns (chrisj@rtems.org)
-default: null
-default-by-variant: []
+default: []
 description: ''
 enabled-by:
 - aarch64

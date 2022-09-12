@@ -5,14 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: CONS_MODE_UNUSED
-default-by-variant:
-- value: CONS_MODE_POLLED
-  variants:
-  - powerpc/tqm8xx_stk8xx
-- value: CONS_MODE_IRQ
-  variants:
-  - powerpc/pghplus
+default:
+- enabled-by: powerpc/tqm8xx_stk8xx
+  value: CONS_MODE_POLLED
+- enabled-by: powerpc/pghplus
+  value: CONS_MODE_IRQ
+- enabled-by: true
+  value: CONS_MODE_UNUSED
 description: |
   (BSP--SMC1 UART IF mode) Must be defined if SMC1 is used as a tty (UART) channel. Set it to CONS_MODE_POLLED for polled operation, CONS_MODE_IRQ for interrupt driven (spooled) operation. Set it to CONS_MODE_UNUSED, if not used
 enabled-by: true

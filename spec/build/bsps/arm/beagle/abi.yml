@@ -7,8 +7,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mcpu=cortex-a8
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -mcpu=cortex-a8
 description: |
   ABI flags
 enabled-by: true

@@ -5,14 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 100000000
-default-by-variant:
-- value: 333333333
-  variants:
-  - arm/xilinx_zynq_zc702
-- value: 666666667
-  variants:
-  - arm/xilinx_zynq_zedboard
+default:
+- enabled-by: arm/xilinx_zynq_zc702
+  value: 333333333
+- enabled-by: arm/xilinx_zynq_zedboard
+  value: 666666667
+- enabled-by: true
+  value: 100000000
 description: |
   ARM Cortex-A9 MPCore PERIPHCLK clock frequency in Hz
 enabled-by: true

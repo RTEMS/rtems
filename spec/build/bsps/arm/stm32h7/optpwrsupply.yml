@@ -5,15 +5,16 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 Karel Gardas <karel@functional.vision>
-default: PWR_LDO_SUPPLY
-default-by-variant:
-- value: PWR_DIRECT_SMPS_SUPPLY
-  variants:
+default:
+- enabled-by:
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
   - arm/stm32h757i-eval
   - arm/stm32h757i-eval-m4
   - arm/stm32h7b3i-dk
+  value: PWR_DIRECT_SMPS_SUPPLY
+- enabled-by: true
+  value: PWR_LDO_SUPPLY
 description: |
   Board power supply mechanism configuration. WARNING: wrong configuration here
   may result in your board being unaccessible using ST-Link interface! Please

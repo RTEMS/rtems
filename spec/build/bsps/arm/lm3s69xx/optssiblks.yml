@@ -5,18 +5,17 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
-default-by-variant:
-- value: 2
-  variants:
-  - arm/lm3s3749
-- value: 1
-  variants:
+default:
+- enabled-by: arm/lm3s3749
+  value: 2
+- enabled-by:
   - arm/lm3s6965
   - arm/lm3s6965_qemu
-- value: 4
-  variants:
-  - arm/lm4f120
+  value: 1
+- enabled-by: arm/lm4f120
+  value: 4
+- enabled-by: true
+  value: 0
 description: |
   number of SSI blocks supported by MCU
 enabled-by: true

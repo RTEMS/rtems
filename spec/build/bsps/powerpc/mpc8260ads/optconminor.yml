@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: SCC2_MINOR
-default-by-variant: []
+default:
+- enabled-by: true
+  value: SCC2_MINOR
 description: |
   (BSP--console driver) Must be defined to be one of SMC1_MINOR, SMC2_MINOR, SCC2_MINOR, SCC3_MINOR, or SCC4_MINOR.  Determines which device will be registered as /dev/console.
 enabled-by: true

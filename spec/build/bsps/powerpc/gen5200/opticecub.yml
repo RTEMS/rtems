@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/icecube
+default:
+- enabled-by: powerpc/icecube
+  value: true
+- enabled-by: true
+  value: false
 description: |
   enable settings for IceCube
 enabled-by: true

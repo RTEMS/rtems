@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0xfff00100
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0xfff00100
 description: |
   This defines the base address of the exception table.  NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.
 enabled-by: true

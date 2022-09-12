@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: <xparameters_dflt.h>
-default-by-variant: []
+default:
+- enabled-by: true
+  value: <xparameters_dflt.h>
 description: |
   This defines the location of the hardware specific "xparameters.h" file.  in the file system. Specify an absolute path. Do not forget the double quotes
 enabled-by: true

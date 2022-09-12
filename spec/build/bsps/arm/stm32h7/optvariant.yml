@@ -15,19 +15,19 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: STM32H743xx
-default-by-variant:
-- value: STM32H7B3xxQ
-  variants:
-  - arm/stm32h7b3i-dk
-- value: STM32H757xx
-  variants:
+default:
+- enabled-by: arm/stm32h7b3i-dk
+  value: STM32H7B3xxQ
+- enabled-by:
   - arm/stm32h757i-eval
   - arm/stm32h757i-eval-m4
-- value: STM32H747xx
-  variants:
+  value: STM32H757xx
+- enabled-by:
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
+  value: STM32H747xx
+- enabled-by: true
+  value: STM32H743xx
 description: |
   Select the STM32H7 series chip variant out of STM32H742xx, STM32H743xx,
   STM32H745xx, STM32H747xx, STM32H750xx, STM32H753xx, STM32H755xx, STM32H757xx,

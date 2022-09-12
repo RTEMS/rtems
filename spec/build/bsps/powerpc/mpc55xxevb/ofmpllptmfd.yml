@@ -5,17 +5,15 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
-default-by-variant:
-- value: 99
-  variants:
-  - powerpc/gwlcfm
-- value: 111
-  variants:
-  - powerpc/mpc5668g
-- value: 66
-  variants:
-  - powerpc/mpc5674fevb
+default:
+- enabled-by: powerpc/gwlcfm
+  value: 99
+- enabled-by: powerpc/mpc5668g
+  value: 111
+- enabled-by: powerpc/mpc5674fevb
+  value: 66
+- enabled-by: true
+  value: 0
 description: |
   Must be defined to be the PLL multiplication factor for clock generation
 enabled-by: true

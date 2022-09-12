@@ -5,14 +5,15 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00000000
-default-by-variant:
-- value: 0x02000000
-  variants:
+default:
+- enabled-by:
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
   - arm/stm32h757i-eval
   - arm/stm32h757i-eval-m4
+  value: 0x02000000
+- enabled-by: true
+  value: 0x00000000
 description: |
   Size of the SDRAM 2 in bytes.
 enabled-by: true

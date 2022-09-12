@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - arm/smdk2410
+default:
+- enabled-by: arm/smdk2410
+  value: true
+- enabled-by: true
+  value: false
 description: |
   If defined, enable optons for the S3C2410 CPU model.
 enabled-by: true

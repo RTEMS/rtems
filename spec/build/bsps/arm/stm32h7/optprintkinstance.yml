@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: stm32h7_usart1_instance
-default-by-variant:
-- value: stm32h7_usart3_instance
-  variants:
-  - arm/nucleo-h743zi
+default:
+- enabled-by: arm/nucleo-h743zi
+  value: stm32h7_usart3_instance
+- enabled-by: true
+  value: stm32h7_usart1_instance
 description: |
   UART/USART instance used for printk() and getchark().
 enabled-by: true

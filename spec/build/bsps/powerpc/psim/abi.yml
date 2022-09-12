@@ -7,11 +7,12 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -Dppc603e
-- -meabi
-- -mcpu=603e
-- -msdata=sysv
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -Dppc603e
+  - -meabi
+  - -mcpu=603e
+  - -msdata=sysv
 description: |
   ABI flags
 enabled-by: true

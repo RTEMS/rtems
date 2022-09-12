@@ -7,8 +7,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
-default: 0x40600000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x40600000
 description: |
   base address of the AXI UART Lite
 enabled-by: true

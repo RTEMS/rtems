@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: linkcmds.flexspi
-default-by-variant: []
+default:
+- enabled-by: true
+  value: linkcmds.flexspi
 description: |
   The default linker command file.  Must be linkcmds.sdram, linkcmds.ocram or
   linkcmds.flexspi.

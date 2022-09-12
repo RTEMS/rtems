@@ -7,8 +7,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00000014
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x00000014
 description: ''
 enabled-by: true
 format: '{:#010x}'

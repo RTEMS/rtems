@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x0000ffff
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x0000ffff
 description: |
   Define to the desired timeout (in steps of 1/20 msec) to enable the watchdog.  Default is to disable the watchdog entirely.
 enabled-by: true

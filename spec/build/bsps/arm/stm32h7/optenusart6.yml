@@ -5,15 +5,16 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant:
-- value: false
-  variants:
+default:
+- enabled-by:
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
   - arm/stm32h757i-eval
   - arm/stm32h757i-eval-m4
   - arm/stm32h7b3i-dk
+  value: false
+- enabled-by: true
+  value: true
 description: |
   Enable USART6 device in console driver.
 enabled-by: true

@@ -5,27 +5,25 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 On-Line Applications Research (OAR)
-default: null
-default-by-variant:
-- value: arm/cortexr5
-  variants: []
-- value: microblaze
-  variants:
-  - bsps/microblaze/microblaze_fpga
-- value: arm/cortexa9
-  variants:
+default:
+- enabled-by: []
+  value: arm/cortexr5
+- enabled-by: bsps/microblaze/microblaze_fpga
+  value: microblaze
+- enabled-by:
   - bsps/arm/xilinx_zynq
   - bsps/arm/xilinx_zynqmp
-- value: arm/ARMv8/32bit
-  variants:
+  value: arm/cortexa9
+- enabled-by:
   - aarch64/xilinx_zynqmp_ilp32_qemu
   - aarch64/xilinx_zynqmp_ilp32_zu3eg
-- value: arm/ARMv8/64bit
-  variants:
+  value: arm/ARMv8/32bit
+- enabled-by:
   - aarch64/xilinx_zynqmp_lp64_cfc400x
   - aarch64/xilinx_zynqmp_lp64_qemu
   - aarch64/xilinx_zynqmp_lp64_zu3eg
   - bsps/aarch64/xilinx_versal
+  value: arm/ARMv8/64bit
 description: Set the Xilinx support path
 enabled-by: true
 format: '{}'

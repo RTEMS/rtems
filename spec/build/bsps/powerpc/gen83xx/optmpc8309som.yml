@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/mpc8309som
+default:
+- enabled-by: powerpc/mpc8309som
+  value: true
+- enabled-by: true
+  value: false
 description: |
   if defined, then use settings for the MPC8309SOM board
 enabled-by: true

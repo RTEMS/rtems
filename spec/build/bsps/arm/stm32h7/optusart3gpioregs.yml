@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-default: GPIOD
-default-by-variant: []
+default:
+- enabled-by: true
+  value: GPIOD
 description: |
   GPIO registers used for the USART3 pin configuration.
 enabled-by: true

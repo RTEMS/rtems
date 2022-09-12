@@ -7,8 +7,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
-default: 0x10000000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x10000000
 description: |
   length of memory area available to the BSP
 enabled-by: true

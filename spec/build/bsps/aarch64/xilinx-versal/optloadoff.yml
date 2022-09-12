@@ -7,11 +7,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
-default: 0x00000000
-default-by-variant:
-- value: 0x00008000
-  variants:
-  - aarch64/xilinx_versal_qemu
+default:
+- enabled-by: aarch64/xilinx_versal_qemu
+  value: 0x00008000
+- enabled-by: true
+  value: 0x00000000
 description: |
   offset of RAM region from memory area base
 enabled-by: true

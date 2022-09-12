@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x2c000000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x2c000000
 description: |
   Defines the base address of the GIC CPU Interface.
 enabled-by: true

@@ -7,9 +7,10 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mno-red-zone
-- -mcmodel=large
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -mno-red-zone
+  - -mcmodel=large
 description: |
   ABI flags
 enabled-by: true

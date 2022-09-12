@@ -6,8 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x04000000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x04000000
 description: |
   Size of the external flash area in bytes.  Has to be big enough to hold the
   i.MXRT initial vector table (IVT) and configuration information.  The sizes of

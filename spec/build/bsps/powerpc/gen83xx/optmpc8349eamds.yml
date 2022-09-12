@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/mpc8349eamds
+default:
+- enabled-by: powerpc/mpc8349eamds
+  value: true
+- enabled-by: true
+  value: false
 description: |
   if defined, then use settings for the MPC8349EAMDS board
 enabled-by: true

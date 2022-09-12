@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - arm/stm32f105rc
+default:
+- enabled-by: arm/stm32f105rc
+  value: true
+- enabled-by: true
+  value: false
 description: |
   Chip belongs to the STM32F10XXX family.
 enabled-by: true

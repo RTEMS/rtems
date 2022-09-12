@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant: []
+default:
+- enabled-by: true
+  value: true
 description: |
   Determines, whether RTEMS will try to use the primary IDE interface.  Disable it, if: - you have no primary IDE interface - or you have no disk attached to this interface - or you do not want to access disks attached to this interface
 enabled-by: true

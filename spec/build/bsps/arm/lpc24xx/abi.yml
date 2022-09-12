@@ -7,25 +7,26 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mcpu=arm7tdmi-s
-- -mthumb
-default-by-variant:
-- value:
-  - -mthumb
-  - -mcpu=cortex-m3
-  variants:
+- enabled-by:
   - arm/lpc17xx_ea_ram
   - arm/lpc17xx_ea_rom_int
   - arm/lpc17xx_plx800_ram
   - arm/lpc17xx_plx800_rom_int
-- value:
+  value:
+  - -mthumb
+  - -mcpu=cortex-m3
+- enabled-by:
+  - arm/lpc40xx_ea_ram
+  - arm/lpc40xx_ea_rom_int
+  value:
   - -mcpu=cortex-m4
   - -mthumb
   - -mfloat-abi=hard
   - -mfpu=auto
-  variants:
-  - arm/lpc40xx_ea_ram
-  - arm/lpc40xx_ea_rom_int
+- enabled-by: true
+  value:
+  - -mcpu=arm7tdmi-s
+  - -mthumb
 description: |
   ABI flags
 enabled-by: true

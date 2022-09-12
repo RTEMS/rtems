@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - m68k/COBRA5475
+default:
+- enabled-by: m68k/COBRA5475
+  value: true
+- enabled-by: true
+  value: false
 description: |
   If defined, we will not boot from RESET, but from Freescale DBug monitor.
 enabled-by: true

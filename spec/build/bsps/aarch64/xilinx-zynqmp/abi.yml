@@ -7,16 +7,17 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default:
-- -mcpu=cortex-a53
-- -mno-outline-atomics
-default-by-variant:
-- value:
+- enabled-by:
+  - aarch64/xilinx_zynqmp_ilp32_qemu
+  - aarch64/xilinx_zynqmp_ilp32_zu3eg
+  value:
   - -mcpu=cortex-a53
   - -mno-outline-atomics
   - -mabi=ilp32
-  variants:
-  - aarch64/xilinx_zynqmp_ilp32_qemu
-  - aarch64/xilinx_zynqmp_ilp32_zu3eg
+- enabled-by: true
+  value:
+  - -mcpu=cortex-a53
+  - -mno-outline-atomics
 description: |
   ABI flags
 enabled-by: true

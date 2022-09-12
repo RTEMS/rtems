@@ -7,8 +7,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- crD
-default-by-variant: []
+- enabled-by: true
+  value:
+  - crD
 description: |
   Flags passed to the library archiver
 enabled-by: true

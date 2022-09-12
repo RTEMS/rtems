@@ -5,14 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 2
-default-by-variant:
-- value: null
-  variants:
-  - riscv/frdme310arty
-- value: 1
-  variants:
-  - riscv/mpfs64imafdc
+default:
+- enabled-by: riscv/frdme310arty
+  value: null
+- enabled-by: riscv/mpfs64imafdc
+  value: 1
+- enabled-by: true
+  value: 2
 description: |
   maximum number of NS16550 devices supported by the console driver (2 by default)
 enabled-by: true

@@ -7,29 +7,26 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -march=rv32imafdc
-- -mabi=ilp32d
-default-by-variant:
-- value:
+- enabled-by: riscv/grv32imac
+  value:
   - -march=rv32imac
   - -mabi=ilp32
-  variants:
-  - riscv/grv32imac
-- value:
+- enabled-by: riscv/grv32im
+  value:
   - -march=rv32im
   - -mabi=ilp32
-  variants:
-  - riscv/grv32im
-- value:
+- enabled-by: riscv/grv32i
+  value:
   - -march=rv32i
   - -mabi=ilp32
-  variants:
-  - riscv/grv32i
-- value:
+- enabled-by: riscv/griscv
+  value:
   - -march=rv32imafd
   - -mabi=ilp32d
-  variants:
-  - riscv/griscv
+- enabled-by: true
+  value:
+  - -march=rv32imafdc
+  - -mabi=ilp32d
 description: |
   ABI flags
 enabled-by: true

@@ -7,13 +7,13 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mcpu=arm7tdmi
-- -mthumb
-default-by-variant:
-- value:
+- enabled-by: arm/rtl22xx
+  value:
   - -mcpu=arm7tdmi
-  variants:
-  - arm/rtl22xx
+- enabled-by: true
+  value:
+  - -mcpu=arm7tdmi
+  - -mthumb
 description: |
   ABI flags
 enabled-by: true

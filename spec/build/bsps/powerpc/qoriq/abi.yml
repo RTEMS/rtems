@@ -7,25 +7,24 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mcpu=8540
-- -msoft-float
-- -meabi
-- -msdata=sysv
-- -mstrict-align
-default-by-variant:
-- value:
+- enabled-by: powerpc/qoriq_e6500_64
+  value:
   - -mcpu=e6500
   - -m64
   - -mvrsave
-  variants:
-  - powerpc/qoriq_e6500_64
-- value:
+- enabled-by: powerpc/qoriq_e6500_32
+  value:
   - -mcpu=e6500
   - -m32
   - -mvrsave
   - -msdata=sysv
-  variants:
-  - powerpc/qoriq_e6500_32
+- enabled-by: true
+  value:
+  - -mcpu=8540
+  - -msoft-float
+  - -meabi
+  - -msdata=sysv
+  - -mstrict-align
 description: |
   ABI flags
 enabled-by: true

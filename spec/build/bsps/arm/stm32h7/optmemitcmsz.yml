@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x0000ff00
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x0000ff00
 description: |
   Size of the Instruction Tightly Coupled Memory (ITCM) in bytes.  The size
   must take the NULL pointer protection memory area into account

@@ -5,24 +5,23 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 72000000
-default-by-variant:
-- value: 96000000
-  variants:
+default:
+- enabled-by:
   - arm/lpc17xx_ea_ram
   - arm/lpc17xx_ea_rom_int
-- value: 96000000
-  variants:
   - arm/lpc40xx_ea_ram
   - arm/lpc40xx_ea_rom_int
-- value: 58982400
-  variants:
+  value: 96000000
+- enabled-by:
   - arm/lpc2362
   - arm/lpc23xx_tli800
-- value: 51612800
-  variants:
+  value: 58982400
+- enabled-by:
   - arm/lpc24xx_plx800_ram
   - arm/lpc24xx_plx800_rom_int
+  value: 51612800
+- enabled-by: true
+  value: 72000000
 description: |
   CPU clock in Hz
 enabled-by: true

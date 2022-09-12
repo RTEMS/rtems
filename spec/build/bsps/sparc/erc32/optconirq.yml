@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0
 description: |
   The erc32 console driver can operate in either polled or interrupt mode.  Under the simulator (especially when FAST_UART is defined), polled seems to operate better. It is common for a task to print a line (like the end of test message) and then exit.  In this case, the program returns control to the simulator command line before the program has even queued the output to the uart.  Thus sis has no chance of getting the data out.
 enabled-by: true

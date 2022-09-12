@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
-default: true
-default-by-variant: []
+default:
+- enabled-by: true
+  value: true
 description: |
   use interrupt driven mode for console
 enabled-by: true

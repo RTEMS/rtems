@@ -5,12 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
+default:
+- enabled-by:
   - arm/lpc24xx_ncs_rom_ext
   - arm/lpc24xx_ncs_rom_int
+  value: true
+- enabled-by: true
+  value: false
 description: |
   enable M29W160E configuration for EMC
 enabled-by: true

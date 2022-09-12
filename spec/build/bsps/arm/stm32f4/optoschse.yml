@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 8000000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 8000000
 description: |
   HSE oscillator frequency in Hz
 enabled-by: true

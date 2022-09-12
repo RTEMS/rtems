@@ -35,8 +35,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: null
-default-by-variant: []
+default: []
 description: ''
 enabled-by:
 - clang

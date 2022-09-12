@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x02000000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x02000000
 description: |
   Size of the external RAM in bytes.  An external ram can be for example be a
   SDRAM connected to SEMC or a HyperRAM connected to FlexSPI.  The size has to

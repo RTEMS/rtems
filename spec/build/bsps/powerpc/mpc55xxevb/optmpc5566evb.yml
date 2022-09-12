@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/mpc5566evb
+default:
+- enabled-by: powerpc/mpc5566evb
+  value: true
+- enabled-by: true
+  value: false
 description: |
   if defined, use custom settings for MPC5566EVB board
 enabled-by: true

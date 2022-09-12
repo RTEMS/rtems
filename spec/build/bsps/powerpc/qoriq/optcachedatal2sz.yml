@@ -5,12 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 262144
-default-by-variant:
-- value: 2097152
-  variants:
+default:
+- enabled-by:
   - powerpc/qoriq_e6500_32
   - powerpc/qoriq_e6500_64
+  value: 2097152
+- enabled-by: true
+  value: 262144
 description: |
   the L2 data cache size
 enabled-by: true

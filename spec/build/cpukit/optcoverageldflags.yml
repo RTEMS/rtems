@@ -7,15 +7,16 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -Wl,--wrap=_CPU_Fatal_halt
-- -Wl,--wrap=bsp_reset
-- -Wl,--start-group
-- -lrtemsbsp
-- -lrtemscpu
-- -lrtemstest
-- -lgcov
-- -Wl,--end-group
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -Wl,--wrap=_CPU_Fatal_halt
+  - -Wl,--wrap=bsp_reset
+  - -Wl,--start-group
+  - -lrtemsbsp
+  - -lrtemscpu
+  - -lrtemstest
+  - -lgcov
+  - -Wl,--end-group
 description: |
   Linker flags recommended for executables which contain modules with coverage
   information.

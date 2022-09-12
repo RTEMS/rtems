@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant: []
+default:
+- enabled-by: true
+  value: false
 description: |
   Determines, whether RTEMS will try to use the secondary IDE interface.  Enable it, if: - you have a secondary IDE interface - and you have at least one disk attached to this interface - and you do want to access disks attached to this interface
 enabled-by: true

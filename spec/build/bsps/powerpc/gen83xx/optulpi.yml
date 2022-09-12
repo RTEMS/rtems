@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/br_uid
+default:
+- enabled-by: powerpc/br_uid
+  value: true
+- enabled-by: true
+  value: false
 description: |
   the board has an ULPI PHY connected to the USB EHCI controller
 enabled-by: true

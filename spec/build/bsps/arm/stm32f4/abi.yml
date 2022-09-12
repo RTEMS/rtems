@@ -7,16 +7,16 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mcpu=cortex-m4
-- -mthumb
-- -mfloat-abi=hard
-- -mfpu=auto
-default-by-variant:
-- value:
+- enabled-by: arm/stm32f105rc
+  value:
   - -mthumb
   - -mcpu=cortex-m3
-  variants:
-  - arm/stm32f105rc
+- enabled-by: true
+  value:
+  - -mcpu=cortex-m4
+  - -mthumb
+  - -mfloat-abi=hard
+  - -mfpu=auto
 description: |
   ABI flags
 enabled-by: true

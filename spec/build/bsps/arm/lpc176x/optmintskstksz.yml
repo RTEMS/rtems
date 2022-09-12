@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 1024
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 1024
 description: |
   Suggested minimum task stack size in bytes
 enabled-by: true

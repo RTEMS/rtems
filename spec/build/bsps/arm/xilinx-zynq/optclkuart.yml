@@ -5,14 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 50000000
-default-by-variant:
-- value: 50000000
-  variants:
-  - arm/xilinx_zynq_zc702
-- value: 50000000
-  variants:
-  - arm/xilinx_zynq_zedboard
+default:
+- enabled-by: true
+  value: 50000000
 description: |
   Zynq UART clock frequency in Hz
 enabled-by: true

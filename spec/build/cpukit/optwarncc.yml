@@ -8,11 +8,12 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -Wmissing-prototypes
-- -Wimplicit-function-declaration
-- -Wstrict-prototypes
-- -Wnested-externs
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -Wmissing-prototypes
+  - -Wimplicit-function-declaration
+  - -Wstrict-prototypes
+  - -Wnested-externs
 description: |
   Warning flags passed to the C compiler
 enabled-by: true

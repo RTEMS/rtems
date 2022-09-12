@@ -7,22 +7,20 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -m4
-- -ml
-default-by-variant:
-- value:
+- enabled-by: sh/simsh2e
+  value:
   - -m2e
   - -ml
-  variants:
-  - sh/simsh2e
-- value:
+- enabled-by: sh/simsh2
+  value:
   - -m2
-  variants:
-  - sh/simsh2
-- value:
+- enabled-by: sh/simsh1
+  value:
   - -m1
-  variants:
-  - sh/simsh1
+- enabled-by: true
+  value:
+  - -m4
+  - -ml
 description: |
   ABI flags
 enabled-by: true

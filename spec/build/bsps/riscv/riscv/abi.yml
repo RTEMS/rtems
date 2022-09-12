@@ -7,67 +7,51 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -march=rv32imac
-- -mabi=ilp32
-default-by-variant:
-- value:
-  - -march=rv64imafdc
-  - -mabi=lp64d
-  - -mcmodel=medany
-  variants:
+- enabled-by:
   - riscv/mpfs64imafdc
-- value:
+  - riscv/rv64imafdc
+  value:
   - -march=rv64imafdc
   - -mabi=lp64d
   - -mcmodel=medany
-  variants:
-  - riscv/rv64imafdc
-- value:
+- enabled-by:
+  - riscv/rv64imafd
+  - riscv/rv64imafd
+  value:
   - -march=rv64imafd
   - -mabi=lp64d
   - -mcmodel=medany
-  variants:
-  - riscv/rv64imafd
-- value:
-  - -march=rv64imafd
-  - -mabi=lp64d
-  - -mcmodel=medany
-  variants:
-  - riscv/rv64imafd
-- value:
+- enabled-by: riscv/rv64imac
+  value:
   - -march=rv64imac
   - -mabi=lp64
   - -mcmodel=medany
-  variants:
-  - riscv/rv64imac
-- value: []
-  variants:
-  - riscv/rv32imafdc
-- value:
+- enabled-by: riscv/rv32imafdc
+  value: []
+- enabled-by: riscv/rv32imafd
+  value:
   - -march=rv32imafd
   - -mabi=ilp32d
-  variants:
-  - riscv/rv32imafd
-- value:
+- enabled-by: riscv/rv32imafc
+  value:
   - -march=rv32imafc
   - -mabi=ilp32f
-  variants:
-  - riscv/rv32imafc
-- value:
+- enabled-by: riscv/rv32im
+  value:
   - -march=rv32im
   - -mabi=ilp32
-  variants:
-  - riscv/rv32im
-- value:
+- enabled-by: riscv/rv32iac
+  value:
   - -march=rv32iac
   - -mabi=ilp32
-  variants:
-  - riscv/rv32iac
-- value:
+- enabled-by: riscv/rv32i
+  value:
   - -march=rv32i
   - -mabi=ilp32
-  variants:
-  - riscv/rv32i
+- enabled-by: true
+  value:
+  - -march=rv32imac
+  - -mabi=ilp32
 description: |
   ABI flags
 enabled-by: true

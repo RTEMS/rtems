@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 Karel Gardas <karel@functional.vision>
-default: FLASH_LATENCY_4
-default-by-variant:
-- value: FLASH_LATENCY_6
-  variants:
-  - arm/stm32h7b3i-dk
+default:
+- enabled-by: arm/stm32h7b3i-dk
+  value: FLASH_LATENCY_6
+- enabled-by: true
+  value: FLASH_LATENCY_4
 description: |
   Internal Flash latency
 enabled-by: true

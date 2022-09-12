@@ -6,8 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant: []
+default:
+- enabled-by: true
+  value: false
 description: |
   If defined, enables use of the Cirrus GD5446 controller rather than the controller utilizing Vesa Bios Extensions - real mode interface.  NOTE: This has only been tested on Qemu.
 enabled-by: true

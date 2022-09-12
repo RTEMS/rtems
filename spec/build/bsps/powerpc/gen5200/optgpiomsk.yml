@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x330f0f77
-default-by-variant:
-- value: 0x037f3f07
-  variants:
-  - powerpc/pm520_ze30
+default:
+- enabled-by: powerpc/pm520_ze30
+  value: 0x037f3f07
+- enabled-by: true
+  value: 0x330f0f77
 description: |
   Defines the bits cleared in the MPC5200 GPIOPCR register during
   initialization.  Must match the hardware requirements.  Must be consistent

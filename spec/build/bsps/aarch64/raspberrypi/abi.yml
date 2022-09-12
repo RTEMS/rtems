@@ -7,9 +7,10 @@ build-type: option
 copyrights:
 - Copyright (C) 2022 Mohd Noor Aman
 default:
-- -mcpu=cortex-a72
-- -march=armv8-a
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -mcpu=cortex-a72
+  - -march=armv8-a
 description: |
   ABI flags
 enabled-by: true

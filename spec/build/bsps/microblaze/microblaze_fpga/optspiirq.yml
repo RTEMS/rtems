@@ -6,8 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
-default: 3
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 3
 description: |
   IRQ number of the AXI SPI
 enabled-by: true

@@ -7,31 +7,28 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mcpu=603e
-default-by-variant:
-- value:
+- enabled-by: powerpc/qemuprep-altivec
+  value:
   - -mcpu=7400
   - -mmultiple
   - -mstrict-align
-  variants:
-  - powerpc/qemuprep-altivec
-- value:
+- enabled-by: powerpc/qemuprep
+  value:
   - -mcpu=powerpc
   - -mmultiple
   - -mstrict-align
-  variants:
-  - powerpc/qemuprep
-- value:
+- enabled-by: powerpc/mvme2307
+  value:
   - -mcpu=604
   - -mmultiple
   - -mstrict-align
   - -meabi
-  variants:
-  - powerpc/mvme2307
-- value:
+- enabled-by: powerpc/mcp750
+  value:
   - -mcpu=750
-  variants:
-  - powerpc/mcp750
+- enabled-by: true
+  value:
+  - -mcpu=603e
 description: |
   ABI flags
 enabled-by: true

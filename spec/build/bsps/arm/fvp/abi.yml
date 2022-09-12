@@ -7,11 +7,12 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mcpu=cortex-r52
-- -mthumb
-- -mfloat-abi=hard
-- -mfpu=auto
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -mcpu=cortex-r52
+  - -mthumb
+  - -mfloat-abi=hard
+  - -mfpu=auto
 description: |
   ABI flags
 enabled-by: true

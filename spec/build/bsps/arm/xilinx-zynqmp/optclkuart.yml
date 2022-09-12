@@ -5,11 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 100000000
-default-by-variant:
-- value: 100000000
-  variants:
-  - arm/xilinx_zynqmp_ultra96
+default:
+- enabled-by: true
+  value: 100000000
 description: |
   Zynq UART clock frequency in Hz
 enabled-by: true

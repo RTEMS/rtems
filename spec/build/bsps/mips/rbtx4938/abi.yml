@@ -7,10 +7,11 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mips3
-- -G0
-- -EL
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -mips3
+  - -G0
+  - -EL
 description: |
   ABI flags
 enabled-by: true

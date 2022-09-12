@@ -7,11 +7,12 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -Og
-- -g
-- -fdata-sections
-- -ffunction-sections
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -Og
+  - -g
+  - -fdata-sections
+  - -ffunction-sections
 description: |
   Default optimization flags for C and C++ compilers.
 enabled-by: true

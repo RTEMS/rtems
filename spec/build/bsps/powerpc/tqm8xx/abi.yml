@@ -7,13 +7,14 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -Dmpc860
-- -mcpu=860
-- -mstrict-align
-- -fno-strict-aliasing
-- -meabi
-- -msdata=sysv
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -Dmpc860
+  - -mcpu=860
+  - -mstrict-align
+  - -fno-strict-aliasing
+  - -meabi
+  - -msdata=sysv
 description: |
   ABI flags
 enabled-by: true

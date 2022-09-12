@@ -5,12 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 1
-default-by-variant:
-- value: 2
-  variants:
+default:
+- enabled-by:
   - powerpc/qoriq_e6500_32
   - powerpc/qoriq_e6500_64
+  value: 2
+- enabled-by: true
+  value: 1
 description: |
   divider of the platform clock to get the clock most on-chip peripherals
 enabled-by: true

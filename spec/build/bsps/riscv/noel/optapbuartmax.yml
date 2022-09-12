@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 Cobham Gaisler AB
-default: 2
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 2
 description: |
   maximum number of APBUART devices supported by the console driver (2 by default)
 enabled-by: true

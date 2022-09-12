@@ -5,17 +5,15 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
-default-by-variant:
-- value: 10
-  variants:
-  - powerpc/gwlcfm
-- value: 6
-  variants:
-  - powerpc/mpc5668g
-- value: 5
-  variants:
-  - powerpc/mpc5674fevb
+default:
+- enabled-by: powerpc/gwlcfm
+  value: 10
+- enabled-by: powerpc/mpc5668g
+  value: 6
+- enabled-by: powerpc/mpc5674fevb
+  value: 5
+- enabled-by: true
+  value: 0
 description: |
   Must be defined to be the PLL predivider factor for clock generation
 enabled-by: true

@@ -6,8 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research (OAR)
-default: true
-default-by-variant: []
+default:
+- enabled-by: true
+  value: true
 description: |
   Enable the RTEMS Exception Extensions for manipulating and acting on exception
   frames.

@@ -5,12 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 2
-default-by-variant:
-- value: 24
-  variants:
+default:
+- enabled-by:
   - powerpc/qoriq_e6500_32
   - powerpc/qoriq_e6500_64
+  value: 24
+- enabled-by: true
+  value: 2
 description: |
   maximum virtual processor count
 enabled-by: true

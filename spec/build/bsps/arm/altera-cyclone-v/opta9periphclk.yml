@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant: []
+default:
+- enabled-by: true
+  value: false
 description: |
   define to set ARM Cortex-A9 MPCore PERIPHCLK clock frequency in Hz, otherwise alt_clk_freq_get() is used
 enabled-by: true

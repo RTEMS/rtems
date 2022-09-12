@@ -5,14 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
+default:
+- enabled-by:
   - arm/lpc17xx_ea_rom_int
-- value: true
-  variants:
   - arm/lpc40xx_ea_rom_int
+  value: true
+- enabled-by: true
+  value: false
 description: |
   enable ISSI IS42S32800B configuration for EMC
 enabled-by: true

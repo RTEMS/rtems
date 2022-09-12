@@ -7,8 +7,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
-default: 0x00008000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x00008000
 description: |
   offset of RAM region from memory area base
 enabled-by: true

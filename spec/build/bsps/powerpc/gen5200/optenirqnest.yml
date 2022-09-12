@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant:
-- value: false
-  variants:
-  - powerpc/icecube
+default:
+- enabled-by: powerpc/icecube
+  value: false
+- enabled-by: true
+  value: true
 description: |
   If set to !0, allow nested IRQ processing.
 enabled-by: true

@@ -5,12 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: null
-default-by-variant:
-- value: 0x01400201
-  variants:
+default:
+- enabled-by:
   - powerpc/qoriq_e6500_32
   - powerpc/qoriq_e6500_64
+  value: 0x01400201
 description: |
   initial BUCSR value
 enabled-by: true

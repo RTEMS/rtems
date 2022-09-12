@@ -7,8 +7,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -m1
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -m1
 description: |
   ABI flags
 enabled-by: true

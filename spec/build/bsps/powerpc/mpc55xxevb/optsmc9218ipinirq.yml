@@ -5,11 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: null
-default-by-variant:
-- value: 193
-  variants:
-  - powerpc/mpc5566evb
+default:
+- enabled-by: powerpc/mpc5566evb
+  value: 193
 description: |
   IRQ pin for SMSC9218I network interface
 enabled-by: true

@@ -7,13 +7,13 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default:
-- -mcpu=cortex-a53
-default-by-variant:
-- value:
+- enabled-by: aarch64/a53_ilp32_qemu
+  value:
   - -mcpu=cortex-a53
   - -mabi=ilp32
-  variants:
-  - aarch64/a53_ilp32_qemu
+- enabled-by: true
+  value:
+  - -mcpu=cortex-a53
 description: |
   ABI flags
 enabled-by: true

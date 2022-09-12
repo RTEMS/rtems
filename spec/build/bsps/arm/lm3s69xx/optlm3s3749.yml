@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - arm/lm3s3749
+default:
+- enabled-by: arm/lm3s3749
+  value: true
+- enabled-by: true
+  value: false
 description: |
   board has LM3S3749 MCU
 enabled-by: true

@@ -5,17 +5,15 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 63
-default-by-variant:
-- value: 127
-  variants:
+default:
+- enabled-by:
   - powerpc/mpc5643l_evb
-- value: 127
-  variants:
   - powerpc/mpc5566evb
-- value: 255
-  variants:
-  - powerpc/mpc5674fevb
+  value: 127
+- enabled-by: powerpc/mpc5674fevb
+  value: 255
+- enabled-by: true
+  value: 63
 description: |
   defines the maximum number of interrupt handlers
 enabled-by: true

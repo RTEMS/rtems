@@ -5,14 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00000000
-default-by-variant:
-- value: 0x00000011
-  variants:
-  - powerpc/mpc8309som
-- value: -0x0000001
-  variants:
-  - powerpc/br_uid
+default:
+- enabled-by: powerpc/mpc8309som
+  value: 0x00000011
+- enabled-by: powerpc/br_uid
+  value: -0x0000001
+- enabled-by: true
+  value: 0x00000000
 description: |
   PHY address of network interface 0
 enabled-by: true

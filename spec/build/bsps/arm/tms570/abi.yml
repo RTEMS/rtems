@@ -7,12 +7,13 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -march=armv7-r
-- -mthumb
-- -mbig-endian
-- -mfpu=vfpv3-d16
-- -mfloat-abi=hard
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -march=armv7-r
+  - -mthumb
+  - -mbig-endian
+  - -mfpu=vfpv3-d16
+  - -mfloat-abi=hard
 description: |
   ABI flags
 enabled-by: true

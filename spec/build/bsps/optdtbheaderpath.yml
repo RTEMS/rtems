@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
-default: false
-default-by-variant:
-- value: bsp/mpfs-dtb.h
-  variants:
-  - riscv/mpfs64imafdc
+default:
+- enabled-by: riscv/mpfs64imafdc
+  value: bsp/mpfs-dtb.h
+- enabled-by: true
+  value: false
 description: |
   the path to the header file containing the device tree binary. See the BSP
   documentation for more information.

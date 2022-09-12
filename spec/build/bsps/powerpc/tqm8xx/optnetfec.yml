@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/pghplus
+default:
+- enabled-by: powerpc/pghplus
+  value: true
+- enabled-by: true
+  value: false
 description: |
   If defined, then the BSP will use the Fast Ethernet Controller for 10/100MBit networking and used as primary networking interface.
 enabled-by: true

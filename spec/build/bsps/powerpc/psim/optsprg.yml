@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant: []
+default:
+- enabled-by: true
+  value: false
 description: |
   If defined, then the PowerPC specific code in RTEMS will use some of the special purpose registers to slightly optimize interrupt response time.  The use of these registers can conflict with other tools like debuggers.
 enabled-by: true

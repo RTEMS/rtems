@@ -5,16 +5,17 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: linkcmds.sdram
-default-by-variant:
-- value: linkcmds.flash
-  variants:
+default:
+- enabled-by:
   - arm/nucleo-h743zi
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
   - arm/stm32h757i-eval
   - arm/stm32h757i-eval-m4
   - arm/stm32h7b3i-dk
+  value: linkcmds.flash
+- enabled-by: true
+  value: linkcmds.sdram
 description: |
   The default linker command file.  Must be either linkcmds.flash,
   linkcmds.sdram, linkcmds.sram, linkcmds.sram_sdram

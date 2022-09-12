@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - m68k/gen68360_040
+default:
+- enabled-by: m68k/gen68360_040
+  value: true
+- enabled-by: true
+  value: false
 description: |
   If defined, use custom settings for the gen68360_040 BSP.
 enabled-by: true

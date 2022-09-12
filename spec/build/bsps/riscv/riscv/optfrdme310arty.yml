@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - riscv/frdme310arty
+default:
+- enabled-by: riscv/frdme310arty
+  value: true
+- enabled-by: true
+  value: false
 description: |
   enables support sifive Freedom E310 Arty board if defined to a non-zero value,otherwise it is disabled (disabled by default)
 enabled-by: true

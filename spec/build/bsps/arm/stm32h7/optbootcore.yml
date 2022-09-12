@@ -9,16 +9,17 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 Karel Gardas <karel@functional.vision>
-default: BOOT_CORE_DEFINE_NOT_NEEDED
-default-by-variant:
-- value: CORE_CM7
-  variants:
+default:
+- enabled-by:
   - arm/stm32h747i-disco
   - arm/stm32h757i-eval
-- value: CORE_CM4
-  variants:
+  value: CORE_CM7
+- enabled-by:
   - arm/stm32h747i-disco-m4
   - arm/stm32h757i-eval-m4
+  value: CORE_CM4
+- enabled-by: true
+  value: BOOT_CORE_DEFINE_NOT_NEEDED
 description: |
   Select the boot core. Possible values are CORE_CM7 and CORE_CM4
 enabled-by: true

@@ -6,8 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant: []
+default:
+- enabled-by: true
+  value: true
 description: |
   Defined by default. Enables use of the Vesa Bios Extensions - real mode interface, which enables graphical mode and introduce it upon bootup.
 enabled-by: true

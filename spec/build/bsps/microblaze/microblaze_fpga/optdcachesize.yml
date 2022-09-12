@@ -6,8 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
-default: 32768
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 32768
 description: |
   size of the data cache in bytes
 enabled-by: true

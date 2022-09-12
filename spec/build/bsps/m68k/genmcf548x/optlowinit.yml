@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - m68k/m5484FireEngine
+default:
+- enabled-by: m68k/m5484FireEngine
+  value: true
+- enabled-by: true
+  value: false
 description: |
   If defined, we will do all the low level init of the chip (like bus/memory...).
 enabled-by: true

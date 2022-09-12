@@ -5,12 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00000000
-default-by-variant:
-- value: null
-  variants:
+default:
+- enabled-by:
   - powerpc/qoriq_e6500_32
   - powerpc/qoriq_e6500_64
+  value: null
+- enabled-by: true
+  value: 0x00000000
 description: |
   initial SPEFSCR value
 enabled-by: true

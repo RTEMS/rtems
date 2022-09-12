@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00000000
-default-by-variant:
-- value: 0x80000040
-  variants:
-  - arm/lpc24xx_ncs_rom_ext
+default:
+- enabled-by: arm/lpc24xx_ncs_rom_ext
+  value: 0x80000040
+- enabled-by: true
+  value: 0x00000000
 description: |
   reset vector address for BSP start
 enabled-by: true

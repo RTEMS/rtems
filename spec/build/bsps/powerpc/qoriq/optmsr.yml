@@ -5,14 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x02000200
-default-by-variant:
-- value: 0x82002200
-  variants:
-  - powerpc/qoriq_e6500_64
-- value: 0x02002200
-  variants:
-  - powerpc/qoriq_e6500_32
+default:
+- enabled-by: powerpc/qoriq_e6500_64
+  value: 0x82002200
+- enabled-by: powerpc/qoriq_e6500_32
+  value: 0x02002200
+- enabled-by: true
+  value: 0x02000200
 description: |
   initial MSR value
 enabled-by: true

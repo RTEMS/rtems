@@ -6,10 +6,8 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant:
-- value: false
-  variants:
+default:
+- enabled-by:
   - aarch64/a53_ilp32_qemu
   - aarch64/a53_lp64_qemu
   - aarch64/a72_ilp32_qemu
@@ -24,6 +22,9 @@ default-by-variant:
   - powerpc/qemuppc
   - powerpc/qemuprep
   - powerpc/qemuprep-altivec
+  value: false
+- enabled-by: true
+  value: true
 description: |
   Enable instruction cache
 enabled-by: true

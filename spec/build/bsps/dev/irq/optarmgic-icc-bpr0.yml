@@ -5,10 +5,8 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00000002
-default-by-variant:
-- value: null
-  variants:
+default:
+- enabled-by:
   - aarch64/a53_ilp32_qemu
   - aarch64/a53_lp64_qemu
   - aarch64/a72_ilp32_qemu
@@ -22,6 +20,9 @@ default-by-variant:
   - aarch64/xilinx_zynqmp_lp64_cfc400x
   - aarch64/xilinx_zynqmp_lp64_qemu
   - aarch64/xilinx_zynqmp_lp64_zu3eg
+  value: null
+- enabled-by: true
+  value: 0x00000002
 description: |
   Defines the initial value of the ICC_BPR0 register of the ARM GIC CPU
   Interface.  The value is optional.  If it is not defined, then the register

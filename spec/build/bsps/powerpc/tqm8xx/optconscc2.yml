@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: CONS_MODE_UNUSED
-default-by-variant: []
+default:
+- enabled-by: true
+  value: CONS_MODE_UNUSED
 description: |
   (BSP--SCC2 UART IF mode) Must be defined if SCC2 is used as a tty (UART) channel. Set it to CONS_MODE_POLLED for polled operation, CONS_MODE_IRQ for interrupt driven (spooled) operation. Set it to CONS_MODE_UNUSED, if not used
 enabled-by: true

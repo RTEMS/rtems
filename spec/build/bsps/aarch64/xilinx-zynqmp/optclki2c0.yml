@@ -6,20 +6,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research (OAR)
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 111111111
-default-by-variant:
-- value: 111111111
-  variants:
-  - aarch64/xilinx_zynqmp_ilp32_qemu
-- value: 111111111
-  variants:
-  - aarch64/xilinx_zynqmp_ilp32_zu3eg
-- value: 111111111
-  variants:
-  - aarch64/xilinx_zynqmp_lp64_qemu
-- value: 111111111
-  variants:
-  - aarch64/xilinx_zynqmp_lp64_zu3eg
+default:
+- enabled-by: true
+  value: 111111111
 description: |
   ZynqMP i2c0 clock frequency in Hz. This is the frequency after the signal
   has been processed using the values passed to the I2C0_REF_CTRL register.

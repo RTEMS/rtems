@@ -5,12 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 12000000
-default-by-variant:
-- value: 3686400
-  variants:
+default:
+- enabled-by:
   - arm/lpc2362
   - arm/lpc23xx_tli800
+  value: 3686400
+- enabled-by: true
+  value: 12000000
 description: |
   main oscillator frequency in Hz
 enabled-by: true

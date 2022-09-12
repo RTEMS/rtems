@@ -9,8 +9,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -Wall
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -Wall
 description: |
   Warning flags passed to the C and C++ compiler
 enabled-by: true

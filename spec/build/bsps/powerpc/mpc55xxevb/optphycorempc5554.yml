@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/phycore_mpc5554
+default:
+- enabled-by: powerpc/phycore_mpc5554
+  value: true
+- enabled-by: true
+  value: false
 description: |
   if defined, use custom settings for phyCORE MPC5554 board
 enabled-by: true

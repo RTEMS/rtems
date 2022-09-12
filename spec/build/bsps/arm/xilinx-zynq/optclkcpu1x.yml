@@ -5,14 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 111111111
-default-by-variant:
-- value: 111111111
-  variants:
-  - arm/xilinx_zynq_zc702
-- value: 111111111
-  variants:
-  - arm/xilinx_zynq_zedboard
+default:
+- enabled-by: true
+  value: 111111111
 description: |
   Zynq cpu_1x clock frequency in Hz
 enabled-by: true

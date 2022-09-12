@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 Chris Johns <chris@contemporary.software>
-default: 99999001
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 99999001
 description: |
   Versal i2c0 clock frequency in Hz. This is the frequency after the signal
   has been processed using the values passed to the I2C0_REF_CTRL register.

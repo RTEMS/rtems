@@ -30,8 +30,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: null
-default-by-variant: []
+default: []
 description: ''
 enabled-by:
 - gcc

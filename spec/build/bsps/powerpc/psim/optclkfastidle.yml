@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - powerpc/psim
+default:
+- enabled-by: powerpc/psim
+  value: true
+- enabled-by: true
+  value: false
 description: |
   This sets a mode where the time runs as fast as possible when a clock ISR occurs while the IDLE thread is executing.  This can significantly reduce simulation times.
 enabled-by: true

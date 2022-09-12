@@ -7,16 +7,15 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mcpu32
-default-by-variant:
-- value:
+- enabled-by: m68k/gen68360_040
+  value:
   - -mcpu=68040
-  variants:
-  - m68k/gen68360_040
-- value:
+- enabled-by: m68k/gen68360
+  value:
   - -mcpu=cpu32
-  variants:
-  - m68k/gen68360
+- enabled-by: true
+  value:
+  - -mcpu32
 description: |
   ABI flags
 enabled-by: true

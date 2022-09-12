@@ -5,20 +5,17 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 8313
-default-by-variant:
-- value: 8309
-  variants:
+default:
+- enabled-by:
   - powerpc/mpc8309som
-- value: 8309
-  variants:
   - powerpc/br_uid
-- value: 8349
-  variants:
+  value: 8309
+- enabled-by:
   - powerpc/mpc8349eamds
-- value: 8349
-  variants:
   - powerpc/hsc_cm01
+  value: 8349
+- enabled-by: true
+  value: 8313
 description: |
   chip type of the MPC83XX family
 enabled-by: true

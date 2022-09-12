@@ -5,14 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant:
-- value: false
-  variants:
+default:
+- enabled-by:
   - powerpc/mpc8313erdb
-- value: false
-  variants:
   - powerpc/br_uid
+  value: false
+- enabled-by: true
+  value: true
 description: |
   enable interrupt nesting
 enabled-by: true

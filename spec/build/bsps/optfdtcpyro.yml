@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant: []
+default:
+- enabled-by: true
+  value: true
 description: |
   copy the FDT blob into the read-only load area via bsp_fdt_copy()
 enabled-by: true

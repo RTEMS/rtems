@@ -5,14 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
-default-by-variant:
-- value: 66
-  variants:
-  - powerpc/gwlcfm
-- value: null
-  variants:
-  - powerpc/mpc5643l_evb
+default:
+- enabled-by: powerpc/gwlcfm
+  value: 66
+- enabled-by: powerpc/mpc5643l_evb
+  value: null
+- enabled-by: true
+  value: 0
 description: |
   Must be defined to set the EMIOS prescaler
 enabled-by: true

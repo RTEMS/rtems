@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: /dev/i2c1.eeprom
-  variants:
-  - powerpc/gwlcfm
+default:
+- enabled-by: powerpc/gwlcfm
+  value: /dev/i2c1.eeprom
+- enabled-by: true
+  value: false
 description: |
   EEPROM device file path
 enabled-by: true

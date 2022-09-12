@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00001000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x00001000
 description: |
   Size of the image vector table, boot data structure, device configuration data
   and similar program image header information. Take a look at the i.MX RT1050

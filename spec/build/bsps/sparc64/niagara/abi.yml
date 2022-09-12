@@ -7,9 +7,10 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -DSUN4V
-- -mcpu=niagara
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -DSUN4V
+  - -mcpu=niagara
 description: |
   ABI flags
 enabled-by: true

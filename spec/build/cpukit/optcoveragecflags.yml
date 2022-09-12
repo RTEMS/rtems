@@ -7,10 +7,11 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- --coverage
-- -fprofile-info-section=.rtemsroset.gcov_info.content
-- -fprofile-update=atomic
-default-by-variant: []
+- enabled-by: true
+  value:
+  - --coverage
+  - -fprofile-info-section=.rtemsroset.gcov_info.content
+  - -fprofile-update=atomic
 description: |
   Compiler flags recommended for components which should generate coverage
   information.

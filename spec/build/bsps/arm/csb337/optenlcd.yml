@@ -6,11 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: false
-  variants:
-  - arm/kit637_v6
+default:
+- enabled-by: true
+  value: false
 description: |
   If defined, enable use of the SED1356 controller and LCD.
 enabled-by: true

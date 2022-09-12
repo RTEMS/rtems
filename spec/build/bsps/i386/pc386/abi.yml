@@ -7,34 +7,30 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -mtune=pentium4
-- -march=pentium4
-- -msse3
-default-by-variant:
-- value:
+- enabled-by: i386/pc686
+  value:
   - -mtune=pentiumpro
   - -march=pentium
-  variants:
-  - i386/pc686
-- value:
+- enabled-by: i386/pc586-sse
+  value:
   - -mtune=pentium
   - -march=pentium
   - -msse2
-  variants:
-  - i386/pc586-sse
-- value:
+- enabled-by: i386/pc586
+  value:
   - -mtune=pentium
   - -march=pentium
-  variants:
-  - i386/pc586
-- value:
+- enabled-by: i386/pc486
+  value:
   - -mtune=i486
-  variants:
-  - i386/pc486
-- value:
+- enabled-by: i386/pc386
+  value:
   - -mtune=i386
-  variants:
-  - i386/pc386
+- enabled-by: true
+  value:
+  - -mtune=pentium4
+  - -march=pentium4
+  - -msse3
 description: |
   ABI flags
 enabled-by: true

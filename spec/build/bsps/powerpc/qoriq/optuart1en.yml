@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant:
-- value: false
-  variants:
-  - powerpc/qoriq_core_1
+default:
+- enabled-by: powerpc/qoriq_core_1
+  value: false
+- enabled-by: true
+  value: true
 description: |
   use 1 to enable UART 1, otherwise use 0
 enabled-by: true

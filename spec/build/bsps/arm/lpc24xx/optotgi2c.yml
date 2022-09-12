@@ -5,16 +5,15 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00000000
-default-by-variant:
-- value: 0x0000005e
-  variants:
+default:
+- enabled-by:
   - arm/lpc17xx_ea_ram
   - arm/lpc17xx_ea_rom_int
-- value: 0x0000005e
-  variants:
   - arm/lpc40xx_ea_ram
   - arm/lpc40xx_ea_rom_int
+  value: 0x0000005e
+- enabled-by: true
+  value: 0x00000000
 description: |
   USB OTG transceiver I2C address used by USB stack
 enabled-by: true

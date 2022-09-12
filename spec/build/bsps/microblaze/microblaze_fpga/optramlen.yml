@@ -7,12 +7,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 On-Line Applications Research (OAR)
-default: 0x10000000
-default-by-variant:
-- value: 0x80000000
-  variants:
+default:
+- enabled-by:
   - microblaze/kcu105
   - microblaze/kcu105_qemu
+  value: 0x80000000
+- enabled-by: true
+  value: 0x10000000
 description: |
   length of memory area available to the BSP
 enabled-by: true

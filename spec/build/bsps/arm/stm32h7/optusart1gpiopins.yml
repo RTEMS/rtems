@@ -5,13 +5,14 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021-22 embedded brains GmbH (http://www.embedded-brains.de)
-default: ( GPIO_PIN_14 | GPIO_PIN_15 )
-default-by-variant:
-- value: ( GPIO_PIN_9 | GPIO_PIN_10 )
-  variants:
+default:
+- enabled-by:
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
   - arm/stm32h7b3i-dk
+  value: ( GPIO_PIN_9 | GPIO_PIN_10 )
+- enabled-by: true
+  value: ( GPIO_PIN_14 | GPIO_PIN_15 )
 description: |
   GPIO pins used for the USART1 pin configuration.
 enabled-by: true

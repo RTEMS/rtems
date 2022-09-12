@@ -8,8 +8,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -Wl,--gc-sections
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -Wl,--gc-sections
 description: |
   Flags passed to the linker at the end of the link command.
 enabled-by: true

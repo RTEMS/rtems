@@ -7,11 +7,12 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
 default:
-- -mlittle-endian
-- -mno-xl-soft-div
-- -mno-xl-soft-mul
-- -Wl,-EL
-default-by-variant: []
+- enabled-by: true
+  value:
+  - -mlittle-endian
+  - -mno-xl-soft-div
+  - -mno-xl-soft-mul
+  - -Wl,-EL
 description: |
   ABI flags
 enabled-by: true

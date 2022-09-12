@@ -5,14 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
+default:
+- enabled-by:
   - powerpc/qoriq_core_0
-- value: true
-  variants:
   - powerpc/qoriq_core_1
+  value: true
+- enabled-by: true
+  value: false
 description: |
   use 1 to enable UART 1 to Intercom bridge, otherwise use 0
 enabled-by: true

@@ -14,11 +14,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - arm/realview_pbx_a9_qemu
+default:
+- enabled-by: arm/realview_pbx_a9_qemu
+  value: true
+- enabled-by: true
+  value: false
 description: |
   If set to true, then the MMU is configured to use small pages (4KiB),
   otherwise it uses sections (1MiB).

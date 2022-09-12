@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant: []
+default:
+- enabled-by: true
+  value: true
 description: |
   Define to 1 to use interrupt-driven I/O with the Raspberry Pi SPI bus. If defined to other value the access will be polled-driven.
 enabled-by: true

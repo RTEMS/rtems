@@ -7,8 +7,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
-default: 0x80000000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x80000000
 description: |
   base address of the instruction cache
 enabled-by: true

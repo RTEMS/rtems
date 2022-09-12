@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: SMC2_MINOR
-default-by-variant: []
+default:
+- enabled-by: true
+  value: SMC2_MINOR
 description: |
   (BSP--console driver) Must be defined to be one of SMC1_MINOR, SMC2_MINOR, SCC2_MINOR, SCC3_MINOR, or SCC4_MINOR. Determines which device is used for output by printk(). If the port that printk() uses is also used for other I/O (e.g. if  PRINTK_MINOR == \$CONSOLE_MINOR), then both ports should use the same type of I/O, otherwise the drivers will likely conflict with each other.
 enabled-by: true

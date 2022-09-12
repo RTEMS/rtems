@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
-default-by-variant:
-- value: true
-  variants:
-  - arm/raspberrypi2
+default:
+- enabled-by: arm/raspberrypi2
+  value: true
+- enabled-by: true
+  value: false
 description: |
   Set if the BSP variant is Raspberry Pi 2.
 enabled-by: true

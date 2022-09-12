@@ -7,26 +7,23 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>
 default:
-- -mcpu=leon3
-default-by-variant:
-- value:
+- enabled-by: sparc/ut700
+  value:
   - -mcpu=leon3
   - -mfix-ut700
-  variants:
-  - sparc/ut700
-- value:
+- enabled-by: sparc/ut699
+  value:
   - -mcpu=leon
   - -mfix-ut699
-  variants:
-  - sparc/ut699
-- value:
+- enabled-by: sparc/gr712rc
+  value:
   - -mcpu=gr712rc
-  variants:
-  - sparc/gr712rc
-- value:
+- enabled-by: sparc/gr740
+  value:
   - -mcpu=gr740
-  variants:
-  - sparc/gr740
+- enabled-by: true
+  value:
+  - -mcpu=leon3
 description: |
   ABI flags
 enabled-by:

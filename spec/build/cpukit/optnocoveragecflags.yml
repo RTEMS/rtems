@@ -6,8 +6,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-default: []
-default-by-variant: []
+default:
+- enabled-by: true
+  value: []
 description: |
   Compiler flags recommended for components which should generate coverage
   information.

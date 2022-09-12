@@ -6,14 +6,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-default: 25000000
-default-by-variant:
-- value: 8000000
-  variants:
-  - arm/nucleo-h743zi
-- value: 24000000
-  variants:
-  - arm/stm32h7b3i-dk
+default:
+- enabled-by: arm/nucleo-h743zi
+  value: 8000000
+- enabled-by: arm/stm32h7b3i-dk
+  value: 24000000
+- enabled-by: true
+  value: 25000000
 description: |
   Frequency of the external high speed oscillator (HSE).
 enabled-by: true

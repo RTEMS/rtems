@@ -5,8 +5,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0x00001000
-default-by-variant: []
+default:
+- enabled-by: true
+  value: 0x00001000
 description: |
   Size of the flash configuration area at the start of the FlexSPI / SEMC flash
   in bytes. Either 4 KByte for FlexSPI NOR / SEMC NOR or 1 Kbyte for most other.

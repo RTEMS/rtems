@@ -5,14 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: null
-default-by-variant:
-- value: 3
-  variants:
-  - powerpc/mpc5643l_evb
-- value: 8
-  variants:
-  - powerpc/mpc5668g
+default:
+- enabled-by: powerpc/mpc5643l_evb
+  value: 3
+- enabled-by: powerpc/mpc5668g
+  value: 8
 description: |
   selects the PIT channel for the RTEMS system tick (the default is the last channel)
 enabled-by: true
