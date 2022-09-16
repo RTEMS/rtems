@@ -525,8 +525,10 @@ static void send_error (
 
     /*
      * Send it
+     *
+     * Ignoring result because error packets are sent once and maybe lost.
      */
-    sendto (tp->socket, (char *)&msg, len, 0, (struct sockaddr *)to, sizeof *to);
+    (void) sendto (tp->socket, (char *)&msg, len, 0, (struct sockaddr *)to, sizeof *to);
 }
 
 /*
@@ -552,11 +554,21 @@ getPacket (struct tftpStream *tp, int retryCount)
     } else if (retryCount == 0) {
         tv.tv_sec = tp->config.first_timeout / 1000L;
         tv.tv_usec = (tp->config.first_timeout % 1000L) * 1000L;
-        setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
+        /*
+         * Ignoring result because all possible errors indicate wrong
+         * arguments and these arguments are OK as tested by test suite.
+         */
+        (void) setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv,
+            sizeof tv);
     } else {
         tv.tv_sec = tp->config.timeout / 1000L;
         tv.tv_usec = (tp->config.timeout % 1000L) * 1000L;
-        setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
+        /*
+         * Ignoring result because all possible errors indicate wrong
+         * arguments and these arguments are OK as tested by test suite.
+         */
+        (void) setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv,
+            sizeof tv);
     }
     for (;;) {
         union {
@@ -591,7 +603,12 @@ getPacket (struct tftpStream *tp, int retryCount)
     if (retryCount != GET_PACKET_DONT_WAIT) {
         tv.tv_sec = 0;
         tv.tv_usec = 0;
-        setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
+        /*
+         * Ignoring result because all possible errors indicate wrong
+         * arguments and these arguments are OK as tested by test suite.
+         */
+        (void) setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv,
+            sizeof tv);
     }
     return len;
 }
@@ -724,7 +741,7 @@ static int process_data_packet (struct tftpStream *tp, ssize_t len)
         /*
          * Send it. Errors during send will not matter for this last ACK.
          */
-        sendto (
+        (void) sendto (
             tp->socket,
             send_buf,
             plen,
