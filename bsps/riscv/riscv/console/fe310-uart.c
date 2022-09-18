@@ -34,11 +34,13 @@
 int fe310_uart_read(rtems_termios_device_context *base)
 {
   fe310_uart_context * ctx = (fe310_uart_context*) base;
+  int32_t              rxdata;
 
-  if ((ctx->regs->rxdata & TXRXREADY) != 0) {
+  rxdata = ctx->regs->rxdata;
+  if ((rxdata & TXRXREADY) != 0) {
     return -1;
   } else {
-    return ctx->regs->rxdata;
+    return rxdata & 0xFF;
   }
 }
 
@@ -91,6 +93,7 @@ static bool fe310_uart_first_open (
   (ctx->regs)->div = riscv_get_core_frequency() / 115200 - 1;
   (ctx->regs)->txctrl |= 1;
   (ctx->regs)->rxctrl |= 1;
+  (ctx->regs)->ie = 0;
   return true;
 };
 
