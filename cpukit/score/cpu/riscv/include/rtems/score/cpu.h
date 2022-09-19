@@ -481,7 +481,7 @@ static inline uint32_t _CPU_SMP_Get_current_processor( void )
     "=&r" ( mhartid )
   );
 
-  return (uint32_t) mhartid;
+  return (uint32_t) mhartid - RISCV_BOOT_HARTID;
 }
 
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );

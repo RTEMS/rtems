@@ -136,6 +136,12 @@ static void riscv_clint_init(const void *fdt)
     Per_CPU_Control *cpu;
 
     hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
+#ifdef RTEMS_SMP
+    if (hart_index < RISCV_BOOT_HARTID) {
+      continue;
+    }
+
+    hart_index = _RISCV_Map_hardid_to_cpu_index(hart_index);
     if (hart_index >= rtems_configuration_get_maximum_processors()) {
       continue;
     }
@@ -143,6 +149,15 @@ static void riscv_clint_init(const void *fdt)
     cpu = _Per_CPU_Get_by_index(hart_index);
     cpu->cpu_per_cpu.clint_msip = &clint->msip[i / 16];
     cpu->cpu_per_cpu.clint_mtimecmp = &clint->mtimecmp[i / 16];
+#else
+    if (hart_index != RISCV_BOOT_HARTID) {
+      continue;
+    }
+
+    cpu = _Per_CPU_Get_by_index(0);
+    cpu->cpu_per_cpu.clint_msip = &clint->msip[i / 16];
+    cpu->cpu_per_cpu.clint_mtimecmp = &clint->mtimecmp[i / 16];
+#endif
   }
 }
 
@@ -183,8 +198,21 @@ static void riscv_plic_init(const void *fdt)
 
   for (i = 0; i < len; i += 8) {
     uint32_t hart_index;
+    uint8_t mie_regs;
+
+    /*
+     * Interrupt enable  registers with 32-bit alignment based on
+     * number of interrupts.
+     */
+    mie_regs =  (ndev + 0x1f) & ~(0x1f);
 
     hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
+#ifdef RTEMS_SMP
+    if (hart_index < RISCV_BOOT_HARTID) {
+      continue;
+    }
+
+    hart_index = _RISCV_Map_hardid_to_cpu_index(hart_index);
     if (hart_index >= rtems_configuration_get_maximum_processors()) {
       continue;
     }
@@ -199,6 +227,28 @@ static void riscv_plic_init(const void *fdt)
     cpu = _Per_CPU_Get_by_index(hart_index);
     cpu->cpu_per_cpu.plic_hart_regs = &plic->harts[i / 8];
     cpu->cpu_per_cpu.plic_m_ie = &plic->enable[i / 8][0];
+
+    for (interrupt_index = 0; interrupt_index < mie_regs; ++interrupt_index) {
+      cpu->cpu_per_cpu.plic_m_ie[interrupt_index] = 0;
+    }
+#else
+    if (hart_index != RISCV_BOOT_HARTID) {
+      continue;
+    }
+
+    interrupt_index = fdt32_to_cpu(val[i / 4 + 1]);
+    if (interrupt_index != RISCV_INTERRUPT_EXTERNAL_MACHINE) {
+      continue;
+    }
+    plic->harts[i / 8].priority_threshold = 0;
+
+    cpu = _Per_CPU_Get_by_index(0);
+    cpu->cpu_per_cpu.plic_hart_regs = &plic->harts[i / 8];
+    cpu->cpu_per_cpu.plic_m_ie = &plic->enable[i / 8][0];
+    for (interrupt_index = 0; interrupt_index < mie_regs; ++interrupt_index) {
+      cpu->cpu_per_cpu.plic_m_ie[interrupt_index] = 0;
+    }
+#endif
   }
 
   cpu = _Per_CPU_Get_by_index(0);
@@ -298,6 +348,7 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
     if (enable != NULL) {
       enable[group] |= bit;
     } else {
+#ifdef RTEMS_SMP
       uint32_t cpu_max;
       uint32_t cpu_index;
 
@@ -313,6 +364,16 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
           enable[group] |= bit;
         }
       }
+#else
+      Per_CPU_Control *cpu;
+
+      cpu = _Per_CPU_Get_by_index(0);
+      enable = cpu->cpu_per_cpu.plic_m_ie;
+
+      if (enable != NULL) {
+        enable[group] |= bit;
+      }
+#endif
     }
 
     rtems_interrupt_lock_release(&riscv_plic_lock, &lock_context);
@@ -342,6 +403,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
     if (enable != NULL) {
       enable[group] &= ~bit;
     } else {
+#ifdef RTEMS_SMP
       uint32_t cpu_max;
       uint32_t cpu_index;
 
@@ -357,6 +419,16 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
           enable[group] &= ~bit;
         }
       }
+#else
+      Per_CPU_Control *cpu;
+
+      cpu = _Per_CPU_Get_by_index(0);
+      enable = cpu->cpu_per_cpu.plic_m_ie;
+
+      if (enable != NULL) {
+        enable[group] &= ~bit;
+      }
+#endif
     }
 
     rtems_interrupt_lock_release(&riscv_plic_lock, &lock_context);
@@ -414,6 +486,7 @@ rtems_status_code bsp_interrupt_get_affinity(
     enable = riscv_plic_irq_to_cpu[interrupt_index - 1];
 
     if (enable != NULL) {
+#ifdef RTEMS_SMP
       uint32_t cpu_max;
       uint32_t cpu_index;
 
@@ -429,6 +502,14 @@ rtems_status_code bsp_interrupt_get_affinity(
           break;
         }
       }
+#else
+      Per_CPU_Control *cpu;
+
+      cpu = _Per_CPU_Get_by_index(0);
+
+      if (enable == cpu->cpu_per_cpu.plic_m_ie)
+        _Processor_mask_Set(affinity, 0);
+#endif
     } else {
       _Processor_mask_Assign(affinity, _SMP_Get_online_processors());
     }

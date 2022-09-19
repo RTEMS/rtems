@@ -325,7 +325,7 @@ typedef struct {
   uint32_t priority[RISCV_PLIC_MAX_INTERRUPTS];
   uint32_t pending[1024];
   uint32_t enable[16320][32];
-  RISCV_PLIC_hart_regs harts[CPU_MAXIMUM_PROCESSORS];
+  RISCV_PLIC_hart_regs harts[CPU_MAXIMUM_PROCESSORS + RISCV_BOOT_HARTID];
 } RISCV_PLIC_regs;
 
 typedef struct {

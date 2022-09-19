@@ -34,16 +34,30 @@
 extern "C" {
 #endif
 
+static inline uint32_t _RISCV_Map_hardid_to_cpu_index(uint32_t hardid)
+{
+  return (hardid - RISCV_BOOT_HARTID);
+}
+
+static inline uint32_t _RISCV_Map_cpu_index_to_hardid(uint32_t cpu_index)
+{
+  return (cpu_index + RISCV_BOOT_HARTID);
+}
+
 extern volatile RISCV_CLINT_regs *riscv_clint;
 
 void *riscv_fdt_get_address(const void *fdt, int node);
 
 uint32_t riscv_get_core_frequency(void);
 
+#if RISCV_ENABLE_MPFS_SUPPORT != 0
+extern uint32_t riscv_hart_count;
+#else
 #ifdef RTEMS_SMP
 extern uint32_t riscv_hart_count;
 #else
 #define riscv_hart_count 1
+#endif
 #endif
 
 uint32_t riscv_get_hart_index_by_phandle(uint32_t phandle);

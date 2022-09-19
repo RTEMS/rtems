@@ -65,6 +65,8 @@ SYM(_start):
 	LADDR	sp, _ISR_Stack_area_begin
 	LADDR	t2, _ISR_Stack_size
 	csrr	s0, mhartid
+	li      t3, RISCV_BOOT_HARTID
+	sub     s0, s0, t3
 	LADDR	t0, _Per_CPU_Information
 	slli	t1, s0, PER_CPU_CONTROL_SIZE_LOG2
 	add	s1, t0, t1

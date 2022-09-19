@@ -74,12 +74,17 @@ void *riscv_fdt_get_address(const void *fdt, int node)
   return (void *)(uintptr_t) addr;
 }
 
+#if RISCV_ENABLE_MPFS_SUPPORT != 0
+uint32_t riscv_hart_count;
+static uint32_t riscv_hart_phandles[5];
+#else
 #ifdef RTEMS_SMP
 uint32_t riscv_hart_count;
 
 static uint32_t riscv_hart_phandles[CPU_MAXIMUM_PROCESSORS];
 #else
 static uint32_t riscv_hart_phandles[1];
+#endif
 #endif
 
 static void riscv_find_harts(void)
@@ -146,8 +151,12 @@ static void riscv_find_harts(void)
     riscv_hart_phandles[hart_index] = phandle;
   }
 
+#if RISCV_ENABLE_MPFS_SUPPORT != 0
+  riscv_hart_count = max_hart_index + 1;
+#else
 #ifdef RTEMS_SMP
   riscv_hart_count = max_hart_index + 1;
+#endif
 #endif
 }
 
@@ -166,7 +175,7 @@ uint32_t riscv_get_hart_index_by_phandle(uint32_t phandle)
 
 static uint32_t get_core_frequency(void)
 {
-#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0 || RISCV_ENABLE_MPFS_SUPPORT != 0
   uint32_t node;
   const char *fdt;
   const char *tlclk;
@@ -177,7 +186,13 @@ static uint32_t get_core_frequency(void)
   node = fdt_node_offset_by_compatible(fdt, -1,"fixed-clock");
   tlclk = fdt_getprop(fdt, node, "clock-output-names", &len);
 
-  if (strcmp(tlclk,"tlclk") != 0) {
+#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+  if (strcmp(tlclk,"tlclk") != 0)
+#endif
+#if RISCV_ENABLE_MPFS_SUPPORT != 0
+  if (strcmp(tlclk,"msspllclk") != 0)
+#endif
+  {
     bsp_fatal(RISCV_FATAL_NO_TLCLOCK_FREQUENCY_IN_DEVICE_TREE);
   }
 

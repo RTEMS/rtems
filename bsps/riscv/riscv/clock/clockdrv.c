@@ -95,6 +95,8 @@ static void riscv_clock_at_tick(riscv_timecounter *tc)
   uint64_t value;
   uint32_t cpu = rtems_scheduler_get_processor();
 
+  cpu = _RISCV_Map_cpu_index_to_hardid(cpu);
+
   clint = tc->clint;
 
   value = clint->mtimecmp[cpu].val_64;
@@ -172,6 +174,8 @@ static void riscv_clock_secondary_action(void *arg)
   uint64_t *cmpval = arg;
   uint32_t cpu = _CPU_SMP_Get_current_processor();
 
+  cpu = _RISCV_Map_cpu_index_to_hardid(cpu);
+
   riscv_clock_clint_init(clint, *cmpval, cpu);
 }
 #endif
@@ -214,7 +218,7 @@ static void riscv_clock_initialize(void)
   cmpval = riscv_clock_read_mtime(&clint->mtime);
   cmpval += interval;
 
-  riscv_clock_clint_init(clint, cmpval, 0);
+  riscv_clock_clint_init(clint, cmpval, RISCV_BOOT_HARTID);
   riscv_clock_secondary_initialization(clint, cmpval, interval);
 
   /* Initialize timecounter */

@@ -1,22 +1,18 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
-- get-integer: null
-- define: null
+- get-boolean: null
+- define-condition: null
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 2
+default: false
 default-by-variant:
-- value: null
-  variants:
-  - riscv/frdme310arty.*
-- value: 1
+- value: true
   variants:
   - riscv/mpfs64.*
 description: |
-  maximum number of NS16550 devices supported by the console driver (2 by default)
+  enables support Microchip PolarFire SoC if defined to a non-zero value,otherwise it is disabled (disabled by default)
 enabled-by: true
-format: '{}'
 links: []
-name: RISCV_CONSOLE_MAX_NS16550_DEVICES
+name: RISCV_ENABLE_MPFS_SUPPORT
 type: build

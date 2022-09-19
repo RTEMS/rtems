@@ -5,18 +5,15 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 2
+default: 0
 default-by-variant:
-- value: null
-  variants:
-  - riscv/frdme310arty.*
 - value: 1
   variants:
   - riscv/mpfs64.*
 description: |
-  maximum number of NS16550 devices supported by the console driver (2 by default)
+  boot hartid (processor number) of risc-v cpu (default 0)
 enabled-by: true
 format: '{}'
 links: []
-name: RISCV_CONSOLE_MAX_NS16550_DEVICES
+name: RISCV_BOOT_HARTID
 type: build
