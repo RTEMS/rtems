@@ -32,6 +32,10 @@
 #include <bsp/fdt.h>
 #include <bsp/linker-symbols.h>
 
+#ifdef BSP_DTB_IS_SUPPORTED
+#include BSP_DTB_HEADER_PATH
+#endif
+
 #ifndef BSP_FDT_IS_SUPPORTED
 #warning "BSP FDT support indication not defined"
 #endif
@@ -76,5 +80,9 @@ void bsp_fdt_copy(const void *src)
 
 const void *bsp_fdt_get(void)
 {
+#ifdef BSP_DTB_IS_SUPPORTED
+  return system_dtb;
+#else
   return &bsp_fdt_blob[0];
+#endif
 }
