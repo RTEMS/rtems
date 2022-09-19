@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: LINKFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- -mbe32
+default-by-variant: []
+description: |
+  TMS570-specific flags passed to the linker.
+enabled-by: true
+links: []
+name: TMS570_LINKFLAGS
+type: build
