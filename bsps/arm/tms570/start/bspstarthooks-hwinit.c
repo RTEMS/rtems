@@ -7,8 +7,6 @@
 #include <bsp/tms570_selftest_parity.h>
 #include <bsp/tms570_hwinit.h>
 
-void bsp_start_hook_0_done( void );
-
 static inline
 int tms570_running_from_tcram( void )
 {

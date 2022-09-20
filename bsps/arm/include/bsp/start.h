@@ -73,6 +73,12 @@ void _start(void);
 void bsp_start_hook_0(void);
 
 /**
+* @brief Can be used by bsp_start_hook_0() to jump back to the start code
+*   instead of using the link register.
+*/
+void bsp_start_hook_0_done(void);
+
+/**
 * @brief Start entry hook 1.
 *
 * This hook will be called from the start entry code after copying of the
