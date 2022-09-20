@@ -84,7 +84,6 @@ source:
 - bsps/arm/tms570/irq/irq.c
 - bsps/arm/tms570/start/bspreset.c
 - bsps/arm/tms570/start/bspstart.c
-- bsps/arm/tms570/start/bspstarthooks.c
 - bsps/arm/tms570/start/pinmux.c
 - bsps/arm/tms570/start/tms570-pom.c
 - bsps/shared/cache/nocache.c
