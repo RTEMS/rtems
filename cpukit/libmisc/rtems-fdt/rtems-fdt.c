@@ -163,7 +163,7 @@ rtems_fdt_init_index (rtems_fdt_handle* fdt, rtems_fdt_blob* blob)
   }
 
   names = calloc(1, total_name_memory);
-  if (!entries)
+  if (!names)
   {
     free(entries);
     return -RTEMS_FDT_ERR_NO_MEMORY;
