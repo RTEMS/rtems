@@ -285,6 +285,7 @@ _start:
 	sub	r3, r3, r1
 
 #ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
+	/* These are banked FIQ mode registers */
 	mov	r8, #0
 	mov	r9, #0
 	mov	r10, #0
