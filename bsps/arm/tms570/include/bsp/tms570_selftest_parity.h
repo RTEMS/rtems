@@ -81,13 +81,13 @@ extern const tms570_selftest_par_desc_t
   tms570_selftest_par_can3_desc;
 extern const tms570_selftest_par_desc_t
   tms570_selftest_par_vim_desc;
-const tms570_selftest_par_desc_t
+extern const tms570_selftest_par_desc_t
   tms570_selftest_par_dma_desc;
-const tms570_selftest_par_desc_t
+extern const tms570_selftest_par_desc_t
   tms570_selftest_par_spi1_desc;
-const tms570_selftest_par_desc_t
+extern const tms570_selftest_par_desc_t
   tms570_selftest_par_spi3_desc;
-const tms570_selftest_par_desc_t
+extern const tms570_selftest_par_desc_t
   tms570_selftest_par_spi5_desc;
 
 extern const tms570_selftest_par_desc_t *const
