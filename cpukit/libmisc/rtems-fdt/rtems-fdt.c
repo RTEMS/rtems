@@ -680,13 +680,13 @@ rtems_fdt_unload (rtems_fdt_handle* handle)
 
   rtems_chain_extract_unprotected (&handle->blob->node);
 
+  rtems_fdt_release_index(&handle->blob->index);
+
   free (handle->blob);
 
   handle->blob = NULL;
 
   rtems_fdt_unlock (fdt);
-
-  rtems_fdt_release_index(&handle->blob->index);
 
   return 0;
 }
