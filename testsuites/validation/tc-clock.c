@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021, 2022 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -68,11 +68,22 @@
  *
  * This test case performs the following actions:
  *
- * - Use the rtems_clock_get_ticks_since_boot() function.
+ * - Use the rtems_clock_get_ticks_since_boot() directive before and after
+ *   exactly one clock tick.
  *
  *   - Check that clock tick gets incremented.
  *
- * - Use the rtems_clock_get_ticks_per_second() function.
+ * - Use the rtems_clock_get_ticks_since_boot() directive before and after
+ *   exactly one clock tick.
+ *
+ *   - Check that clock tick gets incremented.
+ *
+ * - Use the rtems_clock_get_ticks_per_second() directive.
+ *
+ *   - Check that rtems_clock_get_ticks_per_second() actually returns 1us /
+ *     CONFIGURE_MICROSECONDS_PER_TICK.
+ *
+ * - Use the rtems_clock_get_ticks_per_second() directive.
  *
  *   - Check that rtems_clock_get_ticks_per_second() actually returns 1us /
  *     CONFIGURE_MICROSECONDS_PER_TICK.
@@ -81,43 +92,77 @@
  */
 
 /**
- * @brief Use the rtems_clock_get_ticks_since_boot() function.
+ * @brief Use the rtems_clock_get_ticks_since_boot() directive before and after
+ *   exactly one clock tick.
  */
 static void RtemsClockValClock_Action_0( void )
 {
   rtems_interval result_0;
   rtems_interval result_1;
-  int32_t difference; /* Note: rtems_interval = uint32_t (unsigned!) */
 
   result_0 = rtems_clock_get_ticks_since_boot();
   ClockTick();
   result_1 = rtems_clock_get_ticks_since_boot();
-  /*
-   * Because of the ones-complement, the overflow
-   * is handled correctly. result_0 = 0xFFFFFFFF will become -1
-   * and result_1 = 0x0 will become 0.
-   */
-  difference = (int32_t) result_1 - (int32_t) result_0;
 
   /*
    * Check that clock tick gets incremented.
    */
-  T_step_eq_i32( 0, difference, 1 );
+  T_step_eq_u32( 0, result_1 - result_0, 1 );
 }
 
 /**
- * @brief Use the rtems_clock_get_ticks_per_second() function.
+ * @brief Use the rtems_clock_get_ticks_since_boot() directive before and after
+ *   exactly one clock tick.
  */
 static void RtemsClockValClock_Action_1( void )
 {
+  rtems_interval result_0;
+  rtems_interval result_1;
+
+  #undef rtems_clock_get_ticks_since_boot
+
+  result_0 = rtems_clock_get_ticks_since_boot();
+  ClockTick();
+  result_1 = rtems_clock_get_ticks_since_boot();
+
+  /*
+   * Check that clock tick gets incremented.
+   */
+  T_step_eq_u32( 1, result_1 - result_0, 1 );
+}
+
+/**
+ * @brief Use the rtems_clock_get_ticks_per_second() directive.
+ */
+static void RtemsClockValClock_Action_2( void )
+{
   rtems_interval result;
+
   result = rtems_clock_get_ticks_per_second();
 
   /*
    * Check that rtems_clock_get_ticks_per_second() actually returns 1us /
    * CONFIGURE_MICROSECONDS_PER_TICK.
    */
-  T_step_eq_u32( 1, result, 1000000UL / TEST_MICROSECONDS_PER_TICK );
+  T_step_eq_u32( 2, result, 1000000UL / TEST_MICROSECONDS_PER_TICK );
+}
+
+/**
+ * @brief Use the rtems_clock_get_ticks_per_second() directive.
+ */
+static void RtemsClockValClock_Action_3( void )
+{
+  rtems_interval result;
+
+  #undef rtems_clock_get_ticks_per_second
+
+  result = rtems_clock_get_ticks_per_second();
+
+  /*
+   * Check that rtems_clock_get_ticks_per_second() actually returns 1us /
+   * CONFIGURE_MICROSECONDS_PER_TICK.
+   */
+  T_step_eq_u32( 3, result, 1000000UL / TEST_MICROSECONDS_PER_TICK );
 }
 
 /**
@@ -125,10 +170,12 @@ static void RtemsClockValClock_Action_1( void )
  */
 T_TEST_CASE( RtemsClockValClock )
 {
-  T_plan( 2 );
+  T_plan( 4 );
 
   RtemsClockValClock_Action_0();
   RtemsClockValClock_Action_1();
+  RtemsClockValClock_Action_2();
+  RtemsClockValClock_Action_3();
 }
 
 /** @} */
