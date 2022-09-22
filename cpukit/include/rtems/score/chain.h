@@ -61,17 +61,7 @@ extern "C" {
  */
 
 /**
- *  @typedef Chain_Node
- *
- *  This type definition promotes the name for the Chain Node used by
- *  all RTEMS code.  It is a separate type definition because a forward
- *  reference is required to define it.  See @ref Chain_Node_struct for
- *  detailed information.
- */
-typedef struct Chain_Node_struct Chain_Node;
-
-/**
- *  @struct Chain_Node_struct
+ *  @brief This structure represents a chain node.
  *
  *  This is used to manage each element (node) which is placed
  *  on a chain.
@@ -85,15 +75,15 @@ typedef struct Chain_Node_struct Chain_Node;
  *        so the user can cast the pointers back and forth.
  *
  */
-struct Chain_Node_struct {
+typedef struct Chain_Node {
   /** This points to the node after this one on this chain. */
-  Chain_Node *next;
+  struct Chain_Node *next;
   /** This points to the node immediate prior to this one on this chain. */
-  Chain_Node *previous;
-};
+  struct Chain_Node *previous;
+} Chain_Node;
 
 /**
- *  @struct Chain_Control
+ * @brief This union represents a chain control block.
  *
  * This is used to manage a chain.  A chain consists of a doubly
  * linked list of zero or more nodes.
