@@ -29,7 +29,9 @@
 
 	/* Global symbols */
 	.globl	_start
+	.type	_start, %function
 	.globl	bsp_start_hook_0_done
+	.type	bsp_start_hook_0_done, %function
 	.globl	bsp_start_vector_table_begin
 	.globl	bsp_start_vector_table_end
 	.globl	bsp_start_vector_table_size
