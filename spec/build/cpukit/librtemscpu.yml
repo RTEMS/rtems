@@ -25,8 +25,11 @@ install:
   - cpukit/include/mqueue.h
   - cpukit/include/poll.h
   - cpukit/include/rtems.h
+  - cpukit/include/sha224.h
   - cpukit/include/sha256.h
+  - cpukit/include/sha384.h
   - cpukit/include/sha512.h
+  - cpukit/include/sha512t.h
   - cpukit/include/xz.h
 - destination: ${BSP_INCLUDEDIR}/arpa
   source:
