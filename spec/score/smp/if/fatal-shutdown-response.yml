@@ -9,6 +9,6 @@ links:
   uid: header-impl
 - role: interface-ingroup
   uid: group
-name: SMP_SHUTDOWN_RESPONSE
+name: SMP_FATAL_SHUTDOWN_RESPONSE
 references: []
 type: interface
