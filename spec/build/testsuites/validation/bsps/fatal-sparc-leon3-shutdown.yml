@@ -11,7 +11,8 @@ enabled-by:
   - bsps/sparc/leon3
 features: c cprogram
 includes: []
-ldflags: []
+ldflags:
+- -Wl,--wrap=_CPU_Fatal_halt
 links: []
 source:
 - testsuites/validation/bsps/tc-fatal-sparc-leon3-shutdown.c
