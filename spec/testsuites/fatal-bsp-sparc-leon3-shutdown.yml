@@ -1,0 +1,116 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021, 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  and:
+  - RTEMS_SMP
+  - bsps/sparc/leon3
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This validation test suite provides an application configuration to perform a
+  shutdown.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  static char buffer[ 512 ];
+
+  static const T_action actions[] = {
+    T_report_hash_sha256
+  };
+
+  static const T_config test_config = {
+    .name = rtems_test_name,
+    .buf = buffer,
+    .buf_size = sizeof( buffer ),
+    .putchar = rtems_put_char,
+    .verbosity = RTEMS_TEST_VERBOSITY,
+    .now = T_now_tick,
+    .allocate = T_memory_allocate,
+    .deallocate = T_memory_deallocate,
+    .action_count = T_ARRAY_SIZE( actions ),
+    .actions = actions
+  };
+
+  void __real__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code );
+
+  void __wrap__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code );
+
+  void __wrap__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
+  {
+    int exit_code;
+
+    T_register();
+    exit_code = T_main( &test_config );
+
+    if ( exit_code == 0 ) {
+      rtems_test_end( rtems_test_name );
+    }
+
+  #if defined(RTEMS_GCOV_COVERAGE)
+    rtems_test_gcov_dump_info();
+  #endif
+    __real__CPU_Fatal_halt( source, code );
+  }
+
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 2
+
+  #include <rtems/score/scheduleredfsmp.h>
+
+  #define CONFIGURE_SCHEDULER_EDF_SMP
+
+  #include <rtems/scheduler.h>
+
+  RTEMS_SCHEDULER_EDF_SMP( a );
+
+  #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
+    RTEMS_SCHEDULER_TABLE_EDF_SMP( a, TEST_SCHEDULER_A_NAME )
+
+  #define CONFIGURE_SCHEDULER_ASSIGNMENTS \
+    RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
+    RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
+
+  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 0
+
+  #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+
+  #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
+  #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+
+  #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+
+  static void *ShutdownIdleBody( uintptr_t arg )
+  {
+    if ( rtems_scheduler_get_processor() == 0 ) {
+      rtems_test_begin( rtems_test_name, TEST_STATE );
+      rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
+    }
+
+    return _CPU_Thread_Idle_body( arg );
+  }
+
+  #define CONFIGURE_IDLE_TASK_BODY ShutdownIdleBody
+
+  #define CONFIGURE_INITIAL_EXTENSIONS { .fatal = FatalInitialExtension }
+
+  #define CONFIGURE_INIT
+
+  #include <rtems/confdefs.h>
+test-description: null
+test-includes:
+- rtems.h
+- rtems/bspIo.h
+- rtems/test.h
+- rtems/test-info.h
+- rtems/testopts.h
+- rtems/score/smpimpl.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-suite-name: FatalBspSparcLeon3Shutdown
+test-target: testsuites/validation/ts-fatal-bsp-sparc-leon3-shutdown.c
+type: test-suite
