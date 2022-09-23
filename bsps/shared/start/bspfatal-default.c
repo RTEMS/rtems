@@ -153,7 +153,7 @@ void bsp_fatal_extension(
 
       _Thread_Get_name( executing, name, sizeof( name ) );
       printk(
-        "executing thread ID: 0x08%" PRIx32 "\n"
+        "executing thread ID: 0x%08" PRIx32 "\n"
         "executing thread name: %s\n",
         executing->Object.id,
         name
