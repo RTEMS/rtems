@@ -50,4 +50,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemSetAffinity
 test-target: testsuites/membench/mem-task-set-affinity.c
-type: test-suite
+type: memory-benchmark

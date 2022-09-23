@@ -50,4 +50,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemSet
 test-target: testsuites/membench/mem-clock-set.c
-type: test-suite
+type: memory-benchmark

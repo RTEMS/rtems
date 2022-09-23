@@ -50,4 +50,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemWakeWhen
 test-target: testsuites/membench/mem-task-wake-when.c
-type: test-suite
+type: memory-benchmark

@@ -82,4 +82,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemSmpPart4
 test-target: testsuites/membench/mem-rtems-smp-part-4.c
-type: test-suite
+type: memory-benchmark

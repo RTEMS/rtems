@@ -52,4 +52,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemBasic
 test-target: testsuites/membench/mem-rtems-basic.c
-type: test-suite
+type: memory-benchmark

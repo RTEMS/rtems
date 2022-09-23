@@ -51,4 +51,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemCatchSnd
 test-target: testsuites/membench/mem-signal-catch-snd.c
-type: test-suite
+type: memory-benchmark

@@ -55,4 +55,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemObtRel
 test-target: testsuites/membench/mem-sem-obt-rel.c
-type: test-suite
+type: memory-benchmark

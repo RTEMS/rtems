@@ -51,4 +51,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemSusRes
 test-target: testsuites/membench/mem-task-sus-res.c
-type: test-suite
+type: memory-benchmark

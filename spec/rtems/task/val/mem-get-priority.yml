@@ -50,4 +50,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemGetPriority
 test-target: testsuites/membench/mem-task-get-priority.c
-type: test-suite
+type: memory-benchmark

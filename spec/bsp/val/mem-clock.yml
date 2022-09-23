@@ -51,4 +51,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemClock
 test-target: testsuites/membench/mem-bsp-clock.c
-type: test-suite
+type: memory-benchmark

@@ -50,4 +50,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemFatal
 test-target: testsuites/membench/mem-fatal-fatal.c
-type: test-suite
+type: memory-benchmark

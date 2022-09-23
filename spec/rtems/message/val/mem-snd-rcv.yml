@@ -53,4 +53,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemSndRcv
 test-target: testsuites/membench/mem-message-snd-rcv.c
-type: test-suite
+type: memory-benchmark

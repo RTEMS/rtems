@@ -57,4 +57,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemGetRetDel
 test-target: testsuites/membench/mem-part-get-ret-del.c
-type: test-suite
+type: memory-benchmark

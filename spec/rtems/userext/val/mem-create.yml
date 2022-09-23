@@ -53,4 +53,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemCreate
 test-target: testsuites/membench/mem-userext-create.c
-type: test-suite
+type: memory-benchmark

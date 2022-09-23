@@ -56,4 +56,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemRmCpu
 test-target: testsuites/membench/mem-scheduler-rm-cpu.c
-type: test-suite
+type: memory-benchmark

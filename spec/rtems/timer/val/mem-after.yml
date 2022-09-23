@@ -52,4 +52,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemAfter
 test-target: testsuites/membench/mem-timer-after.c
-type: test-suite
+type: memory-benchmark

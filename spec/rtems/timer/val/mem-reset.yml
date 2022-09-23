@@ -51,4 +51,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemReset
 test-target: testsuites/membench/mem-timer-reset.c
-type: test-suite
+type: memory-benchmark

@@ -50,4 +50,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemRestart
 test-target: testsuites/membench/mem-task-restart.c
-type: test-suite
+type: memory-benchmark

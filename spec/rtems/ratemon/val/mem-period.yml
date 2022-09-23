@@ -54,4 +54,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemPeriod
 test-target: testsuites/membench/mem-ratemon-period.c
-type: test-suite
+type: memory-benchmark

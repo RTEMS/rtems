@@ -50,4 +50,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemExit
 test-target: testsuites/membench/mem-task-exit.c
-type: test-suite
+type: memory-benchmark

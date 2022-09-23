@@ -55,4 +55,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemWaitRel
 test-target: testsuites/membench/mem-barrier-wait-rel.c
-type: test-suite
+type: memory-benchmark

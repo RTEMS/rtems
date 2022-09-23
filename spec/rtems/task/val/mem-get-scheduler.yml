@@ -50,4 +50,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemGetScheduler
 test-target: testsuites/membench/mem-task-get-scheduler.c
-type: test-suite
+type: memory-benchmark

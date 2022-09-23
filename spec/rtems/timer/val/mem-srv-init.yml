@@ -65,4 +65,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemSrvInit
 test-target: testsuites/membench/mem-timer-srv-init.c
-type: test-suite
+type: memory-benchmark

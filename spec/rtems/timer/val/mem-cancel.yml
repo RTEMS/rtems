@@ -51,4 +51,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemCancel
 test-target: testsuites/membench/mem-timer-cancel.c
-type: test-suite
+type: memory-benchmark

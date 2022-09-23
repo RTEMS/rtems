@@ -57,4 +57,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemSmpGlobal4
 test-target: testsuites/membench/mem-rtems-smp-global-4.c
-type: test-suite
+type: memory-benchmark

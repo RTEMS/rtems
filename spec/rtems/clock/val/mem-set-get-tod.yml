@@ -51,4 +51,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemSetGetTod
 test-target: testsuites/membench/mem-clock-set-get-tod.c
-type: test-suite
+type: memory-benchmark

@@ -50,4 +50,4 @@ test-includes:
 test-local-includes: []
 test-suite-name: MemGetUptime
 test-target: testsuites/membench/mem-clock-get-uptime.c
-type: test-suite
+type: memory-benchmark
