@@ -12,7 +12,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  While the ${../if/scheduler-assign-processor-optional:/name} define is used
+  When the ${../if/scheduler-assign-processor-optional:/name} define is used
   as the second parameter in the ${../if/scheduler-assign:/name} macro in an
   entry of a ${../if/scheduler-assignments:/name} application configuration
   option value, the presence of the processor associated with the entry in the

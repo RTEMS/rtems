@@ -12,7 +12,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  While the ${../if/scheduler-assign-no-scheduler:/name} define is used to
+  When the ${../if/scheduler-assign-no-scheduler:/name} define is used to
   define an entry of a ${../if/scheduler-assignments:/name} application
   configuration option value, the processor associated with the entry shall not
   have a scheduler assigned.

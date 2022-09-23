@@ -12,7 +12,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  While the ${../if/scheduler-assign:/name} macro is used to define an entry of
+  When the ${../if/scheduler-assign:/name} macro is used to define an entry of
   a ${../if/scheduler-assignments:/name} application configuration option
   value, the attributes defined by the second parameter shall define the
   scheduler assignment attributes for the processor associated with the entry.
