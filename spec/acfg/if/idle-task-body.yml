@@ -15,7 +15,7 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: appl-config-group-member
+- role: interface-ingroup
   uid: group-idle
 - role: constraint
   uid: ../constraint/init-idle-task-body

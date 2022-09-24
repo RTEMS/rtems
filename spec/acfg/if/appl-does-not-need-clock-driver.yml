@@ -12,7 +12,7 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: appl-config-group-member
+- role: interface-ingroup
   uid: group-devdrv
 name: CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 notes: |

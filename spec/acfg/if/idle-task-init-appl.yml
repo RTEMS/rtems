@@ -14,7 +14,7 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: appl-config-group-member
+- role: interface-ingroup
   uid: group-idle
 name: CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 notes: |

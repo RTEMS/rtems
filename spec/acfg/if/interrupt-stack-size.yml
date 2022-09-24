@@ -16,7 +16,7 @@ index-entries:
 - interrupt stack size
 interface-type: appl-config-option
 links:
-- role: appl-config-group-member
+- role: interface-ingroup
   uid: group-general
 - role: constraint
   uid: ../constraint/min-bsp-app

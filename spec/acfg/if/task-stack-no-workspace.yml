@@ -9,7 +9,7 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: appl-config-group-member
+- role: interface-ingroup
   uid: group-stackalloc
 name: CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
 notes: |

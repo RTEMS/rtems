@@ -15,7 +15,7 @@ index-entries:
 - task stack allocator for IDLE tasks
 interface-type: appl-config-option
 links:
-- role: appl-config-group-member
+- role: interface-ingroup
   uid: group-stackalloc
 - role: constraint
   uid: ../constraint/init-task-stack-allocator-for-idle

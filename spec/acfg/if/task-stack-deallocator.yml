@@ -13,7 +13,7 @@ index-entries:
 - task stack deallocator
 interface-type: appl-config-option
 links:
-- role: appl-config-group-member
+- role: interface-ingroup
   uid: group-stackalloc
 - role: constraint
   uid: ../constraint/init-task-stack-deallocator

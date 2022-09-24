@@ -9,7 +9,7 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: appl-config-group-member
+- role: interface-ingroup
   uid: group-schedgeneral
 - role: constraint
   uid: ../constraint/option-not-pre-qualified

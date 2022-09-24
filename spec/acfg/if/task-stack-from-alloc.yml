@@ -12,7 +12,7 @@ index-entries:
 - task stack allocator
 interface-type: appl-config-option
 links:
-- role: appl-config-group-member
+- role: interface-ingroup
   uid: group-stackalloc
 - role: constraint
   uid: ../constraint/option-not-pre-qualified
