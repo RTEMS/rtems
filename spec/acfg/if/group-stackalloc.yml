@@ -12,7 +12,7 @@ index-entries: []
 interface-type: appl-config-group
 links:
 - role: interface-placement
-  uid: ../../if/domain
+  uid: domain
 - role: requirement-refinement
   uid: ../../req/applconfig
 name: Task Stack Allocator Configuration

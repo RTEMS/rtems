@@ -10,6 +10,8 @@ index-entries:
 - /dev/zero
 interface-type: appl-config-option
 links:
+- role: interface-placement
+  uid: domain
 - role: interface-ingroup
   uid: group-devdrv
 - role: constraint

@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: interface-placement
+  uid: domain
 - role: interface-ingroup
   uid: group-eventrecord
 - role: constraint

@@ -28,6 +28,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: interface-placement
+  uid: domain
 - role: interface-ingroup
   uid: group-general
 name: CONFIGURE_DISABLE_BSP_SETTINGS

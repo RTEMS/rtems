@@ -14,6 +14,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: interface-placement
+  uid: domain
 - role: interface-ingroup
   uid: group-idle
 name: CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION

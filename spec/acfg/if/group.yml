@@ -4,6 +4,8 @@ copyrights:
 enabled-by: true
 identifier: RTEMSApplConfig
 links:
+- role: interface-placement
+  uid: domain
 - role: interface-ingroup
   uid: /if/group
 non-functional-type: design-group

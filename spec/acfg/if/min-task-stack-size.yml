@@ -11,6 +11,8 @@ index-entries:
 - minimum task stack size
 interface-type: appl-config-option
 links:
+- role: interface-placement
+  uid: domain
 - role: interface-ingroup
   uid: group-general
 - role: constraint
