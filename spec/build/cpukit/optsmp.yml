@@ -13,6 +13,7 @@ description: |
 enabled-by:
 - aarch64/xilinx_zynqmp_ilp32_qemu
 - aarch64/xilinx_zynqmp_ilp32_zu3eg
+- aarch64/xilinx_zynqmp_lp64_cfc400x
 - aarch64/xilinx_zynqmp_lp64_qemu
 - aarch64/xilinx_zynqmp_lp64_zu3eg
 - arm/altcycv_devkit

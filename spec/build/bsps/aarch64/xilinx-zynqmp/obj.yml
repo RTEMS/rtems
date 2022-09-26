@@ -21,6 +21,7 @@ source:
 - bsps/aarch64/shared/clock/arm-generic-timer-aarch64.c
 - bsps/aarch64/shared/mmu/vmsav8-64.c
 - bsps/aarch64/xilinx-zynqmp/console/console.c
+- bsps/aarch64/xilinx-zynqmp/fdt/bsp_fdt.c
 - bsps/aarch64/xilinx-zynqmp/start/bspstart.c
 - bsps/aarch64/xilinx-zynqmp/start/bspstarthooks.c
 - bsps/aarch64/xilinx-zynqmp/start/bspstartmmu.c

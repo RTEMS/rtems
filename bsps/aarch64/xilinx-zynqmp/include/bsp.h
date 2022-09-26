@@ -51,6 +51,7 @@
 #include <bsp/start.h>
 
 #include <rtems.h>
+#include <rtems/termiostypes.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,6 +62,10 @@ extern "C" {
 
 #define BSP_RESET_SMC
 #define BSP_CPU_ON_USES_SMC
+
+#define BSP_FDT_IS_SUPPORTED
+extern unsigned int zynqmp_dtb_len;
+extern unsigned char zynqmp_dtb[];
 
 /**
  * @brief Zynq UltraScale+ MPSoC specific set up of the MMU.
@@ -82,6 +87,16 @@ void zynqmp_debug_console_flush(void);
 uint32_t zynqmp_clock_i2c0(void);
 
 uint32_t zynqmp_clock_i2c1(void);
+
+/**
+ * @brief Zynq UltraScale+ MPSoC specific set up of a management console.
+ *
+ * Some systems may have a management interface which needs special
+ * initialization. Provide in the application to override the defaults in the
+ * BSP. This will only be called if the interface is found in the device tree.
+ */
+__attribute__ ((weak))
+void zynqmp_configure_management_console(rtems_termios_device_context *base);
 
 #ifdef __cplusplus
 }

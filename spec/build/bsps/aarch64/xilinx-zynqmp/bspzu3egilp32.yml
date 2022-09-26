@@ -15,5 +15,7 @@ links:
   uid: grp_zu3eg
 - role: build-dependency
   uid: linkcmds_ilp32
+- role: build-dependency
+  uid: objfdtzynqmp
 source: []
 type: build

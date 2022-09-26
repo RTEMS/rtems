@@ -5,11 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64XilinxZynqMP
  *
- * @brief This source file contains the default MMU tables and setup.
+ * @brief This file provides the base ZynqMP device tree
  */
 
 /*
- * Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
  * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,61 +34,61 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp.h>
-#include <bsp/start.h>
-#include <bsp/aarch64-mmu.h>
-#include <libcpu/mmu-vmsav8-64.h>
+/dts-v1/;
 
-BSP_START_DATA_SECTION static const aarch64_mmu_config_entry
-zynqmp_mmu_config_table[] = {
-  AARCH64_MMU_DEFAULT_SECTIONS,
-  {
-    .begin = 0xf9000000U,
-    .end = 0xf9100000U,
-    .flags = AARCH64_MMU_DEVICE
-  }, {
-    .begin = 0xfd000000U,
-    .end = 0xffc00000U,
-    .flags = AARCH64_MMU_DEVICE
-  }, {
-    .begin = 0x80000000U,
-    .end = 0x80100000U,
-    .flags = 0
-  }
+/ {
+	#address-cells = <0x02>;
+	#size-cells = <0x02>;
+
+	amba {
+		compatible = "simple-bus";
+		#address-cells = <0x02>;
+		#size-cells = <0x02>;
+		ranges;
+
+		interrupt-controller@f9010000 {
+			compatible = "arm,gic-400";
+			#address-cells = <0x02>;
+			#interrupt-cells = <0x03>;
+			reg = <0x00 0xf9010000 0x00 0x10000>;
+			interrupt-controller;
+			phandle = <0x01>;
+		};
+
+		ethernet@ff0b0000 {
+			compatible = "cdns,gem";
+			status = "okay";
+			interrupt-parent = <0x01>;
+			interrupts = <0x00 0x39 0x04>;
+			reg = <0x00 0xff0b0000 0x00 0x1000>;
+			phy-mode = "sgmii";
+		};
+
+		ethernet@ff0c0000 {
+			compatible = "cdns,gem";
+			status = "okay";
+			interrupt-parent = <0x01>;
+			interrupts = <0x00 0x3b 0x04>;
+			reg = <0x00 0xff0c0000 0x00 0x1000>;
+			phy-mode = "sgmii";
+		};
+
+		ethernet@ff0d0000 {
+			compatible = "cdns,gem";
+			status = "okay";
+			interrupt-parent = <0x01>;
+			interrupts = <0x00 0x3d 0x04>;
+			reg = <0x00 0xff0d0000 0x00 0x1000>;
+			phy-mode = "sgmii";
+		};
+
+		ethernet@ff0e0000 {
+			compatible = "cdns,gem";
+			status = "okay";
+			interrupt-parent = <0x01>;
+			interrupts = <0x00 0x3f 0x04>;
+			reg = <0x00 0xff0e0000 0x00 0x1000>;
+			phy-mode = "sgmii";
+		};
+	};
 };
-
-/*
- * Make weak and let the user override.
- */
-BSP_START_TEXT_SECTION void
-zynqmp_setup_mmu_and_cache( void ) __attribute__ ((weak));
-
-BSP_START_TEXT_SECTION void
-zynqmp_setup_mmu_and_cache( void )
-{
-  aarch64_mmu_setup();
-
-  aarch64_mmu_setup_translation_table(
-    &zynqmp_mmu_config_table[ 0 ],
-    RTEMS_ARRAY_SIZE( zynqmp_mmu_config_table )
-  );
-
-  aarch64_mmu_enable();
-}
-
-/*
- * Make weak and let the user override.
- */
-BSP_START_TEXT_SECTION void zynqmp_setup_secondary_cpu_mmu_and_cache( void )
-__attribute__ ( ( weak ) );
-
-BSP_START_TEXT_SECTION void zynqmp_setup_secondary_cpu_mmu_and_cache( void )
-{
-  /* Perform basic MMU setup */
-  aarch64_mmu_setup();
-
-  /* Use the existing root page table already configured by CPU0 */
-  _AArch64_Write_ttbr0_el1( (uintptr_t) bsp_translation_table_base );
-
-  aarch64_mmu_enable();
-}

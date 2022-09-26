@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
  * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,12 +36,164 @@
 
 #include <rtems/console.h>
 #include <rtems/bspIo.h>
+#include <rtems/endian.h>
+#include <rtems/rtems-fdt.h>
 #include <rtems/sysinit.h>
 
+#include <bsp/aarch64-mmu.h>
+#include <bsp/fdt.h>
 #include <bsp/irq.h>
+
 #include <dev/serial/zynq-uart.h>
 
 #include <bspopts.h>
+
+#include <libchip/ns16550.h>
+
+uint32_t mgmt_uart_reg_shift = 0;
+static uint8_t get_register(uintptr_t addr, uint8_t i)
+{
+  volatile uint8_t *reg = (uint8_t *) addr;
+
+  i <<= mgmt_uart_reg_shift;
+  return reg [i];
+}
+
+static void set_register(uintptr_t addr, uint8_t i, uint8_t val)
+{
+  volatile uint8_t *reg = (uint8_t *) addr;
+
+  i <<= mgmt_uart_reg_shift;
+  reg [i] = val;
+}
+
+static ns16550_context zynqmp_mgmt_uart_context = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("Management UART 0"),
+  .get_reg = get_register,
+  .set_reg = set_register,
+  .port = 0,
+  .irq = 0,
+  .clock = 0,
+  .initial_baud = 0,
+};
+
+__attribute__ ((weak)) void zynqmp_configure_management_console(rtems_termios_device_context *base)
+{
+  /* This SLIP-encoded watchdog command sets timeouts to 0xFFFFFFFF seconds. */
+  const char mgmt_watchdog_cmd[] =
+    "\xc0\xda\x00\x00\xff\xff\xff\xff\xff\x00\xff\xff\xff\xffM#\xc0";
+
+  /* Send the system watchdog configuration command */
+  for (int i = 0; i < sizeof(mgmt_watchdog_cmd); i++) {
+    ns16550_polled_putchar(base, mgmt_watchdog_cmd[i]);
+  }
+}
+
+static void zynqmp_management_console_init(void)
+{
+  /* Find the management console in the device tree */
+  rtems_fdt_handle fdt_handle;
+  const uint32_t *prop;
+  uint32_t outprop[4];
+  int proplen;
+  int node;
+
+  rtems_fdt_init_handle(&fdt_handle);
+  rtems_fdt_register(bsp_fdt_get(), &fdt_handle);
+  const char *alias = rtems_fdt_get_alias(&fdt_handle, "mgmtport");
+  if (alias == NULL) {
+    rtems_fdt_release_handle(&fdt_handle);
+    return;
+  }
+  node = rtems_fdt_path_offset(&fdt_handle, alias);
+
+  prop = rtems_fdt_getprop(&fdt_handle, node, "clock-frequency", &proplen);
+  if ( prop == NULL || proplen != 4 ) {
+    rtems_fdt_release_handle(&fdt_handle);
+    zynqmp_mgmt_uart_context.port = 0;
+    return;
+  }
+  outprop[0] = rtems_uint32_from_big_endian((const uint8_t *) &prop[0]);
+  zynqmp_mgmt_uart_context.clock = outprop[0];
+
+  prop = rtems_fdt_getprop(&fdt_handle, node, "current-speed", &proplen);
+  if ( prop == NULL || proplen != 4 ) {
+    rtems_fdt_release_handle(&fdt_handle);
+    zynqmp_mgmt_uart_context.port = 0;
+    return;
+  }
+  outprop[0] = rtems_uint32_from_big_endian((const uint8_t *) &prop[0]);
+  zynqmp_mgmt_uart_context.initial_baud = outprop[0];
+
+  prop = rtems_fdt_getprop(&fdt_handle, node, "interrupts", &proplen);
+  if ( prop == NULL || proplen != 12 ) {
+    rtems_fdt_release_handle(&fdt_handle);
+    zynqmp_mgmt_uart_context.port = 0;
+    return;
+  }
+  outprop[0] = rtems_uint32_from_big_endian((const uint8_t *) &prop[0]);
+  outprop[1] = rtems_uint32_from_big_endian((const uint8_t *) &prop[1]);
+  outprop[2] = rtems_uint32_from_big_endian((const uint8_t *) &prop[2]);
+  /* proplen is in bytes, interrupt mapping expects a length in 32-bit cells */
+  zynqmp_mgmt_uart_context.irq = bsp_fdt_map_intr(outprop, proplen / 4);
+  if ( zynqmp_mgmt_uart_context.irq == 0 ) {
+    rtems_fdt_release_handle(&fdt_handle);
+    zynqmp_mgmt_uart_context.port = 0;
+    return;
+  }
+
+  prop = rtems_fdt_getprop(&fdt_handle, node, "reg", &proplen);
+  if ( prop == NULL || proplen != 16 ) {
+    rtems_fdt_release_handle(&fdt_handle);
+    zynqmp_mgmt_uart_context.port = 0;
+    return;
+  }
+  outprop[0] = rtems_uint32_from_big_endian((const uint8_t *) &prop[0]);
+  outprop[1] = rtems_uint32_from_big_endian((const uint8_t *) &prop[1]);
+  outprop[2] = rtems_uint32_from_big_endian((const uint8_t *) &prop[2]);
+  outprop[3] = rtems_uint32_from_big_endian((const uint8_t *) &prop[3]);
+  zynqmp_mgmt_uart_context.port = ( ( (uint64_t) outprop[0] ) << 32 ) | outprop[1];
+  uintptr_t uart_base = zynqmp_mgmt_uart_context.port;
+  size_t uart_size = ( ( (uint64_t) outprop[2] ) << 32 ) | outprop[3];
+
+  rtems_status_code sc = aarch64_mmu_map( uart_base,
+                                          uart_size,
+                                          AARCH64_MMU_DEVICE);
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    zynqmp_mgmt_uart_context.port = 0;
+    return;
+  }
+
+  prop = rtems_fdt_getprop(&fdt_handle, node, "reg-offset", &proplen);
+  if ( prop == NULL || proplen != 4 ) {
+    rtems_fdt_release_handle(&fdt_handle);
+    zynqmp_mgmt_uart_context.port = 0;
+    return;
+  }
+  outprop[0] = rtems_uint32_from_big_endian((const uint8_t *) &prop[0]);
+  zynqmp_mgmt_uart_context.port += outprop[0];
+
+  prop = rtems_fdt_getprop(&fdt_handle, node, "reg-shift", &proplen);
+  if ( prop == NULL || proplen != 4 ) {
+    rtems_fdt_release_handle(&fdt_handle);
+    zynqmp_mgmt_uart_context.port = 0;
+    return;
+  }
+  outprop[0] = rtems_uint32_from_big_endian((const uint8_t *) &prop[0]);
+  mgmt_uart_reg_shift = outprop[0];
+
+  rtems_fdt_release_handle(&fdt_handle);
+
+  ns16550_probe(&zynqmp_mgmt_uart_context.base);
+
+  zynqmp_configure_management_console(&zynqmp_mgmt_uart_context.base);
+}
+
+RTEMS_SYSINIT_ITEM(
+  zynqmp_management_console_init,
+  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_ORDER_FIRST
+);
 
 static zynq_uart_context zynqmp_uart_instances[2] = {
   {
@@ -79,6 +231,15 @@ rtems_status_code console_initialize(
     if (i == BSP_CONSOLE_MINOR) {
       link(&uart[0], CONSOLE_DEVICE_NAME);
     }
+  }
+
+  if ( zynqmp_mgmt_uart_context.port != 0 ) {
+    rtems_termios_device_install(
+      "/dev/ttyMGMT0",
+      &ns16550_handler_polled,
+      NULL,
+      &zynqmp_mgmt_uart_context.base
+    );
   }
 
   return RTEMS_SUCCESSFUL;

@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: aarch64
-bsp: xilinx_zynqmp_ilp32_qemu
+bsp: xilinx_zynqmp_lp64_cfc400x
 build-type: bsp
 cflags: []
 copyrights:
-- Copyright (C) 2020 On-Line Applications Research (OAR)
+- Copyright (C) 2022 On-Line Applications Research (OAR)
 cppflags: []
 enabled-by: true
 family: xilinx-zynqmp
@@ -12,12 +12,10 @@ includes: []
 install: []
 links:
 - role: build-dependency
-  uid: grp
+  uid: grp_zu3eg
 - role: build-dependency
-  uid: tstqemu
+  uid: linkcmds_lp64
 - role: build-dependency
-  uid: linkcmds_ilp32
-- role: build-dependency
-  uid: objfdtzynqmp
+  uid: objfdtcfc400x
 source: []
 type: build
