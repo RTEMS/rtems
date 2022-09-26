@@ -109,7 +109,7 @@ void *test_task_stack_allocate( size_t size );
 
 void test_task_stack_deallocate( void *stack );
 
-void *test_idle_task_stack_allocate( uint32_t cpu_index, size_t size );
+void *test_idle_task_stack_allocate( uint32_t cpu_index, size_t *size );
 
 extern rtems_task_argument test_runner_argument;
 

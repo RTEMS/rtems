@@ -322,9 +322,9 @@ static char test_idle_stacks[ CONFIGURE_MAXIMUM_PROCESSORS ][
 RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
 RTEMS_SECTION( ".rtemsstack.idle" );
 
-void *test_idle_task_stack_allocate( uint32_t cpu_index, size_t size )
+void *test_idle_task_stack_allocate( uint32_t cpu_index, size_t *size )
 {
-  if ( size > sizeof( test_idle_stacks[ 0 ] ) ) {
+  if ( *size > sizeof( test_idle_stacks[ 0 ] ) ) {
     rtems_fatal( RTEMS_FATAL_SOURCE_APPLICATION, 0xABAD1DEA );
   }
 

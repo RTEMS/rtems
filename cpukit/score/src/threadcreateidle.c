@@ -73,9 +73,9 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
    * The IDLE thread stacks may be statically allocated or there may be a
    * custom allocator provided just as with user threads.
    */
-  config.stack_area = (*_Stack_Allocator_allocate_for_idle)(
+  config.stack_area = ( *_Stack_Allocator_allocate_for_idle )(
     _Per_CPU_Get_index( cpu ),
-    config.stack_size
+    &config.stack_size
   );
 
   /*

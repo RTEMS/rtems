@@ -34,27 +34,26 @@
 #include <rtems/score/assert.h>
 
 /**
- * @brief Default stack allocator allocate for idle handler.
- *
- * The allocate for idle handler is optional even when the user thread stack
- * allocator and deallocator are configured.
+ * @brief Default stack allocator allocate for IDLE threads.
  *
  * The default allocator for IDLE thread stacks gets the memory from a
  * statically allocated area provided via confdefs.h.
  *
- * @param cpu_index Index of the CPU for the IDLE thread using this stack
- * @param stack_size The size of the stack area to allocate in bytes.
+ * @param cpu is the index of the CPU for the IDLE thread using this stack.
  *
- * @retval NULL Not enough memory (never returned).
- * @retval other Pointer to begin of stack area.
+ * @param stack_size[in] is pointer to a size_t object.  On function
+ *   entry, the object contains the size of the stack area to allocate in
+ *   bytes.
+ *
+ * @return Returns the pointer to begin of the allocated stack area.
  */
 static void *_Stack_Allocator_allocate_for_idle_default(
   uint32_t  cpu_index,
-  size_t    stack_size
+  size_t   *stack_size
 )
 {
 #if defined(RTEMS_SMP)
-  return &_Thread_Idle_stacks[ cpu_index * stack_size ];
+  return &_Thread_Idle_stacks[ cpu_index * ( *stack_size ) ];
 #else
   _Assert( cpu_index == 0 );
   return &_Thread_Idle_stacks[ 0 ];

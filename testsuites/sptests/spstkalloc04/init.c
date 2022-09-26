@@ -69,12 +69,12 @@ static void *allocate_helper(size_t size)
 
 static void *thread_stacks_allocate_for_idle(
   uint32_t  cpu,
-  size_t    stack_size
+  size_t   *stack_size
 )
 {
   rtems_test_assert(thread_stacks_count == 0);
   thread_stacks_count++;
-  return allocate_helper(stack_size);
+  return allocate_helper(*stack_size);
 }
 
 /*

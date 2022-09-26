@@ -4836,7 +4836,7 @@
  *
  * @par Value Constraints
  * The value of this configuration option shall be defined to a valid function
- * pointer of the type ``void *( *allocate )( uint32_t, size_t )``.
+ * pointer of the type ``void *( *allocate )( uint32_t, size_t * )``.
  *
  * @par Notes
  * This configuration option is independent of the other thread stack allocator

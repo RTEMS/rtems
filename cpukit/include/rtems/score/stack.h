@@ -105,15 +105,22 @@ typedef void ( *Stack_Allocator_free )( void *addr );
  * The allocate for idle handler is optional even when the user thread stack
  * allocator and deallocator are configured.
  *
- * @param cpu Index of the CPU for the IDLE thread using this stack
- * @param stack_size The size of the stack area to allocate in bytes.
+ * @param cpu is the index of the CPU for the IDLE thread using this stack.
  *
- * @retval NULL Not enough memory.
- * @retval other Pointer to begin of stack area.
+ * @param stack_size[in, out] is pointer to a size_t object.  On function
+ *   entry, the object contains the proposed size of the stack area to allocate
+ *   in bytes.  The proposed size does not take the actual thread-local storage
+ *   size of the application into account.  The stack allocator can modify the
+ *   size to ensure that there is enough space available in the stack area for
+ *   the thread-local storage.
+ *
+ * @retval NULL There was not enough memory available to allocate a stack area.
+ *
+ * @return Returns the pointer to begin of the allocated stack area.
  */
 typedef void *( *Stack_Allocator_allocate_for_idle )(
   uint32_t  cpu,
-  size_t    stack_size
+  size_t   *stack_size
 );
 
 /**
