@@ -169,10 +169,14 @@ static void checkTLSValues()
 	rtems_test_assert(extern_int == 7);
 	rtems_test_assert(i123 == 123);
 	rtems_test_assert(a256 == 256);
-	rtems_test_assert((a256 & 255) == 0);
+	uintptr_t addr = reinterpret_cast<uintptr_t>(&a256);
+	RTEMS_OBFUSCATE_VARIABLE(addr);
+	rtems_test_assert((addr % 256) == 0);
 	rtems_test_assert(i0 == 0);
 	rtems_test_assert(a512 == 0);
-	rtems_test_assert((a512 & 511) == 0);
+	addr = reinterpret_cast<uintptr_t>(&a512);
+	RTEMS_OBFUSCATE_VARIABLE(addr);
+	rtems_test_assert((addr % 512) == 0);
 	rtems_test_assert(f456(false) == 456);
 	rtems_test_assert(f0(false) == 0);
 	rtems_test_assert(C::c789() == 789);
