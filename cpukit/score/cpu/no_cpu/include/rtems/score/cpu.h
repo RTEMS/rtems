@@ -554,7 +554,8 @@ extern Context_Control_fp _CPU_Null_fp_context;
  * @addtogroup RTEMSScoreCPUExampleContext
  * 
  * Should be large enough to run all RTEMS tests.  This ensures
- * that a "reasonable" small application should not have any problems.
+ * that a "reasonable" small application should not have any problems.  The
+ * size shall be a power of two.
  *
  * Port Specific Information:
  *

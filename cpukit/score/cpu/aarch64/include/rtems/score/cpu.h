@@ -102,7 +102,7 @@
 
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
-#define CPU_STACK_MINIMUM_SIZE (1024 * 10)
+#define CPU_STACK_MINIMUM_SIZE (1024 * 8)
 
 /* This could be either 4 or 8, depending on the ABI in use.
  * Could also use __LP64__ or __ILP32__ */

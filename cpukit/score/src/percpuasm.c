@@ -44,7 +44,7 @@
 #include <rtems/score/percpu.h>
 
 #define PER_CPU_IS_POWER_OF_TWO( value ) \
-  ( ( ( ( value ) - 1 ) & ( value ) ) == 0 )
+  ( ( value ) > 1 && ( ( ( value ) - 1 ) & ( value ) ) == 0 )
 
 /*
  * The minimum alignment of two is due to the Heap Handler which uses the
@@ -70,6 +70,11 @@ RTEMS_STATIC_ASSERT(
   CPU_STACK_ALIGNMENT >= CPU_HEAP_ALIGNMENT &&
     PER_CPU_IS_POWER_OF_TWO( CPU_STACK_ALIGNMENT ),
   CPU_STACK_ALIGNMENT
+);
+
+RTEMS_STATIC_ASSERT(
+  PER_CPU_IS_POWER_OF_TWO( CPU_STACK_MINIMUM_SIZE ),
+  CPU_STACK_MINIMUM_SIZE
 );
 
 RTEMS_STATIC_ASSERT(

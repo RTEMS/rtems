@@ -228,7 +228,7 @@ typedef struct {
  *
  *  XXX
  */
-#define CPU_STACK_MINIMUM_SIZE          (1536)
+#define CPU_STACK_MINIMUM_SIZE          (2048)
 
 /**
  * Size of a pointer.
