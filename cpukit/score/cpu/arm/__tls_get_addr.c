@@ -39,10 +39,10 @@ void *__tls_get_addr(const TLS_Index *ti);
 void *__tls_get_addr(const TLS_Index *ti)
 {
   const Thread_Control *executing = _Thread_Get_executing();
-  void *tls_block = (char *) executing->Start.tls_area
-    + _TLS_Get_thread_control_block_area_size( (uintptr_t) _TLS_Alignment );
+  void *tls_data = (char *) executing->Registers.thread_id
+    + _TLS_Get_thread_control_block_area_size();
 
   assert(ti->module == 1);
 
-  return (char *) tls_block + ti->offset;
+  return (char *) tls_data + ti->offset;
 }

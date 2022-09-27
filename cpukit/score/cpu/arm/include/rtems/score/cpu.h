@@ -176,9 +176,7 @@
 
 #define CPU_MAXIMUM_PROCESSORS 32
 
-#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
-  #define ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET 44
-#endif
+#define ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET 44
 
 #ifdef ARM_MULTILIB_VFP
   #define ARM_CONTEXT_CONTROL_D8_OFFSET 48
@@ -191,10 +189,8 @@
 #ifdef RTEMS_SMP
   #if defined(ARM_MULTILIB_VFP)
     #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 112
-  #elif defined(ARM_MULTILIB_HAS_THREAD_ID_REGISTER)
-    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 48
   #else
-    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 44
+    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 48
   #endif
 #endif
 
@@ -240,9 +236,7 @@ typedef struct {
 #else
   void *register_sp;
 #endif
-#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
   uint32_t thread_id;
-#endif
 #ifdef ARM_MULTILIB_VFP
   uint64_t register_d8;
   uint64_t register_d9;

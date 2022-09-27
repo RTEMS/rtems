@@ -279,6 +279,9 @@ void _CPU_Context_Initialize(
 #endif
 
   if ( tls_area != NULL ) {
-    _TLS_TCB_before_TLS_block_initialize( tls_area );
+    the_context->thread_pointer =
+      (char *) _TLS_Initialize_area( tls_area ) + 0x7000;
+  } else {
+    the_context->thread_pointer = NULL;
   }
 }

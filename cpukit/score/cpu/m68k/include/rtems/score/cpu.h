@@ -145,6 +145,7 @@ typedef struct {
   #if defined( __mcoldfire__ ) && ( M68K_HAS_FPU == 1 )
     uint8_t   fpu_dis;
   #endif
+  void       *thread_pointer;
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \

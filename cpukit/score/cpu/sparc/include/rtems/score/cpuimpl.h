@@ -120,6 +120,8 @@
   #define CPU_PER_CPU_CONTROL_SIZE 0
 #endif
 
+#define CPU_THREAD_LOCAL_STORAGE_VARIANT 20
+
 #if ( SPARC_HAS_FPU == 1 )
   /**
    * @brief Offset of the CPU_Per_CPU_control::fsr field relative to the

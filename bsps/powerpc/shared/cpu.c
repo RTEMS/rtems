@@ -130,7 +130,7 @@ void _CPU_Context_Initialize(
 #endif
 
   if ( tls_area != NULL ) {
-    void *tls_block = _TLS_TCB_before_TLS_block_initialize( tls_area );
+    void *tls_block = _TLS_Initialize_area( tls_area );
 
     the_ppc_context->tp = (uintptr_t) tls_block + 0x7000;
   }

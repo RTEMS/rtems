@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2014, 2022 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -58,29 +58,45 @@ uintptr_t _TLS_Get_allocation_size( void )
   allocation_size = _TLS_Allocation_size;
 
   if ( allocation_size == 0 ) {
-    uintptr_t alignment;
-
-    alignment = _TLS_Align_up( (uintptr_t) _TLS_Alignment );
-
-    allocation_size = size;
-    allocation_size += _TLS_Get_thread_control_block_area_size( alignment );
-#ifndef __i386__
-    allocation_size += sizeof( TLS_Dynamic_thread_vector );
-#endif
+    uintptr_t tls_align;
+    uintptr_t stack_align;
 
     /*
      * The TLS area is allocated in the thread storage area.  Each allocation
      * shall meet the stack alignment requirement.
      */
-    allocation_size = _TLS_Align_up( allocation_size );
+    stack_align = CPU_STACK_ALIGNMENT;
+    tls_align = RTEMS_ALIGN_UP( (uintptr_t) _TLS_Alignment, stack_align );
+
+#ifndef __i386__
+    /* Reserve space for the dynamic thread vector */
+    allocation_size +=
+      RTEMS_ALIGN_UP( sizeof( TLS_Dynamic_thread_vector ), stack_align );
+#endif
+
+    /* Reserve space for the thread control block */
+    allocation_size +=
+#if CPU_THREAD_LOCAL_STORAGE_VARIANT == 11
+      RTEMS_ALIGN_UP( sizeof( TLS_Thread_control_block ), tls_align );
+#else
+      RTEMS_ALIGN_UP( sizeof( TLS_Thread_control_block ), stack_align );
+#endif
+
+    /* Reserve space for the thread-local storage data */
+    allocation_size +=
+#if CPU_THREAD_LOCAL_STORAGE_VARIANT == 20
+      RTEMS_ALIGN_UP( size, tls_align );
+#else
+      RTEMS_ALIGN_UP( size, stack_align );
+#endif
 
     /*
      * The stack allocator does not support aligned allocations.  Allocate
      * enough to do the alignment manually.
      */
-    if ( alignment > CPU_STACK_ALIGNMENT ) {
-      _Assert( alignment % CPU_STACK_ALIGNMENT == 0 );
-      allocation_size += alignment - CPU_STACK_ALIGNMENT;
+    if ( tls_align > stack_align ) {
+      _Assert( tls_align % stack_align == 0 );
+      allocation_size += tls_align - stack_align;
     }
 
     if ( _Thread_Maximum_TLS_size != 0 ) {

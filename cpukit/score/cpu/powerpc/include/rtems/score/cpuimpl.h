@@ -151,6 +151,8 @@
 
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
+#define CPU_THREAD_LOCAL_STORAGE_VARIANT 10
+
 #ifdef RTEMS_SMP
 
 /* Use SPRG0 for the per-CPU control of the current processor */

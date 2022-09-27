@@ -193,7 +193,7 @@ void _CPU_Context_Initialize(
   the_context->esp     = (void *) _stack;
 
   if ( tls_area != NULL ) {
-    tcb = (uint32_t) _TLS_TCB_after_TLS_block_initialize( tls_area );
+    tcb = (uint32_t) _TLS_Initialize_area( tls_area );
   } else {
     tcb = 0;
   }

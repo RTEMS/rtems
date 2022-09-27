@@ -37,9 +37,7 @@ void __m68k_read_tp(void);
 void __m68k_read_tp(void)
 {
   const Thread_Control *executing = _Thread_Get_executing();
-  void *tp = (char *) executing->Start.tls_area +
-    _TLS_Get_thread_control_block_area_size((uintptr_t) _TLS_Alignment)
-    + 0x7000;
+  void *tp = executing->Registers.thread_pointer;
 
   __asm__ volatile (
     "move.l %0, %%a0"

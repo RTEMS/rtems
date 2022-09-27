@@ -56,13 +56,11 @@
   );
 #endif
 
-#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
-  RTEMS_STATIC_ASSERT(
-    offsetof( Context_Control, thread_id )
-      == ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET,
-    ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET
-  );
-#endif
+RTEMS_STATIC_ASSERT(
+  offsetof( Context_Control, thread_id )
+    == ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET,
+  ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET
+);
 
 #ifdef ARM_MULTILIB_ARCH_V4
   RTEMS_STATIC_ASSERT(
@@ -118,13 +116,10 @@ void _CPU_Context_Initialize(
   the_context->register_sp = (uint32_t) stack_area_begin + stack_area_size;
   the_context->register_lr = (uint32_t) entry_point;
   the_context->isr_dispatch_disable = 0;
-
-#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
   the_context->thread_id = (uint32_t) tls_area;
-#endif
 
   if ( tls_area != NULL ) {
-    _TLS_TCB_at_area_begin_initialize( tls_area );
+    the_context->thread_id = (uint32_t) _TLS_Initialize_area( tls_area );
   }
 }
 

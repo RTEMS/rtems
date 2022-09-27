@@ -48,6 +48,8 @@
 
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
+#define CPU_THREAD_LOCAL_STORAGE_VARIANT 20
+
 #ifndef ASM
 
 #ifdef __cplusplus

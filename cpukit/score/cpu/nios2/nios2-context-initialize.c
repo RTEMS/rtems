@@ -90,9 +90,6 @@ void _CPU_Context_Initialize(
   }
 
   if ( tls_area != NULL ) {
-    context->r23 = (uintptr_t) tls_area +
-      _TLS_Get_thread_control_block_area_size( (uintptr_t) _TLS_Alignment ) +
-       0x7000;
-    _TLS_TCB_before_TLS_block_initialize( tls_area );
+    context->r23 = (uintptr_t) _TLS_Initialize_area( tls_area ) + 0x7000;
   }
 }

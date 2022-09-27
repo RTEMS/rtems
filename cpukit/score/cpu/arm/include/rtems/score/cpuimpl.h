@@ -60,6 +60,8 @@
 
 #endif /* ARM_MULTILIB_ARCH_V4 */
 
+#define CPU_THREAD_LOCAL_STORAGE_VARIANT 11
+
 #ifndef ASM
 
 #ifdef __cplusplus

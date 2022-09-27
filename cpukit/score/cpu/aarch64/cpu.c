@@ -142,7 +142,7 @@ void _CPU_Context_Initialize(
   the_context->thread_id = (uintptr_t) tls_area;
 
   if ( tls_area != NULL ) {
-    _TLS_TCB_at_area_begin_initialize( tls_area );
+    the_context->thread_id = (uintptr_t) _TLS_Initialize_area( tls_area );
   }
 }
 

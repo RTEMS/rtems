@@ -61,7 +61,7 @@ void _CPU_Context_Initialize(
   context->register_sp = stack_area_end;
 
   if ( tls_area != NULL ) {
-    _TLS_TCB_at_area_begin_initialize( tls_area );
+    _TLS_Initialize_area( tls_area );
   }
 }
 

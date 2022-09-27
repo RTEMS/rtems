@@ -46,9 +46,11 @@ void *__tls_get_addr( const TLS_Index *ti );
 
 void *__tls_get_addr( const TLS_Index *ti )
 {
-  const Thread_Control *executing = _Thread_Get_executing();
-  void *tls_block = (char *) executing->Start.tls_area
-    + _TLS_Get_thread_control_block_area_size( (uintptr_t) _TLS_Alignment );
+  const Thread_Control *executing;
 
-  return (char *) tls_block + ti->offset;
+  (void) ti;
+
+  executing = _Thread_Get_executing();
+
+  return executing->Registers.thread_pointer;
 }

@@ -54,6 +54,24 @@
  */
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
+/**
+ * @brief Defines the thread-local storage (TLS) variant.
+ *
+ * Use one of the following values:
+ *
+ * 10: The architecture uses Variant I and the TLS offsets emitted by the
+ *     linker neglect the TCB (examples: nios2, m68k, microblaze, powerpc,
+ *     riscv).  The thread pointer directly references the thread-local data
+ *     area.
+ *
+ * 11: The architecture uses Variant I and the TLS offsets emitted by the
+ *     linker take the TCB into account (examples: arm, aarch64).
+ *     The thread pointer references the TCB.
+ *
+ * 20: The architecture uses Variant II (examples: i386, sparc).
+ */
+#define CPU_THREAD_LOCAL_STORAGE_VARIANT 10
+
 #ifndef ASM
 
 #ifdef __cplusplus

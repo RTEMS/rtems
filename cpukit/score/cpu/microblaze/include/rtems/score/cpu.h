@@ -137,6 +137,7 @@ typedef struct {
   uint32_t r30;
   uint32_t r31;
   uint32_t rmsr;
+  void *thread_pointer;
 } Context_Control;
 
 /**

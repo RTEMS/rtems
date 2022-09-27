@@ -267,12 +267,8 @@ static bool _Thread_Try_initialize(
 
   /* Allocate thread-local storage (TLS) area in stack area */
   if ( tls_size > 0 ) {
-    uintptr_t tls_align;
-
     stack_end -= tls_size;
-    tls_align = (uintptr_t) _TLS_Alignment;
-    the_thread->Start.tls_area = (void *)
-      ( ( (uintptr_t) stack_end + tls_align - 1 ) & ~( tls_align - 1 ) );
+    the_thread->Start.tls_area = stack_end;
   }
 
   _Stack_Initialize(

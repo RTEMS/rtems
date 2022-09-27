@@ -50,6 +50,8 @@
 
 #define CPU_INTERRUPT_FRAME_SIZE 52
 
+#define CPU_THREAD_LOCAL_STORAGE_VARIANT 20
+
 #ifndef ASM
 
 #ifdef __cplusplus

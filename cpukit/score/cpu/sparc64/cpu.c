@@ -132,7 +132,7 @@ void _CPU_Context_Initialize(
     the_context->isr_dispatch_disable = 0;
 
   if ( tls_area != NULL ) {
-    void *tcb = _TLS_TCB_after_TLS_block_initialize( tls_area );
+    void *tcb = _TLS_Initialize_area( tls_area );
 
     the_context->g7 = (uintptr_t) tcb;
   }

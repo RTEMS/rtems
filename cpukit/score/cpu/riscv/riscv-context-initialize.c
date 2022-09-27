@@ -68,7 +68,7 @@ void _CPU_Context_Initialize(
   if ( tls_area != NULL ) {
     void *tls_block;
 
-    tls_block = _TLS_TCB_before_TLS_block_initialize( tls_area );
+    tls_block = _TLS_Initialize_area( tls_area );
     context->tp = (uintptr_t) tls_block;
   }
 }

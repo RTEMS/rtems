@@ -73,7 +73,7 @@ void _CPU_Context_Initialize(
   context->rmsr = msr;
 
   if ( tls_area != NULL ) {
-    _TLS_TCB_at_area_begin_initialize( tls_area );
+    context->thread_pointer = _TLS_Initialize_area( tls_area );
   }
 }
 

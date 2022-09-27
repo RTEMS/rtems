@@ -42,15 +42,15 @@ void __attribute__((naked)) __aeabi_read_tp(void)
     "ldr r0, =_Per_CPU_Information\n"
     "ldr r0, [r0, %[executingoff]]\n"
 #if defined(__thumb__) && !defined(__thumb2__)
-    "add r0, %[tlsareaoff]\n"
+    "add r0, %[threadidoff]\n"
     "ldr r0, [r0]\n"
 #else
-    "ldr r0, [r0, %[tlsareaoff]]\n"
+    "ldr r0, [r0, %[threadidoff]]\n"
 #endif
     "bx lr\n"
     :
     : [executingoff] "I" (offsetof(Per_CPU_Control, executing)),
-      [tlsareaoff] "I" (offsetof(Thread_Control, Start.tls_area))
+      [threadidoff] "I" (offsetof(Thread_Control, Registers.thread_id))
   );
 }
 
