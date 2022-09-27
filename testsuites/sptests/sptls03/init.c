@@ -29,6 +29,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/stackchk.h>
 #include <rtems/score/thread.h>
 
 #include "tmacros.h"
@@ -55,6 +56,7 @@ static void Init(rtems_task_argument arg)
 
   test();
 
+  rtems_test_assert(!rtems_stack_checker_is_blown());
   TEST_END();
 
   rtems_test_exit(0);
@@ -74,6 +76,8 @@ static void Init(rtems_task_argument arg)
  * thread-local objects.
  */
 #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
+#define CONFIGURE_STACK_CHECKER_ENABLED
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 

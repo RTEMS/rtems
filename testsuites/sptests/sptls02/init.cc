@@ -36,6 +36,7 @@
 
 #include <rtems.h>
 #include <rtems/libcsupport.h>
+#include <rtems/stackchk.h>
 
 #include <tmacros.h>
 
@@ -288,6 +289,7 @@ extern "C" void Init(rtems_task_argument arg)
 	testWorkerTask();
 
 	rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+	rtems_test_assert(!rtems_stack_checker_is_blown());
 
 	TEST_END();
 
@@ -296,6 +298,8 @@ extern "C" void Init(rtems_task_argument arg)
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+
+#define CONFIGURE_STACK_CHECKER_ENABLED
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 #define CONFIGURE_MAXIMUM_SEMAPHORES 3

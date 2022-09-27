@@ -30,6 +30,7 @@
 #endif
 
 #include <rtems/bspIo.h>
+#include <rtems/stackchk.h>
 #include <rtems/sysinit.h>
 
 #include "tmacros.h"
@@ -109,6 +110,7 @@ static void Init(rtems_task_argument arg)
 {
   test();
 
+  rtems_test_assert(!rtems_stack_checker_is_blown());
   TEST_END();
 
   rtems_test_exit(0);
@@ -122,6 +124,8 @@ RTEMS_SYSINIT_ITEM(
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+
+#define CONFIGURE_STACK_CHECKER_ENABLED
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 
