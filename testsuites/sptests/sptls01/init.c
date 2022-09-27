@@ -32,6 +32,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/stackchk.h>
 #include <rtems/sysinit.h>
+#include <rtems/score/tls.h>
 
 #include "tmacros.h"
 
@@ -62,6 +63,24 @@ static void task(rtems_task_argument arg)
 
   sc = rtems_task_suspend(RTEMS_SELF);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void check_tls_size(void)
+{
+  uintptr_t tls_size;
+
+  tls_size = _TLS_Get_size();
+
+  if (tls_size != 1) {
+    printk(
+      "WARNING: The thread-local storage size is %" PRIuPTR ".  It should be\n"
+      "exactly one for this test.  Check the BSP implementation.  The BSP\n"
+      "should not pull in thread-local storage objects such as errno for\n"
+      "this test.\n",
+      tls_size
+    );
+    rtems_test_assert(tls_size == 1);
+  }
 }
 
 static void test(void)
@@ -101,6 +120,7 @@ static void test(void)
 
 static void test_idle_during_system_init(void)
 {
+  rtems_print_printer_printk(&rtems_test_printer);
   TEST_BEGIN();
 
   check_tls_item(123);
@@ -111,6 +131,7 @@ static void Init(rtems_task_argument arg)
   test();
 
   rtems_test_assert(!rtems_stack_checker_is_blown());
+  check_tls_size();
   TEST_END();
 
   rtems_test_exit(0);
@@ -123,7 +144,19 @@ RTEMS_SYSINIT_ITEM(
 );
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+
+/*
+ * Avoid a dependency on errno which might be a thread-local object.  This test
+ * assumes that no thread-local storage object other than tls_item is present.
+ */
+#define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+
+/*
+ * This test requires full control over the present thread-local objects.  In
+ * certain Newlib configurations, the Newlib reentrancy support may add
+ * thread-local objects.
+ */
+#define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
 
 #define CONFIGURE_STACK_CHECKER_ENABLED
 
