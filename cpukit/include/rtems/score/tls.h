@@ -167,17 +167,13 @@ uintptr_t _TLS_Get_allocation_size( void );
  */
 static inline void _TLS_Copy_and_clear( void *tls_data )
 {
-  tls_data = memcpy(
-    tls_data,
-    _TLS_Data_begin,
-    (size_t) ((uintptr_t)_TLS_Data_size)
-  );
+  tls_data = memcpy( tls_data, _TLS_Data_begin, (uintptr_t) _TLS_Data_size );
 
   memset(
-    (char *) tls_data + (size_t)((intptr_t) _TLS_BSS_begin) -
-      (size_t)((intptr_t) _TLS_Data_begin),
+    (char *) tls_data +
+      (uintptr_t) _TLS_BSS_begin - (uintptr_t) _TLS_Data_begin,
     0,
-    ((size_t) (intptr_t)_TLS_BSS_size)
+    (uintptr_t) _TLS_BSS_size
   );
 }
 
