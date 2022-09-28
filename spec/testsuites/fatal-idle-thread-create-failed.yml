@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This validation test suite contains a test case which is triggered by a fatal
+  error during system initialization.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  static bool CreateTask( rtems_tcb *executing, rtems_tcb *created )
+  {
+    (void) executing;
+    (void) created;
+    return false;
+  }
+
+  #define FATAL_SYSINIT_RUN ScoreThreadValFatalIdleThreadCreateFailed_Run
+
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+  #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+
+  #define FATAL_SYSINIT_INITIAL_EXTENSION { .thread_create = CreateTask }
+
+  #include "ts-fatal-sysinit.h"
+test-description: null
+test-includes: []
+test-local-includes:
+- tr-fatal-idle-thread-create-failed.h
+test-suite-name: FatalIdleThreadCreateFailed
+test-target: testsuites/validation/ts-fatal-idle-thread-create-failed.c
+type: test-suite

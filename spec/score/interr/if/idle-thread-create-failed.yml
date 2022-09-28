@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: unspecified-enumerator
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: INTERNAL_ERROR_IDLE_THREAD_CREATE_FAILED
+references:
+- identifier: internal_errors
+  name: c-user
+  type: document
+type: interface
