@@ -18,6 +18,8 @@ links:
 - role: build-dependency
   uid: fatal-boot-processor-not-assigned-to-scheduler
 - role: build-dependency
+  uid: fatal-idle-thread-create-failed
+- role: build-dependency
   uid: fatal-init-task-construct-failed
 - role: build-dependency
   uid: fatal-mandatory-processor-not-present

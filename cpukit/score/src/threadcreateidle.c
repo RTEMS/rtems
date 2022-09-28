@@ -39,13 +39,16 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadidledata.h>
-#include <rtems/score/cpuimpl.h>
 #include <rtems/score/threadimpl.h>
+
 #include <rtems/score/assert.h>
+#include <rtems/score/cpuimpl.h>
+#include <rtems/score/interr.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/threadidledata.h>
+#include <rtems/score/tls.h>
 #include <rtems/score/userextimpl.h>
 
 #include <string.h>
@@ -66,6 +69,7 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   config.name = _Objects_Build_name( 'I', 'D', 'L', 'E' );
   config.is_fp = CPU_IDLE_TASK_IS_FP;
   config.is_preemptible = true;
+  config.stack_free = _Objects_Free_nothing;
   config.stack_size = _Thread_Idle_stack_size
     + CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE;
 
@@ -87,7 +91,9 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   _Assert( idle != NULL );
 
   status = _Thread_Initialize( &_Thread_Information, idle, &config );
-  _Assert_Unused_variable_equals( status, STATUS_SUCCESSFUL );
+  if ( status != STATUS_SUCCESSFUL ) {
+    _Internal_error( INTERNAL_ERROR_IDLE_THREAD_CREATE_FAILED );
+  }
 
   /*
    *  WARNING!!! This is necessary to "kick" start the system and
