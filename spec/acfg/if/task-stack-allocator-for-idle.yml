@@ -1,14 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: initializer
 copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
 default-value: |
-  The default value is ``_Stack_Allocator_allocate_for_idle_default``, which
-  indicates that IDLE task stacks will be allocated from an area statically
-  allocated by ``<rtems/confdefs.h>``.
+  By default, the IDLE task storage area will be allocated from the RTEMS
+  Workspace.
 description: |
   The value of this configuration option is the address for the stack allocator
-  allocate handler used to allocate the task stack of each
+  allocate handler used to allocate the task storage area of each
   ${/glossary/idletask:/term}.
 enabled-by: true
 index-entries:
@@ -21,10 +21,25 @@ links:
   uid: group-stackalloc
 - role: constraint
   uid: ../constraint/init-task-stack-allocator-for-idle
+- role: constraint
+  uid: ../constraint/task-stack-allocator-for-idle-do-or-die
+- role: constraint
+  uid: ../constraint/task-stack-allocator-for-idle-increase-size
 name: CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
 notes: |
   This configuration option is independent of the other thread stack allocator
-  configuration options.  It is assumed that any memory allocated for the stack
-  of an ${/glossary/idletask:/term} will not be from the RTEMS Workspace or the
-  memory statically allocated by default.
+  configuration options.  It is assumed that any memory allocated for the task
+  storage area of an ${/glossary/idletask:/term} will not be from the RTEMS
+  Workspace.
+
+  The IDLE task stack allocator may increase the size of the allocated memory
+  area to account for the actually allocated memory area.
+
+  The
+
+  * ${idle-task-storage-size:/name}, and
+
+  * ``CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE``
+
+  configuration options are mutually exclusive.
 type: interface

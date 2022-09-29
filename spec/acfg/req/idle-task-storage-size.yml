@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/idle-task-storage-size
+- role: requirement-refinement
+  uid: group
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The application configuration option shall define the task storage area size
+  for an ${/glossary/idletask:/term}.
+type: requirement

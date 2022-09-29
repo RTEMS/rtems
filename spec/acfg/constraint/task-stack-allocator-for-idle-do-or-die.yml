@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  The IDLE task stack allocator shall return a pointer to the allocated memory
+  area or terminate the system with a fatal error if the allocation request
+  cannot be satisfied.
+type: constraint

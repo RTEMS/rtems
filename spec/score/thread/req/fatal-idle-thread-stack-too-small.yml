@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/fatal-error
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  If the idle thread stack is less than the configured stack size for idle
+  threads, then the system shall terminate with the
+  ${/score/interr/if/internal-error-core:/name} fatal source and the
+  ${/score/interr/if/idle-thread-stack-too-small:/name} fatal code.
+type: requirement

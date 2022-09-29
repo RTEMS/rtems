@@ -8,5 +8,5 @@ links:
 rationale: null
 text: |
   The value of the application configuration option shall be defined to a valid
-  function pointer of the type ``void *( *allocate )( uint32_t, size_t )``.
+  function pointer of the type ``void *( *allocate )( uint32_t, size_t * )``.
 type: constraint

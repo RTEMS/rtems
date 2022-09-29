@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This validation test suite contains a test case which triggers a fatal error
+  during system initialization.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define FATAL_SYSINIT_RUN ScoreThreadValFatalIdleThreadStackTooSmall_Run
+
+  static _Thread_local volatile uint8_t zero[ RTEMS_MINIMUM_STACK_SIZE ];
+
+  static void Init( rtems_task_argument arg )
+  {
+    (void) arg;
+    rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, zero[ 0 ] + 1 );
+  }
+
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+  #define CONFIGURE_MAXIMUM_TASKS 1
+
+  #define CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE 1
+
+  #define CONFIGURE_INIT_TASK_PRIORITY 0
+
+  #define CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE RTEMS_MINIMUM_STACK_SIZE
+
+  #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+  #include "ts-fatal-sysinit.h"
+test-description: null
+test-includes: []
+test-local-includes:
+- tr-fatal-idle-thread-stack-too-small.h
+test-suite-name: FatalIdleThreadStackTooSmall
+test-target: testsuites/validation/ts-fatal-idle-thread-stack-too-small.c
+type: test-suite

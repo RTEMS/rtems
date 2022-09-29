@@ -1,0 +1,81 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    The test action is carried out by configuring a thread-local storage demand
+    which leads to a too small idle thread stack size.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the expected fatal source is present.
+    code: |
+      T_step_eq_int( ${step}, ctx->source, INTERNAL_ERROR_CORE );
+    links:
+    - role: validation
+      uid: ../req/fatal-idle-thread-stack-too-small
+  - brief: |
+      Check that the expected fatal code is present.
+    code: |
+      T_step_eq_ulong(
+        ${step},
+        ctx->code,
+        INTERNAL_ERROR_IDLE_THREAD_STACK_TOO_SMALL
+      );
+    links:
+    - role: validation
+      uid: ../req/fatal-idle-thread-stack-too-small
+  - brief: |
+      Check the configured value of ${/acfg/if/idle-task-storage-size:/name}.
+    code: |
+      T_step_eq_sz(
+        ${step},
+        _Stack_Allocator_allocate_for_idle_storage_size,
+        RTEMS_ALIGN_UP(
+          RTEMS_TASK_STORAGE_SIZE(
+            RTEMS_MINIMUM_STACK_SIZE,
+            RTEMS_DEFAULT_ATTRIBUTES
+          ),
+          CPU_INTERRUPT_STACK_ALIGNMENT
+        )
+      );
+    links:
+    - role: validation
+      uid: /acfg/req/idle-task-storage-size
+  links: []
+test-brief: |
+  Tests a fatal error caused by a too small idle thread stack size.
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: true
+  includes:
+  - rtems.h
+  local-includes: []
+  run-params:
+  - description: |
+      is the fatal source.
+    dir: null
+    name: source
+    specifier: ${/rtems/userext/if/fatal-source:/name} ${.:name}
+  - description: |
+      is the fatal code.
+    dir: null
+    name: code
+    specifier: ${/rtems/userext/if/fatal-code:/name} ${.:name}
+  target: testsuites/validation/tr-fatal-idle-thread-stack-too-small.h
+test-includes:
+- rtems.h
+test-local-includes:
+- tr-fatal-idle-thread-stack-too-small.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tr-fatal-idle-thread-stack-too-small.c
+test-teardown: null
+type: test-case

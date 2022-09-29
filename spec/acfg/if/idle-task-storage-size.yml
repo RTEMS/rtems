@@ -1,0 +1,55 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+default-value: |
+  This configuration option has no default value.  If it is not specified, then
+  the task storage area for each ${/glossary/idletask:/term} will allocated
+  from the RTEMS Workspace or through a custom IDLE task stack allocator.
+description: |
+  If this configuration option is specified, then the task storage areas for
+  the ${/glossary/idletask:/plural} are statically allocated by
+  <rtems/confdefs.h>.  The value of this configuration option defines the size
+  in bytes of the task storage area of each IDLE task in the system.
+enabled-by: true
+index-entries:
+- IDLE task storage size
+interface-type: appl-config-option
+links:
+- role: interface-placement
+  uid: domain
+- role: interface-ingroup
+  uid: group-idle
+- role: constraint
+  uid: ../constraint/idle-task-min-stack-size
+name: CONFIGURE_IDLE_TASK_STORAGE_SIZE
+notes: |
+  By default, the IDLE task storage areas are allocated from the RTEMS
+  Workspace.  Applications which do not want to use a heap allocator can use
+  this configuration option to use statically allocated memory for the IDLE
+  task storage areas.  The task storage area contains the task stack, the
+  thread-local storage, and the floating-point context on architectures with a
+  separate floating-point context.  The size of the thread-local storage area
+  is defined at link time or by the ${max-thread-local-storage-size:/name}
+  configuration option.  You have to estimate the actual thread-local storage
+  size if you want to use this configuration option.  If the IDLE task stack
+  size would be less than the value defined by the
+  ${idle-task-stack-size:/name} configuration option, for example because the
+  thread-local storage size is larger than expected, then the system terminates
+  with the ${/score/interr/if/internal-error-core:/name} fatal source and the
+  ${/score/interr/if/idle-thread-stack-too-small:/name} fatal code during
+  system initialization.
+
+  The value of this configuration option is passed to
+  ${/rtems/task/if/storage-size:/name} by <rtems/confdefs.h> to determine the
+  actual size of the statically allocated area to take architecture-specific
+  overheads into account.
+
+  The
+
+  * ``CONFIGURE_IDLE_TASK_STORAGE_SIZE``, and
+
+  * ${task-stack-allocator-for-idle:/name}
+
+  configuration options are mutually exclusive.
+type: interface

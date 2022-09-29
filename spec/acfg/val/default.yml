@@ -20,8 +20,8 @@ test-actions:
     - role: validation
       uid: /rtems/config/req/get-idle-task
   - brief: |
-      Check the default value ${/acfg/if/idle-task-stack-size:/name} where the
-      optional BSP-provided default value is enabled.
+      Check the default value of ${/acfg/if/idle-task-stack-size:/name} where
+      the optional BSP-provided default value is enabled.
     code: |
       T_step_eq_sz(
         ${step},
@@ -38,8 +38,8 @@ test-actions:
     - role: validation
       uid: ../if/disable-bsp-settings
   - brief: |
-      Check the default value ${/acfg/if/interrupt-stack-size:/name} where the
-      optional BSP-provided default value is enabled.
+      Check the default value of ${/acfg/if/interrupt-stack-size:/name} where
+      the optional BSP-provided default value is enabled.
     code: |
       T_step_eq_sz(
         ${step},
