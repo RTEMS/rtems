@@ -64,6 +64,21 @@ typedef struct
   rtems_fdt_blob* blob;  /**< The blob the handle references. */
 } rtems_fdt_handle;
 
+/**
+ * FDT Address property. It is an address an optionally a size.
+ *
+ * Only 32bit addresses and sizes on 32bit machine. Ignore the upper
+ * 32bits.
+ */
+typedef struct
+{
+  int node;
+  uint64_t address;
+  uint64_t size;
+  int      address_cells;
+  int      size_cells;
+} rtems_fdt_address_map;
+
 /*
  * The following are mappings to the standard FDT calls.
  */
@@ -165,9 +180,13 @@ typedef struct
  * The blob cannot be unloaded as it is referenced.
  */
 #define RTEMS_FDT_ERR_REFERENCED     104
+/**
+ * The property length is invalid
+ */
+#define RTEMS_FDT_ERR_BADLENGTH      105
 
 #define RTEMS_FDT_ERR_RTEMS_MIN      100
-#define RTEMS_FDT_ERR_MAX            104
+#define RTEMS_FDT_ERR_MAX            105
 
 /**
  * Initialise a handle to a default state.
@@ -333,6 +352,39 @@ int rtems_fdt_path_offset (rtems_fdt_handle* handle, const char* path);
 const char* rtems_fdt_get_name (rtems_fdt_handle* handle,
                                 int               nodeoffset,
                                 int*              length);
+
+/**
+ * Retrieve the offset for the first property for a node.
+ *
+ * @param handle The FDT handle to the current blob.
+ * @param nodeoffset Structure block offset of the starting node.
+ * @return int The offset of a node's first property.
+ */
+int rtems_fdt_first_prop_offset(rtems_fdt_handle* handle, int nodeoffset);
+
+/**
+ * Retrieve the next property of a node relative to the property
+ *
+ * @param handle The FDT handle to the current blob.
+ * @param propoffset Property offset to search from
+ * @return int Property offset or end if less than 0.
+ */
+int rtems_fdt_next_prop_offset(rtems_fdt_handle* handle, int propoffset);
+
+/**
+ * Retrieve the property value, name and length of name given a
+ * property offset.
+ *
+ * @param handle The FDT handle to the current blob.
+ * @param propoffset Property offset
+ * @param name If not NULL set the pointer to the name string.
+ * @param length Pointer to an integer variable (will be overwritten) or NULL.
+ * @return const void* The node's value data.
+ */
+const void* rtems_fdt_getprop_by_offset(rtems_fdt_handle* handle,
+                                        int               propoffset,
+                                        const char**      name,
+                                        int*              length);
 
 /**
  * Get property value based on substring. Identical to rtems_fdt_getprop(), but
@@ -586,6 +638,14 @@ int rtems_fdt_next_node (rtems_fdt_handle* handle, int offset, int* depth);
 const char* rtems_fdt_strerror (int errval);
 
 /**
+ * Return a parent property given a node offset. Travel up until found
+ * or the root node is reached
+ */
+bool rtems_fdt_get_parent_prop_value(rtems_fdt_handle* handle,
+                                     int               nodeoffset,
+                                     const char*       name,
+                                     uint32_t*         value);
+/**
  * Return a property given a path.
  */
 int rtems_fdt_prop_value(const char* const path,
@@ -600,7 +660,7 @@ int rtems_fdt_prop_value(const char* const path,
 int rtems_fdt_prop_map (const char* const path,
                         const char* const propname,
                         const char* const names[],
-                        uint32_t*         values,
+                        uintptr_t*        values,
                         size_t            count);
 
 /*
@@ -609,7 +669,7 @@ int rtems_fdt_prop_map (const char* const path,
 int rtems_fdt_get_value (const char* const path,
                          const char* const property,
                          size_t            size,
-                         uint32_t*         value);
+                         uintptr_t*        value);
 
 /**
  * Get the number of entries in an FDT handle.
@@ -631,7 +691,38 @@ int rtems_fdt_entry_offset(rtems_fdt_handle* handle, int id);
 /*
  * Helper function to convert the void* property result to a 32bit unsigned int.
  */
-uint32_t rtems_fdt_get_uint32 (const void* prop);
+uint32_t rtems_fdt_get_uint32(const void* prop);
+uint32_t rtems_fdt_get_offset_uint32(const void* prop, int offset);
+
+/*
+ * Helper function to convert the void* property result to a 64bit unsigned int.
+ */
+uint64_t rtems_fdt_get_uint64(const void* prop);
+uint64_t rtems_fdt_get_offset_uint64(const void* prop, int offset);
+
+/*
+ * Helper function to convert the void* property result to a uintptr_t
+ */
+uintptr_t rtems_fdt_get_uintptr(const void* prop);
+uintptr_t rtems_fdt_get_offset_uintptr(const void* prop, int offset);
+
+/*
+ * Find the address cells property in parent nodes.
+ */
+int rtems_fdt_getprop_address_cells(rtems_fdt_handle* handle, int nodeoffset);
+
+/*
+ * Find the size cells property in parent nodes.
+ */
+int rtems_fdt_getprop_size_cells(rtems_fdt_handle* handle, int nodeoffset);
+
+/*
+ * Get an address space property.
+ */
+int rtems_fdt_getprop_address_map(rtems_fdt_handle*      handle,
+                                  const char*            path,
+                                  const char*            name,
+                                  rtems_fdt_address_map* addr_map);
 
 #ifdef __cplusplus
 }

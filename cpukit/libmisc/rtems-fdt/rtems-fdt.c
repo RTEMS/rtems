@@ -782,6 +782,27 @@ rtems_fdt_get_name (rtems_fdt_handle* handle, int nodeoffset, int* length)
   return name;
 }
 
+int
+rtems_fdt_first_prop_offset(rtems_fdt_handle* handle, int nodeoffset)
+{
+  return fdt_first_property_offset(handle->blob->blob, nodeoffset);
+}
+
+int
+rtems_fdt_next_prop_offset(rtems_fdt_handle* handle, int propoffset)
+{
+  return fdt_next_property_offset(handle->blob->blob, propoffset);
+}
+
+const void*
+rtems_fdt_getprop_by_offset(rtems_fdt_handle* handle,
+                            int               propoffset,
+                            const char**      name,
+                            int*              length)
+{
+  return fdt_getprop_by_offset(handle->blob->blob, propoffset, name, length);
+}
+
 const void*
 rtems_fdt_getprop_namelen (rtems_fdt_handle* handle,
                            int               nodeoffset,
@@ -987,11 +1008,29 @@ rtems_fdt_prop_value(const char* const path,
   return 0;
 }
 
+bool
+rtems_fdt_get_parent_prop_value(rtems_fdt_handle* handle,
+                                int               nodeoffset,
+                                const char*       name,
+                                uint32_t*         value)
+{
+  const void* prop;
+  int plen = 0;
+  int node = rtems_fdt_parent_offset(handle, nodeoffset);
+  if (node < 0)
+    return false;
+  prop = rtems_fdt_getprop(handle, node, name, &plen);
+  if (plen < 0)
+    return false;
+  *value = rtems_fdt_get_uint32(prop);
+  return true;
+}
+
 int
 rtems_fdt_prop_map(const char* const path,
                    const char* const propname,
                    const char* const names[],
-                   uint32_t*         values,
+                   uintptr_t*        values,
                    size_t            count)
 {
   rtems_fdt_handle fdt;
@@ -1006,10 +1045,9 @@ rtems_fdt_prop_map(const char* const path,
 
   for (item = 0; item < count; item++)
   {
-    const void*    prop;
-    const uint8_t* p;
-    int            length;
-    int            subnode;
+    const void* prop;
+    int         length;
+    int         subnode;
 
     subnode = rtems_fdt_subnode_offset (&fdt, node, names[item]);
     if (subnode < 0)
@@ -1025,40 +1063,70 @@ rtems_fdt_prop_map(const char* const path,
       return length;
     }
 
-    if (length != sizeof (uint32_t))
+    if (length != sizeof (uintptr_t))
     {
       rtems_fdt_release_handle (&fdt);
       return RTEMS_FDT_ERR_BADPATH;
     }
 
-    p = prop;
-
-    values[item] = ((((uint32_t) p[0]) << 24) |
-                    (((uint32_t) p[1]) << 16) |
-                    (((uint32_t) p[2]) << 8)  |
-                    (uint32_t) p[3]);
+    values[item] = rtems_fdt_get_uintptr(prop);
   }
 
   return 0;
 }
 
 uint32_t
-rtems_fdt_get_uint32 (const void* prop)
+rtems_fdt_get_offset_uint32 (const void* prop, int offset)
 {
   const uint8_t* p = prop;
   uint32_t       value;
-  value = ((((uint32_t) p[0]) << 24) |
-           (((uint32_t) p[1]) << 16) |
-           (((uint32_t) p[2]) << 8)  |
-           (uint32_t) p[3]);
+  offset *= sizeof(uint32_t);
+  value = ((((uint32_t) p[offset + 0]) << 24) |
+           (((uint32_t) p[offset + 1]) << 16) |
+           (((uint32_t) p[offset + 2]) << 8)  |
+           (uint32_t) p[offset + 3]);
   return value;
+}
+
+uint32_t
+rtems_fdt_get_uint32 (const void* prop)
+{
+  return rtems_fdt_get_offset_uint32(prop, 0);
+}
+
+uint64_t
+rtems_fdt_get_offset_uint64 (const void* prop, int offset)
+{
+  uint64_t value = rtems_fdt_get_offset_uint32(prop, offset);
+  value = (value << 16) << 16;
+  return value | rtems_fdt_get_offset_uint32(prop, offset + 1);
+}
+
+uint64_t
+rtems_fdt_get_uint64 (const void* prop)
+{
+  return rtems_fdt_get_offset_uint64(prop, 0);
+}
+
+uintptr_t
+rtems_fdt_get_uintptr (const void* prop)
+{
+  return rtems_fdt_get_offset_uintptr(prop, 0);
+}
+
+uintptr_t
+rtems_fdt_get_offset_uintptr (const void* prop, int offset)
+{
+  if (sizeof(intptr_t) == sizeof(uint32_t))
+    return rtems_fdt_get_offset_uint32(prop, offset);
+  return rtems_fdt_get_offset_uint64(prop, offset);
 }
 
 int
 rtems_fdt_get_value (const char* path,
                      const char* property,
                      size_t      size,
-                     uint32_t*   value)
+                     uintptr_t*  value)
 {
   rtems_fdt_handle fdt;
   const void*      prop;
@@ -1081,7 +1149,7 @@ rtems_fdt_get_value (const char* path,
     return length;
   }
 
-  if (length == sizeof (uint32_t))
+  if (length == sizeof (uintptr_t))
     *value = rtems_fdt_get_uint32 (prop);
   else
     *value = 0;
@@ -1118,4 +1186,112 @@ int
 rtems_fdt_entry_offset(rtems_fdt_handle* handle, int id)
 {
   return handle->blob->index.entries[id].offset;
+}
+
+int
+rtems_fdt_getprop_address_cells(rtems_fdt_handle* handle, int nodeoffset)
+{
+  uint32_t value = 0;
+  if (!rtems_fdt_get_parent_prop_value(handle, nodeoffset, "#address-cells", &value))
+    return -1;
+  return value;
+}
+
+int
+rtems_fdt_getprop_size_cells(rtems_fdt_handle* handle, int nodeoffset)
+{
+  uint32_t value = 0;
+  if (!rtems_fdt_get_parent_prop_value(handle, nodeoffset, "#size-cells", &value))
+    return -1;
+  return value;
+}
+
+int rtems_fdt_getprop_address_map(rtems_fdt_handle*      handle,
+                                  const char*            path,
+                                  const char*            name,
+                                  rtems_fdt_address_map* addr_map)
+{
+  const void* prop;
+  int plen = 0;
+  int poff = 0;
+  int len;
+
+  memset(addr_map, 0, sizeof(*addr_map));
+
+  addr_map->node = rtems_fdt_path_offset(handle, path);
+  if (addr_map->node < 0)
+    return -RTEMS_FDT_ERR_NOTFOUND;
+
+  addr_map->address_cells = rtems_fdt_getprop_address_cells(handle, addr_map->node);
+  addr_map->size_cells = rtems_fdt_getprop_size_cells(handle, addr_map->node);
+
+  prop = rtems_fdt_getprop(handle, addr_map->node, name, &plen);
+  if (plen < 0)
+    return -RTEMS_FDT_ERR_NOTFOUND;
+
+  if (addr_map->address_cells == 0)
+    return -RTEMS_FDT_ERR_BADOFFSET;
+
+  if (addr_map->address_cells < 0)
+  {
+    if (addr_map->size_cells > 0)
+      return -RTEMS_FDT_ERR_BADOFFSET;
+    addr_map->address_cells = 1;
+  }
+
+  if (addr_map->size_cells < 0)
+  {
+    addr_map->size = sizeof(uint32_t);
+    addr_map->size_cells = 0;
+  }
+
+  len = (addr_map->address_cells + addr_map->size_cells) * sizeof(uint32_t);
+
+  if (len != plen)
+    return -RTEMS_FDT_ERR_BADLENGTH;
+
+  switch (addr_map->address_cells)
+  {
+    case 1:
+      if (plen < sizeof(uint32_t))
+        return -RTEMS_FDT_ERR_BADLENGTH;
+      addr_map->address = rtems_fdt_get_offset_uint32(prop, poff);
+      poff += 1;
+      plen -= sizeof(uint32_t);
+      break;
+    case 2:
+      if (plen < sizeof(uint64_t))
+        return -RTEMS_FDT_ERR_BADLENGTH;
+      addr_map->address = rtems_fdt_get_offset_uint64(prop, poff);
+      poff += 2;
+      plen -= sizeof(uint64_t);
+      break;
+    default:
+      return -RTEMS_FDT_ERR_BADLENGTH;
+  }
+
+  switch (addr_map->size_cells)
+  {
+    case 0:
+      addr_map->size = sizeof(uint32_t);
+      break;
+    case 1:
+      if (plen < sizeof(uint32_t))
+        return -RTEMS_FDT_ERR_BADLENGTH;
+      addr_map->size = rtems_fdt_get_offset_uint32(prop, poff);
+      poff += 1;
+      plen -= sizeof(uint32_t);
+      break;
+    case 2:
+      if (plen < sizeof(uint64_t))
+        return -RTEMS_FDT_ERR_BADLENGTH;
+      addr_map->size = rtems_fdt_get_offset_uint64(prop, poff);
+      poff += 2;
+      plen -= sizeof(uint64_t);
+      break;
+    default:
+      return -RTEMS_FDT_ERR_BADLENGTH;
+  }
+
+  return 0;
 }

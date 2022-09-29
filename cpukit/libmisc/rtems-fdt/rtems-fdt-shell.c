@@ -127,32 +127,6 @@ rtems_fdt_get_value32 (const char* path,
                        size_t      size,
                        uint32_t*   value)
 {
-  const void* prop;
-  int         node;
-  int         length;
-
-  node = rtems_fdt_path_offset(&cmd_fdt_handle, path);
-  if (node < 0)
-  {
-    rtems_fdt_check_error (node, "path lookup", path);
-    return false;
-  }
-
-  prop = rtems_fdt_getprop(&cmd_fdt_handle, node, property, &length);
-  if (length < 0)
-  {
-    rtems_fdt_check_error (length, "get property", path);
-    return false;
-  }
-
-  if (length != sizeof (uint32_t))
-  {
-    printf ("error: property is not sizeof(uint32_t): %s\n", path);
-    return false;
-  }
-
-  *value = rtems_fdt_get_uint32 (prop);
-
   return true;
 }
 
@@ -185,7 +159,10 @@ rtems_fdt_shell_ls (int argc, char *argv[])
   bool   debug = false;
   int    arg = 1;
   size_t path_len = 0;
+  int    total_entries = 0;
   int    num_entries = 0;
+  int    max_name_len = 0;
+  int    name_offset = 0;
   int    i = 0;
 
   while (arg < argc)
@@ -220,9 +197,14 @@ rtems_fdt_shell_ls (int argc, char *argv[])
     ++arg;
   }
 
-  if (!path)
+  if (path == NULL)
   {
     path = "";
+  }
+  else
+  {
+    if (path[0] != '/')
+      name_offset = 1;
   }
 
   /* Eliminate trailing slashes. */
@@ -231,45 +213,99 @@ rtems_fdt_shell_ls (int argc, char *argv[])
   if (path_len > 0 && path[path_len - 1] == '/')
       path_len--;
 
-  /* Loop through the entries, looking for matches. */
-  num_entries = rtems_fdt_num_entries(&cmd_fdt_handle);
-  printf("Total: %d\n", num_entries);
-  for (i = 0; i < num_entries; i++)
+  /* Loop through the entries to get the mac name len. */
+  total_entries = rtems_fdt_num_entries(&cmd_fdt_handle);
+
+  for (i = 0; i < total_entries; i++)
   {
     /* Add it to the result set. */
     const char *name = rtems_fdt_entry_name(&cmd_fdt_handle, i);
     size_t name_len = strlen(name);
 
-    if ((name_len > path_len) &&
-        ((strncmp (path, name, path_len) == 0) && (name[path_len] == '/')) &&
-        (recursive || (index(&name[path_len+1], '/') == 0)))
+    if ((name_len >= path_len + name_offset) &&
+        ((strncmp (path, name + name_offset, path_len) == 0) &&
+         ((name[path_len + name_offset] == '/' ||
+           name[path_len + name_offset] == '\0'))) &&
+        (recursive || name_len == path_len + name_offset ||
+         (strchr(&name[path_len + name_offset + 1], '/') == NULL)))
     {
+      ++num_entries;
       if (long_path)
       {
-        printf ("%s", name);
+        if (name_len > max_name_len)
+        {
+          max_name_len = name_len;
+        }
       }
       else if (name_len != path_len)
       {
-        printf ("%s", &name[path_len + 1]);
+        if (name_len - path_len > max_name_len)
+        {
+          max_name_len = name_len - path_len;
+        }
       }
+    }
+  }
+
+  printf("Total: %d of %d\n", num_entries, total_entries);
+
+  for (i = 0; i < total_entries; i++)
+  {
+    /* Add it to the result set. */
+    const char *name = rtems_fdt_entry_name(&cmd_fdt_handle, i);
+    size_t name_len = strlen(name);
+
+    if ((name_len >= path_len + name_offset) &&
+        ((strncmp (path, name + name_offset, path_len) == 0) &&
+         ((name[path_len + name_offset] == '/' ||
+           name[path_len + name_offset] == '\0'))) &&
+        (recursive || name_len == path_len + name_offset ||
+         (strchr(&name[path_len + name_offset + 1], '/') == NULL)))
+    {
+      const char* print_name = ".";
+
+      if (long_path)
+      {
+        print_name = name + name_offset;
+      }
+      else if (name_len != path_len  + name_offset)
+      {
+        print_name = &name[path_len + name_offset + 1];
+      }
+
+      printf ("%-*s", max_name_len, print_name);
 
       if (debug)
       {
         /* Get properties if we're in debug mode. */
-        int proplen = 0;
-        int offset = rtems_fdt_entry_offset(&cmd_fdt_handle, i);
-        const void *prop = rtems_fdt_getprop(&cmd_fdt_handle, offset, "reg", &proplen);
-        const void *prop2 = rtems_fdt_getprop(&cmd_fdt_handle, offset, "mask", &proplen);
-
-        if (prop)
+        int printed = 0;
+        const int noffset = rtems_fdt_entry_offset(&cmd_fdt_handle, i);
+        int poffset = rtems_fdt_first_prop_offset(&cmd_fdt_handle, noffset);
+        int address_cells =
+          rtems_fdt_getprop_address_cells(&cmd_fdt_handle, noffset);
+        int size_cells = rtems_fdt_getprop_size_cells(&cmd_fdt_handle, noffset);
+        printf("cells(a:%d s:%d) ", address_cells, size_cells);
+        while (poffset >= 0)
         {
-            printf(" addr 0x%08" PRIx32, *(uint32_t *)prop);
-        }
-
-        proplen = 0;
-        if (prop2)
-        {
-            printf(" mask 0x%08" PRIx32, *(uint32_t *)prop2);
+          int plen = 0;
+          const char* pname = NULL;
+          const uint8_t *pvalue =
+            rtems_fdt_getprop_by_offset(&cmd_fdt_handle, poffset, &pname, &plen);
+          if (pvalue != NULL)
+          {
+            int b;
+            if (printed > 0)
+              printf(",");
+            ++printed;
+            printf(" %s %i:", pname, plen);
+            for (b = 0; b < plen; ++b)
+            {
+              if (b > 0 && (b % 4) == 0)
+                printf(" ");
+              printf("%02" PRIx8, *pvalue++);
+            }
+          }
+          poffset = rtems_fdt_next_prop_offset(&cmd_fdt_handle, poffset);
         }
       }
 
@@ -283,9 +319,11 @@ rtems_fdt_shell_ls (int argc, char *argv[])
 static int
 rtems_fdt_shell_wr (int argc, char *argv[])
 {
-  uint32_t address;
-  uint32_t offset = 0;
-  uint32_t value;
+  rtems_fdt_address_map addr_map;
+  uint64_t              offset = 0;
+  uint32_t              value;
+  int                   fmt;
+  int                   r;
 
   if ((argc < 3) || (argc > 4))
     return rtems_fdt_wrong_number_of_args ();
@@ -296,18 +334,30 @@ rtems_fdt_shell_wr (int argc, char *argv[])
   }
   else
   {
-    offset = strtoul (argv[2], 0, 0);
+    offset = strtoull (argv[2], 0, 0);
     value = strtoul (argv[3], 0, 0);
   }
 
-  if (!rtems_fdt_get_value32 (argv[1], "reg", sizeof (uint32_t), &address))
+  r = rtems_fdt_getprop_address_map(&cmd_fdt_handle, argv[1], "reg", &addr_map);
+  if (r < 0)
+  {
+    printf("error: invalid reg address map: %d: %s\n", -r, argv[1]);
     return 1;
+  }
 
-  address += offset;
+  if (offset >= addr_map.size)
+  {
+    printf("error: offset out of range: %" PRIu64 ": %s\n", addr_map.size, argv[1]);
+    return 1;
+  }
 
-  printf ("0x%08" PRIx32 " <= 0x%08" PRIx32 "\n", address, value);
+  addr_map.address += offset;
 
-  rtems_fdt_write (address, value);
+  fmt = addr_map.address >= 0x0000000100000000ULL ? 16 : 8;
+
+  printf ("0x%0*" PRIx64 " <= 0x%08" PRIx32 "\n", fmt, addr_map.address, value);
+
+  rtems_fdt_write (addr_map.address, value);
 
   return 0;
 }
@@ -315,8 +365,10 @@ rtems_fdt_shell_wr (int argc, char *argv[])
 static int
 rtems_fdt_shell_rd (int argc, char *argv[])
 {
-  uint32_t address;
-  uint32_t offset = 0;
+  rtems_fdt_address_map addr_map;
+  uint32_t              offset = 0;
+  int                   fmt;
+  int                   r;
 
   if ((argc < 1) || (argc > 3))
     return rtems_fdt_wrong_number_of_args ();
@@ -324,12 +376,25 @@ rtems_fdt_shell_rd (int argc, char *argv[])
   if (argc == 3)
     offset = strtoul (argv[2], 0, 0);
 
-  if (!rtems_fdt_get_value32 (argv[1], "reg", sizeof (uint32_t), &address))
+  r = rtems_fdt_getprop_address_map(&cmd_fdt_handle, argv[1], "reg", &addr_map);
+  if (r < 0)
+  {
+    printf("error: invalid reg address map: %d: %s\n", -r, argv[1]);
     return 1;
+  }
 
-  address += offset;
+  if (offset >= addr_map.size)
+  {
+    printf("error: offset out of range: %" PRIu64 ": %s\n", addr_map.size, argv[1]);
+    return 1;
+  }
 
-  printf ("0x%08" PRIx32 " => 0x%08" PRIx32 "\n", address, rtems_fdt_read (address));
+  addr_map.address += offset;
+
+  fmt = addr_map.address >= 0x0000000100000000ULL ? 16 : 8;
+
+  printf ("0x%0*" PRIx64 " => 0x%08" PRIx32 "\n",
+          fmt, addr_map.address, rtems_fdt_read (addr_map.address));
 
   return 0;
 }
@@ -337,11 +402,13 @@ rtems_fdt_shell_rd (int argc, char *argv[])
 static int
 rtems_fdt_shell_set (int argc, char *argv[])
 {
-  uint32_t address;
-  uint32_t offset = 0;
-  uint32_t value;
-  int      mask_arg;
-  uint32_t mask;
+  rtems_fdt_address_map addr_map;
+  uint32_t              offset = 0;
+  uint32_t              value;
+  int                   mask_arg;
+  uint32_t              mask;
+  int                   fmt;
+  int                   r;
 
   if ((argc < 3) || (argc > 4))
     return rtems_fdt_wrong_number_of_args ();
@@ -354,24 +421,38 @@ rtems_fdt_shell_set (int argc, char *argv[])
     mask_arg = 3;
   }
 
-  if (!rtems_fdt_get_value32 (argv[1], "reg", sizeof (uint32_t), &address))
+  r = rtems_fdt_getprop_address_map(&cmd_fdt_handle, argv[1], "reg", &addr_map);
+  if (r < 0)
+  {
+    printf("error: invalid reg address map: %d: %s\n", -r, argv[1]);
     return 1;
+  }
+
+  if (offset >= addr_map.size)
+  {
+    printf("error: offset out of range: %" PRIu64 ": %s\n", addr_map.size, argv[1]);
+    return 1;
+  }
+
+  addr_map.address += offset;
+
+  fmt = addr_map.address >= 0x0000000100000000ULL ? 16 : 8;
 
   if (isdigit ((unsigned char) argv[mask_arg][0]))
     mask = strtoul (argv[mask_arg], 0, 0);
   else
   {
+    mask = 0;
     if (!rtems_fdt_get_value32 (argv[mask_arg], "mask", sizeof (uint32_t), &mask))
       return 1;
   }
 
-  address += offset;
-  value = rtems_fdt_read (address);
+  value = rtems_fdt_read (addr_map.address);
 
-  printf ("0x%08" PRIx32 " <= 0x%08" PRIx32 " = 0x%08" PRIx32 " | 0x%08" PRIx32 "\n",
-          address, value | mask, value, mask);
+  printf ("0x%0*" PRIx64 " <= 0x%08" PRIx32 " = 0x%08" PRIx32 " | 0x%08" PRIx32 "\n",
+          fmt, addr_map.address, value | mask, value, mask);
 
-  rtems_fdt_write (address, value | mask);
+  rtems_fdt_write (addr_map.address, value | mask);
 
   return 0;
 }
@@ -379,11 +460,13 @@ rtems_fdt_shell_set (int argc, char *argv[])
 static int
 rtems_fdt_shell_cl (int argc, char *argv[])
 {
-  uint32_t address;
-  uint32_t offset = 0;
-  uint32_t value;
-  int      mask_arg;
-  uint32_t mask;
+  rtems_fdt_address_map addr_map;
+  uint32_t              offset = 0;
+  uint32_t              value;
+  int                   mask_arg;
+  uint32_t              mask;
+  int                   fmt;
+  int                   r;
 
   if ((argc < 3) || (argc > 4))
     return rtems_fdt_wrong_number_of_args ();
@@ -396,25 +479,39 @@ rtems_fdt_shell_cl (int argc, char *argv[])
     mask_arg = 3;
   }
 
-  if (!rtems_fdt_get_value32 (argv[1], "reg", sizeof (uint32_t), &address))
+  r = rtems_fdt_getprop_address_map(&cmd_fdt_handle, argv[1], "reg", &addr_map);
+  if (r < 0)
+  {
+    printf("error: invalid reg address map: %d: %s\n", -r, argv[1]);
     return 1;
+  }
+
+  if (offset >= addr_map.size)
+  {
+    printf("error: offset out of range: %" PRIu64 ": %s\n", addr_map.size, argv[1]);
+    return 1;
+  }
+
+  addr_map.address += offset;
+
+  fmt = addr_map.address >= 0x0000000100000000ULL ? 16 : 8;
 
   if (isdigit ((unsigned char) argv[mask_arg][0]))
     mask = strtoul (argv[mask_arg], 0, 0);
   else
   {
+    mask = 0;
     if (!rtems_fdt_get_value32 (argv[mask_arg], "mask", sizeof (uint32_t), &mask))
       return 1;
   }
 
-  address += offset;
-  value = rtems_fdt_read (address);
+  value = rtems_fdt_read (addr_map.address);
 
-  printf ("0x%08" PRIx32 " <= 0x%08" PRIx32 " = 0x%08" PRIx32 \
+  printf ("0x%0*" PRIx64 " <= 0x%08" PRIx32 " = 0x%08" PRIx32 \
           " & ~0x%08" PRIx32 " (0x%08" PRIx32 ")\n",
-          address, value & ~mask, value, mask, ~mask);
+          fmt, addr_map.address, value & ~mask, value, mask, ~mask);
 
-  rtems_fdt_write (address, value & ~mask);
+  rtems_fdt_write (addr_map.address, value & ~mask);
 
   return 0;
 }
@@ -422,12 +519,14 @@ rtems_fdt_shell_cl (int argc, char *argv[])
 static int
 rtems_fdt_shell_up (int argc, char *argv[])
 {
-  uint32_t address;
-  uint32_t offset = 0;
-  uint32_t set;
-  uint32_t value;
-  int      mask_arg;
-  uint32_t mask;
+  rtems_fdt_address_map addr_map;
+  uint32_t              offset = 0;
+  uint32_t              set;
+  uint32_t              value;
+  int                   mask_arg;
+  uint32_t              mask;
+  int                   fmt;
+  int                   r;
 
   if ((argc < 4) || (argc > 5))
     return rtems_fdt_wrong_number_of_args ();
@@ -442,25 +541,39 @@ rtems_fdt_shell_up (int argc, char *argv[])
 
   set = strtoul (argv[mask_arg + 1], 0, 0);
 
-  if (!rtems_fdt_get_value32 (argv[1], "reg", sizeof (uint32_t), &address))
+  r = rtems_fdt_getprop_address_map(&cmd_fdt_handle, argv[1], "reg", &addr_map);
+  if (r < 0)
+  {
+    printf("error: invalid reg address map: %d: %s\n", -r, argv[1]);
     return 1;
+  }
+
+  if (offset >= addr_map.size)
+  {
+    printf("error: offset out of range: %" PRIu64 ": %s\n", addr_map.size, argv[1]);
+    return 1;
+  }
+
+  addr_map.address += offset;
+
+  fmt = addr_map.address >= 0x0000000100000000ULL ? 16 : 8;
 
   if (isdigit ((unsigned char) argv[mask_arg][0]))
     mask = strtoul (argv[mask_arg], 0, 0);
   else
   {
+    mask = 0;
     if (!rtems_fdt_get_value32 (argv[mask_arg], "mask", sizeof (uint32_t), &mask))
       return 1;
   }
 
-  address += offset;
-  value = rtems_fdt_read (address);
+  value = rtems_fdt_read (addr_map.address);
 
-  printf ("0x%08" PRIx32 " <= 0x%08" PRIx32 " = (0x%08" PRIx32 \
+  printf ("0x%0*" PRIx64 " <= 0x%08" PRIx32 " = (0x%08" PRIx32 \
           " & ~0x%08" PRIx32 " (0x%08" PRIx32 ")) | 0x%08" PRIx32 "\n",
-          address, (value & ~mask) | set, value, mask, ~mask, set);
+          fmt, addr_map.address, (value & ~mask) | set, value, mask, ~mask, set);
 
-  rtems_fdt_write (address, (value & ~mask) | set);
+  rtems_fdt_write (addr_map.address, (value & ~mask) | set);
 
   return 0;
 }
@@ -468,13 +581,15 @@ rtems_fdt_shell_up (int argc, char *argv[])
 static int
 rtems_fdt_shell_tst (int argc, char *argv[])
 {
-  uint32_t address;
-  uint32_t offset = 0;
-  uint32_t test;
-  uint32_t value = 0;
-  int      mask_arg;
-  uint32_t mask;
-  time_t   start;
+  rtems_fdt_address_map addr_map;
+  uint32_t              offset = 0;
+  uint32_t              test;
+  uint32_t              value = 0;
+  int                   mask_arg;
+  uint32_t              mask;
+  time_t                start;
+  int                   fmt;
+  int                   r;
 
   if ((argc < 4) || (argc > 5))
     return rtems_fdt_wrong_number_of_args ();
@@ -489,37 +604,50 @@ rtems_fdt_shell_tst (int argc, char *argv[])
 
   test = strtoul (argv[mask_arg + 1], 0, 0);
 
-  if (!rtems_fdt_get_value32 (argv[1], "reg", sizeof (uint32_t), &address))
+  r = rtems_fdt_getprop_address_map(&cmd_fdt_handle, argv[1], "reg", &addr_map);
+  if (r < 0)
+  {
+    printf("error: invalid reg address map: %d: %s\n", -r, argv[1]);
     return 1;
+  }
+
+  if (offset >= addr_map.size)
+  {
+    printf("error: offset out of range: %" PRIu64 ": %s\n", addr_map.size, argv[1]);
+    return 1;
+  }
+
+  addr_map.address += offset;
+
+  fmt = addr_map.address >= 0x0000000100000000ULL ? 16 : 8;
 
   if (isdigit ((unsigned char) argv[mask_arg][0]))
     mask = strtoul (argv[mask_arg], 0, 0);
   else
   {
-     if (!rtems_fdt_get_value32 (argv[mask_arg], "mask", sizeof (uint32_t), &mask))
+    mask = 0;
+    if (!rtems_fdt_get_value32 (argv[mask_arg], "mask", sizeof (uint32_t), &mask))
       return 1;
   }
 
-  address += offset;
-
   start = time (NULL);
 
-  printf ("0x%08" PRIx32 " => (value & 0x%08" PRIx32 ") == 0x%08" PRIx32 \
+  printf ("0x%0*" PRIx64 " => (value & 0x%08" PRIx32 ") == 0x%08" PRIx32 \
           " for %ld seconds\n",
-          address, mask, test, rtems_fdt_test_timeout);
+          fmt, addr_map.address, mask, test, rtems_fdt_test_timeout);
 
   while ((time (NULL) - start) < rtems_fdt_test_timeout)
   {
     int i;
     for (i = 0; i < 10000; ++i)
     {
-      value = rtems_fdt_read (address);
+      value = rtems_fdt_read (addr_map.address);
       if ((value & mask) == test)
         return 0;
     }
   }
 
-  printf ("0x%08" PRIx32 " => 0x%08" PRIx32 ": timeout\n", address, value);
+  printf ("0x%0*" PRIx64 " => 0x%08" PRIx32 ": timeout\n", fmt, addr_map.address, value);
 
   return 1;
 }
