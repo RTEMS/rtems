@@ -40,9 +40,7 @@
 #ifndef _RTEMS_STACKCHK_H
 #define _RTEMS_STACKCHK_H
 
-#include <stdbool.h> /* bool */
-
-#include <rtems/score/thread.h> /* Thread_Control */
+#include <rtems.h>
 #include <rtems/print.h>
 
 /**
@@ -110,11 +108,11 @@ void rtems_stack_checker_report_usage_with_plugin(
  *       will automatically intialize itself.
  */
 bool rtems_stack_checker_create_extension(
-  Thread_Control *running,
-  Thread_Control *the_thread
+  rtems_tcb *running,
+  rtems_tcb *the_thread
 );
 
-void rtems_stack_checker_begin_extension( Thread_Control *executing );
+void rtems_stack_checker_begin_extension( rtems_tcb *executing );
 
 /**
  * @brief Stack Checker Task Context Switch Extension
@@ -128,8 +126,8 @@ void rtems_stack_checker_begin_extension( Thread_Control *executing );
  * @note This is called from the internal method _Thread_Dispatch.
  */
 void rtems_stack_checker_switch_extension(
-  Thread_Control *running,
-  Thread_Control *heir
+  rtems_tcb *running,
+  rtems_tcb *heir
 );
 
 /**
