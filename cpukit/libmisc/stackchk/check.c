@@ -413,125 +413,135 @@ static inline void *Stack_check_Find_high_water_mark(
         return (void *) base;
   #endif
 
-  return (void *)0;
+  return NULL;
 }
 
-static bool Stack_check_Dump_stack_usage(
-  const Stack_Control *stack,
-  const void          *current,
-  const char          *name,
-  uint32_t             id,
-  const rtems_printer *printer
+static void Stack_check_Visit_stack(
+  const Stack_Control        *stack,
+  const void                 *current,
+  const char                 *name,
+  rtems_id                    id,
+  rtems_stack_checker_visitor visit,
+  void                        *arg
 )
 {
-  uint32_t  size;
-  uint32_t  used;
-  void     *low;
-  void     *high_water_mark;
+  rtems_stack_checker_info info;
 
   /* This is likely to occur if the stack checker is not actually enabled */
   if ( stack->area == NULL ) {
-    return false;
+    return;
   }
 
-  low  = Stack_check_Usable_stack_start(stack);
-  size = Stack_check_Usable_stack_size(stack);
+  info.id = id;
+  info.name = name;
+  info.current = current;
+  info.begin  = Stack_check_Usable_stack_start( stack );
+  info.size = Stack_check_Usable_stack_size( stack );
 
-  high_water_mark = Stack_check_Find_high_water_mark(low, size);
+  if ( Stack_check_Initialized ) {
+    void *high_water_mark;
 
-  if ( high_water_mark )
-    used = Stack_check_Calculate_used( low, size, high_water_mark );
-  else
-    used = 0;
+    high_water_mark =
+      Stack_check_Find_high_water_mark( info.begin, info.size );
 
-  rtems_printf(
-    printer,
-    "0x%08" PRIx32 " %-21s 0x%08" PRIxPTR " 0x%08" PRIxPTR " 0x%08" PRIxPTR " %6" PRId32 " ",
-    id,
-    name,
-    (uintptr_t) stack->area,
-    (uintptr_t) stack->area + (uintptr_t) stack->size - 1,
-    (uintptr_t) current,
-    size
-  );
-
-  if (Stack_check_Initialized) {
-    rtems_printf( printer, "%6" PRId32 "\n", used );
+    if ( high_water_mark != NULL ) {
+      info.used =
+        Stack_check_Calculate_used( info.begin, info.size, high_water_mark );
+    } else {
+      info.used = 0;
+    }
   } else {
-    rtems_printf( printer, "N/A\n" );
+    info.used = UINTPTR_MAX;
   }
 
-  return false;
+  ( *visit )( &info, arg );
 }
 
-static bool Stack_check_Dump_threads_usage(
+typedef struct {
+  rtems_stack_checker_visitor visit;
+  void *arg;
+} Stack_check_Visitor;
+
+static bool Stack_check_Visit_thread(
   Thread_Control *the_thread,
   void           *arg
 )
 {
+  Stack_check_Visitor *visitor;
   char                 name[ 22 ];
-  const rtems_printer *printer;
   uintptr_t sp = _CPU_Context_Get_SP( &the_thread->Registers );
 
-  printer = arg;
+  visitor = arg;
   _Thread_Get_name( the_thread, name, sizeof( name ) );
-  Stack_check_Dump_stack_usage(
+  Stack_check_Visit_stack(
     &the_thread->Start.Initial_stack,
     (void *) sp,
     name,
     the_thread->Object.id,
-    printer
+    visitor->visit,
+    visitor->arg
   );
   return false;
 }
 
-static void Stack_check_Dump_interrupt_stack_usage(
-  const Stack_Control *stack,
-  uint32_t             id,
-  const rtems_printer *printer
+static void Stack_check_Visit_interrupt_stack(
+  const Stack_Control        *stack,
+  uint32_t                    id,
+  rtems_stack_checker_visitor visit,
+  void                       *arg
 )
 {
-  Stack_check_Dump_stack_usage(
+  Stack_check_Visit_stack(
     stack,
     NULL,
     "Interrupt Stack",
     id,
-    printer
+    visit,
+    arg
   );
 }
 
-/*
- *  rtems_stack_checker_report_usage
- */
+static void Stack_check_Print_info(
+  const rtems_stack_checker_info *info,
+  void                           *arg
+)
+{
+  const rtems_printer *printer;
+
+  printer = arg;
+
+  rtems_printf(
+    printer,
+    "0x%08" PRIx32 " %-21s 0x%08" PRIxPTR " 0x%08" PRIxPTR " 0x%08" PRIxPTR " %6" PRIuPTR " ",
+    info->id,
+    info->name,
+    (uintptr_t) info->begin,
+    (uintptr_t) info->begin + info->size - 1,
+    (uintptr_t) info->current,
+    info->size
+  );
+
+  if ( info->used != UINTPTR_MAX ) {
+    rtems_printf( printer, "%6" PRIuPTR "\n", info->used );
+  } else {
+    rtems_printf( printer, "N/A\n" );
+  }
+}
 
 void rtems_stack_checker_report_usage_with_plugin(
   const rtems_printer* printer
 )
 {
-  uint32_t cpu_max;
-  uint32_t cpu_index;
-
   rtems_printf(
      printer,
      "                             STACK USAGE BY THREAD\n"
      "ID         NAME                  LOW        HIGH       CURRENT     AVAIL   USED\n"
   );
 
-  /* iterate over all threads and dump the usage */
-  rtems_task_iterate(
-    Stack_check_Dump_threads_usage,
+  rtems_stack_checker_iterate(
+    Stack_check_Print_info,
     RTEMS_DECONST( rtems_printer *, printer )
   );
-
-  cpu_max = rtems_scheduler_get_processor_maximum();
-
-  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
-    Stack_check_Dump_interrupt_stack_usage(
-      &Stack_check_Interrupt_stack[ cpu_index ],
-      cpu_index,
-      printer
-    );
-  }
 }
 
 void rtems_stack_checker_report_usage( void )
@@ -539,6 +549,28 @@ void rtems_stack_checker_report_usage( void )
   rtems_printer printer;
   rtems_print_printer_printk(&printer);
   rtems_stack_checker_report_usage_with_plugin( &printer );
+}
+
+void rtems_stack_checker_iterate( rtems_stack_checker_visitor visit, void *arg )
+{
+  Stack_check_Visitor visitor;
+  uint32_t            cpu_max;
+  uint32_t            cpu_index;
+
+  visitor.visit = visit;
+  visitor.arg = arg;
+  rtems_task_iterate( Stack_check_Visit_thread, &visitor );
+
+  cpu_max = rtems_scheduler_get_processor_maximum();
+
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
+    Stack_check_Visit_interrupt_stack(
+      &Stack_check_Interrupt_stack[ cpu_index ],
+      cpu_index,
+      visit,
+      arg
+    );
+  }
 }
 
 static void Stack_check_Prepare_interrupt_stacks( void )

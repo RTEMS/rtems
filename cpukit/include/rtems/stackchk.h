@@ -90,6 +90,81 @@ void rtems_stack_checker_report_usage_with_plugin(
   const rtems_printer *printer
 );
 
+/**
+ * @brief This structure contains the stack information provided by the stack
+ *   checker for a stack.
+ */
+typedef struct {
+  /**
+   * @brief This member contains the object identifier associated with the
+   *   object using the stack.
+   *
+   * For interrupt stacks, the object identifier is the processor index.
+   */
+  rtems_id id;
+
+  /**
+   * @brief This member provides the object name associated with the
+   *   object using the stack.
+   *
+   * For interrupt stacks, the object name is "Interrupt Stack".
+   */
+  const char *name;
+
+  /**
+   * @brief This member provides the begin address of the stack area.
+   */
+  const void *begin;
+
+  /**
+   * @brief This member contains the size in byes of the stack area.
+   */
+  uintptr_t size;
+
+  /**
+   * @brief This member provides the current stack pointer of the stack.
+   *
+   * If the current stack pointer is not available, then the value is set to
+   * NULL.
+   */
+  const void *current;
+
+  /**
+   * @brief This member contains the size in byes of the used stack area.
+   *
+   * If the stack checker is not initialized, then the value is set to
+   * UINTPTR_MAX.
+   */
+  uintptr_t used;
+} rtems_stack_checker_info;
+
+/**
+ * @brief Visitor routines invoked by rtems_stack_checker_iterate() shall have
+ *   this type.
+ *
+ * @param info is the stack information.
+ *
+ * @param arg is the argument passed to rtems_stack_checker_iterate().
+ */
+typedef void ( *rtems_stack_checker_visitor )(
+  const rtems_stack_checker_info *info,
+  void                           *arg
+);
+
+/**
+ * @brief Iterates over all stacks used by the system and invokes the visitor
+ *   routine for each stack.
+ *
+ * This method prints a stack usage report for the curently executing
+ * task.
+ *
+ * @param visitor is the visitor routine invoked for each stack.
+ *
+ * @param arg is the argument passed to each visitor routine invocation during
+ *   the iteration.
+ */
+void rtems_stack_checker_iterate( rtems_stack_checker_visitor visit, void *arg );
+
 /*************************************************************
  *************************************************************
  **  Prototyped only so the user extension can be installed **
