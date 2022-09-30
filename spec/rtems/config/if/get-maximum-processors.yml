@@ -8,7 +8,7 @@ definition:
     attributes: null
     body: ${/score/smp/if/processor-configured-maximum:/name}
     params: []
-    return: null
+    return: ${/c/if/uint32_t:/name}
   variants: []
 description: null
 enabled-by: true

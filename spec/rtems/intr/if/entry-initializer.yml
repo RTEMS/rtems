@@ -7,8 +7,11 @@ definition:
   default:
     attributes: null
     body: |
-      { ${.:/params[0]/name},  ${.:/params[1]/name}, ${/c/if/null:/name}, ${.:/params[2]/name} }
-    params: []
+      { ${.:/params[0]/name}, ${.:/params[1]/name}, ${/c/if/null:/name}, ${.:/params[2]/name} }
+    params:
+    - ${handler:/name} ${.:/params[0]/name}
+    - void *${.:/params[1]/name}
+    - const char *${.:/params[2]/name}
     return: null
   variants: []
 description: null

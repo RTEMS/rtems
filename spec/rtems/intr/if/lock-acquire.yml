@@ -9,8 +9,10 @@ definition:
     attributes: null
     body: |
       ${/score/isr/if/lock-isr-disable-acquire:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
-    params: []
-    return: null
+    params:
+    - ${lock:/name} *${.:/params[0]/name}
+    - ${lock-context:/name} *${.:/params[1]/name}
+    return: void
   variants: []
 description: |
   This directive acquires the ISR lock specified by ${.:/params[0]/name} using

@@ -8,7 +8,7 @@ definition:
     attributes: null
     body: ${/score/object/if/is-unlimited:/name}( ${.:/params[0]/name} )
     params: []
-    return: null
+    return: ${/c/if/bool:/name}
   variants: []
 description: null
 enabled-by: true

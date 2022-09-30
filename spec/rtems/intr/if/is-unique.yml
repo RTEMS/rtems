@@ -8,8 +8,9 @@ definition:
     attributes: null
     body: |
       ( ( ${.:/params[0]/name} ) & ${unique:/name} )
-    params: []
-    return: null
+    params:
+    - ${../../option/if/option:/name} ${.:/params[0]/name}
+    return: ${/c/if/bool:/name}
   variants: []
 description: null
 enabled-by: true

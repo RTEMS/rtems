@@ -9,8 +9,10 @@ definition:
     attributes: null
     body: |
       ${/score/isr/if/lock-initialize:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
-    params: []
-    return: null
+    params:
+    - ${lock:/name} *${.:/params[0]/name}
+    - const char *${.:/params[1]/name}
+    return: void
   variants: []
 description: null
 enabled-by: true

@@ -8,7 +8,7 @@ definition:
     attributes: null
     body: ${/score/thread/if/idle-body:/name}
     params: []
-    return: null
+    return: void *( * )( ${/c/if/uintptr_t:/name} )
   variants: []
 description: null
 enabled-by: true

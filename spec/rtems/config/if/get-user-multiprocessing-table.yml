@@ -8,13 +8,13 @@ definition:
     attributes: null
     body: ${/c/if/null:/name}
     params: []
-    return: null
+    return: const ${score/mpci/if/configuration-type:/name} *
   variants:
   - definition:
       attributes: null
       body: ( &${/score/mpci/if/configuration:/name} )
       params: []
-      return: null
+      return: const ${score/mpci/if/configuration-type:/name} *
     enabled-by: defined(${/build-options/if/multiprocessing:/name})
 description: null
 enabled-by: true

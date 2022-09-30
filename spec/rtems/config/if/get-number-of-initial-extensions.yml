@@ -8,7 +8,7 @@ definition:
     attributes: null
     body: ((${/c/if/uint32_t:/name}) ${/score/userext/if/initial-count:/name})
     params: []
-    return: null
+    return: ${/c/if/uint32_t:/name}
   variants: []
 description: null
 enabled-by: true

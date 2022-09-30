@@ -8,7 +8,7 @@ definition:
     attributes: null
     body: ${/score/stack/if/allocator-free:/name}
     params: []
-    return: null
+    return: void ( * )( void * )
   variants: []
 description: null
 enabled-by: true

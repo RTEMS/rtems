@@ -8,7 +8,7 @@ definition:
     attributes: null
     body: ( ( ${.:/params[0]/name} ) | ${unlimited-objects:/name} )
     params: []
-    return: null
+    return: ${/c/if/uint32_t:/name}
   variants: []
 description: null
 enabled-by: true

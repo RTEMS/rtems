@@ -11,7 +11,7 @@ definition:
         ( ${get-stack-allocator-avoids-work-space:/name}() ?
           0 : ${get-stack-space-size:/name}() ) )
     params: []
-    return: null
+    return: ${/c/if/uintptr_t:/name}
   variants: []
 description: null
 enabled-by: true

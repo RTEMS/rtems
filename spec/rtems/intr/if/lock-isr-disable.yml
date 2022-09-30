@@ -8,8 +8,9 @@ definition:
   default:
     attributes: null
     body: ${/score/isr/if/lock-isr-disable:/name}( ${.:/params[0]/name} )
-    params: []
-    return: null
+    params:
+    - ${lock-context:/name} *${.:/params[0]/name}
+    return: void
   variants: []
 description: |
   This directive disables maskable interrupts on the current processor and

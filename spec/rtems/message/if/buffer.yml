@@ -12,7 +12,8 @@ definition:
         ${/score/msgq/if/buffer:/name} _buffer;
         char _message[ ${.:/params[0]/name} ];
       }
-    params: []
+    params:
+    - ${/c/if/size_t:/name} ${.:/params[0]/name}
     return: null
   variants: []
 description: null

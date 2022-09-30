@@ -9,7 +9,7 @@ definition:
     body: |
       ${/score/object/if/maximum-per-allocation:/name}( ${.:/params[0]/name} )
     params: []
-    return: null
+    return: ${/c/if/uint32_t:/name}
   variants: []
 description: null
 enabled-by: true

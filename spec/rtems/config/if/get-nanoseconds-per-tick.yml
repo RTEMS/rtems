@@ -9,7 +9,7 @@ definition:
     attributes: null
     body: ${/score/watchdog/if/nanoseconds-per-tick:/name}
     params: []
-    return: null
+    return: ${/c/if/uint32_t:/name}
   variants: []
 description: null
 enabled-by: true

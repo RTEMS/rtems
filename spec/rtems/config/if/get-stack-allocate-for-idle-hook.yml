@@ -9,7 +9,7 @@ definition:
     attributes: null
     body: ${/score/stack/if/allocator-allocate-for-idle:/name}
     params: []
-    return: null
+    return: void *( * )( ${/c/if/uint32_t:/name}, ${/c/if/size_t:/name} * )
   variants: []
 description: null
 enabled-by: true

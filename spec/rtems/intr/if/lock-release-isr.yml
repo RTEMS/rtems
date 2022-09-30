@@ -8,8 +8,10 @@ definition:
   default:
     attributes: null
     body: do { (void) ${.:/params[1]/name}; } while ( 0 )
-    params: []
-    return: null
+    params:
+    - ${lock:/name} *${.:/params[0]/name}
+    - ${lock-context:/name} *${.:/params[1]/name}
+    return: void
   variants:
   - definition:
       attributes: null
@@ -18,8 +20,10 @@ definition:
           &( ${.:/params[0]/name} )->Lock,
           &( ${.:/params[1]/name} )->Lock_context
         )
-      params: []
-      return: null
+      params:
+      - ${lock:/name} *${.:/params[0]/name}
+      - ${lock-context:/name} *${.:/params[1]/name}
+      return: void
     enabled-by: defined(${/build-options/if/smp:/name})
 description: |
   This directive releases the ISR lock specified by ${.:/params[0]/name} using

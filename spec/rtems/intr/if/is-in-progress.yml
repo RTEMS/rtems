@@ -9,7 +9,7 @@ definition:
     attributes: null
     body: ${/score/isr/if/is-in-progress:/name}()
     params: []
-    return: null
+    return: ${/c/if/bool:/name}
   variants: []
 description: |
   This directive returns ``true``, if the current processor is currently

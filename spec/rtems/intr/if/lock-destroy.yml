@@ -8,8 +8,9 @@ definition:
   default:
     attributes: null
     body: ${/score/isr/if/lock-destroy:/name}( ${.:/params[0]/name} )
-    params: []
-    return: null
+    params:
+    - ${lock:/name} *${.:/params[0]/name}
+    return: void
   variants: []
 description: null
 enabled-by: true

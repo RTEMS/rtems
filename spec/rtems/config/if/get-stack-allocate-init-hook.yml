@@ -9,7 +9,7 @@ definition:
     attributes: null
     body: ${/score/stack/if/allocator-initialize:/name}
     params: []
-    return: null
+    return: void ( * )( ${/c/if/size_t:/name} )
   variants: []
 description: null
 enabled-by: true

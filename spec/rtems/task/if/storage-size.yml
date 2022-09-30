@@ -10,15 +10,19 @@ definition:
       ( ( ${.:/params[0]/name} ) +
         ( ( ( ${.:/params[1]/name} ) & ${../../attr/if/floating-point:/name} ) != 0 ?
           ${/score/context/if/fp-size:/name} : 0 ) )
-    params: []
-    return: null
+    params:
+    - ${/c/if/size_t:/name} ${.:/params[0]/name}
+    - ${../../attr/if/attribute:/name} ${.:/params[1]/name}
+    return: ${/c/if/size_t:/name}
   variants:
   - definition:
       attributes: null
       body: |
         ( ( ${.:/params[0]/name} ) + ${/score/context/if/fp-size:/name} )
-      params: []
-      return: null
+      params:
+      - ${/c/if/size_t:/name} ${.:/params[0]/name}
+      - ${../../attr/if/attribute:/name} ${.:/params[1]/name}
+      return: ${/c/if/size_t:/name}
     enabled-by:
     - ${/score/cpu/if/all-tasks-are-fp:/name} == ${../../basedefs/if/true:/name}
 description: null

@@ -8,7 +8,7 @@ definition:
     attributes: null
     body: ${/score/watchdog/if/ticks-per-timeslice:/name}
     params: []
-    return: null
+    return: ${/c/if/uint32_t:/name}
   variants: []
 description: null
 enabled-by: true

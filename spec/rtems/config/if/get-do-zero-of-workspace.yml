@@ -9,7 +9,7 @@ definition:
     attributes: null
     body: ${/score/memory/if/zero-before-use:/name}
     params: []
-    return: null
+    return: ${/c/if/bool:/name}
   variants: []
 description: null
 enabled-by: true

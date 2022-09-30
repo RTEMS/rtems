@@ -8,7 +8,7 @@ definition:
     attributes: null
     body: ${/score/userext/if/initial-extensions:/name}
     params: []
-    return: null
+    return: const ${/rtems/userext/if/table:/name} *
   variants: []
 description: null
 enabled-by: true

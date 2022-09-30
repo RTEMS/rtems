@@ -8,8 +8,9 @@ definition:
   default:
     attributes: null
     body: ${/score/isr/if/local-disable:/name}( ${.:/params[0]/name} )
-    params: []
-    return: null
+    params:
+    - ${level:/name} ${.:/params[0]/name}
+    return: void
   variants: []
 description: |
   This directive disables all maskable interrupts on the current processor and

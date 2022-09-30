@@ -9,7 +9,9 @@ definition:
     attributes: null
     body: |
       ${/score/isr/if/lock-declare:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
-    params: []
+    params:
+    - ${.:/params[0]/name}
+    - ${.:/params[1]/name}
     return: null
   variants: []
 description: null

@@ -8,7 +8,7 @@ definition:
     attributes: null
     body: ${/score/thread/if/idle-stack-size:/name}
     params: []
-    return: null
+    return: ${/c/if/size_t:/name}
   variants: []
 description: null
 enabled-by: true
