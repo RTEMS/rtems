@@ -1035,7 +1035,7 @@ typedef struct rtems_interrupt_entry {
  * initialize an interrupt entry.
  */
 #define RTEMS_INTERRUPT_ENTRY_INITIALIZER( _routine, _arg, _info ) \
-  { _routine,  _arg, NULL, _info }
+  { _routine, _arg, NULL, _info }
 
 /* Generated from spec:/rtems/intr/if/entry-initialize */
 
