@@ -22,9 +22,14 @@ links:
   uid: group
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_unified_work_area
 notes: |
-  See ${/acfg/if/unified-work-areas:/name}.
+  The setting is defined by the ${/acfg/if/unified-work-areas:/name}
+  application configuration option.
 params: []
 return:
   return: |

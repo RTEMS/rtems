@@ -19,6 +19,10 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_maximum_processors
 notes: |
   The actual number of processors available to the application is returned by

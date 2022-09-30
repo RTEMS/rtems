@@ -7,7 +7,8 @@ definition:
   default:
     attributes: null
     body: ( ( ${.:/params[0]/name} ) | ${unlimited-objects:/name} )
-    params: []
+    params:
+    - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
     return: ${/c/if/uint32_t:/name}
   variants: []
 description: null
@@ -21,10 +22,14 @@ links:
   uid: group
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-const
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_resource_unlimited
 notes: |
-  This function is implemented as a macro and can be used to define compile
-  time constants.
+  This directive should be used to configure unlimited objects, see
+  ${/doc/if/config-unlimited-objects:/name}.
 params:
 - description: is the resource number to augment.
   dir: null

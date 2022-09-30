@@ -20,9 +20,14 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_milliseconds_per_tick
 notes: |
-  See ${/acfg/if/microseconds-per-tick:/name}.
+  The number of milliseconds per ${/glossary/clock-tick:/term} is defined by
+  the ${/acfg/if/microseconds-per-tick:/name} application configuration option.
 params: []
 return:
   return: |

@@ -21,9 +21,15 @@ links:
   uid: group
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_number_of_initial_extensions
 notes: |
-  See ${/acfg/if/initial-extensions:/name}.
+  The number of initial extensions is defined by the
+  ${/acfg/if/initial-extensions:/name} application configuration option and
+  related options.
 params: []
 return:
   return: |

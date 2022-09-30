@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Indicates if the thread stack allocator is configured to avoid the RTEMS
+  Indicates if the task stack allocator is configured to avoid the RTEMS
   Workspace for this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
@@ -20,13 +20,18 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_stack_allocator_avoids_work_space
 notes: |
-  See ${/acfg/if/task-stack-no-workspace:/name}.
+  The setting is defined by the ${/acfg/if/task-stack-no-workspace:/name}
+  application configuration option.
 params: []
 return:
   return: |
-    Returns true, if the thread stack allocator is configured to avoid the
+    Returns true, if the task stack allocator is configured to avoid the
     RTEMS Workspace for this application, otherwise false.
   return-values: []
 type: interface

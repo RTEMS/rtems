@@ -1,6 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Gets the thread stack space size in bytes of configured for this application.
+  Gets the configured size in bytes of the memory space used to allocate thread
+  stacks for this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -21,12 +22,18 @@ links:
   uid: group
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_stack_space_size
-notes: null
+notes: |
+  The size takes only threads and tasks into account with are known at the
+  application configuration time.
 params: []
 return:
   return: |
-    Returns the thread stack space size in bytes of configured for this
-    application.
+    Returns the configured size in bytes of the memory space used to allocate
+    thread stacks for this application.
   return-values: []
 type: interface

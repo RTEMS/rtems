@@ -22,9 +22,14 @@ links:
   uid: group
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_do_zero_of_workspace
 notes: |
-  See ${/acfg/if/zero-workspace-automatically:/name}.
+  The setting is defined by the ${/acfg/if/zero-workspace-automatically:/name}
+  application configuration option.
 params: []
 return:
   return: |

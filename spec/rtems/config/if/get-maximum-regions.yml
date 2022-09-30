@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Gets the maximum number of Classic API Regions configured for this
-  application.
+  Gets the resource number of ${/rtems/region/if/group:/name} objects
+  configured for this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -20,13 +20,19 @@ links:
   uid: header-2
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_maximum_regions
 notes: |
-  See ${/acfg/if/max-regions:/name}.
+  The resource number is defined by the ${/acfg/if/max-regions:/name}
+  application configuration option.  See also ${resource-is-unlimited:/name}
+  and ${resource-maximum-per-allocation:/name}.
 params: []
 return:
   return: |
-    Returns the maximum number of Classic API Regions configured for this
-    application.
+    Returns the resource number of ${/rtems/region/if/group:/name} objects
+    configured for this application.
   return-values: []
 type: interface

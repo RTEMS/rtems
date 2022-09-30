@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Gets the thread stack allocator free hook configured for this application.
+  Gets the task stack allocator free hook configured for this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -19,13 +19,18 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_stack_free_hook
 notes: |
-  See ${/acfg/if/task-stack-deallocator:/name}.
+  The task stack allocator free hook is defined by the
+  ${/acfg/if/task-stack-deallocator:/name} application configuration option.
 params: []
 return:
   return: |
-    Returns the thread stack allocator free hook configured for this
+    Returns the task stack allocator free hook configured for this
     application.
   return-values: []
 type: interface

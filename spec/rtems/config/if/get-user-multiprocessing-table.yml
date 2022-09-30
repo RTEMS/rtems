@@ -8,13 +8,13 @@ definition:
     attributes: null
     body: ${/c/if/null:/name}
     params: []
-    return: const ${score/mpci/if/configuration-type:/name} *
+    return: const ${/score/mpci/if/configuration-type:/name} *
   variants:
   - definition:
       attributes: null
       body: ( &${/score/mpci/if/configuration:/name} )
       params: []
-      return: const ${score/mpci/if/configuration-type:/name} *
+      return: const ${/score/mpci/if/configuration-type:/name} *
     enabled-by: defined(${/build-options/if/multiprocessing:/name})
 description: null
 enabled-by: true
@@ -27,12 +27,16 @@ links:
   uid: group
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_user_multiprocessing_table
 notes: null
 params: []
 return:
   return: |
-    Returns the pointer to the MPCI configuration table configured for this
+    Returns a pointer to the MPCI configuration table configured for this
     application.
   return-values: []
 type: interface

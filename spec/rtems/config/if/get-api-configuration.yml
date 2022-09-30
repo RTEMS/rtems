@@ -21,12 +21,16 @@ links:
   uid: group
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_rtems_api_configuration
 notes: null
 params: []
 return:
   return: |
-    Returns the pointer to the Classic API Configuration Table of this
+    Returns a pointer to the Classic API Configuration Table of this
     application.
   return-values: []
 type: interface

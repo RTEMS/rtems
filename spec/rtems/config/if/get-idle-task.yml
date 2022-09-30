@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Gets the IDLE task entry of this application.
+  Gets the IDLE task body of this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -19,12 +19,17 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_idle_task
 notes: |
-  See ${/acfg/if/idle-task-body:/name}.
+  The IDLE task body is defined by the ${/acfg/if/idle-task-body:/name}
+  application configuration option.
 params: []
 return:
   return: |
-    Returns the IDLE task entry of this application.
+    Returns the IDLE task body of this application.
   return-values: []
 type: interface

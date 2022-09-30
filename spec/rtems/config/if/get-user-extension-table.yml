@@ -21,12 +21,16 @@ links:
   uid: group
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_user_extension_table
 notes: null
 params: []
 return:
   return: |
-    Returns the pointer to the initial extensions table configured for this
+    Returns a pointer to the initial extensions table configured for this
     application.
   return-values: []
 type: interface

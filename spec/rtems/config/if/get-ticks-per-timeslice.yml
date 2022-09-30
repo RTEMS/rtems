@@ -19,9 +19,14 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_ticks_per_timeslice
 notes: |
-  See ${/acfg/if/ticks-per-time-slice:/name}.
+  The ${/glossary/clock-tick:/plural} per timeslice is defined by the
+  ${/acfg/if/ticks-per-time-slice:/name} application configuration option.
 params: []
 return:
   return: |

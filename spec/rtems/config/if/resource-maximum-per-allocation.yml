@@ -8,7 +8,8 @@ definition:
     attributes: null
     body: |
       ${/score/object/if/maximum-per-allocation:/name}( ${.:/params[0]/name} )
-    params: []
+    params:
+    - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
     return: ${/c/if/uint32_t:/name}
   variants: []
 description: null
@@ -22,10 +23,12 @@ links:
   uid: group
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-const
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_resource_maximum_per_allocation
-notes: |
-  This function is implemented as a macro and can be used to define compile
-  time constants.
+notes: null
 params:
 - description: is the resource number.
   dir: null

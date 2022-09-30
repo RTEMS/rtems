@@ -1,7 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Gets the thread stack allocator allocate hook configured for this
-  application.
+  Gets the task stack allocator allocate hook configured for this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -20,13 +19,18 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_stack_allocate_hook
 notes: |
-  See ${/acfg/if/task-stack-allocator:/name}.
+  The task stack allocator allocate hook is defined by the
+  ${/acfg/if/task-stack-allocator:/name} application configuration option.
 params: []
 return:
   return: |
-    Returns the thread stack allocator allocate hook configured for this
+    Returns the task stack allocator allocate hook configured for this
     application.
   return-values: []
 type: interface

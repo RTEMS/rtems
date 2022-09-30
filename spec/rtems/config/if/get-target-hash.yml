@@ -12,7 +12,8 @@ definition:
   variants: []
 description: |
   The target hash is calculated from BSP-specific values which characterize a
-  target system.
+  target system.  The target hash is encoded as a base64url string.  The target
+  hash algorithm is unspecified.
 enabled-by: true
 index-entries: []
 interface-type: function
@@ -38,6 +39,6 @@ notes: |
 params: []
 return:
   return: |
-    Returns the pointer to the RTEMS target hash.
+    Returns a pointer to the RTEMS target hash.
   return-values: []
 type: interface

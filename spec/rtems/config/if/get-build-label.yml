@@ -11,7 +11,9 @@ definition:
     return: const char *
   variants: []
 description: |
-  The build label is a user-provided string defined by the build configuration.
+  The build label is a user-provided string defined by the build configuration
+  through the ``RTEMS_BUILD_LABEL`` build option.  The format of the string is
+  completely user-defined.
 enabled-by: true
 index-entries: []
 interface-type: function
@@ -37,6 +39,6 @@ notes: |
 params: []
 return:
   return: |
-    Returns the pointer to the RTEMS build label.
+    Returns a pointer to the RTEMS build label.
   return-values: []
 type: interface

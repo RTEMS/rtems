@@ -19,9 +19,14 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_configuration_get_interrupt_stack_size
 notes: |
-  See ${/acfg/if/interrupt-stack-size:/name}.
+  The interrupt stack size is defined by the
+  ${/acfg/if/interrupt-stack-size:/name} application configuration option.
 params: []
 return:
   return: |

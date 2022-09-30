@@ -21,11 +21,17 @@ links:
   uid: group
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_get_version_string
-notes: null
+notes: |
+  The version string has no particular format.  Parsing the string may break
+  across RTEMS releases.
 params: []
 return:
   return: |
-    Returns the pointer to the RTEMS version string.
+    Returns a pointer to the RTEMS version string.
   return-values: []
 type: interface
