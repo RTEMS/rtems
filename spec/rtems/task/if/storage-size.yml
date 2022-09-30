@@ -4,13 +4,21 @@ brief: |
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    ( ( ${.:/params[0]/name} ) +
-      ( ( ( ${.:/params[1]/name} ) & ${../../attr/if/floating-point:/name} ) != 0 ?
-        ${/score/context/if/fp-size:/name} : 0 ) )
+  default:
+    attributes: null
+    body: |
+      ( ( ${.:/params[0]/name} ) +
+        ( ( ( ${.:/params[1]/name} ) & ${../../attr/if/floating-point:/name} ) != 0 ?
+          ${/score/context/if/fp-size:/name} : 0 ) )
+    params: []
+    return: null
   variants:
-  - definition: |
-      ( ( ${.:/params[0]/name} ) + ${/score/context/if/fp-size:/name} )
+  - definition:
+      attributes: null
+      body: |
+        ( ( ${.:/params[0]/name} ) + ${/score/context/if/fp-size:/name} )
+      params: []
+      return: null
     enabled-by:
     - ${/score/cpu/if/all-tasks-are-fp:/name} == ${../../basedefs/if/true:/name}
 description: null

@@ -3,7 +3,11 @@ brief: null
 copyrights:
 - Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ${/score/smp/if/get-current-processor:/name}()
+  default:
+    attributes: null
+    body: ${/score/smp/if/get-current-processor:/name}()
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

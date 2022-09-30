@@ -4,10 +4,18 @@ brief: |
 copyrights:
 - Copyright (C) 2015 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ''
+  default:
+    attributes: null
+    body: ''
+    params: []
+    return: null
   variants:
-  - definition: |
-      __attribute__(( __section__( ${.:/params[0]/name} ) ))
+  - definition:
+      attributes: null
+      body: |
+        __attribute__(( __section__( ${.:/params[0]/name} ) ))
+      params: []
+      return: null
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null

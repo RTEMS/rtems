@@ -4,8 +4,12 @@ brief: |
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    ${/score/object/if/maximum-per-allocation:/name}( ${.:/params[0]/name} )
+  default:
+    attributes: null
+    body: |
+      ${/score/object/if/maximum-per-allocation:/name}( ${.:/params[0]/name} )
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

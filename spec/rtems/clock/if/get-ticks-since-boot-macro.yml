@@ -3,7 +3,11 @@ brief: null
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ${/score/watchdog/if/ticks-since-boot:/name}
+  default:
+    attributes: null
+    body: ${/score/watchdog/if/ticks-since-boot:/name}
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

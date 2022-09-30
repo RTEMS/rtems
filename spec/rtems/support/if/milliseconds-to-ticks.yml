@@ -5,8 +5,12 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: |
-    ${microseconds-to-ticks:/name}( ${milliseconds-to-microseconds:/name}( ${.:/params[0]/name} ) )
+  default:
+    attributes: null
+    body: |
+      ${microseconds-to-ticks:/name}( ${milliseconds-to-microseconds:/name}( ${.:/params[0]/name} ) )
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

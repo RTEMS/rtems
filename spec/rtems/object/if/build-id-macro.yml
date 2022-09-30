@@ -4,8 +4,12 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: |
-    ${/score/object/if/build-id:/name}( ${.:/params[0]/name}, ${.:/params[1]/name}, ${.:/params[2]/name}, ${.:/params[3]/name} )
+  default:
+    attributes: null
+    body: |
+      ${/score/object/if/build-id:/name}( ${.:/params[0]/name}, ${.:/params[1]/name}, ${.:/params[2]/name}, ${.:/params[3]/name} )
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

@@ -4,7 +4,11 @@ brief: |
 copyrights:
 - Copyright (C) 2015 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ${concat:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
+  default:
+    attributes: null
+    body: ${concat:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

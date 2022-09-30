@@ -4,8 +4,12 @@ brief: |
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    { ${.:/params[0]/name},  ${.:/params[1]/name}, ${/c/if/null:/name}, ${.:/params[2]/name} }
+  default:
+    attributes: null
+    body: |
+      { ${.:/params[0]/name},  ${.:/params[1]/name}, ${/c/if/null:/name}, ${.:/params[2]/name} }
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

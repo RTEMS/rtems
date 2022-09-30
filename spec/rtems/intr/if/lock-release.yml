@@ -5,8 +5,12 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: |
-    ${/score/isr/if/lock-release-isr-enable:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
+  default:
+    attributes: null
+    body: |
+      ${/score/isr/if/lock-release-isr-enable:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
+    params: []
+    return: null
   variants: []
 description: |
   This directive releases the ISR lock specified by ${.:/params[0]/name} using

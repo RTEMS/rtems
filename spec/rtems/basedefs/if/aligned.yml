@@ -5,10 +5,18 @@ brief: |
 copyrights:
 - Copyright (C) 2016 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ''
+  default:
+    attributes: null
+    body: ''
+    params: []
+    return: null
   variants:
-  - definition: |
-      __attribute__(( __aligned__( _alignment ) ))
+  - definition:
+      attributes: null
+      body: |
+        __attribute__(( __aligned__( _alignment ) ))
+      params: []
+      return: null
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null

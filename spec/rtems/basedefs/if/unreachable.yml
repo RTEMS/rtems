@@ -4,14 +4,22 @@ brief: |
 copyrights:
 - Copyright (C) 2016 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    ${/score/basedefs/if/assert-unreachable:/name}()
+  default:
+    attributes: null
+    body: |
+      ${/score/basedefs/if/assert-unreachable:/name}()
+    params: []
+    return: null
   variants:
-  - definition: |
-      do {
-        ${/compiler/if/builtin-unreachable:/name}();
-        ${/score/basedefs/if/assert-unreachable:/name}();
-      } while ( 0 )
+  - definition:
+      attributes: null
+      body: |
+        do {
+          ${/compiler/if/builtin-unreachable:/name}();
+          ${/score/basedefs/if/assert-unreachable:/name}();
+        } while ( 0 )
+      params: []
+      return: null
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null

@@ -4,14 +4,22 @@ brief: |
 copyrights:
 - Copyright (C) 2018, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ''
+  default:
+    attributes: null
+    body: ''
+    params: []
+    return: null
   variants:
-  - definition: |
-      ${/compiler/if/asm:/name}(
-        "\t.globl " ${xstring:/name}( ${symbol-name:/name}( ${.:/params[0]/name} ) )
-        "\n\t.set " ${xstring:/name}( ${symbol-name:/name}( ${.:/params[0]/name} ) )
-        ", " ${string:/name}( ${.:/params[1]/name} ) "\n"
-      )
+  - definition:
+      attributes: null
+      body: |
+        ${/compiler/if/asm:/name}(
+          "\t.globl " ${xstring:/name}( ${symbol-name:/name}( ${.:/params[0]/name} ) )
+          "\n\t.set " ${xstring:/name}( ${symbol-name:/name}( ${.:/params[0]/name} ) )
+          ", " ${string:/name}( ${.:/params[1]/name} ) "\n"
+        )
+      params: []
+      return: null
     enabled-by:
     - defined(${/compiler/if/user-label-prefix:/name})
 description: |

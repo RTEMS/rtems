@@ -5,8 +5,12 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: |
-    ( ( ${.:/params[0]/name} ) * 1000UL )
+  default:
+    attributes: null
+    body: |
+      ( ( ${.:/params[0]/name} ) * 1000UL )
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

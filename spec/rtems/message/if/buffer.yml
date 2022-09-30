@@ -5,11 +5,15 @@ brief: |
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    struct {
-      ${/score/msgq/if/buffer:/name} _buffer;
-      char _message[ ${.:/params[0]/name} ];
-    }
+  default:
+    attributes: null
+    body: |
+      struct {
+        ${/score/msgq/if/buffer:/name} _buffer;
+        char _message[ ${.:/params[0]/name} ];
+      }
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

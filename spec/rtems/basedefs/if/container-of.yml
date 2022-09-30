@@ -4,8 +4,12 @@ brief: |
 copyrights:
 - Copyright (C) 2014 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    ( (${.:/params[1]/name} *) ( (${/c/if/uintptr_t:/name}) ( ${.:/params[0]/name} ) - ${/c/if/offsetof:/name}( ${.:/params[1]/name}, ${.:/params[2]/name} ) ) )
+  default:
+    attributes: null
+    body: |
+      ( (${.:/params[1]/name} *) ( (${/c/if/uintptr_t:/name}) ( ${.:/params[0]/name} ) - ${/c/if/offsetof:/name}( ${.:/params[1]/name}, ${.:/params[2]/name} ) ) )
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

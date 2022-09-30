@@ -4,7 +4,11 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: ${/score/watchdog/if/ticks-per-second:/name}
+  default:
+    attributes: null
+    body: ${/score/watchdog/if/ticks-per-second:/name}
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

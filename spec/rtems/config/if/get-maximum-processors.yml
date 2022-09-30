@@ -4,7 +4,11 @@ brief: |
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ${/score/smp/if/processor-configured-maximum:/name}
+  default:
+    attributes: null
+    body: ${/score/smp/if/processor-configured-maximum:/name}
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

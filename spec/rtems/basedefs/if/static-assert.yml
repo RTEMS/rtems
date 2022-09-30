@@ -4,16 +4,28 @@ brief: |
 copyrights:
 - Copyright (C) 2011, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    struct rtems_static_assert_ ## ${.:/params[1]/name}
-      { int rtems_static_assert_ ## ${.:/params[1]/name} : ( ${.:/params[0]/name} ) ? 1 : -1; }
+  default:
+    attributes: null
+    body: |
+      struct rtems_static_assert_ ## ${.:/params[1]/name}
+        { int rtems_static_assert_ ## ${.:/params[1]/name} : ( ${.:/params[0]/name} ) ? 1 : -1; }
+    params: []
+    return: null
   variants:
-  - definition: |
-      static_assert( ${.:/params[0]/name}, # ${.:/params[1]/name} )
+  - definition:
+      attributes: null
+      body: |
+        static_assert( ${.:/params[0]/name}, # ${.:/params[1]/name} )
+      params: []
+      return: null
     enabled-by:
     - ${/compiler/if/cplusplus:/name} >= 201103L
-  - definition: |
-      _Static_assert( ${.:/params[0]/name}, # ${.:/params[1]/name} )
+  - definition:
+      attributes: null
+      body: |
+        _Static_assert( ${.:/params[0]/name}, # ${.:/params[1]/name} )
+      params: []
+      return: null
     enabled-by:
     - ${/compiler/if/stdc-version:/name} >= 201112L
 description: null

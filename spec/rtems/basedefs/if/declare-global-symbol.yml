@@ -4,8 +4,12 @@ brief: |
 copyrights:
 - Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    extern char ${.:/params[0]/name}[]
+  default:
+    attributes: null
+    body: |
+      extern char ${.:/params[0]/name}[]
+    params: []
+    return: null
   variants: []
 description: |
   This macro must be placed at file scope.

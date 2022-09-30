@@ -5,7 +5,11 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: ${/score/isr/if/lock-destroy:/name}( ${.:/params[0]/name} )
+  default:
+    attributes: null
+    body: ${/score/isr/if/lock-destroy:/name}( ${.:/params[0]/name} )
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

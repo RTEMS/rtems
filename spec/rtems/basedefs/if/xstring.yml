@@ -4,7 +4,11 @@ brief: |
 copyrights:
 - Copyright (C) 2015 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ${string:/name}( __VA_ARGS__ )
+  default:
+    attributes: null
+    body: ${string:/name}( __VA_ARGS__ )
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true
@@ -21,7 +25,7 @@ params:
 - description: |
     are the arguments to expand and stringify.
   dir: null
-  name: ...
+  name: '...'
 return:
   return: |
     Returns the stringification of the expansion of the arguments.  In case of

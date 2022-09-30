@@ -4,8 +4,12 @@ brief: |
 copyrights:
 - Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    ( ( ${.:/params[0]/name} ) & ${replace:/name} )
+  default:
+    attributes: null
+    body: |
+      ( ( ${.:/params[0]/name} ) & ${replace:/name} )
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true
@@ -21,8 +25,7 @@ links:
 name: RTEMS_INTERRUPT_IS_REPLACE
 notes: null
 params:
-- description: 
-    is the interrupt handler option set to check.
+- description: is the interrupt handler option set to check.
   dir: null
   name: _options
 return:

@@ -4,15 +4,27 @@ brief: |
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    sizeof( ${.:/params[0]/name} )
+  default:
+    attributes: null
+    body: |
+      sizeof( ${.:/params[0]/name} )
+    params: []
+    return: null
   variants:
-  - definition: |
-      alignof( ${.:/params[0]/name} )
+  - definition:
+      attributes: null
+      body: |
+        alignof( ${.:/params[0]/name} )
+      params: []
+      return: null
     enabled-by:
     - ${/compiler/if/cplusplus:/name} >= 201103L
-  - definition: |
-      _Alignof( ${.:/params[0]/name} )
+  - definition:
+      attributes: null
+      body: |
+        _Alignof( ${.:/params[0]/name} )
+      params: []
+      return: null
     enabled-by:
     - ${/compiler/if/stdc-version:/name} >= 201112L
 description: null

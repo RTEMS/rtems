@@ -4,11 +4,19 @@ brief: |
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    do { } while ( 0 )
+  default:
+    attributes: null
+    body: |
+      do { } while ( 0 )
+    params: []
+    return: null
   variants:
-  - definition: |
-      _Assert( 0 )
+  - definition:
+      attributes: null
+      body: |
+        _Assert( 0 )
+      params: []
+      return: null
     enabled-by:
     - defined(${/build-options/if/debug:/name})
 description: null

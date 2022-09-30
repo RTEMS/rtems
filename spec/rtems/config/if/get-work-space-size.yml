@@ -4,10 +4,14 @@ brief: |
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    ( ${/score/wkspace/if/size:/name} +
-      ( ${get-stack-allocator-avoids-work-space:/name}() ?
-        0 : ${get-stack-space-size:/name}() ) )
+  default:
+    attributes: null
+    body: |
+      ( ${/score/wkspace/if/size:/name} +
+        ( ${get-stack-allocator-avoids-work-space:/name}() ?
+          0 : ${get-stack-space-size:/name}() ) )
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true

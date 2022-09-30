@@ -4,9 +4,17 @@ brief: |
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ${/c/if/null:/name}
+  default:
+    attributes: null
+    body: ${/c/if/null:/name}
+    params: []
+    return: null
   variants:
-  - definition: ( &${/score/mpci/if/configuration:/name} )
+  - definition:
+      attributes: null
+      body: ( &${/score/mpci/if/configuration:/name} )
+      params: []
+      return: null
     enabled-by: defined(${/build-options/if/multiprocessing:/name})
 description: null
 enabled-by: true
