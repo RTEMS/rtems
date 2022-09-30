@@ -48,7 +48,7 @@ alignas(256) static thread_local long a256 = 256;
 
 static thread_local long i0;
 
-alignas(512) static thread_local long a512;
+alignas(RTEMS_MINIMUM_STACK_SIZE) static thread_local long a;
 
 int seven()
 {
@@ -61,7 +61,7 @@ static void clobber()
 	i123 = 0xdead0001;
 	a256 = 0xdead0002;
 	i0 = 0xdead0003;
-	a512 = 0xdead0004;
+	a = 0xdead0004;
 }
 
 static long f456(bool clobber)
@@ -173,8 +173,8 @@ static void checkTLSValues()
 	RTEMS_OBFUSCATE_VARIABLE(addr);
 	rtems_test_assert((addr % 256) == 0);
 	rtems_test_assert(i0 == 0);
-	rtems_test_assert(a512 == 0);
-	addr = reinterpret_cast<uintptr_t>(&a512);
+	rtems_test_assert(a == 0);
+	addr = reinterpret_cast<uintptr_t>(&a);
 	RTEMS_OBFUSCATE_VARIABLE(addr);
 	rtems_test_assert((addr % 512) == 0);
 	rtems_test_assert(f456(false) == 456);

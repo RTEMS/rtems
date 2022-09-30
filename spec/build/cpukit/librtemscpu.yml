@@ -1545,6 +1545,7 @@ source:
 - cpukit/score/src/smpbarrierwait.c
 - cpukit/score/src/stackallocator.c
 - cpukit/score/src/stackallocatorforidle.c
+- cpukit/score/src/stackallocatorforidlewkspace.c
 - cpukit/score/src/stackallocatorfree.c
 - cpukit/score/src/stackallocatorinit.c
 - cpukit/score/src/thread.c

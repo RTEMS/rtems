@@ -235,6 +235,10 @@ const size_t _Thread_Control_add_on_count =
 #endif
 
 const size_t _Thread_Initial_thread_count =
+#if !defined(CONFIGURE_IDLE_TASK_STORAGE_SIZE) && \
+  !defined(CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE)
+  _CONFIGURE_MAXIMUM_PROCESSORS +
+#endif
   rtems_resource_maximum_per_allocation( _CONFIGURE_TASKS ) +
   rtems_resource_maximum_per_allocation( CONFIGURE_MAXIMUM_POSIX_THREADS );
 

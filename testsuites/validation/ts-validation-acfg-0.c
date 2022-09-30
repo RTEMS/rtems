@@ -72,6 +72,8 @@
 
 const char rtems_test_name[] = "ValidationAcfg0";
 
+#define CONFIGURE_IDLE_TASK_STORAGE_SIZE RTEMS_MINIMUM_STACK_SIZE
+
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 
 void *IdleBody( uintptr_t ignored )

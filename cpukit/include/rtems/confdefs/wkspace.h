@@ -47,6 +47,7 @@
 #include <rtems/confdefs/inittask.h>
 #include <rtems/confdefs/initthread.h>
 #include <rtems/confdefs/objectsposix.h>
+#include <rtems/confdefs/percpu.h>
 #include <rtems/confdefs/threads.h>
 #include <rtems/confdefs/wkspacesupport.h>
 #include <rtems/score/coremsg.h>
@@ -111,8 +112,18 @@
     + 1024 * CONFIGURE_MEMORY_OVERHEAD \
     + _CONFIGURE_HEAP_HANDLER_OVERHEAD )
 
+#if defined(CONFIGURE_IDLE_TASK_STORAGE_SIZE) || \
+  defined(CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE)
+  #define _CONFIGURE_IDLE_TASK_STACKS 0
+#else
+  #define _CONFIGURE_IDLE_TASK_STACKS \
+    ( _CONFIGURE_MAXIMUM_PROCESSORS * \
+      _Configure_From_stackspace( CONFIGURE_IDLE_TASK_STACK_SIZE ) )
+#endif
+
 #define _CONFIGURE_STACK_SPACE_SIZE \
   ( _CONFIGURE_INIT_TASK_STACK_EXTRA \
+    + _CONFIGURE_IDLE_TASK_STACKS \
     + _CONFIGURE_POSIX_INIT_THREAD_STACK_EXTRA \
     + _CONFIGURE_LIBBLOCK_TASKS_STACK_EXTRA \
     + CONFIGURE_EXTRA_TASK_STACKS \
@@ -212,14 +223,39 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
   #error "CONFIGURE_TASK_STACK_ALLOCATOR and CONFIGURE_TASK_STACK_DEALLOCATOR must be both defined or both undefined"
 #endif
 
-/*
- * Custom IDLE thread stacks allocator. If this is provided, it is assumed
- * that the allocator is providing its own memory for these stacks.
- */
-#ifdef CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
-  const Stack_Allocator_allocate_for_idle _Stack_Allocator_allocate_for_idle =
-    CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE;
+#ifdef CONFIGURE_IDLE_TASK_STORAGE_SIZE
+  #ifdef CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
+    #error "CONFIGURE_IDLE_TASK_STORAGE_SIZE and CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE are mutually exclusive"
+  #endif
+
+  #define _CONFIGURE_IDLE_TASK_STORAGE_SIZE \
+    RTEMS_ALIGN_UP( \
+      RTEMS_TASK_STORAGE_SIZE( \
+        CONFIGURE_IDLE_TASK_STORAGE_SIZE, \
+        RTEMS_DEFAULT_ATTRIBUTES \
+      ), \
+      CPU_INTERRUPT_STACK_ALIGNMENT \
+    )
+
+  const size_t _Stack_Allocator_allocate_for_idle_storage_size =
+    _CONFIGURE_IDLE_TASK_STORAGE_SIZE;
+
+  char _Stack_Allocator_allocate_for_idle_storage_areas[
+    _CONFIGURE_MAXIMUM_PROCESSORS * _CONFIGURE_IDLE_TASK_STORAGE_SIZE
+  ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
+  RTEMS_SECTION( ".rtemsstack.idle" );
+
+  #define CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE \
+    _Stack_Allocator_allocate_for_idle_static
 #endif
+
+#ifndef CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
+  #define CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE \
+    _Stack_Allocator_allocate_for_idle_workspace
+#endif
+
+const Stack_Allocator_allocate_for_idle _Stack_Allocator_allocate_for_idle =
+  CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE;
 
 #ifdef CONFIGURE_DIRTY_MEMORY
   RTEMS_SYSINIT_ITEM(

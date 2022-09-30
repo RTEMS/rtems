@@ -6,11 +6,11 @@
  * @ingroup RTEMSScoreStack
  *
  * @brief This source file contains the implementation of
- *   _Stack_Allocator_allocate_for_idle_static().
+ *   _Stack_Allocator_allocate_for_idle_workspace().
  */
 
 /*
- * Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2022 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -39,21 +39,22 @@
 #endif
 
 #include <rtems/score/stack.h>
-#include <rtems/score/assert.h>
+#include <rtems/score/interr.h>
+#include <rtems/score/wkspace.h>
 
-void *_Stack_Allocator_allocate_for_idle_static(
-  uint32_t  cpu_index,
+void *_Stack_Allocator_allocate_for_idle_workspace(
+  uint32_t  unused,
   size_t   *storage_size
 )
 {
-  size_t size;
+  void *area;
 
-  size = _Stack_Allocator_allocate_for_idle_storage_size;
-  *storage_size = size;
-#if defined(RTEMS_SMP)
-  return &_Stack_Allocator_allocate_for_idle_storage_areas[ cpu_index * size ];
-#else
-  _Assert( cpu_index == 0 );
-  return &_Stack_Allocator_allocate_for_idle_storage_areas[ 0 ];
-#endif
+  (void) unused;
+  area = _Workspace_Allocate( *storage_size );
+
+  if ( area == NULL ) {
+    _Internal_error( INTERNAL_ERROR_NO_MEMORY_FOR_IDLE_TASK_STORAGE );
+  }
+
+  return area;
 }

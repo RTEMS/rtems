@@ -44,6 +44,7 @@ const char rtems_test_name[] = "SPSTKALLOC 2";
 #include <stdio.h>
 #include <inttypes.h>
 
+#include <rtems/malloc.h>
 #include <rtems/score/heapimpl.h>
 
 #define TASK_COUNT 5
@@ -55,6 +56,8 @@ static Heap_Control task_stack_heap;
 static void task_stack_init(size_t stack_space_size);
 
 static void *task_stack_allocate(size_t stack_size);
+
+static void *task_stack_allocate_for_idle(uint32_t unused, size_t *stack_size);
 
 static void task_stack_free(void *addr);
 
@@ -149,6 +152,7 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_TASK_STACK_ALLOCATOR_INIT task_stack_init
 #define CONFIGURE_TASK_STACK_ALLOCATOR task_stack_allocate
+#define CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE task_stack_allocate_for_idle
 #define CONFIGURE_TASK_STACK_DEALLOCATOR task_stack_free
 #define CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
 #define CONFIGURE_TASK_STACK_FROM_ALLOCATOR(stack_size) \
@@ -181,6 +185,15 @@ static void task_stack_init(size_t stack_space_size)
 static void *task_stack_allocate(size_t stack_size)
 {
   return _Heap_Allocate(&task_stack_heap, stack_size);
+}
+
+static void *task_stack_allocate_for_idle(uint32_t unused, size_t *stack_size)
+{
+  return rtems_heap_allocate_aligned_with_boundary(
+    *stack_size,
+    CPU_STACK_ALIGNMENT,
+    0
+  );
 }
 
 static void task_stack_free(void *addr)

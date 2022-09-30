@@ -53,7 +53,10 @@
 
 #include <string.h>
 
-static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
+static void _Thread_Create_idle_for_CPU(
+  Per_CPU_Control *cpu,
+  uintptr_t        storage_size
+)
 {
   Thread_Configuration  config;
   Thread_Control       *idle;
@@ -70,8 +73,7 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   config.is_fp = CPU_IDLE_TASK_IS_FP;
   config.is_preemptible = true;
   config.stack_free = _Objects_Free_nothing;
-  config.stack_size = _Thread_Idle_stack_size
-    + CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE;
+  config.stack_size = storage_size;
 
   /*
    * The IDLE thread stacks may be statically allocated or there may be a
@@ -118,21 +120,28 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
 
 void _Thread_Create_idle( void )
 {
+  uintptr_t storage_size;
 #if defined(RTEMS_SMP)
-  uint32_t cpu_max;
-  uint32_t cpu_index;
+  uint32_t  cpu_max;
+  uint32_t  cpu_index;
+#endif
 
+  storage_size = _TLS_Get_allocation_size() +
+    CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE +
+    _Thread_Idle_stack_size;
+
+#if defined(RTEMS_SMP)
   cpu_max = _SMP_Get_processor_maximum();
 
   for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
     if ( _Per_CPU_Is_processor_online( cpu ) ) {
-      _Thread_Create_idle_for_CPU( cpu );
+      _Thread_Create_idle_for_CPU( cpu, storage_size );
     }
   }
 #else
-  _Thread_Create_idle_for_CPU( _Per_CPU_Get() );
+  _Thread_Create_idle_for_CPU( _Per_CPU_Get(), storage_size );
 #endif
 
   _CPU_Use_thread_local_storage(

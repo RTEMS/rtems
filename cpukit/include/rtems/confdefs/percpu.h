@@ -136,20 +136,6 @@ RTEMS_DEFINE_GLOBAL_SYMBOL(
 
 const size_t _Thread_Idle_stack_size = CONFIGURE_IDLE_TASK_STACK_SIZE;
 
-/*
- * If the user provides a custom idle stack allocator, then we do not need
- * memory reserved for the stacks but the symbol is still referenced in
- * threadcreateidle.c. The code path just never uses it. Make it minimal
- * size to proceed.
- */
-#ifndef CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
-  char _Thread_Idle_stacks[
-    _CONFIGURE_MAXIMUM_PROCESSORS
-      * ( CONFIGURE_IDLE_TASK_STACK_SIZE + CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE )
-  ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
-  RTEMS_SECTION( ".rtemsstack.idle" );
-#endif
-
 #if defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION) && \
   !defined(CONFIGURE_IDLE_TASK_BODY)
   #error "If you define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION, then you must define CONFIGURE_IDLE_TASK_BODY as well"

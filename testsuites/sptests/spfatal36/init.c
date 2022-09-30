@@ -1,16 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @ingroup RTEMSScoreStack
- *
- * @brief This source file contains the implementation of
- *   _Stack_Allocator_allocate_for_idle_static().
- */
-
 /*
- * Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2022 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,22 +29,35 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/stack.h>
-#include <rtems/score/assert.h>
+#include "../spfatal_support/spfatal.h"
 
-void *_Stack_Allocator_allocate_for_idle_static(
-  uint32_t  cpu_index,
-  size_t   *storage_size
-)
+#include <rtems/sysinit.h>
+#include <rtems/score/heapimpl.h>
+#include <rtems/score/wkspace.h>
+
+#define FATAL_ERROR_TEST_NAME "36"
+
+#define FATAL_ERROR_DESCRIPTION "failure in idle task storage allocation"
+
+#define FATAL_ERROR_EXPECTED_SOURCE INTERNAL_ERROR_CORE
+
+#define FATAL_ERROR_EXPECTED_ERROR \
+  INTERNAL_ERROR_NO_MEMORY_FOR_IDLE_TASK_STORAGE
+
+static void force_error( void )
 {
-  size_t size;
-
-  size = _Stack_Allocator_allocate_for_idle_storage_size;
-  *storage_size = size;
-#if defined(RTEMS_SMP)
-  return &_Stack_Allocator_allocate_for_idle_storage_areas[ cpu_index * size ];
-#else
-  _Assert( cpu_index == 0 );
-  return &_Stack_Allocator_allocate_for_idle_storage_areas[ 0 ];
-#endif
+  RTEMS_UNREACHABLE();
 }
+
+static void empty_workspace( void )
+{
+  (void) _Heap_Greedy_allocate( &_Workspace_Area, NULL, 0 );
+}
+
+RTEMS_SYSINIT_ITEM(
+  empty_workspace,
+  RTEMS_SYSINIT_IDLE_THREADS,
+  RTEMS_SYSINIT_ORDER_FIRST
+);
+
+#include "../spfatal_support/spfatalimpl.h"

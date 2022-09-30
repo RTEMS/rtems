@@ -72,6 +72,10 @@ static const T_config test_config = {
 #define CONFIGURE_INITIAL_EXTENSIONS \
   { .fatal = FatalInitialExtension }
 
+#ifndef CONFIGURE_IDLE_TASK_STORAGE_SIZE
+#define CONFIGURE_IDLE_TASK_STORAGE_SIZE RTEMS_MINIMUM_STACK_SIZE
+#endif
+
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 
 void *IdleBody( uintptr_t ignored )

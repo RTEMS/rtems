@@ -3431,6 +3431,59 @@
  */
 #define CONFIGURE_IDLE_TASK_STACK_SIZE
 
+/* Generated from spec:/acfg/if/idle-task-storage-size */
+
+/**
+ * @brief This configuration option is an integer define.
+ *
+ * If this configuration option is specified, then the task storage areas for
+ * the IDLE tasks are statically allocated by <rtems/confdefs.h>.  The value of
+ * this configuration option defines the size in bytes of the task storage area
+ * of each IDLE task in the system.
+ *
+ * @par Default Value
+ * This configuration option has no default value.  If it is not specified,
+ * then the task storage area for each IDLE task will allocated from the RTEMS
+ * Workspace or through a custom IDLE task stack allocator.
+ *
+ * @par Constraints
+ * The value of the configuration option shall be greater than or equal to
+ * #CONFIGURE_IDLE_TASK_STACK_SIZE.
+ *
+ * @par Notes
+ * @parblock
+ * By default, the IDLE task storage areas are allocated from the RTEMS
+ * Workspace.  Applications which do not want to use a heap allocator can use
+ * this configuration option to use statically allocated memory for the IDLE
+ * task storage areas.  The task storage area contains the task stack, the
+ * thread-local storage, and the floating-point context on architectures with a
+ * separate floating-point context.  The size of the thread-local storage area
+ * is defined at link time or by the
+ * #CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE configuration option.  You have
+ * to estimate the actual thread-local storage size if you want to use this
+ * configuration option.  If the IDLE task stack size would be less than the
+ * value defined by the #CONFIGURE_IDLE_TASK_STACK_SIZE configuration option,
+ * for example because the thread-local storage size is larger than expected,
+ * then the system terminates with the INTERNAL_ERROR_CORE fatal source and the
+ * INTERNAL_ERROR_IDLE_THREAD_STACK_TOO_SMALL fatal code during system
+ * initialization.
+ *
+ * The value of this configuration option is passed to
+ * RTEMS_TASK_STORAGE_SIZE() by <rtems/confdefs.h> to determine the actual size
+ * of the statically allocated area to take architecture-specific overheads
+ * into account.
+ *
+ * The
+ *
+ * * ``CONFIGURE_IDLE_TASK_STORAGE_SIZE``, and
+ *
+ * * #CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
+ *
+ * configuration options are mutually exclusive.
+ * @endparblock
+ */
+#define CONFIGURE_IDLE_TASK_STORAGE_SIZE
+
 /** @} */
 
 /* Generated from spec:/acfg/if/group-mpci */
@@ -4826,23 +4879,45 @@
  * @brief This configuration option is an initializer define.
  *
  * The value of this configuration option is the address for the stack
- * allocator allocate handler used to allocate the task stack of each IDLE
- * task.
+ * allocator allocate handler used to allocate the task storage area of each
+ * IDLE task.
  *
  * @par Default Value
- * The default value is ``_Stack_Allocator_allocate_for_idle_default``, which
- * indicates that IDLE task stacks will be allocated from an area statically
- * allocated by ``<rtems/confdefs.h>``.
+ * By default, the IDLE task storage area will be allocated from the RTEMS
+ * Workspace.
  *
  * @par Value Constraints
- * The value of this configuration option shall be defined to a valid function
- * pointer of the type ``void *( *allocate )( uint32_t, size_t * )``.
+ * @parblock
+ * The following constraints apply to this configuration option:
+ *
+ * * The value of the configuration option shall be defined to a valid function
+ *   pointer of the type ``void *( *allocate )( uint32_t, size_t * )``.
+ *
+ * * The IDLE task stack allocator shall return a pointer to the allocated
+ *   memory area or terminate the system with a fatal error if the allocation
+ *   request cannot be satisfied.
+ *
+ * * The IDLE task stack allocator may increase the size of the allocated
+ *   memory area.
+ * @endparblock
  *
  * @par Notes
+ * @parblock
  * This configuration option is independent of the other thread stack allocator
- * configuration options.  It is assumed that any memory allocated for the
- * stack of an IDLE task will not be from the RTEMS Workspace or the memory
- * statically allocated by default.
+ * configuration options.  It is assumed that any memory allocated for the task
+ * storage area of an IDLE task will not be from the RTEMS Workspace.
+ *
+ * The IDLE task stack allocator may increase the size of the allocated memory
+ * area to account for the actually allocated memory area.
+ *
+ * The
+ *
+ * * #CONFIGURE_IDLE_TASK_STORAGE_SIZE, and
+ *
+ * * ``CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE``
+ *
+ * configuration options are mutually exclusive.
+ * @endparblock
  */
 #define CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
 

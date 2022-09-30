@@ -133,6 +133,8 @@ RTEMS_SYSINIT_ITEM(
   { .fatal = FatalInitialExtension }, \
   { .fatal = TestSuiteFatalExtension }
 
+#define CONFIGURE_IDLE_TASK_STORAGE_SIZE RTEMS_MINIMUM_STACK_SIZE
+
 #if !defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE)
 
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
