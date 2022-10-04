@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2022 Mohd Noor Aman
+default:
+- -mcpu=cortex-a72
+- -march=armv8-a
+
+default-by-variant: []
+includes: []
+description: |
+  ABI flags
+links: []
+enabled-by: true
+name: ABI_FLAGS
+type: build

@@ -1,0 +1,471 @@
+/**
+ * @file
+ *
+ * @ingroup raspberrypi_4_regs
+ *
+ * @brief Register definitions.
+ */
+
+/*
+ *  Copyright (c) 2022 Mohd Noor Aman
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *
+ *  http://www.rtems.org/license/LICENSE
+ *
+ */
+
+
+#ifndef LIBBSP_AARCH64_RASPBERRYPI_RASPBERRYPI_4_H
+#define LIBBSP_AARCH64_RASPBERRYPI_RASPBERRYPI_4_H
+
+
+#include <bspopts.h>
+#include <stdint.h>
+#include <bsp/utility.h>
+
+
+/**
+ * @defgroup raspberrypi_reg Register Definitions
+ *
+ * @ingroup RTEMSBSPsARMRaspberryPi
+ *
+ * @brief Register Definitions
+ *
+ * @{
+ */
+
+/**
+ * @name Register Macros
+ *
+ * @{
+ */
+
+#define BCM2711_REG(x)           (*(volatile uint64_t *)(x))
+#define BCM2711_BIT(n)           (1 << (n))
+
+/** @} */
+
+/**
+ * @name Peripheral Base Register Address
+ *
+ * @{
+ */
+
+#define RPI_PERIPHERAL_BASE         0xFE000000
+#define BASE_OFFSET                 0xFE000000
+#define RPI_PERIPHERAL_SIZE         0x01800000
+
+/**
+ * @name Bus to Physical address translation
+ *       Macro.
+ * @{
+ */
+#define BUS_TO_PHY(x)            ((x) - BASE_OFFSET)
+
+/** @} */
+
+/**
+ * @name Internal ARM Timer Registers
+ *
+ * @{
+ */
+
+#define BCM2711_CLOCK_FREQ       250000000
+
+#define BCM2711_TIMER_BASE       (RPI_PERIPHERAL_BASE + 0xB400)
+
+#define BCM2711_TIMER_LOD        (BCM2711_TIMER_BASE + 0x00)
+#define BCM2711_TIMER_VAL        (BCM2711_TIMER_BASE + 0x04)
+#define BCM2711_TIMER_CTL        (BCM2711_TIMER_BASE + 0x08)
+#define BCM2711_TIMER_CLI        (BCM2711_TIMER_BASE + 0x0C)
+#define BCM2711_TIMER_RIS        (BCM2711_TIMER_BASE + 0x10)
+#define BCM2711_TIMER_MIS        (BCM2711_TIMER_BASE + 0x14)
+#define BCM2711_TIMER_RLD        (BCM2711_TIMER_BASE + 0x18)
+#define BCM2711_TIMER_DIV        (BCM2711_TIMER_BASE + 0x1C)
+#define BCM2711_TIMER_CNT        (BCM2711_TIMER_BASE + 0x20)
+
+#define BCM2711_TIMER_PRESCALE    0xF9
+
+/** @} */
+
+/**
+ * @name Power Management and Watchdog  Registers
+ *
+ * @{
+ */
+
+#define BCM2711_PM_PASSWD_MAGIC  0x5a000000
+
+#define BCM2711_PM_BASE          (RPI_PERIPHERAL_BASE + 0x100000)
+
+#define BCM2711_PM_GNRIC         (BCM2711_PM_BASE + 0x00)
+#define BCM2711_PM_GNRIC_POWUP   0x00000001
+#define BCM2711_PM_GNRIC_POWOK   0x00000002
+#define BCM2711_PM_GNRIC_ISPOW   0x00000004
+#define BCM2711_PM_GNRIC_MEMREP  0x00000008
+#define BCM2711_PM_GNRIC_MRDONE  0x00000010
+#define BCM2711_PM_GNRIC_ISFUNC  0x00000020
+#define BCM2711_PM_GNRIC_RSTN    0x00000fc0
+#define BCM2711_PM_GNRIC_ENAB    0x00001000
+#define BCM2711_PM_GNRIC_CFG     0x007f0000
+
+#define BCM2711_PM_AUDIO         (BCM2711_PM_BASE + 0x04)
+#define BCM2711_PM_AUDIO_APSM    0x000fffff
+#define BCM2711_PM_AUDIO_CTRLEN  0x00100000
+#define BCM2711_PM_AUDIO_RSTN    0x00200000
+
+#define BCM2711_PM_STATUS        (BCM2711_PM_BASE + 0x18)
+
+#define BCM2711_PM_RSTC          (BCM2711_PM_BASE + 0x1c)
+#define BCM2711_PM_RSTC_DRCFG    0x00000003
+#define BCM2711_PM_RSTC_WRCFG    0x00000030
+#define BCM2711_PM_RSTC_WRCFG_FULL   0x00000020
+#define BCM2711_PM_RSTC_SRCFG    0x00000300
+#define BCM2711_PM_RSTC_QRCFG    0x00003000
+#define BCM2711_PM_RSTC_FRCFG    0x00030000
+#define BCM2711_PM_RSTC_HRCFG    0x00300000
+
+#define BCM2711_PM_RSTS          (BCM2711_PM_BASE + 0x20)
+#define BCM2711_PM_RSTS_HADDRQ   0x00000001
+#define BCM2711_PM_RSTS_HADDRF   0x00000002
+#define BCM2711_PM_RSTS_HADDRH   0x00000004
+#define BCM2711_PM_RSTS_HADWRQ   0x00000010
+#define BCM2711_PM_RSTS_HADWRF   0x0000002
+#define BCM2711_PM_RSTS_HADWRH   0x00000040
+#define BCM2711_PM_RSTS_HADSRQ   0x00000100
+#define BCM2711_PM_RSTS_HADSRF   0x00000200
+#define BCM2711_PM_RSTS_HADSRH   0x00000400
+#define BCM2711_PM_RSTS_HADPOR   0x00001000
+
+#define BCM2711_PM_WDOG          (BCM2711_PM_BASE + 0x24)
+
+/** @} */
+
+
+/** @} */
+
+/**
+ * @name AUX Registers
+ *
+ * @{
+ */
+
+#define BCM2711_AUX_BASE         (RPI_PERIPHERAL_BASE + 0x215000)
+
+#define AUX_ENABLES              (BCM2711_AUX_BASE + 0x04)
+#define AUX_MU_IO_REG            (BCM2711_AUX_BASE + 0x40)
+#define AUX_MU_IER_REG           (BCM2711_AUX_BASE + 0x44)
+#define AUX_MU_IIR_REG           (BCM2711_AUX_BASE + 0x48)
+#define AUX_MU_LCR_REG           (BCM2711_AUX_BASE + 0x4C)
+#define AUX_MU_MCR_REG           (BCM2711_AUX_BASE + 0x50)
+#define AUX_MU_LSR_REG           (BCM2711_AUX_BASE + 0x54)
+#define AUX_MU_MSR_REG           (BCM2711_AUX_BASE + 0x58)
+#define AUX_MU_SCRATCH           (BCM2711_AUX_BASE + 0x5C)
+#define AUX_MU_CNTL_REG          (BCM2711_AUX_BASE + 0x60)
+#define AUX_MU_STAT_REG          (BCM2711_AUX_BASE + 0x64)
+#define AUX_MU_BAUD_REG          (BCM2711_AUX_BASE + 0x68)
+
+/** @} */
+
+
+
+/** @} */
+
+/**
+ * @name GPU Timer Registers
+ *
+ * @{
+ */
+
+/**
+ * NOTE: The GPU uses Compare registers 0 and 2 for
+ *       it's own RTOS. 1 and 3 are available for use in
+ *       RTEMS.
+ */
+#define BCM2711_GPU_TIMER_BASE       (RPI_PERIPHERAL_BASE + 0x3000)
+
+#define BCM2711_GPU_TIMER_CS         (BCM2711_GPU_TIMER_BASE + 0x00)
+#define BCM2711_GPU_TIMER_CS_M0      0x00000001
+#define BCM2711_GPU_TIMER_CS_M1      0x00000002
+#define BCM2711_GPU_TIMER_CS_M2      0x00000004
+#define BCM2711_GPU_TIMER_CS_M3      0x00000008
+#define BCM2711_GPU_TIMER_CLO        (BCM2711_GPU_TIMER_BASE + 0x04)
+#define BCM2711_GPU_TIMER_CHI        (BCM2711_GPU_TIMER_BASE + 0x08)
+#define BCM2711_GPU_TIMER_C0         (BCM2711_GPU_TIMER_BASE + 0x0C)
+#define BCM2711_GPU_TIMER_C1         (BCM2711_GPU_TIMER_BASE + 0x10)
+#define BCM2711_GPU_TIMER_C2         (BCM2711_GPU_TIMER_BASE + 0x14)
+#define BCM2711_GPU_TIMER_C3         (BCM2711_GPU_TIMER_BASE + 0x18)
+
+/** @} */
+
+/**
+ * @name EMMC Registers
+ *
+ * @{
+ */
+
+/**
+ * NOTE: Since the SD controller follows the SDHCI standard,
+ *       the rtems-libbsd tree already provides the remaining registers.
+ */
+
+#define BCM2711_EMMC_BASE           (RPI_PERIPHERAL_BASE + 0x300000)
+
+/** @} */
+
+/**
+* @name Mailbox Registers
+*
+* @{
+*/
+
+#define BCM2711_MBOX_BASE          (RPI_PERIPHERAL_BASE+0xB880)
+
+#define BCM2711_MBOX_READ          (BCM2711_MBOX_BASE+0x00)
+#define BCM2711_MBOX_PEEK          (BCM2711_MBOX_BASE+0x10)
+#define BCM2711_MBOX_SENDER        (BCM2711_MBOX_BASE+0x14)
+#define BCM2711_MBOX_STATUS        (BCM2711_MBOX_BASE+0x18)
+#define BCM2711_MBOX_WRITE         (BCM2711_MBOX_BASE+0x20)
+#define BCM2711_MBOX_CONFIG        (BCM2711_MBOX_BASE+0x1C)
+
+#define BCM2711_MBOX_RESPONSE      0x80000000
+#define BCM2711_MBOX_FULL          0x80000000
+#define BCM2711_MBOX_EMPTY         0x40000000
+
+/** @} */
+
+/**
+* @name Mailbox Channels
+*
+* @{
+*/
+
+/* Power Manager channel */
+#define BCM2711_MBOX_CHANNEL_PM         0
+/* Framebuffer channel */
+#define BCM2711_MBOX_CHANNEL_FB         1
+ /* Virtual UART channel */
+#define BCM2711_MBOX_CHANNEL_VUART      2
+ /* VCHIQ channel */
+#define BCM2711_MBOX_CHANNEL_VCHIQ      3
+ /* LEDs channel */
+#define BCM2711_MBOX_CHANNEL_LED        4
+ /* Button channel */
+#define BCM2711_MBOX_CHANNEL_BUTTON     5
+ /* Touch screen channel */
+#define BCM2711_MBOX_CHANNEL_TOUCHS     6
+
+#define BCM2711_MBOX_CHANNEL_COUNT      7
+/* Property tags (ARM <-> VC) channel */
+#define BCM2711_MBOX_CHANNEL_PROP_AVC   8
+ /* Property tags (VC <-> ARM) channel */
+#define BCM2711_MBOX_CHANNEL_PROP_VCA   9
+
+/** @} */
+
+
+
+/**
+ * @name Raspberry Pi 2 Interrupt Register Defines
+ *
+ * @{
+ */
+
+/* Timers interrupt control registers */
+#define BCM2711_CORE0_TIMER_IRQ_CTRL_BASE       0xFF800040
+#define BCM2711_CORE1_TIMER_IRQ_CTRL_BASE       0xFF800044
+#define BCM2711_CORE2_TIMER_IRQ_CTRL_BASE       0xFF800048
+#define BCM2711_CORE3_TIMER_IRQ_CTRL_BASE       0xFF80004C
+
+#define BCM2711_CORE_TIMER_IRQ_CTRL(cpuidx) \
+  (BCM2711_CORE0_TIMER_IRQ_CTRL_BASE + 0x4 * (cpuidx))
+
+
+/**
+ * @name Raspberry Pi 4 ARM_LOCAL registers
+ *
+ * @{
+ */
+
+#define BCM2711_LOCAL_REGS_BASE               0x4C0000000
+#define BCM2711_LOCAL_REGS_SIZE               0x100
+
+#define BCM2711_LOCAL_ARM_CONTROL             (BCM2711_LOCAL_REGS_BASE + 0x00)
+#define BCM2711_LOCAL_CORE_IRQ_CONTROL        (BCM2711_LOCAL_REGS_BASE + 0x0c)
+#define BCM2711_LOCAL_PMU_CONTROL_SET         (BCM2711_LOCAL_REGS_BASE + 0x10)
+#define BCM2711_LOCAL_PMU_CONTROL_CLR         (BCM2711_LOCAL_REGS_BASE + 0x14)
+#define BCM2711_LOCAL_PERI_IRQ_ROUTE0         (BCM2711_LOCAL_REGS_BASE + 0x24)
+#define BCM2711_LOCAL_AXI_QUIET_TIME          (BCM2711_LOCAL_REGS_BASE + 0x30)
+#define BCM2711_LOCAL_LOCAL_TIMER_CONTROL     (BCM2711_LOCAL_REGS_BASE + 0x34)
+#define BCM2711_LOCAL_LOCAL_TIMER_IRQ         (BCM2711_LOCAL_REGS_BASE + 0x38)
+
+#define BCM2711_LOCAL_TIMER_CNTRL0            (BCM2711_LOCAL_REGS_BASE + 0x40)
+#define BCM2711_LOCAL_TIMER_CNTRL1            (BCM2711_LOCAL_REGS_BASE + 0x44)
+#define BCM2711_LOCAL_TIMER_CNTRL2            (BCM2711_LOCAL_REGS_BASE + 0x48)
+#define BCM2711_LOCAL_TIMER_CNTRL3            (BCM2711_LOCAL_REGS_BASE + 0x4c)
+
+#define BCM2711_LOCAL_MAILBOX_CNTRL0          (BCM2711_LOCAL_REGS_BASE + 0x50)
+#define BCM2711_LOCAL_MAILBOX_CNTRL1          (BCM2711_LOCAL_REGS_BASE + 0x54)
+#define BCM2711_LOCAL_MAILBOX_CNTRL2          (BCM2711_LOCAL_REGS_BASE + 0x58)
+#define BCM2711_LOCAL_MAILBOX_CNTRL3          (BCM2711_LOCAL_REGS_BASE + 0x5c)
+
+#define BCM2711_LOCAL_IRQ_SOURCE0             (BCM2711_LOCAL_REGS_BASE + 0x60)
+#define BCM2711_LOCAL_IRQ_SOURCE1             (BCM2711_LOCAL_REGS_BASE + 0x64)
+#define BCM2711_LOCAL_IRQ_SOURCE2             (BCM2711_LOCAL_REGS_BASE + 0x68)
+#define BCM2711_LOCAL_IRQ_SOURCE3             (BCM2711_LOCAL_REGS_BASE + 0x6c)
+
+#define BCM2711_LOCAL_FIQ_SOURCE0             (BCM2711_LOCAL_REGS_BASE + 0x70)
+#define BCM2711_LOCAL_FIQ_SOURCE1             (BCM2711_LOCAL_REGS_BASE + 0x74)
+#define BCM2711_LOCAL_FIQ_SOURCE2             (BCM2711_LOCAL_REGS_BASE + 0x78)
+#define BCM2711_LOCAL_FIQ_SOURCE3             (BCM2711_LOCAL_REGS_BASE + 0x7c)
+
+/**
+ * @name Raspberry Pi 4 Mailbox registers
+ *
+ * @{
+ */
+
+
+
+#define BCM2711_MAILBOX_00_WRITE_SET_BASE               0x4C000080
+#define BCM2711_MAILBOX_01_WRITE_SET_BASE               0x4C000084
+#define BCM2711_MAILBOX_02_WRITE_SET_BASE               0x4C000088
+#define BCM2711_MAILBOX_03_WRITE_SET_BASE               0x4C00008C
+#define BCM2711_MAILBOX_04_WRITE_SET_BASE               0x4C000090
+#define BCM2711_MAILBOX_05_WRITE_SET_BASE               0x4C000094
+#define BCM2711_MAILBOX_06_WRITE_SET_BASE               0x4C000098
+#define BCM2711_MAILBOX_07_WRITE_SET_BASE               0x4C00009C
+#define BCM2711_MAILBOX_08_WRITE_SET_BASE               0x4C0000A0
+#define BCM2711_MAILBOX_09_WRITE_SET_BASE               0x4C0000A4
+#define BCM2711_MAILBOX_10_WRITE_SET_BASE               0x4C0000A8
+#define BCM2711_MAILBOX_11_WRITE_SET_BASE               0x4C0000AC
+#define BCM2711_MAILBOX_12_WRITE_SET_BASE               0x4C0000B0
+#define BCM2711_MAILBOX_13_WRITE_SET_BASE               0x4C0000B4
+#define BCM2711_MAILBOX_14_WRITE_SET_BASE               0x4C0000B8
+#define BCM2711_MAILBOX_15_WRITE_SET_BASE               0x4C0000BC
+
+#define BCM2711_MAILBOX_00_READ_CLEAR_BASE              0x4C0000C0
+#define BCM2711_MAILBOX_01_READ_CLEAR_BASE              0x4C0000C4
+#define BCM2711_MAILBOX_02_READ_CLEAR_BASE              0x4C0000C8
+#define BCM2711_MAILBOX_03_READ_CLEAR_BASE              0x4C0000CC
+#define BCM2711_MAILBOX_04_READ_CLEAR_BASE              0x4C0000D0
+#define BCM2711_MAILBOX_05_READ_CLEAR_BASE              0x4C0000D4
+#define BCM2711_MAILBOX_06_READ_CLEAR_BASE              0x4C0000D8
+#define BCM2711_MAILBOX_07_READ_CLEAR_BASE              0x4C0000DC
+#define BCM2711_MAILBOX_08_READ_CLEAR_BASE              0x4C0000E0
+#define BCM2711_MAILBOX_09_READ_CLEAR_BASE              0x4C0000E4
+#define BCM2711_MAILBOX_10_READ_CLEAR_BASE              0x4C0000E8
+#define BCM2711_MAILBOX_11_READ_CLEAR_BASE              0x4C0000EC
+#define BCM2711_MAILBOX_12_READ_CLEAR_BASE              0x4C0000F0
+#define BCM2711_MAILBOX_13_READ_CLEAR_BASE              0x4C0000F4
+#define BCM2711_MAILBOX_14_READ_CLEAR_BASE              0x4C0000F8
+#define BCM2711_MAILBOX_15_READ_CLEAR_BASE              0x4C0000FC
+
+
+/**
+ * @name Raspberry Pi 4 ARM_C FIQ and IRQ registers
+ *
+ * @{
+ */
+
+#define BCM2711_ARMC_REGS_BASE                 (RPI_PERIPHERAL_BASE + 0xB200)
+#define BCM2711_ARMC_REGS_SIZE                 0x200
+
+#define BCM2711_ARMC_IRQ0_PENDING0             (BCM2711_ARMC_REGS_BASE + 0x00)
+#define BCM2711_ARMC_IRQ0_PENDING1             (BCM2711_ARMC_REGS_BASE + 0x04)
+#define BCM2711_ARMC_IRQ0_PENDING2             (BCM2711_ARMC_REGS_BASE + 0x08)
+#define BCM2711_ARMC_IRQ0_SET_EN_0             (BCM2711_ARMC_REGS_BASE + 0x10)
+#define BCM2711_ARMC_IRQ0_SET_EN_1             (BCM2711_ARMC_REGS_BASE + 0x14)
+#define BCM2711_ARMC_IRQ0_SET_EN_2             (BCM2711_ARMC_REGS_BASE + 0x18)
+#define BCM2711_ARMC_IRQ0_CLR_EN_0             (BCM2711_ARMC_REGS_BASE + 0x20)
+#define BCM2711_ARMC_IRQ0_CLR_EN_1             (BCM2711_ARMC_REGS_BASE + 0x24)
+#define BCM2711_ARMC_IRQ0_CLR_EN_2             (BCM2711_ARMC_REGS_BASE + 0x28)
+
+#define BCM2711_ARMC_IRQ_STATUS0               (BCM2711_ARMC_REGS_BASE + 0x30)
+#define BCM2711_ARMC_IRQ_STATUS1               (BCM2711_ARMC_REGS_BASE + 0x34)
+#define BCM2711_ARMC_IRQ_STATUS2               (BCM2711_ARMC_REGS_BASE + 0x38)
+
+#define BCM2711_ARMC_IRQ1_PENDING0             (BCM2711_ARMC_REGS_BASE + 0x40)
+#define BCM2711_ARMC_IRQ1_PENDING1             (BCM2711_ARMC_REGS_BASE + 0x44)
+#define BCM2711_ARMC_IRQ1_PENDING2             (BCM2711_ARMC_REGS_BASE + 0x48)
+#define BCM2711_ARMC_IRQ1_SET_EN_0             (BCM2711_ARMC_REGS_BASE + 0x50)
+#define BCM2711_ARMC_IRQ1_SET_EN_1             (BCM2711_ARMC_REGS_BASE + 0x54)
+#define BCM2711_ARMC_IRQ1_SET_EN_2             (BCM2711_ARMC_REGS_BASE + 0x58)
+#define BCM2711_ARMC_IRQ1_CLR_EN_0             (BCM2711_ARMC_REGS_BASE + 0x60)
+#define BCM2711_ARMC_IRQ1_CLR_EN_1             (BCM2711_ARMC_REGS_BASE + 0x64)
+#define BCM2711_ARMC_IRQ1_CLR_EN_2             (BCM2711_ARMC_REGS_BASE + 0x68)
+
+#define BCM2711_ARMC_IRQ2_PENDING0             (BCM2711_ARMC_REGS_BASE + 0x80)
+#define BCM2711_ARMC_IRQ2_PENDING1             (BCM2711_ARMC_REGS_BASE + 0x84)
+#define BCM2711_ARMC_IRQ2_PENDING2             (BCM2711_ARMC_REGS_BASE + 0x88)
+#define BCM2711_ARMC_IRQ2_SET_EN_0             (BCM2711_ARMC_REGS_BASE + 0x90)
+#define BCM2711_ARMC_IRQ2_SET_EN_1             (BCM2711_ARMC_REGS_BASE + 0x94)
+#define BCM2711_ARMC_IRQ2_SET_EN_2             (BCM2711_ARMC_REGS_BASE + 0x98)
+#define BCM2711_ARMC_IRQ2_CLR_EN_0             (BCM2711_ARMC_REGS_BASE + 0xA0)
+#define BCM2711_ARMC_IRQ2_CLR_EN_1             (BCM2711_ARMC_REGS_BASE + 0xA4)
+#define BCM2711_ARMC_IRQ2_CLR_EN_2             (BCM2711_ARMC_REGS_BASE + 0xA8)
+
+#define BCM2711_ARMC_IRQ3_PENDING0             (BCM2711_ARMC_REGS_BASE + 0xC0)
+#define BCM2711_ARMC_IRQ3_PENDING1             (BCM2711_ARMC_REGS_BASE + 0xC4)
+#define BCM2711_ARMC_IRQ3_PENDING2             (BCM2711_ARMC_REGS_BASE + 0xC8)
+#define BCM2711_ARMC_IRQ3_SET_EN_0             (BCM2711_ARMC_REGS_BASE + 0xD0)
+#define BCM2711_ARMC_IRQ3_SET_EN_1             (BCM2711_ARMC_REGS_BASE + 0xD4)
+#define BCM2711_ARMC_IRQ3_SET_EN_2             (BCM2711_ARMC_REGS_BASE + 0xD8)
+#define BCM2711_ARMC_IRQ3_CLR_EN_0             (BCM2711_ARMC_REGS_BASE + 0xE0)
+#define BCM2711_ARMC_IRQ3_CLR_EN_1             (BCM2711_ARMC_REGS_BASE + 0xE4)
+#define BCM2711_ARMC_IRQ3_CLR_EN_2             (BCM2711_ARMC_REGS_BASE + 0xE8)
+
+
+
+#define BCM2711_ARMC_FIQ0_PENDING0             (BCM2711_ARMC_REGS_BASE + 0x100)
+#define BCM2711_ARMC_FIQ0_PENDING1             (BCM2711_ARMC_REGS_BASE + 0x104)
+#define BCM2711_ARMC_FIQ0_PENDING2             (BCM2711_ARMC_REGS_BASE + 0x108)
+#define BCM2711_ARMC_FIQ0_SET_EN_0             (BCM2711_ARMC_REGS_BASE + 0x110)
+#define BCM2711_ARMC_FIQ0_SET_EN_1             (BCM2711_ARMC_REGS_BASE + 0x114)
+#define BCM2711_ARMC_FIQ0_SET_EN_2             (BCM2711_ARMC_REGS_BASE + 0x118)
+#define BCM2711_ARMC_FIQ0_CLR_EN_0             (BCM2711_ARMC_REGS_BASE + 0x120)
+#define BCM2711_ARMC_FIQ0_CLR_EN_1             (BCM2711_ARMC_REGS_BASE + 0x124)
+#define BCM2711_ARMC_FIQ0_CLR_EN_2             (BCM2711_ARMC_REGS_BASE + 0x128)
+
+#define BCM2711_ARMC_FIQ1_PENDING0             (BCM2711_ARMC_REGS_BASE + 0x140)
+#define BCM2711_ARMC_FIQ1_PENDING1             (BCM2711_ARMC_REGS_BASE + 0x144)
+#define BCM2711_ARMC_FIQ1_PENDING2             (BCM2711_ARMC_REGS_BASE + 0x148)
+#define BCM2711_ARMC_FIQ1_SET_EN_0             (BCM2711_ARMC_REGS_BASE + 0x150)
+#define BCM2711_ARMC_FIQ1_SET_EN_1             (BCM2711_ARMC_REGS_BASE + 0x154)
+#define BCM2711_ARMC_FIQ1_SET_EN_2             (BCM2711_ARMC_REGS_BASE + 0x158)
+#define BCM2711_ARMC_FIQ1_CLR_EN_0             (BCM2711_ARMC_REGS_BASE + 0x160)
+#define BCM2711_ARMC_FIQ1_CLR_EN_1             (BCM2711_ARMC_REGS_BASE + 0x164)
+#define BCM2711_ARMC_FIQ1_CLR_EN_2             (BCM2711_ARMC_REGS_BASE + 0x168)
+
+#define BCM2711_ARMC_FIQ2_PENDING0             (BCM2711_ARMC_REGS_BASE + 0x180)
+#define BCM2711_ARMC_FIQ2_PENDING1             (BCM2711_ARMC_REGS_BASE + 0x184)
+#define BCM2711_ARMC_FIQ2_PENDING2             (BCM2711_ARMC_REGS_BASE + 0x188)
+#define BCM2711_ARMC_FIQ2_SET_EN_0             (BCM2711_ARMC_REGS_BASE + 0x190)
+#define BCM2711_ARMC_FIQ2_SET_EN_1             (BCM2711_ARMC_REGS_BASE + 0x194)
+#define BCM2711_ARMC_FIQ2_SET_EN_2             (BCM2711_ARMC_REGS_BASE + 0x198)
+#define BCM2711_ARMC_FIQ2_CLR_EN_0             (BCM2711_ARMC_REGS_BASE + 0x1A0)
+#define BCM2711_ARMC_FIQ2_CLR_EN_1             (BCM2711_ARMC_REGS_BASE + 0x1A4)
+#define BCM2711_ARMC_FIQ2_CLR_EN_2             (BCM2711_ARMC_REGS_BASE + 0x1A8)
+
+#define BCM2711_ARMC_FIQ3_PENDING0             (BCM2711_ARMC_REGS_BASE + 0x1C0)
+#define BCM2711_ARMC_FIQ3_PENDING1             (BCM2711_ARMC_REGS_BASE + 0x1C4)
+#define BCM2711_ARMC_FIQ3_PENDING2             (BCM2711_ARMC_REGS_BASE + 0x1C8)
+#define BCM2711_ARMC_FIQ3_SET_EN_0             (BCM2711_ARMC_REGS_BASE + 0x1D0)
+#define BCM2711_ARMC_FIQ3_SET_EN_1             (BCM2711_ARMC_REGS_BASE + 0x1D4)
+#define BCM2711_ARMC_FIQ3_SET_EN_2             (BCM2711_ARMC_REGS_BASE + 0x1D8)
+#define BCM2711_ARMC_FIQ3_CLR_EN_0             (BCM2711_ARMC_REGS_BASE + 0x1E0)
+#define BCM2711_ARMC_FIQ3_CLR_EN_1             (BCM2711_ARMC_REGS_BASE + 0x1E4)
+#define BCM2711_ARMC_FIQ3_CLR_EN_2             (BCM2711_ARMC_REGS_BASE + 0x1E8)
+
+#define BCM2711_ARMC_SWIRQ_SET                 (BCM2711_ARMC_REGS_BASE + 0x1F0)
+#define BCM2711_ARMC_SWIRQ_CLEAR               (BCM2711_ARMC_REGS_BASE + 0x1F4)
+
+
+
+
+
+/** @} */
+
+#endif /* LIBBSP_ARM_RASPBERRYPI_RASPBERRYPI_H */
