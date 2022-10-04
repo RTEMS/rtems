@@ -171,32 +171,30 @@ typedef struct {
   const rtems_initialization_tasks_table *User_initialization_tasks_table;
 } rtems_api_configuration_table;
 
-/* Generated from spec:/rtems/config/if/get-api-configuration */
-
-/**
- * @ingroup RTEMSAPIConfig
- *
- * @brief Gets the Classic API Configuration Table of this application.
- *
- * @return Returns the pointer to the Classic API Configuration Table of this
- *   application.
- */
-const rtems_api_configuration_table *
-rtems_configuration_get_rtems_api_configuration( void );
-
 /* Generated from spec:/rtems/config/if/get-maximum-barriers */
 
 /**
  * @ingroup RTEMSAPIConfig
  *
- * @brief Gets the maximum number of Classic API Barriers configured for this
- *   application.
+ * @brief Gets the resource number of @ref RTEMSAPIClassicBarrier objects
+ *   configured for this application.
  *
- * @return Returns the maximum number of Classic API Barriers configured for
- *   this application.
+ * @return Returns the resource number of @ref RTEMSAPIClassicBarrier objects
+ *   configured for this application.
  *
  * @par Notes
- * See #CONFIGURE_MAXIMUM_BARRIERS.
+ * The resource number is defined by the #CONFIGURE_MAXIMUM_BARRIERS
+ * application configuration option.  See also rtems_resource_is_unlimited()
+ * and rtems_resource_maximum_per_allocation().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_barriers( void );
 
@@ -205,14 +203,25 @@ uint32_t rtems_configuration_get_maximum_barriers( void );
 /**
  * @ingroup RTEMSAPIConfig
  *
- * @brief Gets the maximum number of Classic API Message Queues configured for
- *   this application.
+ * @brief Gets the resource number of @ref RTEMSAPIClassicMessage objects
+ *   configured for this application.
  *
- * @return Returns the maximum number of Classic API Message Queues configured
- *   for this application.
+ * @return Returns the resource number of @ref RTEMSAPIClassicMessage objects
+ *   configured for this application.
  *
  * @par Notes
- * See #CONFIGURE_MAXIMUM_MESSAGE_QUEUES.
+ * The resource number is defined by the #CONFIGURE_MAXIMUM_MESSAGE_QUEUES
+ * application configuration option.  See also rtems_resource_is_unlimited()
+ * and rtems_resource_maximum_per_allocation().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_message_queues( void );
 
@@ -221,14 +230,25 @@ uint32_t rtems_configuration_get_maximum_message_queues( void );
 /**
  * @ingroup RTEMSAPIConfig
  *
- * @brief Gets the maximum number of Classic API Partitions configured for this
- *   application.
+ * @brief Gets the resource number of @ref RTEMSAPIClassicPart objects
+ *   configured for this application.
  *
- * @return Returns the maximum number of Classic API Partitions configured for
- *   this application.
+ * @return Returns the resource number of @ref RTEMSAPIClassicPart objects
+ *   configured for this application.
  *
  * @par Notes
- * See #CONFIGURE_MAXIMUM_PARTITIONS.
+ * The resource number is defined by the #CONFIGURE_MAXIMUM_PARTITIONS
+ * application configuration option.  See also rtems_resource_is_unlimited()
+ * and rtems_resource_maximum_per_allocation().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_partitions( void );
 
@@ -237,14 +257,25 @@ uint32_t rtems_configuration_get_maximum_partitions( void );
 /**
  * @ingroup RTEMSAPIConfig
  *
- * @brief Gets the maximum number of Classic API Rate Monotonic Periods
+ * @brief Gets the resource number of @ref RTEMSAPIClassicRatemon objects
  *   configured for this application.
  *
- * @return Returns the maximum number of Classic API Rate Monotonic Periods
+ * @return Returns the resource number of @ref RTEMSAPIClassicRatemon objects
  *   configured for this application.
  *
  * @par Notes
- * See #CONFIGURE_MAXIMUM_PERIODS.
+ * The resource number is defined by the #CONFIGURE_MAXIMUM_PERIODS application
+ * configuration option.  See also rtems_resource_is_unlimited() and
+ * rtems_resource_maximum_per_allocation().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_periods( void );
 
@@ -253,14 +284,25 @@ uint32_t rtems_configuration_get_maximum_periods( void );
 /**
  * @ingroup RTEMSAPIConfig
  *
- * @brief Gets the maximum number of Classic API Dual-Ported Memories
+ * @brief Gets the resource number of @ref RTEMSAPIClassicDPMem objects
  *   configured for this application.
  *
- * @return Returns the maximum number of Classic API Dual-Ported Memories
+ * @return Returns the resource number of @ref RTEMSAPIClassicDPMem objects
  *   configured for this application.
  *
  * @par Notes
- * See #CONFIGURE_MAXIMUM_PORTS.
+ * The resource number is defined by the #CONFIGURE_MAXIMUM_PORTS application
+ * configuration option.  See also rtems_resource_is_unlimited() and
+ * rtems_resource_maximum_per_allocation().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_ports( void );
 
@@ -269,14 +311,25 @@ uint32_t rtems_configuration_get_maximum_ports( void );
 /**
  * @ingroup RTEMSAPIConfig
  *
- * @brief Gets the maximum number of Classic API Regions configured for this
- *   application.
+ * @brief Gets the resource number of @ref RTEMSAPIClassicRegion objects
+ *   configured for this application.
  *
- * @return Returns the maximum number of Classic API Regions configured for
- *   this application.
+ * @return Returns the resource number of @ref RTEMSAPIClassicRegion objects
+ *   configured for this application.
  *
  * @par Notes
- * See #CONFIGURE_MAXIMUM_REGIONS.
+ * The resource number is defined by the #CONFIGURE_MAXIMUM_REGIONS application
+ * configuration option.  See also rtems_resource_is_unlimited() and
+ * rtems_resource_maximum_per_allocation().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_regions( void );
 
@@ -285,14 +338,25 @@ uint32_t rtems_configuration_get_maximum_regions( void );
 /**
  * @ingroup RTEMSAPIConfig
  *
- * @brief Gets the maximum number of Classic API Semaphores configured for this
- *   application.
+ * @brief Gets the resource number of @ref RTEMSAPIClassicSem objects
+ *   configured for this application.
  *
- * @return Returns the maximum number of Classic API Semaphores configured for
- *   this application.
+ * @return Returns the resource number of @ref RTEMSAPIClassicSem objects
+ *   configured for this application.
  *
  * @par Notes
- * See #CONFIGURE_MAXIMUM_SEMAPHORES.
+ * The resource number is defined by the #CONFIGURE_MAXIMUM_SEMAPHORES
+ * application configuration option.  See also rtems_resource_is_unlimited()
+ * and rtems_resource_maximum_per_allocation().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_semaphores( void );
 
@@ -301,14 +365,25 @@ uint32_t rtems_configuration_get_maximum_semaphores( void );
 /**
  * @ingroup RTEMSAPIConfig
  *
- * @brief Gets the maximum number of Classic API Tasks configured for this
- *   application.
+ * @brief Gets the resource number of @ref RTEMSAPIClassicTasks objects
+ *   configured for this application.
  *
- * @return Returns the maximum number of Classic API Tasks configured for this
- *   application.
+ * @return Returns the resource number of @ref RTEMSAPIClassicTasks objects
+ *   configured for this application.
  *
  * @par Notes
- * See #CONFIGURE_MAXIMUM_TASKS.
+ * The resource number is defined by the #CONFIGURE_MAXIMUM_TASKS application
+ * configuration option.  See also rtems_resource_is_unlimited() and
+ * rtems_resource_maximum_per_allocation().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_tasks( void );
 
@@ -317,16 +392,49 @@ uint32_t rtems_configuration_get_maximum_tasks( void );
 /**
  * @ingroup RTEMSAPIConfig
  *
- * @brief Gets the maximum number of Classic API Timers configured for this
- *   application.
+ * @brief Gets the resource number of @ref RTEMSAPIClassicTimer objects
+ *   configured for this application.
  *
- * @return Returns the maximum number of Classic API Timers configured for this
- *   application.
+ * @return Returns the resource number of @ref RTEMSAPIClassicTimer objects
+ *   configured for this application.
  *
  * @par Notes
- * See #CONFIGURE_MAXIMUM_TIMERS.
+ * The resource number is defined by the #CONFIGURE_MAXIMUM_TIMERS application
+ * configuration option.  See also rtems_resource_is_unlimited() and
+ * rtems_resource_maximum_per_allocation().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_timers( void );
+
+/* Generated from spec:/rtems/config/if/get-api-configuration */
+
+/**
+ * @ingroup RTEMSAPIConfig
+ *
+ * @brief Gets the Classic API Configuration Table of this application.
+ *
+ * @return Returns a pointer to the Classic API Configuration Table of this
+ *   application.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+const rtems_api_configuration_table *
+rtems_configuration_get_rtems_api_configuration( void );
 
 #ifdef __cplusplus
 }
