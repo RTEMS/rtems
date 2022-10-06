@@ -74,10 +74,10 @@
  *
  *   - Check the configured CONFIGURE_IDLE_TASK_BODY.
  *
- *   - Check the default value CONFIGURE_IDLE_TASK_STACK_SIZE where the
+ *   - Check the default value of CONFIGURE_IDLE_TASK_STACK_SIZE where the
  *     optional BSP-provided default value is enabled.
  *
- *   - Check the default value CONFIGURE_INTERRUPT_STACK_SIZE where the
+ *   - Check the default value of CONFIGURE_INTERRUPT_STACK_SIZE where the
  *     optional BSP-provided default value is enabled.
  *
  *   - Check the BSP-provided initial extension is registered.
@@ -160,8 +160,8 @@ static void AcfgValDefault_Action_0( void )
   T_step_eq_ptr( 0, rtems_configuration_get_idle_task(), IdleBody );
 
   /*
-   * Check the default value CONFIGURE_IDLE_TASK_STACK_SIZE where the optional
-   * BSP-provided default value is enabled.
+   * Check the default value of CONFIGURE_IDLE_TASK_STACK_SIZE where the
+   * optional BSP-provided default value is enabled.
    */
   T_step_eq_sz(
     1,
@@ -174,8 +174,8 @@ static void AcfgValDefault_Action_0( void )
   );
 
   /*
-   * Check the default value CONFIGURE_INTERRUPT_STACK_SIZE where the optional
-   * BSP-provided default value is enabled.
+   * Check the default value of CONFIGURE_INTERRUPT_STACK_SIZE where the
+   * optional BSP-provided default value is enabled.
    */
   T_step_eq_sz(
     2,
