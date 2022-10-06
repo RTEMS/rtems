@@ -918,53 +918,6 @@
  */
 #define CONFIGURE_MAXIMUM_TASKS
 
-/* Generated from spec:/acfg/if/max-thread-local-storage-size */
-
-/**
- * @brief This configuration option is an integer define.
- *
- * If the value of this configuration option is greater than zero, then it
- * defines the maximum thread-local storage size, otherwise the thread-local
- * storage size is defined by the linker depending on the thread-local storage
- * objects used by the application in the statically-linked executable.
- *
- * @par Default Value
- * The default value is 0.
- *
- * @par Value Constraints
- * @parblock
- * The value of this configuration option shall satisfy all of the following
- * constraints:
- *
- * * It shall be greater than or equal to zero.
- *
- * * It shall be less than or equal to <a
- *   href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
- *
- * * It shall be an integral multiple of #RTEMS_TASK_STORAGE_ALIGNMENT.
- * @endparblock
- *
- * @par Notes
- * @parblock
- * This configuration option can be used to reserve space for the dynamic
- * linking of modules with thread-local storage objects.
- *
- * If the thread-local storage size defined by the thread-local storage objects
- * used by the application in the statically-linked executable is greater than
- * a non-zero value of this configuration option, then a fatal error will occur
- * during system initialization.
- *
- * Use RTEMS_ALIGN_UP() and #RTEMS_TASK_STORAGE_ALIGNMENT to adjust the size to
- * meet the minimum alignment requirement of a thread-local storage area.
- *
- * The actual thread-local storage size is determined when the application
- * executable is linked.  The ``rtems-exeinfo`` command line tool included in
- * the RTEMS Tools can be used to obtain the thread-local storage size and
- * alignment of an application executable.
- * @endparblock
- */
-#define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE
-
 /* Generated from spec:/acfg/if/max-timers */
 
 /**
@@ -2893,6 +2846,54 @@
  * @endparblock
  */
 #define CONFIGURE_MAXIMUM_PROCESSORS
+
+/* Generated from spec:/acfg/if/max-thread-local-storage-size */
+
+/**
+ * @brief This configuration option is an integer define.
+ *
+ * If the value of this configuration option is greater than zero, then it
+ * defines the maximum thread-local storage size, otherwise the thread-local
+ * storage size is defined by the linker depending on the thread-local storage
+ * objects used by the application in the statically-linked executable.
+ *
+ * @par Default Value
+ * The default value is 0.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this configuration option:
+ *
+ * * The value of the configuration option shall be greater than or equal to
+ *   zero.
+ *
+ * * The value of the configuration option shall be less than or equal to <a
+ *   href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
+ *
+ * * The value of the configuration option shall be an integral multiple of
+ *   #RTEMS_TASK_STORAGE_ALIGNMENT.
+ * @endparblock
+ *
+ * @par Notes
+ * @parblock
+ * This configuration option can be used to reserve space for the dynamic
+ * linking of modules with thread-local storage objects.
+ *
+ * If the thread-local storage size defined by the thread-local storage objects
+ * used by the application in the statically-linked executable is greater than
+ * a non-zero value of this configuration option, then a fatal error will occur
+ * during system initialization.
+ *
+ * Use RTEMS_ALIGN_UP() and #RTEMS_TASK_STORAGE_ALIGNMENT to adjust the size to
+ * meet the minimum alignment requirement of a thread-local storage area.
+ *
+ * The actual thread-local storage size is determined when the application
+ * executable is linked.  The ``rtems-exeinfo`` command line tool included in
+ * the RTEMS Tools can be used to obtain the thread-local storage size and
+ * alignment of an application executable.
+ * @endparblock
+ */
+#define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE
 
 /* Generated from spec:/acfg/if/max-thread-name-size */
 
