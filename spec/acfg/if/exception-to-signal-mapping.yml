@@ -13,8 +13,6 @@ links:
   uid: domain
 - role: interface-ingroup
   uid: group-devdrv
-- role: interface-ingroup
-  uid: group-devdrv
 - role: constraint
   uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_EXCEPTION_TO_SIGNAL_MAPPING
