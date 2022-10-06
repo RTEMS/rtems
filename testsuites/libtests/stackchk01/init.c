@@ -35,14 +35,18 @@
 
 const char rtems_test_name[] = "STACKCHK 1";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-
-rtems_task Init(
-  rtems_task_argument argument
-)
+static void stack_visitor( const rtems_stack_checker_info *info, void *arg )
 {
-  bool              blown;
+  if ( rtems_object_id_get_api( info->id ) == 1 ) {
+    *(uintptr_t *) arg = info->used;
+  }
+}
+
+static rtems_task Init( rtems_task_argument argument )
+{
+  bool      blown;
+  uintptr_t used;
+  uintptr_t limit;
 
   TEST_BEGIN();
 
@@ -50,14 +54,26 @@ rtems_task Init(
   blown = rtems_stack_checker_is_blown();
   rtems_test_assert(!blown);
 
+  rtems_task_wake_after( 2 );
+  used = 0;
+  rtems_stack_checker_iterate( stack_visitor, &used );
+  limit = CPU_STACK_MINIMUM_SIZE / 4;
+  printf(
+    "check used IDLE stack size: 0 < %" PRIuPTR " <= %" PRIuPTR "\n",
+    used,
+    limit
+  );
+  rtems_test_assert( used > 0 );
+  rtems_test_assert( used <= limit );
+
   TEST_END();
   rtems_test_exit(0);
 }
 
 /* configuration information */
 
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

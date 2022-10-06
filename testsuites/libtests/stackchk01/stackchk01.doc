@@ -30,9 +30,17 @@ This file describes the directives and concepts tested by this test set.
 test set name:  stackchk01
 
 directives:
-  rtems_stack_checker_is_blown
+
+* CPU_STACK_MINIMUM_SIZE
+
+* rtems_stack_checker_is_blown
+
+* rtems_stack_checker_iterate
 
 concepts:
 
-+ ensure that dynamic checks for a blown stack work both when the stack
+* Ensure that dynamic checks for a blown stack work both when the stack
   is not blown and when it is.
+
+* Ensure that the CPU_STACK_MINIMUM_SIZE is suffiently larger than the stack
+  usage in simple applications.
