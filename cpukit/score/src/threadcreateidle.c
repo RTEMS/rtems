@@ -84,6 +84,10 @@ static void _Thread_Create_idle_for_CPU(
     &config.stack_size
   );
 
+  if ( config.stack_size < storage_size ) {
+    _Internal_error( INTERNAL_ERROR_IDLE_THREAD_STACK_TOO_SMALL );
+  }
+
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all
    *  fields not explicitly assigned were explicitly zeroed by

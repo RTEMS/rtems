@@ -49,7 +49,7 @@ static void test_internal_error_text(void)
   } while ( text != text_last );
 
   rtems_test_assert(
-    error - 3 == INTERNAL_ERROR_NO_MEMORY_FOR_IDLE_TASK_STORAGE
+    error - 3 == INTERNAL_ERROR_IDLE_THREAD_STACK_TOO_SMALL
   );
 }
 
