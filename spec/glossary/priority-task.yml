@@ -10,7 +10,7 @@ term: task priority
 text: |
   A task ${priority:/term} of a ${task:/term} determines its importance
   relative to other tasks.
-  
+
   The scheduler use task priorities to determine which ${readytask:/term} gets
   a processor allocated, see ${scheduledtask:/term}.  The
   ${priority-eligible:/plural} of a task define the position of the task in a

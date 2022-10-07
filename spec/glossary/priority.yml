@@ -20,7 +20,7 @@ text: |
   ${priority-lower:/term} than ``B``.  If a numerical priority value ``C`` is
   less than a numerical priority value ``D``, then ``C`` expresses a
   ${priority-higher:/term} than ``D``.
-  
+
   For the ${posix:/term} API, if a numerical priority value ``R`` is less than
   a numerical priority value ``S``, then ``R`` expresses a lower priority than
   ``S``.  If a numerical priority value ``T`` is greater than a numerical
