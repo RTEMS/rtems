@@ -454,10 +454,6 @@ int main(
   status = pthread_rwlock_timedrdlock( NULL, &abstime);
   rtems_test_assert( status == EINVAL );
 
-  puts( "pthread_rwlock_timedrdlock( &rwlock, NULL) -- EINVAL" );
-  status = pthread_rwlock_timedrdlock( &rwlock, NULL);
-  rtems_test_assert( status == EINVAL );
-
   puts( "pthread_rwlock_tryrdlock(NULL) -- EINVAL" );
   status = pthread_rwlock_tryrdlock(NULL);
   rtems_test_assert( status == EINVAL );
@@ -470,10 +466,6 @@ int main(
   status = pthread_rwlock_timedwrlock( NULL, &abstime );
   rtems_test_assert( status == EINVAL );
 
-  puts( "pthread_rwlock_timedwrlock( &rwlock, NULL) -- EINVAL" );
-  status = pthread_rwlock_timedwrlock( &rwlock, NULL);
-  rtems_test_assert( status == EINVAL );
-
   puts( "pthread_rwlock_trywrlock(NULL) -- EINVAL" );
   status = pthread_rwlock_trywrlock(NULL);
   rtems_test_assert( status == EINVAL );
@@ -481,6 +473,26 @@ int main(
   puts( "pthread_rwlock_unlock(NULL) -- EINVAL" );
   status = pthread_rwlock_unlock(NULL);
   rtems_test_assert( status == EINVAL );
+
+  status = pthread_rwlock_init( &rwlock, NULL );
+  rtems_test_assert( status == 0 );
+
+  status = pthread_rwlock_wrlock( &rwlock );
+  rtems_test_assert( status == 0 );
+
+  puts( "pthread_rwlock_timedrdlock( &rwlock, NULL) -- EINVAL" );
+  status = pthread_rwlock_timedrdlock( &rwlock, NULL);
+  rtems_test_assert( status == EINVAL );
+
+  puts( "pthread_rwlock_timedwrlock( &rwlock, NULL) -- EINVAL" );
+  status = pthread_rwlock_timedwrlock( &rwlock, NULL);
+  rtems_test_assert( status == EINVAL );
+
+  status = pthread_rwlock_unlock( &rwlock );
+  rtems_test_assert( status == 0 );
+
+  status = pthread_rwlock_destroy( &rwlock );
+  rtems_test_assert( status == 0 );
 
   /*************** BAD ID CHECK *****************/
   /* make a valid abstime */
