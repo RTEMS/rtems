@@ -962,7 +962,8 @@ rtems_fdt_strerror (int errval)
     "no memory",
     "file not found",
     "DTB read fail",
-    "blob has references"
+    "blob has references",
+    "bad length"
   };
   if (errval > -RTEMS_FDT_ERR_RTEMS_MIN)
     return fdt_strerror (errval);
