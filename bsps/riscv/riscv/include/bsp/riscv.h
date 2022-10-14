@@ -34,16 +34,6 @@
 extern "C" {
 #endif
 
-static inline uint32_t _RISCV_Map_hardid_to_cpu_index(uint32_t hardid)
-{
-  return (hardid - RISCV_BOOT_HARTID);
-}
-
-static inline uint32_t _RISCV_Map_cpu_index_to_hardid(uint32_t cpu_index)
-{
-  return (cpu_index + RISCV_BOOT_HARTID);
-}
-
 extern volatile RISCV_CLINT_regs *riscv_clint;
 
 void *riscv_fdt_get_address(const void *fdt, int node);
