@@ -97,6 +97,21 @@ static void RtemsCpuuseValCpuuse_Action_0( void )
   Thread_Control   *other;
   Timestamp_Control cpu_usage_self;
   Timestamp_Control cpu_usage_other;
+  uint32_t          idle_tasks;
+  uint32_t          cpu_index;
+
+  idle_tasks = 0;
+
+  for ( cpu_index = 0; cpu_index < rtems_scheduler_get_processor_maximum(); ++cpu_index ) {
+    rtems_status_code sc;
+    rtems_id          unused;
+
+    sc = rtems_scheduler_ident_by_processor( cpu_index, &unused );
+
+    if ( sc == RTEMS_SUCCESSFUL ) {
+      ++idle_tasks;
+    }
+  }
 
   id = CreateTask( "WORK", GetSelfPriority() );
   StartTask( id, Worker, NULL );
@@ -128,7 +143,7 @@ static void RtemsCpuuseValCpuuse_Action_0( void )
   T_eq_i64( _Thread_Get_CPU_time_used_after_last_reset( self ), 4295 );
   T_eq_i64(
     _Thread_Get_CPU_time_used( self ),
-    cpu_usage_self + 12885 + rtems_scheduler_get_processor_maximum() * 4295
+    cpu_usage_self + 12885 + 4295 * idle_tasks
   );
 
   T_eq_i64( _Thread_Get_CPU_time_used_after_last_reset( other ), 0 );
