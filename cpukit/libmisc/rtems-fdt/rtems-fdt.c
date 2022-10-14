@@ -999,7 +999,7 @@ rtems_fdt_prop_value(const char* const path,
   if (length > (int) *size)
   {
     rtems_fdt_release_handle (&fdt);
-    return RTEMS_FDT_ERR_BADPATH;
+    return -RTEMS_FDT_ERR_BADPATH;
   }
 
   *size = length;
@@ -1067,7 +1067,7 @@ rtems_fdt_prop_map(const char* const path,
     if (length != sizeof (uintptr_t))
     {
       rtems_fdt_release_handle (&fdt);
-      return RTEMS_FDT_ERR_BADPATH;
+      return -RTEMS_FDT_ERR_BADPATH;
     }
 
     values[item] = rtems_fdt_get_uintptr(prop);
