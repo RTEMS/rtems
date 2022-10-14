@@ -67,27 +67,6 @@ package body RTEMS.IO is
 
    end Register_Name;
 
-   procedure Lookup_Name
-     (Name        : in String;
-      Device_Info : out RTEMS.Driver_Name_t;
-      Result      : out RTEMS.Status_Codes)
-   is
-      function Lookup_Name_Base
-        (Name        : Interfaces.C.char_array;
-         Device_Info : access RTEMS.Driver_Name_t)
-         return        RTEMS.Status_Codes;
-      pragma Import (C, Lookup_Name_Base, "rtems_io_lookup_name");
-      Device_Info_Base : aliased RTEMS.Driver_Name_t;
-   begin
-
-      Result      :=
-         Lookup_Name_Base
-           (Interfaces.C.To_C (Name),
-            Device_Info_Base'Unchecked_Access);
-      Device_Info := Device_Info_Base;
-
-   end Lookup_Name;
-
    procedure Open
      (Major    : in RTEMS.Device_Major_Number;
       Minor    : in RTEMS.Device_Minor_Number;
