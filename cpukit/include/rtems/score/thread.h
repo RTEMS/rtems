@@ -858,6 +858,15 @@ struct _Thread_Control {
 #endif
      /*================= end of common block =================*/
 
+  /**
+   * @brief This member contains the context of this thread.
+   *
+   * This member is placed directly after the end of the common block so that
+   * the structure offsets are as small as possible.  This helps on instruction
+   * set architectures with a very limited range for intermediate values.
+   */
+  Context_Control Registers;
+
 #if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
   /**
    * @brief Potpourri lock statistics.
@@ -913,8 +922,6 @@ struct _Thread_Control {
 
   Thread_Action_control                 Post_switch_actions;
 
-  /** This field contains the context of this thread. */
-  Context_Control                       Registers;
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   /** This field points to the floating point context for this thread.
    *  If NULL, the thread is integer only.
