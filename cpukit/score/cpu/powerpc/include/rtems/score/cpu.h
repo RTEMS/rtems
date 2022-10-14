@@ -449,8 +449,8 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 #endif
 
 #ifndef ASM
-typedef struct {
 #if (PPC_HAS_FPU == 1)
+typedef struct {
     /* The ABIs (PowerOpen/SVR4/EABI) only require saving f14-f31 over
      * procedure calls.  However, this would mean that the interrupt
      * frame had to hold f0-f13, and the fpscr.  And as the majority
@@ -464,9 +464,8 @@ typedef struct {
     float	f[32];
     uint32_t	fpscr;
 #endif
-#endif /* (PPC_HAS_FPU == 1) */
 } Context_Control_fp;
-
+#endif /* (PPC_HAS_FPU == 1) */
 #endif /* ASM */
 
 /*
@@ -562,7 +561,9 @@ typedef struct {
  *  CPUs with a "floating point save context" instruction.
  */
 
+#if (PPC_HAS_FPU == 1)
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
+#endif
 
 /*
  * (Optional) # of bytes for libmisc/stackchk to check
@@ -940,6 +941,7 @@ RTEMS_NO_RETURN void _CPU_Context_switch_no_return(
 
 RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
+#if (PPC_HAS_FPU == 1)
 /*
  *  _CPU_Context_save_fp
  *
@@ -959,6 +961,7 @@ void _CPU_Context_save_fp(
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
+#endif
 
 #ifdef RTEMS_SMP
   uint32_t _CPU_SMP_Initialize( void );
