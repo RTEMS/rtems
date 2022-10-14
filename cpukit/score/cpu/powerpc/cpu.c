@@ -358,4 +358,5 @@ void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
     : "r" (source), "r" (error)
     : "memory"
   );
+  RTEMS_UNREACHABLE();
 }
