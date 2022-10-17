@@ -103,6 +103,7 @@ extern "C" {
 #define RTEMS_DEBUGGER_FLAG_MULTIPROCESS (1 << 4)
 #define RTEMS_DEBUGGER_FLAG_VERBOSE_LOCK (1 << 5)
 #define RTEMS_DEBUGGER_FLAG_VERBOSE_CMDS (1 << 6)
+#define RTEMS_DEBUGGER_FLAG_BREAK_WAITER (1 << 7)
 
 /**
  * Forward decl for the threads and targets.

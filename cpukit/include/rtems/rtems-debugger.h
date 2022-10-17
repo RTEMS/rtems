@@ -54,6 +54,14 @@ extern int rtems_debugger_start(const char*          remote,
                                 const rtems_printer* printer);
 
 /**
+ * Suspend all running threads including the caller if not
+ * excluded. Returns when the debugger has connected and continued.
+ *
+ * If wait is true and there is no remote connected wait then break.
+ */
+extern int rtems_debugger_break(bool wait);
+
+/**
  * Stop the Debugger.
  */
 extern int rtems_debugger_stop(void);

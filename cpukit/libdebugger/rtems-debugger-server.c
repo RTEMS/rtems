@@ -1678,18 +1678,30 @@ rtems_debugger_events(rtems_task_argument arg)
 
   rtems_debugger_target_enable();
 
-  while (rtems_debugger_server_events_running()) {
-    rtems_debugger_server_events_wait();
-    if (rtems_debugger_verbose())
-      rtems_debugger_printf("rtems-db: event woken\n");
-    if (!rtems_debugger_server_events_running())
-      break;
+  if (rtems_debugger_server_flag(RTEMS_DEBUGGER_FLAG_BREAK_WAITER)) {
+    rtems_debugger->flags &= ~RTEMS_DEBUGGER_FLAG_BREAK_WAITER;
     r = rtems_debugger_thread_system_suspend();
-    if (r < 0)
-      break;
-    r = remote_stop_reason(NULL, 0);
-    if (r < 0)
-      break;
+    if (rtems_debugger_verbose())
+      rtems_debugger_printf("rtems-db: break waiter\n");
+    rtems_debugger_server_events_signal();
+    if (rtems_debugger_verbose())
+      rtems_debugger_printf("rtems-db: break waiter: signalled\n");
+  }
+
+  if (r == 0) {
+    while (rtems_debugger_server_events_running()) {
+      rtems_debugger_server_events_wait();
+      if (rtems_debugger_verbose())
+        rtems_debugger_printf("rtems-db: event woken\n");
+      if (!rtems_debugger_server_events_running())
+        break;
+      r = rtems_debugger_thread_system_suspend();
+      if (r < 0)
+        break;
+      r = remote_stop_reason(NULL, 0);
+      if (r < 0)
+        break;
+    }
   }
 
   if (r < 0)
@@ -1973,6 +1985,30 @@ rtems_debugger_server_crash(void)
 }
 
 int
+rtems_debugger_break(bool wait)
+{
+  int r = 0;
+  if (!rtems_debugger_running()) {
+    errno = EIO;
+    r = -1;
+  } else {
+    rtems_debugger_lock();
+    if (rtems_debugger_server_events_running()) {
+      rtems_debugger_server_events_signal();
+    } else if (
+      wait && !rtems_debugger_server_flag(RTEMS_DEBUGGER_FLAG_BREAK_WAITER)) {
+      rtems_debugger->flags |= RTEMS_DEBUGGER_FLAG_BREAK_WAITER;
+      rtems_debugger_server_events_wait();
+    } else {
+      errno = EIO;
+      r = -1;
+    }
+    rtems_debugger_unlock();
+  }
+  return r;
+}
+
+int
 rtems_debugger_stop(void)
 {
   return rtems_debugger_destroy();
@@ -1998,10 +2034,14 @@ rtems_debugger_set_verbose(bool on)
 int
 rtems_debugger_remote_debug(bool state)
 {
-  rtems_debugger_lock();
-  rtems_debugger->remote_debug = state;
-  rtems_debugger_printf("rtems-db: remote-debug is %s\n",
-                        rtems_debugger->remote_debug ? "on" : "off");
-  rtems_debugger_unlock();
+  if (rtems_debugger_running()) {
+    rtems_debugger_lock();
+    rtems_debugger->remote_debug = state;
+    rtems_debugger_printf("rtems-db: remote-debug is %s\n",
+                          rtems_debugger->remote_debug ? "on" : "off");
+    rtems_debugger_unlock();
+  } else {
+    rtems_debugger_printf("rtems-db: debug server not running\n");
+  }
   return 0;
 }
