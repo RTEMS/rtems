@@ -60,8 +60,6 @@ typedef struct {
   uint32_t tcr0;
 } Microblaze_Timer;
 
-#define _Microblaze_Timer ((volatile Microblaze_Timer *) BSP_MICROBLAZE_FPGA_TIMER_BASE)
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

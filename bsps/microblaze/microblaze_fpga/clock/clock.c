@@ -33,6 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <bsp.h>
 #include <bsp/fatal.h>
 #include <bsp/timer.h>
 
@@ -41,17 +42,16 @@
 #include <rtems/timecounter.h>
 
 static rtems_timecounter_simple mblaze_tc;
+static volatile Microblaze_Timer *mblaze_timer;
 
 static uint32_t microblaze_tc_get( rtems_timecounter_simple *tc )
 {
-  volatile Microblaze_Timer *timer = _Microblaze_Timer;
-  return timer->tcr0;
+  return mblaze_timer->tcr0;
 }
 
 static bool microblaze_tc_is_pending( rtems_timecounter_simple *tc )
 {
-  volatile Microblaze_Timer *timer = _Microblaze_Timer;
-  return ( timer->tcsr0 & MICROBLAZE_TIMER_TCSR0_T0INT ) != 0;
+  return ( mblaze_timer->tcsr0 & MICROBLAZE_TIMER_TCSR0_T0INT ) != 0;
 }
 
 static uint32_t microblaze_tc_get_timecount( struct timecounter *tc )
@@ -65,32 +65,41 @@ static uint32_t microblaze_tc_get_timecount( struct timecounter *tc )
 
 static void microblaze_clock_initialize( void )
 {
-  volatile Microblaze_Timer *timer = _Microblaze_Timer;
+  mblaze_timer = (volatile Microblaze_Timer *) try_get_prop_from_device_tree(
+    "xlnx,xps-timer-1.00.a",
+    "reg",
+    BSP_MICROBLAZE_FPGA_TIMER_BASE
+  );
+
   /* Set load register to 0 */
-  timer->tlr0 = 0;
+  mblaze_timer->tlr0 = 0;
   /* Reset the timer and interrupt */
-  timer->tcsr0 = MICROBLAZE_TIMER_TCSR0_T0INT | MICROBLAZE_TIMER_TCSR0_LOAD0;
+  mblaze_timer->tcsr0 = MICROBLAZE_TIMER_TCSR0_T0INT | MICROBLAZE_TIMER_TCSR0_LOAD0;
   /* Release the reset */
-  timer->tcsr0 = 0;
+  mblaze_timer->tcsr0 = 0;
   /*
    * Enable interrupt, auto reload mode, external interrupt signal,
    * and down counter
    */
-  timer->tcsr0 =  MICROBLAZE_TIMER_TCSR0_ARHT0 | MICROBLAZE_TIMER_TCSR0_ENIT0 |
+  mblaze_timer->tcsr0 =  MICROBLAZE_TIMER_TCSR0_ARHT0 | MICROBLAZE_TIMER_TCSR0_ENIT0 |
                   MICROBLAZE_TIMER_TCSR0_GENT0 | MICROBLAZE_TIMER_TCSR0_UDT0;
 
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
-  uint32_t counter_frequency_in_hz = BSP_MICROBLAZE_FPGA_TIMER_FREQUENCY;
+  uint32_t counter_frequency_in_hz = try_get_prop_from_device_tree(
+    "xlnx,xps-timer-1.00.a",
+    "clock-frequency",
+    BSP_MICROBLAZE_FPGA_TIMER_FREQUENCY
+  );
   uint32_t counter_ticks_per_clock_tick =
     ( counter_frequency_in_hz * us_per_tick ) / 1000000;
 
   /* Set a reset value for the timer counter */
-  timer->tlr0 = counter_ticks_per_clock_tick;
-  uint32_t control_status_reg = timer->tcsr0;
+  mblaze_timer->tlr0 = counter_ticks_per_clock_tick;
+  uint32_t control_status_reg = mblaze_timer->tcsr0;
   /* Load the reset value into the counter register */
-  timer->tcsr0 = MICROBLAZE_TIMER_TCSR0_LOAD0;
+  mblaze_timer->tcsr0 = MICROBLAZE_TIMER_TCSR0_LOAD0;
   /* Enable the timer */
-  timer->tcsr0 = control_status_reg | MICROBLAZE_TIMER_TCSR0_ENT0;
+  mblaze_timer->tcsr0 = control_status_reg | MICROBLAZE_TIMER_TCSR0_ENT0;
 
   rtems_timecounter_simple_install(
     &mblaze_tc,
@@ -102,12 +111,11 @@ static void microblaze_clock_initialize( void )
 
 static void microblaze_clock_at_tick( rtems_timecounter_simple *tc )
 {
-  volatile Microblaze_Timer *timer = _Microblaze_Timer;
-  if ( ( timer->tcsr0 & MICROBLAZE_TIMER_TCSR0_T0INT ) == 0 ) {
+  if ( ( mblaze_timer->tcsr0 & MICROBLAZE_TIMER_TCSR0_T0INT ) == 0 ) {
     return;
   }
   /* Clear the interrupt */
-  timer->tcsr0 |= MICROBLAZE_TIMER_TCSR0_T0INT;
+  mblaze_timer->tcsr0 |= MICROBLAZE_TIMER_TCSR0_T0INT;
 }
 
 static void microblaze_tc_tick( void )
@@ -123,8 +131,14 @@ static void microblaze_clock_handler_install( rtems_interrupt_handler isr )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
+  uint32_t clock_irq_num = try_get_prop_from_device_tree(
+    "xlnx,xps-timer-1.00.a",
+    "interrupts",
+    0
+  );
+
   sc = rtems_interrupt_handler_install(
-    0,
+    clock_irq_num,
     "Clock",
     RTEMS_INTERRUPT_UNIQUE,
     isr,
