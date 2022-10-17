@@ -15,6 +15,7 @@ install:
   source:
   - bsps/microblaze/microblaze_fpga/include/bsp/irq.h
   - bsps/microblaze/microblaze_fpga/include/bsp/jffs2_qspi.h
+  - bsps/microblaze/include/bsp/microblaze-fdt-support.h
   - bsps/microblaze/include/common/xil_types.h
   - bsps/microblaze/include/dev/serial/uartlite.h
   - bsps/microblaze/include/dev/serial/uartlite_l.h
@@ -23,7 +24,6 @@ source:
 - bsps/microblaze/microblaze_fpga/clock/clock.c
 - bsps/microblaze/microblaze_fpga/console/console-io.c
 - bsps/microblaze/microblaze_fpga/console/debug-io.c
-- bsps/microblaze/microblaze_fpga/fdt/bsp_fdt.c
 - bsps/microblaze/microblaze_fpga/fs/jffs2_qspi.c
 - bsps/microblaze/microblaze_fpga/irq/irq.c
 - bsps/microblaze/microblaze_fpga/start/_debug_sw_break_handler.S
@@ -38,6 +38,7 @@ source:
 - bsps/microblaze/microblaze_fpga/start/microblaze_invalidate_icache.S
 - bsps/microblaze/shared/dev/serial/uartlite.c
 - bsps/microblaze/shared/dev/serial/uartlite_l.c
+- bsps/microblaze/shared/fdt/microblaze-fdt-support.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/cpucounter/cpucounterfrequency.c

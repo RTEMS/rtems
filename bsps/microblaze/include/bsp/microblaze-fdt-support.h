@@ -5,12 +5,11 @@
  *
  * @ingroup RTEMSBSPsMicroblaze
  *
- * @brief Core BSP definitions
+ * @brief This header file provides support for the device tree.
  */
 
 /*
- * Copyright (C) 2015 Hesham Almatary
- * Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,32 +33,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_MICROBLAZE_FPGA_BSP_H
-#define LIBBSP_MICROBLAZE_FPGA_BSP_H
+#ifndef LIBBSP_MICROBLAZE_MICROBLAZE_FDT_SUPPORT_H
+#define LIBBSP_MICROBLAZE_MICROBLAZE_FDT_SUPPORT_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <bspopts.h>
-#include <bsp/default-initial-extension.h>
-#include <bsp/microblaze-fdt-support.h>
+#include <stdint.h>
 
-#include <rtems.h>
-
-#ifdef BSP_MICROBLAZE_FPGA_USE_FDT
-#define BSP_FDT_IS_SUPPORTED
-extern const unsigned char system_dtb[];
-extern const size_t system_dtb_size;
-#endif /* BSP_MICROBLAZE_FPGA_USE_FDT */
-
-void microblaze_enable_icache(void);
-void microblaze_enable_dcache(void);
-void microblaze_invalidate_icache(void);
-void microblaze_invalidate_dcache(void);
+/**
+ * @brief Get the value of a property from a compatible node in the device tree.
+ *
+ * @param[in] compatible The 'compatible' string to match against.
+ * @param[in] prop_name The property name.
+ * @param[in] default_value The default value to return if no compatible node
+ *                          was found or the property was not found.
+ *
+ * @return The value of the property or the default value.
+ */
+uint32_t try_get_prop_from_device_tree(
+  const char *compatible,
+  const char *prop_name,
+  uint32_t default_value
+);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* LIBBSP_MICROBLAZE_FPGA_BSP_H */
+#endif /* LIBBSP_MICROBLAZE_MICROBLAZE_FDT_SUPPORT_H */

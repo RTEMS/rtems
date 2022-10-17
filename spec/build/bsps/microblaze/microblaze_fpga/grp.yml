@@ -49,6 +49,8 @@ links:
 - role: build-dependency
   uid: optuartlitebaseaddress
 - role: build-dependency
+  uid: optusefdt
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objdevspixil
