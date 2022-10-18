@@ -65,8 +65,6 @@ typedef struct {
   uint32_t ilr;
 } Microblaze_INTC;
 
-#define _Microblaze_INTC ((volatile Microblaze_INTC *) BSP_MICROBLAZE_FPGA_INTC_BASE)
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

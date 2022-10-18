@@ -33,15 +33,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <bsp.h>
 #include <bsp/intc.h>
 #include <bsp/irq-generic.h>
 
 #include <rtems/score/cpu.h>
 
+static volatile Microblaze_INTC *mblaze_intc;
+
 static void ack_interrupt( uint8_t source )
 {
-  volatile Microblaze_INTC *intc = _Microblaze_INTC;
-  intc->iar = 0x1 << source;
+  mblaze_intc->iar = 0x1 << source;
 }
 
 rtems_status_code bsp_interrupt_get_attributes(
@@ -79,8 +81,7 @@ rtems_status_code bsp_interrupt_clear( rtems_vector_number vector )
 {
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-  volatile Microblaze_INTC *intc = _Microblaze_INTC;
-  intc->iar = 0x1 << vector;
+  mblaze_intc->iar = 0x1 << vector;
 
   return RTEMS_SUCCESSFUL;
 }
@@ -93,10 +94,9 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   bsp_interrupt_assert( enabled != NULL );
 
-  volatile Microblaze_INTC *intc = _Microblaze_INTC;
   uint32_t mask = 1 << vector;
 
-  *enabled = (intc->ier & mask) != 0;
+  *enabled = (mblaze_intc->ier & mask) != 0;
   return RTEMS_SUCCESSFUL;
 }
 
@@ -104,10 +104,9 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector )
 {
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-  volatile Microblaze_INTC *intc = _Microblaze_INTC;
   uint32_t mask = 1 << vector;
 
-  intc->ier |= mask;
+  mblaze_intc->ier |= mask;
 
   return RTEMS_SUCCESSFUL;
 }
@@ -116,32 +115,35 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector )
 {
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-  volatile Microblaze_INTC *intc = _Microblaze_INTC;
   uint32_t mask = 1 << vector;
 
-  intc->ier &= ~mask;
+  mblaze_intc->ier &= ~mask;
 
   return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_facility_initialize( void )
 {
-  volatile Microblaze_INTC *intc = _Microblaze_INTC;
   /*
    * Enable HW interrupts on the interrupt controller. This happens before
    * interrupts are enabled on the processor.
    */
-  intc->mer = MICROBLAZE_INTC_MER_ME | MICROBLAZE_INTC_MER_HIE;
+   mblaze_intc = (volatile Microblaze_INTC *) try_get_prop_from_device_tree(
+    "xlnx,xps-intc-1.00.a",
+    "reg",
+    BSP_MICROBLAZE_FPGA_INTC_BASE
+   );
+
+  mblaze_intc->mer = MICROBLAZE_INTC_MER_ME | MICROBLAZE_INTC_MER_HIE;
 }
 
 void bsp_interrupt_dispatch( uint32_t source )
 {
-  volatile Microblaze_INTC *intc = _Microblaze_INTC;
   uint32_t vector_number = 0;
 
   if ( source == 0xFF ) {
     /* Read interrupt controller to get the source */
-    vector_number = intc->isr & intc->ier;
+    vector_number = mblaze_intc->isr & mblaze_intc->ier;
 
     /* Handle and the first interrupt that is set */
     uint8_t interrupt_status = 0;
@@ -149,13 +151,13 @@ void bsp_interrupt_dispatch( uint32_t source )
       interrupt_status = vector_number >> i & 0x1;
       if ( interrupt_status != 0 ) {
         /* save current ILR */
-        uint32_t interrupt_levels = intc->ilr;
+        uint32_t interrupt_levels = mblaze_intc->ilr;
         /* set ILR to block out every interrupt less than or equal to priority of i */
-        intc->ilr = 0xFFFFFFFF >> (32 - i);
+        mblaze_intc->ilr = 0xFFFFFFFF >> (32 - i);
         bsp_interrupt_handler_dispatch( i );
         ack_interrupt( i );
         /* restore ILR */
-        intc->ilr = interrupt_levels;
+        mblaze_intc->ilr = interrupt_levels;
         break;
       }
     }
