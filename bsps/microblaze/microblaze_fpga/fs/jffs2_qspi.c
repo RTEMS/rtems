@@ -46,6 +46,7 @@
 #include <rtems/jffs2.h>
 #include <rtems/libio.h>
 
+#include <bsp.h>
 #include <bsp/jffs2_qspi.h>
 
 #define BLOCK_SIZE (64UL * 1024UL)
@@ -286,12 +287,24 @@ int microblaze_jffs2_initialize( const char* mount_dir )
   int rv = 0;
   int fd = -1;
 
+  uintptr_t mblaze_spi_base = try_get_prop_from_device_tree(
+    "xlnx,xps-spi-2.00.a",
+    "reg",
+    BSP_MICROBLAZE_FPGA_SPI_BASE
+  );
+
+  rtems_vector_number mblaze_spi_irq_num = try_get_prop_from_device_tree(
+    "xlnx,xps-spi-2.00.a",
+    "interrupts",
+    BSP_MICROBLAZE_FPGA_SPI_IRQ_NUM
+  );
+
   rv = spi_bus_register_xilinx_axi(
     BUS_PATH,
-    BSP_MICROBLAZE_FPGA_SPI_BASE,
+    mblaze_spi_base,
     FLASH_PAGE_SIZE,
     FLASH_NUM_CS,
-    BSP_MICROBLAZE_FPGA_SPI_IRQ_NUM
+    mblaze_spi_irq_num
   );
   if ( rv != 0 ) {
     return rv;
