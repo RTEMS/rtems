@@ -37,23 +37,42 @@
 #include <dev/serial/uartlite_l.h>
 #include <rtems/bspIo.h>
 
+#include <bsp.h>
 #include <bspopts.h>
+
+static uint32_t mblaze_uart_base = 0;
 
 static void output_char( char c )
 {
-  if ( c == '\n' ) {
-    XUartLite_SendByte( BSP_MICROBLAZE_FPGA_UART_BASE, '\r' );
+  if (mblaze_uart_base == 0 ) {
+    mblaze_uart_base = try_get_prop_from_device_tree(
+      "xlnx,xps-uartlite-1.00.a",
+      "reg",
+      BSP_MICROBLAZE_FPGA_UART_BASE
+    );
   }
-  XUartLite_SendByte( BSP_MICROBLAZE_FPGA_UART_BASE, c );
+
+    if ( c == '\n' ) {
+    XUartLite_SendByte( mblaze_uart_base, '\r' );
+  }
+  XUartLite_SendByte( mblaze_uart_base, c );
 }
 
 static int xUartLite_RecvByte( int minor )
 {
-  if ( XUartLite_IsReceiveEmpty( BSP_MICROBLAZE_FPGA_UART_BASE ) ) {
+  if (mblaze_uart_base == 0 ) {
+    mblaze_uart_base = try_get_prop_from_device_tree(
+      "xlnx,xps-uartlite-1.00.a",
+      "reg",
+      BSP_MICROBLAZE_FPGA_UART_BASE
+    );
+  }
+
+  if ( XUartLite_IsReceiveEmpty( mblaze_uart_base ) ) {
     return -1;
   }
 
-  return XUartLite_ReadReg( BSP_MICROBLAZE_FPGA_UART_BASE, XUL_RX_FIFO_OFFSET );
+  return XUartLite_ReadReg( mblaze_uart_base, XUL_RX_FIFO_OFFSET );
 }
 
 static int get_char( void )

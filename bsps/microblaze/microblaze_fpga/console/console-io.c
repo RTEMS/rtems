@@ -35,20 +35,35 @@
  */
 
 #include <bsp/console-termios.h>
+#include <bsp/microblaze-fdt-support.h>
 #include <dev/serial/uartlite.h>
 
 #include <bspopts.h>
 
 uart_lite_context microblaze_qemu_uart_context = {
   .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "UARTLITE" ),
-  .address = BSP_MICROBLAZE_FPGA_UART_BASE,
   .initial_baud = 115200
 };
+
+static bool fill_uart_base(rtems_termios_device_context *context)
+{
+  uint32_t mblaze_uart_base;
+
+  mblaze_uart_base = try_get_prop_from_device_tree(
+    "xlnx,xps-uartlite-1.00.a",
+    "reg",
+    BSP_MICROBLAZE_FPGA_UART_BASE
+  );
+
+  microblaze_qemu_uart_context.address = mblaze_uart_base;
+
+  return true;
+}
 
 const console_device console_device_table[] = {
   {
     .device_file = "/dev/ttyS0",
-    .probe = console_device_probe_default,
+    .probe = fill_uart_base,
     .handler = &microblaze_uart_fns,
     .context = &microblaze_qemu_uart_context.base
   }

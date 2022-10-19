@@ -70,8 +70,15 @@ static bool uart_first_open(
 
 #ifdef BSP_MICROBLAZE_FPGA_CONSOLE_INTERRUPTS
   XUartLite_EnableIntr( ctx->address );
+
+  uint32_t uart_irq_num = try_get_prop_from_device_tree(
+    "xlnx,xps-uartlite-1.00.a",
+    "interrupts",
+    1
+  );
+
   sc = rtems_interrupt_handler_install(
-    1,
+    uart_irq_num,
     "UART",
     RTEMS_INTERRUPT_SHARED,
     microblaze_uart_interrupt,
