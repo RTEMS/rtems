@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplClassicCache
+ *
+ * @brief This header file contains the implementation of the
+ *   @ref RTEMSAPIClassicCache.
+ */
+
 /*
  *  Cache Manager
  *
@@ -11,10 +20,12 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-/*
- * The functions in this file implement the API to the RTEMS Cache Manager.
- * This file is intended to be included in a cache implemention source file
- * provided by the architecture or BSP, e.g.
+/**
+ * @file
+ *
+ * The functions in this file implement the API to the
+ * @ref RTEMSAPIClassicCache.  This file is intended to be included in a cache
+ * implemention source file provided by the architecture or BSP, e.g.
  *
  *  - bsps/${RTEMS_CPU}/shared/cache/cache.c
  *  - bsps/${RTEMS_CPU}/${RTEMS_BSP_FAMILY}/start/cache.c
@@ -22,25 +33,33 @@
  * In this file a couple of defines and inline functions may be provided and
  * afterwards this file is included, e.g.
  *
+ *  @code
  *  #define CPU_DATA_CACHE_ALIGNMENT XYZ
  *  ...
  *  #include "../../../bsps/shared/cache/cacheimpl.h"
+ *  @endcode
  *
  * The cache implementation source file shall define
  *
+ *  @code
  *  #define CPU_DATA_CACHE_ALIGNMENT <POSITIVE INTEGER>
+ *  @endcode
  *
  * to enable the data cache support.
  *
  * The cache implementation source file shall define
  *
+ *  @code
  *  #define CPU_INSTRUCTION_CACHE_ALIGNMENT <POSITIVE INTEGER>
+ *  @endcode
  *
  * to enable the instruction cache support.
  *
  * The cache implementation source file shall define
  *
+ *  @code
  *  #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
+ *  @endcode
  *
  * if it provides cache maintenance functions which operate on multiple lines.
  * Otherwise a generic loop with single line operations will be used.  It is
@@ -49,28 +68,36 @@
  *
  * The cache implementation source file shall define
  *
+ *  @code
  *  #define CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS
+ *  @endcode
  *
  * if it provides functions to get the data and instruction cache sizes by
  * level.
  *
  * The cache implementation source file shall define
  *
+ *  @code
  *  #define CPU_CACHE_SUPPORT_PROVIDES_INSTRUCTION_SYNC_FUNCTION
+ *  @endcode
  *
  * if special instructions must be used to synchronize the instruction caches
  * after a code change.
  *
  * The cache implementation source file shall define
  *
+ *  @code
  *  #define CPU_CACHE_SUPPORT_PROVIDES_DISABLE_DATA
+ *  @endcode
  *
  * if an external implementation of rtems_cache_disable_data() is provided,
  * e.g. as an implementation in assembly code.
  *
  * The cache implementation source file shall define
  *
+ *  @code
  *  #define CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING
+ *  @endcode
  *
  * if the hardware provides no instruction cache snooping and the instruction
  * cache invalidation needs software support.
@@ -97,6 +124,14 @@
 #if CPU_INSTRUCTION_CACHE_ALIGNMENT > CPU_CACHE_LINE_BYTES
 #error "CPU_INSTRUCTION_CACHE_ALIGNMENT is greater than CPU_CACHE_LINE_BYTES"
 #endif
+
+/**
+ * @defgroup RTEMSImplClassicCache Cache Manager
+ *
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the Cache Manager implementation.
+ */
 
 /*
  * THESE FUNCTIONS ONLY HAVE BODIES IF WE HAVE A DATA CACHE
