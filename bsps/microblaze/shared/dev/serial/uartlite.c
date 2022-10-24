@@ -35,6 +35,7 @@
 
 #include <bsp/irq.h>
 #include <dev/serial/uartlite.h>
+#include <bspopts.h>
 
 #ifdef BSP_MICROBLAZE_FPGA_CONSOLE_INTERRUPTS
 static void microblaze_uart_interrupt( void *arg )
@@ -47,7 +48,7 @@ static void microblaze_uart_interrupt( void *arg )
     rtems_termios_enqueue_raw_characters( tty, &c, 1 );
   }
 
-  while ( ctx->transmitting && !XUartLite_IsTransmitEmpty( ctx ) ) {
+  while ( ctx->transmitting && !XUartLite_IsTransmitEmpty( ctx->address ) ) {
     rtems_termios_dequeue_characters( tty, 1 );
   }
 }

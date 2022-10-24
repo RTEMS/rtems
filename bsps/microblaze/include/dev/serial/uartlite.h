@@ -36,6 +36,7 @@
 #ifndef LIBBSP_MICROBLAZE_SHARED_UARTLITE_H
 #define LIBBSP_MICROBLAZE_SHARED_UARTLITE_H
 
+#include <bspopts.h>
 #include <rtems/termiostypes.h>
 
 #include <dev/serial/uartlite_l.h>

@@ -234,6 +234,24 @@ static inline void Xil_Out32(UINTPTR Addr, u32 Value)
   ((XUartLite_GetStatusReg((BaseAddress)) & XUL_SR_RX_FIFO_VALID_DATA) != \
 	XUL_SR_RX_FIFO_VALID_DATA)
 
+#ifdef __rtems__
+/****************************************************************************/
+/**
+*
+* Check to see if the transmitter is empty.
+*
+* @param	BaseAddress is the  base address of the device
+*
+* @return	TRUE if the transmitter is empty, FALSE otherwise.
+*
+* @note		C-style Signature:
+* 		int XUartLite_IsTransmitEmpty(u32 BaseAddress);
+*
+*****************************************************************************/
+#define XUartLite_IsTransmitEmpty(BaseAddress) \
+  ((XUartLite_GetStatusReg((BaseAddress)) & XUL_SR_TX_FIFO_EMPTY) == \
+	XUL_SR_TX_FIFO_EMPTY)
+#endif /* __rtems__ */
 
 /****************************************************************************/
 /**
