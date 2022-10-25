@@ -90,7 +90,7 @@ static void _ARMV7M_Clock_initialize_early(void)
 
   interval = (uint32_t) ((freq * us_per_tick) / 1000000);
 
-  systick->rvr = interval;
+  systick->rvr = interval - 1;
   systick->cvr = 0;
   systick->csr = ARMV7M_SYSTICK_CSR_ENABLE | ARMV7M_SYSTICK_CSR_CLKSOURCE;
 }
