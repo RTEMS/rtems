@@ -13,6 +13,7 @@ default:
   - -g
   - -fdata-sections
   - -ffunction-sections
+  - -frandom-seed=0
 description: |
   Default optimization flags for C and C++ compilers.
 enabled-by: true
