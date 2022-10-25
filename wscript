@@ -43,7 +43,13 @@ except:
 from waflib.TaskGen import after, before_method, feature
 
 is_windows_host = os.name == "nt" or sys.platform in ["msys", "cygwin"]
-default_prefix = "/opt/rtems/6"
+version = {
+    "__RTEMS_MAJOR__": "6",
+    "__RTEMS_MINOR__": "0",
+    "__RTEMS_REVISION__": "0",
+    "RTEMS_VERSION_CONTROL_KEY": "git"
+}
+default_prefix = "/opt/rtems/" + version["__RTEMS_MAJOR__"]
 compilers = ["gcc", "clang"]
 items = {}
 bsps = {}
@@ -62,22 +68,28 @@ class VersionControlKeyHeader:
 
     @staticmethod
     def write(bld, filename):
-        if VersionControlKeyHeader._content is None:
-            from waflib.Build import Context
-            from waflib.Errors import WafError
-
+        content = VersionControlKeyHeader._content
+        if content is None:
             content = """/*
  * Automatically generated. Do not edit.
  */
 #if !defined(_RTEMS_VERSION_VC_KEY_H_)
 #define _RTEMS_VERSION_VC_KEY_H_
 """
-            try:
-                rev = bld.cmd_and_log("git rev-parse HEAD",
-                                      quiet=Context.STDOUT).strip()
-                content += """#define RTEMS_VERSION_VC_KEY "{}"
-""".format(rev)
-            except WafError:
+            key = bld.env.RTEMS_VERSION_CONTROL_KEY
+            if key == "git":
+                from waflib.Build import Context
+                from waflib.Errors import WafError
+
+                try:
+                    key = bld.cmd_and_log("git rev-parse HEAD",
+                                          quiet=Context.STDOUT).strip()
+                except WafError:
+                    key = ""
+            if key:
+                content += """#define RTEMS_VERSION_CONTROL_KEY "{}"
+""".format(key)
+            else:
                 content += """/* No version control key found; release? */
 """
             content += """#endif
@@ -87,9 +99,9 @@ class VersionControlKeyHeader:
         f.parent.mkdir()
         try:
             if content != f.read():
-                f.write(VersionControlKeyHeader._content)
+                f.write(content)
         except:
-            f.write(VersionControlKeyHeader._content)
+            f.write(content)
 
 
 class EnvWrapper(object):
@@ -992,15 +1004,6 @@ class OptionItem(Item):
             value = self.default_value(conf.env.ENABLE)
         return value
 
-    def _get_string_command_line(self, conf, cic, value, arg):
-        name = self.data["name"]
-        try:
-            value = conf.rtems_options[name]
-            del conf.rtems_options[name]
-        except KeyError:
-            value = arg[0]
-        return value
-
     def _script(self, conf, cic, value, arg):
         exec(arg)
         return value
@@ -1081,7 +1084,6 @@ class OptionItem(Item):
             "get-env": self._get_env,
             "get-integer": self._get_integer,
             "get-string": self._get_string,
-            "get-string-command-line": self._get_string_command_line,
             "script": self._script,
             "set-test-state": self._set_test_state,
             "set-value": self._set_value,
@@ -1310,15 +1312,6 @@ def options(ctx):
         help=
         "sets the RTEMS major version number; it is intended for RTEMS maintainers and may be used in the bspdefaults and configure commands",
     )
-    rg.add_option(
-        "--rtems-option",
-        metavar="KEY=VALUE",
-        action="append",
-        dest="rtems_options",
-        default=[],
-        help=
-        "sets the option identified by KEY to the VALUE in the build specification; it is intended for RTEMS maintainers and may be used in the bspdefaults and configure commands",
-    )
 
 
 def check_environment(conf):
@@ -1343,6 +1336,27 @@ def check_environment(conf):
     ]:
         if ev in os.environ:
             conf.msg("Environment variable set", ev, color="RED")
+
+
+def configure_version(conf):
+    cp = configparser.ConfigParser()
+    version_file = "VERSION"
+    if cp.read([version_file]):
+        conf.msg("Configure RTEMS version from file",
+                 version_file,
+                 color="YELLOW")
+        for key in version:
+            try:
+                value = cp.get("RTEMS_VERSION", key)
+                version[key] = no_unicode(value)
+            except configparser.NoOptionError:
+                pass
+    major = conf.options.rtems_version
+    if major is not None:
+        conf.msg("Set __RTEMS_MAJOR__ via command line to:",
+                 major,
+                 color="YELLOW")
+        version["__RTEMS_MAJOR__"] = major
 
 
 def load_config_files(ctx):
@@ -1441,6 +1455,9 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     arch_bsp = arch + "/" + bsp_base
     arch_family = arch + "/" + family
 
+    for key, value in version.items():
+        conf.env[key] = value
+
     conf.env["ARCH"] = arch
     conf.env["ARCH_BSP"] = arch_bsp
     conf.env["ARCH_FAMILY"] = arch_family
@@ -1462,7 +1479,6 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     conf.env["TOPGROUP"] = top_group
     conf.env["VARIANT"] = variant
 
-    prepare_rtems_options(conf)
     cic = ConfigItemContext(cp, path_list)
     items[conf.env.TOPGROUP].configure(conf, cic)
     bsp_item.configure(conf, cic)
@@ -1470,8 +1486,6 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     options = set([o[0].upper() for o in cp.items(variant)])
     for o in options.difference(cic.options):
         conf.msg("Unknown configuration option", o.upper(), color="RED")
-    for key in conf.rtems_options:
-        conf.msg("Unknown command line RTEMS option", key, color="RED")
 
 
 def check_forbidden_options(ctx, opts):
@@ -1504,27 +1518,9 @@ def get_top_group(ctx):
     return top_group
 
 
-def prepare_rtems_options(conf):
-    conf.rtems_options = {}
-    for x in conf.options.rtems_options:
-        try:
-            k, v = x.split("=", 1)
-            conf.rtems_options[k] = v
-        except:
-            conf.fatal(
-                "The RTEMS option '{}' is not in KEY=VALUE format".format(x))
-    version = conf.options.rtems_version
-    if version is not None:
-        key = "__RTEMS_MAJOR__"
-        if conf.rtems_options.get(key, version) != version:
-            conf.fatal(
-                "Conflicting RTEMS major versions specified at the command line"
-            )
-        conf.rtems_options[key] = version
-
-
 def configure(conf):
     check_forbidden_options(conf, ["compiler"])
+    configure_version(conf)
     check_environment(conf)
     conf.env["SPECS"] = load_items_from_options(conf)
     top_group = get_top_group(conf)
@@ -1573,7 +1569,6 @@ def build(bld):
             [
                 "compiler",
                 "config",
-                "options",
                 "specs",
                 "tools",
                 "top_group",
@@ -1668,8 +1663,7 @@ COMPILER = {}""".format(variant, compiler))
 def bsplist(ctx):
     """lists base BSP variants"""
     check_forbidden_options(
-        ctx,
-        ["compiler", "config", "options", "tools", "top_group", "version"])
+        ctx, ["compiler", "config", "tools", "top_group", "version"])
     add_log_filter(ctx.cmd)
     load_items_from_options(ctx)
     white_list = get_white_list(ctx)

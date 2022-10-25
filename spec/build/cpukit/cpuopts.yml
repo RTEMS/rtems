@@ -8,12 +8,6 @@ include-headers: []
 install-path: ${BSP_INCLUDEDIR}/rtems/score
 links:
 - role: build-dependency
-  uid: optvermaj
-- role: build-dependency
-  uid: optvermin
-- role: build-dependency
-  uid: optverrev
-- role: build-dependency
   uid: optgcc
 - role: build-dependency
   uid: optarchbits
