@@ -48,6 +48,26 @@
 
 void _AArch64_Exception_default( CPU_Exception_frame *frame )
 {
+  uint64_t EC = AARCH64_ESR_EL1_EC_GET( frame->register_syndrome );
+
+  /* Emulate FPSR flags for FENV if a FPU exception occurred */
+  if ( EC == 0x2c ) {
+    /*
+     * This must be done because FENV depends on FPSR values, but trapped FPU
+     * exceptions don't set FPSR bits. In the case where a signal is mapped, the
+     * signal code executes after the exception frame is restored and FENV
+     * functions executed in that context will need this information to be
+     * accurate.
+     */
+    uint64_t ISS = AARCH64_ESR_EL1_EC_GET( frame->register_syndrome );
+
+    /* If the exception bits are valid, use them */
+    if ( ( ISS & ( 1 << 23 ) ) != 0 ) {
+      /* The bits of the lower byte match the FPSR exception bits */
+      frame->register_fpsr |= ( ISS & 0xff );
+    }
+  }
+
   rtems_fatal( RTEMS_FATAL_SOURCE_EXCEPTION, (rtems_fatal_code) frame );
 }
 
