@@ -226,4 +226,5 @@ rtems_task Init(
   print_time( "TA1 - current time - ", &time, "\n" );
 
   TEST_END();
+  rtems_test_exit( 0 );
 }
