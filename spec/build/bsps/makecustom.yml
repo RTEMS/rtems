@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: config-file
 content: |
   include $$(RTEMS_ROOT)/make/custom/default.cfg
-  CPU_DEFINES = -I$$(exec_prefix)/$$(RTEMS_BSP)/lib/include
+  CPU_DEFINES = -isystem$$(exec_prefix)/$$(RTEMS_BSP)/lib/include
   CPU_CFLAGS = ${ABI_FLAGS}
   CFLAGS_OPTIMIZE_V = ${OPTIMIZATION_FLAGS}
   LDFLAGS = -B$$(exec_prefix)/$$(RTEMS_BSP)/lib ${PKGCONFIG_LDFLAGS}
