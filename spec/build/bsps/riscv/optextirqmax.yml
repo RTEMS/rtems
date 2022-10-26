@@ -5,13 +5,13 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 64
+default: 128
 default-by-variant:
 - value: 187
   variants:
   - riscv/mpfs64.*
 description: |
-  maximum number of external interrupts supported by the BSP (default 64)
+  maximum number of external interrupts supported by the BSP (default 128)
 enabled-by: true
 format: '{}'
 links: []
