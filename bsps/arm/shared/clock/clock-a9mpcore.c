@@ -63,16 +63,21 @@ static void a9mpcore_clock_at_tick(void)
   gt->irqst = A9MPCORE_GT_IRQST_EFLG;
 }
 
+static rtems_interrupt_entry a9mpcore_clock_interrupt_entry =
+  RTEMS_INTERRUPT_ENTRY_INITIALIZER(
+    (rtems_interrupt_handler) Clock_isr,
+    NULL,
+    "Clock"
+  );
+
 static void a9mpcore_clock_handler_install(void)
 {
   rtems_status_code sc;
 
-  sc = rtems_interrupt_handler_install(
+  sc = rtems_interrupt_entry_install(
     A9MPCORE_IRQ_GT,
-    "Clock",
     RTEMS_INTERRUPT_UNIQUE,
-    (rtems_interrupt_handler) Clock_isr,
-    NULL
+    &a9mpcore_clock_interrupt_entry
   );
   if (sc != RTEMS_SUCCESSFUL) {
     bsp_fatal(BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_INSTALL);
