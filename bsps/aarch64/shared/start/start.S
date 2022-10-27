@@ -307,6 +307,12 @@ _el1_start:
 
   /* FPU does not need to be enabled on AArch64 */
 
+  /* Ensure FPU traps are disabled by default */
+  mrs x0, FPCR
+  bic x0, x0, #((1 << 8) | (1 << 9) | (1 << 10) | (1 << 11) | (1 << 12))
+  bic x0, x0, #(1 << 15)
+  msr FPCR, x0
+
 #endif /* AARCH64_MULTILIB_VFP */
 
   /* Branch to start hook 1 */
