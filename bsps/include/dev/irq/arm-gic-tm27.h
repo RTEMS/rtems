@@ -40,10 +40,10 @@
 #ifndef LIBBSP_ARM_SHARED_ARM_GIC_TM27_H
 #define LIBBSP_ARM_SHARED_ARM_GIC_TM27_H
 
-#include <assert.h>
-
 #include <bsp.h>
 #include <bsp/irq.h>
+
+#include <rtems/score/assert.h>
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
@@ -61,44 +61,58 @@
 
 static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
-  rtems_status_code sc = rtems_interrupt_handler_install(
-    ARM_GIC_TM27_IRQ_LOW,
-    "tm27 low",
-    RTEMS_INTERRUPT_UNIQUE,
+  static rtems_interrupt_entry entry_low;
+  static rtems_interrupt_entry entry_high;
+  rtems_status_code sc;
+
+  rtems_interrupt_entry_initialize(
+    &entry_low,
     handler,
-    NULL
+    NULL,
+    "tm27 low"
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_interrupt_entry_install(
+    ARM_GIC_TM27_IRQ_LOW,
+    RTEMS_INTERRUPT_UNIQUE,
+    &entry_low
+  );
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
   sc = arm_gic_irq_set_priority(
     ARM_GIC_TM27_IRQ_LOW,
     ARM_GIC_TM27_PRIO_LOW
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
-  sc = rtems_interrupt_handler_install(
-    ARM_GIC_TM27_IRQ_HIGH,
-    "tm27 high",
-    RTEMS_INTERRUPT_UNIQUE,
-    (rtems_interrupt_handler) handler,
-    NULL
+  rtems_interrupt_entry_initialize(
+    &entry_high,
+    handler,
+    NULL,
+    "tm27 high"
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_interrupt_entry_install(
+    ARM_GIC_TM27_IRQ_HIGH,
+    RTEMS_INTERRUPT_UNIQUE,
+    &entry_high
+  );
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
   sc = arm_gic_irq_set_priority(
     ARM_GIC_TM27_IRQ_HIGH,
     ARM_GIC_TM27_PRIO_HIGH
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 }
 
 static inline void Cause_tm27_intr(void)
 {
-  rtems_status_code sc = arm_gic_irq_generate_software_irq(
+  rtems_status_code sc;
+
+  sc = arm_gic_irq_generate_software_irq(
     ARM_GIC_TM27_IRQ_LOW,
     1U << _SMP_Get_current_processor()
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 }
 
 static inline void Clear_tm27_intr(void)
@@ -108,11 +122,13 @@ static inline void Clear_tm27_intr(void)
 
 static inline void Lower_tm27_intr(void)
 {
-  rtems_status_code sc = arm_gic_irq_generate_software_irq(
+  rtems_status_code sc;
+
+  sc = arm_gic_irq_generate_software_irq(
     ARM_GIC_TM27_IRQ_HIGH,
     1U << _SMP_Get_current_processor()
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 }
 
 #endif /* LIBBSP_ARM_SHARED_ARM_GIC_TM27_H */
