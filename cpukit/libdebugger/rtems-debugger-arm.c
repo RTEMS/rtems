@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019 Chris Johns <chrisj@rtems.org>.
+ * Copyright (c) 2016-2022 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -86,14 +86,26 @@
   #define ARM_SWITCH_REG       uint32_t arm_switch_reg
   #define ARM_SWITCH_REG_ASM   [arm_switch_reg] "=&r" (arm_switch_reg)
   #define ARM_SWITCH_REG_ASM_L ARM_SWITCH_REG_ASM,
+  #define ASM_ARM_ASM          ".align 2\n.arm\n"
   #define ASM_ARM_MODE         ".align 2\nbx pc\n.arm\n"
   #define ASM_THUMB_MODE       "add %[arm_switch_reg], pc, #1\nbx %[arm_switch_reg]\n.thumb\n"
+  #define ARM_THUMB_MODE()     __asm__ volatile(ASM_THUMB_MODE : ARM_SWITCH_REG_ASM : :);
+  #define ARM_ARM_MODE()       __asm__ volatile(ASM_ARM_MODE : : :);
 #else
   #define ARM_SWITCH_REG
   #define ARM_SWITCH_REG_ASM
   #define ARM_SWITCH_REG_ASM_L
+  #define ASM_ARM_ASM
   #define ASM_ARM_MODE
   #define ASM_THUMB_MODE
+  #define ARM_THUMB_MODE()
+  #define ARM_ARM_MODE()
+#endif
+
+#ifdef ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
+#define ARM_SYNC_INST  "isb\n"
+#else
+#define ARM_SYNC_INST
 #endif
 
 /*
@@ -287,29 +299,19 @@ static const size_t exc_offsets[2][5] =
 static bool debug_session_active;
 
 /*
- * ARM debug hardware.
+ * ARM debug hardware. These variables are directly access
+ * from assembler so do not change types.
  */
 static int   debug_version;
 static void* debug_registers;
 static int   debug_revision;
-static bool  debug_disable_ints;
+static int   debug_disable_ints;
 static int   hw_breakpoints;
 static int   hw_watchpoints;
 
 /**
  * Hardware break and watch points.
  */
-typedef struct
-{
-  bool                 enabled;
-  bool                 loaded;
-  void*                address;
-  size_t               length;
-  CPU_Exception_frame* frame;
-  uint32_t             control;
-  uint32_t             value;
-} arm_debug_hwbreak;
-
 #define ARM_HW_BREAKPOINT_MAX (16)
 #define ARM_HW_WATCHPOINT_MAX (16)
 
@@ -327,8 +329,23 @@ typedef struct
 #define ARM_HW_BP_PRIV_PL0_ONLY    (0x02)
 #define ARM_HW_BP_PRIV_ALL_MODES   (0x03)
 
-static arm_debug_hwbreak hw_breaks[ARM_HW_BREAKPOINT_MAX];
-//static arm_debug_hwbreak hw_watches[ARM_HW_WATCHPOINT_MAX];
+/*
+ * A hw breakpoint has DBGBCR and DBGBVR registers. Allocate memory
+ * for each.
+ *
+ * Maintian the values ready to load into the hardware. The loader is
+ * a load of the value and then control for enabled BPs.
+ */
+static uint32_t hw_breaks[ARM_HW_BREAKPOINT_MAX * 2];
+
+/*
+ * The order in the array is important
+ */
+#define ARM_HWB_BCR(_bp) (hw_breaks[((_bp) * 2) + 1])
+#define ARM_HWB_VCR(_bp) (hw_breaks[(_bp) * 2])
+#define ARM_HWB_ENALBED(_bp) ((ARM_HWB_BCR(_bp) & 1) != 0)
+#define ARM_HWB_CLEAR(_bp) ARM_HWB_BCR(_bp) = 0; ARM_HWB_VCR(_bp) = 0
+#define ARM_HWB_CLEAR_ALL() memset(&hw_breaks[0], 0, sizeof(hw_breaks))
 
 /*
  * Method of entry (MOE) to debug mode. Bits [5:2] of DBGDSCR.
@@ -439,6 +456,7 @@ arm_moe_label(uint32_t moe)
     asm volatile(                                          \
       ASM_ARM_MODE                                         \
       ARM_CP_INSTR(mcr, _cp, _op1, val, _CRn, _CRm, _op2)  \
+      ARM_SYNC_INST                                        \
       ASM_THUMB_MODE                                       \
       : ARM_SWITCH_REG_ASM                                 \
       : [val] "r" (_val));                                 \
@@ -449,6 +467,7 @@ arm_moe_label(uint32_t moe)
     ARM_SWITCH_REG;                                        \
     asm volatile(                                          \
       ASM_ARM_MODE                                         \
+      ARM_SYNC_INST                                        \
       ARM_CP_INSTR(mrc, _cp, _op1, val, _CRn, _CRm, _op2)  \
       ASM_THUMB_MODE                                       \
       : ARM_SWITCH_REG_ASM_L                               \
@@ -491,9 +510,21 @@ arm_moe_label(uint32_t moe)
  * Read and write a memory mapped debug register. The register number is a word
  * offset from the base address.
  */
-#define ARM_MMAP_ADDR(reg)       (((volatile uint32_t*) debug_registers) + (reg))
-#define ARM_MMAP_WRITE(reg, val) *ARM_MMAP_ADDR(reg) = (val); _ARM_Data_synchronization_barrier()
-#define ARM_MMAP_READ(reg)       *ARM_MMAP_ADDR(reg)
+#define ARM_MMAP_ADDR(reg) \
+  (((volatile uint32_t*) debug_registers) + (reg))
+#define ARM_MMAP_WRITE(reg, val) *ARM_MMAP_ADDR(reg) = (val)
+#define ARM_MMAP_READ(reg) *ARM_MMAP_ADDR(reg)
+#define ARM_MMAP_WRITE_SYNC(reg, val) \
+  ARM_MMAP_WRITE(reg, val); \
+  _ARM_Data_synchronization_barrier(); \
+  _ARM_Instruction_synchronization_barrier()
+
+/*
+ * Debug hardware breakpoint registers.
+ */
+#define ARM_MMAP_DBGDSCR 34
+#define ARM_MMAP_DBGBCR  80
+#define ARM_MMAP_DBGBVR  64
 
 static bool
 arm_debug_authentication(uint32_t dbgauthstatus)
@@ -902,16 +933,17 @@ arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
        * which seems to make the debug hardware work.
        */
       if (ARM_MMAP_READ(1005) == 3) {
-        ARM_MMAP_WRITE(1004, 0xC5ACCE55);
+        ARM_MMAP_WRITE_SYNC(1004, 0xC5ACCE55);
       }
       /*
        * Are we already in debug mode?
        */
-      val = ARM_MMAP_READ(34);
+      val = ARM_MMAP_READ(ARM_MMAP_DBGDSCR);
       if ((val & (1 << 15)) == 0) {
         rtems_debugger_printf("rtems-db: arm debug: enable debug mode\n");
-        val = ARM_MMAP_READ(34);
-        ARM_MMAP_WRITE(34, ARM_MMAP_READ(34) | (1 << 15));
+        val = ARM_MMAP_READ(ARM_MMAP_DBGDSCR);
+        ARM_MMAP_WRITE_SYNC(ARM_MMAP_DBGDSCR,
+                            ARM_MMAP_READ(ARM_MMAP_DBGDSCR) | (1 << 15));
         arm_debug_retries = 0;
       }
     }
@@ -1002,139 +1034,125 @@ arm_debug_probe(rtems_debugger_target* target)
 }
 
 static inline void
-arm_debug_break_setup(arm_debug_hwbreak* bp,
-                      uint32_t           address,
-                      uint32_t           type,
-                      uint32_t           byte_address_select,
-                      uint32_t           privilege)
+arm_debug_break_setup(int      bp,
+                      uint32_t address,
+                      uint32_t type,
+                      uint32_t byte_address_select,
+                      uint32_t privilege)
 {
-  bp->control = (((type & 0xf) << 20) |
-                 ((byte_address_select & 0xf) << 5) |
-                 ((privilege & 0x3) << 1) | 1);
-  bp->value = (intptr_t) address;
+  ARM_HWB_BCR(bp) = (((type & 0xf) << 20) |
+                     ((byte_address_select & 0xf) << 5) |
+                     ((privilege & 0x3) << 1) | 1);
+  ARM_HWB_VCR(bp) = (intptr_t) (address & (~3));
 }
 
 static void
-arm_debug_break_write_control(int bp, uint32_t control)
+arm_debug_break_c14_write_control(int bp, uint32_t control)
 {
-  if (bp < 15) {
-    if (debug_registers != NULL) {
-      ARM_MMAP_WRITE(80 + bp, control);
-    }
-    else {
-      switch (bp) {
-      case 0:
-        ARM_CP14_WRITE(control, 0, 0, 5);
-        break;
-      case 1:
-        ARM_CP14_WRITE(control, 0, 1, 5);
-        break;
-      case 2:
-        ARM_CP14_WRITE(control, 0, 2, 5);
-        break;
-      case 3:
-        ARM_CP14_WRITE(control, 0, 3, 5);
-        break;
-      case 4:
-        ARM_CP14_WRITE(control, 0, 4, 5);
-        break;
-      case 5:
-        ARM_CP14_WRITE(control, 0, 5, 5);
-        break;
-      case 6:
-        ARM_CP14_WRITE(control, 0, 6, 5);
-        break;
-      case 7:
-        ARM_CP14_WRITE(control, 0, 7, 5);
-        break;
-      case 8:
-        ARM_CP14_WRITE(control, 0, 8, 5);
-        break;
-      case 9:
-        ARM_CP14_WRITE(control, 0, 9, 5);
-        break;
-      case 10:
-        ARM_CP14_WRITE(control, 0, 10, 5);
-        break;
-      case 11:
-        ARM_CP14_WRITE(control, 0, 11, 5);
-        break;
-      case 12:
-        ARM_CP14_WRITE(control, 0, 12, 5);
-        break;
-      case 13:
-        ARM_CP14_WRITE(control, 0, 13, 5);
-        break;
-      case 14:
-        ARM_CP14_WRITE(control, 0, 14, 5);
-        break;
-      case 15:
-        ARM_CP14_WRITE(control, 0, 15, 5);
-        break;
-      }
-    }
+  switch (bp) {
+    case 0:
+      ARM_CP14_WRITE(control, 0, 0, 5);
+      break;
+    case 1:
+      ARM_CP14_WRITE(control, 0, 1, 5);
+      break;
+    case 2:
+      ARM_CP14_WRITE(control, 0, 2, 5);
+      break;
+    case 3:
+      ARM_CP14_WRITE(control, 0, 3, 5);
+      break;
+    case 4:
+      ARM_CP14_WRITE(control, 0, 4, 5);
+      break;
+    case 5:
+      ARM_CP14_WRITE(control, 0, 5, 5);
+      break;
+    case 6:
+      ARM_CP14_WRITE(control, 0, 6, 5);
+      break;
+    case 7:
+      ARM_CP14_WRITE(control, 0, 7, 5);
+      break;
+    case 8:
+      ARM_CP14_WRITE(control, 0, 8, 5);
+      break;
+    case 9:
+      ARM_CP14_WRITE(control, 0, 9, 5);
+      break;
+    case 10:
+      ARM_CP14_WRITE(control, 0, 10, 5);
+      break;
+    case 11:
+      ARM_CP14_WRITE(control, 0, 11, 5);
+      break;
+    case 12:
+      ARM_CP14_WRITE(control, 0, 12, 5);
+      break;
+    case 13:
+      ARM_CP14_WRITE(control, 0, 13, 5);
+      break;
+    case 14:
+      ARM_CP14_WRITE(control, 0, 14, 5);
+      break;
+    case 15:
+      ARM_CP14_WRITE(control, 0, 15, 5);
+      break;
   }
 }
 
 static void
-arm_debug_break_write_value(int bp, uint32_t value)
+arm_debug_break_c14_write_value(int bp, uint32_t value)
 {
-  if (bp < 15) {
-    if (debug_registers != NULL) {
-      ARM_MMAP_WRITE(64 + bp, value);
-    }
-    else {
-      switch (bp) {
-      case 0:
-        ARM_CP14_WRITE(value, 0, 0, 4);
-        break;
-      case 1:
-        ARM_CP14_WRITE(value, 0, 1, 4);
-        break;
-      case 2:
-        ARM_CP14_WRITE(value, 0, 2, 4);
-        break;
-      case 3:
-        ARM_CP14_WRITE(value, 0, 3, 4);
-        break;
-      case 4:
-        ARM_CP14_WRITE(value, 0, 4, 4);
-        break;
-      case 5:
-        ARM_CP14_WRITE(value, 0, 5, 4);
-        break;
-      case 6:
-        ARM_CP14_WRITE(value, 0, 6, 4);
-        break;
-      case 7:
-        ARM_CP14_WRITE(value, 0, 7, 4);
-        break;
-      case 8:
-        ARM_CP14_WRITE(value, 0, 8, 4);
-        break;
-      case 9:
-        ARM_CP14_WRITE(value, 0, 9, 4);
-        break;
-      case 10:
-        ARM_CP14_WRITE(value, 0, 10, 4);
-        break;
-      case 11:
-        ARM_CP14_WRITE(value, 0, 11, 4);
-        break;
-      case 12:
-        ARM_CP14_WRITE(value, 0, 12, 4);
-        break;
-      case 13:
-        ARM_CP14_WRITE(value, 0, 13, 4);
-        break;
-      case 14:
-        ARM_CP14_WRITE(value, 0, 14, 4);
-        break;
-      case 15:
-        ARM_CP14_WRITE(value, 0, 15, 4);
-        break;
-      }
-    }
+  switch (bp) {
+    case 0:
+      ARM_CP14_WRITE(value, 0, 0, 4);
+      break;
+    case 1:
+      ARM_CP14_WRITE(value, 0, 1, 4);
+      break;
+    case 2:
+      ARM_CP14_WRITE(value, 0, 2, 4);
+      break;
+    case 3:
+      ARM_CP14_WRITE(value, 0, 3, 4);
+      break;
+    case 4:
+      ARM_CP14_WRITE(value, 0, 4, 4);
+      break;
+    case 5:
+      ARM_CP14_WRITE(value, 0, 5, 4);
+      break;
+    case 6:
+      ARM_CP14_WRITE(value, 0, 6, 4);
+      break;
+    case 7:
+      ARM_CP14_WRITE(value, 0, 7, 4);
+      break;
+    case 8:
+      ARM_CP14_WRITE(value, 0, 8, 4);
+      break;
+    case 9:
+      ARM_CP14_WRITE(value, 0, 9, 4);
+      break;
+    case 10:
+      ARM_CP14_WRITE(value, 0, 10, 4);
+      break;
+    case 11:
+      ARM_CP14_WRITE(value, 0, 11, 4);
+      break;
+    case 12:
+      ARM_CP14_WRITE(value, 0, 12, 4);
+      break;
+    case 13:
+      ARM_CP14_WRITE(value, 0, 13, 4);
+      break;
+    case 14:
+      ARM_CP14_WRITE(value, 0, 14, 4);
+      break;
+    case 15:
+      ARM_CP14_WRITE(value, 0, 15, 4);
+      break;
   }
 }
 
@@ -1143,7 +1161,7 @@ arm_debug_dbgdscr_read(void)
 {
   uint32_t val;
   if (debug_registers != NULL) {
-    val = ARM_MMAP_READ(34);
+    val = ARM_MMAP_READ(ARM_MMAP_DBGDSCR);
   }
   else {
     ARM_CP14_READ(val, 0, 1, 0);
@@ -1155,7 +1173,7 @@ static void
 arm_debug_dbgdscr_write(uint32_t val)
 {
   if (debug_registers != NULL) {
-    ARM_MMAP_WRITE(34, val);
+    ARM_MMAP_WRITE_SYNC(ARM_MMAP_DBGDSCR, val);
   }
   else {
     ARM_CP14_WRITE(val, 0, 1, 0);
@@ -1171,16 +1189,7 @@ arm_debug_method_of_entry(void)
 static void
 arm_debug_disable_interrupts(void)
 {
-  debug_disable_ints = true;
-}
-
-static void
-arm_debug_commit_interrupt_disable(void)
-{
-  if (debug_disable_ints) {
-    arm_debug_dbgdscr_write(arm_debug_dbgdscr_read() | (1 << 11));
-    debug_disable_ints = false;
-  }
+  debug_disable_ints = 1;
 }
 
 static void
@@ -1190,16 +1199,20 @@ arm_debug_enable_interrupts(void)
 }
 
 static void
-arm_debug_break_clear(void)
+arm_debug_break_clear(int bp)
 {
   rtems_interrupt_lock_context lock_context;
-  arm_debug_hwbreak*           bp = &hw_breaks[0];
-  int                          i;
   rtems_interrupt_lock_acquire(&target_lock, &lock_context);
-  for (i = 0; i < hw_breakpoints; ++i, ++bp) {
-    bp->enabled = false;
-    bp->loaded = false;
-  }
+  ARM_HWB_CLEAR(bp);
+  rtems_interrupt_lock_release(&target_lock, &lock_context);
+}
+
+static void
+arm_debug_break_clear_all(void)
+{
+  rtems_interrupt_lock_context lock_context;
+  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
+  ARM_HWB_CLEAR_ALL();
   rtems_interrupt_lock_release(&target_lock, &lock_context);
 }
 
@@ -1211,58 +1224,81 @@ arm_debug_set_context_id(const uint32_t id)
 #endif
 }
 
-/*
- * You can only load the hardware breaks points when in the SVC mode or the
- * single step inverted break point will trigger.
- */
 static void
-arm_debug_break_load(void)
+arm_debug_break_unload(void)
 {
   rtems_interrupt_lock_context lock_context;
-  arm_debug_hwbreak*           bp = &hw_breaks[0];
-  int                          i;
+  int i;
   rtems_interrupt_lock_acquire(&target_lock, &lock_context);
-  if (bp->enabled && !bp->loaded) {
-    arm_debug_set_context_id(0xdead1111);
-    arm_debug_break_write_value(0, bp->value);
-    arm_debug_break_write_control(0, bp->control);
-  }
-  ++bp;
-  for (i = 1; i < hw_breakpoints; ++i, ++bp) {
-    if (bp->enabled && !bp->loaded) {
-      bp->loaded = true;
-      arm_debug_break_write_value(i, bp->value);
-      arm_debug_break_write_control(i, bp->control);
+  if (debug_registers != NULL) {
+    for (i = 0; i < hw_breakpoints; ++i) {
+      ARM_MMAP_WRITE(ARM_MMAP_DBGBCR + i, 0);
+      ARM_MMAP_WRITE(ARM_MMAP_DBGBVR + i, 0);
+    }
+  } else {
+    for (i = 0; i < hw_breakpoints; ++i) {
+      arm_debug_break_c14_write_control(i, 0);
+      arm_debug_break_c14_write_value(i, 0);
     }
   }
   rtems_interrupt_lock_release(&target_lock, &lock_context);
 }
 
 static void
-arm_debug_break_unload(void)
-{
-  rtems_interrupt_lock_context lock_context;
-  arm_debug_hwbreak*           bp = &hw_breaks[0];
-  int                          i;
-  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
-  arm_debug_set_context_id(0);
-  for (i = 0; i < hw_breakpoints; ++i, ++bp) {
-    bp->loaded = false;
-    arm_debug_break_write_control(i, 0);
+arm_debug_break_exec_enable(int bp, uintptr_t addr, bool thumb, bool step) {
+  uint32_t bas;
+
+  /*
+   * See table C3-2 Effect of byte address selection on Breakpoint
+   * generation and "Instruction address comparision programming
+   * examples.
+   */
+  if (thumb) {
+    /*
+     * Thumb
+     */
+    if ((addr & (1 << 1)) == 0) {
+      /*
+       * Instruction address: DBGBVR[31:2]:00 BAS: 0bxx11 Mismatch: Miss
+       */
+      bas = 0x3; /* bxx11 */
+    }
+    else {
+      /*
+       * Instruction address: DBGBVR[31:2]:10 BAS: 0b11xx Mismatch: Miss
+       */
+      bas = 0xc; /* b11xx */
+    }
   }
-  rtems_interrupt_lock_release(&target_lock, &lock_context);
+  else {
+    /*
+     * ARM
+     *
+     * Instruction address: DBGBVR[31:2]:00 BAS: 0b1111 Mismatch: Miss
+     */
+    bas = 0xf; /* b1111 */
+  }
+
+  target_printk("[} break: addr:%08x bas:%x thumb:%s\n",
+                addr, bas, thumb ? "yes" : "no");
+
+  arm_debug_break_setup(
+    bp,
+    addr,
+    step ? ARM_HW_BP_UNLINKED_INSTR_MISMATCH : ARM_HW_BP_UNLINKED_INSTR_MATCH,
+    bas,
+    ARM_HW_BP_PRIV_PL0_SUP_SYS);
 }
 
 static void
 arm_debug_break_dump(void)
 {
 #if TARGET_DEBUG
-  arm_debug_hwbreak* bp = &hw_breaks[0];
   int                i;
-  for (i = 0; i < hw_breakpoints; ++i, ++bp) {
-    if (bp->enabled) {
+  for (i = 0; i < hw_breakpoints; ++i) {
+    if (ARM_HWB_ENALBED(i)) {
       target_printk("[} bp: %d: control: %08x addr: %08x\n",
-                    i, bp->control, bp->value);
+                    i, ARM_HWB_BCR(i), ARM_HWB_VCR(i));
     }
   }
 #endif
@@ -1314,6 +1350,8 @@ target_exception(CPU_Exception_frame* frame)
 #if TARGET_DEBUG
 #if ARM_CP15
   const uint32_t ifsr = arm_cp15_get_instruction_fault_status();
+  const uint32_t dfsr = arm_cp15_get_data_fault_status();
+  const void* far = arm_cp15_get_fault_address();
 #else
   const uint32_t ifsr = 0;
 #endif
@@ -1341,18 +1379,20 @@ target_exception(CPU_Exception_frame* frame)
 
   target_printk("[} > frame = %08" PRIx32 \
                 " sig=%d vector=%u (%u) dbgdscr=%08" PRIx32 " moe=%s" \
-                " ifsr=%08" PRIx32 " pra=%08x\n",
-                (uint32_t) frame,
+                " far=%p ifsr=%08" PRIx32 " dfsr=%08" PRIx32
+                " exc-ret-pc=%08x\n", (uint32_t) frame,
                 rtems_debugger_target_exception_to_signal(frame),
                 frame->vector, mvector, dbgdscr, arm_moe_label(moe),
-                ifsr, (intptr_t) frame->register_pc);
+                far, ifsr, dfsr, (intptr_t) frame->register_pc);
+
+  arm_debug_break_dump();
 
   frame->register_pc = (void*) ((intptr_t) frame->register_pc - exc_offset);
 
   target_print_frame(frame);
 
+  arm_debug_break_clear(0);
   arm_debug_enable_interrupts();
-  arm_debug_break_clear();
 
   if (!debug_session_active)
     _ARM_Exception_default(frame);
@@ -1373,8 +1413,14 @@ target_exception(CPU_Exception_frame* frame)
                 " PC = %08" PRIxPTR " CPSR = %08" PRIx32 "\n",
                 (uint32_t) frame, (intptr_t) frame->register_pc, FRAME_SR(frame));
   target_print_frame(frame);
-  arm_debug_break_dump();
 }
+
+/**
+ * Exception Handlers
+ *
+ * The entry and exit is all assembler and ARM code. This avoids any
+ * compiler related optimisations effecting the various pieces.
+ */
 
 /**
  * Exception stack frame size.
@@ -1408,15 +1454,89 @@ target_exception(CPU_Exception_frame* frame)
  */
 #define EXCEPTION_ENTRY_EXC()                                           \
   __asm__ volatile(                                                     \
-    ASM_ARM_MODE                                                        \
+    ASM_ARM_MODE                 /* force ARM mode for thumb systems */ \
     "sub  sp, %[frame_size]\n"           /* alloc the frame and CPSR */ \
     "stm  sp, {r0-r12}\n"                            /* store r0-r12 */ \
-    "sub  sp, #4\n"                                                     \
-    "str  lr, [sp]\n"                           /* save the link reg */ \
-    ASM_THUMB_MODE                                                      \
-    : ARM_SWITCH_REG_ASM                                                \
+    :                                                                   \
     : [frame_size] "i" (EXCEPTION_FRAME_SIZE)                           \
-    : "memory")
+    : "cc", "memory")
+
+/**
+ * Debugger entry
+ *
+ * Check if using debug registers else use CP14.
+ *
+ * Set all the break point registers to 0. Enable interrupts.
+ */
+#if ARM_CP15
+#define ARM_HW_BP_UNLOAD(_bp)                                           \
+    "cmp r0, #" #_bp "\n"                                               \
+    "ble 3f\n"                                                          \
+    "mcr p14, 0, r1, c0, c" #_bp ", 5\n"                                \
+    "mcr p14, 0, r1, c0, c" #_bp ", 4\n"
+#define ARM_DGB_ENABLE_INTS                                             \
+    "mrc   p14, 0, r1, c0, c1, 0\n"               /* Get the DBGDSCR */ \
+    "bic   r1, r1, #(1 << 11)\n"                /* enable interrupts */ \
+    "mcr   p14, 0, r1, c0, c1, 0\n"               /* Set the DBGDSCR */
+#else
+#define ARM_HW_BP_UNLOAD(_bp)
+#define ARM_DGB_ENABLE_INTS
+#endif
+
+#define EXCEPTION_ENTRY_DEBUGGER()                                      \
+  __asm__ volatile(                                                     \
+    /* Set up r0 and r1 */                                              \
+    "movw  r0, #:lower16:hw_breakpoints\n"  /* get the num hw breaks */ \
+    "movt  r0, #:upper16:hw_breakpoints\n"                              \
+    "ldr   r0, [r0]\n"                        /* r0 = hw_breakpoints */ \
+    "mov   r1, #0\n"                                   /* write zero */ \
+    /* Check if debug registers are being used */                       \
+    "movw  r2, #:lower16:debug_registers\n"    /* get the debug regs */ \
+    "movt  r2, #:upper16:debug_registers\n"                             \
+    "ldr   r2, [r2]\n"                       /* r2 = debug_registers */ \
+    "cmp   r2, #0\n"                                        /* NULL? */ \
+    "beq    2f\n"                                /* if NULL use cp14 */ \
+    /* Debug registers */                                               \
+    "add   r3, r2, %[dbgbvr] - 4\n"        /* a3 = DBGBCR0, adjusted */ \
+    "add   r2, r2, %[dbgbcr] - 4\n"        /* a2 = DBGBVR0, adjusted */ \
+    "1:\n"                                                              \
+    "str   r1, [r3, #4]!\n"   /* Store DBGBVR, pre-indexed, modified */ \
+    "str   r1, [r2, #4]!\n"   /* Store DBGBCR, pre-indexed, modified */ \
+    "sub   r0, r0, #1\n"                                 /* one less */ \
+    "cmp   r0, #0\n"                                    /* all done? */ \
+    "bne   1b\n"                                                        \
+    "ldr   r1, [r2, %[dbgdscr]]\n"                /* Get the DBGDSCR */ \
+    "bic   r1, r1, #(1 << 11)\n"                /* enable interrupts */ \
+    "str   r1, [r2, %[dbgdscr]]\n"                /* Set the DBGDSCR */ \
+    "b     4f\n"                                                        \
+    /* CP14 */                                                          \
+    "2:\n"                                                              \
+    ARM_HW_BP_UNLOAD(0)                                                 \
+    ARM_HW_BP_UNLOAD(1)                                                 \
+    ARM_HW_BP_UNLOAD(2)                                                 \
+    ARM_HW_BP_UNLOAD(3)                                                 \
+    ARM_HW_BP_UNLOAD(4)                                                 \
+    ARM_HW_BP_UNLOAD(5)                                                 \
+    ARM_HW_BP_UNLOAD(6)                                                 \
+    ARM_HW_BP_UNLOAD(7)                                                 \
+    ARM_HW_BP_UNLOAD(8)                                                 \
+    ARM_HW_BP_UNLOAD(9)                                                 \
+    ARM_HW_BP_UNLOAD(10)                                                \
+    ARM_HW_BP_UNLOAD(11)                                                \
+    ARM_HW_BP_UNLOAD(12)                                                \
+    ARM_HW_BP_UNLOAD(12)                                                \
+    ARM_HW_BP_UNLOAD(13)                                                \
+    ARM_HW_BP_UNLOAD(14)                                                \
+    ARM_HW_BP_UNLOAD(15)                                                \
+    "3:\n"                                                              \
+    ARM_DGB_ENABLE_INTS                                                 \
+    "4:\n"                                                              \
+    ARM_SYNC_INST                                                       \
+    :                                                                   \
+    : [dbgdscr] "i" (ARM_MMAP_DBGDSCR * sizeof(uint32_t)),              \
+      [dbgbcr] "i" (ARM_MMAP_DBGBCR * sizeof(uint32_t)),                \
+      [dbgbvr] "i" (ARM_MMAP_DBGBVR * sizeof(uint32_t))                 \
+    : "cc", "r0", "r1", "r2", "r3", "memory")
 
 /*
  * FPU entry. Conditionally D16 or D32 support.
@@ -1430,10 +1550,10 @@ target_exception(CPU_Exception_frame* frame)
     "mov    r3, #0\n"                                                   \
     "mov    r4, #0\n"                                                   \
     "adds   r6, r5, #128\n"                                             \
-    "3:\n"                                                              \
+    "1:\n"                                                              \
     "stmia  r5!, {r3-r4}\n"                                             \
     "cmp    r5, r6\n"                                                   \
-    "bne    3b\n"
+    "bne    1b\n"
 #endif /* ARM_MULTILIB_VFP_D32 */
 #define EXCEPTION_ENTRY_FPU(frame_fpu_size)                             \
     "sub    sp, %[frame_fpu_size]\n" /* size includes alignment size */ \
@@ -1453,9 +1573,6 @@ target_exception(CPU_Exception_frame* frame)
 
 #define EXCEPTION_ENTRY_THREAD(_frame)                                  \
   __asm__ volatile(                                                     \
-    ASM_ARM_MODE                                                        \
-    "ldr  lr, [sp]\n"                        /* recover the link reg */ \
-    "add  sp, #4\n"                                                     \
     "add  r0, sp, %[r0_r12_size]\n"       /* get the sp in the frame */ \
     "mrs  r1, spsr\n"                            /* get the saved sr */ \
     "mov  r6, r1\n"                            /* stash it for later */ \
@@ -1468,7 +1585,7 @@ target_exception(CPU_Exception_frame* frame)
     "mov  r4, lr\n"                              /* get the link reg */ \
     "msr  cpsr, r2\n"                            /* back to exc mode */ \
     "mov  r5, lr\n"                                   /* get the PRA */ \
-    "stm  r0, {r3-r6}\n"                      /* save into the frame */ \
+    "stm  r0, {r3-r6}\n"       /* save into the frame: sp,lr,pc,cpsr */ \
     "sub  r4, r3, %[frame_size]\n"            /* destination address */ \
     "mov  r6, r4\n"                                /* save the frame */ \
     "sub  r4, #1\n"                          /* one before the start */ \
@@ -1491,8 +1608,7 @@ target_exception(CPU_Exception_frame* frame)
     EXCEPTION_ENTRY_FPU(frame_fpu_size)                                 \
     "bic  r1, r1, %[psr_i]\n"        /* clear irq mask, debug checks */ \
     "msr  cpsr, r1\n"       /* restore the state with irq mask clear */ \
-    ASM_THUMB_MODE                                                      \
-    : ARM_SWITCH_REG_ASM_L                                              \
+    :                                                                   \
       [o_frame] "=r" (_frame)                                           \
     : [psr_t] "i" (ARM_PSR_T),                                          \
       [psr_i] "i" (ARM_PSR_I),                                          \
@@ -1501,7 +1617,7 @@ target_exception(CPU_Exception_frame* frame)
       [frame_size] "i" (EXCEPTION_FRAME_SIZE),                          \
       [o_frame_fpu] "i" (EXCEPTION_FRAME_FPU_OFFSET),                   \
       [frame_fpu_size] "i" (EXCEPTION_FRAME_FPU_SIZE + 4)               \
-    : "r0", "r1", "r2", "r3", "r4", "r5", "r6", "memory")
+    : "cc", "r0", "r1", "r2", "r3", "r4", "r5", "r6", "memory")
 
 /*
  * FPU exit. Conditionally D16 or D32 support.
@@ -1537,9 +1653,8 @@ target_exception(CPU_Exception_frame* frame)
  */
 #define EXCEPTION_EXIT_THREAD(_frame)                                   \
   __asm__ volatile(                                                     \
-    ASM_ARM_MODE                                                        \
     "mov  r0, %[i_frame]\n"                         /* get the frame */ \
-    "ldr  r0, [r0, %[frame_fpu]]\n"     /* recover FPU frame pointer */ \
+    "ldr  r0, [r0, %[frame_fpu]]\n" /* recover aligned FPU frame ptr */ \
     EXCEPTION_EXIT_FPU(frame_fpu_size)                                  \
     "ldr  r2, [sp, %[frame_cpsr]]\n" /* recover exc CPSR from thread */ \
     "mov  r0, sp\n"                  /* get the thread frame pointer */ \
@@ -1562,11 +1677,8 @@ target_exception(CPU_Exception_frame* frame)
     "mov  lr, r4\n"                              /* set the link reg */ \
     "msr  cpsr, r2\n"            /* switch back to the exc's context */ \
     "msr  spsr, r6\n"                       /* set the thread's CPSR */ \
-    "sub  sp, #4\n"                                                     \
     "mov  lr, r5\n"                                    /* get the PC */ \
-    "str  lr, [sp]\n"                           /* save the link reg */ \
-    ASM_THUMB_MODE                                                      \
-    : ARM_SWITCH_REG_ASM                                                \
+    :                                                                   \
     : [psr_i] "i" (ARM_PSR_I),                                          \
       [r0_r12_size] "i" (13 * sizeof(uint32_t)),                        \
       [frame_cpsr] "i" (EXCEPTION_FRAME_SIZE - sizeof(uint32_t)),       \
@@ -1574,19 +1686,135 @@ target_exception(CPU_Exception_frame* frame)
       [frame_fpu] "i" (EXCEPTION_FRAME_FPU_OFFSET),                     \
       [frame_fpu_size] "i" (EXCEPTION_FRAME_FPU_SIZE + 4),              \
       [i_frame] "r" (_frame)                                            \
-    : "r0", "r1", "r2", "r3", "r4", "r5", "r6", "memory")
+    : "cc", "r0", "r1", "r2", "r3", "r4", "r5", "r6", "memory")
+
+/*
+ * Debugger exit
+ *
+ * Check if using debug registers else use CP14.
+ *
+ * Set all the break point registers to settgins. Disable interrupts
+ * if debug_disable_ints is true. Clear debug_disable_ints.
+ */
+#if ARM_CP15
+#define ARM_HW_BP_LOAD(_bp)                                             \
+    "cmp r0, #" #_bp "\n"                                               \
+    "ble 5f\n"                                                          \
+    "ldm r1!, {r2-r3}\n"                                                \
+    "mcr p14, 0, r2, c0, c" #_bp ", 4\n"                    /* value */ \
+    "mcr p14, 0, r3, c0, c" #_bp ", 5\n"                  /* control */
+#define ARM_DGB_DISABLE_INTS                                            \
+    "mrc   p14, 0, r4, c0, c1, 0\n"               /* Get the DBGDSCR */ \
+    "orr   r4, r4, #(1 << 11)\n"               /* disable interrupts */ \
+    "mcr   p14, 0, r4, c0, c1, 0\n"               /* Set the DBGDSCR */
+#else
+#define ARM_HW_BP_LOAD(_bp)
+#define ARM_DGB_DISABLE_INTS
+#endif
+
+#define EXCEPTION_EXIT_DEBUGGER()                                       \
+  __asm__ volatile(                                                     \
+    /* Set up r0, r1, r4 and r5 */                                      \
+    "movw  r0, #:lower16:hw_breakpoints\n"  /* get the num hw breaks */ \
+    "movt  r0, #:upper16:hw_breakpoints\n"                              \
+    "ldr   r0, [r0]\n"                        /* r0 = hw_breakpoints */ \
+    "movw  r1, #:lower16:hw_breaks\n"   /* get the hw_breaks pointer */ \
+    "movt  r1, #:upper16:hw_breaks\n"                                   \
+    "movw  r4, #:lower16:debug_disable_ints\n"   /* get disable ints */ \
+    "movt  r4, #:upper16:debug_disable_ints\n"                          \
+    "ldr   r5, [r4]\n"                                                  \
+    "mov   r3, #0\n"                             /* clear debug ints */ \
+    "str   r3, [r4]\n"                                                  \
+    /* Check if debug registers are being used */                       \
+    "movw  r2, #:lower16:debug_registers\n"    /* get the debug regs */ \
+    "movt  r2, #:upper16:debug_registers\n"                             \
+    "ldr   r2, [r2]\n"                       /* r2 = debug_registers */ \
+    "cmp   r2, #0\n"                                        /* NULL? */ \
+    "beq   3f\n"                                 /* if NULL use cp14 */ \
+    /* Debug registers */                                               \
+    "cmp   r5, #0\n"                                       /* false? */ \
+    "beq   1f\n"                 /* if false do not set ints disable */ \
+    "ldr   r4, [r2, %[dbgdscr]]\n"                /* Get the DBGDSCR */ \
+    "orr   r4, r4, #(1 << 11)\n"               /* disable interrupts */ \
+    "str   r4, [r2, %[dbgdscr]]\n"                /* Set the DBGDSCR */ \
+    "1:\n"                                                              \
+    "add   r3, r2, %[dbgbvr] - 4\n"        /* a3 = DBGBCR0, adjusted */ \
+    "add   r2, r2, %[dbgbcr] - 4\n"        /* a2 = DBGBVR0, adjusted */ \
+    "2:\n"                                                              \
+    "ldm   r1!, {r4-r5}\n"                         /* load vr and cr */ \
+    "str   r4, [r3, #4]!\n"   /* Store DBGBVR, pre-indexed, modified */ \
+    "str   r5, [r2, #4]!\n"   /* Store DBGBCR, pre-indexed, modified */ \
+    "sub   r0, r0, #1\n"                                /* one less? */ \
+    "cmp   r0, #1\n"                                    /* all done? */ \
+    "bne   2b\n"                                                        \
+    "b     5f\n"                                                        \
+    /* CP14 */                                                          \
+    "3:\n"                                                              \
+    "cmp   r5, #0\n"                                       /* false? */ \
+    "beq   4f\n"                 /* if false do not set ints disable */ \
+    ARM_DGB_DISABLE_INTS                                                \
+    "4:\n"                                                              \
+    ARM_HW_BP_LOAD(0)                                                   \
+    ARM_HW_BP_LOAD(1)                                                   \
+    ARM_HW_BP_LOAD(2)                                                   \
+    ARM_HW_BP_LOAD(3)                                                   \
+    ARM_HW_BP_LOAD(4)                                                   \
+    ARM_HW_BP_LOAD(5)                                                   \
+    ARM_HW_BP_LOAD(6)                                                   \
+    ARM_HW_BP_LOAD(7)                                                   \
+    ARM_HW_BP_LOAD(8)                                                   \
+    ARM_HW_BP_LOAD(9)                                                   \
+    ARM_HW_BP_LOAD(10)                                                  \
+    ARM_HW_BP_LOAD(11)                                                  \
+    ARM_HW_BP_LOAD(12)                                                  \
+    ARM_HW_BP_LOAD(13)                                                  \
+    ARM_HW_BP_LOAD(14)                                                  \
+    ARM_HW_BP_LOAD(15)                                                  \
+    "5:\n"                                                              \
+     ARM_SYNC_INST                                                      \
+    :                                                                   \
+    : [disints] "X" (debug_disable_ints),  /* make the sym available */ \
+      [dbgdscr] "i" (ARM_MMAP_DBGDSCR * sizeof(uint32_t)),              \
+      [dbgbcr] "i" (ARM_MMAP_DBGBCR * sizeof(uint32_t)),                \
+      [dbgbvr] "i" (ARM_MMAP_DBGBVR * sizeof(uint32_t))                 \
+    : "cc", "r0", "r1", "r2", "r3", "r4", "r5", "memory")
 
 #define EXCEPTION_EXIT_EXC()                                            \
   __asm__ volatile(                                                     \
-    ASM_ARM_MODE                                                        \
-    "ldr  lr, [sp]\n"                        /* recover the link reg */ \
-    "add  sp, #4\n"                                                     \
     "ldm  sp, {r0-r12}\n"            /* restore the thread's context */ \
     "add  sp, %[frame_size]\n"                     /* free the frame */ \
     "subs pc, lr, #0\n"                       /* return from the exc */ \
+    ARM_SYNC_INST                                                       \
     :                                                                   \
     : [frame_size] "i" (EXCEPTION_FRAME_SIZE)                           \
-    : "memory")
+    : "cc", "memory")
+
+#define ARM_PUSH_LR()                                                   \
+  __asm__ volatile(                                                     \
+    "push {lr}\n"                                                       \
+    : : : )
+
+#define ARM_POP_LR()                                                    \
+  __asm__ volatile(                                                     \
+    "pop {lr}\n"                                                        \
+    : : : )
+
+/*
+ * Entry and exit stacks
+ */
+#define EXCEPTION_ENTRY(_frame)                   \
+  EXCEPTION_ENTRY_EXC();                          \
+  EXCEPTION_ENTRY_DEBUGGER();                     \
+  EXCEPTION_ENTRY_THREAD(_frame);                 \
+  ARM_THUMB_MODE()                                \
+  ARM_PUSH_LR()
+
+#define EXCEPTION_EXIT(_frame)                    \
+  ARM_POP_LR();                                   \
+  ARM_ARM_MODE();                                 \
+  EXCEPTION_EXIT_THREAD(_frame);                  \
+  EXCEPTION_EXIT_DEBUGGER();                      \
+  EXCEPTION_EXIT_EXC()
 
 /*
  * This is used to catch faulting accesses.
@@ -1596,9 +1824,10 @@ static void __attribute__((naked))
 arm_debug_unlock_abort(void)
 {
   CPU_Exception_frame* frame;
-  ARM_SWITCH_REG;
+  ARM_SWITCH_REGISTERS;
   EXCEPTION_ENTRY_EXC();
   EXCEPTION_ENTRY_THREAD(frame);
+  ARM_SWITCH_BACK;
   longjmp(unlock_abort_jmpbuf, -1);
 }
 #endif
@@ -1608,16 +1837,10 @@ target_exception_undefined_instruction(void)
 {
   CPU_Exception_frame* frame;
   ARM_SWITCH_REG;
-  EXCEPTION_ENTRY_EXC();
-  arm_debug_break_unload();
-  arm_debug_enable_interrupts();
-  EXCEPTION_ENTRY_THREAD(frame);
+  EXCEPTION_ENTRY(frame);
   frame->vector = 1;
   target_exception(frame);
-  EXCEPTION_EXIT_THREAD(frame);
-  arm_debug_commit_interrupt_disable();
-  arm_debug_break_load();
-  EXCEPTION_EXIT_EXC();
+  EXCEPTION_EXIT(frame);
 }
 
 static void __attribute__((naked))
@@ -1631,16 +1854,10 @@ target_exception_supervisor_call(void)
    * this exception is used by the BKPT instruction in the prefetch abort
    * handler to signal a TRAP.
    */
-  EXCEPTION_ENTRY_EXC();
-  arm_debug_break_unload();
-  arm_debug_enable_interrupts();
-  EXCEPTION_ENTRY_THREAD(frame);
+  EXCEPTION_ENTRY(frame);
   frame->vector = 2;
   target_exception(frame);
-  EXCEPTION_EXIT_THREAD(frame);
-  arm_debug_commit_interrupt_disable();
-  arm_debug_break_load();
-  EXCEPTION_EXIT_EXC();
+  EXCEPTION_EXIT(frame);
 }
 
 static void __attribute__((naked))
@@ -1648,16 +1865,10 @@ target_exception_prefetch_abort(void)
 {
   CPU_Exception_frame* frame;
   ARM_SWITCH_REG;
-  EXCEPTION_ENTRY_EXC();
-  arm_debug_break_unload();
-  arm_debug_enable_interrupts();
-  EXCEPTION_ENTRY_THREAD(frame);
+  EXCEPTION_ENTRY(frame);
   frame->vector = 3;
   target_exception(frame);
-  EXCEPTION_EXIT_THREAD(frame);
-  arm_debug_commit_interrupt_disable();
-  arm_debug_break_load();
-  EXCEPTION_EXIT_EXC();
+  EXCEPTION_EXIT(frame);
 }
 
 static void __attribute__((naked))
@@ -1665,16 +1876,10 @@ target_exception_data_abort(void)
 {
   CPU_Exception_frame* frame;
   ARM_SWITCH_REG;
-  EXCEPTION_ENTRY_EXC();
-  arm_debug_break_unload();
-  arm_debug_enable_interrupts();
-  EXCEPTION_ENTRY_THREAD(frame);
+  EXCEPTION_ENTRY(frame);
   frame->vector = 4;
   target_exception(frame);
-  EXCEPTION_EXIT_THREAD(frame);
-  arm_debug_commit_interrupt_disable();
-  arm_debug_break_load();
-  EXCEPTION_EXIT_EXC();
+  EXCEPTION_EXIT(frame);
 }
 
 #if ARM_CP15
@@ -1776,13 +1981,13 @@ int
 rtems_debugger_target_enable(void)
 {
   rtems_interrupt_lock_context lock_context;
-  debug_session_active = true;
   arm_debug_break_unload();
-  arm_debug_break_clear();
+  arm_debug_break_clear_all();
   rtems_interrupt_lock_acquire(&target_lock, &lock_context);
   rtems_debugger_target_set_mmu();
   rtems_debugger_target_set_vectors();
   rtems_interrupt_lock_release(&target_lock, &lock_context);
+  debug_session_active = true;
   return 0;
 }
 
@@ -1795,8 +2000,9 @@ rtems_debugger_target_disable(void)
   void*                        text_end;
 #endif
   arm_debug_break_unload();
-  arm_debug_break_clear();
+  arm_debug_break_clear_all();
   rtems_interrupt_lock_acquire(&target_lock, &lock_context);
+  debug_disable_ints = 0;
   debug_session_active = false;
 #if DOES_NOT_WORK
   text_begin = &bsp_section_text_begin[0];
@@ -1979,57 +2185,13 @@ rtems_debugger_target_thread_stepping(rtems_debugger_thread* thread)
      * 0. This is reserved for single stepping.
      */
     CPU_Exception_frame* frame = thread->frame;
-    arm_debug_hwbreak*   bp = &hw_breaks[0];
 
-    target_printk("[} stepping: %s\n", bp->enabled ? "yes" : "no");
+    target_printk("[} stepping: hbp[0] enabled: %s\n", ARM_HWB_ENALBED(0) ? "yes" : "no");
 
-    if (!bp->enabled) {
+    if (!ARM_HWB_ENALBED(0)) {
       const uint32_t addr = (intptr_t) frame->register_pc;
       const bool     thumb = (FRAME_SR(frame) & (1 << 5)) != 0 ? true : false;
-      uint32_t       bas;
-
-      bp->enabled = true;
-      bp->loaded = false;
-      bp->address = frame->register_pc;
-      bp->frame = frame;
-      bp->length = sizeof(uint32_t);
-
-      if (thumb) {
-        uint16_t instr = *((uint16_t*) frame->register_pc);
-        switch (instr & 0xf800) {
-        case 0xe800:
-        case 0xf000:
-        case 0xf800:
-          break;
-        default:
-          bp->length = sizeof(uint16_t);
-          break;
-        }
-      }
-
-      /*
-       * See table C3-2 Effect of byte address selection on Breakpoint
-       * generation and "Instruction address comparision programming
-       * examples.
-       */
-      if (thumb) {
-        if ((addr & (1 << 1)) == 0) {
-          bas = 0x3; /* b0011 */
-        }
-        else {
-          bas = 0xc; /* b1100 */
-        }
-      }
-      else {
-        bas = 0xf; /* b1111 */
-      }
-
-      arm_debug_break_setup(bp,
-                            addr & ~0x3,
-                            ARM_HW_BP_UNLINKED_INSTR_MISMATCH,
-                            bas,
-                            ARM_HW_BP_PRIV_PL0_SUP_SYS);
-
+      arm_debug_break_exec_enable(0, addr, thumb, true);
       arm_debug_disable_interrupts();
     }
   }
@@ -2085,6 +2247,7 @@ rtems_debugger_target_hwbreak_insert(void)
 int
 rtems_debugger_target_hwbreak_remove(void)
 {
+  target_printk("[} hbreak: remove: unload\n");
   arm_debug_break_unload();
   return 0;
 }
@@ -2095,15 +2258,34 @@ rtems_debugger_target_hwbreak_control(rtems_debugger_target_watchpoint wp,
                                       DB_UINT                          addr,
                                       DB_UINT                          kind)
 {
-  /*
-   * To do.
-   */
+  rtems_interrupt_lock_context lock_context;
+  int                          i;
+  if (wp != rtems_debugger_target_hw_execute) {
+    errno = EIO;
+    return -1;
+  }
+  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
+  for (i = 1; i < hw_breakpoints; ++i) {
+    if (insert && !ARM_HWB_ENALBED(i)) {
+      arm_debug_break_exec_enable(i, addr, kind == 1, false);
+      break;
+    } else if (!insert && ARM_HWB_ENALBED(i) && ARM_HWB_VCR(i) == (addr & ~3)) {
+      arm_debug_break_clear(i);
+      break;
+    }
+  }
+  rtems_interrupt_lock_release(&target_lock, &lock_context);
+  if (!insert && i == hw_breakpoints) {
+    errno = EIO;
+    return -1;
+  }
   return 0;
 }
 
 int
 rtems_debugger_target_cache_sync(rtems_debugger_target_swbreak* swbreak)
 {
+  target_printk("[} cache: sync: %p\n", swbreak->address);
   /*
    * Flush the data cache and invalidate the instruction cache.
    */
