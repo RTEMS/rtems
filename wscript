@@ -1274,26 +1274,26 @@ def options(ctx):
         "--rtems-bsps",
         metavar="REGEX,...",
         help=
-        "a comma-separated list of Python regular expressions which select the desired BSP variants (e.g. 'sparc/erc32'); it may be used in the bsp_defaults and bsp_list commands",
+        "a comma-separated list of Python regular expressions which select the desired BSP variants (e.g. 'sparc/erc32'); it may be used in the bspdefaults and bsps commands",
     )
     rg.add_option(
         "--rtems-compiler",
         metavar="COMPILER",
         help=
-        "determines which compiler is used to list the BSP option defaults [default: 'gcc']; it may be used in the bsp_defaults command; valid compilers are: {}"
+        "determines which compiler is used to list the BSP option defaults [default: 'gcc']; it may be used in the bspdefaults command; valid compilers are: {}"
         .format(", ".join(compilers)),
     )
     rg.add_option(
         "--rtems-config",
         metavar="CONFIG.INI,...",
         help=
-        "a comma-separated list of paths to the BSP configuration option files [default: 'config.ini']; default option values can be obtained via the bsp_defaults command; it may be used in the configure command",
+        "a comma-separated list of paths to the BSP configuration option files [default: 'config.ini']; default option values can be obtained via the bspdefaults command; it may be used in the configure command",
     )
     rg.add_option(
         "--rtems-specs",
         metavar="SPECDIRS,...",
         help=
-        "a comma-separated list of directory paths to build specification items [default: 'spec/build']; it may be used in the bsp_defaults, bsp_list, and configure commands",
+        "a comma-separated list of directory paths to build specification items [default: 'spec/build']; it may be used in the bspdefaults, bsps, and configure commands",
     )
     rg.add_option(
         "--rtems-tools",
@@ -1305,13 +1305,13 @@ def options(ctx):
         "--rtems-top-group",
         metavar="UID",
         help=
-        "the UID of the top-level group [default: '/grp']; it may be used in the bsp_defaults and configure commands",
+        "the UID of the top-level group [default: '/grp']; it may be used in the bspdefaults and configure commands",
     )
     rg.add_option(
         "--rtems-version",
         metavar="VALUE",
         help=
-        "sets the RTEMS major version number; it is intended for RTEMS maintainers and may be used in the bsp_defaults and configure commands",
+        "sets the RTEMS major version number; it is intended for RTEMS maintainers and may be used in the bspdefaults and configure commands",
     )
     rg.add_option(
         "--rtems-option",
@@ -1320,7 +1320,7 @@ def options(ctx):
         dest="rtems_options",
         default=[],
         help=
-        "sets the option identified by KEY to the VALUE in the build specification; it is intended for RTEMS maintainers and may be used in the bsp_defaults and configure commands",
+        "sets the option identified by KEY to the VALUE in the build specification; it is intended for RTEMS maintainers and may be used in the bspdefaults and configure commands",
     )
 
 
@@ -1630,7 +1630,7 @@ def no_matches_error(ctx, white_list):
         ctx.fatal("The build specification contains no BSPs")
 
 
-def bsp_defaults(ctx):
+def bspdefaults(ctx):
     """get all options with default values for base BSP variants"""
     check_forbidden_options(ctx, ["config", "tools"])
     add_log_filter(ctx.cmd)
@@ -1656,7 +1656,7 @@ def bsp_defaults(ctx):
 # selection and changing the compiler may lead to unpredictable behaviour if
 # these options are not adjusted as well.  Use the --rtems-compiler command line
 # option to get the default values for a particular compiler via
-# ./waf bsp_defaults.
+# ./waf bspdefaults.
 COMPILER = {}""".format(variant, compiler))
                 enable = [compiler, arch, variant]
                 bsp_item = bsps[arch][bsp]
