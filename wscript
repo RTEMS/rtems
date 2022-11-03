@@ -1667,7 +1667,7 @@ COMPILER = {}""".format(variant, compiler))
         no_matches_error(ctx, white_list)
 
 
-def bsp_list(ctx):
+def bsplist(ctx):
     """lists base BSP variants"""
     check_forbidden_options(
         ctx,
