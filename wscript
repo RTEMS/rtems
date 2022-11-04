@@ -73,13 +73,10 @@ class VersionControlKeyHeader:
 #define _RTEMS_VERSION_VC_KEY_H_
 """
             try:
-                rev = bld.cmd_and_log(
-                    "git rev-parse HEAD", quiet=Context.STDOUT
-                ).strip()
+                rev = bld.cmd_and_log("git rev-parse HEAD",
+                                      quiet=Context.STDOUT).strip()
                 content += """#define RTEMS_VERSION_VC_KEY "{}"
-""".format(
-                    rev
-                )
+""".format(rev)
             except WafError:
                 content += """/* No version control key found; release? */
 """
@@ -96,6 +93,7 @@ class VersionControlKeyHeader:
 
 
 class EnvWrapper(object):
+
     def __init__(self, env):
         self._env = env
 
@@ -155,9 +153,8 @@ def _is_enabled(enabled, enabled_by):
 
 
 def _asm_explicit_target(self, node):
-    task = self.create_task(
-        "asm", node, self.bld.bldnode.make_node(self.target)
-    )
+    task = self.create_task("asm", node,
+                            self.bld.bldnode.make_node(self.target))
     try:
         self.compiled_tasks.append(task)
     except AttributeError:
@@ -180,6 +177,7 @@ def process_start_files(self):
 
 
 class Item(object):
+
     def __init__(self, uid, data):
         self.uid = uid
         self.data = data
@@ -192,8 +190,7 @@ class Item(object):
                 uid = link["uid"]
                 if not os.path.isabs(uid):
                     uid = os.path.normpath(
-                        os.path.join(os.path.dirname(self.uid), uid)
-                    )
+                        os.path.join(os.path.dirname(self.uid), uid))
                 self._links.append(items[uid])
         self.links = self._yield_links
         for link in self._links:
@@ -248,9 +245,7 @@ class Item(object):
             except Exception as e:
                 ctx.fatal(
                     "In item '{}' substitution in '{}' failed: {}".format(
-                        self.uid, value, e
-                    )
-                )
+                        self.uid, value, e))
         if isinstance(value, list):
             more = []
             for item in value:
@@ -284,7 +279,8 @@ class Item(object):
             asflags=self.substitute(bld, self.data["asflags"]),
             cppflags=self.substitute(bld, self.data["cppflags"]),
             features="asm_explicit_target asm c",
-            includes=bic.includes + self.substitute(bld, self.data["includes"]),
+            includes=bic.includes +
+            self.substitute(bld, self.data["includes"]),
             source=[source],
             target=target,
         )
@@ -297,8 +293,10 @@ class Item(object):
             cflags=self.substitute(bld, self.data["cflags"]),
             cppflags=cppflags + self.substitute(bld, self.data["cppflags"]),
             features="c",
-            includes=bic.includes + self.substitute(bld, self.data["includes"]),
-            rule="${CC} ${CFLAGS} ${CPPFLAGS} ${DEFINES_ST:DEFINES} ${CPPPATH_ST:INCPATHS} -c ${SRC[0]} -o ${TGT}",
+            includes=bic.includes +
+            self.substitute(bld, self.data["includes"]),
+            rule=
+            "${CC} ${CFLAGS} ${CPPFLAGS} ${DEFINES_ST:DEFINES} ${CPPPATH_ST:INCPATHS} -c ${SRC[0]} -o ${TGT}",
             source=[source] + deps,
             target=target,
         )
@@ -311,8 +309,10 @@ class Item(object):
             cppflags=cppflags + self.substitute(bld, self.data["cppflags"]),
             cxxflags=self.substitute(bld, self.data["cxxflags"]),
             features="cxx",
-            includes=bic.includes + self.substitute(bld, self.data["includes"]),
-            rule="${CXX} ${CXXFLAGS} ${CPPFLAGS} ${DEFINES_ST:DEFINES} ${CPPPATH_ST:INCPATHS} -c ${SRC[0]} -o ${TGT}",
+            includes=bic.includes +
+            self.substitute(bld, self.data["includes"]),
+            rule=
+            "${CXX} ${CXXFLAGS} ${CPPFLAGS} ${DEFINES_ST:DEFINES} ${CPPPATH_ST:INCPATHS} -c ${SRC[0]} -o ${TGT}",
             source=[source] + deps,
             target=target,
         )
@@ -322,14 +322,14 @@ class Item(object):
         from waflib.Task import Task
 
         class link(Task):
+
             def __init__(self, item, bic, cmd, env):
                 super(link, self).__init__(self, env=env)
                 self.cmd = cmd
                 self.ldflags = bic.ldflags + item.data["ldflags"]
                 self.stlib = item.data["stlib"]
-                self.use = (
-                    item.data["use-before"] + bic.use + item.data["use-after"]
-                )
+                self.use = (item.data["use-before"] + bic.use +
+                            item.data["use-after"])
 
             def run(self):
                 cmd = [self.cmd]
@@ -368,6 +368,7 @@ class Item(object):
         from waflib.Task import Task
 
         class gnatmake(Task):
+
             def __init__(self, bld, bic, objdir, objs, main, target, item):
                 super(gnatmake, self).__init__(self, env=bld.env)
                 self.objdir = objdir
@@ -382,9 +383,8 @@ class Item(object):
                     self.adaincludes.append(bld.path.make_node(i))
                 self.ldflags = bic.ldflags + item.data["ldflags"]
                 self.stlib = item.data["stlib"]
-                self.use = (
-                    item.data["use-before"] + bic.use + item.data["use-after"]
-                )
+                self.use = (item.data["use-before"] + bic.use +
+                            item.data["use-after"])
 
             def run(self):
                 cwd = self.get_cwd()
@@ -428,7 +428,9 @@ class Item(object):
         return target
 
     def ar(self, bld, source, target):
-        bld(rule="${AR} ${ARFLAGS} ${TGT} ${SRC}", source=source, target=target)
+        bld(rule="${AR} ${ARFLAGS} ${TGT} ${SRC}",
+            source=source,
+            target=target)
         return target
 
     def gzip(self, bld, source):
@@ -442,12 +444,13 @@ class Item(object):
         return target
 
     def tar(self, bld, source, remove, target):
+
         def run(task):
             import tarfile
 
-            tar = tarfile.TarFile(
-                task.outputs[0].abspath(), "w", format=tarfile.USTAR_FORMAT
-            )
+            tar = tarfile.TarFile(task.outputs[0].abspath(),
+                                  "w",
+                                  format=tarfile.USTAR_FORMAT)
             srcpath = bld.path.abspath() + "/"
             bldpath = bld.bldnode.abspath() + "/"
             for src in task.inputs:
@@ -463,6 +466,7 @@ class Item(object):
         return target
 
     def bin2c(self, bld, source, name=None, target=None):
+
         def run(task):
             cmd = [bld.env.BIN2C[0]]
             if name is not None:
@@ -488,6 +492,7 @@ class Item(object):
         return target
 
     def rtems_rap(self, bld, base, objects, libs, target):
+
         def run(task):
             cmd = [
                 bld.env.RTEMS_LD[0],
@@ -514,6 +519,7 @@ class Item(object):
 
 
 class GroupItem(Item):
+
     def __init__(self, uid, data):
         super(GroupItem, self).__init__(uid, data)
 
@@ -533,14 +539,14 @@ class GroupItem(Item):
 
 
 class ConfigFileItem(Item):
+
     def __init__(self, uid, data):
         super(ConfigFileItem, self).__init__(uid, data)
 
     def do_configure(self, conf, cic):
         content = self.substitute(conf, self.data["content"])
-        f = conf.bldnode.make_node(
-            conf.env.VARIANT + "/" + self.get(conf, "target")
-        )
+        f = conf.bldnode.make_node(conf.env.VARIANT + "/" +
+                                   self.get(conf, "target"))
         f.parent.mkdir()
         f.write(content)
         conf.env.append_value("cfg_files", f.abspath())
@@ -550,6 +556,7 @@ class ConfigFileItem(Item):
 
 
 class ConfigHeaderItem(Item):
+
     def __init__(self, uid, data):
         super(ConfigHeaderItem, self).__init__(uid, data)
 
@@ -567,6 +574,7 @@ class ConfigHeaderItem(Item):
 
 
 class StartFileItem(Item):
+
     def __init__(self, uid, data):
         super(StartFileItem, self).__init__(uid, data)
 
@@ -585,6 +593,7 @@ class StartFileItem(Item):
 
 
 class ObjectsItem(Item):
+
     def __init__(self, uid, data):
         super(ObjectsItem, self).__init__(uid, data)
 
@@ -614,6 +623,7 @@ class ObjectsItem(Item):
 
 
 class BSPItem(Item):
+
     def __init__(self, uid, data):
         super(BSPItem, self).__init__(uid, data)
         arch_bsps = bsps.setdefault(data["arch"].strip(), {})
@@ -621,9 +631,8 @@ class BSPItem(Item):
 
     def prepare_build(self, bld, bic):
         return BuildItemContext(
-            bic.includes
-            + bld.env.BSP_INCLUDES
-            + self.substitute(bld, self.data["includes"]),
+            bic.includes + bld.env.BSP_INCLUDES +
+            self.substitute(bld, self.data["includes"]),
             self.substitute(bld, self.data["cppflags"]),
             bld.env.BSP_CFLAGS + self.substitute(bld, self.data["cflags"]),
             [],
@@ -647,6 +656,7 @@ class BSPItem(Item):
 
 
 class LibraryItem(Item):
+
     def __init__(self, uid, data):
         super(LibraryItem, self).__init__(uid, data)
 
@@ -677,6 +687,7 @@ class LibraryItem(Item):
 
 
 class TestProgramItem(Item):
+
     def __init__(self, uid, data):
         super(TestProgramItem, self).__init__(uid, data)
         name = uid.split("/")[-1].upper().replace("-", "_")
@@ -689,9 +700,8 @@ class TestProgramItem(Item):
     def prepare_build(self, bld, bic):
         return BuildItemContext(
             bic.includes + self.substitute(bld, self.data["includes"]),
-            bic.cppflags
-            + bld.env[self.cppflags]
-            + self.substitute(bld, self.data["cppflags"]),
+            bic.cppflags + bld.env[self.cppflags] +
+            self.substitute(bld, self.data["cppflags"]),
             bic.cflags + self.substitute(bld, self.data["cflags"]),
             bic.cxxflags + self.substitute(bld, self.data["cxxflags"]),
             self.data["use-before"] + bic.use + self.data["use-after"],
@@ -717,6 +727,7 @@ class TestProgramItem(Item):
 
 
 class AdaTestProgramItem(TestProgramItem):
+
     def __init__(self, uid, data):
         super(AdaTestProgramItem, self).__init__(uid, data)
 
@@ -735,6 +746,7 @@ class AdaTestProgramItem(TestProgramItem):
 
 
 class OptionItem(Item):
+
     def __init__(self, uid, data):
         super(OptionItem, self).__init__(uid, data)
 
@@ -783,8 +795,7 @@ class OptionItem(Item):
 
     def _do_append_test_cppflags(self, conf, name, state):
         conf.env.append_value(
-            "TEST_" + name.upper().replace("-", "_") + "_CPPFLAGS", state
-        )
+            "TEST_" + name.upper().replace("-", "_") + "_CPPFLAGS", state)
 
     def _append_test_cppflags(self, conf, cic, value, arg):
         self._do_append_test_cppflags(conf, arg, value)
@@ -794,45 +805,34 @@ class OptionItem(Item):
         if value is not None and value % arg != 0:
             conf.fatal(
                 "Value '{}' for option '{}' is not aligned by '{}'".format(
-                    value, self.data["name"], arg
-                )
-            )
+                    value, self.data["name"], arg))
         return value
 
     def _assert_eq(self, conf, cic, value, arg):
         if value is not None and value != arg:
-            conf.fatal(
-                "Value '{}' for option '{}' is not equal to {}".format(
-                    value, self.data["name"], arg
-                )
-            )
+            conf.fatal("Value '{}' for option '{}' is not equal to {}".format(
+                value, self.data["name"], arg))
         return value
 
     def _assert_ge(self, conf, cic, value, arg):
         if value is not None and value < arg:
             conf.fatal(
-                "Value '{}' for option '{}' is not greater than or equal to {}".format(
-                    value, self.data["name"], arg
-                )
-            )
+                "Value '{}' for option '{}' is not greater than or equal to {}"
+                .format(value, self.data["name"], arg))
         return value
 
     def _assert_gt(self, conf, cic, value, arg):
         if value is not None and value <= arg:
             conf.fatal(
                 "Value '{}' for option '{}' is not greater than {}".format(
-                    value, self.data["name"], arg
-                )
-            )
+                    value, self.data["name"], arg))
         return value
 
     def _assert_in_interval(self, conf, cic, value, arg):
         if value is not None and (value < arg[0] or value > arg[1]):
             conf.fatal(
-                "Value '{}' for option '{}' is not in closed interval [{}, {}]".format(
-                    value, self.data["name"], arg[0], arg[1]
-                )
-            )
+                "Value '{}' for option '{}' is not in closed interval [{}, {}]"
+                .format(value, self.data["name"], arg[0], arg[1]))
         return value
 
     def _assert_int8(self, conf, cic, value, arg):
@@ -842,49 +842,38 @@ class OptionItem(Item):
         return self._assert_in_interval(conf, cic, value, [-32768, 32767])
 
     def _assert_int32(self, conf, cic, value, arg):
-        return self._assert_in_interval(
-            conf, cic, value, [-2147483648, 2147483647]
-        )
+        return self._assert_in_interval(conf, cic, value,
+                                        [-2147483648, 2147483647])
 
     def _assert_int64(self, conf, cic, value, arg):
         return self._assert_in_interval(
-            conf, cic, value, [-9223372036854775808, 9223372036854775807]
-        )
+            conf, cic, value, [-9223372036854775808, 9223372036854775807])
 
     def _assert_le(self, conf, cic, value, arg):
         if value is not None and value > arg:
             conf.fatal(
-                "Value '{}' for option '{}' is not less than or equal to {}".format(
-                    value, self.data["name"], arg
-                )
-            )
+                "Value '{}' for option '{}' is not less than or equal to {}".
+                format(value, self.data["name"], arg))
         return value
 
     def _assert_lt(self, conf, cic, value, arg):
         if value is not None and value >= arg:
-            conf.fatal(
-                "Value '{}' for option '{}' is not less than {}".format(
-                    value, self.data["name"], arg
-                )
-            )
+            conf.fatal("Value '{}' for option '{}' is not less than {}".format(
+                value, self.data["name"], arg))
         return value
 
     def _assert_ne(self, conf, cic, value, arg):
         if value is not None and value == arg:
             conf.fatal(
                 "Value '{}' for option '{}' is not unequal to {}".format(
-                    value, self.data["name"], arg
-                )
-            )
+                    value, self.data["name"], arg))
         return value
 
     def _assert_power_of_two(self, conf, cic, value, arg):
         if value is not None and (value <= 0 or (value & (value - 1)) != 0):
             conf.fatal(
                 "Value '{}' for option '{}' is not a power of two".format(
-                    value, self.data["name"]
-                )
-            )
+                    value, self.data["name"]))
         return value
 
     def _assert_uint8(self, conf, cic, value, arg):
@@ -897,9 +886,8 @@ class OptionItem(Item):
         return self._assert_in_interval(conf, cic, value, [0, 4294967295])
 
     def _assert_uint64(self, conf, cic, value, arg):
-        return self._assert_in_interval(
-            conf, cic, value, [0, 18446744073709551615]
-        )
+        return self._assert_in_interval(conf, cic, value,
+                                        [0, 18446744073709551615])
 
     def _check_cc(self, conf, cic, value, arg):
         result = conf.check_cc(
@@ -975,9 +963,8 @@ class OptionItem(Item):
         except configparser.NoOptionError:
             value = self.default_value(conf.env.ARCH_BSP, conf.env.ARCH_FAMILY)
         except ValueError as ve:
-            conf.fatal(
-                "Invalid value for configuration option {}: {}".format(name, ve)
-            )
+            conf.fatal("Invalid value for configuration option {}: {}".format(
+                name, ve))
         return value
 
     def _get_env(self, conf, cic, value, arg):
@@ -996,10 +983,8 @@ class OptionItem(Item):
             return eval(value)
         except Exception as e:
             conf.fatal(
-                "Value '{}' for option '{}' is an invalid integer expression: {}".format(
-                    value, name, e
-                )
-            )
+                "Value '{}' for option '{}' is an invalid integer expression: {}"
+                .format(value, name, e))
 
     def _get_string(self, conf, cic, value, arg):
         name = self.data["name"]
@@ -1029,18 +1014,15 @@ class OptionItem(Item):
 
     def _test_state_exclude(self, conf, name):
         conf.env.append_value(
-            "ENABLE", "TEST_" + name.upper().replace("-", "_") + "_EXCLUDE"
-        )
+            "ENABLE", "TEST_" + name.upper().replace("-", "_") + "_EXCLUDE")
 
     def _test_state_expected_fail(self, conf, name):
-        self._do_append_test_cppflags(
-            conf, name, "-DTEST_STATE_EXPECTED_FAIL=1"
-        )
+        self._do_append_test_cppflags(conf, name,
+                                      "-DTEST_STATE_EXPECTED_FAIL=1")
 
     def _test_state_indeterminate(self, conf, name):
-        self._do_append_test_cppflags(
-            conf, name, "-DTEST_STATE_INDETERMINATE=1"
-        )
+        self._do_append_test_cppflags(conf, name,
+                                      "-DTEST_STATE_INDETERMINATE=1")
 
     def _test_state_user_input(self, conf, name):
         self._do_append_test_cppflags(conf, name, "-DTEST_STATE_USER_INPUT=1")
@@ -1116,6 +1098,7 @@ class OptionItem(Item):
 
 
 class ScriptItem(Item):
+
     def __init__(self, uid, data):
         super(ScriptItem, self).__init__(uid, data)
 
@@ -1142,6 +1125,7 @@ class ScriptItem(Item):
 
 
 class ConfigItemContext(object):
+
     def __init__(self, cp, path_list):
         self.cp = cp
         self.options = set()
@@ -1152,9 +1136,9 @@ class ConfigItemContext(object):
 
 
 class BuildItemContext(object):
-    def __init__(
-        self, includes, cppflags, cflags, cxxflags, use, ldflags, objects
-    ):
+
+    def __init__(self, includes, cppflags, cflags, cxxflags, use, ldflags,
+                 objects):
         self.includes = includes
         self.cppflags = cppflags
         self.cflags = cflags
@@ -1289,39 +1273,45 @@ def options(ctx):
     rg.add_option(
         "--rtems-bsps",
         metavar="REGEX,...",
-        help="a comma-separated list of Python regular expressions which select the desired BSP variants (e.g. 'sparc/erc32'); it may be used in the bsp_defaults and bsp_list commands",
+        help=
+        "a comma-separated list of Python regular expressions which select the desired BSP variants (e.g. 'sparc/erc32'); it may be used in the bsp_defaults and bsp_list commands",
     )
     rg.add_option(
         "--rtems-compiler",
         metavar="COMPILER",
-        help="determines which compiler is used to list the BSP option defaults [default: 'gcc']; it may be used in the bsp_defaults command; valid compilers are: {}".format(
-            ", ".join(compilers)
-        ),
+        help=
+        "determines which compiler is used to list the BSP option defaults [default: 'gcc']; it may be used in the bsp_defaults command; valid compilers are: {}"
+        .format(", ".join(compilers)),
     )
     rg.add_option(
         "--rtems-config",
         metavar="CONFIG.INI,...",
-        help="a comma-separated list of paths to the BSP configuration option files [default: 'config.ini']; default option values can be obtained via the bsp_defaults command; it may be used in the configure command",
+        help=
+        "a comma-separated list of paths to the BSP configuration option files [default: 'config.ini']; default option values can be obtained via the bsp_defaults command; it may be used in the configure command",
     )
     rg.add_option(
         "--rtems-specs",
         metavar="SPECDIRS,...",
-        help="a comma-separated list of directory paths to build specification items [default: 'spec/build']; it may be used in the bsp_defaults, bsp_list, and configure commands",
+        help=
+        "a comma-separated list of directory paths to build specification items [default: 'spec/build']; it may be used in the bsp_defaults, bsp_list, and configure commands",
     )
     rg.add_option(
         "--rtems-tools",
         metavar="PREFIX,...",
-        help="a comma-separated list of prefix paths to tools, e.g. compiler, linker, etc. [default: the installation prefix]; tools are searched in the prefix path and also in a 'bin' subdirectory of the prefix path; it may be used in the configure command",
+        help=
+        "a comma-separated list of prefix paths to tools, e.g. compiler, linker, etc. [default: the installation prefix]; tools are searched in the prefix path and also in a 'bin' subdirectory of the prefix path; it may be used in the configure command",
     )
     rg.add_option(
         "--rtems-top-group",
         metavar="UID",
-        help="the UID of the top-level group [default: '/grp']; it may be used in the bsp_defaults and configure commands",
+        help=
+        "the UID of the top-level group [default: '/grp']; it may be used in the bsp_defaults and configure commands",
     )
     rg.add_option(
         "--rtems-version",
         metavar="VALUE",
-        help="sets the RTEMS major version number; it is intended for RTEMS maintainers and may be used in the bsp_defaults and configure commands",
+        help=
+        "sets the RTEMS major version number; it is intended for RTEMS maintainers and may be used in the bsp_defaults and configure commands",
     )
     rg.add_option(
         "--rtems-option",
@@ -1329,29 +1319,30 @@ def options(ctx):
         action="append",
         dest="rtems_options",
         default=[],
-        help="sets the option identified by KEY to the VALUE in the build specification; it is intended for RTEMS maintainers and may be used in the bsp_defaults and configure commands",
+        help=
+        "sets the option identified by KEY to the VALUE in the build specification; it is intended for RTEMS maintainers and may be used in the bsp_defaults and configure commands",
     )
 
 
 def check_environment(conf):
     for ev in [
-        "AR",
-        "AS",
-        "ASFLAGS",
-        "CC",
-        "CFLAGS",
-        "CPPFLAGS",
-        "CXX",
-        "CXXFLAGS",
-        "IFLAGS",
-        "LD",
-        "LIB",
-        "LINK_CC",
-        "LINK_CXX",
-        "LINKFLAGS",
-        "MFLAGS",
-        "RFLAGS",
-        "WFLAGS",
+            "AR",
+            "AS",
+            "ASFLAGS",
+            "CC",
+            "CFLAGS",
+            "CPPFLAGS",
+            "CXX",
+            "CXXFLAGS",
+            "IFLAGS",
+            "LD",
+            "LIB",
+            "LINK_CC",
+            "LINK_CXX",
+            "LINKFLAGS",
+            "MFLAGS",
+            "RFLAGS",
+            "WFLAGS",
     ]:
         if ev in os.environ:
             conf.msg("Environment variable set", ev, color="RED")
@@ -1390,10 +1381,8 @@ def inherit(conf, cp, bsp_map, arch, bsp, path):
         if not cp.has_section(base_variant):
             if (not arch in bsps) or (not base in bsps[arch]):
                 conf.fatal(
-                    "BSP variant '{}' cannot inherit options from not existing variant '{}'".format(
-                        variant, base_variant
-                    )
-                )
+                    "BSP variant '{}' cannot inherit options from not existing variant '{}'"
+                    .format(variant, base_variant))
             bsp_map[bsp] = base
             return base
         top = inherit(conf, cp, bsp_map, arch, base, path + [variant])
@@ -1416,20 +1405,15 @@ def resolve_option_inheritance(conf, cp):
         except:
             conf.fatal(
                 "Section name '{}' is a malformed 'arch/bsp' tuple".format(
-                    variant
-                )
-            )
+                    variant))
         inherit(conf, cp, bsp_map, arch, bsp, [])
     return bsp_map
 
 
 def check_compiler(ctx, compiler):
     if compiler not in compilers:
-        ctx.fatal(
-            "Specified compiler '{}' is not one of {}".format(
-                compiler, compilers
-            )
-        )
+        ctx.fatal("Specified compiler '{}' is not one of {}".format(
+            compiler, compilers))
 
 
 def get_compiler(conf, cp, variant):
@@ -1497,10 +1481,8 @@ def check_forbidden_options(ctx, opts):
     for o in opts:
         if getattr(ctx.options, "rtems_" + o):
             ctx.fatal(
-                "The --rtems-{} command line option is not allowed in the {} command".format(
-                    o.replace("_", "-"), ctx.cmd
-                )
-            )
+                "The --rtems-{} command line option is not allowed in the {} command"
+                .format(o.replace("_", "-"), ctx.cmd))
 
 
 def get_path_list(conf):
@@ -1520,10 +1502,8 @@ def get_top_group(ctx):
         top_group = "/grp"
     if top_group not in items:
         ctx.fatal(
-            "There is no top-level group with UID '{}' in the specification".format(
-                top_group
-            )
-        )
+            "There is no top-level group with UID '{}' in the specification".
+            format(top_group))
     return top_group
 
 
@@ -1535,8 +1515,7 @@ def prepare_rtems_options(conf):
             conf.rtems_options[k] = v
         except:
             conf.fatal(
-                "The RTEMS option '{}' is not in KEY=VALUE format".format(x)
-            )
+                "The RTEMS option '{}' is not in KEY=VALUE format".format(x))
     version = conf.options.rtems_version
     if version is not None:
         key = "__RTEMS_MAJOR__"
@@ -1574,7 +1553,8 @@ def append_variant_builds(bld):
     )
 
     for var in bld.env["VARIANTS"]:
-        for c in (BuildContext, CleanContext, InstallContext, UninstallContext):
+        for c in (BuildContext, CleanContext, InstallContext,
+                  UninstallContext):
             name = c.__name__.replace("Context", "").lower()
 
             class magic(c):
@@ -1607,9 +1587,8 @@ def build(bld):
         append_variant_builds(bld)
         return
     long_command_line_workaround(bld)
-    bic = BuildItemContext(
-        bld.env.ARCH_INCLUDES.split(), [], [], [], [], [], []
-    )
+    bic = BuildItemContext(bld.env.ARCH_INCLUDES.split(), [], [], [], [], [],
+                           [])
     bsps[bld.env.ARCH][bld.env.BSP_BASE].build(bld, bic)
     items[bld.env.TOPGROUP].build(bld, bic)
 
@@ -1618,6 +1597,7 @@ def add_log_filter(name):
     msg = "'" + name + "' finished successfully"
 
     class Filter:
+
         def filter(self, rec):
             return not msg in rec.getMessage()
 
@@ -1644,11 +1624,8 @@ def is_in_white_list(variant, white_list):
 
 def no_matches_error(ctx, white_list):
     if white_list:
-        ctx.fatal(
-            "No BSP matches with the specified patterns: '{}'".format(
-                "', '".join(white_list)
-            )
-        )
+        ctx.fatal("No BSP matches with the specified patterns: '{}'".format(
+            "', '".join(white_list)))
     else:
         ctx.fatal("The build specification contains no BSPs")
 
@@ -1673,18 +1650,14 @@ def bsp_defaults(ctx):
                 if not first:
                     print("")
                 first = False
-                print(
-                    """[{}]
+                print("""[{}]
 # Selects the compiler used to build the BSP (allowed values are "gcc" and
 # "clang").  Please note that the values of some options depend on the compiler
 # selection and changing the compiler may lead to unpredictable behaviour if
 # these options are not adjusted as well.  Use the --rtems-compiler command line
 # option to get the default values for a particular compiler via
 # ./waf bsp_defaults.
-COMPILER = {}""".format(
-                        variant, compiler
-                    )
-                )
+COMPILER = {}""".format(variant, compiler))
                 enable = [compiler, arch, variant]
                 bsp_item = bsps[arch][bsp]
                 family = arch + "/" + bsp_item.data["family"]
@@ -1697,8 +1670,8 @@ COMPILER = {}""".format(
 def bsp_list(ctx):
     """lists base BSP variants"""
     check_forbidden_options(
-        ctx, ["compiler", "config", "options", "tools", "top_group", "version"]
-    )
+        ctx,
+        ["compiler", "config", "options", "tools", "top_group", "version"])
     add_log_filter(ctx.cmd)
     load_items_from_options(ctx)
     white_list = get_white_list(ctx)
