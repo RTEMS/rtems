@@ -131,9 +131,15 @@ SYM(_start):
 	mv	a0, s1
 	call	bsp_start_on_secondary_processor
 
+	.section	.bsp_start_data, "aw"
+
+	.type	.Lsecondary_processor_go, @object
+
 #if __riscv_xlen == 32
+	.size	.Lsecondary_processor_go, 4
 	.align	2
 #elif __riscv_xlen == 64
+	.size	.Lsecondary_processor_go, 8
 	.align	3
 #endif
 
