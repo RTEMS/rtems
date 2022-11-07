@@ -1,6 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
+    can01: exclude
     exit03: exclude
     flashdisk01: exclude
     fsdosfsname01: exclude
