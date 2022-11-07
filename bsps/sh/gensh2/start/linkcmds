@@ -202,15 +202,15 @@ SECTIONS
     *(SORT_BY_NAME (SORT_BY_ALIGNMENT (.noinit*)))
   } > ram
 
-  .rtemsstackidle (NOLOAD) : {
-    *(SORT(.rtemsstack.idle*))
-  } > ram
-
-  _WorkAreaBase = . ;
+  .rtemsstackinterrupt (NOLOAD) : {
+    *(.rtemsstack.interrupt)
+  } > onchip_ram
 
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
-  } > onchip_ram
+  } > ram
+
+  _WorkAreaBase = . ;
 
   /* Stabs debugging sections.  */
   .stab 0 : { *(.stab) }

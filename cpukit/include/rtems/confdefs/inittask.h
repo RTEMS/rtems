@@ -122,8 +122,9 @@ RTEMS_STATIC_ASSERT(
   CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE_IS_TOO_SMALL
 );
 
+static RTEMS_SECTION( ".rtemsstack.userinit" )
 RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
-static char _RTEMS_tasks_User_task_storage[ CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE ];
+char _RTEMS_tasks_User_task_storage[ CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE ];
 
 const RTEMS_tasks_User_task_config _RTEMS_tasks_User_task_config = {
   {
