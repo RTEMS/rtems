@@ -173,18 +173,6 @@ RTEMS_STATIC_ASSERT(
   riscv_interrupt_frame_size
 );
 
-void _init(void);
-
-void _fini(void);
-
-void _init(void)
-{
-}
-
-void _fini(void)
-{
-}
-
 /**
  * @brief Performs processor dependent initialization.
  */
