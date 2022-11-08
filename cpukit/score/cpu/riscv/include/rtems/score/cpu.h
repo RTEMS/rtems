@@ -193,21 +193,19 @@ static inline bool _CPU_ISR_Is_enabled( unsigned long level )
 
 static inline void _CPU_ISR_Set_level( uint32_t level )
 {
-  if ( ( level & CPU_MODES_INTERRUPT_MASK) == 0 ) {
-    __asm__ volatile (
-      ".option push\n"
-      ".option arch, +zicsr\n"
-      "csrrs zero, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE ) "\n"
-      ".option pop"
-    );
-  } else {
-    __asm__ volatile (
-      ".option push\n"
-      ".option arch, +zicsr\n"
-      "csrrc zero, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE ) "\n"
-      ".option pop"
-    );
-  }
+  /*
+   * Where CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE, the only supported
+   * interrupt level allowed to set is 0 (interrupts enabled).  This constraint
+   * is enforced by the API level functions which return an error status for
+   * other interrupt levels.
+   */
+  (void) level;
+  __asm__ volatile (
+    ".option push\n"
+    ".option arch, +zicsr\n"
+    "csrrs zero, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE ) "\n"
+    ".option pop"
+  );
 }
 
 uint32_t _CPU_ISR_Get_level( void );
