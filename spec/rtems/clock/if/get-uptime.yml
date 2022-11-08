@@ -32,10 +32,11 @@ name: rtems_clock_get_uptime
 notes: null
 params:
 - description: |
-    is the pointer to a ${/c/if/timeval:/name} object.  When the directive call
-    is successful, the seconds and nanoseconds elapsed since some time point
-    during the system initialization and some point during the directive call
-    using ${/glossary/clock-monotonic:/term} will be stored in this object.
+    is the pointer to a ${/c/if/timespec:/name} object.  When the directive
+    call is successful, the seconds and nanoseconds elapsed since some time
+    point during the system initialization and some point during the directive
+    call using ${/glossary/clock-monotonic:/term} will be stored in this
+    object.
   dir: out
   name: uptime
 return:
