@@ -291,7 +291,6 @@ SHA256_Final(unsigned char digest[static SHA256_DIGEST_LENGTH], SHA256_CTX *ctx)
 	SHA256_Pad(ctx);
 
 	/* Write the hash */
-	be32enc_vect(digest, ctx->state, 32);
 	be32enc_vect(digest, ctx->state, SHA256_DIGEST_LENGTH);
 
 	/* Clear the context state */
