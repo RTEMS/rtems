@@ -338,8 +338,53 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
-  *enabled = false;
-  return RTEMS_UNSATISFIED;
+
+  if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
+    uint32_t interrupt_index;
+    uint32_t group;
+    uint32_t bit;
+    Per_CPU_Control *cpu;
+#ifdef RTEMS_SMP
+    uint32_t cpu_max;
+    uint32_t cpu_index;
+#endif
+
+    interrupt_index = RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector);
+    group = interrupt_index / 32;
+    bit = UINT32_C(1) << (interrupt_index % 32);
+
+#ifdef RTEMS_SMP
+    cpu_max = _SMP_Get_processor_maximum();
+
+    for (cpu_index = 0; cpu_index < cpu_max; ++cpu_index) {
+      volatile uint32_t *enable;
+
+      cpu = _Per_CPU_Get_by_index(cpu_index);
+      enable = cpu->cpu_per_cpu.plic_m_ie;
+
+      if (enable != NULL && (enable[group] & bit) != 0) {
+        *enabled = true;
+        return RTEMS_SUCCESSFUL;
+      }
+    }
+
+    *enabled = false;
+#else
+    cpu = _Per_CPU_Get_by_index(0);
+    *enabled = (cpu->cpu_per_cpu.plic_m_ie[group] & bit) != 0;
+#endif
+
+    return RTEMS_SUCCESSFUL;
+  }
+
+  if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
+    *enabled = (read_csr(mie) & MIP_MTIP) != 0;
+    return RTEMS_SUCCESSFUL;
+  }
+
+  _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
+  *enabled = (read_csr(mie) & MIP_MSIP) != 0;
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
