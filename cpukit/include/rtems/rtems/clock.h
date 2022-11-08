@@ -909,7 +909,7 @@ rtems_interval rtems_clock_get_ticks_since_boot( void );
  * @brief Gets the seconds and nanoseconds elapsed since some time point during
  *   the system initialization using CLOCK_MONOTONIC.
  *
- * @param[out] uptime is the pointer to a struct timeval object.  When the
+ * @param[out] uptime is the pointer to a struct timespec object.  When the
  *   directive call is successful, the seconds and nanoseconds elapsed since
  *   some time point during the system initialization and some point during the
  *   directive call using CLOCK_MONOTONIC will be stored in this object.
