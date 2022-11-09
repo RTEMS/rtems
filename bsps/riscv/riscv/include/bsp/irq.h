@@ -58,6 +58,8 @@
 
 #define BSP_INTERRUPT_VECTOR_COUNT RISCV_INTERRUPT_VECTOR_EXTERNAL(RISCV_MAXIMUM_EXTERNAL_INTERRUPTS)
 
+#define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+
 rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity

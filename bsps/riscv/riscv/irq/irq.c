@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
@@ -7,7 +9,7 @@
  */
 
 /*
- * Copyright (c) 2018 embedded brains GmbH
+ * Copyright (C) 2018, 2022 embedded brains GmbH
  *
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>
@@ -272,6 +274,19 @@ void bsp_interrupt_facility_initialize(void)
   fdt = bsp_fdt_get();
   riscv_clint_init(fdt);
   riscv_plic_init(fdt);
+}
+
+bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
+{
+  /*
+   * The PLIC interrupt ID of zero is reserved.  For example, this ID is used
+   * to indicate that no interrupt was claimed.
+   */
+  if (vector == RISCV_INTERRUPT_VECTOR_EXTERNAL(0)) {
+    return false;
+  }
+
+  return vector < (rtems_vector_number) BSP_INTERRUPT_VECTOR_COUNT;
 }
 
 rtems_status_code bsp_interrupt_get_attributes(
