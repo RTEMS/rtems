@@ -471,6 +471,12 @@ test-context:
   member: |
     rtems_vector_number test_vector
 - brief: |
+    If this member is true, then the testable interrupt vector was enabled at
+    the test case begin.
+  description: null
+  member: |
+    bool test_vector_was_enabled
+- brief: |
     This member provides the attributes of the testable interrupt vector.
   description: null
   member: |
@@ -546,6 +552,11 @@ test-setup:
 
     ctx->initialized_during_setup = bsp_interrupt_is_initialized();
     ctx->test_vector = GetTestableInterruptVector( NULL );
+    ctx->test_vector_was_enabled = false;
+    (void) rtems_interrupt_vector_is_enabled(
+      ctx->test_vector,
+      &ctx->test_vector_was_enabled
+    );
     sc = rtems_interrupt_get_attributes( ctx->test_vector, &ctx->attributes );
     T_rsc_success( sc );
   description: null
@@ -725,7 +736,13 @@ test-support: |
     ctx->visited_entries = visited_entries + 1;
   }
 test-target: testsuites/validation/tc-intr-entry-remove.c
-test-teardown: null
+test-teardown:
+  brief: null
+  code: |
+    if ( ctx->test_vector_was_enabled ) {
+      (void) rtems_interrupt_vector_enable( ctx->test_vector );
+    }
+  description: null
 text: ${.:text-template}
 transition-map:
 - enabled-by: true
