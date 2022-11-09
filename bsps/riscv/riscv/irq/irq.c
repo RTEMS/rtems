@@ -346,10 +346,27 @@ rtems_status_code bsp_interrupt_is_pending(
   return RTEMS_SUCCESSFUL;
 }
 
+static inline rtems_status_code riscv_raise_on(
+  rtems_vector_number vector,
+  uint32_t            cpu_index
+)
+{
+  Per_CPU_Control *cpu;
+
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  if (vector != RISCV_INTERRUPT_VECTOR_SOFTWARE) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  cpu = _Per_CPU_Get_by_index(cpu_index);
+  *cpu->cpu_per_cpu.clint_msip = 0x1;
+  return RTEMS_SUCCESSFUL;
+}
+
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+  return riscv_raise_on(vector, rtems_scheduler_get_processor());
 }
 
 #if defined(RTEMS_SMP)
@@ -358,8 +375,7 @@ rtems_status_code bsp_interrupt_raise_on(
   uint32_t            cpu_index
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+  return riscv_raise_on(vector, cpu_index);
 }
 #endif
 
