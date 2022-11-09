@@ -294,6 +294,21 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  attributes->is_maskable = true;
+  attributes->can_enable = true;
+  attributes->maybe_enable = true;
+  attributes->can_disable = true;
+  attributes->maybe_disable = true;
+  attributes->can_raise = (vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
+  attributes->can_raise_on = attributes->can_raise;
+  attributes->cleared_by_acknowledge = true;
+  attributes->can_get_affinity = RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector);
+  attributes->can_set_affinity = attributes->can_get_affinity;
+
+  if (vector == RISCV_INTERRUPT_VECTOR_SOFTWARE) {
+    attributes->trigger_signal = RTEMS_INTERRUPT_NO_SIGNAL;
+  }
+
   return RTEMS_SUCCESSFUL;
 }
 
