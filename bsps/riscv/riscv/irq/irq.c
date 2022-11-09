@@ -437,8 +437,16 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
     }
 
     rtems_interrupt_lock_release(&riscv_plic_lock, &lock_context);
+    return RTEMS_SUCCESSFUL;
   }
 
+  if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
+    set_csr(mie, MIP_MTIP);
+    return RTEMS_SUCCESSFUL;
+  }
+
+  _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
+  set_csr(mie, MIP_MSIP);
   return RTEMS_SUCCESSFUL;
 }
 
