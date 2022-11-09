@@ -234,6 +234,12 @@ typedef struct {
   rtems_vector_number test_vector;
 
   /**
+   * @brief If this member is true, then the testable interrupt vector was
+   *   enabled at the test case begin.
+   */
+  bool test_vector_was_enabled;
+
+  /**
    * @brief This member provides the attributes of the testable interrupt
    *   vector.
    */
@@ -1088,6 +1094,11 @@ static void RtemsIntrReqEntryRemove_Setup(
 
   ctx->initialized_during_setup = bsp_interrupt_is_initialized();
   ctx->test_vector = GetTestableInterruptVector( NULL );
+  ctx->test_vector_was_enabled = false;
+  (void) rtems_interrupt_vector_is_enabled(
+    ctx->test_vector,
+    &ctx->test_vector_was_enabled
+  );
   sc = rtems_interrupt_get_attributes( ctx->test_vector, &ctx->attributes );
   T_rsc_success( sc );
 }
@@ -1099,6 +1110,24 @@ static void RtemsIntrReqEntryRemove_Setup_Wrap( void *arg )
   ctx = arg;
   ctx->Map.in_action_loop = false;
   RtemsIntrReqEntryRemove_Setup( ctx );
+}
+
+static void RtemsIntrReqEntryRemove_Teardown(
+  RtemsIntrReqEntryRemove_Context *ctx
+)
+{
+  if ( ctx->test_vector_was_enabled ) {
+    (void) rtems_interrupt_vector_enable( ctx->test_vector );
+  }
+}
+
+static void RtemsIntrReqEntryRemove_Teardown_Wrap( void *arg )
+{
+  RtemsIntrReqEntryRemove_Context *ctx;
+
+  ctx = arg;
+  ctx->Map.in_action_loop = false;
+  RtemsIntrReqEntryRemove_Teardown( ctx );
 }
 
 static void RtemsIntrReqEntryRemove_Prepare(
@@ -1292,7 +1321,7 @@ static size_t RtemsIntrReqEntryRemove_Scope( void *arg, char *buf, size_t n )
 static T_fixture RtemsIntrReqEntryRemove_Fixture = {
   .setup = RtemsIntrReqEntryRemove_Setup_Wrap,
   .stop = NULL,
-  .teardown = NULL,
+  .teardown = RtemsIntrReqEntryRemove_Teardown_Wrap,
   .scope = RtemsIntrReqEntryRemove_Scope,
   .initial_context = &RtemsIntrReqEntryRemove_Instance
 };

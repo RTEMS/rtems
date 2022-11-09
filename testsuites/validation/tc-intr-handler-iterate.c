@@ -134,6 +134,12 @@ typedef struct {
   rtems_vector_number test_vector;
 
   /**
+   * @brief If this member is true, then the testable interrupt vector was
+   *   enabled at the test case begin.
+   */
+  bool test_vector_was_enabled;
+
+  /**
    * @brief If this member is true, then the service shall be initialized.
    */
   bool initialized;
@@ -506,6 +512,11 @@ static void RtemsIntrReqHandlerIterate_Setup(
 
   ctx->initialized_during_setup = bsp_interrupt_is_initialized();
   ctx->test_vector = GetTestableInterruptVector( NULL );
+  ctx->test_vector_was_enabled = false;
+  (void) rtems_interrupt_vector_is_enabled(
+    ctx->test_vector,
+    &ctx->test_vector_was_enabled
+  );
   rtems_interrupt_entry_initialize(
     &ctx->entry,
     EntryRoutine,
@@ -527,6 +538,32 @@ static void RtemsIntrReqHandlerIterate_Setup_Wrap( void *arg )
   ctx = arg;
   ctx->Map.in_action_loop = false;
   RtemsIntrReqHandlerIterate_Setup( ctx );
+}
+
+static void RtemsIntrReqHandlerIterate_Teardown(
+  RtemsIntrReqHandlerIterate_Context *ctx
+)
+{
+  rtems_status_code sc;
+
+  sc = rtems_interrupt_entry_remove(
+    ctx->test_vector,
+    &ctx->entry
+  );
+  T_rsc_success( sc );
+
+  if ( ctx->test_vector_was_enabled ) {
+    (void) rtems_interrupt_vector_enable( ctx->test_vector );
+  }
+}
+
+static void RtemsIntrReqHandlerIterate_Teardown_Wrap( void *arg )
+{
+  RtemsIntrReqHandlerIterate_Context *ctx;
+
+  ctx = arg;
+  ctx->Map.in_action_loop = false;
+  RtemsIntrReqHandlerIterate_Teardown( ctx );
 }
 
 static void RtemsIntrReqHandlerIterate_Action(
@@ -586,7 +623,7 @@ static size_t RtemsIntrReqHandlerIterate_Scope(
 static T_fixture RtemsIntrReqHandlerIterate_Fixture = {
   .setup = RtemsIntrReqHandlerIterate_Setup_Wrap,
   .stop = NULL,
-  .teardown = NULL,
+  .teardown = RtemsIntrReqHandlerIterate_Teardown_Wrap,
   .scope = RtemsIntrReqHandlerIterate_Scope,
   .initial_context = &RtemsIntrReqHandlerIterate_Instance
 };
