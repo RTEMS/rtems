@@ -567,6 +567,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
+#ifdef RTEMS_SMP
 rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity
@@ -595,7 +596,7 @@ rtems_status_code bsp_interrupt_set_affinity(
       return RTEMS_SUCCESSFUL;
     }
 
-    bsp_fatal(RISCV_FATAL_INVALID_INTERRUPT_AFFINITY);
+    return RTEMS_INVALID_NUMBER;
   }
 
   return RTEMS_UNSATISFIED;
@@ -606,8 +607,6 @@ rtems_status_code bsp_interrupt_get_affinity(
   Processor_mask *affinity
 )
 {
-  _Processor_mask_Zero(affinity);
-
   if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
     uint32_t interrupt_index;
     volatile uint32_t *enable;
@@ -616,7 +615,6 @@ rtems_status_code bsp_interrupt_get_affinity(
     enable = riscv_plic_irq_to_cpu[interrupt_index - 1];
 
     if (enable != NULL) {
-#ifdef RTEMS_SMP
       uint32_t cpu_max;
       uint32_t cpu_index;
 
@@ -632,18 +630,13 @@ rtems_status_code bsp_interrupt_get_affinity(
           break;
         }
       }
-#else
-      Per_CPU_Control *cpu;
-
-      cpu = _Per_CPU_Get_by_index(0);
-
-      if (enable == cpu->cpu_per_cpu.plic_m_ie)
-        _Processor_mask_Set(affinity, 0);
-#endif
     } else {
       _Processor_mask_Assign(affinity, _SMP_Get_online_processors());
     }
+
+    return RTEMS_SUCCESSFUL;
   }
 
-  return RTEMS_SUCCESSFUL;
+  return RTEMS_UNSATISFIED;
 }
+#endif
