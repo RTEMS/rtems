@@ -48,6 +48,8 @@
 
 #include <libfdt.h>
 
+static volatile RISCV_PLIC_regs *riscv_plic;
+
 volatile RISCV_CLINT_regs *riscv_clint;
 
 /*
@@ -186,6 +188,8 @@ static void riscv_plic_init(const void *fdt)
 #endif
   }
 
+  riscv_plic = plic;
+
   val = fdt_getprop(fdt, node, "riscv,ndev", &len);
   if (val == NULL || len != 4) {
     bsp_fatal(RISCV_FATAL_INVALID_PLIC_NDEV_IN_DEVICE_TREE);
@@ -319,8 +323,27 @@ rtems_status_code bsp_interrupt_is_pending(
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
-  *pending = false;
-  return RTEMS_UNSATISFIED;
+
+  if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
+    uint32_t interrupt_index;
+    uint32_t group;
+    uint32_t bit;
+
+    interrupt_index = RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector);
+    group = interrupt_index / 32;
+    bit = UINT32_C(1) << (interrupt_index % 32);
+    *pending = ((riscv_plic->pending[group] & bit) != 0);
+    return RTEMS_SUCCESSFUL;
+  }
+
+  if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
+    *pending = (read_csr(mip) & MIP_MTIP) != 0;
+    return RTEMS_SUCCESSFUL;
+  }
+
+  _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
+  *pending = (read_csr(mip) & MIP_MSIP) != 0;
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
