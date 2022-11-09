@@ -256,7 +256,7 @@ int rtems_fdt_register (const void* blob, rtems_fdt_handle* handle);
 
 /**
  * Unload a device tree blob or DTB file and release any memory allocated when
- * loading. The blob is removed from the list of registered.
+ * loading. The blob is removed from the list if registered.
  *
  * @param blob_desc A valid blob descriptor.
  * @return int If less than 0 it is an error code else 0 is return on success.
@@ -296,7 +296,7 @@ int rtems_fdt_get_mem_rsv (rtems_fdt_handle* handle,
  * larger string, such as a full path.
  *
  * @param blob_desc A valid blob descriptor.
- * @param arentoffset Structure block offset of a node
+ * @param parentoffset Structure block offset of a node
  * @param name Name of the subnode to locate.
  * @param namelen Number of characters of name to consider.
  * @return int If less than 0 it is an error code else the node offset is
@@ -345,7 +345,9 @@ int rtems_fdt_path_offset (rtems_fdt_handle* handle, const char* path);
  *
  * @param handle The FDT handle to the current blob.
  * @param nodeoffset Structure block offset of the starting node.
- * @param length Pointer to an integer variable (will be overwritten) or NULL.
+ * @param length Pointer to an integer variable or NULL. If non-NULL, this will
+ *               be overwritten with either the length in bytes or the error
+ *               code.
  * @return const char* The node's name on success or NULL on error. The length
  *                     if non-NULL will hold the error code.
  */
@@ -378,7 +380,9 @@ int rtems_fdt_next_prop_offset(rtems_fdt_handle* handle, int propoffset);
  * @param handle The FDT handle to the current blob.
  * @param propoffset Property offset
  * @param name If not NULL set the pointer to the name string.
- * @param length Pointer to an integer variable (will be overwritten) or NULL.
+ * @param length Pointer to an integer variable or NULL. If non-NULL, this will
+ *               be overwritten with either the length in bytes or the error
+ *               code.
  * @return const void* The node's value data.
  */
 const void* rtems_fdt_getprop_by_offset(rtems_fdt_handle* handle,
@@ -395,8 +399,9 @@ const void* rtems_fdt_getprop_by_offset(rtems_fdt_handle* handle,
  * @param nodeoffset Offset of the node whose property to find
  * @param name The name of the property to find
  * @param namelen The number of characters of name to consider
- * @param length A pointer to an integer variable (will be overwritten) or
- *               NULL.
+ * @param length Pointer to an integer variable or NULL. If non-NULL, this will
+ *               be overwritten with either the length in bytes or the error
+ *               code.
  * @return const void* The node's property on success or NULL on error. The
  *                     length if non-NULL will hold the error code.
  */
@@ -416,8 +421,9 @@ const void *rtems_fdt_getprop_namelen (rtems_fdt_handle* handle,
  * @param handle The FDT handle to the current blob.
  * @param nodeoffset The offset of the node whose property to find.
  * @param name The name of the property to find.
- * @param length A pointer to an integer variable (will be overwritten) or
- *               NULL.
+ * @param length Pointer to an integer variable or NULL. If non-NULL, this will
+ *               be overwritten with either the length in bytes or the error
+ *               code.
  * @return const void* The node's property on success or NULL on error. The
  *                     length if non-NULL will hold the error code.
  */
@@ -427,7 +433,7 @@ const void *rtems_fdt_getprop (rtems_fdt_handle* handle,
                                int*              length);
 
 /**
- * Retrieve the phandle of a given of the device tree node at structure block
+ * Retrieve the phandle of the device tree node at structure block
  * offset nodeoffset.
  *
  * @param handle The FDT handle to the current blob.
