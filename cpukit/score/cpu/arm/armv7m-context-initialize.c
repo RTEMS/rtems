@@ -61,7 +61,7 @@ void _CPU_Context_Initialize(
   context->register_sp = stack_area_end;
 
   if ( tls_area != NULL ) {
-    _TLS_Initialize_area( tls_area );
+    context->thread_id = (uint32_t) _TLS_Initialize_area( tls_area );
   }
 }
 
