@@ -44,6 +44,7 @@
 
 #include <rtems/score/percpu.h>
 #include <rtems/score/riscv-utility.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/smpimpl.h>
 
 #include <libfdt.h>
@@ -176,6 +177,11 @@ static void riscv_clint_init(const void *fdt)
     if (cpu_index >= rtems_configuration_get_maximum_processors()) {
       continue;
     }
+
+    if ( _Scheduler_Initial_assignments[ cpu_index ].scheduler == NULL ) {
+      /* Skip not configured processor */
+      continue;
+    }
 #else
     if (hart_index != RISCV_BOOT_HARTID) {
       continue;
@@ -249,6 +255,11 @@ static void riscv_plic_init(const void *fdt)
 #ifdef RTEMS_SMP
     cpu_index = _RISCV_Map_hardid_to_cpu_index(hart_index);
     if (cpu_index >= rtems_configuration_get_maximum_processors()) {
+      continue;
+    }
+
+    if ( _Scheduler_Initial_assignments[ cpu_index ].scheduler == NULL ) {
+      /* Skip not configured processor */
       continue;
     }
 #else
