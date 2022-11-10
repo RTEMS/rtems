@@ -125,6 +125,27 @@ static void riscv_clint_per_cpu_init(
   cpu->cpu_per_cpu.clint_mtimecmp = &clint->mtimecmp[index];
 }
 
+static void riscv_plic_per_cpu_init(
+  volatile RISCV_PLIC_regs *plic,
+  uint32_t enable_register_count,
+  Per_CPU_Control *cpu,
+  uint32_t index
+)
+{
+  volatile uint32_t *enable;
+  uint32_t i;
+
+  plic->harts[index].priority_threshold = 0;
+
+  enable = &plic->enable[index][0];
+  cpu->cpu_per_cpu.plic_m_ie = enable;
+  cpu->cpu_per_cpu.plic_hart_regs = &plic->harts[index];
+
+  for (i = 0; i < enable_register_count; ++i) {
+    enable[i] = 0;
+  }
+}
+
 static void riscv_clint_init(const void *fdt)
 {
   volatile RISCV_CLINT_regs *clint;
@@ -214,56 +235,44 @@ static void riscv_plic_init(const void *fdt)
 
   for (i = 0; i < len; i += 8) {
     uint32_t hart_index;
-    uint8_t mie_regs;
+    uint32_t enable_register_count;
+    uint32_t cpu_index;
 
     /*
      * Interrupt enable  registers with 32-bit alignment based on
      * number of interrupts.
      */
-    mie_regs =  (ndev + 0x1f) & ~(0x1f);
+    enable_register_count = RTEMS_ALIGN_UP(ndev, 32);
 
     hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
+
 #ifdef RTEMS_SMP
-    if (hart_index < RISCV_BOOT_HARTID) {
+    cpu_index = _RISCV_Map_hardid_to_cpu_index(hart_index);
+    if (cpu_index >= rtems_configuration_get_maximum_processors()) {
       continue;
-    }
-
-    hart_index = _RISCV_Map_hardid_to_cpu_index(hart_index);
-    if (hart_index >= rtems_configuration_get_maximum_processors()) {
-      continue;
-    }
-
-    interrupt_index = fdt32_to_cpu(val[i / 4 + 1]);
-    if (interrupt_index != RISCV_INTERRUPT_EXTERNAL_MACHINE) {
-      continue;
-    }
-
-    plic->harts[i / 8].priority_threshold = 0;
-
-    cpu = _Per_CPU_Get_by_index(hart_index);
-    cpu->cpu_per_cpu.plic_hart_regs = &plic->harts[i / 8];
-    cpu->cpu_per_cpu.plic_m_ie = &plic->enable[i / 8][0];
-
-    for (interrupt_index = 0; interrupt_index < mie_regs; ++interrupt_index) {
-      cpu->cpu_per_cpu.plic_m_ie[interrupt_index] = 0;
     }
 #else
     if (hart_index != RISCV_BOOT_HARTID) {
       continue;
     }
 
+    cpu_index = 0;
+#endif
+
     interrupt_index = fdt32_to_cpu(val[i / 4 + 1]);
     if (interrupt_index != RISCV_INTERRUPT_EXTERNAL_MACHINE) {
       continue;
     }
-    plic->harts[i / 8].priority_threshold = 0;
 
-    cpu = _Per_CPU_Get_by_index(0);
-    cpu->cpu_per_cpu.plic_hart_regs = &plic->harts[i / 8];
-    cpu->cpu_per_cpu.plic_m_ie = &plic->enable[i / 8][0];
-    for (interrupt_index = 0; interrupt_index < mie_regs; ++interrupt_index) {
-      cpu->cpu_per_cpu.plic_m_ie[interrupt_index] = 0;
-    }
+    riscv_plic_per_cpu_init(
+      plic,
+      enable_register_count,
+      _Per_CPU_Get_by_index(cpu_index),
+      (uint32_t) (i / 8)
+    );
+
+#ifndef RTEMS_SMP
+    break;
 #endif
   }
 
