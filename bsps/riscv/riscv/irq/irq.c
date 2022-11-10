@@ -115,6 +115,16 @@ void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
   }
 }
 
+static void riscv_clint_per_cpu_init(
+  volatile RISCV_CLINT_regs *clint,
+  Per_CPU_Control *cpu,
+  uint32_t index
+)
+{
+  cpu->cpu_per_cpu.clint_msip = &clint->msip[index];
+  cpu->cpu_per_cpu.clint_mtimecmp = &clint->mtimecmp[index];
+}
+
 static void riscv_clint_init(const void *fdt)
 {
   volatile RISCV_CLINT_regs *clint;
@@ -136,30 +146,31 @@ static void riscv_clint_init(const void *fdt)
 
   for (i = 0; i < len; i += 16) {
     uint32_t hart_index;
-    Per_CPU_Control *cpu;
+    uint32_t cpu_index;
 
     hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
+
 #ifdef RTEMS_SMP
-    if (hart_index < RISCV_BOOT_HARTID) {
+    cpu_index = _RISCV_Map_hardid_to_cpu_index(hart_index);
+    if (cpu_index >= rtems_configuration_get_maximum_processors()) {
       continue;
     }
-
-    hart_index = _RISCV_Map_hardid_to_cpu_index(hart_index);
-    if (hart_index >= rtems_configuration_get_maximum_processors()) {
-      continue;
-    }
-
-    cpu = _Per_CPU_Get_by_index(hart_index);
-    cpu->cpu_per_cpu.clint_msip = &clint->msip[i / 16];
-    cpu->cpu_per_cpu.clint_mtimecmp = &clint->mtimecmp[i / 16];
 #else
     if (hart_index != RISCV_BOOT_HARTID) {
       continue;
     }
 
-    cpu = _Per_CPU_Get_by_index(0);
-    cpu->cpu_per_cpu.clint_msip = &clint->msip[i / 16];
-    cpu->cpu_per_cpu.clint_mtimecmp = &clint->mtimecmp[i / 16];
+    cpu_index = 0;
+#endif
+
+    riscv_clint_per_cpu_init(
+      clint,
+      _Per_CPU_Get_by_index(cpu_index),
+      (uint32_t) (i / 16)
+    );
+
+#ifndef RTEMS_SMP
+    break;
 #endif
   }
 }
