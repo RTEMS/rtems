@@ -390,6 +390,12 @@ void CallWithinISRSubmit( CallWithinISRRequest *request );
 
 void CallWithinISRWait( const CallWithinISRRequest *request );
 
+void CallWithinISRRaise( void );
+
+void CallWithinISRClear( void );
+
+rtems_vector_number CallWithinISRGetVector( void );
+
 typedef struct {
   Thread_queue_Operations        tq_ops;
   const Thread_queue_Operations *wrapped_ops;

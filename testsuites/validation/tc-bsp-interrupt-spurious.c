@@ -110,6 +110,12 @@ typedef struct {
  */
 typedef struct {
   /**
+   * @brief This member references the interrupt entry to restore during test
+   *   case teardown.
+   */
+  rtems_interrupt_entry *entry_to_restore;
+
+  /**
    * @brief This member provides a jump buffer to return from the fatal error.
    */
   jmp_buf before_call;
@@ -118,11 +124,6 @@ typedef struct {
    * @brief This member provides an interrupt entry to be dispatched.
    */
   rtems_interrupt_entry entry;
-
-  /**
-   * @brief If this member is true, then the interrupt shall be cleared.
-   */
-  bool do_clear;
 
   /**
    * @brief This member is true, then an interrupt occurred.
@@ -234,14 +235,7 @@ static void Disable( const Context *ctx )
 static void ProcessInterrupt( Context *ctx )
 {
   ctx->interrupt_occurred = true;
-
-  if ( ctx->do_clear ) {
-    rtems_status_code sc;
-
-    sc = rtems_interrupt_clear( ctx->test_vector );
-    T_rsc_success( sc );
-  }
-
+  CallWithinISRClear();
   Disable( ctx );
 }
 
@@ -424,20 +418,15 @@ static void BspReqInterruptSpurious_Setup(
   BspReqInterruptSpurious_Context *ctx
 )
 {
-  rtems_interrupt_attributes attr = {
-    .can_raise = true
-  };
   rtems_status_code sc;
 
-  ctx->test_vector = GetTestableInterruptVector( &attr );
+  ctx->first = NULL;
+  ctx->test_vector = CallWithinISRGetVector();
   T_assert_lt_u32( ctx->test_vector, BSP_INTERRUPT_VECTOR_COUNT );
   ctx->first = &bsp_interrupt_handler_table[
     bsp_interrupt_handler_index( ctx->test_vector )
   ];
-
-  sc = rtems_interrupt_get_attributes( ctx->test_vector, &attr );
-  T_rsc_success( sc );
-  ctx->do_clear = attr.can_clear && !attr.cleared_by_acknowledge;
+  ctx->entry_to_restore = *ctx->first;
 
   rtems_interrupt_entry_initialize( &ctx->entry, EntryRoutine, ctx, "Info" );
   test_case_active = true;
@@ -459,6 +448,10 @@ static void BspReqInterruptSpurious_Teardown(
 {
   SetFatalHandler( NULL, NULL );
   test_case_active = false;
+
+  if ( ctx->first != NULL ) {
+    *ctx->first = ctx->entry_to_restore;
+  }
 }
 
 static void BspReqInterruptSpurious_Teardown_Wrap( void *arg )
@@ -487,12 +480,9 @@ static void BspReqInterruptSpurious_Action(
   } else
   #endif
   {
-    rtems_status_code sc;
-
     (void) rtems_interrupt_vector_enable( ctx->test_vector );
 
-    sc = rtems_interrupt_raise( ctx->test_vector );
-    T_rsc_success( sc );
+    CallWithinISRRaise();
 
     while ( !ctx->interrupt_occurred ) {
       /* Wait */

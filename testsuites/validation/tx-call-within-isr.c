@@ -5,12 +5,13 @@
  *
  * @ingroup RTEMSTestSuites
  *
- * @brief This source file contains the implementation of CallWithinISR(),
+ * @brief This source file contains the implementation of CallWithinISRClear(),
+ *   CallWithinISRGetVector(), CallWithinISR(), CallWithinISRRaise(),
  *   CallWithinISRSubmit(), and CallWithinISRWait().
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021, 2022 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -44,6 +45,7 @@
 #include <rtems/score/chainimpl.h>
 
 #include <bsp.h>
+#include <bsp/irq-generic.h>
 
 /* Some target architectures need this variable for <tm27.h> */
 uint32_t Interrupt_nest;
@@ -64,6 +66,16 @@ static CallWithinISRContext CallWithinISRInstance = {
   .pending = CHAIN_INITIALIZER_EMPTY( CallWithinISRInstance.pending )
 };
 
+void CallWithinISRRaise( void )
+{
+  Cause_tm27_intr();
+}
+
+void CallWithinISRClear( void )
+{
+  Clear_tm27_intr();
+}
+
 static void CallWithinISRHandler( rtems_vector_number vector )
 {
   CallWithinISRContext *ctx;
@@ -71,7 +83,7 @@ static void CallWithinISRHandler( rtems_vector_number vector )
   (void) vector;
   ctx = &CallWithinISRInstance;
 
-  Clear_tm27_intr();
+  CallWithinISRClear();
 
   while ( true ) {
     rtems_interrupt_lock_context lock_context;
@@ -114,7 +126,7 @@ void CallWithinISRSubmit( CallWithinISRRequest *request )
   _Chain_Append_unprotected( &ctx->pending, &request->node );
   rtems_interrupt_lock_release( &ctx->lock, &lock_context );
 
-  Cause_tm27_intr();
+  CallWithinISRRaise();
 }
 
 void CallWithinISRWait( const CallWithinISRRequest *request )
@@ -122,6 +134,45 @@ void CallWithinISRWait( const CallWithinISRRequest *request )
   while ( _Atomic_Load_uint( &request->done, ATOMIC_ORDER_ACQUIRE ) == 0 ) {
     /* Wait */
   }
+}
+
+static void CallWithinISRIsHandlerInstalled(
+  void                   *arg,
+  const char             *info,
+  rtems_option            option,
+  rtems_interrupt_handler handler,
+  void                   *handler_arg
+)
+{
+  (void) info;
+  (void) option;
+  (void) handler_arg;
+
+  if ( handler == (rtems_interrupt_handler) CallWithinISRHandler ) {
+    *(bool *) arg = true;
+  }
+}
+
+rtems_vector_number CallWithinISRGetVector( void )
+{
+  rtems_vector_number vector;
+
+  for ( vector = 0; vector < BSP_INTERRUPT_VECTOR_COUNT; ++vector ) {
+    bool installed;
+
+    installed = false;
+    (void) rtems_interrupt_handler_iterate(
+      vector,
+      CallWithinISRIsHandlerInstalled,
+      &installed
+    );
+
+    if ( installed ) {
+      return vector;
+    }
+  }
+
+  return UINT32_MAX;
 }
 
 static void CallWithinISRInitialize( void )
