@@ -78,7 +78,7 @@ void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
   mcause <<= 1;
 
   if (mcause == (RISCV_INTERRUPT_TIMER_MACHINE << 1)) {
-    bsp_interrupt_handler_dispatch(RISCV_INTERRUPT_VECTOR_TIMER);
+    bsp_interrupt_handler_dispatch_unchecked(RISCV_INTERRUPT_VECTOR_TIMER);
   } else if (mcause == (RISCV_INTERRUPT_EXTERNAL_MACHINE << 1)) {
     volatile RISCV_PLIC_hart_regs *plic_hart_regs;
     uint32_t interrupt_index;
@@ -109,8 +109,10 @@ void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
 
 #ifdef RTEMS_SMP
     _SMP_Inter_processor_interrupt_handler(cpu_self);
+    bsp_interrupt_handler_dispatch_unlikely(RISCV_INTERRUPT_VECTOR_SOFTWARE);
+#else
+    bsp_interrupt_handler_dispatch_unchecked(RISCV_INTERRUPT_VECTOR_SOFTWARE);
 #endif
-    bsp_interrupt_handler_dispatch(RISCV_INTERRUPT_VECTOR_SOFTWARE);
   } else {
     bsp_fatal(RISCV_FATAL_UNEXPECTED_INTERRUPT_EXCEPTION);
   }

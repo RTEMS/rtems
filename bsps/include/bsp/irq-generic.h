@@ -463,6 +463,35 @@ static inline void bsp_interrupt_dispatch_entries(
  * This function does not validate the vector number.  If the vector number is
  * out of range, then the behaviour is undefined.
  *
+ * The function assumes that no handlers are installed at the vector.  In this
+ * case, no operation is performed.
+ *
+ * In uniprocessor configurations, you can call this function within every
+ * context which can be disabled via rtems_interrupt_local_disable().
+ *
+ * In SMP configurations, you can call this function in every context.
+ *
+ * @param vector is the vector number.
+ */
+static inline void bsp_interrupt_handler_dispatch_unlikely(
+  rtems_vector_number vector
+)
+{
+  const rtems_interrupt_entry *entry;
+
+  entry = bsp_interrupt_entry_load_first( vector );
+
+  if ( RTEMS_PREDICT_FALSE( entry != NULL ) ) {
+    bsp_interrupt_dispatch_entries( entry );
+  }
+}
+
+/**
+ * @brief Sequentially calls all interrupt handlers installed at the vector.
+ *
+ * This function does not validate the vector number.  If the vector number is
+ * out of range, then the behaviour is undefined.
+ *
  * In uniprocessor configurations, you can call this function within every
  * context which can be disabled via rtems_interrupt_local_disable().
  *
