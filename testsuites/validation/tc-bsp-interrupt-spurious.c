@@ -418,8 +418,6 @@ static void BspReqInterruptSpurious_Setup(
   BspReqInterruptSpurious_Context *ctx
 )
 {
-  rtems_status_code sc;
-
   ctx->first = NULL;
   ctx->test_vector = CallWithinISRGetVector();
   T_assert_lt_u32( ctx->test_vector, BSP_INTERRUPT_VECTOR_COUNT );
