@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2020 Cobham Gailer AB
+ * Copyright (C) 2020 Cobham Gaisler AB
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
