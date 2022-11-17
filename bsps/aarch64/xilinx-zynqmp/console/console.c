@@ -37,7 +37,6 @@
 #include <rtems/console.h>
 #include <rtems/bspIo.h>
 #include <rtems/endian.h>
-#include <rtems/rtems-fdt.h>
 #include <rtems/sysinit.h>
 
 #include <bsp/aarch64-mmu.h>
@@ -47,6 +46,7 @@
 #include <dev/serial/zynq-uart.h>
 
 #include <bspopts.h>
+#include <libfdt.h>
 
 #include <libchip/ns16550.h>
 
@@ -92,42 +92,36 @@ __attribute__ ((weak)) void zynqmp_configure_management_console(rtems_termios_de
 static void zynqmp_management_console_init(void)
 {
   /* Find the management console in the device tree */
-  rtems_fdt_handle fdt_handle;
+  const void *fdt = bsp_fdt_get();
   const uint32_t *prop;
   uint32_t outprop[4];
   int proplen;
   int node;
 
-  rtems_fdt_init_handle(&fdt_handle);
-  rtems_fdt_register(bsp_fdt_get(), &fdt_handle);
-  const char *alias = rtems_fdt_get_alias(&fdt_handle, "mgmtport");
+  const char *alias = fdt_get_alias(fdt, "mgmtport");
   if (alias == NULL) {
-    rtems_fdt_release_handle(&fdt_handle);
     return;
   }
-  node = rtems_fdt_path_offset(&fdt_handle, alias);
+  node = fdt_path_offset(fdt, alias);
 
-  prop = rtems_fdt_getprop(&fdt_handle, node, "clock-frequency", &proplen);
+  prop = fdt_getprop(fdt, node, "clock-frequency", &proplen);
   if ( prop == NULL || proplen != 4 ) {
-    rtems_fdt_release_handle(&fdt_handle);
     zynqmp_mgmt_uart_context.port = 0;
     return;
   }
   outprop[0] = rtems_uint32_from_big_endian((const uint8_t *) &prop[0]);
   zynqmp_mgmt_uart_context.clock = outprop[0];
 
-  prop = rtems_fdt_getprop(&fdt_handle, node, "current-speed", &proplen);
+  prop = fdt_getprop(fdt, node, "current-speed", &proplen);
   if ( prop == NULL || proplen != 4 ) {
-    rtems_fdt_release_handle(&fdt_handle);
     zynqmp_mgmt_uart_context.port = 0;
     return;
   }
   outprop[0] = rtems_uint32_from_big_endian((const uint8_t *) &prop[0]);
   zynqmp_mgmt_uart_context.initial_baud = outprop[0];
 
-  prop = rtems_fdt_getprop(&fdt_handle, node, "interrupts", &proplen);
+  prop = fdt_getprop(fdt, node, "interrupts", &proplen);
   if ( prop == NULL || proplen != 12 ) {
-    rtems_fdt_release_handle(&fdt_handle);
     zynqmp_mgmt_uart_context.port = 0;
     return;
   }
@@ -137,14 +131,12 @@ static void zynqmp_management_console_init(void)
   /* proplen is in bytes, interrupt mapping expects a length in 32-bit cells */
   zynqmp_mgmt_uart_context.irq = bsp_fdt_map_intr(outprop, proplen / 4);
   if ( zynqmp_mgmt_uart_context.irq == 0 ) {
-    rtems_fdt_release_handle(&fdt_handle);
     zynqmp_mgmt_uart_context.port = 0;
     return;
   }
 
-  prop = rtems_fdt_getprop(&fdt_handle, node, "reg", &proplen);
+  prop = fdt_getprop(fdt, node, "reg", &proplen);
   if ( prop == NULL || proplen != 16 ) {
-    rtems_fdt_release_handle(&fdt_handle);
     zynqmp_mgmt_uart_context.port = 0;
     return;
   }
@@ -164,25 +156,21 @@ static void zynqmp_management_console_init(void)
     return;
   }
 
-  prop = rtems_fdt_getprop(&fdt_handle, node, "reg-offset", &proplen);
+  prop = fdt_getprop(fdt, node, "reg-offset", &proplen);
   if ( prop == NULL || proplen != 4 ) {
-    rtems_fdt_release_handle(&fdt_handle);
     zynqmp_mgmt_uart_context.port = 0;
     return;
   }
   outprop[0] = rtems_uint32_from_big_endian((const uint8_t *) &prop[0]);
   zynqmp_mgmt_uart_context.port += outprop[0];
 
-  prop = rtems_fdt_getprop(&fdt_handle, node, "reg-shift", &proplen);
+  prop = fdt_getprop(fdt, node, "reg-shift", &proplen);
   if ( prop == NULL || proplen != 4 ) {
-    rtems_fdt_release_handle(&fdt_handle);
     zynqmp_mgmt_uart_context.port = 0;
     return;
   }
   outprop[0] = rtems_uint32_from_big_endian((const uint8_t *) &prop[0]);
   mgmt_uart_reg_shift = outprop[0];
-
-  rtems_fdt_release_handle(&fdt_handle);
 
   ns16550_probe(&zynqmp_mgmt_uart_context.base);
 
