@@ -25,9 +25,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <errno.h>
 #include <fcntl.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -35,6 +33,7 @@
 #include <libfdt.h>
 #include <zlib.h>
 
+#include <rtems/malloc.h>
 #include <rtems/rtems-fdt.h>
 #include <rtems/thread.h>
 
@@ -175,13 +174,13 @@ rtems_fdt_init_index (rtems_fdt_handle* fdt, rtems_fdt_blob* blob)
   /*
    * Create the index.
    */
-  entries = calloc(num_entries, sizeof(rtems_fdt_index_entry));
+  entries = rtems_calloc(num_entries, sizeof(rtems_fdt_index_entry));
   if (!entries)
   {
     return -RTEMS_FDT_ERR_NO_MEMORY;
   }
 
-  names = calloc(1, total_name_memory);
+  names = rtems_calloc(1, total_name_memory);
   if (!names)
   {
     free(entries);
@@ -505,7 +504,7 @@ rtems_fdt_load (const char* filename, rtems_fdt_handle* handle)
   {
     size_t offset;
 
-    cdata = malloc(sb.st_size);
+    cdata = rtems_malloc(sb.st_size);
     if (!cdata)
     {
       close (bf);
@@ -546,7 +545,7 @@ rtems_fdt_load (const char* filename, rtems_fdt_handle* handle)
 
   name_len = strlen (filename) + 1;
 
-  blob = malloc(sizeof (rtems_fdt_blob) + name_len + bsize);
+  blob = rtems_malloc(sizeof (rtems_fdt_blob) + name_len + bsize);
   if (!blob)
   {
     free(cdata);
@@ -649,7 +648,7 @@ rtems_fdt_register (const void* dtb, rtems_fdt_handle* handle)
     return fe;
   }
 
-  blob = malloc(sizeof (rtems_fdt_blob));
+  blob = rtems_malloc(sizeof (rtems_fdt_blob));
   if (!blob)
   {
     return -RTEMS_FDT_ERR_NO_MEMORY;
