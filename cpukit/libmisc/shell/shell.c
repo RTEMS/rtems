@@ -1,6 +1,6 @@
 /**
  * @file
- * 
+ *
  * @brief Instantatiate a new terminal shell.
  */
 
@@ -805,6 +805,83 @@ void rtems_shell_print_env(
 }
 #endif
 
+/*
+ * Direct method to get the size of an XTERM window.
+ *
+ * If you do not use an XTERM the env variables are not define.
+ */
+static void rtems_shell_winsize( void )
+{
+  const int fd = fileno(stdin);
+  struct winsize ws;
+  char buf[64];
+  bool ok = false;
+  int lines = 0;
+  int cols = 0;
+  int r;
+  r = ioctl(fd, TIOCGWINSZ, &ws);
+  if (r == 0) {
+    ok = true;
+    lines = ws.ws_row;
+    cols = ws.ws_col;
+  } else if (isatty(fd)) {
+    struct termios cterm;
+    if (tcgetattr(fd, &cterm) >= 0) {
+      struct termios term = cterm;
+      term.c_cc[VMIN] = 0;
+      term.c_cc[VTIME] = 0;
+      if (tcsetattr (fd, TCSADRAIN, &term) >= 0) {
+        int msec = 50;
+        int len = 0;
+        int i = 0;
+        memset(&buf[0], 0, sizeof(buf));
+        /*
+         * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h3-Miscellaneous
+         *
+         * CSI 1 8 t
+         */
+        fputs("\033[18t", stdout);
+        fflush(stdout);
+        while (msec-- > 0 && len < sizeof(buf)) {
+          char ch[2];
+          if (read(fd, &ch[0], 1) == 1) {
+            buf[len++] = ch[0];
+            msec = 50;
+          } else {
+            usleep(1000);
+          }
+        }
+        while (i < len) {
+          static const char resp[] = "\033[8;";
+          if (memcmp(resp, &buf[i], sizeof(resp) - 1) == 0) {
+            i += sizeof(resp) - 1;
+            while (i < len && buf[i] != ';') {
+              lines *= 10;
+              lines += buf[i++] - '0';
+            }
+            cols = 0;
+            ++i;
+            while (i < len && buf[i] != 't') {
+              cols *= 10;
+              cols += buf[i++] - '0';
+            }
+          } else {
+            i++;
+          }
+          ok = true;
+        }
+      }
+      tcsetattr (fd, TCSADRAIN, &cterm);
+    }
+  }
+  if (ok) {
+    snprintf(buf, sizeof(buf) - 1, "%d", lines);
+    setenv("LINES", buf, 1);
+    snprintf(buf, sizeof(buf) - 1, "%d", cols);
+    setenv("COLUMNS", buf, 1);
+  }
+}
+
 static rtems_task rtems_shell_task(rtems_task_argument task_argument)
 {
   rtems_shell_env_t *shell_env = (rtems_shell_env_t*) task_argument;
@@ -984,7 +1061,9 @@ static bool shell_main_loop(
           memcpy (cmd_argv, cmds[cmd], RTEMS_SHELL_CMD_SIZE);
           if (!rtems_shell_make_args(cmd_argv, &argc, argv,
                                      RTEMS_SHELL_MAXIMUM_ARGUMENTS)) {
-            int exit_code = rtems_shell_execute_cmd(argv[0], argc, argv);
+            int exit_code;
+            rtems_shell_winsize();
+            exit_code = rtems_shell_execute_cmd(argv[0], argc, argv);
             if (shell_env->exit_code != NULL)
               *shell_env->exit_code = exit_code;
             if (exit_code != 0 && shell_env->exit_on_error)

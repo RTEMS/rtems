@@ -755,8 +755,23 @@ static void get_console_size(struct env *env) {
   env->cols = ws.ws_col;
   env->lines = ws.ws_row - 1;
 #elif defined(__rtems__)
-  env->cols = 80;
+  char* e;
   env->lines = 25;
+  env->lines = 80;
+  e = getenv("LINES");
+  if (e != NULL) {
+    int lines = strtol(e, 0, 10);
+    if (lines > 0) {
+      env->lines = lines - 1;
+    }
+  }
+  e = getenv("COLUMNS");
+  if (e != NULL) {
+    int cols = strtol(e, 0, 10);
+    if (cols > 0) {
+      env->cols = cols;
+    }
+  }
 #else
   struct term *term = gettib()->proc->term;
   env->cols = term->cols;
