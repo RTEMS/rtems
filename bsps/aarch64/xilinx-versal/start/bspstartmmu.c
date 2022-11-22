@@ -44,7 +44,11 @@
 BSP_START_DATA_SECTION static const aarch64_mmu_config_entry
 versal_mmu_config_table[] = {
   AARCH64_MMU_DEFAULT_SECTIONS,
-  {  /* APU GIC */
+  {  /* Devices */
+    .begin = 0xf1000000U,
+    .end = 0xf2000000U,
+    .flags = AARCH64_MMU_DEVICE
+  }, {  /* APU GIC */
     .begin = 0xf9000000U,
     .end = 0xf90c0000U,
     .flags = AARCH64_MMU_DEVICE
