@@ -1,0 +1,60 @@
+Development Board: Freescale Kinetis EKK20 from Manley
+
+http://www.manley.com.cn/
+
+Overview
+--------
+
+Drivers:
+
+  o Console
+  o Clock
+  o Flexbus
+  o TFT LCD
+  o SD Card
+
+BSP variants:
+  dk_k20           - place code and data into internal ROM(128KB)
+  dk_k60           - place code and data into internal ROM(256KB)
+                     By default this board contains MK20DX128VL,
+                     which has to be manually replaced with MK60DX256
+                     if developer wants to select dk_k60.
+                     But developer should be careful to do that because
+                     the board‘s pad is frangible.
+  dk_k60_psram     - place code and data into internal ROM(256KB)，
+                     and place bbs into externl psram at address 0x80000000
+                     RTEMS has to be configured with
+                      FREESCALE_KINETIS_USING_PSRAM=1
+                     and patched with fix-bugs-of-psram.patch (based on commit: 05461a)
+
+Tool-chain used for development
+-------------------------------
+
+  arm-rtems5-gcc (GCC) 7.5.0 20191114 (RTEMS 5, RSB 5.1, Newlib 7947581)
+
+  o For dk_k20:
+  ../../../src/rtems/configure  --prefix=//opt/rtems/5 \
+    --enable-maintainer-mode --target=arm-rtems5  --disable-cxx \
+    --enable-tests=samples --disable-networking --enable-rtemsbsp=dk_k20
+
+  o For dk_k60:
+  ../../../src/rtems/configure  --prefix=//opt/rtems/5 \
+    --enable-maintainer-mode --target=arm-rtems5  --disable-cxx \
+    --enable-tests=samples --disable-networking --enable-rtemsbsp=dk_k60
+
+  o For dk_k60_psram:
+  ../../../src/rtems/configure  --prefix=//opt/rtems/5 \
+    --enable-maintainer-mode --target=arm-rtems5  --disable-cxx \
+    --enable-tests=samples --disable-networking --enable-rtemsbsp=dk_k60_psram \
+    TMS570_USE_HWINIT_STARTUP=1
+
+Links to additional information
+-------------------------------
+
+Additional information about the BSP and board can be found at
+  https://bbs.21ic.com/icview-759978-1-1.html
+  https://bbs.21ic.com/icview-793590-2-1.html
+
+Additional information about the CPU can be found at
+  https://www.nxp.com/docs/en/data-sheet/K20P100M72SF1.pdf
+  https://www.nxp.com/docs/en/data-sheet/K60P100M100SF2V2.pdf

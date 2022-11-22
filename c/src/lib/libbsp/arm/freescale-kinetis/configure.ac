@@ -1,0 +1,54 @@
+##
+#
+# @file configure.ac
+#
+# @brief Configure script of LibBSP for the FreeScale Kinetis boards.
+#
+
+AC_PREREQ([2.69])
+AC_INIT([rtems-c-src-lib-libbsp-arm-freescale-kinetis],[_RTEMS_VERSION],
+				[https://devel.rtems.org/newticket])
+RTEMS_TOP(../../../../../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
+RTEMS_BSP_LINKCMDS
+
+RTEMS_CANONICAL_TARGET_CPU
+AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
+RTEMS_BSP_CONFIGURE
+
+
+
+RTEMS_BSPOPTS_SET([FREESCALE_KINETIS_UART_BAUD],[*],[115200U])
+RTEMS_BSPOPTS_HELP([FREESCALE_KINETIS_UART_BAUD],[baud for UARTs])
+
+RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[1])
+RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
+[The freescale_kinetis console driver can operate in either polled or interrupt mode.])
+
+RTEMS_BSPOPTS_SET([ARM_freescale_kinetis],[*],[0])
+RTEMS_BSPOPTS_HELP([ARM_freescale_kinetis],[target used for identify FREESCALE_KINETIS board])
+
+RTEMS_BSPOPTS_SET([BSP_MINIMUM_TASK_STACK_SIZE],[*],[1024])
+RTEMS_BSPOPTS_HELP([BSP_MINIMUM_TASK_STACK_SIZE],[Suggested minimum task stack
+			size in bytes])
+
+RTEMS_BSPOPTS_SET([BSP_START_NEEDS_REGISTER_INITIALIZATION],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_START_NEEDS_REGISTER_INITIALIZATION],
+					[The FREESCALE_KINETIS needs to have the registers of its CPU initialized
+					to avoid CCMR4F errors])
+
+RTEMS_BSPOPTS_SET([FREESCALE_KINETIS_OSCILLATOR_MAIN],[*],[12000000U])
+RTEMS_BSPOPTS_HELP([FREESCALE_KINETIS_OSCILLATOR_MAIN],[main oscillator frequency in Hz])
+
+RTEMS_BSPOPTS_SET([FREESCALE_KINETIS_OSCILLATOR_RTC],[*],[32768U])
+RTEMS_BSPOPTS_HELP([FREESCALE_KINETIS_OSCILLATOR_RTC],[RTC oscillator frequency in Hz])
+
+RTEMS_BSPOPTS_SET([FREESCALE_KINETIS_CCLK],[*],[96000000U])
+RTEMS_BSPOPTS_HELP([FREESCALE_KINETIS_CCLK],[CPU clock in Hz])
+
+
+RTEMS_BSP_CLEANUP_OPTIONS
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
