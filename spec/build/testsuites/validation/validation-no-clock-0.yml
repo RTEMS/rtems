@@ -12,6 +12,8 @@ ldflags: []
 links:
 - role: build-dependency
   uid: objnodebug
+- role: build-dependency
+  uid: objpreinitarray
 source:
 - testsuites/validation/tc-acfg.c
 - testsuites/validation/tc-attr.c

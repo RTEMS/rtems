@@ -95,6 +95,15 @@
  *
  *   - Clean up all used resources.
  *
+ * - Validate the global construction.  Mark that the test case executed.
+ *
+ *   - Check that the global constructor was called exactly once.
+ *
+ *   - Check that the global construction was done by the Classic API user
+ *     initialization task.
+ *
+ *   - Check that the global constructor was called before the task entry.
+ *
  * @{
  */
 
@@ -122,6 +131,21 @@ static ScoreThreadValThread_Context
   ScoreThreadValThread_Instance;
 
 typedef ScoreThreadValThread_Context Context;
+
+static bool test_case_executed;
+
+static bool constructor_test_case_executed;
+
+static uint32_t constructor_calls;
+
+static rtems_id constructor_id;
+
+static __attribute__(( __constructor__ )) void Constructor( void )
+{
+  constructor_test_case_executed = test_case_executed;
+  ++constructor_calls;
+  constructor_id = rtems_task_self();
+}
 
 static void TaskTerminate( rtems_tcb *executing )
 {
@@ -290,6 +314,30 @@ static void ScoreThreadValThread_Action_1( ScoreThreadValThread_Context *ctx )
 }
 
 /**
+ * @brief Validate the global construction.  Mark that the test case executed.
+ */
+static void ScoreThreadValThread_Action_2( ScoreThreadValThread_Context *ctx )
+{
+  test_case_executed = true;
+
+  /*
+   * Check that the global constructor was called exactly once.
+   */
+  T_eq_u32( constructor_calls, 1 );
+
+  /*
+   * Check that the global construction was done by the Classic API user
+   * initialization task.
+   */
+  T_eq_u32( constructor_id, rtems_task_self() );
+
+  /*
+   * Check that the global constructor was called before the task entry.
+   */
+  T_false( constructor_test_case_executed );
+}
+
+/**
  * @fn void T_case_body_ScoreThreadValThread( void )
  */
 T_TEST_CASE_FIXTURE( ScoreThreadValThread, &ScoreThreadValThread_Fixture )
@@ -300,6 +348,7 @@ T_TEST_CASE_FIXTURE( ScoreThreadValThread, &ScoreThreadValThread_Fixture )
 
   ScoreThreadValThread_Action_0( ctx );
   ScoreThreadValThread_Action_1( ctx );
+  ScoreThreadValThread_Action_2( ctx );
 }
 
 /** @} */
