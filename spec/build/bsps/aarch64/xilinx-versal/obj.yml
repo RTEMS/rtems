@@ -26,6 +26,7 @@ source:
 - bsps/aarch64/shared/mmu/vmsav8-64.c
 - bsps/aarch64/xilinx-versal/console/console.c
 - bsps/aarch64/xilinx-versal/dev/serial/versal-uart-polled.c
+- bsps/aarch64/xilinx-versal/dev/serial/versal-uart.c
 - bsps/aarch64/xilinx-versal/start/bspstart.c
 - bsps/aarch64/xilinx-versal/start/bspstarthooks.c
 - bsps/aarch64/xilinx-versal/start/bspstartmmu.c

@@ -110,7 +110,6 @@ typedef struct versal_uart {
 #define VERSAL_UARTCR_RXE BSP_BIT32(9)
 #define VERSAL_UARTCR_TXE BSP_BIT32(8)
 #define VERSAL_UARTCR_LBE BSP_BIT32(7)
-//#define VERSAL_UARTCR_SIREN BSP_BIT32()?
 #define VERSAL_UARTCR_UARTEN BSP_BIT32(0)
   uint32_t uartifls;
 #define VERSAL_UARTIFLS_RXIFLSEL(val) BSP_FLD32(val, 3, 5)

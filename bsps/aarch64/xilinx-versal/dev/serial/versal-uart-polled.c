@@ -152,23 +152,6 @@ int versal_uart_initialize(rtems_termios_device_context *base)
   return 0;
 }
 
-static bool versal_uart_first_open(
-  struct rtems_termios_tty *tty,
-  rtems_termios_device_context *base,
-  struct termios *term,
-  rtems_libio_open_close_args_t *args
-)
-{
-  int rc = versal_uart_initialize(base);
-  if ( rc < 0 ) {
-    return false;
-  }
-
-  rtems_termios_set_initial_baud(tty, VERSAL_UART_DEFAULT_BAUD);
-
-  return true;
-}
-
 int versal_uart_read_polled(rtems_termios_device_context *base)
 {
   volatile versal_uart *regs = versal_uart_get_regs(base);
@@ -209,23 +192,3 @@ void versal_uart_reset_tx_flush(rtems_termios_device_context *base)
     /* Wait for empty */
   }
 }
-
-static void versal_uart_write_support(
-  rtems_termios_device_context *base,
-  const char *s,
-  size_t n
-)
-{
-  size_t i;
-
-  for (i = 0; i < n; i++) {
-    versal_uart_write_polled(base, s[i]);
-  }
-}
-
-const rtems_termios_device_handler versal_uart_handler = {
-  .first_open = versal_uart_first_open,
-  .write = versal_uart_write_support,
-  .poll_read = versal_uart_read_polled,
-  .mode = TERMIOS_POLLED
-};

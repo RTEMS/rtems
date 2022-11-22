@@ -54,7 +54,9 @@ extern "C" {
 typedef struct {
   rtems_termios_device_context base;
   volatile struct versal_uart *regs;
-  bool transmitting; /* Currently unused */
+  volatile size_t tx_queued;
+  volatile bool transmitting;
+  bool first_send;
   rtems_vector_number irq;
 } versal_uart_context;
 
