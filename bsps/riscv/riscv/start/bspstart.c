@@ -212,7 +212,7 @@ uint32_t riscv_get_core_frequency(void)
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
   (void) icells;
-  return intr[0];
+  return RISCV_INTERRUPT_VECTOR_EXTERNAL(intr[0]);
 }
 
 void bsp_start(void)
