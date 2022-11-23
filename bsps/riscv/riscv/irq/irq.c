@@ -149,6 +149,28 @@ static void riscv_plic_per_cpu_init(
   }
 }
 
+static void riscv_plic_cpu_0_init(
+  volatile RISCV_PLIC_regs *plic,
+  uint32_t interrupt_last
+)
+{
+  Per_CPU_Control *cpu;
+  uint32_t i;
+
+  cpu = _Per_CPU_Get_by_index(0);
+
+  for (i = 1; i <= interrupt_last; ++i) {
+    plic->priority[i] = 1;
+    riscv_plic_irq_to_cpu[i - 1] = cpu->cpu_per_cpu.plic_m_ie;
+  }
+
+  /*
+   * External M-mode interrupts on secondary processors are enabled in
+   * bsp_start_on_secondary_processor().
+   */
+  set_csr(mie, MIP_MEIP);
+}
+
 static void riscv_clint_init(const void *fdt)
 {
   volatile RISCV_CLINT_regs *clint;
@@ -213,7 +235,6 @@ static void riscv_plic_init(const void *fdt)
   int len;
   uint32_t interrupt_index;
   uint32_t ndev;
-  Per_CPU_Control *cpu;
 
   node = fdt_node_offset_by_compatible(fdt, -1, "riscv,plic0");
 
@@ -289,18 +310,7 @@ static void riscv_plic_init(const void *fdt)
 #endif
   }
 
-  cpu = _Per_CPU_Get_by_index(0);
-
-  for (interrupt_index = 1; interrupt_index <= ndev; ++interrupt_index) {
-    plic->priority[interrupt_index] = 1;
-    riscv_plic_irq_to_cpu[interrupt_index - 1] = cpu->cpu_per_cpu.plic_m_ie;
-  }
-
-  /*
-   * External M-mode interrupts on secondary processors are enabled in
-   * bsp_start_on_secondary_processor().
-   */
-  set_csr(mie, MIP_MEIP);
+  riscv_plic_cpu_0_init(plic, ndev);
 }
 
 void bsp_interrupt_facility_initialize(void)
