@@ -268,10 +268,12 @@ static void riscv_plic_init(const void *fdt)
     uint32_t cpu_index;
 
     /*
-     * Interrupt enable registers with 32-bit alignment based on
-     * number of interrupts.
+     * Each interrupt enable register contains exactly 32 enable bits.
+     * Calculate the enable register count based on the number of interrupts
+     * supported by the PLIC.  Take the reserved interrupt ID zero into
+     * account.
      */
-    enable_register_count = RTEMS_ALIGN_UP(ndev, 32) / 32;
+    enable_register_count = RTEMS_ALIGN_UP(ndev + 1, 32) / 32;
 
     hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
 
