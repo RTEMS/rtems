@@ -53,6 +53,7 @@ static volatile RISCV_PLIC_regs *riscv_plic;
 
 volatile RISCV_CLINT_regs *riscv_clint;
 
+#ifdef RTEMS_SMP
 /*
  * The lovely PLIC has an interrupt enable bit per hart for each interrupt
  * source.  This makes the interrupt enable/disable a bit difficult.  We have
@@ -66,6 +67,7 @@ volatile RISCV_CLINT_regs *riscv_clint;
  */
 static volatile uint32_t *
 riscv_plic_irq_to_cpu[RISCV_MAXIMUM_EXTERNAL_INTERRUPTS];
+#endif
 
 RTEMS_INTERRUPT_LOCK_DEFINE(static, riscv_plic_lock, "PLIC")
 
@@ -154,14 +156,20 @@ static void riscv_plic_cpu_0_init(
   uint32_t interrupt_last
 )
 {
+#ifdef RTEMS_SMP
   Per_CPU_Control *cpu;
+#endif
   uint32_t i;
 
+#ifdef RTEMS_SMP
   cpu = _Per_CPU_Get_by_index(0);
+#endif
 
   for (i = 1; i <= interrupt_last; ++i) {
     plic->priority[i] = 1;
+#ifdef RTEMS_SMP
     riscv_plic_irq_to_cpu[i - 1] = cpu->cpu_per_cpu.plic_m_ie;
+#endif
   }
 
   /*
@@ -491,30 +499,33 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 
   if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
     uint32_t interrupt_index;
-    volatile uint32_t *enable;
     uint32_t group;
     uint32_t bit;
     rtems_interrupt_lock_context lock_context;
+    Per_CPU_Control *cpu;
+#ifdef RTEMS_SMP
+    volatile uint32_t *enable;
+#endif
 
     interrupt_index = RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector);
-    enable = riscv_plic_irq_to_cpu[interrupt_index - 1];
     group = interrupt_index / 32;
     bit = UINT32_C(1) << (interrupt_index % 32);
+#ifdef RTEMS_SMP
+    enable = riscv_plic_irq_to_cpu[interrupt_index - 1];
+#endif
 
     rtems_interrupt_lock_acquire(&riscv_plic_lock, &lock_context);
 
+#ifdef RTEMS_SMP
     if (enable != NULL) {
       enable[group] |= bit;
     } else {
-#ifdef RTEMS_SMP
       uint32_t cpu_max;
       uint32_t cpu_index;
 
       cpu_max = _SMP_Get_processor_maximum();
 
       for (cpu_index = 0; cpu_index < cpu_max; ++cpu_index) {
-        Per_CPU_Control *cpu;
-
         cpu = _Per_CPU_Get_by_index(cpu_index);
         enable = cpu->cpu_per_cpu.plic_m_ie;
 
@@ -522,17 +533,11 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
           enable[group] |= bit;
         }
       }
-#else
-      Per_CPU_Control *cpu;
-
-      cpu = _Per_CPU_Get_by_index(0);
-      enable = cpu->cpu_per_cpu.plic_m_ie;
-
-      if (enable != NULL) {
-        enable[group] |= bit;
-      }
-#endif
     }
+#else
+    cpu = _Per_CPU_Get_by_index(0);
+    cpu->cpu_per_cpu.plic_m_ie[group] |= bit;
+#endif
 
     rtems_interrupt_lock_release(&riscv_plic_lock, &lock_context);
     return RTEMS_SUCCESSFUL;
@@ -554,30 +559,33 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
   if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
     uint32_t interrupt_index;
-    volatile uint32_t *enable;
     uint32_t group;
     uint32_t bit;
     rtems_interrupt_lock_context lock_context;
+    Per_CPU_Control *cpu;
+#ifdef RTEMS_SMP
+    volatile uint32_t *enable;
+#endif
 
     interrupt_index = RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector);
-    enable = riscv_plic_irq_to_cpu[interrupt_index - 1];
     group = interrupt_index / 32;
     bit = UINT32_C(1) << (interrupt_index % 32);
+#ifdef RTEMS_SMP
+    enable = riscv_plic_irq_to_cpu[interrupt_index - 1];
+#endif
 
     rtems_interrupt_lock_acquire(&riscv_plic_lock, &lock_context);
 
+#ifdef RTEMS_SMP
     if (enable != NULL) {
       enable[group] &= ~bit;
     } else {
-#ifdef RTEMS_SMP
       uint32_t cpu_max;
       uint32_t cpu_index;
 
       cpu_max = _SMP_Get_processor_maximum();
 
       for (cpu_index = 0; cpu_index < cpu_max; ++cpu_index) {
-        Per_CPU_Control *cpu;
-
         cpu = _Per_CPU_Get_by_index(cpu_index);
         enable = cpu->cpu_per_cpu.plic_m_ie;
 
@@ -585,17 +593,11 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
           enable[group] &= ~bit;
         }
       }
-#else
-      Per_CPU_Control *cpu;
-
-      cpu = _Per_CPU_Get_by_index(0);
-      enable = cpu->cpu_per_cpu.plic_m_ie;
-
-      if (enable != NULL) {
-        enable[group] &= ~bit;
-      }
-#endif
     }
+#else
+    cpu = _Per_CPU_Get_by_index(0);
+    cpu->cpu_per_cpu.plic_m_ie[group] &= ~bit;
+#endif
 
     rtems_interrupt_lock_release(&riscv_plic_lock, &lock_context);
     return RTEMS_SUCCESSFUL;
