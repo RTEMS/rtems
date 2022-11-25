@@ -695,6 +695,12 @@ const char *rtems_fdt_entry_name(rtems_fdt_handle* handle, int id);
 int rtems_fdt_entry_offset(rtems_fdt_handle* handle, int id);
 
 /*
+ * Helper function to convert the void* property result of unknown
+ * length to an unsigned int pointer value.
+ */
+uintptr_t rtems_fdt_get_offset_len_uintptr(const void* prop, int offset, int len);
+
+/*
  * Helper function to convert the void* property result to a 32bit unsigned int.
  */
 uint32_t rtems_fdt_get_uint32(const void* prop);
