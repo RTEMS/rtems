@@ -757,7 +757,7 @@ static void get_console_size(struct env *env) {
 #elif defined(__rtems__)
   char* e;
   env->lines = 25;
-  env->lines = 80;
+  env->cols = 80;
   e = getenv("LINES");
   if (e != NULL) {
     int lines = strtol(e, 0, 10);
