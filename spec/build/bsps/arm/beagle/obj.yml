@@ -20,6 +20,7 @@ install:
   - bsps/arm/beagle/include/bsp/irq.h
   - bsps/arm/beagle/include/bsp/pwmss.h
   - bsps/arm/beagle/include/bsp/qep.h
+  - bsps/arm/beagle/include/bsp/spi.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/arm/beagle/start/linkcmds
