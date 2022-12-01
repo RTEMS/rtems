@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: false
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/record-interrupts-enabled
+- role: requirement-refinement
+  uid: group
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The application configuration option shall enable the interrupt event recording.
+type: requirement

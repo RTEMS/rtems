@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  In case
+
+  * this configuration option is defined
+
+  * and ${record-per-processor-items:/name} is properly defined,
+
+  then the interrupt event recording is enabled.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: interface-placement
+  uid: domain
+- role: interface-ingroup
+  uid: group-eventrecord
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+name: CONFIGURE_RECORD_INTERRUPTS_ENABLED
+notes: |
+  The interrupt event recording generates interrupt entry and exit events when
+  interrupt entries are dispatched.
+type: interface
