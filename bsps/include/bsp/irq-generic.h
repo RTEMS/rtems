@@ -663,6 +663,17 @@ static inline bool bsp_interrupt_is_initialized( void )
   return bsp_interrupt_is_handler_unique( BSP_INTERRUPT_DISPATCH_TABLE_SIZE );
 }
 
+/**
+ * @brief Gets a reference to the interrupt handler table slot associated with
+ *   the index.
+ *
+ * @return Returns a reference to the interrupt handler table slot associated
+ *   with the index.
+ */
+rtems_interrupt_entry **bsp_interrupt_get_dispatch_table_slot(
+  rtems_vector_number index
+);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

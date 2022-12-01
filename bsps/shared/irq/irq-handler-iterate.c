@@ -57,9 +57,9 @@ rtems_status_code rtems_interrupt_handler_iterate(
   }
 
   index = bsp_interrupt_dispatch_index( vector );
+  entry = *bsp_interrupt_get_dispatch_table_slot( index );
   options = bsp_interrupt_is_handler_unique( index ) ?
     RTEMS_INTERRUPT_UNIQUE : RTEMS_INTERRUPT_SHARED;
-  entry = bsp_interrupt_dispatch_table[ index ];
 
   while ( entry != NULL ) {
     ( *routine )( arg, entry->info, options, entry->handler, entry->arg );

@@ -49,6 +49,13 @@
 rtems_interrupt_entry *
 bsp_interrupt_dispatch_table[ BSP_INTERRUPT_DISPATCH_TABLE_SIZE ];
 
+RTEMS_WEAK rtems_interrupt_entry **bsp_interrupt_get_dispatch_table_slot(
+  rtems_vector_number index
+)
+{
+  return &bsp_interrupt_dispatch_table[ index ];
+}
+
 /* The last entry indicates if everything is initialized */
 uint8_t bsp_interrupt_handler_unique_table
   [ ( BSP_INTERRUPT_DISPATCH_TABLE_SIZE + 7 + 1 ) / 8 ];
@@ -91,9 +98,9 @@ void bsp_interrupt_spurious( rtems_vector_number vector )
    * In order to get the last written pointer value to the first entry, we have
    * to carry out an atomic read-modify-write operation.
    */
-  ptr = (Atomic_Uintptr *) &bsp_interrupt_dispatch_table[
+  ptr = (Atomic_Uintptr *) bsp_interrupt_get_dispatch_table_slot(
     bsp_interrupt_dispatch_index( vector )
-  ];
+  );
   first = (rtems_interrupt_entry *)
     _Atomic_Fetch_add_uintptr( ptr, 0, ATOMIC_ORDER_ACQUIRE );
 
@@ -143,8 +150,8 @@ rtems_interrupt_entry *bsp_interrupt_entry_find(
 
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   index = bsp_interrupt_dispatch_index( vector );
-  *previous_next = &bsp_interrupt_dispatch_table[ index ];
-  entry = bsp_interrupt_dispatch_table[ index ];
+  *previous_next = bsp_interrupt_get_dispatch_table_slot( index );
+  entry = **previous_next;
 
   while ( entry != NULL ) {
     if ( entry->handler == routine && entry->arg == arg ) {
@@ -187,7 +194,7 @@ static rtems_status_code bsp_interrupt_entry_install_first(
   bsp_interrupt_dispatch_index_table[ vector ] = index;
 #endif
   bsp_interrupt_entry_store_release(
-    &bsp_interrupt_dispatch_table[ index ],
+    bsp_interrupt_get_dispatch_table_slot( index ),
     entry
   );
 
@@ -220,7 +227,7 @@ static rtems_status_code bsp_interrupt_entry_install(
   }
 
   index = bsp_interrupt_dispatch_index( vector );
-  first = bsp_interrupt_dispatch_table[ index ];
+  first = *bsp_interrupt_get_dispatch_table_slot( index );
 
   if ( first == NULL ) {
     return bsp_interrupt_entry_install_first( vector, options, entry );

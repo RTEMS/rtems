@@ -47,7 +47,7 @@ void bsp_interrupt_entry_remove(
   rtems_interrupt_entry *entry_next;
 
   index = bsp_interrupt_dispatch_index( vector );
-  first = bsp_interrupt_dispatch_table[ index ];
+  first = *bsp_interrupt_get_dispatch_table_slot( index );
   entry_next = entry->next;
 
   if ( entry == first && entry_next == NULL ) {
