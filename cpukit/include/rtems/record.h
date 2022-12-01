@@ -67,6 +67,8 @@ extern const Record_Configuration _Record_Configuration;
 
 void _Record_Initialize( void );
 
+void _Record_Interrupt_initialize( void );
+
 bool _Record_Thread_create(
   struct _Thread_Control *executing,
   struct _Thread_Control *created

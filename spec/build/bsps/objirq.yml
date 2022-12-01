@@ -21,6 +21,7 @@ source:
 - bsps/shared/irq/irq-info.c
 - bsps/shared/irq/irq-legacy.c
 - bsps/shared/irq/irq-lock.c
+- bsps/shared/irq/irq-record.c
 - bsps/shared/irq/irq-server.c
 - bsps/shared/irq/irq-shell.c
 type: build

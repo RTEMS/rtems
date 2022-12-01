@@ -1911,6 +1911,29 @@
  */
 #define CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB
 
+/* Generated from spec:/acfg/if/record-interrupts-enabled */
+
+/**
+ * @brief This configuration option is a boolean feature define.
+ *
+ * In case
+ *
+ * * this configuration option is defined
+ *
+ * * and #CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
+ *
+ * then the interrupt event recording is enabled.
+ *
+ * @par Default Configuration
+ * If this configuration option is undefined, then the described feature is not
+ * enabled.
+ *
+ * @par Notes
+ * The interrupt event recording generates interrupt entry and exit events when
+ * interrupt entries are dispatched.
+ */
+#define CONFIGURE_RECORD_INTERRUPTS_ENABLED
+
 /* Generated from spec:/acfg/if/record-per-processor-items */
 
 /**
