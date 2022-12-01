@@ -523,7 +523,7 @@ static void Action( void *arg )
   T_rsc_success( sc );
 
   bsp_interrupt_set_handler_unique(
-    BSP_INTERRUPT_HANDLER_TABLE_SIZE,
+    BSP_INTERRUPT_DISPATCH_TABLE_SIZE,
     ctx->initialized
   );
 
@@ -534,7 +534,7 @@ static void Action( void *arg )
   );
 
   bsp_interrupt_set_handler_unique(
-    BSP_INTERRUPT_HANDLER_TABLE_SIZE,
+    BSP_INTERRUPT_DISPATCH_TABLE_SIZE,
     ctx->initialized_during_setup
   );
 

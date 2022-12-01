@@ -123,9 +123,9 @@ static inline void Lower_tm27_intr( void )
    */
   irq = RISCV_INTERRUPT_VECTOR_SOFTWARE;
 
-  if ( bsp_interrupt_handler_table[ irq ] == NULL ) {
+  if ( bsp_interrupt_dispatch_table[ irq ] == NULL ) {
     _Assert( riscv_tm27_can_use_mtime );
-    bsp_interrupt_handler_table[ irq ] = &riscv_tm27_interrupt_entry;
+    bsp_interrupt_dispatch_table[ irq ] = &riscv_tm27_interrupt_entry;
     (void) rtems_interrupt_vector_enable( irq );
   }
 

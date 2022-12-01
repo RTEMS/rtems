@@ -479,14 +479,14 @@ static void Action( void *arg )
   T_rsc_success( sc );
 
   bsp_interrupt_set_handler_unique(
-    BSP_INTERRUPT_HANDLER_TABLE_SIZE,
+    BSP_INTERRUPT_DISPATCH_TABLE_SIZE,
     ctx->initialized
   );
 
   ctx->status = rtems_interrupt_entry_remove( ctx->vector, ctx->entry );
 
   bsp_interrupt_set_handler_unique(
-    BSP_INTERRUPT_HANDLER_TABLE_SIZE,
+    BSP_INTERRUPT_DISPATCH_TABLE_SIZE,
     ctx->initialized_during_setup
   );
 
@@ -1040,8 +1040,8 @@ static void RtemsIntrReqEntryRemove_Post_Installed_Check(
       } else {
         rtems_interrupt_entry *first;
 
-        first = bsp_interrupt_handler_table[
-          bsp_interrupt_handler_index( ctx->test_vector )
+        first = bsp_interrupt_dispatch_table[
+          bsp_interrupt_dispatch_index( ctx->test_vector )
         ];
         T_null( first );
       }
