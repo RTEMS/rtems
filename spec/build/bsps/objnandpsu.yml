@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-5.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2022 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes:
+- bsps/include/dev/nand/
+- bsps/include/xil/
+- bsps/include/xil/${XIL_SUPPORT_PATH}/
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/include/dev/nand/xnandpsu_bbm.h
+  - bsps/include/dev/nand/xnandpsu.h
+  - bsps/include/dev/nand/xnandpsu_hw.h
+  - bsps/include/dev/nand/xnandpsu_onfi.h
+links:
+- role: build-dependency
+  uid: objxilinxsupport
+- role: build-dependency
+  uid: optnandpsu0baseaddress
+- role: build-dependency
+  uid: optnandpsunuminstances
+source:
+- bsps/shared/dev/nand/xnandpsu_bbm.c
+- bsps/shared/dev/nand/xnandpsu.c
+- bsps/shared/dev/nand/xnandpsu_g.c
+- bsps/shared/dev/nand/xnandpsu_onfi.c
+- bsps/shared/dev/nand/xnandpsu_sinit.c
+type: build
