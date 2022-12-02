@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-5.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2022 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by:
+- aarch64/xilinx_zynqmp_ilp32_qemu
+- aarch64/xilinx_zynqmp_ilp32_zu3eg
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/include/xil/arm/ARMv8/32bit/xil_cache.h
+  - bsps/include/xil/arm/ARMv8/32bit/xpseudo_asm.h
+  - bsps/include/xil/arm/ARMv8/32bit/xreg_cortexa53.h
+links: []
+source: []
+type: build

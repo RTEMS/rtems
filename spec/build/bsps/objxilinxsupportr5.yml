@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-5.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2022 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by: false
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/include/xil/arm/cortexr5/xil_cache.h
+  - bsps/include/xil/arm/cortexr5/xpseudo_asm.h
+  - bsps/include/xil/arm/cortexr5/xreg_cortexr5.h
+links: []
+source: []
+type: build

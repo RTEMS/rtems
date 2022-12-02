@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- env-assign: null
+build-type: option
+copyrights:
+- Copyright (C) 2022 On-Line Applications Research (OAR)
+default: null
+default-by-variant:
+- value: arm/cortexr5
+  variants: []
+- value: microblaze
+  variants:
+  - bsps/microblaze/microblaze_fpga
+- value: arm/cortexa9
+  variants:
+  - bsps/arm/xilinx_zynq
+  - bsps/arm/xilinx_zynqmp
+- value: arm/ARMv8/32bit
+  variants:
+  - aarch64/xilinx_zynqmp_ilp32_qemu
+  - aarch64/xilinx_zynqmp_ilp32_zu3eg
+- value: arm/ARMv8/64bit
+  variants:
+  - bsps/aarch64/xilinx_versal
+  - aarch64/xilinx_zynqmp_lp64_cfc400x
+  - aarch64/xilinx_zynqmp_lp64_qemu
+  - aarch64/xilinx_zynqmp_lp64_zu3eg
+description: 'Set the Xilinx support path'
+enabled-by: true
+format: '{}'
+links: []
+name: XIL_SUPPORT_PATH
+type: build

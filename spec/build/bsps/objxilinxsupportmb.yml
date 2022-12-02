@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-5.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2022 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by:
+- microblaze
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/include/xil/microblaze/xil_cache.h
+links: []
+source: []
+type: build
