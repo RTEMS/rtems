@@ -62,6 +62,7 @@
 			interrupts = <0x00 0x39 0x04>;
 			reg = <0x00 0xff0b0000 0x00 0x1000>;
 			phy-mode = "sgmii";
+			ref-clock-num = <0>;
 		};
 
 		ethernet@ff0c0000 {
@@ -71,6 +72,7 @@
 			interrupts = <0x00 0x3b 0x04>;
 			reg = <0x00 0xff0c0000 0x00 0x1000>;
 			phy-mode = "sgmii";
+			ref-clock-num = <1>;
 		};
 
 		ethernet@ff0d0000 {
@@ -80,6 +82,7 @@
 			interrupts = <0x00 0x3d 0x04>;
 			reg = <0x00 0xff0d0000 0x00 0x1000>;
 			phy-mode = "sgmii";
+			ref-clock-num = <2>;
 		};
 
 		ethernet@ff0e0000 {
@@ -89,6 +92,7 @@
 			interrupts = <0x00 0x3f 0x04>;
 			reg = <0x00 0xff0e0000 0x00 0x1000>;
 			phy-mode = "sgmii";
+			ref-clock-num = <3>;
 		};
 
 		serial@800a0000 {
