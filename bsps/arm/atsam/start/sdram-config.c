@@ -148,6 +148,13 @@ const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
 #error Please check SDRAM settings for this frequency.
 #endif
 
+#elif defined ATSAM_SDRAM_CUSTOM
+/*
+ * Custom SDRAM defined. Provide only a dummy BOARD_Sdram_Config. This config
+ * won't work and is only there so that test applications can link. The
+ * application has to overwrite this BOARD_Sdram_Config!
+ */
+const struct BOARD_Sdram_Config BOARD_Sdram_Config = {};
 #else
   #error SDRAM not supported.
 #endif
