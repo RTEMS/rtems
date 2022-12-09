@@ -106,7 +106,7 @@ static void configure_tcm(void)
   uintptr_t tcm_size;
   uint32_t itcmcr_sz;
 
-  tcm_size = (uintptr_t) atsam_memory_itcm_size;
+  tcm_size = (uintptr_t) atsam_memory_dtcm_size;
   itcmcr_sz = (SCB->ITCMCR & SCB_ITCMCR_SZ_Msk) >> SCB_ITCMCR_SZ_Pos;
 
   if (tcm_setup_and_check_if_do_efc_config(tcm_size, itcmcr_sz)) {

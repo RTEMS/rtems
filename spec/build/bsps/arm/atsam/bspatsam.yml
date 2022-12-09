@@ -297,6 +297,8 @@ links:
 - role: build-dependency
   uid: optnocachesz
 - role: build-dependency
+  uid: optnullsz
+- role: build-dependency
   uid: optoscmain
 - role: build-dependency
   uid: optqspiflashsz

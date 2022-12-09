@@ -59,8 +59,12 @@ Use ATSAM_CONSOLE_DEVICE_INDEX=XYZ to set the device index for /dev/console
 Use ATSAM_CONSOLE_USE_INTERRUPTS=XYZ to set the use interrupt driven mode for
 console devices (used by default).
 
-Use ATSAM_MEMORY_TCM_SIZE=XYZ to set the size of tightly coupled memories (TCM)
+Use ATSAM_MEMORY_NULL_SIZE=XYZ to set the size of NULL pointer protection area
 in bytes (default 0x00000000).
+
+Use ATSAM_MEMORY_TCM_SIZE=XYZ to set the size of tightly coupled memories (TCM)
+in bytes (default 0x00000000). Note: ITCM is reduced by the
+ATSAM_MEMORY_NULL_SIZE.
 
 Use ATSAM_MEMORY_INTFLASH_SIZE=XYZ to set the size of internal flash in bytes
 (default is derived from chip variant).

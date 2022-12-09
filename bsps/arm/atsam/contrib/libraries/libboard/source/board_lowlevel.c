@@ -347,6 +347,23 @@ void _SetupMemoryRegion(void)
 	SCB->SHCSR |= (SCB_SHCSR_MEMFAULTENA_Msk | SCB_SHCSR_BUSFAULTENA_Msk
 				   | SCB_SHCSR_USGFAULTENA_Msk);
 
+#ifdef __rtems__
+	dwRegionBaseAddr =
+		((uintptr_t)atsam_memory_null_begin) |
+		MPU_REGION_VALID |
+		MPU_NULL_REGION;
+	if (atsam_memory_null_begin != atsam_memory_itcm_end) {
+		dwRegionAttr =
+			MPU_AP_NO_ACCESS |
+			MPU_REGION_EXECUTE_NEVER |
+			MPU_CalMPURegionSize((uintptr_t)atsam_memory_null_size) |
+			MPU_REGION_ENABLE;
+	} else {
+		dwRegionAttr = MPU_REGION_DISABLE;
+	}
+	MPU_SetRegion(dwRegionBaseAddr, dwRegionAttr);
+#endif /* __rtems__ */
+
 	/* Enable the MPU region */
 #ifndef __rtems__
 	MPU_Enable(MPU_ENABLE | MPU_PRIVDEFENA);

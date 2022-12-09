@@ -89,6 +89,10 @@ typedef struct {
   uint8_t phy_addr;
 } if_atsam_config;
 
+extern char atsam_memory_null_begin[];
+extern char atsam_memory_null_end[];
+extern char atsam_memory_null_size[];
+
 extern char atsam_memory_dtcm_begin[];
 extern char atsam_memory_dtcm_end[];
 extern char atsam_memory_dtcm_size[];

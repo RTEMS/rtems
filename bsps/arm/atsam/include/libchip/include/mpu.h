@@ -56,6 +56,7 @@
 #endif
 #define MPU_SYSTEM_REGION                       (12)
 #ifdef __rtems__
+#define MPU_NULL_REGION                         (13)
 /* Reserve the region with highest priority for user applications */
 #define MPU_USER_DEFINED_REGION                 (15)
 #endif /* __rtems__ */

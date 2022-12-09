@@ -2,7 +2,8 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: config-file
 content: |
   MEMORY {
-    ITCM      : ORIGIN = 0x00000000, LENGTH = ${ATSAM_MEMORY_TCM_SIZE}
+    NULL      : ORIGIN = 0x00000000, LENGTH = ${ATSAM_MEMORY_NULL_SIZE}
+    ITCM      : ORIGIN = ${ATSAM_MEMORY_NULL_SIZE}, LENGTH = ((${ATSAM_MEMORY_TCM_SIZE} > ${ATSAM_MEMORY_NULL_SIZE}) ? (${ATSAM_MEMORY_TCM_SIZE} - ${ATSAM_MEMORY_NULL_SIZE}) : 0)
     INTFLASH  : ORIGIN = 0x00400000, LENGTH = ${ATSAM_MEMORY_INTFLASH_SIZE}
     DTCM      : ORIGIN = 0x20000000, LENGTH = ${ATSAM_MEMORY_TCM_SIZE}
     INTSRAM   : ORIGIN = 0x20400000, LENGTH = ${ATSAM_MEMORY_INTSRAM_SIZE} - 2 * ${ATSAM_MEMORY_TCM_SIZE} - ${ATSAM_MEMORY_NOCACHE_SIZE}
@@ -12,6 +13,10 @@ content: |
   }
 
   /* Must be used only for MPU definitions */
+
+  atsam_memory_null_begin = ORIGIN (NULL);
+  atsam_memory_null_end = ORIGIN (NULL) + LENGTH (NULL);
+  atsam_memory_null_size = LENGTH (NULL);
 
   atsam_memory_itcm_begin = ORIGIN (ITCM);
   atsam_memory_itcm_end = ORIGIN (ITCM) + LENGTH (ITCM);

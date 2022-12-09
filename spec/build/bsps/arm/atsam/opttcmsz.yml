@@ -9,7 +9,8 @@ copyrights:
 default: 0
 default-by-variant: []
 description: |
-  size of tightly coupled memories (TCM) in bytes
+  Size of tightly coupled memories (TCM) in bytes.  Note that the ITCM is
+  reduced by the ATSAM_MEMORY_NULL_SIZE option.  DTCM is unaffected.
 enabled-by: true
 format: '{:#010x}'
 links: []
