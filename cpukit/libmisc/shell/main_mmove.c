@@ -62,7 +62,7 @@ static int rtems_shell_main_mmove(
   /*
    *  Now copy the memory.
    */
-  memcpy(dst, src, length);
+  memmove(dst, src, length);
 
  return 0;
 }
