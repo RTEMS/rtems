@@ -38,14 +38,17 @@ void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
   int node;
   volatile uint32_t *sifive_test;
 
-#if RISCV_ENABLE_HTIF_SUPPORT != 0
-  htif_poweroff();
-#endif
+  fdt = bsp_fdt_get();
+
+  node = fdt_node_offset_by_compatible(fdt, -1, "ucb,htif0");
+
+  if (node != -1)
+      htif_poweroff();
+
 #if RISCV_ENABLE_MPFS_SUPPORT != 0
   for(;;);
 #endif
 
-  fdt = bsp_fdt_get();
   node = fdt_node_offset_by_compatible(fdt, -1, "sifive,test0");
   sifive_test = riscv_fdt_get_address(fdt, node);
 
