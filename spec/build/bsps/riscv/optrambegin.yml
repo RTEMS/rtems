@@ -10,12 +10,6 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 2147483648
 default-by-variant:
-- value: 2147483648
-  variants:
-  - riscv/rv64.*medany
-- value: 1879048192
-  variants:
-  - riscv/rv64.*
 - value: 0
   variants:
   - riscv/noel.*
