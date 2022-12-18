@@ -21,32 +21,23 @@ default-by-variant:
   - -mabi=lp64d
   - -mcmodel=medany
   variants:
-  - riscv/rv64imafdc_medany
-- value:
-  - -march=rv64imafdc
-  - -mabi=lp64d
-  variants:
   - riscv/rv64imafdc
 - value:
   - -march=rv64imafd
   - -mabi=lp64d
   - -mcmodel=medany
   variants:
-  - riscv/rv64imafd_medany
+  - riscv/rv64imafd
 - value:
   - -march=rv64imafd
   - -mabi=lp64d
+  - -mcmodel=medany
   variants:
   - riscv/rv64imafd
 - value:
   - -march=rv64imac
   - -mabi=lp64
   - -mcmodel=medany
-  variants:
-  - riscv/rv64imac_medany
-- value:
-  - -march=rv64imac
-  - -mabi=lp64
   variants:
   - riscv/rv64imac
 - value: []
