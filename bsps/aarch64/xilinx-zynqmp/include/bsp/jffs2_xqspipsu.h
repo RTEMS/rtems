@@ -5,12 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64XilinxZynqMP
  *
- * @brief This header file provides the BSP's IRQ definitions.
+ * @brief XilinxZynqMP QSPI JFFS2 flash driver definitions
  */
 
 /*
- * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
- * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
+ * Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,41 +33,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_AARCH64_XILINX_ZYNQMP_IRQ_H
-#define LIBBSP_AARCH64_XILINX_ZYNQMP_IRQ_H
+#ifndef LIBBSP_XILINX_ZYNQMP_JFFS2_XQSPIPSU_H
+#define LIBBSP_XILINX_ZYNQMP_JFFS2_XQSPIPSU_H
 
-#ifndef ASM
-
-#include <rtems/irq.h>
-#include <rtems/irq-extension.h>
-
-#include <dev/irq/arm-gic-irq.h>
+#include "xqspipsu.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_INTERRUPT_VECTOR_COUNT 192
-
-/* Interrupts vectors */
-#define BSP_TIMER_VIRT_PPI 27
-#define BSP_TIMER_PHYS_NS_PPI 30
-#define ZYNQMP_IRQ_QSPI 47
-#define ZYNQMP_IRQ_I2C_0 49
-#define ZYNQMP_IRQ_I2C_1 50
-#define ZYNQMP_IRQ_UART_0 54
-#define ZYNQMP_IRQ_UART_1 53
-#define ZYNQMP_IRQ_ETHERNET_0 89
-#define ZYNQMP_IRQ_ETHERNET_1 91
-#define ZYNQMP_IRQ_ETHERNET_2 93
-#define ZYNQMP_IRQ_ETHERNET_3 95
-
-/** @} */
+/**
+ * @brief Mount jffs2 filesystem.
+ *
+ * @param[in] mount_dir The directory to mount the filesystem at.
+ * @param[in] qspipsu_ptr A pointer to an initialized QSPI instance.
+ *
+ * @retval 0 Successful operation. Negative number otherwise.
+ */
+int xilinx_zynqmp_nor_jffs2_initialize(
+  const char *mount_dir,
+  XQspiPsu *qspipsu_ptr
+);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* ASM */
-
-#endif /* LIBBSP_AARCH64_XILINX_ZYNQMP_IRQ_H */
+#endif /* LIBBSP_XILINX_ZYNQMP_JFFS2_XQSPIPSU_H */
