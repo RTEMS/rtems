@@ -545,6 +545,11 @@ void bsp_interrupt_facility_initialize(void)
 		qoriq.pic.svr = SPURIOUS;
 		qoriq.pic.gcr = GCR_M;
 
+		/* Clear shared message signaled interrupts */
+		for (i = 0; i < RTEMS_ARRAY_SIZE(qoriq.pic.msir); ++i) {
+			(void) qoriq.pic.msir[i].reg;
+		}
+
 		pic_global_timer_init();
 	}
 
