@@ -353,9 +353,9 @@ static inline uint32_t _Processor_mask_To_uint32_t(
   uint32_t              index
 )
 {
-  long bits = mask->__bits[ __bitset_words( index ) ];
+  long bits = mask->__bits[ index / _BITSET_BITS ];
 
-  return (uint32_t) (bits >> (32 * (index % _BITSET_BITS) / 32));
+  return (uint32_t) ( bits >> ( 32 * ( ( index % _BITSET_BITS ) / 32 ) ) );
 }
 
 /**
