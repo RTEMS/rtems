@@ -293,7 +293,7 @@ static volatile qoriq_pic_src_cfg *get_src_cfg(rtems_vector_number vector)
 	}
 }
 
-static bool is_ipi(rtems_vector_number vector)
+static bool pic_is_ipi(rtems_vector_number vector)
 {
 	return (vector - QORIQ_IRQ_IPI_BASE) < 4;
 }
@@ -340,7 +340,7 @@ rtems_status_code bsp_interrupt_set_affinity(
 {
 	volatile qoriq_pic_src_cfg *src_cfg;
 
-	if (is_ipi(vector)) {
+	if (pic_is_ipi(vector)) {
 		return RTEMS_UNSATISFIED;
 	}
 
@@ -356,7 +356,7 @@ rtems_status_code bsp_interrupt_get_affinity(
 {
 	volatile qoriq_pic_src_cfg *src_cfg;
 
-	if (is_ipi(vector)) {
+	if (pic_is_ipi(vector)) {
 		return RTEMS_UNSATISFIED;
 	}
 
@@ -383,7 +383,7 @@ rtems_status_code bsp_interrupt_get_attributes(
 	rtems_interrupt_attributes *attributes
 )
 {
-	bool vector_is_ipi = is_ipi(vector);
+	bool vector_is_ipi = pic_is_ipi(vector);
 	attributes->is_maskable = true;
 	attributes->can_enable = true;
 	attributes->maybe_enable = true;
@@ -422,7 +422,7 @@ rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
 	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-	if (is_ipi(vector)) {
+	if (pic_is_ipi(vector)) {
 		raise_on(vector, rtems_scheduler_get_processor());
 		return RTEMS_SUCCESSFUL;
 	}
@@ -438,7 +438,7 @@ rtems_status_code bsp_interrupt_raise_on(
 {
 	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-	if (is_ipi(vector)) {
+	if (pic_is_ipi(vector)) {
 		raise_on(vector, cpu_index);
 		return RTEMS_SUCCESSFUL;
 	}
@@ -496,11 +496,6 @@ void bsp_interrupt_dispatch(uintptr_t exception_number)
 	} else {
 		bsp_interrupt_handler_default(vector);
 	}
-}
-
-static bool pic_is_ipi(rtems_vector_number vector)
-{
-	return QORIQ_IRQ_IPI_0 <= vector && vector <= QORIQ_IRQ_IPI_3;
 }
 
 static void pic_reset(void)
