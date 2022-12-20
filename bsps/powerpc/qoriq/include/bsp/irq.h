@@ -363,7 +363,23 @@ extern "C" {
 #define QORIQ_IRQ_GT_B_2 (QORIQ_IRQ_GT_BASE + 6)
 #define QORIQ_IRQ_GT_B_3 (QORIQ_IRQ_GT_BASE + 7)
 
-#define BSP_INTERRUPT_VECTOR_COUNT (QORIQ_IRQ_GT_B_3 + 1)
+#define QORIQ_INTERRUPT_SOURCE_COUNT (QORIQ_IRQ_GT_B_3 + 1)
+
+#define QORIQ_IS_INTERRUPT_SOURCE(vector) \
+  (((rtems_vector_number) (vector)) < QORIQ_INTERRUPT_SOURCE_COUNT)
+
+#define QORIQ_IRQ_MSI_MULTIPLEX_BASE QORIQ_INTERRUPT_SOURCE_COUNT
+
+#define QORIQ_IRQ_MSI_COUNT 256
+
+#define QORIQ_IRQ_MSI_INDEX(vector) ((vector) - QORIQ_IRQ_MSI_MULTIPLEX_BASE)
+
+#define QORIQ_IRQ_MSI_VECTOR(index) (QORIQ_IRQ_MSI_MULTIPLEX_BASE + (index))
+
+#define QORIQ_IRQ_IS_MSI(vector) \
+  (QORIQ_IRQ_MSI_INDEX(vector) < QORIQ_IRQ_MSI_COUNT)
+
+#define BSP_INTERRUPT_VECTOR_COUNT QORIQ_IRQ_MSI_VECTOR(QORIQ_IRQ_MSI_COUNT)
 
 /** @} */
 
@@ -401,6 +417,16 @@ rtems_status_code bsp_interrupt_set_affinity(
 rtems_status_code bsp_interrupt_get_affinity(
   rtems_vector_number vector,
   Processor_mask *affinity
+);
+
+rtems_status_code qoriq_pic_msi_allocate(rtems_vector_number *vector);
+
+rtems_status_code qoriq_pic_msi_free(rtems_vector_number vector);
+
+rtems_status_code qoriq_pic_msi_map(
+  rtems_vector_number vector,
+  uint64_t *addr,
+  uint32_t *data
 );
 
 /** @} */

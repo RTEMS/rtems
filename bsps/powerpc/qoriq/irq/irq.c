@@ -34,6 +34,7 @@
  */
 
 #include <sys/param.h>
+#include <sys/bitset.h>
 
 #include <rtems.h>
 
@@ -307,6 +308,10 @@ rtems_status_code qoriq_pic_set_priority(
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	uint32_t old_vpr = 0;
 
+	if (QORIQ_IRQ_IS_MSI(vector)) {
+		return RTEMS_UNSATISFIED;
+	}
+
 	if (bsp_interrupt_is_valid_vector(vector)) {
 		volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
 
@@ -344,6 +349,10 @@ rtems_status_code bsp_interrupt_set_affinity(
 		return RTEMS_UNSATISFIED;
 	}
 
+	if (QORIQ_IRQ_IS_MSI(vector)) {
+		return RTEMS_UNSATISFIED;
+	}
+
 	src_cfg = get_src_cfg(vector);
 	src_cfg->dr = _Processor_mask_To_uint32_t(affinity, 0);
 	return RTEMS_SUCCESSFUL;
@@ -360,22 +369,34 @@ rtems_status_code bsp_interrupt_get_affinity(
 		return RTEMS_UNSATISFIED;
 	}
 
+	if (QORIQ_IRQ_IS_MSI(vector)) {
+		return RTEMS_UNSATISFIED;
+	}
+
 	src_cfg = get_src_cfg(vector);
 	_Processor_mask_From_uint32_t(affinity, src_cfg->dr, 0);
 	return RTEMS_SUCCESSFUL;
 }
 
-static void pic_vector_enable(rtems_vector_number vector, uint32_t msk)
+static rtems_status_code pic_vector_set_mask(
+	rtems_vector_number vector,
+	uint32_t msk
+)
 {
 	volatile qoriq_pic_src_cfg *src_cfg;
 	rtems_interrupt_lock_context lock_context;
 
 	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
+	if (QORIQ_IRQ_IS_MSI(vector)) {
+		return RTEMS_UNSATISFIED;
+	}
+
 	src_cfg = get_src_cfg(vector);
 	rtems_interrupt_lock_acquire(&lock, &lock_context);
 	src_cfg->vpr = (src_cfg->vpr & ~VPR_MSK) | msk;
 	rtems_interrupt_lock_release(&lock, &lock_context);
+	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_attributes(
@@ -383,17 +404,25 @@ rtems_status_code bsp_interrupt_get_attributes(
 	rtems_interrupt_attributes *attributes
 )
 {
-	bool vector_is_ipi = pic_is_ipi(vector);
+	bool is_ipi = pic_is_ipi(vector);
+	bool is_msi = QORIQ_IRQ_IS_MSI(vector);
+
 	attributes->is_maskable = true;
-	attributes->can_enable = true;
-	attributes->maybe_enable = true;
-	attributes->can_disable = true;
-	attributes->maybe_disable = true;
+	attributes->can_enable = !is_msi;
+	attributes->maybe_enable = !is_msi;
+	attributes->can_disable = !is_msi;
+	attributes->maybe_disable = !is_msi;
 	attributes->cleared_by_acknowledge = true;
-	attributes->can_get_affinity = !vector_is_ipi;
-	attributes->can_set_affinity = !vector_is_ipi;
-	attributes->can_raise = vector_is_ipi;
-	attributes->can_raise_on = vector_is_ipi;
+	attributes->can_get_affinity = !(is_ipi || is_msi);
+	attributes->can_set_affinity = !(is_ipi || is_msi);
+	attributes->can_raise = is_ipi;
+	attributes->can_raise_on = is_ipi;
+
+	if (is_msi) {
+		attributes->can_be_triggered_by_message = true;
+		attributes->trigger_signal = RTEMS_INTERRUPT_NO_SIGNAL;
+	}
+
 	return RTEMS_SUCCESSFUL;
 }
 
@@ -406,6 +435,11 @@ rtems_status_code bsp_interrupt_is_pending(
 
 	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 	bsp_interrupt_assert(pending != NULL);
+
+	if (QORIQ_IRQ_IS_MSI(vector)) {
+		*pending = false;
+		return RTEMS_SUCCESSFUL;
+	}
 
 	src_cfg = get_src_cfg(vector);
 	*pending = (src_cfg->vpr & VPR_A) != 0;
@@ -463,6 +497,10 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 	bsp_interrupt_assert(enabled != NULL);
 
+	if (QORIQ_IRQ_IS_MSI(vector)) {
+		vector = QORIQ_IRQ_MSI_0 + QORIQ_IRQ_MSI_INDEX(vector) / 32;
+	}
+
 	src_cfg = get_src_cfg(vector);
 	*enabled = (src_cfg->vpr & VPR_MSK) == 0;
 	return RTEMS_SUCCESSFUL;
@@ -470,14 +508,12 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-	pic_vector_enable(vector, 0);
-	return RTEMS_SUCCESSFUL;
+	return pic_vector_set_mask(vector, 0);
 }
 
 rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-	pic_vector_enable(vector, VPR_MSK);
-	return RTEMS_SUCCESSFUL;
+	return pic_vector_set_mask(vector, VPR_MSK);
 }
 
 void bsp_interrupt_dispatch(uintptr_t exception_number)
@@ -529,7 +565,7 @@ void bsp_interrupt_facility_initialize(void)
 
 		pic_reset();
 
-		for (i = 0; i < BSP_INTERRUPT_VECTOR_COUNT; ++i) {
+		for (i = 0; i < QORIQ_INTERRUPT_SOURCE_COUNT; ++i) {
 			volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(i);
 
 			src_cfg->vpr = VPR_MSK | VPR_P
@@ -555,11 +591,176 @@ void bsp_interrupt_facility_initialize(void)
 
 	qoriq.pic.ctpr = 0;
 
-	for (i = 0; i < BSP_INTERRUPT_VECTOR_COUNT; ++i) {
+	for (i = 0; i < QORIQ_INTERRUPT_SOURCE_COUNT; ++i) {
 		qoriq.pic.iack;
 		qoriq.pic.eoi = 0;
 		qoriq.pic.whoami;
 	}
+}
+
+typedef __BITSET_DEFINE(pic_msi_bitset, QORIQ_IRQ_MSI_COUNT) pic_msi_bitset;
+
+static pic_msi_bitset pic_msi_available =
+  __BITSET_T_INITIALIZER(__BITSET_FSET(__bitset_words(QORIQ_IRQ_MSI_COUNT)));
+
+
+static uint32_t pic_msi_bitset_to_uint32_t(
+	const pic_msi_bitset *bitset,
+	uint32_t              index
+)
+{
+	long bits = bitset->__bits[index / _BITSET_BITS];
+
+	return (uint32_t) (bits >> (32 * ((index % _BITSET_BITS) / 32)));
+}
+
+static void pic_msi_dispatch(void *arg)
+{
+	uintptr_t reg = (uintptr_t) arg;
+	uint32_t msir = qoriq.pic.msir[reg].reg;
+
+	while (msir != 0) {
+		uint32_t index = 31 - __builtin_clz(msir);
+		const rtems_interrupt_entry *entry;
+
+		msir &= ~(UINT32_C(1) << index);
+		entry = bsp_interrupt_entry_load_first(
+			QORIQ_IRQ_MSI_VECTOR(32 * reg + index)
+		);
+
+		if (entry != NULL) {
+			bsp_interrupt_dispatch_entries(entry);
+		}
+	}
+}
+
+static rtems_status_code pic_msi_allocate(rtems_vector_number *vector)
+{
+	pic_msi_bitset *available = &pic_msi_available;
+	long found = __BIT_FFS(QORIQ_IRQ_MSI_COUNT, available);
+	rtems_vector_number index;
+	uint32_t subset;
+
+	if (found == 0) {
+		return RTEMS_UNSATISFIED;
+	}
+
+	index = (rtems_vector_number) found - 1;
+	subset = pic_msi_bitset_to_uint32_t(available, index);
+
+	if (subset == 0xffffffff) {
+		uintptr_t reg = index / 32;
+		rtems_status_code sc;
+
+		sc = rtems_interrupt_handler_install(
+			QORIQ_IRQ_MSI_0 + reg,
+			"MSI",
+			RTEMS_INTERRUPT_UNIQUE,
+			pic_msi_dispatch,
+			(void *) reg
+		);
+
+		if (sc != RTEMS_SUCCESSFUL) {
+			return sc;
+		}
+	}
+
+	__BIT_CLR(QORIQ_IRQ_MSI_COUNT, index, available);
+	*vector = QORIQ_IRQ_MSI_VECTOR(index);
+	return RTEMS_SUCCESSFUL;
+}
+
+static rtems_status_code pic_msi_free(rtems_vector_number vector)
+{
+	pic_msi_bitset *available = &pic_msi_available;
+	rtems_vector_number index = QORIQ_IRQ_MSI_INDEX(vector);
+	uint32_t subset;
+
+	if (__BIT_ISSET(QORIQ_IRQ_MSI_COUNT, index, available)) {
+		return RTEMS_NOT_DEFINED;
+	}
+
+	__BIT_SET(QORIQ_IRQ_MSI_COUNT, index, available);
+	subset = pic_msi_bitset_to_uint32_t(available, index);
+
+	if (subset == 0xffffffff) {
+		uintptr_t reg = index / 32;
+
+		return rtems_interrupt_handler_remove(
+			QORIQ_IRQ_MSI_0 + reg,
+			pic_msi_dispatch,
+			(void *) reg
+		);
+	}
+
+	return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code qoriq_pic_msi_allocate(rtems_vector_number *vector)
+{
+	rtems_status_code sc;
+
+	if (!bsp_interrupt_is_initialized()) {
+		return RTEMS_INCORRECT_STATE;
+	}
+
+	if (vector == NULL) {
+		return RTEMS_INVALID_ADDRESS;
+	}
+
+	if (rtems_interrupt_is_in_progress()) {
+		return RTEMS_CALLED_FROM_ISR;
+	}
+
+	bsp_interrupt_lock();
+	sc = pic_msi_allocate(vector);
+	bsp_interrupt_unlock();
+	return sc;
+}
+
+rtems_status_code qoriq_pic_msi_free(rtems_vector_number vector)
+{
+	rtems_status_code sc;
+
+	if (!bsp_interrupt_is_initialized()) {
+		return RTEMS_INCORRECT_STATE;
+	}
+
+	if (!QORIQ_IRQ_IS_MSI(vector) ) {
+		return RTEMS_INVALID_ID;
+	}
+
+	if (rtems_interrupt_is_in_progress()) {
+		return RTEMS_CALLED_FROM_ISR;
+	}
+
+	bsp_interrupt_lock();
+	sc = pic_msi_free(vector);
+	bsp_interrupt_unlock();
+	return sc;
+}
+
+rtems_status_code qoriq_pic_msi_map(
+	rtems_vector_number vector,
+	uint64_t *addr,
+	uint32_t *data
+)
+{
+	if (addr == NULL) {
+		return RTEMS_INVALID_ADDRESS;
+	}
+
+	if (data == NULL) {
+		return RTEMS_INVALID_ADDRESS;
+	}
+
+	if (!QORIQ_IRQ_IS_MSI(vector) ) {
+		return RTEMS_INVALID_ID;
+	}
+
+	*addr = (uint64_t)(uintptr_t) &qoriq.pic.msiir;
+	*data = QORIQ_IRQ_MSI_INDEX(vector) << 24;
+	return RTEMS_SUCCESSFUL;
 }
 
 #endif /* QORIQ_IS_HYPERVISOR_GUEST */
