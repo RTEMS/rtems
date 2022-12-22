@@ -358,12 +358,14 @@ void qoriq_mmu_change_perm(uint32_t test, uint32_t set, uint32_t clear)
 {
 	int i = 0;
 
-	for (i = 0; i < 16; ++i) {
+	for (i = 0; i < QORIQ_TLB1_ENTRY_COUNT; ++i) {
 		uint32_t mas0 = FSL_EIS_MAS0_TLBSEL | FSL_EIS_MAS0_ESEL(i);
 		uint32_t mas1 = 0;
 
 		PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS0, mas0);
+		ppc_synchronize_instructions();
 		ppc_tlbre();
+		ppc_synchronize_instructions();
 
 		mas1 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS1);
 		if ((mas1 & FSL_EIS_MAS1_V) != 0) {
@@ -381,4 +383,26 @@ void qoriq_mmu_change_perm(uint32_t test, uint32_t set, uint32_t clear)
 			}
 		}
 	}
+}
+
+int qoriq_mmu_find_free_tlb1_entry(void)
+{
+	int i = 0;
+
+	for (i = 0; i < QORIQ_TLB1_ENTRY_COUNT; ++i) {
+		uint32_t mas0 = FSL_EIS_MAS0_TLBSEL | FSL_EIS_MAS0_ESEL(i);
+		uint32_t mas1;
+
+		PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS0, mas0);
+		ppc_synchronize_instructions();
+		ppc_tlbre();
+		ppc_synchronize_instructions();
+
+		mas1 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS1);
+		if ((mas1 & FSL_EIS_MAS1_V) == 0) {
+			return i;
+		}
+	}
+
+	return -1;
 }
