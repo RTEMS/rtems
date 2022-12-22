@@ -105,6 +105,16 @@ void qoriq_tlb1_write(
 	int tsize
 );
 
+void qoriq_mmu_adjust_and_write_to_tlb1(
+	int tlb,
+	uintptr_t begin,
+	uintptr_t last,
+	uint32_t mas1,
+	uint32_t mas2,
+	uint32_t mas3,
+	uint32_t mas7
+);
+
 void qoriq_tlb1_invalidate(int esel);
 
 /** @} */

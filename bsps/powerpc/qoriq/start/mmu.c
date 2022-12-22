@@ -406,3 +406,29 @@ int qoriq_mmu_find_free_tlb1_entry(void)
 
 	return -1;
 }
+
+void qoriq_mmu_adjust_and_write_to_tlb1(
+	int tlb,
+	uintptr_t begin,
+	uintptr_t last,
+	uint32_t mas1,
+	uint32_t mas2,
+	uint32_t mas3,
+	uint32_t mas7
+)
+{
+	qoriq_mmu_context context;
+
+	qoriq_mmu_context_init(&context);
+	qoriq_mmu_add(
+		&context,
+		begin,
+		last,
+		mas1,
+		mas2,
+		mas3,
+		mas7
+	);
+	qoriq_mmu_partition(&context, 1);
+	qoriq_mmu_write_to_tlb1(&context, tlb);
+}

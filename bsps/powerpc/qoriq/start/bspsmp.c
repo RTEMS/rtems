@@ -118,11 +118,8 @@ static void bsp_inter_processor_interrupt(void *arg)
 static void setup_boot_page(void)
 {
 #ifdef QORIQ_IS_HYPERVISOR_GUEST
-  qoriq_mmu_context mmu_context;
-
-  qoriq_mmu_context_init(&mmu_context);
-  qoriq_mmu_add(
-    &mmu_context,
+  qoriq_mmu_adjust_and_write_to_tlb1(
+    QORIQ_TLB1_ENTRY_COUNT - 1,
     0xfffff000,
     0xffffffff,
     0,
@@ -130,8 +127,6 @@ static void setup_boot_page(void)
     FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW,
     0
   );
-  qoriq_mmu_partition(&mmu_context, 1);
-  qoriq_mmu_write_to_tlb1(&mmu_context, QORIQ_TLB1_ENTRY_COUNT - 1);
 #endif
 }
 
