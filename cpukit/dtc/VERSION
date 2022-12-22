@@ -2,24 +2,32 @@ Import from:
 
 git://git.kernel.org/pub/scm/utils/dtc/dtc.git
 
-commit ed310803ea893ed0a8bba9c4ff0d9eb0063a8bef
-Author: Luca Weiss <luca@z3ntu.xyz>
-Date:   Tue Apr 19 21:45:38 2022 +0200
+commit 2cd89f862cdb04d91c5d59c5b39647f7d5d5b3b8
+Author: David Gibson <david@gibson.dropbear.id.au>
+Date:   Mon Nov 21 14:18:44 2022 +1100
 
-    pylibfdt: add FdtRo.get_path()
+    dtc: Warning rather than error on possible truncation of cell values
 
-    Add a new Python method wrapping fdt_get_path() from the C API.
+    We always evaluate integer values in cell arrays as 64-bit quantities, then
+    truncate to the size of the array cells (32-bit by default).  However to
+    detect accidental truncation of meaningful values, we give an error if the
+    truncated portion isn't either all 0 or all 1 bits.  However, this can
+    still give counterintuitive errors.  For if the user is thinking in 2's
+    complement 32-bit arithmetic (which would be quite natural), then they'd
+    expect the expression (-0xffffffff-2) to evaluate to -1 (0xffffffff).
+    However in 64-bit it evaluates to 0xfffffffeffffffff which does truncate
+    to the expected value but trips this error message.
 
-    Also add a test for the new method.
+    Because of this reduce the error to only a warnings, with a somewhat more
+    helpful message.
 
-    Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-    Message-Id: <20220419194537.63170-1-luca@z3ntu.xyz>
-    Reviewed-by: Simon Glass <sjg@chromium.org>
+    Fixes: https://github.com/dgibson/dtc/issues/74
+
     Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
 
 Commands to generate update patches:
 
-git format-patch ed310803ea893ed0a8bba9c4ff0d9eb0063a8bef -- libfdt/fdt_addresses.c libfdt/fdt.c libfdt/fdt_empty_tree.c libfdt/fdt.h libfdt/fdt_ro.c libfdt/fdt_rw.c libfdt/fdt_strerror.c libfdt/fdt_sw.c libfdt/fdt_wip.c libfdt/libfdt_env.h libfdt/libfdt.h libfdt/libfdt_internal.h libfdt/TODO
+git format-patch 2cd89f862cdb04d91c5d59c5b39647f7d5d5b3b8 -- libfdt/fdt_addresses.c libfdt/fdt.c libfdt/fdt_empty_tree.c libfdt/fdt.h libfdt/fdt_ro.c libfdt/fdt_rw.c libfdt/fdt_strerror.c libfdt/fdt_sw.c libfdt/fdt_wip.c libfdt/libfdt_env.h libfdt/libfdt.h libfdt/libfdt_internal.h libfdt/TODO
 sed -i 's%/libfdt/fdt.h%/cpukit/include/fdt.h%g' 00*
 sed -i 's%/libfdt/libfdt.h%/cpukit/include/libfdt.h%g' 00*
 sed -i 's%/libfdt/libfdt_env.h%/cpukit/include/libfdt_env.h%g' 00*
