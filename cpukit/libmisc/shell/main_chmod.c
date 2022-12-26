@@ -56,7 +56,7 @@ static int rtems_shell_main_chmod(
    *  Now change the files modes
    */
   for (n=2 ; n < argc ; n++) {
-    sc = chmod(argv[n++], mode);
+    sc = chmod(argv[n], mode);
     _Assert_Unused_variable_unequal(sc, -1);
   }
 
