@@ -67,6 +67,8 @@ extern "C" {
 extern unsigned int zynqmp_dtb_len;
 extern unsigned char zynqmp_dtb[];
 
+#define NANDPSU_BASEADDR 0xFF100000
+
 /**
  * @brief Zynq UltraScale+ MPSoC specific set up of the MMU.
  *
