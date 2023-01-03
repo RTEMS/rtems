@@ -184,8 +184,8 @@ test-setup:
     ctx->first = NULL;
     ctx->test_vector = CallWithinISRGetVector();
     T_assert_lt_u32( ctx->test_vector, BSP_INTERRUPT_VECTOR_COUNT );
-    ctx->first = &bsp_interrupt_handler_table[
-      bsp_interrupt_handler_index( ctx->test_vector )
+    ctx->first = &bsp_interrupt_dispatch_table[
+      bsp_interrupt_dispatch_index( ctx->test_vector )
     ];
     ctx->entry_to_restore = *ctx->first;
 
