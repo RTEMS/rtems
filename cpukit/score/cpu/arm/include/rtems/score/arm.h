@@ -72,7 +72,8 @@ extern "C" {
 #ifndef ARM_DISABLE_THREAD_ID_REGISTER_USE
   #if defined(__ARM_ARCH_7A__) \
     || defined(__ARM_ARCH_7R__) \
-    || __ARM_ARCH >= 8
+    || __ARM_ARCH >= 8 \
+    || __ARM_ARCH == 6
     #define ARM_MULTILIB_HAS_THREAD_ID_REGISTER
   #endif
 #endif
