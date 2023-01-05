@@ -336,7 +336,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
                 " addend=%" PRIu32 "\n",
                 r, info, offset, addend);
 
-      type = info & 0xff;
+      type = ELF_R_TYPE(info);
 
       if ((info & (1 << 31)) == 0)
       {
