@@ -452,8 +452,8 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
       break;
 
     default:
-      printf ("rtl: Unsupported relocation type in %s --> %p in %s\n",
-              sect->name, (void *)where,
+      printf ("rtl: Unsupported relocation type (%ld) in %s --> %p in %s\n",
+              ELF_R_TYPE(rela->r_info), sect->name, (void *)where,
               rtems_rtl_obj_oname (obj));
       return rtems_rtl_elf_rel_failure;
   }
