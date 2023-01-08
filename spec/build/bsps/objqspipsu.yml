@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2022 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes:
+- bsps/include/dev/spi/
+- bsps/include/xil/
+- bsps/include/xil/${XIL_SUPPORT_PATH}/
+install:
+- destination: ${BSP_INCLUDEDIR}/dev/spi
+  source:
+  - bsps/include/dev/spi/xqspipsu_control.h
+  - bsps/include/dev/spi/xqspipsu_flash_config.h
+  - bsps/include/dev/spi/xqspipsu_hw.h
+  - bsps/include/dev/spi/xqspipsu-flash-helper.h
+  - bsps/include/dev/spi/xqspipsu.h
+links:
+- role: build-dependency
+  uid: objxilinxsupport
+- role: build-dependency
+  uid: optxpssysctrlbaseaddress
+source:
+- bsps/shared/dev/spi/xqspipsu_control.c
+- bsps/shared/dev/spi/xqspipsu_hw.c
+- bsps/shared/dev/spi/xqspipsu_options.c
+- bsps/shared/dev/spi/xqspipsu-flash-helper.c
+- bsps/shared/dev/spi/xqspipsu.c
+type: build
