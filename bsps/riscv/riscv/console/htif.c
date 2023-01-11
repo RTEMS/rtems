@@ -29,6 +29,8 @@
 
 #include <bsp/riscv.h>
 
+#ifdef RISCV_ENABLE_HTIF_SUPPORT
+
 #include <dev/serial/htif.h>
 
 #include <assert.h>
@@ -137,3 +139,5 @@ const rtems_termios_device_handler htif_console_handler = {
   .poll_read = htif_console_getchar,
   .mode = TERMIOS_POLLED
 };
+
+#endif /* RISCV_ENABLE_HTIF_SUPPORT */

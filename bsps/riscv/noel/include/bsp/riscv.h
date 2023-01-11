@@ -50,8 +50,6 @@ extern uint32_t riscv_hart_count;
 
 uint32_t riscv_get_hart_index_by_phandle(uint32_t phandle);
 
-void htif_poweroff(void);
-
 #ifdef __cplusplus
 }
 #endif

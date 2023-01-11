@@ -60,7 +60,9 @@
 static fe310_uart_context fe310_uart_instance;
 #endif
 
+#ifdef RISCV_ENABLE_HTIF_SUPPORT
 static htif_console_context htif_console_instance;
+#endif
 
 #if RISCV_CONSOLE_MAX_NS16550_DEVICES > 0
 static ns16550_context ns16550_instances[RISCV_CONSOLE_MAX_NS16550_DEVICES];
@@ -163,6 +165,7 @@ static void riscv_console_probe(void)
       compat_len = 0;
     }
 
+#ifdef RISCV_ENABLE_HTIF_SUPPORT
     /* Search for HTIF (eg. on Spike) and use it if found */
     if (fdt_stringlist_contains(compat, compat_len, "ucb,htif0")) {
       htif_console_context_init(&htif_console_instance.base, node);
@@ -171,6 +174,7 @@ static void riscv_console_probe(void)
       riscv_console.putchar = htif_console_putchar;
       riscv_console.getchar = htif_console_getchar;
     };
+#endif
 
 #if RISCV_CONSOLE_MAX_NS16550_DEVICES > 0
     if (
@@ -277,9 +281,10 @@ rtems_status_code console_initialize(
   void *arg
 )
 {
+#ifdef RISCV_ENABLE_HTIF_SUPPORT
   rtems_termios_device_context *base;
   char htif_path[] = "/dev/ttyShtif";
-
+#endif
 #if RISCV_CONSOLE_MAX_NS16550_DEVICES > 0
   char path[] = "/dev/ttyS?";
   size_t i;
@@ -292,12 +297,14 @@ rtems_status_code console_initialize(
 
   rtems_termios_initialize();
 
+#ifdef RISCV_ENABLE_HTIF_SUPPORT
   base = &htif_console_instance.base;
   rtems_termios_device_install(htif_path, &htif_console_handler, NULL, base);
 
   if (base == riscv_console.context) {
     link(htif_path, CONSOLE_DEVICE_NAME);
   }
+#endif
 
 #if RISCV_CONSOLE_MAX_NS16550_DEVICES > 0
   for (i = 0; i < RISCV_CONSOLE_MAX_NS16550_DEVICES; ++i) {

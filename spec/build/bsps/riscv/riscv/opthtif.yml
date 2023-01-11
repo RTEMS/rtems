@@ -5,10 +5,10 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: false
+default: true
 default-by-variant: []
 description: |
-  enables the HTIF support if defined to a non-zero value, otherwise it is disabled (disabled by default)
+  Enable the Host/Target Interface (HTIF) support.
 enabled-by: true
 links: []
 name: RISCV_ENABLE_HTIF_SUPPORT

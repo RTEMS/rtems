@@ -249,14 +249,18 @@ static void riscv_plic_init(const void *fdt)
   plic = riscv_fdt_get_address(fdt, node);
 
   if (plic == NULL) {
-      node = fdt_node_offset_by_compatible(fdt, -1, "ucb,htif0");
+#ifdef RISCV_ENABLE_HTIF_SUPPORT
+    node = fdt_node_offset_by_compatible(fdt, -1, "ucb,htif0");
 
-      /* Spike platform has HTIF and does not have a PLIC */
-      if (node != -1) {
-          return;
-      } else {
-          bsp_fatal(RISCV_FATAL_NO_PLIC_REG_IN_DEVICE_TREE);
-      }
+    /* Spike platform has HTIF and does not have a PLIC */
+    if (node >= 0) {
+      return;
+    } else {
+      bsp_fatal(RISCV_FATAL_NO_PLIC_REG_IN_DEVICE_TREE);
+    }
+#else
+    bsp_fatal(RISCV_FATAL_NO_PLIC_REG_IN_DEVICE_TREE);
+#endif
   }
 
   riscv_plic = plic;

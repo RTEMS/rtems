@@ -40,10 +40,13 @@ void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
 
   fdt = bsp_fdt_get();
 
+#ifdef RISCV_ENABLE_HTIF_SUPPORT
   node = fdt_node_offset_by_compatible(fdt, -1, "ucb,htif0");
 
-  if (node != -1)
-      htif_poweroff();
+  if (node >= 0) {
+    htif_poweroff();
+  }
+#endif
 
 #if RISCV_ENABLE_MPFS_SUPPORT != 0
   for(;;);
