@@ -3,7 +3,7 @@ This directory contains a port of the JFFS2 file system from Linux v5.9.
 To update to a newer Linux version use this command in a Git clone of Linux to
 generate the relevant patches:
 
-  git format-patch v5.9..v9.99 --
+  git format-patch v6.1..v9.99 -- \
     include/uapi/linux/jffs2.h \
     fs/jffs2/LICENCE \
     fs/jffs2/acl.h \
