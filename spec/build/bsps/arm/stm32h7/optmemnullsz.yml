@@ -1,17 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
 - env-assign: null
 build-type: option
-default: 256
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0x00000100
 default-by-variant: []
+description: |
+  Size of the NULL pointer protection area in bytes.  This memory area reduces
+  the size of the ITCM available to the application (STM32H7_MEMORY_ITCM_SIZE).
 enabled-by: true
 format: '{:#010x}'
 links: []
 name: STM32H7_MEMORY_NULL_SIZE
-description: |
-  Size of the NULL pointer protection area in bytes.  This memory area reduces
-  the size of the ITCM available to the application (STM32H7_MEMORY_ITCM_SIZE).
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

@@ -5,15 +5,15 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
+default: 0x00000000
 default-by-variant:
-- value: 14
+- value: 0x0000000e
   variants:
   - arm/lm3s6965.*
-- value: 16
+- value: 0x00000010
   variants:
   - arm/lm3s3749.*
-- value: 21
+- value: 0x00000015
   variants:
   - arm/lm4f120.*
 description: |

@@ -1,7 +1,10 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-string: null
 - env-assign: null
 build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: linkcmds.sdram
 default-by-variant:
 - value: linkcmds.flash
@@ -12,15 +15,12 @@ default-by-variant:
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
   - arm/nucleo-h743zi
-enabled-by: true
-format: '{}'
-links: []
-name: STM32H7_DEFAULT_LINKCMDS
 description: |
   The default linker command file.  Must be either linkcmds.flash,
   linkcmds.sdram, linkcmds.sram, linkcmds.sram_sdram
   or linkcmds.flash_sdram
+enabled-by: true
+format: '{}'
+links: []
+name: STM32H7_DEFAULT_LINKCMDS
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

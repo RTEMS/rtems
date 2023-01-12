@@ -7,7 +7,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
-default: 32768
+default: 0x00008000
 default-by-variant: []
 description: |
   offset of RAM region from memory area base

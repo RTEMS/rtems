@@ -3,15 +3,15 @@ actions:
 - get-integer: null
 - env-assign: null
 build-type: option
-default: 0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0x00000000
 default-by-variant: []
+description: |
+  Size of the NULL pointer protection area in bytes.  This memory area reduces
+  the size of the ITCM available to the application.
 enabled-by: true
 format: '{:#010x}'
 links: []
 name: ATSAM_MEMORY_NULL_SIZE
-description: |
-  Size of the NULL pointer protection area in bytes.  This memory area reduces
-  the size of the ITCM available to the application.
 type: build
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

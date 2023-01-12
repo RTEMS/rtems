@@ -1,20 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-boolean: null
 - env-assign: null
 - define-condition: null
 build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: true
 default-by-variant: []
-enabled-by: true
-format: '{}'
-links: []
-name: STM32H7_ENABLE_MPU_ALIGNMENT
 description: |
   Enable the alignment of the size of the combined start and text sections and
   the rodata section to meet MPU region alignment requirements.  This increases
   the memory footprint.  It enables a write-protection of the start, text, and
   rodata sections.  It makes the data sections non-executable.
+enabled-by: true
+format: '{}'
+links: []
+name: STM32H7_ENABLE_MPU_ALIGNMENT
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

@@ -1,7 +1,10 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-string: null
 - define-unquoted: null
 build-type: option
+copyrights:
+- Copyright (C) 2022 Karel Gardas <karel@functional.vision>
 default: PWR_LDO_SUPPLY
 default-by-variant:
 - value: PWR_DIRECT_SMPS_SUPPLY
@@ -11,13 +14,13 @@ default-by-variant:
   - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
+description: |
+  Board power supply mechanism configuration. WARNING: wrong configuration here
+  may result in your board being unaccessible using ST-Link interface! Please
+  consult board datasheet for more information about various power supply
+  options and about how to fix possible misconfiguration.
 enabled-by: true
 format: '{}'
 links: []
 name: STM32H7_PWR_SUPPLY
-description: |
-  Board power supply mechanism configuration. WARNING: wrong configuration here may result in your board being unaccessible using ST-Link interface! Please consult board datasheet for more information about various power supply options and about how to fix possible misconfiguration.
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2022 Karel Gardas <karel@functional.vision>

@@ -5,7 +5,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 256
+default: 0x00000100
 default-by-variant: []
 description: |
   This defines the base address of the exception table.

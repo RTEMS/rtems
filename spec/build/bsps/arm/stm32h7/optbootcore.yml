@@ -1,11 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-string: null
 - script: |
-          cores = ["CORE_CM7", "CORE_CM4", "BOOT_CORE_DEFINE_NOT_NEEDED"]
-          if value not in cores:
-             conf.fatal("STM32H7 boot core '{}' is not one of {}".format(value, cores))
-          conf.define_cond(value, True)
+    cores = ["CORE_CM7", "CORE_CM4", "BOOT_CORE_DEFINE_NOT_NEEDED"]
+    if value not in cores:
+       conf.fatal("STM32H7 boot core '{}' is not one of {}".format(value, cores))
+    conf.define_cond(value, True)
 build-type: option
+copyrights:
+- Copyright (C) 2022 Karel Gardas <karel@functional.vision>
 default: BOOT_CORE_DEFINE_NOT_NEEDED
 default-by-variant:
 - value: CORE_CM7
@@ -16,13 +19,10 @@ default-by-variant:
   variants:
   - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco-m4
+description: |
+  Select the boot core. Possible values are CORE_CM7 and CORE_CM4
 enabled-by: true
 format: '{}'
 links: []
 name: STM32H7_BOOT_CORE
-description: |
-  Select the boot core. Possible values are CORE_CM7 and CORE_CM4
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2022 Karel Gardas <karel@functional.vision>

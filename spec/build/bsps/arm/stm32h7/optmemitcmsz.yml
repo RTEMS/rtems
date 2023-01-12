@@ -1,18 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
 - env-assign: null
 build-type: option
-default: 0xff00
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0x0000ff00
 default-by-variant: []
-enabled-by: true
-format: '{:#010x}'
-links: []
-name: STM32H7_MEMORY_ITCM_SIZE
 description: |
   Size of the Instruction Tightly Coupled Memory (ITCM) in bytes.  The size
   must take the NULL pointer protection memory area into account
   (STM32H7_MEMORY_NULL_SIZE).
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: STM32H7_MEMORY_ITCM_SIZE
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

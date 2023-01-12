@@ -1,21 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
 - env-assign: null
 build-type: option
-default: 0x200000
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0x00200000
 default-by-variant:
-default-by-variant:
-- value: 0x100000
+- value: 0x00100000
   variants:
   - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco-m4
+description: |
+  Size of the internal flash in bytes.
 enabled-by: true
 format: '{:#010x}'
 links: []
 name: STM32H7_MEMORY_FLASH_SIZE
-description: |
-  Size of the internal flash in bytes.
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

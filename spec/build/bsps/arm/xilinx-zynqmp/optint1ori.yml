@@ -7,7 +7,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 4294901760
+default: 0xffff0000
 default-by-variant: []
 description: ''
 enabled-by: true

@@ -4,6 +4,8 @@ actions:
 - assert-uint32: null
 - format-and-define: null
 build-type: option
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 default: 25000000
 default-by-variant:
 - value: 8000000
@@ -12,12 +14,10 @@ default-by-variant:
 - value: 24000000
   variants:
   - arm/stm32h7b3i-dk
+description: |
+  Frequency of the external high speed oscillator (HSE).
 enabled-by: true
 format: '{}'
 links: []
 name: STM32H7_HSE_FREQUENCY
-description: |
-  Frequency of the external high speed oscillator (HSE).
 type: build
-copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)

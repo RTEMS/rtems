@@ -5,7 +5,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
-default: 3
+default: 0x00000003
 default-by-variant: []
 description: |
   Defines the initial value of the ICC_BPR1 register of the ARM GIC CPU

@@ -7,7 +7,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
-default: 0x100000
+default: 0x00100000
 default-by-variant: []
 description: |
   length of nocache RAM region

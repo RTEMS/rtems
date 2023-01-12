@@ -7,9 +7,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 268435456
+default: 0x10000000
 default-by-variant:
-- value: 2147483648
+- value: 0x80000000
   variants:
   - arm/xilinx_zynqmp_ultra96
 description: |

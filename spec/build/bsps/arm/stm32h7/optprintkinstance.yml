@@ -1,19 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-string: null
 - define-unquoted: null
 build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: stm32h7_usart1_instance
 default-by-variant:
 - value: stm32h7_usart3_instance
   variants:
   - arm/nucleo-h743zi
+description: |
+  UART/USART instance used for printk() and getchark().
 enabled-by: true
 format: '{}'
 links: []
 name: STM32H7_PRINTK_INSTANCE
-description: |
-  UART/USART instance used for printk() and getchark().
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

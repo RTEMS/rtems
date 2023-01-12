@@ -5,12 +5,12 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 33554944
+default: 0x02000200
 default-by-variant:
-- value: 2181046784
+- value: 0x82002200
   variants:
   - powerpc/qoriq_e6500_64.*
-- value: 33563136
+- value: 0x02002200
   variants:
   - powerpc/qoriq_e6500_32.*
 description: |

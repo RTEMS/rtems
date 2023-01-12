@@ -1,17 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
 - env-assign: null
 build-type: option
-default: 1048576
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0x00100000
 default-by-variant: []
+description: |
+  Size of the nocache area at the end of the external RAM in bytes.  Must not be
+  bigger than IMXRT_MEMORY_EXTRAM_SIZE.
 enabled-by: true
 format: '{:#010x}'
 links: []
 name: IMXRT_MEMORY_EXTRAM_NOCACHE_SIZE
-description: |
-  Size of the nocache area at the end of the external RAM in bytes.  Must not be
-  bigger than IMXRT_MEMORY_EXTRAM_SIZE.
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

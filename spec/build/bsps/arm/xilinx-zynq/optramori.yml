@@ -8,9 +8,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 1048576
+default: 0x00100000
 default-by-variant:
-- value: 4194304
+- value: 0x00400000
   variants:
   - arm/xilinx_zynq_zc706
 description: ''

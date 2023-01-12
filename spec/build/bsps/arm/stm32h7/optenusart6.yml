@@ -1,7 +1,10 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-boolean: null
 - define-condition: null
 build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: true
 default-by-variant:
 - value: false
@@ -11,13 +14,10 @@ default-by-variant:
   - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
+description: |
+  Enable USART6 device in console driver.
 enabled-by: true
 format: '{}'
 links: []
 name: STM32H7_CONSOLE_ENABLE_USART6
-description: |
-  Enable USART6 device in console driver.
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

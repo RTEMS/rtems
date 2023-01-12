@@ -7,7 +7,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 268435456
+default: 0x10000000
 default-by-variant: []
 description: |
   RAM region length

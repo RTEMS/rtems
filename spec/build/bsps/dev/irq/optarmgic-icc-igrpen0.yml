@@ -5,7 +5,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
-default: 1
+default: 0x00000001
 default-by-variant:
 - value: null
   variants:

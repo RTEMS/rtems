@@ -1,8 +1,11 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-string: null
 - split: null
 - env-append: null
 build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
 - -mthumb
 - -mcpu=cortex-m7
@@ -17,12 +20,9 @@ default-by-variant:
   variants:
   - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco-m4
+description: |
+  ABI flags
 enabled-by: true
 links: []
 name: ABI_FLAGS
-description: |
-  ABI flags
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

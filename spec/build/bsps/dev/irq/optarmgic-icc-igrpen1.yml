@@ -5,7 +5,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
-default: 1
+default: 0x00000001
 default-by-variant: []
 description: |
   Defines the initial value of the ICC_IGRPEN1 register of the ARM GIC CPU

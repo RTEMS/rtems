@@ -1,16 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
 - env-assign: null
 build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 0x20000000
 default-by-variant: []
+description: |
+  Size of the peripheral memory in bytes.
 enabled-by: true
 format: '{:#010x}'
 links: []
 name: STM32H7_MEMORY_PERIPHERAL_SIZE
-description: |
-  Size of the peripheral memory in bytes.
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

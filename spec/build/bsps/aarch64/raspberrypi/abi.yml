@@ -9,12 +9,11 @@ copyrights:
 default:
 - -mcpu=cortex-a72
 - -march=armv8-a
-
 default-by-variant: []
-includes: []
 description: |
   ABI flags
-links: []
 enabled-by: true
+includes: []
+links: []
 name: ABI_FLAGS
 type: build

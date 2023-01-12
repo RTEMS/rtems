@@ -1,19 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-string: null
 - define-unquoted: null
 build-type: option
+copyrights:
+- Copyright (C) 2022 Karel Gardas <karel@functional.vision>
 default: FLASH_LATENCY_4
 default-by-variant:
 - value: FLASH_LATENCY_6
   variants:
   - arm/stm32h7b3i-dk
+description: |
+  Internal Flash latency
 enabled-by: true
 format: '{}'
 links: []
 name: STM32H7_FLASH_LATENCY
-description: |
-  Internal Flash latency
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2022 Karel Gardas <karel@functional.vision>

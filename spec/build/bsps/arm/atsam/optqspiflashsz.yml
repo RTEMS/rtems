@@ -6,7 +6,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 2097152
+default: 0x00200000
 default-by-variant: []
 description: |
   size of QSPI flash in bytes

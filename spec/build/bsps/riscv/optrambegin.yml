@@ -8,15 +8,15 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 2147483648
+default: 0x80000000
 default-by-variant:
-- value: 0
+- value: 0x00000000
   variants:
   - riscv/noel.*
-- value: 1073741824
+- value: 0x40000000
   variants:
   - riscv/griscv
-- value: 68719476736
+- value: 0x1000000000
   variants:
   - riscv/mpfs64.*
 description: ''

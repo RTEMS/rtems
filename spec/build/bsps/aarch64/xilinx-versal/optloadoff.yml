@@ -7,9 +7,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
-default: 0x0
+default: 0x00000000
 default-by-variant:
-- value: 32768
+- value: 0x00008000
   variants:
   - aarch64/xilinx_versal_qemu
 description: |

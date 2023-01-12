@@ -1,17 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-string: null
 - env-assign: null
 build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: linkcmds.flexspi
 default-by-variant: []
+description: |
+  The default linker command file.  Must be linkcmds.sdram, linkcmds.ocram or
+  linkcmds.flexspi.
 enabled-by: true
 format: '{}'
 links: []
 name: IMXRT_DEFAULT_LINKCMDS
-description: |
-  The default linker command file.  Must be linkcmds.sdram, linkcmds.ocram or
-  linkcmds.flexspi.
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

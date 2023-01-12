@@ -26,7 +26,7 @@ default-by-variant:
   - aarch64/xilinx_zynqmp_lp64_cfc400x
   - aarch64/xilinx_zynqmp_lp64_qemu
   - aarch64/xilinx_zynqmp_lp64_zu3eg
-description: 'Set the Xilinx support path'
+description: Set the Xilinx support path
 enabled-by: true
 format: '{}'
 links: []

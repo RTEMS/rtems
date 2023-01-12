@@ -5,12 +5,12 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: 0
+default: 0x00000000
 default-by-variant:
-- value: 17
+- value: 0x00000011
   variants:
   - powerpc/mpc8309som
-- value: -1
+- value: -0x0000001
   variants:
   - powerpc/br_uid
 description: |

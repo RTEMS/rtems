@@ -1,21 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-boolean: null
 - define-condition: null
 build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: true
-default-by-variant:
 default-by-variant:
 - value: false
   variants:
   - arm/stm32h757i-eval
   - arm/stm32h757i-eval-m4
+description: |
+  Enable USART2 device in console driver.
 enabled-by: true
 format: '{}'
 links: []
 name: STM32H7_CONSOLE_ENABLE_USART2
-description: |
-  Enable USART2 device in console driver.
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
