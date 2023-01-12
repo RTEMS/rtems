@@ -9,10 +9,10 @@ default: 111111111
 default-by-variant:
 - value: 111111111
   variants:
-  - arm/xilinx_zynq_zc702.*
+  - arm/xilinx_zynq_zc702
 - value: 111111111
   variants:
-  - arm/xilinx_zynq_zedboard.*
+  - arm/xilinx_zynq_zedboard
 description: |
   Zynq cpu_1x clock frequency in Hz
 enabled-by: true

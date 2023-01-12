@@ -12,13 +12,13 @@ default-by-variant:
   - powerpc/gwlcfm
 - value: 40000000
   variants:
-  - powerpc/mpc5643l_evb.*
+  - powerpc/mpc5643l_evb
 - value: 25000000
   variants:
-  - powerpc/mpc5668g.*
+  - powerpc/mpc5668g
 - value: 40000000
   variants:
-  - powerpc/mpc5674f.*
+  - powerpc/mpc5674fevb
 description: |
   None
 enabled-by: true

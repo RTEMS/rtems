@@ -9,10 +9,10 @@ default: 0x00000000
 default-by-variant:
 - value: 0x02000000
   variants:
-  - arm/stm32h757i-eval
-  - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
+  - arm/stm32h757i-eval
+  - arm/stm32h757i-eval-m4
 description: |
   Size of the SDRAM 2 in bytes.
 enabled-by: true

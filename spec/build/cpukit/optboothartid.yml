@@ -9,7 +9,7 @@ default: 0
 default-by-variant:
 - value: 1
   variants:
-  - riscv/mpfs64.*
+  - riscv/mpfs64imafdc
 description: |
   boot hartid (processor number) of risc-v cpu (default 0)
 enabled-by: riscv

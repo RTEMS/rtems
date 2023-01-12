@@ -9,7 +9,8 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - powerpc/qoriq_e6500.*
+  - powerpc/qoriq_e6500_32
+  - powerpc/qoriq_e6500_64
 description: |
   defined if the processor core has a hypervisor mode
 enabled-by: true

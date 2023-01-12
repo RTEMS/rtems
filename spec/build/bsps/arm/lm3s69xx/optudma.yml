@@ -9,10 +9,10 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/lm3s3749.*
+  - arm/lm3s3749
 - value: true
   variants:
-  - arm/lm4f.*
+  - arm/lm4f120
 description: |
   defined if MCU supports UDMA
 enabled-by: true

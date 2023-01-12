@@ -9,7 +9,8 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/beagleboard.*
+  - arm/beagleboardorig
+  - arm/beagleboardxm
 description: |
   true if SOC is DM3730
 enabled-by: true

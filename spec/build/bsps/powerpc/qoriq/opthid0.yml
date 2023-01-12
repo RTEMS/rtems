@@ -9,7 +9,8 @@ default: null
 default-by-variant:
 - value: 0x40000000
   variants:
-  - powerpc/qoriq_e6500.*
+  - powerpc/qoriq_e6500_32
+  - powerpc/qoriq_e6500_64
 description: |
   initial HID0 value (EN_L2MMU_MHD is set by default on the T-series)
 enabled-by: true

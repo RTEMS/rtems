@@ -9,7 +9,8 @@ default: 12000000
 default-by-variant:
 - value: 3686400
   variants:
-  - arm/lpc23.*
+  - arm/lpc2362
+  - arm/lpc23xx_tli800
 description: |
   main oscillator frequency in Hz
 enabled-by: true

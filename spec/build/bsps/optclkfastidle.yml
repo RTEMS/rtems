@@ -9,7 +9,20 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - .*qemu.*
+  - aarch64/a53_ilp32_qemu
+  - aarch64/a53_lp64_qemu
+  - aarch64/a72_ilp32_qemu
+  - aarch64/a72_lp64_qemu
+  - aarch64/xilinx_versal_qemu
+  - aarch64/xilinx_zynqmp_ilp32_qemu
+  - aarch64/xilinx_zynqmp_lp64_qemu
+  - arm/lm3s6965_qemu
+  - arm/realview_pbx_a9_qemu
+  - arm/xilinx_zynq_a9_qemu
+  - microblaze/kcu105_qemu
+  - powerpc/qemuppc
+  - powerpc/qemuprep
+  - powerpc/qemuprep-altivec
 description: |
   Set a mode where the time runs as fast as possible when a clock ISR occurs
   while the IDLE thread is executing; this can significantly reduce simulation

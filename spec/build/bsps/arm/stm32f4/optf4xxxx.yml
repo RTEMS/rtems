@@ -9,7 +9,7 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/stm32f4.*
+  - arm/stm32f4
 description: |
   Chip belongs to the STM32F4XXXX family.
 enabled-by: true

@@ -9,11 +9,11 @@ default: PWR_LDO_SUPPLY
 default-by-variant:
 - value: PWR_DIRECT_SMPS_SUPPLY
   variants:
-  - arm/stm32h7b3i-dk
-  - arm/stm32h757i-eval
-  - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
+  - arm/stm32h757i-eval
+  - arm/stm32h757i-eval-m4
+  - arm/stm32h7b3i-dk
 description: |
   Board power supply mechanism configuration. WARNING: wrong configuration here
   may result in your board being unaccessible using ST-Link interface! Please

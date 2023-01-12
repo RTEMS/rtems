@@ -9,7 +9,8 @@ default: 1
 default-by-variant:
 - value: 2
   variants:
-  - powerpc/qoriq_e6500.*
+  - powerpc/qoriq_e6500_32
+  - powerpc/qoriq_e6500_64
 description: |
   the number of threads per core
 enabled-by: true

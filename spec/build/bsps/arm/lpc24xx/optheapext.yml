@@ -9,7 +9,8 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/lpc23.*
+  - arm/lpc2362
+  - arm/lpc23xx_tli800
 description: |
   enable heap extend by Ethernet and USB regions
 enabled-by: true

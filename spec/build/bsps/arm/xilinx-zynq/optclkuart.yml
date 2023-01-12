@@ -9,10 +9,10 @@ default: 50000000
 default-by-variant:
 - value: 50000000
   variants:
-  - arm/xilinx_zynq_zc702.*
+  - arm/xilinx_zynq_zc702
 - value: 50000000
   variants:
-  - arm/xilinx_zynq_zedboard.*
+  - arm/xilinx_zynq_zedboard
 description: |
   Zynq UART clock frequency in Hz
 enabled-by: true

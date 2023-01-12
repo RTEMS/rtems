@@ -9,13 +9,14 @@ default: 0
 default-by-variant:
 - value: 8
   variants:
-  - arm/lm3s3749.*
+  - arm/lm3s3749
 - value: 7
   variants:
-  - arm/lm3s6965.*
+  - arm/lm3s6965
+  - arm/lm3s6965_qemu
 - value: 6
   variants:
-  - arm/lm4f120.*
+  - arm/lm4f120
 description: |
   number of GPIO blocks supported by MCU
 enabled-by: true

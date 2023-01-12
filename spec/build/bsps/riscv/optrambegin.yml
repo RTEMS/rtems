@@ -12,13 +12,17 @@ default: 0x80000000
 default-by-variant:
 - value: 0x00000000
   variants:
-  - riscv/noel.*
+  - riscv/noel32im
+  - riscv/noel32imafd
+  - riscv/noel64imac
+  - riscv/noel64imafd
+  - riscv/noel64imafdc
 - value: 0x40000000
   variants:
   - riscv/griscv
 - value: 0x1000000000
   variants:
-  - riscv/mpfs64.*
+  - riscv/mpfs64imafdc
 description: ''
 enabled-by: true
 format: '{:#010x}'

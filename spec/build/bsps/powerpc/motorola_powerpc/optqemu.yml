@@ -9,7 +9,8 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - powerpc/qemuprep.*
+  - powerpc/qemuprep
+  - powerpc/qemuprep-altivec
 description: |
   Defined for QEMU BSP -- undefined for others
 enabled-by: true

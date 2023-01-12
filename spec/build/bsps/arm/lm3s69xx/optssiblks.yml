@@ -9,13 +9,14 @@ default: 0
 default-by-variant:
 - value: 2
   variants:
-  - arm/lm3s3749.*
+  - arm/lm3s3749
 - value: 1
   variants:
-  - arm/lm3s6965.*
+  - arm/lm3s6965
+  - arm/lm3s6965_qemu
 - value: 4
   variants:
-  - arm/lm4f120.*
+  - arm/lm4f120
 description: |
   number of SSI blocks supported by MCU
 enabled-by: true

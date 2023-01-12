@@ -9,7 +9,10 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/.*_ea_.*
+  - arm/lpc17xx_ea_ram
+  - arm/lpc17xx_ea_rom_int
+  - arm/lpc40xx_ea_ram
+  - arm/lpc40xx_ea_rom_int
 description: |
   enable RMII for Ethernet
 enabled-by: true

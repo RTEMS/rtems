@@ -9,7 +9,7 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - riscv/frdme310arty.*
+  - riscv/frdme310arty
 description: |
   enables support sifive Freedom E310 Arty board if defined to a non-zero value,otherwise it is disabled (disabled by default)
 enabled-by: true

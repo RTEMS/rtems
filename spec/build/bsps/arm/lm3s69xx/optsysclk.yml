@@ -9,10 +9,12 @@ default: 0
 default-by-variant:
 - value: 50000000
   variants:
-  - arm/lm3s.*
+  - arm/lm3s3749
+  - arm/lm3s6965
+  - arm/lm3s6965_qemu
 - value: 80000000
   variants:
-  - arm/lm4f.*
+  - arm/lm4f120
 description: |
   system clock in Hz
 enabled-by: true

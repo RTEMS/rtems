@@ -11,7 +11,8 @@ default: 0x10000000
 default-by-variant:
 - value: 0x80000000
   variants:
-  - microblaze/kcu105.*
+  - microblaze/kcu105
+  - microblaze/kcu105_qemu
 description: |
   length of memory area available to the BSP
 enabled-by: true

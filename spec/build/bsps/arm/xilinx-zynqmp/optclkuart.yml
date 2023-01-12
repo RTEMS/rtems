@@ -9,7 +9,7 @@ default: 100000000
 default-by-variant:
 - value: 100000000
   variants:
-  - arm/xilinx_zynqmp_ultra96.*
+  - arm/xilinx_zynqmp_ultra96
 description: |
   Zynq UART clock frequency in Hz
 enabled-by: true

@@ -9,7 +9,7 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - powerpc/mpc5566evb.*
+  - powerpc/mpc5566evb
 description: |
   if defined, use custom settings for MPC5566EVB board
 enabled-by: true

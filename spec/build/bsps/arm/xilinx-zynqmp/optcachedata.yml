@@ -9,7 +9,9 @@ default: true
 default-by-variant:
 - value: false
   variants:
-  - arm/.*qemu
+  - arm/lm3s6965_qemu
+  - arm/realview_pbx_a9_qemu
+  - arm/xilinx_zynq_a9_qemu
 description: |
   enable data cache
 enabled-by: true

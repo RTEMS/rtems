@@ -9,7 +9,8 @@ default: 0x00000000
 default-by-variant:
 - value: 0x0000000f
   variants:
-  - powerpc/qoriq_e6500.*
+  - powerpc/qoriq_e6500_32
+  - powerpc/qoriq_e6500_64
 description: |
   MAS7 value for device TLB1 entries
 enabled-by: true

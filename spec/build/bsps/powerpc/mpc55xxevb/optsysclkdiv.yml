@@ -9,7 +9,7 @@ default: 1
 default-by-variant:
 - value: 2
   variants:
-  - powerpc/mpc5674f.*
+  - powerpc/mpc5674fevb
 description: |
   system clock divider
 enabled-by: true

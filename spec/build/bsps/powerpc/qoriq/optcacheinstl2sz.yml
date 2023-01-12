@@ -9,7 +9,8 @@ default: 262144
 default-by-variant:
 - value: 2097152
   variants:
-  - powerpc/qoriq_e6500.*
+  - powerpc/qoriq_e6500_32
+  - powerpc/qoriq_e6500_64
 description: |
   the L2 instruction cache size
 enabled-by: true

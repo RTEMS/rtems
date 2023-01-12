@@ -9,7 +9,9 @@ default: false
 default-by-variant:
 - value: USB_OTG_VBUS_POWER_WITH_CHARGE_PUMP
   variants:
-  - arm/lpc32xx_mzx.*
+  - arm/lpc32xx_mzx
+  - arm/lpc32xx_mzx_stage_1
+  - arm/lpc32xx_mzx_stage_2
 description: |
   USB OTG transceiver VBUS policy
 enabled-by: true

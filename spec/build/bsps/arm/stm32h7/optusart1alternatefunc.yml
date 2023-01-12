@@ -9,9 +9,9 @@ default: GPIO_AF4_USART1
 default-by-variant:
 - value: GPIO_AF7_USART1
   variants:
-  - arm/stm32h7b3i-dk
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
+  - arm/stm32h7b3i-dk
 description: |
   Alternate function mapping for the USART1 pin configuration.
 enabled-by: true

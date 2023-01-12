@@ -9,7 +9,8 @@ default: null
 default-by-variant:
 - value: 0x01400201
   variants:
-  - powerpc/qoriq_e6500.*
+  - powerpc/qoriq_e6500_32
+  - powerpc/qoriq_e6500_64
 description: |
   initial BUCSR value
 enabled-by: true

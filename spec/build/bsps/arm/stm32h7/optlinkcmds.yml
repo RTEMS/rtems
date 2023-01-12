@@ -9,12 +9,12 @@ default: linkcmds.sdram
 default-by-variant:
 - value: linkcmds.flash
   variants:
-  - arm/stm32h7b3i-dk
-  - arm/stm32h757i-eval
-  - arm/stm32h757i-eval-m4
+  - arm/nucleo-h743zi
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
-  - arm/nucleo-h743zi
+  - arm/stm32h757i-eval
+  - arm/stm32h757i-eval-m4
+  - arm/stm32h7b3i-dk
 description: |
   The default linker command file.  Must be either linkcmds.flash,
   linkcmds.sdram, linkcmds.sram, linkcmds.sram_sdram

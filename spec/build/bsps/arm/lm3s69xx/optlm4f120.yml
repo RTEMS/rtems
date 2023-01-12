@@ -9,7 +9,7 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/lm4f120.*
+  - arm/lm4f120
 description: |
   board has LM4F120xxx MCU
 enabled-by: true

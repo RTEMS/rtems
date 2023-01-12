@@ -9,10 +9,10 @@ default: 0x02000200
 default-by-variant:
 - value: 0x82002200
   variants:
-  - powerpc/qoriq_e6500_64.*
+  - powerpc/qoriq_e6500_64
 - value: 0x02002200
   variants:
-  - powerpc/qoriq_e6500_32.*
+  - powerpc/qoriq_e6500_32
 description: |
   initial MSR value
 enabled-by: true

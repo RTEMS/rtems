@@ -9,16 +9,20 @@ default: 72000000
 default-by-variant:
 - value: 96000000
   variants:
-  - arm/lpc17xx_ea.*
+  - arm/lpc17xx_ea_ram
+  - arm/lpc17xx_ea_rom_int
 - value: 96000000
   variants:
-  - arm/lpc40xx_ea.*
+  - arm/lpc40xx_ea_ram
+  - arm/lpc40xx_ea_rom_int
 - value: 58982400
   variants:
-  - arm/lpc23.*
+  - arm/lpc2362
+  - arm/lpc23xx_tli800
 - value: 51612800
   variants:
-  - arm/lpc24xx_plx800_.*
+  - arm/lpc24xx_plx800_ram
+  - arm/lpc24xx_plx800_rom_int
 description: |
   CPU clock in Hz
 enabled-by: true

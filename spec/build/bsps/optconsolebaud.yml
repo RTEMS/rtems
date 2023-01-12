@@ -11,8 +11,8 @@ default-by-variant:
   variants:
   - bsps/powerpc/motorola_powerpc
   - m68k/m5484FireEngine
-  - powerpc/hsc_cm01
   - powerpc/beatnik
+  - powerpc/hsc_cm01
   - powerpc/mvme3100
   - powerpc/mvme5500
 - value: 19200

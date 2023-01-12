@@ -13,12 +13,12 @@ default: BOOT_CORE_DEFINE_NOT_NEEDED
 default-by-variant:
 - value: CORE_CM7
   variants:
-  - arm/stm32h757i-eval
   - arm/stm32h747i-disco
+  - arm/stm32h757i-eval
 - value: CORE_CM4
   variants:
-  - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco-m4
+  - arm/stm32h757i-eval-m4
 description: |
   Select the boot core. Possible values are CORE_CM7 and CORE_CM4
 enabled-by: true

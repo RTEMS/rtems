@@ -9,7 +9,8 @@ default: 2
 default-by-variant:
 - value: 24
   variants:
-  - powerpc/qoriq_e6500.*
+  - powerpc/qoriq_e6500_32
+  - powerpc/qoriq_e6500_64
 description: |
   maximum virtual processor count
 enabled-by: true

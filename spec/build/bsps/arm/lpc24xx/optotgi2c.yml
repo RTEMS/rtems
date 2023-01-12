@@ -9,10 +9,12 @@ default: 0x00000000
 default-by-variant:
 - value: 0x0000005e
   variants:
-  - arm/lpc17xx_ea.*
+  - arm/lpc17xx_ea_ram
+  - arm/lpc17xx_ea_rom_int
 - value: 0x0000005e
   variants:
-  - arm/lpc40xx_ea.*
+  - arm/lpc40xx_ea_ram
+  - arm/lpc40xx_ea_rom_int
 description: |
   USB OTG transceiver I2C address used by USB stack
 enabled-by: true

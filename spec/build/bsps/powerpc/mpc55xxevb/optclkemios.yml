@@ -9,13 +9,13 @@ default: 23
 default-by-variant:
 - value: null
   variants:
-  - powerpc/mpc5643l.*
+  - powerpc/mpc5643l_evb
 - value: null
   variants:
-  - powerpc/mpc5668g.*
+  - powerpc/mpc5668g
 - value: 31
   variants:
-  - powerpc/mpc5674f.*
+  - powerpc/mpc5674fevb
 description: |
   selects the eMIOS channel for the RTEMS system tick (the default is the last channel)
 enabled-by: true

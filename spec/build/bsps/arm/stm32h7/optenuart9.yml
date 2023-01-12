@@ -9,11 +9,11 @@ default: true
 default-by-variant:
 - value: false
   variants:
-  - arm/stm32h7b3i-dk
-  - arm/stm32h757i-eval
-  - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
+  - arm/stm32h757i-eval
+  - arm/stm32h757i-eval-m4
+  - arm/stm32h7b3i-dk
 description: |
   Enable UART9 device in console driver.
 enabled-by: true

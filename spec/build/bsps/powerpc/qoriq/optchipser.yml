@@ -9,7 +9,8 @@ default: P
 default-by-variant:
 - value: T
   variants:
-  - powerpc/qoriq_e6500.*
+  - powerpc/qoriq_e6500_32
+  - powerpc/qoriq_e6500_64
 description: |
   chip series, e.g. 'P' or 'T'
 enabled-by: true

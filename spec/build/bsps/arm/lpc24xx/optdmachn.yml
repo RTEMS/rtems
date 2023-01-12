@@ -9,10 +9,17 @@ default: 2
 default-by-variant:
 - value: 8
   variants:
-  - arm/lpc17.*
+  - arm/lpc1768_mbed
+  - arm/lpc1768_mbed_ahb_ram
+  - arm/lpc1768_mbed_ahb_ram_eth
+  - arm/lpc17xx_ea_ram
+  - arm/lpc17xx_ea_rom_int
+  - arm/lpc17xx_plx800_ram
+  - arm/lpc17xx_plx800_rom_int
 - value: 8
   variants:
-  - arm/lpc40.*
+  - arm/lpc40xx_ea_ram
+  - arm/lpc40xx_ea_rom_int
 description: |
   DMA channel count
 enabled-by: true

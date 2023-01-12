@@ -9,7 +9,8 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/lpc24xx_ncs_rom_.*
+  - arm/lpc24xx_ncs_rom_ext
+  - arm/lpc24xx_ncs_rom_int
 description: |
   enable Micron MT48LC4M16A2 configuration for EMC
 enabled-by: true

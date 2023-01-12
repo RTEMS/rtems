@@ -9,7 +9,9 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/.*qemu.*
+  - arm/lm3s6965_qemu
+  - arm/realview_pbx_a9_qemu
+  - arm/xilinx_zynq_a9_qemu
 description: |
   This sets a mode where the time runs as fast as possible when a clock ISR occurs while the IDLE thread is executing.  This can significantly reduce simulation times.
 enabled-by: true

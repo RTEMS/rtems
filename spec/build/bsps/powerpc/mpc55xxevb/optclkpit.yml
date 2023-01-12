@@ -9,10 +9,10 @@ default: null
 default-by-variant:
 - value: 3
   variants:
-  - powerpc/mpc5643l.*
+  - powerpc/mpc5643l_evb
 - value: 8
   variants:
-  - powerpc/mpc5668g.*
+  - powerpc/mpc5668g
 description: |
   selects the PIT channel for the RTEMS system tick (the default is the last channel)
 enabled-by: true

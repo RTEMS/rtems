@@ -9,7 +9,7 @@ default: null
 default-by-variant:
 - value: 193
   variants:
-  - powerpc/mpc5566.*
+  - powerpc/mpc5566evb
 description: |
   IRQ pin for SMSC9218I network interface
 enabled-by: true

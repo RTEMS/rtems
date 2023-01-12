@@ -9,7 +9,9 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/.*qemu.*
+  - arm/lm3s6965_qemu
+  - arm/realview_pbx_a9_qemu
+  - arm/xilinx_zynq_a9_qemu
 description: |
   If defined, then do the clock tick processing on the boot processor on behalf of all other processors.
 enabled-by: true

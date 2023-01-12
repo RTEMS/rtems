@@ -9,7 +9,7 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - powerpc/mpc5674fevb.*
+  - powerpc/mpc5674fevb
 description: |
   if defined, use custom settings for MPC5674FEVB board
 enabled-by: true

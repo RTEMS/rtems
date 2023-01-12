@@ -9,7 +9,7 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/lm3s3749.*
+  - arm/lm3s3749
 description: |
   board has LM3S3749 MCU
 enabled-by: true

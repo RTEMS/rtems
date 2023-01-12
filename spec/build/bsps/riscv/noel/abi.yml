@@ -28,8 +28,7 @@ default-by-variant:
 - value:
   - -march=rv64im
   - -mabi=lp64
-  variants:
-  - riscv/noel64im
+  variants: []
 - value:
   - -march=rv32imafd
   - -mabi=ilp32d

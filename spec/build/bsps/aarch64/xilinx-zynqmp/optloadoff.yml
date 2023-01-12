@@ -11,9 +11,9 @@ default: 0x00008000
 default-by-variant:
 - value: 0x00000000
   variants:
+  - aarch64/xilinx_zynqmp_ilp32_zu3eg
   - aarch64/xilinx_zynqmp_lp64_cfc400x
   - aarch64/xilinx_zynqmp_lp64_zu3eg
-  - aarch64/xilinx_zynqmp_ilp32_zu3eg
 description: |
   offset of RAM region from memory area base
 enabled-by: true

@@ -11,15 +11,26 @@ default-by-variant:
 - value:
   - '64'
   variants:
-  - riscv/mpfs64.*
-  - riscv/noel64.*
-  - riscv/rv64.*
+  - riscv/mpfs64imafdc
+  - riscv/noel64imac
+  - riscv/noel64imafd
+  - riscv/noel64imafdc
+  - riscv/rv64imac
+  - riscv/rv64imafd
+  - riscv/rv64imafdc
 - value:
   - '32'
   variants:
   - riscv/griscv
-  - riscv/noel32.*
-  - riscv/rv32.*
+  - riscv/noel32im
+  - riscv/noel32imafd
+  - riscv/rv32i
+  - riscv/rv32iac
+  - riscv/rv32im
+  - riscv/rv32imac
+  - riscv/rv32imafc
+  - riscv/rv32imafd
+  - riscv/rv32imafdc
 description: The architecture word bits for the clang target triple.
 enabled-by:
 - and:

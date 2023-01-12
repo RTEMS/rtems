@@ -9,7 +9,9 @@ default: 0
 default-by-variant:
 - value: 4096
   variants:
-  - arm/lpc32xx_mzx.*
+  - arm/lpc32xx_mzx
+  - arm/lpc32xx_mzx_stage_1
+  - arm/lpc32xx_mzx_stage_2
 description: |
   size of scratch area
 enabled-by: true

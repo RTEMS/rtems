@@ -9,7 +9,8 @@ default: 16
 default-by-variant:
 - value: 64
   variants:
-  - powerpc/qoriq_e6500.*
+  - powerpc/qoriq_e6500_32
+  - powerpc/qoriq_e6500_64
 description: |
   TLB1 entry count
 enabled-by: true

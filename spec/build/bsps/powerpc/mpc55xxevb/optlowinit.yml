@@ -8,8 +8,7 @@ copyrights:
 default: true
 default-by-variant:
 - value: false
-  variants:
-  - powerpc/mpc5674f_.*app
+  variants: []
 description: |
   if defined, do low level initialization
 enabled-by: true

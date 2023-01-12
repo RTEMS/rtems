@@ -9,7 +9,8 @@ default: 1020
 default-by-variant:
 - value: 0
   variants:
-  - powerpc/qoriq_e6500.*
+  - powerpc/qoriq_e6500_32
+  - powerpc/qoriq_e6500_64
 description: |
   chip number, e.g. 1020, 2040, 2080, 4240
 enabled-by: true

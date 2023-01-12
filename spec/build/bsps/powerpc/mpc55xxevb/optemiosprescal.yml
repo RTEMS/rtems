@@ -12,7 +12,7 @@ default-by-variant:
   - powerpc/gwlcfm
 - value: null
   variants:
-  - powerpc/mpc5643l.*
+  - powerpc/mpc5643l_evb
 description: |
   Must be defined to set the EMIOS prescaler
 enabled-by: true

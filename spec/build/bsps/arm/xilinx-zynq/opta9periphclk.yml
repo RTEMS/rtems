@@ -9,10 +9,10 @@ default: 100000000
 default-by-variant:
 - value: 333333333
   variants:
-  - arm/xilinx_zynq_zc702.*
+  - arm/xilinx_zynq_zc702
 - value: 666666667
   variants:
-  - arm/xilinx_zynq_zedboard.*
+  - arm/xilinx_zynq_zedboard
 description: |
   ARM Cortex-A9 MPCore PERIPHCLK clock frequency in Hz
 enabled-by: true

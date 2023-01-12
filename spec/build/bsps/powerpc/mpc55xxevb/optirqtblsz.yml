@@ -9,13 +9,13 @@ default: 63
 default-by-variant:
 - value: 127
   variants:
-  - powerpc/mpc5643l.*
+  - powerpc/mpc5643l_evb
 - value: 127
   variants:
-  - powerpc/mpc5566.*
+  - powerpc/mpc5566evb
 - value: 255
   variants:
-  - powerpc/mpc5674f.*
+  - powerpc/mpc5674fevb
 description: |
   defines the maximum number of interrupt handlers
 enabled-by: true

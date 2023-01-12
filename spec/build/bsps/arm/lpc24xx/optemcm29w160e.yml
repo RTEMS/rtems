@@ -9,7 +9,8 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/lpc24xx_ncs_rom_.*
+  - arm/lpc24xx_ncs_rom_ext
+  - arm/lpc24xx_ncs_rom_int
 description: |
   enable M29W160E configuration for EMC
 enabled-by: true

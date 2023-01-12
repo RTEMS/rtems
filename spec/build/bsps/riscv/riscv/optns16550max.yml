@@ -9,10 +9,10 @@ default: 2
 default-by-variant:
 - value: null
   variants:
-  - riscv/frdme310arty.*
+  - riscv/frdme310arty
 - value: 1
   variants:
-  - riscv/mpfs64.*
+  - riscv/mpfs64imafdc
 description: |
   maximum number of NS16550 devices supported by the console driver (2 by default)
 enabled-by: true

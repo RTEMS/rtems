@@ -9,7 +9,7 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - riscv/mpfs64.*
+  - riscv/mpfs64imafdc
 description: |
   the path to the header file containing the device tree binary. See the BSP
   documentation for more information.

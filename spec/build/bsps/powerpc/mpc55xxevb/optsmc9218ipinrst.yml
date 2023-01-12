@@ -9,7 +9,7 @@ default: null
 default-by-variant:
 - value: 186
   variants:
-  - powerpc/mpc5566.*
+  - powerpc/mpc5566evb
 description: |
   reset pin for SMSC9218I network interface
 enabled-by: true

@@ -9,7 +9,7 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - riscv/mpfs64.*
+  - riscv/mpfs64imafdc
 description: |
   enables support Microchip PolarFire SoC if defined to a non-zero value,otherwise it is disabled (disabled by default)
 enabled-by: true

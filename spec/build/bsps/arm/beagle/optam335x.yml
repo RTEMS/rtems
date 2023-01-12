@@ -9,7 +9,8 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/beaglebone.*
+  - arm/beagleboneblack
+  - arm/beaglebonewhite
 description: |
   true if SOC is AM335X
 enabled-by: true

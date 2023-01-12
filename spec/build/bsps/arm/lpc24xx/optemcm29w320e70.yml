@@ -9,7 +9,8 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/.*_plx800_rom_.*
+  - arm/lpc17xx_plx800_rom_int
+  - arm/lpc24xx_plx800_rom_int
 description: |
   enable M29W320E70 configuration for EMC
 enabled-by: true

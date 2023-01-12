@@ -9,7 +9,8 @@ default: true
 default-by-variant:
 - value: false
   variants:
-  - arm/lpc23.*
+  - arm/lpc2362
+  - arm/lpc23xx_tli800
 description: |
   stop Ethernet controller at start-up to avoid DMA interference
 enabled-by: true

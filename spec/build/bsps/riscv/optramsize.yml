@@ -18,7 +18,7 @@ default-by-variant:
   - riscv/griscv
 - value: 0x10000000
   variants:
-  - riscv/mpfs64.*
+  - riscv/mpfs64imafdc
 description: ''
 enabled-by: true
 format: '{:#010x}'

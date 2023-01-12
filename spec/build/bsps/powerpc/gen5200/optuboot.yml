@@ -9,7 +9,8 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - powerpc/pm520.*
+  - powerpc/pm520_cr825
+  - powerpc/pm520_ze30
 - value: true
   variants:
   - powerpc/icecube

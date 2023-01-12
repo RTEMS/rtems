@@ -9,10 +9,10 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - powerpc/mpc5566.*
+  - powerpc/mpc5566evb
 - value: true
   variants:
-  - powerpc/mpc5674f.*
+  - powerpc/mpc5674fevb
 description: |
   enable NULL pointer protection
 enabled-by: true

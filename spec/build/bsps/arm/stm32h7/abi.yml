@@ -18,8 +18,8 @@ default-by-variant:
   - -mfpu=fpv4-sp-d16
   - -mfloat-abi=hard
   variants:
-  - arm/stm32h757i-eval-m4
   - arm/stm32h747i-disco-m4
+  - arm/stm32h757i-eval-m4
 description: |
   ABI flags
 enabled-by: true

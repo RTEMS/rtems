@@ -9,7 +9,7 @@ default: 128
 default-by-variant:
 - value: 187
   variants:
-  - riscv/mpfs64.*
+  - riscv/mpfs64imafdc
 description: |
   maximum number of external interrupts supported by the BSP (default 128)
 enabled-by: true

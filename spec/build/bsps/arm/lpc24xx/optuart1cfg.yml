@@ -9,7 +9,10 @@ default: false
 default-by-variant:
 - value: false
   variants:
-  - arm/.*_plx800_.*
+  - arm/lpc17xx_plx800_ram
+  - arm/lpc17xx_plx800_rom_int
+  - arm/lpc24xx_plx800_ram
+  - arm/lpc24xx_plx800_rom_int
 description: |
   configuration for UART 1
 enabled-by: true

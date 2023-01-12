@@ -9,7 +9,7 @@ default: 16000000
 default-by-variant:
 - value: 8000000
   variants:
-  - arm/stm32f1.*
+  - arm/stm32f105rc
 description: |
   HCLK frequency in Hz
 enabled-by: true

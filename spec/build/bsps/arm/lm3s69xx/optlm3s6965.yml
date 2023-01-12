@@ -9,7 +9,8 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/lm3s6965.*
+  - arm/lm3s6965
+  - arm/lm3s6965_qemu
 description: |
   board has LM3S6965 MCU
 enabled-by: true

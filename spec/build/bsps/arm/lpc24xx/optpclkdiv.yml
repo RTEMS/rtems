@@ -9,10 +9,12 @@ default: 1
 default-by-variant:
 - value: 2
   variants:
-  - arm/lpc17xx_ea.*
+  - arm/lpc17xx_ea_ram
+  - arm/lpc17xx_ea_rom_int
 - value: 2
   variants:
-  - arm/lpc40xx_ea.*
+  - arm/lpc40xx_ea_ram
+  - arm/lpc40xx_ea_rom_int
 description: |
   clock divider for default PCLK (PCLK = CCLK / PCLKDIV)
 enabled-by: true

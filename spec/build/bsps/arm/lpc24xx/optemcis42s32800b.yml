@@ -9,10 +9,10 @@ default: false
 default-by-variant:
 - value: true
   variants:
-  - arm/lpc17xx_ea_rom_.*
+  - arm/lpc17xx_ea_rom_int
 - value: true
   variants:
-  - arm/lpc40xx_ea_rom_.*
+  - arm/lpc40xx_ea_rom_int
 description: |
   enable ISSI IS42S32800B configuration for EMC
 enabled-by: true
