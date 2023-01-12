@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: script
+cflags: []
+copyrights:
+- Copyright (C) 2023 On-Line Applications Research (OAR)
+cppflags: []
+do-build: |
+  path = "testsuites/libtests/dl11/"
+  objs = []
+  objs.append(self.cc(bld, bic, path + "dl11-o1.c"))
+  tar = path + "dl11.tar"
+  self.tar(bld, objs, [path], tar)
+  tar_c, tar_h = self.bin2c(bld, tar)
+  objs = []
+  objs.append(self.cc(bld, bic, tar_c))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_DL11_CPPFLAGS))
+  objs.append(self.cc(bld, bic, path + "dl-load.c"))
+  dl11_pre = path + "dl11.pre"
+  self.link_cc(bld, bic, objs, dl11_pre)
+  dl11_sym_o = path + "dl11-sym.o"
+  objs.append(dl11_sym_o)
+  self.rtems_syms(bld, dl11_pre, dl11_sym_o)
+  self.link_cc(bld, bic, objs, "testsuites/libtests/dl11.exe")
+do-configure: null
+enabled-by:
+- and:
+  - not: TEST_DL11_EXCLUDE
+  - BUILD_LIBDL
+includes:
+- testsuites/libtests/dl11
+ldflags: []
+links: []
+prepare-build: null
+prepare-configure: null
+stlib: []
+type: build
+use-after: []
+use-before: []

@@ -1,0 +1,6 @@
+*** BEGIN OF TEST libdl (RTL) 11 ***
+load: /dl11-o1.o
+handle: 0x40118e60 loaded
+handle: 0x40118e60 closed
+
+*** END OF TEST libdl (RTL) 11 ***
