@@ -79,6 +79,7 @@ __RCSID("$NetBSD: mdreloc.c,v 1.14 2020/06/16 21:01:30 joerg Exp $");
 #include "rtl-error.h"
 #include <rtems/rtl/rtl-trace.h>
 #include "rtl-unwind-arm.h"
+#include <rtems/score/tls.h>
 
 struct tls_data {
   size_t    td_tlsindex;
@@ -237,6 +238,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
    * A - the addend of the reolcation
    * P - the address of the place being relocated (derived from r_offset)
    * Page(expr) - the page address of the expression expr, defined as (expr & ~0xFFF).
+   * TPREL(expr) - the thread pointer offset of the expression expr
    */
   switch (ELF_R_TYPE(rela->r_info)) {
     case R_TYPE(NONE):
@@ -284,6 +286,42 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
        * are allowed only in executable files.
        */
       printf("rtl: reloc COPY (please report)\n");
+      break;
+
+    case R_AARCH64_ADD_TPREL_HI12: /* TPREL(S + A) */
+    case R_AARCH64_ADD_TPREL_LO12:
+    case R_AARCH64_ADD_TPREL_LO12_NC:
+      uint32_t of_check = 0;
+      switch (ELF_R_TYPE(rela->r_info)) {
+        case R_AARCH64_ADD_TPREL_LO12:
+	  of_check = 212;
+	/* fallthrough */
+        case R_AARCH64_ADD_TPREL_LO12_NC:
+          shift = 0;
+          break;
+        case R_AARCH64_ADD_TPREL_HI12:
+	  of_check = 224;
+          shift = 12;
+          break;
+        default:
+          printf("illegal rtype: %ld\n", ELF_R_TYPE(rela->r_info));
+          break;
+      }
+
+      if (!parsing) {
+        target = (Elf_Addr)symvalue + rela->r_addend;
+	/* Calculate offset accounting for the DTV */
+	target -= (uintptr_t)_TLS_Data_begin;
+	target += sizeof(TLS_Dynamic_thread_vector);
+
+        target >>= shift;
+	target &= WIDTHMASK(12);
+        if (of_check && target >= of_check) {
+          return rtems_rtl_elf_rel_failure;
+        }
+        *insn = htole32(
+            (le32toh(*insn) & ~__BITS(21,10)) | (target << 10));
+      }
       break;
 
     case R_AARCH64_ADD_ABS_LO12_NC: /* S + A */
