@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2023 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes:
+- bsps/include/dev/nand/
+- bsps/include/xil/
+- bsps/include/xil/${XIL_SUPPORT_PATH}/
+install:
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/aarch64/xilinx-zynqmp/include/bsp/jffs2_xnandpsu.h
+links: []
+source:
+- bsps/aarch64/xilinx-zynqmp/jffs2_xnandpsu.c
+type: build

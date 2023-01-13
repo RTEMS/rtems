@@ -13,6 +13,8 @@ links:
 - role: build-dependency
   uid: ../../objnandpsu
 - role: build-dependency
+  uid: objnandjffs2
+- role: build-dependency
   uid: grp
 - role: build-dependency
   uid: tstzu3eg
