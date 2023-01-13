@@ -1,14 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    fatal-init-task-construct-failed: expected-fail
-    fatal-too-large-tls-size: expected-fail
-    performance-no-clock-0: expected-fail
-    validation-intr: expected-fail
-    validation-io-kernel: expected-fail
-    validation-no-clock-0: expected-fail
-    validation-one-cpu-0: expected-fail
-    validation-timecounter-1: expected-fail
+    reason: null
+    state: expected-fail
+    tests:
+    - fatal-init-task-construct-failed
+    - fatal-too-large-tls-size
+    - performance-no-clock-0
+    - validation-intr
+    - validation-io-kernel
+    - validation-no-clock-0
+    - validation-one-cpu-0
+    - validation-timecounter-1
 build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)

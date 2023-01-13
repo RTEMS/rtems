@@ -1,8 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    fileio: exclude
-    psxaio02: exclude
+    reason: null
+    state: exclude
+    tests:
+    - fileio
+    - psxaio02
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

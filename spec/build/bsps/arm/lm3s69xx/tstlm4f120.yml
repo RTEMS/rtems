@@ -1,27 +1,30 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    block08: exclude
-    capture: exclude
-    fileio: exclude
-    iostream: exclude
-    ostream: exclude
-    psxaio01: exclude
-    psxaio02: exclude
-    psxaio03: exclude
-    psxsignal07: exclude
-    rcxx01: exclude
-    sp16: exclude
-    sp25: exclude
-    sp42: exclude
-    sp48: exclude
-    sp71: exclude
-    spregionerr01: exclude
-    sptimecounter02: exclude
-    sptimecounter03: exclude
-    tmcontext01: exclude
-    top: exclude
-    utf8proc01: exclude
+    reason: null
+    state: exclude
+    tests:
+    - block08
+    - capture
+    - fileio
+    - iostream
+    - ostream
+    - psxaio01
+    - psxaio02
+    - psxaio03
+    - psxsignal07
+    - rcxx01
+    - sp16
+    - sp25
+    - sp42
+    - sp48
+    - sp71
+    - spregionerr01
+    - sptimecounter02
+    - sptimecounter03
+    - tmcontext01
+    - top
+    - utf8proc01
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

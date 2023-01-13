@@ -1,8 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    # expected to fail, don't compile these
-    minimum: exclude
+    reason: |
+      Expected to fail, do not compile these.
+    state: exclude
+    tests:
+    - minimum
 build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research Corporation (OAR)

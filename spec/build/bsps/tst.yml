@@ -1,16 +1,27 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    capture: user-input
-    dhrystone: benchmark
-    dl10: user-input
-    fileio: user-input
-    linpack: benchmark
-    monitor: user-input
-    psxfenv01: expected-fail
-    termios: user-input
-    top: user-input
-    whetstone: benchmark
+    reason: null
+    state: user-input
+    tests:
+    - capture
+    - dl10
+    - fileio
+    - monitor
+    - termios
+    - top
+- set-test-state:
+    reason: null
+    state: benchmark
+    tests:
+    - dhrystone
+    - linpack
+    - whetstone
+- set-test-state:
+    reason: null
+    state: expected-fail
+    tests:
+    - psxfenv01
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

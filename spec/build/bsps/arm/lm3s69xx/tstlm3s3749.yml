@@ -1,27 +1,30 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    capture: exclude
-    cdtest: exclude
-    fileio: exclude
-    fsdosfsformat01: exclude
-    fsrfsbitmap01: exclude
-    iostream: exclude
-    math: exclude
-    mdosfsfserror: exclude
-    mdosfsfsrdwr: exclude
-    monitor02: exclude
-    paranoia: exclude
-    psxmsgq01: exclude
-    rcxx01: exclude
-    record01: exclude
-    rtems: exclude
-    shell01: exclude
-    spcxx01: exclude
-    sptls02: exclude
-    syscall01: exclude
-    ttest01: exclude
-    utf8proc01: exclude
+    reason: null
+    state: exclude
+    tests:
+    - capture
+    - cdtest
+    - fileio
+    - fsdosfsformat01
+    - fsrfsbitmap01
+    - iostream
+    - math
+    - mdosfsfserror
+    - mdosfsfsrdwr
+    - monitor02
+    - paranoia
+    - psxmsgq01
+    - rcxx01
+    - record01
+    - rtems
+    - shell01
+    - spcxx01
+    - sptls02
+    - syscall01
+    - ttest01
+    - utf8proc01
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

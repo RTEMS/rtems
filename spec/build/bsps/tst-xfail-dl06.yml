@@ -1,7 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    dl06: expected-fail
+    reason: null
+    state: expected-fail
+    tests:
+    - dl06
 build-type: option
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)

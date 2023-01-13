@@ -1,31 +1,40 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    # expected to fail, don't compile these
-    minimum: exclude
-
-    # tests that are passing intermittently
-    spcpucounter01: indeterminate
-    rtmonuse: indeterminate
-    sp68: indeterminate
-    sp04: indeterminate
-    sp20: indeterminate
-    sp69: indeterminate
-    rtmonusxtimes01: indeterminate
-    spedfsched02: indeterminate
-    spedfsched04: indeterminate
-    psxtimes01: indeterminate
-    sprmsched01: indeterminate
-    sptimecounter02: indeterminate
-    sptimecounter04: indeterminate
-    ttest02: indeterminate
-
-    # tests that pass nominally, but fail under Qemu when the host is under
-    # heavy load
-    psx12: indeterminate
-    spintrcritical03: indeterminate
-    spintrcritical04: indeterminate
-    spintrcritical05: indeterminate
+    reason: |
+      Expected to fail, do not compile these.
+    state: exclude
+    tests:
+    - minimum
+- set-test-state:
+    reason: |
+      Tests that are passing intermittently.
+    state: indeterminate
+    tests:
+    - psx12
+    - psxtimes01
+    - rtmonuse
+    - rtmonusxtimes01
+    - sp04
+    - sp20
+    - sp68
+    - sp69
+    - spcpucounter01
+    - spedfsched02
+    - spedfsched04
+    - sprmsched01
+    - sptimecounter02
+    - sptimecounter04
+    - ttest02
+- set-test-state:
+    reason: |
+      Tests that pass nominally, but fail under Qemu when the host is under
+      heavy load.
+    state: indeterminate
+    tests:
+    - spintrcritical03
+    - spintrcritical04
+    - spintrcritical05
 build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)

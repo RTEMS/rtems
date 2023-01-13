@@ -1,26 +1,29 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    fileio: exclude
-    flashdisk01: exclude
-    fsdosfsname01: exclude
-    jffs2fserror: exclude
-    jffs2fslink: exclude
-    jffs2fspatheval: exclude
-    jffs2fspermission: exclude
-    jffs2fsrdwr: exclude
-    jffs2fsscandir01: exclude
-    jffs2fssymlink: exclude
-    jffs2fstime: exclude
-    linpack: exclude
-    psxconfig01: exclude
-    record02: exclude
-    sp16: exclude
-    sp25: exclude
-    sp48: exclude
-    spregionerr01: exclude
-    spstkalloc02: exclude
-    tmfine01: exclude
+    reason: null
+    state: exclude
+    tests:
+    - fileio
+    - flashdisk01
+    - fsdosfsname01
+    - jffs2fserror
+    - jffs2fslink
+    - jffs2fspatheval
+    - jffs2fspermission
+    - jffs2fsrdwr
+    - jffs2fsscandir01
+    - jffs2fssymlink
+    - jffs2fstime
+    - linpack
+    - psxconfig01
+    - record02
+    - sp16
+    - sp25
+    - sp48
+    - spregionerr01
+    - spstkalloc02
+    - tmfine01
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

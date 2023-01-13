@@ -1,23 +1,26 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    block08: exclude
-    capture: exclude
-    cdtest: exclude
-    fileio: exclude
-    fsdosfsformat01: exclude
-    iostream: exclude
-    monitor02: exclude
-    paranoia: exclude
-    sp16: exclude
-    sptimecounter02: exclude
-    sptimecounter03: exclude
-    syscall01: exclude
-    tmcontext01: exclude
-    tmfine01: exclude
-    top: exclude
-    ttest01: exclude
-    utf8proc01: exclude
+    reason: null
+    state: exclude
+    tests:
+    - block08
+    - capture
+    - cdtest
+    - fileio
+    - fsdosfsformat01
+    - iostream
+    - monitor02
+    - paranoia
+    - sp16
+    - sptimecounter02
+    - sptimecounter03
+    - syscall01
+    - tmcontext01
+    - tmfine01
+    - top
+    - ttest01
+    - utf8proc01
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

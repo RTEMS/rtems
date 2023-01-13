@@ -1035,8 +1035,9 @@ class OptionItem(Item):
             "indeterminate": self._test_state_indeterminate,
             "user-input": self._test_state_user_input,
         }
-        for k, v in arg.items():
-            actions[v](conf, k)
+        action = actions[arg["state"]]
+        for test in arg["tests"]:
+            action(conf, test)
         return value
 
     def _set_value(self, conf, cic, value, arg):

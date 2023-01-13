@@ -1,12 +1,15 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    fileio: exclude
-    iostream: exclude
-    monitor02: exclude
-    rcxx01: exclude
-    syscall01: exclude
-    utf8proc01: exclude
+    reason: null
+    state: exclude
+    tests:
+    - fileio
+    - iostream
+    - monitor02
+    - rcxx01
+    - syscall01
+    - utf8proc01
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
