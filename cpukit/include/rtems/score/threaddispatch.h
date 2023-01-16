@@ -222,16 +222,17 @@ static inline Per_CPU_Control *_Thread_Dispatch_disable_critical(
 static inline Per_CPU_Control *_Thread_Dispatch_disable( void )
 {
   Per_CPU_Control  *cpu_self;
-  ISR_lock_Context  lock_context;
 
 #if defined( RTEMS_SMP ) || defined( RTEMS_PROFILING )
+  ISR_lock_Context  lock_context;
+
   _ISR_lock_ISR_disable( &lock_context );
-#endif
 
   cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
 
-#if defined( RTEMS_SMP ) || defined( RTEMS_PROFILING )
   _ISR_lock_ISR_enable( &lock_context );
+#else
+  cpu_self = _Thread_Dispatch_disable_critical( NULL );
 #endif
 
   return cpu_self;
