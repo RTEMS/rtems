@@ -541,8 +541,8 @@ lidate */
 
 #define FSL_EIS_MAS0 624
 #define FSL_EIS_MAS0_TLBSEL (1 << (63 - 35))
-#define FSL_EIS_MAS0_ESEL(n) ((0xf & (n)) << (63 - 47))
-#define FSL_EIS_MAS0_ESEL_GET(m) (((m) >> (63 - 47)) & 0xf)
+#define FSL_EIS_MAS0_ESEL(n) ((0xfff & (n)) << (63 - 47))
+#define FSL_EIS_MAS0_ESEL_GET(m) (((m) >> (63 - 47)) & 0xfff)
 #define FSL_EIS_MAS0_NV (1 << (63 - 63))
 
 #define FSL_EIS_MAS1 625
