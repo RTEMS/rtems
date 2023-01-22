@@ -430,7 +430,7 @@ static inline Status_Control _CORE_message_queue_Urgent(
 /**
  * @brief Acquires the message queue.
  *
- * @param[in, out] the_message_queue Rhe message queue to acquire.
+ * @param[in, out] the_message_queue The message queue to acquire.
  * @param queue_context The thread queue context.
  */
 static inline void _CORE_message_queue_Acquire(
