@@ -1,14 +1,13 @@
 /**
  * @file
  *
- * @ingroup bsp_clock
+ * @ingroup RTEMSDriverClockImpl
  *
- * @brief or1k clock support.
+ * @brief This source file contains the implementation of the or1k Clock
+ *   Driver.
  */
 
 /*
- * generic_or1k Clock driver
- *
  * COPYRIGHT (c) 2014-2015 Hesham ALMatary <heshamelmatary@gmail.com>
  *
  * The license and distribution terms for this file may be

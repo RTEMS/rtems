@@ -3,9 +3,12 @@
 /**
  * @file
  *
- * @ingroup bsp_clock
+ * @ingroup RTEMSDriverClockImpl
  *
- * @brief Clock Tick Device Driver Shell
+ * @brief This header file contains the shared Clock Driver implementation.
+ *
+ * This header file shall only be included by a particular Clock Driver
+ * implementation source file.
  */
 
 /*
@@ -44,18 +47,18 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdogimpl.h>
 
+/**
+ * @defgroup RTEMSDriverClockImpl Clock Driver Implementation
+ *
+ * @ingroup RTEMSDriverClock
+ *
+ * @brief This group contains the Clock Driver implementation.
+ */
+
 #ifdef Clock_driver_nanoseconds_since_last_tick
 #error "Update driver to use the timecounter instead of nanoseconds extension"
 #endif
 
-/**
- * @defgroup bsp_clock Clock Support
- *
- * @ingroup RTEMSBSPsShared
- *
- * @brief Clock support 
- *
- */
 #if CLOCK_DRIVER_USE_FAST_IDLE && CLOCK_DRIVER_ISRS_PER_TICK
 #error "Fast Idle PLUS n ISRs per tick is not supported"
 #endif

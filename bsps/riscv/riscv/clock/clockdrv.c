@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup bsp_clock
+ * @ingroup RTEMSDriverClockImpl
  *
- * @brief riscv clock support.
+ * @brief This source file contains the implementation of the riscv Clock
+ *   Driver.
  */
 
 /*

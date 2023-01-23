@@ -5,9 +5,7 @@
  *
  * @ingroup RTEMSDriverClock
  *
- * @brief Clock Driver API
- *
- * This file defines the Clock Driver API.
+ * @brief This header file defines the Clock Driver API.
  */
 
 /*
@@ -50,7 +48,7 @@ extern "C" {
  *
  * @ingroup RTEMSDeviceDrivers
  *
- * @brief The Clock Driver API.
+ * @brief This group contains the Clock Driver API.
  *
  * @{
  */

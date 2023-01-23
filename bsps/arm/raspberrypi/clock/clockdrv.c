@@ -1,14 +1,13 @@
 /**
  * @file
  *
- * @ingroup bsp_clock
+ * @ingroup RTEMSDriverClockImpl
  *
- * @brief Raspberry Pi clock support.
+ * @brief This source file contains the implementation of the BCM2835 Clock
+ *   Driver.
  */
 
 /*
- * BCM2835 Clock driver
- *
  * Copyright (c) 2013 Alan Cudmore
  * Copyright (c) 2016 Pavel Pisa
  *
