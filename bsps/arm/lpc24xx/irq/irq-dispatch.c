@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  *
  * @brief LPC24XX interrupt support.
  */

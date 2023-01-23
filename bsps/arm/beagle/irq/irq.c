@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  * @ingroup arm_beagle
  *
  * @brief Interrupt support.

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  *
  * @brief interrupt definitions.
  */
@@ -45,7 +45,7 @@
 #endif
 
 /**
- * @addtogroup bsp_interrupt
+ * @addtogroup RTEMSImplClassicIntr
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  *
  * @brief This source file contains the default implementation of
  *   bsp_interrupt_vector_enable(), bsp_interrupt_vector_disable(), and

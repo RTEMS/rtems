@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  *
  * @brief This header file provides interfaces of the generic interrupt
  *   controller support for the RTEMS Shell.

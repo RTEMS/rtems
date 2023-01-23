@@ -3,10 +3,10 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  *
- * @brief This header file provides interfaces of the generic interrupt
- *   controller support.
+ * @brief This header file provides interfaces of the Interrupt Manager
+ *   implementation.
  */
 
 /*
@@ -101,29 +101,29 @@ static inline rtems_vector_number bsp_interrupt_dispatch_index(
 }
 
 /**
- * @defgroup bsp_interrupt BSP Interrupt Support
+ * @defgroup RTEMSImplClassicIntr Interrupt Manager
  *
- * @ingroup RTEMSBSPsShared
+ * @ingroup RTEMSImplClassic
  *
- * @brief Generic BSP Interrupt Support
+ * @brief This group contains the Interrupt Manager implementation.
  *
- * The BSP interrupt support manages a sequence of interrupt vector numbers
- * greater than or equal to zero and less than @ref BSP_INTERRUPT_VECTOR_COUNT
- * It provides methods to install, remove, and @ref
- * bsp_interrupt_handler_dispatch() "dispatch" interrupt entries for each
- * vector number.  It implements parts of the RTEMS interrupt manager.
+ * The Interrupt Manager implementation manages a sequence of interrupt vector
+ * numbers greater than or equal to zero and less than
+ * ``BSP_INTERRUPT_VECTOR_COUNT``.  It provides methods to install, remove, and
+ * dispatch interrupt entries for each vector number, see
+ * bsp_interrupt_dispatch_entries().
  *
  * The entry points to a list of interrupt entries are stored in a table
  * (= dispatch table).
  *
- * You have to configure the BSP interrupt support in the <bsp/irq.h> file
+ * You have to configure the Interrupt Manager implementation in the <bsp/irq.h> file
  * for each BSP.  For a minimum configuration you have to provide
- * @ref BSP_INTERRUPT_VECTOR_COUNT.
+ * ``BSP_INTERRUPT_VECTOR_COUNT``.
  *
  * For boards with small memory requirements you can define
- * @ref BSP_INTERRUPT_USE_INDEX_TABLE.  With an enabled index table the
+ * ``BSP_INTERRUPT_USE_INDEX_TABLE``.  With an enabled index table the
  * dispatch table will be accessed via a small index table.  You can define the
- * size of the dispatch table with @ref BSP_INTERRUPT_DISPATCH_TABLE_SIZE.
+ * size of the dispatch table with ``BSP_INTERRUPT_DISPATCH_TABLE_SIZE``.
  *
  * You have to provide some special routines in your BSP (follow the links for
  * the details):
@@ -175,7 +175,7 @@ static inline rtems_vector_number bsp_interrupt_dispatch_index(
 void bsp_interrupt_handler_default(rtems_vector_number vector);
 
 /**
- * @brief Initialize BSP interrupt support.
+ * @brief Initialize Interrupt Manager implementation.
  *
  * You must call this function before you can install, remove and dispatch
  * interrupt entries.  There is no protection against concurrent

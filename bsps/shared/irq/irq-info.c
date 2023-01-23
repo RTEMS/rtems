@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  *
  * @brief This source file contains the implementation of
  *   bsp_interrupt_report() and bsp_interrupt_report_with_plugin().

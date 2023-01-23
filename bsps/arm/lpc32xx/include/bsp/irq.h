@@ -51,7 +51,7 @@ extern "C" {
  *
  * @ingroup RTEMSBSPsARMLPC32XX
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  *
  * @{
  */

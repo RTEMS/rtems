@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  *
  * @brief BSP interrupt support for LM32.
  */
@@ -41,7 +41,7 @@
 #include <stdint.h>
 
 /**
- * @addtogroup bsp_interrupt
+ * @addtogroup RTEMSImplClassicIntr
  *
  * @{
  */

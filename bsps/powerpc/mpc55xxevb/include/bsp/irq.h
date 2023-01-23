@@ -485,7 +485,7 @@ rtems_status_code mpc55xx_intc_raise_software_irq(rtems_vector_number vector);
 rtems_status_code mpc55xx_intc_clear_software_irq(rtems_vector_number vector);
 
 /**
- * @addtogroup bsp_interrupt
+ * @addtogroup RTEMSImplClassicIntr
  *
  * @{
  */

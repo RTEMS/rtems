@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  *
  * @brief LPC176X interrupt definitions.
  */
@@ -43,7 +43,7 @@
 #endif
 
 /**
- * @addtogroup bsp_interrupt
+ * @addtogroup RTEMSImplClassicIntr
  *
  * @{
  */

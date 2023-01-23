@@ -52,7 +52,7 @@ extern "C" {
  *
  * @ingroup RTEMSBSPsARMCycV
  *
- * @ingroup bsp_interrupt
+ * @ingroup RTEMSImplClassicIntr
  *
  * @brief Intel Cyclone V Interrupt Support.
  *
