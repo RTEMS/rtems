@@ -3,11 +3,10 @@
 /**
  * @file
  *
- * @ingroup libmisc_cpuuse CPU Usage
+ * @ingroup RTEMSAPICPUUsageReporting
  *
- * @brief CPU Usage Data
- *
- * CPU Usage Reporter - Shared Data
+ * @brief This source file contains the definition of
+ *   ::CPU_usage_Uptime_at_last_reset.
  */
 
 /*

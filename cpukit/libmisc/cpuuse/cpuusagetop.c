@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup libmisc_cpuuse CPU Usage
+ * @ingroup RTEMSAPICPUUsageReporting
  *
- * @brief CPU Usage Top
+ * @brief This source file contains the definition of
+ *   rtems_cpu_usage_top() and rtems_cpu_usage_top_with_plugin().
  */
 
 /*

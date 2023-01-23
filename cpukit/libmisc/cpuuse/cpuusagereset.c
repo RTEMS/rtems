@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup libmisc_cpuuse CPU Usage
+ * @ingroup RTEMSAPICPUUsageReporting
  *
- * @brief CPU Usage Reset
+ * @brief This source file contains the definition of
+ *   rtems_cpu_usage_reset().
  */
 
 /*

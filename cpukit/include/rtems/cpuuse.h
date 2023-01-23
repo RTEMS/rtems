@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libmisc_cpuuse
+ * @ingroup RTEMSAPICPUUsageReporting
  *
  * @brief This header file provides the CPU usage reporting API.
  */
@@ -62,7 +62,7 @@ extern "C" {
 /* Generated from spec:/rtems/cpuuse/if/group */
 
 /**
- * @defgroup libmisc_cpuuse CPU Usage Reporting
+ * @defgroup RTEMSAPICPUUsageReporting CPU Usage Reporting
  *
  * @ingroup RTEMSAPI
  *
@@ -78,7 +78,7 @@ struct rtems_printer;
 /* Generated from spec:/rtems/cpuuse/if/cpu-info-report */
 
 /**
- * @ingroup libmisc_cpuuse
+ * @ingroup RTEMSAPICPUUsageReporting
  *
  * @brief Reports the CPU information using the printer plugin.
  *
@@ -100,7 +100,7 @@ int rtems_cpu_info_report( const struct rtems_printer *printer );
 /* Generated from spec:/rtems/cpuuse/if/report */
 
 /**
- * @ingroup libmisc_cpuuse
+ * @ingroup RTEMSAPICPUUsageReporting
  *
  * @brief Reports the CPU usage of each thread using the printk() printer.
  *
@@ -125,7 +125,7 @@ void rtems_cpu_usage_report( void );
 /* Generated from spec:/rtems/cpuuse/if/report-with-plugin */
 
 /**
- * @ingroup libmisc_cpuuse
+ * @ingroup RTEMSAPICPUUsageReporting
  *
  * @brief Reports the CPU usage of each thread using the printer plugin.
  *
@@ -149,7 +149,7 @@ void rtems_cpu_usage_report_with_plugin( const struct rtems_printer *printer );
 /* Generated from spec:/rtems/cpuuse/if/reset */
 
 /**
- * @ingroup libmisc_cpuuse
+ * @ingroup RTEMSAPICPUUsageReporting
  *
  * @brief Resets the CPU usage of each thread.
  *
@@ -171,7 +171,7 @@ void rtems_cpu_usage_reset( void );
 /* Generated from spec:/rtems/cpuuse/if/top */
 
 /**
- * @ingroup libmisc_cpuuse
+ * @ingroup RTEMSAPICPUUsageReporting
  *
  * @brief Starts an interactive CPU usage reporting using the printk() printer.
  *
@@ -196,7 +196,7 @@ void rtems_cpu_usage_top( void );
 /* Generated from spec:/rtems/cpuuse/if/top-with-plugin */
 
 /**
- * @ingroup libmisc_cpuuse
+ * @ingroup RTEMSAPICPUUsageReporting
  *
  * @brief Starts an interactive CPU usage reporting using the printer plugin.
  *
