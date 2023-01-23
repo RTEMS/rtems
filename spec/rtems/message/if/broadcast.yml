@@ -19,9 +19,9 @@ description: |
   This directive causes all tasks that are waiting at the queue specified by
   ${.:/params[0]/name} to be unblocked and sent the message contained in
   ${.:/params[1]/name}.  Before a task is unblocked, the message
-  ${.:/params[1]/name} of ${.:/params[2]/name} byes in length is copied to that
-  task's message buffer.  The number of tasks that were unblocked is returned
-  in ${.:/params[3]/name}.
+  ${.:/params[1]/name} of ${.:/params[2]/name} bytes in length is copied to
+  that task's message buffer.  The number of tasks that were unblocked is
+  returned in ${.:/params[3]/name}.
 enabled-by: true
 index-entries:
 - broadcast message to a queue
