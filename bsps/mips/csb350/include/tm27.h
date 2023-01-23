@@ -28,7 +28,7 @@ int negate_sw_irw(uint32_t irqnum);
 
 #define Install_tm27_vector( handler ) \
    rtems_interrupt_handler_install( \
-      AU1X00_IRQ_SW0, "benchmark", 0, (rtems_interrupt_handler)handler, NULL );
+      AU1X00_IRQ_SW0, "benchmark", 0, handler, NULL );
 
 #define Cause_tm27_intr() \
   do { \

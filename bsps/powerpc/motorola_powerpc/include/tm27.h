@@ -39,9 +39,9 @@ static rtems_irq_connect_data clockIrqData =
  .isOn = null_irq_is_enabled
 };
 
-static void Install_tm27_vector(rtems_isr (*_handler)(rtems_vector_number))
+static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
-  clockIrqData.hdl = (rtems_irq_hdl) _handler;
+  clockIrqData.hdl = handler;
   if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
 	printk("Error installing clock interrupt handler!\n");
 	rtems_fatal_error_occurred(1);

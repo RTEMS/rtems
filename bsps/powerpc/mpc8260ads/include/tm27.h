@@ -29,7 +29,7 @@
    do { \
 	static rtems_irq_connect_data scIrqData = { \
 	  PPC_IRQ_SCALL, \
-	  (rtems_irq_hdl) handler, \
+	  handler, \
 	  NULL, \
 	  NULL, \
 	  NULL  \

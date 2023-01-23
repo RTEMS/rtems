@@ -34,9 +34,9 @@ static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
                                               (rtems_irq_disable) nullFunc,
                                               (rtems_irq_is_enabled) nullFunc};
 
-static inline void Install_tm27_vector(void (*_handler)(void))
+static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
-  clockIrqData.hdl = _handler;
+  clockIrqData.hdl = handler;
   if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
     printk("Error installing clock interrupt handler!\n");
     bsp_fatal(MPC5200_FATAL_TM27_IRQ_INSTALL);

@@ -26,6 +26,8 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
+#define TM27_USE_VECTOR_HANDLER
+
 #define Install_tm27_vector( handler ) set_vector( (handler), 35, 1 )
 
 #define Cause_tm27_intr()	asm volatile ("trap #3");

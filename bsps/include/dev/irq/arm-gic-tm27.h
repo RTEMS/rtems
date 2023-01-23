@@ -59,13 +59,13 @@
 
 #define ARM_GIC_TM27_PRIO_HIGH 0x00
 
-static inline void Install_tm27_vector(void (*handler)(rtems_vector_number))
+static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
   rtems_status_code sc = rtems_interrupt_handler_install(
     ARM_GIC_TM27_IRQ_LOW,
     "tm27 low",
     RTEMS_INTERRUPT_UNIQUE,
-    (rtems_interrupt_handler) handler,
+    handler,
     NULL
   );
   assert(sc == RTEMS_SUCCESSFUL);

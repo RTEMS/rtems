@@ -51,7 +51,7 @@
 
 #define LPC32XX_TM27_IRQ LPC32XX_IRQ_TIMER_2
 
-static inline void Install_tm27_vector(void (*handler)(rtems_vector_number))
+static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
   static rtems_interrupt_entry entry;
   volatile lpc_timer *timer = LPC32XX_TM27_TIMER;
@@ -70,7 +70,7 @@ static inline void Install_tm27_vector(void (*handler)(rtems_vector_number))
 
   rtems_interrupt_entry_initialize(
     &entry,
-    (rtems_interrupt_handler) handler,
+    handler,
     NULL,
     "tm27"
   );

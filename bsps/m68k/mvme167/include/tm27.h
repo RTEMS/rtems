@@ -24,6 +24,8 @@
  */
 #define MUST_WAIT_FOR_INTERRUPT 0
 
+#define TM27_USE_VECTOR_HANDLER
+
 #define Install_tm27_vector( handler ) \
             set_vector( (handler), VBR1 * 0x10 + 0x8, 1 ); \
             lcsr->intr_level[2] |= 3; \

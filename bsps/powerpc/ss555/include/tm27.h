@@ -32,7 +32,7 @@
   usiu.siel |= (1 << 17); 						\
   usiu.sipend |= (1 << 17); 						\
 									\
-  tm27IrqData.hdl = (rtems_irq_hdl)handler;				\
+  tm27IrqData.hdl = handler;						\
   BSP_install_rtems_irq_handler (&tm27IrqData);				\
 }
 

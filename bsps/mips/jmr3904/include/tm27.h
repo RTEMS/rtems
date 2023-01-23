@@ -26,7 +26,7 @@
 #define Install_tm27_vector( handler ) \
    rtems_interrupt_handler_install( \
       TX3904_IRQ_TMR0, "benchmark", 0, \
-      (rtems_interrupt_handler)handler, NULL );
+      handler, NULL );
 
 #define Cause_tm27_intr() \
   do { \

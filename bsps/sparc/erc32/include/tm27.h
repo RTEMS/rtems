@@ -59,6 +59,8 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
+#define TM27_USE_VECTOR_HANDLER
+
 #define Install_tm27_vector( handler ) \
   set_vector( (handler), TEST_VECTOR, 1 );
 
@@ -80,22 +82,20 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-static inline void Install_tm27_vector(
-  void ( *handler )( rtems_vector_number )
-)
+static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
   (void) rtems_interrupt_handler_install(
     TEST_INTERRUPT_SOURCE,
     "tm27 low",
     RTEMS_INTERRUPT_SHARED,
-    (rtems_interrupt_handler) handler,
+    handler,
     NULL
   );
   (void) rtems_interrupt_handler_install(
     TEST_INTERRUPT_SOURCE2,
     "tm27 high",
     RTEMS_INTERRUPT_SHARED,
-    (rtems_interrupt_handler) handler,
+    handler,
     NULL
   );
 }

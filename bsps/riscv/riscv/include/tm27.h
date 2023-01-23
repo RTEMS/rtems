@@ -52,9 +52,7 @@ static bool riscv_tm27_can_use_mtime;
 
 static rtems_interrupt_entry riscv_tm27_interrupt_entry;
 
-static inline void Install_tm27_vector(
-  void ( *handler )( rtems_vector_number )
-)
+static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
   rtems_vector_number irq;
   bool                enabled;
@@ -71,7 +69,7 @@ static inline void Install_tm27_vector(
 
   rtems_interrupt_entry_initialize(
     &riscv_tm27_interrupt_entry,
-    (rtems_interrupt_handler) handler,
+    handler,
     NULL,
     "tm27"
   );

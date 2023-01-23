@@ -27,6 +27,8 @@
 #   error "..."
 #endif
 
+#define TM27_USE_VECTOR_HANDLER
+
 #define Install_tm27_vector( handler ) \
 { \
     rtems_isr_entry old_handler; \

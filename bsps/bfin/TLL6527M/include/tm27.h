@@ -34,6 +34,8 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
+#define TM27_USE_VECTOR_HANDLER
+
 #define Install_tm27_vector(handler) \
 { \
   set_vector( handler, 0x06, 1 ); \

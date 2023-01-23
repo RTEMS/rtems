@@ -45,10 +45,6 @@ uint32_t   Interrupt_nest;
 uint32_t   timer_overhead;
 uint32_t   Interrupt_enter_time;
 
-rtems_isr Isr_handler(
-  rtems_vector_number vector
-);
-
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -91,6 +87,19 @@ rtems_task Init(
   rtems_task_exit();
 }
 
+#ifdef TM27_USE_VECTOR_HANDLER
+static rtems_isr Isr_handler( rtems_vector_number arg )
+#else
+static void Isr_handler( void *arg )
+#endif
+{
+  (void) arg;
+
+  /* See how long it took system to recognize interrupt */
+  Interrupt_enter_time = benchmark_timer_read();
+  Clear_tm27_intr();
+}
+
 rtems_task Task_1(
   rtems_task_argument argument
 )
@@ -113,13 +122,4 @@ rtems_task Task_1(
 
   TEST_END();
   rtems_test_exit( 0 );
-}
-
-rtems_isr Isr_handler(
-  rtems_vector_number vector
-)
-{
-  /* See how long it took system to recognize interrupt */
-  Interrupt_enter_time = benchmark_timer_read();
-  Clear_tm27_intr();
 }

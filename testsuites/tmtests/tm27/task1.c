@@ -62,10 +62,6 @@ volatile uint32_t   Interrupt_return_time, Interrupt_return_nested_time;
 uint32_t   Interrupt_nest;
 uint32_t   timer_overhead;
 
-rtems_isr Isr_handler(
-  rtems_vector_number vector
-);
-
 static void set_thread_executing( Thread_Control *thread )
 {
   _Per_CPU_Get_snapshot()->executing = thread;
@@ -124,6 +120,55 @@ rtems_task Init(
   timer_overhead = benchmark_timer_read();
 
   rtems_task_exit();
+}
+
+/*  The Isr_handler() and Isr_handler_inner() routines are structured
+ *  so that there will be as little entry overhead as possible included
+ *  in the interrupt entry time.
+ */
+
+static void Isr_handler_inner( void )
+{
+
+  /*enable_tracing();*/
+  Clear_tm27_intr();
+  switch ( Interrupt_nest ) {
+    case 0:
+      Interrupt_enter_time = end_time;
+      break;
+    case 1:
+      Interrupt_enter_time = end_time;
+      Interrupt_nest = 2;
+      Interrupt_occurred = 0;
+      Lower_tm27_intr();
+      benchmark_timer_initialize();
+      Cause_tm27_intr();
+      /* goes to a nested copy of Isr_handler */
+#if (MUST_WAIT_FOR_INTERRUPT == 1)
+       while ( Interrupt_occurred == 0 );
+#endif
+      Interrupt_return_nested_time = benchmark_timer_read();
+      break;
+    case 2:
+      Interrupt_enter_nested_time = end_time;
+      break;
+  }
+
+  benchmark_timer_initialize();
+}
+
+#ifdef TM27_USE_VECTOR_HANDLER
+static rtems_isr Isr_handler( rtems_vector_number arg )
+#else
+static void Isr_handler( void *arg )
+#endif
+{
+  (void) arg;
+
+  end_time = benchmark_timer_read();
+
+  Interrupt_occurred = 1;
+  Isr_handler_inner();
 }
 
 rtems_task Task_1(
@@ -301,51 +346,4 @@ rtems_task Task_2(
 
   _Thread_Dispatch();
 
-}
-
-/*  The Isr_handler() and Isr_handler_inner() routines are structured
- *  so that there will be as little entry overhead as possible included
- *  in the interrupt entry time.
- */
-
-void Isr_handler_inner( void );
-
-rtems_isr Isr_handler(
-  rtems_vector_number vector
-)
-{
-  end_time = benchmark_timer_read();
-
-  Interrupt_occurred = 1;
-  Isr_handler_inner();
-}
-
-void Isr_handler_inner( void )
-{
-
-  /*enable_tracing();*/
-  Clear_tm27_intr();
-  switch ( Interrupt_nest ) {
-    case 0:
-      Interrupt_enter_time = end_time;
-      break;
-    case 1:
-      Interrupt_enter_time = end_time;
-      Interrupt_nest = 2;
-      Interrupt_occurred = 0;
-      Lower_tm27_intr();
-      benchmark_timer_initialize();
-      Cause_tm27_intr();
-      /* goes to a nested copy of Isr_handler */
-#if (MUST_WAIT_FOR_INTERRUPT == 1)
-       while ( Interrupt_occurred == 0 );
-#endif
-      Interrupt_return_nested_time = benchmark_timer_read();
-      break;
-    case 2:
-      Interrupt_enter_nested_time = end_time;
-      break;
-  }
-
-  benchmark_timer_initialize();
 }
