@@ -185,6 +185,9 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
     flexbus_gpio_init();
     flexbus_clock_enable();
     flexbus_init(5);
+#if (FREESCALE_KINETIS_USING_PSRAM == 1)
+    kinetis_psram_clear();
+#endif
 }
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1( void )

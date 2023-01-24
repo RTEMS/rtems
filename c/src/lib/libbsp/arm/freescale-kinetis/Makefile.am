@@ -26,6 +26,7 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../../../../../../bsps/arm/freescale-kinetis/start/linkcmds.dk_k60
+dist_project_lib_DATA += ../../../../../../bsps/arm/freescale-kinetis/start/linkcmds.dk_k60_psram
 
 # ----------------------------
 # ------  LibBSP
@@ -66,6 +67,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-armv7m.c
 # FlexBus
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/freescale-kinetis/flexbus/flexbus.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/freescale-kinetis/flexbus/flexbus_glcd.c
+if FREESCALE_KINETIS_USING_PSRAM
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/freescale-kinetis/flexbus/flexbus_psram.c
+endif
 
 # SPI
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/freescale-kinetis/spi/spi.c
