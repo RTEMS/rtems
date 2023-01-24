@@ -311,10 +311,7 @@ void _SMP_Request_shutdown( void )
   }
 }
 
-long unsigned _SMP_Process_message(
-  Per_CPU_Control *cpu_self,
-  long unsigned    message
-)
+void _SMP_Process_message( Per_CPU_Control *cpu_self, long unsigned message )
 {
   if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
     ISR_Level level;
@@ -332,8 +329,6 @@ long unsigned _SMP_Process_message(
   if ( ( message & SMP_MESSAGE_PERFORM_JOBS ) != 0 ) {
     _Per_CPU_Perform_jobs( cpu_self );
   }
-
-  return message;
 }
 
 void _SMP_Try_to_process_message(

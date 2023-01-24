@@ -166,12 +166,9 @@ RTEMS_NO_RETURN void _SMP_Start_multitasking_on_secondary_processor(
  * @param[in, out] cpu_self is the processor control of the processor executing
  *   this function.
  *
- * @return Returns the processed message.
+ * @param message is the message to process.
  */
-long unsigned _SMP_Process_message(
-  Per_CPU_Control *cpu_self,
-  long unsigned    message
-);
+void _SMP_Process_message( Per_CPU_Control *cpu_self, long unsigned message );
 
 /**
  * @brief Tries to process the current SMP message.
@@ -200,10 +197,8 @@ void _SMP_Try_to_process_message(
  *
  * @param[in, out] cpu_self is the processor control of the processor executing
  *   this function.
- *
- * @return Returns the processed message.
  */
-static inline long unsigned _SMP_Inter_processor_interrupt_handler(
+static inline void _SMP_Inter_processor_interrupt_handler(
   Per_CPU_Control *cpu_self
 )
 {
@@ -222,10 +217,8 @@ static inline long unsigned _SMP_Inter_processor_interrupt_handler(
   );
 
   if ( RTEMS_PREDICT_FALSE( message != 0 ) ) {
-    return _SMP_Process_message( cpu_self, message );
+    _SMP_Process_message( cpu_self, message );
   }
-
-  return message;
 }
 
 /**
