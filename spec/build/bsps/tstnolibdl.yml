@@ -14,6 +14,7 @@ actions:
     - dl08
     - dl09
     - dl10
+    - dl11
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
