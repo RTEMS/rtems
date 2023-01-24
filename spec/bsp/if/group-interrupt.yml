@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-identifier: bsp_interrupt
+identifier: RTEMSImplClassicIntr
 links:
 - role: interface-ingroup
   uid: group-shared

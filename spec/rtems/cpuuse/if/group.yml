@@ -6,7 +6,7 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 description: null
 enabled-by: true
-identifier: libmisc_cpuuse
+identifier: RTEMSAPICPUUsageReporting
 index-entries: []
 interface-type: group
 links:
