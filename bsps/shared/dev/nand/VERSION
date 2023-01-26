@@ -5,16 +5,20 @@ Import from:
 
 https://github.com/Xilinx/embeddedsw.git
 
-commit 8a89579489c88ea5acd23d7d439ac928659c26cf
-Author:     msreeram <manikanta.sreeram@xilinx.com>
-AuthorDate: Wed Apr 6 23:24:38 2022 -0600
+commit 5330a64c8efd14f0eef09befdbb8d3d738c33ec2
+Refs: <xilinx_v2022.2>
+Author:     Nicole Baze <nicole.baze@xilinx.com>
+AuthorDate: Mon Oct 3 13:27:19 2022 -0700
 Commit:     Siva Addepalli <sivaprasad.addepalli@xilinx.com>
-CommitDate: Fri Apr 8 16:47:15 2022 +0530
+CommitDate: Fri Oct 7 10:26:16 2022 +0530
 
-    update license file for EmbeddedSW 2022.1 release
+    xilpm: versal: server: Fix bug in AIE2 zeroization
 
-    Update license file for EmbeddedSW 2022.1 release
+    There is a bug in AIE2 zeriozation function when polling for memory
+    zeroization complete. Currently the entire memory register is being
+    checked against zero but instead we need to check the bits specific
+    to the memory tiles. This patch updates the zeroization check by
+    adding a mask so that only the desired bits are checked for zero.
 
-    Signed-off-by: Manikanta Sreeram <msreeram@xilinx.com>
-
-    Acked-by : Meena Paleti <meena.paleti@xilinx.com>
+    Signed-off-by: Nicole Baze <nicole.baze@xilinx.com>
+    Acked-by: Jesus De Haro <jesus.de-haro@xilinx.com>
