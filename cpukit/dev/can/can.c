@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <inttypes.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -57,13 +58,13 @@
                            real_can_interrupt_lock_release(bus);  \
                          } while (0);
 
-static ssize_t 
+static int
 can_bus_open(rtems_libio_t *iop, const char *path, int oflag, mode_t mode);
 static ssize_t 
 can_bus_read(rtems_libio_t *iop, void *buffer, size_t count);
 static ssize_t 
 can_bus_write(rtems_libio_t *iop, const void *buffer, size_t count);
-static ssize_t 
+static int
 can_bus_ioctl(rtems_libio_t *iop, ioctl_command_t request, void *buffer);
 
 static int can_xmit(struct can_bus *bus);
@@ -179,7 +180,7 @@ static int try_sem(struct can_bus *bus)
   return ret;
 }
 
-static ssize_t 
+static int
 can_bus_open(rtems_libio_t *iop, const char *path, int oflag, mode_t mode)
 {
   CAN_DEBUG("can_bus_open\n");
@@ -210,7 +211,8 @@ static ssize_t can_bus_read(rtems_libio_t *iop, void *buffer, size_t count)
   len = CAN_MSG_LEN(&bus->can_rx_msg);
 
   if (count < len) {
-    CAN_DEBUG("can_bus_read: buffer size is small min sizeof(struct can_msg) = %u\n",
+    CAN_DEBUG("can_bus_read: buffer size is small min "
+              "sizeof(struct can_msg) = %" PRIuPTR "\n",
                     sizeof(struct can_msg));
     return -RTEMS_INVALID_SIZE;
   }
@@ -314,8 +316,8 @@ can_bus_write(rtems_libio_t *iop, const void *buffer, size_t count)
 
   CAN_DEBUG_TX("can_bus_write: can_msg_size = %u\n", msg_size);
   if (msg_size > sizeof(struct can_msg)) {
-    CAN_ERR("can_bus_write:"
-          "can message len error msg_size = %u struct can_msg = %u\n", 
+    CAN_ERR("can_bus_write: can message "
+            "len error msg_size = %u struct can_msg = %" PRIxPTR "\n",
           msg_size, sizeof(struct can_msg));
     return -RTEMS_INVALID_SIZE;
   }
@@ -363,7 +365,7 @@ release_lock_and_return:
   return ret;
 }
 
-static ssize_t 
+static int
 can_bus_ioctl(rtems_libio_t *iop, ioctl_command_t request, void *buffer)
 {
   can_bus *bus = IMFS_generic_get_context_by_iop(iop);
