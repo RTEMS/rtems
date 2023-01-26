@@ -102,14 +102,17 @@ rtems_status_code rtems_partition_create(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if ( length == 0 )
+  if ( length == 0 ) {
     return RTEMS_INVALID_SIZE;
+  }
 
-  if ( buffer_size == 0 )
+  if ( buffer_size == 0 ) {
     return RTEMS_INVALID_SIZE;
+  }
 
-  if ( length < buffer_size )
+  if ( length < buffer_size ) {
     return RTEMS_INVALID_SIZE;
+  }
 
   /*
    * Ensure that the buffer size is an integral multiple of the pointer size so
