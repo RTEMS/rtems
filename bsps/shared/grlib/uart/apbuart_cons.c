@@ -76,7 +76,7 @@ struct apbuart_priv {
 	struct drvmgr_dev *dev;
 	struct apbuart_regs *regs;
 	struct rtems_termios_tty *tty;
-	char devName[32];
+	char devName[52];
 	volatile int sending;
 	int mode;
 	int cap;

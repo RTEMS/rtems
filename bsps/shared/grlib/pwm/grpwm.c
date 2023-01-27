@@ -169,7 +169,7 @@ struct grpwm_regs {
 struct grpwm_priv {
 	struct drvmgr_dev	*dev;
 	struct grpwm_regs		*regs;
-	char				devName[32];
+	char				devName[52];
 	int				irq;
 	int				open;
 

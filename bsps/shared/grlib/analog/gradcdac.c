@@ -53,7 +53,7 @@
 struct gradcdac_priv {
 	struct gradcdac_regs *regs;	/* Must be first */
 	struct drvmgr_dev *dev;
-	char devName[48];
+	char devName[54];               /* Must be at least 48 per names */
 
 	unsigned int freq;
 	int irqno;

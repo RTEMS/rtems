@@ -375,7 +375,7 @@ int i2cmst_init3(struct drvmgr_dev *dev)
 {
 	gr_i2cmst_prv_t *priv;
 	char prefix[32];
-	char devName[32];
+	char devName[50];
 	int rc;
 
 	priv = (gr_i2cmst_prv_t *)dev->priv;

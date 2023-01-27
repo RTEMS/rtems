@@ -251,7 +251,7 @@ int spictrl_init3(struct drvmgr_dev *dev)
 {
 	struct spictrl_priv *priv;
 	char prefix[32];
-	char devName[32];
+	char devName[48];
 	int rc;
 
 	priv = (struct spictrl_priv *)dev->priv;

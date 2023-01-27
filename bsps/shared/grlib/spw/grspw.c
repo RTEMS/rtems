@@ -108,7 +108,7 @@ typedef struct {
 typedef struct {
    /* configuration parameters */ 
    struct drvmgr_dev *dev; /* Driver manager device */
-   char devName[32]; /* Device Name */
+   char devName[49]; /* Device Name */
    LEON3_SPACEWIRE_Regs_Map *regs;
    spw_config config;
 

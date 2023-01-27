@@ -367,7 +367,7 @@ struct grtm_ring {
 
 struct grtm_priv {
 	struct drvmgr_dev	*dev;		/* Driver manager device */
-	char			devName[32];	/* Device Name */
+	char			devName[52];	/* Device Name */
 	struct grtm_regs	*regs;
 	int			irq;
 	int			minor;

@@ -56,7 +56,7 @@ struct grcan_config {
 
 struct grcan_priv {
 	struct drvmgr_dev *dev;	/* Driver manager device */
-	char devName[32];	/* Device Name */
+	char devName[52];	/* Device Name */
 	unsigned int baseaddr, ram_base;
 	struct grcan_regs *regs;
 	int irq;

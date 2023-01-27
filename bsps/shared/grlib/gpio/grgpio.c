@@ -379,12 +379,12 @@ static int grgpio_gpiolib_get_info(void *handle, struct gpiolib_info *pinfo)
 		/* Failed to get prefix, make sure of a unique FS name
 		 * by using the driver minor.
 		 */
-		snprintf(pinfo->devName, 64, "/dev/grgpio%d/%d", dev->minor_drv, portnr);
+		snprintf(pinfo->devName, 80, "/dev/grgpio%d/%d", dev->minor_drv, portnr);
 	} else {
 		/* Got special prefix, this means we have a bus prefix
 		 * And we should use our "bus minor"
 		 */
-		snprintf(pinfo->devName, 64, "/dev/%sgrgpio%d/%d", prefix, dev->minor_bus, portnr);
+		snprintf(pinfo->devName, 80, "/dev/%sgrgpio%d/%d", prefix, dev->minor_bus, portnr);
 	}
 
 	return 0;

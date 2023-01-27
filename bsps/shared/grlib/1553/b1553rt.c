@@ -87,7 +87,7 @@ static rtems_driver_address_table b1553rt_driver = RT_DRIVER_TABLE_ENTRY;
 typedef struct { 
 
     struct drvmgr_dev *dev; /* Driver manager device */
-    char devName[32];     /* Device Name */
+    char devName[52];       /* Device Name */
 
     struct rt_reg *regs;
     unsigned int ctrl_copy; /* Local copy of config register */

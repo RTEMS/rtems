@@ -78,7 +78,7 @@ extern int gpiolib_irq_register(void *handle, void *func, void *arg);
 /*** Driver Interface ***/
 
 struct gpiolib_info {
-	char		devName[64];
+	char		devName[80];
 };
 
 struct gpiolib_drv_ops {

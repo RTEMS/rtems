@@ -119,7 +119,7 @@ struct irq_log_list {
 typedef struct { 
 
 	struct drvmgr_dev *dev; /* Driver manager device */
-	char devName[32]; /* Device Name */
+	char devName[52]; /* Device Name */
 	struct brm_reg *regs;
 
 	unsigned int memarea_base;

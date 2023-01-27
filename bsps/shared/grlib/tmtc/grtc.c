@@ -241,7 +241,7 @@ struct grtc_frame_pool {
 
 struct grtc_priv {
 	struct drvmgr_dev		*dev;		/* Driver manager device */
-	char			devName[32];	/* Device Name */
+	char			devName[52];	/* Device Name */
 	struct grtc_regs	*regs;		/* TC Hardware Register MAP */
 	int			irq;		/* IRQ number of TC core */
 	SPIN_DECLARE(devlock);			/* spin-lock of registers */

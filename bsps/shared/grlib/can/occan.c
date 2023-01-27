@@ -226,7 +226,7 @@ typedef struct {
 
 typedef struct {
 	struct drvmgr_dev *dev;
-	char devName[32];
+	char devName[52];
 	SPIN_DECLARE(devlock);
 
 	/* hardware shortcuts */
