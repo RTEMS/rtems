@@ -139,7 +139,10 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
    * The application configuration ensures that we have at least one scheduler
    * configured.
    */
-  while ( scheduler_index < _Scheduler_Count ) {
+
+  _Assert ( _Scheduler_Count >= 1 );
+
+  do {
     Priority_Control priority;
 
     if ( scheduler == config->scheduler ) {
@@ -172,7 +175,7 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
       ( (uintptr_t) scheduler_node + _Scheduler_Node_size );
     ++scheduler;
     ++scheduler_index;
-  }
+  } while ( scheduler_index < _Scheduler_Count );
 
   /*
    * The thread is initialized to use exactly one scheduler node which is
