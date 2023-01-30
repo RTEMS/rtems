@@ -1789,14 +1789,14 @@ static void save_editor(struct editor *ed) {
   ed->refresh = 1;
 }
 
-static void close_editor(struct editor *ed) {
+static struct editor* close_editor(struct editor *ed) {
   struct env *env = ed->env;
 
   if (ed->dirty) {
     display_message(ed, "Close %s without saving changes (y/n)? ", ed->filename);
     if (!ask()) {
       ed->refresh = 1;
-      return;
+      return ed;
     }
   }
 
@@ -1808,6 +1808,7 @@ static void close_editor(struct editor *ed) {
     new_file(ed, "");
   }
   ed->refresh = 1;
+  return ed;
 }
 
 static void pipe_command(struct editor *ed) {
@@ -2131,15 +2132,7 @@ static void edit(struct editor *ed) {
         case ctrl('s'): save_editor(ed); break;
         case ctrl('p'): pipe_command(ed); break;
 #endif
-#if defined(__rtems__)
-        /*
-         * Coverity spotted this as using ed after free() so changing
-         * the order of the statements.
-         */
-        case ctrl('w'): ed = ed->env->current; close_editor(ed); break;
-#else
-        case ctrl('w'): close_editor(ed); ed = ed->env->current; break;
-#endif
+        case ctrl('w'): ed = close_editor(ed); break;
       }
     }
   }
