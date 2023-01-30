@@ -412,6 +412,9 @@ static void move_gap(struct editor *ed, int pos, int minsize) {
     if (gapsize + MINEXTEND > minsize) minsize = gapsize + MINEXTEND;
     newsize = (ed->end - ed->start) - gapsize + minsize;
     start = (unsigned char *) malloc(newsize); // TODO check for out of memory
+    if (start == NULL) {
+        return;
+    }
     gap = start + pos;
     rest = gap + minsize;
     end = start + newsize;
