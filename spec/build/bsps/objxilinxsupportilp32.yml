@@ -13,6 +13,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/include/xil/arm/ARMv8/32bit/xil_cache.h
+  - bsps/include/xil/arm/ARMv8/32bit/xil_exception.h
   - bsps/include/xil/arm/ARMv8/32bit/xpseudo_asm.h
   - bsps/include/xil/arm/ARMv8/32bit/xreg_cortexa53.h
 links: []

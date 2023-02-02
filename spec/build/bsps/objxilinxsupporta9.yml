@@ -13,6 +13,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/include/xil/arm/cortexa9/xil_cache.h
+  - bsps/include/xil/arm/cortexa9/xil_exception.h
   - bsps/include/xil/arm/cortexa9/xpseudo_asm.h
   - bsps/include/xil/arm/cortexa9/xreg_cortexa9.h
 links: []

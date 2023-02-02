@@ -12,6 +12,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}
   source:
   - bsps/include/xil/microblaze/xil_cache.h
+  - bsps/include/xil/microblaze/xil_exception.h
 links: []
 source: []
 type: build
