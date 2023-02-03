@@ -1,11 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: RTEMS_SMP
+- Copyright (C) 2021, 2023 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
 functional-type: action
 links:
 - role: interface-function
-  uid: ../if/interrupt-spurious
+  uid: ../if/interrupt-handler-dispatch-unchecked
 post-conditions:
 - name: Result
   states:
@@ -44,7 +44,7 @@ post-conditions:
   test-epilogue: null
   test-prologue: null
 pre-conditions:
-- name: First
+- name: LoadFirst
   states:
   - name: 'Null'
     test-code: |
@@ -62,7 +62,7 @@ pre-conditions:
       an object of type ${/rtems/intr/if/entry:/name}.
   test-epilogue: null
   test-prologue: null
-- name: FirstAgain
+- name: LoadFirstAgain
   states:
   - name: 'Null'
     test-code: |
@@ -91,23 +91,15 @@ test-action: |
   ctx->fatal_source = RTEMS_FATAL_SOURCE_LAST;
   ctx->fatal_code = UINT32_MAX;
 
-  #if defined(RTEMS_SMP)
-  if ( *ctx->first == NULL && ctx->first_again != NULL ) {
-    *ctx->first = ctx->first_again;
-    bsp_interrupt_spurious( ctx->test_vector );
-  } else
-  #endif
-  {
-    (void) rtems_interrupt_vector_enable( ctx->test_vector );
+  (void) rtems_interrupt_vector_enable( ctx->test_vector );
 
-    CallWithinISRRaise();
+  CallWithinISRRaise();
 
-    while ( !ctx->interrupt_occurred ) {
-      /* Wait */
-    }
-
-    Disable( ctx );
+  while ( !ctx->interrupt_occurred ) {
+    /* Wait */
   }
+
+  Disable( ctx );
 test-brief: null
 test-cleanup: null
 test-context:
@@ -254,7 +246,25 @@ test-support: |
       __real_bsp_interrupt_handler_default( vector );
     }
   }
-test-target: testsuites/validation/tc-bsp-interrupt-spurious.c
+
+  #if defined(RTEMS_SMP)
+  void __real_bsp_interrupt_spurious( rtems_vector_number vector );
+
+  void __wrap_bsp_interrupt_spurious( rtems_vector_number vector );
+
+  void __wrap_bsp_interrupt_spurious( rtems_vector_number vector )
+  {
+    if ( test_case_active ) {
+      Context *ctx;
+
+      ctx = T_fixture_context();
+      *ctx->first = ctx->first_again;
+    }
+
+    __real_bsp_interrupt_spurious( vector );
+  }
+  #endif
+test-target: testsuites/validation/tc-bsp-interrupt-handler-dispatch-unchecked.c
 test-teardown:
   brief: null
   code: |
@@ -273,27 +283,27 @@ transition-map:
     FatalSource: SpuriousInterrupt
     FatalCode: Vector
   pre-conditions:
-    First:
+    LoadFirst:
     - 'Null'
-    FirstAgain: N/A
+    LoadFirstAgain: N/A
 - enabled-by: true
   post-conditions:
     Result: Dispatch
     FatalSource: N/A
     FatalCode: N/A
   pre-conditions:
-    First:
+    LoadFirst:
     - Entry
-    FirstAgain: N/A
+    LoadFirstAgain: N/A
 - enabled-by: RTEMS_SMP
   post-conditions:
     Result: FatalError
     FatalSource: SpuriousInterrupt
     FatalCode: Vector
   pre-conditions:
-    First:
+    LoadFirst:
     - 'Null'
-    FirstAgain:
+    LoadFirstAgain:
     - 'Null'
 - enabled-by: RTEMS_SMP
   post-conditions:
@@ -301,8 +311,8 @@ transition-map:
     FatalSource: N/A
     FatalCode: N/A
   pre-conditions:
-    First:
+    LoadFirst:
     - 'Null'
-    FirstAgain:
+    LoadFirstAgain:
     - Entry
 type: requirement
