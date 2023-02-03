@@ -3,11 +3,11 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseBspReqInterruptSpurious
+ * @ingroup RTEMSTestCaseBspReqInterruptHandlerDispatchUnchecked
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021, 2023 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -60,8 +60,8 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseBspReqInterruptSpurious \
- *   spec:/bsp/req/interrupt-spurious
+ * @defgroup RTEMSTestCaseBspReqInterruptHandlerDispatchUnchecked \
+ *   spec:/bsp/req/interrupt-handler-dispatch-unchecked
  *
  * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
  *
@@ -69,44 +69,45 @@
  */
 
 typedef enum {
-  BspReqInterruptSpurious_Pre_First_Null,
-  BspReqInterruptSpurious_Pre_First_Entry,
-  BspReqInterruptSpurious_Pre_First_NA
-} BspReqInterruptSpurious_Pre_First;
+  BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Null,
+  BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Entry,
+  BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_NA
+} BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst;
 
 typedef enum {
-  BspReqInterruptSpurious_Pre_FirstAgain_Null,
-  BspReqInterruptSpurious_Pre_FirstAgain_Entry,
-  BspReqInterruptSpurious_Pre_FirstAgain_NA
-} BspReqInterruptSpurious_Pre_FirstAgain;
+  BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Null,
+  BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Entry,
+  BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_NA
+} BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain;
 
 typedef enum {
-  BspReqInterruptSpurious_Post_Result_FatalError,
-  BspReqInterruptSpurious_Post_Result_Dispatch,
-  BspReqInterruptSpurious_Post_Result_NA
-} BspReqInterruptSpurious_Post_Result;
+  BspReqInterruptHandlerDispatchUnchecked_Post_Result_FatalError,
+  BspReqInterruptHandlerDispatchUnchecked_Post_Result_Dispatch,
+  BspReqInterruptHandlerDispatchUnchecked_Post_Result_NA
+} BspReqInterruptHandlerDispatchUnchecked_Post_Result;
 
 typedef enum {
-  BspReqInterruptSpurious_Post_FatalSource_SpuriousInterrupt,
-  BspReqInterruptSpurious_Post_FatalSource_NA
-} BspReqInterruptSpurious_Post_FatalSource;
+  BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_SpuriousInterrupt,
+  BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_NA
+} BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource;
 
 typedef enum {
-  BspReqInterruptSpurious_Post_FatalCode_Vector,
-  BspReqInterruptSpurious_Post_FatalCode_NA
-} BspReqInterruptSpurious_Post_FatalCode;
+  BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_Vector,
+  BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_NA
+} BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode;
 
 typedef struct {
   uint8_t Skip : 1;
-  uint8_t Pre_First_NA : 1;
-  uint8_t Pre_FirstAgain_NA : 1;
+  uint8_t Pre_LoadFirst_NA : 1;
+  uint8_t Pre_LoadFirstAgain_NA : 1;
   uint8_t Post_Result : 2;
   uint8_t Post_FatalSource : 1;
   uint8_t Post_FatalCode : 1;
-} BspReqInterruptSpurious_Entry;
+} BspReqInterruptHandlerDispatchUnchecked_Entry;
 
 /**
- * @brief Test context for spec:/bsp/req/interrupt-spurious test case.
+ * @brief Test context for spec:/bsp/req/interrupt-handler-dispatch-unchecked
+ *   test case.
  */
 typedef struct {
   /**
@@ -192,7 +193,7 @@ typedef struct {
     /**
      * @brief This member contains the current transition map entry.
      */
-    BspReqInterruptSpurious_Entry entry;
+    BspReqInterruptHandlerDispatchUnchecked_Entry entry;
 
     /**
      * @brief If this member is true, then the current transition variant
@@ -200,30 +201,30 @@ typedef struct {
      */
     bool skip;
   } Map;
-} BspReqInterruptSpurious_Context;
+} BspReqInterruptHandlerDispatchUnchecked_Context;
 
-static BspReqInterruptSpurious_Context
-  BspReqInterruptSpurious_Instance;
+static BspReqInterruptHandlerDispatchUnchecked_Context
+  BspReqInterruptHandlerDispatchUnchecked_Instance;
 
-static const char * const BspReqInterruptSpurious_PreDesc_First[] = {
+static const char * const BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirst[] = {
   "Null",
   "Entry",
   "NA"
 };
 
-static const char * const BspReqInterruptSpurious_PreDesc_FirstAgain[] = {
+static const char * const BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirstAgain[] = {
   "Null",
   "Entry",
   "NA"
 };
 
-static const char * const * const BspReqInterruptSpurious_PreDesc[] = {
-  BspReqInterruptSpurious_PreDesc_First,
-  BspReqInterruptSpurious_PreDesc_FirstAgain,
+static const char * const * const BspReqInterruptHandlerDispatchUnchecked_PreDesc[] = {
+  BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirst,
+  BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirstAgain,
   NULL
 };
 
-typedef BspReqInterruptSpurious_Context Context;
+typedef BspReqInterruptHandlerDispatchUnchecked_Context Context;
 
 static bool test_case_active;
 
@@ -283,13 +284,31 @@ void __wrap_bsp_interrupt_handler_default( rtems_vector_number vector )
   }
 }
 
-static void BspReqInterruptSpurious_Pre_First_Prepare(
-  BspReqInterruptSpurious_Context  *ctx,
-  BspReqInterruptSpurious_Pre_First state
+#if defined(RTEMS_SMP)
+void __real_bsp_interrupt_spurious( rtems_vector_number vector );
+
+void __wrap_bsp_interrupt_spurious( rtems_vector_number vector );
+
+void __wrap_bsp_interrupt_spurious( rtems_vector_number vector )
+{
+  if ( test_case_active ) {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    *ctx->first = ctx->first_again;
+  }
+
+  __real_bsp_interrupt_spurious( vector );
+}
+#endif
+
+static void BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Prepare(
+  BspReqInterruptHandlerDispatchUnchecked_Context      *ctx,
+  BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst state
 )
 {
   switch ( state ) {
-    case BspReqInterruptSpurious_Pre_First_Null: {
+    case BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Null: {
       /*
        * While the first loaded value of the pointer to the first interrupt
        * entry of the interrupt vector specified by the ``vector`` parameter is
@@ -299,7 +318,7 @@ static void BspReqInterruptSpurious_Pre_First_Prepare(
       break;
     }
 
-    case BspReqInterruptSpurious_Pre_First_Entry: {
+    case BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Entry: {
       /*
        * While the first loaded value of the pointer to the first interrupt
        * entry of the interrupt vector specified by the ``vector`` parameter
@@ -309,18 +328,18 @@ static void BspReqInterruptSpurious_Pre_First_Prepare(
       break;
     }
 
-    case BspReqInterruptSpurious_Pre_First_NA:
+    case BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_NA:
       break;
   }
 }
 
-static void BspReqInterruptSpurious_Pre_FirstAgain_Prepare(
-  BspReqInterruptSpurious_Context       *ctx,
-  BspReqInterruptSpurious_Pre_FirstAgain state
+static void BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Prepare(
+  BspReqInterruptHandlerDispatchUnchecked_Context           *ctx,
+  BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain state
 )
 {
   switch ( state ) {
-    case BspReqInterruptSpurious_Pre_FirstAgain_Null: {
+    case BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Null: {
       /*
        * While the second loaded value of the pointer to the first interrupt
        * entry of the interrupt vector specified by the ``vector`` parameter is
@@ -330,7 +349,7 @@ static void BspReqInterruptSpurious_Pre_FirstAgain_Prepare(
       break;
     }
 
-    case BspReqInterruptSpurious_Pre_FirstAgain_Entry: {
+    case BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Entry: {
       /*
        * While the second loaded value of the pointer to the first interrupt
        * entry of the interrupt vector specified by the ``vector`` parameter
@@ -340,18 +359,18 @@ static void BspReqInterruptSpurious_Pre_FirstAgain_Prepare(
       break;
     }
 
-    case BspReqInterruptSpurious_Pre_FirstAgain_NA:
+    case BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_NA:
       break;
   }
 }
 
-static void BspReqInterruptSpurious_Post_Result_Check(
-  BspReqInterruptSpurious_Context    *ctx,
-  BspReqInterruptSpurious_Post_Result state
+static void BspReqInterruptHandlerDispatchUnchecked_Post_Result_Check(
+  BspReqInterruptHandlerDispatchUnchecked_Context    *ctx,
+  BspReqInterruptHandlerDispatchUnchecked_Post_Result state
 )
 {
   switch ( state ) {
-    case BspReqInterruptSpurious_Post_Result_FatalError: {
+    case BspReqInterruptHandlerDispatchUnchecked_Post_Result_FatalError: {
       /*
        * A fatal error shall occur.
        */
@@ -360,7 +379,7 @@ static void BspReqInterruptSpurious_Post_Result_Check(
       break;
     }
 
-    case BspReqInterruptSpurious_Post_Result_Dispatch: {
+    case BspReqInterruptHandlerDispatchUnchecked_Post_Result_Dispatch: {
       /*
        * The interrupt entries installed at the interrupt vector specified by
        * the ``vector`` parameter shall be dispatched.
@@ -370,18 +389,18 @@ static void BspReqInterruptSpurious_Post_Result_Check(
       break;
     }
 
-    case BspReqInterruptSpurious_Post_Result_NA:
+    case BspReqInterruptHandlerDispatchUnchecked_Post_Result_NA:
       break;
   }
 }
 
-static void BspReqInterruptSpurious_Post_FatalSource_Check(
-  BspReqInterruptSpurious_Context         *ctx,
-  BspReqInterruptSpurious_Post_FatalSource state
+static void BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_Check(
+  BspReqInterruptHandlerDispatchUnchecked_Context         *ctx,
+  BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource state
 )
 {
   switch ( state ) {
-    case BspReqInterruptSpurious_Post_FatalSource_SpuriousInterrupt: {
+    case BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_SpuriousInterrupt: {
       /*
        * The fatal source shall be equal to
        * RTEMS_FATAL_SOURCE_SPURIOUS_INTERRUPT.
@@ -390,18 +409,18 @@ static void BspReqInterruptSpurious_Post_FatalSource_Check(
       break;
     }
 
-    case BspReqInterruptSpurious_Post_FatalSource_NA:
+    case BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_NA:
       break;
   }
 }
 
-static void BspReqInterruptSpurious_Post_FatalCode_Check(
-  BspReqInterruptSpurious_Context       *ctx,
-  BspReqInterruptSpurious_Post_FatalCode state
+static void BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_Check(
+  BspReqInterruptHandlerDispatchUnchecked_Context       *ctx,
+  BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode state
 )
 {
   switch ( state ) {
-    case BspReqInterruptSpurious_Post_FatalCode_Vector: {
+    case BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_Vector: {
       /*
        * The fatal code shall be equal to the ``vector`` parameter.
        */
@@ -409,13 +428,13 @@ static void BspReqInterruptSpurious_Post_FatalCode_Check(
       break;
     }
 
-    case BspReqInterruptSpurious_Post_FatalCode_NA:
+    case BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_NA:
       break;
   }
 }
 
-static void BspReqInterruptSpurious_Setup(
-  BspReqInterruptSpurious_Context *ctx
+static void BspReqInterruptHandlerDispatchUnchecked_Setup(
+  BspReqInterruptHandlerDispatchUnchecked_Context *ctx
 )
 {
   ctx->first = NULL;
@@ -431,17 +450,17 @@ static void BspReqInterruptSpurious_Setup(
   SetFatalHandler( Fatal, ctx );
 }
 
-static void BspReqInterruptSpurious_Setup_Wrap( void *arg )
+static void BspReqInterruptHandlerDispatchUnchecked_Setup_Wrap( void *arg )
 {
-  BspReqInterruptSpurious_Context *ctx;
+  BspReqInterruptHandlerDispatchUnchecked_Context *ctx;
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  BspReqInterruptSpurious_Setup( ctx );
+  BspReqInterruptHandlerDispatchUnchecked_Setup( ctx );
 }
 
-static void BspReqInterruptSpurious_Teardown(
-  BspReqInterruptSpurious_Context *ctx
+static void BspReqInterruptHandlerDispatchUnchecked_Teardown(
+  BspReqInterruptHandlerDispatchUnchecked_Context *ctx
 )
 {
   SetFatalHandler( NULL, NULL );
@@ -452,17 +471,17 @@ static void BspReqInterruptSpurious_Teardown(
   }
 }
 
-static void BspReqInterruptSpurious_Teardown_Wrap( void *arg )
+static void BspReqInterruptHandlerDispatchUnchecked_Teardown_Wrap( void *arg )
 {
-  BspReqInterruptSpurious_Context *ctx;
+  BspReqInterruptHandlerDispatchUnchecked_Context *ctx;
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  BspReqInterruptSpurious_Teardown( ctx );
+  BspReqInterruptHandlerDispatchUnchecked_Teardown( ctx );
 }
 
-static void BspReqInterruptSpurious_Action(
-  BspReqInterruptSpurious_Context *ctx
+static void BspReqInterruptHandlerDispatchUnchecked_Action(
+  BspReqInterruptHandlerDispatchUnchecked_Context *ctx
 )
 {
   ctx->interrupt_occurred = false;
@@ -471,64 +490,60 @@ static void BspReqInterruptSpurious_Action(
   ctx->fatal_source = RTEMS_FATAL_SOURCE_LAST;
   ctx->fatal_code = UINT32_MAX;
 
-  #if defined(RTEMS_SMP)
-  if ( *ctx->first == NULL && ctx->first_again != NULL ) {
-    *ctx->first = ctx->first_again;
-    bsp_interrupt_spurious( ctx->test_vector );
-  } else
-  #endif
-  {
-    (void) rtems_interrupt_vector_enable( ctx->test_vector );
+  (void) rtems_interrupt_vector_enable( ctx->test_vector );
 
-    CallWithinISRRaise();
+  CallWithinISRRaise();
 
-    while ( !ctx->interrupt_occurred ) {
-      /* Wait */
-    }
-
-    Disable( ctx );
+  while ( !ctx->interrupt_occurred ) {
+    /* Wait */
   }
+
+  Disable( ctx );
 }
 
-static const BspReqInterruptSpurious_Entry
-BspReqInterruptSpurious_Entries[] = {
-  { 0, 0, 1, BspReqInterruptSpurious_Post_Result_Dispatch,
-    BspReqInterruptSpurious_Post_FatalSource_NA,
-    BspReqInterruptSpurious_Post_FatalCode_NA },
+static const BspReqInterruptHandlerDispatchUnchecked_Entry
+BspReqInterruptHandlerDispatchUnchecked_Entries[] = {
+  { 0, 0, 1, BspReqInterruptHandlerDispatchUnchecked_Post_Result_Dispatch,
+    BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_NA,
+    BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_NA },
 #if defined(RTEMS_SMP)
-  { 0, 0, 0, BspReqInterruptSpurious_Post_Result_FatalError,
-    BspReqInterruptSpurious_Post_FatalSource_SpuriousInterrupt,
-    BspReqInterruptSpurious_Post_FatalCode_Vector },
+  { 0, 0, 0, BspReqInterruptHandlerDispatchUnchecked_Post_Result_FatalError,
+    BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_SpuriousInterrupt,
+    BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_Vector },
 #else
-  { 0, 0, 1, BspReqInterruptSpurious_Post_Result_FatalError,
-    BspReqInterruptSpurious_Post_FatalSource_SpuriousInterrupt,
-    BspReqInterruptSpurious_Post_FatalCode_Vector },
+  { 0, 0, 1, BspReqInterruptHandlerDispatchUnchecked_Post_Result_FatalError,
+    BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_SpuriousInterrupt,
+    BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_Vector },
 #endif
 #if defined(RTEMS_SMP)
-  { 0, 0, 0, BspReqInterruptSpurious_Post_Result_Dispatch,
-    BspReqInterruptSpurious_Post_FatalSource_NA,
-    BspReqInterruptSpurious_Post_FatalCode_NA }
+  { 0, 0, 0, BspReqInterruptHandlerDispatchUnchecked_Post_Result_Dispatch,
+    BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_NA,
+    BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_NA }
 #else
-  { 0, 0, 1, BspReqInterruptSpurious_Post_Result_FatalError,
-    BspReqInterruptSpurious_Post_FatalSource_SpuriousInterrupt,
-    BspReqInterruptSpurious_Post_FatalCode_Vector }
+  { 0, 0, 1, BspReqInterruptHandlerDispatchUnchecked_Post_Result_FatalError,
+    BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_SpuriousInterrupt,
+    BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_Vector }
 #endif
 };
 
 static const uint8_t
-BspReqInterruptSpurious_Map[] = {
+BspReqInterruptHandlerDispatchUnchecked_Map[] = {
   1, 2, 0, 0
 };
 
-static size_t BspReqInterruptSpurious_Scope( void *arg, char *buf, size_t n )
+static size_t BspReqInterruptHandlerDispatchUnchecked_Scope(
+  void  *arg,
+  char  *buf,
+  size_t n
+)
 {
-  BspReqInterruptSpurious_Context *ctx;
+  BspReqInterruptHandlerDispatchUnchecked_Context *ctx;
 
   ctx = arg;
 
   if ( ctx->Map.in_action_loop ) {
     return T_get_scope(
-      BspReqInterruptSpurious_PreDesc,
+      BspReqInterruptHandlerDispatchUnchecked_PreDesc,
       buf,
       n,
       ctx->Map.pcs
@@ -538,85 +553,95 @@ static size_t BspReqInterruptSpurious_Scope( void *arg, char *buf, size_t n )
   return 0;
 }
 
-static T_fixture BspReqInterruptSpurious_Fixture = {
-  .setup = BspReqInterruptSpurious_Setup_Wrap,
+static T_fixture BspReqInterruptHandlerDispatchUnchecked_Fixture = {
+  .setup = BspReqInterruptHandlerDispatchUnchecked_Setup_Wrap,
   .stop = NULL,
-  .teardown = BspReqInterruptSpurious_Teardown_Wrap,
-  .scope = BspReqInterruptSpurious_Scope,
-  .initial_context = &BspReqInterruptSpurious_Instance
+  .teardown = BspReqInterruptHandlerDispatchUnchecked_Teardown_Wrap,
+  .scope = BspReqInterruptHandlerDispatchUnchecked_Scope,
+  .initial_context = &BspReqInterruptHandlerDispatchUnchecked_Instance
 };
 
-static inline BspReqInterruptSpurious_Entry BspReqInterruptSpurious_PopEntry(
-  BspReqInterruptSpurious_Context *ctx
+static inline BspReqInterruptHandlerDispatchUnchecked_Entry
+BspReqInterruptHandlerDispatchUnchecked_PopEntry(
+  BspReqInterruptHandlerDispatchUnchecked_Context *ctx
 )
 {
   size_t index;
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return BspReqInterruptSpurious_Entries[
-    BspReqInterruptSpurious_Map[ index ]
+  return BspReqInterruptHandlerDispatchUnchecked_Entries[
+    BspReqInterruptHandlerDispatchUnchecked_Map[ index ]
   ];
 }
 
-static void BspReqInterruptSpurious_SetPreConditionStates(
-  BspReqInterruptSpurious_Context *ctx
+static void BspReqInterruptHandlerDispatchUnchecked_SetPreConditionStates(
+  BspReqInterruptHandlerDispatchUnchecked_Context *ctx
 )
 {
   ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
 
-  if ( ctx->Map.entry.Pre_FirstAgain_NA ) {
-    ctx->Map.pcs[ 1 ] = BspReqInterruptSpurious_Pre_FirstAgain_NA;
+  if ( ctx->Map.entry.Pre_LoadFirstAgain_NA ) {
+    ctx->Map.pcs[ 1 ] = BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_NA;
   } else {
     ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
   }
 }
 
-static void BspReqInterruptSpurious_TestVariant(
-  BspReqInterruptSpurious_Context *ctx
+static void BspReqInterruptHandlerDispatchUnchecked_TestVariant(
+  BspReqInterruptHandlerDispatchUnchecked_Context *ctx
 )
 {
-  BspReqInterruptSpurious_Pre_First_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  BspReqInterruptSpurious_Pre_FirstAgain_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  BspReqInterruptSpurious_Action( ctx );
-  BspReqInterruptSpurious_Post_Result_Check( ctx, ctx->Map.entry.Post_Result );
-  BspReqInterruptSpurious_Post_FatalSource_Check(
+  BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Prepare(
+    ctx,
+    ctx->Map.pcs[ 0 ]
+  );
+  BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Prepare(
+    ctx,
+    ctx->Map.pcs[ 1 ]
+  );
+  BspReqInterruptHandlerDispatchUnchecked_Action( ctx );
+  BspReqInterruptHandlerDispatchUnchecked_Post_Result_Check(
+    ctx,
+    ctx->Map.entry.Post_Result
+  );
+  BspReqInterruptHandlerDispatchUnchecked_Post_FatalSource_Check(
     ctx,
     ctx->Map.entry.Post_FatalSource
   );
-  BspReqInterruptSpurious_Post_FatalCode_Check(
+  BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_Check(
     ctx,
     ctx->Map.entry.Post_FatalCode
   );
 }
 
 /**
- * @fn void T_case_body_BspReqInterruptSpurious( void )
+ * @fn void T_case_body_BspReqInterruptHandlerDispatchUnchecked( void )
  */
 T_TEST_CASE_FIXTURE(
-  BspReqInterruptSpurious,
-  &BspReqInterruptSpurious_Fixture
+  BspReqInterruptHandlerDispatchUnchecked,
+  &BspReqInterruptHandlerDispatchUnchecked_Fixture
 )
 {
-  BspReqInterruptSpurious_Context *ctx;
+  BspReqInterruptHandlerDispatchUnchecked_Context *ctx;
 
   ctx = T_fixture_context();
   ctx->Map.in_action_loop = true;
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pci[ 0 ] = BspReqInterruptSpurious_Pre_First_Null;
-    ctx->Map.pci[ 0 ] < BspReqInterruptSpurious_Pre_First_NA;
+    ctx->Map.pci[ 0 ] = BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Null;
+    ctx->Map.pci[ 0 ] < BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_NA;
     ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pci[ 1 ] = BspReqInterruptSpurious_Pre_FirstAgain_Null;
-      ctx->Map.pci[ 1 ] < BspReqInterruptSpurious_Pre_FirstAgain_NA;
+      ctx->Map.pci[ 1 ] = BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Null;
+      ctx->Map.pci[ 1 ] < BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_NA;
       ++ctx->Map.pci[ 1 ]
     ) {
-      ctx->Map.entry = BspReqInterruptSpurious_PopEntry( ctx );
-      BspReqInterruptSpurious_SetPreConditionStates( ctx );
-      BspReqInterruptSpurious_TestVariant( ctx );
+      ctx->Map.entry = BspReqInterruptHandlerDispatchUnchecked_PopEntry( ctx );
+      BspReqInterruptHandlerDispatchUnchecked_SetPreConditionStates( ctx );
+      BspReqInterruptHandlerDispatchUnchecked_TestVariant( ctx );
     }
   }
 }

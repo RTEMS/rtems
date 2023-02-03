@@ -10,9 +10,10 @@ features: c cprogram
 includes: []
 ldflags:
 - -Wl,--wrap=bsp_interrupt_handler_default
+- -Wl,--wrap=bsp_interrupt_spurious
 links: []
 source:
-- testsuites/validation/tc-bsp-interrupt-spurious.c
+- testsuites/validation/tc-bsp-interrupt-handler-dispatch-unchecked.c
 - testsuites/validation/tc-intr-clear.c
 - testsuites/validation/tc-intr-entry-install.c
 - testsuites/validation/tc-intr-entry-remove.c
