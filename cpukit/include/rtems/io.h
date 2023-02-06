@@ -98,7 +98,7 @@ typedef rtems_status_code rtems_device_driver;
  *
  * @par Notes
  * The major number of a device is determined by rtems_io_register_driver() and
- * the application configuration (see #CONFIGURE_MAXIMUM_DRIVERS) .
+ * the application configuration (see @ref CONFIGURE_MAXIMUM_DRIVERS) .
  */
 typedef uint32_t rtems_device_major_number;
 
@@ -207,7 +207,7 @@ typedef struct {
  * @retval ::RTEMS_INVALID_ADDRESS The device driver address table was empty.
  *
  * @retval ::RTEMS_INVALID_NUMBER The device major number of the device was out
- *   of range, see #CONFIGURE_MAXIMUM_DRIVERS.
+ *   of range, see @ref CONFIGURE_MAXIMUM_DRIVERS.
  *
  * @retval ::RTEMS_TOO_MANY The system was unable to obtain a device major
  *   number.

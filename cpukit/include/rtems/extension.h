@@ -140,7 +140,7 @@ rtems_status_code rtems_extension_delete( rtems_id id );
  * may be in an undefined and corrupt state.
  *
  * It is recommended to register fatal extensions through initial extension
- * sets, see #CONFIGURE_INITIAL_EXTENSIONS.
+ * sets, see @ref CONFIGURE_INITIAL_EXTENSIONS.
  * @endparblock
  */
 typedef User_extensions_fatal_extension rtems_fatal_extension;
@@ -230,7 +230,7 @@ rtems_status_code rtems_extension_ident( rtems_name name, rtems_id *id );
  * @ingroup RTEMSAPIClassicUserExt
  *
  * @brief The extensions table contains a set of extensions which may be
- *   registered in the system through the #CONFIGURE_INITIAL_EXTENSIONS
+ *   registered in the system through the @ref CONFIGURE_INITIAL_EXTENSIONS
  *   application configuration option or the rtems_extension_create()
  *   directive.
  */
@@ -271,8 +271,8 @@ typedef User_extensions_Table rtems_extensions_table;
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create an
  *   extension set.  The number of extension sets available to the application
- *   is configured through the #CONFIGURE_MAXIMUM_USER_EXTENSIONS application
- *   configuration option.
+ *   is configured through the @ref CONFIGURE_MAXIMUM_USER_EXTENSIONS
+ *   application configuration option.
  *
  * @par Notes
  * @parblock
@@ -286,8 +286,8 @@ typedef User_extensions_Table rtems_extensions_table;
  * are invoked upon the next system event supporting an extension.
  *
  * An alternative to dynamically created extension sets are initial extensions,
- * see #CONFIGURE_INITIAL_EXTENSIONS.  Initial extensions are recommended for
- * extension sets which provide a fatal error extension.
+ * see @ref CONFIGURE_INITIAL_EXTENSIONS.  Initial extensions are recommended
+ * for extension sets which provide a fatal error extension.
  *
  * For control and maintenance of the extension set, RTEMS allocates a ESCB
  * from the local ESCB free pool and initializes it.
@@ -306,8 +306,8 @@ typedef User_extensions_Table rtems_extensions_table;
  *   cause the calling task to be preempted.
  *
  * * The number of extension sets available to the application is configured
- *   through the #CONFIGURE_MAXIMUM_USER_EXTENSIONS application configuration
- *   option.
+ *   through the @ref CONFIGURE_MAXIMUM_USER_EXTENSIONS application
+ *   configuration option.
  * @endparblock
  */
 rtems_status_code rtems_extension_create(

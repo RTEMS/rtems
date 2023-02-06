@@ -195,7 +195,8 @@ rtems_status_code rtems_region_get_segment_size(
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
  *   region.  The number of regions available to the application is configured
- *   through the #CONFIGURE_MAXIMUM_REGIONS application configuration option.
+ *   through the @ref CONFIGURE_MAXIMUM_REGIONS application configuration
+ *   option.
  *
  * @retval ::RTEMS_INVALID_SIZE The ``page_size`` parameter was invalid.
  *
@@ -219,7 +220,7 @@ rtems_status_code rtems_region_get_segment_size(
  *   cause the calling task to be preempted.
  *
  * * The number of regions available to the application is configured through
- *   the #CONFIGURE_MAXIMUM_REGIONS application configuration option.
+ *   the @ref CONFIGURE_MAXIMUM_REGIONS application configuration option.
  *
  * * Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS

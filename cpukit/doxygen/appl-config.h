@@ -69,6 +69,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+ *
  * In case this configuration option is defined, then the Block Device Cache is
  * initialized during system initialization.
  *
@@ -88,6 +90,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_BDBUF_BUFFER_MAX_SIZE
+ *
  * The value of this configuration option defines the maximum size of a buffer
  * in bytes.
  *
@@ -102,7 +106,7 @@
  *   zero.
  *
  * * The value of the configuration option shall be an integral multiple of
- *   #CONFIGURE_BDBUF_BUFFER_MIN_SIZE.
+ *   @ref CONFIGURE_BDBUF_BUFFER_MIN_SIZE.
  * @endparblock
  */
 #define CONFIGURE_BDBUF_BUFFER_MAX_SIZE
@@ -111,6 +115,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_BDBUF_BUFFER_MIN_SIZE
  *
  * The value of this configuration option defines the minimum size of a buffer
  * in bytes.
@@ -136,6 +142,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_BDBUF_CACHE_MEMORY_SIZE
+ *
  * The value of this configuration option defines the size of the cache memory
  * in bytes.
  *
@@ -159,6 +167,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS
  *
  * The value of this configuration option defines the maximum blocks per
  * read-ahead request.
@@ -189,6 +199,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_BDBUF_MAX_WRITE_BLOCKS
+ *
  * The value of this configuration option defines the maximum blocks per write
  * request.
  *
@@ -213,6 +225,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY
+ *
  * The value of this configuration option defines the read-ahead task priority.
  *
  * @par Default Value
@@ -230,6 +244,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_BDBUF_TASK_STACK_SIZE
+ *
  * The value of this configuration option defines the task stack size of the
  * Block Device Cache tasks in bytes.
  *
@@ -241,7 +257,7 @@
  * The following constraints apply to this configuration option:
  *
  * * The value of the configuration option shall be greater than or equal to
- *   #CONFIGURE_MINIMUM_TASK_STACK_SIZE.
+ *   @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
  * * The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
@@ -259,6 +275,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_SWAPOUT_BLOCK_HOLD
  *
  * The value of this configuration option defines the swapout task maximum
  * block hold time in milliseconds.
@@ -284,6 +302,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_SWAPOUT_SWAP_PERIOD
+ *
  * The value of this configuration option defines the swapout task swap period
  * in milliseconds.
  *
@@ -308,6 +328,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_SWAPOUT_TASK_PRIORITY
+ *
  * The value of this configuration option defines the swapout task priority.
  *
  * @par Default Value
@@ -324,6 +346,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_SWAPOUT_WORKER_TASKS
  *
  * The value of this configuration option defines the swapout worker task
  * count.
@@ -348,6 +372,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY
  *
  * The value of this configuration option defines the swapout worker task
  * priority.
@@ -380,6 +406,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_BARRIERS
  *
  * The value of this configuration option defines the maximum number of Classic
  * API Barriers that can be concurrently active.
@@ -419,6 +447,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_MESSAGE_QUEUES
+ *
  * The value of this configuration option defines the maximum number of Classic
  * API Message Queues that can be concurrently active.
  *
@@ -449,7 +479,7 @@
  * This object class can be configured in unlimited allocation mode, see <a
  * href="https://docs.rtems.org/branches/master/c-user/config/intro.html#unlimited-objects">Unlimited
  * Objects</a>.  You have to account for the memory used to store the messages
- * of each message queue, see #CONFIGURE_MESSAGE_BUFFER_MEMORY.
+ * of each message queue, see @ref CONFIGURE_MESSAGE_BUFFER_MEMORY.
  */
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES
 
@@ -457,6 +487,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_PARTITIONS
  *
  * The value of this configuration option defines the maximum number of Classic
  * API Partitions that can be concurrently active.
@@ -496,6 +528,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_PERIODS
+ *
  * The value of this configuration option defines the maximum number of Classic
  * API Periods that can be concurrently active.
  *
@@ -533,6 +567,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_PORTS
  *
  * The value of this configuration option defines the maximum number of Classic
  * API Ports that can be concurrently active.
@@ -572,6 +608,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_REGIONS
+ *
  * The value of this configuration option defines the maximum number of Classic
  * API Regions that can be concurrently active.
  *
@@ -609,6 +647,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_SEMAPHORES
  *
  * The value of this configuration option defines the maximum number of Classic
  * API Semaphore that can be concurrently active.
@@ -657,6 +697,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_TASKS
+ *
  * The value of this configuration option defines the maximum number of Classic
  * API Tasks that can be concurrently active.
  *
@@ -696,11 +738,12 @@
  *
  * The calculations for the required memory in the RTEMS Workspace for tasks
  * assume that each task has a minimum stack size and has floating point
- * support enabled.  The configuration option #CONFIGURE_EXTRA_TASK_STACKS is
- * used to specify task stack requirements *above* the minimum size required.
+ * support enabled.  The configuration option @ref CONFIGURE_EXTRA_TASK_STACKS
+ * is used to specify task stack requirements *above* the minimum size
+ * required.
  *
- * The maximum number of POSIX threads is specified by
- * #CONFIGURE_MAXIMUM_POSIX_THREADS.
+ * The maximum number of POSIX threads is specified by @ref
+ * CONFIGURE_MAXIMUM_POSIX_THREADS.
  *
  * A future enhancement to ``<rtems/confdefs.h>`` could be to eliminate the
  * assumption that all tasks have floating point enabled. This would require
@@ -714,6 +757,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_TIMERS
  *
  * The value of this configuration option defines the maximum number of Classic
  * API Timers that can be concurrently active.
@@ -753,6 +798,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_USER_EXTENSIONS
+ *
  * The value of this configuration option defines the maximum number of Classic
  * API User Extensions that can be concurrently active.
  *
@@ -784,6 +831,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE
+ *
  * The value of this configuration option defines the minimum count of Classic
  * API Tasks which are constructed by rtems_task_construct().
  *
@@ -797,8 +846,8 @@
  * * The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
- *   #CONFIGURE_MAXIMUM_TASKS.
+ * * The value of the configuration option shall be less than or equal to @ref
+ *   CONFIGURE_MAXIMUM_TASKS.
  * @endparblock
  *
  * @par Notes
@@ -831,6 +880,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_INIT_TASK_ARGUMENTS
+ *
  * The value of this configuration option defines task argument of the Classic
  * API initialization task.
  *
@@ -848,6 +899,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_INIT_TASK_ATTRIBUTES
+ *
  * The value of this configuration option defines the task attributes of the
  * Classic API initialization task.
  *
@@ -864,20 +917,22 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
+ *
  * The value of this configuration option defines the task storage size of the
  * Classic API initialization task.
  *
  * @par Default Value
  * This configuration option has no default value.  If it is not specified,
  * then the Classic API initialization task will be created with the stack size
- * defined by the #CONFIGURE_INIT_TASK_STACK_SIZE configuration option.
+ * defined by the @ref CONFIGURE_INIT_TASK_STACK_SIZE configuration option.
  *
  * @par Constraints
  * @parblock
  * The following constraints apply to this configuration option:
  *
  * * The value of the configuration option shall be greater than or equal to
- *   #CONFIGURE_MINIMUM_TASK_STACK_SIZE.
+ *   @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
  * * The value of the configuration option shall be defined using
  *   RTEMS_TASK_STORAGE_SIZE().
@@ -893,19 +948,19 @@
  * * the Classic API initialization task is constructed by
  *   rtems_task_construct() instead of using rtems_task_create(),
  *
- * * the maximum thread-local storage size defined by
- *   #CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE is used for the Classic API
+ * * the maximum thread-local storage size defined by @ref
+ *   CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE is used for the Classic API
  *   initialization task,
  *
- * * the Classic API initialization task should be accounted for in
- *   #CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE, and
+ * * the Classic API initialization task should be accounted for in @ref
+ *   CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE, and
  *
  * * the task storage area used for the Classic API initialization task is not
  *   reclaimed by the system if the task is deleted.
  *
  * The
  *
- * * #CONFIGURE_INIT_TASK_STACK_SIZE and
+ * * @ref CONFIGURE_INIT_TASK_STACK_SIZE and
  *
  * * ``CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE``
  *
@@ -918,6 +973,8 @@
 
 /**
  * @brief This configuration option is an initializer define.
+ *
+ * @anchor CONFIGURE_INIT_TASK_ENTRY_POINT
  *
  * The value of this configuration option initializes the entry point of the
  * Classic API initialization task.
@@ -940,6 +997,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_INIT_TASK_INITIAL_MODES
+ *
  * The value of this configuration option defines the initial execution mode of
  * the Classic API initialization task.
  *
@@ -956,6 +1015,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_INIT_TASK_NAME
  *
  * The value of this configuration option defines the name of the Classic API
  * initialization task.
@@ -977,6 +1038,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_INIT_TASK_PRIORITY
+ *
  * The value of this configuration option defines the initial priority of the
  * Classic API initialization task.
  *
@@ -995,18 +1058,20 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_INIT_TASK_STACK_SIZE
+ *
  * The value of this configuration option defines the task stack size of the
  * Classic API initialization task.
  *
  * @par Default Value
- * The default value is #CONFIGURE_MINIMUM_TASK_STACK_SIZE.
+ * The default value is @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
  * @par Constraints
  * @parblock
  * The following constraints apply to this configuration option:
  *
  * * The value of the configuration option shall be greater than or equal to
- *   #CONFIGURE_MINIMUM_TASK_STACK_SIZE.
+ *   @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
  * * The value of the configuration option shall be small enough so that the
  *   task stack space calculation carried out by ``<rtems/confdefs.h>`` does
@@ -1020,7 +1085,7 @@
  *
  * * ``CONFIGURE_INIT_TASK_STACK_SIZE`` and
  *
- * * #CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
+ * * @ref CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -1031,6 +1096,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_RTEMS_INIT_TASKS_TABLE
  *
  * In case this configuration option is defined, then exactly one Classic API
  * initialization task is configured.
@@ -1046,9 +1113,9 @@
  *
  * * ``CONFIGURE_RTEMS_INIT_TASKS_TABLE``,
  *
- * * #CONFIGURE_POSIX_INIT_THREAD_TABLE, or
+ * * @ref CONFIGURE_POSIX_INIT_THREAD_TABLE, or
  *
- * * #CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+ * * @ref CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
  *
  * otherwise a compile time error in the configuration file will occur.
  * @endparblock
@@ -1076,6 +1143,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+ *
  * In case this configuration option is defined, then **no** Clock Driver is
  * initialized during system initialization.
  *
@@ -1092,11 +1161,11 @@
  * The application shall define exactly one of the following configuration
  * options
  *
- * * #CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER,
+ * * @ref CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER,
  *
  * * ``CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER``, or
  *
- * * #CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER,
+ * * @ref CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER,
  *
  * otherwise a compile time error in the configuration file will occur.
  * @endparblock
@@ -1107,6 +1176,8 @@
 
 /**
  * @brief This configuration option is an initializer define.
+ *
+ * @anchor CONFIGURE_APPLICATION_EXTRA_DRIVERS
  *
  * The value of this configuration option is used to initialize the Device
  * Driver Table.
@@ -1123,8 +1194,8 @@
  * The value of this configuration option is placed after the entries of other
  * device driver configuration options.
  *
- * See #CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS for an alternative placement
- * of application device driver initializers.
+ * See @ref CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS for an alternative
+ * placement of application device driver initializers.
  * @endparblock
  */
 #define CONFIGURE_APPLICATION_EXTRA_DRIVERS
@@ -1133,6 +1204,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
  *
  * In case this configuration option is defined, then the ATA Driver is
  * initialized during system initialization.
@@ -1156,6 +1229,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+ *
  * In case this configuration option is defined, then the Clock Driver is
  * initialized during system initialization.
  *
@@ -1173,9 +1248,9 @@
  *
  * * ``CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER``,
  *
- * * #CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER, or
+ * * @ref CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER, or
  *
- * * #CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER,
+ * * @ref CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER,
  *
  * otherwise a compile time error in the configuration file will occur.
  * @endparblock
@@ -1186,6 +1261,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
  *
  * In case this configuration option is defined, then the Console Driver is
  * initialized during system initialization.
@@ -1207,9 +1284,9 @@
  *
  * * ``CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER``,
  *
- * * #CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and
+ * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and
  *
- * * #CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -1220,6 +1297,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
  *
  * In case this configuration option is defined, then the Frame Buffer Driver
  * is initialized during system initialization.
@@ -1244,6 +1323,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
+ *
  * In case this configuration option is defined, then the IDE Driver is
  * initialized during system initialization.
  *
@@ -1266,6 +1347,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
+ *
  * In case this configuration option is defined, then the ``/dev/null`` Driver
  * is initialized during system initialization.
  *
@@ -1282,6 +1365,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
  *
  * In case this configuration option is defined, then the Real-Time Clock
  * Driver is initialized during system initialization.
@@ -1306,6 +1391,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+ *
  * In case this configuration option is defined, then the Simple Console Driver
  * is initialized during system initialization.
  *
@@ -1328,11 +1415,11 @@
  *
  * The
  *
- * * #CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER,
+ * * @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER,
  *
  * * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER``, and
  *
- * * #CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -1343,6 +1430,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
  *
  * In case this configuration option is defined, then the Simple Task Console
  * Driver is initialized during system initialization.
@@ -1375,9 +1464,9 @@
  *
  * The
  *
- * * #CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER,
+ * * @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER,
  *
- * * #CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and
+ * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and
  *
  * * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER``
  *
@@ -1390,6 +1479,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
  *
  * In case this configuration option is defined, then the Stub Driver is
  * initialized during system initialization.
@@ -1409,6 +1500,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
+ *
  * In case this configuration option is defined, then the Benchmark Timer
  * Driver is initialized during system initialization.
  *
@@ -1424,9 +1517,9 @@
  * The application shall define exactly one of the following configuration
  * options
  *
- * * #CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER,
+ * * @ref CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER,
  *
- * * #CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER, or
+ * * @ref CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER, or
  *
  * * ``CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER``,
  *
@@ -1439,6 +1532,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
  *
  * In case this configuration option is defined, then the Watchdog Driver is
  * initialized during system initialization.
@@ -1463,6 +1558,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
+ *
  * In case this configuration option is defined, then the ``/dev/zero`` Driver
  * is initialized during system initialization.
  *
@@ -1480,6 +1577,8 @@
 /**
  * @brief This configuration option is an initializer define.
  *
+ * @anchor CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
+ *
  * The value of this configuration option is used to initialize the Device
  * Driver Table.
  *
@@ -1496,7 +1595,7 @@
  * by #CONFIGURE_BSP_PREREQUISITE_DRIVERS and before all other device driver
  * configuration options.
  *
- * See #CONFIGURE_APPLICATION_EXTRA_DRIVERS for an alternative placement of
+ * See @ref CONFIGURE_APPLICATION_EXTRA_DRIVERS for an alternative placement of
  * application device driver initializers.
  * @endparblock
  */
@@ -1506,6 +1605,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_ATA_DRIVER_TASK_PRIORITY
  *
  * The value of this configuration option defines the ATA task priority.
  *
@@ -1518,8 +1619,8 @@
  * configuration.
  *
  * @par Notes
- * This configuration option is only evaluated if the configuration option
- * #CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER is defined.
+ * This configuration option is only evaluated if the configuration option @ref
+ * CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER is defined.
  */
 #define CONFIGURE_ATA_DRIVER_TASK_PRIORITY
 
@@ -1527,6 +1628,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_EXCEPTION_TO_SIGNAL_MAPPING
  *
  * In case this configuration option is defined, then the machine exception to
  * POSIX signal mapping is configured during system initialization.
@@ -1551,6 +1654,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_DRIVERS
+ *
  * The value of this configuration option defines the number of device drivers.
  *
  * @par Default Value
@@ -1559,40 +1664,40 @@
  * configured device drivers configured using the following configuration
  * options:
  *
- * * #CONFIGURE_APPLICATION_EXTRA_DRIVERS
+ * * @ref CONFIGURE_APPLICATION_EXTRA_DRIVERS
  *
- * * #CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+ * * @ref CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
  *
- * * #CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
  *
- * * #CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
+ * * @ref CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
  *
- * * #CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
+ * * @ref CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
  *
- * If the #CONFIGURE_DISABLE_BSP_SETTINGS configuration option is not defined
- * and the BSP provides #CONFIGURE_BSP_PREREQUISITE_DRIVERS, then the
+ * If the @ref CONFIGURE_DISABLE_BSP_SETTINGS configuration option is not
+ * defined and the BSP provides #CONFIGURE_BSP_PREREQUISITE_DRIVERS, then the
  * BSP-provided prerequisite device drivers are also taken into account.
  * @endparblock
  *
@@ -1638,11 +1743,13 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_RECORD_EXTENSIONS_ENABLED
+ *
  * In case
  *
  * * this configuration option is defined
  *
- * * and #CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
+ * * and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
  *
  * then the event record extensions are enabled.
  *
@@ -1661,13 +1768,15 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_RECORD_FATAL_DUMP_BASE64
+ *
  * In case
  *
  * * this configuration option is defined
  *
- * * and #CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
+ * * and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
  *
- * * and #CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB is undefined,
+ * * and @ref CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB is undefined,
  *
  * then the event records are dumped in Base64 encoding in a fatal error
  * extension (see <a
@@ -1688,11 +1797,13 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB
+ *
  * In case
  *
  * * this configuration option is defined
  *
- * * and #CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
+ * * and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
  *
  * then the event records are compressed by zlib and dumped in Base64 encoding
  * in a fatal error extension (see <a
@@ -1714,11 +1825,13 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_RECORD_INTERRUPTS_ENABLED
+ *
  * In case
  *
  * * this configuration option is defined
  *
- * * and #CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
+ * * and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
  *
  * then the interrupt event recording is enabled.
  *
@@ -1736,6 +1849,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
  *
  * The value of this configuration option defines the event record item count
  * per processor.
@@ -1762,7 +1877,7 @@
  *
  * @par Notes
  * The event record buffers are statically allocated for each configured
- * processor (#CONFIGURE_MAXIMUM_PROCESSORS).  If the value of this
+ * processor (@ref CONFIGURE_MAXIMUM_PROCESSORS).  If the value of this
  * configuration option is zero, then nothing is allocated.
  */
 #define CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
@@ -1801,6 +1916,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_POSIX_TIMERS_FACE_BEHAVIOR
+ *
  * If this configuration option is defined, then POSIX timers may not be
  * created to use the CLOCK_REALTIME.  Per POSIX, this is allowed behavior but
  * per the FACE Technical Standard, it is not. Using POSIX timers based on
@@ -1828,44 +1945,44 @@
  * This section describes configuration options related to filesytems. By
  * default, the In-Memory Filesystem (IMFS) is used as the base filesystem
  * (also known as root filesystem).  In order to save some memory for your
- * application, you can disable the filesystem support with the
- * #CONFIGURE_APPLICATION_DISABLE_FILESYSTEM configuration option.
+ * application, you can disable the filesystem support with the @ref
+ * CONFIGURE_APPLICATION_DISABLE_FILESYSTEM configuration option.
  * Alternatively, you can strip down the features of the base filesystem with
- * the #CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM and
- * #CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM configuration options.  These three
+ * the @ref CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM and @ref
+ * CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM configuration options.  These three
  * configuration options are mutually exclusive.  They are intended for an
  * advanced application configuration.
  *
  * Features of the IMFS can be disabled and enabled with the following
  * configuration options:
  *
- * * #CONFIGURE_IMFS_DISABLE_CHMOD
+ * * @ref CONFIGURE_IMFS_DISABLE_CHMOD
  *
- * * #CONFIGURE_IMFS_DISABLE_CHOWN
+ * * @ref CONFIGURE_IMFS_DISABLE_CHOWN
  *
- * * #CONFIGURE_IMFS_DISABLE_LINK
+ * * @ref CONFIGURE_IMFS_DISABLE_LINK
  *
- * * #CONFIGURE_IMFS_DISABLE_MKNOD
+ * * @ref CONFIGURE_IMFS_DISABLE_MKNOD
  *
- * * #CONFIGURE_IMFS_DISABLE_MKNOD_FILE
+ * * @ref CONFIGURE_IMFS_DISABLE_MKNOD_FILE
  *
- * * #CONFIGURE_IMFS_DISABLE_MOUNT
+ * * @ref CONFIGURE_IMFS_DISABLE_MOUNT
  *
- * * #CONFIGURE_IMFS_DISABLE_READDIR
+ * * @ref CONFIGURE_IMFS_DISABLE_READDIR
  *
- * * #CONFIGURE_IMFS_DISABLE_READLINK
+ * * @ref CONFIGURE_IMFS_DISABLE_READLINK
  *
- * * #CONFIGURE_IMFS_DISABLE_RENAME
+ * * @ref CONFIGURE_IMFS_DISABLE_RENAME
  *
- * * #CONFIGURE_IMFS_DISABLE_RMNOD
+ * * @ref CONFIGURE_IMFS_DISABLE_RMNOD
  *
- * * #CONFIGURE_IMFS_DISABLE_SYMLINK
+ * * @ref CONFIGURE_IMFS_DISABLE_SYMLINK
  *
- * * #CONFIGURE_IMFS_DISABLE_UNMOUNT
+ * * @ref CONFIGURE_IMFS_DISABLE_UNMOUNT
  *
- * * #CONFIGURE_IMFS_DISABLE_UTIME
+ * * @ref CONFIGURE_IMFS_DISABLE_UTIME
  *
- * * #CONFIGURE_IMFS_ENABLE_MKFIFO
+ * * @ref CONFIGURE_IMFS_ENABLE_MKFIFO
  *
  * @{
  */
@@ -1874,6 +1991,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
  *
  * In case this configuration option is defined, then **no base filesystem** is
  * initialized during system initialization and **no filesystems** are
@@ -1895,22 +2014,24 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_FILESYSTEM_ALL
+ *
  * In case this configuration option is defined, then the following
  * configuration options will be defined as well
  *
- * * #CONFIGURE_FILESYSTEM_DOSFS,
+ * * @ref CONFIGURE_FILESYSTEM_DOSFS,
  *
- * * #CONFIGURE_FILESYSTEM_FTPFS,
+ * * @ref CONFIGURE_FILESYSTEM_FTPFS,
  *
- * * #CONFIGURE_FILESYSTEM_IMFS,
+ * * @ref CONFIGURE_FILESYSTEM_IMFS,
  *
- * * #CONFIGURE_FILESYSTEM_JFFS2,
+ * * @ref CONFIGURE_FILESYSTEM_JFFS2,
  *
- * * #CONFIGURE_FILESYSTEM_NFS,
+ * * @ref CONFIGURE_FILESYSTEM_NFS,
  *
- * * #CONFIGURE_FILESYSTEM_RFS, and
+ * * @ref CONFIGURE_FILESYSTEM_RFS, and
  *
- * * #CONFIGURE_FILESYSTEM_TFTPFS.
+ * * @ref CONFIGURE_FILESYSTEM_TFTPFS.
  *
  * @par Default Configuration
  * If this configuration option is undefined, then the described feature is not
@@ -1923,6 +2044,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_FILESYSTEM_DOSFS
+ *
  * In case this configuration option is defined, then the DOS (FAT) filesystem
  * is registered, so that instances of this filesystem can be mounted by the
  * application.
@@ -1932,8 +2055,8 @@
  * enabled.
  *
  * @par Notes
- * This filesystem requires a Block Device Cache configuration, see
- * #CONFIGURE_APPLICATION_NEEDS_LIBBLOCK.
+ * This filesystem requires a Block Device Cache configuration, see @ref
+ * CONFIGURE_APPLICATION_NEEDS_LIBBLOCK.
  */
 #define CONFIGURE_FILESYSTEM_DOSFS
 
@@ -1941,6 +2064,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_FILESYSTEM_FTPFS
  *
  * In case this configuration option is defined, then the FTP filesystem (FTP
  * client) is registered, so that instances of this filesystem can be mounted
@@ -1956,6 +2081,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_FILESYSTEM_IMFS
  *
  * In case this configuration option is defined, then the In-Memory Filesystem
  * (IMFS) is registered, so that instances of this filesystem can be mounted by
@@ -1978,6 +2105,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_FILESYSTEM_JFFS2
+ *
  * In case this configuration option is defined, then the JFFS2 filesystem is
  * registered, so that instances of this filesystem can be mounted by the
  * application.
@@ -1992,6 +2121,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_FILESYSTEM_NFS
  *
  * In case this configuration option is defined, then the Network Filesystem
  * (NFS) client is registered, so that instances of this filesystem can be
@@ -2008,6 +2139,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_FILESYSTEM_RFS
+ *
  * In case this configuration option is defined, then the RTEMS Filesystem
  * (RFS) is registered, so that instances of this filesystem can be mounted by
  * the application.
@@ -2017,8 +2150,8 @@
  * enabled.
  *
  * @par Notes
- * This filesystem requires a Block Device Cache configuration, see
- * #CONFIGURE_APPLICATION_NEEDS_LIBBLOCK.
+ * This filesystem requires a Block Device Cache configuration, see @ref
+ * CONFIGURE_APPLICATION_NEEDS_LIBBLOCK.
  */
 #define CONFIGURE_FILESYSTEM_RFS
 
@@ -2026,6 +2159,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_FILESYSTEM_TFTPFS
  *
  * In case this configuration option is defined, then the TFTP filesystem (TFTP
  * client) is registered, so that instances of this filesystem can be mounted
@@ -2042,6 +2177,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_IMFS_DISABLE_CHMOD
+ *
  * In case this configuration option is defined, then the root IMFS does not
  * support changing the mode of files (no support for chmod()).
  *
@@ -2055,6 +2192,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_IMFS_DISABLE_CHOWN
  *
  * In case this configuration option is defined, then the root IMFS does not
  * support changing the ownership of files (no support for chown()).
@@ -2070,6 +2209,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_IMFS_DISABLE_LINK
+ *
  * In case this configuration option is defined, then the root IMFS does not
  * support hard links (no support for link()).
  *
@@ -2083,6 +2224,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_IMFS_DISABLE_MKNOD
  *
  * In case this configuration option is defined, then the root IMFS does not
  * support making files (no support for mknod()).
@@ -2098,6 +2241,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_IMFS_DISABLE_MKNOD_DEVICE
+ *
  * In case this configuration option is defined, then the root IMFS does not
  * support making device files.
  *
@@ -2111,6 +2256,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_IMFS_DISABLE_MKNOD_FILE
  *
  * In case this configuration option is defined, then the root IMFS does not
  * support making regular files.
@@ -2126,6 +2273,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_IMFS_DISABLE_MOUNT
+ *
  * In case this configuration option is defined, then the root IMFS does not
  * support mounting other filesystems (no support for mount()).
  *
@@ -2139,6 +2288,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_IMFS_DISABLE_READDIR
  *
  * In case this configuration option is defined, then the root IMFS does not
  * support reading directories (no support for readdir()).  It is still
@@ -2155,6 +2306,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_IMFS_DISABLE_READLINK
+ *
  * In case this configuration option is defined, then the root IMFS does not
  * support reading symbolic links (no support for readlink()).
  *
@@ -2168,6 +2321,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_IMFS_DISABLE_RENAME
  *
  * In case this configuration option is defined, then the root IMFS does not
  * support renaming files (no support for rename()).
@@ -2183,6 +2338,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_IMFS_DISABLE_RMNOD
+ *
  * In case this configuration option is defined, then the root IMFS does not
  * support removing files (no support for rmnod()).
  *
@@ -2196,6 +2353,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_IMFS_DISABLE_SYMLINK
  *
  * In case this configuration option is defined, then the root IMFS does not
  * support creating symbolic links (no support for symlink()).
@@ -2211,6 +2370,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_IMFS_DISABLE_UNMOUNT
+ *
  * In case this configuration option is defined, then the root IMFS does not
  * support unmounting other filesystems (no support for unmount()).
  *
@@ -2224,6 +2385,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_IMFS_DISABLE_UTIME
  *
  * In case this configuration option is defined, then the root IMFS does not
  * support changing file times (no support for utime()).
@@ -2239,6 +2402,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_IMFS_ENABLE_MKFIFO
+ *
  * In case this configuration option is defined, then the root IMFS supports
  * making FIFOs.
  *
@@ -2252,6 +2417,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
  *
  * The value of this configuration option defines the block size for in-memory
  * files managed by the IMFS.
@@ -2301,6 +2468,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
+ *
  * In case this configuration option is defined, then an IMFS with a reduced
  * feature set will be the base filesystem (also known as root filesystem).
  *
@@ -2313,29 +2482,29 @@
  * In case this configuration option is defined, then the following
  * configuration options will be defined as well
  *
- * * #CONFIGURE_IMFS_DISABLE_CHMOD,
+ * * @ref CONFIGURE_IMFS_DISABLE_CHMOD,
  *
- * * #CONFIGURE_IMFS_DISABLE_CHOWN,
+ * * @ref CONFIGURE_IMFS_DISABLE_CHOWN,
  *
- * * #CONFIGURE_IMFS_DISABLE_LINK,
+ * * @ref CONFIGURE_IMFS_DISABLE_LINK,
  *
- * * #CONFIGURE_IMFS_DISABLE_MKNOD_FILE,
+ * * @ref CONFIGURE_IMFS_DISABLE_MKNOD_FILE,
  *
- * * #CONFIGURE_IMFS_DISABLE_MOUNT,
+ * * @ref CONFIGURE_IMFS_DISABLE_MOUNT,
  *
- * * #CONFIGURE_IMFS_DISABLE_READDIR,
+ * * @ref CONFIGURE_IMFS_DISABLE_READDIR,
  *
- * * #CONFIGURE_IMFS_DISABLE_READLINK,
+ * * @ref CONFIGURE_IMFS_DISABLE_READLINK,
  *
- * * #CONFIGURE_IMFS_DISABLE_RENAME,
+ * * @ref CONFIGURE_IMFS_DISABLE_RENAME,
  *
- * * #CONFIGURE_IMFS_DISABLE_RMNOD,
+ * * @ref CONFIGURE_IMFS_DISABLE_RMNOD,
  *
- * * #CONFIGURE_IMFS_DISABLE_SYMLINK,
+ * * @ref CONFIGURE_IMFS_DISABLE_SYMLINK,
  *
- * * #CONFIGURE_IMFS_DISABLE_UTIME, and
+ * * @ref CONFIGURE_IMFS_DISABLE_UTIME, and
  *
- * * #CONFIGURE_IMFS_DISABLE_UNMOUNT.
+ * * @ref CONFIGURE_IMFS_DISABLE_UNMOUNT.
  *
  * In addition, a simplified path evaluation is enabled.  It allows only a look
  * up of absolute paths.
@@ -2352,6 +2521,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
+ *
  * In case this configuration option is defined, then an IMFS with a reduced
  * feature set will be the base filesystem (also known as root filesystem).
  *
@@ -2364,21 +2535,21 @@
  * In case this configuration option is defined, then the following
  * configuration options will be defined as well
  *
- * * #CONFIGURE_IMFS_DISABLE_CHMOD,
+ * * @ref CONFIGURE_IMFS_DISABLE_CHMOD,
  *
- * * #CONFIGURE_IMFS_DISABLE_CHOWN,
+ * * @ref CONFIGURE_IMFS_DISABLE_CHOWN,
  *
- * * #CONFIGURE_IMFS_DISABLE_LINK,
+ * * @ref CONFIGURE_IMFS_DISABLE_LINK,
  *
- * * #CONFIGURE_IMFS_DISABLE_READLINK,
+ * * @ref CONFIGURE_IMFS_DISABLE_READLINK,
  *
- * * #CONFIGURE_IMFS_DISABLE_RENAME,
+ * * @ref CONFIGURE_IMFS_DISABLE_RENAME,
  *
- * * #CONFIGURE_IMFS_DISABLE_SYMLINK,
+ * * @ref CONFIGURE_IMFS_DISABLE_SYMLINK,
  *
- * * #CONFIGURE_IMFS_DISABLE_UTIME, and
+ * * @ref CONFIGURE_IMFS_DISABLE_UTIME, and
  *
- * * #CONFIGURE_IMFS_DISABLE_UNMOUNT.
+ * * @ref CONFIGURE_IMFS_DISABLE_UNMOUNT.
  * @endparblock
  */
 #define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
@@ -2403,6 +2574,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_DIRTY_MEMORY
+ *
  * In case this configuration option is defined, then the memory areas used for
  * the RTEMS Workspace and the C Program Heap are dirtied with a ``0xCF`` byte
  * pattern during system initialization.
@@ -2415,11 +2588,11 @@
  * @parblock
  * Dirtying memory can add significantly to system initialization time.  It may
  * assist in finding code that incorrectly assumes the contents of free memory
- * areas is cleared to zero during system initialization.  In case
- * #CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY is also defined, then the memory is
+ * areas is cleared to zero during system initialization.  In case @ref
+ * CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY is also defined, then the memory is
  * first dirtied and then zeroed.
  *
- * See also #CONFIGURE_MALLOC_DIRTY.
+ * See also @ref CONFIGURE_MALLOC_DIRTY.
  * @endparblock
  */
 #define CONFIGURE_DIRTY_MEMORY
@@ -2429,17 +2602,19 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_DISABLE_BSP_SETTINGS
+ *
  * In case this configuration option is defined, then the optional BSP provided
  * settings listed below are disabled.
  *
  * The optional BSP provided default values for the following application
  * configuration options are disabled:
  *
- * * #CONFIGURE_IDLE_TASK_BODY
+ * * @ref CONFIGURE_IDLE_TASK_BODY
  *
- * * #CONFIGURE_IDLE_TASK_STACK_SIZE
+ * * @ref CONFIGURE_IDLE_TASK_STACK_SIZE
  *
- * * #CONFIGURE_INTERRUPT_STACK_SIZE
+ * * @ref CONFIGURE_INTERRUPT_STACK_SIZE
  *
  * The optional BSP provided initial extension set is disabled (see initial
  * extension sets).  The optional BSP provided prerequisite IO device drivers
@@ -2460,6 +2635,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+ *
  * In case this configuration option is defined, then the Newlib reentrancy
  * support per thread is disabled and a global reentrancy structure is used.
  *
@@ -2479,6 +2656,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_EXECUTIVE_RAM_SIZE
  *
  * The value of this configuration option defines the RTEMS Workspace size in
  * bytes.
@@ -2514,6 +2693,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_EXTRA_TASK_STACKS
+ *
  * The value of this configuration option defines the number of bytes the
  * applications wishes to add to the task stack requirements calculated by
  * ``<rtems/confdefs.h>``.
@@ -2546,6 +2727,8 @@
 /**
  * @brief This configuration option is an initializer define.
  *
+ * @anchor CONFIGURE_INITIAL_EXTENSIONS
+ *
  * The value of this configuration option is used to initialize the table of
  * initial user extensions.
  *
@@ -2568,14 +2751,16 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_INTERRUPT_STACK_SIZE
+ *
  * The value of this configuration option defines the size of an interrupt
  * stack in bytes.
  *
  * @par Default Value
- * If the #CONFIGURE_DISABLE_BSP_SETTINGS configuration option is not defined
- * and #BSP_INTERRUPT_STACK_SIZE is provided by the BSP, then the default value
- * is defined by #BSP_INTERRUPT_STACK_SIZE, otherwise the default value is
- * #CPU_STACK_MINIMUM_SIZE.
+ * If the @ref CONFIGURE_DISABLE_BSP_SETTINGS configuration option is not
+ * defined and #BSP_INTERRUPT_STACK_SIZE is provided by the BSP, then the
+ * default value is defined by #BSP_INTERRUPT_STACK_SIZE, otherwise the default
+ * value is #CPU_STACK_MINIMUM_SIZE.
  *
  * @par Constraints
  * @parblock
@@ -2595,8 +2780,8 @@
  *
  * @par Notes
  * @parblock
- * There is one interrupt stack available for each configured processor
- * (#CONFIGURE_MAXIMUM_PROCESSORS).  The interrupt stack areas are statically
+ * There is one interrupt stack available for each configured processor (@ref
+ * CONFIGURE_MAXIMUM_PROCESSORS).  The interrupt stack areas are statically
  * allocated in a special linker section (``.rtemsstack.interrupt``). The
  * placement of this linker section is BSP-specific.
  *
@@ -2604,12 +2789,12 @@
  * to perform the sequential system initialization before the multithreading is
  * started.
  *
- * The interrupt stacks are covered by the stack checker, see
- * #CONFIGURE_STACK_CHECKER_ENABLED.  However, using a too small interrupt
- * stack size may still result in undefined behaviour.
+ * The interrupt stacks are covered by the stack checker, see @ref
+ * CONFIGURE_STACK_CHECKER_ENABLED.  However, using a too small interrupt stack
+ * size may still result in undefined behaviour.
  *
- * In releases before RTEMS 5.1 the default value was
- * #CONFIGURE_MINIMUM_TASK_STACK_SIZE instead of #CPU_STACK_MINIMUM_SIZE.
+ * In releases before RTEMS 5.1 the default value was @ref
+ * CONFIGURE_MINIMUM_TASK_STACK_SIZE instead of #CPU_STACK_MINIMUM_SIZE.
  * @endparblock
  */
 #define CONFIGURE_INTERRUPT_STACK_SIZE
@@ -2618,6 +2803,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_MALLOC_DIRTY
  *
  * In case this configuration option is defined, then each memory area returned
  * by C Program Heap allocator functions such as malloc() is dirtied with a
@@ -2629,8 +2816,8 @@
  *
  * @par Notes
  * The dirtying performed by this option is carried out for each successful
- * memory allocation from the C Program Heap in contrast to
- * #CONFIGURE_DIRTY_MEMORY which dirties the memory only once during the system
+ * memory allocation from the C Program Heap in contrast to @ref
+ * CONFIGURE_DIRTY_MEMORY which dirties the memory only once during the system
  * initialization.
  */
 #define CONFIGURE_MALLOC_DIRTY
@@ -2639,6 +2826,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
  *
  * The value of this configuration option defines the maximum number of file
  * like objects that can be concurrently open.
@@ -2671,6 +2860,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_PROCESSORS
  *
  * The value of this configuration option defines the maximum number of
  * processors an application intends to use.  The number of actually available
@@ -2708,6 +2899,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE
  *
  * If the value of this configuration option is greater than zero, then it
  * defines the maximum thread-local storage size, otherwise the thread-local
@@ -2757,6 +2950,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_THREAD_NAME_SIZE
+ *
  * The value of this configuration option defines the maximum thread name size
  * including the terminating ``NUL`` character.
  *
@@ -2796,6 +2991,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MEMORY_OVERHEAD
+ *
  * The value of this configuration option defines the number of kilobytes the
  * application wishes to add to the RTEMS Workspace size calculated by
  * ``<rtems/confdefs.h>``.
@@ -2824,8 +3021,8 @@
  * This configuration option should only be used when it is suspected that a
  * bug in ``<rtems/confdefs.h>`` has resulted in an underestimation.  Typically
  * the memory allocation will be too low when an application does not account
- * for all message queue buffers or task stacks, see
- * #CONFIGURE_MESSAGE_BUFFER_MEMORY.
+ * for all message queue buffers or task stacks, see @ref
+ * CONFIGURE_MESSAGE_BUFFER_MEMORY.
  */
 #define CONFIGURE_MEMORY_OVERHEAD
 
@@ -2833,6 +3030,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MESSAGE_BUFFER_MEMORY
  *
  * The value of this configuration option defines the number of bytes reserved
  * for message queue buffers in the RTEMS Workspace.
@@ -2859,8 +3058,8 @@
  *
  * @par Notes
  * @parblock
- * The configuration options #CONFIGURE_MAXIMUM_MESSAGE_QUEUES and
- * #CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES define only how many message queues
+ * The configuration options @ref CONFIGURE_MAXIMUM_MESSAGE_QUEUES and @ref
+ * CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES define only how many message queues
  * can be created by the application.  The memory for the message buffers is
  * configured by this option.  For each message queue you have to reserve some
  * memory for the message buffers.  The size depends on the maximum number of
@@ -2912,6 +3111,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MICROSECONDS_PER_TICK
+ *
  * The value of this configuration option defines the length of time in
  * microseconds between clock ticks (clock tick quantum).
  *
@@ -2949,7 +3150,7 @@
  * @par Notes
  * @parblock
  * This configuration option has no impact if the Clock Driver is not
- * configured, see #CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER.
+ * configured, see @ref CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER.
  *
  * There may be Clock Driver specific limits on the resolution or maximum value
  * of a clock tick quantum.
@@ -2961,6 +3162,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MINIMUM_TASK_STACK_SIZE
  *
  * The value of this configuration option defines the minimum stack size in
  * bytes for every user task or thread in the system.
@@ -2985,7 +3188,7 @@
  * @parblock
  * Adjusting this parameter should be done with caution.  Examining the actual
  * stack usage using the stack checker usage reporting facility is recommended
- * (see also #CONFIGURE_STACK_CHECKER_ENABLED).
+ * (see also @ref CONFIGURE_STACK_CHECKER_ENABLED).
  *
  * This parameter can be used to lower the minimum from that recommended. This
  * can be used in low memory systems to reduce memory consumption for stacks.
@@ -2997,11 +3200,11 @@
  * overflow without performing analysis on actual consumption.
  *
  * By default, this configuration parameter defines also the minimum stack size
- * of POSIX threads.  This can be changed with the
- * #CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE configuration option.
+ * of POSIX threads.  This can be changed with the @ref
+ * CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE configuration option.
  *
  * In releases before RTEMS 5.1 the ``CONFIGURE_MINIMUM_TASK_STACK_SIZE`` was
- * used to define the default value of #CONFIGURE_INTERRUPT_STACK_SIZE.
+ * used to define the default value of @ref CONFIGURE_INTERRUPT_STACK_SIZE.
  * @endparblock
  */
 #define CONFIGURE_MINIMUM_TASK_STACK_SIZE
@@ -3010,6 +3213,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_STACK_CHECKER_ENABLED
  *
  * In case this configuration option is defined, then the stack checker is
  * enabled.
@@ -3034,6 +3239,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_TICKS_PER_TIMESLICE
+ *
  * The value of this configuration option defines the length of the timeslice
  * quantum in ticks for each task.
  *
@@ -3053,7 +3260,7 @@
  *
  * @par Notes
  * This configuration option has no impact if the Clock Driver is not
- * configured, see #CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER.
+ * configured, see @ref CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER.
  */
 #define CONFIGURE_TICKS_PER_TIMESLICE
 
@@ -3061,6 +3268,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_UNIFIED_WORK_AREAS
  *
  * In case this configuration option is defined, then the RTEMS Workspace and
  * the C Program Heap will be one pool of memory.
@@ -3089,7 +3298,9 @@
 /**
  * @brief This configuration option is an integer define.
  *
- * If #CONFIGURE_UNLIMITED_OBJECTS is defined, then the value of this
+ * @anchor CONFIGURE_UNLIMITED_ALLOCATION_SIZE
+ *
+ * If @ref CONFIGURE_UNLIMITED_OBJECTS is defined, then the value of this
  * configuration option defines the default objects maximum of all object
  * classes supporting <a
  * href="https://docs.rtems.org/branches/master/c-user/config/intro.html#unlimited-objects">Unlimited
@@ -3119,6 +3330,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_UNLIMITED_OBJECTS
+ *
  * In case this configuration option is defined, then unlimited objects are
  * used by default.
  *
@@ -3128,14 +3341,14 @@
  *
  * @par Notes
  * @parblock
- * When using unlimited objects, it is common practice to also specify
- * #CONFIGURE_UNIFIED_WORK_AREAS so the system operates with a single pool of
+ * When using unlimited objects, it is common practice to also specify @ref
+ * CONFIGURE_UNIFIED_WORK_AREAS so the system operates with a single pool of
  * memory for both RTEMS Workspace and C Program Heap.
  *
  * This option does not override an explicit configuration for a particular
  * object class by the user.
  *
- * See also #CONFIGURE_UNLIMITED_ALLOCATION_SIZE.
+ * See also @ref CONFIGURE_UNLIMITED_ALLOCATION_SIZE.
  * @endparblock
  */
 #define CONFIGURE_UNLIMITED_OBJECTS
@@ -3144,6 +3357,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_VERBOSE_SYSTEM_INITIALIZATION
  *
  * In case this configuration option is defined, then the system initialization
  * is verbose.
@@ -3163,6 +3378,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
+ *
  * In case this configuration option is defined, then the memory areas used for
  * the RTEMS Workspace and the C Program Heap are zeroed with a ``0x00`` byte
  * pattern during system initialization.
@@ -3174,7 +3391,7 @@
  * @par Notes
  * Zeroing memory can add significantly to the system initialization time. It
  * is not necessary for RTEMS but is often assumed by support libraries.  In
- * case #CONFIGURE_DIRTY_MEMORY is also defined, then the memory is first
+ * case @ref CONFIGURE_DIRTY_MEMORY is also defined, then the memory is first
  * dirtied and then zeroed.
  */
 #define CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
@@ -3198,12 +3415,14 @@
 /**
  * @brief This configuration option is an initializer define.
  *
+ * @anchor CONFIGURE_IDLE_TASK_BODY
+ *
  * The value of this configuration option initializes the IDLE thread body.
  *
  * @par Default Value
- * If the #CONFIGURE_DISABLE_BSP_SETTINGS configuration option is not defined
- * and #BSP_IDLE_TASK_BODY is provided by the BSP, then the default value is
- * defined by #BSP_IDLE_TASK_BODY, otherwise the default value is
+ * If the @ref CONFIGURE_DISABLE_BSP_SETTINGS configuration option is not
+ * defined and #BSP_IDLE_TASK_BODY is provided by the BSP, then the default
+ * value is defined by #BSP_IDLE_TASK_BODY, otherwise the default value is
  * ``_CPU_Thread_Idle_body``.
  *
  * @par Constraints
@@ -3217,7 +3436,7 @@
  * exists.
  *
  * IDLE threads can be used to initialize the application, see configuration
- * option #CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION.
+ * option @ref CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION.
  *
  * The BSP may have knowledge of the specific CPU model, system controller
  * logic, and peripheral buses, so a BSP-specific IDLE task may be capable of
@@ -3231,6 +3450,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
  *
  * This configuration option is defined to indicate that the user has
  * configured **no** user initialization tasks or threads and that the user
@@ -3251,15 +3472,15 @@
  * The IDLE task shall run at the lowest priority of all tasks in the system.
  *
  * If this configuration option is defined, then it is mandatory to configure a
- * user IDLE task with the #CONFIGURE_IDLE_TASK_BODY configuration option,
+ * user IDLE task with the @ref CONFIGURE_IDLE_TASK_BODY configuration option,
  * otherwise a compile time error in the configuration file will occur.
  *
  * The application shall define exactly one of the following configuration
  * options
  *
- * * #CONFIGURE_RTEMS_INIT_TASKS_TABLE,
+ * * @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE,
  *
- * * #CONFIGURE_POSIX_INIT_THREAD_TABLE, or
+ * * @ref CONFIGURE_POSIX_INIT_THREAD_TABLE, or
  *
  * * ``CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION``
  *
@@ -3273,14 +3494,17 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_IDLE_TASK_STACK_SIZE
+ *
  * The value of this configuration option defines the task stack size for an
  * IDLE task.
  *
  * @par Default Value
- * If the #CONFIGURE_DISABLE_BSP_SETTINGS configuration option is not defined
- * and #BSP_IDLE_TASK_STACK_SIZE is provided by the BSP, then the default value
- * is defined by #BSP_IDLE_TASK_STACK_SIZE, otherwise the default value is
- * defined by the #CONFIGURE_MINIMUM_TASK_STACK_SIZE configuration option.
+ * If the @ref CONFIGURE_DISABLE_BSP_SETTINGS configuration option is not
+ * defined and #BSP_IDLE_TASK_STACK_SIZE is provided by the BSP, then the
+ * default value is defined by #BSP_IDLE_TASK_STACK_SIZE, otherwise the default
+ * value is defined by the @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE configuration
+ * option.
  *
  * @par Constraints
  * @parblock
@@ -3297,7 +3521,7 @@
  *
  * @par Notes
  * In SMP configurations, there is one IDLE task per configured processor, see
- * #CONFIGURE_MAXIMUM_PROCESSORS.
+ * @ref CONFIGURE_MAXIMUM_PROCESSORS.
  */
 #define CONFIGURE_IDLE_TASK_STACK_SIZE
 
@@ -3305,6 +3529,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_IDLE_TASK_STORAGE_SIZE
  *
  * If this configuration option is specified, then the task storage areas for
  * the IDLE tasks are statically allocated by <rtems/confdefs.h>.  The value of
@@ -3317,8 +3543,8 @@
  * Workspace or through a custom IDLE task stack allocator.
  *
  * @par Constraints
- * The value of the configuration option shall be greater than or equal to
- * #CONFIGURE_IDLE_TASK_STACK_SIZE.
+ * The value of the configuration option shall be greater than or equal to @ref
+ * CONFIGURE_IDLE_TASK_STACK_SIZE.
  *
  * @par Notes
  * @parblock
@@ -3328,15 +3554,15 @@
  * task storage areas.  The task storage area contains the task stack, the
  * thread-local storage, and the floating-point context on architectures with a
  * separate floating-point context.  The size of the thread-local storage area
- * is defined at link time or by the
- * #CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE configuration option.  You have
+ * is defined at link time or by the @ref
+ * CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE configuration option.  You have
  * to estimate the actual thread-local storage size if you want to use this
  * configuration option.  If the IDLE task stack size would be less than the
- * value defined by the #CONFIGURE_IDLE_TASK_STACK_SIZE configuration option,
- * for example because the thread-local storage size is larger than expected,
- * then the system terminates with the INTERNAL_ERROR_CORE fatal source and the
- * INTERNAL_ERROR_IDLE_THREAD_STACK_TOO_SMALL fatal code during system
- * initialization.
+ * value defined by the @ref CONFIGURE_IDLE_TASK_STACK_SIZE configuration
+ * option, for example because the thread-local storage size is larger than
+ * expected, then the system terminates with the INTERNAL_ERROR_CORE fatal
+ * source and the INTERNAL_ERROR_IDLE_THREAD_STACK_TOO_SMALL fatal code during
+ * system initialization.
  *
  * The value of this configuration option is passed to
  * RTEMS_TASK_STORAGE_SIZE() by <rtems/confdefs.h> to determine the actual size
@@ -3347,7 +3573,7 @@
  *
  * * ``CONFIGURE_IDLE_TASK_STORAGE_SIZE``, and
  *
- * * #CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
+ * * @ref CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -3368,8 +3594,8 @@
  * options are only used if RTEMS was built when the multiprocessing build
  * configuration option is enabled. The multiprocessing configuration is
  * distinct from the SMP configuration.  Additionally, this class of
- * configuration options are only applicable if the configuration option
- * #CONFIGURE_MP_APPLICATION is defined.  The multiprocessing (MPCI) support
+ * configuration options are only applicable if the configuration option @ref
+ * CONFIGURE_MP_APPLICATION is defined.  The multiprocessing (MPCI) support
  * must not be confused with the SMP support.
  *
  * @{
@@ -3380,9 +3606,11 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
+ *
  * The value of this configuration option defines the number of bytes the
- * applications wishes to add to the MPCI task stack on top of
- * #CONFIGURE_MINIMUM_TASK_STACK_SIZE.
+ * applications wishes to add to the MPCI task stack on top of @ref
+ * CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
  * @par Default Value
  * The default value is 0.
@@ -3404,8 +3632,8 @@
  * @endparblock
  *
  * @par Notes
- * This configuration option is only evaluated if #CONFIGURE_MP_APPLICATION is
- * defined.
+ * This configuration option is only evaluated if @ref CONFIGURE_MP_APPLICATION
+ * is defined.
  */
 #define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
 
@@ -3413,6 +3641,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_MP_APPLICATION
  *
  * This configuration option is defined to indicate that the application
  * intends to be part of a multiprocessing configuration.  Additional
@@ -3434,6 +3664,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
  *
  * The value of this configuration option defines the maximum number of
  * concurrently active global objects in a multiprocessor system.
@@ -3457,8 +3689,8 @@
  * This value corresponds to the total number of objects which can be created
  * with the #RTEMS_GLOBAL attribute.
  *
- * This configuration option is only evaluated if #CONFIGURE_MP_APPLICATION is
- * defined.
+ * This configuration option is only evaluated if @ref CONFIGURE_MP_APPLICATION
+ * is defined.
  * @endparblock
  */
 #define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
@@ -3467,6 +3699,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MP_MAXIMUM_NODES
  *
  * The value of this configuration option defines the maximum number of nodes
  * in a multiprocessor system.
@@ -3486,8 +3720,8 @@
  * @endparblock
  *
  * @par Notes
- * This configuration option is only evaluated if #CONFIGURE_MP_APPLICATION is
- * defined.
+ * This configuration option is only evaluated if @ref CONFIGURE_MP_APPLICATION
+ * is defined.
  */
 #define CONFIGURE_MP_MAXIMUM_NODES
 
@@ -3495,6 +3729,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MP_MAXIMUM_PROXIES
  *
  * The value of this configuration option defines the maximum number of
  * concurrently active thread/task proxies on this node in a multiprocessor
@@ -3521,8 +3757,8 @@
  * remote tasks/threads which can be blocked on objects on this node, see <a
  * href="https://docs.rtems.org/branches/master/c-user/multiprocessing.html#proxies">Proxies</a>.
  *
- * This configuration option is only evaluated if #CONFIGURE_MP_APPLICATION is
- * defined.
+ * This configuration option is only evaluated if @ref CONFIGURE_MP_APPLICATION
+ * is defined.
  * @endparblock
  */
 #define CONFIGURE_MP_MAXIMUM_PROXIES
@@ -3531,6 +3767,8 @@
 
 /**
  * @brief This configuration option is an initializer define.
+ *
+ * @anchor CONFIGURE_MP_MPCI_TABLE_POINTER
  *
  * The value of this configuration option initializes the MPCI Configuration
  * Table.
@@ -3548,8 +3786,8 @@
  * Multiprocessor System assuming the BSP provides the proper set of supporting
  * methods.
  *
- * This configuration option is only evaluated if #CONFIGURE_MP_APPLICATION is
- * defined.
+ * This configuration option is only evaluated if @ref CONFIGURE_MP_APPLICATION
+ * is defined.
  * @endparblock
  */
 #define CONFIGURE_MP_MPCI_TABLE_POINTER
@@ -3558,6 +3796,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MP_NODE_NUMBER
  *
  * The value of this configuration option defines the node number of this node
  * in a multiprocessor system.
@@ -3583,8 +3823,8 @@
  * ``NODE_NUMBER`` set to different values. The test programs behave
  * differently based upon their node number.
  *
- * This configuration option is only evaluated if #CONFIGURE_MP_APPLICATION is
- * defined.
+ * This configuration option is only evaluated if @ref CONFIGURE_MP_APPLICATION
+ * is defined.
  * @endparblock
  */
 #define CONFIGURE_MP_NODE_NUMBER
@@ -3610,6 +3850,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_POSIX_KEYS
  *
  * The value of this configuration option defines the maximum number of POSIX
  * API Keys that can be concurrently active.
@@ -3649,12 +3891,14 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
+ *
  * The value of this configuration option defines the maximum number of key
  * value pairs used by POSIX API Keys that can be concurrently active.
  *
  * @par Default Value
- * The default value is #CONFIGURE_MAXIMUM_POSIX_KEYS * (
- * #CONFIGURE_MAXIMUM_TASKS + #CONFIGURE_MAXIMUM_POSIX_THREADS ).
+ * The default value is @ref CONFIGURE_MAXIMUM_POSIX_KEYS * ( @ref
+ * CONFIGURE_MAXIMUM_TASKS + @ref CONFIGURE_MAXIMUM_POSIX_THREADS ).
  *
  * @par Constraints
  * @parblock
@@ -3694,6 +3938,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
+ *
  * The value of this configuration option defines the maximum number of POSIX
  * API Message Queues that can be concurrently active.
  *
@@ -3729,7 +3975,7 @@
  * This object class can be configured in unlimited allocation mode, see <a
  * href="https://docs.rtems.org/branches/master/c-user/config/intro.html#unlimited-objects">Unlimited
  * Objects</a>.  You have to account for the memory used to store the messages
- * of each message queue, see #CONFIGURE_MESSAGE_BUFFER_MEMORY.
+ * of each message queue, see @ref CONFIGURE_MESSAGE_BUFFER_MEMORY.
  */
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
 
@@ -3737,6 +3983,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
  *
  * The value of this configuration option defines the maximum number of POSIX
  * API Queued Signals that can be concurrently active.
@@ -3780,6 +4028,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
  *
  * The value of this configuration option defines the maximum number of POSIX
  * API Named Semaphores that can be concurrently active.
@@ -3830,6 +4080,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_POSIX_SHMS
+ *
  * The value of this configuration option defines the maximum number of POSIX
  * API Shared Memory objects that can be concurrently active.
  *
@@ -3873,6 +4125,8 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_POSIX_THREADS
+ *
  * The value of this configuration option defines the maximum number of POSIX
  * API Threads that can be concurrently active.
  *
@@ -3907,12 +4161,12 @@
  *
  * This calculations for the required memory in the RTEMS Workspace for threads
  * assume that each thread has a minimum stack size and has floating point
- * support enabled.  The configuration option #CONFIGURE_EXTRA_TASK_STACKS is
- * used to specify thread stack requirements **above** the minimum size
+ * support enabled.  The configuration option @ref CONFIGURE_EXTRA_TASK_STACKS
+ * is used to specify thread stack requirements **above** the minimum size
  * required.
  *
- * The maximum number of Classic API Tasks is specified by
- * #CONFIGURE_MAXIMUM_TASKS.
+ * The maximum number of Classic API Tasks is specified by @ref
+ * CONFIGURE_MAXIMUM_TASKS.
  *
  * All POSIX threads have floating point enabled.
  * @endparblock
@@ -3923,6 +4177,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_MAXIMUM_POSIX_TIMERS
  *
  * The value of this configuration option defines the maximum number of POSIX
  * API Timers that can be concurrently active.
@@ -3972,12 +4228,14 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
+ *
  * The value of this configuration option defines the minimum stack size in
  * bytes for every POSIX thread in the system.
  *
  * @par Default Value
- * The default value is two times the value of
- * #CONFIGURE_MINIMUM_TASK_STACK_SIZE.
+ * The default value is two times the value of @ref
+ * CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
  * @par Constraints
  * @parblock
@@ -4015,6 +4273,8 @@
 /**
  * @brief This configuration option is an initializer define.
  *
+ * @anchor CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
+ *
  * The value of this configuration option initializes the entry point of the
  * POSIX API initialization thread.
  *
@@ -4036,18 +4296,20 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
+ *
  * The value of this configuration option defines the thread stack size of the
  * POSIX API initialization thread.
  *
  * @par Default Value
- * The default value is #CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE.
+ * The default value is @ref CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE.
  *
  * @par Constraints
  * @parblock
  * The following constraints apply to this configuration option:
  *
  * * The value of the configuration option shall be greater than or equal to
- *   #CONFIGURE_MINIMUM_TASK_STACK_SIZE.
+ *   @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
  * * The value of the configuration option shall be small enough so that the
  *   task stack space calculation carried out by ``<rtems/confdefs.h>`` does
@@ -4062,6 +4324,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_POSIX_INIT_THREAD_TABLE
+ *
  * In case this configuration option is defined, then exactly one POSIX
  * initialization thread is configured.
  *
@@ -4074,11 +4338,11 @@
  * The application shall define exactly one of the following configuration
  * options
  *
- * * #CONFIGURE_RTEMS_INIT_TASKS_TABLE,
+ * * @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE,
  *
  * * ``CONFIGURE_POSIX_INIT_THREAD_TABLE``, or
  *
- * * #CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+ * * @ref CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
  *
  * otherwise a compile time error in the configuration file will occur.
  * @endparblock
@@ -4104,8 +4368,8 @@
  * By default, the <a
  * href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#deterministic-priority-scheduler">Deterministic
  * Priority Scheduler</a> algorithm is used in uniprocessor configurations.  In
- * case SMP is enabled and the configured maximum processors
- * (#CONFIGURE_MAXIMUM_PROCESSORS) is greater than one, then the <a
+ * case SMP is enabled and the configured maximum processors (@ref
+ * CONFIGURE_MAXIMUM_PROCESSORS) is greater than one, then the <a
  * href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#earliest-deadline-first-smp-scheduler">Earliest
  * Deadline First SMP Scheduler</a> is selected as the default scheduler
  * algorithm.
@@ -4128,11 +4392,13 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_CBS_MAXIMUM_SERVERS
+ *
  * The value of this configuration option defines the maximum number Constant
  * Bandwidth Servers that can be concurrently active.
  *
  * @par Default Value
- * The default value is #CONFIGURE_MAXIMUM_TASKS.
+ * The default value is @ref CONFIGURE_MAXIMUM_TASKS.
  *
  * @par Constraints
  * @parblock
@@ -4150,8 +4416,8 @@
  * @endparblock
  *
  * @par Notes
- * This configuration option is only evaluated if the configuration option
- * #CONFIGURE_SCHEDULER_CBS is defined.
+ * This configuration option is only evaluated if the configuration option @ref
+ * CONFIGURE_SCHEDULER_CBS is defined.
  */
 #define CONFIGURE_CBS_MAXIMUM_SERVERS
 
@@ -4160,23 +4426,25 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor CONFIGURE_MAXIMUM_PRIORITY
+ *
  * For the following schedulers
  *
  * * <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#deterministic-priority-scheduler">Deterministic
  *   Priority Scheduler</a>, which is the default in uniprocessor
- *   configurations and can be configured through the
- *   #CONFIGURE_SCHEDULER_PRIORITY configuration option,
+ *   configurations and can be configured through the @ref
+ *   CONFIGURE_SCHEDULER_PRIORITY configuration option,
  *
  * * <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#deterministic-priority-smp-scheduler">Deterministic
- *   Priority SMP Scheduler</a> which can be configured through the
- *   #CONFIGURE_SCHEDULER_PRIORITY_SMP configuration option, and
+ *   Priority SMP Scheduler</a> which can be configured through the @ref
+ *   CONFIGURE_SCHEDULER_PRIORITY_SMP configuration option, and
  *
  * * <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#arbitrary-processor-affinity-priority-smp-scheduler">Arbitrary
  *   Processor Affinity Priority SMP Scheduler</a> which can be configured
- *   through the #CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP configuration
+ *   through the @ref CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP configuration
  *   option
  *
  * this configuration option specifies the maximum numeric priority of any task
@@ -4218,6 +4486,8 @@
 /**
  * @brief This configuration option is an initializer define.
  *
+ * @anchor CONFIGURE_SCHEDULER_ASSIGNMENTS
+ *
  * The value of this configuration option is used to initialize the initial
  * scheduler to processor assignments.
  *
@@ -4237,7 +4507,7 @@
  *   * ``RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER``
  *
  *   The ``scheduler_index`` macro parameter shall be a valid index of the
- *   scheduler table defined by the #CONFIGURE_SCHEDULER_TABLE_ENTRIES
+ *   scheduler table defined by the @ref CONFIGURE_SCHEDULER_TABLE_ENTRIES
  *   configuration option.
  *
  *   The ``attributes`` macro parameter shall be set to exactly one of the
@@ -4247,8 +4517,8 @@
  *
  *   * ``RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL``
  *
- * * The value of the configuration option shall be a list of exactly
- *   #CONFIGURE_MAXIMUM_PROCESSORS elements.
+ * * The value of the configuration option shall be a list of exactly @ref
+ *   CONFIGURE_MAXIMUM_PROCESSORS elements.
  * @endparblock
  *
  * @par Notes
@@ -4267,6 +4537,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_SCHEDULER_CBS
  *
  * In case this configuration option is defined, then the <a
  * href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#constant-bandwidth-server-scheduling-cbs">Constant
@@ -4295,6 +4567,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_SCHEDULER_EDF
+ *
  * In case this configuration option is defined, then the <a
  * href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#earliest-deadline-first-scheduler">Earliest
  * Deadline First Scheduler</a> algorithm is made available to the application.
@@ -4321,6 +4595,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_SCHEDULER_EDF_SMP
+ *
  * In case this configuration option is defined, then the <a
  * href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#earliest-deadline-first-smp-scheduler">Earliest
  * Deadline First SMP Scheduler</a> algorithm is made available to the
@@ -4343,8 +4619,8 @@
  * Scheduler Configuration</a> is present, then it is used as the scheduler for
  * up to 32 processors.
  *
- * This scheduler algorithm is the default in SMP configurations if
- * #CONFIGURE_MAXIMUM_PROCESSORS is greater than one.
+ * This scheduler algorithm is the default in SMP configurations if @ref
+ * CONFIGURE_MAXIMUM_PROCESSORS is greater than one.
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_EDF_SMP
@@ -4353,6 +4629,8 @@
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_SCHEDULER_NAME
  *
  * The value of this configuration option defines the name of the default
  * scheduler.
@@ -4415,6 +4693,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_SCHEDULER_PRIORITY
+ *
  * In case this configuration option is defined, then the <a
  * href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#deterministic-priority-scheduler">Deterministic
  * Priority Scheduler</a> algorithm is made available to the application.
@@ -4433,11 +4713,11 @@
  * Scheduler Configuration</a> is present, then it is used as the scheduler for
  * exactly one processor.
  *
- * This scheduler algorithm is the default when #CONFIGURE_MAXIMUM_PROCESSORS
- * is exactly one.
+ * This scheduler algorithm is the default when @ref
+ * CONFIGURE_MAXIMUM_PROCESSORS is exactly one.
  *
- * The memory allocated for this scheduler depends on the
- * #CONFIGURE_MAXIMUM_PRIORITY configuration option.
+ * The memory allocated for this scheduler depends on the @ref
+ * CONFIGURE_MAXIMUM_PRIORITY configuration option.
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_PRIORITY
@@ -4446,6 +4726,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
  *
  * In case this configuration option is defined, then the <a
  * href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#arbitrary-processor-affinity-priority-smp-scheduler">Arbitrary
@@ -4469,8 +4751,8 @@
  * Scheduler Configuration</a> is present, then it is used as the scheduler for
  * up to 32 processors.
  *
- * The memory allocated for this scheduler depends on the
- * #CONFIGURE_MAXIMUM_PRIORITY configuration option.
+ * The memory allocated for this scheduler depends on the @ref
+ * CONFIGURE_MAXIMUM_PRIORITY configuration option.
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
@@ -4479,6 +4761,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_SCHEDULER_PRIORITY_SMP
  *
  * In case this configuration option is defined, then the <a
  * href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#deterministic-priority-smp-scheduler">Deterministic
@@ -4501,8 +4785,8 @@
  * Scheduler Configuration</a> is present, then it is used as the scheduler for
  * up to 32 processors.
  *
- * The memory allocated for this scheduler depends on the
- * #CONFIGURE_MAXIMUM_PRIORITY configuration option.
+ * The memory allocated for this scheduler depends on the @ref
+ * CONFIGURE_MAXIMUM_PRIORITY configuration option.
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_PRIORITY_SMP
@@ -4511,6 +4795,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_SCHEDULER_SIMPLE
  *
  * In case this configuration option is defined, then the <a
  * href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#simple-priority-scheduler">Simple
@@ -4537,6 +4823,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_SCHEDULER_SIMPLE_SMP
  *
  * In case this configuration option is defined, then the <a
  * href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#simple-priority-smp-scheduler">Simple
@@ -4567,6 +4855,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_SCHEDULER_STRONG_APA
+ *
  * In case this configuration option is defined, then the Strong APA algorithm
  * is made available to the application.
  *
@@ -4591,6 +4881,8 @@
 
 /**
  * @brief This configuration option is an initializer define.
+ *
+ * @anchor CONFIGURE_SCHEDULER_TABLE_ENTRIES
  *
  * The value of this configuration option is used to initialize the table of
  * configured schedulers.
@@ -4655,6 +4947,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor CONFIGURE_SCHEDULER_USER
+ *
  * In case this configuration option is defined, then the user shall provide a
  * scheduler algorithm to the application.
  *
@@ -4716,6 +5010,8 @@
 /**
  * @brief This configuration option is an initializer define.
  *
+ * @anchor CONFIGURE_TASK_STACK_ALLOCATOR
+ *
  * The value of this configuration option initializes the stack allocator
  * allocate handler.
  *
@@ -4732,11 +5028,11 @@
  * A correctly configured system shall configure the following to be
  * consistent:
  *
- * * #CONFIGURE_TASK_STACK_ALLOCATOR_INIT
+ * * @ref CONFIGURE_TASK_STACK_ALLOCATOR_INIT
  *
  * * ``CONFIGURE_TASK_STACK_ALLOCATOR``
  *
- * * #CONFIGURE_TASK_STACK_DEALLOCATOR
+ * * @ref CONFIGURE_TASK_STACK_DEALLOCATOR
  * @endparblock
  */
 #define CONFIGURE_TASK_STACK_ALLOCATOR
@@ -4745,6 +5041,8 @@
 
 /**
  * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
  *
  * In case this configuration option is defined, then the system is informed
  * that the task stack allocator does not use the RTEMS Workspace.
@@ -4755,7 +5053,7 @@
  *
  * @par Notes
  * This configuration option may be used if a custom task stack allocator is
- * configured, see #CONFIGURE_TASK_STACK_ALLOCATOR.
+ * configured, see @ref CONFIGURE_TASK_STACK_ALLOCATOR.
  */
 #define CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
 
@@ -4763,6 +5061,8 @@
 
 /**
  * @brief This configuration option is an initializer define.
+ *
+ * @anchor CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
  *
  * The value of this configuration option is the address for the stack
  * allocator allocate handler used to allocate the task storage area of each
@@ -4798,7 +5098,7 @@
  *
  * The
  *
- * * #CONFIGURE_IDLE_TASK_STORAGE_SIZE, and
+ * * @ref CONFIGURE_IDLE_TASK_STORAGE_SIZE, and
  *
  * * ``CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE``
  *
@@ -4811,6 +5111,8 @@
 
 /**
  * @brief This configuration option is an initializer define.
+ *
+ * @anchor CONFIGURE_TASK_STACK_ALLOCATOR_INIT
  *
  * The value of this configuration option initializes the stack allocator
  * initialization handler.
@@ -4831,9 +5133,9 @@
  *
  * * ``CONFIGURE_TASK_STACK_ALLOCATOR_INIT``
  *
- * * #CONFIGURE_TASK_STACK_ALLOCATOR
+ * * @ref CONFIGURE_TASK_STACK_ALLOCATOR
  *
- * * #CONFIGURE_TASK_STACK_DEALLOCATOR
+ * * @ref CONFIGURE_TASK_STACK_DEALLOCATOR
  * @endparblock
  */
 #define CONFIGURE_TASK_STACK_ALLOCATOR_INIT
@@ -4842,6 +5144,8 @@
 
 /**
  * @brief This configuration option is an initializer define.
+ *
+ * @anchor CONFIGURE_TASK_STACK_DEALLOCATOR
  *
  * The value of this configuration option initializes the stack allocator
  * deallocate handler.
@@ -4859,9 +5163,9 @@
  * A correctly configured system shall configure the following to be
  * consistent:
  *
- * * #CONFIGURE_TASK_STACK_ALLOCATOR_INIT
+ * * @ref CONFIGURE_TASK_STACK_ALLOCATOR_INIT
  *
- * * #CONFIGURE_TASK_STACK_ALLOCATOR
+ * * @ref CONFIGURE_TASK_STACK_ALLOCATOR
  *
  * * ``CONFIGURE_TASK_STACK_DEALLOCATOR``
  * @endparblock
@@ -4872,6 +5176,8 @@
 
 /**
  * @brief This configuration option is an initializer define.
+ *
+ * @anchor CONFIGURE_TASK_STACK_FROM_ALLOCATOR
  *
  * The value of this configuration option is used to calculate the task stack
  * space size.
@@ -4888,7 +5194,7 @@
  *
  * @par Notes
  * This configuration option may be used if a custom task stack allocator is
- * configured, see #CONFIGURE_TASK_STACK_ALLOCATOR.
+ * configured, see @ref CONFIGURE_TASK_STACK_ALLOCATOR.
  */
 #define CONFIGURE_TASK_STACK_FROM_ALLOCATOR
 

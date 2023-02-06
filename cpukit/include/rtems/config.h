@@ -152,8 +152,8 @@ extern "C" {
  *   RTEMS Workspace for this application, otherwise false.
  *
  * @par Notes
- * The setting is defined by the
- * #CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE application configuration
+ * The setting is defined by the @ref
+ * CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE application configuration
  * option.
  *
  * @par Constraints
@@ -353,7 +353,7 @@ const char *rtems_get_version_string( void );
  *   during system initialization for this application, otherwise false.
  *
  * @par Notes
- * The setting is defined by the #CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
+ * The setting is defined by the @ref CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
  * application configuration option.
  *
  * @par Constraints
@@ -377,8 +377,8 @@ const char *rtems_get_version_string( void );
  * @return Returns the IDLE task stack size in bytes of this application.
  *
  * @par Notes
- * The IDLE task stack size is defined by the #CONFIGURE_IDLE_TASK_STACK_SIZE
- * application configuration option.
+ * The IDLE task stack size is defined by the @ref
+ * CONFIGURE_IDLE_TASK_STACK_SIZE application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -401,8 +401,8 @@ const char *rtems_get_version_string( void );
  * @return Returns the IDLE task body of this application.
  *
  * @par Notes
- * The IDLE task body is defined by the #CONFIGURE_IDLE_TASK_BODY application
- * configuration option.
+ * The IDLE task body is defined by the @ref CONFIGURE_IDLE_TASK_BODY
+ * application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -425,8 +425,8 @@ const char *rtems_get_version_string( void );
  * @return Returns the interrupt stack size in bytes of this application.
  *
  * @par Notes
- * The interrupt stack size is defined by the #CONFIGURE_INTERRUPT_STACK_SIZE
- * application configuration option.
+ * The interrupt stack size is defined by the @ref
+ * CONFIGURE_INTERRUPT_STACK_SIZE application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -452,7 +452,7 @@ const char *rtems_get_version_string( void );
  *   configured for this application.
  *
  * @par Notes
- * The resource number is defined by the #CONFIGURE_MAXIMUM_USER_EXTENSIONS
+ * The resource number is defined by the @ref CONFIGURE_MAXIMUM_USER_EXTENSIONS
  * application configuration option.  See also rtems_resource_is_unlimited()
  * and rtems_resource_maximum_per_allocation().
  *
@@ -482,7 +482,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The actual number of processors available to the application is returned by
  * rtems_scheduler_get_processor_maximum() which less than or equal to the
- * configured maximum number of processors (#CONFIGURE_MAXIMUM_PROCESSORS).
+ * configured maximum number of processors (@ref CONFIGURE_MAXIMUM_PROCESSORS).
  *
  * In uniprocessor configurations, this macro is a compile time constant which
  * evaluates to one.
@@ -512,8 +512,8 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *   this application.
  *
  * @par Notes
- * The number of microseconds per clock tick is defined by the
- * #CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
+ * The number of microseconds per clock tick is defined by the @ref
+ * CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -539,8 +539,8 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *   this application.
  *
  * @par Notes
- * The number of milliseconds per clock tick is defined by the
- * #CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
+ * The number of milliseconds per clock tick is defined by the @ref
+ * CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -566,8 +566,8 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *   this application.
  *
  * @par Notes
- * The number of nanoseconds per clock tick is defined by the
- * #CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
+ * The number of nanoseconds per clock tick is defined by the @ref
+ * CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -593,8 +593,8 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *   application.
  *
  * @par Notes
- * The number of initial extensions is defined by the
- * #CONFIGURE_INITIAL_EXTENSIONS application configuration option and related
+ * The number of initial extensions is defined by the @ref
+ * CONFIGURE_INITIAL_EXTENSIONS application configuration option and related
  * options.
  *
  * @par Constraints
@@ -621,8 +621,8 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *   stack of each IDLE task configured for this application.
  *
  * @par Notes
- * The task stack allocator allocate hook for idle tasks is defined by the
- * #CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE application configuration option.
+ * The task stack allocator allocate hook for idle tasks is defined by the @ref
+ * CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -648,8 +648,8 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *   application.
  *
  * @par Notes
- * The task stack allocator allocate hook is defined by the
- * #CONFIGURE_TASK_STACK_ALLOCATOR application configuration option.
+ * The task stack allocator allocate hook is defined by the @ref
+ * CONFIGURE_TASK_STACK_ALLOCATOR application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -674,8 +674,8 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *   this application.
  *
  * @par Notes
- * The task stack allocator initialization hook is defined by the
- * #CONFIGURE_TASK_STACK_ALLOCATOR_INIT application configuration option.
+ * The task stack allocator initialization hook is defined by the @ref
+ * CONFIGURE_TASK_STACK_ALLOCATOR_INIT application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -701,8 +701,8 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *   application.
  *
  * @par Notes
- * The task stack allocator free hook is defined by the
- * #CONFIGURE_TASK_STACK_DEALLOCATOR application configuration option.
+ * The task stack allocator free hook is defined by the @ref
+ * CONFIGURE_TASK_STACK_DEALLOCATOR application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -726,8 +726,8 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *   application.
  *
  * @par Notes
- * The clock ticks per timeslice is defined by the
- * #CONFIGURE_TICKS_PER_TIMESLICE application configuration option.
+ * The clock ticks per timeslice is defined by the @ref
+ * CONFIGURE_TICKS_PER_TIMESLICE application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -753,7 +753,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *   configured to be unified for this application, otherwise false.
  *
  * @par Notes
- * The setting is defined by the #CONFIGURE_UNIFIED_WORK_AREAS application
+ * The setting is defined by the @ref CONFIGURE_UNIFIED_WORK_AREAS application
  * configuration option.
  *
  * @par Constraints

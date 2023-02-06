@@ -245,7 +245,8 @@ struct rtems_printer;
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
  *   period.  The number of periods available to the application is configured
- *   through the #CONFIGURE_MAXIMUM_PERIODS application configuration option.
+ *   through the @ref CONFIGURE_MAXIMUM_PERIODS application configuration
+ *   option.
  *
  * @par Notes
  * @parblock
@@ -269,7 +270,7 @@ struct rtems_printer;
  *   cause the calling task to be preempted.
  *
  * * The number of periods available to the application is configured through
- *   the #CONFIGURE_MAXIMUM_PERIODS application configuration option.
+ *   the @ref CONFIGURE_MAXIMUM_PERIODS application configuration option.
  *
  * * Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS

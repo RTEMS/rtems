@@ -284,7 +284,8 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )( rtem
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
  *   timer.  The number of timers available to the application is configured
- *   through the #CONFIGURE_MAXIMUM_TIMERS application configuration option.
+ *   through the @ref CONFIGURE_MAXIMUM_TIMERS application configuration
+ *   option.
  *
  * @par Notes
  * @parblock
@@ -308,7 +309,7 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )( rtem
  *   cause the calling task to be preempted.
  *
  * * The number of timers available to the application is configured through
- *   the #CONFIGURE_MAXIMUM_TIMERS application configuration option.
+ *   the @ref CONFIGURE_MAXIMUM_TIMERS application configuration option.
  *
  * * Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS
@@ -600,7 +601,7 @@ rtems_status_code rtems_timer_fire_when(
  * * The directive may be called from within task context.
  *
  * * The number of timers available to the application is configured through
- *   the #CONFIGURE_MAXIMUM_TIMERS application configuration option.
+ *   the @ref CONFIGURE_MAXIMUM_TIMERS application configuration option.
  *
  * * Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS

@@ -160,8 +160,8 @@ typedef struct {
    * alignment of an application executable.
    *
    * The application may configure the maximum thread-local storage size for all
-   * threads explicitly through the #CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE
-   * configuration option.
+   * threads explicitly through the @ref
+   * CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE configuration option.
    */
   size_t maximum_thread_local_storage_size;
 
@@ -325,8 +325,8 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  * risk of blown stacks for most user applications.  Using this constant when
  * specifying the task stack size, indicates that the stack size will be at
  * least RTEMS_MINIMUM_STACK_SIZE bytes in size.  If the user configured
- * minimum stack size (see #CONFIGURE_MINIMUM_TASK_STACK_SIZE) is larger than
- * the recommended minimum, then it will be used.
+ * minimum stack size (see @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE) is larger
+ * than the recommended minimum, then it will be used.
  */
 #define RTEMS_MINIMUM_STACK_SIZE STACK_MINIMUM_SIZE
 
@@ -454,8 +454,8 @@ typedef bool( *rtems_task_visitor )( rtems_tcb *, void * );
  * The **stack size** of the task is specified in ``stack_size``.  If the
  * requested stack size is less than the configured minimum stack size, then
  * RTEMS will use the configured minimum as the stack size for this task.  The
- * configured minimum stack size is defined by the
- * #CONFIGURE_MINIMUM_TASK_STACK_SIZE application configuration option.  In
+ * configured minimum stack size is defined by the @ref
+ * CONFIGURE_MINIMUM_TASK_STACK_SIZE application configuration option.  In
  * addition to being able to specify the task stack size as a integer, there
  * are two constants which may be specified:
  *
@@ -583,12 +583,12 @@ typedef bool( *rtems_task_visitor )( rtems_tcb *, void * );
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
  *   task.  The number of tasks available to the application is configured
- *   through the #CONFIGURE_MAXIMUM_TASKS application configuration option.
+ *   through the @ref CONFIGURE_MAXIMUM_TASKS application configuration option.
  *
  * @retval ::RTEMS_TOO_MANY In multiprocessing configurations, there was no
  *   inactive global object available to create a global task.  The number of
- *   global objects available to the application is configured through the
- *   #CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration option.
+ *   global objects available to the application is configured through the @ref
+ *   CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration option.
  *
  * @retval ::RTEMS_UNSATISFIED There was not enough memory to allocate the task
  *   storage area.  The task storage area contains the task stack, the
@@ -615,7 +615,7 @@ typedef bool( *rtems_task_visitor )( rtems_tcb *, void * );
  * The task stack size shall account for an target processor dependent
  * interrupt stack frame which may be placed on the stack of the interrupted
  * task while servicing an interrupt.  The stack checker may be used to monitor
- * the stack usage, see #CONFIGURE_STACK_CHECKER_ENABLED.
+ * the stack usage, see @ref CONFIGURE_STACK_CHECKER_ENABLED.
  *
  * For control and maintenance of the task, RTEMS allocates a TCB from the
  * local TCB free pool and initializes it.
@@ -644,15 +644,15 @@ typedef bool( *rtems_task_visitor )( rtems_tcb *, void * );
  *   message to remote nodes.  This may preempt the calling task.
  *
  * * The number of tasks available to the application is configured through the
- *   #CONFIGURE_MAXIMUM_TASKS application configuration option.
+ *   @ref CONFIGURE_MAXIMUM_TASKS application configuration option.
  *
  * * Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS
  *   Workspace.
  *
  * * The number of global objects available to the application is configured
- *   through the #CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration
- *   option.
+ *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
+ *   configuration option.
  * @endparblock
  */
 rtems_status_code rtems_task_create(
@@ -690,12 +690,13 @@ rtems_status_code rtems_task_create(
  * @retval ::RTEMS_INVALID_SIZE The thread-local storage size is greater than
  *   the maximum thread-local storage size specified in the task configuration.
  *   The thread-local storage size is determined by the thread-local variables
- *   used by the application and #CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE.
+ *   used by the application and @ref
+ *   CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE.
  *
  * @retval ::RTEMS_INVALID_SIZE The task storage area was too small to provide
- *   a task stack of the configured minimum size, see
- *   #CONFIGURE_MINIMUM_TASK_STACK_SIZE. The task storage area contains the
- *   task stack, the thread-local storage, and the floating-point context on
+ *   a task stack of the configured minimum size, see @ref
+ *   CONFIGURE_MINIMUM_TASK_STACK_SIZE. The task storage area contains the task
+ *   stack, the thread-local storage, and the floating-point context on
  *   architectures with a separate floating-point context.
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive task object available to
@@ -736,11 +737,11 @@ rtems_status_code rtems_task_create(
  *
  * The stack space estimate done by <rtems/confdefs.h> assumes that all tasks
  * are created by rtems_task_create().  The estimate can be adjusted to take
- * user-provided task storage areas into account through the
- * #CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE application
- * configuration option.
+ * user-provided task storage areas into account through the @ref
+ * CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE application configuration
+ * option.
  *
- * The #CONFIGURE_MAXIMUM_TASKS should include tasks constructed by
+ * The @ref CONFIGURE_MAXIMUM_TASKS should include tasks constructed by
  * rtems_task_construct().
  * @endparblock
  *
@@ -760,15 +761,15 @@ rtems_status_code rtems_task_create(
  *   message to remote nodes.  This may preempt the calling task.
  *
  * * The number of tasks available to the application is configured through the
- *   #CONFIGURE_MAXIMUM_TASKS application configuration option.
+ *   @ref CONFIGURE_MAXIMUM_TASKS application configuration option.
  *
  * * Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS
  *   Workspace.
  *
  * * The number of global objects available to the application is configured
- *   through the #CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration
- *   option.
+ *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
+ *   configuration option.
  * @endparblock
  */
 rtems_status_code rtems_task_construct(

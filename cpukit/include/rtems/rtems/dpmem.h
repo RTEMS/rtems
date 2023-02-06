@@ -114,7 +114,7 @@ extern "C" {
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
  *   port.  The number of port available to the application is configured
- *   through the #CONFIGURE_MAXIMUM_PORTS application configuration option.
+ *   through the @ref CONFIGURE_MAXIMUM_PORTS application configuration option.
  *
  * @par Notes
  * @parblock
@@ -138,7 +138,7 @@ extern "C" {
  *   cause the calling task to be preempted.
  *
  * * The number of ports available to the application is configured through the
- *   #CONFIGURE_MAXIMUM_PORTS application configuration option.
+ *   @ref CONFIGURE_MAXIMUM_PORTS application configuration option.
  *
  * * Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS

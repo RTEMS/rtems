@@ -137,7 +137,7 @@ extern "C" {
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
  *   barrier.  The number of barriers available to the application is
- *   configured through the #CONFIGURE_MAXIMUM_BARRIERS application
+ *   configured through the @ref CONFIGURE_MAXIMUM_BARRIERS application
  *   configuration option.
  *
  * @par Notes
@@ -157,7 +157,7 @@ extern "C" {
  *   cause the calling task to be preempted.
  *
  * * The number of barriers available to the application is configured through
- *   the #CONFIGURE_MAXIMUM_BARRIERS application configuration option.
+ *   the @ref CONFIGURE_MAXIMUM_BARRIERS application configuration option.
  *
  * * Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS

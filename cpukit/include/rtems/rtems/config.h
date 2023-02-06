@@ -80,7 +80,7 @@ typedef struct {
    * @brief This member contains the maximum number of Classic API Tasks
    *   configured for this application.
    *
-   * See #CONFIGURE_MAXIMUM_TASKS.
+   * See @ref CONFIGURE_MAXIMUM_TASKS.
    */
   uint32_t maximum_tasks;
 
@@ -94,7 +94,7 @@ typedef struct {
    * @brief This member contains the maximum number of Classic API Timers
    *   configured for this application.
    *
-   * See #CONFIGURE_MAXIMUM_TIMERS.
+   * See @ref CONFIGURE_MAXIMUM_TIMERS.
    */
   uint32_t maximum_timers;
 
@@ -102,7 +102,7 @@ typedef struct {
    * @brief This member contains the maximum number of Classic API Semaphores
    *   configured for this application.
    *
-   * See #CONFIGURE_MAXIMUM_SEMAPHORES.
+   * See @ref CONFIGURE_MAXIMUM_SEMAPHORES.
    */
   uint32_t maximum_semaphores;
 
@@ -110,7 +110,7 @@ typedef struct {
    * @brief This member contains the maximum number of Classic API Message Queues
    *   configured for this application.
    *
-   * See #CONFIGURE_MAXIMUM_MESSAGE_QUEUES.
+   * See @ref CONFIGURE_MAXIMUM_MESSAGE_QUEUES.
    */
   uint32_t maximum_message_queues;
 
@@ -118,7 +118,7 @@ typedef struct {
    * @brief This member contains the maximum number of Classic API Partitions
    *   configured for this application.
    *
-   * See #CONFIGURE_MAXIMUM_PARTITIONS.
+   * See @ref CONFIGURE_MAXIMUM_PARTITIONS.
    */
   uint32_t maximum_partitions;
 
@@ -126,7 +126,7 @@ typedef struct {
    * @brief This member contains the maximum number of Classic API Regions
    *   configured for this application.
    *
-   * See #CONFIGURE_MAXIMUM_REGIONS.
+   * See @ref CONFIGURE_MAXIMUM_REGIONS.
    */
   uint32_t maximum_regions;
 
@@ -134,7 +134,7 @@ typedef struct {
    * @brief This member contains the maximum number of Classic API Dual-Ported
    *   Memories configured for this application.
    *
-   * See #CONFIGURE_MAXIMUM_PORTS.
+   * See @ref CONFIGURE_MAXIMUM_PORTS.
    */
   uint32_t maximum_ports;
 
@@ -142,7 +142,7 @@ typedef struct {
    * @brief This member contains the maximum number of Classic API Rate Monotonic
    *   Periods configured for this application.
    *
-   * See #CONFIGURE_MAXIMUM_PERIODS.
+   * See @ref CONFIGURE_MAXIMUM_PERIODS.
    */
   uint32_t maximum_periods;
 
@@ -150,7 +150,7 @@ typedef struct {
    * @brief This member contains the maximum number of Classic API Barriers
    *   configured for this application.
    *
-   * See #CONFIGURE_MAXIMUM_BARRIERS.
+   * See @ref CONFIGURE_MAXIMUM_BARRIERS.
    */
   uint32_t maximum_barriers;
 
@@ -158,7 +158,7 @@ typedef struct {
    * @brief This member contains the number of Classic API Initialization Tasks
    *   configured for this application.
    *
-   * See #CONFIGURE_RTEMS_INIT_TASKS_TABLE.
+   * See @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE.
    */
   uint32_t number_of_initialization_tasks;
 
@@ -166,7 +166,7 @@ typedef struct {
    * @brief This member contains the pointer to Classic API Initialization Tasks
    *   Table of this application.
    *
-   * See #CONFIGURE_RTEMS_INIT_TASKS_TABLE.
+   * See @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE.
    */
   const rtems_initialization_tasks_table *User_initialization_tasks_table;
 } rtems_api_configuration_table;
@@ -183,7 +183,7 @@ typedef struct {
  *   configured for this application.
  *
  * @par Notes
- * The resource number is defined by the #CONFIGURE_MAXIMUM_BARRIERS
+ * The resource number is defined by the @ref CONFIGURE_MAXIMUM_BARRIERS
  * application configuration option.  See also rtems_resource_is_unlimited()
  * and rtems_resource_maximum_per_allocation().
  *
@@ -210,7 +210,7 @@ uint32_t rtems_configuration_get_maximum_barriers( void );
  *   configured for this application.
  *
  * @par Notes
- * The resource number is defined by the #CONFIGURE_MAXIMUM_MESSAGE_QUEUES
+ * The resource number is defined by the @ref CONFIGURE_MAXIMUM_MESSAGE_QUEUES
  * application configuration option.  See also rtems_resource_is_unlimited()
  * and rtems_resource_maximum_per_allocation().
  *
@@ -237,7 +237,7 @@ uint32_t rtems_configuration_get_maximum_message_queues( void );
  *   configured for this application.
  *
  * @par Notes
- * The resource number is defined by the #CONFIGURE_MAXIMUM_PARTITIONS
+ * The resource number is defined by the @ref CONFIGURE_MAXIMUM_PARTITIONS
  * application configuration option.  See also rtems_resource_is_unlimited()
  * and rtems_resource_maximum_per_allocation().
  *
@@ -264,9 +264,9 @@ uint32_t rtems_configuration_get_maximum_partitions( void );
  *   configured for this application.
  *
  * @par Notes
- * The resource number is defined by the #CONFIGURE_MAXIMUM_PERIODS application
- * configuration option.  See also rtems_resource_is_unlimited() and
- * rtems_resource_maximum_per_allocation().
+ * The resource number is defined by the @ref CONFIGURE_MAXIMUM_PERIODS
+ * application configuration option.  See also rtems_resource_is_unlimited()
+ * and rtems_resource_maximum_per_allocation().
  *
  * @par Constraints
  * @parblock
@@ -291,9 +291,9 @@ uint32_t rtems_configuration_get_maximum_periods( void );
  *   configured for this application.
  *
  * @par Notes
- * The resource number is defined by the #CONFIGURE_MAXIMUM_PORTS application
- * configuration option.  See also rtems_resource_is_unlimited() and
- * rtems_resource_maximum_per_allocation().
+ * The resource number is defined by the @ref CONFIGURE_MAXIMUM_PORTS
+ * application configuration option.  See also rtems_resource_is_unlimited()
+ * and rtems_resource_maximum_per_allocation().
  *
  * @par Constraints
  * @parblock
@@ -318,9 +318,9 @@ uint32_t rtems_configuration_get_maximum_ports( void );
  *   configured for this application.
  *
  * @par Notes
- * The resource number is defined by the #CONFIGURE_MAXIMUM_REGIONS application
- * configuration option.  See also rtems_resource_is_unlimited() and
- * rtems_resource_maximum_per_allocation().
+ * The resource number is defined by the @ref CONFIGURE_MAXIMUM_REGIONS
+ * application configuration option.  See also rtems_resource_is_unlimited()
+ * and rtems_resource_maximum_per_allocation().
  *
  * @par Constraints
  * @parblock
@@ -345,7 +345,7 @@ uint32_t rtems_configuration_get_maximum_regions( void );
  *   configured for this application.
  *
  * @par Notes
- * The resource number is defined by the #CONFIGURE_MAXIMUM_SEMAPHORES
+ * The resource number is defined by the @ref CONFIGURE_MAXIMUM_SEMAPHORES
  * application configuration option.  See also rtems_resource_is_unlimited()
  * and rtems_resource_maximum_per_allocation().
  *
@@ -372,9 +372,9 @@ uint32_t rtems_configuration_get_maximum_semaphores( void );
  *   configured for this application.
  *
  * @par Notes
- * The resource number is defined by the #CONFIGURE_MAXIMUM_TASKS application
- * configuration option.  See also rtems_resource_is_unlimited() and
- * rtems_resource_maximum_per_allocation().
+ * The resource number is defined by the @ref CONFIGURE_MAXIMUM_TASKS
+ * application configuration option.  See also rtems_resource_is_unlimited()
+ * and rtems_resource_maximum_per_allocation().
  *
  * @par Constraints
  * @parblock
@@ -399,9 +399,9 @@ uint32_t rtems_configuration_get_maximum_tasks( void );
  *   configured for this application.
  *
  * @par Notes
- * The resource number is defined by the #CONFIGURE_MAXIMUM_TIMERS application
- * configuration option.  See also rtems_resource_is_unlimited() and
- * rtems_resource_maximum_per_allocation().
+ * The resource number is defined by the @ref CONFIGURE_MAXIMUM_TIMERS
+ * application configuration option.  See also rtems_resource_is_unlimited()
+ * and rtems_resource_maximum_per_allocation().
  *
  * @par Constraints
  * @parblock

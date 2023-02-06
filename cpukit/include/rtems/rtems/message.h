@@ -212,14 +212,14 @@ typedef struct {
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
  *   message queue.  The number of message queue available to the application
- *   is configured through the #CONFIGURE_MAXIMUM_MESSAGE_QUEUES application
- *   configuration option.
+ *   is configured through the @ref CONFIGURE_MAXIMUM_MESSAGE_QUEUES
+ *   application configuration option.
  *
  * @retval ::RTEMS_TOO_MANY In multiprocessing configurations, there was no
  *   inactive global object available to create a global message queue.  The
  *   number of global objects available to the application is configured
- *   through the #CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration
- *   option.
+ *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
+ *   configuration option.
  *
  * @retval ::RTEMS_INVALID_NUMBER The product of ``count`` and
  *   ``max_message_size`` is greater than the maximum storage size.
@@ -260,16 +260,16 @@ typedef struct {
  *   message to remote nodes.  This may preempt the calling task.
  *
  * * The number of message queues available to the application is configured
- *   through the #CONFIGURE_MAXIMUM_MESSAGE_QUEUES application configuration
- *   option.
+ *   through the @ref CONFIGURE_MAXIMUM_MESSAGE_QUEUES application
+ *   configuration option.
  *
  * * Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS
  *   Workspace.
  *
  * * The number of global objects available to the application is configured
- *   through the #CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration
- *   option.
+ *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
+ *   configuration option.
  * @endparblock
  */
 rtems_status_code rtems_message_queue_create(
@@ -342,8 +342,8 @@ rtems_status_code rtems_message_queue_create(
  * runtime memory allocators.  This can simplify the application architecture
  * as well as any analysis that may be required.
  *
- * The value for #CONFIGURE_MESSAGE_BUFFER_MEMORY should not include memory for
- * message queues constructed by rtems_message_queue_construct().
+ * The value for @ref CONFIGURE_MESSAGE_BUFFER_MEMORY should not include memory
+ * for message queues constructed by rtems_message_queue_construct().
  * @endparblock
  *
  * @par Constraints
@@ -362,16 +362,16 @@ rtems_status_code rtems_message_queue_create(
  *   message to remote nodes.  This may preempt the calling task.
  *
  * * The number of message queues available to the application is configured
- *   through the #CONFIGURE_MAXIMUM_MESSAGE_QUEUES application configuration
- *   option.
+ *   through the @ref CONFIGURE_MAXIMUM_MESSAGE_QUEUES application
+ *   configuration option.
  *
  * * Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS
  *   Workspace.
  *
  * * The number of global objects available to the application is configured
- *   through the #CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration
- *   option.
+ *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
+ *   configuration option.
  * @endparblock
  */
 rtems_status_code rtems_message_queue_construct(

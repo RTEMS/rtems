@@ -203,13 +203,13 @@ extern "C" {
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
  *   semaphore.  The number of semaphores available to the application is
- *   configured through the #CONFIGURE_MAXIMUM_SEMAPHORES application
+ *   configured through the @ref CONFIGURE_MAXIMUM_SEMAPHORES application
  *   configuration option.
  *
  * @retval ::RTEMS_TOO_MANY In multiprocessing configurations, there was no
  *   inactive global object available to create a global semaphore.  The number
  *   of global objects available to the application is configured through the
- *   #CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration option.
+ *   @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration option.
  *
  * @retval ::RTEMS_INVALID_PRIORITY The ``priority_ceiling`` parameter was
  *   invalid.
@@ -243,7 +243,7 @@ extern "C" {
  *   message to remote nodes.  This may preempt the calling task.
  *
  * * The number of semaphores available to the application is configured
- *   through the #CONFIGURE_MAXIMUM_SEMAPHORES application configuration
+ *   through the @ref CONFIGURE_MAXIMUM_SEMAPHORES application configuration
  *   option.
  *
  * * Where the object class corresponding to the directive is configured to use
@@ -251,8 +251,8 @@ extern "C" {
  *   Workspace.
  *
  * * The number of global objects available to the application is configured
- *   through the #CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration
- *   option.
+ *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
+ *   configuration option.
  * @endparblock
  */
 rtems_status_code rtems_semaphore_create(

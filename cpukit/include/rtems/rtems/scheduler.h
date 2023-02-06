@@ -383,8 +383,8 @@ uint32_t rtems_scheduler_get_processor( void );
  *
  * Where the system was built with SMP support enabled, this directive returns
  * the minimum of the processors (physically or virtually) available at the
- * target and the configured processor maximum (see
- * #CONFIGURE_MAXIMUM_PROCESSORS).  Not all processors in the range from
+ * target and the configured processor maximum (see @ref
+ * CONFIGURE_MAXIMUM_PROCESSORS).  Not all processors in the range from
  * processor index zero to the last processor index (which is the processor
  * maximum minus one) may be configured to be used by a scheduler or may be
  * online (online processors have a scheduler assigned).

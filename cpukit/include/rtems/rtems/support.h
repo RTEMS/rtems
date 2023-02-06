@@ -115,8 +115,8 @@ static inline bool rtems_is_name_valid( rtems_name name )
  *   value.
  *
  * @par Notes
- * The number of clock ticks per second is defined by the
- * #CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
+ * The number of clock ticks per second is defined by the @ref
+ * CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
  *
  * @par Constraints
  * @parblock
@@ -166,8 +166,8 @@ static inline bool rtems_is_name_valid( rtems_name name )
  * @return Returns the number of clock ticks for the milliseconds value.
  *
  * @par Notes
- * The number of clock ticks per second is defined by the
- * #CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
+ * The number of clock ticks per second is defined by the @ref
+ * CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
  *
  * @par Constraints
  * @parblock

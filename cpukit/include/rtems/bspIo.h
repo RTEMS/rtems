@@ -78,7 +78,7 @@ extern "C" {
  *
  * The directives may be used to print debug and test information.  The kernel
  * character input/output support should work even if no Console Driver is
- * configured, see #CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER.  The kernel
+ * configured, see @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER.  The kernel
  * character input and output device is provided by the BSP. Applications may
  * change the device.
  */

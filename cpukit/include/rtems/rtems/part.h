@@ -168,13 +168,13 @@ extern "C" {
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
  *   partition.  The number of partitions available to the application is
- *   configured through the #CONFIGURE_MAXIMUM_PARTITIONS application
+ *   configured through the @ref CONFIGURE_MAXIMUM_PARTITIONS application
  *   configuration option.
  *
  * @retval ::RTEMS_TOO_MANY In multiprocessing configurations, there was no
  *   inactive global object available to create a global semaphore.  The number
  *   of global objects available to the application is configured through the
- *   #CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration option.
+ *   @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration option.
  *
  * @par Notes
  * @parblock
@@ -220,7 +220,7 @@ extern "C" {
  *   message to remote nodes.  This may preempt the calling task.
  *
  * * The number of partitions available to the application is configured
- *   through the #CONFIGURE_MAXIMUM_PARTITIONS application configuration
+ *   through the @ref CONFIGURE_MAXIMUM_PARTITIONS application configuration
  *   option.
  *
  * * Where the object class corresponding to the directive is configured to use
@@ -228,8 +228,8 @@ extern "C" {
  *   Workspace.
  *
  * * The number of global objects available to the application is configured
- *   through the #CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration
- *   option.
+ *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
+ *   configuration option.
  * @endparblock
  */
 rtems_status_code rtems_partition_create(
