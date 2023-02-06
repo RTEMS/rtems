@@ -1,0 +1,414 @@
+From cc33eb62cf3bfdbd18e3be55491e795533c653c0 Mon Sep 17 00:00:00 2001
+From: PengQianheng <598507680@qq.com>
+Date: Tue, 22 Nov 2022 20:51:54 +0800
+Subject: [PATCH] fix bugs of psram
+
+---
+ bsps/shared/dev/i2c/spi-sd-card.c         | 29 ++++++++---
+ cpukit/include/rtems/bdbuf.h              |  4 +-
+ cpukit/include/rtems/confdefs/unlimited.h |  2 +-
+ cpukit/libblock/src/bdbuf.c               |  8 +--
+ cpukit/libblock/src/bdpart-write.c        | 61 ++++++++++++++++++++++-
+ cpukit/libblock/src/blkdev-imfs.c         |  4 +-
+ cpukit/libcsupport/src/getgrnam.c         |  2 +-
+ cpukit/libcsupport/src/getpwent.c         |  2 +-
+ cpukit/libdl/dlfcn.c                      |  2 +-
+ cpukit/score/src/threadinitialize.c       |  9 +++-
+ 10 files changed, 101 insertions(+), 22 deletions(-)
+
+diff --git a/bsps/shared/dev/i2c/spi-sd-card.c b/bsps/shared/dev/i2c/spi-sd-card.c
+index bf8ed403a5..e64c538353 100644
+--- a/bsps/shared/dev/i2c/spi-sd-card.c
++++ b/bsps/shared/dev/i2c/spi-sd-card.c
+@@ -22,16 +22,17 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <inttypes.h>
+-
++#include <stdlib.h>
+ #include <rtems.h>
+ #include <rtems/libi2c.h>
+ #include <rtems/libio.h>
+ #include <rtems/blkdev.h>
+ 
+ #include <libchip/spi-sd-card.h>
+-
++#define RTEMS_STATUS_CHECKS_USE_PRINTK
+ #include <rtems/status-checks.h>
+-
++#include <bsp/flexbus.h>
++#include <bsp/psram.h>
+ /**
+  * @name Integer to and from Byte-Stream Converter
+  * @{
+@@ -536,7 +537,7 @@ static int sd_card_stop_multiple_block_write( sd_card_driver_entry *e)
+ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *in, int n)
+ {
+ 	int rv = 0;
+-
++    uint8_t * origin_in_ptr = NULL;
+ 	/* Discard command response */
+ 	int r = e->response_index + 1;
+ 
+@@ -590,6 +591,16 @@ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *
+ 		   bytes.  To reduce overhead, read the response in chunks of
+ 		   50 bytes - this doesn't introduce too much copy overhead
+ 		   but does allow SPI DMA transfers to work efficiently. */
++        if (IS_PSRAM_ADDRESS(in))
++        {
++            origin_in_ptr = in;
++            in = (uint8_t *)malloc(n);
++            if (in == NULL)
++            {
++                RTEMS_SYSLOG_ERROR( "No enough memory for current buffer.\n");
++                return -RTEMS_NO_MEMORY;
++            }
++        }
+ 		response = in;
+ 		response_size = 50;
+ 		if (response_size > n)
+@@ -620,12 +631,16 @@ sd_card_read_start:
+ 	RTEMS_CHECK_RV( rv, "Read CRC 16");
+ 
+ 	crc16 = sd_card_compute_crc16 (in, n);
++    if (IS_PSRAM_ADDRESS(origin_in_ptr))
++    {
++        kinetis_memcpy((char *)origin_in_ptr, (const char *)in, n);
++        free(in);
++    }
+ 	if ((e->response[0] != ((crc16 >> 8) & 0xff)) ||
+ 	    (e->response[1] != (crc16 & 0xff))) {
+ 		RTEMS_SYSLOG_ERROR( "CRC check failed on read\n");
+ 		return -RTEMS_IO_ERROR;
+ 	}
+-
+ 	return i;
+ }
+ 
+@@ -761,7 +776,7 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
+ 	sd_card_stop_multiple_block_write( e);
+ 
+ 	/* Get card status */
+-	sd_card_send_command( e, SD_CARD_CMD_SEND_STATUS, 0);
++	// sd_card_send_command( e, SD_CARD_CMD_SEND_STATUS, 0);
+ 
+ 	/* Stop multiple block read */
+ 	sd_card_stop_multiple_block_read( e);
+@@ -1286,7 +1301,7 @@ rtems_status_code sd_card_register( void)
+ 		RTEMS_CHECK_SC( sc, "Initialize SD Card");
+ 
+ 		/* Create disk device */
+-		sc = rtems_blkdev_create( e->device_name, e->block_size, e->block_number, sd_card_disk_ioctl, NULL);
++		sc = rtems_blkdev_create( e->device_name, e->block_size, e->block_number, sd_card_disk_ioctl, e);
+ 		RTEMS_CHECK_SC( sc, "Create disk device");
+ 	}
+ 
+diff --git a/cpukit/include/rtems/bdbuf.h b/cpukit/include/rtems/bdbuf.h
+index fbb4fc05e9..32e24ac960 100644
+--- a/cpukit/include/rtems/bdbuf.h
++++ b/cpukit/include/rtems/bdbuf.h
+@@ -313,8 +313,8 @@ typedef struct rtems_bdbuf_buffer
+   {
+     struct rtems_bdbuf_buffer* left;   /**< Left Child */
+     struct rtems_bdbuf_buffer* right;  /**< Right Child */
+-    signed char                cache;  /**< Cache */
+-    signed char                bal;    /**< The balance of the sub-tree */
++    signed int                 cache;  /**< Cache */
++    signed int                 bal;    /**< The balance of the sub-tree */
+   } avl;
+ 
+   rtems_disk_device *dd;        /**< disk device */
+diff --git a/cpukit/include/rtems/confdefs/unlimited.h b/cpukit/include/rtems/confdefs/unlimited.h
+index 3f0c66b459..ff62f3ef45 100644
+--- a/cpukit/include/rtems/confdefs/unlimited.h
++++ b/cpukit/include/rtems/confdefs/unlimited.h
+@@ -53,7 +53,7 @@
+ #endif
+ 
+ #ifndef CONFIGURE_UNLIMITED_ALLOCATION_SIZE
+-  #define CONFIGURE_UNLIMITED_ALLOCATION_SIZE 8
++  #define CONFIGURE_UNLIMITED_ALLOCATION_SIZE 2
+ #endif
+ 
+ #ifndef CONFIGURE_MAXIMUM_TASKS
+diff --git a/cpukit/libblock/src/bdbuf.c b/cpukit/libblock/src/bdbuf.c
+index a7d471507c..2f680508e5 100644
+--- a/cpukit/libblock/src/bdbuf.c
++++ b/cpukit/libblock/src/bdbuf.c
+@@ -46,7 +46,7 @@
+ #include "rtems/bdbuf.h"
+ 
+ #define BDBUF_INVALID_DEV NULL
+-
++char *kinetis_malloc(size_t len);
+ /*
+  * Simpler label for this file.
+  */
+@@ -1354,7 +1354,7 @@ rtems_bdbuf_do_init (void)
+   /*
+    * Allocate the memory for the buffer descriptors.
+    */
+-  bdbuf_cache.bds = calloc (sizeof (rtems_bdbuf_buffer),
++  bdbuf_cache.bds = kinetis_malloc (sizeof (rtems_bdbuf_buffer) *
+                             bdbuf_cache.buffer_min_count);
+   if (!bdbuf_cache.bds)
+     goto error;
+@@ -1362,7 +1362,7 @@ rtems_bdbuf_do_init (void)
+   /*
+    * Allocate the memory for the buffer descriptors.
+    */
+-  bdbuf_cache.groups = calloc (sizeof (rtems_bdbuf_group),
++  bdbuf_cache.groups = kinetis_malloc (sizeof (rtems_bdbuf_group) *
+                                bdbuf_cache.group_count);
+   if (!bdbuf_cache.groups)
+     goto error;
+@@ -1372,7 +1372,7 @@ rtems_bdbuf_do_init (void)
+    * aligned. It is possible to free the memory allocated by
+    * rtems_cache_aligned_malloc() with free().
+    */
+-  bdbuf_cache.buffers = rtems_cache_aligned_malloc(bdbuf_cache.buffer_min_count
++  bdbuf_cache.buffers = kinetis_malloc(bdbuf_cache.buffer_min_count
+                                                    * bdbuf_config.buffer_min);
+   if (bdbuf_cache.buffers == NULL)
+     goto error;
+diff --git a/cpukit/libblock/src/bdpart-write.c b/cpukit/libblock/src/bdpart-write.c
+index 0418e82850..3aa7500450 100644
+--- a/cpukit/libblock/src/bdpart-write.c
++++ b/cpukit/libblock/src/bdpart-write.c
+@@ -75,10 +75,15 @@ static rtems_status_code rtems_bdpart_new_record(
+   memset( (*block)->buffer, 0, RTEMS_BDPART_BLOCK_SIZE);
+ 
+   /* Write signature */
++  #if 0
+   (*block)->buffer [RTEMS_BDPART_MBR_OFFSET_SIGNATURE_0] =
+     RTEMS_BDPART_MBR_SIGNATURE_0;
+   (*block)->buffer [RTEMS_BDPART_MBR_OFFSET_SIGNATURE_1] =
+     RTEMS_BDPART_MBR_SIGNATURE_1;
++  #else
++  unsigned short *signature = (unsigned short *)(&(*block)->buffer [RTEMS_BDPART_MBR_OFFSET_SIGNATURE_0]);
++  *signature = 0xAA55;
++  #endif
+ 
+   return RTEMS_SUCCESSFUL;
+ }
+@@ -104,7 +109,7 @@ rtems_status_code rtems_bdpart_write(
+   uint8_t *data = NULL;
+   int fd = -1;
+   rtems_disk_device *dd = NULL;
+-
++  char pt_record[16];
+   /* Check if we have something to do */
+   if (count == 0) {
+     /* Nothing to do */
+@@ -219,10 +224,15 @@ rtems_status_code rtems_bdpart_write(
+   }
+ 
+   /* Write disk ID */
++  #if 0
+   rtems_uint32_to_little_endian(
+     format->mbr.disk_id,
+     block->buffer + RTEMS_BDPART_MBR_OFFSET_DISK_ID
+   );
++  #else
++  rtems_uint32_to_little_endian(format->mbr.disk_id, pt_record);
++  kinetis_memcpy(block->buffer + RTEMS_BDPART_MBR_OFFSET_DISK_ID, pt_record, 4);
++  #endif
+ 
+   /* Write primary partition table */
+   data = block->buffer + RTEMS_BDPART_MBR_OFFSET_TABLE_0;
+@@ -230,6 +240,7 @@ rtems_status_code rtems_bdpart_write(
+     const rtems_bdpart_partition *p = pt + i;
+ 
+     /* Write partition entry */
++    #if 0
+     rtems_bdpart_write_mbr_partition(
+       data,
+       p->begin,
+@@ -237,6 +248,17 @@ rtems_status_code rtems_bdpart_write(
+       rtems_bdpart_mbr_partition_type( p->type),
+       (uint8_t) p->flags
+     );
++    #else
++    memset(pt_record, 0, sizeof(pt_record));
++    rtems_bdpart_write_mbr_partition(
++      pt_record,
++      p->begin,
++      p->end - p->begin,
++      rtems_bdpart_mbr_partition_type( p->type),
++      (uint8_t) p->flags
++    );
++    kinetis_memcpy(data, pt_record, sizeof(pt_record));
++    #endif
+ 
+     data += RTEMS_BDPART_MBR_TABLE_ENTRY_SIZE;
+   }
+@@ -249,6 +271,7 @@ rtems_status_code rtems_bdpart_write(
+     rtems_blkdev_bnum ep_begin = pt [ppc].begin - record_space;
+ 
+     /* Write extended partition */
++    #if 0
+     rtems_bdpart_write_mbr_partition(
+       data,
+       ep_begin,
+@@ -256,6 +279,17 @@ rtems_status_code rtems_bdpart_write(
+       RTEMS_BDPART_MBR_EXTENDED,
+       0
+     );
++    #else
++    memset(pt_record, 0, sizeof(pt_record));
++    rtems_bdpart_write_mbr_partition(
++      pt_record,
++      ep_begin,
++      disk_end - ep_begin,
++      RTEMS_BDPART_MBR_EXTENDED,
++      0
++    );
++    kinetis_memcpy(data, pt_record, sizeof(pt_record));
++    #endif
+ 
+     /* Write logical partitions */
+     for (i = ppc; i < count; ++i) {
+@@ -264,7 +298,7 @@ rtems_status_code rtems_bdpart_write(
+       /* Write second partition entry */
+       if (i > ppc) {
+         rtems_blkdev_bnum begin = p->begin - record_space;
+-
++        #if 0
+         rtems_bdpart_write_mbr_partition(
+           block->buffer + RTEMS_BDPART_MBR_OFFSET_TABLE_1,
+           begin - ep_begin,
+@@ -272,6 +306,17 @@ rtems_status_code rtems_bdpart_write(
+           RTEMS_BDPART_MBR_EXTENDED,
+           0
+         );
++        #else
++        memset(pt_record, 0, sizeof(pt_record));
++        rtems_bdpart_write_mbr_partition(
++          pt_record,
++          begin - ep_begin,
++          disk_end - begin,
++          RTEMS_BDPART_MBR_EXTENDED,
++          0
++        );
++        kinetis_memcpy(block->buffer + RTEMS_BDPART_MBR_OFFSET_TABLE_1, pt_record, sizeof(pt_record));
++        #endif
+       }
+ 
+       /* New EBR */
+@@ -283,6 +328,16 @@ rtems_status_code rtems_bdpart_write(
+       }
+ 
+       /* Write first partition entry */
++      #if 0
++      rtems_bdpart_write_mbr_partition(
++        block->buffer + RTEMS_BDPART_MBR_OFFSET_TABLE_0,
++        record_space,
++        p->end - p->begin,
++        rtems_bdpart_mbr_partition_type( p->type),
++        (uint8_t) p->flags
++      );
++      #else
++      memset(pt_record, 0, sizeof(pt_record));
+       rtems_bdpart_write_mbr_partition(
+         block->buffer + RTEMS_BDPART_MBR_OFFSET_TABLE_0,
+         record_space,
+@@ -290,6 +345,8 @@ rtems_status_code rtems_bdpart_write(
+         rtems_bdpart_mbr_partition_type( p->type),
+         (uint8_t) p->flags
+       );
++      kinetis_memcpy(block->buffer + RTEMS_BDPART_MBR_OFFSET_TABLE_0, pt_record, sizeof(pt_record));
++      #endif
+     }
+   }
+ 
+diff --git a/cpukit/libblock/src/blkdev-imfs.c b/cpukit/libblock/src/blkdev-imfs.c
+index c7e582cfbc..6a4dc5b5d8 100644
+--- a/cpukit/libblock/src/blkdev-imfs.c
++++ b/cpukit/libblock/src/blkdev-imfs.c
+@@ -33,7 +33,7 @@
+ #include <rtems/blkdev.h>
+ #include <rtems/bdbuf.h>
+ #include <rtems/imfs.h>
+-
++extern char *kinetis_memcpy(char *dst, const char *src, size_t len);
+ typedef struct {
+   rtems_disk_device dd;
+   int fd;
+@@ -66,7 +66,7 @@ static ssize_t rtems_blkdev_imfs_read(
+         copy = remaining;
+       }
+ 
+-      memcpy(dst, (char *) bd->buffer + block_offset, (size_t) copy);
++      kinetis_memcpy(dst, (char *) bd->buffer + block_offset, (size_t) copy);
+ 
+       sc = rtems_bdbuf_release(bd);
+       if (sc == RTEMS_SUCCESSFUL) {
+diff --git a/cpukit/libcsupport/src/getgrnam.c b/cpukit/libcsupport/src/getgrnam.c
+index 71c613499a..2c44611960 100644
+--- a/cpukit/libcsupport/src/getgrnam.c
++++ b/cpukit/libcsupport/src/getgrnam.c
+@@ -27,7 +27,7 @@
+ /*
+  * Static, thread-unsafe, buffers
+  */
+-static char grbuf[200];
++static char grbuf[200] = {0xFF};
+ static struct group grent;
+ 
+ struct group *getgrnam(
+diff --git a/cpukit/libcsupport/src/getpwent.c b/cpukit/libcsupport/src/getpwent.c
+index 400a53e5f3..e9ed613c1a 100644
+--- a/cpukit/libcsupport/src/getpwent.c
++++ b/cpukit/libcsupport/src/getpwent.c
+@@ -28,7 +28,7 @@
+  * Static, thread-unsafe, buffers
+  */
+ static FILE *passwd_fp;
+-static char pwbuf[200];
++static char pwbuf[200] = {0xFF};
+ static struct passwd pwent;
+ 
+ struct passwd *getpwnam(
+diff --git a/cpukit/libdl/dlfcn.c b/cpukit/libdl/dlfcn.c
+index e90ed43668..917eeb0f77 100644
+--- a/cpukit/libdl/dlfcn.c
++++ b/cpukit/libdl/dlfcn.c
+@@ -128,7 +128,7 @@ dlsym (void* handle, const char *symbol)
+ const char*
+ dlerror (void)
+ {
+-  static char msg[64];
++  static char msg[64] = {0xFF};
+   int         eno;
+   eno = rtems_rtl_get_error (msg, sizeof (msg));
+   if (eno == 0)
+diff --git a/cpukit/score/src/threadinitialize.c b/cpukit/score/src/threadinitialize.c
+index 691f56388e..49031c1257 100644
+--- a/cpukit/score/src/threadinitialize.c
++++ b/cpukit/score/src/threadinitialize.c
+@@ -44,7 +44,7 @@ bool _Thread_Initialize(
+ #endif
+   size_t                   scheduler_index;
+   Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
+-
++  static char shell_task_libc_reent[sizeof(struct _reent)] = {0xFF};
+   memset(
+     &the_thread->Join_queue,
+     0,
+@@ -54,6 +54,13 @@ bool _Thread_Initialize(
+   for ( i = 0 ; i < _Thread_Control_add_on_count ; ++i ) {
+     const Thread_Control_add_on *add_on = &_Thread_Control_add_ons[ i ];
+ 
++    if (config->name.name_u32 == 0x53484C4C && i == 2)
++    {
++        *(void **) ( (char *) the_thread + add_on->destination_offset ) =
++            shell_task_libc_reent;
++        continue;
++    }
++
+     *(void **) ( (char *) the_thread + add_on->destination_offset ) =
+       (char *) the_thread + add_on->source_offset;
+   }
+-- 
+2.34.1
+

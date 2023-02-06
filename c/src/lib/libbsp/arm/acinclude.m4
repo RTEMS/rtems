@@ -44,6 +44,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([xilinx-zynq]);;
   xilinx-zynqmp )
     AC_CONFIG_SUBDIRS([xilinx-zynqmp]);;
+  freescale-kinetis )
+    AC_CONFIG_SUBDIRS([freescale-kinetis]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac
