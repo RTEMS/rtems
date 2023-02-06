@@ -362,225 +362,6 @@
 
 /** @} */
 
-/* Generated from spec:/acfg/if/group-bsp */
-
-/**
- * @defgroup RTEMSApplConfigBSPRelatedConfigurationOptions \
- *   BSP Related Configuration Options
- *
- * @ingroup RTEMSApplConfig
- *
- * This section describes configuration options related to the BSP.  Some
- * configuration options may have a BSP-specific setting which is defined by
- * ``<bsp.h>``.  The BSP-specific settings can be disabled by the
- * #CONFIGURE_DISABLE_BSP_SETTINGS configuration option.
- *
- * @{
- */
-
-/* Generated from spec:/acfg/if/bsp-idle-task-body */
-
-/**
- * @brief This configuration option is an initializer define.
- *
- * If
- *
- * * this configuration option is defined by the BSP
- *
- * * and #CONFIGURE_DISABLE_BSP_SETTINGS is undefined,
- *
- * then the value of this configuration option defines the default value of
- * #CONFIGURE_IDLE_TASK_BODY.
- *
- * @par Default Value
- * The default value is BSP-specific.
- *
- * @par Value Constraints
- * The value of this configuration option shall be defined to a valid function
- * pointer of the type ``void *( *idle_body )( uintptr_t )``.
- *
- * @par Notes
- * As it has knowledge of the specific CPU model, system controller logic, and
- * peripheral buses, a BSP-specific IDLE task may be capable of turning
- * components off to save power during extended periods of no task activity.
- */
-#define BSP_IDLE_TASK_BODY
-
-/* Generated from spec:/acfg/if/bsp-idle-task-stack-size */
-
-/**
- * @brief This configuration option is an integer define.
- *
- * If
- *
- * * this configuration option is defined by the BSP
- *
- * * and #CONFIGURE_DISABLE_BSP_SETTINGS is undefined,
- *
- * then the value of this configuration option defines the default value of
- * #CONFIGURE_IDLE_TASK_STACK_SIZE.
- *
- * @par Default Value
- * The default value is BSP-specific.
- *
- * @par Value Constraints
- * @parblock
- * The value of this configuration option shall satisfy all of the following
- * constraints:
- *
- * * It shall be greater than or equal to a BSP-specific and
- *   application-specific minimum value.
- *
- * * It shall be small enough so that the IDLE task stack area calculation
- *   carried out by ``<rtems/confdefs.h>`` does not overflow an integer of type
- *   <a href="https://en.cppreference.com/w/c/types/size_t">size_t</a>.
- * @endparblock
- */
-#define BSP_IDLE_TASK_STACK_SIZE
-
-/* Generated from spec:/acfg/if/bsp-initial-extension */
-
-/**
- * @brief This configuration option is an initializer define.
- *
- * If
- *
- * * this configuration option is defined by the BSP
- *
- * * and #CONFIGURE_DISABLE_BSP_SETTINGS is undefined,
- *
- * then the value of this configuration option is used to initialize the table
- * of initial user extensions.
- *
- * @par Default Value
- * The default value is BSP-specific.
- *
- * @par Value Constraints
- * The value of this configuration option shall be a list of initializers for
- * structures of type ::rtems_extensions_table.
- *
- * @par Notes
- * The value of this configuration option is placed after the entries of all
- * other initial user extensions.
- */
-#define BSP_INITIAL_EXTENSION
-
-/* Generated from spec:/acfg/if/bsp-interrupt-stack-size */
-
-/**
- * @brief This configuration option is an integer define.
- *
- * If
- *
- * * this configuration option is defined by the BSP
- *
- * * and #CONFIGURE_DISABLE_BSP_SETTINGS is undefined,
- *
- * then the value of this configuration option defines the default value of
- * #CONFIGURE_INTERRUPT_STACK_SIZE.
- *
- * @par Default Value
- * The default value is BSP-specific.
- *
- * @par Value Constraints
- * @parblock
- * The value of this configuration option shall satisfy all of the following
- * constraints:
- *
- * * It shall be greater than or equal to a BSP-specific and
- *   application-specific minimum value.
- *
- * * It shall be small enough so that the interrupt stack area calculation
- *   carried out by ``<rtems/confdefs.h>`` does not overflow an integer of type
- *   <a href="https://en.cppreference.com/w/c/types/size_t">size_t</a>.
- *
- * * It shall be aligned according to #CPU_INTERRUPT_STACK_ALIGNMENT.
- * @endparblock
- */
-#define BSP_INTERRUPT_STACK_SIZE
-
-/* Generated from spec:/acfg/if/bsp-prerequisite-drivers */
-
-/**
- * @brief This configuration option is an initializer define.
- *
- * If
- *
- * * this configuration option is defined by the BSP
- *
- * * and #CONFIGURE_DISABLE_BSP_SETTINGS is undefined,
- *
- * then the value of this configuration option is used to add BSP-provided
- * prerequisite drivers to the Device Driver Table.
- *
- * @par Default Value
- * The default value is BSP-specific.
- *
- * @par Value Constraints
- * The value of this configuration option shall be a list of initializers for
- * structures of type ::rtems_extensions_table.
- *
- * @par Notes
- * The value of this configuration option is placed before the entries of all
- * other initial user extensions (including
- * #CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS).
- */
-#define CONFIGURE_BSP_PREREQUISITE_DRIVERS
-
-/* Generated from spec:/acfg/if/disable-bsp-settings */
-
-/**
- * @brief This configuration option is a boolean feature define.
- *
- * In case this configuration option is defined, then the following BSP related
- * configuration options are undefined:
- *
- * * #BSP_IDLE_TASK_BODY
- *
- * * #BSP_IDLE_TASK_STACK_SIZE
- *
- * * #BSP_INITIAL_EXTENSION
- *
- * * #BSP_INTERRUPT_STACK_SIZE
- *
- * * #CONFIGURE_BSP_PREREQUISITE_DRIVERS
- *
- * * #CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
- *
- * @par Default Configuration
- * If this configuration option is undefined, then the described feature is not
- * enabled.
- */
-#define CONFIGURE_DISABLE_BSP_SETTINGS
-
-/* Generated from spec:/acfg/if/malloc-bsp-supports-sbrk */
-
-/**
- * @brief This configuration option is a boolean feature define.
- *
- * If
- *
- * * this configuration option is defined by the BSP
- *
- * * and #CONFIGURE_DISABLE_BSP_SETTINGS is undefined,
- *
- * then not all memory is made available to the C Program Heap immediately at
- * system initialization time.  When malloc() or other standard memory
- * allocation functions are unable to allocate memory, they will call the BSP
- * supplied sbrk() function to obtain more memory.
- *
- * @par Default Configuration
- * If this configuration option is undefined, then the described feature is not
- * enabled.
- *
- * @par Notes
- * This option should not be defined by the application. Only the BSP knows how
- * it allocates memory to the C Program Heap.
- */
-#define CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-
-/** @} */
-
 /* Generated from spec:/acfg/if/group-classic */
 
 /**
@@ -2625,6 +2406,37 @@
  * @endparblock
  */
 #define CONFIGURE_DIRTY_MEMORY
+
+/* Generated from spec:/acfg/if/disable-bsp-settings */
+
+/**
+ * @brief This configuration option is a boolean feature define.
+ *
+ * In case this configuration option is defined, then the optional BSP provided
+ * settings listed below are disabled.
+ *
+ * The optional BSP provided default values for the following application
+ * configuration options are disabled:
+ *
+ * * #CONFIGURE_IDLE_TASK_BODY
+ *
+ * * #CONFIGURE_IDLE_TASK_STACK_SIZE
+ *
+ * * #CONFIGURE_INTERRUPT_STACK_SIZE
+ *
+ * The optional BSP provided initial extension set is disabled (see initial
+ * extension sets).  The optional BSP provided prerequisite IO device drivers
+ * are disabled (see Device Driver Configuration).  The optional BSP provided
+ * support for sbrk() is disabled.
+ *
+ * This configuration option provides an all or nothing choice with respect to
+ * the optional BSP provided settings.
+ *
+ * @par Default Configuration
+ * If this configuration option is undefined, then the described feature is not
+ * enabled.
+ */
+#define CONFIGURE_DISABLE_BSP_SETTINGS
 
 /* Generated from spec:/acfg/if/disable-newlib-reentrancy */
 
