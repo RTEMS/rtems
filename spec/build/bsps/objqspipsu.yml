@@ -20,8 +20,6 @@ install:
   - bsps/include/dev/spi/xqspipsu.h
 links:
 - role: build-dependency
-  uid: objxilinxsupport
-- role: build-dependency
   uid: optxpssysctrlbaseaddress
 source:
 - bsps/shared/dev/spi/xqspipsu_control.c
