@@ -165,8 +165,6 @@ install:
   - cpukit/include/rtems/rtems-rfs.h
   - cpukit/include/rtems/rtemsdialer.h
   - cpukit/include/rtems/scheduler.h
-  - cpukit/include/rtems/serdbg.h
-  - cpukit/include/rtems/serdbgcnf.h
   - cpukit/include/rtems/serial_mouse.h
   - cpukit/include/rtems/seterr.h
   - cpukit/include/rtems/shell.h
@@ -178,8 +176,6 @@ install:
   - cpukit/include/rtems/stdio-redirect.h
   - cpukit/include/rtems/stringto.h
   - cpukit/include/rtems/sysinit.h
-  - cpukit/include/rtems/termios_printk.h
-  - cpukit/include/rtems/termios_printk_cnf.h
   - cpukit/include/rtems/termiostypes.h
   - cpukit/include/rtems/thread.h
   - cpukit/include/rtems/timecounter.h
