@@ -301,12 +301,13 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
     heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
 
     /*
-     *  When the heir and executing are the same, then we are being
-     *  requested to do the post switch dispatching.  This is normally
-     *  done to dispatch signals.
+     * If the heir and executing are the same, then there is no need to do a
+     * context switch.  Proceed to run the post switch actions.  This is
+     * normally done to dispatch signals.
      */
-    if ( heir == executing )
-      goto post_switch;
+    if ( heir == executing ) {
+      break;
+    }
 
     /*
      *  Since heir and executing are not the same, we need to do a real
@@ -341,7 +342,11 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
     _ISR_Local_disable( level );
   } while ( cpu_self->dispatch_necessary );
 
-post_switch:
+  /*
+   * We are done with context switching.  Proceed to run the post switch
+   * actions.
+   */
+
   _Assert( cpu_self->thread_dispatch_disable_level == 1 );
   cpu_self->thread_dispatch_disable_level = 0;
   _Profiling_Thread_dispatch_enable( cpu_self, 0 );
