@@ -1713,7 +1713,6 @@ static void copy_selection(struct editor *ed) {
   ed->env->clipboard = (unsigned char *) realloc(ed->env->clipboard, ed->env->clipsize);
   if (!ed->env->clipboard) return;
   copy(ed, ed->env->clipboard, selstart, ed->env->clipsize);
-  select_toggle(ed);
 }
 
 static void cut_selection(struct editor *ed) {
@@ -2132,7 +2131,7 @@ static void edit(struct editor *ed) {
 
         case ctrl('e'): select_toggle(ed); break;
         case ctrl('a'): select_all(ed); break;
-        case ctrl('c'): copy_selection(ed); break;
+        case ctrl('c'): copy_selection(ed);select_toggle(ed); break;
         case ctrl('f'): find_text(ed, 0); break;
         case ctrl('l'): goto_line(ed); break;
         case ctrl('g'): find_text(ed, 1); break;
