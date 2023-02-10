@@ -181,9 +181,15 @@ static inline void _CPU_cache_unfreeze_instruction(void)
   /* TODO */
 }
 
-static inline uint64_t AArch64_get_ccsidr_for_level(uint64_t val)
+static inline uint64_t AArch64_get_ccsidr_for_level(
+  uint64_t level, bool instruction
+)
 {
-  _AArch64_Write_csselr_el1(val);
+  uint64_t csselr = AARCH64_CSSELR_EL1_LEVEL(level - 1);
+
+  csselr |= instruction ? AARCH64_CSSELR_EL1_IND : 0;
+
+  _AArch64_Write_csselr_el1(csselr);
   return _AArch64_Read_ccsidr_el1();
 }
 
@@ -214,7 +220,7 @@ static inline void AArch64_data_cache_clean_level(uint64_t level)
   uint64_t way;
   uint64_t way_shift;
 
-  ccsidr = AArch64_get_ccsidr_for_level(AARCH64_CSSELR_EL1_LEVEL(level));
+  ccsidr = AArch64_get_ccsidr_for_level(level, false);
 
   line_power = AArch64_ccsidr_get_line_power(ccsidr);
   associativity = AArch64_ccsidr_get_associativity(ccsidr);
@@ -227,7 +233,7 @@ static inline void AArch64_data_cache_clean_level(uint64_t level)
     for (set = 0; set < num_sets; ++set) {
       uint64_t set_and_way = (way << way_shift)
         | (set << line_power)
-        | (level << 1);
+        | ((level - 1) << 1);
 
       __asm__ volatile (
         "dc csw, %[set_and_way]"
@@ -274,7 +280,7 @@ static inline void AArch64_data_cache_clean_all_levels(void)
   uint64_t loc = AArch64_clidr_get_level_of_coherency(clidr);
   uint64_t level = 0;
 
-  for (level = 0; level < loc; ++level) {
+  for (level = 1; level <= loc; ++level) {
     uint64_t ctype = AArch64_clidr_get_cache_type(clidr, level);
 
     /* Check if this level has a data cache or unified cache */
@@ -299,7 +305,7 @@ static inline void AArch64_cache_invalidate_level(uint64_t level)
   uint64_t way;
   uint64_t way_shift;
 
-  ccsidr = AArch64_get_ccsidr_for_level(AARCH64_CSSELR_EL1_LEVEL(level));
+  ccsidr = AArch64_get_ccsidr_for_level(level, false);
 
   line_power = AArch64_ccsidr_get_line_power(ccsidr);
   associativity = AArch64_ccsidr_get_associativity(ccsidr);
@@ -312,7 +318,7 @@ static inline void AArch64_cache_invalidate_level(uint64_t level)
     for (set = 0; set < num_sets; ++set) {
       uint64_t set_and_way = (way << way_shift)
         | (set << line_power)
-        | (level << 1);
+        | ((level - 1) << 1);
 
       __asm__ volatile (
         "dc isw, %[set_and_way]"
@@ -330,7 +336,7 @@ static inline void AArch64_data_cache_invalidate_all_levels(void)
   uint64_t loc = AArch64_clidr_get_level_of_coherency(clidr);
   uint64_t level = 0;
 
-  for (level = 0; level < loc; ++level) {
+  for (level = 1; level <= loc; ++level) {
     uint64_t ctype = AArch64_clidr_get_cache_type(clidr, level);
 
     /* Check if this level has a data cache or unified cache */
@@ -444,17 +450,11 @@ static inline size_t AArch64_get_cache_size(
   clidr = _AArch64_Read_clidr_el1();
   loc = AArch64_clidr_get_level_of_coherency(clidr);
 
-  if (level >= loc) {
+  if (level > loc) {
     return 0;
   }
 
-  if (level == 0) {
-    level = loc - 1;
-  }
-
-  ccsidr = AArch64_get_ccsidr_for_level(
-    AARCH64_CSSELR_EL1_LEVEL(level) | (instruction ? AARCH64_CSSELR_EL1_IND : 0)
-  );
+  ccsidr = AArch64_get_ccsidr_for_level(level, instruction);
 
   return (1U << (AArch64_ccsidr_get_line_power(ccsidr)+4))
     * AArch64_ccsidr_get_associativity(ccsidr)
