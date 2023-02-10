@@ -493,17 +493,13 @@ SYM(hard_reset):
         mov     %sp, %fp ! set frame pointer
 
 #if defined(START_LEON3_ENABLE_SMP)
-	/* If LEON3_Boot_Cpu < 0 then assign us as boot CPU and continue. */
-        set     SYM(LEON3_Boot_Cpu), %l0
-        ld      [%l0], %l1
-        tst     %l1
-	bneg	.Lbootcpu
-	 nop
-
-	call	SYM(bsp_start_on_secondary_processor) ! does not return
-	 mov	%g6, %o0
-.Lbootcpu:
-	st	%l7, [%l0]
+        /* If .Lbootcpuindex < 0 then assign us as boot CPU and continue. */
+        set     SYM(.Lbootcpuindex), %l0
+        mov     -1, %l1
+        casa    [%l0] (10), %l1, %l7
+        cmp     %l1, %l7
+        bne     .Lbootsecondarycpu
+         nop
 #endif
 
         /* clear the bss */
@@ -526,5 +522,22 @@ SYM(hard_reset):
 
         call    SYM(boot_card)          ! does not return
          mov    %g0, %o0                ! command line
+
+#if defined(START_LEON3_ENABLE_SMP)
+.Lbootsecondarycpu:
+        call    SYM(bsp_start_on_secondary_processor) ! does not return
+         mov    %g6, %o0
+
+        /*
+         * This is the index of the boot CPU.  Set by the first CPU at boot to
+         * its CPU index.
+         */
+        .section .data, "aw"
+        .align  4
+        .type   .Lbootcpuindex, #object
+        .size   .Lbootcpuindex, 4
+.Lbootcpuindex:
+        .long   -1
+#endif
 
 /* end of file */

@@ -59,11 +59,6 @@ int CPU_SPARC_HAS_SNOOPING;
 /* Index of CPU, in an AMP system CPU-index may be non-zero */
 uint32_t LEON3_Cpu_Index = 0;
 
-#if defined(RTEMS_SMP)
-/* Index of the boot CPU. Set by the first CPU at boot to its CPU ID. */
-int LEON3_Boot_Cpu = -1;
-#endif
-
 /*
  * set_snooping
  *
