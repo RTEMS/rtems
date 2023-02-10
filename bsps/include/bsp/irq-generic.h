@@ -259,7 +259,10 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_UNSATISFIED The request to enable the interrupt vector has
- *   not been satisfied.
+ *   not been satisfied.  The presence of this error condition is
+ *   implementation-defined.  The interrupt vector attributes obtained by
+ *   rtems_interrupt_get_attributes() should indicate if it is possible to
+ *   enable a particular interrupt vector.
  */
 rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector );
 
@@ -280,7 +283,10 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector );
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_UNSATISFIED The request to disable the interrupt vector has
- *   not been satisfied.
+ *   not been satisfied.  The presence of this error condition is
+ *   implementation-defined.  The interrupt vector attributes obtained by
+ *   rtems_interrupt_get_attributes() should indicate if it is possible to
+ *   disable a particular interrupt vector.
  */
 rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector );
 
@@ -318,8 +324,11 @@ rtems_status_code bsp_interrupt_is_pending(
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_UNSATISFIED The request to cause the interrupt vector has
- *   not been satisfied.
+ * @retval ::RTEMS_UNSATISFIED The request to raise the interrupt vector has
+ *   not been satisfied.  The presence of this error condition is
+ *   implementation-defined.  The interrupt vector attributes obtained by
+ *   rtems_interrupt_get_attributes() should indicate if it is possible to
+ *   raise a particular interrupt vector.
  */
 rtems_status_code bsp_interrupt_raise( rtems_vector_number vector );
 
@@ -336,7 +345,10 @@ rtems_status_code bsp_interrupt_raise( rtems_vector_number vector );
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_UNSATISFIED The request to cause the interrupt vector has
- *   not been satisfied.
+ *   not been satisfied.  The presence of this error condition is
+ *   implementation-defined.  The interrupt vector attributes obtained by
+ *   rtems_interrupt_get_attributes() should indicate if it is possible to
+ *   raise a particular interrupt vector on a specific processor.
  */
 rtems_status_code bsp_interrupt_raise_on(
   rtems_vector_number vector,
@@ -353,7 +365,10 @@ rtems_status_code bsp_interrupt_raise_on(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_UNSATISFIED The request to cause the interrupt vector has
- *   not been satisfied.
+ *   not been satisfied.  The presence of this error condition is
+ *   implementation-defined.  The interrupt vector attributes obtained by
+ *   rtems_interrupt_get_attributes() should indicate if it is possible to
+ *   clear a particular interrupt vector.
  */
 rtems_status_code bsp_interrupt_clear( rtems_vector_number vector );
 
