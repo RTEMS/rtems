@@ -9,6 +9,6 @@ rationale: null
 text: |
   The value of the application configuration option shall be small enough so
   that the interrupt stack area calculation carried out by
-  ``<rtems/confdefs.h>`` does not overflow an integer of type
+  ${../if/header-confdefs:/path} does not overflow an integer of type
   ${/c/if/size_t:/name}.
 type: constraint

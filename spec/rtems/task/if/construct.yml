@@ -54,9 +54,9 @@ notes: |
   allocators.  This can simplify the application architecture as well as any
   analysis that may be required.
 
-  The stack space estimate done by <rtems/confdefs.h> assumes that all tasks
-  are created by ${create:/name}.  The estimate can be adjusted to take
-  user-provided task storage areas into account through the
+  The stack space estimate done by ${/acfg/if/header-confdefs:/path} assumes
+  that all tasks are created by ${create:/name}.  The estimate can be adjusted
+  to take user-provided task storage areas into account through the
   ${/acfg/if/min-tasks-with-user-provided-storage:/name} application
   configuration option.
 

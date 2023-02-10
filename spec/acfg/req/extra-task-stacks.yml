@@ -14,5 +14,5 @@ requirement-type: functional
 text: |
   The application configuration option shall define the number of bytes the
   applications wishes to add to the task stack requirements calculated by
-  ``<rtems/confdefs.h>``.
+  ${../if/header-confdefs:/path}.
 type: requirement

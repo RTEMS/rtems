@@ -6,7 +6,7 @@ default-value: 0
 description: |
   The value of this configuration option defines the number of bytes the
   applications wishes to add to the task stack requirements calculated by
-  ``<rtems/confdefs.h>``.
+  ${header-confdefs:/path}.
 enabled-by: true
 index-entries:
 - memory for task tasks
@@ -26,5 +26,5 @@ name: CONFIGURE_EXTRA_TASK_STACKS
 notes: |
   This parameter is very important.  If the application creates tasks with
   stacks larger then the minimum, then that memory is **not** accounted for by
-  ``<rtems/confdefs.h>``.
+  ${header-confdefs:/path}.
 type: interface

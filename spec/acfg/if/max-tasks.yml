@@ -37,7 +37,7 @@ notes: |
   The maximum number of POSIX threads is specified by
   ${max-posix-threads:/name}.
 
-  A future enhancement to ``<rtems/confdefs.h>`` could be to eliminate the
+  A future enhancement to ${header-confdefs:/path} could be to eliminate the
   assumption that all tasks have floating point enabled. This would require
   the addition of a new configuration parameter to specify the number of
   tasks which enable floating point support.

@@ -4,8 +4,8 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default-value: |
   If this configuration option is undefined, then the RTEMS Workspace and task
-  stack space size is calculated by ``<rtems/confdefs.h>`` based on the values
-  configuration options.
+  stack space size is calculated by ${header-confdefs:/path} based on the
+  values configuration options.
 description: |
   The value of this configuration option defines the RTEMS Workspace size in
   bytes.

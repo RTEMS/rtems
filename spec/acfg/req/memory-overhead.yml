@@ -14,5 +14,5 @@ requirement-type: functional
 text: |
   The application configuration option shall define the number of kilobytes the
   application wishes to add to the RTEMS Workspace size calculated by
-  ``<rtems/confdefs.h>``.
+  ${../if/header-confdefs:/path}.
 type: requirement

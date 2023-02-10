@@ -8,6 +8,7 @@ links:
 rationale: null
 text: |
   The value of the application configuration option shall be small enough so
-  that the task stack space calculation carried out by ``<rtems/confdefs.h>``
-  does not overflow an integer of type ${/c/if/uintptr_t:/name}.
+  that the task stack space calculation carried out by
+  ${../if/header-confdefs:/path} does not overflow an integer of type
+  ${/c/if/uintptr_t:/name}.
 type: constraint

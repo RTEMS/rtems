@@ -9,8 +9,8 @@ default-value: |
 description: |
   If this configuration option is specified, then the task storage areas for
   the ${/glossary/idletask:/plural} are statically allocated by
-  <rtems/confdefs.h>.  The value of this configuration option defines the size
-  in bytes of the task storage area of each IDLE task in the system.
+  ${header-confdefs:/path}.  The value of this configuration option defines the
+  size in bytes of the task storage area of each IDLE task in the system.
 enabled-by: true
 index-entries:
 - IDLE task storage size
@@ -41,9 +41,9 @@ notes: |
   system initialization.
 
   The value of this configuration option is passed to
-  ${/rtems/task/if/storage-size:/name} by <rtems/confdefs.h> to determine the
-  actual size of the statically allocated area to take architecture-specific
-  overheads into account.
+  ${/rtems/task/if/storage-size:/name} by ${header-confdefs:/path} to determine
+  the actual size of the statically allocated area to take
+  architecture-specific overheads into account.
 
   The
 

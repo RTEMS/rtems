@@ -26,7 +26,7 @@ notes: |
   If this configuration option is specified, then
 
   * a task storage area of the specified size is statically allocated by
-    ``<rtems/confdefs.h>`` for the Classic API initialization task,
+    ${header-confdefs:/path} for the Classic API initialization task,
 
   * the Classic API initialization task is constructed by
     ${/rtems/task/if/construct:/name} instead of using
