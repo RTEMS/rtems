@@ -1,14 +1,27 @@
+type: interface
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+default: |
+  There is no default configuration associated with this configuration option.
+  If ${header-confdefs:/path} is included and this configuration option is not
+  defined, then only white space is included.
+description: |
+  While this configuration option is defined, when the ${header-confdefs:/path}
+  is included, the system settings defined by present application configuration
+  options are statically allocated and initialized.  All user provided
+  application configuration options defined before the include of
+  ${header-confdefs:/path} are evaluated.  They define the actual system
+  settings.
 enabled-by: true
 index-entries: []
-interface-type: unspecified-define
+interface-type: appl-config-option
 links:
 - role: interface-placement
   uid: domain
 - role: interface-ingroup
-  uid: group
+  uid: group-general
 name: CONFIGURE_INIT
-references: []
+notes: null
 type: interface
