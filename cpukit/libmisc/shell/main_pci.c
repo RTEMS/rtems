@@ -375,7 +375,7 @@ static int shell_pci_infodev(
   printf(" PCIID:         0x%04x\n", dev->busdevfun);
   bus = dev->bus;
   if (!bus) {
-    printf(" AT BUS:        0x%x via Host Bridge\n", bus->num);
+    printf(" AT BUS:        via Host Bridge\n");
   } else {
     printf(" AT BUS:        0x%x via Bridge at [%x:%x:%x]\n", bus->num, 
            PCI_DEV_EXPAND(bus->dev.busdevfun));
