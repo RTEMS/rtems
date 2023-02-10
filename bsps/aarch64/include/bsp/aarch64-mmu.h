@@ -420,7 +420,13 @@ aarch64_mmu_disable( void )
 {
   uint64_t sctlr;
 
-  /* Enable MMU and cache */
+  /*
+   * Flush data cache before disabling the MMU. While the MMU is disabled, all
+   * accesses are treated as uncached device memory.
+   */
+  rtems_cache_flush_entire_data();
+
+  /* Disable MMU */
   sctlr = _AArch64_Read_sctlr_el1();
   sctlr &= ~(AARCH64_SCTLR_EL1_M);
   _AArch64_Write_sctlr_el1( sctlr );
