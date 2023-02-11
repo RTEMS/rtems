@@ -350,16 +350,6 @@ static inline void write_ttbr0(uint32_t bar)
     refresh_tlb();
 }
 
-/* Behaviour on fatal error; default: test-friendly.
- * set breakpoint to bsp_fatal_extension.
- */
-/* Enabling BSP_PRESS_KEY_FOR_RESET prevents noninteractive testing */
-/*#define  BSP_PRESS_KEY_FOR_RESET     1 */
-#define    BSP_PRINT_EXCEPTION_CONTEXT 1
-    /* human-readable exception info */
-#define    BSP_RESET_BOARD_AT_EXIT 1
-    /* causes qemu to exit, signaling end of test */
-
 /**
  * @brief Beagleboard specific set up of the MMU.
  *
