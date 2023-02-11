@@ -121,7 +121,7 @@ int beagle_get_node_unit(phandle_t node)
 
     if (strstr(prop_val, name) != NULL) {
       for (i = strlen(prop) - 1; i >= 0; i--) {
-        if (!isdigit(prop[i]))
+        if (!isdigit((int)prop[i]))
           break;
       }
 
