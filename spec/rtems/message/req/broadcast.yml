@@ -88,7 +88,7 @@ post-conditions:
       waiting for a message at the ${/glossary/messagequeue:/term}.
 
       Note: Currently, ${../if/broadcast:/name} unblocks
-      ${../glossary/receiver:/plural} in a none-atomic way. Meaning,
+      ${../glossary/receiver:/plural} in a non-atomic way. Meaning,
       it will not only ${../glossary/unblock:/term} those
       ${../glossary/receiver:/plural} it finds waiting at the queue
       when ${../if/broadcast:/name} is invoked but also any new
