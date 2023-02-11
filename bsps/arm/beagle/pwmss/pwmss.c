@@ -38,7 +38,7 @@
 #include <bsp.h>
 #include <bsp/pwmss.h>
 #include <bsp/beagleboneblack.h>
-
+#include <rtems/error.h>
 
 /**
  * @brief   This function configures the L3 and L4_PER system clocks.
@@ -56,7 +56,10 @@
  */
 rtems_status_code pwmss_module_clk_config(BBB_PWMSS pwmss_id)
 {
-    uint32_t clkctrl;
+    /* we initialize clkctrl here to nonsentical value as this is going
+     * to be assigned later anyway. Here assigning 0 is just to kill
+     * warning emitted by the C compiler. */
+    uint32_t clkctrl = 0;
 
     /* calculate the address of the clock control register for the PWMSS
      * module we are configuring */
@@ -66,6 +69,9 @@ rtems_status_code pwmss_module_clk_config(BBB_PWMSS pwmss_id)
         clkctrl = AM335X_CM_PER_ADDR + AM335X_CM_PER_EPWMSS1_CLKCTRL;
     } else if(pwmss_id == BBB_PWMSS2) {
         clkctrl = AM335X_CM_PER_ADDR + AM335X_CM_PER_EPWMSS2_CLKCTRL;
+    } else {
+	/* wrong clock configuration, let's panic here. */
+	rtems_error(RTEMS_ERROR_PANIC, "beagle: unsupported pwmss module clock configuration value!");
     }
 
     /* when the module is functional the IDLEST bits (16 -17) of the
