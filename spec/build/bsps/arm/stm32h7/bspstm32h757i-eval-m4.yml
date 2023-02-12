@@ -8,7 +8,8 @@ copyrights:
 cppflags: []
 enabled-by: true
 family: stm32h7
-includes: []
+includes:
+- bsps/arm/stm32h7/boards/stm/stm32h757i-eval
 install: []
 links:
 - role: build-dependency
@@ -16,6 +17,8 @@ links:
 - role: build-dependency
   uid: tststm32h757i-eval
 source:
+- bsps/arm/stm32h7/boards/stm/Components/mt25tl01g/mt25tl01g.c
+- bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h747i_eval_qspi.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-bspstarthooks.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-config-clk.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-config-osc.c
