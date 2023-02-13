@@ -782,8 +782,7 @@ RTEMS_SYSINIT_ITEM(_NTP_Initialize, RTEMS_SYSINIT_DEVICE_DRIVERS,
  * is selected by the STA_MODE status bit.
  */
 static void
-hardupdate(offset)
-	long offset;		/* clock offset (ns) */
+hardupdate(long offset /* clock offset (ns) */)
 {
 	long mtemp;
 	l_fp ftemp;
