@@ -20,3 +20,4 @@ include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/if_em_
 include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/if_gfe_pub.h
 include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/if_mve_pub.h
 include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/irq.h
+include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/mv643xx_eth.h
