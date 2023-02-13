@@ -1322,7 +1322,7 @@ T_verbosity T_set_verbosity(T_verbosity);
 /** @} */
 
 /**
- * @defgroup RTEMSTestFrameworkChecksLong Signed Long Long Integer Checks
+ * @defgroup RTEMSTestFrameworkChecksLongLong Signed Long Long Integer Checks
  *
  * @ingroup RTEMSTestFramework
  *
