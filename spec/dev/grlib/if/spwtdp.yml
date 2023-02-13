@@ -47,7 +47,7 @@ definition:
   variants: []
 - default:
     count: 1
-    name: CET0
+    name: CET3
   offset: 0x30
   variants: []
 - default:
@@ -444,7 +444,7 @@ registers:
   brief: |
     Command Elapsed Time 3
   description: null
-  name: CET0
+  name: CET3
   width: 32
 - bits:
   - default:
