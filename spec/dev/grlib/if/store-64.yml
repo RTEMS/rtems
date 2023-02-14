@@ -9,6 +9,6 @@ links:
   uid: io-header
 - role: interface-ingroup
   uid: group
-name: grlib_load_64
+name: grlib_store_64
 references: []
 type: interface
