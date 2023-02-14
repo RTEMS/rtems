@@ -4980,8 +4980,9 @@
  * evolving and not fully documented.  It is recommended that you look at the
  * existing Deterministic Priority Scheduler in
  * ``cpukit/score/src/schedulerpriority*.c`` for guidance.  For guidance on the
- * configuration macros, please examine ``cpukit/sapi/include/confdefs.h`` for
- * how these are defined for the Deterministic Priority Scheduler.
+ * configuration macros, please examine
+ * ``cpukit/include/rtems/confdefs/scheduler.h`` for how these are defined for
+ * the Deterministic Priority Scheduler.
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_USER
