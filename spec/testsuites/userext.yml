@@ -39,6 +39,5 @@ test-description: null
 test-includes: []
 test-local-includes:
 - tc-userext.h
-test-suite-name: Userext
 test-target: testsuites/validation/ts-userext.c
 type: test-suite

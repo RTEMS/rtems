@@ -18,6 +18,5 @@ test-code: |
 test-description: null
 test-includes: []
 test-local-includes: []
-test-suite-name: ValidationTls1
 test-target: testsuites/validation/ts-validation-tls-1.c
 type: test-suite

@@ -56,6 +56,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemAddCpu
 test-target: testsuites/membench/mem-scheduler-add-cpu.c
 type: memory-benchmark

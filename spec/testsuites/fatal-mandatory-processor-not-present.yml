@@ -68,6 +68,5 @@ test-includes: []
 test-local-includes:
 - tr-fatal-mandatory-processor-not-present.h
 - ts-config.h
-test-suite-name: FatalMandatoryProcessorNotPresent
 test-target: testsuites/validation/ts-fatal-mandatory-processor-not-present.c
 type: test-suite

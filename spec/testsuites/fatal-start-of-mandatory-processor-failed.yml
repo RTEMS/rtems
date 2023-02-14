@@ -38,6 +38,5 @@ test-includes: []
 test-local-includes:
 - tr-fatal-start-of-mandatory-processor-failed.h
 - ts-config.h
-test-suite-name: FatalStartOfMandatoryProcessorFailed
 test-target: testsuites/validation/ts-fatal-start-of-mandatory-processor-failed.c
 type: test-suite

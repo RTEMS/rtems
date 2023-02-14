@@ -23,6 +23,5 @@ test-description: null
 test-includes: []
 test-local-includes:
 - tr-fatal-too-large-tls-size.h
-test-suite-name: FatalTooLargeTlsSize
 test-target: testsuites/validation/ts-fatal-too-large-tls-size.c
 type: test-suite

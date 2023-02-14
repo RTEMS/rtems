@@ -22,6 +22,5 @@ test-description: |
 test-includes:
 - rtems/test-info.h
 test-local-includes: []
-test-suite-name: PerformanceNoClock0
 test-target: testsuites/validation/ts-performance-no-clock-0.c
 type: test-suite

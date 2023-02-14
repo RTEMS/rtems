@@ -91,6 +91,5 @@ test-includes:
 - rtems/testopts.h
 test-local-includes:
 - tr-io-kernel.h
-test-suite-name: ValidationIoKernel
 test-target: testsuites/validation/ts-validation-io-kernel.c
 type: test-suite

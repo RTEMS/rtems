@@ -50,6 +50,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemGetUptime
 test-target: testsuites/membench/mem-clock-get-uptime.c
 type: memory-benchmark

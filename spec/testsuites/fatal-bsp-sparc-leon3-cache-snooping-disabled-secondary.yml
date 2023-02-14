@@ -26,6 +26,5 @@ test-description: null
 test-includes: []
 test-local-includes:
 - tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-secondary.h
-test-suite-name: FatalBspSparcLeon3CacheSnoopingDisabledSecondary
 test-target: testsuites/validation/ts-fatal-bsp-sparc-leon3-cache-snooping-disabled-secondary.c
 type: test-suite

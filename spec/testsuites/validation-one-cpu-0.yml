@@ -22,6 +22,5 @@ test-description: |
   duration.
 test-includes: []
 test-local-includes: []
-test-suite-name: ValidationOneCpu0
 test-target: testsuites/validation/ts-validation-one-cpu-0.c
 type: test-suite

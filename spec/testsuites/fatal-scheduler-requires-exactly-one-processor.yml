@@ -39,6 +39,5 @@ test-includes: []
 test-local-includes:
 - tr-fatal-scheduler-requires-exactly-one-processor.h
 - ts-config.h
-test-suite-name: FatalSchedulerRequiresExactlyOneProcessor
 test-target: testsuites/validation/ts-fatal-scheduler-requires-exactly-one-processor.c
 type: test-suite

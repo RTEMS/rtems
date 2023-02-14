@@ -57,6 +57,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemSmp1
 test-target: testsuites/membench/mem-rtems-smp-1.c
 type: memory-benchmark

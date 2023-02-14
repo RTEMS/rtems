@@ -39,6 +39,5 @@ test-includes: []
 test-local-includes:
 - tr-fatal-smp.h
 - ts-config.h
-test-suite-name: FatalSmp
 test-target: testsuites/validation/ts-fatal-smp.c
 type: test-suite

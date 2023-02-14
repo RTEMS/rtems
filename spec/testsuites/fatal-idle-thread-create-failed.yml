@@ -31,6 +31,5 @@ test-description: null
 test-includes: []
 test-local-includes:
 - tr-fatal-idle-thread-create-failed.h
-test-suite-name: FatalIdleThreadCreateFailed
 test-target: testsuites/validation/ts-fatal-idle-thread-create-failed.c
 type: test-suite

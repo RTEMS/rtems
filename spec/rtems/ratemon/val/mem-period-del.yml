@@ -55,6 +55,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemPeriodDel
 test-target: testsuites/membench/mem-ratemon-period-del.c
 type: memory-benchmark

@@ -65,6 +65,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemSrvInit
 test-target: testsuites/membench/mem-timer-srv-init.c
 type: memory-benchmark

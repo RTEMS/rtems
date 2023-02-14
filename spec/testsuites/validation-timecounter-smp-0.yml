@@ -19,6 +19,5 @@ test-code: |
 test-description: null
 test-includes: []
 test-local-includes: []
-test-suite-name: ValidationTimecounterSmp0
 test-target: testsuites/validation/ts-validation-timecounter-smp-0.c
 type: test-suite

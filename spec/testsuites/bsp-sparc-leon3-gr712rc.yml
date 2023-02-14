@@ -14,6 +14,5 @@ test-code: |
 test-description: null
 test-includes: []
 test-local-includes: []
-test-suite-name: BspSparcLeon3Gr712rc
 test-target: testsuites/validation/ts-bsp-sparc-leon3-gr712rc.c
 type: test-suite

@@ -25,6 +25,5 @@ test-includes: []
 test-local-includes:
 - tr-fatal-start-on-not-online-processor.h
 - ts-config.h
-test-suite-name: FatalStartOnNotOnlineProcessor
 test-target: testsuites/validation/ts-fatal-start-on-not-online-processor.c
 type: test-suite

@@ -19,6 +19,5 @@ test-description: |
   scheduler are provided using up to four processors.
 test-includes: []
 test-local-includes: []
-test-suite-name: ValidationCache
 test-target: testsuites/validation/ts-validation-cache.c
 type: test-suite

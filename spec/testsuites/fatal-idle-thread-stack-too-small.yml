@@ -38,6 +38,5 @@ test-description: null
 test-includes: []
 test-local-includes:
 - tr-fatal-idle-thread-stack-too-small.h
-test-suite-name: FatalIdleThreadStackTooSmall
 test-target: testsuites/validation/ts-fatal-idle-thread-stack-too-small.c
 type: test-suite

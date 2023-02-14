@@ -53,6 +53,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemCreate
 test-target: testsuites/membench/mem-userext-create.c
 type: memory-benchmark

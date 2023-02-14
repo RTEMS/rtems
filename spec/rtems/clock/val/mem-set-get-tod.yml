@@ -51,6 +51,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemSetGetTod
 test-target: testsuites/membench/mem-clock-set-get-tod.c
 type: memory-benchmark

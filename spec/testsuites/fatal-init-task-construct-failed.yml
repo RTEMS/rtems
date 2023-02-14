@@ -36,6 +36,5 @@ test-description: null
 test-includes: []
 test-local-includes:
 - tr-fatal-init-task-construct-failed.h
-test-suite-name: FatalInitTaskConstructFailed
 test-target: testsuites/validation/ts-fatal-init-task-construct-failed.c
 type: test-suite

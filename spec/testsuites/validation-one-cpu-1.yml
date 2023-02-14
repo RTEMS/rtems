@@ -26,6 +26,5 @@ test-description: |
 test-includes: []
 test-local-includes:
 - ts-config.h
-test-suite-name: ValidationOneCpu1
 test-target: testsuites/validation/ts-validation-one-cpu-1.c
 type: test-suite

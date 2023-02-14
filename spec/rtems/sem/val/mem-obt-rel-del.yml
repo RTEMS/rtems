@@ -57,6 +57,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemObtRelDel
 test-target: testsuites/membench/mem-sem-obt-rel-del.c
 type: memory-benchmark

@@ -50,6 +50,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemGetScheduler
 test-target: testsuites/membench/mem-task-get-scheduler.c
 type: memory-benchmark

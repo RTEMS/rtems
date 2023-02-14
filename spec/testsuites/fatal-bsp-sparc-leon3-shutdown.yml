@@ -113,6 +113,5 @@ test-includes:
 test-local-includes:
 - ts-config.h
 - tx-support.h
-test-suite-name: FatalBspSparcLeon3Shutdown
 test-target: testsuites/validation/ts-fatal-bsp-sparc-leon3-shutdown.c
 type: test-suite

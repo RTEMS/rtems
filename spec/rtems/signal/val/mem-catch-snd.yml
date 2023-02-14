@@ -51,6 +51,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemCatchSnd
 test-target: testsuites/membench/mem-signal-catch-snd.c
 type: memory-benchmark

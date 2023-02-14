@@ -20,6 +20,5 @@ test-description: null
 test-includes: []
 test-local-includes:
 - tr-fatal-bsp-sparc-leon3-clock-initialization.h
-test-suite-name: FatalBspSparcLeon3ClockInitialization
 test-target: testsuites/validation/ts-fatal-bsp-sparc-leon3-clock-initialization.c
 type: test-suite

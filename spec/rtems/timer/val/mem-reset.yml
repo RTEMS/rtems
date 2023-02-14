@@ -51,6 +51,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemReset
 test-target: testsuites/membench/mem-timer-reset.c
 type: memory-benchmark

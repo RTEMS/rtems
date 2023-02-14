@@ -53,6 +53,5 @@ test-includes:
 - bsp.h
 test-local-includes:
 - ts-acfg.h
-test-suite-name: ValidationAcfg1
 test-target: testsuites/validation/ts-validation-acfg-1.c
 type: test-suite

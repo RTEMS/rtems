@@ -19,6 +19,5 @@ test-description: |
   using up to four processors.
 test-includes: []
 test-local-includes: []
-test-suite-name: ValidationSMPOnly0
 test-target: testsuites/validation/ts-validation-smp-only-0.c
 type: test-suite

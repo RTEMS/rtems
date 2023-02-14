@@ -39,6 +39,5 @@ test-includes: []
 test-local-includes:
 - tr-fatal-boot-processor-not-assigned-to-scheduler.h
 - ts-config.h
-test-suite-name: FatalBootProcessorNotAssignedToScheduler
 test-target: testsuites/validation/ts-fatal-boot-processor-not-assigned-to-scheduler.c
 type: test-suite

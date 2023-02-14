@@ -42,6 +42,5 @@ test-description: null
 test-includes: []
 test-local-includes:
 - ts-config.h
-test-suite-name: ValidationSMPOnly2
 test-target: testsuites/validation/ts-validation-smp-only-2.c
 type: test-suite

@@ -32,6 +32,5 @@ test-includes: []
 test-local-includes:
 - ts-acfg.h
 - tx-support.h
-test-suite-name: ValidationAcfg0
 test-target: testsuites/validation/ts-validation-acfg-0.c
 type: test-suite

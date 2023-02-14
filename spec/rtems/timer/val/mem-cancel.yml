@@ -51,6 +51,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemCancel
 test-target: testsuites/membench/mem-timer-cancel.c
 type: memory-benchmark

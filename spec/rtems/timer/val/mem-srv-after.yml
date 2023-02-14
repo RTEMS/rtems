@@ -52,6 +52,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemSrvAfter
 test-target: testsuites/membench/mem-timer-srv-after.c
 type: memory-benchmark

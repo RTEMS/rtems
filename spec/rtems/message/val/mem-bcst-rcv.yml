@@ -53,6 +53,5 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemBcstRcv
 test-target: testsuites/membench/mem-message-bcst-rcv.c
 type: memory-benchmark

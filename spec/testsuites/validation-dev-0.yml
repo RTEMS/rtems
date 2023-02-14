@@ -15,6 +15,5 @@ test-code: |
 test-description: null
 test-includes: []
 test-local-includes: []
-test-suite-name: ValidationDev0
 test-target: testsuites/validation/ts-validation-dev-0.c
 type: test-suite
