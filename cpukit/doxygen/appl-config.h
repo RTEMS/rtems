@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2019, 2022 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2019, 2023 embedded brains GmbH (http://www.embedded-brains.de)
  * Copyright (C) 2010 Gedare Bloom
  * Copyright (C) 1988, 2022 On-Line Applications Research Corporation (OAR)
  *
@@ -2721,6 +2721,27 @@
  * ``<rtems/confdefs.h>``.
  */
 #define CONFIGURE_EXTRA_TASK_STACKS
+
+/* Generated from spec:/acfg/if/init */
+
+/**
+ * @brief This configuration option is a boolean feature define.
+ *
+ * @anchor CONFIGURE_INIT
+ *
+ * While this configuration option is defined, when the ``<rtems/confdefs.h>``
+ * is included, the system settings defined by present application
+ * configuration options are statically allocated and initialized.  All user
+ * provided application configuration options defined before the include of
+ * ``<rtems/confdefs.h>`` are evaluated.  They define the actual system
+ * settings.
+ *
+ * @par Default Configuration
+ * There is no default configuration associated with this configuration option.
+ * If ``<rtems/confdefs.h>`` is included and this configuration option is not
+ * defined, then only white space is included.
+ */
+#define CONFIGURE_INIT
 
 /* Generated from spec:/acfg/if/initial-extensions */
 
