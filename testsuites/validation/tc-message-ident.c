@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsMessageValIdent
+ * @ingroup RtemsMessageValIdent
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsMessageValIdent spec:/rtems/message/val/ident
+ * @defgroup RtemsMessageValIdent spec:/rtems/message/val/ident
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Test the rtems_message_queue_ident() directive.
  *

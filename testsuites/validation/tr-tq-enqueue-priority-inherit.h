@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqEnqueuePriorityInherit
+ * @ingroup ScoreTqReqEnqueuePriorityInherit
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreTqReqEnqueuePriorityInherit
+ * @addtogroup ScoreTqReqEnqueuePriorityInherit
  *
  * @{
  */

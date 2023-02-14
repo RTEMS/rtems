@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValFatalInitTaskConstructFailed
+ * @ingroup AcfgValFatalInitTaskConstructFailed
  */
 
 /*
@@ -60,10 +60,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAcfgValFatalInitTaskConstructFailed \
+ * @defgroup AcfgValFatalInitTaskConstructFailed \
  *   spec:/acfg/val/fatal-init-task-construct-failed
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalInitTaskConstructFailed
+ * @ingroup TestsuitesFatalInitTaskConstructFailed
  *
  * @brief Tests a fatal error caused by an invalid application configuration.
  *

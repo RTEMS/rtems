@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqTimeoutPriorityInherit
+ * @ingroup ScoreTqReqTimeoutPriorityInherit
  */
 
 /*
@@ -61,10 +61,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqTimeoutPriorityInherit \
+ * @defgroup ScoreTqReqTimeoutPriorityInherit \
  *   spec:/score/tq/req/timeout-priority-inherit
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

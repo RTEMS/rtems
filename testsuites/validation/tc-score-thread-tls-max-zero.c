@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreThreadValTlsMaxZero
+ * @ingroup ScoreThreadValTlsMaxZero
  */
 
 /*
@@ -57,10 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreThreadValTlsMaxZero \
- *   spec:/score/thread/val/tls-max-zero
+ * @defgroup ScoreThreadValTlsMaxZero spec:/score/thread/val/tls-max-zero
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationTls1
+ * @ingroup TestsuitesValidationTls1
  *
  * @brief Tests properties of thread-local objects.
  *

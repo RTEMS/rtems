@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValFatalSchedulerRequiresExactlyOneProcessor
+ * @ingroup ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSmpValFatalSchedulerRequiresExactlyOneProcessor \
+ * @defgroup ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor \
  *   spec:/score/smp/val/fatal-scheduler-requires-exactly-one-processor
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalSchedulerRequiresExactlyOneProcessor
+ * @ingroup TestsuitesFatalSchedulerRequiresExactlyOneProcessor
  *
  * @brief Tests a fatal error.
  *

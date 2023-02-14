@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreThreadValIdleBodyNoReturn
+ * @ingroup ScoreThreadValIdleBodyNoReturn
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreThreadValIdleBodyNoReturn \
+ * @defgroup ScoreThreadValIdleBodyNoReturn \
  *   spec:/score/thread/val/idle-body-no-return
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup TestsuitesValidation0
  *
  * @brief Tests thread idle body behaviour.
  *

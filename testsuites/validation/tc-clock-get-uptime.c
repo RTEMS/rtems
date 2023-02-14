@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsClockReqGetUptime
+ * @ingroup RtemsClockReqGetUptime
  */
 
 /*
@@ -57,10 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsClockReqGetUptime \
- *   spec:/rtems/clock/req/get-uptime
+ * @defgroup RtemsClockReqGetUptime spec:/rtems/clock/req/get-uptime
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

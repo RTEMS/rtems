@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskReqStorageSize
+ * @ingroup RtemsTaskReqStorageSize
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskReqStorageSize \
- *   spec:/rtems/task/req/storage-size
+ * @defgroup RtemsTaskReqStorageSize spec:/rtems/task/req/storage-size
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

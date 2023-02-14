@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqTimeoutMrsp
+ * @ingroup ScoreTqReqTimeoutMrsp
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreTqReqTimeoutMrsp
+ * @addtogroup ScoreTqReqTimeoutMrsp
  *
  * @{
  */

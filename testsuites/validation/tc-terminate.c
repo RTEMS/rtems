@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreInterrValTerminate
+ * @ingroup ScoreInterrValTerminate
  */
 
 /*
@@ -67,10 +67,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreInterrValTerminate \
- *   spec:/score/interr/val/terminate
+ * @defgroup ScoreInterrValTerminate spec:/score/interr/val/terminate
  *
- * @ingroup RTEMSTestSuiteTestsuitesTerminate
+ * @ingroup TestsuitesTerminate
  *
  * @brief Tests system termination procedure.
  *

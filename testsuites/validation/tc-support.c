@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSupportValSupport
+ * @ingroup RtemsSupportValSupport
  */
 
 /*
@@ -57,10 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSupportValSupport \
- *   spec:/rtems/support/val/support
+ * @defgroup RtemsSupportValSupport spec:/rtems/support/val/support
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests some @ref RTEMSAPIClassicSupport directives.
  *

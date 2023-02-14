@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrReqGetAffinity
+ * @ingroup RtemsIntrReqGetAffinity
  */
 
 /*
@@ -61,10 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrReqGetAffinity \
- *   spec:/rtems/intr/req/get-affinity
+ * @defgroup RtemsIntrReqGetAffinity spec:/rtems/intr/req/get-affinity
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  *
  * @{
  */

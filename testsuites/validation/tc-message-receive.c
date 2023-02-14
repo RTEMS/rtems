@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsMessageReqReceive
+ * @ingroup RtemsMessageReqReceive
  */
 
 /*
@@ -63,10 +63,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsMessageReqReceive \
- *   spec:/rtems/message/req/receive
+ * @defgroup RtemsMessageReqReceive spec:/rtems/message/req/receive
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

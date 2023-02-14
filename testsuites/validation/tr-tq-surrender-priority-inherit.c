@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqSurrenderPriorityInherit
+ * @ingroup ScoreTqReqSurrenderPriorityInherit
  */
 
 /*
@@ -61,10 +61,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqSurrenderPriorityInherit \
+ * @defgroup ScoreTqReqSurrenderPriorityInherit \
  *   spec:/score/tq/req/surrender-priority-inherit
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

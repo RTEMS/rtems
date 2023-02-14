@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValFatalBootProcessorNotAssignedToScheduler
+ * @ingroup ScoreSmpValFatalBootProcessorNotAssignedToScheduler
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreSmpValFatalBootProcessorNotAssignedToScheduler
+ * @addtogroup ScoreSmpValFatalBootProcessorNotAssignedToScheduler
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSchedSmpEdfReqSetAffinity
+ * @ingroup ScoreSchedSmpEdfReqSetAffinity
  */
 
 /*
@@ -63,10 +63,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSchedSmpEdfReqSetAffinity \
+ * @defgroup ScoreSchedSmpEdfReqSetAffinity \
  *   spec:/score/sched/smp/edf/req/set-affinity
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @{
  */

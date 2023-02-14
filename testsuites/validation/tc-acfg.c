@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValAcfg
+ * @ingroup AcfgValAcfg
  */
 
 /*
@@ -62,9 +62,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAcfgValAcfg spec:/acfg/val/acfg
+ * @defgroup AcfgValAcfg spec:/acfg/val/acfg
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests the effect of application configuration options.
  *

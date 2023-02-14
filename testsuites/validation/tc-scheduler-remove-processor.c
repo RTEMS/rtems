@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSchedulerReqRemoveProcessor
+ * @ingroup RtemsSchedulerReqRemoveProcessor
  */
 
 /*
@@ -63,10 +63,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSchedulerReqRemoveProcessor \
+ * @defgroup RtemsSchedulerReqRemoveProcessor \
  *   spec:/rtems/scheduler/req/remove-processor
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

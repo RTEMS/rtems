@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  */
 
 /*
@@ -55,7 +55,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationSmpOnly0 \
+ * @defgroup TestsuitesValidationSmpOnly0 \
  *   spec:/testsuites/validation-smp-only-0
  *
  * @ingroup RTEMSTestSuites
@@ -69,7 +69,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationSMPOnly0";
+const char rtems_test_name[] = "TestsuitesValidationSmpOnly0";
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 5
 

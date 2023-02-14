@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValFatalTooLargeTlsSize
+ * @ingroup AcfgValFatalTooLargeTlsSize
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseAcfgValFatalTooLargeTlsSize
+ * @addtogroup AcfgValFatalTooLargeTlsSize
  *
  * @{
  */

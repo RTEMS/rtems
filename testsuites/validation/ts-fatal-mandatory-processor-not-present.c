@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalMandatoryProcessorNotPresent
+ * @ingroup TestsuitesFatalMandatoryProcessorNotPresent
  */
 
 /*
@@ -58,7 +58,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesFatalMandatoryProcessorNotPresent \
+ * @defgroup TestsuitesFatalMandatoryProcessorNotPresent \
  *   spec:/testsuites/fatal-mandatory-processor-not-present
  *
  * @ingroup RTEMSTestSuites
@@ -69,7 +69,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "FatalMandatoryProcessorNotPresent";
+const char rtems_test_name[] = "TestsuitesFatalMandatoryProcessorNotPresent";
 
 #define FATAL_SYSINIT_RUN ScoreSmpValFatalMandatoryProcessorNotPresent_Run
 

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValOneCpu
+ * @ingroup AcfgValOneCpu
  */
 
 /*
@@ -61,9 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAcfgValOneCpu spec:/acfg/val/one-cpu
+ * @defgroup AcfgValOneCpu spec:/acfg/val/one-cpu
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
+ * @ingroup TestsuitesValidationOneCpu0
  *
  * @brief Tests the effect of application configuration options.
  *

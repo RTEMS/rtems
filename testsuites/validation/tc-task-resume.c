@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskReqResume
+ * @ingroup RtemsTaskReqResume
  */
 
 /*
@@ -59,9 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskReqResume spec:/rtems/task/req/resume
+ * @defgroup RtemsTaskReqResume spec:/rtems/task/req/resume
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

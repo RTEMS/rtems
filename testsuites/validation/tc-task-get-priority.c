@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskReqGetPriority
+ * @ingroup RtemsTaskReqGetPriority
  */
 
 /*
@@ -60,10 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskReqGetPriority \
- *   spec:/rtems/task/req/get-priority
+ * @defgroup RtemsTaskReqGetPriority spec:/rtems/task/req/get-priority
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

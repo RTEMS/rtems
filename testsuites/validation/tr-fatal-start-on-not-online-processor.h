@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValFatalStartOnNotOnlineProcessor
+ * @ingroup ScoreSmpValFatalStartOnNotOnlineProcessor
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreSmpValFatalStartOnNotOnlineProcessor
+ * @addtogroup ScoreSmpValFatalStartOnNotOnlineProcessor
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSignalValSignalConstant
+ * @ingroup RtemsSignalValSignalConstant
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseRtemsSignalValSignalConstant
+ * @addtogroup RtemsSignalValSignalConstant
  *
  * @{
  */

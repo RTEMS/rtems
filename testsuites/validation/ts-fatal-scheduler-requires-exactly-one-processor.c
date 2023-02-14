@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalSchedulerRequiresExactlyOneProcessor
+ * @ingroup TestsuitesFatalSchedulerRequiresExactlyOneProcessor
  */
 
 /*
@@ -58,7 +58,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesFatalSchedulerRequiresExactlyOneProcessor \
+ * @defgroup TestsuitesFatalSchedulerRequiresExactlyOneProcessor \
  *   spec:/testsuites/fatal-scheduler-requires-exactly-one-processor
  *
  * @ingroup RTEMSTestSuites
@@ -69,7 +69,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "FatalSchedulerRequiresExactlyOneProcessor";
+const char rtems_test_name[] = "TestsuitesFatalSchedulerRequiresExactlyOneProcessor";
 
 #define FATAL_SYSINIT_RUN \
   ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor_Run

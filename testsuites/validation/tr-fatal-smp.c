@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValFatal
+ * @ingroup ScoreSmpValFatal
  */
 
 /*
@@ -64,9 +64,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSmpValFatal spec:/score/smp/val/fatal
+ * @defgroup ScoreSmpValFatal spec:/score/smp/val/fatal
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalSmp
+ * @ingroup TestsuitesFatalSmp
  *
  * @brief Tests four fatal errors.
  *

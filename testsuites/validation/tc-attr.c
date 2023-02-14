@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsAttrValAttr
+ * @ingroup RtemsAttrValAttr
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsAttrValAttr spec:/rtems/attr/val/attr
+ * @defgroup RtemsAttrValAttr spec:/rtems/attr/val/attr
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests the attribute constants of the Classic API.
  *

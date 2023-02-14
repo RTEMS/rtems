@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSemReqRelease
+ * @ingroup RtemsSemReqRelease
  */
 
 /*
@@ -63,9 +63,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSemReqRelease spec:/rtems/sem/req/release
+ * @defgroup RtemsSemReqRelease spec:/rtems/sem/req/release
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

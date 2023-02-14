@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreThreadValFatalIdleThreadStackTooSmall
+ * @ingroup ScoreThreadValFatalIdleThreadStackTooSmall
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreThreadValFatalIdleThreadStackTooSmall \
+ * @defgroup ScoreThreadValFatalIdleThreadStackTooSmall \
  *   spec:/score/thread/val/fatal-idle-thread-stack-too-small
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalIdleThreadStackTooSmall
+ * @ingroup TestsuitesFatalIdleThreadStackTooSmall
  *
  * @brief Tests a fatal error caused by a too small idle thread stack size.
  *

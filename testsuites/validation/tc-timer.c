@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTimerValTimer
+ * @ingroup RtemsTimerValTimer
  */
 
 /*
@@ -61,9 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTimerValTimer spec:/rtems/timer/val/timer
+ * @defgroup RtemsTimerValTimer spec:/rtems/timer/val/timer
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests general timer behaviour.
  *

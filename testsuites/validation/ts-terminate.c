@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesTerminate
+ * @ingroup TestsuitesTerminate
  */
 
 /*
@@ -57,7 +57,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesTerminate spec:/testsuites/terminate
+ * @defgroup TestsuitesTerminate spec:/testsuites/terminate
  *
  * @ingroup RTEMSTestSuites
  *
@@ -67,7 +67,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "Terminate";
+const char rtems_test_name[] = "TestsuitesTerminate";
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 2
 

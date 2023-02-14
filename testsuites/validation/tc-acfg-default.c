@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValDefault
+ * @ingroup AcfgValDefault
  */
 
 /*
@@ -61,9 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAcfgValDefault spec:/acfg/val/default
+ * @defgroup AcfgValDefault spec:/acfg/val/default
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationAcfg0
+ * @ingroup TestsuitesValidationAcfg0
  *
  * @brief Tests the default values of application configuration options.
  *

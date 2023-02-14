@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqFlushPriority
+ * @ingroup ScoreTqReqFlushPriority
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreTqReqFlushPriority
+ * @addtogroup ScoreTqReqFlushPriority
  *
  * @{
  */

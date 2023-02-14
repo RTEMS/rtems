@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalIdleThreadCreateFailed
+ * @ingroup TestsuitesFatalIdleThreadCreateFailed
  */
 
 /*
@@ -57,7 +57,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesFatalIdleThreadCreateFailed \
+ * @defgroup TestsuitesFatalIdleThreadCreateFailed \
  *   spec:/testsuites/fatal-idle-thread-create-failed
  *
  * @ingroup RTEMSTestSuites
@@ -68,7 +68,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "FatalIdleThreadCreateFailed";
+const char rtems_test_name[] = "TestsuitesFatalIdleThreadCreateFailed";
 
 static bool CreateTask( rtems_tcb *executing, rtems_tcb *created )
 {

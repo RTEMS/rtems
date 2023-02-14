@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrReqEntryInstall
+ * @ingroup RtemsIntrReqEntryInstall
  */
 
 /*
@@ -60,10 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrReqEntryInstall \
- *   spec:/rtems/intr/req/entry-install
+ * @defgroup RtemsIntrReqEntryInstall spec:/rtems/intr/req/entry-install
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  *
  * @{
  */

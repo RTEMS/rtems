@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalTooLargeTlsSize
+ * @ingroup TestsuitesFatalTooLargeTlsSize
  */
 
 /*
@@ -57,7 +57,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesFatalTooLargeTlsSize \
+ * @defgroup TestsuitesFatalTooLargeTlsSize \
  *   spec:/testsuites/fatal-too-large-tls-size
  *
  * @ingroup RTEMSTestSuites
@@ -68,7 +68,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "FatalTooLargeTlsSize";
+const char rtems_test_name[] = "TestsuitesFatalTooLargeTlsSize";
 
 #define FATAL_SYSINIT_RUN AcfgValFatalTooLargeTlsSize_Run
 

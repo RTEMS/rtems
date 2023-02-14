@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTimerReqReset
+ * @ingroup RtemsTimerReqReset
  */
 
 /*
@@ -59,9 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTimerReqReset spec:/rtems/timer/req/reset
+ * @defgroup RtemsTimerReqReset spec:/rtems/timer/req/reset
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

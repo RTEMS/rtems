@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValFatalStartOfMandatoryProcessorFailed
+ * @ingroup ScoreSmpValFatalStartOfMandatoryProcessorFailed
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSmpValFatalStartOfMandatoryProcessorFailed \
+ * @defgroup ScoreSmpValFatalStartOfMandatoryProcessorFailed \
  *   spec:/score/smp/val/fatal-start-of-mandatory-processor-failed
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalStartOfMandatoryProcessorFailed
+ * @ingroup TestsuitesFatalStartOfMandatoryProcessorFailed
  *
  * @brief Tests a fatal error.
  *

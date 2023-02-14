@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsClockReqGetTod
+ * @ingroup RtemsClockReqGetTod
  */
 
 /*
@@ -59,9 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsClockReqGetTod spec:/rtems/clock/req/get-tod
+ * @defgroup RtemsClockReqGetTod spec:/rtems/clock/req/get-tod
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

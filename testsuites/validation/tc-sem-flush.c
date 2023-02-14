@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSemReqFlush
+ * @ingroup RtemsSemReqFlush
  */
 
 /*
@@ -64,9 +64,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSemReqFlush spec:/rtems/sem/req/flush
+ * @defgroup RtemsSemReqFlush spec:/rtems/sem/req/flush
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

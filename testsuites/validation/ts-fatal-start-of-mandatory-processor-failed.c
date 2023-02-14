@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalStartOfMandatoryProcessorFailed
+ * @ingroup TestsuitesFatalStartOfMandatoryProcessorFailed
  */
 
 /*
@@ -58,7 +58,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesFatalStartOfMandatoryProcessorFailed \
+ * @defgroup TestsuitesFatalStartOfMandatoryProcessorFailed \
  *   spec:/testsuites/fatal-start-of-mandatory-processor-failed
  *
  * @ingroup RTEMSTestSuites
@@ -69,7 +69,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "FatalStartOfMandatoryProcessorFailed";
+const char rtems_test_name[] = "TestsuitesFatalStartOfMandatoryProcessorFailed";
 
 #define FATAL_SYSINIT_RUN ScoreSmpValFatalStartOfMandatoryProcessorFailed_Run
 

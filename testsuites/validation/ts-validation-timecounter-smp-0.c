@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationTimecounterSmp0
+ * @ingroup TestsuitesValidationTimecounterSmp0
  */
 
 /*
@@ -55,7 +55,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationTimecounterSmp0 \
+ * @defgroup TestsuitesValidationTimecounterSmp0 \
  *   spec:/testsuites/validation-timecounter-smp-0
  *
  * @ingroup RTEMSTestSuites
@@ -66,7 +66,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationTimecounterSmp0";
+const char rtems_test_name[] = "TestsuitesValidationTimecounterSmp0";
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 4
 

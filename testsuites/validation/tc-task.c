@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskValTask
+ * @ingroup RtemsTaskValTask
  */
 
 /*
@@ -62,9 +62,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskValTask spec:/rtems/task/val/task
+ * @defgroup RtemsTaskValTask spec:/rtems/task/val/task
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief This test case collection provides validation test cases for
  *   requirements of the @ref RTEMSAPIClassicTasks.

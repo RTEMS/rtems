@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSchedulerValNonSmp
+ * @ingroup RtemsSchedulerValNonSmp
  */
 
 /*
@@ -57,10 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSchedulerValNonSmp \
- *   spec:/rtems/scheduler/val/non-smp
+ * @defgroup RtemsSchedulerValNonSmp spec:/rtems/scheduler/val/non-smp
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNonSmp
+ * @ingroup TestsuitesValidationNonSmp
  *
  * @brief This test case collection provides validation test cases for non-SMP
  *   requirements of the @ref RTEMSAPIClassicScheduler.

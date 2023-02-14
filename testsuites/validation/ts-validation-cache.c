@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationCache
+ * @ingroup TestsuitesValidationCache
  */
 
 /*
@@ -55,8 +55,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationCache \
- *   spec:/testsuites/validation-cache
+ * @defgroup TestsuitesValidationCache spec:/testsuites/validation-cache
  *
  * @ingroup RTEMSTestSuites
  *
@@ -69,7 +68,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationCache";
+const char rtems_test_name[] = "TestsuitesValidationCache";
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 4
 

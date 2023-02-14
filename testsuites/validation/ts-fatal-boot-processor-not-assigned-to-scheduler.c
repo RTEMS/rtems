@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalBootProcessorNotAssignedToScheduler
+ * @ingroup TestsuitesFatalBootProcessorNotAssignedToScheduler
  */
 
 /*
@@ -58,7 +58,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesFatalBootProcessorNotAssignedToScheduler \
+ * @defgroup TestsuitesFatalBootProcessorNotAssignedToScheduler \
  *   spec:/testsuites/fatal-boot-processor-not-assigned-to-scheduler
  *
  * @ingroup RTEMSTestSuites
@@ -69,7 +69,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "FatalBootProcessorNotAssignedToScheduler";
+const char rtems_test_name[] = "TestsuitesFatalBootProcessorNotAssignedToScheduler";
 
 #define FATAL_SYSINIT_RUN \
   ScoreSmpValFatalBootProcessorNotAssignedToScheduler_Run

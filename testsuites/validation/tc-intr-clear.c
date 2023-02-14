@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrReqClear
+ * @ingroup RtemsIntrReqClear
  */
 
 /*
@@ -61,9 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrReqClear spec:/rtems/intr/req/clear
+ * @defgroup RtemsIntrReqClear spec:/rtems/intr/req/clear
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  *
  * @{
  */

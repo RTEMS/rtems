@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSemValIdent
+ * @ingroup RtemsSemValIdent
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSemValIdent spec:/rtems/sem/val/ident
+ * @defgroup RtemsSemValIdent spec:/rtems/sem/val/ident
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Test the rtems_semaphore_ident() directive.
  *

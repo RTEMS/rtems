@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsRatemonReqCancel
+ * @ingroup RtemsRatemonReqCancel
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsRatemonReqCancel spec:/rtems/ratemon/req/cancel
+ * @defgroup RtemsRatemonReqCancel spec:/rtems/ratemon/req/cancel
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
+ * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationOneCpu0
  *
  * @{
  */

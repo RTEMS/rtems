@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIoValKernel
+ * @ingroup RtemsIoValKernel
  */
 
 /*
@@ -59,9 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIoValKernel spec:/rtems/io/val/kernel
+ * @defgroup RtemsIoValKernel spec:/rtems/io/val/kernel
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIoKernel
+ * @ingroup TestsuitesValidationIoKernel
  *
  * @brief Tests the functions referenced by BSP_output_char and BSP_poll_char.
  *

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSemReqTimeout
+ * @ingroup RtemsSemReqTimeout
  */
 
 /*
@@ -64,9 +64,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSemReqTimeout spec:/rtems/sem/req/timeout
+ * @defgroup RtemsSemReqTimeout spec:/rtems/sem/req/timeout
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

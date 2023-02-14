@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrReqRaiseOn
+ * @ingroup RtemsIntrReqRaiseOn
  */
 
 /*
@@ -61,9 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrReqRaiseOn spec:/rtems/intr/req/raise-on
+ * @defgroup RtemsIntrReqRaiseOn spec:/rtems/intr/req/raise-on
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  *
  * @{
  */

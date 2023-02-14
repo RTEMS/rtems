@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIoReqPutChar
+ * @ingroup RtemsIoReqPutChar
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIoReqPutChar spec:/rtems/io/req/put-char
+ * @defgroup RtemsIoReqPutChar spec:/rtems/io/req/put-char
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

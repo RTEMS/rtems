@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsRatemonValIdent
+ * @ingroup RtemsRatemonValIdent
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsRatemonValIdent spec:/rtems/ratemon/val/ident
+ * @defgroup RtemsRatemonValIdent spec:/rtems/ratemon/val/ident
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Test the rtems_rate_monotonic_ident() directive.
  *

@@ -3,8 +3,8 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsEventValSendReceive
- * @ingroup RTEMSTestCaseRtemsEventValSystemSendReceive
+ * @ingroup RtemsEventValSendReceive
+ * @ingroup RtemsEventValSystemSendReceive
  */
 
 /*
@@ -63,10 +63,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsEventValSendReceive \
- *   spec:/rtems/event/val/send-receive
+ * @defgroup RtemsEventValSendReceive spec:/rtems/event/val/send-receive
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup TestsuitesValidation0
  *
  * @brief Tests the rtems_event_send() and rtems_event_receive() directives.
  *
@@ -130,10 +129,10 @@ T_TEST_CASE( RtemsEventValSendReceive )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseRtemsEventValSystemSendReceive \
+ * @defgroup RtemsEventValSystemSendReceive \
  *   spec:/rtems/event/val/system-send-receive
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup TestsuitesValidation0
  *
  * @brief Tests the rtems_event_system_send() and rtems_event_system_receive()
  *   directives.

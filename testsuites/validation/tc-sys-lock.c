@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseNewlibValSysLock
+ * @ingroup NewlibValSysLock
  */
 
 /*
@@ -65,9 +65,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseNewlibValSysLock spec:/newlib/val/sys-lock
+ * @defgroup NewlibValSysLock spec:/newlib/val/sys-lock
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests the <sys/lock.h> mutex directives.
  *

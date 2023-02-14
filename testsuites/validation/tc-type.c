@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTypeValType
+ * @ingroup RtemsTypeValType
  */
 
 /*
@@ -58,9 +58,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTypeValType spec:/rtems/type/val/type
+ * @defgroup RtemsTypeValType spec:/rtems/type/val/type
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests some @ref RTEMSAPIClassicTypes interfaces.
  *

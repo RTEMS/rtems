@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsMessageValMessageMacros
+ * @ingroup RtemsMessageValMessageMacros
  */
 
 /*
@@ -57,10 +57,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsMessageValMessageMacros \
+ * @defgroup RtemsMessageValMessageMacros \
  *   spec:/rtems/message/val/message-macros
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests the macros of the @ref RTEMSAPIClassicMessage.
  *

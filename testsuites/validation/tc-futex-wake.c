@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseNewlibReqFutexWake
+ * @ingroup NewlibReqFutexWake
  */
 
 /*
@@ -62,9 +62,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseNewlibReqFutexWake spec:/newlib/req/futex-wake
+ * @defgroup NewlibReqFutexWake spec:/newlib/req/futex-wake
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

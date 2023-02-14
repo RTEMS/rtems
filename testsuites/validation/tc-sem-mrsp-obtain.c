@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSemReqMrspObtain
+ * @ingroup RtemsSemReqMrspObtain
  */
 
 /*
@@ -63,9 +63,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSemReqMrspObtain spec:/rtems/sem/req/mrsp-obtain
+ * @defgroup RtemsSemReqMrspObtain spec:/rtems/sem/req/mrsp-obtain
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @{
  */

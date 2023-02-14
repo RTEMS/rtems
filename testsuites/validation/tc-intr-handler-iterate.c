@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrReqHandlerIterate
+ * @ingroup RtemsIntrReqHandlerIterate
  */
 
 /*
@@ -60,10 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrReqHandlerIterate \
- *   spec:/rtems/intr/req/handler-iterate
+ * @defgroup RtemsIntrReqHandlerIterate spec:/rtems/intr/req/handler-iterate
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  *
  * @{
  */

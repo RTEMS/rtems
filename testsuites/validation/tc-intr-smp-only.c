@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrValIntrSmpOnly
+ * @ingroup RtemsIntrValIntrSmpOnly
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrValIntrSmpOnly \
- *   spec:/rtems/intr/val/intr-smp-only
+ * @defgroup RtemsIntrValIntrSmpOnly spec:/rtems/intr/val/intr-smp-only
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @brief Tests some @ref RTEMSAPIClassicIntr directives.
  *

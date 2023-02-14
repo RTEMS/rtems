@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSemReqCreate
+ * @ingroup RtemsSemReqCreate
  */
 
 /*
@@ -62,9 +62,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSemReqCreate spec:/rtems/sem/req/create
+ * @defgroup RtemsSemReqCreate spec:/rtems/sem/req/create
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

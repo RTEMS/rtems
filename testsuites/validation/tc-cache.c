@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsCacheValCache
+ * @ingroup RtemsCacheValCache
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsCacheValCache spec:/rtems/cache/val/cache
+ * @defgroup RtemsCacheValCache spec:/rtems/cache/val/cache
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationCache
+ * @ingroup TestsuitesValidationCache
  *
  * @brief Tests some @ref RTEMSAPIClassicCache directives.
  *

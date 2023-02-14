@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreValFatal
+ * @ingroup ScoreValFatal
  */
 
 /*
@@ -64,10 +64,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreValFatal spec:/score/val/fatal
+ * @defgroup ScoreValFatal spec:/score/val/fatal
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
+ * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationOneCpu0
  *
  * @brief Tests some fatal errors.
  *

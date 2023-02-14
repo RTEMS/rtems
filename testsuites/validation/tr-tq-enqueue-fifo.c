@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqEnqueueFifo
+ * @ingroup ScoreTqReqEnqueueFifo
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqEnqueueFifo spec:/score/tq/req/enqueue-fifo
+ * @defgroup ScoreTqReqEnqueueFifo spec:/score/tq/req/enqueue-fifo
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

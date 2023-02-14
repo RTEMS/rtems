@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsReqIdentLocal
+ * @ingroup RtemsReqIdentLocal
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsReqIdentLocal spec:/rtems/req/ident-local
+ * @defgroup RtemsReqIdentLocal spec:/rtems/req/ident-local
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

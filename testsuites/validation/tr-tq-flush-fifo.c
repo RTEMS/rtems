@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqFlushFifo
+ * @ingroup ScoreTqReqFlushFifo
  */
 
 /*
@@ -58,9 +58,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqFlushFifo spec:/score/tq/req/flush-fifo
+ * @defgroup ScoreTqReqFlushFifo spec:/score/tq/req/flush-fifo
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

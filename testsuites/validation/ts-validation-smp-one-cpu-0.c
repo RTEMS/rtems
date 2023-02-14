@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOneCpu0
+ * @ingroup TestsuitesValidationSmpOneCpu0
  */
 
 /*
@@ -55,7 +55,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationSmpOneCpu0 \
+ * @defgroup TestsuitesValidationSmpOneCpu0 \
  *   spec:/testsuites/validation-smp-one-cpu-0
  *
  * @ingroup RTEMSTestSuites
@@ -67,7 +67,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationSmpOneCpu0";
+const char rtems_test_name[] = "TestsuitesValidationSmpOneCpu0";
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 1
 

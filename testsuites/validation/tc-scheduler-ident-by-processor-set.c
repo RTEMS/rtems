@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSchedulerReqIdentByProcessorSet
+ * @ingroup RtemsSchedulerReqIdentByProcessorSet
  */
 
 /*
@@ -60,10 +60,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSchedulerReqIdentByProcessorSet \
+ * @defgroup RtemsSchedulerReqIdentByProcessorSet \
  *   spec:/rtems/scheduler/req/ident-by-processor-set
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

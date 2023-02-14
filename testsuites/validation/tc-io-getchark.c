@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIoReqGetchark
+ * @ingroup RtemsIoReqGetchark
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIoReqGetchark spec:/rtems/io/req/getchark
+ * @defgroup RtemsIoReqGetchark spec:/rtems/io/req/getchark
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

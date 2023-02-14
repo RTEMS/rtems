@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValApplDoesNotNeedClockDriver
+ * @ingroup AcfgValApplDoesNotNeedClockDriver
  */
 
 /*
@@ -57,10 +57,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAcfgValApplDoesNotNeedClockDriver \
+ * @defgroup AcfgValApplDoesNotNeedClockDriver \
  *   spec:/acfg/val/appl-does-not-need-clock-driver
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationAcfg0
+ * @ingroup TestsuitesValidationAcfg0
  *
  * @brief Tests the effect of the
  *   CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER application configuration

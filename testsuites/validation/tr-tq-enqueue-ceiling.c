@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqEnqueueCeiling
+ * @ingroup ScoreTqReqEnqueueCeiling
  */
 
 /*
@@ -57,10 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqEnqueueCeiling \
- *   spec:/score/tq/req/enqueue-ceiling
+ * @defgroup ScoreTqReqEnqueueCeiling spec:/score/tq/req/enqueue-ceiling
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

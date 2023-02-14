@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValSchedulerEdfSmp
+ * @ingroup AcfgValSchedulerEdfSmp
  */
 
 /*
@@ -61,10 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAcfgValSchedulerEdfSmp \
- *   spec:/acfg/val/scheduler-edf-smp
+ * @defgroup AcfgValSchedulerEdfSmp spec:/acfg/val/scheduler-edf-smp
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @brief Tests the effect of application configuration options.
  *

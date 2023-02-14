@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSchedulerValScheduler
+ * @ingroup RtemsSchedulerValScheduler
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSchedulerValScheduler \
- *   spec:/rtems/scheduler/val/scheduler
+ * @defgroup RtemsSchedulerValScheduler spec:/rtems/scheduler/val/scheduler
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief This test case collection provides validation test cases for general
  *   requirements of the @ref RTEMSAPIClassicScheduler.

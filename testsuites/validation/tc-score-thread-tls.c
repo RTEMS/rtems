@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreThreadValTls
+ * @ingroup ScoreThreadValTls
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreThreadValTls spec:/score/thread/val/tls
+ * @defgroup ScoreThreadValTls spec:/score/thread/val/tls
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationTls0
- * @ingroup RTEMSTestSuiteTestsuitesValidationTls1
+ * @ingroup TestsuitesValidationTls0
+ * @ingroup TestsuitesValidationTls1
  *
  * @brief Tests properties of thread-local objects.
  *

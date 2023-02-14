@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsRatemonReqGetStatus
+ * @ingroup RtemsRatemonReqGetStatus
  */
 
 /*
@@ -60,11 +60,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsRatemonReqGetStatus \
- *   spec:/rtems/ratemon/req/get-status
+ * @defgroup RtemsRatemonReqGetStatus spec:/rtems/ratemon/req/get-status
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
+ * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationOneCpu0
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSignalValSignalConstant
+ * @ingroup RtemsSignalValSignalConstant
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSignalValSignalConstant \
+ * @defgroup RtemsSignalValSignalConstant \
  *   spec:/rtems/signal/val/signal-constant
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests a signal constant of the @ref RTEMSAPIClassicSignal using the
  *   signal set of the executing task.

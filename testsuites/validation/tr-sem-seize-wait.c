@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSemReqSeizeWait
+ * @ingroup ScoreSemReqSeizeWait
  */
 
 /*
@@ -61,9 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSemReqSeizeWait spec:/score/sem/req/seize-wait
+ * @defgroup ScoreSemReqSeizeWait spec:/score/sem/req/seize-wait
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqTimeoutMrsp
+ * @ingroup ScoreTqReqTimeoutMrsp
  */
 
 /*
@@ -61,9 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqTimeoutMrsp spec:/score/tq/req/timeout-mrsp
+ * @defgroup ScoreTqReqTimeoutMrsp spec:/score/tq/req/timeout-mrsp
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSchedulerReqGetMaximumPriority
+ * @ingroup RtemsSchedulerReqGetMaximumPriority
  */
 
 /*
@@ -61,10 +61,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSchedulerReqGetMaximumPriority \
+ * @defgroup RtemsSchedulerReqGetMaximumPriority \
  *   spec:/rtems/scheduler/req/get-maximum-priority
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

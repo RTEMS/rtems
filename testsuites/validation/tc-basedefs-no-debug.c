@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsBasedefsValBasedefsNoDebug
+ * @ingroup RtemsBasedefsValBasedefsNoDebug
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsBasedefsValBasedefsNoDebug \
+ * @defgroup RtemsBasedefsValBasedefsNoDebug \
  *   spec:/rtems/basedefs/val/basedefs-no-debug
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests the basedefs macros where RTEMS_DEBUG is disabled.
  *

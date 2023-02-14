@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValFatalInitTaskConstructFailed
+ * @ingroup AcfgValFatalInitTaskConstructFailed
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseAcfgValFatalInitTaskConstructFailed
+ * @addtogroup AcfgValFatalInitTaskConstructFailed
  *
  * @{
  */

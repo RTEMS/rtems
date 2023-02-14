@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSemValUni
+ * @ingroup RtemsSemValUni
  */
 
 /*
@@ -59,9 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSemValUni spec:/rtems/sem/val/uni
+ * @defgroup RtemsSemValUni spec:/rtems/sem/val/uni
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
+ * @ingroup TestsuitesValidationOneCpu0
  *
  * @brief Tests uniprocessor-specific semaphore behaviour.
  *

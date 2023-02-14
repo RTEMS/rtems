@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValFatalMandatoryProcessorNotPresent
+ * @ingroup ScoreSmpValFatalMandatoryProcessorNotPresent
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreSmpValFatalMandatoryProcessorNotPresent
+ * @addtogroup ScoreSmpValFatalMandatoryProcessorNotPresent
  *
  * @{
  */

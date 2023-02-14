@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIoValKernel
+ * @ingroup RtemsIoValKernel
  */
 
 /*
@@ -56,7 +56,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseRtemsIoValKernel
+ * @addtogroup RtemsIoValKernel
  *
  * @{
  */

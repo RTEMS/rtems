@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationAcfg1
+ * @ingroup TestsuitesValidationAcfg1
  */
 
 /*
@@ -59,8 +59,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationAcfg1 \
- *   spec:/testsuites/validation-acfg-1
+ * @defgroup TestsuitesValidationAcfg1 spec:/testsuites/validation-acfg-1
  *
  * @ingroup RTEMSTestSuites
  *
@@ -71,7 +70,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationAcfg1";
+const char rtems_test_name[] = "TestsuitesValidationAcfg1";
 
 static void FatalExtension(
   rtems_fatal_source source,

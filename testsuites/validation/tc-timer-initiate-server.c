@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTimerReqInitiateServer
+ * @ingroup RtemsTimerReqInitiateServer
  */
 
 /*
@@ -60,10 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTimerReqInitiateServer \
- *   spec:/rtems/timer/req/initiate-server
+ * @defgroup RtemsTimerReqInitiateServer spec:/rtems/timer/req/initiate-server
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

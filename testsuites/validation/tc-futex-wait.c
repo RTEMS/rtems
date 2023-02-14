@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseNewlibReqFutexWait
+ * @ingroup NewlibReqFutexWait
  */
 
 /*
@@ -62,9 +62,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseNewlibReqFutexWait spec:/newlib/req/futex-wait
+ * @defgroup NewlibReqFutexWait spec:/newlib/req/futex-wait
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

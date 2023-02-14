@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTimecounterValGet
+ * @ingroup ScoreTimecounterValGet
  */
 
 /*
@@ -62,10 +62,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTimecounterValGet \
- *   spec:/score/timecounter/val/get
+ * @defgroup ScoreTimecounterValGet spec:/score/timecounter/val/get
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationTimecounter1
+ * @ingroup TestsuitesValidationTimecounter1
  *
  * @brief Tests directives to get a time value.
  *

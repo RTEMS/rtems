@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsUserextValIdent
+ * @ingroup RtemsUserextValIdent
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsUserextValIdent spec:/rtems/userext/val/ident
+ * @defgroup RtemsUserextValIdent spec:/rtems/userext/val/ident
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Test the rtems_extension_ident() directive.
  *

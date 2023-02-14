@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSchedSmpValSmp
+ * @ingroup ScoreSchedSmpValSmp
  */
 
 /*
@@ -63,9 +63,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSchedSmpValSmp spec:/score/sched/smp/val/smp
+ * @defgroup ScoreSchedSmpValSmp spec:/score/sched/smp/val/smp
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @brief Tests SMP-specific scheduler behaviour.
  *

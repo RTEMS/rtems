@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesPerformanceNoClock0
+ * @ingroup TestsuitesPerformanceNoClock0
  */
 
 /*
@@ -57,7 +57,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesPerformanceNoClock0 \
+ * @defgroup TestsuitesPerformanceNoClock0 \
  *   spec:/testsuites/performance-no-clock-0
  *
  * @ingroup RTEMSTestSuites
@@ -71,7 +71,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "PerformanceNoClock0";
+const char rtems_test_name[] = "TestsuitesPerformanceNoClock0";
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 4
 

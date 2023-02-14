@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqEnqueueMrsp
+ * @ingroup ScoreTqReqEnqueueMrsp
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqEnqueueMrsp spec:/score/tq/req/enqueue-mrsp
+ * @defgroup ScoreTqReqEnqueueMrsp spec:/score/tq/req/enqueue-mrsp
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

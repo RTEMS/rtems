@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsPartValPerf
+ * @ingroup RtemsPartValPerf
  */
 
 /*
@@ -58,9 +58,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsPartValPerf spec:/rtems/part/val/perf
+ * @defgroup RtemsPartValPerf spec:/rtems/part/val/perf
  *
- * @ingroup RTEMSTestSuiteTestsuitesPerformanceNoClock0
+ * @ingroup TestsuitesPerformanceNoClock0
  *
  * @brief This test case provides a context to run @ref RTEMSAPIClassicPart
  *   performance tests.

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalStartOnNotOnlineProcessor
+ * @ingroup TestsuitesFatalStartOnNotOnlineProcessor
  */
 
 /*
@@ -58,7 +58,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesFatalStartOnNotOnlineProcessor \
+ * @defgroup TestsuitesFatalStartOnNotOnlineProcessor \
  *   spec:/testsuites/fatal-start-on-not-online-processor
  *
  * @ingroup RTEMSTestSuites
@@ -69,7 +69,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "FatalStartOnNotOnlineProcessor";
+const char rtems_test_name[] = "TestsuitesFatalStartOnNotOnlineProcessor";
 
 #define FATAL_SYSINIT_RUN ScoreSmpValFatalStartOnNotOnlineProcessor_Run
 

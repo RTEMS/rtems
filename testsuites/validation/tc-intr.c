@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrValIntr
+ * @ingroup RtemsIntrValIntr
  */
 
 /*
@@ -60,9 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrValIntr spec:/rtems/intr/val/intr
+ * @defgroup RtemsIntrValIntr spec:/rtems/intr/val/intr
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests some @ref RTEMSAPIClassicIntr directives.
  *

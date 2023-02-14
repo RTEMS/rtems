@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  */
 
 /*
@@ -55,8 +55,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationIntr \
- *   spec:/testsuites/validation-intr
+ * @defgroup TestsuitesValidationIntr spec:/testsuites/validation-intr
  *
  * @ingroup RTEMSTestSuites
  *
@@ -70,7 +69,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationIntr";
+const char rtems_test_name[] = "TestsuitesValidationIntr";
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 5
 

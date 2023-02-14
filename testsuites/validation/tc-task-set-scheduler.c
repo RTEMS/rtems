@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskReqSetScheduler
+ * @ingroup RtemsTaskReqSetScheduler
  */
 
 /*
@@ -61,10 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskReqSetScheduler \
- *   spec:/rtems/task/req/set-scheduler
+ * @defgroup RtemsTaskReqSetScheduler spec:/rtems/task/req/set-scheduler
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

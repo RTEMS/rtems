@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqSurrenderMrsp
+ * @ingroup ScoreTqReqSurrenderMrsp
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreTqReqSurrenderMrsp
+ * @addtogroup ScoreTqReqSurrenderMrsp
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSchedulerValSmpOnly
+ * @ingroup RtemsSchedulerValSmpOnly
  */
 
 /*
@@ -60,10 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSchedulerValSmpOnly \
- *   spec:/rtems/scheduler/val/smp-only
+ * @defgroup RtemsSchedulerValSmpOnly spec:/rtems/scheduler/val/smp-only
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @brief This test case collection provides validation test cases for SMP-only
  *   requirements of the @ref RTEMSAPIClassicScheduler.

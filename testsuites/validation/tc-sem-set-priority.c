@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSemReqSetPriority
+ * @ingroup RtemsSemReqSetPriority
  */
 
 /*
@@ -61,10 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSemReqSetPriority \
- *   spec:/rtems/sem/req/set-priority
+ * @defgroup RtemsSemReqSetPriority spec:/rtems/sem/req/set-priority
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

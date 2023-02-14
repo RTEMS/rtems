@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsBarrierValPerf
+ * @ingroup RtemsBarrierValPerf
  */
 
 /*
@@ -59,9 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsBarrierValPerf spec:/rtems/barrier/val/perf
+ * @defgroup RtemsBarrierValPerf spec:/rtems/barrier/val/perf
  *
- * @ingroup RTEMSTestSuiteTestsuitesPerformanceNoClock0
+ * @ingroup TestsuitesPerformanceNoClock0
  *
  * @brief This test case provides a context to run @ref RTEMSAPIClassicBarrier
  *   performance tests.

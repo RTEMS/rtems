@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValFatalStartOnNotOnlineProcessor
+ * @ingroup ScoreSmpValFatalStartOnNotOnlineProcessor
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSmpValFatalStartOnNotOnlineProcessor \
+ * @defgroup ScoreSmpValFatalStartOnNotOnlineProcessor \
  *   spec:/score/smp/val/fatal-start-on-not-online-processor
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalStartOnNotOnlineProcessor
+ * @ingroup TestsuitesFatalStartOnNotOnlineProcessor
  *
  * @brief Tests a fatal error.
  *

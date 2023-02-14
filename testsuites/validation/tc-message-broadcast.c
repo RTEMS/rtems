@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsMessageReqBroadcast
+ * @ingroup RtemsMessageReqBroadcast
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsMessageReqBroadcast \
- *   spec:/rtems/message/req/broadcast
+ * @defgroup RtemsMessageReqBroadcast spec:/rtems/message/req/broadcast
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

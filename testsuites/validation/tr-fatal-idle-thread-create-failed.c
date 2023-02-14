@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreThreadValFatalIdleThreadCreateFailed
+ * @ingroup ScoreThreadValFatalIdleThreadCreateFailed
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreThreadValFatalIdleThreadCreateFailed \
+ * @defgroup ScoreThreadValFatalIdleThreadCreateFailed \
  *   spec:/score/thread/val/fatal-idle-thread-create-failed
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalIdleThreadCreateFailed
+ * @ingroup TestsuitesFatalIdleThreadCreateFailed
  *
  * @brief Tests a fatal error caused by a failing task create extension.
  *

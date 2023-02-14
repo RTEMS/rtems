@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrReqGetAttributes
+ * @ingroup RtemsIntrReqGetAttributes
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrReqGetAttributes \
- *   spec:/rtems/intr/req/get-attributes
+ * @defgroup RtemsIntrReqGetAttributes spec:/rtems/intr/req/get-attributes
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  *
  * @{
  */

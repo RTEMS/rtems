@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTimerReqCancel
+ * @ingroup RtemsTimerReqCancel
  */
 
 /*
@@ -59,9 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTimerReqCancel spec:/rtems/timer/req/cancel
+ * @defgroup RtemsTimerReqCancel spec:/rtems/timer/req/cancel
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

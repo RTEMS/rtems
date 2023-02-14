@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreThreadValSmp
+ * @ingroup ScoreThreadValSmp
  */
 
 /*
@@ -63,9 +63,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreThreadValSmp spec:/score/thread/val/smp
+ * @defgroup ScoreThreadValSmp spec:/score/thread/val/smp
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @brief Tests SMP-specific thread behaviour.
  *

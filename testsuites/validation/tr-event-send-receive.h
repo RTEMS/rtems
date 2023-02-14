@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsEventReqSendReceive
+ * @ingroup RtemsEventReqSendReceive
  */
 
 /*
@@ -59,7 +59,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseRtemsEventReqSendReceive
+ * @addtogroup RtemsEventReqSendReceive
  *
  * @{
  */

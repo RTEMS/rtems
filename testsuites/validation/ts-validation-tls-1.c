@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationTls1
+ * @ingroup TestsuitesValidationTls1
  */
 
 /*
@@ -55,8 +55,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationTls1 \
- *   spec:/testsuites/validation-tls-1
+ * @defgroup TestsuitesValidationTls1 spec:/testsuites/validation-tls-1
  *
  * @ingroup RTEMSTestSuites
  *
@@ -66,7 +65,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationTls1";
+const char rtems_test_name[] = "TestsuitesValidationTls1";
 
 #define CONFIGURE_IDLE_TASK_STORAGE_SIZE \
   ( RTEMS_MINIMUM_STACK_SIZE + 4096 )

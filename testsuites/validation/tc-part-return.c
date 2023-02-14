@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsPartReqReturnBuffer
+ * @ingroup RtemsPartReqReturnBuffer
  */
 
 /*
@@ -57,10 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsPartReqReturnBuffer \
- *   spec:/rtems/part/req/return-buffer
+ * @defgroup RtemsPartReqReturnBuffer spec:/rtems/part/req/return-buffer
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValDisabledBspSettings
+ * @ingroup AcfgValDisabledBspSettings
  */
 
 /*
@@ -58,10 +58,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAcfgValDisabledBspSettings \
- *   spec:/acfg/val/disabled-bsp-settings
+ * @defgroup AcfgValDisabledBspSettings spec:/acfg/val/disabled-bsp-settings
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationAcfg1
+ * @ingroup TestsuitesValidationAcfg1
  *
  * @brief Tests the default values of application configuration options where
  *   all optional BSP provided settings are disabled.

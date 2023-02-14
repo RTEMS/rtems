@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTimecounterValInstall
+ * @ingroup ScoreTimecounterValInstall
  */
 
 /*
@@ -62,10 +62,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTimecounterValInstall \
- *   spec:/score/timecounter/val/install
+ * @defgroup ScoreTimecounterValInstall spec:/score/timecounter/val/install
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationTimecounter0
+ * @ingroup TestsuitesValidationTimecounter0
  *
  * @brief Tests timecounter installation related functions and directives of
  *   the Clock Manager.

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrReqEntryRemove
+ * @ingroup RtemsIntrReqEntryRemove
  */
 
 /*
@@ -60,10 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrReqEntryRemove \
- *   spec:/rtems/intr/req/entry-remove
+ * @defgroup RtemsIntrReqEntryRemove spec:/rtems/intr/req/entry-remove
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  *
  * @{
  */

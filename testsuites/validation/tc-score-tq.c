@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqValTq
+ * @ingroup ScoreTqValTq
  */
 
 /*
@@ -58,9 +58,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqValTq spec:/score/tq/val/tq
+ * @defgroup ScoreTqValTq spec:/score/tq/val/tq
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests special thread queue behaviour.
  *

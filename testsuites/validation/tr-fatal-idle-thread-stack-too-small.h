@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreThreadValFatalIdleThreadStackTooSmall
+ * @ingroup ScoreThreadValFatalIdleThreadStackTooSmall
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreThreadValFatalIdleThreadStackTooSmall
+ * @addtogroup ScoreThreadValFatalIdleThreadStackTooSmall
  *
  * @{
  */

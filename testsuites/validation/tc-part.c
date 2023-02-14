@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsPartValPart
+ * @ingroup RtemsPartValPart
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsPartValPart spec:/rtems/part/val/part
+ * @defgroup RtemsPartValPart spec:/rtems/part/val/part
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief This test case collection provides validation test cases for
  *   requirements of the @ref RTEMSAPIClassicPart.

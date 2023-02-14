@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSupportReqIsNameValid
+ * @ingroup RtemsSupportReqIsNameValid
  */
 
 /*
@@ -57,10 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSupportReqIsNameValid \
- *   spec:/rtems/support/req/is-name-valid
+ * @defgroup RtemsSupportReqIsNameValid spec:/rtems/support/req/is-name-valid
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

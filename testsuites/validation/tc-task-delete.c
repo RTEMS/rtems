@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskReqDelete
+ * @ingroup RtemsTaskReqDelete
  */
 
 /*
@@ -67,9 +67,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskReqDelete spec:/rtems/task/req/delete
+ * @defgroup RtemsTaskReqDelete spec:/rtems/task/req/delete
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

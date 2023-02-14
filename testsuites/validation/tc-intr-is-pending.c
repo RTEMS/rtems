@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrReqIsPending
+ * @ingroup RtemsIntrReqIsPending
  */
 
 /*
@@ -61,9 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrReqIsPending spec:/rtems/intr/req/is-pending
+ * @defgroup RtemsIntrReqIsPending spec:/rtems/intr/req/is-pending
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  *
  * @{
  */

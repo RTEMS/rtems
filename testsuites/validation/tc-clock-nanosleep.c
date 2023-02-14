@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseCReqClockNanosleep
+ * @ingroup CReqClockNanosleep
  */
 
 /*
@@ -64,9 +64,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseCReqClockNanosleep spec:/c/req/clock-nanosleep
+ * @defgroup CReqClockNanosleep spec:/c/req/clock-nanosleep
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  */
 
 /*
@@ -55,7 +55,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationNoClock0 \
+ * @defgroup TestsuitesValidationNoClock0 \
  *   spec:/testsuites/validation-no-clock-0
  *
  * @ingroup RTEMSTestSuites
@@ -70,7 +70,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationNoClock0";
+const char rtems_test_name[] = "TestsuitesValidationNoClock0";
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 5
 

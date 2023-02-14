@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalInitTaskConstructFailed
+ * @ingroup TestsuitesFatalInitTaskConstructFailed
  */
 
 /*
@@ -57,7 +57,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesFatalInitTaskConstructFailed \
+ * @defgroup TestsuitesFatalInitTaskConstructFailed \
  *   spec:/testsuites/fatal-init-task-construct-failed
  *
  * @ingroup RTEMSTestSuites
@@ -68,7 +68,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "FatalInitTaskConstructFailed";
+const char rtems_test_name[] = "TestsuitesFatalInitTaskConstructFailed";
 
 #define FATAL_SYSINIT_RUN AcfgValFatalInitTaskConstructFailed_Run
 

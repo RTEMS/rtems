@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqFlushPriority
+ * @ingroup ScoreTqReqFlushPriority
  */
 
 /*
@@ -58,10 +58,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqFlushPriority \
- *   spec:/score/tq/req/flush-priority
+ * @defgroup ScoreTqReqFlushPriority spec:/score/tq/req/flush-priority
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

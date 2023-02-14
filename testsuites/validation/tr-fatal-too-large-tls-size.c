@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValFatalTooLargeTlsSize
+ * @ingroup AcfgValFatalTooLargeTlsSize
  */
 
 /*
@@ -60,10 +60,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAcfgValFatalTooLargeTlsSize \
+ * @defgroup AcfgValFatalTooLargeTlsSize \
  *   spec:/acfg/val/fatal-too-large-tls-size
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalTooLargeTlsSize
+ * @ingroup TestsuitesFatalTooLargeTlsSize
  *
  * @brief Tests a fatal error.
  *

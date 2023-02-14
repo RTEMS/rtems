@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsRatemonReqCreate
+ * @ingroup RtemsRatemonReqCreate
  */
 
 /*
@@ -60,9 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsRatemonReqCreate spec:/rtems/ratemon/req/create
+ * @defgroup RtemsRatemonReqCreate spec:/rtems/ratemon/req/create
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

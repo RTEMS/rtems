@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqTimeoutPriorityInherit
+ * @ingroup ScoreTqReqTimeoutPriorityInherit
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreTqReqTimeoutPriorityInherit
+ * @addtogroup ScoreTqReqTimeoutPriorityInherit
  *
  * @{
  */

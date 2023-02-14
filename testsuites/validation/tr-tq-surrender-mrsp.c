@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqSurrenderMrsp
+ * @ingroup ScoreTqReqSurrenderMrsp
  */
 
 /*
@@ -60,10 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqSurrenderMrsp \
- *   spec:/score/tq/req/surrender-mrsp
+ * @defgroup ScoreTqReqSurrenderMrsp spec:/score/tq/req/surrender-mrsp
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

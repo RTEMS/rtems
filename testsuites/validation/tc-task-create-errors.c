@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskReqCreateErrors
+ * @ingroup RtemsTaskReqCreateErrors
  */
 
 /*
@@ -62,11 +62,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskReqCreateErrors \
- *   spec:/rtems/task/req/create-errors
+ * @defgroup RtemsTaskReqCreateErrors spec:/rtems/task/req/create-errors
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
+ * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationOneCpu0
  *
  * @{
  */

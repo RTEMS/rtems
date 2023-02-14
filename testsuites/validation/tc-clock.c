@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsClockValClock
+ * @ingroup RtemsClockValClock
  */
 
 /*
@@ -60,9 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsClockValClock spec:/rtems/clock/val/clock
+ * @defgroup RtemsClockValClock spec:/rtems/clock/val/clock
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests some @ref RTEMSAPIClassicClock directives.
  *

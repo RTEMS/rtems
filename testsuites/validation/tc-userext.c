@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsUserextValUserext
+ * @ingroup RtemsUserextValUserext
  */
 
 /*
@@ -62,10 +62,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsUserextValUserext \
- *   spec:/rtems/userext/val/userext
+ * @defgroup RtemsUserextValUserext spec:/rtems/userext/val/userext
  *
- * @ingroup RTEMSTestSuiteTestsuitesUserext
+ * @ingroup TestsuitesUserext
  *
  * @brief Tests the thread user extensions.
  *

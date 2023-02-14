@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValFatalBootProcessorNotAssignedToScheduler
+ * @ingroup ScoreSmpValFatalBootProcessorNotAssignedToScheduler
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSmpValFatalBootProcessorNotAssignedToScheduler \
+ * @defgroup ScoreSmpValFatalBootProcessorNotAssignedToScheduler \
  *   spec:/score/smp/val/fatal-boot-processor-not-assigned-to-scheduler
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalBootProcessorNotAssignedToScheduler
+ * @ingroup TestsuitesFatalBootProcessorNotAssignedToScheduler
  *
  * @brief Tests a fatal error.
  *

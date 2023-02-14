@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIoKernel
+ * @ingroup TestsuitesValidationIoKernel
  */
 
 /*
@@ -62,8 +62,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationIoKernel \
- *   spec:/testsuites/validation-io-kernel
+ * @defgroup TestsuitesValidationIoKernel spec:/testsuites/validation-io-kernel
  *
  * @ingroup RTEMSTestSuites
  *
@@ -74,7 +73,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationIoKernel";
+const char rtems_test_name[] = "TestsuitesValidationIoKernel";
 
 static char buffer[ 512 ];
 

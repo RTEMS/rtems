@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrValIntrNonSmp
+ * @ingroup RtemsIntrValIntrNonSmp
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrValIntrNonSmp \
- *   spec:/rtems/intr/val/intr-non-smp
+ * @defgroup RtemsIntrValIntrNonSmp spec:/rtems/intr/val/intr-non-smp
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNonSmp
+ * @ingroup TestsuitesValidationNonSmp
  *
  * @brief Tests some @ref RTEMSAPIClassicIntr interfaces.
  *

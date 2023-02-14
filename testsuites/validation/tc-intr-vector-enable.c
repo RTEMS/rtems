@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsIntrReqVectorEnable
+ * @ingroup RtemsIntrReqVectorEnable
  */
 
 /*
@@ -61,10 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsIntrReqVectorEnable \
- *   spec:/rtems/intr/req/vector-enable
+ * @defgroup RtemsIntrReqVectorEnable spec:/rtems/intr/req/vector-enable
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  *
  * @{
  */

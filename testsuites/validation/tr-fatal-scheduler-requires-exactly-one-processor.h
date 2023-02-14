@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValFatalSchedulerRequiresExactlyOneProcessor
+ * @ingroup ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreSmpValFatalSchedulerRequiresExactlyOneProcessor
+ * @addtogroup ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor
  *
  * @{
  */

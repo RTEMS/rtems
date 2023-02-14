@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreThreadValSmpOneCpu
+ * @ingroup ScoreThreadValSmpOneCpu
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreThreadValSmpOneCpu \
- *   spec:/score/thread/val/smp-one-cpu
+ * @defgroup ScoreThreadValSmpOneCpu spec:/score/thread/val/smp-one-cpu
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOneCpu0
+ * @ingroup TestsuitesValidationSmpOneCpu0
  *
  * @brief Tests SMP-specific thread behaviour using only one processor and a
  *   uniprocessor scheduler.

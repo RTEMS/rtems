@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly2
+ * @ingroup TestsuitesValidationSmpOnly2
  */
 
 /*
@@ -57,7 +57,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationSmpOnly2 \
+ * @defgroup TestsuitesValidationSmpOnly2 \
  *   spec:/testsuites/validation-smp-only-2
  *
  * @ingroup RTEMSTestSuites
@@ -70,7 +70,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationSMPOnly2";
+const char rtems_test_name[] = "TestsuitesValidationSmpOnly2";
 
 bool __wrap__CPU_SMP_Start_processor( uint32_t cpu_index );
 

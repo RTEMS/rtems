@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsOptionValOptions
+ * @ingroup RtemsOptionValOptions
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsOptionValOptions spec:/rtems/option/val/options
+ * @defgroup RtemsOptionValOptions spec:/rtems/option/val/options
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests the option constants of the Classic API.
  *

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreMtxReqSeizeTry
+ * @ingroup ScoreMtxReqSeizeTry
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreMtxReqSeizeTry
+ * @addtogroup ScoreMtxReqSeizeTry
  *
  * @{
  */

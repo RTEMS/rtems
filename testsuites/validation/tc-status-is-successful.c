@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsStatusReqIsSuccessful
+ * @ingroup RtemsStatusReqIsSuccessful
  */
 
 /*
@@ -57,10 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsStatusReqIsSuccessful \
- *   spec:/rtems/status/req/is-successful
+ * @defgroup RtemsStatusReqIsSuccessful spec:/rtems/status/req/is-successful
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

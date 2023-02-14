@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsRatemonReqTimeout
+ * @ingroup RtemsRatemonReqTimeout
  */
 
 /*
@@ -60,11 +60,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsRatemonReqTimeout \
- *   spec:/rtems/ratemon/req/timeout
+ * @defgroup RtemsRatemonReqTimeout spec:/rtems/ratemon/req/timeout
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
+ * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationOneCpu0
  *
  * @{
  */

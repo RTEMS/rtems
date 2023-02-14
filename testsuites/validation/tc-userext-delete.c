@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsUserextReqDelete
+ * @ingroup RtemsUserextReqDelete
  */
 
 /*
@@ -58,9 +58,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsUserextReqDelete spec:/rtems/userext/req/delete
+ * @defgroup RtemsUserextReqDelete spec:/rtems/userext/req/delete
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

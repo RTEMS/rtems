@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValStartOfOptionalProcessorFailed
+ * @ingroup ScoreSmpValStartOfOptionalProcessorFailed
  */
 
 /*
@@ -57,10 +57,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSmpValStartOfOptionalProcessorFailed \
+ * @defgroup ScoreSmpValStartOfOptionalProcessorFailed \
  *   spec:/score/smp/val/start-of-optional-processor-failed
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly2
+ * @ingroup TestsuitesValidationSmpOnly2
  *
  * @brief Tests the state of an optional processor which failed to start.
  *

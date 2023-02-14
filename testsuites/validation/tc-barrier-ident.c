@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsBarrierValIdent
+ * @ingroup RtemsBarrierValIdent
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsBarrierValIdent spec:/rtems/barrier/val/ident
+ * @defgroup RtemsBarrierValIdent spec:/rtems/barrier/val/ident
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Test the rtems_barrier_ident() directive.
  *

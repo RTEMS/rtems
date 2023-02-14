@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSchedSmpEdfValEdf
+ * @ingroup ScoreSchedSmpEdfValEdf
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSchedSmpEdfValEdf \
- *   spec:/score/sched/smp/edf/val/edf
+ * @defgroup ScoreSchedSmpEdfValEdf spec:/score/sched/smp/edf/val/edf
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @brief Tests for operations of the EDF SMP scheduler.
  *

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskReqIsSuspended
+ * @ingroup RtemsTaskReqIsSuspended
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskReqIsSuspended \
- *   spec:/rtems/task/req/is-suspended
+ * @defgroup RtemsTaskReqIsSuspended spec:/rtems/task/req/is-suspended
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

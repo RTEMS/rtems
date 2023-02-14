@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalIdleThreadStackTooSmall
+ * @ingroup TestsuitesFatalIdleThreadStackTooSmall
  */
 
 /*
@@ -57,7 +57,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesFatalIdleThreadStackTooSmall \
+ * @defgroup TestsuitesFatalIdleThreadStackTooSmall \
  *   spec:/testsuites/fatal-idle-thread-stack-too-small
  *
  * @ingroup RTEMSTestSuites
@@ -68,7 +68,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "FatalIdleThreadStackTooSmall";
+const char rtems_test_name[] = "TestsuitesFatalIdleThreadStackTooSmall";
 
 #define FATAL_SYSINIT_RUN ScoreThreadValFatalIdleThreadStackTooSmall_Run
 

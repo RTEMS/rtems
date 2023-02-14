@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTimerReqServerFireAfter
+ * @ingroup RtemsTimerReqServerFireAfter
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTimerReqServerFireAfter \
+ * @defgroup RtemsTimerReqServerFireAfter \
  *   spec:/rtems/timer/req/server-fire-after
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

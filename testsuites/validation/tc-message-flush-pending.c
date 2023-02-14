@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsMessageReqFlushPending
+ * @ingroup RtemsMessageReqFlushPending
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsMessageReqFlushPending \
- *   spec:/rtems/message/req/flush-pending
+ * @defgroup RtemsMessageReqFlushPending spec:/rtems/message/req/flush-pending
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

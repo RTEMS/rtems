@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNonSmp
+ * @ingroup TestsuitesValidationNonSmp
  */
 
 /*
@@ -55,8 +55,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationNonSmp \
- *   spec:/testsuites/validation-non-smp
+ * @defgroup TestsuitesValidationNonSmp spec:/testsuites/validation-non-smp
  *
  * @ingroup RTEMSTestSuites
  *
@@ -66,7 +65,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationNonSMP";
+const char rtems_test_name[] = "TestsuitesValidationNonSmp";
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 1
 

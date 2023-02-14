@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAcfgValApplNeedsClockDriver
+ * @ingroup AcfgValApplNeedsClockDriver
  */
 
 /*
@@ -57,10 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAcfgValApplNeedsClockDriver \
- *   spec:/acfg/val/appl-needs-clock-driver
+ * @defgroup AcfgValApplNeedsClockDriver spec:/acfg/val/appl-needs-clock-driver
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup TestsuitesValidation0
  *
  * @brief Tests the effect of the CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
  *   application configuration option.

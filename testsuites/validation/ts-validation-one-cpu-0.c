@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
+ * @ingroup TestsuitesValidationOneCpu0
  */
 
 /*
@@ -55,8 +55,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidationOneCpu0 \
- *   spec:/testsuites/validation-one-cpu-0
+ * @defgroup TestsuitesValidationOneCpu0 spec:/testsuites/validation-one-cpu-0
  *
  * @ingroup RTEMSTestSuites
  *
@@ -69,7 +68,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "ValidationOneCpu0";
+const char rtems_test_name[] = "TestsuitesValidationOneCpu0";
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 

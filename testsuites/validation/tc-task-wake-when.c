@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskReqWakeWhen
+ * @ingroup RtemsTaskReqWakeWhen
  */
 
 /*
@@ -62,9 +62,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskReqWakeWhen spec:/rtems/task/req/wake-when
+ * @defgroup RtemsTaskReqWakeWhen spec:/rtems/task/req/wake-when
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

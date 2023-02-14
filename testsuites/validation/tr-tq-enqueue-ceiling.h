@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqEnqueueCeiling
+ * @ingroup ScoreTqReqEnqueueCeiling
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreTqReqEnqueueCeiling
+ * @addtogroup ScoreTqReqEnqueueCeiling
  *
  * @{
  */

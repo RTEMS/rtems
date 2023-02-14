@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsBasedefsValBasedefs
+ * @ingroup RtemsBasedefsValBasedefs
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsBasedefsValBasedefs \
- *   spec:/rtems/basedefs/val/basedefs
+ * @defgroup RtemsBasedefsValBasedefs spec:/rtems/basedefs/val/basedefs
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests the basedefs macros of the Classic API.
  *

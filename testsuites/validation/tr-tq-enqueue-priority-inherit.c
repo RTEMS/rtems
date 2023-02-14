@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqEnqueuePriorityInherit
+ * @ingroup ScoreTqReqEnqueuePriorityInherit
  */
 
 /*
@@ -57,10 +57,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqEnqueuePriorityInherit \
+ * @defgroup ScoreTqReqEnqueuePriorityInherit \
  *   spec:/score/tq/req/enqueue-priority-inherit
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

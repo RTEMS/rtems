@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSignalReqCatch
+ * @ingroup RtemsSignalReqCatch
  */
 
 /*
@@ -61,10 +61,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSignalReqCatch spec:/rtems/signal/req/catch
+ * @defgroup RtemsSignalReqCatch spec:/rtems/signal/req/catch
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
+ * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationOneCpu0
  *
  * @{
  */

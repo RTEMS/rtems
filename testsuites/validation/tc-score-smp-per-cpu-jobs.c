@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValPerCpuJobs
+ * @ingroup ScoreSmpValPerCpuJobs
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSmpValPerCpuJobs \
- *   spec:/score/smp/val/per-cpu-jobs
+ * @defgroup ScoreSmpValPerCpuJobs spec:/score/smp/val/per-cpu-jobs
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @brief Tests the processing order of per-processor jobs.
  *

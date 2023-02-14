@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseBspReqInterruptHandlerDispatchUnchecked
+ * @ingroup BspReqInterruptHandlerDispatchUnchecked
  */
 
 /*
@@ -60,10 +60,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseBspReqInterruptHandlerDispatchUnchecked \
+ * @defgroup BspReqInterruptHandlerDispatchUnchecked \
  *   spec:/bsp/req/interrupt-handler-dispatch-unchecked
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
+ * @ingroup TestsuitesValidationIntr
  *
  * @{
  */

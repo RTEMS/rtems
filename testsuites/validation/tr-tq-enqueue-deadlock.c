@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqEnqueueDeadlock
+ * @ingroup ScoreTqReqEnqueueDeadlock
  */
 
 /*
@@ -57,10 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqEnqueueDeadlock \
- *   spec:/score/tq/req/enqueue-deadlock
+ * @defgroup ScoreTqReqEnqueueDeadlock spec:/score/tq/req/enqueue-deadlock
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsEventValEvents
+ * @ingroup RtemsEventValEvents
  */
 
 /*
@@ -59,9 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsEventValEvents spec:/rtems/event/val/events
+ * @defgroup RtemsEventValEvents spec:/rtems/event/val/events
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests the Event Manager API.
  *

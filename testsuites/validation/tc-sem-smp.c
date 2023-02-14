@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsSemValSmp
+ * @ingroup RtemsSemValSmp
  */
 
 /*
@@ -61,9 +61,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsSemValSmp spec:/rtems/sem/val/smp
+ * @defgroup RtemsSemValSmp spec:/rtems/sem/val/smp
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @brief Tests SMP-specific semaphore behaviour.
  *

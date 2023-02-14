@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsMessageReqConstruct
+ * @ingroup RtemsMessageReqConstruct
  */
 
 /*
@@ -60,10 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsMessageReqConstruct \
- *   spec:/rtems/message/req/construct
+ * @defgroup RtemsMessageReqConstruct spec:/rtems/message/req/construct
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreSmpValFatalMandatoryProcessorNotPresent
+ * @ingroup ScoreSmpValFatalMandatoryProcessorNotPresent
  */
 
 /*
@@ -59,10 +59,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreSmpValFatalMandatoryProcessorNotPresent \
+ * @defgroup ScoreSmpValFatalMandatoryProcessorNotPresent \
  *   spec:/score/smp/val/fatal-mandatory-processor-not-present
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalMandatoryProcessorNotPresent
+ * @ingroup TestsuitesFatalMandatoryProcessorNotPresent
  *
  * @brief Tests a fatal error.
  *

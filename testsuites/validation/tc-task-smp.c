@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskValSmp
+ * @ingroup RtemsTaskValSmp
  */
 
 /*
@@ -60,9 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskValSmp spec:/rtems/task/val/smp
+ * @defgroup RtemsTaskValSmp spec:/rtems/task/val/smp
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly0
+ * @ingroup TestsuitesValidationSmpOnly0
  *
  * @brief This test case collection provides SMP-specific validation test cases
  *   for requirements of the @ref RTEMSAPIClassicTasks.

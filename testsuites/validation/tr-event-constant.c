@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsEventValEventConstant
+ * @ingroup RtemsEventValEventConstant
  */
 
 /*
@@ -59,10 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsEventValEventConstant \
- *   spec:/rtems/event/val/event-constant
+ * @defgroup RtemsEventValEventConstant spec:/rtems/event/val/event-constant
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests an event constant and number of the Event Manager using the
  *   Classic and system event sets of the executing task.

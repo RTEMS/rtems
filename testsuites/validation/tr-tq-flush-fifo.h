@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqFlushFifo
+ * @ingroup ScoreTqReqFlushFifo
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseScoreTqReqFlushFifo
+ * @addtogroup ScoreTqReqFlushFifo
  *
  * @{
  */

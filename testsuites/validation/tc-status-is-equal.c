@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsStatusReqIsEqual
+ * @ingroup RtemsStatusReqIsEqual
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsStatusReqIsEqual spec:/rtems/status/req/is-equal
+ * @defgroup RtemsStatusReqIsEqual spec:/rtems/status/req/is-equal
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

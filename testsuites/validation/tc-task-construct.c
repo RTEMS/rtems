@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskReqConstruct
+ * @ingroup RtemsTaskReqConstruct
  */
 
 /*
@@ -64,10 +64,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskReqConstruct spec:/rtems/task/req/construct
+ * @defgroup RtemsTaskReqConstruct spec:/rtems/task/req/construct
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation1
- * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu1
+ * @ingroup TestsuitesValidation1
+ * @ingroup TestsuitesValidationOneCpu1
  *
  * @{
  */

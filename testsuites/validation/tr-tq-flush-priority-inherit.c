@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreTqReqFlushPriorityInherit
+ * @ingroup ScoreTqReqFlushPriorityInherit
  */
 
 /*
@@ -58,10 +58,10 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreTqReqFlushPriorityInherit \
+ * @defgroup ScoreTqReqFlushPriorityInherit \
  *   spec:/score/tq/req/flush-priority-inherit
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

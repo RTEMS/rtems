@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsModeValModes
+ * @ingroup RtemsModeValModes
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsModeValModes spec:/rtems/mode/val/modes
+ * @defgroup RtemsModeValModes spec:/rtems/mode/val/modes
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests the task mode constants and function-like macros of the Classic
  *   API.

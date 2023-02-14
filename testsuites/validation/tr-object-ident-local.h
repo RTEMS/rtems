@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsReqIdentLocal
+ * @ingroup RtemsReqIdentLocal
  */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseRtemsReqIdentLocal
+ * @addtogroup RtemsReqIdentLocal
  *
  * @{
  */

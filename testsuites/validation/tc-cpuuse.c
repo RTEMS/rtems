@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsCpuuseValCpuuse
+ * @ingroup RtemsCpuuseValCpuuse
  */
 
 /*
@@ -60,9 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsCpuuseValCpuuse spec:/rtems/cpuuse/val/cpuuse
+ * @defgroup RtemsCpuuseValCpuuse spec:/rtems/cpuuse/val/cpuuse
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests the CPU usage reporting and reset.
  *

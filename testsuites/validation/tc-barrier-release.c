@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsBarrierReqRelease
+ * @ingroup RtemsBarrierReqRelease
  */
 
 /*
@@ -60,10 +60,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsBarrierReqRelease \
- *   spec:/rtems/barrier/req/release
+ * @defgroup RtemsBarrierReqRelease spec:/rtems/barrier/req/release
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

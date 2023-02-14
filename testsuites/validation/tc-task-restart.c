@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsTaskReqRestart
+ * @ingroup RtemsTaskReqRestart
  */
 
 /*
@@ -65,9 +65,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsTaskReqRestart spec:/rtems/task/req/restart
+ * @defgroup RtemsTaskReqRestart spec:/rtems/task/req/restart
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @{
  */

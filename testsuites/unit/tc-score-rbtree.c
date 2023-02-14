@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreRbtreeUnitRbtree
+ * @ingroup ScoreRbtreeUnitRbtree
  */
 
 /*
@@ -59,9 +59,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseScoreRbtreeUnitRbtree spec:/score/rbtree/unit/rbtree
+ * @defgroup ScoreRbtreeUnitRbtree spec:/score/rbtree/unit/rbtree
  *
- * @ingroup RTEMSTestSuiteTestsuitesUnitNoClock0
+ * @ingroup TestsuitesUnitNoClock0
  *
  * @brief Unit tests for the red-black tree implementation.
  *

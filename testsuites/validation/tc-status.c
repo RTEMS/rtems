@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsStatusValStatus
+ * @ingroup RtemsStatusValStatus
  */
 
 /*
@@ -57,9 +57,9 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsStatusValStatus spec:/rtems/status/val/status
+ * @defgroup RtemsStatusValStatus spec:/rtems/status/val/status
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock0
  *
  * @brief Tests some @ref RTEMSAPIClassicStatus interfaces.
  *
