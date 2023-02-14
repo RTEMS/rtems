@@ -15,6 +15,7 @@ install:
   source:
   - bsps/microblaze/microblaze_fpga/include/bsp/irq.h
   - bsps/microblaze/microblaze_fpga/include/bsp/jffs2_qspi.h
+  - bsps/microblaze/microblaze_fpga/include/bsp/microblaze-gpio.h
   - bsps/microblaze/include/bsp/microblaze-fdt-support.h
   - bsps/microblaze/include/common/xil_types.h
   - bsps/microblaze/include/dev/serial/uartlite.h
@@ -25,6 +26,7 @@ source:
 - bsps/microblaze/microblaze_fpga/console/console-io.c
 - bsps/microblaze/microblaze_fpga/console/debug-io.c
 - bsps/microblaze/microblaze_fpga/fs/jffs2_qspi.c
+- bsps/microblaze/microblaze_fpga/gpio/microblaze-gpio.c
 - bsps/microblaze/microblaze_fpga/irq/irq.c
 - bsps/microblaze/microblaze_fpga/start/_debug_sw_break_handler.S
 - bsps/microblaze/microblaze_fpga/start/_exception_handler.S

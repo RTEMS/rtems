@@ -29,6 +29,24 @@ links:
 - role: build-dependency
   uid: optdtbheaderpath
 - role: build-dependency
+  uid: optgpio2enable
+- role: build-dependency
+  uid: optgpio1baseaddress
+- role: build-dependency
+  uid: optgpio2baseaddress
+- role: build-dependency
+  uid: optgpio1dualchannel
+- role: build-dependency
+  uid: optgpio2dualchannel
+- role: build-dependency
+  uid: optgpio1irq
+- role: build-dependency
+  uid: optgpio2irq
+- role: build-dependency
+  uid: optgpio1interrupt
+- role: build-dependency
+  uid: optgpio2interrupt
+- role: build-dependency
   uid: opticachebaseaddress
 - role: build-dependency
   uid: opticachelinelen
