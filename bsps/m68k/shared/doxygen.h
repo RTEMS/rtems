@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup RTEMSImplDoxygen
+ *
+ * @brief This header file defines m68k-specific groups.
+ */
+
+/**
  * @defgroup RTEMSBSPsM68k Motorola 68000 and NXP ColdFire (m68k)
  *
  * @ingroup RTEMSBSPs

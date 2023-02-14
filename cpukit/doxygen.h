@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup RTEMSImplDoxygen
+ *
+ * @brief This header file defines some Doxygen groups.
+ */
+
+/**
  * @defgroup RTEMSAPIIO IO
  *
  * @ingroup RTEMSAPI

@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup RTEMSImplDoxygen
+ *
+ * @brief This header file defines riscv-specific groups.
+ */
+
+/**
  * @defgroup RTEMSBSPsRISCV RISC-V
  *
  * @ingroup RTEMSBSPs

@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup RTEMSImplDoxygen
+ *
+ * @brief This header file defines BSP-specific groups.
+ */
+
+/**
  * @defgroup RTEMSBSPsARM ARM
  *
  * @ingroup RTEMSBSPs

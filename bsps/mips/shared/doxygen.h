@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup RTEMSImplDoxygen
+ *
+ * @brief This header file defines mips-specific groups.
+ */
+
+/**
  * @defgroup RTEMSBSPsMIPS MIPS
  *
  * @ingroup RTEMSBSPs

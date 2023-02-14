@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup RTEMSImplDoxygen
+ *
+ * @brief This header file defines lm32-specific groups.
+ */
+
+/**
  * @defgroup RTEMSBSPsLM32 LatticeMicro32 (lm32)
  *
  * @ingroup RTEMSBSPs

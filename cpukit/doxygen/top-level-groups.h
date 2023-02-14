@@ -1,7 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDoxygen
+ *
+ * @brief This header file defines high level Doxygen groups.
+ */
+
 /*
- * Copyright (C) 2019, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2019, 2023 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -42,6 +50,12 @@
  * @defgroup RTEMSImpl Implementation
  *
  * @brief This group contains the RTEMS implementation components.
+ */
+
+/**
+ * @defgroup RTEMSImplDoxygen Doxygen Support
+ *
+ * @ingroup RTEMSImpl
  */
 
 /**

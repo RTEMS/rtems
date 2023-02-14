@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup RTEMSImplDoxygen
+ *
+ * @brief This header file defines powerpc-specific groups.
+ */
+
+/**
  * @defgroup RTEMSBSPsPowerPC PowerPC
  *
  * @ingroup RTEMSBSPs

@@ -1,4 +1,12 @@
 /**
+ * @file
+ *
+ * @ingroup RTEMSImplDoxygen
+ *
+ * @brief This header file defines i386-specific groups.
+ */
+
+/**
  * @defgroup RTEMSBSPsI386 i386
  *
  * @ingroup RTEMSBSPs
