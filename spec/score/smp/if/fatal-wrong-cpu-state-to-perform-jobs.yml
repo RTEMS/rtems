@@ -9,6 +9,6 @@ links:
   uid: header-impl
 - role: interface-ingroup
   uid: group
-name: SMP_FATAL_START_OF_MANDATORY_PROCESSOR_FAILED
+name: SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS
 references: []
 type: interface
