@@ -3533,9 +3533,9 @@
  * @anchor CONFIGURE_IDLE_TASK_STORAGE_SIZE
  *
  * If this configuration option is specified, then the task storage areas for
- * the IDLE tasks are statically allocated by <rtems/confdefs.h>.  The value of
- * this configuration option defines the size in bytes of the task storage area
- * of each IDLE task in the system.
+ * the IDLE tasks are statically allocated by ``<rtems/confdefs.h>``.  The
+ * value of this configuration option defines the size in bytes of the task
+ * storage area of each IDLE task in the system.
  *
  * @par Default Value
  * This configuration option has no default value.  If it is not specified,
@@ -3565,9 +3565,9 @@
  * system initialization.
  *
  * The value of this configuration option is passed to
- * RTEMS_TASK_STORAGE_SIZE() by <rtems/confdefs.h> to determine the actual size
- * of the statically allocated area to take architecture-specific overheads
- * into account.
+ * RTEMS_TASK_STORAGE_SIZE() by ``<rtems/confdefs.h>`` to determine the actual
+ * size of the statically allocated area to take architecture-specific
+ * overheads into account.
  *
  * The
  *
