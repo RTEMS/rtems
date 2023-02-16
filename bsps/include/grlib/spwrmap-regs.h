@@ -751,7 +751,7 @@ extern "C" {
  */
 
 #define SPWRMAP_IPMASK_IE_SHIFT 0
-#define SPWRMAP_IPMASK_IE_MASK 0xfffffU
+#define SPWRMAP_IPMASK_IE_MASK 0xffffffffU
 #define SPWRMAP_IPMASK_IE_GET( _reg ) \
   ( ( ( _reg ) & SPWRMAP_IPMASK_IE_MASK ) >> \
     SPWRMAP_IPMASK_IE_SHIFT )
@@ -774,7 +774,7 @@ extern "C" {
  */
 
 #define SPWRMAP_PIP_IP_SHIFT 0
-#define SPWRMAP_PIP_IP_MASK 0xfffffU
+#define SPWRMAP_PIP_IP_MASK 0xffffffffU
 #define SPWRMAP_PIP_IP_GET( _reg ) \
   ( ( ( _reg ) & SPWRMAP_PIP_IP_MASK ) >> \
     SPWRMAP_PIP_IP_SHIFT )
@@ -953,7 +953,7 @@ extern "C" {
  */
 
 #define SPWRMAP_LRUNSTAT_LR_SHIFT 1
-#define SPWRMAP_LRUNSTAT_LR_MASK 0x7fffeU
+#define SPWRMAP_LRUNSTAT_LR_MASK 0xfffffffeU
 #define SPWRMAP_LRUNSTAT_LR_GET( _reg ) \
   ( ( ( _reg ) & SPWRMAP_LRUNSTAT_LR_MASK ) >> \
     SPWRMAP_LRUNSTAT_LR_SHIFT )
