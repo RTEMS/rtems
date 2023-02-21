@@ -214,6 +214,8 @@ int jffs2_mknod(
 
 	f = JFFS2_INODE_INFO(inode);
 
+	mutex_lock(&f->sem);
+
 	inode->i_size = datalen;
 	ri->isize = ri->dsize = ri->csize = cpu_to_je32(inode->i_size);
 	ri->totlen = cpu_to_je32(sizeof(*ri) + inode->i_size);

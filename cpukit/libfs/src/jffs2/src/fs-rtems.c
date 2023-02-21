@@ -1459,6 +1459,7 @@ void jffs2_iput(struct _inode *i)
 static inline void jffs2_init_inode_info(struct jffs2_inode_info *f)
 {
 	memset(f, 0, sizeof(*f));
+	mutex_init(&f->sem);
 }
 
 static void jffs2_clear_inode (struct _inode *inode)
@@ -1543,6 +1544,7 @@ static int jffs2_read_inode (struct _inode *inode)
 	c = JFFS2_SB_INFO(inode->i_sb);
 
 	jffs2_init_inode_info(f);
+	mutex_lock(&f->sem);
 	
 	ret = jffs2_do_read_inode(c, f, inode->i_ino, &latest_node);
 
