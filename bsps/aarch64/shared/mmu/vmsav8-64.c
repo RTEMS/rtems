@@ -47,11 +47,15 @@ rtems_status_code aarch64_mmu_map(
 )
 {
   rtems_status_code sc;
+  ISR_Level        level;
   uint64_t max_mappable = 1LLU << aarch64_mmu_get_cpu_pa_bits();
 
   if ( addr >= max_mappable || (addr + size) > max_mappable ) {
     return RTEMS_INVALID_ADDRESS;
   }
+
+  /* Disable interrupts so they don't run while the MMU is disabled */
+  _ISR_Local_disable( level );
 
   aarch64_mmu_disable();
   sc = aarch64_mmu_map_block(
@@ -69,6 +73,8 @@ rtems_status_code aarch64_mmu_map(
   _AARCH64_Data_synchronization_barrier();
   _AARCH64_Instruction_synchronization_barrier();
   aarch64_mmu_enable();
+
+  _ISR_Local_enable( level );
 
   return sc;
 }
