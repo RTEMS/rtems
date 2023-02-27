@@ -2161,7 +2161,7 @@ pps_event(struct pps_state *pps, int event)
 	struct timecounter *captc;
 	uint64_t capth_scale;
 	struct bintime bt;
-	struct timespec ts, *tsp, *osp;
+	struct timespec *tsp, *osp;
 	uint32_t tcount, *pcount;
 	int foff;
 	pps_seq_t *pseq;
@@ -2265,7 +2265,7 @@ pps_event(struct pps_state *pps, int event)
 
 #ifdef PPS_SYNC
 	if (fhard) {
-		uint64_t scale;
+		uint64_t delta_nsec;
 
 		/*
 		 * Feed the NTP PLL/FLL.
@@ -2275,14 +2275,10 @@ pps_event(struct pps_state *pps, int event)
 		tcount = pps->capcount - pps->ppscount[2];
 		pps->ppscount[2] = pps->capcount;
 		tcount &= captc->tc_counter_mask;
-		scale = (uint64_t)1 << 63;
-		scale /= captc->tc_frequency;
-		scale *= 2;
-		bt.sec = 0;
-		bt.frac = 0;
-		bintime_addx(&bt, scale * tcount);
-		bintime2timespec(&bt, &ts);
-		hardpps(tsp, ts.tv_nsec + 1000000000 * ts.tv_sec);
+		delta_nsec = 1000000000;
+		delta_nsec *= tcount;
+		delta_nsec /= captc->tc_frequency;
+		hardpps(tsp, (long)delta_nsec);
 	}
 #endif
 
