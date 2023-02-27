@@ -2244,8 +2244,7 @@ pps_event(struct pps_state *pps, int event)
 	tcount = pps->capcount - tcount;
 	tcount &= captc->tc_counter_mask;
 	bintime_addx(&bt, capth_scale * tcount);
-	bintime2timespec(&bt, &ts);
-	*tsp = ts;
+	bintime2timespec(&bt, tsp);
 
 	if (foff) {
 		timespecadd(tsp, osp, tsp);
@@ -2260,9 +2259,8 @@ pps_event(struct pps_state *pps, int event)
 	bt = pps->capffth->tick_time;
 	ffclock_convert_delta(tcount, pps->capffth->cest.period, &bt);
 	bintime_add(&bt, &pps->capffth->tick_time);
-	bintime2timespec(&bt, &ts);
 	(*pseq_ffc)++;
-	*tsp_ffc = ts;
+	bintime2timespec(&bt, tsp_ffc);
 #endif
 
 #ifdef PPS_SYNC
