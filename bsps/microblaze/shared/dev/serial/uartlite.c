@@ -48,8 +48,11 @@ static void microblaze_uart_interrupt( void *arg )
     rtems_termios_enqueue_raw_characters( tty, &c, 1 );
   }
 
-  while ( ctx->transmitting && !XUartLite_IsTransmitEmpty( ctx->address ) ) {
-    rtems_termios_dequeue_characters( tty, 1 );
+  if ( ctx->transmitting && XUartLite_IsTransmitEmpty( ctx->address ) ) {
+    size_t sent = ctx->tx_queued;
+    ctx->transmitting = false;
+    ctx->tx_queued = 0;
+    rtems_termios_dequeue_characters( tty, sent );
   }
 }
 #endif
@@ -81,6 +84,8 @@ static bool uart_first_open(
   if ( sc != RTEMS_SUCCESSFUL ) {
     return false;
   }
+
+  ctx->tty = tty;
 #endif
 
   return true;
@@ -120,10 +125,17 @@ static void uart_write(
 
 #ifdef BSP_MICROBLAZE_FPGA_CONSOLE_INTERRUPTS
   if ( n > 0 ) {
+    size_t remaining = n;
+    const char *p = &s[0];
+
+    while (!XUartLite_IsTransmitFull( ctx->address ) && remaining > 0) {
+      XUartLite_SendByte( ctx->address, *p );
+      p++;
+      remaining--;
+    }
+
     ctx->transmitting = true;
-    XUartLite_SendByte( ctx->address, s[0] );
-  } else {
-    ctx->transmitting = false;
+    ctx->tx_queued = n - remaining;
   }
 #else
   size_t i = 0;
