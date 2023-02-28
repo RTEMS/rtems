@@ -27,12 +27,46 @@
 
 #include <bspopts.h>
 #include <bsp/microblaze-fdt-support.h>
-#ifdef BSP_MICROBLAZE_FPGA_USE_FDT
 #include <bsp/fdt.h>
 
 #include <libfdt.h>
 
+#ifdef BSP_START_COPY_FDT_FROM_U_BOOT
+/* use external dtb provided by u-boot */
+#include <sys/param.h>
+
+#ifndef BSP_FDT_BLOB_SIZE_MAX
+#define BSP_FDT_BLOB_SIZE_MAX 0
+#endif
+
+static RTEMS_ALIGNED(8) uint32_t
+system_dtb[BSP_FDT_BLOB_SIZE_MAX / sizeof(uint32_t)];
+
+void bsp_fdt_copy(const void *src)
+{
+  const volatile uint32_t *s = (const uint32_t *) src;
+  uint32_t *d = RTEMS_DECONST(uint32_t *, &system_dtb[0]);
+
+  if (s != d) {
+    size_t m = MIN(sizeof(system_dtb), fdt_totalsize(src));
+    size_t aligned_size = roundup2(m, CPU_CACHE_LINE_BYTES);
+    size_t n = (m + sizeof(*d) - 1) / sizeof(*d);
+    size_t i;
+
+    for (i = 0; i < n; ++i) {
+      d[i] = s[i];
+    }
+
+    rtems_cache_flush_multiple_data_lines(d, aligned_size);
+  }
+}
+#endif /* BSP_START_COPY_FDT_FROM_U_BOOT */
+
+#ifdef BSP_MICROBLAZE_FPGA_USE_FDT
+#ifndef BSP_START_COPY_FDT_FROM_U_BOOT
+/* use internal bsp dtb */
 #include BSP_MICROBLAZE_FPGA_DTB_HEADER_PATH
+#endif /* BSP_START_COPY_FDT_FROM_U_BOOT */
 
 const void *bsp_fdt_get(void)
 {

@@ -30,6 +30,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <bspopts.h>
+
 	.globl _crtinit
 	.align 2
 	.ent _crtinit
@@ -75,7 +77,9 @@ _crtinit:
 	brlid   r15, __init					 /* Invoke language initialization functions */
 	nop
 #endif /* __rtems__ */
-
+#ifdef BSP_START_COPY_FDT_FROM_U_BOOT      /* Boot loaders may pass the device tree in r5 */
+	brlid	r15, bsp_fdt_copy              /* Do not touch r5 until bsp_fdt_copy() is called */
+#endif /* BSP_START_COPY_FDT_FROM_U_BOOT */
 	addi	r6, r0, 0					   /* Initialize argc = 1 and argv = NULL and envp = NULL  */
 	addi	r7, r0, 0
 #ifndef __rtems__

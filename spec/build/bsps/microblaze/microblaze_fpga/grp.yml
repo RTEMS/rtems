@@ -80,6 +80,10 @@ links:
   uid: linkcmds
 - role: build-dependency
   uid: ../../bspopts
+- role: build-dependency
+  uid: ../../optfdtuboot
+- role: build-dependency
+  uid: ../../optfdtmxsz
 type: build
 use-after: []
 use-before: []

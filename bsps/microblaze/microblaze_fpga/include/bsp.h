@@ -49,14 +49,17 @@ extern "C" {
 
 #ifdef BSP_MICROBLAZE_FPGA_USE_FDT
 #define BSP_FDT_IS_SUPPORTED
+#ifndef BSP_START_COPY_FDT_FROM_U_BOOT
 extern const unsigned char system_dtb[];
 extern const size_t system_dtb_size;
+#endif /* BSP_START_COPY_FDT_FROM_U_BOOT */
 #endif /* BSP_MICROBLAZE_FPGA_USE_FDT */
 
 void microblaze_enable_icache(void);
 void microblaze_enable_dcache(void);
 void microblaze_invalidate_icache(void);
 void microblaze_invalidate_dcache(void);
+void microblaze_invalidate_dcache_range(unsigned int cacheaddr, unsigned int len);
 
 #ifdef __cplusplus
 }
