@@ -49,8 +49,10 @@ typedef struct {
   rtems_termios_device_context base;
   uintptr_t address;
   uint32_t initial_baud;
+  uint32_t enabled;
 #ifdef BSP_MICROBLAZE_FPGA_CONSOLE_INTERRUPTS
   bool transmitting;
+  uint32_t irq;
 #endif
 } uart_lite_context;
 

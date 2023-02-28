@@ -55,6 +55,8 @@ links:
 - role: build-dependency
   uid: optintcbaseaddress
 - role: build-dependency
+  uid: optmaxuarts
+- role: build-dependency
   uid: optramlen
 - role: build-dependency
   uid: optspibaseaddress
@@ -66,6 +68,14 @@ links:
   uid: opttimerfrequency
 - role: build-dependency
   uid: optuartlitebaseaddress
+- role: build-dependency
+  uid: optuseuart
+- role: build-dependency
+  uid: optuartirq
+- role: build-dependency
+  uid: optuartirq
+- role: build-dependency
+  uid: optconsoleuart
 - role: build-dependency
   uid: optusefdt
 - role: build-dependency

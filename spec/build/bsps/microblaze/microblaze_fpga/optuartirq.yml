@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 On-Line Applications Research Corporation (OAR)
+default:
+- enabled-by: true
+  value: 3
+default-by-variant: []
+description: |
+  irq number of the AXI UART Lite
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: BSP_MICROBLAZE_FPGA_UART_IRQ
+type: build
