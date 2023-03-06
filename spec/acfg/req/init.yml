@@ -3,6 +3,8 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links:
+- role: interface-function
+  uid: ../if/init
 - role: requirement-refinement
   uid: group
 functional-type: function
