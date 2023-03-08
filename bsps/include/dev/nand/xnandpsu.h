@@ -181,7 +181,11 @@ extern "C" {
 
 #define XNANDPSU_DEBUG
 
+#ifdef __rtems__
+#define XNANDPSU_MAX_TARGETS		2U	/**< ce_n0, ce_n1 */
+#else
 #define XNANDPSU_MAX_TARGETS		1U	/**< ce_n0, ce_n1 */
+#endif
 #define XNANDPSU_MAX_PKT_SIZE		0x7FFU	/**< Max packet size */
 #define XNANDPSU_MAX_PKT_COUNT		0xFFFU	/**< Max packet count */
 
