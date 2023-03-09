@@ -48,6 +48,10 @@
 #include <math.h>
 #ifdef __rtems__
 #include <bsp/linker-symbols.h>
+#include <bspopts.h>
+
+#define HSE_VALUE STM32H7_HSE_FREQUENCY
+
 #endif /* __rtems__ */
 #if !defined  (HSE_VALUE)
 #define HSE_VALUE    ((uint32_t)24000000) /*!< Value of the External oscillator in Hz */
