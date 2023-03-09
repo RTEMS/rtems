@@ -537,13 +537,7 @@ static const void *fdt_path_getprop_namelen(const void *fdt, const char *path,
 const char *fdt_get_alias_namelen(const void *fdt,
 				  const char *name, int namelen)
 {
-	int aliasoffset;
-
-	aliasoffset = fdt_path_offset(fdt, "/aliases");
-	if (aliasoffset < 0)
-		return NULL;
-
-	return fdt_getprop_namelen(fdt, aliasoffset, name, namelen, NULL);
+	return fdt_path_getprop_namelen(fdt, "/aliases", name, namelen, NULL);
 }
 
 const char *fdt_get_alias(const void *fdt, const char *name)
