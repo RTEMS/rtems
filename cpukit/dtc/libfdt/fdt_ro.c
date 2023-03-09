@@ -522,6 +522,18 @@ uint32_t fdt_get_phandle(const void *fdt, int nodeoffset)
 	return fdt32_ld_(php);
 }
 
+static const void *fdt_path_getprop_namelen(const void *fdt, const char *path,
+					    const char *propname, int propnamelen,
+					    int *lenp)
+{
+	int offset = fdt_path_offset(fdt, path);
+
+	if (offset < 0)
+		return NULL;
+
+	return fdt_getprop_namelen(fdt, offset, propname, propnamelen, lenp);
+}
+
 const char *fdt_get_alias_namelen(const void *fdt,
 				  const char *name, int namelen)
 {
