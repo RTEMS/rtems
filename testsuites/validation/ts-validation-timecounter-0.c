@@ -58,7 +58,7 @@
  * @defgroup TestsuitesValidationTimecounter0 \
  *   spec:/testsuites/validation-timecounter-0
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite is intended test cases related to the
  *   installation of timecouters.  The Clock Driver is disabled.

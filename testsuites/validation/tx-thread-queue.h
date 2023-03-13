@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValdation
  *
  * @brief This header file provides the functions to test the
  *   @ref RTEMSScoreThreadQueue.
@@ -50,7 +50,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestSuites
+ * @addtogroup RTEMSTestSuitesValdation
  *
  * @{
  */

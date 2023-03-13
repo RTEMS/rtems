@@ -60,7 +60,7 @@
  * @defgroup TestsuitesFatalInitTaskConstructFailed \
  *   spec:/testsuites/fatal-init-task-construct-failed
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains a test case which triggers a
  *   fatal error during system initialization.

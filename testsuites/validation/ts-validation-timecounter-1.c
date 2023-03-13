@@ -58,7 +58,7 @@
  * @defgroup TestsuitesValidationTimecounter1 \
  *   spec:/testsuites/validation-timecounter-1
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite is intended test cases related to the use
  *   of timecouters.  The Clock Driver is enabled.

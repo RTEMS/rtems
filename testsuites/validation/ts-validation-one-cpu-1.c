@@ -59,7 +59,7 @@
 /**
  * @defgroup TestsuitesValidationOneCpu1 spec:/testsuites/validation-one-cpu-1
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This general purpose validation test suite provides enough resources
  *   to run basic tests with exactly one processor and without a Clock Driver.

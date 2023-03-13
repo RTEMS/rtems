@@ -61,7 +61,7 @@
  * @defgroup TestsuitesFatalBootProcessorNotAssignedToScheduler \
  *   spec:/testsuites/fatal-boot-processor-not-assigned-to-scheduler
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite uses an application configuration which
  *   triggers a fatal error during system initialization.

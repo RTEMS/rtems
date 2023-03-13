@@ -57,7 +57,7 @@
 /**
  * @defgroup TestsuitesValidationNonSmp spec:/testsuites/validation-non-smp
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This test suite for non-SMP test cases provides enough resources to
  *   run basic tests for all specified managers and functions.

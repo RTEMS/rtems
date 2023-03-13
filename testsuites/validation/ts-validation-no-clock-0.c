@@ -58,7 +58,7 @@
  * @defgroup TestsuitesValidationNoClock0 \
  *   spec:/testsuites/validation-no-clock-0
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This general purpose validation test suite provides enough resources
  *   to run basic tests without a Clock Driver for all specified managers and

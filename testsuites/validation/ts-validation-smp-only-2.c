@@ -60,7 +60,7 @@
  * @defgroup TestsuitesValidationSmpOnly2 \
  *   spec:/testsuites/validation-smp-only-2
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This SMP-only test suite validates the clustered scheduler
  *   configuration through an application configuration with a processor

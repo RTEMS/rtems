@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValdation
  *
  * @brief This source file contains the implementation of
  *   HasInterruptVectorEntriesInstalled().

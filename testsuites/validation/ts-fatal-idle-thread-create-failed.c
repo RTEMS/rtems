@@ -60,7 +60,7 @@
  * @defgroup TestsuitesFatalIdleThreadCreateFailed \
  *   spec:/testsuites/fatal-idle-thread-create-failed
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains a test case which is triggered by
  *   a fatal error during system initialization.

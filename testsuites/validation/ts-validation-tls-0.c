@@ -57,7 +57,7 @@
 /**
  * @defgroup TestsuitesValidationTls0 spec:/testsuites/validation-tls-0
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains test cases related to the
  *   thread-local storage support.

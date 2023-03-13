@@ -58,7 +58,7 @@
  * @defgroup TestsuitesValidationSmpOneCpu0 \
  *   spec:/testsuites/validation-smp-one-cpu-0
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This general purpose validation test suite provides enough resources
  *   to run basic tests for all specified managers and functions in a

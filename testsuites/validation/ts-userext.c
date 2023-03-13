@@ -59,7 +59,7 @@
 /**
  * @defgroup TestsuitesUserext spec:/testsuites/userext
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains a test cases related to the
  *   invocation of user extensions.

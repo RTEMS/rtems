@@ -60,7 +60,7 @@
  * @defgroup TestsuitesFatalIdleThreadStackTooSmall \
  *   spec:/testsuites/fatal-idle-thread-stack-too-small
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains a test case which triggers a
  *   fatal error during system initialization.

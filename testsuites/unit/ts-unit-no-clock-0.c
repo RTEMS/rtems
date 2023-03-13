@@ -57,7 +57,7 @@
 /**
  * @defgroup TestsuitesUnitNoClock0 spec:/testsuites/unit-no-clock-0
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesUnit
  *
  * @brief This general purpose unit test suite provides enough resources to run
  *   basic tests without a Clock Driver for all specified managers and

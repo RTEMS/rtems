@@ -61,7 +61,7 @@
  * @defgroup TestsuitesFatalStartOfMandatoryProcessorFailed \
  *   spec:/testsuites/fatal-start-of-mandatory-processor-failed
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains a test case which triggers a
  *   fatal error during system initialization.

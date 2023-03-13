@@ -60,7 +60,7 @@
 /**
  * @defgroup TestsuitesFatalSmp spec:/testsuites/fatal-smp
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains a test case which triggers
  *   SMP-specific fatal errors.

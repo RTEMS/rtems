@@ -52,7 +52,7 @@ extern "C" {
 /**
  * @defgroup RTEMSTestSuiteTestsTFTPFS Test suite for libtftpsfs tests
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesFilesystem
  *
  * @brief This test suite provides a tests for libtftpfs.
  *

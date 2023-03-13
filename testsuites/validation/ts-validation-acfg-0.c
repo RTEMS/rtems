@@ -60,7 +60,7 @@
 /**
  * @defgroup TestsuitesValidationAcfg0 spec:/testsuites/validation-acfg-0
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite is used to validate the default value of
  *   application configuration options taking the optional BSP provided

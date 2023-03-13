@@ -59,7 +59,7 @@
 /**
  * @defgroup TestsuitesTerminate spec:/testsuites/terminate
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains a test case for the system
  *   termination procedure.

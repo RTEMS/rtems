@@ -60,7 +60,7 @@
  * @defgroup TestsuitesPerformanceNoClock0 \
  *   spec:/testsuites/performance-no-clock-0
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This general purpose performance test suite provides enough resources
  *   to run basic performance tests for all specified managers and functions.

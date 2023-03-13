@@ -63,3 +63,27 @@
  *
  * @brief This group contains the test suites.
  */
+
+/**
+ * @defgroup RTEMSTestSuitesFilesystem Filesystem Test Suites
+ *
+ * @ingroup RTEMSTestSuites
+ *
+ * @brief This group contains the test suites related to filesystem tests.
+ */
+
+/**
+ * @defgroup RTEMSTestSuitesUnit Unit Test Suites
+ *
+ * @ingroup RTEMSTestSuites
+ *
+ * @brief This group contains the test suites related to unit tests.
+ */
+
+/**
+ * @defgroup RTEMSTestSuitesValidation Validation Test Suites
+ *
+ * @ingroup RTEMSTestSuites
+ *
+ * @brief This group contains the test suites related to validation tests.
+ */

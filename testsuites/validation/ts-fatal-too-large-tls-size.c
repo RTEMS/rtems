@@ -60,7 +60,7 @@
  * @defgroup TestsuitesFatalTooLargeTlsSize \
  *   spec:/testsuites/fatal-too-large-tls-size
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains a test case which triggers a
  *   fatal error during system initialization.

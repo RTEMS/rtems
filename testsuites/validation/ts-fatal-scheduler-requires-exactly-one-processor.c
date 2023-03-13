@@ -61,7 +61,7 @@
  * @defgroup TestsuitesFatalSchedulerRequiresExactlyOneProcessor \
  *   spec:/testsuites/fatal-scheduler-requires-exactly-one-processor
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite uses an application configuration which
  *   triggers a fatal error during system initialization.

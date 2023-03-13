@@ -61,7 +61,7 @@
  * @defgroup TestsuitesFatalMandatoryProcessorNotPresent \
  *   spec:/testsuites/fatal-mandatory-processor-not-present
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains a test case which triggers a
  *   fatal error during system initialization.

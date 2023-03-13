@@ -64,7 +64,7 @@
 /**
  * @defgroup TestsuitesValidationIoKernel spec:/testsuites/validation-io-kernel
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite contains test cases which test the kernel
  *   character input/output device provided by the BSP before the system

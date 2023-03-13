@@ -57,7 +57,7 @@
 /**
  * @defgroup TestsuitesValidationCache spec:/testsuites/validation-cache
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite provides enough resources to run tests for
  *   the directives of the @ref RTEMSAPIClassicCache.

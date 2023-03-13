@@ -57,7 +57,7 @@
 /**
  * @defgroup TestsuitesValidation0 spec:/testsuites/validation-0
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This general purpose validation test suite provides enough resources
  *   to run basic tests for all specified managers and functions.

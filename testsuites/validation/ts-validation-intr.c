@@ -57,7 +57,7 @@
 /**
  * @defgroup TestsuitesValidationIntr spec:/testsuites/validation-intr
  *
- * @ingroup RTEMSTestSuites
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite provides enough resources to run tests for
  *   the interrupt controller related directives of the @ref
