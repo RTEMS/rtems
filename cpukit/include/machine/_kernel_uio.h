@@ -39,9 +39,7 @@
  *   kernel space (_KERNEL is defined before including <sys/uio.h>).
  */
 
-#if !defined(_SYS_UIO_H_) || !defined(_KERNEL)
-#error "must be included via <sys/uio.h> in kernel space"
-#endif
+#if defined(_SYS_UIO_H_) && defined(_KERNEL)
 
 struct uio {
 	struct	iovec *uio_iov;		/* scatter/gather list */
@@ -88,3 +86,7 @@ int	uiomove_fromphys(struct vm_page *ma[], vm_offset_t offset, int n,
 	    struct uio *uio);
 int	uiomove_nofault(void *cp, int n, struct uio *uio);
 int	uiomove_object(struct vm_object *obj, off_t obj_size, struct uio *uio);
+
+#else /* !_SYS_UIO_H_ || !_KERNEL */
+#error "must be included via <sys/uio.h> in kernel space"
+#endif /* _SYS_UIO_H_ && _KERNEL */

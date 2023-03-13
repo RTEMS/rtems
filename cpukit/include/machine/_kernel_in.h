@@ -39,9 +39,7 @@
  *   (_KERNEL is defined before including <netinet/in.h>).
  */
 
-#if !defined(_NETINET_IN_H_) || !defined(_KERNEL)
-#error "must be included via <netinet/in.h> in kernel space"
-#endif
+#if defined(_NETINET_IN_H_) && defined(_KERNEL)
 
 struct ifnet; struct mbuf;	/* forward declarations for Standard C */
 struct in_ifaddr;
@@ -71,3 +69,7 @@ void	 in_ifdetach(struct ifnet *);
 #define	satosin(sa)	((struct sockaddr_in *)(sa))
 #define	sintosa(sin)	((struct sockaddr *)(sin))
 #define	ifatoia(ifa)	((struct in_ifaddr *)(ifa))
+
+#else /* !_NETINET_IN_H_ || !_KERNEL */
+#error "must be included via <netinet/in.h> in kernel space"
+#endif /* _NETINET_IN_H_ && _KERNEL */

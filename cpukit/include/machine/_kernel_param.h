@@ -37,9 +37,7 @@
 #include <sys/time.h>
 #include <sys/priority.h>
 
-#if !defined(_SYS_PARAM_H_) || !defined(_KERNEL)
-#error "must be included via <sys/param.h> in kernel space"
-#endif
+#if defined(_SYS_PARAM_H_) && defined(_KERNEL)
 
 #ifndef FALSE
 #define	FALSE	0
@@ -65,3 +63,7 @@ __END_DECLS
 #define	ntohl(x)	__ntohl(x)
 #define	ntohs(x)	__ntohs(x)
 #endif /* !_BYTEORDER_FUNC_DEFINED */
+
+#else /* !_SYS_PARAM_H_ || !_KERNEL */
+#error "must be included via <sys/param.h> in kernel space"
+#endif /* _SYS_PARAM_H_ && _KERNEL */

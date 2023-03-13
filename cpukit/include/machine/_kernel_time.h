@@ -41,9 +41,7 @@
  *   (_KERNEL is defined before including <sys/time.h>).
  */
 
-#if !defined(_SYS_TIME_H_) || !defined(_KERNEL)
-#error "must be included via <sys/time.h> in kernel space"
-#endif
+#if defined(_SYS_TIME_H_) && defined(_KERNEL)
 
 #include <machine/_timecounter.h>
 
@@ -216,3 +214,7 @@ int	tvtohz(struct timeval *tv);
 #define	TIMESEL(sbt, sbt2)						\
 	(((sbt2) >= sbt_timethreshold) ?				\
 	    ((*(sbt) = getsbinuptime()), 1) : ((*(sbt) = sbinuptime()), 0))
+
+#else /* !_SYS_TIME_H_ || !_KERNEL */
+#error "must be included via <sys/time.h> in kernel space"
+#endif /* _SYS_TIME_H_ && _KERNEL */
