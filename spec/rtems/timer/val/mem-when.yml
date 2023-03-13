@@ -3,6 +3,8 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links:
+- role: requirement-refinement
+  uid: /testsuites/membench
 - role: validation
   uid: ../req/mem-when
 test-brief: |

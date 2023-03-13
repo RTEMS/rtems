@@ -7,7 +7,7 @@ enabled-by:
   - bsps/sparc/leon3
 links:
 - role: requirement-refinement
-  uid: /req/test-suites
+  uid: validation
 test-brief: |
   This validation test suite provides an application configuration to perform a
   shutdown.

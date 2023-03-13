@@ -4,7 +4,7 @@ copyrights:
 enabled-by: sparc/gr712rc
 links:
 - role: requirement-refinement
-  uid: /req/test-suites
+  uid: validation
 test-brief: |
   This validation test suite contains BSP-specific test cases.
 test-code: |

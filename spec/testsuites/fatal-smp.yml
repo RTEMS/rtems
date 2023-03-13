@@ -4,7 +4,7 @@ copyrights:
 enabled-by: RTEMS_SMP
 links:
 - role: requirement-refinement
-  uid: /req/test-suites
+  uid: validation
 test-brief: |
   This validation test suite contains a test case which triggers
   ${/glossary/smp:/term}-specific fatal errors.

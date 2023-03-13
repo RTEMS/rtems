@@ -4,7 +4,7 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: /req/test-suites
+  uid: validation
 test-brief: |
   This validation test suite contains test cases which test the kernel
   character input/output device provided by the ${/glossary/bsp:/term} before

@@ -4,7 +4,7 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: /req/test-suites
+  uid: validation
 test-brief: |
   This general purpose validation test suite provides enough resources to run
   basic tests without a ${/glossary/clock-driver:/term} for all specified
