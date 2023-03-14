@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuitesValdation
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This header file provides the constants used by the test suite
  *   configuration.
@@ -44,7 +44,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestSuitesValdation
+ * @addtogroup RTEMSTestSuitesValidation
  *
  * @{
  */

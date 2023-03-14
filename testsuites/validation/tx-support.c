@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuitesValdation
+ * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This source file contains the implementation of support functions for
  *   the validation test cases.
