@@ -9,7 +9,7 @@ copyrights:
 - Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
 default:
 - enabled-by: true
-  value: 0xFF180000
+  value: 0xff180000
 description: |
   base address of XPS
 enabled-by: true
