@@ -8,6 +8,8 @@ copyrights:
 default:
 - enabled-by: riscv/mpfs64imafdc
   value: bsp/mpfs-dtb.h
+- enabled-by: riscv/kendrytek210
+  value: bsp/kendryte-k210-dtb.h
 - enabled-by: true
   value: false
 description: |

@@ -51,9 +51,13 @@ links:
 - role: build-dependency
   uid: optfrdme310arty
 - role: build-dependency
+  uid: optkendrytek210
+- role: build-dependency
   uid: opthtif
 - role: build-dependency
   uid: optmpfs
+- role: build-dependency
+  uid: optsifiveuart
 - role: build-dependency
   uid: optns16550max
 - role: build-dependency

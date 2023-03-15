@@ -49,6 +49,7 @@ enabled-by:
 - riscv/rv64imafdc
 - riscv/rv64imafdc_medany
 - riscv/rv64imafd_medany
+- riscv/kendrytek210
 - sparc/erc32
 - sparc/gr712rc
 - sparc/gr740

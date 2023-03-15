@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2022 Alan Cudmore
+default:
+- enabled-by: riscv/kendrytek210
+  value: true
+- enabled-by: true
+  value: false
+description: |
+  enables support for the Kendryte K210 System on Chip if defined to a non-zero value, otherwise it is disabled (disabled by default)
+enabled-by: true
+links: []
+name: RISCV_ENABLE_KENDRYTE_K210_SUPPORT
+type: build
