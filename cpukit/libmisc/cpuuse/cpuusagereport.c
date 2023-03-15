@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPICPUUsageReporting
+ * @ingroup RTEMSImplCPUUsageReporting
  *
  * @brief This source file contains the definition of
  *   rtems_cpu_usage_report() and rtems_cpu_usage_report_with_plugin().

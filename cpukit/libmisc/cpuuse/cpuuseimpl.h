@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplCPUUsageReporting
+ *
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSImplCPUUsageReporting implementation.
+ */
+
 /*
  * COPYRIGHT (c) 1989-2011.
  * On-Line Applications Research Corporation (OAR).
@@ -35,7 +44,24 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplCPUUsageReporting CPU Usage Reporting
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the implementation of
+ *   @ref RTEMSAPICPUUsageReporting.
+ *
+ * @{
+ */
+
+/**
+ * @brief This object provides the uptime timestamp at the last CPU usage
+ *   reset.
+ */
 extern Timestamp_Control CPU_usage_Uptime_at_last_reset;
+
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPICPUUsageReporting
+ * @ingroup RTEMSImplCPUUsageReporting
  *
  * @brief This source file contains the definition of
  *   ::CPU_usage_Uptime_at_last_reset.
