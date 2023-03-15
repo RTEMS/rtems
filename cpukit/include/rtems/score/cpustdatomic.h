@@ -3,6 +3,8 @@
 /**
  * @file
  * 
+ * @ingroup RTEMSScoreAtomicCPU
+ *
  * @brief This header file provides the interfaces of the
  *   @ref RTEMSScoreAtomicCPU.
  */
