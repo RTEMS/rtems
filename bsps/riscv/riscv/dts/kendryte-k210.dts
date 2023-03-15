@@ -1,0 +1,216 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/*
+ * Copyright (C) Alan Cudmore
+ * Copyright (C) Padmarao Begari
+ * Copyright (C) 2022 Microchip Technology Inc.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *	notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *	notice, this list of conditions and the following disclaimer in the
+ *	documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+ /* This is a device tree for the Kendryte K210 SoC. It is a simplified tree
+  * to support the current RTEMS BSP, but it is not sufficient enough for
+  * full linux or u-boot support.
+  * The file structure is based on the device tree source for the
+  * Polarfire SoC created by Padmaro Begari. The K210 device trees from
+  * u-boot were originally used to bring up the RTEMS BSP and were
+  * referenced to develop this file.
+  */
+
+/dts-v1/;
+
+/ {
+        /* 32 bit address bus - upper 32 bits are ignored */
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	model = "Kendtryte K210 generic";
+	compatible = "canaan,kendryte-k210";
+
+	aliases {
+		serial0 = &uarths0;
+		serial1 = &uart1;
+		/* serial2 = &uart2; */
+		/* serial3 = &uart3; */
+	};
+
+	chosen {
+		stdout-path = "serial0";
+	};
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		timebase-frequency = <7800000>;
+
+		cpu0: cpu@0 {
+			compatible = "canaan,k210", "riscv";
+			device_type = "cpu";
+			reg = <0>;
+			riscv,isa = "rv64imafdc";
+			i-cache-block-size = <64>;
+			i-cache-size = <0x8000>;
+			d-cache-block-size = <64>;
+			d-cache-size = <0x8000>;
+			cpu0_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+		cpu1: cpu@1 {
+			compatible = "canaan,k210", "riscv";
+			device_type = "cpu";
+			reg = <1>;
+			riscv,isa = "rv64imafdc";
+			i-cache-block-size = <64>;
+			i-cache-size = <0x8000>;
+			d-cache-block-size = <64>;
+			d-cache-size = <0x8000>;
+			cpu1_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+
+	};
+
+	clocks {
+                in0: oscillator {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <26000000>;
+		};
+	};
+
+	sram: memory@80000000 {
+		device_type = "memory";
+                compatible = "canaan,k210-sram";
+		reg = <0x80000000 0x400000>,
+		      <0x80400000 0x200000>,
+		      <0x80600000 0x200000>;
+                reg-names = "sram0",
+                            "sram1",
+                            "aisram";
+
+	};
+
+	soc: soc {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "simple-bus";
+		ranges;
+                interrupt-parent = <&plic0>;
+
+                rom0: nvmem@1000 {
+                         reg = <0x1000 0x1000>;
+                         read-only;
+                };
+
+		clint0: timer@2000000 {
+			compatible = "riscv,clint0","sifive,clint0";
+			reg = <0x2000000 0xC000>;
+			interrupts-extended = <&cpu0_intc 3>,<&cpu0_intc 7>,
+					      <&cpu1_intc 3>,<&cpu1_intc 7>;
+		};
+
+		plic0: interrupt-controller@c000000 {
+			#interrupt-cells = <1>;
+			#address-cells = <0>;
+			compatible = "riscv,plic0","sifive,plic-1.0.0";
+			reg = <0xC000000 0x4000000>;
+			riscv,ndev = <65>;
+			interrupt-controller;
+			interrupts-extended =
+				<&cpu0_intc 11>, <&cpu0_intc 9>,
+				<&cpu1_intc 11>, <&cpu1_intc 9>;
+		};
+
+		uarths0: serial@38000000 {
+			compatible = "canaan,k210-uarths","sifive,uart0";
+			reg = <0x38000000 0x1000>;
+			interrupts = <33>;
+			clocks = <&sysclk 0>;
+
+		};
+
+                /* apb0 has gpio1 and additional uarts */
+		apb0: bus@50200000 {
+			#address-cells = <1>;
+			#size-cells = <1>;
+			compatible = "simple-pm-bus";
+			ranges;
+			clocks = <&sysclk 8>;
+
+			uart1: serial@50210000 {
+				compatible = "snps,dw-apb-uart";
+				reg = <0x50210000 0x100>;
+				interrupts = <11>;
+				clocks = <&sysclk 30>,
+					 <&sysclk 8>;
+				clock-namees = "baudclk", "abp_pclk";
+				resets = <&sysrst 16>;
+				reg-io-width = <4>;
+				reg-shift = <2>;
+				dcd-override;
+				dsr-override;
+				cts-override;
+				ri-override;
+			};
+                };
+
+                apb1: bus@50400000 {
+			#address-cells = <1>;
+			#size-cells = <1>;
+			compatible = "simple-pm-bus";
+			ranges;
+			clocks = <&sysclk 9>;
+
+			sysctl: syscon@50440000 {
+				compatible = "canaan,k210-sysctl","syscon",
+				             "simple-mfd";
+				reg = <0x50440000 0x100>;
+				clocks = <&sysclk 9>;
+				clock-names = "pclk";
+				sysclk: clock-controller {
+					#clock-cells = <1>;
+					compatible = "canaan,k210-rst";
+					clock = <&in0>;
+				};
+				sysrst: reset-coontroller {
+					compatible = "canaan,k210-rst";
+					#reset-cells = <1>;
+				};
+				reboot: syscon-reboot {
+					compatible = "syscon-reboot";
+					regmap = <&sysctl>;
+					offset = <48>;
+					mask = <1>;
+					value = <1>;
+				};
+			};
+		};
+
+	};
+};
