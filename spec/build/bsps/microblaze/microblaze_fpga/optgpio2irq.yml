@@ -9,7 +9,6 @@ copyrights:
 default:
 - enabled-by: true
   value: 9
-default-by-variant: []
 description: |
   the IRQ number of GPIO 2
 enabled-by: BSP_MICROBLAZE_FPGA_GPIO2_ENABLED

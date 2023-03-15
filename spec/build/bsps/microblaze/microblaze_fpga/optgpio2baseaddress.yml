@@ -10,7 +10,6 @@ copyrights:
 default:
 - enabled-by: true
   value: 0x40010000
-default-by-variant: []
 description: |
   base address of GPIO 2
 enabled-by: BSP_MICROBLAZE_FPGA_GPIO2_ENABLED

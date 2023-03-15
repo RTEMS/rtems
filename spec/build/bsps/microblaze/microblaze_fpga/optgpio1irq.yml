@@ -9,7 +9,6 @@ copyrights:
 default:
 - enabled-by: true
   value: 8
-default-by-variant: []
 description: |
   the IRQ number of GPIO 1
 enabled-by: true

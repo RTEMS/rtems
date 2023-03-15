@@ -10,7 +10,6 @@ copyrights:
 default:
 - enabled-by: true
   value: 0x40000000
-default-by-variant: []
 description: |
   base address of GPIO 1
 enabled-by: true

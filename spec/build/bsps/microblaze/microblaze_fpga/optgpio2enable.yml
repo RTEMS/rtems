@@ -9,7 +9,6 @@ copyrights:
 default:
 - enabled-by: true
   value: false
-default-by-variant: []
 description: |
   GPIO 2 is enabled
 enabled-by: true

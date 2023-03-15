@@ -8,7 +8,6 @@ copyrights:
 default:
 - enabled-by: true
   value: true
-default-by-variant: []
 description: |
   GPIO 2 has interrupt
 enabled-by: BSP_MICROBLAZE_FPGA_GPIO2_ENABLED
