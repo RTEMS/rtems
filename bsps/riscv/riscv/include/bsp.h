@@ -60,6 +60,10 @@
 
 #include <rtems/devnull.h>
 
+#if RISCV_ENABLE_KENDRYTE_K210_SUPPORT != 0
+   #include <bsp/k210.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -53,7 +53,7 @@ static void fe310_uart_write (
   fe310_uart_context * ctx = (fe310_uart_context*) base;
   size_t i;
 
-  ctx->regs->div = riscv_get_core_frequency() / 115200 - 1;
+  ctx->regs->div = (riscv_get_core_frequency() / 115200 - 1) & 0xFFFF;
   ctx->regs->txctrl |= 1;
   ctx->regs->rxctrl |= 1;
 

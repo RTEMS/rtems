@@ -55,7 +55,7 @@
 #include <libfdt.h>
 #include <string.h>
 
-#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+#if RISCV_ENABLE_SIFIVE_UART_SUPPORT != 0
 #include <bsp/fe310-uart.h>
 static fe310_uart_context fe310_uart_instance;
 #endif
@@ -239,7 +239,7 @@ static void riscv_console_probe(void)
     }
 #endif
 
-#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+#if RISCV_ENABLE_SIFIVE_UART_SUPPORT != 0
     if (fdt_stringlist_contains(compat, compat_len, "sifive,uart0")) {
       fe310_uart_context *ctx;
 
@@ -255,7 +255,7 @@ static void riscv_console_probe(void)
         riscv_console.getchar = fe310_uart_read;
       }
 
-      rtems_termios_device_context_initialize(&ctx->base, "FE310UART");
+      rtems_termios_device_context_initialize(&ctx->base, "SIFIVEUART");
     }
 #endif
 
@@ -290,7 +290,7 @@ rtems_status_code console_initialize(
   size_t i;
 #endif
 
-#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+#if RISCV_ENABLE_SIFIVE_UART_SUPPORT != 0
   fe310_uart_context *ctx;
   char fe310_path[] = "/dev/ttyS0";
 #endif
@@ -326,7 +326,7 @@ rtems_status_code console_initialize(
   }
 #endif
 
-#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+#if RISCV_ENABLE_SIFIVE_UART_SUPPORT != 0
   ctx = &fe310_uart_instance;
   rtems_termios_device_install(
     fe310_path,
