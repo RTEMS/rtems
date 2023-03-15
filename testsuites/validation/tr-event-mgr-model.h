@@ -2,6 +2,10 @@
 
 /**
  * @file
+ *
+ * @ingroup TestsuitesModel0
+ *
+ * @brief This source file contains test cases related to a formal model.
  */
 
 /*
