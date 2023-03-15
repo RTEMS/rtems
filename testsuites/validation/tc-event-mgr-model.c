@@ -3,8 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsEventValSendReceive
- * @ingroup RTEMSTestCaseRtemsEventValSystemSendReceive
+ * @ingroup TestsuitesModel0
  */
 
 /*
@@ -58,22 +57,6 @@
 #include "tr-event-mgr-model.h"
 
 #include <rtems/test.h>
-
-/**
- * @defgroup RTEMSTestCaseRtemsEventValSendReceive \
- *   spec:/rtems/event/val/send-receive
- *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
- *
- * @brief Tests the rtems_event_send and rtems_event_receive directives.
- *
- * This test case performs the following actions:
- *
- * - Run the event send and receive tests for the application event set defined
- *   by /rtems/event/req/send-receive.
- *
- * @{
- */
 
 static rtems_status_code EventSend(
   rtems_id        id,
@@ -202,25 +185,6 @@ T_TEST_CASE( RtemsModelEventsMgr8 )
     STATES_WAITING_FOR_EVENT
   );
 }
-
-/** @} */
-
-/**
- * @defgroup RTEMSTestCaseRtemsEventValSystemSendReceive \
- *   spec:/rtems/event/val/system-send-receive
- *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
- *
- * @brief Tests the rtems_event_system_send and rtems_event_system_receive
- *   directives.
- *
- * This test case performs the following actions:
- *
- * - Run the event send and receive tests for the system event set defined by
- *   /rtems/event/req/send-receive.
- *
- * @{
- */
 
 static rtems_status_code EventSystemSend(
   rtems_id        id,
@@ -354,5 +318,3 @@ T_TEST_CASE( RtemsModelSystemEventsMgr8 )
     STATES_WAITING_FOR_SYSTEM_EVENT
   );
 }
-
-/** @} */
