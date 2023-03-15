@@ -3,7 +3,10 @@
 /**
  * @file
  *
- * @brief CPU Port Implementation API
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This header file defines implementation interfaces pertaining to the
+ *   port of the executive to the SPARC processor.
  */
 
 /*

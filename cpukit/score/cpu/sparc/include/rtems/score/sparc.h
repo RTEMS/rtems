@@ -3,8 +3,10 @@
 /**
  * @file
  *
- * @brief Information Required to Build RTEMS for a Particular Member
- * of the SPARC Family
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This header file provides information required to build RTEMS for a
+ *   particular member of the SPARC family.
  *
  * This file contains the information required to build
  * RTEMS for a particular member of the SPARC family.  It does

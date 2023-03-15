@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This header file provides interfaces used by the SPARC port of RTEMS.
+ */
+
 /*
  * Copyright (c) 2016, 2018 embedded brains GmbH.  All rights reserved.
  *

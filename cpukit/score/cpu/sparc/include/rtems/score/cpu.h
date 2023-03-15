@@ -3,10 +3,10 @@
 /**
  * @file
  *
- * @brief SPARC CPU Department Source
+ * @ingroup RTEMSScoreCPUSPARC
  *
- * This include file contains information pertaining to the port of
- * the executive to the SPARC processor.
+ * @brief This header file defines interfaces pertaining to the port of the
+ *   executive to the SPARC processor.
  */
 
 /*
