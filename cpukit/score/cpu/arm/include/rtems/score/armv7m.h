@@ -159,8 +159,19 @@ typedef struct {
 #define ARMV7M_SCB_SHCSR_MEMFAULTENA (1U << 16)
   uint32_t shcsr;
 
+#define ARMV7M_SCB_CFSR_MMFSR_MASK 0xff
+#define ARMV7M_SCB_CFSR_MMFSR_GET(n) (n & ARMV7M_SCB_CFSR_MMFSR_MASK)
+#define ARMV7M_SCB_CFSR_BFSR_MASK 0xff00
+#define ARMV7M_SCB_CFSR_BFSR_GET(n) (n & ARMV7M_SCB_CFSR_BFSR_MASK)
+#define ARMV7M_SCB_CFSR_UFSR_MASK 0xffff0000
+#define ARMV7M_SCB_CFSR_UFSR_GET(n) (n & ARMV7M_SCB_CFSR_UFSR_MASK)
   uint32_t cfsr;
+
+#define ARMV7M_SCB_HFSR_VECTTBL_MASK 0x2
+#define ARMV7M_SCB_HFSR_FORCED_MASK (1U << 30)
+#define ARMV7M_SCB_HFSR_DEBUGEVT_MASK (1U << 31)
   uint32_t hfsr;
+
   uint32_t dfsr;
   uint32_t mmfar;
   uint32_t bfar;
