@@ -36,7 +36,7 @@
 #ifndef LIBBSP_XILINX_ZYNQMP_JFFS2_XQSPIPSU_H
 #define LIBBSP_XILINX_ZYNQMP_JFFS2_XQSPIPSU_H
 
-#include "xqspipsu.h"
+#include <dev/spi/xqspipsu.h>
 
 #ifdef __cplusplus
 extern "C" {
