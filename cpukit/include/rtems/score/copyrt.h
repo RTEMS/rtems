@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSSuperCoreCopyright
+ * @ingroup RTEMSScoreCopyright
  *
  * @brief This header file provides the interfaces of the
  *   @ref RTEMSScoreCopyright.
