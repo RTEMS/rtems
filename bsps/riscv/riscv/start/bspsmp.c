@@ -46,7 +46,7 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
 
 uint32_t _CPU_SMP_Initialize(void)
 {
-  return riscv_hart_count - RISCV_BOOT_HARTID;
+  return riscv_hart_count;
 }
 
 bool _CPU_SMP_Start_processor(uint32_t cpu_index)

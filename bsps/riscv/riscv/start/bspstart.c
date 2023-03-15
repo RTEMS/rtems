@@ -111,6 +111,14 @@ static void riscv_find_harts(void)
 
     hart_index = fdt32_to_cpu(val[0]);
 
+#if RISCV_BOOT_HARTID != 0
+    if (hart_index < RISCV_BOOT_HARTID) {
+      continue;
+    }
+
+    hart_index -= RISCV_BOOT_HARTID;
+#endif
+
     if (hart_index >= RTEMS_ARRAY_SIZE(riscv_hart_phandles)) {
       continue;
     }
@@ -166,7 +174,7 @@ uint32_t riscv_get_hart_index_by_phandle(uint32_t phandle)
 
   for (hart_index = 0; hart_index < riscv_hart_count; ++hart_index) {
     if (riscv_hart_phandles[hart_index] == phandle) {
-      return hart_index;
+      return hart_index + RISCV_BOOT_HARTID;
     }
   }
 
