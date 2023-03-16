@@ -31,7 +31,6 @@
 
 #include <bspopts.h>
 
-#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
 static uint32_t versal_uart_intr_all(void)
 {
   return VERSAL_UARTI_OEI |
@@ -47,6 +46,7 @@ static uint32_t versal_uart_intr_all(void)
     VERSAL_UARTI_RIMI;
 }
 
+#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
 static void versal_uart_intr_clear(volatile versal_uart *regs, uint32_t ints)
 {
   regs->uarticr = ints;
@@ -61,6 +61,7 @@ static void versal_uart_intr_enable(volatile versal_uart *regs, uint32_t ints)
 {
   regs->uartimsc |= ints;
 }
+#endif
 
 static void versal_uart_intr_disable(volatile versal_uart *regs, uint32_t ints)
 {
@@ -72,6 +73,7 @@ static void versal_uart_intr_disableall(volatile versal_uart *regs)
   versal_uart_intr_disable(regs, versal_uart_intr_all());
 }
 
+#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
 static bool versal_uart_flags_clear(volatile versal_uart *regs, uint32_t flags)
 {
   return (regs->uartfr & flags) == 0;
