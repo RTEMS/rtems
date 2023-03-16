@@ -691,6 +691,7 @@ static inline void _ARMV7M_MPU_Disable_region(
 }
 
 static inline void _ARMV7M_MPU_Setup(
+  uint32_t ctrl,
   const ARMV7M_MPU_Region_config *cfg,
   size_t cfg_count
 )
@@ -726,7 +727,7 @@ static inline void _ARMV7M_MPU_Setup(
     _ARMV7M_MPU_Disable_region(mpu, region);
   }
 
-  mpu->ctrl = ARMV7M_MPU_CTRL_ENABLE | ARMV7M_MPU_CTRL_PRIVDEFENA;
+  mpu->ctrl = ctrl;
   scb->shcsr |= ARMV7M_SCB_SHCSR_MEMFAULTENA;
 
   _ARM_Data_synchronization_barrier();

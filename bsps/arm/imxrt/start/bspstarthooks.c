@@ -46,7 +46,7 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
     SCB_EnableDCache();
   }
 
-  _ARMV7M_MPU_Setup(imxrt_config_mpu_region, imxrt_config_mpu_region_count);
+  _ARMV7M_MPU_Setup(ARMV7M_MPU_CTRL_DEFAULT, imxrt_config_mpu_region, imxrt_config_mpu_region_count);
 }
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)

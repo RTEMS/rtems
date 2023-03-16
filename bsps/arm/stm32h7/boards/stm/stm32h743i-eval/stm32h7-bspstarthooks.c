@@ -63,7 +63,7 @@ void bsp_start_hook_0(void)
     SCB_EnableDCache();
   }
 
-  _ARMV7M_MPU_Setup(stm32h7_config_mpu_region, stm32h7_config_mpu_region_count);
+  _ARMV7M_MPU_Setup(ARMV7M_MPU_CTRL_DEFAULT, stm32h7_config_mpu_region, stm32h7_config_mpu_region_count);
 #endif
 }
 
