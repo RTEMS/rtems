@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSTestSuitesValidation
+ *
  * @brief This header file provides a configurable validation test suite runner
  *   and application configuration for tests which should run within an idle
  *   task without a user initialization task.

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSTestSuitesValidation
+ *
  * @brief This header file provides a configurable validation test suite runner
  *   and application configuration for fatal error tests which occur during
  *   system initialization.

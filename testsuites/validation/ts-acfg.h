@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSTestSuitesValidation
+ *
  * @brief This header file provides a validation test suite runner for
  *    validation test cases specific to the application configuration.
  */

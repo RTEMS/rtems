@@ -1,5 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup TestsuitesUnitNoClock0
+ */
+
 /*
  * Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
  *
