@@ -3,10 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreSchedulerDPS
+ * @ingroup RTEMSScoreSchedulerPriority
  *
  * @brief This header file provides interfaces of the
- *   @ref RTEMSScoreSchedulerDPS which are used by the implementation and the
+ *   @ref RTEMSScoreSchedulerPriority which are used by the implementation and the
  *   @ref RTEMSImplApplConfig.
  */
 
@@ -48,7 +48,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup RTEMSScoreSchedulerDPS Deterministic Priority Scheduler
+ * @defgroup RTEMSScoreSchedulerPriority Deterministic Priority Scheduler
  *
  * @ingroup RTEMSScoreScheduler
  *

@@ -3,10 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreSchedulerDPS
+ * @ingroup RTEMSScoreSchedulerPriority
  *
  * @brief This header file provides interfaces of the
- *   @ref RTEMSScoreSchedulerDPS which are only used by the implementation.
+ *   @ref RTEMSScoreSchedulerPriority which are only used by the implementation.
  */
 
 /*
@@ -49,7 +49,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSScoreSchedulerDPS
+ * @addtogroup RTEMSScoreSchedulerPriority
  *
  * @{
  */
