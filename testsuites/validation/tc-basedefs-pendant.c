@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsBasedefsValBasedefs
+ * @ingroup RtemsBasedefsValBasedefs
  *
  * @brief Helper file to verify the requirements towards the basedefs.
  *

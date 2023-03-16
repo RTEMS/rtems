@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseScoreInterrValTerminate
+ * @ingroup ScoreInterrValTerminate
  *
  * @brief This header file provides functions used by corresponding test suite.
  */
