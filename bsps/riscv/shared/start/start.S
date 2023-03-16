@@ -66,8 +66,17 @@ SYM(_start):
 	LADDR	sp, _ISR_Stack_area_begin
 	LADDR	t2, _ISR_Stack_size
 	csrr	s0, mhartid
-	li      t3, RISCV_BOOT_HARTID
-	sub     s0, s0, t3
+	li	t3, RISCV_BOOT_HARTID
+	sub	s0, s0, t3
+
+	/*
+	 * Check that this is a configured processor.  If not, then there is
+	 * not much that can be done since we do not have a stack available for
+	 * this processor.  Just loop forever in this case.
+	 */
+	LREG	t3, _SMP_Processor_configured_maximum
+	bgeu	s0, t3, .Lwfi
+
 	LADDR	t0, _Per_CPU_Information
 	slli	t1, s0, PER_CPU_CONTROL_SIZE_LOG2
 	add	s1, t0, t1
@@ -100,6 +109,9 @@ SYM(_start):
 	tail	boot_card
 
 #ifdef RTEMS_SMP
+.Lwfi:
+	wfi
+	j	.Lwfi
 
 .Lstart_on_secondary_processor:
 

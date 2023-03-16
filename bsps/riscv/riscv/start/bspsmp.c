@@ -36,10 +36,7 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
 
   cpu_index_self = _Per_CPU_Get_index(cpu_self);
 
-  if (
-    cpu_index_self < rtems_configuration_get_maximum_processors()
-      && _SMP_Should_start_processor(cpu_index_self)
-  ) {
+  if (_SMP_Should_start_processor(cpu_index_self)) {
     set_csr(mie, MIP_MSIP | MIP_MEIP);
     _SMP_Start_multitasking_on_secondary_processor(cpu_self);
   } else {
