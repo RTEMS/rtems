@@ -164,6 +164,8 @@ links:
 - role: build-dependency
   uid: linkcmdsmemory
 - role: build-dependency
+  uid: ../optmpuctrl
+- role: build-dependency
   uid: ../../bspopts
 source:
 - bsps/arm/imxrt/console/console.c
