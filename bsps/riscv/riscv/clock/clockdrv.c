@@ -8,7 +8,7 @@
  */
 
 /*
- * Copyright (c) 2018 embedded brains GmbH
+ * Copyright (c) 2018, 2023 embedded brains GmbH
  * COPYRIGHT (c) 2015 Hesham Alatary <hesham@alumni.york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,6 +41,7 @@
 #include <rtems/sysinit.h>
 #include <rtems/timecounter.h>
 #include <rtems/score/cpuimpl.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/riscv-utility.h>
 #include <rtems/score/smpimpl.h>
 
@@ -92,18 +93,16 @@ static uint64_t riscv_clock_read_mtime(volatile RISCV_CLINT_timer_reg *mtime)
 
 static void riscv_clock_at_tick(riscv_timecounter *tc)
 {
-  volatile RISCV_CLINT_regs *clint;
+  Per_CPU_Control *cpu_self;
+  volatile RISCV_CLINT_timer_reg *mtimecmp;
   uint64_t value;
-  uint32_t cpu = rtems_scheduler_get_processor();
 
-  cpu = _RISCV_Map_cpu_index_to_hardid(cpu);
-
-  clint = tc->clint;
-
-  value = clint->mtimecmp[cpu].val_64;
+  cpu_self = _Per_CPU_Get();
+  mtimecmp = cpu_self->cpu_per_cpu.clint_mtimecmp;
+  value = mtimecmp->val_64;
   value += tc->interval;
 
-  riscv_clock_write_mtimecmp(&clint->mtimecmp[cpu], value);
+  riscv_clock_write_mtimecmp(mtimecmp, value);
 }
 
 static void riscv_clock_handler_install(void)
@@ -153,16 +152,12 @@ static uint32_t riscv_clock_get_timebase_frequency(const void *fdt)
   return fdt32_to_cpu(*val);
 }
 
-static void riscv_clock_clint_init(
-  volatile RISCV_CLINT_regs *clint,
-  uint64_t cmpval,
-  uint32_t cpu
-)
+static void riscv_clock_clint_init(uint64_t cmpval)
 {
-  riscv_clock_write_mtimecmp(
-    &clint->mtimecmp[cpu],
-	cmpval
-  );
+  Per_CPU_Control *cpu_self;
+
+  cpu_self = _Per_CPU_Get();
+  riscv_clock_write_mtimecmp(cpu_self->cpu_per_cpu.clint_mtimecmp, cmpval);
 
   /* Enable mtimer interrupts */
   set_csr(mie, MIP_MTIP);
@@ -171,13 +166,7 @@ static void riscv_clock_clint_init(
 #if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
 static void riscv_clock_secondary_action(void *arg)
 {
-  volatile RISCV_CLINT_regs *clint = riscv_clint;
-  uint64_t *cmpval = arg;
-  uint32_t cpu = _CPU_SMP_Get_current_processor();
-
-  cpu = _RISCV_Map_cpu_index_to_hardid(cpu);
-
-  riscv_clock_clint_init(clint, *cmpval, cpu);
+  riscv_clock_clint_init(*(uint64_t *) arg);
 }
 #endif
 
@@ -219,7 +208,7 @@ static void riscv_clock_initialize(void)
   cmpval = riscv_clock_read_mtime(&clint->mtime);
   cmpval += interval;
 
-  riscv_clock_clint_init(clint, cmpval, RISCV_BOOT_HARTID);
+  riscv_clock_clint_init(cmpval);
   riscv_clock_secondary_initialization(clint, cmpval, interval);
 
   /* Initialize timecounter */
