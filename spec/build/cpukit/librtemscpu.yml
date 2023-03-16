@@ -52,6 +52,9 @@ install:
 - destination: ${BSP_INCLUDEDIR}/dev/spi
   source:
   - cpukit/include/dev/spi/spi.h
+- destination: ${BSP_INCLUDEDIR}/dev/flash
+  source:
+  - cpukit/include/dev/flash/flashdev.h
 - destination: ${BSP_INCLUDEDIR}/dev/can
   source:
   - cpukit/include/dev/can/can.h
@@ -522,6 +525,7 @@ links:
 - role: build-dependency
   uid: vckey
 source:
+- cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/eeprom.c
 - cpukit/dev/i2c/fpga-i2c-slave.c
 - cpukit/dev/i2c/gpio-nxp-pca9535.c
