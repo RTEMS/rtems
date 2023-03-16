@@ -2,9 +2,11 @@
 
 /**
  * @file
- * 
+ *
+ * @ingroup libcsupport
+ *
  * @brief Standard C Library Support
- * 
+ *
  * This include file contains the information regarding the
  * RTEMS specific support for the standard C library.
  */
@@ -55,8 +57,8 @@ extern "C" {
  *
  * @brief RTEMS Specific Support for the Standard C Library
  *
+ * @{
  */
-/**@{**/
 
 extern void malloc_dump(void);
 

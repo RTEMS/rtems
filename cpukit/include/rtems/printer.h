@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSPrintSupport
+ *
  * @brief User print interface to the bspIO print plug in.
  *
  * This include file defines the user interface to kernel print methods.

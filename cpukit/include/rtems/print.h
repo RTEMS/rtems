@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSPrintSupport
+ *
  * @brief User print interface to the bspIO print plug in.
  *
  * This include file defines the user interface to kernel print methods.
@@ -54,6 +56,8 @@ typedef struct rtems_printer rtems_printer;
  *
  * This module contains all methods and support related to providing the user
  * with an interface to the kernel level print support.
+ *
+ * @{
  */
 
 /**

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup Timespec
+ * @ingroup RTEMSScoreTimespec
  *
  * @brief This header file provides the interfaces of the
  * @ref RTEMSScoreTimespec.
