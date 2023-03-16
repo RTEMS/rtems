@@ -52,6 +52,7 @@ source:
 - cpukit/libmisc/shell/main_echo.c
 - cpukit/libmisc/shell/main_edit.c
 - cpukit/libmisc/shell/main_exit.c
+- cpukit/libmisc/shell/main_flashdev.c
 - cpukit/libmisc/shell/main_getenv.c
 - cpukit/libmisc/shell/main_halt.c
 - cpukit/libmisc/shell/main_help.c
