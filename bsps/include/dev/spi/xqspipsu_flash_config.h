@@ -79,6 +79,7 @@ extern "C" {
 
 #define BANK_REG_RD		0x16
 #define BANK_REG_WR		0x17
+#define READ_ECCSR		0x18
 /* Bank register is called Extended Address Register in Micron */
 #define EXTADD_REG_RD		0xC8
 #define EXTADD_REG_WR		0xC5
