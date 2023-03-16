@@ -2365,8 +2365,8 @@ T_case_context T_case_instance_##name = {			\
     NULL							\
 };								\
 static T_case_context * const T_case_item_##name		\
-__attribute((__section__(".rtemsroset._T.content.0." #name)))	\
-__attribute((__used__)) = &T_case_instance_##name;		\
+__attribute__((__section__(".rtemsroset._T.content.0." #name)))	\
+__attribute__((__used__)) = &T_case_instance_##name;		\
 void T_case_body_##name(void)
 #else /* __rtems__ */
 #define T_TEST_CASE_FIXTURE(name, fixture)			\
@@ -2377,7 +2377,7 @@ T_case_context T_case_instance_##name = {			\
     fixture,							\
     NULL							\
 };								\
-__attribute((__constructor__)) static void			\
+__attribute__((__constructor__)) static void			\
 T_case_register_##name(void)					\
 {								\
 	T_case_register(&T_case_instance_##name);		\
