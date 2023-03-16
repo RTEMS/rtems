@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplFreeBSDKernel
+ *
  * @brief This header file provides parameter definitions for the kernel space
  *   (_KERNEL is defined before including <sys/param.h>).
  */

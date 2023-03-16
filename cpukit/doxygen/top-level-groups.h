@@ -59,6 +59,15 @@
  */
 
 /**
+ * @defgroup RTEMSImplFreeBSDKernel FreeBSD Kernel Space Support
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the interfaces used by FreeBSD kernel space
+ *   components ported to RTEMS.
+ */
+
+/**
  * @defgroup RTEMSTestSuites Test Suites
  *
  * @brief This group contains the test suites.

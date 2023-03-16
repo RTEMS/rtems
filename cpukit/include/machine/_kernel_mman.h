@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplFreeBSDKernel
+ *
  * @brief This header file provides memory map definitions for the kernel space
  *   (_KERNEL is defined before including <sys/mman.h>).
  */

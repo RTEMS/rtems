@@ -35,6 +35,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplFreeBSDKernel
+ *
  * @brief This header file provides device driver I/O definitions for the
  *   kernel space (_KERNEL is defined before including <sys/uio.h>).
  */

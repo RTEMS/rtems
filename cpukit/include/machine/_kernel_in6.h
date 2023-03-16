@@ -34,6 +34,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplFreeBSDKernel
+ *
  * @brief This header file provides IPv6 definitions for the kernel space
  *   (_KERNEL is defined before including <netinet6/in6.h>).
  */
