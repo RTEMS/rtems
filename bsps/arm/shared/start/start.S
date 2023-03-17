@@ -196,7 +196,7 @@ _start:
 
 	/*
 	 * Check that this is a configured processor.  If not, then there is
-	 * not much what can be done since we do not have a stack available for
+	 * not much that can be done since we do not have a stack available for
 	 * this processor.  Just loop forever in this case.
 	 */
 	ldr	r1, =_SMP_Processor_configured_maximum
