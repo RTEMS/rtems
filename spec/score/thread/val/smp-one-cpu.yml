@@ -65,11 +65,9 @@ test-local-includes:
 test-setup: null
 test-stop: null
 test-support: |
-  typedef ${.:/test-context-type} Context;
+  #define EVENT_COUNT RTEMS_EVENT_0
 
-  typedef enum {
-    EVENT_COUNT = RTEMS_EVENT_0
-  } Event;
+  typedef ${.:/test-context-type} Context;
 
   static void WorkerTask( rtems_task_argument arg )
   {

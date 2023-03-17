@@ -305,13 +305,13 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef ${.:/test-context-type} Context;
+  #define EVENT_RESET RTEMS_EVENT_0
 
-  typedef enum {
-    EVENT_RESET = RTEMS_EVENT_0,
-    EVENT_PERIOD_WAIT = RTEMS_EVENT_1,
-    EVENT_PERIOD_OTHER = RTEMS_EVENT_2
-  } Event;
+  #define EVENT_PERIOD_WAIT RTEMS_EVENT_1
+
+  #define EVENT_PERIOD_OTHER RTEMS_EVENT_2
+
+  typedef ${.:/test-context-type} Context;
 
   static void Tick( void *arg )
   {
