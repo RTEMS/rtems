@@ -97,11 +97,9 @@ typedef struct {
 static ScoreThreadValSmpOneCpu_Context
   ScoreThreadValSmpOneCpu_Instance;
 
-typedef ScoreThreadValSmpOneCpu_Context Context;
+#define EVENT_COUNT RTEMS_EVENT_0
 
-typedef enum {
-  EVENT_COUNT = RTEMS_EVENT_0
-} Event;
+typedef ScoreThreadValSmpOneCpu_Context Context;
 
 static void WorkerTask( rtems_task_argument arg )
 {

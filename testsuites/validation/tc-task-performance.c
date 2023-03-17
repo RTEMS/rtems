@@ -113,13 +113,13 @@ typedef struct {
 static RtemsTaskValPerf_Context
   RtemsTaskValPerf_Instance;
 
-typedef RtemsTaskValPerf_Context Context;
+#define EVENT_RESTART RTEMS_EVENT_0
 
-enum {
-  EVENT_RESTART = RTEMS_EVENT_0,
-  EVENT_SET_END = RTEMS_EVENT_1,
-  EVENT_BUSY = RTEMS_EVENT_2
-} Event;
+#define EVENT_SET_END RTEMS_EVENT_1
+
+#define EVENT_BUSY RTEMS_EVENT_2
+
+typedef RtemsTaskValPerf_Context Context;
 
 RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) static char task_storage[
   RTEMS_TASK_STORAGE_SIZE(

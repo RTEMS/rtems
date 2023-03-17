@@ -107,12 +107,11 @@ typedef struct {
 static RtemsEventValPerf_Context
   RtemsEventValPerf_Instance;
 
-typedef RtemsEventValPerf_Context Context;
+#define EVENT_END RTEMS_EVENT_0
 
-typedef enum {
-  EVENT_END = RTEMS_EVENT_0,
-  EVENT_OTHER = RTEMS_EVENT_1
-} Event;
+#define EVENT_OTHER RTEMS_EVENT_1
+
+typedef RtemsEventValPerf_Context Context;
 
 static void Send( const Context *ctx, rtems_event_set events )
 {

@@ -159,17 +159,21 @@ typedef struct {
 static ScoreThreadValSmp_Context
   ScoreThreadValSmp_Instance;
 
-typedef ScoreThreadValSmp_Context Context;
+#define EVENT_OBTAIN RTEMS_EVENT_0
 
-typedef enum {
-  EVENT_OBTAIN = RTEMS_EVENT_0,
-  EVENT_RELEASE = RTEMS_EVENT_1,
-  EVENT_COUNT_EARLY = RTEMS_EVENT_2,
-  EVENT_BUSY = RTEMS_EVENT_3,
-  EVENT_COUNT = RTEMS_EVENT_4,
-  EVENT_LET_WORKER_C_COUNT = RTEMS_EVENT_5,
-  EVENT_SET_TASK_SWITCH_EXTENSION = RTEMS_EVENT_6
-} Event;
+#define EVENT_RELEASE RTEMS_EVENT_1
+
+#define EVENT_COUNT_EARLY RTEMS_EVENT_2
+
+#define EVENT_BUSY RTEMS_EVENT_3
+
+#define EVENT_COUNT RTEMS_EVENT_4
+
+#define EVENT_LET_WORKER_C_COUNT RTEMS_EVENT_5
+
+#define EVENT_SET_TASK_SWITCH_EXTENSION RTEMS_EVENT_6
+
+typedef ScoreThreadValSmp_Context Context;
 
 static void TaskSwitchExtension( rtems_tcb *executing, rtems_tcb *heir )
 {

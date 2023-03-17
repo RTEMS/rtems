@@ -280,13 +280,13 @@ static const char * const * const RtemsRatemonReqTimeout_PreDesc[] = {
   NULL
 };
 
-typedef RtemsRatemonReqTimeout_Context Context;
+#define EVENT_RESET RTEMS_EVENT_0
 
-typedef enum {
-  EVENT_RESET = RTEMS_EVENT_0,
-  EVENT_PERIOD_WAIT = RTEMS_EVENT_1,
-  EVENT_PERIOD_OTHER = RTEMS_EVENT_2
-} Event;
+#define EVENT_PERIOD_WAIT RTEMS_EVENT_1
+
+#define EVENT_PERIOD_OTHER RTEMS_EVENT_2
+
+typedef RtemsRatemonReqTimeout_Context Context;
 
 static void Tick( void *arg )
 {

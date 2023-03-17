@@ -305,18 +305,25 @@ typedef struct {
 static ScoreSchedSmpValSmp_Context
   ScoreSchedSmpValSmp_Instance;
 
+#define EVENT_OBTAIN RTEMS_EVENT_0
+
+#define EVENT_RELEASE RTEMS_EVENT_1
+
+#define EVENT_STICKY_OBTAIN RTEMS_EVENT_2
+
+#define EVENT_STICKY_RELEASE RTEMS_EVENT_3
+
+#define EVENT_SYNC_RUNNER RTEMS_EVENT_4
+
+#define EVENT_BUSY RTEMS_EVENT_5
+
 typedef ScoreSchedSmpValSmp_Context Context;
 
-typedef enum {
-  EVENT_OBTAIN = RTEMS_EVENT_0,
-  EVENT_RELEASE = RTEMS_EVENT_1,
-  EVENT_STICKY_OBTAIN = RTEMS_EVENT_2,
-  EVENT_STICKY_RELEASE = RTEMS_EVENT_3,
-  EVENT_SYNC_RUNNER = RTEMS_EVENT_4,
-  EVENT_BUSY = RTEMS_EVENT_5
-} Event;
-
-static void SendAndSync( Context *ctx, WorkerIndex worker, Event event )
+static void SendAndSync(
+  Context        *ctx,
+  WorkerIndex     worker,
+  rtems_event_set event
+)
 {
   SendEvents( ctx->worker_id[ worker ], EVENT_SYNC_RUNNER | event );
   ReceiveAllEvents( EVENT_SYNC_RUNNER );
