@@ -1365,11 +1365,11 @@ int rtems_jffs2_initialize(
 		err = -ENOMEM;
 	}
 
-	sb = &fs_info->sb;
-	c = JFFS2_SB_INFO(sb);
-	c->mtd = NULL;
 
 	if (err == 0) {
+		sb = &fs_info->sb;
+		c = JFFS2_SB_INFO(sb);
+		c->mtd = NULL;
 		rtems_recursive_mutex_init(&sb->s_mutex, RTEMS_FILESYSTEM_TYPE_JFFS2);
 	}
 
