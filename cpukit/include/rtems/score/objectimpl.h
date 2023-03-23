@@ -542,9 +542,7 @@ static inline bool _Objects_Is_api_valid(
   uint32_t   the_api
 )
 {
-  if ( !the_api || the_api > OBJECTS_APIS_LAST )
-   return false;
-  return true;
+  return ( 1 <= the_api && the_api <= OBJECTS_APIS_LAST );
 }
 
 /**
