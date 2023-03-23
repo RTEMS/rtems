@@ -318,6 +318,7 @@ static void smp_cache_inst_inv(void *arg)
 
 static void smp_cache_inst_inv_all(void *arg)
 {
+  (void) arg;
   _CPU_cache_invalidate_entire_instruction();
 }
 
