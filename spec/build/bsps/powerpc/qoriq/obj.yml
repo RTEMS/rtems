@@ -63,6 +63,8 @@ source:
 - bsps/powerpc/shared/start/bsp-start-zero.S
 - bsps/powerpc/shared/start/bspidle.c
 - bsps/powerpc/shared/start/tictac.c
+- bsps/powerpc/shared/vme/bspVmeDmaList.c
+- bsps/powerpc/shared/vme/vmeTsi148.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
 - bsps/shared/dev/serial/console-termios-init.c
