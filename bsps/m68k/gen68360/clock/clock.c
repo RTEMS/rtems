@@ -33,7 +33,7 @@ static unsigned long nsec;
  *        Application code can override this by
  *        setting M360DefaultWatchdogFeeder to zero.
  */
-#define Clock_driver_support_at_tick()  \
+#define Clock_driver_support_at_tick(arg)  \
     do {                                   \
         nsec += pit_nsec_per_tick;         \
         if (nsec >= rtems_nsec_per_tick)   \

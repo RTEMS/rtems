@@ -157,7 +157,7 @@ static void zynqmp_ttc_clock_driver_support_initialize_hardware(void)
  *
  * @retval Void
  */
-static void zynqmp_ttc_clock_driver_support_at_tick( void )
+static void zynqmp_ttc_clock_driver_support_at_tick(ttc_clock_context *tc)
 {
   uint32_t irq_flags;
   uint32_t cval;
@@ -181,49 +181,41 @@ static void zynqmp_ttc_clock_driver_support_at_tick( void )
      */
     now = XTtcPs_ReadReg(BSP_SELECTED_TTC_ADDR, XTTCPS_COUNT_VALUE_OFFSET);
     delta = now - cval;
-    if(delta > ttc_clock_instance.irq_match_interval) {
+    if(delta > tc->irq_match_interval) {
      cval = now;
-     ttc_clock_instance.tick_miss++;
+     tc->tick_miss++;
     }
-    cval += ttc_clock_instance.irq_match_interval;
+    cval += tc->irq_match_interval;
     XTtcPs_WriteReg(BSP_SELECTED_TTC_ADDR, XTTCPS_MATCH_0_OFFSET, cval);
   }
   /* Else, something is set up wrong, only match should be enabled */
 }
 
-/**
- * @brief registers RTI interrupt handler
- *
- * @param[in] Clock_isr new ISR handler
- * @param[in] Old_ticker old ISR handler (unused and type broken)
- *
- * @retval Void
- */
 static void zynqmp_ttc_clock_driver_support_install_isr(
-  rtems_isr_entry Clock_isr
+  rtems_interrupt_handler handler
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_status_code sc;
 
   sc = rtems_interrupt_handler_install(
     BSP_SELECTED_TTC_IRQ,
     "Clock",
     RTEMS_INTERRUPT_UNIQUE,
-    (rtems_interrupt_handler) Clock_isr,
-    NULL
+    handler,
+    &ttc_clock_instance
   );
   if ( sc != RTEMS_SUCCESSFUL ) {
     rtems_fatal_error_occurred(0xdeadbeef);
   }
 }
 
-#define Clock_driver_support_at_tick \
-  zynqmp_ttc_clock_driver_support_at_tick
+#define Clock_driver_support_at_tick(arg) \
+  zynqmp_ttc_clock_driver_support_at_tick(arg)
 
 #define Clock_driver_support_initialize_hardware \
   zynqmp_ttc_clock_driver_support_initialize_hardware
 
-#define Clock_driver_support_install_isr(Clock_isr) \
-  zynqmp_ttc_clock_driver_support_install_isr( Clock_isr )
+#define Clock_driver_support_install_isr(isr) \
+  zynqmp_ttc_clock_driver_support_install_isr(isr)
 
 #include "../../../shared/dev/clock/clockimpl.h"

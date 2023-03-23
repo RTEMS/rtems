@@ -290,7 +290,7 @@ static void beagle_clock_handler_install(rtems_interrupt_handler isr)
   clock_isr = isr;
 }
 
-#define Clock_driver_support_at_tick() beagle_clock_at_tick()
+#define Clock_driver_support_at_tick(arg) beagle_clock_at_tick()
 #define Clock_driver_support_initialize_hardware() beagle_clock_initialize()
 #define Clock_driver_support_install_isr(isr) \
   beagle_clock_handler_install(isr)

@@ -14,7 +14,7 @@
 /*
  * Periodic interval timer interrupt handler
  */
-#define Clock_driver_support_at_tick()             \
+#define Clock_driver_support_at_tick(arg)          \
     do {                                           \
         MCF5235_PIT_PCSR3 |= MCF5235_PIT_PCSR_PIF; \
     } while (0)                                    \

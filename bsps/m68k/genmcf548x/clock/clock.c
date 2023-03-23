@@ -62,7 +62,7 @@
 /*
  * Periodic interval timer interrupt handler
  */
-#define Clock_driver_support_at_tick()             \
+#define Clock_driver_support_at_tick(arg)          \
     do {                                           \
         MCF548X_SLT_SSR0 = MCF548X_SLT_SSR_ST;     \
     } while (0)                                    \

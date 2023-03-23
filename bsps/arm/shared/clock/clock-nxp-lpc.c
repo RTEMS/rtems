@@ -41,9 +41,6 @@
 
 #ifdef ARM_MULTILIB_ARCH_V4
 
-/* This is defined in ../../../shared/dev/clock/clockimpl.h */
-void Clock_isr(rtems_irq_hdl_param arg);
-
 static volatile lpc_timer *const lpc_clock =
   (volatile lpc_timer *) LPC_CLOCK_TIMER_BASE;
 
@@ -57,12 +54,12 @@ static uint32_t lpc_clock_tc_get_timecount(struct timecounter *tc)
   return lpc_timecounter->tc;
 }
 
-static void lpc_clock_at_tick(void)
+static void lpc_clock_at_tick(volatile lpc_timer *regs)
 {
-  lpc_clock->ir = LPC_TIMER_IR_MR0;
+  regs->ir = LPC_TIMER_IR_MR0;
 }
 
-static void lpc_clock_handler_install(void)
+static void lpc_clock_handler_install(rtems_interrupt_handler handler)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
@@ -70,8 +67,8 @@ static void lpc_clock_handler_install(void)
     LPC_CLOCK_INTERRUPT,
     "Clock",
     RTEMS_INTERRUPT_UNIQUE,
-    (rtems_interrupt_handler) Clock_isr,
-    NULL
+    handler,
+    RTEMS_DEVOLATILE(lpc_timer *, lpc_clock)
   );
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_fatal_error_occurred(0xdeadbeef);
@@ -118,10 +115,10 @@ static void lpc_clock_initialize(void)
   rtems_timecounter_install(&lpc_clock_tc);
 }
 
-#define Clock_driver_support_at_tick() lpc_clock_at_tick()
+#define Clock_driver_support_at_tick(arg) lpc_clock_at_tick(arg)
 #define Clock_driver_support_initialize_hardware() lpc_clock_initialize()
 #define Clock_driver_support_install_isr(isr) \
-  lpc_clock_handler_install()
+  lpc_clock_handler_install(isr)
 
 /* Include shared source clock driver code */
 #include "../../../shared/dev/clock/clockimpl.h"

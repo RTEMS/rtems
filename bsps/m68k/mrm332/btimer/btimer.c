@@ -31,8 +31,6 @@
 
 bool benchmark_timer_find_average_overhead;
 
-extern rtems_isr Clock_isr(void);
-
 void benchmark_timer_initialize( void )
 {
 }

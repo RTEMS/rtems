@@ -93,6 +93,6 @@ static void Clock_driver_support_initialize_hardware(void)
   );
 }
 
-#define Clock_driver_timecounter_tick() mcf52235_tc_tick()
+#define Clock_driver_timecounter_tick(arg) mcf52235_tc_tick()
 
 #include "../../../shared/dev/clock/clockimpl.h"

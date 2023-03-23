@@ -41,14 +41,14 @@
 #include <bsp/qoriq.h>
 #include <bsp/irq.h>
 
-/* This is defined in dev/clock/clockimpl.h */
-static rtems_isr Clock_isr(void *arg);
-
 static struct timecounter qoriq_clock_tc;
 
 #ifdef QORIQ_IS_HYPERVISOR_GUEST
 
 #define CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR
+
+/* This is defined in dev/clock/clockimpl.h */
+static rtems_isr Clock_isr(void *arg);
 
 void qoriq_decrementer_dispatch(void)
 {
@@ -99,7 +99,7 @@ static volatile qoriq_pic_global_timer *const qoriq_timecounter =
 
 #define CLOCK_INTERRUPT (QORIQ_IRQ_GT_BASE + QORIQ_CLOCK_TIMER)
 
-static void qoriq_clock_handler_install(void)
+static void qoriq_clock_handler_install(rtems_interrupt_handler handler)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
@@ -125,7 +125,7 @@ static void qoriq_clock_handler_install(void)
     CLOCK_INTERRUPT,
     "Clock",
     RTEMS_INTERRUPT_UNIQUE,
-    Clock_isr,
+    handler,
     NULL
   );
   if (sc != RTEMS_SUCCESSFUL) {
@@ -157,8 +157,8 @@ static void qoriq_clock_initialize(void)
   rtems_timecounter_install(&qoriq_clock_tc);
 }
 
-#define Clock_driver_support_install_isr(clock_isr) \
-  qoriq_clock_handler_install()
+#define Clock_driver_support_install_isr(isr) \
+  qoriq_clock_handler_install(isr)
 
 #define Clock_driver_support_set_interrupt_affinity(online_processors) \
   bsp_interrupt_set_affinity(CLOCK_INTERRUPT, online_processors)

@@ -108,7 +108,7 @@ static void generic_or1k_clock_initialize(void)
   rtems_timecounter_install(&or1ksim_tc);
 }
 
-#define Clock_driver_support_at_tick() generic_or1k_clock_at_tick()
+#define Clock_driver_support_at_tick(arg) generic_or1k_clock_at_tick()
 
 #define Clock_driver_support_initialize_hardware() generic_or1k_clock_initialize()
 
