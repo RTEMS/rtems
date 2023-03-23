@@ -63,7 +63,7 @@ static unsigned int get_Frequency(void)
   return freq;
 }
 
-#define Clock_driver_support_at_tick() \
+#define Clock_driver_support_at_tick(arg) \
   Clock_driver_support_at_tick_helper()
 
 static void Clock_driver_support_at_tick_helper(void)

@@ -94,7 +94,7 @@ static void Clock_driver_support_initialize_hardware(void)
   ST_REG(ST_PIMR) = value;
 }
 
-#define Clock_driver_support_at_tick() \
+#define Clock_driver_support_at_tick(arg) \
   do { \
     uint32_t st_str; \
     \

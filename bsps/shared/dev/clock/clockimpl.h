@@ -63,6 +63,13 @@
 #error "Fast Idle PLUS n ISRs per tick is not supported"
 #endif
 
+#if defined(BSP_FEATURE_IRQ_EXTENSION) || \
+    (CPU_SIMPLE_VECTORED_INTERRUPTS != TRUE)
+typedef void * Clock_isr_argument;
+#else
+typedef rtems_vector_number Clock_isr_argument;
+#endif
+
 /**
  * @brief Do nothing by default.
  */
@@ -81,7 +88,7 @@
  * @brief Do nothing by default.
  */
 #ifndef Clock_driver_support_at_tick
-  #define Clock_driver_support_at_tick()
+  #define Clock_driver_support_at_tick( arg ) do { (void) arg; } while (0)
 #endif
 
 /**
@@ -96,8 +103,9 @@
  * instead of the default.
  */
 #ifndef Clock_driver_timecounter_tick
-static void Clock_driver_timecounter_tick( void )
+static void Clock_driver_timecounter_tick( Clock_isr_argument arg )
 {
+  (void) arg;
 #if defined(CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER)
   rtems_clock_tick();
 #elif defined(RTEMS_SMP) && defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
@@ -159,20 +167,11 @@ static bool _Clock_Has_watchdogs(const Per_CPU_Control *cpu)
  *
  *  This is the clock tick interrupt handler.
  *
- *  @param vector Vector number.
+ *  @param arg is the clock interrupt handler argument.
  */
-#if defined(BSP_FEATURE_IRQ_EXTENSION) || \
-    (CPU_SIMPLE_VECTORED_INTERRUPTS != TRUE)
-void Clock_isr(void *arg);
-void Clock_isr(void *arg)
+void Clock_isr( Clock_isr_argument arg );
+void Clock_isr( Clock_isr_argument arg )
 {
-#else
-rtems_isr Clock_isr(rtems_vector_number vector);
-rtems_isr Clock_isr(
-  rtems_vector_number vector
-)
-{
-#endif
   /*
    *  Accurate count of ISRs
    */
@@ -180,7 +179,7 @@ rtems_isr Clock_isr(
 
   #if CLOCK_DRIVER_USE_FAST_IDLE
     {
-      Clock_driver_timecounter_tick();
+      Clock_driver_timecounter_tick( arg );
 
       if (_SMP_Get_processor_maximum() == 1) {
         struct timecounter *tc;
@@ -210,7 +209,7 @@ rtems_isr Clock_isr(
         }
       }
 
-      Clock_driver_support_at_tick();
+      Clock_driver_support_at_tick( arg );
     }
   #else
     /*
@@ -218,14 +217,14 @@ rtems_isr Clock_isr(
      *
      *  The counter/timer may or may not be set to automatically reload.
      */
-    Clock_driver_support_at_tick();
+    Clock_driver_support_at_tick( arg );
 
     #if CLOCK_DRIVER_ISRS_PER_TICK
       /*
        *  The driver is multiple ISRs per clock tick.
        */
       if ( !Clock_driver_isrs ) {
-        Clock_driver_timecounter_tick();
+        Clock_driver_timecounter_tick( arg );
 
         Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK_VALUE;
       }
@@ -234,7 +233,7 @@ rtems_isr Clock_isr(
       /*
        *  The driver is one ISR per clock tick.
        */
-      Clock_driver_timecounter_tick();
+      Clock_driver_timecounter_tick( arg );
     #endif
   #endif
 }

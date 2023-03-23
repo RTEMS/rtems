@@ -220,7 +220,7 @@ CPU_Counter_ticks _CPU_Counter_read( void )
 #define Clock_driver_support_initialize_hardware() \
   grlib_clock_initialize()
 
-#define Clock_driver_timecounter_tick() grlib_tc_do_tick()
+#define Clock_driver_timecounter_tick(arg) grlib_tc_do_tick()
 
 #include "../../../shared/dev/clock/clockimpl.h"
 

@@ -25,9 +25,6 @@
 #include <bsp/raspberrypi.h>
 #include <rtems/timecounter.h>
 
-/* This is defined in ../../../shared/dev/clock/clockimpl.h */
-void Clock_isr(rtems_irq_hdl_param arg);
-
 static struct timecounter raspberrypi_tc;
 
 static uint32_t raspberrypi_clock_get_timecount(struct timecounter *tc)
@@ -54,27 +51,18 @@ static void raspberrypi_clock_at_tick(void)
 }
 
 static void raspberrypi_clock_handler_install_isr(
-  rtems_isr_entry clock_isr
+  rtems_interrupt_handler clock_isr
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  if (clock_isr != NULL) {
-    sc = rtems_interrupt_handler_install(
-      BCM2835_IRQ_ID_GPU_TIMER_M3,
-      "Clock",
-      RTEMS_INTERRUPT_UNIQUE,
-      (rtems_interrupt_handler) clock_isr,
-      NULL
-    );
-  } else {
-    /* Remove interrupt handler */
-    sc = rtems_interrupt_handler_remove(
-      BCM2835_IRQ_ID_GPU_TIMER_M3,
-      (rtems_interrupt_handler) Clock_isr,
-      NULL
-    );
-  }
+  sc = rtems_interrupt_handler_install(
+    BCM2835_IRQ_ID_GPU_TIMER_M3,
+    "Clock",
+    RTEMS_INTERRUPT_UNIQUE,
+    clock_isr,
+    NULL
+  );
   if ( sc != RTEMS_SUCCESSFUL ) {
     rtems_fatal_error_occurred(0xdeadbeef);
   }
@@ -94,7 +82,7 @@ static void raspberrypi_clock_initialize_hardware(void)
   rtems_timecounter_install(&raspberrypi_tc);
 }
 
-#define Clock_driver_support_at_tick() raspberrypi_clock_at_tick()
+#define Clock_driver_support_at_tick(arg) raspberrypi_clock_at_tick()
 
 #define Clock_driver_support_initialize_hardware() raspberrypi_clock_initialize_hardware()
 

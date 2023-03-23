@@ -47,9 +47,6 @@
 
 #include <libfdt.h>
 
-/* This is defined in dev/clock/clockimpl.h */
-void Clock_isr(void *arg);
-
 typedef struct {
   struct timecounter base;
   volatile RISCV_CLINT_regs *clint;
@@ -105,7 +102,7 @@ static void riscv_clock_at_tick(riscv_timecounter *tc)
   riscv_clock_write_mtimecmp(mtimecmp, value);
 }
 
-static void riscv_clock_handler_install(void)
+static void riscv_clock_handler_install(rtems_interrupt_handler handler)
 {
   rtems_status_code sc;
 
@@ -113,8 +110,8 @@ static void riscv_clock_handler_install(void)
     RISCV_INTERRUPT_VECTOR_TIMER,
     "Clock",
     RTEMS_INTERRUPT_UNIQUE,
-    (rtems_interrupt_handler) Clock_isr,
-    NULL
+    handler,
+    &riscv_clock_tc
   );
   if (sc != RTEMS_SUCCESSFUL) {
     bsp_fatal(RISCV_FATAL_CLOCK_IRQ_INSTALL);
@@ -242,11 +239,11 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_FIRST
 );
 
-#define Clock_driver_support_at_tick() riscv_clock_at_tick(&riscv_clock_tc)
+#define Clock_driver_support_at_tick(arg) riscv_clock_at_tick(arg)
 
 #define Clock_driver_support_initialize_hardware() riscv_clock_initialize()
 
 #define Clock_driver_support_install_isr(isr) \
-  riscv_clock_handler_install()
+  riscv_clock_handler_install(isr)
 
 #include "../../../shared/dev/clock/clockimpl.h"

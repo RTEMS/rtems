@@ -89,7 +89,7 @@ void new_brk_esr(void)
   } while(0)
 
 
-#define Clock_driver_support_at_tick() \
+#define Clock_driver_support_at_tick(arg) \
   do { \
 	uint32_t interrupt_flag; \
   	do { \

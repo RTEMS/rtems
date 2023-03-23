@@ -150,6 +150,6 @@ int bsp_cpu_load_percentage(void)
            0;
 }
 
-#define Clock_driver_timecounter_tick() uC5282_tc_tick()
+#define Clock_driver_timecounter_tick(arg) uC5282_tc_tick()
 
 #include "../../../shared/dev/clock/clockimpl.h"

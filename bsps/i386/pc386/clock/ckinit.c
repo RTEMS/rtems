@@ -87,7 +87,7 @@ extern volatile uint32_t Clock_driver_ticks;
 
 
 #ifdef RTEMS_SMP
-#define Clock_driver_support_at_tick() \
+#define Clock_driver_support_at_tick(arg) \
   do {                                                              \
     Processor_mask targets;                                         \
     _Processor_mask_Assign(&targets, _SMP_Get_online_processors()); \

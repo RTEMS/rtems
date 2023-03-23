@@ -44,7 +44,7 @@ extern uint32_t bsp_clicks_per_microsecond;
 static uint32_t mips_timer_rate = 0;
 
 /* refresh the internal CPU timer */
-#define Clock_driver_support_at_tick() \
+#define Clock_driver_support_at_tick(arg) \
   mips_set_timer( mips_timer_rate );
 
 #define Clock_driver_support_install_isr( _new ) \

@@ -12,7 +12,7 @@
 /*
  * Periodic interval timer interrupt handler
  */
-#define Clock_driver_support_at_tick() \
+#define Clock_driver_support_at_tick(arg) \
   do { CLOCK_REGS->status = 0; } while(0)
 
 /*

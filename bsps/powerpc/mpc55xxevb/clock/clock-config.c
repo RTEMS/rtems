@@ -41,8 +41,6 @@
 
 #include <rtems/timecounter.h>
 
-void Clock_isr(void *arg);
-
 static rtems_timecounter_simple mpc55xx_tc;
 
 #if defined(MPC55XX_CLOCK_EMIOS_CHANNEL)
@@ -75,16 +73,16 @@ static void mpc55xx_tc_at_tick(rtems_timecounter_simple *tc)
   EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CSR.R = csr.R;
 }
 
-static void mpc55xx_tc_tick(void)
+static void mpc55xx_tc_tick(rtems_timecounter_simple *tc)
 {
   rtems_timecounter_simple_upcounter_tick(
-    &mpc55xx_tc,
+    tc,
     mpc55xx_tc_get,
     mpc55xx_tc_at_tick
   );
 }
 
-static void mpc55xx_clock_handler_install(rtems_isr_entry isr)
+static void mpc55xx_clock_handler_install(rtems_interrupt_handler handler)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
@@ -93,8 +91,8 @@ static void mpc55xx_clock_handler_install(rtems_isr_entry isr)
     "clock",
     RTEMS_INTERRUPT_UNIQUE,
     MPC55XX_INTC_MIN_PRIORITY,
-    (rtems_interrupt_handler) isr,
-    NULL
+    handler,
+    &mpc55xx_tc
   );
   if (sc != RTEMS_SUCCESSFUL) {
     bsp_fatal(MPC55XX_FATAL_CLOCK_EMIOS_IRQ_INSTALL);
@@ -190,16 +188,16 @@ static void mpc55xx_tc_at_tick(rtems_timecounter_simple *tc)
   channel->TFLG.R = tflg.R;
 }
 
-static void mpc55xx_tc_tick(void)
+static void mpc55xx_tc_tick(rtems_timecounter_simple *tc)
 {
   rtems_timecounter_simple_downcounter_tick(
-    &mpc55xx_tc,
+    tc,
     mpc55xx_tc_get,
     mpc55xx_tc_at_tick
   );
 }
 
-static void mpc55xx_clock_handler_install(rtems_isr_entry isr)
+static void mpc55xx_clock_handler_install(rtems_interrupt_handler handler)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
@@ -208,8 +206,8 @@ static void mpc55xx_clock_handler_install(rtems_isr_entry isr)
     "clock",
     RTEMS_INTERRUPT_UNIQUE,
     MPC55XX_INTC_MIN_PRIORITY,
-    (rtems_interrupt_handler) isr,
-    NULL
+    handler,
+    &mpc55xx_tc
   );
   if (sc != RTEMS_SUCCESSFUL) {
     bsp_fatal(MPC55XX_FATAL_CLOCK_PIT_IRQ_INSTALL);
@@ -240,7 +238,7 @@ static void mpc55xx_clock_initialize(void)
 
 #endif
 
-#define Clock_driver_timecounter_tick() mpc55xx_tc_tick()
+#define Clock_driver_timecounter_tick(arg) mpc55xx_tc_tick(arg)
 #define Clock_driver_support_initialize_hardware() \
   mpc55xx_clock_initialize()
 #define Clock_driver_support_install_isr(isr) \

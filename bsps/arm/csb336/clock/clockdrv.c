@@ -38,7 +38,7 @@ rtems_irq_connect_data clock_isr_data = {
  *    - clear the interrupt bit?
  *    - restart the timer?
  */
-#define Clock_driver_support_at_tick()               \
+#define Clock_driver_support_at_tick(arg)            \
   do {                                               \
     uint32_t reg;                                    \
                                                      \

@@ -202,7 +202,7 @@ static void leon3_clock_initialize(void)
 #define Clock_driver_support_initialize_hardware() \
   leon3_clock_initialize()
 
-#define Clock_driver_timecounter_tick() leon3_tc_do_tick()
+#define Clock_driver_timecounter_tick(arg) leon3_tc_do_tick()
 
 #define BSP_FEATURE_IRQ_EXTENSION
 

@@ -157,7 +157,7 @@ static int clock_isr_is_on(const rtems_irq_connect_data *irq)
   return T0IR & 0x01;  /* MR0 mask */
 }
 
-#define Clock_driver_timecounter_tick() lpc22xx_tc_tick()
+#define Clock_driver_timecounter_tick(arg) lpc22xx_tc_tick()
 
 /* Make sure to include this, and only at the end of the file */
 #include "../../../shared/dev/clock/clockimpl.h"

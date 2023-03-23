@@ -59,7 +59,7 @@ static inline void clockwrite(unsigned int reg, int value)
 #define CLOCK_VECTOR    ( TIMER0_IRQ )
 #define CLOCK_IRQMASK   ( 1 << CLOCK_VECTOR )
 
-#define Clock_driver_support_at_tick() \
+#define Clock_driver_support_at_tick(arg) \
   do { \
     /* Clear overflow flag */ \
     clockwrite(LM32_CLOCK_SR, 0); \

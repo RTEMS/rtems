@@ -118,10 +118,10 @@ static void microblaze_clock_at_tick( rtems_timecounter_simple *tc )
   mblaze_timer->tcsr0 |= MICROBLAZE_TIMER_TCSR0_T0INT;
 }
 
-static void microblaze_tc_tick( void )
+static void microblaze_tc_tick( rtems_timecounter_simple *tc )
 {
   rtems_timecounter_simple_downcounter_tick(
-    &mblaze_tc,
+    tc,
     microblaze_tc_get,
     microblaze_clock_at_tick
   );
@@ -142,7 +142,7 @@ static void microblaze_clock_handler_install( rtems_interrupt_handler isr )
     "Clock",
     RTEMS_INTERRUPT_UNIQUE,
     isr,
-    NULL
+    &mblaze_tc
   );
 
   if ( sc != RTEMS_SUCCESSFUL ) {
@@ -153,7 +153,7 @@ static void microblaze_clock_handler_install( rtems_interrupt_handler isr )
 #define Clock_driver_support_initialize_hardware() microblaze_clock_initialize()
 #define Clock_driver_support_install_isr( isr ) \
   microblaze_clock_handler_install( isr )
-#define Clock_driver_timecounter_tick() microblaze_tc_tick()
+#define Clock_driver_timecounter_tick(arg) microblaze_tc_tick(arg)
 
 /* Include shared source clock driver code */
 #include "../../shared/dev/clock/clockimpl.h"

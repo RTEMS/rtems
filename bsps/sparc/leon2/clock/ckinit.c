@@ -121,7 +121,7 @@ uint32_t _CPU_Counter_frequency( void )
     NULL \
   )
 
-#define Clock_driver_support_at_tick() leon2_clock_at_tick()
+#define Clock_driver_support_at_tick(arg) leon2_clock_at_tick()
 
 #define Clock_driver_support_initialize_hardware() leon2_clock_init()
 

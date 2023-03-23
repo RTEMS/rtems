@@ -144,9 +144,9 @@ static void tms570_clock_driver_support_initialize_hardware( void )
  *
  * @retval Void
  */
-static void tms570_clock_driver_support_at_tick( void )
+static void tms570_clock_driver_support_at_tick(volatile tms570_rti_t *rti)
 {
-  TMS570_RTI.INTFLAG = TMS570_RTI_INTFLAG_INT0;
+  rti->INTFLAG = TMS570_RTI_INTFLAG_INT0;
 }
 
 /**
@@ -158,7 +158,7 @@ static void tms570_clock_driver_support_at_tick( void )
  * @retval Void
  */
 static void tms570_clock_driver_support_install_isr(
-  rtems_isr_entry Clock_isr
+  rtems_interrupt_handler handler
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -167,8 +167,8 @@ static void tms570_clock_driver_support_install_isr(
     TMS570_IRQ_TIMER_0,
     "Clock",
     RTEMS_INTERRUPT_UNIQUE,
-    (rtems_interrupt_handler) Clock_isr,
-    NULL
+    handler,
+    RTEMS_DEVOLATILE(tms570_rti_t *, &TMS570_RTI)
   );
   if ( sc != RTEMS_SUCCESSFUL ) {
     rtems_fatal_error_occurred(0xdeadbeef);
@@ -177,14 +177,12 @@ static void tms570_clock_driver_support_install_isr(
 
 #define Clock_driver_support_initialize_hardware \
                         tms570_clock_driver_support_initialize_hardware
-#define Clock_driver_support_at_tick \
-                        tms570_clock_driver_support_at_tick
+#define Clock_driver_support_at_tick(arg) \
+                        tms570_clock_driver_support_at_tick(arg)
 #define Clock_driver_support_initialize_hardware \
                         tms570_clock_driver_support_initialize_hardware
 
-#define Clock_driver_support_install_isr(Clock_isr) \
-              tms570_clock_driver_support_install_isr( Clock_isr )
-
-void Clock_isr(void *arg); /* to supress warning */
+#define Clock_driver_support_install_isr(handler) \
+              tms570_clock_driver_support_install_isr(handler)
 
 #include "../../../shared/dev/clock/clockimpl.h"

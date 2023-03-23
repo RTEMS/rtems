@@ -99,7 +99,7 @@ static void Clock_driver_support_initialize_hardware(void)
 #endif
 }
 
-#define Clock_driver_support_at_tick() \
+#define Clock_driver_support_at_tick(arg) \
   do { \
     /* read the status to clear the int */ \
     XSCALE_OS_TIMER_TSR = 0x1; \

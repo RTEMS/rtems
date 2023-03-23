@@ -18,9 +18,7 @@
   #define CLOCK_DRIVER_USE_FAST_IDLE 1
 #endif
 
-void Clock_isr(void * arg);
-
-#define Clock_driver_support_at_tick()                \
+#define Clock_driver_support_at_tick(arg)             \
   do {                                                \
     *EP7312_TC1EOI = 0xffffffff;                      \
   } while(0)
@@ -32,7 +30,7 @@ void Clock_isr(void * arg);
         BSP_TC1OI,                                     \
         "Clock",                                       \
         RTEMS_INTERRUPT_UNIQUE,                        \
-        Clock_isr,                                     \
+        _new,                                          \
         NULL                                           \
     );                                                 \
     assert(status == RTEMS_SUCCESSFUL);                \

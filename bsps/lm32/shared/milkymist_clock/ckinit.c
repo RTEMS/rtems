@@ -21,7 +21,7 @@
 #define CLOCK_DRIVER_USE_FAST_IDLE 1
 #endif
 
-#define Clock_driver_support_at_tick() \
+#define Clock_driver_support_at_tick(arg) \
   do { \
     lm32_interrupt_ack(1 << MM_IRQ_TIMER0); \
   } while (0)
