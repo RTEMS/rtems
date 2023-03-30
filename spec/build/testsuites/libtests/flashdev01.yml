@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2023 Aaron Nyholm (Southern Innovation)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/libtests/flashdev01/init.c
+- testsuites/libtests/flashdev01/test_flashdev.c
+stlib: []
+target: testsuites/libtests/flashdev01.exe
+type: build
+use-after: []
+use-before: []

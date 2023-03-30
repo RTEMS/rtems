@@ -125,6 +125,8 @@ links:
 - role: build-dependency
   uid: fcntl
 - role: build-dependency
+  uid: flashdev01
+- role: build-dependency
   uid: flashdisk01
 - role: build-dependency
   uid: flockfile
