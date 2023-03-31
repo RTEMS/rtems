@@ -274,7 +274,11 @@ static void LPUART_ReadNonBlocking(LPUART_Type *base, uint8_t *data, size_t leng
  * retval kStatus_LPUART_BaudrateNotSupport Baudrate is not support in current clock source.
  * retval kStatus_Success LPUART initialize succeed
  */
+#ifndef __rtems__
 status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t srcClock_Hz)
+#else /* __rtems__ */
+status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t srcClock_Hz, bool do_reset)
+#endif /* __rtems__ */
 {
     assert(NULL != config);
     assert(0U < config->baudRate_Bps);
@@ -320,6 +324,7 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
         }
     }
 
+#ifndef __rtems__
     /* Check to see if actual baud rate is within 3% of desired baud rate
      * based on the best calculate OSR value */
     if (baudDiff > ((config->baudRate_Bps / 100U) * 3U))
@@ -328,6 +333,12 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
         status = kStatus_LPUART_BaudrateNotSupport;
     }
     else
+#else /* __rtems__ */
+    /*
+     * Better to have any baudrate then none. With this change, the function can
+     * not fail any more.
+     */
+#endif /* __rtems__ */
     {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 
@@ -343,7 +354,13 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
 
 #if defined(FSL_FEATURE_LPUART_HAS_GLOBAL) && FSL_FEATURE_LPUART_HAS_GLOBAL
         /*Reset all internal logic and registers, except the Global Register */
+#ifndef __rtems__
         LPUART_SoftwareReset(base);
+#else /* __rtems__ */
+        if (do_reset) {
+            LPUART_SoftwareReset(base);
+        }
+#endif /* __rtems__ */
 #else
         /* Disable LPUART TX RX before setting. */
         base->CTRL &= ~(LPUART_CTRL_TE_MASK | LPUART_CTRL_RE_MASK);

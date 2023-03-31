@@ -389,7 +389,11 @@ static inline void LPUART_SoftwareReset(LPUART_Type *base)
  * @retval kStatus_LPUART_BaudrateNotSupport Baudrate is not support in current clock source.
  * @retval kStatus_Success LPUART initialize succeed
  */
+#ifndef __rtems__
 status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t srcClock_Hz);
+#else /* __rtems__ */
+status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t srcClock_Hz, bool do_reset);
+#endif /* __rtems__ */
 
 /*!
  * @brief Deinitializes a LPUART instance.

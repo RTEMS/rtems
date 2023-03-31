@@ -10,6 +10,9 @@
 #ifndef __FSL_DEVICE_REGISTERS_H__
 #define __FSL_DEVICE_REGISTERS_H__
 
+#ifdef __rtems__
+#include <bspopts.h>
+#endif /* __rtems__ */
 /*
  * Include the cpu specific register header files.
  *
