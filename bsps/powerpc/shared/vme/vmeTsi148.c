@@ -57,6 +57,7 @@
 #include <rtems/score/sysstate.h>
 #include <bsp.h>
 #include <libcpu/byteorder.h>
+#include <libcpu/io.h>
 
 #define __INSIDE_RTEMS_BSP__
 #define _VME_TSI148_DECLARE_SHOW_ROUTINES
