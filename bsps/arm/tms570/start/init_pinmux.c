@@ -45,6 +45,10 @@
      per_pin_action(common_arg, TMS570_BALL_E3_HET2_18)
 #endif
 
+#elif TMS570_VARIANT == 4357
+
+#define TMS570_PINMMR_INIT_LIST( per_pin_action, common_arg )
+
 #else
 
 /*

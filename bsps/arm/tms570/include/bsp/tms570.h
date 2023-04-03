@@ -78,13 +78,21 @@
 #include <bsp/ti_herc/reg_sys2.h>
 #include <bsp/ti_herc/reg_pcr.h>
 
+#include <bspopts.h>
+
 #define TMS570_ADC1 (*(volatile tms570_adc_t*)0xFFF7C000)
 #define TMS570_ADC2 (*(volatile tms570_adc_t*)0xFFF7C200)
 #define TMS570_CCMSR (*(volatile tms570_ccmsr_t*)0xFFFFF600)
 #define TMS570_CRC (*(volatile tms570_crc_t*)0xFE000000)
+#if TMS570_VARIANT == 4357
+#define TMS570_CRC2 (*(volatile tms570_crc_t*)0xFB000000)
+#endif
 #define TMS570_DCAN1 (*(volatile tms570_dcan_t*)0xFFF7DC00)
 #define TMS570_DCAN2 (*(volatile tms570_dcan_t*)0xFFF7DE00)
 #define TMS570_DCAN3 (*(volatile tms570_dcan_t*)0xFFF7E000)
+#if TMS570_VARIANT == 4357
+#define TMS570_DCAN4 (*(volatile tms570_dcan_t*)0xFFF7E200)
+#endif
 #define TMS570_DCC1 (*(volatile tms570_dcc_t*)0xFFFFEC00)
 #define TMS570_DCC2 (*(volatile tms570_dcc_t*)0xFFFFF400)
 #define TMS570_DMA (*(volatile tms570_dma_t*)0xFFFFF000)
@@ -108,9 +116,20 @@
 #define TMS570_HTU1 (*(volatile tms570_htu_t*)0xFFF7A400)
 #define TMS570_HTU2 (*(volatile tms570_htu_t*)0xFFF7A500)
 #define TMS570_I2C (*(volatile tms570_i2c_t*)0xFFF7D400)
+#if TMS570_VARIANT == 4357
+#define TMS570_I2C2 (*(volatile tms570_i2c_t*)0xFFF7D500)
+#endif
+#if TMS570_VARIANT == 4357
+#define TMS570_IOMM (*(volatile tms570_iomm_t*)0xFFFF1C00)
+#define TMS570_PINMUX (*(volatile tms570_pinmux_t*)0xFFFF1D10)
+#else
 #define TMS570_IOMM (*(volatile tms570_iomm_t*)0xFFFFEA00)
 #define TMS570_PINMUX (*(volatile tms570_pinmux_t*)0xFFFFEB10)
+#endif
 #define TMS570_LIN (*(volatile tms570_lin_t*)0xFFF7E400)
+#if TMS570_VARIANT == 4357
+#define TMS570_LIN2 (*(volatile tms570_lin_t*)0xFFF7E600)
+#endif
 #define TMS570_MDIO (*(volatile tms570_mdio_t*)0xFCF78900)
 #define TMS570_NHET1 (*(volatile tms570_nhet_t*)0xFFF7B800)
 #define TMS570_NHET2 (*(volatile tms570_nhet_t*)0xFFF7B900)
@@ -120,6 +139,9 @@
 #define TMS570_RTI (*(volatile tms570_rti_t*)0xFFFFFC00)
 #define TMS570_RTP (*(volatile tms570_rtp_t*)0xFFFFFA00)
 #define TMS570_SCI (*(volatile tms570_sci_t*)0xFFF7E500)
+#if TMS570_VARIANT == 4357
+#define TMS570_SCI2 (*(volatile tms570_sci_t*)0xFFF7E700)
+#endif
 #define TMS570_TCR (*(volatile tms570_tcr_t*)0xFFF7C800)
 #define TMS570_TCRAM1 (*(volatile tms570_tcram_t*)0xFFFFF800)
 #define TMS570_TCRAM2 (*(volatile tms570_tcram_t*)0xFFFFF900)
