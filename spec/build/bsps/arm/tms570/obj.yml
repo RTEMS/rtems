@@ -86,7 +86,8 @@ source:
 - bsps/arm/tms570/start/bspstart.c
 - bsps/arm/tms570/start/pinmux.c
 - bsps/arm/tms570/start/tms570-pom.c
-- bsps/shared/cache/nocache.c
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/cache/cache-v7ar-disable-data.S
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-termios.c
