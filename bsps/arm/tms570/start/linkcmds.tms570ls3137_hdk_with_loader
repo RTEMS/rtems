@@ -25,6 +25,7 @@ REGION_ALIAS ("REGION_STACK", RAM_INT);
 REGION_ALIAS ("REGION_NOCACHE", RAM_INT);
 REGION_ALIAS ("REGION_NOCACHE_LOAD", RAM_INT);
 
+bsp_vector_table_in_start_section = 1;
 bsp_int_vec_overlay_start = ORIGIN(RAM_INT_VEC);
 
 INCLUDE linkcmds.armv4
