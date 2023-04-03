@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-in-set:
+  - 3137
+  - 4357
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- enabled-by: true
+  value: 3137
+description: |
+  Defines the TMS570 family variant.  Use 3137 for the TMS570LS3137 and 4357
+  for the TMSLC4357.
+enabled-by: true
+format: '{}'
+links: []
+name: TMS570_VARIANT
+type: build

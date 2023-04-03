@@ -11,6 +11,8 @@ install: []
 ldflags: []
 links:
 - role: build-dependency
+  uid: optvariant
+- role: build-dependency
   uid: ../grp
 - role: build-dependency
   uid: ../start
