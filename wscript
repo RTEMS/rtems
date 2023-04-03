@@ -850,6 +850,13 @@ class OptionItem(Item):
                     value, self.data["name"], arg))
         return value
 
+    def _assert_in_set(self, conf, cic, value, arg):
+        if value is not None and value not in arg:
+            conf.fatal(
+                "Value '{}' for option '{}' is not an element of {}"
+                .format(value, self.data["name"], arg))
+        return value
+
     def _assert_in_interval(self, conf, cic, value, arg):
         if value is not None and (value < arg[0] or value > arg[1]):
             conf.fatal(
@@ -1072,6 +1079,7 @@ class OptionItem(Item):
             "assert-eq": self._assert_eq,
             "assert-ge": self._assert_ge,
             "assert-gt": self._assert_gt,
+            "assert-in-set": self._assert_in_set,
             "assert-int8": self._assert_int8,
             "assert-int16": self._assert_int16,
             "assert-int32": self._assert_int32,
