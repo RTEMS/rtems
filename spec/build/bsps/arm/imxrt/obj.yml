@@ -1,0 +1,72 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020-2023 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+cppflags: []
+cxxflags: []
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/imxrt/include/bsp.h
+  - bsps/arm/imxrt/include/chip.h
+  - bsps/arm/imxrt/include/fsl_clock_config.h
+- destination: ${BSP_INCLUDEDIR}/arm/freescale/imx
+  source:
+  - bsps/arm/include/arm/freescale/imx/imx_iomuxreg.h
+  - bsps/arm/include/arm/freescale/imx/imx_iomuxvar.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/imxrt/include/bsp/flash-headers.h
+  - bsps/arm/imxrt/include/bsp/irq.h
+  - bsps/arm/include/bsp/imx-gpio.h
+  - bsps/arm/include/bsp/imx-iomux.h
+- destination: ${BSP_INCLUDEDIR}/imxrt
+  source:
+  - bsps/arm/imxrt/include/imxrt/imxrt1050.dtsi
+  - bsps/arm/imxrt/include/imxrt/imxrt1050-pinfunc.h
+  - bsps/arm/imxrt/include/imxrt/lpspi.h
+  - bsps/arm/imxrt/include/imxrt/memory.h
+  - bsps/arm/imxrt/include/imxrt/mpu-config.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/imxrt/start/linkcmds.flexspi
+  - bsps/arm/imxrt/start/linkcmds.ocram
+  - bsps/arm/imxrt/start/linkcmds.sdram
+links: []
+source:
+- bsps/arm/imxrt/console/console.c
+- bsps/arm/imxrt/dts/imxrt1050-evkb.c
+- bsps/arm/imxrt/i2c/imxrt-lpi2c.c
+- bsps/arm/imxrt/nxp/boards/evkbimxrt1050/clock_config.c
+- bsps/arm/imxrt/nxp/boards/evkbimxrt1050/pin_mux.c
+- bsps/arm/imxrt/spi/imxrt-lpspi.c
+- bsps/arm/imxrt/start/bspstart.c
+- bsps/arm/imxrt/start/bspstarthooks.c
+- bsps/arm/imxrt/start/clock-arm-pll-config.c
+- bsps/arm/imxrt/start/flash-boot-data.c
+- bsps/arm/imxrt/start/flash-dcd.c
+- bsps/arm/imxrt/start/flash-flexspi-config.c
+- bsps/arm/imxrt/start/flash-ivt.c
+- bsps/arm/imxrt/start/imxrt-ffec-init.c
+- bsps/arm/imxrt/start/mpu-config.c
+- bsps/arm/shared/cache/cache-v7m.c
+- bsps/arm/shared/clock/clock-armv7m.c
+- bsps/arm/shared/cpucounter/cpucounter-armv7m.c
+- bsps/arm/shared/irq/irq-armv7m.c
+- bsps/arm/shared/irq/irq-dispatch-armv7m.c
+- bsps/arm/shared/pins/imx-gpio.c
+- bsps/arm/shared/pins/imx_iomux.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/shared/start/bspreset-armv7m.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/gettargethash-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

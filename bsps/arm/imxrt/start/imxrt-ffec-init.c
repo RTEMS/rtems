@@ -49,7 +49,7 @@ void imxrt_ffec_init(void)
 
   CLOCK_InitEnetPll(&config);
 
-  iomuxc_gpr->GPR1 |= IOMUXC_GPR_GPR1_ENET1_TX_CLK_DIR_MASK;
+  iomuxc_gpr->GPR1 |= IOMUXC_GPR_GPR1_ENET_REF_CLK_DIR_MASK;
 
   node = fdt_node_offset_by_compatible(fdt, -1, "fsl,imxrt-fec");
   if (node >= 0) {

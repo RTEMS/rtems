@@ -31,7 +31,6 @@
 #include <imxrt/mpu-config.h>
 
 #include <chip.h>
-#include <fsl_pin_mux.h>
 #include <fsl_clock_config.h>
 
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)

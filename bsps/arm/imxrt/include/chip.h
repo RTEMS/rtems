@@ -1,2 +1,1 @@
-#include "MIMXRT1052.h"
-#include "MIMXRT1052_features.h"
+#include <fsl_device_registers.h>

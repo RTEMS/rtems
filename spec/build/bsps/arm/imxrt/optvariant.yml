@@ -1,0 +1,104 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- script: |
+    variants = [
+          "MIMXRT1011CAE4A",
+          "MIMXRT1011DAE5A",
+          "MIMXRT1015CAF4A",
+          "MIMXRT1015DAF5A",
+          "MIMXRT1024CAG4A",
+          "MIMXRT1024CAG4B",
+          "MIMXRT1024DAG5A",
+          "MIMXRT1024DAG5B",
+          "MIMXRT1042DFP6B",
+          "MIMXRT1042XFP5B",
+          "MIMXRT1042XJM5B",
+          "MIMXRT1051CVJ5B",
+          "MIMXRT1051CVL5B",
+          "MIMXRT1051DVJ6B",
+          "MIMXRT1051DVL6B",
+          "MIMXRT1052CVJ5B",
+          "MIMXRT1052CVL5B",
+          "MIMXRT1052DVJ6B",
+          "MIMXRT1052DVL6B",
+          "MIMXRT1061CVJ5A",
+          "MIMXRT1061CVJ5B",
+          "MIMXRT1061CVL5A",
+          "MIMXRT1061CVL5B",
+          "MIMXRT1061DVJ6A",
+          "MIMXRT1061DVJ6B",
+          "MIMXRT1061DVL6A",
+          "MIMXRT1061DVL6B",
+          "MIMXRT1061XVN5B",
+          "MIMXRT1062CVJ5A",
+          "MIMXRT1062CVJ5B",
+          "MIMXRT1062CVL5A",
+          "MIMXRT1062CVL5B",
+          "MIMXRT1062DVJ6A",
+          "MIMXRT1062DVJ6B",
+          "MIMXRT1062DVL6A",
+          "MIMXRT1062DVL6B",
+          "MIMXRT1062DVN6B",
+          "MIMXRT1062XVN5B",
+          "MIMXRT1064CVJ5A",
+          "MIMXRT1064CVL5A",
+          "MIMXRT1064DVJ6A",
+          "MIMXRT1064DVL6A",
+          "MIMXRT1165CVM5A_cm7",
+          "MIMXRT1165DVM6A_cm7",
+          "MIMXRT1165XVM5A_cm7",
+          "MIMXRT1165CVM5A_cm4",
+          "MIMXRT1165DVM6A_cm4",
+          "MIMXRT1165XVM5A_cm4",
+          "MIMXRT1166CVM5A_cm7",
+          "MIMXRT1166DVM6A_cm7",
+          "MIMXRT1166XVM5A_cm7",
+          "MIMXRT1166CVM5A_cm4",
+          "MIMXRT1166DVM6A_cm4",
+          "MIMXRT1166XVM5A_cm4",
+          "MIMXRT1171AVM8A",
+          "MIMXRT1171CVM8A",
+          "MIMXRT1171DVMAA",
+          "MIMXRT1172AVM8A",
+          "MIMXRT1172CVM8A",
+          "MIMXRT1172DVMAA",
+          "MIMXRT1173CVM8A_cm7",
+          "MIMXRT1173CVM8A_cm4",
+          "MIMXRT1175AVM8A_cm7",
+          "MIMXRT1175CVM8A_cm7",
+          "MIMXRT1175DVMAA_cm7",
+          "MIMXRT1175AVM8A_cm4",
+          "MIMXRT1175CVM8A_cm4",
+          "MIMXRT1175DVMAA_cm4",
+          "MIMXRT1176AVM8A_cm7",
+          "MIMXRT1176CVM8A_cm7",
+          "MIMXRT1176DVMAA_cm7",
+          "MIMXRT1176AVM8A_cm4",
+          "MIMXRT1176CVM8A_cm4",
+          "MIMXRT1176DVMAA_cm4",
+        ]
+    if value not in variants:
+        conf.fatal(
+            "MIMXRT chip variant '{}' is not one of {}".format(
+                value, variants
+            )
+        )
+    conf.define_cond("CPU_{}".format(value), True)
+    speedgrade = "'{}'".format(value[13])
+    conf.define("IMXRT_SPEEDGRADE", speedgrade, quote=False)
+    conf.define("IMXRT_IS_{}xx".format(value[:8]), True)
+build-type: option
+default:
+- enabled-by: true
+  value: MIMXRT1052DVL6B
+enabled-by: true
+format: '{}'
+links: []
+name: IMXRT_VARIANT
+description: |
+  Select the i.MXRT series chip variant. Can be (for example) MIMXRT1052CVJ5B or
+  MIMXRT1166DVM6A_cm7.
+type: build
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
