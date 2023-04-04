@@ -576,7 +576,7 @@ send_reply(FTPD_SessionInfo_t  *info, int code, const char *text)
  * Output parameters:
  *   returns 1 on success, 0 on failure.
  */
-static int
+static void
 set_socket_timeout(int s, int seconds)
 {
   int res = 0;
@@ -591,9 +591,6 @@ set_socket_timeout(int s, int seconds)
     syslog(LOG_ERR, "ftpd: Can't set send timeout on socket: %s.", serr());
   else if(0 != setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &tv, len))
     syslog(LOG_ERR, "ftpd: Can't set receive timeout on socket: %s.", serr());
-  else
-    res = 1;
-  return res;
 }
 
 /*
@@ -688,8 +685,7 @@ data_socket(FTPD_SessionInfo_t *info)
   }
   info->data_socket = s;
   info->use_default = 1;
-  if(s >= 0)
-    set_socket_timeout(s, info->idle);
+  set_socket_timeout(s, info->idle);
   return s;
 }
 
@@ -1568,8 +1564,8 @@ command_pasv(FTPD_SessionInfo_t *info)
       syslog(LOG_ERR, "ftpd: Error binding PASV socket: %s", serr());
     else if (0 > listen(s, 1))
       syslog(LOG_ERR, "ftpd: Error listening on PASV socket: %s", serr());
-    else if (set_socket_timeout(s, info->idle))
     {
+      set_socket_timeout(s, info->idle);
       if (0 == getsockname(s, (struct sockaddr *)&addr, &addrLen))
       {
         char buf[FTPD_BUFSIZE];
@@ -2030,12 +2026,11 @@ ftpd_daemon(rtems_task_argument args RTEMS_UNUSED)
     ss = accept(s, (struct sockaddr *)&addr, &addrLen);
     if (0 > ss)
       syslog(LOG_ERR, "ftpd: Error accepting control connection: %s", serr());
-    else if(!set_socket_timeout(ss, ftpd_timeout))
-      close_socket(ss);
     else
     {
       FTPD_SessionInfo_t *info;
 
+      set_socket_timeout(ss, ftpd_timeout);
       info = task_pool_obtain();
       if (NULL == info)
       {
