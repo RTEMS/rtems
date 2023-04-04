@@ -23,8 +23,8 @@
 #ifndef LIBBSP_ARM_TMS570_PINMUX_H
 #define LIBBSP_ARM_TMS570_PINMUX_H
 
-#ifndef ASM
-#include <bsp/tms570.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,10 +40,18 @@ extern "C" {
  * connection is not enabled in parallel to other one.
  * Mask is ored with pin number in such list.
  */
-#define TMS570_PIN_CLEAR_RQ_MASK 0x00000800
+#define TMS570_PIN_CLEAR_RQ_MASK 0x00008000
 
-#define TMS570_PIN_FNC_SHIFT    12
-#define TMS570_PIN_FNC_MASK     0x0000f000
+#define TMS570_PIN_FNC_SHIFT    11
+#define TMS570_PIN_FNC_MASK     0x00007800
+
+/**
+ * @brief This constant indicates that all eight function bits associated with
+ *   the pin shall be cleared.
+ *
+ * Use it as a special value for the pin function in TMS570_PIN_AND_FNC().
+ */
+#define TMS570_PIN_FNC_CLEAR 0x10U
 
 #define TMS570_PIN_NUM_FNC_MASK 0x0000ffff
 
@@ -52,6 +60,15 @@ extern "C" {
 
 #define TMS570_PIN_FNC_AUTO  (-1)
 
+/**
+ * @brief Defines the function of the pin.
+ *
+ * @param pin is the pin identifier.  Use TMS570_BALL_WITH_MMR() to define the
+ *   pin identifier.
+ *
+ * param fnc is the pin function.  The pin function shall be the function bit
+ *   index or TMS570_PIN_FNC_CLEAR.
+ */
 #define TMS570_PIN_AND_FNC(pin, fnc) \
   ((pin) | ((fnc) << TMS570_PIN_FNC_SHIFT))
 
@@ -60,6 +77,43 @@ extern "C" {
 
 #define TMS570_BALL_WITH_MMR(mmrx, pos) \
   ((pos) | ((mmrx) << 2))
+
+/**
+ * @brief Prepares a pin configuration sequence.
+ *
+ * Use tms570_pin_config_apply() to apply pin configurations.  Use
+ * tms570_pin_config_complete() to complete the pin configuration sequence.
+ */
+void tms570_pin_config_prepare(void);
+
+/**
+ * @brief Applies a pin configuration.
+ *
+ * This function can only be used if the pin configuration was prepared by
+ * tms570_pin_config_prepare().
+ *
+ * @param config is the pin configuration defined by TMS570_PIN_AND_FNC() or
+ *   TMS570_PIN_WITH_IN_ALT().
+ */
+void tms570_pin_config_apply(uint32_t config);
+
+/**
+ * @brief Applies a pin configuration array.
+ *
+ * This function can only be used if the pin configuration was prepared by
+ * tms570_pin_config_prepare().
+ *
+ * @param config is the pin configuration array.  Calls
+ *   tms570_pin_config_apply() for each pin configuration in the array.
+ *
+ * @param count is the element count of the pin configuration array.
+ */
+void tms570_pin_config_array_apply(const uint32_t *config, size_t count);
+
+/**
+ * @brief Completes a pin configuration sequence.
+ */
+void tms570_pin_config_complete(void);
 
 /* Generic functions select pin to peripheral connection */
 
@@ -70,15 +124,6 @@ void tms570_bsp_pin_clear_function(int pin_num, int pin_fnc);
 void tms570_bsp_pin_config_one(uint32_t pin_num_and_fnc);
 
 void tms570_bsp_pinmmr_config(const uint32_t *pinmmr_values, int reg_start, int reg_count);
-
-static inline void
-tms570_bsp_pin_to_pinmmrx(volatile uint32_t **pinmmrx, unsigned int *pin_shift,
-                          int pin_num)
-{
-  pin_num = (pin_num & TMS570_PIN_NUM_MASK) >> TMS570_PIN_NUM_SHIFT;
-  *pinmmrx = &TMS570_IOMM.PINMUX.PINMMR0 + (pin_num >> 2);
-  *pin_shift = (pin_num & 0x3)*8;
-}
 
 #define TMS570_PINMMR_REG_SINGLE_VAL_ACTION(reg, pin) \
   (((((pin) & TMS570_PIN_NUM_MASK) >> 2 != (reg)) || ((pin) & TMS570_PIN_CLEAR_RQ_MASK))? 0: \
@@ -124,9 +169,6 @@ tms570_bsp_pin_to_pinmmrx(volatile uint32_t **pinmmrx, unsigned int *pin_shift,
  */
 #define TMS570_PINMMR_COMA_LIST(pin_list) \
   pin_list(TMS570_PINMMR_COMA_LIST_ACTION, 0)
-
-
-#endif
 
 /** @} */
 
