@@ -107,7 +107,7 @@ checkoverflow(Elf_Addr addr, int bitwidth, Elf_Addr targetaddr,
   const Elf_Addr mask = ~__BITS(bitwidth - 1, 0);
 
   if (((addr & mask) != 0) && ((addr & mask) != mask)) {
-    printf("kobj_reloc: Relocation 0x%jx too far from %p"
+    printf("kobj_reloc: Relocation 0x%" PRIxPTR " too far from %p"
         " (base+0x%jx) for %dbit%s\n",
         (uintptr_t)targetaddr, where, off, bitwidth, bitscale);
     return true;
@@ -120,7 +120,7 @@ static inline bool
 checkalign(Elf_Addr addr, int alignbyte, void *where, Elf64_Addr off)
 {
   if ((addr & (alignbyte - 1)) != 0) {
-    printf("kobj_reloc: Relocation 0x%jx unaligned at %p"
+    printf("kobj_reloc: Relocation 0x%" PRIxPTR " unaligned at %p"
         " (base+0x%jx). must be aligned %d\n",
         (uintptr_t)addr, where, off, alignbyte);
     return true;
@@ -257,7 +257,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
           printf ("rtl: reloc 64/GLOB_DAT in %s --> %p in %s\n",
-                  sect->name, (void *)*where,
+                  sect->name, (void *)(uintptr_t)*where,
                   rtems_rtl_obj_oname (obj));
       }
       break;
@@ -270,10 +270,10 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
      */
     case R_TYPE(RELATIVE):  /* Delta(S) + A */
       if (!parsing) {
-        *where = (Elf_Addr)(sect->base + rela->r_addend);
+        *where = (Elf_Addr)(uintptr_t)(sect->base + rela->r_addend);
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
           printf ("rtl: reloc RELATIVE in %s --> %p in %s\n",
-                  sect->name, (void *)*where,
+                  sect->name, (void *)(uintptr_t)*where,
                   rtems_rtl_obj_oname (obj));
       }
       break;
@@ -304,7 +304,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
           shift = 12;
           break;
         default:
-          printf("illegal rtype: %ld\n", ELF_R_TYPE(rela->r_info));
+          printf("illegal rtype: %" PRIu64 "\n", ELF_R_TYPE(rela->r_info));
           break;
       }
 
@@ -344,7 +344,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
           shift = 3;
           break;
         default:
-          printf("illegal rtype: %ld\n", ELF_R_TYPE(rela->r_info));
+          printf("illegal rtype: %" PRIu64 "\n", ELF_R_TYPE(rela->r_info));
           break;
       }
 
@@ -360,9 +360,9 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
         target = (Elf_Addr)symvalue + rela->r_addend;
         if (checkalign(target, 1 << shift, where, off)) {
           printf ("rtl: reloc checkalign failed in %s --> %p in %s\n",
-                  sect->name, (void *)*where,
+                  sect->name, (void *)(uintptr_t)*where,
                   rtems_rtl_obj_oname (obj));
-          printf("ELF_R_TYPE is : %ld\n", ELF_R_TYPE(rela->r_info));
+          printf("ELF_R_TYPE is : %" PRIu64 "\n", ELF_R_TYPE(rela->r_info));
           break;
         }
         target &= WIDTHMASK(12);
@@ -433,7 +433,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
           return rtems_rtl_elf_rel_failure;
         }
 
-        tramp_addr = ((Elf_Addr) obj->tramp_brk) | (symvalue & 1);
+        tramp_addr = ((Elf_Addr)(uintptr_t)obj->tramp_brk) | (symvalue & 1);
         obj->tramp_brk = set_veneer(obj->tramp_brk, symvalue);
 
         target = tramp_addr + rela->r_addend - (uintptr_t)where;
@@ -468,29 +468,30 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
 
     case R_TYPE(TLSDESC):
       printf ("rtl: reloc TLSDESC in %s --> %p in %s\n",
-              sect->name, (void *)*where,
+              sect->name, (void *)(uintptr_t)*where,
               rtems_rtl_obj_oname (obj));
       break;
 
     case R_TLS_TYPE(TLS_DTPREL):
       printf ("rtl: reloc TLS_DTPREL in %s --> %p in %s\n",
-              sect->name, (void *)*where,
+              sect->name, (void *)(uintptr_t)*where,
               rtems_rtl_obj_oname (obj));
       break;
     case R_TLS_TYPE(TLS_DTPMOD):
       printf ("rtl: reloc TLS_DTPMOD in %s --> %p in %s\n",
-              sect->name, (void *)*where,
+              sect->name, (void *)(uintptr_t)*where,
               rtems_rtl_obj_oname (obj));
       break;
 
     case R_TLS_TYPE(TLS_TPREL):
       printf ("rtl: reloc TLS_TPREL in %s --> %p in %s\n",
-              sect->name, (void *)*where,
+              sect->name, (void *)(uintptr_t)*where,
               rtems_rtl_obj_oname (obj));
       break;
 
     default:
-      printf ("rtl: Unsupported relocation type (%ld) in %s --> %p in %s\n",
+      printf ("rtl: Unsupported relocation type (%" PRIu64
+              ") in %s --> %p in %s\n",
               ELF_R_TYPE(rela->r_info), sect->name, (void *)where,
               rtems_rtl_obj_oname (obj));
       return rtems_rtl_elf_rel_failure;

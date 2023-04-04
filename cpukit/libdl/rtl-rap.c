@@ -350,7 +350,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
           return false;
         }
 
-        symvalue = (Elf_Addr) symsect->base + addend;
+        symvalue = (Elf_Addr)(uintptr_t) symsect->base + addend;
       }
       else if (rtems_rtl_elf_rel_resolve_sym (type))
       {
@@ -390,7 +390,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
           return false;
         }
 
-        symvalue = (Elf_Addr) symbol->value;
+        symvalue = (Elf_Addr)(uintptr_t) symbol->value;
       }
 
       if (is_rela)

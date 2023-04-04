@@ -192,7 +192,7 @@ rtems_rtl_elf_find_symbol (rtems_rtl_obj*      obj,
     if (!*symbol)
       return false;
 
-    *value = (Elf_Addr) (*symbol)->value;
+    *value = (Elf_Addr)(uintptr_t) (*symbol)->value;
     return true;
   }
 
@@ -202,7 +202,7 @@ rtems_rtl_elf_find_symbol (rtems_rtl_obj*      obj,
   if (!sect)
     return false;
 
-  *value = sym->st_value + (Elf_Addr) sect->base;
+  *value = sym->st_value + (Elf_Addr)(uintptr_t) sect->base;
 
   return true;
 }
