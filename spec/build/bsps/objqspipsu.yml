@@ -1,6 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: objects
-cflags: []
+cflags:
+- -Wno-shift-count-overflow
 copyrights:
 - Copyright (C) 2022 On-Line Applications Research (OAR)
 cppflags: []
