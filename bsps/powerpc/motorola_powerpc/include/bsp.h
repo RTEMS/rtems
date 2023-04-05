@@ -50,8 +50,8 @@ extern "C" {
  * _VME_A32_WIN0_ON_VME: VME address of that same window
  *
  * AFAIK, only PreP boards have a non-zero PCI_MEM_BASE (i.e., an offset between
- * CPU and PCI addresses). The mvme2300 'ppcbug' firmware configures the PCI
- * bus using PCI base addresses! I.e., drivers need to add PCI_MEM_BASE to
+ * CPU and PCI addresses). The mvme2307/mvme2700 'ppcbug' firmware configures the
+ * PCI bus using PCI base addresses! I.e., drivers need to add PCI_MEM_BASE to
  * the base address read from PCI config.space in order to translate that
  * into a CPU address.
  *
@@ -169,7 +169,7 @@ extern "C" {
 #define BSP_VGA_IOBASE       ((_IO_BASE)+0x3c0)
 #endif
 
-#if defined(mvme2300)
+#if defined(mvme2300) || defined(mvme2307) || defined(mvme2700)
 #define MVME_HAS_DEC21140
 #endif
 #endif
@@ -271,7 +271,7 @@ extern int BSP_connect_clock_handler (void);
  *       It returns and clears the error bits of the PCI status register.
  *       MCP support is disabled because:
  *         a) the 2100 has no raven chip
- *         b) the raven (2300) would raise machine check interrupts
+ *         b) the raven (2300, 2307, 2700) would raise machine check interrupts
  *            on PCI config space access to empty slots.
  */
 extern unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet);
