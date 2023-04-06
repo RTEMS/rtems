@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 Chris Johns
+default:
+- enabled-by: powerpc/mvme2307
+  value: true
+- enabled-by: true
+  value: false
+description: |
+  Defined for MVME2307 -- undefined for others
+enabled-by: true
+links: []
+name: mvme2307
+type: build

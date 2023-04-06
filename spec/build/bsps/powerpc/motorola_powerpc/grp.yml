@@ -33,6 +33,10 @@ links:
 - role: build-dependency
   uid: optmvme2100
 - role: build-dependency
+  uid: optmvme2307
+- role: build-dependency
+  uid: optmvme2700
+- role: build-dependency
   uid: optqemu
 - role: build-dependency
   uid: optsbrk
