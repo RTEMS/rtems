@@ -577,15 +577,11 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
  *
  * @note This macro uses a GNU C extension.
  */
-#define PPC_SPECIAL_PURPOSE_REGISTER(spr) \
-  ({ \
-    uint32_t val; \
-    __asm__ volatile (\
-      "mfspr %0, " PPC_STRINGOF(spr) \
-      : "=r" (val) \
-    ); \
-    val;\
-  } )
+#define PPC_SPECIAL_PURPOSE_REGISTER(spr, val) \
+  __asm__ volatile (\
+    "mfspr %0, " PPC_STRINGOF(spr) \
+    : "=r" (val) \
+  )
 
 /**
  * @brief Sets the Special Purpose Register with number @a spr to the value in
@@ -612,7 +608,7 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
     uint32_t val; \
     uint32_t mybits = bits; \
     _ISR_Local_disable(level); \
-    val = PPC_SPECIAL_PURPOSE_REGISTER(spr); \
+    PPC_SPECIAL_PURPOSE_REGISTER(spr, val); \
     val |= mybits; \
     PPC_SET_SPECIAL_PURPOSE_REGISTER(spr, val); \
     _ISR_Local_enable(level); \
@@ -632,7 +628,7 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
     uint32_t mybits = bits; \
     uint32_t mymask = mask; \
     _ISR_Local_disable(level); \
-    val = PPC_SPECIAL_PURPOSE_REGISTER(spr); \
+    PPC_SPECIAL_PURPOSE_REGISTER(spr, val); \
     val &= ~mymask; \
     val |= mybits; \
     PPC_SET_SPECIAL_PURPOSE_REGISTER(spr, val); \
@@ -651,7 +647,7 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
     uint32_t val; \
     uint32_t mybits = bits; \
     _ISR_Local_disable(level); \
-    val = PPC_SPECIAL_PURPOSE_REGISTER(spr); \
+    PPC_SPECIAL_PURPOSE_REGISTER(spr, val); \
     val &= ~mybits; \
     PPC_SET_SPECIAL_PURPOSE_REGISTER(spr, val); \
     _ISR_Local_enable(level); \
@@ -790,7 +786,9 @@ static inline void ppc_set_time_base(uint32_t val)
 
 static inline uint32_t ppc_time_base_upper(void)
 {
-  return PPC_SPECIAL_PURPOSE_REGISTER(TBRU);
+  uint32_t val;
+  PPC_SPECIAL_PURPOSE_REGISTER(TBRU, val);
+  return val;
 }
 
 static inline void ppc_set_time_base_upper(uint32_t val)
@@ -810,12 +808,16 @@ static inline void ppc_set_time_base_64(uint64_t val)
 
 static inline uint32_t ppc_alternate_time_base(void)
 {
-  return PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_ATBL);
+  uint32_t val;
+  PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_ATBL, val);
+  return val;
 }
 
 static inline uint32_t ppc_alternate_time_base_upper(void)
 {
-  return PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_ATBU);
+  uint32_t val;
+  PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_ATBU, val);
+  return val;
 }
 
 static inline uint64_t ppc_alternate_time_base_64(void)
@@ -835,7 +837,9 @@ static inline uint64_t ppc_alternate_time_base_64(void)
 
 static inline uint32_t ppc_processor_id(void)
 {
-  return PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_PIR);
+  uint32_t val;
+  PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_PIR, val);
+  return val;
 }
 
 static inline void ppc_set_processor_id(uint32_t val)
@@ -845,7 +849,9 @@ static inline void ppc_set_processor_id(uint32_t val)
 
 static inline uint32_t ppc_fsl_system_version(void)
 {
-  return PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_SVR);
+  uint32_t val;
+  PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_SVR, val);
+  return val;
 }
 
 static inline uint32_t ppc_fsl_system_version_cid(uint32_t svr)

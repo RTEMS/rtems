@@ -42,18 +42,23 @@ typedef struct LRFrameRec_ {
 
 static uint32_t ppc_exc_get_DAR_dflt(void)
 {
-  if (ppc_cpu_is_60x())
-    return PPC_SPECIAL_PURPOSE_REGISTER(PPC_DAR);
-  else
+  uint32_t val;
+  if (ppc_cpu_is_60x()) {
+    PPC_SPECIAL_PURPOSE_REGISTER(PPC_DAR, val);
+    return val;
+  } else {
     switch (ppc_cpu_is_bookE()) {
       default:
         break;
       case PPC_BOOKE_STD:
       case PPC_BOOKE_E500:
-        return PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_DEAR);
+        PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_DEAR, val);
+        return val;
       case PPC_BOOKE_405:
-        return PPC_SPECIAL_PURPOSE_REGISTER(PPC405_DEAR);
+        PPC_SPECIAL_PURPOSE_REGISTER(PPC405_DEAR, val);
+        return val;
     }
+  }
   return 0xdeadbeef;
 }
 
@@ -170,13 +175,13 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
     printk(" %s = 0x%08" PRIx32 "\n", reg, ppc_exc_get_DAR());
   }
   if (ppc_cpu_is_bookE()) {
-    unsigned esr, mcsr;
+    uint32_t esr, mcsr;
     if (ppc_cpu_is_bookE() == PPC_BOOKE_405) {
-      esr  = PPC_SPECIAL_PURPOSE_REGISTER(PPC405_ESR);
-      mcsr = PPC_SPECIAL_PURPOSE_REGISTER(PPC405_MCSR);
+      PPC_SPECIAL_PURPOSE_REGISTER(PPC405_ESR, esr);
+      PPC_SPECIAL_PURPOSE_REGISTER(PPC405_MCSR, mcsr);
     } else {
-      esr  = PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_ESR);
-      mcsr = PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_MCSR);
+      PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_ESR, esr);
+      PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_MCSR, mcsr);
     }
     printk("  ESR = 0x%08x\n", esr);
     printk(" MCSR = 0x%08x\n", mcsr);
