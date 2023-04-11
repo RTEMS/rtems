@@ -11,7 +11,7 @@
 #include <libchip/m48t08.h>
 
 /* Forward function declaration */
-#if !defined(mvme2100)
+#if !defined(mot_ppc_mvme2100)
 uint32_t mvmertc_get_register( uintptr_t, uint8_t );
 void mvmertc_set_register( uintptr_t, uint8_t, uint32_t );
 #endif
@@ -24,7 +24,7 @@ rtc_tbl RTC_Table[] = {
         &m48t08_fns,               /* pDeviceFns */
         rtc_probe,                 /* deviceProbe */
         NULL,                      /* pDeviceParams */
-#if defined(mvme2100)
+#if defined(mot_ppc_mvme2100)
         0xFFE81ff8,                /* ulCtrlPort1 */
         0x00,                      /* ulDataPort */
         m48t08_get_register,       /* getRegister */
@@ -44,7 +44,7 @@ rtc_tbl RTC_Table[] = {
 
 size_t RTC_Count = NUM_RTCS;
 
-#if !defined(mvme2100)
+#if !defined(mot_ppc_mvme2100)
 #include <rtems/bspIo.h>
 void mvmertc_set_register(
   uintptr_t base,

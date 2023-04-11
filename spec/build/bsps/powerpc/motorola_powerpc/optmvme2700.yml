@@ -14,5 +14,5 @@ description: |
   Defined for MVME2700 -- undefined for others
 enabled-by: true
 links: []
-name: mvme2700
+name: mot_ppc_mvme2700
 type: build

@@ -16,7 +16,7 @@ void bsp_reset(void)
   CPU_print_stack();
   /* shutdown and reboot */
 
-#if defined(mvme2100)
+#if defined(mot_ppc_mvme2100)
   *(unsigned char*)0xffe00000 |= 0x80;
 #else
    /* Memory-mapped Port 92 PIB device access

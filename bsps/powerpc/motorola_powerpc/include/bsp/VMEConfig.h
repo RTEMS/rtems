@@ -66,7 +66,7 @@
  * available and unused!
  */
 
-#if defined(mvme2100)
+#if defined(mot_ppc_mvme2100)
 #define _VME_A32_WIN0_ON_PCI  0x90000000
 #define _VME_A24_ON_PCI      0x9f000000
 #define _VME_A16_ON_PCI      0x9fff0000

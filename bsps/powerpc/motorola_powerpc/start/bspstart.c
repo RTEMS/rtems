@@ -109,7 +109,7 @@ char *save_boot_params(
   return loaderParam;
 }
 
-#if defined(mvme2100)
+#if defined(mot_ppc_mvme2100)
 unsigned int EUMBBAR;
 
 /*
@@ -130,7 +130,7 @@ uint32_t _CPU_Counter_frequency(void)
 
 static void bsp_early( void )
 {
-#if !defined(mvme2100)
+#if !defined(mot_ppc_mvme2100)
   unsigned l2cr;
 #endif
   prep_t boardManufacturer;
@@ -149,7 +149,7 @@ static void bsp_early( void )
    * Init MMU block address translation to enable hardware access
    */
 
-#if !defined(mvme2100)
+#if !defined(mot_ppc_mvme2100)
   /*
    * PC legacy IO space used for inb/outb and all PC compatible hardware
    */
@@ -173,7 +173,7 @@ static void bsp_early( void )
   setdbat(3, 0xb0000000, 0xb0000000, 0x10000000, IO_PAGE);
 #endif
 
-#if defined(mvme2100)
+#if defined(mot_ppc_mvme2100)
   /* Need 0xfec00000 mapped for this */
   EUMBBAR = get_eumbbar();
 #endif
@@ -200,7 +200,7 @@ static void bsp_early( void )
 #endif
 
 
-#if !defined(mvme2100)
+#if !defined(mot_ppc_mvme2100)
   /*
    * Enable L2 Cache. Note that the set_L2CR(L2CR) codes checks for
    * relevant CPU type (mpc750)...

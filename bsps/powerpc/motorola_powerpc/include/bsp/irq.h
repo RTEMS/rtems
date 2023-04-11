@@ -133,7 +133,7 @@ extern "C" {
 #define BSP_PCI_ISA_BRIDGE_IRQ		(BSP_PCI_IRQ0)
 #endif
 
-#if defined(mvme2100)
+#if defined(mot_ppc_mvme2100)
 #define BSP_DEC21143_IRQ                (BSP_PCI_IRQ_LOWEST_OFFSET + 1)
 #define BSP_PMC_PCMIP_TYPE1_SLOT0_IRQ   (BSP_PCI_IRQ_LOWEST_OFFSET + 2)
 #define BSP_PCMIP_TYPE1_SLOT1_IRQ       (BSP_PCI_IRQ_LOWEST_OFFSET + 3)

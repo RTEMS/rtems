@@ -98,7 +98,7 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
 };
 
 #if BSP_PCI_IRQ_NUMBER > 0
-#if defined(mvme2100)
+#if defined(mot_ppc_mvme2100)
 static unsigned char mvme2100_openpic_initpolarities[16] = {
     0,  /* Not used - should be disabled */
     0,	/* DEC21143 Controller */
@@ -276,7 +276,7 @@ loop_exit:
    */
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
-#if BSP_ISA_IRQ_NUMBER > 0 && !defined(mvme2100)
+#if BSP_ISA_IRQ_NUMBER > 0 && !defined(mot_ppc_mvme2100)
   int known_cpi_isa_bridge = 0;
 #endif
   int i;
@@ -285,7 +285,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   /*
    * First initialize the Interrupt management hardware
    */
-#if defined(mvme2100)
+#if defined(mot_ppc_mvme2100)
 #ifdef TRACE_IRQ_INIT
   printk("Going to initialize EPIC interrupt controller (openpic compliant)\n");
 #endif

@@ -14,5 +14,5 @@ description: |
   Defined for MVME2307 -- undefined for others
 enabled-by: true
 links: []
-name: mvme2307
+name: mot_ppc_mvme2307
 type: build

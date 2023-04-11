@@ -37,7 +37,7 @@
  * @{
  */
 
-#if 1 
+#if 1
 #define ISA8259_M_ELCR 		0x4d0
 #define ISA8259_S_ELCR 		0x4d1
 #endif
@@ -169,7 +169,7 @@ extern "C" {
 
 /** @} */
 
-#if defined(mvme2100)
+#if defined(mot_ppc_mvme2100)
 #define BSP_DEC21143_IRQ                (BSP_PCI_IRQ_LOWEST_OFFSET + 1)
 #define BSP_PMC_PCMIP_TYPE1_SLOT0_IRQ   (BSP_PCI_IRQ_LOWEST_OFFSET + 2)
 #define BSP_PCMIP_TYPE1_SLOT1_IRQ       (BSP_PCI_IRQ_LOWEST_OFFSET + 3)

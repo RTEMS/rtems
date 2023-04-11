@@ -368,7 +368,7 @@ motorolaBoard getMotorolaBoard(void)
  *
  *  NOTE: Every path must set currentBoard.
  */
-#if defined(mvme2100)
+#if defined(mot_ppc_mvme2100)
   currentBoard = (motorolaBoard) MVME_2100;
 #else
   unsigned char  cpu_type;
