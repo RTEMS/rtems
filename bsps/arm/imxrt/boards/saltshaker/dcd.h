@@ -1,13 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @ingroup RTEMSBSPsARMimxrt
- */
-
 /*
- * Copyright (C) 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,28 +25,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_ARM_IMXRT_IRQ_H
-#define LIBBSP_ARM_IMXRT_IRQ_H
+#ifndef BOARD_DCD_H
+#define BOARD_DCD_H
 
-#include <bspopts.h>
-#ifndef ASM
-  #include <rtems/irq.h>
-  #include <rtems/irq-extension.h>
-#endif /* ASM */
+#include <bsp/flash-headers.h>
+#include <stdint.h>
+#define XIP_BOOT_HEADER_ENABLE 1
+#define XIP_BOOT_HEADER_DCD_ENABLE 1
+#define dcd_data imxrt_dcd_data
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-#if IMXRT_IS_MIMXRT10xx
-#define BSP_INTERRUPT_VECTOR_COUNT 160
-#elif IMXRT_IS_MIMXRT11xx
-#define BSP_INTERRUPT_VECTOR_COUNT 217
-#endif
-#define BSP_INTERRUPT_VECTOR_INVALID (UINT32_MAX)
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* LIBBSP_ARM_IMXRT_IRQ_H */
+#endif /* BOARD_DCD_H */

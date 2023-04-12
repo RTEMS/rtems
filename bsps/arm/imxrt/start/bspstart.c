@@ -59,6 +59,13 @@ static void imxrt_disable_wait_mode(void)
    * every WFI.
    */
   CLOCK_SetMode(kCLOCK_ModeRun);
+#elif IMXRT_IS_MIMXRT11xx
+  /*
+   * i.MX RT11xx doesn't support disabling power saving for WFI. On the other
+   * hand it doesn't have a separate interrupt controller like the i.MX RT1050.
+   * So a power save during WFI is only annoying during debugging but doesn't
+   * hurt otherwise.
+   */
 #else
   #error Disabling wait mode not implemented for this chip.
 #endif
@@ -128,6 +135,22 @@ uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
   return intr[0];
 }
+
+/*
+ * Clock frequencies for peripherals like SD card. These are used by libbsd
+ * drivers.
+ */
+#if IMXRT_IS_MIMXRT11xx
+uint32_t
+imx_ccm_sdhci_hz(void)
+{
+	/*
+	 * We don't know which SDHCI is used. So just return the clock frequency
+	 * of the first SDHCI and hope the best.
+	 */
+	return CLOCK_GetRootClockFreq(kCLOCK_Root_Usdhc1);
+}
+#endif
 
 /* Make sure to pull in the flash headers */
 __attribute__((used)) static const void *hdr_dcd = &imxrt_dcd_data;

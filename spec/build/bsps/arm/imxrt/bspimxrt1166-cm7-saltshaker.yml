@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: imxrt1166-cm7-saltshaker
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: imxrt
+includes:
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1166
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1166/drivers
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1166/xip
+- bsps/arm/imxrt/mcux-sdk/drivers/common
+- bsps/arm/imxrt/mcux-sdk/drivers/semc
+install:
+- destination: ${BSP_INCLUDEDIR}/imxrt
+  source:
+  - bsps/arm/imxrt/dts/imxrt1166-cm7-saltshaker.dts
+  - bsps/arm/imxrt/include/imxrt/imxrt1166.dtsi
+  - bsps/arm/imxrt/include/imxrt/imxrt1166-pinfunc.h
+links:
+- role: build-dependency
+  uid: obj-mimxrt1166-cm7
+source:
+- bsps/arm/imxrt/boards/saltshaker/clock_config.c
+- bsps/arm/imxrt/boards/saltshaker/dcd.c
+- bsps/arm/imxrt/boards/saltshaker/flash-flexspi-config.c
+- bsps/arm/imxrt/boards/saltshaker/pin_mux.c
+- bsps/arm/imxrt/dts/imxrt1166-cm7-saltshaker.c
+type: build

@@ -90,6 +90,8 @@ actions:
     conf.define("IMXRT_IS_{}xx".format(value[:8]), True)
 build-type: option
 default:
+- enabled-by: arm/imxrt1166-cm7-saltshaker
+  value: MIMXRT1166DVM6A_cm7
 - enabled-by: true
   value: MIMXRT1052DVL6B
 enabled-by: true

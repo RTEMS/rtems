@@ -1,0 +1,1224 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/*
+ * Copyright (C) 2020-2023 embedded brains GmbH & Co. KG
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/ {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	chosen: chosen {};
+
+	aliases {
+		acmp1 = &acmp1;
+		acmp2 = &acmp2;
+		acmp3 = &acmp3;
+		acmp4 = &acmp4;
+		adc-etc = &adc_etc;
+		aips-1 = &aips_1;
+		aips-2 = &aips_2;
+		aips-3 = &aips_3;
+		aips-4 = &aips_4;
+		aips-m7 = &aips_m7;
+		analog = &analog;
+		aoi1 = &aoi1;
+		aoi2 = &aoi2;
+		asrc = &asrc;
+		caam = &caam;
+		can1 = &can1;
+		can2 = &can2;
+		can3 = &can3;
+		ccm = &ccm;
+		csi = &csi;
+		dac = &dac;
+		dcdc = &dcdc;
+		dma-mux0 = &dma_mux0;
+		dma-mux1-lpsr = &dma_mux1_lpsr;
+		edma = &edma;
+		edma-lpsr = &edma_lpsr;
+		elcdif = &elcdif;
+		emvsim1 = &emvsim1;
+		emvsim2 = &emvsim2;
+		ewm = &ewm;
+		fec1 = &fec1;
+		fec2 = &fec2;
+		flexio1 = &flexio1;
+		flexio2 = &flexio2;
+		flexpwm1 = &flexpwm1;
+		flexpwm2 = &flexpwm2;
+		flexpwm3 = &flexpwm3;
+		flexpwm4 = &flexpwm4;
+		flexram-cm7 = &flexram_cm7;
+		flexspi1 = &flexspi1;
+		flexspi2 = &flexspi2;
+		gpc = &gpc;
+		/*
+		 * Linux convention starts GPIO at 0. Therefore the driver
+		 * shared with i.MX6 expects 0 too. The driver also expects only
+		 * numbers. So m7_2 is 13 and m7_3 is 14.
+		 */
+		gpio0 = &gpio1;
+		gpio1 = &gpio2;
+		gpio2 = &gpio3;
+		gpio3 = &gpio4;
+		gpio4 = &gpio5;
+		gpio5 = &gpio6;
+		gpio6 = &gpio7;
+		gpio7 = &gpio8;
+		gpio8 = &gpio9;
+		gpio9 = &gpio10;
+		gpio10 = &gpio11;
+		gpio11 = &gpio12;
+		gpio12 = &gpio13;
+		gpio13 = &gpio_m7_2;
+		gpio14 = &gpio_m7_3;
+		gpt1 = &gpt1;
+		gpt2 = &gpt2;
+		gpt3 = &gpt3;
+		gpt4 = &gpt4;
+		gpt5 = &gpt5;
+		gpt6 = &gpt6;
+		iee = &iee;
+		iee-apc = &iee_apc;
+		iomuxc = &iomuxc;
+		iomuxc-gpr = &iomuxc_gpr;
+		iomuxc-lpsr = &iomuxc_lpsr;
+		iomuxc-lpsr-gpr = &iomuxc_lpsr_gpr;
+		iomuxc-snvs = &iomuxc_snvs;
+		iomuxc-snvs-gpr = &iomuxc_snvs_gpr;
+		keymgr = &keymgr;
+		kpp = &kpp;
+		lcdifv2 = &lcdifv2;
+		lpadc1 = &lpadc1;
+		lpadc2 = &lpadc2;
+		lpi2c1 = &lpi2c1;
+		lpi2c2 = &lpi2c2;
+		lpi2c3 = &lpi2c3;
+		lpi2c4 = &lpi2c4;
+		lpi2c5 = &lpi2c5;
+		lpi2c6 = &lpi2c6;
+		lpspi1 = &lpspi1;
+		lpspi2 = &lpspi2;
+		lpspi3 = &lpspi3;
+		lpspi4 = &lpspi4;
+		lpspi5 = &lpspi5;
+		lpspi6 = &lpspi6;
+		lpuart1 = &lpuart1;
+		lpuart10 = &lpuart10;
+		lpuart11 = &lpuart11;
+		lpuart12 = &lpuart12;
+		lpuart2 = &lpuart2;
+		lpuart3 = &lpuart3;
+		lpuart4 = &lpuart4;
+		lpuart5 = &lpuart5;
+		lpuart6 = &lpuart6;
+		lpuart7 = &lpuart7;
+		lpuart8 = &lpuart8;
+		lpuart9 = &lpuart9;
+		mecc1 = &mecc1;
+		mecc2 = &mecc2;
+		mipi-csi = &mipi_csi;
+		mipi-dsi = &mipi_dsi;
+		mu = &mu;
+		nvic = &nvic;
+		ocotp = &ocotp;
+		pdm = &pdm;
+		pgmc = &pgmc;
+		pit1 = &pit1;
+		pit2 = &pit2;
+		pxp = &pxp;
+		qdc1 = &qdc1;
+		qdc2 = &qdc2;
+		qdc3 = &qdc3;
+		qdc4 = &qdc4;
+		qtimer1 = &qtimer1;
+		qtimer2 = &qtimer2;
+		qtimer3 = &qtimer3;
+		qtimer4 = &qtimer4;
+		rdc = &rdc;
+		rdc-semaphore1 = &rdc_semaphore1;
+		rdc-semaphore2 = &rdc_semaphore2;
+		romcp = &romcp;
+		sai1 = &sai1;
+		sai2 = &sai2;
+		sai3 = &sai3;
+		sai4 = &sai4;
+		semc = &semc;
+		snvs = &snvs;
+		snvs-sram = &snvs_sram;
+		spdif = &spdif;
+		src = &src;
+		ssarc-hp = &ssarc_hp;
+		ssarc-lp = &ssarc_lp;
+		systick = &systick;
+		usbotg1 = &usbotg1;
+		usbotg2 = &usbotg2;
+		usbphy1 = &usbphy1;
+		usbphy2 = &usbphy2;
+		usdhc1 = &usdhc1;
+		usdhc2 = &usdhc2;
+		video-mux = &video_mux;
+		wdog1 = &wdog1;
+		wdog2 = &wdog2;
+		wdog3 = &wdog3;
+		wdog4 = &wdog4;
+		xbar1 = &xbar1;
+		xbar2 = &xbar2;
+		xbar3 = &xbar3;
+		xecc-flexspi1 = &xecc_flexspi1;
+		xecc-flexspi2 = &xecc_flexspi2;
+		xecc-semc = &xecc_semc;
+		xrdc2-mgr-m4 = &xrdc2_mgr_m4;
+		xrdc2-mgr-m7 = &xrdc2_mgr_m7;
+	};
+
+	nvic: interrupt-controller@e000e100  {
+		compatible = "arm,armv7m-nvic";
+		interrupt-controller;
+		#interrupt-cells = <1>;
+		reg = <0xe000e100 0xc00>;
+	};
+
+	systick: timer@e000e010 {
+		compatible = "arm,armv7m-systick";
+		reg = <0xe000e010 0x10>;
+		status = "disabled";
+	};
+
+	soc {
+		compatible = "simple-bus";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		interrupt-parent = <&nvic>;
+		ranges;
+
+		aips_1: aips-bus@40000000 {
+			compatible = "fsl,aips-bus", "simple-bus";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			reg = <0x40000000 0x00400000>;
+			ranges;
+
+			mecc1: mecc@40014000 {
+				reg = <0x40014000 0x4000>;
+				interrupts = <206>, <207>;
+			};
+
+			mecc2: mecc@40018000 {
+				reg = <0x40018000 0x4000>;
+				interrupts = <208>, <209>;
+			};
+
+			xecc_flexspi1: xecc_flexspi@4001c000 {
+				reg = <0x4001c000 0x4000>;
+				interrupts = <210>, <211>;
+			};
+
+			xecc_flexspi2: xecc_flexspi@40020000 {
+				reg = <0x40020000 0x4000>;
+				interrupts = <212>, <213>;
+			};
+
+			xecc_semc: xecc_semc@40024000 {
+				reg = <0x40024000 0x4000>;
+				interrupts = <214>, <215>;
+			};
+
+			flexram_cm7: flexram@40028000 {
+				reg = <0x40028000 0x4000>;
+				interrupts = <50>;
+			};
+
+			ewm: ewm@4002c000 {
+				reg = <0x4002c000 0x4000>;
+				interrupts = <114>;
+			};
+
+			wdog1: wdog@40030000 {
+				reg = <0x40030000 0x4000>;
+				interrupts = <112>;
+			};
+
+			wdog2: wdog@40034000 {
+				reg = <0x40034000 0x4000>;
+				interrupts = <65>;
+			};
+
+			wdog3: wdog@40038000 {
+				reg = <0x40038000 0x4000>;
+				interrupts = <113>;
+			};
+
+			xbar1: xbar@4003c000 {
+				reg = <0x4003c000 0x4000>;
+				interrupts = <143>, <144>;
+			};
+
+			xbar2: xbar@40040000 {
+				reg = <0x40040000 0x4000>;
+			};
+
+			xbar3: xbar@40044000 {
+				reg = <0x40044000 0x4000>;
+			};
+
+			adc_etc: adc@40048000 {
+				reg = <0x40048000 0x4000>;
+				interrupts = <145>, <146>, <147>, <148>, <149>;
+			};
+
+			lpadc1: adc@40050000 {
+				reg = <0x40050000 0x4000>;
+				interrupts = <88>;
+			};
+
+			lpadc2: adc@40054000 {
+				reg = <0x40054000 0x4000>;
+				interrupts = <89>;
+			};
+
+			dac: dac@40064000 {
+				reg = <0x40064000 0x4000>;
+				interrupts = <63>;
+			};
+
+			iee_apc: iee_apc@40068000 {
+				reg = <0x40068000 0x4000>;
+			};
+
+			iee: iee@4006c000 {
+				reg = <0x4006c000 0x4000>;
+			};
+
+			edma: dma-controller@40070000 {
+				compatible = "fsl,imxrt-edma";
+				/*
+				 * Use DMA cells just like Linux:
+				 * First cell is the DMAMUX which is allways 0
+				 * in our case. Second one is the request
+				 * source.
+				 */
+				#dma-cells = <2>;
+				reg = <0x40070000 0x4000>;
+				interrupts = <0>, <1>, <2>, <3>,
+				             <4>, <5>, <6>, <7>,
+					     <8>, <9>, <10>, <11>,
+					     <12>, <13>, <14>, <15>,
+					     <16>;
+			};
+
+			dma_mux0: dma_mux@40074000 {
+				reg = <0x40074000 0x4000>;
+			};
+
+			lpuart1: uart@4007c000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x4007c000 0x4000>;
+				interrupts = <20>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS1";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 8>, <&edma 0 9>;
+			};
+
+			lpuart2: uart@40080000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x40080000 0x4000>;
+				interrupts = <21>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS2";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 10>, <&edma 0 11>;
+			};
+
+			lpuart3: uart@40084000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x40084000 0x4000>;
+				interrupts = <22>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS3";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 12>, <&edma 0 13>;
+			};
+
+			lpuart4: uart@40088000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x40088000 0x4000>;
+				interrupts = <23>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS4";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 14>, <&edma 0 15>;
+			};
+
+			lpuart5: uart@4008c000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x4008c000 0x4000>;
+				interrupts = <24>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS5";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 16>, <&edma 0 17>;
+			};
+
+			lpuart6: uart@40090000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x40090000 0x4000>;
+				interrupts = <25>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS6";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 18>, <&edma 0 19>;
+			};
+
+			lpuart7: uart@40094000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x40094000 0x4000>;
+				interrupts = <26>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS7";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 20>, <&edma 0 21>;
+			};
+
+			lpuart8: uart@40098000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x40098000 0x4000>;
+				interrupts = <27>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS8";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 22>, <&edma 0 23>;
+			};
+
+			lpuart9: uart@4009c000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x4009c000 0x4000>;
+				interrupts = <28>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS9";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 24>, <&edma 0 25>;
+			};
+
+			lpuart10: uart@400a0000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x400a0000 0x4000>;
+				interrupts = <29>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS10";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 26>, <&edma 0 27>;
+			};
+
+			flexio1: flexio@400ac000 {
+				reg = <0x400ac000 0x4000>;
+				interrupts = <110>;
+			};
+
+			flexio2: flexio@400b0000 {
+				reg = <0x400b0000 0x4000>;
+				interrupts = <111>;
+			};
+
+			aoi1: aoi@400b8000 {
+				reg = <0x400b8000 0x4000>;
+			};
+
+			aoi2: aoi@400bc000 {
+				reg = <0x400bc000 0x4000>;
+			};
+
+			can1: can@400c4000 {
+				reg = <0x400c4000 0x4000>;
+				interrupts = <44>, <45>;
+			};
+
+			can2: can@400c8000 {
+				reg = <0x400c8000 0x4000>;
+				interrupts = <46>, <47>;
+			};
+
+			flexspi1: spi@400cc000 {
+				reg = <0x400cc000 0x4000>;
+				interrupts = <130>;
+			};
+
+			flexspi2: spi@400d0000 {
+				reg = <0x400d0000 0x4000>;
+				interrupts = <131>;
+			};
+
+			semc: semc@400d4000 {
+				reg = <0x400d4000 0x4000>;
+				interrupts = <132>;
+			};
+
+			pit1: pit@400d8000 {
+				reg = <0x400d8000 0x4000>;
+				interrupts = <155>;
+			};
+
+			kpp: kpp@400e0000 {
+				reg = <0x400e0000 0x4000>;
+				interrupts = <51>;
+			};
+
+			iomuxc_gpr: iomuxc_gpr@400e4000 {
+				reg = <0x400e4000 0x4000>;
+				interrupts = <53>;
+			};
+
+			iomuxc: pinctrl@400e8000 {
+				compatible = "nxp,imxrt1166-iomuxc",
+				             "nxp,imxrt1050-iomuxc";
+				reg = <0x400e8000 0x4000>;
+			};
+
+			gpt1: timer@400ec000 {
+				reg = <0x400ec000 0x4000>;
+				interrupts = <119>;
+			};
+
+			gpt2: timer@400f0000 {
+				reg = <0x400f0000 0x4000>;
+				interrupts = <120>;
+			};
+
+			gpt3: timer@400f4000 {
+				reg = <0x400f4000 0x4000>;
+				interrupts = <121>;
+			};
+
+			gpt4: timer@400f8000 {
+				reg = <0x400f8000 0x4000>;
+				interrupts = <122>;
+			};
+
+			gpt5: timer@400fc000 {
+				reg = <0x400fc000 0x4000>;
+				interrupts = <123>;
+			};
+
+			gpt6: timer@40100000 {
+				reg = <0x40100000 0x4000>;
+				interrupts = <124>;
+			};
+
+			lpi2c1: i2c@40104000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpi2c";
+				reg = <0x40104000 0x4000>;
+				interrupts = <32>;
+				status = "disabled";
+				rtems,path = "/dev/i2c1";
+				dmas = <&edma 0 48>;
+			};
+
+			lpi2c2: i2c@40108000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpi2c";
+				reg = <0x40108000 0x4000>;
+				interrupts = <33>;
+				status = "disabled";
+				rtems,path = "/dev/i2c2";
+				dmas = <&edma 0 49>;
+			};
+
+			lpi2c3: i2c@4010c000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpi2c";
+				reg = <0x4010c000 0x4000>;
+				interrupts = <34>;
+				status = "disabled";
+				rtems,path = "/dev/i2c3";
+				dmas = <&edma 0 50>;
+			};
+
+			lpi2c4: i2c@40110000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpi2c";
+				reg = <0x40110000 0x4000>;
+				interrupts = <35>;
+				status = "disabled";
+				rtems,path = "/dev/i2c4";
+				dmas = <&edma 0 51>;
+			};
+
+			lpspi1: spi@40114000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpspi";
+				reg = <0x40114000 0x4000>;
+				interrupts = <38>;
+				status = "disabled";
+				rtems,path = "/dev/spi1";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 37>, <&edma 0 36>;
+			};
+
+			lpspi2: spi@40118000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpspi";
+				reg = <0x40118000 0x4000>;
+				interrupts = <39>;
+				status = "disabled";
+				rtems,path = "/dev/spi2";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 39>, <&edma 0 38>;
+			};
+
+			lpspi3: spi@4011c000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpspi";
+				reg = <0x4011c000 0x4000>;
+				interrupts = <40>;
+				status = "disabled";
+				rtems,path = "/dev/spi3";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 41>, <&edma 0 40>;
+			};
+
+			lpspi4: spi@40120000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpspi";
+				reg = <0x40120000 0x4000>;
+				interrupts = <41>;
+				status = "disabled";
+				rtems,path = "/dev/spi4";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 43>, <&edma 0 42>;
+			};
+
+			gpio1: gpio@4012c000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x4012c000 0x4000>;
+				interrupts = <100>, <101>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			gpio2: gpio@40130000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40130000 0x4000>;
+				interrupts = <102>, <103>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			gpio3: gpio@40134000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40134000 0x4000>;
+				interrupts = <104>, <105>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			gpio4: gpio@40138000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40138000 0x4000>;
+				interrupts = <106>, <107>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			gpio5: gpio@4013c000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x4013c000 0x4000>;
+				interrupts = <108>, <109>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			gpio6: gpio@40140000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40140000 0x4000>;
+				interrupts = <61>, <62>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			emvsim1: emvsim@40154000 {
+				reg = <0x40154000 0x4000>;
+				interrupts = <204>;
+			};
+
+			emvsim2: emvsim@40158000 {
+				reg = <0x40158000 0x4000>;
+				interrupts = <205>;
+			};
+
+			qtimer1: timer@4015c000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x4015c000 0x4000>;
+				interrupts = <171>;
+			};
+
+			qtimer2: timer@40160000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x40160000 0x4000>;
+				interrupts = <172>;
+			};
+
+			qtimer3: timer@40164000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x40164000 0x4000>;
+				interrupts = <173>;
+			};
+
+			qtimer4: timer@40168000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x40168000 0x4000>;
+				interrupts = <174>;
+			};
+
+			qdc1: qdc@40174000 {
+				reg = <0x40174000 0x4000>;
+				interrupts = <165>;
+			};
+
+			qdc2: qdc@40178000 {
+				reg = <0x40178000 0x4000>;
+				interrupts = <166>;
+			};
+
+			qdc3: qdc@4017c000 {
+				reg = <0x4017c000 0x4000>;
+				interrupts = <167>;
+			};
+
+			qdc4: qdc@40180000 {
+				reg = <0x40180000 0x4000>;
+				interrupts = <168>;
+			};
+
+			flexpwm1: pwm@4018c000 {
+				compatible = "nxp,imxrt-flexpwm";
+				reg = <0x4018c000 0x4000>;
+				interrupts = <125>, <126>, <127>, <128>, <129>;
+			};
+
+			flexpwm2: pwm@40190000 {
+				compatible = "nxp,imxrt-flexpwm";
+				reg = <0x40190000 0x4000>;
+				interrupts = <177>, <178>, <179>, <180>, <181>;
+			};
+
+			flexpwm3: pwm@40194000 {
+				compatible = "nxp,imxrt-flexpwm";
+				reg = <0x40194000 0x4000>;
+				interrupts = <182>, <183>, <184>, <185>, <186>;
+			};
+
+			flexpwm4: pwm@40198000 {
+				compatible = "nxp,imxrt-flexpwm";
+				reg = <0x40198000 0x4000>;
+				interrupts = <187>, <188>, <189>, <190>, <191>;
+			};
+
+			acmp1: acmp@401a4000 {
+				reg = <0x401a4000 0x4000>;
+				interrupts = <157>;
+			};
+
+			acmp2: acmp@401a8000 {
+				reg = <0x401a8000 0x4000>;
+				interrupts = <158>;
+			};
+
+			acmp3: acmp@401ac000 {
+				reg = <0x401ac000 0x4000>;
+				interrupts = <159>;
+			};
+
+			acmp4: acmp@401b0000 {
+				reg = <0x401b0000 0x4000>;
+				interrupts = <160>;
+			};
+		};
+
+		aips_2: aips-bus@40400000 {
+			compatible = "fsl,aips-bus", "simple-bus";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			reg = <0x40400000 0x00400000>;
+			ranges;
+
+			spdif: spdif@40400000 {
+				reg = <0x40400000 0x4000>;
+				interrupts = <82>;
+			};
+
+			sai1: sai@40404000 {
+				reg = <0x40404000 0x4000>;
+				interrupts = <76>;
+			};
+
+			sai2: sai@40408000 {
+				reg = <0x40408000 0x4000>;
+				interrupts = <77>;
+			};
+
+			sai3: sai@4040c000 {
+				reg = <0x4040c000 0x4000>;
+				interrupts = <78>, <79>;
+			};
+
+			asrc: asrc@40410000 {
+				reg = <0x40410000 0x4000>;
+				interrupts = <97>;
+			};
+
+			usdhc1: sdhci@40418000 {
+				reg = <0x40418000 0x4000>;
+				interrupts = <133>;
+				compatible = "fsl,imxrt1160-usdhc", "fsl,imxrt1050-usdhc", "fsl,imx6sl-usdhc";
+				bus-width = <4>;
+				status = "disabled";
+			};
+
+			usdhc2: sdhci@4041c000 {
+				reg = <0x4041c000 0x4000>;
+				interrupts = <134>;
+				compatible = "fsl,imxrt1160-usdhc", "fsl,imxrt1050-usdhc", "fsl,imx6sl-usdhc";
+				bus-width = <8>;
+				status = "disabled";
+			};
+
+			fec1: ethernet@40420000 {
+				compatible = "fsl,imxrt-fec", "fsl,imx6ul-fec";
+				reg = <0x40420000 0x4000>;
+				interrupt-names = "int0", "int1", "int2", "pps";
+				interrupts = <139>, <140>, <141>, <142>;
+				fsl,num-tx-queues = <1>;
+				fsl,num-rx-queues = <1>;
+				phy-mode = "grmii";
+				status = "disabled";
+			};
+
+			fec2: ethernet@40424000 {
+				compatible = "fsl,imxrt-fec", "fsl,imx6ul-fec";
+				reg = <0x40424000 0x4000>;
+				interrupt-names = "int0", "pps";
+				interrupts = <137>, <138>;
+				fsl,num-tx-queues = <1>;
+				fsl,num-rx-queues = <1>;
+				phy-mode = "rmii";
+				status = "disabled";
+			};
+
+			usbotg2: usb@4042c000 {
+				reg = <0x4042c000 0x4000>;
+				interrupts = <135>;
+			};
+
+			usbotg1: usb@40430000 {
+				reg = <0x40430000 0x4000>;
+				interrupts = <136>;
+			};
+
+			usbphy1: usbphy@40434000 {
+				reg = <0x40434000 0x4000>;
+				interrupts = <90>;
+			};
+
+			usbphy2: usbphy@40438000 {
+				reg = <0x40438000 0x4000>;
+				interrupts = <91>;
+			};
+
+			caam: caam@40440000 {
+				reg = <0x40440000 0x100000>;
+				interrupts = <69>, <70>, <71>, <72>, <73>, <74>;
+			};
+		};
+
+		aips_3: aips-bus@40800000 {
+			compatible = "fsl,aips-bus", "simple-bus";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			reg = <0x40800000 0x00400000>;
+			ranges;
+
+			csi: csi@40800000 {
+				reg = <0x40800000 0x4000>;
+				interrupts = <56>;
+			};
+
+			elcdif: lcdif@40804000 {
+				reg = <0x40804000 0x4000>;
+				interrupts = <54>;
+			};
+
+			lcdifv2: lcdif@40808000 {
+				reg = <0x40808000 0x4000>;
+				interrupts = <55>;
+			};
+
+			mipi_dsi: dsi@4080c000 {
+				reg = <0x4080c000 0x4000>;
+				interrupts = <59>;
+			};
+
+			mipi_csi: csi@40810000 {
+				reg = <0x40810000 0x4000>;
+				interrupts = <58>;
+			};
+
+			pxp: pxp@40814000 {
+				reg = <0x40814000 0x4000>;
+				interrupts = <57>;
+			};
+
+			video_mux: video_mux@40818000 {
+				reg = <0x40818000 0x4000>;
+				interrupts = <95>, <96>;
+			};
+		};
+
+		aips_4: aips-bus@40c00000 {
+			compatible = "fsl,aips-bus", "simple-bus";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			reg = <0x40c00000 0x00400000>;
+			ranges;
+
+			gpc: gpc@40c00000 {
+				reg = <0x40c00000 0x4000>;
+				interrupts = <117>;
+			};
+
+			src: src@40c04000 {
+				reg = <0x40c04000 0x4000>;
+			};
+
+			iomuxc_lpsr: iomuxc_lpsr@40c08000 {
+				compatible = "nxp,imxrt1166-iomuxc",
+				             "nxp,imxrt1050-iomuxc";
+				reg = <0x40c08000 0x4000>;
+			};
+
+			iomuxc_lpsr_gpr: iomuxc_lpsr_gpr@40c0c000 {
+				reg = <0x40c0c000 0x4000>;
+			};
+
+			wdog4: wdog@40c10000 {
+				reg = <0x40c10000 0x4000>;
+			};
+
+			edma_lpsr: dma-controller@40c14000 {
+				compatible = "fsl,imxrt-edma";
+				#dma-cells = <2>;
+				reg = <0x40c14000 0x4000>;
+			};
+
+			dma_mux1_lpsr: dma_mux@40c18000 {
+				reg = <0x40c18000 0x4000>;
+			};
+
+			pdm: pdm@40c20000 {
+				reg = <0x40c20000 0x4000>;
+				interrupts = <200>, <201>, <202>, <203>;
+			};
+
+			lpuart11: uart@40c24000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x40c24000 0x4000>;
+				interrupts = <30>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS11";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 28>, <&edma 0 29>;
+			};
+
+			lpuart12: uart@40c28000 {
+				compatible = "nxp,imxrt-lpuart";
+				reg = <0x40c28000 0x4000>;
+				interrupts = <31>;
+				status = "disabled";
+				rtems,path = "/dev/ttyS12";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 30>, <&edma 0 31>;
+			};
+
+			lpspi5: spi@40c2c000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpspi";
+				reg = <0x40c2c000 0x4000>;
+				interrupts = <42>;
+				status = "disabled";
+				rtems,path = "/dev/spi5";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 45>, <&edma 0 44>;
+			};
+
+			lpspi6: spi@40c30000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpspi";
+				reg = <0x40c30000 0x4000>;
+				interrupts = <43>;
+				status = "disabled";
+				rtems,path = "/dev/spi6";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 47>, <&edma 0 46>;
+			};
+
+			lpi2c5: i2c@40c34000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpi2c";
+				reg = <0x40c34000 0x4000>;
+				interrupts = <36>;
+				status = "disabled";
+				rtems,path = "/dev/i2c5";
+				dmas = <&edma 0 52>;
+			};
+
+			lpi2c6: i2c@40c38000 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				compatible = "nxp,imxrt-lpi2c";
+				reg = <0x40c38000 0x4000>;
+				interrupts = <37>;
+				status = "disabled";
+				rtems,path = "/dev/i2c6";
+				dmas = <&edma 0 53>;
+			};
+
+			can3: can@40c3c000 {
+				reg = <0x40c3c000 0x4000>;
+				interrupts = <48>, <49>;
+			};
+
+			sai4: sai@40c40000 {
+				reg = <0x40c40000 0x4000>;
+				interrupts = <80>, <81>;
+			};
+
+			rdc_semaphore1: rdc_semaphore@40c44000 {
+				reg = <0x40c44000 0x4000>;
+			};
+
+			mu: mu@40c48000 {
+				reg = <0x40c48000 0x8000>;
+				interrupts = <118>;
+			};
+
+			gpio7: gpio@40c5c000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40c5c000 0x4000>;
+				gpio-controller;
+				#gpio-cells = <2>;
+			};
+
+			gpio8: gpio@40c60000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40c60000 0x4000>;
+				gpio-controller;
+				#gpio-cells = <2>;
+			};
+
+			gpio9: gpio@40c64000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40c64000 0x4000>;
+				gpio-controller;
+				#gpio-cells = <2>;
+			};
+
+			gpio10: gpio@40c68000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40c68000 0x4000>;
+				gpio-controller;
+				#gpio-cells = <2>;
+			};
+
+			gpio11: gpio@40c6c000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40c6c000 0x4000>;
+				gpio-controller;
+				#gpio-cells = <2>;
+			};
+
+			gpio12: gpio@40c70000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40c70000 0x4000>;
+				gpio-controller;
+				#gpio-cells = <2>;
+			};
+
+			rdc: rdc@40c78000 {
+				reg = <0x40c78000 0x4000>;
+				interrupts = <92>;
+			};
+
+			keymgr: keymgr@40c80000 {
+				reg = <0x40c80000 0x4000>;
+				interrupts = <64>;
+			};
+
+			analog: analog@40c84000 {
+				reg = <0x40c84000 0x4000>;
+			};
+
+			pgmc: pgmc@40c88000 {
+				reg = <0x40c88000 0x4000>;
+			};
+
+			snvs: snvs@40c90000 {
+				reg = <0x40c90000 0x4000>;
+				interrupts = <66>, <67>, <68>;
+			};
+
+			iomuxc_snvs: iomuxc_snvs@40c94000 {
+				compatible = "nxp,imxrt1166-iomuxc",
+				             "nxp,imxrt1050-iomuxc";
+				reg = <0x40c94000 0x4000>;
+			};
+
+			iomuxc_snvs_gpr: iomuxc_snvs_gpr@40c98000 {
+				reg = <0x40c98000 0x4000>;
+			};
+
+			snvs_sram: snvs_sram@40c9c000 {
+				reg = <0x40c9c000 0x4000>;
+			};
+
+			gpio13: gpio@40ca0000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x40ca0000 0x4000>;
+				interrupts = <93>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			romcp: romcp@40ca4000 {
+				reg = <0x40ca4000 0x4000>;
+			};
+
+			dcdc: dcdc@40ca8000 {
+				reg = <0x40ca8000 0x4000>;
+			};
+
+			ocotp: ocotp@40cac000 {
+				reg = <0x40cac000 0x4000>;
+				interrupts = <115>, <116>;
+			};
+
+			pit2: pit@40cb0000 {
+				reg = <0x40cb0000 0x4000>;
+				interrupts = <156>;
+			};
+
+			ssarc_hp: ssarc@40cb4000 {
+				reg = <0x40cb4000 0x4000>;
+			};
+
+			ssarc_lp: ssarc@40cb8000 {
+				reg = <0x40cb8000 0x4000>;
+			};
+
+			ccm: ccm@40cc0000 {
+				reg = <0x40cc0000 0x8000>;
+			};
+
+			rdc_semaphore2: rdc_semaphore@40ccc000 {
+				reg = <0x40ccc000 0x4000>;
+			};
+
+			xrdc2_mgr_m4: xrdc2_mgr@40cd0000 {
+				reg = <0x40cd0000 0x10000>;
+			};
+
+			xrdc2_mgr_m7: xrdc2_mgr@40ce0000 {
+				reg = <0x40ce0000 0x10000>;
+			};
+		};
+
+		aips_m7: aips-bus@42000000 {
+			compatible = "fsl,aips-bus", "simple-bus";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			reg = <0x42000000 0x00100000>;
+			ranges;
+
+			gpio_m7_2: gpio@42008000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x42008000 0x4000>;
+				interrupts = <99>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			gpio_m7_3: gpio@4200c000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x4200c000 0x4000>;
+				interrupts = <99>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+		};
+	};
+};

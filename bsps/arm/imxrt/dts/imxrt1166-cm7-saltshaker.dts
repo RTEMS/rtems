@@ -1,0 +1,296 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/*
+ * Copyright (C) 2020-2023 embedded brains GmbH & Co. KG
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*
+ * FIXME: Compilation should be automated.
+ *
+ * Compile this file with the following commands:
+ *     export BSP_DIR="${RTEMS_SRC_DIR}/bsps/arm/imxrt/"
+ *     arm-rtems6-cpp -P -x assembler-with-cpp -I "${BSP_DIR}/include/" -include "${BSP_DIR}/dts/imxrt1166-cm7-saltshaker.dts" /dev/null | \
+ *         dtc -O dtb -o "${BSP_DIR}/dts/imxrt1166-cm7-saltshaker.dtb" -b 0 -p 64
+ *     rtems-bin2c -A 8 -C -N imxrt_dtb "${BSP_DIR}/dts/imxrt1166-cm7-saltshaker.dtb" "${BSP_DIR}/dts/imxrt1166-cm7-saltshaker.c"
+ */
+
+/dts-v1/;
+
+#include <imxrt/imxrt1166-pinfunc.h>
+#include <imxrt/imxrt1166.dtsi>
+
+/ {
+	led-controller {
+		compatible = "gpio-leds";
+		pinctrl-0 = <&pinctrl_led>;
+		status = "okay";
+
+		led-0 {
+			gpios = <&gpio9 15 0>;
+		};
+		led-1 {
+			gpios = <&gpio9 16 0>;
+		};
+		led-2 {
+			gpios = <&gpio9 18 0>;
+		};
+	};
+
+	usdhc1_vcard: usdhc1_vcard {
+		compatible = "regulator-fixed";
+		regulator-name = "usdhc1-supply";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&gpio10 2 0>;
+		regulator-boot-on;
+	};
+};
+
+&lpuart8 {
+	pinctrl-0 = <&pinctrl_lpuart8>;
+	status = "okay";
+};
+
+&chosen {
+	stdout-path = &lpuart8;
+};
+
+&fec2 {
+	pinctrl-0 = <&pinctrl_fec2>;
+	phy-reset-gpios = <&gpio9 14 1>;
+	phy-mode = "rmii";
+	status = "okay";
+};
+
+&lpi2c1 {
+	pinctrl-0 = <&pinctrl_lpi2c1>;
+};
+
+&lpi2c5 {
+	pinctrl-0 = <&pinctrl_lpi2c5>;
+};
+
+&lpi2c6 {
+	pinctrl-0 = <&pinctrl_lpi2c6>;
+};
+
+&lpspi1 {
+	pinctrl-0 = <&pinctrl_lpspi1>;
+};
+
+&lpspi3 {
+	pinctrl-0 = <&pinctrl_lpspi3>;
+};
+
+&lpspi4 {
+	pinctrl-0 = <&pinctrl_lpspi4>;
+};
+
+&lpuart7 {
+	pinctrl-0 = <&pinctrl_lpuart7>;
+};
+
+&lpuart12 {
+	pinctrl-0 = <&pinctrl_lpuart12>;
+};
+
+&usdhc1 {
+	pinctrl-0 = <&pinctrl_usdhc1>;
+	status = "okay";
+	bus-width = <4>;
+	cd-gpios = <&gpio9 31 1>;
+	cd-inverted;
+	vmmc-supply = <&usdhc1_vcard>;
+};
+
+&video_mux {
+	pinctrl-0 = <&pinctrl_video_mux>;
+};
+
+&iomuxc {
+	pinctrl_lpuart8: lpuart8grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_AD_02_LPUART8_TXD	0x8
+			IMXRT_PAD_GPIO_AD_03_LPUART8_RXD	0x13000
+		>;
+	};
+
+	pinctrl_fec2: fec2grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_AD_33_ENET_MDIO		0x1c
+			IMXRT_PAD_GPIO_EMC_B2_19_ENET_MDC	0x00
+			IMXRT_PAD_GPIO_AD_26_ENET_RX_DATA00	0x02
+			IMXRT_PAD_GPIO_AD_27_ENET_RX_DATA01	0x02
+			IMXRT_PAD_GPIO_AD_24_ENET_RX_EN		0x02
+			IMXRT_PAD_GPIO_AD_30_ENET_TX_DATA00	0x02
+			IMXRT_PAD_GPIO_AD_31_ENET_TX_DATA01	0x02
+			IMXRT_PAD_GPIO_AD_28_ENET_TX_EN		0x02
+			IMXRT_PAD_GPIO_AD_29_ENET_REF_CLK	0x40000002
+			IMXRT_PAD_GPIO_AD_25_ENET_RX_ER		0x02
+			/* ENET_RST */
+			IMXRT_PAD_GPIO_AD_15_GPIO9_IO14		0x1c
+		>;
+	};
+
+	pinctrl_lpi2c1: lpi2c1grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_AD_08_LPI2C1_SCL		0x40000011
+			IMXRT_PAD_GPIO_AD_09_LPI2C1_SDA		0x40000011
+		>;
+	};
+
+	pinctrl_lpspi3: lpspi3grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_EMC_B2_04_LPSPI3_SCK	0x04
+			IMXRT_PAD_GPIO_EMC_B2_06_LPSPI3_SOUT	0x04
+			IMXRT_PAD_GPIO_EMC_B2_07_LPSPI3_SIN	0x04
+			IMXRT_PAD_GPIO_EMC_B2_05_LPSPI3_PCS0	0x04
+			IMXRT_PAD_GPIO_EMC_B2_08_LPSPI3_PCS1	0x04
+			IMXRT_PAD_GPIO_EMC_B2_09_LPSPI3_PCS2	0x04
+			IMXRT_PAD_GPIO_EMC_B2_10_LPSPI3_PCS3	0x04
+		>;
+	};
+
+	pinctrl_lpspi3: lpspi3grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_EMC_B2_04_LPSPI3_SCK	0x06
+			IMXRT_PAD_GPIO_EMC_B2_06_LPSPI3_SOUT	0x06
+			IMXRT_PAD_GPIO_EMC_B2_07_LPSPI3_SIN	0x06
+			IMXRT_PAD_GPIO_EMC_B2_05_LPSPI3_PCS0	0x06
+			IMXRT_PAD_GPIO_EMC_B2_08_LPSPI3_PCS1	0x06
+			IMXRT_PAD_GPIO_EMC_B2_09_LPSPI3_PCS2	0x06
+			IMXRT_PAD_GPIO_EMC_B2_10_LPSPI3_PCS3	0x06
+		>;
+	};
+
+	pinctrl_lpspi1: lpspi1grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_AD_20_LPSPI1_PCS3	0x06
+			IMXRT_PAD_GPIO_EMC_B2_00_LPSPI1_SCK	0x06
+			IMXRT_PAD_GPIO_EMC_B2_01_LPSPI1_PCS0	0x06
+			IMXRT_PAD_GPIO_EMC_B2_02_LPSPI1_SOUT	0x06
+			IMXRT_PAD_GPIO_EMC_B2_03_LPSPI1_SIN	0x06
+		>;
+	};
+
+	pinctrl_lpspi4: lpspi4grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_SD_B2_00_LPSPI4_SCK	0x06
+			IMXRT_PAD_GPIO_SD_B2_01_LPSPI4_PCS0	0x06
+			IMXRT_PAD_GPIO_SD_B2_02_LPSPI4_SOUT	0x06
+			IMXRT_PAD_GPIO_SD_B2_03_LPSPI4_SIN	0x06
+			IMXRT_PAD_GPIO_SD_B2_04_LPSPI4_PCS1	0x06
+			IMXRT_PAD_GPIO_SD_B2_05_LPSPI4_PCS2	0x06
+		>;
+	};
+
+	pinctrl_lpuart7: lpuart7grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_AD_00_LPUART7_TXD	0x0c
+			IMXRT_PAD_GPIO_AD_01_LPUART7_RXD	0x0c
+		>;
+	};
+
+	pinctrl_usdhc1: usdhc1grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_SD_B1_00_USDHC1_CMD	0x04
+			IMXRT_PAD_GPIO_SD_B1_01_USDHC1_CLK	0x08
+			IMXRT_PAD_GPIO_SD_B1_02_USDHC1_DATA0	0x04
+			IMXRT_PAD_GPIO_SD_B1_03_USDHC1_DATA1	0x04
+			IMXRT_PAD_GPIO_SD_B1_04_USDHC1_DATA2	0x04
+			IMXRT_PAD_GPIO_SD_B1_05_USDHC1_DATA3	0x04
+			IMXRT_PAD_GPIO_AD_32_GPIO9_IO31		0x10 /* CD */
+			IMXRT_PAD_GPIO_AD_34_GPIO10_IO01	0x00 /* VSEL */
+			IMXRT_PAD_GPIO_AD_35_GPIO10_IO02	0x00 /* PWR_B */
+		>;
+	};
+
+	pinctrl_video_mux: videomuxgrp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_DISP_B1_00_VIDEO_MUX_LCDIF_CLK	 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_01_VIDEO_MUX_LCDIF_ENABLE 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_02_VIDEO_MUX_LCDIF_HSYNC	 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_03_VIDEO_MUX_LCDIF_VSYNC	 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_04_VIDEO_MUX_LCDIF_DATA00 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_05_VIDEO_MUX_LCDIF_DATA01 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_06_VIDEO_MUX_LCDIF_DATA02 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_07_VIDEO_MUX_LCDIF_DATA03 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_08_VIDEO_MUX_LCDIF_DATA04 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_09_VIDEO_MUX_LCDIF_DATA05 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_10_VIDEO_MUX_LCDIF_DATA06 0x0a
+			IMXRT_PAD_GPIO_DISP_B1_11_VIDEO_MUX_LCDIF_DATA07 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_00_VIDEO_MUX_LCDIF_DATA08 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_01_VIDEO_MUX_LCDIF_DATA09 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_02_VIDEO_MUX_LCDIF_DATA10 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_03_VIDEO_MUX_LCDIF_DATA11 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_04_VIDEO_MUX_LCDIF_DATA12 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_05_VIDEO_MUX_LCDIF_DATA13 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_06_VIDEO_MUX_LCDIF_DATA14 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_07_VIDEO_MUX_LCDIF_DATA15 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_08_VIDEO_MUX_LCDIF_DATA16 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_09_VIDEO_MUX_LCDIF_DATA17 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_10_VIDEO_MUX_LCDIF_DATA18 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_11_VIDEO_MUX_LCDIF_DATA19 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_12_VIDEO_MUX_LCDIF_DATA20 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_13_VIDEO_MUX_LCDIF_DATA21 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_14_VIDEO_MUX_LCDIF_DATA22 0x0a
+			IMXRT_PAD_GPIO_DISP_B2_15_VIDEO_MUX_LCDIF_DATA23 0x0a
+		>;
+	};
+
+	pinctrl_led: ledgrp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_AD_16_GPIO9_IO15		0x00
+			IMXRT_PAD_GPIO_AD_17_GPIO9_IO16		0x00
+			IMXRT_PAD_GPIO_AD_19_GPIO9_IO18		0x00
+		>;
+	};
+};
+
+&iomuxc_lpsr {
+	pinctrl_lpi2c5: lpi2c5grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_LPSR_09_LPI2C5_SCL	0x40000011
+			IMXRT_PAD_GPIO_LPSR_08_LPI2C5_SDA	0x40000011
+		>;
+	};
+
+	pinctrl_lpi2c6: lpi2c6grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_LPSR_07_LPI2C6_SCL	0x40000011
+			IMXRT_PAD_GPIO_LPSR_06_LPI2C6_SDA	0x40000011
+		>;
+	};
+
+	pinctrl_lpuart12: lpuart12grp {
+		fsl,pins = <
+			IMXRT_PAD_GPIO_LPSR_00_LPUART12_TXD	0x0d
+			IMXRT_PAD_GPIO_LPSR_01_LPUART12_RXD	0x0d
+			IMXRT_PAD_GPIO_LPSR_04_LPUART12_RTS_B	0x0d
+			IMXRT_PAD_GPIO_LPSR_05_LPUART12_CTS_B	0x0d
+		>;
+	};
+};
+
+&iomuxc_snvs {
+};

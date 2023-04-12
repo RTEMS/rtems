@@ -1,13 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @ingroup RTEMSBSPsARMimxrt
- */
-
 /*
- * Copyright (C) 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,28 +25,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_ARM_IMXRT_IRQ_H
-#define LIBBSP_ARM_IMXRT_IRQ_H
+#ifndef BOARD_CLOCK_CONFIG_H
+#define BOARD_CLOCK_CONFIG_H
 
 #include <bspopts.h>
-#ifndef ASM
-  #include <rtems/irq.h>
-  #include <rtems/irq-extension.h>
-#endif /* ASM */
+#include <fsl_clock_config.h>
+#define FLEXSPI_IN_USE
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-#if IMXRT_IS_MIMXRT10xx
-#define BSP_INTERRUPT_VECTOR_COUNT 160
-#elif IMXRT_IS_MIMXRT11xx
-#define BSP_INTERRUPT_VECTOR_COUNT 217
-#endif
-#define BSP_INTERRUPT_VECTOR_INVALID (UINT32_MAX)
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* LIBBSP_ARM_IMXRT_IRQ_H */
+#endif /* BOARD_CLOCK_CONFIG_H */

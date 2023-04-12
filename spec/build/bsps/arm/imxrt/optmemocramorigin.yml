@@ -6,6 +6,8 @@ build-type: option
 copyrights:
 - Copyright (C) 2023 embedded brains GmbH & Co. KG
 default:
+- enabled-by: arm/imxrt1166-cm7-saltshaker
+  value: 0x20340000
 - enabled-by: true
   value: 0x20200000
 description: |
