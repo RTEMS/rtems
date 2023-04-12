@@ -373,11 +373,14 @@ static int imxrt_lpi2c_hw_init(struct imxrt_lpi2c_bus *bus)
   return 0;
 }
 
-static uint32_t imxrt_lpi2c_get_src_freq(void)
+static uint32_t imxrt_lpi2c_get_src_freq(clock_ip_name_t clock_ip)
 {
   uint32_t freq;
+#if IMXRT_IS_MIMXRT10xx
   uint32_t mux;
   uint32_t divider;
+
+  (void) clock_ip; /* Not necessary for i.MXRT1050 */
 
   mux = CLOCK_GetMux(kCLOCK_Lpi2cMux);
   divider = 1;
@@ -396,6 +399,17 @@ static uint32_t imxrt_lpi2c_get_src_freq(void)
 
   divider *= CLOCK_GetDiv(kCLOCK_Lpi2cDiv) + 1;
   freq /= divider;
+#elif IMXRT_IS_MIMXRT11xx
+  /*
+   * FIXME: A future version of the mcux_sdk might provide a better method to
+   * get the clock instead of this hack.
+   */
+  clock_root_t clock_root = clock_ip + kCLOCK_Root_Lpi2c1 - kCLOCK_Lpi2c1;
+
+  freq = CLOCK_GetRootClockFreq(clock_root);
+#else
+  #error Getting I2C frequency is not implemented for this chip.
+#endif
 
   return freq;
 }
@@ -457,7 +471,7 @@ void imxrt_lpi2c_init(void)
       }
 
       bus->clock_ip = imxrt_lpi2c_clock_ip(bus->regs);
-      bus->src_clock_hz = imxrt_lpi2c_get_src_freq();
+      bus->src_clock_hz = imxrt_lpi2c_get_src_freq(bus->clock_ip);
 
       eno = imxrt_lpi2c_hw_init(bus);
       if (eno != 0) {

@@ -53,6 +53,7 @@ typedef struct {
   volatile LPUART_Type *regs;
   rtems_vector_number irq;
   const char *path;
+  clock_ip_name_t clock_ip;
   uint32_t src_clock_hz;
   lpuart_config_t config;
 } imxrt_lpuart_context;
@@ -174,11 +175,14 @@ static bool imxrt_lpuart_set_attributes(
   return true;
 }
 
-static uint32_t imxrt_lpuart_get_src_freq(void)
+static uint32_t imxrt_lpuart_get_src_freq(clock_ip_name_t clock_ip)
 {
   uint32_t freq;
+#if IMXRT_IS_MIMXRT10xx
   uint32_t mux;
   uint32_t divider;
+
+  (void) clock_ip; /* Not necessary for i.MXRT1050 */
 
   mux = CLOCK_GetMux(kCLOCK_UartMux);
   divider = 1;
@@ -197,8 +201,34 @@ static uint32_t imxrt_lpuart_get_src_freq(void)
 
   divider *= CLOCK_GetDiv(kCLOCK_UartDiv) + 1U;
   freq /= divider;
+#elif IMXRT_IS_MIMXRT11xx
+  /*
+   * FIXME: A future version of the mcux_sdk might provide a better method to
+   * get the clock instead of this hack.
+   */
+  clock_root_t clock_root = clock_ip + kCLOCK_Root_Lpuart1 - kCLOCK_Lpuart1;
+
+  freq = CLOCK_GetRootClockFreq(clock_root);
+#else
+  #error Getting UART clock frequency is not implemented for this chip
+#endif
 
   return freq;
+}
+
+static clock_ip_name_t imxrt_lpuart_clock_ip(volatile LPUART_Type *regs)
+{
+  LPUART_Type *const base_addresses[] = LPUART_BASE_PTRS;
+  static const clock_ip_name_t lpuart_clocks[] = LPUART_CLOCKS;
+  size_t i;
+
+  for (i = 0; i < RTEMS_ARRAY_SIZE(base_addresses); ++i) {
+    if (base_addresses[i] == regs) {
+      return lpuart_clocks[i];
+    }
+  }
+
+  return kCLOCK_IpInvalid;
 }
 
 static void imxrt_lpuart_init_hardware(imxrt_lpuart_context *ctx)
@@ -378,7 +408,8 @@ static void imxrt_lpuart_init_context_from_fdt(
     bsp_fatal(IMXRT_FATAL_LPI2C_INVALID_FDT);
   }
 
-  ctx->src_clock_hz = imxrt_lpuart_get_src_freq();
+  ctx->clock_ip = imxrt_lpuart_clock_ip(ctx->regs);
+  ctx->src_clock_hz = imxrt_lpuart_get_src_freq(ctx->clock_ip);
 
   LPUART_GetDefaultConfig(&ctx->config);
   ctx->config.enableTx = true;

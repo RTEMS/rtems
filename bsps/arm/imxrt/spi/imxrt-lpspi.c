@@ -477,11 +477,14 @@ static int imxrt_lpspi_setup(spi_bus *base)
   return rv;
 }
 
-static uint32_t imxrt_lpspi_get_src_freq(void)
+static uint32_t imxrt_lpspi_get_src_freq(clock_ip_name_t clock_ip)
 {
   uint32_t freq;
+#if IMXRT_IS_MIMXRT10xx
   uint32_t mux;
   uint32_t divider;
+
+  (void) clock_ip; /* Not necessary for i.MXRT1050 */
 
   mux = CLOCK_GetMux(kCLOCK_LpspiMux);
 
@@ -504,6 +507,17 @@ static uint32_t imxrt_lpspi_get_src_freq(void)
 
   divider = CLOCK_GetDiv(kCLOCK_LpspiDiv) + 1;
   freq /= divider;
+#elif IMXRT_IS_MIMXRT11xx
+  /*
+   * FIXME: A future version of the mcux_sdk might provide a better method to
+   * get the clock instead of this hack.
+   */
+  clock_root_t clock_root = clock_ip + kCLOCK_Root_Lpspi1 - kCLOCK_Lpspi1;
+
+  freq = CLOCK_GetRootClockFreq(clock_root);
+#else
+  #error Getting SPI frequency is not implemented for this chip.
+#endif
 
   return freq;
 }
@@ -580,7 +594,7 @@ void imxrt_lpspi_init(void)
       }
 
       bus->clock_ip = imxrt_lpspi_clock_ip(bus->regs);
-      bus->src_clock_hz = imxrt_lpspi_get_src_freq();
+      bus->src_clock_hz = imxrt_lpspi_get_src_freq(bus->clock_ip);
       /* Absolut maximum is 30MHz according to electrical characteristics */
       bus->base.max_speed_hz = MIN(bus->src_clock_hz / 2, 30000000);
       bus->base.delay_usecs = 0;

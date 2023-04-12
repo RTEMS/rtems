@@ -92,9 +92,17 @@ rtems_vector_number QTMR_get_IRQ_from_fdt(const void *fdt, int node)
 
 uint32_t QTMR_get_src_clk(TMR_Type *base)
 {
+#if IMXRT_IS_MIMXRT10xx
     (void) base;
 
     return CLOCK_GetFreq(kCLOCK_IpgClk);
+#elif IMXRT_IS_MIMXRT11xx
+    (void) base;
+
+    return CLOCK_GetRootClockMux(kCLOCK_Root_Bus);
+#else
+  #error Getting Timer clock frequency is not implemented for this chip
+#endif
 }
 
 #endif /* __rtems__ */
