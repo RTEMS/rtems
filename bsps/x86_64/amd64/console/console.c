@@ -30,6 +30,9 @@
 #include <bsp/console-termios.h>
 #include <rtems/score/cpuimpl.h>
 
+void
+uart0_output_char(char);
+
 static uint8_t amd64_uart_get_register(uintptr_t addr, uint8_t i)
 {
   return inport_byte(addr + i);
@@ -61,12 +64,16 @@ const console_device console_device_table[] = {
 };
 const size_t console_device_count = RTEMS_ARRAY_SIZE(console_device_table);
 
-static void output_char(char c)
+void uart0_output_char(char c)
 {
   rtems_termios_device_context *ctx = console_device_table[0].context;
 
   ns16550_polled_putchar(ctx, c);
 }
 
-BSP_output_char_function_type BSP_output_char   = output_char;
+#ifndef BSP_USE_EFI_BOOT_SERVICES
+
+BSP_output_char_function_type BSP_output_char   = uart0_output_char;
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
+
+#endif

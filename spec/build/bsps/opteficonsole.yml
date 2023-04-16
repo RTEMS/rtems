@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define: null
+- script: |
+    kinds = ["TEXT", "GRAPHIC", "BOTH", "AUTO"]
+    if value not in kinds:
+       conf.fatal("Preferred EFI console '{}' is not one of {}".format(value, kinds))
+build-type: option
+copyrights:
+- Copyright (C) 2023 Karel Gardas
+default:
+- enabled-by: true
+  value: AUTO
+description: |
+  Select preferred EFI console. Possible values are TEXT, GRAPHIC, BOTH and AUTO. The TEXT here will instruct RTEMS to use EFI simple text output protocol. By default
+  EFI also forwards such text output to configured serial port. Details depends on the target platform EFI configuration.
+  The GRAPHIC instructs RTEMS to use EFI graphics output protocol. Advantage of it
+  in comparison with TEXT is that it is available also in the time when boot services
+  are already finished. BOTH tells RTEMS to mirror its output to both TEXT and GRAPHIC. This only
+  applies to platforms where both options are supported. The option which is not supported
+  on target platform is ignored in the RTEMS runtime and only available option is used. Finally AUTO tells RTEMS to use output console
+  preferred by the target platform configuration. In case RTEMS is not able to retrieve EFI console control protocol interface, then BOTH
+  is used instead of AUTO.
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_EFI_CONSOLE_KIND
+type: build

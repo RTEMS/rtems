@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 Karel Gardas
+default:
+- enabled-by: true
+  value: AUTO
+description: |
+  Define EFI graphics output protocol mode value. Use MAX to select maximum
+  available mode or AUTO to allow automatic selection based on the platform
+  preference. Otherwise use positive integer number to select desired graphics
+  protocol mode which you can get from graphics protocol mode list.
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_EFI_GRAPHICS_OUTPUT_MODE_VALUE
+type: build

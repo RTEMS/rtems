@@ -1,6 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
+ * Copyright (C) 2023 Karel Gardas
  * Copyright (C) 2018 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,6 +26,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <bspopts.h>
+
+#ifdef BSP_MULTIBOOT_SUPPORT
+#include <multiboot2.h>
+#endif
+
 	.text
 	.section	.text._start,"ax",@progbits
 	.p2align 4,,15
@@ -36,6 +43,71 @@ _start:
 	subq	$8, %rsp
 	.cfi_def_cfa_offset 16
 	xorl	%edi, %edi
+#ifdef BSP_MULTIBOOT_SUPPORT
+        mov    %eax, _multiboot2_magic
+        mov    %rbx, _multiboot2_info_ptr
+#endif
 	movabsq	$boot_card, %rax
 	call	*%rax
 	.cfi_endproc
+
+#ifdef BSP_MULTIBOOT_SUPPORT
+
+multiboot2:
+        ret
+
+_multiboot2_start:
+	jmp	_start
+
+	.text
+	.section	.multiboot2_header
+	.p2align	4,,15
+multiboot2_header_start:
+        .long	MULTIBOOT2_HEADER_MAGIC
+        .long 	MULTIBOOT_ARCHITECTURE_I386
+	.long 	multiboot2_header_end - multiboot2_header_start
+        .long   -(MULTIBOOT2_HEADER_MAGIC + MULTIBOOT_ARCHITECTURE_I386 + (multiboot2_header_end - multiboot2_header_start))
+efi_bootservices_start:
+        .short  MULTIBOOT_HEADER_TAG_EFI_BS
+        .short  0
+        .long   efi_bootservices_end - efi_bootservices_start
+efi_bootservices_end:
+efi64_entry_start:
+        .short  MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_EFI64
+        .short  0
+        .long   efi64_entry_end - efi64_entry_start
+        .long   _start /* directly copied from resulting ELF */
+        /* padding to 8 byte tags allignment */
+        .long   0
+efi64_entry_end:
+info_requests_start:
+        .short  MULTIBOOT_HEADER_TAG_INFORMATION_REQUEST
+        .short  0
+        .long   info_requests_end - info_requests_start
+        .long   MULTIBOOT_TAG_TYPE_EFI64
+        .long   MULTIBOOT_TAG_TYPE_CMDLINE
+#ifdef BSP_USE_EFI_BOOT_SERVICES
+        .long   MULTIBOOT_TAG_TYPE_EFI_BS
+#else
+	.long	0
+#endif
+        /* padding to 8 byte tags allignment */
+        .long   0
+info_requests_end:
+        /* header end*/
+        .short  MULTIBOOT_HEADER_TAG_END
+        .short  0
+        .long   8
+multiboot2_header_end:
+
+        .data
+        .global  _multiboot2_magic
+_multiboot2_magic:
+        .long   0
+
+        .data
+        .global  _multiboot2_info_ptr
+_multiboot2_info_ptr:
+        .quad   0
+
+#endif

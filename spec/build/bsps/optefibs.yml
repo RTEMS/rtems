@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- env-assign: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 Karel Gardas
+default:
+- enabled-by: true
+  value: true
+description: |
+  Enable use of EFI boot services.
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_USE_EFI_BOOT_SERVICES
+type: build

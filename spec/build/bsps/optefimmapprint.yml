@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- env-assign: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 Karel Gardas
+default:
+- enabled-by: true
+  value: false
+description: |
+  Print EFI memory map on boot.
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_EFI_MMAP_PRINTOUT
+type: build

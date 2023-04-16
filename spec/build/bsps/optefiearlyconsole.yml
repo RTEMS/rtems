@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- script: |
+    kinds = ["SERIAL", "BUFFER"]
+    if value not in kinds:
+       conf.fatal("Preferred EFI early console '{}' is not one of {}".format(value, kinds))
+    conf.define("BUFFER", "1", False)
+    conf.define("SERIAL", "2", False)
+- define-unquoted: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 Karel Gardas
+default:
+- enabled-by: true
+  value: BUFFER
+description: |
+  Select preferred EFI early printout console. Possible values here
+  are SERIAL and BUFFER. In case of SERIAL, the tty0/com1 will be used
+  for early printout. In case of BUFFER, all prints will be buffered
+  and once real EFI console is initialized, then whole buffer will be
+  copied to it.
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_EFI_EARLY_CONSOLE_KIND
+type: build

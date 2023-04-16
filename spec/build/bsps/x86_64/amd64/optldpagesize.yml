@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- env-assign: null
+- set-value: -Wl,-z,max-page-size=${LD_MAX_PAGE_SIZE:#010x}
+- substitute: null
+- env-append: LDFLAGS
+- env-append: PKGCONFIG_LDFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2023 Karel Gardas
+default:
+- enabled-by: true
+  value: 4096
+description: |
+  Set the value of max-page-size parameter for the GNU linker.
+  By default on x86_64 the linker is using 2MB page size which is
+  too big for creating correctly formed and later recognized multiboot2
+  binaries. Default value 4k used here is working well for the purpose.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: LD_MAX_PAGE_SIZE
+type: build

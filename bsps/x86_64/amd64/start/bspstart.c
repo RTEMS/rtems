@@ -28,9 +28,21 @@
 #include <bsp/bootcard.h>
 #include <libcpu/page.h>
 #include <bsp/irq-generic.h>
+#include <multiboot2impl.h>
+
+#if defined(BSP_USE_EFI_BOOT_SERVICES) && !defined(BSP_MULTIBOOT_SUPPORT)
+#error "RTEMS amd64efi BSP requires multiboot2 support!"
+#endif
 
 void bsp_start(void)
 {
-  paging_init();
-  bsp_interrupt_initialize();
+#ifdef BSP_MULTIBOOT_SUPPORT
+    process_multiboot2_info();
+    if (!uefi_bootservices_running()) {
+#endif
+        paging_init();
+        bsp_interrupt_initialize();
+#ifdef BSP_MULTIBOOT_SUPPORT
+    }
+#endif
 }
