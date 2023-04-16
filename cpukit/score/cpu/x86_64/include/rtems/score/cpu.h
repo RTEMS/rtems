@@ -144,7 +144,7 @@ typedef struct {
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 #define CPU_STACK_MINIMUM_SIZE          (1024*4)
 #define CPU_SIZEOF_POINTER         8
-#define CPU_ALIGNMENT              8
+#define CPU_ALIGNMENT              16
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
 #define CPU_STACK_ALIGNMENT        16
 #define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
