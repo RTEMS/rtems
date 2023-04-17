@@ -34,8 +34,11 @@ description: |
   The **option set** specified in ${.:/params[1]/name} is built through a
   *bitwise or* of the option constants described below.  Not all combinations
   of options are allowed.  Some options are mutually exclusive.  If mutually
-  exclusive options are combined, the behaviour is undefined.  Options not
-  mentioned below are not evaluated by this directive and have no effect.
+  exclusive options are combined, the behaviour is undefined.
+  Combining mutually exclusive options may throw an error or run silently
+  with unintended default values.
+  Options not mentioned below are not evaluated by this directive and have no
+  effect.
   Default options can be selected by using the ${../../option/if/default:/name}
   constant.  The option set defines
 
