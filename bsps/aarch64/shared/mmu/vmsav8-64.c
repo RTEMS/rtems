@@ -54,10 +54,12 @@ rtems_status_code aarch64_mmu_map(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  /* Disable interrupts so they don't run while the MMU is disabled */
+  /*
+   * Disable interrupts so they don't run while the MMU tables are being
+   * modified.
+   */
   _ISR_Local_disable( level );
 
-  aarch64_mmu_disable();
   sc = aarch64_mmu_map_block(
     (uint64_t *) bsp_translation_table_base,
     0x0,
@@ -72,7 +74,6 @@ rtems_status_code aarch64_mmu_map(
   );
   _AARCH64_Data_synchronization_barrier();
   _AARCH64_Instruction_synchronization_barrier();
-  aarch64_mmu_enable();
 
   _ISR_Local_enable( level );
 
