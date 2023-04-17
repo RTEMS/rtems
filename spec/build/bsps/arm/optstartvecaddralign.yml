@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+default:
+- enabled-by: bsps/arm/tms570
+  value: 64
+- enabled-by: true
+  value: null
+description: |
+  Defines the alignment in bytes of the vector address table begin.  The vector
+  address table contains the exception handler addresses.  When no alignment is
+  specified, the vector address table immediately follows the vector
+  instruction table.
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_START_VECTOR_ADDRESS_TABLE_ALIGNMENT
+type: build
