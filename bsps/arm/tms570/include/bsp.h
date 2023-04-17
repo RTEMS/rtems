@@ -44,8 +44,13 @@
 #include <rtems.h>
 #include <bsp/default-initial-extension.h>
 
+#if TMS570_VARIANT == 4357
+#define BSP_OSCILATOR_CLOCK 16000000
+#define BSP_PLL_OUT_CLOCK 150000000
+#else
 #define BSP_OSCILATOR_CLOCK 8000000
 #define BSP_PLL_OUT_CLOCK 160000000
+#endif
 
 #endif /* ASM */
 
