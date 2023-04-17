@@ -75,7 +75,7 @@ static void tms570_debug_console_init(void)
 
   tms570_sci_initialize(ctx);
   memset(&term, 0, sizeof(term));
-  term.c_cflag = B115200;
+  cfsetospeed(&term, B115200);
   tms570_sci_set_attributes(&ctx->base, &term);
   BSP_output_char = tms570_debug_console_out;
 }
