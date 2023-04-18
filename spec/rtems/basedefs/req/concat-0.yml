@@ -12,7 +12,6 @@ rationale: |
 references: []
 requirement-type: non-functional
 text: |
-  When neither argument is a call of the macro ${../if/concat:/name} itself,
-  the macro shall result in both argument values
+  The macro shall result in both argument values
   concatenated textually unaltered in the order they are provided.
 type: requirement
