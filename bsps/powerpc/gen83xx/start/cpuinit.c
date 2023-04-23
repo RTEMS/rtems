@@ -93,7 +93,7 @@ void cpu_init( void)
   clear_mmu_regs();
 
   /* Clear caches */
-  hid0 = PPC_SPECIAL_PURPOSE_REGISTER(HID0);
+  PPC_SPECIAL_PURPOSE_REGISTER(HID0, hid0);
   if ((hid0 & (HID0_ICE | HID0_DCE)) == 0) {
     hid0 &= ~(HID0_ILOCK | HID0_DLOCK | HID0_ICE | HID0_DCE);
     PPC_SET_SPECIAL_PURPOSE_REGISTER(HID0, hid0);

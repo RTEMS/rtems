@@ -367,10 +367,11 @@ void qoriq_mmu_change_perm(uint32_t test, uint32_t set, uint32_t clear)
 		ppc_tlbre();
 		ppc_synchronize_instructions();
 
-		mas1 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS1);
+		PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS1, mas1);
 		if ((mas1 & FSL_EIS_MAS1_V) != 0) {
 			uint32_t mask = 0x3ff;
-			uint32_t mas3 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS3);
+			uint32_t mas3;
+			PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS3, mas3);
 
 			if ((mas3 & mask) == test) {
 				mas3 &= ~(clear & mask);
@@ -398,7 +399,7 @@ int qoriq_mmu_find_free_tlb1_entry(void)
 		ppc_tlbre();
 		ppc_synchronize_instructions();
 
-		mas1 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS1);
+		PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS1, mas1);
 		if ((mas1 & FSL_EIS_MAS1_V) == 0) {
 			return i;
 		}

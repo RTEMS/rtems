@@ -297,9 +297,9 @@ addr_map(
       rtems_interrupt_disable(level);
       PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS0, mas0);
       asm volatile("tlbre");
-      mas1 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS1);
-      mas2 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS2);
-      mas3 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS3);
+      PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS1, mas1);
+      PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS2, mas2);
+      PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS3, mas3);
       rtems_interrupt_enable(level);
 
       if (mas1 & 0x80000000) {
@@ -671,7 +671,7 @@ mpc55xx_flash_writable(void)
     rtems_interrupt_disable(level);
     PPC_SET_SPECIAL_PURPOSE_REGISTER( FSL_EIS_MAS0, 0x10010000);
     asm volatile("tlbre");
-    mas3 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS3);
+    PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS3, mas3);
     rtems_interrupt_enable(level);
 
     return ((mas3 & 0x0000000C) == 0x0000000C) ? 1 : 0;
@@ -689,7 +689,7 @@ mpc55xx_flash_address(void)
     rtems_interrupt_disable(level);
     PPC_SET_SPECIAL_PURPOSE_REGISTER( FSL_EIS_MAS0, 0x10010000);
     asm volatile("tlbre");
-    mas2 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS2);
+    PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS2, mas2);
     rtems_interrupt_enable(level);
 
     return mas2 & 0xFFFFF000;

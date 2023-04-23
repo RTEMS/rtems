@@ -180,7 +180,7 @@ void bsp_interrupt_dispatch(uintptr_t exception_number)
 	 * This works only if the "has-external-proxy" property is present in the
 	 * "epapr,hv-pic" device tree node.
 	 */
-	vector = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_EPR);
+	PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_EPR, vector);
 
 	if (vector != SPURIOUS) {
 		uint32_t msr;

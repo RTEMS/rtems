@@ -46,7 +46,7 @@ void bsp_restart(void *addr)
   rtems_interrupt_disable(level);
   (void) level; /* avoid set but not used warning */
 
-  hid0 = PPC_SPECIAL_PURPOSE_REGISTER(HID0);
+  PPC_SPECIAL_PURPOSE_REGISTER(HID0, hid0);
 
   if ((hid0 & HID0_DCE) != 0) {
     rtems_cache_flush_multiple_data_lines(mem_begin, mem_size);
