@@ -72,9 +72,9 @@
  *
  *   - Check that the string is equal to the expected statement.
  *
- * - Expand and stringify _Assert_Unreachable().
+ * - Expand RTEMS_FUNCTION_NAME.
  *
- *   - Check that the string is equal to the expected statement.
+ *   - Check that the string is equal to the expected function name.
  *
  * @{
  */
@@ -95,24 +95,30 @@ static void RtemsBasedefsValBasedefsNoDebug_Action_0( void )
     0,
     IsEqualIgnoreWhiteSpace(
       s,
-      "do{__builtin_unreachable();do{}while(0);}while(0)"
+      "__builtin_unreachable()"
     )
   );
 }
 
 /**
- * @brief Expand and stringify _Assert_Unreachable().
+ * @brief Expand RTEMS_FUNCTION_NAME.
  */
 static void RtemsBasedefsValBasedefsNoDebug_Action_1( void )
 {
   const char *s;
 
-  s = RTEMS_XSTRING( _Assert_Unreachable() );
+  s = RTEMS_FUNCTION_NAME;
 
   /*
-   * Check that the string is equal to the expected statement.
+   * Check that the string is equal to the expected function name.
    */
-  T_step_true( 1, IsEqualIgnoreWhiteSpace( s, "do{}while(0)" ) );
+  T_step_true(
+    1,
+    IsEqualIgnoreWhiteSpace(
+      s,
+      "RtemsBasedefsValBasedefsNoDebug_Action_1"
+    )
+  );
 }
 
 /**

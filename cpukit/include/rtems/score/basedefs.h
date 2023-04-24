@@ -12,7 +12,7 @@
 /*
  * Copyright (C) 2014 Paval Pisa
  * Copyright (C) 2011, 2013 On-Line Applications Research Corporation (OAR)
- * Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2009, 2023 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -355,6 +355,47 @@ extern "C" {
  */
 #define RTEMS_EXPAND( _token ) _token
 
+/* Generated from spec:/rtems/basedefs/if/function-name */
+
+/**
+ * @ingroup RTEMSAPIBaseDefs
+ *
+ * @brief Expands to the name of the function containing the use of this
+ *   define.
+ */
+#if defined(__cplusplus) && defined(__GNUC__)
+  #define RTEMS_FUNCTION_NAME __PRETTY_FUNCTION__
+#else
+  #define RTEMS_FUNCTION_NAME __func__
+#endif
+
+/* Generated from spec:/rtems/basedefs/if/no-return */
+
+/**
+ * @ingroup RTEMSAPIBaseDefs
+ *
+ * @brief Tells the compiler in a function declaration that this function does
+ *   not return.
+ */
+#if __cplusplus >= 201103L
+  #define RTEMS_NO_RETURN [[noreturn]]
+#elif __STDC_VERSION__ >= 201112L
+  #define RTEMS_NO_RETURN _Noreturn
+#elif defined(__GNUC__)
+  #define RTEMS_NO_RETURN __attribute__(( __noreturn__ ))
+#else
+  #define RTEMS_NO_RETURN
+#endif
+
+/* Generated from spec:/rtems/basedefs/if/compiler-no-return-attribute */
+
+/**
+ * @ingroup RTEMSAPIBaseDefs
+ *
+ * @brief Provided for backward compatibility.
+ */
+#define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE RTEMS_NO_RETURN
+
 /* Generated from spec:/rtems/basedefs/if/section */
 
 /**
@@ -425,17 +466,25 @@ extern "C" {
  */
 #define RTEMS_XCONCAT( _x, _y ) RTEMS_CONCAT( _x, _y )
 
-/* Generated from spec:/score/basedefs/if/assert-unreachable */
+#if !defined(ASM) && defined(RTEMS_DEBUG)
+  /* Generated from spec:/score/basedefs/if/debug-unreachable */
 
-/**
- * @ingroup RTEMSScore
- *
- * @brief Asserts that this program point is unreachable.
- */
-#if defined(RTEMS_DEBUG)
-  #define _Assert_Unreachable() _Assert( 0 )
-#else
-  #define _Assert_Unreachable() do { } while ( 0 )
+  /**
+   * @ingroup RTEMSScore
+   *
+   * @brief Terminates the program with a failed assertion.
+   *
+   * @param file is the file name.
+   *
+   * @param line is the line of the file.
+   *
+   * @param func is the function name.
+   */
+  RTEMS_NO_RETURN void _Debug_Unreachable(
+    const char *file,
+    int         line,
+    const char *func
+  );
 #endif
 
 #if !defined(ASM)
@@ -613,33 +662,6 @@ extern "C" {
 #else
   #define RTEMS_NO_INLINE
 #endif
-
-/* Generated from spec:/rtems/basedefs/if/no-return */
-
-/**
- * @ingroup RTEMSAPIBaseDefs
- *
- * @brief Tells the compiler in a function declaration that this function does
- *   not return.
- */
-#if __cplusplus >= 201103L
-  #define RTEMS_NO_RETURN [[noreturn]]
-#elif __STDC_VERSION__ >= 201112L
-  #define RTEMS_NO_RETURN _Noreturn
-#elif defined(__GNUC__)
-  #define RTEMS_NO_RETURN __attribute__(( __noreturn__ ))
-#else
-  #define RTEMS_NO_RETURN
-#endif
-
-/* Generated from spec:/rtems/basedefs/if/compiler-no-return-attribute */
-
-/**
- * @ingroup RTEMSAPIBaseDefs
- *
- * @brief Provided for backward compatibility.
- */
-#define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE RTEMS_NO_RETURN
 
 /* Generated from spec:/rtems/basedefs/if/noinit */
 
@@ -858,14 +880,13 @@ extern "C" {
  *
  * @brief Tells the compiler that this program point is unreachable.
  */
-#if defined(__GNUC__)
+#if defined(RTEMS_DEBUG)
   #define RTEMS_UNREACHABLE() \
-    do { \
-      __builtin_unreachable(); \
-      _Assert_Unreachable(); \
-    } while ( 0 )
+    _Debug_Unreachable( __FILE__, __LINE__, RTEMS_FUNCTION_NAME )
+#elif defined(__GNUC__)
+  #define RTEMS_UNREACHABLE() __builtin_unreachable()
 #else
-  #define RTEMS_UNREACHABLE() _Assert_Unreachable()
+  #define RTEMS_UNREACHABLE() do { } while ( 0 )
 #endif
 
 /* Generated from spec:/rtems/basedefs/if/unused */

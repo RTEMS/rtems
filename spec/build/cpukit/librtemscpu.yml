@@ -1409,6 +1409,7 @@ source:
 - cpukit/score/src/coretodhookunregister.c
 - cpukit/score/src/coretodset.c
 - cpukit/score/src/debugisthreaddispatchingallowed.c
+- cpukit/score/src/debugunreachable.c
 - cpukit/score/src/freechain.c
 - cpukit/score/src/futex.c
 - cpukit/score/src/gcovdumpinfobase64.c

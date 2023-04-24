@@ -71,22 +71,7 @@ extern "C" {
    * @note This is based on the code in newlib's assert.h.
    */
   #ifndef __RTEMS_ASSERT_FUNCTION
-    /* Use g++'s demangled names in C++.  */
-    #if defined __cplusplus && defined __GNUC__
-      #define __RTEMS_ASSERT_FUNCTION __PRETTY_FUNCTION__
-
-    /* C99 requires the use of __func__.  */
-    #elif __STDC_VERSION__ >= 199901L
-      #define __RTEMS_ASSERT_FUNCTION __func__
-
-    /* Older versions of gcc don't have __func__ but can use __FUNCTION__.  */
-    #elif __GNUC__ >= 2
-      #define __RTEMS_ASSERT_FUNCTION __FUNCTION__
-
-    /* failed to detect __func__ support.  */
-    #else
-      #define __RTEMS_ASSERT_FUNCTION ((char *) 0)
-    #endif
+    #define __RTEMS_ASSERT_FUNCTION RTEMS_FUNCTION_NAME
   #endif /* !__RTEMS_ASSERT_FUNCTION */
 
   #if !defined( RTEMS_SCHEDSIM )
