@@ -2,26 +2,29 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Tells the compiler that this program point is unreachable.
 copyrights:
-- Copyright (C) 2016 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2016, 2023 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
     attributes: null
     body: |
-      ${/score/basedefs/if/assert-unreachable:/name}()
+      do { } while ( 0 )
     params: []
     return: null
   variants:
   - definition:
       attributes: null
       body: |
-        do {
-          ${/compiler/if/builtin-unreachable:/name}();
-          ${/score/basedefs/if/assert-unreachable:/name}();
-        } while ( 0 )
+        ${/score/basedefs/if/debug-unreachable:/name}( ${/compiler/if/file:/name}, ${/compiler/if/line:/name}, ${function-name:/name} )
       params: []
       return: null
-    enabled-by:
-    - defined(${/compiler/if/gnuc:/name})
+    enabled-by: defined(${/build-options/if/debug:/name})
+  - definition:
+      attributes: null
+      body: |
+        ${/compiler/if/builtin-unreachable:/name}()
+      params: []
+      return: null
+    enabled-by: defined(${/compiler/if/gnuc:/name})
 description: null
 enabled-by: true
 index-entries: []

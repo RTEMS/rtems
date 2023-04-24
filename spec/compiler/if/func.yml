@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: unspecified-define
+links:
+- role: interface-placement
+  uid: domain
+- role: interface-ingroup
+  uid: group
+name: __func__
+references: []
+type: interface

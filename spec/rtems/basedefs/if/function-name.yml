@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Expands to the name of the function containing the use of this define.
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    ${/compiler/if/func:/name}
+  variants:
+  - definition: |
+      ${/compiler/if/pretty-function:/name}
+    enabled-by:
+      and:
+      - defined(${/compiler/if/cplusplus:/name})
+      - defined(${/compiler/if/gnuc:/name})
+description: null
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_FUNCTION_NAME
+notes: null
+type: interface

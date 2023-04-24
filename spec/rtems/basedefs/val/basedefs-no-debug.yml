@@ -18,7 +18,7 @@ test-actions:
         ${step},
         IsEqualIgnoreWhiteSpace(
           s,
-          "do{__builtin_unreachable();do{}while(0);}while(0)"
+          "__builtin_unreachable()"
         )
       );
     links:
@@ -26,19 +26,25 @@ test-actions:
       uid: ../req/unreachable-gnuc
   links: []
 - action-brief: |
-    Expand and stringify ${/score/basedefs/if/assert-unreachable:/name}.
+    Expand ${../if/function-name:/name}.
   action-code: |
     const char *s;
 
-    s = RTEMS_XSTRING( _Assert_Unreachable() );
+    s = RTEMS_FUNCTION_NAME;
   checks:
   - brief: |
-      Check that the string is equal to the expected statement.
+      Check that the string is equal to the expected function name.
     code: |
-      T_step_true( ${step}, IsEqualIgnoreWhiteSpace( s, "do{}while(0)" ) );
+      T_step_true(
+        ${step},
+        IsEqualIgnoreWhiteSpace(
+          s,
+          "RtemsBasedefsValBasedefsNoDebug_Action_1"
+        )
+      );
     links:
     - role: validation
-      uid: /score/basedefs/req/assert-unreachable
+      uid: ../req/function-name
   links: []
 test-brief: |
   Tests the basedefs macros where RTEMS_DEBUG is disabled.

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/function-name
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the ${../if/function-name:/name} define is used inside a function body,
+  the ${../if/function-name:/name} define shall expand the name of the
+  function.
+type: requirement

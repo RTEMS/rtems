@@ -1,0 +1,41 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Terminates the program with a failed assertion.
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: ${/rtems/basedefs/if/no-return:/name}
+    body: null
+    params:
+    - const char *${.:/params[0]/name}
+    - int ${.:/params[1]/name}
+    - const char *${.:/params[2]/name}
+    return: void
+  variants: []
+description: null
+enabled-by:
+  and:
+  - not: ASM
+  - RTEMS_DEBUG
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: /rtems/basedefs/if/header
+- role: interface-ingroup
+  uid: ../../if/group
+name: _Debug_Unreachable
+notes: null
+params:
+- description: is the file name.
+  dir: null
+  name: file
+- description: is the line of the file.
+  dir: null
+  name: line
+- description: is the function name.
+  dir: null
+  name: func
+return: null
+type: interface
