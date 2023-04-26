@@ -40,6 +40,7 @@ try:
 except:
     import ConfigParser as configparser
 
+from waflib.Errors import WafError
 from waflib.TaskGen import after, before_method, feature
 
 is_windows_host = os.name == "nt" or sys.platform in ["msys", "cygwin"]
@@ -51,7 +52,6 @@ version = {
 }
 default_prefix = "/opt/rtems/" + version["__RTEMS_MAJOR__"]
 compilers = ["gcc", "clang"]
-items = {}
 bsps = {}
 
 
@@ -1176,106 +1176,61 @@ class BuildItemContext(object):
         self.objects = objects
 
 
-def is_one_item_newer(ctx, path, mtime):
-    try:
-        mtime2 = os.path.getmtime(path)
-        if mtime <= mtime2:
-            return True
-        names = os.listdir(path)
-    except Exception as e:
-        ctx.fatal("Cannot access build specification directory: {}".format(e))
-    for name in names:
-        path2 = os.path.join(path, name)
-        if name.endswith(".yml") and not name.startswith("."):
-            mtime2 = os.path.getmtime(path2)
-            if mtime <= mtime2:
-                return True
-        else:
-            mode = os.lstat(path2).st_mode
-            if stat.S_ISDIR(mode) and is_one_item_newer(ctx, path2, mtime):
-                return True
-    return False
-
-
-def must_update_item_cache(ctx, path, cache_file):
-    try:
-        mtime = os.path.getmtime(cache_file)
-    except:
-        return True
-    return is_one_item_newer(ctx, path, mtime)
-
-
-def load_from_yaml(ctx, data_by_uid, base, path):
-    try:
-        names = os.listdir(path)
-    except Exception as e:
-        ctx.fatal("Cannot list build specification directory: {}".format(e))
-    for name in names:
-        path2 = os.path.join(path, name)
-        if name.endswith(".yml") and not name.startswith("."):
-            uid = "/" + os.path.relpath(path2, base).replace(".yml", "")
-            with open(path2, "r") as f:
-                data_by_uid[uid] = load(f.read(), SafeLoader)
-        else:
-            mode = os.lstat(path2).st_mode
-            if stat.S_ISDIR(mode):
-                load_from_yaml(ctx, data_by_uid, base, path2)
-
-
-def load_items_in_directory(ctx, ctors, path):
-    p = "c4che/" + re.sub(r"[^\w]", "_", path) + ".pickle"
-    try:
-        f = ctx.bldnode.make_node(p)
-    except AttributeError:
-        f = ctx.path.make_node("build/" + p)
-    f.parent.mkdir()
-    cache_file = f.abspath()
-    data_by_uid = {}
-    if must_update_item_cache(ctx, path, cache_file):
-        from waflib import Logs
-
-        Logs.warn(
-            "Regenerate build specification cache (needs a couple of seconds)..."
-        )
-
-        load_from_yaml(ctx, data_by_uid, path, path)
-        with open(cache_file, "wb") as f:
-            pickle.dump(data_by_uid, f)
-    else:
-        with open(cache_file, "rb") as f:
-            data_by_uid = pickle.load(f)
-    for uid, data in data_by_uid.items():
-        if data["type"] == "build":
-            items[uid] = ctors[data["build-type"]](uid, data)
-
-
-def load_items(ctx, specs):
-    if items:
-        return
-
-    ctors = {
-        "ada-test-program": AdaTestProgramItem,
-        "bsp": BSPItem,
-        "config-file": ConfigFileItem,
-        "config-header": ConfigHeaderItem,
-        "test-program": TestProgramItem,
-        "group": GroupItem,
-        "library": LibraryItem,
-        "objects": ObjectsItem,
-        "option": OptionItem,
-        "script": ScriptItem,
-        "start-file": StartFileItem,
-    }
-
-    for path in specs:
-        load_items_in_directory(ctx, ctors, path)
-
+ctors = {
+    "ada-test-program": AdaTestProgramItem,
+    "bsp": BSPItem,
+    "config-file": ConfigFileItem,
+    "config-header": ConfigHeaderItem,
+    "test-program": TestProgramItem,
+    "group": GroupItem,
+    "library": LibraryItem,
+    "objects": ObjectsItem,
+    "option": OptionItem,
+    "script": ScriptItem,
+    "start-file": StartFileItem,
+}
 
 try:
     #
     # Try to use the system-provided yaml module with libyaml support.
     #
     from yaml import load, CSafeLoader as SafeLoader
+
+    class ItemCache(dict):
+
+        def __init__(self):
+            super(ItemCache, self).__init__()
+            self.spec_directories = []
+
+        def set_spec_directories(self, spec_directories):
+            self.spec_directories = spec_directories
+
+        def load_from_yaml(self, base, path):
+            try:
+                names = os.listdir(path)
+            except Exception as e:
+                raise WafError(
+                    "Cannot list build specification directory: {}".format(e))
+            for name in names:
+                path2 = os.path.join(path, name)
+                if name.endswith(".yml") and not name.startswith("."):
+                    uid = "/" + os.path.relpath(path2, base).replace(
+                        ".yml", "")
+                    with open(path2, "r") as f:
+                        data = load(f.read(), SafeLoader)
+                        if data["type"] == "build":
+                            self[uid] = ctors[data["build-type"]](uid, data)
+                else:
+                    mode = os.lstat(path2).st_mode
+                    if stat.S_ISDIR(mode):
+                        self.load_from_yaml(base, path2)
+
+        def load_all(self, ctx):
+            if bool(self):
+                return
+
+            for path in self.spec_directories:
+                self.load_from_yaml(path, path)
 except ImportError:
     #
     # Fall back to the Python implementation provided by the project.  This
@@ -1289,6 +1244,96 @@ except ImportError:
     sys.path += [yaml_path]
     from yaml import load, SafeLoader
 
+    def is_one_item_newer(ctx, path, mtime):
+        try:
+            mtime2 = os.path.getmtime(path)
+            if mtime <= mtime2:
+                return True
+            names = os.listdir(path)
+        except Exception as e:
+            ctx.fatal(
+                "Cannot access build specification directory: {}".format(e))
+        for name in names:
+            path2 = os.path.join(path, name)
+            if name.endswith(".yml") and not name.startswith("."):
+                mtime2 = os.path.getmtime(path2)
+                if mtime <= mtime2:
+                    return True
+            else:
+                mode = os.lstat(path2).st_mode
+                if stat.S_ISDIR(mode) and is_one_item_newer(ctx, path2, mtime):
+                    return True
+        return False
+
+    def must_update_item_cache(ctx, path, cache_file):
+        try:
+            mtime = os.path.getmtime(cache_file)
+        except:
+            return True
+        return is_one_item_newer(ctx, path, mtime)
+
+    def load_from_yaml(ctx, data_by_uid, base, path):
+        try:
+            names = os.listdir(path)
+        except Exception as e:
+            ctx.fatal(
+                "Cannot list build specification directory: {}".format(e))
+        for name in names:
+            path2 = os.path.join(path, name)
+            if name.endswith(".yml") and not name.startswith("."):
+                uid = "/" + os.path.relpath(path2, base).replace(".yml", "")
+                with open(path2, "r") as f:
+                    data_by_uid[uid] = load(f.read(), SafeLoader)
+            else:
+                mode = os.lstat(path2).st_mode
+                if stat.S_ISDIR(mode):
+                    load_from_yaml(ctx, data_by_uid, base, path2)
+
+    def load_items_in_directory(ctx, path):
+        p = "c4che/" + re.sub(r"[^\w]", "_", path) + ".pickle"
+        try:
+            f = ctx.bldnode.make_node(p)
+        except AttributeError:
+            f = ctx.path.make_node("build/" + p)
+        f.parent.mkdir()
+        cache_file = f.abspath()
+        data_by_uid = {}
+        if must_update_item_cache(ctx, path, cache_file):
+            from waflib import Logs
+
+            Logs.warn("Regenerate the build specification cache.  "
+                      "Install the PyYAML Python package to avoid this.  "
+                      "The cache regeneration needs a couple of seconds...")
+
+            load_from_yaml(ctx, data_by_uid, path, path)
+            with open(cache_file, "wb") as f:
+                pickle.dump(data_by_uid, f)
+        else:
+            with open(cache_file, "rb") as f:
+                data_by_uid = pickle.load(f)
+        for uid, data in data_by_uid.items():
+            if data["type"] == "build":
+                items[uid] = ctors[data["build-type"]](uid, data)
+
+    class ItemCache(dict):
+
+        def __init__(self):
+            super(ItemCache, self).__init__()
+            self.spec_directories = []
+
+        def set_spec_directories(self, spec_directories):
+            self.spec_directories = spec_directories
+
+        def load_all(self, ctx):
+            if bool(self):
+                return
+
+            for path in self.spec_directories:
+                load_items_in_directory(ctx, path)
+
+
+items = ItemCache()
+
 
 def load_items_from_options(ctx):
     specs = ctx.options.rtems_specs
@@ -1296,7 +1341,8 @@ def load_items_from_options(ctx):
         specs = specs.split(",")
     else:
         specs = ["spec/build"]
-    load_items(ctx, specs)
+    items.set_spec_directories(specs)
+    items.load_all(ctx)
     return specs
 
 
@@ -1592,7 +1638,8 @@ def build(bld):
             bld,
             ["compiler", "config", "specs", "tools", "top_group"],
         )
-        load_items(bld, bld.env.SPECS)
+        items.set_spec_directories(bld.env.SPECS)
+        items.load_all(bld)
         append_variant_builds(bld)
         return
     long_command_line_workaround(bld)
