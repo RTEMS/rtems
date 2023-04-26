@@ -1205,7 +1205,7 @@ def must_update_item_cache(ctx, path, cache_file):
     return is_one_item_newer(ctx, path, mtime)
 
 
-def load_from_yaml(load, ctx, data_by_uid, base, path):
+def load_from_yaml(ctx, data_by_uid, base, path):
     try:
         names = os.listdir(path)
     except Exception as e:
@@ -1215,11 +1215,11 @@ def load_from_yaml(load, ctx, data_by_uid, base, path):
         if name.endswith(".yml") and not name.startswith("."):
             uid = "/" + os.path.relpath(path2, base).replace(".yml", "")
             with open(path2, "r") as f:
-                data_by_uid[uid] = load(f.read())
+                data_by_uid[uid] = load(f.read(), SafeLoader)
         else:
             mode = os.lstat(path2).st_mode
             if stat.S_ISDIR(mode):
-                load_from_yaml(load, ctx, data_by_uid, base, path2)
+                load_from_yaml(ctx, data_by_uid, base, path2)
 
 
 def load_items_in_directory(ctx, ctors, path):
@@ -1238,19 +1238,7 @@ def load_items_in_directory(ctx, ctors, path):
             "Regenerate build specification cache (needs a couple of seconds)..."
         )
 
-        #
-        # Do not use a system provided yaml module and instead import it from
-        # the project.  This reduces the host system requirements to a simple
-        # Python 2.7 or 3 installation without extra modules.
-        #
-        if sys.version_info[0] == 2:
-            yaml_path = "yaml/lib"
-        else:
-            yaml_path = "yaml/lib3"
-        sys.path += [yaml_path]
-        from yaml import safe_load
-
-        load_from_yaml(safe_load, ctx, data_by_uid, path, path)
+        load_from_yaml(ctx, data_by_uid, path, path)
         with open(cache_file, "wb") as f:
             pickle.dump(data_by_uid, f)
     else:
@@ -1281,6 +1269,25 @@ def load_items(ctx, specs):
 
     for path in specs:
         load_items_in_directory(ctx, ctors, path)
+
+
+try:
+    #
+    # Try to use the system-provided yaml module with libyaml support.
+    #
+    from yaml import load, CSafeLoader as SafeLoader
+except ImportError:
+    #
+    # Fall back to the Python implementation provided by the project.  This
+    # reduces the host system requirements to a simple Python 2.7 or 3
+    # installation without extra modules.
+    #
+    if sys.version_info[0] == 2:
+        yaml_path = "yaml/lib"
+    else:
+        yaml_path = "yaml/lib3"
+    sys.path += [yaml_path]
+    from yaml import load, SafeLoader
 
 
 def load_items_from_options(ctx):
