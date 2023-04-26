@@ -1202,6 +1202,22 @@ try:
             super(ItemCache, self).__init__()
             self.spec_directories = []
 
+        def __missing__(self, uid):
+            name = uid + ".yml"
+            for path in self.spec_directories:
+                path2 = os.path.join(path, name[1:])
+                try:
+                    with open(path2, "r") as f:
+                        content = f.read()
+                except OSError:
+                    pass
+                else:
+                    data = load(content, SafeLoader)
+                    item = ctors[data["build-type"]](uid, data)
+                    self[uid] = item
+                    return item
+            raise KeyError("No item file found for UID: {}".format(uid))
+
         def set_spec_directories(self, spec_directories):
             self.spec_directories = spec_directories
 
@@ -1231,6 +1247,9 @@ try:
 
             for path in self.spec_directories:
                 self.load_from_yaml(path, path)
+
+        def load_on_demand(self, ctx):
+            pass
 except ImportError:
     #
     # Fall back to the Python implementation provided by the project.  This
@@ -1330,6 +1349,9 @@ except ImportError:
 
             for path in self.spec_directories:
                 load_items_in_directory(ctx, path)
+
+        def load_on_demand(self, ctx):
+            self.load_all(ctx)
 
 
 items = ItemCache()
@@ -1534,6 +1556,7 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     conf.env["BSP_BASE"] = bsp_base
     conf.env["BSP_NAME"] = bsp_name
     conf.env["BSP_FAMILY"] = family
+    conf.env["BSP_UID"] = bsp_item.uid
     conf.env["DEST_OS"] = "rtems"
 
     # For the enabled-by evaluation we have to use the base BSP defined by the
@@ -1639,13 +1662,13 @@ def build(bld):
             ["compiler", "config", "specs", "tools", "top_group"],
         )
         items.set_spec_directories(bld.env.SPECS)
-        items.load_all(bld)
+        items.load_on_demand(bld)
         append_variant_builds(bld)
         return
     long_command_line_workaround(bld)
     bic = BuildItemContext(bld.env.ARCH_INCLUDES.split(), [], [], [], [], [],
                            [])
-    bsps[bld.env.ARCH][bld.env.BSP_BASE].build(bld, bic)
+    items[bld.env.BSP_UID].build(bld, bic)
     items[bld.env.TOPGROUP_UID].build(bld, bic)
 
 
