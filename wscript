@@ -229,9 +229,8 @@ class Item(object):
             try:
                 self.do_build(bld, bic)
             except Exception as e:
-                raise type(e)(
-                    "Build error related to item spec:{}: {}".format(
-                        self.uid, str(e)))
+                raise type(e)("Build error related to item spec:{}: {}".format(
+                    self.uid, str(e)))
 
     def do_defaults(self, enabled):
         return
