@@ -10,7 +10,6 @@ copyrights:
 default:
 - enabled-by: true
   value: 3
-default-by-variant: []
 description: |
   irq number of the AXI UART Lite
 enabled-by: true
