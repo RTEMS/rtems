@@ -1546,11 +1546,11 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     ]
 
     conf.env["TOP"] = conf.path.abspath()
-    conf.env["TOPGROUP"] = top_group
+    conf.env["TOPGROUP_UID"] = top_group
     conf.env["VARIANT"] = variant
 
     cic = ConfigItemContext(cp, path_list)
-    items[conf.env.TOPGROUP].configure(conf, cic)
+    items[conf.env.TOPGROUP_UID].configure(conf, cic)
     bsp_item.configure(conf, cic)
 
     options = set([o[0].upper() for o in cp.items(variant)])
@@ -1646,7 +1646,7 @@ def build(bld):
     bic = BuildItemContext(bld.env.ARCH_INCLUDES.split(), [], [], [], [], [],
                            [])
     bsps[bld.env.ARCH][bld.env.BSP_BASE].build(bld, bic)
-    items[bld.env.TOPGROUP].build(bld, bic)
+    items[bld.env.TOPGROUP_UID].build(bld, bic)
 
 
 def add_log_filter(name):
