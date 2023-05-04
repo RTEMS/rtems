@@ -8,10 +8,23 @@ copyrights:
 cppflags: []
 enabled-by: true
 family: imxrt
-includes: []
-install: []
+includes:
+- bsps/arm/imxrt/mcux-sdk/drivers/common
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/drivers
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/xip
+install:
+- destination: ${BSP_INCLUDEDIR}/imxrt
+  source:
+  - bsps/arm/imxrt/include/imxrt/imxrt1050.dtsi
+  - bsps/arm/imxrt/include/imxrt/imxrt1050-pinfunc.h
 links:
 - role: build-dependency
   uid: obj-mimxrt1052
-source: []
+source:
+- bsps/arm/imxrt/boards/evkbimxrt1050/clock_config.c
+- bsps/arm/imxrt/boards/evkbimxrt1050/flash-dcd.c
+- bsps/arm/imxrt/boards/evkbimxrt1050/pin_mux.c
+- bsps/arm/imxrt/boards/evkbimxrt1050/clock-arm-pll-config.c
+- bsps/arm/imxrt/dts/imxrt1050-evkb.c
 type: build

@@ -25,8 +25,6 @@ install:
   - bsps/arm/include/bsp/imx-iomux.h
 - destination: ${BSP_INCLUDEDIR}/imxrt
   source:
-  - bsps/arm/imxrt/include/imxrt/imxrt1050.dtsi
-  - bsps/arm/imxrt/include/imxrt/imxrt1050-pinfunc.h
   - bsps/arm/imxrt/include/imxrt/lpspi.h
   - bsps/arm/imxrt/include/imxrt/memory.h
   - bsps/arm/imxrt/include/imxrt/mpu-config.h
@@ -38,16 +36,11 @@ install:
 links: []
 source:
 - bsps/arm/imxrt/console/console.c
-- bsps/arm/imxrt/dts/imxrt1050-evkb.c
 - bsps/arm/imxrt/i2c/imxrt-lpi2c.c
-- bsps/arm/imxrt/nxp/boards/evkbimxrt1050/clock_config.c
-- bsps/arm/imxrt/nxp/boards/evkbimxrt1050/pin_mux.c
 - bsps/arm/imxrt/spi/imxrt-lpspi.c
 - bsps/arm/imxrt/start/bspstart.c
 - bsps/arm/imxrt/start/bspstarthooks.c
-- bsps/arm/imxrt/start/clock-arm-pll-config.c
 - bsps/arm/imxrt/start/flash-boot-data.c
-- bsps/arm/imxrt/start/flash-dcd.c
 - bsps/arm/imxrt/start/flash-flexspi-config.c
 - bsps/arm/imxrt/start/flash-ivt.c
 - bsps/arm/imxrt/start/imxrt-ffec-init.c
