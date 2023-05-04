@@ -58,9 +58,11 @@ BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
   BOARD_BootClockRUN();
   BOARD_InitDEBUG_UARTPins();
 
+#if IMXRT_IS_MIMXRT10xx
   /* Reduce frequency for I2C */
   CLOCK_SetDiv(kCLOCK_Lpi2cDiv, 5);
 
   /* Enable EDMA clock. We initialize the EDMA so we need the clock. */
   CLOCK_EnableClock(kCLOCK_Dma);
+#endif
 }

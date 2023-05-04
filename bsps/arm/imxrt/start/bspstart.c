@@ -47,6 +47,7 @@ uint32_t imxrt_systick_frequency(void)
 
 static void imxrt_disable_wait_mode(void)
 {
+#if IMXRT_IS_MIMXRT10xx
   /*
    * Prevent processor from entering WAIT or SLEEP mode when a WFI is executed.
    * This would switch off the normal interrupt controller and activate an
@@ -58,6 +59,9 @@ static void imxrt_disable_wait_mode(void)
    * every WFI.
    */
   CLOCK_SetMode(kCLOCK_ModeRun);
+#else
+  #error Disabling wait mode not implemented for this chip.
+#endif
 }
 
 void bsp_start(void)
