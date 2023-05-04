@@ -1,13 +1,14 @@
 /*
- * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Based on file for EVKBIMSRT1050 with values for other EVKs integrated.
  */
 
-#ifndef __EVKBIMXRT1050_FLEXSPI_NOR_CONFIG__
-#define __EVKBIMXRT1050_FLEXSPI_NOR_CONFIG__
+#ifndef __FSL_FLEXSPI_NOR_CONFIG__
+#define __FSL_FLEXSPI_NOR_CONFIG__
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -15,8 +16,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief XIP_BOARD driver version 2.0.0. */
-#define FSL_XIP_BOARD_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief XIP_BOARD driver version 2.0.1. */
+#define FSL_XIP_BOARD_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /* FLEXSPI memory config block related defintions */
@@ -82,11 +83,39 @@ typedef enum _FlexSpiSerialClockFreq
     kFlexSpiSerialClk_30MHz  = 1,
     kFlexSpiSerialClk_50MHz  = 2,
     kFlexSpiSerialClk_60MHz  = 3,
+#if defined(MIMXRT1011_SERIES)
+    kFlexSpiSerialClk_75MHz  = 4,
+    kFlexSpiSerialClk_80MHz  = 5,
+    kFlexSpiSerialClk_100MHz = 6,
+    kFlexSpiSerialClk_120MHz = 7,
+    kFlexSpiSerialClk_133MHz = 8,
+#elif defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES)
+    kFlexSpiSerialClk_75MHz  = 4,
+    kFlexSpiSerialClk_80MHz  = 5,
+    kFlexSpiSerialClk_100MHz = 6,
+    kFlexSpiSerialClk_133MHz = 7,
+#elif defined(MIMXRT1052_SERIES)
     kFlexSpiSerialClk_75MHz  = 4,
     kFlexSpiSerialClk_80MHz  = 5,
     kFlexSpiSerialClk_100MHz = 6,
     kFlexSpiSerialClk_133MHz = 7,
     kFlexSpiSerialClk_166MHz = 8,
+#elif defined(MIMXRT1042_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES)
+    kFlexSpiSerialClk_75MHz  = 4,
+    kFlexSpiSerialClk_80MHz  = 5,
+    kFlexSpiSerialClk_100MHz = 6,
+    kFlexSpiSerialClk_120MHz = 7,
+    kFlexSpiSerialClk_133MHz = 8,
+    kFlexSpiSerialClk_166MHz = 9,
+#elif defined(MIMXRT1166_cm4_SERIES) || defined(MIMXRT1166_cm7_SERIES) || \
+      defined(MIMXRT1176_cm4_SERIES) || defined(MIMXRT1176_cm7_SERIES)
+    kFlexSpiSerialClk_80MHz  = 4,
+    kFlexSpiSerialClk_100MHz = 5,
+    kFlexSpiSerialClk_120MHz = 6,
+    kFlexSpiSerialClk_133MHz = 7,
+    kFlexSpiSerialClk_166MHz = 8,
+    kFlexSpiSerialClk_200MHz = 9,
+#endif
 } flexspi_serial_clk_freq_t;
 
 //!@brief FlexSPI clock configuration type
@@ -249,13 +278,15 @@ typedef struct _flexspi_nor_config
     uint32_t sectorSize;            //!< Sector size of Serial NOR
     uint8_t ipcmdSerialClkFreq;     //!< Clock frequency for IP command
     uint8_t isUniformBlockSize;     //!< Sector/Block size is the same
-    uint8_t reserved0[2];           //!< Reserved for future use
+    uint8_t isDataOrderSwapped;     //!< The data order is swapped in OPI DDR mode (only i.MXRT11*)
+    uint8_t reserved0;              //!< Reserved for future use
     uint8_t serialNorType;          //!< Serial NOR Flash type: 0/1/2/3
     uint8_t needExitNoCmdMode;      //!< Need to exit NoCmd mode before other IP command
     uint8_t halfClkForNonReadCmd;   //!< Half the Serial Clock for non-read command: true/false
     uint8_t needRestoreNoCmdMode;   //!< Need to Restore NoCmd mode after IP commmand execution
     uint32_t blockSize;             //!< Block size
-    uint32_t reserve2[11];          //!< Reserved for future use
+    uint32_t FlashStateCtx;         //!< Flash State Context after being configured (only i.MXRT11*)
+    uint32_t reserve2[10];          //!< Reserved for future use
 } flexspi_nor_config_t;
 
 #ifdef __cplusplus
@@ -265,4 +296,4 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-#endif /* __EVKBIMXRT1050_FLEXSPI_NOR_CONFIG__ */
+#endif /* __FSL_FLEXSPI_NOR_CONFIG__ */
