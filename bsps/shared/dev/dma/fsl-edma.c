@@ -40,7 +40,7 @@
 #include <bsp/fatal.h>
 #include <bsp/irq.h>
 #ifdef LIBBSP_ARM_IMXRT_BSP_H
-#include <MIMXRT1052.h>
+#include <fsl_device_registers.h>
 #endif
 
 #define EDMA_CHANNELS_PER_GROUP 32U
