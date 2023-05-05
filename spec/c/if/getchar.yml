@@ -9,8 +9,6 @@ links:
   uid: stdio
 - role: interface-ingroup
   uid: group
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: getchar
 references:
 - identifier: https://en.cppreference.com/w/c/io/getchar
