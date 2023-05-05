@@ -103,7 +103,7 @@ pre-conditions:
        */
     text: |
       While the interrupt vector associated with the
-      ${../if/vector-enable:/params[0]/name} parameter is enabled.
+      ${../if/vector-enable:/params[0]/name} parameter is disabled.
   test-epilogue: null
   test-prologue: null
 - name: CanEnable
