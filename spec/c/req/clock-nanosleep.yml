@@ -188,7 +188,7 @@ pre-conditions:
     test-code: |
       ctx->rqtp = NULL;
     text: |
-      While the ``rqtp parameter is equal to ${../if/null:/name}.
+      While the ``rqtp`` parameter is equal to ${../if/null:/name}.
   test-epilogue: null
   test-prologue: null
 - name: RQTpNSec
@@ -254,7 +254,7 @@ pre-conditions:
     test-code: |
       ctx->rmtp = NULL;
     text: |
-      While the ``rmtp parameter is equal to ${../if/null:/name}.
+      While the ``rmtp`` parameter is equal to ${../if/null:/name}.
   test-epilogue: null
   test-prologue: null
 rationale: null
