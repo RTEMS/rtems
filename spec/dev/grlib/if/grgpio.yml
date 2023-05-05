@@ -131,7 +131,7 @@ register-block-size: 128
 registers:
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'DATA'
@@ -145,7 +145,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DATA'
@@ -159,7 +159,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DIR'
@@ -173,7 +173,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MASK'
@@ -187,7 +187,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'POL'
@@ -201,7 +201,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EDGE'
@@ -215,7 +215,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BYPASS'
@@ -229,31 +229,31 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'PU'
       start: 18
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'IER'
       start: 17
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'IFL'
       start: 16
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'IRQGEN'
       start: 8
       width: 5
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NLINES'
@@ -267,25 +267,25 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQMAP_I_0'
       start: 24
       width: 5
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQMAP_I_1'
       start: 16
       width: 5
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQMAP_I_2'
       start: 8
       width: 5
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQMAP_I_3'
@@ -299,7 +299,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'IMASK'
@@ -313,7 +313,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'IFLAG'
@@ -327,7 +327,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IPEN'
@@ -341,7 +341,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PULSE'
@@ -355,7 +355,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'DATA'
@@ -369,7 +369,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'DATA'
@@ -383,7 +383,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'DATA'

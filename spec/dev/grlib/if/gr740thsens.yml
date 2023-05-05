@@ -36,37 +36,37 @@ register-block-size: 12
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DIV'
       start: 16
       width: 10
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ALEN'
       start: 8
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PDN'
       start: 7
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DCORRECT'
       start: 2
       width: 5
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SRSTN'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CLKEN'
@@ -80,43 +80,43 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MAX'
       start: 24
       width: 7
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MIN'
       start: 16
       width: 7
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SCLK'
       start: 15
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WE'
       start: 10
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'UPD'
       start: 9
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'ALACT'
       start: 8
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'DATA'
@@ -130,7 +130,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'THRES'

@@ -90,13 +90,13 @@ register-block-size: 49156
 registers:
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'VEND'
       start: 16
       width: 16
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'PROD'
@@ -110,19 +110,19 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'MAJOR'
       start: 24
       width: 8
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'MINOR'
       start: 16
       width: 8
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'PATCH'
@@ -136,7 +136,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'STATUS'
@@ -150,7 +150,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'ACTIVE'
@@ -164,7 +164,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RA'
@@ -178,7 +178,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RA'
@@ -192,7 +192,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RA'
@@ -206,7 +206,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w, cas]
+    - properties: [r, w, cas]
       brief: null
       description: null
       name: 'DID'
@@ -220,13 +220,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'VEND'
       start: 16
       width: 16
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'PROD'
@@ -240,7 +240,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'USN'
@@ -254,7 +254,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'LEN'
@@ -268,7 +268,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'LEN'
@@ -282,7 +282,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'PC'
@@ -296,7 +296,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'AC'

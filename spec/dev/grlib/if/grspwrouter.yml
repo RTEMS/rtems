@@ -181,79 +181,79 @@ register-block-size: 188
 registers:
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RA'
       start: 31
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RX'
       start: 30
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RC'
       start: 29
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NCH'
       start: 27
       width: 2
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'DI'
       start: 24
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ME'
       start: 23
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RD'
       start: 17
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RE'
       start: 16
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TQ'
       start: 8
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RS'
       start: 6
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PM'
       start: 5
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TI'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IE'
@@ -267,43 +267,43 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NIRQ'
       start: 28
       width: 3
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NRXD'
       start: 26
       width: 2
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NTXD'
       start: 24
       width: 2
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'ME'
       start: 12
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'EE'
       start: 8
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'IA'
       start: 7
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'TO'
@@ -317,13 +317,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DEFMASK'
       start: 8
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DEFADDR'
@@ -337,7 +337,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DESTKEY'
@@ -351,25 +351,25 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TCMSK'
       start: 24
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TCVAL'
       start: 16
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TCTRL'
       start: 6
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TIMECNT'
@@ -383,139 +383,139 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'INTNUM'
       start: 26
       width: 6
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'EP'
       start: 23
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'TR'
       start: 22
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IE'
       start: 21
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IT'
       start: 20
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'RP'
       start: 19
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'TP'
       start: 18
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SP'
       start: 15
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SA'
       start: 14
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EN'
       start: 13
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'NS'
       start: 12
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RD'
       start: 11
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RX'
       start: 10
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'AT'
       start: 9
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'RA'
       start: 8
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'TA'
       start: 7
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'PR'
       start: 6
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'PS'
       start: 5
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'AI'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RI'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TI'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RE'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TE'
@@ -529,7 +529,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RXMAXLEN'
@@ -543,13 +543,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DESCBASEADDR'
       start: 10
       width: 22
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DESCSEL'
@@ -563,13 +563,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DESCBASEADDR'
       start: 10
       width: 22
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DESCSEL'
@@ -583,13 +583,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MASK'
       start: 8
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ADDR'
@@ -603,73 +603,73 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'INTNUM'
       start: 26
       width: 6
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EE'
       start: 24
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IA'
       start: 23
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TQ'
       start: 20
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'AQ'
       start: 19
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IQ'
       start: 18
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'AA'
       start: 15
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'AT'
       start: 14
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IT'
       start: 13
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'ID'
       start: 7
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'II'
       start: 6
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TXINT'
@@ -683,7 +683,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'RXIRQ'
@@ -697,7 +697,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'RXACK'
@@ -711,7 +711,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'INTTO'
@@ -725,7 +725,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'INTTO'
@@ -739,7 +739,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MASK'
@@ -753,7 +753,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MASK'

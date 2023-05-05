@@ -66,7 +66,7 @@ register-block-size: 36
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'FTMEN'
@@ -80,7 +80,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ALTEN'
@@ -94,19 +94,19 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SMEM'
       start: 17
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DMEM'
       start: 16
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SPWOE'
@@ -120,25 +120,25 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SWTAG'
       start: 27
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SPWPLLCFG'
       start: 18
       width: 9
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MEMPLLCFG'
       start: 9
       width: 9
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SYSPLLCFG'
@@ -152,7 +152,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RECONF'
@@ -166,25 +166,25 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SWTAG'
       start: 27
       width: 2
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SPWPLLCFG'
       start: 18
       width: 9
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'MEMPLLCFG'
       start: 9
       width: 9
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SYSPLLCFG'
@@ -198,61 +198,61 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S9'
       start: 18
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S8'
       start: 16
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S7'
       start: 14
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S6'
       start: 12
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S5'
       start: 10
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S4'
       start: 8
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S3'
       start: 6
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S2'
       start: 4
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S1'
       start: 2
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S0'
@@ -266,61 +266,61 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S19'
       start: 18
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S18'
       start: 16
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S17'
       start: 14
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S16'
       start: 12
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S15'
       start: 10
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S14'
       start: 8
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S13'
       start: 6
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S12'
       start: 4
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S11'
       start: 2
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S10'
@@ -334,13 +334,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PERMANENT'
       start: 16
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'REVOCABLE'

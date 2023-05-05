@@ -41,7 +41,7 @@ register-block-size: 16
 registers:
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TCNT'
@@ -55,31 +55,31 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TSTAMP'
       start: 27
       width: 5
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'S1'
       start: 26
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'S2'
       start: 25
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'KS'
       start: 5
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TSISEL'
@@ -93,7 +93,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TASSERTION'
@@ -107,7 +107,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TACKNOWLEDGE'

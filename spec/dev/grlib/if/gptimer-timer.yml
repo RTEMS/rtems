@@ -41,7 +41,7 @@ register-block-size: 16
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TCVAL'
@@ -55,7 +55,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TRLDVAL'
@@ -69,55 +69,55 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WS'
       start: 8
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WN'
       start: 7
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'DH'
       start: 6
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CH'
       start: 5
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'IP'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IE'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'LD'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RS'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EN'
@@ -131,7 +131,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'LTCV'

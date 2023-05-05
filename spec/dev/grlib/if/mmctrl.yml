@@ -56,61 +56,61 @@ register-block-size: 52
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RF'
       start: 31
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TRP'
       start: 30
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TRFC'
       start: 27
       width: 3
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TC'
       start: 26
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BANKSZ'
       start: 23
       width: 3
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'COLSZ'
       start: 21
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'COMMAND'
       start: 18
       width: 3
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'MS'
       start: 16
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: '64'
       start: 15
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RFLOAD'
@@ -124,25 +124,25 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CE'
       start: 30
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EN2T'
       start: 15
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DCS'
       start: 14
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BPARK'
@@ -156,61 +156,61 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'ERRLOC'
       start: 20
       width: 12
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'DDERR'
       start: 19
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'DWIDTH'
       start: 16
       width: 3
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'BEID'
       start: 12
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DATAMUX'
       start: 5
       width: 3
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CEN'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BAUPD'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BAEN'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CODE'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EDEN'
@@ -224,7 +224,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'FTDA'
@@ -238,25 +238,25 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CBD'
       start: 24
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CBC'
       start: 16
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CBB'
       start: 8
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CBA'
@@ -270,7 +270,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DATA'
@@ -284,7 +284,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'FTBND_31_3'

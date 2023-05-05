@@ -31,55 +31,55 @@ register-block-size: 8
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ME'
       start: 13
       width: 1
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'FW'
       start: 12
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CF'
       start: 11
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'AF'
       start: 10
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CE'
       start: 9
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'NE'
       start: 8
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'HWRITE'
       start: 7
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'HMASTER'
       start: 3
       width: 4
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'HSIZE'
@@ -93,7 +93,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'HADDR'

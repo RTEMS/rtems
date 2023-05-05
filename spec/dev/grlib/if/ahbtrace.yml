@@ -61,55 +61,55 @@ register-block-size: 32
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DCNT'
       start: 16
       width: 7
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PF'
       start: 8
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'BW'
       start: 6
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RF'
       start: 5
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'AF'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'FR'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'FW'
       start: 2
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'DM'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EN'
@@ -123,7 +123,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'INDEX'
@@ -137,7 +137,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: []
+    - properties: []
       brief: null
       description: null
       name: 'TIMETAG'
@@ -151,13 +151,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SMASK_15_0'
       start: 16
       width: 16
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MMASK_15_0'
@@ -171,7 +171,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BADDR_31_2'
@@ -185,19 +185,19 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BMASK_31_2'
       start: 2
       width: 30
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'LD'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ST'

@@ -41,79 +41,79 @@ register-block-size: 28
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PBRDY'
       start: 30
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ABRDY'
       start: 29
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IOBUSW'
       start: 27
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IBRDY'
       start: 26
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BEXCN'
       start: 25
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IO_WAITSTATES'
       start: 20
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IOEN'
       start: 19
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'R'
       start: 18
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ROMBANKSZ'
       start: 14
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PWEN'
       start: 11
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PROM_WIDTH'
       start: 8
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PROM_WRITE_WS'
       start: 4
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PROM_READ_WS'
@@ -127,31 +127,31 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: []
+    - properties: []
       brief: null
       description: null
       name: 'ME'
       start: 27
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WB'
       start: 11
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RB'
       start: 10
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PE'
       start: 8
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TCB'
@@ -165,13 +165,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IOHWS'
       start: 23
       width: 7
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ROMHWS'
@@ -185,13 +185,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BRDYNCNT'
       start: 16
       width: 16
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BRDYNRLD'

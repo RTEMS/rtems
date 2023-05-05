@@ -116,67 +116,67 @@ register-block-size: 800
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SCALER'
       start: 24
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PS1'
       start: 20
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PS2'
       start: 16
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RSJ'
       start: 12
       width: 3
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BPR'
       start: 8
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SAM'
       start: 5
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SILNT'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SELECT'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ENABLE1'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ENABLE0'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ABORT'
@@ -190,55 +190,55 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TXCHANNELS'
       start: 28
       width: 4
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RXCHANNELS'
       start: 24
       width: 4
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TXERRCNT'
       start: 16
       width: 8
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RXERRCNT'
       start: 8
       width: 8
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'ACTIVE'
       start: 4
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'AHBERR'
       start: 3
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'OR'
       start: 2
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'OFF'
       start: 1
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'PASS'
@@ -252,13 +252,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RESET'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ENABLE'
@@ -272,7 +272,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MASK'
@@ -286,7 +286,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SYNC'
@@ -300,19 +300,19 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SINGLE'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ONGOING'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ENABLE'
@@ -326,7 +326,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ADDR'
@@ -340,7 +340,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SIZE'
@@ -354,7 +354,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WRITE'
@@ -368,7 +368,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'READ'
@@ -382,7 +382,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQ'
@@ -396,13 +396,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'ONGOING'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ENABLE'
@@ -416,7 +416,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ADDR'
@@ -430,7 +430,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SIZE'
@@ -444,7 +444,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WRITE'
@@ -458,7 +458,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'READ'
@@ -472,7 +472,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQ'
@@ -486,7 +486,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'AM'
@@ -500,7 +500,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'AC'

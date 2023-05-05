@@ -56,7 +56,7 @@ register-block-size: 388
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CVAL'
@@ -70,85 +70,85 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NCPU'
       start: 28
       width: 4
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NCNT'
       start: 23
       width: 5
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'MC'
       start: 22
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'IA'
       start: 21
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'DS'
       start: 20
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'EE'
       start: 19
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'AE'
       start: 18
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EL'
       start: 17
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CD'
       start: 16
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SU'
       start: 14
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CL'
       start: 13
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EN'
       start: 12
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EVENT_ID'
       start: 4
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CPU_AHBM'
@@ -162,7 +162,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CSVAL'
@@ -176,7 +176,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TSTAMP'

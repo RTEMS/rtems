@@ -181,49 +181,49 @@ register-block-size: 228
 registers:
 - bits:
   - default:
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'BMTOF'
       start: 17
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'BMD'
       start: 16
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'RTTE'
       start: 10
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'RTD'
       start: 9
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'RTEV'
       start: 8
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'BCWK'
       start: 2
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'BCD'
       start: 1
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'BCEV'
@@ -237,49 +237,49 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BMTOE'
       start: 17
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BMDE'
       start: 16
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RTTEE'
       start: 10
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RTDE'
       start: 9
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RTEVE'
       start: 8
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BCWKE'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BCDE'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BCEVE'
@@ -293,37 +293,37 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'MOD'
       start: 31
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CVER'
       start: 12
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'XKEYS'
       start: 11
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'ENDIAN'
       start: 9
       width: 2
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SCLK'
       start: 8
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'CCFREQ'
@@ -337,43 +337,43 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'BCSUP'
       start: 31
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'BCFEAT'
       start: 28
       width: 3
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BCCHK'
       start: 16
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'ASADL'
       start: 11
       width: 5
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'ASST'
       start: 8
       width: 2
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SCADL'
       start: 3
       width: 5
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SCST'
@@ -387,49 +387,49 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'BCKEY'
       start: 16
       width: 16
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'ASSTP'
       start: 9
       width: 1
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'ASSRT'
       start: 8
       width: 1
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'CLRT'
       start: 4
       width: 1
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'SETT'
       start: 3
       width: 1
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'SCSTP'
       start: 2
       width: 1
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'SCSUS'
       start: 1
       width: 1
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'SCSRT'
@@ -443,7 +443,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'POINTER'
@@ -457,7 +457,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'POINTER'
@@ -471,7 +471,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SCTM'
@@ -485,7 +485,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'POSITION'
@@ -499,7 +499,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SWAP'
@@ -513,7 +513,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'POINTER'
@@ -527,7 +527,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'POINTER'
@@ -541,31 +541,31 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RTSUP'
       start: 31
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'ACT'
       start: 3
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SHDA'
       start: 2
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SHDB'
       start: 1
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RUN'
@@ -579,43 +579,43 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'RTKEY'
       start: 16
       width: 16
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SYS'
       start: 15
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SYDS'
       start: 14
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BRS'
       start: 13
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RTEIS'
       start: 6
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RTADDR'
       start: 1
       width: 5
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RTEN'
@@ -629,37 +629,37 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TFDE'
       start: 8
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SREQ'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BUSY'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SSF'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DBCA'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TFLG'
@@ -673,13 +673,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BITW'
       start: 16
       width: 16
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'VECW'
@@ -693,13 +693,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SYTM'
       start: 16
       width: 16
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SYD'
@@ -713,7 +713,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SATB'
@@ -727,91 +727,91 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RRTB'
       start: 28
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RRT'
       start: 26
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ITFB'
       start: 24
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ITF'
       start: 22
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ISTB'
       start: 20
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IST'
       start: 18
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DBC'
       start: 16
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TBW'
       start: 14
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TVW'
       start: 12
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TSB'
       start: 10
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TS'
       start: 8
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SDB'
       start: 6
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SD'
       start: 4
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SB'
       start: 2
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S'
@@ -825,13 +825,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TRES'
       start: 16
       width: 16
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TVAL'
@@ -845,7 +845,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MASK'
@@ -859,7 +859,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'POINTER'
@@ -873,7 +873,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'POINTER'
@@ -887,13 +887,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'BMSUP'
       start: 31
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'KEYEN'
@@ -907,43 +907,43 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BMKEY'
       start: 16
       width: 16
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WRSTP'
       start: 5
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EXST'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IMCL'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'UDWL'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MANL'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BMEN'
@@ -957,7 +957,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MASK'
@@ -971,7 +971,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MASK'
@@ -985,115 +985,115 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'STSB'
       start: 18
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'STS'
       start: 17
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TLC'
       start: 16
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TSW'
       start: 15
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RRTB'
       start: 14
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RRT'
       start: 13
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ITFB'
       start: 12
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ITF'
       start: 11
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ISTB'
       start: 10
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IST'
       start: 9
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DBC'
       start: 8
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TBW'
       start: 7
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TVW'
       start: 6
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TSB'
       start: 5
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TS'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SDB'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SD'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SB'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'S'
@@ -1107,7 +1107,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'START'
@@ -1121,7 +1121,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'END'
@@ -1135,7 +1135,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'POSITION'
@@ -1149,13 +1149,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TRES'
       start: 24
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TVAL'

@@ -104,7 +104,7 @@ register-block-size: 1024
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IL_15_1'
@@ -118,13 +118,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EIP_31_16'
       start: 16
       width: 16
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IP_15_1'
@@ -138,7 +138,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IF_15_1'
@@ -152,13 +152,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'EIC_31_16'
       start: 16
       width: 16
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'IC_15_1'
@@ -172,31 +172,31 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NCPU'
       start: 28
       width: 4
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'BA'
       start: 27
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'ER'
       start: 26
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'EIRQ'
       start: 16
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'STATUS'
@@ -210,7 +210,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BM15_1'
@@ -224,7 +224,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ERRMODE_3_0'
@@ -238,19 +238,19 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NWDOG'
       start: 27
       width: 5
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WDOGIRQ'
       start: 16
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WDOGMSK'
@@ -264,19 +264,19 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NCTRL'
       start: 28
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ICF'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'L'
@@ -290,25 +290,25 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ICSEL0'
       start: 28
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ICSEL1'
       start: 24
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ICSEL2'
       start: 20
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ICSEL3'
@@ -322,13 +322,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EIM_31_16'
       start: 16
       width: 16
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IM15_1'
@@ -342,13 +342,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'FC_15_1'
       start: 17
       width: 15
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IF15_1'
@@ -362,7 +362,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'EID_4_0'
@@ -376,13 +376,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'BOOTADDR_31_3'
       start: 3
       width: 29
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'AS'
@@ -396,25 +396,25 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQMAP_4_N_0'
       start: 24
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQMAP_4_N_1'
       start: 16
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQMAP_4_N_2'
       start: 8
       width: 8
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQMAP_4_N_3'

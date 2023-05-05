@@ -66,61 +66,61 @@ register-block-size: 64
 registers:
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SSSZ'
       start: 24
       width: 8
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'MAXWLEN'
       start: 20
       width: 4
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TWEN'
       start: 19
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'AMODE'
       start: 18
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'ASELA'
       start: 17
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SSEN'
       start: 16
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'FDEPTH'
       start: 8
       width: 8
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SR'
       start: 7
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'FT'
       start: 5
       width: 2
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'REV'
@@ -134,115 +134,115 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'LOOP'
       start: 30
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CPOL'
       start: 29
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CPHA'
       start: 28
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DIV_16'
       start: 27
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'REV'
       start: 26
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MX'
       start: 25
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EN'
       start: 24
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'LEN'
       start: 20
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PM'
       start: 16
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TWEN'
       start: 15
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ASEL'
       start: 14
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'FACT'
       start: 13
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'OD'
       start: 12
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CG'
       start: 7
       width: 5
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ASELDEL'
       start: 5
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TAC'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TTO'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IGSEL'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CITE'
@@ -256,43 +256,43 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TIP'
       start: 31
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'LT'
       start: 14
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'OV'
       start: 12
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'UN'
       start: 11
       width: 1
-    - access: [r, w1c]
+    - properties: [r, w1c]
       brief: null
       description: null
       name: 'MME'
       start: 10
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NE'
       start: 9
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'NF'
@@ -306,43 +306,43 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TIPE'
       start: 31
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'LTE'
       start: 14
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'OVE'
       start: 12
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'UNE'
       start: 11
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MMEE'
       start: 10
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'NEEE'
       start: 9
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'NFE'
@@ -356,7 +356,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'LST'
@@ -370,7 +370,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'TDATA'
@@ -384,7 +384,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'RDATA'
@@ -398,7 +398,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SLVSEL'
@@ -412,7 +412,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ASLVSEL'

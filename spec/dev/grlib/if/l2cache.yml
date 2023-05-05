@@ -91,73 +91,73 @@ register-block-size: 132
 registers:
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EN'
       start: 31
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EDAC'
       start: 30
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'REPL'
       start: 28
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BBS'
       start: 16
       width: 3
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'INDEX_WAY'
       start: 12
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'LOCK'
       start: 8
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'HPRHB'
       start: 5
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'HPB'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'UC'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'HC'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WP'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'HP'
@@ -171,43 +171,43 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'LS'
       start: 24
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'AT'
       start: 23
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'MP'
       start: 22
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'MTRR'
       start: 16
       width: 6
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'BBUS_W'
       start: 13
       width: 3
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'WAY_SIZE'
       start: 2
       width: 11
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'WAY'
@@ -221,19 +221,19 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ADDR'
       start: 5
       width: 27
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'DI'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'FMODE'
@@ -247,55 +247,55 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'INDEX'
       start: 16
       width: 16
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TAG'
       start: 10
       width: 22
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'FL'
       start: 9
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'VB'
       start: 8
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DB'
       start: 7
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WAY'
       start: 4
       width: 2
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'DI'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WF'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'FMODE'
@@ -309,103 +309,103 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'AHB_MASTER_INDEX'
       start: 28
       width: 4
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'SCRUB'
       start: 27
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TYPE'
       start: 24
       width: 3
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'TAG_DATA'
       start: 23
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'COR_UCOR'
       start: 22
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'MULTI'
       start: 21
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'VALID'
       start: 20
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DISERESP'
       start: 19
       width: 1
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'CORRECTABLE_ERROR_COUNTER'
       start: 16
       width: 3
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'IRQ_PENDING'
       start: 12
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IRQ_MASK'
       start: 8
       width: 4
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SELECT_CB'
       start: 6
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SELECT_TCB'
       start: 4
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'XCB'
       start: 3
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'RCB'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'COMP'
       start: 1
       width: 1
-    - access: [w]
+    - properties: [w]
       brief: null
       description: null
       name: 'RST'
@@ -419,7 +419,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r]
+    - properties: [r]
       brief: null
       description: null
       name: 'EADDR'
@@ -433,7 +433,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TCB'
@@ -447,7 +447,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'CB'
@@ -461,25 +461,25 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'INDEX'
       start: 16
       width: 16
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WAY'
       start: 2
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'PEN'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EN'
@@ -493,7 +493,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DEL'
@@ -507,13 +507,13 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ADDR'
       start: 2
       width: 30
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'INJ'
@@ -527,67 +527,67 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DSC'
       start: 14
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SH'
       start: 13
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SPLITQ'
       start: 10
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'NHM'
       start: 9
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'BERR'
       start: 8
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'OAPM'
       start: 7
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'FLINE'
       start: 6
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DBPF'
       start: 5
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: '128WF'
       start: 4
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DBPWS'
       start: 2
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'SPLIT'
@@ -601,19 +601,19 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'EDI'
       start: 10
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'TER'
       start: 9
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'IMD'
@@ -627,31 +627,31 @@ registers:
   width: 32
 - bits:
   - default:
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ADDR'
       start: 18
       width: 14
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'ACC'
       start: 16
       width: 2
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'MASK'
       start: 2
       width: 14
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'WP'
       start: 1
       width: 1
-    - access: [r, w]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'AC'
