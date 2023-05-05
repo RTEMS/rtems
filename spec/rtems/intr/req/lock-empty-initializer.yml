@@ -11,6 +11,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  When the macro is used, the macro shall expand to an empty structure
+  The ${../if/lock-initializer:/name} macro shall expand to an empty structure
   initializer.
 type: requirement

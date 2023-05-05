@@ -10,7 +10,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  When the ${../if/lock-reference:/name} is used, it shall expand to an object
-  reference definition which is initialized to the object reference specified
-  by the ${../if/lock-reference:/params[1]/name} parameter.
+  The ${../if/lock-reference:/name} macro shall expand to an object reference
+  definition which is initialized to the object reference specified by the
+  ${../if/lock-reference:/params[1]/name} parameter.
 type: requirement

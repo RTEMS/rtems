@@ -10,7 +10,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  When the ${../if/lock-define:/name} is used, it shall expand to an object
-  definition with a specifier specified by the
-  ${../if/lock-define:/params[0]/name} parameter.
+  The ${../if/lock-define:/name} macro shall expand to an object definition
+  with a specifier specified by the ${../if/lock-define:/params[0]/name}
+  parameter.
 type: requirement

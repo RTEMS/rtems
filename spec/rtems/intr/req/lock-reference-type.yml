@@ -10,6 +10,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  When the ${../if/lock-reference:/name} is used, it shall expand to an object
-  reference definition with a type of a pointer to ${../if/lock:/name}.
+  The ${../if/lock-reference:/name} macro shall expand to an object reference
+  definition with a type of a pointer to ${../if/lock:/name}.
 type: requirement

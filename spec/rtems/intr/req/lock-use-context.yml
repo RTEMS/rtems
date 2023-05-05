@@ -13,6 +13,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  When the macro is used, the macro shall expand to code block which marks the
-  second parameter as used.
+  The macro shall expand to a code block which marks the second parameter as
+  used.
 type: requirement

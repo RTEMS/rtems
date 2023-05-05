@@ -10,6 +10,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  When the ${../if/lock-member:/name} is used, it shall expand to structure or
-  union member declaration with a type of ${../if/lock:/name}.
+  The ${../if/lock-member:/name} macro shall expand to structure or union
+  member declaration with a type of ${../if/lock:/name}.
 type: requirement

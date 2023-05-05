@@ -10,6 +10,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The value of macro ${../if/default:/name} shall be equal to the value
-  of expression ``${../if/fifo:/name} | ${../if/local:/name}``.
+  The value of ${../if/default:/name} shall be equal to the value of the
+  expression ${../if/fifo:/name} bitwise or ${../if/local:/name}.
 type: requirement
