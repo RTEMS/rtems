@@ -15,5 +15,5 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/sys-lock-mutex-release:/name} directive shall surrender the mutex
-  as specified by ${/score/mtx/req/surrender}.
+  as specified by ${/score/mtx/req/surrender:/spec}.
 type: requirement

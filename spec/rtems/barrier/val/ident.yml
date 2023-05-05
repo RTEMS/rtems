@@ -8,7 +8,7 @@ links:
 test-actions:
 - action-brief: |
     Run the generic object identification tests for Classic API partition class
-    objects defined by ${../../req/ident-local}.
+    objects defined by ${../../req/ident-local:/spec}.
   action-code: |
     rtems_status_code sc;
     rtems_id          id_local_object;

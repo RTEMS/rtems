@@ -11,5 +11,5 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/system-receive:/name} directive shall receive events from the
-  system event set of a task as specified by ${send-receive}.
+  system event set of a task as specified by ${send-receive:/spec}.
 type: requirement

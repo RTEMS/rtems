@@ -11,5 +11,5 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/ident:/name} directive shall identify an Classic API
-  barrier class object by its name as specified by ${../../req/ident-local}.
+  barrier class object by its name as specified by ${../../req/ident-local:/spec}.
 type: requirement

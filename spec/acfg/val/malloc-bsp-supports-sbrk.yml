@@ -12,6 +12,6 @@ references:
   type: file
 text: |
   Inspection of the referenced ${/glossary/sourcecode:/term} file showed that
-  the ${../req/malloc-bsp-supports-sbrk} requirement is implemented as
+  the ${../req/malloc-bsp-supports-sbrk:/spec} requirement is implemented as
   specified.
 type: validation

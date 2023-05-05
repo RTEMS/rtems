@@ -15,5 +15,5 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/sys-lock-mutex-recursive-acquire-timed:/name} directive shall
-  seize the mutex as specified by ${/score/mtx/req/seize-wait}.
+  seize the mutex as specified by ${/score/mtx/req/seize-wait:/spec}.
 type: requirement

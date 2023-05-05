@@ -8,7 +8,7 @@ links:
 test-actions:
 - action-brief: |
     Run the generic object identification tests for Classic API user extension
-    class objects defined by ${../../req/ident-local}.
+    class objects defined by ${../../req/ident-local:/spec}.
   action-code: |
     static const rtems_extensions_table table;
     rtems_status_code                   sc;

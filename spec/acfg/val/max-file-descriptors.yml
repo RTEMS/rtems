@@ -23,6 +23,6 @@ text: |
   defined to zero, otherwise a table with an entry count specified by the
   option is statically allocated.  For a not pre-qualified only build of RTEMS,
   a file descriptor table with zero entries is provided by an RTEMS library.
-  This shows that the ${../req/max-file-descriptors} requirement is implemented
+  This shows that the ${../req/max-file-descriptors:/spec} requirement is implemented
   as specified.
 type: validation

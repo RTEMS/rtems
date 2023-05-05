@@ -21,21 +21,21 @@ post-conditions:
       ${/score/tq/req/timeout:/test-run}( &ctx->tq_ctx );
     text: |
       The semaphore obtain timeout actions shall be done as specified by
-      ${/score/tq/req/timeout}.
+      ${/score/tq/req/timeout:/spec}.
   - name: TimeoutMrsP
     test-code: |
       ctx->tq_ctx.wait = TQ_WAIT_TIMED;
       ${/score/tq/req/timeout-mrsp:/test-run}( &ctx->tq_ctx );
     text: |
       The semaphore obtain timeout actions shall be done as specified by
-      ${/score/tq/req/timeout-mrsp}.
+      ${/score/tq/req/timeout-mrsp:/spec}.
   - name: TimeoutPriorityInherit
     test-code: |
       ctx->tq_ctx.wait = TQ_WAIT_FOREVER;
       ${/score/tq/req/timeout-priority-inherit:/test-run}( &ctx->tq_ctx );
     text: |
       The semaphore obtain timeout actions shall be done as specified by
-      ${/score/tq/req/timeout-priority-inherit}.
+      ${/score/tq/req/timeout-priority-inherit:/spec}.
   test-epilogue: null
   test-prologue: null
 pre-conditions:

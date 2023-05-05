@@ -11,5 +11,5 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/send:/name} directive shall send events to the application event
-  set of a task as specified by ${send-receive}.
+  set of a task as specified by ${send-receive:/spec}.
 type: requirement

@@ -262,10 +262,10 @@ test-actions:
   - brief: |
       Check the configured ${/acfg/if/task-stack-allocator:/name} hook.  Using
       the test stack allocator validates also
-      ${/acfg/if/init-task-construct-storage-size}, since the
+      ${/acfg/if/init-task-construct-storage-size:/spec}, since the
       test_task_stack_allocate() allocate handler only supports
       ${/acfg/if/max-tasks:/name} minus one stacks and the validation test for
-      ${/rtems/task/req/create-errors} creates for some pre-condition variants
+      ${/rtems/task/req/create-errors:/spec} creates for some pre-condition variants
       all tasks until ${/rtems/status/if/too-many:/name} is returned.  In
       addition, test_task_stack_allocate() checks that the allocation size is
       greater than or equal to TEST_MINIMUM_STACK_SIZE which validates

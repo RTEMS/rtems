@@ -49,7 +49,7 @@ pre-conditions:
       ${../../object/if/who-am-i:/name} or ${../if/ident:/params[2]/name}
       parameter is equal to ${/c/if/null:/name},
       the behaviour of ${../if/ident:/name} shall be specified by
-      ${../../req/ident}.
+      ${../../req/ident:/spec}.
   test-epilogue: null
   test-prologue: null
 rationale: null

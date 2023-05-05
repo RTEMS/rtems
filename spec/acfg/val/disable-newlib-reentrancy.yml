@@ -29,6 +29,6 @@ text: |
   the ``__getreent()`` function is not provided by RTEMS.  If
   ${../if/disable-newlib-reentrancy:/name} is defined, then the Newlib
   reentrancy structure is not contained in the ${/glossary/tcb:/term}.  This
-  shows that the ${../req/disable-newlib-reentrancy} requirement is implemented
+  shows that the ${../req/disable-newlib-reentrancy:/spec} requirement is implemented
   as specified.
 type: validation

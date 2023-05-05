@@ -8,7 +8,7 @@ links:
 test-actions:
 - action-brief: |
     Run the generic object identification tests for Classic API partition class
-    objects defined by ${../../req/ident}.
+    objects defined by ${../../req/ident:/spec}.
   action-code: |
     static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) long area[32];
     rtems_status_code                                      sc;

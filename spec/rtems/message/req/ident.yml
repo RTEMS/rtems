@@ -11,5 +11,5 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/ident:/name} directive shall identify an Classic API
-  message queue class object by its name as specified by ${../../req/ident}.
+  message queue class object by its name as specified by ${../../req/ident:/spec}.
 type: requirement

@@ -11,5 +11,5 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/ident:/name} directive shall identify an Classic API
-  timer class object by its name as specified by ${../../req/ident-local}.
+  timer class object by its name as specified by ${../../req/ident-local:/spec}.
 type: requirement

@@ -20,5 +20,5 @@ text: |
   pre-qualified feature set, if ${../if/appl-disable-filesystem:/name} is not
   defined.  For the pre-qualified only build of RTEMS, this would lead to an
   unresolved reference linker error.  This shows that the
-  ${../req/appl-disable-filesystem} requirement is implemented as specified.
+  ${../req/appl-disable-filesystem:/spec} requirement is implemented as specified.
 type: validation

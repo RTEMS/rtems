@@ -34,25 +34,25 @@ post-conditions:
       ${/score/tq/req/flush-fifo:/test-run}( &ctx->tq_ctx, false );
     text: |
       The calling task shall flush the semaphore as specified by
-      ${/score/tq/req/flush-fifo}.
+      ${/score/tq/req/flush-fifo:/spec}.
   - name: FlushPriority
     test-code: |
       ${/score/tq/req/flush-priority:/test-run}( &ctx->tq_ctx, true );
     text: |
       The calling task shall flush the semaphore as specified by
-      ${/score/tq/req/flush-priority}.
+      ${/score/tq/req/flush-priority:/spec}.
   - name: FlushPriorityCeiling
     test-code: |
       ${/score/tq/req/flush-priority:/test-run}( &ctx->tq_ctx, false );
     text: |
       The calling task shall flush the semaphore as specified by
-      ${/score/tq/req/flush-priority}.
+      ${/score/tq/req/flush-priority:/spec}.
   - name: FlushPriorityInherit
     test-code: |
       ${/score/tq/req/flush-priority-inherit:/test-run}( &ctx->tq_ctx );
     text: |
       The calling task shall flush the semaphore as specified by
-      ${/score/tq/req/flush-priority-inherit}.
+      ${/score/tq/req/flush-priority-inherit:/spec}.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;

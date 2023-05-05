@@ -33,7 +33,7 @@ post-conditions:
       ${/score/sem/req/seize-try:/test-run}( &ctx->tq_sem_ctx );
     text: |
       The calling task shall try to seize the semaphore as specified by
-      ${/score/sem/req/seize-try}.
+      ${/score/sem/req/seize-try:/spec}.
   - name: SemSeizeWait
     test-code: |
       ctx->tq_sem_ctx.get_count = TQSemGetCountClassic;
@@ -41,7 +41,7 @@ post-conditions:
       ${/score/sem/req/seize-wait:/test-run}( &ctx->tq_sem_ctx );
     text: |
       The calling task shall wait to seize the semaphore as specified by
-      ${/score/sem/req/seize-wait}.
+      ${/score/sem/req/seize-wait:/spec}.
   - name: MtxSeizeTry
     test-code: |
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
@@ -51,7 +51,7 @@ post-conditions:
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall try to seize the mutex as specified by
-      ${/score/mtx/req/seize-try} where an enqueue blocks, a recursive seize is
+      ${/score/mtx/req/seize-try:/spec} where an enqueue blocks, a recursive seize is
       allowed, and no locking protocol is used.
   - name: MtxSeizeWait
     test-code: |
@@ -62,7 +62,7 @@ post-conditions:
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall wait to seize the mutex as specified by
-      ${/score/mtx/req/seize-wait} where an enqueue blocks, a recursive seize
+      ${/score/mtx/req/seize-wait:/spec} where an enqueue blocks, a recursive seize
       is allowed, and no locking protocol is used.
   - name: InheritMtxSeizeTry
     test-code: |
@@ -73,7 +73,7 @@ post-conditions:
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall try to seize the mutex as specified by
-      ${/score/mtx/req/seize-try} where an enqueue blocks, a recursive seize is
+      ${/score/mtx/req/seize-try:/spec} where an enqueue blocks, a recursive seize is
       allowed, and a priority inheritance protocol is used.
   - name: InheritMtxSeizeWait
     test-code: |
@@ -84,7 +84,7 @@ post-conditions:
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall wait to seize the mutex as specified by
-      ${/score/mtx/req/seize-wait} where an enqueue blocks, a recursive seize
+      ${/score/mtx/req/seize-wait:/spec} where an enqueue blocks, a recursive seize
       is allowed, and a priority inheritance protocol is used.
   - name: CeilingMtxSeizeTry
     test-code: |
@@ -95,7 +95,7 @@ post-conditions:
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall try to seize the mutex as specified by
-      ${/score/mtx/req/seize-try} where an enqueue blocks, a recursive seize is
+      ${/score/mtx/req/seize-try:/spec} where an enqueue blocks, a recursive seize is
       allowed, and a priority ceiling is used.
   - name: CeilingMtxSeizeWait
     test-code: |
@@ -106,7 +106,7 @@ post-conditions:
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall wait to seize the mutex as specified by
-      ${/score/mtx/req/seize-wait} where an enqueue blocks, a recursive seize
+      ${/score/mtx/req/seize-wait:/spec} where an enqueue blocks, a recursive seize
       is allowed, and a priority ceiling is used.
   - name: MrsPMtxSeizeTry
     test-code: |
@@ -117,7 +117,7 @@ post-conditions:
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall try to seize the mutex as specified by
-      ${/score/mtx/req/seize-try} where an enqueue is sticky, a recursive seize
+      ${/score/mtx/req/seize-try:/spec} where an enqueue is sticky, a recursive seize
       returns an error status, and a priority ceiling is used.
   - name: MrsPMtxSeizeWait
     test-code: |
@@ -128,7 +128,7 @@ post-conditions:
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall wait to seize the mutex as specified by
-      ${/score/mtx/req/seize-wait} where an enqueue is sticky, a recursive
+      ${/score/mtx/req/seize-wait:/spec} where an enqueue is sticky, a recursive
       seize returns an error status, and a priority ceiling is used.
   test-epilogue: null
   test-prologue: |

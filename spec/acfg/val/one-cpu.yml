@@ -14,7 +14,7 @@ test-actions:
   - brief: |
       Check that the ${/acfg/if/max-priority:/name} application configuration
       option resulted in the expected system setting using
-      ${/rtems/task/if/maximum-priority}.
+      ${/rtems/task/if/maximum-priority:/spec}.
     code: |
       T_eq_u32( RTEMS_MAXIMUM_PRIORITY, 127 );
     links:
