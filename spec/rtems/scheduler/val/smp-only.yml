@@ -66,9 +66,10 @@ test-actions:
 - action-brief: |
     Call ${../if/ident:/name} for each configured scheduler.
   action-code: |
-    rtems_status_code sc;
-    rtems_id          id[ 4 ];
-    rtems_id          id_by_cpu;
+    rtems_status_code   sc;
+    rtems_id            id[ 4 ];
+    rtems_id            id_by_cpu;
+    rtems_task_priority priority;
 
     sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &id[ 0 ]);
     T_step_rsc_success( ${.:/step}, sc );
@@ -121,6 +122,15 @@ test-actions:
     - role: validation
       uid: /acfg/req/scheduler-assign-scheduler
   - brief: |
+      Check that scheduler B has the maximum priority of the EDF SMP scheduler.
+    code: |
+      sc = rtems_scheduler_get_maximum_priority( id_by_cpu, &priority );
+      T_step_rsc_success( ${.:/step}, sc );
+      T_step_eq_u32( ${.:/step}, priority, (uint32_t) INT_MAX );
+    links:
+    - role: validation
+      uid: /acfg/req/scheduler-control-edf-smp
+  - brief: |
       Check that processor 2 has scheduler C assigned if it is present.
     code: |
       sc = rtems_scheduler_ident_by_processor( 2, &id_by_cpu );
@@ -147,6 +157,7 @@ test-context-support: null
 test-description: null
 test-header: null
 test-includes:
+- limits.h
 - rtems.h
 test-local-includes:
 - ts-config.h

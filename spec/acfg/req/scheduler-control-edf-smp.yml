@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/scheduler-control-edf-smp
+- role: requirement-refinement
+  uid: group
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/scheduler-control-edf-smp:/name} macro shall define a scheduler
+  control data structure for the ${/doc/if/scheduler-smp-edf:/name} scheduler
+  with the specified name.
+type: requirement

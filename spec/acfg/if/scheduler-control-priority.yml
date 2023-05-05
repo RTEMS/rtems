@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: RTEMS_SMP
+enabled-by: true
 index-entries: []
 interface-type: unspecified-macro
 links:
@@ -9,6 +9,6 @@ links:
   uid: header-scheduler
 - role: interface-ingroup
   uid: group-schedgeneral
-name: RTEMS_SCHEDULER_ASSIGN
+name: RTEMS_SCHEDULER_PRIORITY
 references: []
 type: interface

@@ -18,6 +18,8 @@ test-actions:
     links:
     - role: validation
       uid: ../req/scheduler-table-entries
+    - role: validation
+      uid: ../req/scheduler-control-priority
   links: []
 test-brief: |
   Tests the effect of ${/acfg/if/scheduler-table-entries:/name} the application

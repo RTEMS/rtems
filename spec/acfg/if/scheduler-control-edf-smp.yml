@@ -9,6 +9,6 @@ links:
   uid: header-scheduler
 - role: interface-ingroup
   uid: group-schedgeneral
-name: RTEMS_SCHEDULER_ASSIGN
+name: RTEMS_SCHEDULER_EDF_SMP
 references: []
 type: interface
