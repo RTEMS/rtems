@@ -5,6 +5,8 @@ enabled-by: true
 links:
 - role: interface-function
   uid: ../if/init
+- role: interface-function
+  uid: ../if/header-confdefs
 - role: requirement-refinement
   uid: group
 functional-type: function
