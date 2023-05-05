@@ -255,7 +255,7 @@ test-actions:
   checks:
   - brief: |
       Check ${../if/default:/name} equals
-      ``${../if/fifo:/name} | ${../if/local:/name}``.
+      ${../if/fifo:/name} | ${../if/local:/name}.
     code: |
       T_step_eq_int(
         ${.:/step},
