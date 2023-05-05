@@ -3,7 +3,23 @@ brief: |
   This structure represents time in a binary fraction format.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-definition: []
+definition:
+- default:
+    brief: |
+      This member contains the seconds.
+    definition: ${time_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: sec
+  variants: []
+- default:
+    brief: |
+      This member contains two to the power of 64 fractions of a second.
+    definition: ${uint64_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: frac
+  variants: []
 definition-kind: struct-only
 description: null
 enabled-by: true
