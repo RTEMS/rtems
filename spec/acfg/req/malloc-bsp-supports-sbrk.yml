@@ -3,8 +3,6 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links:
-- role: interface-function
-  uid: /bsp/if/acfg-malloc-supports-sbrk
 - role: requirement-refinement
   uid: init
 functional-type: function
