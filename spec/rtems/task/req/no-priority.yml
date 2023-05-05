@@ -14,7 +14,7 @@ rationale: |
 references: []
 requirement-type: functional
 text: |
-  The ${../if/no-priority} constant shall expand to a constant
+  The ${../if/no-priority:/name} constant shall expand to a constant
   expression which evaluates to the value of
   ${../if/current-priority:/name}.
 type: requirement

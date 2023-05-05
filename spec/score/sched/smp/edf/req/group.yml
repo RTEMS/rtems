@@ -12,5 +12,5 @@ references: []
 requirement-type: non-functional
 text: |
   The super core shall have a component containing the ${/glossary/edf:/term}
-  ${/glossary/smp:/term} ${/glossary/scheduler} implementation.
+  ${/glossary/smp:/term} ${/glossary/scheduler:/term} implementation.
 type: requirement

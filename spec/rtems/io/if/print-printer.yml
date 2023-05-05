@@ -4,7 +4,7 @@ brief: |
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: int ( *${.:/name} )( void *, const char *, ${/c/if/va_list} )
+  default: int ( *${.:/name} )( void *, const char *, ${/c/if/va_list:/name} )
   variants: []
 description: null
 enabled-by: true
