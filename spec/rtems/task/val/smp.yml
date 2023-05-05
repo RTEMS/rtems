@@ -14,7 +14,7 @@ test-actions:
   - brief: |
       Move runner from scheduler A to B.
     code: |
-      T_step_eq_u32( ${step}, GetSelfScheduler(), SCHEDULER_A_ID );
+      T_step_eq_u32( ${.:/step}, GetSelfScheduler(), SCHEDULER_A_ID );
       SetSelfScheduler( SCHEDULER_B_ID, 1 );
     links: []
   - brief: |
@@ -29,9 +29,9 @@ test-actions:
         RTEMS_DEFAULT_ATTRIBUTES,
         &id
       );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
-      T_step_eq_u32( ${step}, GetScheduler( id ), SCHEDULER_B_ID );
+      T_step_eq_u32( ${.:/step}, GetScheduler( id ), SCHEDULER_B_ID );
       DeleteTask( id );
     links:
     - role: validation
@@ -41,9 +41,9 @@ test-actions:
       is scheduler B.
     code: |
       sc = rtems_task_construct( &DefaultTaskConfig, &id );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
-      T_step_eq_u32( ${step}, GetScheduler( id ), SCHEDULER_B_ID );
+      T_step_eq_u32( ${.:/step}, GetScheduler( id ), SCHEDULER_B_ID );
       DeleteTask( id );
     links:
     - role: validation

@@ -16,7 +16,7 @@ test-actions:
   - brief: |
       Check that the returned value is equal to the prepared value.
     code: |
-      T_step_eq_u8( ${step}, val_8, 0x81 );
+      T_step_eq_u8( ${.:/step}, val_8, 0x81 );
     links:
     - role: validation
       uid: ../req/load-08
@@ -33,7 +33,7 @@ test-actions:
   - brief: |
       Check that the returned value is equal to the prepared value.
     code: |
-      T_step_eq_u16( ${step}, val_16, 0x8001 );
+      T_step_eq_u16( ${.:/step}, val_16, 0x8001 );
     links:
     - role: validation
       uid: ../req/load-16
@@ -50,7 +50,7 @@ test-actions:
   - brief: |
       Check that the returned value is equal to the prepared value.
     code: |
-      T_step_eq_u32( ${step}, val_32, 0x80000001 );
+      T_step_eq_u32( ${.:/step}, val_32, 0x80000001 );
     links:
     - role: validation
       uid: ../req/load-32
@@ -67,7 +67,7 @@ test-actions:
   - brief: |
       Check that the returned value is equal to the prepared value.
     code: |
-      T_step_eq_u64( ${step}, val_64, 0x8000000000000001 );
+      T_step_eq_u64( ${.:/step}, val_64, 0x8000000000000001 );
     links:
     - role: validation
       uid: ../req/load-64
@@ -82,7 +82,7 @@ test-actions:
   - brief: |
       Check that the value of the object is equal to the stored value.
     code: |
-      T_step_eq_u8( ${step}, reg_8, 0x81 );
+      T_step_eq_u8( ${.:/step}, reg_8, 0x81 );
     links:
     - role: validation
       uid: ../req/store-08
@@ -97,7 +97,7 @@ test-actions:
   - brief: |
       Check that the value of the object is equal to the stored value.
     code: |
-      T_step_eq_u16( ${step}, reg_16, 0x8001 );
+      T_step_eq_u16( ${.:/step}, reg_16, 0x8001 );
     links:
     - role: validation
       uid: ../req/store-16
@@ -112,7 +112,7 @@ test-actions:
   - brief: |
       Check that the value of the object is equal to the stored value.
     code: |
-      T_step_eq_u32( ${step}, reg_32, 0x80000001 );
+      T_step_eq_u32( ${.:/step}, reg_32, 0x80000001 );
     links:
     - role: validation
       uid: ../req/store-32
@@ -127,7 +127,7 @@ test-actions:
   - brief: |
       Check that the value of the object is equal to the stored value.
     code: |
-      T_step_eq_u64( ${step}, reg_64, 0x8000000000000001 );
+      T_step_eq_u64( ${.:/step}, reg_64, 0x8000000000000001 );
     links:
     - role: validation
       uid: ../req/store-64
@@ -147,7 +147,7 @@ test-actions:
   - brief: |
       Check that the transmitter FIFO empty flag was set by ApbuartIORelax().
     code: |
-      T_step_eq_u32( ${step}, regs.status, APBUART_STATUS_TE );
+      T_step_eq_u32( ${.:/step}, regs.status, APBUART_STATUS_TE );
     links:
     - role: validation
       uid: ../req/apbuart-outbyte-wait
@@ -157,7 +157,7 @@ test-actions:
       Check that the data register was written by
       ${../if/apbuart-outbyte-polled:/name}.
     code: |
-      T_step_eq_u32( ${step}, regs.data, 0xff );
+      T_step_eq_u32( ${.:/step}, regs.data, 0xff );
     links:
     - role: validation
       uid: ../req/apbuart-outbyte-polled

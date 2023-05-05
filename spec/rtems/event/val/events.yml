@@ -11,7 +11,7 @@ test-actions:
 
     for ( i = 0; i < 32; ++i ) {
       ${event-constant:/test-run}( events[ i ], i );
-      T_step( i ); /* ${steps/32} */
+      T_step( i ); /* ${.:/step:32} */
     }
   checks: []
   links: []
@@ -39,7 +39,7 @@ test-actions:
   - brief: |
       Check that the value is equal to RTEMS_ALL_EVENTS.
     code: |
-      T_step_eq_u32( ${step}, all, RTEMS_ALL_EVENTS );
+      T_step_eq_u32( ${.:/step}, all, RTEMS_ALL_EVENTS );
     links:
     - role: validation
       uid: ../req/all-events
@@ -52,13 +52,13 @@ test-actions:
   - brief: |
       Check that RTEMS_EVENT_ALL is equal to zero.
     code: |
-      T_step_eq_u32( ${step}, RTEMS_EVENT_ALL, 0 );
+      T_step_eq_u32( ${.:/step}, RTEMS_EVENT_ALL, 0 );
     links: []
   - brief: |
       Check that RTEMS_EVENT_ANY is a power of two.
     code: |
-      T_step_ne_u32( ${step}, RTEMS_EVENT_ANY, 0 );
-      T_step_eq_u32( ${step}, RTEMS_EVENT_ANY & ( RTEMS_EVENT_ANY - 1 ), 0 );
+      T_step_ne_u32( ${.:/step}, RTEMS_EVENT_ANY, 0 );
+      T_step_eq_u32( ${.:/step}, RTEMS_EVENT_ANY & ( RTEMS_EVENT_ANY - 1 ), 0 );
     links: []
   links: []
 test-brief: Tests the Event Manager API.

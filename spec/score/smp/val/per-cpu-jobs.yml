@@ -22,14 +22,14 @@ test-actions:
   - brief: |
       Check that the first job was processed firstly.
     code: |
-      T_step_eq_int( ${step}, counter_0, 1 );
+      T_step_eq_int( ${.:/step}, counter_0, 1 );
     links:
     - role: validation
       uid: ../req/per-cpu-jobs-order
   - brief: |
       Check that the second job was processed secondly.
     code: |
-      T_step_eq_int( ${step}, counter_1, 2 );
+      T_step_eq_int( ${.:/step}, counter_1, 2 );
     links:
     - role: validation
       uid: ../req/per-cpu-jobs-order

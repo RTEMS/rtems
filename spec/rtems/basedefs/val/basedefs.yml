@@ -14,7 +14,7 @@ test-actions:
   - brief: |
       Check that ori_func() and alias_func() are the same function.
     code: |
-      T_step_eq_int( ${step}, alias_result, 16 );
+      T_step_eq_int( ${.:/step}, alias_result, 16 );
     links:
     - role: validation
       uid: ../req/alias-0
@@ -48,16 +48,16 @@ test-actions:
       Check that ${../if/align-down:/name} calculates the expected result
       and is side-effect free.
     code: |
-      T_step_eq_int( ${step}, align_down0_result, 0 );
-      T_step_eq_int( ${step}, align_down1_result, 0 );
-      T_step_eq_int( ${step}, align_down2_result, 0 );
-      T_step_eq_int( ${step}, align_down3_result, 2 );
-      T_step_eq_int( ${step}, align_down4_result, 2 );
-      T_step_eq_int( ${step}, align_down5_result, 4 );
-      T_step_eq_int( ${step}, align_down6_result, 4 );
-      T_step_eq_int( ${step}, align_down7_result, 240 );
-      T_step_eq_int( ${step}, align_down8_result, 256 );
-      T_step_eq_int( ${step}, align_down9_result, 256 );
+      T_step_eq_int( ${.:/step}, align_down0_result, 0 );
+      T_step_eq_int( ${.:/step}, align_down1_result, 0 );
+      T_step_eq_int( ${.:/step}, align_down2_result, 0 );
+      T_step_eq_int( ${.:/step}, align_down3_result, 2 );
+      T_step_eq_int( ${.:/step}, align_down4_result, 2 );
+      T_step_eq_int( ${.:/step}, align_down5_result, 4 );
+      T_step_eq_int( ${.:/step}, align_down6_result, 4 );
+      T_step_eq_int( ${.:/step}, align_down7_result, 240 );
+      T_step_eq_int( ${.:/step}, align_down8_result, 256 );
+      T_step_eq_int( ${.:/step}, align_down9_result, 256 );
     links:
     - role: validation
       uid: ../req/align-down-0
@@ -91,16 +91,16 @@ test-actions:
       Check that ${../if/align-up:/name} calculates the expected result
       and is side-effect free.
     code: |
-      T_step_eq_int( ${step}, align_up0_result, 0 );
-      T_step_eq_int( ${step}, align_up1_result, 0 );
-      T_step_eq_int( ${step}, align_up2_result, 2 );
-      T_step_eq_int( ${step}, align_up3_result, 2 );
-      T_step_eq_int( ${step}, align_up4_result, 4 );
-      T_step_eq_int( ${step}, align_up5_result, 4 );
-      T_step_eq_int( ${step}, align_up6_result, 6 );
-      T_step_eq_int( ${step}, align_up7_result, 256 );
-      T_step_eq_int( ${step}, align_up8_result, 256 );
-      T_step_eq_int( ${step}, align_up9_result, 272 );
+      T_step_eq_int( ${.:/step}, align_up0_result, 0 );
+      T_step_eq_int( ${.:/step}, align_up1_result, 0 );
+      T_step_eq_int( ${.:/step}, align_up2_result, 2 );
+      T_step_eq_int( ${.:/step}, align_up3_result, 2 );
+      T_step_eq_int( ${.:/step}, align_up4_result, 4 );
+      T_step_eq_int( ${.:/step}, align_up5_result, 4 );
+      T_step_eq_int( ${.:/step}, align_up6_result, 6 );
+      T_step_eq_int( ${.:/step}, align_up7_result, 256 );
+      T_step_eq_int( ${.:/step}, align_up8_result, 256 );
+      T_step_eq_int( ${.:/step}, align_up9_result, 272 );
     links:
     - role: validation
       uid: ../req/align-up-0
@@ -117,8 +117,8 @@ test-actions:
       Check that ${../if/aligned:/name} correctly aligns a variable on the stack
       and a structure member.
     code: |
-      T_step_eq_int( ${step}, ( ( uintptr_t ) &aligned_var ) % 8, 0 );
-      T_step_eq_int( ${step},
+      T_step_eq_int( ${.:/step}, ( ( uintptr_t ) &aligned_var ) % 8, 0 );
+      T_step_eq_int( ${.:/step},
         offsetof( aligned_member_struct, aligned_member ) % 8, 0 );
     links:
     - role: validation
@@ -136,8 +136,8 @@ test-actions:
       Check that the ${../if/alignof:/name} macro results in the alignment
       of the type.
     code: |
-      T_step_eq_sz( ${step}, alignof_char, 1 );
-      T_step_eq_sz( ${step}, alignof_long, alignof_long_array );
+      T_step_eq_sz( ${.:/step}, alignof_char, 1 );
+      T_step_eq_sz( ${.:/step}, alignof_long, alignof_long_array );
     links:
     - role: validation
       uid: ../req/alignof-0
@@ -145,7 +145,7 @@ test-actions:
       If the ${../if/alignof:/name} macro would evaluate its argument,
       it could not figure out how much menory to reserve for it.
     code: |
-      T_step_eq_sz( ${step}, alignof_long, alignof_not_eval_array );
+      T_step_eq_sz( ${.:/step}, alignof_long, alignof_not_eval_array );
     links:
     - role: validation
       uid: ../req/alignof-1
@@ -153,7 +153,7 @@ test-actions:
       If the ${../if/alignof:/name} macro would evaluate the size expression,
       the division by zero would cause an error.
     code: |
-      T_step_eq_sz( ${step}, alignof_long, alignof_not_eval_array );
+      T_step_eq_sz( ${.:/step}, alignof_long, alignof_not_eval_array );
     links:
     - role: validation
       uid: ../req/alignof-2
@@ -161,7 +161,7 @@ test-actions:
       Ensure the constant value of the ${../if/alignof:/name} macro is
       of type size_t.
     code: |
-      T_step_true( ${step},
+      T_step_true( ${.:/step},
         __builtin_types_compatible_p( __typeof__( RTEMS_ALIGNOF( char ) ),
         size_t ) );
     links:
@@ -182,11 +182,11 @@ test-actions:
       that it can be used on such a memory function and that the
       argument counting starts at 1.
     code: |
-      T_step_not_null( ${step}, alloc_align_ptr );
-      T_step_eq_int( ${step}, ( ( uintptr_t ) alloc_align_ptr ) % 64, 0 );
-      T_step_ge_uptr( ${step}, ( ( uintptr_t ) alloc_align_ptr ),
+      T_step_not_null( ${.:/step}, alloc_align_ptr );
+      T_step_eq_int( ${.:/step}, ( ( uintptr_t ) alloc_align_ptr ) % 64, 0 );
+      T_step_ge_uptr( ${.:/step}, ( ( uintptr_t ) alloc_align_ptr ),
         ( ( uintptr_t ) free_ptr ) );
-      T_step_lt_uptr( ${step}, ( ( uintptr_t ) alloc_align_ptr ),
+      T_step_lt_uptr( ${.:/step}, ( ( uintptr_t ) alloc_align_ptr ),
         ( ( uintptr_t ) free_ptr ) + 64 );
     links:
     - role: validation
@@ -205,7 +205,7 @@ test-actions:
       that it can be used on such a memory function and that the
       argument counting starts at 1.
     code: |
-      T_step_not_null( ${step}, alloc_size_ptr );
+      T_step_not_null( ${.:/step}, alloc_size_ptr );
     links:
     - role: validation
       uid: ../req/alloc-size-0
@@ -223,7 +223,7 @@ test-actions:
       that it can be used on such a memory function and that the
       argument counting starts at 1.
     code: |
-      T_step_not_null( ${step}, alloc_size_2_ptr );
+      T_step_not_null( ${.:/step}, alloc_size_2_ptr );
     links:
     - role: validation
       uid: ../req/alloc-size-2-0
@@ -239,8 +239,8 @@ test-actions:
   - brief: |
       Check that the calculated size of the arrays fit their definition.
     code: |
-      T_step_eq_sz( ${step}, array_size, 5 );
-      T_step_eq_sz( ${step}, array2_size, 12 );
+      T_step_eq_sz( ${.:/step}, array_size, 5 );
+      T_step_eq_sz( ${.:/step}, array2_size, 12 );
     links:
     - role: validation
       uid: ../req/array-size-0
@@ -267,7 +267,7 @@ test-actions:
        */
       _Pragma( "GCC diagnostic push" )
       _Pragma( "GCC diagnostic ignored \"-Wdeprecated-declarations\"" )
-      T_step_eq_int( ${step}, compiler_deprecated_attribute, 42 );
+      T_step_eq_int( ${.:/step}, compiler_deprecated_attribute, 42 );
       _Pragma( "GCC diagnostic pop" )
     links:
     - role: validation
@@ -316,7 +316,7 @@ test-actions:
       Check that ${../if/compiler-packed-attribute:/name} correctly aligns
       a structure member.
     code: |
-      T_step_eq_int( ${step}, compiler_packed_attribute_offset, 1 );
+      T_step_eq_int( ${.:/step}, compiler_packed_attribute_offset, 1 );
     links:
     - role: validation
       uid: ../req/compiler-packed-attribute-0
@@ -335,8 +335,8 @@ test-actions:
       It cannot be checked that the ${../if/compiler-pure-attribute:/name}
       macro has the desired effect. It is checked that such a macro exists.
     code: |
-      T_step_eq_int( ${step}, compiler_pure_attribute_result, 21 );
-      T_step_eq_int( ${step}, compiler_pure_attribute_result_2, 21 );
+      T_step_eq_int( ${.:/step}, compiler_pure_attribute_result, 21 );
+      T_step_eq_int( ${.:/step}, compiler_pure_attribute_result_2, 21 );
     links:
     - role: validation
       uid: ../req/compiler-pure-attribute-0
@@ -369,7 +369,7 @@ test-actions:
       Check that the two arguments of ${../if/concat:/name} are concatenated to a
       new token.
     code: |
-      T_step_eq_int( ${step}, concat0_result, 91 );
+      T_step_eq_int( ${.:/step}, concat0_result, 91 );
     links:
     - role: validation
       uid: ../req/concat-0
@@ -379,7 +379,7 @@ test-actions:
       Check that the result of the ${../if/concat:/name} expansion is subject to
       a further pre-processor substitution.
     code: |
-      T_step_eq_int( ${step}, concat1_result, 91 );
+      T_step_eq_int( ${.:/step}, concat1_result, 91 );
     links:
     - role: validation
       uid: ../req/concat-2
@@ -396,8 +396,8 @@ test-actions:
       It cannot be checked that the ${../if/const:/name}
       macro has the desired effect. It is checked that such a macro exists.
     code: |
-      T_step_eq_int( ${step}, const_result, 28 );
-      T_step_eq_int( ${step}, const_result_2, 28 );
+      T_step_eq_int( ${.:/step}, const_result, 28 );
+      T_step_eq_int( ${.:/step}, const_result_2, 28 );
     links:
     - role: validation
       uid: ../req/const-0
@@ -420,7 +420,7 @@ test-actions:
       Check that the ${../if/container-of:/name}
       macro evaluates to a pointer to container_of_struct_var.
     code: |
-      T_step_eq_ptr( ${step},
+      T_step_eq_ptr( ${.:/step},
         container_of_struct_adr, &container_of_struct_var );
     links:
     - role: validation
@@ -438,7 +438,7 @@ test-actions:
       basedefs_get_global_symbol() which is defined in a file
       different from the file in which the gobal symbol is defined.
     code: |
-      T_step_eq_int( ${step}, basedefs_get_global_symbol(), 0xabc );
+      T_step_eq_int( ${.:/step}, basedefs_get_global_symbol(), 0xabc );
     links:
     - role: validation
       uid: ../req/declare-global-symbol-0
@@ -454,10 +454,10 @@ test-actions:
       Check that the ${../if/deconst:/name} macro returns a pointer
       which allows to write into an otherwise const value.
     code: |
-      T_step_eq_int( ${step}, deconst_pointer[0], 52 );
-      T_step_eq_int( ${step}, deconst_pointer[1], 55 );
+      T_step_eq_int( ${.:/step}, deconst_pointer[0], 52 );
+      T_step_eq_int( ${.:/step}, deconst_pointer[1], 55 );
       deconst_pointer[1] = 13;
-      T_step_eq_int( ${step}, deconst_pointer[1], 13 );
+      T_step_eq_int( ${.:/step}, deconst_pointer[1], 13 );
     links:
     - role: validation
       uid: ../req/deconst-0
@@ -472,7 +472,7 @@ test-actions:
       Check that the ${../if/define-global-symbol:/name}
       macro defines a global symbol with the correct value.
     code: |
-      T_step_eq_int( ${step}, (uintptr_t) global_symbol, 0xabc );
+      T_step_eq_int( ${.:/step}, (uintptr_t) global_symbol, 0xabc );
     links:
     - role: validation
       uid: ../req/define-global-symbol-0
@@ -502,7 +502,7 @@ test-actions:
       deprecated function on the above line
       where the ``deprecated_func`` is used.
     code: |
-      T_step_eq_int( ${step}, deprecated_result, 15 );
+      T_step_eq_int( ${.:/step}, deprecated_result, 15 );
     links:
     - role: validation
       uid: ../req/deprecated-0
@@ -526,13 +526,13 @@ test-actions:
       Check that the ${../if/dequalify-depthx:/name} macro returns a pointer
       which allows to write into an otherwise const (volatile) value.
     code: |
-      T_step_eq_int( ${step}, dequalify_depthx_pointer[0], 52 );
-      T_step_eq_int( ${step}, dequalify_depthx_pointer[1], 55 );
+      T_step_eq_int( ${.:/step}, dequalify_depthx_pointer[0], 52 );
+      T_step_eq_int( ${.:/step}, dequalify_depthx_pointer[1], 55 );
       dequalify_depthx_pointer[0] = 13;
-      T_step_eq_int( ${step}, dequalify_depthx_pointer[0], 13 );
-      T_step_eq_char( ${step}, **dequalify_depthx_twice_pointer, 'a' );
+      T_step_eq_int( ${.:/step}, dequalify_depthx_pointer[0], 13 );
+      T_step_eq_char( ${.:/step}, **dequalify_depthx_twice_pointer, 'a' );
       **dequalify_depthx_twice_pointer = 'Z';
-      T_step_eq_char( ${step}, **dequalify_depthx_twice_pointer, 'Z' );
+      T_step_eq_char( ${.:/step}, **dequalify_depthx_twice_pointer, 'Z' );
     links:
     - role: validation
       uid: ../req/dequalify-depthx-0
@@ -548,10 +548,10 @@ test-actions:
       Check that the ${../if/dequalify:/name} macro returns a pointer
       which allows to write into an otherwise const volatile value.
     code: |
-      T_step_eq_int( ${step}, dequalify_pointer[0], 52 );
-      T_step_eq_int( ${step}, dequalify_pointer[1], 55 );
+      T_step_eq_int( ${.:/step}, dequalify_pointer[0], 52 );
+      T_step_eq_int( ${.:/step}, dequalify_pointer[1], 55 );
       dequalify_pointer[0] = 13;
-      T_step_eq_int( ${step}, dequalify_pointer[0], 13 );
+      T_step_eq_int( ${.:/step}, dequalify_pointer[0], 13 );
     links:
     - role: validation
       uid: ../req/dequalify-0
@@ -567,10 +567,10 @@ test-actions:
       Check that the ${../if/devolatile:/name} macro returns a pointer
       which allows to write into an otherwise volatile value.
     code: |
-      T_step_eq_int( ${step}, devolatile_pointer[0], 52 );
-      T_step_eq_int( ${step}, devolatile_pointer[1], 55 );
+      T_step_eq_int( ${.:/step}, devolatile_pointer[0], 52 );
+      T_step_eq_int( ${.:/step}, devolatile_pointer[1], 55 );
       devolatile_pointer[1] = 13;
-      T_step_eq_int( ${step}, devolatile_pointer[1], 13 );
+      T_step_eq_int( ${.:/step}, devolatile_pointer[1], 13 );
     links:
     - role: validation
       uid: ../req/devolatile-0
@@ -585,7 +585,7 @@ test-actions:
       Check that the argument of ${../if/expand:/name} is expanded and
       returned.
     code: |
-      T_step_eq_int( ${step}, expand_result, 82 );
+      T_step_eq_int( ${.:/step}, expand_result, 82 );
     links:
     - role: validation
       uid: ../req/expand-0
@@ -599,7 +599,7 @@ test-actions:
   - brief: |
       Check that of ${../if/false:/name} is substituted by 0.
     code: |
-      T_step_eq_str( ${step}, false_result, "0" );
+      T_step_eq_str( ${.:/step}, false_result, "0" );
     links:
     - role: validation
       uid: ../req/false-0
@@ -646,16 +646,16 @@ test-actions:
       Check that of ${../if/have-member-same-type:/name} returns 0 and 1
       depending on whether these types are compatible.
     code: |
-      T_step_eq_int( ${step}, same_type_result_0, 1 );
-      T_step_eq_int( ${step}, same_type_result_1, 0 );
-      T_step_eq_int( ${step}, same_type_result_2, 0 );
-      T_step_eq_int( ${step}, same_type_result_3, 1 );
-      T_step_eq_int( ${step}, same_type_result_4, 1 );
-      T_step_eq_int( ${step}, same_type_result_5, 1 );
-      T_step_eq_int( ${step}, same_type_result_6, 1 );
-      T_step_eq_int( ${step}, same_type_result_7, 0 );
-      T_step_eq_int( ${step}, same_type_result_8, 0 );
-      T_step_eq_int( ${step}, same_type_result_9, 1 );
+      T_step_eq_int( ${.:/step}, same_type_result_0, 1 );
+      T_step_eq_int( ${.:/step}, same_type_result_1, 0 );
+      T_step_eq_int( ${.:/step}, same_type_result_2, 0 );
+      T_step_eq_int( ${.:/step}, same_type_result_3, 1 );
+      T_step_eq_int( ${.:/step}, same_type_result_4, 1 );
+      T_step_eq_int( ${.:/step}, same_type_result_5, 1 );
+      T_step_eq_int( ${.:/step}, same_type_result_6, 1 );
+      T_step_eq_int( ${.:/step}, same_type_result_7, 0 );
+      T_step_eq_int( ${.:/step}, same_type_result_8, 0 );
+      T_step_eq_int( ${.:/step}, same_type_result_9, 1 );
     links:
     - role: validation
       uid: ../req/have-member-same-type-0
@@ -665,7 +665,7 @@ test-actions:
     inline_routine_func() at the beginning of this file. Obtain the text
     the macro ${../if/inline-routine:/name} produces.
   action-code: |
-    const int inline_routine_step = ${step};
+    const int inline_routine_step = ${.:/step};
     int inline_routine_result;
     char *inline_routine_text;
     inline_routine_result = inline_routine_func( 3 );
@@ -682,7 +682,7 @@ test-actions:
         T_step_eq_str( inline_routine_step,
           inline_routine_text, "static __inline__" );
       }
-      T_step_eq_int( ${step}, inline_routine_result, 8 );
+      T_step_eq_int( ${.:/step}, inline_routine_result, 8 );
     links:
     - role: validation
       uid: ../req/inline-routine-0
@@ -708,8 +708,8 @@ test-actions:
       that it can be used on such a memory function and that it produces
       the correct code.
     code: |
-      T_step_not_null( ${step}, malloclike_ptr );
-      T_step_eq_str( ${step}, malloclike_text, "__attribute__((__malloc__))" );
+      T_step_not_null( ${.:/step}, malloclike_ptr );
+      T_step_eq_str( ${.:/step}, malloclike_text, "__attribute__((__malloc__))" );
     links:
     - role: validation
       uid: ../req/malloclike-0
@@ -734,8 +734,8 @@ test-actions:
       that it can be used on such a function and that it produces
       the correct code.
     code: |
-      T_step_eq_int( ${step}, no_inline_result, 75 );
-      T_step_eq_str( ${step}, no_inline_text, "__attribute__((__noinline__))" );
+      T_step_eq_int( ${.:/step}, no_inline_result, 75 );
+      T_step_eq_str( ${.:/step}, no_inline_text, "__attribute__((__noinline__))" );
     links:
     - role: validation
       uid: ../req/no-inline-0
@@ -765,7 +765,7 @@ test-actions:
       macro has the desired effect. Yet, the check confirms that such a
       macro exists and can be used.
     code: |
-      T_step_not_null( ${step}, &noinit_variable );
+      T_step_not_null( ${.:/step}, &noinit_variable );
     links:
     - role: validation
       uid: ../req/noinit-0
@@ -781,7 +781,7 @@ test-actions:
       macro has the desired effect. Yet, the check confirms that such a
       macro exists and can be used.
     code: |
-      T_step_eq_int( ${step}, obfuscate_variable, 66 );
+      T_step_eq_int( ${.:/step}, obfuscate_variable, 66 );
     links:
     - role: validation
       uid: ../req/obfuscate-variable-0
@@ -816,22 +816,22 @@ test-actions:
   - brief: |
       Check that ${../if/packed:/name} correctly aligns a structure member.
     code: |
-      T_step_eq_int( ${step}, packed_offset, 1 );
+      T_step_eq_int( ${.:/step}, packed_offset, 1 );
     links:
     - role: validation
       uid: ../req/packed-0
   - brief: |
       Check that ${../if/packed:/name} correctly aligns all structure members.
     code: |
-      T_step_eq_int( ${step}, packed_full_i_offset, 1 );
-      T_step_eq_int( ${step}, packed_full_j_offset, 5 );
+      T_step_eq_int( ${.:/step}, packed_full_i_offset, 1 );
+      T_step_eq_int( ${.:/step}, packed_full_j_offset, 5 );
     links:
     - role: validation
       uid: ../req/packed-1
   - brief: |
       Check that ${../if/packed:/name} correctly enforces a minimal enum type.
     code: |
-      T_step_eq_int( ${step}, packed_enum_size, 1 );
+      T_step_eq_int( ${.:/step}, packed_enum_size, 1 );
     links:
     - role: validation
       uid: ../req/packed-2
@@ -846,7 +846,7 @@ test-actions:
       macro has the desired effect. Yet, the check confirms that such a
       macro exists and can be used.
     code: |
-      T_step_eq_int( ${step}, RTEMS_PREDICT_FALSE( PREDICT_FALSE 1 ), 0 );
+      T_step_eq_int( ${.:/step}, RTEMS_PREDICT_FALSE( PREDICT_FALSE 1 ), 0 );
     links:
     - role: validation
       uid: ../req/predict-false-0
@@ -861,7 +861,7 @@ test-actions:
       macro has the desired effect. Yet, the check confirms that such a
       macro exists and can be used.
     code: |
-      T_step_eq_int( ${step}, RTEMS_PREDICT_TRUE( 6 - 5 ), 1 );
+      T_step_eq_int( ${.:/step}, RTEMS_PREDICT_TRUE( 6 - 5 ), 1 );
     links:
     - role: validation
       uid: ../req/predict-true-0
@@ -884,7 +884,7 @@ test-actions:
       exists and that it can be used on such a printf-like function and that
       the argument numbers are correct.
     code: |
-      T_step_eq_int( ${step}, printflike_result, 23 );
+      T_step_eq_int( ${.:/step}, printflike_result, 23 );
     links:
     - role: validation
       uid: ../req/printflike-0
@@ -903,8 +903,8 @@ test-actions:
       It cannot be checked that the ${../if/pure:/name}
       macro has the desired effect. It is checked that such a macro exists.
     code: |
-      T_step_eq_int( ${step}, pure_result, 21 );
-      T_step_eq_int( ${step}, pure_result_2, 21 );
+      T_step_eq_int( ${.:/step}, pure_result, 21 );
+      T_step_eq_int( ${.:/step}, pure_result_2, 21 );
     links:
     - role: validation
       uid: ../req/pure-0
@@ -926,7 +926,7 @@ test-actions:
       The check confirms that a ${../if/return-address:/name} macro exists
       and that it produces the correct code.
     code: |
-      T_step_eq_str( ${step},
+      T_step_eq_str( ${.:/step},
         return_address_text, "__builtin_return_address(0)" );
     links:
     - role: validation
@@ -944,8 +944,8 @@ test-actions:
       macro has the desired effect. Yet, the check confirms that such a
       macro exists and can be used.
     code: |
-      T_step_eq_int( ${step}, section_var, 28 );
-      T_step_eq_int( ${step}, section_result, 67 );
+      T_step_eq_int( ${.:/step}, section_var, 28 );
+      T_step_eq_int( ${.:/step}, section_result, 67 );
     links:
     - role: validation
       uid: ../req/section-0
@@ -1021,9 +1021,9 @@ test-actions:
       converts its arguments into a single string without applying
       pre-processor substitutions on its arguments.
     code: |
-      T_step_eq_str( ${step}, string_var, "\\ STRING_PREFIX cat\"\"\n" );
-      T_step_eq_str( ${step}, string_empty_var, "" );
-      T_step_eq_str( ${step}, string_multi_args_var,
+      T_step_eq_str( ${.:/step}, string_var, "\\ STRING_PREFIX cat\"\"\n" );
+      T_step_eq_str( ${.:/step}, string_empty_var, "" );
+      T_step_eq_str( ${.:/step}, string_multi_args_var,
         "STRING_PREFIX, \"abc\", DEF" );
     links:
     - role: validation
@@ -1038,7 +1038,7 @@ test-actions:
       Check that the ${../if/symbol-name:/name} macro expands to the expected
       symbol name.
     code: |
-      T_step_eq_ptr( ${step}, &global_object, &address_of_global_object );
+      T_step_eq_ptr( ${.:/step}, &global_object, &address_of_global_object );
     links:
     - role: validation
       uid: ../req/symbol-name
@@ -1054,7 +1054,7 @@ test-actions:
   - brief: |
       Check that of ${../if/true:/name} is substituted by 0.
     code: |
-      T_step_eq_str( ${step}, true_result, "1" );
+      T_step_eq_str( ${.:/step}, true_result, "1" );
     links:
     - role: validation
       uid: ../req/true-0
@@ -1084,17 +1084,17 @@ test-actions:
       The checks here are proforma. The macro is tested by the fact that
       the action will not compile if the macro returns a wrong result.
     code: |
-      T_step_eq_int( ${step}, type_refx_val, 7 );
-      T_step_eq_int( ${step}, type_refx_x_int, 8 );
-      T_step_eq_int( ${step}, type_refx_xx_int, 9 );
-      T_step_eq_int( ${step}, type_refx_xxx_int, 10 );
-      T_step_eq_int( ${step}, *type_refx_xxx_int_p, 7 );
-      T_step_eq_char( ${step}, type_refx_chr, 'c' );
-      T_step_eq_char( ${step}, type_refx_ax_char, 'd' );
-      T_step_eq_char( ${step}, type_refx_x_char, 'e' );
-      T_step_eq_char( ${step}, type_refx_char, 'f' );
-      T_step_eq_char( ${step}, type_refx_xx_char, 'g' );
-      T_step_eq_short( ${step}, *type_refx_xx_const_short_p, 333 );
+      T_step_eq_int( ${.:/step}, type_refx_val, 7 );
+      T_step_eq_int( ${.:/step}, type_refx_x_int, 8 );
+      T_step_eq_int( ${.:/step}, type_refx_xx_int, 9 );
+      T_step_eq_int( ${.:/step}, type_refx_xxx_int, 10 );
+      T_step_eq_int( ${.:/step}, *type_refx_xxx_int_p, 7 );
+      T_step_eq_char( ${.:/step}, type_refx_chr, 'c' );
+      T_step_eq_char( ${.:/step}, type_refx_ax_char, 'd' );
+      T_step_eq_char( ${.:/step}, type_refx_x_char, 'e' );
+      T_step_eq_char( ${.:/step}, type_refx_char, 'f' );
+      T_step_eq_char( ${.:/step}, type_refx_xx_char, 'g' );
+      T_step_eq_short( ${.:/step}, *type_refx_xx_const_short_p, 333 );
     links:
     - role: validation
       uid: ../req/typeof-refx-0
@@ -1162,7 +1162,7 @@ test-actions:
       macro has the desired effect. It is checked that such a macro exists
       and the compiler warning about the missing return statement is suppressed.
     code: |
-      T_step_eq_int( ${step}, unreachable_result, 2101 );
+      T_step_eq_int( ${.:/step}, unreachable_result, 2101 );
     links:
     - role: validation
       uid: ../req/unreachable-0
@@ -1207,7 +1207,7 @@ test-actions:
       about the disregarded result returned by the call
       to the ``warn_unused_func()`` function.
     code: |
-      T_step_eq_int( ${step}, warn_unused_result, 11 );
+      T_step_eq_int( ${.:/step}, warn_unused_result, 11 );
     links:
     - role: validation
       uid: ../req/warn-unused-result-0
@@ -1226,7 +1226,7 @@ test-actions:
       Check that ori_func() and basedefs_weak_alias_0_func() are the
       same function.
     code: |
-      T_step_eq_int( ${step}, weak_alias_0_result, 16 );
+      T_step_eq_int( ${.:/step}, weak_alias_0_result, 16 );
     links:
     - role: validation
       uid: ../req/weak-alias-0
@@ -1236,7 +1236,7 @@ test-actions:
       Check that ori_func() and basedefs_weak_alias_1_func() are not
       the same function.
     code: |
-      T_step_eq_int( ${step}, weak_alias_1_result, 56 );
+      T_step_eq_int( ${.:/step}, weak_alias_1_result, 56 );
     links:
     - role: validation
       uid: ../req/weak-alias-1
@@ -1256,8 +1256,8 @@ test-actions:
       exists no other symbols with the same name.
       Hence, the checks test that the weak symbols are used.
     code: |
-      T_step_eq_int( ${step}, basedefs_weak_0_var, 60 );
-      T_step_eq_int( ${step}, weak_0_result, 63 );
+      T_step_eq_int( ${.:/step}, basedefs_weak_0_var, 60 );
+      T_step_eq_int( ${.:/step}, weak_0_result, 63 );
     links:
     - role: validation
       uid: ../req/weak-0
@@ -1267,8 +1267,8 @@ test-actions:
       ``tc_basedefs_pendant.c``. Hence, the checks test that the strong
       variants are used.
     code: |
-      T_step_eq_int( ${step}, basedefs_weak_1_var, 62 );
-      T_step_eq_int( ${step}, weak_1_result, 65 );
+      T_step_eq_int( ${.:/step}, basedefs_weak_1_var, 62 );
+      T_step_eq_int( ${.:/step}, weak_1_result, 65 );
     links:
     - role: validation
       uid: ../req/weak-1
@@ -1290,7 +1290,7 @@ test-actions:
       Check that the two arguments of ${../if/xconcat:/name} are
       concatenated without inserting new characters.
     code: |
-      T_step_eq_int( ${step}, xconcat0_result, 91 );
+      T_step_eq_int( ${.:/step}, xconcat0_result, 91 );
     links:
     - role: validation
       uid: ../req/xconcat-0
@@ -1300,7 +1300,7 @@ test-actions:
       Check that the two arguments of ${../if/xconcat:/name} are
       substituted before they are concatenated.
     code: |
-      T_step_eq_int( ${step}, xconcat1_result, 91 );
+      T_step_eq_int( ${.:/step}, xconcat1_result, 91 );
     links:
     - role: validation
       uid: ../req/xconcat-2
@@ -1308,7 +1308,7 @@ test-actions:
       Check that the two arguments of ${../if/xconcat:/name} are can
       be the macro itself.
     code: |
-      T_step_eq_int( ${step}, xconcat2_result, 91 );
+      T_step_eq_int( ${.:/step}, xconcat2_result, 91 );
     links:
     - role: validation
       uid: ../req/xconcat-3
@@ -1316,7 +1316,7 @@ test-actions:
       Check that the result of the ${../if/xconcat:/name} expansion
       is subject to a further pre-processor substitution.
     code: |
-      T_step_eq_int( ${step}, xconcat3_result, 91 );
+      T_step_eq_int( ${.:/step}, xconcat3_result, 91 );
     links:
     - role: validation
       uid: ../req/xconcat-2
@@ -1337,9 +1337,9 @@ test-actions:
       pre-processor substitutions on its arguments and
       converts its arguments into a single string.
     code: |
-      T_step_eq_str( ${step}, xstring_var, "\\ str cat\"\"\n" );
-      T_step_eq_str( ${step}, xstring_empty_var, "" );
-      T_step_eq_str( ${step}, string_multi_args_var,
+      T_step_eq_str( ${.:/step}, xstring_var, "\\ str cat\"\"\n" );
+      T_step_eq_str( ${.:/step}, xstring_empty_var, "" );
+      T_step_eq_str( ${.:/step}, string_multi_args_var,
         "str, ABC, \"abc\", DEF" );
     links:
     - role: validation
@@ -1362,11 +1362,11 @@ test-actions:
       Checked that the ${../if/zero-length-array:/name} macro
       produces a structure similar to a structure with one element.
     code: |
-      T_step_eq_sz( ${step}, sizeof( zero_length_struct_0 ),
+      T_step_eq_sz( ${.:/step}, sizeof( zero_length_struct_0 ),
         sizeof( zero_length_struct_1 ) - sizeof( int ) );
-      T_step_eq_sz( ${step}, offsetof( zero_length_struct_0, chr ),
+      T_step_eq_sz( ${.:/step}, offsetof( zero_length_struct_0, chr ),
         offsetof( zero_length_struct_1, chr ) );
-      T_step_eq_sz( ${step}, offsetof( zero_length_struct_0, array ),
+      T_step_eq_sz( ${.:/step}, offsetof( zero_length_struct_0, array ),
         offsetof( zero_length_struct_1, array ) );
     links:
     - role: validation

@@ -15,7 +15,7 @@ test-actions:
       Check that the returned value is equal to the object identifier of the
       calling task.
     code: |
-      T_step_eq_u32( ${step}, id, 0x0a010001 );
+      T_step_eq_u32( ${.:/step}, id, 0x0a010001 );
     links: []
   links:
   - role: validation
@@ -47,8 +47,8 @@ test-actions:
       ${../if/iterate:/params[0]/name} and ${../if/iterate:/params[1]/name}.
       Secondly, this shows that the iteration was done over all tasks.
     code: |
-      T_step_eq_u32( ${step}, ctx.counter_all, task_count );
-      T_step_eq_u32( ${step}, ctx.counter_self, 1 );
+      T_step_eq_u32( ${.:/step}, ctx.counter_all, task_count );
+      T_step_eq_u32( ${.:/step}, ctx.counter_self, 1 );
     links:
     - role: validation
       uid: ../req/iterate-visit
@@ -59,9 +59,9 @@ test-actions:
       call.  Check that the object alloctor mutex was owned during the
       iteration.
     code: |
-      T_step_false( ${step}, ctx.owner_before );
-      T_step_true( ${step}, ctx.owner_in_visitor );
-      T_step_false( ${step}, ctx.owner_after );
+      T_step_false( ${.:/step}, ctx.owner_before );
+      T_step_true( ${.:/step}, ctx.owner_in_visitor );
+      T_step_false( ${.:/step}, ctx.owner_after );
     links:
     - role: validation
       uid: ../req/iterate-start
@@ -84,7 +84,7 @@ test-actions:
       Check that the all counter is equal to one.  This shows that the
       iteration stops when the visitor returns ${/c/if/true:/name}.
     code: |
-      T_step_eq_u32( ${step}, ctx.counter_all, 1 );
+      T_step_eq_u32( ${.:/step}, ctx.counter_all, 1 );
     links:
     - role: validation
       uid: ../req/iterate-stop
@@ -156,7 +156,7 @@ test-actions:
       called with a task identifier parameter of ${../if/self-define:/name}.
     code: |
       sc = rtems_task_is_suspended( RTEMS_SELF );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links:
     - role: validation
       uid: ../req/self-define
@@ -180,9 +180,9 @@ test-actions:
         RTEMS_DEFAULT_ATTRIBUTES,
         &id
       );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
-      T_step_eq_u32( ${step}, GetScheduler( id ), SCHEDULER_A_ID );
+      T_step_eq_u32( ${.:/step}, GetScheduler( id ), SCHEDULER_A_ID );
       DeleteTask( id );
     links:
     - role: validation
@@ -192,9 +192,9 @@ test-actions:
       is scheduler A.
     code: |
       sc = rtems_task_construct( &DefaultTaskConfig, &id );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
-      T_step_eq_u32( ${step}, GetScheduler( id ), SCHEDULER_A_ID );
+      T_step_eq_u32( ${.:/step}, GetScheduler( id ), SCHEDULER_A_ID );
       DeleteTask( id );
     links:
     - role: validation

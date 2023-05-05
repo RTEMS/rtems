@@ -28,7 +28,7 @@ test-actions:
       &table,
       &extension_ids[ 2 ]
     );
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
 
     table.fatal = FatalExtension3;
     sc = rtems_extension_create(
@@ -36,7 +36,7 @@ test-actions:
       &table,
       &extension_ids[ 3 ]
     );
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
 
     table.fatal = FatalExtension4;
     sc = rtems_extension_create(
@@ -44,7 +44,7 @@ test-actions:
       &table,
       &extension_ids[ 4 ]
     );
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
 
     table.fatal = FatalExtension5;
     sc = rtems_extension_create(
@@ -52,7 +52,7 @@ test-actions:
       &table,
       &extension_ids[ 5 ]
     );
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
 
     table.fatal = FatalExtension6;
     sc = rtems_extension_create(
@@ -60,7 +60,7 @@ test-actions:
       &table,
       &extension_ids[ 6 ]
     );
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
 
     test_case_active = true;
 
@@ -79,7 +79,7 @@ test-actions:
         _Per_CPU_Get_state( _Per_CPU_Get() ) == PER_CPU_STATE_SHUTDOWN );
       _ISR_Set_level( 0 );
       #endif
-      T_step_true( ${step}, shutdown_ok );
+      T_step_true( ${.:/step}, shutdown_ok );
     links:
     - role: validation
       uid: ../req/terminate-shutdown
@@ -87,41 +87,41 @@ test-actions:
       Delete the dynamic extension sets.
     code: |
       sc = rtems_extension_delete( extension_ids[ 2 ] );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
       sc = rtems_extension_delete( extension_ids[ 6 ] );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that the fatal extensions were invoked with the expected source.
     code: |
       T_step_eq_int(
-        ${step},
+        ${.:/step},
         info[ 0 ].source,
         RTEMS_FATAL_SOURCE_APPLICATION
       );
       T_step_eq_int(
-        ${step},
+        ${.:/step},
         info[ 1 ].source,
         RTEMS_FATAL_SOURCE_APPLICATION
       );
       T_step_eq_int(
-        ${step},
+        ${.:/step},
         info[ 2 ].source,
         RTEMS_FATAL_SOURCE_APPLICATION
       );
       T_step_eq_int(
-        ${step},
+        ${.:/step},
         info[ 4 ].source,
         RTEMS_FATAL_SOURCE_APPLICATION
       );
       T_step_eq_int(
-        ${step},
+        ${.:/step},
         info[ 5 ].source,
         RTEMS_FATAL_SOURCE_APPLICATION
       );
       T_step_eq_int(
-        ${step},
+        ${.:/step},
         info[ 6 ].source,
         RTEMS_FATAL_SOURCE_APPLICATION
       );
@@ -132,36 +132,36 @@ test-actions:
       Check that the fatal extensions were invoked with the expected always set
       to false argument.
     code: |
-      T_step_false( ${step}, info[ 0 ].always_set_to_false );
-      T_step_false( ${step}, info[ 1 ].always_set_to_false );
-      T_step_false( ${step}, info[ 2 ].always_set_to_false );
-      T_step_false( ${step}, info[ 4 ].always_set_to_false );
-      T_step_false( ${step}, info[ 5 ].always_set_to_false );
-      T_step_false( ${step}, info[ 6 ].always_set_to_false );
+      T_step_false( ${.:/step}, info[ 0 ].always_set_to_false );
+      T_step_false( ${.:/step}, info[ 1 ].always_set_to_false );
+      T_step_false( ${.:/step}, info[ 2 ].always_set_to_false );
+      T_step_false( ${.:/step}, info[ 4 ].always_set_to_false );
+      T_step_false( ${.:/step}, info[ 5 ].always_set_to_false );
+      T_step_false( ${.:/step}, info[ 6 ].always_set_to_false );
     links:
     - role: validation
       uid: ../req/terminate-userext
   - brief: |
       Check that the fatal extensions were invoked with the expected code.
     code: |
-      T_step_eq_ulong( ${step}, info[ 0 ].code, 123456 );
-      T_step_eq_ulong( ${step}, info[ 1 ].code, 123456 );
-      T_step_eq_ulong( ${step}, info[ 2 ].code, 123456 );
-      T_step_eq_ulong( ${step}, info[ 4 ].code, 123456 );
-      T_step_eq_ulong( ${step}, info[ 5 ].code, 123456 );
-      T_step_eq_ulong( ${step}, info[ 6 ].code, 123456 );
+      T_step_eq_ulong( ${.:/step}, info[ 0 ].code, 123456 );
+      T_step_eq_ulong( ${.:/step}, info[ 1 ].code, 123456 );
+      T_step_eq_ulong( ${.:/step}, info[ 2 ].code, 123456 );
+      T_step_eq_ulong( ${.:/step}, info[ 4 ].code, 123456 );
+      T_step_eq_ulong( ${.:/step}, info[ 5 ].code, 123456 );
+      T_step_eq_ulong( ${.:/step}, info[ 6 ].code, 123456 );
     links:
     - role: validation
       uid: ../req/terminate-userext
   - brief: |
       Check that the fatal extensions were invoked in forward order.
     code: |
-      T_step_eq_uint( ${step}, info[ 0 ].counter, 1 );
-      T_step_eq_uint( ${step}, info[ 1 ].counter, 2 );
-      T_step_eq_uint( ${step}, info[ 2 ].counter, 3 );
-      T_step_eq_uint( ${step}, info[ 4 ].counter, 4 );
-      T_step_eq_uint( ${step}, info[ 5 ].counter, 5 );
-      T_step_eq_uint( ${step}, info[ 6 ].counter, 6 );
+      T_step_eq_uint( ${.:/step}, info[ 0 ].counter, 1 );
+      T_step_eq_uint( ${.:/step}, info[ 1 ].counter, 2 );
+      T_step_eq_uint( ${.:/step}, info[ 2 ].counter, 3 );
+      T_step_eq_uint( ${.:/step}, info[ 4 ].counter, 4 );
+      T_step_eq_uint( ${.:/step}, info[ 5 ].counter, 5 );
+      T_step_eq_uint( ${.:/step}, info[ 6 ].counter, 6 );
     links:
     - role: validation
       uid: /rtems/userext/req/fatal-order
@@ -169,24 +169,24 @@ test-actions:
       Check that the fatal extension in the deleted extension set was not
       invoked.
     code: |
-      T_step_eq_int( ${step}, info[ 3 ].source, 0 );
-      T_step_false( ${step}, info[ 3 ].always_set_to_false );
-      T_step_eq_ulong( ${step}, info[ 3 ].code, 0 );
-      T_step_eq_uint( ${step}, info[ 3 ].counter, 0 );
+      T_step_eq_int( ${.:/step}, info[ 3 ].source, 0 );
+      T_step_false( ${.:/step}, info[ 3 ].always_set_to_false );
+      T_step_eq_ulong( ${.:/step}, info[ 3 ].code, 0 );
+      T_step_eq_uint( ${.:/step}, info[ 3 ].counter, 0 );
     links:
     - role: validation
       uid: /rtems/userext/req/fatal-iterate-remove
   - brief: |
       Check that the system state is terminated.
     code: |
-      T_step_eq_int( ${step}, _System_state_Get(), SYSTEM_STATE_TERMINATED );
+      T_step_eq_int( ${.:/step}, _System_state_Get(), SYSTEM_STATE_TERMINATED );
     links:
     - role: validation
       uid: ../req/terminate-state
   - brief: |
       Check that the system was halted with the expected fatal source.
     code: |
-      T_step_eq_int( ${step}, halt_source, RTEMS_FATAL_SOURCE_APPLICATION );
+      T_step_eq_int( ${.:/step}, halt_source, RTEMS_FATAL_SOURCE_APPLICATION );
     links:
     - role: validation
       uid: ../req/terminate-halt
@@ -195,7 +195,7 @@ test-actions:
   - brief: |
       Check that the system was halted with the expected fatal code.
     code: |
-      T_step_eq_ulong( ${step}, halt_code, 123456 );
+      T_step_eq_ulong( ${.:/step}, halt_code, 123456 );
     links:
     - role: validation
       uid: ../req/terminate-halt
@@ -204,7 +204,7 @@ test-actions:
   - brief: |
       Check that the system was finally halted.
     code: |
-      T_step_eq_uint( ${step}, counter, 7 );
+      T_step_eq_uint( ${.:/step}, counter, 7 );
     links:
     - role: validation
       uid: ../req/terminate-halt

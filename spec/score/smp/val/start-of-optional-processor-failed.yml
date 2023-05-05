@@ -15,7 +15,7 @@ test-actions:
       Check that the boot processor is online.
     code: |
       T_step_true(
-        ${step},
+        ${.:/step},
         _Per_CPU_Is_processor_online( _Per_CPU_Get_by_index( 0 ) )
       );
     links:
@@ -25,7 +25,7 @@ test-actions:
       Check that the optional processor which failed to start is not online.
     code: |
       T_step_false(
-        ${step},
+        ${.:/step},
         _Per_CPU_Is_processor_online( _Per_CPU_Get_by_index( 1 ) )
       );
     links:

@@ -17,7 +17,7 @@ test-actions:
       Check that the values returned by ${../if/get-processor:/name}
       and ${../if/get-processor-macro:/name} are equal.
     code: |
-      T_step_eq_u32( ${step}, cpu_index, cpu_index_macro );
+      T_step_eq_u32( ${.:/step}, cpu_index, cpu_index_macro );
     links:
     - role: validation
       uid: ../req/get-processor
@@ -35,7 +35,7 @@ test-actions:
       Check that the values returned by ${../if/get-processor-maximum:/name}
       and ${../if/get-processor-maximum-macro:/name} are equal.
     code: |
-      T_step_eq_u32( ${step}, cpu_max, cpu_max_macro );
+      T_step_eq_u32( ${.:/step}, cpu_max, cpu_max_macro );
     links:
     - role: validation
       uid: ../req/get-processor-maximum

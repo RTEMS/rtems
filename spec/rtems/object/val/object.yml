@@ -78,7 +78,7 @@ test-actions:
   - brief: |
       Check that the accumulated name has the expected value.
     code: |
-      T_step_eq_u32( ${step}, accumulated_name, 0x51515100 );
+      T_step_eq_u32( ${.:/step}, accumulated_name, 0x51515100 );
     links:
     - role: validation
       uid: ../req/build-name
@@ -99,7 +99,7 @@ test-actions:
   - brief: |
       Check that the returned value is one.
     code: |
-      T_step_eq_u32( ${step}, node, 1 );
+      T_step_eq_u32( ${.:/step}, node, 1 );
     links: []
   links:
   - role: validation

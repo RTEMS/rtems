@@ -16,8 +16,8 @@ test-actions:
       Since at least one thread-local objects is available, the referenced
       requirement is validated.
     code: |
-      T_step_eq_int( ${step}, tls_object, 0 );
-      T_step_eq_sz( ${step}, _Thread_Maximum_TLS_size, 0 );
+      T_step_eq_int( ${.:/step}, tls_object, 0 );
+      T_step_eq_sz( ${.:/step}, _Thread_Maximum_TLS_size, 0 );
     links:
     - role: validation
       uid: ../req/tls-max-zero

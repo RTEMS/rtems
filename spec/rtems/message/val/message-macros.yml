@@ -53,15 +53,15 @@ test-actions:
         &config_0,
         &id
       );
-      T_step_rsc_success( ${step}, status );
-      T_step_rsc_success( ${step}, rtems_message_queue_delete( id ) );
+      T_step_rsc_success( ${.:/step}, status );
+      T_step_rsc_success( ${.:/step}, rtems_message_queue_delete( id ) );
 
       status = rtems_message_queue_construct(
         &config_1,
         &id
       );
-      T_step_rsc_success( ${step}, status );
-      T_step_rsc_success( ${step}, rtems_message_queue_delete( id ) );
+      T_step_rsc_success( ${.:/step}, status );
+      T_step_rsc_success( ${.:/step}, rtems_message_queue_delete( id ) );
     links:
     - role: validation
       uid: ../req/buffer

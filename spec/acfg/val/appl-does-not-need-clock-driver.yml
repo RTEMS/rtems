@@ -36,7 +36,7 @@ test-actions:
       waiting for more than one clock tick interval.
     code: |
       T_step_eq_u32(
-        ${step},
+        ${.:/step},
         rtems_clock_get_ticks_since_boot(),
         ticks_since_boot
       );

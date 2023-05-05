@@ -13,7 +13,7 @@ test-actions:
   - brief: |
       Check that the expected fatal source is present.
     code: |
-      T_step_eq_int( ${step}, ctx->source, INTERNAL_ERROR_CORE );
+      T_step_eq_int( ${.:/step}, ctx->source, INTERNAL_ERROR_CORE );
     links:
     - role: validation
       uid: ../req/fatal-idle-thread-create-failed
@@ -21,7 +21,7 @@ test-actions:
       Check that the expected fatal code is present.
     code: |
       T_step_eq_ulong(
-        ${step},
+        ${.:/step},
         ctx->code,
         INTERNAL_ERROR_IDLE_THREAD_CREATE_FAILED
       );

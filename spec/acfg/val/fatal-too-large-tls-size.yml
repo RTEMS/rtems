@@ -19,7 +19,7 @@ test-actions:
   - brief: |
       Check that the expected fatal source is present.
     code: |
-      T_step_eq_int( ${step}, ctx->source, INTERNAL_ERROR_CORE );
+      T_step_eq_int( ${.:/step}, ctx->source, INTERNAL_ERROR_CORE );
     links:
     - role: validation
       uid: ../req/fatal-too-large-tls-size
@@ -27,7 +27,7 @@ test-actions:
       Check that the expected fatal code is present.
     code: |
       T_step_eq_ulong(
-        ${step},
+        ${.:/step},
         ctx->code,
         INTERNAL_ERROR_TOO_LARGE_TLS_SIZE
       );
@@ -39,7 +39,7 @@ test-actions:
       application configuration option resulted in the expected system setting.
     code: |
       T_step_eq_sz(
-        ${step},
+        ${.:/step},
         _Thread_Maximum_TLS_size,
         RTEMS_TASK_STORAGE_ALIGNMENT
       );

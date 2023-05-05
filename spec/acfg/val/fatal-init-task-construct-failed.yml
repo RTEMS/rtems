@@ -13,7 +13,7 @@ test-actions:
   - brief: |
       Check that the expected fatal source is present.
     code: |
-      T_step_eq_int( ${step}, ctx->source, INTERNAL_ERROR_CORE );
+      T_step_eq_int( ${.:/step}, ctx->source, INTERNAL_ERROR_CORE );
     links:
     - role: validation
       uid: ../req/fatal-init-task-construct-failed
@@ -21,7 +21,7 @@ test-actions:
       Check that the expected fatal code is present.
     code: |
       T_step_eq_ulong(
-        ${step},
+        ${.:/step},
         ctx->code,
         INTERNAL_ERROR_RTEMS_INIT_TASK_CONSTRUCT_FAILED
       );
@@ -33,7 +33,7 @@ test-actions:
       configuration option resulted in the expected system setting.
     code: |
       T_step_eq_u32(
-        ${step},
+        ${.:/step},
         _RTEMS_tasks_User_task_config.config.initial_priority,
         0
       );

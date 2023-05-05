@@ -280,7 +280,7 @@ test-actions:
       Check that the maximal cache line size is greater than or equal to the
       data cache line size.
     code: |
-      T_step_ge_sz( ${step}, maximal_line_size, data_line_size );
+      T_step_ge_sz( ${.:/step}, maximal_line_size, data_line_size );
     links:
     - role: validation
       uid: ../req/get-maximal-line-size
@@ -288,7 +288,7 @@ test-actions:
       Check that the maximal cache line size is greater than or equal to the
       instruction cache line size.
     code: |
-      T_step_ge_sz( ${step}, maximal_line_size, instruction_line_size );
+      T_step_ge_sz( ${.:/step}, maximal_line_size, instruction_line_size );
     links:
     - role: validation
       uid: ../req/get-maximal-line-size
@@ -318,7 +318,7 @@ test-actions:
       Check that the maximal cache line size is greater than or equal to the
       data cache line size.
     code: |
-      T_step_ge_sz( ${step}, maximal_line_size, data_line_size );
+      T_step_ge_sz( ${.:/step}, maximal_line_size, data_line_size );
     links:
     - role: validation
       uid: ../req/get-maximal-line-size
@@ -326,7 +326,7 @@ test-actions:
       Check that the maximal cache line size is greater than or equal to the
       instruction cache line size.
     code: |
-      T_step_ge_sz( ${step}, maximal_line_size, instruction_line_size );
+      T_step_ge_sz( ${.:/step}, maximal_line_size, instruction_line_size );
     links:
     - role: validation
       uid: ../req/get-maximal-line-size

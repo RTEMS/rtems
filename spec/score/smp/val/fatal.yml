@@ -12,14 +12,14 @@ test-actions:
   - brief: |
       Check that the expected fatal source is present.
     code: |
-      T_step_eq_int( ${step}, ctx->source, RTEMS_FATAL_SOURCE_SMP );
+      T_step_eq_int( ${.:/step}, ctx->source, RTEMS_FATAL_SOURCE_SMP );
     links:
     - role: validation
       uid: ../req/fatal-shutdown-response
   - brief: |
       Check that the expected fatal code is present.
     code: |
-      T_step_eq_ulong( ${step}, ctx->code, SMP_FATAL_SHUTDOWN_RESPONSE );
+      T_step_eq_ulong( ${.:/step}, ctx->code, SMP_FATAL_SHUTDOWN_RESPONSE );
     links:
     - role: validation
       uid: ../req/fatal-shutdown-response
@@ -27,7 +27,7 @@ test-actions:
       Check that the processor state is shutdown.
     code: |
       T_step_eq_int(
-        ${step},
+        ${.:/step},
         _Per_CPU_Get_state( _Per_CPU_Get() ),
         PER_CPU_STATE_SHUTDOWN
       );
@@ -58,13 +58,13 @@ test-actions:
     }
 
     T_step_eq_uint(
-      ${step},
+      ${.:/step},
       _Atomic_Load_uint( &fatal_counter, ATOMIC_ORDER_RELAXED ),
       1
     );
-    T_step_eq_int( ${step}, fatal_source, RTEMS_FATAL_SOURCE_SMP );
+    T_step_eq_int( ${.:/step}, fatal_source, RTEMS_FATAL_SOURCE_SMP );
     T_step_eq_ulong(
-      ${step},
+      ${.:/step},
       fatal_code,
       SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS
     );
@@ -93,13 +93,13 @@ test-actions:
     }
 
     T_step_eq_uint(
-      ${step},
+      ${.:/step},
       _Atomic_Load_uint( &fatal_counter, ATOMIC_ORDER_RELAXED ),
       2
     );
-    T_step_eq_int( ${step}, fatal_source, RTEMS_FATAL_SOURCE_SMP );
+    T_step_eq_int( ${.:/step}, fatal_source, RTEMS_FATAL_SOURCE_SMP );
     T_step_eq_ulong(
-      ${step},
+      ${.:/step},
       fatal_code,
       SMP_FATAL_MULTITASKING_START_ON_INVALID_PROCESSOR
     );
@@ -122,13 +122,13 @@ test-actions:
     }
 
     T_step_eq_uint(
-      ${step},
+      ${.:/step},
       _Atomic_Load_uint( &fatal_counter, ATOMIC_ORDER_RELAXED ),
       3
     );
-    T_step_eq_int( ${step}, fatal_source, RTEMS_FATAL_SOURCE_SMP );
+    T_step_eq_int( ${.:/step}, fatal_source, RTEMS_FATAL_SOURCE_SMP );
     T_step_eq_ulong(
-      ${step},
+      ${.:/step},
       fatal_code,
       SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR
     );

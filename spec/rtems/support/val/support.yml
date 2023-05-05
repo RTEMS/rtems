@@ -18,28 +18,28 @@ test-actions:
   - brief: |
       Check that the first character is equal to 0x01.
     code: |
-      T_step_eq_char( ${step}, c1, 0x01 );
+      T_step_eq_char( ${.:/step}, c1, 0x01 );
     links:
     - role: validation
       uid: ../req/name-to-characters-1
   - brief: |
       Check that the second character is equal to 0x02.
     code: |
-      T_step_eq_char( ${step}, c2, 0x02 );
+      T_step_eq_char( ${.:/step}, c2, 0x02 );
     links:
     - role: validation
       uid: ../req/name-to-characters-2
   - brief: |
       Check that the third character is equal to 0x03.
     code: |
-      T_step_eq_char( ${step}, c3, 0x03 );
+      T_step_eq_char( ${.:/step}, c3, 0x03 );
     links:
     - role: validation
       uid: ../req/name-to-characters-3
   - brief: |
       Check that the fourth character is equal to 0x04.
     code: |
-      T_step_eq_char( ${step}, c4, 0x04 );
+      T_step_eq_char( ${.:/step}, c4, 0x04 );
     links:
     - role: validation
       uid: ../req/name-to-characters-4

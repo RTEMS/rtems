@@ -33,7 +33,7 @@ test-actions:
       Check that the returned value is minus one or an unsigned character
       value.
     code: |
-      T_step_true( ${step}, c == -1 || ( c & ~0xff ) == 0 );
+      T_step_true( ${.:/step}, c == -1 || ( c & ~0xff ) == 0 );
     links:
     - role: validation
       uid: ../req/bsp-poll-char-empty

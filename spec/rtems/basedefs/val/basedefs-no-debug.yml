@@ -15,7 +15,7 @@ test-actions:
       Check that the string is equal to the expected statement.
     code: |
       T_step_true(
-        ${step},
+        ${.:/step},
         IsEqualIgnoreWhiteSpace(
           s,
           "__builtin_unreachable()"
@@ -36,7 +36,7 @@ test-actions:
       Check that the string is equal to the expected function name.
     code: |
       T_step_true(
-        ${step},
+        ${.:/step},
         IsEqualIgnoreWhiteSpace(
           s,
           "RtemsBasedefsValBasedefsNoDebug_Action_1"

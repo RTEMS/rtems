@@ -11,7 +11,7 @@ test-actions:
 
     for ( i = 0; i < 32; ++i ) {
       ${signal-constant:/test-run}( signals[ i ], i );
-      T_step( i ); /* ${steps/32} */
+      T_step( i ); /* ${.:/step:32} */
     }
   checks: []
   links:

@@ -24,7 +24,7 @@ test-actions:
       RTEMS_DEFAULT_ATTRIBUTES,
       &id
     );
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
   checks:
   - brief: |
       Check that exactly three buffers can be obtained from the partition for
@@ -32,23 +32,23 @@ test-actions:
     code: |
       pointers[ 0 ] = NULL;
       sc = rtems_partition_get_buffer( id, &pointers[ 0 ] );
-      T_step_rsc_success( ${step}, sc );
-      T_step_not_null( ${step}, pointers[ 0 ] );
+      T_step_rsc_success( ${.:/step}, sc );
+      T_step_not_null( ${.:/step}, pointers[ 0 ] );
 
       pointers[ 1 ] = NULL;
       sc = rtems_partition_get_buffer( id, &pointers[ 1 ] );
-      T_step_rsc_success( ${step}, sc );
-      T_step_not_null( ${step}, pointers[ 1 ] );
+      T_step_rsc_success( ${.:/step}, sc );
+      T_step_not_null( ${.:/step}, pointers[ 1 ] );
 
       pointers[ 2 ] = NULL;
       sc = rtems_partition_get_buffer( id, &pointers[ 2 ] );
-      T_step_rsc_success( ${step}, sc );
-      T_step_not_null( ${step}, pointers[ 2 ] );
+      T_step_rsc_success( ${.:/step}, sc );
+      T_step_not_null( ${.:/step}, pointers[ 2 ] );
 
       pointers[ 3 ] = NULL;
       sc = rtems_partition_get_buffer( id, &pointers[ 3 ] );
-      T_step_rsc( ${step}, sc, RTEMS_UNSATISFIED );
-      T_step_null( ${step}, pointers[ 3 ] );
+      T_step_rsc( ${.:/step}, sc, RTEMS_UNSATISFIED );
+      T_step_null( ${.:/step}, pointers[ 3 ] );
     links:
     - role: validation
       uid: ../req/buffers
@@ -57,40 +57,40 @@ test-actions:
       be obtained from the partition for use in parallel in FIFO order.
     code: |
       sc = rtems_partition_return_buffer( id, pointers[ 1 ] );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
       sc = rtems_partition_return_buffer( id, pointers[ 2 ] );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
       sc = rtems_partition_return_buffer( id, pointers[ 0 ] );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
       pointer = NULL;
       sc = rtems_partition_get_buffer( id, &pointer );
-      T_step_rsc_success( ${step}, sc );
-      T_step_eq_ptr( ${step}, pointer, pointers[ 1 ] );
+      T_step_rsc_success( ${.:/step}, sc );
+      T_step_eq_ptr( ${.:/step}, pointer, pointers[ 1 ] );
 
       pointer = NULL;
       sc = rtems_partition_get_buffer( id, &pointer );
-      T_step_rsc_success( ${step}, sc );
-      T_step_eq_ptr( ${step}, pointer, pointers[ 2 ] );
+      T_step_rsc_success( ${.:/step}, sc );
+      T_step_eq_ptr( ${.:/step}, pointer, pointers[ 2 ] );
 
       pointer = NULL;
       sc = rtems_partition_get_buffer( id, &pointer );
-      T_step_rsc_success( ${step}, sc );
-      T_step_eq_ptr( ${step}, pointer, pointers[ 0 ] );
+      T_step_rsc_success( ${.:/step}, sc );
+      T_step_eq_ptr( ${.:/step}, pointer, pointers[ 0 ] );
 
       sc = rtems_partition_return_buffer( id, pointers[ 0 ] );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
       sc = rtems_partition_return_buffer( id, pointers[ 1 ] );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
       sc = rtems_partition_return_buffer( id, pointers[ 2 ] );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
 
       sc = rtems_partition_delete( id );
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links:
     - role: validation
       uid: ../req/fifo

@@ -14,7 +14,7 @@ test-actions:
       event set.
     code: |
       T_step_eq_u32(
-        ${step},
+        ${.:/step},
         ctx->event,
         ( (rtems_event_set) 1 ) << ctx->number
       );
@@ -27,7 +27,7 @@ test-actions:
       Check that the event number bit of the event constant is not set in
       RTEMS_PENDING_EVENTS.
     code: |
-      T_step_eq_u32( ${step}, ctx->event & RTEMS_PENDING_EVENTS, 0 );
+      T_step_eq_u32( ${.:/step}, ctx->event & RTEMS_PENDING_EVENTS, 0 );
     links: []
   links: []
 - action-brief: |
@@ -47,12 +47,12 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that there were no pending events.
     code: |
-      T_step_eq_u32( ${step}, out, 0 );
+      T_step_eq_u32( ${.:/step}, out, 0 );
     links: []
   links: []
 - action-brief: |
@@ -72,12 +72,12 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that there were no pending events.
     code: |
-      T_step_eq_u32( ${step}, out, 0 );
+      T_step_eq_u32( ${.:/step}, out, 0 );
     links: []
   links: []
 - action-brief: |
@@ -97,12 +97,12 @@ test-actions:
   - brief: |
       Check that the directive call was unsatisfied.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_UNSATISFIED );
+      T_step_rsc( ${.:/step}, sc, RTEMS_UNSATISFIED );
     links: []
   - brief: |
       Check that there were no events received.
     code: |
-      T_step_eq_u32( ${step}, out, 0 );
+      T_step_eq_u32( ${.:/step}, out, 0 );
     links: []
   links: []
 - action-brief: |
@@ -122,12 +122,12 @@ test-actions:
   - brief: |
       Check that the directive call was unsatisfied.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_UNSATISFIED );
+      T_step_rsc( ${.:/step}, sc, RTEMS_UNSATISFIED );
     links: []
   - brief: |
       Check that there were no events received.
     code: |
-      T_step_eq_u32( ${step}, out, 0 );
+      T_step_eq_u32( ${.:/step}, out, 0 );
     links: []
   links: []
 - action-brief: |
@@ -140,7 +140,7 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   links: []
 - action-brief: |
@@ -160,13 +160,13 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that the pending event is equal to the event sent by a previous
       action.
     code: |
-      T_step_eq_u32( ${step}, out, ctx->event );
+      T_step_eq_u32( ${.:/step}, out, ctx->event );
     links: []
   links: []
 - action-brief: |
@@ -186,12 +186,12 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that there were no pending events.
     code: |
-      T_step_eq_u32( ${step}, out, 0 );
+      T_step_eq_u32( ${.:/step}, out, 0 );
     links: []
   links: []
 - action-brief: |
@@ -211,13 +211,13 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that the received event is equal to the event sent by a previous
       action.
     code: |
-      T_step_eq_u32( ${step}, out, ctx->event );
+      T_step_eq_u32( ${.:/step}, out, ctx->event );
     links: []
   links: []
 - action-brief: |
@@ -237,12 +237,12 @@ test-actions:
   - brief: |
       Check that the directive call was unsatisfied.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_UNSATISFIED );
+      T_step_rsc( ${.:/step}, sc, RTEMS_UNSATISFIED );
     links: []
   - brief: |
       Check that the no events were received.
     code: |
-      T_step_eq_u32( ${step}, out, 0 );
+      T_step_eq_u32( ${.:/step}, out, 0 );
     links: []
   links: []
 - action-brief: |
@@ -255,7 +255,7 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   links: []
 - action-brief: |
@@ -275,12 +275,12 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that there were no pending events.
     code: |
-      T_step_eq_u32( ${step}, out, 0 );
+      T_step_eq_u32( ${.:/step}, out, 0 );
     links: []
   links: []
 - action-brief: |
@@ -300,13 +300,13 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that the pending event is equal to the event sent by a previous
       action.
     code: |
-      T_step_eq_u32( ${step}, out, ctx->event );
+      T_step_eq_u32( ${.:/step}, out, ctx->event );
     links: []
   links: []
 - action-brief: |
@@ -326,12 +326,12 @@ test-actions:
   - brief: |
       Check that the directive call was unsatisfied.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_UNSATISFIED );
+      T_step_rsc( ${.:/step}, sc, RTEMS_UNSATISFIED );
     links: []
   - brief: |
       Check that the no events were received.
     code: |
-      T_step_eq_u32( ${step}, out, 0 );
+      T_step_eq_u32( ${.:/step}, out, 0 );
     links: []
   links: []
 - action-brief: |
@@ -351,13 +351,13 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that the received event is equal to the event sent by a previous
       action.
     code: |
-      T_step_eq_u32( ${step}, out, ctx->event );
+      T_step_eq_u32( ${.:/step}, out, ctx->event );
     links: []
   links: []
 - action-brief: |
@@ -377,12 +377,12 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that there were no pending events.
     code: |
-      T_step_eq_u32( ${step}, out, 0 );
+      T_step_eq_u32( ${.:/step}, out, 0 );
     links: []
   links: []
 - action-brief: |
@@ -402,12 +402,12 @@ test-actions:
   - brief: |
       Check that the directive call was successful.
     code: |
-      T_step_rsc_success( ${step}, sc );
+      T_step_rsc_success( ${.:/step}, sc );
     links: []
   - brief: |
       Check that there were no pending events.
     code: |
-      T_step_eq_u32( ${step}, out, 0 );
+      T_step_eq_u32( ${.:/step}, out, 0 );
     links: []
   links: []
 test-brief: |

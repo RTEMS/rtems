@@ -16,7 +16,7 @@ test-actions:
     scheduler_id = GetSelfScheduler();
     priority = GetSelfPriority();
     cpu_max = rtems_scheduler_get_processor_maximum();
-    T_step_ge_u32( ${step}, cpu_max, 1 );
+    T_step_ge_u32( ${.:/step}, cpu_max, 1 );
 
     for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
       rtems_status_code sc;
@@ -48,14 +48,14 @@ test-actions:
   - brief: |
       Check that the returned value is greater than or equal to one.
     code: |
-      T_step_ge_u32( ${step}, cpu_max, 1 );
+      T_step_ge_u32( ${.:/step}, cpu_max, 1 );
     links: []
   - brief: |
       Check that the returned value is less than or equal to
       ${../../config/if/get-maximum-processors:/name}.
     code: |
       T_step_le_u32(
-        ${step},
+        ${.:/step},
         cpu_max,
         rtems_configuration_get_maximum_processors()
       );
@@ -71,43 +71,43 @@ test-actions:
     rtems_id          id_by_cpu;
 
     sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &id[ 0 ]);
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
 
     sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &id[ 1 ]);
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
 
     sc = rtems_scheduler_ident( TEST_SCHEDULER_C_NAME, &id[ 2 ]);
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
 
     sc = rtems_scheduler_ident( TEST_SCHEDULER_D_NAME, &id[ 3 ]);
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
   checks:
   - brief: |
       Check that the object index of scheduler A has the expected value.
     code: |
-      T_step_eq_u16( ${step}, rtems_object_id_get_index( id[ 0 ] ), 1 );
+      T_step_eq_u16( ${.:/step}, rtems_object_id_get_index( id[ 0 ] ), 1 );
     links: []
   - brief: |
       Check that the object index of scheduler B has the expected value.
     code: |
-      T_step_eq_u16( ${step}, rtems_object_id_get_index( id[ 1 ] ), 2 );
+      T_step_eq_u16( ${.:/step}, rtems_object_id_get_index( id[ 1 ] ), 2 );
     links: []
   - brief: |
       Check that the object index of scheduler C has the expected value.
     code: |
-      T_step_eq_u16( ${step}, rtems_object_id_get_index( id[ 2 ] ), 3 );
+      T_step_eq_u16( ${.:/step}, rtems_object_id_get_index( id[ 2 ] ), 3 );
     links: []
   - brief: |
       Check that the object index of scheduler D has the expected value.
     code: |
-      T_step_eq_u16( ${step}, rtems_object_id_get_index( id[ 3 ] ), 4 );
+      T_step_eq_u16( ${.:/step}, rtems_object_id_get_index( id[ 3 ] ), 4 );
     links: []
   - brief: |
       Check that processor 0 has scheduler A assigned.
     code: |
       sc = rtems_scheduler_ident_by_processor( 0, &id_by_cpu );
-      T_step_rsc_success( ${step}, sc );
-      T_step_eq_u32( ${step}, id[ 0 ], id_by_cpu );
+      T_step_rsc_success( ${.:/step}, sc );
+      T_step_eq_u32( ${.:/step}, id[ 0 ], id_by_cpu );
     links:
     - role: validation
       uid: /acfg/req/scheduler-assign-scheduler
@@ -115,8 +115,8 @@ test-actions:
       Check that processor 1 has scheduler B assigned.
     code: |
       sc = rtems_scheduler_ident_by_processor( 1, &id_by_cpu );
-      T_step_rsc_success( ${step}, sc );
-      T_step_eq_u32( ${step}, id[ 1 ], id_by_cpu );
+      T_step_rsc_success( ${.:/step}, sc );
+      T_step_eq_u32( ${.:/step}, id[ 1 ], id_by_cpu );
     links:
     - role: validation
       uid: /acfg/req/scheduler-assign-scheduler
@@ -124,7 +124,7 @@ test-actions:
       Check that processor 2 has scheduler C assigned if it is present.
     code: |
       sc = rtems_scheduler_ident_by_processor( 2, &id_by_cpu );
-      T_step_true( ${step}, sc == RTEMS_INVALID_NAME || id[ 2 ] == id_by_cpu );
+      T_step_true( ${.:/step}, sc == RTEMS_INVALID_NAME || id[ 2 ] == id_by_cpu );
     links:
     - role: validation
       uid: /acfg/req/scheduler-assign-scheduler
@@ -132,7 +132,7 @@ test-actions:
       Check that processor 3 has scheduler C assigned if it is present.
     code: |
       sc = rtems_scheduler_ident_by_processor( 3, &id_by_cpu );
-      T_step_true( ${step}, sc == RTEMS_INVALID_NAME || id[ 2 ] == id_by_cpu );
+      T_step_true( ${.:/step}, sc == RTEMS_INVALID_NAME || id[ 2 ] == id_by_cpu );
     links:
     - role: validation
       uid: /acfg/req/scheduler-assign-scheduler

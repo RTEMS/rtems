@@ -18,7 +18,7 @@ test-actions:
   - brief: |
       Check that ${/glossary/clock-tick:/term} gets incremented.
     code: |
-      T_step_eq_u32( ${step}, result_1 - result_0, 1 );
+      T_step_eq_u32( ${.:/step}, result_1 - result_0, 1 );
     links:
     - role: validation
       uid: ../req/get-ticks-since-boot-macro
@@ -39,7 +39,7 @@ test-actions:
   - brief: |
       Check that ${/glossary/clock-tick:/term} gets incremented.
     code: |
-      T_step_eq_u32( ${step}, result_1 - result_0, 1 );
+      T_step_eq_u32( ${.:/step}, result_1 - result_0, 1 );
     links:
     - role: validation
       uid: ../req/get-ticks-since-boot
@@ -55,7 +55,7 @@ test-actions:
       Check that ${../if/get-ticks-per-second:/name} actually returns
       1us / CONFIGURE_MICROSECONDS_PER_TICK.
     code: |
-      T_step_eq_u32( ${step}, result, 1000000UL / TEST_MICROSECONDS_PER_TICK );
+      T_step_eq_u32( ${.:/step}, result, 1000000UL / TEST_MICROSECONDS_PER_TICK );
     links:
     - role: validation
       uid: ../req/get-ticks-per-second-macro
@@ -73,7 +73,7 @@ test-actions:
       Check that ${../if/get-ticks-per-second:/name} actually returns
       1us / CONFIGURE_MICROSECONDS_PER_TICK.
     code: |
-      T_step_eq_u32( ${step}, result, 1000000UL / TEST_MICROSECONDS_PER_TICK );
+      T_step_eq_u32( ${.:/step}, result, 1000000UL / TEST_MICROSECONDS_PER_TICK );
     links:
     - role: validation
       uid: ../req/get-ticks-per-second

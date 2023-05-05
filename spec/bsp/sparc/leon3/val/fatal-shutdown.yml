@@ -19,7 +19,7 @@ test-actions:
       Check that the second processor was not powered down during system
       initialization.
     code: |
-      T_step_eq_u32( ${step}, mpstat_during_sysinit & 0x2, 0 );
+      T_step_eq_u32( ${.:/step}, mpstat_during_sysinit & 0x2, 0 );
     links: []
   - brief: |
       Wait until the second processor is powered down.
@@ -33,22 +33,22 @@ test-actions:
       fatal error occurred exactly once.
     code: |
       counter = Add( &shutdown_response_counter, 0 );
-      T_step_eq_uint( ${step}, counter, 1 );
+      T_step_eq_uint( ${.:/step}, counter, 1 );
     links: []
   - brief: |
       Check that the RTEMS_FATAL_SOURCE_SMP with SMP_FATAL_SHUTDOWN_RESPONSE
       fatal error occurred on the second processor.
     code: |
-      T_step_eq_u32( ${step}, shutdown_response_cpu_index, 1 );
+      T_step_eq_u32( ${.:/step}, shutdown_response_cpu_index, 1 );
     links: []
   - brief: |
       Check that no dynamic fatal error extension was invoked.  This shows that
       the leon3 BSP family shutdown procedure called the wrapped
       _CPU_Fatal_halt() function of the test suite.
     code: |
-      T_step_rsc_success( ${step}, status );
+      T_step_rsc_success( ${.:/step}, status );
       counter = Add( &dynamic_fatal_extension_counter, 0 );
-      T_step_eq_u32( ${step}, dynamic_fatal_extension_counter, 0 );
+      T_step_eq_u32( ${.:/step}, dynamic_fatal_extension_counter, 0 );
     links:
     - role: validation
       uid: ../req/fatal-shutdown-halt

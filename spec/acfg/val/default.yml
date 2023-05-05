@@ -13,7 +13,7 @@ test-actions:
   - brief: |
       Check the configured ${/acfg/if/idle-task-body:/name}.
     code: |
-      T_step_eq_ptr( ${step}, rtems_configuration_get_idle_task(), IdleBody );
+      T_step_eq_ptr( ${.:/step}, rtems_configuration_get_idle_task(), IdleBody );
     links:
     - role: validation
       uid: ../if/idle-task-body
@@ -24,7 +24,7 @@ test-actions:
       the optional BSP-provided default value is enabled.
     code: |
       T_step_eq_sz(
-        ${step},
+        ${.:/step},
         rtems_configuration_get_idle_task_stack_size(),
       #if defined(BSP_IDLE_TASK_STACK_SIZE)
         BSP_IDLE_TASK_STACK_SIZE
@@ -42,7 +42,7 @@ test-actions:
       the optional BSP-provided default value is enabled.
     code: |
       T_step_eq_sz(
-        ${step},
+        ${.:/step},
         rtems_configuration_get_interrupt_stack_size(),
       #if defined(BSP_INTERRUPT_STACK_SIZE)
         BSP_INTERRUPT_STACK_SIZE
@@ -58,9 +58,9 @@ test-actions:
   - brief: |
       Check the BSP-provided initial extension is registered.
     code: |
-      T_step_eq_sz( ${step}, _User_extensions_Initial_count, 1 );
+      T_step_eq_sz( ${.:/step}, _User_extensions_Initial_count, 1 );
       T_step_eq_ptr(
-        ${step},
+        ${.:/step},
         _User_extensions_Initial_extensions[ 0 ].fatal,
         bsp.fatal
       );
@@ -87,7 +87,7 @@ test-actions:
       Check that the returned status code is
       ${/rtems/status/if/too-many:/name}.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_TOO_MANY );
+      T_step_rsc( ${.:/step}, sc, RTEMS_TOO_MANY );
     links:
     - role: validation
       uid: ../if/max-barriers
@@ -114,7 +114,7 @@ test-actions:
       Check that the returned status code is
       ${/rtems/status/if/too-many:/name}.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_TOO_MANY );
+      T_step_rsc( ${.:/step}, sc, RTEMS_TOO_MANY );
     links:
     - role: validation
       uid: ../if/max-message-queues
@@ -139,7 +139,7 @@ test-actions:
       Check that the returned status code is
       ${/rtems/status/if/too-many:/name}.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_TOO_MANY );
+      T_step_rsc( ${.:/step}, sc, RTEMS_TOO_MANY );
     links:
     - role: validation
       uid: ../if/max-partitions
@@ -156,7 +156,7 @@ test-actions:
       Check that the returned status code is
       ${/rtems/status/if/too-many:/name}.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_TOO_MANY );
+      T_step_rsc( ${.:/step}, sc, RTEMS_TOO_MANY );
     links:
     - role: validation
       uid: ../if/max-periods
@@ -164,7 +164,7 @@ test-actions:
 - action-brief: |
     Check that the processor maximum is one.
   action-code: |
-    T_step_eq_u32( ${step}, rtems_scheduler_get_processor_maximum(), 1 );
+    T_step_eq_u32( ${.:/step}, rtems_scheduler_get_processor_maximum(), 1 );
   checks: []
   links:
   - role: validation
@@ -187,7 +187,7 @@ test-actions:
       Check that the returned status code is
       ${/rtems/status/if/too-many:/name}.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_TOO_MANY );
+      T_step_rsc( ${.:/step}, sc, RTEMS_TOO_MANY );
     links:
     - role: validation
       uid: ../if/max-semaphores
@@ -204,7 +204,7 @@ test-actions:
       Check that the returned status code is
       ${/rtems/status/if/too-many:/name}.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_TOO_MANY );
+      T_step_rsc( ${.:/step}, sc, RTEMS_TOO_MANY );
     links:
     - role: validation
       uid: ../if/max-tasks
@@ -217,7 +217,7 @@ test-actions:
       suite containing the test case.  The test suite defines
       ${../if/idle-task-init-appl:/name}.
     code: |
-      T_step_eq_u32( ${step}, rtems_configuration_get_maximum_tasks(), 0 );
+      T_step_eq_u32( ${.:/step}, rtems_configuration_get_maximum_tasks(), 0 );
     links:
     - role: validation
       uid: ../req/max-tasks
@@ -238,7 +238,7 @@ test-actions:
       Check that the returned status code is
       ${/rtems/status/if/too-many:/name}.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_TOO_MANY );
+      T_step_rsc( ${.:/step}, sc, RTEMS_TOO_MANY );
     links:
     - role: validation
       uid: ../if/max-timers
@@ -257,7 +257,7 @@ test-actions:
       Check that the returned status code is
       ${/rtems/status/if/too-many:/name}.
     code: |
-      T_step_rsc( ${step}, sc, RTEMS_TOO_MANY );
+      T_step_rsc( ${.:/step}, sc, RTEMS_TOO_MANY );
     links:
     - role: validation
       uid: ../if/max-user-extensions

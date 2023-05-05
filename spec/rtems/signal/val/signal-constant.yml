@@ -14,7 +14,7 @@ test-actions:
       the signal in the signal set.
     code: |
       T_step_eq_u32(
-        ${step},
+        ${.:/step},
         ctx->signal,
         ( (rtems_signal_set) 1 ) << ctx->number
       );
@@ -32,19 +32,19 @@ test-actions:
     ctx->signal_set = 0;
 
     sc = rtems_signal_catch( NULL, RTEMS_DEFAULT_MODES );
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
 
     sc = rtems_signal_catch( SignalHandler, RTEMS_NO_ASR );
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
 
     sc = rtems_signal_send( RTEMS_SELF, ctx->signal );
-    T_step_rsc_success( ${step}, sc );
+    T_step_rsc_success( ${.:/step}, sc );
   checks:
   - brief: |
       Check that the caught signal set represents exactly the sent signal.
     code: |
       T_step_eq_u32(
-        ${step},
+        ${.:/step},
         ctx->signal_set,
         ctx->signal
       );

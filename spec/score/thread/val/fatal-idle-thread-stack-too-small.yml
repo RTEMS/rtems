@@ -13,7 +13,7 @@ test-actions:
   - brief: |
       Check that the expected fatal source is present.
     code: |
-      T_step_eq_int( ${step}, ctx->source, INTERNAL_ERROR_CORE );
+      T_step_eq_int( ${.:/step}, ctx->source, INTERNAL_ERROR_CORE );
     links:
     - role: validation
       uid: ../req/fatal-idle-thread-stack-too-small
@@ -21,7 +21,7 @@ test-actions:
       Check that the expected fatal code is present.
     code: |
       T_step_eq_ulong(
-        ${step},
+        ${.:/step},
         ctx->code,
         INTERNAL_ERROR_IDLE_THREAD_STACK_TOO_SMALL
       );
@@ -32,7 +32,7 @@ test-actions:
       Check the configured value of ${/acfg/if/idle-task-storage-size:/name}.
     code: |
       T_step_eq_sz(
-        ${step},
+        ${.:/step},
         _Stack_Allocator_allocate_for_idle_storage_size,
         RTEMS_ALIGN_UP(
           RTEMS_TASK_STORAGE_SIZE(

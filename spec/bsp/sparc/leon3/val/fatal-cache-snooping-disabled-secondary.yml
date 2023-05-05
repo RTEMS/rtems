@@ -16,7 +16,7 @@ test-actions:
   - brief: |
       Check that the expected fatal source is present.
     code: |
-      T_step_eq_int( ${step}, ctx->source, RTEMS_FATAL_SOURCE_BSP );
+      T_step_eq_int( ${.:/step}, ctx->source, RTEMS_FATAL_SOURCE_BSP );
     links:
     - role: validation
       uid: ../req/fatal-cache-snooping-disabled-secondary
@@ -24,7 +24,7 @@ test-actions:
       Check that the expected fatal code is present.
     code: |
       T_step_eq_ulong(
-        ${step},
+        ${.:/step},
         ctx->code,
         LEON3_FATAL_INVALID_CACHE_CONFIG_SECONDARY_PROCESSOR
       );

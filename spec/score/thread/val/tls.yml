@@ -13,7 +13,7 @@ test-actions:
       Check that the initial value of the zero initialized thread-local
       object has the expected value.
     code: |
-      T_step_eq_int( ${step}, tls_object_0, 0 );
+      T_step_eq_int( ${.:/step}, tls_object_0, 0 );
     links:
     - role: validation
       uid: ../req/tls-zero-initialized-data
@@ -21,7 +21,7 @@ test-actions:
       Check that the alignment of the zero initialized thread-local
       object has the expected value.
     code: |
-      T_step_eq_uptr( ${step}, ( (uintptr_t) &tls_object_0 ) % 256, 0 );
+      T_step_eq_uptr( ${.:/step}, ( (uintptr_t) &tls_object_0 ) % 256, 0 );
     links:
     - role: validation
       uid: ../req/tls-big-alignment
@@ -29,7 +29,7 @@ test-actions:
       Check that the initial value of the non-zero initialized thread-local
       object has the expected value.
     code: |
-      T_step_eq_int( ${step}, tls_object_1, 123 );
+      T_step_eq_int( ${.:/step}, tls_object_1, 123 );
     links:
     - role: validation
       uid: ../req/tls-initialized-data
@@ -37,7 +37,7 @@ test-actions:
       Check that the alignment of the non-zero initialized thread-local object
       has the expected value.
     code: |
-      T_step_eq_uptr( ${step}, ( (uintptr_t) &tls_object_1 ) % 256, 0 );
+      T_step_eq_uptr( ${.:/step}, ( (uintptr_t) &tls_object_1 ) % 256, 0 );
     links:
     - role: validation
       uid: ../req/tls-big-alignment
