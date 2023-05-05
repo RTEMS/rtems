@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: global-construction
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where the Classic API user initialization task is configured, the global
+  construction shall be done by the Classic API user initialization task.
+type: requirement

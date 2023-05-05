@@ -115,6 +115,34 @@ test-actions:
       RestoreRunnerPriority();
     links: []
   links: []
+- action-brief: |
+    Validate the global construction.  Mark that the test case executed.
+  action-code: |
+    test_case_executed = true;
+  checks:
+  - brief: |
+      Check that the global constructor was called exactly once.
+    code: |
+      T_eq_u32( constructor_calls, 1 );
+    links:
+    - role: validation
+      uid: ../req/global-construction-constructors
+  - brief: |
+      Check that the global construction was done by the Classic API user
+      initialization task.
+    code: |
+      T_eq_u32( constructor_id, rtems_task_self() );
+    links:
+    - role: validation
+      uid: ../req/global-construction-classic
+  - brief: |
+      Check that the global constructor was called before the task entry.
+    code: |
+      T_false( constructor_test_case_executed );
+    links:
+    - role: validation
+      uid: ../req/global-construction-classic-before-entry
+  links: []
 test-brief: |
   Tests general thread behaviour.
 test-context:
@@ -147,6 +175,21 @@ test-setup: null
 test-stop: null
 test-support: |
   typedef ${.:/test-context-type} Context;
+
+  static bool test_case_executed;
+
+  static bool constructor_test_case_executed;
+
+  static uint32_t constructor_calls;
+
+  static rtems_id constructor_id;
+
+  static __attribute__(( __constructor__ )) void Constructor( void )
+  {
+    constructor_test_case_executed = test_case_executed;
+    ++constructor_calls;
+    constructor_id = rtems_task_self();
+  }
 
   static void TaskTerminate( rtems_tcb *executing )
   {

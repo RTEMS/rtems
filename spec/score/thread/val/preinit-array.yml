@@ -1,0 +1,85 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+- arm
+- riscv
+links: []
+test-actions:
+- action-brief: |
+    Validate the ``.preinit_array`` constructor invocation.  Mark that the test
+    case executed.
+  action-code: |
+    test_case_executed = true;
+  checks:
+  - brief: |
+      Check that the ``.preinit_array`` constructor was called exactly once.
+    code: |
+      T_eq_u32( constructor_calls, 1 );
+    links:
+    - role: validation
+      uid: ../req/global-construction-preinit-array
+  - brief: |
+      Check that the ``.preeinit_array`` construction was done by the Classic
+      API user initialization task.
+    code: |
+      T_eq_u32( constructor_id, rtems_task_self() );
+    links:
+    - role: validation
+      uid: ../req/global-construction-classic
+  - brief: |
+      Check that the ``.preinit_array`` constructor was called before the
+      global constructor invocations.
+    code: |
+      T_eq_u32( constructor_counter, 1 );
+      T_eq_u32( normal_constructor_counter, 2 );
+    links:
+    - role: validation
+      uid: ../req/global-construction-preinit-array-before-constructors
+  links: []
+test-brief: |
+  Tests the ``.preinit_array`` constructor handling of the C runtime support.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: |
+  static bool test_case_executed;
+
+  static bool constructor_test_case_executed;
+
+  static uint32_t counter;
+
+  static uint32_t normal_constructor_counter;
+
+  static uint32_t constructor_counter;
+
+  static uint32_t constructor_calls;
+
+  static rtems_id constructor_id;
+
+  static __attribute__(( __constructor__ )) void NormalConstructor( void )
+  {
+    ++counter;
+    normal_constructor_counter = counter;
+  }
+
+  static void Constructor( void )
+  {
+    constructor_test_case_executed = test_case_executed;
+    ++counter;
+    constructor_counter = counter;
+    ++constructor_calls;
+    constructor_id = rtems_task_self();
+  }
+
+  static RTEMS_USED RTEMS_SECTION( ".preinit_array" ) void
+    ( * const constructor_registration )( void ) = Constructor;
+test-target: testsuites/validation/tc-preinit-array.c
+test-teardown: null
+type: test-case

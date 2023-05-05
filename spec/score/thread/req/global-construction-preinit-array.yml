@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+- arm
+- riscv
+links:
+- role: requirement-refinement
+  uid: global-construction
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the global construction is done, the handlers registered in the
+  ``.preinit_array`` table shall be called.
+type: requirement
