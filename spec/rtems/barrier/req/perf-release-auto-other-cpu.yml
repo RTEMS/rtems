@@ -65,7 +65,7 @@ test-teardown:
 text: |
   Let U and V be two tasks with distinct home schedulers.  Let :math:`B`
   be a time point measured by U right before a call to ${../if/wait:/name}
-  which automaticall releases the barrier.  Let :math:`E` be a time point
+  which automatically releases the barrier.  Let :math:`E` be a time point
   measured by V right after a call to ${../if/wait:/name} returns
   successfully due to the ${../if/wait:/name} call associated with :math:`B`.
   While the execution environment is ${.:/environment}, while the barrier is an
