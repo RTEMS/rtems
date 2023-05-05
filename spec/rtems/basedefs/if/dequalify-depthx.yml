@@ -53,7 +53,7 @@ name: RTEMS_DEQUALIFY_DEPTHX
 notes: null
 params:
 - description: |
-    is the pointer indirection level expressed in *.
+    is the pointer indirection level expressed in ``*``.
   dir: null
   name: _ptr_level
 - description: |

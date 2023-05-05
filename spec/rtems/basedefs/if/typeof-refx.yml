@@ -33,7 +33,7 @@ name: RTEMS_TYPEOF_REFX
 notes: null
 params:
 - description: |
-    is the pointer indirection level expressed in *.
+    is the pointer indirection level expressed in ``*``.
   dir: null
   name: _level
 - description: |
