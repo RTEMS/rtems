@@ -10,9 +10,6 @@ interface-type: header-file
 links:
 - enabled-by: RTEMS_MULTIPROCESSING
   role: interface-include
-  uid: /score/mpci/if/header
-- enabled-by: RTEMS_MULTIPROCESSING
-  role: interface-include
   uid: ../../type/if/header
 - enabled-by: true
   role: interface-include

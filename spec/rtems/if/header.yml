@@ -86,7 +86,7 @@ links:
 - enabled-by: []
   role: interface-include
   uid: ../userext/if/header
-- enabled-by: RTEMS_MULTIPROCESSING
+- enabled-by: true
   role: interface-include
   uid: ../mp/if/header
 path: rtems.h
