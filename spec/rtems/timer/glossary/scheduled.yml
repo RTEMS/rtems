@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: /glossary-requirements
+  uid: group
 term: scheduled
 text: |
   A timer in scheduled ${../glossary/state:/term} is set to

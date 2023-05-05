@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: /glossary-requirements
+  uid: group
 term: state
 text: |
   The state of a timer denotes whether the timer is set to ${../glossary/fire:/term} or not.  There is also a third state for the timer has fired but the ${../glossary/timerserviceroutine:/term} has not been invoked yet.  A timer can be in one of these states:

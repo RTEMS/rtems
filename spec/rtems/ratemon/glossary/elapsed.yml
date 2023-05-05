@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: /glossary-requirements
+  uid: group
 term: elapsed
 text: |
   Elapsed denotes the real ${../glossary/time:/term} passed since the last

@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: /glossary-requirements
+  uid: group
 term: consumed
 text: |
   Consumed denotes the processor ${../glossary/cputime:/term} consumed by the

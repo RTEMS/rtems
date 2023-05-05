@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: group
+links:
+- role: requirement-refinement
+  uid: /glossary-general
+name: Rate-Monotonic Manager
+text: |
+  The system shall have a glossary for terms used specifically by the
+  ${../if/group:/name}.
+type: glossary

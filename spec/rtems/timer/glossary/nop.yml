@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: /glossary-requirements
+  uid: group
 term: Nop
 text: |
   Nop means *no operation*. This term is used when directives do not return

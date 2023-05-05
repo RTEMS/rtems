@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: /glossary-requirements
+  uid: group
 term: none
 text: |
   A timer in ${../glossary/state:/term} or ${../glossary/context:/term} none or

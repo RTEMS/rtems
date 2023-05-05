@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: /glossary-requirements
+  uid: group
 term: interrupt context
 text: |
   The ${../glossary/timerserviceroutine:/term} is or will be executed as part of

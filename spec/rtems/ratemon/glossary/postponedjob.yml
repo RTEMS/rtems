@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: /glossary-requirements
+  uid: group
 term: postponed job
 text: |
   A postponed job is a ${../glossary/job:/term} which should already have been

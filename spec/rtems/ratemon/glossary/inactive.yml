@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: /glossary-requirements
+  uid: group
 term: inactive
 text: |
   A period is in inactive ${../glossary/state:/term} if no current
