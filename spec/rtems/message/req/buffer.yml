@@ -20,8 +20,8 @@ text: |
   ${../if/config:/name}),
   and ``storage_area`` is a variable or structure member,
   the expression
-  ``${../if/buffer:/name}(`` ``${../if/buffer:/params[0]/name} )``
-  ``storage_area[`` ``MAXIMUM_PENDING_MESSAGES ]``
+  ${../if/buffer:/name}( ${../if/buffer:/params[0]/name} )
+  storage_area[ MAXIMUM_PENDING_MESSAGES ]
   shall declare an object of such a size that a pointer to it
   is usable as value for member ${../if/config:/definition[3]/default/name}
   of type ${../if/config:/name}.

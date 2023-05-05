@@ -11,5 +11,5 @@ references: []
 requirement-type: functional
 text: |
   The value of macro ${../if/default:/name} shall be equal
-  to the value of expression ``${../if/wait:/name}``.
+  to the value of ${../if/wait:/name}.
 type: requirement

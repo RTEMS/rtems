@@ -91,7 +91,7 @@ test-actions:
     /* No action */
   checks:
   - brief: |
-      Check ${..//if/default:/name} equals ``${../if/wait:/name}``.
+      Check ${..//if/default:/name} equals ${../if/wait:/name}.
     code: |
       T_step_eq_int( ${.:/step}, ${../if/default:/name}, ${../if/wait:/name} );
     links:
