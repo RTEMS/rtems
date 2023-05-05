@@ -11,7 +11,7 @@ links:
   uid: /if/domain
 - role: interface-ingroup
   uid: group
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: header
 path: rtems/irq-extension.h

@@ -11,79 +11,79 @@ links:
   uid: /if/domain
 - role: interface-ingroup
   uid: group
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../barrier/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../cache/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../clock/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../config/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../dpmem/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../event/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../fatal/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../init/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../intr/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../io/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../message/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../object/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../option/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../part/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../ratemon/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../region/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../scheduler/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../sem/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../signal/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../status/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../support/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../task/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../timer/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../type/if/header
-- enabled-by: []
+- enabled-by: true
   role: interface-include
   uid: ../userext/if/header
 - enabled-by: true
