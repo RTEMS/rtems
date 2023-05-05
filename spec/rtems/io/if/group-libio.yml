@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
+enabled-by:
+  not: RTEMS_QUAL
 identifier: LibIO
 links:
 - role: interface-ingroup
