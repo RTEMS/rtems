@@ -4,7 +4,7 @@ brief: |
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 description: null
-enabled-by: true
+enabled-by: bsps/sparc/leon3
 identifier: RTEMSDeviceGRLIB
 index-entries: []
 interface-type: group
