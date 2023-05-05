@@ -1,6 +1,6 @@
-SPDX-License-Identifier: CC-BY-SA-4.0
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
 enabled-by: true
 glossary-type: term
 links:
@@ -8,6 +8,5 @@ links:
   uid: ../glossary-general
 term: SIS
 text: |
-  SPARC Instruction Set Simulator (software which permits to run binary code
-  for SPARC processors on other processor architectures)
+  This term is an acronym for ${sparc:/term} Instruction Simulator.
 type: glossary

@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: root
+non-functional-type: quality
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The tests shall be executed on the ${/glossary/target:/plural}.
+type: requirement
