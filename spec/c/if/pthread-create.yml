@@ -9,6 +9,8 @@ links:
   uid: pthread
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: pthread_create
 references:
 - identifier: https://pubs.opengroup.org/onlinepubs/9699919799/functions/pthread_create.html

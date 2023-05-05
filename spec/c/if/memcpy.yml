@@ -9,6 +9,8 @@ links:
   uid: string
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: memcpy
 references:
 - identifier: https://en.cppreference.com/w/c/string/byte/memcpy

@@ -9,6 +9,8 @@ links:
   uid: pthread
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: pthread_setname_np
 references:
 - identifier: http://man7.org/linux/man-pages/man3/pthread_setname_np.3.html

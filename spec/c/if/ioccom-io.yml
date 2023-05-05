@@ -3,12 +3,14 @@ copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified-function
+interface-type: unspecified-macro
 links:
 - role: interface-placement
   uid: sys-ioccom
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: _IO
 references: []
 type: interface

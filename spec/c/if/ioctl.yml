@@ -9,6 +9,8 @@ links:
   uid: sys-ioccom
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: ioctl
 references: []
 type: interface
