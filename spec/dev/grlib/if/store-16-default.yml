@@ -1,18 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: |
-  This header file defines the register load/store interface.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: sparc
+enabled-by:
+  not: sparc
 index-entries: []
-interface-type: header-file
+interface-type: unspecified-function
 links:
 - role: interface-placement
-  uid: /if/domain
+  uid: io-header-default
 - role: interface-ingroup
-  uid: grlib-io-group
+  uid: group
 - role: proxy-member
-  uid: /dev/grlib/if/io-header
-path: grlib/io.h
-prefix: bsps/sparc/include
+  uid: store-16
+name: grlib_store_16
+references: []
 type: interface

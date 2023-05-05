@@ -4,13 +4,13 @@ copyrights:
 enabled-by: true
 links:
 - role: interface-function
-  uid: ../if/grlib-store-08
+  uid: ../if/load-08
 functional-type: function
 rationale: null
 references: []
 requirement-type: functional
 text: |
-  The ${../if/grlib-store-08:/name} directive shall store the unsigned 8-bit
-  value specified by ${../if/grlib-store-08:/params[1]/name} to the address
-  specified by ${../if/grlib-store-08:/params[0]/name}.
+  The ${../if/load-08:/name} directive shall load an unsigned 8-bit
+  value from the address specified by ${../if/load-08:/params[0]/name}
+  and return it.
 type: requirement

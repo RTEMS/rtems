@@ -19,7 +19,7 @@ test-actions:
       T_step_eq_u8( ${step}, val_8, 0x81 );
     links:
     - role: validation
-      uid: /bsp/sparc/req/grlib-load-08
+      uid: ../req/load-08
   links: []
 - action-brief: |
     Call ${../if/load-16:/name} to load a prepared value.
@@ -36,7 +36,7 @@ test-actions:
       T_step_eq_u16( ${step}, val_16, 0x8001 );
     links:
     - role: validation
-      uid: /bsp/sparc/req/grlib-load-16
+      uid: ../req/load-16
   links: []
 - action-brief: |
     Call ${../if/load-32:/name} to load a prepared value.
@@ -53,7 +53,7 @@ test-actions:
       T_step_eq_u32( ${step}, val_32, 0x80000001 );
     links:
     - role: validation
-      uid: /bsp/sparc/req/grlib-load-32
+      uid: ../req/load-32
   links: []
 - action-brief: |
     Call ${../if/load-64:/name} to load a prepared value.
@@ -70,7 +70,7 @@ test-actions:
       T_step_eq_u64( ${step}, val_64, 0x8000000000000001 );
     links:
     - role: validation
-      uid: /bsp/sparc/req/grlib-load-64
+      uid: ../req/load-64
   links: []
 - action-brief: |
     Call ${../if/store-08:/name} to store a value to an object.
@@ -85,7 +85,7 @@ test-actions:
       T_step_eq_u8( ${step}, reg_8, 0x81 );
     links:
     - role: validation
-      uid: /bsp/sparc/req/grlib-store-08
+      uid: ../req/store-08
   links: []
 - action-brief: |
     Call ${../if/store-16:/name} to store a value to an object.
@@ -100,7 +100,7 @@ test-actions:
       T_step_eq_u16( ${step}, reg_16, 0x8001 );
     links:
     - role: validation
-      uid: /bsp/sparc/req/grlib-store-16
+      uid: ../req/store-16
   links: []
 - action-brief: |
     Call ${../if/store-32:/name} to store a value to an object.
@@ -115,7 +115,7 @@ test-actions:
       T_step_eq_u32( ${step}, reg_32, 0x80000001 );
     links:
     - role: validation
-      uid: /bsp/sparc/req/grlib-store-32
+      uid: ../req/store-32
   links: []
 - action-brief: |
     Call ${../if/store-64:/name} to store a value to an object.
@@ -130,7 +130,7 @@ test-actions:
       T_step_eq_u64( ${step}, reg_64, 0x8000000000000001 );
     links:
     - role: validation
-      uid: /bsp/sparc/req/grlib-store-64
+      uid: ../req/store-64
   links: []
 - action-brief: |
     Call ${../if/apbuart-outbyte-polled:/name} to store a character to the data

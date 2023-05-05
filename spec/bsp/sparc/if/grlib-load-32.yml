@@ -13,7 +13,7 @@ definition:
     return: ${/c/if/uint32_t:/name}
   variants: []
 description: null
-enabled-by: true
+enabled-by: sparc
 index-entries: []
 interface-type: function
 links:
@@ -21,6 +21,8 @@ links:
   uid: grlib-io-header
 - role: interface-ingroup
   uid: grlib-io-group
+- role: proxy-member
+  uid: /dev/grlib/if/load-32
 name: grlib_load_32
 notes: null
 params:

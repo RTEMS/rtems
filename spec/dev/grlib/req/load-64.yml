@@ -4,13 +4,13 @@ copyrights:
 enabled-by: true
 links:
 - role: interface-function
-  uid: ../if/grlib-store-32
+  uid: ../if/load-64
 functional-type: function
 rationale: null
 references: []
 requirement-type: functional
 text: |
-  The ${../if/grlib-store-32:/name} directive shall store the unsigned 32-bit
-  value specified by ${../if/grlib-store-32:/params[1]/name} to the address
-  specified by ${../if/grlib-store-32:/params[0]/name}.
+  The ${../if/load-64:/name} directive shall load an unsigned 64-bit value
+  from the address specified by ${../if/load-64:/params[0]/name} and
+  return it.
 type: requirement

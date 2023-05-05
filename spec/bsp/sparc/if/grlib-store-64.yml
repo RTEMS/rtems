@@ -14,7 +14,7 @@ definition:
     return: void
   variants: []
 description: null
-enabled-by: true
+enabled-by: sparc
 index-entries: []
 interface-type: function
 links:
@@ -22,6 +22,8 @@ links:
   uid: grlib-io-header
 - role: interface-ingroup
   uid: grlib-io-group
+- role: proxy-member
+  uid: /dev/grlib/if/store-64
 name: grlib_store_64
 notes: null
 params:

@@ -1,16 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: |
-  This header file defines the register load/store interface.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-index-entries: []
-interface-type: header-file
-links:
-- role: interface-placement
-  uid: /bsp/if/domain
-- role: interface-ingroup
-  uid: group
-path: grlib/io.h
-prefix: bsps/include
-type: interface
+links: []
+type: proxy
