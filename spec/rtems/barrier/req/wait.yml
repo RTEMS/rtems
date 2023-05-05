@@ -6,8 +6,6 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/wait
-- role: interface-function
-  uid: ../../type/if/no-timeout
 post-conditions:
 - name: Status
   states:

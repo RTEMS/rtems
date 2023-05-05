@@ -6,8 +6,6 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/obtain
-- role: interface-function
-  uid: ../../type/if/no-timeout
 - role: function-implementation
   uid: /score/mtx/req/seize-try
 - role: function-implementation

@@ -6,8 +6,6 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/receive
-- role: interface-function
-  uid: ../../type/if/no-timeout
 - role: function-implementation
   uid: /score/tq/req/enqueue-fifo
 - role: function-implementation

@@ -22,6 +22,20 @@ test-actions:
     - role: validation
       uid: ../req/id-none
   links: []
+- action-brief: |
+    Validate the ${../if/no-timeout:/name} constant.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Assert that ${../if/no-timeout:/name} is a compile time constant which
+      evaluates to a value of zero.
+    code: |
+      RTEMS_STATIC_ASSERT( RTEMS_NO_TIMEOUT == 0, NO_TIMEOUT );
+    links:
+    - role: validation
+      uid: ../req/no-timeout
+  links: []
 test-brief: |
   Tests some ${../if/group:/name} interfaces.
 test-context: []

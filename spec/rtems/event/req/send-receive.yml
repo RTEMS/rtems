@@ -6,8 +6,6 @@ functional-type: action
 links:
 - role: requirement-refinement
   uid: group
-- role: interface-function
-  uid: ../../type/if/no-timeout
 post-conditions:
 - name: SendStatus
   states:
