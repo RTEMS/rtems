@@ -3,13 +3,13 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified-typedef
+interface-type: unspecified-struct
 links:
 - role: interface-placement
   uid: sys-impl-timespec
 - role: interface-ingroup
   uid: group
-name: struct timespec
+name: timespec
 references:
 - identifier: https://en.cppreference.com/w/c/chrono/timespec
   type: url
