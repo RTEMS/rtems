@@ -3,6 +3,8 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links:
+- role: interface-function
+  uid: /bsp/if/acfg-malloc-supports-sbrk
 - role: requirement-refinement
   uid: init
 functional-type: function
@@ -10,9 +12,9 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  Where ${../if/disable-bsp-settings:/name} is not defined by the application,
-  where ${/bsp/if/acfg-malloc-supports-sbrk:/name} is defined by the
-  ${/glossary/bsp:/term}, when the application configuration is initialized,
-  not all memory shall made available to the C Program Heap immediately at
-  system initialization time.
+  Where ${/bsp/if/acfg-malloc-supports-sbrk:/name} is defined by the
+  ${/glossary/bsp:/term}, while ${../if/disable-bsp-settings:/name} is not
+  defined by the application, when the application configuration is
+  initialized, not all memory shall made available to the C Program Heap
+  immediately at system initialization time.
 type: requirement
