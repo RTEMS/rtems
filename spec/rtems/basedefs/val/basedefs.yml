@@ -951,44 +951,21 @@ test-actions:
       uid: ../req/section-0
   links: []
 - action-brief: |
-    Use the ${../if/static-analysis:/name} macro.
+    Evaluate if ${../if/static-analysis:/name} is defined.
   action-code: |
-    /* No action */
+    #if defined(RTEMS_STATIC_ANALYSIS)
+    bool defined = true;
+    #else
+    bool defined = false;
+    #endif
   checks:
   - brief: |
-      It cannot be automatically check that
-      the ${../if/static-analysis:/name} macro has the desired effect.
+      Check that ${../if/static-analysis:/name} was not defined.
     code: |
-      #if defined(__COVERITY__)
-      #  if defined(RTEMS_STATIC_ANALYSIS)
-        T_quiet_true( true, "test passes, no output" );
-      #  else
-        T_quiet_true( false, "RTEMS_STATIC_ANALYSIS not defined" );
-      #  endif
-      #endif
+      T_step_false( ${.:/step}, defined );
     links:
     - role: validation
-      uid: ../req/static-analysis-0
-  links: []
-- action-brief: |
-    Use the ${../if/static-analysis:/name} macro.
-  action-code: |
-    /* No action */
-  checks:
-  - brief: |
-      It cannot be automatically check that
-      the ${../if/static-analysis:/name} macro has the desired effect.
-    code: |
-      #if !defined(__COVERITY__)
-      #  if !defined(RTEMS_STATIC_ANALYSIS)
-        T_quiet_true( true, "test passes, no output" );
-      #  else
-        T_quiet_true( false, "RTEMS_STATIC_ANALYSIS defined" );
-      #  endif
-      #endif
-    links:
-    - role: validation
-      uid: ../req/static-analysis-1
+      uid: ../req/no-static-analysis
   links: []
 - action-brief: |
     Use the ${../if/static-assert:/name} macro.
