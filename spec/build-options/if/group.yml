@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-identifier: BuildOptions
+identifier: RTEMSImplBuild
 links:
 - role: requirement-refinement
   uid: /req/external-interface
