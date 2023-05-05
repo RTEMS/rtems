@@ -4,12 +4,12 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: group
+  uid: ../if/group
 non-functional-type: design
 rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  The clock implementation shall optionally use a handler to do time
-  adjustments and second updates through a ${/glossary/ntp:/term} service.
+  The Timecounter Handler shall optionally use a handler to do time adjustments
+  and second updates through a ${/glossary/ntp:/term} service.
 type: requirement

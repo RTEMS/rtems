@@ -4,12 +4,11 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: group
+  uid: ../if/group
 non-functional-type: design
 rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  The timecounter component shall provide the
-  ${/glossary/clock-monotonic:/term}.
+  The Timecounter Handler shall provide the ${/glossary/clock-monotonic:/term}.
 type: requirement

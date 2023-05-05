@@ -4,12 +4,12 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: group
+  uid: ../if/group
 non-functional-type: design
 rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  The timecounter component shall implement directives to get time values in
-  the highest resolution available to the system.
+  The Timecounter Handler shall implement directives to get time values in the
+  highest resolution available to the system.
 type: requirement
