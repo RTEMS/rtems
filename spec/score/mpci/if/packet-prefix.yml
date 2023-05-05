@@ -3,7 +3,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified-struct
+interface-type: unspecified-typedef
 links:
 - role: interface-placement
   uid: header-2
