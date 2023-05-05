@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: perf-runtime
+non-functional-type: performance
+rationale: |
+  The state of the memory system on the ${/glossary/target:/term} has usually a
+  significant influence on timings.
+references: []
+requirement-type: non-functional
+text: |
+  The runtime measurement shall be done in different runtime measurement
+  environments.
+type: requirement

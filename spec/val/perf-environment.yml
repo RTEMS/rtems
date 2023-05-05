@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: validation
+  uid: /req/perf-runtime-environment-dirty-cache
+- role: validation
+  uid: /req/perf-runtime-environment-full-cache
+- role: validation
+  uid: /req/perf-runtime-environment-hot-cache
+- role: validation
+  uid: /req/perf-runtime-environment-load-steps
+method: by-review-of-design
+references: []
+text: |
+  The execution environments are set up by the RTEMS Test Framework.  For each
+  runtime performance requirement test code for all execution environments is
+  generated.
+type: validation

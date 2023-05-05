@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: perf-runtime-environment
+name: DirtyCache
+non-functional-type: performance-runtime-environment
+rationale: |
+  This runtime measurement environment is used to measure the runtime of code
+  sections while data and instructions of the code section have to be loaded
+  from main memory and the loaded data has to wait for the write out of dirty
+  data.
+references: []
+requirement-type: non-functional
+text: |
+  A ${/glossary/target:/term} state in which the caches are fully loaded with
+  dirty data and instructions unrelated to the measured code section shall be
+  a runtime measurement environment.
+type: requirement

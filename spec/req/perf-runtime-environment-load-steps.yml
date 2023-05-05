@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: perf-runtime-environment-load
+non-functional-type: performance
+rationale: |
+  Having a data bus load task subsequently for each processor on the target is
+  done to get close to worst case conditions in an ${/glossary/smp:/term}
+  system.  Ideally, for this runtime measurement environment data traffic from
+  other bus masters should be generated also, however, this would require
+  specific device support.
+references: []
+requirement-type: non-functional
+text: |
+  The load runtime measurement environment shall be set up with exactly one up
+  the maximum number of processors of the ${/glossary/target:/term} data bus
+  load tasks.
+type: requirement
