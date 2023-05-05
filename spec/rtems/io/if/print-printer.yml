@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Printer handlers shall have this type.
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: int ( *${.:/name} )( void *, const char *, ${/c/if/va_list} )
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header-4
+- role: interface-ingroup
+  uid: group-print-support-rtems
+name: rtems_print_printer
+notes: null
+params: []
+return: null
+type: interface
