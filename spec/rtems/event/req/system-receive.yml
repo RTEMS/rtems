@@ -6,6 +6,8 @@ functional-type: function
 links:
 - role: interface-function
   uid: ../if/system-receive
+- role: function-implementation
+  uid: send-receive
 rationale: null
 references: []
 requirement-type: functional
