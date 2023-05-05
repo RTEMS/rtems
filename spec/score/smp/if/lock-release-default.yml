@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  not:
+  - RTEMS_DEBUG
+  - RTEMS_PROFILING
+index-entries: []
+interface-type: unspecified-macro
+links:
+- role: interface-placement
+  uid: header-2
+- role: interface-ingroup
+  uid: group
+- role: proxy-member
+  uid: lock-release
+name: _SMP_lock_Release
+references: []
+type: interface
