@@ -62,12 +62,12 @@
 #include <sys/cpuset.h>
 #include <rtems/rtems/modes.h>
 #include <rtems/score/cpuopts.h>
-#include <rtems/score/mppkt.h>
 #include <rtems/score/object.h>
 #include <rtems/score/watchdogticks.h>
 
 #if defined(RTEMS_MULTIPROCESSING)
   #include <rtems/score/mpci.h>
+  #include <rtems/score/mppkt.h>
 #endif
 
 #ifdef __cplusplus
