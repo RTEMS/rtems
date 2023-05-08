@@ -167,7 +167,7 @@ static void RtemsTaskReqIdent_Pre_Name_Prepare(
       /*
        * While the ``name`` is not equal to RTEMS_WHO_AM_I or ``id`` parameter
        * is equal to NULL, the behaviour of rtems_task_ident() shall be
-       * specified by /rtems/req/ident.
+       * specified by spec:/rtems/req/ident.
        */
       ctx->id = NULL;
       /* Preparation performed by RtemsReqIdent_Run() */

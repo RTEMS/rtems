@@ -66,7 +66,7 @@
  * This test case performs the following actions:
  *
  * - Run the generic object identification tests for Classic API message queue
- *   class objects defined by /rtems/req/ident.
+ *   class objects defined by spec:/rtems/req/ident.
  *
  * @{
  */
@@ -95,7 +95,7 @@ static rtems_status_code ClassicMessageIdentAction(
 
 /**
  * @brief Run the generic object identification tests for Classic API message
- *   queue class objects defined by /rtems/req/ident.
+ *   queue class objects defined by spec:/rtems/req/ident.
  */
 static void RtemsMessageValIdent_Action_0( void )
 {

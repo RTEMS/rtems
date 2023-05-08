@@ -390,7 +390,7 @@ static void RtemsSemReqObtain_Post_Action_Check(
     case RtemsSemReqObtain_Post_Action_SemSeizeTry: {
       /*
        * The calling task shall try to seize the semaphore as specified by
-       * /score/sem/req/seize-try.
+       * spec:/score/sem/req/seize-try.
        */
       ctx->tq_sem_ctx.get_count = TQSemGetCountClassic;
       ctx->tq_sem_ctx.set_count = TQSemSetCountClassic;
@@ -401,7 +401,7 @@ static void RtemsSemReqObtain_Post_Action_Check(
     case RtemsSemReqObtain_Post_Action_SemSeizeWait: {
       /*
        * The calling task shall wait to seize the semaphore as specified by
-       * /score/sem/req/seize-wait.
+       * spec:/score/sem/req/seize-wait.
        */
       ctx->tq_sem_ctx.get_count = TQSemGetCountClassic;
       ctx->tq_sem_ctx.set_count = TQSemSetCountClassic;
@@ -412,8 +412,8 @@ static void RtemsSemReqObtain_Post_Action_Check(
     case RtemsSemReqObtain_Post_Action_MtxSeizeTry: {
       /*
        * The calling task shall try to seize the mutex as specified by
-       * /score/mtx/req/seize-try where an enqueue blocks, a recursive seize is
-       * allowed, and no locking protocol is used.
+       * spec:/score/mtx/req/seize-try where an enqueue blocks, a recursive
+       * seize is allowed, and no locking protocol is used.
        */
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_NO_PROTOCOL;
@@ -426,8 +426,8 @@ static void RtemsSemReqObtain_Post_Action_Check(
     case RtemsSemReqObtain_Post_Action_MtxSeizeWait: {
       /*
        * The calling task shall wait to seize the mutex as specified by
-       * /score/mtx/req/seize-wait where an enqueue blocks, a recursive seize
-       * is allowed, and no locking protocol is used.
+       * spec:/score/mtx/req/seize-wait where an enqueue blocks, a recursive
+       * seize is allowed, and no locking protocol is used.
        */
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_NO_PROTOCOL;
@@ -440,8 +440,8 @@ static void RtemsSemReqObtain_Post_Action_Check(
     case RtemsSemReqObtain_Post_Action_InheritMtxSeizeTry: {
       /*
        * The calling task shall try to seize the mutex as specified by
-       * /score/mtx/req/seize-try where an enqueue blocks, a recursive seize is
-       * allowed, and a priority inheritance protocol is used.
+       * spec:/score/mtx/req/seize-try where an enqueue blocks, a recursive
+       * seize is allowed, and a priority inheritance protocol is used.
        */
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_NO_PROTOCOL;
@@ -454,8 +454,8 @@ static void RtemsSemReqObtain_Post_Action_Check(
     case RtemsSemReqObtain_Post_Action_InheritMtxSeizeWait: {
       /*
        * The calling task shall wait to seize the mutex as specified by
-       * /score/mtx/req/seize-wait where an enqueue blocks, a recursive seize
-       * is allowed, and a priority inheritance protocol is used.
+       * spec:/score/mtx/req/seize-wait where an enqueue blocks, a recursive
+       * seize is allowed, and a priority inheritance protocol is used.
        */
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_NO_PROTOCOL;
@@ -468,8 +468,8 @@ static void RtemsSemReqObtain_Post_Action_Check(
     case RtemsSemReqObtain_Post_Action_CeilingMtxSeizeTry: {
       /*
        * The calling task shall try to seize the mutex as specified by
-       * /score/mtx/req/seize-try where an enqueue blocks, a recursive seize is
-       * allowed, and a priority ceiling is used.
+       * spec:/score/mtx/req/seize-try where an enqueue blocks, a recursive
+       * seize is allowed, and a priority ceiling is used.
        */
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_PRIORITY_CEILING;
@@ -482,8 +482,8 @@ static void RtemsSemReqObtain_Post_Action_Check(
     case RtemsSemReqObtain_Post_Action_CeilingMtxSeizeWait: {
       /*
        * The calling task shall wait to seize the mutex as specified by
-       * /score/mtx/req/seize-wait where an enqueue blocks, a recursive seize
-       * is allowed, and a priority ceiling is used.
+       * spec:/score/mtx/req/seize-wait where an enqueue blocks, a recursive
+       * seize is allowed, and a priority ceiling is used.
        */
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_PRIORITY_CEILING;
@@ -496,8 +496,8 @@ static void RtemsSemReqObtain_Post_Action_Check(
     case RtemsSemReqObtain_Post_Action_MrsPMtxSeizeTry: {
       /*
        * The calling task shall try to seize the mutex as specified by
-       * /score/mtx/req/seize-try where an enqueue is sticky, a recursive seize
-       * returns an error status, and a priority ceiling is used.
+       * spec:/score/mtx/req/seize-try where an enqueue is sticky, a recursive
+       * seize returns an error status, and a priority ceiling is used.
        */
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_MRSP;
@@ -510,7 +510,7 @@ static void RtemsSemReqObtain_Post_Action_Check(
     case RtemsSemReqObtain_Post_Action_MrsPMtxSeizeWait: {
       /*
        * The calling task shall wait to seize the mutex as specified by
-       * /score/mtx/req/seize-wait where an enqueue is sticky, a recursive
+       * spec:/score/mtx/req/seize-wait where an enqueue is sticky, a recursive
        * seize returns an error status, and a priority ceiling is used.
        */
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;

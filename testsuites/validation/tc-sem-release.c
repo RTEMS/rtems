@@ -331,7 +331,7 @@ static void RtemsSemReqRelease_Post_Action_Check(
     case RtemsSemReqRelease_Post_Action_BinarySurrender: {
       /*
        * The calling task shall surrender the binary semaphore as specified by
-       * /score/sem/req/surrender.
+       * spec:/score/sem/req/surrender.
        */
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_ctx.get_owner = NULL;
@@ -345,7 +345,7 @@ static void RtemsSemReqRelease_Post_Action_Check(
     case RtemsSemReqRelease_Post_Action_CountingSurrender: {
       /*
        * The calling task shall surrender the counting semaphore as specified
-       * by /score/sem/req/surrender.
+       * by spec:/score/sem/req/surrender.
        */
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_ctx.get_owner = NULL;
@@ -359,8 +359,9 @@ static void RtemsSemReqRelease_Post_Action_Check(
     case RtemsSemReqRelease_Post_Action_MtxSurrender: {
       /*
        * The calling task shall surrender the mutex as specified by
-       * /score/mtx/req/surrender where an enqueue blocks, a recursive seize is
-       * allowed, the owner is checked, and no locking protocol is used.
+       * spec:/score/mtx/req/surrender where an enqueue blocks, a recursive
+       * seize is allowed, the owner is checked, and no locking protocol is
+       * used.
        */
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
@@ -375,9 +376,9 @@ static void RtemsSemReqRelease_Post_Action_Check(
     case RtemsSemReqRelease_Post_Action_InheritMtxSurrender: {
       /*
        * The calling task shall surrender the mutex as specified by
-       * /score/mtx/req/surrender where an enqueue blocks, a recursive seize is
-       * allowed, the owner is checked, and a priority inheritance protocol is
-       * used.
+       * spec:/score/mtx/req/surrender where an enqueue blocks, a recursive
+       * seize is allowed, the owner is checked, and a priority inheritance
+       * protocol is used.
        */
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
@@ -392,8 +393,9 @@ static void RtemsSemReqRelease_Post_Action_Check(
     case RtemsSemReqRelease_Post_Action_CeilingMtxSurrender: {
       /*
        * The calling task shall surrender the mutex as specified by
-       * /score/mtx/req/surrender where an enqueue blocks, a recursive seize is
-       * allowed, the owner is checked, and a priority ceiling is used.
+       * spec:/score/mtx/req/surrender where an enqueue blocks, a recursive
+       * seize is allowed, the owner is checked, and a priority ceiling is
+       * used.
        */
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
@@ -408,9 +410,9 @@ static void RtemsSemReqRelease_Post_Action_Check(
     case RtemsSemReqRelease_Post_Action_MrsPMtxSurrender: {
       /*
        * The calling task shall surrender the mutex as specified by
-       * /score/mtx/req/surrender where an enqueue is sticky, a recursive seize
-       * returns an error status, the owner is checked, and a priority ceiling
-       * is used.
+       * spec:/score/mtx/req/surrender where an enqueue is sticky, a recursive
+       * seize returns an error status, the owner is checked, and a priority
+       * ceiling is used.
        */
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_STICKY;
       ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;

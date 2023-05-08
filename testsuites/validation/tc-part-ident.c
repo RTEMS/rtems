@@ -66,7 +66,7 @@
  * This test case performs the following actions:
  *
  * - Run the generic object identification tests for Classic API partition
- *   class objects defined by /rtems/req/ident.
+ *   class objects defined by spec:/rtems/req/ident.
  *
  * @{
  */
@@ -84,7 +84,7 @@ static rtems_status_code ClassicPartIdentAction(
 
 /**
  * @brief Run the generic object identification tests for Classic API partition
- *   class objects defined by /rtems/req/ident.
+ *   class objects defined by spec:/rtems/req/ident.
  */
 static void RtemsPartValIdent_Action_0( void )
 {

@@ -132,11 +132,11 @@
  *
  *   - Check the configured CONFIGURE_TASK_STACK_ALLOCATOR hook.  Using the
  *     test stack allocator validates also
- *     /acfg/if/init-task-construct-storage-size, since the
+ *     spec:/acfg/if/init-task-construct-storage-size, since the
  *     test_task_stack_allocate() allocate handler only supports
  *     CONFIGURE_MAXIMUM_TASKS minus one stacks and the validation test for
- *     /rtems/task/req/create-errors creates for some pre-condition variants
- *     all tasks until RTEMS_TOO_MANY is returned.  In addition,
+ *     spec:/rtems/task/req/create-errors creates for some pre-condition
+ *     variants all tasks until RTEMS_TOO_MANY is returned.  In addition,
  *     test_task_stack_allocate() checks that the allocation size is greater
  *     than or equal to TEST_MINIMUM_STACK_SIZE which validates
  *     CONFIGURE_MINIMUM_TASK_STACK_SIZE.
@@ -342,11 +342,12 @@ static void AcfgValAcfg_Action_0( void )
 
   /*
    * Check the configured CONFIGURE_TASK_STACK_ALLOCATOR hook.  Using the test
-   * stack allocator validates also /acfg/if/init-task-construct-storage-size,
-   * since the test_task_stack_allocate() allocate handler only supports
+   * stack allocator validates also
+   * spec:/acfg/if/init-task-construct-storage-size, since the
+   * test_task_stack_allocate() allocate handler only supports
    * CONFIGURE_MAXIMUM_TASKS minus one stacks and the validation test for
-   * /rtems/task/req/create-errors creates for some pre-condition variants all
-   * tasks until RTEMS_TOO_MANY is returned.  In addition,
+   * spec:/rtems/task/req/create-errors creates for some pre-condition variants
+   * all tasks until RTEMS_TOO_MANY is returned.  In addition,
    * test_task_stack_allocate() checks that the allocation size is greater than
    * or equal to TEST_MINIMUM_STACK_SIZE which validates
    * CONFIGURE_MINIMUM_TASK_STACK_SIZE.

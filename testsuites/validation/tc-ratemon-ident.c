@@ -66,7 +66,7 @@
  * This test case performs the following actions:
  *
  * - Run the generic object identification tests for Classic API rate monotonic
- *   class objects defined by /rtems/req/ident-local.
+ *   class objects defined by spec:/rtems/req/ident-local.
  *
  * @{
  */
@@ -83,7 +83,7 @@ static rtems_status_code ClassicRatemonIdentAction(
 
 /**
  * @brief Run the generic object identification tests for Classic API rate
- *   monotonic class objects defined by /rtems/req/ident-local.
+ *   monotonic class objects defined by spec:/rtems/req/ident-local.
  */
 static void RtemsRatemonValIdent_Action_0( void )
 {

@@ -72,7 +72,7 @@
  * This test case performs the following actions:
  *
  * - Run the event send and receive tests for the application event set defined
- *   by /rtems/event/req/send-receive.
+ *   by spec:/rtems/event/req/send-receive.
  *
  * @{
  */
@@ -105,7 +105,7 @@ static rtems_event_set GetPendingEvents( Thread_Control *thread )
 
 /**
  * @brief Run the event send and receive tests for the application event set
- *   defined by /rtems/event/req/send-receive.
+ *   defined by spec:/rtems/event/req/send-receive.
  */
 static void RtemsEventValSendReceive_Action_0( void )
 {
@@ -140,7 +140,7 @@ T_TEST_CASE( RtemsEventValSendReceive )
  * This test case performs the following actions:
  *
  * - Run the event send and receive tests for the system event set defined by
- *   /rtems/event/req/send-receive.
+ *   spec:/rtems/event/req/send-receive.
  *
  * @{
  */
@@ -178,7 +178,7 @@ static rtems_event_set GetPendingSystemEvents( Thread_Control *thread )
 
 /**
  * @brief Run the event send and receive tests for the system event set defined
- *   by /rtems/event/req/send-receive.
+ *   by spec:/rtems/event/req/send-receive.
  */
 static void RtemsEventValSystemSendReceive_Action_0( void )
 {

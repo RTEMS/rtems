@@ -405,7 +405,7 @@ static void RtemsSemReqFlush_Post_Action_Check(
     case RtemsSemReqFlush_Post_Action_FlushFIFO: {
       /*
        * The calling task shall flush the semaphore as specified by
-       * /score/tq/req/flush-fifo.
+       * spec:/score/tq/req/flush-fifo.
        */
       ScoreTqReqFlushFifo_Run( &ctx->tq_ctx, false );
       break;
@@ -414,7 +414,7 @@ static void RtemsSemReqFlush_Post_Action_Check(
     case RtemsSemReqFlush_Post_Action_FlushPriority: {
       /*
        * The calling task shall flush the semaphore as specified by
-       * /score/tq/req/flush-priority.
+       * spec:/score/tq/req/flush-priority.
        */
       ScoreTqReqFlushPriority_Run( &ctx->tq_ctx, true );
       break;
@@ -423,7 +423,7 @@ static void RtemsSemReqFlush_Post_Action_Check(
     case RtemsSemReqFlush_Post_Action_FlushPriorityCeiling: {
       /*
        * The calling task shall flush the semaphore as specified by
-       * /score/tq/req/flush-priority.
+       * spec:/score/tq/req/flush-priority.
        */
       ScoreTqReqFlushPriority_Run( &ctx->tq_ctx, false );
       break;
@@ -432,7 +432,7 @@ static void RtemsSemReqFlush_Post_Action_Check(
     case RtemsSemReqFlush_Post_Action_FlushPriorityInherit: {
       /*
        * The calling task shall flush the semaphore as specified by
-       * /score/tq/req/flush-priority-inherit.
+       * spec:/score/tq/req/flush-priority-inherit.
        */
       ScoreTqReqFlushPriorityInherit_Run( &ctx->tq_ctx );
       break;
