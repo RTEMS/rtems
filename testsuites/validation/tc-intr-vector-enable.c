@@ -367,7 +367,7 @@ static void RtemsIntrReqVectorEnable_Pre_IsEnabled_Prepare(
     case RtemsIntrReqVectorEnable_Pre_IsEnabled_No: {
       /*
        * While the interrupt vector associated with the ``vector`` parameter is
-       * enabled.
+       * disabled.
        */
       /*
        * This pre-condition depends on the attributes of an interrupt vector,
