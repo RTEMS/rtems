@@ -430,7 +430,7 @@ static void CReqClockNanosleep_Pre_RQTp_Prepare(
 
     case CReqClockNanosleep_Pre_RQTp_Null: {
       /*
-       * While the ``rqtp parameter is equal to NULL.
+       * While the ``rqtp`` parameter is equal to NULL.
        */
       ctx->rqtp = NULL;
       break;
@@ -543,7 +543,7 @@ static void CReqClockNanosleep_Pre_RMTp_Prepare(
 
     case CReqClockNanosleep_Pre_RMTp_Null: {
       /*
-       * While the ``rmtp parameter is equal to NULL.
+       * While the ``rmtp`` parameter is equal to NULL.
        */
       ctx->rmtp = NULL;
       break;
