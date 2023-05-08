@@ -312,15 +312,9 @@
  *     effect. Yet, the check confirms that such a macro exists and can be
  *     used.
  *
- * - Use the RTEMS_STATIC_ANALYSIS macro.
+ * - Evaluate if RTEMS_STATIC_ANALYSIS is defined.
  *
- *   - It cannot be automatically check that the RTEMS_STATIC_ANALYSIS macro
- *     has the desired effect.
- *
- * - Use the RTEMS_STATIC_ANALYSIS macro.
- *
- *   - It cannot be automatically check that the RTEMS_STATIC_ANALYSIS macro
- *     has the desired effect.
+ *   - Check that RTEMS_STATIC_ANALYSIS was not defined.
  *
  * - Use the RTEMS_STATIC_ASSERT() macro.
  *
@@ -1556,49 +1550,26 @@ static void RtemsBasedefsValBasedefs_Action_40( void )
 }
 
 /**
- * @brief Use the RTEMS_STATIC_ANALYSIS macro.
+ * @brief Evaluate if RTEMS_STATIC_ANALYSIS is defined.
  */
 static void RtemsBasedefsValBasedefs_Action_41( void )
 {
-  /* No action */
+  #if defined(RTEMS_STATIC_ANALYSIS)
+  bool defined = true;
+  #else
+  bool defined = false;
+  #endif
 
   /*
-   * It cannot be automatically check that the RTEMS_STATIC_ANALYSIS macro has
-   * the desired effect.
+   * Check that RTEMS_STATIC_ANALYSIS was not defined.
    */
-  #if defined(__COVERITY__)
-  #  if defined(RTEMS_STATIC_ANALYSIS)
-    T_quiet_true( true, "test passes, no output" );
-  #  else
-    T_quiet_true( false, "RTEMS_STATIC_ANALYSIS not defined" );
-  #  endif
-  #endif
-}
-
-/**
- * @brief Use the RTEMS_STATIC_ANALYSIS macro.
- */
-static void RtemsBasedefsValBasedefs_Action_42( void )
-{
-  /* No action */
-
-  /*
-   * It cannot be automatically check that the RTEMS_STATIC_ANALYSIS macro has
-   * the desired effect.
-   */
-  #if !defined(__COVERITY__)
-  #  if !defined(RTEMS_STATIC_ANALYSIS)
-    T_quiet_true( true, "test passes, no output" );
-  #  else
-    T_quiet_true( false, "RTEMS_STATIC_ANALYSIS defined" );
-  #  endif
-  #endif
+  T_step_false( 94, defined );
 }
 
 /**
  * @brief Use the RTEMS_STATIC_ASSERT() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_43( void )
+static void RtemsBasedefsValBasedefs_Action_42( void )
 {
   RTEMS_STATIC_ASSERT( STATIC_ASSERT_COND 1, RTEMS_STATIC_ASSERT_test );
 
@@ -1613,7 +1584,7 @@ static void RtemsBasedefsValBasedefs_Action_43( void )
 /**
  * @brief Use the RTEMS_STRING() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_44( void )
+static void RtemsBasedefsValBasedefs_Action_43( void )
 {
   const char *string_var;
   const char *string_empty_var;
@@ -1627,16 +1598,16 @@ static void RtemsBasedefsValBasedefs_Action_44( void )
    * Check that the RTEMS_STRING() macro converts its arguments into a single
    * string without applying pre-processor substitutions on its arguments.
    */
-  T_step_eq_str( 94, string_var, "\\ STRING_PREFIX cat\"\"\n" );
-  T_step_eq_str( 95, string_empty_var, "" );
-  T_step_eq_str( 96, string_multi_args_var,
+  T_step_eq_str( 95, string_var, "\\ STRING_PREFIX cat\"\"\n" );
+  T_step_eq_str( 96, string_empty_var, "" );
+  T_step_eq_str( 97, string_multi_args_var,
     "STRING_PREFIX, \"abc\", DEF" );
 }
 
 /**
  * @brief Use the RTEMS_SYMBOL_NAME() macro with an example object.
  */
-static void RtemsBasedefsValBasedefs_Action_45( void )
+static void RtemsBasedefsValBasedefs_Action_44( void )
 {
   /* Nothing to do */
 
@@ -1644,13 +1615,13 @@ static void RtemsBasedefsValBasedefs_Action_45( void )
    * Check that the RTEMS_SYMBOL_NAME() macro expands to the expected symbol
    * name.
    */
-  T_step_eq_ptr( 97, &global_object, &address_of_global_object );
+  T_step_eq_ptr( 98, &global_object, &address_of_global_object );
 }
 
 /**
  * @brief Invoke the  TRUE macro on an example.
  */
-static void RtemsBasedefsValBasedefs_Action_46( void )
+static void RtemsBasedefsValBasedefs_Action_45( void )
 {
   char *true_result;
   true_result = _TO_STR( TRUE );
@@ -1658,7 +1629,7 @@ static void RtemsBasedefsValBasedefs_Action_46( void )
   /*
    * Check that of TRUE is substituted by 0.
    */
-  T_step_eq_str( 98, true_result, "1" );
+  T_step_eq_str( 99, true_result, "1" );
 }
 
 /**
@@ -1666,7 +1637,7 @@ static void RtemsBasedefsValBasedefs_Action_46( void )
  *   is already the test as the statements will not compile without error if
  *   the macro did not evaluate to the correct type.
  */
-static void RtemsBasedefsValBasedefs_Action_47( void )
+static void RtemsBasedefsValBasedefs_Action_46( void )
 {
   int type_refx_val = 7;
   char type_refx_chr = 'c';
@@ -1688,24 +1659,24 @@ static void RtemsBasedefsValBasedefs_Action_47( void )
    * The checks here are proforma. The macro is tested by the fact that the
    * action will not compile if the macro returns a wrong result.
    */
-  T_step_eq_int( 99, type_refx_val, 7 );
-  T_step_eq_int( 100, type_refx_x_int, 8 );
-  T_step_eq_int( 101, type_refx_xx_int, 9 );
-  T_step_eq_int( 102, type_refx_xxx_int, 10 );
-  T_step_eq_int( 103, *type_refx_xxx_int_p, 7 );
-  T_step_eq_char( 104, type_refx_chr, 'c' );
-  T_step_eq_char( 105, type_refx_ax_char, 'd' );
-  T_step_eq_char( 106, type_refx_x_char, 'e' );
-  T_step_eq_char( 107, type_refx_char, 'f' );
-  T_step_eq_char( 108, type_refx_xx_char, 'g' );
-  T_step_eq_short( 109, *type_refx_xx_const_short_p, 333 );
+  T_step_eq_int( 100, type_refx_val, 7 );
+  T_step_eq_int( 101, type_refx_x_int, 8 );
+  T_step_eq_int( 102, type_refx_xx_int, 9 );
+  T_step_eq_int( 103, type_refx_xxx_int, 10 );
+  T_step_eq_int( 104, *type_refx_xxx_int_p, 7 );
+  T_step_eq_char( 105, type_refx_chr, 'c' );
+  T_step_eq_char( 106, type_refx_ax_char, 'd' );
+  T_step_eq_char( 107, type_refx_x_char, 'e' );
+  T_step_eq_char( 108, type_refx_char, 'f' );
+  T_step_eq_char( 109, type_refx_xx_char, 'g' );
+  T_step_eq_short( 110, *type_refx_xx_const_short_p, 333 );
 }
 
 /**
  * @brief Use the RTEMS_UNUSED macro. See also unused_func() at the beginning
  *   of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_48( void )
+static void RtemsBasedefsValBasedefs_Action_47( void )
 {
   int unused_var RTEMS_UNUSED;
   typedef struct RTEMS_UNUSED {
@@ -1752,7 +1723,7 @@ static void RtemsBasedefsValBasedefs_Action_48( void )
  * @brief Use of the RTEMS_UNREACHABLE() macro in function definition of
  *   unreachable_func() at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_49( void )
+static void RtemsBasedefsValBasedefs_Action_48( void )
 {
   int unreachable_result;
   unreachable_result = unreachable_func(2101);
@@ -1762,14 +1733,14 @@ static void RtemsBasedefsValBasedefs_Action_49( void )
    * effect. It is checked that such a macro exists and the compiler warning
    * about the missing return statement is suppressed.
    */
-  T_step_eq_int( 110, unreachable_result, 2101 );
+  T_step_eq_int( 111, unreachable_result, 2101 );
 }
 
 /**
  * @brief Use of the RTEMS_USED macro in function definition of used_func() at
  *   the beginning of this file and with used_var above.
  */
-static void RtemsBasedefsValBasedefs_Action_50( void )
+static void RtemsBasedefsValBasedefs_Action_49( void )
 {
   /* No action */
 
@@ -1784,7 +1755,7 @@ static void RtemsBasedefsValBasedefs_Action_50( void )
  * @brief Use of the RTEMS_WARN_UNUSED_RESULT macro in function definition of
  *   warn_unused_func() at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_51( void )
+static void RtemsBasedefsValBasedefs_Action_50( void )
 {
   int warn_unused_result;
   warn_unused_result = warn_unused_func( 33 );
@@ -1808,14 +1779,14 @@ static void RtemsBasedefsValBasedefs_Action_51( void )
    * disregarded result returned by the call to the ``warn_unused_func()``
    * function.
    */
-  T_step_eq_int( 111, warn_unused_result, 11 );
+  T_step_eq_int( 112, warn_unused_result, 11 );
 }
 
 /**
  * @brief Use of ``basedefs_weak_alias_0/1_func()`` which are defined with the
  *   RTEMS_WEAK_ALIAS() macro at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_52( void )
+static void RtemsBasedefsValBasedefs_Action_51( void )
 {
   int weak_alias_0_result;
   int weak_alias_1_result;
@@ -1826,21 +1797,21 @@ static void RtemsBasedefsValBasedefs_Action_52( void )
    * There exists no strong alias for basedefs_weak_alias_0_func(). Check that
    * ori_func() and basedefs_weak_alias_0_func() are the same function.
    */
-  T_step_eq_int( 112, weak_alias_0_result, 16 );
+  T_step_eq_int( 113, weak_alias_0_result, 16 );
 
   /*
    * File ``tc_basedefs_pndant.c`` defines a strong function for
    * basedefs_weak_alias_1_func(). Check that ori_func() and
    * basedefs_weak_alias_1_func() are not the same function.
    */
-  T_step_eq_int( 113, weak_alias_1_result, 56 );
+  T_step_eq_int( 114, weak_alias_1_result, 56 );
 }
 
 /**
  * @brief Use of ``basedefs_weak_0/1_var`` and ``basedefs_weak_0/1_func()``
  *   which are defined with the RTEMS_WEAK macro at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_53( void )
+static void RtemsBasedefsValBasedefs_Action_52( void )
 {
   int weak_0_result;
   int weak_1_result;
@@ -1852,22 +1823,22 @@ static void RtemsBasedefsValBasedefs_Action_53( void )
    * other symbols with the same name. Hence, the checks test that the weak
    * symbols are used.
    */
-  T_step_eq_int( 114, basedefs_weak_0_var, 60 );
-  T_step_eq_int( 115, weak_0_result, 63 );
+  T_step_eq_int( 115, basedefs_weak_0_var, 60 );
+  T_step_eq_int( 116, weak_0_result, 63 );
 
   /*
    * ``basedefs_weak_1_var`` and ``basedefs_weak_1_func()`` are overwritten by
    * strong symbols defined in file ``tc_basedefs_pendant.c``. Hence, the
    * checks test that the strong variants are used.
    */
-  T_step_eq_int( 116, basedefs_weak_1_var, 62 );
-  T_step_eq_int( 117, weak_1_result, 65 );
+  T_step_eq_int( 117, basedefs_weak_1_var, 62 );
+  T_step_eq_int( 118, weak_1_result, 65 );
 }
 
 /**
  * @brief Invoke the RTEMS_XCONCAT() macro on examples.
  */
-static void RtemsBasedefsValBasedefs_Action_54( void )
+static void RtemsBasedefsValBasedefs_Action_53( void )
 {
   int xconcat0_result;
   int xconcat1_result;
@@ -1883,31 +1854,31 @@ static void RtemsBasedefsValBasedefs_Action_54( void )
    * Check that the two arguments of RTEMS_XCONCAT() are concatenated without
    * inserting new characters.
    */
-  T_step_eq_int( 118, xconcat0_result, 91 );
+  T_step_eq_int( 119, xconcat0_result, 91 );
 
   /*
    * Check that the two arguments of RTEMS_XCONCAT() are substituted before
    * they are concatenated.
    */
-  T_step_eq_int( 119, xconcat1_result, 91 );
+  T_step_eq_int( 120, xconcat1_result, 91 );
 
   /*
    * Check that the two arguments of RTEMS_XCONCAT() are can be the macro
    * itself.
    */
-  T_step_eq_int( 120, xconcat2_result, 91 );
+  T_step_eq_int( 121, xconcat2_result, 91 );
 
   /*
    * Check that the result of the RTEMS_XCONCAT() expansion is subject to a
    * further pre-processor substitution.
    */
-  T_step_eq_int( 121, xconcat3_result, 91 );
+  T_step_eq_int( 122, xconcat3_result, 91 );
 }
 
 /**
  * @brief Use the RTEMS_XSTRING() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_55( void )
+static void RtemsBasedefsValBasedefs_Action_54( void )
 {
   const char *xstring_var;
   const char *xstring_empty_var;
@@ -1921,9 +1892,9 @@ static void RtemsBasedefsValBasedefs_Action_55( void )
    * Check that the RTEMS_XSTRING() macro applies pre-processor substitutions
    * on its arguments and converts its arguments into a single string.
    */
-  T_step_eq_str( 122, xstring_var, "\\ str cat\"\"\n" );
-  T_step_eq_str( 123, xstring_empty_var, "" );
-  T_step_eq_str( 124, string_multi_args_var,
+  T_step_eq_str( 123, xstring_var, "\\ str cat\"\"\n" );
+  T_step_eq_str( 124, xstring_empty_var, "" );
+  T_step_eq_str( 125, string_multi_args_var,
     "str, ABC, \"abc\", DEF" );
 }
 
@@ -1931,7 +1902,7 @@ static void RtemsBasedefsValBasedefs_Action_55( void )
  * @brief Use of the RTEMS_ZERO_LENGTH_ARRAY macro in a declaration of a
  *   structure.
  */
-static void RtemsBasedefsValBasedefs_Action_56( void )
+static void RtemsBasedefsValBasedefs_Action_55( void )
 {
   typedef struct {
     char chr;
@@ -1946,11 +1917,11 @@ static void RtemsBasedefsValBasedefs_Action_56( void )
    * Checked that the RTEMS_ZERO_LENGTH_ARRAY macro produces a structure
    * similar to a structure with one element.
    */
-  T_step_eq_sz( 125, sizeof( zero_length_struct_0 ),
+  T_step_eq_sz( 126, sizeof( zero_length_struct_0 ),
     sizeof( zero_length_struct_1 ) - sizeof( int ) );
-  T_step_eq_sz( 126, offsetof( zero_length_struct_0, chr ),
+  T_step_eq_sz( 127, offsetof( zero_length_struct_0, chr ),
     offsetof( zero_length_struct_1, chr ) );
-  T_step_eq_sz( 127, offsetof( zero_length_struct_0, array ),
+  T_step_eq_sz( 128, offsetof( zero_length_struct_0, array ),
     offsetof( zero_length_struct_1, array ) );
 }
 
@@ -1959,7 +1930,7 @@ static void RtemsBasedefsValBasedefs_Action_56( void )
  */
 T_TEST_CASE( RtemsBasedefsValBasedefs )
 {
-  T_plan( 128 );
+  T_plan( 129 );
 
   RtemsBasedefsValBasedefs_Action_0();
   RtemsBasedefsValBasedefs_Action_1();
@@ -2017,7 +1988,6 @@ T_TEST_CASE( RtemsBasedefsValBasedefs )
   RtemsBasedefsValBasedefs_Action_53();
   RtemsBasedefsValBasedefs_Action_54();
   RtemsBasedefsValBasedefs_Action_55();
-  RtemsBasedefsValBasedefs_Action_56();
 }
 
 /** @} */
