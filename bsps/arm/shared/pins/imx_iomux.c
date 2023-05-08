@@ -307,7 +307,17 @@ int imx_iomux_configure_pins(const void *fdt, uint32_t cfgxref)
 		WR4(sc, cfg->mux_reg, cfg->mux_val | sion);
 		iomux_configure_input(sc, cfg->input_reg, cfg->input_val);
 		if ((cfg->padconf_val & PADCONF_NONE) == 0)
+#ifndef __rtems__
 			WR4(sc, cfg->padconf_reg, cfg->padconf_val);
+#else /* __rtems__ */
+			/*
+			 * Need to mask the flags. On (for example) i.MXRT1166
+			 * they are used for domain write protection. On other
+			 * i.MX* these are Reserved.
+			 */
+			WR4(sc, cfg->padconf_reg, cfg->padconf_val
+				& ~(PADCONF_SION | PADCONF_NONE));
+#endif /* __rtems__ */
 #ifndef __rtems__
 		if (bootverbose) {
 			char name[32]; 
