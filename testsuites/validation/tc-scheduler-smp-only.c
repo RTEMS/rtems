@@ -52,6 +52,7 @@
 #include "config.h"
 #endif
 
+#include <limits.h>
 #include <rtems.h>
 
 #include "ts-config.h"
@@ -92,6 +93,9 @@
  *   - Check that processor 0 has scheduler A assigned.
  *
  *   - Check that processor 1 has scheduler B assigned.
+ *
+ *   - Check that scheduler B has the maximum priority of the EDF SMP
+ *     scheduler.
  *
  *   - Check that processor 2 has scheduler C assigned if it is present.
  *
@@ -165,9 +169,10 @@ static void RtemsSchedulerValSmpOnly_Action_1( void )
  */
 static void RtemsSchedulerValSmpOnly_Action_2( void )
 {
-  rtems_status_code sc;
-  rtems_id          id[ 4 ];
-  rtems_id          id_by_cpu;
+  rtems_status_code   sc;
+  rtems_id            id[ 4 ];
+  rtems_id            id_by_cpu;
+  rtems_task_priority priority;
 
   sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &id[ 0 ]);
   T_step_rsc_success( 3, sc );
@@ -216,16 +221,23 @@ static void RtemsSchedulerValSmpOnly_Action_2( void )
   T_step_eq_u32( 14, id[ 1 ], id_by_cpu );
 
   /*
+   * Check that scheduler B has the maximum priority of the EDF SMP scheduler.
+   */
+  sc = rtems_scheduler_get_maximum_priority( id_by_cpu, &priority );
+  T_step_rsc_success( 15, sc );
+  T_step_eq_u32( 16, priority, (uint32_t) INT_MAX );
+
+  /*
    * Check that processor 2 has scheduler C assigned if it is present.
    */
   sc = rtems_scheduler_ident_by_processor( 2, &id_by_cpu );
-  T_step_true( 15, sc == RTEMS_INVALID_NAME || id[ 2 ] == id_by_cpu );
+  T_step_true( 17, sc == RTEMS_INVALID_NAME || id[ 2 ] == id_by_cpu );
 
   /*
    * Check that processor 3 has scheduler C assigned if it is present.
    */
   sc = rtems_scheduler_ident_by_processor( 3, &id_by_cpu );
-  T_step_true( 16, sc == RTEMS_INVALID_NAME || id[ 2 ] == id_by_cpu );
+  T_step_true( 18, sc == RTEMS_INVALID_NAME || id[ 2 ] == id_by_cpu );
 }
 
 /**
@@ -233,7 +245,7 @@ static void RtemsSchedulerValSmpOnly_Action_2( void )
  */
 T_TEST_CASE( RtemsSchedulerValSmpOnly )
 {
-  T_plan( 17 );
+  T_plan( 19 );
 
   RtemsSchedulerValSmpOnly_Action_0();
   RtemsSchedulerValSmpOnly_Action_1();
