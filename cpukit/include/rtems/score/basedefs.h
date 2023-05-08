@@ -75,9 +75,8 @@ extern "C" {
 /**
  * @defgroup RTEMSAPI API
  *
- * @brief API
- *
- * This group contains the RTEMS Application Programming Interface (API).
+ * @brief This group contains the RTEMS Application Programming Interface
+ *   (API).
  */
 
 /* Generated from spec:/rtems/basedefs/if/group */
