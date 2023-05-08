@@ -210,6 +210,12 @@ static T_fixture RtemsEventValPerf_Fixture = {
 };
 
 /**
+ * @defgroup RtemsEventReqPerfIsrPreempt spec:/rtems/event/req/perf-isr-preempt
+ *
+ * @{
+ */
+
+/**
  * @brief Send two events from with interrupt context.  Satisfy the event
  *   condition.
  */
@@ -258,6 +264,14 @@ static bool RtemsEventReqPerfIsrPreempt_Teardown_Wrap(
   ctx = arg;
   return RtemsEventReqPerfIsrPreempt_Teardown( ctx, delta, tic, toc, retry );
 }
+
+/** @} */
+
+/**
+ * @defgroup RtemsEventReqPerfOther spec:/rtems/event/req/perf-other
+ *
+ * @{
+ */
 
 /**
  * @brief Lower the worker priority.
@@ -324,7 +338,15 @@ static bool RtemsEventReqPerfOther_Teardown_Wrap(
   return RtemsEventReqPerfOther_Teardown( ctx, delta, tic, toc, retry );
 }
 
+/** @} */
+
 #if defined(RTEMS_SMP)
+/**
+ * @defgroup RtemsEventReqPerfOtherCpu spec:/rtems/event/req/perf-other-cpu
+ *
+ * @{
+ */
+
 /**
  * @brief Move worker to scheduler B.
  */
@@ -391,7 +413,16 @@ static void RtemsEventReqPerfOtherCpu_Cleanup( RtemsEventValPerf_Context *ctx )
 {
   SetScheduler( ctx->worker_id, SCHEDULER_A_ID, PRIO_HIGH );
 }
+
+/** @} */
 #endif
+
+/**
+ * @defgroup RtemsEventReqPerfOtherNotSatisfied \
+ *   spec:/rtems/event/req/perf-other-not-satisfied
+ *
+ * @{
+ */
 
 /**
  * @brief Send an event.  Do not satisfy the event condition.
@@ -450,6 +481,15 @@ static bool RtemsEventReqPerfOtherNotSatisfied_Teardown_Wrap(
   );
 }
 
+/** @} */
+
+/**
+ * @defgroup RtemsEventReqPerfOtherPreempt \
+ *   spec:/rtems/event/req/perf-other-preempt
+ *
+ * @{
+ */
+
 /**
  * @brief Send two events.  Satisfy the event condition.
  */
@@ -501,6 +541,8 @@ static bool RtemsEventReqPerfOtherPreempt_Teardown_Wrap(
   ctx = arg;
   return RtemsEventReqPerfOtherPreempt_Teardown( ctx, delta, tic, toc, retry );
 }
+
+/** @} */
 
 /**
  * @fn void T_case_body_RtemsEventValPerf( void )

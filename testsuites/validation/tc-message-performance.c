@@ -279,6 +279,13 @@ static T_fixture RtemsMessageValPerf_Fixture = {
 };
 
 /**
+ * @defgroup RtemsMessageReqPerfReceiveTry \
+ *   spec:/rtems/message/req/perf-receive-try
+ *
+ * @{
+ */
+
+/**
  * @brief Try to receive a message.
  */
 static void RtemsMessageReqPerfReceiveTry_Body(
@@ -334,6 +341,15 @@ static bool RtemsMessageReqPerfReceiveTry_Teardown_Wrap(
   ctx = arg;
   return RtemsMessageReqPerfReceiveTry_Teardown( ctx, delta, tic, toc, retry );
 }
+
+/** @} */
+
+/**
+ * @defgroup RtemsMessageReqPerfReceiveWaitForever \
+ *   spec:/rtems/message/req/perf-receive-wait-forever
+ *
+ * @{
+ */
 
 /**
  * @brief Schedule a message send.
@@ -422,6 +438,15 @@ static bool RtemsMessageReqPerfReceiveWaitForever_Teardown_Wrap(
   );
 }
 
+/** @} */
+
+/**
+ * @defgroup RtemsMessageReqPerfReceiveWaitTimed \
+ *   spec:/rtems/message/req/perf-receive-wait-timed
+ *
+ * @{
+ */
+
 /**
  * @brief Schedule a message send.
  */
@@ -509,6 +534,14 @@ static bool RtemsMessageReqPerfReceiveWaitTimed_Teardown_Wrap(
   );
 }
 
+/** @} */
+
+/**
+ * @defgroup RtemsMessageReqPerfSend spec:/rtems/message/req/perf-send
+ *
+ * @{
+ */
+
 /**
  * @brief Send a message.
  */
@@ -566,6 +599,15 @@ static bool RtemsMessageReqPerfSend_Teardown_Wrap(
   ctx = arg;
   return RtemsMessageReqPerfSend_Teardown( ctx, delta, tic, toc, retry );
 }
+
+/** @} */
+
+/**
+ * @defgroup RtemsMessageReqPerfSendOther \
+ *   spec:/rtems/message/req/perf-send-other
+ *
+ * @{
+ */
 
 /**
  * @brief Let the worker wait on the message queue.
@@ -641,7 +683,16 @@ static bool RtemsMessageReqPerfSendOther_Teardown_Wrap(
   return RtemsMessageReqPerfSendOther_Teardown( ctx, delta, tic, toc, retry );
 }
 
+/** @} */
+
 #if defined(RTEMS_SMP)
+/**
+ * @defgroup RtemsMessageReqPerfSendOtherCpu \
+ *   spec:/rtems/message/req/perf-send-other-cpu
+ *
+ * @{
+ */
+
 /**
  * @brief Move worker to scheduler B.
  */
@@ -743,7 +794,16 @@ static void RtemsMessageReqPerfSendOtherCpu_Cleanup(
 {
   SetScheduler( ctx->worker_id, SCHEDULER_A_ID, PRIO_HIGH );
 }
+
+/** @} */
 #endif
+
+/**
+ * @defgroup RtemsMessageReqPerfSendPreempt \
+ *   spec:/rtems/message/req/perf-send-preempt
+ *
+ * @{
+ */
 
 /**
  * @brief Let the worker wait on the message queue.
@@ -824,6 +884,8 @@ static bool RtemsMessageReqPerfSendPreempt_Teardown_Wrap(
     retry
   );
 }
+
+/** @} */
 
 /**
  * @fn void T_case_body_RtemsMessageValPerf( void )

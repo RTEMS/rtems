@@ -213,6 +213,12 @@ static T_fixture RtemsPartValPerf_Fixture = {
 };
 
 /**
+ * @defgroup RtemsPartReqPerfGetBuffer spec:/rtems/part/req/perf-get-buffer
+ *
+ * @{
+ */
+
+/**
  * @brief Get a buffer.
  */
 static void RtemsPartReqPerfGetBuffer_Body( RtemsPartValPerf_Context *ctx )
@@ -262,6 +268,15 @@ static bool RtemsPartReqPerfGetBuffer_Teardown_Wrap(
   ctx = arg;
   return RtemsPartReqPerfGetBuffer_Teardown( ctx, delta, tic, toc, retry );
 }
+
+/** @} */
+
+/**
+ * @defgroup RtemsPartReqPerfGetNoBuffer \
+ *   spec:/rtems/part/req/perf-get-no-buffer
+ *
+ * @{
+ */
 
 /**
  * @brief Get the buffer.
@@ -335,6 +350,15 @@ static void RtemsPartReqPerfGetNoBuffer_Cleanup(
   T_rsc_success( sc );
 }
 
+/** @} */
+
+/**
+ * @defgroup RtemsPartReqPerfReturnBuffer \
+ *   spec:/rtems/part/req/perf-return-buffer
+ *
+ * @{
+ */
+
 /**
  * @brief Get the buffer.
  */
@@ -399,6 +423,8 @@ static bool RtemsPartReqPerfReturnBuffer_Teardown_Wrap(
   ctx = arg;
   return RtemsPartReqPerfReturnBuffer_Teardown( ctx, delta, tic, toc, retry );
 }
+
+/** @} */
 
 /**
  * @fn void T_case_body_RtemsPartValPerf( void )

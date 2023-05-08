@@ -160,6 +160,13 @@ static T_fixture RtemsBarrierValPerf_Fixture = {
 };
 
 /**
+ * @defgroup RtemsBarrierReqPerfReleaseAuto \
+ *   spec:/rtems/barrier/req/perf-release-auto
+ *
+ * @{
+ */
+
+/**
  * @brief Create an automatic release barrier.
  */
 static void RtemsBarrierReqPerfReleaseAuto_Prepare(
@@ -244,7 +251,16 @@ static void RtemsBarrierReqPerfReleaseAuto_Cleanup(
   T_rsc_success( sc );
 }
 
+/** @} */
+
 #if defined(RTEMS_SMP)
+/**
+ * @defgroup RtemsBarrierReqPerfReleaseAutoOtherCpu \
+ *   spec:/rtems/barrier/req/perf-release-auto-other-cpu
+ *
+ * @{
+ */
+
 /**
  * @brief Create an automatic release barrier.  Create and start a worker task.
  */
@@ -341,7 +357,16 @@ static void RtemsBarrierReqPerfReleaseAutoOtherCpu_Cleanup(
   sc = rtems_barrier_delete( ctx->barrier_id );
   T_rsc_success( sc );
 }
+
+/** @} */
 #endif
+
+/**
+ * @defgroup RtemsBarrierReqPerfReleaseManual \
+ *   spec:/rtems/barrier/req/perf-release-manual
+ *
+ * @{
+ */
 
 /**
  * @brief Create a manual release barrier.  Create and start a worker task.
@@ -456,6 +481,15 @@ static void RtemsBarrierReqPerfReleaseManual_Cleanup(
   RestoreRunnerPriority();
 }
 
+/** @} */
+
+/**
+ * @defgroup RtemsBarrierReqPerfReleaseManualPreempt \
+ *   spec:/rtems/barrier/req/perf-release-manual-preempt
+ *
+ * @{
+ */
+
 /**
  * @brief Create a manual release barrier.  Create and start a worker task.
  */
@@ -554,6 +588,8 @@ static void RtemsBarrierReqPerfReleaseManualPreempt_Cleanup(
 
   RestoreRunnerPriority();
 }
+
+/** @} */
 
 /**
  * @fn void T_case_body_RtemsBarrierValPerf( void )

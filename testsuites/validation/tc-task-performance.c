@@ -226,6 +226,12 @@ static T_fixture RtemsTaskValPerf_Fixture = {
 };
 
 /**
+ * @defgroup RtemsTaskReqPerfConstruct spec:/rtems/task/req/perf-construct
+ *
+ * @{
+ */
+
+/**
  * @brief Construct a worker task.
  */
 static void RtemsTaskReqPerfConstruct_Body( RtemsTaskValPerf_Context *ctx )
@@ -273,6 +279,14 @@ static bool RtemsTaskReqPerfConstruct_Teardown_Wrap(
   ctx = arg;
   return RtemsTaskReqPerfConstruct_Teardown( ctx, delta, tic, toc, retry );
 }
+
+/** @} */
+
+/**
+ * @defgroup RtemsTaskReqPerfRestart spec:/rtems/task/req/perf-restart
+ *
+ * @{
+ */
 
 /**
  * @brief Create and start a worker task.
@@ -339,6 +353,15 @@ static void RtemsTaskReqPerfRestart_Cleanup( RtemsTaskValPerf_Context *ctx )
 {
   DeleteTask( ctx->worker_id );
 }
+
+/** @} */
+
+/**
+ * @defgroup RtemsTaskReqPerfRestartPreempt \
+ *   spec:/rtems/task/req/perf-restart-preempt
+ *
+ * @{
+ */
 
 /**
  * @brief Create and start a worker task.
@@ -422,6 +445,14 @@ static void RtemsTaskReqPerfRestartPreempt_Cleanup(
   DeleteTask( ctx->worker_id );
 }
 
+/** @} */
+
+/**
+ * @defgroup RtemsTaskReqPerfRestartSelf spec:/rtems/task/req/perf-restart-self
+ *
+ * @{
+ */
+
 /**
  * @brief Create and start a worker task.
  */
@@ -492,7 +523,16 @@ static void RtemsTaskReqPerfRestartSelf_Cleanup(
   DeleteTask( ctx->worker_id );
 }
 
+/** @} */
+
 #if defined(RTEMS_SMP)
+/**
+ * @defgroup RtemsTaskReqPerfSetSchedulerMove \
+ *   spec:/rtems/task/req/perf-set-scheduler-move
+ *
+ * @{
+ */
+
 /**
  * @brief Set the runner affinity.
  */
@@ -572,7 +612,16 @@ static void RtemsTaskReqPerfSetSchedulerMove_Cleanup(
 {
   SetSelfAffinityOne( 0 );
 }
+
+/** @} */
 #endif
+
+/**
+ * @defgroup RtemsTaskReqPerfSetSchedulerNop \
+ *   spec:/rtems/task/req/perf-set-scheduler-nop
+ *
+ * @{
+ */
 
 /**
  * @brief Set the scheduler of the runner.
@@ -632,7 +681,16 @@ static bool RtemsTaskReqPerfSetSchedulerNop_Teardown_Wrap(
   );
 }
 
+/** @} */
+
 #if defined(RTEMS_SMP)
+/**
+ * @defgroup RtemsTaskReqPerfSetSchedulerOther \
+ *   spec:/rtems/task/req/perf-set-scheduler-other
+ *
+ * @{
+ */
+
 /**
  * @brief Create and start a worker task for scheduler B.
  */
@@ -715,9 +773,18 @@ static void RtemsTaskReqPerfSetSchedulerOther_Cleanup(
 {
   DeleteTask( ctx->worker_id );
 }
+
+/** @} */
 #endif
 
 #if defined(RTEMS_SMP)
+/**
+ * @defgroup RtemsTaskReqPerfSetSchedulerPreempt \
+ *   spec:/rtems/task/req/perf-set-scheduler-preempt
+ *
+ * @{
+ */
+
 /**
  * @brief Create and start two worker tasks for scheduler B.  Make the second
  *   worker busy.
@@ -834,7 +901,15 @@ static void RtemsTaskReqPerfSetSchedulerPreempt_Cleanup(
   DeleteTask( ctx->worker_2_id );
   DeleteTask( ctx->worker_id );
 }
+
+/** @} */
 #endif
+
+/**
+ * @defgroup RtemsTaskReqPerfStart spec:/rtems/task/req/perf-start
+ *
+ * @{
+ */
 
 /**
  * @brief Create a worker task.
@@ -903,6 +978,15 @@ static bool RtemsTaskReqPerfStart_Teardown_Wrap(
   ctx = arg;
   return RtemsTaskReqPerfStart_Teardown( ctx, delta, tic, toc, retry );
 }
+
+/** @} */
+
+/**
+ * @defgroup RtemsTaskReqPerfStartPreempt \
+ *   spec:/rtems/task/req/perf-start-preempt
+ *
+ * @{
+ */
 
 /**
  * @brief Create a worker task.
@@ -974,6 +1058,8 @@ static bool RtemsTaskReqPerfStartPreempt_Teardown_Wrap(
   ctx = arg;
   return RtemsTaskReqPerfStartPreempt_Teardown( ctx, delta, tic, toc, retry );
 }
+
+/** @} */
 
 /**
  * @fn void T_case_body_RtemsTaskValPerf( void )
