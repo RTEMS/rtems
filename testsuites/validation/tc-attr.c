@@ -124,7 +124,7 @@
  *
  * - Check the value of RTEMS_DEFAULT_ATTRIBUTES.
  *
- *   - Check RTEMS_DEFAULT_ATTRIBUTES equals ``RTEMS_FIFO | RTEMS_LOCAL``.
+ *   - Check RTEMS_DEFAULT_ATTRIBUTES equals RTEMS_FIFO | RTEMS_LOCAL.
  *
  * @{
  */
@@ -324,7 +324,7 @@ static void RtemsAttrValAttr_Action_4( void )
   /* No action */
 
   /*
-   * Check RTEMS_DEFAULT_ATTRIBUTES equals ``RTEMS_FIFO | RTEMS_LOCAL``.
+   * Check RTEMS_DEFAULT_ATTRIBUTES equals RTEMS_FIFO | RTEMS_LOCAL.
    */
   T_step_eq_int(
     22,
