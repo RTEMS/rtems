@@ -88,7 +88,7 @@
  *
  * - Check the value of RTEMS_DEFAULT_OPTIONS.
  *
- *   - Check RTEMS_DEFAULT_OPTIONS equals ``RTEMS_WAIT``.
+ *   - Check RTEMS_DEFAULT_OPTIONS equals RTEMS_WAIT.
  *
  * @{
  */
@@ -181,7 +181,7 @@ static void RtemsOptionValOptions_Action_3( void )
   /* No action */
 
   /*
-   * Check RTEMS_DEFAULT_OPTIONS equals ``RTEMS_WAIT``.
+   * Check RTEMS_DEFAULT_OPTIONS equals RTEMS_WAIT.
    */
   T_step_eq_int( 6, RTEMS_DEFAULT_OPTIONS, RTEMS_WAIT );
 }
