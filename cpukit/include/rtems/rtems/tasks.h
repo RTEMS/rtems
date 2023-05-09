@@ -671,7 +671,8 @@ rtems_status_code rtems_task_create(
  *
  * @brief Constructs a task from the specified task configuration.
  *
- * @param config is the task configuration.
+ * @param config is the pointer to an rtems_task_config object.  It configures
+ *   the task.
  *
  * @param[out] id is the pointer to an ::rtems_id object.  When the directive
  *   call is successful, the identifier of the constructed task will be stored
