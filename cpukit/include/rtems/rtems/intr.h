@@ -994,6 +994,13 @@ typedef void ( *rtems_interrupt_per_handler_routine )(
  * rtems_interrupt_entry_initialize().  It may be installed for an interrupt
  * vector with rtems_interrupt_entry_install() and removed from an interrupt
  * vector by rtems_interrupt_entry_remove().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this structure:
+ *
+ * * Members of the type shall not be accessed directly by the application.
+ * @endparblock
  */
 typedef struct rtems_interrupt_entry {
   /**
@@ -2077,6 +2084,13 @@ rtems_status_code rtems_interrupt_handler_iterate(
  * view.  Members shall not be accessed directly.  The structure is initialized
  * by rtems_interrupt_server_create() and maintained by the interrupt server
  * support.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this structure:
+ *
+ * * Members of the type shall not be accessed directly by the application.
+ * @endparblock
  */
 typedef struct rtems_interrupt_server_control {
   #if defined(RTEMS_SMP)
@@ -2127,6 +2141,13 @@ typedef struct rtems_interrupt_server_control {
  *
  * @par Notes
  * See also rtems_interrupt_server_create().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this structure:
+ *
+ * * Members of the type shall not be accessed directly by the application.
+ * @endparblock
  */
 typedef struct {
   /**
@@ -2715,6 +2736,13 @@ rtems_status_code rtems_interrupt_server_handler_iterate(
  * @par Notes
  * This structure shall be treated as an opaque data type from the API point of
  * view.  Members shall not be accessed directly.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this structure:
+ *
+ * * Members of the type shall not be accessed directly by the application.
+ * @endparblock
  */
 typedef struct rtems_interrupt_server_action {
   /**
@@ -2747,6 +2775,13 @@ typedef struct rtems_interrupt_server_action {
  * rtems_interrupt_server_entry_destroy().  Interrupt server actions can be
  * prepended to the entry by rtems_interrupt_server_action_prepend().  The
  * entry is submitted to be serviced by rtems_interrupt_server_entry_submit().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this structure:
+ *
+ * * Members of the type shall not be accessed directly by the application.
+ * @endparblock
  */
 typedef struct {
   /**
@@ -3041,6 +3076,13 @@ rtems_status_code rtems_interrupt_server_entry_move(
  * request can be set by rtems_interrupt_server_request_set_vector().  The
  * request is submitted to be serviced by
  * rtems_interrupt_server_request_submit().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this structure:
+ *
+ * * Members of the type shall not be accessed directly by the application.
+ * @endparblock
  */
 typedef struct {
   /**
