@@ -38,6 +38,8 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/type-opaque
 name: rtems_interrupt_server_action
 notes: |
   This structure shall be treated as an opaque data type from the
