@@ -1,0 +1,212 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes:
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/drivers
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/xip
+- bsps/arm/imxrt/mcux-sdk/drivers/adc_12b1msps_sar
+- bsps/arm/imxrt/mcux-sdk/drivers/adc_etc
+- bsps/arm/imxrt/mcux-sdk/drivers/aoi
+- bsps/arm/imxrt/mcux-sdk/drivers/bee
+- bsps/arm/imxrt/mcux-sdk/drivers/cache/armv7-m7
+- bsps/arm/imxrt/mcux-sdk/drivers/cmp
+- bsps/arm/imxrt/mcux-sdk/drivers/common
+- bsps/arm/imxrt/mcux-sdk/drivers/csi
+- bsps/arm/imxrt/mcux-sdk/drivers/dcdc_1
+- bsps/arm/imxrt/mcux-sdk/drivers/dcp
+- bsps/arm/imxrt/mcux-sdk/drivers/dmamux
+- bsps/arm/imxrt/mcux-sdk/drivers/edma
+- bsps/arm/imxrt/mcux-sdk/drivers/elcdif
+- bsps/arm/imxrt/mcux-sdk/drivers/enc
+- bsps/arm/imxrt/mcux-sdk/drivers/enet
+- bsps/arm/imxrt/mcux-sdk/drivers/ewm
+- bsps/arm/imxrt/mcux-sdk/drivers/flexcan
+- bsps/arm/imxrt/mcux-sdk/drivers/flexio
+- bsps/arm/imxrt/mcux-sdk/drivers/flexram
+- bsps/arm/imxrt/mcux-sdk/drivers/flexspi
+- bsps/arm/imxrt/mcux-sdk/drivers/gpc_1
+- bsps/arm/imxrt/mcux-sdk/drivers/gpt
+- bsps/arm/imxrt/mcux-sdk/drivers/igpio
+- bsps/arm/imxrt/mcux-sdk/drivers/kpp
+- bsps/arm/imxrt/mcux-sdk/drivers/lpi2c
+- bsps/arm/imxrt/mcux-sdk/drivers/lpspi
+- bsps/arm/imxrt/mcux-sdk/drivers/lpuart
+- bsps/arm/imxrt/mcux-sdk/drivers/ocotp
+- bsps/arm/imxrt/mcux-sdk/drivers/pit
+- bsps/arm/imxrt/mcux-sdk/drivers/pwm
+- bsps/arm/imxrt/mcux-sdk/drivers/pxp
+- bsps/arm/imxrt/mcux-sdk/drivers/qtmr_1
+- bsps/arm/imxrt/mcux-sdk/drivers/rtwdog
+- bsps/arm/imxrt/mcux-sdk/drivers/sai
+- bsps/arm/imxrt/mcux-sdk/drivers/semc
+- bsps/arm/imxrt/mcux-sdk/drivers/snvs_hp
+- bsps/arm/imxrt/mcux-sdk/drivers/snvs_lp
+- bsps/arm/imxrt/mcux-sdk/drivers/src
+- bsps/arm/imxrt/mcux-sdk/drivers/tempmon
+- bsps/arm/imxrt/mcux-sdk/drivers/trng
+- bsps/arm/imxrt/mcux-sdk/drivers/usdhc
+- bsps/arm/imxrt/mcux-sdk/drivers/wdog01
+- bsps/arm/imxrt/mcux-sdk/drivers/xbara
+- bsps/arm/imxrt/mcux-sdk/drivers/xbarb
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/MIMXRT1052.h
+  - bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/MIMXRT1052_features.h
+  - bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/fsl_device_registers.h
+  - bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/system_MIMXRT1052.h
+  - bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/drivers/fsl_clock.h
+  - bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/drivers/fsl_flexram_allocate.h
+  - bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/drivers/fsl_iomuxc.h
+  - bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/drivers/fsl_nic301.h
+  - bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/drivers/fsl_romapi.h
+  - bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/xip/fsl_flexspi_nor_boot.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/adc_12b1msps_sar/fsl_adc.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/adc_etc/fsl_adc_etc.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/aoi/fsl_aoi.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/bee/fsl_bee.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/cache/armv7-m7/fsl_cache.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/cmp/fsl_cmp.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/common/fsl_common.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/common/fsl_common_arm.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/common/fsl_common_dsp.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/csi/fsl_csi.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/dcdc_1/fsl_dcdc.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/dcp/fsl_dcp.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/dmamux/fsl_dmamux.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/edma/fsl_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/elcdif/fsl_elcdif.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/enc/fsl_enc.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/enet/fsl_enet.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/ewm/fsl_ewm.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexcan/fsl_flexcan.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexcan/fsl_flexcan_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_camera.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_camera_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_i2c_master.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_i2s.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_i2s_dma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_i2s_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_mculcd.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_mculcd_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_mculcd_smartdma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_spi.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_spi_dma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_spi_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_uart.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_uart_dma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_uart_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexram/fsl_flexram.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexspi/fsl_flexspi.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexspi/fsl_flexspi_dma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/flexspi/fsl_flexspi_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/gpc_1/fsl_gpc.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/gpt/fsl_gpt.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/igpio/fsl_gpio.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/kpp/fsl_kpp.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/lpi2c/fsl_lpi2c.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/lpi2c/fsl_lpi2c_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/lpi2c/fsl_lpi2c_freertos.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/lpspi/fsl_lpspi.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/lpspi/fsl_lpspi_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/lpspi/fsl_lpspi_freertos.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/lpuart/fsl_lpuart.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/lpuart/fsl_lpuart_dma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/lpuart/fsl_lpuart_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/lpuart/fsl_lpuart_freertos.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/ocotp/fsl_ocotp.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/pit/fsl_pit.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/pwm/fsl_pwm.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/pxp/fsl_pxp.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/qtmr_1/fsl_qtmr.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/rtwdog/fsl_rtwdog.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/sai/fsl_sai.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/sai/fsl_sai_edma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/sai/fsl_sai_sdma.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/semc/fsl_semc.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/snvs_hp/fsl_snvs_hp.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/snvs_lp/fsl_snvs_lp.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/src/fsl_src.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/tempmon/fsl_tempmon.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/trng/fsl_trng.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/usdhc/fsl_usdhc.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/wdog01/fsl_wdog.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/xbara/fsl_xbara.h
+  - bsps/arm/imxrt/mcux-sdk/drivers/xbarb/fsl_xbarb.h
+ldflags: []
+links:
+- role: build-dependency
+  uid: grp
+source:
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/drivers/fsl_clock.c
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/drivers/fsl_flexram_allocate.c
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/drivers/fsl_romapi.c
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/gcc/startup_MIMXRT1052.S
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/system_MIMXRT1052.c
+- bsps/arm/imxrt/mcux-sdk/devices/MIMXRT1052/xip/fsl_flexspi_nor_boot.c
+- bsps/arm/imxrt/mcux-sdk/drivers/adc_12b1msps_sar/fsl_adc.c
+- bsps/arm/imxrt/mcux-sdk/drivers/adc_etc/fsl_adc_etc.c
+- bsps/arm/imxrt/mcux-sdk/drivers/aoi/fsl_aoi.c
+- bsps/arm/imxrt/mcux-sdk/drivers/bee/fsl_bee.c
+- bsps/arm/imxrt/mcux-sdk/drivers/cache/armv7-m7/fsl_cache.c
+- bsps/arm/imxrt/mcux-sdk/drivers/cmp/fsl_cmp.c
+- bsps/arm/imxrt/mcux-sdk/drivers/common/fsl_common.c
+- bsps/arm/imxrt/mcux-sdk/drivers/common/fsl_common_arm.c
+- bsps/arm/imxrt/mcux-sdk/drivers/csi/fsl_csi.c
+- bsps/arm/imxrt/mcux-sdk/drivers/dcdc_1/fsl_dcdc.c
+- bsps/arm/imxrt/mcux-sdk/drivers/dcp/fsl_dcp.c
+- bsps/arm/imxrt/mcux-sdk/drivers/dmamux/fsl_dmamux.c
+- bsps/arm/imxrt/mcux-sdk/drivers/edma/fsl_edma.c
+- bsps/arm/imxrt/mcux-sdk/drivers/elcdif/fsl_elcdif.c
+- bsps/arm/imxrt/mcux-sdk/drivers/enc/fsl_enc.c
+- bsps/arm/imxrt/mcux-sdk/drivers/enet/fsl_enet.c
+- bsps/arm/imxrt/mcux-sdk/drivers/ewm/fsl_ewm.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexcan/fsl_flexcan.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_i2c_master.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_i2s.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_i2s_edma.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_spi.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_spi_edma.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_uart.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexio/fsl_flexio_uart_edma.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexram/fsl_flexram.c
+- bsps/arm/imxrt/mcux-sdk/drivers/flexspi/fsl_flexspi.c
+- bsps/arm/imxrt/mcux-sdk/drivers/gpc_1/fsl_gpc.c
+- bsps/arm/imxrt/mcux-sdk/drivers/gpt/fsl_gpt.c
+- bsps/arm/imxrt/mcux-sdk/drivers/igpio/fsl_gpio.c
+- bsps/arm/imxrt/mcux-sdk/drivers/kpp/fsl_kpp.c
+- bsps/arm/imxrt/mcux-sdk/drivers/lpi2c/fsl_lpi2c.c
+- bsps/arm/imxrt/mcux-sdk/drivers/lpi2c/fsl_lpi2c_edma.c
+- bsps/arm/imxrt/mcux-sdk/drivers/lpspi/fsl_lpspi.c
+- bsps/arm/imxrt/mcux-sdk/drivers/lpspi/fsl_lpspi_edma.c
+- bsps/arm/imxrt/mcux-sdk/drivers/lpuart/fsl_lpuart.c
+- bsps/arm/imxrt/mcux-sdk/drivers/lpuart/fsl_lpuart_edma.c
+- bsps/arm/imxrt/mcux-sdk/drivers/ocotp/fsl_ocotp.c
+- bsps/arm/imxrt/mcux-sdk/drivers/pit/fsl_pit.c
+- bsps/arm/imxrt/mcux-sdk/drivers/pwm/fsl_pwm.c
+- bsps/arm/imxrt/mcux-sdk/drivers/pxp/fsl_pxp.c
+- bsps/arm/imxrt/mcux-sdk/drivers/qtmr_1/fsl_qtmr.c
+- bsps/arm/imxrt/mcux-sdk/drivers/rtwdog/fsl_rtwdog.c
+- bsps/arm/imxrt/mcux-sdk/drivers/sai/fsl_sai.c
+- bsps/arm/imxrt/mcux-sdk/drivers/sai/fsl_sai_edma.c
+- bsps/arm/imxrt/mcux-sdk/drivers/semc/fsl_semc.c
+- bsps/arm/imxrt/mcux-sdk/drivers/snvs_hp/fsl_snvs_hp.c
+- bsps/arm/imxrt/mcux-sdk/drivers/snvs_lp/fsl_snvs_lp.c
+- bsps/arm/imxrt/mcux-sdk/drivers/src/fsl_src.c
+- bsps/arm/imxrt/mcux-sdk/drivers/tempmon/fsl_tempmon.c
+- bsps/arm/imxrt/mcux-sdk/drivers/trng/fsl_trng.c
+- bsps/arm/imxrt/mcux-sdk/drivers/usdhc/fsl_usdhc.c
+- bsps/arm/imxrt/mcux-sdk/drivers/wdog01/fsl_wdog.c
+- bsps/arm/imxrt/mcux-sdk/drivers/xbara/fsl_xbara.c
+- bsps/arm/imxrt/mcux-sdk/drivers/xbarb/fsl_xbarb.c
+type: build
+use-after: []
+use-before: []
