@@ -51,7 +51,9 @@ notes: |
   The value for ${/acfg/if/message-buffer-memory:/name} should not include
   memory for message queues constructed by ${.:/name}.
 params:
-- description: is the message queue configuration.
+- description: |
+    is the pointer to an ${config:/name} object.  It configures the message
+    queue.
   dir: null
   name: config
 - description: |

@@ -63,7 +63,8 @@ notes: |
   The ${/acfg/if/max-tasks:/name} should include tasks constructed by
   ${.:/name}.
 params:
-- description: is the task configuration.
+- description: |
+    is the pointer to an ${config:/name} object.  It configures the task.
   dir: null
   name: config
 - description: |
