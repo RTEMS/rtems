@@ -329,6 +329,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
     case R_AARCH_LDST16_ABS_LO12_NC:
     case R_AARCH_LDST32_ABS_LO12_NC:
     case R_AARCH_LDST64_ABS_LO12_NC:
+    case R_AARCH64_LDST128_ABS_LO12_NC:
       switch (ELF_R_TYPE(rela->r_info)) {
         case R_AARCH64_ADD_ABS_LO12_NC:
         case R_AARCH64_LDST8_ABS_LO12_NC:
@@ -342,6 +343,9 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
           break;
         case R_AARCH_LDST64_ABS_LO12_NC:
           shift = 3;
+          break;
+        case R_AARCH64_LDST128_ABS_LO12_NC:
+          shift = 4;
           break;
         default:
           printf("illegal rtype: %" PRIu64 "\n", ELF_R_TYPE(rela->r_info));
