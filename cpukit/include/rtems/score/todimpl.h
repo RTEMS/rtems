@@ -382,21 +382,6 @@ static inline void _TOD_Get_timeval(
 }
 
 /**
- * @brief Adjusts the Time of Time.
- *
- * This method is used to adjust the current time of day by the
- * specified amount.
- *
- * @param delta is the amount to adjust.
- *
- * @retval STATUS_SUCCESSFUL Successful operation.
- * @retval other Some error occurred.
- */
-Status_Control _TOD_Adjust(
-  const struct timespec *delta
-);
-
-/**
  * @brief Check if the TOD is Set
  *
  * @retval true The time is set.

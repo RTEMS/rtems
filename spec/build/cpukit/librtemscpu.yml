@@ -1405,7 +1405,6 @@ source:
 - cpukit/score/src/corerwlockrelease.c
 - cpukit/score/src/coresem.c
 - cpukit/score/src/coretod.c
-- cpukit/score/src/coretodadjust.c
 - cpukit/score/src/coretodcheck.c
 - cpukit/score/src/coretodhookdata.c
 - cpukit/score/src/coretodhookregister.c
