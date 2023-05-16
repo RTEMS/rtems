@@ -216,7 +216,7 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 
   for ( i = 0 ; i < 32 ; ++i ) {
     uint64_t low = (uint64_t) qx[i];
-    uint64_t high = (uint64_t) (qx[i] >> 32);
+    uint64_t high = (uint64_t) (qx[i] >> 64);
 
     printk( "Q%02i  = 0x%016" PRIx64 "%016" PRIx64 "\n", i, high, low );
   }
