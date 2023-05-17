@@ -78,6 +78,15 @@ static int rtems_flashdev_shell_main( int argc, char *argv[] ) {
 
   for (i = 1; i < argc; ++i) {
     if (argv[i][0] == '-') {
+      /*
+       * Check that a path to flashdev has been provided before running
+       * command.
+       */
+      if (dev_path == NULL) {
+        printf("Please input FLASH_DEV_PATH before instruction\n");
+        return 1;
+      }
+      /* Run command */
       switch (argv[i][1]) {
       case ('r'):
         /* Read */
@@ -112,7 +121,6 @@ static int rtems_flashdev_shell_main( int argc, char *argv[] ) {
         printf(rtems_flashdev_shell_usage);
         break;
       }
-
     } else if (dev_path == NULL) {
       dev_path = argv[i];
     } else {
@@ -144,10 +152,6 @@ int flashdev_shell_read(
   if (argc < 5) {
     printf("Missing argument\n");
     return -1;
-  }
-  if (dev_path == NULL) {
-    printf("Please input FLASH_DEV_PATH before instruction\n");
-    return 1;
   }
 
   /* Get arguments */
@@ -181,6 +185,7 @@ int flashdev_shell_read(
   buffer = calloc((bytes + bytes%4), 1);
   if (buffer == NULL) {
     printf("Failed to allocate read buffer\n");
+    close(fd);
     return -1;
   }
 
@@ -229,10 +234,6 @@ int flashdev_shell_write(
   if (argc < 5) {
     printf("Missing argument\n");
     return -1;
-  }
-  if (dev_path == NULL) {
-    printf("Please input FLASH_DEV_PATH before instruction\n");
-    return 1;
   }
 
   /* Get arguments */
@@ -336,10 +337,6 @@ int flashdev_shell_erase(
   if (argc < 5) {
     printf("Missing argument\n");
     return -1;
-  }
-  if (dev_path == NULL) {
-    printf("Please input FLASH_DEV_PATH before instruction\n");
-    return 1;
   }
 
   /* Get arguments */
@@ -545,10 +542,6 @@ static int flashdev_shell_page(
   if (argc < 4) {
     printf("Missing argument\n");
     return -1;
-  }
-  if (dev_path == NULL) {
-    printf("Please input FLASH_DEV_PATH before instruction\n");
-    return 1;
   }
 
   /* Get arguments */
