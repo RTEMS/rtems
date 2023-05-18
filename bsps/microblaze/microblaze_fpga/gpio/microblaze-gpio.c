@@ -42,38 +42,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-Microblaze_GPIO_context gpio1_context = {
-  .regs = (Microblaze_GPIO_registers *) BSP_MICROBLAZE_FPGA_GPIO1_BASE,
-#ifdef BSP_MICROBLAZE_FPGA_GPIO1_DUAL_CHANNEL
-  .is_dual = true,
-#else
-  .is_dual = false,
-#endif
-  .irq = BSP_MICROBLAZE_FPGA_GPIO1_IRQ,
-#ifdef BSP_MICROBLAZE_FPGA_GPIO1_INTERRUPT
-  .has_interrupts = true
-#else
-  .has_interrupts = false
-#endif
-};
-
-#if BSP_MICROBLAZE_FPGA_GPIO2_ENABLED
-Microblaze_GPIO_context gpio2_context = {
-  .regs = (Microblaze_GPIO_registers *) BSP_MICROBLAZE_FPGA_GPIO2_BASE,
-#ifdef BSP_MICROBLAZE_FPGA_GPIO2_DUAL_CHANNEL
-  .is_dual = true,
-#else
-  .is_dual = false,
-#endif
-  .irq = BSP_MICROBLAZE_FPGA_GPIO2_IRQ,
-#ifdef BSP_MICROBLAZE_FPGA_GPIO2_INTERRUPT
-  .has_interrupts = true
-#else
-  .has_interrupts = false
-#endif
-};
-#endif
-
 void microblaze_gpio_set_data_direction(
   Microblaze_GPIO_context *ctx,
   uint32_t                 channel,

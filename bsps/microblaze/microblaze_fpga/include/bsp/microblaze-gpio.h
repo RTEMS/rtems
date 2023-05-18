@@ -129,16 +129,6 @@ typedef struct {
   bool                       has_interrupts;
 } Microblaze_GPIO_context;
 
-extern Microblaze_GPIO_context gpio1_context;
-#ifdef BSP_MICROBLAZE_FPGA_GPIO2_ENABLED
-extern Microblaze_GPIO_context gpio2_context;
-#endif
-
-#define gpio1 ((Microblaze_GPIO_context * const) &gpio1_context)
-#ifdef BSP_MICROBLAZE_FPGA_GPIO2_ENABLED
-#define gpio2 ((Microblaze_GPIO_context * const) &gpio2_context)
-#endif
-
 /**
  * @brief Set pin configuration for the specified GPIO channel.
  *
