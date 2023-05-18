@@ -36,11 +36,74 @@
 #include <assert.h>
 
 #include <bsp/fatal.h>
+#include <bsp/fdt.h>
 #include <bsp/microblaze-gpio.h>
+
+#include <libfdt.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+#ifdef BSP_MICROBLAZE_FPGA_USE_FDT
+rtems_status_code microblaze_gpio_init_context_from_fdt(
+  Microblaze_GPIO_context *context,
+  int index
+)
+{
+  if ( context == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  const char* compatible = "xlnx,xps-gpio-1.00.a";
+  const void *fdt = bsp_fdt_get();
+  int node = fdt_node_offset_by_compatible( fdt, -1, compatible );
+  if ( node < 0 ) {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  /* Get the desired GPIO node if index is greater than zero. */
+  for(int i = 0; i < index; i++) {
+    node = fdt_node_offset_by_compatible( fdt, node, compatible );
+    if ( node < 0 ) {
+      return RTEMS_INVALID_NUMBER;
+    }
+  }
+
+  const uint32_t *prop;
+  prop = fdt_getprop( fdt, node, "reg", NULL );
+  if ( prop != NULL ) {
+    context->regs = (Microblaze_GPIO_registers *) fdt32_to_cpu( prop[0] );
+  } else {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  prop = fdt_getprop( fdt, node, "xlnx,is-dual", NULL );
+  if ( prop != NULL ) {
+    context->is_dual = fdt32_to_cpu( prop[0] ) != 0 ? true : false;
+  } else {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  prop = fdt_getprop( fdt, node, "xlnx,interrupt-present", NULL );
+  if ( prop != NULL ) {
+    context->has_interrupts = fdt32_to_cpu( prop[0] ) != 0 ? true : false;
+  } else {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  if ( context->has_interrupts ) {
+    prop = fdt_getprop( fdt, node, "interrupts", NULL );
+    if ( prop != NULL ) {
+      context->irq = fdt32_to_cpu( prop[0] );
+    } else {
+      return RTEMS_INVALID_NUMBER;
+    }
+  }
+
+  return RTEMS_SUCCESSFUL;
+}
+#endif /* BSP_MICROBLAZE_FPGA_USE_FDT */
 
 void microblaze_gpio_set_data_direction(
   Microblaze_GPIO_context *ctx,
