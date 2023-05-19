@@ -3,7 +3,7 @@ brief: |
   Waits until an empty transmitter FIFO was observed and then stores the
   character to the data register.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

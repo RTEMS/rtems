@@ -4,7 +4,7 @@ brief: |
   blocking device driver call has been interrupted and should be reflected to
   the caller as interrupted.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2019 On-Line Applications Research Corporation (OAR)
 definition:
   default: '28'

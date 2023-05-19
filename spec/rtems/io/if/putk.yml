@@ -3,7 +3,7 @@ brief: |
   Outputs the characters of the string and a newline character to the kernel
   character output device.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 - Copyright (C) 2015 On-Line Applications Research Corporation (OAR)
 definition:
   default:

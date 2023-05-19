@@ -3,7 +3,7 @@ brief: |
   This runtime constant represents the lowest (least important) task priority
   of the scheduler with index zero.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
 definition:
   default: ${maximum-priority-impl:/name}()

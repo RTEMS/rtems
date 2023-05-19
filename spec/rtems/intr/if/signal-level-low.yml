@@ -3,7 +3,7 @@ brief: |
   This interrupt signal variant indicates that the interrupt is triggered by a
   low level signal.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 definition:
   default: null
   variants: []

@@ -3,7 +3,7 @@ brief: |
   Indicates if the current ${/glossary/clock-tick:/term} counter is before the
   ticks.
 copyrights:
-- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2014, 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

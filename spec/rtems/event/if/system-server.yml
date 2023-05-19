@@ -3,7 +3,7 @@ brief: |
   This event set constant represents the reserved system event for server
   thread usage, for example the timer or interrupt server.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: ${event-30:/name}

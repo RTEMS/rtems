@@ -3,7 +3,7 @@ brief: |
   Maps the interrupt level to the associated processor-dependent task mode
   interrupt level.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:

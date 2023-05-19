@@ -3,7 +3,7 @@ brief: |
   This structure represents a printer handler with an associated printer
   context.
 copyrights:
-- Copyright (C) 2020, 2022 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2022 embedded brains GmbH & Co. KG
 definition:
 - default:
     brief: |

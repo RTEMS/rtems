@@ -3,7 +3,7 @@ brief: |
   Starts an interactive CPU usage reporting using the
   ${../../io/if/printk:/name} printer.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

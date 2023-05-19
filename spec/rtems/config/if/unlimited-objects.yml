@@ -3,7 +3,7 @@ brief: |
   This flag is used in augment a resource number so that it indicates an
   unlimited resource.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default: ${/score/object/if/unlimited-objects:/name}
   variants: []

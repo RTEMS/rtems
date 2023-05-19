@@ -3,7 +3,7 @@ brief: |
   Installs the interrupt handler routine and argument at the interrupt vector
   on the interrupt server.
 copyrights:
-- Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008, 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

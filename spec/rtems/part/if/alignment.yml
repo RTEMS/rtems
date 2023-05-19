@@ -3,7 +3,7 @@ brief: |
   This constant defines the minimum alignment of a partition buffer in
   bytes.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default: ${/score/cpu/if/sizeof-pointer:/name}
   variants: []

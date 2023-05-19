@@ -4,7 +4,7 @@ brief: |
   except the return value and that the return value depends only on the value
   of parameters.
 copyrights:
-- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2019 embedded brains GmbH & Co. KG
 definition:
   default: ''
   variants:

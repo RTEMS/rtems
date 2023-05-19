@@ -3,7 +3,7 @@ brief: |
   Instructs the compiler in a declaration or definition to enforce the
   alignment.
 copyrights:
-- Copyright (C) 2016 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2016 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

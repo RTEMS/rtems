@@ -3,7 +3,7 @@ brief: |
   A not implemented function to trigger compile time errors with an error
   message.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2014 Paval Pisa
 definition:
   default:

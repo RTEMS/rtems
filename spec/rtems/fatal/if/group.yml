@@ -4,7 +4,7 @@ brief: |
   sources of system termination (for example after ${/c/if/exit:/name}).  Fatal
   errors are identified by the fatal source and code pair.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: null
 enabled-by: true

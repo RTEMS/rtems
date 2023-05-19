@@ -3,7 +3,7 @@ brief: |
   Task switch extensions are invoked when a thread switch from an executing
   thread to a heir thread takes place.
 copyrights:
-- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2009, 2021 embedded brains GmbH & Co. KG
 definition:
   default: ${/score/userext/if/thread-switch:/name} ${.:/name}
   variants: []

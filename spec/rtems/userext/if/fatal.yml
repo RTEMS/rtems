@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Fatal extensions are invoked when the system should terminate.
 copyrights:
-- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2009, 2021 embedded brains GmbH & Co. KG
 definition:
   default: ${/score/userext/if/fatal:/name} ${.:/name}
   variants: []

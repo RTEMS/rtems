@@ -3,7 +3,7 @@ brief: |
   This compile time constant may be passed to the ${wake-after:/name} directive
   as the interval when a task wishes to yield the processor.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
 definition:
   default: ${/score/watchdog/if/no-timeout:/name}

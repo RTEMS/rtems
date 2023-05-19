@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   MPCI initialization routines shall have this type.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2006 On-Line Applications Research Corporation (OAR)
 definition:
   default: ${/score/mpci/if/initialization-entry:/name} ${.:/name}

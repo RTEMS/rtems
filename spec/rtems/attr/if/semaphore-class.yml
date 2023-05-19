@@ -4,7 +4,7 @@ brief: |
   Classic API semaphore classes ${binary-semaphore:/name},
   ${counting-semaphore:/name}, and ${simple-binary-semaphore:/name}.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: '0x00000030'

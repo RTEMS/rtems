@@ -3,7 +3,7 @@ brief: |
   Defines a structure which can be used as a message queue buffer for messages
   of the specified maximum size.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

@@ -3,7 +3,7 @@ brief: |
   Gives a hint to the compiler in a function declaration to inline this
   function.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default: static inline
   variants:

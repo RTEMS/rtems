@@ -3,7 +3,7 @@ brief: |
   Tells the compiler in a function declaration that this function does not
   return.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default: ''
   variants:

@@ -3,7 +3,7 @@ brief: |
   This structure defines the ${.:/register-block-group} register block memory
   map.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 description: null
 enabled-by: true
 identifier: RTEMSDeviceGRLIBGPTIMERTimer

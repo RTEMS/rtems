@@ -4,7 +4,7 @@ brief: |
   ${/glossary/unix-epoch:/term} and the current
   ${/glossary/clock-realtime:/term}.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:

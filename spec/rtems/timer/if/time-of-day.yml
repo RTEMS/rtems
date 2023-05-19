@@ -4,7 +4,7 @@ brief: |
   day timer which will fire in the context of the clock tick
   ${/glossary/isr:/term}.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: |

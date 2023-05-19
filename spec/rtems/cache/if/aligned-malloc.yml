@@ -3,7 +3,7 @@ brief: |
   Allocates memory from the C Program Heap which begins at a cache line
   boundary.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

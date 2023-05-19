@@ -4,7 +4,7 @@ brief: |
   variant has hardware floating point support, otherwise to
   ${../../basedefs/if/false:/name}.
 copyrights:
-- Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2009, 2020 embedded brains GmbH & Co. KG
 definition:
   default: ${/score/cpu/if/hardware-fp:/name}
   variants: []

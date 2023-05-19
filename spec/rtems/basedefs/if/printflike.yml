@@ -3,7 +3,7 @@ brief: |
   Tells the compiler in a declaration that this function expects printf()-like
   arguments.
 copyrights:
-- Copyright (C) 2016 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2016 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

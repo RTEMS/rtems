@@ -3,7 +3,7 @@ brief: |
   This header file provides the status codes of Classic API directives and
   support functions.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 index-entries: []
 interface-type: header-file

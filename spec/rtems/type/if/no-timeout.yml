@@ -3,7 +3,7 @@ brief: |
   This clock tick interval constant indicates that the calling task is willing
   to wait potentially forever on a resource.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default: |
     ( (${interval:/name}) ${/score/watchdog/if/no-timeout:/name} )

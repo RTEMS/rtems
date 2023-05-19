@@ -3,7 +3,7 @@ brief: |
   Builds the object identifier with the lowest index from the API, class, and
   MPCI node components.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:

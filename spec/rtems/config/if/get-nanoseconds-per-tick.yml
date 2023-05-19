@@ -3,7 +3,7 @@ brief: |
   Gets the number of microseconds per clock tick configured for this
   application.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

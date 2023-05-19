@@ -3,7 +3,7 @@ brief: |
   Removes the interrupt handler routine and argument from the interrupt vector
   and the interrupt server.
 copyrights:
-- Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008, 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

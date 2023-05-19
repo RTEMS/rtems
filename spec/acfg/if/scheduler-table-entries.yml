@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: initializer
 copyrights:
-- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
 default-value: |
   The default value of this configuration option is the definition of exactly
   one table entry for the configured scheduler.

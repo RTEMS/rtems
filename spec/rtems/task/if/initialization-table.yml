@@ -3,7 +3,7 @@ brief: |
   This structure defines the properties of the Classic API user initialization
   task.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
 definition:
 - default:

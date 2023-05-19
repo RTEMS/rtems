@@ -3,7 +3,7 @@ brief: |
   This constant defines the minimum packet size which must be supported by the
   MPCI.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: ${/score/mpci/if/packet-minimum-size:/name}

@@ -3,7 +3,7 @@ brief: |
   Indicates if the task stack allocator is configured to avoid the RTEMS
   Workspace for this application.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

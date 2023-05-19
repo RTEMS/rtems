@@ -3,7 +3,7 @@ brief: |
   The application configuration information group provides an API to get the
   configuration of an application.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: |
   RTEMS must be configured for an application.  This configuration encompasses a

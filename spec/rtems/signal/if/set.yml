@@ -3,7 +3,7 @@ brief: |
   This integer type represents a bit field which can hold exactly 32 individual
   signals.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: ${/c/if/uint32_t:/name} ${.:/name}

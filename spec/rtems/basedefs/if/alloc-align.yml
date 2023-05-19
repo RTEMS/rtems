@@ -3,7 +3,7 @@ brief: |
   Tells the compiler in a declaration that the memory allocation alignment
   parameter of this function is similar to aligned_alloc().
 copyrights:
-- Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2018 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

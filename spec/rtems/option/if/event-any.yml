@@ -4,7 +4,7 @@ brief: |
   one of the events of interest is available in ${../../event/if/receive:/name}
   and ${../../event/if/system-receive:/name}.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: '0x00000002'

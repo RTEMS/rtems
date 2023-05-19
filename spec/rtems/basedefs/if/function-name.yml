@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Expands to the name of the function containing the use of this define.
 copyrights:
-- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
 definition:
   default:
     ${/compiler/if/func:/name}

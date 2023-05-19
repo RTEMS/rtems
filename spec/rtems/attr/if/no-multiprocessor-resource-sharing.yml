@@ -4,7 +4,7 @@ brief: |
   ${../../sem/if/create:/name} will not use the Multiprocessor Resource Sharing
   Protocol.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: '0x00000000'

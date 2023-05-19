@@ -3,7 +3,7 @@ brief: |
   Iterates over all interrupt handler installed at the interrupt vector and
   interrupt server.
 copyrights:
-- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2017, 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

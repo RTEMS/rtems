@@ -3,7 +3,7 @@ brief: |
   Performs a type cast which removes volatile qualifiers without warnings to
   the type for the pointer variable.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2014 Paval Pisa
 definition:
   default:

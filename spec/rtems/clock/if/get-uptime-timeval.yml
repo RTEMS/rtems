@@ -3,7 +3,7 @@ brief: |
   Gets the seconds and microseconds elapsed since some time point during the
   system initialization using ${/glossary/clock-monotonic:/term}.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:

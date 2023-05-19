@@ -5,7 +5,7 @@ brief: |
   receive characters from the kernel character input device using a polled and
   non-blocking implementation.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 description: |
   The directives may be used to print debug and test information.  The kernel
   character input/output support should work even if no Console Driver is

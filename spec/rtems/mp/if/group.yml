@@ -4,7 +4,7 @@ brief: |
   multiprocessing systems based on message passing in a network of
   multiprocessing nodes.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: |
   In multiprocessor real-time systems, new requirements, such as sharing data

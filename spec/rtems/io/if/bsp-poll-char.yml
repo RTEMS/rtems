@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   This function pointer may reference the kernel character input implementation.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 - Copyright (C) 2015 On-Line Applications Research Corporation (OAR)
 definition:
   default: ${bsp-polling-getchar-function-type:/name} ${.:/name}

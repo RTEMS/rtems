@@ -3,7 +3,7 @@ brief: |
   This status code indicates that the operation should not be called from this
   execution environment.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: '18'

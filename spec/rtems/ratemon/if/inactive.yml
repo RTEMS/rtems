@@ -3,7 +3,7 @@ brief: |
   This status indicates the period is off the watchdog chain, and has never
   been initialized.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: null

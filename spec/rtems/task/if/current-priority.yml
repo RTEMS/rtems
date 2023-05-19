@@ -3,7 +3,7 @@ brief: |
   This constant is passed to ${set-priority:/name} when the caller wants to
   obtain the current priority.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
 definition:
   default: '0'

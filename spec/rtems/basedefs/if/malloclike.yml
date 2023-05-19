@@ -3,7 +3,7 @@ brief: |
   Tells the compiler in a declaration that this function is a memory allocation
   function similar to malloc().
 copyrights:
-- Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2018 embedded brains GmbH & Co. KG
 definition:
   default: ''
   variants:

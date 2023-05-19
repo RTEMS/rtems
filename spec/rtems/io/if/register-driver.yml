@@ -3,7 +3,7 @@ brief: |
   Registers and initializes the device with the specified device driver address
   table and device major number in the Device Driver Table.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:

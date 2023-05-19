@@ -3,7 +3,7 @@ brief: |
   This structure defines the configuration of a task constructed by
   ${construct:/name}.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
 - default:
     brief: |

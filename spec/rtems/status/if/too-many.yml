@@ -3,7 +3,7 @@ brief: |
   This status code indicates you have attempted to create too many instances of
   a particular object class.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: '5'

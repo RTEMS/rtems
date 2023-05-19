@@ -3,7 +3,7 @@ brief: |
   Gets the resource number of ${/rtems/ratemon/if/group:/name} objects
   configured for this application.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

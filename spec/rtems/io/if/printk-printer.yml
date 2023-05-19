@@ -3,7 +3,7 @@ brief: |
   Outputs the characters defined by the format string and the variable argument
   list to the kernel character output device.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

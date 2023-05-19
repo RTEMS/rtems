@@ -3,7 +3,7 @@ brief: |
   Task start extensions are invoked when a task was made ready for the first
   time.
 copyrights:
-- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2009, 2021 embedded brains GmbH & Co. KG
 definition:
   default: ${/score/userext/if/thread-start:/name} ${.:/name}
   variants: []

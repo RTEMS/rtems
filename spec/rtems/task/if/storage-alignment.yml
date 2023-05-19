@@ -3,7 +3,7 @@ brief: |
   This compile time constant defines the recommended alignment of a task
   storage area in bytes.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default: ${/score/cpu/if/stack-alignment:/name}
   variants: []

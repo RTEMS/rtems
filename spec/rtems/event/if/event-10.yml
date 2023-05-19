@@ -3,7 +3,7 @@ brief: |
   This event set constant represents the bit in the event set associated with
   event 10.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: '0x00000400'

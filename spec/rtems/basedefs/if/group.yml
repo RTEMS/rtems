@@ -3,7 +3,7 @@ brief: |
   This group contains basic macros and defines to give access to
   compiler-specific features.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 description: null
 enabled-by: true
 identifier: RTEMSAPIBaseDefs

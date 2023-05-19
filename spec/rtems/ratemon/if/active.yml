@@ -3,7 +3,7 @@ brief: |
   This status indicates the period is on the watchdog chain, and running.  The
   owner may be executing or blocked waiting on another object.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: null

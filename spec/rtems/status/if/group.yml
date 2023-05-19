@@ -3,7 +3,7 @@ brief: |
   This group contains the Classic API directive status codes and support
   functions.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 description: null
 enabled-by: true
 identifier: RTEMSAPIClassicStatus

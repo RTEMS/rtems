@@ -3,7 +3,7 @@ brief: |
   This timer class bit indicates that the timer routine executes in a task
   context.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: '0x2'

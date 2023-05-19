@@ -3,7 +3,7 @@ brief: |
   Gets the time elapsed since some fixed time point in the past measured using
   the ${/glossary/clock-monotonic:/term} in signed binary time format.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

@@ -3,7 +3,7 @@ brief: |
   This interrupt handler install option ensures that the interrupt handler is
   unique.
 copyrights:
-- Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008, 2021 embedded brains GmbH & Co. KG
 definition:
   default: ( (${../../option/if/option:/name}) 0x00000001 )
   variants: []

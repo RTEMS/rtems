@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Task terminate extensions are invoked when a task terminates.
 copyrights:
-- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2009, 2021 embedded brains GmbH & Co. KG
 definition:
   default: ${/score/userext/if/thread-terminate:/name} ${.:/name}
   variants: []

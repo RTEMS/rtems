@@ -3,7 +3,7 @@ brief: |
   Gets a ${/glossary/clock-tick:/term} value which is at least delta clock
   ticks in the future.
 copyrights:
-- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2014, 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

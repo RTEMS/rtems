@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Sends the transient event to the task.
 copyrights:
-- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2014, 2020 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

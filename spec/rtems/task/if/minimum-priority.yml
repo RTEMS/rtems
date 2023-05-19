@@ -3,7 +3,7 @@ brief: |
   This compile time constant provides the highest (most important) task
   priority settable by the ${/glossary/api:/term}.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
 definition:
   default: '1'

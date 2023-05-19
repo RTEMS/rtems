@@ -3,7 +3,7 @@ brief: |
   This header file defines data structures of the User Extensions Handler used
   to instantiate objects defined by the application configuration.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 index-entries: []
 interface-type: header-file

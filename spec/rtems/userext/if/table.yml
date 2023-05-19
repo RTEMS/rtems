@@ -4,7 +4,7 @@ brief: |
   the system through the ${/acfg/if/initial-extensions:/name} application
   configuration option or the ${../if/create:/name} directive.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 definition:
   default: ${/score/userext/if/table:/name} ${.:/name}
   variants: []

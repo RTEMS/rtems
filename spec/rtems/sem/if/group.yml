@@ -3,7 +3,7 @@ brief: |
   The Semaphore Manager utilizes standard Dijkstra counting semaphores to
   provide synchronization and mutual exclusion capabilities.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 description: null
 enabled-by: true
 identifier: RTEMSAPIClassicSem

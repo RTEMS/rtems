@@ -3,7 +3,7 @@ brief: |
   The Cache Manager provides functions to perform maintenance operations for
   data and instruction caches.
 copyrights:
-- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2014, 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2000, 2008 On-Line Applications Research Corporation (OAR)
 description: |
   The actual actions of the Cache Manager operations depend on the hardware and

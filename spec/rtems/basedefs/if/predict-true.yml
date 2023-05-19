@@ -3,7 +3,7 @@ brief: |
   Evaluates the integral expression and tells the compiler that the predicted
   value is true (1).
 copyrights:
-- Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2018 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

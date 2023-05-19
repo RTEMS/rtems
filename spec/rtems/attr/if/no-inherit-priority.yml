@@ -3,7 +3,7 @@ brief: |
   This attribute constant indicates that the Classic API semaphore created by
   ${../../sem/if/create:/name} will not use the Priority Inheritance Protocol.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: '0x00000000'

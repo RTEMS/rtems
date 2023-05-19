@@ -3,7 +3,7 @@ brief: |
   Gets the time elapsed since the ${/glossary/unix-epoch:/term} at some time
   point during system initialization in seconds and nanoseconds format.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

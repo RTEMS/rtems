@@ -3,7 +3,7 @@ brief: |
   Gets the time elapsed since the ${/glossary/unix-epoch:/term} measured using
   ${/glossary/clock-realtime:/term} in binary time format.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

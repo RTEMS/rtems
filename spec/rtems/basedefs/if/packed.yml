@@ -3,7 +3,7 @@ brief: |
   Instructs the compiler in a type definition to place members of a structure
   or union so that the memory required is minimized.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default: ''
   variants:

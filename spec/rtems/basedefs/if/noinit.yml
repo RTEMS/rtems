@@ -3,7 +3,7 @@ brief: |
   Instructs the compiler to place the variable in a section which is not
   initialized.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 definition:
   default: |
     ${section:/name}( ".noinit" )

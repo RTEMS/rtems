@@ -3,7 +3,7 @@ brief: |
   Tells the compiler in a declaration that the result of this function should
   be used.
 copyrights:
-- Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2018 embedded brains GmbH & Co. KG
 definition:
   default: ''
   variants:

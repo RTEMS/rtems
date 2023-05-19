@@ -3,7 +3,7 @@ brief: |
   Obfuscates the variable so that the compiler cannot perform optimizations
   based on the variable value.
 copyrights:
-- Copyright (C) 2016, 2018 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2016, 2018 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null

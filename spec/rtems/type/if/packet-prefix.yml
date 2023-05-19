@@ -3,7 +3,7 @@ brief: |
   This type represents the prefix found at the beginning of each MPCI packet
   sent between nodes.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 definition:
   default: ${/score/mpci/if/packet-prefix:/name} ${.:/name}
   variants: []

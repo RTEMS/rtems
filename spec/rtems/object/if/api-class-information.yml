@@ -3,7 +3,7 @@ brief: |
   This structure is used to return information to the application about the
   objects configured for a specific API/Class combination.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
 - default:
