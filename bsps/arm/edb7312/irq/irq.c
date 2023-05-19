@@ -3,7 +3,7 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.
+ * Copyright (c) 2010 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
  *

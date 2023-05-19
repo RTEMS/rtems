@@ -2,7 +2,7 @@
 /*
  * libfdt - Flat Device Tree manipulation
  * Copyright (C) 2014 David Gibson <david@gibson.dropbear.id.au>
- * Copyright (C) 2018 embedded brains GmbH
+ * Copyright (C) 2018 embedded brains GmbH & Co. KG
  */
 #include "libfdt_env.h"
 

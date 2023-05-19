@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2002 IMD Ingenieurbuero fuer Microcomputertechnik
  * All rights reserved.

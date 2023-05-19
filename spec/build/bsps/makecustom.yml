@@ -7,7 +7,7 @@ content: |
   CFLAGS_OPTIMIZE_V = ${OPTIMIZATION_FLAGS}
   LDFLAGS = -B$$(exec_prefix)/$$(RTEMS_BSP)/lib ${PKGCONFIG_LDFLAGS}
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 install-path: ${PREFIX}/make/custom
 links: []

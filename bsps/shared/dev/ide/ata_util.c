@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 embedded brains GmbH.
+ * Copyright (c) 2010 embedded brains GmbH & Co. KG
  *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Authors: Eugeny S. Mints <Eugeny.Mints@oktet.ru>

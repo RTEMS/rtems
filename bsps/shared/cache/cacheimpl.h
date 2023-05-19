@@ -10,7 +10,7 @@
 /*
  *  Cache Manager
  *
- *  Copyright (C) 2014, 2018 embedded brains GmbH
+ *  Copyright (C) 2014, 2018 embedded brains GmbH & Co. KG
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

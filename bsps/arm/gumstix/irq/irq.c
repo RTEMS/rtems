@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 embedded brains GmbH.
+ * Copyright (c) 2010 embedded brains GmbH & Co. KG
  *
  * PXA255 Interrupt handler by Yang Xi <hiyangxi@gmail.com>
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>

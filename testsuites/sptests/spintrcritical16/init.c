@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- *  Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *  Copyright (C) 2020 embedded brains GmbH & Co. KG
  *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).

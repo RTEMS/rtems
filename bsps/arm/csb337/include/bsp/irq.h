@@ -9,7 +9,7 @@
 /*
  * Interrupt handler Header file
  *
- * Copyright (c) 2010 embedded brains GmbH.
+ * Copyright (c) 2010 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
  *

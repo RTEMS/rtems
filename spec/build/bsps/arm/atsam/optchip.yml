@@ -42,7 +42,7 @@ actions:
     conf.env["ATSAM_MEMORY_INTSRAM_SIZE"] = c[2]
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
   value: samv71q21

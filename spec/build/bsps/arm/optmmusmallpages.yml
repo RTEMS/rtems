@@ -13,7 +13,7 @@ actions:
     conf.env["ARM_MMU_TRANSLATION_TABLE_SIZE"] = tbl_sz
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
 - enabled-by: arm/realview_pbx_a9_qemu
   value: true

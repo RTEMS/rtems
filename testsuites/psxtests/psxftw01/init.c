@@ -6,7 +6,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2020 Eshan Dhawan, embedded brains GmbH, Joel Sherrill
+ * Copyright (C) 2020 Eshan Dhawan, embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

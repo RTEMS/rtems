@@ -5,7 +5,7 @@
  * @ingroup sparc_leon3
  * @brief LEON3 BSP fatal extension
  *
- *  Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ *  Copyright (c) 2014 embedded brains GmbH & Co. KG
  *
  *  COPYRIGHT (c) 2014
  *  Aeroflex Gaisler

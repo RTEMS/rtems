@@ -3,7 +3,7 @@
 /*                       SAM Software Package License                           */
 /* ---------------------------------------------------------------------------- */
 /* Copyright (c) 2015, Atmel Corporation                                        */
-/* Copyright (c) 2016, embedded brains GmbH                                     */
+/* Copyright (c) 2016, embedded brains GmbH & Co. KG                            */
 /*                                                                              */
 /* All rights reserved.                                                         */
 /*                                                                              */

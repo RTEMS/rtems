@@ -6,11 +6,11 @@
  * Copyright © 2001-2003 Free Software Foundation, Inc.
  * Copyright © 2001-2007 Red Hat, Inc.
  * Copyright © 2004-2010 David Woodhouse <dwmw2@infradead.org>
- * Copyright © 2013 embedded brains GmbH <rtems@embedded-brains.de>
+ * Copyright © 2013 embedded brains GmbH & Co. KG
  *
  * Created by David Woodhouse <dwmw2@cambridge.redhat.com>
  *
- * Port to the RTEMS by embedded brains GmbH.
+ * Port to the RTEMS by embedded brains GmbH & Co. KG
  *
  * For licensing information, see the file 'LICENCE' in this directory.
  *

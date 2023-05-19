@@ -11,7 +11,7 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008, 2009, 2010 embedded brains GmbH. All rights reserved.
+ * Copyright (C) 2008, 2009 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

@@ -13,7 +13,7 @@
  *
  * Copyright (C) 2007 Till Straumann <strauman@slac.stanford.edu>
  *
- * Copyright (C) 2009 embedded brains GmbH.
+ * Copyright (C) 2009 embedded brains GmbH & Co. KG
  *
  * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
  * to support 603, 603e, 604, 604e exceptions

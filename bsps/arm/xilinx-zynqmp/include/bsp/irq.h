@@ -7,7 +7,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2013 embedded brains GmbH
+ * Copyright (C) 2013 embedded brains GmbH & Co. KG
  *
  * Copyright (C) 2019 DornerWorks
  *

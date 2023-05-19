@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: config-header
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 guard: ''
 include-headers:

@@ -4,7 +4,7 @@ bsp: tms570ls3137_hdk
 build-type: bsp
 cflags: []
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []
 enabled-by: true
 family: tms570

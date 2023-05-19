@@ -59,7 +59,7 @@ content: |
   imxrt_memory_extram_nocache_end = ORIGIN (EXTRAM_NOCACHE) + LENGTH (EXTRAM_NOCACHE);
   imxrt_memory_extram_nocache_size = LENGTH (EXTRAM_NOCACHE);
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 install-path: ${BSP_LIBDIR}
 links: []

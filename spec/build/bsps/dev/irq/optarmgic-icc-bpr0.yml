@@ -4,7 +4,7 @@ actions:
 - define: null
 build-type: option
 copyrights:
-- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
 default:
 - enabled-by:
   - aarch64/a53_ilp32_qemu

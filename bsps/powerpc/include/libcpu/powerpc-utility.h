@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (c) 2008-2015 embedded brains GmbH.
+ * Copyright (C) 2008, 2015 embedded brains GmbH & Co. KG
  *
  * access function for Device Control Registers inspired by "ppc405common.h"
  * from Michael Hamel ADInstruments May 2008

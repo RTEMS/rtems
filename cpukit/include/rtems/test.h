@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2017, 2021 embedded brains GmbH
+ * Copyright (C) 2017, 2021 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

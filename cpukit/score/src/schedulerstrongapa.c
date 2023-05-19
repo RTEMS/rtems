@@ -38,7 +38,7 @@
 
 /*
  * Copyright (C) 2020 Richi Dubey
- * Copyright (C) 2013, 2016 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2013, 2016 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

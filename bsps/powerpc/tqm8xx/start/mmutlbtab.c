@@ -6,7 +6,7 @@
 
 /*
  * Copyright (c) 1999, National Research Council of Canada
- * Copyright (c) 2008 Thomas Doerfler, embedded brains GmbH.
+ * Copyright (c) 2008 Thomas Doerfler, embedded brains GmbH & Co. KG
  * All rights reserved.
  *
  * The license and distribution terms for this file may be

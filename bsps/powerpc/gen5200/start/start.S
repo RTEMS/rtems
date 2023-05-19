@@ -36,7 +36,7 @@
  *    of this software for any purpose.
  *
  * Copyright (c) 2003 IPR Engineering
- * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ * Copyright (c) 2005 embedded brains GmbH & Co. KG
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

@@ -13,7 +13,7 @@
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *
  *  Modifications to support UTF-8 in the file system are
- *  Copyright (c) 2013 embedded brains GmbH.
+ *  Copyright (c) 2013 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

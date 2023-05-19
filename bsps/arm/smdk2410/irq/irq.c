@@ -2,7 +2,7 @@
  *
  *  This file contains the implementation of the function described in irq.h
  *
- *  Copyright (c) 2010 embedded brains GmbH.
+ *  Copyright (c) 2010 embedded brains GmbH & Co. KG
  *
  *  CopyRight (C) 2000 Canon Research France SA.
  *  Emmanuel Raguet,  mailto:raguet@crf.canon.fr

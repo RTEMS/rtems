@@ -3,7 +3,7 @@
 /*
  *  GRLIB/LEON3 extended interrupt controller
  *
- *  Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ *  Copyright (C) 2021 embedded brains GmbH & Co. KG
  *
  *  COPYRIGHT (c) 2011
  *  Aeroflex Gaisler

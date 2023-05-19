@@ -12,7 +12,7 @@
  *
  * Copyright (C) 2007 Till Straumann <strauman@slac.stanford.edu>
  *
- * Copyright (C) 2009-2012 embedded brains GmbH.
+ * Copyright (C) 2009, 2012 embedded brains GmbH & Co. KG
  *
  * Derived from file "libcpu/powerpc/new-exceptions/bspsupport/vectors_init.c".
  * Derived from file "libcpu/powerpc/new-exceptions/e500_raw_exc_init.c".

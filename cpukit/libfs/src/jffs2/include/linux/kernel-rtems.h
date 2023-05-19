@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013 embedded brains GmbH & Co. KG
  *
  * Copyright 2016 Chris Johns <chrisj@rtems.org>
  *

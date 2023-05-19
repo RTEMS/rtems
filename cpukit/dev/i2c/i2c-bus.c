@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2014, 2017 embedded brains GmbH & Co. KG
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

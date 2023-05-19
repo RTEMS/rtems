@@ -4,7 +4,7 @@ bsp: generic_or1k
 build-type: bsp
 cflags: []
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []
 enabled-by: true
 family: generic_or1k

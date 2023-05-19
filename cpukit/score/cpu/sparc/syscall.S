@@ -11,7 +11,7 @@
  *  COPYRIGHT:
  *
  *  COPYRIGHT (c) 1995. European Space Agency.
- *  Copyright (c) 2016, 2017 embedded brains GmbH
+ *  Copyright (C) 2016, 2017 embedded brains GmbH & Co. KG
  *
  *  This terms of the RTEMS license apply to this file.
  *

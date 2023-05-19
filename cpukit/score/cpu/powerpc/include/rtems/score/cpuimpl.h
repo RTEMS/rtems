@@ -12,7 +12,7 @@
  *
  * Copyright (C) 2007 Till Straumann <strauman@slac.stanford.edu>
  *
- * Copyright (c) 2009, 2017 embedded brains GmbH
+ * Copyright (C) 2009, 2017 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

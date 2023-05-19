@@ -10,7 +10,7 @@
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
  *
- * Copyright (c) 2009, 2017 embedded brains GmbH.
+ * Copyright (C) 2009, 2017 embedded brains GmbH & Co. KG
  */
 
 #ifdef HAVE_CONFIG_H

@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (c) 2014, 2018 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2014, 2018 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2017 Chris Johns <chrisj@rtems.org>. All rights reserved.
  *

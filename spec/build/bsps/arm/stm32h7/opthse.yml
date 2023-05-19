@@ -5,7 +5,7 @@ actions:
 - format-and-define: null
 build-type: option
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 default:
 - enabled-by: arm/nucleo-h743zi
   value: 8000000

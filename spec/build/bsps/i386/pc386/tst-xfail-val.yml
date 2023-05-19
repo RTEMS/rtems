@@ -14,7 +14,7 @@ actions:
     - validation-timecounter-1
 build-type: option
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 default: []
 description: ''
 enabled-by: true

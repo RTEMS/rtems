@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (C) 2018, 2022 embedded brains GmbH
+ * Copyright (C) 2018, 2022 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>

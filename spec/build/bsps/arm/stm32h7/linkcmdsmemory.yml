@@ -84,7 +84,7 @@ content: |
   stm32h7_memory_sdram_2_end = ORIGIN (SDRAM_2) + LENGTH (SDRAM_2);
   stm32h7_memory_sdram_2_size = LENGTH (SDRAM_2);
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 install-path: ${BSP_LIBDIR}
 links: []

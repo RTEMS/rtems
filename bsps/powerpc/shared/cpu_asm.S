@@ -23,7 +23,7 @@
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2011, 2020 embedded brains GmbH
+ *  Copyright (C) 2011, 2020 embedded brains GmbH & Co. KG
  *
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at

@@ -10,7 +10,7 @@
  * Copyright (c) 2013. Hesham AL-Matary
  * Copyright (c) 2013 by Alan Cudmore
  * based on work by:
- * Copyright (c) 2009 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009 embedded brains GmbH & Co. KG
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

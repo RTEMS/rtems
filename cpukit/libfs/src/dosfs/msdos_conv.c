@@ -25,7 +25,7 @@
  * October 1992
  *
  * Modifications to support UTF-8 in the file system are
- * Copyright (c) 2013 embedded brains GmbH.
+ * Copyright (c) 2013 embedded brains GmbH & Co. KG
  */
 
 #ifdef HAVE_CONFIG_H

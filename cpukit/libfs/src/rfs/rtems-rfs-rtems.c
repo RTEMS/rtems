@@ -12,7 +12,7 @@
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  Modifications to support reference counting in the file system are
- *  Copyright (c) 2012 embedded brains GmbH.
+ *  Copyright (c) 2012 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

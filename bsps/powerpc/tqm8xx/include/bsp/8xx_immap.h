@@ -11,7 +11,7 @@
 
 /*
  * Copyright (c) 1997 Dan Malek (dmalek@jlc.net)
- * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
+ * Copyright (c) 2007 embedded brains GmbH & Co. KG
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

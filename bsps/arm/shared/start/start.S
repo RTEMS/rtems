@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2008, 2020 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2008, 2020 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2016 Pavel Pisa <pisa@cmp.felk.cvut.cz>
  *

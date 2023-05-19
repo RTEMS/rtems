@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2013, 2015 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2013 Deng Hengyi.
  *

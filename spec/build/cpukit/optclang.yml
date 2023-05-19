@@ -34,7 +34,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 default: []
 description: ''
 enabled-by:

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2010, 2011 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2011 Stephan Hoffmann <sho@reLinux.de>
  *

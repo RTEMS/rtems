@@ -13,7 +13,7 @@
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2017 embedded brains GmbH
+ *  Copyright (c) 2017 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

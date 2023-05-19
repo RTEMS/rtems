@@ -19,7 +19,7 @@
  *    Rewritten to remove score mutex access. Fixes many performance
  *    issues.
  *
- * Copyright (c) 2009, 2017 embedded brains GmbH.
+ * Copyright (C) 2009, 2017 embedded brains GmbH & Co. KG
  */
 
 /**

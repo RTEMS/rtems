@@ -29,7 +29,7 @@
  *
  *  Copyright (c) 2001 Surrey Satellite Technology Limited (SSTL).
  *
- *  Copyright (c) 2010, 2020 embedded brains GmbH.
+ *  Copyright (C) 2010, 2020 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

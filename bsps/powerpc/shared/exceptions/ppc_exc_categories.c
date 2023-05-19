@@ -10,7 +10,7 @@
  * Copyright (C) 1999 Eric Valette (valette@crf.canon.fr)
  *                    Canon Centre Recherche France.
  *
- * Copyright (C) 2009-2011 embedded brains GmbH.
+ * Copyright (C) 2009, 2011 embedded brains GmbH & Co. KG
  *
  * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
  * to support 603, 603e, 604, 604e exceptions

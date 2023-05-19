@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (c) 2008 Thomas Doerfler, embedded brains GmbH.
+ * Copyright (c) 2008 Thomas Doerfler, embedded brains GmbH & Co. KG
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

@@ -12,7 +12,7 @@
  */
 
 /*
- * Copyright (C) 2011, 2019 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2011, 2019 embedded brains GmbH & Co. KG
  *
  * Copyright (C) 1989, 2009 On-Line Applications Research Corporation (OAR)
  *

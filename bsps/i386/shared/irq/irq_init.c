@@ -3,7 +3,7 @@
  *  This file contains the implementation of rtems initialization
  *  related to interrupt handling.
  *
- *  Copyright (c) 2009 embedded brains GmbH
+ *  Copyright (c) 2009 embedded brains GmbH & Co. KG
  *  CopyRight (C) 1998 valette@crf.canon.fr
  *
  *  COPYRIGHT (c) 2011.

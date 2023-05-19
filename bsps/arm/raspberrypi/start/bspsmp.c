@@ -18,7 +18,7 @@
  *
  * Reuses some ideas from Rohini Kulkarni <krohini1593@gmail.com>
  * GSoC 2015 project and Altera Cyclone-V SMP code
- * by embedded brains GmbH
+ * by embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

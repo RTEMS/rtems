@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
  * Copyright (C) 2017 Kuan-Hsun Chen
  * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
  *

@@ -12,7 +12,7 @@
  * COPYRIGHT (C) 1989, 2021 On-Line Applications Research Corporation (OAR).
  *
  * Modifications to support reference counting in the file system are
- * Copyright (c) 2012 embedded brains GmbH.
+ * Copyright (c) 2012 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

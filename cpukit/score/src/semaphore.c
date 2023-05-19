@@ -11,7 +11,7 @@
  */
 
 /*
- * Copyright (c) 2015, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2015, 2017 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

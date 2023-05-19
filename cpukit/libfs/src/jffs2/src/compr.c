@@ -7,7 +7,7 @@
  * Copyright © 2004-2010 David Woodhouse <dwmw2@infradead.org>
  * Copyright © 2004 Ferenc Havasi <havasi@inf.u-szeged.hu>,
  *		    University of Szeged, Hungary
- * Copyright © 2013 embedded brains GmbH <rtems@embedded-brains.de>
+ * Copyright © 2013 embedded brains GmbH & Co. KG
  *
  * Created by Arjan van de Ven <arjan@infradead.org>
  *

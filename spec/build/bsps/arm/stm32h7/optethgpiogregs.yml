@@ -4,7 +4,7 @@ actions:
 - define-unquoted: null
 build-type: option
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 default:
 - enabled-by: arm/nucleo-h743zi
   value: ( GPIO_PIN_2 | GPIO_PIN_11 | GPIO_PIN_13 )

@@ -10,7 +10,7 @@
  *  Initial release: Oct 1, 2004   by Ed Sutter
  *
  *  Modifications to support reference counting in the file system are
- *  Copyright (c) 2012 embedded brains GmbH.
+ *  Copyright (c) 2012 embedded brains GmbH & Co. KG
  *
  *  This code was derived from the tftpDriver.c code written by
  *  W. Eric Norum, which was apparently derived from the IMFS driver.

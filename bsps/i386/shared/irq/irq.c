@@ -3,7 +3,7 @@
  */
 
 /*
- *  Copyright (c) 2009 embedded brains GmbH
+ *  Copyright (c) 2009 embedded brains GmbH & Co. KG
  *  Copyright (C) 1998 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be

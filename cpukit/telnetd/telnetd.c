@@ -22,7 +22,7 @@
  *    possible to have 'telnetd' run an arbitrary 'shell'
  *    program.
  *
- * Copyright (c) 2009, 2018 embedded brains GmbH and others.
+ * Copyright (C) 2009, 2018 embedded brains GmbH & Co. KG
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

@@ -1,7 +1,7 @@
 /*
  * Philps LPC22XX Interrupt handler
  *
- * Copyright (c) 2010 embedded brains GmbH.
+ * Copyright (c) 2010 embedded brains GmbH & Co. KG
  *
  * Copyright (c)  2006 by Ray<rayx.cn@gmail.com>  to support LPC ARM
  *  The license and distribution terms for this file may be

@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
  * Copyright (C) 2015 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without

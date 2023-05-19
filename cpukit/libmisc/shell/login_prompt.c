@@ -48,7 +48,7 @@
  *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  *
- * Copyright (c) 2009 embedded brains GmbH and others.
+ * Copyright (c) 2009 embedded brains GmbH & Co. KG
  *
  * Based on work from Chris Johns, Fernando Ruiz and Till Straumann.
  *

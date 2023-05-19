@@ -12,7 +12,7 @@
 /*
  * Author: Keith Robertson <kjrobert@alumni.uwaterloo.ca>
  * COPYRIGHT (c) 2005 Linn Products Ltd, Scotland.
- * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
+ * Copyright (c) 2007 embedded brains GmbH & Co. KG
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

@@ -9,7 +9,7 @@
  */
 
 /*
- *  Copyright (c) 2010-2014 embedded brains GmbH.
+ *  Copyright (C) 2010, 2014 embedded brains GmbH & Co. KG
  *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2014 Aeroflex Gaisler AB.  All rights reserved.
- * Copyright (c) 2017 embedded brains GmbH.
+ * Copyright (c) 2017 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

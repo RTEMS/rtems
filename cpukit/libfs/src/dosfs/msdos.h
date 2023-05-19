@@ -11,7 +11,7 @@
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *
  *  Modifications to support UTF-8 in the file system are
- *  Copyright (c) 2013 embedded brains GmbH.
+ *  Copyright (c) 2013 embedded brains GmbH & Co. KG
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

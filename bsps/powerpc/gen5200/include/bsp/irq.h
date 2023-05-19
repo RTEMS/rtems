@@ -27,7 +27,7 @@
  *
  * Copyright (c) 2003 IPR Engineering
  *
- * Copyright (c) 2005, 2010 embedded brains GmbH. All rights reserved.
+ * Copyright (C) 2005, 2010 embedded brains GmbH & Co. KG
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

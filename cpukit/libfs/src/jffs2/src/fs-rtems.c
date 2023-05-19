@@ -6,12 +6,12 @@
  * Copyright © 2001-2003 Free Software Foundation, Inc.
  * Copyright © 2001-2007 Red Hat, Inc.
  * Copyright © 2004-2010 David Woodhouse <dwmw2@infradead.org>
- * Copyright © 2013, 2016 embedded brains GmbH <rtems@embedded-brains.de>
+ * Copyright (C) 2013, 2016 embedded brains GmbH & Co. KG
  *
  * Created by Dominic Ostrowski <dominic.ostrowski@3glab.com>
  * Contributors: David Woodhouse, Nick Garnett, Richard Panton.
  *
- * Port to the RTEMS by embedded brains GmbH.
+ * Port to the RTEMS by embedded brains GmbH & Co. KG
  *
  * For licensing information, see the file 'LICENCE' in this directory.
  *

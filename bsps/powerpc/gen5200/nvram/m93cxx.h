@@ -18,7 +18,7 @@
  */
 
 /*
- * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ * Copyright (c) 2005 embedded brains GmbH & Co. KG
  * Copyright (c) 2003 IPR Engineering
  *
  * The license and distribution terms for this file may be

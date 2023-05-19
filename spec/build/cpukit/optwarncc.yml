@@ -6,7 +6,7 @@ actions:
 - env-append: CFLAGS
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
   value:

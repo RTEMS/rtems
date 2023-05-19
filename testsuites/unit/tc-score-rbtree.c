@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021 embedded brains GmbH & Co. KG
  * Copyright (C) 2010 Gedare Bloom
  *
  * Redistribution and use in source and binary forms, with or without

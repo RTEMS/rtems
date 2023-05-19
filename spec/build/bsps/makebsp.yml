@@ -33,7 +33,7 @@ content: |
   ##
   HAS_NETWORKING = ${RTEMS_HAS_NETWORKING}
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 install-path: ${PREFIX}/${ARCH}-rtems${__RTEMS_MAJOR__}/${BSP_NAME}/make
 links: []

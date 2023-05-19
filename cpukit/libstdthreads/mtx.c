@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 2011 Ed Schouten <ed@FreeBSD.org>
- * Copyright (c) 2015 embedded brains GmbH <info@embedded-brains.de>
+ * Copyright (c) 2015 embedded brains GmbH & Co. KG
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

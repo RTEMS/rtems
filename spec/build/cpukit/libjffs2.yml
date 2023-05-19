@@ -3,7 +3,7 @@ build-type: library
 cflags:
 - -Wno-pointer-sign
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
 enabled-by: true

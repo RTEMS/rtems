@@ -3,7 +3,7 @@ build-type: config-file
 content: |
   INCLUDE ${STM32H7_DEFAULT_LINKCMDS}
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 install-path: ${BSP_LIBDIR}
 links: []

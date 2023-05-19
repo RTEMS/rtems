@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH
+ * Copyright (c) 2011 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2006 Kolja Waschk (rtemsdev/ixo.de)
  *

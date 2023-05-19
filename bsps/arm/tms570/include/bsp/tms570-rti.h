@@ -16,7 +16,7 @@
  * Czech Republic
  *
  * Based on LPC24xx and LPC1768 BSP
- * by embedded brains GmbH and others
+ * by embedded brains GmbH & Co. KG and others
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

@@ -1,6 +1,6 @@
 # RTEMS generic mcf548x BSP
 #
-# Copyright (c) 2007 embedded brains GmbH.  All rights reserved.
+# Copyright (c) 2007 embedded brains GmbH & Co. KG
 #
 # Parts of the code has been derived from the "dBUG source code"
 # package Freescale is providing for M548X EVBs. The usage of

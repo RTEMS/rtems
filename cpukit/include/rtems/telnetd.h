@@ -7,7 +7,7 @@
 /*
  * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  * Reworked by Till Straumann and .h overhauled by Joel Sherrill.
- * Copyright (c) 2009 embedded brains GmbH and others.
+ * Copyright (c) 2009 embedded brains GmbH & Co. KG
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

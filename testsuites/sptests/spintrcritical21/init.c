@@ -3,7 +3,7 @@
 /*
  *  Classic API Signal to Task from ISR
  *
- *  Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *  Copyright (C) 2020 embedded brains GmbH & Co. KG
  *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).

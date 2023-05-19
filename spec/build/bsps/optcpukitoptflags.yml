@@ -6,7 +6,7 @@ actions:
 - env-assign: null
 build-type: option
 copyrights:
-- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
   value: ${OPTIMIZATION_FLAGS}

@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2009-2014 embedded brains GmbH and others.
+ * Copyright (C) 2009, 2014 embedded brains GmbH & Co. KG
  *
  * Based on work from Chris Johns and Fernando Ruiz.
  *

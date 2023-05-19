@@ -8,7 +8,7 @@
  */
 
 /*
- * Copyright (c) 2018, 2023 embedded brains GmbH
+ * Copyright (C) 2018, 2023 embedded brains GmbH & Co. KG
  * COPYRIGHT (c) 2015 Hesham Alatary <hesham@alumni.york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without

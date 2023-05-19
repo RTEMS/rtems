@@ -7,7 +7,7 @@ content: |
      notice and this notice are preserved.  */
 
   /*
-   * Copyright (c) 2018 embedded brains GmbH.
+   * Copyright (c) 2018 embedded brains GmbH & Co. KG
    *
    * Copyright (c) 2015 University of York.
    * Hesham ALMatary <hmka501@york.ac.uk>
@@ -406,7 +406,7 @@ content: |
     .unexpected_sections : { *(*) } > UNEXPECTED_SECTIONS
   }
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 install-path: ${BSP_LIBDIR}
 links: []

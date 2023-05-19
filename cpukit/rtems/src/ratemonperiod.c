@@ -12,7 +12,7 @@
 /*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright (c) 2016 embedded brains GmbH.
+ *  Copyright (c) 2016 embedded brains GmbH & Co. KG
  *  COPYRIGHT (c) 2016 Kuan-Hsun Chen.
  *
  * Redistribution and use in source and binary forms, with or without

@@ -26,7 +26,7 @@ content: |
   Ldflags: -B$${libdir} ${PKGCONFIG_LDFLAGS}
   Libs: -B$${libdir} ${PKGCONFIG_LDFLAGS}
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 install-path: ${PREFIX}/lib/pkgconfig
 links: []

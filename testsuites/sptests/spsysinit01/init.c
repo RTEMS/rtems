@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2020 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2015, 2020 embedded brains GmbH & Co. KG
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

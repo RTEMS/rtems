@@ -2,11 +2,11 @@
  * JFFS2 -- Journalling Flash File System, Version 2.
  *
  * Copyright © 2002-2003 Free Software Foundation, Inc.
- * Copyright © 2013 embedded brains GmbH <rtems@embedded-brains.de>
+ * Copyright © 2013 embedded brains GmbH & Co. KG
  *
  * Created by David Woodhouse <dwmw2@cambridge.redhat.com>
  *
- * Port to the RTEMS by embedded brains GmbH.
+ * Port to the RTEMS by embedded brains GmbH & Co. KG
  *
  * For licensing information, see the file 'LICENCE' in this directory.
  *
