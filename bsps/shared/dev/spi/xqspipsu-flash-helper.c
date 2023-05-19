@@ -333,7 +333,7 @@ static int FlashReadID(XQspiPsu *QspiPsuPtr)
   return XST_SUCCESS;
 }
 
-int QspiPsu_NOR_Write(
+int QspiPsu_NOR_Write_Page(
   XQspiPsu *QspiPsuPtr,
   u32 Address,
   u32 ByteCount,
@@ -473,6 +473,51 @@ int QspiPsu_NOR_Write(
   }
 
   return 0;
+}
+
+int QspiPsu_NOR_Write(
+  XQspiPsu *QspiPsuPtr,
+  u32 Address,
+  u32 ByteCount,
+  u8 *WriteBfrPtr
+)
+{
+  int Status;
+  size_t ByteCountRemaining = ByteCount;
+  unsigned char *WriteBfrPartial = WriteBfrPtr;
+  uint32_t AddressPartial = Address;
+  uint32_t PageSize = Flash_Config_Table[FCTIndex].PageSize;
+  if(QspiPsuPtr->Config.ConnectionMode == XQSPIPSU_CONNECTION_MODE_PARALLEL) {
+    PageSize *= 2;
+  }
+
+  while (ByteCountRemaining > 0) {
+    /* Get write boundary */
+    size_t WriteChunkLen = RTEMS_ALIGN_UP(AddressPartial + 1, PageSize);
+
+    /* Get offset to write boundary */
+    WriteChunkLen -= (size_t)AddressPartial;
+
+    /* Cap short writes */
+    if (WriteChunkLen > ByteCountRemaining) {
+      WriteChunkLen = ByteCountRemaining;
+    }
+
+    Status = QspiPsu_NOR_Write_Page(
+      QspiPsuPtr,
+      AddressPartial,
+      WriteChunkLen,
+      WriteBfrPartial
+    );
+    if ( Status != XST_SUCCESS ) {
+      return Status;
+    }
+
+    ByteCountRemaining -= WriteChunkLen;
+    AddressPartial += WriteChunkLen;
+    WriteBfrPartial += WriteChunkLen;
+  }
+  return Status;
 }
 
 int QspiPsu_NOR_Erase(

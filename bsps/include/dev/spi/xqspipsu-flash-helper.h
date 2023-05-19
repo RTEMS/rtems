@@ -49,11 +49,34 @@ int QspiPsu_NOR_Erase(
  * @note	None.
  *
  ******************************************************************************/
+int QspiPsu_NOR_Write_Page(
+  XQspiPsu *QspiPsuPtr,
+  u32 Address,
+  u32 ByteCount,
+  u8 *WriteBfrPtr
+);
+
+/*****************************************************************************/
+/**
+ *
+ * This function writes to the serial Flash connected to the QSPIPSU interface.
+ * Writes will be broken into device page sized and aligned writes as necessary.
+ *
+ * @param	QspiPsuPtr is a pointer to the QSPIPSU driver component to use.
+ * @param	Address contains the address to write data to in the Flash.
+ * @param	ByteCount contains the number of bytes to write.
+ * @param	WriteBfrPtr is pointer to the write buffer (which is to be transmitted)
+ *
+ * @return	XST_SUCCESS if successful, else XST_FAILURE.
+ *
+ * @note	None.
+ *
+ ******************************************************************************/
 int QspiPsu_NOR_Write(
   XQspiPsu *QspiPsuPtr,
   u32 Address,
   u32 ByteCount,
-	u8 *WriteBfrPtr
+  u8 *WriteBfrPtr
 );
 
 /*****************************************************************************/
