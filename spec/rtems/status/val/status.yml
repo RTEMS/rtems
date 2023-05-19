@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2021, 2023 embedded brains GmbH & Co. KG
 enabled-by: true
 links: []
 test-actions:
@@ -10,7 +10,7 @@ test-actions:
     /* Nothing to do */
   checks:
   - brief: |
-      Check that ${../if/first:/name} has the expected value and is a constant
+      Assert that ${../if/first:/name} has the expected value and is a constant
       expression.
     code: |
       RTEMS_STATIC_ASSERT( RTEMS_STATUS_CODES_FIRST == 0, FIRST );
@@ -18,10 +18,24 @@ test-actions:
     - role: validation
       uid: ../req/first
   - brief: |
-      Check that ${../if/last:/name} has the expected value and is a constant
+      Check that ${../if/first:/name} has the expected value.
+    code: |
+      T_eq_int( RTEMS_STATUS_CODES_FIRST, 0 );
+    links:
+    - role: validation
+      uid: ../req/first
+  - brief: |
+      Assert that ${../if/last:/name} has the expected value and is a constant
       expression.
     code: |
       RTEMS_STATIC_ASSERT( RTEMS_STATUS_CODES_LAST == 29, LAST );
+    links:
+    - role: validation
+      uid: ../req/last
+  - brief: |
+      Check that ${../if/last:/name} has the expected value.
+    code: |
+      T_eq_int( RTEMS_STATUS_CODES_LAST, 29 );
     links:
     - role: validation
       uid: ../req/last
