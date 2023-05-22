@@ -155,3 +155,18 @@ u32 QspiPsu_NOR_Get_Device_Size(XQspiPsu *QspiPsuPtr);
  *
  ******************************************************************************/
 u32 QspiPsu_NOR_Get_Sector_Size(XQspiPsu *QspiPsuPtr);
+
+/*****************************************************************************/
+/**
+ *
+ * This function performs a read of the RDID configuration space.
+ *
+ * @param	QspiPsuPtr is a pointer to the QSPIPSU driver component to use.
+ * @param	ReadBfrPtr is a pointer to a buffer to be filled with
+ * 		configuration data.
+ * @param	ReadLen is the total length of the configuration space to read.
+ *
+ * @return	XST_SUCCESS if successful, else XST_FAILURE.
+ *
+ ******************************************************************************/
+int QspiPsu_NOR_RDID(XQspiPsu *QspiPsuPtr, u8 *ReadBfrPtr, u32 ReadLen);

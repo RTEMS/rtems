@@ -274,6 +274,37 @@ static void QspiPsuHandler(
   }
 }
 
+int QspiPsu_NOR_RDID(XQspiPsu *QspiPsuPtr, u8 *ReadBfrPtr, u32 ReadLen)
+{
+  int Status;
+
+  /*
+   * Read ID
+   */
+  TxBfrPtr = READ_ID;
+  FlashMsg[0].TxBfrPtr = &TxBfrPtr;
+  FlashMsg[0].RxBfrPtr = NULL;
+  FlashMsg[0].ByteCount = 1;
+  FlashMsg[0].BusWidth = XQSPIPSU_SELECT_MODE_SPI;
+  FlashMsg[0].Flags = XQSPIPSU_MSG_FLAG_TX;
+
+  FlashMsg[1].TxBfrPtr = NULL;
+  FlashMsg[1].RxBfrPtr = ReadBfrPtr;
+  FlashMsg[1].ByteCount = ReadLen;
+  FlashMsg[1].BusWidth = XQSPIPSU_SELECT_MODE_SPI;
+  FlashMsg[1].Flags = XQSPIPSU_MSG_FLAG_RX;
+
+  TransferInProgress = TRUE;
+  Status = XQspiPsu_InterruptTransfer(QspiPsuPtr, FlashMsg, 2);
+  if (Status != XST_SUCCESS) {
+    return XST_FAILURE;
+  }
+  while (TransferInProgress);
+
+  rtems_cache_invalidate_multiple_data_lines(ReadBfrPtr, ReadLen);
+  return XST_SUCCESS;
+}
+
 /*****************************************************************************/
 /**
  *
@@ -288,33 +319,15 @@ static void QspiPsuHandler(
  *****************************************************************************/
 static int FlashReadID(XQspiPsu *QspiPsuPtr)
 {
-  int Status;
   u32 ReadId = 0;
+  u32 ReadLen = 3;
+  int Status;
 
-  /*
-   * Read ID
-   */
-  TxBfrPtr = READ_ID;
-  FlashMsg[0].TxBfrPtr = &TxBfrPtr;
-  FlashMsg[0].RxBfrPtr = NULL;
-  FlashMsg[0].ByteCount = 1;
-  FlashMsg[0].BusWidth = XQSPIPSU_SELECT_MODE_SPI;
-  FlashMsg[0].Flags = XQSPIPSU_MSG_FLAG_TX;
-
-  FlashMsg[1].TxBfrPtr = NULL;
-  FlashMsg[1].RxBfrPtr = ReadBfrPtr;
-  FlashMsg[1].ByteCount = 3;
-  FlashMsg[1].BusWidth = XQSPIPSU_SELECT_MODE_SPI;
-  FlashMsg[1].Flags = XQSPIPSU_MSG_FLAG_RX;
-
-  TransferInProgress = TRUE;
-  Status = XQspiPsu_InterruptTransfer(QspiPsuPtr, FlashMsg, 2);
+  Status = QspiPsu_NOR_RDID(QspiPsuPtr, ReadBfrPtr, ReadLen);
   if (Status != XST_SUCCESS) {
     return XST_FAILURE;
   }
-  while (TransferInProgress);
 
-  rtems_cache_invalidate_multiple_data_lines(ReadBfrPtr, 3);
   /* In case of dual, read both and ensure they are same make/size */
 
   /*
