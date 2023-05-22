@@ -163,59 +163,6 @@ static inline void *_Protected_heap_Allocate(
 }
 
 /**
- * @brief Returns the size of the allocatable memory area.
- *
- * The size value may be greater than the initially requested size in
- * _Heap_Allocate_aligned_with_boundary().
- *
- * Inappropriate values for @a addr will not corrupt the heap, but may yield
- * invalid size values.
- *
- * This method first locks the allocator and after the operation, unlocks it again.
- *
- * @param heap The heap to operate upon.
- * @param addr The starting address of the allocatable memory area.
- * @param[out] size Stores the size of the allocatable memory area after the method call.
- *
- * @retval true The operation was successful.
- * @retval false The operation was not successful.
- */
-bool _Protected_heap_Get_block_size(
-  Heap_Control *heap,
-  void *addr,
-  uintptr_t *size
-);
-
-/**
- * @brief Resizes the block of the allocated memory area.
- *
- * Inappropriate values for @a addr may corrupt the heap.
- *
- * This method first locks the allocator and after the resize, unlocks it again.
- *
- * @param[in, out] heap The heap to operate upon.
- * @param addr The starting address of the allocated memory area to be resized.
- * @param size The least possible size for the new memory area.  Resize may be
- *      impossible and depends on the current heap usage.
- * @param[out] old_size Stores the size available for allocation in the current
- *      block before the resize after the method call.
- * @param[out] new_size Stores the size available for allocation in the resized
- *      block after the method call.  In the case of an unsuccessful resize,
- *      zero is returned in this parameter
- *
- * @retval HEAP_RESIZE_SUCCESSFUL The resize was successful.
- * @retval HEAP_RESIZE_UNSATISFIED The least possible size @a size was too big.
- *      Resize not possible.
- * @retval HEAP_RESIZE_FATAL_ERROR The block starting at @a addr is not part of
- *      the heap.
- */
-bool _Protected_heap_Resize_block(
-  Heap_Control *heap,
-  void *addr,
-  uintptr_t size
-);
-
-/**
  * @brief Frees the allocated memory area.
  *
  * Inappropriate values for @a addr may corrupt the heap.  This method first locks
@@ -243,22 +190,6 @@ bool _Protected_heap_Free( Heap_Control *heap, void *addr );
  * @retval false The heap is corrupt.
  */
 bool _Protected_heap_Walk( Heap_Control *heap, int source, bool dump );
-
-/**
- * @brief Iterates over all blocks of the heap.
- *
- * This method first locks the allocator and after the operation, unlocks it again.
- *
- * @param[in, out] heap The heap to iterate over.
- * @param visitor This will be called for each heap block with
- *      the argument @a visitor_arg.
- * @param[in, out] visitor_arg The argument for all calls of @a visitor.
- */
-void _Protected_heap_Iterate(
-  Heap_Control *heap,
-  Heap_Block_visitor visitor,
-  void *visitor_arg
-);
 
 /**
  * @brief Returns information about used and free blocks for the heap.
