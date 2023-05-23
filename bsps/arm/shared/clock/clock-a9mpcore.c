@@ -48,7 +48,7 @@
 static struct timecounter a9mpcore_tc;
 
 /* This is defined in dev/clock/clockimpl.h */
-void Clock_isr(rtems_irq_hdl_param arg);
+void Clock_isr(void *arg);
 
 __attribute__ ((weak)) uint32_t a9mpcore_clock_periphclk(void)
 {

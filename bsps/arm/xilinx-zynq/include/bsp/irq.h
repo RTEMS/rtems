@@ -36,7 +36,6 @@
 
 #ifndef ASM
 
-#include <rtems/irq.h>
 #include <rtems/irq-extension.h>
 
 #include <bsp/arm-a9mpcore-irq.h>
