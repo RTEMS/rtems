@@ -1,8 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Termios Initialization
- *  @ingroup Termios
+ * @ingroup TermiostypesSupport
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_termios_device_lock_acquire_default() and
+ *   rtems_termios_device_lock_release_default().
  */
 
 /*
@@ -17,7 +20,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/termiostypes.h>
+#include <rtems/termiosdevice.h>
 
 void
 rtems_termios_device_lock_acquire_default(

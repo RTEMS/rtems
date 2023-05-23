@@ -34,7 +34,7 @@
 #ifndef LIBBSP_ARM_XILINX_ZYNQ_UART_H
 #define LIBBSP_ARM_XILINX_ZYNQ_UART_H
 
-#include <rtems/termiostypes.h>
+#include <rtems/termiosdevice.h>
 
 #ifdef __cplusplus
 extern "C" {

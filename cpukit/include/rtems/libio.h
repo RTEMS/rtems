@@ -1360,7 +1360,7 @@ typedef struct {
 /**
  * @brief Parameter block for open/close.
  */
-typedef struct {
+typedef struct rtems_libio_open_close_args {
   rtems_libio_t          *iop;
   uint32_t                flags;
   uint32_t                mode;

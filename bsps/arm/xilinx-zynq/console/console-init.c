@@ -26,6 +26,7 @@
  */
 
 #include <rtems/console.h>
+#include <rtems/termiostypes.h>
 
 #include <bsp.h>
 #include <dev/serial/zynq-uart.h>

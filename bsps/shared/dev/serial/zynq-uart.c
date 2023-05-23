@@ -28,6 +28,7 @@
 #include <dev/serial/zynq-uart.h>
 #include <dev/serial/zynq-uart-regs.h>
 #include <bsp/irq.h>
+#include <rtems/termiostypes.h>
 
 #include <bspopts.h>
 
