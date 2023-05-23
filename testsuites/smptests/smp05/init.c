@@ -35,6 +35,8 @@
 
 const char rtems_test_name[] = "SMP 5";
 
+static volatile bool init_task_done;
+
 rtems_task Init(
   rtems_task_argument argument
 );
@@ -54,6 +56,10 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
+  while (!init_task_done) {
+    /* Wait */
+  }
+
   locked_printf( "Shut down from CPU %" PRIu32 "\n", rtems_scheduler_get_processor() );
   success();
 }
@@ -94,6 +100,8 @@ rtems_task Init(
     status = rtems_task_start( id, Test_task, i+1 );
     directive_failed( status, "task start" );
   }
+
+  init_task_done = true;
 
   while (1)
     ;

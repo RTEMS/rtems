@@ -54,8 +54,12 @@ rtems_task Test_task(
     status = rtems_clock_get_tod( &time );
     rtems_test_assert( status == RTEMS_SUCCESSFUL );
     if ( time.second >= 35 ) {
-      TEST_END();
-      rtems_test_exit( 0 );
+      if ( task_index == 1 ) {
+        TEST_END();
+        rtems_test_exit( 0 );
+      } else {
+        rtems_task_exit();
+      }
     }
 
     PrintTaskInfo( p, &time );

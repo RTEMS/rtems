@@ -78,14 +78,14 @@ rtems_task Test_task(
   if ( !TSRFired )
     locked_printf( "*** ERROR TSR DID NOT FIRE BUT TEST TASK AWAKE***" );
 
-  TaskRan = true;
-
   /* Print that the task is up and running. */
   locked_printf(
     " CPU %" PRIu32 " running Task %s after semaphore release\n",
     cpu_num,
     name
   );
+
+  TaskRan = true;
 
   rtems_task_exit();
 }
