@@ -1,9 +1,10 @@
 /**
- * @ingroup L2C-310_cache
+ * @file
  *
- * @brief Cache definitions and functions.
+ * @ingroup L2C310CacheSupport
  *
- * This file implements handling for the ARM L2C-310 cache controller
+ * @brief This source file contains the implementation of the ARM L2C-310 cache
+ *   controller support.
  */
 
 /*
@@ -96,12 +97,14 @@
 #define BSP_ARM_L2C_310_RTL_RELEASE (BSP_ARM_L2C_310_ID & L2C_310_ID_RTL_MASK)
 
 /**
- * @defgroup L2C-310_cache Cache Support
+ * @defgroup L2C310CacheSupport L2C-310 Cache Support
+ *
  * @ingroup RTEMSBSPsARMShared
- * @brief Cache Functions and Defitions
+ *
+ * @brief This group contains the L2C-310 cache support.
+ *
  * @{
  */
-
 
 /**
  * @brief L2CC Register Offsets

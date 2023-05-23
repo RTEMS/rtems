@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMShared
+ *
+ * @brief This source file contains the implementation of
+ *   arm_cp15_set_translation_table_entries().
+ */
+
 /*
  * Copyright (C) 2010, 2019 embedded brains GmbH & Co. KG
  *

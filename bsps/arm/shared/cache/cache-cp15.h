@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
+ * @file
+ *
  * @ingroup RTEMSBSPsARMShared
  *
- * @brief Level 1 Cache definitions and functions.
- * 
- * This file implements handling for the ARM Level 1 cache controller
+ * @brief This header file provides interfaces of the ARM CP15 cache controller
+ *   suppport.
  */
 
 /*

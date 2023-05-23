@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMShared
+ *
+ * @brief This source file contains the implementation of ARM GICv2 support.
+ */
+
 /*
  * Copyright (C) 2013, 2021 embedded brains GmbH & Co. KG
  *

@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @ingroup bsp_kit
+ * @ingroup RTEMSBSPsShared
  *
- * @brief Utility macros.
+ * @brief This header file provides utility macros for BSPs.
  */
 
 /*
