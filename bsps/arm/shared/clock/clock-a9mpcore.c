@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup A9MPCoreSupport
+ *
+ * @brief This source file contains the Clock Driver for Cortex-A9 MPCore
+ * compatible devices.
+ */
+
 /*
  * Copyright (C) 2013, 2016 embedded brains GmbH & Co. KG
  *

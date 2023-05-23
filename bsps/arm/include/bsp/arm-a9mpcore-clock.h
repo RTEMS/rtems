@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup A9MPCoreSupport
+ *
+ * @brief This header file provides the interfaces of the @ref A9MPCoreSupport.
+ */
+
 /*
  * Copyright (c) 2013 Chris Johns <chrisj@rtems.org>.  All rights reserved.
  *
@@ -34,12 +42,20 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @addtogroup A9MPCoreSupport
+ *
+ * @{
+ */
+
 /*
  * Return the peripheral clock. For systems such as the zynq this
  * is controlled by the PL logic generation and can vary. Provide this
  * function in your application to override the BSP default.
  */
 uint32_t a9mpcore_clock_periphclk(void);
+
+/** @} */
 
 #ifdef __cplusplus
 }

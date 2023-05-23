@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup RTEMSBSPsARMShared
+ * @ingroup A9MPCoreSupport
  *
- *  @brief ARM_A9MPCORE_IRQ Support
+ * @brief This header file provides the interfaces of the @ref A9MPCoreSupport.
  */
 
 /*
@@ -40,11 +40,19 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @addtogroup A9MPCoreSupport
+ *
+ * @{
+ */
+
 #define A9MPCORE_IRQ_GT 27
 #define A9MPCORE_IRQ_NFIQ 28
 #define A9MPCORE_IRQ_PT 29
 #define A9MPCORE_IRQ_PW 30
 #define A9MPCORE_IRQ_NIRQ 31
+
+/** @} */
 
 #ifdef __cplusplus
 }
