@@ -41,20 +41,24 @@ uint32_t _CPU_SMP_Initialize(void)
   return arm_gic_irq_processor_count();
 }
 
+static rtems_interrupt_entry arm_a9mpcore_ipi_entry =
+  RTEMS_INTERRUPT_ENTRY_INITIALIZER(
+    bsp_inter_processor_interrupt,
+    NULL,
+    "IPI"
+  );
+
 void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
 {
   if (cpu_count > 0) {
     rtems_status_code sc;
 
-    sc = rtems_interrupt_handler_install(
+    sc = rtems_interrupt_entry_install(
       ARM_GIC_IRQ_SGI_0,
-      "IPI",
       RTEMS_INTERRUPT_UNIQUE,
-      bsp_inter_processor_interrupt,
-      NULL
+      &arm_a9mpcore_ipi_entry
     );
-    _Assert(sc == RTEMS_SUCCESSFUL);
-    (void) sc;
+    _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
 
 #if defined(BSP_DATA_CACHE_ENABLED) || defined(BSP_INSTRUCTION_CACHE_ENABLED)
     /* Enable unified L2 cache */
