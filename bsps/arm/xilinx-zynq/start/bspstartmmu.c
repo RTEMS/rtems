@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsARMZynq
+ *
+ * @brief This source file contains the implementation of
+ *   zynq_setup_mmu_and_cache().
+ */
+
+/*
  * Copyright (C) 2013 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without

@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsARMZynq
+ *
+ * @brief This source file contains the implementation of the polled Zynq UART
+ *   support.
+ */
+
+/*
  * Copyright (C) 2013, 2017 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
