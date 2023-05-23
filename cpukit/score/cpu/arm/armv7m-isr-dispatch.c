@@ -3,7 +3,10 @@
 /**
  * @file
  *
- * @brief ARMV7M ISR Dispatch
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of
+ *   _ARMV7M_Thread_dispatch().
  */
 
 /*

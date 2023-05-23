@@ -3,10 +3,10 @@
 /**
  * @file
  *
- * @brief ARM Paravirtualization Definitions
+ * @ingroup RTEMSScoreCPUARMParavirt
  *
- * This include file contains definitions pertaining to paravirtualization
- * of the ARM port.
+ * @brief This header file provides definitions pertaining to
+ *   paravirtualization of the ARM port.
  */
 
 /*

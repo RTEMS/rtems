@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of __aeabi_read_tp().
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH & Co. KG
  *

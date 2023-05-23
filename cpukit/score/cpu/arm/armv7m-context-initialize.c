@@ -1,9 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief CPU Initialize Context
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_Initialize().
  */
 
 /*

@@ -3,7 +3,10 @@
 /**
  * @file
  *
- * @brief ARM7M CPU Context Switch
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_switch().
  */
 
 /*

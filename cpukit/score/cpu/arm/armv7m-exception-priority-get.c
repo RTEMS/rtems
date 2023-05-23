@@ -1,10 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief ARMV7M Get Exception Priority
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of
+ *   _ARMV7M_Get_exception_priority().
  */
+
 /*
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *

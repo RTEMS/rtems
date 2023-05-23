@@ -3,7 +3,10 @@
 /**
  * @file
  *
- * @brief ARMV7M Architecture Support
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This header file provides interfaces of the ARMv7-M architecture
+ *   support.
  */
 
 /*

@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of __tls_get_addr().
+ */
+
 /*
  * Copyright (C) 2014, 2015 embedded brains GmbH & Co. KG
  *

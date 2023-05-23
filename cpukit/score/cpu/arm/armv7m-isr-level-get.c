@@ -1,9 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief CPU Get ISR Level
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of _CPU_ISR_Get_level().
  */
 
 /*

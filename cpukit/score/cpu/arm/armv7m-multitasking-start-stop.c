@@ -3,7 +3,10 @@
 /**
  * @file
  *
- * @brief ARMV7M Start Multitasking
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of
+ *   _ARMV7M_Start_multitasking().
  */
 
 /*

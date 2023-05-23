@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This header file provides interfaces of the ARMv4 architecture
+ *   support.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH & Co. KG
  *
@@ -33,6 +42,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @addtogroup RTEMSScoreCPUARM
+ *
+ * @{
+ */
 
 #ifdef ARM_MULTILIB_ARCH_V4
 
@@ -103,6 +118,8 @@ static inline void _ARMV4_Status_restore( uint32_t psr )
 }
 
 #endif /* ARM_MULTILIB_ARCH_V4 */
+
+/** @} */
 
 #ifdef __cplusplus
 }

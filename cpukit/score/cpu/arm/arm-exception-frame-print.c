@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Exception_frame_print().
+ */
+
 /*
  * Copyright (C) 2012, 2013 embedded brains GmbH & Co. KG
  *

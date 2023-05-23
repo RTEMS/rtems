@@ -3,7 +3,9 @@
 /**
  * @file
  *
- * @brief ARM7M CPU Initialize
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of _CPU_Initialize().
  */
 
 /*

@@ -1,9 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief ARMV7M Get Exception Handler
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of
+ *   _ARMV7M_Get_exception_handler().
  */
 
 /*

@@ -3,7 +3,10 @@
 /**
  * @file
  *
- * @brief ARM Assembler Support API
+ * @ingroup RTEMSScoreCPUARMASM
+ *
+ * @brief This header file provides interfaces to address problems caused by
+ *   incompatible flavor of assemblers and toolsets.
  *
  * This include file attempts to address the problems
  * caused by incompatible flavors of assemblers and

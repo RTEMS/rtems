@@ -3,7 +3,10 @@
 /**
  * @file
  *
- * @brief ARMV7M Set Exception Priority and Handler
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the implementation of
+ *   _ARMV7M_Set_exception_priority_and_handler().
  */
 
 /*
