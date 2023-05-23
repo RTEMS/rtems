@@ -89,15 +89,13 @@
 #define __REGISTER_PREFIX__
 #endif
 
-#include <rtems/concat.h>
-
 /* Use the right prefix for global labels.  */
 
-#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
+#define SYM(x) RTEMS_XCONCAT(__USER_LABEL_PREFIX__, x)
 
 /* Use the right prefix for registers.  */
 
-#define REG(x) CONCAT1 (__REGISTER_PREFIX__, x)
+#define REG(x) RTEMS_XCONCAT(__REGISTER_PREFIX__, x)
 
 /*
  *  define macros for all of the registers on this CPU
