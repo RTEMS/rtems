@@ -534,22 +534,18 @@ int QspiPsu_NOR_Erase(
   u32 NumSect;
   int Status;
   u32 SectSize;
-  u32 SectMask;
 
   WriteEnableCmd = WRITE_ENABLE_CMD;
 
   if(QspiPsuPtr->Config.ConnectionMode == XQSPIPSU_CONNECTION_MODE_PARALLEL) {
-    SectMask = (Flash_Config_Table[FCTIndex]).SectMask - (Flash_Config_Table[FCTIndex]).SectSize;
     SectSize = (Flash_Config_Table[FCTIndex]).SectSize * 2;
     NumSect = (Flash_Config_Table[FCTIndex]).NumSect;
   } else if (QspiPsuPtr->Config.ConnectionMode == XQSPIPSU_CONNECTION_MODE_STACKED) {
     NumSect = (Flash_Config_Table[FCTIndex]).NumSect * 2;
-    SectMask = (Flash_Config_Table[FCTIndex]).SectMask;
     SectSize = (Flash_Config_Table[FCTIndex]).SectSize;
   } else {
     SectSize = (Flash_Config_Table[FCTIndex]).SectSize;
     NumSect = (Flash_Config_Table[FCTIndex]).NumSect;
-    SectMask = (Flash_Config_Table[FCTIndex]).SectMask;
   }
 
   /*
@@ -614,18 +610,9 @@ int QspiPsu_NOR_Erase(
   /*
    * Calculate no. of sectors to erase based on byte count
    */
-  NumSect = (ByteCount / SectSize) + 1;
-
-  /*
-   * If ByteCount to k sectors,
-   * but the address range spans from N to N+k+1 sectors, then
-   * increment no. of sectors to be erased
-   */
-
-  if (((Address + ByteCount) & SectMask) ==
-    ((Address + (NumSect * SectSize)) & SectMask)) {
-    NumSect++;
-  }
+  u32 SectorStartBase = RTEMS_ALIGN_DOWN(Address, SectSize);
+  u32 SectorEndTop = RTEMS_ALIGN_UP(Address + ByteCount, SectSize);
+  NumSect = (SectorEndTop - SectorStartBase)/SectSize;
 
   for (Sector = 0; Sector < NumSect; Sector++) {
 
