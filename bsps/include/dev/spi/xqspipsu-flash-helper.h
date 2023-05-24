@@ -131,3 +131,27 @@ int QspiPsu_NOR_Read_Ecc(
   u32 Address,
   u8 *ReadBfrPtr
 );
+
+/*****************************************************************************/
+/**
+ *
+ * This function returns the size of attached flash parts.
+ *
+ * @param	QspiPsuPtr is a pointer to the QSPIPSU driver component to use.
+ *
+ * @return	The size of attached flash in bytes.
+ *
+ ******************************************************************************/
+u32 QspiPsu_NOR_Get_Device_Size(XQspiPsu *QspiPsuPtr);
+
+/*****************************************************************************/
+/**
+ *
+ * This function returns the sector size of attached flash parts.
+ *
+ * @param	QspiPsuPtr is a pointer to the QSPIPSU driver component to use.
+ *
+ * @return	The sector size of attached flash in bytes.
+ *
+ ******************************************************************************/
+u32 QspiPsu_NOR_Get_Sector_Size(XQspiPsu *QspiPsuPtr);

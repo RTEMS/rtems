@@ -38,9 +38,6 @@ typedef struct {
   XQspiPsu *qspipsu;
 } flash_control;
 
-/* From the N25Q512A datasheet */
-#define BLOCK_SIZE (64UL * 1024UL)
-#define FLASH_SIZE (1024UL * BLOCK_SIZE)
 #define FLASH_DEVICE_ID 0xbb20 /* Type: 0xbb, Capacity: 0x20 */
 
 static flash_control *get_flash_control( rtems_jffs2_flash_control *super )
@@ -117,7 +114,7 @@ static int do_erase(
   Status = QspiPsu_NOR_Erase(
     QspiPsuPtr,
     offset,
-    BLOCK_SIZE
+    super->block_size
   );
   if ( Status != XST_SUCCESS ) {
     return Status;
@@ -139,8 +136,6 @@ static void do_destroy( rtems_jffs2_flash_control *super )
 
 static flash_control flash_instance = {
   .super = {
-    .block_size        = BLOCK_SIZE,
-    .flash_size        = FLASH_SIZE,
     .read              = do_read,
     .write             = do_write,
     .erase             = do_erase,
@@ -170,6 +165,11 @@ int xilinx_zynqmp_nor_jffs2_initialize(
   if ( rv != 0 ) {
     return rv;
   }
+
+  uint32_t sect_size = QspiPsu_NOR_Get_Sector_Size(qspipsu_ptr);
+  uint32_t flash_size = QspiPsu_NOR_Get_Device_Size(qspipsu_ptr);
+  flash_instance.super.flash_size = flash_size;
+  flash_instance.super.block_size = sect_size;
 
   rv = mount(
     NULL,

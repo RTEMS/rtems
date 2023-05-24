@@ -2258,3 +2258,19 @@ static int MultiDieReadEcc(
   }
   return 0;
 }
+
+u32 QspiPsu_NOR_Get_Sector_Size(XQspiPsu *QspiPsuPtr)
+{
+  if(QspiPsuPtr->Config.ConnectionMode == XQSPIPSU_CONNECTION_MODE_PARALLEL) {
+    return Flash_Config_Table[FCTIndex].SectSize * 2;
+  }
+  return Flash_Config_Table[FCTIndex].SectSize;
+}
+
+u32 QspiPsu_NOR_Get_Device_Size(XQspiPsu *QspiPsuPtr)
+{
+  if(QspiPsuPtr->Config.ConnectionMode == XQSPIPSU_CONNECTION_MODE_STACKED) {
+    return Flash_Config_Table[FCTIndex].FlashDeviceSize * 2;
+  }
+  return Flash_Config_Table[FCTIndex].FlashDeviceSize;
+}
