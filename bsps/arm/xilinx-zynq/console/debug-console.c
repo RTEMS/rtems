@@ -50,10 +50,16 @@ static void zynq_debug_console_out(char c)
   zynq_uart_write_polled(base, c);
 }
 
+static void zynq_debug_console_early_init(char c);
+
 static void zynq_debug_console_init(void)
 {
   rtems_termios_device_context *base =
     &zynq_uart_instances[BSP_CONSOLE_MINOR].base;
+
+  if (BSP_output_char != zynq_debug_console_early_init) {
+    return;
+  }
 
   zynq_uart_initialize(base);
   BSP_output_char = zynq_debug_console_out;
