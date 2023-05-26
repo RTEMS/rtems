@@ -526,6 +526,9 @@ links:
 - role: build-dependency
   uid: vckey
 source:
+- cpukit/compression/xz/xz_crc32.c
+- cpukit/compression/xz/xz_dec_lzma2.c
+- cpukit/compression/xz/xz_dec_stream.c
 - cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/eeprom.c
 - cpukit/dev/i2c/fpga-i2c-slave.c
@@ -974,9 +977,6 @@ source:
 - cpukit/libmisc/uuid/unpack.c
 - cpukit/libmisc/uuid/unparse.c
 - cpukit/libmisc/uuid/uuid_time.c
-- cpukit/libmisc/xz/xz_crc32.c
-- cpukit/libmisc/xz/xz_dec_lzma2.c
-- cpukit/libmisc/xz/xz_dec_stream.c
 - cpukit/libstdthreads/call_once.c
 - cpukit/libstdthreads/cnd.c
 - cpukit/libstdthreads/mtx.c
