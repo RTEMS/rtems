@@ -304,25 +304,25 @@ extern "C" {
 /** @} */
 
 /**
- * @defgroup RTEMSDeviceGRLIBSPWTDPCET0 Command Elapsed Time 3 (CET0)
+ * @defgroup RTEMSDeviceGRLIBSPWTDPCET3 Command Elapsed Time 3 (CET3)
  *
  * @brief This group contains register bit definitions.
  *
  * @{
  */
 
-#define SPWTDP_CET0_CET3_SHIFT 0
-#define SPWTDP_CET0_CET3_MASK 0xffffffffU
-#define SPWTDP_CET0_CET3_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CET0_CET3_MASK ) >> \
-    SPWTDP_CET0_CET3_SHIFT )
-#define SPWTDP_CET0_CET3_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWTDP_CET0_CET3_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CET0_CET3_SHIFT ) & \
-      SPWTDP_CET0_CET3_MASK ) )
-#define SPWTDP_CET0_CET3( _val ) \
-  ( ( ( _val ) << SPWTDP_CET0_CET3_SHIFT ) & \
-    SPWTDP_CET0_CET3_MASK )
+#define SPWTDP_CET3_CET3_SHIFT 0
+#define SPWTDP_CET3_CET3_MASK 0xffffffffU
+#define SPWTDP_CET3_CET3_GET( _reg ) \
+  ( ( ( _reg ) & SPWTDP_CET3_CET3_MASK ) >> \
+    SPWTDP_CET3_CET3_SHIFT )
+#define SPWTDP_CET3_CET3_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~SPWTDP_CET3_CET3_MASK ) | \
+    ( ( ( _val ) << SPWTDP_CET3_CET3_SHIFT ) & \
+      SPWTDP_CET3_CET3_MASK ) )
+#define SPWTDP_CET3_CET3( _val ) \
+  ( ( ( _val ) << SPWTDP_CET3_CET3_SHIFT ) & \
+    SPWTDP_CET3_CET3_MASK )
 
 /** @} */
 
@@ -1075,7 +1075,7 @@ typedef struct spwtdp {
   /**
    * @brief See @ref RTEMSDeviceGRLIBSPWTDPCET0.
    */
-  uint32_t cet0_0;
+  uint32_t cet0;
 
   /**
    * @brief See @ref RTEMSDeviceGRLIBSPWTDPCET1.
@@ -1088,9 +1088,9 @@ typedef struct spwtdp {
   uint32_t cet2;
 
   /**
-   * @brief See @ref RTEMSDeviceGRLIBSPWTDPCET0.
+   * @brief See @ref RTEMSDeviceGRLIBSPWTDPCET3.
    */
-  uint32_t cet0_1;
+  uint32_t cet3;
 
   /**
    * @brief See @ref RTEMSDeviceGRLIBSPWTDPCET4.
