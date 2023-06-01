@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/get-ticks-since-boot-macro
+rationale: null
+references: []
+requirement-type: functional
+text: |
+ The directive shall return the number of ${/glossary/clock-tick:/plural}
+ since a point in time during the system initialization or the last overflow
+ of the ${/glossary/clock-tick:/term} counter.
+type: requirement

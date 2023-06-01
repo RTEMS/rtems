@@ -1,38 +1,72 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021, 2022 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links: []
 test-actions:
 - action-brief: |
-    Use the ${../if/get-ticks-since-boot:/name} function.
+    Use the ${../if/get-ticks-since-boot-macro:/name} directive before and
+    after exactly one clock tick.
   action-code: |
     rtems_interval result_0;
     rtems_interval result_1;
-    int32_t difference; /* Note: rtems_interval = uint32_t (unsigned!) */
 
     result_0 = rtems_clock_get_ticks_since_boot();
     ClockTick();
     result_1 = rtems_clock_get_ticks_since_boot();
-    /*
-     * Because of the ones-complement, the overflow
-     * is handled correctly. result_0 = 0xFFFFFFFF will become -1
-     * and result_1 = 0x0 will become 0.
-     */
-    difference = (int32_t) result_1 - (int32_t) result_0;
   checks:
   - brief: |
       Check that ${/glossary/clock-tick:/term} gets incremented.
     code: |
-      T_step_eq_i32( ${step}, difference, 1 );
+      T_step_eq_u32( ${step}, result_1 - result_0, 1 );
+    links:
+    - role: validation
+      uid: ../req/get-ticks-since-boot-macro
+  links: []
+- action-brief: |
+    Use the ${../if/get-ticks-since-boot:/name} directive before and after
+    exactly one clock tick.
+  action-code: |
+    rtems_interval result_0;
+    rtems_interval result_1;
+
+    #undef rtems_clock_get_ticks_since_boot
+
+    result_0 = rtems_clock_get_ticks_since_boot();
+    ClockTick();
+    result_1 = rtems_clock_get_ticks_since_boot();
+  checks:
+  - brief: |
+      Check that ${/glossary/clock-tick:/term} gets incremented.
+    code: |
+      T_step_eq_u32( ${step}, result_1 - result_0, 1 );
     links:
     - role: validation
       uid: ../req/get-ticks-since-boot
   links: []
 - action-brief: |
-    Use the ${../if/get-ticks-per-second:/name} function.
+    Use the ${../if/get-ticks-per-second-macro:/name} directive.
   action-code: |
     rtems_interval result;
+
+    result = rtems_clock_get_ticks_per_second();
+  checks:
+  - brief: |
+      Check that ${../if/get-ticks-per-second:/name} actually returns
+      1us / CONFIGURE_MICROSECONDS_PER_TICK.
+    code: |
+      T_step_eq_u32( ${step}, result, 1000000UL / TEST_MICROSECONDS_PER_TICK );
+    links:
+    - role: validation
+      uid: ../req/get-ticks-per-second-macro
+  links: []
+- action-brief: |
+    Use the ${../if/get-ticks-per-second:/name} directive.
+  action-code: |
+    rtems_interval result;
+
+    #undef rtems_clock_get_ticks_per_second
+
     result = rtems_clock_get_ticks_per_second();
   checks:
   - brief: |

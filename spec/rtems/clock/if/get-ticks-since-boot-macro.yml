@@ -14,8 +14,6 @@ links:
   uid: header
 - role: interface-ingroup-hidden
   uid: group
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_clock_get_ticks_since_boot
 notes: null
 params: []

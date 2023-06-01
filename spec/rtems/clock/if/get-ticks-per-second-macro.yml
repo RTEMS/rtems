@@ -15,8 +15,6 @@ links:
   uid: header
 - role: interface-ingroup-hidden
   uid: group
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_clock_get_ticks_per_second
 notes: null
 params: []
