@@ -64,6 +64,7 @@ extern "C" {
 #define BULK_ERASE_CMD		0xC7
 #define	SEC_ERASE_CMD		0xD8
 #define READ_ID			0x9F
+#define READ_SFDP		0x5A
 #define READ_CONFIG_CMD		0x35
 #define WRITE_CONFIG_CMD	0x01
 #define ENTER_4B_ADDR_MODE	0xB7

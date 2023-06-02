@@ -274,6 +274,54 @@ static void QspiPsuHandler(
   }
 }
 
+int QspiPsu_NOR_RDSFDP(
+  XQspiPsu *QspiPsuPtr,
+  u32 Address,
+  u32 ByteCount,
+  u8 **ReadBfrPtr
+)
+{
+  int Status;
+
+  *ReadBfrPtr = ReadBuffer;
+
+  CmdBfr[COMMAND_OFFSET]   = READ_SFDP;
+  CmdBfr[ADDRESS_1_OFFSET] =
+      (u8)((Address & 0xFF0000) >> 16);
+  CmdBfr[ADDRESS_2_OFFSET] =
+      (u8)((Address & 0xFF00) >> 8);
+  CmdBfr[ADDRESS_3_OFFSET] =
+      (u8)(Address & 0xFF);
+
+  FlashMsg[0].BusWidth = XQSPIPSU_SELECT_MODE_SPI;
+  FlashMsg[0].TxBfrPtr = CmdBfr;
+  FlashMsg[0].RxBfrPtr = NULL;
+  FlashMsg[0].ByteCount = 4;
+  FlashMsg[0].Flags = XQSPIPSU_MSG_FLAG_TX;
+
+  FlashMsg[1].BusWidth = XQSPIPSU_SELECT_MODE_SPI;
+  FlashMsg[1].TxBfrPtr = NULL;
+  FlashMsg[1].RxBfrPtr = NULL;
+  FlashMsg[1].ByteCount = DUMMY_CLOCKS;
+  FlashMsg[1].Flags = 0;
+
+  FlashMsg[2].BusWidth = XQSPIPSU_SELECT_MODE_SPI;
+  FlashMsg[2].TxBfrPtr = NULL;
+  FlashMsg[2].RxBfrPtr = *ReadBfrPtr;
+  FlashMsg[2].ByteCount = ByteCount;
+  FlashMsg[2].Flags = XQSPIPSU_MSG_FLAG_RX;
+
+  TransferInProgress = TRUE;
+  Status = XQspiPsu_InterruptTransfer(QspiPsuPtr, FlashMsg, 3);
+  if (Status != XST_SUCCESS)
+    return XST_FAILURE;
+
+  while (TransferInProgress);
+
+  rtems_cache_invalidate_multiple_data_lines(ReadBuffer, ByteCount);
+  return 0;
+}
+
 int QspiPsu_NOR_RDID(XQspiPsu *QspiPsuPtr, u8 *ReadBfrPtr, u32 ReadLen)
 {
   int Status;
