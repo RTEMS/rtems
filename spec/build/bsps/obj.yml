@@ -55,6 +55,9 @@ install:
   - bsps/include/libchip/spi-memdrv.h
   - bsps/include/libchip/spi-sd-card.h
   - bsps/include/libchip/wd80x3.h
+- destination: ${BSP_INCLUDEDIR}/dev/nor
+  source:
+  - bsps/include/dev/nor/config-parser.h
 - destination: ${BSP_INCLUDEDIR}/dev/flash
   source:
   - bsps/include/dev/flash/flash_sim_flashdev.h
@@ -91,6 +94,7 @@ source:
 - bsps/shared/dev/ide/ata.c
 - bsps/shared/dev/ide/ata_util.c
 - bsps/shared/dev/ide/ide_controller.c
+- bsps/shared/dev/nor/config-parser.c
 - bsps/shared/dev/rtc/abeoz9.c
 - bsps/shared/dev/rtc/ds1375.c
 - bsps/shared/dev/rtc/i2c-rtc.c

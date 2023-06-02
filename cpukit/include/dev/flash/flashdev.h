@@ -47,7 +47,7 @@ extern "C" {
 typedef struct rtems_flashdev rtems_flashdev;
 
 /**
- * @defgroup Generic Flash API
+ * @defgroup RTEMSGenericFlashAPI Generic Flash API
  *
  * @ingroup RTEMSDeviceDrivers
  *
