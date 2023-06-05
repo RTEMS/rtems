@@ -180,6 +180,7 @@ install:
   - cpukit/include/rtems/stringto.h
   - cpukit/include/rtems/sysinit.h
   - cpukit/include/rtems/termiostypes.h
+  - cpukit/include/rtems/termiosdevice.h
   - cpukit/include/rtems/thread.h
   - cpukit/include/rtems/timecounter.h
   - cpukit/include/rtems/timespec.h
