@@ -33,6 +33,7 @@
 #include <rtems/console.h>
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
+#include <rtems/libio.h>   /* for rtems_termios_initialize */
 
 #include <bsp/irq.h>
 #include <dev/serial/zynq-uart.h>
