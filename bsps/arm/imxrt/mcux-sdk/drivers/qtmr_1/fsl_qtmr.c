@@ -99,7 +99,7 @@ uint32_t QTMR_get_src_clk(TMR_Type *base)
 #elif IMXRT_IS_MIMXRT11xx
     (void) base;
 
-    return CLOCK_GetRootClockMux(kCLOCK_Root_Bus);
+    return CLOCK_GetRootClockFreq(kCLOCK_Root_Bus);
 #else
   #error Getting Timer clock frequency is not implemented for this chip
 #endif
