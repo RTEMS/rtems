@@ -60,15 +60,17 @@ void lan91c11x_write_reg(int reg, uint16_t value)
     rtems_interrupt_enable(level);
 }
 
+
 uint16_t lan91c11x_read_reg_fast(int reg)
 {
-    volatile uint16_t *ptr = (uint16_t *)LAN91C11X_BASE_ADDR;
+    volatile uint16_t *ptr = (volatile uint16_t *)LAN91C11X_BASE_ADDR;
     uint16_t val;
 
-    val = ptr[((reg & 0xf) >> 1)];
+    val = ptr[(reg & 0xf) >> 1];
 
     return val;
 }
+
 
 void lan91c11x_write_reg_fast(int reg, uint16_t value)
 {
