@@ -857,8 +857,10 @@ rtems_rtl_path_prepend (const char* path)
 }
 
 void
-rtems_rtl_base_sym_global_add (const unsigned char* esyms,
-                               unsigned int         size)
+rtems_rtl_base_sym_global_add (const unsigned char*  esyms,
+                               unsigned int          size,
+                               rtems_rtl_tls_offset* tls_offsets,
+                               unsigned int          tls_size)
 {
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_GLOBAL_SYM))
     printf ("rtl: adding global symbols, table size %u\n", size);
@@ -869,7 +871,7 @@ rtems_rtl_base_sym_global_add (const unsigned char* esyms,
     return;
   }
 
-  rtems_rtl_symbol_global_add (rtl->base, esyms, size);
+  rtems_rtl_symbol_global_add (rtl->base, esyms, size, tls_offsets, tls_size);
 
   rtems_rtl_unlock ();
 }

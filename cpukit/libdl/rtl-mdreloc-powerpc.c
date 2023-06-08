@@ -348,37 +348,47 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
       break;
 
     case R_TYPE(16_HA):
+    case R_TYPE(TPREL16_HA):
       /*
        * value:6; Field:half16; Expression: #ha(S+A)
+       * value:72; Field:half16; Expression: #ha(S+A)
        */
       if (!parsing) {
         tmp = symvalue + rela->r_addend;
         *(uint16_t *)where = (((tmp >> 16) + ((tmp & 0x8000) ? 1: 0)) & 0xffff);
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf ("rtl: 16_HA %p @ %p in %s\n",
+          printf ("rtl: %s16_HA %p @ %p in %s\n",
+                  ELF_R_TYPE(rela->r_info) == R_TYPE(TPREL16_HA) ? "TPREL" : "",
                   (void *)*(where), where, rtems_rtl_obj_oname (obj));
       }
       break;
 
     case R_TYPE(16_HI):
+    case R_TYPE(TPREL16_HI):
       /*
        * value:5; Field:half16; Expression: #hi(S+A)
+       * value:71; Field:half16; Expression: #hi(S+A)
        */
       if (!parsing) {
         *(uint16_t *)where = ((symvalue + rela->r_addend) >> 16) & 0xffff;
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf ("rtl: 16_HI %p @ %p in %s\n",
+          printf ("rtl: %s16_HI %p @ %p in %s\n",
+                  ELF_R_TYPE(rela->r_info) == R_TYPE(TPREL16_HI) ? "TPREL" : "",
                   (void *)*where, where, rtems_rtl_obj_oname (obj));
       }
       break;
+
     case R_TYPE(16_LO):
+    case R_TYPE(TPREL16_LO):
       /*
        * value:4; Field:half16; Expression: #lo(S+A)
+       * value:71; Field:half16; Expression: #lo(S+A)
        */
       if (!parsing) {
         *(uint16_t *)where = (symvalue + (rela->r_addend)) & 0xffff;
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf ("rtl: 16_LO %p @ %p in %s\n",
+          printf ("rtl: %s16_LO %p @ %p in %s\n",
+                  ELF_R_TYPE(rela->r_info) == R_TYPE(TPREL16_LO) ? "TPREL" : "",
                   (void *)*where, where, rtems_rtl_obj_oname (obj));
       }
       break;
@@ -484,7 +494,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
               (void *)rela->r_offset, (void *)*where);
       rtems_rtl_set_error (EINVAL,
                            "%s: Unsupported relocation type %" PRId32
-                           "in non-PLT relocations",
+                           " in non-PLT relocations",
                            sect->name, (uint32_t) ELF_R_TYPE(rela->r_info));
       return rtems_rtl_elf_rel_failure;
   }

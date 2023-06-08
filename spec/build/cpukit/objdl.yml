@@ -66,6 +66,7 @@ source:
 - cpukit/libdl/rtl-shell.c
 - cpukit/libdl/rtl-string.c
 - cpukit/libdl/rtl-sym.c
+- cpukit/libdl/rtl-tls.c
 - cpukit/libdl/rtl-trace.c
 - cpukit/libdl/rtl-unresolved.c
 - cpukit/libdl/rtl-unwind-dw2.c

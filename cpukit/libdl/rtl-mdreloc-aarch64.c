@@ -78,8 +78,10 @@ __RCSID("$NetBSD: mdreloc.c,v 1.14 2020/06/16 21:01:30 joerg Exp $");
 #include "rtl-elf.h"
 #include "rtl-error.h"
 #include <rtems/rtl/rtl-trace.h>
-#include "rtl-unwind-arm.h"
 #include <rtems/score/tls.h>
+
+#include "rtl-unwind.h"
+#include "rtl-unwind-dw2.h"
 
 struct tls_data {
   size_t    td_tlsindex;
@@ -309,11 +311,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
       }
 
       if (!parsing) {
-        target = (Elf_Addr)symvalue + rela->r_addend;
-	/* Calculate offset accounting for the DTV */
-	target -= (uintptr_t)_TLS_Data_begin;
-	target += sizeof(TLS_Dynamic_thread_vector);
-
+        target = (Elf_Addr)symvalue;
         target >>= shift;
 	target &= WIDTHMASK(12);
         if (of_check && target >= of_check) {

@@ -77,6 +77,22 @@ rtems_rtl_symbol_global_insert (rtems_rtl_symbols* symbols,
                       &symbol->node);
 }
 
+static rtems_rtl_tls_offset*
+rtems_rtl_symbol_find_tls_offset (size_t                index,
+                                  rtems_rtl_tls_offset* tls_offsets,
+                                  size_t                tls_size)
+{
+  size_t entry;
+  for (entry = 0; entry < tls_size; ++entry)
+  {
+    if (tls_offsets[entry].index == index)
+    {
+      return &tls_offsets[entry];
+    }
+  }
+  return NULL;
+}
+
 bool
 rtems_rtl_symbol_table_open (rtems_rtl_symbols* symbols,
                              size_t             buckets)
@@ -103,9 +119,11 @@ rtems_rtl_symbol_table_close (rtems_rtl_symbols* symbols)
 }
 
 bool
-rtems_rtl_symbol_global_add (rtems_rtl_obj*       obj,
-                             const unsigned char* esyms,
-                             unsigned int         size)
+rtems_rtl_symbol_global_add (rtems_rtl_obj*        obj,
+                             const unsigned char*  esyms,
+                             unsigned int          size,
+                             rtems_rtl_tls_offset* tls_offsets,
+                             unsigned int          tls_size)
 {
   rtems_rtl_symbols* symbols;
   rtems_rtl_obj_sym* sym;
@@ -159,6 +177,9 @@ rtems_rtl_symbol_global_add (rtems_rtl_obj*       obj,
 
   symbols = rtems_rtl_global_symbols ();
 
+  obj->global_syms = count;
+
+  count = 0;
   s = 0;
   sym = obj->global_table;
 
@@ -171,23 +192,28 @@ rtems_rtl_symbol_global_add (rtems_rtl_obj*       obj,
      */
     union {
       uint8_t data[sizeof (void*)];
-      void*   value;
+      void*   voidp;
     } copy_voidp;
+    rtems_rtl_tls_offset* tls_off;
     int b;
 
     sym->name = (const char*) &esyms[s];
     s += strlen (sym->name) + 1;
     for (b = 0; b < sizeof (void*); ++b, ++s)
       copy_voidp.data[b] = esyms[s];
-    sym->value = copy_voidp.value;
+    tls_off = rtems_rtl_symbol_find_tls_offset (count, tls_offsets, tls_size);
+    if (tls_off == NULL) {
+      sym->value = copy_voidp.voidp;
+    } else {
+      sym->value = (void*) tls_off->offset();
+    }
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_GLOBAL_SYM))
       printf ("rtl: esyms: %s -> %8p\n", sym->name, sym->value);
     if (rtems_rtl_symbol_global_find (sym->name) == NULL)
       rtems_rtl_symbol_global_insert (symbols, sym);
+    ++count;
     ++sym;
   }
-
-  obj->global_syms = count;
 
   return true;
 }

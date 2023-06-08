@@ -87,46 +87,66 @@ static const uint32_t reloc_target_flags[] = {
   _RF_G|              _RF_SZ(32) | _RF_RS(10),   /* GOT22 */
   _RF_S|_RF_A|_RF_P|  _RF_SZ(32) | _RF_RS(0),    /* PC10 */
   _RF_S|_RF_A|_RF_P|  _RF_SZ(32) | _RF_RS(10),   /* PC22 */
-        _RF_A|_RF_P|  _RF_SZ(32) | _RF_RS(2),    /* WPLT30 */
-                      _RF_SZ(32) | _RF_RS(0),    /* COPY */
+  _RF_A|_RF_P|        _RF_SZ(32) | _RF_RS(2),    /* WPLT30 */
+  _RF_SZ(32) |                     _RF_RS(0),    /* COPY */
   _RF_S|_RF_A|        _RF_SZ(32) | _RF_RS(0),    /* GLOB_DAT */
-                      _RF_SZ(32) | _RF_RS(0),    /* JMP_SLOT */
-        _RF_A|  _RF_B|_RF_SZ(32) | _RF_RS(0),    /* RELATIVE */
-  _RF_S|_RF_A|  _RF_U|_RF_SZ(32) | _RF_RS(0),    /* UA_32 */
-};
+  _RF_SZ(32) |                     _RF_RS(0),    /* JMP_SLOT */
+  _RF_A|  _RF_B|      _RF_SZ(32) | _RF_RS(0),    /* RELATIVE */
+  _RF_S|_RF_A|_RF_U|  _RF_SZ(32) | _RF_RS(0),    /* UA_32 */
 
-#define NOT_CURRENTLY_USED_BUT_MAYBE_USEFUL
-#ifdef NOT_CURRENTLY_USED_BUT_MAYBE_USEFUL
+  /* TLS and 64 bit relocs not listed here... */
+};
+#define RELOC_TARGET_FLAGS_SIZE \
+  (sizeof(reloc_target_flags) / sizeof(reloc_target_flags[0]))
+
+#define RTLD_DEBUG_RELOC
+#ifdef RTLD_DEBUG_RELOC
 static const char *reloc_names[] = {
   "NONE", "RELOC_8", "RELOC_16", "RELOC_32", "DISP_8",
   "DISP_16", "DISP_32", "WDISP_30", "WDISP_22", "HI22",
   "22", "13", "LO10", "GOT10", "GOT13",
   "GOT22", "PC10", "PC22", "WPLT30", "COPY",
-  "GLOB_DAT", "JMP_SLOT", "RELATIVE", "UA_32"
+  "GLOB_DAT", "JMP_SLOT", "RELATIVE", "UA_32",
+
+  /* not used with 32bit userland, besides a few of the TLS ones */
+  "PLT32",
+  "HIPLT22", "LOPLT10", "LOPLT10", "PCPLT22", "PCPLT32",
+  "10", "11", "64", "OLO10", "HH22",
+  "HM10", "LM22", "PC_HH22", "PC_HM10", "PC_LM22",
+  "WDISP16", "WDISP19", "GLOB_JMP", "7", "5", "6",
+  "DISP64", "PLT64", "HIX22", "LOX10", "H44", "M44",
+  "L44", "REGISTER", "UA64", "UA16",
+  "TLS_GD_HI22", "TLS_GD_LO10", "TLS_GD_ADD", "TLS_GD_CALL",
+  "TLS_LDM_HI22", "TLS_LDM_LO10", "TLS_LDM_ADD", "TLS_LDM_CALL",
+  "TLS_LDO_HIX22", "TLS_LDO_LOX10", "TLS_LDO_ADD", "TLS_IE_HI22",
+  "TLS_IE_LO10", "TLS_IE_LD", "TLS_IE_LDX", "TLS_IE_ADD", "TLS_LE_HIX22",
+  "TLS_LE_LOX10", "TLS_DTPMOD32", "TLS_DTPMOD64", "TLS_DTPOFF32",
+  "TLS_DTPOFF64", "TLS_TPOFF32", "TLS_TPOFF64",
 };
 #endif
 
-#define RELOC_RESOLVE_SYMBOL(t)    ((reloc_target_flags[t] & _RF_S) != 0)
-#define RELOC_PC_RELATIVE(t)       ((reloc_target_flags[t] & _RF_P) != 0)
-#define RELOC_BASE_RELATIVE(t)     ((reloc_target_flags[t] & _RF_B) != 0)
-#define RELOC_UNALIGNED(t)         ((reloc_target_flags[t] & _RF_U) != 0)
-#define RELOC_USE_ADDEND(t)        ((reloc_target_flags[t] & _RF_A) != 0)
-#define RELOC_TARGET_SIZE(t)       ((reloc_target_flags[t] >> 8) & 0xff)
-#define RELOC_VALUE_RIGHTSHIFT(t)  (reloc_target_flags[t] & 0xff)
+#define RELOC_RESOLVE_SYMBOL(t)         ((reloc_target_flags[t] & _RF_S) != 0)
+#define RELOC_PC_RELATIVE(t)            ((reloc_target_flags[t] & _RF_P) != 0)
+#define RELOC_BASE_RELATIVE(t)          ((reloc_target_flags[t] & _RF_B) != 0)
+#define RELOC_UNALIGNED(t)              ((reloc_target_flags[t] & _RF_U) != 0)
+#define RELOC_USE_ADDEND(t)             ((reloc_target_flags[t] & _RF_A) != 0)
+#define RELOC_TARGET_SIZE(t)            ((reloc_target_flags[t] >> 8) & 0xff)
+#define RELOC_VALUE_RIGHTSHIFT(t)       (reloc_target_flags[t] & 0xff)
+#define RELOC_TLS(t)                    (t >= R_TYPE(TLS_GD_HI22))
 
 static const int reloc_target_bitmask[] = {
 #define _BM(x)  (~(-(1ULL << (x))))
-  0,        /* NONE */
-  _BM(8),  _BM(16), _BM(32),  /* RELOC_8, _16, _32 */
-  _BM(8),  _BM(16), _BM(32),  /* DISP8, DISP16, DISP32 */
-  _BM(30), _BM(22),           /* WDISP30, WDISP22 */
-  _BM(22), _BM(22),           /* HI22, _22 */
-  _BM(13), _BM(10),           /* RELOC_13, _LO10 */
-  _BM(10), _BM(13), _BM(22),  /* GOT10, GOT13, GOT22 */
-  _BM(10), _BM(22),           /* _PC10, _PC22 */
-  _BM(30), 0,                 /* _WPLT30, _COPY */
-  -1, -1, -1,                 /* _GLOB_DAT, JMP_SLOT, _RELATIVE */
-  _BM(32)                     /* _UA32 */
+  0,                            /* NONE */
+  _BM(8), _BM(16), _BM(32),     /* RELOC_8, _16, _32 */
+  _BM(8), _BM(16), _BM(32),     /* DISP8, DISP16, DISP32 */
+  _BM(30), _BM(22),             /* WDISP30, WDISP22 */
+  _BM(22), _BM(22),             /* HI22, _22 */
+  _BM(13), _BM(10),             /* RELOC_13, _LO10 */
+  _BM(10), _BM(13), _BM(22),    /* GOT10, GOT13, GOT22 */
+  _BM(10), _BM(22),             /* _PC10, _PC22 */
+  _BM(30), 0,                   /* _WPLT30, _COPY */
+  -1, -1, -1,                   /* _GLOB_DAT, JMP_SLOT, _RELATIVE */
+  _BM(32)                       /* _UA32 */
 #undef _BM
 };
 #define RELOC_VALUE_BITMASK(t)  (reloc_target_bitmask[t])
@@ -173,7 +193,20 @@ rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
 bool
 rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
 {
-  return RELOC_RESOLVE_SYMBOL (type) ? true : false;
+  bool r = false;
+  if (type < RELOC_TARGET_FLAGS_SIZE) {
+    r = RELOC_RESOLVE_SYMBOL (type) ? true : false;
+  }
+  switch (type) {
+    case R_TYPE(TLS_DTPOFF32):
+    case R_TYPE(TLS_LE_HIX22):
+    case R_TYPE(TLS_LE_LOX10):
+      r = true;
+      break;
+  default:
+    break;
+  }
+  return r;
 }
 
 size_t
@@ -239,6 +272,73 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
   }
 
   value = rela->r_addend;
+
+  /*
+   * Handle TLS relocations here, they are different.
+   */
+  if (RELOC_TLS(type)) {
+    switch (type) {
+    case R_TYPE(TLS_DTPMOD32):
+      #if NETBSD_CODE__NOT_USED
+      *where = (Elf_Addr)defobj->tlsindex;
+      #endif
+
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: TLS_DTPMOD32 %s in %s --> %p\n",
+               symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      break;
+
+    case R_TYPE(TLS_DTPOFF32):
+      *where = (Elf_Addr)(symvalue + rela->r_addend);
+
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: TLS_DTPOFF32 %s in %s --> %p\n",
+               symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      break;
+
+    case R_TYPE(TLS_TPOFF32):
+      #if NETBSD_CODE__NOT_USED
+      if (!defobj->tls_static &&
+          _rtld_tls_offset_allocate(__UNCONST(defobj)))
+        return ;
+
+      *where = (Elf_Addr)(def->st_value -
+                          defobj->tlsoffset + rela->r_addend);
+     #endif
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: TLS_TPOFF32 %s in %s --> %p\n",
+               symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      return rtems_rtl_elf_rel_failure;
+
+    case R_TYPE(TLS_LE_HIX22):
+      *where |= ((symvalue + rela->r_addend) ^ 0xffffffff) >> 10;
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: R_SPARC_TLS_LE_HIX22 %s in %s --> %p\n",
+               symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      break;
+
+    case R_TYPE(TLS_LE_LOX10):
+      *where |= ((symvalue + rela->r_addend) & 0x3ff) | 0x1c00;
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: R_SPARC_TLS_LE_LOX10 %s in %s --> %p\n",
+               symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      break;
+
+    default:
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: unknown TLS relo: %d for %s in %s --> %p\n",
+               type, symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      return rtems_rtl_elf_rel_failure;
+    }
+    return rtems_rtl_elf_rel_no_error;
+  }
+
+  /*
+   * If it is no TLS relocation (handled above), we can not
+   * deal with it if it is beyond R_SPARC_6.
+   */
+  if (type > R_TYPE(6))
+    return rtems_rtl_elf_rel_failure;
 
   /*
    * Handle relative relocs here, as an optimization.

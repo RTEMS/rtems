@@ -178,12 +178,19 @@ rtems_rtl_elf_find_symbol (rtems_rtl_obj*      obj,
 
   /*
    * If the symbol type is STT_NOTYPE the symbol references a global
-   * symbol. The gobal symbol table is searched to find it and that value
+   * symbol. The global symbol table is searched to find it and that value
    * returned. If the symbol is local to the object module the section for the
    * symbol is located and it's base added to the symbol's value giving an
    * absolute location.
+   *
+   * If the symbols type of TLS return the symbols value. It is the
+   * offset from the thread's TLS area base. The offset is set by the
+   * linker for the base image and by the TLS allocator for loaded
+   * modules. There is no section and no absolute base.
    */
-  if (ELF_ST_TYPE(sym->st_info) == STT_NOTYPE || sym->st_shndx == SHN_COMMON)
+  if (ELF_ST_TYPE (sym->st_info) == STT_NOTYPE ||
+      sym->st_shndx == SHN_COMMON ||
+      ELF_ST_TYPE (sym->st_info) == STT_TLS)
   {
     /*
      * Search the object file then the global table for the symbol.
@@ -247,6 +254,13 @@ rtems_rtl_elf_reloc_parser (rtems_rtl_obj*      obj,
   rtems_rtl_elf_rel_status  rs;
 
   /*
+   * TLS are not parsed.
+   */
+  if (ELF_ST_TYPE (sym->st_info) == STT_TLS) {
+    return true;
+  }
+
+  /*
    * Check the reloc record to see if a trampoline is needed.
    */
   if (is_rela)
@@ -302,7 +316,7 @@ rtems_rtl_elf_reloc_parser (rtems_rtl_obj*      obj,
      * Find the symbol's object file. It cannot be NULL so ignore that result
      * if returned, it means something is corrupted. We are in an iterator.
      */
-    rtems_rtl_obj*  sobj = rtems_rtl_find_obj_with_symbol (symbol);
+    rtems_rtl_obj* sobj = rtems_rtl_find_obj_with_symbol (symbol);
     if (sobj != NULL)
     {
       /*

@@ -37,10 +37,17 @@
 
 #define TEST_TRACE 0
 #if TEST_TRACE
+ #define SHOW_GLOBAL_SYMS 1
+ #if SHOW_GLOBAL_SYMS
+  #define TRACE_GLOBAL_SYMBOL RTEMS_RTL_TRACE_GLOBAL_SYM
+ #else
+  #define TRACE_GLOBAL_SYMBOL 0
+ #endif
  #define DEBUG_TRACE (RTEMS_RTL_TRACE_DETAIL | \
                       RTEMS_RTL_TRACE_WARNING | \
                       RTEMS_RTL_TRACE_LOAD | \
                       RTEMS_RTL_TRACE_UNLOAD | \
+                      TRACE_GLOBAL_SYMBOL | \
                       RTEMS_RTL_TRACE_SYMBOL | \
                       RTEMS_RTL_TRACE_RELOC | \
                       RTEMS_RTL_TRACE_ALLOCATOR | \
@@ -68,6 +75,9 @@ static void dl_load_dump (void)
 
 typedef int (*int_call_t)(void);
 typedef int* (*ptr_call_t)(void);
+
+void* get_errno_ptr(void);
+int get_errno(void);
 
 int dl_load_test(void)
 {
@@ -116,7 +126,7 @@ int dl_load_test(void)
   }
 
   ptr_call_ret = ptr_call ();
-  if (ptr_call_ret != &errno)
+  if (ptr_call_ret != get_errno_ptr())
   {
     printf("dlsym ptr_call failed: ret value bad\n");
     return 1;
@@ -124,7 +134,7 @@ int dl_load_test(void)
 
   errno = 12345;
   int_call_ret = int_call ();
-  if (int_call_ret != 12345)
+  if (int_call_ret != get_errno())
   {
     printf("dlsym int_call failed: ret value bad\n");
     return 1;
@@ -139,4 +149,17 @@ int dl_load_test(void)
   printf ("handle: %p closed\n", handle);
 
   return 0;
+}
+
+/*
+ * Disasseble these to see how the platform accesses TLS
+ */
+void* get_errno_ptr(void)
+{
+  return &errno;
+}
+
+int get_errno(void)
+{
+  return errno;
 }

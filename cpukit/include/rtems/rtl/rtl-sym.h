@@ -63,6 +63,22 @@ typedef struct rtems_rtl_symbols
 } rtems_rtl_symbols;
 
 /**
+ * A TLS variable offset call. There is one per base image TLS
+ * variable.
+ */
+typedef size_t (*rtems_rtl_tls_offset_func)(void);
+
+/**
+ * A TLS symbol offset entry. It is used with an exported symbol table
+ * to find a TSL table offset for a variable at runtime.
+ */
+typedef struct rtems_rtl_tls_offset
+{
+  size_t                    index;  /** exported symbol table index */
+  rtems_rtl_tls_offset_func offset; /** TLS offset function */
+} rtems_rtl_tls_offset;
+
+/**
  * Open a symbol table with the specified number of buckets.
  *
  * @param symbols The symbol table to open.
@@ -101,10 +117,14 @@ void rtems_rtl_symbol_table_close (rtems_rtl_symbols* symbols);
  * @param obj The object table the symbols are for.
  * @param esyms The exported symbol table.
  * @param size The size of the table in bytes.
+ * @param tls_offsets The TLS offsets table. If NULL none provided.
+ * @param tls_size The number TLS offset entries in the table.
  */
-bool rtems_rtl_symbol_global_add (rtems_rtl_obj*       obj,
-                                  const unsigned char* esyms,
-                                  unsigned int         size);
+bool rtems_rtl_symbol_global_add (rtems_rtl_obj*        obj,
+                                  const unsigned char*  esyms,
+                                  unsigned int          size,
+                                  rtems_rtl_tls_offset* tls_offsets,
+                                  unsigned int          tls_size);
 
 /**
  * Find a symbol given the symbol label in the global symbol table.
