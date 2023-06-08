@@ -1511,7 +1511,7 @@ int fdt_nop_node(void *fdt, int nodeoffset);
  * fdt_create_with_flags() begins the process of creating a new fdt with
  * the sequential write interface.
  *
- * fdt creation process must end with fdt_finished() to produce a valid fdt.
+ * fdt creation process must end with fdt_finish() to produce a valid fdt.
  *
  * returns:
  *	0, on success
