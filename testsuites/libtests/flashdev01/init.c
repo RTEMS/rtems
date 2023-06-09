@@ -57,7 +57,7 @@ static void run_test(void) {
   rtems_flashdev_ioctl_page_info pg_info;
   rtems_flashdev_region region;
   uint32_t jedec;
-  size_t page_count;
+  int page_count;
   int type;
   size_t wb_size;
 
