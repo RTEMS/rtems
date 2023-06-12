@@ -28,8 +28,7 @@ description: |
   The **attribute set** specified in ${.:/params[3]/name} is built through a
   *bitwise or* of the attribute constants described below.  Not all
   combinations of attributes are allowed.  Some attributes are mutually
-  exclusive.  If mutually exclusive attributes are combined, the behaviour is
-  undefined.
+  exclusive.
   Combining mutually exclusive attributes may throw an error or run silently
   with unintended default values.
   Attributes not mentioned below are not evaluated by this

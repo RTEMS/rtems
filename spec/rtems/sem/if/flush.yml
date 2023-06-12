@@ -107,8 +107,6 @@ return:
       The semaphore resided on a remote node.
     value: ${../../status/if/illegal-on-remote-object:/name}
   - description: |
-      Flushing a semaphore using the MrsP locking protocol is undefined
-      behaviour.
       Flushing a semaphore using the MrsP locking protocol may throw an
       error or run silently with unintended default values.
     value: ${../../status/if/not-defined:/name}

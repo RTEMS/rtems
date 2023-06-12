@@ -36,8 +36,7 @@ params:
 - description: |
     is the pointer to a ${/c/if/timespec:/name} object.  The time elapsed since
     the ${/glossary/unix-epoch:/term} at some time point during system
-    initialization call will be stored in this object.  Calling the directive
-    with a pointer equal to ${/c/if/null:/name} is undefined behaviour.
+    initialization call will be stored in this object.
     A null pointer causes an acess atempt to an invalid memory address, a trap
     is raised in some hardware configurations whereas in others garbage is stored 
     at 0x00000000.
