@@ -24,7 +24,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}/rtems/score
   source:
   - cpukit/score/cpu/m68k/include/rtems/score/cpu.h
-  - cpukit/score/cpu/m68k/include/rtems/score/cpuatomic.h
   - cpukit/score/cpu/m68k/include/rtems/score/cpuimpl.h
   - cpukit/score/cpu/m68k/include/rtems/score/m68k.h
 links: []

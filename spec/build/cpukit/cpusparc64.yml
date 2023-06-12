@@ -15,7 +15,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}/rtems/score
   source:
   - cpukit/score/cpu/sparc64/include/rtems/score/cpu.h
-  - cpukit/score/cpu/sparc64/include/rtems/score/cpuatomic.h
   - cpukit/score/cpu/sparc64/include/rtems/score/cpuimpl.h
   - cpukit/score/cpu/sparc64/include/rtems/score/sparc64.h
 links: []

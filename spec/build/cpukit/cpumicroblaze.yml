@@ -15,7 +15,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}/rtems/score
   source:
   - cpukit/score/cpu/microblaze/include/rtems/score/cpu.h
-  - cpukit/score/cpu/microblaze/include/rtems/score/cpuatomic.h
   - cpukit/score/cpu/microblaze/include/rtems/score/cpuimpl.h
   - cpukit/score/cpu/microblaze/include/rtems/score/microblaze.h
 links: []

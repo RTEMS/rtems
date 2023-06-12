@@ -20,7 +20,6 @@ install:
   source:
   - cpukit/score/cpu/riscv/include/rtems/score/cpu.h
   - cpukit/score/cpu/riscv/include/rtems/score/cpu_asm.h
-  - cpukit/score/cpu/riscv/include/rtems/score/cpuatomic.h
   - cpukit/score/cpu/riscv/include/rtems/score/cpuimpl.h
   - cpukit/score/cpu/riscv/include/rtems/score/riscv-utility.h
   - cpukit/score/cpu/riscv/include/rtems/score/riscv.h

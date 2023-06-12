@@ -19,7 +19,6 @@ install:
   source:
   - cpukit/score/cpu/x86_64/include/rtems/score/cpu.h
   - cpukit/score/cpu/x86_64/include/rtems/score/cpu_asm.h
-  - cpukit/score/cpu/x86_64/include/rtems/score/cpuatomic.h
   - cpukit/score/cpu/x86_64/include/rtems/score/cpuimpl.h
   - cpukit/score/cpu/x86_64/include/rtems/score/idt.h
   - cpukit/score/cpu/x86_64/include/rtems/score/x86_64.h

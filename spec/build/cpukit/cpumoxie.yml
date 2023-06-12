@@ -18,7 +18,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}/rtems/score
   source:
   - cpukit/score/cpu/moxie/include/rtems/score/cpu.h
-  - cpukit/score/cpu/moxie/include/rtems/score/cpuatomic.h
   - cpukit/score/cpu/moxie/include/rtems/score/cpuimpl.h
   - cpukit/score/cpu/moxie/include/rtems/score/moxie.h
 links: []

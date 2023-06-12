@@ -23,7 +23,6 @@ install:
   source:
   - cpukit/score/cpu/aarch64/include/rtems/score/aarch64-system-registers.h
   - cpukit/score/cpu/aarch64/include/rtems/score/cpu.h
-  - cpukit/score/cpu/aarch64/include/rtems/score/cpuatomic.h
   - cpukit/score/cpu/aarch64/include/rtems/score/cpuimpl.h
   - cpukit/score/cpu/aarch64/include/rtems/score/aarch64.h
   - cpukit/score/cpu/aarch64/include/rtems/score/cpu_irq.h

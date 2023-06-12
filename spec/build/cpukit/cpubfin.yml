@@ -25,7 +25,6 @@ install:
   - cpukit/score/cpu/bfin/include/rtems/score/bfin.h
   - cpukit/score/cpu/bfin/include/rtems/score/cpu.h
   - cpukit/score/cpu/bfin/include/rtems/score/cpu_asm.h
-  - cpukit/score/cpu/bfin/include/rtems/score/cpuatomic.h
   - cpukit/score/cpu/bfin/include/rtems/score/cpuimpl.h
 links: []
 source:
