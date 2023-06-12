@@ -38,7 +38,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/endian.h>
 #include <rtems/sysinit.h>
-#include <rtems/libio.h>   /* for rtems_termios_initialize */
+#include <rtems/termiostypes.h>
 
 #include <bsp/aarch64-mmu.h>
 #include <bsp/fdt.h>
