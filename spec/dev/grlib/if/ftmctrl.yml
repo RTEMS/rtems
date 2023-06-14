@@ -45,74 +45,80 @@ registers:
       brief: null
       description: null
       name: 'PBRDY'
-      start: 31
-      width: 1
-    - access: [r, w]
-      brief: null
-      description: null
-      name: 'ABRDY'
       start: 30
       width: 1
     - access: [r, w]
       brief: null
       description: null
-      name: 'IOBUSW'
+      name: 'ABRDY'
       start: 29
       width: 1
     - access: [r, w]
       brief: null
       description: null
-      name: 'IBRDY'
+      name: 'IOBUSW'
       start: 27
       width: 2
     - access: [r, w]
       brief: null
       description: null
-      name: 'BEXCN'
+      name: 'IBRDY'
       start: 26
       width: 1
     - access: [r, w]
       brief: null
       description: null
-      name: 'IO_WAITSTATES'
-      start: 24
+      name: 'BEXCN'
+      start: 25
       width: 1
     - access: [r, w]
       brief: null
       description: null
-      name: 'IOEN'
+      name: 'IO_WAITSTATES'
       start: 20
       width: 4
     - access: [r, w]
       brief: null
       description: null
-      name: 'ROMBANKSZ'
+      name: 'IOEN'
       start: 19
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 18
       width: 1
     - access: [r, w]
       brief: null
       description: null
-      name: 'PWEN'
+      name: 'ROMBANKSZ'
       start: 14
       width: 4
     - access: [r, w]
       brief: null
       description: null
-      name: 'PROM_WIDTH'
-      start: 12
-      width: 2
-    - access: [r, w]
-      brief: null
-      description: null
-      name: 'PROM_WRITE_WS'
+      name: 'PWEN'
       start: 11
       width: 1
     - access: [r, w]
       brief: null
       description: null
-      name: 'PROM_READ_WS'
+      name: 'PROM_WIDTH'
       start: 8
       width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PROM_WRITE_WS'
+      start: 4
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PROM_READ_WS'
+      start: 0
+      width: 4
     variants: []
   brief: |
     Memory configuration register 1

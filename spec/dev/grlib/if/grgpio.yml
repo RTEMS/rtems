@@ -270,9 +270,9 @@ registers:
     - access: [r, w]
       brief: null
       description: null
-      name: 'IRQMAP_I'
+      name: 'IRQMAP_I_0'
       start: 24
-      width: 7
+      width: 5
     - access: [r, w]
       brief: null
       description: null
@@ -289,8 +289,8 @@ registers:
       brief: null
       description: null
       name: 'IRQMAP_I_3'
-      start: 4
-      width: 1
+      start: 0
+      width: 5
     variants: []
   brief: |
     Interrupt map register n, where n = 0 .. 3

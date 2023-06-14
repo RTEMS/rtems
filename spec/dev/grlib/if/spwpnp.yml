@@ -155,7 +155,7 @@ registers:
       description: null
       name: 'ACTIVE'
       start: 1
-      width: 12
+      width: 31
     variants: []
   brief: |
     SpaceWire Plug-and-Play - Active Links

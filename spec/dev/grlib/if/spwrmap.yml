@@ -1009,7 +1009,7 @@ registers:
       description: null
       name: 'IE'
       start: 0
-      width: 20
+      width: 32
     variants: []
   brief: |
     Interrupt port mask
@@ -1023,7 +1023,7 @@ registers:
       description: null
       name: 'IP'
       start: 0
-      width: 20
+      width: 32
     variants: []
   brief: |
     Port interrupt pending
@@ -1157,7 +1157,7 @@ registers:
       description: null
       name: 'LR'
       start: 1
-      width: 18
+      width: 31
     variants: []
   brief: |
     Link running status
@@ -1245,7 +1245,7 @@ registers:
       description: null
       name: 'PI'
       start: 0
-      width: 26
+      width: 16
     variants: []
   brief: |
     SpaceWire Plug-and-Play - Device Vendor and Product ID
@@ -1265,7 +1265,7 @@ registers:
       description: null
       name: 'PI'
       start: 0
-      width: 26
+      width: 16
     variants: []
   brief: |
     SpaceWire Plug-and-Play - Unit Vendor and Product ID
