@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: sparc/gr712rc
+includes: []
+install: []
+links: []
+source:
+- testsuites/validation/bsps/tc-sparc-gr712rc.c
+type: build

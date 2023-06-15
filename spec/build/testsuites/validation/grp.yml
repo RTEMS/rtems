@@ -81,6 +81,14 @@ links:
 - role: build-dependency
   uid: validation-tls-1
 - role: build-dependency
+  uid: bsps/fatal-sparc-leon3-cache-snooping-disabled-boot
+- role: build-dependency
+  uid: bsps/fatal-sparc-leon3-cache-snooping-disabled-secondary
+- role: build-dependency
+  uid: bsps/fatal-sparc-leon3-clock-initialization
+- role: build-dependency
+  uid: bsps/fatal-sparc-leon3-shutdown
+- role: build-dependency
   uid: bsps/validation-bsp-0
 type: build
 use-after:

@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by:
+  and:
+  - RTEMS_SMP
+  - bsps/sparc/leon3
+features: c cprogram
+includes: []
+ldflags:
+- -Wl,--wrap=bsp_start_on_secondary_processor
+links: []
+source:
+- testsuites/validation/bsps/tr-fatal-sparc-leon3-cache-snooping-disabled-secondary.c
+- testsuites/validation/bsps/ts-fatal-sparc-leon3-cache-snooping-disabled-secondary.c
+stlib: []
+target: testsuites/validation/bsps/ts-fatal-sparc-leon3-cache-snooping-disabled-secondary.exe
+type: build
+use-after:
+- validation
+use-before: []

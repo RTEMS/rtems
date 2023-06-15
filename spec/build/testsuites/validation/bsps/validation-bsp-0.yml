@@ -13,6 +13,8 @@ ldflags:
 links:
 - role: build-dependency
   uid: objgrlib
+- role: build-dependency
+  uid: objsparcgr712rc
 source:
 - testsuites/validation/bsps/ts-validation-bsp-0.c
 stlib: []
