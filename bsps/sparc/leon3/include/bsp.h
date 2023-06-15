@@ -148,7 +148,7 @@ typedef void (*bsp_shared_isr)(void *arg);
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-static __inline__ int BSP_shared_interrupt_register
+RTEMS_DEPRECATED static inline int BSP_shared_interrupt_register
        (
        int irq,
        const char *info,
@@ -167,7 +167,7 @@ static __inline__ int BSP_shared_interrupt_register
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-static __inline__ int BSP_shared_interrupt_unregister
+RTEMS_DEPRECATED static inline int BSP_shared_interrupt_unregister
        (
        int irq,
        bsp_shared_isr isr,
@@ -185,7 +185,7 @@ static __inline__ int BSP_shared_interrupt_unregister
  * Arguments
  *  irq       System IRQ number
  */
-static inline void BSP_shared_interrupt_clear( int irq )
+RTEMS_DEPRECATED static inline void BSP_shared_interrupt_clear( int irq )
 {
   (void) rtems_interrupt_clear( (rtems_vector_number) irq );
 }
@@ -197,7 +197,7 @@ static inline void BSP_shared_interrupt_clear( int irq )
  * Arguments
  *  irq       System IRQ number
  */
-static inline void BSP_shared_interrupt_unmask( int irq )
+RTEMS_DEPRECATED static inline void BSP_shared_interrupt_unmask( int irq )
 {
   (void) rtems_interrupt_vector_enable( (rtems_vector_number) irq );
 }
@@ -209,7 +209,7 @@ static inline void BSP_shared_interrupt_unmask( int irq )
  * Arguments
  *  irq         System IRQ number
  */
-static inline void BSP_shared_interrupt_mask( int irq )
+RTEMS_DEPRECATED static inline void BSP_shared_interrupt_mask( int irq )
 {
   (void) rtems_interrupt_vector_disable( (rtems_vector_number) irq );
 }
