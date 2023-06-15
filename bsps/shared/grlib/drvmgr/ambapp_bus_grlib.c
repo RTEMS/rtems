@@ -41,7 +41,7 @@
 #include <grlib/genirq.h>
 
 #include <bsp.h>
-#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 
 #include <grlib/grlib_impl.h>
 
@@ -227,7 +227,10 @@ static int ambapp_grlib_int_clear
 	struct drvmgr_dev *dev,
 	int irq)
 {
-	BSP_shared_interrupt_clear(irq);
+	if (rtems_interrupt_clear(irq) != RTEMS_SUCCESSFUL) {
+		return DRVMGR_FAIL;
+	}
+
 	return DRVMGR_OK;
 }
 
@@ -237,7 +240,10 @@ static int ambapp_grlib_int_mask
 	int irq
 	)
 {
-	BSP_shared_interrupt_mask(irq);
+	if (rtems_interrupt_vector_disable(irq) != RTEMS_SUCCESSFUL) {
+		return DRVMGR_FAIL;
+	}
+
 	return DRVMGR_OK;
 }
 
@@ -247,7 +253,10 @@ static int ambapp_grlib_int_unmask
 	int irq
 	)
 {
-	BSP_shared_interrupt_unmask(irq);
+	if (rtems_interrupt_vector_enable(irq) != RTEMS_SUCCESSFUL) {
+		return DRVMGR_FAIL;
+	}
+
 	return DRVMGR_OK;
 }
 

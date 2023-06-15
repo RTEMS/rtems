@@ -52,7 +52,6 @@ source:
 - bsps/sparc/leon3/start/setvec.c
 - bsps/sparc/shared/gnatcommon.c
 - bsps/sparc/shared/irq/bsp_isr_handler.c
-- bsps/sparc/shared/irq/irq-shared.c
 - bsps/sparc/shared/pci/gr_cpci_gr740.c
 - bsps/sparc/shared/pci/gr_leon4_n2x.c
 - bsps/sparc/shared/pci/pci_memreg_sparc_be.c

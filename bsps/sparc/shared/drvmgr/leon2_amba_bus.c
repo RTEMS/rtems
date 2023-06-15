@@ -373,7 +373,7 @@ int leon2_amba_int_register
 
 	DBG("Registering IRQ %d to func 0x%x arg 0x%x\n", irq, (unsigned int)isr, (unsigned int)arg);
 
-	return BSP_shared_interrupt_register(irq, info, isr, arg);
+	return rtems_interrupt_handler_install(irq, info, RTEMS_INTERRUPT_SHARED, isr, arg);
 }
 
 int leon2_amba_int_unregister
@@ -392,7 +392,7 @@ int leon2_amba_int_unregister
 
 	DBG("Unregistering IRQ %d to func 0x%x arg 0x%x\n", irq, (unsigned int)handler, (unsigned int)arg);
 
-	return BSP_shared_interrupt_unregister(irq, isr, arg);
+	return rtems_interrupt_handler_remove(irq, isr, arg);
 }
 
 int leon2_amba_int_clear
@@ -407,7 +407,9 @@ int leon2_amba_int_clear
 	if ( irq < 0 )
 		return -1;
 
-	BSP_shared_interrupt_clear(irq);
+	if (rtems_interrupt_clear(irq) != RTEMS_SUCCESSFUL) {
+		return DRVMGR_FAIL;
+	}
 
 	return DRVMGR_OK;
 }
@@ -424,7 +426,9 @@ int leon2_amba_int_mask
 	if ( irq < 0 )
 		return -1;
 
-	BSP_shared_interrupt_mask(irq);
+	if (rtems_interrupt_vector_disable(irq) != RTEMS_SUCCESSFUL) {
+		return DRVMGR_FAIL;
+	}
 
 	return DRVMGR_OK;
 }
@@ -441,7 +445,9 @@ int leon2_amba_int_unmask
 	if ( irq < 0 )
 		return -1;
 
-	BSP_shared_interrupt_unmask(irq);
+	if (rtems_interrupt_vector_enable(irq) != RTEMS_SUCCESSFUL) {
+		return DRVMGR_FAIL;
+	}
 
 	return DRVMGR_OK;
 }

@@ -69,12 +69,6 @@ extern "C" {
 /* Maximum supported APBUARTs by BSP */
 #define BSP_NUMBER_OF_TERMIOS_PORTS 8
 
-/* GRLIB driver functions */
-
-extern void BSP_shared_interrupt_mask(int irq);
-extern void BSP_shared_interrupt_clear(int irq);
-extern void BSP_shared_interrupt_unmask(int irq);
-
 /*
  * Network driver configuration for greth
  */

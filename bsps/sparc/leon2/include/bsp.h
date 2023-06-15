@@ -166,7 +166,10 @@ static __inline__ int BSP_shared_interrupt_unregister
  * Arguments
  *  irq       System IRQ number
  */
-extern void BSP_shared_interrupt_clear(int irq);
+static inline void BSP_shared_interrupt_clear( int irq )
+{
+  (void) rtems_interrupt_clear( (rtems_vector_number) irq );
+}
 
 /* Enable Interrupt. This function will unmask the IRQ at the interrupt
  * controller. This is normally done by _register(). Note that this will
@@ -175,7 +178,10 @@ extern void BSP_shared_interrupt_clear(int irq);
  * Arguments
  *  irq       System IRQ number
  */
-extern void BSP_shared_interrupt_unmask(int irq);
+static inline void BSP_shared_interrupt_unmask( int irq )
+{
+  (void) rtems_interrupt_vector_enable( (rtems_vector_number) irq );
+}
 
 /* Disable Interrupt. This function will mask one IRQ at the interrupt
  * controller. This is normally done by _unregister().  Note that this will
@@ -184,7 +190,10 @@ extern void BSP_shared_interrupt_unmask(int irq);
  * Arguments
  *  irq         System IRQ number
  */
-extern void BSP_shared_interrupt_mask(int irq);
+static inline void BSP_shared_interrupt_mask( int irq )
+{
+  (void) rtems_interrupt_vector_disable( (rtems_vector_number) irq );
+}
 
 /*
  * Delay method

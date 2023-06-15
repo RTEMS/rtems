@@ -32,19 +32,9 @@
 
 static inline int bsp_irq_cpu(int irq)
 {
-#if defined(RTEMS_SMP)
-  Processor_mask affinity;
-
-  (void) bsp_interrupt_get_affinity((rtems_vector_number) irq, &affinity);
-  return (int) _Processor_mask_Find_last_set(&affinity);
-#elif defined(LEON3)
-  return _LEON3_Get_current_processor();
-#else
   return 0;
-#endif
 }
 
-#if !defined(LEON3)
 bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
 {
   if (vector == 0) {
@@ -149,23 +139,4 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
   BSP_Cpu_Mask_interrupt(vector, 0);
   return RTEMS_SUCCESSFUL;
-}
-#endif
-
-void BSP_shared_interrupt_mask(int irq)
-{
-  BSP_Cpu_Mask_interrupt(irq, bsp_irq_cpu(irq));
-}
-
-void BSP_shared_interrupt_unmask(int irq)
-{
-  BSP_Cpu_Unmask_interrupt(irq, bsp_irq_cpu(irq));
-}
-
-void BSP_shared_interrupt_clear(int irq)
-{
-  /* We don't have to interrupt lock here, because the register is only
-   * written and self clearing
-   */
-  BSP_Clear_interrupt(irq);
 }
