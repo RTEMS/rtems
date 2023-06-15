@@ -32,6 +32,7 @@
 
 #include <grlib/apbuart_termios.h>
 #include <grlib/apbuart.h>
+#include <grlib/io.h>
 #include <bsp.h>
 
 static void apbuart_isr(void *arg)
@@ -42,9 +43,9 @@ static void apbuart_isr(void *arg)
   char data;
 
   /* Get all received characters */
-  while ((status=uart->regs->status) & APBUART_STATUS_DR) {
+  while ((status=grlib_load_32(&uart->regs->status)) & APBUART_STATUS_DR) {
     /* Data has arrived, get new data */
-    data = uart->regs->data;
+    data = (char)grlib_load_32(&uart->regs->data);
 
     /* Tell termios layer about new character */
     rtems_termios_enqueue_raw_characters(tty, &data, 1);
@@ -52,7 +53,7 @@ static void apbuart_isr(void *arg)
 
   if (
     (status & APBUART_STATUS_TE)
-      && (uart->regs->ctrl & APBUART_CTRL_TI) != 0
+      && (grlib_load_32(&uart->regs->ctrl) & APBUART_CTRL_TI) != 0
   ) {
     /* write_interrupt will get called from this function */
     rtems_termios_dequeue_characters(tty, 1);
@@ -67,23 +68,27 @@ static void apbuart_write_support(
 {
   struct apbuart_context *uart = (struct apbuart_context *) base;
   int sending;
+  uint32_t ctrl;
+
+  ctrl = grlib_load_32(&uart->regs->ctrl);
 
   if (len > 0) {
     /* Enable TX interrupt (interrupt is edge-triggered) */
-    uart->regs->ctrl |= APBUART_CTRL_TI;
+    ctrl |= APBUART_CTRL_TI;
 
     /* start UART TX, this will result in an interrupt when done */
-    uart->regs->data = *buf;
+    grlib_store_32(&uart->regs->data, (uint8_t)*buf);
 
     sending = 1;
   } else {
     /* No more to send, disable TX interrupts */
-    uart->regs->ctrl &= ~APBUART_CTRL_TI;
+    ctrl &= ~APBUART_CTRL_TI;
 
     /* Tell close that we sent everything */
     sending = 0;
   }
 
+  grlib_store_32(&uart->regs->ctrl, ctrl);
   uart->sending = sending;
 }
 
@@ -134,7 +139,7 @@ static bool apbuart_set_attributes(
   rtems_termios_device_lock_acquire(base, &lock_context);
 
   /* Read out current value */
-  ctrl = uart->regs->ctrl;
+  ctrl = grlib_load_32(&uart->regs->ctrl);
 
   switch (t->c_cflag & (PARENB|PARODD)) {
     case (PARENB|PARODD):
@@ -162,7 +167,7 @@ static bool apbuart_set_attributes(
   }
 
   /* Update new settings */
-  uart->regs->ctrl = ctrl;
+  grlib_store_32(&uart->regs->ctrl, ctrl);
 
   rtems_termios_device_lock_release(base, &lock_context);
 
@@ -173,7 +178,7 @@ static bool apbuart_set_attributes(
     scaler = (((uart->freq_hz * 10) / (baud * 8)) - 5) / 10;
 
     /* Set new baud rate by setting scaler */
-    uart->regs->scaler = scaler;
+    grlib_store_32(&uart->regs->scaler, scaler);
   }
 
   return true;
@@ -184,7 +189,8 @@ static void apbuart_set_best_baud(
   struct termios *term
 )
 {
-  uint32_t baud = (uart->freq_hz * 10) / ((uart->regs->scaler * 10 + 5) * 8);
+  uint32_t baud = (uart->freq_hz * 10) /
+    ((grlib_load_32(&uart->regs->scaler) * 10 + 5) * 8);
 
   rtems_termios_set_best_baud(term, baud);
 }
@@ -197,12 +203,15 @@ static bool apbuart_first_open_polled(
 )
 {
   struct apbuart_context *uart = (struct apbuart_context *) base;
+  uint32_t ctrl;
 
   apbuart_set_best_baud(uart, term);
 
   /* Initialize UART on opening */
-  uart->regs->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
-  uart->regs->status = 0;
+  ctrl = grlib_load_32(&uart->regs->ctrl);
+  ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
+  grlib_store_32(&uart->regs->ctrl, ctrl);
+  grlib_store_32(&uart->regs->status, 0);
 
   return true;
 }
@@ -216,6 +225,7 @@ static bool apbuart_first_open_interrupt(
 {
   struct apbuart_context *uart = (struct apbuart_context *) base;
   rtems_status_code sc;
+  uint32_t ctrl;
 
   apbuart_set_best_baud(uart, term);
 
@@ -229,11 +239,13 @@ static bool apbuart_first_open_interrupt(
 
   uart->sending = 0;
   /* Enable Receiver and transmitter and Turn on RX interrupts */
-  uart->regs->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE |
-                      APBUART_CTRL_RI;
+  ctrl = grlib_load_32(&uart->regs->ctrl);
+  ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE | APBUART_CTRL_RI;
+  grlib_store_32(&uart->regs->ctrl, ctrl);
   /* Initialize UART on opening */
-  uart->regs->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
-  uart->regs->status = 0;
+  ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
+  grlib_store_32(&uart->regs->ctrl, ctrl);
+  grlib_store_32(&uart->regs->status, 0);
 
   return true;
 }
@@ -246,10 +258,13 @@ static void apbuart_last_close_interrupt(
 {
   struct apbuart_context *uart = (struct apbuart_context *) base;
   rtems_interrupt_lock_context lock_context;
+  uint32_t ctrl;
 
   /* Turn off RX interrupts */
   rtems_termios_device_lock_acquire(base, &lock_context);
-  uart->regs->ctrl &= ~(APBUART_CTRL_RI);
+  ctrl = grlib_load_32(&uart->regs->ctrl);
+  ctrl &= ~APBUART_CTRL_RI;
+  grlib_store_32(&uart->regs->ctrl, ctrl);
   rtems_termios_device_lock_release(base, &lock_context);
 
   /**** Flush device ****/

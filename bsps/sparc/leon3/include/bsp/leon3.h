@@ -1,12 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*
- *  COPYRIGHT (c) 1989-1998.
- *  On-Line Applications Research Corporation (OAR).
+/**
+ * @file
  *
- *  Modified for LEON3 BSP.
- *  COPYRIGHT (c) 2004.
- *  Gaisler Research.
+ * @ingroup RTEMSBSPsSPARCLEON3
+ *
+ * @brief This header file provides interfaces used by the BSP implementation.
+ */
+
+/*
+ * Copyright (C) 2021 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,31 +33,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef APBUART_TERMIOS_H
-#define APBUART_TERMIOS_H
+#ifndef LIBBSP_SPARC_LEON3_BSP_LEON3_H
+#define LIBBSP_SPARC_LEON3_BSP_LEON3_H
 
-#include <rtems/termiostypes.h>
-#include "apbuart.h"
+#include <grlib/apbuart-regs.h>
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif
 
-struct apbuart_context {
-  rtems_termios_device_context base;
-  apbuart *regs;
-  unsigned int freq_hz;
-  rtems_vector_number irq;
-  volatile int sending;
-  char *buf;
-};
+/**
+ * @addtogroup RTEMSBSPsSPARCLEON3
+ *
+ * @{
+ */
 
-extern const rtems_termios_device_handler apbuart_handler_interrupt;
+/**
+ * @brief This pointer provides the debug APBUART register block address.
+ */
+extern apbuart *leon3_debug_uart;
 
-extern const rtems_termios_device_handler apbuart_handler_polled;
+/** @} */
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif
 
-#endif /* APBUART_TERMIOS_H */
+#endif /* LIBBSP_SPARC_LEON3_BSP_LEON3_H */

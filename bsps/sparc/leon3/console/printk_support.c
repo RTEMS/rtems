@@ -35,14 +35,17 @@
  */
 
 #include <bsp.h>
-#include <leon.h>
+#include <bsp/leon3.h>
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
 #include <rtems/score/thread.h>
 #include <grlib/apbuart.h>
+#include <grlib/io.h>
+
+#include <grlib/ambapp.h>
 
 int leon3_debug_uart_index __attribute__((weak)) = 0;
-struct apbuart_regs *leon3_debug_uart = NULL;
+apbuart *leon3_debug_uart = NULL;
 
 static void bsp_debug_uart_init(void);
 
@@ -105,15 +108,18 @@ static void bsp_debug_uart_init(void)
                                  ambapp_find_by_idx, (void *)&i);
   if (adev != NULL) {
     struct ambapp_apb_info *apb;
+    uint32_t ctrl;
 
     /*
      * Found a matching debug console, initialize debug UART if present for
      * printk().
      */
     apb = (struct ambapp_apb_info *)adev->devinfo;
-    leon3_debug_uart = (struct apbuart_regs *)apb->start;
-    leon3_debug_uart->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
-    leon3_debug_uart->status = 0;
+    leon3_debug_uart = (apbuart *)apb->start;
+    ctrl = grlib_load_32(&leon3_debug_uart->ctrl);
+    ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
+    grlib_store_32(&leon3_debug_uart->ctrl, ctrl);
+    grlib_store_32(&leon3_debug_uart->status, 0);
 
     BSP_poll_char = bsp_debug_uart_poll_char;
     BSP_output_char = bsp_debug_uart_output_char;

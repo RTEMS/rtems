@@ -82,7 +82,7 @@ static int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg)
   struct ambapp_apb_info *apb = (struct ambapp_apb_info *)dev->devinfo;
 
   /* Extract needed information of one APBUART */
-  apbuarts[uarts].regs = (struct apbuart_regs *)apb->start;
+  apbuarts[uarts].regs = (apbuart *)apb->start;
   apbuarts[uarts].irq = apb->common.irq;
   /* Get APBUART core frequency, it is assumed that it is the same
    * as Bus frequency where the UART is situated

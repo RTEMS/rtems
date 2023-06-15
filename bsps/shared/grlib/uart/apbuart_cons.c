@@ -47,10 +47,14 @@
 #include <grlib/ambapp_bus.h>
 #include <grlib/apbuart.h>
 #include <grlib/ambapp.h>
-#include <grlib/grlib.h>
+#include <grlib/io.h>
 #include <grlib/cons.h>
 #include <rtems/termiostypes.h>
 #include <grlib/apbuart_cons.h>
+
+#ifdef LEON3
+#include <bsp/leon3.h>
+#endif
 
 /*#define DEBUG 1  */
 
@@ -58,12 +62,6 @@
 #define DBG(x...) printk(x)
 #else
 #define DBG(x...)
-#endif
-
-/* LEON3 Low level transmit/receive functions provided by debug-uart code */
-#ifdef LEON3
-#include <leon.h>
-extern struct apbuart_regs *leon3_debug_uart; /* The debug UART */
 #endif
 
 /* Probed hardware capabilities */
@@ -74,7 +72,7 @@ enum {
 struct apbuart_priv {
 	struct console_dev condev;
 	struct drvmgr_dev *dev;
-	struct apbuart_regs *regs;
+	apbuart *regs;
 	struct rtems_termios_tty *tty;
 	char devName[52];
 	volatile int sending;
@@ -213,18 +211,23 @@ static const rtems_termios_device_handler handler_polled = {
  * can select appropriate routines for the hardware. probecap() return value
  * is a CAP_ bitmask.
  */
-static int probecap(struct apbuart_regs *regs)
+static int probecap(apbuart *regs)
 {
 	int cap = 0;
+	uint32_t ctrl;
 
 	/* Probe FIFO */
-	if (regs->ctrl & APBUART_CTRL_FA) {
+	ctrl = grlib_load_32(&regs->ctrl);
+	if (ctrl & APBUART_CTRL_FA) {
 		cap |= CAP_FIFO;
 
 		/* Probe RX delayed interrupt */
-		regs->ctrl |= APBUART_CTRL_DI;
-		if (regs->ctrl & APBUART_CTRL_DI) {
-			regs->ctrl &= ~APBUART_CTRL_DI;
+		ctrl |= APBUART_CTRL_DI;
+		grlib_store_32(&regs->ctrl, ctrl);
+		ctrl = grlib_load_32(&regs->ctrl);
+		if (ctrl & APBUART_CTRL_DI) {
+			ctrl &= ~APBUART_CTRL_DI;
+			grlib_store_32(&regs->ctrl, ctrl);
 			cap |= CAP_DI;
 		}
 	}
@@ -241,6 +244,7 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	char prefix[32];
 	unsigned int db;
 	static int first_uart = 1;
+	uint32_t ctrl;
 
 	/* The default operation in AMP is to use APBUART[0] for CPU[0],
 	 * APBUART[1] for CPU[1] and so on. The remaining UARTs is not used
@@ -269,10 +273,12 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	if (ambadev == NULL)
 		return -1;
 	pnpinfo = &ambadev->info;
-	priv->regs = (struct apbuart_regs *)pnpinfo->apb_slv->start;
+	priv->regs = (apbuart *)pnpinfo->apb_slv->start;
 
 	/* Clear HW regs, leave baudrate register as it is */
-	priv->regs->status = 0;
+	grlib_store_32(&priv->regs->status, 0);
+
+	ctrl = grlib_load_32(&priv->regs->ctrl);
 
 	/* leave Transmitter/receiver if this is the RTEMS debug UART (assume
 	 * it has been setup by boot loader).
@@ -280,10 +286,10 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	db = 0;
 #ifdef LEON3
 	if (priv->regs == leon3_debug_uart) {
-		db = priv->regs->ctrl & (APBUART_CTRL_RE |
-					APBUART_CTRL_TE |
-					APBUART_CTRL_PE |
-					APBUART_CTRL_PS);
+		db = ctrl & (APBUART_CTRL_RE |
+			     APBUART_CTRL_TE |
+			     APBUART_CTRL_PE |
+			     APBUART_CTRL_PS);
 	}
 #endif
 	/* Let UART debug tunnelling be untouched if Flow-control is set.
@@ -293,12 +299,12 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	 * guess that we are debugging if FL is already set, the debugger set
 	 * either LB or DB depending on UART capabilities.
 	 */
-	if (priv->regs->ctrl & APBUART_CTRL_FL) {
-		db |= priv->regs->ctrl & (APBUART_CTRL_DB |
+	if (ctrl & APBUART_CTRL_FL) {
+		db |= ctrl & (APBUART_CTRL_DB |
 		      APBUART_CTRL_LB | APBUART_CTRL_FL);
 	}
 
-	priv->regs->ctrl = db;
+	grlib_store_32(&priv->regs->ctrl, db);
 
 	priv->cap = probecap(priv->regs);
 
@@ -387,12 +393,13 @@ static int apbuart_info(
 		sprintf(buf, "FS Name:     %s", priv->condev.fsname);
 		print_line(p, buf);
 	}
-	sprintf(buf, "STATUS REG:  0x%x", priv->regs->status);
+	sprintf(buf, "STATUS REG:  0x%x", grlib_load_32(&priv->regs->status));
 	print_line(p, buf);
-	sprintf(buf, "CTRL REG:    0x%x", priv->regs->ctrl);
+	sprintf(buf, "CTRL REG:    0x%x", grlib_load_32(&priv->regs->ctrl));
 	print_line(p, buf);
 	sprintf(buf, "SCALER REG:  0x%x  baud rate %d",
-				priv->regs->scaler, apbuart_get_baud(priv));
+				grlib_load_32(&priv->regs->scaler),
+				apbuart_get_baud(priv));
 	print_line(p, buf);
 
 	return DRVMGR_OK;
@@ -407,6 +414,8 @@ static bool first_open(
 )
 {
 	struct apbuart_priv *uart = base_get_priv(base);
+	apbuart *regs = uart->regs;
+	uint32_t ctrl;
 
 	uart->tty = tty;
 
@@ -418,7 +427,8 @@ static bool first_open(
 	}
 
 	/* Enable TX/RX */
-	uart->regs->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
+	ctrl = grlib_load_32(&regs->ctrl);
+	ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
 
 	if (uart->mode != TERMIOS_POLLED) {
 		int ret;
@@ -435,14 +445,14 @@ static bool first_open(
 		uart->sending = 0;
 
 		/* Turn on RX interrupts */
-		ctrl = uart->regs->ctrl;
 		ctrl |= APBUART_CTRL_RI;
 		if (uart->cap & CAP_DI) {
 			/* Use RX FIFO interrupt only if delayed interrupt available. */
 			ctrl |= (APBUART_CTRL_DI | APBUART_CTRL_RF);
 		}
-		uart->regs->ctrl = ctrl;
 	}
+
+	grlib_store_32(&regs->ctrl, ctrl);
 
 	return true;
 }
@@ -454,13 +464,16 @@ static void last_close(
 )
 {
 	struct apbuart_priv *uart = base_get_priv(base);
+	apbuart *regs = uart->regs;
 	rtems_interrupt_lock_context lock_context;
+	uint32_t ctrl;
 
 	if (uart->mode != TERMIOS_POLLED) {
 		/* Turn off RX interrupts */
 		rtems_termios_device_lock_acquire(base, &lock_context);
-		uart->regs->ctrl &=
-			~(APBUART_CTRL_DI | APBUART_CTRL_RI | APBUART_CTRL_RF);
+		ctrl = grlib_load_32(&regs->ctrl);
+		ctrl &= ~(APBUART_CTRL_DI | APBUART_CTRL_RI | APBUART_CTRL_RF);
+		grlib_store_32(&regs->ctrl, ctrl);
 		rtems_termios_device_lock_release(base, &lock_context);
 
 		/**** Flush device ****/
@@ -468,8 +481,8 @@ static void last_close(
 			/* Wait until all data has been sent */
 		}
 		while (
-			(uart->regs->ctrl & APBUART_CTRL_TE) &&
-			!(uart->regs->status & APBUART_STATUS_TS)
+			(grlib_load_32(&regs->ctrl) & APBUART_CTRL_TE) &&
+			!(grlib_load_32(&regs->status) & APBUART_STATUS_TS)
 		) {
 			/* Wait until all data has left shift register */
 		}
@@ -480,8 +493,11 @@ static void last_close(
 
 #ifdef LEON3
 	/* Disable TX/RX if not used for DEBUG */
-	if (uart->regs != leon3_debug_uart)
-		uart->regs->ctrl &= ~(APBUART_CTRL_RE | APBUART_CTRL_TE);
+	if (regs != leon3_debug_uart) {
+		ctrl = grlib_load_32(&regs->ctrl);
+		ctrl &= ~(APBUART_CTRL_RE | APBUART_CTRL_TE);
+		grlib_store_32(&regs->ctrl, ctrl);
+	}
 #endif
 }
 
@@ -497,10 +513,11 @@ static int read_task(rtems_termios_device_context *base)
 {
 	rtems_interrupt_lock_context lock_context;
 	struct apbuart_priv *uart = base_get_priv(base);
-	struct apbuart_regs *regs = uart->regs;
+	apbuart *regs = uart->regs;
 	int cnt;
 	char buf[33];
 	struct rtems_termios_tty *tty;
+	uint32_t ctrl;
 	uint32_t ctrl_add;
 
 	ctrl_add = APBUART_CTRL_RI;
@@ -511,10 +528,10 @@ static int read_task(rtems_termios_device_context *base)
 	do {
 		cnt = 0;
 		while (
-			(regs->status & APBUART_STATUS_DR) &&
+			(grlib_load_32(&regs->status) & APBUART_STATUS_DR) &&
 			(cnt < sizeof(buf))
 		) {
-			buf[cnt] = regs->data;
+			buf[cnt] = grlib_load_32(&regs->data);
 			cnt++;
 		}
 		if (0 < cnt) {
@@ -528,9 +545,11 @@ static int read_task(rtems_termios_device_context *base)
 		 * afterwards.
 		 */
 		rtems_termios_device_lock_acquire(base, &lock_context);
-		regs->ctrl |= ctrl_add;
+		ctrl = grlib_load_32(&regs->ctrl);
+		ctrl |= ctrl_add;
+		grlib_store_32(&regs->ctrl, ctrl);
 		rtems_termios_device_lock_release(base, &lock_context);
-	} while (regs->status & APBUART_STATUS_DR);
+	} while (grlib_load_32(&regs->status) & APBUART_STATUS_DR);
 
 	return EOF;
 }
@@ -541,7 +560,7 @@ int apbuart_get_baud(struct apbuart_priv *uart)
 	unsigned int scaler;
 
 	/* Get current scaler setting */
-	scaler = uart->regs->scaler;
+	scaler = grlib_load_32(&uart->regs->scaler);
 
 	/* Get APBUART core frequency */
 	drvmgr_freq_get(uart->dev, DEV_APB_SLV, &core_clk_hz);
@@ -576,7 +595,7 @@ static bool set_attributes(
 	rtems_termios_device_lock_acquire(base, &lock_context);
 
 	/* Read out current value */
-	ctrl = uart->regs->ctrl;
+	ctrl = grlib_load_32(&uart->regs->ctrl);
 
 	switch(t->c_cflag & (PARENB|PARODD)){
 		case (PARENB|PARODD):
@@ -603,7 +622,7 @@ static bool set_attributes(
 		ctrl &= ~APBUART_CTRL_FL;
 
 	/* Update new settings */
-	uart->regs->ctrl = ctrl;
+	grlib_store_32(&uart->regs->ctrl, ctrl);
 
 	rtems_termios_device_lock_release(base, &lock_context);
 
@@ -617,7 +636,7 @@ static bool set_attributes(
 		scaler = (((core_clk_hz*10)/(baud*8))-5)/10;
 
 		/* Set new baud rate by setting scaler */
-		uart->regs->scaler = scaler;
+		grlib_store_32(&uart->regs->scaler, scaler);
 	}
 
 	return true;
@@ -637,7 +656,7 @@ static void get_attributes(
 	t->c_cflag |= CS8;
 
 	/* Read out current parity */
-	ctrl = uart->regs->ctrl;
+	ctrl = grlib_load_32(&uart->regs->ctrl);
 	if (ctrl & APBUART_CTRL_PE) {
 		if (ctrl & APBUART_CTRL_PS)
 			t->c_cflag |= PARENB|PARODD; /* Odd parity */
@@ -673,11 +692,11 @@ static void write_interrupt(
 )
 {
 	struct apbuart_priv *uart = base_get_priv(base);
-	struct apbuart_regs *regs = uart->regs;
+	apbuart *regs = uart->regs;
 	int sending;
 	unsigned int ctrl;
 
-	ctrl = regs->ctrl;
+	ctrl = grlib_load_32(&regs->ctrl);
 
 	if (len > 0) {
 		/*
@@ -685,28 +704,30 @@ static void write_interrupt(
 		 * we can tell termios later.
 		 */
 		/* Enable TX interrupt (interrupt is edge-triggered) */
-		regs->ctrl = ctrl | APBUART_CTRL_TI;
+		ctrl |= APBUART_CTRL_TI;
+		grlib_store_32(&regs->ctrl, ctrl);
 
 		if (ctrl & APBUART_CTRL_FA) {
 			/* APBUART with FIFO.. Fill as many as FIFO allows */
 			sending = 0;
 			while (
-				((regs->status & APBUART_STATUS_TF) == 0) &&
+				((grlib_load_32(&regs->status) & APBUART_STATUS_TF) == 0) &&
 				(sending < len)
 			) {
-				regs->data = *buf;
+				grlib_store_32(&regs->data, *buf);
 				buf++;
 				sending++;
 			}
 		} else {
 			/* start UART TX, this will result in an interrupt when done */
-			regs->data = *buf;
+			grlib_store_32(&regs->data, *buf);
 
 			sending = 1;
 		}
 	} else {
 		/* No more to send, disable TX interrupts */
-		regs->ctrl = ctrl & ~APBUART_CTRL_TI;
+		ctrl &= ~APBUART_CTRL_TI;
+		grlib_store_32(&regs->ctrl, ctrl);
 
 		/* Tell close that we sent everything */
 		sending = 0;
@@ -722,21 +743,24 @@ static void apbuart_cons_isr(void *arg)
 	rtems_termios_device_context *base;
 	struct console_dev *condev = rtems_termios_get_device_context(tty);
 	struct apbuart_priv *uart = condev_get_priv(condev);
-	struct apbuart_regs *regs = uart->regs;
+	apbuart *regs = uart->regs;
 	unsigned int status;
 	char buf[33];
 	int cnt;
 
 	if (uart->mode == TERMIOS_TASK_DRIVEN) {
-		if ((status = regs->status) & APBUART_STATUS_DR) {
+		if ((status = grlib_load_32(&regs->status)) & APBUART_STATUS_DR) {
 			rtems_interrupt_lock_context lock_context;
+			uint32_t ctrl;
 
 			/* Turn off RX interrupts */
 			base = rtems_termios_get_device_context(tty);
 			rtems_termios_device_lock_acquire(base, &lock_context);
-			regs->ctrl &=
+			ctrl = grlib_load_32(&regs->ctrl);
+			ctrl &=
 			    ~(APBUART_CTRL_DI | APBUART_CTRL_RI |
 			      APBUART_CTRL_RF);
+			grlib_store_32(&regs->ctrl, ctrl);
 			rtems_termios_device_lock_release(base, &lock_context);
 			/* Activate termios RX daemon task */
 			rtems_termios_rxirq_occured(tty);
@@ -749,10 +773,10 @@ static void apbuart_cons_isr(void *arg)
 		 */
 		cnt = 0;
 		while (
-			((status=regs->status) & APBUART_STATUS_DR) &&
+			((status=grlib_load_32(&regs->status)) & APBUART_STATUS_DR) &&
 			(cnt < sizeof(buf))
 		) {
-			buf[cnt] = regs->data;
+			buf[cnt] = grlib_load_32(&regs->data);
 			cnt++;
 		}
 		if (0 < cnt) {

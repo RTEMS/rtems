@@ -43,9 +43,10 @@
 #include <stdio.h>
 #include <grlib/apbuart.h>
 #include <grlib/ambapp.h>
+#include <grlib/io.h>
 
 int grlib_debug_uart_index __attribute__((weak)) = 0;
-struct apbuart_regs *grlib_debug_uart = NULL;
+apbuart *grlib_debug_uart = NULL;
 
 /* Before UART driver has registered (or when no UART is available), calls to
  * printk that gets to bsp_out_char() will be filling data into the
@@ -87,13 +88,17 @@ static void bsp_debug_uart_init(void)
                                  VENDOR_GAISLER, GAISLER_APBUART,
                                  ambapp_find_by_idx, (void *)&i);
   if (adev) {
+    uint32_t ctrl;
+
     /* Found a matching debug console, initialize debug uart if present
      * for printk
      */
     apb = (struct ambapp_apb_info *)adev->devinfo;
-    grlib_debug_uart = (struct apbuart_regs *)apb->start;
-    grlib_debug_uart->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
-    grlib_debug_uart->status = 0;
+    grlib_debug_uart = (apbuart *)apb->start;
+    ctrl = grlib_load_32(&grlib_debug_uart->ctrl);
+    ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
+    grlib_store_32(&grlib_debug_uart->ctrl, ctrl);
+    grlib_store_32(&grlib_debug_uart->status, 0);
   }
 }
 
@@ -107,10 +112,14 @@ RTEMS_SYSINIT_ITEM(
 static void bsp_out_char(char c)
 {
   if (grlib_debug_uart == NULL) {
+    uint32_t ctrl;
+
     /* Try to assign standard UART address to debug driver to pass some tests */
-    grlib_debug_uart = (struct apbuart_regs *) 0x80000100;
-    grlib_debug_uart->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
-    grlib_debug_uart->status = 0;
+    grlib_debug_uart = (apbuart *) 0x80000100;
+    ctrl = grlib_load_32(&grlib_debug_uart->ctrl);
+    ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
+    grlib_store_32(&grlib_debug_uart->ctrl, ctrl);
+    grlib_store_32(&grlib_debug_uart->status, 0);
     /* Local debug buffer when UART driver has not registered */
     /*
     pre_printk_dbgbuf[pre_printk_pos++] = c;
