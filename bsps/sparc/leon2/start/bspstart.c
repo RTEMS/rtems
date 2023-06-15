@@ -46,6 +46,7 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <bsp/irq-generic.h>
 #include <rtems/sysinit.h>
 
 /*
