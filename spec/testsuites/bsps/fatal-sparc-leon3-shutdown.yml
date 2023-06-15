@@ -7,7 +7,7 @@ enabled-by:
   - bsps/sparc/leon3
 links:
 - role: requirement-refinement
-  uid: validation
+  uid: ../validation
 test-brief: |
   This validation test suite provides an application configuration to perform a
   shutdown.
@@ -113,5 +113,5 @@ test-includes:
 test-local-includes:
 - ts-config.h
 - tx-support.h
-test-target: testsuites/validation/ts-fatal-bsp-sparc-leon3-shutdown.c
+test-target: testsuites/validation/bsps/ts-fatal-sparc-leon3-shutdown.c
 type: test-suite

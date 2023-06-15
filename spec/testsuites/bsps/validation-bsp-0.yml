@@ -1,12 +1,13 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
-enabled-by: sparc/gr712rc
+enabled-by: bsps/sparc/leon3
 links:
 - role: requirement-refinement
-  uid: validation
+  uid: ../validation
 test-brief: |
-  This validation test suite contains BSP-specific test cases.
+  This general purpose validation test suite provides enough resources to run
+  ${/glossary/target:/term}-specific tests.
 test-code: |
   const char rtems_test_name[] = "${.:/test-suite-name}";
 
@@ -14,5 +15,5 @@ test-code: |
 test-description: null
 test-includes: []
 test-local-includes: []
-test-target: testsuites/validation/ts-bsp-sparc-leon3-gr712rc.c
+test-target: testsuites/validation/bsps/ts-validation-bsp-0.c
 type: test-suite

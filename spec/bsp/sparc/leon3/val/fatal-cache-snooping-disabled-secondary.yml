@@ -54,13 +54,13 @@ test-header:
     dir: null
     name: code
     specifier: ${/rtems/userext/if/fatal-code:/name} ${.:name}
-  target: testsuites/validation/tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-secondary.h
+  target: testsuites/validation/bsps/tr-fatal-sparc-leon3-cache-snooping-disabled-secondary.h
 test-includes:
 - bsp/bootcard.h
 - bsp/fatal.h
 - bsp/leon3.h
 test-local-includes:
-- tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-secondary.h
+- tr-fatal-sparc-leon3-cache-snooping-disabled-secondary.h
 test-setup: null
 test-stop: null
 test-support: |
@@ -78,6 +78,6 @@ test-support: |
 
     __real_bsp_start_on_secondary_processor( cpu_self );
   }
-test-target: testsuites/validation/tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-secondary.c
+test-target: testsuites/validation/bsps/tr-fatal-sparc-leon3-cache-snooping-disabled-secondary.c
 test-teardown: null
 type: test-case

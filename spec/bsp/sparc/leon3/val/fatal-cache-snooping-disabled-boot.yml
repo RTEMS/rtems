@@ -54,13 +54,13 @@ test-header:
     dir: null
     name: code
     specifier: ${/rtems/userext/if/fatal-code:/name} ${.:name}
-  target: testsuites/validation/tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-boot.h
+  target: testsuites/validation/bsps/tr-fatal-sparc-leon3-cache-snooping-disabled-boot.h
 test-includes:
 - rtems/sysinit.h
 - bsp/fatal.h
 - bsp/leon3.h
 test-local-includes:
-- tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-boot.h
+- tr-fatal-sparc-leon3-cache-snooping-disabled-boot.h
 test-setup: null
 test-stop: null
 test-support: |
@@ -78,6 +78,6 @@ test-support: |
     RTEMS_SYSINIT_BSP_EARLY,
     RTEMS_SYSINIT_ORDER_FIRST
   );
-test-target: testsuites/validation/tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-boot.c
+test-target: testsuites/validation/bsps/tr-fatal-sparc-leon3-cache-snooping-disabled-boot.c
 test-teardown: null
 type: test-case

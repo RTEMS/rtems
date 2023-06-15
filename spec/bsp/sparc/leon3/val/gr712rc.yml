@@ -53,6 +53,6 @@ test-local-includes:
 test-setup: null
 test-stop: null
 test-support: null
-test-target: testsuites/validation/tc-bsp-sparc-leon3-gr712rc.c
+test-target: testsuites/validation/bsps/tc-sparc-gr712rc.c
 test-teardown: null
 type: test-case

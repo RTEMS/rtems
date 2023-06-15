@@ -51,14 +51,14 @@ test-header:
     dir: null
     name: code
     specifier: ${/rtems/userext/if/fatal-code:/name} ${.:name}
-  target: testsuites/validation/tr-fatal-bsp-sparc-leon3-clock-initialization.h
+  target: testsuites/validation/bsps/tr-fatal-sparc-leon3-clock-initialization.h
 test-includes:
 - rtems/irq-extension.h
 - rtems/sysinit.h
 - bsp/fatal.h
 - bsp/leon3.h
 test-local-includes:
-- tr-fatal-bsp-sparc-leon3-clock-initialization.h
+- tr-fatal-sparc-leon3-clock-initialization.h
 test-setup: null
 test-stop: null
 test-support: |
@@ -90,6 +90,6 @@ test-support: |
     RTEMS_SYSINIT_DEVICE_DRIVERS,
     RTEMS_SYSINIT_ORDER_FIRST
   );
-test-target: testsuites/validation/tr-fatal-bsp-sparc-leon3-clock-initialization.c
+test-target: testsuites/validation/bsps/tr-fatal-sparc-leon3-clock-initialization.c
 test-teardown: null
 type: test-case

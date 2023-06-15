@@ -133,6 +133,6 @@ test-support: |
     RTEMS_SYSINIT_DEVICE_DRIVERS,
     RTEMS_SYSINIT_ORDER_MIDDLE
   );
-test-target: testsuites/validation/tc-fatal-bsp-sparc-leon3-shutdown.c
+test-target: testsuites/validation/bsps/tc-fatal-sparc-leon3-shutdown.c
 test-teardown: null
 type: test-case
