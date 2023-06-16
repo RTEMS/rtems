@@ -47,7 +47,8 @@ params:
   dir: null
   name: id
 - description: |
-    is the begin address of the message buffer to send.
+    is the begin address of the message buffer to send (which shall be consistent
+    with the subsequent size parameter).
   dir: null
   name: buffer
 - description: |
