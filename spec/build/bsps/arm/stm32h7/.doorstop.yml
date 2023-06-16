@@ -1,6 +1,0 @@
-settings:
-  digits: 3
-  parent: RTEMS-BUILD-BSP-ARM
-  prefix: RTEMS-BUILD-BSP-ARM-STM32H7
-  sep: '-'
-attributes: !include ../../../attributes.inc
