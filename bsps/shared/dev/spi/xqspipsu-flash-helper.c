@@ -314,6 +314,7 @@ static int FlashReadID(XQspiPsu *QspiPsuPtr)
   }
   while (TransferInProgress);
 
+  rtems_cache_invalidate_multiple_data_lines(ReadBfrPtr, 3);
   /* In case of dual, read both and ensure they are same make/size */
 
   /*
@@ -860,6 +861,7 @@ int QspiPsu_NOR_Read(
     while (TransferInProgress);
 
   }
+  rtems_cache_invalidate_multiple_data_lines(ReadBuffer, ByteCount);
   return 0;
 }
 
@@ -1047,6 +1049,7 @@ static int MultiDieRead(
     Address += data_len;
     remain_len -= data_len;
   }
+  rtems_cache_invalidate_multiple_data_lines(ReadBfrPtr, ByteCount);
   return 0;
 }
 

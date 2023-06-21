@@ -259,6 +259,9 @@ typedef struct {
 	s32 TxBytes;	 /**< Number of bytes to transfer (state) */
 	s32 RxBytes;	 /**< Number of bytes left to transfer(state) */
 	s32 GenFifoEntries;	 /**< Number of Gen FIFO entries remaining */
+#ifdef __rtems__
+	volatile
+#endif
 	u32 IsBusy;		 /**< A transfer is in progress (state) */
 	u32 ReadMode;		 /**< DMA or IO mode */
 	u32 GenFifoCS;		/**< Gen FIFO chip selection */

@@ -84,6 +84,9 @@
 #include "xqspipsu.h"
 #include "xqspipsu_control.h"
 #include "sleep.h"
+#ifdef __rtems__
+#include <rtems/rtems/cache.h>
+#endif
 
 /************************** Constant Definitions *****************************/
 #define MAX_DELAY_CNT	10000000U	/**< Max delay count */
@@ -442,7 +445,16 @@ s32 XQspiPsu_PolledTransfer(XQspiPsu *InstancePtr, XQspiPsu_Msg *Msg,
 
 	for (Index = 0; Index < (s32)NumMsg; Index++) {
 		Xil_AssertNonvoid(Msg[Index].ByteCount > 0U);
+#ifdef __rtems__
+		if (Msg[Index].TxBfrPtr != NULL) {
+			rtems_cache_flush_multiple_data_lines(Msg[Index].TxBfrPtr, Msg[Index].ByteCount);
+		}
+#endif
 	}
+#ifdef __rtems__
+	rtems_cache_flush_multiple_data_lines(Msg, NumMsg * sizeof(*Msg));
+#endif
+
 	/*
 	 * Check whether there is another transfer in progress.
 	 * Not thread-safe
@@ -582,7 +594,18 @@ s32 XQspiPsu_InterruptTransfer(XQspiPsu *InstancePtr, XQspiPsu_Msg *Msg,
 	Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
 	for (Index = 0; Index < (s32)NumMsg; Index++)
+#ifdef __rtems__
+	{
+#endif
 		Xil_AssertNonvoid(Msg[Index].ByteCount > 0U);
+#ifdef __rtems__
+		if (Msg[Index].TxBfrPtr != NULL) {
+			rtems_cache_flush_multiple_data_lines(Msg[Index].TxBfrPtr, Msg[Index].ByteCount);
+		}
+	}
+	rtems_cache_flush_multiple_data_lines(Msg, NumMsg * sizeof(*Msg));
+#endif
+
 	/*
 	 * Check whether there is another transfer in progress.
 	 * Not thread-safe
