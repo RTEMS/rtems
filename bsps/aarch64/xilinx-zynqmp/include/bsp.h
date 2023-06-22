@@ -45,6 +45,8 @@
 
 #include <bspopts.h>
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 #ifndef ASM
 
 #include <bsp/default-initial-extension.h>

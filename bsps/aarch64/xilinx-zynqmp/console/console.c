@@ -225,7 +225,7 @@ rtems_status_code console_initialize(
   if ( zynqmp_mgmt_uart_context.port != 0 ) {
     rtems_termios_device_install(
       "/dev/ttyMGMT0",
-      &ns16550_handler_polled,
+      &ns16550_handler_interrupt,
       NULL,
       &zynqmp_mgmt_uart_context.base
     );
