@@ -91,6 +91,9 @@ static int riscv_get_console_node(const void *fdt)
     stdout_path = "";
   }
 
+  const char *q = memchr(stdout_path, ':', strlen(stdout_path));
+  const int stdout_path_len = q == NULL ? strlen(stdout_path) : q-stdout_path;
+
 #if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
   int root;
   int soc;
@@ -101,7 +104,7 @@ static int riscv_get_console_node(const void *fdt)
 
   return offset;
 #else
-  return fdt_path_offset(fdt, stdout_path);
+  return fdt_path_offset_namelen(fdt, stdout_path, stdout_path_len);
 #endif
 }
 
