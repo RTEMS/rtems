@@ -135,6 +135,13 @@ static int rtems_flashdev_get_addr(
   off_t *addr
 );
 
+static int rtems_flashdev_get_abs_addr(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  size_t count,
+  off_t *addr
+);
+
 static int rtems_flashdev_update_and_return(
   rtems_libio_t *iop,
   int status,
@@ -565,6 +572,28 @@ static int rtems_flashdev_get_addr(
   return 0;
 }
 
+static int rtems_flashdev_get_abs_addr(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  size_t count,
+  off_t *addr
+)
+{
+  off_t new_offset;
+
+  /* Check address is in valid region */
+  new_offset = *addr + count;
+
+  if (rtems_flashdev_check_offset_region(flash, iop, new_offset)) {
+    return -1;
+  }
+
+  /* Get address for operation */
+  if ( rtems_flashdev_is_region_defined( iop ) ) {
+    *addr = ( *addr + rtems_flashdev_get_region_offset( flash, iop ) );
+  }
+  return 0;
+}
 static int rtems_flashdev_update_and_return(
   rtems_libio_t *iop,
   int status,
@@ -588,7 +617,7 @@ static int rtems_flashdev_ioctl_erase(
 )
 {
   rtems_flashdev_region *erase_args_1;
-  off_t check_offset;
+  off_t new_offset;
   int status;
 
   if ( flash->erase == NULL ) {
@@ -597,16 +626,14 @@ static int rtems_flashdev_ioctl_erase(
 
   erase_args_1 = (rtems_flashdev_region *) arg;
   /* Check erasing valid region */
-  check_offset = erase_args_1->offset + erase_args_1->size;
-  if ( rtems_flashdev_is_region_defined( iop ) && (
-         rtems_flashdev_check_offset_region(flash, iop, check_offset) ||
-         ( erase_args_1->offset <
-           rtems_flashdev_get_region_offset( flash, iop ) ) ) ) {
-    rtems_set_errno_and_return_minus_one( EINVAL );
+  new_offset = erase_args_1->offset;
+  status = rtems_flashdev_get_abs_addr(flash, iop, erase_args_1->size, &new_offset);
+  if ( status < 0 ) {
+    return status;
   }
 
   /* Erase flash */
-  status = ( *flash->erase )( flash, erase_args_1->offset, erase_args_1->size );
+  status = ( *flash->erase )( flash, new_offset, erase_args_1->size );
   return status;
 }
 
