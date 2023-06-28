@@ -176,7 +176,6 @@ install:
   - bsps/arm/imxrt/mcux-sdk/drivers/xbarb/fsl_xbarb.h
   - bsps/arm/imxrt/mcux-sdk/drivers/xecc/fsl_xecc.h
   - bsps/arm/imxrt/mcux-sdk/drivers/xrdc2/fsl_xrdc2.h
-ldflags: []
 links:
 - role: build-dependency
   uid: grp
@@ -264,5 +263,3 @@ source:
 - bsps/arm/imxrt/mcux-sdk/drivers/xecc/fsl_xecc.c
 - bsps/arm/imxrt/mcux-sdk/drivers/xrdc2/fsl_xrdc2.c
 type: build
-use-after: []
-use-before: []

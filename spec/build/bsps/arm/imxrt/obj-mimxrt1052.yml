@@ -140,7 +140,6 @@ install:
   - bsps/arm/imxrt/mcux-sdk/drivers/wdog01/fsl_wdog.h
   - bsps/arm/imxrt/mcux-sdk/drivers/xbara/fsl_xbara.h
   - bsps/arm/imxrt/mcux-sdk/drivers/xbarb/fsl_xbarb.h
-ldflags: []
 links:
 - role: build-dependency
   uid: grp
@@ -208,5 +207,3 @@ source:
 - bsps/arm/imxrt/mcux-sdk/drivers/xbara/fsl_xbara.c
 - bsps/arm/imxrt/mcux-sdk/drivers/xbarb/fsl_xbarb.c
 type: build
-use-after: []
-use-before: []
