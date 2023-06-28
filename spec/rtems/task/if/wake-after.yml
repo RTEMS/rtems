@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Wakes up after an interval in ${/glossary/clock-tick:/plural} or yields the
-  processor.
+  Wakes up after a count of ${/glossary/clock-tick:/plural} have occurred or
+  yields the processor.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
-- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 1988, 2023 On-Line Applications Research Corporation (OAR)
 definition:
   default:
     attributes: null
@@ -15,15 +15,15 @@ definition:
   variants: []
 description: |
   This directive blocks the calling task for the specified ${.:/params[0]/name}
-  of clock ticks if the value is not equal to ${yield-processor:/name}.  When
-  the requested interval has elapsed, the task is made ready.  The clock tick
-  directives automatically updates the delay period.  The calling task may give
-  up the processor and remain in the ready state by specifying a value of
-  ${yield-processor:/name} in ${.:/params[0]/name}.
+  count of clock ticks if the value is not equal to ${yield-processor:/name}.
+  When the requested count of ticks have occurred, the task is made ready.  The
+  clock tick directives automatically update the delay period.  The calling task
+  may give up the processor and remain in the ready state by specifying a value
+  of ${yield-processor:/name} in ${.:/params[0]/name}.
 enabled-by: true
 index-entries:
-- delay a task for an interval
-- wake up after an interval
+- delay a task for a count of clock ticks
+- wake up after a count of clock ticks
 interface-type: function
 links:
 - role: interface-placement
@@ -40,10 +40,14 @@ name: rtems_task_wake_after
 notes: |
   Setting the system date and time with the ${../../clock/if/set:/name}
   directive and similar directives which set ${/glossary/clock-realtime:/term}
-  have no effect on a ${wake-after:/name} blocked task.
+  have no effect on a ${wake-after:/name} blocked task.  The delay until first
+  clock tick will never be a whole clock tick interval since this directive will
+  never excute exactly on a clock tick.  Applications requiring use of a clock
+  (${/glossary/clock-realtime:/term} or ${/glossary/clock-monotonic:/term})
+  instead of clock ticks should make use of ${/c/if/clock-nanosleep:/name}.
 params:
 - description: |
-    is the interval in ${/glossary/clock-tick:/plural} to delay the task or
+    is the count of ${/glossary/clock-tick:/plural} to delay the task or
     ${yield-processor:/name} to yield the processor.
   dir: null
   name: ticks
