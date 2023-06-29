@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 Reflex Aerospace GmbH ( https://www.reflexaerospace.com/ )
+default:
+- enabled-by: true
+  value: true
+description: |
+  Sets the target processing unit to the RPU (R5F) cores.
+enabled-by: true
+format: '{}'
+links: []
+name: ZYNQMP_PROC_UNIT_RPU
+type: build

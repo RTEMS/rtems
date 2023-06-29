@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 Reflex Aerospace GmbH ( https://www.reflexaerospace.com/ )
+default:
+- enabled-by: true
+  value:
+  - -march=armv7-r
+  - -mthumb
+  - -mfpu=vfpv3-d16
+  - -mfloat-abi=hard
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build

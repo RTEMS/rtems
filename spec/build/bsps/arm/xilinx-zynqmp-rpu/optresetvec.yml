@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- enabled-by: true
+  value: false
+description: |
+  reset vector address for BSP start
+enabled-by: true
+links: []
+name: BSP_START_RESET_VECTOR
+type: build

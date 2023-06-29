@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- enabled-by: true
+  value: 0x00000000
+description: ''
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: ZYNQMP_RPU_RAM_INT_0_ORIGIN
+type: build

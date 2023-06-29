@@ -41,6 +41,9 @@ extern "C" {
 #include "xil_types.h"
 #include "xil_assert.h"
 #include "xil_io.h"
+#ifdef __rtems__
+#include <xil_system.h>
+#endif
 
 /************************** Constant Definitions *****************************/
 /*

@@ -6,7 +6,8 @@ build-type: option
 copyrights:
 - Copyright (C) 2022 On-Line Applications Research (OAR)
 default:
-- enabled-by: []
+- enabled-by:
+  - arm/xilinx_zynqmp_mercuryxu5_rpu
   value: arm/cortexr5
 - enabled-by: bsps/microblaze/microblaze_fpga
   value: microblaze

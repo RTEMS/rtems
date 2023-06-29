@@ -1,0 +1,96 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: xilinx_zynqmp_mercuryxu5_rpu
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2023 Reflex Aerospace GmbH ( https://www.reflexaerospace.com/ )
+cppflags: []
+enabled-by: true
+family: xilinx-zynqmp-rpu
+includes:
+- bsps/include/xil/
+- bsps/include/xil/${XIL_SUPPORT_PATH}/
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/xilinx-zynqmp-rpu/include/bsp.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/xilinx-zynqmp-rpu/include/bsp/irq.h
+- destination: ${BSP_INCLUDEDIR}/peripheral_maps
+  source:
+  - bsps/include/peripheral_maps/xilinx_zynqmp.h
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: optclkfastidle
+- role: build-dependency
+  uid: optclkuart
+- role: build-dependency
+  uid: optconirq
+- role: build-dependency
+  uid: ../../optconminor
+- role: build-dependency
+  uid: optint0len
+- role: build-dependency
+  uid: optint0ori
+- role: build-dependency
+  uid: optint1len
+- role: build-dependency
+  uid: optint1ori
+- role: build-dependency
+  uid: optramlen
+- role: build-dependency
+  uid: optramori
+- role: build-dependency
+  uid: optresetvec
+- role: build-dependency
+  uid: optnocachelen
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../objdevserialzynq
+- role: build-dependency
+  uid: ../../objdevspizynq
+- role: build-dependency
+  uid: ../../objdevspixil
+- role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
+  uid: ../../opto0
+- role: build-dependency
+  uid: linkcmds
+- role: build-dependency
+  uid: ../../bspopts
+- role: build-dependency
+  uid: ../../objxilinxsupport
+source:
+- bsps/shared/cache/nocache.c
+- bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
+- bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/xilinx-zynqmp-rpu/console/console-config.c
+- bsps/arm/xilinx-zynqmp-rpu/start/bspreset.c
+- bsps/arm/xilinx-zynqmp-rpu/start/bspstart.c
+- bsps/arm/xilinx-zynqmp-rpu/start/bspstarthooks.c
+- bsps/arm/xilinx-zynqmp-rpu/start/bspstartmpu.c
+- bsps/shared/dev/clock/xil-ttc.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/irq/arm-gicv2.c
+- bsps/shared/dev/irq/arm-gicv2-zynqmp.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/gettargethash-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build
