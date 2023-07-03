@@ -1434,6 +1434,7 @@ source:
 - cpukit/score/src/interr.c
 - cpukit/score/src/iobase64.c
 - cpukit/score/src/ioprintf.c
+- cpukit/score/src/iorelax.c
 - cpukit/score/src/iovprintf.c
 - cpukit/score/src/isr.c
 - cpukit/score/src/isrisinprogress.c
