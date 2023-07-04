@@ -47,7 +47,7 @@ post-conditions:
       T_ge_uptr( size, ctx->size );
     text: |
       The size of the allocated memory area shall greater than or equal to the
-      ``size` parameter.
+      ``size`` parameter.
   test-epilogue: null
   test-prologue: |
     void     *ptr;
