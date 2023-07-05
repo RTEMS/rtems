@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: stm32h750b-dk
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2023 On-Line Applications Research (OAR)
+cppflags: []
+enabled-by: true
+family: stm32h7
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: grp
+source:
+- bsps/arm/stm32h7/boards/stm/stm32h747i-disco/stm32h7-bspstarthooks.c
+- bsps/arm/stm32h7/boards/stm/stm32h747i-disco/stm32h7-config-clk.c
+- bsps/arm/stm32h7/boards/stm/stm32h747i-disco/stm32h7-config-osc.c
+- bsps/arm/stm32h7/boards/stm/stm32h750b-dk/stm32h7-config-per.c
+- bsps/arm/stm32h7/boards/stm/stm32h750b-dk/system_stm32h7xx.c
+- bsps/arm/shared/cache/cache-v7m.c
+type: build

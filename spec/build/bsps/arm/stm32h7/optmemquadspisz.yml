@@ -8,6 +8,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
 - enabled-by:
+  - arm/stm32h750b-dk
   - arm/stm32h757i-eval
   - arm/stm32h757i-eval-m4
   value: 0x08000000

@@ -12,6 +12,9 @@ default:
   - arm/stm32h757i-eval
   - arm/stm32h757i-eval-m4
   value: 0x02000000
+- enabled-by:
+  - arm/stm32h750b-dk
+  value: 0x01000000
 - enabled-by: true
   value: 0x00000000
 description: |

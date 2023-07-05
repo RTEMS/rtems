@@ -4,16 +4,16 @@ actions:
 - define-unquoted: null
 build-type: option
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2023 On-Line Applications Research (OAR)
 default:
 - enabled-by: arm/stm32h750b-dk
-  value: GPIOB
-- enabled-by: true
   value: GPIOD
+- enabled-by: true
+  value: GPIOA
 description: |
-  GPIO registers used for the USART3 pin configuration.
+  GPIO registers used for the USART2 pin configuration.
 enabled-by: true
 format: '{}'
 links: []
-name: STM32H7_USART3_GPIO_REGS
+name: STM32H7_USART2_GPIO_REGS
 type: build

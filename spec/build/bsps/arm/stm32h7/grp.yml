@@ -99,6 +99,10 @@ links:
 - role: build-dependency
   uid: optusart1alternatefunc
 - role: build-dependency
+  uid: optusart2gpiopins
+- role: build-dependency
+  uid: optusart2gpioregs
+- role: build-dependency
   uid: optusart3gpiopins
 - role: build-dependency
   uid: optusart3gpioregs

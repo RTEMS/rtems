@@ -4,18 +4,17 @@ actions:
 - define-unquoted: null
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2023 On-Line Applications Research (OAR)
 default:
 - enabled-by:
-  - arm/nucleo-h743zi
   - arm/stm32h750b-dk
-  value: stm32h7_usart3_instance
+  value: ( GPIO_PIN_5 | GPIO_PIN_6 )
 - enabled-by: true
-  value: stm32h7_usart1_instance
+  value: ( GPIO_PIN_2 | GPIO_PIN_3 )
 description: |
-  UART/USART instance used for printk() and getchark().
+  GPIO pins used for the USART1 pin configuration.
 enabled-by: true
 format: '{}'
 links: []
-name: STM32H7_PRINTK_INSTANCE
+name: STM32H7_USART2_GPIO_PINS
 type: build

@@ -26,6 +26,9 @@ default:
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
   value: STM32H747xx
+- enabled-by:
+  - arm/stm32h750b-dk
+  value: STM32H750xx
 - enabled-by: true
   value: STM32H743xx
 description: |

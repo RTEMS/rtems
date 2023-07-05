@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2023 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,17 +31,10 @@
 
 #include <stm32h7/hal.h>
 
-const stm32h7_uart_config stm32h7_usart2_config = {
-  .gpio = {
-    .regs = STM32H7_USART2_GPIO_REGS,
-    .config = {
-      .Pin = STM32H7_USART2_GPIO_PINS,
-      .Mode = GPIO_MODE_AF_PP,
-      .Pull = GPIO_NOPULL,
-      .Speed = GPIO_SPEED_FREQ_LOW,
-      .Alternate = GPIO_AF7_USART2
-    }
-  },
-  .irq = USART2_IRQn,
-  .device_index = 1
+const RCC_PeriphCLKInitTypeDef stm32h7_config_peripheral_clocks = {
+  /* for stm32h750b-dk BSP we provide U(S)ART1/2/3 */
+  .PeriphClockSelection = RCC_PERIPHCLK_USART1 | RCC_PERIPHCLK_USART2
+	  | RCC_PERIPHCLK_USART3,
+  .Usart16ClockSelection = RCC_USART16CLKSOURCE_D2PCLK2,
+  .Usart234578ClockSelection = RCC_USART234578CLKSOURCE_D2PCLK1,
 };
