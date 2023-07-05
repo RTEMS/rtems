@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2023 OAR Corporation
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags:
+- -Wl,--wrap=malloc
+links: []
+source:
+- testsuites/libtests/regulator01/regulator01.c
+- testsuites/libtests/regulator01/rtems_config.c
+stlib: []
+target: testsuites/libtests/regulator01.exe
+type: build
+use-after: []
+use-before: []

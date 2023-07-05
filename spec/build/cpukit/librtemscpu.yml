@@ -511,6 +511,8 @@ links:
 - role: build-dependency
   uid: objpci
 - role: build-dependency
+  uid: objregulator
+- role: build-dependency
   uid: objpsxsgnl
 - role: build-dependency
   uid: objshell

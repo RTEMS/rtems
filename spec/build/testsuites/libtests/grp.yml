@@ -229,6 +229,8 @@ links:
 - role: build-dependency
   uid: record02
 - role: build-dependency
+  uid: regulator01
+- role: build-dependency
   uid: rtmonuse
 - role: build-dependency
   uid: setjmp
