@@ -33,6 +33,13 @@
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
+  /*
+   * This is a workaround for:
+   *
+   * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108658
+   */
+  __asm__ volatile ("");
+
   while ( true ) {
     /* Do nothing */
   }
