@@ -1,0 +1,76 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021, 2022 embedded brains GmbH & Co. KG
+enabled-by: bsps/sparc/leon3
+links: []
+test-actions:
+- action-brief: |
+    Check the effects of the leon3 BSP family shutdown procedure.
+  action-code: |
+    uint32_t counter;
+
+  checks:
+  - brief: |
+      Check that no dynamic fatal error extension was invoked.  This shows that
+      the leon3 BSP family shutdown procedure called the wrapped
+      _CPU_Fatal_halt() function of the test suite.
+    code: |
+      T_step_rsc_success( ${.:/step}, status );
+      counter = Add( &dynamic_fatal_extension_counter, 0 );
+      T_step_eq_u32( ${.:/step}, counter, 0 );
+    links:
+    - role: validation
+      uid: ../req/fatal-shutdown-halt
+    - role: validation
+      uid: ../req/fatal-shutdown-halt-smp
+  links: []
+test-brief: |
+  Tests the leon3 BSP family shutdown procedure.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/sysinit.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  static Atomic_Uint dynamic_fatal_extension_counter;
+
+  static rtems_status_code status;
+
+  static unsigned int Add( Atomic_Uint *a, unsigned int b )
+  {
+    return _Atomic_Fetch_add_uint( a, b, ATOMIC_ORDER_RELAXED );
+  }
+
+  static void DynamicFatalHandler(
+    rtems_fatal_source source,
+    bool               always_set_to_false,
+    rtems_fatal_code   code
+  )
+  {
+    (void) source;
+    (void) code;
+    (void) always_set_to_false;
+    (void) Add( &dynamic_fatal_extension_counter, 1 );
+  }
+
+  static void Init${.:/test-ident}( void )
+  {
+    rtems_extensions_table table = { .fatal = DynamicFatalHandler };
+    rtems_id               id;
+
+    status = rtems_extension_create( OBJECT_NAME, &table, &id );
+  }
+
+  RTEMS_SYSINIT_ITEM(
+    Init${.:/test-ident},
+    RTEMS_SYSINIT_DEVICE_DRIVERS,
+    RTEMS_SYSINIT_ORDER_MIDDLE
+  );
+test-target: testsuites/validation/bsps/tc-fatal-sparc-leon3-shutdown-halt.c
+test-teardown: null
+type: test-case
