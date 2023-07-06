@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by:
+  and:
+  - RTEMS_SMP
+  - bsps/sparc/leon3
+includes: []
+install: []
+links: []
+source:
+- testsuites/validation/bsps/tc-fatal-sparc-leon3-shutdown-request.c
+type: build

@@ -120,6 +120,7 @@ void __wrap__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
+#if defined(RTEMS_SMP)
 #define CONFIGURE_MAXIMUM_PROCESSORS 2
 
 #include <rtems/score/scheduleredfsmp.h>
@@ -136,6 +137,7 @@ RTEMS_SCHEDULER_EDF_SMP( a );
 #define CONFIGURE_SCHEDULER_ASSIGNMENTS \
   RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
   RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
+#endif /* RTEMS_SMP */
 
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 0
 
@@ -151,12 +153,17 @@ RTEMS_SCHEDULER_EDF_SMP( a );
 
 static void *ShutdownIdleBody( uintptr_t arg )
 {
+#if defined(RTEMS_SMP)
   if ( rtems_scheduler_get_processor() == 0 ) {
     rtems_test_begin( rtems_test_name, TEST_STATE );
     rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
   }
 
   return _CPU_Thread_Idle_body( arg );
+#else
+  rtems_test_begin( rtems_test_name, TEST_STATE );
+  rtems_fatal( RTEMS_FATAL_SOURCE_APPLICATION, 123 );
+#endif
 }
 
 #define CONFIGURE_IDLE_TASK_BODY ShutdownIdleBody

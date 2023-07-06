@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup BspSparcLeon3ValFatalShutdown
+ * @ingroup BspSparcLeon3ValFatalShutdownHalt
  */
 
 /*
@@ -52,17 +52,15 @@
 #include "config.h"
 #endif
 
-#include <bsp/leon3.h>
 #include <rtems/sysinit.h>
-#include <rtems/score/smpimpl.h>
 
 #include "tx-support.h"
 
 #include <rtems/test.h>
 
 /**
- * @defgroup BspSparcLeon3ValFatalShutdown \
- *   spec:/bsp/sparc/leon3/val/fatal-shutdown
+ * @defgroup BspSparcLeon3ValFatalShutdownHalt \
+ *   spec:/bsp/sparc/leon3/val/fatal-shutdown-halt
  *
  * @ingroup TestsuitesBspsFatalSparcLeon3Shutdown
  *
@@ -72,29 +70,12 @@
  *
  * - Check the effects of the leon3 BSP family shutdown procedure.
  *
- *   - Check that the second processor was not powered down during system
- *     initialization.
- *
- *   - Wait until the second processor is powered down.
- *
- *   - Check that the RTEMS_FATAL_SOURCE_SMP with SMP_FATAL_SHUTDOWN_RESPONSE
- *     fatal error occurred exactly once.
- *
- *   - Check that the RTEMS_FATAL_SOURCE_SMP with SMP_FATAL_SHUTDOWN_RESPONSE
- *     fatal error occurred on the second processor.
- *
  *   - Check that no dynamic fatal error extension was invoked.  This shows
  *     that the leon3 BSP family shutdown procedure called the wrapped
  *     _CPU_Fatal_halt() function of the test suite.
  *
  * @{
  */
-
-static uint32_t mpstat_during_sysinit;
-
-static Atomic_Uint shutdown_response_counter;
-
-static uint32_t shutdown_response_cpu_index = UINT32_MAX;
 
 static Atomic_Uint dynamic_fatal_extension_counter;
 
@@ -103,23 +84,6 @@ static rtems_status_code status;
 static unsigned int Add( Atomic_Uint *a, unsigned int b )
 {
   return _Atomic_Fetch_add_uint( a, b, ATOMIC_ORDER_RELAXED );
-}
-
-static void ShutdownFatalHandler(
-  rtems_fatal_source source,
-  rtems_fatal_code   code,
-  void              *arg
-)
-{
-  T_null( arg );
-
-  if (
-    source == RTEMS_FATAL_SOURCE_SMP &&
-    code == SMP_FATAL_SHUTDOWN_RESPONSE
-  ) {
-    (void) Add( &shutdown_response_counter, 1 );
-    shutdown_response_cpu_index = rtems_scheduler_get_processor();
-  }
 }
 
 static void DynamicFatalHandler(
@@ -134,20 +98,16 @@ static void DynamicFatalHandler(
   (void) Add( &dynamic_fatal_extension_counter, 1 );
 }
 
-static void InitTestCase( void )
+static void InitBspSparcLeon3ValFatalShutdownHalt( void )
 {
   rtems_extensions_table table = { .fatal = DynamicFatalHandler };
-  irqamp                *regs;
   rtems_id               id;
 
-  regs = LEON3_IrqCtrl_Regs;
-  mpstat_during_sysinit = grlib_load_32( &regs->mpstat );
-  SetFatalHandler( ShutdownFatalHandler, NULL );
   status = rtems_extension_create( OBJECT_NAME, &table, &id );
 }
 
 RTEMS_SYSINIT_ITEM(
-  InitTestCase,
+  InitBspSparcLeon3ValFatalShutdownHalt,
   RTEMS_SYSINIT_DEVICE_DRIVERS,
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
@@ -155,57 +115,28 @@ RTEMS_SYSINIT_ITEM(
 /**
  * @brief Check the effects of the leon3 BSP family shutdown procedure.
  */
-static void BspSparcLeon3ValFatalShutdown_Action_0( void )
+static void BspSparcLeon3ValFatalShutdownHalt_Action_0( void )
 {
-  irqamp  *regs;
   uint32_t counter;
-
-  regs = LEON3_IrqCtrl_Regs;
-
-  /*
-   * Check that the second processor was not powered down during system
-   * initialization.
-   */
-  T_step_eq_u32( 0, mpstat_during_sysinit & 0x2, 0 );
-
-  /*
-   * Wait until the second processor is powered down.
-   */
-  while ( ( grlib_load_32( &regs->mpstat ) & 0x2 ) != 0x2U ) {
-    /* Wait */
-  }
-
-  /*
-   * Check that the RTEMS_FATAL_SOURCE_SMP with SMP_FATAL_SHUTDOWN_RESPONSE
-   * fatal error occurred exactly once.
-   */
-  counter = Add( &shutdown_response_counter, 0 );
-  T_step_eq_uint( 1, counter, 1 );
-
-  /*
-   * Check that the RTEMS_FATAL_SOURCE_SMP with SMP_FATAL_SHUTDOWN_RESPONSE
-   * fatal error occurred on the second processor.
-   */
-  T_step_eq_u32( 2, shutdown_response_cpu_index, 1 );
 
   /*
    * Check that no dynamic fatal error extension was invoked.  This shows that
    * the leon3 BSP family shutdown procedure called the wrapped
    * _CPU_Fatal_halt() function of the test suite.
    */
-  T_step_rsc_success( 3, status );
+  T_step_rsc_success( 0, status );
   counter = Add( &dynamic_fatal_extension_counter, 0 );
-  T_step_eq_u32( 4, dynamic_fatal_extension_counter, 0 );
+  T_step_eq_u32( 1, counter, 0 );
 }
 
 /**
- * @fn void T_case_body_BspSparcLeon3ValFatalShutdown( void )
+ * @fn void T_case_body_BspSparcLeon3ValFatalShutdownHalt( void )
  */
-T_TEST_CASE( BspSparcLeon3ValFatalShutdown )
+T_TEST_CASE( BspSparcLeon3ValFatalShutdownHalt )
 {
-  T_plan( 5 );
+  T_plan( 2 );
 
-  BspSparcLeon3ValFatalShutdown_Action_0();
+  BspSparcLeon3ValFatalShutdownHalt_Action_0();
 }
 
 /** @} */
