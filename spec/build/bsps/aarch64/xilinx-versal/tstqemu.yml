@@ -12,5 +12,7 @@ copyrights:
 default: []
 description: ''
 enabled-by: true
-links: []
+links:
+- role: build-dependency
+  uid: ../../tstqemu
 type: build

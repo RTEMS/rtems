@@ -54,6 +54,8 @@ links:
 - role: build-dependency
   uid: ../../opto0
 - role: build-dependency
+  uid: ../../tstqemu
+- role: build-dependency
   uid: ../../bspopts
 source:
 - bsps/arm/realview-pbx-a9/console/console-config.c

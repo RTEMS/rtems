@@ -1,0 +1,72 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    reason: |
+      Tests that are passing intermittently due to #4922
+    state: indeterminate
+    tests:
+    - psx12
+    - psxclock
+    - psxtimes01
+    - psxualarm
+    - rtmonuse
+    - rtmonusxtimes01
+    - smpclock01
+    - smpfatal01
+    - smpfatal03
+    - smpmrsp01
+    - smpmutex01
+    - smppsxmutex01
+    - smpschedaffinity01
+    - smpschedaffinity02
+    - smpschededf01
+    - smpschededf03
+    - smpscheduler04
+    - smpthreadpin01
+    - sp04
+    - sp20
+    - sp68
+    - sp69
+    - sp71
+    - spcpucounter01
+    - spedfsched02
+    - spedfsched04
+    - spintrcritical01
+    - spintrcritical02
+    - spintrcritical03
+    - spintrcritical04
+    - spintrcritical05
+    - spintrcritical06
+    - spintrcritical07
+    - spintrcritical08
+    - spintrcritical09
+    - spintrcritical10
+    - spintrcritical11
+    - spintrcritical12
+    - spintrcritical13
+    - spintrcritical14
+    - spintrcritical15
+    - spintrcritical16
+    - spintrcritical17
+    - spintrcritical18
+    - spintrcritical19
+    - spintrcritical20
+    - spintrcritical21
+    - spintrcritical22
+    - spintrcritical23
+    - spintrcritical24
+    - sprmsched01
+    - sptimecounter01
+    - sptimecounter02
+    - sptimecounter04
+    - ttest02
+    - validation-0
+    - validation-smp-only-0
+build-type: option
+copyrights:
+- Copyright (C) 2023 On-Line Applications Research (OAR)
+default: []
+description: ''
+enabled-by: true
+links: []
+type: build

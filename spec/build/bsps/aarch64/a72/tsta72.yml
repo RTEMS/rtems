@@ -6,40 +6,13 @@ actions:
     state: exclude
     tests:
     - minimum
-- set-test-state:
-    reason: |
-      Tests that are passing intermittently.
-    state: indeterminate
-    tests:
-    - psx12
-    - psxtimes01
-    - rtmonuse
-    - rtmonusxtimes01
-    - sp04
-    - sp20
-    - sp68
-    - sp69
-    - spcpucounter01
-    - spedfsched02
-    - spedfsched04
-    - sprmsched01
-    - sptimecounter02
-    - sptimecounter04
-    - ttest02
-- set-test-state:
-    reason: |
-      Tests that pass nominally, but fail under Qemu when the host is under
-      heavy load.
-    state: indeterminate
-    tests:
-    - spintrcritical03
-    - spintrcritical04
-    - spintrcritical05
 build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default: []
 description: ''
 enabled-by: true
-links: []
+links:
+- role: build-dependency
+  uid: ../../tstqemu
 type: build
