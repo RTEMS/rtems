@@ -55,6 +55,9 @@ install:
   - bsps/include/libchip/spi-memdrv.h
   - bsps/include/libchip/spi-sd-card.h
   - bsps/include/libchip/wd80x3.h
+- destination: ${BSP_INCLUDEDIR}/dev/flash
+  source:
+  - bsps/include/dev/flash/jffs2_flashdev.h
 - destination: ${BSP_INCLUDEDIR}/rtems/zilog
   source:
   - bsps/include/rtems/zilog/z8036.h
@@ -73,6 +76,7 @@ links:
 source:
 - bsps/shared/dev/display/disp_hcms29xx.c
 - bsps/shared/dev/display/font_hcms29xx.c
+- bsps/shared/dev/flash/jffs2_flashdev.c
 - bsps/shared/dev/i2c/i2c-2b-eeprom.c
 - bsps/shared/dev/i2c/i2c-ds1621.c
 - bsps/shared/dev/i2c/i2c-sc620.c
