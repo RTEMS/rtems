@@ -1,0 +1,124 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRSPWRouterPortStats
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: grspwrouter
+- role: interface-placement
+  uid: grspwrouter-header
+definition:
+- default:
+    count: 1
+    name: OCHARCNT
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: ICHARCNT
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: OPKTCNT
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: IPKTCNT
+  offset: 0xc
+  variants: []
+register-prefix: grspwrouter
+register-block-group: SpaceWire Router Port Statistics
+register-block-size: 16
+registers:
+- bits:
+  - default:
+    - properties: [r, w1c]
+      brief: null
+      description: null
+      name: 'OR'
+      start: 31
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'CC'
+      start: 0
+      width: 31
+    variants: []
+  brief: |
+    Outgoing character counter, ports > 0
+  description: null
+  name: OCHARCNT
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w1c]
+      brief: null
+      description: null
+      name: 'OR'
+      start: 31
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'CC'
+      start: 0
+      width: 31
+    variants: []
+  brief: |
+    Incoming character counter, ports > 0
+  description: null
+  name: ICHARCNT
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w1c]
+      brief: null
+      description: null
+      name: 'OR'
+      start: 31
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'PC'
+      start: 0
+      width: 31
+    variants: []
+  brief: |
+    Outgoing packet counter, ports > 0
+  description: null
+  name: OPKTCNT
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w1c]
+      brief: null
+      description: null
+      name: 'OR'
+      start: 31
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'PC'
+      start: 0
+      width: 31
+    variants: []
+  brief: |
+    Incoming packet counter, ports > 0
+  description: null
+  name: IPKTCNT
+  width: 32
+name: grspwrouter_portstats
+notes: null
+type: interface

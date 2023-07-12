@@ -1,26 +1,30 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This set of defines the ${.:/register-block-group} address map.
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2021, 2023 embedded brains GmbH & Co. KG
 description: null
 enabled-by: true
-identifier: RTEMSDeviceGRLIBSPWMAP
+identifier: RTEMSDeviceGRSPWROUTER
 index-entries: []
 interface-type: register-block
 links:
 - role: interface-ingroup
   uid: group
 - role: interface-placement
-  uid: spwrmap-header
+  uid: grspwrouter-header
+- name: PORTSTATS
+  role: register-block-include
+  uid: grspwrouter-portstats
 definition:
 - default:
-    count: 1
+    count: 255
     name: RTPMAP
   offset: 0x4
   variants: []
 - default:
-    count: 1
+    count: 255
     name: RTACTRL
   offset: 0x404
   variants: []
@@ -30,7 +34,7 @@ definition:
   offset: 0x800
   variants: []
 - default:
-    count: 1
+    count: 31
     name: PCTRL
   offset: 0x804
   variants: []
@@ -40,12 +44,12 @@ definition:
   offset: 0x880
   variants: []
 - default:
-    count: 1
+    count: 31
     name: PSTS
   offset: 0x884
   variants: []
 - default:
-    count: 1
+    count: 32
     name: PTIMER
   offset: 0x900
   variants: []
@@ -55,7 +59,7 @@ definition:
   offset: 0x980
   variants: []
 - default:
-    count: 1
+    count: 31
     name: PCTRL2
   offset: 0x984
   variants: []
@@ -161,22 +165,47 @@ definition:
   variants: []
 - default:
     count: 1
+    name: PNPNETDISC
+  offset: 0xa5c
+  variants: []
+- default:
+    count: 31
+    name: PORTSTATS
+  offset: 0xc10
+  variants: []
+- default:
+    count: 32
     name: MAXPLEN
   offset: 0xe00
   variants: []
 - default:
-    count: 1
+    count: 31
     name: CREDCNT
   offset: 0xe84
   variants: []
 - default:
-    count: 1
+    count: 4
+    name: GPO
+  offset: 0xf00
+  variants: []
+- default:
+    count: 4
+    name: GPI
+  offset: 0xf10
+  variants: []
+- default:
+    count: 255
     name: RTCOMB
   offset: 0x1004
   variants: []
+- default:
+    count: 1024
+    name: APBAREA
+  offset: 0x2000
+  variants: []
 register-prefix: null
-register-block-group: SpaceWire Remote Memory Access Protocol (RMAP)
-register-block-size: 4104
+register-block-group: SpaceWire Router
+register-block-size: 12288
 registers:
 - bits:
   - default:
@@ -185,7 +214,7 @@ registers:
       description: null
       name: 'PE'
       start: 1
-      width: 12
+      width: 31
     - properties: [r, w]
       brief: null
       description: null
@@ -194,7 +223,7 @@ registers:
       width: 1
     variants: []
   brief: |
-    Routing table port mapping, addresses 1-12 and 32-255
+    Routing table port mapping, addresses 1-31 and 32-255
   description: null
   name: RTPMAP
   width: 32
@@ -226,7 +255,7 @@ registers:
       width: 1
     variants: []
   brief: |
-    Routing table address control, addresses 1-12 and 32-255
+    Routing table address control, addresses 1-31 and 32-255
   description: null
   name: RTACTRL
   width: 32
@@ -264,6 +293,12 @@ registers:
       name: 'RD'
       start: 24
       width: 8
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'RES'
+      start: 22
+      width: 2
     - properties: [r, w]
       brief: null
       description: null
@@ -315,6 +350,24 @@ registers:
     - properties: [r, w]
       brief: null
       description: null
+      name: 'NF'
+      start: 13
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'PS'
+      start: 12
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'BE'
+      start: 11
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
       name: 'DI'
       start: 10
       width: 1
@@ -348,6 +401,12 @@ registers:
       name: 'TE'
       start: 5
       width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 4
+      width: 1
     - properties: [r, w]
       brief: null
       description: null
@@ -374,7 +433,7 @@ registers:
       width: 1
     variants: []
   brief: |
-    Port control, ports 1-12 (SpaceWire ports and AMBA ports)
+    Port control, ports > 0
   description: null
   name: PCTRL
   width: 32
@@ -434,6 +493,12 @@ registers:
       name: 'EC'
       start: 20
       width: 4
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 19
+      width: 1
     - properties: [r, w1c]
       brief: null
       description: null
@@ -452,6 +517,12 @@ registers:
       name: 'IP'
       start: 7
       width: 5
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'RES'
+      start: 5
+      width: 2
     - properties: [r, w]
       brief: null
       description: null
@@ -519,6 +590,12 @@ registers:
       description: null
       name: 'AC'
       start: 20
+      width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'AP'
+      start: 19
       width: 1
     - properties: [r, w1c]
       brief: null
@@ -600,7 +677,7 @@ registers:
       width: 1
     variants: []
   brief: |
-    Port status, ports 1-12 (SpaceWire ports and AMBA ports)
+    Port status, ports > 0
   description: null
   name: PSTS
   width: 32
@@ -611,10 +688,10 @@ registers:
       description: null
       name: 'RL'
       start: 0
-      width: 16
+      width: 10
     variants: []
   brief: |
-    Port timer reload, ports 0-12
+    Port timer reload
   description: null
   name: PTIMER
   width: 32
@@ -670,6 +747,12 @@ registers:
       name: 'UR'
       start: 14
       width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 13
+      width: 1
     - properties: [r, w]
       brief: null
       description: null
@@ -708,7 +791,7 @@ registers:
       width: 1
     variants: []
   brief: |
-    Port control 2, ports 1-12 (SpaceWire ports and AMBA ports)
+    Port control 2, ports > 0
   description: null
   name: PCTRL2
   width: 32
@@ -726,6 +809,18 @@ registers:
       name: 'AP'
       start: 22
       width: 5
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'FP'
+      start: 17
+      width: 5
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 16
+      width: 1
     - properties: [r]
       brief: null
       description: null
@@ -786,6 +881,12 @@ registers:
       name: 'EE'
       start: 6
       width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 5
+      width: 1
     - properties: [r, w]
       brief: null
       description: null
@@ -801,7 +902,7 @@ registers:
     - properties: [r, w1c]
       brief: null
       description: null
-      name: 'ME'
+      name: 'RM'
       start: 2
       width: 1
     - properties: [r]
@@ -921,7 +1022,7 @@ registers:
       description: null
       name: 'RL'
       start: 0
-      width: 16
+      width: 32
     variants: []
   brief: |
     Timer prescaler reload
@@ -1060,20 +1161,20 @@ registers:
       brief: null
       description: null
       name: 'TE'
-      start: 17
+      start: 0
       width: 1
     - properties: [r, w]
       brief: null
       description: null
       name: 'EN'
-      start: 16
+      start: 17
       width: 1
     - properties: [r, w]
       brief: null
       description: null
       name: 'IN'
-      start: 0
-      width: 6
+      start: 6
+      width: 10
     variants: []
   brief: |
     Interrupt code generation
@@ -1115,7 +1216,7 @@ registers:
       description: null
       name: 'RL'
       start: 0
-      width: 16
+      width: 32
     variants: []
   brief: |
     Interrupt code distribution ISR timer reload
@@ -1129,7 +1230,7 @@ registers:
       description: null
       name: 'RL'
       start: 0
-      width: 16
+      width: 32
     variants: []
   brief: |
     Interrupt code distribution ACK-to-INT timer reload
@@ -1158,6 +1259,12 @@ registers:
       name: 'LR'
       start: 1
       width: 31
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 0
+      width: 1
     variants: []
   brief: |
     Link running status
@@ -1175,9 +1282,21 @@ registers:
     - properties: [r]
       brief: null
       description: null
+      name: 'R'
+      start: 23
+      width: 1
+    - properties: [r]
+      brief: null
+      description: null
       name: 'PF'
       start: 20
       width: 3
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 19
+      width: 1
     - properties: [r]
       brief: null
       description: null
@@ -1187,7 +1306,13 @@ registers:
     - properties: [r]
       brief: null
       description: null
-      name: 'AS'
+      name: 'R'
+      start: 15
+      width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'AA'
       start: 14
       width: 1
     - properties: [r]
@@ -1245,7 +1370,7 @@ registers:
       description: null
       name: 'PI'
       start: 0
-      width: 16
+      width: 26
     variants: []
   brief: |
     SpaceWire Plug-and-Play - Device Vendor and Product ID
@@ -1265,7 +1390,7 @@ registers:
       description: null
       name: 'PI'
       start: 0
-      width: 16
+      width: 26
     variants: []
   brief: |
     SpaceWire Plug-and-Play - Unit Vendor and Product ID
@@ -1291,12 +1416,26 @@ registers:
     - properties: [r, w]
       brief: null
       description: null
+      name: 'ND'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Port network discovery enable
+  description: null
+  name: PNPNETDISC
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w]
+      brief: null
+      description: null
       name: 'ML'
       start: 0
       width: 25
     variants: []
   brief: |
-    Maximum packet length, ports 0-12
+    Maximum packet length, ports > 0
   description: null
   name: MAXPLEN
   width: 32
@@ -1316,9 +1455,37 @@ registers:
       width: 6
     variants: []
   brief: |
-    Credit counter, ports 1-8
+    Credit counter, SpaceWire ports
   description: null
   name: CREDCNT
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'GPO'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    General purpose out, bits 0-31, 32-63, 64-95, and 96-127
+  description: null
+  name: GPO
+  width: 32
+- bits:
+  - default:
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'GPI'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    General purpose in, bits 0-31, 32-63, 64-95, and 96-127
+  description: null
+  name: GPI
   width: 32
 - bits:
   - default:
@@ -1351,7 +1518,7 @@ registers:
       description: null
       name: 'PE'
       start: 1
-      width: 19
+      width: 27
     - properties: [r, w]
       brief: null
       description: null
@@ -1364,6 +1531,20 @@ registers:
   description: null
   name: RTCOMB
   width: 32
-name: spwrmap
+- bits:
+  - default:
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'APB'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    APB address area
+  description: null
+  name: APBAREA
+  width: 32
+name: grspwrouter
 notes: null
 type: interface
