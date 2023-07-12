@@ -3,13 +3,14 @@
 /**
  * @file
  *
- * @ingroup RTEMSDeviceGRGPREG
+ * @ingroup RTEMSBSPsGR740Bootstrap
  *
- * @brief This header file defines the GRGPREG register block interface.
+ * @brief This header file defines the GR740 Boostrap Signals register block
+ *   interface.
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -50,10 +51,10 @@
  * https://docs.rtems.org
  */
 
-/* Generated from spec:/dev/grlib/if/grgpreg-header */
+/* Generated from spec:/bsp/sparc/leon3/if/gr740-bootstrap-header */
 
-#ifndef _GRLIB_GRGPREG_REGS_H
-#define _GRLIB_GRGPREG_REGS_H
+#ifndef _BSP_GR740_BOOTSTRAP_REGS_H
+#define _BSP_GR740_BOOTSTRAP_REGS_H
 
 #include <stdint.h>
 
@@ -61,70 +62,71 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/grgpreg */
+/* Generated from spec:/bsp/sparc/leon3/if/gr740-bootstrap */
 
 /**
- * @defgroup RTEMSDeviceGRGPREG GRGPREG
+ * @defgroup RTEMSBSPsGR740Bootstrap GR740 Bootstrap Signals
  *
- * @ingroup RTEMSDeviceGRLIB
+ * @ingroup RTEMSBSPsSPARCLEON3
  *
- * @brief This group contains the GRGPREG interfaces.
+ * @brief This group contains the GR740 Bootstrap Signals interfaces.
  *
  * @{
  */
 
 /**
- * @defgroup RTEMSDeviceGRGPREGBOOTSTRAP Bootstrap register (BOOTSTRAP)
+ * @defgroup RTEMSBSPsGR740BootstrapBOOTSTRAP Bootstrap register (BOOTSTRAP)
  *
  * @brief This group contains register bit definitions.
  *
  * @{
  */
 
-#define GRGPREG_BOOTSTRAP_B10 0x2000000U
+#define GR740_BOOTSTRAP_BOOTSTRAP_B10 0x2000000U
 
-#define GRGPREG_BOOTSTRAP_B9 0x1000000U
+#define GR740_BOOTSTRAP_BOOTSTRAP_B9 0x1000000U
 
-#define GRGPREG_BOOTSTRAP_B8 0x800000U
+#define GR740_BOOTSTRAP_BOOTSTRAP_B8 0x800000U
 
-#define GRGPREG_BOOTSTRAP_B7 0x400000U
+#define GR740_BOOTSTRAP_BOOTSTRAP_B7 0x400000U
 
-#define GRGPREG_BOOTSTRAP_B6 0x200000U
+#define GR740_BOOTSTRAP_BOOTSTRAP_B6 0x200000U
 
-#define GRGPREG_BOOTSTRAP_B5 0x100000U
+#define GR740_BOOTSTRAP_BOOTSTRAP_B5 0x100000U
 
-#define GRGPREG_BOOTSTRAP_B4 0x80000U
+#define GR740_BOOTSTRAP_BOOTSTRAP_B4 0x80000U
 
-#define GRGPREG_BOOTSTRAP_B3 0x40000U
+#define GR740_BOOTSTRAP_BOOTSTRAP_B3 0x40000U
 
-#define GRGPREG_BOOTSTRAP_B2 0x20000U
+#define GR740_BOOTSTRAP_BOOTSTRAP_B2 0x20000U
 
-#define GRGPREG_BOOTSTRAP_B1 0x10000U
+#define GR740_BOOTSTRAP_BOOTSTRAP_B1 0x10000U
 
-#define GRGPREG_BOOTSTRAP_GPIO_SHIFT 0
-#define GRGPREG_BOOTSTRAP_GPIO_MASK 0xffffU
-#define GRGPREG_BOOTSTRAP_GPIO_GET( _reg ) \
-  ( ( ( _reg ) & GRGPREG_BOOTSTRAP_GPIO_MASK ) >> \
-    GRGPREG_BOOTSTRAP_GPIO_SHIFT )
-#define GRGPREG_BOOTSTRAP_GPIO_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRGPREG_BOOTSTRAP_GPIO_MASK ) | \
-    ( ( ( _val ) << GRGPREG_BOOTSTRAP_GPIO_SHIFT ) & \
-      GRGPREG_BOOTSTRAP_GPIO_MASK ) )
-#define GRGPREG_BOOTSTRAP_GPIO( _val ) \
-  ( ( ( _val ) << GRGPREG_BOOTSTRAP_GPIO_SHIFT ) & \
-    GRGPREG_BOOTSTRAP_GPIO_MASK )
+#define GR740_BOOTSTRAP_BOOTSTRAP_GPIO_SHIFT 0
+#define GR740_BOOTSTRAP_BOOTSTRAP_GPIO_MASK 0xffffU
+#define GR740_BOOTSTRAP_BOOTSTRAP_GPIO_GET( _reg ) \
+  ( ( ( _reg ) & GR740_BOOTSTRAP_BOOTSTRAP_GPIO_MASK ) >> \
+    GR740_BOOTSTRAP_BOOTSTRAP_GPIO_SHIFT )
+#define GR740_BOOTSTRAP_BOOTSTRAP_GPIO_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GR740_BOOTSTRAP_BOOTSTRAP_GPIO_MASK ) | \
+    ( ( ( _val ) << GR740_BOOTSTRAP_BOOTSTRAP_GPIO_SHIFT ) & \
+      GR740_BOOTSTRAP_BOOTSTRAP_GPIO_MASK ) )
+#define GR740_BOOTSTRAP_BOOTSTRAP_GPIO( _val ) \
+  ( ( ( _val ) << GR740_BOOTSTRAP_BOOTSTRAP_GPIO_SHIFT ) & \
+    GR740_BOOTSTRAP_BOOTSTRAP_GPIO_MASK )
 
 /** @} */
 
 /**
- * @brief This structure defines the GRGPREG register block memory map.
+ * @brief This structure defines the GR740 Bootstrap Signals register block
+ *   memory map.
  */
-typedef struct grgpreg {
+typedef struct gr740_bootstrap {
   /**
-   * @brief See @ref RTEMSDeviceGRGPREGBOOTSTRAP.
+   * @brief See @ref RTEMSBSPsGR740BootstrapBOOTSTRAP.
    */
   uint32_t bootstrap;
-} grgpreg;
+} gr740_bootstrap;
 
 /** @} */
 
@@ -132,4 +134,4 @@ typedef struct grgpreg {
 }
 #endif
 
-#endif /* _GRLIB_GRGPREG_REGS_H */
+#endif /* _BSP_GR740_BOOTSTRAP_REGS_H */
