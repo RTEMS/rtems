@@ -46,7 +46,7 @@ registers:
       description: null
       name: 'UNLOCK'
       start: 0
-      width: 11
+      width: 32
     variants: []
   brief: |
     Unlock register
@@ -60,7 +60,7 @@ registers:
       description: null
       name: 'ENABLE'
       start: 0
-      width: 11
+      width: 32
     variants: []
   brief: |
     Clock enable register
@@ -74,7 +74,7 @@ registers:
       description: null
       name: 'RESET'
       start: 0
-      width: 11
+      width: 32
     variants: []
   brief: |
     Reset register
