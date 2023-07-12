@@ -404,25 +404,26 @@ extern "C" {
 /** @} */
 
 /**
- * @defgroup RTEMSDeviceGRCANCanTxRD Transmit Channel Read Register (CanTxRD)
+ * @defgroup RTEMSDeviceGRCANCanTxIRQ \
+ *   Transmit Channel Interrupt Register (CanTxIRQ)
  *
  * @brief This group contains register bit definitions.
  *
  * @{
  */
 
-#define GRCAN_CANTXRD_IRQ_SHIFT 4
-#define GRCAN_CANTXRD_IRQ_MASK 0xffff0U
-#define GRCAN_CANTXRD_IRQ_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANTXRD_IRQ_MASK ) >> \
-    GRCAN_CANTXRD_IRQ_SHIFT )
-#define GRCAN_CANTXRD_IRQ_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANTXRD_IRQ_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANTXRD_IRQ_SHIFT ) & \
-      GRCAN_CANTXRD_IRQ_MASK ) )
-#define GRCAN_CANTXRD_IRQ( _val ) \
-  ( ( ( _val ) << GRCAN_CANTXRD_IRQ_SHIFT ) & \
-    GRCAN_CANTXRD_IRQ_MASK )
+#define GRCAN_CANTXIRQ_IRQ_SHIFT 4
+#define GRCAN_CANTXIRQ_IRQ_MASK 0xffff0U
+#define GRCAN_CANTXIRQ_IRQ_GET( _reg ) \
+  ( ( ( _reg ) & GRCAN_CANTXIRQ_IRQ_MASK ) >> \
+    GRCAN_CANTXIRQ_IRQ_SHIFT )
+#define GRCAN_CANTXIRQ_IRQ_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRCAN_CANTXIRQ_IRQ_MASK ) | \
+    ( ( ( _val ) << GRCAN_CANTXIRQ_IRQ_SHIFT ) & \
+      GRCAN_CANTXIRQ_IRQ_MASK ) )
+#define GRCAN_CANTXIRQ_IRQ( _val ) \
+  ( ( ( _val ) << GRCAN_CANTXIRQ_IRQ_SHIFT ) & \
+    GRCAN_CANTXIRQ_IRQ_MASK )
 
 /** @} */
 
@@ -663,12 +664,12 @@ typedef struct grcan {
   /**
    * @brief See @ref RTEMSDeviceGRCANCanTxRD.
    */
-  uint32_t cantxrd_0;
+  uint32_t cantxrd;
 
   /**
-   * @brief See @ref RTEMSDeviceGRCANCanTxRD.
+   * @brief See @ref RTEMSDeviceGRCANCanTxIRQ.
    */
-  uint32_t cantxrd_1;
+  uint32_t cantxirq;
 
   uint32_t reserved_218_300[ 58 ];
 
