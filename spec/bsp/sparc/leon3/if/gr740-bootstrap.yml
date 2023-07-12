@@ -6,142 +6,98 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
 description: null
 enabled-by: true
-identifier: RTEMSDeviceGR740THSENS
+identifier: RTEMSBSPsGR740Bootstrap
 index-entries: []
 interface-type: register-block
 links:
 - role: interface-ingroup
   uid: group
 - role: interface-placement
-  uid: gr740thsens-header
+  uid: gr740-bootstrap-header
 definition:
 - default:
     count: 1
-    name: CTRL
+    name: BOOTSTRAP
   offset: 0x0
   variants: []
-- default:
-    count: 1
-    name: STATUS
-  offset: 0x4
-  variants: []
-- default:
-    count: 1
-    name: THRES
-  offset: 0x8
-  variants: []
 register-prefix: null
-register-block-group: GR740THSENS
-register-block-size: 12
+register-block-group: GR740 Bootstrap Signals
+register-block-size: 4
 registers:
 - bits:
   - default:
     - properties: [r, w]
       brief: null
       description: null
-      name: 'DIV'
-      start: 16
-      width: 10
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'ALEN'
-      start: 8
+      name: 'B10'
+      start: 25
       width: 1
     - properties: [r, w]
       brief: null
       description: null
-      name: 'PDN'
-      start: 7
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'DCORRECT'
-      start: 2
-      width: 5
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'SRSTN'
-      start: 1
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'CLKEN'
-      start: 0
-      width: 1
-    variants: []
-  brief: |
-    Control register
-  description: null
-  name: CTRL
-  width: 32
-- bits:
-  - default:
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'MAX'
+      name: 'B9'
       start: 24
-      width: 7
+      width: 1
     - properties: [r, w]
       brief: null
       description: null
-      name: 'MIN'
+      name: 'B8'
+      start: 23
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'B7'
+      start: 22
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'B6'
+      start: 21
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'B5'
+      start: 20
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'B4'
+      start: 19
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'B3'
+      start: 18
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'B2'
+      start: 17
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'B1'
       start: 16
-      width: 7
-    - properties: [r]
-      brief: null
-      description: null
-      name: 'SCLK'
-      start: 15
       width: 1
     - properties: [r, w]
       brief: null
       description: null
-      name: 'WE'
-      start: 10
-      width: 1
-    - properties: [r]
-      brief: null
-      description: null
-      name: 'UPD'
-      start: 9
-      width: 1
-    - properties: [r, w1c]
-      brief: null
-      description: null
-      name: 'ALACT'
-      start: 8
-      width: 1
-    - properties: [r]
-      brief: null
-      description: null
-      name: 'DATA'
+      name: 'GPIO'
       start: 0
-      width: 7
+      width: 16
     variants: []
   brief: |
-    Status register
+    Bootstrap register
   description: null
-  name: STATUS
+  name: BOOTSTRAP
   width: 32
-- bits:
-  - default:
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'THRES'
-      start: 0
-      width: 7
-    variants: []
-  brief: |
-    Threshold register
-  description: null
-  name: THRES
-  width: 32
-name: gr740thsens
+name: gr740_bootstrap
 notes: null
 type: interface

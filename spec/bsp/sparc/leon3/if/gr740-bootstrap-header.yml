@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This header file defines the GR740 Boostrap Signals register block interface.
+copyrights:
+- Copyright (C) 2021, 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+index-entries: []
+interface-type: header-file
+links:
+- role: interface-placement
+  uid: /dev/if/domain
+- role: interface-ingroup
+  uid: gr740-bootstrap
+path: bsp/gr740-bootstrap-regs.h
+prefix: bsps/sparc/leon3/include
+type: interface

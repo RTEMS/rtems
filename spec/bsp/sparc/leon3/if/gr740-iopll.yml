@@ -6,14 +6,14 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
 description: null
 enabled-by: true
-identifier: RTEMSDeviceGRGPRBANK
+identifier: RTEMSBSPsGR740IOPLL
 index-entries: []
 interface-type: register-block
 links:
 - role: interface-ingroup
   uid: group
 - role: interface-placement
-  uid: grgprbank-header
+  uid: gr740-iopll-header
 definition:
 - default:
     count: 1
@@ -61,7 +61,7 @@ definition:
   offset: 0x20
   variants: []
 register-prefix: null
-register-block-group: GPRBANK
+register-block-group: GR740 I/0 and PLL Configuration
 register-block-size: 36
 registers:
 - bits:
@@ -352,6 +352,6 @@ registers:
   description: null
   name: LOCKDOWN
   width: 32
-name: grgprbank
+name: gr740_iopll
 notes: null
 type: interface
