@@ -3,7 +3,7 @@ brief: |
   This structure defines the ${.:/register-block-group} register block memory
   map.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2021, 2023 embedded brains GmbH & Co. KG
 description: null
 enabled-by: true
 identifier: RTEMSDeviceGRSPW2
@@ -14,6 +14,9 @@ links:
   uid: group
 - role: interface-placement
   uid: grspw2-header
+- name: DMA
+  role: register-block-include
+  uid: grspw2-dma
 definition:
 - default:
     count: 1
@@ -46,33 +49,113 @@ definition:
   offset: 0x14
   variants: []
 - default:
-    count: 1
-    name: DMACTRL
+    count: 4
+    name: DMA
   offset: 0x20
   variants: []
 - default:
     count: 1
-    name: DMAMAXLEN
-  offset: 0x24
+    name: INTCTRL
+  offset: 0xa0
   variants: []
 - default:
     count: 1
-    name: DMATXDESC
-  offset: 0x28
+    name: INTRX
+  offset: 0xa4
   variants: []
 - default:
     count: 1
-    name: DMARXDESC
-  offset: 0x2c
+    name: INTTO
+  offset: 0xac
   variants: []
 - default:
     count: 1
-    name: DMAADDR
-  offset: 0x30
+    name: INTTOEXT
+  offset: 0xb0
+  variants: []
+- default:
+    count: 1
+    name: TICKMASK
+  offset: 0xb4
+  variants: []
+- default:
+    count: 1
+    name: AUTOACK_TICKMASKEXT
+  offset: 0xb8
+  variants: []
+- default:
+    count: 1
+    name: INTCFG
+  offset: 0xbc
+  variants: []
+- default:
+    count: 1
+    name: ISR
+  offset: 0xc4
+  variants: []
+- default:
+    count: 1
+    name: ISREXT
+  offset: 0xc8
+  variants: []
+- default:
+    count: 1
+    name: PRESCALER
+  offset: 0xd0
+  variants: []
+- default:
+    count: 1
+    name: ISRTIMER
+  offset: 0xd4
+  variants: []
+- default:
+    count: 1
+    name: IATIMER
+  offset: 0xd8
+  variants: []
+- default:
+    count: 1
+    name: ICTIMER
+  offset: 0xdc
+  variants: []
+- default:
+    count: 1
+    name: PNPVEND
+  offset: 0xe0
+  variants: []
+- default:
+    count: 1
+    name: PNPOA0
+  offset: 0xe8
+  variants: []
+- default:
+    count: 1
+    name: PNPOA1
+  offset: 0xec
+  variants: []
+- default:
+    count: 1
+    name: PNPOA2
+  offset: 0xf0
+  variants: []
+- default:
+    count: 1
+    name: PNPDEVID
+  offset: 0xf4
+  variants: []
+- default:
+    count: 1
+    name: PNPUVEND
+  offset: 0xf8
+  variants: []
+- default:
+    count: 1
+    name: PNPUSN
+  offset: 0xfc
   variants: []
 register-prefix: null
 register-block-group: GRSPW2
-register-block-size: 52
+register-block-size: 256
 registers:
 - bits:
   - default:
@@ -106,6 +189,48 @@ registers:
       name: 'PO'
       start: 26
       width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'CC'
+      start: 25
+      width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'ID'
+      start: 24
+      width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 23
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'LE'
+      start: 22
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'PS'
+      start: 21
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'NP'
+      start: 20
+      width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'PNPA'
+      start: 18
+      width: 2
     - properties: [r, w]
       brief: null
       description: null
@@ -117,6 +242,18 @@ registers:
       description: null
       name: 'RE'
       start: 16
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'PE'
+      start: 15
+      width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 14
       width: 1
     - properties: [r, w]
       brief: null
@@ -153,6 +290,12 @@ registers:
       description: null
       name: 'TQ'
       start: 8
+      width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 7
       width: 1
     - properties: [r, w]
       brief: null
@@ -214,14 +357,20 @@ registers:
       brief: null
       description: null
       name: 'NTXD'
-      start: 24
-      width: 2
+      start: 25
+      width: 1
     - properties: [r]
       brief: null
       description: null
       name: 'LS'
       start: 21
       width: 3
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'AP'
+      start: 9
+      width: 1
     - properties: [r, w1c]
       brief: null
       description: null
@@ -234,6 +383,12 @@ registers:
       name: 'IA'
       start: 7
       width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'RES'
+      start: 5
+      width: 2
     - properties: [r, w1c]
       brief: null
       description: null
@@ -312,7 +467,7 @@ registers:
   width: 32
 - bits:
   - default:
-    - properties: [r]
+    - properties: [r, w]
       brief: null
       description: null
       name: 'DESTKEY'
@@ -346,197 +501,149 @@ registers:
   width: 32
 - bits:
   - default:
-    - properties: [r, w1c]
+    - properties: [r, w]
       brief: null
       description: null
-      name: 'EP'
+      name: 'INTNUM'
+      start: 26
+      width: 6
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'RS'
+      start: 25
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'EE'
+      start: 24
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'IA'
       start: 23
-      width: 1
-    - properties: [r, w1c]
-      brief: null
-      description: null
-      name: 'TR'
-      start: 22
-      width: 1
-    - properties: [r, w1c]
-      brief: null
-      description: null
-      name: 'RP'
-      start: 19
-      width: 1
-    - properties: [r, w1c]
-      brief: null
-      description: null
-      name: 'TP'
-      start: 18
-      width: 1
-    - properties: [r, w1c]
-      brief: null
-      description: null
-      name: 'TL'
-      start: 17
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'LE'
-      start: 16
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'SP'
-      start: 15
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'SA'
-      start: 14
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'EN'
-      start: 13
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'NS'
-      start: 12
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'RD'
-      start: 11
       width: 1
     - properties: [r]
       brief: null
       description: null
-      name: 'RX'
-      start: 10
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'AT'
-      start: 9
-      width: 1
-    - properties: [r, w1c]
-      brief: null
-      description: null
-      name: 'RA'
-      start: 8
-      width: 1
-    - properties: [r, w1c]
-      brief: null
-      description: null
-      name: 'TA'
-      start: 7
-      width: 1
-    - properties: [r, w1c]
-      brief: null
-      description: null
-      name: 'PR'
-      start: 6
-      width: 1
-    - properties: [r, w1c]
-      brief: null
-      description: null
-      name: 'PS'
-      start: 5
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'AI'
-      start: 4
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'RI'
-      start: 3
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'TI'
-      start: 2
-      width: 1
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'RE'
+      name: 'RES'
       start: 1
       width: 1
     - properties: [r, w]
       brief: null
       description: null
-      name: 'TE'
-      start: 0
+      name: 'TQ'
+      start: 21
+      width: 2
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'AQ'
+      start: 20
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'IQ'
+      start: 19
+      width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'RES'
+      start: 18
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'AA'
+      start: 16
+      width: 2
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'AT'
+      start: 15
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'IT'
+      start: 14
+      width: 1
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'RES'
+      start: 13
+      width: 1
+    - properties: [r, w1c]
+      brief: null
+      description: null
+      name: 'ID'
+      start: 8
+      width: 5
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'II'
+      start: 7
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'TXINT'
+      start: 6
       width: 1
     variants: []
   brief: |
-    DMA control/status, channel 1
+    Interrupt distribution control
   description: null
-  name: DMACTRL
+  name: INTCTRL
   width: 32
 - bits:
   - default:
-    - properties: [r, w]
+    - properties: [r, w1c]
       brief: null
       description: null
-      name: 'RXMAXLEN'
-      start: 2
-      width: 23
+      name: 'RXIRQ'
+      start: 0
+      width: 32
     variants: []
   brief: |
-    DMA RX maximum length, channel 1
+    Interrupt-code receive
   description: null
-  name: DMAMAXLEN
+  name: INTRX
   width: 32
 - bits:
   - default:
-    - properties: [r, w]
+    - properties: [r, w1c]
       brief: null
       description: null
-      name: 'DESCBASEADDR'
-      start: 10
-      width: 22
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'DESCSEL'
-      start: 4
-      width: 6
+      name: 'INTTO'
+      start: 0
+      width: 32
     variants: []
   brief: |
-    DMA transmitter descriptor table address, channel 1
+    Interrupt timeout
   description: null
-  name: DMATXDESC
+  name: INTTO
   width: 32
 - bits:
   - default:
-    - properties: [r, w]
+    - properties: [r, w1c]
       brief: null
       description: null
-      name: 'DESCBASEADDR'
-      start: 10
-      width: 22
-    - properties: [r, w]
-      brief: null
-      description: null
-      name: 'DESCSEL'
-      start: 3
-      width: 7
+      name: 'INTTOEXT'
+      start: 0
+      width: 32
     variants: []
   brief: |
-    DMA receiver descriptor table address, channel 1
+    Interrupt timeout extended
   description: null
-  name: DMARXDESC
+  name: INTTOEXT
   width: 32
 - bits:
   - default:
@@ -544,19 +651,307 @@ registers:
       brief: null
       description: null
       name: 'MASK'
-      start: 8
-      width: 8
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt tick-out mask
+  description: null
+  name: TICKMASK
+  width: 32
+- bits:
+  - default:
     - properties: [r, w]
       brief: null
       description: null
-      name: 'ADDR'
+      name: 'AAMASK'
       start: 0
-      width: 8
+      width: 32
     variants: []
   brief: |
-    DMA address, channel 1
+     Interrupt-code auto acknowledge mask / interrupt tick-out mask extended
   description: null
-  name: DMAADDR
+  name: AUTOACK_TICKMASKEXT
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'INTNUM3'
+      start: 26
+      width: 6
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'INTNUM2'
+      start: 20
+      width: 6
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'INTNUM1'
+      start: 14
+      width: 6
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'INTNUM0'
+      start: 8
+      width: 6
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'NUMINT'
+      start: 4
+      width: 4
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'PR'
+      start: 3
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'IR'
+      start: 2
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'IT'
+      start: 1
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'EE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Interrupt distribution configuration
+  description: null
+  name: INTCFG
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w1c]
+      brief: null
+      description: null
+      name: 'ISR'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt distribution ISR
+  description: null
+  name: ISR
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w1c]
+      brief: null
+      description: null
+      name: 'ISR'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt distribution ISR extended
+  description: null
+  name: ISREXT
+  width: 32
+- bits:
+  - default:
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'R'
+      start: 31
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'RL'
+      start: 0
+      width: 31
+    variants: []
+  brief: |
+    Interrupt distribution prescaler reload
+  description: null
+  name: PRESCALER
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 31
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'RL'
+      start: 0
+      width: 31
+    variants: []
+  brief: |
+    Interrupt distribution ISR timer reload
+  description: null
+  name: ISRTIMER
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 31
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'RL'
+      start: 0
+      width: 31
+    variants: []
+  brief: |
+    Interrupt distribution INT / ACK timer reload
+  description: null
+  name: IATIMER
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 31
+      width: 1
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'RL'
+      start: 0
+      width: 31
+    variants: []
+  brief: |
+    Interrupt distribution change timer reload
+  description: null
+  name: ICTIMER
+  width: 32
+- bits:
+  - default:
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'VEND'
+      start: 16
+      width: 16
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'PROD'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Device Vendor and Product ID
+  description: null
+  name: PNPVEND
+  width: 32
+- bits:
+  - default:
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'RA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Owner Address 0
+  description: null
+  name: PNPOA0
+  width: 32
+- bits:
+  - default:
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'RA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Owner Address 1
+  description: null
+  name: PNPOA1
+  width: 32
+- bits:
+  - default:
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'RA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Owner Address 2
+  description: null
+  name: PNPOA2
+  width: 32
+- bits:
+  - default:
+    - properties: [r]
+      brief: null
+      description: null
+      name: 'DID'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Device ID
+  description: null
+  name: PNPDEVID
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'VEND'
+      start: 16
+      width: 16
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'PROD'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Unit Vendor and Product ID
+  description: null
+  name: PNPUVEND
+  width: 32
+- bits:
+  - default:
+    - properties: [r, w]
+      brief: null
+      description: null
+      name: 'USN'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Unit Serial Number
+  description: null
+  name: PNPUSN
   width: 32
 name: grspw2
 notes: null

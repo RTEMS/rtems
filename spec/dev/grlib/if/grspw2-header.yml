@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   This header file defines the GRSPW2 register block interface.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2021, 2023 embedded brains GmbH & Co. KG
 enabled-by: true
 index-entries: []
 interface-type: header-file
