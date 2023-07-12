@@ -67,7 +67,7 @@ definition:
   variants: []
 - default:
     count: 1
-    name: CanTxRD
+    name: CanTxIRQ
   offset: 0x214
   variants: []
 - default:
@@ -390,9 +390,9 @@ registers:
       width: 16
     variants: []
   brief: |
-    Transmit Channel Read Register
+    Transmit Channel Interrupt Register
   description: null
-  name: CanTxRD
+  name: CanTxIRQ
   width: 32
 - bits:
   - default:
