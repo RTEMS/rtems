@@ -33,9 +33,9 @@
 
 const stm32h7_uart_config stm32h7_uart7_config = {
   .gpio = {
-    .regs = GPIOB,
+    .regs = STM32H7_UART7_GPIO_REGS,
     .config = {
-      .Pin = GPIO_PIN_3 | GPIO_PIN_4,
+      .Pin = STM32H7_UART7_GPIO_PINS,
       .Mode = GPIO_MODE_AF_PP,
       .Pull = GPIO_NOPULL,
       .Speed = GPIO_SPEED_FREQ_LOW,

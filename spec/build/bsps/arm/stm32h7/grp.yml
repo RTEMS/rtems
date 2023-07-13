@@ -107,6 +107,10 @@ links:
 - role: build-dependency
   uid: optusart3gpioregs
 - role: build-dependency
+  uid: optuart7gpiopins
+- role: build-dependency
+  uid: optuart7gpioregs
+- role: build-dependency
   uid: optvariant
 - role: build-dependency
   uid: optethgpiogregs

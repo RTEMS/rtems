@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define-unquoted: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 On-Line Applications Research (OAR)
+default:
+- enabled-by: true
+  value: GPIOB
+description: |
+  GPIO registers used for the UART7 pin configuration.
+enabled-by: true
+format: '{}'
+links: []
+name: STM32H7_UART7_GPIO_REGS
+type: build
