@@ -33,14 +33,17 @@
 #include <rtems.h>
 #include <rtems/sysinit.h>
 
-#define IMX_GPIO_ALIAS_NAME "gpioX"
+/*
+ * Most of the time it's gpio1 or gpio13.
+ */
+#define IMX_GPIO_ALIAS_NAME "gpioXY"
 
 /*
- * i.MX6ULL has 5, i.MX7D has 7
+ * i.MX6ULL has 5, i.MX7D has 7, i.MXRT1160 has 13 (base) + 2 (core-specific).
  *
  * Be careful when changing this. The attach() does a simple ASCII conversion.
  */
-#define IMX_MAX_GPIO_MODULES 7
+#define IMX_MAX_GPIO_MODULES 15
 
 struct imx_gpio_regs {
   uint32_t dr;
@@ -88,7 +91,14 @@ static void imx_gpio_attach(void)
     int len;
 
     memcpy(imx_gpio[i].name, IMX_GPIO_ALIAS_NAME, sizeof(IMX_GPIO_ALIAS_NAME));
-    imx_gpio[i].name[sizeof(IMX_GPIO_ALIAS_NAME)-2] = (char)('0' + i);
+    if (i < 10) {
+      imx_gpio[i].name[sizeof(IMX_GPIO_ALIAS_NAME)-3] = (char)('0' + i);
+      imx_gpio[i].name[sizeof(IMX_GPIO_ALIAS_NAME)-2] = '\0';
+    } else {
+      imx_gpio[i].name[sizeof(IMX_GPIO_ALIAS_NAME)-3] = (char)('0' + i / 10);
+      imx_gpio[i].name[sizeof(IMX_GPIO_ALIAS_NAME)-2] = (char)('0' + i % 10);
+      imx_gpio[i].name[sizeof(IMX_GPIO_ALIAS_NAME)-1] = '\0';
+    }
 
     path = fdt_get_alias(fdt, imx_gpio[i].name);
     if (path == NULL) {
