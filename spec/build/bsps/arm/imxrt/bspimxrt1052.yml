@@ -16,6 +16,7 @@ includes:
 install:
 - destination: ${BSP_INCLUDEDIR}/imxrt
   source:
+  - bsps/arm/imxrt/dts/imxrt1050-evkb.dts
   - bsps/arm/imxrt/include/imxrt/imxrt1050.dtsi
   - bsps/arm/imxrt/include/imxrt/imxrt1050-pinfunc.h
 links:
