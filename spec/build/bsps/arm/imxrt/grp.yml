@@ -33,7 +33,9 @@ links:
 - role: build-dependency
   uid: optmemextramsz
 - role: build-dependency
-  uid: optmemflashcfgsz
+  uid: optmemflashcfgoffset
+- role: build-dependency
+  uid: optmemflashivtoffset
 - role: build-dependency
   uid: optmemflashivtsz
 - role: build-dependency

@@ -41,7 +41,6 @@ source:
 - bsps/arm/imxrt/start/bspstart.c
 - bsps/arm/imxrt/start/bspstarthooks.c
 - bsps/arm/imxrt/start/flash-boot-data.c
-- bsps/arm/imxrt/start/flash-flexspi-config.c
 - bsps/arm/imxrt/start/flash-ivt.c
 - bsps/arm/imxrt/start/imxrt-ffec-init.c
 - bsps/arm/imxrt/start/mpu-config.c

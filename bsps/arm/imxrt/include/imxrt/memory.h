@@ -56,6 +56,10 @@ extern char imxrt_memory_peripheral_begin[];
 extern char imxrt_memory_peripheral_end[];
 extern char imxrt_memory_peripheral_size[];
 
+extern char imxrt_memory_flash_raw_begin[];
+extern char imxrt_memory_flash_raw_end[];
+extern char imxrt_memory_flash_raw_size[];
+
 extern char imxrt_memory_flash_config_begin[];
 extern char imxrt_memory_flash_config_end[];
 extern char imxrt_memory_flash_config_size[];

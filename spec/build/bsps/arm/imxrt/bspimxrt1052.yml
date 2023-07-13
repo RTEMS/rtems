@@ -25,6 +25,7 @@ links:
 source:
 - bsps/arm/imxrt/boards/evkbimxrt1050/clock_config.c
 - bsps/arm/imxrt/boards/evkbimxrt1050/flash-dcd.c
+- bsps/arm/imxrt/boards/evkbimxrt1050/flash-flexspi-config.c
 - bsps/arm/imxrt/boards/evkbimxrt1050/pin_mux.c
 - bsps/arm/imxrt/boards/evkbimxrt1050/clock-arm-pll-config.c
 - bsps/arm/imxrt/dts/imxrt1050-evkb.c

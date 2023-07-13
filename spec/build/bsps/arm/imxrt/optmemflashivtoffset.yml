@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- env-assign: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- enabled-by: true
+  value: 0x00001000
+description: |
+  Offset of the image vector table in flash in bytes. Either 4 KByte for FlexSPI
+  NOR / SEMC NOR or 1 KByte for most others (on i.MXRT1050). Take a look at the
+  i.MXRT1050 / i.MXRT1166 Processor Reference Manual chapter "System Boot" /
+  "Program image" for details.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: IMXRT_MEMORY_FLASH_IVT_OFFSET
+type: build
