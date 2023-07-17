@@ -432,7 +432,6 @@ static bool first_open(
 
 	if (uart->mode != TERMIOS_POLLED) {
 		int ret;
-		uint32_t ctrl;
 
 		/* Register interrupt and enable it */
 		ret = drvmgr_interrupt_register(
