@@ -133,14 +133,6 @@ int _IO_Base64url(
   int          wordlen
 );
 
-/**
- * @brief Issues a couple of no-operation instructions.
- *
- * This function may be used to burn a couple of processor cycles with minimum
- * impact on the system bus.  It may be used in busy wait loops.
- */
-void _IO_Relax( void );
-
 /** @} */ 
 
 #ifdef __cplusplus

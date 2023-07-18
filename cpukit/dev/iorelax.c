@@ -3,11 +3,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSDeviceGRLIBAPBUART
+ * @ingroup RTEMSDeviceIO
  *
- * @brief This source file contains the implementation of
- *   apbuart_outbyte_wait(), apbuart_outbyte_polled(), and
- *   apbuart_inbyte_nonblocking().
+ * @brief This source file contains the implementation of _IO_Relax().
  */
 
 /*
@@ -35,38 +33,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <grlib/apbuart.h>
-#include <grlib/io.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <rtems/dev/io.h>
+#include <rtems/score/cpuimpl.h>
 
-void apbuart_outbyte_wait( const apbuart *regs )
+void _IO_Relax( void )
 {
-  while ( ( grlib_load_32( &regs->status ) & APBUART_STATUS_TE ) == 0 ) {
-    _IO_Relax();
-  }
-}
-
-void apbuart_outbyte_polled( apbuart *regs, char ch)
-{
-  apbuart_outbyte_wait( regs );
-  grlib_store_32( &regs->data, (uint8_t) ch );
-}
-
-int apbuart_inbyte_nonblocking( apbuart *regs )
-{
-  uint32_t status;
-
-  status = grlib_load_32( &regs->status );
-
-  /* Clear errors, writes to non-error flags are ignored */
-  status &= ~( APBUART_STATUS_FE | APBUART_STATUS_PE | APBUART_STATUS_OV |
-    APBUART_STATUS_BR );
-  grlib_store_32( &regs->status, status );
-
-  if ( ( status & APBUART_STATUS_DR ) == 0 ) {
-    return -1;
-  }
-
-  return (int) APBUART_DATA_DATA_GET( grlib_load_32( &regs->data ) );
+  _CPU_Instruction_no_operation();
+  _CPU_Instruction_no_operation();
+  _CPU_Instruction_no_operation();
+  _CPU_Instruction_no_operation();
+  _CPU_Instruction_no_operation();
+  _CPU_Instruction_no_operation();
+  _CPU_Instruction_no_operation();
+  _CPU_Instruction_no_operation();
 }

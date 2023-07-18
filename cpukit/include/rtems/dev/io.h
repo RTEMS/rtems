@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreIO
+ * @ingroup RTEMSDeviceIO
  *
- * @brief This source file contains the implementation of _IO_Relax().
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSDeviceIO.
  */
 
 /*
@@ -33,21 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#ifndef _RTEMS_DEV_IO_H
+#define _RTEMS_DEV_IO_H
 
-#include <rtems/score/io.h>
-#include <rtems/score/cpuimpl.h>
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
-void _IO_Relax( void )
-{
-  _CPU_Instruction_no_operation();
-  _CPU_Instruction_no_operation();
-  _CPU_Instruction_no_operation();
-  _CPU_Instruction_no_operation();
-  _CPU_Instruction_no_operation();
-  _CPU_Instruction_no_operation();
-  _CPU_Instruction_no_operation();
-  _CPU_Instruction_no_operation();
+/**
+ * @defgroup RTEMSDeviceIO Device I/O Support
+ *
+ * @ingroup RTEMSDeviceDrivers
+ *
+ * @brief This group contains the Device I/O Support API and implementation.
+ *
+ * @{
+ */
+
+/**
+ * @brief Issues a couple of no-operation instructions.
+ *
+ * This function may be used to burn a couple of processor cycles with minimum
+ * impact on the system bus.  It may be used in busy wait loops.
+ */
+void _IO_Relax( void );
+
+/** @} */
+
+#ifdef __cplusplus
 }
+#endif /* __cplusplus */
+
+#endif /* _RTEMS_DEV_IO_H */

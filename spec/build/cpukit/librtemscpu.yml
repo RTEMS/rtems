@@ -528,6 +528,7 @@ source:
 - cpukit/compression/xz/xz_crc32.c
 - cpukit/compression/xz/xz_dec_lzma2.c
 - cpukit/compression/xz/xz_dec_stream.c
+- cpukit/dev/can/can.c
 - cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/eeprom.c
 - cpukit/dev/i2c/fpga-i2c-slave.c
@@ -540,10 +541,10 @@ source:
 - cpukit/dev/i2c/ti-lm25066a.c
 - cpukit/dev/i2c/ti-tmp112.c
 - cpukit/dev/i2c/xilinx-axi-i2c.c
+- cpukit/dev/iorelax.c
 - cpukit/dev/serial/sc16is752-spi.c
 - cpukit/dev/serial/sc16is752.c
 - cpukit/dev/spi/spi-bus.c
-- cpukit/dev/can/can.c
 - cpukit/dtc/libfdt/fdt.c
 - cpukit/dtc/libfdt/fdt_addresses.c
 - cpukit/dtc/libfdt/fdt_empty_tree.c
@@ -1434,7 +1435,6 @@ source:
 - cpukit/score/src/interr.c
 - cpukit/score/src/iobase64.c
 - cpukit/score/src/ioprintf.c
-- cpukit/score/src/iorelax.c
 - cpukit/score/src/iovprintf.c
 - cpukit/score/src/isr.c
 - cpukit/score/src/isrisinprogress.c
