@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -38,7 +37,6 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup CRC_Exported_Types CRC Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -61,19 +59,22 @@ typedef struct
 {
   uint8_t DefaultPolynomialUse;       /*!< This parameter is a value of @ref CRC_Default_Polynomial and indicates if default polynomial is used.
                                             If set to DEFAULT_POLYNOMIAL_ENABLE, resort to default
-                                            X^32 + X^26 + X^23 + X^22 + X^16 + X^12 + X^11 + X^10 +X^8 + X^7 + X^5 + X^4 + X^2+ X +1.
+                                            X^32 + X^26 + X^23 + X^22 + X^16 + X^12 + X^11 + X^10 +X^8 + X^7 + X^5 +
+                                            X^4 + X^2+ X +1.
                                             In that case, there is no need to set GeneratingPolynomial field.
-                                            If otherwise set to DEFAULT_POLYNOMIAL_DISABLE, GeneratingPolynomial and CRCLength fields must be set. */
+                                            If otherwise set to DEFAULT_POLYNOMIAL_DISABLE, GeneratingPolynomial and
+                                            CRCLength fields must be set. */
 
   uint8_t DefaultInitValueUse;        /*!< This parameter is a value of @ref CRC_Default_InitValue_Use and indicates if default init value is used.
                                            If set to DEFAULT_INIT_VALUE_ENABLE, resort to default
-                                           0xFFFFFFFF value. In that case, there is no need to set InitValue field.
-                                           If otherwise set to DEFAULT_INIT_VALUE_DISABLE,  InitValue field must be set. */
+                                           0xFFFFFFFF value. In that case, there is no need to set InitValue field. If
+                                           otherwise set to DEFAULT_INIT_VALUE_DISABLE, InitValue field must be set. */
 
   uint32_t GeneratingPolynomial;      /*!< Set CRC generating polynomial as a 7, 8, 16 or 32-bit long value for a polynomial degree
-                                           respectively equal to 7, 8, 16 or 32. This field is written in normal representation,
-                                           e.g., for a polynomial of degree 7, X^7 + X^6 + X^5 + X^2 + 1 is written 0x65.
-                                           No need to specify it if DefaultPolynomialUse is set to DEFAULT_POLYNOMIAL_ENABLE.   */
+                                           respectively equal to 7, 8, 16 or 32. This field is written in normal,
+                                           representation e.g., for a polynomial of degree 7, X^7 + X^6 + X^5 + X^2 + 1
+                                           is written 0x65. No need to specify it if DefaultPolynomialUse is set to
+                                            DEFAULT_POLYNOMIAL_ENABLE.   */
 
   uint32_t CRCLength;                 /*!< This parameter is a value of @ref CRC_Polynomial_Sizes and indicates CRC length.
                                            Value can be either one of
@@ -88,14 +89,18 @@ typedef struct
   uint32_t InputDataInversionMode;    /*!< This parameter is a value of @ref CRCEx_Input_Data_Inversion and specifies input data inversion mode.
                                            Can be either one of the following values
                                            @arg @ref CRC_INPUTDATA_INVERSION_NONE       no input data inversion
-                                           @arg @ref CRC_INPUTDATA_INVERSION_BYTE       byte-wise inversion, 0x1A2B3C4D becomes 0x58D43CB2
-                                           @arg @ref CRC_INPUTDATA_INVERSION_HALFWORD   halfword-wise inversion, 0x1A2B3C4D becomes 0xD458B23C
-                                           @arg @ref CRC_INPUTDATA_INVERSION_WORD       word-wise inversion, 0x1A2B3C4D becomes 0xB23CD458 */
+                                           @arg @ref CRC_INPUTDATA_INVERSION_BYTE       byte-wise inversion, 0x1A2B3C4D
+                                           becomes 0x58D43CB2
+                                           @arg @ref CRC_INPUTDATA_INVERSION_HALFWORD   halfword-wise inversion,
+                                           0x1A2B3C4D becomes 0xD458B23C
+                                           @arg @ref CRC_INPUTDATA_INVERSION_WORD       word-wise inversion, 0x1A2B3C4D
+                                           becomes 0xB23CD458 */
 
   uint32_t OutputDataInversionMode;   /*!< This parameter is a value of @ref CRCEx_Output_Data_Inversion and specifies output data (i.e. CRC) inversion mode.
                                             Can be either
                                             @arg @ref CRC_OUTPUTDATA_INVERSION_DISABLE   no CRC inversion,
-                                            @arg @ref CRC_OUTPUTDATA_INVERSION_ENABLE    CRC 0x11223344 is converted into 0x22CC4488 */
+                                            @arg @ref CRC_OUTPUTDATA_INVERSION_ENABLE    CRC 0x11223344 is converted
+                                             into 0x22CC4488 */
 } CRC_InitTypeDef;
 
 /**
@@ -113,12 +118,16 @@ typedef struct
 
   uint32_t InputDataFormat;                /*!< This parameter is a value of @ref CRC_Input_Buffer_Format and specifies input data format.
                                             Can be either
-                                            @arg @ref CRC_INPUTDATA_FORMAT_BYTES       input data is a stream of bytes (8-bit data)
-                                            @arg @ref CRC_INPUTDATA_FORMAT_HALFWORDS   input data is a stream of half-words (16-bit data)
-                                            @arg @ref CRC_INPUTDATA_FORMAT_WORDS       input data is a stream of words (32-bit data)
+                                            @arg @ref CRC_INPUTDATA_FORMAT_BYTES       input data is a stream of bytes
+                                            (8-bit data)
+                                            @arg @ref CRC_INPUTDATA_FORMAT_HALFWORDS   input data is a stream of
+                                            half-words (16-bit data)
+                                            @arg @ref CRC_INPUTDATA_FORMAT_WORDS       input data is a stream of words
+                                            (32-bit data)
 
-                                           Note that constant CRC_INPUT_FORMAT_UNDEFINED is defined but an initialization error
-                                           must occur if InputBufferFormat is not one of the three values listed above  */
+                                          Note that constant CRC_INPUT_FORMAT_UNDEFINED is defined but an initialization
+                                          error must occur if InputBufferFormat is not one of the three values listed
+                                          above  */
 } CRC_HandleTypeDef;
 /**
   * @}
@@ -126,12 +135,10 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CRC_Exported_Constants CRC Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRC_Default_Polynomial_Value    Default CRC generating polynomial
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DEFAULT_CRC32_POLY      0x04C11DB7U  /*!<  X^32 + X^26 + X^23 + X^22 + X^16 + X^12 + X^11 + X^10 +X^8 + X^7 + X^5 + X^4 + X^2+ X +1 */
@@ -140,7 +147,6 @@ typedef struct
   */
 
 /** @defgroup CRC_Default_InitValue    Default CRC computation initialization value
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DEFAULT_CRC_INITVALUE   0xFFFFFFFFU  /*!< Initial CRC default value */
@@ -149,7 +155,6 @@ typedef struct
   */
 
 /** @defgroup CRC_Default_Polynomial    Indicates whether or not default polynomial is used
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DEFAULT_POLYNOMIAL_ENABLE       ((uint8_t)0x00U)  /*!< Enable default generating polynomial 0x04C11DB7  */
@@ -159,7 +164,6 @@ typedef struct
   */
 
 /** @defgroup CRC_Default_InitValue_Use    Indicates whether or not default init value is used
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DEFAULT_INIT_VALUE_ENABLE      ((uint8_t)0x00U) /*!< Enable initial CRC default value  */
@@ -169,7 +173,6 @@ typedef struct
   */
 
 /** @defgroup CRC_Polynomial_Sizes Polynomial sizes to configure the peripheral
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CRC_POLYLENGTH_32B                  0x00000000U        /*!< Resort to a 32-bit long generating polynomial */
@@ -181,7 +184,6 @@ typedef struct
   */
 
 /** @defgroup CRC_Polynomial_Size_Definitions CRC polynomial possible sizes actual definitions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_CRC_LENGTH_32B     32U          /*!< 32-bit long CRC */
@@ -193,7 +195,6 @@ typedef struct
   */
 
 /** @defgroup CRC_Input_Buffer_Format Input Buffer Format
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* WARNING: CRC_INPUT_FORMAT_UNDEFINED is created for reference purposes but
@@ -208,23 +209,12 @@ typedef struct
   * @}
   */
 
-/** @defgroup CRC_Aliases CRC API aliases
-  * @ingroup RTEMSBSPsARMSTM32H7
-  * @{
-  */
-#define HAL_CRC_Input_Data_Reverse   HAL_CRCEx_Input_Data_Reverse    /*!< Aliased to HAL_CRCEx_Input_Data_Reverse for inter STM32 series compatibility  */
-#define HAL_CRC_Output_Data_Reverse  HAL_CRCEx_Output_Data_Reverse   /*!< Aliased to HAL_CRCEx_Output_Data_Reverse for inter STM32 series compatibility */
-/**
-  * @}
-  */
-
 /**
   * @}
   */
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup CRC_Exported_Macros CRC Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -272,7 +262,6 @@ typedef struct
 
 /* Private macros --------------------------------------------------------*/
 /** @defgroup  CRC_Private_Macros CRC Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -300,13 +289,11 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup CRC_Exported_Functions CRC Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Initialization and de-initialization functions  ****************************/
 /** @defgroup CRC_Exported_Functions_Group1 Initialization and de-initialization functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_CRC_Init(CRC_HandleTypeDef *hcrc);
@@ -319,7 +306,6 @@ void HAL_CRC_MspDeInit(CRC_HandleTypeDef *hcrc);
 
 /* Peripheral Control functions ***********************************************/
 /** @defgroup CRC_Exported_Functions_Group2 Peripheral Control functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 uint32_t HAL_CRC_Accumulate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_t BufferLength);
@@ -330,7 +316,6 @@ uint32_t HAL_CRC_Calculate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_t
 
 /* Peripheral State and Error functions ***************************************/
 /** @defgroup CRC_Exported_Functions_Group3 Peripheral State functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_CRC_StateTypeDef HAL_CRC_GetState(CRC_HandleTypeDef *hcrc);
@@ -355,5 +340,3 @@ HAL_CRC_StateTypeDef HAL_CRC_GetState(CRC_HandleTypeDef *hcrc);
 #endif
 
 #endif /* STM32H7xx_HAL_CRC_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

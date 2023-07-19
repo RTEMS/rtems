@@ -6,17 +6,16 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_ll_dma.h"
@@ -68,11 +67,13 @@
 
 #define IS_LL_DMA_NBDATA(__VALUE__)             ((__VALUE__)  <= 0x0000FFFFU)
 
-#if defined(ADC3)
+#if defined(TIM24)
+#define IS_LL_DMA_REQUEST(REQUEST)              (((REQUEST)   <= LL_DMAMUX1_REQ_TIM24_TRIG))
+#elif defined(ADC3)
 #define IS_LL_DMA_REQUEST(REQUEST)              (((REQUEST)   <= LL_DMAMUX1_REQ_ADC3))
 #else
 #define IS_LL_DMA_REQUEST(REQUEST)              (((REQUEST)   <= LL_DMAMUX1_REQ_USART10_TX))
-#endif /* ADC3 */
+#endif /* TIM24 */
 
 #define IS_LL_DMA_PRIORITY(__VALUE__)           (((__VALUE__) == LL_DMA_PRIORITY_LOW)    || \
                                                  ((__VALUE__) == LL_DMA_PRIORITY_MEDIUM) || \
@@ -420,4 +421,3 @@ void LL_DMA_StructInit(LL_DMA_InitTypeDef *DMA_InitStruct)
 
 #endif /* USE_FULL_LL_DRIVER */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

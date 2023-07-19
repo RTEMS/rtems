@@ -8,6 +8,17 @@
   *           + Peripheral Control functions
   *
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                ##### USART peripheral extended features  #####
@@ -26,17 +37,6 @@
 
   @endverbatim
   ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -47,7 +47,6 @@
   */
 
 /** @defgroup USARTEx USARTEx
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief USART Extended HAL module driver
   * @{
   */
@@ -56,14 +55,13 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /** @defgroup USARTEx_Private_Constants USARTEx Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* USART RX FIFO depth */
-#define RX_FIFO_DEPTH 8U
+#define RX_FIFO_DEPTH 16U
 
 /* USART TX FIFO depth */
-#define TX_FIFO_DEPTH 8U
+#define TX_FIFO_DEPTH 16U
 /**
   * @}
   */
@@ -73,7 +71,6 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup USARTEx_Private_Functions USARTEx Private Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart);
@@ -84,12 +81,10 @@ static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup USARTEx_Exported_Functions  USARTEx Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup USARTEx_Exported_Functions_Group1 IO operation functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief Extended USART Transmit/Receive functions
   *
 @verbatim
@@ -141,7 +136,6 @@ __weak void HAL_USARTEx_TxFifoEmptyCallback(USART_HandleTypeDef *husart)
   */
 
 /** @defgroup USARTEx_Exported_Functions_Group2 Peripheral Control functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended Peripheral Control functions
   *
 @verbatim
@@ -509,8 +503,8 @@ static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart)
   uint8_t rx_fifo_threshold;
   uint8_t tx_fifo_threshold;
   /* 2 0U/1U added for MISRAC2012-Rule-18.1_b and MISRAC2012-Rule-18.1_d */
-  uint8_t numerator[]   = {1U, 1U, 1U, 3U, 7U, 1U, 0U, 0U};
-  uint8_t denominator[] = {8U, 4U, 2U, 4U, 8U, 1U, 1U, 1U};
+  static const uint8_t numerator[]   = {1U, 1U, 1U, 3U, 7U, 1U, 0U, 0U};
+  static const uint8_t denominator[] = {8U, 4U, 2U, 4U, 8U, 1U, 1U, 1U};
 
   if (husart->FifoMode == USART_FIFOMODE_DISABLE)
   {
@@ -521,10 +515,14 @@ static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart)
   {
     rx_fifo_depth = RX_FIFO_DEPTH;
     tx_fifo_depth = TX_FIFO_DEPTH;
-    rx_fifo_threshold = (uint8_t)((READ_BIT(husart->Instance->CR3, USART_CR3_RXFTCFG) >> USART_CR3_RXFTCFG_Pos) & 0xFFU);
-    tx_fifo_threshold = (uint8_t)((READ_BIT(husart->Instance->CR3, USART_CR3_TXFTCFG) >> USART_CR3_TXFTCFG_Pos) & 0xFFU);
-    husart->NbTxDataToProcess = ((uint16_t)tx_fifo_depth * numerator[tx_fifo_threshold]) / (uint16_t)denominator[tx_fifo_threshold];
-    husart->NbRxDataToProcess = ((uint16_t)rx_fifo_depth * numerator[rx_fifo_threshold]) / (uint16_t)denominator[rx_fifo_threshold];
+    rx_fifo_threshold = (uint8_t)((READ_BIT(husart->Instance->CR3,
+                                            USART_CR3_RXFTCFG) >> USART_CR3_RXFTCFG_Pos) & 0xFFU);
+    tx_fifo_threshold = (uint8_t)((READ_BIT(husart->Instance->CR3,
+                                            USART_CR3_TXFTCFG) >> USART_CR3_TXFTCFG_Pos) & 0xFFU);
+    husart->NbTxDataToProcess = ((uint16_t)tx_fifo_depth * numerator[tx_fifo_threshold]) /
+                                (uint16_t)denominator[tx_fifo_threshold];
+    husart->NbRxDataToProcess = ((uint16_t)rx_fifo_depth * numerator[rx_fifo_threshold]) /
+                                (uint16_t)denominator[rx_fifo_threshold];
   }
 }
 /**
@@ -541,4 +539,3 @@ static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

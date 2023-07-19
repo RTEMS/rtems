@@ -5,7 +5,7 @@
   * @brief   Extended HASH HAL module driver.
   *          This file provides firmware functions to manage the following
   *          functionalities of the HASH peripheral for SHA-224 and SHA-256
-  *          alogrithms:
+  *          algorithms:
   *           + HASH or HMAC processing in polling mode
   *           + HASH or HMAC processing in interrupt mode
   *           + HASH or HMAC processing in DMA mode
@@ -14,6 +14,17 @@
   *         and SHA-256.
   *
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
  ===============================================================================
                      ##### HASH peripheral extended features  #####
@@ -39,17 +50,18 @@
              User must resort to HAL_HASHEx_xxx_Accumulate_End() to enter the last one and retrieve as
              well the computed digest.
 
-        (##) In interrupt mode, API HAL_HASHEx_xxx_Accumulate_IT() must be called for each input buffer, 
+        (##) In interrupt mode, API HAL_HASHEx_xxx_Accumulate_IT() must be called for each input buffer,
              except for the last one.
              User must resort to HAL_HASHEx_xxx_Accumulate_End_IT() to enter the last one and retrieve as
              well the computed digest.
 
         (##) In DMA mode, multi-buffer HASH and HMAC processing are possible.
 
-              (+++) HASH processing: once initialization is done, MDMAT bit must be set thru __HAL_HASH_SET_MDMAT() macro.
-             From that point, each buffer can be fed to the Peripheral thru HAL_HASHEx_xxx_Start_DMA() API.
+              (+++) HASH processing: once initialization is done, MDMAT bit must be set through
+               __HAL_HASH_SET_MDMAT() macro.
+             From that point, each buffer can be fed to the Peripheral through HAL_HASHEx_xxx_Start_DMA() API.
              Before entering the last buffer, reset the MDMAT bit with __HAL_HASH_RESET_MDMAT()
-             macro then wrap-up the HASH processing in feeding the last input buffer thru the
+             macro then wrap-up the HASH processing in feeding the last input buffer through the
              same API HAL_HASHEx_xxx_Start_DMA(). The digest can then be retrieved with a call to
              API HAL_HASHEx_xxx_Finish().
 
@@ -68,17 +80,6 @@
 
   @endverbatim
   ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -93,7 +94,6 @@
 #if defined (HASH)
 
 /** @defgroup HASHEx HASHEx
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HASH HAL extended module driver.
   * @{
   */
@@ -104,14 +104,12 @@
 
 
 /** @defgroup HASHEx_Exported_Functions HASH Extended Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HASHEx_Exported_Functions_Group1 HASH extended processing functions in polling mode
-  * @ingroup RTEMSBSPsARMSTM32H7
- *  @brief   HASH extended processing functions using polling mode.
- *
+  *  @brief   HASH extended processing functions using polling mode.
+  *
 @verbatim
  ===============================================================================
                ##### Polling mode HASH extended processing functions #####
@@ -150,7 +148,8 @@
   * @param  Timeout Timeout value
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HASHEx_SHA224_Start(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer, uint32_t Timeout)
+HAL_StatusTypeDef HAL_HASHEx_SHA224_Start(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                          uint8_t *pOutBuffer, uint32_t Timeout)
 {
   return HASH_Start(hhash, pInBuffer, Size, pOutBuffer, Timeout, HASH_ALGOSELECTION_SHA224);
 }
@@ -177,7 +176,7 @@ HAL_StatusTypeDef HAL_HASHEx_SHA224_Start(HASH_HandleTypeDef *hhash, uint8_t *pI
   */
 HAL_StatusTypeDef HAL_HASHEx_SHA224_Accmlt(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size)
 {
-  return  HASH_Accumulate(hhash, pInBuffer, Size,HASH_ALGOSELECTION_SHA224);
+  return  HASH_Accumulate(hhash, pInBuffer, Size, HASH_ALGOSELECTION_SHA224);
 }
 
 /**
@@ -190,7 +189,8 @@ HAL_StatusTypeDef HAL_HASHEx_SHA224_Accmlt(HASH_HandleTypeDef *hhash, uint8_t *p
   * @param  Timeout Timeout value
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HASHEx_SHA224_Accmlt_End(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer, uint32_t Timeout)
+HAL_StatusTypeDef HAL_HASHEx_SHA224_Accmlt_End(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                               uint8_t *pOutBuffer, uint32_t Timeout)
 {
   return HASH_Start(hhash, pInBuffer, Size, pOutBuffer, Timeout, HASH_ALGOSELECTION_SHA224);
 }
@@ -206,7 +206,8 @@ HAL_StatusTypeDef HAL_HASHEx_SHA224_Accmlt_End(HASH_HandleTypeDef *hhash, uint8_
   * @param  Timeout Timeout value
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HASHEx_SHA256_Start(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer, uint32_t Timeout)
+HAL_StatusTypeDef HAL_HASHEx_SHA256_Start(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                          uint8_t *pOutBuffer, uint32_t Timeout)
 {
   return HASH_Start(hhash, pInBuffer, Size, pOutBuffer, Timeout, HASH_ALGOSELECTION_SHA256);
 }
@@ -233,7 +234,7 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Start(HASH_HandleTypeDef *hhash, uint8_t *pI
   */
 HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size)
 {
-  return  HASH_Accumulate(hhash, pInBuffer, Size,HASH_ALGOSELECTION_SHA256);
+  return  HASH_Accumulate(hhash, pInBuffer, Size, HASH_ALGOSELECTION_SHA256);
 }
 
 /**
@@ -246,7 +247,8 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt(HASH_HandleTypeDef *hhash, uint8_t *p
   * @param  Timeout Timeout value
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_End(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer, uint32_t Timeout)
+HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_End(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                               uint8_t *pOutBuffer, uint32_t Timeout)
 {
   return HASH_Start(hhash, pInBuffer, Size, pOutBuffer, Timeout, HASH_ALGOSELECTION_SHA256);
 }
@@ -256,9 +258,8 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_End(HASH_HandleTypeDef *hhash, uint8_
   */
 
 /** @defgroup HASHEx_Exported_Functions_Group2 HASH extended processing functions in interrupt mode
-  * @ingroup RTEMSBSPsARMSTM32H7
- *  @brief   HASH extended processing functions using interrupt mode.
- *
+  *  @brief   HASH extended processing functions using interrupt mode.
+  *
 @verbatim
  ===============================================================================
           ##### Interruption mode HASH extended processing functions #####
@@ -289,9 +290,10 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_End(HASH_HandleTypeDef *hhash, uint8_
   * @param  pOutBuffer pointer to the computed digest. Digest size is 28 bytes.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HASHEx_SHA224_Start_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer)
+HAL_StatusTypeDef HAL_HASHEx_SHA224_Start_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                             uint8_t *pOutBuffer)
 {
-  return HASH_Start_IT(hhash, pInBuffer, Size, pOutBuffer,HASH_ALGOSELECTION_SHA224);
+  return HASH_Start_IT(hhash, pInBuffer, Size, pOutBuffer, HASH_ALGOSELECTION_SHA224);
 }
 
 /**
@@ -314,7 +316,7 @@ HAL_StatusTypeDef HAL_HASHEx_SHA224_Start_IT(HASH_HandleTypeDef *hhash, uint8_t 
   */
 HAL_StatusTypeDef HAL_HASHEx_SHA224_Accmlt_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size)
 {
-  return  HASH_Accumulate_IT(hhash, pInBuffer, Size,HASH_ALGOSELECTION_SHA224);
+  return  HASH_Accumulate_IT(hhash, pInBuffer, Size, HASH_ALGOSELECTION_SHA224);
 }
 
 /**
@@ -326,9 +328,10 @@ HAL_StatusTypeDef HAL_HASHEx_SHA224_Accmlt_IT(HASH_HandleTypeDef *hhash, uint8_t
   * @param  pOutBuffer pointer to the computed digest. Digest size is 28 bytes.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HASHEx_SHA224_Accmlt_End_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer)
+HAL_StatusTypeDef HAL_HASHEx_SHA224_Accmlt_End_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                                  uint8_t *pOutBuffer)
 {
-  return HASH_Start_IT(hhash, pInBuffer, Size, pOutBuffer,HASH_ALGOSELECTION_SHA224);
+  return HASH_Start_IT(hhash, pInBuffer, Size, pOutBuffer, HASH_ALGOSELECTION_SHA224);
 }
 
 /**
@@ -341,9 +344,10 @@ HAL_StatusTypeDef HAL_HASHEx_SHA224_Accmlt_End_IT(HASH_HandleTypeDef *hhash, uin
   * @param  pOutBuffer pointer to the computed digest. Digest size is 32 bytes.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HASHEx_SHA256_Start_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer)
+HAL_StatusTypeDef HAL_HASHEx_SHA256_Start_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                             uint8_t *pOutBuffer)
 {
-  return HASH_Start_IT(hhash, pInBuffer, Size, pOutBuffer,HASH_ALGOSELECTION_SHA256);
+  return HASH_Start_IT(hhash, pInBuffer, Size, pOutBuffer, HASH_ALGOSELECTION_SHA256);
 }
 
 /**
@@ -366,7 +370,7 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Start_IT(HASH_HandleTypeDef *hhash, uint8_t 
   */
 HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size)
 {
-  return  HASH_Accumulate_IT(hhash, pInBuffer, Size,HASH_ALGOSELECTION_SHA256);
+  return  HASH_Accumulate_IT(hhash, pInBuffer, Size, HASH_ALGOSELECTION_SHA256);
 }
 
 /**
@@ -378,9 +382,10 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_IT(HASH_HandleTypeDef *hhash, uint8_t
   * @param  pOutBuffer pointer to the computed digest. Digest size is 32 bytes.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_End_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer)
+HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_End_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                                  uint8_t *pOutBuffer)
 {
-  return HASH_Start_IT(hhash, pInBuffer, Size, pOutBuffer,HASH_ALGOSELECTION_SHA256);
+  return HASH_Start_IT(hhash, pInBuffer, Size, pOutBuffer, HASH_ALGOSELECTION_SHA256);
 }
 
 /**
@@ -388,12 +393,11 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_End_IT(HASH_HandleTypeDef *hhash, uin
   */
 
 /** @defgroup HASHEx_Exported_Functions_Group3 HASH extended processing functions in DMA mode
-  * @ingroup RTEMSBSPsARMSTM32H7
- *  @brief   HASH extended processing functions using DMA mode.
- *
+  *  @brief   HASH extended processing functions using DMA mode.
+  *
 @verbatim
  ===============================================================================
-                ##### DMA mode HASH extended  processing functionss #####
+                ##### DMA mode HASH extended  processing functions #####
  ===============================================================================
     [..]  This section provides functions allowing to calculate in DMA mode
           the hash value using one of the following algorithms:
@@ -445,9 +449,9 @@ HAL_StatusTypeDef HAL_HASHEx_SHA224_Start_DMA(HASH_HandleTypeDef *hhash, uint8_t
   * @param  Timeout Timeout value.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HASHEx_SHA224_Finish(HASH_HandleTypeDef *hhash, uint8_t* pOutBuffer, uint32_t Timeout)
+HAL_StatusTypeDef HAL_HASHEx_SHA224_Finish(HASH_HandleTypeDef *hhash, uint8_t *pOutBuffer, uint32_t Timeout)
 {
-   return HASH_Finish(hhash, pOutBuffer, Timeout);
+  return HASH_Finish(hhash, pOutBuffer, Timeout);
 }
 
 /**
@@ -475,9 +479,9 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Start_DMA(HASH_HandleTypeDef *hhash, uint8_t
   * @param  Timeout Timeout value.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HASHEx_SHA256_Finish(HASH_HandleTypeDef *hhash, uint8_t* pOutBuffer, uint32_t Timeout)
+HAL_StatusTypeDef HAL_HASHEx_SHA256_Finish(HASH_HandleTypeDef *hhash, uint8_t *pOutBuffer, uint32_t Timeout)
 {
-   return HASH_Finish(hhash, pOutBuffer, Timeout);
+  return HASH_Finish(hhash, pOutBuffer, Timeout);
 }
 
 /**
@@ -485,9 +489,8 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Finish(HASH_HandleTypeDef *hhash, uint8_t* p
   */
 
 /** @defgroup HASHEx_Exported_Functions_Group4 HMAC extended processing functions in polling mode
-  * @ingroup RTEMSBSPsARMSTM32H7
- *  @brief   HMAC extended processing functions using polling mode.
- *
+  *  @brief   HMAC extended processing functions using polling mode.
+  *
 @verbatim
  ===============================================================================
              ##### Polling mode HMAC extended processing functions #####
@@ -518,7 +521,8 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Finish(HASH_HandleTypeDef *hhash, uint8_t* p
   * @param  Timeout Timeout value.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HMACEx_SHA224_Start(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer, uint32_t Timeout)
+HAL_StatusTypeDef HAL_HMACEx_SHA224_Start(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                          uint8_t *pOutBuffer, uint32_t Timeout)
 {
   return HMAC_Start(hhash, pInBuffer, Size, pOutBuffer, Timeout, HASH_ALGOSELECTION_SHA224);
 }
@@ -536,7 +540,8 @@ HAL_StatusTypeDef HAL_HMACEx_SHA224_Start(HASH_HandleTypeDef *hhash, uint8_t *pI
   * @param  Timeout Timeout value.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HMACEx_SHA256_Start(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer, uint32_t Timeout)
+HAL_StatusTypeDef HAL_HMACEx_SHA256_Start(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                          uint8_t *pOutBuffer, uint32_t Timeout)
 {
   return HMAC_Start(hhash, pInBuffer, Size, pOutBuffer, Timeout, HASH_ALGOSELECTION_SHA256);
 }
@@ -547,9 +552,8 @@ HAL_StatusTypeDef HAL_HMACEx_SHA256_Start(HASH_HandleTypeDef *hhash, uint8_t *pI
 
 
 /** @defgroup HASHEx_Exported_Functions_Group5 HMAC extended processing functions in interrupt mode
-  * @ingroup RTEMSBSPsARMSTM32H7
- *  @brief   HMAC extended processing functions using interruption mode.
- *
+  *  @brief   HMAC extended processing functions using interruption mode.
+  *
 @verbatim
  ===============================================================================
              ##### Interrupt mode HMAC extended processing functions #####
@@ -579,7 +583,8 @@ HAL_StatusTypeDef HAL_HMACEx_SHA256_Start(HASH_HandleTypeDef *hhash, uint8_t *pI
   * @param  pOutBuffer pointer to the computed digest. Digest size is 28 bytes.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HMACEx_SHA224_Start_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer)
+HAL_StatusTypeDef HAL_HMACEx_SHA224_Start_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                             uint8_t *pOutBuffer)
 {
   return  HMAC_Start_IT(hhash, pInBuffer, Size, pOutBuffer, HASH_ALGOSELECTION_SHA224);
 }
@@ -596,7 +601,8 @@ HAL_StatusTypeDef HAL_HMACEx_SHA224_Start_IT(HASH_HandleTypeDef *hhash, uint8_t 
   * @param  pOutBuffer pointer to the computed digest. Digest size is 32 bytes.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_HMACEx_SHA256_Start_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer)
+HAL_StatusTypeDef HAL_HMACEx_SHA256_Start_IT(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size,
+                                             uint8_t *pOutBuffer)
 {
   return  HMAC_Start_IT(hhash, pInBuffer, Size, pOutBuffer, HASH_ALGOSELECTION_SHA256);
 }
@@ -610,9 +616,8 @@ HAL_StatusTypeDef HAL_HMACEx_SHA256_Start_IT(HASH_HandleTypeDef *hhash, uint8_t 
 
 
 /** @defgroup HASHEx_Exported_Functions_Group6 HMAC extended processing functions in DMA mode
-  * @ingroup RTEMSBSPsARMSTM32H7
- *  @brief   HMAC extended processing functions using DMA mode.
- *
+  *  @brief   HMAC extended processing functions using DMA mode.
+  *
 @verbatim
  ===============================================================================
               ##### DMA mode HMAC extended processing functions #####
@@ -689,9 +694,8 @@ HAL_StatusTypeDef HAL_HMACEx_SHA256_Start_DMA(HASH_HandleTypeDef *hhash, uint8_t
   */
 
 /** @defgroup HASHEx_Exported_Functions_Group7 Multi-buffer HMAC extended processing functions in DMA mode
-  * @ingroup RTEMSBSPsARMSTM32H7
- *  @brief   HMAC extended processing functions in multi-buffer DMA mode.
- *
+  *  @brief   HMAC extended processing functions in multi-buffer DMA mode.
+  *
 @verbatim
  ===============================================================================
       ##### Multi-buffer DMA mode HMAC extended processing functions #####
@@ -1034,6 +1038,3 @@ HAL_StatusTypeDef HAL_HMACEx_SHA256_Step2_3_DMA(HASH_HandleTypeDef *hhash, uint8
   * @}
   */
 
-
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

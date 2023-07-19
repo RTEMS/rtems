@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -41,7 +40,6 @@ extern "C" {
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup CRYPEx_Private_Types CRYPEx Private Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -51,7 +49,6 @@ extern "C" {
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup CRYPEx_Private_Variables CRYPEx Private Variables
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -61,7 +58,6 @@ extern "C" {
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup CRYPEx_Private_Constants CRYPEx Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -71,7 +67,6 @@ extern "C" {
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup CRYPEx_Private_Macros CRYPEx Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -81,7 +76,6 @@ extern "C" {
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup CRYPEx_Private_Functions CRYPEx Private Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -91,7 +85,6 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup CRYPEx_Exported_Functions CRYPEx Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -126,4 +119,3 @@ HAL_StatusTypeDef HAL_CRYPEx_AESCCM_GenerateAuthTAG(CRYP_HandleTypeDef *hcryp, u
 
 #endif /* STM32H7xx_HAL_CRYP_EX_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

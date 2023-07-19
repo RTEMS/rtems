@@ -68,13 +68,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -87,7 +86,6 @@
   */
 
 /** @defgroup CORTEX CORTEX
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief CORTEX HAL module driver
   * @{
   */
@@ -102,13 +100,11 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup CORTEX_Exported_Functions CORTEX Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 
 /** @defgroup CORTEX_Exported_Functions_Group1 Initialization and de-initialization functions
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions
  *
 @verbatim
@@ -238,7 +234,6 @@ uint32_t HAL_SYSTICK_Config(uint32_t TicksNumb)
   */
 
 /** @defgroup CORTEX_Exported_Functions_Group2 Peripheral Control functions
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Cortex control functions
  *
 @verbatim
@@ -534,4 +529,3 @@ uint32_t HAL_GetCurrentCPUID(void)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

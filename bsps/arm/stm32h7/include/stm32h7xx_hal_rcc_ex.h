@@ -6,14 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   ******************************************************************************
   */
 
@@ -22,7 +20,7 @@
 #define STM32H7xx_HAL_RCC_EX_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -38,7 +36,6 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup RCCEx_Exported_Types RCCEx Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -54,7 +51,7 @@ typedef struct
   uint32_t PLL2N;       /*!< PLL2N: Multiplication factor for PLL2 VCO output clock.
                              This parameter must be a number between Min_Data = 4 and Max_Data = 512
                              or between Min_Data = 8 and Max_Data = 420(*)
-                             (*) : For stm32h7a3xx and stm32h7b3xx family lines.                       */   
+                             (*) : For stm32h7a3xx and stm32h7b3xx family lines.                       */
 
   uint32_t PLL2P;       /*!< PLL2P: Division factor for system clock.
                              This parameter must be a number between Min_Data = 2 and Max_Data = 128
@@ -72,7 +69,7 @@ typedef struct
 
   uint32_t PLL2FRACN;    /*!<PLL2FRACN: Specifies Fractional Part Of The Multiplication Factor for
                             PLL2 VCO It should be a value between 0 and 8191                           */
-}RCC_PLL2InitTypeDef;
+} RCC_PLL2InitTypeDef;
 
 /**
   * @brief  PLL3 Clock structure definition
@@ -86,7 +83,7 @@ typedef struct
   uint32_t PLL3N;       /*!< PLL3N: Multiplication factor for PLL3 VCO output clock.
                              This parameter must be a number between Min_Data = 4 and Max_Data = 512
                              or between Min_Data = 8 and Max_Data = 420(*)
-                             (*) : For stm32h7a3xx and stm32h7b3xx family lines.                       */  
+                             (*) : For stm32h7a3xx and stm32h7b3xx family lines.                       */
 
   uint32_t PLL3P;       /*!< PLL3P: Division factor for system clock.
                              This parameter must be a number between Min_Data = 2 and Max_Data = 128
@@ -104,7 +101,7 @@ typedef struct
 
   uint32_t PLL3FRACN;    /*!<PLL3FRACN: Specifies Fractional Part Of The Multiplication Factor for
                             PLL3 VCO It should be a value between 0 and 8191                           */
-}RCC_PLL3InitTypeDef;
+} RCC_PLL3InitTypeDef;
 
 /**
   * @brief  RCC PLL1 Clocks structure definition
@@ -114,7 +111,7 @@ typedef struct
   uint32_t PLL1_P_Frequency;
   uint32_t PLL1_Q_Frequency;
   uint32_t PLL1_R_Frequency;
-}PLL1_ClocksTypeDef;
+} PLL1_ClocksTypeDef;
 
 /**
   * @brief  RCC PLL2 Clocks structure definition
@@ -124,7 +121,7 @@ typedef struct
   uint32_t PLL2_P_Frequency;
   uint32_t PLL2_Q_Frequency;
   uint32_t PLL2_R_Frequency;
-}PLL2_ClocksTypeDef;
+} PLL2_ClocksTypeDef;
 
 /**
   * @brief  RCC PLL3 Clocks structure definition
@@ -134,7 +131,7 @@ typedef struct
   uint32_t PLL3_P_Frequency;
   uint32_t PLL3_Q_Frequency;
   uint32_t PLL3_R_Frequency;
-}PLL3_ClocksTypeDef;
+} PLL3_ClocksTypeDef;
 
 
 /**
@@ -142,7 +139,7 @@ typedef struct
   */
 typedef struct
 {
-  uint32_t PeriphClockSelection;   /*!< The Extended Clock to be configured.
+  uint64_t PeriphClockSelection;   /*!< The Extended Clock to be configured.
                                         This parameter can be a value of @ref RCCEx_Periph_Clock_Selection */
 
   RCC_PLL2InitTypeDef PLL2;        /*!< PLL2structure parameters.
@@ -225,11 +222,16 @@ typedef struct
   uint32_t Usart16ClockSelection;  /*!< Specifies USART1/6 clock source
                                         This parameter can be a value of @ref RCCEx_USART16_Clock_Source  */
 
-   uint32_t RngClockSelection;      /*!< Specifies RNG clock source
+  uint32_t RngClockSelection;      /*!< Specifies RNG clock source
                                         This parameter can be a value of @ref RCCEx_RNG_Clock_Source     */
 
-   uint32_t I2c123ClockSelection;   /*!< Specifies I2C1/2/3 clock source
-                                        This parameter can be a value of @ref RCCEx_I2C123_Clock_Source    */
+#if defined(I2C5)
+  uint32_t I2c1235ClockSelection;  /*!< Specifies I2C1/2/3/5 clock source
+                                        This parameter can be a value of @ref RCCEx_I2C1235_Clock_Source    */
+#else
+  uint32_t I2c123ClockSelection;   /*!< Specifies I2C1/2/3 clock source
+                                        This parameter can be a value of @ref RCCEx_I2C1235_Clock_Source    */
+#endif /*I2C5*/
 
   uint32_t UsbClockSelection;      /*!< Specifies USB clock source
                                         This parameter can be a value of @ref RCCEx_USB_Clock_Source     */
@@ -275,7 +277,14 @@ typedef struct
 
   uint32_t TIMPresSelection;       /*!< Specifies TIM Clock Prescalers Selection.
                                        This parameter can be a value of @ref RCCEx_TIM_Prescaler_Selection */
-}RCC_PeriphCLKInitTypeDef;
+} RCC_PeriphCLKInitTypeDef;
+
+/*!< Alias for Inter STM32H7 lines compatibility regarding RCC_PeriphCLKInitTypeDef field : I2C5 available on some lines only  */
+#if defined(I2C5)
+#define I2c123ClockSelection I2c1235ClockSelection
+#else
+#define I2c1235ClockSelection I2c123ClockSelection
+#endif /*I2C5*/
 
 
 /**
@@ -302,7 +311,7 @@ typedef struct
   uint32_t HSI48CalibrationValue; /*!< Specifies a user-programmable trimming value to the HSI48 oscillator.
                                      This parameter must be a number between 0 and 0x3F or a value of @ref RCCEx_CRS_HSI48CalibrationDefault */
 
-}RCC_CRSInitTypeDef;
+} RCC_CRSInitTypeDef;
 
 /**
   * @brief RCC_CRS Synchronization structure definition
@@ -324,7 +333,7 @@ typedef struct
                                                                     It shows whether the actual frequency is below or above the target.
                                     This parameter must be a value of @ref RCCEx_CRS_FreqErrorDirection*/
 
-}RCC_CRSSynchroInfoTypeDef;
+} RCC_CRSSynchroInfoTypeDef;
 
 /**
   * @}
@@ -333,17 +342,15 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup RCCEx_Exported_Constants  RCCEx Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RCCEx_Periph_Clock_Selection  RCCEx Periph Clock Selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 #if defined(UART9) && defined(USART10)
-#define RCC_PERIPHCLK_USART16910       (0x00000001U)
+#define RCC_PERIPHCLK_USART16910       ((uint64_t)(0x00000001U))
 #define RCC_PERIPHCLK_USART1           RCC_PERIPHCLK_USART16910
 #define RCC_PERIPHCLK_USART6           RCC_PERIPHCLK_USART16910
 #define RCC_PERIPHCLK_UART9            RCC_PERIPHCLK_USART16910
@@ -351,28 +358,40 @@ typedef struct
 /*alias*/
 #define RCC_PERIPHCLK_USART16          RCC_PERIPHCLK_USART16910
 #else
-#define RCC_PERIPHCLK_USART16          (0x00000001U)
+#define RCC_PERIPHCLK_USART16          ((uint64_t)(0x00000001U))
 #define RCC_PERIPHCLK_USART1           RCC_PERIPHCLK_USART16
 #define RCC_PERIPHCLK_USART6           RCC_PERIPHCLK_USART16
 /* alias */
 #define RCC_PERIPHCLK_USART16910       RCC_PERIPHCLK_USART16
 #endif /* UART9 && USART10*/
-#define RCC_PERIPHCLK_USART234578      (0x00000002U)
+#define RCC_PERIPHCLK_USART234578      ((uint64_t)(0x00000002U))
 #define RCC_PERIPHCLK_USART2           RCC_PERIPHCLK_USART234578
 #define RCC_PERIPHCLK_USART3           RCC_PERIPHCLK_USART234578
 #define RCC_PERIPHCLK_UART4            RCC_PERIPHCLK_USART234578
 #define RCC_PERIPHCLK_UART5            RCC_PERIPHCLK_USART234578
 #define RCC_PERIPHCLK_UART7            RCC_PERIPHCLK_USART234578
 #define RCC_PERIPHCLK_UART8            RCC_PERIPHCLK_USART234578
-#define RCC_PERIPHCLK_LPUART1          (0x00000004U)
-#define RCC_PERIPHCLK_I2C123           (0x00000008U)
+#define RCC_PERIPHCLK_LPUART1          ((uint64_t)(0x00000004U))
+#if defined(I2C5)
+#define RCC_PERIPHCLK_I2C1235          ((uint64_t)(0x00000008U))
+#define RCC_PERIPHCLK_I2C1             RCC_PERIPHCLK_I2C1235
+#define RCC_PERIPHCLK_I2C2             RCC_PERIPHCLK_I2C1235
+#define RCC_PERIPHCLK_I2C3             RCC_PERIPHCLK_I2C1235
+/* alias */
+#define RCC_PERIPHCLK_I2C123           RCC_PERIPHCLK_I2C1235
+#else
+#define RCC_PERIPHCLK_I2C123           ((uint64_t)(0x00000008U))
 #define RCC_PERIPHCLK_I2C1             RCC_PERIPHCLK_I2C123
 #define RCC_PERIPHCLK_I2C2             RCC_PERIPHCLK_I2C123
 #define RCC_PERIPHCLK_I2C3             RCC_PERIPHCLK_I2C123
-#define RCC_PERIPHCLK_I2C4             (0x00000010U)
-#define RCC_PERIPHCLK_LPTIM1           (0x00000020U)
-#define RCC_PERIPHCLK_LPTIM2           (0x00000040U)
-#define RCC_PERIPHCLK_LPTIM345         (0x00000080U)
+#endif /*I2C5*/
+#define RCC_PERIPHCLK_I2C4             ((uint64_t)(0x00000010U))
+#if defined(I2C5)
+#define RCC_PERIPHCLK_I2C5             RCC_PERIPHCLK_I2C1235
+#endif /*I2C5*/
+#define RCC_PERIPHCLK_LPTIM1           ((uint64_t)(0x00000020U))
+#define RCC_PERIPHCLK_LPTIM2           ((uint64_t)(0x00000040U))
+#define RCC_PERIPHCLK_LPTIM345         ((uint64_t)(0x00000080U))
 #define RCC_PERIPHCLK_LPTIM3           RCC_PERIPHCLK_LPTIM345
 #if defined(LPTIM4)
 #define RCC_PERIPHCLK_LPTIM4           RCC_PERIPHCLK_LPTIM345
@@ -380,59 +399,66 @@ typedef struct
 #if defined(LPTIM5)
 #define RCC_PERIPHCLK_LPTIM5           RCC_PERIPHCLK_LPTIM345
 #endif /*LPTIM5*/
-#define RCC_PERIPHCLK_SAI1             (0x00000100U)
+#define RCC_PERIPHCLK_SAI1             ((uint64_t)(0x00000100U))
 #if defined(SAI3)
-#define RCC_PERIPHCLK_SAI23            (0x00000200U)
+#define RCC_PERIPHCLK_SAI23            ((uint64_t)(0x00000200U))
 #define RCC_PERIPHCLK_SAI2             RCC_PERIPHCLK_SAI23
 #define RCC_PERIPHCLK_SAI3             RCC_PERIPHCLK_SAI23
 #endif /* SAI3 */
 #if defined(RCC_CDCCIP1R_SAI2ASEL_0)
-#define RCC_PERIPHCLK_SAI2A            (0x00000200U)
+#define RCC_PERIPHCLK_SAI2A            ((uint64_t)(0x00000200U))
 #endif /* RCC_CDCCIP1R_SAI2ASEL_0 */
 #if defined(RCC_CDCCIP1R_SAI2BSEL_0)
-#define RCC_PERIPHCLK_SAI2B            (0x00000400U)
+#define RCC_PERIPHCLK_SAI2B            ((uint64_t)(0x00000400U))
 #endif /* RCC_CDCCIP1R_SAI2BSEL_0 */
 #if defined(SAI4)
-#define RCC_PERIPHCLK_SAI4A            (0x00000400U)
-#define RCC_PERIPHCLK_SAI4B            (0x00000800U)
+#define RCC_PERIPHCLK_SAI4A            ((uint64_t)(0x00000400U))
+#define RCC_PERIPHCLK_SAI4B            ((uint64_t)(0x00000800U))
 #endif /* SAI4 */
-#define RCC_PERIPHCLK_SPI123           (0x00001000U)
+#define RCC_PERIPHCLK_SPI123           ((uint64_t)(0x00001000U))
 #define RCC_PERIPHCLK_SPI1             RCC_PERIPHCLK_SPI123
 #define RCC_PERIPHCLK_SPI2             RCC_PERIPHCLK_SPI123
 #define RCC_PERIPHCLK_SPI3             RCC_PERIPHCLK_SPI123
-#define RCC_PERIPHCLK_SPI45            (0x00002000U)
+#define RCC_PERIPHCLK_SPI45            ((uint64_t)(0x00002000U))
 #define RCC_PERIPHCLK_SPI4             RCC_PERIPHCLK_SPI45
 #define RCC_PERIPHCLK_SPI5             RCC_PERIPHCLK_SPI45
-#define RCC_PERIPHCLK_SPI6             (0x00004000U)
-#define RCC_PERIPHCLK_FDCAN            (0x00008000U)
-#define RCC_PERIPHCLK_SDMMC            (0x00010000U)
-#define RCC_PERIPHCLK_RNG              (0x00020000U)
-#define RCC_PERIPHCLK_USB              (0x00040000U)
-#define RCC_PERIPHCLK_ADC              (0x00080000U)
-#define RCC_PERIPHCLK_SWPMI1           (0x00100000U)
-#define RCC_PERIPHCLK_DFSDM1           (0x00200000U)
+#define RCC_PERIPHCLK_SPI6             ((uint64_t)(0x00004000U))
+#define RCC_PERIPHCLK_FDCAN            ((uint64_t)(0x00008000U))
+#define RCC_PERIPHCLK_SDMMC            ((uint64_t)(0x00010000U))
+#define RCC_PERIPHCLK_RNG              ((uint64_t)(0x00020000U))
+#define RCC_PERIPHCLK_USB              ((uint64_t)(0x00040000U))
+#define RCC_PERIPHCLK_ADC              ((uint64_t)(0x00080000U))
+#define RCC_PERIPHCLK_SWPMI1           ((uint64_t)(0x00100000U))
+#define RCC_PERIPHCLK_DFSDM1           ((uint64_t)(0x00200000U))
 #if defined(DFSDM2_BASE)
-#define RCC_PERIPHCLK_DFSDM2           (0x00000800U)
+#define RCC_PERIPHCLK_DFSDM2           ((uint64_t)(0x00000800U))
 #endif /* DFSDM2 */
-#define RCC_PERIPHCLK_RTC              (0x00400000U)
-#define RCC_PERIPHCLK_CEC              (0x00800000U)
-#define RCC_PERIPHCLK_FMC              (0x01000000U)
+#define RCC_PERIPHCLK_RTC              ((uint64_t)(0x00400000U))
+#define RCC_PERIPHCLK_CEC              ((uint64_t)(0x00800000U))
+#define RCC_PERIPHCLK_FMC              ((uint64_t)(0x01000000U))
 #if defined(QUADSPI)
-#define RCC_PERIPHCLK_QSPI             (0x02000000U)
+#define RCC_PERIPHCLK_QSPI             ((uint64_t)(0x02000000U))
 #endif /* QUADSPI */
 #if defined(OCTOSPI1) || defined(OCTOSPI2)
-#define RCC_PERIPHCLK_OSPI             (0x02000000U)
+#define RCC_PERIPHCLK_OSPI             ((uint64_t)(0x02000000U))
 #endif /* defined(OCTOSPI1) || defined(OCTOSPI2) */
-#define RCC_PERIPHCLK_DSI              (0x04000000U)
-#define RCC_PERIPHCLK_SPDIFRX          (0x08000000U)
+#define RCC_PERIPHCLK_DSI              ((uint64_t)(0x04000000U))
+#define RCC_PERIPHCLK_SPDIFRX          ((uint64_t)(0x08000000U))
 #if defined(HRTIM1)
-#define RCC_PERIPHCLK_HRTIM1           (0x10000000U)
+#define RCC_PERIPHCLK_HRTIM1           ((uint64_t)(0x10000000U))
 #endif /* HRTIM1 */
 #if defined(LTDC)
-#define RCC_PERIPHCLK_LTDC             (0x20000000U)
+#define RCC_PERIPHCLK_LTDC             ((uint64_t)(0x20000000U))
 #endif /* LTDC */
-#define RCC_PERIPHCLK_TIM              (0x40000000U)
-#define RCC_PERIPHCLK_CKPER            (0x80000000U)
+#define RCC_PERIPHCLK_TIM              ((uint64_t)(0x40000000U))
+#define RCC_PERIPHCLK_CKPER            ((uint64_t)(0x80000000U))
+
+#define RCC_PERIPHCLK_PLL2_DIVP        ((uint64_t)(0x0000000100000000U))
+#define RCC_PERIPHCLK_PLL2_DIVQ        ((uint64_t)(0x0000000200000000U))
+#define RCC_PERIPHCLK_PLL2_DIVR        ((uint64_t)(0x0000000400000000U))
+#define RCC_PERIPHCLK_PLL3_DIVP        ((uint64_t)(0x0000000800000000U))
+#define RCC_PERIPHCLK_PLL3_DIVQ        ((uint64_t)(0x0000001000000000U))
+#define RCC_PERIPHCLK_PLL3_DIVR        ((uint64_t)(0x0000002000000000U))
 
 /**
   * @}
@@ -440,7 +466,6 @@ typedef struct
 
 
 /** @defgroup RCC_PLL2_Clock_Output  RCC PLL2 Clock Output
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL2_DIVP                RCC_PLLCFGR_DIVP2EN
@@ -452,7 +477,6 @@ typedef struct
   */
 
 /** @defgroup RCC_PLL3_Clock_Output  RCC PLL3 Clock Output
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL3_DIVP                RCC_PLLCFGR_DIVP3EN
@@ -464,7 +488,6 @@ typedef struct
   */
 
 /** @defgroup RCC_PLL2_VCI_Range  RCC PLL2 VCI Range
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL2VCIRANGE_0                RCC_PLLCFGR_PLL2RGE_0        /*!< Clock range frequency between 1 and 2 MHz  */
@@ -478,7 +501,6 @@ typedef struct
 
 
 /** @defgroup RCC_PLL2_VCO_Range  RCC PLL2 VCO Range
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL2VCOWIDE                 (0x00000000U)
@@ -489,7 +511,6 @@ typedef struct
   */
 
 /** @defgroup RCC_PLL3_VCI_Range  RCC PLL3 VCI Range
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL3VCIRANGE_0                RCC_PLLCFGR_PLL3RGE_0         /*!< Clock range frequency between 1 and 2 MHz  */
@@ -503,7 +524,6 @@ typedef struct
 
 
 /** @defgroup RCC_PLL3_VCO_Range  RCC PLL3 VCO Range
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL3VCOWIDE                 (0x00000000U)
@@ -514,7 +534,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_USART16_Clock_Source  RCCEx USART1/6 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_USART16SEL)
@@ -527,7 +546,7 @@ typedef struct
 #define RCC_USART16CLKSOURCE_CSI          RCC_D2CCIP2R_USART16SEL_2
 #define RCC_USART16CLKSOURCE_LSE         (RCC_D2CCIP2R_USART16SEL_0 | RCC_D2CCIP2R_USART16SEL_2)
 
-#else
+#elif defined(RCC_CDCCIP2R_USART16910SEL)
 #define RCC_USART16910CLKSOURCE_CDPCLK2   (0x00000000U)
 /* alias */
 #define RCC_USART16910CLKSOURCE_D2PCLK2   RCC_USART16910CLKSOURCE_CDPCLK2
@@ -546,13 +565,29 @@ typedef struct
 #define RCC_USART16CLKSOURCE_HSI         RCC_USART16910CLKSOURCE_HSI
 #define RCC_USART16CLKSOURCE_CSI         RCC_USART16910CLKSOURCE_CSI
 #define RCC_USART16CLKSOURCE_LSE         RCC_USART16910CLKSOURCE_LSE
+
+#else  /* RCC_D2CCIP2R_USART16910SEL */
+#define RCC_USART16910CLKSOURCE_D2PCLK2   (0x00000000U)
+#define RCC_USART16910CLKSOURCE_PLL2      RCC_D2CCIP2R_USART16910SEL_0
+#define RCC_USART16910CLKSOURCE_PLL3      RCC_D2CCIP2R_USART16910SEL_1
+#define RCC_USART16910CLKSOURCE_HSI      (RCC_D2CCIP2R_USART16910SEL_0 | RCC_D2CCIP2R_USART16910SEL_1)
+#define RCC_USART16910CLKSOURCE_CSI       RCC_D2CCIP2R_USART16910SEL_2
+#define RCC_USART16910CLKSOURCE_LSE      (RCC_D2CCIP2R_USART16910SEL_0 | RCC_D2CCIP2R_USART16910SEL_2)
+
+/*  Aliases */
+#define RCC_USART16CLKSOURCE_D2PCLK2     RCC_USART16910CLKSOURCE_D2PCLK2
+#define RCC_USART16CLKSOURCE_PCLK2       RCC_USART16910CLKSOURCE_D2PCLK2
+#define RCC_USART16CLKSOURCE_PLL2        RCC_USART16910CLKSOURCE_PLL2
+#define RCC_USART16CLKSOURCE_PLL3        RCC_USART16910CLKSOURCE_PLL3
+#define RCC_USART16CLKSOURCE_HSI         RCC_USART16910CLKSOURCE_HSI
+#define RCC_USART16CLKSOURCE_CSI         RCC_USART16910CLKSOURCE_CSI
+#define RCC_USART16CLKSOURCE_LSE         RCC_USART16910CLKSOURCE_LSE
 #endif /* RCC_D2CCIP2R_USART16SEL */
 /**
   * @}
   */
 
 /** @defgroup RCCEx_USART1_Clock_Source  RCCEx USART1 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_USART1CLKSOURCE_D2PCLK2   RCC_USART16CLKSOURCE_D2PCLK2
@@ -566,7 +601,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_USART6_Clock_Source  RCCEx USART6 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_USART6CLKSOURCE_D2PCLK2   RCC_USART16CLKSOURCE_D2PCLK2
@@ -582,7 +616,6 @@ typedef struct
 
 #if defined(UART9)
 /** @defgroup RCCEx_UART9_Clock_Source  RCCEx UART9 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_UART9CLKSOURCE_D2PCLK2   RCC_USART16CLKSOURCE_D2PCLK2
@@ -598,7 +631,6 @@ typedef struct
 
 #if defined(USART10)
 /** @defgroup RCCEx_USART10_Clock_Source  RCCEx USART10 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_USART10CLKSOURCE_D2PCLK2   RCC_USART16CLKSOURCE_D2PCLK2
@@ -613,7 +645,6 @@ typedef struct
 #endif /* USART10 */
 
 /** @defgroup RCCEx_USART234578_Clock_Source  RCCEx USART2/3/4/5/7/8 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_USART28SEL)
@@ -641,7 +672,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_USART2_Clock_Source  RCCEx USART2 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_USART2CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -656,7 +686,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_USART3_Clock_Source  RCCEx USART3 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_USART3CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -671,7 +700,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_UART4_Clock_Source  RCCEx UART4 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_UART4CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -686,7 +714,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_UART5_Clock_Source  RCCEx UART5 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_UART5CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -701,7 +728,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_UART7_Clock_Source  RCCEx UART7 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_UART7CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -716,7 +742,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_UART8_Clock_Source  RCCEx UART8 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_UART8CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -731,7 +756,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_LPUART1_Clock_Source  RCCEx LPUART1 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_LPUART1SEL)
@@ -758,8 +782,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup RCCEx_I2C123_Clock_Source  RCCEx I2C1/2/3 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RCCEx_I2C1235_Clock_Source  RCCEx I2C1/2/3/5 Clock Source
   * @{
   */
 #if defined (RCC_D2CCIP2R_I2C123SEL)
@@ -767,59 +790,96 @@ typedef struct
 #define RCC_I2C123CLKSOURCE_PLL3         RCC_D2CCIP2R_I2C123SEL_0
 #define RCC_I2C123CLKSOURCE_HSI          RCC_D2CCIP2R_I2C123SEL_1
 #define RCC_I2C123CLKSOURCE_CSI         (RCC_D2CCIP2R_I2C123SEL_0 | RCC_D2CCIP2R_I2C123SEL_1)
-#else
+/* aliases */
+#define RCC_I2C1235CLKSOURCE_D2PCLK1     RCC_I2C123CLKSOURCE_D2PCLK1
+#define RCC_I2C1235CLKSOURCE_PLL3        RCC_I2C123CLKSOURCE_PLL3
+#define RCC_I2C1235CLKSOURCE_HSI         RCC_I2C123CLKSOURCE_HSI
+#define RCC_I2C1235CLKSOURCE_CSI         RCC_I2C123CLKSOURCE_CSI
+#elif defined(RCC_CDCCIP2R_I2C123SEL)
 #define RCC_I2C123CLKSOURCE_CDPCLK1      (0x00000000U)
 /* alias */
 #define RCC_I2C123CLKSOURCE_D2PCLK1      RCC_I2C123CLKSOURCE_CDPCLK1
 #define RCC_I2C123CLKSOURCE_PLL3         RCC_CDCCIP2R_I2C123SEL_0
 #define RCC_I2C123CLKSOURCE_HSI          RCC_CDCCIP2R_I2C123SEL_1
 #define RCC_I2C123CLKSOURCE_CSI         (RCC_CDCCIP2R_I2C123SEL_0 | RCC_CDCCIP2R_I2C123SEL_1)
+/* aliases */
+#define RCC_I2C1235CLKSOURCE_D2PCLK1     RCC_I2C123CLKSOURCE_D2PCLK1
+#define RCC_I2C1235CLKSOURCE_PLL3        RCC_I2C123CLKSOURCE_PLL3
+#define RCC_I2C1235CLKSOURCE_HSI         RCC_I2C123CLKSOURCE_HSI
+#define RCC_I2C1235CLKSOURCE_CSI         RCC_I2C123CLKSOURCE_CSI
+#elif defined(I2C5)
+#define RCC_I2C1235CLKSOURCE_D2PCLK1      (0x00000000U)
+#define RCC_I2C1235CLKSOURCE_PLL3        RCC_D2CCIP2R_I2C1235SEL_0
+#define RCC_I2C1235CLKSOURCE_HSI         RCC_D2CCIP2R_I2C1235SEL_1
+#define RCC_I2C1235CLKSOURCE_CSI         (RCC_D2CCIP2R_I2C1235SEL_0 | RCC_D2CCIP2R_I2C1235SEL_1)
+/* aliases */
+#define RCC_I2C123CLKSOURCE_D2PCLK1      RCC_I2C1235CLKSOURCE_D2PCLK1
+#define RCC_I2C123CLKSOURCE_PLL3         RCC_I2C1235CLKSOURCE_PLL3
+#define RCC_I2C123CLKSOURCE_HSI          RCC_I2C1235CLKSOURCE_HSI
+#define RCC_I2C123CLKSOURCE_CSI          RCC_I2C1235CLKSOURCE_CSI
 #endif /* RCC_D2CCIP2R_I2C123SEL */
 /**
   * @}
   */
 
 /** @defgroup RCCEx_I2C1_Clock_Source  RCCEx I2C1 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
+#if defined(I2C5)
+#define RCC_I2C1CLKSOURCE_D2PCLK1     RCC_I2C1235CLKSOURCE_D2PCLK1
+#define RCC_I2C1CLKSOURCE_PLL3        RCC_I2C1235CLKSOURCE_PLL3
+#define RCC_I2C1CLKSOURCE_HSI         RCC_I2C1235CLKSOURCE_HSI
+#define RCC_I2C1CLKSOURCE_CSI         RCC_I2C1235CLKSOURCE_CSI
+#else
 #define RCC_I2C1CLKSOURCE_D2PCLK1     RCC_I2C123CLKSOURCE_D2PCLK1
 #define RCC_I2C1CLKSOURCE_PLL3        RCC_I2C123CLKSOURCE_PLL3
 #define RCC_I2C1CLKSOURCE_HSI         RCC_I2C123CLKSOURCE_HSI
 #define RCC_I2C1CLKSOURCE_CSI         RCC_I2C123CLKSOURCE_CSI
+#endif /*I2C5*/
 
 /**
   * @}
   */
 
 /** @defgroup RCCEx_I2C2_Clock_Source  RCCEx I2C2 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
+#if defined(I2C5)
+#define RCC_I2C2CLKSOURCE_D2PCLK1     RCC_I2C1235CLKSOURCE_D2PCLK1
+#define RCC_I2C2CLKSOURCE_PLL3        RCC_I2C1235CLKSOURCE_PLL3
+#define RCC_I2C2CLKSOURCE_HSI         RCC_I2C1235CLKSOURCE_HSI
+#define RCC_I2C2CLKSOURCE_CSI         RCC_I2C1235CLKSOURCE_CSI
+#else
 #define RCC_I2C2CLKSOURCE_D2PCLK1     RCC_I2C123CLKSOURCE_D2PCLK1
 #define RCC_I2C2CLKSOURCE_PLL3        RCC_I2C123CLKSOURCE_PLL3
 #define RCC_I2C2CLKSOURCE_HSI         RCC_I2C123CLKSOURCE_HSI
 #define RCC_I2C2CLKSOURCE_CSI         RCC_I2C123CLKSOURCE_CSI
+#endif /*I2C5*/
 
 /**
   * @}
   */
 
 /** @defgroup RCCEx_I2C3_Clock_Source  RCCEx I2C3 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
+#if defined(I2C5)
+#define RCC_I2C3CLKSOURCE_D2PCLK1     RCC_I2C1235CLKSOURCE_D2PCLK1
+#define RCC_I2C3CLKSOURCE_PLL3        RCC_I2C1235CLKSOURCE_PLL3
+#define RCC_I2C3CLKSOURCE_HSI         RCC_I2C1235CLKSOURCE_HSI
+#define RCC_I2C3CLKSOURCE_CSI         RCC_I2C1235CLKSOURCE_CSI
+#else
 #define RCC_I2C3CLKSOURCE_D2PCLK1     RCC_I2C123CLKSOURCE_D2PCLK1
 #define RCC_I2C3CLKSOURCE_PLL3        RCC_I2C123CLKSOURCE_PLL3
 #define RCC_I2C3CLKSOURCE_HSI         RCC_I2C123CLKSOURCE_HSI
 #define RCC_I2C3CLKSOURCE_CSI         RCC_I2C123CLKSOURCE_CSI
+#endif /*I2C5*/
 
 /**
   * @}
   */
 
 /** @defgroup RCCEx_I2C4_Clock_Source  RCCEx I2C4 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_I2C4SEL)
@@ -839,9 +899,21 @@ typedef struct
 /**
   * @}
   */
+#if defined(I2C5)
+/** @defgroup RCCEx_I2C5_Clock_Source  RCCEx I2C5 Clock Source
+  * @{
+  */
+#define RCC_I2C5CLKSOURCE_D2PCLK1      RCC_I2C1235CLKSOURCE_D2PCLK1
+#define RCC_I2C5CLKSOURCE_PLL3         RCC_I2C1235CLKSOURCE_PLL3
+#define RCC_I2C5CLKSOURCE_HSI          RCC_I2C1235CLKSOURCE_HSI
+#define RCC_I2C5CLKSOURCE_CSI          RCC_I2C1235CLKSOURCE_CSI
+
+/**
+  * @}
+  */
+#endif /*I2C5*/
 
 /** @defgroup RCCEx_RNG_Clock_Source  RCCEx RNG Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_RNGSEL)
@@ -862,7 +934,6 @@ typedef struct
 #if defined(HRTIM1)
 
 /** @defgroup RCCEx_HRTIM1_Clock_Source RCC Extended HRTIM1 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_HRTIM1CLK_TIMCLK                (0x00000000U)
@@ -874,7 +945,6 @@ typedef struct
 #endif /*HRTIM1*/
 
 /** @defgroup RCCEx_USB_Clock_Source  RCCEx USB Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_USBSEL)
@@ -892,7 +962,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SAI1_Clock_Source SAI1 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SAI1SEL)
@@ -914,7 +983,6 @@ typedef struct
 
 #if defined(SAI3)
 /** @defgroup RCCEx_SAI23_Clock_Source SAI2/3 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI23CLKSOURCE_PLL         (0x00000000U)
@@ -927,7 +995,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SAI2_Clock_Source SAI2 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI2CLKSOURCE_PLL         RCC_SAI23CLKSOURCE_PLL
@@ -941,7 +1008,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SAI3_Clock_Source SAI3 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI3CLKSOURCE_PLL         RCC_SAI23CLKSOURCE_PLL
@@ -955,8 +1021,7 @@ typedef struct
 #endif /* SAI3 */
 
 #if defined(RCC_CDCCIP1R_SAI2ASEL)
-/** @defgroup RCCEx_SAI2_Clock_A Source SAI2A Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RCCEx_SAI2A_Clock_Source SAI2A Clock Source
   * @{
   */
 #define RCC_SAI2ACLKSOURCE_PLL         (0x00000000U)
@@ -965,14 +1030,13 @@ typedef struct
 #define RCC_SAI2ACLKSOURCE_PIN         (RCC_CDCCIP1R_SAI2ASEL_0 | RCC_CDCCIP1R_SAI2ASEL_1)
 #define RCC_SAI2ACLKSOURCE_CLKP         RCC_CDCCIP1R_SAI2ASEL_2
 #define RCC_SAI2ACLKSOURCE_SPDIF       (RCC_CDCCIP1R_SAI2ASEL_0 | RCC_CDCCIP1R_SAI2ASEL_2)
- /**
-  * @}
-  */
+/**
+ * @}
+ */
 #endif /* RCC_CDCCIP1R_SAI2ASEL */
 
 #if defined(RCC_CDCCIP1R_SAI2BSEL)
-/** @defgroup RCCEx_SAI2_Block_B Clock_Source SAI2B Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RCCEx_SAI2B_Clock_Source SAI2B Clock Source
   * @{
   */
 #define RCC_SAI2BCLKSOURCE_PLL         (0x00000000U)
@@ -988,7 +1052,6 @@ typedef struct
 
 
 /** @defgroup RCCEx_SPI123_Clock_Source SPI1/2/3 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SPI123SEL)
@@ -1009,7 +1072,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI1_Clock_Source SPI1 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SPI1CLKSOURCE_PLL         RCC_SPI123CLKSOURCE_PLL
@@ -1023,7 +1085,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI2_Clock_Source SPI2 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SPI2CLKSOURCE_PLL         RCC_SPI123CLKSOURCE_PLL
@@ -1037,7 +1098,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI3_Clock_Source SPI3 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SPI3CLKSOURCE_PLL         RCC_SPI123CLKSOURCE_PLL
@@ -1051,22 +1111,21 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI45_Clock_Source SPI4/5 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SPI45SEL)
-#define RCC_SPI45CLKSOURCE_D2PCLK1     (0x00000000U)
-#define RCC_SPI45CLKSOURCE_PCLK1        RCC_SPI45CLKSOURCE_D2PCLK1
+#define RCC_SPI45CLKSOURCE_D2PCLK2     (0x00000000U)
+#define RCC_SPI45CLKSOURCE_PCLK2        RCC_SPI45CLKSOURCE_D2PCLK2
 #define RCC_SPI45CLKSOURCE_PLL2         RCC_D2CCIP1R_SPI45SEL_0
 #define RCC_SPI45CLKSOURCE_PLL3         RCC_D2CCIP1R_SPI45SEL_1
 #define RCC_SPI45CLKSOURCE_HSI         (RCC_D2CCIP1R_SPI45SEL_0 | RCC_D2CCIP1R_SPI45SEL_1)
 #define RCC_SPI45CLKSOURCE_CSI          RCC_D2CCIP1R_SPI45SEL_2
 #define RCC_SPI45CLKSOURCE_HSE         (RCC_D2CCIP1R_SPI45SEL_0 | RCC_D2CCIP1R_SPI45SEL_2)
 #else
-#define RCC_SPI45CLKSOURCE_CDPCLK1     (0x00000000U)
+#define RCC_SPI45CLKSOURCE_CDPCLK2     (0x00000000U)
 /* aliases */
-#define RCC_SPI45CLKSOURCE_D2PCLK1      RCC_SPI45CLKSOURCE_CDPCLK1  /* D2PCLK1 is used in STM32H74xxx, STM32H75xxx, STM32H72xxx and STM32H73xxx family lines */
-#define RCC_SPI45CLKSOURCE_PCLK1        RCC_SPI45CLKSOURCE_CDPCLK1
+#define RCC_SPI45CLKSOURCE_D2PCLK2      RCC_SPI45CLKSOURCE_CDPCLK2  /* D2PCLK2 is used in STM32H74xxx, STM32H75xxx, STM32H72xxx and STM32H73xxx family lines */
+#define RCC_SPI45CLKSOURCE_PCLK2        RCC_SPI45CLKSOURCE_CDPCLK2
 #define RCC_SPI45CLKSOURCE_PLL2         RCC_CDCCIP1R_SPI45SEL_0
 #define RCC_SPI45CLKSOURCE_PLL3         RCC_CDCCIP1R_SPI45SEL_1
 #define RCC_SPI45CLKSOURCE_HSI         (RCC_CDCCIP1R_SPI45SEL_0 | RCC_CDCCIP1R_SPI45SEL_1)
@@ -1078,10 +1137,9 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI4_Clock_Source SPI4 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
-#define RCC_SPI4CLKSOURCE_D2PCLK1     RCC_SPI45CLKSOURCE_D2PCLK1
+#define RCC_SPI4CLKSOURCE_D2PCLK2     RCC_SPI45CLKSOURCE_D2PCLK2
 #define RCC_SPI4CLKSOURCE_PLL2        RCC_SPI45CLKSOURCE_PLL2
 #define RCC_SPI4CLKSOURCE_PLL3        RCC_SPI45CLKSOURCE_PLL3
 #define RCC_SPI4CLKSOURCE_HSI         RCC_SPI45CLKSOURCE_HSI
@@ -1093,10 +1151,9 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI5_Clock_Source SPI5 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
-#define RCC_SPI5CLKSOURCE_D2PCLK1     RCC_SPI45CLKSOURCE_D2PCLK1
+#define RCC_SPI5CLKSOURCE_D2PCLK2     RCC_SPI45CLKSOURCE_D2PCLK2
 #define RCC_SPI5CLKSOURCE_PLL2        RCC_SPI45CLKSOURCE_PLL2
 #define RCC_SPI5CLKSOURCE_PLL3        RCC_SPI45CLKSOURCE_PLL3
 #define RCC_SPI5CLKSOURCE_HSI         RCC_SPI45CLKSOURCE_HSI
@@ -1108,7 +1165,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI6_Clock_Source SPI6 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_SPI6SEL)
@@ -1139,7 +1195,6 @@ typedef struct
 
 #if defined(SAI4_Block_A)
 /** @defgroup RCCEx_SAI4A_Clock_Source SAI4A Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI4ACLKSOURCE_PLL         (0x00000000U)
@@ -1147,6 +1202,9 @@ typedef struct
 #define RCC_SAI4ACLKSOURCE_PLL3         RCC_D3CCIPR_SAI4ASEL_1
 #define RCC_SAI4ACLKSOURCE_PIN         (RCC_D3CCIPR_SAI4ASEL_0 | RCC_D3CCIPR_SAI4ASEL_1)
 #define RCC_SAI4ACLKSOURCE_CLKP         RCC_D3CCIPR_SAI4ASEL_2
+#if defined(RCC_VER_3_0)
+#define RCC_SAI4ACLKSOURCE_SPDIF       (RCC_D3CCIPR_SAI4ASEL_2 | RCC_D3CCIPR_SAI4ASEL_0)
+#endif /*RCC_VER_3_0*/
 
 /**
   * @}
@@ -1157,7 +1215,6 @@ typedef struct
 
 #if defined(SAI4_Block_B)
 /** @defgroup RCCEx_SAI4B_Clock_Source SAI4B Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI4BCLKSOURCE_PLL         (0x00000000U)
@@ -1165,6 +1222,9 @@ typedef struct
 #define RCC_SAI4BCLKSOURCE_PLL3         RCC_D3CCIPR_SAI4BSEL_1
 #define RCC_SAI4BCLKSOURCE_PIN         (RCC_D3CCIPR_SAI4BSEL_0 | RCC_D3CCIPR_SAI4BSEL_1)
 #define RCC_SAI4BCLKSOURCE_CLKP         RCC_D3CCIPR_SAI4BSEL_2
+#if defined(RCC_VER_3_0)
+#define RCC_SAI4BCLKSOURCE_SPDIF       (RCC_D3CCIPR_SAI4BSEL_2 | RCC_D3CCIPR_SAI4BSEL_0)
+#endif /* RCC_VER_3_0 */
 
 /**
   * @}
@@ -1173,7 +1233,6 @@ typedef struct
 
 
 /** @defgroup RCCEx_LPTIM1_Clock_Source  RCCEx LPTIM1 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_LPTIM1SEL)
@@ -1202,7 +1261,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_LPTIM2_Clock_Source  RCCEx LPTIM2 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_LPTIM2SEL)
@@ -1230,7 +1288,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_LPTIM345_Clock_Source  RCCEx LPTIM3/4/5 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_LPTIM345SEL)
@@ -1258,7 +1315,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_LPTIM3_Clock_Source  RCCEx LPTIM3 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_LPTIM3CLKSOURCE_D3PCLK1       RCC_LPTIM345CLKSOURCE_D3PCLK1
@@ -1273,7 +1329,6 @@ typedef struct
   */
 #if defined(LPTIM4)
 /** @defgroup RCCEx_LPTIM4_Clock_Source  RCCEx LPTIM4 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_LPTIM4CLKSOURCE_D3PCLK1       RCC_LPTIM345CLKSOURCE_D3PCLK1
@@ -1289,7 +1344,6 @@ typedef struct
 
 #if defined(LPTIM5)
 /** @defgroup RCCEx_LPTIM5_Clock_Source  RCCEx LPTIM5 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_LPTIM5CLKSOURCE_D3PCLK1       RCC_LPTIM345CLKSOURCE_D3PCLK1
@@ -1306,7 +1360,6 @@ typedef struct
 
 #if defined(QUADSPI)
 /** @defgroup RCCEx_QSPI_Clock_Source  RCCEx QSPI Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_QSPICLKSOURCE_D1HCLK       (0x00000000U)
@@ -1322,9 +1375,10 @@ typedef struct
 
 #if defined(OCTOSPI1) || defined(OCTOSPI2)
 /** @defgroup RCCEx_OSPI_Clock_Source  RCCEx OSPI Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
+
+#if defined(RCC_CDCCIPR_OCTOSPISEL)
 #define RCC_OSPICLKSOURCE_CDHCLK       (0x00000000U)
 /*aliases*/
 #define RCC_OSPICLKSOURCE_D1HCLK       RCC_OSPICLKSOURCE_CDHCLK
@@ -1332,6 +1386,14 @@ typedef struct
 #define RCC_OSPICLKSOURCE_PLL          RCC_CDCCIPR_OCTOSPISEL_0
 #define RCC_OSPICLKSOURCE_PLL2         RCC_CDCCIPR_OCTOSPISEL_1
 #define RCC_OSPICLKSOURCE_CLKP         RCC_CDCCIPR_OCTOSPISEL
+#else
+#define RCC_OSPICLKSOURCE_D1HCLK       (0x00000000U)
+#define RCC_OSPICLKSOURCE_HCLK         RCC_OSPICLKSOURCE_D1HCLK
+#define RCC_OSPICLKSOURCE_PLL          RCC_D1CCIPR_OCTOSPISEL_0
+#define RCC_OSPICLKSOURCE_PLL2         RCC_D1CCIPR_OCTOSPISEL_1
+#define RCC_OSPICLKSOURCE_CLKP         RCC_D1CCIPR_OCTOSPISEL
+#endif /* RCC_CDCCIPR_OCTOSPISEL */
+
 
 /**
   * @}
@@ -1340,7 +1402,6 @@ typedef struct
 
 #if defined(DSI)
 /** @defgroup RCCEx_DSI_Clock_Source  RCCEx DSI Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_DSICLKSOURCE_PHY       (0x00000000U)
@@ -1352,7 +1413,6 @@ typedef struct
 #endif /* DSI */
 
 /** @defgroup RCCEx_FMC_Clock_Source  RCCEx FMC Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_FMCSEL)
@@ -1376,7 +1436,6 @@ typedef struct
 
 #if defined(FDCAN1) || defined(FDCAN2)
 /** @defgroup RCCEx_FDCAN_Clock_Source  RCCEx FDCAN Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_FDCANSEL)
@@ -1395,7 +1454,6 @@ typedef struct
 
 
 /** @defgroup RCCEx_SDMMC_Clock_Source  RCCEx SDMMC Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_SDMMCSEL)
@@ -1411,7 +1469,6 @@ typedef struct
 
 
 /** @defgroup RCCEx_ADC_Clock_Source  RCCEx ADC Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_ADCSEL_0)
@@ -1428,7 +1485,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SWPMI1_Clock_Source  RCCEx SWPMI1 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SWPSEL)
@@ -1445,7 +1501,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_DFSDM1_Clock_Source  RCCEx DFSDM1 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_DFSDM1SEL)
@@ -1463,7 +1518,6 @@ typedef struct
 
 #if defined(DFSDM2_BASE)
 /** @defgroup RCCEx_DFSDM2_Clock_Source  RCCEx DFSDM2 Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_DFSDM2CLKSOURCE_SRDPCLK4       (0x00000000U)
@@ -1476,7 +1530,6 @@ typedef struct
 #endif /* DFSDM2 */
 
 /** @defgroup RCCEx_SPDIFRX_Clock_Source  RCCEx SPDIFRX Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SPDIFSEL_0)
@@ -1495,7 +1548,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CEC_Clock_Source  RCCEx CEC Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_CECSEL_0)
@@ -1513,7 +1565,6 @@ typedef struct
 
 
 /** @defgroup RCCEx_CLKP_Clock_Source  RCCEx CLKP Clock Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_CKPERSEL_0)
@@ -1530,7 +1581,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_TIM_Prescaler_Selection RCCEx TIM Prescaler Selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_TIMPRES_DESACTIVATED        (0x00000000U)
@@ -1543,7 +1593,6 @@ typedef struct
 #if defined(DUAL_CORE)
 
 /** @defgroup RCCEx_RCC_BootCx RCCEx RCC BootCx
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_BOOT_C1        RCC_GCR_BOOT_C1
@@ -1556,7 +1605,6 @@ typedef struct
 
 #if defined(DUAL_CORE)
 /** @defgroup RCCEx_RCC_WWDGx  RCCEx RCC WWDGx
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_WWDG1        RCC_GCR_WW1RSC
@@ -1569,7 +1617,6 @@ typedef struct
 #else
 
 /** @defgroup RCCEx_RCC_WWDGx  RCCEx RCC WWDGx
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_WWDG1        RCC_GCR_WW1RSC
@@ -1581,16 +1628,14 @@ typedef struct
 #endif /*DUAL_CORE*/
 
 /** @defgroup RCCEx_EXTI_LINE_LSECSS  RCC LSE CSS external interrupt line
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
-#define RCC_EXTI_LINE_LSECSS           EXTI_IMR1_IM18        /*!< External interrupt line 19 connected to the LSE CSS EXTI Line */
+#define RCC_EXTI_LINE_LSECSS           EXTI_IMR1_IM18        /*!< External interrupt line 18 connected to the LSE CSS EXTI Line */
 /**
   * @}
   */
 
 /** @defgroup RCCEx_CRS_Status RCCEx CRS Status
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_NONE                   (0x00000000U)
@@ -1605,7 +1650,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_SynchroSource RCCEx CRS SynchroSource
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_SYNC_SOURCE_PIN       (0x00000000U)                            /*!< Synchro Signal source external pin, Available on STM32H7 Rev.B and above devices only */
@@ -1619,7 +1663,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_SynchroDivider RCCEx CRS SynchroDivider
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_SYNC_DIV1        (0x00000000U)           /*!< Synchro Signal not divided (default) */
@@ -1635,7 +1678,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_SynchroPolarity RCCEx CRS SynchroPolarity
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_SYNC_POLARITY_RISING   (0x00000000U) /*!< Synchro Active on rising edge (default) */
@@ -1645,7 +1687,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_ReloadValueDefault RCCEx CRS ReloadValueDefault
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_RELOADVALUE_DEFAULT    (0x0000BB7FU) /*!< The reset value of the RELOAD field corresponds
@@ -1655,7 +1696,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_ErrorLimitDefault RCCEx CRS ErrorLimitDefault
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_ERRORLIMIT_DEFAULT     (0x00000022U) /*!< Default Frequency error limit */
@@ -1664,7 +1704,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_HSI48CalibrationDefault RCCEx CRS HSI48CalibrationDefault
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_HSI48CALIBRATION_DEFAULT (0x00000020U) /*!< The default value is 32, which corresponds to the middle of the trimming interval.
@@ -1675,7 +1714,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_FreqErrorDirection RCCEx CRS FreqErrorDirection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_FREQERRORDIR_UP        (0x00000000U)   /*!< Upcounting direction, the actual frequency is above the target */
@@ -1685,7 +1723,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_Interrupt_Sources RCCEx CRS Interrupt Sources
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_IT_SYNCOK              CRS_CR_SYNCOKIE       /*!< SYNC event OK */
@@ -1701,7 +1738,6 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_Flags RCCEx CRS Flags
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_FLAG_SYNCOK            CRS_ISR_SYNCOKF       /*!< SYNC event OK flag     */
@@ -1724,7 +1760,6 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup RCCEx_Exported_Macros RCCEx Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1743,11 +1778,13 @@ typedef struct
   *         This is mainly used to save Power.
   * @param  __RCC_PLL2ClockOut__ Specifies the PLL2 clock to be outputted
   *          This parameter can be one of the following values:
-  *            @arg RCC_PLL2_DIVP: This clock is used to generate peripherals clock up to 400MHZ or 280MHZ(*)
-  *            @arg RCC_PLL2_DIVQ: This clock is used to generate peripherals clock up to 400MHZ or 280MHZ(*)
-  *            @arg RCC_PLL2_DIVR: This clock is used to generate peripherals clock up to 400MHZ or 280MHZ(*)
+  *            @arg RCC_PLL2_DIVP: This clock is used to generate peripherals clock up to 550MHZ(*), 480MHZ(**) or 280MHZ(***)
+  *            @arg RCC_PLL2_DIVQ: This clock is used to generate peripherals clock up to 550MHZ(*), 480MHZ(**) or 280MHZ(***)
+  *            @arg RCC_PLL2_DIVR: This clock is used to generate peripherals clock up to 550MHZ(*), 480MHZ(**) or 280MHZ(***)
   *
-  * (*) : For stm32h7a3xx and stm32h7b3xx family lines.
+  * (*) : For stm32h72xxx and stm32h73xxx family lines and requires to enable the CPU_FREQ_BOOST flash option byte, 520MHZ otherwise.
+  * (**) : For stm32h74xx and stm32h75xx family lines and requires the board to be connected on LDO regulator not SMPS, 400MHZ otherwise.
+  * (***): For stm32h7a3xx, stm32h7b3xx and stm32h7b0xx family lines.
   *
   * @retval None
   */
@@ -1872,11 +1909,13 @@ typedef struct
   *         This is mainly used to save Power.
   * @param  __RCC_PLL3ClockOut__ specifies the PLL3 clock to be outputted
   *          This parameter can be one of the following values:
-  *            @arg RCC_PLL3_DIVP: This clock is used to generate peripherals clock up to 400MHZ or 280MHZ(*)
-  *            @arg RCC_PLL3_DIVQ: This clock is used to generate peripherals clock  up to 400MHZ or 280MHZ(*)
-  *            @arg RCC_PLL3_DIVR: This clock is used to generate peripherals clock up to 400MHZ or 280MHZ(*)
+  *            @arg RCC_PLL3_DIVP: This clock is used to generate peripherals clock up to 550MHZ(*), 480MHZ(**) or 280MHZ(***)
+  *            @arg RCC_PLL3_DIVQ: This clock is used to generate peripherals clock up to 550MHZ(*), 480MHZ(**) or 280MHZ(***)
+  *            @arg RCC_PLL3_DIVR: This clock is used to generate peripherals clock up to 550MHZ(*), 480MHZ(**) or 280MHZ(***)
   *
-  * (*) : For stm32h7a3xx and stm32h7b3xx family lines.
+  * (*) : For stm32h72xxx and stm32h73xxx family lines and requires to enable the CPU_FREQ_BOOST flash option byte, 520MHZ otherwise.
+  * (**) : For stm32h74xx and stm32h75xx family lines and requires the board to be connected on LDO regulator not SMPS, 400MHZ otherwise.
+  * (***): For stm32h7a3xx, stm32h7b3xx and stm32h7b0xx family lines.
   *
   * @retval None
   */
@@ -1940,7 +1979,7 @@ typedef struct
   *
   * @retval None
   */
- #define  __HAL_RCC_PLL3FRACN_CONFIG(__RCC_PLL3FRACN__) MODIFY_REG(RCC->PLL3FRACR, RCC_PLL3FRACR_FRACN3, (uint32_t)(__RCC_PLL3FRACN__) << RCC_PLL3FRACR_FRACN3_Pos)
+#define  __HAL_RCC_PLL3FRACN_CONFIG(__RCC_PLL3FRACN__) MODIFY_REG(RCC->PLL3FRACR, RCC_PLL3FRACR_FRACN3, (uint32_t)(__RCC_PLL3FRACN__) << RCC_PLL3FRACR_FRACN3_Pos)
 
 /** @brief  Macro to select  the PLL3  reference frequency range.
   * @param  __RCC_PLL3VCIRange__ specifies the PLL1 input frequency range
@@ -2218,34 +2257,47 @@ typedef struct
 #define __HAL_RCC_GET_SAI4B_SOURCE() ((uint32_t)(READ_BIT(RCC->D3CCIPR, RCC_D3CCIPR_SAI4BSEL)))
 #endif /* SAI4_Block_B */
 
-/** @brief macro to configure the I2C1/2/3 clock (I2C123CLK).
+/** @brief macro to configure the I2C1/2/3/5* clock (I2C123CLK).
   *
-  * @param  __I2C123CLKSource__ specifies the I2C1/2/3 clock source.
+  * @param  __I2C1235CLKSource__ specifies the I2C1/2/3/5* clock source.
   *          This parameter can be one of the following values:
-  *            @arg RCC_I2C123CLKSOURCE_D2PCLK1: D2PCLK1 selected as I2C1/2/3 clock
-  *            @arg RCC_I2C123CLKSOURCE_PLL3: PLL3 selected as I2C1/2/3 clock
-  *            @arg RCC_I2C123CLKSOURCE_HSI: HSI selected as I2C1/2/3 clock
-  *            @arg RCC_I2C123CLKSOURCE_CSI: CSI selected as I2C1/2/3 clock
+  *            @arg RCC_I2C123CLKSOURCE_D2PCLK1: D2PCLK1 selected as I2C1/2/3/5* clock
+  *            @arg RCC_I2C123CLKSOURCE_PLL3: PLL3 selected as I2C1/2/3/5* clock
+  *            @arg RCC_I2C123CLKSOURCE_HSI: HSI selected as I2C1/2/3/5* clock
+  *            @arg RCC_I2C123CLKSOURCE_CSI: CSI selected as I2C1/2/3/5* clock
+  *
+  * (**): Available on stm32h72xxx and stm32h73xxx family lines.
   */
 #if defined(RCC_D2CCIP2R_I2C123SEL)
-#define __HAL_RCC_I2C123_CONFIG(__I2C123CLKSource__) \
-                  MODIFY_REG(RCC->D2CCIP2R, RCC_D2CCIP2R_I2C123SEL, (uint32_t)(__I2C123CLKSource__))
-#else
-#define __HAL_RCC_I2C123_CONFIG(__I2C123CLKSource__) \
-                  MODIFY_REG(RCC->CDCCIP2R, RCC_CDCCIP2R_I2C123SEL, (uint32_t)(__I2C123CLKSource__))
+#define __HAL_RCC_I2C123_CONFIG(__I2C1235CLKSource__) \
+                  MODIFY_REG(RCC->D2CCIP2R, RCC_D2CCIP2R_I2C123SEL, (uint32_t)(__I2C1235CLKSource__))
+#elif defined(RCC_CDCCIP2R_I2C123SEL)
+#define __HAL_RCC_I2C123_CONFIG(__I2C1235CLKSource__) \
+                  MODIFY_REG(RCC->CDCCIP2R, RCC_CDCCIP2R_I2C123SEL, (uint32_t)(__I2C1235CLKSource__))
+#else /* RCC_D2CCIP2R_I2C1235SEL */
+#define __HAL_RCC_I2C1235_CONFIG(__I2C1235CLKSource__) \
+                  MODIFY_REG(RCC->D2CCIP2R, RCC_D2CCIP2R_I2C1235SEL, (uint32_t)(__I2C1235CLKSource__))
+/* alias */
+#define __HAL_RCC_I2C123_CONFIG  __HAL_RCC_I2C1235_CONFIG
 #endif /* RCC_D2CCIP2R_I2C123SEL */
 
-/** @brief  macro to get the I2C1/2/3 clock source.
+/** @brief  macro to get the I2C1/2/3/5* clock source.
   * @retval The clock source can be one of the following values:
-  *            @arg RCC_I2C123CLKSOURCE_D2PCLK1: D2PCLK1 selected as I2C1/2/3 clock
-  *            @arg RCC_I2C123CLKSOURCE_PLL3: PLL3 selected as I2C1/2/3 clock
-  *            @arg RCC_I2C123CLKSOURCE_HSI: HSI selected as I2C1/2/3 clock
-  *            @arg RCC_I2C123CLKSOURCE_CSI: CSI selected as I2C1/2/3 clock
+  *            @arg RCC_I2C123CLKSOURCE_D2PCLK1: D2PCLK1 selected as I2C1/2/3/5* clock
+  *            @arg RCC_I2C123CLKSOURCE_PLL3: PLL3 selected as I2C1/2/3/5* clock
+  *            @arg RCC_I2C123CLKSOURCE_HSI: HSI selected as I2C1/2/3/5* clock
+  *            @arg RCC_I2C123CLKSOURCE_CSI: CSI selected as I2C1/2/3/5* clock
+  *
+  * (**): Available on stm32h72xxx and stm32h73xxx family lines.
   */
 #if defined(RCC_D2CCIP2R_I2C123SEL)
 #define __HAL_RCC_GET_I2C123_SOURCE() ((uint32_t)(READ_BIT(RCC->D2CCIP2R, RCC_D2CCIP2R_I2C123SEL)))
-#else
+#elif defined(RCC_CDCCIP2R_I2C123SEL)
 #define __HAL_RCC_GET_I2C123_SOURCE() ((uint32_t)(READ_BIT(RCC->CDCCIP2R, RCC_CDCCIP2R_I2C123SEL)))
+#else /* RCC_D2CCIP2R_I2C1235SEL */
+#define __HAL_RCC_GET_I2C1235_SOURCE() ((uint32_t)(READ_BIT(RCC->D2CCIP2R, RCC_D2CCIP2R_I2C1235SEL)))
+/* alias */
+#define __HAL_RCC_GET_I2C123_SOURCE  __HAL_RCC_GET_I2C1235_SOURCE
 #endif /* RCC_D2CCIP2R_I2C123SEL */
 
 /** @brief macro to configure the I2C1 clock (I2C1CLK).
@@ -2257,7 +2309,11 @@ typedef struct
   *            @arg RCC_I2C1CLKSOURCE_HSI: HSI selected as I2C1 clock
   *            @arg RCC_I2C1CLKSOURCE_CSI: CSI selected as I2C1 clock
   */
+#if defined(I2C5)
+#define __HAL_RCC_I2C1_CONFIG  __HAL_RCC_I2C1235_CONFIG
+#else
 #define __HAL_RCC_I2C1_CONFIG  __HAL_RCC_I2C123_CONFIG
+#endif /*I2C5*/
 
 /** @brief  macro to get the I2C1 clock source.
   * @retval The clock source can be one of the following values:
@@ -2266,7 +2322,11 @@ typedef struct
   *            @arg RCC_I2C1CLKSOURCE_HSI: HSI selected as I2C1 clock
   *            @arg RCC_I2C1CLKSOURCE_CSI: CSI selected as I2C1 clock
   */
+#if defined(I2C5)
+#define __HAL_RCC_GET_I2C1_SOURCE __HAL_RCC_GET_I2C1235_SOURCE
+#else
 #define __HAL_RCC_GET_I2C1_SOURCE __HAL_RCC_GET_I2C123_SOURCE
+#endif /*I2C5*/
 
 /** @brief macro to configure the I2C2 clock (I2C2CLK).
   *
@@ -2277,7 +2337,11 @@ typedef struct
   *            @arg RCC_I2C2CLKSOURCE_HSI: HSI selected as I2C2 clock
   *            @arg RCC_I2C2CLKSOURCE_CSI: CSI selected as I2C2 clock
   */
+#if defined(I2C5)
+#define __HAL_RCC_I2C2_CONFIG __HAL_RCC_I2C1235_CONFIG
+#else
 #define __HAL_RCC_I2C2_CONFIG __HAL_RCC_I2C123_CONFIG
+#endif /*I2C5*/
 
 /** @brief  macro to get the I2C2 clock source.
   * @retval The clock source can be one of the following values:
@@ -2286,7 +2350,11 @@ typedef struct
   *            @arg RCC_I2C2CLKSOURCE_HSI: HSI selected as I2C2 clock
   *            @arg RCC_I2C2CLKSOURCE_CSI: CSI selected as I2C2 clock
   */
+#if defined(I2C5)
+#define __HAL_RCC_GET_I2C2_SOURCE __HAL_RCC_GET_I2C1235_SOURCE
+#else
 #define __HAL_RCC_GET_I2C2_SOURCE __HAL_RCC_GET_I2C123_SOURCE
+#endif /*I2C5*/
 
 /** @brief macro to configure the I2C3 clock (I2C3CLK).
   *
@@ -2297,7 +2365,11 @@ typedef struct
   *            @arg RCC_I2C3CLKSOURCE_HSI: HSI selected as I2C3 clock
   *            @arg RCC_I2C3CLKSOURCE_CSI: CSI selected as I2C3 clock
   */
+#if defined(I2C5)
+#define __HAL_RCC_I2C3_CONFIG __HAL_RCC_I2C1235_CONFIG
+#else
 #define __HAL_RCC_I2C3_CONFIG __HAL_RCC_I2C123_CONFIG
+#endif /*I2C5*/
 
 /** @brief  macro to get the I2C3 clock source.
   * @retval The clock source can be one of the following values:
@@ -2306,7 +2378,11 @@ typedef struct
   *            @arg RCC_I2C3CLKSOURCE_HSI: HSI selected as I2C3 clock
   *            @arg RCC_I2C3CLKSOURCE_CSI: CSI selected as I2C3 clock
   */
+#if defined(I2C5)
+#define __HAL_RCC_GET_I2C3_SOURCE __HAL_RCC_GET_I2C1235_SOURCE
+#else
 #define __HAL_RCC_GET_I2C3_SOURCE __HAL_RCC_GET_I2C123_SOURCE
+#endif /*I2C5*/
 
 /** @brief macro to configure the I2C4 clock (I2C4CLK).
   *
@@ -2332,11 +2408,39 @@ typedef struct
   *            @arg RCC_I2C4CLKSOURCE_HSI: HSI selected as I2C4 clock
   *            @arg RCC_I2C4CLKSOURCE_CSI: CSI selected as I2C4 clock
   */
+#if defined(RCC_D3CCIPR_I2C4SEL)
 #define __HAL_RCC_GET_I2C4_SOURCE() ((uint32_t)(READ_BIT(RCC->D3CCIPR, RCC_D3CCIPR_I2C4SEL)))
+#else
+#define __HAL_RCC_GET_I2C4_SOURCE() ((uint32_t)(READ_BIT(RCC->SRDCCIPR, RCC_SRDCCIPR_I2C4SEL)))
+#endif /* RCC_D3CCIPR_I2C4SEL */
+
+#if defined(I2C5)
+/** @brief macro to configure the I2C5 clock (I2C5CLK).
+  *
+  * @param  __I2C5CLKSource__ specifies the I2C5 clock source.
+  *          This parameter can be one of the following values:
+  *            @arg RCC_I2C5CLKSOURCE_D2PCLK1: D2PCLK1 selected as I2C5 clock
+  *            @arg RCC_I2C5CLKSOURCE_PLL3: PLL3 selected as I2C5 clock
+  *            @arg RCC_I2C5CLKSOURCE_HSI: HSI selected as I2C5 clock
+  *            @arg RCC_I2C5CLKSOURCE_CSI: CSI selected as I2C5 clock
+  */
+#define __HAL_RCC_I2C5_CONFIG  __HAL_RCC_I2C1235_CONFIG
+#endif /* I2C5 */
+
+#if defined(I2C5)
+/** @brief  macro to get the I2C5 clock source.
+  * @retval The clock source can be one of the following values:
+  *            @arg RCC_I2C5CLKSOURCE_D2PCLK1: D2PCLK5 selected as I2C5 clock
+  *            @arg RCC_I2C5CLKSOURCE_PLL3: PLL3 selected as I2C5 clock
+  *            @arg RCC_I2C5CLKSOURCE_HSI: HSI selected as I2C5 clock
+  *            @arg RCC_I2C5CLKSOURCE_CSI: CSI selected as I2C5 clock
+  */
+#define __HAL_RCC_GET_I2C5_SOURCE __HAL_RCC_GET_I2C1235_SOURCE
+#endif /* I2C5 */
 
 /** @brief macro to configure the USART1/6/9* /10* clock (USART16CLK).
   *
-  * @param  __USART16CLKSource__ specifies the USART1/6/9* /10* clock source.
+  * @param  __USART16910CLKSource__ specifies the USART1/6/9* /10* clock source.
   *          This parameter can be one of the following values:
   *            @arg RCC_USART16CLKSOURCE_D2PCLK2: APB2 Clock selected as USART1/6/9* /10* clock
   *            @arg RCC_USART16CLKSOURCE_PLL2: PLL2_Q Clock selected as USART1/6/9* /10* clock
@@ -2348,11 +2452,16 @@ typedef struct
   * (*) : Available on some STM32H7 lines only.
   */
 #if defined(RCC_D2CCIP2R_USART16SEL)
-#define __HAL_RCC_USART16_CONFIG(__USART16CLKSource__) \
-                  MODIFY_REG(RCC->D2CCIP2R, RCC_D2CCIP2R_USART16SEL, (uint32_t)(__USART16CLKSource__))
-#else
+#define __HAL_RCC_USART16_CONFIG(__USART16910CLKSource__) \
+                  MODIFY_REG(RCC->D2CCIP2R, RCC_D2CCIP2R_USART16SEL, (uint32_t)(__USART16910CLKSource__))
+#elif defined(RCC_CDCCIP2R_USART16910SEL)
 #define __HAL_RCC_USART16910_CONFIG(__USART16910CLKSource__) \
                   MODIFY_REG(RCC->CDCCIP2R, RCC_CDCCIP2R_USART16910SEL, (uint32_t)(__USART16910CLKSource__))
+/* alias */
+#define __HAL_RCC_USART16_CONFIG  __HAL_RCC_USART16910_CONFIG
+#else  /* RCC_D2CCIP2R_USART16910SEL */
+#define __HAL_RCC_USART16910_CONFIG(__USART16910CLKSource__) \
+                  MODIFY_REG(RCC->D2CCIP2R, RCC_D2CCIP2R_USART16910SEL, (uint32_t)(__USART16910CLKSource__))
 /* alias */
 #define __HAL_RCC_USART16_CONFIG  __HAL_RCC_USART16910_CONFIG
 #endif /* RCC_D2CCIP2R_USART16SEL */
@@ -2370,10 +2479,14 @@ typedef struct
   */
 #if defined(RCC_D2CCIP2R_USART16SEL)
 #define __HAL_RCC_GET_USART16_SOURCE() ((uint32_t)(READ_BIT(RCC->D2CCIP2R, RCC_D2CCIP2R_USART16SEL)))
-#else
+#elif defined(RCC_CDCCIP2R_USART16910SEL)
 #define __HAL_RCC_GET_USART16910_SOURCE() ((uint32_t)(READ_BIT(RCC->CDCCIP2R, RCC_CDCCIP2R_USART16910SEL)))
 /* alias*/
 #define  __HAL_RCC_GET_USART16_SOURCE  __HAL_RCC_GET_USART16910_SOURCE
+#else  /* RCC_D2CCIP2R_USART16910SEL */
+#define __HAL_RCC_GET_USART16910_SOURCE() ((uint32_t)(READ_BIT(RCC->D2CCIP2R, RCC_D2CCIP2R_USART16910SEL)))
+/* alias */
+#define __HAL_RCC_GET_USART16_SOURCE  __HAL_RCC_GET_USART16910_SOURCE
 #endif /* RCC_D2CCIP2R_USART16SEL */
 
 /** @brief macro to configure the USART234578 clock (USART234578CLK).
@@ -2770,8 +2883,8 @@ typedef struct
 #define __HAL_RCC_LPTIM345_CONFIG(__LPTIM345CLKSource__) \
                   MODIFY_REG(RCC->D3CCIPR, RCC_D3CCIPR_LPTIM345SEL, (uint32_t)(__LPTIM345CLKSource__))
 #else
-#define __HAL_RCC_LPTIM345_CONFIG(__LPTIM3CLKSource__) \
-                  MODIFY_REG(RCC->SRDCCIPR, RCC_SRDCCIPR_LPTIM3SEL, (uint32_t)(__LPTIM3CLKSource__))
+#define __HAL_RCC_LPTIM345_CONFIG(__LPTIM345CLKSource__) \
+                  MODIFY_REG(RCC->SRDCCIPR, RCC_SRDCCIPR_LPTIM3SEL, (uint32_t)(__LPTIM345CLKSource__))
 #endif /* RCC_D3CCIPR_LPTIM345SEL */
 
 /** @brief  macro to get the LPTIM3/4/5 clock source.
@@ -2896,9 +3009,13 @@ typedef struct
   *            @arg RCC_RCC_OSPICLKSOURCE_PLL2  : PLL2_R Clock selected as OSPI clock
   *            @arg RCC_RCC_OSPICLKSOURCE_CLKP    CLKP selected as OSPI clock
   */
+#if defined(RCC_CDCCIPR_OCTOSPISEL)
 #define __HAL_RCC_OSPI_CONFIG(__OSPICLKSource__) \
                   MODIFY_REG(RCC->CDCCIPR, RCC_CDCCIPR_OCTOSPISEL, (uint32_t)(__OSPICLKSource__))
-
+#else
+#define __HAL_RCC_OSPI_CONFIG(__OSPICLKSource__) \
+                  MODIFY_REG(RCC->D1CCIPR, RCC_D1CCIPR_OCTOSPISEL, (uint32_t)(__OSPICLKSource__))
+#endif /* RCC_CDCCIPR_OCTOSPISEL */
 
 /** @brief  macro to get the OSPI clock source.
   * @retval The clock source can be one of the following values:
@@ -2907,7 +3024,11 @@ typedef struct
   *            @arg RCC_RCC_OSPICLKSOURCE_PLL2  : PLL2_R Clock selected as OSPI clock
   *            @arg RCC_RCC_OSPICLKSOURCE_CLKP    CLKP selected as OSPI clock
   */
+#if defined(RCC_CDCCIPR_OCTOSPISEL)
 #define __HAL_RCC_GET_OSPI_SOURCE() ((uint32_t)(READ_BIT(RCC->CDCCIPR, RCC_CDCCIPR_OCTOSPISEL)))
+#else
+#define __HAL_RCC_GET_OSPI_SOURCE() ((uint32_t)(READ_BIT(RCC->D1CCIPR, RCC_D1CCIPR_OCTOSPISEL)))
+#endif /* RCC_CDCCIPR_OCTOSPISEL */
 #endif /* defined(OCTOSPI1) || defined(OCTOSPI2) */
 
 
@@ -3013,12 +3134,12 @@ typedef struct
 #define __HAL_RCC_GET_ADC_SOURCE() ((uint32_t)(READ_BIT(RCC->SRDCCIPR, RCC_SRDCCIPR_ADCSEL)))
 #endif /* RCC_D3CCIPR_ADCSEL */
 
- /** @brief  Macro to configure the SWPMI1 clock
-  * @param  __SWPMI1CLKSource__ specifies the SWPMI1  clock source.
-  *         This parameter can be one of the following values:
-  *            @arg RCC_SWPMI1CLKSOURCE_D2PCLK1:  D2PCLK1 Clock selected as SWPMI1 clock
-  *            @arg RCC_SWPMI1CLKSOURCE_HSI: HSI Clock selected as SWPMI1 clock
-  */
+/** @brief  Macro to configure the SWPMI1 clock
+ * @param  __SWPMI1CLKSource__ specifies the SWPMI1  clock source.
+ *         This parameter can be one of the following values:
+ *            @arg RCC_SWPMI1CLKSOURCE_D2PCLK1:  D2PCLK1 Clock selected as SWPMI1 clock
+ *            @arg RCC_SWPMI1CLKSOURCE_HSI: HSI Clock selected as SWPMI1 clock
+ */
 #if defined(RCC_D2CCIP1R_SWPSEL)
 #define __HAL_RCC_SWPMI1_CONFIG(__SWPMI1CLKSource__) \
                   MODIFY_REG(RCC->D2CCIP1R, RCC_D2CCIP1R_SWPSEL, (uint32_t)(__SWPMI1CLKSource__))
@@ -3038,12 +3159,12 @@ typedef struct
 #define __HAL_RCC_GET_SWPMI1_SOURCE() ((uint32_t)(READ_BIT(RCC->CDCCIP1R, RCC_CDCCIP1R_SWPSEL)))
 #endif /* RCC_D2CCIP1R_SWPSEL */
 
- /** @brief  Macro to configure the DFSDM1 clock
-  * @param  __DFSDM1CLKSource__ specifies the DFSDM1  clock source.
-  *         This parameter can be one of the following values:
-  *            @arg RCC_DFSDM1CLKSOURCE_D2PCLK:  D2PCLK Clock selected as DFSDM1 clock
-  *            @arg RCC_DFSDM1CLKSOURCE_SYS:     System Clock selected as DFSDM1 clock
-  */
+/** @brief  Macro to configure the DFSDM1 clock
+ * @param  __DFSDM1CLKSource__ specifies the DFSDM1  clock source.
+ *         This parameter can be one of the following values:
+ *            @arg RCC_DFSDM1CLKSOURCE_D2PCLK:  D2PCLK Clock selected as DFSDM1 clock
+ *            @arg RCC_DFSDM1CLKSOURCE_SYS:     System Clock selected as DFSDM1 clock
+ */
 #if defined(RCC_D2CCIP1R_DFSDM1SEL)
 #define __HAL_RCC_DFSDM1_CONFIG(__DFSDM1CLKSource__) \
                   MODIFY_REG(RCC->D2CCIP1R, RCC_D2CCIP1R_DFSDM1SEL, (uint32_t)(__DFSDM1CLKSource__))
@@ -3064,12 +3185,12 @@ typedef struct
 #endif /* RCC_D2CCIP1R_DFSDM1SEL */
 
 #if defined(DFSDM2_BASE)
- /** @brief  Macro to configure the DFSDM2 clock
-  * @param  __DFSDM2CLKSource__ specifies the DFSDM2  clock source.
-  *         This parameter can be one of the following values:
-  *            @arg RCC_DFSDM2CLKSOURCE_SRDPCLK1:  SRDPCLK1 (APB4) selected as DFSDM2 clock
-  *            @arg RCC_DFSDM2CLKSOURCE_SYS:   System Clock selected as DFSDM2 clock
-  */
+/** @brief  Macro to configure the DFSDM2 clock
+ * @param  __DFSDM2CLKSource__ specifies the DFSDM2  clock source.
+ *         This parameter can be one of the following values:
+ *            @arg RCC_DFSDM2CLKSOURCE_SRDPCLK1:  SRDPCLK1 (APB4) selected as DFSDM2 clock
+ *            @arg RCC_DFSDM2CLKSOURCE_SYS:   System Clock selected as DFSDM2 clock
+ */
 #define __HAL_RCC_DFSDM2_CONFIG(__DFSDM2CLKSource__) \
                   MODIFY_REG(RCC->SRDCCIPR, RCC_SRDCCIPR_DFSDM2SEL, (uint32_t)(__DFSDM2CLKSource__))
 
@@ -3094,7 +3215,7 @@ typedef struct
                   MODIFY_REG(RCC->D2CCIP2R, RCC_D2CCIP2R_CECSEL, (uint32_t)(__CECCLKSource__))
 #else
 #define __HAL_RCC_CEC_CONFIG(__CECCLKSource__) \
-                  MODIFY_REG(RCC->D2CCIP2R, RCC_CDCCIP2R_CECSEL, (uint32_t)(__CECCLKSource__))
+                  MODIFY_REG(RCC->CDCCIP2R, RCC_CDCCIP2R_CECSEL, (uint32_t)(__CECCLKSource__))
 #endif /* RCC_D2CCIP2R_CECSEL */
 
 /** @brief  macro to get the CEC clock source.
@@ -3277,7 +3398,7 @@ typedef struct
   * @param  __RCC_SPI45CLKSource__ defines the SPI4/5 clock source. This clock is derived
   *         from system PCLK, PLL2, PLL3, OSC
   *          This parameter can be one of the following values:
-  *             @arg RCC_SPI45CLKSOURCE_D2PCLK1:SPI4/5 clock = D2PCLK1
+  *             @arg RCC_SPI45CLKSOURCE_D2PCLK2:SPI4/5 clock = D2PCLK2
   *             @arg RCC_SPI45CLKSOURCE_PLL2:   SPI4/5 clock = PLL2
   *             @arg RCC_SPI45CLKSOURCE_PLL3:   SPI4/5 clock = PLL3
   *             @arg RCC_SPI45CLKSOURCE_HSI:    SPI4/5 clock = HSI
@@ -3295,7 +3416,7 @@ typedef struct
 
 /** @brief  Macro to get the SPI4/5 clock source.
   * @retval The clock source can be one of the following values:
-  *             @arg RCC_SPI45CLKSOURCE_D2PCLK1:SPI4/5 clock = D2PCLK1
+  *             @arg RCC_SPI45CLKSOURCE_D2PCLK2:SPI4/5 clock = D2PCLK2
   *             @arg RCC_SPI45CLKSOURCE_PLL2:   SPI4/5 clock = PLL2
   *             @arg RCC_SPI45CLKSOURCE_PLL3:   SPI4/5 clock = PLL3
   *             @arg RCC_SPI45CLKSOURCE_HSI:    SPI4/5 clock = HSI
@@ -3313,7 +3434,7 @@ typedef struct
   * @param  __RCC_SPI4CLKSource__ defines the SPI4 clock source. This clock is derived
   *         from system PCLK, PLL2, PLL3, OSC
   *          This parameter can be one of the following values:
-  *             @arg RCC_SPI4CLKSOURCE_D2PCLK1:SPI4 clock = D2PCLK1
+  *             @arg RCC_SPI4CLKSOURCE_D2PCLK2:SPI4 clock = D2PCLK2
   *             @arg RCC_SPI4CLKSOURCE_PLL2:   SPI4 clock = PLL2
   *             @arg RCC_SPI4CLKSOURCE_PLL3:   SPI4 clock = PLL3
   *             @arg RCC_SPI4CLKSOURCE_HSI:    SPI4 clock = HSI
@@ -3325,7 +3446,7 @@ typedef struct
 
 /** @brief  Macro to get the SPI4 clock source.
   * @retval The clock source can be one of the following values:
-  *             @arg RCC_SPI4CLKSOURCE_D2PCLK1:SPI4 clock = D2PCLK1
+  *             @arg RCC_SPI4CLKSOURCE_D2PCLK2:SPI4 clock = D2PCLK2
   *             @arg RCC_SPI4CLKSOURCE_PLL2:   SPI4 clock = PLL2
   *             @arg RCC_SPI4CLKSOURCE_PLL3:   SPI4 clock = PLL3
   *             @arg RCC_SPI4CLKSOURCE_HSI:    SPI4 clock = HSI
@@ -3339,7 +3460,7 @@ typedef struct
   * @param  __RCC_SPI5CLKSource__ defines the SPI5 clock source. This clock is derived
   *         from system PCLK, PLL2, PLL3, OSC
   *          This parameter can be one of the following values:
-  *             @arg RCC_SPI5CLKSOURCE_D2PCLK1:SPI5 clock = D2PCLK1
+  *             @arg RCC_SPI5CLKSOURCE_D2PCLK2:SPI5 clock = D2PCLK2
   *             @arg RCC_SPI5CLKSOURCE_PLL2:   SPI5 clock = PLL2
   *             @arg RCC_SPI5CLKSOURCE_PLL3:   SPI5 clock = PLL3
   *             @arg RCC_SPI5CLKSOURCE_HSI:    SPI5 clock = HSI
@@ -3351,7 +3472,7 @@ typedef struct
 
 /** @brief  Macro to get the SPI5 clock source.
   * @retval The clock source can be one of the following values:
-  *             @arg RCC_SPI5CLKSOURCE_D2PCLK1:SPI5 clock = D2PCLK1
+  *             @arg RCC_SPI5CLKSOURCE_D2PCLK2:SPI5 clock = D2PCLK2
   *             @arg RCC_SPI5CLKSOURCE_PLL2:   SPI5 clock = PLL2
   *             @arg RCC_SPI5CLKSOURCE_PLL3:   SPI5 clock = PLL3
   *             @arg RCC_SPI5CLKSOURCE_HSI:    SPI5 clock = HSI
@@ -3455,10 +3576,6 @@ typedef struct
 #endif /* RCC_D2CCIP2R_RNGSEL */
 
 #if defined(HRTIM1)
-/** @defgroup RCCEx_HRTIMx_Clock_Config RCC Extended HRTIMx Clock Config
-  * @ingroup RTEMSBSPsARMSTM32H7
-  * @{
-  */
 /** @brief  Macro to configure the HRTIM1 prescaler clock source.
   * @param  __HRTIM1CLKSource__ specifies the HRTIM1 prescaler clock source.
   *         This parameter can be one of the following values:
@@ -3490,10 +3607,6 @@ typedef struct
                                                  RCC->CFGR |= (__PRESC__);       \
                                                 }while(0)
 
-/**
-  * @}
-  */
-    
 /**
   * @brief Enable the RCC LSE CSS Extended Interrupt Line.
   * @retval None
@@ -3620,7 +3733,7 @@ typedef struct
   * @retval None.
   */
 #define __HAL_RCC_LSECSS_EXTI_GENERATE_SWIT()  SET_BIT(EXTI->SWIER1, RCC_EXTI_LINE_LSECSS)
- 
+
 /**
   * @brief  Enable the specified CRS interrupts.
   * @param  __INTERRUPT__ specifies the CRS interrupt sources to be enabled.
@@ -3725,10 +3838,9 @@ typedef struct
                                                  } \
                                                } while(0)
 
- /** @defgroup RCCEx_CRS_Extended_Features RCCEx CRS Extended Features
-  * @ingroup RTEMSBSPsARMSTM32H7
-  * @{
-  */
+/** @defgroup RCCEx_CRS_Extended_Features RCCEx CRS Extended Features
+ * @{
+ */
 /**
   * @brief  Enable the oscillator clock for frequency error counter.
   * @note   when the CEN bit is set the CRS_CFGR register becomes write-protected.
@@ -3779,18 +3891,22 @@ typedef struct
 
 
 /* Exported functions --------------------------------------------------------*/
+/** @addtogroup RCCEx_Exported_Functions
+ * @{
+ */
+
 /** @addtogroup RCCEx_Exported_Functions_Group1
   * @{
   */
-HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(const RCC_PeriphCLKInitTypeDef  *PeriphClkInit);
+HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit);
 void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit);
-uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk);
+uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk);
 uint32_t HAL_RCCEx_GetD1PCLK1Freq(void);
 uint32_t HAL_RCCEx_GetD3PCLK1Freq(void);
 uint32_t HAL_RCCEx_GetD1SysClockFreq(void);
-void     HAL_RCCEx_GetPLL1ClockFreq(PLL1_ClocksTypeDef* PLL1_Clocks);
-void     HAL_RCCEx_GetPLL2ClockFreq(PLL2_ClocksTypeDef* PLL2_Clocks);
-void     HAL_RCCEx_GetPLL3ClockFreq(PLL3_ClocksTypeDef* PLL3_Clocks);
+void     HAL_RCCEx_GetPLL1ClockFreq(PLL1_ClocksTypeDef *PLL1_Clocks);
+void     HAL_RCCEx_GetPLL2ClockFreq(PLL2_ClocksTypeDef *PLL2_Clocks);
+void     HAL_RCCEx_GetPLL3ClockFreq(PLL3_ClocksTypeDef *PLL3_Clocks);
 /**
   * @}
   */
@@ -3834,12 +3950,15 @@ void     HAL_RCCEx_CRS_ErrorCallback(uint32_t Error);
   * @}
   */
 
- /* Private macros ------------------------------------------------------------*/
+/**
+  * @}
+  */
+
+/* Private macros ------------------------------------------------------------*/
 /** @addtogroup RCCEx_Private_Macros RCCEx Private Macros
   * @{
   */
 /** @defgroup RCCEx_IS_RCC_Definitions RCC Private macros to check input parameters
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3968,10 +4087,19 @@ void     HAL_RCCEx_CRS_ErrorCallback(uint32_t Error);
                                          ((SOURCE) == RCC_LPUART1CLKSOURCE_LSE)     || \
                                          ((SOURCE) == RCC_LPUART1CLKSOURCE_HSI))
 
+#if defined(I2C5)
+#define IS_RCC_I2C1235CLKSOURCE(SOURCE)   (((SOURCE) == RCC_I2C1235CLKSOURCE_PLL3)   || \
+                                          ((SOURCE) == RCC_I2C1235CLKSOURCE_HSI)     || \
+                                          ((SOURCE) == RCC_I2C1235CLKSOURCE_D2PCLK1) || \
+                                          ((SOURCE) == RCC_I2C1235CLKSOURCE_CSI))
+
+#define IS_RCC_I2C123CLKSOURCE    IS_RCC_I2C1235CLKSOURCE  /* For  API Backward compatibility */
+#else
 #define IS_RCC_I2C123CLKSOURCE(SOURCE)   (((SOURCE) == RCC_I2C123CLKSOURCE_PLL3)   || \
                                           ((SOURCE) == RCC_I2C123CLKSOURCE_HSI)    || \
                                           ((SOURCE) == RCC_I2C123CLKSOURCE_D2PCLK1)|| \
                                           ((SOURCE) == RCC_I2C123CLKSOURCE_CSI))
+#endif /*I2C5*/
 
 #define IS_RCC_I2C1CLKSOURCE(SOURCE)   (((SOURCE) == RCC_I2C1CLKSOURCE_PLL3)   || \
                                         ((SOURCE) == RCC_I2C1CLKSOURCE_HSI)    || \
@@ -3991,7 +4119,14 @@ void     HAL_RCCEx_CRS_ErrorCallback(uint32_t Error);
 #define IS_RCC_I2C4CLKSOURCE(SOURCE)   (((SOURCE) == RCC_I2C4CLKSOURCE_PLL3)   || \
                                         ((SOURCE) == RCC_I2C4CLKSOURCE_HSI)    || \
                                         ((SOURCE) == RCC_I2C4CLKSOURCE_D3PCLK1)|| \
-                                        ((SOURCE) == RCC_I2C3CLKSOURCE_CSI))
+                                        ((SOURCE) == RCC_I2C4CLKSOURCE_CSI))
+
+#if defined(I2C5)
+#define IS_RCC_I2C5CLKSOURCE(SOURCE)   (((SOURCE) == RCC_I2C5CLKSOURCE_PLL3)   || \
+                                        ((SOURCE) == RCC_I2C5CLKSOURCE_HSI)    || \
+                                        ((SOURCE) == RCC_I2C5CLKSOURCE_D2PCLK1)|| \
+                                        ((SOURCE) == RCC_I2C5CLKSOURCE_CSI))
+#endif /*I2C5*/
 
 #define IS_RCC_RNGCLKSOURCE(SOURCE)    (((SOURCE) == RCC_RNGCLKSOURCE_HSI48)|| \
                                         ((SOURCE) == RCC_RNGCLKSOURCE_PLL)  || \
@@ -4087,7 +4222,7 @@ void     HAL_RCCEx_CRS_ErrorCallback(uint32_t Error);
                 ((__SOURCE__) == RCC_SPI3CLKSOURCE_PIN))
 
 #define IS_RCC_SPI45CLK(__SOURCE__)   \
-               (((__SOURCE__) == RCC_SPI45CLKSOURCE_D2PCLK1)  || \
+               (((__SOURCE__) == RCC_SPI45CLKSOURCE_D2PCLK2)  || \
                 ((__SOURCE__) == RCC_SPI45CLKSOURCE_PLL2)     || \
                 ((__SOURCE__) == RCC_SPI45CLKSOURCE_PLL3)     || \
                 ((__SOURCE__) == RCC_SPI45CLKSOURCE_HSI)      || \
@@ -4095,7 +4230,7 @@ void     HAL_RCCEx_CRS_ErrorCallback(uint32_t Error);
                 ((__SOURCE__) == RCC_SPI45CLKSOURCE_HSE))
 
 #define IS_RCC_SPI4CLK(__SOURCE__)   \
-               (((__SOURCE__) == RCC_SPI4CLKSOURCE_D2PCLK1)  || \
+               (((__SOURCE__) == RCC_SPI4CLKSOURCE_D2PCLK2)  || \
                 ((__SOURCE__) == RCC_SPI4CLKSOURCE_PLL2)     || \
                 ((__SOURCE__) == RCC_SPI4CLKSOURCE_PLL3)     || \
                 ((__SOURCE__) == RCC_SPI4CLKSOURCE_HSI)      || \
@@ -4103,7 +4238,7 @@ void     HAL_RCCEx_CRS_ErrorCallback(uint32_t Error);
                 ((__SOURCE__) == RCC_SPI4CLKSOURCE_HSE))
 
 #define IS_RCC_SPI5CLK(__SOURCE__)   \
-               (((__SOURCE__) == RCC_SPI5CLKSOURCE_D2PCLK1)|| \
+               (((__SOURCE__) == RCC_SPI5CLKSOURCE_D2PCLK2)|| \
                 ((__SOURCE__) == RCC_SPI5CLKSOURCE_PLL2)   || \
                 ((__SOURCE__) == RCC_SPI5CLKSOURCE_PLL3)   || \
                 ((__SOURCE__) == RCC_SPI5CLKSOURCE_HSI)    || \
@@ -4172,8 +4307,6 @@ void     HAL_RCCEx_CRS_ErrorCallback(uint32_t Error);
 
 #define IS_RCC_PLL3VCO_VALUE(VALUE) (((VALUE) == RCC_PLL3VCOWIDE)  || \
                                     ((VALUE) == RCC_PLL3VCOMEDIUM))
-
-#define IS_RCC_PLLFRACN_VALUE(VALUE) ((VALUE) <=8191U)
 
 #define IS_RCC_LPTIM1CLK(SOURCE)       (((SOURCE) == RCC_LPTIM1CLKSOURCE_D2PCLK1)|| \
                                         ((SOURCE) == RCC_LPTIM1CLKSOURCE_PLL2)   || \
@@ -4337,10 +4470,13 @@ void     HAL_RCCEx_CRS_ErrorCallback(uint32_t Error);
   * @}
   */
 
+/**
+  * @}
+  */
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* STM32H7xx_HAL_RCC_EX_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

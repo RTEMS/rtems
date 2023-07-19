@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -41,7 +40,6 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup DAC_Exported_Types DAC Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -84,13 +82,15 @@ typedef struct
   void (* ConvHalfCpltCallbackCh1)        (struct __DAC_HandleTypeDef *hdac);
   void (* ErrorCallbackCh1)               (struct __DAC_HandleTypeDef *hdac);
   void (* DMAUnderrunCallbackCh1)         (struct __DAC_HandleTypeDef *hdac);
+
   void (* ConvCpltCallbackCh2)            (struct __DAC_HandleTypeDef *hdac);
   void (* ConvHalfCpltCallbackCh2)        (struct __DAC_HandleTypeDef *hdac);
   void (* ErrorCallbackCh2)               (struct __DAC_HandleTypeDef *hdac);
   void (* DMAUnderrunCallbackCh2)         (struct __DAC_HandleTypeDef *hdac);
 
+
   void (* MspInitCallback)                (struct __DAC_HandleTypeDef *hdac);
-  void (* MspDeInitCallback )             (struct __DAC_HandleTypeDef *hdac);
+  void (* MspDeInitCallback)              (struct __DAC_HandleTypeDef *hdac);
 #endif /* USE_HAL_DAC_REGISTER_CALLBACKS */
 
 } DAC_HandleTypeDef;
@@ -137,9 +137,7 @@ typedef struct
   uint32_t DAC_TrimmingValue;             /*!< Specifies the offset trimming value
                                                i.e. when DAC_SampleAndHold is DAC_TRIMMING_USER.
                                                This parameter must be a number between Min_Data = 1 and Max_Data = 31 */
-
   DAC_SampleAndHoldConfTypeDef  DAC_SampleAndHoldConfig;  /*!< Sample and Hold settings */
-
 } DAC_ChannelConfTypeDef;
 
 #if (USE_HAL_DAC_REGISTER_CALLBACKS == 1)
@@ -152,10 +150,12 @@ typedef enum
   HAL_DAC_CH1_HALF_COMPLETE_CB_ID            = 0x01U,  /*!< DAC CH1 half Complete Callback ID */
   HAL_DAC_CH1_ERROR_ID                       = 0x02U,  /*!< DAC CH1 error Callback ID         */
   HAL_DAC_CH1_UNDERRUN_CB_ID                 = 0x03U,  /*!< DAC CH1 underrun Callback ID      */
+
   HAL_DAC_CH2_COMPLETE_CB_ID                 = 0x04U,  /*!< DAC CH2 Complete Callback ID      */
   HAL_DAC_CH2_HALF_COMPLETE_CB_ID            = 0x05U,  /*!< DAC CH2 half Complete Callback ID */
   HAL_DAC_CH2_ERROR_ID                       = 0x06U,  /*!< DAC CH2 error Callback ID         */
   HAL_DAC_CH2_UNDERRUN_CB_ID                 = 0x07U,  /*!< DAC CH2 underrun Callback ID      */
+
   HAL_DAC_MSPINIT_CB_ID                      = 0x08U,  /*!< DAC MspInit Callback ID           */
   HAL_DAC_MSPDEINIT_CB_ID                    = 0x09U,  /*!< DAC MspDeInit Callback ID         */
   HAL_DAC_ALL_CB_ID                          = 0x0AU   /*!< DAC All ID                        */
@@ -174,12 +174,10 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup DAC_Exported_Constants DAC Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DAC_Error_Code DAC Error Code
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  HAL_DAC_ERROR_NONE              0x00U    /*!< No error                          */
@@ -196,7 +194,6 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_trigger_selection DAC trigger selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_TRIGGER_NONE                0x00000000U                                                                       /*!< Conversion is automatic once the DAC_DHRxxxx register has been loaded, and not by external trigger */
@@ -231,7 +228,6 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_output_buffer DAC output buffer
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_OUTPUTBUFFER_ENABLE            0x00000000U
@@ -242,17 +238,17 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_Channel_selection DAC Channel selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_CHANNEL_1                      0x00000000U
+
 #define DAC_CHANNEL_2                      0x00000010U
+
 /**
   * @}
   */
 
 /** @defgroup DAC_data_alignment DAC data alignment
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_ALIGN_12B_R                    0x00000000U
@@ -264,29 +260,30 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_flags_definition DAC flags definition
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_FLAG_DMAUDR1                   (DAC_SR_DMAUDR1)
+
 #define DAC_FLAG_DMAUDR2                   (DAC_SR_DMAUDR2)
+
 
 /**
   * @}
   */
 
 /** @defgroup DAC_IT_definition  DAC IT definition
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_IT_DMAUDR1                   (DAC_SR_DMAUDR1)
+
 #define DAC_IT_DMAUDR2                   (DAC_SR_DMAUDR2)
+
 
 /**
   * @}
   */
 
 /** @defgroup DAC_ConnectOnChipPeripheral DAC ConnectOnChipPeripheral
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_CHIPCONNECT_EXTERNAL       (1UL << 0)
@@ -298,7 +295,6 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_UserTrimming DAC User Trimming
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_TRIMMING_FACTORY        (0x00000000UL)        /*!< Factory trimming */
@@ -308,7 +304,6 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_SampleAndHold DAC power mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_SAMPLEANDHOLD_DISABLE     (0x00000000UL)
@@ -324,7 +319,6 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 /* Exported macro ------------------------------------------------------------*/
 
 /** @defgroup DAC_Exported_Macros DAC Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -364,11 +358,13 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 #define DAC_DHR12R1_ALIGNMENT(__ALIGNMENT__) (0x00000008UL + (__ALIGNMENT__))
 
+
 /** @brief  Set DHR12R2 alignment.
   * @param  __ALIGNMENT__ specifies the DAC alignment
   * @retval None
   */
 #define DAC_DHR12R2_ALIGNMENT(__ALIGNMENT__) (0x00000014UL + (__ALIGNMENT__))
+
 
 /** @brief  Set DHR12RD alignment.
   * @param  __ALIGNMENT__ specifies the DAC alignment
@@ -404,7 +400,8 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   *            @arg DAC_IT_DMAUDR2 DAC channel 2 DMA underrun interrupt
   * @retval State of interruption (SET or RESET)
   */
-#define __HAL_DAC_GET_IT_SOURCE(__HANDLE__, __INTERRUPT__) (((__HANDLE__)->Instance->CR & (__INTERRUPT__)) == (__INTERRUPT__))
+#define __HAL_DAC_GET_IT_SOURCE(__HANDLE__, __INTERRUPT__) (((__HANDLE__)->Instance->CR\
+                                                             & (__INTERRUPT__)) == (__INTERRUPT__))
 
 /** @brief  Get the selected DAC's flag status.
   * @param  __HANDLE__ specifies the DAC handle.
@@ -433,7 +430,6 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 /* Private macro -------------------------------------------------------------*/
 
 /** @defgroup DAC_Private_Macros DAC Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_DAC_OUTPUT_BUFFER_STATE(STATE) (((STATE) == DAC_OUTPUTBUFFER_ENABLE) || \
@@ -530,7 +526,6 @@ uint32_t HAL_DAC_GetError(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_Private_Functions DAC Private Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 void DAC_DMAConvCpltCh1(DMA_HandleTypeDef *hdma);
@@ -555,7 +550,5 @@ void DAC_DMAHalfConvCpltCh1(DMA_HandleTypeDef *hdma);
 #endif
 
 
-#endif /*STM32H7xx_HAL_DAC_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif /* STM32H7xx_HAL_DAC_H */
 

@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -35,7 +34,6 @@ extern "C" {
 #if defined (WWDG1) || defined (WWDG2)
 
 /** @defgroup WWDG_LL WWDG
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -46,12 +44,10 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup WWDG_LL_Exported_Constants WWDG Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup WWDG_LL_EC_IT IT Defines
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_WWDG_ReadReg and  LL_WWDG_WriteReg functions
   * @{
   */
@@ -61,7 +57,6 @@ extern "C" {
   */
 
 /** @defgroup WWDG_LL_EC_PRESCALER  PRESCALER
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_WWDG_PRESCALER_1                 0x00000000u                                               /*!< WWDG counter clock = (PCLK1/4096)/1 */
@@ -82,11 +77,9 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup WWDG_LL_Exported_Macros WWDG Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup WWDG_LL_EM_WRITE_READ Common Write and read registers macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -115,12 +108,10 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup WWDG_LL_Exported_Functions WWDG Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup WWDG_LL_EF_Configuration Configuration
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -254,7 +245,6 @@ __STATIC_INLINE uint32_t LL_WWDG_GetWindow(WWDG_TypeDef *WWDGx)
   */
 
 /** @defgroup WWDG_LL_EF_FLAG_Management FLAG_Management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -287,7 +277,6 @@ __STATIC_INLINE void LL_WWDG_ClearFlag_EWKUP(WWDG_TypeDef *WWDGx)
   */
 
 /** @defgroup WWDG_LL_EF_IT_Management IT_Management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -337,5 +326,3 @@ __STATIC_INLINE uint32_t LL_WWDG_IsEnabledIT_EWKUP(WWDG_TypeDef *WWDGx)
 #endif
 
 #endif /* STM32H7xx_LL_WWDG_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

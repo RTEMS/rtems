@@ -10,6 +10,17 @@
   *           + Peripheral Control functions
   *           + Peripheral State functions
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                   ##### How to use this driver #####
@@ -199,18 +210,6 @@
     and weak (surcharged) callbacks are used.
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -221,7 +220,6 @@
   */
 
 /** @defgroup SAI SAI
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SAI HAL module driver
   * @{
   */
@@ -230,7 +228,6 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /** @defgroup SAI_Private_Typedefs  SAI Private Typedefs
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -244,12 +241,12 @@ typedef enum
 
 /* Private define ------------------------------------------------------------*/
 /** @defgroup SAI_Private_Constants  SAI Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
-#define SAI_FIFO_SIZE            8U
 #define SAI_DEFAULT_TIMEOUT      4U
 #define SAI_LONG_TIMEOUT         1000U
+#define SAI_SPDIF_FRAME_LENGTH   64U
+#define SAI_AC97_FRAME_LENGTH    256U
 /**
   * @}
   */
@@ -258,7 +255,6 @@ typedef enum
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup SAI_Private_Functions  SAI Private Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void SAI_FillFifo(SAI_HandleTypeDef *hsai);
@@ -286,12 +282,10 @@ static void SAI_DMAAbort(DMA_HandleTypeDef *hdma);
 
 /* Exported functions ---------------------------------------------------------*/
 /** @defgroup SAI_Exported_Functions SAI Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SAI_Exported_Functions_Group1 Initialization and de-initialization functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -398,7 +392,7 @@ HAL_StatusTypeDef HAL_SAI_Init(SAI_HandleTypeDef *hsai)
   assert_param(IS_SAI_BLOCK_FIRST_BIT(hsai->Init.FirstBit));
   assert_param(IS_SAI_BLOCK_CLOCK_STROBING(hsai->Init.ClockStrobing));
   assert_param(IS_SAI_BLOCK_SYNCHRO(hsai->Init.Synchro));
-#if defined(SAI_VER_V2_X) 
+#if defined(SAI_VER_V2_X)
   /* SAI Peripheral version depends on STM32H7 device revision ID */
   if (HAL_GetREVID() >= REV_ID_B) /* STM32H7xx Rev.B and above */
   {
@@ -623,8 +617,26 @@ HAL_StatusTypeDef HAL_SAI_Init(SAI_HandleTypeDef *hsai)
     if (hsai->Init.NoDivider == SAI_MASTERDIVIDER_DISABLE)
     {
       /* NODIV = 1 */
+      uint32_t tmpframelength;
+
+      if (hsai->Init.Protocol == SAI_SPDIF_PROTOCOL)
+      {
+        /* For SPDIF protocol, frame length is set by hardware to 64 */
+        tmpframelength = SAI_SPDIF_FRAME_LENGTH;
+      }
+      else if (hsai->Init.Protocol == SAI_AC97_PROTOCOL)
+      {
+        /* For AC97 protocol, frame length is set by hardware to 256 */
+        tmpframelength = SAI_AC97_FRAME_LENGTH;
+      }
+      else
+      {
+        /* For free protocol, frame length is set by user */
+        tmpframelength = hsai->FrameInit.FrameLength;
+      }
+
       /* (freq x 10) to keep Significant digits */
-      tmpval = (freq * 10U) / (hsai->Init.AudioFrequency * hsai->FrameInit.FrameLength);
+      tmpval = (freq * 10U) / (hsai->Init.AudioFrequency * tmpframelength);
     }
     else
     {
@@ -641,7 +653,16 @@ HAL_StatusTypeDef HAL_SAI_Init(SAI_HandleTypeDef *hsai)
     {
       hsai->Init.Mckdiv += 1U;
     }
+
+    /* For SPDIF protocol, SAI shall provide a bit clock twice faster the symbol-rate */
+    if (hsai->Init.Protocol == SAI_SPDIF_PROTOCOL)
+    {
+      hsai->Init.Mckdiv = hsai->Init.Mckdiv >> 1;
+    }
   }
+
+  /* Check the SAI Block master clock divider parameter */
+  assert_param(IS_SAI_BLOCK_MASTER_DIVIDER(hsai->Init.Mckdiv));
 
   /* Compute CKSTR bits of SAI CR1 according ClockStrobing and AudioMode */
   if ((hsai->Init.AudioMode == SAI_MODEMASTER_TX) || (hsai->Init.AudioMode == SAI_MODESLAVE_TX))
@@ -1048,7 +1069,6 @@ HAL_StatusTypeDef HAL_SAI_UnRegisterCallback(SAI_HandleTypeDef        *hsai,
   */
 
 /** @defgroup SAI_Exported_Functions_Group2 IO operation functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Data transfers functions
   *
 @verbatim
@@ -1668,7 +1688,7 @@ HAL_StatusTypeDef HAL_SAI_Transmit_DMA(SAI_HandleTypeDef *hsai, uint8_t *pData, 
     /* Enable SAI Tx DMA Request */
     hsai->Instance->CR1 |= SAI_xCR1_DMAEN;
 
-    /* Wait untill FIFO is not empty */
+    /* Wait until FIFO is not empty */
     while ((hsai->Instance->SR & SAI_xSR_FLVL) == SAI_FIFOSTATUS_EMPTY)
     {
       /* Check for the Timeout */
@@ -1867,7 +1887,7 @@ void HAL_SAI_IRQHandler(SAI_HandleTypeDef *hsai)
     uint32_t cr1config = hsai->Instance->CR1;
     uint32_t tmperror;
 
-    /* SAI Fifo request interrupt occured ------------------------------------*/
+    /* SAI Fifo request interrupt occurred ------------------------------------*/
     if (((itflags & SAI_xSR_FREQ) == SAI_xSR_FREQ) && ((itsources & SAI_IT_FREQ) == SAI_IT_FREQ))
     {
       hsai->InterruptServiceRoutine(hsai);
@@ -2210,7 +2230,6 @@ __weak void HAL_SAI_ErrorCallback(SAI_HandleTypeDef *hsai)
   */
 
 /** @defgroup SAI_Exported_Functions_Group3 Peripheral State functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Peripheral State functions
   *
 @verbatim
@@ -2231,7 +2250,7 @@ __weak void HAL_SAI_ErrorCallback(SAI_HandleTypeDef *hsai)
   *              the configuration information for SAI module.
   * @retval HAL state
   */
-HAL_SAI_StateTypeDef HAL_SAI_GetState(SAI_HandleTypeDef *hsai)
+HAL_SAI_StateTypeDef HAL_SAI_GetState(const SAI_HandleTypeDef *hsai)
 {
   return hsai->State;
 }
@@ -2242,7 +2261,7 @@ HAL_SAI_StateTypeDef HAL_SAI_GetState(SAI_HandleTypeDef *hsai)
   *              the configuration information for the specified SAI Block.
   * @retval SAI Error Code
   */
-uint32_t HAL_SAI_GetError(SAI_HandleTypeDef *hsai)
+uint32_t HAL_SAI_GetError(const SAI_HandleTypeDef *hsai)
 {
   return hsai->ErrorCode;
 }
@@ -2514,7 +2533,7 @@ static uint32_t SAI_InterruptFlag(const SAI_HandleTypeDef *hsai, SAI_ModeTypedef
   */
 static HAL_StatusTypeDef SAI_Disable(SAI_HandleTypeDef *hsai)
 {
-  register uint32_t count = SAI_DEFAULT_TIMEOUT * (SystemCoreClock / 7U / 1000U);
+  uint32_t count = SAI_DEFAULT_TIMEOUT * (SystemCoreClock / 7U / 1000U);
   HAL_StatusTypeDef status = HAL_OK;
 
   /* Disable the SAI instance */
@@ -2925,4 +2944,3 @@ static void SAI_DMAAbort(DMA_HandleTypeDef *hdma)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -35,7 +34,6 @@ extern "C" {
 #if defined (COMP1) || defined (COMP2)
 
 /** @defgroup COMP_LL COMP
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -43,7 +41,6 @@ extern "C" {
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup COMP_LL_Private_Constants COMP Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -55,10 +52,15 @@ extern "C" {
   */
 
 /* Private macros ------------------------------------------------------------*/
+/** @defgroup COMP_LL_Private_Macros COMP Private Macros
+  * @{
+  */
+/**
+  * @}
+  */
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup COMP_LL_ES_INIT COMP Exported Init structure
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -106,12 +108,10 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup COMP_LL_Exported_Constants COMP Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup COMP_LL_EC_COMMON_WINDOWMODE Comparator common modes - Window mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_COMP_WINDOWMODE_DISABLE                 (0x00000000UL)          /*!< Window mode disable: Comparators 1 and 2 are independent */
@@ -121,7 +121,6 @@ typedef struct
   */
 
 /** @defgroup COMP_LL_EC_POWERMODE Comparator modes - Power mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_COMP_POWERMODE_HIGHSPEED     (0x00000000UL)                                /*!< COMP power mode to high speed */
@@ -132,7 +131,6 @@ typedef struct
   */
 
 /** @defgroup COMP_LL_EC_INPUT_PLUS Comparator inputs - Input plus (input non-inverting) selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_COMP_INPUT_PLUS_IO1          (0x00000000UL)                           /*!< Comparator input plus connected to IO1 (pin PB0 for COMP1, pin PE9 for COMP2) */
@@ -145,7 +143,6 @@ typedef struct
   */
 
 /** @defgroup COMP_LL_EC_INPUT_MINUS Comparator inputs - Input minus (input inverting) selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_COMP_INPUT_MINUS_1_4VREFINT      (                                                                                        COMP_CFGRx_SCALEN | COMP_CFGRx_BRGEN)   /*!< Comparator input minus connected to 1/4 VrefInt  */
@@ -165,7 +162,6 @@ typedef struct
   */
 
 /** @defgroup COMP_LL_EC_INPUT_HYSTERESIS Comparator input - Hysteresis
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_COMP_HYSTERESIS_NONE         (0x00000000UL)                            /*!< No hysteresis */
@@ -177,7 +173,6 @@ typedef struct
   */
 
 /** @defgroup COMP_LL_EC_OUTPUT_POLARITY Comparator output - Output polarity
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_COMP_OUTPUTPOL_NONINVERTED   (0x00000000UL)          /*!< COMP output polarity is not inverted: comparator output is high when the plus (non-inverting) input is at a higher voltage than the minus (inverting) input */
@@ -187,7 +182,6 @@ typedef struct
   */
 
 /** @defgroup COMP_LL_EC_OUTPUT_BLANKING_SOURCE Comparator output - Blanking source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_COMP_BLANKINGSRC_NONE      (0x00000000UL)                                  /*!<Comparator output without blanking */
@@ -202,7 +196,6 @@ typedef struct
   */
 
 /** @defgroup COMP_LL_EC_OUTPUT_LEVEL Comparator output - Output level
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_COMP_OUTPUT_LEVEL_LOW        (0x00000000UL)           /*!< Comparator output level low (if the polarity is not inverted, otherwise to be complemented) */
@@ -211,7 +204,6 @@ typedef struct
   * @}
   */
 /** @defgroup COMP_LL_EC_OUTPUT_BKIN_TIMER Comparator output - Output to BKIN timer
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_COMP_AF_PA6          COMP_OR_AFOPA6       /*!< Comparator Alternate Function PA6 source selected to timer BKIN input  */
@@ -230,7 +222,6 @@ typedef struct
   */
 
 /** @defgroup COMP_LL_EC_HW_DELAYS  Definitions of COMP hardware constraints delays
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @note   Only COMP IP HW delays are defined in COMP LL driver driver,
   *         not timeout values.
   *         For details on delays values, refer to descriptions in source code
@@ -263,11 +254,9 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup COMP_LL_Exported_Macros COMP Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup COMP_LL_EM_WRITE_READ Common write and read registers macro
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -292,7 +281,6 @@ typedef struct
   */
 
 /** @defgroup COMP_LL_EM_HELPER_MACRO COMP helper macro
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -318,12 +306,10 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup COMP_LL_Exported_Functions COMP Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup COMP_LL_EF_Configuration_comparator_common Configuration of COMP hierarchical scope: common to several COMP instances
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -340,7 +326,7 @@ typedef struct
   */
 __STATIC_INLINE void LL_COMP_SetCommonWindowMode(COMP_Common_TypeDef *COMPxy_COMMON, uint32_t WindowMode)
 {
-  /* Note: On this STM32 serie, window mode can be set only                   */
+  /* Note: On this STM32 series, window mode can be set only                   */
   /*       from COMP instance: COMP2.                                         */
   MODIFY_REG(COMPxy_COMMON->CFGR, COMP_CFGRx_WINMODE, WindowMode);
 }
@@ -365,7 +351,6 @@ __STATIC_INLINE uint32_t LL_COMP_GetCommonWindowMode(COMP_Common_TypeDef *COMPxy
   */
 
 /** @defgroup COMP_LL_EF_Configuration_comparator_modes Configuration of comparator modes
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -403,7 +388,6 @@ __STATIC_INLINE uint32_t LL_COMP_GetPowerMode(COMP_TypeDef *COMPx)
   */
 
 /** @defgroup COMP_LL_EF_Configuration_comparator_inputs Configuration of comparator inputs
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -412,7 +396,7 @@ __STATIC_INLINE uint32_t LL_COMP_GetPowerMode(COMP_TypeDef *COMPx)
   * @note   In case of comparator input selected to be connected to IO:
   *         GPIO pins are specific to each comparator instance.
   *         Refer to description of parameters or to reference manual.
-  * @note   On this STM32 serie, scaler bridge is configurable:
+  * @note   On this STM32 series, scaler bridge is configurable:
   *         to optimize power consumption, this function enables the
   *         voltage scaler bridge only when required
   *         (when selecting comparator input based on VrefInt: VrefInt or
@@ -438,16 +422,12 @@ __STATIC_INLINE uint32_t LL_COMP_GetPowerMode(COMP_TypeDef *COMPx)
   *         @arg @ref LL_COMP_INPUT_MINUS_DAC1_CH2 
   *         @arg @ref LL_COMP_INPUT_MINUS_IO1
   *         @arg @ref LL_COMP_INPUT_MINUS_IO2
-#if defined (COMP_CFGRx_INMSEL_3)
   *         @arg @ref LL_COMP_INPUT_MINUS_TPSENS_DAC2CH1
   *         @arg @ref LL_COMP_INPUT_MINUS_VBAT_VDDAP
-#endif
   * @param  InputPlus This parameter can be one of the following values:
   *         @arg @ref LL_COMP_INPUT_PLUS_IO1
   *         @arg @ref LL_COMP_INPUT_PLUS_IO2
-#if defined (COMP_CFGRx_INP2SEL)
   *         @arg @ref LL_COMP_INPUT_PLUS_DAC2_CH1
-#endif
   * @retval None
   */
 __STATIC_INLINE void LL_COMP_ConfigInputs(COMP_TypeDef *COMPx, uint32_t InputMinus, uint32_t InputPlus)
@@ -476,9 +456,7 @@ __STATIC_INLINE void LL_COMP_ConfigInputs(COMP_TypeDef *COMPx, uint32_t InputMin
   * @param  InputPlus This parameter can be one of the following values:
   *         @arg @ref LL_COMP_INPUT_PLUS_IO1
   *         @arg @ref LL_COMP_INPUT_PLUS_IO2
-#if defined (COMP_CFGRx_INP2SEL)
   *         @arg @ref LL_COMP_INPUT_PLUS_DAC2_CH1
-#endif
   * @retval None
   */
 __STATIC_INLINE void LL_COMP_SetInputPlus(COMP_TypeDef *COMPx, uint32_t InputPlus)
@@ -500,9 +478,7 @@ __STATIC_INLINE void LL_COMP_SetInputPlus(COMP_TypeDef *COMPx, uint32_t InputPlu
   * @retval Returned value can be one of the following values:
   *         @arg @ref LL_COMP_INPUT_PLUS_IO1
   *         @arg @ref LL_COMP_INPUT_PLUS_IO2
-#if defined (COMP_CFGRx_INP2SEL)
   *         @arg @ref LL_COMP_INPUT_PLUS_DAC2_CH1
-#endif
   */
 __STATIC_INLINE uint32_t LL_COMP_GetInputPlus(COMP_TypeDef *COMPx)
 {
@@ -518,7 +494,7 @@ __STATIC_INLINE uint32_t LL_COMP_GetInputPlus(COMP_TypeDef *COMPx)
   * @note   In case of comparator input selected to be connected to IO:
   *         GPIO pins are specific to each comparator instance.
   *         Refer to description of parameters or to reference manual.
-  * @note   On this STM32 serie, scaler bridge is configurable:
+  * @note   On this STM32 series, scaler bridge is configurable:
   *         to optimize power consumption, this function enables the
   *         voltage scaler bridge only when required
   *         (when selecting comparator input based on VrefInt: VrefInt or
@@ -543,10 +519,8 @@ __STATIC_INLINE uint32_t LL_COMP_GetInputPlus(COMP_TypeDef *COMPx)
   *         @arg @ref LL_COMP_INPUT_MINUS_DAC1_CH2
   *         @arg @ref LL_COMP_INPUT_MINUS_IO1
   *         @arg @ref LL_COMP_INPUT_MINUS_IO2
-#if defined (COMP_CFGRx_INMSEL_3)
   *         @arg @ref LL_COMP_INPUT_MINUS_TPSENS_DAC2CH1
   *         @arg @ref LL_COMP_INPUT_MINUS_VBAT_VDDAP
-#endif
   * @retval None
   */
 __STATIC_INLINE void LL_COMP_SetInputMinus(COMP_TypeDef *COMPx, uint32_t InputMinus)
@@ -572,10 +546,8 @@ __STATIC_INLINE void LL_COMP_SetInputMinus(COMP_TypeDef *COMPx, uint32_t InputMi
   *         @arg @ref LL_COMP_INPUT_MINUS_DAC1_CH2  
   *         @arg @ref LL_COMP_INPUT_MINUS_IO1
   *         @arg @ref LL_COMP_INPUT_MINUS_IO2
-#if defined (COMP_CFGRx_INMSEL_3)
   *         @arg @ref LL_COMP_INPUT_MINUS_TPSENS_DAC2CH1
   *         @arg @ref LL_COMP_INPUT_MINUS_VBAT_VDDAP
-#endif
   */
 __STATIC_INLINE uint32_t LL_COMP_GetInputMinus(COMP_TypeDef *COMPx)
 {
@@ -618,7 +590,6 @@ __STATIC_INLINE uint32_t LL_COMP_GetInputHysteresis(COMP_TypeDef *COMPx)
   */
 
 /** @defgroup COMP_LL_EF_Configuration_comparator_output Configuration of comparator output
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -745,7 +716,6 @@ __STATIC_INLINE uint32_t LL_COMP_GetOutputAlternateFunction(COMP_TypeDef *COMPx 
   */
 
 /** @defgroup COMP_LL_EF_Operation Operation on comparator instance
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -849,9 +819,8 @@ __STATIC_INLINE uint32_t LL_COMP_ReadOutputLevel(COMP_TypeDef *COMPx)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup COMP_LL_EF_Init Initialization and de-initialization functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -884,4 +853,4 @@ void        LL_COMP_StructInit(LL_COMP_InitTypeDef *COMP_InitStruct);
 
 #endif /* __STM32H7xx_LL_COMP_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

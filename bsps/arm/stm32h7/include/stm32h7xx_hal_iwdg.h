@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -33,13 +32,11 @@ extern "C" {
   */
 
 /** @defgroup IWDG IWDG
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup IWDG_Exported_Types IWDG Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -76,12 +73,10 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup IWDG_Exported_Constants IWDG Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup IWDG_Prescaler IWDG Prescaler
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IWDG_PRESCALER_4                0x00000000u                                     /*!< IWDG prescaler set to 4   */
@@ -91,13 +86,11 @@ typedef struct
 #define IWDG_PRESCALER_64               IWDG_PR_PR_2                                    /*!< IWDG prescaler set to 64  */
 #define IWDG_PRESCALER_128              (IWDG_PR_PR_2 | IWDG_PR_PR_0)                   /*!< IWDG prescaler set to 128 */
 #define IWDG_PRESCALER_256              (IWDG_PR_PR_2 | IWDG_PR_PR_1)                   /*!< IWDG prescaler set to 256 */
-
 /**
   * @}
   */
 
 /** @defgroup IWDG_Window_option IWDG Window option
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IWDG_WINDOW_DISABLE             IWDG_WINR_WIN
@@ -105,14 +98,12 @@ typedef struct
   * @}
   */
 
-
 /**
   * @}
   */
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup IWDG_Exported_Macros IWDG Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -137,26 +128,23 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup IWDG_Exported_Functions  IWDG Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup IWDG_Exported_Functions_Group1 Initialization and Start functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Initialization/Start functions  ********************************************/
-HAL_StatusTypeDef HAL_IWDG_Init(IWDG_HandleTypeDef *hiwdg);
+HAL_StatusTypeDef     HAL_IWDG_Init(IWDG_HandleTypeDef *hiwdg);
 /**
   * @}
   */
 
 /** @defgroup IWDG_Exported_Functions_Group2 IO operation functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* I/O operation functions ****************************************************/
-HAL_StatusTypeDef HAL_IWDG_Refresh(IWDG_HandleTypeDef *hiwdg);
+HAL_StatusTypeDef     HAL_IWDG_Refresh(IWDG_HandleTypeDef *hiwdg);
 /**
   * @}
   */
@@ -167,7 +155,6 @@ HAL_StatusTypeDef HAL_IWDG_Refresh(IWDG_HandleTypeDef *hiwdg);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup IWDG_Private_Constants IWDG Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -185,7 +172,6 @@ HAL_StatusTypeDef HAL_IWDG_Refresh(IWDG_HandleTypeDef *hiwdg);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup IWDG_Private_Macros IWDG Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -249,5 +235,3 @@ HAL_StatusTypeDef HAL_IWDG_Refresh(IWDG_HandleTypeDef *hiwdg);
 #endif
 
 #endif /* STM32H7xx_HAL_IWDG_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

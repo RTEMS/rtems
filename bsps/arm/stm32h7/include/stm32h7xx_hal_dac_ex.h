@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -47,12 +46,10 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup DACEx_Exported_Constants DACEx Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DACEx_lfsrunmask_triangleamplitude DACEx lfsrunmask triangle amplitude
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_LFSRUNMASK_BIT0                0x00000000UL                                                        /*!< Unmask DAC channel LFSR bit0 for noise wave generation */
@@ -94,7 +91,6 @@ extern "C" {
 /* Private macro -------------------------------------------------------------*/
 
 /** @defgroup DACEx_Private_Macros DACEx Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(HRTIM1)
@@ -271,6 +267,5 @@ void DAC_DMAHalfConvCpltCh2(DMA_HandleTypeDef *hdma);
 }
 #endif
 
-#endif /*STM32H7xx_HAL_DAC_EX_H */
+#endif /* STM32H7xx_HAL_DAC_EX_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

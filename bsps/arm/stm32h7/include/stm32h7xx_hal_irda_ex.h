@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -33,7 +32,6 @@ extern "C" {
   */
 
 /** @defgroup IRDAEx IRDAEx
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief IRDA Extended HAL module driver
   * @{
   */
@@ -41,12 +39,10 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup IRDAEx_Extended_Exported_Constants IRDAEx Extended Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup IRDAEx_Word_Length IRDAEx Word Length
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_WORDLENGTH_7B                  USART_CR1_M1   /*!< 7-bit long frame */
@@ -65,7 +61,6 @@ extern "C" {
 /* Private macros ------------------------------------------------------------*/
 
 /** @defgroup IRDAEx_Private_Macros IRDAEx Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -651,4 +646,3 @@ extern "C" {
 
 #endif /* STM32H7xx_HAL_IRDA_EX_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

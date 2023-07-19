@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -39,7 +38,6 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup CRYP_Exported_Types CRYP Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -49,8 +47,8 @@ extern "C" {
 
 typedef struct
 {
-  uint32_t DataType;                   /*!< 32-bit data, 16-bit data, 8-bit data or 1-bit string.
-                                        This parameter can be a value of @ref CRYP_Data_Type */
+  uint32_t DataType;                   /*!< no swap(32-bit data), halfword swap(16-bit data), byte swap(8-bit data)
+                                        or bit swap(1-bit data).this parameter can be a value of @ref CRYP_Data_Type */
   uint32_t KeySize;                    /*!< Used only in AES mode : 128, 192 or 256 bit key length in CRYP1.
                                             This parameter can be a value of @ref CRYP_Key_Size */
   uint32_t *pKey;                      /*!< The key used for encryption/decryption */
@@ -62,11 +60,12 @@ typedef struct
   uint32_t *Header;                    /*!< used only in AES GCM and CCM Algorithm for authentication,
                                         GCM : also known as Additional Authentication Data
                                         CCM : named B1 composed of the associated data length and Associated Data. */
-  uint32_t HeaderSize;                /*!< The size of header buffer in word  */
-  uint32_t *B0;                       /*!< B0 is first authentication block used only  in AES CCM mode */
-  uint32_t DataWidthUnit;             /*!< Data With Unit, this parameter can be value of @ref CRYP_Data_Width_Unit*/
-  uint32_t KeyIVConfigSkip;            /*!< CRYP peripheral Key and IV configuration skip, to config Key and Initialization
-                                           Vector only once and to skip configuration for consecutive processings.
+  uint32_t HeaderSize;                 /*!< The size of header buffer */
+  uint32_t *B0;                        /*!< B0 is first authentication block used only  in AES CCM mode */
+  uint32_t DataWidthUnit;              /*!< Payload data Width Unit, this parameter can be value of @ref CRYP_Data_Width_Unit*/
+  uint32_t HeaderWidthUnit;            /*!< Header Width Unit, this parameter can be value of @ref CRYP_Header_Width_Unit*/
+  uint32_t KeyIVConfigSkip;            /*!< CRYP peripheral Key and IV configuration skip, to configure Key and Initialization
+                                           Vector only once and to skip configuration for consecutive processing.
                                            This parameter can be a value of @ref CRYP_Configuration_Skip */
 
 } CRYP_ConfigTypeDef;
@@ -109,7 +108,7 @@ typedef struct
 
   __IO uint16_t                     CrypOutCount;     /*!< Counter of output data */
 
-  uint16_t                          Size;           /*!< length of input data in word */
+  uint16_t                          Size;           /*!< length of input data in word or in byte, according to DataWidthUnit */
 
   uint32_t                          Phase;            /*!< CRYP peripheral phase */
 
@@ -151,7 +150,6 @@ typedef struct
 
 #if (USE_HAL_CRYP_REGISTER_CALLBACKS == 1)
 /** @defgroup HAL_CRYP_Callback_ID_enumeration_definition HAL CRYP Callback ID enumeration definition
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL CRYP Callback ID enumeration definition
   * @{
   */
@@ -170,7 +168,6 @@ typedef enum
   */
 
 /** @defgroup HAL_CRYP_Callback_pointer_definition HAL CRYP Callback pointer definition
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL CRYP Callback pointer definition
   * @{
   */
@@ -185,12 +182,10 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CRYP_Exported_Constants CRYP Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRYP_Error_Definition   CRYP Error Definition
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_CRYP_ERROR_NONE              0x00000000U  /*!< No error        */
@@ -211,19 +206,28 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
 
 
 /** @defgroup CRYP_Data_Width_Unit CRYP Data Width Unit
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 #define CRYP_DATAWIDTHUNIT_WORD   0x00000000U  /*!< By default, size unit is word */
-#define CRYP_DATAWIDTHUNIT_BYTE   0x00000001U  /*!< By default, size unit is word */
+#define CRYP_DATAWIDTHUNIT_BYTE   0x00000001U  /*!< Size unit is byte, but all input will be loaded in HW CRYPT IP by block of 4 words */
+
+/**
+  * @}
+  */
+
+/** @defgroup CRYP_Header_Width_Unit CRYP Header Width Unit
+  * @{
+  */
+
+#define CRYP_HEADERWIDTHUNIT_WORD   0x00000000U  /*!< By default, header size unit is word */
+#define CRYP_HEADERWIDTHUNIT_BYTE   0x00000001U  /*!< Size unit is byte, but all input will be loaded in HW CRYPT IP by block of 4 words */
 
 /**
   * @}
   */
 
 /** @defgroup CRYP_Algorithm_Mode CRYP Algorithm Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -242,7 +246,6 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Key_Size CRYP Key Size
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -255,21 +258,19 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Data_Type CRYP Data Type
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
-#define CRYP_DATATYPE_32B         0x00000000U
-#define CRYP_DATATYPE_16B         CRYP_CR_DATATYPE_0
-#define CRYP_DATATYPE_8B          CRYP_CR_DATATYPE_1
-#define CRYP_DATATYPE_1B          CRYP_CR_DATATYPE
+#define CRYP_NO_SWAP         0x00000000U
+#define CRYP_HALFWORD_SWAP   CRYP_CR_DATATYPE_0
+#define CRYP_BYTE_SWAP       CRYP_CR_DATATYPE_1
+#define CRYP_BIT_SWAP        CRYP_CR_DATATYPE
 
 /**
   * @}
   */
 
 /** @defgroup CRYP_Interrupt  CRYP Interrupt
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -281,7 +282,6 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Flags CRYP Flags
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -301,7 +301,6 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Configuration_Skip CRYP Key and IV Configuration Skip Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -318,7 +317,6 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup CRYP_Exported_Macros CRYP Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -360,8 +358,11 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 #define CRYP_FLAG_MASK  0x0000001FU
 
-#define __HAL_CRYP_GET_FLAG(__HANDLE__, __FLAG__) ((((uint8_t)((__FLAG__) >> 24)) == 0x01U)?((((__HANDLE__)->Instance->RISR) & ((__FLAG__) & CRYP_FLAG_MASK)) == ((__FLAG__) & CRYP_FLAG_MASK)): \
-                                                   ((((__HANDLE__)->Instance->RISR) & ((__FLAG__) & CRYP_FLAG_MASK)) == ((__FLAG__) & CRYP_FLAG_MASK)))
+#define __HAL_CRYP_GET_FLAG(__HANDLE__, __FLAG__)\
+  ((((uint8_t)((__FLAG__) >> 24)) == 0x01U)?((((__HANDLE__)->Instance->RISR) &\
+                                              ((__FLAG__) & CRYP_FLAG_MASK)) == ((__FLAG__) & CRYP_FLAG_MASK)): \
+   ((((__HANDLE__)->Instance->RISR) &\
+     ((__FLAG__) & CRYP_FLAG_MASK)) == ((__FLAG__) & CRYP_FLAG_MASK)))
 
 /** @brief  Check whether the specified CRYP interrupt is set or not.
   * @param  __HANDLE__: specifies the CRYP handle.
@@ -372,7 +373,8 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   * @retval The state of __INTERRUPT__ (TRUE or FALSE).
   */
 
-#define __HAL_CRYP_GET_IT(__HANDLE__, __INTERRUPT__) (((__HANDLE__)->Instance->MISR & (__INTERRUPT__)) == (__INTERRUPT__))
+#define __HAL_CRYP_GET_IT(__HANDLE__, __INTERRUPT__) (((__HANDLE__)->Instance->MISR &\
+                                                       (__INTERRUPT__)) == (__INTERRUPT__))
 
 /**
   * @brief  Enable the CRYP interrupt.
@@ -407,7 +409,6 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup CRYP_Exported_Functions CRYP Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -469,12 +470,10 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
 
 /* Private macros --------------------------------------------------------*/
 /** @defgroup CRYP_Private_Macros   CRYP Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRYP_IS_CRYP_Definitions CRYP Private macros to check input parameters
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -492,10 +491,10 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
                                  ((KEYSIZE) == CRYP_KEYSIZE_192B)   || \
                                  ((KEYSIZE) == CRYP_KEYSIZE_256B))
 
-#define IS_CRYP_DATATYPE(DATATYPE)(((DATATYPE) == CRYP_DATATYPE_32B)   || \
-                                   ((DATATYPE) == CRYP_DATATYPE_16B) || \
-                                   ((DATATYPE) == CRYP_DATATYPE_8B) || \
-                                   ((DATATYPE) == CRYP_DATATYPE_1B))
+#define IS_CRYP_DATATYPE(DATATYPE)(((DATATYPE) == CRYP_NO_SWAP)   || \
+                                   ((DATATYPE) == CRYP_HALFWORD_SWAP) || \
+                                   ((DATATYPE) == CRYP_BYTE_SWAP) || \
+                                   ((DATATYPE) == CRYP_BIT_SWAP))
 
 #define IS_CRYP_INIT(CONFIG)(((CONFIG) == CRYP_KEYIVCONFIG_ALWAYS) || \
                              ((CONFIG) == CRYP_KEYIVCONFIG_ONCE))
@@ -511,7 +510,6 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup CRYP_Private_Constants CRYP Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -520,7 +518,6 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
   */
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup CRYP_Private_Defines CRYP Private Defines
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -530,7 +527,6 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup CRYP_Private_Variables CRYP Private Variables
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -539,7 +535,6 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
   */
 /* Private functions prototypes ----------------------------------------------*/
 /** @defgroup CRYP_Private_Functions_Prototypes CRYP Private Functions Prototypes
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -549,7 +544,6 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup CRYP_Private_Functions CRYP Private Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -574,4 +568,3 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
 
 #endif /* STM32H7xx_HAL_CRYP_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -32,24 +31,22 @@ extern "C" {
   * @{
   */
 
-#if defined (RNG)
-#if defined (RNG_CR_CONDRST)
+#if defined(RNG)
+#if defined(RNG_CR_CONDRST)
 
-/** @defgroup RNGEx RNGEx
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RNG_Ex RNG_Ex
   * @brief RNG Extension HAL module driver
   * @{
   */
 
 /* Exported types ------------------------------------------------------------*/
-/** @defgroup RNGEx_Exported_Types RNGEx Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
-  * @brief RNGEx Exported types
+/** @defgroup RNG_Ex_Exported_Types RNG_Ex Exported Types
+  * @brief RNG_Ex Exported types
   * @{
   */
 
 /**
-  * @brief RNGEX Configuration Structure definition
+  * @brief RNG_Ex Configuration Structure definition
   */
 
 typedef struct
@@ -58,9 +55,9 @@ typedef struct
   uint32_t        Config2;           /*!< Config2 must be a value between 0 and 0x7 */
   uint32_t        Config3;           /*!< Config3 must be a value between 0 and 0xF */
   uint32_t        ClockDivider;      /*!< Clock Divider factor.This parameter can
-                                          be a value of @ref RNGEX_Clock_Divider_Factor   */
+                                          be a value of @ref RNG_Ex_Clock_Divider_Factor   */
   uint32_t        NistCompliance;    /*!< NIST compliance.This parameter can be a
-                                          value of @ref RNGEX_NIST_Compliance   */
+                                          value of @ref RNG_Ex_NIST_Compliance   */
 } RNG_ConfigTypeDef;
 
 /**
@@ -68,14 +65,12 @@ typedef struct
   */
 
 /* Exported constants --------------------------------------------------------*/
-/** @defgroup RNGEX_Exported_Constants RNGEX Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RNG_Ex_Exported_Constants RNG_Ex Exported Constants
   * @{
   */
 
-/** @defgroup RNGEX_Clock_Divider_Factor  Value used to configure an internal
-  * @ingroup RTEMSBSPsARMSTM32H7
- *            programmable divider acting on the incoming RNG clock
+/** @defgroup RNG_Ex_Clock_Divider_Factor  Value used to configure an internal
+  *            programmable divider acting on the incoming RNG clock
   * @{
   */
 #define RNG_CLKDIV_BY_1       (0x00000000UL)      /*!< No clock division  */
@@ -113,8 +108,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup RNGEX_NIST_Compliance  NIST Compliance configuration
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RNG_Ex_NIST_Compliance  NIST Compliance configuration
   * @{
   */
 #define RNG_NIST_COMPLIANT     (0x00000000UL) /*!< NIST compliant configuration*/
@@ -129,8 +123,7 @@ typedef struct
   */
 
 /* Private types -------------------------------------------------------------*/
-/** @defgroup RNGEx_Private_Types RNGEx Private Types
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RNG_Ex_Private_Types RNG_Ex Private Types
   * @{
   */
 
@@ -139,8 +132,7 @@ typedef struct
   */
 
 /* Private variables ---------------------------------------------------------*/
-/** @defgroup RNGEx_Private_Variables RNGEx Private Variables
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RNG_Ex_Private_Variables RNG_Ex Private Variables
   * @{
   */
 
@@ -149,8 +141,7 @@ typedef struct
   */
 
 /* Private constants ---------------------------------------------------------*/
-/** @defgroup RNGEx_Private_Constants RNGEx Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RNG_Ex_Private_Constants RNG_Ex Private Constants
   * @{
   */
 
@@ -159,8 +150,7 @@ typedef struct
   */
 
 /* Private macros ------------------------------------------------------------*/
-/** @defgroup RNGEx_Private_Macros RNGEx Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RNG_Ex_Private_Macros RNG_Ex Private Macros
   * @{
   */
 
@@ -193,12 +183,11 @@ typedef struct
 
 
 /**
- * @}
- */
+  * @}
+  */
 
 /* Private functions ---------------------------------------------------------*/
-/** @defgroup RNGEx_Private_Functions RNGEx Private Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RNG_Ex_Private_Functions RNG_Ex Private Functions
   * @{
   */
 
@@ -207,12 +196,11 @@ typedef struct
   */
 
 /* Exported functions --------------------------------------------------------*/
-/** @defgroup RNGEx_Exported_Functions RNGEx Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
+/** @defgroup RNG_Ex_Exported_Functions RNG_Ex Exported Functions
   * @{
   */
 
-/** @addtogroup RNGEx_Exported_Functions_Group1
+/** @addtogroup RNG_Ex_Exported_Functions_Group1
   * @{
   */
 HAL_StatusTypeDef HAL_RNGEx_SetConfig(RNG_HandleTypeDef *hrng, RNG_ConfigTypeDef *pConf);
@@ -223,9 +211,10 @@ HAL_StatusTypeDef HAL_RNGEx_LockConfig(RNG_HandleTypeDef *hrng);
   * @}
   */
 
-/**
-  * @}
+/** @addtogroup RNG_Ex_Exported_Functions_Group2
+  * @{
   */
+HAL_StatusTypeDef HAL_RNGEx_RecoverSeedError(RNG_HandleTypeDef *hrng);
 
 /**
   * @}
@@ -235,7 +224,15 @@ HAL_StatusTypeDef HAL_RNGEx_LockConfig(RNG_HandleTypeDef *hrng);
   * @}
   */
 
-#endif  /* CONDRST */
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
+
+#endif /* RNG_CR_CONDRST */
 #endif /* RNG */
 
 /**
@@ -247,6 +244,5 @@ HAL_StatusTypeDef HAL_RNGEx_LockConfig(RNG_HandleTypeDef *hrng);
 #endif
 
 
-#endif /* STM32H7xx_HAL_RNGEX_H */
+#endif /* STM32H7xx_HAL_RNG_EX_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -4,15 +4,23 @@
   * @author  MCD Application Team
   * @brief   OPAMP HAL module driver. 
   *          This file provides firmware functions to manage the following 
-  *          functionalities of the operational amplifier(s) peripheral: 
-  *           + OPAMP configuration
-  *           + OPAMP calibration
-  *          Thanks to
+  *          functionalities of the operational amplifier(s) peripheral:
   *           + Initialization and de-initialization functions
   *           + IO operation functions
   *           + Peripheral Control functions
   *           + Peripheral State functions
-  *         
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
 ================================================================================
           ##### OPAMP Peripheral Features #####
@@ -112,14 +120,14 @@
       (++) The compilation define  USE_HAL_OPAMP_REGISTER_CALLBACKS when set to 1
            allows the user to configure dynamically the driver callbacks.
 
-      (++) Use Functions @ref HAL_OPAMP_RegisterCallback() to register a user callback,
+      (++) Use Functions HAL_OPAMP_RegisterCallback() to register a user callback,
            it allows to register following callbacks:
       (+++) MspInitCallback         : OPAMP MspInit.  
       (+++) MspDeInitCallback       : OPAMP MspDeInit.
            This function takes as parameters the HAL peripheral handle, the Callback ID
            and a pointer to the user callback function.
 
-      (++) Use function @ref HAL_OPAMP_UnRegisterCallback() to reset a callback to the default
+      (++) Use function HAL_OPAMP_UnRegisterCallback() to reset a callback to the default
            weak (surcharged) function. It allows to reset following callbacks:
       (+++) MspInitCallback         : OPAMP MspInit.  
       (+++) MspDeInitCallback       : OPAMP MspDeInit.
@@ -193,18 +201,6 @@
     |                 |        |   COMP1_INN7 if       |                     |
     |                 |        |  connected internally |                     |
     |-----------------|--------|-----------------------|---------------------|
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -215,7 +211,6 @@
   */
 
 /** @defgroup OPAMP OPAMP
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief OPAMP module driver
   * @{
   */
@@ -253,12 +248,10 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup OPAMP_Exported_Functions OPAMP Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OPAMP_Exported_Functions_Group1 Initialization and de-initialization functions 
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions 
  *
 @verbatim
@@ -513,7 +506,6 @@ __weak void HAL_OPAMP_MspDeInit(OPAMP_HandleTypeDef *hopamp)
 
 
 /** @defgroup OPAMP_Exported_Functions_Group2 IO operation functions 
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   IO operation functions 
  *
 @verbatim   
@@ -837,7 +829,6 @@ HAL_StatusTypeDef HAL_OPAMP_SelfCalibrate(OPAMP_HandleTypeDef *hopamp)
   */
 
 /** @defgroup OPAMP_Exported_Functions_Group3 Peripheral Control functions 
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral Control functions 
  *
 @verbatim   
@@ -973,50 +964,6 @@ HAL_OPAMP_TrimmingValueTypeDef HAL_OPAMP_GetTrimOffset (OPAMP_HandleTypeDef *hop
   return trimmingvalue;
 }
 
-/**
-  * @}
-  */
-
-
-/** @defgroup OPAMP_Exported_Functions_Group4 Peripheral State functions 
-  * @ingroup RTEMSBSPsARMSTM32H7
- *  @brief   Peripheral State functions 
- *
-@verbatim   
- ===============================================================================
-                      ##### Peripheral State functions #####
- =============================================================================== 
-    [..]
-    This subsection permits to get in run-time the status of the peripheral.
-
-@endverbatim
-  * @{
-  */
-
-/**
-  * @brief  Return the OPAMP handle state.
-  * @param  hopamp  OPAMP handle
-  * @retval HAL state
-  */
-HAL_OPAMP_StateTypeDef HAL_OPAMP_GetState(OPAMP_HandleTypeDef *hopamp)
-{
-  /* Check the OPAMP handle allocation */
-  if(hopamp == NULL)
-  {
-    return HAL_OPAMP_STATE_RESET;
-  }
-
-  /* Check the parameter */
-  assert_param(IS_OPAMP_ALL_INSTANCE(hopamp->Instance));
-
- /* Return OPAMP handle state */
-  return hopamp->State;
-}
-
-/**
-  * @}
-  */
-
 #if (USE_HAL_OPAMP_REGISTER_CALLBACKS == 1)
 /**
   * @brief  Register a User OPAMP Callback
@@ -1150,13 +1097,53 @@ HAL_StatusTypeDef HAL_OPAMP_UnRegisterCallback (OPAMP_HandleTypeDef *hopamp, HAL
 }
 
 #endif /* USE_HAL_OPAMP_REGISTER_CALLBACKS */
-  /**
-  * @}
-  */ 
-  
+
 /**
   * @}
-  */  
+  */
+
+
+/** @defgroup OPAMP_Exported_Functions_Group4 Peripheral State functions 
+  *  @brief   Peripheral State functions 
+  *
+@verbatim   
+ ===============================================================================
+                      ##### Peripheral State functions #####
+ =============================================================================== 
+    [..]
+    This subsection permits to get in run-time the status of the peripheral.
+
+@endverbatim
+  * @{
+  */
+
+/**
+  * @brief  Return the OPAMP handle state.
+  * @param  hopamp  OPAMP handle
+  * @retval HAL state
+  */
+HAL_OPAMP_StateTypeDef HAL_OPAMP_GetState(OPAMP_HandleTypeDef *hopamp)
+{
+  /* Check the OPAMP handle allocation */
+  if(hopamp == NULL)
+  {
+    return HAL_OPAMP_STATE_RESET;
+  }
+
+  /* Check the parameter */
+  assert_param(IS_OPAMP_ALL_INSTANCE(hopamp->Instance));
+
+  /* Return OPAMP handle state */
+  return hopamp->State;
+}
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
 #endif /* HAL_OPAMP_MODULE_ENABLED */
 /**
   * @}
@@ -1166,4 +1153,3 @@ HAL_StatusTypeDef HAL_OPAMP_UnRegisterCallback (OPAMP_HandleTypeDef *hopamp, HAL
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

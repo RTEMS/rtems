@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -35,14 +34,12 @@ extern "C" {
   */
 
 /** @defgroup LTDC LTDC
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief LTDC HAL module driver
   * @{
   */
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup LTDC_Exported_Types LTDC Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define MAX_LAYER  2U
@@ -82,28 +79,36 @@ typedef struct
                                                       This parameter can be one of value of @ref LTDC_PC_POLARITY */
 
   uint32_t            HorizontalSync;            /*!< configures the number of Horizontal synchronization width.
-                                                      This parameter must be a number between Min_Data = 0x000 and Max_Data = 0xFFF. */
+                                                      This parameter must be a number between
+                                                      Min_Data = 0x000 and Max_Data = 0xFFF. */
 
   uint32_t            VerticalSync;              /*!< configures the number of Vertical synchronization height.
-                                                      This parameter must be a number between Min_Data = 0x000 and Max_Data = 0x7FF. */
+                                                      This parameter must be a number between
+                                                      Min_Data = 0x000 and Max_Data = 0x7FF. */
 
   uint32_t            AccumulatedHBP;            /*!< configures the accumulated horizontal back porch width.
-                                                      This parameter must be a number between Min_Data = LTDC_HorizontalSync and Max_Data = 0xFFF. */
+                                                      This parameter must be a number between
+                                                      Min_Data = LTDC_HorizontalSync and Max_Data = 0xFFF. */
 
   uint32_t            AccumulatedVBP;            /*!< configures the accumulated vertical back porch height.
-                                                      This parameter must be a number between Min_Data = LTDC_VerticalSync and Max_Data = 0x7FF. */
+                                                      This parameter must be a number between
+                                                      Min_Data = LTDC_VerticalSync and Max_Data = 0x7FF. */
 
   uint32_t            AccumulatedActiveW;        /*!< configures the accumulated active width.
-                                                      This parameter must be a number between Min_Data = LTDC_AccumulatedHBP and Max_Data = 0xFFF. */
+                                                      This parameter must be a number between
+                                                      Min_Data = LTDC_AccumulatedHBP and Max_Data = 0xFFF. */
 
   uint32_t            AccumulatedActiveH;        /*!< configures the accumulated active height.
-                                                      This parameter must be a number between Min_Data = LTDC_AccumulatedVBP and Max_Data = 0x7FF. */
+                                                      This parameter must be a number between
+                                                      Min_Data = LTDC_AccumulatedVBP and Max_Data = 0x7FF. */
 
   uint32_t            TotalWidth;                /*!< configures the total width.
-                                                      This parameter must be a number between Min_Data = LTDC_AccumulatedActiveW and Max_Data = 0xFFF. */
+                                                      This parameter must be a number between
+                                                      Min_Data = LTDC_AccumulatedActiveW and Max_Data = 0xFFF. */
 
   uint32_t            TotalHeigh;                /*!< configures the total height.
-                                                      This parameter must be a number between Min_Data = LTDC_AccumulatedActiveH and Max_Data = 0x7FF. */
+                                                      This parameter must be a number between
+                                                      Min_Data = LTDC_AccumulatedActiveH and Max_Data = 0x7FF. */
 
   LTDC_ColorTypeDef   Backcolor;                 /*!< Configures the background color. */
 } LTDC_InitTypeDef;
@@ -114,25 +119,31 @@ typedef struct
 typedef struct
 {
   uint32_t WindowX0;                   /*!< Configures the Window Horizontal Start Position.
-                                            This parameter must be a number between Min_Data = 0x000 and Max_Data = 0xFFF. */
+                                            This parameter must be a number between
+                                            Min_Data = 0x000 and Max_Data = 0xFFF. */
 
   uint32_t WindowX1;                   /*!< Configures the Window Horizontal Stop Position.
-                                            This parameter must be a number between Min_Data = 0x000 and Max_Data = 0xFFF. */
+                                            This parameter must be a number between
+                                            Min_Data = 0x000 and Max_Data = 0xFFF. */
 
   uint32_t WindowY0;                   /*!< Configures the Window vertical Start Position.
-                                            This parameter must be a number between Min_Data = 0x000 and Max_Data = 0x7FF. */
+                                            This parameter must be a number between
+                                            Min_Data = 0x000 and Max_Data = 0x7FF. */
 
   uint32_t WindowY1;                   /*!< Configures the Window vertical Stop Position.
-                                            This parameter must be a number between Min_Data = 0x0000 and Max_Data = 0x7FF. */
+                                            This parameter must be a number between
+                                            Min_Data = 0x0000 and Max_Data = 0x7FF. */
 
   uint32_t PixelFormat;                /*!< Specifies the pixel format.
                                             This parameter can be one of value of @ref LTDC_Pixelformat */
 
   uint32_t Alpha;                      /*!< Specifies the constant alpha used for blending.
-                                            This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF. */
+                                            This parameter must be a number between
+                                            Min_Data = 0x00 and Max_Data = 0xFF. */
 
   uint32_t Alpha0;                     /*!< Configures the default alpha value.
-                                            This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF. */
+                                            This parameter must be a number between
+                                            Min_Data = 0x00 and Max_Data = 0xFF. */
 
   uint32_t BlendingFactor1;            /*!< Select the blending factor 1.
                                             This parameter can be one of value of @ref LTDC_BlendingFactor1 */
@@ -143,10 +154,12 @@ typedef struct
   uint32_t FBStartAdress;              /*!< Configures the color frame buffer address */
 
   uint32_t ImageWidth;                 /*!< Configures the color frame buffer line length.
-                                            This parameter must be a number between Min_Data = 0x0000 and Max_Data = 0x1FFF. */
+                                            This parameter must be a number between
+                                            Min_Data = 0x0000 and Max_Data = 0x1FFF. */
 
   uint32_t ImageHeight;                /*!< Specifies the number of line in frame buffer.
-                                            This parameter must be a number between Min_Data = 0x000 and Max_Data = 0x7FF. */
+                                            This parameter must be a number between
+                                            Min_Data = 0x000 and Max_Data = 0x7FF. */
 
   LTDC_ColorTypeDef   Backcolor;       /*!< Configures the layer background color. */
 } LTDC_LayerCfgTypeDef;
@@ -225,12 +238,10 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup LTDC_Exported_Constants LTDC Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup LTDC_Error_Code LTDC Error Code
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_LTDC_ERROR_NONE               0x00000000U   /*!< LTDC No error             */
@@ -245,7 +256,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Layer LTDC Layer
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_LAYER_1                      0x00000000U   /*!< LTDC Layer 1 */
@@ -255,7 +265,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_HS_POLARITY LTDC HS POLARITY
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_HSPOLARITY_AL                0x00000000U   /*!< Horizontal Synchronization is active low. */
@@ -265,7 +274,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_VS_POLARITY LTDC VS POLARITY
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_VSPOLARITY_AL                0x00000000U   /*!< Vertical Synchronization is active low. */
@@ -275,7 +283,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_DE_POLARITY LTDC DE POLARITY
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_DEPOLARITY_AL                0x00000000U   /*!< Data Enable, is active low. */
@@ -285,7 +292,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_PC_POLARITY LTDC PC POLARITY
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_PCPOLARITY_IPC               0x00000000U   /*!< input pixel clock. */
@@ -295,7 +301,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_SYNC LTDC SYNC
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_HORIZONTALSYNC               (LTDC_SSCR_HSW >> 16U)    /*!< Horizontal synchronization width. */
@@ -305,7 +310,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_BACK_COLOR LTDC BACK COLOR
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_COLOR                        0x000000FFU   /*!< Color mask */
@@ -314,7 +318,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_BlendingFactor1 LTDC Blending Factor1
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_BLENDING_FACTOR1_CA          0x00000400U   /*!< Blending factor : Cte Alpha */
@@ -324,7 +327,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_BlendingFactor2 LTDC Blending Factor2
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_BLENDING_FACTOR2_CA          0x00000005U   /*!< Blending factor : Cte Alpha */
@@ -334,7 +336,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Pixelformat LTDC Pixel format
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_PIXEL_FORMAT_ARGB8888        0x00000000U   /*!< ARGB8888 LTDC pixel format */
@@ -350,7 +351,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Alpha LTDC Alpha
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_ALPHA                        LTDC_LxCACR_CONSTA        /*!< LTDC Constant Alpha mask */
@@ -359,7 +359,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_LAYER_Config LTDC LAYER Config
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_STOPPOSITION                 (LTDC_LxWHPCR_WHSPPOS >> 16U) /*!< LTDC Layer stop position  */
@@ -372,7 +371,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Interrupts LTDC Interrupts
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_IT_LI                        LTDC_IER_LIE              /*!< LTDC Line Interrupt            */
@@ -384,7 +382,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Flags LTDC Flags
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_FLAG_LI                      LTDC_ISR_LIF              /*!< LTDC Line Interrupt Flag            */
@@ -396,7 +393,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Reload_Type LTDC Reload Type
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_RELOAD_IMMEDIATE             LTDC_SRCR_IMR             /*!< Immediate Reload */
@@ -411,7 +407,6 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup LTDC_Exported_Macros LTDC Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -420,7 +415,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   * @retval None
   */
 #if (USE_HAL_LTDC_REGISTER_CALLBACKS == 1)
-#define __HAL_LTDC_RESET_HANDLE_STATE(__HANDLE__) do{                                                  \
+#define __HAL_LTDC_RESET_HANDLE_STATE(__HANDLE__) do{                                                 \
                                                       (__HANDLE__)->State = HAL_LTDC_STATE_RESET;     \
                                                       (__HANDLE__)->MspInitCallback = NULL;           \
                                                       (__HANDLE__)->MspDeInitCallback = NULL;         \
@@ -450,7 +445,8 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   *                     This parameter can be LTDC_LAYER_1 (0) or LTDC_LAYER_2 (1).
   * @retval None.
   */
-#define __HAL_LTDC_LAYER_ENABLE(__HANDLE__, __LAYER__)  ((LTDC_LAYER((__HANDLE__), (__LAYER__)))->CR |= (uint32_t)LTDC_LxCR_LEN)
+#define __HAL_LTDC_LAYER_ENABLE(__HANDLE__, __LAYER__)  ((LTDC_LAYER((__HANDLE__), (__LAYER__)))->CR\
+                                                         |= (uint32_t)LTDC_LxCR_LEN)
 
 /**
   * @brief  Disable the LTDC Layer.
@@ -459,7 +455,8 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   *                     This parameter can be LTDC_LAYER_1 (0) or LTDC_LAYER_2 (1).
   * @retval None.
   */
-#define __HAL_LTDC_LAYER_DISABLE(__HANDLE__, __LAYER__) ((LTDC_LAYER((__HANDLE__), (__LAYER__)))->CR &= ~(uint32_t)LTDC_LxCR_LEN)
+#define __HAL_LTDC_LAYER_DISABLE(__HANDLE__, __LAYER__) ((LTDC_LAYER((__HANDLE__), (__LAYER__)))->CR\
+                                                         &= ~(uint32_t)LTDC_LxCR_LEN)
 
 /**
   * @brief  Reload immediately all LTDC Layers.
@@ -565,7 +562,8 @@ void HAL_LTDC_ReloadEventCallback(LTDC_HandleTypeDef *hltdc);
 
 /* Callbacks Register/UnRegister functions  ***********************************/
 #if (USE_HAL_LTDC_REGISTER_CALLBACKS == 1)
-HAL_StatusTypeDef HAL_LTDC_RegisterCallback(LTDC_HandleTypeDef *hltdc, HAL_LTDC_CallbackIDTypeDef CallbackID, pLTDC_CallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_LTDC_RegisterCallback(LTDC_HandleTypeDef *hltdc, HAL_LTDC_CallbackIDTypeDef CallbackID,
+                                            pLTDC_CallbackTypeDef pCallback);
 HAL_StatusTypeDef HAL_LTDC_UnRegisterCallback(LTDC_HandleTypeDef *hltdc, HAL_LTDC_CallbackIDTypeDef CallbackID);
 #endif /* USE_HAL_LTDC_REGISTER_CALLBACKS */
 
@@ -603,9 +601,12 @@ HAL_StatusTypeDef HAL_LTDC_ProgramLineEvent(LTDC_HandleTypeDef *hltdc, uint32_t 
 HAL_StatusTypeDef HAL_LTDC_EnableDither(LTDC_HandleTypeDef *hltdc);
 HAL_StatusTypeDef HAL_LTDC_DisableDither(LTDC_HandleTypeDef *hltdc);
 HAL_StatusTypeDef HAL_LTDC_Reload(LTDC_HandleTypeDef *hltdc, uint32_t ReloadType);
-HAL_StatusTypeDef HAL_LTDC_ConfigLayer_NoReload(LTDC_HandleTypeDef *hltdc, LTDC_LayerCfgTypeDef *pLayerCfg, uint32_t LayerIdx);
-HAL_StatusTypeDef HAL_LTDC_SetWindowSize_NoReload(LTDC_HandleTypeDef *hltdc, uint32_t XSize, uint32_t YSize, uint32_t LayerIdx);
-HAL_StatusTypeDef HAL_LTDC_SetWindowPosition_NoReload(LTDC_HandleTypeDef *hltdc, uint32_t X0, uint32_t Y0, uint32_t LayerIdx);
+HAL_StatusTypeDef HAL_LTDC_ConfigLayer_NoReload(LTDC_HandleTypeDef *hltdc, LTDC_LayerCfgTypeDef *pLayerCfg,
+                                                uint32_t LayerIdx);
+HAL_StatusTypeDef HAL_LTDC_SetWindowSize_NoReload(LTDC_HandleTypeDef *hltdc, uint32_t XSize, uint32_t YSize,
+                                                  uint32_t LayerIdx);
+HAL_StatusTypeDef HAL_LTDC_SetWindowPosition_NoReload(LTDC_HandleTypeDef *hltdc, uint32_t X0, uint32_t Y0,
+                                                      uint32_t LayerIdx);
 HAL_StatusTypeDef HAL_LTDC_SetPixelFormat_NoReload(LTDC_HandleTypeDef *hltdc, uint32_t Pixelformat, uint32_t LayerIdx);
 HAL_StatusTypeDef HAL_LTDC_SetAlpha_NoReload(LTDC_HandleTypeDef *hltdc, uint32_t Alpha, uint32_t LayerIdx);
 HAL_StatusTypeDef HAL_LTDC_SetAddress_NoReload(LTDC_HandleTypeDef *hltdc, uint32_t Address, uint32_t LayerIdx);
@@ -639,15 +640,20 @@ uint32_t              HAL_LTDC_GetError(LTDC_HandleTypeDef *hltdc);
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup LTDC_Private_Macros LTDC Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
-#define LTDC_LAYER(__HANDLE__, __LAYER__)              ((LTDC_Layer_TypeDef *)((uint32_t)(((uint32_t)((__HANDLE__)->Instance)) + 0x84U + (0x80U*(__LAYER__)))))
+#define LTDC_LAYER(__HANDLE__, __LAYER__)              ((LTDC_Layer_TypeDef *)((uint32_t)(\
+                                                                               ((uint32_t)((__HANDLE__)->Instance))\
+                                                                               + 0x84U + (0x80U*(__LAYER__)))))
 #define IS_LTDC_LAYER(__LAYER__)                       ((__LAYER__) < MAX_LAYER)
-#define IS_LTDC_HSPOL(__HSPOL__)                       (((__HSPOL__) == LTDC_HSPOLARITY_AL) || ((__HSPOL__) == LTDC_HSPOLARITY_AH))
-#define IS_LTDC_VSPOL(__VSPOL__)                       (((__VSPOL__) == LTDC_VSPOLARITY_AL) || ((__VSPOL__) == LTDC_VSPOLARITY_AH))
-#define IS_LTDC_DEPOL(__DEPOL__)                       (((__DEPOL__) == LTDC_DEPOLARITY_AL) || ((__DEPOL__) ==  LTDC_DEPOLARITY_AH))
-#define IS_LTDC_PCPOL(__PCPOL__)                       (((__PCPOL__) == LTDC_PCPOLARITY_IPC) || ((__PCPOL__) ==  LTDC_PCPOLARITY_IIPC))
+#define IS_LTDC_HSPOL(__HSPOL__)                       (((__HSPOL__) == LTDC_HSPOLARITY_AL)\
+                                                        || ((__HSPOL__) == LTDC_HSPOLARITY_AH))
+#define IS_LTDC_VSPOL(__VSPOL__)                       (((__VSPOL__) == LTDC_VSPOLARITY_AL)\
+                                                        || ((__VSPOL__) == LTDC_VSPOLARITY_AH))
+#define IS_LTDC_DEPOL(__DEPOL__)                       (((__DEPOL__) == LTDC_DEPOLARITY_AL)\
+                                                        || ((__DEPOL__) ==  LTDC_DEPOLARITY_AH))
+#define IS_LTDC_PCPOL(__PCPOL__)                       (((__PCPOL__) == LTDC_PCPOLARITY_IPC)\
+                                                        || ((__PCPOL__) ==  LTDC_PCPOLARITY_IIPC))
 #define IS_LTDC_HSYNC(__HSYNC__)                       ((__HSYNC__)  <= LTDC_HORIZONTALSYNC)
 #define IS_LTDC_VSYNC(__VSYNC__)                       ((__VSYNC__)  <= LTDC_VERTICALSYNC)
 #define IS_LTDC_AHBP(__AHBP__)                         ((__AHBP__)   <= LTDC_HORIZONTALSYNC)
@@ -663,10 +669,14 @@ uint32_t              HAL_LTDC_GetError(LTDC_HandleTypeDef *hltdc);
                                                         ((__BLENDING_FACTOR1__) == LTDC_BLENDING_FACTOR1_PAxCA))
 #define IS_LTDC_BLENDING_FACTOR2(__BLENDING_FACTOR1__) (((__BLENDING_FACTOR1__) == LTDC_BLENDING_FACTOR2_CA) || \
                                                         ((__BLENDING_FACTOR1__) == LTDC_BLENDING_FACTOR2_PAxCA))
-#define IS_LTDC_PIXEL_FORMAT(__PIXEL_FORMAT__)         (((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_ARGB8888) || ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_RGB888)   || \
-                                                        ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_RGB565)   || ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_ARGB1555) || \
-                                                        ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_ARGB4444) || ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_L8)       || \
-                                                        ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_AL44)     || ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_AL88))
+#define IS_LTDC_PIXEL_FORMAT(__PIXEL_FORMAT__)         (((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_ARGB8888) || \
+                                                        ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_RGB888)   || \
+                                                        ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_RGB565)   || \
+                                                        ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_ARGB1555) || \
+                                                        ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_ARGB4444) || \
+                                                        ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_L8)       || \
+                                                        ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_AL44)     || \
+                                                        ((__PIXEL_FORMAT__) == LTDC_PIXEL_FORMAT_AL88))
 #define IS_LTDC_ALPHA(__ALPHA__)                       ((__ALPHA__) <= LTDC_ALPHA)
 #define IS_LTDC_HCONFIGST(__HCONFIGST__)               ((__HCONFIGST__) <= LTDC_STARTPOSITION)
 #define IS_LTDC_HCONFIGSP(__HCONFIGSP__)               ((__HCONFIGSP__) <= LTDC_STOPPOSITION)
@@ -676,14 +686,14 @@ uint32_t              HAL_LTDC_GetError(LTDC_HandleTypeDef *hltdc);
 #define IS_LTDC_CFBLL(__CFBLL__)                       ((__CFBLL__) <= LTDC_COLOR_FRAME_BUFFER)
 #define IS_LTDC_CFBLNBR(__CFBLNBR__)                   ((__CFBLNBR__) <= LTDC_LINE_NUMBER)
 #define IS_LTDC_LIPOS(__LIPOS__)                       ((__LIPOS__) <= 0x7FFU)
-#define IS_LTDC_RELOAD(__RELOADTYPE__)                 (((__RELOADTYPE__) == LTDC_RELOAD_IMMEDIATE) || ((__RELOADTYPE__) == LTDC_RELOAD_VERTICAL_BLANKING))
+#define IS_LTDC_RELOAD(__RELOADTYPE__)                 (((__RELOADTYPE__) == LTDC_RELOAD_IMMEDIATE) || \
+                                                        ((__RELOADTYPE__) == LTDC_RELOAD_VERTICAL_BLANKING))
 /**
   * @}
   */
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup LTDC_Private_Functions LTDC Private Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -707,4 +717,3 @@ uint32_t              HAL_LTDC_GetError(LTDC_HandleTypeDef *hltdc);
 
 #endif /* STM32H7xx_HAL_LTDC_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

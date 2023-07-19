@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -35,7 +34,6 @@ extern "C" {
 #if defined(CRC)
 
 /** @defgroup CRC_LL CRC
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -47,12 +45,10 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CRC_LL_Exported_Constants CRC Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRC_LL_EC_POLYLENGTH Polynomial length
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRC_POLYLENGTH_32B              0x00000000U                              /*!< 32 bits Polynomial size */
@@ -64,7 +60,6 @@ extern "C" {
   */
 
 /** @defgroup CRC_LL_EC_INDATA_REVERSE Input Data Reverse
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRC_INDATA_REVERSE_NONE         0x00000000U                              /*!< Input Data bit order not affected */
@@ -76,7 +71,6 @@ extern "C" {
   */
 
 /** @defgroup CRC_LL_EC_OUTDATA_REVERSE Output Data Reverse
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRC_OUTDATA_REVERSE_NONE        0x00000000U                               /*!< Output Data bit order not affected */
@@ -86,7 +80,6 @@ extern "C" {
   */
 
 /** @defgroup CRC_LL_EC_Default_Polynomial_Value    Default CRC generating polynomial value
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Normal representation of this polynomial value is
   *           X^32 + X^26 + X^23 + X^22 + X^16 + X^12 + X^11 + X^10 +X^8 + X^7 + X^5 + X^4 + X^2 + X + 1 .
   * @{
@@ -97,7 +90,6 @@ extern "C" {
   */
 
 /** @defgroup CRC_LL_EC_Default_InitValue    Default CRC computation initialization value
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRC_DEFAULT_CRC_INITVALUE       0xFFFFFFFFU                               /*!< Default CRC computation initialization value */
@@ -111,12 +103,10 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup CRC_LL_Exported_Macros CRC Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRC_LL_EM_WRITE_READ Common Write and read registers Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -147,12 +137,10 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup CRC_LL_Exported_Functions CRC Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRC_LL_EF_Configuration CRC Configuration functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -247,7 +235,7 @@ __STATIC_INLINE void LL_CRC_SetOutputDataReverseMode(CRC_TypeDef *CRCx, uint32_t
 }
 
 /**
-  * @brief  Configure the reversal of the bit order of the Output data
+  * @brief  Return type of reversal of the bit order of the Output data
   * @rmtoll CR           REV_OUT       LL_CRC_GetOutputDataReverseMode
   * @param  CRCx CRC Instance
   * @retval Returned value can be one of the following values:
@@ -323,7 +311,6 @@ __STATIC_INLINE uint32_t LL_CRC_GetPolynomialCoef(CRC_TypeDef *CRCx)
   */
 
 /** @defgroup CRC_LL_EF_Data_Management Data_Management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -441,9 +428,8 @@ __STATIC_INLINE void LL_CRC_Write_IDR(CRC_TypeDef *CRCx, uint32_t InData)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup CRC_LL_EF_Init Initialization and de-initialization functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -473,5 +459,3 @@ ErrorStatus LL_CRC_DeInit(CRC_TypeDef *CRCx);
 #endif
 
 #endif /* STM32H7xx_LL_CRC_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

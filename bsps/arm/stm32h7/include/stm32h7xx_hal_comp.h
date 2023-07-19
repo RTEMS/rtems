@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -38,7 +37,6 @@
 
 /* Exported types ------------------------------------------------------------*/ 
 /** @defgroup COMP_Exported_Types COMP Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -137,12 +135,10 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup COMP_Exported_Constants COMP Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
   
 /** @defgroup COMP_Error_Code COMP Error Code
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_COMP_ERROR_NONE             (0x00U)   /*!< No error */
@@ -154,7 +150,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   */
   
 /** @defgroup COMP_WindowMode COMP Window Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_WINDOWMODE_DISABLE                 ((uint32_t)0x00000000)   /*!< Window mode disable: Comparators instances pair COMP1 and COMP2 are independent */
@@ -165,7 +160,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   */
 
 /** @defgroup COMP_PowerMode COMP power mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Note: For the characteritics of comparator power modes                     */
@@ -179,7 +173,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   */
 
 /** @defgroup COMP_InputPlus COMP input plus (non-inverting input)
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_INPUT_PLUS_IO1            ((uint32_t)0x00000000) /*!< Comparator input plus connected to IO1 (pin PB0 for COMP1, pin PE9 for COMP2) */
@@ -192,7 +185,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   */
 
 /** @defgroup COMP_InputMinus COMP input minus (inverting input)
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_INPUT_MINUS_1_4VREFINT     (                                                                                        COMP_CFGRx_SCALEN | COMP_CFGRx_BRGEN)    /*!< Comparator input minus connected to 1/4 VrefInt */
@@ -212,7 +204,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   */
 
 /** @defgroup COMP_Hysteresis COMP hysteresis
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_HYSTERESIS_NONE           ((uint32_t)0x00000000)   /*!< No hysteresis */
@@ -224,7 +215,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   */
 
 /** @defgroup COMP_OutputPolarity COMP Output Polarity
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_OUTPUTPOL_NONINVERTED     ((uint32_t)0x00000000)  /*!< COMP output level is not inverted (comparator output is high when the input plus is at a higher voltage than the input minus) */
@@ -235,7 +225,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
 
 
 /** @defgroup COMP_BlankingSrce  COMP Blanking Source
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Any blanking source can be selected for all comparators */
@@ -254,7 +243,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
 
 
 /** @defgroup COMP_OutputLevel COMP Output Level
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */ 
 
@@ -274,7 +262,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   */
 
 /** @defgroup COMP_EXTI_TriggerMode COMP output to EXTI
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_TRIGGERMODE_NONE                 ((uint32_t)0x00000000)                                    /*!< Comparator output triggering no External Interrupt Line */
@@ -290,7 +277,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   */
 
 /** @defgroup COMP_Flag COMP Flag
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_FLAG_C1I           COMP_SR_C1IF           /*!< Comparator 1 Interrupt Flag */
@@ -300,7 +286,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   * @}
   */
 /** @defgroup COMP_IT_CLEAR_Flags  COMP Interruption Clear Flags
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_CLEAR_C1IF          COMP_ICFR_C1IF     /*!< Clear Comparator 1 Interrupt Flag */
@@ -309,7 +294,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   * @}
   */
 /** @defgroup COMP_Interrupts_Definitions COMP Interrupts Definitions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_IT_EN               COMP_CFGRx_ITEN 
@@ -325,11 +309,9 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
  
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup COMP_Exported_Macros COMP Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup COMP_Handle_Management  COMP Handle Management
-  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
   */
 
@@ -391,7 +373,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   */
   
 /** @defgroup COMP_Exti_Management  COMP external interrupt line management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -774,11 +755,9 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
 /* Private types -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup COMP_Private_Constants COMP Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup COMP_ExtiLine COMP EXTI Lines
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_EXTI_LINE_COMP1           (EXTI_IMR1_IM20)  /*!< EXTI line 20 connected to COMP1 output */
@@ -787,7 +766,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   * @}
   */
 /** @defgroup COMP_ExtiLine COMP EXTI Lines
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define COMP_EXTI_IT                        ((uint32_t) 0x01)  /*!< EXTI line event with interruption */
@@ -803,11 +781,9 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup COMP_Private_Macros COMP Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup COMP_GET_EXTI_LINE COMP Private macros to get EXTI line associated with Comparators 
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -821,7 +797,6 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   * @}
   */
 /** @defgroup COMP_IS_COMP_Definitions COMP private macros to check input parameters
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_COMP_WINDOWMODE(__WINDOWMODE__)  (((__WINDOWMODE__) == COMP_WINDOWMODE_DISABLE)                || \
@@ -975,4 +950,4 @@ uint32_t              HAL_COMP_GetError(COMP_HandleTypeDef *hcomp);
 
 #endif /* STM32H7xx_HAL_COMP_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

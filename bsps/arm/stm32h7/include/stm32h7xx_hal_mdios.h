@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -41,12 +40,10 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup MDIOS_Exported_Types MDIOS Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MDIOS_Exported_Types_Group1 MDIOS State structures definition
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -63,7 +60,6 @@ typedef enum
   */
 
 /** @defgroup MDIOS_Exported_Types_Group2 MDIOS Init Structure definition
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -80,7 +76,6 @@ typedef struct
   */
 
 /** @defgroup MDIOS_Exported_Types_Group4 MDIOS handle Structure definition
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -147,12 +142,10 @@ typedef  void (*pMDIOS_CallbackTypeDef)(MDIOS_HandleTypeDef * hmdios); /*!< poin
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup MDIOS_Exported_Constants MDIOS Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MDIOS_Preamble_Check  MDIOS Preamble Check
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define MDIOS_PREAMBLE_CHECK_ENABLE      ((uint32_t)0x00000000U)
@@ -162,7 +155,6 @@ typedef  void (*pMDIOS_CallbackTypeDef)(MDIOS_HandleTypeDef * hmdios); /*!< poin
   */
 
 /** @defgroup MDIOS_Input_Output_Registers_Definitions MDIOS Input Output Registers Definitions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define MDIOS_REG0                      ((uint32_t)0x00000000U)
@@ -202,7 +194,6 @@ typedef  void (*pMDIOS_CallbackTypeDef)(MDIOS_HandleTypeDef * hmdios); /*!< poin
   */
 
 /** @defgroup MDIOS_Registers_Flags  MDIOS Registers Flags
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define MDIOS_REG0_FLAG			((uint32_t)0x00000001U)
@@ -243,7 +234,6 @@ typedef  void (*pMDIOS_CallbackTypeDef)(MDIOS_HandleTypeDef * hmdios); /*!< poin
   */
 
 /** @defgroup MDIOS_Interrupt_sources Interrupt Sources
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define MDIOS_IT_WRITE                   MDIOS_CR_WRIE
@@ -254,7 +244,6 @@ typedef  void (*pMDIOS_CallbackTypeDef)(MDIOS_HandleTypeDef * hmdios); /*!< poin
   */
 
 /** @defgroup MDIOS_Interrupt_Flags  MDIOS Interrupt Flags
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define	MDIOS_TURNAROUND_ERROR_FLAG       MDIOS_SR_TERF
@@ -265,7 +254,6 @@ typedef  void (*pMDIOS_CallbackTypeDef)(MDIOS_HandleTypeDef * hmdios); /*!< poin
   */
 
 /** @defgroup MDIOS_Error_Code MDIOS Error Code
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_MDIOS_ERROR_NONE         ((uint32_t)0x00000000U)   /*!< No error            */
@@ -281,7 +269,6 @@ typedef  void (*pMDIOS_CallbackTypeDef)(MDIOS_HandleTypeDef * hmdios); /*!< poin
   */
 
  /** @defgroup MDIOS_Wakeup_Line  MDIOS Wakeup Line
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define MDIOS_WAKEUP_EXTI_LINE  ((uint32_t)0x00000400)  /* !<  42 - 32 = 10 */
@@ -294,7 +281,6 @@ typedef  void (*pMDIOS_CallbackTypeDef)(MDIOS_HandleTypeDef * hmdios); /*!< poin
   */
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup MDIOS_Exported_Macros MDIOS Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -497,7 +483,6 @@ typedef  void (*pMDIOS_CallbackTypeDef)(MDIOS_HandleTypeDef * hmdios); /*!< poin
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup MDIOS_Exported_Functions MDIOS Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -554,7 +539,6 @@ HAL_MDIOS_StateTypeDef HAL_MDIOS_GetState(MDIOS_HandleTypeDef *hmdios);
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup MDIOS_Private_Types MDIOS Private Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -564,7 +548,6 @@ HAL_MDIOS_StateTypeDef HAL_MDIOS_GetState(MDIOS_HandleTypeDef *hmdios);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup MDIOS_Private_Variables MDIOS Private Variables
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -574,7 +557,6 @@ HAL_MDIOS_StateTypeDef HAL_MDIOS_GetState(MDIOS_HandleTypeDef *hmdios);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup MDIOS_Private_Constants MDIOS Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -584,7 +566,6 @@ HAL_MDIOS_StateTypeDef HAL_MDIOS_GetState(MDIOS_HandleTypeDef *hmdios);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup MDIOS_Private_Macros MDIOS Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -601,7 +582,6 @@ HAL_MDIOS_StateTypeDef HAL_MDIOS_GetState(MDIOS_HandleTypeDef *hmdios);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup MDIOS_Private_Functions MDIOS Private Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -626,4 +606,3 @@ HAL_MDIOS_StateTypeDef HAL_MDIOS_GetState(MDIOS_HandleTypeDef *hmdios);
 
 #endif /* STM32H7xx_HAL_MDIOS_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -37,13 +37,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -56,7 +55,6 @@
   */
 
 /** @defgroup DMAEx DMAEx
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DMA Extended HAL module driver
   * @{
   */
@@ -184,7 +182,7 @@ HAL_StatusTypeDef HAL_DMAEx_MultiBufferStart(DMA_HandleTypeDef *hdma, uint32_t S
         /* Clear the DMAMUX synchro overrun flag */
         hdma->DMAmuxChannelStatus->CFR = hdma->DMAmuxChannelStatusMask;
 
-        if(hdma->DMAmuxRequestGen != NULL)
+        if(hdma->DMAmuxRequestGen != 0U)
         {
           /* Clear the DMAMUX request generator overrun flag */
           hdma->DMAmuxRequestGenStatus->RGCFR = hdma->DMAmuxRequestGenStatusMask;
@@ -280,7 +278,7 @@ HAL_StatusTypeDef HAL_DMAEx_MultiBufferStart_IT(DMA_HandleTypeDef *hdma, uint32_
       /* Clear the DMAMUX synchro overrun flag */
       hdma->DMAmuxChannelStatus->CFR = hdma->DMAmuxChannelStatusMask;
 
-      if(hdma->DMAmuxRequestGen != NULL)
+      if(hdma->DMAmuxRequestGen != 0U)
       {
         /* Clear the DMAMUX request generator overrun flag */
         hdma->DMAmuxRequestGenStatus->RGCFR = hdma->DMAmuxRequestGenStatusMask;
@@ -320,7 +318,7 @@ HAL_StatusTypeDef HAL_DMAEx_MultiBufferStart_IT(DMA_HandleTypeDef *hdma, uint32_
         hdma->DMAmuxChannel->CCR |= DMAMUX_CxCR_SOIE;
       }
 
-      if(hdma->DMAmuxRequestGen != NULL)
+      if(hdma->DMAmuxRequestGen != 0U)
       {
         /* if using DMAMUX request generator, enable the DMAMUX request generator overrun IT*/
         /* enable the request gen overrun IT*/
@@ -487,7 +485,7 @@ HAL_StatusTypeDef HAL_DMAEx_ConfigMuxRequestGenerator (DMA_HandleTypeDef *hdma, 
   /* check if the DMA state is ready
      and DMA is using a DMAMUX request generator block
   */
-  if(hdma->DMAmuxRequestGen == NULL)
+  if(hdma->DMAmuxRequestGen == 0U)
   {
     /* Set the error code to busy */
     hdma->ErrorCode = HAL_DMA_ERROR_PARAM;
@@ -536,7 +534,7 @@ HAL_StatusTypeDef HAL_DMAEx_EnableMuxRequestGenerator (DMA_HandleTypeDef *hdma)
 
   /* check if the DMA state is ready
      and DMA is using a DMAMUX request generator block */
-  if((hdma->State != HAL_DMA_STATE_RESET) && (hdma->DMAmuxRequestGen != NULL))
+  if((hdma->State != HAL_DMA_STATE_RESET) && (hdma->DMAmuxRequestGen != 0U))
   {
     /* Enable the request generator*/
     hdma->DMAmuxRequestGen->RGCR |= DMAMUX_RGxCR_GE;
@@ -562,7 +560,7 @@ HAL_StatusTypeDef HAL_DMAEx_DisableMuxRequestGenerator (DMA_HandleTypeDef *hdma)
 
   /* check if the DMA state is ready
      and DMA is using a DMAMUX request generator block */
-  if((hdma->State != HAL_DMA_STATE_RESET) && (hdma->DMAmuxRequestGen != NULL))
+  if((hdma->State != HAL_DMA_STATE_RESET) && (hdma->DMAmuxRequestGen != 0U))
   {
     /* Disable the request generator*/
     hdma->DMAmuxRequestGen->RGCR &= ~DMAMUX_RGxCR_GE;
@@ -602,7 +600,7 @@ void HAL_DMAEx_MUX_IRQHandler(DMA_HandleTypeDef *hdma)
     }
   }
 
-  if(hdma->DMAmuxRequestGen != NULL)
+  if(hdma->DMAmuxRequestGen != 0)
   {
    /* if using a DMAMUX request generator block Check for DMAMUX request generator overrun */
     if((hdma->DMAmuxRequestGenStatus->RGSR & hdma->DMAmuxRequestGenStatusMask) != 0U)
@@ -712,4 +710,3 @@ static void DMA_MultiBufferSetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddres
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

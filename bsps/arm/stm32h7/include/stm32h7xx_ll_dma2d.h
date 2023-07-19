@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -35,7 +34,6 @@ extern "C" {
 #if defined (DMA2D)
 
 /** @defgroup DMA2D_LL DMA2D
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -43,9 +41,8 @@ extern "C" {
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup DMA2D_LL_Private_Macros DMA2D Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -55,9 +52,8 @@ extern "C" {
 #endif /*USE_FULL_LL_DRIVER*/
 
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup DMA2D_LL_ES_Init_Struct DMA2D Exported Init structures
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -69,91 +65,125 @@ typedef struct
   uint32_t Mode;                 /*!< Specifies the DMA2D transfer mode.
                                       - This parameter can be one value of @ref DMA2D_LL_EC_MODE.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetMode().*/
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetMode(). */
 
   uint32_t ColorMode;            /*!< Specifies the color format of the output image.
                                       - This parameter can be one value of @ref DMA2D_LL_EC_OUTPUT_COLOR_MODE.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputColorMode(). */
+                                      This parameter can be modified afterwards using,
+                                      unitary function @ref LL_DMA2D_SetOutputColorMode(). */
 
   uint32_t OutputBlue;           /*!< Specifies the Blue value of the output image.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F if RGB565 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x1F if RGB565 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
                                       function @ref LL_DMA2D_ConfigOutputColor(). */
 
   uint32_t OutputGreen;          /*!< Specifies the Green value of the output image.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x3F if RGB565 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x3F if RGB565 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
+                                      This parameter can be modified afterwards
+                                      using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
                                       function @ref LL_DMA2D_ConfigOutputColor(). */
 
   uint32_t OutputRed;            /*!< Specifies the Red value of the output image.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F if RGB565 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x1F if RGB565 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
+                                      This parameter can be modified afterwards
+                                      using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
                                       function @ref LL_DMA2D_ConfigOutputColor(). */
 
   uint32_t OutputAlpha;          /*!< Specifies the Alpha channel of the output image.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x01 if ARGB1555 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x01 if ARGB1555 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
                                       - This parameter is not considered if RGB888 or RGB565 color mode is selected.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
+                                      This parameter can be modified afterwards using,
+                                      unitary function @ref LL_DMA2D_SetOutputColor() or configuration
                                       function @ref LL_DMA2D_ConfigOutputColor(). */
 
   uint32_t OutputMemoryAddress;  /*!< Specifies the memory address.
-                                      - This parameter must be a number between Min_Data = 0x0000 and Max_Data = 0xFFFFFFFF.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x0000 and Max_Data = 0xFFFFFFFF.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputMemAddr(). */
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetOutputMemAddr(). */
 
   uint32_t OutputSwapMode;             /*!< Specifies the output swap mode color format of the output image.
                                       - This parameter can be one value of @ref DMA2D_LL_EC_OUTPUT_SWAP_MODE.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputSwapMode(). */
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetOutputSwapMode(). */
 
   uint32_t LineOffsetMode;       /*!< Specifies the output line offset mode.
                                       - This parameter can be one value of @ref DMA2D_LL_EC_LINE_OFFSET_MODE.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetLineOffsetMode(). */
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetLineOffsetMode(). */
 
   uint32_t LineOffset;           /*!< Specifies the output line offset value.
                                       - This parameter must be a number between Min_Data = 0x0000 and Max_Data = 0xFFFF.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetLineOffset(). */
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetLineOffset(). */
 
   uint32_t NbrOfLines;           /*!< Specifies the number of lines of the area to be transferred.
-                                      - This parameter must be a number between Min_Data = 0x0000 and Max_Data = 0xFFFF.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x0000 and Max_Data = 0xFFFF.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetNbrOfLines(). */
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetNbrOfLines(). */
 
-  uint32_t NbrOfPixelsPerLines;  /*!< Specifies the number of pixels per lines of the area to be transfered.
+  uint32_t NbrOfPixelsPerLines;  /*!< Specifies the number of pixels per lines of the area to be transferred.
                                       - This parameter must be a number between Min_Data = 0x0000 and Max_Data = 0x3FFF.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetNbrOfPixelsPerLines(). */
+                                      This parameter can be modified afterwards using,
+                                      unitary function @ref LL_DMA2D_SetNbrOfPixelsPerLines(). */
 
   uint32_t AlphaInversionMode;   /*!< Specifies the output alpha inversion mode.
                                       - This parameter can be one value of @ref DMA2D_LL_EC_ALPHA_INVERSION.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputAlphaInvMode(). */
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetOutputAlphaInvMode(). */
 
   uint32_t RBSwapMode;           /*!< Specifies the output Red Blue swap mode.
                                       - This parameter can be one value of @ref DMA2D_LL_EC_RED_BLUE_SWAP.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputRBSwapMode(). */
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetOutputRBSwapMode(). */
 
 } LL_DMA2D_InitTypeDef;
 
@@ -163,7 +193,8 @@ typedef struct
 typedef struct
 {
   uint32_t MemoryAddress;        /*!< Specifies the foreground or background memory address.
-                                      - This parameter must be a number between Min_Data = 0x0000 and Max_Data = 0xFFFFFFFF.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x0000 and Max_Data = 0xFFFFFFFF.
 
                                       This parameter can be modified afterwards using unitary functions
                                       - @ref LL_DMA2D_FGND_SetMemAddr() for foreground layer,
@@ -233,7 +264,8 @@ typedef struct
                                       - @ref LL_DMA2D_BGND_SetRedColor() for background layer. */
 
   uint32_t CLUTMemoryAddress;    /*!< Specifies the foreground or background CLUT memory address.
-                                      - This parameter must be a number between Min_Data = 0x0000 and Max_Data = 0xFFFFFFFF.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x0000 and Max_Data = 0xFFFFFFFF.
 
                                       This parameter can be modified afterwards using unitary functions
                                       - @ref LL_DMA2D_FGND_SetCLUTMemAddr() for foreground layer,
@@ -270,45 +302,68 @@ typedef struct
   uint32_t ColorMode;            /*!< Specifies the color format of the output image.
                                       - This parameter can be one value of @ref DMA2D_LL_EC_OUTPUT_COLOR_MODE.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputColorMode(). */
+                                      This parameter can be modified afterwards using
+                    unitary function @ref LL_DMA2D_SetOutputColorMode(). */
 
   uint32_t OutputBlue;           /*!< Specifies the Blue value of the output image.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F if RGB565 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x1F if RGB565 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
+                                      This parameter can be modified afterwards using,
+                                      unitary function @ref LL_DMA2D_SetOutputColor() or configuration
                                       function @ref LL_DMA2D_ConfigOutputColor(). */
 
   uint32_t OutputGreen;          /*!< Specifies the Green value of the output image.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x3F if RGB565 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
+                                      - This parameter must be a number between
+                                        Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x3F if RGB565 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
                                       function @ref LL_DMA2D_ConfigOutputColor(). */
 
   uint32_t OutputRed;            /*!< Specifies the Red value of the output image.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F if RGB565 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if RGB888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x1F if RGB565 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x1F if ARGB1555 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
                                       function @ref LL_DMA2D_ConfigOutputColor(). */
 
   uint32_t OutputAlpha;          /*!< Specifies the Alpha channel of the output image.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x01 if ARGB1555 color mode is selected.
-                                      - This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0xFF if ARGB8888 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x01 if ARGB1555 color mode is selected.
+                                      - This parameter must be a number between:
+                                        Min_Data = 0x00 and Max_Data = 0x0F if ARGB4444 color mode is selected.
                                       - This parameter is not considered if RGB888 or RGB565 color mode is selected.
 
-                                      This parameter can be modified afterwards using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
+                                      This parameter can be modified afterwards,
+                                      using unitary function @ref LL_DMA2D_SetOutputColor() or configuration
                                       function @ref LL_DMA2D_ConfigOutputColor(). */
 
 } LL_DMA2D_ColorTypeDef;
@@ -320,12 +375,10 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup DMA2D_LL_Exported_Constants DMA2D Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DMA2D_LL_EC_GET_FLAG Get Flags Defines
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_DMA2D_ReadReg function
   * @{
   */
@@ -340,7 +393,6 @@ typedef struct
   */
 
 /** @defgroup DMA2D_LL_EC_IT IT Defines
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_DMA2D_ReadReg and  LL_DMA2D_WriteReg functions
   * @{
   */
@@ -355,7 +407,6 @@ typedef struct
   */
 
 /** @defgroup DMA2D_LL_EC_MODE Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA2D_MODE_M2M                       0x00000000U                       /*!< DMA2D memory to memory transfer mode */
@@ -369,7 +420,6 @@ typedef struct
   */
 
 /** @defgroup DMA2D_LL_EC_OUTPUT_COLOR_MODE Output Color Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA2D_OUTPUT_MODE_ARGB8888     0x00000000U                           /*!< ARGB8888 */
@@ -382,7 +432,6 @@ typedef struct
   */
 
 /** @defgroup DMA2D_LL_EC_INPUT_COLOR_MODE Input Color Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA2D_INPUT_MODE_ARGB8888      0x00000000U                                                /*!< ARGB8888 */
@@ -402,19 +451,19 @@ typedef struct
   */
 
 /** @defgroup DMA2D_LL_EC_ALPHA_MODE Alpha Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA2D_ALPHA_MODE_NO_MODIF       0x00000000U             /*!< No modification of the alpha channel value */
-#define LL_DMA2D_ALPHA_MODE_REPLACE        DMA2D_FGPFCCR_AM_0      /*!< Replace original alpha channel value by programmed alpha value */
-#define LL_DMA2D_ALPHA_MODE_COMBINE        DMA2D_FGPFCCR_AM_1      /*!< Replace original alpha channel value by programmed alpha value
-                                                                   with original alpha channel value                              */
+#define LL_DMA2D_ALPHA_MODE_REPLACE        DMA2D_FGPFCCR_AM_0      /*!< Replace original alpha channel value by
+                                                                        programmed alpha value                     */
+#define LL_DMA2D_ALPHA_MODE_COMBINE        DMA2D_FGPFCCR_AM_1      /*!< Replace original alpha channel value by
+                                                                        programmed alpha value with,
+                                                                        original alpha channel value               */
 /**
   * @}
   */
 
 /** @defgroup DMA2D_LL_EC_OUTPUT_SWAP_MODE Swap Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA2D_SWAP_MODE_REGULAR        0x00000000U                      /*!< Regular order */
@@ -424,7 +473,6 @@ typedef struct
   */
 
 /** @defgroup DMA2D_LL_EC_RED_BLUE_SWAP Red Blue Swap
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA2D_RB_MODE_REGULAR          0x00000000U                      /*!< RGB or ARGB */
@@ -434,7 +482,6 @@ typedef struct
   */
 
 /** @defgroup DMA2D_LL_EC_ALPHA_INVERSION Alpha Inversion
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA2D_ALPHA_REGULAR          0x00000000U                     /*!< Regular alpha  */
@@ -445,7 +492,6 @@ typedef struct
 
 
 /** @defgroup DMA2D_LL_EC_LINE_OFFSET_MODE Line Offset Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA2D_LINE_OFFSET_PIXELS     0x00000000U                     /*!< Line offsets are expressed in pixels  */
@@ -455,7 +501,6 @@ typedef struct
   */
 
 /** @defgroup DMA2D_LL_EC_CLUT_COLOR_MODE CLUT Color Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA2D_CLUT_COLOR_MODE_ARGB8888          0x00000000U                     /*!< ARGB8888 */
@@ -465,7 +510,6 @@ typedef struct
   */
 
 /** @defgroup DMA2D_LL_CHROMA_SUB_SAMPLING Chroma Sub Sampling
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA2D_CSS_444              0x00000000U             /*!< No chroma sub-sampling 4:4:4 */
@@ -481,12 +525,10 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup DMA2D_LL_Exported_Macros DMA2D Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DMA2D_LL_EM_WRITE_READ Common Write and read registers Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -516,12 +558,10 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup DMA2D_LL_Exported_Functions DMA2D Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DMA2D_LL_EF_Configuration Configuration Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -803,7 +843,6 @@ __STATIC_INLINE void LL_DMA2D_SetLineOffset(DMA2D_TypeDef *DMA2Dx, uint32_t Line
   * @rmtoll OOR          LO         LL_DMA2D_GetLineOffset
   * @param  DMA2Dx DMA2D Instance
   * @retval Line offset value between Min_Data=0 and Max_Data=0xFFFF
-  @endif
   */
 __STATIC_INLINE uint32_t LL_DMA2D_GetLineOffset(DMA2D_TypeDef *DMA2Dx)
 {
@@ -997,7 +1036,6 @@ __STATIC_INLINE uint32_t LL_DMA2D_IsEnabledDeadTime(DMA2D_TypeDef *DMA2Dx)
 }
 
 /** @defgroup DMA2D_LL_EF_FGND_Configuration Foreground Configuration Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1412,7 +1450,6 @@ __STATIC_INLINE uint32_t LL_DMA2D_FGND_GetChrSubSampling(DMA2D_TypeDef *DMA2Dx)
   */
 
 /** @defgroup DMA2D_LL_EF_BGND_Configuration Background Configuration Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1804,7 +1841,6 @@ __STATIC_INLINE uint32_t  LL_DMA2D_BGND_GetCLUTColorMode(DMA2D_TypeDef *DMA2Dx)
 
 
 /** @defgroup DMA2D_LL_EF_FLAG_MANAGEMENT Flag Management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1945,7 +1981,6 @@ __STATIC_INLINE void LL_DMA2D_ClearFlag_TE(DMA2D_TypeDef *DMA2Dx)
   */
 
 /** @defgroup DMA2D_LL_EF_IT_MANAGEMENT Interruption Management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2153,9 +2188,8 @@ __STATIC_INLINE uint32_t LL_DMA2D_IsEnabledIT_TE(DMA2D_TypeDef *DMA2Dx)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup DMA2D_LL_EF_Init_Functions Initialization and De-initialization Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2195,5 +2229,3 @@ void LL_DMA2D_ConfigSize(DMA2D_TypeDef *DMA2Dx, uint32_t NbrOfLines, uint32_t Nb
 #endif
 
 #endif /* STM32H7xx_LL_DMA2D_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

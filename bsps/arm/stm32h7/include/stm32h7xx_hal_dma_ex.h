@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -38,7 +37,6 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup DMAEx_Exported_Types DMAEx Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DMAEx Exported types
   * @{
   */
@@ -100,13 +98,11 @@ typedef struct
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup DMAEx_Exported_Constants DMA Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx Exported constants
   * @{
   */
 
 /** @defgroup DMAEx_MUX_SyncSignalID_selection DMAEx MUX SyncSignalID selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx MUX SyncSignalID selection
   * @{
   */
@@ -141,7 +137,6 @@ typedef struct
   */
 
 /** @defgroup DMAEx_MUX_SyncPolarity_selection DMAEx MUX SyncPolarity selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx MUX SyncPolarity selection
   * @{
   */
@@ -156,7 +151,6 @@ typedef struct
 
 
 /** @defgroup DMAEx_MUX_SignalGeneratorID_selection DMAEx MUX SignalGeneratorID selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx MUX SignalGeneratorID selection
   * @{
   */
@@ -212,7 +206,6 @@ typedef struct
   */
 
 /** @defgroup DMAEx_MUX_RequestGeneneratorPolarity_selection DMAEx MUX RequestGeneneratorPolarity selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx MUX RequestGeneneratorPolarity selection
   * @{
   */
@@ -231,13 +224,11 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup DMAEx_Exported_Functions DMAEx Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   DMAEx Exported functions
   * @{
   */
 
 /** @defgroup DMAEx_Exported_Functions_Group1 Extended features functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   Extended features functions
   * @{
   */
@@ -261,7 +252,6 @@ void HAL_DMAEx_MUX_IRQHandler(DMA_HandleTypeDef *hdma);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup DMAEx_Private_Macros DMA Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx private macros
   * @{
   */
@@ -297,7 +287,6 @@ void HAL_DMAEx_MUX_IRQHandler(DMA_HandleTypeDef *hdma);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup DMAEx_Private_Functions DMAEx Private Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DMAEx Private functions
   * @{
   */
@@ -319,4 +308,3 @@ void HAL_DMAEx_MUX_IRQHandler(DMA_HandleTypeDef *hdma);
 
 #endif /* STM32H7xx_HAL_DMA_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

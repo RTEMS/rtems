@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -40,7 +39,6 @@ extern "C" {
 /* Exported typedef ----------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup NAND_Exported_Types NAND Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -90,10 +88,10 @@ typedef struct
 typedef struct
 {
   uint32_t        PageSize;              /*!< NAND memory page (without spare area) size measured in bytes
-                                              for 8 bits adressing or words for 16 bits addressing             */
+                                              for 8 bits addressing or words for 16 bits addressing             */
 
   uint32_t        SpareAreaSize;         /*!< NAND memory spare area size measured in bytes
-                                              for 8 bits adressing or words for 16 bits addressing             */
+                                              for 8 bits addressing or words for 16 bits addressing             */
 
   uint32_t        BlockSize;             /*!< NAND memory block size measured in number of pages               */
 
@@ -131,10 +129,10 @@ typedef struct
   NAND_DeviceConfigTypeDef       Config;     /*!< NAND phusical characteristic information structure    */
 
 #if (USE_HAL_NAND_REGISTER_CALLBACKS == 1)
-  void  (* MspInitCallback)        ( struct __NAND_HandleTypeDef * hnand);    /*!< NAND Msp Init callback              */
-  void  (* MspDeInitCallback)      ( struct __NAND_HandleTypeDef * hnand);    /*!< NAND Msp DeInit callback            */
-  void  (* ItCallback)             ( struct __NAND_HandleTypeDef * hnand);    /*!< NAND IT callback                    */
-#endif
+  void (* MspInitCallback)(struct __NAND_HandleTypeDef *hnand);               /*!< NAND Msp Init callback              */
+  void (* MspDeInitCallback)(struct __NAND_HandleTypeDef *hnand);             /*!< NAND Msp DeInit callback            */
+  void (* ItCallback)(struct __NAND_HandleTypeDef *hnand);                    /*!< NAND IT callback                    */
+#endif /* USE_HAL_NAND_REGISTER_CALLBACKS */
 } NAND_HandleTypeDef;
 
 #if (USE_HAL_NAND_REGISTER_CALLBACKS == 1)
@@ -146,13 +144,13 @@ typedef enum
   HAL_NAND_MSP_INIT_CB_ID       = 0x00U,  /*!< NAND MspInit Callback ID          */
   HAL_NAND_MSP_DEINIT_CB_ID     = 0x01U,  /*!< NAND MspDeInit Callback ID        */
   HAL_NAND_IT_CB_ID             = 0x02U   /*!< NAND IT Callback ID               */
-}HAL_NAND_CallbackIDTypeDef;
+} HAL_NAND_CallbackIDTypeDef;
 
 /**
   * @brief  HAL NAND Callback pointer definition
   */
 typedef void (*pNAND_CallbackTypeDef)(NAND_HandleTypeDef *hnand);
-#endif
+#endif /* USE_HAL_NAND_REGISTER_CALLBACKS */
 
 /**
   * @}
@@ -161,9 +159,8 @@ typedef void (*pNAND_CallbackTypeDef)(NAND_HandleTypeDef *hnand);
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup NAND_Exported_Macros NAND Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
- * @{
- */
+  * @{
+  */
 
 /** @brief Reset NAND handle state
   * @param  __HANDLE__ specifies the NAND handle.
@@ -177,7 +174,7 @@ typedef void (*pNAND_CallbackTypeDef)(NAND_HandleTypeDef *hnand);
                                                              } while(0)
 #else
 #define __HAL_NAND_RESET_HANDLE_STATE(__HANDLE__) ((__HANDLE__)->State = HAL_NAND_STATE_RESET)
-#endif
+#endif /* USE_HAL_NAND_REGISTER_CALLBACKS */
 
 /**
   * @}
@@ -193,7 +190,8 @@ typedef void (*pNAND_CallbackTypeDef)(NAND_HandleTypeDef *hnand);
   */
 
 /* Initialization/de-initialization functions  ********************************/
-HAL_StatusTypeDef  HAL_NAND_Init(NAND_HandleTypeDef *hnand, FMC_NAND_PCC_TimingTypeDef *ComSpace_Timing, FMC_NAND_PCC_TimingTypeDef *AttSpace_Timing);
+HAL_StatusTypeDef  HAL_NAND_Init(NAND_HandleTypeDef *hnand, FMC_NAND_PCC_TimingTypeDef *ComSpace_Timing,
+                                 FMC_NAND_PCC_TimingTypeDef *AttSpace_Timing);
 HAL_StatusTypeDef  HAL_NAND_DeInit(NAND_HandleTypeDef *hnand);
 
 HAL_StatusTypeDef  HAL_NAND_ConfigDevice(NAND_HandleTypeDef *hnand, NAND_DeviceConfigTypeDef *pDeviceConfig);
@@ -216,15 +214,23 @@ void               HAL_NAND_ITCallback(NAND_HandleTypeDef *hnand);
 /* IO operation functions  ****************************************************/
 HAL_StatusTypeDef  HAL_NAND_Reset(NAND_HandleTypeDef *hnand);
 
-HAL_StatusTypeDef  HAL_NAND_Read_Page_8b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint8_t *pBuffer, uint32_t NumPageToRead);
-HAL_StatusTypeDef  HAL_NAND_Write_Page_8b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint8_t *pBuffer, uint32_t NumPageToWrite);
-HAL_StatusTypeDef  HAL_NAND_Read_SpareArea_8b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint8_t *pBuffer, uint32_t NumSpareAreaToRead);
-HAL_StatusTypeDef  HAL_NAND_Write_SpareArea_8b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint8_t *pBuffer, uint32_t NumSpareAreaTowrite);
+HAL_StatusTypeDef  HAL_NAND_Read_Page_8b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint8_t *pBuffer,
+                                         uint32_t NumPageToRead);
+HAL_StatusTypeDef  HAL_NAND_Write_Page_8b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint8_t *pBuffer,
+                                          uint32_t NumPageToWrite);
+HAL_StatusTypeDef  HAL_NAND_Read_SpareArea_8b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress,
+                                              uint8_t *pBuffer, uint32_t NumSpareAreaToRead);
+HAL_StatusTypeDef  HAL_NAND_Write_SpareArea_8b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress,
+                                               uint8_t *pBuffer, uint32_t NumSpareAreaTowrite);
 
-HAL_StatusTypeDef  HAL_NAND_Read_Page_16b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint16_t *pBuffer, uint32_t NumPageToRead);
-HAL_StatusTypeDef  HAL_NAND_Write_Page_16b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint16_t *pBuffer, uint32_t NumPageToWrite);
-HAL_StatusTypeDef  HAL_NAND_Read_SpareArea_16b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint16_t *pBuffer, uint32_t NumSpareAreaToRead);
-HAL_StatusTypeDef  HAL_NAND_Write_SpareArea_16b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint16_t *pBuffer, uint32_t NumSpareAreaTowrite);
+HAL_StatusTypeDef  HAL_NAND_Read_Page_16b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint16_t *pBuffer,
+                                          uint32_t NumPageToRead);
+HAL_StatusTypeDef  HAL_NAND_Write_Page_16b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress, uint16_t *pBuffer,
+                                           uint32_t NumPageToWrite);
+HAL_StatusTypeDef  HAL_NAND_Read_SpareArea_16b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress,
+                                               uint16_t *pBuffer, uint32_t NumSpareAreaToRead);
+HAL_StatusTypeDef  HAL_NAND_Write_SpareArea_16b(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress,
+                                                uint16_t *pBuffer, uint32_t NumSpareAreaTowrite);
 
 HAL_StatusTypeDef  HAL_NAND_Erase_Block(NAND_HandleTypeDef *hnand, NAND_AddressTypeDef *pAddress);
 
@@ -232,9 +238,10 @@ uint32_t           HAL_NAND_Address_Inc(NAND_HandleTypeDef *hnand, NAND_AddressT
 
 #if (USE_HAL_NAND_REGISTER_CALLBACKS == 1)
 /* NAND callback registering/unregistering */
-HAL_StatusTypeDef  HAL_NAND_RegisterCallback(NAND_HandleTypeDef *hnand, HAL_NAND_CallbackIDTypeDef CallbackId, pNAND_CallbackTypeDef pCallback);
+HAL_StatusTypeDef  HAL_NAND_RegisterCallback(NAND_HandleTypeDef *hnand, HAL_NAND_CallbackIDTypeDef CallbackId,
+                                             pNAND_CallbackTypeDef pCallback);
 HAL_StatusTypeDef  HAL_NAND_UnRegisterCallback(NAND_HandleTypeDef *hnand, HAL_NAND_CallbackIDTypeDef CallbackId);
-#endif
+#endif /* USE_HAL_NAND_REGISTER_CALLBACKS */
 
 /**
   * @}
@@ -271,7 +278,6 @@ uint32_t              HAL_NAND_Read_Status(NAND_HandleTypeDef *hnand);
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup NAND_Private_Constants NAND Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define NAND_DEVICE                0x80000000UL
@@ -280,19 +286,19 @@ uint32_t              HAL_NAND_Read_Status(NAND_HandleTypeDef *hnand);
 #define CMD_AREA                   (1UL<<16U)  /* A16 = CLE high */
 #define ADDR_AREA                  (1UL<<17U)  /* A17 = ALE high */
 
-#define NAND_CMD_AREA_A            0x00U
-#define NAND_CMD_AREA_B            0x01U
-#define NAND_CMD_AREA_C            0x50U
-#define NAND_CMD_AREA_TRUE1        0x30U
+#define NAND_CMD_AREA_A            ((uint8_t)0x00)
+#define NAND_CMD_AREA_B            ((uint8_t)0x01)
+#define NAND_CMD_AREA_C            ((uint8_t)0x50)
+#define NAND_CMD_AREA_TRUE1        ((uint8_t)0x30)
 
-#define NAND_CMD_WRITE0            0x80U
-#define NAND_CMD_WRITE_TRUE1       0x10U
-#define NAND_CMD_ERASE0            0x60U
-#define NAND_CMD_ERASE1            0xD0U
-#define NAND_CMD_READID            0x90U
-#define NAND_CMD_STATUS            0x70U
-#define NAND_CMD_LOCK_STATUS       0x7AU
-#define NAND_CMD_RESET             0xFFU
+#define NAND_CMD_WRITE0            ((uint8_t)0x80)
+#define NAND_CMD_WRITE_TRUE1       ((uint8_t)0x10)
+#define NAND_CMD_ERASE0            ((uint8_t)0x60)
+#define NAND_CMD_ERASE1            ((uint8_t)0xD0)
+#define NAND_CMD_READID            ((uint8_t)0x90)
+#define NAND_CMD_STATUS            ((uint8_t)0x70)
+#define NAND_CMD_LOCK_STATUS       ((uint8_t)0x7A)
+#define NAND_CMD_RESET             ((uint8_t)0xFF)
 
 /* NAND memory status */
 #define NAND_VALID_ADDRESS         0x00000100UL
@@ -307,7 +313,6 @@ uint32_t              HAL_NAND_Read_Status(NAND_HandleTypeDef *hnand);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup NAND_Private_Macros NAND Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -318,7 +323,10 @@ uint32_t              HAL_NAND_Read_Status(NAND_HandleTypeDef *hnand);
   * @retval NAND Raw address value
   */
 #define ARRAY_ADDRESS(__ADDRESS__ , __HANDLE__) ((__ADDRESS__)->Page + \
-                         (((__ADDRESS__)->Block + (((__ADDRESS__)->Plane) * ((__HANDLE__)->Config.PlaneSize)))* ((__HANDLE__)->Config.BlockSize)))
+                                                 (((__ADDRESS__)->Block + \
+                                                   (((__ADDRESS__)->Plane) * \
+                                                    ((__HANDLE__)->Config.PlaneSize))) * \
+                                                  ((__HANDLE__)->Config.BlockSize)))
 
 /**
   * @brief  NAND memory Column address computation.
@@ -367,5 +375,3 @@ uint32_t              HAL_NAND_Read_Status(NAND_HandleTypeDef *hnand);
 #endif
 
 #endif /* STM32H7xx_HAL_NAND_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

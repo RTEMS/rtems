@@ -4,22 +4,20 @@
   * @author  MCD Application Team
   * @brief   Extended OPAMP HAL module driver.
   *          This file provides firmware functions to manage the following
-  *          functionalities of the operational amplifier(s)(OPAMP1, OPAMP2 etc)
-  *          peripheral:
+  *          functionalities of the operational amplifier(s) peripheral:
   *           + Extended Initialization and de-initialization functions
   *           + Extended Peripheral Control functions
-  *         
+  *
   @verbatim
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -32,7 +30,6 @@
   */
 
 /** @defgroup OPAMPEx OPAMPEx
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief OPAMP Extended HAL module driver
   * @{
   */
@@ -47,12 +44,10 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup OPAMPEx_Exported_Functions OPAMP Extended Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OPAMPEx_Exported_Functions_Group1 Extended Input and Output operation functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended operation functions
   *
 @verbatim
@@ -371,7 +366,6 @@ HAL_StatusTypeDef HAL_OPAMPEx_SelfCalibrateAll(OPAMP_HandleTypeDef *hopamp1, OPA
   */
 
 /** @defgroup OPAMPEx_Exported_Functions_Group2 Peripheral Control functions 
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral Control functions 
  *
 @verbatim   
@@ -436,4 +430,4 @@ HAL_StatusTypeDef HAL_OPAMPEx_Unlock(OPAMP_HandleTypeDef* hopamp)
   */
 
 #endif /* HAL_OPAMP_MODULE_ENABLED */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

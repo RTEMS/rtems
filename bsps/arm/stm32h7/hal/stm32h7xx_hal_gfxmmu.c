@@ -7,10 +7,21 @@
   *           + Initialization and De-initialization.
   *           + LUT configuration.
   *           + Force flush and/or invalidate of cache.
-  *           + Modify physical buffer adresses.
+  *           + Modify physical buffer addresses.
   *           + Modify cache and pre-fetch parameters.
   *           + Error management.
-  *         
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                      ##### How to use this driver #####
@@ -40,7 +51,7 @@
     [..]    
       (#) Use HAL_GFXMMU_ConfigForceCache() to flush and/or invalidate cache.
 
-    *** Modify physical buffer adresses ***
+    *** Modify physical buffer addresses ***
     =======================================
     [..]    
       (#) Use HAL_GFXMMU_ModifyBuffers() to modify physical buffer addresses.
@@ -121,17 +132,6 @@
 
   @endverbatim
   ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -143,7 +143,6 @@
 #ifdef HAL_GFXMMU_MODULE_ENABLED
 #if defined(GFXMMU)
 /** @defgroup GFXMMU GFXMMU
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief GFXMMU HAL driver module
   * @{
   */
@@ -158,12 +157,10 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup GFXMMU_Exported_Functions GFXMMU Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup GFXMMU_Exported_Functions_Group1 Initialization and de-initialization functions
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and de-initialization functions 
  *
 @verbatim
@@ -253,7 +250,7 @@ HAL_StatusTypeDef HAL_GFXMMU_Init(GFXMMU_HandleTypeDef *hgfxmmu)
     /* Configure default value on GFXMMU_DVR register */
     hgfxmmu->Instance->DVR = hgfxmmu->Init.DefaultValue;
     
-    /* Configure physical buffer adresses on GFXMMU_BxCR registers */
+    /* Configure physical buffer addresses on GFXMMU_BxCR registers */
     hgfxmmu->Instance->B0CR = hgfxmmu->Init.Buffers.Buf0Address;
     hgfxmmu->Instance->B1CR = hgfxmmu->Init.Buffers.Buf1Address;
     hgfxmmu->Instance->B2CR = hgfxmmu->Init.Buffers.Buf2Address;
@@ -495,7 +492,6 @@ HAL_StatusTypeDef HAL_GFXMMU_UnRegisterCallback(GFXMMU_HandleTypeDef        *hgf
   */
 
 /** @defgroup GFXMMU_Exported_Functions_Group2 Operations functions
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    GFXMMU operation functions
  *
 @verbatim
@@ -505,7 +501,7 @@ HAL_StatusTypeDef HAL_GFXMMU_UnRegisterCallback(GFXMMU_HandleTypeDef        *hgf
     [..]  This section provides functions allowing to:
       (+) Configure LUT.
       (+) Force flush and/or invalidate of cache.
-      (+) Modify physical buffer adresses.
+      (+) Modify physical buffer addresses.
       (+) Modify cache and pre-fetch parameters.
       (+) Manage error.
 @endverbatim
@@ -717,7 +713,7 @@ HAL_StatusTypeDef HAL_GFXMMU_ModifyBuffers(GFXMMU_HandleTypeDef *hgfxmmu, GFXMMU
   }
   else
   {
-    /* Modify physical buffer adresses on GFXMMU_BxCR registers */
+    /* Modify physical buffer addresses on GFXMMU_BxCR registers */
     hgfxmmu->Instance->B0CR = Buffers->Buf0Address;
     hgfxmmu->Instance->B1CR = Buffers->Buf1Address;
     hgfxmmu->Instance->B2CR = Buffers->Buf2Address;
@@ -827,7 +823,6 @@ __weak void HAL_GFXMMU_ErrorCallback(GFXMMU_HandleTypeDef *hgfxmmu)
   */
 
 /** @defgroup GFXMMU_Exported_Functions_Group3 State functions
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    GFXMMU state functions
  *
 @verbatim
@@ -895,4 +890,3 @@ uint32_t HAL_GFXMMU_GetError(GFXMMU_HandleTypeDef *hgfxmmu)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

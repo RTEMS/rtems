@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -39,12 +38,10 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CRCEx_Exported_Constants CRC Extended Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRCEx_Input_Data_Inversion Input Data Inversion Modes
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CRC_INPUTDATA_INVERSION_NONE               0x00000000U     /*!< No input data inversion            */
@@ -56,7 +53,6 @@ extern "C" {
   */
 
 /** @defgroup CRCEx_Output_Data_Inversion Output Data Inversion Modes
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CRC_OUTPUTDATA_INVERSION_DISABLE         0x00000000U       /*!< No output data inversion       */
@@ -71,7 +67,6 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup CRCEx_Exported_Macros CRC Extended Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -103,7 +98,6 @@ extern "C" {
 
 /* Private macros --------------------------------------------------------*/
 /** @defgroup CRCEx_Private_Macros CRC Extended Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -154,5 +148,3 @@ HAL_StatusTypeDef HAL_CRCEx_Output_Data_Reverse(CRC_HandleTypeDef *hcrc, uint32_
 #endif
 
 #endif /* STM32H7xx_HAL_CRC_EX_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

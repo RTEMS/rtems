@@ -14,6 +14,17 @@
   *           + IRQ handler management
   *
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                      ##### How to use this driver #####
@@ -71,17 +82,6 @@
 
   @endverbatim
   ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -92,7 +92,6 @@
   */
 
 /** @defgroup HSEM HSEM
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HSEM HAL module driver
   * @{
   */
@@ -102,6 +101,10 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #if defined(DUAL_CORE)
+/** @defgroup HSEM_Private_Constants  HSEM Private Constants
+  * @{
+  */
+
 #ifndef HSEM_R_MASTERID
 #define HSEM_R_MASTERID HSEM_R_COREID
 #endif
@@ -113,6 +116,10 @@
 #ifndef HSEM_CR_MASTERID
 #define HSEM_CR_MASTERID HSEM_CR_COREID
 #endif
+
+/**
+  * @}
+  */  
 #endif /* DUAL_CORE */
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -121,12 +128,10 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup HSEM_Exported_Functions  HSEM Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HSEM_Exported_Functions_Group1 Take and Release functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    HSEM Take and Release functions
   *
 @verbatim
@@ -200,7 +205,7 @@ HAL_StatusTypeDef HAL_HSEM_FastTake(uint32_t SemID)
     /*take success when MasterID match and take bit set*/
     return HAL_OK;
   }
-#else
+#else  
   /* Read the RLR register to take the semaphore */
   if (HSEM->RLR[SemID] == (HSEM_CR_COREID_CURRENT | HSEM_RLR_LOCK))
   {
@@ -263,7 +268,6 @@ void HAL_HSEM_ReleaseAll(uint32_t Key, uint32_t CoreID)
   */
 
 /** @defgroup HSEM_Exported_Functions_Group2 HSEM Set and Get Key functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    HSEM Set and Get Key functions.
   *
 @verbatim
@@ -305,7 +309,6 @@ uint32_t HAL_HSEM_GetClearKey(void)
   */
 
 /** @defgroup HSEM_Exported_Functions_Group3 HSEM IRQ handler management
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    HSEM Notification functions.
   *
 @verbatim
@@ -442,5 +445,3 @@ __weak void HAL_HSEM_FreeCallback(uint32_t SemMask)
 /**
   * @}
   */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

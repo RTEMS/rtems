@@ -16,6 +16,17 @@
   *           + IRQ handler management
   *           + Peripheral State and Error functions
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                      ##### How to use this driver #####
@@ -203,17 +214,6 @@
 
   @endverbatim
   ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -223,15 +223,14 @@
   * @{
   */
 
-/** @defgroup JPEG JPEG
-  * @ingroup RTEMSBSPsARMSTM32H7
-  * @brief JPEG HAL module driver.
-  * @{
-  */
-
 #ifdef HAL_JPEG_MODULE_ENABLED
 
 #if defined (JPEG)
+
+/** @defgroup JPEG JPEG
+  * @brief JPEG HAL module driver.
+  * @{
+  */
 
 /* Private define ------------------------------------------------------------*/
 /** @addtogroup JPEG_Private_Constants
@@ -457,12 +456,10 @@ static void JPEG_MDMAOutAbortCallback(MDMA_HandleTypeDef *hmdma);
   */
 
 /** @defgroup JPEG_Exported_Functions JPEG Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup JPEG_Exported_Functions_Group1 Initialization and de-initialization functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and de-initialization functions.
   *
 @verbatim
@@ -1075,7 +1072,6 @@ HAL_StatusTypeDef HAL_JPEG_UnRegisterDataReadyCallback(JPEG_HandleTypeDef *hjpeg
   */
 
 /** @defgroup JPEG_Exported_Functions_Group2 Configuration functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    JPEG Configuration functions.
   *
 @verbatim
@@ -1288,7 +1284,7 @@ HAL_StatusTypeDef HAL_JPEG_ConfigEncoding(JPEG_HandleTypeDef *hjpeg, JPEG_ConfTy
   * @param  hjpeg pointer to a JPEG_HandleTypeDef structure that contains
   *         the configuration information for JPEG module
   * @param  pInfo pointer to a JPEG_ConfTypeDef structure that contains
-  *         The JPEG decoded header informations
+  *         The JPEG decoded header information
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_JPEG_GetInfo(JPEG_HandleTypeDef *hjpeg, JPEG_ConfTypeDef *pInfo)
@@ -1488,7 +1484,6 @@ HAL_StatusTypeDef  HAL_JPEG_SetUserQuantTables(JPEG_HandleTypeDef *hjpeg, uint8_
   */
 
 /** @defgroup JPEG_Exported_Functions_Group3 encoding/decoding processing functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   processing functions.
   *
 @verbatim
@@ -2295,7 +2290,6 @@ HAL_StatusTypeDef HAL_JPEG_Abort(JPEG_HandleTypeDef *hjpeg)
   */
 
 /** @defgroup JPEG_Exported_Functions_Group4 JPEG Decode/Encode callback functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   JPEG process callback functions.
   *
 @verbatim
@@ -2319,7 +2313,7 @@ HAL_StatusTypeDef HAL_JPEG_Abort(JPEG_HandleTypeDef *hjpeg)
   * @param  hjpeg pointer to a JPEG_HandleTypeDef structure that contains
   *         the configuration information for JPEG module
   * @param  pInfo pointer to a JPEG_ConfTypeDef structure that contains
-  *         The JPEG decoded header informations
+  *         The JPEG decoded header information
   * @retval None
   */
 __weak void HAL_JPEG_InfoReadyCallback(JPEG_HandleTypeDef *hjpeg, JPEG_ConfTypeDef *pInfo)
@@ -2425,7 +2419,6 @@ __weak void HAL_JPEG_DataReadyCallback(JPEG_HandleTypeDef *hjpeg, uint8_t *pData
 
 
 /** @defgroup JPEG_Exported_Functions_Group5 JPEG IRQ handler management
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   JPEG IRQ handler.
   *
 @verbatim
@@ -2477,7 +2470,6 @@ void HAL_JPEG_IRQHandler(JPEG_HandleTypeDef *hjpeg)
   */
 
 /** @defgroup JPEG_Exported_Functions_Group6 Peripheral State functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Peripheral State functions.
   *
 @verbatim
@@ -2532,7 +2524,7 @@ uint32_t HAL_JPEG_GetError(JPEG_HandleTypeDef *hjpeg)
   * @param  Bits pointer to bits table
   * @param  Huffsize pointer to sizes table
   * @param  Huffcode pointer to codes table
-  * @param  LastK pointer to last Coeff (table dimmension)
+  * @param  LastK pointer to last Coeff (table dimension)
   * @retval HAL status
   */
 static HAL_StatusTypeDef JPEG_Bits_To_SizeCodes(uint8_t *Bits, uint8_t *Huffsize, uint32_t *Huffcode, uint32_t *LastK)
@@ -3336,12 +3328,12 @@ static uint32_t JPEG_Process(JPEG_HandleTypeDef *hjpeg)
 {
   uint32_t tmpContext;
 
-  /*End of header processing flag rised*/
+  /*End of header processing flag */
   if ((hjpeg->Context & JPEG_CONTEXT_OPERATION_MASK) == JPEG_CONTEXT_DECODE)
   {
     if (__HAL_JPEG_GET_FLAG(hjpeg, JPEG_FLAG_HPDF) != 0UL)
     {
-      /*Call Header parsing complet callback */
+      /*Call Header parsing complete callback */
       (void) HAL_JPEG_GetInfo(hjpeg, &hjpeg->Conf);
       /* Reset the ImageQuality */
       hjpeg->Conf.ImageQuality = 0;
@@ -3367,13 +3359,13 @@ static uint32_t JPEG_Process(JPEG_HandleTypeDef *hjpeg)
   {
     if (__HAL_JPEG_GET_FLAG(hjpeg, JPEG_FLAG_IFTF) != 0UL)
     {
-      /*Input FIFO threshold flag rised*/
+      /*Input FIFO threshold flag */
       /*JPEG_FIFO_TH_SIZE words can be written in */
       JPEG_ReadInputData(hjpeg, JPEG_FIFO_TH_SIZE);
     }
     else if (__HAL_JPEG_GET_FLAG(hjpeg, JPEG_FLAG_IFNFF) != 0UL)
     {
-      /*Input FIFO Not Full flag rised*/
+      /*Input FIFO Not Full flag */
       /*32-bit value can be written in */
       JPEG_ReadInputData(hjpeg, 1);
     }
@@ -3389,13 +3381,13 @@ static uint32_t JPEG_Process(JPEG_HandleTypeDef *hjpeg)
   {
     if (__HAL_JPEG_GET_FLAG(hjpeg, JPEG_FLAG_OFTF) != 0UL)
     {
-      /*Output FIFO threshold flag rised*/
+      /*Output FIFO threshold flag */
       /*JPEG_FIFO_TH_SIZE words can be read out */
       JPEG_StoreOutputData(hjpeg, JPEG_FIFO_TH_SIZE);
     }
     else if (__HAL_JPEG_GET_FLAG(hjpeg, JPEG_FLAG_OFNEF) != 0UL)
     {
-      /*Output FIFO Not Empty flag rised*/
+      /*Output FIFO Not Empty flag */
       /*32-bit value can be read out */
       JPEG_StoreOutputData(hjpeg, 1);
     }
@@ -3836,7 +3828,7 @@ static void JPEG_DMA_EndProcess(JPEG_HandleTypeDef *hjpeg)
     hjpeg->Instance->CONFR0 &=  ~JPEG_CONFR0_START;
 
     tmpContext = hjpeg->Context;
-    /*Clear all context fileds execpt JPEG_CONTEXT_CONF_ENCODING and JPEG_CONTEXT_CUSTOM_TABLES*/
+    /*Clear all context fields execpt JPEG_CONTEXT_CONF_ENCODING and JPEG_CONTEXT_CUSTOM_TABLES*/
     hjpeg->Context &= (JPEG_CONTEXT_CONF_ENCODING | JPEG_CONTEXT_CUSTOM_TABLES);
 
     /* Process Unlocked */
@@ -3935,7 +3927,7 @@ static void JPEG_DMA_PollResidualData(JPEG_HandleTypeDef *hjpeg)
     }
 
     tmpContext = hjpeg->Context;
-    /*Clear all context fileds execpt JPEG_CONTEXT_CONF_ENCODING and JPEG_CONTEXT_CUSTOM_TABLES*/
+    /*Clear all context fields execpt JPEG_CONTEXT_CONF_ENCODING and JPEG_CONTEXT_CUSTOM_TABLES*/
     hjpeg->Context &= (JPEG_CONTEXT_CONF_ENCODING | JPEG_CONTEXT_CUSTOM_TABLES);
 
     /* Process Unlocked */
@@ -4194,14 +4186,14 @@ static uint32_t JPEG_GetQuality(JPEG_HandleTypeDef *hjpeg)
   * @}
   */
 
+/**
+  * @}
+  */
 #endif /* JPEG */
 #endif /* HAL_JPEG_MODULE_ENABLED */
-/**
-  * @}
-  */
+
 
 /**
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

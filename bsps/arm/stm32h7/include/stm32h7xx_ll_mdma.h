@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -35,14 +34,12 @@ extern "C" {
 #if defined (MDMA)
 
 /** @defgroup MDMA_LL MDMA
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup MDMA_LL_Private_Variables MDMA Private Variables
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Array used to get the MDMA channel register offset versus channel index LL_MDMA_CHANNEL_x */
@@ -72,7 +69,6 @@ static const uint32_t LL_MDMA_CH_OFFSET_TAB[] =
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup MDMA_LL_Private_Constants MDMA Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -82,9 +78,8 @@ static const uint32_t LL_MDMA_CH_OFFSET_TAB[] =
 
 /* Private macros ------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup MDMA_LL_ES_INIT MDMA Exported Init structure
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -253,12 +248,10 @@ typedef struct
 #endif /*USE_FULL_LL_DRIVER*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup MDMA_LL_Exported_Constants MDMA Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MDMA_LL_EC_CHANNEL CHANNEL
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_CHANNEL_0                   0x00000000U
@@ -283,10 +276,9 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_WORD_ENDIANNESS Word Endianness
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
-#define LL_MDMA_WORD_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianess preserved for words */
+#define LL_MDMA_WORD_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianness preserved for words */
 #define LL_MDMA_WORD_ENDIANNESS_EXCHANGE     MDMA_CCR_WEX /*!< word order exchanged when destination data size is double word  */
 
 /**
@@ -294,10 +286,9 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_HALFWORD_ENDIANNESS Half Word Endianness
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
-#define LL_MDMA_HALFWORD_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianess preserved for half words */
+#define LL_MDMA_HALFWORD_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianness preserved for half words */
 #define LL_MDMA_HALFWORD_ENDIANNESS_EXCHANGE     MDMA_CCR_HEX /*!< half word order exchanged when destination data size is word or double word  */
 
 /**
@@ -305,10 +296,9 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_BYTE_ENDIANNESS Byte Endianness
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
-#define LL_MDMA_BYTE_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianess preserved for bytes */
+#define LL_MDMA_BYTE_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianness preserved for bytes */
 #define LL_MDMA_BYTE_ENDIANNESS_EXCHANGE     MDMA_CCR_BEX /*!< byte order exchanged when destination data size is half word , word or double word  */
 
 /**
@@ -316,7 +306,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_PRIORITY Transfer Priority level
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_PRIORITY_LOW               0x00000000U               /*!< Priority level : Low       */
@@ -328,7 +317,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_BUFF_WRITE_MODE Bufferable Write Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_BUFF_WRITE_DISABLE         0x00000000U               /*!< destination write operation is non-bufferable */
@@ -338,7 +326,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_REQUEST_MODE Request Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_REQUEST_MODE_HW            0x00000000U               /*!< Request mode is Hardware    */
@@ -348,7 +335,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_TRIGGER_MODE Trigger Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_BUFFER_TRANSFER          0x00000000U               /*!< Each MDMA request (SW or HW) triggers a buffer transfer */
@@ -360,7 +346,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_PADDING_ALIGNMENT_MODE Padding Alignment Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_DATAALIGN_RIGHT          0x00000000U              /*!< Right Aligned, padded w/ 0s (default) */
@@ -372,7 +357,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_PACKING_MODE Transfer Packing
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_PACK_DISABLE          0x00000000U              /*!< Packing disabled */
@@ -382,7 +366,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_DEST_BURST Transfer Destination Burst
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_DEST_BURST_SINGLE        0x00000000U                               /*!< Single transfer */
@@ -398,7 +381,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_BURST Transfer Source Burst
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_SRC_BURST_SINGLE        0x00000000U                                /*!< Single transfer */
@@ -414,7 +396,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_DEST_INC_OFFSET_SIZE Destination Increment Offset Size
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_DEST_INC_OFFSET_BYTE        0x00000000U                           /*!< offset is Byte (8-bit)         */
@@ -426,7 +407,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_INC_OFFSET_SIZE Source Increment Offset Size
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_SRC_INC_OFFSET_BYTE        0x00000000U                           /*!< offset is Byte (8-bit)         */
@@ -438,7 +418,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_DEST_DATA_SIZE Destination Data Size
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_DEST_DATA_SIZE_BYTE       0x00000000U                            /*!< Destination data size is Byte        */
@@ -450,7 +429,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_DATA_SIZE Source Data Size
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_SRC_DATA_SIZE_BYTE       0x00000000U                            /*!< Source data size is Byte        */
@@ -462,7 +440,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_DEST_INC_MODE Destination Increment Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_DEST_FIXED               0x00000000U                            /*!< Destination address pointer is fixed */
@@ -473,7 +450,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_INC_MODE Source Increment Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_SRC_FIXED                0x00000000U                            /*!< Destination address pointer is fixed */
@@ -484,7 +460,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_BLK_RPT_DEST_ADDR_UPDATE_MODE Block Repeat Destination address Update Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_BLK_RPT_DEST_ADDR_INCREMENT   0x00000000U                       /*!< Destination address pointer is incremented after each block transfer by Destination Update Value */
@@ -494,7 +469,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_BLK_RPT_ADDR_UPDATE_MODE Source Block Repeat address Update Mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_BLK_RPT_SRC_ADDR_INCREMENT   0x00000000U                        /*!< Source address pointer is incremented after each block transfer by Source Update Value */
@@ -504,7 +478,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_DEST_BUS Destination BUS Selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  LL_MDMA_DEST_BUS_SYSTEM_AXI    0x00000000U                             /*!< System/AXI bus is used as destination */
@@ -514,7 +487,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_BUS Source BUS Selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_SRC_BUS_SYSTEM_AXI     0x00000000U                             /*!< System/AXI bus is used as source */
@@ -524,7 +496,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_HW_TRIGGER_SELCTION HW Trigger Selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_REQ_DMA1_STREAM0_TC          0x00000000U    /*!< MDMA HW Trigger (request) is DMA1 Stream 0 Transfer Complete Flag   */
@@ -580,7 +551,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_XFER_ERROR_DIRECTION Transfer Error Direction
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_READ_ERROR                       0x00000000U                /*!< Last transfer error on the channel was a related to a read access    */
@@ -595,12 +565,10 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup MDMA_LL_Exported_Macros MDMA Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MDMA_LL_EM_WRITE_READ Common Write and read registers macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -624,7 +592,6 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EM_CONVERT_DMAxCHANNELy Convert MDMAxChannely
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -692,12 +659,10 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
  /** @defgroup MDMA_LL_Exported_Functions MDMA Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MDMA_LL_EF_Configuration Configuration
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -725,7 +690,7 @@ typedef struct
   */
 __STATIC_INLINE void LL_MDMA_EnableChannel(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   SET_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_EN);
 }
@@ -755,7 +720,7 @@ __STATIC_INLINE void LL_MDMA_EnableChannel(MDMA_TypeDef *MDMAx, uint32_t Channel
   */
 __STATIC_INLINE void LL_MDMA_DisableChannel(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   CLEAR_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_EN);
 }
@@ -785,7 +750,7 @@ __STATIC_INLINE void LL_MDMA_DisableChannel(MDMA_TypeDef *MDMAx, uint32_t Channe
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsEnabledChannel(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_EN) == (MDMA_CCR_EN)) ? 1UL : 0UL);
 }
@@ -815,13 +780,13 @@ __STATIC_INLINE uint32_t LL_MDMA_IsEnabledChannel(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE void LL_MDMA_GenerateSWRequest(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   SET_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_SWRQ);
 }
 
 /**
-  * @brief Configure Transfer endianness paremeters : Word, Half word and Bytes Endianess.
+  * @brief Configure Transfer endianness parameters : Word, Half word and Bytes Endianness.
   * @rmtoll CCR          WEX            LL_MDMA_ConfigXferEndianness\n
   * @rmtoll CCR          HEX            LL_MDMA_ConfigXferEndianness\n
   * @rmtoll CCR          BEX            LL_MDMA_ConfigXferEndianness
@@ -851,14 +816,14 @@ __STATIC_INLINE void LL_MDMA_GenerateSWRequest(MDMA_TypeDef *MDMAx, uint32_t Cha
   */
 __STATIC_INLINE void LL_MDMA_ConfigXferEndianness(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Configuration)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR,
              MDMA_CCR_WEX | MDMA_CCR_HEX | MDMA_CCR_BEX, Configuration);
 }
 
 /**
-  * @brief Set Words Endianess.
+  * @brief Set Words Endianness.
   * @rmtoll CCR          WEX            LL_MDMA_SetWordEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -885,13 +850,13 @@ __STATIC_INLINE void LL_MDMA_ConfigXferEndianness(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE void LL_MDMA_SetWordEndianness(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Endianness)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_WEX, Endianness);
 }
 
 /**
-  * @brief Get Words Endianess.
+  * @brief Get Words Endianness.
   * @rmtoll CCR          WEX            LL_MDMA_GetWordEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -918,13 +883,13 @@ __STATIC_INLINE void LL_MDMA_SetWordEndianness(MDMA_TypeDef *MDMAx, uint32_t Cha
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetWordEndianness(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_WEX));
 }
 
 /**
-  * @brief Set Half Words Endianess.
+  * @brief Set Half Words Endianness.
   * @rmtoll CCR          HEX            LL_MDMA_SetHalfWordEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -951,13 +916,13 @@ __STATIC_INLINE uint32_t LL_MDMA_GetWordEndianness(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE void LL_MDMA_SetHalfWordEndianness(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Endianness)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_HEX, Endianness);
 }
 
 /**
-  * @brief Get Half Words Endianess.
+  * @brief Get Half Words Endianness.
   * @rmtoll CCR          HEX            LL_MDMA_GetHalfWordEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -984,13 +949,13 @@ __STATIC_INLINE void LL_MDMA_SetHalfWordEndianness(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetHalfWordEndianness(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_HEX));
 }
 
 /**
-  * @brief Set Bytes Endianess.
+  * @brief Set Bytes Endianness.
   * @rmtoll CCR          BEX            LL_MDMA_SetByteEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -1017,13 +982,13 @@ __STATIC_INLINE uint32_t LL_MDMA_GetHalfWordEndianness(MDMA_TypeDef *MDMAx, uint
   */
 __STATIC_INLINE void LL_MDMA_SetByteEndianness(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Endianness)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_BEX, Endianness);
 }
 
 /**
-  * @brief Get Bytes Endianess.
+  * @brief Get Bytes Endianness.
   * @rmtoll CCR          BEX            LL_MDMA_GetByteEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -1050,7 +1015,7 @@ __STATIC_INLINE void LL_MDMA_SetByteEndianness(MDMA_TypeDef *MDMAx, uint32_t Cha
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetByteEndianness(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_BEX));
 }
@@ -1085,7 +1050,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetByteEndianness(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE void LL_MDMA_SetChannelPriorityLevel(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Priority)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_PL, Priority);
 }
@@ -1120,7 +1085,7 @@ __STATIC_INLINE void LL_MDMA_SetChannelPriorityLevel(MDMA_TypeDef *MDMAx, uint32
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetChannelPriorityLevel(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR, MDMA_CCR_PL));
 }
@@ -1180,7 +1145,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetChannelPriorityLevel(MDMA_TypeDef *MDMAx, ui
   */
 __STATIC_INLINE void LL_MDMA_ConfigTransfer(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Configuration, uint32_t BufferXferLength)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR,
   Configuration | ((BufferXferLength << MDMA_CTCR_TLEN_Pos) & MDMA_CTCR_TLEN_Msk));
@@ -1211,7 +1176,7 @@ __STATIC_INLINE void LL_MDMA_ConfigTransfer(MDMA_TypeDef *MDMAx, uint32_t Channe
   */
 __STATIC_INLINE void LL_MDMA_EnableBufferableWrMode(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   SET_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_BWM);
 }
@@ -1241,7 +1206,7 @@ __STATIC_INLINE void LL_MDMA_EnableBufferableWrMode(MDMA_TypeDef *MDMAx, uint32_
   */
 __STATIC_INLINE void LL_MDMA_DisableBufferableWrMode(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   CLEAR_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_BWM);
 }
@@ -1271,7 +1236,7 @@ __STATIC_INLINE void LL_MDMA_DisableBufferableWrMode(MDMA_TypeDef *MDMAx, uint32
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsEnabledBufferableWrMode(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_BWM) == (MDMA_CTCR_BWM)) ? 1UL : 0UL);
 }
@@ -1304,7 +1269,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsEnabledBufferableWrMode(MDMA_TypeDef *MDMAx, 
   */
 __STATIC_INLINE void LL_MDMA_SetRequestMode(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t RequestMode)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_SWRM, RequestMode);
 }
@@ -1337,7 +1302,7 @@ __STATIC_INLINE void LL_MDMA_SetRequestMode(MDMA_TypeDef *MDMAx, uint32_t Channe
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetRequestMode(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_SWRM));
 }
@@ -1372,7 +1337,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetRequestMode(MDMA_TypeDef *MDMAx, uint32_t Ch
   */
 __STATIC_INLINE void LL_MDMA_SetTriggerMode(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t TriggerMode)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_TRGM, TriggerMode);
 }
@@ -1407,7 +1372,7 @@ __STATIC_INLINE void LL_MDMA_SetTriggerMode(MDMA_TypeDef *MDMAx, uint32_t Channe
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetTriggerMode(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_TRGM));
 }
@@ -1441,7 +1406,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetTriggerMode(MDMA_TypeDef *MDMAx, uint32_t Ch
   */
 __STATIC_INLINE void LL_MDMA_SetPaddingAlignment(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t PaddingAlignment)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_PAM, PaddingAlignment);
 }
@@ -1475,7 +1440,7 @@ __STATIC_INLINE void LL_MDMA_SetPaddingAlignment(MDMA_TypeDef *MDMAx, uint32_t C
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetPaddingAlignment(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_PAM));
 }
@@ -1506,7 +1471,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetPaddingAlignment(MDMA_TypeDef *MDMAx, uint32
   */
 __STATIC_INLINE void LL_MDMA_EnablePacking(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   SET_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_PKE);
 }
@@ -1536,7 +1501,7 @@ __STATIC_INLINE void LL_MDMA_EnablePacking(MDMA_TypeDef *MDMAx, uint32_t Channel
   */
 __STATIC_INLINE void LL_MDMA_DisablePacking(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   CLEAR_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_PKE);
 }
@@ -1566,7 +1531,7 @@ __STATIC_INLINE void LL_MDMA_DisablePacking(MDMA_TypeDef *MDMAx, uint32_t Channe
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsEnabledPacking(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_PKE) == (MDMA_CTCR_PKE)) ? 1UL : 0UL);
 }
@@ -1597,7 +1562,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsEnabledPacking(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE void LL_MDMA_SetBufferTransferLength(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Length)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_TLEN,
               (Length << MDMA_CTCR_TLEN_Pos) & MDMA_CTCR_TLEN_Msk);
@@ -1629,7 +1594,7 @@ __STATIC_INLINE void LL_MDMA_SetBufferTransferLength(MDMA_TypeDef *MDMAx, uint32
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetBufferTransferLength(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return(READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_TLEN) >> MDMA_CTCR_TLEN_Pos);
 }
@@ -1668,7 +1633,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetBufferTransferLength(MDMA_TypeDef *MDMAx, ui
   */
 __STATIC_INLINE void LL_MDMA_SetDestinationBurstSize(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Dburst)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_DBURST, Dburst);
 }
@@ -1707,7 +1672,7 @@ __STATIC_INLINE void LL_MDMA_SetDestinationBurstSize(MDMA_TypeDef *MDMAx, uint32
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetDestinationBurstSize(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return(READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_DBURST));
 }
@@ -1746,7 +1711,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetDestinationBurstSize(MDMA_TypeDef *MDMAx, ui
   */
 __STATIC_INLINE void LL_MDMA_SetSourceBurstSize(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Sburst)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_SBURST, Sburst);
 }
@@ -1785,7 +1750,7 @@ __STATIC_INLINE void LL_MDMA_SetSourceBurstSize(MDMA_TypeDef *MDMAx, uint32_t Ch
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetSourceBurstSize(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return(READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_SBURST));
 }
@@ -1820,7 +1785,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetSourceBurstSize(MDMA_TypeDef *MDMAx, uint32_
   */
 __STATIC_INLINE void LL_MDMA_SetDestinationIncSize(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t IncSize)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_DINCOS, IncSize);
 }
@@ -1855,7 +1820,7 @@ __STATIC_INLINE void LL_MDMA_SetDestinationIncSize(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetDestinationIncSize(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_DINCOS));
 }
@@ -1890,7 +1855,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetDestinationIncSize(MDMA_TypeDef *MDMAx, uint
   */
 __STATIC_INLINE void LL_MDMA_SetSourceIncSize(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t IncSize)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_SINCOS, IncSize);
 }
@@ -1925,7 +1890,7 @@ __STATIC_INLINE void LL_MDMA_SetSourceIncSize(MDMA_TypeDef *MDMAx, uint32_t Chan
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetSourceIncSize(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_SINCOS));
 }
@@ -1960,7 +1925,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetSourceIncSize(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE void LL_MDMA_SetDestinationDataSize(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t DestDataSize)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_DSIZE, DestDataSize);
 }
@@ -1995,7 +1960,7 @@ __STATIC_INLINE void LL_MDMA_SetDestinationDataSize(MDMA_TypeDef *MDMAx, uint32_
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetDestinationDataSize(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_DSIZE));
 }
@@ -2030,7 +1995,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetDestinationDataSize(MDMA_TypeDef *MDMAx, uin
   */
 __STATIC_INLINE void LL_MDMA_SetSourceDataSize(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t SrcDataSize)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_SSIZE, SrcDataSize);
 }
@@ -2065,7 +2030,7 @@ __STATIC_INLINE void LL_MDMA_SetSourceDataSize(MDMA_TypeDef *MDMAx, uint32_t Cha
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetSourceDataSize(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_SSIZE));
 }
@@ -2099,7 +2064,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetSourceDataSize(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE void LL_MDMA_SetDestinationIncMode(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t DestIncMode)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_DINC, DestIncMode);
 }
@@ -2133,7 +2098,7 @@ __STATIC_INLINE void LL_MDMA_SetDestinationIncMode(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetDestinationIncMode(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_DINC));
 }
@@ -2167,7 +2132,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetDestinationIncMode(MDMA_TypeDef *MDMAx, uint
   */
 __STATIC_INLINE void LL_MDMA_SetSourceIncMode(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t SrcIncMode)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_SINC, SrcIncMode);
 }
@@ -2201,7 +2166,7 @@ __STATIC_INLINE void LL_MDMA_SetSourceIncMode(MDMA_TypeDef *MDMAx, uint32_t Chan
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetSourceIncMode(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTCR, MDMA_CTCR_SINC));
 }
@@ -2234,7 +2199,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetSourceIncMode(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE void LL_MDMA_ConfigBlkCounters(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t BlockRepeatCount, uint32_t BlkDataLength)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBNDTR,
                MDMA_CBNDTR_BRC | MDMA_CBNDTR_BNDT,
@@ -2267,7 +2232,7 @@ __STATIC_INLINE void LL_MDMA_ConfigBlkCounters(MDMA_TypeDef *MDMAx, uint32_t Cha
   */
 __STATIC_INLINE void LL_MDMA_SetBlkDataLength(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t BlkDataLength)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBNDTR, MDMA_CBNDTR_BNDT, (BlkDataLength & MDMA_CBNDTR_BNDT_Msk));
 }
@@ -2298,7 +2263,7 @@ __STATIC_INLINE void LL_MDMA_SetBlkDataLength(MDMA_TypeDef *MDMAx, uint32_t Chan
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetBlkDataLength(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBNDTR, MDMA_CBNDTR_BNDT));
 }
@@ -2329,7 +2294,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetBlkDataLength(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE void LL_MDMA_SetBlkRepeatCount(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t BlockRepeatCount)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBNDTR, MDMA_CBNDTR_BRC,
               (BlockRepeatCount << MDMA_CBNDTR_BRC_Pos) & MDMA_CBNDTR_BRC_Msk);
@@ -2361,7 +2326,7 @@ __STATIC_INLINE void LL_MDMA_SetBlkRepeatCount(MDMA_TypeDef *MDMAx, uint32_t Cha
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetBlkRepeatCount(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBNDTR, MDMA_CBNDTR_BRC) >> MDMA_CBNDTR_BRC_Pos);
 }
@@ -2395,7 +2360,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetBlkRepeatCount(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE void LL_MDMA_ConfigBlkRepeatAddrUpdate(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Configuration)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBNDTR,
                MDMA_CBNDTR_BRDUM | MDMA_CBNDTR_BRSUM,
@@ -2430,7 +2395,7 @@ __STATIC_INLINE void LL_MDMA_ConfigBlkRepeatAddrUpdate(MDMA_TypeDef *MDMAx, uint
   */
 __STATIC_INLINE void LL_MDMA_SetBlkRepeatDestAddrUpdate(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t DestAdrUpdateMode)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBNDTR, MDMA_CBNDTR_BRDUM, DestAdrUpdateMode);
 }
@@ -2463,7 +2428,7 @@ __STATIC_INLINE void LL_MDMA_SetBlkRepeatDestAddrUpdate(MDMA_TypeDef *MDMAx, uin
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetBlkRepeatDestAddrUpdate(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBNDTR, MDMA_CBNDTR_BRDUM));
 }
@@ -2496,7 +2461,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetBlkRepeatDestAddrUpdate(MDMA_TypeDef *MDMAx,
   */
 __STATIC_INLINE void LL_MDMA_SetBlkRepeatSrcAddrUpdate(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t SrcAdrUpdateMode)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBNDTR, MDMA_CBNDTR_BRSUM, SrcAdrUpdateMode);
 }
@@ -2529,7 +2494,7 @@ __STATIC_INLINE void LL_MDMA_SetBlkRepeatSrcAddrUpdate(MDMA_TypeDef *MDMAx, uint
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetBlkRepeatSrcAddrUpdate(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBNDTR, MDMA_CBNDTR_BRSUM));
 }
@@ -2563,7 +2528,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetBlkRepeatSrcAddrUpdate(MDMA_TypeDef *MDMAx, 
   */
 __STATIC_INLINE void LL_MDMA_ConfigAddresses(MDMA_TypeDef *MDMAx, uint32_t Channel,  uint32_t SrcAddress, uint32_t DstAddress)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CSAR, SrcAddress);
   WRITE_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CDAR, DstAddress);
@@ -2594,7 +2559,7 @@ __STATIC_INLINE void LL_MDMA_ConfigAddresses(MDMA_TypeDef *MDMAx, uint32_t Chann
   */
 __STATIC_INLINE void LL_MDMA_SetSourceAddress(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t SrcAddress)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CSAR, SrcAddress);
 }
@@ -2625,7 +2590,7 @@ __STATIC_INLINE void LL_MDMA_SetSourceAddress(MDMA_TypeDef *MDMAx, uint32_t Chan
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetSourceAddress(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CSAR));
 }
@@ -2656,7 +2621,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetSourceAddress(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE void LL_MDMA_SetDestinationAddress(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t DestAddress)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CDAR, DestAddress);
 }
@@ -2687,7 +2652,7 @@ __STATIC_INLINE void LL_MDMA_SetDestinationAddress(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetDestinationAddress(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CDAR));
 }
@@ -2721,7 +2686,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetDestinationAddress(MDMA_TypeDef *MDMAx, uint
   */
 __STATIC_INLINE void LL_MDMA_ConfigBlkRptAddrUpdateValue(MDMA_TypeDef *MDMAx, uint32_t Channel,  uint32_t SrctAdrUpdateValue, uint32_t DestAdrUpdateValue)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBRUR,
               (SrctAdrUpdateValue & MDMA_CBRUR_SUV_Msk)  | ((DestAdrUpdateValue << MDMA_CBRUR_DUV_Pos) & MDMA_CBRUR_DUV_Msk));
@@ -2753,7 +2718,7 @@ __STATIC_INLINE void LL_MDMA_ConfigBlkRptAddrUpdateValue(MDMA_TypeDef *MDMAx, ui
   */
 __STATIC_INLINE void LL_MDMA_SetBlkRptDestAddrUpdateValue(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t DestAdrUpdateValue)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBRUR, MDMA_CBRUR_DUV,
                ((DestAdrUpdateValue << MDMA_CBRUR_DUV_Pos) & MDMA_CBRUR_DUV_Msk));
@@ -2785,7 +2750,7 @@ __STATIC_INLINE void LL_MDMA_SetBlkRptDestAddrUpdateValue(MDMA_TypeDef *MDMAx, u
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetBlkRptDestAddrUpdateValue(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBRUR, MDMA_CBRUR_DUV) >> MDMA_CBRUR_DUV_Pos);
 }
@@ -2816,7 +2781,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetBlkRptDestAddrUpdateValue(MDMA_TypeDef *MDMA
   */
 __STATIC_INLINE void LL_MDMA_SetBlkRptSrcAddrUpdateValue(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t SrcAdrUpdateValue)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBRUR, MDMA_CBRUR_SUV, SrcAdrUpdateValue);
 }
@@ -2847,7 +2812,7 @@ __STATIC_INLINE void LL_MDMA_SetBlkRptSrcAddrUpdateValue(MDMA_TypeDef *MDMAx, ui
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetBlkRptSrcAddrUpdateValue(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CBRUR, MDMA_CBRUR_SUV));
 }
@@ -2878,7 +2843,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetBlkRptSrcAddrUpdateValue(MDMA_TypeDef *MDMAx
   */
 __STATIC_INLINE void LL_MDMA_SetLinkAddress(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t LinkAddress)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CLAR, LinkAddress);
 }
@@ -2909,7 +2874,7 @@ __STATIC_INLINE void LL_MDMA_SetLinkAddress(MDMA_TypeDef *MDMAx, uint32_t Channe
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetLinkAddress(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CLAR));
 }
@@ -2943,7 +2908,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetLinkAddress(MDMA_TypeDef *MDMAx, uint32_t Ch
   */
 __STATIC_INLINE void LL_MDMA_ConfigBusSelection(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t Configuration)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTBR,
                MDMA_CTBR_DBUS | MDMA_CTBR_SBUS,
@@ -2978,7 +2943,7 @@ __STATIC_INLINE void LL_MDMA_ConfigBusSelection(MDMA_TypeDef *MDMAx, uint32_t Ch
   */
 __STATIC_INLINE void LL_MDMA_SetDestBusSelection(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t DestBus)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTBR, MDMA_CTBR_DBUS, DestBus);
 }
@@ -3011,7 +2976,7 @@ __STATIC_INLINE void LL_MDMA_SetDestBusSelection(MDMA_TypeDef *MDMAx, uint32_t C
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetDestBusSelection(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTBR, MDMA_CTBR_DBUS));
 }
@@ -3044,7 +3009,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetDestBusSelection(MDMA_TypeDef *MDMAx, uint32
   */
 __STATIC_INLINE void LL_MDMA_SetSrcBusSelection(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t SrcBus)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTBR, MDMA_CTBR_SBUS, SrcBus);
 }
@@ -3077,7 +3042,7 @@ __STATIC_INLINE void LL_MDMA_SetSrcBusSelection(MDMA_TypeDef *MDMAx, uint32_t Ch
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetSrcBusSelection(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTBR, MDMA_CTBR_SBUS));
 }
@@ -3145,7 +3110,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetSrcBusSelection(MDMA_TypeDef *MDMAx, uint32_
   */
 __STATIC_INLINE void LL_MDMA_SetHWTrigger(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t HWRequest)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   MODIFY_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTBR, MDMA_CTBR_TSEL, HWRequest);
 }
@@ -3213,7 +3178,7 @@ __STATIC_INLINE void LL_MDMA_SetHWTrigger(MDMA_TypeDef *MDMAx, uint32_t Channel,
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetHWTrigger(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CTBR, MDMA_CTBR_TSEL));
 }
@@ -3244,7 +3209,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetHWTrigger(MDMA_TypeDef *MDMAx, uint32_t Chan
   */
 __STATIC_INLINE void LL_MDMA_SetMaskAddress(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t MaskAddress)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CMAR, MaskAddress);
 }
@@ -3275,7 +3240,7 @@ __STATIC_INLINE void LL_MDMA_SetMaskAddress(MDMA_TypeDef *MDMAx, uint32_t Channe
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetMaskAddress(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CMAR));
 }
@@ -3306,7 +3271,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetMaskAddress(MDMA_TypeDef *MDMAx, uint32_t Ch
   */
 __STATIC_INLINE void LL_MDMA_SetMaskData(MDMA_TypeDef *MDMAx, uint32_t Channel, uint32_t MaskData)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CMDR, MaskData);
 }
@@ -3337,7 +3302,7 @@ __STATIC_INLINE void LL_MDMA_SetMaskData(MDMA_TypeDef *MDMAx, uint32_t Channel, 
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetMaskData(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_REG(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CMDR));
 }
@@ -3370,7 +3335,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetMaskData(MDMA_TypeDef *MDMAx, uint32_t Chann
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetXferErrorDirection(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CESR, MDMA_CESR_TED));
 }
@@ -3401,7 +3366,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetXferErrorDirection(MDMA_TypeDef *MDMAx, uint
   */
 __STATIC_INLINE uint32_t LL_MDMA_GetXferErrorLSBAddress(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return (READ_BIT(((MDMA_Channel_TypeDef *)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CESR, MDMA_CESR_TEA));
 }
@@ -3411,7 +3376,6 @@ __STATIC_INLINE uint32_t LL_MDMA_GetXferErrorLSBAddress(MDMA_TypeDef *MDMAx, uin
   */
 
 /** @defgroup MDMA_LL_EF_FLAG_Management FLAG_Management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3468,7 +3432,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_GI(MDMA_TypeDef *MDMAx, uint32_t C
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_TE(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CISR, MDMA_CISR_TEIF) == (MDMA_CISR_TEIF)) ? 1UL : 0UL);
 }
@@ -3498,7 +3462,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_TE(MDMA_TypeDef *MDMAx, uint32_t C
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_CTC(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CISR, MDMA_CISR_CTCIF) == (MDMA_CISR_CTCIF)) ? 1UL : 0UL);
 }
@@ -3528,7 +3492,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_CTC(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_BRT(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CISR, MDMA_CISR_BRTIF) == (MDMA_CISR_BRTIF)) ? 1UL : 0UL);
 }
@@ -3558,7 +3522,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_BRT(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_BT(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CISR, MDMA_CISR_BTIF) == (MDMA_CISR_BTIF)) ? 1UL : 0UL);
 }
@@ -3588,7 +3552,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_BT(MDMA_TypeDef *MDMAx, uint32_t C
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_TC(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CISR, MDMA_CISR_TCIF) == (MDMA_CISR_TCIF)) ? 1UL : 0UL);
 }
@@ -3618,7 +3582,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_TC(MDMA_TypeDef *MDMAx, uint32_t C
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_CRQA(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CISR, MDMA_CISR_CRQA) == (MDMA_CISR_CRQA)) ? 1UL : 0UL);
 }
@@ -3648,7 +3612,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_CRQA(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_BSE(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CESR, MDMA_CESR_BSE) == (MDMA_CESR_BSE)) ? 1UL : 0UL);
 }
@@ -3678,7 +3642,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_BSE(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_ASE(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CESR, MDMA_CESR_ASE) == (MDMA_CESR_ASE)) ? 1UL : 0UL);
 }
@@ -3708,7 +3672,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_ASE(MDMA_TypeDef *MDMAx, uint32_t 
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_TEMD(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CESR, MDMA_CESR_TEMD) == (MDMA_CESR_TEMD)) ? 1UL : 0UL);
 }
@@ -3738,7 +3702,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_TEMD(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_TELD(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CESR, MDMA_CESR_TELD) == (MDMA_CESR_TELD)) ? 1UL : 0UL);
 }
@@ -3768,7 +3732,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsActiveFlag_TELD(MDMA_TypeDef *MDMAx, uint32_t
   */
 __STATIC_INLINE void LL_MDMA_ClearFlag_TE(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CIFCR ,MDMA_CIFCR_CTEIF);
 }
@@ -3798,7 +3762,7 @@ __STATIC_INLINE void LL_MDMA_ClearFlag_TE(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_MDMA_ClearFlag_CTC(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CIFCR ,MDMA_CIFCR_CCTCIF);
 }
@@ -3828,7 +3792,7 @@ __STATIC_INLINE void LL_MDMA_ClearFlag_CTC(MDMA_TypeDef *MDMAx, uint32_t Channel
   */
 __STATIC_INLINE void LL_MDMA_ClearFlag_BRT(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CIFCR ,MDMA_CIFCR_CBRTIF);
 }
@@ -3858,7 +3822,7 @@ __STATIC_INLINE void LL_MDMA_ClearFlag_BRT(MDMA_TypeDef *MDMAx, uint32_t Channel
   */
 __STATIC_INLINE void LL_MDMA_ClearFlag_BT(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CIFCR ,MDMA_CIFCR_CBTIF);
 }
@@ -3888,7 +3852,7 @@ __STATIC_INLINE void LL_MDMA_ClearFlag_BT(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_MDMA_ClearFlag_TC(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   WRITE_REG(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CIFCR ,MDMA_CIFCR_CLTCIF);
 }
@@ -3898,7 +3862,6 @@ __STATIC_INLINE void LL_MDMA_ClearFlag_TC(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 
 /** @defgroup MDMA_LL_EF_IT_Management IT_Management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3927,7 +3890,7 @@ __STATIC_INLINE void LL_MDMA_ClearFlag_TC(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_MDMA_EnableIT_TE(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   SET_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_TEIE);
 }
@@ -3957,7 +3920,7 @@ __STATIC_INLINE void LL_MDMA_EnableIT_TE(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_MDMA_EnableIT_CTC(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   SET_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_CTCIE);
 }
@@ -3987,7 +3950,7 @@ __STATIC_INLINE void LL_MDMA_EnableIT_CTC(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_MDMA_EnableIT_BRT(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   SET_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_BRTIE);
 }
@@ -4017,7 +3980,7 @@ __STATIC_INLINE void LL_MDMA_EnableIT_BRT(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_MDMA_EnableIT_BT(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   SET_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_BTIE);
 }
@@ -4047,7 +4010,7 @@ __STATIC_INLINE void LL_MDMA_EnableIT_BT(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_MDMA_EnableIT_TC(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   SET_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_TCIE);
 }
@@ -4077,7 +4040,7 @@ __STATIC_INLINE void LL_MDMA_EnableIT_TC(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_MDMA_DisableIT_TE(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   CLEAR_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_TEIE);
 }
@@ -4107,7 +4070,7 @@ __STATIC_INLINE void LL_MDMA_DisableIT_TE(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_MDMA_DisableIT_CTC(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   CLEAR_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_CTCIE);
 }
@@ -4137,7 +4100,7 @@ __STATIC_INLINE void LL_MDMA_DisableIT_CTC(MDMA_TypeDef *MDMAx, uint32_t Channel
   */
 __STATIC_INLINE void LL_MDMA_DisableIT_BRT(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   CLEAR_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_BRTIE);
 }
@@ -4167,7 +4130,7 @@ __STATIC_INLINE void LL_MDMA_DisableIT_BRT(MDMA_TypeDef *MDMAx, uint32_t Channel
   */
 __STATIC_INLINE void LL_MDMA_DisableIT_BT(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   CLEAR_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_BTIE);
 }
@@ -4197,7 +4160,7 @@ __STATIC_INLINE void LL_MDMA_DisableIT_BT(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_MDMA_DisableIT_TC(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   CLEAR_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_TCIE);
 }
@@ -4227,7 +4190,7 @@ __STATIC_INLINE void LL_MDMA_DisableIT_TC(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_TE(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_TEIE) == MDMA_CCR_TEIE) ? 1UL : 0UL);
 }
@@ -4257,7 +4220,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_TE(MDMA_TypeDef *MDMAx, uint32_t Ch
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_CTC(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_CTCIE) == MDMA_CCR_CTCIE) ? 1UL : 0UL);
 }
@@ -4287,7 +4250,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_CTC(MDMA_TypeDef *MDMAx, uint32_t C
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_BRT(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_BRTIE) == MDMA_CCR_BRTIE) ? 1UL : 0UL);
 }
@@ -4317,7 +4280,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_BRT(MDMA_TypeDef *MDMAx, uint32_t C
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_BT(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_BTIE) == MDMA_CCR_BTIE) ? 1UL : 0UL);
 }
@@ -4347,7 +4310,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_BT(MDMA_TypeDef *MDMAx, uint32_t Ch
   */
 __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_TC(MDMA_TypeDef *MDMAx, uint32_t Channel)
 {
-  register uint32_t mdma_base_addr = (uint32_t)MDMAx;
+  uint32_t mdma_base_addr = (uint32_t)MDMAx;
 
   return ((READ_BIT(((MDMA_Channel_TypeDef*)(mdma_base_addr + LL_MDMA_CH_OFFSET_TAB[Channel]))->CCR ,MDMA_CCR_TCIE) == MDMA_CCR_TCIE) ? 1UL : 0UL);
 }
@@ -4356,9 +4319,8 @@ __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_TC(MDMA_TypeDef *MDMAx, uint32_t Ch
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup MDMA_LL_EF_Init Initialization and de-initialization functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4394,4 +4356,3 @@ void LL_MDMA_DisconnectNextLinkNode(LL_MDMA_LinkNodeTypeDef *pLinkNode);
 
 #endif /* STM32H7xx_LL_MDMA_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

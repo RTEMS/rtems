@@ -10,6 +10,17 @@
   *           + Peripheral Control functions
   *           + Peripheral State and Error functions
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                         ##### How to use this driver #####
@@ -105,18 +116,6 @@
        (@) You can refer to the DCMI HAL driver header file for more useful macros
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -126,7 +125,6 @@
   * @{
   */
 /** @defgroup DCMI DCMI
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DCMI HAL module driver
   * @{
   */
@@ -136,8 +134,13 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+/** @addtogroup DCMI_Private_Defines
+  * @{
+  */
 #define HAL_TIMEOUT_DCMI_STOP    ((uint32_t)1000) /* Set timeout to 1s  */
-
+/**
+  * @}
+  */
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -147,12 +150,10 @@ static void       DCMI_DMAError(DMA_HandleTypeDef *hdma);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup DCMI_Exported_Functions DCMI Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DCMI_Exported_Functions_Group1 Initialization and Configuration functions
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Initialization and Configuration functions
  *
 @verbatim
@@ -333,7 +334,6 @@ __weak void HAL_DCMI_MspDeInit(DCMI_HandleTypeDef *hdcmi)
   * @}
   */
 /** @defgroup DCMI_Exported_Functions_Group2 IO operation functions
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   IO operation functions
  *
 @verbatim
@@ -466,7 +466,7 @@ HAL_StatusTypeDef HAL_DCMI_Start_DMA(DCMI_HandleTypeDef *hdcmi, uint32_t DCMI_Mo
   */
 HAL_StatusTypeDef HAL_DCMI_Stop(DCMI_HandleTypeDef *hdcmi)
 {
-  register uint32_t count = HAL_TIMEOUT_DCMI_STOP * (SystemCoreClock / 8U / 1000U);
+  uint32_t count = HAL_TIMEOUT_DCMI_STOP * (SystemCoreClock / 8U / 1000U);
   HAL_StatusTypeDef status = HAL_OK;
 
   /* Process locked */
@@ -520,7 +520,7 @@ HAL_StatusTypeDef HAL_DCMI_Stop(DCMI_HandleTypeDef *hdcmi)
   */
 HAL_StatusTypeDef HAL_DCMI_Suspend(DCMI_HandleTypeDef *hdcmi)
 {
-  register uint32_t count = HAL_TIMEOUT_DCMI_STOP * (SystemCoreClock / 8U / 1000U);
+  uint32_t count = HAL_TIMEOUT_DCMI_STOP * (SystemCoreClock / 8U / 1000U);
   HAL_StatusTypeDef status = HAL_OK;
 
   /* Process locked */
@@ -575,7 +575,7 @@ HAL_StatusTypeDef HAL_DCMI_Resume(DCMI_HandleTypeDef *hdcmi)
     /* Change DCMI state */
     hdcmi->State = HAL_DCMI_STATE_BUSY;
 
-    /* Disable Capture */
+    /* Enable Capture */
     hdcmi->Instance->CR |= DCMI_CR_CAPTURE;
   }
   /* Process Unlocked */
@@ -753,7 +753,6 @@ __weak void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
   */
 
 /** @defgroup DCMI_Exported_Functions_Group3 Peripheral Control functions
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Peripheral Control functions
  *
 @verbatim
@@ -894,7 +893,6 @@ HAL_StatusTypeDef  HAL_DCMI_ConfigSyncUnmask(DCMI_HandleTypeDef *hdcmi, DCMI_Syn
   */
 
 /** @defgroup DCMI_Exported_Functions_Group4 Peripheral State functions
-  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Peripheral State functions
  *
 @verbatim
@@ -1029,7 +1027,7 @@ HAL_StatusTypeDef HAL_DCMI_RegisterCallback(DCMI_HandleTypeDef *hdcmi, HAL_DCMI_
 
 /**
   * @brief  Unregister a DCMI Callback
-  *         DCMI callabck is redirected to the weak predefined callback
+  *         DCMI callback is redirected to the weak predefined callback
   * @param  hdcmi DCMI handle
   * @param  CallbackID ID of the callback to be registered
   *         This parameter can be one of the following values:
@@ -1116,9 +1114,12 @@ HAL_StatusTypeDef HAL_DCMI_UnRegisterCallback(DCMI_HandleTypeDef *hdcmi, HAL_DCM
 /**
   * @}
   */
+
+/**
+  * @}
+  */
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup DCMI_Private_Functions DCMI Private Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -1218,9 +1219,6 @@ static void DCMI_DMAError(DMA_HandleTypeDef *hdma)
   * @}
   */
 
-/**
-  * @}
-  */
 #endif /* DCMI */
 #endif /* HAL_DCMI_MODULE_ENABLED */
 /**
@@ -1231,4 +1229,3 @@ static void DCMI_DMAError(DMA_HandleTypeDef *hdma)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

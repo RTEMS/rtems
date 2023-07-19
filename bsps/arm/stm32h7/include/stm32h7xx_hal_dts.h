@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -25,21 +24,21 @@
 extern "C" {
 #endif
 
-#if defined(DTS)
+
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_hal_def.h"
+
 
 /** @addtogroup STM32H7xx_HAL_Driver
   * @{
   */
-
+#if defined(DTS)
 /** @addtogroup DTS
   * @{
   */
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup DTS_Exported_Types DTS Exported Types
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -97,14 +96,36 @@ typedef struct
 #if (USE_HAL_DTS_REGISTER_CALLBACKS == 1)
   void (* MspInitCallback)(struct __DTS_HandleTypeDef *hdts);         /*!< DTS Base Msp Init Callback                   */
   void (* MspDeInitCallback)(struct __DTS_HandleTypeDef *hdts);       /*!< DTS Base Msp DeInit Callback                 */
-  void (* DTS_EndCallback)(struct __DTS_HandleTypeDef *hdts);         /*!< End measure Callback                         */
-  void (* DTS_LowCallback)(struct __DTS_HandleTypeDef *hdts);         /*!< low threshold Callback                       */
-  void (* DTS_HighCallback)(struct __DTS_HandleTypeDef *hdts);        /*!< high threshold Callback                      */
-  void (* DTS_AsyncEndCallback)(struct __DTS_HandleTypeDef *hdts);    /*!< Asynchronous end of measure Callback         */
-  void (* DTS_AsyncLowCallback)(struct __DTS_HandleTypeDef *hdts);    /*!< Asynchronous low threshold Callback          */
-  void (* DTS_AsyncHighCallback(struct __DTS_HandleTypeDef *hdts);    /*!< Asynchronous high threshold Callback         */
+  void (* EndCallback)(struct __DTS_HandleTypeDef *hdts);             /*!< End measure Callback                         */
+  void (* LowCallback)(struct __DTS_HandleTypeDef *hdts);             /*!< low threshold Callback                       */
+  void (* HighCallback)(struct __DTS_HandleTypeDef *hdts);            /*!< high threshold Callback                      */
+  void (* AsyncEndCallback)(struct __DTS_HandleTypeDef *hdts);        /*!< Asynchronous end of measure Callback         */
+  void (* AsyncLowCallback)(struct __DTS_HandleTypeDef *hdts);        /*!< Asynchronous low threshold Callback          */
+  void (* AsyncHighCallback)(struct __DTS_HandleTypeDef *hdts);       /*!< Asynchronous high threshold Callback         */
 #endif /* USE_HAL_DTS_REGISTER_CALLBACKS */
 } DTS_HandleTypeDef;
+
+#if (USE_HAL_DTS_REGISTER_CALLBACKS == 1)
+/**
+  * @brief  DTS callback ID enumeration definition
+  */
+typedef enum
+{
+  HAL_DTS_MEAS_COMPLETE_CB_ID        = 0x00U, /*!< Measure complete callback ID */
+  HAL_DTS_ASYNC_MEAS_COMPLETE_CB_ID  = 0x01U, /*!< Asynchronous measure complete callback ID */
+  HAL_DTS_LOW_THRESHOLD_CB_ID        = 0x02U, /*!< Low threshold detection callback ID */
+  HAL_DTS_ASYNC_LOW_THRESHOLD_CB_ID  = 0x03U, /*!< Asynchronous low threshold detection callback ID */
+  HAL_DTS_HIGH_THRESHOLD_CB_ID       = 0x04U, /*!< High threshold detection callback ID */
+  HAL_DTS_ASYNC_HIGH_THRESHOLD_CB_ID = 0x05U, /*!< Asynchronous high threshold detection callback ID */
+  HAL_DTS_MSPINIT_CB_ID              = 0x06U, /*!< MSP init callback ID */
+  HAL_DTS_MSPDEINIT_CB_ID            = 0x07U  /*!< MSP de-init callback ID */
+} HAL_DTS_CallbackIDTypeDef;
+
+/**
+  * @brief  DTS callback pointers definition
+  */
+typedef void (*pDTS_CallbackTypeDef)(DTS_HandleTypeDef *hdts);
+#endif /* USE_HAL_DTS_REGISTER_CALLBACKS */
 
 /**
   * @}
@@ -112,12 +133,10 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup DTS_Exported_Constants DTS Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DTS_TriggerConfig  DTS Trigger Configuration
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* @brief No Hardware trigger detection */
@@ -139,7 +158,6 @@ typedef struct
   */
 
 /** @defgroup DTS_Quick_Measurement  DTS Quick Measurement
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_QUICKMEAS_ENABLE    DTS_CFGR1_Q_MEAS_OPT      /*!< Enable the Quick Measure (Measure without calibration) */
@@ -149,7 +167,6 @@ typedef struct
   */
 
 /** @defgroup DTS_Reference_Clock_Selection   DTS Reference Clock Selection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_REFCLKSEL_LSE   DTS_CFGR1_REFCLK_SEL          /*!< Low speed REF clock (LSE) */
@@ -159,7 +176,6 @@ typedef struct
   */
 
 /** @defgroup DTS_Sampling_Time   DTS Sampling Time
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_SMP_TIME_1_CYCLE     DTS_CFGR1_TS1_SMP_TIME_0                                                                                   /*!< 1 clock cycle for the sampling time  */
@@ -181,7 +197,6 @@ typedef struct
   * @}
   */
 /** @defgroup DTS_Flag_Definitions DTS Flag Definitions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_FLAG_TS1_ITE   DTS_SR_TS1_ITEF   /*!< Interrupt flag for end of measure for DTS1 */
@@ -196,7 +211,6 @@ typedef struct
   */
 
 /** @defgroup DTS_Interrupts_Definitions DTS Interrupts Definitions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_IT_TS1_ITE  DTS_ITENR_TS1_ITEEN   /*!< Enable interrupt flag for end of measure for DTS1 */
@@ -214,7 +228,6 @@ typedef struct
   */
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup DTS_Exported_Macros DTS Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -222,7 +235,15 @@ typedef struct
   * @param  __HANDLE__ DTS handle.
   * @retval None
   */
+#if (USE_HAL_DTS_REGISTER_CALLBACKS == 1)
+#define __HAL_DTS_RESET_HANDLE_STATE(__HANDLE__) do{                                             \
+                                                      (__HANDLE__)->State = HAL_DTS_STATE_RESET; \
+                                                      (__HANDLE__)->MspInitCallback = NULL;      \
+                                                      (__HANDLE__)->MspDeInitCallback = NULL;    \
+                                                    } while(0)
+#else /* USE_HAL_DTS_REGISTER_CALLBACKS */
 #define __HAL_DTS_RESET_HANDLE_STATE(__HANDLE__)    ((__HANDLE__)->State = HAL_DTS_STATE_RESET)
+#endif /* USE_HAL_DTS_REGISTER_CALLBACKS */
 
 /**
   * @brief  Enable the specified DTS sensor
@@ -381,6 +402,13 @@ HAL_StatusTypeDef HAL_DTS_Init(DTS_HandleTypeDef *hdts);
 HAL_StatusTypeDef HAL_DTS_DeInit(DTS_HandleTypeDef *hdts);
 void              HAL_DTS_MspInit(DTS_HandleTypeDef *hdts);
 void              HAL_DTS_MspDeInit(DTS_HandleTypeDef *hdts);
+#if (USE_HAL_DTS_REGISTER_CALLBACKS == 1)
+HAL_StatusTypeDef HAL_DTS_RegisterCallback(DTS_HandleTypeDef        *hdts,
+                                           HAL_DTS_CallbackIDTypeDef CallbackID,
+                                           pDTS_CallbackTypeDef      pCallback);
+HAL_StatusTypeDef HAL_DTS_UnRegisterCallback(DTS_HandleTypeDef        *hdts,
+                                             HAL_DTS_CallbackIDTypeDef CallbackID);
+#endif /* USE_HAL_DTS_REGISTER_CALLBACKS */
 /**
   * @}
   */
@@ -406,15 +434,16 @@ void              HAL_DTS_AsyncHighCallback(DTS_HandleTypeDef *hdts);
 /**
   * @}
   */
+/**
+  * @}
+  */
 
 /* Private types -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup DTS_Private_Constants DTS Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup DTS_ExtiLine DTS EXTI Lines
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_EXTI_LINE_DTS1           (EXTI_IMR3_IM88)  /*!< EXTI line 88 connected to DTS1 output */
@@ -427,12 +456,10 @@ void              HAL_DTS_AsyncHighCallback(DTS_HandleTypeDef *hdts);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup DTS_Private_Macros DTS Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DTS_IS_DTS_Definitions  DTS Private macros to check input parameters
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_DTS_QUICKMEAS(__SEL__)   (((__SEL__) == DTS_QUICKMEAS_DISABLE) || \
@@ -449,7 +476,7 @@ void              HAL_DTS_AsyncHighCallback(DTS_HandleTypeDef *hdts);
 
 #define IS_DTS_THRESHOLD(__THRESHOLD__)  ((__THRESHOLD__) <= 0xFFFFUL)
 
-#define IS_DTS_DIVIDER_RATIO_NUMBER(__NUMBER__) (((__NUMBER__) >= (2UL)) && ((__NUMBER__) <= (127UL)))
+#define IS_DTS_DIVIDER_RATIO_NUMBER(__NUMBER__) ((__NUMBER__) <= 127UL)
 
 #define IS_DTS_SAMPLINGTIME(__CYCLE__)  (((__CYCLE__) == DTS_SMP_TIME_1_CYCLE)  || \
                                              ((__CYCLE__) == DTS_SMP_TIME_2_CYCLE)    || \
@@ -493,4 +520,3 @@ void              HAL_DTS_AsyncHighCallback(DTS_HandleTypeDef *hdts);
 
 #endif /* __STM32H7xx_HAL_DTS_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

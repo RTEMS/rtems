@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -35,7 +34,6 @@ extern "C" {
 #if defined (OPAMP1) || defined (OPAMP2)
 
 /** @defgroup OPAMP_LL OPAMP
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -44,7 +42,6 @@ extern "C" {
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup OPAMP_LL_Private_Constants OPAMP Private Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -76,7 +73,6 @@ extern "C" {
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup OPAMP_LL_Private_Macros OPAMP Private Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -99,9 +95,8 @@ extern "C" {
 
 
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup OPAMP_LL_ES_INIT OPAMP Exported Init structure
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -142,12 +137,10 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup OPAMP_LL_Exported_Constants OPAMP Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OPAMP_LL_EC_MODE OPAMP mode calibration or functional.
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_MODE_FUNCTIONAL        0x00000000U                               /*!< OPAMP functional mode */
@@ -157,7 +150,6 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_FUNCTIONAL_MODE OPAMP functional mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_MODE_STANDALONE        0x00000000U                                                 /*!< OPAMP functional mode, OPAMP operation in standalone */
@@ -177,7 +169,6 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_MODE_PGA_GAIN OPAMP PGA gain (relevant when OPAMP is in functional mode PGA)
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @note Gain sign:
   *         - is positive if the @ref OPAMP_LL_EC_FUNCTIONAL_MODE configuration is
   *           @ref LL_OPAMP_MODE_PGA or LL_OPAMP_MODE_PGA_IO0
@@ -195,15 +186,14 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_INPUT_NONINVERTING OPAMP input non-inverting
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_INPUT_NONINVERT_IO0         0x00000000U           /*!< OPAMP non inverting input connected to I/O VINP0
                                                                         (PB0  for OPAMP1, PE9  for OPAMP2)
-                                                                        Note: On this STM32 serie, all OPAMPx are not available on all devices. Refer to device datasheet for more details */
+                                                                        Note: On this STM32 series, all OPAMPx are not available on all devices. Refer to device datasheet for more details */
 #define LL_OPAMP_INPUT_NONINVERT_DAC         OPAMP_CSR_VPSEL_0     /*!< OPAMP non inverting input connected internally to DAC channel
                                                                         (DAC1_CH1 for OPAMP1, DAC1_CH2  for OPAMP2)
-                                                                        Note: On this STM32 serie, all OPAMPx are not available on all devices. Refer to device datasheet for more details */
+                                                                        Note: On this STM32 series, all OPAMPx are not available on all devices. Refer to device datasheet for more details */
 #if defined(DAC2)
 #define LL_OPAMP_INPUT_NONINVERT_DAC2        OPAMP_CSR_VPSEL_1     /*!< OPAMP non inverting input connected internally to DAC2 channel
                                                                         (DAC3 only for OPAMP2)*/
@@ -214,19 +204,18 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_INPUT_INVERTING OPAMP input inverting
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @note OPAMP inverting input is used with OPAMP in mode standalone or PGA with negative gain or bias.
   *       Otherwise (OPAMP in mode follower), OPAMP inverting input is not used (not connected to GPIO pin).
   * @{
   */
 #define LL_OPAMP_INPUT_INVERT_IO0         0x00000000U              /*!< OPAMP inverting input connected to I/O VINM0
                                                                         (PC5  for OPAMP1, PE8  for OPAMP2)
-                                                                        Note: On this STM32 serie, all OPAMPx are not available on all devices. Refer to device datasheet for more details */
+                                                                        Note: On this STM32 series, all OPAMPx are not available on all devices. Refer to device datasheet for more details */
 #define LL_OPAMP_INPUT_INVERT_IO1         OPAMP_CSR_VMSEL_0        /*!< OPAMP inverting input connected to I/0 VINM1
                                                                         (PA7  for OPAMP1, PG1  for OPAMP2)
-                                                                        Note: On this STM32 serie, all OPAMPx are not available on all devices. Refer to device datasheet for more details */
+                                                                        Note: On this STM32 series, all OPAMPx are not available on all devices. Refer to device datasheet for more details */
 #define LL_OPAMP_INPUT_INVERT_CONNECT_NO  OPAMP_CSR_VMSEL_1        /*!< OPAMP inverting input not externally connected (intended for OPAMP in mode follower or PGA with positive gain without bias).
-                                                                        Note: On this STM32 serie, this literal include cases of value 0x11 for mode follower and value 0x10 for mode PGA. */
+                                                                        Note: On this STM32 series, this literal include cases of value 0x11 for mode follower and value 0x10 for mode PGA. */
 /**
   * @}
   */
@@ -234,7 +223,6 @@ typedef struct
 
 
 /** @defgroup OPAMP_LL_EC_POWER_MODE OPAMP PowerMode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_POWERMODE_NORMAL        (OPAMP_POWERMODE_OTR_REGOFFSET)                            /*!< OPAMP output in normal mode */
@@ -244,7 +232,6 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_TRIMMING_MODE OPAMP trimming mode
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_TRIMMING_FACTORY       0x00000000U             /*!< OPAMP trimming factors set to factory values */
@@ -254,7 +241,6 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_TRIMMING_TRANSISTORS_DIFF_PAIR OPAMP trimming of transistors differential pair NMOS or PMOS
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_TRIMMING_NMOS_VREF_90PC_VDDA  (OPAMP_OTR_TRIMOFFSETN | ((OPAMP_CSR_CALSEL_1 | OPAMP_CSR_CALSEL_0) << 4)) /*!< OPAMP trimming of transistors differential pair NMOS (internal reference voltage set to 0.9*Vdda). Default parameters to be used for calibration using two trimming steps (one with each transistors differential pair NMOS and PMOS). */
@@ -268,8 +254,7 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_HW_DELAYS  Definitions of OPAMP hardware constraints delays
-  * @ingroup RTEMSBSPsARMSTM32H7
-  * @note   Only OPAMP IP HW delays are defined in OPAMP LL driver driver,
+  * @note   Only OPAMP peripheral HW delays are defined in OPAMP LL driver driver,
   *         not timeout values.
   *         For details on delays values, refer to descriptions in source code
   *         above each literal definition.
@@ -296,11 +281,9 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup OPAMP_LL_Exported_Macros OPAMP Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup OPAMP_LL_EM_WRITE_READ Common write and read registers macro
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -323,7 +306,6 @@ typedef struct
   * @}
   */
 /** @defgroup OPAMP_LL_EM_HELPER_MACRO OPAMP helper macro
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -369,12 +351,10 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup OPAMP_LL_Exported_Functions OPAMP Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OPAMP_LL_EF_CONFIGURATION_OPAMP_INSTANCE Configuration of OPAMP hierarchical scope: OPAMP instance
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -520,7 +500,7 @@ __STATIC_INLINE void LL_OPAMP_SetPowerMode(OPAMP_TypeDef *OPAMPx, uint32_t Power
   */
 __STATIC_INLINE uint32_t LL_OPAMP_GetPowerMode(OPAMP_TypeDef *OPAMPx)
 {
-  register uint32_t power_mode = (READ_BIT(OPAMPx->CSR, OPAMP_CSR_OPAHSM));
+  uint32_t power_mode = (READ_BIT(OPAMPx->CSR, OPAMP_CSR_OPAHSM));
 
   return (uint32_t)(power_mode | (power_mode >> (OPAMP_CSR_OPAHSM_Pos)));
 }
@@ -529,7 +509,6 @@ __STATIC_INLINE uint32_t LL_OPAMP_GetPowerMode(OPAMP_TypeDef *OPAMPx)
   */
 
 /** @defgroup OPAMP_LL_EF_CONFIGURATION_INPUTS Configuration of OPAMP inputs
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -595,7 +574,7 @@ __STATIC_INLINE void LL_OPAMP_SetInputInverting(OPAMP_TypeDef *OPAMPx, uint32_t 
   */
 __STATIC_INLINE uint32_t LL_OPAMP_GetInputInverting(OPAMP_TypeDef *OPAMPx)
 {
-  register uint32_t input_inverting = READ_BIT(OPAMPx->CSR, OPAMP_CSR_VMSEL);
+  uint32_t input_inverting = READ_BIT(OPAMPx->CSR, OPAMP_CSR_VMSEL);
 
   /* Manage cases 0x10 and 0x11 to return the same value: OPAMP inverting     */
   /* input not connected.                                                     */
@@ -607,7 +586,6 @@ __STATIC_INLINE uint32_t LL_OPAMP_GetInputInverting(OPAMP_TypeDef *OPAMPx)
   */
 
 /** @defgroup OPAMP_LL_EF_OPAMP_TRIMMING Configuration and operation of OPAMP trimming
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -682,7 +660,7 @@ __STATIC_INLINE void LL_OPAMP_SetCalibrationSelection(OPAMP_TypeDef *OPAMPx, uin
   */
 __STATIC_INLINE uint32_t LL_OPAMP_GetCalibrationSelection(OPAMP_TypeDef *OPAMPx)
 {
-  register uint32_t CalibrationSelection = (uint32_t)(READ_BIT(OPAMPx->CSR, OPAMP_CSR_CALSEL));
+  uint32_t CalibrationSelection = (uint32_t)(READ_BIT(OPAMPx->CSR, OPAMP_CSR_CALSEL));
 
   return (uint32_t)((CalibrationSelection << 4)|
           (((CalibrationSelection & OPAMP_CSR_CALSEL_1) == 0UL) ? OPAMP_OTR_TRIMOFFSETN : OPAMP_OTR_TRIMOFFSETP));
@@ -722,7 +700,7 @@ __STATIC_INLINE uint32_t LL_OPAMP_IsCalibrationOutputSet(OPAMP_TypeDef *OPAMPx)
   */
 __STATIC_INLINE void LL_OPAMP_SetTrimmingValue(OPAMP_TypeDef* OPAMPx, uint32_t PowerMode, uint32_t TransistorsDiffPair, uint32_t TrimmingValue)
 {
-  register __IO uint32_t *preg = __OPAMP_PTR_REG_OFFSET(OPAMPx->OTR, (PowerMode & OPAMP_POWERMODE_OTR_REGOFFSET_MASK));
+  __IO uint32_t *preg = __OPAMP_PTR_REG_OFFSET(OPAMPx->OTR, (PowerMode & OPAMP_POWERMODE_OTR_REGOFFSET_MASK));
 
   /* Set bits with position in register depending on parameter                */
   /* "TransistorsDiffPair".                                                   */
@@ -752,7 +730,7 @@ __STATIC_INLINE void LL_OPAMP_SetTrimmingValue(OPAMP_TypeDef* OPAMPx, uint32_t P
   */
 __STATIC_INLINE uint32_t LL_OPAMP_GetTrimmingValue(OPAMP_TypeDef* OPAMPx, uint32_t PowerMode, uint32_t TransistorsDiffPair)
 {
-  register const __IO uint32_t *preg = __OPAMP_PTR_REG_OFFSET(OPAMPx->OTR, (PowerMode & OPAMP_POWERMODE_OTR_REGOFFSET_MASK));
+  const __IO uint32_t *preg = __OPAMP_PTR_REG_OFFSET(OPAMPx->OTR, (PowerMode & OPAMP_POWERMODE_OTR_REGOFFSET_MASK));
 
   /* Retrieve bits with position in register depending on parameter           */
   /* "TransistorsDiffPair".                                                   */
@@ -767,13 +745,12 @@ __STATIC_INLINE uint32_t LL_OPAMP_GetTrimmingValue(OPAMP_TypeDef* OPAMPx, uint32
   */
 
 /** @defgroup OPAMP_LL_EF_OPERATION Operation on OPAMP instance
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
   * @brief  Enable OPAMP instance.
   * @note   After enable from off state, OPAMP requires a delay
-  *         to fullfill wake up time specification.
+  *         to fulfill wake up time specification.
   *         Refer to device datasheet, parameter "tWAKEUP".
   * @rmtoll CSR      OPAMPXEN       LL_OPAMP_Enable
   * @param  OPAMPx OPAMP instance
@@ -810,9 +787,8 @@ __STATIC_INLINE uint32_t LL_OPAMP_IsEnabled(OPAMP_TypeDef *OPAMPx)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup OPAMP_LL_EF_Init Initialization and de-initialization functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -845,4 +821,4 @@ void        LL_OPAMP_StructInit(LL_OPAMP_InitTypeDef *OPAMP_InitStruct);
 
 #endif /* __STM32H7xx_LL_OPAMP_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

@@ -7,17 +7,28 @@
   *          functionalities of the RAM ECC monitoring (RAMECC) peripheral:
   *           + Initialization and de-initialization functions
   *           + Monitoring operation functions
-  *           + Error informations functions
+  *           + Error information functions
   *           + State and error functions
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                         ##### How to use this driver #####
   ==============================================================================
   [..]
-   (#) Enable and latch error informations through HAL_RAMECC_Init().
+   (#) Enable and latch error information through HAL_RAMECC_Init().
 
    (#) For a given Monitor, enable and disable interrupt through
-       HAL_RAMECC_EnableNotifiaction().
+       HAL_RAMECC_EnableNotification().
        To enable a notification for a given RAMECC instance, use global
        interrupts.
        To enable a notification for only RAMECC monitor, use monitor interrupts.
@@ -33,13 +44,14 @@
      *** Interrupt mode ***
      ======================
     [..]
-          (+) Use HAL_RAMECC_EnableNotifiaction() to enable interrupts for a
+          (+) Use HAL_RAMECC_EnableNotification() to enable interrupts for a
               given error.
           (+) Configure the RAMECC interrupt priority using
               HAL_NVIC_SetPriority().
           (+) Enable the RAMECC IRQ handler using HAL_NVIC_EnableIRQ().
+          (+) Start RAMECC latch failing information using HAL_RAMECC_StartMonitor().
 
-     *** Failing informations ***
+     *** Failing information ***
      ======================
     [..]
      (#) Use HAL_RAMECC_GetFailingAddress() function to return the RAMECC
@@ -69,18 +81,6 @@
       (+) __HAL_RAMECC_CLEAR_FLAG : Clear the current RAMECC Monitor selected
                                     flag.
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -91,7 +91,6 @@
   */
 
 /** @defgroup RAMECC RAMECC
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief RAMECC HAL module driver
   * @{
   */
@@ -220,10 +219,6 @@ HAL_StatusTypeDef HAL_RAMECC_DeInit (RAMECC_HandleTypeDef *hramecc)
   * @}
   */
 
-/**
-  * @}
-  */
-
 /** @addtogroup RAMECC_Exported_Functions_Group2
   *
 @verbatim
@@ -231,7 +226,7 @@ HAL_StatusTypeDef HAL_RAMECC_DeInit (RAMECC_HandleTypeDef *hramecc)
                    #####  Monitoring operation functions  #####
  ===============================================================================
     [..]  This section provides functions allowing to:
-      (+) Configure latching error informations.
+      (+) Configure latching error information.
       (+) Configure RAMECC Global/Monitor interrupts.
       (+) Register and Unregister RAMECC callbacks
       (+) Handle RAMECC interrupt request
@@ -279,7 +274,7 @@ HAL_StatusTypeDef HAL_RAMECC_StartMonitor (RAMECC_HandleTypeDef *hramecc)
 
 
 /**
-  * @brief  Stop the RAMECC latching error informations.
+  * @brief  Stop the RAMECC latching error information.
   * @param  hramecc  Pointer to a RAMECC_HandleTypeDef structure that contains
   *                  the configuration information for the specified RAMECC
   *                  Monitor.
@@ -495,20 +490,22 @@ void HAL_RAMECC_IRQHandler (RAMECC_HandleTypeDef *hramecc)
   /* Clear active flags */
   __HAL_RAMECC_CLEAR_FLAG (hramecc, (((ier_reg | cr_reg) & sr_reg) >> 1U));
 
-  /* Check if a valid double error callback is registred */
+  /* Check if a valid double error callback is registered */
   if (hramecc->DetectErrorCallback != NULL)
   {
     /* Error detection callback */
     hramecc->DetectErrorCallback(hramecc);
   }
 }
-
+/**
+  * @}
+  */
 
 /** @addtogroup RAMECC_Exported_Functions_Group3
   *
 @verbatim
  ===============================================================================
-                   #####  Error informations functions  #####
+                   #####  Error information functions  #####
  ===============================================================================
     [..]  This section provides functions allowing to:
       (+) Get failing address.
@@ -590,7 +587,7 @@ uint32_t HAL_RAMECC_GetHammingErrorCode (RAMECC_HandleTypeDef *hramecc)
 }
 
 /**
-  * @brief  Check if an ECC single error was occured.
+  * @brief  Check if an ECC single error was occurred.
   * @param  hramecc  Pointer to a RAMECC_HandleTypeDef structure that contains
   *                  the configuration information for the specified RAMECC
   *                  Monitor.
@@ -606,7 +603,7 @@ uint32_t HAL_RAMECC_IsECCSingleErrorDetected (RAMECC_HandleTypeDef *hramecc)
 }
 
 /**
-  * @brief  Check if an ECC double error was occured.
+  * @brief  Check if an ECC double error was occurred.
   * @param  hramecc  Pointer to a RAMECC_HandleTypeDef structure that contains
   *                  the configuration information for the specified RAMECC
   *                  Monitor.
@@ -672,8 +669,11 @@ uint32_t HAL_RAMECC_GetError (RAMECC_HandleTypeDef *hramecc)
 /**
   * @}
   */
+
+/**
+  * @}
+  */
 #endif /* HAL_RAMECC_MODULE_ENABLED */
-
 /**
   * @}
   */
@@ -682,12 +682,3 @@ uint32_t HAL_RAMECC_GetError (RAMECC_HandleTypeDef *hramecc)
   * @}
   */
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

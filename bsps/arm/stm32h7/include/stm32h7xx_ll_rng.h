@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -35,19 +34,26 @@ extern "C" {
 #if defined (RNG)
 
 /** @defgroup RNG_LL RNG
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Private types -------------------------------------------------------------*/
+/* Private defines -----------------------------------------------------------*/
+/** @defgroup RNG_LL_Private_Defines RNG Private Defines
+  * @{
+  */
+/*  Health test control register information to use in CCM algorithm */
+#define LL_RNG_HTCFG   0x17590ABCU /*!< Magic number */
+/**
+  * @}
+  */
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup RNG_LL_ES_Init_Struct RNG Exported Init structures
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -59,8 +65,8 @@ typedef struct
 {
   uint32_t         ClockErrorDetection; /*!< Clock error detection.
                                       This parameter can be one value of @ref RNG_LL_CED.
-
-                                      This parameter can be modified using unitary functions @ref LL_RNG_EnableClkErrorDetect(). */
+                                      This parameter can be modified using unitary
+                                      functions @ref LL_RNG_EnableClkErrorDetect(). */
 } LL_RNG_InitTypeDef;
 
 /**
@@ -69,12 +75,10 @@ typedef struct
 #endif /* USE_FULL_LL_DRIVER */
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup RNG_LL_Exported_Constants RNG Exported Constants
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RNG_LL_CED Clock Error Detection
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RNG_CED_ENABLE         0x00000000U              /*!< Clock error detection enabled  */
@@ -85,8 +89,7 @@ typedef struct
 
 #if defined(RNG_CR_CONDRST)
 /** @defgroup RNG_LL_Clock_Divider_Factor  Value used to configure an internal
-  * @ingroup RTEMSBSPsARMSTM32H7
- *            programmable divider acting on the incoming RNG clock
+  *            programmable divider acting on the incoming RNG clock
   * @{
   */
 #define LL_RNG_CLKDIV_BY_1       (0x00000000UL)                                                           /*!< No clock division                             */
@@ -110,7 +113,6 @@ typedef struct
   */
 
 /** @defgroup RNG_LL_NIST_Compliance  NIST Compliance configuration
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RNG_NIST_COMPLIANT     (0x00000000UL) /*!< Default NIST compliant configuration*/
@@ -120,9 +122,8 @@ typedef struct
   * @}
   */
 
-#endif/*RNG_CR_CONDRST*/
+#endif /* RNG_CR_CONDRST */
 /** @defgroup RNG_LL_EC_GET_FLAG Get Flags Defines
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_RNG_ReadReg function
   * @{
   */
@@ -136,7 +137,6 @@ typedef struct
   */
 
 /** @defgroup RNG_LL_EC_IT IT Defines
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_RNG_ReadReg and  LL_RNG_WriteReg macros
   * @{
   */
@@ -151,12 +151,10 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup RNG_LL_Exported_Macros RNG Exported Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RNG_LL_EM_WRITE_READ Common Write and read registers Macros
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -187,11 +185,9 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup RNG_LL_Exported_Functions RNG Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup RNG_LL_EF_Configuration RNG Configuration functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -479,7 +475,6 @@ __STATIC_INLINE uint32_t LL_RNG_GetClockDivider(RNG_TypeDef *RNGx)
   */
 
 /** @defgroup RNG_LL_EF_FLAG_Management FLAG Management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -565,7 +560,6 @@ __STATIC_INLINE void LL_RNG_ClearFlag_SEIS(RNG_TypeDef *RNGx)
   */
 
 /** @defgroup RNG_LL_EF_IT_Management IT Management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -610,7 +604,6 @@ __STATIC_INLINE uint32_t LL_RNG_IsEnabledIT(RNG_TypeDef *RNGx)
   */
 
 /** @defgroup RNG_LL_EF_Data_Management Data Management
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -629,9 +622,8 @@ __STATIC_INLINE uint32_t LL_RNG_ReadRandData32(RNG_TypeDef *RNGx)
   * @}
   */
 
-#if defined (RNG_VER_3_1)
+#if defined(RNG_VER_3_2) || defined(RNG_VER_3_1) || defined(RNG_VER_3_0)
 /** @defgroup RNG_LL_EF_Health_Test_Control Health Test Control
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -644,6 +636,9 @@ __STATIC_INLINE uint32_t LL_RNG_ReadRandData32(RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_SetHealthConfig(RNG_TypeDef *RNGx, uint32_t HTCFG)
 {
+  /*!< magic number must be written immediately before to RNG_HTCRG */
+  WRITE_REG(RNGx->HTCR, LL_RNG_HTCFG);
+
   WRITE_REG(RNGx->HTCR, HTCFG);
 }
 
@@ -655,16 +650,18 @@ __STATIC_INLINE void LL_RNG_SetHealthConfig(RNG_TypeDef *RNGx, uint32_t HTCFG)
   */
 __STATIC_INLINE uint32_t LL_RNG_GetHealthConfig(RNG_TypeDef *RNGx)
 {
+  /*!< magic number must be written immediately before reading RNG_HTCRG */
+  WRITE_REG(RNGx->HTCR, LL_RNG_HTCFG);
+
   return (uint32_t)READ_REG(RNGx->HTCR);
 }
 
 /**
   * @}
   */
-#endif  /*RNG_VER_3_1*/
-#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
+#endif  /* RNG_VER_3_2, RNG_VER_3_1 or RNG_VER_3_0 */
+#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup RNG_LL_EF_Init Initialization and de-initialization functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 ErrorStatus LL_RNG_Init(RNG_TypeDef *RNGx, LL_RNG_InitTypeDef *RNG_InitStruct);
@@ -696,4 +693,3 @@ ErrorStatus LL_RNG_DeInit(RNG_TypeDef *RNGx);
 
 #endif /* __STM32H7xx_LL_RNG_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

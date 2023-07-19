@@ -7,13 +7,26 @@
   *          functionalities of the DAC peripheral.
   *
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                       ##### How to use this driver #####
   ==============================================================================
     [..]
+
      *** Dual mode IO operation ***
      ==============================
+     [..]
       (+) Use HAL_DACEx_DualStart() to enable both channel and start conversion
           for dual mode operation.
           If software trigger is selected, using HAL_DACEx_DualStart() will start
@@ -35,6 +48,7 @@
 
      *** Signal generation operation ***
      ===================================
+     [..]
       (+) Use HAL_DACEx_TriangleWaveGenerate() to generate Triangle signal.
       (+) Use HAL_DACEx_NoiseWaveGenerate() to generate Noise signal.
 
@@ -45,17 +59,6 @@
           at least one time after reset).
 
  @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -72,7 +75,6 @@
 #if defined(DAC1) || defined(DAC2)
 
 /** @defgroup DACEx DACEx
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DAC Extended HAL module driver
   * @{
   */
@@ -85,12 +87,10 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup DACEx_Exported_Functions DACEx Exported Functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DACEx_Exported_Functions_Group2 IO operation functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Extended IO operation functions
   *
 @verbatim
@@ -108,6 +108,7 @@
 @endverbatim
   * @{
   */
+
 
 /**
   * @brief  Enables DAC and starts conversion of both channels.
@@ -131,11 +132,11 @@ HAL_StatusTypeDef HAL_DACEx_DualStart(DAC_HandleTypeDef *hdac)
   __HAL_DAC_ENABLE(hdac, DAC_CHANNEL_2);
 
   /* Check if software trigger enabled */
-  if ((hdac->Instance->CR & (DAC_CR_TEN1 | DAC_CR_TSEL1)) == DAC_CR_TEN1)
+  if ((hdac->Instance->CR & (DAC_CR_TEN1 | DAC_CR_TSEL1)) == DAC_TRIGGER_SOFTWARE)
   {
     tmp_swtrig |= DAC_SWTRIGR_SWTRIG1;
   }
-  if ((hdac->Instance->CR & (DAC_CR_TEN2 | DAC_CR_TSEL2)) == DAC_CR_TEN2)
+  if ((hdac->Instance->CR & (DAC_CR_TEN2 | DAC_CR_TSEL2)) == (DAC_TRIGGER_SOFTWARE << (DAC_CHANNEL_2 & 0x10UL)))
   {
     tmp_swtrig |= DAC_SWTRIGR_SWTRIG2;
   }
@@ -346,6 +347,7 @@ HAL_StatusTypeDef HAL_DACEx_DualStop_DMA(DAC_HandleTypeDef *hdac, uint32_t Chann
   return status;
 }
 
+
 /**
   * @brief  Enable or disable the selected DAC channel wave generation.
   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
@@ -383,7 +385,8 @@ HAL_StatusTypeDef HAL_DACEx_TriangleWaveGenerate(DAC_HandleTypeDef *hdac, uint32
   hdac->State = HAL_DAC_STATE_BUSY;
 
   /* Enable the triangle wave generation for the selected DAC channel */
-  MODIFY_REG(hdac->Instance->CR, ((DAC_CR_WAVE1) | (DAC_CR_MAMP1)) << (Channel & 0x10UL), (DAC_CR_WAVE1_1 | Amplitude) << (Channel & 0x10UL));
+  MODIFY_REG(hdac->Instance->CR, ((DAC_CR_WAVE1) | (DAC_CR_MAMP1)) << (Channel & 0x10UL),
+             (DAC_CR_WAVE1_1 | Amplitude) << (Channel & 0x10UL));
 
   /* Change DAC state */
   hdac->State = HAL_DAC_STATE_READY;
@@ -432,7 +435,8 @@ HAL_StatusTypeDef HAL_DACEx_NoiseWaveGenerate(DAC_HandleTypeDef *hdac, uint32_t 
   hdac->State = HAL_DAC_STATE_BUSY;
 
   /* Enable the noise wave generation for the selected DAC channel */
-  MODIFY_REG(hdac->Instance->CR, ((DAC_CR_WAVE1) | (DAC_CR_MAMP1)) << (Channel & 0x10UL), (DAC_CR_WAVE1_0 | Amplitude) << (Channel & 0x10UL));
+  MODIFY_REG(hdac->Instance->CR, ((DAC_CR_WAVE1) | (DAC_CR_MAMP1)) << (Channel & 0x10UL),
+             (DAC_CR_WAVE1_0 | Amplitude) << (Channel & 0x10UL));
 
   /* Change DAC state */
   hdac->State = HAL_DAC_STATE_READY;
@@ -443,6 +447,7 @@ HAL_StatusTypeDef HAL_DACEx_NoiseWaveGenerate(DAC_HandleTypeDef *hdac, uint32_t 
   /* Return function status */
   return HAL_OK;
 }
+
 
 /**
   * @brief  Set the specified data holding register value for dual DAC channel.
@@ -552,6 +557,7 @@ __weak void HAL_DACEx_DMAUnderrunCallbackCh2(DAC_HandleTypeDef *hdac)
             the HAL_DACEx_DMAUnderrunCallbackCh2 could be implemented in the user file
    */
 }
+
 
 /**
   * @brief  Run the self calibration of one DAC channel.
@@ -750,7 +756,6 @@ uint32_t HAL_DACEx_GetTrimOffset(DAC_HandleTypeDef *hdac, uint32_t Channel)
   */
 
 /** @defgroup DACEx_Exported_Functions_Group3 Peripheral Control functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Extended Peripheral Control functions
   *
 @verbatim
@@ -763,6 +768,7 @@ uint32_t HAL_DACEx_GetTrimOffset(DAC_HandleTypeDef *hdac, uint32_t Channel)
 @endverbatim
   * @{
   */
+
 
 /**
   * @brief  Return the last data output value of the selected DAC channel.
@@ -782,20 +788,20 @@ uint32_t HAL_DACEx_DualGetValue(DAC_HandleTypeDef *hdac)
   return tmp;
 }
 
+
 /**
   * @}
   */
-
 /**
   * @}
   */
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup DACEx_Private_Functions DACEx private functions
-  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Extended private functions
   * @{
   */
+
 
 /**
   * @brief  DMA conversion complete callback.
@@ -855,6 +861,7 @@ void DAC_DMAErrorCh2(DMA_HandleTypeDef *hdma)
   hdac->State = HAL_DAC_STATE_READY;
 }
 
+
 /**
   * @}
   */
@@ -871,4 +878,3 @@ void DAC_DMAErrorCh2(DMA_HandleTypeDef *hdma)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
