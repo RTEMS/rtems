@@ -671,6 +671,7 @@ HAL_StatusTypeDef HAL_UART_DeInit(UART_HandleTypeDef *huart)
   return HAL_OK;
 }
 
+#ifndef __rtems__
 /**
   * @brief Initialize the UART MSP.
   * @param huart UART handle.
@@ -685,6 +686,7 @@ __weak void HAL_UART_MspInit(UART_HandleTypeDef *huart)
             the HAL_UART_MspInit can be implemented in the user file
    */
 }
+#endif /* __rtems__ */
 
 /**
   * @brief DeInitialize the UART MSP.
