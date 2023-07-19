@@ -10443,7 +10443,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_IsEnabledDMAReq_DLYPRT(const HRTIM_TypeDef *HR
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup HRTIM_LL_LL_EF_Init In-initialization and de-initialization functions
   * @{
   */

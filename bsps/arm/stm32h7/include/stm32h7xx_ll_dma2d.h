@@ -41,7 +41,7 @@ extern "C" {
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DMA2D_LL_Private_Macros DMA2D Private Macros
   * @{
   */
@@ -52,7 +52,7 @@ extern "C" {
 #endif /*USE_FULL_LL_DRIVER*/
 
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DMA2D_LL_ES_Init_Struct DMA2D Exported Init structures
   * @{
   */
@@ -2188,7 +2188,7 @@ __STATIC_INLINE uint32_t LL_DMA2D_IsEnabledIT_TE(DMA2D_TypeDef *DMA2Dx)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DMA2D_LL_EF_Init_Functions Initialization and De-initialization Functions
   * @{
   */

@@ -76,7 +76,7 @@ static const uint16_t LPUART_PRESCALER_TAB[] =
 
 
 /* Private macros ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup LPUART_LL_Private_Macros LPUART Private Macros
   * @{
   */
@@ -86,7 +86,7 @@ static const uint16_t LPUART_PRESCALER_TAB[] =
 #endif /*USE_FULL_LL_DRIVER*/
 
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup LPUART_LL_ES_INIT LPUART Exported Init structures
   * @{
   */
@@ -2609,7 +2609,7 @@ __STATIC_INLINE void LL_LPUART_RequestRxDataFlush(USART_TypeDef *LPUARTx)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup LPUART_LL_EF_Init Initialization and de-initialization functions
   * @{
   */

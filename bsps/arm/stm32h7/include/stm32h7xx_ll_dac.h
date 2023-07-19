@@ -153,7 +153,7 @@ extern "C" {
 
 
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DAC_LL_ES_INIT DAC Exported Init structure
   * @{
   */
@@ -1830,7 +1830,7 @@ __STATIC_INLINE uint32_t LL_DAC_IsEnabledIT_DMAUDR2(DAC_TypeDef *DACx)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DAC_LL_EF_Init Initialization and de-initialization functions
   * @{
   */

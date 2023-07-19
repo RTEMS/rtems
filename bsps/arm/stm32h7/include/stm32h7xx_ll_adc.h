@@ -432,7 +432,7 @@ extern "C" {
 
 
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup ADC_LL_ES_INIT ADC Exported Init structure
   * @{
   */
@@ -8338,7 +8338,7 @@ __STATIC_INLINE uint32_t LL_ADC_IsEnabledIT_AWD3(ADC_TypeDef *ADCx)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup ADC_LL_EF_Init Initialization and de-initialization functions
   * @{
   */

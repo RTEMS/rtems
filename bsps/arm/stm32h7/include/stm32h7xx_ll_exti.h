@@ -41,7 +41,7 @@ extern "C" {
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private Macros ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup EXTI_LL_Private_Macros EXTI Private Macros
   * @{
   */
@@ -50,7 +50,7 @@ extern "C" {
   */
 #endif /*USE_FULL_LL_DRIVER*/
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup EXTI_LL_ES_INIT EXTI Exported Init structure
   * @{
   */
@@ -211,14 +211,14 @@ typedef struct
 
 #define LL_EXTI_LINE_ALL               (0xFFFFFFFFU)  /*!< All Extended line */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 #define LL_EXTI_LINE_NONE              (0x00000000U)  /*!< None Extended line */
 #endif /*USE_FULL_LL_DRIVER*/
 
 /**
   * @}
   */
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 
 /** @defgroup EXTI_LL_EC_MODE Mode
   * @{
@@ -3248,7 +3248,7 @@ __STATIC_INLINE uint32_t LL_D3_EXTI_GetPendClearSel_48_63(uint32_t ExtiLine)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup EXTI_LL_EF_Init Initialization and de-initialization functions
   * @{,
   */
