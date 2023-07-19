@@ -1153,6 +1153,7 @@ HAL_StatusTypeDef HAL_ETH_ReadData(ETH_HandleTypeDef *heth, void **pAppBuff)
   */
 static void ETH_UpdateDescriptor(ETH_HandleTypeDef *heth)
 {
+#ifndef __rtems__
   uint32_t descidx;
   uint32_t desccount;
   ETH_DMADescTypeDef *dmarxdesc;
@@ -1217,6 +1218,7 @@ static void ETH_UpdateDescriptor(ETH_HandleTypeDef *heth)
     heth->RxDescList.RxBuildDescIdx = descidx;
     heth->RxDescList.RxBuildDescCnt = desccount;
   }
+#endif /* ! __rtems__ */
 }
 
 /**
