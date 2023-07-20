@@ -63,7 +63,6 @@ static rtems_chain_control chain;
 //  ===== TEST CODE SEGMENT 0 =====
 
 static void TestSegment0( Context* ctx ) {
-  const char rtems_test_name[] = "Model_Chain_API";
   
   T_log(T_NORMAL,"@@@ 0 INIT");
   rtems_chain_initialize_empty( &chain );
@@ -159,8 +158,7 @@ static void TestSegment0( Context* ctx ) {
 
 
 /* post-amble empty for now */
-void RtemsModelChainsAPI_Run12(
-)
+static void RtemsModelChainsAPI_Run12(void)
 {
   Context ctx;
 

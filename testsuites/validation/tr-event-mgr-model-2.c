@@ -87,8 +87,6 @@
 #define RC_Unsat RTEMS_UNSATISFIED
 // @@@ 0 DEF RC_Timeout RTEMS_TIMEOUT
 #define RC_Timeout RTEMS_TIMEOUT
-// @@@ 0 DECL byte sendrc 0
-static rtems_status_code sendrc = 0;
 // @@@ 0 DECL byte recrc 0
 static rtems_status_code recrc = 0;
 // @@@ 0 DCLARRAY EvtSet pending TASK_MAX
@@ -107,14 +105,6 @@ static void TestSegment0( Context* ctx ) {
   initialise_pending( pending, TASK_MAX );
   initialise_semaphore( ctx, semaphore );
   
-}
-
-//  ===== TEST CODE SEGMENT 2 =====
-
-static void TestSegment2( Context* ctx ) {
-  T_log(T_NORMAL,"@@@ 2 STATE 2 Ready");
-  /* We (Task 2) must have been recently ready because we are running */
-
 }
 
 //  ===== TEST CODE SEGMENT 3 =====

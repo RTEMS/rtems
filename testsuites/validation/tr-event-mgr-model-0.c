@@ -89,12 +89,8 @@
 #define RC_Timeout RTEMS_TIMEOUT
 // @@@ 0 DECL byte sendrc 0
 static rtems_status_code sendrc = 0;
-// @@@ 0 DECL byte recrc 0
-static rtems_status_code recrc = 0;
 // @@@ 0 DCLARRAY EvtSet pending TASK_MAX
 static rtems_event_set pending[TASK_MAX];
-// @@@ 0 DCLARRAY byte recout TASK_MAX
-static rtems_event_set recout[TASK_MAX];
 // @@@ 0 DCLARRAY Semaphore semaphore SEMA_MAX
 static rtems_id semaphore[SEMA_MAX];
 
@@ -136,7 +132,7 @@ static void TestSegment3( Context* ctx ) {
   T_log( T_NORMAL, "Returned 0x%x from Send", sendrc );
   
   T_log(T_NORMAL,"@@@ 3 CALL CheckNoPreemption");
-  log = &ctx->thread_switch_log;
+  log = (T_thread_switch_log *) &ctx->thread_switch_log;
   T_le_sz( log->header.recorded, 1 );
   for ( size_t i = 0; i < log->header.recorded; ++i ) {
     T_ne_u32( log->events[ i ].executing, ctx->worker_id );

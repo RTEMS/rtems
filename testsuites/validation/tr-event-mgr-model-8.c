@@ -143,7 +143,7 @@ static void TestSegment3( Context* ctx ) {
   T_log( T_NORMAL, "Returned 0x%x from Send", sendrc );
   
   T_log(T_NORMAL,"@@@ 3 CALL CheckNoPreemption");
-  log = &ctx->thread_switch_log;
+  log = (T_thread_switch_log *) &ctx->thread_switch_log;
   T_le_sz( log->header.recorded, 1 );
   for ( size_t i = 0; i < log->header.recorded; ++i ) {
     T_ne_u32( log->events[ i ].executing, ctx->worker_id );

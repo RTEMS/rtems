@@ -55,6 +55,7 @@
 
 #include <rtems/test.h>
 #include "ts-config.h"
+#include "tx-support.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -97,13 +98,6 @@ typedef struct {
                         // which is not used by the runner task
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelEventsMgr_Context;
-
-typedef enum {
-  PRIO_HIGH = 1,
-  PRIO_NORMAL,
-  PRIO_LOW,
-  PRIO_OTHER
-} Priorities;
 
 #define POWER_OF_10 100
 
