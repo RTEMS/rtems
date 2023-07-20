@@ -42,7 +42,7 @@ notes: |
   directive and similar directives which set ${/glossary/clock-realtime:/term}
   have no effect on a ${wake-after:/name} blocked task.  The delay until first
   clock tick will never be a whole clock tick interval since this directive will
-  never excute exactly on a clock tick.  Applications requiring use of a clock
+  never execute exactly on a clock tick.  Applications requiring use of a clock
   (${/glossary/clock-realtime:/term} or ${/glossary/clock-monotonic:/term})
   instead of clock ticks should make use of ${/c/if/clock-nanosleep:/name}.
 params:
