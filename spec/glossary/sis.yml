@@ -8,5 +8,6 @@ links:
   uid: ../glossary-general
 term: SIS
 text: |
-  This term is an acronym for ${sparc:/term} Instruction Simulator.
+  This term is an acronym for Simple Instruction Simulator.  The SIS is a
+  ${sparc:/term} V7/V8 and RISC-V RV32IMACFD ${target-arch:/term} simulator.
 type: glossary
