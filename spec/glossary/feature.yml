@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2021, 2023 embedded brains GmbH & Co. KG
 enabled-by: true
 glossary-type: term
 links:
@@ -8,6 +8,10 @@ links:
   uid: ../glossary-general
 term: feature
 text: |
-  A feature is a collection of interfaces together with their implementation
-  provided by the system.
+  In general, a
+  `software feature <https://en.wikipedia.org/wiki/Software_feature>`_
+  is vaguely defined.  A domain-specific definition is required.  In
+  ${rtems:/term}, a feature is a collection of interfaces together with their
+  implementation which provides a specific function or a service of the
+  operating system.
 type: glossary
