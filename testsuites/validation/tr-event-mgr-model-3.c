@@ -87,8 +87,6 @@
 #define RC_Unsat RTEMS_UNSATISFIED
 // @@@ 0 DEF RC_Timeout RTEMS_TIMEOUT
 #define RC_Timeout RTEMS_TIMEOUT
-// @@@ 0 DECL byte sendrc 0
-static rtems_status_code sendrc = 0;
 // @@@ 0 DECL byte recrc 0
 static rtems_status_code recrc = 0;
 // @@@ 0 DCLARRAY EvtSet pending TASK_MAX

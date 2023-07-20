@@ -109,14 +109,6 @@ static void TestSegment0( Context* ctx ) {
   
 }
 
-//  ===== TEST CODE SEGMENT 1 =====
-
-static void TestSegment1( Context* ctx ) {
-  T_log(T_NORMAL,"@@@ 1 STATE 1 Ready");
-  /* We (Task 1) must have been recently ready because we are running */
-
-}
-
 //  ===== TEST CODE SEGMENT 3 =====
 
 static void TestSegment3( Context* ctx ) {
@@ -144,7 +136,7 @@ static void TestSegment3( Context* ctx ) {
   T_log( T_NORMAL, "Returned 0x%x from Send", sendrc );
   
   T_log(T_NORMAL,"@@@ 3 CALL CheckPreemption");
-  log = &ctx->thread_switch_log;
+  log = (T_thread_switch_log *) &ctx->thread_switch_log;
   T_eq_sz( log->header.recorded, 2 );
   T_eq_u32( log->events[ 0 ].heir, ctx->runner_id );
   T_eq_u32( log->events[ 1 ].heir, ctx->worker_id );
