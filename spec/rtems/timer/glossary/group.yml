@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: group
 links:
 - role: requirement-refinement
-  uid: /glossary-general
+  uid: /req/glossary
 name: Timer Manager
 text: |
   The system shall have a glossary for terms used specifically by the
