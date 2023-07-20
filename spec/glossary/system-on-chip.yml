@@ -6,12 +6,12 @@ glossary-type: term
 links:
 - role: glossary-member
   uid: ../glossary-general
-term: system on a chip
+term: system-on-chip
 text: |
   This project uses the `system on a chip definition of Wikipedia
-  <https://en.wikipedia.org/wiki/System_on_a_chip>`_: "A system on a chip (SoC)
-  is an integrated circuit (also known as a *chip*) that integrates all or
-  most components of a computer or other electronic system."
+  <https://en.wikipedia.org/wiki/System_on_a_chip>`_: "A system on a chip or
+  system-on-chip is an integrated circuit that integrates most or all
+  components of a computer or other electronic system."
 
   Systems on a chip are ${target:/term} systems for applications using
   ${rtems:/term}.
