@@ -1,10 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021, 2022 embedded brains GmbH & Co. KG
-enabled-by:
-  and:
-  - RTEMS_SMP
-  - bsps/sparc/leon3
+enabled-by: bsps/sparc/leon3
 links:
 - role: requirement-refinement
   uid: ../validation
