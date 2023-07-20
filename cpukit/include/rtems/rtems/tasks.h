@@ -1563,7 +1563,7 @@ rtems_status_code rtems_task_mode(
  * Setting the system date and time with the rtems_clock_set() directive and
  * similar directives which set CLOCK_REALTIME have no effect on a
  * rtems_task_wake_after() blocked task.  The delay until first clock tick will
- * never be a whole clock tick interval since this directive will never excute
+ * never be a whole clock tick interval since this directive will never execute
  * exactly on a clock tick.  Applications requiring use of a clock
  * (CLOCK_REALTIME or CLOCK_MONOTONIC) instead of clock ticks should make use
  * of clock_nanosleep().
