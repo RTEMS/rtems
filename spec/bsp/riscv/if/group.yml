@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+enabled-by: riscv
+identifier: RTEMSBSPsRISCV
+links:
+- role: requirement-refinement
+  uid: ../../if/group
+non-functional-type: design-group
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The ${/glossary/bsp:/term} component shall have a component containing the
+  RISC-V ${/glossary/bsp:/plural}.
+type: requirement

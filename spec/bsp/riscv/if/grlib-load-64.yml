@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Loads the memory-mapped unsigned 64-bit register.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+definition:
+  default:
+    attributes: null
+    body: |
+      return *address;
+    params:
+    - const volatile ${/c/if/uint64_t:/name} *${.:/params[0]/name}
+    return: ${/c/if/uint64_t:/name}
+  variants: []
+description: null
+enabled-by: riscv
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: grlib-io-header
+- role: interface-ingroup
+  uid: grlib-io-group
+- role: proxy-member
+  uid: /dev/grlib/if/load-64
+name: grlib_load_64
+notes: null
+params:
+- description: |
+    is the address of the memory-mapped unsigned 64-bit register to load.
+  dir: null
+  name: address
+return:
+  return: |
+    Returns the loaded register value.
+  return-values: []
+type: interface

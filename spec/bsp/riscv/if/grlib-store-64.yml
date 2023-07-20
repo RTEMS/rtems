@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Stores the value to the memory-mapped unsigned 64-bit register.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+definition:
+  default:
+    attributes: null
+    body: |
+      *address = value;
+    params:
+    - volatile ${/c/if/uint64_t:/name} *${.:/params[0]/name}
+    - ${/c/if/uint64_t:/name} ${.:/params[1]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: riscv
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: grlib-io-header
+- role: interface-ingroup
+  uid: grlib-io-group
+- role: proxy-member
+  uid: /dev/grlib/if/store-64
+name: grlib_store_64
+notes: null
+params:
+- description: |
+    is the address of the memory-mapped unsigned 64-bit register.
+  dir: null
+  name: address
+- description: |
+    is the value to store.
+  dir: null
+  name: value
+return: null
+type: interface
