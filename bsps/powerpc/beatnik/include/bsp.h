@@ -173,12 +173,10 @@ extern void BSP_motload_pci_fixup(void);
 int BSP_i2c_initialize(void);
 
 /* Networking; */
-#if defined(RTEMS_NETWORKING)
 #include <bsp/bsp_bsdnet_attach.h>
 int rtems_em_attach(struct rtems_bsdnet_ifconfig *, int);
 int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 int rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *, int);
-#endif
 
 /* NOT FOR PUBLIC USE BELOW HERE */
 #define BSP_PCI_HOSE0_MEM_BASE    0x80000000  /* must be aligned to size */
