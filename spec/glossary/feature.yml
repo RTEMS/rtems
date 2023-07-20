@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: /req/glossary
 term: feature
 text: |
   In general, a
