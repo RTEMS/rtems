@@ -10,7 +10,7 @@
 
 /*
  * Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
- * Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 1988, 2023 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -1544,15 +1544,16 @@ rtems_status_code rtems_task_mode(
 /**
  * @ingroup RTEMSAPIClassicTasks
  *
- * @brief Wakes up after an interval in clock ticks or yields the processor.
+ * @brief Wakes up after a count of clock ticks have occurred or yields the
+ *   processor.
  *
- * @param ticks is the interval in clock ticks to delay the task or
+ * @param ticks is the count of clock ticks to delay the task or
  *   #RTEMS_YIELD_PROCESSOR to yield the processor.
  *
- * This directive blocks the calling task for the specified ``ticks`` of clock
- * ticks if the value is not equal to #RTEMS_YIELD_PROCESSOR.  When the
- * requested interval has elapsed, the task is made ready.  The clock tick
- * directives automatically updates the delay period.  The calling task may
+ * This directive blocks the calling task for the specified ``ticks`` count of
+ * clock ticks if the value is not equal to #RTEMS_YIELD_PROCESSOR. When the
+ * requested count of ticks have occurred, the task is made ready.  The clock
+ * tick directives automatically update the delay period.  The calling task may
  * give up the processor and remain in the ready state by specifying a value of
  * #RTEMS_YIELD_PROCESSOR in ``ticks``.
  *
@@ -1561,7 +1562,11 @@ rtems_status_code rtems_task_mode(
  * @par Notes
  * Setting the system date and time with the rtems_clock_set() directive and
  * similar directives which set CLOCK_REALTIME have no effect on a
- * rtems_task_wake_after() blocked task.
+ * rtems_task_wake_after() blocked task.  The delay until first clock tick will
+ * never be a whole clock tick interval since this directive will never excute
+ * exactly on a clock tick.  Applications requiring use of a clock
+ * (CLOCK_REALTIME or CLOCK_MONOTONIC) instead of clock ticks should make use
+ * of clock_nanosleep().
  *
  * @par Constraints
  * @parblock
