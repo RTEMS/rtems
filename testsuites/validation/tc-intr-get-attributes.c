@@ -118,7 +118,7 @@ typedef struct {
   /**
    * @brief This member specifies if the ``attributes`` parameter value.
    */
-  rtems_interrupt_attributes *attributes;;
+  rtems_interrupt_attributes *attributes;
 
   /**
    * @brief This member contains the return value of the

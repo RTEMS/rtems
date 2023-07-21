@@ -224,15 +224,15 @@ typedef struct {
 
   rtems_status_code status;
 
-  Semaphore_Variant variant;;
+  Semaphore_Variant variant;
 
-  Semaphore_Discipline discipline;;
+  Semaphore_Discipline discipline;
 
-  uint32_t sem_count;;
+  uint32_t sem_count;
 
-  Thread_Control *executing;;
+  Thread_Control *executing;
 
-  Thread_Control *owner;;
+  Thread_Control *owner;
 
   rtems_name name;
 

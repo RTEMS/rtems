@@ -123,12 +123,12 @@ typedef struct {
   /**
    * @brief This member contains the mutex identifier.
    */
-  rtems_id mutex_id;;
+  rtems_id mutex_id;
 
   /**
    * @brief This member contains the second mutex identifier.
    */
-  rtems_id mutex_2_id;;
+  rtems_id mutex_2_id;
 
   /**
    * @brief If this member is true, then the worker is done.

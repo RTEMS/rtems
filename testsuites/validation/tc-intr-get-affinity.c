@@ -138,7 +138,7 @@ typedef struct {
    * @brief This member provides the object referenced by the ``affinity``
    *   parameter.
    */
-  cpu_set_t cpuset_obj[ 2 ];;
+  cpu_set_t cpuset_obj[ 2 ];
 
   /**
    * @brief This member contains the return value of the

@@ -166,29 +166,29 @@ typedef struct {
   /**
    * @brief This member provides the scheduler operation records.
    */
-  T_scheduler_log_4 scheduler_log;;
+  T_scheduler_log_4 scheduler_log;
 
   /**
    * @brief This member contains the CLOCK_REALTIME value before the
    *   clock_nanosleep() call.
    */
-  struct timespec now_realtime;;
+  struct timespec now_realtime;
 
   /**
    * @brief This member contains the CLOCK_MONOTONIC value before the
    *   clock_nanosleep() call.
    */
-  struct timespec now_monotonic;;
+  struct timespec now_monotonic;
 
   /**
    * @brief This member contains the worker task identifier.
    */
-  rtems_id worker_id;;
+  rtems_id worker_id;
 
   /**
    * @brief This member contains the timer information of the worker task.
    */
-  TaskTimerInfo timer_info;;
+  TaskTimerInfo timer_info;
 
   /**
    * @brief This member provides the object referenced by the ``rqtp``

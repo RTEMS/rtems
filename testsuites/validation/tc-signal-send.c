@@ -154,9 +154,9 @@ typedef struct {
 
   rtems_signal_set processed_signal_sets[ 2 ];
 
-  uintptr_t stack_pointers[ 2 ];;
+  uintptr_t stack_pointers[ 2 ];
 
-  rtems_mode mode;;
+  rtems_mode mode;
 
   rtems_status_code status;
 

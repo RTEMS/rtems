@@ -131,23 +131,23 @@ typedef struct {
   /**
    * @brief This member provides the scheduler operation records.
    */
-  T_scheduler_log_4 scheduler_log;;
+  T_scheduler_log_4 scheduler_log;
 
   /**
    * @brief This member contains the CLOCK_REALTIME value before the
    *   rtems_task_wake_when() call.
    */
-  struct timespec now;;
+  struct timespec now;
 
   /**
    * @brief This member contains the worker task identifier.
    */
-  rtems_id worker_id;;
+  rtems_id worker_id;
 
   /**
    * @brief This member contains the timer information of the worker task.
    */
-  TaskTimerInfo timer_info;;
+  TaskTimerInfo timer_info;
 
   /**
    * @brief This member provides the object referenced by the ``time_buffer``

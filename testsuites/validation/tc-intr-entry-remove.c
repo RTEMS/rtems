@@ -181,7 +181,7 @@ typedef struct {
   /**
    * @brief This member provides a counter incremented by EntryRoutine().
    */
-  uint32_t entry_counter;;
+  uint32_t entry_counter;
 
   /**
    * @brief This member provides another rtems_interrupt_entry object.
@@ -285,7 +285,7 @@ typedef struct {
   /**
    * @brief This member specifies if the ``entry`` parameter value.
    */
-  rtems_interrupt_entry *entry;;
+  rtems_interrupt_entry *entry;
 
   /**
    * @brief This member contains the return value of the

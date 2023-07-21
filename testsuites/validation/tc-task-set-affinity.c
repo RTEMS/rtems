@@ -131,7 +131,7 @@ typedef struct {
   /**
    * @brief This member provides the scheduler operation records.
    */
-  T_scheduler_log_2 scheduler_log;;
+  T_scheduler_log_2 scheduler_log;
 
   /**
    * @brief This member provides the object referenced by the ``cpuset``

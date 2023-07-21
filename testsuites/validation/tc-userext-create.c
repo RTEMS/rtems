@@ -129,13 +129,13 @@ typedef struct {
 typedef struct {
   void *seized_objects;
 
-  rtems_extensions_table table_variable;;
+  rtems_extensions_table table_variable;
 
   rtems_id id_value;
 
   rtems_name name;
 
-  rtems_extensions_table *table;;
+  rtems_extensions_table *table;
 
   rtems_id *id;
 

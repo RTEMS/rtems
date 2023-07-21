@@ -284,7 +284,7 @@ typedef struct {
   /**
    * @brief If this member is true, then the worker shall be in the busy loop.
    */
-  volatile bool is_busy[ WORKER_COUNT ];;
+  volatile bool is_busy[ WORKER_COUNT ];
 
   /**
    * @brief This member contains the per-CPU jobs.
@@ -299,7 +299,7 @@ typedef struct {
   /**
    * @brief This member contains the call within ISR request.
    */
-  CallWithinISRRequest request;;
+  CallWithinISRRequest request;
 } ScoreSchedSmpValSmp_Context;
 
 static ScoreSchedSmpValSmp_Context

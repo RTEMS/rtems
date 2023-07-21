@@ -143,7 +143,7 @@ typedef struct {
   /**
    * @brief This member specifies if the ``enabled`` parameter value.
    */
-  bool *enabled;;
+  bool *enabled;
 
   /**
    * @brief This member contains the return value of the

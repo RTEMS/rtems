@@ -122,29 +122,29 @@ typedef struct {
   /**
    * @brief This member provides the scheduler operation records.
    */
-  T_scheduler_log_4 scheduler_log;;
+  T_scheduler_log_4 scheduler_log;
 
   /**
    * @brief This member contains the clock tick value before the
    *   rtems_task_wake_after() call.
    */
-  uint64_t now;;
+  uint64_t now;
 
   /**
    * @brief This member contains the worker task identifier.
    */
-  rtems_id worker_id;;
+  rtems_id worker_id;
 
   /**
    * @brief If this member is true, then the worker shall be suspended during
    *   the rtems_task_wake_after() call.
    */
-  bool suspended;;
+  bool suspended;
 
   /**
    * @brief This member contains the timer information of the worker task.
    */
-  TaskTimerInfo timer_info;;
+  TaskTimerInfo timer_info;
 
   /**
    * @brief This member contains the return value of the

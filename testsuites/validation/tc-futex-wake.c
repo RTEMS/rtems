@@ -100,7 +100,7 @@ typedef struct {
   /**
    * @brief This member contains the thread queue test context.
    */
-  TQContext tq_ctx;;
+  TQContext tq_ctx;
 
   /**
    * @brief This member provides the futex object.

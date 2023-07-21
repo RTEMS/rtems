@@ -142,7 +142,7 @@ typedef struct {
   /**
    * @brief This member specifies if the ``pending`` parameter value.
    */
-  bool *pending;;
+  bool *pending;
 
   /**
    * @brief This member contains the return value of the

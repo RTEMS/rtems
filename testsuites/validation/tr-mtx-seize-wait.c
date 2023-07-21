@@ -92,24 +92,24 @@ typedef struct {
    * @brief If this member is true, then the calling thread shall be the owner
    *   of the mutex.
    */
-  bool owner_caller;;
+  bool owner_caller;
 
   /**
    * @brief If this member is true, then a thread other than the calling thread
    *   shall be the owner of the mutex.
    */
-  bool owner_other;;
+  bool owner_other;
 
   /**
    * @brief If this member is true, then a deadlock shall occur.
    */
-  bool deadlock;;
+  bool deadlock;
 
   /**
    * @brief This member contains the current priority of the calling thread
    *   before the directive call.
    */
-  rtems_task_priority priority_before;;
+  rtems_task_priority priority_before;
 
   /**
    * @brief This member contains the owner of the mutex after the directive
@@ -121,7 +121,7 @@ typedef struct {
    * @brief This member contains the current priority of the calling thread
    *   after the directive call.
    */
-  rtems_task_priority priority_after;;
+  rtems_task_priority priority_after;
 
   /**
    * @brief This member contains a copy of the corresponding

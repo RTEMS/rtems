@@ -266,7 +266,7 @@ typedef struct {
   /**
    * @brief This member contains the identifier of the new scheduler.
    */
-  rtems_id new_scheduler;;
+  rtems_id new_scheduler;
 
   /**
    * @brief This member contains the new priorities of the task.

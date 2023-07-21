@@ -172,7 +172,7 @@ typedef struct {
    *
    * It is used for run-time type checking.
    */
-  uint32_t magic;;
+  uint32_t magic;
 
   /**
    * @brief This member contains a number which is sent as next message.

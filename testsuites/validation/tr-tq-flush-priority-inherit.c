@@ -81,7 +81,7 @@ typedef struct {
   /**
    * @brief This member contains the call within ISR request.
    */
-  CallWithinISRRequest request;;
+  CallWithinISRRequest request;
 
   /**
    * @brief If this member is true, then a minimum priority of the owner of the

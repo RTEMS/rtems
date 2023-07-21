@@ -79,7 +79,7 @@ static int call_at_level(
   bool dirty
 )
 {
-  int prevent_optimization;;
+  int prevent_optimization;
 
   prevent_optimization = start + fl;
 

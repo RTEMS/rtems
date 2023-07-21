@@ -155,18 +155,18 @@ typedef struct {
    * @brief This member contains the online status of the processor to add
    *   before the rtems_scheduler_add_processor() call is prepared.
    */
-  bool online;;
+  bool online;
 
   /**
    * @brief If this member is true, then the processor should be added to the
    *   scheduler B during cleanup.
    */
-  bool add_cpu_to_scheduler_b;;
+  bool add_cpu_to_scheduler_b;
 
   /**
    * @brief This member provides the scheduler operation records.
    */
-  T_scheduler_log_2 scheduler_log;;
+  T_scheduler_log_2 scheduler_log;
 
   /**
    * @brief This member contains the return value of the

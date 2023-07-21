@@ -251,7 +251,7 @@ typedef struct {
   /**
    * @brief This member provides a jump context to resume a thread dispatch.
    */
-  jmp_buf thread_dispatch_context;;
+  jmp_buf thread_dispatch_context;
 
   /**
    * @brief This member provides the context to wrap thread queue operations.
@@ -319,13 +319,13 @@ typedef struct {
   /**
    * @brief This member contains extension calls.
    */
-  ExtensionCalls calls;;
+  ExtensionCalls calls;
 
   /**
    * @brief This member contains extension calls after the rtems_task_restart()
    *   call.
    */
-  ExtensionCalls calls_after_restart;;
+  ExtensionCalls calls_after_restart;
 
   /**
    * @brief This member contains the actual argument passed to the entry point.

@@ -88,7 +88,7 @@ typedef struct {
    *   with an eligible scheduler equal to an eligible scheduler of the
    *   enqueueing thread.
    */
-  rtems_task_priority priority;;
+  rtems_task_priority priority;
 
   /**
    * @brief If this member is true, then a thread those eligible schedulers are
@@ -96,7 +96,7 @@ typedef struct {
    *   thread with an eligible scheduler equal to an eligible scheduler of the
    *   enqueueing thread.
    */
-  size_t other_before;;
+  size_t other_before;
 
   /**
    * @brief If this member is true, then a thread those eligible schedulers are
@@ -104,7 +104,7 @@ typedef struct {
    *   thread with an eligible scheduler equal to an eligible scheduler of the
    *   enqueueing thread.
    */
-  size_t other_after;;
+  size_t other_after;
 
   /**
    * @brief This member contains a copy of the corresponding

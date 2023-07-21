@@ -291,7 +291,7 @@ typedef struct {
    * @brief If this member is true, then the zombie thread is ready to get
    *   killed.
    */
-  volatile bool zombie_ready;;
+  volatile bool zombie_ready;
 
   /**
    * @brief This member contains the actual modes of the constructed task.

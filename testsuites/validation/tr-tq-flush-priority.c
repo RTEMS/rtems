@@ -78,7 +78,7 @@ typedef struct {
   /**
    * @brief This member contains the call within ISR request.
    */
-  CallWithinISRRequest request;;
+  CallWithinISRRequest request;
 
   /**
    * @brief This member contains a copy of the corresponding

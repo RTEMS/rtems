@@ -262,7 +262,7 @@ typedef struct {
   /**
    * @brief This member provides a jump context to resume a thread dispatch.
    */
-  jmp_buf thread_dispatch_context;;
+  jmp_buf thread_dispatch_context;
 
   /**
    * @brief This member contains the identifier of the runner scheduler.
@@ -310,13 +310,13 @@ typedef struct {
    * @brief This member contains the worker timer info at the end of the
    *   rtems_task_delete() call.
    */
-  TaskTimerInfo worker_timer_info;;
+  TaskTimerInfo worker_timer_info;
 
   /**
    * @brief This member contains the worker thread queue at the end of the
    *   rtems_task_delete() call.
    */
-  const Thread_queue_Queue *worker_wait_queue;;
+  const Thread_queue_Queue *worker_wait_queue;
 
   /**
    * @brief This member contains the worker thread life state at the end of the
@@ -358,13 +358,13 @@ typedef struct {
   /**
    * @brief This member contains extension calls.
    */
-  ExtensionCalls calls;;
+  ExtensionCalls calls;
 
   /**
    * @brief This member contains extension calls after the rtems_task_delete()
    *   call.
    */
-  ExtensionCalls calls_after_restart;;
+  ExtensionCalls calls_after_restart;
 
   /**
    * @brief This member contains the delete counter.

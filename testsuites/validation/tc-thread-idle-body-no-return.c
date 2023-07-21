@@ -90,7 +90,7 @@ typedef struct {
   /**
    * @brief This member contains a counter.
    */
-  uint32_t counter;;
+  uint32_t counter;
 } ScoreThreadValIdleBodyNoReturn_Context;
 
 static ScoreThreadValIdleBodyNoReturn_Context

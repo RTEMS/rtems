@@ -177,12 +177,12 @@ typedef struct {
   /**
    * @brief This member contains the worker busy status.
    */
-  volatile bool busy[ WORKER_COUNT ];;
+  volatile bool busy[ WORKER_COUNT ];
 
   /**
    * @brief This member contains the worker busy status.
    */
-  volatile uint32_t busy_counter[ WORKER_COUNT ];;
+  volatile uint32_t busy_counter[ WORKER_COUNT ];
 
   /**
    * @brief This member contains the barrier to synchronize the runner and the
@@ -193,7 +193,7 @@ typedef struct {
   /**
    * @brief This member contains the call within ISR request.
    */
-  CallWithinISRRequest request;;
+  CallWithinISRRequest request;
 
   /**
    * @brief This member provides the context to wrap thread queue operations.
@@ -246,7 +246,7 @@ typedef struct {
   /**
    * @brief This member provides the scheduler operation records.
    */
-  T_scheduler_log_4 scheduler_log;;
+  T_scheduler_log_4 scheduler_log;
 
   /**
    * @brief This member contains the return value of the

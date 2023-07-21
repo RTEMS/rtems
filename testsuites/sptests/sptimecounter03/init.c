@@ -41,7 +41,7 @@ const char rtems_test_name[] = "SPTIMECOUNTER 3";
 
 #define CPU_COUNT 32
 
-static rtems_test_parallel_context ctx;;
+static rtems_test_parallel_context ctx;
 
 static rtems_interval test_binuptime_init(
   rtems_test_parallel_context *ctx,
