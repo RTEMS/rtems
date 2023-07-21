@@ -1,3 +1,6 @@
+/*
+ * The file was modified by RTEMS contributors.
+ */
 /**************************************************************************//**
  * @file     cmsis_gcc.h
  * @brief    CMSIS compiler GCC header file
@@ -136,6 +139,10 @@
  */
 __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
 {
+#ifdef __rtems__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnested-externs"
+#endif /* __rtems__ */
   extern void _start(void) __NO_RETURN;
 
   typedef struct __copy_table {
@@ -153,6 +160,10 @@ __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
   extern const __copy_table_t __copy_table_end__;
   extern const __zero_table_t __zero_table_start__;
   extern const __zero_table_t __zero_table_end__;
+
+#ifdef __rtems__
+#pragma GCC diagnostic pop
+#endif /* __rtems__ */
 
   for (__copy_table_t const* pTable = &__copy_table_start__; pTable < &__copy_table_end__; ++pTable) {
     for(uint32_t i=0u; i<pTable->wlen; ++i) {
