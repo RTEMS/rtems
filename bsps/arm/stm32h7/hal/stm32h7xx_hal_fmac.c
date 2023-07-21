@@ -220,6 +220,7 @@
   */
 
 /** @defgroup FMAC FMAC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    FMAC HAL driver module
   * @{
   */
@@ -227,6 +228,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup  FMAC_Private_Constants   FMAC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -255,6 +257,7 @@
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup  FMAC_Private_Macros   FMAC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -350,10 +353,12 @@ static void FMAC_DMAError(DMA_HandleTypeDef *hdma);
 /* Functions Definition ------------------------------------------------------*/
 
 /** @defgroup FMAC_Exported_Functions FMAC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FMAC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -768,6 +773,7 @@ HAL_StatusTypeDef HAL_FMAC_UnRegisterCallback(FMAC_HandleTypeDef *hfmac, HAL_FMA
   */
 
 /** @defgroup FMAC_Exported_Functions_Group2 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Control functions.
   *
 @verbatim
@@ -1259,6 +1265,7 @@ HAL_StatusTypeDef HAL_FMAC_FilterStop(FMAC_HandleTypeDef *hfmac)
   */
 
 /** @defgroup FMAC_Exported_Functions_Group3 Callback functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Callback functions.
   *
 @verbatim
@@ -1393,6 +1400,7 @@ __weak void HAL_FMAC_FilterPreloadCallback(FMAC_HandleTypeDef *hfmac)
   */
 
 /** @defgroup FMAC_Exported_Functions_Group4 IRQ handler management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IRQ handler.
   *
 @verbatim
@@ -1507,6 +1515,7 @@ void HAL_FMAC_IRQHandler(FMAC_HandleTypeDef *hfmac)
   */
 
 /** @defgroup FMAC_Exported_Functions_Group5 Peripheral State and Error functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Peripheral State and Error functions.
   *
 @verbatim
@@ -1555,6 +1564,7 @@ uint32_t HAL_FMAC_GetError(FMAC_HandleTypeDef *hfmac)
   */
 
 /** @defgroup FMAC_Private_Functions FMAC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

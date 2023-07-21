@@ -154,6 +154,7 @@
   */
 
 /** @defgroup MDMA  MDMA
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief MDMA HAL module driver
   * @{
   */

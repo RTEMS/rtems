@@ -275,6 +275,7 @@
 #if defined (CRYP)
 
 /** @defgroup CRYP CRYP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief CRYP HAL module driver.
   * @{
   */
@@ -373,11 +374,13 @@ static HAL_StatusTypeDef CRYP_TDES_Process(CRYP_HandleTypeDef *hcryp, uint32_t T
 /* Exported functions ---------------------------------------------------------*/
 
 /** @defgroup CRYP_Exported_Functions CRYP Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 
 /** @defgroup CRYP_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    CRYP  Initialization and Configuration functions.
   *
 @verbatim
@@ -872,6 +875,7 @@ HAL_StatusTypeDef HAL_CRYP_UnRegisterCallback(CRYP_HandleTypeDef *hcryp, HAL_CRY
   */
 
 /** @defgroup CRYP_Exported_Functions_Group2  Encrypt Decrypt functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   CRYP processing functions.
   *
 @verbatim
@@ -1676,6 +1680,7 @@ HAL_StatusTypeDef HAL_CRYP_Decrypt_DMA(CRYP_HandleTypeDef *hcryp, uint32_t *Inpu
   */
 
 /** @defgroup CRYP_Exported_Functions_Group3 CRYP IRQ handler management
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    CRYP IRQ handler.
   *
 @verbatim

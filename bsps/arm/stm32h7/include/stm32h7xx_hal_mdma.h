@@ -38,6 +38,7 @@
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup MDMA_Exported_Types MDMA Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Exported Types
   * @{
   */
@@ -247,11 +248,13 @@ typedef struct __MDMA_HandleTypeDef
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup MDMA_Exported_Constants MDMA Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Exported constants
   * @{
   */
 
 /** @defgroup MDMA_Error_Codes MDMA Error Codes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Error Codes
   * @{
   */
@@ -271,6 +274,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_Request_selection MDMA Request selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA_Request_selection
   * @{
   */
@@ -335,6 +339,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_Transfer_TriggerMode MDMA Transfer Trigger  Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Transfer Trigger Mode
   * @{
   */
@@ -348,6 +353,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_Priority_level MDMA Priority level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Priority level
   * @{
   */
@@ -362,6 +368,7 @@ typedef struct __MDMA_HandleTypeDef
 
 
 /** @defgroup MDMA_Endianness MDMA Endianness
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Endianness
   * @{
   */
@@ -375,6 +382,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_Source_increment_mode MDMA Source increment mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Source increment mode
   * @{
   */
@@ -393,6 +401,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_Destination_increment_mode MDMA Destination increment mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Destination increment mode
   * @{
   */
@@ -411,6 +420,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_Source_data_size MDMA Source data size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Source data size
   * @{
   */
@@ -424,6 +434,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_Destination_data_size MDMA Destination data size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Destination data size
   * @{
   */
@@ -437,6 +448,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_data_Alignment MDMA data alignment
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA data alignment
   * @{
   */
@@ -452,6 +464,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_Source_burst MDMA Source burst
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Source burst
   * @{
   */
@@ -469,6 +482,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_Destination_burst MDMA Destination burst
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA Destination burst
   * @{
   */
@@ -486,6 +500,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_interrupt_enable_definitions MDMA interrupt enable definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA interrupt enable definitions
   * @{
   */
@@ -500,6 +515,7 @@ typedef struct __MDMA_HandleTypeDef
   */
 
 /** @defgroup MDMA_flag_definitions MDMA flag definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    MDMA flag definitions
   * @{
   */
@@ -521,6 +537,7 @@ typedef struct __MDMA_HandleTypeDef
 /* Exported macro ------------------------------------------------------------*/
 
 /** @defgroup MDMA_Exported_Macros MDMA Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -629,11 +646,13 @@ typedef struct __MDMA_HandleTypeDef
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup MDMA_Exported_Functions  MDMA Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Initialization and de-initialization functions *****************************/
 /** @defgroup MDMA_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   Initialization and de-initialization functions
   * @{
   */
@@ -650,6 +669,7 @@ HAL_StatusTypeDef HAL_MDMA_UnRegisterCallback(MDMA_HandleTypeDef *hmdma, HAL_MDM
 
 /* Linked list operation functions ********************************************/
 /** @defgroup MDMA_Exported_Functions_Group2 Linked List operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   Linked list operation functions
   * @{
   */
@@ -667,6 +687,7 @@ HAL_StatusTypeDef HAL_MDMA_LinkedList_DisableCircularMode(MDMA_HandleTypeDef *hm
 
 /* IO operation functions *****************************************************/
 /** @defgroup MDMA_Exported_Functions_Group3 I/O operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   I/O operation functions
   * @{
   */
@@ -684,6 +705,7 @@ void HAL_MDMA_IRQHandler(MDMA_HandleTypeDef *hmdma);
 
 /* Peripheral State and Error functions ***************************************/
 /** @defgroup MDMA_Exported_Functions_Group4 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Peripheral State functions
   * @{
   */
@@ -700,6 +722,7 @@ uint32_t              HAL_MDMA_GetError(MDMA_HandleTypeDef *hmdma);
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup MDMA_Private_Types MDMA Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -709,6 +732,7 @@ uint32_t              HAL_MDMA_GetError(MDMA_HandleTypeDef *hmdma);
 
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup MDMA_Private_Defines MDMA Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -718,6 +742,7 @@ uint32_t              HAL_MDMA_GetError(MDMA_HandleTypeDef *hmdma);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup MDMA_Private_Variables MDMA Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -727,6 +752,7 @@ uint32_t              HAL_MDMA_GetError(MDMA_HandleTypeDef *hmdma);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup MDMA_Private_Constants MDMA Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -736,6 +762,7 @@ uint32_t              HAL_MDMA_GetError(MDMA_HandleTypeDef *hmdma);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup MDMA_Private_Macros MDMA Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -836,6 +863,7 @@ uint32_t              HAL_MDMA_GetError(MDMA_HandleTypeDef *hmdma);
 
 /* Private functions prototypes ----------------------------------------------*/
 /** @defgroup MDMA_Private_Functions_Prototypes MDMA Private Functions Prototypes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -845,6 +873,7 @@ uint32_t              HAL_MDMA_GetError(MDMA_HandleTypeDef *hmdma);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup MDMA_Private_Functions MDMA Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

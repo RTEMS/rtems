@@ -193,6 +193,7 @@
   */
 
 /** @defgroup IRDA IRDA
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HAL IRDA module driver
   * @{
   */
@@ -202,6 +203,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup IRDA_Private_Constants IRDA Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_TEACK_REACK_TIMEOUT            1000U                                   /*!< IRDA TX or RX enable acknowledge time-out value  */
@@ -218,6 +220,7 @@
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup IRDA_Private_Macros IRDA Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @brief  BRR division operation to set BRR register in 16-bit oversampling mode.
@@ -266,10 +269,12 @@ static void IRDA_Receive_IT(IRDA_HandleTypeDef *hirda);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup IRDA_Exported_Functions IRDA Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup IRDA_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -698,6 +703,7 @@ HAL_StatusTypeDef HAL_IRDA_UnRegisterCallback(IRDA_HandleTypeDef *hirda, HAL_IRD
   */
 
 /** @defgroup IRDA_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   IRDA Transmit and Receive functions
   *
 @verbatim
@@ -2161,6 +2167,7 @@ __weak void HAL_IRDA_AbortReceiveCpltCallback(IRDA_HandleTypeDef *hirda)
   */
 
 /** @defgroup IRDA_Exported_Functions_Group4 Peripheral State and Error functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   IRDA State and Errors functions
   *
 @verbatim
@@ -2216,6 +2223,7 @@ uint32_t HAL_IRDA_GetError(const IRDA_HandleTypeDef *hirda)
   */
 
 /** @defgroup IRDA_Private_Functions IRDA Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

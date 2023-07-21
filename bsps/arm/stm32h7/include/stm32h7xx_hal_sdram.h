@@ -39,6 +39,7 @@ extern "C" {
 /* Exported typedef ----------------------------------------------------------*/
 
 /** @defgroup SDRAM_Exported_Types SDRAM Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -111,6 +112,7 @@ typedef void (*pSDRAM_DmaCallbackTypeDef)(MDMA_HandleTypeDef *hmdma);
 /* Exported macro ------------------------------------------------------------*/
 
 /** @defgroup SDRAM_Exported_Macros SDRAM Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

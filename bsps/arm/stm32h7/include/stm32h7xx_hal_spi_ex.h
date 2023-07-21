@@ -37,6 +37,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SPIEx_Exported_Types SPIEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -46,6 +47,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SPIEx_Exported_Constants SPIEx Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -55,6 +57,7 @@ extern "C" {
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup SPIEx_Exported_Macros SPIEx Extended Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

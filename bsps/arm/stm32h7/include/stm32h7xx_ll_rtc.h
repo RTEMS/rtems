@@ -34,6 +34,7 @@ extern "C" {
 #if defined(RTC)
 
 /** @defgroup RTC_LL RTC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -41,6 +42,7 @@ extern "C" {
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup RTC_LL_Private_Constants RTC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Masks Definition */
@@ -66,6 +68,7 @@ extern "C" {
 /* Private macros ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RTC_LL_Private_Macros RTC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -76,6 +79,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RTC_LL_ES_INIT RTC Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -197,11 +201,13 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup RTC_LL_Exported_Constants RTC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RTC_LL_EC_FORMAT FORMAT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_FORMAT_BIN                  0x00000000U /*!< Binary data format */
@@ -211,6 +217,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_ALMA_WEEKDAY_SELECTION RTC Alarm A Date WeekDay
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_ALMA_DATEWEEKDAYSEL_DATE    0x00000000U             /*!< Alarm A Date is selected */
@@ -220,6 +227,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_ALMB_WEEKDAY_SELECTION RTC Alarm B Date WeekDay
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_ALMB_DATEWEEKDAYSEL_DATE    0x00000000U             /*!< Alarm B Date is selected */
@@ -231,6 +239,7 @@ typedef struct
 #endif /* USE_FULL_LL_DRIVER */
 
 /** @defgroup RTC_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_RTC_ReadReg function
   * @{
   */
@@ -272,6 +281,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_RTC_ReadReg and  LL_RTC_WriteReg functions
   * @{
   */
@@ -290,6 +300,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_WEEKDAY  WEEK DAY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_WEEKDAY_MONDAY              (uint8_t)0x01 /*!< Monday    */
@@ -304,6 +315,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_MONTH  MONTH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_MONTH_JANUARY               (uint8_t)0x01  /*!< January   */
@@ -323,6 +335,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_HOURFORMAT  HOUR FORMAT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_HOURFORMAT_24HOUR           0x00000000U           /*!< 24 hour/day format */
@@ -332,6 +345,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_ALARMOUT  ALARM OUTPUT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_ALARMOUT_DISABLE            0x00000000U             /*!< Output disabled */
@@ -343,6 +357,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_ALARM_OUTPUTTYPE  ALARM OUTPUT TYPE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -357,6 +372,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_OUTPUTPOLARITY_PIN  OUTPUT POLARITY PIN
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_OUTPUTPOLARITY_PIN_HIGH     0x00000000U           /*!< Pin is high when ALRAF/ALRBF/WUTF is asserted (depending on OSEL)*/
@@ -366,6 +382,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TIME_FORMAT TIME FORMAT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TIME_FORMAT_AM_OR_24        0x00000000U           /*!< AM or 24-hour format */
@@ -375,6 +392,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_SHIFT_SECOND  SHIFT SECOND
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_SHIFT_SECOND_DELAY          0x00000000U           /* Delay (seconds) = SUBFS / (PREDIV_S + 1) */
@@ -384,6 +402,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_ALMA_MASK  ALARMA MASK
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_ALMA_MASK_NONE              0x00000000U             /*!< No masks applied on Alarm A*/
@@ -397,6 +416,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_ALMA_TIME_FORMAT  ALARMA TIME FORMAT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_ALMA_TIME_FORMAT_AM         0x00000000U           /*!< AM or 24-hour format */
@@ -406,6 +426,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_ALMB_MASK  ALARMB MASK
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_ALMB_MASK_NONE              0x00000000U             /*!< No masks applied on Alarm B*/
@@ -419,6 +440,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_ALMB_TIME_FORMAT  ALARMB TIME FORMAT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_ALMB_TIME_FORMAT_AM         0x00000000U           /*!< AM or 24-hour format */
@@ -428,6 +450,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TIMESTAMP_EDGE  TIMESTAMP EDGE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TIMESTAMP_EDGE_RISING       0x00000000U           /*!< RTC_TS input rising edge generates a time-stamp event */
@@ -437,6 +460,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TS_TIME_FORMAT  TIMESTAMP TIME FORMAT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TS_TIME_FORMAT_AM           0x00000000U           /*!< AM or 24-hour format */
@@ -447,6 +471,7 @@ typedef struct
 
 #if defined(TAMP)
 /** @defgroup RTC_LL_EC_TAMPER  TAMPER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_1                    TAMP_CR1_TAMP1E /*!< Tamper 1 input detection */
@@ -457,6 +482,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_MASK  TAMPER MASK
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_MASK_TAMPER1         TAMP_CR2_TAMP1MSK /*!< Tamper 1 event generates a trigger event. TAMP1F is masked and internally cleared by hardware. The backup registers are not erased */
@@ -467,6 +493,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_NOERASE  TAMPER NO ERASE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_NOERASE_TAMPER1      TAMP_CR2_TAMP1NOERASE /*!< Tamper 1 event does not erase the backup registers. */
@@ -477,6 +504,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_DURATION  TAMPER DURATION
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_DURATION_1RTCCLK     0x00000000U            /*!< Tamper pins are pre-charged before sampling during 1 RTCCLK cycle  */
@@ -488,6 +516,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_FILTER  TAMPER FILTER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_FILTER_DISABLE       0x00000000U             /*!< Tamper filter is disabled */
@@ -499,6 +528,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_SAMPLFREQDIV  TAMPER SAMPLING FREQUENCY DIVIDER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_SAMPLFREQDIV_32768   0x00000000U                                     /*!< Each of the tamper inputs are sampled with a frequency =  RTCCLK / 32768 */
@@ -514,6 +544,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_ACTIVELEVEL  TAMPER ACTIVE LEVEL
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_ACTIVELEVEL_TAMP1    TAMP_CR2_TAMP1TRG /*!< Tamper 1 input falling edge (if TAMPFLT = 00) or staying high (if TAMPFLT != 00) triggers a tamper detection event */
@@ -524,6 +555,7 @@ typedef struct
   */
 #else
 /** @defgroup RTC_LL_EC_TAMPER  TAMPER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_1                    RTC_TAMPCR_TAMP1E /*!< RTC_TAMP1 input detection */
@@ -534,6 +566,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_MASK  TAMPER MASK
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_MASK_TAMPER1         RTC_TAMPCR_TAMP1MF /*!< Tamper 1 event generates a trigger event. TAMP1F is masked and internally cleared by hardware.The backup registers are not erased */
@@ -544,6 +577,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_NOERASE  TAMPER NO ERASE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_NOERASE_TAMPER1      RTC_TAMPCR_TAMP1NOERASE /*!< Tamper 1 event does not erase the backup registers. */
@@ -554,6 +588,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_DURATION  TAMPER DURATION
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_DURATION_1RTCCLK     0x00000000U                             /*!< Tamper pins are pre-charged before sampling during 1 RTCCLK cycle  */
@@ -565,6 +600,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_FILTER  TAMPER FILTER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_FILTER_DISABLE       0x00000000U                              /*!< Tamper filter is disabled */
@@ -576,6 +612,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_SAMPLFREQDIV  TAMPER SAMPLING FREQUENCY DIVIDER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_SAMPLFREQDIV_32768   0x00000000U                                                      /*!< Each of the tamper inputs are sampled with a frequency =  RTCCLK / 32768 */
@@ -591,6 +628,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_TAMPER_ACTIVELEVEL  TAMPER ACTIVE LEVEL
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_ACTIVELEVEL_TAMP1    RTC_TAMPCR_TAMP1TRG /*!< RTC_TAMP1 input falling edge (if TAMPFLT = 00) or staying high (if TAMPFLT != 00) triggers a tamper detection event*/
@@ -603,6 +641,7 @@ typedef struct
 
 #if defined(TAMP)
 /** @defgroup RTC_LL_EC_ACTIVE_MODE   ACTIVE TAMPER MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_ATAMP_TAMP1AM               TAMP_ATCR1_TAMP1AM /*!< tamper 1 is active */
@@ -613,6 +652,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_ACTIVE_ASYNC_PRESCALER   ACTIVE TAMPER ASYNCHRONOUS PRESCALER CLOCK
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_ATAMP_ASYNCPRES_RTCCLK      0U                                                                      /*!< RTCCLK */
@@ -628,6 +668,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_ACTIVE_OUTPUT_SELECTION   ACTIVE TAMPER OUTPUT SELECTION
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_TAMPER_ATAMP1IN_ATAMP1OUT  (0UL << TAMP_ATCR2_ATOSEL1_Pos)
@@ -647,6 +688,7 @@ typedef struct
 #endif /* TAMP */
 
 /** @defgroup RTC_LL_EC_WAKEUPCLOCK_DIV  WAKEUP CLOCK DIV
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_WAKEUPCLOCK_DIV_16          0x00000000U                           /*!< RTC/16 clock is selected */
@@ -660,6 +702,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_BKP  BACKUP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_BKP_DR0                     0x00000000U
@@ -699,6 +742,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_CALIB_OUTPUT  Calibration output
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_CALIB_OUTPUT_NONE           0x00000000U                 /*!< Calibration output disabled */
@@ -709,6 +753,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_CALIB_INSERTPULSE  Calibration pulse insertion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_CALIB_INSERTPULSE_NONE      0x00000000U           /*!< No RTCCLK pulses are added */
@@ -718,6 +763,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EC_CALIB_PERIOD  Calibration period
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RTC_CALIB_PERIOD_32SEC          0x00000000U           /*!< Use a 32-second calibration cycle period */
@@ -733,10 +779,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup RTC_LL_Exported_Macros RTC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RTC_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -761,6 +809,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EM_Convert Convert helper Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -783,6 +832,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EM_Date Date helper Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -838,6 +888,7 @@ typedef struct
   */
 
 /** @defgroup RTC_LL_EM_Time Time helper Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -872,10 +923,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup RTC_LL_Exported_Functions RTC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RTC_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1345,6 +1398,7 @@ __STATIC_INLINE void LL_RTC_DisableOutRemap(RTC_TypeDef *RTCx)
   */
 
 /** @defgroup RTC_LL_EF_Time Time
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1646,6 +1700,7 @@ __STATIC_INLINE void LL_RTC_TIME_Synchronize(RTC_TypeDef *RTCx, uint32_t ShiftSe
   */
 
 /** @defgroup RTC_LL_EF_Date Date
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1881,6 +1936,7 @@ __STATIC_INLINE uint32_t LL_RTC_DATE_Get(RTC_TypeDef *RTCx)
   */
 
 /** @defgroup RTC_LL_EF_ALARMA ALARMA
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2247,6 +2303,7 @@ __STATIC_INLINE uint32_t LL_RTC_ALMA_GetSubSecond(RTC_TypeDef *RTCx)
   */
 
 /** @defgroup RTC_LL_EF_ALARMB ALARMB
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2613,6 +2670,7 @@ __STATIC_INLINE uint32_t LL_RTC_ALMB_GetSubSecond(RTC_TypeDef *RTCx)
   */
 
 /** @defgroup RTC_LL_EF_Timestamp Timestamp
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2854,6 +2912,7 @@ __STATIC_INLINE uint32_t LL_RTC_TS_GetSubSecond(RTC_TypeDef *RTCx)
   */
 
 /** @defgroup RTC_LL_EF_Tamper_Timestamp Time-stamp on Tamper
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2909,6 +2968,7 @@ __STATIC_INLINE void LL_RTC_TS_DisableOnTamper(RTC_TypeDef *RTCx)
   */
 
 /** @defgroup RTC_LL_EF_Tamper Tamper
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3457,6 +3517,7 @@ __STATIC_INLINE uint32_t LL_RTC_TAMPER_GetSamplingFreq(TAMP_TypeDef *TAMPx)
   */
 
 /** @defgroup RTC_LL_EF_Wakeup Wakeup
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3562,6 +3623,7 @@ __STATIC_INLINE uint32_t LL_RTC_WAKEUP_GetAutoReload(RTC_TypeDef *RTCx)
 
 
 /** @defgroup RTC_LL_EF_Backup_Registers Backup_Registers
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3775,6 +3837,7 @@ __STATIC_INLINE uint32_t LL_RTC_BKP_GetRegister(TAMP_TypeDef *TAMPx, uint32_t Ba
 
 
 /** @defgroup RTC_LL_EF_Calibration Calibration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3901,6 +3964,7 @@ __STATIC_INLINE uint32_t LL_RTC_CAL_GetMinus(RTC_TypeDef *RTCx)
 
 
 /** @defgroup RTC_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4606,6 +4670,7 @@ __STATIC_INLINE void LL_RTC_ClearFlag_TAMP3(TAMP_TypeDef *TAMPx)
   */
 
 /** @defgroup RTC_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4991,6 +5056,7 @@ __STATIC_INLINE uint32_t LL_RTC_IsEnabledIT_TAMP3(TAMP_TypeDef *TAMPx)
   */
 
 /** @defgroup RTC_LL_EF_Active_Tamper Active Tamper
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -5170,6 +5236,7 @@ __STATIC_INLINE uint32_t LL_RTC_IsActiveFlag_ATAMP_SEEDF(void)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RTC_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

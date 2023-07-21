@@ -32,16 +32,19 @@ extern "C" {
   */
 
 /** @defgroup RTCEx RTCEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup RTCEx_Exported_Types RTCEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RTCEx_Tamper_structure_definition RTC Tamper structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -82,6 +85,7 @@ typedef struct
 
 #if defined(TAMP)
 /** @defgroup RTCEx_Internal_Tamper_structure_definition RTCEx Internal Tamper structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -97,6 +101,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Active_Seed_Size Seed size Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_ATAMP_SEED_NB_UINT32        4U
@@ -105,6 +110,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Active_Tampers_Number Active Tampers number Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_TAMP_NB                     3u
@@ -113,6 +119,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_ActiveTamper_structures_definition RTC Active Tamper structures definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -171,6 +178,7 @@ typedef struct
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup RTCEx_Exported_Constants RTC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -179,6 +187,7 @@ typedef struct
 /* ========================================================================== */
 
 /** @defgroup RTCEx_Backup_Registers_Number_Definitions RTC Backup Registers Number Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -191,6 +200,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Backup_Registers_Definitions RTC Backup Registers Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_BKP_DR0                       0x00u
@@ -234,6 +244,7 @@ typedef struct
 /* ========================================================================== */
 
 /** @defgroup RTCEx_TimeStamp_Edges_definitions RTC TimeStamp Edges Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *
   * @{
   */
@@ -244,6 +255,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_TimeStamp_Pin_Selection RTC TimeStamp Pin Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_TIMESTAMPPIN_DEFAULT              0x00000000u
@@ -257,6 +269,7 @@ typedef struct
 /* ========================================================================== */
 
 /** @defgroup RTCEx_Tamper_Pins_Definitions RTC Tamper Pins Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -275,6 +288,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_Interrupt_Definitions RTC Tamper Interrupts Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -299,6 +313,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Internal_Tamper_Pins_Definitions  RTCEx Internal Tamper Pins Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -320,6 +335,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Internal_Tamper_Interrupt_Definitions  RTC Internal Tamper Interrupt
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -336,6 +352,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_Trigger_Definitions RTC Tamper Triggers Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_TAMPERTRIGGER_RISINGEDGE        0x01u  /*!< Warning : Filter must be RTC_TAMPERFILTER_DISABLE     */
@@ -361,6 +378,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_EraseBackUp_Definitions RTC Tamper EraseBackUp Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
 * @{
 */
 #if defined(TAMP)
@@ -389,6 +407,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_MaskFlag_Definitions RTC Tamper Mask Flag Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
 * @{
 */
 #if defined(TAMP)
@@ -417,6 +436,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_Filter_Definitions RTC Tamper Filter Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -447,6 +467,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_Sampling_Frequencies_Definitions RTC Tamper Sampling Frequencies Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -493,6 +514,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_Pin_Precharge_Duration_Definitions RTC Tamper Pin Precharge Duration Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -523,6 +545,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_TimeStampOnTamperDetection_Definitions RTC Tamper TimeStamp On Tamper Detection Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -539,6 +562,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_Pull_UP_Definitions RTC Tamper Pull Up Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -555,6 +579,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_DetectionOutput_Definitions RTC Tamper Detection Output Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -567,6 +592,7 @@ typedef struct
   */
 
 /** @defgroup RTC_Tamper_Flags_Definitions RTC Tamper Flags Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -583,6 +609,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_ActiveTamper_Enable RTCEx_ActiveTamper_Enable Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_ATAMP_ENABLE                   1u
@@ -592,6 +619,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_ActiveTamper_Interrupt RTCEx_ActiveTamper_Interrupt Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_ATAMP_INTERRUPT_ENABLE        1u
@@ -601,6 +629,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_ActiveTamper_Filter RTCEx_ActiveTamper_Filter Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_ATAMP_FILTER_ENABLE           TAMP_ATCR1_FLTEN
@@ -610,6 +639,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_ActiveTamper_Async_prescaler RTC Active_Tamper_Asynchronous_Prescaler clock Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_ATAMP_ASYNCPRES_RTCCLK        0u                                                                      /*!< RTCCLK */
@@ -625,6 +655,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_ActiveTamper_Sel  RTC Active Tamper selection Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_ATAMP_1                       0u   /*!< Tamper 1 */
@@ -640,6 +671,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_MonotonicCounter_Instance  RTCEx Monotonic Counter Instance Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_MONOTONIC_COUNTER_1           0u   /*!< Monotonic counter 1 */
@@ -648,6 +680,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Tamper_Registers_Offset  RTC Tamper Registers Offset
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(TAMP)
@@ -663,6 +696,7 @@ typedef struct
 /* ========================================================================== */
 
 /** @defgroup RTCEx_Wakeup_Timer_Definitions RTC Wakeup Timer Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_WAKEUPCLOCK_RTCCLK_DIV16        0x00000000u
@@ -680,6 +714,7 @@ typedef struct
 /* ========================================================================== */
 
 /** @defgroup RTCEx_Smooth_calib_period_Definitions RTC Smooth Calib Period Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_SMOOTHCALIB_PERIOD_32SEC   0x00000000u             /*!< If RTCCLK = 32768 Hz, Smooth calibration
@@ -693,6 +728,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Smooth_calib_Plus_pulses_Definitions RTC Smooth Calib Plus pulses Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_SMOOTHCALIB_PLUSPULSES_SET    RTC_CALR_CALP           /*!< The number of RTCCLK pulses added
@@ -705,6 +741,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Calib_Output_selection_Definitions RTC Calib Output Selection Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_CALIBOUTPUT_512HZ            0x00000000u
@@ -714,6 +751,7 @@ typedef struct
   */
 
 /** @defgroup RTCEx_Add_1_Second_Parameter_Definitions RTC Add 1 Second Parameter Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_SHIFTADD1S_RESET      0x00000000u
@@ -729,6 +767,7 @@ typedef struct
 /* Exported macros -----------------------------------------------------------*/
 
 /** @defgroup RTCEx_Exported_Macros RTC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1640,6 +1679,7 @@ typedef struct
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup RTCEx_Exported_Functions RTC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1650,6 +1690,7 @@ typedef struct
 /* RTC TimeStamp functions ****************************************************/
 
 /** @defgroup RTCEx_Exported_Functions_Group1 Extended RTC TimeStamp functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_RTCEx_SetTimeStamp(RTC_HandleTypeDef *hrtc, uint32_t TimeStampEdge, uint32_t RTC_TimeStampPin);
@@ -1672,6 +1713,7 @@ HAL_StatusTypeDef HAL_RTCEx_PollForTimeStampEvent(RTC_HandleTypeDef *hrtc, uint3
 /* RTC Tamper functions *******************************************************/
 
 /** @defgroup RTCEx_Exported_Functions_Group5 Extended RTC Tamper functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_RTCEx_SetTamper(RTC_HandleTypeDef *hrtc, RTC_TamperTypeDef *sTamper);
@@ -1711,6 +1753,7 @@ HAL_StatusTypeDef HAL_RTCEx_DeactivateActiveTampers(RTC_HandleTypeDef *hrtc);
 /* RTC Wake-up functions ******************************************************/
 
 /** @defgroup RTCEx_Exported_Functions_Group2 Extended RTC Wake-up functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_RTCEx_SetWakeUpTimer(RTC_HandleTypeDef *hrtc, uint32_t WakeUpCounter, uint32_t WakeUpClock);
@@ -1731,6 +1774,7 @@ HAL_StatusTypeDef HAL_RTCEx_PollForWakeUpTimerEvent(RTC_HandleTypeDef *hrtc, uin
 /* Extended RTC Backup registers functions ************************************/
 
 /** @defgroup RTCEx_Exported_Functions_Group6 Extended RTC Backup register functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 void     HAL_RTCEx_BKUPWrite(RTC_HandleTypeDef *hrtc, uint32_t BackupRegister, uint32_t Data);
@@ -1746,6 +1790,7 @@ uint32_t HAL_RTCEx_BKUPRead(RTC_HandleTypeDef *hrtc, uint32_t BackupRegister);
 /* Extended RTC Peripheral Control functions **********************************/
 
 /** @defgroup RTCEx_Exported_Functions_Group3 Extended Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_RTCEx_SetSmoothCalib(RTC_HandleTypeDef *hrtc, uint32_t SmoothCalibPeriod, uint32_t SmoothCalibPlusPulses, uint32_t SmoothCalibMinusPulsesValue);
@@ -1767,6 +1812,7 @@ HAL_StatusTypeDef HAL_RTCEx_MonotonicCounterGet(RTC_HandleTypeDef *hrtc, uint32_
 /* Extended RTC features functions *******************************************/
 
 /** @defgroup RTCEx_Exported_Functions_Group4 Extended features functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1784,6 +1830,7 @@ HAL_StatusTypeDef HAL_RTCEx_PollForAlarmBEvent(RTC_HandleTypeDef *hrtc, uint32_t
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup RTCEx_Private_Constants RTC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_EXTI_LINE_TAMPER_TIMESTAMP_EVENT  EXTI_IMR1_IM18  /*!< External interrupt line 18 Connected to the RTC Tamper and Time Stamp events */
@@ -1799,10 +1846,12 @@ HAL_StatusTypeDef HAL_RTCEx_PollForAlarmBEvent(RTC_HandleTypeDef *hrtc, uint32_t
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup RTCEx_Private_Macros RTC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RTCEx_IS_RTC_Definitions Private macros to check input parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

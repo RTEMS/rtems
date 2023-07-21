@@ -37,6 +37,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SAI_Exported_Types SAI Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -58,6 +59,7 @@ typedef enum
 typedef void (*SAIcallback)(void);
 
 /** @defgroup SAI_PDM_Structure_definition SAI PDM Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  SAI PDM Init structure definition
   * @{
   */
@@ -74,6 +76,7 @@ typedef struct
   */
 
 /** @defgroup SAI_Init_Structure_definition SAI Init Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  SAI Init Structure definition
   * @{
   */
@@ -153,6 +156,7 @@ typedef struct
   */
 
 /** @defgroup SAI_Frame_Structure_definition SAI Frame Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  SAI Frame Init structure definition
   * @note   For SPDIF and AC97 protocol, these parameters are not used (set by hardware).
   * @{
@@ -186,6 +190,7 @@ typedef struct
   */
 
 /** @defgroup SAI_Slot_Structure_definition SAI Slot Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   SAI Block Slot Init Structure definition
   * @note    For SPDIF protocol, these parameters are not used (set by hardware).
   * @note    For AC97 protocol, only SlotActive parameter is used (the others are set by hardware).
@@ -210,6 +215,7 @@ typedef struct
   */
 
 /** @defgroup SAI_Handle_Structure_definition SAI Handle Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  SAI handle Structure definition
   * @{
   */
@@ -284,10 +290,12 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SAI_Exported_Constants SAI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SAI_Error_Code SAI Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_SAI_ERROR_NONE          0x00000000U  /*!< No error */
@@ -307,6 +315,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_SyncExt SAI External synchronisation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_SYNCEXT_DISABLE           0U
@@ -317,6 +326,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_MckOutput SAI Block Master Clock Output
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_MCK_OUTPUT_DISABLE      0x00000000U
@@ -326,6 +336,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Protocol SAI Supported protocol
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_I2S_STANDARD         0U
@@ -338,6 +349,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Protocol_DataSize SAI protocol data size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_PROTOCOL_DATASIZE_16BIT         0U
@@ -349,6 +361,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Audio_Frequency SAI Audio Frequency
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_AUDIO_FREQUENCY_192K      192000U
@@ -366,6 +379,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Mck_OverSampling SAI Block Master Clock OverSampling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_MCK_OVERSAMPLING_DISABLE  0x00000000U
@@ -375,6 +389,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_PDM_ClockEnable SAI PDM Clock Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_PDM_CLOCK1_ENABLE         SAI_PDMCR_CKEN1
@@ -384,6 +399,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Mode SAI Block Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_MODEMASTER_TX             0x00000000U
@@ -396,6 +412,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Protocol SAI Block Protocol
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_FREE_PROTOCOL             0x00000000U
@@ -406,6 +423,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Data_Size SAI Block Data Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_DATASIZE_8                SAI_xCR1_DS_1
@@ -419,6 +437,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_MSB_LSB_transmission SAI Block MSB LSB transmission
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_FIRSTBIT_MSB              0x00000000U
@@ -428,6 +447,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Clock_Strobing SAI Block Clock Strobing
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_CLOCKSTROBING_FALLINGEDGE  0U
@@ -437,6 +457,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Synchronization SAI Block Synchronization
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_ASYNCHRONOUS                  0U /*!< Asynchronous */
@@ -456,6 +477,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Output_Drive SAI Block Output Drive
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_OUTPUTDRIVE_DISABLE     0x00000000U
@@ -465,6 +487,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_NoDivider SAI Block NoDivider
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_MASTERDIVIDER_ENABLE    0x00000000U
@@ -474,6 +497,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_FS_Definition SAI Block FS Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_FS_STARTFRAME               0x00000000U
@@ -483,6 +507,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_FS_Polarity SAI Block FS Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_FS_ACTIVE_LOW           0x00000000U
@@ -492,6 +517,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_FS_Offset SAI Block FS Offset
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_FS_FIRSTBIT             0x00000000U
@@ -501,6 +527,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Slot_Size SAI Block Slot Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_SLOTSIZE_DATASIZE       0x00000000U
@@ -511,6 +538,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Slot_Active SAI Block Slot Active
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_SLOT_NOTACTIVE          0x00000000U
@@ -536,6 +564,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Mono_Stereo_Mode SAI Mono Stereo Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_STEREOMODE              0x00000000U
@@ -545,6 +574,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_TRIState_Management SAI TRIState Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_OUTPUT_NOTRELEASED      0x00000000U
@@ -554,6 +584,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Fifo_Threshold SAI Block Fifo Threshold
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_FIFOTHRESHOLD_EMPTY     0x00000000U
@@ -566,6 +597,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Companding_Mode SAI Block Companding Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_NOCOMPANDING            0x00000000U
@@ -578,6 +610,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Mute_Value SAI Block Mute Value
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_ZERO_VALUE              0x00000000U
@@ -587,6 +620,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Interrupts_Definition SAI Block Interrupts Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_IT_OVRUDR               SAI_xIMR_OVRUDRIE
@@ -601,6 +635,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Flags_Definition  SAI Block Flags Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_FLAG_OVRUDR             SAI_xSR_OVRUDR
@@ -615,6 +650,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
   */
 
 /** @defgroup SAI_Block_Fifo_Status_Level   SAI Block Fifo Status Level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_FIFOSTATUS_EMPTY              0x00000000U
@@ -633,6 +669,7 @@ typedef void (*pSAI_CallbackTypeDef)(SAI_HandleTypeDef *hsai);
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup SAI_Exported_Macros SAI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief macros to handle interrupts and specific configurations
   * @{
   */
@@ -828,6 +865,7 @@ uint32_t HAL_SAI_GetError(const SAI_HandleTypeDef *hsai);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup SAI_Private_Macros SAI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_SAI_BLOCK_SYNCEXT(STATE) (((STATE) == SAI_SYNCEXT_DISABLE) ||\
@@ -962,6 +1000,7 @@ uint32_t HAL_SAI_GetError(const SAI_HandleTypeDef *hsai);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup SAI_Private_Functions SAI Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

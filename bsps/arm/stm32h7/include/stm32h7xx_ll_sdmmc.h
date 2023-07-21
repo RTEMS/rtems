@@ -37,6 +37,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SDMMC_LL_Exported_Types SDMMC_LL Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -124,6 +125,7 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SDMMC_LL_Exported_Constants SDMMC_LL Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_ERROR_NONE                     ((uint32_t)0x00000000U)   /*!< No error                                                      */
@@ -313,6 +315,7 @@ typedef struct
 #define SDMMC_STOPTRANSFERTIMEOUT          ((uint32_t)100000000U)   /* Timeout for STOP TRANSMISSION command */
 
 /** @defgroup SDMMC_LL_Clock_Edge Clock Edge
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_CLOCK_EDGE_RISING               ((uint32_t)0x00000000U)
@@ -325,6 +328,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Clock_Power_Save Clock Power Saving
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_CLOCK_POWER_SAVE_DISABLE         ((uint32_t)0x00000000U)
@@ -337,6 +341,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Bus_Wide Bus Width
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_BUS_WIDE_1B                      ((uint32_t)0x00000000U)
@@ -351,6 +356,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Speed_Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_SPEED_MODE_AUTO                  ((uint32_t)0x00000000U)
@@ -373,6 +379,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Hardware_Flow_Control Hardware Flow Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_HARDWARE_FLOW_CONTROL_DISABLE    ((uint32_t)0x00000000U)
@@ -385,6 +392,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Clock_Division Clock Division
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* SDMMC_CK frequency = SDMMCCLK / [2 * CLKDIV] */
@@ -394,6 +402,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_TRANSCEIVER_PRESENT Transceiver Present
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_TRANSCEIVER_UNKNOWN             ((uint32_t)0x00000000U)
@@ -405,6 +414,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Command_Index Command Index
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_SDMMC_CMD_INDEX(INDEX)            ((INDEX) < 0x40U)
@@ -413,6 +423,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Response_Type Response Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_RESPONSE_NO                    ((uint32_t)0x00000000U)
@@ -427,6 +438,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Wait_Interrupt_State Wait Interrupt
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_WAIT_NO                        ((uint32_t)0x00000000U)
@@ -441,6 +453,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_CPSM_State CPSM State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_CPSM_DISABLE                   ((uint32_t)0x00000000U)
@@ -453,6 +466,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Response_Registers Response Register
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_RESP1                          ((uint32_t)0x00000000U)
@@ -466,6 +480,7 @@ typedef struct
                              ((RESP) == SDMMC_RESP4))
 
 /** @defgroup SDMMC_Internal_DMA_Mode  SDMMC Internal DMA Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_DISABLE_IDMA              ((uint32_t)0x00000000)
@@ -478,6 +493,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Data_Length Data Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_SDMMC_DATA_LENGTH(LENGTH) ((LENGTH) <= 0x01FFFFFFU)
@@ -486,6 +502,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Data_Block_Size  Data Block Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_DATABLOCK_SIZE_1B               ((uint32_t)0x00000000U)
@@ -528,6 +545,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Transfer_Direction Transfer Direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_TRANSFER_DIR_TO_CARD            ((uint32_t)0x00000000U)
@@ -540,6 +558,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Transfer_Type Transfer Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_TRANSFER_MODE_BLOCK             ((uint32_t)0x00000000U)
@@ -552,6 +571,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_DPSM_State DPSM State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_DPSM_DISABLE                    ((uint32_t)0x00000000U)
@@ -564,6 +584,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Read_Wait_Mode Read Wait Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_READ_WAIT_MODE_DATA2                ((uint32_t)0x00000000U)
@@ -576,6 +597,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Interrupt_sources Interrupt Sources
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_IT_CCRCFAIL                  SDMMC_MASK_CCRCFAILIE
@@ -606,6 +628,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Flags Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SDMMC_FLAG_CCRCFAIL                  SDMMC_STA_CCRCFAIL
@@ -663,10 +686,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup SDMMC_LL_Exported_macros SDMMC_LL Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SDMMC_LL_Register Bits And Addresses Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SDMMC_LL registers bit address in the alias region
   * @{
   */
@@ -703,6 +728,7 @@ typedef struct
   */
 
 /** @defgroup SDMMC_LL_Interrupt_Clock Interrupt And Clock Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief macros to handle interrupts and specific clock configurations
   * @{
   */

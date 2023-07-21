@@ -94,6 +94,7 @@
 #if defined (HASH)
 
 /** @defgroup HASHEx HASHEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HASH HAL extended module driver.
   * @{
   */
@@ -104,10 +105,12 @@
 
 
 /** @defgroup HASHEx_Exported_Functions HASH Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HASHEx_Exported_Functions_Group1 HASH extended processing functions in polling mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   HASH extended processing functions using polling mode.
   *
 @verbatim
@@ -258,6 +261,7 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_End(HASH_HandleTypeDef *hhash, uint8_
   */
 
 /** @defgroup HASHEx_Exported_Functions_Group2 HASH extended processing functions in interrupt mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   HASH extended processing functions using interrupt mode.
   *
 @verbatim
@@ -393,6 +397,7 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Accmlt_End_IT(HASH_HandleTypeDef *hhash, uin
   */
 
 /** @defgroup HASHEx_Exported_Functions_Group3 HASH extended processing functions in DMA mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   HASH extended processing functions using DMA mode.
   *
 @verbatim
@@ -489,6 +494,7 @@ HAL_StatusTypeDef HAL_HASHEx_SHA256_Finish(HASH_HandleTypeDef *hhash, uint8_t *p
   */
 
 /** @defgroup HASHEx_Exported_Functions_Group4 HMAC extended processing functions in polling mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   HMAC extended processing functions using polling mode.
   *
 @verbatim
@@ -552,6 +558,7 @@ HAL_StatusTypeDef HAL_HMACEx_SHA256_Start(HASH_HandleTypeDef *hhash, uint8_t *pI
 
 
 /** @defgroup HASHEx_Exported_Functions_Group5 HMAC extended processing functions in interrupt mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   HMAC extended processing functions using interruption mode.
   *
 @verbatim
@@ -616,6 +623,7 @@ HAL_StatusTypeDef HAL_HMACEx_SHA256_Start_IT(HASH_HandleTypeDef *hhash, uint8_t 
 
 
 /** @defgroup HASHEx_Exported_Functions_Group6 HMAC extended processing functions in DMA mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   HMAC extended processing functions using DMA mode.
   *
 @verbatim
@@ -694,6 +702,7 @@ HAL_StatusTypeDef HAL_HMACEx_SHA256_Start_DMA(HASH_HandleTypeDef *hhash, uint8_t
   */
 
 /** @defgroup HASHEx_Exported_Functions_Group7 Multi-buffer HMAC extended processing functions in DMA mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   HMAC extended processing functions in multi-buffer DMA mode.
   *
 @verbatim

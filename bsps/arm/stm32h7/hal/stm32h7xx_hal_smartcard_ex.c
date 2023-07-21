@@ -48,6 +48,7 @@
   */
 
 /** @defgroup SMARTCARDEx SMARTCARDEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SMARTCARD Extended HAL module driver
   * @{
   */
@@ -56,6 +57,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup SMARTCARDEx_Private_Constants SMARTCARD Extended Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* UART RX FIFO depth */
@@ -74,10 +76,12 @@ static void SMARTCARDEx_SetNbDataToProcess(SMARTCARD_HandleTypeDef *hsmartcard);
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SMARTCARDEx_Exported_Functions  SMARTCARD Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SMARTCARDEx_Exported_Functions_Group1 Extended Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended control functions
   *
 @verbatim
@@ -184,6 +188,7 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef
   */
 
 /** @defgroup SMARTCARDEx_Exported_Functions_Group2 Extended Peripheral IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   SMARTCARD Transmit and Receive functions
   *
 @verbatim
@@ -238,6 +243,7 @@ __weak void HAL_SMARTCARDEx_TxFifoEmptyCallback(SMARTCARD_HandleTypeDef *hsmartc
   */
 
 /** @defgroup SMARTCARDEx_Exported_Functions_Group3 Extended Peripheral FIFO Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   SMARTCARD control functions
   *
 @verbatim
@@ -441,6 +447,7 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_SetRxFifoThreshold(SMARTCARD_HandleTypeDef *hs
   */
 
 /** @defgroup SMARTCARDEx_Private_Functions  SMARTCARD Extended Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

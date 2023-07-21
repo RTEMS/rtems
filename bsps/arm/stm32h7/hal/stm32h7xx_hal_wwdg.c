@@ -143,6 +143,7 @@
 
 #ifdef HAL_WWDG_MODULE_ENABLED
 /** @defgroup WWDG WWDG
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief WWDG HAL module driver.
   * @{
   */
@@ -155,10 +156,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup WWDG_Exported_Functions WWDG Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup WWDG_Exported_Functions_Group1 Initialization and Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions.
   *
 @verbatim
@@ -328,6 +331,7 @@ HAL_StatusTypeDef HAL_WWDG_UnRegisterCallback(WWDG_HandleTypeDef *hwwdg, HAL_WWD
   */
 
 /** @defgroup WWDG_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    IO operation functions
   *
 @verbatim

@@ -37,6 +37,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SMARTCARD_Exported_Types SMARTCARD Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -314,10 +315,12 @@ typedef enum
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SMARTCARD_Exported_Constants  SMARTCARD Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SMARTCARD_State_Definition SMARTCARD State Code Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_SMARTCARD_STATE_RESET            0x00000000U                     /*!< Peripheral is not initialized. Value
@@ -345,6 +348,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Error_Definition SMARTCARD Error Code Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_SMARTCARD_ERROR_NONE             (0x00000000U)         /*!< No error                */
@@ -362,6 +366,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Word_Length SMARTCARD Word Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_WORDLENGTH_9B             USART_CR1_M0                    /*!< SMARTCARD frame length */
@@ -370,6 +375,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Stop_Bits SMARTCARD Number of Stop Bits
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_STOPBITS_0_5              USART_CR2_STOP_0                /*!< SMARTCARD frame with 0.5 stop bit  */
@@ -379,6 +385,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Parity SMARTCARD Parity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_PARITY_EVEN               USART_CR1_PCE                   /*!< SMARTCARD frame even parity */
@@ -388,6 +395,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Mode SMARTCARD Transfer Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_MODE_RX                   USART_CR1_RE                    /*!< SMARTCARD RX mode        */
@@ -398,6 +406,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Clock_Polarity SMARTCARD Clock Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_POLARITY_LOW              0x00000000U                     /*!< SMARTCARD frame low polarity  */
@@ -407,6 +416,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Clock_Phase SMARTCARD Clock Phase
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_PHASE_1EDGE               0x00000000U                     /*!< SMARTCARD frame phase on first clock transition  */
@@ -416,6 +426,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Last_Bit SMARTCARD Last Bit
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_LASTBIT_DISABLE           0x00000000U                     /*!< SMARTCARD frame last data bit clock pulse not output to SCLK pin */
@@ -425,6 +436,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_OneBit_Sampling SMARTCARD One Bit Sampling Method
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_ONE_BIT_SAMPLE_DISABLE    0x00000000U                     /*!< SMARTCARD frame one-bit sample disabled */
@@ -434,6 +446,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_NACK_Enable SMARTCARD NACK Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_NACK_DISABLE              0x00000000U                     /*!< SMARTCARD NACK transmission disabled  */
@@ -443,6 +456,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Timeout_Enable SMARTCARD Timeout Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_TIMEOUT_DISABLE           0x00000000U                     /*!< SMARTCARD receiver timeout disabled */
@@ -452,6 +466,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_ClockPrescaler  SMARTCARD Clock Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_PRESCALER_DIV1    0x00000000U  /*!< fclk_pres = fclk     */
@@ -471,6 +486,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Tx_Inv SMARTCARD advanced feature TX pin active level inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_ADVFEATURE_TXINV_DISABLE  0x00000000U                  /*!< TX pin active level inversion disable */
@@ -480,6 +496,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Rx_Inv SMARTCARD advanced feature RX pin active level inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_ADVFEATURE_RXINV_DISABLE  0x00000000U                  /*!< RX pin active level inversion disable */
@@ -489,6 +506,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Data_Inv SMARTCARD advanced feature Binary Data inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_ADVFEATURE_DATAINV_DISABLE  0x00000000U                /*!< Binary data inversion disable */
@@ -498,6 +516,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Rx_Tx_Swap SMARTCARD advanced feature RX TX pins swap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_ADVFEATURE_SWAP_DISABLE   0x00000000U                  /*!< TX/RX pins swap disable */
@@ -507,6 +526,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Overrun_Disable SMARTCARD advanced feature Overrun Disable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_ADVFEATURE_OVERRUN_ENABLE   0x00000000U                /*!< RX overrun enable  */
@@ -516,6 +536,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_DMA_Disable_on_Rx_Error SMARTCARD advanced feature DMA Disable on Rx Error
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_ADVFEATURE_DMA_ENABLEONRXERROR   0x00000000U           /*!< DMA enable on Reception Error  */
@@ -525,6 +546,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_MSB_First   SMARTCARD advanced feature MSB first
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_ADVFEATURE_MSBFIRST_DISABLE      0x00000000U           /*!< Most significant bit sent/received first disable */
@@ -534,6 +556,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Request_Parameters SMARTCARD Request Parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_RXDATA_FLUSH_REQUEST      USART_RQR_RXFRQ              /*!< Receive data flush request */
@@ -543,6 +566,7 @@ typedef enum
   */
 
 /** @defgroup SMARTCARD_Interruption_Mask SMARTCARD interruptions flags mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_IT_MASK                   0x001FU   /*!< SMARTCARD interruptions flags mask  */
@@ -560,6 +584,7 @@ typedef enum
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup SMARTCARD_Exported_Macros  SMARTCARD Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -853,6 +878,7 @@ typedef enum
 
 /* Private macros -------------------------------------------------------------*/
 /** @defgroup SMARTCARD_Private_Macros SMARTCARD Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -28,6 +28,7 @@
   */
 
 /** @defgroup PCDEx PCDEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief PCD Extended HAL module driver
   * @{
   */
@@ -43,10 +44,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup PCDEx_Exported_Functions PCDEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PCDEx_Exported_Functions_Group1 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    PCDEx control functions
   *
 @verbatim

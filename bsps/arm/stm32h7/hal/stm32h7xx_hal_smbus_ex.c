@@ -48,6 +48,7 @@
   */
 
 /** @defgroup SMBUSEx SMBUSEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SMBUS Extended HAL module driver
   * @{
   */
@@ -62,10 +63,12 @@
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup SMBUSEx_Exported_Functions SMBUS Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SMBUSEx_Exported_Functions_Group2 WakeUp Mode Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    WakeUp Mode Functions
   *
 @verbatim
@@ -161,6 +164,7 @@ HAL_StatusTypeDef HAL_SMBUSEx_DisableWakeUp(SMBUS_HandleTypeDef *hsmbus)
   */
 
 /** @defgroup SMBUSEx_Exported_Functions_Group3 Fast Mode Plus Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Fast Mode Plus Functions
   *
 @verbatim

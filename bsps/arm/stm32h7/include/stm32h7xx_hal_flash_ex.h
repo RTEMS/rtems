@@ -36,6 +36,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup FLASHEx_Exported_Types FLASH Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -182,10 +183,12 @@ typedef struct
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup FLASHEx_Exported_Constants FLASH Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FLASHEx_Type_Erase FLASH Type Erase
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_TYPEERASE_SECTORS      0x00U  /*!< Sectors erase only          */
@@ -196,6 +199,7 @@ typedef struct
 
 #if defined (FLASH_CR_PSIZE)
 /** @defgroup FLASHEx_Voltage_Range FLASH Voltage Range
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_VOLTAGE_RANGE_1        0x00000000U       /*!< Flash program/erase by 8 bits  */
@@ -208,6 +212,7 @@ typedef struct
 #endif /* FLASH_CR_PSIZE */
 
 /** @defgroup FLASHEx_WRP_State FLASH WRP State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_WRPSTATE_DISABLE          0x00000000U  /*!< Disable the write protection of the desired bank 1 sectors */
@@ -217,6 +222,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_Option_Type FLASH Option Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OPTIONBYTE_WRP           0x01U  /*!< WRP option byte configuration  */
@@ -264,6 +270,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_Option_Bytes_Read_Protection FLASH Option Bytes Read Protection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_RDP_LEVEL_0       0xAA00U
@@ -275,6 +282,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_Option_Bytes_IWatchdog FLASH Option Bytes IWatchdog
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_IWDG_SW           OB_IWDG1_SW  /*!< Software IWDG selected */
@@ -284,6 +292,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_Option_Bytes_nRST_STOP FLASH Option Bytes nRST_STOP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_STOP_NO_RST       0x40U /*!< No reset generated when entering in STOP */
@@ -293,6 +302,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_Option_Bytes_nRST_STDBY FLASH Option Bytes nRST_STDBY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_STDBY_NO_RST      0x80U /*!< No reset generated when entering in STANDBY */
@@ -302,6 +312,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_Option_Bytes_IWDG_FREEZE_STOP FLASH IWDG Counter Freeze in STOP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_IWDG_STOP_FREEZE  0x00000000U /*!< Freeze IWDG counter in STOP mode */
@@ -311,6 +322,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_Option_Bytes_IWDG_FREEZE_SANDBY FLASH IWDG Counter Freeze in STANDBY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_IWDG_STDBY_FREEZE 0x00000000U /*!< Freeze IWDG counter in STANDBY mode */
@@ -320,6 +332,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_BOR_Reset_Level FLASH BOR Reset Level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_BOR_LEVEL0        0x00000000U                /*!< Reset level threshold is set to 1.6V */
@@ -333,6 +346,7 @@ typedef struct
 
 
 /** @defgroup FLASHEx_Boot_Address FLASH Boot Address
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_BOOTADDR_ITCM_RAM     0x0000U  /*!< Boot from ITCM RAM (0x00000000)                 */
@@ -347,6 +361,7 @@ typedef struct
   */
 
 /** @defgroup FLASH_Latency FLASH Latency
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_LATENCY_0          FLASH_ACR_LATENCY_0WS   /*!< FLASH Zero Latency cycle      */
@@ -372,6 +387,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_Banks FLASH Banks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_BANK_1             0x01U                         /*!< Bank 1   */
@@ -384,6 +400,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_OB_PCROP_RDP  FLASHEx OB PCROP RDP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_PCROP_RDP_NOT_ERASE   0x00000000U     /*!< PCROP area is not erased when the RDP level
@@ -396,6 +413,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_Option_Bytes_Write_Protection FLASH Option Bytes Write Protection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if (FLASH_SECTOR_TOTAL == 128)
@@ -448,6 +466,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_OB_SECURITY  FLASHEx OB SECURITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_SECURITY_DISABLE   0x00000000U             /*!< security enabled */
@@ -457,6 +476,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_OB_ST_RAM_SIZE  FLASHEx OB ST RAM SIZE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_ST_RAM_SIZE_2KB    0x00000000U               /*!< 2 Kbytes reserved to ST code */
@@ -469,6 +489,7 @@ typedef struct
 
 #if defined(DUAL_CORE)
 /** @defgroup FLASHEx_OB_BCM7  FLASHEx OB BCM7
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_BCM7_DISABLE       0x00000000U              /*!< CM7 Boot disabled */
@@ -479,6 +500,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_OB_BCM4  FLASHEx OB BCM4
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_BCM4_DISABLE       0x00000000U              /*!< CM4 Boot disabled */
@@ -489,6 +511,7 @@ typedef struct
 #endif /* DUAL_CORE */
 
 /** @defgroup FLASHEx_OB_IWDG1_SW  FLASHEx OB IWDG1 SW
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_IWDG1_SW            FLASH_OPTSR_IWDG1_SW /*!< Hardware independent watchdog 1 */
@@ -499,6 +522,7 @@ typedef struct
 
 #if defined(DUAL_CORE)
 /** @defgroup FLASHEx_OB_IWDG2_SW  FLASHEx OB IWDG2 SW
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_IWDG2_SW            FLASH_OPTSR_IWDG2_SW  /*!< Hardware independent watchdog 2*/
@@ -509,6 +533,7 @@ typedef struct
 #endif
 
 /** @defgroup FLASHEx_OB_NRST_STOP_D1  FLASHEx OB NRST STOP D1
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_STOP_RST_D1         0x00000000U              /*!< Reset generated when entering the D1 to stop mode */
@@ -518,6 +543,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_OB_NRST_STDBY_D1  FLASHEx OB NRST STDBY D1
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_STDBY_RST_D1        0x00000000U              /*!< Reset generated when entering the D1 to standby mode */
@@ -528,6 +554,7 @@ typedef struct
 
 #if defined (FLASH_OPTSR_NRST_STOP_D2)
 /** @defgroup FLASHEx_OB_NRST_STOP_D2  FLASHEx OB NRST STOP D2
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_STOP_RST_D2         0x00000000U              /*!< Reset generated when entering the D2 to stop mode */
@@ -537,6 +564,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_OB_NRST_STDBY_D2  FLASHEx OB NRST STDBY D2
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_STDBY_RST_D2        0x00000000U              /*!< Reset generated when entering the D2 to standby mode */
@@ -548,6 +576,7 @@ typedef struct
 
 #if defined (DUAL_BANK)
 /** @defgroup FLASHEx_OB_SWAP_BANK  FLASHEx OB SWAP BANK
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_SWAP_BANK_DISABLE   0x00000000U               /*!< Bank swap disabled */
@@ -558,6 +587,7 @@ typedef struct
 #endif /* DUAL_BANK */
 
 /** @defgroup FLASHEx_OB_IOHSLV FLASHEx OB IOHSLV
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_IOHSLV_DISABLE      0x00000000U         /*!< IOHSLV disabled */
@@ -568,6 +598,7 @@ typedef struct
 
 #if defined (FLASH_OPTSR_VDDMMC_HSLV)
 /** @defgroup FLASHEx_OB_VDDMMC_HSLV FLASHEx OB VDDMMC HSLV
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_VDDMMC_HSLV_DISABLE 0x00000000U             /*!< VDDMMC HSLV disabled */
@@ -579,6 +610,7 @@ typedef struct
 
 #if defined (FLASH_OPTSR2_CPUFREQ_BOOST)
 /** @defgroup FLASHEx_OB_CPUFREQ_BOOST FLASHEx OB CPUFREQ BOOST
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_CPUFREQ_BOOST_DISABLE     0x00000000U                /*!< CPUFREQ BOOST disabled */
@@ -590,6 +622,7 @@ typedef struct
 
 #if defined (FLASH_OPTSR2_TCM_AXI_SHARED)
 /** @defgroup FLASHEx_OB_TCM_AXI_SHARED  FLASHEx OB TCM AXI SHARED
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_TCM_AXI_SHARED_ITCM64KB   0x00000000U                   /*!< 64KB ITCM / 320KB system AXI  */
@@ -602,6 +635,7 @@ typedef struct
 #endif /* FLASH_OPTSR2_TCM_AXI_SHARED */
 
  /** @defgroup FLASHEx_OB_USER_Type  FLASHEx OB USER Type
+   * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_USER_IWDG1_SW          0x0001U /*!< Independent watchdog selection */
@@ -667,6 +701,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_OB_BOOT_OPTION  FLASHEx OB BOOT OPTION
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_BOOT_ADD0           0x01U       /*!< Select Boot Address 0 */
@@ -677,6 +712,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_OB_SECURE_RDP  FLASHEx OB SECURE RDP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OB_SECURE_RDP_NOT_ERASE   0x00000000U     /*!< Secure area is not erased when the RDP level
@@ -688,6 +724,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_CRC_Selection_Type FLASH CRC Selection Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_CRC_ADDR         0x00000000U              /*!< CRC selection type by address  */
@@ -698,6 +735,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_CRC_Burst_Size FLASH CRC Burst Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_CRC_BURST_SIZE_4    0x00000000U              /*!< Every burst has a size of 4 Flash words (256-bit)  */
@@ -709,6 +747,7 @@ typedef struct
   */
 
 /** @defgroup FLASHEx_Programming_Delay FLASH Programming Delay
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_PROGRAMMING_DELAY_0   0x00000000U            /*!< programming delay set for Flash running at 70 MHz or below          */
@@ -721,6 +760,7 @@ typedef struct
 
 #if defined (FLASH_OTPBL_LOCKBL)
 /** @defgroup FLASHEx_OTP_Blocks FLASH OTP blocks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_OTP_BLOCK_0          0x00000001U /*!< OTP Block0     */
@@ -750,6 +790,7 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup FLASHEx_Exported_Macros FLASH Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -845,10 +886,12 @@ HAL_StatusTypeDef HAL_FLASHEx_ComputeCRC(FLASH_CRCInitTypeDef *pCRCInit, uint32_
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup FLASHEx_Private_Macros FLASHEx Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FLASHEx_IS_FLASH_Definitions FLASHEx Private macros to check input parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -990,6 +1033,7 @@ HAL_StatusTypeDef HAL_FLASHEx_ComputeCRC(FLASH_CRCInitTypeDef *pCRCInit, uint32_
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup FLASHEx_Private_Functions FLASHEx Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 void FLASH_Erase_Sector(uint32_t Sector, uint32_t Banks, uint32_t VoltageRange);

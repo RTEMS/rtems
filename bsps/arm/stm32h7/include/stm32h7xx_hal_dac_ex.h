@@ -46,10 +46,12 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup DACEx_Exported_Constants DACEx Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DACEx_lfsrunmask_triangleamplitude DACEx lfsrunmask triangle amplitude
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_LFSRUNMASK_BIT0                0x00000000UL                                                        /*!< Unmask DAC channel LFSR bit0 for noise wave generation */
@@ -91,6 +93,7 @@ extern "C" {
 /* Private macro -------------------------------------------------------------*/
 
 /** @defgroup DACEx_Private_Macros DACEx Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(HRTIM1)

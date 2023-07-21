@@ -47,6 +47,7 @@
   */
 
 /** @defgroup USARTEx USARTEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief USART Extended HAL module driver
   * @{
   */
@@ -55,6 +56,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /** @defgroup USARTEx_Private_Constants USARTEx Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* USART RX FIFO depth */
@@ -71,6 +73,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup USARTEx_Private_Functions USARTEx Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart);
@@ -81,10 +84,12 @@ static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup USARTEx_Exported_Functions  USARTEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup USARTEx_Exported_Functions_Group1 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief Extended USART Transmit/Receive functions
   *
 @verbatim
@@ -136,6 +141,7 @@ __weak void HAL_USARTEx_TxFifoEmptyCallback(USART_HandleTypeDef *husart)
   */
 
 /** @defgroup USARTEx_Exported_Functions_Group2 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended Peripheral Control functions
   *
 @verbatim

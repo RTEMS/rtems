@@ -38,6 +38,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup HAL_TICK_FREQ Tick Frequency
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -53,9 +54,11 @@ typedef enum
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup HAL_Exported_Constants HAL Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup REV_ID device revision ID
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define REV_ID_Y ((uint32_t)0x1003)  /*!< STM32H7 rev.Y */
@@ -68,10 +71,12 @@ typedef enum
   */
   
 /** @defgroup SYSCFG_Exported_Constants SYSCFG Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SYSCFG_VREFBUF_VoltageScale VREFBUF Voltage Scale
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SYSCFG_VREFBUF_VOLTAGE_SCALE0   VREFBUF_CSR_VRS_OUT1   /*!< Voltage reference scale 0 (VREF_OUT1) */
@@ -91,6 +96,7 @@ typedef enum
   */
 
 /** @defgroup SYSCFG_VREFBUF_HighImpedance VREFBUF High Impedance
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SYSCFG_VREFBUF_HIGH_IMPEDANCE_DISABLE  ((uint32_t)0x00000000) /*!< VREF_plus pin is internally connected to Voltage reference buffer output */
@@ -107,6 +113,7 @@ typedef enum
 
 #if !defined(SYSCFG_PMCR_BOOSTEN)
 /** @defgroup SYSCFG_FastModePlus_GPIO Fast-mode Plus on GPIO
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -130,6 +137,7 @@ typedef enum
 
 #if defined(SYSCFG_ADC2ALT_ADC2_ROUT0) || defined(SYSCFG_ADC2ALT_ADC2_ROUT1)
 /** @defgroup SYSCFG_Adc2_Alternate_Connection SYSCFG ADC2 Alternate Connection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -152,6 +160,7 @@ typedef enum
 
 
 /** @defgroup SYSCFG_Ethernet_Config  Ethernet Config
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SYSCFG_ETH_MII                      ((uint32_t)0x00000000)  /*!< Select the Media Independent Interface */
@@ -166,6 +175,7 @@ typedef enum
 
 
 /** @defgroup SYSCFG_Analog_Switch_Config  Analog Switch Config
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SYSCFG_SWITCH_PA0                       SYSCFG_PMCR_PA0SO  /*!< Select PA0 analog switch */
@@ -206,6 +216,7 @@ typedef enum
 
 
 /** @defgroup SYSCFG_Boot_Config  Boot Config
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SYSCFG_BOOT_ADDR0                    ((uint32_t)0x00000000)  /*!< Select Boot address0 */
@@ -222,6 +233,7 @@ typedef enum
 
 
 /** @defgroup SYSCFG_IOCompenstionCell_Config  IOCompenstionCell Config
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SYSCFG_CELL_CODE                    ((uint32_t)0x00000000)  /*!< Select Code from the cell */
@@ -242,6 +254,7 @@ typedef enum
 
 
 /** @defgroup EXTI_Event_Input_Config  Event Input Config
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -692,6 +705,7 @@ typedef enum
 
 
 /** @defgroup FMC_SwapBankMapping_Config  SwapBankMapping Config
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SWAPBMAP_DISABLE             (0x00000000U)
@@ -710,10 +724,12 @@ typedef enum
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup HAL_Exported_Macros HAL Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(DUAL_CORE)
 /** @defgroup ART_Exported_Macros ART Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -738,6 +754,7 @@ typedef enum
 #endif /* DUAL_CORE */
 
 /** @defgroup SYSCFG_Exported_Macros SYSCFG Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -849,6 +866,7 @@ typedef enum
   */
 
 /** @defgroup DBG_Exported_Macros DBG Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1027,6 +1045,7 @@ typedef enum
   */
 
 /** @defgroup HAL_Private_Macros HAL Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_TICKFREQ(FREQ) (((FREQ) == HAL_TICK_FREQ_10HZ)  || \
@@ -1050,10 +1069,12 @@ extern HAL_TickFreqTypeDef uwTickFreq;
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup HAL_Exported_Functions HAL Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Initialization and de-initialization functions  ******************************/
 /** @defgroup HAL_Group1 Initialization and de-initialization Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_Init(void);
@@ -1068,6 +1089,7 @@ HAL_StatusTypeDef HAL_InitTick (uint32_t TickPriority);
 
 /* Peripheral Control functions  ************************************************/
 /** @defgroup HAL_Group2 HAL Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *
  */
 void HAL_IncTick(void);

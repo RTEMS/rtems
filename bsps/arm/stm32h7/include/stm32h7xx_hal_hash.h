@@ -37,6 +37,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup HASH_Exported_Types HASH Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -181,10 +182,12 @@ typedef  void (*pHASH_CallbackTypeDef)(HASH_HandleTypeDef *hhash);  /*!< pointer
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup HASH_Exported_Constants  HASH Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HASH_Algo_Selection   HASH algorithm selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HASH_ALGOSELECTION_SHA1      0x00000000U /*!< HASH function is SHA1   */
@@ -196,6 +199,7 @@ typedef  void (*pHASH_CallbackTypeDef)(HASH_HandleTypeDef *hhash);  /*!< pointer
   */
 
 /** @defgroup HASH_Algorithm_Mode   HASH algorithm mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HASH_ALGOMODE_HASH         0x00000000U /*!< Algorithm is HASH */
@@ -205,6 +209,7 @@ typedef  void (*pHASH_CallbackTypeDef)(HASH_HandleTypeDef *hhash);  /*!< pointer
   */
 
 /** @defgroup HASH_Data_Type      HASH input data type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HASH_DATATYPE_32B          0x00000000U /*!< 32-bit data. No swapping                     */
@@ -216,6 +221,7 @@ typedef  void (*pHASH_CallbackTypeDef)(HASH_HandleTypeDef *hhash);  /*!< pointer
   */
 
 /** @defgroup HASH_HMAC_Long_key_only_for_HMAC_mode   HMAC key length type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HASH_HMAC_KEYTYPE_SHORTKEY      0x00000000U /*!< HMAC Key size is <= 64 bytes */
@@ -225,6 +231,7 @@ typedef  void (*pHASH_CallbackTypeDef)(HASH_HandleTypeDef *hhash);  /*!< pointer
   */
 
 /** @defgroup HASH_flags_definition  HASH flags definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HASH_FLAG_DINIS            HASH_SR_DINIS  /*!< 16 locations are free in the DIN : a new block can be entered in the Peripheral */
@@ -238,6 +245,7 @@ typedef  void (*pHASH_CallbackTypeDef)(HASH_HandleTypeDef *hhash);  /*!< pointer
   */
 
 /** @defgroup HASH_interrupts_definition   HASH interrupts definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HASH_IT_DINI               HASH_IMR_DINIE  /*!< A new block can be entered into the input buffer (DIN) */
@@ -248,6 +256,7 @@ typedef  void (*pHASH_CallbackTypeDef)(HASH_HandleTypeDef *hhash);  /*!< pointer
   */
 
 /** @defgroup HASH_Error_Definition   HASH Error Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  HAL_HASH_ERROR_NONE             0x00000000U   /*!< No error                */
@@ -266,6 +275,7 @@ typedef  void (*pHASH_CallbackTypeDef)(HASH_HandleTypeDef *hhash);  /*!< pointer
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup HASH_Exported_Macros HASH Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -374,6 +384,7 @@ typedef  void (*pHASH_CallbackTypeDef)(HASH_HandleTypeDef *hhash);  /*!< pointer
 
 /* Private macros --------------------------------------------------------*/
 /** @defgroup HASH_Private_Macros   HASH Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**

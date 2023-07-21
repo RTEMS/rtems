@@ -42,6 +42,7 @@
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup RNG_LL_Private_Macros RNG Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_LL_RNG_CED(__MODE__) (((__MODE__) == LL_RNG_CED_ENABLE) || \

@@ -34,6 +34,7 @@ extern "C" {
 #if defined(FMAC)
 
 /** @defgroup FMAC_LL FMAC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -41,10 +42,12 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup FMAC_LL_Exported_Constants FMAC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FMAC_LL_EC_GET_FLAG Get Flag Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flag defines which can be used with LL_FMAC_ReadReg function
   * @{
   */
@@ -59,6 +62,7 @@ extern "C" {
   */
 
 /** @defgroup FMAC_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_FMAC_ReadReg and LL_FMAC_WriteReg functions
   * @{
   */
@@ -73,6 +77,7 @@ extern "C" {
   */
 
 /** @defgroup FMAC_LL_EC_WM FMAC watermarks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Watermark defines that can be used for buffer full (input) or buffer empty (output)
   * @{
   */
@@ -89,6 +94,7 @@ extern "C" {
   */
 
 /** @defgroup FMAC_LL_EC_FUNC FMAC functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_FMAC_FUNC_LOAD_X1               (FMAC_PARAM_FUNC_0)                        /*!< Load X1 buffer             */
@@ -101,6 +107,7 @@ extern "C" {
   */
 
 /** @defgroup FMAC_LL_EC_PROCESSING FMAC processing
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_FMAC_PROCESSING_STOP            0x00U /*!< Stop FMAC Processing                                            */
@@ -116,10 +123,12 @@ extern "C" {
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup FMAC_LL_Exported_Macros FMAC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FMAC_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -151,10 +160,12 @@ extern "C" {
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup FMAC_LL_Exported_Functions FMAC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FMAC_LL_EF_Configuration FMAC Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -514,6 +525,7 @@ __STATIC_INLINE uint8_t LL_FMAC_GetParamP(FMAC_TypeDef *FMACx)
   */
 
 /** @defgroup FMAC_LL_EF_Reset_Management Reset_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -544,6 +556,7 @@ __STATIC_INLINE uint32_t LL_FMAC_IsEnabledReset(FMAC_TypeDef *FMACx)
   */
 
 /** @defgroup FMAC_LL_EF_Configuration FMAC Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -585,6 +598,7 @@ __STATIC_INLINE uint32_t LL_FMAC_IsEnabledClipping(FMAC_TypeDef *FMACx)
   */
 
 /** @defgroup FMAC_LL_EF_DMA_Management DMA_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -659,6 +673,7 @@ __STATIC_INLINE uint32_t LL_FMAC_IsEnabledDMAReq_READ(FMAC_TypeDef *FMACx)
   */
 
 /** @defgroup FMAC_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -832,6 +847,7 @@ __STATIC_INLINE uint32_t LL_FMAC_IsEnabledIT_RD(FMAC_TypeDef *FMACx)
   */
 
 /** @defgroup FMAC_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -895,6 +911,7 @@ __STATIC_INLINE uint32_t LL_FMAC_IsActiveFlag_YEMPTY(FMAC_TypeDef *FMACx)
   */
 
 /** @defgroup FMAC_LL_EF_Data_Management Data_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -927,6 +944,7 @@ __STATIC_INLINE uint16_t LL_FMAC_ReadData(FMAC_TypeDef *FMACx)
   */
 
 /** @defgroup FMAC_LL_EF_Configuration FMAC Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1037,6 +1055,7 @@ __STATIC_INLINE void LL_FMAC_ConfigFunc(FMAC_TypeDef *FMACx, uint8_t Start, uint
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup FMAC_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 ErrorStatus LL_FMAC_Init(FMAC_TypeDef *FMACx);

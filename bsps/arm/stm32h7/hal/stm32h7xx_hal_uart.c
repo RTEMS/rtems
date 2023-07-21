@@ -166,6 +166,7 @@
   */
 
 /** @defgroup UART UART
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HAL UART module driver
   * @{
   */
@@ -175,6 +176,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup UART_Private_Constants UART Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_CR1_FIELDS  ((uint32_t)(USART_CR1_M | USART_CR1_PCE | USART_CR1_PS | USART_CR1_TE | USART_CR1_RE | \
@@ -235,10 +237,12 @@ const uint16_t UARTPrescTable[12] = {1U, 2U, 4U, 6U, 8U, 10U, 12U, 16U, 32U, 64U
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup UART_Exported_Functions UART Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup UART_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -1029,6 +1033,7 @@ HAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart)
   */
 
 /** @defgroup UART_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief UART Transmit/Receive functions
   *
 @verbatim
@@ -2687,6 +2692,7 @@ __weak void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
   */
 
 /** @defgroup UART_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   UART control functions
   *
 @verbatim
@@ -2931,6 +2937,7 @@ HAL_StatusTypeDef HAL_LIN_SendBreak(UART_HandleTypeDef *huart)
   */
 
 /** @defgroup UART_Exported_Functions_Group4 Peripheral State and Error functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   UART Peripheral State functions
   *
 @verbatim
@@ -2981,6 +2988,7 @@ uint32_t HAL_UART_GetError(const UART_HandleTypeDef *huart)
   */
 
 /** @defgroup UART_Private_Functions UART Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

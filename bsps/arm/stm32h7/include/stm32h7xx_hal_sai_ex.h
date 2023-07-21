@@ -37,6 +37,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SAIEx_Exported_Types SAIEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

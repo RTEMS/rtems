@@ -27,6 +27,7 @@
   */
 
 /** @defgroup RCCEx  RCCEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief RCC HAL module driver
   * @{
   */
@@ -36,6 +37,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup RCCEx_Private_defines RCCEx Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 #define PLL2_TIMEOUT_VALUE         PLL_TIMEOUT_VALUE    /* 2 ms */
@@ -50,6 +52,7 @@
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup RCCEx_Private_Macros RCCEx Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 /**
@@ -63,10 +66,12 @@ static HAL_StatusTypeDef RCCEx_PLL3_Config(RCC_PLL3InitTypeDef *pll3, uint32_t D
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup RCCEx_Exported_Functions RCCEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RCCEx_Exported_Functions_Group1 Extended Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief  Extended Peripheral Control functions
  *
 @verbatim
@@ -3170,6 +3175,7 @@ uint32_t HAL_RCCEx_GetD1SysClockFreq(void)
   */
 
 /** @defgroup RCCEx_Exported_Functions_Group2 Extended System Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief  Extended Peripheral Control functions
   * @{
   */
@@ -3311,6 +3317,7 @@ void HAL_RCCEx_WWDGxSysResetConfig(uint32_t RCC_WWDGx)
   */
 
 /** @defgroup RCCEx_Exported_Functions_Group3 Extended Clock Recovery System Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief  Extended Clock Recovery System Control functions
  *
 @verbatim
@@ -3679,6 +3686,7 @@ __weak void HAL_RCCEx_CRS_ErrorCallback(uint32_t Error)
   */
 
 /** @defgroup RCCEx_Private_functions RCCEx Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 /**

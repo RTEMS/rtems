@@ -34,6 +34,7 @@ extern "C" {
 #if defined (OPAMP1) || defined (OPAMP2)
 
 /** @defgroup OPAMP_LL OPAMP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -42,6 +43,7 @@ extern "C" {
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup OPAMP_LL_Private_Constants OPAMP Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -73,6 +75,7 @@ extern "C" {
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup OPAMP_LL_Private_Macros OPAMP Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -97,6 +100,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup OPAMP_LL_ES_INIT OPAMP Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -137,10 +141,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup OPAMP_LL_Exported_Constants OPAMP Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OPAMP_LL_EC_MODE OPAMP mode calibration or functional.
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_MODE_FUNCTIONAL        0x00000000U                               /*!< OPAMP functional mode */
@@ -150,6 +156,7 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_FUNCTIONAL_MODE OPAMP functional mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_MODE_STANDALONE        0x00000000U                                                 /*!< OPAMP functional mode, OPAMP operation in standalone */
@@ -169,6 +176,7 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_MODE_PGA_GAIN OPAMP PGA gain (relevant when OPAMP is in functional mode PGA)
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @note Gain sign:
   *         - is positive if the @ref OPAMP_LL_EC_FUNCTIONAL_MODE configuration is
   *           @ref LL_OPAMP_MODE_PGA or LL_OPAMP_MODE_PGA_IO0
@@ -186,6 +194,7 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_INPUT_NONINVERTING OPAMP input non-inverting
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_INPUT_NONINVERT_IO0         0x00000000U           /*!< OPAMP non inverting input connected to I/O VINP0
@@ -204,6 +213,7 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_INPUT_INVERTING OPAMP input inverting
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @note OPAMP inverting input is used with OPAMP in mode standalone or PGA with negative gain or bias.
   *       Otherwise (OPAMP in mode follower), OPAMP inverting input is not used (not connected to GPIO pin).
   * @{
@@ -223,6 +233,7 @@ typedef struct
 
 
 /** @defgroup OPAMP_LL_EC_POWER_MODE OPAMP PowerMode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_POWERMODE_NORMAL        (OPAMP_POWERMODE_OTR_REGOFFSET)                            /*!< OPAMP output in normal mode */
@@ -232,6 +243,7 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_TRIMMING_MODE OPAMP trimming mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_TRIMMING_FACTORY       0x00000000U             /*!< OPAMP trimming factors set to factory values */
@@ -241,6 +253,7 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_TRIMMING_TRANSISTORS_DIFF_PAIR OPAMP trimming of transistors differential pair NMOS or PMOS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_OPAMP_TRIMMING_NMOS_VREF_90PC_VDDA  (OPAMP_OTR_TRIMOFFSETN | ((OPAMP_CSR_CALSEL_1 | OPAMP_CSR_CALSEL_0) << 4)) /*!< OPAMP trimming of transistors differential pair NMOS (internal reference voltage set to 0.9*Vdda). Default parameters to be used for calibration using two trimming steps (one with each transistors differential pair NMOS and PMOS). */
@@ -254,6 +267,7 @@ typedef struct
   */
 
 /** @defgroup OPAMP_LL_EC_HW_DELAYS  Definitions of OPAMP hardware constraints delays
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @note   Only OPAMP peripheral HW delays are defined in OPAMP LL driver driver,
   *         not timeout values.
   *         For details on delays values, refer to descriptions in source code
@@ -281,9 +295,11 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup OPAMP_LL_Exported_Macros OPAMP Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup OPAMP_LL_EM_WRITE_READ Common write and read registers macro
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -306,6 +322,7 @@ typedef struct
   * @}
   */
 /** @defgroup OPAMP_LL_EM_HELPER_MACRO OPAMP helper macro
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -351,10 +368,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup OPAMP_LL_Exported_Functions OPAMP Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OPAMP_LL_EF_CONFIGURATION_OPAMP_INSTANCE Configuration of OPAMP hierarchical scope: OPAMP instance
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -509,6 +528,7 @@ __STATIC_INLINE uint32_t LL_OPAMP_GetPowerMode(OPAMP_TypeDef *OPAMPx)
   */
 
 /** @defgroup OPAMP_LL_EF_CONFIGURATION_INPUTS Configuration of OPAMP inputs
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -586,6 +606,7 @@ __STATIC_INLINE uint32_t LL_OPAMP_GetInputInverting(OPAMP_TypeDef *OPAMPx)
   */
 
 /** @defgroup OPAMP_LL_EF_OPAMP_TRIMMING Configuration and operation of OPAMP trimming
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -745,6 +766,7 @@ __STATIC_INLINE uint32_t LL_OPAMP_GetTrimmingValue(OPAMP_TypeDef* OPAMPx, uint32
   */
 
 /** @defgroup OPAMP_LL_EF_OPERATION Operation on OPAMP instance
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -789,6 +811,7 @@ __STATIC_INLINE uint32_t LL_OPAMP_IsEnabled(OPAMP_TypeDef *OPAMPx)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup OPAMP_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

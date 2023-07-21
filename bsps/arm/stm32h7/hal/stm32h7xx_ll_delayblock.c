@@ -55,6 +55,7 @@
   */
 
 /** @defgroup DELAYBLOCK_LL DELAYBLOCK_LL
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief Low layer module for Delay Block
   * @{
   */
@@ -64,6 +65,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup DelayBlock_LL_Private_Defines Delay Block Low Layer Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DLYB_TIMEOUT 0xFFU
@@ -76,10 +78,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup DelayBlock_LL_Exported_Functions Delay Block Low Layer Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HAL_DELAY_LL_Group1 Initialization de-initialization functions 
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions 
  *
 @verbatim    

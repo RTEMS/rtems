@@ -39,6 +39,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SPDIFRX_Exported_Types SPDIFRX Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -204,9 +205,11 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SPDIFRX_Exported_Constants SPDIFRX Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup SPDIFRX_ErrorCode SPDIFRX Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_SPDIFRX_ERROR_NONE      ((uint32_t)0x00000000U)  /*!< No error           */
@@ -223,6 +226,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_Input_Selection SPDIFRX Input Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_INPUT_IN0   ((uint32_t)0x00000000U)
@@ -234,6 +238,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_Max_Retries SPDIFRX Maximum Retries
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_MAXRETRIES_NONE   ((uint32_t)0x00000000U)
@@ -245,6 +250,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_Wait_For_Activity SPDIFRX Wait For Activity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_WAITFORACTIVITY_OFF   ((uint32_t)0x00000000U)
@@ -254,6 +260,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_PT_Mask SPDIFRX Preamble Type Mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_PREAMBLETYPEMASK_OFF    ((uint32_t)0x00000000U)
@@ -263,6 +270,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_ChannelStatus_Mask  SPDIFRX Channel Status Mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_CHANNELSTATUS_OFF   ((uint32_t)0x00000000U)        /* The channel status and user bits are copied into the SPDIF_DR */
@@ -272,6 +280,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_V_Mask SPDIFRX Validity Mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_VALIDITYMASK_OFF    ((uint32_t)0x00000000U)
@@ -281,6 +290,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_PE_Mask  SPDIFRX Parity Error Mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_PARITYERRORMASK_OFF   ((uint32_t)0x00000000U)
@@ -290,6 +300,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_Channel_Selection  SPDIFRX Channel Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_CHANNEL_A   ((uint32_t)0x00000000U)
@@ -299,6 +310,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_Data_Format SPDIFRX Data Format
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_DATAFORMAT_LSB      ((uint32_t)0x00000000U)
@@ -309,6 +321,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_Stereo_Mode SPDIFRX Stereo Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_STEREOMODE_DISABLE    ((uint32_t)0x00000000U)
@@ -318,6 +331,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_State SPDIFRX State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -329,6 +343,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_Interrupts_Definition SPDIFRX Interrupts Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_IT_RXNE       ((uint32_t)SPDIFRX_IMR_RXNEIE)
@@ -343,6 +358,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
   */
 
 /** @defgroup SPDIFRX_Flags_Definition SPDIFRX Flags Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPDIFRX_FLAG_RXNE     ((uint32_t)SPDIFRX_SR_RXNE)
@@ -364,6 +380,7 @@ typedef  void (*pSPDIFRX_CallbackTypeDef)(SPDIFRX_HandleTypeDef *hspdif);  /*!< 
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup SPDIFRX_Exported_macros SPDIFRX Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -543,6 +560,7 @@ uint32_t HAL_SPDIFRX_GetError(SPDIFRX_HandleTypeDef const *const hspdif);
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup SPDIFRX_Private_Macros SPDIFRX Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_SPDIFRX_INPUT_SELECT(INPUT)      (((INPUT) == SPDIFRX_INPUT_IN1) || \
@@ -587,6 +605,7 @@ uint32_t HAL_SPDIFRX_GetError(SPDIFRX_HandleTypeDef const *const hspdif);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup SPDIFRX_Private_Functions SPDIFRX Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**

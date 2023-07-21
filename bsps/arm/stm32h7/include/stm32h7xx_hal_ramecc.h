@@ -38,6 +38,7 @@
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup RAMECC_Exported_Types RAMECC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    RAMECC Exported Types
   * @{
   */
@@ -73,9 +74,11 @@ typedef struct __RAMECC_HandleTypeDef
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup RAMECC_Exported_Constants RAMECC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup RAMECC_Error_Codes RAMECC Error Codes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_RAMECC_ERROR_NONE              0x00000000U  /*!< RAMECC No Error         */
@@ -87,6 +90,7 @@ typedef struct __RAMECC_HandleTypeDef
   */
 
 /** @defgroup RAMECC_Interrupt RAMECC interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RAMECC_IT_GLOBAL_ID                0x10000000UL
@@ -108,6 +112,7 @@ typedef struct __RAMECC_HandleTypeDef
   */
 
 /** @defgroup RAMECC_FLAG RAMECC Monitor flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RAMECC_FLAG_SINGLEERR_R            RAMECC_SR_SEDCF
@@ -124,6 +129,7 @@ typedef struct __RAMECC_HandleTypeDef
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup RAMECC_Exported_Macros RAMECC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -239,11 +245,13 @@ typedef struct __RAMECC_HandleTypeDef
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup RAMECC_Exported_Functions RAMECC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    RAMECC Exported functions
   * @{
   */
 
 /** @defgroup RAMECC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and de-initialization functions
   * @{
   */
@@ -254,6 +262,7 @@ HAL_StatusTypeDef HAL_RAMECC_DeInit (RAMECC_HandleTypeDef *hramecc);
   */
 
 /** @defgroup RAMECC_Exported_Functions_Group2 monitoring operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    monitoring operation functions
   * @{
   */
@@ -269,6 +278,7 @@ HAL_StatusTypeDef HAL_RAMECC_UnRegisterCallback  (RAMECC_HandleTypeDef *hramecc)
   */
 
 /** @defgroup RAMECC_Exported_Functions_Group3 Error information functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Error information functions
   * @{
   */
@@ -283,6 +293,7 @@ uint32_t HAL_RAMECC_IsECCDoubleErrorDetected (RAMECC_HandleTypeDef *hramecc);
   */
 
 /** @defgroup RAMECC_Exported_Functions_Group4 State and Error Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    State and Error Functions
   * @{
   */
@@ -297,6 +308,7 @@ uint32_t                HAL_RAMECC_GetError (RAMECC_HandleTypeDef *hramecc);
   */
 /* Private Constants -------------------------------------------------------------*/
 /** @defgroup RAMECC_Private_Constants RAMECC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    RAMECC private defines and constants
   * @{
   */
@@ -306,6 +318,7 @@ uint32_t                HAL_RAMECC_GetError (RAMECC_HandleTypeDef *hramecc);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup RAMECC_Private_Macros RAMECC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    RAMECC private macros
   * @{
   */
@@ -331,6 +344,7 @@ uint32_t                HAL_RAMECC_GetError (RAMECC_HandleTypeDef *hramecc);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup RAMECC_Private_Functions RAMECC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    RAMECC private  functions
   * @{
   */

@@ -39,6 +39,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup LPTIM_Exported_Types LPTIM Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -194,10 +195,12 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup LPTIM_Exported_Constants LPTIM Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup LPTIM_Clock_Source LPTIM Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LPTIM_CLOCKSOURCE_APBCLOCK_LPOSC        0x00000000U
@@ -207,6 +210,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Clock_Prescaler LPTIM Clock Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LPTIM_PRESCALER_DIV1                    0x00000000U
@@ -222,6 +226,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Output_Polarity LPTIM Output Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -232,6 +237,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Clock_Sample_Time LPTIM Clock Sample Time
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LPTIM_CLOCKSAMPLETIME_DIRECTTRANSITION  0x00000000U
@@ -243,6 +249,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Clock_Polarity LPTIM Clock Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LPTIM_CLOCKPOLARITY_RISING              0x00000000U
@@ -253,6 +260,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Trigger_Source LPTIM Trigger Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LPTIM_TRIGSOURCE_SOFTWARE               0x0000FFFFU
@@ -269,6 +277,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_External_Trigger_Polarity LPTIM External Trigger Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LPTIM_ACTIVEEDGE_RISING                LPTIM_CFGR_TRIGEN_0
@@ -279,6 +288,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Trigger_Sample_Time LPTIM Trigger Sample Time
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LPTIM_TRIGSAMPLETIME_DIRECTTRANSITION  0x00000000U
@@ -290,6 +300,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Updating_Mode LPTIM Updating Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -300,6 +311,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Counter_Source LPTIM Counter Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -310,6 +322,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Input1_Source LPTIM Input1 Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -325,6 +338,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Input2_Source LPTIM Input2 Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -335,6 +349,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Flag_Definition LPTIM Flags Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -350,6 +365,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 /** @defgroup LPTIM_Interrupts_Definition LPTIM Interrupts Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LPTIM_IT_DOWN                            LPTIM_IER_DOWNIE
@@ -369,6 +385,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup LPTIM_Exported_Macros LPTIM Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -540,6 +557,7 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup LPTIM_Exported_Functions LPTIM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -668,6 +686,7 @@ HAL_LPTIM_StateTypeDef HAL_LPTIM_GetState(LPTIM_HandleTypeDef *hlptim);
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup LPTIM_Private_Types LPTIM Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -677,6 +696,7 @@ HAL_LPTIM_StateTypeDef HAL_LPTIM_GetState(LPTIM_HandleTypeDef *hlptim);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup LPTIM_Private_Variables LPTIM Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -686,6 +706,7 @@ HAL_LPTIM_StateTypeDef HAL_LPTIM_GetState(LPTIM_HandleTypeDef *hlptim);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup LPTIM_Private_Constants LPTIM Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -695,6 +716,7 @@ HAL_LPTIM_StateTypeDef HAL_LPTIM_GetState(LPTIM_HandleTypeDef *hlptim);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup LPTIM_Private_Macros LPTIM Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -788,6 +810,7 @@ HAL_LPTIM_StateTypeDef HAL_LPTIM_GetState(LPTIM_HandleTypeDef *hlptim);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup LPTIM_Private_Functions LPTIM Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 void LPTIM_Disable(LPTIM_HandleTypeDef *hlptim);

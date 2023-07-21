@@ -171,6 +171,7 @@
 #if defined (LTDC)
 
 /** @defgroup LTDC LTDC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief LTDC HAL module driver
   * @{
   */
@@ -179,6 +180,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup LTDC_Private_Define LTDC Private Define
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_TIMEOUT_VALUE ((uint32_t)100U)  /* 100ms */
@@ -192,10 +194,12 @@ static void LTDC_SetConfig(LTDC_HandleTypeDef *hltdc, LTDC_LayerCfgTypeDef *pLay
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup LTDC_Exported_Functions LTDC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup LTDC_Exported_Functions_Group1 Initialization and Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Initialization and Configuration functions
   *
 @verbatim
@@ -610,6 +614,7 @@ HAL_StatusTypeDef HAL_LTDC_UnRegisterCallback(LTDC_HandleTypeDef *hltdc, HAL_LTD
   */
 
 /** @defgroup LTDC_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   IO operation functions
   *
 @verbatim
@@ -793,6 +798,7 @@ __weak void HAL_LTDC_ReloadEventCallback(LTDC_HandleTypeDef *hltdc)
   */
 
 /** @defgroup LTDC_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Peripheral Control functions
   *
 @verbatim
@@ -2071,6 +2077,7 @@ HAL_StatusTypeDef HAL_LTDC_DisableCLUT_NoReload(LTDC_HandleTypeDef *hltdc, uint3
   */
 
 /** @defgroup LTDC_Exported_Functions_Group4 Peripheral State and Errors functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Peripheral State and Errors functions
   *
 @verbatim
@@ -2117,6 +2124,7 @@ uint32_t HAL_LTDC_GetError(LTDC_HandleTypeDef *hltdc)
   */
 
 /** @defgroup LTDC_Private_Functions LTDC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

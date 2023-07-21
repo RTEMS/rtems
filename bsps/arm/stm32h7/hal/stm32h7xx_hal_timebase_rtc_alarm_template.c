@@ -52,6 +52,7 @@
   */
 
 /** @defgroup HAL_TimeBase_RTC_Alarm_Template  HAL TimeBase RTC Alarm Template
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

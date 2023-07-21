@@ -146,6 +146,7 @@
   */
 
 /** @defgroup CORDIC CORDIC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief CORDIC HAL driver modules.
   * @{
   */
@@ -157,6 +158,7 @@
 /* Private function prototypes -----------------------------------------------*/
 
 /** @defgroup CORDIC_Private_Functions CORDIC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void CORDIC_WriteInDataIncrementPtr(const CORDIC_HandleTypeDef *hcordic, const int32_t **ppInBuff);
@@ -171,10 +173,12 @@ static void CORDIC_DMAError(DMA_HandleTypeDef *hdma);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup CORDIC_Exported_Functions CORDIC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CORDIC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions.
   *
 @verbatim
@@ -525,6 +529,7 @@ HAL_StatusTypeDef HAL_CORDIC_UnRegisterCallback(CORDIC_HandleTypeDef *hcordic, H
   */
 
 /** @defgroup CORDIC_Exported_Functions_Group2 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Control functions.
   *
 @verbatim
@@ -1029,6 +1034,7 @@ HAL_StatusTypeDef HAL_CORDIC_Calculate_DMA(CORDIC_HandleTypeDef *hcordic, const 
   */
 
 /** @defgroup CORDIC_Exported_Functions_Group3 Callback functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Callback functions.
   *
 @verbatim
@@ -1080,6 +1086,7 @@ __weak void HAL_CORDIC_CalculateCpltCallback(CORDIC_HandleTypeDef *hcordic)
   */
 
 /** @defgroup CORDIC_Exported_Functions_Group4 IRQ handler management
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    IRQ handler.
   *
 @verbatim
@@ -1150,6 +1157,7 @@ void HAL_CORDIC_IRQHandler(CORDIC_HandleTypeDef *hcordic)
   */
 
 /** @defgroup CORDIC_Exported_Functions_Group5 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Peripheral State functions.
   *
 @verbatim

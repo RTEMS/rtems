@@ -34,6 +34,7 @@ extern "C" {
 #if defined(SPI1) || defined(SPI2) || defined(SPI3) || defined(SPI4) || defined(SPI5) || defined(SPI6)
 
 /** @defgroup SPI_LL SPI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -43,6 +44,7 @@ extern "C" {
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup SPI_LL_Private_Macros SPI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -52,6 +54,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup SPI_LL_Exported_Types SPI Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -137,10 +140,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SPI_LL_Exported_Constants SPI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SPI_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_SPI_ReadReg function
   * @{
   */
@@ -163,6 +168,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_SPI_ReadReg and  LL_SPI_WriteReg functions
   * @{
   */
@@ -182,6 +188,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_MODE Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_MODE_MASTER                         (SPI_CFG2_MASTER)
@@ -191,6 +198,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_SS_LEVEL SS Level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_SS_LEVEL_HIGH                       (SPI_CR1_SSI)
@@ -200,6 +208,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_SS_IDLENESS SS Idleness
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_SS_IDLENESS_00CYCLE                 (0x00000000UL)
@@ -224,6 +233,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_ID_IDLENESS Master Inter-Data Idleness
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_ID_IDLENESS_00CYCLE                 (0x00000000UL)
@@ -248,6 +258,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_TXCRCINIT_ALL TXCRC Init All
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_TXCRCINIT_ALL_ZERO_PATTERN          (0x00000000UL)
@@ -257,6 +268,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_RXCRCINIT_ALL RXCRC Init All
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_RXCRCINIT_ALL_ZERO_PATTERN          (0x00000000UL)
@@ -266,6 +278,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_UDR_CONFIG_REGISTER UDR Config Register
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_UDR_CONFIG_REGISTER_PATTERN         (0x00000000UL)
@@ -276,6 +289,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_UDR_DETECT_BEGIN_DATA UDR Detect Begin Data
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_UDR_DETECT_BEGIN_DATA_FRAME         (0x00000000UL)
@@ -286,6 +300,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_PROTOCOL Protocol
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_PROTOCOL_MOTOROLA                   (0x00000000UL)
@@ -295,6 +310,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_PHASE Phase
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_PHASE_1EDGE                         (0x00000000UL)
@@ -304,6 +320,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_POLARITY Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_POLARITY_LOW                        (0x00000000UL)
@@ -313,6 +330,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_NSS_POLARITY NSS Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_NSS_POLARITY_LOW                    (0x00000000UL)
@@ -322,6 +340,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_BAUDRATEPRESCALER Baud Rate Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_BAUDRATEPRESCALER_DIV2              (0x00000000UL)
@@ -337,6 +356,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_BIT_ORDER Bit Order
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_LSB_FIRST                           (SPI_CFG2_LSBFRST)
@@ -346,6 +366,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_TRANSFER_MODE Transfer Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_FULL_DUPLEX                         (0x00000000UL)
@@ -358,6 +379,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_DATAWIDTH Data Width
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_DATAWIDTH_4BIT                      (SPI_CFG1_DSIZE_0 | SPI_CFG1_DSIZE_1)
@@ -400,6 +422,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_FIFO_TH FIFO Threshold
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_FIFO_TH_01DATA                      (0x00000000UL)
@@ -426,6 +449,7 @@ typedef struct
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 
 /** @defgroup SPI_LL_EC_CRC_CALCULATION CRC Calculation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_CRCCALCULATION_DISABLE              (0x00000000UL)            /*!< CRC calculation disabled */
@@ -436,6 +460,7 @@ typedef struct
 #endif /* USE_FULL_LL_DRIVER */
 
 /** @defgroup SPI_LL_EC_CRC CRC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_CRC_4BIT                            (SPI_CFG1_CRCSIZE_0 | SPI_CFG1_CRCSIZE_1)
@@ -478,6 +503,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_NSS_MODE NSS Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_NSS_SOFT                            (SPI_CFG2_SSM)
@@ -488,6 +514,7 @@ typedef struct
   */
 
 /** @defgroup SPI_LL_EC_RX_FIFO RxFIFO Packing LeVel
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SPI_RX_FIFO_0PACKET               (0x00000000UL)    /* 0 or multiple of 4 packet available is the RxFIFO */
@@ -504,10 +531,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup SPI_LL_Exported_Macros SPI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SPI_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -539,10 +568,12 @@ typedef struct
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup SPI_LL_Exported_Functions SPI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SPI_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1686,6 +1717,7 @@ __STATIC_INLINE uint32_t LL_SPI_IsEnabledNSSPulse(SPI_TypeDef *SPIx)
   */
 
 /** @defgroup SPI_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1973,6 +2005,7 @@ __STATIC_INLINE void LL_SPI_ClearFlag_SUSP(SPI_TypeDef *SPIx)
   */
 
 /** @defgroup SPI_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2344,6 +2377,7 @@ __STATIC_INLINE uint32_t LL_SPI_IsEnabledIT_TSER(SPI_TypeDef *SPIx)
   */
 
 /** @defgroup SPI_LL_EF_DMA_Management DMA Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2438,6 +2472,7 @@ __STATIC_INLINE uint32_t LL_SPI_DMA_GetRxRegAddr(SPI_TypeDef *SPIx)
   */
 
 /** @defgroup SPI_LL_EF_DATA_Management DATA_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2594,6 +2629,7 @@ __STATIC_INLINE uint32_t LL_SPI_GetTxCRC(SPI_TypeDef *SPIx)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup SPI_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2613,6 +2649,7 @@ void        LL_SPI_StructInit(LL_SPI_InitTypeDef *SPI_InitStruct);
   */
 
 /** @defgroup I2S_LL I2S
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2623,6 +2660,7 @@ void        LL_SPI_StructInit(LL_SPI_InitTypeDef *SPI_InitStruct);
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup I2S_LL_ES_INIT I2S Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2683,10 +2721,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup I2S_LL_Exported_Constants I2S Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2S_LL_EC_DATA_FORMAT Data Format
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2S_DATAFORMAT_16B               (0x00000000UL)
@@ -2699,6 +2739,7 @@ typedef struct
   */
 
 /** @defgroup I2S_LL_EC_CHANNEL_LENGTH_TYPE Type of Channel Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2S_SLAVE_VARIABLE_CH_LENGTH     (0x00000000UL)
@@ -2708,6 +2749,7 @@ typedef struct
   */
 
 /** @defgroup I2S_LL_EC_POLARITY Clock Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2S_POLARITY_LOW                 (0x00000000UL)
@@ -2717,6 +2759,7 @@ typedef struct
   */
 
 /** @defgroup I2S_LL_EC_STANDARD I2S Standard
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2S_STANDARD_PHILIPS             (0x00000000UL)
@@ -2729,6 +2772,7 @@ typedef struct
   */
 
 /** @defgroup I2S_LL_EC_MODE Operation Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2S_MODE_SLAVE_TX                (0x00000000UL)
@@ -2742,6 +2786,7 @@ typedef struct
   */
 
 /** @defgroup I2S_LL_EC_PRESCALER_PARITY Prescaler Factor
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2S_PRESCALER_PARITY_EVEN        (0x00000000UL)   /*!< Odd factor: Real divider value is =  I2SDIV * 2    */
@@ -2751,6 +2796,7 @@ typedef struct
   */
 
 /** @defgroup I2S_LL_EC_FIFO_TH FIFO Threshold Level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2S_FIFO_TH_01DATA               (LL_SPI_FIFO_TH_01DATA)
@@ -2766,6 +2812,7 @@ typedef struct
   */
 
 /** @defgroup I2S_LL_EC_BIT_ORDER Transmission Bit Order
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2S_LSB_FIRST                    (LL_SPI_LSB_FIRST)
@@ -2777,6 +2824,7 @@ typedef struct
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 
 /** @defgroup I2S_LL_EC_MCLK_OUTPUT MCLK Output
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2S_MCLK_OUTPUT_DISABLE          (0x00000000UL)
@@ -2786,6 +2834,7 @@ typedef struct
   */
 
 /** @defgroup I2S_LL_EC_AUDIO_FREQ Audio Frequency
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2810,10 +2859,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup I2S_LL_Exported_Macros I2S Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2S_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2845,10 +2896,12 @@ typedef struct
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup I2S_LL_Exported_Functions I2S Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2S_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3347,6 +3400,7 @@ __STATIC_INLINE uint32_t LL_I2S_IsEnabledMasterClock(SPI_TypeDef *SPIx)
 
 
 /** @defgroup I2S_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3443,6 +3497,7 @@ __STATIC_INLINE void LL_I2S_ClearFlag_FRE(SPI_TypeDef *SPIx)
   */
 
 /** @defgroup I2S_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3616,6 +3671,7 @@ __STATIC_INLINE uint32_t LL_I2S_IsEnabledIT_FRE(SPI_TypeDef *SPIx)
   */
 
 /** @defgroup I2S_LL_EF_DMA_Management DMA_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3690,6 +3746,7 @@ __STATIC_INLINE uint32_t LL_I2S_IsEnabledDMAReq_TX(SPI_TypeDef *SPIx)
   */
 
 /** @defgroup I2S_LL_EF_DATA_Management DATA_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3747,6 +3804,7 @@ __STATIC_INLINE void LL_I2S_TransmitData32(SPI_TypeDef *SPIx, uint32_t TxData)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup I2S_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

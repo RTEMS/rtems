@@ -29,6 +29,7 @@
 #ifdef HAL_SAI_MODULE_ENABLED
 
 /** @defgroup SAIEx SAIEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SAI Extended HAL module driver
   * @{
   */
@@ -44,10 +45,12 @@
 /* Private functions ---------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SAIEx_Exported_Functions SAIEx Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SAIEx_Exported_Functions_Group1 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    SAIEx control functions
   *
 @verbatim

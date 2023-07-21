@@ -37,6 +37,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup CRC_Exported_Types CRC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -135,10 +136,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CRC_Exported_Constants CRC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRC_Default_Polynomial_Value    Default CRC generating polynomial
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DEFAULT_CRC32_POLY      0x04C11DB7U  /*!<  X^32 + X^26 + X^23 + X^22 + X^16 + X^12 + X^11 + X^10 +X^8 + X^7 + X^5 + X^4 + X^2+ X +1 */
@@ -147,6 +150,7 @@ typedef struct
   */
 
 /** @defgroup CRC_Default_InitValue    Default CRC computation initialization value
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DEFAULT_CRC_INITVALUE   0xFFFFFFFFU  /*!< Initial CRC default value */
@@ -155,6 +159,7 @@ typedef struct
   */
 
 /** @defgroup CRC_Default_Polynomial    Indicates whether or not default polynomial is used
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DEFAULT_POLYNOMIAL_ENABLE       ((uint8_t)0x00U)  /*!< Enable default generating polynomial 0x04C11DB7  */
@@ -164,6 +169,7 @@ typedef struct
   */
 
 /** @defgroup CRC_Default_InitValue_Use    Indicates whether or not default init value is used
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DEFAULT_INIT_VALUE_ENABLE      ((uint8_t)0x00U) /*!< Enable initial CRC default value  */
@@ -173,6 +179,7 @@ typedef struct
   */
 
 /** @defgroup CRC_Polynomial_Sizes Polynomial sizes to configure the peripheral
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CRC_POLYLENGTH_32B                  0x00000000U        /*!< Resort to a 32-bit long generating polynomial */
@@ -184,6 +191,7 @@ typedef struct
   */
 
 /** @defgroup CRC_Polynomial_Size_Definitions CRC polynomial possible sizes actual definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_CRC_LENGTH_32B     32U          /*!< 32-bit long CRC */
@@ -195,6 +203,7 @@ typedef struct
   */
 
 /** @defgroup CRC_Input_Buffer_Format Input Buffer Format
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* WARNING: CRC_INPUT_FORMAT_UNDEFINED is created for reference purposes but
@@ -215,6 +224,7 @@ typedef struct
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup CRC_Exported_Macros CRC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -262,6 +272,7 @@ typedef struct
 
 /* Private macros --------------------------------------------------------*/
 /** @defgroup  CRC_Private_Macros CRC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -289,11 +300,13 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup CRC_Exported_Functions CRC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Initialization and de-initialization functions  ****************************/
 /** @defgroup CRC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_CRC_Init(CRC_HandleTypeDef *hcrc);
@@ -306,6 +319,7 @@ void HAL_CRC_MspDeInit(CRC_HandleTypeDef *hcrc);
 
 /* Peripheral Control functions ***********************************************/
 /** @defgroup CRC_Exported_Functions_Group2 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 uint32_t HAL_CRC_Accumulate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_t BufferLength);
@@ -316,6 +330,7 @@ uint32_t HAL_CRC_Calculate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_t
 
 /* Peripheral State and Error functions ***************************************/
 /** @defgroup CRC_Exported_Functions_Group3 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_CRC_StateTypeDef HAL_CRC_GetState(CRC_HandleTypeDef *hcrc);

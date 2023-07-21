@@ -34,12 +34,14 @@ extern "C" {
   */
 
 /** @defgroup LTDC LTDC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief LTDC HAL module driver
   * @{
   */
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup LTDC_Exported_Types LTDC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define MAX_LAYER  2U
@@ -238,10 +240,12 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup LTDC_Exported_Constants LTDC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup LTDC_Error_Code LTDC Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_LTDC_ERROR_NONE               0x00000000U   /*!< LTDC No error             */
@@ -256,6 +260,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Layer LTDC Layer
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_LAYER_1                      0x00000000U   /*!< LTDC Layer 1 */
@@ -265,6 +270,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_HS_POLARITY LTDC HS POLARITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_HSPOLARITY_AL                0x00000000U   /*!< Horizontal Synchronization is active low. */
@@ -274,6 +280,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_VS_POLARITY LTDC VS POLARITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_VSPOLARITY_AL                0x00000000U   /*!< Vertical Synchronization is active low. */
@@ -283,6 +290,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_DE_POLARITY LTDC DE POLARITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_DEPOLARITY_AL                0x00000000U   /*!< Data Enable, is active low. */
@@ -292,6 +300,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_PC_POLARITY LTDC PC POLARITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_PCPOLARITY_IPC               0x00000000U   /*!< input pixel clock. */
@@ -301,6 +310,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_SYNC LTDC SYNC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_HORIZONTALSYNC               (LTDC_SSCR_HSW >> 16U)    /*!< Horizontal synchronization width. */
@@ -310,6 +320,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_BACK_COLOR LTDC BACK COLOR
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_COLOR                        0x000000FFU   /*!< Color mask */
@@ -318,6 +329,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_BlendingFactor1 LTDC Blending Factor1
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_BLENDING_FACTOR1_CA          0x00000400U   /*!< Blending factor : Cte Alpha */
@@ -327,6 +339,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_BlendingFactor2 LTDC Blending Factor2
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_BLENDING_FACTOR2_CA          0x00000005U   /*!< Blending factor : Cte Alpha */
@@ -336,6 +349,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Pixelformat LTDC Pixel format
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_PIXEL_FORMAT_ARGB8888        0x00000000U   /*!< ARGB8888 LTDC pixel format */
@@ -351,6 +365,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Alpha LTDC Alpha
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_ALPHA                        LTDC_LxCACR_CONSTA        /*!< LTDC Constant Alpha mask */
@@ -359,6 +374,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_LAYER_Config LTDC LAYER Config
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_STOPPOSITION                 (LTDC_LxWHPCR_WHSPPOS >> 16U) /*!< LTDC Layer stop position  */
@@ -371,6 +387,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Interrupts LTDC Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_IT_LI                        LTDC_IER_LIE              /*!< LTDC Line Interrupt            */
@@ -382,6 +399,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Flags LTDC Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_FLAG_LI                      LTDC_ISR_LIF              /*!< LTDC Line Interrupt Flag            */
@@ -393,6 +411,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
   */
 
 /** @defgroup LTDC_Reload_Type LTDC Reload Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_RELOAD_IMMEDIATE             LTDC_SRCR_IMR             /*!< Immediate Reload */
@@ -407,6 +426,7 @@ typedef  void (*pLTDC_CallbackTypeDef)(LTDC_HandleTypeDef *hltdc);  /*!< pointer
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup LTDC_Exported_Macros LTDC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -640,6 +660,7 @@ uint32_t              HAL_LTDC_GetError(LTDC_HandleTypeDef *hltdc);
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup LTDC_Private_Macros LTDC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LTDC_LAYER(__HANDLE__, __LAYER__)              ((LTDC_Layer_TypeDef *)((uint32_t)(\
@@ -694,6 +715,7 @@ uint32_t              HAL_LTDC_GetError(LTDC_HandleTypeDef *hltdc);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup LTDC_Private_Functions LTDC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

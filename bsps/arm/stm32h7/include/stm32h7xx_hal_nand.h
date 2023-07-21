@@ -39,6 +39,7 @@ extern "C" {
 /* Exported typedef ----------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup NAND_Exported_Types NAND Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -159,6 +160,7 @@ typedef void (*pNAND_CallbackTypeDef)(NAND_HandleTypeDef *hnand);
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup NAND_Exported_Macros NAND Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -278,6 +280,7 @@ uint32_t              HAL_NAND_Read_Status(NAND_HandleTypeDef *hnand);
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup NAND_Private_Constants NAND Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define NAND_DEVICE                0x80000000UL
@@ -313,6 +316,7 @@ uint32_t              HAL_NAND_Read_Status(NAND_HandleTypeDef *hnand);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup NAND_Private_Macros NAND Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

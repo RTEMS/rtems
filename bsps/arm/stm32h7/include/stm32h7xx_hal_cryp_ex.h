@@ -40,6 +40,7 @@ extern "C" {
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup CRYPEx_Private_Types CRYPEx Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -49,6 +50,7 @@ extern "C" {
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup CRYPEx_Private_Variables CRYPEx Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -58,6 +60,7 @@ extern "C" {
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup CRYPEx_Private_Constants CRYPEx Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -67,6 +70,7 @@ extern "C" {
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup CRYPEx_Private_Macros CRYPEx Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -76,6 +80,7 @@ extern "C" {
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup CRYPEx_Private_Functions CRYPEx Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -85,6 +90,7 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup CRYPEx_Exported_Functions CRYPEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

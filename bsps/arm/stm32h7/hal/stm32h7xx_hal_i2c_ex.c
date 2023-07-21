@@ -55,6 +55,7 @@
   */
 
 /** @defgroup I2CEx I2CEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief I2C Extended HAL module driver
   * @{
   */
@@ -69,10 +70,12 @@
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup I2CEx_Exported_Functions I2C Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2CEx_Exported_Functions_Group1 Filter Mode Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Filter Mode Functions
   *
 @verbatim
@@ -186,6 +189,7 @@ HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c, uint32_
   */
 
 /** @defgroup I2CEx_Exported_Functions_Group2 WakeUp Mode Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    WakeUp Mode Functions
   *
 @verbatim
@@ -281,6 +285,7 @@ HAL_StatusTypeDef HAL_I2CEx_DisableWakeUp(I2C_HandleTypeDef *hi2c)
   */
 
 /** @defgroup I2CEx_Exported_Functions_Group3 Fast Mode Plus Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Fast Mode Plus Functions
   *
 @verbatim

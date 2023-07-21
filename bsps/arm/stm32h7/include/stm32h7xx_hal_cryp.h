@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup CRYP_Exported_Types CRYP Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -150,6 +151,7 @@ typedef struct
 
 #if (USE_HAL_CRYP_REGISTER_CALLBACKS == 1)
 /** @defgroup HAL_CRYP_Callback_ID_enumeration_definition HAL CRYP Callback ID enumeration definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL CRYP Callback ID enumeration definition
   * @{
   */
@@ -168,6 +170,7 @@ typedef enum
   */
 
 /** @defgroup HAL_CRYP_Callback_pointer_definition HAL CRYP Callback pointer definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL CRYP Callback pointer definition
   * @{
   */
@@ -182,10 +185,12 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CRYP_Exported_Constants CRYP Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRYP_Error_Definition   CRYP Error Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_CRYP_ERROR_NONE              0x00000000U  /*!< No error        */
@@ -206,6 +211,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
 
 
 /** @defgroup CRYP_Data_Width_Unit CRYP Data Width Unit
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -217,6 +223,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Header_Width_Unit CRYP Header Width Unit
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -228,6 +235,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Algorithm_Mode CRYP Algorithm Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -246,6 +254,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Key_Size CRYP Key Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -258,6 +267,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Data_Type CRYP Data Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -271,6 +281,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Interrupt  CRYP Interrupt
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -282,6 +293,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Flags CRYP Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -301,6 +313,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
   */
 
 /** @defgroup CRYP_Configuration_Skip CRYP Key and IV Configuration Skip Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -317,6 +330,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup CRYP_Exported_Macros CRYP Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -409,6 +423,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup CRYP_Exported_Functions CRYP Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -470,10 +485,12 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
 
 /* Private macros --------------------------------------------------------*/
 /** @defgroup CRYP_Private_Macros   CRYP Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRYP_IS_CRYP_Definitions CRYP Private macros to check input parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -510,6 +527,7 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup CRYP_Private_Constants CRYP Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -518,6 +536,7 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
   */
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup CRYP_Private_Defines CRYP Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -527,6 +546,7 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup CRYP_Private_Variables CRYP Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -535,6 +555,7 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
   */
 /* Private functions prototypes ----------------------------------------------*/
 /** @defgroup CRYP_Private_Functions_Prototypes CRYP Private Functions Prototypes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -544,6 +565,7 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup CRYP_Private_Functions CRYP Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

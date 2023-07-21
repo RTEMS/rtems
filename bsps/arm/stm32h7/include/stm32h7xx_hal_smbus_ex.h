@@ -38,10 +38,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SMBUSEx_Exported_Constants SMBUS Extended Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SMBUSEx_FastModePlus SMBUS Extended Fast Mode Plus
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMBUS_FMP_NOT_SUPPORTED           0xAAAA0000U                                     /*!< Fast Mode Plus not supported       */
@@ -68,6 +70,7 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup SMBUSEx_Exported_Macros SMBUS Extended Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -105,6 +108,7 @@ void HAL_SMBUSEx_DisableFastModePlus(uint32_t ConfigFastModePlus);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup SMBUSEx_Private_Constants SMBUS Extended Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -114,6 +118,7 @@ void HAL_SMBUSEx_DisableFastModePlus(uint32_t ConfigFastModePlus);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup SMBUSEx_Private_Macro SMBUS Extended Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_SMBUS_FASTMODEPLUS(__CONFIG__) ((((__CONFIG__) & SMBUS_FASTMODEPLUS_PB6)  == SMBUS_FASTMODEPLUS_PB6)    || \
@@ -130,6 +135,7 @@ void HAL_SMBUSEx_DisableFastModePlus(uint32_t ConfigFastModePlus);
 
 /* Private Functions ---------------------------------------------------------*/
 /** @defgroup SMBUSEx_Private_Functions SMBUS Extended Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Private functions are defined in stm32h7xx_hal_smbus_ex.c file */

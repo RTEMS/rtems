@@ -37,6 +37,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup DFSDM_Exported_Types DFSDM Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -295,10 +296,12 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup DFSDM_Exported_Constants DFSDM Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DFSDM_Channel_OuputClock DFSDM channel output clock selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_CHANNEL_OUTPUT_CLOCK_SYSTEM    0x00000000U             /*!< Source for output clock is system clock */
@@ -308,6 +311,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Channel_InputMultiplexer DFSDM channel input multiplexer
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_CHANNEL_EXTERNAL_INPUTS    0x00000000U             /*!< Data are taken from external inputs */
@@ -318,6 +322,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Channel_DataPacking DFSDM channel input data packing
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_CHANNEL_STANDARD_MODE         0x00000000U             /*!< Standard data packing mode */
@@ -328,6 +333,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Channel_InputPins DFSDM channel input pins
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_CHANNEL_SAME_CHANNEL_PINS      0x00000000U             /*!< Input from pins on same channel */
@@ -337,6 +343,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Channel_SerialInterfaceType DFSDM channel serial interface type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_CHANNEL_SPI_RISING         0x00000000U             /*!< SPI with rising edge */
@@ -348,6 +355,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Channel_SpiClock DFSDM channel SPI clock selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_CHANNEL_SPI_CLOCK_EXTERNAL              0x00000000U              /*!< External SPI clock */
@@ -359,6 +367,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Channel_AwdFilterOrder DFSDM channel analog watchdog filter order
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_CHANNEL_FASTSINC_ORDER 0x00000000U             /*!< FastSinc filter type */
@@ -370,6 +379,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Filter_Trigger DFSDM filter conversion trigger
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_FILTER_SW_TRIGGER   0x00000000U /*!< Software trigger */
@@ -380,6 +390,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Filter_ExtTrigger DFSDM filter external trigger
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_FILTER_EXT_TRIG_TIM1_TRGO      0x00000000U                                       /*!< For all DFSDM filters */
@@ -413,6 +424,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Filter_ExtTriggerEdge DFSDM filter external trigger edge
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_FILTER_EXT_TRIG_RISING_EDGE  DFSDM_FLTCR1_JEXTEN_0 /*!< External rising edge */
@@ -423,6 +435,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Filter_SincOrder DFSDM filter sinc order
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_FILTER_FASTSINC_ORDER 0x00000000U                                 /*!< FastSinc filter type */
@@ -436,6 +449,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Filter_AwdDataSource DFSDM filter analog watchdog data source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_FILTER_AWD_FILTER_DATA  0x00000000U             /*!< From digital filter */
@@ -445,6 +459,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Filter_ErrorCode DFSDM filter error code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_FILTER_ERROR_NONE             0x00000000U /*!< No error */
@@ -459,6 +474,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_BreakSignals DFSDM break signals
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_NO_BREAK_SIGNAL 0x00000000U /*!< No break signal */
@@ -471,6 +487,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Channel_Selection DFSDM Channel Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* DFSDM Channels ------------------------------------------------------------*/
@@ -494,6 +511,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_ContinuousMode DFSDM Continuous Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_CONTINUOUS_CONV_OFF            0x00000000U /*!< Conversion are not continuous */
@@ -503,6 +521,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_AwdThreshold DFSDM analog watchdog threshold
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DFSDM_AWD_HIGH_THRESHOLD            0x00000000U /*!< Analog watchdog high threshold */
@@ -518,6 +537,7 @@ typedef void (*pDFSDM_Filter_AwdCallbackTypeDef)(DFSDM_Filter_HandleTypeDef *hdf
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup DFSDM_Exported_Macros DFSDM Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 
@@ -612,6 +632,7 @@ void HAL_DFSDM_ChannelScdCallback(DFSDM_Channel_HandleTypeDef *hdfsdm_channel);
   */
 
 /** @defgroup DFSDM_Exported_Functions_Group3_Channel Channel state function
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Channel state function *****************************************************/
@@ -703,6 +724,7 @@ void HAL_DFSDM_FilterErrorCallback(DFSDM_Filter_HandleTypeDef *hdfsdm_filter);
   */
 
 /** @defgroup DFSDM_Exported_Functions_Group4_Filter Filter state functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Filter state functions *****************************************************/
@@ -719,6 +741,7 @@ uint32_t                      HAL_DFSDM_FilterGetError(const DFSDM_Filter_Handle
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup DFSDM_Private_Macros DFSDM Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
 * @{
 */
 #define IS_DFSDM_CHANNEL_OUTPUT_CLOCK(CLOCK)          (((CLOCK) == DFSDM_CHANNEL_OUTPUT_CLOCK_SYSTEM) || \

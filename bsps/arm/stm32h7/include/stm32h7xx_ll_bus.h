@@ -50,6 +50,7 @@ extern "C" {
 #if defined(RCC)
 
 /** @defgroup BUS_LL BUS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -63,10 +64,12 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup BUS_LL_Exported_Constants BUS Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup BUS_LL_EC_AHB3_GRP1_PERIPH  AHB3 GRP1 PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_AHB3_GRP1_PERIPH_MDMA           RCC_AHB3ENR_MDMAEN
@@ -117,6 +120,7 @@ extern "C" {
 
 
 /** @defgroup BUS_LL_EC_AHB1_GRP1_PERIPH  AHB1 GRP1 PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_AHB1_GRP1_PERIPH_DMA1           RCC_AHB1ENR_DMA1EN
@@ -145,6 +149,7 @@ extern "C" {
 
 
 /** @defgroup BUS_LL_EC_AHB2_GRP1_PERIPH  AHB2 GRP1 PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_AHB2_GRP1_PERIPH_DCMI           RCC_AHB2ENR_DCMIEN
@@ -189,6 +194,7 @@ extern "C" {
 
 
 /** @defgroup BUS_LL_EC_AHB4_GRP1_PERIPH  AHB4 GRP1 PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_AHB4_GRP1_PERIPH_GPIOA          RCC_AHB4ENR_GPIOAEN
@@ -234,6 +240,7 @@ extern "C" {
 
 
 /** @defgroup BUS_LL_EC_APB3_GRP1_PERIPH  APB3 GRP1 PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(LTDC)
@@ -252,6 +259,7 @@ extern "C" {
 
 
 /** @defgroup BUS_LL_EC_APB1_GRP1_PERIPH  APB1 GRP1 PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_APB1_GRP1_PERIPH_TIM2           RCC_APB1LENR_TIM2EN
@@ -295,6 +303,7 @@ extern "C" {
 
 
 /** @defgroup BUS_LL_EC_APB1_GRP2_PERIPH  APB1 GRP2 PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_APB1_GRP2_PERIPH_CRS            RCC_APB1HENR_CRSEN
@@ -314,6 +323,7 @@ extern "C" {
 
 
 /** @defgroup BUS_LL_EC_APB2_GRP1_PERIPH  APB2 GRP1 PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_APB2_GRP1_PERIPH_TIM1           RCC_APB2ENR_TIM1EN
@@ -349,6 +359,7 @@ extern "C" {
 
 
 /** @defgroup BUS_LL_EC_APB4_GRP1_PERIPH  APB4 GRP1 PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_APB4_GRP1_PERIPH_SYSCFG         RCC_APB4ENR_SYSCFGEN
@@ -383,6 +394,7 @@ extern "C" {
   */
 
 /** @defgroup BUS_LL_EC_CLKAM_PERIPH  CLKAM PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3AMR_BDMAAMEN)
@@ -478,6 +490,7 @@ extern "C" {
 
 #if defined(RCC_CKGAENR_AXICKG)
 /** @defgroup BUS_LL_EC_CKGA_PERIPH  CKGA (AXI Clocks Gating) PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CKGA_PERIPH_AXI            RCC_CKGAENR_AXICKG
@@ -515,10 +528,12 @@ extern "C" {
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup BUS_LL_Exported_Functions BUS Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup BUS_LL_EF_AHB3 AHB3
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -835,6 +850,7 @@ __STATIC_INLINE void LL_AHB3_GRP1_DisableClockSleep(uint32_t Periphs)
   */
 
 /** @defgroup BUS_LL_EF_AHB1 AHB1
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1087,6 +1103,7 @@ __STATIC_INLINE void LL_AHB1_GRP1_DisableClockSleep(uint32_t Periphs)
   */
 
 /** @defgroup BUS_LL_EF_AHB2 AHB2
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1337,6 +1354,7 @@ __STATIC_INLINE void LL_AHB2_GRP1_DisableClockSleep(uint32_t Periphs)
   */
 
 /** @defgroup BUS_LL_EF_AHB4 AHB4
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1659,6 +1677,7 @@ __STATIC_INLINE void LL_AHB4_GRP1_DisableClockSleep(uint32_t Periphs)
   */
 
 /** @defgroup BUS_LL_EF_APB3 APB3
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1797,6 +1816,7 @@ __STATIC_INLINE void LL_APB3_GRP1_DisableClockSleep(uint32_t Periphs)
   */
 
 /** @defgroup BUS_LL_EF_APB1 APB1
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2433,6 +2453,7 @@ __STATIC_INLINE void LL_APB1_GRP2_DisableClockSleep(uint32_t Periphs)
   */
 
 /** @defgroup BUS_LL_EF_APB2 APB2
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2771,6 +2792,7 @@ __STATIC_INLINE void LL_APB2_GRP1_DisableClockSleep(uint32_t Periphs)
   */
 
 /** @defgroup BUS_LL_EF_APB4 APB4
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3077,6 +3099,7 @@ __STATIC_INLINE void LL_APB4_GRP1_DisableClockSleep(uint32_t Periphs)
   */
 
 /** @defgroup BUS_LL_EF_CLKAM CLKAM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3202,6 +3225,7 @@ __STATIC_INLINE void LL_CLKAM_Disable(uint32_t Periphs)
   */
 
 /** @defgroup BUS_LL_EF_CKGA CKGA
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

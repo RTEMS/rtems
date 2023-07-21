@@ -38,6 +38,7 @@
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup PWR_Exported_Types PWR Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -63,10 +64,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup PWR_Exported_Constants PWR Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PWR_PVD_detection_level PWR PVD detection level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_PVDLEVEL_0  PWR_CR1_PLS_LEV0  /*!< Programmable voltage detector
@@ -90,6 +93,7 @@ typedef struct
   */
 
 /** @defgroup PWR_PVD_Mode PWR PVD Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_PVD_MODE_NORMAL               (0x00000000U) /*!< Basic mode is used                                        */
@@ -104,6 +108,7 @@ typedef struct
   */
 
 /** @defgroup PWR_Regulator_state_in_STOP_mode PWR Regulator state in SLEEP/STOP mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_MAINREGULATOR_ON      (0U)
@@ -113,6 +118,7 @@ typedef struct
   */
 
 /** @defgroup PWR_SLEEP_mode_entry PWR SLEEP mode entry
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_SLEEPENTRY_WFI  (0x01U)
@@ -122,6 +128,7 @@ typedef struct
   */
 
 /** @defgroup PWR_STOP_mode_entry PWR STOP mode entry
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_STOPENTRY_WFI  (0x01U)
@@ -131,6 +138,7 @@ typedef struct
   */
 
 /** @defgroup PWR_Regulator_Voltage_Scale PWR Regulator Voltage Scale
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(PWR_SRDCR_VOS)
@@ -149,6 +157,7 @@ typedef struct
   */
 
 /** @defgroup PWR_Flag PWR Flag
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* PWR CPU flag */
@@ -198,6 +207,7 @@ typedef struct
   */
 
 /** @defgroup PWR_ENABLE_WUP_Mask PWR Enable WUP Mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  PWR_EWUP_MASK  (0x0FFF3F3FU)
@@ -210,6 +220,7 @@ typedef struct
   */
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup PWR_Exported_Macro PWR Exported Macro
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -726,10 +737,12 @@ void HAL_PWR_DisableSEVOnPend   (void);
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup PWR_Private_Constants PWR Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PWR_PVD_EXTI_Line PWR PVD EXTI Line
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_EXTI_LINE_PVD  EXTI_IMR1_IM16 /*!< External interrupt line 16
@@ -743,10 +756,12 @@ void HAL_PWR_DisableSEVOnPend   (void);
   */
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup PWR_Private_Macros PWR Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PWR_IS_PWR_Definitions PWR Private macros to check input parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Check PVD level parameter */

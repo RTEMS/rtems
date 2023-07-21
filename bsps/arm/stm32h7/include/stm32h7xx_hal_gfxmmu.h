@@ -39,6 +39,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup GFXMMU_Exported_Types GFXMMU Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -172,10 +173,12 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup GFXMMU_Exported_Constants GFXMMU Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup GFXMMU_BlocksPerLine GFXMMU blocks per line
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_256BLOCKS 0x00000000U     /*!< 256 blocks of 16 bytes per line */
@@ -185,6 +188,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_CacheLock GFXMMU cache lock
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_CACHE_LOCK_DISABLE 0x00000000U  /*!< Cache not locked to a buffer */
@@ -194,6 +198,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_CacheLockBuffer GFXMMU cache lock buffer
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_CACHE_LOCK_BUFFER0 0x00000000U     /*!< Cache locked to buffer 0 */
@@ -205,6 +210,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_CacheForce GFXMMU cache force
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_CACHE_FORCE_DISABLE 0x00000000U  /*!< Caching not forced */
@@ -214,6 +220,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_OutterBufferability GFXMMU outer bufferability
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_OUTTER_BUFFERABILITY_DISABLE 0x00000000U  /*!< No bufferable */
@@ -223,6 +230,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_OutterCachability GFXMMU outer cachability
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_OUTTER_CACHABILITY_DISABLE 0x00000000U  /*!< No cacheable */
@@ -232,6 +240,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_Prefetch GFXMMU pre-fetch
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_PREFETCH_DISABLE GFXMMU_CR_PD /*!< Pre-fetch disable */
@@ -241,6 +250,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_Interrupts GFXMMU interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_AHB_MASTER_ERROR_IT GFXMMU_CR_AMEIE /*!< AHB master error interrupt */
@@ -253,6 +263,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_Error_Code GFXMMU Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_ERROR_NONE             0x00000000U    /*!< No error */
@@ -269,6 +280,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_LutLineStatus GFXMMU LUT line status
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_LUT_LINE_DISABLE 0x00000000U     /*!< LUT line disabled */
@@ -278,6 +290,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_CacheForceParam GFXMMU cache force parameter
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GFXMMU_CACHE_FORCE_FLUSH      GFXMMU_CCR_FF /*!< Force cache flush */
@@ -293,6 +306,7 @@ typedef void (*pGFXMMU_CallbackTypeDef)(GFXMMU_HandleTypeDef *hgfxmmu);
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup GFXMMU_Exported_Macros GFXMMU Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 
@@ -370,6 +384,7 @@ void HAL_GFXMMU_ErrorCallback(GFXMMU_HandleTypeDef *hgfxmmu);
   */
 
 /** @defgroup GFXMMU_Exported_Functions_Group3 State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* State function *************************************************************/
@@ -387,6 +402,7 @@ uint32_t HAL_GFXMMU_GetError(GFXMMU_HandleTypeDef *hgfxmmu);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup GFXMMU_Private_Macros GFXMMU Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
 * @{
 */
 #define IS_GFXMMU_BLOCKS_PER_LINE(VALUE) (((VALUE) == GFXMMU_256BLOCKS) || \

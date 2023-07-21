@@ -37,6 +37,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup GPIO_Exported_Types GPIO Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -76,10 +77,12 @@ typedef enum
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup GPIO_Exported_Constants  GPIO Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup GPIO_pins_define  GPIO pins define
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GPIO_PIN_0                 ((uint16_t)0x0001)  /* Pin 0 selected    */
@@ -106,6 +109,7 @@ typedef enum
   */
 
 /** @defgroup GPIO_mode_define  GPIO mode define
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief GPIO Configuration Mode
   *        Elements values convention: 0x00WX00YZ
   *           - W  : EXTI trigger detection on 3 bits
@@ -132,6 +136,7 @@ typedef enum
   */
 
 /** @defgroup GPIO_speed_define  GPIO speed define
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief GPIO Output Maximum frequency
   * @{
   */
@@ -144,6 +149,7 @@ typedef enum
   */
 
 /** @defgroup GPIO_pull_define  GPIO pull define
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief GPIO Pull-Up or Pull-Down Activation
   * @{
   */
@@ -160,6 +166,7 @@ typedef enum
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup GPIO_Exported_Macros GPIO Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -280,6 +287,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup GPIO_Private_Constants GPIO Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GPIO_MODE_Pos                           0u
@@ -307,6 +315,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup GPIO_Private_Macros GPIO Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_GPIO_PIN_ACTION(ACTION) (((ACTION) == GPIO_PIN_RESET) || ((ACTION) == GPIO_PIN_SET))
@@ -336,6 +345,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup GPIO_Private_Functions GPIO Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

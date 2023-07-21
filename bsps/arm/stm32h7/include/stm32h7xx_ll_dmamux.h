@@ -34,6 +34,7 @@ extern "C" {
 #if defined (DMAMUX1) || defined (DMAMUX2)
 
 /** @defgroup DMAMUX_LL DMAMUX
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -41,6 +42,7 @@ extern "C" {
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup DMAMUX_LL_Private_Constants DMAMUX Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Define used to get DMAMUX CCR register size */
@@ -64,9 +66,11 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup DMAMUX_LL_Exported_Constants DMAMUX Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup DMAMUX_LL_EC_CLEAR_FLAG Clear Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_DMAMUX_WriteReg function
   * @{
   */
@@ -99,6 +103,7 @@ extern "C" {
   */
 
 /** @defgroup DMAMUX_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_DMAMUX_ReadReg function
   * @{
   */
@@ -131,6 +136,7 @@ extern "C" {
   */
 
 /** @defgroup DMAMUX_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_DMA_ReadReg and  LL_DMAMUX_WriteReg functions
   * @{
   */
@@ -141,6 +147,7 @@ extern "C" {
   */
 
 /** @defgroup DMAMUX1_Request_selection DMAMUX1 Request selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAMUX1 Request selection
   * @{
   */
@@ -314,6 +321,7 @@ extern "C" {
   */
 
 /** @defgroup DMAMUX2_Request_selection DMAMUX2 Request selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAMUX2 Request selection
   * @{
   */
@@ -352,6 +360,7 @@ extern "C" {
 
 
 /** @defgroup DMAMUX_LL_EC_CHANNEL DMAMUX Channel
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMAMUX_CHANNEL_0     0x00000000U  /*!< DMAMUX1 Channel 0  connected to DMA1 Channel 0 , DMAMUX2 Channel 0 connected to BDMA Channel 0 */
@@ -375,6 +384,7 @@ extern "C" {
   */
 
 /** @defgroup DMAMUX_LL_EC_SYNC_NO Synchronization Signal Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMAMUX_SYNC_NO_EVENT            0x00000000U                               /*!< All requests are blocked                            */
@@ -386,6 +396,7 @@ extern "C" {
   */
 
 /** @defgroup DMAMUX_LL_EC_SYNC_EVT Synchronization Signal Event
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMAMUX1_SYNC_DMAMUX1_CH0_EVT   0x00000000U   /*!< DMAMUX1 synchronization Signal is DMAMUX1 Channel0 Event */
@@ -419,6 +430,7 @@ extern "C" {
   */
 
 /** @defgroup DMAMUX_LL_EC_REQUEST_GENERATOR Request Generator Channel
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMAMUX_REQ_GEN_0           0x00000000U
@@ -434,6 +446,7 @@ extern "C" {
   */
 
 /** @defgroup DMAMUX_LL_EC_REQUEST_GEN_POLARITY External Request Signal Generation Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMAMUX_REQ_GEN_NO_EVENT             0x00000000U                                  /*!< No external DMA request  generation                        */
@@ -445,6 +458,7 @@ extern "C" {
   */
 
 /** @defgroup DMAMUX_LL_EC_REQUEST_GEN External Request Signal Generation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMAMUX1_REQ_GEN_DMAMUX1_CH0_EVT   0U   /*!< DMAMUX1 Request generator Signal is DMAMUX1 Channel0 Event        */
@@ -502,10 +516,12 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup DMAMUX_LL_Exported_Macros DMAMUX Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DMAMUX_LL_EM_WRITE_READ Common Write and read registers macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -534,10 +550,12 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup DMAMUX_LL_Exported_Functions DMAMUX Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 
 /** @defgroup DMAMUX_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -1619,6 +1637,7 @@ __STATIC_INLINE uint32_t LL_DMAMUX_GetRequestSignalID(DMAMUX_Channel_TypeDef *DM
   */
 
 /** @defgroup DMAMUX_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2251,6 +2270,7 @@ __STATIC_INLINE void LL_DMAMUX_ClearFlag_RGO7(DMAMUX_Channel_TypeDef *DMAMUXx)
   */
 
 /** @defgroup DMAMUX_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

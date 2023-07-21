@@ -40,6 +40,7 @@
 /* Private types -------------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup RNG_Ex_Private_Defines RNGEx Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /*  Health test control register information to use in CCM algorithm */

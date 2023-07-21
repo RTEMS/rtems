@@ -35,16 +35,19 @@ extern "C" {
   */
 
 /** @defgroup SD SD
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SD HAL module driver
   * @{
   */
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SD_Exported_Types SD Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SD_Exported_Types_Group1 SD State enumeration structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -63,6 +66,7 @@ typedef enum
   */
 
 /** @defgroup SD_Exported_Types_Group2 SD Card State enumeration structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef uint32_t HAL_SD_CardStateTypeDef;
@@ -81,6 +85,7 @@ typedef uint32_t HAL_SD_CardStateTypeDef;
   */
 
 /** @defgroup SD_Exported_Types_Group3 SD Handle Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SD_InitTypeDef      SDMMC_InitTypeDef
@@ -169,6 +174,7 @@ typedef struct
   */
 
 /** @defgroup SD_Exported_Types_Group4 Card Specific Data: CSD Register
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -216,6 +222,7 @@ typedef struct
   */
 
 /** @defgroup SD_Exported_Types_Group5 Card Identification Data: CID Register
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -237,6 +244,7 @@ typedef struct
   */
 
 /** @defgroup SD_Exported_Types_Group6 SD Card Status returned by ACMD13
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -261,6 +269,7 @@ typedef struct
 
 #if defined (USE_HAL_SD_REGISTER_CALLBACKS) && (USE_HAL_SD_REGISTER_CALLBACKS == 1U)
 /** @defgroup SD_Exported_Types_Group7 SD Callback ID enumeration definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -282,6 +291,7 @@ typedef enum
   */
 
 /** @defgroup SD_Exported_Types_Group8 SD Callback pointer definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef void (*pSD_CallbackTypeDef)(SD_HandleTypeDef *hsd);
@@ -298,12 +308,14 @@ typedef void (*pSD_TransceiverCallbackTypeDef)(FlagStatus status);
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SD_Exported_Constants SD Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 #define BLOCKSIZE   ((uint32_t)512U) /*!< Block size is 512 bytes */
 
 /** @defgroup SD_Exported_Constansts_Group1 SD Error status enumeration Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_SD_ERROR_NONE                     SDMMC_ERROR_NONE                        /*!< No error                                                     */
@@ -351,6 +363,7 @@ typedef void (*pSD_TransceiverCallbackTypeDef)(FlagStatus status);
   */
 
 /** @defgroup SD_Exported_Constansts_Group2 SD context enumeration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define   SD_CONTEXT_NONE                 ((uint32_t)0x00000000U)  /*!< None                             */
@@ -366,6 +379,7 @@ typedef void (*pSD_TransceiverCallbackTypeDef)(FlagStatus status);
   */
 
 /** @defgroup SD_Exported_Constansts_Group3 SD Supported Memory Cards
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CARD_NORMAL_SPEED        ((uint32_t)0x00000000U)    /*!< Normal Speed Card <12.5Mo/s , Spec Version 1.01    */
@@ -382,6 +396,7 @@ typedef void (*pSD_TransceiverCallbackTypeDef)(FlagStatus status);
   */
 
 /** @defgroup SD_Exported_Constansts_Group4 SD Supported Version
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CARD_V1_X                  ((uint32_t)0x00000000U)
@@ -396,6 +411,7 @@ typedef void (*pSD_TransceiverCallbackTypeDef)(FlagStatus status);
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup SD_Exported_macros SD Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief macros to handle interrupts and specific clock configurations
   * @{
   */
@@ -613,10 +629,12 @@ typedef void (*pSD_TransceiverCallbackTypeDef)(FlagStatus status);
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SD_Exported_Functions SD Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SD_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_SD_Init(SD_HandleTypeDef *hsd);
@@ -629,6 +647,7 @@ void              HAL_SD_MspDeInit(SD_HandleTypeDef *hsd);
   */
 
 /** @defgroup SD_Exported_Functions_Group2 Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Blocking mode: Polling */
@@ -678,6 +697,7 @@ HAL_StatusTypeDef HAL_SD_UnRegisterTransceiverCallback(SD_HandleTypeDef *hsd);
   */
 
 /** @defgroup SD_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_SD_ConfigWideBusOperation(SD_HandleTypeDef *hsd, uint32_t WideMode);
@@ -687,6 +707,7 @@ HAL_StatusTypeDef HAL_SD_ConfigSpeedBusOperation(SD_HandleTypeDef *hsd, uint32_t
   */
 
 /** @defgroup SD_Exported_Functions_Group4 SD card related functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_SD_CardStateTypeDef HAL_SD_GetCardState(SD_HandleTypeDef *hsd);
@@ -699,6 +720,7 @@ HAL_StatusTypeDef       HAL_SD_GetCardInfo(SD_HandleTypeDef *hsd, HAL_SD_CardInf
   */
 
 /** @defgroup SD_Exported_Functions_Group5 Peripheral State and Errors functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_SD_StateTypeDef HAL_SD_GetState(SD_HandleTypeDef *hsd);
@@ -708,6 +730,7 @@ uint32_t            HAL_SD_GetError(SD_HandleTypeDef *hsd);
   */
 
 /** @defgroup SD_Exported_Functions_Group6 Perioheral Abort management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_SD_Abort(SD_HandleTypeDef *hsd);
@@ -718,6 +741,7 @@ HAL_StatusTypeDef HAL_SD_Abort_IT(SD_HandleTypeDef *hsd);
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup SD_Private_Types SD Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -727,6 +751,7 @@ HAL_StatusTypeDef HAL_SD_Abort_IT(SD_HandleTypeDef *hsd);
 
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup SD_Private_Defines SD Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -736,6 +761,7 @@ HAL_StatusTypeDef HAL_SD_Abort_IT(SD_HandleTypeDef *hsd);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup SD_Private_Variables SD Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -745,6 +771,7 @@ HAL_StatusTypeDef HAL_SD_Abort_IT(SD_HandleTypeDef *hsd);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup SD_Private_Constants SD Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -754,6 +781,7 @@ HAL_StatusTypeDef HAL_SD_Abort_IT(SD_HandleTypeDef *hsd);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup SD_Private_Macros SD Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -763,6 +791,7 @@ HAL_StatusTypeDef HAL_SD_Abort_IT(SD_HandleTypeDef *hsd);
 
 /* Private functions prototypes ----------------------------------------------*/
 /** @defgroup SD_Private_Functions_Prototypes SD Private Functions Prototypes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -772,6 +801,7 @@ HAL_StatusTypeDef HAL_SD_Abort_IT(SD_HandleTypeDef *hsd);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup SD_Private_Functions SD Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

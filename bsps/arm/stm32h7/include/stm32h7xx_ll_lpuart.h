@@ -34,12 +34,14 @@ extern "C" {
 #if defined (LPUART1)
 
 /** @defgroup LPUART_LL LPUART
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup LPUART_LL_Private_Variables LPUART Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Array used to get the LPUART prescaler division decimal values versus @ref LPUART_LL_EC_PRESCALER values */
@@ -64,6 +66,7 @@ static const uint16_t LPUART_PRESCALER_TAB[] =
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup LPUART_LL_Private_Constants LPUART Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Defines used in Baud Rate related macros and corresponding register setting computation */
@@ -78,6 +81,7 @@ static const uint16_t LPUART_PRESCALER_TAB[] =
 /* Private macros ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup LPUART_LL_Private_Macros LPUART Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -88,6 +92,7 @@ static const uint16_t LPUART_PRESCALER_TAB[] =
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup LPUART_LL_ES_INIT LPUART Exported Init structures
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -146,10 +151,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup LPUART_LL_Exported_Constants LPUART Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup LPUART_LL_EC_CLEAR_FLAG Clear Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_LPUART_WriteReg function
   * @{
   */
@@ -167,6 +174,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_LPUART_ReadReg function
   * @{
   */
@@ -196,6 +204,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_LPUART_ReadReg and  LL_LPUART_WriteReg functions
   * @{
   */
@@ -219,6 +228,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_FIFOTHRESHOLD FIFO Threshold
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_FIFOTHRESHOLD_1_8        0x00000000U /*!< FIFO reaches 1/8 of its depth */
@@ -232,6 +242,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_DIRECTION Direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_DIRECTION_NONE  0x00000000U                  /*!< Transmitter and Receiver are disabled           */
@@ -243,6 +254,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_PARITY Parity Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_PARITY_NONE 0x00000000U                    /*!< Parity control disabled                            */
@@ -253,6 +265,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_WAKEUP Wakeup
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_WAKEUP_IDLELINE    0x00000000U    /*!<  LPUART wake up from Mute mode on Idle Line    */
@@ -262,6 +275,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_DATAWIDTH Datawidth
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_DATAWIDTH_7B USART_CR1_M1 /*!< 7 bits word length : Start bit, 7 data bits, n stop bits */
@@ -272,6 +286,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_PRESCALER Clock Source Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_PRESCALER_DIV1   0x00000000U                    /*!< Input clock not divided   */
@@ -300,6 +315,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_STOPBITS Stop Bits
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_STOPBITS_1         0x00000000U             /*!< 1 stop bit */
@@ -309,6 +325,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_TXRX TX RX Pins Swap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_TXRX_STANDARD      0x00000000U        /*!< TX/RX pins are used as defined in standard pinout */
@@ -318,6 +335,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_RXPIN_LEVEL RX Pin Active Level Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_RXPIN_LEVEL_STANDARD   0x00000000U       /*!< RX pin signal works using the standard logic levels */
@@ -327,6 +345,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_TXPIN_LEVEL TX Pin Active Level Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_TXPIN_LEVEL_STANDARD  0x00000000U       /*!< TX pin signal works using the standard logic levels */
@@ -336,6 +355,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_BINARY_LOGIC Binary Data Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_BINARY_LOGIC_POSITIVE 0x00000000U       /*!< Logical data from the data register are send/received
@@ -348,6 +368,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_BITORDER Bit Order
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_BITORDER_LSBFIRST 0x00000000U        /*!< data is transmitted/received with data bit 0 first,
@@ -359,6 +380,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_ADDRESS_DETECT Address Length Detection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_ADDRESS_DETECT_4B 0x00000000U     /*!< 4-bit address detection method selected */
@@ -368,6 +390,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_HWCONTROL Hardware Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_HWCONTROL_NONE    0x00000000U                       /*!< CTS and RTS hardware flow control disabled */
@@ -381,6 +404,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_WAKEUP_ON Wakeup Activation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_WAKEUP_ON_ADDRESS   0x00000000U                          /*!< Wake up active on address match */
@@ -391,6 +415,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_DE_POLARITY Driver Enable Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_DE_POLARITY_HIGH         0x00000000U    /*!< DE signal is active high */
@@ -400,6 +425,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EC_DMA_REG_DATA DMA Register Data
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_LPUART_DMA_REG_DATA_TRANSMIT    0x00000000U    /*!< Get address of data register used for transmission */
@@ -414,10 +440,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup LPUART_LL_Exported_Macros LPUART Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup LPUART_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -442,6 +470,7 @@ typedef struct
   */
 
 /** @defgroup LPUART_LL_EM_Exported_Macros_Helper Helper Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -479,10 +508,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup LPUART_LL_Exported_Functions LPUART Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup LPUART_LL_EF_Configuration Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1424,6 +1455,7 @@ __STATIC_INLINE uint32_t LL_LPUART_GetBaudRate(const USART_TypeDef *LPUARTx, uin
   */
 
 /** @defgroup LPUART_LL_EF_Configuration_HalfDuplex Configuration functions related to Half Duplex feature
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1465,6 +1497,7 @@ __STATIC_INLINE uint32_t LL_LPUART_IsEnabledHalfDuplex(const USART_TypeDef *LPUA
   */
 
 /** @defgroup LPUART_LL_EF_Configuration_DE Configuration functions related to Driver Enable feature
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1579,6 +1612,7 @@ __STATIC_INLINE uint32_t LL_LPUART_GetDESignalPolarity(const USART_TypeDef *LPUA
   */
 
 /** @defgroup LPUART_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1921,6 +1955,7 @@ __STATIC_INLINE void LL_LPUART_ClearFlag_WKUP(USART_TypeDef *LPUARTx)
   */
 
 /** @defgroup LPUART_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2378,6 +2413,7 @@ __STATIC_INLINE uint32_t LL_LPUART_IsEnabledIT_RXFT(const USART_TypeDef *LPUARTx
   */
 
 /** @defgroup LPUART_LL_EF_DMA_Management DMA_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2513,6 +2549,7 @@ __STATIC_INLINE uint32_t LL_LPUART_DMA_GetRegAddr(const USART_TypeDef *LPUARTx, 
   */
 
 /** @defgroup LPUART_LL_EF_Data_Management Data_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2567,6 +2604,7 @@ __STATIC_INLINE void LL_LPUART_TransmitData9(USART_TypeDef *LPUARTx, uint16_t Va
   */
 
 /** @defgroup LPUART_LL_EF_Execution Execution
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2611,6 +2649,7 @@ __STATIC_INLINE void LL_LPUART_RequestRxDataFlush(USART_TypeDef *LPUARTx)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup LPUART_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 ErrorStatus LL_LPUART_DeInit(const USART_TypeDef *LPUARTx);

@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup FMAC_Exported_Types FMAC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -248,10 +249,12 @@ typedef struct
 
 
 /** @defgroup FMAC_Exported_Constants FMAC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FMAC_Error_Code FMAC Error code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_FMAC_ERROR_NONE                0x00000000U /*!< No error               */
@@ -271,6 +274,7 @@ typedef struct
   */
 
 /** @defgroup FMAC_Functions FMAC Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMAC_FUNC_LOAD_X1                  (FMAC_PARAM_FUNC_0)                        /*!< Load X1 buffer             */
@@ -283,6 +287,7 @@ typedef struct
   */
 
 /** @defgroup FMAC_Data_Buffer_Threshold FMAC Data Buffer Threshold
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @note     This parameter sets a watermark for buffer full (input) or buffer empty (output).
   */
@@ -308,6 +313,7 @@ typedef struct
   */
 
 /** @defgroup FMAC_Buffer_Access FMAC Buffer Access
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMAC_BUFFER_ACCESS_NONE            0x00U           /*!< Buffer handled by an external IP (ADC for instance) */
@@ -319,6 +325,7 @@ typedef struct
   */
 
 /** @defgroup FMAC_Clip_State FMAC Clip State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMAC_CLIP_DISABLED                 0x00000000U     /*!< Clipping disabled */
@@ -328,6 +335,7 @@ typedef struct
   */
 
 /** @defgroup FMAC_Flags  FMAC status flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMAC_FLAG_YEMPTY                   FMAC_SR_YEMPTY  /*!< Y Buffer Empty Flag */
@@ -341,6 +349,7 @@ typedef struct
   */
 
 /** @defgroup FMAC_Interrupts_Enable FMAC Interrupts Enable bit
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMAC_IT_RIEN                       FMAC_CR_RIEN    /*!< Read Interrupt Enable */
@@ -360,6 +369,7 @@ typedef struct
 
 /* Exported variables --------------------------------------------------------*/
 /** @defgroup FMAC_Exported_variables FMAC Exported variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -368,6 +378,7 @@ typedef struct
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup FMAC_Exported_Macros FMAC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

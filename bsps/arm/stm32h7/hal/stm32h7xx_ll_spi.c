@@ -461,6 +461,7 @@ void LL_SPI_StructInit(LL_SPI_InitTypeDef *SPI_InitStruct)
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup I2S_LL_Private_Constants I2S Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* I2S registers Masks */
@@ -474,6 +475,7 @@ void LL_SPI_StructInit(LL_SPI_InitTypeDef *SPI_InitStruct)
   */
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup I2S_LL_Private_Macros I2S Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

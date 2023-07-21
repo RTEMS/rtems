@@ -226,11 +226,13 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup PCD_Exported_Constants PCD Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 #if defined (USB_OTG_FS) || defined (USB_OTG_HS)
 /** @defgroup USB_OTG_CORE VERSION ID
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USB_OTG_CORE_ID_300A          0x4F54300AU
@@ -240,6 +242,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_Core_Mode_ USB Core Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USB_OTG_MODE_DEVICE                    0U
@@ -250,6 +253,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_Core_Speed USB Low Layer Core Speed
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USB_OTG_SPEED_HIGH                     0U
@@ -260,6 +264,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_Core_PHY USB Low Layer Core PHY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USB_OTG_ULPI_PHY                       1U
@@ -269,6 +274,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_Turnaround_Timeout Turnaround Timeout Value
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #ifndef USBD_HS_TRDT_VALUE
@@ -283,6 +289,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_Core_MPS USB Low Layer Core MPS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USB_OTG_HS_MAX_PACKET_SIZE           512U
@@ -293,6 +300,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_Core_PHY_Frequency USB Low Layer Core PHY Frequency
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSTS_ENUMSPD_HS_PHY_30MHZ_OR_60MHZ     (0U << 1)
@@ -303,6 +311,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_CORE_Frame_Interval USB Low Layer Core Frame Interval
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCFG_FRAME_INTERVAL_80                 0U
@@ -314,6 +323,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 #endif /* defined (USB_OTG_FS) || defined (USB_OTG_HS) */
 /** @defgroup USB_LL_EP0_MPS USB Low Layer EP0 MPS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define EP_MPS_64                              0U
@@ -325,6 +335,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_EP_Type USB Low Layer EP Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define EP_TYPE_CTRL                           0U
@@ -337,6 +348,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_EP_Speed USB Low Layer EP Speed
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define EP_SPEED_LOW                           0U
@@ -347,6 +359,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_CH_PID_Type USB Low Layer Channel PID Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HC_PID_DATA0                           0U
@@ -358,6 +371,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL Device Speed
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USBD_HS_SPEED                          0U
@@ -371,6 +385,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
 
 #if defined (USB_OTG_FS) || defined (USB_OTG_HS)
 /** @defgroup USB_LL_STS_Defines USB Low Layer STS Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define STS_GOUT_NAK                           1U
@@ -383,6 +398,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_HCFG_SPEED_Defines USB Low Layer HCFG Speed Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HCFG_30_60_MHZ                         0U
@@ -393,6 +409,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_HFIR_Defines USB Low Layer frame interval Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HFIR_6_MHZ                          6000U
@@ -403,6 +420,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
   */
 
 /** @defgroup USB_LL_HPRT0_PRTSPD_SPEED_Defines USB Low Layer HPRT0 PRTSPD Speed Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HPRT0_PRTSPD_HIGH_SPEED                0U
@@ -458,6 +476,7 @@ typedef USB_HCTypeDef       USB_OTG_HCTypeDef;
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup USB_LL_Exported_Macros USB Low Layer Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined (USB_OTG_FS) || defined (USB_OTG_HS)

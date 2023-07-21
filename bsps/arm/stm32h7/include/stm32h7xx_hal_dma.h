@@ -38,6 +38,7 @@
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup DMA_Exported_Types DMA Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA Exported Types
   * @{
   */
@@ -186,11 +187,13 @@ typedef struct __DMA_HandleTypeDef
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup DMA_Exported_Constants DMA Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA Exported constants
   * @{
   */
 
 /** @defgroup DMA_Error_Code DMA Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA Error Code
   * @{
   */
@@ -211,6 +214,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_Request_selection DMA Request selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA Request selection
   * @{
   */
@@ -455,6 +459,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_Data_transfer_direction DMA Data transfer direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA data transfer direction
   * @{
   */
@@ -466,6 +471,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_Peripheral_incremented_mode DMA Peripheral incremented mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA peripheral incremented mode
   * @{
   */
@@ -476,6 +482,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_Memory_incremented_mode DMA Memory incremented mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA memory incremented mode
   * @{
   */
@@ -486,6 +493,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_Peripheral_data_size DMA Peripheral data size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA peripheral data size
   * @{
   */
@@ -497,6 +505,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_Memory_data_size DMA Memory data size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA memory data size
   * @{
   */
@@ -508,6 +517,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_mode DMA mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA mode
   * @{
   */
@@ -521,6 +531,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_Priority_level DMA Priority level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA priority levels
   * @{
   */
@@ -533,6 +544,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_FIFO_direct_mode DMA FIFO direct mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA FIFO direct mode
   * @{
   */
@@ -543,6 +555,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_FIFO_threshold_level DMA FIFO threshold level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA FIFO level
   * @{
   */
@@ -555,6 +568,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_Memory_burst DMA Memory burst
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA memory burst
   * @{
   */
@@ -567,6 +581,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_Peripheral_burst DMA Peripheral burst
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA peripheral burst
   * @{
   */
@@ -579,6 +594,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_interrupt_enable_definitions DMA interrupt enable definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA interrupts definition
   * @{
   */
@@ -592,6 +608,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup DMA_flag_definitions DMA flag definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA flag definitions
   * @{
   */
@@ -620,6 +637,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @defgroup BDMA_flag_definitions BDMA flag definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    BDMA flag definitions
   * @{
   */
@@ -666,6 +684,7 @@ typedef struct __DMA_HandleTypeDef
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup DMA_Exported_Macros DMA Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1176,11 +1195,13 @@ typedef struct __DMA_HandleTypeDef
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup DMA_Exported_Functions DMA Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA Exported functions
   * @{
   */
 
 /** @defgroup DMA_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   Initialization and de-initialization functions
   * @{
   */
@@ -1191,6 +1212,7 @@ HAL_StatusTypeDef HAL_DMA_DeInit(DMA_HandleTypeDef *hdma);
   */
 
 /** @defgroup DMA_Exported_Functions_Group2 I/O operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   I/O operation functions
   * @{
   */
@@ -1208,6 +1230,7 @@ HAL_StatusTypeDef HAL_DMA_UnRegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_Ca
   */
 
 /** @defgroup DMA_Exported_Functions_Group3 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Peripheral State functions
   * @{
   */
@@ -1221,6 +1244,7 @@ uint32_t             HAL_DMA_GetError(DMA_HandleTypeDef *hdma);
   */
 /* Private Constants -------------------------------------------------------------*/
 /** @defgroup DMA_Private_Constants DMA Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA private defines and constants
   * @{
   */
@@ -1230,6 +1254,7 @@ uint32_t             HAL_DMA_GetError(DMA_HandleTypeDef *hdma);
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup DMA_Private_Types DMA Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -1238,6 +1263,7 @@ uint32_t             HAL_DMA_GetError(DMA_HandleTypeDef *hdma);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup DMA_Private_Macros DMA Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA private macros
   * @{
   */
@@ -1310,6 +1336,7 @@ uint32_t             HAL_DMA_GetError(DMA_HandleTypeDef *hdma);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup DMA_Private_Functions DMA Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMA private  functions
   * @{
   */

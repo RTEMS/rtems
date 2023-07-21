@@ -125,6 +125,7 @@
   * @{
   */
 /** @defgroup DCMI DCMI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DCMI HAL module driver
   * @{
   */
@@ -150,10 +151,12 @@ static void       DCMI_DMAError(DMA_HandleTypeDef *hdma);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup DCMI_Exported_Functions DCMI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DCMI_Exported_Functions_Group1 Initialization and Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Initialization and Configuration functions
  *
 @verbatim
@@ -334,6 +337,7 @@ __weak void HAL_DCMI_MspDeInit(DCMI_HandleTypeDef *hdcmi)
   * @}
   */
 /** @defgroup DCMI_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   IO operation functions
  *
 @verbatim
@@ -753,6 +757,7 @@ __weak void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
   */
 
 /** @defgroup DCMI_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Peripheral Control functions
  *
 @verbatim
@@ -893,6 +898,7 @@ HAL_StatusTypeDef  HAL_DCMI_ConfigSyncUnmask(DCMI_HandleTypeDef *hdcmi, DCMI_Syn
   */
 
 /** @defgroup DCMI_Exported_Functions_Group4 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Peripheral State functions
  *
 @verbatim
@@ -1120,6 +1126,7 @@ HAL_StatusTypeDef HAL_DCMI_UnRegisterCallback(DCMI_HandleTypeDef *hdcmi, HAL_DCM
   */
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup DCMI_Private_Functions DCMI Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**

@@ -46,6 +46,7 @@ extern "C" {
   */
 
 /** @defgroup UTILS_LL UTILS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -54,6 +55,7 @@ extern "C" {
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup UTILS_LL_Private_Constants UTILS Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -81,6 +83,7 @@ extern "C" {
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup UTILS_LL_Private_Macros UTILS Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -88,6 +91,7 @@ extern "C" {
   */
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup UTILS_LL_ES_INIT UTILS Exported structures
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -183,10 +187,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup UTILS_LL_Exported_Constants UTILS Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup UTILS_EC_HSE_BYPASS HSE Bypass activation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_UTILS_HSEBYPASS_OFF        0x00000000U       /*!< HSE Bypass is not enabled                */
@@ -196,6 +202,7 @@ typedef struct
   */
 
 /** @defgroup UTILS_EC_PACKAGETYPE PACKAGE TYPE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if (STM32H7_DEV_ID == 0x450UL)
@@ -242,10 +249,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup UTILS_LL_Exported_Functions UTILS Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup UTILS_EF_DEVICE_ELECTRONIC_SIGNATURE DEVICE ELECTRONIC SIGNATURE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -337,6 +346,7 @@ __STATIC_INLINE uint32_t LL_GetPackageType(void)
   */
 
 /** @defgroup UTILS_LL_EF_DELAY DELAY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -365,6 +375,7 @@ void        LL_mDelay(uint32_t Delay);
   */
 
 /** @defgroup UTILS_EF_SYSTEM SYSTEM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

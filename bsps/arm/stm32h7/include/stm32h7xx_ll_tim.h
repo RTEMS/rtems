@@ -34,12 +34,14 @@ extern "C" {
 #if defined (TIM1) || defined (TIM2) || defined (TIM3) || defined (TIM4) || defined (TIM5) || defined (TIM6) || defined (TIM7) || defined (TIM8) || defined (TIM12) || defined (TIM13) || defined (TIM14) || defined (TIM15) || defined (TIM16) || defined (TIM17) || defined (TIM23) || defined (TIM24)
 
 /** @defgroup TIM_LL TIM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup TIM_LL_Private_Variables TIM Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static const uint8_t OFFSET_TAB_CCMRx[] =
@@ -112,6 +114,7 @@ static const uint8_t SHIFT_TAB_OISx[] =
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup TIM_LL_Private_Constants TIM Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -144,6 +147,7 @@ static const uint8_t SHIFT_TAB_OISx[] =
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup TIM_LL_Private_Macros TIM Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @brief  Convert channel id into channel index.
@@ -189,6 +193,7 @@ static const uint8_t SHIFT_TAB_OISx[] =
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup TIM_LL_ES_INIT TIM Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -560,10 +565,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup TIM_LL_Exported_Constants TIM Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup TIM_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_TIM_ReadReg function.
   * @{
   */
@@ -589,6 +596,7 @@ typedef struct
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup TIM_LL_EC_BREAK_ENABLE Break Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BREAK_DISABLE            0x00000000U             /*!< Break function disabled */
@@ -598,6 +606,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_BREAK2_ENABLE Break2 Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BREAK2_DISABLE            0x00000000U              /*!< Break2 function disabled */
@@ -607,6 +616,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_AUTOMATICOUTPUT_ENABLE Automatic output enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_AUTOMATICOUTPUT_DISABLE         0x00000000U             /*!< MOE can be set only by software */
@@ -617,6 +627,7 @@ typedef struct
 #endif /* USE_FULL_LL_DRIVER */
 
 /** @defgroup TIM_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_TIM_ReadReg and  LL_TIM_WriteReg functions.
   * @{
   */
@@ -633,6 +644,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_UPDATESOURCE Update Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_UPDATESOURCE_REGULAR            0x00000000U          /*!< Counter overflow/underflow, Setting the UG bit or Update generation through the slave mode controller generates an update request */
@@ -642,6 +654,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_ONEPULSEMODE One Pulse Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_ONEPULSEMODE_SINGLE             TIM_CR1_OPM          /*!< Counter stops counting at the next update event */
@@ -651,6 +664,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_COUNTERMODE Counter Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_COUNTERMODE_UP                  0x00000000U          /*!<Counter used as upcounter */
@@ -663,6 +677,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_CLOCKDIVISION Clock Division
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_CLOCKDIVISION_DIV1              0x00000000U          /*!< tDTS=tCK_INT */
@@ -673,6 +688,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_COUNTERDIRECTION Counter Direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_COUNTERDIRECTION_UP             0x00000000U          /*!< Timer counter counts up */
@@ -682,6 +698,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_CCUPDATESOURCE Capture Compare  Update Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_CCUPDATESOURCE_COMG_ONLY        0x00000000U          /*!< Capture/compare control bits are updated by setting the COMG bit only */
@@ -691,6 +708,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_CCDMAREQUEST Capture Compare DMA Request
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_CCDMAREQUEST_CC                 0x00000000U          /*!< CCx DMA request sent when CCx event occurs */
@@ -700,6 +718,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_LOCKLEVEL Lock Level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_LOCKLEVEL_OFF                   0x00000000U          /*!< LOCK OFF - No bit is write protected */
@@ -711,6 +730,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_CHANNEL Channel
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_CHANNEL_CH1                     TIM_CCER_CC1E     /*!< Timer input/output channel 1 */
@@ -728,6 +748,7 @@ typedef struct
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup TIM_LL_EC_OCSTATE Output Configuration State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_OCSTATE_DISABLE                 0x00000000U             /*!< OCx is not active */
@@ -738,6 +759,7 @@ typedef struct
 #endif /* USE_FULL_LL_DRIVER */
 
 /** @defgroup TIM_LL_EC_OCMODE Output Configuration Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_OCMODE_FROZEN                   0x00000000U                                              /*!<The comparison between the output compare register TIMx_CCRy and the counter TIMx_CNT has no effect on the output channel level */
@@ -759,6 +781,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_OCPOLARITY Output Configuration Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_OCPOLARITY_HIGH                 0x00000000U                 /*!< OCxactive high*/
@@ -768,6 +791,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_OCIDLESTATE Output Configuration Idle State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_OCIDLESTATE_LOW                 0x00000000U             /*!<OCx=0 (after a dead-time if OC is implemented) when MOE=0*/
@@ -777,6 +801,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_GROUPCH5 GROUPCH5
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_GROUPCH5_NONE                   0x00000000U           /*!< No effect of OC5REF on OC1REFC, OC2REFC and OC3REFC */
@@ -788,6 +813,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_ACTIVEINPUT Active Input Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_ACTIVEINPUT_DIRECTTI            (TIM_CCMR1_CC1S_0 << 16U) /*!< ICx is mapped on TIx */
@@ -798,6 +824,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_ICPSC Input Configuration Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_ICPSC_DIV1                      0x00000000U                    /*!< No prescaler, capture is done each time an edge is detected on the capture input */
@@ -809,6 +836,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_IC_FILTER Input Configuration Filter
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_IC_FILTER_FDIV1                 0x00000000U                                                        /*!< No filter, sampling is done at fDTS */
@@ -832,6 +860,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_IC_POLARITY Input Configuration Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_IC_POLARITY_RISING              0x00000000U                      /*!< The circuit is sensitive to TIxFP1 rising edge, TIxFP1 is not inverted */
@@ -842,6 +871,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_CLOCKSOURCE Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_CLOCKSOURCE_INTERNAL            0x00000000U                                          /*!< The timer is clocked by the internal clock provided from the RCC */
@@ -852,6 +882,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_ENCODERMODE Encoder Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_ENCODERMODE_X2_TI1                     TIM_SMCR_SMS_0                                                     /*!< Quadrature encoder mode 1, x2 mode - Counter counts up/down on TI1FP1 edge depending on TI2FP2 level */
@@ -862,6 +893,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TRGO Trigger Output
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TRGO_RESET                      0x00000000U                                     /*!< UG bit from the TIMx_EGR register is used as trigger output */
@@ -877,6 +909,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TRGO2 Trigger Output 2
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TRGO2_RESET                     0x00000000U                                                         /*!< UG bit from the TIMx_EGR register is used as trigger output 2 */
@@ -900,6 +933,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_SLAVEMODE Slave Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_SLAVEMODE_DISABLED              0x00000000U                         /*!< Slave mode disabled */
@@ -912,6 +946,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TS Trigger Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TS_ITR0                         0x00000000U                                                     /*!< Internal Trigger 0 (ITR0) is used as trigger input */
@@ -937,6 +972,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_ETR_POLARITY External Trigger Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_ETR_POLARITY_NONINVERTED        0x00000000U             /*!< ETR is non-inverted, active at high level or rising edge */
@@ -946,6 +982,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_ETR_PRESCALER External Trigger Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_ETR_PRESCALER_DIV1              0x00000000U             /*!< ETR prescaler OFF */
@@ -957,6 +994,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_ETR_FILTER External Trigger Filter
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_ETR_FILTER_FDIV1                0x00000000U                                          /*!< No filter, sampling is done at fDTS */
@@ -1026,6 +1064,7 @@ typedef struct
 #define LL_TIM_TIM24_ETRSOURCE_SAI1_FSB    TIM2_AF1_ETRSEL_2                                          /*!< TIM24_ETR is connected to SAI1 FS_B */
 
 /** @defgroup TIM_LL_EC_BREAK_POLARITY break polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BREAK_POLARITY_LOW              0x00000000U               /*!< Break input BRK is active low */
@@ -1035,6 +1074,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_BREAK_FILTER break filter
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BREAK_FILTER_FDIV1              0x00000000U   /*!< No filter, BRK acts asynchronously */
@@ -1058,6 +1098,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_BREAK2_POLARITY BREAK2 POLARITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BREAK2_POLARITY_LOW             0x00000000U             /*!< Break input BRK2 is active low */
@@ -1067,6 +1108,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_BREAK2_FILTER BREAK2 FILTER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BREAK2_FILTER_FDIV1             0x00000000U   /*!< No filter, BRK acts asynchronously */
@@ -1090,6 +1132,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_OSSI OSSI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_OSSI_DISABLE                    0x00000000U             /*!< When inactive, OCx/OCxN outputs are disabled */
@@ -1099,6 +1142,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_OSSR OSSR
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_OSSR_DISABLE                    0x00000000U             /*!< When inactive, OCx/OCxN outputs are disabled */
@@ -1109,6 +1153,7 @@ typedef struct
 
 #if   defined(TIM_BREAK_INPUT_SUPPORT)
 /** @defgroup TIM_LL_EC_BREAK_INPUT BREAK INPUT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BREAK_INPUT_BKIN                0x00000000U  /*!< TIMx_BKIN input */
@@ -1118,6 +1163,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_BKIN_SOURCE BKIN SOURCE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BKIN_SOURCE_BKIN                TIM1_AF1_BKINE      /*!< BKIN input from AF controller */
@@ -1129,6 +1175,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_BKIN_POLARITY BKIN POLARITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BKIN_POLARITY_LOW               TIM1_AF1_BKINP           /*!< BRK BKIN input is active low */
@@ -1140,6 +1187,7 @@ typedef struct
 
 #if defined(TIM_BDTR_BKBID)
 /** @defgroup TIM_LL_EC_BREAK_AFMODE BREAK AF MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BREAK_AFMODE_INPUT              0x00000000U              /*!< Break input BRK in input mode */
@@ -1149,6 +1197,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_BREAK2_AFMODE BREAK2 AF MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_BREAK2_AFMODE_INPUT             0x00000000U             /*!< Break2 input BRK2 in input mode */
@@ -1159,6 +1208,7 @@ typedef struct
 
 #endif /*TIM_BDTR_BKBID */
 /** @defgroup TIM_LL_EC_DMABURST_BASEADDR DMA Burst Base Address
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_DMABURST_BASEADDR_CR1           0x00000000U                                                      /*!< TIMx_CR1 register is the DMA base address for DMA burst */
@@ -1192,6 +1242,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_DMABURST_LENGTH DMA Burst Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_DMABURST_LENGTH_1TRANSFER       0x00000000U                                                     /*!< Transfer is done to 1 register starting from the DMA burst base address */
@@ -1217,6 +1268,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM1_TI1_RMP  TIM1 Timer Input Ch1 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM1_TI1_RMP_GPIO                          0x00000000U                               /*!< TIM1 input 1 is connected to GPIO */
@@ -1226,6 +1278,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM8_TI1_RMP  TIM8 Timer Input Ch1 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM8_TI1_RMP_GPIO                          0x00000000U                               /*!< TIM8 input 1 is connected to GPIO */
@@ -1235,6 +1288,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM2_TI4_RMP  TIM2 Timer Input Ch4 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM2_TI4_RMP_GPIO                          0x00000000U                               /*!< TIM2 input 4 is connected to GPIO */
@@ -1246,6 +1300,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM3_TI1_RMP  TIM3 Timer Input Ch1 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM3_TI1_RMP_GPIO                          0x00000000U                               /*!< TIM3 input 1 is connected to GPIO */
@@ -1257,6 +1312,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM5_TI1_RMP  TIM5 Timer Input Ch1 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM5_TI1_RMP_GPIO                          0x00000000U                               /*!< TIM5 input 1 is connected to GPIO */
@@ -1267,6 +1323,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM12_TI1_RMP  TIM12 Timer Input Ch1 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM12_TI1_RMP_GPIO                         0x00000000U                               /*!< TIM12 input 1 is connected to GPIO */
@@ -1276,6 +1333,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM15_TI1_RMP  TIM15 Timer Input Ch1 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM15_TI1_RMP_GPIO                         0x00000000U                               /*!< TIM15 input 1 is connected to GPIO */
@@ -1290,6 +1348,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM15_TI2_RMP  TIM15 Timer Input Ch2 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM15_TI2_RMP_GPIO                         0x00000000U                               /*!< TIM15 input 2 is connected to GPIO */
@@ -1301,6 +1360,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM16_TI1_RMP  TIM16 Timer Input Ch1 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM16_TI1_RMP_GPIO                         0x00000000U                               /*!< TIM16 input 1 is connected to GPIO */
@@ -1312,6 +1372,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM17_TI1_RMP  TIM17 Timer Input Ch1 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM17_TI1_RMP_GPIO                         0x00000000U                               /*!< TIM17 input 1 is connected to GPIO */
@@ -1323,6 +1384,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM23_TI4_RMP  TIM23 Timer Input Ch4 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM23_TI4_RMP_GPIO                         0x00000000U                               /*!< TIM23 input 4 is connected to GPIO */
@@ -1334,6 +1396,7 @@ typedef struct
   */
 
 /** @defgroup TIM_LL_EC_TIM24_TI1_RMP  TIM24 Timer Input Ch1 Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_TIM_TIM24_TI1_RMP_GPIO                         0x00000000U                               /*!< TIM24 input 1 is connected to GPIO */
@@ -1356,10 +1419,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup TIM_LL_Exported_Macros TIM Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup TIM_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -1491,10 +1556,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup TIM_LL_Exported_Functions TIM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup TIM_LL_EF_Time_Base Time Base configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -1910,6 +1977,7 @@ __STATIC_INLINE uint32_t LL_TIM_IsActiveUIFCPY(const uint32_t Counter)
   */
 
 /** @defgroup TIM_LL_EF_Capture_Compare Capture Compare configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -2095,6 +2163,7 @@ __STATIC_INLINE uint32_t LL_TIM_CC_IsEnabledChannel(TIM_TypeDef *TIMx, uint32_t 
   */
 
 /** @defgroup TIM_LL_EF_Output_Channel Output channel configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -2822,6 +2891,7 @@ __STATIC_INLINE void LL_TIM_SetCH5CombinedChannels(TIM_TypeDef *TIMx, uint32_t G
   */
 
 /** @defgroup TIM_LL_EF_Input_Channel Input channel configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -3210,6 +3280,7 @@ __STATIC_INLINE uint32_t LL_TIM_IC_GetCaptureCH4(const TIM_TypeDef *TIMx)
   */
 
 /** @defgroup TIM_LL_EF_Clock_Selection Counter clock selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -3298,6 +3369,7 @@ __STATIC_INLINE void LL_TIM_SetEncoderMode(TIM_TypeDef *TIMx, uint32_t EncoderMo
   */
 
 /** @defgroup TIM_LL_EF_Timer_Synchronization Timer synchronisation configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -3558,6 +3630,7 @@ __STATIC_INLINE void LL_TIM_SetETRSource(TIM_TypeDef *TIMx, uint32_t ETRSource)
   */
 
 /** @defgroup TIM_LL_EF_Break_Function Break function configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -4037,6 +4110,7 @@ __STATIC_INLINE void LL_TIM_SetBreakInputSourcePolarity(TIM_TypeDef *TIMx, uint3
   */
 
 /** @defgroup TIM_LL_EF_DMA_Burst_Mode DMA burst mode configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -4103,6 +4177,7 @@ __STATIC_INLINE void LL_TIM_ConfigDMABurst(TIM_TypeDef *TIMx, uint32_t DMABurstB
   */
 
 /** @defgroup TIM_LL_EF_Timer_Inputs_Remapping Timer input remapping
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -4188,6 +4263,7 @@ __STATIC_INLINE void LL_TIM_SetRemap(TIM_TypeDef *TIMx, uint32_t Remap)
   */
 
 /** @defgroup TIM_LL_EF_FLAG_Management FLAG-Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -4551,6 +4627,7 @@ __STATIC_INLINE uint32_t LL_TIM_IsActiveFlag_SYSBRK(const TIM_TypeDef *TIMx)
   */
 
 /** @defgroup TIM_LL_EF_IT_Management IT-Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -4822,6 +4899,7 @@ __STATIC_INLINE uint32_t LL_TIM_IsEnabledIT_BRK(const TIM_TypeDef *TIMx)
   */
 
 /** @defgroup TIM_LL_EF_DMA_Management DMA Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -5060,6 +5138,7 @@ __STATIC_INLINE uint32_t LL_TIM_IsEnabledDMAReq_TRIG(const TIM_TypeDef *TIMx)
   */
 
 /** @defgroup TIM_LL_EF_EVENT_Management EVENT-Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -5167,6 +5246,7 @@ __STATIC_INLINE void LL_TIM_GenerateEvent_BRK2(TIM_TypeDef *TIMx)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup TIM_LL_EF_Init Initialisation and deinitialisation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

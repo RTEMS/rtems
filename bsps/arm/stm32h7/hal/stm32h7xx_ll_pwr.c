@@ -28,6 +28,7 @@
 #if defined (PWR)
 
 /** @defgroup PWR_LL PWR
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

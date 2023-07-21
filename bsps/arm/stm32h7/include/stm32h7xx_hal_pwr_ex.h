@@ -37,6 +37,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup PWREx_Exported_Types PWREx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -94,9 +95,11 @@ typedef enum
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup PWREx_Exported_Constants PWREx Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup PWREx_WakeUp_Pins PWREx Wake-Up Pins
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* High level and No pull (default configuration) */
@@ -139,6 +142,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_PIN_Polarity PWREx Pin Polarity configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_PIN_POLARITY_HIGH (0x00000000U)
@@ -148,6 +152,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_PIN_Pull PWREx Pin Pull configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_PIN_NO_PULL   (0x00000000U)
@@ -158,6 +163,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_Wakeup_Pins_Flags PWREx Wakeup Pins Flags.
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_WAKEUP_FLAG1 PWR_WKUPFR_WKUPF1 /*!< Wakeup flag on PA0  */
@@ -184,6 +190,7 @@ typedef enum
 
 #if defined (DUAL_CORE)
 /** @defgroup PWREx_Core_Select PWREx Core definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_CORE_CPU1 (0x00000000U)
@@ -194,6 +201,7 @@ typedef enum
 #endif /* defined (DUAL_CORE) */
 
 /** @defgroup PWREx_Domains PWREx Domains definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_D1_DOMAIN (0x00000000U)
@@ -206,6 +214,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_Domain_Flags PWREx Domain Flags definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined (DUAL_CORE)
@@ -220,6 +229,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_D3_State PWREx D3 Domain State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_D3_DOMAIN_STOP (0x00000000U)
@@ -230,6 +240,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_Supply_configuration PWREx Supply configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_LDO_SUPPLY                      PWR_CR3_LDOEN                                                               /*!< Core domains are supplied from the LDO                                                                     */
@@ -256,6 +267,7 @@ typedef enum
 
 
 /** @defgroup PWREx_AVD_detection_level PWREx AVD detection level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_AVDLEVEL_0 PWR_CR1_ALS_LEV0 /*!< Analog voltage detector level 0
@@ -271,6 +283,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_AVD_Mode PWREx AVD Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_AVD_MODE_NORMAL               (0x00000000U)   /*!< Basic mode is used                                                 */
@@ -285,6 +298,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_Regulator_Voltage_Scale PWREx Regulator Voltage Scale
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_REGULATOR_SVOS_SCALE5 (PWR_CR1_SVOS_0)
@@ -295,6 +309,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_VBAT_Battery_Charging_Resistor PWR battery charging resistor selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_BATTERY_CHARGING_RESISTOR_5    (0x00000000U) /*!< VBAT charging through a 5 kOhms resistor   */
@@ -304,6 +319,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_VBAT_Thresholds PWREx VBAT Thresholds
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_VBAT_BETWEEN_HIGH_LOW_THRESHOLD  (0x00000000U)
@@ -314,6 +330,7 @@ typedef enum
   */
 
 /** @defgroup PWREx_TEMP_Thresholds PWREx Temperature Thresholds
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_TEMP_BETWEEN_HIGH_LOW_THRESHOLD  (0x00000000U)
@@ -323,6 +340,7 @@ typedef enum
   * @}
   */
 /** @defgroup PWREx_AVD_EXTI_Line PWREx AVD EXTI Line 16
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_EXTI_LINE_AVD EXTI_IMR1_IM16 /*!< External interrupt line 16
@@ -333,6 +351,7 @@ typedef enum
 
 #if defined (PWR_CR1_SRDRAMSO)
 /** @defgroup PWREx_Memory_Shut_Off Memory shut-off block selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_SRD_AHB_MEMORY_BLOCK        PWR_CR1_SRDRAMSO    /*!< SmartRun domain AHB memory shut-off in DStop/DStop2 low-power mode         */
@@ -357,6 +376,7 @@ typedef enum
 /* Exported macro ------------------------------------------------------------*/
 
 /** @defgroup PWREx_Exported_Macro PWREx Exported Macro
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 
@@ -617,10 +637,12 @@ void HAL_PWREx_AVDCallback        (void);
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup PWREx_Private_Macros PWREx Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PWREx_IS_PWR_Definitions PWREx Private macros to check input parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Check PWR regulator configuration parameter */

@@ -34,12 +34,14 @@ extern "C" {
 #if defined (HRTIM1)
 
 /** @defgroup HRTIM_LL HRTIM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup HRTIM_LL_Private_Variables HRTIM Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static const uint16_t REG_OFFSET_TAB_TIMER[] =
@@ -209,6 +211,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup HRTIM_LL_Private_Constants HRTIM Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HRTIM_CR1_UDIS_MASK   ((uint32_t)(HRTIM_CR1_MUDIS  |\
@@ -282,10 +285,12 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup HRTIM_LL_Exported_Constants HRTIM Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HRTIM_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_HRTIM_ReadReg function
   * @{
   */
@@ -324,6 +329,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_HRTIM_ReadReg and LL_HRTIM_WriteReg functions
   * @{
   */
@@ -362,6 +368,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_SYNCIN_SRC  SYNCHRONIZATION INPUT SOURCE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining defining the synchronization input source.
   */
@@ -373,6 +380,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_SYNCOUT_SRC  SYNCHRONIZATION OUTPUT SOURCE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the source and event to be sent on the synchronization output.
   */
@@ -385,6 +393,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_SYNCOUT_POLARITY  SYNCHRONIZATION OUTPUT POLARITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the routing and conditioning of the synchronization output event.
   */
@@ -396,6 +405,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_TIMER  TIMER ID
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants identifying a timing unit.
   */
@@ -416,6 +426,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_OUTPUT  OUTPUT ID
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants identifying an HRTIM output.
   */
@@ -434,6 +445,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_COMPAREUNIT  COMPARE UNIT ID
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants identifying a compare unit.
   */
@@ -444,6 +456,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_CAPTUREUNIT  CAPTURE UNIT ID
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants identifying a capture unit.
   */
@@ -454,6 +467,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_FAULT  FAULT ID
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants identifying a fault channel.
   */
@@ -467,6 +481,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_EVENT  EXTERNAL EVENT ID
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants identifying an external event channel.
   */
@@ -485,6 +500,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_OUTPUTSTATE  OUTPUT STATE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the state of an HRTIM output.
   */
@@ -496,6 +512,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_ADCTRIG  ADC TRIGGER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants identifying an ADC trigger.
   */
@@ -508,6 +525,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_ADCTRIG_UPDATE ADC TRIGGER UPDATE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief constants defining the source triggering the update of the HRTIM_ADCxR register (transfer from preload to active register).
   */
@@ -522,6 +540,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_ADCTRIG_SRC13  ADC TRIGGER 1/3 SOURCE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief constants defining the events triggering ADC conversion for ADC Triggers 1 and 3.
   */
@@ -563,6 +582,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_ADCTRIG_SRC24  ADC TRIGGER 2/4 SOURCE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief constants defining the events triggering ADC conversion for ADC Triggers 2 and 4.
   */
@@ -604,6 +624,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_PRESCALERRATIO  PRESCALER RATIO
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining timer high-resolution clock prescaler ratio.
   */
@@ -615,6 +636,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_MODE  COUNTER MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining timer counter operating mode.
   */
@@ -626,6 +648,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_DACTRIG  DAC TRIGGER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining on which output the DAC synchronization event is sent.
   */
@@ -638,6 +661,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_UPDATETRIG  UPDATE TRIGGER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining whether the registers update is done synchronously with any other timer or master update.
   */
@@ -655,6 +679,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_UPDATEGATING  UPDATE GATING
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining how the update occurs relatively to the burst DMA transaction and the external update request on update enable inputs 1 to 3.
   */
@@ -672,6 +697,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_COMPAREMODE  COMPARE MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining whether the compare register is behaving in regular mode (compare match issued as soon as counter equal compare) or in auto-delayed mode.
   */
@@ -684,6 +710,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_RESETTRIG  RESET TRIGGER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the events that can be selected to trigger the reset of the timer counter.
   */
@@ -723,6 +750,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_CAPTURETRIG  CAPTURE TRIGGER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the events that can be selected to trigger the capture of the timing unit counter.
   */
@@ -763,6 +791,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_DLYPRT  DELAYED PROTECTION (DLYPRT) MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining all possible delayed protection modes for a timer (also define the source and outputs on which the delayed protection schemes are applied).
   */
@@ -788,6 +817,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_BURSTMODE  BURST MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining how the timer behaves during a burst mode operation.
   */
@@ -798,6 +828,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_BURSTDMA  BURST DMA
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the registers that can be written during a burst DMA operation.
   */
@@ -838,6 +869,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_CPPSTAT  CURRENT PUSH-PULL STATUS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining on which output the signal is currently applied in push-pull mode.
   */
@@ -848,6 +880,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_IPPSTAT  IDLE PUSH-PULL STATUS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining on which output the signal was applied, in push-pull mode balanced fault mode or delayed idle mode, when the protection was triggered.
   */
@@ -858,6 +891,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_TIM_EEFLTR TIMER EXTERNAL EVENT FILTER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the event filtering applied to external events by a timer.
   */
@@ -882,6 +916,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_TIM_LATCHSTATUS TIMER EXTERNAL EVENT LATCH STATUS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining whether or not the external event is memorized (latched) and generated as soon as the blanking period is completed or the window ends.
   */
@@ -892,6 +927,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_DT_PRESCALER DEADTIME PRESCALER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining division ratio between the timer clock frequency (fHRTIM) and the deadtime generator clock (fDTG).
   */
@@ -908,6 +944,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_DT_RISING_SIGN DEADTIME RISING SIGN
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining whether the deadtime is positive or negative (overlapping signal) on rising edge.
   */
@@ -918,6 +955,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_DT_FALLING_SIGN DEADTIME FALLING SIGN
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining whether the deadtime is positive or negative (overlapping signal) on falling edge.
   */
@@ -928,6 +966,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_CHP_PRESCALER CHOPPER MODE PRESCALER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the frequency of the generated high frequency carrier (fCHPFRQ).
   */
@@ -952,6 +991,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_CHP_DUTYCYCLE CHOPPER MODE DUTY CYCLE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the duty cycle of the generated high frequency carrier. Duty cycle can be adjusted by 1/8 step (from 0/8 up to 7/8).
   */
@@ -968,6 +1008,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_CHP_PULSEWIDTH CHOPPER MODE PULSE WIDTH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the pulse width of the first pulse of the generated high frequency carrier.
   */
@@ -992,6 +1033,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_CROSSBAR_INPUT CROSSBAR INPUT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the events that can be selected to configure the set/reset crossbar of a timer output.
   */
@@ -1032,6 +1074,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_OUT_POLARITY OUPUT_POLARITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the polarity of a timer output.
   */
@@ -1042,6 +1085,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_OUT_IDLEMODE OUTPUT IDLE MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining whether or not the timer output transition to its IDLE state when burst mode is entered.
   */
@@ -1052,6 +1096,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_HALF_MODE HALF MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the half mode of an HRTIM Timer instance.
   */
@@ -1062,6 +1107,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_OUT_IDLELEVEL OUTPUT IDLE LEVEL
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the output level when output is in IDLE state
   */
@@ -1072,6 +1118,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_OUT_FAULTSTATE OUTPUT FAULT STATE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the output level when output is in FAULT state.
   */
@@ -1084,6 +1131,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_OUT_CHOPPERMODE OUTPUT CHOPPER MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining whether or not chopper mode is enabled for a timer output.
   */
@@ -1094,6 +1142,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   */
 
 /** @defgroup HRTIM_LL_EC_OUT_BM_ENTRYMODE OUTPUT BURST MODE ENTRY MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the idle state entry mode during a burst mode operation. It is possible to delay the burst mode entry and force the output to an inactive state
 during a programmable period before the output takes its idle state.
@@ -1104,6 +1153,7 @@ during a programmable period before the output takes its idle state.
   * @}
   */
 /** @defgroup HRTIM_LL_EC_OUT_LEVEL OUTPUT LEVEL
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the level of a timer output.
   */
@@ -1114,6 +1164,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_EE_SRC EXTERNAL EVENT SOURCE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining available sources associated to external events.
   */
@@ -1125,6 +1176,7 @@ during a programmable period before the output takes its idle state.
   * @}
   */
 /** @defgroup HRTIM_LL_EC_EE_POLARITY EXTERNAL EVENT POLARITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the polarity of an external event.
   */
@@ -1135,6 +1187,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_EE_SENSITIVITY EXTERNAL EVENT SENSITIVITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the sensitivity (level-sensitive or edge-sensitive) of an external event.
   */
@@ -1147,6 +1200,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_EE_FASTMODE EXTERNAL EVENT FAST MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining whether or not an external event is programmed in fast mode.
   */
@@ -1157,6 +1211,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_EE_FILTER EXTERNAL EVENT DIGITAL FILTER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the frequency used to sample an external event input (fSAMPLING) and the length (N) of the digital filter applied.
   */
@@ -1181,6 +1236,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_EE_PRESCALER EXTERNAL EVENT PRESCALER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining division ratio between the timer clock frequency (fHRTIM) and the external event signal sampling clock (fEEVS) used by the digital filters.
   */
@@ -1193,6 +1249,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_FLT_SRC FAULT SOURCE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining whether a faults is be triggered by any external or internal fault source.
   */
@@ -1203,6 +1260,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_FLT_POLARITY FAULT POLARITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the polarity of a fault event.
   */
@@ -1213,6 +1271,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_FLT_FILTER FAULT DIGITAL FILTER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the frequency used to sample the fault input (fSAMPLING) and the length (N) of the digital filter applied.
   */
@@ -1237,6 +1296,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_FLT_PRESCALER BURST FAULT PRESCALER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the division ratio between the timer clock frequency (fHRTIM) and the fault signal sampling clock (fFLTS) used  by the digital filters.
   */
@@ -1249,6 +1309,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_BM_MODE BURST MODE OPERATING MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining if the burst mode is entered once or if it is continuously operating.
   */
@@ -1259,6 +1320,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_BM_CLKSRC BURST MODE CLOCK SOURCE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the clock source for the burst mode counter.
   */
@@ -1277,6 +1339,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_BM_PRESCALER BURST MODE PRESCALER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the prescaling ratio of the fHRTIM clock for the burst mode controller (fBRST).
   */
@@ -1301,6 +1364,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_BM_TRIG HRTIM BURST MODE TRIGGER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the events that can be used to trig the burst mode operation.
   */
@@ -1341,6 +1405,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EC_BM_STATUS HRTIM BURST MODE STATUS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   * @brief Constants defining the operating state of the burst mode controller.
   */
@@ -1356,10 +1421,12 @@ during a programmable period before the output takes its idle state.
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup HRTIM_LL_Exported_Macros HRTIM Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HRTIM_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1384,6 +1451,7 @@ during a programmable period before the output takes its idle state.
   */
 
 /** @defgroup HRTIM_LL_EM_Exported_Macros Exported_Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -1408,9 +1476,11 @@ during a programmable period before the output takes its idle state.
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup HRTIM_LL_Exported_Functions HRTIM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup HRTIM_LL_EF_HRTIM_Control HRTIM_Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2475,6 +2545,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_GetADCTrigSrc(const HRTIM_TypeDef *HRTIMx, uin
   */
 
 /** @defgroup HRTIM_LL_EF_HRTIM_Timer_Control HRTIM_Timer_Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4679,6 +4750,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_TIM_GetEventLatchStatus(const HRTIM_TypeDef *H
   */
 
 /** @defgroup HRTIM_LL_EF_Dead_Time_Configuration Dead_Time_Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -5022,6 +5094,7 @@ __STATIC_INLINE void LL_HRTIM_DT_LockFallingSign(HRTIM_TypeDef *HRTIMx, uint32_t
   */
 
 /** @defgroup HRTIM_LL_EF_Chopper_Mode_Configuration Chopper_Mode_Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -5269,6 +5342,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_CHP_GetPulseWidth(const HRTIM_TypeDef *HRTIMx,
   */
 
 /** @defgroup HRTIM_LL_EF_Output_Management Output_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -6252,6 +6326,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_OUT_GetLevel(const HRTIM_TypeDef *HRTIMx, uint
   */
 
 /** @defgroup HRTIM_LL_EF_External_Event_management External_Event_management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -6739,6 +6814,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_EE_GetPrescaler(const HRTIM_TypeDef *HRTIMx)
   */
 
 /** @defgroup HRTIM_LL_EF_Fault_management Fault_management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -7099,6 +7175,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_FLT_IsEnabled(const HRTIM_TypeDef *HRTIMx, uin
   */
 
 /** @defgroup HRTIM_LL_EF_Burst_Mode_management Burst_Mode_management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -7568,6 +7645,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_BM_GetStatus(const HRTIM_TypeDef *HRTIMx)
   */
 
 /** @defgroup HRTIM_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -8351,6 +8429,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_IsActiveFlag_DLYPRT(const HRTIM_TypeDef *HRTIM
   */
 
 /** @defgroup HRTIM_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -9513,6 +9592,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_IsEnabledIT_DLYPRT(const HRTIM_TypeDef *HRTIMx
   */
 
 /** @defgroup HRTIM_LL_EF_DMA_Management DMA_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -10445,6 +10525,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_IsEnabledDMAReq_DLYPRT(const HRTIM_TypeDef *HR
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup HRTIM_LL_LL_EF_Init In-initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 ErrorStatus LL_HRTIM_DeInit(HRTIM_TypeDef* HRTIMx);

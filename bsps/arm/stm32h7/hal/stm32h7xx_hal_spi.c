@@ -141,6 +141,7 @@
   */
 
 /** @defgroup SPI SPI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SPI HAL module driver
   * @{
   */
@@ -149,6 +150,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup SPI_Private_Constants SPI Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_DEFAULT_TIMEOUT 100UL
@@ -161,6 +163,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup SPI_Private_Functions SPI Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void SPI_DMATransmitCplt(DMA_HandleTypeDef *hdma);
@@ -192,10 +195,12 @@ static uint32_t SPI_GetPacketSize(SPI_HandleTypeDef *hspi);
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SPI_Exported_Functions SPI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SPI_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -775,6 +780,7 @@ HAL_StatusTypeDef HAL_SPI_UnRegisterCallback(SPI_HandleTypeDef *hspi, HAL_SPI_Ca
   */
 
 /** @defgroup SPI_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Data transfers functions
   *
 @verbatim
@@ -3184,6 +3190,7 @@ __weak void HAL_SPI_SuspendCallback(SPI_HandleTypeDef *hspi)
   */
 
 /** @defgroup SPI_Exported_Functions_Group3 Peripheral State and Errors functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   SPI control functions
   *
 @verbatim

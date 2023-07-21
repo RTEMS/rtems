@@ -36,11 +36,13 @@
   */
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup CORTEX_Exported_Types Cortex Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 #if (__MPU_PRESENT == 1)
 /** @defgroup CORTEX_MPU_Region_Initialization_Structure_definition MPU Region Initialization Structure Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  MPU Region initialization structure
   * @{
   */
@@ -80,10 +82,12 @@ typedef struct
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup CORTEX_Exported_Constants CORTEX Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CORTEX_Preemption_Priority_Group CORTEX Preemption Priority Group
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define NVIC_PRIORITYGROUP_0         ((uint32_t)0x00000007) /*!< 0 bits for pre-emption priority
@@ -101,6 +105,7 @@ typedef struct
   */
 
 /** @defgroup CORTEX_SysTick_clock_source CORTEX _SysTick clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SYSTICK_CLKSOURCE_HCLK_DIV8    ((uint32_t)0x00000000)
@@ -112,6 +117,7 @@ typedef struct
 
 #if (__MPU_PRESENT == 1)
 /** @defgroup CORTEX_MPU_HFNMI_PRIVDEF_Control MPU HFNMI and PRIVILEGED Access control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  MPU_HFNMI_PRIVDEF_NONE      ((uint32_t)0x00000000)
@@ -123,6 +129,7 @@ typedef struct
   */
 
 /** @defgroup CORTEX_MPU_Region_Enable CORTEX MPU Region Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  MPU_REGION_ENABLE     ((uint8_t)0x01)
@@ -132,6 +139,7 @@ typedef struct
   */
 
 /** @defgroup CORTEX_MPU_Instruction_Access CORTEX MPU Instruction Access
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  MPU_INSTRUCTION_ACCESS_ENABLE      ((uint8_t)0x00)
@@ -141,6 +149,7 @@ typedef struct
   */
 
 /** @defgroup CORTEX_MPU_Access_Shareable CORTEX MPU Instruction Access Shareable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  MPU_ACCESS_SHAREABLE        ((uint8_t)0x01)
@@ -150,6 +159,7 @@ typedef struct
   */
 
 /** @defgroup CORTEX_MPU_Access_Cacheable CORTEX MPU Instruction Access Cacheable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  MPU_ACCESS_CACHEABLE         ((uint8_t)0x01)
@@ -159,6 +169,7 @@ typedef struct
   */
 
 /** @defgroup CORTEX_MPU_Access_Bufferable CORTEX MPU Instruction Access Bufferable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  MPU_ACCESS_BUFFERABLE         ((uint8_t)0x01)
@@ -168,6 +179,7 @@ typedef struct
   */
 
 /** @defgroup CORTEX_MPU_TEX_Levels MPU TEX Levels
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  MPU_TEX_LEVEL0    ((uint8_t)0x00)
@@ -178,6 +190,7 @@ typedef struct
   */
 
 /** @defgroup CORTEX_MPU_Region_Size CORTEX MPU Region Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define   MPU_REGION_SIZE_32B      ((uint8_t)0x04)
@@ -213,6 +226,7 @@ typedef struct
   */
 
 /** @defgroup CORTEX_MPU_Region_Permission_Attributes CORTEX MPU Region Permission Attributes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  MPU_REGION_NO_ACCESS      ((uint8_t)0x00)
@@ -226,6 +240,7 @@ typedef struct
   */
 
 /** @defgroup CORTEX_MPU_Region_Number CORTEX MPU Region Number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  MPU_REGION_NUMBER0    ((uint8_t)0x00)
@@ -259,6 +274,7 @@ typedef struct
 
 /* Exported Macros -----------------------------------------------------------*/
 /** @defgroup CORTEX_Exported_Macros CORTEX Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -269,6 +285,7 @@ typedef struct
 
 
 /** @defgroup CORTEX_CPU_Identifier CORTEX_CPU_Identifier
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CM7_CPUID        ((uint32_t)0x00000003)
@@ -334,6 +351,7 @@ uint32_t HAL_GetCurrentCPUID(void);
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup CORTEX_Private_Macros CORTEX Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_NVIC_PRIORITY_GROUP(GROUP) (((GROUP) == NVIC_PRIORITYGROUP_0) || \

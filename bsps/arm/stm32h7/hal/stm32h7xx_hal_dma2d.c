@@ -171,6 +171,7 @@
   */
 
 /** @defgroup DMA2D  DMA2D
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DMA2D HAL module driver
   * @{
   */
@@ -178,10 +179,12 @@
 /* Private types -------------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup DMA2D_Private_Constants DMA2D Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DMA2D_TimeOut DMA2D Time Out
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_TIMEOUT_ABORT           (1000U)  /*!<  1s  */
@@ -210,10 +213,12 @@ static void DMA2D_SetConfig(DMA2D_HandleTypeDef *hdma2d, uint32_t pdata, uint32_
 /* Private functions ---------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup DMA2D_Exported_Functions DMA2D Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DMA2D_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Initialization and Configuration functions
   *
 @verbatim
@@ -626,6 +631,7 @@ HAL_StatusTypeDef HAL_DMA2D_UnRegisterCallback(DMA2D_HandleTypeDef *hdma2d, HAL_
 
 
 /** @defgroup DMA2D_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   IO operation functions
   *
 @verbatim
@@ -1740,6 +1746,7 @@ __weak void HAL_DMA2D_CLUTLoadingCpltCallback(DMA2D_HandleTypeDef *hdma2d)
   */
 
 /** @defgroup DMA2D_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Peripheral Control functions
   *
 @verbatim
@@ -2041,6 +2048,7 @@ HAL_StatusTypeDef HAL_DMA2D_ConfigDeadTime(DMA2D_HandleTypeDef *hdma2d, uint8_t 
 
 
 /** @defgroup DMA2D_Exported_Functions_Group4 Peripheral State and Error functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Peripheral State functions
   *
 @verbatim
@@ -2088,6 +2096,7 @@ uint32_t HAL_DMA2D_GetError(DMA2D_HandleTypeDef *hdma2d)
 
 
 /** @defgroup DMA2D_Private_Functions DMA2D Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -86,6 +86,7 @@
   */
 
 /** @defgroup TIMEx TIMEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief TIM Extended HAL module driver
   * @{
   */
@@ -97,6 +98,7 @@
 #if defined(TIM_BDTR_BKBID)
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup TIMEx_Private_Constants TIM Extended Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Timeout for break input rearm */
@@ -116,10 +118,12 @@ static void TIM_CCxNChannelCmd(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t Cha
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup TIMEx_Exported_Functions TIM Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup TIMEx_Exported_Functions_Group1 Extended Timer Hall Sensor functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Timer Hall Sensor functions
   *
 @verbatim
@@ -606,6 +610,7 @@ HAL_StatusTypeDef HAL_TIMEx_HallSensor_Stop_DMA(TIM_HandleTypeDef *htim)
   */
 
 /** @defgroup TIMEx_Exported_Functions_Group2 Extended Timer Complementary Output Compare functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Timer Complementary Output Compare functions
   *
 @verbatim
@@ -1081,6 +1086,7 @@ HAL_StatusTypeDef HAL_TIMEx_OCN_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Chann
   */
 
 /** @defgroup TIMEx_Exported_Functions_Group3 Extended Timer Complementary PWM functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Timer Complementary PWM functions
   *
 @verbatim
@@ -1563,6 +1569,7 @@ HAL_StatusTypeDef HAL_TIMEx_PWMN_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Chan
   */
 
 /** @defgroup TIMEx_Exported_Functions_Group4 Extended Timer Complementary One Pulse functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Timer Complementary One Pulse functions
   *
 @verbatim
@@ -1773,6 +1780,7 @@ HAL_StatusTypeDef HAL_TIMEx_OnePulseN_Stop_IT(TIM_HandleTypeDef *htim, uint32_t 
   */
 
 /** @defgroup TIMEx_Exported_Functions_Group5 Extended Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Peripheral Control functions
   *
 @verbatim
@@ -2637,6 +2645,7 @@ HAL_StatusTypeDef HAL_TIMEx_ReArmBreakInput(TIM_HandleTypeDef *htim, uint32_t Br
   */
 
 /** @defgroup TIMEx_Exported_Functions_Group6 Extended Callbacks functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended Callbacks functions
   *
 @verbatim
@@ -2715,6 +2724,7 @@ __weak void HAL_TIMEx_Break2Callback(TIM_HandleTypeDef *htim)
   */
 
 /** @defgroup TIMEx_Exported_Functions_Group7 Extended Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended Peripheral State functions
   *
 @verbatim
@@ -2770,6 +2780,7 @@ HAL_TIM_ChannelStateTypeDef HAL_TIMEx_GetChannelNState(const TIM_HandleTypeDef *
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup TIMEx_Private_Functions TIM Extended Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

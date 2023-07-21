@@ -34,6 +34,7 @@ extern "C" {
 #if defined(CORDIC)
 
 /** @defgroup CORDIC_LL CORDIC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -47,10 +48,12 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CORDIC_LL_Exported_Constants CORDIC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CORDIC_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_CORDIC_ReadReg function.
   * @{
   */
@@ -60,6 +63,7 @@ extern "C" {
   */
 
 /** @defgroup CORDIC_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_CORDIC_ReadReg and LL_CORDIC_WriteReg functions.
   * @{
   */
@@ -69,6 +73,7 @@ extern "C" {
   */
 
 /** @defgroup CORDIC_LL_EC_FUNCTION FUNCTION
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CORDIC_FUNCTION_COSINE          (0x00000000U)                                                          /*!< Cosine */
@@ -86,6 +91,7 @@ extern "C" {
   */
 
 /** @defgroup CORDIC_LL_EC_PRECISION PRECISION
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CORDIC_PRECISION_1CYCLE         ((uint32_t)(CORDIC_CSR_PRECISION_0))
@@ -114,6 +120,7 @@ extern "C" {
   */
 
 /** @defgroup CORDIC_LL_EC_SCALE SCALE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CORDIC_SCALE_0                  (0x00000000U)
@@ -129,6 +136,7 @@ extern "C" {
   */
 
 /** @defgroup CORDIC_LL_EC_NBWRITE NBWRITE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CORDIC_NBWRITE_1                (0x00000000U)             /*!< One 32-bits write containing either only one
@@ -142,6 +150,7 @@ extern "C" {
   */
 
 /** @defgroup CORDIC_LL_EC_NBREAD NBREAD
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CORDIC_NBREAD_1                 (0x00000000U)             /*!< One 32-bits read containing either only one
@@ -155,6 +164,7 @@ extern "C" {
   */
 
 /** @defgroup CORDIC_LL_EC_INSIZE INSIZE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CORDIC_INSIZE_32BITS            (0x00000000U)             /*!< 32 bits input data size (Q1.31 format) */
@@ -164,6 +174,7 @@ extern "C" {
   */
 
 /** @defgroup CORDIC_LL_EC_OUTSIZE OUTSIZE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CORDIC_OUTSIZE_32BITS           (0x00000000U)             /*!< 32 bits output data size (Q1.31 format) */
@@ -173,6 +184,7 @@ extern "C" {
   */
 
 /** @defgroup CORDIC_LL_EC_DMA_REG_DATA DMA register data
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CORDIC_DMA_REG_DATA_IN          (0x00000000U)             /*!< Get address of input data register */
@@ -187,10 +199,12 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup CORDIC_LL_Exported_Macros CORDIC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CORDIC_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -222,10 +236,12 @@ extern "C" {
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup CORDIC_LL_Exported_Functions CORDIC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CORDIC_LL_EF_Configuration CORDIC Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -557,6 +573,7 @@ __STATIC_INLINE uint32_t LL_CORDIC_GetOutSize(const CORDIC_TypeDef *CORDICx)
   */
 
 /** @defgroup CORDIC_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -598,6 +615,7 @@ __STATIC_INLINE uint32_t LL_CORDIC_IsEnabledIT(const CORDIC_TypeDef *CORDICx)
   */
 
 /** @defgroup CORDIC_LL_EF_DMA_Management DMA_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -700,6 +718,7 @@ __STATIC_INLINE uint32_t LL_CORDIC_DMA_GetRegAddr(const CORDIC_TypeDef *CORDICx,
   */
 
 /** @defgroup CORDIC_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -719,6 +738,7 @@ __STATIC_INLINE uint32_t LL_CORDIC_IsActiveFlag_RRDY(const CORDIC_TypeDef *CORDI
   */
 
 /** @defgroup CORDIC_LL_EF_Data_Management Data_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -753,6 +773,7 @@ __STATIC_INLINE uint32_t LL_CORDIC_ReadData(const CORDIC_TypeDef *CORDICx)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup CORDIC_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 ErrorStatus LL_CORDIC_DeInit(const CORDIC_TypeDef *CORDICx);

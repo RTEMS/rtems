@@ -116,6 +116,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup IWDG_Private_Defines IWDG Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Status register needs up to 5 LSI clock periods divided by the clock

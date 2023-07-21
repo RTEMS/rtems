@@ -48,6 +48,7 @@ extern "C" {
 #if defined (FLASH) || defined (SYSCFG) || defined (DBGMCU)
 
 /** @defgroup SYSTEM_LL SYSTEM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -56,9 +57,11 @@ extern "C" {
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup SYSTEM_LL_Private_Constants SYSTEM Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup SYSTEM_LL_EC_FLASH_BANK1_SECTORS SYSCFG Flash Bank1 sectors bits status
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_FLASH_B1_SECTOR0_STATUS_BIT   0x10000U
@@ -74,6 +77,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_FLASH_BANK2_SECTORS SYSCFG Flash Bank2 sectors bits status
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_FLASH_B2_SECTOR0_STATUS_BIT   0x10000U
@@ -96,10 +100,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SYSTEM_LL_Exported_Constants SYSTEM Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SYSTEM_LL_EC_I2C_FASTMODEPLUS SYSCFG I2C FASTMODEPLUS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_I2C_FASTMODEPLUS_I2C1        SYSCFG_PMCR_I2C1_FMP       /*!< Enable Fast Mode Plus for I2C1      */
@@ -118,6 +124,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_ANALOG_SWITCH Analog Switch control
+  * @ingroup RTEMSBSPsARMSTM32H7
 * @{
 */
 #if defined(SYSCFG_PMCR_BOOSTEN)
@@ -133,6 +140,7 @@ extern "C" {
 
 #if defined(SYSCFG_PMCR_EPIS_SEL)
 /** @defgroup SYSTEM_LL_EC_EPIS Ethernet PHY Interface Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
 * @{
 */
 #define LL_SYSCFG_ETH_MII               0x00000000U                           /*!< ETH Media MII interface */
@@ -143,6 +151,7 @@ extern "C" {
 #endif /* SYSCFG_PMCR_EPIS_SEL */
 
 /** @defgroup SYSTEM_LL_EC_EXTI_PORT SYSCFG EXTI PORT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_EXTI_PORTA               0U               /*!< EXTI PORT A                        */
@@ -163,6 +172,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_EXTI_LINE SYSCFG EXTI LINE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_EXTI_LINE0               ((0x000FUL << 16U) | 0U)  /*!< EXTI_POSITION_0  | EXTICR[0] */
@@ -186,6 +196,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_TIMBREAK SYSCFG TIMER BREAK
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_TIMBREAK_AXISRAM_DBL_ECC SYSCFG_CFGR_AXISRAML /*!< Enables and locks the AXIRAM double ECC error signal
@@ -232,6 +243,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_CS SYSCFG I/O compensation cell Code selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_CELL_CODE               0U
@@ -241,6 +253,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_IWDG1_CONTROL_MODES SYSCFG IWDG1 control modes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_IWDG1_SW_CONTROL_MODE   0U
@@ -251,6 +264,7 @@ extern "C" {
 
 #if defined (DUAL_CORE)
 /** @defgroup SYSTEM_LL_IWDG2_CONTROL_MODES SYSCFG IWDG2 control modes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_IWDG2_SW_CONTROL_MODE   0U
@@ -261,6 +275,7 @@ extern "C" {
 #endif /* DUAL_CORE */
 
 /** @defgroup SYSTEM_LL_DTCM_RAM_SIZE SYSCFG DTCM RAM size configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_DTCM_RAM_SIZE_2KB     0U
@@ -272,6 +287,7 @@ extern "C" {
   */
 #ifdef SYSCFG_UR17_TCM_AXI_CFG
 /** @defgroup SYSTEM_LL_PACKAGE SYSCFG device package
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_ITCM_AXI_64KB_320KB     0U
@@ -284,6 +300,7 @@ extern "C" {
 #endif /* #ifdef SYSCFG_UR17_TCM_AXI_CFG */
 #if defined(SYSCFG_PKGR_PKG)
 /** @defgroup SYSTEM_LL_PACKAGE SYSCFG device package
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if (STM32H7_DEV_ID == 0x450UL)
@@ -310,6 +327,7 @@ extern "C" {
 #endif /* SYSCFG_PKGR_PKG */
   
 /** @defgroup SYSTEM_LL_SYSCFG_BOR SYSCFG Brownout Reset Threshold Level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSCFG_BOR_OFF_RESET_LEVEL      0x00000000U
@@ -322,6 +340,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_TRACE DBGMCU TRACE Pin Assignment
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DBGMCU_TRACE_NONE               0x00000000U                                     /*!< TRACE pins not assigned (default state) */
@@ -334,6 +353,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_APB1_GRP1_STOP_IP DBGMCU APB1 GRP1 STOP IP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DBGMCU_APB1_GRP1_TIM2_STOP      DBGMCU_APB1LFZ1_DBG_TIM2     /*!< TIM2 counter stopped when core is halted */
@@ -358,6 +378,7 @@ extern "C" {
 
 
 /** @defgroup SYSTEM_LL_EC_APB1_GRP2_STOP_IP DBGMCU APB1 GRP2 STOP IP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(DBGMCU_APB1HFZ1_DBG_FDCAN)
@@ -374,6 +395,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_APB2_GRP1_STOP_IP DBGMCU APB2 GRP1 STOP IP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DBGMCU_APB2_GRP1_TIM1_STOP      DBGMCU_APB2FZ1_DBG_TIM1    /*!< TIM1 counter stopped when core is halted */
@@ -389,6 +411,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_APB3_GRP1_STOP_IP DBGMCU APB3 GRP1 STOP IP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DBGMCU_APB3_GRP1_WWDG1_STOP      DBGMCU_APB3FZ1_DBG_WWDG1   /*!< WWDG1 is frozen while the core is in debug mode */
@@ -397,6 +420,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_APB4_GRP1_STOP_IP DBGMCU APB4 GRP1 STOP IP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DBGMCU_APB4_GRP1_I2C4_STOP       DBGMCU_APB4FZ1_DBG_I2C4     /*!< I2C4 is frozen while the core is in debug mode */
@@ -411,6 +435,7 @@ extern "C" {
   */
 
 /** @defgroup SYSTEM_LL_EC_LATENCY FLASH LATENCY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_FLASH_LATENCY_0                 FLASH_ACR_LATENCY_0WS   /*!< FLASH Zero wait state */
@@ -433,10 +458,12 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SYSTEM_LL_Exported_Functions SYSTEM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SYSTEM_LL_EF_SYSCFG SYSCFG
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1770,6 +1797,7 @@ __STATIC_INLINE uint32_t LL_SYSCFG_IsCpuFreqBoostEnabled(void)
   */
 
 /** @defgroup SYSTEM_LL_EF_DBGMCU DBGMCU
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2313,6 +2341,7 @@ __STATIC_INLINE void LL_DBGMCU_APB4_GRP1_UnFreezePeriph(uint32_t Periphs)
   */
 
 /** @defgroup SYSTEM_LL_EF_FLASH FLASH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2359,6 +2388,7 @@ __STATIC_INLINE uint32_t LL_FLASH_GetLatency(void)
 
 #if defined(DUAL_CORE)
 /** @defgroup SYSTEM_LL_EF_ART ART
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

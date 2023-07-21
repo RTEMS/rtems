@@ -267,6 +267,7 @@
   */
 
 /** @defgroup OSPI OSPI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief OSPI HAL module driver
   * @{
   */
@@ -314,10 +315,12 @@ static HAL_StatusTypeDef OSPIM_GetConfig               (uint8_t instance_nb, OSP
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup OSPI_Exported_Functions OSPI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OSPI_Exported_Functions_Group1 Initialization/de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -544,6 +547,7 @@ __weak void HAL_OSPI_MspDeInit(OSPI_HandleTypeDef *hospi)
   */
 
 /** @defgroup OSPI_Exported_Functions_Group2 Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief OSPI Transmit/Receive functions
   *
 @verbatim
@@ -2206,6 +2210,7 @@ HAL_StatusTypeDef HAL_OSPI_UnRegisterCallback (OSPI_HandleTypeDef *hospi, HAL_OS
   */
 
 /** @defgroup OSPI_Exported_Functions_Group3 Peripheral Control and State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   OSPI control and State functions
   *
 @verbatim
@@ -2445,6 +2450,7 @@ uint32_t HAL_OSPI_GetState(OSPI_HandleTypeDef *hospi)
   */
 
 /** @defgroup OSPI_Exported_Functions_Group4 IO Manager configuration function
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   OSPI IO Manager configuration function
   *
 @verbatim

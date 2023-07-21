@@ -37,6 +37,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SPI_Exported_Types SPI Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -255,10 +256,12 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup SPI_Exported_Constants SPI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SPI_FIFO_Type SPI FIFO Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_LOWEND_FIFO_SIZE                          8UL
@@ -268,6 +271,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Error_Code SPI Error Codes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_SPI_ERROR_NONE                            (0x00000000UL)   /*!< No error                               */
@@ -291,6 +295,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Mode SPI Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_MODE_SLAVE                                (0x00000000UL)
@@ -300,6 +305,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Direction SPI Direction Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_DIRECTION_2LINES                          (0x00000000UL)
@@ -311,6 +317,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Data_Size SPI Data Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_DATASIZE_4BIT                             (0x00000003UL)
@@ -347,6 +354,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Clock_Polarity SPI Clock Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_POLARITY_LOW                              (0x00000000UL)
@@ -356,6 +364,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Clock_Phase SPI Clock Phase
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_PHASE_1EDGE                               (0x00000000UL)
@@ -365,6 +374,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Slave_Select_Management SPI Slave Select Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_NSS_SOFT                                  SPI_CFG2_SSM
@@ -375,6 +385,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_NSSP_Mode SPI NSS Pulse Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_NSS_PULSE_DISABLE                         (0x00000000UL)
@@ -384,6 +395,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_BaudRate_Prescaler SPI BaudRate Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_BAUDRATEPRESCALER_2                       (0x00000000UL)
@@ -399,6 +411,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_MSB_LSB_Transmission SPI MSB LSB Transmission
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_FIRSTBIT_MSB                              (0x00000000UL)
@@ -408,6 +421,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_TI_Mode SPI TI Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_TIMODE_DISABLE                            (0x00000000UL)
@@ -417,6 +431,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_CRC_Calculation SPI CRC Calculation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_CRCCALCULATION_DISABLE                    (0x00000000UL)
@@ -426,6 +441,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_CRC_length SPI CRC Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_CRC_LENGTH_DATASIZE                       (0x00000000UL)
@@ -463,6 +479,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Fifo_Threshold SPI Fifo Threshold
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_FIFO_THRESHOLD_01DATA                     (0x00000000UL)
@@ -486,6 +503,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_CRC_Calculation_Initialization_Pattern SPI CRC Calculation Initialization Pattern
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_CRC_INITIALIZATION_ALL_ZERO_PATTERN       (0x00000000UL)
@@ -495,6 +513,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_NSS_Polarity SPI NSS Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_NSS_POLARITY_LOW                          (0x00000000UL)
@@ -504,6 +523,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Master_Keep_IO_State Keep IO State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_MASTER_KEEP_IO_STATE_DISABLE              (0x00000000UL)
@@ -513,6 +533,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_IO_Swap Control SPI IO Swap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_IO_SWAP_DISABLE                           (0x00000000UL)
@@ -522,6 +543,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Master_SS_Idleness SPI Master SS Idleness
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_MASTER_SS_IDLENESS_00CYCLE                (0x00000000UL)
@@ -545,6 +567,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Master_InterData_Idleness SPI Master Inter-Data Idleness
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_MASTER_INTERDATA_IDLENESS_00CYCLE         (0x00000000UL)
@@ -568,6 +591,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Master_RX_AutoSuspend SPI Master Receiver AutoSuspend
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_MASTER_RX_AUTOSUSP_DISABLE                (0x00000000UL)
@@ -577,6 +601,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Underrun_Behaviour SPI Underrun Behavior
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_UNDERRUN_BEHAV_REGISTER_PATTERN           (0x00000000UL)
@@ -587,6 +612,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Underrun_Detection SPI Underrun Detection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_UNDERRUN_DETECT_BEGIN_DATA_FRAME          (0x00000000UL)
@@ -597,6 +623,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Interrupt_definition SPI Interrupt Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_IT_RXP                      SPI_IER_RXPIE
@@ -616,6 +643,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_Flags_definition SPI Flags Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_FLAG_RXP                    SPI_SR_RXP     /* SPI status flag : Rx-Packet available flag                 */
@@ -638,6 +666,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
   */
 
 /** @defgroup SPI_reception_fifo_status_level SPI Reception FIFO Status Level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SPI_RX_FIFO_0PACKET             (0x00000000UL)         /* 0 or multiple of 4 packets available in the RxFIFO */
@@ -654,6 +683,7 @@ typedef  void (*pSPI_CallbackTypeDef)(SPI_HandleTypeDef *hspi); /*!< pointer to 
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup SPI_Exported_Macros SPI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -922,6 +952,7 @@ uint32_t             HAL_SPI_GetError(const SPI_HandleTypeDef *hspi);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup SPI_Private_Macros SPI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

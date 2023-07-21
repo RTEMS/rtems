@@ -71,6 +71,7 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup LPTIM_Private_Functions LPTIM Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**

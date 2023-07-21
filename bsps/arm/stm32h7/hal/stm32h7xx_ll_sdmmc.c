@@ -158,6 +158,7 @@
   */
 
 /** @defgroup SDMMC_LL SDMMC Low Layer
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief Low layer module for SD
   * @{
   */
@@ -174,10 +175,12 @@ static uint32_t SDMMC_GetCmdError(SDMMC_TypeDef *SDMMCx);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup SDMMC_LL_Exported_Functions SDMMC Low Layer Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HAL_SDMMC_LL_Group1 Initialization de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -229,6 +232,7 @@ HAL_StatusTypeDef SDMMC_Init(SDMMC_TypeDef *SDMMCx, SDMMC_InitTypeDef Init)
   */
 
 /** @defgroup HAL_SDMMC_LL_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Data transfers functions
   *
 @verbatim
@@ -273,6 +277,7 @@ HAL_StatusTypeDef SDMMC_WriteFIFO(SDMMC_TypeDef *SDMMCx, uint32_t *pWriteData)
   */
 
 /** @defgroup HAL_SDMMC_LL_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   management functions
   *
 @verbatim
@@ -492,6 +497,7 @@ HAL_StatusTypeDef SDMMC_SetSDMMCReadWaitMode(SDMMC_TypeDef *SDMMCx, uint32_t SDM
 
 
 /** @defgroup HAL_SDMMC_LL_Group4 Command management functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Data transfers functions
   *
 @verbatim
@@ -1237,6 +1243,7 @@ uint32_t SDMMC_CmdSendEXTCSD(SDMMC_TypeDef *SDMMCx, uint32_t Argument)
 
 
 /** @defgroup HAL_SDMMC_LL_Group5 Responses management functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Responses functions
   *
 @verbatim

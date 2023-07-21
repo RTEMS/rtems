@@ -41,6 +41,7 @@
   */
 
 /** @defgroup MMCEx MMCEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief MMC Extended HAL module driver
   * @{
   */

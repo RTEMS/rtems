@@ -34,6 +34,7 @@ extern "C" {
 #if defined(IWDG1) || defined(IWDG2)
 
 /** @defgroup IWDG_LL IWDG
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -42,6 +43,7 @@ extern "C" {
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup IWDG_LL_Private_Constants IWDG Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_IWDG_KEY_RELOAD                 0x0000AAAAU               /*!< IWDG Reload Counter Enable   */
@@ -57,10 +59,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup IWDG_LL_Exported_Constants IWDG Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup IWDG_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_IWDG_ReadReg function
   * @{
   */
@@ -72,6 +76,7 @@ extern "C" {
   */
 
 /** @defgroup IWDG_LL_EC_PRESCALER  Prescaler Divider
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_IWDG_PRESCALER_4                0x00000000U                           /*!< Divider by 4   */
@@ -91,10 +96,12 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup IWDG_LL_Exported_Macros IWDG Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup IWDG_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -125,9 +132,11 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup IWDG_LL_Exported_Functions IWDG Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup IWDG_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -264,6 +273,7 @@ __STATIC_INLINE uint32_t LL_IWDG_GetWindow(IWDG_TypeDef *IWDGx)
   */
 
 /** @defgroup IWDG_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

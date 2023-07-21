@@ -40,6 +40,7 @@
   */
 
 /** @defgroup HAL  HAL
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HAL module driver.
   * @{
   */
@@ -66,6 +67,7 @@
 /* Exported variables --------------------------------------------------------*/
 
 /** @defgroup HAL_Exported_Variables HAL Exported Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #ifndef __rtems__

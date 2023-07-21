@@ -35,6 +35,7 @@
   */
 
 /** @defgroup HAL_MSP HAL MSP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HAL MSP module.
   * @{
   */
@@ -47,6 +48,7 @@
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup HAL_MSP_Private_Functions HAL MSP Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

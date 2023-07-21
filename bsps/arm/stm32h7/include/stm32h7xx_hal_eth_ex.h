@@ -39,6 +39,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup ETHEx_Exported_Types ETHEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -152,10 +153,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup ETHEx_Exported_Constants ETHEx Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup ETHEx_LPI_Event ETHEx LPI Event
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_TX_LPI_ENTRY    ETH_MACLCSR_TLPIEN
@@ -167,6 +170,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_L3_Filter ETHEx L3 Filter
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_L3_FILTER_0                 0x00000000U
@@ -176,6 +180,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_L4_Filter ETHEx L4 Filter
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_L4_FILTER_0                 0x00000000U
@@ -185,6 +190,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_L3_Protocol ETHEx L3 Protocol
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_L3_IPV6_MATCH                       ETH_MACL3L4CR_L3PEN
@@ -194,6 +200,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_L3_Source_Match ETHEx L3 Source Match
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_L3_SRC_ADDR_PERFECT_MATCH_ENABLE    ETH_MACL3L4CR_L3SAM
@@ -204,6 +211,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_L3_Destination_Match ETHEx L3 Destination Match
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_L3_DEST_ADDR_PERFECT_MATCH_ENABLE   ETH_MACL3L4CR_L3DAM
@@ -214,6 +222,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_L4_Protocol ETHEx L4 Protocol
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_L4_UDP_MATCH                        ETH_MACL3L4CR_L4PEN
@@ -223,6 +232,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_L4_Source_Match ETHEx L4 Source Match
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_L4_SRC_PORT_PERFECT_MATCH_ENABLE    ETH_MACL3L4CR_L4SPM
@@ -233,6 +243,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_L4_Destination_Match ETHEx L4 Destination Match
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_L4_DEST_PORT_PERFECT_MATCH_ENABLE   ETH_MACL3L4CR_L4DPM
@@ -243,6 +254,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_Rx_Inner_VLAN_Tag_Stripping ETHEx Rx Inner VLAN Tag Stripping
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_INNERVLANTAGRXSTRIPPING_NONE      ETH_MACVTR_EIVLS_DONOTSTRIP
@@ -254,6 +266,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_Rx_VLAN_Tag_Stripping ETHEx Rx VLAN Tag Stripping
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_VLANTAGRXSTRIPPING_NONE      ETH_MACVTR_EVLS_DONOTSTRIP
@@ -265,6 +278,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_VLAN_Type_Check ETHEx VLAN Type Check
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_VLANTYPECHECK_DISABLE    ETH_MACVTR_DOVLTC
@@ -275,6 +289,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_VLAN_Tag_Control ETHEx_VLAN_Tag_Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_VLANTAGCONTROL_NONE       (ETH_MACVIR_VLP | ETH_MACVIR_VLC_NOVLANTAG)
@@ -286,6 +301,7 @@ typedef struct
   */
 
 /** @defgroup ETHEx_Tx_VLAN_Tag ETHEx Tx VLAN Tag
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_INNER_TX_VLANTAG    0x00000001U

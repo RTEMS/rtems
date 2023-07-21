@@ -39,6 +39,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup CORDIC_Exported_Types CORDIC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -152,10 +153,12 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CORDIC_Exported_Constants CORDIC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CORDIC_Error_Code CORDIC Error code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_CORDIC_ERROR_NONE              ((uint32_t)0x00000000U)   /*!< No error                */
@@ -171,6 +174,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_Function CORDIC Function
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CORDIC_FUNCTION_COSINE      (0x00000000U)                                                          /*!< Cosine */
@@ -188,6 +192,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_Precision_In_Cycles_Number CORDIC Precision in Cycles Number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Note: 1 cycle corresponds to 4 algorithm iterations */
@@ -217,6 +222,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_Scale CORDIC Scaling factor
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Scale factor value 'n' implies that the input data have been multiplied
@@ -234,6 +240,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_Interrupts_Enable CORDIC Interrupts Enable bit
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CORDIC_IT_IEN              CORDIC_CSR_IEN            /*!< Result ready interrupt enable */
@@ -242,6 +249,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_DMAR DMA Read Request Enable bit
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CORDIC_DMA_REN             CORDIC_CSR_DMAREN         /*!< DMA Read requests enable */
@@ -250,6 +258,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_DMAW DMA Write Request Enable bit
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CORDIC_DMA_WEN             CORDIC_CSR_DMAWEN         /*!< DMA Write channel enable */
@@ -258,6 +267,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_Nb_Write CORDIC Number of 32-bit write required for one calculation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CORDIC_NBWRITE_1           (0x00000000U)             /*!< One 32-bits write containing either only one
@@ -271,6 +281,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_Nb_Read CORDIC Number of 32-bit read required after one calculation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CORDIC_NBREAD_1            (0x00000000U)             /*!< One 32-bits read containing either only one
@@ -284,6 +295,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_In_Size CORDIC input data size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CORDIC_INSIZE_32BITS       (0x00000000U)             /*!< 32 bits input data size (Q1.31 format) */
@@ -293,6 +305,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_Out_Size CORDIC Results Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CORDIC_OUTSIZE_32BITS      (0x00000000U)             /*!< 32 bits output data size (Q1.31 format) */
@@ -302,6 +315,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_Flags  CORDIC status flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CORDIC_FLAG_RRDY           CORDIC_CSR_RRDY           /*!< Result Ready Flag */
@@ -310,6 +324,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
   */
 
 /** @defgroup CORDIC_DMA_Direction CORDIC DMA direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CORDIC_DMA_DIR_NONE        ((uint32_t)0x00000000U)   /*!< DMA direction : none */
@@ -327,6 +342,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup CORDIC_Exported_Macros CORDIC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -418,6 +434,7 @@ typedef  void (*pCORDIC_CallbackTypeDef)(CORDIC_HandleTypeDef *hcordic);  /*!< p
 
 /* Private macros --------------------------------------------------------*/
 /** @defgroup  CORDIC_Private_Macros   CORDIC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

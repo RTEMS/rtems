@@ -38,10 +38,12 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SDEx_Exported_Types SDEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SDEx_Exported_Types_Group1 SD Card Internal DMA Buffer structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -60,10 +62,12 @@ typedef enum
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SDEx_Exported_Functions SDEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SDEx_Exported_Functions_Group1 MultiBuffer functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

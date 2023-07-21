@@ -38,6 +38,7 @@
 /* Exported types ------------------------------------------------------------*/ 
 
 /** @defgroup OPAMP_Exported_Types OPAMP Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -167,10 +168,12 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
     
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup OPAMP_Exported_Constants OPAMP Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OPAMP_Mode OPAMP Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OPAMP_STANDALONE_MODE             0x00000000U                                  /*!< standalone mode */
@@ -182,6 +185,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
   */
 
 /** @defgroup OPAMP_NonInvertingInput OPAMP Non Inverting Input
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -196,6 +200,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
   */
 
 /** @defgroup OPAMP_InvertingInput OPAMP Inverting Input
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -207,6 +212,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
   */
 
 /** @defgroup OPAMP_PgaConnect OPAMP Pga Connect
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -221,6 +227,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
   */
 
 /** @defgroup OPAMP_PgaGain OPAMP Pga Gain
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -234,6 +241,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
   */
 
 /** @defgroup OPAMP_PowerMode OPAMP PowerMode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OPAMP_POWERMODE_NORMAL         0x00000000U
@@ -245,6 +253,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
 
 
 /** @defgroup OPAMP_VREF OPAMP VREF
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -258,6 +267,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
   */ 
 
 /** @defgroup OPAMP_UserTrimming OPAMP User Trimming
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OPAMP_TRIMMING_FACTORY         0x00000000U                             /*!< Factory trimming */
@@ -269,6 +279,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
   */
 
 /** @defgroup OPAMP_FactoryTrimming OPAMP Factory Trimming
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OPAMP_FACTORYTRIMMING_DUMMY    0xFFFFFFFFU                          /*!< Dummy value if trimming value could not be retrieved */
@@ -286,6 +297,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup OPAMP_Private_Constants OPAMP Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   OPAMP Private constants and defines
   * @{
   */
@@ -305,6 +317,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup OPAMP_Exported_Macros OPAMP Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -321,6 +334,7 @@ typedef void (*pOPAMP_CallbackTypeDef)(OPAMP_HandleTypeDef *hopamp);
 /* Private macro -------------------------------------------------------------*/
 
 /** @defgroup OPAMP_Private_Macros OPAMP Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -37,6 +37,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup UARTEx_Exported_Types UARTEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -62,10 +63,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup UARTEx_Exported_Constants UARTEx Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup UARTEx_Word_Length UARTEx Word Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_WORDLENGTH_7B          USART_CR1_M1   /*!< 7-bit long UART frame */
@@ -76,6 +79,7 @@ typedef struct
   */
 
 /** @defgroup UARTEx_WakeUp_Address_Length UARTEx WakeUp Address Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADDRESS_DETECT_4B      0x00000000U      /*!< 4-bit long wake-up address */
@@ -85,6 +89,7 @@ typedef struct
   */
 
 /** @defgroup UARTEx_FIFO_mode UARTEx FIFO mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    UART FIFO mode
   * @{
   */
@@ -95,6 +100,7 @@ typedef struct
   */
 
 /** @defgroup UARTEx_TXFIFO_threshold_level UARTEx TXFIFO threshold level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    UART TXFIFO threshold level
   * @{
   */
@@ -109,6 +115,7 @@ typedef struct
   */
 
 /** @defgroup UARTEx_RXFIFO_threshold_level UARTEx RXFIFO threshold level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    UART RXFIFO threshold level
   * @{
   */
@@ -191,6 +198,7 @@ HAL_UART_RxEventTypeTypeDef HAL_UARTEx_GetRxEventType(UART_HandleTypeDef *huart)
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup UARTEx_Private_Macros UARTEx Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -52,6 +52,7 @@
   */
 
 /** @defgroup HAL_TimeBase_RTC_WakeUp_Template  HAL TimeBase RTC WakeUp Template
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

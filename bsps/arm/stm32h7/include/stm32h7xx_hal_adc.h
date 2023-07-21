@@ -40,6 +40,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup ADC_Exported_Types ADC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -352,6 +353,7 @@ typedef struct
 } ADC_InjectionConfigTypeDef;
 
 /** @defgroup ADC_States ADC States
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -464,10 +466,12 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup ADC_Exported_Constants ADC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup ADC_Error_Code ADC Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_ADC_ERROR_NONE              (0x00U)   /*!< No error                                    */
@@ -484,6 +488,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_HAL_EC_COMMON_CLOCK_SOURCE  ADC common - Clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_CLOCK_SYNC_PCLK_DIV1           (LL_ADC_CLOCK_SYNC_PCLK_DIV1)  /*!< ADC synchronous clock derived from AHB clock without prescaler */
@@ -507,6 +512,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_HAL_EC_RESOLUTION  ADC instance - Resolution
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_RESOLUTION_16B                 (LL_ADC_RESOLUTION_16B)  /*!< ADC resolution 16 bits, On devices STM32H72xx and STM32H73xx, parameter available only on ADC instance: ADC1, ADC2 */
@@ -529,6 +535,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 
 #if defined(ADC_VER_V5_V90)
 /** @defgroup ADC_HAL_EC_DATA_ALIGN ADC conversion data alignment
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC3_DATAALIGN_RIGHT                (LL_ADC_DATA_ALIGN_RIGHT)      /*!< ADC conversion data alignment: right aligned (alignment on data register LSB bit 0)*/
@@ -539,6 +546,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 #endif
 
 /** @defgroup ADC_Scan_mode ADC sequencer scan mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_SCAN_DISABLE         (0x00000000UL)       /*!< Scan mode disabled */
@@ -548,6 +556,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_regular_external_trigger_source ADC group regular trigger source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* ADC group regular trigger sources for all ADC instances */
@@ -584,6 +593,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_regular_external_trigger_edge ADC group regular trigger edge (when external trigger is selected)
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_EXTERNALTRIGCONVEDGE_NONE           (0x00000000UL)                      /*!< Regular conversions hardware trigger detection disabled */
@@ -595,6 +605,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 #if defined(ADC_VER_V5_V90)
 /** @defgroup ADC_regular_sampling_mode ADC group regular sampling mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_SAMPLING_MODE_NORMAL                (0x00000000UL)      /*!< ADC conversions sampling phase duration is defined using  @ref ADC_HAL_EC_CHANNEL_SAMPLINGTIME */
@@ -612,6 +623,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 #endif
 
 /** @defgroup ADC_EOCSelection ADC sequencer end of unitary conversion or sequence conversions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_EOC_SINGLE_CONV         (ADC_ISR_EOC)                 /*!< End of unitary conversion flag  */
@@ -621,6 +633,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_HAL_EC_REG_OVR_DATA_BEHAVIOR  ADC group regular - Overrun behavior on conversion data
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_OVR_DATA_PRESERVED             (LL_ADC_REG_OVR_DATA_PRESERVED)    /*!< ADC group regular behavior in case of overrun: data preserved */
@@ -630,6 +643,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_HAL_EC_REG_SEQ_RANKS  ADC group regular - Sequencer ranks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_REGULAR_RANK_1                 (LL_ADC_REG_RANK_1)  /*!< ADC group regular sequencer rank 1 */
@@ -653,6 +667,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_HAL_EC_CHANNEL_SAMPLINGTIME  Channel - Sampling time
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_SAMPLETIME_1CYCLE_5          (LL_ADC_SAMPLINGTIME_1CYCLE_5)     /*!< Sampling time 1.5 ADC clock cycles, On devices STM32H72xx and STM32H73xx, parameter available only on ADC instance: ADC1, ADC2 */
@@ -668,6 +683,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 #if defined(ADC_VER_V5_V90)
 /** @defgroup ADC_HAL_EC_CHANNEL_SAMPLINGTIME  Channel - Sampling time
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC3_SAMPLETIME_2CYCLES_5         (LL_ADC_SAMPLINGTIME_ADC3_2CYCLES_5)    /*!< Sampling time 2.5 ADC clock cycles, On devices STM32H72xx and STM32H73xx, parameter available only on ADC instance: ADC3 */
@@ -686,6 +702,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 #endif
 
 /** @defgroup ADCEx_Calibration_Mode   ADC Extended Calibration mode offset mode or linear mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_CALIB_OFFSET                   (LL_ADC_CALIB_OFFSET)
@@ -695,6 +712,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_HAL_EC_CHANNEL  ADC instance - Channel number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Note: VrefInt, TempSensor and Vbat internal channels are not available on  */
@@ -732,6 +750,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_ConversionDataManagement ADC Conversion Data Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_CONVERSIONDATA_DR                  ((uint32_t)0x00000000)                            /*!< Regular Conversion data stored in DR register only  */
@@ -742,6 +761,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   * @}
   */
 /** @defgroup ADC_HAL_EC_AWD_NUMBER Analog watchdog - Analog watchdog number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_ANALOGWATCHDOG_1               (LL_ADC_AWD1) /*!< ADC analog watchdog number 1 */
@@ -753,6 +773,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 
 #if defined(ADC_VER_V5_V90)
 /** @defgroup ADC_analog_watchdog_filtering_config ADC Analog Watchdog filtering configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC3_AWD_FILTERING_NONE          (0x00000000UL)                                                   /*!< ADC analog watchdog no filtering, one out-of-window sample is needed to raise flag or interrupt. Applicable for ADC3 on devices STM32H72xx and STM32H73xx */
@@ -769,6 +790,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 #endif
 
 /** @defgroup ADC_analog_watchdog_mode ADC Analog Watchdog Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_ANALOGWATCHDOG_NONE                 (0x00000000UL)                                          /*!< No analog watchdog selected                                             */
@@ -783,6 +805,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 #if defined(ADC_VER_V5_V90)
 /** @defgroup ADC_HAL_EC_OVS_RATIO  Oversampling - Ratio
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC3_OVERSAMPLING_RATIO_2           (LL_ADC_OVS_RATIO_2)    /*!< ADC oversampling ratio of 2 (2 ADC conversions are performed, sum of these conversions data is computed to result as the ADC oversampling conversion data (before potential shift). Applicable for ADC3 on devices STM32H72xx and STM32H73xx */
@@ -801,6 +824,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 #endif
 
 /** @defgroup ADC_HAL_EC_OVS_SHIFT  Oversampling - Data shift
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_RIGHTBITSHIFT_NONE             (LL_ADC_OVS_SHIFT_NONE)    /*!< ADC oversampling no shift (sum of the ADC conversions data is not divided to result as the ADC oversampling conversion data) */
@@ -820,6 +844,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADCEx_Left_Bit_Shift   ADC Extended Oversampling left Shift
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_LEFTBITSHIFT_NONE  (LL_ADC_LEFT_BIT_SHIFT_NONE)   /*!<  ADC No bit shift */
@@ -843,6 +868,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_HAL_EC_OVS_DISCONT_MODE  Oversampling - Discontinuous mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_TRIGGEREDMODE_SINGLE_TRIGGER   (LL_ADC_OVS_REG_CONT)          /*!< ADC oversampling discontinuous mode: continuous mode (all conversions of oversampling ratio are done from 1 trigger) */
@@ -852,6 +878,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_HAL_EC_OVS_SCOPE_REG  Oversampling - Oversampling scope for ADC group regular
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_REGOVERSAMPLING_CONTINUED_MODE    (LL_ADC_OVS_GRP_REGULAR_CONTINUED) /*!< Oversampling buffer maintained during injection sequence */
@@ -862,6 +889,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 
 
 /** @defgroup ADC_Event_type ADC Event type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_EOSMP_EVENT          (ADC_FLAG_EOSMP) /*!< ADC End of Sampling event */
@@ -876,6 +904,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 #define ADC_AWD_EVENT            ADC_AWD1_EVENT      /*!< ADC Analog watchdog 1 event: Naming for compatibility with other STM32 devices having only one analog watchdog */
 
 /** @defgroup ADC_interrupts_definition ADC interrupts definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_IT_RDY           ADC_IER_ADRDYIE    /*!< ADC Ready interrupt source */
@@ -897,6 +926,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_flags_definition ADC flags definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_FLAG_RDY           ADC_ISR_ADRDY    /*!< ADC Ready flag */
@@ -922,6 +952,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 /* Private macro -------------------------------------------------------------*/
 
 /** @defgroup ADC_Private_Macros ADC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Macro reserved for internal HAL driver usage, not intended to be used in   */
@@ -1240,6 +1271,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 /* Private constants ---------------------------------------------------------*/
 
 /** @defgroup ADC_Private_Constants ADC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1270,12 +1302,14 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 /* Exported macro ------------------------------------------------------------*/
 
 /** @defgroup ADC_Exported_Macros ADC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Macro for internal HAL driver usage, and possibly can be used into code of */
 /* final user.                                                                */
 
 /** @defgroup ADC_HAL_EM_HANDLE_IT_FLAG HAL ADC macro to manage HAL ADC handle, IT and flags.
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1406,6 +1440,7 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
   */
 
 /** @defgroup ADC_HAL_EM_HELPER_MACRO HAL ADC helper macro
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

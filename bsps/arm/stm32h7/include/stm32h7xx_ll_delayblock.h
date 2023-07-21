@@ -37,6 +37,7 @@
 
 /* Exported types ------------------------------------------------------------*/ 
 /** @defgroup DELAYBLOCK_LL_Exported_Types DELAYBLOCK_LL Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
   
@@ -47,6 +48,7 @@
   
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup DLYB_Exported_Constants Delay Block Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

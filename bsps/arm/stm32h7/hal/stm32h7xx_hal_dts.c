@@ -52,6 +52,7 @@
 #if defined(DTS)
 
 /** @defgroup DTS DTS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DTS HAL module driver
   * @{
   */
@@ -92,10 +93,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup DTS_Exported_Functions DTS Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DTS_Exported_Functions_Group1 Initialization/de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and de-initialization functions.
  *
 @verbatim
@@ -464,6 +467,7 @@ HAL_StatusTypeDef HAL_DTS_UnRegisterCallback(DTS_HandleTypeDef        *hdts,
   */
 
 /** @defgroup DTS_Exported_Functions_Group2 Start-Stop operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Start-Stop operation functions.
  *
 @verbatim
@@ -930,6 +934,7 @@ __weak void HAL_DTS_AsyncHighCallback(DTS_HandleTypeDef *hdts)
   */
 
 /** @defgroup DTS_Exported_Functions_Group3 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions.
  *
 @verbatim

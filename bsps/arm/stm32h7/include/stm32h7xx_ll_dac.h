@@ -34,6 +34,7 @@ extern "C" {
 #if defined(DAC1) || defined(DAC2)
 
 /** @defgroup DAC_LL DAC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -42,6 +43,7 @@ extern "C" {
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup DAC_LL_Private_Constants DAC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -133,6 +135,7 @@ extern "C" {
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup DAC_LL_Private_Macros DAC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -155,6 +158,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DAC_LL_ES_INIT DAC Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -216,10 +220,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup DAC_LL_Exported_Constants DAC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DAC_LL_EC_GET_FLAG DAC flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_DAC_ReadReg function
   * @{
   */
@@ -238,6 +244,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_IT DAC interruptions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_DAC_ReadReg and  LL_DAC_WriteReg functions
   * @{
   */
@@ -250,6 +257,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_CHANNEL DAC channels
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_CHANNEL_1                   (DAC_REG_SHSR1_REGOFFSET | DAC_REG_DOR1_REGOFFSET | DAC_REG_DHR12R1_REGOFFSET | DAC_REG_DHR12L1_REGOFFSET | DAC_REG_DHR8R1_REGOFFSET | DAC_CR_CH1_BITOFFSET | DAC_SWTR_CH1) /*!< DAC channel 1 */
@@ -259,6 +267,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_OPERATING_MODE DAC operating mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_MODE_NORMAL_OPERATION       0x00000000UL            /*!< DAC channel in mode normal operation */
@@ -268,6 +277,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_TRIGGER_SOURCE DAC trigger source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_TRIG_SOFTWARE               0x00000000U                                                         /*!< DAC channel conversion trigger internal (SW start) */
@@ -300,6 +310,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_WAVE_AUTO_GENERATION_MODE DAC waveform automatic generation mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_WAVE_AUTO_GENERATION_NONE     0x00000000UL                    /*!< DAC channel wave auto generation mode disabled. */
@@ -310,6 +321,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_WAVE_NOISE_LFSR_UNMASK_BITS DAC wave generation - Noise LFSR unmask bits
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_NOISE_LFSR_UNMASK_BIT0      0x00000000UL                                                        /*!< Noise wave generation, unmask LFSR bit0, for the selected DAC channel */
@@ -329,6 +341,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_WAVE_TRIANGLE_AMPLITUDE DAC wave generation - Triangle amplitude
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_TRIANGLE_AMPLITUDE_1        0x00000000UL                                                        /*!< Triangle wave generation, amplitude of 1 LSB of DAC output range, for the selected DAC channel */
@@ -348,6 +361,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_OUTPUT_MODE DAC channel output mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_OUTPUT_MODE_NORMAL          0x00000000UL            /*!< The selected DAC channel output is on mode normal. */
@@ -357,6 +371,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_OUTPUT_BUFFER DAC channel output buffer
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_OUTPUT_BUFFER_ENABLE        0x00000000UL            /*!< The selected DAC channel output is buffered: higher drive current capability, but also higher current consumption */
@@ -366,6 +381,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_OUTPUT_CONNECTION DAC channel output connection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_OUTPUT_CONNECT_GPIO         0x00000000UL            /*!< The selected DAC channel output is connected to external pin */
@@ -375,6 +391,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_LEGACY DAC literals legacy naming
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_TRIGGER_SOFTWARE            (LL_DAC_TRIG_SOFTWARE)
@@ -395,6 +412,7 @@ typedef struct
   * @}
   */
 /** @defgroup DAC_LL_EC_RESOLUTION  DAC channel output resolution
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DAC_RESOLUTION_12B              0x00000000UL            /*!< DAC channel resolution 12 bits */
@@ -404,6 +422,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_REGISTERS  DAC registers compliant with specific purpose
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* List of DAC registers intended to be used (most commonly) with             */
@@ -417,6 +436,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EC_HW_DELAYS  Definitions of DAC hardware constraints delays
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @note   Only DAC peripheral HW delays are defined in DAC LL driver driver,
   *         not timeout values.
   *         For details on delays values, refer to descriptions in source code
@@ -461,10 +481,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup DAC_LL_Exported_Macros DAC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DAC_LL_EM_WRITE_READ Common write and read registers macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -490,6 +512,7 @@ typedef struct
   */
 
 /** @defgroup DAC_LL_EM_HELPER_MACRO DAC helper macro
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -575,9 +598,11 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup DAC_LL_Exported_Functions DAC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup DAC_LL_EF_Configuration Configuration of DAC channels
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1254,6 +1279,7 @@ __STATIC_INLINE uint32_t LL_DAC_GetSampleAndHoldRefreshTime(DAC_TypeDef *DACx, u
   */
 
 /** @defgroup DAC_LL_EF_DMA_Management DMA Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1355,6 +1381,7 @@ __STATIC_INLINE uint32_t LL_DAC_DMA_GetRegAddr(DAC_TypeDef *DACx, uint32_t DAC_C
   */
 
 /** @defgroup DAC_LL_EF_Operation Operation on DAC channels
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1648,6 +1675,7 @@ __STATIC_INLINE uint32_t LL_DAC_RetrieveOutputData(DAC_TypeDef *DACx, uint32_t D
   */
 
 /** @defgroup DAC_LL_EF_FLAG_Management FLAG Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1751,6 +1779,7 @@ __STATIC_INLINE void LL_DAC_ClearFlag_DMAUDR2(DAC_TypeDef *DACx)
   */
 
 /** @defgroup DAC_LL_EF_IT_Management IT management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1832,6 +1861,7 @@ __STATIC_INLINE uint32_t LL_DAC_IsEnabledIT_DMAUDR2(DAC_TypeDef *DACx)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DAC_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
