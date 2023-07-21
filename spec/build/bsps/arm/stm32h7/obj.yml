@@ -13,10 +13,18 @@ install:
   - bsps/arm/stm32h7/include/bsp.h
   - bsps/arm/stm32h7/include/chip.h
   - bsps/arm/stm32h7/include/stm32_assert_template.h
+  - bsps/arm/stm32h7/include/stm32h723xx.h
+  - bsps/arm/stm32h7/include/stm32h725xx.h
+  - bsps/arm/stm32h7/include/stm32h730xx.h
+  - bsps/arm/stm32h7/include/stm32h730xxq.h
+  - bsps/arm/stm32h7/include/stm32h733xx.h
+  - bsps/arm/stm32h7/include/stm32h735xx.h
   - bsps/arm/stm32h7/include/stm32h742xx.h
   - bsps/arm/stm32h7/include/stm32h743xx.h
   - bsps/arm/stm32h7/include/stm32h745xx.h
+  - bsps/arm/stm32h7/include/stm32h745xg.h
   - bsps/arm/stm32h7/include/stm32h747xx.h
+  - bsps/arm/stm32h7/include/stm32h747xg.h
   - bsps/arm/stm32h7/include/stm32h750xx.h
   - bsps/arm/stm32h7/include/stm32h753xx.h
   - bsps/arm/stm32h7/include/stm32h755xx.h
@@ -35,6 +43,7 @@ install:
   - bsps/arm/stm32h7/include/stm32h7xx_hal_comp.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_conf.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_conf_template.h
+  - bsps/arm/stm32h7/include/stm32h7xx_hal_cordic.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_cortex.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_crc_ex.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_crc.h
@@ -57,6 +66,7 @@ install:
   - bsps/arm/stm32h7/include/stm32h7xx_hal_fdcan.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_flash_ex.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_flash.h
+  - bsps/arm/stm32h7/include/stm32h7xx_hal_fmac.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_gfxmmu.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_gpio_ex.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_gpio.h
@@ -108,6 +118,7 @@ install:
   - bsps/arm/stm32h7/include/stm32h7xx_hal_smartcard_ex.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_smartcard.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_smbus.h
+  - bsps/arm/stm32h7/include/stm32h7xx_hal_smbus_ex.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_spdifrx.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_spi_ex.h
   - bsps/arm/stm32h7/include/stm32h7xx_hal_spi.h
@@ -124,6 +135,7 @@ install:
   - bsps/arm/stm32h7/include/stm32h7xx_ll_bdma.h
   - bsps/arm/stm32h7/include/stm32h7xx_ll_bus.h
   - bsps/arm/stm32h7/include/stm32h7xx_ll_comp.h
+  - bsps/arm/stm32h7/include/stm32h7xx_ll_cordic.h
   - bsps/arm/stm32h7/include/stm32h7xx_ll_cortex.h
   - bsps/arm/stm32h7/include/stm32h7xx_ll_crc.h
   - bsps/arm/stm32h7/include/stm32h7xx_ll_crs.h
@@ -133,6 +145,7 @@ install:
   - bsps/arm/stm32h7/include/stm32h7xx_ll_dma.h
   - bsps/arm/stm32h7/include/stm32h7xx_ll_dmamux.h
   - bsps/arm/stm32h7/include/stm32h7xx_ll_exti.h
+  - bsps/arm/stm32h7/include/stm32h7xx_ll_fmac.h
   - bsps/arm/stm32h7/include/stm32h7xx_ll_fmc.h
   - bsps/arm/stm32h7/include/stm32h7xx_ll_gpio.h
   - bsps/arm/stm32h7/include/stm32h7xx_ll_hrtim.h
@@ -160,6 +173,8 @@ install:
 - destination: ${BSP_INCLUDEDIR}/Legacy
   source:
   - bsps/arm/stm32h7/include/Legacy/stm32_hal_legacy.h
+  - bsps/arm/stm32h7/include/Legacy/stm32h7xx_hal_eth_ex_legacy.h
+  - bsps/arm/stm32h7/include/Legacy/stm32h7xx_hal_eth_legacy.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/stm32h7/include/bsp/irq.h
@@ -204,6 +219,7 @@ source:
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_cec.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_comp.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_cortex.c
+- bsps/arm/stm32h7/hal/stm32h7xx_hal_cordic.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_crc.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_crc_ex.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_cryp.c
@@ -224,6 +240,7 @@ source:
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_fdcan.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_flash.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_flash_ex.c
+- bsps/arm/stm32h7/hal/stm32h7xx_hal_fmac.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_gfxmmu.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_gpio.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_hash.c
@@ -272,6 +289,7 @@ source:
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_smartcard.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_smartcard_ex.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_smbus.c
+- bsps/arm/stm32h7/hal/stm32h7xx_hal_smbus_ex.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_spdifrx.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_spi.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_spi_ex.c
@@ -287,6 +305,7 @@ source:
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_adc.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_bdma.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_comp.c
+- bsps/arm/stm32h7/hal/stm32h7xx_ll_cordic.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_crc.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_crs.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_dac.c
@@ -294,6 +313,7 @@ source:
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_dma.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_dma2d.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_exti.c
+- bsps/arm/stm32h7/hal/stm32h7xx_ll_fmac.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_fmc.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_gpio.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_hrtim.c
