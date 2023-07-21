@@ -121,7 +121,7 @@ test-context:
     This member provides a memory support context.
   description: null
   member: |
-    MemoryContext mem_ctx;
+    MemoryContext mem_ctx
 - brief: |
     This member contains the return value of the ${../if/calloc:/name} call.
   description: null

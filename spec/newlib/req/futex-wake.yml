@@ -59,14 +59,14 @@ skip-reasons: {}
 test-action: |
   /* The action is performed in the ``Flush`` post-condition ``All`` state. */
 test-brief: null
-test-cleanup:
+test-cleanup: |
   _Futex_Destroy( &ctx->futex );
 test-context:
 - brief: |
     This member contains the thread queue test context.
   description: null
   member: |
-    TQContext tq_ctx;
+    TQContext tq_ctx
 - brief: |
     This member provides the futex object.
   description: null

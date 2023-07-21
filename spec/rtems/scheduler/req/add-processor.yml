@@ -257,18 +257,18 @@ test-context:
     ${../if/add-processor:/name} call is prepared.
   description: null
   member: |
-    bool online;
+    bool online
 - brief: |
     If this member is true, then the processor should be added to the scheduler
     B during cleanup.
   description: null
   member: |
-    bool add_cpu_to_scheduler_b;
+    bool add_cpu_to_scheduler_b
 - brief: |
     This member provides the scheduler operation records.
   description: null
   member: |
-    T_scheduler_log_2 scheduler_log;
+    T_scheduler_log_2 scheduler_log
 - brief: |
     This member contains the return value of the
     ${../if/add-processor:/name} call.

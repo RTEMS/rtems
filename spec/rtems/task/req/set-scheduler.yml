@@ -503,7 +503,7 @@ test-context:
     This member contains the identifier of the new scheduler.
   description: null
   member: |
-    rtems_id new_scheduler;
+    rtems_id new_scheduler
 - brief: |
     This member contains the new priorities of the task.
   description: null

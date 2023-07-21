@@ -57,8 +57,8 @@ post-conditions:
       See also ${../glossary/nop:/term}.
   test-epilogue: null
   test-prologue: |
-      Timer_Classes class;
-      class = GetTimerClass( ctx->timer_id );
+    Timer_Classes class;
+    class = GetTimerClass( ctx->timer_id );
 - name: Clock
   states:
   - name: None
@@ -88,8 +88,8 @@ post-conditions:
       accessed by the ${../if/reset:/name} call.
   test-epilogue: null
   test-prologue: |
-      Timer_Classes class;
-      class = GetTimerClass( ctx->timer_id );
+    Timer_Classes class;
+    class = GetTimerClass( ctx->timer_id );
 - name: State
   states:
   - name: Scheduled
@@ -388,7 +388,7 @@ test-context:
     in the next call to the ${../glossary/timerserviceroutine:/term}.
   description: null
   member: |
-    void **scheduled_user_data;
+    void **scheduled_user_data
 - brief: |
     This member contains 1 if the ${../glossary/timerserviceroutine:/term}
     "A" has been ${../glossary/scheduled:/term} otherwise 0.

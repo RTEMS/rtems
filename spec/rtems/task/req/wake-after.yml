@@ -127,29 +127,29 @@ test-context:
     This member provides the scheduler operation records.
   description: null
   member: |
-    T_scheduler_log_4 scheduler_log;
+    T_scheduler_log_4 scheduler_log
 - brief: |
     This member contains the ${/glossary/clock-tick:/term} value before the
     ${../if/wake-after:/name} call.
   description: null
   member: |
-    uint64_t now;
+    uint64_t now
 - brief: |
     This member contains the worker task identifier.
   description: null
   member: |
-    rtems_id worker_id;
+    rtems_id worker_id
 - brief: |
     If this member is true, then the worker shall be suspended during the
     ${../if/wake-after:/name} call.
   description: null
   member: |
-    bool suspended;
+    bool suspended
 - brief: |
     This member contains the timer information of the worker task.
   description: null
   member: |
-    TaskTimerInfo timer_info;
+    TaskTimerInfo timer_info
 - brief: |
     This member contains the return value of the ${../if/wake-after:/name}
     call.

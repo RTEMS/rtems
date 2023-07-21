@@ -178,7 +178,7 @@ test-context:
 - brief: null
   description: null
   member: |
-    rtems_extensions_table table_variable;
+    rtems_extensions_table table_variable
 - brief: null
   description: null
   member: |
@@ -190,7 +190,7 @@ test-context:
 - brief: null
   description: null
   member: |
-    rtems_extensions_table *table;
+    rtems_extensions_table *table
 - brief: null
   description: null
   member: |

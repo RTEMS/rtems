@@ -418,7 +418,7 @@ test-context:
     This member provides a counter snapshot for each entry.
   description: null
   member: |
-    uint32_t counter_by_entry[ 3 ];
+    uint32_t counter_by_entry[ 3 ]
 - brief: |
     This member provides the vector number of a testable interrupt vector.
   description: null
@@ -511,7 +511,7 @@ test-context:
     parameter value.
   description: null
   member: |
-    rtems_interrupt_entry *entry;
+    rtems_interrupt_entry *entry
 - brief: |
     This member contains the return value of the ${../if/entry-install:/name}
     call.

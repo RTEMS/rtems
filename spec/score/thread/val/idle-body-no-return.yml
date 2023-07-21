@@ -41,7 +41,7 @@ test-context:
     This member contains a counter.
   description: null
   member: |
-    uint32_t counter;
+    uint32_t counter
 test-context-support: null
 test-description: null
 test-header: null

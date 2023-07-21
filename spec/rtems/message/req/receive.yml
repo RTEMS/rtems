@@ -243,7 +243,7 @@ pre-conditions:
 - name: TaskQueue
   states:
   - name: Fifo
-    test-code:  |
+    test-code: |
       ctx->attribute_set = RTEMS_LOCAL | RTEMS_FIFO;
     text: |
       While the member ${../if/config:/definition[6]/default/name} of type
@@ -373,7 +373,7 @@ test-context:
   description: |
     It is used for run-time type checking.
   member: |
-    uint32_t magic;
+    uint32_t magic
 - brief: |
     This member contains a number which is sent as next message.
   description: null

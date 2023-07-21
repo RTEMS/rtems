@@ -169,7 +169,7 @@ test-context:
     This member provides a memory support context.
   description: null
   member: |
-    MemoryContext mem_ctx;
+    MemoryContext mem_ctx
 - brief: |
     This member provides the object referenced by the memptr parameter.
   description: null

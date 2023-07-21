@@ -99,7 +99,7 @@ test-context:
     This member contains the call within ISR request.
   description: null
   member: |
-    CallWithinISRRequest request;
+    CallWithinISRRequest request
 test-context-support: null
 test-description: null
 test-header:

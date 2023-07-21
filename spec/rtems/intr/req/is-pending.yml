@@ -181,7 +181,7 @@ test-context:
     parameter value.
   description: null
   member: |
-    bool *pending;
+    bool *pending
 - brief: |
     This member contains the return value of the ${../if/is-pending:/name}
     call.

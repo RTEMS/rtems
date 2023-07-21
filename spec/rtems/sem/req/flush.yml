@@ -164,7 +164,7 @@ test-action: |
   );
   T_rsc_success( sc );
 test-brief: null
-test-cleanup:
+test-cleanup: |
   rtems_status_code sc;
 
   sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id );
@@ -174,7 +174,7 @@ test-context:
     This member contains the thread queue test context.
   description: null
   member: |
-    TQContext tq_ctx;
+    TQContext tq_ctx
 - brief: |
     This member specifies if the attribute set of the semaphore.
   description: null

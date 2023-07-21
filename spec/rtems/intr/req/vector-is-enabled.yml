@@ -188,7 +188,7 @@ test-context:
     parameter value.
   description: null
   member: |
-    bool *enabled;
+    bool *enabled
 - brief: |
     This member contains the return value of the ${../if/vector-is-enabled:/name}
     call.

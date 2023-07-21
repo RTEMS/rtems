@@ -139,14 +139,12 @@ pre-conditions:
       ctx->other_before = true;
       ctx->other_after = false;
     text: |
-    text: |
       While exactly one priority queue of the thread queue exists which is not
       associated with an eligible scheduler of the enqueueing thread.
   - name: Before
     test-code: |
       ctx->other_before = true;
       ctx->other_after = false;
-    text: |
     text: |
       While a priority queue of the thread queue exists which is not
       associated with an eligible scheduler of the enqueueing thread, while
@@ -270,7 +268,7 @@ test-context:
     eligible scheduler equal to an eligible scheduler of the enqueueing thread.
   description: null
   member: |
-    rtems_task_priority priority;
+    rtems_task_priority priority
 - brief: |
     If this member is true, then a thread those eligible schedulers are
     ineligible scheduler to the enqueueing task should be enqueued before a
@@ -278,7 +276,7 @@ test-context:
     enqueueing thread.
   description: null
   member: |
-    size_t other_before;
+    size_t other_before
 - brief: |
     If this member is true, then a thread those eligible schedulers are
     ineligible scheduler to the enqueueing task should be enqueued after a
@@ -286,7 +284,7 @@ test-context:
     enqueueing thread.
   description: null
   member: |
-    size_t other_after;
+    size_t other_after
 test-context-support: null
 test-description: null
 test-header:

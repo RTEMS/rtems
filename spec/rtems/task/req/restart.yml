@@ -669,7 +669,7 @@ test-context:
     This member provides a jump context to resume a thread dispatch.
   description: null
   member: |
-    jmp_buf thread_dispatch_context;
+    jmp_buf thread_dispatch_context
 - brief: |
     This member provides the context to wrap thread queue operations.
   description: null
@@ -737,12 +737,12 @@ test-context:
     This member contains extension calls.
   description: null
   member: |
-    ExtensionCalls calls;
+    ExtensionCalls calls
 - brief: |
     This member contains extension calls after the ${../if/restart:/name} call.
   description: null
   member: |
-    ExtensionCalls calls_after_restart;
+    ExtensionCalls calls_after_restart
 - brief: |
     This member contains the actual argument passed to the entry point.
   description: null

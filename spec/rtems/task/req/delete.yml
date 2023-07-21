@@ -488,7 +488,7 @@ test-context:
     This member provides a jump context to resume a thread dispatch.
   description: null
   member: |
-    jmp_buf thread_dispatch_context;
+    jmp_buf thread_dispatch_context
 - brief: |
     This member contains the identifier of the runner scheduler.
   description: null
@@ -536,13 +536,13 @@ test-context:
     ${../if/delete:/name} call.
   description: null
   member: |
-    TaskTimerInfo worker_timer_info;
+    TaskTimerInfo worker_timer_info
 - brief: |
     This member contains the worker thread queue at the end of the
     ${../if/delete:/name} call.
   description: null
   member: |
-    const Thread_queue_Queue *worker_wait_queue;
+    const Thread_queue_Queue *worker_wait_queue
 - brief: |
     This member contains the worker thread life state at the end of the
     ${../if/delete:/name} call.
@@ -584,12 +584,12 @@ test-context:
     This member contains extension calls.
   description: null
   member: |
-    ExtensionCalls calls;
+    ExtensionCalls calls
 - brief: |
     This member contains extension calls after the ${../if/delete:/name} call.
   description: null
   member: |
-    ExtensionCalls calls_after_restart;
+    ExtensionCalls calls_after_restart
 - brief: |
     This member contains the delete counter.
   description: null

@@ -129,7 +129,6 @@ post-conditions:
 pre-conditions:
 - name: Protocol
   states:
-  states:
   - name: None
     test-code: |
       if ( ctx->tq_ctx->protocol != TQ_MTX_NO_PROTOCOL ) {
@@ -292,24 +291,24 @@ test-context:
     mutex.
   description: null
   member: |
-    bool owner_caller;
+    bool owner_caller
 - brief: |
     If this member is true, then a thread other than the calling thread shall
     be the owner of the mutex.
   description: null
   member: |
-    bool owner_other;
+    bool owner_other
 - brief: |
     If this member is true, then a deadlock shall occur.
   description: null
   member: |
-    bool deadlock;
+    bool deadlock
 - brief: |
     This member contains the current priority of the calling thread before the
     directive call.
   description: null
   member: |
-    rtems_task_priority priority_before;
+    rtems_task_priority priority_before
 - brief: |
     This member contains the owner of the mutex after the directive call.
   description: null
@@ -320,7 +319,7 @@ test-context:
     directive call.
   description: null
   member: |
-    rtems_task_priority priority_after;
+    rtems_task_priority priority_after
 test-context-support: null
 test-description: null
 test-header:

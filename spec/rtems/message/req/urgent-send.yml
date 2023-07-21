@@ -274,7 +274,7 @@ test-action: |
   }
 test-brief: null
 test-cleanup: |
-    T_rsc_success( rtems_message_queue_delete( ctx->message_queue_id ) );
+  T_rsc_success( rtems_message_queue_delete( ctx->message_queue_id ) );
 test-context:
 - brief: |
     This member contains a valid ${/glossary/id:/term} of a
@@ -294,7 +294,7 @@ test-context:
   description: |
     It is used for run-time type checking.
   member: |
-    uint32_t magic;
+    uint32_t magic
 - brief: |
     This member contains a number which is sent as next message.
   description: null
@@ -331,7 +331,7 @@ test-context:
     This member specifies the directive to be called as action.
   description: |
     This is either ${../if/send:/name} or ${../if/urgent:/name}.
-  member:
+  member: |
     rtems_status_code (*action)( rtems_id id, const void *buffer, size_t size )
 - brief: |
     This member specifies the ${../if/send:/params[0]/name} parameter
@@ -578,7 +578,6 @@ test-support: |
     T_rsc_success( status );
     ++ctx->send_msg_counter;
   }
-
 test-target: testsuites/validation/tc-message-urgent-send.c
 test-teardown:
   brief: null

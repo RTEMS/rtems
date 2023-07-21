@@ -273,11 +273,11 @@ test-context:
 - brief: null
   description: null
   member: |
-    uintptr_t stack_pointers[ 2 ];
+    uintptr_t stack_pointers[ 2 ]
 - brief: null
   description: null
   member: |
-    rtems_mode mode;
+    rtems_mode mode
 - brief: null
   description: null
   member: |

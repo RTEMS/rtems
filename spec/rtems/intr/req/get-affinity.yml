@@ -239,7 +239,7 @@ test-context:
     ${../if/get-affinity:/params[2]/name} parameter.
   description: null
   member: |
-    cpu_set_t cpuset_obj[ 2 ];
+    cpu_set_t cpuset_obj[ 2 ]
 - brief: |
     This member contains the return value of the ${../if/get-affinity:/name}
     call.

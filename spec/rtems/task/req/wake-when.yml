@@ -155,23 +155,23 @@ test-context:
     This member provides the scheduler operation records.
   description: null
   member: |
-    T_scheduler_log_4 scheduler_log;
+    T_scheduler_log_4 scheduler_log
 - brief: |
     This member contains the CLOCK_REALTIME value before the
     ${../if/wake-when:/name} call.
   description: null
   member: |
-    struct timespec now;
+    struct timespec now
 - brief: |
     This member contains the worker task identifier.
   description: null
   member: |
-    rtems_id worker_id;
+    rtems_id worker_id
 - brief: |
     This member contains the timer information of the worker task.
   description: null
   member: |
-    TaskTimerInfo timer_info;
+    TaskTimerInfo timer_info
 - brief: |
     This member provides the object referenced by the
     ${../if/wake-when:/params[0]/name} parameter.

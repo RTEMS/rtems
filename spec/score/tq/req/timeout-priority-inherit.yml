@@ -437,7 +437,7 @@ test-context:
     This member contains the call within ISR request.
   description: null
   member: |
-    CallWithinISRRequest request;
+    CallWithinISRRequest request
 - brief: |
     This member specifies the scheduler of the thread.
   description: null

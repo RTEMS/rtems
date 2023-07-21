@@ -427,23 +427,23 @@ test-context:
 - brief: null
   description: null
   member: |
-    Semaphore_Variant variant;
+    Semaphore_Variant variant
 - brief: null
   description: null
   member: |
-    Semaphore_Discipline discipline;
+    Semaphore_Discipline discipline
 - brief: null
   description: null
   member: |
-    uint32_t sem_count;
+    uint32_t sem_count
 - brief: null
   description: null
   member: |
-    Thread_Control *executing;
+    Thread_Control *executing
 - brief: null
   description: null
   member: |
-    Thread_Control *owner;
+    Thread_Control *owner
 - brief: null
   description: null
   member: |
