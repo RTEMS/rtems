@@ -58,7 +58,7 @@ test-actions:
       T_rsc_success( status_submit_high );
     links: []
   - brief: |
-      Check that the messages are in right order in the
+      Check that the messages are in the right order in the
       ${/glossary/messagequeue:/term}.
     code: |
       T_rsc_success( status_receive_high );
@@ -78,7 +78,7 @@ test-actions:
 #### _CORE_message_queue_Seize(), _CORE_message_queue_Submit() ################
 
 - action-brief: |
-    Submit() three messages into a ${/glossary/messagequeue:/term} which can
+    Submit three messages into a ${/glossary/messagequeue:/term} which can
     only store two and have the third submit() blocked till a seize() occurs.
   action-code: |
     bool is_worker_blocked_after_third_send;
@@ -115,7 +115,7 @@ test-actions:
 #### _CORE_message_queue_Submit() in ISR ######################################
 
 - action-brief: |
-    Submit() messages in the queue from within an ISR.
+    Submit messages in the queue from within an ${/glossary/isr:/term}.
   action-code: |
     rtems_status_code status_send_first_message;
     rtems_status_code status_send_second_message;
@@ -176,7 +176,7 @@ test-context:
 - brief: |
     This member indicated whether the worker ${/glossary/task:/term}
     is currently sending a message (``true``) or whether it is
-    waiting to receive an event (``false``)..
+    waiting to receive an event (``false``).
   description: null
   member: |
     bool is_worker_working
@@ -192,16 +192,11 @@ test-context-support: |
 
   static void WorkerTask( rtems_task_argument argument );
 test-description: |
-  The files
-
-  * ``cpukit/score/src/coremsginsert.c``,
-  * ``cpukit/score/src/coremsgseize.c``, and
-  * ``cpukit/score/src/coremsgsubmit.c``
-
-  are only executed by the POSIX API.  The space qualified code
-  subset does not contain the POSIX API (see *Space Profile*).  This test
-  exercises the code parts otherwise only reached by the POSIX API
-  to achieve full code coverage.
+  Parts of the files ``cpukit/score/src/coremsginsert.c``,
+  ``cpukit/score/src/coremsgseize.c``, and ``cpukit/score/src/coremsgsubmit.c``
+  are only executed by the POSIX API.  Currently, the pre-qualified subset of
+  RTEMS does not contain the POSIX API.  This test exercises the code parts
+  otherwise only reached by the POSIX API to achieve full code coverage.
 test-header: null
 test-includes:
 - rtems.h
