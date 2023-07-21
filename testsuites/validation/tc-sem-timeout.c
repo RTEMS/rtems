@@ -361,8 +361,12 @@ static void RtemsSemReqTimeout_Action( RtemsSemReqTimeout_Context *ctx )
 
 static void RtemsSemReqTimeout_Cleanup( RtemsSemReqTimeout_Context *ctx )
 {
-  if ( ctx->tq_ctx.thread_queue_id != 0 ) { rtems_status_code sc;
-  sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id ); T_rsc_success( sc ); }
+  if ( ctx->tq_ctx.thread_queue_id != 0 ) {
+    rtems_status_code sc;
+
+    sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id );
+    T_rsc_success( sc );
+  }
 }
 
 static const RtemsSemReqTimeout_Entry

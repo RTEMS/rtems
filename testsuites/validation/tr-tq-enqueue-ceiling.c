@@ -454,7 +454,9 @@ static void ScoreTqReqEnqueueCeiling_Prepare(
   ScoreTqReqEnqueueCeiling_Context *ctx
 )
 {
-  ctx->priority = PRIO_PSEUDO_ISR; ctx->other_before = false; ctx->other_after = false;
+  ctx->priority = PRIO_PSEUDO_ISR;
+  ctx->other_before = false;
+  ctx->other_after = false;
 }
 
 static void ScoreTqReqEnqueueCeiling_Action(

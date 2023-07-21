@@ -498,7 +498,9 @@ static void RtemsSemReqFlush_Action( RtemsSemReqFlush_Context *ctx )
 static void RtemsSemReqFlush_Cleanup( RtemsSemReqFlush_Context *ctx )
 {
   rtems_status_code sc;
-  sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id ); T_rsc_success( sc );
+
+  sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id );
+  T_rsc_success( sc );
 }
 
 static const RtemsSemReqFlush_Entry
