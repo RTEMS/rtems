@@ -92,6 +92,8 @@ const char rtems_test_name[] = "TestsuitesUserext";
     .thread_terminate = ThreadTerminateExtension1 \
   }
 
+#define CONFIGURE_IDLE_TASK_BODY IdleBody
+
 #include "ts-default.h"
 
 /** @} */

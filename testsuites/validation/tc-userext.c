@@ -159,6 +159,18 @@
  *   - Check that the thread terminate extension of the extension set deleted
  *     before its turn in the invocation was not invoked.
  *
+ * - Create five dynamic extensions.  Let an idle thread return from its entry.
+ *   Delete three dynamic extension during the thread exitted invocation.
+ *   Clean up the used resources.
+ *
+ *   - Check that the thread exitted extensions were invoked in the right
+ *     order.
+ *
+ *   - Check that the other extensions were not invoked.
+ *
+ *   - Check that the thread exitted extension of the extension set deleted
+ *     before its turn in the invocation was not invoked.
+ *
  * @{
  */
 
@@ -293,7 +305,13 @@ static void Extension(
 
   if ( index == 6 && ( kind == THREAD_EXITTED || kind == THREAD_RESTART ) ) {
     StopTestCase();
-    rtems_task_exit();
+
+    if ( GetExecuting()->is_idle ) {
+      SetSelfPriority( RTEMS_MAXIMUM_PRIORITY );
+      _CPU_Thread_Idle_body( 0 );
+    } else {
+      rtems_task_exit();
+    }
   }
 
   if ( index == 0 && kind == THREAD_TERMINATE ) {
@@ -514,6 +532,18 @@ static void TerminateWorker( rtems_task_argument arg )
   T_eq_u32( arg, 0 );
   (void) StartTestCase( THREAD_TERMINATE );
   rtems_task_exit();
+}
+
+void *IdleBody( uintptr_t arg )
+{
+  rtems_event_set events;
+
+  do {
+    events = PollAnyEvents();
+  } while ( events == 0 );
+
+  (void) StartTestCase( THREAD_EXITTED );
+  return (void *) arg;
 }
 
 static void RtemsUserextValUserext_Setup( void *ctx )
@@ -832,6 +862,45 @@ static void RtemsUserextValUserext_Action_6( void )
 }
 
 /**
+ * @brief Create five dynamic extensions.  Let an idle thread return from its
+ *   entry. Delete three dynamic extension during the thread exitted
+ *   invocation.  Clean up the used resources.
+ */
+static void RtemsUserextValUserext_Action_7( void )
+{
+  rtems_tcb *thread;
+  rtems_id   id;
+
+  /* ID of idle thread of processor 0 */
+  id = 0x09010001;
+  thread = GetThread( id );
+  SendEvents( id, RTEMS_EVENT_0 );
+  SetPriority( id, PRIO_HIGH );
+
+  /*
+   * Check that the thread exitted extensions were invoked in the right order.
+   */
+  CheckForward( THREAD_EXITTED, 1, 1, thread, NULL );
+
+  /*
+   * Check that the other extensions were not invoked.
+   */
+  CheckForward( THREAD_BEGIN, 0, 0, NULL, NULL );
+  CheckForward( THREAD_CREATE, 0, 0, NULL, NULL );
+  CheckReverse( THREAD_DELETE, 0, 0, NULL, NULL );
+  CheckForward( THREAD_RESTART, 0, 0, NULL, NULL );
+  CheckForward( THREAD_START, 0, 0, NULL, NULL );
+  CheckForward( THREAD_SWITCH, 0, 0, NULL, NULL );
+  CheckReverse( THREAD_TERMINATE, 0, 0, NULL, NULL );
+
+  /*
+   * Check that the thread exitted extension of the extension set deleted
+   * before its turn in the invocation was not invoked.
+   */
+  CheckDeletedNotInvoked( THREAD_EXITTED );
+}
+
+/**
  * @fn void T_case_body_RtemsUserextValUserext( void )
  */
 T_TEST_CASE_FIXTURE( RtemsUserextValUserext, &RtemsUserextValUserext_Fixture )
@@ -843,6 +912,7 @@ T_TEST_CASE_FIXTURE( RtemsUserextValUserext, &RtemsUserextValUserext_Fixture )
   RtemsUserextValUserext_Action_4();
   RtemsUserextValUserext_Action_5();
   RtemsUserextValUserext_Action_6();
+  RtemsUserextValUserext_Action_7();
 }
 
 /** @} */
