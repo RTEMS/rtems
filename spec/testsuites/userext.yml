@@ -34,6 +34,8 @@ test-code: |
       .thread_terminate = ThreadTerminateExtension1 \
     }
 
+  #define CONFIGURE_IDLE_TASK_BODY IdleBody
+
   #include "ts-default.h"
 test-description: null
 test-includes: []

@@ -181,6 +181,8 @@ test-actions:
       CheckForward( THREAD_EXITTED, 1, 1, thread, NULL );
     links:
     - role: validation
+      uid: ../req/thread-exitted
+    - role: validation
       uid: ../req/thread-exitted-iterate-remove
     - role: validation
       uid: ../req/thread-exitted-order
@@ -334,6 +336,51 @@ test-actions:
     - role: validation
       uid: ../req/thread-terminate-iterate-remove
   links: []
+- action-brief: |
+    Create five dynamic extensions.  Let an idle thread return from its entry.
+    Delete three dynamic extension during the thread exitted invocation.  Clean
+    up the used resources.
+  action-code: |
+    rtems_tcb *thread;
+    rtems_id   id;
+
+    /* ID of idle thread of processor 0 */
+    id = 0x09010001;
+    thread = GetThread( id );
+    SendEvents( id, RTEMS_EVENT_0 );
+    SetPriority( id, PRIO_HIGH );
+  checks:
+  - brief: |
+      Check that the thread exitted extensions were invoked in the right order.
+    code: |
+      CheckForward( THREAD_EXITTED, 1, 1, thread, NULL );
+    links:
+    - role: validation
+      uid: ../req/thread-exitted
+    - role: validation
+      uid: ../req/thread-exitted-iterate-remove
+    - role: validation
+      uid: ../req/thread-exitted-order
+  - brief: |
+      Check that the other extensions were not invoked.
+    code: |
+      CheckForward( THREAD_BEGIN, 0, 0, NULL, NULL );
+      CheckForward( THREAD_CREATE, 0, 0, NULL, NULL );
+      CheckReverse( THREAD_DELETE, 0, 0, NULL, NULL );
+      CheckForward( THREAD_RESTART, 0, 0, NULL, NULL );
+      CheckForward( THREAD_START, 0, 0, NULL, NULL );
+      CheckForward( THREAD_SWITCH, 0, 0, NULL, NULL );
+      CheckReverse( THREAD_TERMINATE, 0, 0, NULL, NULL );
+    links: []
+  - brief: |
+      Check that the thread exitted extension of the extension set deleted
+      before its turn in the invocation was not invoked.
+    code: |
+      CheckDeletedNotInvoked( THREAD_EXITTED );
+    links:
+    - role: validation
+      uid: ../req/thread-exitted-iterate-remove
+  links: []
 test-brief: |
   Tests the thread user extensions.
 test-context: []
@@ -485,7 +532,13 @@ test-support: |
 
     if ( index == 6 && ( kind == THREAD_EXITTED || kind == THREAD_RESTART ) ) {
       StopTestCase();
-      rtems_task_exit();
+
+      if ( GetExecuting()->is_idle ) {
+        SetSelfPriority( RTEMS_MAXIMUM_PRIORITY );
+        _CPU_Thread_Idle_body( 0 );
+      } else {
+        rtems_task_exit();
+      }
     }
 
     if ( index == 0 && kind == THREAD_TERMINATE ) {
@@ -706,6 +759,18 @@ test-support: |
     T_eq_u32( arg, 0 );
     (void) StartTestCase( THREAD_TERMINATE );
     rtems_task_exit();
+  }
+
+  void *IdleBody( uintptr_t arg )
+  {
+    rtems_event_set events;
+
+    do {
+      events = PollAnyEvents();
+    } while ( events == 0 );
+
+    (void) StartTestCase( THREAD_EXITTED );
+    return (void *) arg;
   }
 test-target: testsuites/validation/tc-userext.c
 test-teardown:
