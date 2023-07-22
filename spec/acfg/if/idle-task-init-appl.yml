@@ -31,7 +31,7 @@ notes: |
   user IDLE task with the ${idle-task-body:/name} configuration option,
   otherwise a compile time error in the configuration file will occur.
 
-  The application shall define exactly one of the following configuration
+  The application shall define at least one of the following configuration
   options
 
   * ${rtems-init-tasks-table:/name},
@@ -41,4 +41,7 @@ notes: |
   * ``CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION``
 
   otherwise a compile time error in the configuration file will occur.
+
+  If no Classic API initialization task and no POSIX API initialization thread
+  is configured, then no ${/doc/if/global-construction:/name} is performed.
 type: interface

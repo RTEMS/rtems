@@ -10,6 +10,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  Where the global construction is done by the Classic API user initialization
-  task, the global construction shall be done before the task entry is called.
+  Where the ${/glossary/global-construction:/term} is done by the Classic API
+  user initialization task, the global construction shall be done before the
+  task entry is called.
 type: requirement

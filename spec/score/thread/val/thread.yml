@@ -116,7 +116,8 @@ test-actions:
     links: []
   links: []
 - action-brief: |
-    Validate the global construction.  Mark that the test case executed.
+    Validate the ${/glossary/global-construction:/term}.  Mark that the test
+    case executed.
   action-code: |
     test_case_executed = true;
   checks:

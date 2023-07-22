@@ -10,6 +10,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  Where the Classic API user initialization task is configured, the global
-  construction shall be done by the Classic API user initialization task.
+  Where the Classic API user initialization task is configured, the
+  ${/glossary/global-construction:/term} shall be done by the Classic API user
+  initialization task.
 type: requirement

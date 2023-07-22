@@ -10,6 +10,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  When the global construction is done, the global constructors shall be
-  called.
+  When the ${/glossary/global-construction:/term} is done, the global
+  constructors shall be called.
 type: requirement

@@ -17,8 +17,9 @@ definition:
 description: |
   This directive readies the task, specified by ${.:/params[0]/name}, for
   execution based on the priority and execution mode specified when the task
-  was created.  The entry point of the task is given in ${.:/params[1]/name}.
-  The task's entry point argument is contained in ${.:/params[2]/name}.
+  was created.  The ${/glossary/task-entry:/term} point of the task is given in
+  ${.:/params[1]/name}.  The task's entry point argument is contained in
+  ${.:/params[2]/name}.
 enabled-by: true
 index-entries:
 - starting a task

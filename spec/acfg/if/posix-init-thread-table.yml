@@ -17,7 +17,7 @@ links:
   uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_POSIX_INIT_THREAD_TABLE
 notes: |
-  The application shall define exactly one of the following configuration
+  The application shall define at least one of the following configuration
   options
 
   * ${rtems-init-tasks-table:/name},
@@ -27,4 +27,7 @@ notes: |
   * ${idle-task-init-appl:/name}
 
   otherwise a compile time error in the configuration file will occur.
+
+  If no Classic API initialization task is configured, then the POSIX API
+  initialization thread performs the ${/doc/if/global-construction:/name}.
 type: interface

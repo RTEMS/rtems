@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+index-entries: []
+interface-type: unspecified-group
+links:
+- role: interface-placement
+  uid: domain
+- role: interface-ingroup
+  uid: group
+name: Global Construction
+references:
+- identifier: GlobalConstruction
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/initialization/operations.html
+  type: url
+type: interface

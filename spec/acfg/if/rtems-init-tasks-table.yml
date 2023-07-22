@@ -15,7 +15,7 @@ links:
   uid: group-classicinit
 name: CONFIGURE_RTEMS_INIT_TASKS_TABLE
 notes: |
-  The application shall define exactly one of the following configuration
+  The application shall define at least one of the following configuration
   options
 
   * ``CONFIGURE_RTEMS_INIT_TASKS_TABLE``,
@@ -25,4 +25,7 @@ notes: |
   * ${idle-task-init-appl:/name}
 
   otherwise a compile time error in the configuration file will occur.
+
+  The Classic API initialization task performs the
+  ${/doc/if/global-construction:/name}.
 type: interface

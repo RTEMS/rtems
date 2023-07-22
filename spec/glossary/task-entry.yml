@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: task entry
+text: |
+  The task entry is invoked to execute the task's job.  Before the task entry
+  is invoked, the thread begin ${userextensions:/term} run in the context of
+  the task.  After the return of the task entry, the thread exitted user
+  extensions run in the context of the task.  The first user initialization
+  task performs the ${global-construction:/term} after running the thread begin
+  extensions and before the task entry is invoked.  See also
+  ${/rtems/task/if/start:/name}.
+type: glossary

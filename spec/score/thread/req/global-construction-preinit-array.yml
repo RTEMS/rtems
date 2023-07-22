@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  When the global construction is done, the handlers registered in the
-  ``.preinit_array`` table shall be called.
+  When the ${/glossary/global-construction:/term} is done, the handlers
+  registered in the ``.preinit_array`` table shall be called.
 type: requirement
