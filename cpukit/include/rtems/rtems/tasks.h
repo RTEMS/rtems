@@ -234,7 +234,7 @@ typedef void rtems_task;
 /**
  * @ingroup RTEMSAPIClassicTasks
  *
- * @brief This type defines the entry point of an RTEMS task.
+ * @brief This type defines the task entry point of an RTEMS task.
  */
 typedef rtems_task ( *rtems_task_entry )( rtems_task_argument );
 
@@ -897,8 +897,8 @@ rtems_id rtems_task_self( void );
  *
  * This directive readies the task, specified by ``id``, for execution based on
  * the priority and execution mode specified when the task was created.  The
- * entry point of the task is given in ``entry_point``. The task's entry point
- * argument is contained in ``argument``.
+ * task entry point of the task is given in ``entry_point``.  The task's entry
+ * point argument is contained in ``argument``.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
