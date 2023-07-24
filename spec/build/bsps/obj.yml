@@ -42,6 +42,7 @@ install:
   - bsps/include/libchip/ide_ctrl_cfg.h
   - bsps/include/libchip/ide_ctrl_io.h
   - bsps/include/libchip/m48t08.h
+  - bsps/include/libchip/mcp7940m-rtc.h
   - bsps/include/libchip/ns16550.h
   - bsps/include/libchip/ns16550_p.h
   - bsps/include/libchip/rtc.h
@@ -93,6 +94,7 @@ source:
 - bsps/shared/dev/rtc/m48t08_reg2.c
 - bsps/shared/dev/rtc/m48t08_reg4.c
 - bsps/shared/dev/rtc/m48t08_reg8.c
+- bsps/shared/dev/rtc/mcp7940m.c
 - bsps/shared/dev/rtc/rtcprobe.c
 - bsps/shared/dev/serial/arm-pl011.c
 - bsps/shared/dev/serial/ns16550-context.c
