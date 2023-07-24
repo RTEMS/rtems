@@ -1116,7 +1116,7 @@
  *
  * @par Notes
  * @parblock
- * The application shall define exactly one of the following configuration
+ * The application shall define at least one of the following configuration
  * options
  *
  * * ``CONFIGURE_RTEMS_INIT_TASKS_TABLE``,
@@ -1126,6 +1126,10 @@
  * * @ref CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
  *
  * otherwise a compile time error in the configuration file will occur.
+ *
+ * The Classic API initialization task performs the <a
+ * href="https://docs.rtems.org/branches/master/c-user/initialization/operations.html">Global
+ * Construction</a>.
  * @endparblock
  */
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -3504,7 +3508,7 @@
  * user IDLE task with the @ref CONFIGURE_IDLE_TASK_BODY configuration option,
  * otherwise a compile time error in the configuration file will occur.
  *
- * The application shall define exactly one of the following configuration
+ * The application shall define at least one of the following configuration
  * options
  *
  * * @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE,
@@ -3514,6 +3518,11 @@
  * * ``CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION``
  *
  * otherwise a compile time error in the configuration file will occur.
+ *
+ * If no Classic API initialization task and no POSIX API initialization thread
+ * is configured, then no <a
+ * href="https://docs.rtems.org/branches/master/c-user/initialization/operations.html">Global
+ * Construction</a> is performed.
  * @endparblock
  */
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
@@ -4364,7 +4373,7 @@
  *
  * @par Notes
  * @parblock
- * The application shall define exactly one of the following configuration
+ * The application shall define at least one of the following configuration
  * options
  *
  * * @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE,
@@ -4374,6 +4383,11 @@
  * * @ref CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
  *
  * otherwise a compile time error in the configuration file will occur.
+ *
+ * If no Classic API initialization task is configured, then the POSIX API
+ * initialization thread performs the <a
+ * href="https://docs.rtems.org/branches/master/c-user/initialization/operations.html">Global
+ * Construction</a>.
  * @endparblock
  */
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
