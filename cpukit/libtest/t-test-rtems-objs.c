@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestFramework
+ * @ingroup RTEMSTestFrameworkImpl
  *
- * @brief RTEMS Objects Support for Test Framework
+ * @brief This source file contains the implementation of the RTEMS objects
+ *   test support.
  */
 
 /*

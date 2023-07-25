@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSTestFrameworkImpl
+ *
+ * @brief This source file contains the core implementation of RTEMS Test
+ *    Framework.
+ */
+
+/*
  * Copyright (C) 2018, 2020 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without

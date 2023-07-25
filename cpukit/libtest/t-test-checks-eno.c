@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSTestFrameworkImpl
+ *
+ * @brief This source file contains the implementation of
+ *   T_strerror(), T_check_eno(), and T_check_eno_success().
+ */
+
+/*
  * Copyright (C) 2018 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without

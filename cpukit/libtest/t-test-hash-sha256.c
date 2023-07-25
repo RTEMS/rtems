@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSTestFrameworkImpl
+ *
+ * @brief This source file contains the implementation of
+ *   T_report_hash_sha256_update() and T_report_hash_sha256().
+ */
+
+/*
  * Copyright (C) 2019, 2021 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without

@@ -3,7 +3,10 @@
 /**
  * @file
  *
- * @brief
+ * @ingroup RTEMSTestFrameworkImpl
+ *
+ * @brief This source file contains the implementation of
+ *   T_check_psx_error() and T_check_psx_success().
  */
 
 /*

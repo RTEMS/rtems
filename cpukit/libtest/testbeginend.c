@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestFrameworkImpl
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_test_begin() and rtems_test_end().
+ */
+
 /*
  * Copyright (C) 2014, 2018 embedded brains GmbH & Co. KG
  *

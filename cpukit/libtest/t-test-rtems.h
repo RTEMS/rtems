@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestFrameworkImpl
+ * @ingroup RTEMSTestFramework
  *
- * @brief RTEMS Support for Test Framework
+ * @brief This header file provides the RTEMS-specific API of the RTEMS Test
+ *   Framework.
  */
 
 /*

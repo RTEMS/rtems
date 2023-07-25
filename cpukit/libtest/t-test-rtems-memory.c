@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestFrameworkImpl
+ *
+ * @brief This source file contains the implementation of
+ *   T_memory_allocate(), T_memory_deallocate(), and T_memory_action().
+ */
+
 /*
  * Copyright (C) 2020 embedded brains GmbH & Co. KG
  *

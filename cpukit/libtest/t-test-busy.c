@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSTestFrameworkImpl
  *
- * @brief Implementation of T_busy().
+ * @brief This source file contains the implementation of
+ *   T_busy().
  */
 
 /*

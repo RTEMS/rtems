@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestFramework
+ * @ingroup RTEMSTestFrameworkImpl
  *
- * @brief RTEMS POSIX Keys Support for Test Framework
+ * @brief This source file contains the implementation of
+ *   T_check_posix_keys().
  */
 
 /*

@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestFramework
+ *
+ * @brief This header file provides interfaces of the
+ *   RTEMS Test Framework.
+ */
+
 /*
  * Copyright (C) 2014, 2018 embedded brains GmbH & Co. KG
  *

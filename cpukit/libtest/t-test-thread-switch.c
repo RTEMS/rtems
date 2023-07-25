@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSTestFrameworkImpl
  *
- * @brief Implementation of T_thread_switch_record().
+ * @brief This source file contains the implementation of the thread switch
+ *   recorder.
  */
 
 /*
