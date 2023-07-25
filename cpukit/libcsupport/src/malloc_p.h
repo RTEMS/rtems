@@ -1,8 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*
- *  RTEMS Malloc Family Internal Header
+/**
+ * @file
  *
+ * @ingroup libcsupport
+ *
+ * @brief This header file provides interfaces used by the memory allocator
+ *   implementation.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
