@@ -79,6 +79,7 @@ T_TEST_CASE( NTP )
   T_eq_long( tx.constant, 0 );
   T_eq_long( tx.precision, 0 );
   T_eq_long( tx.tolerance, 32500000 );
+#ifdef RTEMS_PPS_SYNC
   T_eq_long( tx.ppsfreq, 0 );
   T_eq_long( tx.jitter, 0 );
   T_eq_int( tx.shift, 2 );
@@ -87,6 +88,16 @@ T_TEST_CASE( NTP )
   T_eq_long( tx.calcnt, 0 );
   T_eq_long( tx.errcnt, 0 );
   T_eq_long( tx.stbcnt, 0 );
+#else
+  T_eq_long( tx.ppsfreq, -1 );
+  T_eq_long( tx.jitter, -1 );
+  T_eq_int( tx.shift, -1 );
+  T_eq_long( tx.stabil, -1 );
+  T_eq_long( tx.jitcnt, -1 );
+  T_eq_long( tx.calcnt, -1 );
+  T_eq_long( tx.errcnt, -1 );
+  T_eq_long( tx.stbcnt, -1 );
+#endif
 
   status = adjtime( NULL,  NULL );
   T_eq_int( status, 0 );
