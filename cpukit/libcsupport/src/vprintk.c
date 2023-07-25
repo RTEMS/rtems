@@ -38,7 +38,7 @@
 #endif
 
 #include <rtems/bspIo.h>
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 
 int vprintk( const char *fmt, va_list ap )
 {

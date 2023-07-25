@@ -46,7 +46,7 @@
 #include <stdatomic.h>
 
 #ifdef __rtems__
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/smp.h>
 #include <rtems/score/threadimpl.h>

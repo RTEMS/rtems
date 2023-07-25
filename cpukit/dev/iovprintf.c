@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreIO
+ * @ingroup RTEMSDeviceIO
  *
  * @brief This source file contains the implementation of
  *   _IO_Vprintf().
@@ -45,7 +45,7 @@
  *	@(#)subr_prf.c	8.3 (Berkeley) 1/21/94
  */
 
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD: head/sys/kern/subr_prf.c 336417 2018-07-17 14:56:54Z markj $");

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreIO
+ * @ingroup RTEMSDeviceIO
  *
  * @brief This source file contains the implementation of
  *   _IO_Printf().
@@ -38,7 +38,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 
 int _IO_Printf( IO_Put_char put_char, void *arg, char const  *fmt, ... )
 {

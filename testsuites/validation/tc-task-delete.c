@@ -57,7 +57,6 @@
 #include <setjmp.h>
 #include <rtems/bspIo.h>
 #include <rtems/test-scheduler.h>
-#include <rtems/score/io.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>

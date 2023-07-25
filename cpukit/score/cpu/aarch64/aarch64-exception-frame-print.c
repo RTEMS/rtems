@@ -45,7 +45,7 @@
 #include <inttypes.h>
 
 #include <rtems/score/cpu.h>
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 #include <rtems/bspIo.h>
 
 typedef struct {

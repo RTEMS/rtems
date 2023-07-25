@@ -351,7 +351,6 @@ install:
   - cpukit/include/rtems/score/heapimpl.h
   - cpukit/include/rtems/score/heapinfo.h
   - cpukit/include/rtems/score/interr.h
-  - cpukit/include/rtems/score/io.h
   - cpukit/include/rtems/score/isr.h
   - cpukit/include/rtems/score/isrlevel.h
   - cpukit/include/rtems/score/isrlock.h
@@ -535,7 +534,10 @@ source:
 - cpukit/dev/i2c/ti-lm25066a.c
 - cpukit/dev/i2c/ti-tmp112.c
 - cpukit/dev/i2c/xilinx-axi-i2c.c
+- cpukit/dev/iobase64.c
+- cpukit/dev/ioprintf.c
 - cpukit/dev/iorelax.c
+- cpukit/dev/iovprintf.c
 - cpukit/dev/serial/sc16is752-spi.c
 - cpukit/dev/serial/sc16is752.c
 - cpukit/dev/spi/spi-bus.c
@@ -1427,9 +1429,6 @@ source:
 - cpukit/score/src/heapsizeofuserarea.c
 - cpukit/score/src/heapwalk.c
 - cpukit/score/src/interr.c
-- cpukit/score/src/iobase64.c
-- cpukit/score/src/ioprintf.c
-- cpukit/score/src/iovprintf.c
 - cpukit/score/src/isr.c
 - cpukit/score/src/isrisinprogress.c
 - cpukit/score/src/isrvectortable.c

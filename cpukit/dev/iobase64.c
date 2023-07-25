@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreIO
+ * @ingroup RTEMSDeviceIO
  *
  * @brief This source file contains the implementation of
  *   _IO_Base64() and _IO_Base64url().
@@ -27,7 +27,7 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 
 static void
 _IO_Put(int c, void *arg, IO_Put_char put_char)

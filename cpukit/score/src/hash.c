@@ -39,7 +39,7 @@
 
 #include <rtems/score/hash.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 
 #include <limits.h>
 

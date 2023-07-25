@@ -58,7 +58,6 @@
 #include <rtems/bspIo.h>
 #include <rtems/test-info.h>
 #include <rtems/score/atomic.h>
-#include <rtems/score/io.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/sysstate.h>
 

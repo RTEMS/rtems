@@ -30,7 +30,7 @@
 #endif
 
 #include <rtems/recorddump.h>
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 
 #include <limits.h>
 #include <string.h>

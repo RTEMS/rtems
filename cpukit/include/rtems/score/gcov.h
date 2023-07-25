@@ -40,7 +40,7 @@
 #include <gcov.h>
 
 #include <rtems/linkersets.h>
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 
 #ifdef __cplusplus
 extern "C" {

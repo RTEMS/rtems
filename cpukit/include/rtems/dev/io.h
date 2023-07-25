@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2017, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,6 +37,10 @@
 #ifndef _RTEMS_DEV_IO_H
 #define _RTEMS_DEV_IO_H
 
+#include <rtems/score/basedefs.h>
+
+#include <stdarg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -50,6 +54,119 @@ extern "C" {
  *
  * @{
  */
+
+/**
+ * @brief This type defines the put character handler.
+ *
+ * @param c is the character to put.
+ *
+ * @param arg is the user-provided argument.
+ */
+typedef void ( *IO_Put_char )( int c, void *arg );
+
+/**
+ * @brief Prints characters using the put character handler according to the
+ *   format string.
+ *
+ * @param put_char is the put character handler.
+ *
+ * @param arg is the user-provided argument for the put character handler.
+ *
+ * @param fmt is the printf()-style format string.
+ *
+ * @param ... is the list of parameters required by the format string.
+ *
+ * @return Returns the count of put characters.
+ */
+int _IO_Printf(
+  IO_Put_char  put_char,
+  void        *arg,
+  char const  *fmt,
+  ...
+) RTEMS_PRINTFLIKE( 3, 4 );
+
+/**
+ * @brief Prints characters using the put character handler according to the
+ *   format string.
+ *
+ * @param put_char is the put character handler.
+ *
+ * @param arg is the user-provided argument for the put character handler.
+ *
+ * @param fmt is the printf()-style format string.
+ *
+ * @param ap is the argument list required by the format string.
+ *
+ * @return Returns the count of put characters.
+ */
+int _IO_Vprintf(
+  IO_Put_char  put_char,
+  void        *arg,
+  char const  *fmt,
+  va_list      ap
+);
+
+/**
+ * @brief Outputs the source buffer in base64 encoding.
+ *
+ * After word length of output characters produced by the encoding a word break
+ * is produced.
+ *
+ * @param put_char is the put character function used to output the encoded
+ *   source buffer.
+ *
+ * @param arg is the argument passed to the put character function.
+ *
+ * @param src is the pointer to the source buffer begin.
+ *
+ * @param srclen is the length of the source buffer in bytes.
+ *
+ * @param wordbreak is the word break string.
+ *
+ * @param wordlen is the word length in bytes.  If the word length is less than
+ *   four, then a word length of four will be used.
+ *
+ * @return Returns the count of output characters.
+ */
+int _IO_Base64(
+  IO_Put_char  put_char,
+  void        *arg,
+  const void  *src,
+  size_t       len,
+  const char  *wordbreak,
+  int          wordlen
+);
+
+/**
+ * @brief Outputs the source buffer in base64url encoding.
+ *
+ * After word length of output characters produced by the encoding a word break
+ * is produced.
+ *
+ * @param put_char is the put character function used to output the encoded
+ *   source buffer.
+ *
+ * @param arg is the argument passed to the put character function.
+ *
+ * @param src is the pointer to the source buffer begin.
+ *
+ * @param srclen is the length of the source buffer in bytes.
+ *
+ * @param wordbreak is the word break string.
+ *
+ * @param wordlen is the word length in bytes.  If the word length is less than
+ *   four, then a word length of four will be used.
+ *
+ * @return Returns the count of output characters.
+ */
+int _IO_Base64url(
+  IO_Put_char  put_char,
+  void        *arg,
+  const void  *src,
+  size_t       len,
+  const char  *wordbreak,
+  int          wordlen
+);
 
 /**
  * @brief Issues a couple of no-operation instructions.

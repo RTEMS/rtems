@@ -35,7 +35,7 @@
  */
 
 #include <rtems/test.h>
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 
 #include <limits.h>
 

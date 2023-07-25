@@ -32,7 +32,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/io.h>
+#include <rtems/dev/io.h>
 
 /*
  * Undefined the RTEMS_PRINTFLIKE and make it nothing. The test code
