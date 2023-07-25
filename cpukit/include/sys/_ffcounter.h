@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreTimecounter
+ *
+ * @brief This header file provides interfaces of the feed-forward clock
+ *   counter.
+ */
+
 /*-
  * Copyright (c) 2011 The University of Melbourne
  * All rights reserved.

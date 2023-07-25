@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreTimecounter
+ *
  * @brief This header file provides timecounter definitions for the kernel space
  *   (_KERNEL is defined before including <sys/time.h>) and RTEMS.
  */

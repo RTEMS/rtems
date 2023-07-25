@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreTimecounter
+ *
+ * @brief This header file provides interfaces of the Pulse Per Second (PPS)
+ *   support.
+ */
+
 /*-
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):

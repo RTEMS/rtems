@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreTimecounter
+ *
+ * @brief This header file provides interfaces of the Network Time Protocol
+ *   (NTP) support.
+ */
+
 /*-
  ***********************************************************************
  *								       *
