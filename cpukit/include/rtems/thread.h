@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSAPISelfContainedObjects
+ *
+ * @brief This header file provides the API of
+ *   @ref RTEMSAPISelfContainedObjects.
+ */
+
 /*
  * Copyright (c) 2017 embedded brains GmbH & Co. KG
  *
@@ -44,6 +53,16 @@ int _Semaphore_Try_wait(struct _Semaphore_Control *);
 void _Semaphore_Post_binary(struct _Semaphore_Control *);
 
 typedef struct _Mutex_Control rtems_mutex;
+
+/**
+ * @defgroup RTEMSAPISelfContainedObjects Self-Contained Objects
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @brief This group contains the self-contained objects API.
+ *
+ * @{
+ */
 
 #define RTEMS_MUTEX_INITIALIZER( name ) _MUTEX_NAMED_INITIALIZER( name )
 
@@ -308,6 +327,8 @@ static __inline void rtems_binary_semaphore_destroy(
 {
   _Semaphore_Destroy( &binary_semaphore->Semaphore );
 }
+
+/** @} */
 
 __END_DECLS
 

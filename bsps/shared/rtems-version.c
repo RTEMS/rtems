@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_board_support_package() and the definition of ::_RTEMS_version.
+ */
+
 /*
  *  COPYRIGHT (c) 2003, Ralf Corsepius, Ulm, Germany.
  *  COPYRIGHT (c) 2003, On-Line Applications Research Corporation (OAR).

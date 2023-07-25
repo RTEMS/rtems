@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSAPILinkerSets
+ *
+ * @brief This header file provides the linker sets API.
+ */
+
 /*
  * Copyright (C) 2015, 2020 embedded brains GmbH & Co. KG
  *
@@ -33,6 +41,36 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @ingroup RTEMSImpl
+ *
+ * @brief Obfuscates a pointer to prevent compiler optimizations.
+ *
+ * @param ptr is the pointer to obfuscate.
+ *
+ * @return Returns the unsigned integer representation of the obfuscated
+ *   pointer.
+ */
+static inline uintptr_t _Linker_set_Obfuscate( const void *ptr )
+{
+  uintptr_t addr;
+
+  addr = (uintptr_t) ptr;
+  RTEMS_OBFUSCATE_VARIABLE( addr );
+
+  return addr;
+}
+
+/**
+ * @defgroup RTEMSAPILinkerSets Linker Sets
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @brief This group contains the linker sets API.
+ *
+ * @{
+ */
 
 #define RTEMS_LINKER_SET_BEGIN( set ) \
   _Linker_set_##set##_begin
@@ -129,16 +167,6 @@ extern "C" {
   decl \
   RTEMS_SECTION( ".rtemsrwset." #set ".content" )
 
-static inline uintptr_t _Linker_set_Obfuscate( const void *ptr )
-{
-  uintptr_t addr;
-
-  addr = (uintptr_t) ptr;
-  RTEMS_OBFUSCATE_VARIABLE( addr );
-
-  return addr;
-}
-
 #define RTEMS_LINKER_SET_SIZE( set ) \
   ( _Linker_set_Obfuscate( RTEMS_LINKER_SET_END( set ) ) \
     - _Linker_set_Obfuscate( RTEMS_LINKER_SET_BEGIN( set ) ) )
@@ -156,6 +184,8 @@ static inline uintptr_t _Linker_set_Obfuscate( const void *ptr )
     item != RTEMS_LINKER_SET_END( set ) ; \
     ++item \
   )
+
+/** @} */
 
 #ifdef __cplusplus
 }

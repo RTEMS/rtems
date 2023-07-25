@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPIClassicVersion
+ * @ingroup RTEMSImplClassic
  *
  * @brief This source file contains the implementation of rtems_version(),
  *   rtems_version_control_key(), rtems_version_major(), rtems_version_minor(),

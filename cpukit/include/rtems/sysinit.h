@@ -1,7 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSAPISystemInit
+ *
+ * @brief This header file provides the API of the @ref RTEMSAPISystemInit.
+ */
+
 /*
- * Copyright (C) 2015, 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2015, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,6 +41,54 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @ingroup RTEMSImpl
+ *
+ * @brief Enables a verbose system initialization.
+ */
+void _Sysinit_Verbose( void );
+
+/**
+ * @ingroup RTEMSImpl
+ *
+ * @brief Creates the system initialization item associated with the handler
+ *   and index.
+ *
+ * The enum helps to detect typos in the module and order parameters of
+ * RTEMS_SYSINIT_ITEM().
+ */
+#define _RTEMS_SYSINIT_INDEX_ITEM( handler, index ) \
+  enum { _Sysinit_##handler = index }; \
+  RTEMS_LINKER_ROSET_ITEM_ORDERED( \
+    _Sysinit, \
+    rtems_sysinit_item, \
+    handler, \
+    index \
+  ) = { handler }
+
+/**
+ * @ingroup RTEMSImpl
+ *
+ * @brief Creates the system initialization item associated with the handler,
+ *   module, and order.
+ *
+ * This helper macro is used to perform parameter expansion in
+ * RTEMS_SYSINIT_ITEM().
+ */
+#define _RTEMS_SYSINIT_ITEM( handler, module, order ) \
+  _RTEMS_SYSINIT_INDEX_ITEM( handler, 0x##module##order )
+
+/**
+ * @defgroup RTEMSAPISystemInit System Initialization Support
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @brief The system initialization support provides an ordered invocation of
+ *   system initialization handlers registered in a linker set.
+ *
+ * @{
+ */
 
 /*
  * The value of each module define must consist of exactly six hexadecimal
@@ -133,29 +189,22 @@ typedef struct {
   rtems_sysinit_handler handler;
 } rtems_sysinit_item;
 
-/* The enum helps to detect typos in the module and order parameters */
-#define _RTEMS_SYSINIT_INDEX_ITEM( handler, index ) \
-  enum { _Sysinit_##handler = index }; \
-  RTEMS_LINKER_ROSET_ITEM_ORDERED( \
-    _Sysinit, \
-    rtems_sysinit_item, \
-    handler, \
-    index \
-  ) = { handler }
-
-/* Create index from module and order */
-#define _RTEMS_SYSINIT_ITEM( handler, module, order ) \
-  _RTEMS_SYSINIT_INDEX_ITEM( handler, 0x##module##order )
-
-/* Perform parameter expansion */
+/**
+ * @brief Creates the system initialization item associated with the handler,
+ *   module, and order.
+ *
+ * @param handler is the system initialization handler.
+ *
+ * @param module is the system initialization module.  It shall be a 6-digit
+ *   hex number without a 0x-prefix.
+ *
+ * @param order is the system initialization order with respect to the module.
+ *   It shall be a 2-digit hex number without a 0x-prefix.
+ */
 #define RTEMS_SYSINIT_ITEM( handler, module, order ) \
   _RTEMS_SYSINIT_ITEM( handler, module, order )
 
-/**
- * @brief System initialization handler to enable a verbose system
- * initialization.
- */
-void _Sysinit_Verbose( void );
+/** @} */
 
 #ifdef __cplusplus
 }

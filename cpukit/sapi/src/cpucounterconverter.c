@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This source file contains a implementation of the counter value
+ *   conversion functions.
+ */
+
 /*
  * Copyright (C) 2014, 2018 embedded brains GmbH & Co. KG
  *
