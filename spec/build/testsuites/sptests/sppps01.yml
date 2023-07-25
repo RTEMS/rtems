@@ -5,7 +5,7 @@ copyrights:
 - Copyright (C) 2022 German Aerospace Center (DLR)
 cppflags: []
 cxxflags: []
-enabled-by: true
+enabled-by: RTEMS_PPS_SYNC
 features: c cprogram
 includes: []
 ldflags: []

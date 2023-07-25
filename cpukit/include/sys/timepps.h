@@ -32,8 +32,11 @@
 #include <sys/ioccom.h>
 #include <sys/time.h>
 #ifdef __rtems__
+#include <rtems/score/cpuopts.h>
 #include <rtems/score/atomic.h>
+#ifdef RTEMS_PPS_SYNC
 #define	PPS_SYNC
+#endif
 #define hardpps _Timecounter_Discipline
 #ifdef __cplusplus
 extern "C" {

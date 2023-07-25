@@ -50,6 +50,8 @@ links:
 - role: build-dependency
   uid: optparavirt
 - role: build-dependency
+  uid: optppssync
+- role: build-dependency
   uid: optposix
 - role: build-dependency
   uid: optprofiling
