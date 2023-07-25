@@ -2,11 +2,11 @@
 
 /**
  * @file
- * 
- * @brief Inlined Routines from the POSIX Spinlock Manager
  *
- * This file contains the static inlin implementation of the inlined
- * routines from the POSIX Spinlock Manager.
+ * @ingroup POSIXAPI
+ *
+ * @brief This header file provides interfaces used by the POSIX Spinlock
+ *   implementation.
  */
 
 /*

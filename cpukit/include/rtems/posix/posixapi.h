@@ -3,10 +3,10 @@
 /**
  * @file
  *
- * @brief POSIX API Implementation
+ * @ingroup POSIXAPI
  *
- * This include file defines the top level interface to the POSIX API
- * implementation in RTEMS.
+ * @brief This header file provides interfaces used by the POSIX API
+ *   implementation.
  */
 
 /*
