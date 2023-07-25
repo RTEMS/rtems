@@ -3,10 +3,11 @@
 /**
  * @file
  *
- * @brief Interface to the statvfs() Set of API Methods
+ * @ingroup RTEMSAPISystemLibrary
  *
- * This include file defines the interface to the statvfs() set of
- * API methods. The statvfs as defined by the SUS:
+ * @brief This header file provides the statvfs() and fstatvfs() interfaces.
+ *
+ * The statvfs() is defined by the SUS:
  *
  * - http://www.opengroup.org/onlinepubs/009695399/basedefs/sys/statvfs.h.html
  */

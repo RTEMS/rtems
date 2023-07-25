@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSAPISystemLibrary
+ *
+ * @brief This header file provides interfaces of the process priority support.
+ */
+
 /*-
  * SPDX-License-Identifier: BSD-4-Clause
  *

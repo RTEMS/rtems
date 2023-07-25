@@ -41,6 +41,14 @@
  */
 
 /**
+ * @defgroup RTEMSAPISystemLibrary System Library
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @brief This group contains the system library APIs of RTEMS.
+ */
+
+/**
  * @defgroup RTEMSDeviceDrivers Device Drivers
  *
  * @brief This group contains the device drivers.
