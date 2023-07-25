@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCLEON3
+ *
+ * @brief This source file contains the implementation of the CPU Counter.
+ */
+
 /*
  * Copyright (C) 2014, 2018 embedded brains GmbH & Co. KG
  *

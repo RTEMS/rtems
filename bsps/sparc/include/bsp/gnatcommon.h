@@ -1,3 +1,18 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplGnat
+ *
+ * @brief This header file provides interfaces of the
+ *   gnat/rtems interrupts and exception handling.
+ */
+
+/**
+ * @defgroup RTEMSImplGnat GNAT/RTEMS interrupts and exception handling
+ *
+ * @ingroup RTEMSImpl
+ */
+
 #ifndef __GNATCOMMON_H
 #define __GNATCOMMON_H
 

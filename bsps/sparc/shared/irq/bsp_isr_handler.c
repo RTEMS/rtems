@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCLEON3
+ *
+ * @brief This source file contains the implementation of
+ *   _SPARC_Interrupt_dispatch().
+ */
+
 /*
  *  COPYRIGHT (c) 2015
  *  Cobham Gaisler

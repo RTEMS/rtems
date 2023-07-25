@@ -1,10 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCLEON3
+ *
+ * @brief This source file contains the definition of ::BSP_output_char and
+ *   ::BSP_poll_char.
+ */
+
 /*
- *  This file contains the TTY driver for the serial ports on the LEON.
- *
- *  This driver uses the termios pseudo driver.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

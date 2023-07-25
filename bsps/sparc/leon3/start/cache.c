@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCLEON3
+ *
+ * @brief This source file contains the implementation of the Cache Manager.
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH & Co. KG
  *

@@ -1,13 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCLEON3
+ *
+ * @brief This source file contains the Clock Driver implementation.
+ */
+
 /*
- *  Clock Tick Device Driver
- *
- *  This routine initializes LEON timer 1 which used for the clock tick.
- *
- *  The tick frequency is directly programmed to the configured number of
- *  microseconds per tick.
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *

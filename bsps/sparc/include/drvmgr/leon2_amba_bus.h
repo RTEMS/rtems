@@ -1,7 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*  LEON2 Hardcoded bus driver interface.
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsSPARCLEON2
+ *
+ * @brief This header file provides interfaces of the
+ *   LEON2 Hardcoded bus driver.
+ */
+
+/*
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *

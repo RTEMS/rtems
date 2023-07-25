@@ -1,11 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*
- *  This set of routines starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before any of these are invoked.
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsSPARCLEON3
+ *
+ * @brief This source file contains the implementation of bsp_start() and
+ *   definitions of BSP-specific objects.
+ */
+
+/*
  *  COPYRIGHT (c) 2011
  *  Aeroflex Gaisler
  *

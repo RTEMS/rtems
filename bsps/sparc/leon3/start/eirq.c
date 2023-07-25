@@ -1,8 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*
- *  GRLIB/LEON3 extended interrupt controller
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsSPARCLEON3
+ *
+ * @brief This source file contains the implementation of the interrupt
+ *   controller support.
+ */
+
+/*
  *  Copyright (C) 2021 embedded brains GmbH & Co. KG
  *
  *  COPYRIGHT (c) 2011
