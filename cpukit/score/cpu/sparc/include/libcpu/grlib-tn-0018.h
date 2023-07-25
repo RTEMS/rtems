@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This header file provides interfaces of the GRLIB-TN-0018 LEON3FT
+ *   RETT Restart Errata fixes.
+ */
+
 /*
  * Copyright (C) 2020 Cobham Gaisler AB
  *
