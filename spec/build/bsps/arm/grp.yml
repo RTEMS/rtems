@@ -10,12 +10,13 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
+  - bsps/arm/include/cachel1_armv7.h
+  - bsps/arm/include/cmsis_compiler.h
   - bsps/arm/include/cmsis_gcc.h
+  - bsps/arm/include/cmsis_version.h
   - bsps/arm/include/core_cm7.h
   - bsps/arm/include/core_cm4.h
-  - bsps/arm/include/core_cmFunc.h
-  - bsps/arm/include/core_cmInstr.h
-  - bsps/arm/include/core_cmSimd.h
+  - bsps/arm/include/mpu_armv7.h
   - bsps/arm/include/uart.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
