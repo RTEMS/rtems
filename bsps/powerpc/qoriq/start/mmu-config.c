@@ -305,6 +305,92 @@ static void TEXT config_fdt_adjust(const void *fdt)
 	}
 }
 
+/*
+ * Each PCIe controller has a ranges attribute in the fdt like the following:
+ *
+ *   ranges = <0x2000000 0x00 0xc0000000 0x00 0xc0000000 0x00 0x20000000
+ *             0x1000000 0x00 0x00000000 0x00 0xffc20000 0x00 0x00010000>;
+ *             |------PCI address------| |-CPU address-| |-----size----|
+ *
+ * In theory, some fdt-attributes should be used to find out how long the PCI
+ * address (#address-cells of the PCIe node), the CPU address (#address-cells of
+ * the parent node) and the size (#size-cells of the PCIe node) are. In our case
+ * the structure is fixed because the pcie root controllers are a part of the
+ * chip. Therefore the sizes will never change and we can assume fixed lengths.
+ *
+ * The first cell of the PCI address holds a number of flags. A detailed
+ * explanation can be found for example here:
+ *
+ * https://web.archive.org/web/20240109080338/https://michael2012z.medium.com/understanding-pci-node-in-fdt-769a894a13cc
+ *
+ * We are only interested in the entry with the flags 0x02000000 which basically
+ * means that it is a non-relocatable, non-prefetchable, not-aliased 32 bit
+ * memory space on the first bus.
+ *
+ * The other two cells of the PCI address are a 64 Bit address viewed from PCI
+ * address space. The two CPU address cells are the same 64 Bit address viewed
+ * from CPU address space. For our controller these two should always be the
+ * same (no address translation). The last two cells give a size of the memory
+ * region (in theory in PCI address space but it has to be the same for CPU and
+ * PCI).
+ */
+static void TEXT add_pcie_regions(qoriq_mmu_context *context, const void *fdt)
+{
+	int node;
+
+	node = -1;
+
+	while (true) {
+		static const size_t range_length = 7 * 4;
+		const void *val;
+		int len;
+
+		node = fdt_node_offset_by_compatible(
+			fdt,
+			node,
+			"fsl,mpc8548-pcie"
+		);
+		if (node < 0) {
+			break;
+		}
+
+		val = fdt_getprop(fdt, node, "ranges", &len);
+		if (len % range_length != 0) {
+			continue;
+		}
+
+		while (len >= range_length) {
+			uint32_t pci_addr_flags;
+			uintptr_t pci_addr;
+			uintptr_t cpu_addr;
+			uintptr_t size;
+			const uint32_t *cells;
+
+			cells = val;
+			pci_addr_flags = fdt32_to_cpu(cells[0]);
+			pci_addr = fdt64_to_cpu(*(fdt64_t *)(&cells[1]));
+			cpu_addr = fdt64_to_cpu(*(fdt64_t *)(&cells[3]));
+			size = fdt64_to_cpu(*(fdt64_t *)(&cells[5]));
+
+			if (pci_addr_flags == 0x02000000 &&
+			    pci_addr == cpu_addr) {
+				/* Add as I/O memory */
+				qoriq_mmu_add(
+					context,
+					cpu_addr,
+					cpu_addr + size - 1,
+					0,
+					FSL_EIS_MAS2_I | FSL_EIS_MAS2_G,
+					FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW,
+					0
+				);
+			}
+			len -= range_length;
+			val += range_length;
+		}
+	}
+}
+
 void TEXT qoriq_mmu_config(bool boot_processor, int first_tlb, int scratch_tlb)
 {
 	qoriq_mmu_context context;
@@ -348,6 +434,8 @@ void TEXT qoriq_mmu_config(bool boot_processor, int first_tlb, int scratch_tlb)
 			);
 		}
 	}
+
+	add_pcie_regions(&context, fdt);
 
 	qoriq_mmu_partition(&context, max_count);
 	qoriq_mmu_write_to_tlb1(&context, first_tlb);
