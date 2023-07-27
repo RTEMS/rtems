@@ -55,11 +55,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}/dev/flash
   source:
   - cpukit/include/dev/flash/flashdev.h
-- destination: ${BSP_INCLUDEDIR}/dev/can
-  source:
-  - cpukit/include/dev/can/can.h
-  - cpukit/include/dev/can/can-msg.h
-  - cpukit/include/dev/can/canqueueimpl.h
 - destination: ${BSP_INCLUDEDIR}/linux
   source:
   - cpukit/include/linux/i2c-dev.h
@@ -528,7 +523,6 @@ source:
 - cpukit/compression/xz/xz_crc32.c
 - cpukit/compression/xz/xz_dec_lzma2.c
 - cpukit/compression/xz/xz_dec_stream.c
-- cpukit/dev/can/can.c
 - cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/eeprom.c
 - cpukit/dev/i2c/fpga-i2c-slave.c
