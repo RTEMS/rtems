@@ -12,10 +12,14 @@ install:
   source:
   - cpukit/include/rtems/test.h
   - cpukit/include/rtems/test-info.h
+  - cpukit/include/rtems/test-gcov.h
   - cpukit/include/rtems/test-scheduler.h
 install-path: ${BSP_LIBDIR}
 links: []
 source:
+- cpukit/libtest/gcovdumpinfobase64.c
+- cpukit/libtest/gcovdumpinfo.c
+- cpukit/libtest/gcovinfoset.c
 - cpukit/libtest/t-test-busy-tick.c
 - cpukit/libtest/t-test-busy.c
 - cpukit/libtest/t-test-checks-eno.c

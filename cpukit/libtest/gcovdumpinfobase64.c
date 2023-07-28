@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreIO
+ * @ingroup RTEMSTestFrameworkImpl
  *
  * @brief This source file contains the implementation of
  *   _Gcov_Dump_info_base64().
@@ -38,7 +38,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/gcov.h>
+#include <rtems/test-gcov.h>
 
 #include <limits.h>
 #include <string.h>

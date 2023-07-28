@@ -3,14 +3,13 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreGcov
+ * @ingroup RTEMSTestFrameworkImpl
  *
- * @brief This header file provides the interfaces of the
- *   @ref RTEMSScoreGcov.
+ * @brief This source file contains the implementation of _Gcov_Ddump_info().
  */
 
 /*
- * Copyright (C) 2013, 2014 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2022 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,54 +33,64 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _RTEMS_SCORE_GCOV_H
-#define _RTEMS_SCORE_GCOV_H
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <gcov.h>
+#include <rtems/test-gcov.h>
 
-#include <rtems/linkersets.h>
-#include <rtems/dev/io.h>
+typedef struct {
+  IO_Put_char put_char;
+  void       *arg;
+} Gcov_Context;
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+static void _Gcov_Dump( const void *data, unsigned length, void *arg )
+{
+  Gcov_Context *ctx;
+  IO_Put_char   put_char;
+  void         *ctx_arg;
+  const char   *in;
+  const void   *end;
 
-/**
- * @defgroup RTEMSScoreGcov Gcov Support
- *
- * @ingroup RTEMSScore
- *
- * @brief This group contains the gocv support.
- *
- * @{
- */
+  ctx = arg;
+  in = data;
+  end = in + length;
+  put_char = ctx->put_char;
+  ctx_arg = ctx->arg;
 
-RTEMS_LINKER_ROSET_DECLARE( gcov_info, const struct gcov_info * );
-
-/**
- * @brief Dumps the gcov information as a binary gcfn and gcda data
- *   stream using the put character handler.
- *
- * @param put_char is the put character handler used to output the data stream.
- *
- * @param arg is the argument passed to the put character handler.
- */
-void _Gcov_Dump_info( IO_Put_char put_char, void *arg );
-
-/**
- * @brief Dumps the gcov information as a base64 encoded gcfn and gcda data
- *   stream using the put character handler.
- *
- * @param put_char is the put character handler used to output the data stream.
- *
- * @param arg is the argument passed to the put character handler.
- */
-void _Gcov_Dump_info_base64( IO_Put_char put_char, void *arg );
-
-/** @} */
-
-#ifdef __cplusplus
+  while ( in != end ) {
+    ( *put_char )( *in, ctx_arg );
+    ++in;
+  }
 }
-#endif /* __cplusplus */
 
-#endif /* _RTEMS_SCORE_GCOV_H */
+static void _Gcov_Filename( const char *filename, void *arg )
+{
+  __gcov_filename_to_gcfn( filename, _Gcov_Dump, arg );
+}
+
+static void *_Gcov_Allocate( unsigned length, void *arg )
+{
+  (void) length;
+  (void) arg;
+  return NULL;
+}
+
+void _Gcov_Dump_info( IO_Put_char put_char, void *arg )
+{
+  Gcov_Context                    ctx;
+  const struct gcov_info * const *item;
+
+  ctx.put_char = put_char;
+  ctx.arg = arg;
+
+  RTEMS_LINKER_SET_FOREACH( gcov_info, item ) {
+    __gcov_info_to_gcda(
+      *item,
+      _Gcov_Filename,
+      _Gcov_Dump,
+      _Gcov_Allocate,
+      &ctx
+    );
+  }
+}

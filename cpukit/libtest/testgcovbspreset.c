@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTest
+ * @ingroup RTEMSTestFrameworkImpl
  *
  * @brief This source file contains the implementation of a wrapper for
  *   bsp_reset() which dumps the gcov information using

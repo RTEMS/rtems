@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreIO
+ * @ingroup RTEMSTestFrameworkImpl
  *
  * @brief This source file contains the definition of the gcov information
  *   linker set.
@@ -38,6 +38,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/gcov.h>
+#include <rtems/test-gcov.h>
 
 RTEMS_LINKER_ROSET( gcov_info, const struct gcov_info * );

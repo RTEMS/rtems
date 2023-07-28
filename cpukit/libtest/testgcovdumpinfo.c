@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTest
+ * @ingroup RTEMSTestFrameworkImpl
  *
  * @brief This source file contains the implementation of
  *   rtems_test_gcov_dump_info().
@@ -40,7 +40,7 @@
 
 #include <rtems/test-info.h>
 
-#include <rtems/score/gcov.h>
+#include <rtems/test-gcov.h>
 #include <rtems/score/isrlock.h>
 #include <rtems/bspIo.h>
 
