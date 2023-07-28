@@ -130,6 +130,7 @@ static inline Priority_Control _MRSP_Get_priority(
   uint32_t scheduler_index;
 
   scheduler_index = _Scheduler_Get_index( scheduler );
+  _Assert( scheduler_index < _Scheduler_Count );
   return mrsp->ceiling_priorities[ scheduler_index ];
 }
 
@@ -149,6 +150,7 @@ static inline void _MRSP_Set_priority(
   uint32_t scheduler_index;
 
   scheduler_index = _Scheduler_Get_index( scheduler );
+  _Assert( scheduler_index < _Scheduler_Count );
   mrsp->ceiling_priorities[ scheduler_index ] = new_priority;
 }
 

@@ -1598,12 +1598,12 @@ static inline Scheduler_Node *_Thread_Scheduler_get_node_by_index(
   size_t                scheduler_index
 )
 {
+  _Assert( scheduler_index < _Scheduler_Count );
 #if defined(RTEMS_SMP)
   return (Scheduler_Node *)
     ( (uintptr_t) the_thread->Scheduler.nodes
       + scheduler_index * _Scheduler_Node_size );
 #else
-  _Assert( scheduler_index == 0 );
   (void) scheduler_index;
   return the_thread->Scheduler.nodes;
 #endif

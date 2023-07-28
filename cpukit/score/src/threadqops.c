@@ -291,6 +291,7 @@ static Thread_queue_Priority_queue *_Thread_queue_Priority_queue_by_index(
 )
 {
 #if defined(RTEMS_SMP)
+  _Assert( scheduler_index < _Scheduler_Count );
   return &heads->Priority[ scheduler_index ];
 #else
   (void) scheduler_index;
