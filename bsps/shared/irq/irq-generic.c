@@ -66,9 +66,7 @@ static inline void bsp_interrupt_set_initialized(void)
 }
 
 #if defined(BSP_INTERRUPT_USE_INDEX_TABLE)
-static inline rtems_vector_number bsp_interrupt_allocate_handler_index(
-  rtems_vector_number vector
-)
+static inline rtems_vector_number bsp_interrupt_allocate_handler_index( void )
 {
   rtems_vector_number i;
 
@@ -180,7 +178,7 @@ static rtems_status_code bsp_interrupt_entry_install_first(
   rtems_vector_number index;
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
-  index = bsp_interrupt_allocate_handler_index( vector );
+  index = bsp_interrupt_allocate_handler_index();
 
   if ( index == BSP_INTERRUPT_DISPATCH_TABLE_SIZE ) {
     /* Handler table is full */
