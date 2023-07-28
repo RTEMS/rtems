@@ -107,7 +107,7 @@ typedef struct T_fixture_node {
 /**
  * @defgroup RTEMSTestFrameworkImpl RTEMS Test Framework Implementation
  *
- * @ingroup RTEMSTestFramework
+ * @ingroup RTEMSImpl
  *
  * @brief Implementation details.
  *

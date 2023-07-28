@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestFrameworkImpl
+ * @ingroup RTEMSImplGcov
  *
  * @brief This source file contains the definition of the gcov information
  *   linker set.

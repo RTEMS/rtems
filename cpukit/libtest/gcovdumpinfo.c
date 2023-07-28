@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestFrameworkImpl
+ * @ingroup RTEMSImplGcov
  *
  * @brief This source file contains the implementation of _Gcov_Ddump_info().
  */

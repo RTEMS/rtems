@@ -3,10 +3,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestGcov
+ * @ingroup RTEMSImplGcov
  *
- * @brief This header file provides the interfaces of the
- *   @ref RTEMSTestGcov.
+ * @brief This header file provides the interfaces of the @ref RTEMSImplGcov.
  */
 
 /*
@@ -47,9 +46,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup RTEMSTestGcov Gcov Support
+ * @defgroup RTEMSImplGcov Gcov Support
  *
- * @ingroup RTEMSTest
+ * @ingroup RTEMSTestFrameworkImpl
  *
  * @brief This group contains the gocv support.
  *
