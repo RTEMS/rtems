@@ -90,12 +90,12 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 #define LEON3_IrqCtrl_Regs ((irqamp *) LEON3_IRQAMP_BASE)
 #else
 extern irqamp *LEON3_IrqCtrl_Regs;
-#endif
 
 /**
  * @brief This pointer provides the IRQ(A)MP device information block.
  */
 extern struct ambapp_dev *LEON3_IrqCtrl_Adev;
+#endif
 
 /**
  * @brief This object provides the interrupt number used to multiplex extended

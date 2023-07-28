@@ -211,12 +211,12 @@ static inline uint32_t leon3_get_cpu_count( const irqamp *regs )
 #define LEON3_Timer_Regs ((gptimer *) LEON3_GPTIMER_BASE)
 #else
 extern gptimer *LEON3_Timer_Regs;
-#endif
 
 /**
  * @brief This pointer provides the GPTIMER device information block.
  */
 extern struct ambapp_dev *LEON3_Timer_Adev;
+#endif
 
 /**
  * @brief Gets the processor local bus frequency in Hz.
