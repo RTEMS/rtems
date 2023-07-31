@@ -1,3 +1,6 @@
+/*
+ * The file was modified by RTEMS contributors.
+ */
 /**
   ******************************************************************************
   * @file    stm32h7xx.h
