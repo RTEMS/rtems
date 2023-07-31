@@ -224,7 +224,6 @@ test-includes:
 - rtems/bspIo.h
 - rtems/test-info.h
 - rtems/score/atomic.h
-- rtems/score/io.h
 - rtems/score/percpu.h
 - rtems/score/sysstate.h
 - setjmp.h

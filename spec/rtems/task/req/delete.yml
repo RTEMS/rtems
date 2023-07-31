@@ -690,7 +690,6 @@ test-includes:
 - rtems.h
 - rtems/test-scheduler.h
 - rtems/bspIo.h
-- rtems/score/io.h
 - rtems/score/statesimpl.h
 - rtems/score/threaddispatch.h
 - rtems/score/threadimpl.h
