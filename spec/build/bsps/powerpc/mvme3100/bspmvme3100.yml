@@ -86,6 +86,5 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
 - bsps/shared/start/bspfatal-default.c
-- bsps/shared/start/bspreset-empty.c
 - bsps/shared/start/gettargethash-default.c
 type: build
