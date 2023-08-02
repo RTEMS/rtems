@@ -33,6 +33,8 @@ install:
 ldflags: []
 links:
 - role: build-dependency
+  uid: optmake
+- role: build-dependency
   uid: makebsp
 - role: build-dependency
   uid: makecustom
@@ -40,8 +42,6 @@ links:
   uid: makeinc
 - role: build-dependency
   uid: maketarget
-- role: build-dependency
-  uid: optmake
 type: build
 use-after: []
 use-before: []
