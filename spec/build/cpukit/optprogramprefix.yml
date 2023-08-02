@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- substitute: null
+- env-assign: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+default:
+- enabled-by: true
+  value: ${ARCH}-rtems${__RTEMS_MAJOR__}-
+description: |
+  Defines the program prefix of tools (compiler, assembler, linker).
+enabled-by: true
+format: '{}'
+links: []
+name: PROGRAM_PREFIX
+type: build

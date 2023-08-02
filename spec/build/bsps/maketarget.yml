@@ -11,17 +11,17 @@ content: |
   LIBS =
 
   RTEMS_API = ${__RTEMS_MAJOR__}
-  CC = ${ARCH}-rtems${__RTEMS_MAJOR__}-gcc --pipe
-  AS = ${ARCH}-rtems${__RTEMS_MAJOR__}-as
-  AR = ${ARCH}-rtems${__RTEMS_MAJOR__}-ar
-  NM = ${ARCH}-rtems${__RTEMS_MAJOR__}-nm
-  LD = ${ARCH}-rtems${__RTEMS_MAJOR__}-ld
-  SIZE = ${ARCH}-rtems${__RTEMS_MAJOR__}-size
-  STRIP = ${ARCH}-rtems${__RTEMS_MAJOR__}-strip
-  OBJCOPY = ${ARCH}-rtems${__RTEMS_MAJOR__}-objcopy
-  RANLIB = ${ARCH}-rtems${__RTEMS_MAJOR__}-ranlib
+  CC = ${PROGRAM_PREFIX}gcc --pipe
+  AS = ${PROGRAM_PREFIX}as
+  AR = ${PROGRAM_PREFIX}ar
+  NM = ${PROGRAM_PREFIX}nm
+  LD = ${PROGRAM_PREFIX}ld
+  SIZE = ${PROGRAM_PREFIX}size
+  STRIP = ${PROGRAM_PREFIX}strip
+  OBJCOPY = ${PROGRAM_PREFIX}objcopy
+  RANLIB = ${PROGRAM_PREFIX}ranlib
 
-  CXX = ${ARCH}-rtems${__RTEMS_MAJOR__}-g++
+  CXX = ${PROGRAM_PREFIX}g++
 
   export CC
   export AS

@@ -1,21 +1,21 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
-- set-value: ${ARCH}-rtems${__RTEMS_MAJOR__}-gcc
+- set-value: ${PROGRAM_PREFIX}gcc
 - substitute: null
 - find-program: null
 - env-assign: AS
 - env-assign: CC
 - env-assign: LINK_CC
-- set-value: ${ARCH}-rtems${__RTEMS_MAJOR__}-g++
+- set-value: ${PROGRAM_PREFIX}g++
 - substitute: null
 - find-program: null
 - env-assign: CXX
 - env-assign: LINK_CXX
-- set-value: ${ARCH}-rtems${__RTEMS_MAJOR__}-ar
+- set-value: ${PROGRAM_PREFIX}ar
 - substitute: null
 - find-program: null
 - env-assign: AR
-- set-value: ${ARCH}-rtems${__RTEMS_MAJOR__}-ld
+- set-value: ${PROGRAM_PREFIX}ld
 - substitute: null
 - find-program: null
 - env-assign: LD

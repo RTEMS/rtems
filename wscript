@@ -1306,12 +1306,6 @@ def options(ctx):
         help=
         "the UID of the top-level group [default: '/grp']; it may be used in the bspdefaults and configure commands",
     )
-    rg.add_option(
-        "--rtems-version",
-        metavar="VALUE",
-        help=
-        "sets the RTEMS major version number; it is intended for RTEMS maintainers and may be used in the bspdefaults and configure commands",
-    )
 
 
 def check_environment(conf):
@@ -1351,12 +1345,6 @@ def configure_version(conf):
                 version[key] = no_unicode(value)
             except configparser.NoOptionError:
                 pass
-    major = conf.options.rtems_version
-    if major is not None:
-        conf.msg("Set __RTEMS_MAJOR__ via command line to:",
-                 major,
-                 color="YELLOW")
-        version["__RTEMS_MAJOR__"] = major
 
 
 def load_config_files(ctx):
@@ -1566,14 +1554,7 @@ def build(bld):
     if not bld.variant:
         check_forbidden_options(
             bld,
-            [
-                "compiler",
-                "config",
-                "specs",
-                "tools",
-                "top_group",
-                "version",
-            ],
+            ["compiler", "config", "specs", "tools", "top_group"],
         )
         load_items(bld, bld.env.SPECS)
         append_variant_builds(bld)
@@ -1662,8 +1643,7 @@ COMPILER = {}""".format(variant, compiler))
 
 def bsplist(ctx):
     """lists base BSP variants"""
-    check_forbidden_options(
-        ctx, ["compiler", "config", "tools", "top_group", "version"])
+    check_forbidden_options(ctx, ["compiler", "config", "tools", "top_group"])
     add_log_filter(ctx.cmd)
     load_items_from_options(ctx)
     white_list = get_white_list(ctx)

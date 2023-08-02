@@ -16,14 +16,14 @@ content: |
   prefix = ${PREFIX}
   exec_prefix = $${prefix}/${ARCH}-rtems${__RTEMS_MAJOR__}
 
-  CC_FOR_TARGET = ${ARCH}-rtems${__RTEMS_MAJOR__}-gcc
-  CXX_FOR_TARGET = ${ARCH}-rtems${__RTEMS_MAJOR__}-g++
-  AS_FOR_TARGET = ${ARCH}-rtems${__RTEMS_MAJOR__}-as
-  AR_FOR_TARGET = ${ARCH}-rtems${__RTEMS_MAJOR__}-ar
-  NM_FOR_TARGET = ${ARCH}-rtems${__RTEMS_MAJOR__}-nm
-  LD_FOR_TARGET = ${ARCH}-rtems${__RTEMS_MAJOR__}-ld
-  SIZE_FOR_TARGET = ${ARCH}-rtems${__RTEMS_MAJOR__}-size
-  OBJCOPY_FOR_TARGET = ${ARCH}-rtems${__RTEMS_MAJOR__}-objcopy
+  CC_FOR_TARGET = ${PROGRAM_PREFIX}gcc
+  CXX_FOR_TARGET = ${PROGRAM_PREFIX}g++
+  AS_FOR_TARGET = ${PROGRAM_PREFIX}as
+  AR_FOR_TARGET = ${PROGRAM_PREFIX}ar
+  NM_FOR_TARGET = ${PROGRAM_PREFIX}nm
+  LD_FOR_TARGET = ${PROGRAM_PREFIX}ld
+  SIZE_FOR_TARGET = ${PROGRAM_PREFIX}size
+  OBJCOPY_FOR_TARGET = ${PROGRAM_PREFIX}objcopy
 
   CC= $$(CC_FOR_TARGET)
   CXX= $$(CXX_FOR_TARGET)
