@@ -312,9 +312,8 @@ static int mcp7940m_set_time(int minor, const rtems_time_of_day *time)
   }
 
   if (rv == 0) {
-    /* Make sure weekday is in range. Otherwise it's not relevant. */
-    if (RTCWKDAY_WKDAY_GET(buf[REG_RTCWKDAY]) < 1 ||
-        RTCWKDAY_WKDAY_GET(buf[REG_RTCWKDAY]) > 7) {
+    /* Make sure weekday is not 0 (out of range). Otherwise it's not used. */
+    if (RTCWKDAY_WKDAY_GET(buf[REG_RTCWKDAY]) < 1) {
       buf[REG_RTCWKDAY] &= ~RTCWKDAY_WKDAY_MASK;
       buf[REG_RTCWKDAY] |= RTCWKDAY_WKDAY(1);
     }
