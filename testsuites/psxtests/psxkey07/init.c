@@ -39,32 +39,27 @@
 
 const char rtems_test_name[] = "PSXKEY 7";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_task Test_Thread(rtems_task_argument argument);
+#define INITIAL_TASK_COUNT 10
 
-pthread_key_t Key;
-int created_thread_count, setted_thread_count, got_thread_count;
-int all_thread_created;
-pthread_mutex_t mutex1, mutex2;
-pthread_cond_t create_condition_var, set_condition_var;
+#define ADDITIONAL_TASK_COUNT 13
 
-rtems_task Test_Thread(rtems_task_argument argument)
+static pthread_key_t Key;
+static int created_thread_count, setted_thread_count, got_thread_count;
+static int all_thread_created;
+static pthread_mutex_t mutex1, mutex2;
+static pthread_cond_t create_condition_var, set_condition_var;
+
+static rtems_task Test_Thread(rtems_task_argument argument)
 {
   int sc;
   int *value_p, *value_p2;
 
   value_p = malloc( sizeof( int ) );
   rtems_test_assert(value_p != NULL);
-/*
- * This was added to address the following warning.
- * warning: 'value_p' may be used uninitialized
- */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
- sc = pthread_setspecific( Key, value_p );
-#pragma GCC diagnostic pop
- rtems_test_assert( !sc );
+
+  *value_p = 123;
+  sc = pthread_setspecific( Key, value_p );
+  rtems_test_assert( !sc );
 
   pthread_mutex_lock( &mutex1 );
   ++setted_thread_count;
@@ -86,12 +81,13 @@ rtems_task Test_Thread(rtems_task_argument argument)
   rtems_task_exit();
 }
 
-rtems_task Init(rtems_task_argument argument)
+static rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code  rc;
   int                sc;
   struct timespec    delay_request;
-  uintptr_t          max_free_size = 13 * RTEMS_MINIMUM_STACK_SIZE;
+  uintptr_t          max_free_size =
+                       ADDITIONAL_TASK_COUNT * RTEMS_MINIMUM_STACK_SIZE;
   void              *greedy;
 
   all_thread_created = 0;
@@ -222,8 +218,10 @@ rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS          rtems_resource_unlimited(10)
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     1
+#define CONFIGURE_MAXIMUM_TASKS rtems_resource_unlimited(INITIAL_TASK_COUNT)
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
+#define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
+  (INITIAL_TASK_COUNT + ADDITIONAL_TASK_COUNT)
 #define CONFIGURE_UNIFIED_WORK_AREAS
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
