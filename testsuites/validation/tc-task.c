@@ -303,7 +303,7 @@ static void RtemsTaskValTask_Action_8( void )
 static void RtemsTaskValTask_Action_9( void )
 {
   rtems_status_code sc;
-  rtems_status_code id;
+  rtems_id          id;
 
   /*
    * Create a task.  Check that the home scheduler of the created task is
