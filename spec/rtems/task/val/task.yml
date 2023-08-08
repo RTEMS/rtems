@@ -166,7 +166,7 @@ test-actions:
     constructed by ${../if/construct:/name}.
   action-code: |
     rtems_status_code sc;
-    rtems_status_code id;
+    rtems_id          id;
   checks:
   - brief: |
       Create a task.  Check that the home scheduler of the created task is
