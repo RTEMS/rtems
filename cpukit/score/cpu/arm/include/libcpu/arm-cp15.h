@@ -1309,15 +1309,17 @@ arm_cp15_data_cache_test_and_clean(void)
   );
 }
 
-/*	In DDI0301H_arm1176jzfs_r0p7_trm
- * 	'MCR p15, 0, <Rd>, c7, c14, 0' means
- * 	Clean and Invalidate Entire Data Cache
- */
 ARM_CP15_TEXT_SECTION static inline void
 arm_cp15_data_cache_clean_and_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
 
+#if __ARM_ARCH >= 6
+  /*
+   * In DDI0301H_arm1176jzfs_r0p7_trm
+   * 'MCR p15, 0, <Rd>, c7, c14, 0' means
+   * Clean and Invalidate Entire Data Cache
+   */
   uint32_t sbz = 0;
 
   __asm__ volatile (
@@ -1328,6 +1330,22 @@ arm_cp15_data_cache_clean_and_invalidate(void)
     : [sbz] "r" (sbz)
     : "memory"
   );
+#else
+  /*
+   * Assume this is an ARM926EJ-S.  Use the test, clean, and invalidate DCache
+   * operation.
+   */
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "1:\n"
+    "mrc p15, 0, r15, c7, c14, 3\n"
+    "bne 1b\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    :
+    : "memory"
+  );
+#endif
 }
 
 ARM_CP15_TEXT_SECTION static inline void

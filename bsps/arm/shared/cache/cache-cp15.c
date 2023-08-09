@@ -200,6 +200,7 @@ static inline void _CPU_cache_disable_instruction(void)
   rtems_interrupt_local_enable(level);
 }
 
+#if __ARM_ARCH >= 6
 static inline size_t arm_cp15_get_cache_size(
   uint32_t level,
   uint32_t which
@@ -238,5 +239,30 @@ static inline size_t _CPU_cache_get_instruction_cache_size(uint32_t level)
 {
   return arm_cp15_get_cache_size(level, ARM_CP15_CACHE_CSS_ID_INSTRUCTION);
 }
+#else
+static inline size_t _CPU_cache_get_data_cache_size(uint32_t level)
+{
+  uint32_t cache_type;
+
+  if (level > 0) {
+    return 0;
+  }
+
+  cache_type = arm_cp15_get_cache_type();
+  return 1U << (((cache_type >> (12 + 6)) & 0xf) + 9);
+}
+
+static inline size_t _CPU_cache_get_instruction_cache_size(uint32_t level)
+{
+  uint32_t cache_type;
+
+  if (level > 0) {
+    return 0;
+  }
+
+  cache_type = arm_cp15_get_cache_type();
+  return 1U << (((cache_type >> (0 + 6)) & 0xf) + 9);
+}
+#endif
 
 #include "../../shared/cache/cacheimpl.h"
