@@ -216,6 +216,9 @@ install:
   - cpukit/include/rtems/debugger/rtems-debugger-bsp.h
   - cpukit/include/rtems/debugger/rtems-debugger-remote.h
   - cpukit/include/rtems/debugger/rtems-debugger-server.h
+- destination: ${BSP_INCLUDEDIR}/rtems/dev
+  source:
+  - cpukit/include/rtems/dev/io.h
 - destination: ${BSP_INCLUDEDIR}/rtems/posix
   source:
   - cpukit/include/rtems/posix/aio_misc.h
