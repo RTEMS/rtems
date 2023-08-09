@@ -44,16 +44,17 @@
 
 #include <stdlib.h>
 
+#include <tmacros.h>
+
 const char rtems_test_name[] = "IOSTREAM";
 
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  std::cout << std::endl << std::endl
-    << "*** BEGIN OF TEST " << rtems_test_name << " ***" << std::endl;
+  TEST_BEGIN();
   std::cout << "Hello World" << std::endl;
-  std::cout << "*** END OF TEST " << rtems_test_name << " ***" << std::endl;
-  exit( 0 );
+  TEST_END();
+  rtems_test_exit( 0 );
 }
 
