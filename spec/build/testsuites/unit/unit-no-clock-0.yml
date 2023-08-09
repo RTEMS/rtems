@@ -11,6 +11,7 @@ includes: []
 ldflags: []
 links: []
 source:
+- testsuites/unit/tc-base64-decode.c
 - testsuites/unit/tc-compiler-builtins.c
 - testsuites/unit/tc-config.c
 - testsuites/unit/tc-misaligned-builtin-memcpy.c

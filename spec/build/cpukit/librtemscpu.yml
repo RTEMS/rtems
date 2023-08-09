@@ -529,6 +529,7 @@ source:
 - cpukit/compression/xz/xz_dec_lzma2.c
 - cpukit/compression/xz/xz_dec_stream.c
 - cpukit/base64/base64-encode.c
+- cpukit/base64/base64-decode.c
 - cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/eeprom.c
 - cpukit/dev/i2c/fpga-i2c-slave.c

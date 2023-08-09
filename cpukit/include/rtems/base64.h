@@ -126,6 +126,69 @@ int _Base64url_Encode(
   int          wordlen
 );
 
+/**
+ * @brief Represents the base64 and base64url decoder state.
+ */
+typedef enum {
+  BASE64_DECODE_STATE_0,
+  BASE64_DECODE_STATE_1,
+  BASE64_DECODE_STATE_2,
+  BASE64_DECODE_STATE_3
+} Base64_Decode_state;
+
+/**
+ * @brief Contains the base64 and base64url decoder control.
+ */
+typedef struct {
+  Base64_Decode_state state;
+  uint8_t            *target;
+  const uint8_t      *target_end;
+} Base64_Decode_control;
+
+/**
+ * @brief Maps a 7-bit character to the associated 6-bit integer as defined by
+ *   the base64 or base64url encoding or a special value.
+ */
+extern const uint8_t _Base64_Decoding[ 128 ];
+
+/**
+ * @brief Initializes the base64 decoder.
+ *
+ * @param[out] self is the base64 decoder control to initialize.
+ *
+ * @param[out] target is the base address of the target area for decoding.
+ *
+ * @param target_size is the size in bytes of the target area for decoding.
+ */
+void _Base64_Decode_initialize(
+  Base64_Decode_control *self,
+  uint8_t               *target,
+  size_t                 target_size
+);
+
+/**
+ * @brief Represents the base64 and base64url decoder status.
+ */
+typedef enum {
+  BASE64_DECODE_SUCCESS,
+  BASE64_DECODE_OVERFLOW,
+  BASE64_DECODE_INVALID_INPUT
+} Base64_Decode_status;
+
+/**
+ * @brief Decodes the character.
+ *
+ * The decoder accepts base64 and base64url encodings.  White space is ignored.
+ *
+ * @param[in, out] self is the base64 decoder control.
+ *
+ * @param ch is the character to decode.
+ */
+Base64_Decode_status _Base64_Decode(
+  Base64_Decode_control *self,
+  char                   ch
+);
+
 /** @} */
 
 #ifdef __cplusplus
