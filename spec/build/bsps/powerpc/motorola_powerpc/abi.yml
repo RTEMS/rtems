@@ -17,6 +17,10 @@ default:
   - -mcpu=powerpc
   - -mmultiple
   - -mstrict-align
+- enabled-by: [powerpc/mvme2100]
+  value:
+  - -mcpu=603e
+  - -mstrict-align
 - enabled-by: [powerpc/mvme2307, powerpc/mvme2700]
   value:
   - -mcpu=604
