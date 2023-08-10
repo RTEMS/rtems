@@ -33,6 +33,7 @@ links: []
 prepare-build: null
 prepare-configure: null
 stlib: []
+target: testsuites/libtests/dl01.exe
 type: build
 use-after: []
 use-before: []

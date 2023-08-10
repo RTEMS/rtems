@@ -23,6 +23,7 @@ links: []
 prepare-build: null
 prepare-configure: null
 stlib: []
+target: testsuites/libtests/tar02.exe
 type: build
 use-after:
 - z

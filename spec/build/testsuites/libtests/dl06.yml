@@ -44,6 +44,7 @@ links: []
 prepare-build: null
 prepare-configure: null
 stlib: []
+target: testsuites/libtests/dl06.exe
 type: build
 use-after: []
 use-before: []

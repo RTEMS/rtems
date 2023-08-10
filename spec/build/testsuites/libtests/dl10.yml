@@ -42,6 +42,7 @@ links: []
 prepare-build: null
 prepare-configure: null
 stlib: []
+target: testsuites/libtests/dl10.exe
 type: build
 use-after: []
 use-before: []
