@@ -25,6 +25,8 @@ links:
 - role: build-dependency
   uid: optlib
 - role: build-dependency
+  uid: optlibdl
+- role: build-dependency
   uid: optmembench
 - role: build-dependency
   uid: optmp

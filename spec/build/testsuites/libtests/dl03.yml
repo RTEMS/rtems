@@ -6,7 +6,9 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by:
-- BUILD_LIBDL
+- and:
+  - not: TEST_DL03_EXCLUDE
+  - BUILD_LIBDL_TESTS
 features: c cprogram
 includes:
 - cpukit/libdl
