@@ -29,7 +29,7 @@ do-configure: null
 enabled-by:
 - and:
   - not: TEST_DL07_EXCLUDE
-  - BUILD_LIBDL
+  - BUILD_LIBDL_TESTS
 includes:
 - testsuites/libtests/dl07
 ldflags:

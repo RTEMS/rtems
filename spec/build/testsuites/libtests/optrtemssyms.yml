@@ -8,6 +8,6 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default: []
 description: ''
-enabled-by: true
+enabled-by: BUILD_LIBDL_TESTS
 links: []
 type: build
