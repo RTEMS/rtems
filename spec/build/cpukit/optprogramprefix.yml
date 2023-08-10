@@ -10,7 +10,10 @@ default:
 - enabled-by: true
   value: ${ARCH}-rtems${__RTEMS_MAJOR__}-
 description: |
-  Defines the program prefix of tools (compiler, assembler, linker).
+  Defines the program prefix of tools (compiler, assembler, linker) used to
+  build RTEMS. This option may be used to build RTEMS with a vendor tool suite.
+  Please note, support issues related to using this option with vendor tool
+  suites should be directed to the vendor of the tools.
 enabled-by: true
 format: '{}'
 links: []
