@@ -188,6 +188,15 @@ def process_start_files(self):
         self.link_task.dep_nodes.extend(self.bld.start_files)
 
 
+def make_tar_info_reproducible(info):
+    info.uid = 0
+    info.gid = 0
+    info.mtime = 0
+    info.uname = "root"
+    info.gname = "root"
+    return info
+
+
 class Item(object):
 
     def __init__(self, uid, data):
@@ -479,7 +488,7 @@ class Item(object):
                 dst = src
                 for r in remove:
                     dst = src.replace(srcpath + r, "").replace(bldpath + r, "")
-                tar.add(src, dst)
+                tar.add(src, dst, filter=make_tar_info_reproducible)
             tar.close()
             return 0
 
