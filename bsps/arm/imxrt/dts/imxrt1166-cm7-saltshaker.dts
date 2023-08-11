@@ -127,6 +127,14 @@
 	pinctrl-0 = <&pinctrl_video_mux>;
 };
 
+&usbotg1 {
+	status = "okay";
+};
+
+&usbotg2 {
+	status = "okay";
+};
+
 &iomuxc {
 	pinctrl_lpuart8: lpuart8grp {
 		fsl,pins = <

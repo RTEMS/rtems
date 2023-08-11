@@ -856,21 +856,29 @@
 			usbotg2: usb@4042c000 {
 				reg = <0x4042c000 0x4000>;
 				interrupts = <135>;
+				compatible = "fsl,imxrt1166-usb", "fsl,imx27-usb";
+				fsl,usbphy = <&usbphy2>;
+				status = "disabled";
 			};
 
 			usbotg1: usb@40430000 {
 				reg = <0x40430000 0x4000>;
 				interrupts = <136>;
+				compatible = "fsl,imxrt1166-usb", "fsl,imx27-usb";
+				fsl,usbphy = <&usbphy1>;
+				status = "disabled";
 			};
 
 			usbphy1: usbphy@40434000 {
 				reg = <0x40434000 0x4000>;
 				interrupts = <90>;
+				compatible = "fsl,imxrt1166-usbphy";
 			};
 
 			usbphy2: usbphy@40438000 {
 				reg = <0x40438000 0x4000>;
 				interrupts = <91>;
+				compatible = "fsl,imxrt1166-usbphy";
 			};
 
 			caam: caam@40440000 {
