@@ -1735,7 +1735,11 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     USBPHY1->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
 
     USBPHY1->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
+#ifndef __rtems__
     USBPHY1->PWD_SET  = 0x0;
+#else /* __rtems__ */
+    USBPHY1->PWD = 0x0;
+#endif /* __rtems__ */
 
     while (0UL == (USBPHY1->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
     {
@@ -1841,7 +1845,11 @@ bool CLOCK_EnableUsbhs1PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     USBPHY2->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
 
     USBPHY2->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
+#ifndef __rtems__
     USBPHY2->PWD_SET  = 0x0;
+#else /* __rtems__ */
+    USBPHY2->PWD = 0x0;
+#endif /* __rtems__ */
 
     while (0UL == (USBPHY2->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
     {
