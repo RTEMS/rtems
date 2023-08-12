@@ -561,3 +561,20 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
   rtems_rtl_set_error (EINVAL, "rela type record not supported");
   return rtems_rtl_elf_rel_failure;
 }
+
+bool
+rtems_rtl_elf_unwind_parse (const rtems_rtl_obj* obj,
+                            const char*          name,
+                            uint32_t             flags) {
+  return rtems_rtl_elf_unwind_dw2_parse (obj, name, flags);
+}
+
+bool
+rtems_rtl_elf_unwind_register (rtems_rtl_obj* obj) {
+  return rtems_rtl_elf_unwind_dw2_register (obj);
+}
+
+bool
+rtems_rtl_elf_unwind_deregister (rtems_rtl_obj* obj) {
+  return rtems_rtl_elf_unwind_dw2_deregister (obj);
+}
