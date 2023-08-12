@@ -14,7 +14,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <fcntl.h>
-
+#include <sys/ioctl.h>
 #include <rtems/seterr.h>
 
 #include "sc16is752-regs.h"
