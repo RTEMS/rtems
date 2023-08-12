@@ -465,7 +465,7 @@ class Item(object):
 
     def gzip(self, bld, source):
         target = source + ".gz"
-        bld(rule="${GZIP} < ${SRC} > ${TGT}", source=source, target=target)
+        bld(rule="${GZIP} -n < ${SRC} > ${TGT}", source=source, target=target)
         return target
 
     def xz(self, bld, source):
