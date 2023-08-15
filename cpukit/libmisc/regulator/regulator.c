@@ -35,6 +35,7 @@
 
 #include <rtems.h>
 #include <rtems/regulator.h>
+#include <string.h>
 
 #include <rtems/regulatorimpl.h>
 
