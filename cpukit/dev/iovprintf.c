@@ -48,8 +48,6 @@
 #include <rtems/dev/io.h>
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: head/sys/kern/subr_prf.c 336417 2018-07-17 14:56:54Z markj $");
-
 #include <sys/param.h>
 #include <string.h>
 
