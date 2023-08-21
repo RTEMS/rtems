@@ -572,7 +572,7 @@ rtems_rtl_obj_printer (rtems_rtl_obj_print* print, rtems_rtl_obj* obj)
       rtems_printf (print->printer, "%-*cslots     : %zu\n", indent + 4, ' ',
                     slots);
       rtems_printf (print->printer, "%-*csize      : %zu\n", indent + 4, ' ',
-                    obj->tramps_size);
+                    obj->tramp_size);
       rtems_printf (print->printer, "%-*cslot size : %zu\n", indent + 4, ' ',
                     obj->tramp_size);
       rtems_printf (print->printer, "%-*cused      : %zu\n", indent + 4, ' ',

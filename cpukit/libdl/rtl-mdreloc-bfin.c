@@ -99,6 +99,12 @@ load_ptr(void *where)
 	return (res);
 }
 
+uint32_t rtems_rtl_obj_tramp_alignment (const rtems_rtl_obj* obj)
+{
+  (void) obj;
+  return sizeof(uint32_t);
+}
+
 size_t
 rtems_rtl_elf_relocate_tramp_max_size (void)
 {

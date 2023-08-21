@@ -137,7 +137,6 @@ rtems_rtl_obj_free (rtems_rtl_obj* obj)
   rtems_rtl_obj_erase_sections (obj);
   rtems_rtl_obj_erase_dependents (obj);
   rtems_rtl_symbol_obj_erase (obj);
-  rtems_rtl_obj_erase_trampoline (obj);
   rtems_rtl_obj_free_names (obj);
   if (obj->sec_num != NULL)
     free (obj->sec_num);
@@ -600,26 +599,6 @@ rtems_rtl_obj_find_section_by_mask (const rtems_rtl_obj* obj,
 }
 
 bool
-rtems_rtl_obj_alloc_trampoline (rtems_rtl_obj* obj)
-{
-  if (obj->tramps_size == 0)
-    return true;
-  obj->trampoline = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
-                                         obj->tramps_size,
-                                         true);
-  if (obj->trampoline == NULL)
-    rtems_rtl_set_error (ENOMEM, "no memory for the trampoline");
-  obj->tramp_brk = obj->trampoline;
-  return obj->trampoline != NULL;
-}
-
-void
-rtems_rtl_obj_erase_trampoline (rtems_rtl_obj* obj)
-{
-  rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, obj->trampoline);
-}
-
-bool
 rtems_rtl_obj_alloc_dependents (rtems_rtl_obj* obj, size_t dependents)
 {
   rtems_rtl_obj_depends* depends;
@@ -828,6 +807,12 @@ rtems_rtl_obj_bss_size (const rtems_rtl_obj* obj)
   return rtems_rtl_obj_section_size (obj, RTEMS_RTL_OBJ_SECT_BSS);
 }
 
+size_t
+rtems_rtl_obj_tramp_size (const rtems_rtl_obj* obj)
+{
+  return obj->tramp_slots * obj->tramp_slot_size;
+}
+
 uint32_t
 rtems_rtl_obj_bss_alignment (const rtems_rtl_obj* obj)
 {
@@ -919,10 +904,10 @@ rtems_rtl_obj_synchronize_cache (rtems_rtl_obj* obj)
                                                    size);
   }
 
-  if (obj->trampoline != NULL)
+  if (obj->tramp_base != NULL)
   {
-    rtems_cache_instruction_sync_after_code_change(obj->trampoline,
-                                                   obj->tramps_size);
+    rtems_cache_instruction_sync_after_code_change(obj->tramp_base,
+                                                   obj->tramp_size);
   }
 }
 
@@ -1069,19 +1054,29 @@ rtems_rtl_obj_sections_locate (uint32_t            mask,
   }
 }
 
-bool
-rtems_rtl_obj_alloc_sections (rtems_rtl_obj*             obj,
-                              int                        fd,
-                              rtems_rtl_obj_sect_handler handler,
-                              void*                      data)
+static void
+rtems_rtl_obj_set_sizes (rtems_rtl_obj* obj)
 {
   size_t text_size;
+  size_t tramp_size;
   size_t const_size;
   size_t eh_size;
   size_t data_size;
   size_t bss_size;
 
-  text_size  = rtems_rtl_obj_text_size (obj) + rtems_rtl_obj_const_alignment (obj);
+  text_size  = rtems_rtl_obj_text_size (obj);
+  tramp_size = rtems_rtl_obj_tramp_size (obj);
+
+  if (tramp_size != 0)
+  {
+    text_size += rtems_rtl_obj_tramp_alignment (obj);
+    tramp_size += rtems_rtl_obj_const_alignment (obj);
+  }
+  else
+  {
+    text_size += rtems_rtl_obj_const_alignment (obj);
+  }
+
   const_size = rtems_rtl_obj_const_size (obj) + rtems_rtl_obj_eh_alignment (obj);
   eh_size    = rtems_rtl_obj_eh_size (obj) + rtems_rtl_obj_data_alignment (obj);
   data_size  = rtems_rtl_obj_data_size (obj) + rtems_rtl_obj_bss_alignment (obj);
@@ -1090,68 +1085,39 @@ rtems_rtl_obj_alloc_sections (rtems_rtl_obj*             obj,
   /*
    * Set the sizes held in the object data. We need this for a fast reference.
    */
-  obj->text_size  = text_size;
+  obj->text_size  = text_size + tramp_size;
+  obj->tramp_size = tramp_size;
   obj->const_size = const_size;
   obj->data_size  = data_size;
   obj->eh_size    = eh_size;
   obj->bss_size   = bss_size;
 
-  /*
-   * Perform any specific allocations for sections.
-   */
-  if (handler != NULL)
-  {
-    if (!rtems_rtl_obj_section_handler (RTEMS_RTL_OBJ_SECT_TYPES,
-                                        obj,
-                                        fd,
-                                        handler,
-                                        data))
-    {
-      obj->exec_size = 0;
-      return false;
-    }
-  }
-
-  /*
-   * Let the allocator manage the actual allocation. The user can use the
-   * standard heap or provide a specific allocator with memory protection.
-   */
-  if (!rtems_rtl_alloc_module_new (&obj->text_base, text_size,
-                                   &obj->const_base, const_size,
-                                   &obj->eh_base, eh_size,
-                                   &obj->data_base, data_size,
-                                   &obj->bss_base, bss_size))
-  {
-    obj->exec_size = 0;
-    rtems_rtl_set_error (ENOMEM, "no memory to load obj");
-    return false;
-  }
-
   obj->exec_size = text_size + const_size + eh_size + data_size + bss_size;
+}
 
-  if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
+static void
+rtems_rtl_obj_print_sizes (rtems_rtl_obj* obj, const char* label)
+{
+if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
   {
-    printf ("rtl: load sect: text  - b:%p s:%zi a:%" PRIu32 "\n",
-            obj->text_base, text_size, rtems_rtl_obj_text_alignment (obj));
-    printf ("rtl: load sect: const - b:%p s:%zi a:%" PRIu32 "\n",
-            obj->const_base, const_size, rtems_rtl_obj_const_alignment (obj));
-    printf ("rtl: load sect: eh    - b:%p s:%zi a:%" PRIu32 "\n",
-            obj->eh_base, eh_size, rtems_rtl_obj_eh_alignment (obj));
-    printf ("rtl: load sect: data  - b:%p s:%zi a:%" PRIu32 "\n",
-            obj->data_base, data_size, rtems_rtl_obj_data_alignment (obj));
-    printf ("rtl: load sect: bss   - b:%p s:%zi a:%" PRIu32 "\n",
-            obj->bss_base, bss_size, rtems_rtl_obj_bss_alignment (obj));
+    printf ("rtl: %s sect: text  - b:%p s:%zi a:%" PRIu32 "\n",
+            label, obj->text_base, obj->text_size, rtems_rtl_obj_text_alignment (obj));
+    printf ("rtl: %s sect: tramp - b:%p s:%zi a:%" PRIu32 "\n",
+            label, obj->tramp_base, obj->tramp_size, rtems_rtl_obj_tramp_alignment (obj));
+    printf ("rtl: %s sect: const - b:%p s:%zi a:%" PRIu32 "\n",
+            label, obj->const_base, obj->const_size, rtems_rtl_obj_const_alignment (obj));
+    printf ("rtl: %s sect: eh    - b:%p s:%zi a:%" PRIu32 "\n",
+            label, obj->eh_base, obj->eh_size, rtems_rtl_obj_eh_alignment (obj));
+    printf ("rtl: %s sect: data  - b:%p s:%zi a:%" PRIu32 "\n",
+            label, obj->data_base, obj->data_size, rtems_rtl_obj_data_alignment (obj));
+    printf ("rtl: %s sect: bss   - b:%p s:%zi a:%" PRIu32 "\n",
+            label, obj->bss_base, obj->bss_size, rtems_rtl_obj_bss_alignment (obj));
   }
+}
 
-  /*
-   * Determine the load order.
-   */
-  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_TEXT,  obj);
-  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_CONST, obj);
-  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_EH,    obj);
-  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_DATA,  obj);
-  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_BSS,   obj);
-
+static void
+rtems_rtl_obj_locate (rtems_rtl_obj* obj)
+{
   /*
    * Locate all text, data and bss sections in seperate operations so each type of
    * section is grouped together.
@@ -1171,6 +1137,110 @@ rtems_rtl_obj_alloc_sections (rtems_rtl_obj*             obj,
   rtems_rtl_obj_sections_locate (RTEMS_RTL_OBJ_SECT_BSS,
                                  rtems_rtl_alloc_bss_tag (),
                                  obj, obj->bss_base);
+}
+
+bool
+rtems_rtl_obj_alloc_sections (rtems_rtl_obj*             obj,
+                              int                        fd,
+                              rtems_rtl_obj_sect_handler handler,
+                              void*                      data)
+{
+  rtems_rtl_obj_set_sizes (obj);
+
+    /*
+   * Perform any specific allocations for sections.
+   */
+  if (handler != NULL)
+  {
+    if (!rtems_rtl_obj_section_handler (RTEMS_RTL_OBJ_SECT_TYPES,
+                                        obj,
+                                        fd,
+                                        handler,
+                                        data))
+    {
+      obj->exec_size = 0;
+      return false;
+    }
+  }
+
+  /*
+   * Let the allocator manage the actual allocation. The user can use the
+   * standard heap or provide a specific allocator with memory protection.
+   */
+  if (!rtems_rtl_alloc_module_new (&obj->text_base, obj->text_size,
+                                   &obj->const_base, obj->const_size,
+                                   &obj->eh_base, obj->eh_size,
+                                   &obj->data_base, obj->data_size,
+                                   &obj->bss_base, obj->bss_size))
+  {
+    obj->exec_size = 0;
+    rtems_rtl_set_error (ENOMEM, "no memory to load obj");
+    return false;
+  }
+
+  /*
+   * Set the trampoline base if there are trampolines
+   */
+  if (obj->tramp_size != 0)
+  {
+    obj->tramp_base = obj->tramp_brk =
+      obj->text_base + obj->text_size - obj->tramp_size;
+  }
+
+  rtems_rtl_obj_print_sizes (obj, "alloc");
+
+  /*
+   * Determine the load order.
+   */
+  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_TEXT,  obj);
+  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_CONST, obj);
+  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_EH,    obj);
+  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_DATA,  obj);
+  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_BSS,   obj);
+
+  /*
+   * Locate the sections to the allocated section bases
+   */
+  rtems_rtl_obj_locate (obj);
+
+  return true;
+}
+
+bool
+rtems_rtl_obj_resize_sections (rtems_rtl_obj* obj)
+{
+  rtems_rtl_obj_set_sizes (obj);
+
+  /*
+   * Let the allocator manage the resizing.
+   */
+  if (!rtems_rtl_alloc_module_resize (&obj->text_base, obj->text_size,
+                                      &obj->const_base, obj->const_size,
+                                      &obj->eh_base, obj->eh_size,
+                                      &obj->data_base, obj->data_size,
+                                      &obj->bss_base, obj->bss_size))
+  {
+    rtems_rtl_obj_free (obj);
+    obj->exec_size = 0;
+    rtems_rtl_set_error (ENOMEM, "no memory resize obj");
+    return false;
+  }
+
+  /*
+   * Set the trampoline base if there are trampolines
+   */
+  if (obj->tramp_size != 0)
+  {
+    obj->tramp_base = obj->tramp_brk =
+      obj->text_base + obj->text_size - obj->tramp_size;
+  }
+
+  rtems_rtl_obj_print_sizes (obj, "resize");
+
+  /*
+   * Locate the sections to the allocated section bases
+   */
+  rtems_rtl_obj_locate (obj);
 
   return true;
 }

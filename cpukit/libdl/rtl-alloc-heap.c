@@ -9,7 +9,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012,2023 Chris Johns <chrisj@rtems.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -53,6 +53,9 @@ rtems_rtl_alloc_heap (rtems_rtl_alloc_cmd cmd,
     case RTEMS_RTL_ALLOC_DEL:
       free (*address);
       *address = NULL;
+      break;
+    case RTEMS_RTL_ALLOC_RESIZE:
+      *address = realloc (*address, size);
       break;
     case RTEMS_RTL_ALLOC_LOCK:
       _RTEMS_Lock_allocator();

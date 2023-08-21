@@ -163,6 +163,12 @@ get_veneer_size(int type)
   return 16;
 }
 
+uint32_t rtems_rtl_obj_tramp_alignment (const rtems_rtl_obj* obj)
+{
+  (void) obj;
+  return sizeof(uint64_t);
+}
+
 size_t
 rtems_rtl_elf_relocate_tramp_max_size (void)
 {
@@ -386,6 +392,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
         target -= (uintptr_t)where >> 12;
 
         if (checkoverflow(target, 21, raddr, " x 4k", where, off)) {
+          printf("]] %d\n", __LINE__);
           return rtems_rtl_elf_rel_failure;
         }
 
@@ -416,6 +423,10 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
         return rtems_rtl_elf_rel_failure;
       }
 
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf ("rtl: JUMP26/PC26/CALL: insn=%p where=%p target=%p raddr=%p parsing=%d\n",
+                insn, (void*) where, (void*) target, (void*) raddr, parsing);
+
       target = (intptr_t)target >> 2;
 
       if (((Elf_Sword)target > 0x1FFFFFF) || ((Elf_Sword)target < -0x2000000)) {
@@ -435,9 +446,8 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
           return rtems_rtl_elf_rel_failure;
         }
 
-        tramp_addr = ((Elf_Addr)(uintptr_t)obj->tramp_brk) | (symvalue & 1);
+        tramp_addr = ((Elf_Addr)(uintptr_t) obj->tramp_brk) | (symvalue & 1);
         obj->tramp_brk = set_veneer(obj->tramp_brk, symvalue);
-
         target = tramp_addr + rela->r_addend - (uintptr_t)where;
         target = (uintptr_t)target >> 2;
       }
@@ -462,6 +472,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
         raddr = (Elf_Addr)symvalue + rela->r_addend;
         target = raddr - (uintptr_t)where;
         if (checkoverflow(target, 32, raddr, "", where, off)) {
+          printf("]] %d\n", __LINE__);
           return rtems_rtl_elf_rel_failure;
         }
         *where32 = target;

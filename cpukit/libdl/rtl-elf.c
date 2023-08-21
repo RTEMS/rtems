@@ -805,7 +805,7 @@ rtems_rtl_elf_tramp_resolve_reloc (rtems_rtl_unresolv_rec* rec,
       }
 
       if (unresolved || rs == rtems_rtl_elf_rel_tramp_add)
-        tramp->obj->tramps_size += tramp->obj->tramp_size;
+        ++tramp->obj->tramp_slots;
       if (rs == rtems_rtl_elf_rel_failure)
       {
         *failure = true;
@@ -818,7 +818,7 @@ rtems_rtl_elf_tramp_resolve_reloc (rtems_rtl_unresolv_rec* rec,
 }
 
 static bool
-rtems_rtl_elf_alloc_trampoline (rtems_rtl_obj* obj, size_t unresolved)
+rtems_rtl_elf_find_trampolines (rtems_rtl_obj* obj, size_t unresolved)
 {
   rtems_rtl_tramp_data td =  { 0 };
   td.obj = obj;
@@ -829,21 +829,20 @@ rtems_rtl_elf_alloc_trampoline (rtems_rtl_obj* obj, size_t unresolved)
   if (td.failure)
     return false;
   rtems_rtl_trampoline_remove (obj);
-  obj->tramp_relocs = obj->tramp_size == 0 ? 0 : obj->tramps_size / obj->tramp_size;
+  obj->tramp_relocs = obj->tramp_slots;
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-    printf ("rtl: tramp:elf: tramps: %zu count:%zu total:%zu\n",
+    printf ("rtl: tramp:elf: tramps: slots:%zu count:%zu total:%zu\n",
             obj->tramp_relocs, td.count, td.total);
   /*
    * Add on enough space to handle the unresolved externals that need to be
    * resolved at some point in time. They could all require fixups and
    * trampolines.
    */
-  obj->tramps_size += obj->tramp_size * unresolved;
+  obj->tramp_slots += unresolved;
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-    printf ("rtl: tramp:elf: slots: %zu (%zu)\n",
-            obj->tramp_size == 0 ? 0 : obj->tramps_size / obj->tramp_size,
-            obj->tramps_size);
-  return rtems_rtl_obj_alloc_trampoline (obj);
+    printf ("rtl: tramp:elf: slots:%zu (%zu)\n",
+            obj->tramp_slots, obj->tramp_slots * obj->tramp_slot_size);
+  return true;
 }
 
 static bool
@@ -1730,7 +1729,7 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
   /*
    * Set the format's architecture's maximum tramp size.
    */
-  obj->tramp_size = rtems_rtl_elf_relocate_tramp_max_size ();
+  obj->tramp_slot_size = rtems_rtl_elf_relocate_tramp_max_size ();
 
   /*
    * Parse the section information first so we have the memory map of the object
@@ -1779,13 +1778,23 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
   if (!rtems_rtl_obj_alloc_sections (obj, fd, rtems_rtl_elf_arch_alloc, &ehdr))
     return false;
 
-  if (!rtems_rtl_obj_load_symbols (obj, fd, rtems_rtl_elf_symbols_locate, &ehdr))
-    return false;
-
   if (!rtems_rtl_elf_dependents (obj, &relocs))
     return false;
 
-  if (!rtems_rtl_elf_alloc_trampoline (obj, relocs.unresolved))
+  if (!rtems_rtl_elf_find_trampolines (obj, relocs.unresolved))
+    return false;
+
+  /*
+   * Resize the sections to allocate the trampoline memory as part of
+   * the text section.
+   */
+  if (rtems_rtl_obj_has_trampolines (obj))
+  {
+    if (!rtems_rtl_obj_resize_sections (obj))
+      return false;
+  }
+
+  if (!rtems_rtl_obj_load_symbols (obj, fd, rtems_rtl_elf_symbols_locate, &ehdr))
     return false;
 
   /*

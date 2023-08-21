@@ -198,65 +198,66 @@ typedef bool (*rtems_rtl_obj_depends_iterator) (rtems_rtl_obj* obj,
  */
 struct rtems_rtl_obj
 {
-  rtems_chain_node    link;         /**< The node's link in the chain. */
-  uint32_t            flags;        /**< The status of the object file. */
-  size_t              users;        /**< Users of this object file, number of loads. */
-  size_t              refs;         /**< References to the object file. */
-  int                 format;       /**< The format of the object file. */
-  const char*         fname;        /**< The file name for the object. */
-  const char*         oname;        /**< The object file name. Can be
-                                     *   relative. */
-  const char*         aname;        /**< The archive name containing the
-                                     *   object. NULL means the object is not
-                                     *   in a lib */
-  off_t               ooffset;      /**< The object offset in the archive. */
-  size_t              fsize;        /**< Size of the object file. */
-  rtems_chain_control sections;     /**< The sections of interest in the object
-                                     *   file. */
-  rtems_chain_control dependents;   /**< The dependent object files. */
-  rtems_rtl_obj_sym*  local_table;  /**< Local symbol table. */
-  size_t              local_syms;   /**< Local symbol count. */
-  size_t              local_size;   /**< Local symbol memory usage. */
-  rtems_rtl_obj_sym*  global_table; /**< Global symbol table. */
-  size_t              global_syms;  /**< Global symbol count. */
-  size_t              global_size;  /**< Global symbol memory usage. */
-  size_t              unresolved;   /**< The number of unresolved relocations. */
-  void*               text_base;    /**< The base address of the text section
-                                     *   in memory. */
-  size_t              text_size;    /**< The size of the text section. */
-  void*               const_base;   /**< The base address of the const section
-                                     *   in memory. */
-  size_t              const_size;   /**< The size of the const section. */
-  void*               eh_base;      /**< The base address of the eh section in
-                                     *   memory. */
-  size_t              eh_size;      /**< The size of the eh section. */
-  void*               data_base;    /**< The base address of the data section
-                                     *   in memory. */
-  size_t              data_size;    /**< The size of the data section. */
-  void*               bss_base;     /**< The base address of the bss section in
-                                     *   memory. */
-  size_t              bss_size;     /**< The size of the bss section. */
-  size_t              exec_size;    /**< The amount of executable memory
-                                     *   allocated */
-  void*               entry;        /**< The entry point of the module. */
-  uint32_t            checksum;     /**< The checksum of the text sections. A
-                                     *   zero means do not checksum. */
-  uint32_t*           sec_num;      /**< The sec nums of each obj. */
-  uint32_t            obj_num;      /**< The count of elf files in an rtl
-                                     *   obj. */
-  void*               trampoline;   /**< Trampoline memory. Used for fixups or
-                                     *   veneers */
-  size_t              tramp_size;   /**< Size of a tramopline slot. */
-  size_t              tramps_size;  /**< Size of the trampoline memory. */
-  void*               tramp_brk;    /**< Trampoline memory allocator. MD
-                                     *   relocators can take memory from the
-                                     *   break up to the size. */
-  size_t              tramp_relocs; /**< Number of slots reserved for
-                                     *   relocs. The remainder are for
-                                     *   unresolved symbols. */
-  struct link_map*    linkmap;      /**< For GDB. */
-  void*               loader;       /**< The file details specific to a
-                                     *   loader. */
+  rtems_chain_node    link;            /**< The node's link in the chain. */
+  uint32_t            flags;           /**< The status of the object file. */
+  size_t              users;           /**< Users of this object file, number of loads. */
+  size_t              refs;            /**< References to the object file. */
+  int                 format;          /**< The format of the object file. */
+  const char*         fname;           /**< The file name for the object. */
+  const char*         oname;           /**< The object file name. Can be
+                                        *   relative. */
+  const char*         aname;           /**< The archive name containing the
+                                        *   object. NULL means the object is not
+                                        *   in a lib */
+  off_t               ooffset;         /**< The object offset in the archive. */
+  size_t              fsize;           /**< Size of the object file. */
+  rtems_chain_control sections;        /**< The sections of interest in the object
+                                        *   file. */
+  rtems_chain_control dependents;      /**< The dependent object files. */
+  rtems_rtl_obj_sym*  local_table;     /**< Local symbol table. */
+  size_t              local_syms;      /**< Local symbol count. */
+  size_t              local_size;      /**< Local symbol memory usage. */
+  rtems_rtl_obj_sym*  global_table;    /**< Global symbol table. */
+  size_t              global_syms;     /**< Global symbol count. */
+  size_t              global_size;     /**< Global symbol memory usage. */
+  size_t              unresolved;      /**< The number of unresolved relocations. */
+  void*               text_base;       /**< The base address of the text section
+                                        *   in memory. */
+  size_t              text_size;       /**< The size of the text section. */
+  void*               const_base;      /**< The base address of the const section
+                                        *   in memory. */
+  size_t              const_size;      /**< The size of the const section. */
+  void*               eh_base;         /**< The base address of the eh section in
+                                        *   memory. */
+  size_t              eh_size;         /**< The size of the eh section. */
+  void*               data_base;       /**< The base address of the data section
+                                        *   in memory. */
+  size_t              data_size;       /**< The size of the data section. */
+  void*               bss_base;        /**< The base address of the bss section in
+                                        *   memory. */
+  size_t              bss_size;        /**< The size of the bss section. */
+  size_t              exec_size;       /**< The amount of executable memory
+                                        *   allocated */
+  void*               entry;           /**< The entry point of the module. */
+  uint32_t            checksum;        /**< The checksum of the text sections. A
+                                        *   zero means do not checksum. */
+  uint32_t*           sec_num;         /**< The sec nums of each obj. */
+  uint32_t            obj_num;         /**< The count of elf files in an rtl
+                                        *   obj. */
+  void*               tramp_base;      /**< Trampoline memory. Used for fixups or
+                                        *   veneers */
+  size_t              tramp_size;      /**< Size of a trampoline memory. */
+  size_t              tramp_slots;     /**< The number of tampoline slots. */
+  size_t              tramp_slot_size; /**< The number of tampoline slots. */
+  void*               tramp_brk;       /**< Trampoline memory allocator. MD
+                                        *   relocators can take memory from the
+                                        *   break up to the size. */
+  size_t              tramp_relocs;    /**< Number of slots reserved for
+                                        *   relocs. The remainder are for
+                                        *   unresolved symbols. */
+  struct link_map*    linkmap;         /**< For GDB. */
+  void*               loader;          /**< The file details specific to a
+                                        *   loader. */
 };
 
 /**
@@ -387,6 +388,17 @@ static inline bool rtems_rtl_obj_has_symbol (const rtems_rtl_obj*     obj,
 }
 
 /**
+ * Does the object file have any trampolines?
+ *
+ * @param obj The object file's descriptor to check for available space.
+ * @retval bool Returns @true if the object file has trampolines
+ */
+static inline size_t rtems_rtl_obj_has_trampolines (const rtems_rtl_obj* obj)
+{
+  return obj->tramp_slot_size != 0 && obj->tramp_slots != 0;
+}
+
+/**
  * Is there space in the trampoline memory for a trapoline.
  *
  * @param obj The object file's descriptor to check for available space.
@@ -395,7 +407,7 @@ static inline bool rtems_rtl_obj_has_symbol (const rtems_rtl_obj*     obj,
  */
 static inline size_t rtems_rtl_obj_tramp_avail_space (const rtems_rtl_obj* obj)
 {
-  return (char*) obj->tramp_brk - (char*) obj->trampoline;
+  return (char*) obj->tramp_brk - (char*) obj->tramp_base;
 }
 
 /**
@@ -408,8 +420,8 @@ static inline size_t rtems_rtl_obj_tramp_avail_space (const rtems_rtl_obj* obj)
 static inline bool rtems_rtl_obj_has_tramp_space (const rtems_rtl_obj* obj,
                                                   const size_t         size)
 {
-  return (obj->trampoline != NULL &&
-          (rtems_rtl_obj_tramp_avail_space (obj) + size) <= obj->tramps_size);
+  return (obj->tramp_base != NULL &&
+          (rtems_rtl_obj_tramp_avail_space (obj) + size) <= obj->tramp_size);
 }
 
 /**
@@ -420,20 +432,19 @@ static inline bool rtems_rtl_obj_has_tramp_space (const rtems_rtl_obj* obj,
  */
 static inline size_t rtems_rtl_obj_trampoline_slots (const rtems_rtl_obj* obj)
 {
-  return obj->trampoline == NULL || obj->tramp_size == 0 ?
-    0 : obj->tramps_size / obj->tramp_size;
+  return obj->tramp_slots;
 }
 
 /**
- * Number of trampolines.
+ * Number of trampoline slot available.
  *
  * @param obj The object file's descriptor.
- * @retval size_t The number of trampolines.
+ * @retval size_t The number of trampoline slots available.
  */
 static inline size_t rtems_rtl_obj_trampolines (const rtems_rtl_obj* obj)
 {
-  return obj->trampoline == NULL || obj->tramp_size == 0 ?
-    0 : rtems_rtl_obj_tramp_avail_space (obj) / obj->tramp_size;
+  return obj->tramp_base == NULL || obj->tramp_slots == 0 ?
+    0 : rtems_rtl_obj_tramp_avail_space (obj) / obj->tramp_slot_size;
 }
 
 /**
@@ -570,22 +581,6 @@ rtems_rtl_obj_sect* rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj* ob
 rtems_rtl_obj_sect* rtems_rtl_obj_find_section_by_mask (const rtems_rtl_obj* obj,
                                                         int                  index,
                                                         uint32_t             mask);
-
-/**
- * Allocate a table for trampoline fixup calls.
- *
- * @param obj The object file's descriptor.
- * @retval true The table was allocated.
- * @retval false The alloction failed.
- */
-bool rtems_rtl_obj_alloc_trampoline (rtems_rtl_obj* obj);
-
-/**
- * Erase the object file descriptor's trampoline table..
- *
- * @param obj The object file's descriptor.
- */
-void rtems_rtl_obj_erase_trampoline (rtems_rtl_obj* obj);
 
 /**
  * Allocate a table for dependent objects.
@@ -750,6 +745,24 @@ size_t rtems_rtl_obj_bss_size (const rtems_rtl_obj* obj);
 uint32_t rtems_rtl_obj_bss_alignment (const rtems_rtl_obj* obj);
 
 /**
+ * The trampoline size.
+ *
+ * @param obj The object file's descriptor.
+ * @return size_t The size of the trampoline memory of the object file.
+ */
+size_t rtems_rtl_obj_tramp_size (const rtems_rtl_obj* obj);
+
+/**
+ * The trampolinme alignment for the architecture.
+ *
+ * This is implemented and set in the architecture backend.
+ *
+ * @param obj The object file's descriptor.
+ * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
+ */
+uint32_t rtems_rtl_obj_tramp_alignment (const rtems_rtl_obj* obj);
+
+/**
  * Relocate the object file. The object file's section are parsed for any
  * relocation type sections.
  *
@@ -810,11 +823,19 @@ bool rtems_rtl_obj_load_symbols (rtems_rtl_obj*             obj,
  * @retval true The object has been sucessfully loaded.
  * @retval false The load failed. The RTL error has been set.
  */
-bool
-rtems_rtl_obj_alloc_sections (rtems_rtl_obj*             obj,
-                              int                        fd,
-                              rtems_rtl_obj_sect_handler handler,
-                              void*                      data);
+bool rtems_rtl_obj_alloc_sections (rtems_rtl_obj*             obj,
+                                   int                        fd,
+                                   rtems_rtl_obj_sect_handler handler,
+                                   void*                      data);
+
+/**
+ * Resize the sections.
+ *
+ * @param obj The object file's descriptor.
+ * @retval true The object has been sucessfully loaded.
+ * @retval false The load failed. The RTL error has been set.
+ */
+bool rtems_rtl_obj_resize_sections (rtems_rtl_obj* obj);
 
 /**
  * Load the sections that have been allocated memory in the target. The bss

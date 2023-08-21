@@ -9,7 +9,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018, 2023 Chris Johns <chrisj@rtems.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -108,6 +108,39 @@ rtems_rtl_alloc_del (rtems_rtl_alloc_tag tag, void* address)
     rtl->allocator.allocator (RTEMS_RTL_ALLOC_DEL, tag, &address, 0);
 
   rtems_rtl_unlock ();
+}
+
+void* rtems_rtl_alloc_resize (rtems_rtl_alloc_tag tag,
+                              void*               address,
+                              size_t              size,
+                              bool                zero)
+{
+  rtems_rtl_data* rtl = rtems_rtl_lock ();
+  const void* prev_address = address;
+
+  /*
+   * Resize memory of an existing allocation. The address field is set
+   * by the allocator and may change.
+   */
+  if (rtl != NULL)
+    rtl->allocator.allocator (RTEMS_RTL_ALLOC_RESIZE, tag, &address, size);
+
+  rtems_rtl_unlock ();
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_ALLOCATOR))
+    printf ("rtl: alloc: resize: %s%s prev-addr=%p addr=%p size=%zu\n",
+            rtems_rtl_trace_tag_label (tag), prev_address == address ? "" : " MOVED",
+            prev_address, address, size);
+
+  /*
+   * Only zero the memory if asked to and the resize was successful. We
+   * cannot clear the resized area if bigger than the previouis allocation
+   * because we do not have the original size.
+   */
+  if (address != NULL && zero)
+    memset (address, 0, size);
+
+  return address;
 }
 
 void
@@ -277,45 +310,11 @@ rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
 {
   *text_base = *const_base = *data_base = *bss_base = NULL;
 
-  if (text_size)
-  {
-    *text_base = rtems_rtl_alloc_new (rtems_rtl_alloc_text_tag (),
-                                      text_size, false);
-    if (!*text_base)
-    {
-      return false;
-    }
-  }
-
-  if (const_size)
-  {
-    *const_base = rtems_rtl_alloc_new (rtems_rtl_alloc_const_tag (),
-                                       const_size, false);
-    if (!*const_base)
-    {
-      rtems_rtl_alloc_module_del (text_base, const_base, eh_base,
-                                  data_base, bss_base);
-      return false;
-    }
-  }
-
-  if (eh_size)
-  {
-    *eh_base = rtems_rtl_alloc_new (rtems_rtl_alloc_eh_tag (),
-                                    eh_size, false);
-    if (!*eh_base)
-    {
-      rtems_rtl_alloc_module_del (text_base, const_base, eh_base,
-                                  data_base, bss_base);
-      return false;
-    }
-  }
-
-  if (data_size)
+  if (data_size != 0)
   {
     *data_base = rtems_rtl_alloc_new (rtems_rtl_alloc_data_tag (),
                                       data_size, false);
-    if (!*data_base)
+    if (*data_base == NULL)
     {
       rtems_rtl_alloc_module_del (text_base, const_base, eh_base,
                                   data_base, bss_base);
@@ -323,14 +322,108 @@ rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
     }
   }
 
-  if (bss_size)
+  if (bss_size != 0)
   {
     *bss_base = rtems_rtl_alloc_new (rtems_rtl_alloc_bss_tag (),
                                      bss_size, false);
-    if (!*bss_base)
+    if (*bss_base == NULL)
     {
       rtems_rtl_alloc_module_del (text_base, const_base, eh_base,
                                   data_base, bss_base);
+      return false;
+    }
+  }
+
+  if (eh_size != 0)
+  {
+    *eh_base = rtems_rtl_alloc_new (rtems_rtl_alloc_eh_tag (),
+                                    eh_size, false);
+    if (*eh_base == NULL)
+    {
+      rtems_rtl_alloc_module_del (text_base, const_base, eh_base,
+                                  data_base, bss_base);
+      return false;
+    }
+  }
+
+  if (const_size != 0)
+  {
+    *const_base = rtems_rtl_alloc_new (rtems_rtl_alloc_const_tag (),
+                                       const_size, false);
+    if (*const_base == NULL)
+    {
+      rtems_rtl_alloc_module_del (text_base, const_base, eh_base,
+                                  data_base, bss_base);
+      return false;
+    }
+  }
+
+  if (text_size != 0)
+  {
+    *text_base = rtems_rtl_alloc_new (rtems_rtl_alloc_text_tag (),
+                                      text_size, false);
+    if (*text_base == NULL)
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+bool
+rtems_rtl_alloc_module_resize (void** text_base, size_t text_size,
+                               void** const_base, size_t const_size,
+                               void** eh_base, size_t eh_size,
+                               void** data_base, size_t data_size,
+                               void** bss_base, size_t bss_size)
+{
+  if (data_size != 0)
+  {
+    *data_base = rtems_rtl_alloc_resize (rtems_rtl_alloc_data_tag (),
+                                         *data_base, data_size, false);
+    if (*data_base == NULL)
+    {
+      return false;
+    }
+  }
+
+  if (bss_size != 0)
+  {
+    *bss_base = rtems_rtl_alloc_resize (rtems_rtl_alloc_bss_tag (),
+                                        *bss_base, bss_size, false);
+    if (*bss_base == NULL)
+    {
+      return false;
+    }
+  }
+
+  if (eh_size != 0)
+  {
+    *eh_base = rtems_rtl_alloc_resize (rtems_rtl_alloc_eh_tag (),
+                                       *eh_base, eh_size, false);
+    if (*eh_base == NULL)
+    {
+      return false;
+    }
+  }
+
+  if (const_size != 0)
+  {
+    *const_base = rtems_rtl_alloc_resize (rtems_rtl_alloc_const_tag (),
+                                          *const_base, const_size, false);
+    if (*const_base == NULL)
+    {
+      return false;
+    }
+  }
+
+  if (text_size != 0)
+  {
+    *text_base = rtems_rtl_alloc_resize (rtems_rtl_alloc_text_tag (),
+                                         *text_base, text_size, false);
+    if (*text_base == NULL)
+    {
       return false;
     }
   }

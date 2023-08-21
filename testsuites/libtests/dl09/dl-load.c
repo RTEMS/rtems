@@ -116,8 +116,12 @@ static void dl_check_resolved(void* handle, bool has_unresolved)
       rtems_test_assert (unresolved == 0);
     }
   }
-  printf ("handel: %p: %sunresolved externals\n",
-          handle, unresolved != 0 ? "" : "no ");
+  if (handle == RTLD_SELF)
+    printf ("handle: RTL_SELF: %sunresolved externals\n",
+            unresolved != 0 ? "" : "no ");
+  else
+    printf ("handle: %p: %sunresolved externals\n",
+            handle, unresolved != 0 ? "" : "no ");
 }
 
 static void* dl_load_obj (const char* name, bool has_unresolved)
@@ -152,12 +156,20 @@ static void dl_close (void* handle)
 
 static int dl_call (void* handle, const char* func)
 {
+  static call_sig last_call;
   call_sig call = dlsym (handle, func);
   if (call == NULL)
   {
     printf("dlsym failed: symbol not found: %s\n", func);
     return 1;
   }
+  if (last_call != NULL && last_call != call)
+  {
+    printf("Call location different: moved by: %i (call:%p last:%p)\n",
+           (int) (call - last_call),
+           call, last_call);
+  }
+  last_call = call;
   call ();
   return 0;
 }

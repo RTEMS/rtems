@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018, 2023 Chris Johns <chrisj@rtems.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -69,6 +69,7 @@ typedef enum rtems_rtl_alloc_tags rtems_rtl_alloc_tag;
 enum rtems_rtl_alloc_cmd {
   RTEMS_RTL_ALLOC_NEW,        /**< Allocate new memory. */
   RTEMS_RTL_ALLOC_DEL,        /**< Delete allocated memory. */
+  RTEMS_RTL_ALLOC_RESIZE,     /**< Resize allocated memory. */
   RTEMS_RTL_ALLOC_LOCK,       /**< Lock the allocator. */
   RTEMS_RTL_ALLOC_UNLOCK,     /**< Unlock the allocator. */
   RTEMS_RTL_ALLOC_WR_ENABLE,  /**< Enable writes to the memory. */
@@ -141,6 +142,25 @@ void* rtems_rtl_alloc_new (rtems_rtl_alloc_tag tag, size_t size, bool zero);
  * @param address The memory address to delete. A NULL is ignored.
  */
 void rtems_rtl_alloc_del (rtems_rtl_alloc_tag tag, void* address);
+
+/**
+ * The Runtime Loader allocator resize resizes allocated memory.
+ *
+ * This call resizes a previously allocated block of memory. If the
+ * provided address cannot be resized it is deleted and a new block is
+ * allocated and the contents of the existing memory is copied.
+ *
+ *
+ * @param tag The type of allocation request.
+ * @param address The memory address to resize. A NULL is ignored.
+ * @param size The size of the allocation.
+ * @param zero If true the memory is cleared.
+ * @return void* The memory address or NULL is not memory available.
+ */
+void* rtems_rtl_alloc_resize (rtems_rtl_alloc_tag tag,
+                              void*               address,
+                              size_t              size,
+                              bool                zero);
 
 /**
  * The Runtime Loader allocator lock. An allocator that depends on a
@@ -265,6 +285,30 @@ bool rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
                                  void** eh_base, size_t eh_size,
                                  void** data_base, size_t data_size,
                                  void** bss_base, size_t bss_size);
+
+/**
+ * Resize the allocated memory for a module given the new size of the text,
+ * const, data and bss sections. If any part of the allocation fails the
+ * allocated is deleted.
+ *
+ * @param text_base Pointer to the text base pointer.
+ * @param text_size The size of the read/exec section.
+ * @param const_base Pointer to the const base pointer.
+ * @param const_size The size of the read only section.
+ * @param eh_base Pointer to the eh base pointer.
+ * @param eh_size The size of the eh section.
+ * @param data_base Pointer to the data base pointer.
+ * @param data_size The size of the read/write secton.
+ * @param bss_base Pointer to the bss base pointer.
+ * @param bss_size The size of the read/write.
+ * @retval true The memory has been allocated.
+ * @retval false The allocation of memory has failed.
+ */
+bool rtems_rtl_alloc_module_resize (void** text_base, size_t text_size,
+                                    void** const_base, size_t const_size,
+                                    void** eh_base, size_t eh_size,
+                                    void** data_base, size_t data_size,
+                                    void** bss_base, size_t bss_size);
 
 /**
  * Free the memory allocated to a module.
