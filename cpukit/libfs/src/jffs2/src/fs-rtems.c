@@ -1282,6 +1282,8 @@ static void process_delayed_work(void)
 	rtems_chain_node*    node;
 
 	mutex_lock(&delayed_work_mutex);
+	rtems_chain_control process_work_chain;
+	rtems_chain_initialize_empty(&process_work_chain);
 
 	if (rtems_chain_is_empty(&delayed_work_chain)) {
 		mutex_unlock(&delayed_work_mutex);
@@ -1294,12 +1296,22 @@ static void process_delayed_work(void)
 		rtems_chain_node* next_node = rtems_chain_next(node);
 		if (rtems_clock_get_uptime_nanoseconds() >= work->execution_time) {
 			rtems_chain_extract(node);
-			work->callback(&work->work);
+			rtems_chain_append(&process_work_chain, node);
 		}
 		node = next_node;
 	}
 	mutex_unlock(&delayed_work_mutex);
+
+	node = rtems_chain_first(&process_work_chain);
+	while (!rtems_chain_is_tail(&process_work_chain, node)) {
+		work = (struct delayed_work*) node;
+		rtems_chain_node* next_node = rtems_chain_next(node);
+		rtems_chain_extract(node);
+		work->callback(&work->work);
+		node = next_node;
+	}
 }
+
 /* Task for processing delayed work */
 static rtems_task delayed_work_task(
   rtems_task_argument unused
