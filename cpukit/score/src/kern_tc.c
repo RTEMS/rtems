@@ -86,6 +86,9 @@
 #include <sys/systm.h>
 #endif /* __rtems__ */
 #include <sys/timeffc.h>
+#ifndef __rtems__
+#include <sys/timerfd.h>
+#endif /* __rtems__ */
 #include <sys/timepps.h>
 #include <sys/timetc.h>
 #include <sys/timex.h>
@@ -1585,6 +1588,7 @@ _Timecounter_Set_clock(const struct bintime *_bt,
 
 	/* Avoid rtc_generation == 0, since td_rtcgen == 0 is special. */
 	atomic_add_rel_int(&rtc_generation, 2);
+	timerfd_jumped();
 	sleepq_chains_remove_matching(sleeping_on_old_rtc);
 	if (timestepwarnings) {
 		nanotime(&taft);
