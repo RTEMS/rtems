@@ -6,6 +6,12 @@ actions:
     state: exclude
     tests:
     - minimum
+- set-test-state:
+    reason: |
+      Expected to fail due to GCC issues.
+    state: expected-fail
+    tests:
+    - dl05
 build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
