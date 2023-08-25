@@ -104,20 +104,20 @@ content: |
     } > REGION_RODATA AT > REGION_RODATA_LOAD
 
     _frodata = . ;
-    .rodata : {
+    .rodata : ALIGN_WITH_INPUT {
       *(.rodata)
       *(.rodata.*)
       *(.gnu.linkonce.r.*)
       CONSTRUCTORS; /* Is this needed? */
     } > REGION_RODATA AT > REGION_RODATA_LOAD
     _erodata = .;
-    .eh_frame : {
-      *(.eh_frame)
+    .eh_frame : ALIGN_WITH_INPUT {
+      KEEP (*(.eh_frame))
     } > REGION_RODATA AT > REGION_RODATA_LOAD
     .jcr : {
       *(.jcr)
     } > REGION_RODATA AT > REGION_RODATA_LOAD
-    .gcc_except_table : {
+    .gcc_except_table : ALIGN_WITH_INPUT {
       *(.gcc_except_table)
     } > REGION_RODATA AT > REGION_RODATA_LOAD
     .tdata : ALIGN_WITH_INPUT {
