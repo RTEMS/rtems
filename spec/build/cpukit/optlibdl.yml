@@ -12,6 +12,7 @@ enabled-by:
 - arm
 - i386
 - m68k
+- microblaze
 - mips
 - moxie
 - powerpc

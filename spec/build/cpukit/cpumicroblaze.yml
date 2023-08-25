@@ -9,6 +9,9 @@ enabled-by:
 - microblaze
 includes: []
 install:
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/score/cpu/microblaze/include/machine/elf_machdep.h
 - destination: ${BSP_INCLUDEDIR}/rtems
   source:
   - cpukit/score/cpu/microblaze/include/rtems/asm.h

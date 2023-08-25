@@ -97,7 +97,7 @@
 #elif defined(__powerpc__)
 #include <stdint.h>
 # define __get_tls() ({ void** __val; register uintptr_t tp __asm__( "2" ); __val = (void**) tp; __val; })
-#elif defined(__m68k__) || defined(__v850__)
+#elif defined(__m68k__) || defined(__v850__) || defined(__microblaze__)
 /* No TLS support */
 # define __get_tls() (void*) 0UL
 #else

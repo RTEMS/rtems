@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2023 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by:
+- microblaze
+includes: []
+install: []
+links: []
+source:
+- cpukit/libdl/rtl-mdreloc-microblaze.c
+type: build

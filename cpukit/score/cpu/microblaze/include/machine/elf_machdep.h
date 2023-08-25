@@ -1,0 +1,83 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/*
+ * Copyright (C) 2023 On-Line Applications Research Corporation (OAR)
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifndef _MICROBLAZE_ELF_MACHDEP_H_
+#define _MICROBLAZE_ELF_MACHDEP_H_
+
+#define ELF64_MACHDEP_ID EM_MICROBLAZE
+#define ELF32_MACHDEP_ID EM_MICROBLAZE
+
+#define ELF64_MACHDEP_ENDIANNESS ELFDATA2LSB
+#define ELF32_MACHDEP_ENDIANNESS ELFDATA2LSB
+
+#define ELF32_MACHDEP_ID_CASES \
+  case EM_MICROBLAZE:          \
+    break;
+
+#define ELF64_MACHDEP_ID_CASES \
+  case EM_MICROBLAZE:          \
+    break;
+
+#define KERN_ELFSIZE 32
+#define ARCH_ELFSIZE 32 /* MD native binary size */
+
+/* Processor specific relocation types */
+
+#define R_MICROBLAZE_NONE 0
+#define R_MICROBLAZE_32 1
+#define R_MICROBLAZE_32_PCREL 2
+#define R_MICROBLAZE_64_PCREL 3
+#define R_MICROBLAZE_32_PCREL_LO 4
+#define R_MICROBLAZE_64 5
+#define R_MICROBLAZE_32_LO 6
+#define R_MICROBLAZE_SRO32 7
+#define R_MICROBLAZE_SRW32 8
+#define R_MICROBLAZE_64_NONE 9
+#define R_MICROBLAZE_32_SYM_OP_SYM 10
+#define R_MICROBLAZE_GNU_VTINHERIT 11
+#define R_MICROBLAZE_GNU_VTENTRY 12
+#define R_MICROBLAZE_GOTPC_64 13
+#define R_MICROBLAZE_GOT_64 14
+#define R_MICROBLAZE_PLT_64 15
+#define R_MICROBLAZE_REL 16
+#define R_MICROBLAZE_JUMP_SLOT 17
+#define R_MICROBLAZE_GLOB_DAT 18
+#define R_MICROBLAZE_GOTOFF_64 19
+#define R_MICROBLAZE_GOTOFF_32 20
+#define R_MICROBLAZE_COPY 21
+#define R_MICROBLAZE_TLS 22
+#define R_MICROBLAZE_TLSGD 23
+#define R_MICROBLAZE_TLSLD 24
+#define R_MICROBLAZE_TLSDTPMOD32 25
+#define R_MICROBLAZE_TLSDTPREL32 26
+#define R_MICROBLAZE_TLSDTPREL64 27
+#define R_MICROBLAZE_TLSGOTTPREL32 28
+#define R_MICROBLAZE_TLSTPREL32 29
+
+#define R_TYPE( name ) R_MICROBLAZE_##name
+
+#endif /* _MICROBLAZE_ELF_MACHDEP_H_ */

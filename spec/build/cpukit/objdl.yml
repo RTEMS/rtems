@@ -37,6 +37,8 @@ links:
 - role: build-dependency
   uid: objdlm68k
 - role: build-dependency
+  uid: objdlmicroblaze
+- role: build-dependency
   uid: objdlmips
 - role: build-dependency
   uid: objdlmoxie
