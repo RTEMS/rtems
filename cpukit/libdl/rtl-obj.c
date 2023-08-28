@@ -1032,6 +1032,7 @@ rtems_rtl_obj_sections_locate (uint32_t            mask,
         {
           base_offset = rtems_rtl_obj_align (base_offset, sect->alignment);
           sect->base = base + base_offset;
+          base_offset += sect->size;
         }
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
@@ -1039,9 +1040,6 @@ rtems_rtl_obj_sections_locate (uint32_t            mask,
                   " a:%" PRIu32 " l:%02d)\n",
                   order, sect->name, sect->base, sect->size,
                   sect->flags, sect->alignment, sect->link);
-
-        if (sect->base)
-          base_offset += sect->size;
 
         ++order;
 
@@ -1064,23 +1062,18 @@ rtems_rtl_obj_set_sizes (rtems_rtl_obj* obj)
   size_t data_size;
   size_t bss_size;
 
-  text_size  = rtems_rtl_obj_text_size (obj);
+  /*
+   * The allocator may not align memory to the required boundary. Add
+   * the alignment size to the size allocated.
+   */
+  text_size  = rtems_rtl_obj_text_size (obj) + rtems_rtl_obj_text_alignment (obj);
   tramp_size = rtems_rtl_obj_tramp_size (obj);
-
   if (tramp_size != 0)
-  {
-    text_size += rtems_rtl_obj_tramp_alignment (obj);
-    tramp_size += rtems_rtl_obj_const_alignment (obj);
-  }
-  else
-  {
-    text_size += rtems_rtl_obj_const_alignment (obj);
-  }
-
-  const_size = rtems_rtl_obj_const_size (obj) + rtems_rtl_obj_eh_alignment (obj);
-  eh_size    = rtems_rtl_obj_eh_size (obj) + rtems_rtl_obj_data_alignment (obj);
-  data_size  = rtems_rtl_obj_data_size (obj) + rtems_rtl_obj_bss_alignment (obj);
-  bss_size   = rtems_rtl_obj_bss_size (obj);
+    tramp_size += rtems_rtl_obj_tramp_alignment (obj);
+  const_size = rtems_rtl_obj_const_size (obj) + rtems_rtl_obj_const_alignment (obj);
+  eh_size    = rtems_rtl_obj_eh_size (obj) + rtems_rtl_obj_eh_alignment (obj);
+  data_size  = rtems_rtl_obj_data_size (obj) + rtems_rtl_obj_data_alignment (obj);
+  bss_size   = rtems_rtl_obj_bss_size (obj) + rtems_rtl_obj_bss_alignment (obj);
 
   /*
    * Set the sizes held in the object data. We need this for a fast reference.
@@ -1098,7 +1091,7 @@ rtems_rtl_obj_set_sizes (rtems_rtl_obj* obj)
 static void
 rtems_rtl_obj_print_sizes (rtems_rtl_obj* obj, const char* label)
 {
-if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
   {
     printf ("rtl: %s sect: text  - b:%p s:%zi a:%" PRIu32 "\n",
             label, obj->text_base, obj->text_size, rtems_rtl_obj_text_alignment (obj));

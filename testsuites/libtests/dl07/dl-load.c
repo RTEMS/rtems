@@ -32,6 +32,7 @@
                       RTEMS_RTL_TRACE_WARNING | \
                       RTEMS_RTL_TRACE_LOAD | \
                       RTEMS_RTL_TRACE_UNLOAD | \
+                      RTEMS_RTL_TRACE_LOAD_SECT | \
                       RTEMS_RTL_TRACE_SYMBOL | \
                       RTEMS_RTL_TRACE_RELOC | \
                       RTEMS_RTL_TRACE_ALLOCATOR | \
