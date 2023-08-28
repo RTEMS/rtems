@@ -1174,6 +1174,7 @@ rtems_rtl_obj_archive_find_obj (int                     fd,
      */
     if (header[0] == '/')
     {
+      const char* name_ = *name;
       off_t extended_off;
 
       switch (header[1])
@@ -1190,7 +1191,7 @@ rtems_rtl_obj_archive_find_obj (int                     fd,
            * return the result.
            */
           *extended_file_names = *ooffset + RTEMS_RTL_AR_FHDR_SIZE;
-          if (*name[0] == '/' && *name[1] == '/')
+          if (name_[0] == '/' && name_[1] == '/')
           {
             *ooffset = *ooffset + RTEMS_RTL_AR_FHDR_SIZE;
             return true;
