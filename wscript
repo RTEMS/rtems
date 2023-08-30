@@ -353,10 +353,10 @@ class Item(object):
 
         class link(Task):
 
-            def __init__(self, item, bic, cmd, env):
+            def __init__(self, item, bic, cmd, env, ldflags):
                 super(link, self).__init__(self, env=env)
                 self.cmd = cmd
-                self.ldflags = bic.ldflags + item.data["ldflags"]
+                self.ldflags = bic.ldflags + ldflags
                 self.stlib = item.data["stlib"]
                 self.use = (item.data["use-before"] + bic.use +
                             item.data["use-after"])
@@ -382,7 +382,14 @@ class Item(object):
                     [],
                 )
 
-        tsk = link(self, bic, cmd, bld.env)
+        ldflags = []
+        for ldflag in self.data["ldflags"]:
+            if isinstance(ldflag, dict):
+                if _is_enabled(bld.env.ENABLE, ldflag["enabled-by"]):
+                    ldflags.append(ldflag["value"])
+            else:
+                ldflags.append(ldflag)
+        tsk = link(self, bic, cmd, bld.env, ldflags)
         tsk.set_inputs([bld.bldnode.make_node(s) for s in source])
         tsk.set_outputs(bld.bldnode.make_node(target))
         bld.add_to_group(tsk)
