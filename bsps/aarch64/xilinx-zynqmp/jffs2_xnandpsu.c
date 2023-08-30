@@ -46,11 +46,13 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/malloc.h>
+#include <rtems/thread.h>
 #include <dev/nand/xnandpsu_bbm.h>
 
 typedef struct {
   rtems_jffs2_flash_control super;
   XNandPsu *nandpsu;
+  rtems_mutex access_lock;
 } flash_control;
 
 static flash_control *get_flash_control(rtems_jffs2_flash_control *super)
@@ -68,7 +70,9 @@ static int flash_read(
   XNandPsu *nandpsu = get_flash_control(super)->nandpsu;
   rtems_status_code sc;
 
+  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
   sc = XNandPsu_Read(nandpsu, offset, size_of_buffer, buffer);
+  rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
   if (sc) {
     return -EIO;
   }
@@ -85,7 +89,9 @@ static int flash_write(
   XNandPsu *nandpsu = get_flash_control(super)->nandpsu;
   rtems_status_code sc;
 
+  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
   sc = XNandPsu_Write(nandpsu, offset, size_of_buffer, (void *)buffer);
+  rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
   if (sc) {
     return -EIO;
   }
@@ -112,7 +118,9 @@ static int flash_erase(
   BlockIndex = (offset % DeviceSize) / BlockSize;
 
   /* Perform erase operation. */
+  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
   sc = XNandPsu_EraseBlock(nandpsu, DeviceIndex, BlockIndex);
+  rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
   if (sc ) {
     return -EIO;
   }
@@ -137,7 +145,9 @@ static int flash_block_is_bad(
 
   BlockIndex = offset / nandpsu->Geometry.BlockSize;
 
+  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
   *bad = (XNandPsu_IsBlockBad(nandpsu, BlockIndex) == XST_SUCCESS);
+  rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
   return 0;
 }
 
@@ -146,6 +156,7 @@ static int flash_block_mark_bad(
   uint32_t offset
 )
 {
+  rtems_status_code sc;
   XNandPsu *nandpsu = get_flash_control(super)->nandpsu;
   uint32_t BlockIndex;
 
@@ -155,7 +166,10 @@ static int flash_block_mark_bad(
 
   BlockIndex = offset / nandpsu->Geometry.BlockSize;
 
-  if ( XNandPsu_MarkBlockBad(nandpsu, BlockIndex) != XST_SUCCESS ) {
+  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
+  sc = XNandPsu_MarkBlockBad(nandpsu, BlockIndex);
+  rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
+  if ( sc != XST_SUCCESS ) {
     return -EIO;
   }
   return RTEMS_SUCCESSFUL;
@@ -189,6 +203,7 @@ static int flash_read_oob(
     return -ENOMEM;
   }
 
+  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
   while (ooblen) {
     int rv = XNandPsu_ReadSpareBytes(nandpsu, PageIndex, spare_bytes);
     /* no guarantee oobbuf can hold all of spare bytes, so read and then copy */
@@ -198,6 +213,7 @@ static int flash_read_oob(
     }
 
     if (rv) {
+      rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
       free(spare_bytes);
       return -EIO;
     }
@@ -208,6 +224,7 @@ static int flash_read_oob(
     ooblen -= readlen;
     oobbuf += readlen;
   }
+  rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
   free(spare_bytes);
   return RTEMS_SUCCESSFUL;
 }
@@ -219,6 +236,7 @@ static int flash_write_oob(
   uint32_t ooblen
 )
 {
+  rtems_status_code sc;
   uint8_t *spare_bytes;
   uint8_t *buffer = oobbuf;
   XNandPsu *nandpsu = get_flash_control(super)->nandpsu;
@@ -252,11 +270,14 @@ static int flash_write_oob(
   /* Get page index */
   uint32_t PageIndex = offset / nandpsu->Geometry.BytesPerPage;
 
-  if ( XNandPsu_WriteSpareBytes(nandpsu, PageIndex, buffer) != XST_SUCCESS ) {
-    free(spare_bytes);
+  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
+  sc = XNandPsu_WriteSpareBytes(nandpsu, PageIndex, buffer);
+  rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
+  free(spare_bytes);
+
+  if ( sc != XST_SUCCESS ) {
     return -EIO;
   }
-  free(spare_bytes);
   return RTEMS_SUCCESSFUL;
 }
 
@@ -307,6 +328,7 @@ int xilinx_zynqmp_nand_jffs2_initialize(
 
   flash_instance.super.write_size = NandInstPtr->Geometry.BytesPerPage;
   flash_instance.nandpsu = NandInstPtr;
+  rtems_mutex_init(&flash_instance.access_lock, "XNandPsu JFFS2 adapter lock");
   mount_data.flash_control = &flash_instance.super;
   mount_data.compressor_control = &compressor_instance;
 
