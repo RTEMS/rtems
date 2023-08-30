@@ -2002,6 +2002,14 @@ static s32 XNandPsu_ReadPage(XNandPsu *InstancePtr, u32 Target, u32 Page,
 
 	Status = XNandPsu_Data_ReadWrite(InstancePtr, Buf, PktCount, PktSize, 0, 1);
 
+#ifdef __rtems__
+	if (InstancePtr->DmaMode == XNANDPSU_MDMA) {
+		if (InstancePtr->Config.IsCacheCoherent == 0) {
+			Xil_DCacheInvalidateRange((INTPTR)(void *)Buf, (PktSize * PktCount));
+		}
+	}
+#endif
+
 	/* Check ECC Errors */
 	if (InstancePtr->EccMode == XNANDPSU_HWECC) {
 		/* Hamming Multi Bit Errors */
@@ -2114,6 +2122,14 @@ s32 XNandPsu_ReadSpareBytes(XNandPsu *InstancePtr, u32 Page, u8 *Buf)
 				XNANDPSU_PROG_OFFSET,XNANDPSU_PROG_RD_MASK);
 
 	Status = XNandPsu_Data_ReadWrite(InstancePtr, Buf, PktCount, PktSize, 0, 1);
+
+#ifdef __rtems__
+	if (InstancePtr->DmaMode == XNANDPSU_MDMA) {
+		if (InstancePtr->Config.IsCacheCoherent == 0) {
+			Xil_DCacheInvalidateRange((INTPTR)(void *)Buf, (PktSize * PktCount));
+		}
+	}
+#endif
 
 	return Status;
 }
@@ -2557,6 +2573,11 @@ static s32 XNandPsu_ChangeWriteColumn(XNandPsu *InstancePtr, u32 Target,
 	if (InstancePtr->DmaMode == XNANDPSU_MDMA) {
 		RegVal = XNANDPSU_INTR_STS_EN_TRANS_COMP_STS_EN_MASK |
 			 XNANDPSU_INTR_STS_EN_DMA_INT_STS_EN_MASK;
+#ifdef __rtems__
+		if (InstancePtr->Config.IsCacheCoherent == 0) {
+			Xil_DCacheFlushRange((INTPTR)(void *)Buf, (PktSize * PktCount));
+		}
+#endif
 		XNandPsu_Update_DmaAddr(InstancePtr, Buf);
 	} else {
 		RegVal = XNANDPSU_INTR_STS_EN_BUFF_WR_RDY_STS_EN_MASK;
