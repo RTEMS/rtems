@@ -38,7 +38,10 @@ enabled-by:
   - BUILD_LIBDL
 includes:
 - testsuites/libtests/dl08
-ldflags: []
+ldflags:
+- enabled-by:
+  - microblaze
+  value: -u__extendsfdf2
 links: []
 prepare-build: null
 prepare-configure: null
