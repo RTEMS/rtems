@@ -4,6 +4,8 @@ actions:
     reason: null
     state: exclude
     tests:
+    - fsrfsbitmap01
+    - fsrofs01
     - mrfsfserror
     - mrfsfsfpathconf
     - mrfsfslink
