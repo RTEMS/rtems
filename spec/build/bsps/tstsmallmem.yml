@@ -7,20 +7,26 @@ actions:
     - can01
     - exit03
     - flashdisk01
+    - fsbdpart01
     - fsdosfsname01
     - linpack
     - performance-no-clock-0
     - psxconfig01
     - psxusleep
+    - rcxx01
     - record02
     - sp47
+    - sp71
     - spstkalloc02
     - terminate
     - tftpfs
+    - tmck
     - unit-no-clock-0
     - userext
     - validation-0
     - validation-1
+    - validation-acfg-0
+    - validation-acfg-1
     - validation-cache
     - validation-intr
     - validation-no-clock-0
