@@ -141,8 +141,10 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
 
   where = (Elf_Addr *)(sect->base + rela->r_offset);
 
+  /* Target value */
+  target = (Elf_Addr)symvalue + addend;
   /* Final PCREL value */
-  Elf_Word pcrel_val = symvalue - ((Elf_Word)where);
+  Elf_Word pcrel_val = target - ((Elf_Word)where);
 
   if (parsing) {
     return rtems_rtl_elf_rel_no_error;
@@ -153,7 +155,6 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
     break;
 
   case R_TYPE(64):
-    target = (Elf_Addr)symvalue + addend;
     /* Set the lower 16 bits of where to the upper 16 bits of target */
     write16le(where,
               (read16le(where) & 0xFFFF0000) | (target >> 16));
@@ -180,18 +181,18 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
         unsigned offset = addr & 3;
 
         /*
-         * Combine `symvalue` with `value_down` and `value_up` to form the new
+         * Combine `target` with `value_down` and `value_up` to form the new
          * values to write.
          */
         uint32_t new_value_down = (value_down & ((1 << (offset * 8)) - 1)) |
-          (symvalue << (offset * 8));
+          (target << (offset * 8));
         uint32_t new_value_up = (value_up & ~((1 << (offset * 8)) - 1)) |
-          (symvalue >> ((4 - offset) * 8));
+          (target >> ((4 - offset) * 8));
 
         write32le((void*)addr_down, new_value_down);
         write32le((void*)addr_up, new_value_up);
       } else {
-        write32le(where, symvalue);
+        write32le(where, target);
       }
     }
     break;
@@ -208,13 +209,13 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
     /*
      * Compensate for the fact that the PC is 4 bytes ahead of the instruction
      */
-    target = pcrel_val - 4;
+    pcrel_val -= 4;
     /* Set the lower 16 bits of where to the upper 16 bits of target */
     write16le(where,
-              (read16le(where) & 0xFFFF0000) | (target >> 16));
+              (read16le(where) & 0xFFFF0000) | (pcrel_val >> 16));
     /* Set the lower 16 bits of where + 4 to the lower 16 bits of target */
     write16le(where + 1,
-              (read16le(where + 1) & 0xFFFF0000) | (target & 0xFFFF));
+              (read16le(where + 1) & 0xFFFF0000) | (pcrel_val & 0xFFFF));
 
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
       printf ("rtl: R_MICROBLAZE_64_PCREL %p @ %p in %s\n",
