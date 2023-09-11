@@ -307,7 +307,8 @@ class Item(object):
             target = os.path.splitext(source)[0] + ".o"
         bld(
             asflags=self.substitute(bld, self.data["asflags"]),
-            cppflags=self.substitute(bld, self.data["cppflags"]),
+            cppflags=bic.cppflags +
+            self.substitute(bld, self.data["cppflags"]),
             features="asm_explicit_target asm c",
             includes=bic.includes +
             self.substitute(bld, self.data["includes"]),
@@ -320,8 +321,9 @@ class Item(object):
         if target is None:
             target = os.path.splitext(source)[0] + ".o"
         bld(
-            cflags=self.substitute(bld, self.data["cflags"]),
-            cppflags=cppflags + self.substitute(bld, self.data["cppflags"]),
+            cflags=bic.cflags + self.substitute(bld, self.data["cflags"]),
+            cppflags=bic.cppflags + cppflags +
+            self.substitute(bld, self.data["cppflags"]),
             features="c",
             includes=bic.includes +
             self.substitute(bld, self.data["includes"]),
@@ -336,8 +338,10 @@ class Item(object):
         if target is None:
             target = os.path.splitext(source)[0] + ".o"
         bld(
-            cppflags=cppflags + self.substitute(bld, self.data["cppflags"]),
-            cxxflags=self.substitute(bld, self.data["cxxflags"]),
+            cppflags=bic.cppflags + cppflags +
+            self.substitute(bld, self.data["cppflags"]),
+            cxxflags=bic.cxxflags +
+            self.substitute(bld, self.data["cxxflags"]),
             features="cxx",
             includes=bic.includes +
             self.substitute(bld, self.data["includes"]),

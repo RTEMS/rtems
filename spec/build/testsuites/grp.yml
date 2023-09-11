@@ -12,7 +12,6 @@ includes:
 - ${BSP_INCLUDES}
 install: []
 ldflags:
-- ${TEST_OPTIMIZATION_FLAGS}
 - ${COVERAGE_LINKER_FLAGS}
 links:
 - role: build-dependency
