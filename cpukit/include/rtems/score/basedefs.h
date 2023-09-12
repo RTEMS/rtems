@@ -999,11 +999,12 @@ extern "C" {
  *
  * @param _value is the value of the symbol.  On the value a macro expansion is
  *   performed and afterwards it is stringified.  It shall expand to an integer
- *   expression understood by the assembler.
+ *   expression understood by the assembler.  The value shall be representable
+ *   in the code model of the target architecture.
  *
  * This macro shall be placed at file scope.
  */
-#if defined(__USER_LABEL_PREFIX__)
+#if defined(__GNUC__)
   #define RTEMS_DEFINE_GLOBAL_SYMBOL( _name, _value ) \
     __asm__( \
       "\t.globl " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( _name ) ) \
