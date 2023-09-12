@@ -438,7 +438,11 @@ test-actions:
       basedefs_get_global_symbol() which is defined in a file
       different from the file in which the gobal symbol is defined.
     code: |
-      T_step_eq_int( ${.:/step}, basedefs_get_global_symbol(), 0xabc );
+      T_step_eq_uptr(
+        ${.:/step},
+        basedefs_get_global_symbol() - (uintptr_t) &global_symbol_base,
+        0xabc
+      );
     links:
     - role: validation
       uid: ../req/declare-global-symbol-0
@@ -472,7 +476,11 @@ test-actions:
       Check that the ${../if/define-global-symbol:/name}
       macro defines a global symbol with the correct value.
     code: |
-      T_step_eq_int( ${.:/step}, (uintptr_t) global_symbol, 0xabc );
+      T_step_eq_uptr(
+        ${.:/step},
+        (uintptr_t) global_symbol - (uintptr_t) &global_symbol_base,
+        0xabc
+      );
     links:
     - role: validation
       uid: ../req/define-global-symbol-0
@@ -1454,8 +1462,12 @@ test-support: |
     return 21;
   }
 
+  static int global_symbol_base;
+
   RTEMS_DEFINE_GLOBAL_SYMBOL(
-    GLOBAL_SYMBOL, GLOBAL_SYMBOL_VALULE( abc ) );
+    GLOBAL_SYMBOL,
+    RTEMS_SYMBOL_NAME( global_symbol_base ) + GLOBAL_SYMBOL_VALULE( abc )
+  );
 
   static int deprecated_func( int i ) RTEMS_DEPRECATED;
   static int deprecated_func( int i )
