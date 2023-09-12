@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Defines a global symbol with the name and value.
 copyrights:
-- Copyright (C) 2018, 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2018, 2023 embedded brains GmbH & Co. KG
 definition:
   default:
     attributes: null
@@ -21,7 +21,7 @@ definition:
       params: []
       return: null
     enabled-by:
-    - defined(${/compiler/if/user-label-prefix:/name})
+    - defined(${/compiler/if/gnuc:/name})
 description: |
   This macro shall be placed at file scope.
 enabled-by: true
@@ -44,7 +44,8 @@ params:
 - description: |
     is the value of the symbol.  On the value a macro expansion is performed
     and afterwards it is stringified.  It shall expand to an integer expression
-    understood by the assembler.
+    understood by the assembler.  The value shall be representable in the code
+    model of the ${/glossary/target-arch:/term}.
   dir: null
   name: _value
 return: null
