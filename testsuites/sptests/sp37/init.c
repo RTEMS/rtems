@@ -40,6 +40,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <rtems/sysinit.h>
+
 const char rtems_test_name[] = "SP 37";
 
 /* prototypes */
@@ -66,6 +68,19 @@ rtems_timer_service_routine test_isr_in_progress(
 /* test bodies */
 
 #define TEST_ISR_EVENT RTEMS_EVENT_0
+
+static uint32_t boot_isr_level;
+
+static void set_boot_isr_level( void )
+{
+  boot_isr_level = _ISR_Get_level();
+}
+
+RTEMS_SYSINIT_ITEM(
+  set_boot_isr_level,
+  RTEMS_SYSINIT_DEVICE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
 typedef struct {
   ISR_Level actual_level;
@@ -153,6 +168,9 @@ static void test_isr_level( void )
   ISR_Level normal = _ISR_Get_level();
   ISR_Level current = 0;
   ISR_Level last_proper_level;
+
+  /* Interrupts shall be disabled during system initialization */
+  rtems_test_assert( boot_isr_level != 0 );
 
   _ISR_Set_level( current );
   rtems_test_assert( _ISR_Get_level() == current );
