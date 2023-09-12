@@ -527,8 +527,12 @@ RTEMS_COMPILER_PURE_ATTRIBUTE static int compiler_pure_attribute_func( void )
   return 21;
 }
 
+static int global_symbol_base;
+
 RTEMS_DEFINE_GLOBAL_SYMBOL(
-  GLOBAL_SYMBOL, GLOBAL_SYMBOL_VALULE( abc ) );
+  GLOBAL_SYMBOL,
+  RTEMS_SYMBOL_NAME( global_symbol_base ) + GLOBAL_SYMBOL_VALULE( abc )
+);
 
 static int deprecated_func( int i ) RTEMS_DEPRECATED;
 static int deprecated_func( int i )
@@ -1055,7 +1059,11 @@ static void RtemsBasedefsValBasedefs_Action_18( void )
    * which is defined in a file different from the file in which the gobal
    * symbol is defined.
    */
-  T_step_eq_int( 45, basedefs_get_global_symbol(), 0xabc );
+  T_step_eq_uptr(
+    45,
+    basedefs_get_global_symbol() - (uintptr_t) &global_symbol_base,
+    0xabc
+  );
 }
 
 /**
@@ -1089,7 +1097,11 @@ static void RtemsBasedefsValBasedefs_Action_20( void )
    * Check that the RTEMS_DEFINE_GLOBAL_SYMBOL() macro defines a global symbol
    * with the correct value.
    */
-  T_step_eq_int( 49, (uintptr_t) global_symbol, 0xabc );
+  T_step_eq_uptr(
+    49,
+    (uintptr_t) global_symbol - (uintptr_t) &global_symbol_base,
+    0xabc
+  );
 }
 
 /**

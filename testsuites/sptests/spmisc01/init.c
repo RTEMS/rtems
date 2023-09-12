@@ -122,9 +122,14 @@ static int obfuscate_variable(int i)
   return i;
 }
 
+static int global_symbol_base;
+
 RTEMS_DECLARE_GLOBAL_SYMBOL(a_global_symbol);
 
-RTEMS_DEFINE_GLOBAL_SYMBOL(a_global_symbol, 0xabc);
+RTEMS_DEFINE_GLOBAL_SYMBOL(
+  a_global_symbol,
+  RTEMS_SYMBOL_NAME(global_symbol_base) + 0xabc
+);
 
 RTEMS_STATIC_ASSERT(0 != 1, zero_neq_one);
 
@@ -243,7 +248,9 @@ static void Init(rtems_task_argument arg)
   unreachable();
   rtems_test_assert(printflike_func("%i", 0) == 56);
   rtems_test_assert(obfuscate_variable(63) == 63);
-  rtems_test_assert((uintptr_t)a_global_symbol == 0xabc);
+  rtems_test_assert(
+    (uintptr_t) a_global_symbol - (uintptr_t) &global_symbol_base == 0xabc
+  );
   rtems_test_assert(RTEMS_ARRAY_SIZE(array) == 3);
   rtems_test_assert(sizeof(zero_length_array_struct) == 4);
   container_of();
