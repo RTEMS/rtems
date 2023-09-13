@@ -152,6 +152,8 @@ install:
   - cpukit/include/rtems/recorddata.h
   - cpukit/include/rtems/recorddump.h
   - cpukit/include/rtems/recordserver.h
+  - cpukit/include/rtems/regulator.h
+  - cpukit/include/rtems/regulatorimpl.h
   - cpukit/include/rtems/ringbuf.h
   - cpukit/include/rtems/rtc.h
   - cpukit/include/rtems/rtems-debugger-remote-tcp.h
@@ -510,8 +512,6 @@ links:
   uid: objmpci
 - role: build-dependency
   uid: objpci
-- role: build-dependency
-  uid: objregulator
 - role: build-dependency
   uid: objpsxsgnl
 - role: build-dependency
@@ -950,6 +950,7 @@ source:
 - cpukit/libmisc/mouse/mouse_parser.c
 - cpukit/libmisc/mouse/serial_mouse.c
 - cpukit/libmisc/redirector/stdio-redirect.c
+- cpukit/libmisc/regulator/regulator.c
 - cpukit/libmisc/rtems-fdt/rtems-fdt-shell.c
 - cpukit/libmisc/rtems-fdt/rtems-fdt.c
 - cpukit/libmisc/stackchk/check.c
