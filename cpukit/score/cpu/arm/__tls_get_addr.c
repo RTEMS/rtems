@@ -48,7 +48,7 @@ void *__tls_get_addr(const TLS_Index *ti)
 {
   const Thread_Control *executing = _Thread_Get_executing();
   void *tls_data = (char *) executing->Registers.thread_id
-    + _TLS_Get_thread_control_block_area_size();
+    + _TLS_Get_thread_control_block_area_size( &_TLS_Configuration );
 
   assert(ti->module == 1);
 

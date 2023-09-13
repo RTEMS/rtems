@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2014, 2022 embedded brains GmbH & Co. KG
+ * Copyright (C) 2014, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -42,14 +42,47 @@
 #include <rtems/score/interr.h>
 #include <rtems/score/thread.h>
 
+extern char _TLS_Data_begin[];
+
+extern char _TLS_Data_size[];
+
+extern char _TLS_BSS_begin[];
+
+extern char _TLS_BSS_size[];
+
+extern char _TLS_Size[];
+
+/**
+ * @brief The TLS section alignment.
+ *
+ * This symbol is provided by the linker command file as the maximum alignment
+ * of the .tdata and .tbss sections.  The linker ensures that the first TLS
+ * output section is aligned to the maximum alignment of all TLS output
+ * sections, see function _bfd_elf_tls_setup() in bfd/elflink.c of the GNU
+ * Binutils sources.  The linker command file must take into account the case
+ * that the .tdata section is empty and the .tbss section is non-empty.
+ */
+extern char _TLS_Alignment[];
+
+const volatile TLS_Configuration _TLS_Configuration = {
+  .data_begin = _TLS_Data_begin,
+  .data_size = _TLS_Data_size,
+  .bss_begin = _TLS_BSS_begin,
+  .bss_size = _TLS_BSS_size,
+  .size = _TLS_Size,
+  .alignment = _TLS_Alignment
+};
+
 static uintptr_t _TLS_Allocation_size;
 
 uintptr_t _TLS_Get_allocation_size( void )
 {
-  uintptr_t size;
-  uintptr_t allocation_size;
+  const volatile TLS_Configuration *config;
+  uintptr_t                         size;
+  uintptr_t                         allocation_size;
 
-  size = _TLS_Get_size();
+  config = &_TLS_Configuration;
+  size = (uintptr_t) config->size;
 
   if ( size == 0 ) {
     return 0;
@@ -66,7 +99,7 @@ uintptr_t _TLS_Get_allocation_size( void )
      * shall meet the stack alignment requirement.
      */
     stack_align = CPU_STACK_ALIGNMENT;
-    tls_align = RTEMS_ALIGN_UP( (uintptr_t) _TLS_Alignment, stack_align );
+    tls_align = RTEMS_ALIGN_UP( (uintptr_t) config->alignment, stack_align );
 
 #ifndef __i386__
     /* Reserve space for the dynamic thread vector */

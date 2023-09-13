@@ -67,9 +67,11 @@ static void task(rtems_task_argument arg)
 
 static void check_tls_size(void)
 {
+  const volatile TLS_Configuration *config;
   uintptr_t tls_size;
 
-  tls_size = _TLS_Get_size();
+  config = &_TLS_Configuration;
+  tls_size = (uintptr_t) config->size;
 
   if (tls_size != 1) {
     printk(

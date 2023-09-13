@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2014, 2022 embedded brains GmbH & Co. KG
+ * Copyright (C) 2014, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -59,31 +59,51 @@ extern "C" {
  * @{
  */
 
-extern char _TLS_Data_begin[];
+/**
+ * @brief Represents the TLS configuration.
+ */
+typedef struct {
+  /**
+   * @brief This member is initialized to _TLS_Data_begin.
+   */
+  const char *data_begin;
 
-extern char _TLS_Data_end[];
+  /**
+   * @brief This member is initialized to _TLS_Data_size.
+   */
+  const char *data_size;
 
-extern char _TLS_Data_size[];
+  /**
+   * @brief This member is initialized to _TLS_BSS_begin.
+   */
+  const char *bss_begin;
 
-extern char _TLS_BSS_begin[];
+  /**
+   * @brief This member is initialized to _TLS_BSS_size.
+   */
+  const char *bss_size;
 
-extern char _TLS_BSS_end[];
+  /**
+   * @brief This member is initialized to _TLS_Size.
+   */
+  const char *size;
 
-extern char _TLS_BSS_size[];
-
-extern char _TLS_Size[];
+  /**
+   * @brief This member is initialized to _TLS_Alignment.
+   */
+  const char *alignment;
+} TLS_Configuration;
 
 /**
- * @brief The TLS section alignment.
+ * @brief Provides the TLS configuration.
  *
- * This symbol is provided by the linker command file as the maximum alignment
- * of the .tdata and .tbss sections.  The linker ensures that the first TLS
- * output section is aligned to the maximum alignment of all TLS output
- * sections, see function _bfd_elf_tls_setup() in bfd/elflink.c of the GNU
- * Binutils sources.  The linker command file must take into account the case
- * that the .tdata section is empty and the .tbss section is non-empty.
+ * Directly using symbols with an arbitrary absolute address such as
+ * _TLS_Alignment may not work with all code models (for example the AArch64
+ * tiny and small code models).  Store the addresses in a read-only object.
+ * Using the volatile qualifier ensures that the compiler actually loads the
+ * address from the object.
  */
-extern char _TLS_Alignment[];
+extern const volatile TLS_Configuration _TLS_Configuration;
 
 typedef struct {
   /*
@@ -116,38 +136,24 @@ typedef struct {
 } TLS_Index;
 
 /**
- * @brief Gets the size of the thread-local storage data in bytes.
- *
- * @return Returns the size of the thread-local storage data in bytes.
- */
-static inline uintptr_t _TLS_Get_size( void )
-{
-  uintptr_t size;
-
-  /*
-   * We must be careful with using _TLS_Size here since this could lead GCC to
-   * assume that this symbol is not 0 and the tests for 0 will be optimized
-   * away.
-   */
-  size = (uintptr_t) _TLS_Size;
-  RTEMS_OBFUSCATE_VARIABLE( size );
-  return size;
-}
-
-/**
  * @brief Gets the size of the thread control block area in bytes.
+ *
+ * @param config is the TLS configuration.
  *
  * @return Returns the size of the thread control block area in bytes.
  */
-static inline uintptr_t _TLS_Get_thread_control_block_area_size( void )
+static inline uintptr_t _TLS_Get_thread_control_block_area_size(
+  const volatile TLS_Configuration *config
+)
 {
 #if CPU_THREAD_LOCAL_STORAGE_VARIANT == 11
   uintptr_t alignment;
 
-  alignment = (uintptr_t) _TLS_Alignment;
+  alignment = (uintptr_t) config->alignment;
 
   return RTEMS_ALIGN_UP( sizeof( TLS_Thread_control_block ), alignment );
 #else
+  (void) config;
   return sizeof( TLS_Thread_control_block );
 #endif
 }
@@ -163,17 +169,23 @@ uintptr_t _TLS_Get_allocation_size( void );
 /**
  * @brief Initializes the thread-local storage data.
  *
+ * @param config is the TLS configuration.
+ *
  * @param[out] tls_data is the thread-local storage data to initialize.
  */
-static inline void _TLS_Copy_and_clear( void *tls_data )
+static inline void _TLS_Copy_and_clear(
+  const volatile TLS_Configuration *config,
+  void                             *tls_data
+)
 {
-  tls_data = memcpy( tls_data, _TLS_Data_begin, (uintptr_t) _TLS_Data_size );
+  tls_data =
+    memcpy( tls_data, config->data_begin, (uintptr_t) config->data_size );
 
   memset(
     (char *) tls_data +
-      (uintptr_t) _TLS_BSS_begin - (uintptr_t) _TLS_Data_begin,
+      (uintptr_t) config->bss_begin - (uintptr_t) config->data_begin,
     0,
-    (uintptr_t) _TLS_BSS_size
+    (uintptr_t) config->bss_size
   );
 }
 
@@ -213,20 +225,22 @@ static inline void _TLS_Initialize_TCB_and_DTV(
  */
 static inline void *_TLS_Initialize_area( void *tls_area )
 {
-  uintptr_t                  alignment;
-  void                      *tls_data;
-  TLS_Thread_control_block  *tcb;
-  TLS_Dynamic_thread_vector *dtv;
-  void                      *return_value;
+  const volatile TLS_Configuration *config;
+  uintptr_t                         alignment;
+  void                             *tls_data;
+  TLS_Thread_control_block         *tcb;
+  TLS_Dynamic_thread_vector        *dtv;
+  void                             *return_value;
 #if CPU_THREAD_LOCAL_STORAGE_VARIANT == 11
-  uintptr_t                  tcb_size;
+  uintptr_t                         tcb_size;
 #endif
 #if CPU_THREAD_LOCAL_STORAGE_VARIANT == 20
-  uintptr_t                  size;
-  uintptr_t                  alignment_2;
+  uintptr_t                         size;
+  uintptr_t                         alignment_2;
 #endif
 
-  alignment = (uintptr_t) _TLS_Alignment;
+  config = &_TLS_Configuration;
+  alignment = (uintptr_t) config->alignment;
 
 #ifdef __i386__
   dtv = NULL;
@@ -249,7 +263,7 @@ static inline void *_TLS_Initialize_area( void *tls_area )
 #elif CPU_THREAD_LOCAL_STORAGE_VARIANT == 20
   alignment_2 = RTEMS_ALIGN_UP( alignment, CPU_SIZEOF_POINTER );
   tls_area = (void *) RTEMS_ALIGN_UP( (uintptr_t) tls_area, alignment_2 );
-  size = _TLS_Get_size();
+  size = (uintptr_t) config->size;
   tcb = (TLS_Thread_control_block *)
     ((char *) tls_area + RTEMS_ALIGN_UP( size, alignment_2 ));
   tls_data = (char *) tcb - RTEMS_ALIGN_UP( size, alignment );
@@ -259,7 +273,7 @@ static inline void *_TLS_Initialize_area( void *tls_area )
 #endif
 
   _TLS_Initialize_TCB_and_DTV( tls_data, tcb, dtv );
-  _TLS_Copy_and_clear( tls_data );
+  _TLS_Copy_and_clear( config, tls_data );
 
   return return_value;
 }
