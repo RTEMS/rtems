@@ -6,7 +6,7 @@ copyrights:
 definition:
   default:
     attributes: null
-    body: ((${/c/if/size_t:/name}) ${/score/isr/if/stack-size:/name})
+    body: ((${/c/if/size_t:/name}) ${/score/isr/if/stack-size-object:/name})
     params: []
     return: ${/c/if/size_t:/name}
   variants: []

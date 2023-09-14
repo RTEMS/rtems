@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
 enabled-by: true
 index-entries: []
 interface-type: unspecified-object
@@ -9,6 +9,6 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
-name: _ISR_Stack_size
+name: _ISR_Stack_size_object
 references: []
 type: interface
