@@ -1151,31 +1151,7 @@ typedef uint32_t CPU_Counter_ticks;
 
 uint32_t _CPU_Counter_frequency( void );
 
-typedef CPU_Counter_ticks ( *SPARC_Counter_read )( void );
-
-/*
- * The SPARC processors supported by RTEMS have no built-in CPU counter
- * support.  We have to use some hardware counter module for this purpose, for
- * example the GPTIMER instance used by the clock driver.  The BSP must provide
- * an implementation of the CPU counter read function.  This allows the use of
- * dynamic hardware enumeration.
- */
-typedef struct {
-  SPARC_Counter_read                read_isr_disabled;
-  SPARC_Counter_read                read;
-  volatile const CPU_Counter_ticks *counter_register;
-  volatile const uint32_t          *pending_register;
-  uint32_t                          pending_mask;
-  CPU_Counter_ticks                 accumulated;
-  CPU_Counter_ticks                 interval;
-} SPARC_Counter;
-
-extern const SPARC_Counter _SPARC_Counter;
-
-static inline CPU_Counter_ticks _CPU_Counter_read( void )
-{
-  return ( *_SPARC_Counter.read )();
-}
+CPU_Counter_ticks _CPU_Counter_read( void );
 
 /** Type that can store a 32-bit integer or a pointer. */
 typedef uintptr_t CPU_Uint32ptr;

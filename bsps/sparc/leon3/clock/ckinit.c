@@ -47,7 +47,7 @@
 #include <rtems/rtems/intr.h>
 #include <grlib/irqamp.h>
 #include <rtems/score/profiling.h>
-#include <rtems/score/sparcimpl.h>
+#include <bsp/sparc-counter.h>
 #include <rtems/timecounter.h>
 
 #if !defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
@@ -73,7 +73,7 @@ static void leon3_tc_tick_default(void)
   SPARC_Counter *counter;
   rtems_interrupt_level level;
 
-  counter = &_SPARC_Counter_mutable;
+  counter = &_SPARC_Counter;
   rtems_interrupt_local_disable(level);
 
   grlib_store_32(&LEON3_IrqCtrl_Regs->iclear, counter->pending_mask);
@@ -249,7 +249,7 @@ static void leon3_clock_use_gptimer(
 #else
   SPARC_Counter *counter;
 
-  counter = &_SPARC_Counter_mutable;
+  counter = &_SPARC_Counter;
   counter->read_isr_disabled = _SPARC_Counter_read_clock_isr_disabled;
   counter->read = _SPARC_Counter_read_clock;
   counter->counter_register = &timer->tcntval;

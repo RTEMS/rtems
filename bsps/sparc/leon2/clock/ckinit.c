@@ -45,7 +45,7 @@
 #include <bspopts.h>
 #include <rtems/sysinit.h>
 #include <rtems/timecounter.h>
-#include <rtems/score/sparcimpl.h>
+#include <bsp/sparc-counter.h>
 
 extern int CLOCK_SPEED;
 
@@ -70,7 +70,7 @@ static void leon2_clock_at_tick( void )
   SPARC_Counter *counter;
   rtems_interrupt_level level;
 
-  counter = &_SPARC_Counter_mutable;
+  counter = &_SPARC_Counter;
   rtems_interrupt_local_disable(level);
 
   LEON_Clear_interrupt( LEON_INTERRUPT_TIMER1 );
@@ -91,7 +91,7 @@ static void leon2_clock_initialize_early( void )
       LEON_REG_TIMER_COUNTER_LOAD_COUNTER
   );
 
-  counter = &_SPARC_Counter_mutable;
+  counter = &_SPARC_Counter;
   counter->read_isr_disabled = _SPARC_Counter_read_clock_isr_disabled;
   counter->read = _SPARC_Counter_read_clock;
   counter->counter_register = &LEON_REG.Timer_Counter_1;
@@ -107,7 +107,7 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_FIRST
 );
 
-uint32_t _CPU_Counter_frequency(void)
+uint32_t _CPU_Counter_frequency( void )
 {
   return LEON2_TIMER_1_FREQUENCY;
 }

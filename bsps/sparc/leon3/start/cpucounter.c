@@ -38,7 +38,7 @@
 
 #include <rtems/counter.h>
 #include <rtems/sysinit.h>
-#include <rtems/score/sparcimpl.h>
+#include <bsp/sparc-counter.h>
 
 static uint32_t leon3_counter_frequency = 1000000000;
 
@@ -112,7 +112,7 @@ static void leon3_counter_initialize(void)
 #endif
   SPARC_Counter *counter;
 
-  counter = &_SPARC_Counter_mutable;
+  counter = &_SPARC_Counter;
 
 #if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
   leon3_up_counter_enable();

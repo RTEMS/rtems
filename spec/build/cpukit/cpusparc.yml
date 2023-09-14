@@ -25,7 +25,6 @@ install:
   - cpukit/score/cpu/sparc/include/rtems/score/cpu.h
   - cpukit/score/cpu/sparc/include/rtems/score/cpuimpl.h
   - cpukit/score/cpu/sparc/include/rtems/score/sparc.h
-  - cpukit/score/cpu/sparc/include/rtems/score/sparcimpl.h
 links: []
 source:
 - cpukit/score/cpu/no_cpu/cpuidle.c
@@ -36,7 +35,6 @@ source:
 - cpukit/score/cpu/sparc/sparc-bad-trap.S
 - cpukit/score/cpu/sparc/sparc-context-validate.S
 - cpukit/score/cpu/sparc/sparc-context-volatile-clobber.S
-- cpukit/score/cpu/sparc/sparc-counter-asm.S
 - cpukit/score/cpu/sparc/sparc-exception-frame-print.c
 - cpukit/score/cpu/sparc/sparc-isr-handler.S
 - cpukit/score/cpu/sparc/sparc-isr-install.c

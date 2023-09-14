@@ -14,6 +14,7 @@ install:
   - bsps/sparc/leon2/include/leon.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
+  - bsps/sparc/include/bsp/sparc-counter.h
   - bsps/sparc/leon2/include/bsp/at697_pci.h
   - bsps/sparc/leon2/include/bsp/irq.h
   - bsps/sparc/leon2/include/bsp/irqimpl.h
@@ -47,4 +48,5 @@ source:
 - bsps/sparc/shared/irq/bsp_isr_handler.c
 - bsps/sparc/shared/irq/irq-shared.c
 - bsps/sparc/shared/start/bsp_fatal_exit.c
+- bsps/sparc/shared/start/sparc-counter-asm.S
 type: build

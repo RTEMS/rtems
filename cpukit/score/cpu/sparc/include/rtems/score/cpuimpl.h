@@ -258,6 +258,13 @@ static inline void *_CPU_Get_TLS_thread_pointer(
   return (void *) context->g7;
 }
 
+#if defined(RTEMS_PROFILING)
+/**
+ * @brief Reads the CPU counter while interrupts are disabled.
+ */
+CPU_Counter_ticks _SPARC_Counter_read_ISR_disabled( void );
+#endif
+
 #ifdef __cplusplus
 }
 #endif

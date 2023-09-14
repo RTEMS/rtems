@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2016, 2018 embedded brains GmbH & Co. KG
+ * Copyright (C) 2016, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,6 +38,32 @@
 
 	.section	".text"
 	.align	4
+
+	/*
+	 * This is a workaround for:
+	 * https://gcc.gnu.org/bugzilla//show_bug.cgi?id=69027
+	 */
+	PUBLIC(_CPU_Counter_read)
+SYM(_CPU_Counter_read):
+	sethi	%hi(_SPARC_Counter + 4), %o1
+	ld	[%o1 + %lo(_SPARC_Counter + 4)], %o1
+	or	%o7, %g0, %g1
+	call	%o1, 0
+	 or	%g1, %g0, %o7
+
+#if defined(RTEMS_PROFILING)
+	/*
+	 * This is a workaround for:
+	 * https://gcc.gnu.org/bugzilla//show_bug.cgi?id=69027
+	 */
+	PUBLIC(_SPARC_Counter_read_ISR_disabled)
+SYM(_SPARC_Counter_read_ISR_disabled):
+	sethi	%hi(_SPARC_Counter), %o1
+	ld	[%o1 + %lo(_SPARC_Counter)], %o1
+	or	%o7, %g0, %g1
+	call	%o1, 0
+	 or	%g1, %g0, %o7
+#endif
 
 	PUBLIC(_SPARC_Counter_read_default)
 SYM(_SPARC_Counter_read_default):

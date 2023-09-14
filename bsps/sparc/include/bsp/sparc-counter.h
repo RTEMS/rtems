@@ -3,13 +3,14 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPUSPARC
+ * @ingroup RTEMSBSPsSPARCShared
  *
- * @brief This header file provides interfaces used by the SPARC port of RTEMS.
+ * @brief This header file provides interfaces of a CPU counter implementation
+ *   for SPARC BSPs.
  */
 
 /*
- * Copyright (C) 2016, 2018 embedded brains GmbH & Co. KG
+ * Copyright (C) 2016, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _RTEMS_SCORE_SPARCIMPL_H
-#define _RTEMS_SCORE_SPARCIMPL_H
+#ifndef _BSP_SPARC_COUNTER_H
+#define _BSP_SPARC_COUNTER_H
 
 #include <rtems/score/cpu.h>
 
@@ -43,13 +44,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 struct timecounter;
-
-/*
- * Provides a mutable alias to _SPARC_Counter for use in
- * _SPARC_Counter_initialize().  The _SPARC_Counter and _SPARC_Counter_mutable
- * are defined via the SPARC_COUNTER_DEFINITION define.
- */
-extern SPARC_Counter _SPARC_Counter_mutable;
 
 void _SPARC_Counter_at_tick_clock( void );
 
@@ -73,33 +67,35 @@ uint32_t _SPARC_Get_timecount_clock( struct timecounter * );
 
 uint32_t _SPARC_Get_timecount_asr23( struct timecounter * );
 
+typedef CPU_Counter_ticks ( *SPARC_Counter_read )( void );
+
 /*
- * Defines the _SPARC_Counter and _SPARC_Counter_mutable global variables.
- * Place this define in the global file scope of the CPU counter support file
- * of the BSP.
+ * The SPARC processors supported by RTEMS have no built-in CPU counter
+ * support.  We have to use some hardware counter module for this purpose, for
+ * example the GPTIMER instance used by the clock driver.  The BSP must provide
+ * an implementation of the CPU counter read function.  This allows the use of
+ * dynamic hardware enumeration.
  */
+typedef struct {
+  SPARC_Counter_read                read_isr_disabled;
+  SPARC_Counter_read                read;
+  volatile const CPU_Counter_ticks *counter_register;
+  volatile const uint32_t          *pending_register;
+  uint32_t                          pending_mask;
+  CPU_Counter_ticks                 accumulated;
+  CPU_Counter_ticks                 interval;
+} SPARC_Counter;
+
+extern SPARC_Counter _SPARC_Counter;
+
 #define SPARC_COUNTER_DEFINITION \
-  __asm__ ( \
-    "\t.global\t_SPARC_Counter\n" \
-    "\t.global\t_SPARC_Counter_mutable\n" \
-    "\t.section\t.data._SPARC_Counter,\"aw\",@progbits\n" \
-    "\t.align\t4\n" \
-    "\t.type\t_SPARC_Counter, #object\n" \
-    "\t.size\t_SPARC_Counter, 28\n" \
-    "_SPARC_Counter:\n" \
-    "_SPARC_Counter_mutable:\n" \
-    "\t.long\t_SPARC_Counter_read_default\n" \
-    "\t.long\t_SPARC_Counter_read_default\n" \
-    "\t.long\t0\n" \
-    "\t.long\t0\n" \
-    "\t.long\t0\n" \
-    "\t.long\t0\n" \
-    "\t.long\t0\n" \
-    "\t.previous\n" \
-  )
+  SPARC_Counter _SPARC_Counter = { \
+    .read_isr_disabled = _SPARC_Counter_read_default, \
+    .read = _SPARC_Counter_read_default \
+  }
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* _RTEMS_SCORE_SPARCIMPL_H */
+#endif /* _BSP_SPARC_COUNTER_H */
