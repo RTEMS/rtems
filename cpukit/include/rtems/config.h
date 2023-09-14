@@ -438,7 +438,7 @@ const char *rtems_get_version_string( void );
  * @endparblock
  */
 #define rtems_configuration_get_interrupt_stack_size() \
-  ((size_t) _ISR_Stack_size)
+  ((size_t) _ISR_Stack_size_object)
 
 /* Generated from spec:/rtems/config/if/get-maximum-extensions */
 

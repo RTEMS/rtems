@@ -44,6 +44,8 @@
 #include <rtems/score/percpu.h>
 #include <rtems/config.h>
 
+const char * const volatile _ISR_Stack_size_object = _ISR_Stack_size;
+
 void _ISR_Handler_initialization( void )
 {
   uint32_t  cpu_max;

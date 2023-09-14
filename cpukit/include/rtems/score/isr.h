@@ -98,12 +98,24 @@ extern ISR_Handler_entry _ISR_Vector_table[ CPU_INTERRUPT_NUMBER_OF_VECTORS ];
 #endif
 
 /**
- * @brief Global symbol with a value equal to the configure interrupt stack size.
+ * @brief Provides the configured interrupt stack size through an address.
+ *
+ * The address of this global symbol is equal to the configured interrupt stack
+ * size.  The address of this symbol has an arbitrary value an may not be
+ * representable in the code model used by the compiler.
  *
  * This global symbol is defined by the application configuration option
  * CONFIGURE_INIT_TASK_STACK_SIZE via <rtems/confdefs.h>.
  */
 RTEMS_DECLARE_GLOBAL_SYMBOL( _ISR_Stack_size );
+
+/**
+ * @brief Provides the configured interrupt stack size through an object.
+ *
+ * This object is provided to avoid issues with the _ISR_Stack_size symbol
+ * address and the code model used by the compiler.
+ */
+extern const char * const volatile _ISR_Stack_size_object;
 
 /**
  * @brief The interrupt stack area begin.
