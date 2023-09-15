@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (C) 2014, 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2014, 2023 embedded brains GmbH & Co. KG
  *
  * Copyright (C) 2015 Cobham Gaisler AB
  *
@@ -350,11 +350,33 @@ extern apbuart *leon3_debug_uart;
 #endif
 
 /**
+ * @brief Represents the LEON3-specific timecounter.
+ */
+typedef struct {
+  /**
+   * @brief This member contains the base timecounter.
+   */
+  struct timecounter base;
+
+  /**
+   * @brief This member provides a software fall-back counter.
+   */
+  uint32_t software_counter;
+
+#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
+  /**
+   * @brief This member may reference a hardware counter register.
+   */
+  volatile uint32_t *counter_register;
+#endif
+} leon3_timecounter;
+
+/**
  * @brief Provides the LEON3-specific timecounter.
  *
  * It is also used by the CPU counter implementation.
  */
-extern struct timecounter leon3_timecounter_instance;
+extern leon3_timecounter leon3_timecounter_instance;
 
 /** @} */
 

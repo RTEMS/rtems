@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (C) 2014, 2018 embedded brains GmbH & Co. KG
+ * Copyright (C) 2014, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -39,80 +39,143 @@
 #include <rtems/counter.h>
 #include <rtems/sysinit.h>
 #include <rtems/timecounter.h>
-#include <bsp/sparc-counter.h>
 
-struct timecounter leon3_timecounter_instance = {
-  .tc_counter_mask = 0xffffffff,
-  .tc_frequency = 1000000000,
-  .tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER
+#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER) || \
+  defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
+static uint32_t leon3_timecounter_get_asr_22_23_up_counter(
+  struct timecounter *tc
+)
+{
+  return leon3_up_counter_low();
+}
+#endif
+
+#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
+
+CPU_Counter_ticks _CPU_Counter_read(void)
+{
+  return leon3_up_counter_low();
+}
+
+RTEMS_ALIAS(_CPU_Counter_read) uint32_t _SPARC_Counter_read_ISR_disabled(void);
+
+#else /* !LEON3_HAS_ASR_22_23_UP_COUNTER */
+
+/*
+ * This is a workaround for:
+ * https://gcc.gnu.org/bugzilla//show_bug.cgi?id=69027
+ */
+__asm__ (
+  "\t.section\t\".text\"\n"
+  "\t.align\t4\n"
+  "\t.globl\t_CPU_Counter_read\n"
+  "\t.globl\t_SPARC_Counter_read_ISR_disabled\n"
+  "\t.type\t_CPU_Counter_read, #function\n"
+  "\t.type\t_SPARC_Counter_read_ISR_disabled, #function\n"
+  "_CPU_Counter_read:\n"
+  "_SPARC_Counter_read_ISR_disabled:\n"
+  "\tsethi\t%hi(leon3_timecounter_instance), %o0\n"
+  "\tld	[%o0 + %lo(leon3_timecounter_instance)], %o1\n"
+  "\tor\t%o0, %lo(leon3_timecounter_instance), %o0\n"
+  "\tor\t%o7, %g0, %g1\n"
+  "\tcall\t%o1, 0\n"
+  "\t or\t%g1, %g0, %o7\n"
+  "\t.previous\n"
+);
+
+static uint32_t leon3_timecounter_get_counter_down(struct timecounter *base)
+{
+  leon3_timecounter *tc;
+
+  tc = (leon3_timecounter *) base;
+  return -(*tc->counter_register);
+}
+
+#if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
+static uint32_t leon3_timecounter_get_counter_up(struct timecounter *base)
+{
+  leon3_timecounter *tc;
+
+  tc = (leon3_timecounter *) base;
+  return *tc->counter_register;
+}
+#endif
+
+#endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
+
+static uint32_t leon3_timecounter_get_dummy(struct timecounter *base)
+{
+  leon3_timecounter *tc;
+  uint32_t counter;
+
+  tc = (leon3_timecounter *) base;
+  counter = tc->software_counter + 1;
+  tc->software_counter = counter;
+  return counter;
+}
+
+leon3_timecounter leon3_timecounter_instance = {
+  .base = {
+    .tc_get_timecount = leon3_timecounter_get_dummy,
+    .tc_counter_mask = 0xffffffff,
+    .tc_frequency = 1000000000,
+    .tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER
+  }
 };
 
 uint32_t _CPU_Counter_frequency(void)
 {
-  return leon3_timecounter_instance.tc_frequency;
+  return leon3_timecounter_instance.base.tc_frequency;
 }
 
 #if defined(LEON3_HAS_ASR_22_23_UP_COUNTER) || \
    defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
-static void leon3_counter_use_up_counter(
-  struct timecounter *tc,
-  SPARC_Counter *counter
-)
+static void leon3_counter_use_asr_22_23_up_counter(leon3_timecounter *tc)
 {
-  counter->read_isr_disabled = _SPARC_Counter_read_asr23;
-  counter->read = _SPARC_Counter_read_asr23;
-
-  tc->tc_get_timecount = _SPARC_Get_timecount_asr23;
-  tc->tc_frequency = leon3_up_counter_frequency();
+  tc->base.tc_get_timecount = leon3_timecounter_get_asr_22_23_up_counter;
+  tc->base.tc_frequency = leon3_up_counter_frequency();
 }
 #endif
 
 #if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
 static void leon3_counter_use_irqamp_timestamp(
-  struct timecounter *tc,
-  SPARC_Counter *counter,
+  leon3_timecounter *tc,
   irqamp_timestamp *irqmp_ts
 )
 {
-  counter->read_isr_disabled = _SPARC_Counter_read_up;
-  counter->read = _SPARC_Counter_read_up;
-  counter->counter_register = &irqmp_ts->itcnt;
-
   /* Enable interrupt timestamping for an arbitrary interrupt line */
   grlib_store_32(&irqmp_ts->itstmpc, IRQAMP_ITSTMPC_TSISEL(1));
 
-  tc->tc_get_timecount = _SPARC_Get_timecount_up;
+  tc->counter_register = &irqmp_ts->itcnt;
+  tc->base.tc_get_timecount = leon3_timecounter_get_counter_up;
 #if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
-  tc->tc_frequency = leon3_processor_local_bus_frequency();
+  tc->base.tc_frequency = leon3_processor_local_bus_frequency();
 #else
-  tc->tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
+  tc->base.tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
 #endif
 }
 #endif
 
 #if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
 static void leon3_counter_use_gptimer(
-  struct timecounter *tc,
-  SPARC_Counter *counter,
+  leon3_timecounter *tc,
   gptimer *gpt
 )
 {
   gptimer_timer *timer;
 
   timer = &gpt->timer[LEON3_COUNTER_GPTIMER_INDEX];
-  counter->read_isr_disabled = _SPARC_Counter_read_down;
-  counter->read = _SPARC_Counter_read_down;
-  counter->counter_register = &timer->tcntval;
 
   /* Make timer free-running */
   grlib_store_32(&timer->trldval, 0xffffffff);
   grlib_store_32(&timer->tctrl, GPTIMER_TCTRL_EN | GPTIMER_TCTRL_RS);
 
-  tc->tc_get_timecount = _SPARC_Get_timecount_down;
+  tc->counter_register = &timer->tcntval;
+  tc->base.tc_get_timecount = leon3_timecounter_get_counter_down;
 #if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
-  tc->tc_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
+  tc->base.tc_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
 #else
-  tc->tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev) /
+  tc->base.tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev) /
     (grlib_load_32(&gpt->sreload) + 1);
 #endif
 }
@@ -120,28 +183,27 @@ static void leon3_counter_use_gptimer(
 
 static void leon3_counter_initialize(void)
 {
+#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
+
+  leon3_up_counter_enable();
+  leon3_counter_use_asr_22_23_up_counter(&leon3_timecounter_instance);
+
+#else /* !LEON3_HAS_ASR_22_23_UP_COUNTER */
+
 #if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
   irqamp_timestamp *irqmp_ts;
 #endif
-#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
   gptimer *gpt;
-#endif
-  struct timecounter *tc;
-  SPARC_Counter *counter;
+  leon3_timecounter *tc;
 
   tc = &leon3_timecounter_instance;
-  counter = &_SPARC_Counter;
 
-#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
-  leon3_up_counter_enable();
-  leon3_counter_use_up_counter(tc, counter);
-#else /* LEON3_HAS_ASR_22_23_UP_COUNTER */
 #if defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
   leon3_up_counter_enable();
 
   if (leon3_up_counter_is_available()) {
     /* Use the LEON4 up-counter if available */
-    leon3_counter_use_up_counter(tc, counter);
+    leon3_counter_use_asr_22_23_up_counter(tc);
     return;
   }
 #endif
@@ -151,7 +213,7 @@ static void leon3_counter_initialize(void)
 
   if (irqmp_ts != NULL) {
     /* Use the interrupt controller timestamp counter if available */
-    leon3_counter_use_irqamp_timestamp(tc, counter, irqmp_ts);
+    leon3_counter_use_irqamp_timestamp(tc, irqmp_ts);
     return;
   }
 #endif
@@ -159,13 +221,14 @@ static void leon3_counter_initialize(void)
   gpt = LEON3_Timer_Regs;
 
 #if defined(LEON3_GPTIMER_BASE)
-  leon3_counter_use_gptimer(tc, counter, gpt);
+  leon3_counter_use_gptimer(tc, gpt);
 #else
   if (gpt != NULL) {
     /* Fall back to the first GPTIMER if available */
-    leon3_counter_use_gptimer(tc, counter, gpt);
+    leon3_counter_use_gptimer(tc, gpt);
   }
 #endif
+
 #endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
 }
 
@@ -174,5 +237,3 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_CPU_COUNTER,
   RTEMS_SYSINIT_ORDER_FIRST
 );
-
-SPARC_COUNTER_DEFINITION;

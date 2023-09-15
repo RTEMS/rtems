@@ -74,25 +74,6 @@ SYM(_SPARC_Counter_read_default):
 	jmp	%o7 + 8
 	 nop
 
-	PUBLIC(_SPARC_Counter_read_up)
-	PUBLIC(_SPARC_Get_timecount_up)
-SYM(_SPARC_Counter_read_up):
-SYM(_SPARC_Get_timecount_up):
-	sethi	%hi(_SPARC_Counter + 8), %o0
-	ld	[%o0 + %lo(_SPARC_Counter + 8)], %o0
-	jmp	%o7 + 8
-	 ld	[%o0], %o0
-
-	PUBLIC(_SPARC_Counter_read_down)
-	PUBLIC(_SPARC_Get_timecount_down)
-SYM(_SPARC_Counter_read_down):
-SYM(_SPARC_Get_timecount_down):
-	sethi	%hi(_SPARC_Counter + 8), %o0
-	ld	[%o0 + %lo(_SPARC_Counter + 8)], %o0
-	ld	[%o0], %o0
-	jmp	%o7 + 8
-	 xnor	%g0, %o0, %o0
-
 	/*
 	 * For the corresponding C code is something like this:
 	 *
@@ -168,10 +149,3 @@ SYM(_SPARC_Get_timecount_clock):
 	add	%o4, %o5, %o4
 	jmp	%o7 + 8
 	 sub	%o4, %o0, %o0
-
-	PUBLIC(_SPARC_Counter_read_asr23)
-	PUBLIC(_SPARC_Get_timecount_asr23)
-SYM(_SPARC_Counter_read_asr23):
-SYM(_SPARC_Get_timecount_asr23):
-	jmp	%o7 + 8
-	 mov	%asr23, %o0

@@ -15,7 +15,6 @@ install:
   - bsps/sparc/leon3/include/leon.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
-  - bsps/sparc/include/bsp/sparc-counter.h
   - bsps/sparc/leon3/include/bsp/irq.h
   - bsps/sparc/leon3/include/bsp/irqimpl.h
   - bsps/sparc/leon3/include/bsp/watchdog.h
@@ -58,5 +57,4 @@ source:
 - bsps/sparc/shared/pci/pci_memreg_sparc_be.c
 - bsps/sparc/shared/pci/pci_memreg_sparc_le.c
 - bsps/sparc/shared/start/bsp_fatal_exit.c
-- bsps/sparc/shared/start/sparc-counter-asm.S
 type: build

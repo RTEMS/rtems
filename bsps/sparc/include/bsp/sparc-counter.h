@@ -49,23 +49,11 @@ void _SPARC_Counter_at_tick_clock( void );
 
 CPU_Counter_ticks _SPARC_Counter_read_default( void );
 
-CPU_Counter_ticks _SPARC_Counter_read_up( void );
-
-CPU_Counter_ticks _SPARC_Counter_read_down( void );
-
 CPU_Counter_ticks _SPARC_Counter_read_clock_isr_disabled( void );
 
 CPU_Counter_ticks _SPARC_Counter_read_clock( void );
 
-CPU_Counter_ticks _SPARC_Counter_read_asr23( void );
-
-uint32_t _SPARC_Get_timecount_up( struct timecounter * );
-
-uint32_t _SPARC_Get_timecount_down( struct timecounter * );
-
 uint32_t _SPARC_Get_timecount_clock( struct timecounter * );
-
-uint32_t _SPARC_Get_timecount_asr23( struct timecounter * );
 
 typedef CPU_Counter_ticks ( *SPARC_Counter_read )( void );
 

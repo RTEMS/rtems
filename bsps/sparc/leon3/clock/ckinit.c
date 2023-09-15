@@ -196,7 +196,7 @@ static void leon3_clock_initialize(void)
   }
 #endif
 
-  rtems_timecounter_install(&leon3_timecounter_instance);
+  rtems_timecounter_install(&leon3_timecounter_instance.base);
 }
 
 #define Clock_driver_support_initialize_hardware() \
