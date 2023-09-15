@@ -201,6 +201,22 @@ static inline void _CPU_Use_thread_local_storage(
   (void) context;
 }
 
+/**
+ * @brief Gets the thread pointer of the context.
+ *
+ * The thread pointer is used to get the address of thread-local storage
+ * objects associated with a thread.
+ *
+ * @param context is the processor context containing the thread pointer.
+ */
+static inline void *_CPU_Get_TLS_thread_pointer(
+  const Context_Control *context
+)
+{
+  (void) context;
+  return NULL;
+}
+
 #ifdef __cplusplus
 }
 #endif

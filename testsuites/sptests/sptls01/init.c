@@ -32,6 +32,8 @@
 #include <rtems/bspIo.h>
 #include <rtems/stackchk.h>
 #include <rtems/sysinit.h>
+#include <rtems/score/cpuimpl.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/tls.h>
 
 #include "tmacros.h"
@@ -57,6 +59,7 @@ static void task(rtems_task_argument arg)
   rtems_status_code sc;
 
   check_tls_item(123);
+  tls_item = 42;
 
   sc = rtems_event_transient_send(master_task);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -85,10 +88,27 @@ static void check_tls_size(void)
   }
 }
 
+static Thread_Control *get_thread(rtems_id id)
+{
+  Thread_Control *the_thread;
+  ISR_lock_Context lock_context;
+
+  the_thread = _Thread_Get(id, &lock_context);
+  _ISR_lock_ISR_enable(&lock_context);
+  return the_thread;
+}
+
 static void test(void)
 {
   rtems_id id;
   rtems_status_code sc;
+  Thread_Control *self;
+  Thread_Control *other;
+  char *self_tp;
+  char *other_tp;
+  uintptr_t tls_item_offset;
+  char *self_tls_item;
+  char *other_tls_item;
 
   master_task = rtems_task_self();
 
@@ -111,8 +131,21 @@ static void test(void)
   sc = rtems_task_start(id, task, 0);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
+  self = get_thread(master_task);
+  other = get_thread(id);
+  self_tp = _CPU_Get_TLS_thread_pointer(&self->Registers);
+  other_tp = _CPU_Get_TLS_thread_pointer(&other->Registers);
+  tls_item_offset = (uintptr_t) (&tls_item - self_tp);
+  self_tls_item = self_tp + tls_item_offset;
+  other_tls_item = other_tp + tls_item_offset;
+  rtems_test_assert(*self_tls_item == 5);
+  rtems_test_assert(*other_tls_item == 123);
+
   sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(*self_tls_item == 5);
+  rtems_test_assert(*other_tls_item == 42);
 
   sc = rtems_task_delete(id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);

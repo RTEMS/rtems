@@ -251,6 +251,13 @@ static inline void _CPU_Use_thread_local_storage(
    __asm__ volatile ( "" : : "r" ( g7 ) );
 }
 
+static inline void *_CPU_Get_TLS_thread_pointer(
+  const Context_Control *context
+)
+{
+  return (void *) context->g7;
+}
+
 #ifdef __cplusplus
 }
 #endif

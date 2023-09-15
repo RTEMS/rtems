@@ -112,6 +112,13 @@ static inline void _CPU_Use_thread_local_storage(
   );
 }
 
+static inline void *_CPU_Get_TLS_thread_pointer(
+  const Context_Control *context
+)
+{
+  return (void *) &context->gs;
+}
+
 #ifdef __cplusplus
 }
 #endif
