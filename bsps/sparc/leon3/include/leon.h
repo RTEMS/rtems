@@ -340,27 +340,6 @@ extern int syscon_uart_index;
 extern int leon3_debug_uart_index;
 #endif
 
-/* Let user override which on-chip TIMER core will be used for system clock
- * timer. This controls which timer core will be accociated with
- * LEON3_Timer_Regs registers base address. This value will by destroyed during
- * initialization.
- *  0 = Default configuration. GPTIMER[0]
- *  1 = GPTIMER[1]
- *  2 = GPTIMER[2]
- *  ...
- */
-extern int leon3_timer_core_index;
-
-/* Let user override system clock timer prescaler. This affects all timer
- * instances on the system clock timer core determined by
- * leon3_timer_core_index.
- *  0 = Default configuration. Use bootloader configured value.
- *  N = Prescaler is set to N. N must not be less that number of timers.
- *  8 = Prescaler is set to 8 (the fastest prescaler possible on all HW)
- *  ...
- */
-extern unsigned int leon3_timer_prescaler;
-
 #endif /* !ASM */
 
 #ifdef __cplusplus

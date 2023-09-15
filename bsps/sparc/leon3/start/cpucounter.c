@@ -89,7 +89,7 @@ static void leon3_counter_use_gptimer(SPARC_Counter *counter, gptimer *gpt)
   counter->read = _SPARC_Counter_read_down;
   counter->counter_register = &timer->tcntval;
 
-  /* Make timer free running */
+  /* Make timer free-running */
   grlib_store_32(&timer->trldval, 0xffffffff);
   grlib_store_32(&timer->tctrl, GPTIMER_TCTRL_EN | GPTIMER_TCTRL_RS);
 

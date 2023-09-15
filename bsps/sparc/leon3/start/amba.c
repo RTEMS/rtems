@@ -39,8 +39,10 @@
 
 #include <string.h>
 
+#if !defined(LEON3_GPTIMER_BASE)
 unsigned int leon3_timer_prescaler __attribute__((weak)) = 0;
 int leon3_timer_core_index __attribute__((weak)) = 0;
+#endif
 
 /* AMBA Plug&Play information description.
  *

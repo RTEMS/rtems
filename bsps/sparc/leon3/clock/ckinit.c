@@ -69,19 +69,6 @@ static struct timecounter leon3_tc;
 
 static void leon3_tc_tick_default(void)
 {
-#if !defined(RTEMS_SMP)
-  SPARC_Counter *counter;
-  rtems_interrupt_level level;
-
-  counter = &_SPARC_Counter;
-  rtems_interrupt_local_disable(level);
-
-  grlib_store_32(&LEON3_IrqCtrl_Regs->iclear, counter->pending_mask);
-  counter->accumulated += counter->interval;
-
-  rtems_interrupt_local_enable(level);
-#endif
-
   rtems_timecounter_tick();
 }
 
@@ -238,29 +225,11 @@ static void leon3_clock_use_gptimer(
   gptimer_timer *timer
 )
 {
-#ifdef RTEMS_SMP
   /*
-   * The GR712RC for example has no timestamp unit in the interrupt
-   * controller.  At least on SMP configurations we must use a second timer
-   * in free running mode for the timecounter.  The timer is initialized by
-   * leon3_counter_initialize().
+   * As a fall back, use a second timer in free-running mode for the
+   * timecounter.  The timer is initialized by leon3_counter_initialize().
    */
   tc->tc_get_timecount = _SPARC_Get_timecount_down;
-#else
-  SPARC_Counter *counter;
-
-  counter = &_SPARC_Counter;
-  counter->read_isr_disabled = _SPARC_Counter_read_clock_isr_disabled;
-  counter->read = _SPARC_Counter_read_clock;
-  counter->counter_register = &timer->tcntval;
-  counter->pending_register = &LEON3_IrqCtrl_Regs->ipend;
-  counter->pending_mask = UINT32_C(1) << clkirq;
-  counter->accumulated = rtems_configuration_get_microseconds_per_tick();
-  counter->interval = rtems_configuration_get_microseconds_per_tick();
-
-  tc->tc_get_timecount = _SPARC_Get_timecount_clock;
-#endif
-
   tc->tc_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER,
 
   rtems_timecounter_install(tc);

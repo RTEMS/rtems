@@ -11,6 +11,8 @@
 /*
  * Copyright (C) 2014, 2021 embedded brains GmbH & Co. KG
  *
+ * Copyright (C) 2015 Cobham Gaisler AB
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -173,13 +175,48 @@ static inline uint32_t leon3_get_cpu_count( const irqamp *regs )
   return IRQAMP_MPSTAT_NCPU_GET( grlib_load_32( &regs->mpstat ) ) + 1;
 }
 
+#if !defined(LEON3_GPTIMER_BASE)
+/**
+ * @brief This object lets the user override which on-chip GPTIMER core will be
+ *   used for system clock timer.
+ *
+ * This controls which timer core will be accociated with LEON3_Timer_Regs
+ * registers base address. This value will by destroyed during initialization.
+ *
+ * * 0 = Default configuration. GPTIMER[0]
+ *
+ * * 1 = GPTIMER[1]
+ *
+ * * 2 = GPTIMER[2]
+ *
+ * * ...
+ */
+extern int leon3_timer_core_index;
+
+/**
+ * @brief This object lets the user override system clock timer prescaler.
+ *
+ * This affects all timer instances on the system clock timer core determined
+ * by ::leon3_timer_core_index.
+ *
+ * * 0 = Default configuration. Use bootloader configured value.
+ *
+ * * N = Prescaler is set to N. N must not be less that number of timers.
+ *
+ * * 8 = Prescaler is set to 8 (the fastest prescaler possible on all HW)
+ *
+ * * ...
+ */
+extern unsigned int leon3_timer_prescaler;
+#endif
+
 /**
  * @brief This constant defines the index of the GPTIMER timer used by the
  *   clock driver.
  */
 #if defined(RTEMS_MULTIPROCESSING)
 #define LEON3_CLOCK_INDEX \
-  ( rtems_configuration_get_user_multiprocessing_table() ? LEON3_Cpu_Index : 0 )
+  ( leon3_timer_core_index != 0 ? 0 : 2 * LEON3_Cpu_Index )
 #else
 #define LEON3_CLOCK_INDEX 0
 #endif
@@ -188,11 +225,7 @@ static inline uint32_t leon3_get_cpu_count( const irqamp *regs )
  * @brief This constant defines the index of the GPTIMER timer used by the
  *   CPU counter if the CPU counter uses the GPTIMER.
  */
-#if defined(RTEMS_SMP)
 #define LEON3_COUNTER_GPTIMER_INDEX ( LEON3_CLOCK_INDEX + 1 )
-#else
-#define LEON3_COUNTER_GPTIMER_INDEX LEON3_CLOCK_INDEX
-#endif
 
 /**
  * @brief This constant defines the frequency set by the boot loader of the
