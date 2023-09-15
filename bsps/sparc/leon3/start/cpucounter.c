@@ -77,7 +77,57 @@ RTEMS_ALIAS(_CPU_Counter_read) uint32_t _SPARC_Counter_read_ISR_disabled(void);
 
 #define LEON3_GET_TIMECOUNT_INIT leon3_timecounter_get_asr_22_23_up_counter
 
-#else /* !LEON3_HAS_ASR_22_23_UP_COUNTER */
+#elif defined(LEON3_DSU_BASE)
+
+/*
+ * In general, using the Debug Support Unit (DSU) is not recommended.  Before
+ * you use it, check that it is available in flight models and that the time
+ * tag register is implemented in radiation hardened flip-flops.  For the
+ * GR712RC, this is the case.
+ */
+
+/* This value is specific to the GR712RC */
+#define LEON3_DSU_TIME_TAG_ZERO_BITS 2
+
+static uint32_t leon3_read_dsu_time_tag(void)
+{
+  uint32_t value;
+  volatile uint32_t *reg;
+
+  /* Use a load with a forced cache miss */
+  reg = (uint32_t *) (LEON3_DSU_BASE + 8);
+  __asm__ volatile (
+    "\tlda\t[%1]1, %0"
+    : "=&r"(value)
+    : "r"(reg)
+  );
+  return value << LEON3_DSU_TIME_TAG_ZERO_BITS;
+}
+
+static uint32_t leon3_timecounter_get_dsu_time_tag(
+  struct timecounter *tc
+)
+{
+  (void) tc;
+  return leon3_read_dsu_time_tag();
+}
+
+CPU_Counter_ticks _CPU_Counter_read(void)
+{
+  return leon3_read_dsu_time_tag();
+}
+
+RTEMS_ALIAS(_CPU_Counter_read) uint32_t _SPARC_Counter_read_ISR_disabled(void);
+
+static void leon3_counter_use_dsu_time_tag(leon3_timecounter *tc)
+{
+  tc->base.tc_frequency =
+    leon3_processor_local_bus_frequency() << LEON3_DSU_TIME_TAG_ZERO_BITS;
+}
+
+#define LEON3_GET_TIMECOUNT_INIT leon3_timecounter_get_dsu_time_tag
+
+#else /* !LEON3_HAS_ASR_22_23_UP_COUNTER && !LEON3_DSU_BASE */
 
 /*
  * This is a workaround for:
@@ -169,7 +219,7 @@ static void leon3_counter_use_irqamp_timestamp(
 }
 
 #endif /* LEON3_IRQAMP_PROBE_TIMESTAMP */
-#endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
+#endif /* LEON3_HAS_ASR_22_23_UP_COUNTER || LEON3_DSU_BASE */
 
 leon3_timecounter leon3_timecounter_instance = {
   .base = {
@@ -192,7 +242,11 @@ static void leon3_counter_initialize(void)
   leon3_up_counter_enable();
   leon3_counter_use_asr_22_23_up_counter(&leon3_timecounter_instance);
 
-#else /* !LEON3_HAS_ASR_22_23_UP_COUNTER */
+#elif defined(LEON3_DSU_BASE)
+
+  leon3_counter_use_dsu_time_tag(&leon3_timecounter_instance);
+
+#else /* !LEON3_HAS_ASR_22_23_UP_COUNTER && !LEON3_DSU_BASE */
 
   /* Try to find the best CPU counter available */
 
@@ -235,7 +289,7 @@ static void leon3_counter_initialize(void)
   }
 #endif
 
-#endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
+#endif /* LEON3_HAS_ASR_22_23_UP_COUNTER || LEON3_DSU_BASE */
 }
 
 RTEMS_SYSINIT_ITEM(

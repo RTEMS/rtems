@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+actions:
+- get-integer: null
+- format-and-define: null
+build-type: option
+default:
+- enabled-by: sparc/gr712rc
+  value: 0x90000000
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: LEON3_DSU_BASE
+description: |
+  This option defines the base address of the DSU register block used by
+  the clock driver and CPU counter implementation.
+
+  In general, using the Debug Support Unit (DSU) is not recommended for the
+  clock driver and CPU counter implementation.  Before you use it, check that
+  it is available in flight models and that the time tag register is
+  implemented in radiation hardened flip-flops.  For the GR712RC, this is the
+  case.
+type: build

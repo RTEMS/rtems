@@ -39,6 +39,8 @@ links:
 - role: build-dependency
   uid: optasrupcntprobe
 - role: build-dependency
+  uid: optdsubase
+- role: build-dependency
   uid: optgptimerbase
 - role: build-dependency
   uid: optirqampbase
