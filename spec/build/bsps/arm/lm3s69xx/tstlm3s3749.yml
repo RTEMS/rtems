@@ -13,6 +13,7 @@ actions:
     - math
     - mdosfsfserror
     - mdosfsfsrdwr
+    - monitor
     - monitor02
     - paranoia
     - psxmsgq01
