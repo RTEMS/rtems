@@ -16,7 +16,7 @@
  *  COPYRIGHT (c) 2004.
  *  Gaisler Research.
  *
- *  Copyright (C) 2014, 2018 embedded brains GmbH & Co. KG
+ *  Copyright (C) 2014, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -47,12 +47,7 @@
 #include <rtems/rtems/intr.h>
 #include <grlib/irqamp.h>
 #include <rtems/score/profiling.h>
-#include <bsp/sparc-counter.h>
 #include <rtems/timecounter.h>
-
-#if !defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
-#include <grlib/ambapp.h>
-#endif
 
 /* The LEON3 BSP Timer driver can rely on the Driver Manager if the
  * DrvMgr is initialized during startup. Otherwise the classic driver
@@ -65,17 +60,26 @@
 /* LEON3 Timer system interrupt number */
 static int clkirq;
 
-static struct timecounter leon3_tc;
+#if defined(RTEMS_PROFILING) && \
+  (defined(LEON3_HAS_ASR_22_23_UP_COUNTER) || \
+     defined(LEON3_PROBE_ASR_22_23_UP_COUNTER) || \
+     defined(LEON3_IRQAMP_PROBE_TIMESTAMP))
+
+#define LEON3_CLOCK_PROBE_IRQAMP_TIMESTAMP
+
+#define IRQMP_TIMESTAMP_S1_S2 ((1U << 25) | (1U << 26))
 
 static void leon3_tc_tick_default(void)
 {
   rtems_timecounter_tick();
 }
 
-#if defined(RTEMS_PROFILING)
 static void (*leon3_tc_tick)(void) = leon3_tc_tick_default;
 
-#define IRQMP_TIMESTAMP_S1_S2 ((1U << 25) | (1U << 26))
+static void leon3_tc_do_tick(void)
+{
+  (*leon3_tc_tick)();
+}
 
 static void leon3_tc_tick_irqmp_timestamp(void)
 {
@@ -124,16 +128,12 @@ static void leon3_tc_tick_irqmp_timestamp_init(void)
 
   rtems_timecounter_tick();
 }
-#endif /* RTEMS_PROFILING */
-
+#else
 static void leon3_tc_do_tick(void)
 {
-#if defined(RTEMS_PROFILING)
-  (*leon3_tc_tick)();
-#else
-  leon3_tc_tick_default();
-#endif
+  rtems_timecounter_tick();
 }
+#endif
 
 #define Adjust_clkirq_for_node() do { clkirq += LEON3_CLOCK_INDEX; } while(0)
 
@@ -175,74 +175,9 @@ static void bsp_clock_handler_install(rtems_interrupt_handler isr)
 #define Clock_driver_support_set_interrupt_affinity(online_processors) \
   bsp_interrupt_set_affinity(clkirq, online_processors)
 
-#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER) || \
-   defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
-static void leon3_clock_use_up_counter(struct timecounter *tc)
-{
-  tc->tc_get_timecount = _SPARC_Get_timecount_asr23;
-  tc->tc_frequency = leon3_up_counter_frequency();
-
-#if defined(RTEMS_PROFILING)
-  if (irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs) != NULL) {
-    leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
-  }
-#endif
-
-  rtems_timecounter_install(tc);
-}
-#endif
-
-#if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
-static void leon3_clock_use_irqamp_timestamp(
-  struct timecounter *tc,
-  irqamp_timestamp *irqmp_ts
-)
-{
-  tc->tc_get_timecount = _SPARC_Get_timecount_up;
-#if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
-  tc->tc_frequency = leon3_processor_local_bus_frequency();
-#else
-  tc->tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev);
-#endif
-
-#if defined(RTEMS_PROFILING)
-  leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
-#endif
-
-  /*
-   * At least one TSISEL field must be non-zero to enable the timestamp
-   * counter.  Use an arbitrary interrupt source.
-   */
-  grlib_store_32(&irqmp_ts->itstmpc, IRQAMP_ITSTMPC_TSISEL(1));
-
-  rtems_timecounter_install(tc);
-}
-#endif
-
-#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
-static void leon3_clock_use_gptimer(
-  struct timecounter *tc,
-  gptimer_timer *timer
-)
-{
-  /*
-   * As a fall back, use a second timer in free-running mode for the
-   * timecounter.  The timer is initialized by leon3_counter_initialize().
-   */
-  tc->tc_get_timecount = _SPARC_Get_timecount_down;
-  tc->tc_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER,
-
-  rtems_timecounter_install(tc);
-}
-#endif
-
 static void leon3_clock_initialize(void)
 {
-#if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
-  irqamp_timestamp *irqmp_ts;
-#endif
   gptimer_timer *timer;
-  struct timecounter *tc;
 
   timer = &LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX];
 
@@ -255,36 +190,13 @@ static void leon3_clock_initialize(void)
     GPTIMER_TCTRL_EN | GPTIMER_TCTRL_RS | GPTIMER_TCTRL_LD | GPTIMER_TCTRL_IE
   );
 
-  tc = &leon3_tc;
-  tc->tc_counter_mask = 0xffffffff;
-  tc->tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
-
-#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
-  leon3_up_counter_enable();
-  leon3_clock_use_up_counter(tc);
-#else /* LEON3_HAS_ASR_22_23_UP_COUNTER */
-#if defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
-  leon3_up_counter_enable();
-
-  if (leon3_up_counter_is_available()) {
-    /* Use the LEON4 up-counter if available */
-    leon3_clock_use_up_counter(tc);
-    return;
+#if defined(LEON3_CLOCK_PROBE_IRQAMP_TIMESTAMP)
+  if (irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs) != NULL) {
+    leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
   }
 #endif
 
-#if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
-  irqmp_ts = irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);
-
-  if (irqmp_ts != NULL) {
-    /* Use the interrupt controller timestamp counter if available */
-    leon3_clock_use_irqamp_timestamp(tc, irqmp_ts);
-    return;
-  }
-#endif
-
-  leon3_clock_use_gptimer(tc, timer);
-#endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
+  rtems_timecounter_install(&leon3_timecounter_instance);
 }
 
 #define Clock_driver_support_initialize_hardware() \
@@ -296,4 +208,4 @@ static void leon3_clock_initialize(void)
 
 #include "../../../shared/dev/clock/clockimpl.h"
 
-#endif
+#endif /* RTEMS_DRVMGR_STARTUP */

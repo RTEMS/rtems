@@ -48,6 +48,8 @@
 #include <grlib/ambapp.h>
 #endif
 
+#include <sys/timetc.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -346,6 +348,13 @@ static inline uint32_t leon3_up_counter_frequency( void )
 #else
 extern apbuart *leon3_debug_uart;
 #endif
+
+/**
+ * @brief Provides the LEON3-specific timecounter.
+ *
+ * It is also used by the CPU counter implementation.
+ */
+extern struct timecounter leon3_timecounter_instance;
 
 /** @} */
 

@@ -38,28 +38,38 @@
 
 #include <rtems/counter.h>
 #include <rtems/sysinit.h>
+#include <rtems/timecounter.h>
 #include <bsp/sparc-counter.h>
 
-static uint32_t leon3_counter_frequency = 1000000000;
+struct timecounter leon3_timecounter_instance = {
+  .tc_counter_mask = 0xffffffff,
+  .tc_frequency = 1000000000,
+  .tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER
+};
 
 uint32_t _CPU_Counter_frequency(void)
 {
-  return leon3_counter_frequency;
+  return leon3_timecounter_instance.tc_frequency;
 }
 
 #if defined(LEON3_HAS_ASR_22_23_UP_COUNTER) || \
    defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
-static void leon3_counter_use_up_counter(SPARC_Counter *counter)
+static void leon3_counter_use_up_counter(
+  struct timecounter *tc,
+  SPARC_Counter *counter
+)
 {
   counter->read_isr_disabled = _SPARC_Counter_read_asr23;
   counter->read = _SPARC_Counter_read_asr23;
 
-  leon3_counter_frequency = leon3_up_counter_frequency();
+  tc->tc_get_timecount = _SPARC_Get_timecount_asr23;
+  tc->tc_frequency = leon3_up_counter_frequency();
 }
 #endif
 
 #if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
 static void leon3_counter_use_irqamp_timestamp(
+  struct timecounter *tc,
   SPARC_Counter *counter,
   irqamp_timestamp *irqmp_ts
 )
@@ -71,16 +81,21 @@ static void leon3_counter_use_irqamp_timestamp(
   /* Enable interrupt timestamping for an arbitrary interrupt line */
   grlib_store_32(&irqmp_ts->itstmpc, IRQAMP_ITSTMPC_TSISEL(1));
 
+  tc->tc_get_timecount = _SPARC_Get_timecount_up;
 #if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
-  leon3_counter_frequency = leon3_processor_local_bus_frequency();
+  tc->tc_frequency = leon3_processor_local_bus_frequency();
 #else
-  leon3_counter_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
+  tc->tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
 #endif
 }
 #endif
 
 #if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
-static void leon3_counter_use_gptimer(SPARC_Counter *counter, gptimer *gpt)
+static void leon3_counter_use_gptimer(
+  struct timecounter *tc,
+  SPARC_Counter *counter,
+  gptimer *gpt
+)
 {
   gptimer_timer *timer;
 
@@ -93,10 +108,11 @@ static void leon3_counter_use_gptimer(SPARC_Counter *counter, gptimer *gpt)
   grlib_store_32(&timer->trldval, 0xffffffff);
   grlib_store_32(&timer->tctrl, GPTIMER_TCTRL_EN | GPTIMER_TCTRL_RS);
 
+  tc->tc_get_timecount = _SPARC_Get_timecount_down;
 #if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
-  leon3_counter_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
+  tc->tc_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
 #else
-  leon3_counter_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev) /
+  tc->tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev) /
     (grlib_load_32(&gpt->sreload) + 1);
 #endif
 }
@@ -110,20 +126,22 @@ static void leon3_counter_initialize(void)
 #if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
   gptimer *gpt;
 #endif
+  struct timecounter *tc;
   SPARC_Counter *counter;
 
+  tc = &leon3_timecounter_instance;
   counter = &_SPARC_Counter;
 
 #if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
   leon3_up_counter_enable();
-  leon3_counter_use_up_counter(counter);
+  leon3_counter_use_up_counter(tc, counter);
 #else /* LEON3_HAS_ASR_22_23_UP_COUNTER */
 #if defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
   leon3_up_counter_enable();
 
   if (leon3_up_counter_is_available()) {
     /* Use the LEON4 up-counter if available */
-    leon3_counter_use_up_counter(counter);
+    leon3_counter_use_up_counter(tc, counter);
     return;
   }
 #endif
@@ -133,7 +151,7 @@ static void leon3_counter_initialize(void)
 
   if (irqmp_ts != NULL) {
     /* Use the interrupt controller timestamp counter if available */
-    leon3_counter_use_irqamp_timestamp(counter, irqmp_ts);
+    leon3_counter_use_irqamp_timestamp(tc, counter, irqmp_ts);
     return;
   }
 #endif
@@ -141,11 +159,11 @@ static void leon3_counter_initialize(void)
   gpt = LEON3_Timer_Regs;
 
 #if defined(LEON3_GPTIMER_BASE)
-  leon3_counter_use_gptimer(counter, gpt);
+  leon3_counter_use_gptimer(tc, counter, gpt);
 #else
   if (gpt != NULL) {
     /* Fall back to the first GPTIMER if available */
-    leon3_counter_use_gptimer(counter, gpt);
+    leon3_counter_use_gptimer(tc, counter, gpt);
   }
 #endif
 #endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
