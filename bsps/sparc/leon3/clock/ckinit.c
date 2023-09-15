@@ -196,11 +196,9 @@ static void leon3_clock_use_up_counter(struct timecounter *tc)
   tc->tc_frequency = leon3_up_counter_frequency();
 
 #if defined(RTEMS_PROFILING)
-  if (irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs) == NULL) {
-    bsp_fatal(LEON3_FATAL_CLOCK_NO_IRQMP_TIMESTAMP_SUPPORT);
+  if (irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs) != NULL) {
+    leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
   }
-
-  leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
 #endif
 
   rtems_timecounter_install(tc);
