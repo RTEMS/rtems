@@ -48,7 +48,21 @@ static uint32_t leon3_timecounter_get_asr_22_23_up_counter(
 {
   return leon3_up_counter_low();
 }
+
+static void leon3_counter_use_asr_22_23_up_counter(leon3_timecounter *tc)
+{
+  tc->base.tc_get_timecount = leon3_timecounter_get_asr_22_23_up_counter;
+  tc->base.tc_frequency = leon3_up_counter_frequency();
+}
 #endif
+
+/*
+ * The following code blocks provide different CPU counter implementations.
+ * The implementation used is defined by build configuration options.  For a
+ * particular chip, the best available hardware counter module may be selected
+ * by build configuration options.  The default implementation tries to select
+ * the best module at runtime.
+ */
 
 #if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
 
@@ -91,7 +105,31 @@ static uint32_t leon3_timecounter_get_counter_down(struct timecounter *base)
   return -(*tc->counter_register);
 }
 
+static void leon3_counter_use_gptimer(
+  leon3_timecounter *tc,
+  gptimer *gpt
+)
+{
+  gptimer_timer *timer;
+
+  timer = &gpt->timer[LEON3_COUNTER_GPTIMER_INDEX];
+
+  /* Make timer free-running */
+  grlib_store_32(&timer->trldval, 0xffffffff);
+  grlib_store_32(&timer->tctrl, GPTIMER_TCTRL_EN | GPTIMER_TCTRL_RS);
+
+  tc->counter_register = &timer->tcntval;
+  tc->base.tc_get_timecount = leon3_timecounter_get_counter_down;
+#if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
+  tc->base.tc_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
+#else
+  tc->base.tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev) /
+    (grlib_load_32(&gpt->sreload) + 1);
+#endif
+}
+
 #if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
+
 static uint32_t leon3_timecounter_get_counter_up(struct timecounter *base)
 {
   leon3_timecounter *tc;
@@ -99,8 +137,25 @@ static uint32_t leon3_timecounter_get_counter_up(struct timecounter *base)
   tc = (leon3_timecounter *) base;
   return *tc->counter_register;
 }
-#endif
 
+static void leon3_counter_use_irqamp_timestamp(
+  leon3_timecounter *tc,
+  irqamp_timestamp *irqmp_ts
+)
+{
+  /* Enable interrupt timestamping for an arbitrary interrupt line */
+  grlib_store_32(&irqmp_ts->itstmpc, IRQAMP_ITSTMPC_TSISEL(1));
+
+  tc->counter_register = &irqmp_ts->itcnt;
+  tc->base.tc_get_timecount = leon3_timecounter_get_counter_up;
+#if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
+  tc->base.tc_frequency = leon3_processor_local_bus_frequency();
+#else
+  tc->base.tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
+#endif
+}
+
+#endif /* LEON3_IRQAMP_PROBE_TIMESTAMP */
 #endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
 
 static uint32_t leon3_timecounter_get_dummy(struct timecounter *base)
@@ -128,59 +183,6 @@ uint32_t _CPU_Counter_frequency(void)
   return leon3_timecounter_instance.base.tc_frequency;
 }
 
-#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER) || \
-   defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
-static void leon3_counter_use_asr_22_23_up_counter(leon3_timecounter *tc)
-{
-  tc->base.tc_get_timecount = leon3_timecounter_get_asr_22_23_up_counter;
-  tc->base.tc_frequency = leon3_up_counter_frequency();
-}
-#endif
-
-#if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
-static void leon3_counter_use_irqamp_timestamp(
-  leon3_timecounter *tc,
-  irqamp_timestamp *irqmp_ts
-)
-{
-  /* Enable interrupt timestamping for an arbitrary interrupt line */
-  grlib_store_32(&irqmp_ts->itstmpc, IRQAMP_ITSTMPC_TSISEL(1));
-
-  tc->counter_register = &irqmp_ts->itcnt;
-  tc->base.tc_get_timecount = leon3_timecounter_get_counter_up;
-#if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
-  tc->base.tc_frequency = leon3_processor_local_bus_frequency();
-#else
-  tc->base.tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
-#endif
-}
-#endif
-
-#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
-static void leon3_counter_use_gptimer(
-  leon3_timecounter *tc,
-  gptimer *gpt
-)
-{
-  gptimer_timer *timer;
-
-  timer = &gpt->timer[LEON3_COUNTER_GPTIMER_INDEX];
-
-  /* Make timer free-running */
-  grlib_store_32(&timer->trldval, 0xffffffff);
-  grlib_store_32(&timer->tctrl, GPTIMER_TCTRL_EN | GPTIMER_TCTRL_RS);
-
-  tc->counter_register = &timer->tcntval;
-  tc->base.tc_get_timecount = leon3_timecounter_get_counter_down;
-#if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
-  tc->base.tc_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
-#else
-  tc->base.tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev) /
-    (grlib_load_32(&gpt->sreload) + 1);
-#endif
-}
-#endif
-
 static void leon3_counter_initialize(void)
 {
 #if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
@@ -189,6 +191,8 @@ static void leon3_counter_initialize(void)
   leon3_counter_use_asr_22_23_up_counter(&leon3_timecounter_instance);
 
 #else /* !LEON3_HAS_ASR_22_23_UP_COUNTER */
+
+  /* Try to find the best CPU counter available */
 
 #if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
   irqamp_timestamp *irqmp_ts;
