@@ -165,11 +165,7 @@ static void leon3_counter_use_irqamp_timestamp(
 
   tc->counter_register = &irqmp_ts->itcnt;
   tc->base.tc_get_timecount = leon3_timecounter_get_counter_up;
-#if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
   tc->base.tc_frequency = leon3_processor_local_bus_frequency();
-#else
-  tc->base.tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
-#endif
 }
 
 #endif /* LEON3_IRQAMP_PROBE_TIMESTAMP */
