@@ -23,6 +23,8 @@ links:
 - role: build-dependency
   uid: ../optxz
 - role: build-dependency
+  uid: optdlldflags
+- role: build-dependency
   uid: optrtemsld
 - role: build-dependency
   uid: optrtemssyms

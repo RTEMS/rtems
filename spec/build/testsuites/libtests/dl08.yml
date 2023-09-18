@@ -38,9 +38,7 @@ enabled-by:
 includes:
 - testsuites/libtests/dl08
 ldflags:
-- enabled-by:
-  - microblaze
-  value: -u__extendsfdf2
+- ${LIBDL_TESTS_LDFLAGS}
 links: []
 prepare-build: null
 prepare-configure: null
