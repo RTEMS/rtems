@@ -1357,6 +1357,21 @@ test-actions:
     - role: validation
       uid: ../req/zero-length-array-0
   links: []
+- action-brief: |
+    Use the ${../if/define-global-symbol:/name} macro at the beginning of this
+    file and assign the address of the symbol to an object.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      Check that the ${../if/define-global-symbol:/name} macro defines a global
+      symbol with the correct value.
+    code: |
+      T_step_eq_uptr( ${.:/step}, (uintptr_t) global_symbol_2_object, 0x123 );
+    links:
+    - role: validation
+      uid: ../req/define-global-symbol-1
+  links: []
 test-brief: |
   Tests the basedefs macros of the Classic API.
 test-context: []
@@ -1468,6 +1483,12 @@ test-support: |
     GLOBAL_SYMBOL,
     RTEMS_SYMBOL_NAME( global_symbol_base ) + GLOBAL_SYMBOL_VALULE( abc )
   );
+
+  RTEMS_DECLARE_GLOBAL_SYMBOL( global_symbol_2 );
+
+  RTEMS_DEFINE_GLOBAL_SYMBOL( global_symbol_2, 0x123 );
+
+  static const char * const volatile global_symbol_2_object = global_symbol_2;
 
   static int deprecated_func( int i ) RTEMS_DEPRECATED;
   static int deprecated_func( int i )
