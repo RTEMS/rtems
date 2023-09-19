@@ -814,6 +814,21 @@ void XNandPsu_DisableEccMode(XNandPsu *InstancePtr)
 	InstancePtr->EccMode = XNANDPSU_NONE;
 }
 
+#ifdef __rtems__
+#include <rtems/rtems/clock.h>
+static void udelay( void )
+{
+	uint64_t time = rtems_clock_get_uptime_nanoseconds() + 1000;
+	while (1) {
+		uint64_t newtime = rtems_clock_get_uptime_nanoseconds();
+		if (newtime > time) {
+			break;
+		}
+	}
+}
+#define usleep(x) udelay()
+#endif
+
 /*****************************************************************************/
 /**
 *
