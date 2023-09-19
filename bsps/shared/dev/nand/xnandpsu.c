@@ -1619,6 +1619,12 @@ s32 XNandPsu_Read(XNandPsu *InstancePtr, u64 Offset, u64 Length, u8 *DestBuf)
 		}
 		if (PartialBytes > 0U) {
 			(void)Xil_MemCpy(DestBufPtr, BufPtr + Col, NumBytes);
+#ifdef __rtems__
+			/* The destination buffer is touched by hardware, synchronize */
+			if (InstancePtr->Config.IsCacheCoherent == 0) {
+				Xil_DCacheFlushRange((INTPTR)(void *)DestBufPtr, NumBytes);
+			}
+#endif
 		}
 		DestBufPtr += NumBytes;
 		OffsetVar += NumBytes;
