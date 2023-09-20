@@ -993,6 +993,25 @@ RTEMS_NO_RETURN void _CPU_Context_switch_no_return(
  */
 RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
+#if !defined(RTEMS_SMP)
+/**
+ * @brief Starts multitasking in uniprocessor configurations.
+ *
+ * This function just sets the stack of the heir thread and then calls
+ * _CPU_Context_restore().
+ *
+ * This is causes that the window flushing and interrupts during
+ * _CPU_Context_restore() use the stack of the heir thread.  This is crucial
+ * for the interrupt handling to prevent a concurrent use of the interrupt
+ * stack (which is also the system initialization stack).
+ *
+ * @param[in] heir is the context of the heir thread.
+ */
+RTEMS_NO_RETURN void _SPARC_Start_multitasking( Context_Control *heir );
+
+#define _CPU_Start_multitasking( _heir ) _SPARC_Start_multitasking( _heir )
+#endif
+
 #if defined(RTEMS_SMP)
   uint32_t _CPU_SMP_Initialize( void );
 

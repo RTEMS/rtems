@@ -246,6 +246,14 @@ done_flushing:
         mov     %g1, %psr                     ! restore status register and
                                               ! **** ENABLE TRAPS ****
 
+        /*
+         * WARNING: This code does not run with the restored stack pointer.  In
+         * SMP configurations, it uses a processor-specific stack.  In
+         * uniprocessor configurations, it uses the stack of the caller.  In
+         * this case, the caller shall ensure that it is not the interrupt
+         * stack (which is also the system initialization stack).
+         */
+
         ld      [%o1 + G5_OFFSET], %g5        ! restore the global registers
         ld      [%o1 + G7_OFFSET], %g7
 
@@ -266,7 +274,9 @@ done_flushing:
         ldd     [%o1 + I4_OFFSET], %i4
         ldd     [%o1 + I6_FP_OFFSET], %i6
 
-        ldd     [%o1 + O6_SP_OFFSET], %o6     ! restore the output registers
+        ldd     [%o1 + O6_SP_OFFSET], %o6     ! restore the non-volatile output
+                                              ! registers (stack pointer,
+                                              ! link register)
 
         jmp     %o7 + 8                       ! return
         nop                                   ! delay slot
@@ -324,6 +334,23 @@ SYM(_CPU_Context_restore):
 #endif
         ba      SYM(_CPU_Context_restore_heir)
         mov     %i0, %o1                      ! in the delay slot
+
+#if !defined(RTEMS_SMP)
+        .align 4
+        PUBLIC(_SPARC_Start_multitasking)
+SYM(_SPARC_Start_multitasking):
+        /*
+         * Restore the stack pointer right now, so that the window flushing and
+         * interrupts during _CPU_Context_restore_heir() use the stack of the
+         * heir thread.  This is crucial for the interrupt handling to prevent
+         * a concurrent use of the interrupt stack (which is also the system
+         * initialization stack).
+         */
+        ld      [%o0 + O6_SP_OFFSET], %o6
+
+        ba      SYM(_CPU_Context_restore)
+         nop
+#endif
 
 /*
  *  void _SPARC_Interrupt_trap()
