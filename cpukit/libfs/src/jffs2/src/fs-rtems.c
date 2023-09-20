@@ -1241,39 +1241,41 @@ rtems_chain_control delayed_work_chain;
 /* Lock for protecting the delayed work chain */
 struct mutex delayed_work_mutex;
 
-void jffs2_queue_delayed_work(struct delayed_work *work, int delay_ms)
+/*
+ * All delayed work structs are initialized and added to the chain during FS
+ * init. Must be called with no locks held
+ */
+static void add_delayed_work_to_chain(struct delayed_work *work)
 {
+	/* Initialize delayed work */
+	mutex_init(&work->dw_mutex);
+	work->pending = false;
+	_Chain_Initialize_node(&work->work.node); \
+	work->callback = NULL;
+
 	mutex_lock(&delayed_work_mutex);
-	if (rtems_chain_is_node_off_chain(&work->work.node)) {
-		work->execution_time = rtems_clock_get_uptime_nanoseconds() + delay_ms*1000000;
-		rtems_chain_append(&delayed_work_chain, &work->work.node);
-	}
+	rtems_chain_append_unprotected(&delayed_work_chain, &work->work.node);
 	mutex_unlock(&delayed_work_mutex);
 }
 
+void jffs2_queue_delayed_work(struct delayed_work *work, int delay_ms)
+{
+	mutex_lock(&work->dw_mutex);
+	if (!work->pending) {
+		work->execution_time = rtems_clock_get_uptime_nanoseconds();
+		work->execution_time += delay_ms*1000000;
+		work->pending = true;
+	}
+	mutex_unlock(&work->dw_mutex);
+}
+
+/* Clean up during FS unmount */
 static void jffs2_remove_delayed_work(struct delayed_work *dwork)
 {
-	struct delayed_work* work;
-	rtems_chain_node*    node;
-
 	mutex_lock(&delayed_work_mutex);
-	if (rtems_chain_is_node_off_chain(&dwork->work.node)) {
-		mutex_unlock(&delayed_work_mutex);
-		return;
-	}
-
-	node = rtems_chain_first(&delayed_work_chain);
-	while (!rtems_chain_is_tail(&delayed_work_chain, node)) {
-		work = (struct delayed_work*) node;
-		rtems_chain_node* next_node = rtems_chain_next(node);
-		if (work == dwork) {
-			rtems_chain_extract(node);
-			mutex_unlock(&delayed_work_mutex);
-			return;
-		}
-		node = next_node;
-	}
+	rtems_chain_extract_unprotected(&dwork->work.node);
 	mutex_unlock(&delayed_work_mutex);
+	/* Don't run pending delayed work, this will happen during unmount */
 }
 
 static void process_delayed_work(void)
@@ -1282,8 +1284,6 @@ static void process_delayed_work(void)
 	rtems_chain_node*    node;
 
 	mutex_lock(&delayed_work_mutex);
-	rtems_chain_control process_work_chain;
-	rtems_chain_initialize_empty(&process_work_chain);
 
 	if (rtems_chain_is_empty(&delayed_work_chain)) {
 		mutex_unlock(&delayed_work_mutex);
@@ -1293,23 +1293,23 @@ static void process_delayed_work(void)
 	node = rtems_chain_first(&delayed_work_chain);
 	while (!rtems_chain_is_tail(&delayed_work_chain, node)) {
 		work = (struct delayed_work*) node;
-		rtems_chain_node* next_node = rtems_chain_next(node);
-		if (rtems_clock_get_uptime_nanoseconds() >= work->execution_time) {
-			rtems_chain_extract(node);
-			rtems_chain_append(&process_work_chain, node);
+		node = rtems_chain_next(node);
+
+		if (!work->pending) {
+			continue;
 		}
-		node = next_node;
+
+		if (rtems_clock_get_uptime_nanoseconds() < work->execution_time) {
+			continue;
+		}
+
+		mutex_lock(&work->dw_mutex);
+		work->pending = false;
+		mutex_unlock(&work->dw_mutex);
+
+		work->callback(&work->work);
 	}
 	mutex_unlock(&delayed_work_mutex);
-
-	node = rtems_chain_first(&process_work_chain);
-	while (!rtems_chain_is_tail(&process_work_chain, node)) {
-		work = (struct delayed_work*) node;
-		rtems_chain_node* next_node = rtems_chain_next(node);
-		rtems_chain_extract(node);
-		work->callback(&work->work);
-		node = next_node;
-	}
 }
 
 /* Task for processing delayed work */
@@ -1320,7 +1320,7 @@ static rtems_task delayed_work_task(
 	(void)unused;
 	while (1) {
 		process_delayed_work();
-		sleep(1);
+		usleep(1);
 	}
 }
 
@@ -1381,6 +1381,9 @@ int rtems_jffs2_initialize(
 	if (err == 0) {
 		sb = &fs_info->sb;
 		c = JFFS2_SB_INFO(sb);
+#ifdef CONFIG_JFFS2_FS_WRITEBUFFER
+		add_delayed_work_to_chain(&c->wbuf_dwork);
+#endif
 		c->mtd = NULL;
 		rtems_recursive_mutex_init(&sb->s_mutex, RTEMS_FILESYSTEM_TYPE_JFFS2);
 	}
@@ -1467,6 +1470,9 @@ int rtems_jffs2_initialize(
 		return 0;
 	} else {
 		if (fs_info != NULL) {
+#ifdef CONFIG_JFFS2_FS_WRITEBUFFER
+			jffs2_remove_delayed_work(&c->wbuf_dwork);
+#endif
 			free(c->mtd);
 			c->mtd = NULL;
 			rtems_jffs2_free_fs_info(fs_info, do_mount_fs_was_successful);

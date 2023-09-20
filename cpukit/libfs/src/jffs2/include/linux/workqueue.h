@@ -2,6 +2,7 @@
 #define __LINUX_WORKQUEUE_H__
 
 #include <rtems/chain.h>
+#include <linux/mutex.h>
 
 struct work_struct { rtems_chain_node node; };
 
@@ -11,7 +12,6 @@ struct work_struct { rtems_chain_node node; };
 })
 
 #define INIT_DELAYED_WORK(delayed_work, delayed_workqueue_callback) ({ \
-  _Chain_Initialize_node(&(delayed_work)->work.node); \
   (delayed_work)->callback = delayed_workqueue_callback; \
 })
 
@@ -20,7 +20,9 @@ struct work_struct { rtems_chain_node node; };
 typedef void (*work_callback_t)(struct work_struct *work);
 struct delayed_work {
 	struct work_struct work;
-	uint64_t execution_time;
+	struct mutex dw_mutex;
+	volatile bool pending;
+	volatile uint64_t execution_time;
 	work_callback_t callback;
 };
 
