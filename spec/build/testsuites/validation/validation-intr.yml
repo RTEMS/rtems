@@ -9,8 +9,11 @@ enabled-by: true
 features: c cprogram
 includes: []
 ldflags:
+- -Wl,--wrap=bsp_interrupt_dispatch
 - -Wl,--wrap=bsp_interrupt_handler_default
 - -Wl,--wrap=bsp_interrupt_spurious
+- -Wl,--wrap=_RISCV_Interrupt_dispatch
+- -Wl,--wrap=_SPARC_Interrupt_dispatch
 links: []
 source:
 - testsuites/validation/tc-bsp-interrupt-handler-dispatch-unchecked.c
@@ -27,6 +30,7 @@ source:
 - testsuites/validation/tc-intr-vector-disable.c
 - testsuites/validation/tc-intr-vector-enable.c
 - testsuites/validation/tc-intr-vector-is-enabled.c
+- testsuites/validation/tc-score-isr.c
 - testsuites/validation/ts-validation-intr.c
 stlib: []
 target: testsuites/validation/ts-validation-intr.exe
