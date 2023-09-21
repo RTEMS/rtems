@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by:
+  not: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While an interrupt is pending, while multitasking is started, while
+  interrupts are enabled, when the interrupt is serviced, the stack of the
+  interrupted context shall be the stack of the heir thread.
+type: requirement

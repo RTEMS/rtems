@@ -1,0 +1,186 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Submit an ISR request during system initialization.  Check the stack of the
+    interrupted context while the ISR request is serviced.  Store the result of
+    the check in interrupted_stack_at_multitasking_start_is_valid.
+  action-code: |
+    /*
+     * The actions are performed during system initialization and the
+     * multitasking start.
+     */
+  checks:
+  - brief: |
+      Check that stack of the interrupted context was valid when an interrupt
+      was serviced during the multitasking start.
+    code: |
+      T_true( interrupted_stack_at_multitasking_start_is_valid );
+    links:
+    - role: validation
+      uid: ../req/stack-at-start-multitasking-heir
+    - role: validation
+      uid: ../req/stack-at-start-multitasking-per-cpu
+  links: []
+test-brief: |
+  Tests general interrupt support behaviour.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/sysinit.h
+- rtems/score/thread.h
+- rtems/score/percpu.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  static uintptr_t interrupted_stack_at_multitasking_start;
+
+  static bool interrupted_stack_at_multitasking_start_is_valid;
+
+  #if defined(__aarch64__)
+  void __real_bsp_interrupt_dispatch( void );
+
+  void __wrap_bsp_interrupt_dispatch( void );
+
+  void __wrap_bsp_interrupt_dispatch( void )
+  {
+    if ( interrupted_stack_at_multitasking_start == 0 ) {
+      uintptr_t             sp;
+      rtems_interrupt_level level;
+
+      rtems_interrupt_local_disable( level );
+      __asm__ volatile (
+        "msr spsel, #1\n"
+        "mov %0, sp\n"
+        "msr spsel, #0"
+        : "=r" ( sp )
+      );
+      rtems_interrupt_local_enable( level );
+
+      interrupted_stack_at_multitasking_start = sp;
+    }
+
+    __real_bsp_interrupt_dispatch();
+  }
+  #endif
+
+  #if defined(ARM_MULTILIB_ARCH_V4)
+  void __real_bsp_interrupt_dispatch( void );
+
+  void __wrap_bsp_interrupt_dispatch( void );
+
+  void __wrap_bsp_interrupt_dispatch( void )
+  {
+    register uintptr_t sp __asm__( "9" );
+
+    if ( interrupted_stack_at_multitasking_start == 0 ) {
+      interrupted_stack_at_multitasking_start = sp;
+    }
+
+    __real_bsp_interrupt_dispatch();
+  }
+  #endif
+
+  #if defined(__riscv)
+  void __real__RISCV_Interrupt_dispatch(
+    uintptr_t        mcause,
+    Per_CPU_Control *cpu_self
+  );
+
+  void __wrap__RISCV_Interrupt_dispatch(
+    uintptr_t        mcause,
+    Per_CPU_Control *cpu_self
+  );
+
+  void __wrap__RISCV_Interrupt_dispatch(
+    uintptr_t        mcause,
+    Per_CPU_Control *cpu_self
+  )
+  {
+    register uintptr_t sp __asm__( "s1" );
+
+    if ( interrupted_stack_at_multitasking_start == 0 ) {
+      interrupted_stack_at_multitasking_start = sp;
+    }
+
+    __real__RISCV_Interrupt_dispatch( mcause, cpu_self );
+  }
+  #endif
+
+  #if defined(__sparc__)
+  void __real__SPARC_Interrupt_dispatch( uint32_t irq );
+
+  static RTEMS_USED void InterruptDispatch( uint32_t irq, uintptr_t sp )
+  {
+    if ( interrupted_stack_at_multitasking_start == 0 ) {
+      interrupted_stack_at_multitasking_start = sp;
+    }
+
+    __real__SPARC_Interrupt_dispatch( irq );
+  }
+
+  __asm__ (
+    "\t.section\t\".text\"\n"
+    "\t.align\t4\n"
+    "\t.globl\t__wrap__SPARC_Interrupt_dispatch\n"
+    "\t.type\t__wrap__SPARC_Interrupt_dispatch, #function\n"
+    "__wrap__SPARC_Interrupt_dispatch:\n"
+    "\tmov\t%fp, %o1\n"
+    "\tor\t%o7, %g0, %g1\n"
+    "\tcall\tInterruptDispatch, 0\n"
+    "\t or\t%g1, %g0, %o7\n"
+    "\t.previous\n"
+  );
+  #endif
+
+  static void ISRHandler( void *arg )
+  {
+    uintptr_t begin;
+    uintptr_t end;
+
+    (void) arg;
+
+  #if defined(RTEMS_SMP)
+    Per_CPU_Control *cpu_self;
+
+    cpu_self = _Per_CPU_Get();
+    begin = (uintptr_t) &cpu_self->Interrupt_frame;
+    end = begin + sizeof( cpu_self->Interrupt_frame );
+  #else
+    Thread_Control *executing;
+
+    executing = GetExecuting();
+    begin = (uintptr_t) executing->Start.Initial_stack.area;
+    end = begin + executing->Start.Initial_stack.size;
+  #endif
+
+    interrupted_stack_at_multitasking_start_is_valid =
+      ( begin <= interrupted_stack_at_multitasking_start &&
+        interrupted_stack_at_multitasking_start < end );
+  }
+
+  static CallWithinISRRequest isr_request = {
+    .handler = ISRHandler
+  };
+
+  static void SubmitISRRequest( void )
+  {
+    CallWithinISRSubmit( &isr_request );
+  }
+
+  RTEMS_SYSINIT_ITEM(
+    SubmitISRRequest,
+    RTEMS_SYSINIT_DEVICE_DRIVERS,
+    RTEMS_SYSINIT_ORDER_LAST
+  );
+test-target: testsuites/validation/tc-score-isr.c
+test-teardown: null
+type: test-case
