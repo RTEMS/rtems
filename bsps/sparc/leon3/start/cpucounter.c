@@ -51,7 +51,9 @@ static uint32_t leon3_timecounter_get_asr_22_23_up_counter(
 
 static void leon3_counter_use_asr_22_23_up_counter(leon3_timecounter *tc)
 {
+#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
   tc->base.tc_get_timecount = leon3_timecounter_get_asr_22_23_up_counter;
+#endif
   tc->base.tc_frequency = leon3_up_counter_frequency();
 }
 #endif
@@ -72,6 +74,8 @@ CPU_Counter_ticks _CPU_Counter_read(void)
 }
 
 RTEMS_ALIAS(_CPU_Counter_read) uint32_t _SPARC_Counter_read_ISR_disabled(void);
+
+#define LEON3_GET_TIMECOUNT_INIT leon3_timecounter_get_asr_22_23_up_counter
 
 #else /* !LEON3_HAS_ASR_22_23_UP_COUNTER */
 
@@ -96,6 +100,19 @@ __asm__ (
   "\t or\t%g1, %g0, %o7\n"
   "\t.previous\n"
 );
+
+static uint32_t leon3_timecounter_get_dummy(struct timecounter *base)
+{
+  leon3_timecounter *tc;
+  uint32_t counter;
+
+  tc = (leon3_timecounter *) base;
+  counter = tc->software_counter + 1;
+  tc->software_counter = counter;
+  return counter;
+}
+
+#define LEON3_GET_TIMECOUNT_INIT leon3_timecounter_get_dummy
 
 static uint32_t leon3_timecounter_get_counter_down(struct timecounter *base)
 {
@@ -158,20 +175,9 @@ static void leon3_counter_use_irqamp_timestamp(
 #endif /* LEON3_IRQAMP_PROBE_TIMESTAMP */
 #endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
 
-static uint32_t leon3_timecounter_get_dummy(struct timecounter *base)
-{
-  leon3_timecounter *tc;
-  uint32_t counter;
-
-  tc = (leon3_timecounter *) base;
-  counter = tc->software_counter + 1;
-  tc->software_counter = counter;
-  return counter;
-}
-
 leon3_timecounter leon3_timecounter_instance = {
   .base = {
-    .tc_get_timecount = leon3_timecounter_get_dummy,
+    .tc_get_timecount = LEON3_GET_TIMECOUNT_INIT,
     .tc_counter_mask = 0xffffffff,
     .tc_frequency = 1000000000,
     .tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER

@@ -358,12 +358,12 @@ typedef struct {
    */
   struct timecounter base;
 
+#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
   /**
    * @brief This member provides a software fall-back counter.
    */
   uint32_t software_counter;
 
-#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
   /**
    * @brief This member may reference a hardware counter register.
    */
