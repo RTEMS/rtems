@@ -585,7 +585,7 @@ typedef enum {
   ARM_EXCEPTION_IRQ = 6,
   ARM_EXCEPTION_FIQ = 7,
   MAX_EXCEPTIONS = 8,
-  ARM_EXCEPTION_MAKE_ENUM_32_BIT = 0xffffffff
+  ARM_EXCEPTION_MAKE_ENUM_32_BIT = 0x7fffffff
 } Arm_symbolic_exception_name;
 
 #endif /* defined(ARM_MULTILIB_ARCH_V4) */
