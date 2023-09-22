@@ -13,6 +13,7 @@ install:
   - cpukit/include/rtems/test.h
   - cpukit/include/rtems/test-info.h
   - cpukit/include/rtems/test-gcov.h
+  - cpukit/include/rtems/test-printer.h
   - cpukit/include/rtems/test-scheduler.h
 install-path: ${BSP_LIBDIR}
 links: []

@@ -42,6 +42,7 @@
 #include "config.h"
 #endif
 
+#include <stdio.h>
 #include <stdlib.h> /* malloc(), free() */
 #include <ctype.h> /* isprint() */
 #include <errno.h>

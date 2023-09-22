@@ -1,7 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSTest
+ *
+ * @brief This header file provides interfaces of the RTEMS Test Support.
+ */
+
 /*
- * Copyright (c) 2018 Chris Johns <chrisj@rtems.org>.  All rights reserved.
+ * Copyright (C) 2014, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -25,33 +33,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "dl06-o2.h"
+#ifndef _RTEMS_TEST_PRINTER_H
+#define _RTEMS_TEST_PRINTER_H
 
-#include <stdlib.h>
-#include <math.h>
+#include <rtems/printer.h>
 
-#include <rtems/test-printer.h>
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
-#define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__);
-
-/*
- * Call function that are not part of the RTEMS kernel base image.
+/**
+ * @addtogroup RTEMSTest
+ *
+ * @{
  */
 
-void dl_o2_func1 (unsigned short s[7])
-{
-  printf("libm: lcong48\n")
-  lcong48 (s);
-}
+/**
+ * @brief Provides an RTEMS printer for tests.
+ */
+extern rtems_printer rtems_test_printer;
 
-double dl_o2_func2 (double d1, double d2)
-{
-  printf("libm: atan2\n")
-  return atan2 (d1, d2);
-}
+/**
+ * @brief Prints via the RTEMS test printer.
+ *
+ * @return Returns the count of output characters as specified by printf().
+ */
+int rtems_test_printf( const char *format, ... ) RTEMS_PRINTFLIKE( 1, 2 );
 
-double dl_o2_func3 (double d)
-{
-  printf("libm: tan\n")
-  return tan (d);
+/** @} */
+
+#ifdef __cplusplus
 }
+#endif /* __cplusplus */
+
+#endif /* _RTEMS_TEST_PRINTER_H */

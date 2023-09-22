@@ -224,7 +224,7 @@
 #include <math.h>
 #include <stdlib.h>
 #ifdef __rtems__
-#include <tmacros.h>
+#include <rtems/test-printer.h>
 #undef print_time
 #define fprintf(f, ...) rtems_printf(&rtems_test_printer, __VA_ARGS__)
 #endif /* __rtems__ */

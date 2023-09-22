@@ -28,7 +28,7 @@
 
 #include "dl-o1.h"
 
-#include <rtems/test-info.h>
+#include <rtems/test-printer.h>
 #include "dl-load.h"
 #include "dl-o1.h"
 #include "dl-o2.h"

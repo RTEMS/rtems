@@ -27,7 +27,7 @@
 
 #include "dl-o2.h"
 
-#include <rtems/test-info.h>
+#include <rtems/test-printer.h>
 
 #define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__)
 

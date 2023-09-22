@@ -29,7 +29,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/test-info.h>
+#include <rtems/test-printer.h>
 
 int __wrap_printf(const char* format, ...);
 int __wrap_puts(const char *str);

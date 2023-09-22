@@ -25,7 +25,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems/test-info.h>
 #include <errno.h>
 
 int get_errno_val (void);

@@ -3,10 +3,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestFramework
+ * @ingroup RTEMSTest
  *
- * @brief This header file provides interfaces of the
- *   RTEMS Test Framework.
+ * @brief This header file provides interfaces of the RTEMS Test Support.
  */
 
 /*
@@ -38,7 +37,6 @@
 #define _RTEMS_TEST_H
 
 #include <rtems.h>
-#include <rtems/printer.h>
 #include <rtems/score/atomic.h>
 #include <rtems/score/smpbarrier.h>
 
@@ -60,11 +58,6 @@ extern "C" {
  * @brief Each test must define a test name string.
  */
 extern const char rtems_test_name[];
-
-/**
- * @brief Each test must define a printer.
- */
-extern rtems_printer rtems_test_printer;
 
 /**
  * @brief Fatal extension for tests.
@@ -133,13 +126,6 @@ int rtems_test_end(const char* name);
  * pulls in stdio code
  */
 RTEMS_NO_RETURN void rtems_test_exit(int status);
-
-/**
- * @brief Prints via the RTEMS printer.
- *
- * @return As specified by printf().
- */
-int rtems_test_printf(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
 
 #define RTEMS_TEST_PARALLEL_PROCESSOR_MAX 32
 

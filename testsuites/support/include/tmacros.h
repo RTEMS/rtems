@@ -46,6 +46,7 @@
 #include <string.h>
 #include <rtems/error.h>
 #include <rtems/test-info.h>
+#include <rtems/test-printer.h>
 #include <rtems/score/threaddispatch.h>
 
 #include <buffer_test_io.h>
