@@ -639,6 +639,8 @@ static void FutimensTest( void )
   /* EBADF test case */
 
   /* Case: Pass an invalid file descriptor */
+  _Timespec_Set_to_zero( &time[0] );
+  _Timespec_Set_to_zero( &time[1] );
   rv = futimens( -1, time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EBADF );
