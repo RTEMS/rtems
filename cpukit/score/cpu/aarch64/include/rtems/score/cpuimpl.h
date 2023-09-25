@@ -178,7 +178,7 @@ static inline void *_CPU_Get_TLS_thread_pointer(
   const Context_Control *context
 )
 {
-  return (void *) context->thread_id;
+  return (void *)(uintptr_t) context->thread_id;
 }
 
 #ifdef __cplusplus

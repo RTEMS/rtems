@@ -424,8 +424,11 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
       }
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf ("rtl: JUMP26/PC26/CALL: insn=%p where=%p target=%p raddr=%p parsing=%d\n",
-                insn, (void*) where, (void*) target, (void*) raddr, parsing);
+        printf (
+          "rtl: JUMP26/PC26/CALL: insn=%p where=%p target=%p raddr=%p parsing=%d\n",
+          insn, (void*) where, (void*)(uintptr_t) target, (void*)(uintptr_t) raddr,
+          parsing
+        );
 
       target = (intptr_t)target >> 2;
 
