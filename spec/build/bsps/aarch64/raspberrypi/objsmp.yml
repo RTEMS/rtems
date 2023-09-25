@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2023 Mohd Noor Aman
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_SMP
+includes: []
+install: []
+links: []
+source:
+- bsps/aarch64/raspberrypi/start/bspsmp.c
+- bsps/aarch64/shared/start/aarch64-smp.c
+type: build

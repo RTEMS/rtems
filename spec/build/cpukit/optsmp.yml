@@ -13,6 +13,7 @@ default:
 description: |
   Enable the Symmetric Multiprocessing (SMP) support
 enabled-by:
+- aarch64/raspberrypi4b
 - arm/altcycv_devkit
 - arm/fvp_cortex_r52
 - arm/imx7

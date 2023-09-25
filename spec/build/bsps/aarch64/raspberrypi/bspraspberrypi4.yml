@@ -26,6 +26,8 @@ links:
 - role: build-dependency
   uid: objclock
 - role: build-dependency
+  uid: objsmp
+- role: build-dependency
   uid: objsystemtimer
 - role: build-dependency
   uid: ../grp

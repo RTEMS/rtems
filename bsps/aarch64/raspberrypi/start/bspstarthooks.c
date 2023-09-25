@@ -39,7 +39,15 @@
 #include <bsp/start.h>
 #include <rtems/score/cpu.h>
 
+#ifdef RTEMS_SMP
+#include <rtems/score/aarch64-system-registers.h>
+#include <rtems/score/smpimpl.h>
+#include <rtems/score/smp.h>
+#include <bsp/irq-generic.h>
+#endif
+
 #ifdef BSP_START_ENABLE_EL3_START_SUPPORT
+
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
   /* Do nothing */
@@ -48,6 +56,27 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
 {
+#ifdef RTEMS_SMP
+  uint32_t cpu_index_self = _SMP_Get_current_processor();
+  if ( cpu_index_self != 0 ) {
+    if (
+      cpu_index_self >= rtems_configuration_get_maximum_processors()
+      || !_SMP_Should_start_processor( cpu_index_self )
+    ) {
+      while ( true ) {
+        _AARCH64_Wait_for_event();
+      }
+    }
+    AArch64_start_set_vector_base();
+    arm_gic_irq_initialize_secondary_cpu();
+    rpi_setup_secondary_cpu_mmu_and_cache();
+    bsp_interrupt_vector_enable( ARM_GIC_IRQ_SGI_0 );
+    _SMP_Start_multitasking_on_secondary_processor(
+      _Per_CPU_Get_by_index( cpu_index_self )
+    );
+  }
+#endif
+
   AArch64_start_set_vector_base();
   bsp_start_copy_sections();
   raspberrypi_4_setup_mmu_and_cache();

@@ -57,6 +57,12 @@ raspberrypi_4_mmu_config_table[] = {
     .flags = AARCH64_MMU_DEVICE
   },
 
+  { /* RPI firmware-owned addresses including spintables */
+    .begin = (unsigned)0x0,
+    .end = (unsigned)0x1000,
+    .flags = AARCH64_MMU_DEVICE
+  },
+
   { /* RPI GIC Interface address */
     .begin = 0xFF800000U,
     .end = 0xFFA00000U,
@@ -88,6 +94,22 @@ raspberrypi_4_setup_mmu_and_cache( void )
     &raspberrypi_4_mmu_config_table[ 0 ],
     RTEMS_ARRAY_SIZE( raspberrypi_4_mmu_config_table )
   );
+
+  aarch64_mmu_enable( control );
+}
+
+BSP_START_TEXT_SECTION void rpi_setup_secondary_cpu_mmu_and_cache( void )
+__attribute__ ( ( weak ) );
+
+BSP_START_TEXT_SECTION void rpi_setup_secondary_cpu_mmu_and_cache( void )
+{
+  aarch64_mmu_control *control = &aarch64_mmu_instance;
+
+  /* Perform basic MMU setup */
+  aarch64_mmu_setup();
+
+  /* Use the existing root page table already configured by CPU0 */
+  _AArch64_Write_ttbr0_el1( (uintptr_t) bsp_translation_table_base );
 
   aarch64_mmu_enable( control );
 }

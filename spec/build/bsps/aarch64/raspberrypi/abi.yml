@@ -11,6 +11,7 @@ default:
   value:
   - -mcpu=cortex-a72
   - -march=armv8-a
+  - -mno-outline-atomics
 description: |
   ABI flags
 enabled-by: true

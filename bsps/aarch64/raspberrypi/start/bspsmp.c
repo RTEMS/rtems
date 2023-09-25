@@ -5,11 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64Raspberrypi4
  *
- * @brief Core BSP definitions
+ * @brief BSP SMP Support
  */
 
 /*
- * Copyright (C) 2022 Mohd Noor Aman
+ * Copyright (C) 2023 Mohd Noor Aman
  *
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,45 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H
-#define LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H
+#include <rtems/score/smpimpl.h>
+#include <bsp/raspberrypi.h>
 
-/**
- * @addtogroup RTEMSBSPsAArch64
- *
- * @{
- */
+#include <bsp/irq.h>
 
-#include <bspopts.h>
+static uintptr_t *cpu_addr[] =
+{
+    [0] = (uintptr_t *)0xd8,
+    [1] = (uintptr_t *)0xe0,
+    [2] = (uintptr_t *)0xe8,
+    [3] = (uintptr_t *)0xf0
+};
 
-#ifndef ASM
-
-#include <bsp/default-initial-extension.h>
-#include <bsp/start.h>
-
-#include <rtems.h>
-
-/*Raspberry pi MMU initialization */
-BSP_START_TEXT_SECTION void raspberrypi_4_setup_mmu_and_cache(void);
-BSP_START_TEXT_SECTION void rpi_setup_secondary_cpu_mmu_and_cache( void );
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-#define BSP_FDT_IS_SUPPORTED
-extern const unsigned char bcm2711_rpi_4_b_dtb[];
-extern const size_t bcm2711_rpi_4_b_dtb_size;
-
-#define BSP_ARM_GIC_CPUIF_BASE 0xFF842000
-#define BSP_ARM_GIC_DIST_BASE 0xFF841000
-
-#ifdef __cplusplus
+bool _CPU_SMP_Start_processor( uint32_t cpu_index )
+{
+  BCM2711_REG(cpu_addr[cpu_index]) = (uintptr_t)_start;
+  _AARCH64_Send_event();
+  _AARCH64_Data_synchronization_barrier();
+  return true;
 }
-#endif /* __cplusplus */
-
-#endif /* ASM */
-
-/** @} */
-
-#endif /* LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H */
