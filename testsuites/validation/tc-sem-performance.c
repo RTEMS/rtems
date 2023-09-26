@@ -382,9 +382,10 @@ static void RtemsSemReqPerfMtxPiReleaseOne_Setup(
   RtemsSemValPerf_Context *ctx
 )
 {
+  SetSelfPriority( PRIO_HIGH );
   ObtainMutex( ctx->mutex_id );
   Send( ctx, EVENT_OBTAIN );
-  SetPriority( ctx->worker_id, PRIO_LOW );
+  Yield();
   Send( ctx, EVENT_RELEASE );
 }
 
@@ -401,6 +402,11 @@ static void RtemsSemReqPerfMtxPiReleaseOne_Setup_Wrap( void *arg )
  */
 static void RtemsSemReqPerfMtxPiReleaseOne_Body( RtemsSemValPerf_Context *ctx )
 {
+  /*
+   * The release will unblock the worker task which has our priority.  The
+   * scheduler ensures FIFO ordering for ready threads of the same priority, so
+   * the release will not preempt us.
+   */
   ctx->status = rtems_semaphore_release( ctx->mutex_id );
 }
 
@@ -426,7 +432,7 @@ static bool RtemsSemReqPerfMtxPiReleaseOne_Teardown(
 {
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
-  SetPriority( ctx->worker_id, PRIO_HIGH );
+  SetSelfPriority( PRIO_NORMAL );
 
   return tic == toc;
 }
@@ -734,7 +740,7 @@ static void RtemsSemReqPerfMtxPiWaitForever_Setup(
 )
 {
   Send( ctx, EVENT_OBTAIN );
-  SetPriority( ctx->worker_id, PRIO_LOW );
+  SetSelfPriority( PRIO_VERY_HIGH );
   Send( ctx, EVENT_END | EVENT_RELEASE );
 }
 
@@ -784,8 +790,8 @@ static bool RtemsSemReqPerfMtxPiWaitForever_Teardown(
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   *delta = ctx->end - ctx->begin;
-  SetPriority( ctx->worker_id, PRIO_HIGH );
   ReleaseMutex( ctx->mutex_id );
+  SetSelfPriority( PRIO_NORMAL );
 
   return tic == toc;
 }
@@ -825,7 +831,7 @@ static bool RtemsSemReqPerfMtxPiWaitForever_Teardown_Wrap(
 static void RtemsSemReqPerfMtxPiWaitTimed_Setup( RtemsSemValPerf_Context *ctx )
 {
   Send( ctx, EVENT_OBTAIN );
-  SetPriority( ctx->worker_id, PRIO_LOW );
+  SetSelfPriority( PRIO_VERY_HIGH );
   Send( ctx, EVENT_END | EVENT_RELEASE );
 }
 
@@ -873,8 +879,8 @@ static bool RtemsSemReqPerfMtxPiWaitTimed_Teardown(
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   *delta = ctx->end - ctx->begin;
-  SetPriority( ctx->worker_id, PRIO_HIGH );
   ReleaseMutex( ctx->mutex_id );
+  SetSelfPriority( PRIO_NORMAL );
 
   return tic == toc;
 }
