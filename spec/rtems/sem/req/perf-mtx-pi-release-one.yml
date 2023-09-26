@@ -48,8 +48,9 @@ test-teardown:
 text: |
   While the execution environment is ${.:/environment}, while the semaphore is
   a priority inheritance mutex, while the measurement sample is the runtime of
-  exactly one successful call to ${../if/release:/name} which does unblock
-  exactly one waiting task which does not preempt the caller, when exactly
+  exactly one successful call to ${../if/release:/name}, while the release does
+  unblock exactly one waiting task, while the unblocked task does not preempt
+  the caller, while the release performs no priority updates, when exactly
   ${../val/perf:/params/sample-count} samples are collected, the
   ${.:/limit-kind} shall be ${.:/limit-condition}.
 type: requirement
