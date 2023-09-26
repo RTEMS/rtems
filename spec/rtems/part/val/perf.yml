@@ -43,7 +43,6 @@ test-context-support: null
 test-description: null
 test-includes:
 - rtems.h
-- rtems/chain.h
 test-local-includes: []
 test-prepare: null
 test-setup:
@@ -55,7 +54,7 @@ test-setup:
     void             *area;
     uintptr_t         length;
 
-    size = sizeof( rtems_chain_node );
+    size = 2 * sizeof( uintptr_t );
 
     area = T_malloc( size );
     sc = rtems_partition_create(
