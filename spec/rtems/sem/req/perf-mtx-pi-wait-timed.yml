@@ -30,7 +30,7 @@ test-setup:
     Make the mutex unavailable.
   code: |
     Send( ctx, EVENT_OBTAIN );
-    SetPriority( ctx->worker_id, PRIO_LOW );
+    SetSelfPriority( PRIO_VERY_HIGH );
     Send( ctx, EVENT_END | EVENT_RELEASE );
   description: null
 test-teardown:
@@ -41,8 +41,8 @@ test-teardown:
     T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
     *delta = ctx->end - ctx->begin;
-    SetPriority( ctx->worker_id, PRIO_HIGH );
     ReleaseMutex( ctx->mutex_id );
+    SetSelfPriority( PRIO_NORMAL );
 
     return tic == toc;
   description: null

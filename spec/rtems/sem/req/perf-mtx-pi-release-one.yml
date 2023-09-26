@@ -16,6 +16,11 @@ test-body:
   brief: |
     Release the mutex.
   code: |
+    /*
+     * The release will unblock the worker task which has our priority.  The
+     * scheduler ensures FIFO ordering for ready threads of the same priority, so
+     * the release will not preempt us.
+     */
     ctx->status = rtems_semaphore_release( ctx->mutex_id );
   description: null
 test-cleanup: null
@@ -24,9 +29,10 @@ test-setup:
   brief: |
     Let one task wait on the mutex.
   code: |
+    SetSelfPriority( PRIO_HIGH );
     ObtainMutex( ctx->mutex_id );
     Send( ctx, EVENT_OBTAIN );
-    SetPriority( ctx->worker_id, PRIO_LOW );
+    Yield();
     Send( ctx, EVENT_RELEASE );
   description: null
 test-teardown:
@@ -35,7 +41,7 @@ test-teardown:
   code: |
     T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
-    SetPriority( ctx->worker_id, PRIO_HIGH );
+    SetSelfPriority( PRIO_NORMAL );
 
     return tic == toc;
   description: null
