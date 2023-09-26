@@ -53,7 +53,6 @@
 #endif
 
 #include <rtems.h>
-#include <rtems/chain.h>
 
 #include <rtems/test.h>
 
@@ -143,7 +142,7 @@ static void RtemsPartValPerf_Setup( RtemsPartValPerf_Context *ctx )
   void             *area;
   uintptr_t         length;
 
-  size = sizeof( rtems_chain_node );
+  size = 2 * sizeof( uintptr_t );
 
   area = T_malloc( size );
   sc = rtems_partition_create(
