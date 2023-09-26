@@ -17,5 +17,7 @@ links:
   uid: linkcmds_lp64
 - role: build-dependency
   uid: objfdtcfc400x
-source: []
+source:
+- bsps/aarch64/xilinx-zynqmp/start/bspstartecc_hw.c
+- bsps/aarch64/xilinx-zynqmp/start/bspstartecc_cfc400x.c
 type: build

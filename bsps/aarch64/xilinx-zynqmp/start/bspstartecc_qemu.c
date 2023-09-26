@@ -5,11 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64XilinxZynqMP
  *
- * @brief This source file contains the implementatin of bsp_start().
+ * @brief This source file contains the implementation of zynqmp_ecc_init().
  */
 
 /*
- * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2023 On-Line Applications Research Corporation (OAR)
  * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,27 +35,21 @@
  */
 
 #include <bsp.h>
-#include <bsp/bootcard.h>
 #include <bsp/ecc_priv.h>
-#include <bsp/irq-generic.h>
-#include <bsp/linker-symbols.h>
 
-__attribute__ ((weak)) uint32_t zynqmp_clock_i2c0(void)
+void zynqmp_ecc_register_handler( zynqmp_ecc_handler handler )
 {
-  return ZYNQMP_CLOCK_I2C0;
+  (void) handler;
+  /* Do nothing on QEMU */
 }
 
-__attribute__ ((weak)) uint32_t zynqmp_clock_i2c1(void)
+int zynqmp_ecc_enable( ECC_Event_Type event )
 {
-  return ZYNQMP_CLOCK_I2C1;
+  (void) event;
+  /* Do nothing on QEMU */
+  return 0;
 }
-
-void bsp_start( void )
+void zynqmp_ecc_init( void )
 {
-  bsp_interrupt_initialize();
-  rtems_cache_coherent_add_area(
-    bsp_section_nocacheheap_begin,
-    (uintptr_t) bsp_section_nocacheheap_size
-  );
-  zynqmp_ecc_init();
+  /* Do nothing on QEMU */
 }

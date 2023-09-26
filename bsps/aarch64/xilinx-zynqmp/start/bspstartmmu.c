@@ -50,6 +50,11 @@ zynqmp_mmu_config_table[] = {
     .begin = 0xfd000000U,
     .end = 0xffc00000U,
     .flags = AARCH64_MMU_DEVICE
+  /* Map OCM space */
+  }, {
+    .begin = 0xfffc0000U,
+    .end = 0x100000000U,
+    .flags = AARCH64_MMU_DATA_RW
   }, {
     .begin = 0x80000000U,
     .end = 0x80100000U,

@@ -5,11 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64XilinxZynqMP
  *
- * @brief This source file contains the implementatin of bsp_start().
+ * @brief This source file contains the implementation of zynqmp_ecc_init().
  */
 
 /*
- * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2023 On-Line Applications Research Corporation (OAR)
  * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,27 +35,58 @@
  */
 
 #include <bsp.h>
-#include <bsp/bootcard.h>
 #include <bsp/ecc_priv.h>
-#include <bsp/irq-generic.h>
-#include <bsp/linker-symbols.h>
+#include <bsp/fatal.h>
+#include <bsp/utility.h>
 
-__attribute__ ((weak)) uint32_t zynqmp_clock_i2c0(void)
+zynqmp_ecc_handler saved_handler = NULL;
+
+void zynqmp_ecc_register_handler( zynqmp_ecc_handler handler )
 {
-  return ZYNQMP_CLOCK_I2C0;
+  saved_handler = handler;
 }
 
-__attribute__ ((weak)) uint32_t zynqmp_clock_i2c1(void)
+void zynqmp_invoke_ecc_handler( ECC_Event_Type event, void *data )
 {
-  return ZYNQMP_CLOCK_I2C1;
+  if (saved_handler == NULL) {
+    bsp_fatal( BSP_FATAL_MEMORY_ECC_ERROR );
+  }
+
+  saved_handler(event, data);
 }
 
-void bsp_start( void )
+int zynqmp_ecc_enable( ECC_Event_Type event )
 {
-  bsp_interrupt_initialize();
-  rtems_cache_coherent_add_area(
-    bsp_section_nocacheheap_begin,
-    (uintptr_t) bsp_section_nocacheheap_size
-  );
-  zynqmp_ecc_init();
+  rtems_status_code sc;
+
+  switch (event) {
+  case L1_CACHE:
+  case L2_CACHE:
+  case L1_L2_CACHE:
+    sc = zynqmp_configure_cache_ecc();
+    break;
+  case OCM_RAM:
+    sc = zynqmp_configure_ocm_ecc();
+    break;
+  case DDR_RAM:
+    sc = zynqmp_configure_ddr_ecc();
+    break;
+  default:
+    return 1;
+  }
+
+  if (sc != RTEMS_SUCCESSFUL) {
+    return 1;
+  }
+  return 0;
+}
+
+void zynqmp_ecc_init( void )
+{
+  /* Do something on hardware */
+  zynqmp_ecc_enable( L1_L2_CACHE );
+  zynqmp_ecc_enable( OCM_RAM );
+
+  /* Call BSP-specific init function */
+  zynqmp_ecc_init_bsp();
 }

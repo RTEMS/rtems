@@ -5,11 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64XilinxZynqMP
  *
- * @brief This header file provides the BSP's IRQ definitions.
+ * @brief This header file provides internal APIs for managing ECC events.
  */
 
 /*
- * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2024 On-Line Applications Research Corporation (OAR)
  * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,38 +34,64 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_AARCH64_XILINX_ZYNQMP_IRQ_H
-#define LIBBSP_AARCH64_XILINX_ZYNQMP_IRQ_H
+#ifndef LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_ECC_PRIV_H
+#define LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_ECC_PRIV_H
+
+/**
+ * @addtogroup RTEMSBSPsAArch64
+ *
+ * @{
+ */
+
+#include <bspopts.h>
 
 #ifndef ASM
 
 #include <rtems.h>
 
-#include <dev/irq/arm-gic-irq.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_INTERRUPT_VECTOR_COUNT 192
+#include <bsp/ecc.h>
 
-/* Interrupts vectors */
-#define BSP_TIMER_VIRT_PPI 27
-#define BSP_TIMER_PHYS_NS_PPI 30
-#define ZYNQMP_IRQ_OCM 42
-#define ZYNQMP_IRQ_QSPI 47
-#define ZYNQMP_IRQ_I2C_0 49
-#define ZYNQMP_IRQ_I2C_1 50
-#define ZYNQMP_IRQ_UART_0 53
-#define ZYNQMP_IRQ_UART_1 54
-#define ZYNQMP_IRQ_ETHERNET_0 89
-#define ZYNQMP_IRQ_ETHERNET_1 91
-#define ZYNQMP_IRQ_ETHERNET_2 93
-#define ZYNQMP_IRQ_ETHERNET_3 95
-#define ZYNQMP_IRQ_DDR 144
-#define ZYNQMP_IRQ_CACHE 183
+/**
+ * @brief Initialize ECC reporting support
+ *
+ * This initializes the base ECC event reporting support for the platform.
+ */
+void zynqmp_ecc_init( void );
 
-/** @} */
+/**
+ * @brief Initialize BSP-specific ECC reporting
+ *
+ * Various BSPs may have different ECC capabilities. This allows those BSPs to
+ * initialize those facilities as necessary.
+ */
+void zynqmp_ecc_init_bsp( void );
+
+/**
+ * @brief Configure Cache ECC reporting
+ */
+rtems_status_code zynqmp_configure_cache_ecc( void );
+
+/**
+ * @brief Configure On-Chip Memory (OCM) ECC reporting
+ */
+rtems_status_code zynqmp_configure_ocm_ecc( void );
+
+/**
+ * @brief Configure DDR Memory ECC reporting
+ */
+rtems_status_code zynqmp_configure_ddr_ecc( void );
+
+/**
+ * @brief Invoke the ECC error handler
+ *
+ * @param event The ECC error event type to be raised
+ * @param data The details associated with the raised ECC error
+ */
+void zynqmp_invoke_ecc_handler( ECC_Event_Type event, void *data );
 
 #ifdef __cplusplus
 }
@@ -73,4 +99,6 @@ extern "C" {
 
 #endif /* ASM */
 
-#endif /* LIBBSP_AARCH64_XILINX_ZYNQMP_IRQ_H */
+/** @} */
+
+#endif /* LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_ECC_PRIV_H */
