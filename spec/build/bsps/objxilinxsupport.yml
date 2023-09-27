@@ -38,7 +38,6 @@ links:
 - role: build-dependency
   uid: optxilsupportpath
 source:
-- bsps/shared/xil/xil_cache.c
 - bsps/shared/xil/xil_assert.c
 - bsps/shared/xil/xil_mem.c
 type: build

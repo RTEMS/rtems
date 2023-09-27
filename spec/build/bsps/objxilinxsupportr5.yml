@@ -14,6 +14,9 @@ install:
   - bsps/include/xil/arm/cortexr5/xil_exception.h
   - bsps/include/xil/arm/cortexr5/xpseudo_asm.h
   - bsps/include/xil/arm/cortexr5/xreg_cortexr5.h
+  - bsps/include/xil/arm/cortexr5/xil_mpu.h
 links: []
-source: []
+source:
+- bsps/shared/xil/arm/cortexr5/xil_cache.c
+- bsps/shared/xil/arm/cortexr5/xil_mpu.c
 type: build

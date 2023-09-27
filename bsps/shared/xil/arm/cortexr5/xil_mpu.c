@@ -115,11 +115,15 @@ static const struct {
 	{ 0x100000000, REGION_4G },
 };
 
+#ifndef __rtems__
 #if defined (__GNUC__)
 XMpu_Config Mpu_Config __attribute__((section(".bootdata")));
 #elif defined (__ICCARM__)
 #pragma default_function_attributes = @ ".bootdata"
 XMpu_Config Mpu_Config;
+#endif
+#else
+XMpu_Config Mpu_Config __attribute__((section(".bsp_start_data")));
 #endif
 
 /************************** Function Prototypes ******************************/

@@ -17,5 +17,6 @@ install:
   - bsps/include/xil/arm/ARMv8/32bit/xpseudo_asm.h
   - bsps/include/xil/arm/ARMv8/32bit/xreg_cortexa53.h
 links: []
-source: []
+source:
+- bsps/shared/xil/arm/ARMv8/xil_cache.c
 type: build
