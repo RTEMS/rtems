@@ -12,8 +12,8 @@ default:
   value:
   - -nodefaultlibs
   - -Wl,--start-group
-  - -lrtemscpu
   - -lrtemsbsp
+  - -lrtemscpu
   - -lgcc
   - -Wl,--end-group
   - -Wl,--gc-sections

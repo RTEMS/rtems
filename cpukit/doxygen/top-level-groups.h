@@ -201,3 +201,187 @@
  *
  * @brief This source file contains the implemention of a C library function.
  */
+
+/**
+ * @defgroup RTEMSImplCompilerBuiltins Compiler Builtins
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the implementation of compiler builtins.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/bswapdi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/bswapsi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/clzsi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/clzdi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/ctzsi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/ctzdi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/divdi3.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/ffsdi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/ffssi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/int_div_impl.inc
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This header file contains the implemention of compiler builtins.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/int_endianness.h
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/int_lib.h
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This header file provides interfaces for compiler builtins.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/int_types.h
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This header file provides interfaces for compiler builtins.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/int_util.h
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This header file provides interfaces for compiler builtins.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/moddi3.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/paritydi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/paritysi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/popcountdi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/popcountsi2.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/udivdi3.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/udivmoddi4.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
+
+/**
+ * @file cpukit/compiler-rt/lib/builtins/umoddi3.c
+ *
+ * @ingroup RTEMSImplCompilerBuiltins
+ *
+ * @brief This source file contains the implemention of a compiler builtin.
+ */
