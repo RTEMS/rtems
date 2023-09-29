@@ -7,11 +7,33 @@ cppflags: []
 cxxflags: []
 enabled-by: RTEMS_QUAL
 extra-files:
+- cpukit/compiler-rt/lib/builtins/int_div_impl.inc
+- cpukit/compiler-rt/lib/builtins/int_endianness.h
+- cpukit/compiler-rt/lib/builtins/int_lib.h
+- cpukit/compiler-rt/lib/builtins/int_types.h
+- cpukit/compiler-rt/lib/builtins/int_util.h
 - cpukit/libc/string/local.h
 includes: []
 install: []
 links: []
 source:
+- cpukit/compiler-rt/lib/builtins/bswapdi2.c
+- cpukit/compiler-rt/lib/builtins/bswapsi2.c
+- cpukit/compiler-rt/lib/builtins/clzdi2.c
+- cpukit/compiler-rt/lib/builtins/clzsi2.c
+- cpukit/compiler-rt/lib/builtins/ctzdi2.c
+- cpukit/compiler-rt/lib/builtins/ctzsi2.c
+- cpukit/compiler-rt/lib/builtins/divdi3.c
+- cpukit/compiler-rt/lib/builtins/ffsdi2.c
+- cpukit/compiler-rt/lib/builtins/ffssi2.c
+- cpukit/compiler-rt/lib/builtins/moddi3.c
+- cpukit/compiler-rt/lib/builtins/paritydi2.c
+- cpukit/compiler-rt/lib/builtins/paritysi2.c
+- cpukit/compiler-rt/lib/builtins/popcountdi2.c
+- cpukit/compiler-rt/lib/builtins/popcountsi2.c
+- cpukit/compiler-rt/lib/builtins/udivdi3.c
+- cpukit/compiler-rt/lib/builtins/udivmoddi4.c
+- cpukit/compiler-rt/lib/builtins/umoddi3.c
 - cpukit/libc/string/flsl.c
 - cpukit/libc/string/memcpy.c
 - cpukit/libc/string/memset.c
