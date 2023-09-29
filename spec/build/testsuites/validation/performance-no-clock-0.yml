@@ -12,6 +12,7 @@ ldflags: []
 links: []
 source:
 - testsuites/validation/tc-barrier-performance.c
+- testsuites/validation/tc-cpu-performance.c
 - testsuites/validation/tc-event-performance.c
 - testsuites/validation/tc-message-performance.c
 - testsuites/validation/tc-part-performance.c
