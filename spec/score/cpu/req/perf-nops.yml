@@ -1,0 +1,55 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: perf-runtime
+- role: runtime-measurement-request
+  uid: ../val/perf
+non-functional-type: performance-runtime
+params: {}
+rationale: |
+  The runtime measurement of a fixed number of no-operation instructions may
+  help to investigate runtime measurement variations which do not result from
+  code generation or source code changes.
+references: []
+requirement-type: non-functional
+test-body:
+  brief: |
+    Execute exactly 1000 no-operation instructions.
+  code: |
+    #define NOPS_10 \
+      _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
+      _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
+      _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
+      _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
+      _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation();
+    #define NOPS_100 NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 \
+      NOPS_10 NOPS_10 NOPS_10
+    NOPS_100
+    NOPS_100
+    NOPS_100
+    NOPS_100
+    NOPS_100
+    NOPS_100
+    NOPS_100
+    NOPS_100
+    NOPS_100
+    NOPS_100
+  description: null
+test-cleanup: null
+test-prepare: null
+test-setup: null
+test-teardown:
+  brief: |
+    Discard samples interrupted by a clock tick.
+  code: |
+    return tic == toc;
+  description: null
+text: |
+  While the execution environment is ${.:/environment}, while the measurement
+  sample is the runtime of exactly 1000 no-operation instructions, when exactly
+  ${../val/perf:/params/sample-count} samples are collected, the
+  ${.:/limit-kind} shall be ${.:/limit-condition}.
+type: requirement

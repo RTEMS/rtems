@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: validation
+  uid: /req/perf-runtime
+params:
+  sample-count: 100
+test-brief: |
+  This test case provides a context to run CPU port performance tests.
+test-cleanup: null
+test-context: []
+test-context-support: null
+test-description: null
+test-includes:
+- rtems/score/cpuimpl.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-cpu-performance.c
+test-teardown: null
+type: runtime-measurement-test
