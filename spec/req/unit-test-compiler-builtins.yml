@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: root
+non-functional-type: design
+rationale: |
+  For example, the 64-bit integer division and modulo operations are essential
+  for the timekeeping services.  On most 32-bit targets, they need a software
+  implementation.
+references: []
+requirement-type: non-functional
+text: |
+  Unit tests may be used to test implementations of compiler builtins.
+type: requirement

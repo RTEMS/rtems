@@ -1,0 +1,482 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: validation
+  uid: /req/unit-test-compiler-builtins
+test-actions:
+- action-brief: |
+    Check the return value of __builtin_clz() for a sample set of inputs.
+  action-code: |
+    volatile unsigned int n;
+
+    n = 1U;
+    T_eq_int( __builtin_clz( n ), 31 );
+
+    n = 1U << 31;
+    T_eq_int( __builtin_clz( n ), 0 );
+
+    n = ~0U;
+    T_eq_int( __builtin_clz( n ), 0 );
+  checks: []
+  links:
+  - name: __builtin_clz
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_clzll() for a sample set of inputs.
+  action-code: |
+    volatile unsigned long long n;
+
+    n = 1ULL;
+    T_eq_int( __builtin_clzll( n ), 63 );
+
+    n = 1ULL << 31;
+    T_eq_int( __builtin_clzll( n ), 32 );
+
+    n = 1ULL << 32;
+    T_eq_int( __builtin_clzll( n ), 31 );
+
+    n = 1ULL << 63;
+    T_eq_int( __builtin_clzll( n ), 0 );
+
+    n = ~0ULL;
+    T_eq_int( __builtin_clzll( n ), 0 );
+  checks: []
+  links:
+  - name: __builtin_clzll
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_ctz() for a sample set of inputs.
+  action-code: |
+    volatile int n;
+
+    n = 1;
+    T_eq_int( __builtin_ctz( n ), 0 );
+
+    n = 1 << 31;
+    T_eq_int( __builtin_ctz( n ), 31 );
+
+    n = ~0;
+    T_eq_int( __builtin_ctz( n ), 0 );
+  checks: []
+  links:
+  - name: __builtin_ctz
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check signed 64-bit divisions for a sample set of values.
+  action-code: |
+    volatile int64_t n;
+    volatile int64_t d;
+
+    n = INT64_C( 0 );
+    d = INT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n / d;
+    }
+
+    n = INT64_C( 1 );
+    d = INT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n / d;
+    }
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n / d;
+    }
+
+    n = INT64_C( 0x7fffffff00000000 );
+    d = INT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n / d;
+    }
+
+    n = INT64_C( 0 );
+    d = INT64_C( 1 );
+    T_eq_i64( n / d, INT64_C( 0 ) );
+
+    n = INT64_C( 1 );
+    d = INT64_C( 1 );
+    T_eq_i64( n / d, INT64_C( 1 ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 1 );
+    T_eq_i64( n / d, INT64_C( 9223372036854775807 ) );
+
+    n = INT64_C( 2 );
+    d = INT64_C( 1 );
+    T_eq_i64( n / d, INT64_C( 2 ) );
+
+    n = INT64_C( 2 );
+    d = INT64_C( 1 );
+    T_eq_i64( n / d, INT64_C( 2 ) );
+
+    n = INT64_C( 1 );
+    d = INT64_C( 0x7fffffffffffffff );
+    T_eq_i64( n / d, INT64_C( 0 ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0x7fffffffffffffff );
+    T_eq_i64( n / d, INT64_C( 1 ) );
+
+    n = INT64_C( 1 );
+    d = INT64_C( 0x7fffffff00000000 );
+    T_eq_i64( n / d, INT64_C( 0 ) );
+
+    n = INT64_C( 0x7fffffff00000000 );
+    d = INT64_C( 0x7fffffff00000000 );
+    T_eq_i64( n / d, INT64_C( 1 ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0x7fffffff00000000 );
+    T_eq_i64( n / d, INT64_C( 1 ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0x8000000000000000 );
+    T_eq_i64( n / d, INT64_C( 0 ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0x0000000080000000 );
+    T_eq_i64( n / d, INT64_C( 0xffffffff ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0x00000000f0000000 );
+    T_eq_i64( n / d, INT64_C( 2290649224 ) );
+
+    n = INT64_C( 0x00000001ffffffff );
+    d = INT64_C( 0x00000000f0000000 );
+    T_eq_i64( n / d, INT64_C( 2 ) );
+
+    n = INT64_C( 0x0000000fffffffff );
+    d = INT64_C( 0x000000000000000f );
+    T_eq_i64( n / d, INT64_C( 4581298449 ) );
+
+    n = INT64_C( 0x0000000100000001 );
+    d = INT64_C( 0x0000000f00000000 );
+    T_eq_i64( n / d, INT64_C( 0 ) );
+
+    n = INT64_C( 0x0000000f0000000f );
+    d = INT64_C( 0x000000ff0000000f );
+    T_eq_i64( n / d, INT64_C( 0 ) );
+  checks: []
+  links:
+  - name: __divdi3
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check unsigned 64-bit divisions for a sample set of values.
+  action-code: |
+    volatile uint64_t n;
+    volatile uint64_t d;
+
+    n = UINT64_C( 0 );
+    d = UINT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n / d;
+    }
+
+    n = UINT64_C( 1 );
+    d = UINT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n / d;
+    }
+
+    n = UINT64_C( 0x7fffffffffffffff );
+    d = UINT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n / d;
+    }
+
+    n = UINT64_C( 0x7fffffff00000000 );
+    d = UINT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n / d;
+    }
+
+    n = UINT64_C( 0 );
+    d = UINT64_C( 1 );
+    T_eq_u64( n / d, UINT64_C( 0 ) );
+
+    n = UINT64_C( 1 );
+    d = UINT64_C( 1 );
+    T_eq_u64( n / d, UINT64_C( 1 ) );
+
+    n = UINT64_C( 0xffffffffffffffff );
+    d = UINT64_C( 1 );
+    T_eq_u64( n / d, UINT64_C( 0xffffffffffffffff ) );
+
+    n = UINT64_C( 2 );
+    d = UINT64_C( 1 );
+    T_eq_u64( n / d, UINT64_C( 2 ) );
+
+    n = UINT64_C( 1 );
+    d = UINT64_C( 0xffffffffffffffff );
+    T_eq_u64( n / d, UINT64_C( 0 ) );
+
+    n = UINT64_C( 0xffffffffffffffff );
+    d = UINT64_C( 0xffffffffffffffff );
+    T_eq_u64( n / d, UINT64_C( 1 ) );
+
+    n = UINT64_C( 0xffffffffffffffff );
+    d = UINT64_C( 0x8000000000000000 );
+    T_eq_u64( n / d, UINT64_C( 1 ) );
+
+    n = UINT64_C( 0x0000000100000001 );
+    d = UINT64_C( 0x0000000f00000000 );
+    T_eq_u64( n / d, UINT64_C( 0 ) );
+
+    n = UINT64_C( 0xffffffff0000000f );
+    d = UINT64_C( 0x000000010000000f );
+    T_eq_u64( n / d, UINT64_C( 4294967280 ) );
+  checks: []
+  links:
+  - name: __udivdi3
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check signed 64-bit modulo operations for a sample set of values.
+  action-code: |
+    volatile int64_t n;
+    volatile int64_t d;
+
+    n = INT64_C( 0 );
+    d = INT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n % d;
+    }
+
+    n = INT64_C( 1 );
+    d = INT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n % d;
+    }
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n % d;
+    }
+
+    n = INT64_C( 0x7fffffff00000000 );
+    d = INT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n % d;
+    }
+
+    n = INT64_C( 0 );
+    d = INT64_C( 1 );
+    T_eq_i64( n % d, INT64_C( 0 ) );
+
+    n = INT64_C( 1 );
+    d = INT64_C( 1 );
+    T_eq_i64( n % d, INT64_C( 0 ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 1 );
+    T_eq_i64( n % d, INT64_C( 0 ) );
+
+    n = INT64_C( 2 );
+    d = INT64_C( 1 );
+    T_eq_i64( n % d, INT64_C( 0 ) );
+
+    n = INT64_C( 2 );
+    d = INT64_C( 1 );
+    T_eq_i64( n % d, INT64_C( 0 ) );
+
+    n = INT64_C( 1 );
+    d = INT64_C( 0x7fffffffffffffff );
+    T_eq_i64( n % d, INT64_C( 1 ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0x7fffffffffffffff );
+    T_eq_i64( n % d, INT64_C( 0 ) );
+
+    n = INT64_C( 1 );
+    d = INT64_C( 0x7fffffff00000000 );
+    T_eq_i64( n % d, INT64_C( 1 ) );
+
+    n = INT64_C( 0x7fffffff00000000 );
+    d = INT64_C( 0x7fffffff00000000 );
+    T_eq_i64( n % d, INT64_C( 0 ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0x7fffffff00000000 );
+    T_eq_i64( n % d, INT64_C( 0xffffffff ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0x8000000000000000 );
+    T_eq_i64( n % d, INT64_C( 0x7fffffffffffffff ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0x0000000080000000 );
+    T_eq_i64( n % d, INT64_C( 2147483647 ) );
+
+    n = INT64_C( 0x7fffffffffffffff );
+    d = INT64_C( 0x00000000f0000000 );
+    T_eq_i64( n % d, INT64_C( 2147483647 ) );
+
+    n = INT64_C( 0x00000001ffffffff );
+    d = INT64_C( 0x00000000f0000000 );
+    T_eq_i64( n % d, INT64_C( 536870911 ) );
+
+    n = INT64_C( 0x0000000fffffffff );
+    d = INT64_C( 0x000000000000000f );
+    T_eq_i64( n % d, INT64_C( 0 ) );
+
+    n = INT64_C( 0x0000000100000001 );
+    d = INT64_C( 0x0000000f00000000 );
+    T_eq_i64( n % d, INT64_C( 4294967297 ) );
+
+    n = INT64_C( 0x0000000f0000000f );
+    d = INT64_C( 0x000000ff0000000f );
+    T_eq_i64( n % d, INT64_C( 64424509455 ) );
+
+    #if defined(TEST_UDIVMODDI4)
+    /*
+     * The above test cases may use __udivmoddi4().  However, the below
+     * parameter values for __udivmoddi4() cannot be obtained through the
+     * signed modulo or division operations.  On some targets, calls to
+     * __udivmoddi4() may result from complex optimizations.
+     */
+    n = INT64_C( 0xffffffff0000000f );
+    d = INT64_C( 0x000000010000000f );
+    T_eq_u64( __udivmoddi4( n, d, NULL ), INT64_C( 4294967280 ) );
+    #endif
+  checks: []
+  links:
+  - name: __moddi3
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check unsigned 64-bit modulo operations for a sample set of values.
+  action-code: |
+    volatile uint64_t n;
+    volatile uint64_t d;
+
+    n = UINT64_C( 0 );
+    d = UINT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n % d;
+    }
+
+    n = UINT64_C( 1 );
+    d = UINT64_C( 0 );
+    do_longjmp = true;
+
+    if ( setjmp( exception_return_context ) == 0 ) {
+      n = n % d;
+    }
+
+    n = UINT64_C( 0 );
+    d = UINT64_C( 1 );
+    T_eq_u64( n % d, UINT64_C( 0 ) );
+
+    n = UINT64_C( 1 );
+    d = UINT64_C( 1 );
+    T_eq_u64( n % d, UINT64_C( 0 ) );
+
+    n = UINT64_C( 0xffffffffffffffff );
+    d = UINT64_C( 1 );
+    T_eq_u64( n % d, UINT64_C( 0 ) );
+
+    n = UINT64_C( 2 );
+    d = UINT64_C( 1 );
+    T_eq_u64( n % d, UINT64_C( 0 ) );
+
+    n = UINT64_C( 1 );
+    d = UINT64_C( 0xffffffffffffffff );
+    T_eq_u64( n % d, UINT64_C( 1 ) );
+
+    n = UINT64_C( 0xffffffffffffffff );
+    d = UINT64_C( 0xffffffffffffffff );
+    T_eq_u64( n % d, UINT64_C( 0 ) );
+  checks: []
+  links:
+  - name: __moddi3
+    role: unit-test
+    uid: ../../if/domain
+test-brief: |
+  These unit tests check compiler builtins.
+test-context: []
+test-context-support: null
+test-description: |
+  Explicitly test the 64-bit integer division and modulo operations.  They are
+  essential for the timekeeping services.  On most 32-bit targets, they need a
+  software implementation.
+test-header: null
+test-includes:
+- stdint.h
+- setjmp.h
+test-local-includes:
+- ../validation/tx-support.h
+test-setup:
+  brief: null
+  code: |
+    SetFatalHandler( Fatal, exception_return_context );
+  description: null
+test-stop: null
+test-support: |
+  #if __LONG_MAX__ == 0x7fffffffL && !defined(__aarch64__)
+  #define TEST_UDIVMODDI4
+  #endif
+
+  #if defined(TEST_UDIVMODDI4)
+  uint64_t __udivmoddi4( uint64_t n, uint64_t d, uint64_t *r );
+  #endif
+
+  static bool do_longjmp;
+
+  static jmp_buf exception_return_context;
+
+  static void Fatal(
+    rtems_fatal_source source,
+    rtems_fatal_code   code,
+    void              *arg
+  )
+  {
+    (void) code;
+
+    if ( source == RTEMS_FATAL_SOURCE_EXCEPTION && do_longjmp ) {
+      do_longjmp = false;
+      _ISR_Set_level( 0 );
+      longjmp( arg, 1 );
+    }
+  }
+test-target: testsuites/unit/tc-compiler-builtins.c
+test-teardown:
+  brief: null
+  code: |
+    SetFatalHandler( NULL, NULL );
+  description: null
+type: test-case
