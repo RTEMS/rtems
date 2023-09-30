@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -104,6 +104,13 @@
  *
  *   - Check that the global constructor was called before the task entry.
  *
+ * - Validate that thread dispatching does not recurse.  Issue a couple of
+ *   thread context switches during a thread dispatch.  Record the stack
+ *   pointers of the heir threads.
+ *
+ *   - Check that the thread dispatching did not recurse through the recorded
+ *     stack pointers.
+ *
  * @{
  */
 
@@ -125,6 +132,21 @@ typedef struct {
    * @brief This member contains a floating-point object.
    */
   volatile double fp_obj;
+
+  /**
+   * @brief This member indicates the thread switch state.
+   */
+  int thread_switch_state;
+
+  /**
+   * @brief This member contain the runner stack pointer at the context switch.
+   */
+  uintptr_t runner_stack[ 2 ];
+
+  /**
+   * @brief This member contain the worker stack pointer at the context switch.
+   */
+  uintptr_t worker_stack[ 2 ];
 } ScoreThreadValThread_Context;
 
 static ScoreThreadValThread_Context
@@ -193,6 +215,44 @@ static void KillerTask( rtems_task_argument arg )
 
   ctx = (Context *) arg;
   DeleteTask( ctx->worker_id );
+}
+
+static void TaskSwitch( rtems_tcb *executing, rtems_tcb *heir )
+{
+  Context  *ctx;
+  rtems_id  worker_id;
+  int       state;
+  uintptr_t heir_stack;
+
+  ctx = T_fixture_context();
+  worker_id = ctx->worker_id;
+  state = ctx->thread_switch_state;
+  ctx->thread_switch_state = state + 1;
+  heir_stack = _CPU_Context_Get_SP( &heir->Registers );
+
+  switch ( state ) {
+    case 0:
+      T_eq_u32( heir->Object.id, worker_id );
+      SuspendTask( worker_id );
+      ctx->worker_stack[ 0 ] = heir_stack;
+      break;
+    case 1:
+      T_eq_u32( executing->Object.id, worker_id );
+      ResumeTask( worker_id );
+      ctx->runner_stack[ 0 ] = heir_stack;
+      break;
+    case 2:
+      T_eq_u32( heir->Object.id, worker_id );
+      SuspendTask( worker_id );
+      ctx->worker_stack[ 1 ] = heir_stack;
+      break;
+    case 3:
+      T_eq_u32( executing->Object.id, worker_id );
+      ctx->runner_stack[ 1 ] = heir_stack;
+      break;
+    default:
+      T_unreachable();
+  }
 }
 
 static T_fixture ScoreThreadValThread_Fixture = {
@@ -338,6 +398,37 @@ static void ScoreThreadValThread_Action_2( ScoreThreadValThread_Context *ctx )
 }
 
 /**
+ * @brief Validate that thread dispatching does not recurse.  Issue a couple of
+ *   thread context switches during a thread dispatch.  Record the stack
+ *   pointers of the heir threads.
+ */
+static void ScoreThreadValThread_Action_3( ScoreThreadValThread_Context *ctx )
+{
+  SetSelfPriority( PRIO_NORMAL );
+  ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+  StartTask( ctx->worker_id, WorkerTask, NULL );
+
+  ctx->thread_switch_state = 0;
+  ctx->runner_stack[ 0 ] = 0;
+  ctx->runner_stack[ 1 ] = 1;
+  ctx->worker_stack[ 0 ] = 0;
+  ctx->worker_stack[ 1 ] = 1;
+  SetTaskSwitchExtension( TaskSwitch );
+  ResumeTask( ctx->worker_id );
+
+  SetTaskSwitchExtension( NULL );
+  DeleteTask( ctx->worker_id );
+  RestoreRunnerPriority();
+
+  /*
+   * Check that the thread dispatching did not recurse through the recorded
+   * stack pointers.
+   */
+  T_eq_uptr( ctx->runner_stack[ 0 ], ctx->runner_stack[ 1 ] );
+  T_eq_uptr( ctx->worker_stack[ 0 ], ctx->worker_stack[ 1 ] );
+}
+
+/**
  * @fn void T_case_body_ScoreThreadValThread( void )
  */
 T_TEST_CASE_FIXTURE( ScoreThreadValThread, &ScoreThreadValThread_Fixture )
@@ -349,6 +440,7 @@ T_TEST_CASE_FIXTURE( ScoreThreadValThread, &ScoreThreadValThread_Fixture )
   ScoreThreadValThread_Action_0( ctx );
   ScoreThreadValThread_Action_1( ctx );
   ScoreThreadValThread_Action_2( ctx );
+  ScoreThreadValThread_Action_3( ctx );
 }
 
 /** @} */
