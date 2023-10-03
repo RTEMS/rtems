@@ -203,9 +203,9 @@ fat_free_fat_clusters_chain(
         cur_cln = next_cln;
     }
 
-        fs_info->vol.next_cl = chain;
-        if (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
-            fs_info->vol.free_cls += freed_cls_cnt;
+    fs_info->vol.next_cl = chain;
+    if (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
+        fs_info->vol.free_cls += freed_cls_cnt;
 
     fat_buf_release(fs_info);
     if (rc1 != RC_OK)
