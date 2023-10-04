@@ -283,7 +283,13 @@ static int escaped = 0;
 void
 _IBMPC_initVideo(void)
 {
-    unsigned char* pt = (unsigned char*) (VIDEO_MODE_ADDR);
+    /*
+     * See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99578#c16
+     */
+    unsigned char* volatile pt = (unsigned char*) (VIDEO_MODE_ADDR);
+    unsigned short* volatile crt_base = (unsigned short*) DISPLAY_CRT_BASE_IO_ADDR;
+    uint8_t* volatile nb_max_row = (uint8_t*) NB_MAX_ROW_ADDR;
+    uint16_t* volatile nb_max_col = (uint16_t*) NB_MAX_COL_ADDR;
 
     if (*pt == VGAMODE7) {
       bitMapBaseAddr = (unsigned short*) V_MONO;
@@ -291,9 +297,9 @@ _IBMPC_initVideo(void)
     else {
       bitMapBaseAddr = (unsigned short*) V_COLOR;
     }
-    ioCrtBaseAddr = *(unsigned short*) DISPLAY_CRT_BASE_IO_ADDR;
-    maxCol  = * (unsigned short*) NB_MAX_COL_ADDR;
-    maxRow  = * (unsigned char*)  NB_MAX_ROW_ADDR;
+    ioCrtBaseAddr = *crt_base;
+    maxCol  = *nb_max_col;
+    maxRow  = *nb_max_row;
     column  = 0;
     row     = 0;
     attribute = ((BLACK << 4) | WHITE)<<8;

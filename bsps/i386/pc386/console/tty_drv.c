@@ -264,8 +264,8 @@ conSetAttr(int port, int minor, const struct termios *t)
     stopbits = 0;
   }
 
-  printk("Setting attributes, port=%X, baud=%" PRId32 ", linemode = 0x%02" PRIx32 "\n",
-         port, baud, databits | parity | stopbits );
+  printk("Setting attributes, port=%X, baud=%d, linemode = 0x%02x\n",
+         port, (int) baud, (int) (databits | parity | stopbits) );
   BSP_uart_set_attributes(port, baud, databits, parity, stopbits);
   return 0;
 }

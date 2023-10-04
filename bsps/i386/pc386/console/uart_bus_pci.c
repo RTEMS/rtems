@@ -260,7 +260,7 @@ typedef struct {
 
 #define UART_PCI_IO (0)
 
-static uint8_t pci_ns16550_mem_get_register(uint32_t addr, uint8_t i)
+static uint8_t pci_ns16550_mem_get_register(uintptr_t addr, uint8_t i)
 {
   uint8_t          val = 0;
   volatile uint32_t *reg = (volatile uint32_t *)(addr + (i*4));
@@ -270,7 +270,7 @@ static uint8_t pci_ns16550_mem_get_register(uint32_t addr, uint8_t i)
   return val;
 }
 
-static void pci_ns16550_mem_set_register(uint32_t addr, uint8_t i, uint8_t val)
+static void pci_ns16550_mem_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 {
   volatile uint32_t *reg = (volatile uint32_t *)(addr + (i*4));
   if (UART_PCI_IO)
@@ -281,7 +281,7 @@ static void pci_ns16550_mem_set_register(uint32_t addr, uint8_t i, uint8_t val)
 /*
  *  IO Register Access Routines
  */
-static uint8_t pci_ns16550_io_get_register(uint32_t addr, uint8_t i)
+static uint8_t pci_ns16550_io_get_register(uintptr_t addr, uint8_t i)
 {
   uint8_t val = rtems_inb(addr + i);
   if (UART_PCI_IO)
@@ -289,7 +289,7 @@ static uint8_t pci_ns16550_io_get_register(uint32_t addr, uint8_t i)
   return val;
 }
 
-static void pci_ns16550_io_set_register(uint32_t addr, uint8_t i, uint8_t val)
+static void pci_ns16550_io_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 {
   if (UART_PCI_IO)
     printk( "WR(%p <- 0x%02x) ", (void*) addr + i, val );
@@ -452,11 +452,11 @@ void pci_uart_probe(void)
 	port_p->ulIntVector   = conf[b].irq;
 
 
-        printk(
-          "%s:%d:%s,%s:0x%lx%s%s,irq:%d,clk:%lu\n", /*  */
+	printk(
+	  "%s:%d:%s,%s:0x%lx%s%s,irq:%d,clk:%lu\n", /*  */
 	  name, b, conf[b].desc,
-	  io ? "io" : "mem", base, locatable, prefectable,
-	  conf[b].irq, conf[b].clock
+	  io ? "io" : "mem", (uintptr_t) base, locatable, prefectable,
+	  conf[b].irq, (uintptr_t) conf[b].clock
         );
 
 

@@ -2,9 +2,9 @@
 
 /**
  * @file
- * 
+ *
  * @brief Intel I386 CPU Dependent Source
- * 
+ *
  * This include file contains information pertaining to the Intel
  * i386 processor.
  */
@@ -51,7 +51,7 @@ extern "C" {
 #include <rtems/score/paravirt.h>
 #endif
 #include <rtems/score/i386.h>
-    
+
 /**
  * @defgroup RTEMSScoreCPUi386 i386 Specific Support
  *
@@ -163,7 +163,7 @@ typedef struct {
 }   Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->esp
+  (uintptr_t) (_context)->esp
 
 #ifdef RTEMS_SMP
   static inline bool _CPU_Context_Get_is_executing(

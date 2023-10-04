@@ -27,7 +27,7 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector(handler)
+#define Install_tm27_vector(handler) (void) handler
 
 #define Cause_tm27_intr() __asm__ volatile("int $0x90" : :);
 

@@ -49,7 +49,7 @@
 
 #define RTD_CLOCK_RATE  (460800 * 32)
 
-uint8_t rtd316_com_get_register(uint32_t addr, uint8_t reg)
+uint8_t rtd316_com_get_register(uintptr_t addr, uint8_t reg)
 {
   register uint8_t val = 0;
 
@@ -60,7 +60,7 @@ uint8_t rtd316_com_get_register(uint32_t addr, uint8_t reg)
   return val;
 }
 
-void rtd316_com_set_register(uint32_t addr,uint8_t reg, uint8_t val)
+void rtd316_com_set_register(uintptr_t addr, uint8_t reg, uint8_t val)
 {
   outport_byte( addr, reg );
   /* It appears the no delay is needed between the accesses. */

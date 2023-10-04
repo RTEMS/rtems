@@ -63,6 +63,17 @@
 
 #define FB_VESA_NAME    "FB_VESA_RM"
 
+/*
+ * GCC complains that access to packed data may not be aligned and
+ * fair enough. The warning is:
+ *
+ *   warning: taking address of packed member of 'struct <anonymous>' may
+ *   result in an unaligned pointer value [-Waddress-of-packed-member]
+ *
+ * Disable the warning.
+ */
+#pragma GCC diagnostic ignored "-Waddress-of-packed-member"
+
 /**
  * @brief Allows to enable initialization of VESA real mode driver from
  * an application by setting the value of this variable to non null value in
@@ -788,7 +799,7 @@ void vesa_realmode_bootup_init(void)
         (vbe_ret_val>>8)!=VBE_callSuccessful)
     {
         printk(FB_VESA_NAME " Cannot get mode info anymore. ax=0x%lx\n",
-            vbe_ret_val);
+               (uintptr_t) vbe_ret_val);
     }
 
     fb_var.xres = mib->XResolution;
@@ -970,9 +981,9 @@ frame_buffer_control(
 {
   rtems_libio_ioctl_args_t *args = arg;
 
-  printk( FB_VESA_NAME " ioctl called, cmd=%" PRIx32 "\n", args->command  );
-    printk("fbxres %lu, fbyres %lu\n", fb_var.xres, fb_var.yres);
-    printk("fbbpp %lu\n", fb_var.bits_per_pixel);
+  printk( FB_VESA_NAME " ioctl called, cmd=%lx\n", (uintptr_t) args->command  );
+  printk("fbxres %d, fbyres %d\n", (int) fb_var.xres, (int) fb_var.yres);
+  printk("fbbpp %d\n", (int) fb_var.bits_per_pixel);
 
   switch (args->command)
   {

@@ -76,7 +76,7 @@ rtems_device_driver rtd316_initialize(
  *
  *  @return This method returns the value of the register.
  */
-uint8_t rtd316_com_get_register(uint32_t addr, uint8_t reg);
+uint8_t rtd316_com_get_register(uintptr_t addr, uint8_t reg);
 
 /**
  *  @brief RTD316 Set Register Helper
@@ -86,7 +86,7 @@ uint8_t rtd316_com_get_register(uint32_t addr, uint8_t reg);
  *  @param[in] addr is the base address
  *  @param[in] reg is the register number
  */
-void rtd316_com_set_register(uint32_t addr,uint8_t reg, uint8_t val);
+void rtd316_com_set_register(uintptr_t addr,uint8_t reg, uint8_t val);
 
 #ifdef __cplusplus
 }

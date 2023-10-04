@@ -170,8 +170,12 @@ bool vgacons_probe(
   rtems_status_code status;
   static bool firstTime = true;
 
-  if ((*(unsigned char*) NB_MAX_ROW_ADDR == 0) &&
-      (*(unsigned short*)NB_MAX_COL_ADDR == 0)) {
+  /*
+   * See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99578#c16
+   */
+  const uint8_t* volatile nb_max_row = (const uint8_t*) NB_MAX_ROW_ADDR;
+  const uint16_t* volatile nb_max_col = (const uint16_t*) NB_MAX_COL_ADDR;
+  if ((*nb_max_row == 0) && (*nb_max_col == 0)) {
     return false;
   }
 

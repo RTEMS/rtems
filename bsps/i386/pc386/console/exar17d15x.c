@@ -94,7 +94,7 @@ typedef struct {
 /*
  *  Register Access Routines
  */
-static uint8_t xr17d15x_get_register(uint32_t addr, uint8_t i)
+static uint8_t xr17d15x_get_register(uintptr_t addr, uint8_t i)
 {
   uint8_t          val = 0;
   volatile uint8_t *reg = (volatile uint8_t *)(addr + i);
@@ -104,7 +104,7 @@ static uint8_t xr17d15x_get_register(uint32_t addr, uint8_t i)
   return val;
 }
 
-static void xr17d15x_set_register(uint32_t addr, uint8_t i, uint8_t val)
+static void xr17d15x_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 {
   volatile uint8_t *reg = (volatile uint8_t *)(addr + i);
 
@@ -187,7 +187,7 @@ rtems_device_driver exar17d15x_initialize(
     printk(
       "Found Exar 17D15x %d at 0x%08lx IRQ %d with %d ports\n",
       instance,
-      conf[instance].base,
+      (uintptr_t) conf[instance].base,
       conf[instance].irq,
       conf[instance].ports
     );

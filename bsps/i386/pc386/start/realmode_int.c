@@ -89,7 +89,16 @@ typedef struct {
  *
  * @note Struct members not necessarily used in C. This serves also as
  *       layout of memory and it is used within inline assembler.
+ *
+ * @note GCC complains that access to packed data may not be aligned and
+ *       fair enough. The warning is:
+ *
+ *   warning: taking address of packed member of 'struct <anonymous>' may
+ *   result in an unaligned pointer value [-Waddress-of-packed-member]
+ *
+ * Disable the warning.
  */
+#pragma GCC diagnostic ignored "-Waddress-of-packed-member"
 typedef struct {
     /** spot for backup protected mode interrupt descriptor table register */
     uint16_t idtr_lim_bkp;
