@@ -1,34 +1,16 @@
 #ifndef __LINUX_SPINLOCK_H__
 #define __LINUX_SPINLOCK_H__
 
+#include <rtems/thread.h>
 
-typedef struct { } spinlock_t;
-#define SPIN_LOCK_UNLOCKED (spinlock_t) { }
-#define DEFINE_SPINLOCK(x) spinlock_t x = SPIN_LOCK_UNLOCKED
+typedef struct { rtems_mutex r_m; } spinlock_t;
 
-#define spin_lock_init(lock)             \
-CYG_MACRO_START;                         \
-CYG_UNUSED_PARAM(spinlock_t *, lock);    \
-CYG_MACRO_END
+#define DEFINE_SPINLOCK(x) spinlock_t x
 
-#define spin_lock(lock)                  \
-CYG_MACRO_START;                         \
-CYG_UNUSED_PARAM(spinlock_t *, lock);    \
-CYG_MACRO_END
+#define spin_lock_init(x) rtems_mutex_init(&(x)->r_m, "JFFS2 Spinlock");
 
-#define spin_unlock(lock)                \
-CYG_MACRO_START;                         \
-CYG_UNUSED_PARAM(spinlock_t *, lock);    \
-CYG_MACRO_END
+#define spin_lock(x) rtems_mutex_lock(&(x)->r_m);
 
-#define spin_lock_bh(lock)               \
-CYG_MACRO_START;                         \
-CYG_UNUSED_PARAM(spinlock_t *, lock);    \
-CYG_MACRO_END
-
-#define spin_unlock_bh(lock)             \
-CYG_MACRO_START;                         \
-CYG_UNUSED_PARAM(spinlock_t *, lock);    \
-CYG_MACRO_END
+#define spin_unlock(x) rtems_mutex_unlock(&(x)->r_m);
 
 #endif /* __LINUX_SPINLOCK_H__ */

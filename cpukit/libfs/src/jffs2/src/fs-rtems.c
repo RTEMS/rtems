@@ -1384,6 +1384,8 @@ int rtems_jffs2_initialize(
 #ifdef CONFIG_JFFS2_FS_WRITEBUFFER
 		add_delayed_work_to_chain(&c->wbuf_dwork);
 #endif
+		spin_lock_init(&c->erase_completion_lock);
+		spin_lock_init(&c->inocache_lock);
 		c->mtd = NULL;
 		rtems_recursive_mutex_init(&sb->s_mutex, RTEMS_FILESYSTEM_TYPE_JFFS2);
 	}
