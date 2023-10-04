@@ -175,7 +175,7 @@ static int flash_block_mark_bad(
   return RTEMS_SUCCESSFUL;
 }
 
-static int flash_read_oob(
+static int flash_read_oob_locked(
   rtems_jffs2_flash_control *super,
   uint32_t offset,
   uint8_t *oobbuf,
@@ -203,7 +203,6 @@ static int flash_read_oob(
     return -ENOMEM;
   }
 
-  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
   while (ooblen) {
     int rv = XNandPsu_ReadSpareBytes(nandpsu, PageIndex, spare_bytes);
     /* no guarantee oobbuf can hold all of spare bytes, so read and then copy */
@@ -213,7 +212,6 @@ static int flash_read_oob(
     }
 
     if (rv) {
-      rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
       free(spare_bytes);
       return -EIO;
     }
@@ -224,9 +222,21 @@ static int flash_read_oob(
     ooblen -= readlen;
     oobbuf += readlen;
   }
-  rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
   free(spare_bytes);
   return RTEMS_SUCCESSFUL;
+}
+
+static int flash_read_oob(
+  rtems_jffs2_flash_control *super,
+  uint32_t offset,
+  uint8_t *oobbuf,
+  uint32_t ooblen
+)
+{
+  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
+  int ret = flash_read_oob_locked(super, offset, oobbuf, ooblen);
+  rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
+  return ret;
 }
 
 static int flash_write_oob(
@@ -257,10 +267,12 @@ static int flash_write_oob(
   }
 
   /* Writing a page spare area to small will result in invalid accesses */
+  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
   if (ooblen < SpareBytesPerPage) {
-    int rv = flash_read_oob(super, offset, spare_bytes, SpareBytesPerPage);
+    int rv = flash_read_oob_locked(super, offset, spare_bytes, SpareBytesPerPage);
     if (rv) {
       free(spare_bytes);
+      rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
       return rv;
     }
     buffer = spare_bytes;
@@ -270,7 +282,6 @@ static int flash_write_oob(
   /* Get page index */
   uint32_t PageIndex = offset / nandpsu->Geometry.BytesPerPage;
 
-  rtems_mutex_lock(&(get_flash_control(super)->access_lock));
   sc = XNandPsu_WriteSpareBytes(nandpsu, PageIndex, buffer);
   rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
   free(spare_bytes);
