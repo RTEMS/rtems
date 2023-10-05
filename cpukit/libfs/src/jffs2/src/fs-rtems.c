@@ -1523,6 +1523,8 @@ static struct _inode *new_inode(struct super_block *sb)
 
 	inode->i_cache_next = NULL;	// Newest inode, about to be cached
 
+	mutex_init(&JFFS2_INODE_INFO(inode)->sem)
+
 	// Add to the icache
 	for (cached_inode = sb->s_root; cached_inode != NULL;
 	     cached_inode = cached_inode->i_cache_next) {
@@ -1639,8 +1641,14 @@ void jffs2_iput(struct _inode *i)
 
 static inline void jffs2_init_inode_info(struct jffs2_inode_info *f)
 {
-	memset(f, 0, sizeof(*f));
-	mutex_init(&f->sem);
+	/* These must be set manually to preserve other members */
+	f->highest_version = 0;
+	f->fragtree = RB_ROOT;
+	f->metadata = NULL;
+	f->dents = NULL;
+	f->target = NULL;
+	f->flags = 0;
+	f->usercompr = 0;
 }
 
 static void jffs2_clear_inode (struct _inode *inode)
