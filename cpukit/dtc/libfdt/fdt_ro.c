@@ -537,7 +537,16 @@ static const void *fdt_path_getprop_namelen(const void *fdt, const char *path,
 const char *fdt_get_alias_namelen(const void *fdt,
 				  const char *name, int namelen)
 {
-	return fdt_path_getprop_namelen(fdt, "/aliases", name, namelen, NULL);
+	int len;
+	const char *alias;
+
+	alias = fdt_path_getprop_namelen(fdt, "/aliases", name, namelen, &len);
+
+	if (!can_assume(VALID_DTB) &&
+	    !(alias && len > 0 && alias[len - 1] == '\0' && *alias == '/'))
+		return NULL;
+
+	return alias;
 }
 
 const char *fdt_get_alias(const void *fdt, const char *name)
