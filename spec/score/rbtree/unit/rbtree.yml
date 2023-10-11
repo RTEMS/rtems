@@ -4,7 +4,7 @@ copyrights:
 - Copyright (C) 2010 Gedare Bloom
 enabled-by: true
 links:
-- role: requirement-refinement
+- role: validation
   uid: /req/unit-test-data-structures
 test-actions:
 - action-brief: |

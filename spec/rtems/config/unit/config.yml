@@ -3,7 +3,7 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
 enabled-by: true
 links:
-- role: requirement-refinement
+- role: validation
   uid: /req/unit-test-dead-code
 test-actions:
 - action-brief: |
