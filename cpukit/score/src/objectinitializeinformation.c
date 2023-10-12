@@ -42,7 +42,6 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/address.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/interr.h>
 #include <rtems/score/sysstate.h>
 
 void _Objects_Initialize_information(

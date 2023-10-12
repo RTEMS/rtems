@@ -39,7 +39,6 @@
 #endif
 
 #include <rtems/rbtree.h>
-#include <rtems/score/rbtreeimpl.h>
 
 RTEMS_STATIC_ASSERT(
   sizeof( rtems_rbtree_compare_result ) >= sizeof( intptr_t ),

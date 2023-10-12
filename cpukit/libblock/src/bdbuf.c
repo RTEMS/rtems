@@ -39,7 +39,6 @@
 #include <pthread.h>
 
 #include <rtems.h>
-#include <rtems/error.h>
 #include <rtems/thread.h>
 #include <rtems/score/assert.h>
 

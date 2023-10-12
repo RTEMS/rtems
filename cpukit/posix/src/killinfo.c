@@ -47,7 +47,6 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/seterr.h>
 

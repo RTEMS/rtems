@@ -41,8 +41,6 @@
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/posixapi.h>
 
-#include <string.h>
-
 bool _POSIX_Mutex_Auto_initialization( POSIX_Mutex_Control *the_mutex )
 {
   unsigned long zero;

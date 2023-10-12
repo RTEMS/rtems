@@ -50,7 +50,6 @@
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/config.h>
-#include <rtems/seterr.h>
 #include <rtems/sysinit.h>
 
 /*

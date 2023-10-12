@@ -44,7 +44,6 @@
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>
-#include <rtems/posix/priorityimpl.h>
 
 /*
  *  13.6.1 Mutex Initialization Scheduling Attributes, P1003.1c/Draft 10, p. 128

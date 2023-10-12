@@ -46,8 +46,6 @@
 
 #include <unistd.h>
 
-#include <rtems/seterr.h>
-
 pid_t _POSIX_types_Ppid = 0;
 
 /**

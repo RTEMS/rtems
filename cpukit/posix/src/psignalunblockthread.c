@@ -46,7 +46,6 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdogimpl.h>
-#include <rtems/seterr.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>

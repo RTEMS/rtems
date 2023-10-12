@@ -44,7 +44,6 @@
  */
 #include <unistd.h>
 #include <reent.h>
-#include <sys/stat.h>
 
 int _isatty_r(
   struct _reent *ptr,

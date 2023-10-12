@@ -39,7 +39,6 @@
 #include <stdlib.h>
 
 #include <rtems/libio_.h>
-#include <rtems/score/threaddispatch.h>
 
 rtems_interrupt_lock rtems_filesystem_mt_entry_lock_control =
   RTEMS_INTERRUPT_LOCK_INITIALIZER("mount table entry");

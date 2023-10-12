@@ -49,7 +49,6 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/schedulerimpl.h>
 
 static int _POSIX_Set_sched_param(
   Thread_Control             *the_thread,
