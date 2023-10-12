@@ -39,7 +39,6 @@
  */
 
 #include <bsp.h>
-#include <bsp/bootcard.h>
 
 #if defined(HAS_UBOOT) && !defined(BSP_DISABLE_UBOOT_WORK_AREA_CONFIG)
   #define USE_UBOOT

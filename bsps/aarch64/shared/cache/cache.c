@@ -36,7 +36,6 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <bsp/utility.h>
 #include <rtems/score/aarch64-system-registers.h>
 
 #define CPU_DATA_CACHE_ALIGNMENT 64

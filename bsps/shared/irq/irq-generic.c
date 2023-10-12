@@ -35,9 +35,6 @@
  */
 
 #include <bsp/irq-generic.h>
-#include <bsp/fatal.h>
-
-#include <stdlib.h>
 
 #include <rtems/malloc.h>
 
