@@ -89,7 +89,11 @@
  * @{
  */
 
-#if __LONG_MAX__ == 0x7fffffffL
+#if __LONG_MAX__ == 0x7fffffffL && !defined(__aarch64__)
+#define TEST_UDIVMODDI4
+#endif
+
+#if defined(TEST_UDIVMODDI4)
 uint64_t __udivmoddi4( uint64_t n, uint64_t d, uint64_t *r );
 #endif
 
@@ -482,7 +486,7 @@ static void CompilerUnitBuiltins_Action_5( void )
   d = INT64_C( 0x000000ff0000000f );
   T_eq_i64( n % d, INT64_C( 64424509455 ) );
 
-  #if __LONG_MAX__ == 0x7fffffffL
+  #if defined(TEST_UDIVMODDI4)
   /*
    * The above test cases may use __udivmoddi4().  However, the below
    * parameter values for __udivmoddi4() cannot be obtained through the
