@@ -128,6 +128,23 @@ void __wrap_bsp_interrupt_dispatch( void )
 }
 #endif
 
+#if defined(__PPC__) || defined(__powerpc64__)
+void __real_bsp_interrupt_dispatch( void );
+
+void __wrap_bsp_interrupt_dispatch( void );
+
+void __wrap_bsp_interrupt_dispatch( void )
+{
+  register uintptr_t sp __asm__( "14" );
+
+  if ( interrupted_stack_at_multitasking_start == 0 ) {
+    interrupted_stack_at_multitasking_start = sp;
+  }
+
+  __real_bsp_interrupt_dispatch();
+}
+#endif
+
 #if defined(__riscv)
 void __real__RISCV_Interrupt_dispatch(
   uintptr_t        mcause,
