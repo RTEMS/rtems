@@ -6,11 +6,14 @@ system.up
 per.s spr:0x11f %long %be 0x80200000
 
 ; Load application
-Data.LOAD.Elf /home/sh/build/t32mppc/powerpc-rtems4.11/c/t32mppc/testsuites/samples/ticker/ticker.exe
+Data.LOAD.Elf build/powerpc/t32mppc/testsuites/samples/ticker/ticker.exe
 
 ; Configure memory-based terminal
 term.reset
 term.method buffere v.address("messagebufferout") v.address("messagebufferin") 
+term.mode VT100
+term.scroll on
+term.size 80. 200. 10000.
 term.gate
  
 ; Initialize RTOS support
