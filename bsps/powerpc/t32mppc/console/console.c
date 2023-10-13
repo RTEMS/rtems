@@ -35,9 +35,9 @@
 #include <rtems/console.h>
 #include <rtems/termiostypes.h>
 
-volatile unsigned char messagebufferin[256];
+RTEMS_SECTION(".rtemsrwset.t32") volatile unsigned char messagebufferin[256];
 
-volatile unsigned char messagebufferout[256];
+RTEMS_SECTION(".rtemsrwset.t32") volatile unsigned char messagebufferout[256];
 
 typedef struct {
   rtems_termios_device_context base;
