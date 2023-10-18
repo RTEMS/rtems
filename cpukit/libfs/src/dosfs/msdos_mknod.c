@@ -44,7 +44,7 @@ int msdos_mknod(
 )
 {
     int                  rc = RC_OK;
-    fat_file_type_t      type = 0;
+    fat_file_type_t      type = FAT_DIRECTORY;
 
     /*
      *  Figure out what type of msdos node this is.
