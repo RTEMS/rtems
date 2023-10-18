@@ -719,50 +719,50 @@ typedef struct {
  * The individual state flags must be a power of two to allow use of bit
  * operations to manipulate and evaluate the thread life state.
  */
-typedef enum {
-  /**
-   * @brief Indicates that the thread life is protected.
-   *
-   * If this flag is set, then the thread restart or delete requests are deferred
-   * until the protection and deferred change flags are cleared.  It is used by
-   * _Thread_Set_life_protection().
-   */
-  THREAD_LIFE_PROTECTED = 0x1,
+typedef uint32_t Thread_Life_state;
 
-  /**
-   * @brief Indicates that thread is restarting.
-   *
-   * If this flag is set, then a thread restart request is in pending. See
-   * _Thread_Restart_self() and _Thread_Restart_other().
-   */
-  THREAD_LIFE_RESTARTING = 0x2,
+/**
+ * @brief Indicates that the thread life is protected.
+ *
+ * If this flag is set, then the thread restart or delete requests are deferred
+ * until the protection and deferred change flags are cleared.  It is used by
+ * _Thread_Set_life_protection().
+ */
+#define THREAD_LIFE_PROTECTED 0x1
 
-  /**
-   * @brief Indicates that thread is terminating.
-   *
-   * If this flag is set, then a thread termination request is in pending.  See
-   * _Thread_Exit() and _Thread_Cancel().
-   */
-  THREAD_LIFE_TERMINATING = 0x4,
+/**
+ * @brief Indicates that thread is restarting.
+ *
+ * If this flag is set, then a thread restart request is in pending. See
+ * _Thread_Restart_self() and _Thread_Restart_other().
+ */
+#define THREAD_LIFE_RESTARTING 0x2
 
-  /**
-   * @brief Indicates that thread life changes are deferred.
-   *
-   * If this flag is set, then the thread restart or delete requests are deferred
-   * until the protection and deferred change flags are cleared.  It is used by
-   * pthread_setcanceltype().
-   */
-  THREAD_LIFE_CHANGE_DEFERRED = 0x8,
+/**
+ * @brief Indicates that thread is terminating.
+ *
+ * If this flag is set, then a thread termination request is in pending.  See
+ * _Thread_Exit() and _Thread_Cancel().
+ */
+#define THREAD_LIFE_TERMINATING 0x4
 
-  /**
-   * @brief Indicates that thread is detached.
-   *
-   * If this flag is set, then the thread is detached.  Detached threads do not
-   * wait during termination for other threads to join.  See rtems_task_delete(),
-   * rtems_task_exit(), and pthread_detach().
-   */
-  THREAD_LIFE_DETACHED = 0x10
-} Thread_Life_state;
+/**
+ * @brief Indicates that thread life changes are deferred.
+ *
+ * If this flag is set, then the thread restart or delete requests are deferred
+ * until the protection and deferred change flags are cleared.  It is used by
+ * pthread_setcanceltype().
+ */
+#define THREAD_LIFE_CHANGE_DEFERRED 0x8
+
+/**
+ * @brief Indicates that thread is detached.
+ *
+ * If this flag is set, then the thread is detached.  Detached threads do not
+ * wait during termination for other threads to join.  See rtems_task_delete(),
+ * rtems_task_exit(), and pthread_detach().
+ */
+#define THREAD_LIFE_DETACHED 0x10
 
 /**
  * @brief Thread life control.
