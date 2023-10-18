@@ -105,21 +105,15 @@ static int flash_erase(
 {
   XNandPsu *nandpsu = get_flash_control(super)->nandpsu;
   rtems_status_code sc;
-  uint32_t BlockSize = nandpsu->Geometry.BlockSize;
-  uint32_t DeviceSize = nandpsu->Geometry.DeviceSize;
-  uint32_t BlockIndex;
-  uint32_t DeviceIndex;
+  uint64_t BlockSize = nandpsu->Geometry.BlockSize;
 
   if (offset > nandpsu->Geometry.DeviceSize) {
     return -EIO;
   }
 
-  DeviceIndex = offset / DeviceSize;
-  BlockIndex = (offset % DeviceSize) / BlockSize;
-
   /* Perform erase operation. */
   rtems_mutex_lock(&(get_flash_control(super)->access_lock));
-  sc = XNandPsu_EraseBlock(nandpsu, DeviceIndex, BlockIndex);
+  sc = XNandPsu_Erase(nandpsu, RTEMS_ALIGN_DOWN(offset, BlockSize), BlockSize);
   rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
   if (sc ) {
     return -EIO;
