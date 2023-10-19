@@ -1482,7 +1482,11 @@ s32 XNandPsu_Write(XNandPsu *InstancePtr, u64 Offset, u64 Length, u8 *SrcBuf)
 		}
 
 		Target = (u32) (OffsetVar/InstancePtr->Geometry.TargetSize);
+#ifdef __rtems__
+		{
+#else
 		if (Page > InstancePtr->Geometry.NumTargetPages) {
+#endif
 			Page %= InstancePtr->Geometry.NumTargetPages;
 		}
 
@@ -1597,7 +1601,11 @@ s32 XNandPsu_Read(XNandPsu *InstancePtr, u64 Offset, u64 Length, u8 *DestBuf)
 		}
 
 		Target = (u32) (OffsetVar/InstancePtr->Geometry.TargetSize);
+#ifdef __rtems__
+		{
+#else
 		if (Page > InstancePtr->Geometry.NumTargetPages) {
+#endif
 			Page %= InstancePtr->Geometry.NumTargetPages;
 		}
 		/* Check if partial read */
