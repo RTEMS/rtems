@@ -1714,13 +1714,21 @@ s32 XNandPsu_Erase(XNandPsu *InstancePtr, u64 Offset, u64 Length)
 
 	for (Block = StartBlock; Block < (StartBlock + NumBlocks); Block++) {
 		Target = Block/InstancePtr->Geometry.NumTargetBlocks;
+#ifdef __rtems__
+		u32 ModBlock = Block % InstancePtr->Geometry.NumTargetBlocks;
+#else
 		Block %= InstancePtr->Geometry.NumTargetBlocks;
+#endif
 		/* Don't erase bad block */
 		if (XNandPsu_IsBlockBad(InstancePtr, Block) ==
 							XST_SUCCESS)
 			continue;
 		/* Block Erase */
+#ifdef __rtems__
+		Status = XNandPsu_EraseBlock(InstancePtr, Target, ModBlock);
+#else
 		Status = XNandPsu_EraseBlock(InstancePtr, Target, Block);
+#endif
 		if (Status != XST_SUCCESS)
 			goto Out;
 
