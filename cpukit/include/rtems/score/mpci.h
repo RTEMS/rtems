@@ -40,9 +40,6 @@
 #define _RTEMS_SCORE_MPCI_H
 
 #include <rtems/score/mppkt.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus
 extern "C" {

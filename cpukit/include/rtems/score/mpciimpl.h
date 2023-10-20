@@ -39,6 +39,9 @@
 #define _RTEMS_SCORE_MPCIIMPL_H
 
 #include <rtems/score/mpci.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/threadq.h>
+#include <rtems/score/watchdog.h>
 #include <rtems/score/status.h>
 
 #ifdef __cplusplus

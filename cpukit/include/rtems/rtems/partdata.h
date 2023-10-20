@@ -116,6 +116,8 @@ typedef struct {
 extern Objects_Information _Partition_Information;
 
 #if defined(RTEMS_MULTIPROCESSING)
+struct _Thread_Control;
+
 /**
  * @brief Sends the extract proxy request.
  *
@@ -126,8 +128,8 @@ extern Objects_Information _Partition_Information;
  * @param id is the partition identifier.
  */
 void _Partition_MP_Send_extract_proxy (
-  Thread_Control *the_thread,
-  Objects_Id      id
+  struct _Thread_Control *the_thread,
+  Objects_Id              id
 );
 #endif
 
