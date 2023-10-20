@@ -45,7 +45,7 @@
 
 int rtems_tarfs_load(
   const char *mountpoint,
-  uint8_t    *tar_image,
+  const void *tar_image,
   size_t      tar_size
 )
 {
@@ -57,6 +57,7 @@ int rtems_tarfs_load(
   size_t                                len;
   Untar_HeaderContext                   ctx;
   unsigned long                         ptr;
+  const uint8_t                        *image;
 
   len = strlen( mountpoint );
   if ( len >= sizeof( buf ) - UNTAR_FILE_NAME_SIZE - 2 ) {
@@ -82,11 +83,12 @@ int rtems_tarfs_load(
   }
 
   ptr = 0;
+  image = tar_image;
 
   while ( ptr + 512 <= tar_size ) {
     int retval;
 
-    retval = Untar_ProcessHeader( &ctx, (const char *) &tar_image[ ptr ] );
+    retval = Untar_ProcessHeader( &ctx, (const char *) &image[ ptr ] );
     if ( retval != UNTAR_SUCCESSFUL ) {
       return -1;
     }
@@ -97,7 +99,7 @@ int rtems_tarfs_load(
       retval = IMFS_make_linearfile(
         ctx.file_path,
         ctx.mode,
-        &tar_image[ ptr ],
+        &image[ ptr ],
         ctx.file_size
       );
       if ( retval != 0 ) {

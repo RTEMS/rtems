@@ -477,7 +477,7 @@ extern void IMFS_fsunmount(
  */
 extern int rtems_tarfs_load(
    const char *mountpoint,
-   uint8_t *tar_image,
+   const void *tar_image,
    size_t tar_size
 );
 
