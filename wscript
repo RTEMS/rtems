@@ -999,8 +999,8 @@ class OptionItem(Item):
             cic.add_option(name)
         except configparser.NoOptionError:
             value = self.default_value(conf.env.ENABLE)
-            if value is None:
-                return value
+        if not value:
+                return None
         try:
             return eval(value)
         except Exception as e:
