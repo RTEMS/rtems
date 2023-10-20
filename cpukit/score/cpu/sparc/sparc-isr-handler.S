@@ -231,9 +231,7 @@ dont_do_the_window:
         bnz      dont_switch_stacks      ! No, then do not switch stacks
 
 #if defined(RTEMS_PROFILING)
-         sethi   %hi(_SPARC_Counter), %o5
-        ld       [%o5 + %lo(_SPARC_Counter)], %l4
-        call     %l4
+        call     SYM(_SPARC_Counter_read_ISR_disabled)
          nop
         mov      %o0, %o5
 #else
@@ -335,7 +333,7 @@ pil_fixed:
         cmp      %l7, 0
         bne      profiling_not_outer_most_exit
          nop
-        call     %l4                    ! Call _SPARC_Counter.counter_read
+        call     SYM(_SPARC_Counter_read_ISR_disabled)
          mov     %g1, %l4               ! Save previous interrupt status
         mov      %o0, %o2               ! o2 = 3rd arg = interrupt exit instant
         mov      %l3, %o1               ! o1 = 2nd arg = interrupt entry instant
