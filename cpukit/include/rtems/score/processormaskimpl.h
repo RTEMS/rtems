@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2016, 2017 embedded brains GmbH & Co. KG
+ * Copyright (C) 2016, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -211,6 +211,22 @@ static inline void _Processor_mask_And(
 )
 {
   __BIT_AND2( CPU_MAXIMUM_PROCESSORS, a, b, c );
+}
+
+/**
+ * @brief Performs a bitwise a = b & ~c.
+ *
+ * @param[out] a The processor mask that is set by this operation.
+ * @param b The first parameter of the ANDNOT-operation.
+ * @param c The second parameter of the ANDNOT-operation.
+ */
+static inline void _Processor_mask_And_not(
+  Processor_mask       *a,
+  const Processor_mask *b,
+  const Processor_mask *c
+)
+{
+  __BIT_ANDNOT2( CPU_MAXIMUM_PROCESSORS, a, b, c );
 }
 
 /**
