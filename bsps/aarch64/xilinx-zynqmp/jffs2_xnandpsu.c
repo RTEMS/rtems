@@ -130,6 +130,10 @@ static int flash_block_is_bad(
 {
   XNandPsu *nandpsu = get_flash_control(super)->nandpsu;
   uint32_t BlockIndex;
+  uint8_t BlockData;
+  uint8_t BlockShift;
+  uint8_t BlockType;
+  uint32_t BlockOffset;
 
   assert(bad);
 
@@ -137,10 +141,28 @@ static int flash_block_is_bad(
     return -EIO;
   }
 
+  *bad = true;
+
   BlockIndex = offset / nandpsu->Geometry.BlockSize;
 
   rtems_mutex_lock(&(get_flash_control(super)->access_lock));
-  *bad = (XNandPsu_IsBlockBad(nandpsu, BlockIndex) == XST_SUCCESS);
+
+  /* XNandPsu_IsBlockBad() is insufficient for this use case */
+  BlockOffset = BlockIndex >> XNANDPSU_BBT_BLOCK_SHIFT;
+  BlockShift = XNandPsu_BbtBlockShift(BlockIndex);
+  BlockData = nandpsu->Bbt[BlockOffset];
+  BlockType = (BlockData >> BlockShift) & XNANDPSU_BLOCK_TYPE_MASK;
+
+  if (BlockType == XNANDPSU_BLOCK_GOOD) {
+    *bad = false;
+  }
+
+  int TargetBlockIndex = BlockIndex % nandpsu->Geometry.NumTargetBlocks;
+  /* The last 4 blocks of every device target are reserved for the BBT */
+  if (nandpsu->Geometry.NumTargetBlocks - TargetBlockIndex <= 4) {
+    *bad = true;
+  }
+
   rtems_mutex_unlock(&(get_flash_control(super)->access_lock));
   return 0;
 }
