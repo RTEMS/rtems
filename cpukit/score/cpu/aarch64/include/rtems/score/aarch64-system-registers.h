@@ -11060,6 +11060,134 @@ static inline uint64_t _AArch64_Read_cntvct_el0( void )
   return value;
 }
 
+/* CPUMERRSR_EL1, CPU Memory Error Syndrome Register, Cortex-A53-specific */
+
+#define AARCH64_CPUMERRSR_EL1_ADDR_SHIFT 0
+#define AARCH64_CPUMERRSR_EL1_ADDR_MASK 0xfffLLU
+#define AARCH64_CPUMERRSR_EL1_ADDR( _val ) \
+  ( ( _val ) << AARCH64_CPUMERRSR_EL1_ADDR_SHIFT )
+#define AARCH64_CPUMERRSR_EL1_ADDR_GET( _reg ) \
+  ( ( ( _reg ) >> AARCH64_CPUMERRSR_EL1_ADDR_SHIFT ) \
+    & AARCH64_CPUMERRSR_EL1_ADDR_MASK )
+
+#define AARCH64_CPUMERRSR_EL1_CPUIDWAY_SHIFT 18
+#define AARCH64_CPUMERRSR_EL1_CPUIDWAY_MASK 0x7LLU
+#define AARCH64_CPUMERRSR_EL1_CPUIDWAY( _val ) \
+  ( ( _val ) << AARCH64_CPUMERRSR_EL1_CPUIDWAY_SHIFT )
+#define AARCH64_CPUMERRSR_EL1_CPUIDWAY_GET( _reg ) \
+  ( ( ( _reg ) >> AARCH64_CPUMERRSR_EL1_CPUIDWAY_SHIFT ) \
+    & AARCH64_CPUMERRSR_EL1_CPUIDWAY_MASK )
+
+#define AARCH64_CPUMERRSR_EL1_RAMID_SHIFT 24
+#define AARCH64_CPUMERRSR_EL1_RAMID_MASK 0x7fLLU
+#define AARCH64_CPUMERRSR_EL1_RAMID( _val ) \
+  ( ( _val ) << AARCH64_CPUMERRSR_EL1_RAMID_SHIFT )
+#define AARCH64_CPUMERRSR_EL1_RAMID_GET( _reg ) \
+  ( ( ( _reg ) >> AARCH64_CPUMERRSR_EL1_RAMID_SHIFT ) \
+    & AARCH64_CPUMERRSR_EL1_RAMID_MASK )
+
+#define AARCH64_CPUMERRSR_EL1_VALID 0x80000000LLU
+
+#define AARCH64_CPUMERRSR_EL1_REPEATERR_SHIFT 32
+#define AARCH64_CPUMERRSR_EL1_REPEATERR_MASK 0xffLLU
+#define AARCH64_CPUMERRSR_EL1_REPEATERR( _val ) \
+  ( ( _val ) << AARCH64_CPUMERRSR_EL1_REPEATERR_SHIFT )
+#define AARCH64_CPUMERRSR_EL1_REPEATERR_GET( _reg ) \
+  ( ( ( _reg ) >> AARCH64_CPUMERRSR_EL1_REPEATERR_SHIFT ) \
+    & AARCH64_CPUMERRSR_EL1_REPEATERR_MASK )
+
+#define AARCH64_CPUMERRSR_EL1_OTHERERR_SHIFT 40
+#define AARCH64_CPUMERRSR_EL1_OTHERERR_MASK 0xffLLU
+#define AARCH64_CPUMERRSR_EL1_OTHERERR( _val ) \
+  ( ( _val ) << AARCH64_CPUMERRSR_EL1_OTHERERR_SHIFT )
+#define AARCH64_CPUMERRSR_EL1_OTHERERR_GET( _reg ) \
+  ( ( ( _reg ) >> AARCH64_CPUMERRSR_EL1_OTHERERR_SHIFT ) \
+    & AARCH64_CPUMERRSR_EL1_OTHERERR_MASK )
+
+#define AARCH64_CPUMERRSR_EL1_FATAL 0x8000000000000000LLU
+
+static inline uint64_t _AArch64_Read_cpumerrsr_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, S3_1_c15_c2_2" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_cpumerrsr_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr S3_1_c15_c2_2, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+/* L2MERRSR_EL1, CPU Memory Error Syndrome Register, Cortex-A53-specific */
+
+#define AARCH64_L2MERRSR_EL1_ADDR_SHIFT 3
+#define AARCH64_L2MERRSR_EL1_ADDR_MASK 0x3fffLLU
+#define AARCH64_L2MERRSR_EL1_ADDR( _val ) \
+  ( ( _val ) << AARCH64_L2MERRSR_EL1_ADDR_SHIFT )
+#define AARCH64_L2MERRSR_EL1_ADDR_GET( _reg ) \
+  ( ( ( _reg ) >> AARCH64_L2MERRSR_EL1_ADDR_SHIFT ) \
+    & AARCH64_L2MERRSR_EL1_ADDR_MASK )
+
+#define AARCH64_L2MERRSR_EL1_CPUIDWAY_SHIFT 18
+#define AARCH64_L2MERRSR_EL1_CPUIDWAY_MASK 0xfLLU
+#define AARCH64_L2MERRSR_EL1_CPUIDWAY( _val ) \
+  ( ( _val ) << AARCH64_L2MERRSR_EL1_CPUIDWAY_SHIFT )
+#define AARCH64_L2MERRSR_EL1_CPUIDWAY_GET( _reg ) \
+  ( ( ( _reg ) >> AARCH64_L2MERRSR_EL1_CPUIDWAY_SHIFT ) \
+    & AARCH64_L2MERRSR_EL1_CPUIDWAY_MASK )
+
+#define AARCH64_L2MERRSR_EL1_RAMID_SHIFT 24
+#define AARCH64_L2MERRSR_EL1_RAMID_MASK 0x7fLLU
+#define AARCH64_L2MERRSR_EL1_RAMID( _val ) \
+  ( ( _val ) << AARCH64_L2MERRSR_EL1_RAMID_SHIFT )
+#define AARCH64_L2MERRSR_EL1_RAMID_GET( _reg ) \
+  ( ( ( _reg ) >> AARCH64_L2MERRSR_EL1_RAMID_SHIFT ) \
+    & AARCH64_L2MERRSR_EL1_RAMID_MASK )
+
+#define AARCH64_L2MERRSR_EL1_VALID 0x80000000LLU
+
+#define AARCH64_L2MERRSR_EL1_REPEATERR_SHIFT 32
+#define AARCH64_L2MERRSR_EL1_REPEATERR_MASK 0xffLLU
+#define AARCH64_L2MERRSR_EL1_REPEATERR( _val ) \
+  ( ( _val ) << AARCH64_L2MERRSR_EL1_REPEATERR_SHIFT )
+#define AARCH64_L2MERRSR_EL1_REPEATERR_GET( _reg ) \
+  ( ( ( _reg ) >> AARCH64_L2MERRSR_EL1_REPEATERR_SHIFT ) \
+    & AARCH64_L2MERRSR_EL1_REPEATERR_MASK )
+
+#define AARCH64_L2MERRSR_EL1_OTHERERR_SHIFT 40
+#define AARCH64_L2MERRSR_EL1_OTHERERR_MASK 0xffLLU
+#define AARCH64_L2MERRSR_EL1_OTHERERR( _val ) \
+  ( ( _val ) << AARCH64_L2MERRSR_EL1_OTHERERR_SHIFT )
+#define AARCH64_L2MERRSR_EL1_OTHERERR_GET( _reg ) \
+  ( ( ( _reg ) >> AARCH64_L2MERRSR_EL1_OTHERERR_SHIFT ) \
+    & AARCH64_L2MERRSR_EL1_OTHERERR_MASK )
+
+#define AARCH64_L2MERRSR_EL1_FATAL 0x8000000000000000LLU
+
+static inline uint64_t _AArch64_Read_l2merrsr_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, S3_1_c15_c2_3" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_l2merrsr_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr S3_1_c15_c2_3, %0" : : "r" ( value ) : "memory"
+  );
+}
+
 #ifdef __cplusplus
 }
 #endif
