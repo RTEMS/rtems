@@ -1,0 +1,97 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+cflags: []
+copyrights:
+- Copyright (C) 2022 Critical Software SA
+cppflags: []
+cxxflags: []
+enabled-by: BUILD_ISVVTESTS
+includes:
+- ${BSP_INCLUDES}
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: optgr712rc
+- role: build-dependency
+  uid: optgr740
+- role: build-dependency
+  uid: 00_uni_test_reference
+- role: build-dependency
+  uid: 00_mrsp_omip_uni
+- role: build-dependency
+  uid: 01_basic_smp_multi
+- role: build-dependency
+  uid: 02_core_affinity_multi
+- role: build-dependency
+  uid: 03_semaphores_multi
+- role: build-dependency
+  uid: 04_messages_multi
+- role: build-dependency
+  uid: 05_priorities_multi
+- role: build-dependency
+  uid: 06_rate_monotonic_multi
+- role: build-dependency
+  uid: 07_timer_multi
+- role: build-dependency
+  uid: 10_barrier_multi
+- role: build-dependency
+  uid: 10_barrier_multi_timeout
+- role: build-dependency
+  uid: 11_mrsp_multi
+- role: build-dependency
+  uid: 12_omip_multi
+- role: build-dependency
+  uid: 13_priority_inheritance_enabled
+- role: build-dependency
+  uid: 13_priority_inheritance_disabled
+- role: build-dependency
+  uid: 14_immediate_ceiling_enabled
+- role: build-dependency
+  uid: 14_immediate_ceiling_disabled
+- role: build-dependency
+  uid: 15_clock_manager_undefined_behaviour
+- role: build-dependency
+  uid: 16_task_manager_undefined_behaviour
+- role: build-dependency
+  uid: 17_barrier_manager_undefined_behaviour
+- role: build-dependency
+  uid: 18_event_manager_undefined_behaviour
+- role: build-dependency
+  uid: 19_message_manager_undefined_behaviour
+- role: build-dependency
+  uid: 20_partition_manager_undefined_behaviour
+- role: build-dependency
+  uid: 21_semaphore_manager_undefined_behaviour
+- role: build-dependency
+  uid: 22_base_defs_undefined_behaviour
+- role: build-dependency
+  uid: 23_1_uni_cache_way_locking_disabled
+- role: build-dependency
+  uid: 23_2_multi_cache_way_locking_disabled
+- role: build-dependency
+  uid: 23_3_multi_cache_way_locking_enabled
+- role: build-dependency
+  uid: 23_4_uni_cache_split_transactions_disabled
+- role: build-dependency
+  uid: 23_5_multi_cache_split_transactions_disabled
+- role: build-dependency
+  uid: 23_6_multi_cache_split_transactions_enabled
+- role: build-dependency
+  uid: 23_7_uni_cache_repl_policy_l2_lru
+- role: build-dependency
+  uid: 23_8_multi_cache_repl_policy_l2_lru
+- role: build-dependency
+  uid: 23_9_multi_cache_repl_policy_l2_random
+- role: build-dependency
+  uid: 23_10_uni_cache_l2_enabled
+- role: build-dependency
+  uid: 23_11_multi_cache_l2_enabled
+- role: build-dependency
+  uid: 23_12_multi_cache_l2_disable
+type: build
+use-after:
+- rtemstest
+- rtemscpu
+- rtemsbsp
+use-before: []

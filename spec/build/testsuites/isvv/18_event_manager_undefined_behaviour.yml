@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2022 Critical Software SA
+cppflags: []
+cxxflags: []
+enabled-by: RTEMS_SMP
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/isvv/18_event_manager_undefined_behaviour/event_manager_undefined_behaviour.c
+- testsuites/isvv/shared/utils.c
+- testsuites/isvv/shared/isvv_rtems_aux.c
+stlib: []
+target: testsuites/isvv/event_manager_undefined_behaviour.exe
+type: build
+use-after:
+- isvv
+use-before: []

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-value: -Dgr712rc=1
+- env-assign: null
+- env-append: CFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2022 Critical Software SA
+default:
+- enabled-by: true
+  value: null
+description: |
+  Enable flags to configure ISVV tests for gr712rc
+enabled-by: sparc/gr712rc
+links: []
+name: ISVV_FLAGS
+type: build
