@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2022 Critical Software SA
+cppflags: [ -DGR740_ESA_BOARD ]
+cxxflags: []
+enabled-by:
+  and:
+  - RTEMS_SMP
+  - not: sparc/gr712rc
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/isvv/23.6_multi_cache_split_transactions_enabled/multi_cache_split_transactions_enabled.c
+- testsuites/isvv/shared/utils.c
+- testsuites/isvv/shared/isvv_rtems_aux.c
+- testsuites/isvv/shared/low_level_utils.c
+stlib: []
+target: testsuites/isvv/multi_cache_split_transactions_enabled.exe
+type: build
+use-after:
+- isvv
+use-before: []

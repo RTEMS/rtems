@@ -23,6 +23,8 @@ links:
 - role: build-dependency
   uid: optfs
 - role: build-dependency
+  uid: optisvv
+- role: build-dependency
   uid: optlib
 - role: build-dependency
   uid: optlibdl
@@ -54,6 +56,8 @@ links:
   uid: benchmarks/grp
 - role: build-dependency
   uid: fstests/grp
+- role: build-dependency
+  uid: isvv/grp
 - role: build-dependency
   uid: libtests/grp
 - role: build-dependency
