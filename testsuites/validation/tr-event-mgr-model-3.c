@@ -244,7 +244,7 @@ static void RtemsModelEventsMgr_Setup3(
   prio = 0;
   sc = rtems_task_set_priority( RTEMS_SELF, PRIO_NORMAL, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_HIGH );
+  T_eq_u32( prio, PRIO_DEFAULT );
 
   sc = rtems_task_construct( &WorkerConfig3, &ctx->worker_id );
   T_log( T_NORMAL, "Construct Worker, sc = %x", sc );
