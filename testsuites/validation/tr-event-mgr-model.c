@@ -185,7 +185,7 @@ static void RtemsModelEventsMgr_Teardown(
   T_log( T_NORMAL, "Runner Teardown" );
 
   prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
+  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_DEFAULT, &prio );
   T_rsc_success( sc );
   T_eq_u32( prio, PRIO_NORMAL );
 
