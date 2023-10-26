@@ -5,9 +5,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by:
-- BUILD_TESTS
-- BUILD_PSXTESTS
+enabled-by: BUILD_PSXTESTS
 includes:
 - testsuites/support/include
 - testsuites/psxtests/include

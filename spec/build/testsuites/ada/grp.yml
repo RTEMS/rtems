@@ -8,9 +8,7 @@ cxxflags: []
 enabled-by:
 - and:
   - __RTEMS_ADA__
-  - or:
-    - BUILD_TESTS
-    - BUILD_ADATESTS
+  - BUILD_ADATESTS
 includes: []
 install: []
 ldflags:

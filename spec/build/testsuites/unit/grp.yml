@@ -5,9 +5,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by:
-- BUILD_TESTS
-- BUILD_UNITTESTS
+enabled-by: BUILD_UNITTESTS
 includes:
 - testsuites/support/include
 install: []

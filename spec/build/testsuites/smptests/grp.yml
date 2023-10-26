@@ -6,11 +6,9 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by:
-- and:
+  and:
   - RTEMS_SMP
-  - or:
-    - BUILD_TESTS
-    - BUILD_SMPTESTS
+  - BUILD_SMPTESTS
 includes:
 - testsuites/support/include
 install: []
