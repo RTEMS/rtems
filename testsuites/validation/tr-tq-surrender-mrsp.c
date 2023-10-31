@@ -353,7 +353,7 @@ static void ScoreTqReqSurrenderMrsp_Pre_Suspended_Prepare(
   switch ( state ) {
     case ScoreTqReqSurrenderMrsp_Pre_Suspended_Yes: {
       /*
-       * Whiel the new owner is suspended.
+       * While the new owner is suspended.
        */
       ctx->suspended = true;
       break;
@@ -361,7 +361,7 @@ static void ScoreTqReqSurrenderMrsp_Pre_Suspended_Prepare(
 
     case ScoreTqReqSurrenderMrsp_Pre_Suspended_No: {
       /*
-       * Whiel the new owner is not suspended.
+       * While the new owner is not suspended.
        */
       ctx->suspended = false;
       break;

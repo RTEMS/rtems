@@ -246,7 +246,7 @@ static void RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_Invalid: {
       /*
-       * While the ``cpu_index`` parameter greater than or equal to the
+       * While the ``cpu_index`` parameter is greater than or equal to the
        * processor maximum.
        */
       ctx->cpu_index = rtems_scheduler_get_processor_maximum();
@@ -255,7 +255,7 @@ static void RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_Prepare(
 
     case RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_Valid: {
       /*
-       * While the ``cpu_index`` parameter less than the processor maximum.
+       * While the ``cpu_index`` parameter is less than the processor maximum.
        */
       if ( ctx->cpu_has_scheduler ) {
         ctx->cpu_index = 0;
