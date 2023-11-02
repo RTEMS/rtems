@@ -51,19 +51,360 @@ test-actions:
 - action-brief: |
     Check the return value of __builtin_ctz() for a sample set of inputs.
   action-code: |
-    volatile int n;
+    volatile unsigned int n;
 
-    n = 1;
+    n = 1U;
     T_eq_int( __builtin_ctz( n ), 0 );
 
-    n = 1 << 31;
+    n = 1U << 31;
     T_eq_int( __builtin_ctz( n ), 31 );
 
-    n = ~0;
+    n = ~0U;
     T_eq_int( __builtin_ctz( n ), 0 );
   checks: []
   links:
   - name: __builtin_ctz
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_ctzll() for a sample set of inputs.
+  action-code: |
+    volatile unsigned long long n;
+
+    n = 1ULL;
+    T_eq_int( __builtin_ctzll( n ), 0 );
+
+    n = 1ULL << 31;
+    T_eq_int( __builtin_ctzll( n ), 31 );
+
+    n = 1ULL << 32;
+    T_eq_int( __builtin_ctzll( n ), 32 );
+
+    n = 1ULL << 63;
+    T_eq_int( __builtin_ctzll( n ), 63 );
+
+    n = ~0ULL;
+    T_eq_int( __builtin_ctzll( n ), 0 );
+  checks: []
+  links:
+  - name: __builtin_ctzll
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_ffs() for a sample set of inputs.
+  action-code: |
+    volatile unsigned int n;
+
+    n = 1U;
+    T_eq_int( __builtin_ffs( n ), 1 );
+
+    n = 1U << 31;
+    T_eq_int( __builtin_ffs( n ), 32 );
+
+    n = 0U;
+    T_eq_int( __builtin_ffs( n ), 0 );
+  checks: []
+  links:
+  - name: __builtin_ffs
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_ffsll() for a sample set of inputs.
+  action-code: |
+    volatile unsigned long long n;
+
+    n = 1ULL;
+    T_eq_int( __builtin_ffsll( n ), 1 );
+
+    n = 1ULL << 31;
+    T_eq_int( __builtin_ffsll( n ), 32 );
+
+    n = 1ULL << 32;
+    T_eq_int( __builtin_ffsll( n ), 33 );
+
+    n = 1ULL << 63;
+    T_eq_int( __builtin_ffsll( n ), 64 );
+
+    n = 0ULL;
+    T_eq_int( __builtin_ffsll( n ), 0 );
+  checks: []
+  links:
+  - name: __builtin_ffsll
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_parity() for a sample set of inputs.
+  action-code: |
+    volatile unsigned int n;
+
+    n = 1U;
+    T_eq_int( __builtin_parity( n ), 1 );
+
+    n = ~0U;
+    T_eq_int( __builtin_parity( n ), 0 );
+  checks: []
+  links:
+  - name: __builtin_parity
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_parityll() for a sample set of inputs.
+  action-code: |
+    volatile unsigned long long n;
+
+    n = 1ULL;
+    T_eq_int( __builtin_parityll( n ), 1 );
+
+    n = ~0ULL;
+    T_eq_int( __builtin_parityll( n ), 0 );
+  checks: []
+  links:
+  - name: __builtin_parityll
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_popcount() for a sample set of inputs.
+  action-code: |
+    volatile unsigned int n;
+
+    n = 0U;
+    T_eq_int( __builtin_popcount( n ), 0 );
+
+    n = 1U;
+    T_eq_int( __builtin_popcount( n ), 1 );
+
+    n = ~0U;
+    T_eq_int( __builtin_popcount( n ), 32 );
+  checks: []
+  links:
+  - name: __builtin_popcount
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_popcountll() for a sample set of inputs.
+  action-code: |
+    volatile unsigned long long n;
+
+    n = 0ULL;
+    T_eq_int( __builtin_popcountll( n ), 0 );
+
+    n = 1ULL;
+    T_eq_int( __builtin_popcountll( n ), 1 );
+
+    n = ~0ULL;
+    T_eq_int( __builtin_popcountll( n ), 64 );
+  checks: []
+  links:
+  - name: __builtin_popcountll
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_bswap32() for a sample set of inputs.
+  action-code: |
+    volatile uint32_t n;
+
+    n = UINT32_C( 0 );
+    T_eq_u32( __builtin_bswap32( n ), n );
+
+    n = UINT32_C( 1 );
+    T_eq_u32( __builtin_bswap32( n ), n << 24 );
+
+    n = UINT32_C( 0x12345678 );
+    T_eq_u32( __builtin_bswap32( n ), UINT32_C( 0x78563412 ) );
+
+    n = ~UINT32_C( 0 );
+    T_eq_u32( __builtin_bswap32( n ), n );
+  checks: []
+  links:
+  - name: __builtin_bswap32
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check the return value of __builtin_bswap64() for a sample set of inputs.
+  action-code: |
+    volatile uint64_t n;
+
+    n = UINT64_C( 0 );
+    T_eq_u64( __builtin_bswap64( n ), n );
+
+    n = UINT64_C( 1 );
+    T_eq_u64( __builtin_bswap64( n ), n << 56 );
+
+    n = UINT64_C( 0x123456789abcdef0 );
+    T_eq_u64( __builtin_bswap64( n ), UINT64_C( 0xf0debc9a78563412 ) );
+
+    n = ~UINT64_C( 0 );
+    T_eq_u64( __builtin_bswap64( n ), n );
+  checks: []
+  links:
+  - name: __builtin_popcount64
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check signed 64-bit comparisons for a sample set of values.
+  action-code: |
+    volatile int64_t a;
+    volatile int64_t b;
+
+    a = INT64_C( 0 );
+    b = INT64_C( 0 );
+    T_false( a < b );
+
+    a = INT64_C( 0 );
+    b = INT64_C( 1 );
+    T_true( a < b );
+
+    a = INT64_C( 0x123456789abcdef0 );
+    b = INT64_C( 0xf0debc9a78563412 );
+    T_false( a < b );
+
+    a = INT64_C( 0xf0debc9a78563412 );
+    b = INT64_C( 0x123456789abcdef0 );
+    T_true( a < b );
+  checks: []
+  links:
+  - name: __cmpdi2
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check unsigned 64-bit comparisons for a sample set of values.
+  action-code: |
+    volatile uint64_t a;
+    volatile uint64_t b;
+
+    a = UINT64_C( 0 );
+    b = UINT64_C( 0 );
+    T_false( a < b );
+
+    a = UINT64_C( 0 );
+    b = UINT64_C( 1 );
+    T_true( a < b );
+
+    a = UINT64_C( 0x123456789abcdef0 );
+    b = UINT64_C( 0xf0debc9a78563412 );
+    T_true( a < b );
+
+    a = UINT64_C( 0xf0debc9a78563412 );
+    b = UINT64_C( 0x123456789abcdef0 );
+    T_false( a < b );
+  checks: []
+  links:
+  - name: __ucmpdi2
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check signed 64-bit arithmetic left shift for a sample set of values.
+  action-code: |
+    volatile int64_t i;
+    volatile int s;
+
+    i = INT64_C( 1 );
+    s = 0;
+    T_eq_i64( i << s, INT64_C( 1 ) );
+
+    i = -INT64_C( 1 );
+    s = 0;
+    T_eq_i64( i << s, -INT64_C( 1 ) );
+
+    i = INT64_C( 1 );
+    s = 1;
+    T_eq_i64( i << s, INT64_C( 2 ) );
+
+    i = -INT64_C( 1 );
+    s = 1;
+    T_eq_i64( i << s, -INT64_C( 2 ) );
+  checks: []
+  links:
+  - name: __ashldi2
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check signed 64-bit arithmetic right shift for a sample set of values.
+  action-code: |
+    volatile int64_t i;
+    volatile int s;
+
+    i = INT64_C( 1 );
+    s = 0;
+    T_eq_i64( i >> s, INT64_C( 1 ) );
+
+    i = -INT64_C( 1 );
+    s = 0;
+    T_eq_i64( i >> s, -INT64_C( 1 ) );
+
+    i = INT64_C( 2 );
+    s = 1;
+    T_eq_i64( i >> s, INT64_C( 1 ) );
+
+    i = -INT64_C( 2 );
+    s = 1;
+    T_eq_i64( i >> s, -INT64_C( 1 ) );
+  checks: []
+  links:
+  - name: __ashrdi2
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check unsigned 64-bit logical right shift for a sample set of values.
+  action-code: |
+    volatile uint64_t i;
+    volatile int s;
+
+    i = UINT64_C( 1 );
+    s = 0;
+    T_eq_u64( i >> s, UINT64_C( 1 ) );
+
+    i = -UINT64_C( 1 );
+    s = 0;
+    T_eq_u64( i >> s, UINT64_C( 0xffffffffffffffff ) );
+
+    i = UINT64_C( 2 );
+    s = 1;
+    T_eq_u64( i >> s, UINT64_C( 1 ) );
+
+    i = -UINT64_C( 2 );
+    s = 1;
+    T_eq_u64( i >> s, UINT64_C( 0x7fffffffffffffff ) );
+  checks: []
+  links:
+  - name: __lshrdi2
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check signed 64-bit multiplication for a sample set of values.
+  action-code: |
+    volatile int64_t a;
+    volatile int64_t b;
+
+    a = INT64_C( 1 );
+    b = INT64_C( 1 );
+    T_eq_i64( a * b, INT64_C( 1 ) );
+
+    a = INT64_C( 1 );
+    b = INT64_C( 0 );
+    T_eq_i64( a * b, INT64_C( 0 ) );
+
+    a = INT64_C( 0 );
+    b = INT64_C( 1 );
+    T_eq_i64( a * b, INT64_C( 0 ) );
+  checks: []
+  links:
+  - name: __negdi2
+    role: unit-test
+    uid: ../../if/domain
+- action-brief: |
+    Check signed 64-bit negation for a sample set of values.
+  action-code: |
+    volatile int64_t i;
+
+    i = INT64_C( 1 );
+    T_eq_i64( -i, -INT64_C( 1 ) );
+
+    i = -INT64_C( 1 );
+    T_eq_i64( -i, INT64_C( 1 ) );
+  checks: []
+  links:
+  - name: __negdi2
     role: unit-test
     uid: ../../if/domain
 - action-brief: |
@@ -423,7 +764,7 @@ test-actions:
     T_eq_u64( n % d, UINT64_C( 0 ) );
   checks: []
   links:
-  - name: __moddi3
+  - name: __umoddi3
     role: unit-test
     uid: ../../if/domain
 test-brief: |
