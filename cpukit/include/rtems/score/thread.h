@@ -719,7 +719,7 @@ typedef struct {
  * The individual state flags must be a power of two to allow use of bit
  * operations to manipulate and evaluate the thread life state.
  */
-typedef uint32_t Thread_Life_state;
+typedef unsigned int Thread_Life_state;
 
 /**
  * @brief Indicates that the thread life is protected.
@@ -728,7 +728,7 @@ typedef uint32_t Thread_Life_state;
  * until the protection and deferred change flags are cleared.  It is used by
  * _Thread_Set_life_protection().
  */
-#define THREAD_LIFE_PROTECTED 0x1
+#define THREAD_LIFE_PROTECTED 0x1U
 
 /**
  * @brief Indicates that thread is restarting.
@@ -736,7 +736,7 @@ typedef uint32_t Thread_Life_state;
  * If this flag is set, then a thread restart request is in pending. See
  * _Thread_Restart_self() and _Thread_Restart_other().
  */
-#define THREAD_LIFE_RESTARTING 0x2
+#define THREAD_LIFE_RESTARTING 0x2U
 
 /**
  * @brief Indicates that thread is terminating.
@@ -744,7 +744,7 @@ typedef uint32_t Thread_Life_state;
  * If this flag is set, then a thread termination request is in pending.  See
  * _Thread_Exit() and _Thread_Cancel().
  */
-#define THREAD_LIFE_TERMINATING 0x4
+#define THREAD_LIFE_TERMINATING 0x4U
 
 /**
  * @brief Indicates that thread life changes are deferred.
@@ -753,7 +753,7 @@ typedef uint32_t Thread_Life_state;
  * until the protection and deferred change flags are cleared.  It is used by
  * pthread_setcanceltype().
  */
-#define THREAD_LIFE_CHANGE_DEFERRED 0x8
+#define THREAD_LIFE_CHANGE_DEFERRED 0x8U
 
 /**
  * @brief Indicates that thread is detached.
@@ -762,7 +762,7 @@ typedef uint32_t Thread_Life_state;
  * wait during termination for other threads to join.  See rtems_task_delete(),
  * rtems_task_exit(), and pthread_detach().
  */
-#define THREAD_LIFE_DETACHED 0x10
+#define THREAD_LIFE_DETACHED 0x10U
 
 /**
  * @brief Thread life control.
