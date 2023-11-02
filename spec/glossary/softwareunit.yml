@@ -8,9 +8,9 @@ links:
   uid: ../glossary-general
 term: software unit
 text: |
-  This term is defined by ECSS-E-ST-40C 3.2.24 as a "separately compilable
-  piece of source code".  For this project a *software unit* shall be any of
-  the following items and nothing else:
+  This term is defined by the ${ecss:/term} standard ECSS-E-ST-40C in clause
+  3.2.24 as a "separately compilable piece of source code".  For this project a
+  *software unit* shall be any of the following items and nothing else:
 
   * ${assemblerlanguage:/term} function in a
     ${sourcecode:/term} file

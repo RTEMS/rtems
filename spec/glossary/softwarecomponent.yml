@@ -8,9 +8,9 @@ links:
   uid: ../glossary-general
 term: software component
 text: |
-  This term is defined by ECSS-E-ST-40C 3.2.28 as a "part of a software
-  system".  For this project a *software component* shall be any of the
-  following items and nothing else:
+  This term is defined by the ${ecss:/term} standard ECSS-E-ST-40C in clause
+  3.2.28 as a "part of a software system".  For this project a *software
+  component* shall be any of the following items and nothing else:
 
   * ${softwareunit:/term}
 
