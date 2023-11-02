@@ -78,6 +78,39 @@
  *
  * - Check the return value of __builtin_ctz() for a sample set of inputs.
  *
+ * - Check the return value of __builtin_ctzll() for a sample set of inputs.
+ *
+ * - Check the return value of __builtin_ffs() for a sample set of inputs.
+ *
+ * - Check the return value of __builtin_ffsll() for a sample set of inputs.
+ *
+ * - Check the return value of __builtin_parity() for a sample set of inputs.
+ *
+ * - Check the return value of __builtin_parityll() for a sample set of inputs.
+ *
+ * - Check the return value of __builtin_popcount() for a sample set of inputs.
+ *
+ * - Check the return value of __builtin_popcountll() for a sample set of
+ *   inputs.
+ *
+ * - Check the return value of __builtin_bswap32() for a sample set of inputs.
+ *
+ * - Check the return value of __builtin_bswap64() for a sample set of inputs.
+ *
+ * - Check signed 64-bit comparisons for a sample set of values.
+ *
+ * - Check unsigned 64-bit comparisons for a sample set of values.
+ *
+ * - Check signed 64-bit arithmetic left shift for a sample set of values.
+ *
+ * - Check signed 64-bit arithmetic right shift for a sample set of values.
+ *
+ * - Check unsigned 64-bit logical right shift for a sample set of values.
+ *
+ * - Check signed 64-bit multiplication for a sample set of values.
+ *
+ * - Check signed 64-bit negation for a sample set of values.
+ *
  * - Check signed 64-bit divisions for a sample set of values.
  *
  * - Check unsigned 64-bit divisions for a sample set of values.
@@ -180,22 +213,356 @@ static void CompilerUnitBuiltins_Action_1( void )
  */
 static void CompilerUnitBuiltins_Action_2( void )
 {
-  volatile int n;
+  volatile unsigned int n;
 
-  n = 1;
+  n = 1U;
   T_eq_int( __builtin_ctz( n ), 0 );
 
-  n = 1 << 31;
+  n = 1U << 31;
   T_eq_int( __builtin_ctz( n ), 31 );
 
-  n = ~0;
+  n = ~0U;
   T_eq_int( __builtin_ctz( n ), 0 );
+}
+
+/**
+ * @brief Check the return value of __builtin_ctzll() for a sample set of
+ *   inputs.
+ */
+static void CompilerUnitBuiltins_Action_3( void )
+{
+  volatile unsigned long long n;
+
+  n = 1ULL;
+  T_eq_int( __builtin_ctzll( n ), 0 );
+
+  n = 1ULL << 31;
+  T_eq_int( __builtin_ctzll( n ), 31 );
+
+  n = 1ULL << 32;
+  T_eq_int( __builtin_ctzll( n ), 32 );
+
+  n = 1ULL << 63;
+  T_eq_int( __builtin_ctzll( n ), 63 );
+
+  n = ~0ULL;
+  T_eq_int( __builtin_ctzll( n ), 0 );
+}
+
+/**
+ * @brief Check the return value of __builtin_ffs() for a sample set of inputs.
+ */
+static void CompilerUnitBuiltins_Action_4( void )
+{
+  volatile unsigned int n;
+
+  n = 1U;
+  T_eq_int( __builtin_ffs( n ), 1 );
+
+  n = 1U << 31;
+  T_eq_int( __builtin_ffs( n ), 32 );
+
+  n = 0U;
+  T_eq_int( __builtin_ffs( n ), 0 );
+}
+
+/**
+ * @brief Check the return value of __builtin_ffsll() for a sample set of
+ *   inputs.
+ */
+static void CompilerUnitBuiltins_Action_5( void )
+{
+  volatile unsigned long long n;
+
+  n = 1ULL;
+  T_eq_int( __builtin_ffsll( n ), 1 );
+
+  n = 1ULL << 31;
+  T_eq_int( __builtin_ffsll( n ), 32 );
+
+  n = 1ULL << 32;
+  T_eq_int( __builtin_ffsll( n ), 33 );
+
+  n = 1ULL << 63;
+  T_eq_int( __builtin_ffsll( n ), 64 );
+
+  n = 0ULL;
+  T_eq_int( __builtin_ffsll( n ), 0 );
+}
+
+/**
+ * @brief Check the return value of __builtin_parity() for a sample set of
+ *   inputs.
+ */
+static void CompilerUnitBuiltins_Action_6( void )
+{
+  volatile unsigned int n;
+
+  n = 1U;
+  T_eq_int( __builtin_parity( n ), 1 );
+
+  n = ~0U;
+  T_eq_int( __builtin_parity( n ), 0 );
+}
+
+/**
+ * @brief Check the return value of __builtin_parityll() for a sample set of
+ *   inputs.
+ */
+static void CompilerUnitBuiltins_Action_7( void )
+{
+  volatile unsigned long long n;
+
+  n = 1ULL;
+  T_eq_int( __builtin_parityll( n ), 1 );
+
+  n = ~0ULL;
+  T_eq_int( __builtin_parityll( n ), 0 );
+}
+
+/**
+ * @brief Check the return value of __builtin_popcount() for a sample set of
+ *   inputs.
+ */
+static void CompilerUnitBuiltins_Action_8( void )
+{
+  volatile unsigned int n;
+
+  n = 0U;
+  T_eq_int( __builtin_popcount( n ), 0 );
+
+  n = 1U;
+  T_eq_int( __builtin_popcount( n ), 1 );
+
+  n = ~0U;
+  T_eq_int( __builtin_popcount( n ), 32 );
+}
+
+/**
+ * @brief Check the return value of __builtin_popcountll() for a sample set of
+ *   inputs.
+ */
+static void CompilerUnitBuiltins_Action_9( void )
+{
+  volatile unsigned long long n;
+
+  n = 0ULL;
+  T_eq_int( __builtin_popcountll( n ), 0 );
+
+  n = 1ULL;
+  T_eq_int( __builtin_popcountll( n ), 1 );
+
+  n = ~0ULL;
+  T_eq_int( __builtin_popcountll( n ), 64 );
+}
+
+/**
+ * @brief Check the return value of __builtin_bswap32() for a sample set of
+ *   inputs.
+ */
+static void CompilerUnitBuiltins_Action_10( void )
+{
+  volatile uint32_t n;
+
+  n = UINT32_C( 0 );
+  T_eq_u32( __builtin_bswap32( n ), n );
+
+  n = UINT32_C( 1 );
+  T_eq_u32( __builtin_bswap32( n ), n << 24 );
+
+  n = UINT32_C( 0x12345678 );
+  T_eq_u32( __builtin_bswap32( n ), UINT32_C( 0x78563412 ) );
+
+  n = ~UINT32_C( 0 );
+  T_eq_u32( __builtin_bswap32( n ), n );
+}
+
+/**
+ * @brief Check the return value of __builtin_bswap64() for a sample set of
+ *   inputs.
+ */
+static void CompilerUnitBuiltins_Action_11( void )
+{
+  volatile uint64_t n;
+
+  n = UINT64_C( 0 );
+  T_eq_u64( __builtin_bswap64( n ), n );
+
+  n = UINT64_C( 1 );
+  T_eq_u64( __builtin_bswap64( n ), n << 56 );
+
+  n = UINT64_C( 0x123456789abcdef0 );
+  T_eq_u64( __builtin_bswap64( n ), UINT64_C( 0xf0debc9a78563412 ) );
+
+  n = ~UINT64_C( 0 );
+  T_eq_u64( __builtin_bswap64( n ), n );
+}
+
+/**
+ * @brief Check signed 64-bit comparisons for a sample set of values.
+ */
+static void CompilerUnitBuiltins_Action_12( void )
+{
+  volatile int64_t a;
+  volatile int64_t b;
+
+  a = INT64_C( 0 );
+  b = INT64_C( 0 );
+  T_false( a < b );
+
+  a = INT64_C( 0 );
+  b = INT64_C( 1 );
+  T_true( a < b );
+
+  a = INT64_C( 0x123456789abcdef0 );
+  b = INT64_C( 0xf0debc9a78563412 );
+  T_false( a < b );
+
+  a = INT64_C( 0xf0debc9a78563412 );
+  b = INT64_C( 0x123456789abcdef0 );
+  T_true( a < b );
+}
+
+/**
+ * @brief Check unsigned 64-bit comparisons for a sample set of values.
+ */
+static void CompilerUnitBuiltins_Action_13( void )
+{
+  volatile uint64_t a;
+  volatile uint64_t b;
+
+  a = UINT64_C( 0 );
+  b = UINT64_C( 0 );
+  T_false( a < b );
+
+  a = UINT64_C( 0 );
+  b = UINT64_C( 1 );
+  T_true( a < b );
+
+  a = UINT64_C( 0x123456789abcdef0 );
+  b = UINT64_C( 0xf0debc9a78563412 );
+  T_true( a < b );
+
+  a = UINT64_C( 0xf0debc9a78563412 );
+  b = UINT64_C( 0x123456789abcdef0 );
+  T_false( a < b );
+}
+
+/**
+ * @brief Check signed 64-bit arithmetic left shift for a sample set of values.
+ */
+static void CompilerUnitBuiltins_Action_14( void )
+{
+  volatile int64_t i;
+  volatile int s;
+
+  i = INT64_C( 1 );
+  s = 0;
+  T_eq_i64( i << s, INT64_C( 1 ) );
+
+  i = -INT64_C( 1 );
+  s = 0;
+  T_eq_i64( i << s, -INT64_C( 1 ) );
+
+  i = INT64_C( 1 );
+  s = 1;
+  T_eq_i64( i << s, INT64_C( 2 ) );
+
+  i = -INT64_C( 1 );
+  s = 1;
+  T_eq_i64( i << s, -INT64_C( 2 ) );
+}
+
+/**
+ * @brief Check signed 64-bit arithmetic right shift for a sample set of
+ *   values.
+ */
+static void CompilerUnitBuiltins_Action_15( void )
+{
+  volatile int64_t i;
+  volatile int s;
+
+  i = INT64_C( 1 );
+  s = 0;
+  T_eq_i64( i >> s, INT64_C( 1 ) );
+
+  i = -INT64_C( 1 );
+  s = 0;
+  T_eq_i64( i >> s, -INT64_C( 1 ) );
+
+  i = INT64_C( 2 );
+  s = 1;
+  T_eq_i64( i >> s, INT64_C( 1 ) );
+
+  i = -INT64_C( 2 );
+  s = 1;
+  T_eq_i64( i >> s, -INT64_C( 1 ) );
+}
+
+/**
+ * @brief Check unsigned 64-bit logical right shift for a sample set of values.
+ */
+static void CompilerUnitBuiltins_Action_16( void )
+{
+  volatile uint64_t i;
+  volatile int s;
+
+  i = UINT64_C( 1 );
+  s = 0;
+  T_eq_u64( i >> s, UINT64_C( 1 ) );
+
+  i = -UINT64_C( 1 );
+  s = 0;
+  T_eq_u64( i >> s, UINT64_C( 0xffffffffffffffff ) );
+
+  i = UINT64_C( 2 );
+  s = 1;
+  T_eq_u64( i >> s, UINT64_C( 1 ) );
+
+  i = -UINT64_C( 2 );
+  s = 1;
+  T_eq_u64( i >> s, UINT64_C( 0x7fffffffffffffff ) );
+}
+
+/**
+ * @brief Check signed 64-bit multiplication for a sample set of values.
+ */
+static void CompilerUnitBuiltins_Action_17( void )
+{
+  volatile int64_t a;
+  volatile int64_t b;
+
+  a = INT64_C( 1 );
+  b = INT64_C( 1 );
+  T_eq_i64( a * b, INT64_C( 1 ) );
+
+  a = INT64_C( 1 );
+  b = INT64_C( 0 );
+  T_eq_i64( a * b, INT64_C( 0 ) );
+
+  a = INT64_C( 0 );
+  b = INT64_C( 1 );
+  T_eq_i64( a * b, INT64_C( 0 ) );
+}
+
+/**
+ * @brief Check signed 64-bit negation for a sample set of values.
+ */
+static void CompilerUnitBuiltins_Action_18( void )
+{
+  volatile int64_t i;
+
+  i = INT64_C( 1 );
+  T_eq_i64( -i, -INT64_C( 1 ) );
+
+  i = -INT64_C( 1 );
+  T_eq_i64( -i, INT64_C( 1 ) );
 }
 
 /**
  * @brief Check signed 64-bit divisions for a sample set of values.
  */
-static void CompilerUnitBuiltins_Action_3( void )
+static void CompilerUnitBuiltins_Action_19( void )
 {
   volatile int64_t n;
   volatile int64_t d;
@@ -304,7 +671,7 @@ static void CompilerUnitBuiltins_Action_3( void )
 /**
  * @brief Check unsigned 64-bit divisions for a sample set of values.
  */
-static void CompilerUnitBuiltins_Action_4( void )
+static void CompilerUnitBuiltins_Action_20( void )
 {
   volatile uint64_t n;
   volatile uint64_t d;
@@ -381,7 +748,7 @@ static void CompilerUnitBuiltins_Action_4( void )
 /**
  * @brief Check signed 64-bit modulo operations for a sample set of values.
  */
-static void CompilerUnitBuiltins_Action_5( void )
+static void CompilerUnitBuiltins_Action_21( void )
 {
   volatile int64_t n;
   volatile int64_t d;
@@ -502,7 +869,7 @@ static void CompilerUnitBuiltins_Action_5( void )
 /**
  * @brief Check unsigned 64-bit modulo operations for a sample set of values.
  */
-static void CompilerUnitBuiltins_Action_6( void )
+static void CompilerUnitBuiltins_Action_22( void )
 {
   volatile uint64_t n;
   volatile uint64_t d;
@@ -560,6 +927,22 @@ T_TEST_CASE_FIXTURE( CompilerUnitBuiltins, &CompilerUnitBuiltins_Fixture )
   CompilerUnitBuiltins_Action_4();
   CompilerUnitBuiltins_Action_5();
   CompilerUnitBuiltins_Action_6();
+  CompilerUnitBuiltins_Action_7();
+  CompilerUnitBuiltins_Action_8();
+  CompilerUnitBuiltins_Action_9();
+  CompilerUnitBuiltins_Action_10();
+  CompilerUnitBuiltins_Action_11();
+  CompilerUnitBuiltins_Action_12();
+  CompilerUnitBuiltins_Action_13();
+  CompilerUnitBuiltins_Action_14();
+  CompilerUnitBuiltins_Action_15();
+  CompilerUnitBuiltins_Action_16();
+  CompilerUnitBuiltins_Action_17();
+  CompilerUnitBuiltins_Action_18();
+  CompilerUnitBuiltins_Action_19();
+  CompilerUnitBuiltins_Action_20();
+  CompilerUnitBuiltins_Action_21();
+  CompilerUnitBuiltins_Action_22();
 }
 
 /** @} */
