@@ -464,7 +464,6 @@ source:
 - cpukit/score/src/coretodhookunregister.c
 - cpukit/score/src/coretodset.c
 - cpukit/score/src/futex.c
-- cpukit/score/src/hash.c
 - cpukit/score/src/interr.c
 - cpukit/score/src/isr.c
 - cpukit/score/src/isrisinprogress.c

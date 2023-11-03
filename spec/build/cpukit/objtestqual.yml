@@ -30,6 +30,7 @@ source:
 - cpukit/sapi/src/delayticks.c
 - cpukit/sapi/src/getbuildlabel.c
 - cpukit/sapi/src/version.c
+- cpukit/score/src/hash.c
 - cpukit/score/src/objectactivecount.c
 - cpukit/score/src/objectapimaximumclass.c
 - cpukit/score/src/objectgetinfo.c

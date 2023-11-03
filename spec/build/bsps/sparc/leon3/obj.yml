@@ -44,7 +44,6 @@ source:
 - bsps/sparc/leon3/start/cache.c
 - bsps/sparc/leon3/start/cpucounter.c
 - bsps/sparc/leon3/start/eirq.c
-- bsps/sparc/leon3/start/gettargethash.c
 - bsps/sparc/shared/irq/bsp_isr_handler.c
 - bsps/sparc/shared/start/bspgetworkarea.c
 type: build
