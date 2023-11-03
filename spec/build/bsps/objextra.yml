@@ -1,0 +1,99 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by:
+  not: RTEMS_QUAL
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/include/bsp/console-polled.h
+  - bsps/include/bsp/console-termios.h
+  - bsps/include/bsp/fdt.h
+  - bsps/include/bsp/gpio.h
+  - bsps/include/bsp/stackalloc.h
+  - bsps/include/bsp/u-boot.h
+  - bsps/include/bsp/uart-output-char.h
+  - bsps/include/bsp/utility.h
+- destination: ${BSP_INCLUDEDIR}/ofw
+  source:
+  - bsps/include/ofw/ofw.h
+  - bsps/include/ofw/ofw_compat.h
+- destination: ${BSP_INCLUDEDIR}/libchip
+  source:
+  - bsps/include/libchip/ata.h
+  - bsps/include/libchip/ata_internal.h
+  - bsps/include/libchip/disp_hcms29xx.h
+  - bsps/include/libchip/ds1375-rtc.h
+  - bsps/include/libchip/i2c-2b-eeprom.h
+  - bsps/include/libchip/i2c-ds1621.h
+  - bsps/include/libchip/i2c-sc620.h
+  - bsps/include/libchip/icm7170.h
+  - bsps/include/libchip/ide_ctrl.h
+  - bsps/include/libchip/ide_ctrl_cfg.h
+  - bsps/include/libchip/ide_ctrl_io.h
+  - bsps/include/libchip/m48t08.h
+  - bsps/include/libchip/mcp7940m-rtc.h
+  - bsps/include/libchip/ns16550.h
+  - bsps/include/libchip/ns16550_p.h
+  - bsps/include/libchip/rtc.h
+  - bsps/include/libchip/serial.h
+  - bsps/include/libchip/sersupp.h
+  - bsps/include/libchip/spi-flash-m25p40.h
+  - bsps/include/libchip/spi-fram-fm25l256.h
+  - bsps/include/libchip/spi-memdrv.h
+  - bsps/include/libchip/spi-sd-card.h
+  - bsps/include/libchip/wd80x3.h
+- destination: ${BSP_INCLUDEDIR}/dev/serial
+  source:
+  - bsps/include/dev/serial/arm-pl011-regs.h
+  - bsps/include/dev/serial/arm-pl011.h
+- destination: ${BSP_INCLUDEDIR}/rtems/zilog
+  source:
+  - bsps/include/rtems/zilog/z8036.h
+  - bsps/include/rtems/zilog/z8530.h
+- destination: ${BSP_INCLUDEDIR}/arm/ti
+  source:
+  - bsps/include/arm/ti/ti_pinmux.h
+  - bsps/include/arm/ti/ti_cpuid.h
+links: []
+source:
+- bsps/shared/dev/display/disp_hcms29xx.c
+- bsps/shared/dev/display/font_hcms29xx.c
+- bsps/shared/dev/i2c/i2c-2b-eeprom.c
+- bsps/shared/dev/i2c/i2c-ds1621.c
+- bsps/shared/dev/i2c/i2c-sc620.c
+- bsps/shared/dev/i2c/spi-flash-m25p40.c
+- bsps/shared/dev/i2c/spi-fram-fm25l256.c
+- bsps/shared/dev/i2c/spi-memdrv.c
+- bsps/shared/dev/i2c/spi-sd-card.c
+- bsps/shared/dev/ide/ata.c
+- bsps/shared/dev/ide/ata_util.c
+- bsps/shared/dev/ide/ide_controller.c
+- bsps/shared/dev/rtc/ds1375.c
+- bsps/shared/dev/rtc/icm7170.c
+- bsps/shared/dev/rtc/icm7170_reg.c
+- bsps/shared/dev/rtc/icm7170_reg2.c
+- bsps/shared/dev/rtc/icm7170_reg4.c
+- bsps/shared/dev/rtc/icm7170_reg8.c
+- bsps/shared/dev/rtc/m48t08.c
+- bsps/shared/dev/rtc/m48t08_reg.c
+- bsps/shared/dev/rtc/m48t08_reg2.c
+- bsps/shared/dev/rtc/m48t08_reg4.c
+- bsps/shared/dev/rtc/m48t08_reg8.c
+- bsps/shared/dev/rtc/mcp7940m.c
+- bsps/shared/dev/rtc/rtcprobe.c
+- bsps/shared/dev/serial/arm-pl011.c
+- bsps/shared/dev/serial/ns16550-context.c
+- bsps/shared/dev/serial/ns16550.c
+- bsps/shared/dev/serial/serprobe.c
+- bsps/shared/ofw/ofw.c
+- bsps/shared/rtems-version.c
+- bsps/shared/start/bootcard.c
+- bsps/shared/freebsd/sys/arm/ti/ti_pinmux.c
+- bsps/shared/freebsd/sys/arm/ti/am335x/am335x_scm_padconf.c
+type: build

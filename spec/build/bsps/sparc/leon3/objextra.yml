@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by:
+  not: RTEMS_QUAL
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/sparc/leon3/include/leon.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/sparc/leon3/include/bsp/watchdog.h
+links: []
+source:
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/sbrk.c
+- bsps/sparc/leon3/btimer/btimer.c
+- bsps/sparc/leon3/btimer/watchdog.c
+- bsps/sparc/leon3/console/console.c
+- bsps/sparc/leon3/gnatsupp/gnatsupp.c
+- bsps/sparc/leon3/start/amba.c
+- bsps/sparc/leon3/start/bspdelay.c
+- bsps/sparc/leon3/start/cpucounter.c
+- bsps/sparc/leon3/start/drvmgr_def_drivers.c
+- bsps/sparc/leon3/start/setvec.c
+- bsps/sparc/shared/gnatcommon.c
+- bsps/sparc/shared/pci/gr_cpci_gr740.c
+- bsps/sparc/shared/pci/gr_leon4_n2x.c
+- bsps/sparc/shared/pci/pci_memreg_sparc_be.c
+- bsps/sparc/shared/pci/pci_memreg_sparc_le.c
+- bsps/sparc/shared/start/bsp_fatal_exit.c
+type: build

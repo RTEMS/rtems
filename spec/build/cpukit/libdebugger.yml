@@ -7,7 +7,10 @@ copyrights:
 cppflags: []
 cxxflags:
 - ${COVERAGE_COMPILER_FLAGS}
-enabled-by: BUILD_LIBDEBUGGER
+enabled-by:
+  and:
+  - BUILD_LIBDEBUGGER
+  - not: RTEMS_QUAL
 includes: []
 install: []
 install-path: ${BSP_LIBDIR}

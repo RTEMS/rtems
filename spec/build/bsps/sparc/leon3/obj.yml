@@ -6,13 +6,14 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by: true
+extra-files:
+- bsps/sparc/leon3/include/tm27.h
+- bsps/sparc/shared/doxygen.h
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
-  - bsps/sparc/leon3/include/amba.h
   - bsps/sparc/leon3/include/bsp.h
-  - bsps/sparc/leon3/include/leon.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/sparc/leon3/include/bsp/gr740-bootstrap-regs.h
@@ -21,7 +22,9 @@ install:
   - bsps/sparc/leon3/include/bsp/irq.h
   - bsps/sparc/leon3/include/bsp/irqimpl.h
   - bsps/sparc/leon3/include/bsp/leon3.h
-  - bsps/sparc/leon3/include/bsp/watchdog.h
+- destination: ${BSP_INCLUDEDIR}/grlib
+  source:
+  - bsps/sparc/include/grlib/io.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/sparc/leon3/start/linkcmds.gr712rc
@@ -32,33 +35,16 @@ install:
   - bsps/sparc/shared/start/linkcmds.base
 links: []
 source:
-- bsps/shared/dev/getentropy/getentropy-cpucounter.c
-- bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
-- bsps/shared/start/bspreset-empty.c
-- bsps/shared/start/sbrk.c
-- bsps/sparc/leon3/btimer/btimer.c
-- bsps/sparc/leon3/btimer/watchdog.c
 - bsps/sparc/leon3/clock/ckinit.c
-- bsps/sparc/leon3/console/console.c
 - bsps/sparc/leon3/console/printk_support.c
-- bsps/sparc/leon3/gnatsupp/gnatsupp.c
-- bsps/sparc/leon3/start/amba.c
 - bsps/sparc/leon3/start/bspclean.c
-- bsps/sparc/leon3/start/bspdelay.c
 - bsps/sparc/leon3/start/bspidle.S
 - bsps/sparc/leon3/start/bspstart.c
 - bsps/sparc/leon3/start/cache.c
 - bsps/sparc/leon3/start/cpucounter.c
-- bsps/sparc/leon3/start/drvmgr_def_drivers.c
 - bsps/sparc/leon3/start/eirq.c
 - bsps/sparc/leon3/start/gettargethash.c
-- bsps/sparc/leon3/start/setvec.c
-- bsps/sparc/shared/gnatcommon.c
 - bsps/sparc/shared/irq/bsp_isr_handler.c
-- bsps/sparc/shared/pci/gr_cpci_gr740.c
-- bsps/sparc/shared/pci/gr_leon4_n2x.c
-- bsps/sparc/shared/pci/pci_memreg_sparc_be.c
-- bsps/sparc/shared/pci/pci_memreg_sparc_le.c
-- bsps/sparc/shared/start/bsp_fatal_exit.c
+- bsps/sparc/shared/start/bspgetworkarea.c
 type: build

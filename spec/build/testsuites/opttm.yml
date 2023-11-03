@@ -6,7 +6,10 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
-- enabled-by: BUILD_TESTS
+- enabled-by:
+    and:
+    - BUILD_TESTS
+    - not: RTEMS_QUAL
   value: true
 - enabled-by: true
   value: false

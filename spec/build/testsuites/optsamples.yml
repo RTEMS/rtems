@@ -6,6 +6,8 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
+- enabled-by: RTEMS_QUAL
+  value: false
 - enabled-by: true
   value: true
 description: |

@@ -7,6 +7,8 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research (OAR)
 default:
+- enabled-by: RTEMS_QUAL
+  value: false
 - enabled-by: true
   value: true
 description: |

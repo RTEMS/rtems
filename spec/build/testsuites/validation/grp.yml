@@ -6,6 +6,16 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by: BUILD_VALIDATIONTESTS
+extra-files:
+- testsuites/validation/tc-basedefs-pendant.h
+- testsuites/validation/tc-userext.h
+- testsuites/validation/ts-acfg.h
+- testsuites/validation/ts-config.h
+- testsuites/validation/ts-default.h
+- testsuites/validation/ts-fatal-sysinit.h
+- testsuites/validation/ts-idle.h
+- testsuites/validation/tx-support.h
+- testsuites/validation/tx-thread-queue.h
 includes:
 - ${BSP_INCLUDES}
 - testsuites/validation

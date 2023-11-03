@@ -16,6 +16,8 @@ links:
 - role: build-dependency
   uid: optclang
 - role: build-dependency
+  uid: optqual
+- role: build-dependency
   uid: optarflags
 - role: build-dependency
   uid: optwarn

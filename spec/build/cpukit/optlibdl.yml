@@ -8,15 +8,18 @@ copyrights:
 default: []
 description: ''
 enabled-by:
-- aarch64
-- arm
-- i386
-- m68k
-- microblaze
-- mips
-- moxie
-- powerpc
-- sparc
+  and:
+  - or:
+    - aarch64
+    - arm
+    - i386
+    - m68k
+    - microblaze
+    - mips
+    - moxie
+    - powerpc
+    - sparc
+  - not: RTEMS_QUAL
 links: []
 name: BUILD_LIBDL
 type: build

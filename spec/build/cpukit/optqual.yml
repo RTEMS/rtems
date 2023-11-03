@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- env-enable: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
+default:
+- enabled-by: true
+  value: false
+description: |
+  If this option is enabled, then only the pre-qualified feature subset of
+  RTEMS is built.  For the pre-qualified feature set of RTEMS, a specification
+  with associated validation tests exists.
+enabled-by: true
+links: []
+name: RTEMS_QUAL
+type: build

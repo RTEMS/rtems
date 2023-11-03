@@ -29,6 +29,8 @@ links:
 - role: build-dependency
   uid: obj
 - role: build-dependency
+  uid: objextra
+- role: build-dependency
   uid: objmpci
 - role: build-dependency
   uid: objsmp

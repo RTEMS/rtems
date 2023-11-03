@@ -6,6 +6,8 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by: true
+extra-files:
+- cpukit/libtest/t-test-rtems.h
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/rtems
@@ -16,40 +18,34 @@ install:
   - cpukit/include/rtems/test-printer.h
   - cpukit/include/rtems/test-scheduler.h
 install-path: ${BSP_LIBDIR}
-links: []
+links:
+- role: build-dependency
+  uid: objtestextra
+- role: build-dependency
+  uid: objtestqual
+- role: build-dependency
+  uid: objtestqualsmp
 source:
 - cpukit/libtest/gcovdumpinfobase64.c
 - cpukit/libtest/gcovdumpinfo.c
 - cpukit/libtest/gcovinfoset.c
 - cpukit/libtest/t-test-busy-tick.c
 - cpukit/libtest/t-test-busy.c
-- cpukit/libtest/t-test-checks-eno.c
-- cpukit/libtest/t-test-checks-psx.c
 - cpukit/libtest/t-test-checks.c
 - cpukit/libtest/t-test-hash-sha256.c
 - cpukit/libtest/t-test-interrupt.c
 - cpukit/libtest/t-test-rtems-context.c
-- cpukit/libtest/t-test-rtems-fds.c
-- cpukit/libtest/t-test-rtems-heap.c
 - cpukit/libtest/t-test-rtems-measure.c
 - cpukit/libtest/t-test-rtems-memory.c
 - cpukit/libtest/t-test-rtems-objs.c
-- cpukit/libtest/t-test-rtems-posix-keys.c
 - cpukit/libtest/t-test-rtems.c
 - cpukit/libtest/t-test-scheduler.c
 - cpukit/libtest/t-test-thread-switch.c
 - cpukit/libtest/t-test-time.c
 - cpukit/libtest/t-test.c
 - cpukit/libtest/testbeginend.c
-- cpukit/libtest/testbusy.c
-- cpukit/libtest/testexit.c
-- cpukit/libtest/testextension.c
 - cpukit/libtest/testgcovcpufatalhalt.c
 - cpukit/libtest/testgcovbspreset.c
 - cpukit/libtest/testgcovdumpinfo.c
-- cpukit/libtest/testparallel.c
-- cpukit/libtest/testprinter.c
-- cpukit/libtest/testrun.c
-- cpukit/libtest/testwrappers.c
 target: rtemstest
 type: build

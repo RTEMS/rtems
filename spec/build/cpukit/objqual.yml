@@ -5,13 +5,10 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by:
-  not: RTEMS_QUAL
+enabled-by: RTEMS_QUAL
 includes: []
 install: []
 links: []
 source:
-- bsps/shared/start/mallocinitone.c
-- bsps/shared/start/wkspaceinitone.c
-- bsps/sparc/shared/start/bspgetworkarea.c
+- cpukit/libcsupport/src/alloconly.c
 type: build

@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by:
+  not: RTEMS_QUAL
+includes: []
+install: []
+links: []
+source:
+- cpukit/libtest/testbusy.c
+- cpukit/libtest/testexit.c
+- cpukit/libtest/testextension.c
+- cpukit/libtest/testparallel.c
+- cpukit/libtest/testprinter.c
+- cpukit/libtest/testrun.c
+- cpukit/libtest/testwrappers.c
+- cpukit/libtest/t-test-checks-eno.c
+- cpukit/libtest/t-test-checks-psx.c
+- cpukit/libtest/t-test-rtems-fds.c
+- cpukit/libtest/t-test-rtems-heap.c
+- cpukit/libtest/t-test-rtems-posix-keys.c
+type: build

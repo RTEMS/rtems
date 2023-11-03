@@ -6,7 +6,9 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by:
-  not: RTEMS_SMP
+  not:
+  - RTEMS_QUAL
+  - RTEMS_SMP
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/libchip

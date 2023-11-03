@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: RTEMS_QUAL
+extra-files:
+- cpukit/include/rtems/base64.h
+- cpukit/include/rtems/crc.h
+includes:
+- ${BSP_INCLUDES}
+install: []
+links: []
+source:
+- bsps/shared/rtems-version.c
+- cpukit/crc/crc24q.c
+- cpukit/base64/base64-encode.c
+- cpukit/base64/base64-decode.c
+- cpukit/dev/ioprintf.c
+- cpukit/dev/iovprintf.c
+- cpukit/libmd/sha256c.c
+- cpukit/posix/src/pspindestroy.c
+- cpukit/posix/src/pspininit.c
+- cpukit/posix/src/pspinlock.c
+- cpukit/posix/src/pspinunlock.c
+- cpukit/sapi/src/cpucounterconverter.c
+- cpukit/sapi/src/delaynano.c
+- cpukit/sapi/src/delayticks.c
+- cpukit/sapi/src/getbuildlabel.c
+- cpukit/sapi/src/version.c
+- cpukit/score/src/objectactivecount.c
+- cpukit/score/src/objectapimaximumclass.c
+- cpukit/score/src/objectgetinfo.c
+- cpukit/score/src/objectgetinfoid.c
+- cpukit/score/src/rbtreeiterate.c
+- cpukit/score/src/rbtreemax.c
+- cpukit/score/src/rbtreenext.c
+- cpukit/score/src/rbtreeprev.c
+- cpukit/score/src/smpbarrierwait.c
+type: build

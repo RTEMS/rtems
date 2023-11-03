@@ -8,28 +8,23 @@ cxxflags: []
 enabled-by: RTEMS_SMP
 includes: []
 install: []
-links: []
+links:
+- role: build-dependency
+  uid: objsmpextra
 source:
 - cpukit/score/src/percpujobs.c
-- cpukit/score/src/percpustatewait.c
-- cpukit/score/src/profilingsmplock.c
+- cpukit/score/src/rbtreeappend.c
+- cpukit/score/src/rbtreeprepend.c
+- cpukit/score/src/rbtreereplace.c
 - cpukit/score/src/schedulerdefaultmakecleansticky.c
-- cpukit/score/src/schedulerdefaultpinunpin.c
 - cpukit/score/src/schedulerdefaultpinunpindonothing.c
 - cpukit/score/src/schedulerdefaultsetaffinity.c
+- cpukit/score/src/scheduleredfreleasejob.c
 - cpukit/score/src/scheduleredfsmp.c
-- cpukit/score/src/schedulerpriorityaffinitysmp.c
-- cpukit/score/src/schedulerprioritysmp.c
-- cpukit/score/src/schedulersimplesmp.c
 - cpukit/score/src/schedulersmp.c
-- cpukit/score/src/schedulersmpstartidle.c
-- cpukit/score/src/schedulerstrongapa.c
-- cpukit/score/src/smpbroadcastaction.c
 - cpukit/score/src/smp.c
 - cpukit/score/src/smplock.c
 - cpukit/score/src/smpmulticastaction.c
 - cpukit/score/src/smpothercastaction.c
-- cpukit/score/src/smpsynchronize.c
-- cpukit/score/src/smpunicastaction.c
 - cpukit/score/src/threadunpin.c
 type: build

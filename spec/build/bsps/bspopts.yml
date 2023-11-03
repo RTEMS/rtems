@@ -3,6 +3,10 @@ build-type: config-header
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
+extra-files:
+- bsps/shared/doxygen.h
+- bsps/shared/cache/cacheimpl.h
+- bsps/shared/dev/clock/clockimpl.h
 guard: __BSP_OPTIONS_H
 include-headers: []
 install-path: ${BSP_INCLUDEDIR}

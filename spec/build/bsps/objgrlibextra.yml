@@ -1,0 +1,141 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by:
+  not: RTEMS_QUAL
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/grlib
+  source:
+  - bsps/include/grlib/ahbstat.h
+  - bsps/include/grlib/ambapp.h
+  - bsps/include/grlib/ambapp_bus.h
+  - bsps/include/grlib/ambapp_bus_grlib.h
+  - bsps/include/grlib/ambapp_ids.h
+  - bsps/include/grlib/apbuart_cons.h
+  - bsps/include/grlib/apbuart_termios.h
+  - bsps/include/grlib/b1553brm.h
+  - bsps/include/grlib/b1553rt.h
+  - bsps/include/grlib/bspcommon.h
+  - bsps/include/grlib/canbtrs.h
+  - bsps/include/grlib/canmux.h
+  - bsps/include/grlib/cons.h
+  - bsps/include/grlib/debug_defs.h
+  - bsps/include/grlib/genirq.h
+  - bsps/include/grlib/gpiolib.h
+  - bsps/include/grlib/gptimer.h
+  - bsps/include/grlib/gr1553b.h
+  - bsps/include/grlib/gr1553bc.h
+  - bsps/include/grlib/gr1553bc_list.h
+  - bsps/include/grlib/gr1553bm.h
+  - bsps/include/grlib/gr1553rt.h
+  - bsps/include/grlib/gr_701.h
+  - bsps/include/grlib/gr_cpci_gr740.h
+  - bsps/include/grlib/gr_rasta_adcdac.h
+  - bsps/include/grlib/gr_rasta_io.h
+  - bsps/include/grlib/gr_rasta_spw_router.h
+  - bsps/include/grlib/gr_rasta_tmtc.h
+  - bsps/include/grlib/gr_tmtc_1553.h
+  - bsps/include/grlib/gradcdac.h
+  - bsps/include/grlib/grascs.h
+  - bsps/include/grlib/grcan.h
+  - bsps/include/grlib/grctm.h
+  - bsps/include/grlib/grgpio.h
+  - bsps/include/grlib/griommu.h
+  - bsps/include/grlib/grlib.h
+  - bsps/include/grlib/grlib_impl.h
+  - bsps/include/grlib/grpci.h
+  - bsps/include/grlib/grpci2.h
+  - bsps/include/grlib/grpci2dma.h
+  - bsps/include/grlib/grpwm.h
+  - bsps/include/grlib/grslink.h
+  - bsps/include/grlib/grspw.h
+  - bsps/include/grlib/grspw_pkt.h
+  - bsps/include/grlib/grspw_router.h
+  - bsps/include/grlib/grtc.h
+  - bsps/include/grlib/grtm.h
+  - bsps/include/grlib/i2cmst.h
+  - bsps/include/grlib/l2c.h
+  - bsps/include/grlib/l4stat.h
+  - bsps/include/grlib/mctrl.h
+  - bsps/include/grlib/memscrub.h
+  - bsps/include/grlib/occan.h
+  - bsps/include/grlib/pcif.h
+  - bsps/include/grlib/satcan.h
+  - bsps/include/grlib/spictrl.h
+  - bsps/include/grlib/spwcuc.h
+  - bsps/include/grlib/spwtdp.h
+  - bsps/include/grlib/tlib.h
+links:
+- role: build-dependency
+  uid: objgrlibnosmp
+source:
+- bsps/shared/grlib/1553/b1553brm.c
+- bsps/shared/grlib/1553/b1553rt.c
+- bsps/shared/grlib/1553/gr1553b.c
+- bsps/shared/grlib/1553/gr1553bc.c
+- bsps/shared/grlib/1553/gr1553bm.c
+- bsps/shared/grlib/1553/gr1553rt.c
+- bsps/shared/grlib/amba/ahbstat.c
+- bsps/shared/grlib/amba/ambapp.c
+- bsps/shared/grlib/amba/ambapp_alloc.c
+- bsps/shared/grlib/amba/ambapp_count.c
+- bsps/shared/grlib/amba/ambapp_depth.c
+- bsps/shared/grlib/amba/ambapp_find_by_idx.c
+- bsps/shared/grlib/amba/ambapp_freq.c
+- bsps/shared/grlib/amba/ambapp_names.c
+- bsps/shared/grlib/amba/ambapp_old.c
+- bsps/shared/grlib/amba/ambapp_parent.c
+- bsps/shared/grlib/amba/ambapp_show.c
+- bsps/shared/grlib/analog/gradcdac.c
+- bsps/shared/grlib/ascs/grascs.c
+- bsps/shared/grlib/btimer/gptimer.c
+- bsps/shared/grlib/btimer/tlib.c
+- bsps/shared/grlib/btimer/tlib_ckinit.c
+- bsps/shared/grlib/can/canbtrs.c
+- bsps/shared/grlib/can/canmux.c
+- bsps/shared/grlib/can/grcan.c
+- bsps/shared/grlib/can/grcanfd.c
+- bsps/shared/grlib/can/grcanstd.c
+- bsps/shared/grlib/can/occan.c
+- bsps/shared/grlib/can/satcan.c
+- bsps/shared/grlib/drvmgr/ambapp_bus.c
+- bsps/shared/grlib/drvmgr/ambapp_bus_grlib.c
+- bsps/shared/grlib/drvmgr/get_resarray_count.c
+- bsps/shared/grlib/gpio/gpiolib.c
+- bsps/shared/grlib/gpio/grgpio.c
+- bsps/shared/grlib/i2c/i2cmst.c
+- bsps/shared/grlib/iommu/griommu.c
+- bsps/shared/grlib/irq/genirq.c
+- bsps/shared/grlib/l2c/l2c.c
+- bsps/shared/grlib/mem/mctrl.c
+- bsps/shared/grlib/pci/gr_701.c
+- bsps/shared/grlib/pci/gr_rasta_adcdac.c
+- bsps/shared/grlib/pci/gr_rasta_io.c
+- bsps/shared/grlib/pci/gr_rasta_spw_router.c
+- bsps/shared/grlib/pci/gr_rasta_tmtc.c
+- bsps/shared/grlib/pci/gr_tmtc_1553.c
+- bsps/shared/grlib/pci/grpci.c
+- bsps/shared/grlib/pci/grpci2.c
+- bsps/shared/grlib/pci/grpci2dma.c
+- bsps/shared/grlib/pci/pcif.c
+- bsps/shared/grlib/pwm/grpwm.c
+- bsps/shared/grlib/scrub/memscrub.c
+- bsps/shared/grlib/slink/grslink.c
+- bsps/shared/grlib/spi/spictrl.c
+- bsps/shared/grlib/spw/grspw_pkt.c
+- bsps/shared/grlib/spw/grspw_router.c
+- bsps/shared/grlib/spw/spwtdp.c
+- bsps/shared/grlib/stat/l4stat.c
+- bsps/shared/grlib/time/grctm.c
+- bsps/shared/grlib/time/spwcuc.c
+- bsps/shared/grlib/tmtc/grtc.c
+- bsps/shared/grlib/tmtc/grtm.c
+- bsps/shared/grlib/uart/apbuart_cons.c
+- bsps/shared/grlib/uart/apbuart_termios.c
+- bsps/shared/grlib/uart/cons.c
+type: build
