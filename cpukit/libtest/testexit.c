@@ -6,12 +6,10 @@
  * @ingroup RTEMSTestFrameworkImpl
  *
  * @brief This source file contains the implementation of
- *   rtems_test_begin() and rtems_test_end().
+ *   rtems_test_exit().
  */
 
 /*
- * Copyright (C) 2014, 2018 embedded brains GmbH & Co. KG
- *
  * Copyright (c) 2017 Chris Johns <chrisj@rtems.org>. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,59 +39,9 @@
 #endif
 
 #include <rtems/test-info.h>
-#include <rtems/test-printer.h>
-#include <rtems/version.h>
 
-static const char* const test_state_strings[] =
+void rtems_test_exit(int status)
 {
-  "EXPECTED_PASS",
-  "EXPECTED_FAIL",
-  "USER_INPUT",
-  "INDETERMINATE",
-  "BENCHMARK"
-};
-
-int rtems_test_begin(const char* name, const RTEMS_TEST_STATE state)
-{
-  return rtems_printf(
-    &rtems_test_printer,
-    "\n\n*** BEGIN OF TEST %s ***\n"
-    "*** TEST VERSION: %s\n"
-    "*** TEST STATE: %s\n"
-    "*** TEST BUILD:"
-#if RTEMS_DEBUG
-    " RTEMS_DEBUG"
-#endif
-#if RTEMS_MULTIPROCESSING
-    " RTEMS_MULTIPROCESSING"
-#endif
-#if RTEMS_NETWORKING
-    " RTEMS_NETWORKING"
-#endif
-#if RTEMS_PARAVIRT
-    " RTEMS_PARAVIRT"
-#endif
-#if RTEMS_POSIX_API
-    " RTEMS_POSIX_API"
-#endif
-#if RTEMS_PROFILING
-    " RTEMS_PROFILING"
-#endif
-#if RTEMS_SMP
-    " RTEMS_SMP"
-#endif
-    "\n"
-    "*** TEST TOOLS: " __VERSION__ "\n",
-    name,
-    rtems_version(),
-    test_state_strings[state]
-  );
-}
-
-int rtems_test_end(const char* name)
-{
-  return rtems_printf(
-    &rtems_test_printer,
-    "\n*** END OF TEST %s ***\n\n", name
-  );
+  (void) status;
+  rtems_shutdown_executive(0);
 }
