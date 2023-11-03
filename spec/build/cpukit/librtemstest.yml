@@ -42,11 +42,13 @@ source:
 - cpukit/libtest/t-test.c
 - cpukit/libtest/testbeginend.c
 - cpukit/libtest/testbusy.c
+- cpukit/libtest/testexit.c
 - cpukit/libtest/testextension.c
 - cpukit/libtest/testgcovcpufatalhalt.c
 - cpukit/libtest/testgcovbspreset.c
 - cpukit/libtest/testgcovdumpinfo.c
 - cpukit/libtest/testparallel.c
+- cpukit/libtest/testprinter.c
 - cpukit/libtest/testrun.c
 - cpukit/libtest/testwrappers.c
 target: rtemstest
