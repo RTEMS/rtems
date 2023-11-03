@@ -29,6 +29,7 @@ source:
 - bsps/sparc/leon3/start/bspdelay.c
 - bsps/sparc/leon3/start/cpucounter.c
 - bsps/sparc/leon3/start/drvmgr_def_drivers.c
+- bsps/sparc/leon3/start/gettargethash.c
 - bsps/sparc/leon3/start/setvec.c
 - bsps/sparc/shared/gnatcommon.c
 - bsps/sparc/shared/pci/gr_cpci_gr740.c
