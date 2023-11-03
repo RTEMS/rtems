@@ -5,13 +5,11 @@
  *
  * @ingroup RTEMSTestFrameworkImpl
  *
- * @brief This source file contains the implementation of
- *   rtems_test_begin() and rtems_test_end().
+ * @brief This source file contains the definition of ::rtems_test_printer and
+ *   the implementation of rtems_test_printf().
  */
 
 /*
- * Copyright (C) 2014, 2018 embedded brains GmbH & Co. KG
- *
  * Copyright (c) 2017 Chris Johns <chrisj@rtems.org>. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,60 +38,26 @@
 #include "config.h"
 #endif
 
-#include <rtems/test-info.h>
 #include <rtems/test-printer.h>
-#include <rtems/version.h>
+#include <rtems/bspIo.h>
 
-static const char* const test_state_strings[] =
-{
-  "EXPECTED_PASS",
-  "EXPECTED_FAIL",
-  "USER_INPUT",
-  "INDETERMINATE",
-  "BENCHMARK"
+rtems_printer rtems_test_printer = {
+  .printer = rtems_printk_printer
 };
 
-int rtems_test_begin(const char* name, const RTEMS_TEST_STATE state)
+int rtems_test_printf(
+  const char* format,
+  ...
+)
 {
-  return rtems_printf(
+  va_list ap;
+  int len;
+  va_start(ap, format);
+  len = rtems_vprintf(
     &rtems_test_printer,
-    "\n\n*** BEGIN OF TEST %s ***\n"
-    "*** TEST VERSION: %s\n"
-    "*** TEST STATE: %s\n"
-    "*** TEST BUILD:"
-#if RTEMS_DEBUG
-    " RTEMS_DEBUG"
-#endif
-#if RTEMS_MULTIPROCESSING
-    " RTEMS_MULTIPROCESSING"
-#endif
-#if RTEMS_NETWORKING
-    " RTEMS_NETWORKING"
-#endif
-#if RTEMS_PARAVIRT
-    " RTEMS_PARAVIRT"
-#endif
-#if RTEMS_POSIX_API
-    " RTEMS_POSIX_API"
-#endif
-#if RTEMS_PROFILING
-    " RTEMS_PROFILING"
-#endif
-#if RTEMS_SMP
-    " RTEMS_SMP"
-#endif
-    "\n"
-    "*** TEST TOOLS: " __VERSION__ "\n",
-    name,
-    rtems_version(),
-    test_state_strings[state]
+    format,
+    ap
   );
-}
-
-int rtems_test_end(const char* name)
-{
-  return rtems_printf(
-    &rtems_test_printer,
-    "\n*** END OF TEST %s ***\n\n", name
-  );
+  va_end(ap);
+  return len;
 }
