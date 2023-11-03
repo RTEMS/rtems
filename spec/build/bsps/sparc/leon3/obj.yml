@@ -15,8 +15,12 @@ install:
   - bsps/sparc/leon3/include/leon.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
+  - bsps/sparc/leon3/include/bsp/gr740-bootstrap-regs.h
+  - bsps/sparc/leon3/include/bsp/gr740-iopll-regs.h
+  - bsps/sparc/leon3/include/bsp/gr740-thsens-regs.h
   - bsps/sparc/leon3/include/bsp/irq.h
   - bsps/sparc/leon3/include/bsp/irqimpl.h
+  - bsps/sparc/leon3/include/bsp/leon3.h
   - bsps/sparc/leon3/include/bsp/watchdog.h
 - destination: ${BSP_LIBDIR}
   source:
