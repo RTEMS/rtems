@@ -15,8 +15,6 @@ default:
   - -lrtemscpu
   - -lrtemsbsp
   - -lgcc
-  - -lc
-  - -latomic
   - -Wl,--end-group
   - -Wl,--gc-sections
 - enabled-by: true

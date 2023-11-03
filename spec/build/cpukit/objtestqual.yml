@@ -20,6 +20,13 @@ source:
 - cpukit/base64/base64-decode.c
 - cpukit/dev/ioprintf.c
 - cpukit/dev/iovprintf.c
+- cpukit/libc/search/qsort.c
+- cpukit/libc/string/explicit_bzero.c
+- cpukit/libc/string/memcmp.c
+- cpukit/libc/string/strchr.c
+- cpukit/libc/string/strcmp.c
+- cpukit/libc/string/strlen.c
+- cpukit/libc/string/strrchr.c
 - cpukit/libmd/sha256c.c
 - cpukit/posix/src/pspindestroy.c
 - cpukit/posix/src/pspininit.c

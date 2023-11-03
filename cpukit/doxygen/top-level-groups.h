@@ -112,3 +112,92 @@
  *
  * @brief This group contains the test suites related to validation tests.
  */
+
+/**
+ * @file cpukit/libc/search/qsort.c
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implemention of a C library function.
+ */
+
+/**
+ * @file cpukit/libc/string/explicit_bzero.c
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implemention of a C library function.
+ */
+
+/**
+ * @file cpukit/libc/string/flsl.c
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implemention of a C library function.
+ */
+
+/**
+ * @file cpukit/libc/string/local.h
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This header file provides interfaces used by the implementation of C
+ *   library functions.
+ */
+
+/**
+ * @file cpukit/libc/string/memcmp.c
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implemention of a C library function.
+ */
+
+/**
+ * @file cpukit/libc/string/memcpy.c
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implemention of a C library function.
+ */
+
+/**
+ * @file cpukit/libc/string/memset.c
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implemention of a C library function.
+ */
+
+/**
+ * @file cpukit/libc/string/strchr.c
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implemention of a C library function.
+ */
+
+/**
+ * @file cpukit/libc/string/strcmp.c
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implemention of a C library function.
+ */
+
+/**
+ * @file cpukit/libc/string/strlen.c
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implemention of a C library function.
+ */
+
+/**
+ * @file cpukit/libc/string/strrchr.c
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implemention of a C library function.
+ */

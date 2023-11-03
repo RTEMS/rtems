@@ -25,6 +25,8 @@ links:
   uid: objtestqual
 - role: build-dependency
   uid: objtestqualsmp
+- role: build-dependency
+  uid: objtestqualsparc
 source:
 - cpukit/libtest/gcovdumpinfobase64.c
 - cpukit/libtest/gcovdumpinfo.c

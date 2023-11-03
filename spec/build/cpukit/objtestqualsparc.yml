@@ -5,15 +5,15 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by: RTEMS_QUAL
-extra-files:
-- cpukit/libc/string/local.h
-includes: []
+enabled-by:
+  and:
+  - sparc
+  - RTEMS_QUAL
+includes:
+- ${BSP_INCLUDES}
 install: []
 links: []
 source:
-- cpukit/libc/string/flsl.c
-- cpukit/libc/string/memcpy.c
-- cpukit/libc/string/memset.c
-- cpukit/libcsupport/src/alloconly.c
+- bsps/sparc/leon3/start/gettargethash.c
+- cpukit/score/cpu/sparc/setjmp.S
 type: build
