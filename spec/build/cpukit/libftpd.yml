@@ -5,7 +5,8 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by: true
+enabled-by:
+  not: RTEMS_QUAL
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/rtems

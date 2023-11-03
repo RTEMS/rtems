@@ -6,13 +6,13 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by:
-  and:
-    - __RTEMS_ADA__
-    - not: RTEMS_QUAL
+  not: RTEMS_QUAL
 includes: []
 install: []
 links: []
 source:
-- cpukit/libgnat/ada_intrsupp.c
-- cpukit/libgnat/adasupp.c
+- cpukit/score/cpu/arm/aarch32-psma-init-default.c
+- cpukit/score/cpu/arm/aarch32-psma-init.c
+- cpukit/score/cpu/arm/arm-exception-frame-print.c
+- cpukit/score/cpu/arm/arm_exc_abort.S
 type: build

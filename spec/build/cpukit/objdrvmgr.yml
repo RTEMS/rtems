@@ -6,8 +6,11 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by:
-- riscv
-- sparc
+  and:
+  - or:
+    - riscv
+    - sparc
+  - not: RTEMS_QUAL
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/drvmgr

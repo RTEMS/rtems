@@ -5,8 +5,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by:
-- arm
+enabled-by: arm
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/libcpu
@@ -27,17 +26,15 @@ install:
   - cpukit/score/cpu/arm/include/rtems/score/cpu_asm.h
   - cpukit/score/cpu/arm/include/rtems/score/cpuimpl.h
   - cpukit/score/cpu/arm/include/rtems/score/paravirt.h
-links: []
+links:
+- role: build-dependency
+  uid: cpuarmextra
 source:
 - cpukit/score/cpu/arm/__aeabi_read_tp.c
 - cpukit/score/cpu/arm/__tls_get_addr.c
-- cpukit/score/cpu/arm/aarch32-psma-init-default.c
-- cpukit/score/cpu/arm/aarch32-psma-init.c
 - cpukit/score/cpu/arm/arm-context-validate.S
 - cpukit/score/cpu/arm/arm-context-volatile-clobber.S
 - cpukit/score/cpu/arm/arm-exception-default.c
-- cpukit/score/cpu/arm/arm-exception-frame-print.c
-- cpukit/score/cpu/arm/arm_exc_abort.S
 - cpukit/score/cpu/arm/arm_exc_interrupt.S
 - cpukit/score/cpu/arm/armv4-exception-default.S
 - cpukit/score/cpu/arm/armv4-sync-synchronize.c

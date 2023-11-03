@@ -8,7 +8,8 @@ copyrights:
 cppflags: []
 cxxflags:
 - ${COVERAGE_COMPILER_FLAGS}
-enabled-by: true
+enabled-by:
+  not: RTEMS_QUAL
 includes:
 - cpukit/libfs/src/jffs2/include
 install:

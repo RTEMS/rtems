@@ -6,7 +6,9 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by:
-- sparc
+  and:
+    - sparc
+    - not: RTEMS_QUAL
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/pci
