@@ -89,6 +89,23 @@ test-support: |
   }
   #endif
 
+  #if defined(__microblaze__)
+  void __real_bsp_interrupt_dispatch( uint32_t source );
+
+  void __wrap_bsp_interrupt_dispatch( uint32_t source );
+
+  void __wrap_bsp_interrupt_dispatch( uint32_t source )
+  {
+    register uintptr_t sp __asm__( "1" );
+
+    if ( interrupted_stack_at_multitasking_start == 0 ) {
+      interrupted_stack_at_multitasking_start = sp;
+    }
+
+    __real_bsp_interrupt_dispatch( source );
+  }
+  #endif
+
   #if defined(__PPC__) || defined(__powerpc64__)
   void __real_bsp_interrupt_dispatch( void );
 
