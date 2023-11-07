@@ -56,18 +56,29 @@ test-support: |
 
   static void CheckIdleBody( Context *ctx, rtems_task_entry entry )
   {
-    rtems_id id;
+    rtems_id          id;
+    rtems_interval    interval;
+    rtems_status_code sc;
 
     ctx->counter = 0;
     id = CreateTask( "WORK", PRIO_LOW );
     StartTask( id, entry, ctx );
 
-    while ( ctx->counter == 0 ) {
-      rtems_status_code sc;
+    /*
+     * With optimization disabled, coverage enabled, SMP enabled and a slow
+     * target, things may take some time.
+     */
+    interval = 1;
+    while ( ctx->counter == 0 && interval <= 1024 ) {
 
-      sc = rtems_task_wake_after( 1 );
+      sc = rtems_task_wake_after( interval );
       T_rsc_success( sc );
+
+      interval *= 2;
     }
+
+    sc = rtems_task_wake_after( interval );
+    T_rsc_success( sc );
 
     T_eq_u32( ctx->counter, 1 );
     DeleteTask( id );
