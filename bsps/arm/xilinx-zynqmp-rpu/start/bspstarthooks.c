@@ -42,6 +42,7 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
      * on reset.  Since the correct settings in these bits are critical,
      * make sure SCTLR[M, I, A, C, V] are cleared.  Afterwards, exceptions are
      * handled by RTEMS.
+     * After setting the SCTLR, invalidate the caches.
      * Note 1: The APU also does these steps in start.S in _start in the #if block:
      *         `#if (__ARM_ARCH >= 7 && __ARM_ARCH_PROFILE == 'A') || __ARM_ARCH >= 8`
      * Note 2: Not all Arm R cores need this (like the TMS570).  So, this probably should
@@ -55,6 +56,13 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
       "bic r1, r0, #0x3000 \n"     /* Clear V[13] and I[12] */
       "bic r1, r1, #0x7 \n"        /* Clear C[2] A[1] and M[0] */
       "mcr p15, 0, r1, c1, c0, 0 \n"
+
+      /* Invalidate caches */
+      "mov      r0,#0 \n"
+      "dsb \n"
+      "mcr      p15, 0, r0, c7, c5, 0 \n"
+      "mcr      p15, 0, r0, c15, c5, 0 \n"
+      "isb \n"
         : :);
 }
 
