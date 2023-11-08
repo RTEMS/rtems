@@ -100,6 +100,10 @@ struct _inode {
 
 struct super_block {
 	struct jffs2_sb_info	jffs2_sb;
+	/*
+	 * If granular locking is ever enabled for JFFS2, the inode cache
+	 * (s_root) needs to be protected due to NAND delayed writes.
+	 */
 	struct _inode *		s_root;
 	rtems_jffs2_flash_control	*s_flash_control;
 	rtems_jffs2_compressor_control	*s_compressor_control;

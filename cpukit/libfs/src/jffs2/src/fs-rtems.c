@@ -1307,7 +1307,9 @@ static void process_delayed_work(void)
 		work->pending = false;
 		mutex_unlock(&work->dw_mutex);
 
+		rtems_jffs2_do_lock(work->sb);
 		work->callback(&work->work);
+		rtems_jffs2_do_unlock(work->sb);
 	}
 	mutex_unlock(&delayed_work_mutex);
 }
@@ -1382,6 +1384,7 @@ int rtems_jffs2_initialize(
 		sb = &fs_info->sb;
 		c = JFFS2_SB_INFO(sb);
 #ifdef CONFIG_JFFS2_FS_WRITEBUFFER
+		c->wbuf_dwork.sb = sb;
 		add_delayed_work_to_chain(&c->wbuf_dwork);
 #endif
 		spin_lock_init(&c->erase_completion_lock);
@@ -1523,7 +1526,7 @@ static struct _inode *new_inode(struct super_block *sb)
 
 	inode->i_cache_next = NULL;	// Newest inode, about to be cached
 
-	mutex_init(&JFFS2_INODE_INFO(inode)->sem)
+	mutex_init(&JFFS2_INODE_INFO(inode)->sem);
 
 	// Add to the icache
 	for (cached_inode = sb->s_root; cached_inode != NULL;

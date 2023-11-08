@@ -24,6 +24,8 @@ struct delayed_work {
 	volatile bool pending;
 	volatile uint64_t execution_time;
 	work_callback_t callback;
+	/* Superblock provided for locking */
+	struct super_block *sb;
 };
 
 #define to_delayed_work(work) RTEMS_CONTAINER_OF(work, struct delayed_work, work)
