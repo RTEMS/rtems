@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2021, 2022 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -42,11 +42,23 @@
 
 #include <rtems/test-gcov.h>
 #include <rtems/score/isrlock.h>
+#include <rtems/score/hash.h>
 #include <rtems/bspIo.h>
 
 ISR_LOCK_DEFINE( static, gcov_dump_lock, "gcov dump" );
 
 static bool gcov_dump_done;
+
+static Hash_Context gcov_hash;
+
+static void gcov_put_char( int c, void *arg )
+{
+  uint8_t byte;
+
+  rtems_put_char( c, arg );
+  byte = (uint8_t) c;
+  _Hash_Add_data( &gcov_hash, &byte, sizeof( byte ) );
+}
 
 void rtems_test_gcov_dump_info( void )
 {
@@ -55,11 +67,24 @@ void rtems_test_gcov_dump_info( void )
   _ISR_lock_ISR_disable_and_acquire( &gcov_dump_lock, &lock_context );
 
   if ( !gcov_dump_done ) {
+    Hash_Control result;
+    uint8_t      byte;
+
     gcov_dump_done = true;
 
     _IO_Printf( rtems_put_char, NULL, "\n*** BEGIN OF GCOV INFO BASE64 ***\n" );
-    _Gcov_Dump_info_base64( rtems_put_char, NULL );
+    _Hash_Initialize( &gcov_hash );
+    _Gcov_Dump_info_base64( gcov_put_char, NULL );
     _IO_Printf( rtems_put_char, NULL, "\n*** END OF GCOV INFO BASE64 ***\n" );
+    byte = '\n';
+    _Hash_Add_data( &gcov_hash, &byte, sizeof( byte ) );
+    _Hash_Finalize( &gcov_hash, &result );
+    _IO_Printf(
+      rtems_put_char,
+      NULL,
+      "*** GCOV INFO SHA256 %s ***\n",
+      _Hash_Get_string( &result )
+    );
   }
 
   _ISR_lock_Release_and_ISR_enable( &gcov_dump_lock, &lock_context );
