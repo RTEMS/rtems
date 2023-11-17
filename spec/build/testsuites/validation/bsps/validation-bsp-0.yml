@@ -19,6 +19,8 @@ links:
   uid: objgrlib
 - role: build-dependency
   uid: objsparcgr712rc
+- role: build-dependency
+  uid: objsparcgr740
 source:
 - testsuites/validation/bsps/ts-validation-bsp-0.c
 stlib: []
