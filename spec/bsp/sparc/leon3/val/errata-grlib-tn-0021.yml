@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: sparc/gr740
+links:
+- role: validation
+  uid: ../req/errata-grlib-tn-0021
+method: by-analysis
+references: []
+text: |
+  Workarounds for the seven errata are described in section 10.3 *Combined
+  workaround with SPLIT enabled* of the errata document.  The L2C flush
+  functionality is not used by the ${/rtems/cache/if/group:/name}
+  implementation of the ${/glossary/bsp:/term}.  The cache support of the BSP
+  only performs L2C register read accesses, so the R-W-R and R-A access
+  patterns cannot occur.  It is recommended to not directly access the L2C
+  registers through the application.  It is recommended to improve the cache
+  support of the BSP, so that applications do not need to access the L2C
+  registers directly.  The BSP does not lock cache ways in the L2C.  It is
+  assumed that the bootloader did set L2CERR.COMP = 0, L2CACCC.DBPF = 0, and
+  L2CACCC.128WF = 1.  It is assumed that the bootloader issued a memory read
+  access to trigger a cache line fetch.
+type: validation

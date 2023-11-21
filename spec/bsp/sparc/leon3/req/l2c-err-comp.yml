@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: sparc/gr740
+links:
+- role: requirement-refinement
+  uid: errata-grlib-tn-0021
+non-functional-type: design
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The bootloader shall set the L2CERR.COMP register field to zero.
+type: requirement

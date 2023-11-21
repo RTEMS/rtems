@@ -1,0 +1,65 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: sparc/gr740
+links: []
+test-actions:
+- action-brief: |
+    Validate the required L2C bootloader settings.
+  action-code: |
+    l2cache *regs;
+    uint32_t accc;
+    uint32_t err;
+
+    regs = (l2cache *) LEON3_L2CACHE_BASE;
+    accc = grlib_load_32( &regs->l2caccc );
+    err = grlib_load_32( &regs->l2cerr );
+  checks:
+  - brief: |
+      Check that the bootloader did set the L2CACCC.128WF register field.
+    code: |
+      T_ne_u32( accc & L2CACHE_L2CACCC_128WF, 0 );
+    links:
+    - role: validation
+      uid: ../req/l2c-accc-128wf
+  - brief: |
+      Check that the bootloader did clear the L2CACCC.DBPF register field.
+    code: |
+      T_eq_u32( accc & L2CACHE_L2CACCC_DBPF, 0 );
+    links:
+    - role: validation
+      uid: ../req/l2c-accc-dbpf
+  - brief: |
+      Check that the bootloader did set the L2CACCC.SPLIT register field.
+    code: |
+      T_ne_u32( accc & L2CACHE_L2CACCC_SPLIT, 0 );
+    links:
+    - role: validation
+      uid: ../req/l2c-accc-split
+  - brief: |
+      Check that the bootloader did clear the L2CERR.COMP register field.
+    code: |
+      T_eq_u32( err & L2CACHE_L2CERR_COMP, 0 );
+    links:
+    - role: validation
+      uid: ../req/l2c-err-comp
+  links: []
+test-brief: |
+  This test case collection provides validation test cases for the
+  ``sparc/gr740`` ${/glossary/bsp:/term}.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- bsp.h
+- grlib/l2cache-regs.h
+- grlib/io.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/bsps/tc-sparc-gr740.c
+test-teardown: null
+type: test-case
