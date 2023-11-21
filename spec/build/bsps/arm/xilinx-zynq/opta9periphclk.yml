@@ -6,7 +6,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
-- enabled-by: arm/xilinx_zynq_zc702
+- enabled-by:
+  - arm/xilinx_zynq_zc702
+  - arm/xilinx_zynq_zc706
   value: 333333333
 - enabled-by: arm/xilinx_zynq_zedboard
   value: 666666667
