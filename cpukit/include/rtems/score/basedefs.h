@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2014 Paval Pisa
+ * Copyright (C) 2014 Pavel Pisa
  * Copyright (C) 2011, 2013 On-Line Applications Research Corporation (OAR)
  * Copyright (C) 2009, 2023 embedded brains GmbH & Co. KG
  *
