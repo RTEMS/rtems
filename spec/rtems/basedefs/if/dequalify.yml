@@ -4,7 +4,7 @@ brief: |
   type for the pointer variable.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
-- Copyright (C) 2014 Paval Pisa
+- Copyright (C) 2014 Pavel Pisa
 definition:
   default:
     attributes: null
