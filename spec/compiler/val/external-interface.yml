@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: validation
+  uid: /compiler/if/asm
+- role: validation
+  uid: /compiler/if/builtin-choose-expr
+- role: validation
+  uid: /compiler/if/builtin-expect
+- role: validation
+  uid: /compiler/if/builtin-return-address
+- role: validation
+  uid: /compiler/if/builtin-types-compatible-p
+- role: validation
+  uid: /compiler/if/builtin-unreachable
+- role: validation
+  uid: /compiler/if/coverity
+- role: validation
+  uid: /compiler/if/cplusplus
+- role: validation
+  uid: /compiler/if/file
+- role: validation
+  uid: /compiler/if/func
+- role: validation
+  uid: /compiler/if/gnuc
+- role: validation
+  uid: /compiler/if/line
+- role: validation
+  uid: /compiler/if/pretty-function
+- role: validation
+  uid: /compiler/if/stdc-version
+- role: validation
+  uid: /compiler/if/typeof
+- role: validation
+  uid: /compiler/if/user-label-prefix
+method: by-review-of-design
+references: []
+text: |
+  This interface is an external interface.  It is implicitly validated by
+  the ${/glossary/api:/term} elements which use this interface.
+type: validation
