@@ -211,12 +211,12 @@ pre-conditions:
     test-code: |
       ctx->suspended = true;
     text: |
-      Whiel the new owner is suspended.
+      While the new owner is suspended.
   - name: 'No'
     test-code: |
       ctx->suspended = false;
     text: |
-      Whiel the new owner is not suspended.
+      While the new owner is not suspended.
   test-epilogue: null
   test-prologue: null
 - name: WaitState
