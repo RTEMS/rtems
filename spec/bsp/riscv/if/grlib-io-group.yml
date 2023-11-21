@@ -4,7 +4,7 @@ brief: |
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
 description: null
-enabled-by: true
+enabled-by: riscv
 identifier: RTEMSDeviceGRLIBIO
 index-entries: []
 interface-type: group
