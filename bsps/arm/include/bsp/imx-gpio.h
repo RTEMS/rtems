@@ -77,6 +77,32 @@ struct imx_gpio_pin {
 void imx_gpio_init (struct imx_gpio_pin *pin);
 
 /**
+ * Initialize a GPIO pin from the fields in an FDT property.
+ *
+ * If you have for example the following property in an FDT node:
+ *
+ *     some-node {
+ *         mixed-stuff = <0>, <&some_node 1>, <&gpio4 22 GPIO_ACTIVE_LOW>, <17>;
+ *     };
+ *
+ * You can get the property using fdt_getprop(...) in your code, somehow find
+ * the right start position (the phandle &gpio4) and then pass it to this
+ * function.
+ *
+ * If you pass something != NULL to @a next_prop_pointer, you will get a pointer
+ * to the next part in the attribute. In the example above, that will be a
+ * pointer to the <17>.
+ *
+ * NOTE: The information from the third parameter in the FDT (GPIO_ACTIVE_LOW in
+ * the example) is currently ignored.
+ */
+rtems_status_code imx_gpio_init_from_fdt_property_pointer(
+  struct imx_gpio_pin *pin,
+  const uint32_t *prop_pointer,
+  enum imx_gpio_mode mode,
+  const uint32_t **next_prop_pointer);
+
+/**
  * Initialize a GPIO pin from a FDT property.
  *
  * If you have for example the following property in an FDT node:

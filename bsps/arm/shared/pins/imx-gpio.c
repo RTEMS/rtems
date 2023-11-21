@@ -191,12 +191,11 @@ static void imx_gpio_set_interrupt_mode(struct imx_gpio_pin *pin, uint32_t mode)
   }
 }
 
-rtems_status_code imx_gpio_init_from_fdt_property (
+rtems_status_code imx_gpio_init_from_fdt_property_pointer (
   struct imx_gpio_pin *pin,
-  int node_offset,
-  const char *property,
+  const uint32_t *prop_pointer,
   enum imx_gpio_mode mode,
-  size_t index
+  const uint32_t **next_prop_pointer
 )
 {
   int len;
@@ -205,7 +204,6 @@ rtems_status_code imx_gpio_init_from_fdt_property (
   const void *fdt;
   uint32_t gpio_regs;
   const unsigned pin_length_dwords = 3;
-  const unsigned pin_length_bytes = (pin_length_dwords * sizeof(uint32_t));
   uint32_t gpio_phandle;
   uint32_t pin_nr;
   int cfgnode;
@@ -213,16 +211,12 @@ rtems_status_code imx_gpio_init_from_fdt_property (
   memset(pin, 0, sizeof(*pin));
 
   fdt = bsp_fdt_get();
-  val = fdt_getprop(fdt, node_offset, property, &len);
-  if (val == NULL || (len % pin_length_bytes != 0) ||
-      (index >= len / pin_length_bytes)) {
-    sc = RTEMS_UNSATISFIED;
-  }
   if (sc == RTEMS_SUCCESSFUL) {
-    pin_nr = fdt32_to_cpu(val[1 + index * pin_length_dwords]);
-    gpio_phandle = fdt32_to_cpu(val[0 + index * pin_length_dwords]);
+    pin_nr = fdt32_to_cpu(prop_pointer[1]);
+    gpio_phandle = fdt32_to_cpu(prop_pointer[0]);
 
     cfgnode = fdt_node_offset_by_phandle(fdt, gpio_phandle);
+    /* FIXME: Check compatible strings here. */
     val = fdt_getprop(fdt, cfgnode, "reg", &len);
     if (len > 0) {
       gpio_regs = fdt32_to_cpu(val[0]);
@@ -238,6 +232,43 @@ rtems_status_code imx_gpio_init_from_fdt_property (
   }
   if (sc == RTEMS_SUCCESSFUL) {
     imx_gpio_init(pin);
+  }
+  if (sc == RTEMS_SUCCESSFUL && next_prop_pointer != NULL) {
+    *next_prop_pointer = prop_pointer + pin_length_dwords;
+  }
+
+  return sc;
+}
+
+rtems_status_code imx_gpio_init_from_fdt_property (
+  struct imx_gpio_pin *pin,
+  int node_offset,
+  const char *property,
+  enum imx_gpio_mode mode,
+  size_t index
+)
+{
+  int len;
+  const uint32_t *val;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  const void *fdt;
+  const unsigned pin_length_dwords = 3;
+  const unsigned pin_length_bytes = pin_length_dwords * 4;
+
+  memset(pin, 0, sizeof(*pin));
+
+  fdt = bsp_fdt_get();
+  val = fdt_getprop(fdt, node_offset, property, &len);
+  if (val == NULL || (len % pin_length_bytes != 0) ||
+      (index >= len / pin_length_bytes)) {
+    sc = RTEMS_UNSATISFIED;
+  }
+  if (sc == RTEMS_SUCCESSFUL) {
+    sc = imx_gpio_init_from_fdt_property_pointer(
+      pin,
+      val + index * pin_length_dwords,
+      mode,
+      NULL);
   }
 
   return sc;
