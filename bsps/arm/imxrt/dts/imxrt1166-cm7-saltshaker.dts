@@ -125,6 +125,7 @@
 
 &video_mux {
 	pinctrl-0 = <&pinctrl_video_mux>;
+	status = "disabled";
 };
 
 &usbotg1 {
