@@ -22,6 +22,8 @@ test-code: |
     (void) rtems_message_queue_delete( 0 );
   }
 
+  #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
+
   #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 
   #define TASK_STORAGE_SIZE \

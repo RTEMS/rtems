@@ -33,6 +33,8 @@ test-code: |
 
   #define CONFIGURE_TASK_STACK_DEALLOCATOR task_stack_deallocate
 
+  #define CONFIGURE_MAXIMUM_TIMERS 1
+
   #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 
   #define TASK_STORAGE_SIZE \

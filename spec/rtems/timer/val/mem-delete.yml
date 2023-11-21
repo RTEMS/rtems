@@ -19,6 +19,8 @@ test-code: |
     (void) rtems_timer_delete( 0 );
   }
 
+  #define CONFIGURE_MAXIMUM_TIMERS 1
+
   #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 
   #define TASK_STORAGE_SIZE \

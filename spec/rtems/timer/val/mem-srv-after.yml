@@ -20,6 +20,8 @@ test-code: |
     (void) rtems_timer_server_fire_after( 0, 0, NULL, NULL );
   }
 
+  #define CONFIGURE_MAXIMUM_TIMERS 1
+
   #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 
   #define TASK_STORAGE_SIZE \
