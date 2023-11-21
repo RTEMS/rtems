@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: GPL
+text: |
+  This term is an acronym for
+  `GNU General Public License <https://www.gnu.org/licenses>`__.
+type: glossary

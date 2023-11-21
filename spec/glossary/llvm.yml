@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: LLVM
+text: |
+  This term is an acronym for
+  `Low Level Virtual Machine <https://www.llvm.org>`__.
+  The LLVM Project is a collection of modular and reusable compiler and
+  toolchain technologies.
+type: glossary
