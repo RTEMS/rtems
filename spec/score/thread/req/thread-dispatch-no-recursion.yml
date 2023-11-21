@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While a thread dispatch is necessary, when a thread context switch returned,
+  the thread dispatch to the heir thread shall be done without recursion.
+type: requirement

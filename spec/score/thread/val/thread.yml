@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2021, 2023 embedded brains GmbH & Co. KG
 enabled-by: true
 links: []
 test-actions:
@@ -144,6 +144,37 @@ test-actions:
     - role: validation
       uid: ../req/global-construction-classic-before-entry
   links: []
+- action-brief: |
+    Validate that thread dispatching does not recurse.  Issue a couple of
+    thread context switches during a thread dispatch.  Record the stack
+    pointers of the heir threads.
+  action-code: |
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, WorkerTask, NULL );
+
+    ctx->thread_switch_state = 0;
+    ctx->runner_stack[ 0 ] = 0;
+    ctx->runner_stack[ 1 ] = 1;
+    ctx->worker_stack[ 0 ] = 0;
+    ctx->worker_stack[ 1 ] = 1;
+    SetTaskSwitchExtension( TaskSwitch );
+    ResumeTask( ctx->worker_id );
+
+    SetTaskSwitchExtension( NULL );
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerPriority();
+  checks:
+  - brief: |
+      Check that the thread dispatching did not recurse through the recorded
+      stack pointers.
+    code: |
+      T_eq_uptr( ctx->runner_stack[ 0 ], ctx->runner_stack[ 1 ] );
+      T_eq_uptr( ctx->worker_stack[ 0 ], ctx->worker_stack[ 1 ] );
+    links:
+    - role: validation
+      uid: ../req/thread-dispatch-no-recursion
+  links: []
 test-brief: |
   Tests general thread behaviour.
 test-context:
@@ -162,6 +193,21 @@ test-context:
   description: null
   member: |
     volatile double fp_obj
+- brief: |
+    This member indicates the thread switch state.
+  description: null
+  member: |
+    int thread_switch_state
+- brief: |
+    This member contain the runner stack pointer at the context switch.
+  description: null
+  member: |
+    uintptr_t runner_stack[ 2 ]
+- brief: |
+    This member contain the worker stack pointer at the context switch.
+  description: null
+  member: |
+    uintptr_t worker_stack[ 2 ]
 test-context-support: null
 test-description: null
 test-header: null
@@ -238,6 +284,44 @@ test-support: |
 
     ctx = (Context *) arg;
     DeleteTask( ctx->worker_id );
+  }
+
+  static void TaskSwitch( rtems_tcb *executing, rtems_tcb *heir )
+  {
+    Context  *ctx;
+    rtems_id  worker_id;
+    int       state;
+    uintptr_t heir_stack;
+
+    ctx = T_fixture_context();
+    worker_id = ctx->worker_id;
+    state = ctx->thread_switch_state;
+    ctx->thread_switch_state = state + 1;
+    heir_stack = _CPU_Context_Get_SP( &heir->Registers );
+
+    switch ( state ) {
+      case 0:
+        T_eq_u32( heir->Object.id, worker_id );
+        SuspendTask( worker_id );
+        ctx->worker_stack[ 0 ] = heir_stack;
+        break;
+      case 1:
+        T_eq_u32( executing->Object.id, worker_id );
+        ResumeTask( worker_id );
+        ctx->runner_stack[ 0 ] = heir_stack;
+        break;
+      case 2:
+        T_eq_u32( heir->Object.id, worker_id );
+        SuspendTask( worker_id );
+        ctx->worker_stack[ 1 ] = heir_stack;
+        break;
+      case 3:
+        T_eq_u32( executing->Object.id, worker_id );
+        ctx->runner_stack[ 1 ] = heir_stack;
+        break;
+      default:
+        T_unreachable();
+    }
   }
 test-target: testsuites/validation/tc-score-thread.c
 test-teardown: null
