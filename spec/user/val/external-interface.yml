@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: validation
+  uid: /user/if/asm
+- role: validation
+  uid: /user/if/false
+- role: validation
+  uid: /user/if/true
+method: by-review-of-design
+references: []
+text: |
+  This interface is an external interface.  It is implicitly validated by
+  the ${/glossary/api:/term} elements which use this interface.
+type: validation
