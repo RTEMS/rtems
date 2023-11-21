@@ -82,8 +82,8 @@ pre-conditions:
     test-code: |
       ctx->cpu_index = rtems_scheduler_get_processor_maximum();
     text: |
-      While the ${../if/ident-by-processor:/params[0]/name} parameter greater
-      than or equal to the processor maximum.
+      While the ${../if/ident-by-processor:/params[0]/name} parameter is
+      greater than or equal to the processor maximum.
   - name: Valid
     test-code: |
       if ( ctx->cpu_has_scheduler ) {
@@ -92,8 +92,8 @@ pre-conditions:
         ctx->cpu_index = 1;
       }
     text: |
-      While the ${../if/ident-by-processor:/params[0]/name} parameter less than
-      the processor maximum.
+      While the ${../if/ident-by-processor:/params[0]/name} parameter is less
+      than the processor maximum.
   test-epilogue: null
   test-prologue: null
 - name: Id
