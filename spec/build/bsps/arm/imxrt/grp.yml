@@ -25,6 +25,8 @@ links:
 - role: build-dependency
   uid: optlinkcmds
 - role: build-dependency
+  uid: optlpspimaxcs
+- role: build-dependency
   uid: optmemdtcmsz
 - role: build-dependency
   uid: optmemextramnocachesz

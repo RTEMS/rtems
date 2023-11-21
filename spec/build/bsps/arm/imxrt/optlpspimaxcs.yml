@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+default:
+- enabled-by: arm/imxrt1166-cm7-saltshaker
+  value: 8
+- enabled-by: true
+  value: 0
+description: |
+  Maximum number of (combined) native and GPIO chip selects per LPSPI.  If only
+  native chip selects are used, this can be set to 0 to save some processing
+  cycles on SPI transfers.  Otherwise you have to set it to at least 4.
+enabled-by: true
+format: '{}'
+links: []
+name: IMXRT_LPSPI_MAX_CS
+type: build
