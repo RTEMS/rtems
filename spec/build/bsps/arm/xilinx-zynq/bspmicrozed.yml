@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: xilinx_zynq_microzed
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2023 B. Moessner
+cppflags: []
+enabled-by: true
+family: xilinx-zynq
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: grp
+source: []
+type: build

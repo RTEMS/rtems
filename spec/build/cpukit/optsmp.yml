@@ -5,6 +5,7 @@ actions:
 - define-condition: null
 build-type: option
 copyrights:
+- Copyright (C) 2023 B. Moessner
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
@@ -27,6 +28,11 @@ enabled-by:
 - arm/xilinx_zynq_zc702
 - arm/xilinx_zynq_zc706
 - arm/xilinx_zynq_zedboard
+- arm/xilinx_zynq_zybo
+- arm/xilinx_zynq_zybo_z7
+- arm/xilinx_zynq_picozed
+- arm/xilinx_zynq_pynq
+- arm/xilinx_zynq_microzed
 - powerpc/qoriq_e500
 - powerpc/qoriq_e6500_32
 - powerpc/qoriq_e6500_64

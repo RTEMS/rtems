@@ -1,0 +1,7 @@
+#
+# Xilinx Zedboard RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+include: xilinx_zynq-testsuite.tcfg

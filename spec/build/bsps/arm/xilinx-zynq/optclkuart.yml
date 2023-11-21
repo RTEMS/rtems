@@ -4,8 +4,13 @@ actions:
 - define: null
 build-type: option
 copyrights:
+- Copyright (C) 2023 B. Moessner
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
+- enabled-by:
+  - arm/xilinx_zynq_zybo_z7
+  - arm/xilinx_zynq_pynq
+  value: 100000000
 - enabled-by: true
   value: 50000000
 description: |

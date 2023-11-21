@@ -6,6 +6,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
+- enabled-by:
+  - arm/xilinx_zynq_microzed
+  value: 0
 - enabled-by: true
   value: 1
 description: |
