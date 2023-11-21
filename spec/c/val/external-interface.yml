@@ -1,0 +1,89 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: validation
+  uid: /c/if/bintime
+- role: validation
+  uid: /c/if/bool
+- role: validation
+  uid: /c/if/caddr-t
+- role: validation
+  uid: /c/if/clock-monotonic
+- role: validation
+  uid: /c/if/clock-realtime
+- role: validation
+  uid: /c/if/clock-settime
+- role: validation
+  uid: /c/if/cpu_set_t
+- role: validation
+  uid: /c/if/eagain
+- role: validation
+  uid: /c/if/ebusy
+- role: validation
+  uid: /c/if/einval
+- role: validation
+  uid: /c/if/enomem
+- role: validation
+  uid: /c/if/enotsup
+- role: validation
+  uid: /c/if/errno
+- role: validation
+  uid: /c/if/etimedout
+- role: validation
+  uid: /c/if/false
+- role: validation
+  uid: /c/if/int16_t
+- role: validation
+  uid: /c/if/int32_t
+- role: validation
+  uid: /c/if/int64_t
+- role: validation
+  uid: /c/if/int8_t
+- role: validation
+  uid: /c/if/intmax_t
+- role: validation
+  uid: /c/if/intptr_t
+- role: validation
+  uid: /c/if/null
+- role: validation
+  uid: /c/if/offsetof
+- role: validation
+  uid: /c/if/size_max
+- role: validation
+  uid: /c/if/size_t
+- role: validation
+  uid: /c/if/time_t
+- role: validation
+  uid: /c/if/timer-abstime
+- role: validation
+  uid: /c/if/timespec
+- role: validation
+  uid: /c/if/timeval
+- role: validation
+  uid: /c/if/true
+- role: validation
+  uid: /c/if/uint16_t
+- role: validation
+  uid: /c/if/uint32_max
+- role: validation
+  uid: /c/if/uint32_t
+- role: validation
+  uid: /c/if/uint64_t
+- role: validation
+  uid: /c/if/uint8_t
+- role: validation
+  uid: /c/if/uintmax_t
+- role: validation
+  uid: /c/if/uintptr_max
+- role: validation
+  uid: /c/if/uintptr_t
+- role: validation
+  uid: /c/if/va_list
+method: by-review-of-design
+references: []
+text: |
+  This interface is an external interface.  It is implicitly validated by
+  the ${/glossary/api:/term} elements which use this interface.
+type: validation
