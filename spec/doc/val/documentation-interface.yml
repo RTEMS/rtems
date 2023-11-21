@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: validation
+  uid: /doc/if/config-scheduler-clustered
+- role: validation
+  uid: /doc/if/config-scheduler-table
+- role: validation
+  uid: /doc/if/config-unlimited-objects
+- role: validation
+  uid: /doc/if/global-construction
+- role: validation
+  uid: /doc/if/mp-proxies
+- role: validation
+  uid: /doc/if/mrsp
+- role: validation
+  uid: /doc/if/scheduler-cbs
+- role: validation
+  uid: /doc/if/scheduler-concepts
+- role: validation
+  uid: /doc/if/scheduler-edf
+- role: validation
+  uid: /doc/if/scheduler-priority
+- role: validation
+  uid: /doc/if/scheduler-priority-simple
+- role: validation
+  uid: /doc/if/scheduler-smp-edf
+- role: validation
+  uid: /doc/if/scheduler-smp-priority
+- role: validation
+  uid: /doc/if/scheduler-smp-priority-affinity
+- role: validation
+  uid: /doc/if/scheduler-smp-priority-simple
+- role: validation
+  uid: /doc/if/terminate
+method: by-inspection
+references: []
+text: |
+  This interface is a documentation interface.  The associated documentation
+  was reviewed to have valid links to this documentation interface.
+type: validation
