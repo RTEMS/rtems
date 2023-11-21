@@ -9,9 +9,8 @@ default:
 - enabled-by:
   - arm/xilinx_zynq_zc702
   - arm/xilinx_zynq_zc706
+  - arm/xilinx_zynq_zedboard
   value: 333333333
-- enabled-by: arm/xilinx_zynq_zedboard
-  value: 666666667
 - enabled-by: true
   value: 100000000
 description: |
