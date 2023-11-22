@@ -703,6 +703,11 @@ static void ScoreTqReqEnqueuePriority_TestVariant(
 
 static T_fixture_node ScoreTqReqEnqueuePriority_Node;
 
+static T_remark ScoreTqReqEnqueuePriority_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqEnqueuePriority"
+};
+
 void ScoreTqReqEnqueuePriority_Run( TQContext *tq_ctx )
 {
   ScoreTqReqEnqueuePriority_Context *ctx;
@@ -739,6 +744,7 @@ void ScoreTqReqEnqueuePriority_Run( TQContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreTqReqEnqueuePriority_Remark );
   T_pop_fixture();
 }
 

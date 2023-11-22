@@ -681,6 +681,11 @@ static void RtemsEventValEventConstant_Action_16(
 
 static T_fixture_node RtemsEventValEventConstant_Node;
 
+static T_remark RtemsEventValEventConstant_Remark = {
+  .next = NULL,
+  .remark = "RtemsEventValEventConstant"
+};
+
 void RtemsEventValEventConstant_Run( rtems_event_set event, int number )
 {
   RtemsEventValEventConstant_Context *ctx;
@@ -714,6 +719,7 @@ void RtemsEventValEventConstant_Run( rtems_event_set event, int number )
   RtemsEventValEventConstant_Action_15( ctx );
   RtemsEventValEventConstant_Action_16( ctx );
 
+  T_add_remark( &RtemsEventValEventConstant_Remark );
   T_pop_fixture();
 }
 

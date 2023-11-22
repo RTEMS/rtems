@@ -1079,6 +1079,11 @@ static void ScoreMtxReqSeizeWait_TestVariant(
 
 static T_fixture_node ScoreMtxReqSeizeWait_Node;
 
+static T_remark ScoreMtxReqSeizeWait_Remark = {
+  .next = NULL,
+  .remark = "ScoreMtxReqSeizeWait"
+};
+
 void ScoreMtxReqSeizeWait_Run( TQMtxContext *tq_ctx )
 {
   ScoreMtxReqSeizeWait_Context *ctx;
@@ -1140,6 +1145,7 @@ void ScoreMtxReqSeizeWait_Run( TQMtxContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreMtxReqSeizeWait_Remark );
   T_pop_fixture();
 }
 

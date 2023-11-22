@@ -1250,6 +1250,11 @@ static void RtemsEventReqSendReceive_TestVariant(
 
 static T_fixture_node RtemsEventReqSendReceive_Node;
 
+static T_remark RtemsEventReqSendReceive_Remark = {
+  .next = NULL,
+  .remark = "RtemsEventReqSendReceive"
+};
+
 void RtemsEventReqSendReceive_Run(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
@@ -1309,6 +1314,7 @@ void RtemsEventReqSendReceive_Run(
     }
   }
 
+  T_add_remark( &RtemsEventReqSendReceive_Remark );
   T_pop_fixture();
 }
 

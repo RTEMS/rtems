@@ -801,6 +801,11 @@ static void ScoreMtxReqSeizeTry_TestVariant( ScoreMtxReqSeizeTry_Context *ctx )
 
 static T_fixture_node ScoreMtxReqSeizeTry_Node;
 
+static T_remark ScoreMtxReqSeizeTry_Remark = {
+  .next = NULL,
+  .remark = "ScoreMtxReqSeizeTry"
+};
+
 void ScoreMtxReqSeizeTry_Run( TQMtxContext *tq_ctx )
 {
   ScoreMtxReqSeizeTry_Context *ctx;
@@ -856,6 +861,7 @@ void ScoreMtxReqSeizeTry_Run( TQMtxContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreMtxReqSeizeTry_Remark );
   T_pop_fixture();
 }
 

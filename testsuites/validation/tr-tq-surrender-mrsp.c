@@ -974,6 +974,11 @@ static void ScoreTqReqSurrenderMrsp_TestVariant(
 
 static T_fixture_node ScoreTqReqSurrenderMrsp_Node;
 
+static T_remark ScoreTqReqSurrenderMrsp_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqSurrenderMrsp"
+};
+
 void ScoreTqReqSurrenderMrsp_Run( TQContext *tq_ctx )
 {
   ScoreTqReqSurrenderMrsp_Context *ctx;
@@ -1029,6 +1034,7 @@ void ScoreTqReqSurrenderMrsp_Run( TQContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreTqReqSurrenderMrsp_Remark );
   T_pop_fixture();
 }
 

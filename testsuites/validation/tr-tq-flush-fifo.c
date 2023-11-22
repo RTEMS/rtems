@@ -633,6 +633,11 @@ static void ScoreTqReqFlushFifo_TestVariant( ScoreTqReqFlushFifo_Context *ctx )
 
 static T_fixture_node ScoreTqReqFlushFifo_Node;
 
+static T_remark ScoreTqReqFlushFifo_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqFlushFifo"
+};
+
 void ScoreTqReqFlushFifo_Run( TQContext *tq_ctx, bool may_stop )
 {
   ScoreTqReqFlushFifo_Context *ctx;
@@ -682,6 +687,7 @@ void ScoreTqReqFlushFifo_Run( TQContext *tq_ctx, bool may_stop )
     }
   }
 
+  T_add_remark( &ScoreTqReqFlushFifo_Remark );
   T_pop_fixture();
 }
 

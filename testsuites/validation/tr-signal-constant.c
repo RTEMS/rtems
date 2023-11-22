@@ -176,6 +176,11 @@ static void RtemsSignalValSignalConstant_Action_1(
 
 static T_fixture_node RtemsSignalValSignalConstant_Node;
 
+static T_remark RtemsSignalValSignalConstant_Remark = {
+  .next = NULL,
+  .remark = "RtemsSignalValSignalConstant"
+};
+
 void RtemsSignalValSignalConstant_Run( rtems_signal_set signal, int number )
 {
   RtemsSignalValSignalConstant_Context *ctx;
@@ -194,6 +199,7 @@ void RtemsSignalValSignalConstant_Run( rtems_signal_set signal, int number )
   RtemsSignalValSignalConstant_Action_0( ctx );
   RtemsSignalValSignalConstant_Action_1( ctx );
 
+  T_add_remark( &RtemsSignalValSignalConstant_Remark );
   T_pop_fixture();
 }
 

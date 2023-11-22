@@ -528,6 +528,11 @@ static void ScoreSemReqSurrender_TestVariant(
 
 static T_fixture_node ScoreSemReqSurrender_Node;
 
+static T_remark ScoreSemReqSurrender_Remark = {
+  .next = NULL,
+  .remark = "ScoreSemReqSurrender"
+};
+
 void ScoreSemReqSurrender_Run( TQSemContext *tq_ctx )
 {
   ScoreSemReqSurrender_Context *ctx;
@@ -564,6 +569,7 @@ void ScoreSemReqSurrender_Run( TQSemContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreSemReqSurrender_Remark );
   T_pop_fixture();
 }
 

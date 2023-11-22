@@ -405,6 +405,11 @@ static void ScoreTqReqEnqueueDeadlock_TestVariant(
 
 static T_fixture_node ScoreTqReqEnqueueDeadlock_Node;
 
+static T_remark ScoreTqReqEnqueueDeadlock_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqEnqueueDeadlock"
+};
+
 void ScoreTqReqEnqueueDeadlock_Run( TQContext *tq_ctx )
 {
   ScoreTqReqEnqueueDeadlock_Context *ctx;
@@ -435,6 +440,7 @@ void ScoreTqReqEnqueueDeadlock_Run( TQContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreTqReqEnqueueDeadlock_Remark );
   T_pop_fixture();
 }
 

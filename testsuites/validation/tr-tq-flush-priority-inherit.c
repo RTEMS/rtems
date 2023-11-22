@@ -535,6 +535,11 @@ static void ScoreTqReqFlushPriorityInherit_TestVariant(
 
 static T_fixture_node ScoreTqReqFlushPriorityInherit_Node;
 
+static T_remark ScoreTqReqFlushPriorityInherit_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqFlushPriorityInherit"
+};
+
 void ScoreTqReqFlushPriorityInherit_Run( TQContext *tq_ctx )
 {
   ScoreTqReqFlushPriorityInherit_Context *ctx;
@@ -565,6 +570,7 @@ void ScoreTqReqFlushPriorityInherit_Run( TQContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreTqReqFlushPriorityInherit_Remark );
   T_pop_fixture();
 }
 

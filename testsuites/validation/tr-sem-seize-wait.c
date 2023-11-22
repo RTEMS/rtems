@@ -368,6 +368,11 @@ static void ScoreSemReqSeizeWait_TestVariant(
 
 static T_fixture_node ScoreSemReqSeizeWait_Node;
 
+static T_remark ScoreSemReqSeizeWait_Remark = {
+  .next = NULL,
+  .remark = "ScoreSemReqSeizeWait"
+};
+
 void ScoreSemReqSeizeWait_Run( TQSemContext *tq_ctx )
 {
   ScoreSemReqSeizeWait_Context *ctx;
@@ -392,6 +397,7 @@ void ScoreSemReqSeizeWait_Run( TQSemContext *tq_ctx )
     ScoreSemReqSeizeWait_TestVariant( ctx );
   }
 
+  T_add_remark( &ScoreSemReqSeizeWait_Remark );
   T_pop_fixture();
 }
 

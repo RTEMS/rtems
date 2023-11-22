@@ -385,6 +385,11 @@ static void ScoreTqReqFlushPriority_TestVariant(
 
 static T_fixture_node ScoreTqReqFlushPriority_Node;
 
+static T_remark ScoreTqReqFlushPriority_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqFlushPriority"
+};
+
 void ScoreTqReqFlushPriority_Run(
   TQContext *tq_ctx,
   bool       supports_multiple_priority_queues
@@ -412,6 +417,7 @@ void ScoreTqReqFlushPriority_Run(
     ScoreTqReqFlushPriority_TestVariant( ctx );
   }
 
+  T_add_remark( &ScoreTqReqFlushPriority_Remark );
   T_pop_fixture();
 }
 

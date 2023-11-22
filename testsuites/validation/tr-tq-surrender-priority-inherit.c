@@ -2435,6 +2435,11 @@ static void ScoreTqReqSurrenderPriorityInherit_TestVariant(
 
 static T_fixture_node ScoreTqReqSurrenderPriorityInherit_Node;
 
+static T_remark ScoreTqReqSurrenderPriorityInherit_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqSurrenderPriorityInherit"
+};
+
 void ScoreTqReqSurrenderPriorityInherit_Run( TQContext *tq_ctx )
 {
   ScoreTqReqSurrenderPriorityInherit_Context *ctx;
@@ -2510,6 +2515,7 @@ void ScoreTqReqSurrenderPriorityInherit_Run( TQContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreTqReqSurrenderPriorityInherit_Remark );
   T_pop_fixture();
 }
 

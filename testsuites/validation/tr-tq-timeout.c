@@ -427,6 +427,11 @@ static void ScoreTqReqTimeout_TestVariant( ScoreTqReqTimeout_Context *ctx )
 
 static T_fixture_node ScoreTqReqTimeout_Node;
 
+static T_remark ScoreTqReqTimeout_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqTimeout"
+};
+
 void ScoreTqReqTimeout_Run( TQContext *tq_ctx )
 {
   ScoreTqReqTimeout_Context *ctx;
@@ -447,6 +452,7 @@ void ScoreTqReqTimeout_Run( TQContext *tq_ctx )
     ScoreTqReqTimeout_TestVariant( ctx );
   }
 
+  T_add_remark( &ScoreTqReqTimeout_Remark );
   T_pop_fixture();
 }
 

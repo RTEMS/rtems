@@ -611,6 +611,11 @@ static void ScoreTqReqEnqueueMrsp_TestVariant(
 
 static T_fixture_node ScoreTqReqEnqueueMrsp_Node;
 
+static T_remark ScoreTqReqEnqueueMrsp_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqEnqueueMrsp"
+};
+
 void ScoreTqReqEnqueueMrsp_Run( TQContext *tq_ctx )
 {
   ScoreTqReqEnqueueMrsp_Context *ctx;
@@ -646,6 +651,7 @@ void ScoreTqReqEnqueueMrsp_Run( TQContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreTqReqEnqueueMrsp_Remark );
   T_pop_fixture();
 }
 

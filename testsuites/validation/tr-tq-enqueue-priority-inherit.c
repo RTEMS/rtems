@@ -1668,6 +1668,11 @@ static void ScoreTqReqEnqueuePriorityInherit_TestVariant(
 
 static T_fixture_node ScoreTqReqEnqueuePriorityInherit_Node;
 
+static T_remark ScoreTqReqEnqueuePriorityInherit_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqEnqueuePriorityInherit"
+};
+
 void ScoreTqReqEnqueuePriorityInherit_Run( TQContext *tq_ctx )
 {
   ScoreTqReqEnqueuePriorityInherit_Context *ctx;
@@ -1730,6 +1735,7 @@ void ScoreTqReqEnqueuePriorityInherit_Run( TQContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreTqReqEnqueuePriorityInherit_Remark );
   T_pop_fixture();
 }
 

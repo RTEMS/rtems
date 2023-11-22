@@ -454,6 +454,11 @@ static void RtemsReqIdent_TestVariant( RtemsReqIdent_Context *ctx )
 
 static T_fixture_node RtemsReqIdent_Node;
 
+static T_remark RtemsReqIdent_Remark = {
+  .next = NULL,
+  .remark = "RtemsReqIdent"
+};
+
 void RtemsReqIdent_Run(
   rtems_id             id_local_object,
   rtems_name           name_local_object,
@@ -492,6 +497,7 @@ void RtemsReqIdent_Run(
     }
   }
 
+  T_add_remark( &RtemsReqIdent_Remark );
   T_pop_fixture();
 }
 

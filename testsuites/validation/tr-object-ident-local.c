@@ -350,6 +350,11 @@ static void RtemsReqIdentLocal_TestVariant( RtemsReqIdentLocal_Context *ctx )
 
 static T_fixture_node RtemsReqIdentLocal_Node;
 
+static T_remark RtemsReqIdentLocal_Remark = {
+  .next = NULL,
+  .remark = "RtemsReqIdentLocal"
+};
+
 void RtemsReqIdentLocal_Run(
   rtems_id             id_local_object,
   rtems_name           name_local_object,
@@ -382,6 +387,7 @@ void RtemsReqIdentLocal_Run(
     }
   }
 
+  T_add_remark( &RtemsReqIdentLocal_Remark );
   T_pop_fixture();
 }
 

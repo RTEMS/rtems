@@ -645,6 +645,11 @@ static void ScoreTqReqEnqueueCeiling_TestVariant(
 
 static T_fixture_node ScoreTqReqEnqueueCeiling_Node;
 
+static T_remark ScoreTqReqEnqueueCeiling_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqEnqueueCeiling"
+};
+
 void ScoreTqReqEnqueueCeiling_Run( TQContext *tq_ctx )
 {
   ScoreTqReqEnqueueCeiling_Context *ctx;
@@ -681,6 +686,7 @@ void ScoreTqReqEnqueueCeiling_Run( TQContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreTqReqEnqueueCeiling_Remark );
   T_pop_fixture();
 }
 

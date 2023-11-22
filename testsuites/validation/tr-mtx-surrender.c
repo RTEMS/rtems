@@ -1161,6 +1161,11 @@ static void ScoreMtxReqSurrender_TestVariant(
 
 static T_fixture_node ScoreMtxReqSurrender_Node;
 
+static T_remark ScoreMtxReqSurrender_Remark = {
+  .next = NULL,
+  .remark = "ScoreMtxReqSurrender"
+};
+
 void ScoreMtxReqSurrender_Run( TQMtxContext *tq_ctx )
 {
   ScoreMtxReqSurrender_Context *ctx;
@@ -1234,6 +1239,7 @@ void ScoreMtxReqSurrender_Run( TQMtxContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreMtxReqSurrender_Remark );
   T_pop_fixture();
 }
 

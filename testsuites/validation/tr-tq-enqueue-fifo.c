@@ -305,6 +305,11 @@ static void ScoreTqReqEnqueueFifo_TestVariant(
 
 static T_fixture_node ScoreTqReqEnqueueFifo_Node;
 
+static T_remark ScoreTqReqEnqueueFifo_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqEnqueueFifo"
+};
+
 void ScoreTqReqEnqueueFifo_Run( TQContext *tq_ctx )
 {
   ScoreTqReqEnqueueFifo_Context *ctx;
@@ -328,6 +333,7 @@ void ScoreTqReqEnqueueFifo_Run( TQContext *tq_ctx )
     ScoreTqReqEnqueueFifo_TestVariant( ctx );
   }
 
+  T_add_remark( &ScoreTqReqEnqueueFifo_Remark );
   T_pop_fixture();
 }
 

@@ -2071,6 +2071,11 @@ static void ScoreTqReqTimeoutPriorityInherit_TestVariant(
 
 static T_fixture_node ScoreTqReqTimeoutPriorityInherit_Node;
 
+static T_remark ScoreTqReqTimeoutPriorityInherit_Remark = {
+  .next = NULL,
+  .remark = "ScoreTqReqTimeoutPriorityInherit"
+};
+
 void ScoreTqReqTimeoutPriorityInherit_Run( TQContext *tq_ctx )
 {
   ScoreTqReqTimeoutPriorityInherit_Context *ctx;
@@ -2148,6 +2153,7 @@ void ScoreTqReqTimeoutPriorityInherit_Run( TQContext *tq_ctx )
     }
   }
 
+  T_add_remark( &ScoreTqReqTimeoutPriorityInherit_Remark );
   T_pop_fixture();
 }
 
