@@ -86,6 +86,11 @@ typedef struct T_fixture_node {
 	unsigned int failures;
 } T_fixture_node;
 
+typedef struct T_remark {
+	struct T_remark *next;
+	const char *remark;
+} T_remark;
+
 #define T_ARRAY_SIZE(array) (sizeof(array) / sizeof((array)[0]))
 
 /*
@@ -2326,6 +2331,8 @@ void T_set_putchar(T_putchar, void *, T_putchar *, void **);
 void *T_fixture_context(void);
 
 void T_set_fixture_context(void *);
+
+void T_add_remark(T_remark *);
 
 void *T_push_fixture(T_fixture_node *, const T_fixture *);
 

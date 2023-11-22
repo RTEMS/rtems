@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2018, 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2018, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -72,6 +72,7 @@ typedef struct {
 	T_fixture_node *fixtures;
 	T_fixture_node case_fixture;
 	LIST_HEAD(, T_destructor) destructors;
+	T_remark remarks;
 	T_time case_begin_time;
 	atomic_uint planned_steps;
 	atomic_uint steps;
@@ -931,6 +932,23 @@ T_call_destructors(const T_context *ctx)
 #endif
 }
 
+static void
+T_make_remarks(T_context *ctx)
+{
+	T_remark *remark;
+
+	remark = ctx->remarks.next;
+
+	while (remark != &ctx->remarks) {
+		T_remark *current;
+
+		current = remark;
+		remark = current->next;
+		current->next = NULL;
+		T_do_log(ctx, T_QUIET, "R:%s\n", current->remark);
+	}
+}
+
 static T_context *
 T_do_run_initialize(const T_config *config)
 {
@@ -982,6 +1000,7 @@ T_do_case_begin(T_context *ctx, const T_case_context *tc)
 	ctx->current_case = tc;
 	ctx->fixtures = &ctx->case_fixture;
 	LIST_INIT(&ctx->destructors);
+	ctx->remarks.next = &ctx->remarks;
 	atomic_store_explicit(&ctx->planned_steps, UINT_MAX,
 	    memory_order_relaxed);
 	atomic_store_explicit(&ctx->steps, 0, memory_order_relaxed);
@@ -1033,6 +1052,7 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 	T_call_destructors(ctx);
 	config = ctx->config;
 	T_actions_backward(config, T_EVENT_CASE_END, tc->name);
+	T_make_remarks(ctx);
 
 	planned_steps = atomic_fetch_add_explicit(&ctx->planned_steps,
 	    0, memory_order_relaxed);
@@ -1291,6 +1311,18 @@ void
 T_pop_fixture(void)
 {
 	T_do_pop_fixture(&T_instance);
+}
+
+void
+T_add_remark(T_remark *remark)
+{
+	if (remark->next == NULL) {
+		T_context *ctx;
+
+		ctx = &T_instance;
+		remark->next = ctx->remarks.next;
+		ctx->remarks.next = remark;
+	}
 }
 
 size_t
