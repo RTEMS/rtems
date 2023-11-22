@@ -125,7 +125,7 @@ class Template(string.Template):
     idpattern = "[_A-Za-z][_A-Za-z0-9:#]*"
 
 
-_VAR_PATTERN = re.compile("\$\{?(" + Template.idpattern + ")\}?$")
+_VAR_PATTERN = re.compile("\\$\\{?(" + Template.idpattern + ")\\}?$")
 
 
 def _is_enabled_op_and(enabled, enabled_by):
