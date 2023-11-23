@@ -53,10 +53,6 @@
 #endif
 
 #include "tr-mtx-seize-try.h"
-#include "tr-tq-enqueue-ceiling.h"
-#include "tr-tq-enqueue-fifo.h"
-#include "tr-tq-enqueue-mrsp.h"
-#include "tr-tq-enqueue-priority.h"
 
 #include <rtems/test.h>
 
