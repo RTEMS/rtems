@@ -90,8 +90,12 @@ post-conditions:
       with priority inheritance.
   - name: MrsP
     test-code: |
+      #if defined(RTEMS_SMP)
       T_eq_u32( ctx->counter, 1 );
       ${../../tq/req/surrender-mrsp:/test-run}( &ctx->tq_ctx->base );
+      #else
+      T_unreachable();
+      #endif
     text: |
       The thread queue of the mutex shall be surrendered in priority order
       with MrsP.
@@ -376,7 +380,6 @@ test-includes: []
 test-local-includes:
 - tr-mtx-surrender.h
 - tr-tq-surrender.h
-- tr-tq-surrender-mrsp.h
 - tr-tq-surrender-priority-inherit.h
 test-prepare: |
   ctx->owner_caller = false;
@@ -392,6 +395,10 @@ test-prepare: |
 test-setup: null
 test-stop: null
 test-support: |
+  #if defined(RTEMS_SMP)
+  #include "tr-tq-surrender-mrsp.h"
+  #endif
+
   typedef ${.:/test-context-type} Context;
 
   static Status_Control Status( const Context *ctx, Status_Control status )

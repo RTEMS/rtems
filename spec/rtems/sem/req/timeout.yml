@@ -24,8 +24,12 @@ post-conditions:
       ${/score/tq/req/timeout:/spec}.
   - name: TimeoutMrsP
     test-code: |
+      #if defined(RTEMS_SMP)
       ctx->tq_ctx.wait = TQ_WAIT_TIMED;
       ${/score/tq/req/timeout-mrsp:/test-run}( &ctx->tq_ctx );
+      #else
+      T_unreachable();
+      #endif
     text: |
       The semaphore obtain timeout actions shall be done as specified by
       ${/score/tq/req/timeout-mrsp:/spec}.
@@ -75,7 +79,11 @@ pre-conditions:
     test-code: |
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
         RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+      #if defined(RTEMS_SMP)
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_STICKY;
+      #else
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      #endif
     text: |
       While the semaphore object is a MrsP semaphore.
   test-epilogue: null
@@ -103,9 +111,6 @@ skip-reasons:
   NeedsPriorityDiscipline: |
     Binary semaphores with a locking protocol are required to use the priority
     task wait queue discipline.
-  NoMrsP: |
-    Where the system is build with SMP support disabled, the MrsP locking
-    protocol is not available.
 test-action: |
   rtems_status_code sc;
 
@@ -144,7 +149,6 @@ test-includes:
 - string.h
 test-local-includes:
 - tr-tq-timeout.h
-- tr-tq-timeout-mrsp.h
 - tr-tq-timeout-priority-inherit.h
 - tx-thread-queue.h
 - tx-support.h
@@ -163,7 +167,10 @@ test-setup:
     TQInitialize( &ctx->tq_ctx );
   description: null
 test-stop: null
-test-support: null
+test-support: |
+  #if defined(RTEMS_SMP)
+  #include "tr-tq-timeout-mrsp.h"
+  #endif
 test-target: testsuites/validation/tc-sem-timeout.c
 test-teardown:
   brief: null
@@ -176,10 +183,6 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Action:
-    - if:
-        pre-conditions:
-          Class: MrsP
-      then: TimeoutMrsP
     - if:
         pre-conditions:
           Class: PrioInherit
@@ -197,9 +200,9 @@ transition-map:
     - MrsP
     Discipline:
     - FIFO
-- enabled-by:
-    not: RTEMS_SMP
-  post-conditions: NoMrsP
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Action: TimeoutMrsP
   pre-conditions:
     Class:
     - MrsP

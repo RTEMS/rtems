@@ -108,22 +108,30 @@ post-conditions:
       is allowed, and a priority ceiling is used.
   - name: MrsPMtxSeizeTry
     test-code: |
+      #if defined(RTEMS_SMP)
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_MRSP;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
+      #else
+      T_unreachable();
+      #endif
     text: |
       The calling task shall try to seize the mutex as specified by
       ${/score/mtx/req/seize-try:/spec} where an enqueue is sticky, a recursive seize
       returns an error status, and a priority ceiling is used.
   - name: MrsPMtxSeizeWait
     test-code: |
+      #if defined(RTEMS_SMP)
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_MRSP;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
+      #else
+      T_unreachable();
+      #endif
     text: |
       The calling task shall wait to seize the mutex as specified by
       ${/score/mtx/req/seize-wait:/spec} where an enqueue is sticky, a recursive
@@ -232,9 +240,6 @@ skip-reasons:
   NeedsPriorityDiscipline: |
     Binary semaphores with a locking protocol are required to use the priority
     task wait queue discipline.
-  NoMrsP: |
-    Where the system is build with SMP support disabled, the MrsP locking
-    protocol is not available.
 test-action: |
   rtems_status_code sc;
 
@@ -247,6 +252,7 @@ test-action: |
   );
   T_rsc_success( sc );
 
+  #if defined(RTEMS_SMP)
   if ( ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0 ) {
     rtems_task_priority prio;
 
@@ -258,6 +264,7 @@ test-action: |
     );
     T_rsc_success( sc );
   }
+  #endif
 test-brief: null
 test-cleanup:
   rtems_status_code sc;
@@ -337,6 +344,7 @@ transition-map:
     Action: InvId
   pre-conditions:
     Class:
+    - MrsP
     - PrioCeiling
     - PrioInherit
     Discipline:
@@ -397,6 +405,7 @@ transition-map:
     Action: CeilingMtxSeizeTry
   pre-conditions:
     Class:
+    - MrsP
     - PrioCeiling
     Discipline:
     - Priority
@@ -409,6 +418,7 @@ transition-map:
     Action: CeilingMtxSeizeWait
   pre-conditions:
     Class:
+    - MrsP
     - PrioCeiling
     Discipline:
     - Priority
@@ -443,15 +453,6 @@ transition-map:
     - Timeout
     - Forever
 - enabled-by: true
-  post-conditions: NoMrsP
-  pre-conditions:
-    Class:
-    - MrsP
-    Discipline:
-    - Priority
-    Id: all
-    Wait: all
-- enabled-by: true
   post-conditions: NeedsPriorityDiscipline
   pre-conditions:
     Class:
@@ -461,17 +462,6 @@ transition-map:
     Discipline:
     - FIFO
     Id: all
-    Wait: all
-- enabled-by: RTEMS_SMP
-  post-conditions:
-    Action: InvId
-  pre-conditions:
-    Class:
-    - MrsP
-    Discipline:
-    - Priority
-    Id:
-    - Invalid
     Wait: all
 - enabled-by: RTEMS_SMP
   post-conditions:

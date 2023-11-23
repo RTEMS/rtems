@@ -81,7 +81,11 @@ post-conditions:
       priority ceiling locking protocol.
   - name: PriorityMrsP
     test-code: |
+      #if defined(RTEMS_SMP)
       ${../../tq/req/enqueue-mrsp:/test-run}( &ctx->tq_ctx->base );
+      #else
+      T_unreachable();
+      #endif
     text: |
       The calling thread shall be enqueued in priority order according to the
       MrsP locking protocol.
@@ -341,7 +345,6 @@ test-local-includes:
 - tr-tq-enqueue-ceiling.h
 - tr-tq-enqueue-deadlock.h
 - tr-tq-enqueue-fifo.h
-- tr-tq-enqueue-mrsp.h
 - tr-tq-enqueue-priority.h
 - tr-tq-enqueue-priority-inherit.h
 test-prepare: |
@@ -352,6 +355,10 @@ test-prepare: |
 test-setup: null
 test-stop: null
 test-support: |
+  #if defined(RTEMS_SMP)
+  #include "tr-tq-enqueue-mrsp.h"
+  #endif
+
   typedef ${.:/test-context-type} Context;
 
   static Status_Control Status( const Context *ctx, Status_Control status )
