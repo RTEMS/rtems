@@ -264,10 +264,6 @@ test-header:
 test-includes: []
 test-local-includes:
 - tr-mtx-seize-try.h
-- tr-tq-enqueue-ceiling.h
-- tr-tq-enqueue-fifo.h
-- tr-tq-enqueue-mrsp.h
-- tr-tq-enqueue-priority.h
 test-prepare: |
   ctx->owner_caller = false;
   ctx->owner_other = false;
