@@ -56,7 +56,6 @@
 #include "tr-tq-enqueue-ceiling.h"
 #include "tr-tq-enqueue-deadlock.h"
 #include "tr-tq-enqueue-fifo.h"
-#include "tr-tq-enqueue-mrsp.h"
 #include "tr-tq-enqueue-priority-inherit.h"
 #include "tr-tq-enqueue-priority.h"
 
@@ -217,6 +216,10 @@ static const char * const * const ScoreMtxReqSeizeWait_PreDesc[] = {
   ScoreMtxReqSeizeWait_PreDesc_Priority,
   NULL
 };
+
+#if defined(RTEMS_SMP)
+#include "tr-tq-enqueue-mrsp.h"
+#endif
 
 typedef ScoreMtxReqSeizeWait_Context Context;
 
@@ -728,7 +731,11 @@ static void ScoreMtxReqSeizeWait_Post_Enqueued_Check(
        * The calling thread shall be enqueued in priority order according to
        * the MrsP locking protocol.
        */
+      #if defined(RTEMS_SMP)
       ScoreTqReqEnqueueMrsp_Run( &ctx->tq_ctx->base );
+      #else
+      T_unreachable();
+      #endif
       break;
     }
 

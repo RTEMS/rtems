@@ -53,7 +53,6 @@
 #endif
 
 #include "tr-mtx-surrender.h"
-#include "tr-tq-surrender-mrsp.h"
 #include "tr-tq-surrender-priority-inherit.h"
 #include "tr-tq-surrender.h"
 
@@ -251,6 +250,10 @@ static const char * const * const ScoreMtxReqSurrender_PreDesc[] = {
   ScoreMtxReqSurrender_PreDesc_Priority,
   NULL
 };
+
+#if defined(RTEMS_SMP)
+#include "tr-tq-surrender-mrsp.h"
+#endif
 
 typedef ScoreMtxReqSurrender_Context Context;
 
@@ -810,8 +813,12 @@ static void ScoreMtxReqSurrender_Post_Surrender_Check(
        * The thread queue of the mutex shall be surrendered in priority order
        * with MrsP.
        */
+      #if defined(RTEMS_SMP)
       T_eq_u32( ctx->counter, 1 );
       ScoreTqReqSurrenderMrsp_Run( &ctx->tq_ctx->base );
+      #else
+      T_unreachable();
+      #endif
       break;
     }
 

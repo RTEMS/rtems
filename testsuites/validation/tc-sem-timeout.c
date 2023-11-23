@@ -55,7 +55,6 @@
 #include <rtems.h>
 #include <string.h>
 
-#include "tr-tq-timeout-mrsp.h"
 #include "tr-tq-timeout-priority-inherit.h"
 #include "tr-tq-timeout.h"
 #include "tx-support.h"
@@ -169,6 +168,10 @@ static const char * const * const RtemsSemReqTimeout_PreDesc[] = {
   NULL
 };
 
+#if defined(RTEMS_SMP)
+#include "tr-tq-timeout-mrsp.h"
+#endif
+
 static void RtemsSemReqTimeout_Pre_Class_Prepare(
   RtemsSemReqTimeout_Context  *ctx,
   RtemsSemReqTimeout_Pre_Class state
@@ -226,7 +229,11 @@ static void RtemsSemReqTimeout_Pre_Class_Prepare(
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
         RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+      #if defined(RTEMS_SMP)
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_STICKY;
+      #else
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      #endif
       break;
     }
 
@@ -285,8 +292,12 @@ static void RtemsSemReqTimeout_Post_Action_Check(
        * The semaphore obtain timeout actions shall be done as specified by
        * spec:/score/tq/req/timeout-mrsp.
        */
+      #if defined(RTEMS_SMP)
       ctx->tq_ctx.wait = TQ_WAIT_TIMED;
       ScoreTqReqTimeoutMrsp_Run( &ctx->tq_ctx );
+      #else
+      T_unreachable();
+      #endif
       break;
     }
 
@@ -374,10 +385,10 @@ RtemsSemReqTimeout_Entries[] = {
   { 0, 0, 0, RtemsSemReqTimeout_Post_Action_Timeout },
   { 1, 0, 0, RtemsSemReqTimeout_Post_Action_NA },
   { 0, 0, 0, RtemsSemReqTimeout_Post_Action_TimeoutPriorityInherit },
-#if !defined(RTEMS_SMP)
-  { 1, 0, 0, RtemsSemReqTimeout_Post_Action_NA }
-#else
+#if defined(RTEMS_SMP)
   { 0, 0, 0, RtemsSemReqTimeout_Post_Action_TimeoutMrsP }
+#else
+  { 0, 0, 0, RtemsSemReqTimeout_Post_Action_Timeout }
 #endif
 };
 

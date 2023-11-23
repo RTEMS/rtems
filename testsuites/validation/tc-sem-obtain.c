@@ -499,11 +499,15 @@ static void RtemsSemReqObtain_Post_Action_Check(
        * spec:/score/mtx/req/seize-try where an enqueue is sticky, a recursive
        * seize returns an error status, and a priority ceiling is used.
        */
+      #if defined(RTEMS_SMP)
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_MRSP;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
       ScoreMtxReqSeizeTry_Run( &ctx->tq_mtx_ctx );
+      #else
+      T_unreachable();
+      #endif
       break;
     }
 
@@ -513,11 +517,15 @@ static void RtemsSemReqObtain_Post_Action_Check(
        * spec:/score/mtx/req/seize-wait where an enqueue is sticky, a recursive
        * seize returns an error status, and a priority ceiling is used.
        */
+      #if defined(RTEMS_SMP)
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_MRSP;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
       ScoreMtxReqSeizeWait_Run( &ctx->tq_mtx_ctx );
+      #else
+      T_unreachable();
+      #endif
       break;
     }
 
@@ -580,6 +588,7 @@ static void RtemsSemReqObtain_Action( RtemsSemReqObtain_Context *ctx )
   );
   T_rsc_success( sc );
 
+  #if defined(RTEMS_SMP)
   if ( ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0 ) {
     rtems_task_priority prio;
 
@@ -591,6 +600,7 @@ static void RtemsSemReqObtain_Action( RtemsSemReqObtain_Context *ctx )
     );
     T_rsc_success( sc );
   }
+  #endif
 }
 
 static void RtemsSemReqObtain_Cleanup( RtemsSemReqObtain_Context *ctx )
@@ -606,33 +616,28 @@ RtemsSemReqObtain_Entries[] = {
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_SemSeizeWait },
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_SemSeizeTry },
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_MtxSeizeWait },
-#if defined(RTEMS_SMP)
-  { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_InvId },
-#else
-  { 1, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_NA },
-#endif
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_MtxSeizeTry },
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_CeilingMtxSeizeWait },
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_InheritMtxSeizeWait },
 #if defined(RTEMS_SMP)
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_MrsPMtxSeizeWait },
 #else
-  { 1, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_NA },
+  { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_CeilingMtxSeizeWait },
 #endif
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_CeilingMtxSeizeTry },
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_InheritMtxSeizeTry },
 #if defined(RTEMS_SMP)
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_MrsPMtxSeizeTry }
 #else
-  { 1, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_NA }
+  { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_CeilingMtxSeizeTry }
 #endif
 };
 
 static const uint8_t
 RtemsSemReqObtain_Map[] = {
-  3, 2, 2, 0, 0, 0, 3, 2, 2, 0, 0, 0, 3, 2, 2, 0, 0, 0, 3, 2, 2, 0, 0, 0, 6, 4,
-  4, 0, 0, 0, 6, 4, 4, 0, 0, 0, 1, 1, 1, 1, 1, 1, 10, 7, 7, 0, 0, 0, 1, 1, 1,
-  1, 1, 1, 11, 8, 8, 0, 0, 0, 1, 1, 1, 1, 1, 1, 12, 9, 9, 5, 5, 5
+  3, 2, 2, 0, 0, 0, 3, 2, 2, 0, 0, 0, 3, 2, 2, 0, 0, 0, 3, 2, 2, 0, 0, 0, 5, 4,
+  4, 0, 0, 0, 5, 4, 4, 0, 0, 0, 1, 1, 1, 1, 1, 1, 9, 6, 6, 0, 0, 0, 1, 1, 1, 1,
+  1, 1, 10, 7, 7, 0, 0, 0, 1, 1, 1, 1, 1, 1, 11, 8, 8, 0, 0, 0
 };
 
 static size_t RtemsSemReqObtain_Scope( void *arg, char *buf, size_t n )
