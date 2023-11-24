@@ -56,10 +56,10 @@
 #define TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
 // One task for undefined task, and n-1 calculation tasks
-#define TASK_COUNT TEST_PROCESSORS
+#define TASK_COUNT ISVV_TEST_PROCESSORS
 
 // We want to create mandelbrot executions whilst our undefined calls are executing
-#define CALCULATION_TASKS ((TEST_PROCESSORS)-1)
+#define CALCULATION_TASKS ((ISVV_TEST_PROCESSORS)-1)
 
 #define FUNCTION_CALLS 32
 #define UNDEF_FUNC_CALLS (FUNCTION_CALLS / 2)
@@ -294,7 +294,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS TEST_PROCESSORS
+#define CONFIGURE_MAXIMUM_PROCESSORS ISVV_TEST_PROCESSORS
 
 // Reduce the priority of the Init task so all other tasks can be schedules to all other cores
 #define CONFIGURE_INIT_TASK_PRIORITY PRIO_LOW

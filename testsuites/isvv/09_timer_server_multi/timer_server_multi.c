@@ -67,7 +67,7 @@
 #define ITOA_STR_SIZE (8 * sizeof(int) + 1)
 
 // test specific global vars
-#define TASK_COUNT TEST_PROCESSORS
+#define TASK_COUNT ISVV_TEST_PROCESSORS
 
 rtems_event_set event_send[4] = {RTEMS_EVENT_1,
 				 RTEMS_EVENT_2,
@@ -224,7 +224,7 @@ static void Init( rtems_task_argument arg ) {
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS TEST_PROCESSORS
+#define CONFIGURE_MAXIMUM_PROCESSORS ISVV_TEST_PROCESSORS
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
@@ -234,7 +234,7 @@ static void Init( rtems_task_argument arg ) {
 
 #define CONFIGURE_MAXIMUM_TIMERS 2
 
-#define CONFIGURE_MAXIMUM_TASKS (TEST_PROCESSORS + 1)
+#define CONFIGURE_MAXIMUM_TASKS (ISVV_TEST_PROCESSORS + 1)
 
 #define CONFIGURE_SCHEDULER_EDF_SMP
 

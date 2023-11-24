@@ -9,5 +9,13 @@ install-path: ${BSP_INCLUDEDIR}/rtems
 links:
 - role: build-dependency
   uid: optverbosity
+- role: build-dependency
+  uid: isvv/optperiodlength
+- role: build-dependency
+  uid: isvv/optprocessors
+- role: build-dependency
+  uid: isvv/optt0period
+- role: build-dependency
+  uid: isvv/optt1period
 target: cpukit/include/rtems/testopts.h
 type: build

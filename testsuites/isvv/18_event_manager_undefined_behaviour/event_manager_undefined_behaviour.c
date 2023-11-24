@@ -63,10 +63,10 @@
 #define SEND_EVENTS_PERIOD 2
 
 // One task for sending events, one task for receiving events, and n-1 calculation tasks
-#define TASK_COUNT (TEST_PROCESSORS) + 1
+#define TASK_COUNT (ISVV_TEST_PROCESSORS) + 1
 
 // We want to create mandelbrot executions whilst our events manager functions execute
-#define CALCULATION_TASKS (TEST_PROCESSORS) - 1
+#define CALCULATION_TASKS (ISVV_TEST_PROCESSORS) - 1
 
 #define EVENT_CALLS 15
 const rtems_event_set TEST_EVENTS[EVENT_CALLS] = {RTEMS_EVENT_0,
@@ -377,7 +377,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS TEST_PROCESSORS
+#define CONFIGURE_MAXIMUM_PROCESSORS ISVV_TEST_PROCESSORS
 
 // Reduce the priority of the Init task so all other tasks can be scheduled to all other cores
 #define CONFIGURE_INIT_TASK_PRIORITY PRIO_LOW

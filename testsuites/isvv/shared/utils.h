@@ -29,14 +29,8 @@
  * Calculates the mandebroot set
 */
 #include <rtems.h>
+#include <rtems/testopts.h>
 #include "trig_tables.h"
-
-#ifdef gr740
-  #define TEST_PROCESSORS 4
-#endif
-#ifdef gr712rc
-  #define TEST_PROCESSORS 2
-#endif
 
 #define MAXITERATION 255
 #define IMAGE_WIDTH 2250

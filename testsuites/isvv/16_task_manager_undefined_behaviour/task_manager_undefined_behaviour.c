@@ -57,7 +57,7 @@
 
 // We want to create mandelbrot executions whilst our task manager functions
 // are executed on another core
-#define TASK_COUNT TEST_PROCESSORS
+#define TASK_COUNT ISVV_TEST_PROCESSORS
 #define CALCULATION_TASKS ((TASK_COUNT) - 1)
 
 // Timing related variables to ensure concurrent executions
@@ -425,7 +425,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS TEST_PROCESSORS
+#define CONFIGURE_MAXIMUM_PROCESSORS ISVV_TEST_PROCESSORS
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
@@ -434,7 +434,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_BARRIERS 1
 
-#define CONFIGURE_MAXIMUM_TASKS (TEST_PROCESSORS + 1)
+#define CONFIGURE_MAXIMUM_TASKS (ISVV_TEST_PROCESSORS + 1)
 
 #define CONFIGURE_SCHEDULER_EDF_SMP
 

@@ -48,16 +48,6 @@
  * and shows that our high priority task will FREQUENTLY overrun the time in its critical region
  */
 
-// Different periods for our periodic tasks needed for robustness and reliability as
-// Execution is dependant on processor clock speed i.e 250 MHz for gr740 and 80 MHz for gr712rc
-#ifdef gr740
-#define T0_PERIOD 400
-#define T1_PERIOD 200
-#else
-#define T0_PERIOD 600
-#define T1_PERIOD 300
-#endif
-
 #ifdef PRIO_INHERIT
 #define PRIO_PROTOCOL_SWITCH RTEMS_INHERIT_PRIORITY
 #else
@@ -96,8 +86,8 @@ static float inSensorDataIm[FFT_SIZE];
         MAX_TLS_SIZE + RTEMS_MINIMUM_STACK_SIZE, \
         TASK_ATTRIBUTES)
 
-#undef TEST_PROCESSORS
-#define TEST_PROCESSORS 1
+#undef ISVV_TEST_PROCESSORS
+#define ISVV_TEST_PROCESSORS 1
 #define TASK_COUNT 3
 #define EVENT_FINISHED_PROCESSING RTEMS_EVENT_0
 
@@ -136,7 +126,7 @@ static void solar_flare_analysis(rtems_task_argument arg)
 
     while (1)
     {
-        WaitPeriod(ctx->period_0_id, T0_PERIOD);
+        WaitPeriod(ctx->period_0_id, ISVV_TEST_T0_PERIOD);
 
         // Timer to see how long it takes to enter and exit critical region
         start_time = rtems_clock_get_ticks_since_boot();
@@ -173,7 +163,7 @@ static void decode_communications(rtems_task_argument arg)
 
     while (1)
     {
-        WaitPeriod(ctx->period_1_id, T1_PERIOD);
+        WaitPeriod(ctx->period_1_id, ISVV_TEST_T1_PERIOD);
 
         start_time = rtems_clock_get_ticks_since_boot();
 
@@ -193,7 +183,7 @@ static void decode_communications(rtems_task_argument arg)
 
         // If the execution time is greater than the period, and hence implicit deadline, then
         // this test cannot sufficiently be completed with the resources and parameters must be changed
-        if (elapsed_time >= T1_PERIOD)
+        if (elapsed_time >= ISVV_TEST_T1_PERIOD)
             print_string("[ERROR] Execution time of T1 is greater than period. Please reduce T1_TUNE_REPS \n");
     }
 
@@ -411,7 +401,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS TEST_PROCESSORS
+#define CONFIGURE_MAXIMUM_PROCESSORS ISVV_TEST_PROCESSORS
 
 #define CONFIGURE_MAXIMUM_TASKS (TASK_COUNT + 1)
 

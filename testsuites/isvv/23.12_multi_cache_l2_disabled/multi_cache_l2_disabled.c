@@ -47,7 +47,7 @@
  * There is one set of math equations processed:
  *  - named "filter_simulation"
  *
- * The equations for "filter_simulation" are used by TEST_PROCESSORS tasks that
+ * The equations for "filter_simulation" are used by ISVV_TEST_PROCESSORS tasks that
  * processes small sections of a "data array" in parallel.
  *
  * The locations in memory for acessing the small sections of the "data arrays" do
@@ -91,7 +91,7 @@
       TASK_ATTRIBUTES)
 
 // test specific global vars
-#define TASK_COUNT TEST_PROCESSORS
+#define TASK_COUNT ISVV_TEST_PROCESSORS
 #define TOTAL_TILES 64
 
 #define MAX_MESSAGE_QUEUES 5
@@ -450,13 +450,13 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS TEST_PROCESSORS
+#define CONFIGURE_MAXIMUM_PROCESSORS ISVV_TEST_PROCESSORS
 
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES MAX_MESSAGE_QUEUES
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
-#define CONFIGURE_MAXIMUM_TASKS ( TEST_PROCESSORS + 1 )
+#define CONFIGURE_MAXIMUM_TASKS ( ISVV_TEST_PROCESSORS + 1 )
 
 #define CONFIGURE_SCHEDULER_EDF_SMP
 

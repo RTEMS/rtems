@@ -78,8 +78,8 @@
 
 
 // test specific global vars
-#undef TEST_PROCESSORS
-#define TEST_PROCESSORS 1
+#undef ISVV_TEST_PROCESSORS
+#define ISVV_TEST_PROCESSORS 1
 
 #define TASK_COUNT            (2+2)  //2 parallel tasks for "filter simulation" and 
                                      // another 2 sequential tasks for "snr processing"
@@ -501,9 +501,9 @@ static void Init(rtems_task_argument arg){
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS TEST_PROCESSORS
+#define CONFIGURE_MAXIMUM_PROCESSORS ISVV_TEST_PROCESSORS
 
-#define CONFIGURE_MAXIMUM_TASKS TEST_PROCESSORS 
+#define CONFIGURE_MAXIMUM_TASKS ISVV_TEST_PROCESSORS 
 
 #define CONFIGURE_SCHEDULER_EDF_SMP
 
