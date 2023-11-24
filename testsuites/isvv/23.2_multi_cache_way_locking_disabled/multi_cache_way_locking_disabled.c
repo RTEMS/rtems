@@ -112,9 +112,9 @@ typedef struct{
   rtems_id main_task;
   uint8_t ntiles;
   uint8_t next_tile;
-  rtems_id task_filter_simulation_id[TEST_PROCESSORS];
+  rtems_id task_filter_simulation_id[ISVV_TEST_PROCESSORS];
   rtems_id tile_queue;
-  rtems_id message_queue[TEST_PROCESSORS];
+  rtems_id message_queue[ISVV_TEST_PROCESSORS];
   rtems_id filter_mutex_id;
   float filter_sim_process_time;
   uint64_t accxL2;
@@ -658,7 +658,7 @@ static void Init(rtems_task_argument arg){
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS TEST_PROCESSORS
+#define CONFIGURE_MAXIMUM_PROCESSORS ISVV_TEST_PROCESSORS
 
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES MAX_MESSAGE_QUEUES
 

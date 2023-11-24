@@ -12,10 +12,6 @@ install: []
 ldflags: []
 links:
 - role: build-dependency
-  uid: optgr712rc
-- role: build-dependency
-  uid: optgr740
-- role: build-dependency
   uid: 00_uni_test_reference
 - role: build-dependency
   uid: 00_mrsp_omip_uni

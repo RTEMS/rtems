@@ -54,15 +54,10 @@
 
 /* Given the board, define rate monotonic period length
  to approx. the mean time needed to calculate a single tile */
-#ifdef gr740
-  const rtems_interval PERIOD_LENGTH = 800;
-#endif
-#ifdef gr712rc
-  const rtems_interval PERIOD_LENGTH = 2500;
-#endif
+const rtems_interval PERIOD_LENGTH = ISVV_TEST_PERIOD_LENGTH;
 
 // test specific global vars
-#define TASK_COUNT TEST_PROCESSORS
+#define TASK_COUNT ISVV_TEST_PROCESSORS
 #define TOTAL_TILES 64
 
 rtems_event_set event_send[4] = {RTEMS_EVENT_1,
@@ -249,7 +244,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS TEST_PROCESSORS
+#define CONFIGURE_MAXIMUM_PROCESSORS ISVV_TEST_PROCESSORS
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
@@ -257,7 +252,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_BARRIERS 1
 
-#define CONFIGURE_MAXIMUM_TASKS (TEST_PROCESSORS + 1)
+#define CONFIGURE_MAXIMUM_TASKS (ISVV_TEST_PROCESSORS + 1)
 
 #define CONFIGURE_SCHEDULER_EDF_SMP
 
