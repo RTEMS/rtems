@@ -71,7 +71,7 @@ post-conditions:
     test-code: |
       ${../../tq/req/enqueue-priority-inherit:/test-run}( &ctx->tq_ctx->base );
     text: |
-      The calling thread shall be enqueued in priority order with priorit
+      The calling thread shall be enqueued in priority order with priority
       inheritance.
   - name: PriorityCeiling
     test-code: |
