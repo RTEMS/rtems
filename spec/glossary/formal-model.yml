@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 Trinity College Dublin
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: formal model
+text: |
+  A model of a computing component (hardware or software) that has a
+  mathematically based ${semantics:/term}.
+type: glossary

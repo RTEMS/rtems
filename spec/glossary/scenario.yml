@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 Trinity College Dublin
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: scenario
+text: |
+  In a setting that involves many concurrent tasks that interleave in arbitrary
+  ways, a scenario describes a single specific possible interleaving.  One
+  interpretation of the behaviour of a concurrent system is the set of all its
+  scenarios.
+type: glossary
