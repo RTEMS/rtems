@@ -8,7 +8,7 @@ cxxflags: []
 enabled-by:
   and:
   - RTEMS_SMP
-  - not: sparc/gr712rc
+  - sparc/gr740
 features: c cprogram
 includes: []
 ldflags: []
