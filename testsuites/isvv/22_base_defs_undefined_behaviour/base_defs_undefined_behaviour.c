@@ -332,8 +332,6 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES (RTEMS_SYSTEM_TASK | TASK_ATTRIBUTES)
 
-#define CONFIGURE_INIT_TASK_INITIAL_MODE 
-
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
