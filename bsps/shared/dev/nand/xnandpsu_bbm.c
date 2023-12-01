@@ -62,7 +62,9 @@ static s32 XNandPsu_WriteBbt(XNandPsu *InstancePtr, XNandPsu_BbtDesc *Desc,
 static s32 XNandPsu_MarkBbt(XNandPsu* InstancePtr, XNandPsu_BbtDesc *Desc,
 							u32 Target);
 
+#ifndef __rtems__
 static s32 XNandPsu_UpdateBbt(XNandPsu *InstancePtr, u32 Target);
+#endif
 
 /************************** Variable Definitions *****************************/
 
@@ -770,7 +772,11 @@ Out:
 *		- XST_FAILURE if fail.
 *
 ******************************************************************************/
+#ifdef __rtems__
+s32 XNandPsu_UpdateBbt(XNandPsu *InstancePtr, u32 Target)
+#else
 static s32 XNandPsu_UpdateBbt(XNandPsu *InstancePtr, u32 Target)
+#endif
 {
 	s32 Status;
 	u8 Version;
@@ -919,10 +925,21 @@ s32 XNandPsu_IsBlockBad(XNandPsu *InstancePtr, u32 Block)
 *
 ******************************************************************************/
 s32 XNandPsu_MarkBlockBad(XNandPsu *InstancePtr, u32 Block)
+#ifdef __rtems__
+{
+	return XNandPsu_MarkBlock(InstancePtr, Block, XNANDPSU_BLOCK_BAD );
+}
+
+s32 XNandPsu_MarkBlock(XNandPsu *InstancePtr, u32 Block, u8 BlockMark)
+#endif
 {
 	Xil_AssertNonvoid(InstancePtr != NULL);
 	Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY)
 	Xil_AssertNonvoid(Block < InstancePtr->Geometry.NumBlocks);
+
+#ifdef __rtems__
+	BlockMark &= XNANDPSU_BLOCK_TYPE_MASK;
+#endif
 
 	u8 Data;
 	u8 BlockShift;
@@ -941,7 +958,11 @@ s32 XNandPsu_MarkBlockBad(XNandPsu *InstancePtr, u32 Block)
 	/* Mark the block as bad in the RAM based Bad Block Table */
 	OldVal = Data;
 	Data &= ~(XNANDPSU_BLOCK_TYPE_MASK << BlockShift);
+#ifdef __rtems__
+	Data |= (BlockMark << BlockShift);
+#else
 	Data |= (XNANDPSU_BLOCK_BAD << BlockShift);
+#endif
 	NewVal = Data;
 	InstancePtr->Bbt[BlockOffset] = Data;
 
@@ -957,4 +978,24 @@ s32 XNandPsu_MarkBlockBad(XNandPsu *InstancePtr, u32 Block)
 Out:
 	return Status;
 }
+
+#ifdef __rtems__
+bool XNandPsu_StageBlockMark(XNandPsu *InstancePtr, u32 Block, u8 BlockMark)
+{
+	u8 BlockShift;
+	u32 BlockOffset;
+	u8 OldVal;
+
+	BlockMark &= XNANDPSU_BLOCK_TYPE_MASK;
+
+	BlockOffset = Block >> XNANDPSU_BBT_BLOCK_SHIFT;
+	BlockShift = XNandPsu_BbtBlockShift(Block);
+	OldVal = InstancePtr->Bbt[BlockOffset] >> BlockShift;
+	OldVal &= XNANDPSU_BLOCK_TYPE_MASK;
+	InstancePtr->Bbt[BlockOffset] &= ~(XNANDPSU_BLOCK_TYPE_MASK << BlockShift);
+	InstancePtr->Bbt[BlockOffset] |= (BlockMark << BlockShift);
+	return BlockMark != OldVal;
+}
+#endif
+
 /** @} */
