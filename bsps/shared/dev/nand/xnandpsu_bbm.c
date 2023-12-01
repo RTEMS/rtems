@@ -321,13 +321,23 @@ Out:
 ******************************************************************************/
 static void XNandPsu_ConvertBbt(XNandPsu *InstancePtr, u8 *Buf, u32 Target)
 {
+#ifndef __rtems__
 	u32 BlockOffset;
 	u8 BlockShift;
 	u32 Data;
 	u8 BlockType;
 	u32 BlockIndex;
+#endif
 	u32 BbtLen = InstancePtr->Geometry.NumTargetBlocks >>
 					XNANDPSU_BBT_BLOCK_SHIFT;
+#ifdef __rtems__
+	u32 BbtOffset = Target * InstancePtr->Geometry.NumTargetBlocks / XNANDPSU_BBT_ENTRY_NUM_BLOCKS;
+
+	for(u32 BbtIndex = 0; BbtIndex < BbtLen; BbtIndex++) {
+		/* Invert the byte to convert from in-flash BBT to in-memory BBT */
+		InstancePtr->Bbt[BbtIndex + BbtOffset] = ~Buf[BbtIndex];
+	}
+#else
 	u32 StartBlock = Target * InstancePtr->Geometry.NumTargetBlocks;
 
 	for(BlockOffset = StartBlock; BlockOffset < (StartBlock + BbtLen);
@@ -370,6 +380,7 @@ static void XNandPsu_ConvertBbt(XNandPsu *InstancePtr, u8 *Buf, u32 Target)
 			}
 		}
 	}
+#endif
 }
 
 /*****************************************************************************/
@@ -612,6 +623,7 @@ static s32 XNandPsu_WriteBbt(XNandPsu *InstancePtr, XNandPsu_BbtDesc *Desc,
 	u8 SpareBuf[XNANDPSU_MAX_SPARE_SIZE] __attribute__ ((aligned(64))) = {0U};
 #endif
 
+#ifndef __rtems__
 	u8 Mask[4] = {0x00U, 0x01U, 0x02U, 0x03U};
 	u8 Data;
 	u32 BlockOffset;
@@ -621,11 +633,21 @@ static s32 XNandPsu_WriteBbt(XNandPsu *InstancePtr, XNandPsu_BbtDesc *Desc,
 	u32 Index;
 	u8 BlockType;
 	u32 BbtLen = InstancePtr->Geometry.NumBlocks >>
+#else
+	s32 Status;
+	u32 Index;
+	u32 BbtLen = InstancePtr->Geometry.NumTargetBlocks >>
+#endif
 						XNANDPSU_BBT_BLOCK_SHIFT;
 	/* Find a valid block to write the Bad Block Table(BBT) */
 	if ((!Desc->Valid) != 0U) {
 		for(Index = 0U; Index < Desc->MaxBlocks; Index++) {
 			Block  = (EndBlock - Index);
+#ifdef __rtems__
+			if (XNandPsu_IsBlockBad(InstancePtr, Block) == XST_FAILURE) {
+				continue;
+			}
+#else
 			BlockOffset = Block >> XNANDPSU_BBT_BLOCK_SHIFT;
 			BlockShift = XNandPsu_BbtBlockShift(Block);
 			BlockType = (InstancePtr->Bbt[BlockOffset] >>
@@ -639,6 +661,7 @@ static s32 XNandPsu_WriteBbt(XNandPsu *InstancePtr, XNandPsu_BbtDesc *Desc,
 					/* Good Block */
 					break;
 			}
+#endif
 			Desc->PageOffset[Target] = Block *
 				InstancePtr->Geometry.PagesPerBlock;
 			if (Desc->PageOffset[Target] !=
@@ -666,6 +689,14 @@ static s32 XNandPsu_WriteBbt(XNandPsu *InstancePtr, XNandPsu_BbtDesc *Desc,
 	/* Convert the memory based BBT to flash based table */
 	(void)memset(Buf, 0xff, BbtLen);
 
+#ifdef __rtems__
+	u32 BbtTargetOffset = BbtLen * Target;
+	/* Loop through the BBT entries */
+	for(u32 BbtIndex = 0U; BbtIndex < BbtLen; BbtIndex++) {
+		/* Invert byte to convert from in-memory BBT to in-flash BBT */
+		Buf[BbtIndex] = ~InstancePtr->Bbt[BbtIndex + BbtTargetOffset];
+	}
+#else
 	/* Loop through the number of blocks */
 	for(BlockOffset = 0U; BlockOffset < BbtLen; BlockOffset++) {
 		Data = InstancePtr->Bbt[BlockOffset];
@@ -679,6 +710,7 @@ static s32 XNandPsu_WriteBbt(XNandPsu *InstancePtr, XNandPsu_BbtDesc *Desc,
 			Data >>= XNANDPSU_BBT_BLOCK_SHIFT;
 		}
 	}
+#endif
 	/* Write the Bad Block Table(BBT) to flash */
 	Status = XNandPsu_EraseBlock(InstancePtr, 0U, Block);
 	if (Status != XST_SUCCESS) {
