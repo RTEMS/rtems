@@ -719,7 +719,12 @@ static s32 XNandPsu_WriteBbt(XNandPsu *InstancePtr, XNandPsu_BbtDesc *Desc,
 	}
 #endif
 	/* Write the Bad Block Table(BBT) to flash */
+#ifdef __rtems__
+	Status = XNandPsu_EraseBlock(InstancePtr, Target,
+		Block % InstancePtr->Geometry.NumTargetBlocks);
+#else
 	Status = XNandPsu_EraseBlock(InstancePtr, 0U, Block);
+#endif
 	if (Status != XST_SUCCESS) {
 		goto Out;
 	}
