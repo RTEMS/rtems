@@ -411,7 +411,11 @@ static s32 XNandPsu_ReadBbt(XNandPsu *InstancePtr, u32 Target)
 
 	XNandPsu_BbtDesc *Desc = &InstancePtr->BbtDesc;
 	XNandPsu_BbtDesc *MirrorDesc = &InstancePtr->BbtMirrorDesc;
+#ifdef __rtems__
+	BufLen = InstancePtr->Geometry.NumTargetBlocks >>
+#else
 	BufLen = InstancePtr->Geometry.NumBlocks >>
+#endif
 			XNANDPSU_BBT_BLOCK_SHIFT;
 	/* Search the Bad Block Table(BBT) in flash */
 	Status1 = XNandPsu_SearchBbt(InstancePtr, Desc, Target);
