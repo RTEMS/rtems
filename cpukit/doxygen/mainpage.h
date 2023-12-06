@@ -50,7 +50,7 @@
  * license](https://git.rtems.org/rtems/tree/LICENSE.BSD-2-Clause).  Some
  * code of RTEMS is under a legacy license, the [modified GPL 2.0 or later
  * license with an exception for static
- * linking](https://git.rtems.org/rtems/tree/LICENSE>).  It exposes no license
+ * linking](https://git.rtems.org/rtems/tree/LICENSE).  It exposes no license
  * requirements on application code.  Everything necessary to build RTEMS
  * applications is available as open source software.  This makes you
  * completely vendor independent.
