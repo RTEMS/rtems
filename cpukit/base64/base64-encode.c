@@ -37,7 +37,7 @@ _Base64_Put(int c, void *arg, IO_Put_char put_char)
 
 static int
 _Base64_Do_encode(IO_Put_char put_char, void *arg, const void *src,
-    size_t srclen, const char *wordbreak, int wordlen, const char *encoding)
+    size_t srclen, const char *wordbreak, int wordlen, const uint8_t *encoding)
 {
 	unsigned int loops = 0;
 	const unsigned char *in = src;
@@ -88,24 +88,34 @@ _Base64_Do_encode(IO_Put_char put_char, void *arg, const void *src,
 	return out;
 }
 
-static const char base64[] =
-	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+const uint8_t _Base64_Encoding[64] = {
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+    'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
+    'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+    't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
+    '8', '9', '+', '/'
+};
 
 int
 _Base64_Encode(IO_Put_char put_char, void *arg, const void *src, size_t srclen,
     const char *wordbreak, int wordlen)
 {
 	return _Base64_Do_encode(put_char, arg, src, srclen, wordbreak,
-	    wordlen, base64);
+	    wordlen, _Base64_Encoding);
 }
 
-static const char base64url[] =
-	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
+const uint8_t _Base64url_Encoding[64] = {
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+    'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
+    'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+    't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
+    '8', '9', '-', '_'
+};
 
 int
 _Base64url_Encode(IO_Put_char put_char, void *arg, const void *src,
     size_t srclen, const char *wordbreak, int wordlen)
 {
 	return _Base64_Do_encode(put_char, arg, src, srclen, wordbreak,
-	    wordlen, base64url);
+	    wordlen, _Base64url_Encoding);
 }

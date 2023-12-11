@@ -55,6 +55,16 @@ extern "C" {
  */
 
 /**
+ * @brief Maps a 6-bit integer to the corresponding base64 encoding.
+ */
+extern const uint8_t _Base64_Encoding[ 64 ];
+
+/**
+ * @brief Maps a 6-bit integer to the corresponding base64url encoding.
+ */
+extern const uint8_t _Base64url_Encoding[ 64 ];
+
+/**
  * @brief Outputs the source buffer in base64 encoding.
  *
  * After word length of output characters produced by the encoding a word break
