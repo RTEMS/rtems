@@ -99,6 +99,7 @@ install:
   - cpukit/include/rtems/console.h
   - cpukit/include/rtems/counter.h
   - cpukit/include/rtems/cpuuse.h
+  - cpukit/include/rtems/crc.h
   - cpukit/include/rtems/deviceio.h
   - cpukit/include/rtems/devnull.h
   - cpukit/include/rtems/devzero.h
@@ -528,6 +529,7 @@ source:
 - cpukit/compression/xz/xz_crc32.c
 - cpukit/compression/xz/xz_dec_lzma2.c
 - cpukit/compression/xz/xz_dec_stream.c
+- cpukit/crc/crc24q.c
 - cpukit/base64/base64-encode.c
 - cpukit/base64/base64-decode.c
 - cpukit/dev/flash/flashdev.c

@@ -14,6 +14,7 @@ source:
 - testsuites/unit/tc-base64-decode.c
 - testsuites/unit/tc-compiler-builtins.c
 - testsuites/unit/tc-config.c
+- testsuites/unit/tc-crc.c
 - testsuites/unit/tc-misaligned-builtin-memcpy.c
 - testsuites/unit/tc-score-msgq.c
 - testsuites/unit/tc-score-rbtree.c
@@ -23,4 +24,5 @@ target: testsuites/unit/ts-unit-no-clock-0.exe
 type: build
 use-after:
 - validation
+- z
 use-before: []
