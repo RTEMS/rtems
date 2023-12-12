@@ -6,11 +6,11 @@ build-type: option
 copyrights:
 - Copyright (C) 2023 B. Moessner
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
+default:
 - enabled-by:
   - arm/xilinx_zynq_zybo
   - arm/xilinx_zynq_pynq
   value: 108333336
-default:
 - enabled-by: true
   value: 111111111
 description: |
