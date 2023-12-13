@@ -66,36 +66,6 @@ void *POSIX_Init (void * argument);
 static char  file_traverse_order[6][20];
 static int file_order;
 
-static char buffer[512];
-
-static const T_action actions[] = {
-  T_report_hash_sha256,
-  T_check_task_context,
-  T_check_file_descriptors,
-  T_check_rtems_barriers,
-  T_check_rtems_extensions,
-  T_check_rtems_message_queues,
-  T_check_rtems_partitions,
-  T_check_rtems_periods,
-  T_check_rtems_regions,
-  T_check_rtems_semaphores,
-  T_check_rtems_tasks,
-  T_check_rtems_timers,
-  T_check_posix_keys
-};
-
-static const T_config config = {
-  .name = "psxftw01",
-  .buf = buffer,
-  .buf_size = sizeof(buffer),
-  .putchar = rtems_put_char,
-  .verbosity = T_VERBOSE,
-  .now = T_now_clock,
-  .action_count = T_ARRAY_SIZE(actions),
-  .actions = actions
-};
-
-
 static int fn_function (const char *fpath, const struct stat *sb,
 int tflag, struct FTW *ftwbuf)
 {
@@ -122,9 +92,7 @@ T_TEST_CASE(ftw)
    TARFILE_SIZE,
    &rtems_test_printer
    );
-  if (sc != RTEMS_SUCCESSFUL) {
-     printf ("error: untar failed: %s\n", rtems_status_text (sc));
-   }
+  T_rsc_success( sc );
 
   /* Array with expected file order */
   char arr_ftw_depth[5][20] = { "test_file", "test_script", "def", "abc", "home" };
@@ -136,49 +104,31 @@ T_TEST_CASE(ftw)
   file_order = 0;
   flags |= FTW_DEPTH;
   r = nftw( files_path, fn_function, 5, flags );
-
-  T_quiet_psx_success(r);
+  T_psx_success( r );
 
   /*comparing the nftw file tree to the expexted file tree traversal */
   for (i = 0; i < file_order; i++){
     r = strcmp( arr_ftw_depth[i], file_traverse_order[i]);
-    if (r){
-      printf( "Incorrect Order " );
-    }
-    T_quiet_psx_success(r);
+    T_eq_int( r, 0 );
   }
     /*----------------Test Block 2--------------------*/
   flags = 0;
   file_order = 0;
   flags |= FTW_PHYS;
   r = nftw( files_path, fn_function, 5, flags );
-  T_quiet_psx_success(r);
+  T_psx_success(r);
 
   /*comparing the nftw file tree to the expected file tree traversal*/
   for (i = 0; i < file_order; i++){
     r = strcmp( arr_ftw_phys[i], file_traverse_order[i]);
-    if (r){
-      printf( "Incorrect Order " );
-    }
-    T_quiet_psx_success(r);
+    T_eq_int( r, 0 );
   }
 
 }
 
 void *POSIX_Init (void * argument)
 {
-  int exit_code;
-
-  TEST_BEGIN();
-
-  T_register();
-  exit_code = T_main(&config);
-  if (exit_code == 0) {
-    TEST_END();
-  }
-
- rtems_test_exit(exit_code);
-
+  rtems_test_run( (rtems_task_argument) argument, TEST_STATE );
 }
 
 /* NOTICE: the clock driver is explicitly disabled */
