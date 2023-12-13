@@ -806,6 +806,109 @@ void rtems_shell_print_env(
 #endif
 
 /*
+ * Wait for the string to return or timeout.
+ */
+static bool rtems_shell_term_wait_for(const int fd, const char* str, const int timeout)
+{
+  int msec = timeout;
+  int i = 0;
+  while (msec-- > 0 && str[i] != '\0') {
+    char ch[2];
+    if (read(fd, &ch[0], 1) == 1) {
+      fflush(stdout);
+      if (ch[0] != str[i++]) {
+        return false;
+      }
+      msec = timeout;
+    } else {
+      usleep(1000);
+    }
+  }
+  if (msec == 0) {
+    return false;
+  }
+  return true;
+}
+
+/*
+ * Buffer a string up to the end string
+ */
+static int rtems_shell_term_buffer_until(const int fd,
+                                         char* buf,
+                                         const int size,
+                                         const char* end,
+                                         const int timeout)
+{
+  int msec = timeout;
+  int i = 0;
+  int e = 0;
+  memset(&buf[0], 0, size);
+  while (msec-- > 0 && i < size && end[e] != '\0') {
+    char ch[2];
+    if (read(fd, &ch[0], 1) == 1) {
+      fflush(stdout);
+      buf[i++] = ch[0];
+      if (ch[0] == end[e]) {
+        e++;
+      } else {
+        e = 0;
+      }
+      msec = timeout;
+    } else {
+      usleep(1000);
+    }
+  }
+  if (msec == 0 || end[e] != '\0') {
+    return -1;
+  }
+  i -= e;
+  if (i < size) {
+    buf[i] = '\0';
+  }
+  return i;
+}
+
+/*
+ * Determine if the terminal has the row and column values
+ * swapped
+ *
+ * https://github.com/tmux/tmux/issues/3457
+ *
+ * Tmux has a bug where the lines and cols are swapped. There is a lag
+ * in the time it takes to get the fix into code so see if tmux is
+ * running and which version and work around the bug.
+ *
+ * The terminal device needs to have VMIN=0, and VTIME=0
+ */
+static bool rtems_shell_term_row_column_swapped(const int fd, const int timeout) {
+  char buf[64];
+  memset(&buf[0], 0, sizeof(buf));
+  /*
+   * CSI > Ps q
+   *    Ps = 0   =>   DCS > | text ST
+   */
+  fputs("\033[>0q", stdout);
+  fflush(stdout);
+  if (rtems_shell_term_wait_for(fd, "\033P>|", timeout)) {
+    int len = rtems_shell_term_buffer_until(fd, buf, sizeof(buf), "\033\\", timeout);
+    if (len > 0) {
+      if (memcmp(buf, "tmux ", 5) == 0) {
+        static const char* bad_versions[] = {
+          "3.2", "3.2a", "3.3", "3.3a"
+        };
+        size_t i;
+        for (i = 0; i < RTEMS_ARRAY_SIZE(bad_versions); ++i) {
+          if (strcmp(bad_versions[i], buf + 5) == 0) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+/*
  * Direct method to get the size of an XTERM window.
  *
  * If you do not use an XTERM the env variables are not define.
@@ -814,6 +917,7 @@ static void rtems_shell_winsize( void )
 {
   const int fd = fileno(stdin);
   struct winsize ws;
+  const int timeout = 150;
   char buf[64];
   bool ok = false;
   int lines = 0;
@@ -831,9 +935,6 @@ static void rtems_shell_winsize( void )
       term.c_cc[VMIN] = 0;
       term.c_cc[VTIME] = 0;
       if (tcsetattr (fd, TCSADRAIN, &term) >= 0) {
-        int msec = 50;
-        int len = 0;
-        int i = 0;
         memset(&buf[0], 0, sizeof(buf));
         /*
          * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h3-Miscellaneous
@@ -842,34 +943,33 @@ static void rtems_shell_winsize( void )
          */
         fputs("\033[18t", stdout);
         fflush(stdout);
-        while (msec-- > 0 && len < sizeof(buf)) {
-          char ch[2];
-          if (read(fd, &ch[0], 1) == 1) {
-            buf[len++] = ch[0];
-            msec = 50;
-          } else {
-            usleep(1000);
-          }
-        }
-        while (i < len) {
-          static const char resp[] = "\033[8;";
-          if (memcmp(resp, &buf[i], sizeof(resp) - 1) == 0) {
-            i += sizeof(resp) - 1;
-            while (i < len && buf[i] != ';') {
+        if (rtems_shell_term_wait_for(fd, "\033[8;", timeout)) {
+          int len = rtems_shell_term_buffer_until(fd, buf, sizeof(buf), ";", timeout);
+          if (len > 0) {
+            int i;
+            lines = 0;
+            i = 0;
+            while (i < len) {
               lines *= 10;
               lines += buf[i++] - '0';
             }
-            cols = 0;
-            ++i;
-            while (i < len && buf[i] != 't') {
-              cols *= 10;
-              cols += buf[i++] - '0';
+            len = rtems_shell_term_buffer_until(fd, buf, sizeof(buf), "t", timeout);
+            if (len > 0) {
+              cols = 0;
+              i = 0;
+              while (i < len) {
+                cols *= 10;
+                cols += buf[i++] - '0';
+              }
+              ok = true;
             }
-          } else {
-            i++;
           }
-          ok = true;
         }
+      }
+      if (rtems_shell_term_row_column_swapped(fd, timeout)) {
+        int tmp = lines;
+        lines = cols;
+        cols = tmp;
       }
       tcsetattr (fd, TCSADRAIN, &cterm);
     }
