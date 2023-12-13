@@ -1165,7 +1165,7 @@ rtems_fdt_get_value (const char* path,
   }
 
   if (length == sizeof (uintptr_t))
-    *value = rtems_fdt_get_uint32 (prop);
+    *value = rtems_fdt_get_uintptr (prop);
   else
     *value = 0;
 
