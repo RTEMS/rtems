@@ -51,6 +51,8 @@ links:
 - role: build-dependency
   uid: optusartbaud
 - role: build-dependency
+  uid: ../../optconsoleirq
+- role: build-dependency
   uid: ../../linkcmds
 - role: build-dependency
   uid: ../../obj

@@ -14,6 +14,8 @@
 #include <bsp/irq.h>
 #include <bsp/usart.h>
 #include <bsp/stm32f4.h>
+#include <termios.h>
+#include <string.h>
 
 static volatile stm32f4_usart *usart_get_regs(const console_tbl *ct)
 {
@@ -24,6 +26,24 @@ static volatile stm32f4_usart *usart_get_regs(const console_tbl *ct)
 static rtems_vector_number usart_get_irq_number(const console_tbl *ct)
 {
   return ct->ulIntVector;
+}
+#endif
+
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
+/**
+ * Read characters in an interrupt
+ */
+static void stm32f4_usart_interrupt(void *arg)
+{
+  rtems_termios_tty *tty = (rtems_termios_tty *) arg;
+  const console_tbl *ct = Console_Port_Tbl [tty->minor];
+  volatile stm32f4_usart *usart = usart_get_regs(ct);
+
+  while ((usart->sr & STM32F4_USART_SR_RXNE) == STM32F4_USART_SR_RXNE)
+  {
+    char data = STM32F4_USART_DR_GET(usart->dr);
+    rtems_termios_enqueue_raw_characters(tty, &data, sizeof(data));
+  }
 }
 #endif
 
@@ -128,29 +148,50 @@ static void usart_initialize(int minor)
   usart->cr2 = 0;
   usart->cr3 = 0;
   usart->bbr = usart_get_bbr(usart, pclk, baud);
-  usart->cr1 = STM32F4_USART_CR1_UE
-    | STM32F4_USART_CR1_TE
-    | STM32F4_USART_CR1_RE;
+  usart->cr1 = STM32F4_USART_CR1_UE // UART enable
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
+    | STM32F4_USART_CR1_RXNEIE // RX interrupt
+#endif
+    | STM32F4_USART_CR1_TE  // TX enable
+    | STM32F4_USART_CR1_RE; // RX enable
 }
 
 static int usart_first_open(int major, int minor, void *arg)
 {
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
-  struct rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
+  rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
   const console_tbl *ct = Console_Port_Tbl [minor];
   console_data *cd = &Console_Port_Data [minor];
 
   cd->termios_data = tty;
   rtems_termios_set_initial_baud(tty, ct->ulClock);
 
-  return 0;
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
+  sc = rtems_interrupt_handler_install(ct->ulIntVector,
+      ct->sDeviceName,
+      RTEMS_INTERRUPT_UNIQUE,
+      stm32f4_usart_interrupt,
+      tty);
+#endif
+
+  return sc;
 }
 
 static int usart_last_close(int major, int minor, void *arg)
 {
-  return 0;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
+  rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
+  rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
+  const console_tbl *ct = Console_Port_Tbl [minor];
+
+  sc = rtems_interrupt_handler_remove(ct->ulIntVector, stm32f4_usart_interrupt, tty);
+#endif
+  return sc;
 }
 
+#ifndef BSP_CONSOLE_USE_INTERRUPTS
 static int usart_read_polled(int minor)
 {
   const console_tbl *ct = Console_Port_Tbl [minor];
@@ -162,6 +203,7 @@ static int usart_read_polled(int minor)
     return -1;
   }
 }
+#endif
 
 static void usart_write_polled(int minor, char c)
 {
@@ -190,16 +232,30 @@ static ssize_t usart_write_support_polled(
   return n;
 }
 
+/**
+ * Configure settings from a termios call to tcsetattr()
+ */
 static int usart_set_attributes(int minor, const struct termios *term)
 {
-  return -1;
+  console_tbl *ct = Console_Port_Tbl[minor];
+  volatile stm32f4_usart *usart = usart_get_regs(ct);
+  uint32_t pclk = usart_get_pclk(ct);
+  uint32_t baud = term->c_ispeed;
+
+  ct->ulClock = baud;
+  usart->bbr = usart_get_bbr(usart, pclk, baud);
+  return 0;
 }
 
 const console_fns stm32f4_usart_fns = {
   .deviceProbe = libchip_serial_default_probe,
   .deviceFirstOpen = usart_first_open,
   .deviceLastClose = usart_last_close,
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
+  .deviceRead = NULL,
+#else
   .deviceRead = usart_read_polled,
+#endif
   .deviceWrite = usart_write_support_polled,
   .deviceInitialize = usart_initialize,
   .deviceWritePolled = usart_write_polled,
