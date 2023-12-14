@@ -85,13 +85,22 @@ void rtems_test_run(
   const RTEMS_TEST_STATE state
 )
 {
+  rtems_print_printer previous_printer;
+  int exit_code;
+
   (void) arg;
 
-  rtems_test_printer.printer = printer;
   rtems_test_begin( rtems_test_name, state );
   T_register();
 
-  if ( T_main( &config ) == 0 ) {
+  previous_printer = rtems_test_printer.printer;
+  rtems_test_printer.printer = printer;
+
+  exit_code = T_main( &config );
+
+  rtems_test_printer.printer = previous_printer;
+
+  if ( exit_code == 0 ) {
     rtems_test_end( rtems_test_name );
   }
 
