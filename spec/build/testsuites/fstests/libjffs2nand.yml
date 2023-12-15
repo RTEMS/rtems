@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: library
+cflags: []
+copyrights:
+- Copyright (C) 2023 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes:
+- testsuites/fstests/jffs2_nand_support
+install: []
+install-path: null
+links: []
+source:
+- testsuites/fstests/jffs2_nand_support/fs_support.c
+- testsuites/fstests/support/fstest_support.c
+target: testjffs2nand
+type: build

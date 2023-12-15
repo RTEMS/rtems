@@ -22,6 +22,8 @@ links:
 - role: build-dependency
   uid: libjffs2
 - role: build-dependency
+  uid: libjffs2nand
+- role: build-dependency
   uid: libmimfs
 - role: build-dependency
   uid: librfs
@@ -89,6 +91,22 @@ links:
   uid: jffs2fssymlink
 - role: build-dependency
   uid: jffs2fstime
+- role: build-dependency
+  uid: jffs2nandfserror
+- role: build-dependency
+  uid: jffs2nandfslink
+- role: build-dependency
+  uid: jffs2nandfspatheval
+- role: build-dependency
+  uid: jffs2nandfspermission
+- role: build-dependency
+  uid: jffs2nandfsrdwr
+- role: build-dependency
+  uid: jffs2nandfsscandir01
+- role: build-dependency
+  uid: jffs2nandfssymlink
+- role: build-dependency
+  uid: jffs2nandfstime
 - role: build-dependency
   uid: mdosfsfserror
 - role: build-dependency

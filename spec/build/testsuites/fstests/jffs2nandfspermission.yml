@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2023 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes:
+- testsuites/fstests/jffs2_nand_support
+ldflags: []
+links: []
+source:
+- testsuites/fstests/fspermission/test.c
+stlib: []
+target: testsuites/fstests/jffs2nand_fspermission.exe
+type: build
+use-after: []
+use-before:
+- testjffs2nand
+- jffs2
