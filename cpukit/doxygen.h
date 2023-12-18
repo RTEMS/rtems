@@ -60,6 +60,13 @@
  *
  * The TM27 support may define TM27_INTERRUPT_VECTOR_DEFAULT to indicate the
  * interrupt vector of the interrupt request raised by Cause_tm27_intr().
+ *
+ * The TM27 support may define TM27_INTERRUPT_VECTOR_ALTERNATIVE to provide an
+ * alternative software generated interrupt request which is raised by
+ * _TM27_Raise_alternative() and cleared by _TM27_Clear_alternative().  Both
+ * functions shall return an RTEMS status code.  This interrupt vector may be
+ * used to test the interrupt controller support on targets which do not
+ * provide generic software generated interrupts.
  */
 
 /**
