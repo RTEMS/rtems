@@ -6896,65 +6896,11 @@ T_TEST_CASE_FIXTURE( OACK_with_surplus_option, &fixture_large_blocksize )
   T_no_more_interactions();
 }
 
-/*
- * Test suite and configuration
- */
-
 const char rtems_test_name[] = "TFTPFS";
-
-static char buffer[ 512 ];
-
-static const T_action actions[] = {
-  T_report_hash_sha256,
-  T_check_task_context,
-  T_check_file_descriptors,
-  T_check_rtems_barriers,
-  T_check_rtems_extensions,
-  T_check_rtems_message_queues,
-  T_check_rtems_partitions,
-  T_check_rtems_periods,
-  T_check_rtems_regions,
-  T_check_rtems_semaphores,
-  T_check_rtems_tasks,
-  T_check_rtems_timers,
-  T_check_posix_keys
-};
-
-static const T_config config = {
-  .name = rtems_test_name,
-  .buf = buffer,
-  .buf_size = sizeof( buffer ),
-  .putchar = T_putchar_default,
-  .verbosity = RTEMS_TEST_VERBOSITY,
-  .now = T_now_clock,
-  .allocate = T_memory_allocate,
-  .deallocate = T_memory_deallocate,
-  .action_count = T_ARRAY_SIZE( actions ),
-  .actions = actions
-};
 
 static void Init( rtems_task_argument argument )
 {
-  (void) argument;
-  int exit_code;
-
-  /*
-   * It would be much easier to simply use
-   *    rtems_test_run( argument, TEST_STATE );
-   * instead of all the code below and the variables
-   *    buffer, actions, config
-   * above. Yet, rtems_test_run() sets the verbosity always to
-   * T_VERBOSE and this would produce plenty of output.
-   */
-  rtems_test_begin( rtems_test_name, TEST_STATE );
-  T_register();
-  exit_code = T_main( &config );
-
-  if ( exit_code == 0 ) {
-    rtems_test_end( rtems_test_name );
-  }
-
-  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, (uint32_t) exit_code );
+  rtems_test_run( argument, TEST_STATE );
 }
 
 /*
@@ -6969,7 +6915,7 @@ static void Init( rtems_task_argument argument )
  */
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 
