@@ -139,6 +139,10 @@ rtems_vector_number GetTestableInterruptVector(
     }
   }
 
+  if ( vector == BSP_INTERRUPT_VECTOR_COUNT ) {
+    vector = GetSoftwareInterruptVector();
+  }
+
   return vector;
 }
 

@@ -396,6 +396,8 @@ void CallWithinISRClear( void );
 
 rtems_vector_number CallWithinISRGetVector( void );
 
+rtems_vector_number GetSoftwareInterruptVector( void );
+
 typedef struct {
   Thread_queue_Operations        tq_ops;
   const Thread_queue_Operations *wrapped_ops;
@@ -436,6 +438,10 @@ rtems_vector_number GetValidInterruptVectorNumber(
 rtems_vector_number GetTestableInterruptVector(
   const rtems_interrupt_attributes *required
 );
+
+rtems_status_code RaiseSoftwareInterrupt( rtems_vector_number vector );
+
+rtems_status_code ClearSoftwareInterrupt( rtems_vector_number vector );
 
 bool HasInterruptVectorEntriesInstalled( rtems_vector_number vector );
 
