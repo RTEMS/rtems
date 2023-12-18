@@ -140,6 +140,7 @@ void CallWithinISRWait( const CallWithinISRRequest *request )
   }
 }
 
+#if !defined( TM27_INTERRUPT_VECTOR_DEFAULT )
 static void CallWithinISRIsHandlerInstalled(
   void                   *arg,
   const char             *info,
@@ -152,13 +153,17 @@ static void CallWithinISRIsHandlerInstalled(
   (void) option;
   (void) handler_arg;
 
-  if ( handler == CallWithinISRHandler ) {
+  if ( handler == CallWithinISRHandler && handler_arg == NULL ) {
     *(bool *) arg = true;
   }
 }
+#endif
 
 rtems_vector_number CallWithinISRGetVector( void )
 {
+#if defined( TM27_INTERRUPT_VECTOR_DEFAULT )
+  return TM27_INTERRUPT_VECTOR_DEFAULT;
+#else
   rtems_vector_number vector;
 
   for ( vector = 0; vector < BSP_INTERRUPT_VECTOR_COUNT; ++vector ) {
@@ -177,6 +182,7 @@ rtems_vector_number CallWithinISRGetVector( void )
   }
 
   return UINT32_MAX;
+#endif
 }
 
 static void CallWithinISRInitialize( void )

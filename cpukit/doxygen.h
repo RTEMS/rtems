@@ -43,7 +43,23 @@
  *
  * @ingroup RTEMSDeviceDrivers
  *
- * @brief Time Test 27 Support
+ * @brief The Time Test 27 (TM27) support is used to measure the timing of
+ *   the interrupt processing.
+ *
+ * The TMS27 support should provide two software generated interrupt requests,
+ * one low priority request raised by Cause_tm27_intr() and one higher priority
+ * request raised by Lower_tm27_intr().  Both requests should be cleared by
+ * Clear_tm27_intr().  A handler provided by the test should be installed
+ * through Install_tm27_vector().  This function should initialize the system
+ * so that the software generated interrupt requests can be raised and cleared.
+ *
+ * If the raise functions Cause_tm27_intr() and Lower_tm27_intr() do not
+ * trigger the interrupt immediately, then the TM27 support shall define
+ * MUST_WAIT_FOR_INTERRUPT to one, otherwise MUST_WAIT_FOR_INTERRUPT shall be
+ * defined to zero.
+ *
+ * The TM27 support may define TM27_INTERRUPT_VECTOR_DEFAULT to indicate the
+ * interrupt vector of the interrupt request raised by Cause_tm27_intr().
  */
 
 /**
