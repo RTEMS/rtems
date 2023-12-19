@@ -579,7 +579,6 @@ send_reply(FTPD_SessionInfo_t  *info, int code, const char *text)
 static void
 set_socket_timeout(int s, int seconds)
 {
-  int res = 0;
   struct timeval tv;
   int len = sizeof(tv);
 
