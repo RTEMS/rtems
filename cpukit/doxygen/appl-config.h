@@ -11,7 +11,7 @@
 /*
  * Copyright (C) 2019, 2023 embedded brains GmbH & Co. KG
  * Copyright (C) 2010 Gedare Bloom
- * Copyright (C) 1988, 2022 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 1988, 2023 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -2474,6 +2474,34 @@
  * @endparblock
  */
 #define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
+
+/* Generated from spec:/acfg/if/jffs2-delayed-write-task-priority */
+
+/**
+ * @brief This configuration option is an integer define.
+ *
+ * @anchor CONFIGURE_JFFS2_DELAYED_WRITE_TASK_PRIORITY
+ *
+ * The value of this configuration option defines the JFFS2 delayed write task
+ * priority.
+ *
+ * @par Default Value
+ * The default value is 15.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this configuration option:
+ *
+ * * The configuration option is not included in the pre-qualified feature set
+ *   of RTEMS.  Applications which are restricted to only use interfaces of the
+ *   pre-qualified feature set of RTEMS shall not use the configuration option.
+ *
+ * * The value of the configuration option shall be a valid Classic API task
+ *   priority.  The set of valid task priorities depends on the scheduler
+ *   configuration.
+ * @endparblock
+ */
+#define CONFIGURE_JFFS2_DELAYED_WRITE_TASK_PRIORITY
 
 /* Generated from spec:/acfg/if/use-devfs-as-base-filesystem */
 
