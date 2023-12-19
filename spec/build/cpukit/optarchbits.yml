@@ -8,6 +8,7 @@ copyrights:
 - Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>
 default:
 - enabled-by:
+  - riscv/bvf
   - riscv/mpfs64imafdc
   - riscv/noel64imac
   - riscv/noel64imafd
