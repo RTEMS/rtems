@@ -603,11 +603,8 @@ test-support: |
 
     ctx->handler_counter = counter;
 
-    if (
-      ctx->attributes.can_clear &&
-      !ctx->attributes.cleared_by_acknowledge
-    ) {
-      sc = rtems_interrupt_clear( ctx->test_vector );
+    if ( !ctx->attributes.cleared_by_acknowledge ) {
+      sc = ClearSoftwareInterrupt( ctx->test_vector );
       T_rsc_success( sc );
     }
 
@@ -716,7 +713,7 @@ test-support: |
     T_rsc_success( sc );
 
     if ( ctx->status == RTEMS_SUCCESSFUL ) {
-      sc = rtems_interrupt_raise( ctx->test_vector );
+      sc = RaiseSoftwareInterrupt( ctx->test_vector );
       T_rsc_success( sc );
     }
   }
