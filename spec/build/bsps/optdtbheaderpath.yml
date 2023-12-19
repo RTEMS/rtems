@@ -6,6 +6,8 @@ build-type: option
 copyrights:
 - Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
 default:
+- enabled-by: riscv/bvf
+  value: bsp/bvf.h
 - enabled-by: riscv/mpfs64imafdc
   value: bsp/mpfs-dtb.h
 - enabled-by: riscv/kendrytek210

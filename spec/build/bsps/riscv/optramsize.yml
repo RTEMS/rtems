@@ -10,6 +10,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
 - enabled-by:
+  - riscv/bvf
   - riscv/frdme310arty
   - riscv/mpfs64imafdc
   value: 0x10000000
