@@ -8,8 +8,8 @@ links:
   uid: ../glossary-general
 term: scenario
 text: |
-  In a setting that involves many concurrent tasks that interleave in arbitrary
-  ways, a scenario describes a single specific possible interleaving.  One
-  interpretation of the behaviour of a concurrent system is the set of all its
-  scenarios.
+  In the context of formal verification, in a setting that involves many
+  concurrent tasks that interleave in arbitrary ways, a scenario describes a
+  single specific possible interleaving.  One interpretation of the behaviour
+  of a concurrent system is the set of all its scenarios.
 type: glossary
