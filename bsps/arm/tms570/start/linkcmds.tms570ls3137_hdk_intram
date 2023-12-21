@@ -1,8 +1,7 @@
 
 MEMORY {
 	ROM_INT (RX) :   ORIGIN = 0x00000000, LENGTH = 3M
-	RAM_INT_VEC :    ORIGIN = 0x08000000, LENGTH = 256
-	RAM_INT (AIWX) : ORIGIN = 0x08000100, LENGTH = 256k - 256
+	RAM_INT (AIWX) : ORIGIN = 0x08000100, LENGTH = 256k
 	RAM_EXT (AIW) :  ORIGIN = 0x80000000, LENGTH = 8M
 }
 
@@ -25,6 +24,12 @@ REGION_ALIAS ("REGION_NOCACHE", RAM_INT);
 REGION_ALIAS ("REGION_NOCACHE_LOAD", RAM_INT);
 
 bsp_vector_table_in_start_section = 1;
-bsp_int_vec_overlay_start = ORIGIN(RAM_INT_VEC);
+
+SECTIONS {
+  .int_vec_overlay : ALIGN_WITH_INPUT {
+    bsp_int_vec_overlay_start = .;
+    . += 256;
+  } > RAM_INT AT > RAM_INT
+}
 
 INCLUDE linkcmds.armv4
