@@ -51,6 +51,7 @@
 
 BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
 {
+#if TMS570_VARIANT == 3137
   /*
    * Work Around for Errata DEVICE#140: ( Only on Rev A silicon)
    *
@@ -62,6 +63,7 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
   if ( TMS570_SYS1.DEVID == 0x802AAD05U ) {
     _esmCcmErrorsClear_();
   }
+#endif
 
   /* Enable CPU Event Export */
   /* This allows the CPU to signal any single-bit or double-bit errors detected
@@ -69,11 +71,13 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
    */
   _coreEnableEventBusExport_();
 
+#if TMS570_VARIANT == 3137
   /* Workaround for Errata CORTEXR4 66 */
   _errata_CORTEXR4_66_();
 
   /* Workaround for Errata CORTEXR4 57 */
   _errata_CORTEXR4_57_();
+#endif
 
   /* check for power-on reset condition */
   /*SAFETYMCUSW 139 S MR:13.7 <APPROVED> "Hardware status bit read check" */
