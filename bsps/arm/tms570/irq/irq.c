@@ -166,9 +166,17 @@ rtems_status_code tms570_irq_get_priority(
  */
 void bsp_interrupt_dispatch(void)
 {
-  rtems_vector_number vector = TMS570_VIM.IRQINDEX-1;
+  while (true) {
+    uint32_t irqindex;
 
-  bsp_interrupt_handler_dispatch(vector);
+    irqindex = TMS570_VIM.IRQINDEX;
+
+    if (irqindex == 0) {
+      return;
+    }
+
+    bsp_interrupt_handler_dispatch(irqindex - 1);
+  }
 }
 
 static bool can_disable(rtems_vector_number vector)
