@@ -65,6 +65,8 @@ install:
   - bsps/arm/tms570/include/bsp/ti_herc/reg_vim.h
 - destination: ${BSP_LIBDIR}
   source:
+  - bsps/arm/tms570/start/linkcmds.tms570lc4357_hdk
+  - bsps/arm/tms570/start/linkcmds.tms570lc4357_hdk_sdram
   - bsps/arm/tms570/start/linkcmds.tms570ls3137_hdk
   - bsps/arm/tms570/start/linkcmds.tms570ls3137_hdk_intram
   - bsps/arm/tms570/start/linkcmds.tms570ls3137_hdk_sdram

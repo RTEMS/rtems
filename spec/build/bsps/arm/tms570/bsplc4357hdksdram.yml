@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: tms570lc4357_hdk_sdram
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+cppflags: []
+enabled-by: true
+family: tms570
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: grp
+source: []
+type: build
