@@ -199,7 +199,7 @@
   per_pin_action( common_arg, \
   TMS570_BALL_F2_GIOB_2 | TMS570_PIN_CLEAR_RQ_MASK ) \
   per_pin_action( common_arg, \
-  TMS570_MMR_SELECT_GMII_SEL | TMS570_PIN_CLEAR_RQ_MASK ) \
+  TMS570_MMR_SELECT_MII_MODE | TMS570_PIN_CLEAR_RQ_MASK ) \
   per_pin_action( common_arg, TMS570_MMR_SELECT_ADC_TRG1 ) \
 
 
