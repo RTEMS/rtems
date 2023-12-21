@@ -41,6 +41,7 @@
 
 #include <bsp/bootcard.h>
 #include <bsp/tms570.h>
+#include <bsp/tms570-pom.h>
 
 static void handle_esm_errors(uint32_t esm_irq_channel)
 {
@@ -56,7 +57,14 @@ static void handle_esm_errors(uint32_t esm_irq_channel)
 
 void bsp_reset(void)
 {
-   uint32_t esm_irq_channel = TMS570_ESM.IOFFHR - 1;
+   rtems_interrupt_level level;
+   uint32_t esm_irq_channel;
+
+   rtems_interrupt_disable(level);
+   (void) level;
+
+   tms570_pom_initialize_and_clear();
+   esm_irq_channel = TMS570_ESM.IOFFHR - 1;
 
    if (esm_irq_channel) {
      handle_esm_errors(esm_irq_channel);
