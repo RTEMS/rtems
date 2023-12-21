@@ -337,6 +337,9 @@ static RTEMS_USED void tms570_start_hook_0( void )
 
   tms570_emif_sdram_init();
 
+  /* Configures and enables the ARM-core Memory Protection Unit (MPU) */
+  _mpuInit_();
+
 #if 1
   /*
    * Do not depend on link register to be restored to
