@@ -101,8 +101,20 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
     /*SAFETYMCUSW 5 C MR:NA <APPROVED> "for(;;) can be removed by adding "# if 0" and "# endif" in the user codes above and below" */
     /*SAFETYMCUSW 26 S MR:NA <APPROVED> "for(;;) can be removed by adding "# if 0" and "# endif" in the user codes above and below" */
     /*SAFETYMCUSW 28 D MR:NA <APPROVED> "for(;;) can be removed by adding "# if 0" and "# endif" in the user codes above and below" */
+#if TMS570_VARIANT == 4357
+    /*
+     * During code-loading/debug-resets SR[2][4] may get set (indicates double
+     * ECC error in internal RAM) ignore for now as its resolved with ESM
+     * init/reset below.
+     */
+    if ((TMS570_SYS1.SYSESR & TMS570_SYS1_SYSESR_DBGRST) == 0) {
+      for (;; ) {
+      }           /* Wait */
+    }
+#else
     for (;; ) {
     }           /* Wait */
+#endif
   }
 
   /* Initialize System - Clock, Flash settings with Efuse self check */

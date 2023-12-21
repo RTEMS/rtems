@@ -629,6 +629,16 @@ typedef struct{
 /* field: WDRST - Watchdog reset flag. */
 #define TMS570_SYS1_SYSESR_WDRST BSP_BIT32(13)
 
+#if TMS570_VARIANT == 4357
+
+/* field: DBGRST - Debug reset flag. */
+#define TMS570_SYS1_SYSESR_DBGRST BSP_BIT32(11)
+
+/* field: ICSTRST - Interconnect reset flag. */
+#define TMS570_SYS1_SYSESR_ICSTRST BSP_BIT32(7)
+
+#endif
+
 /* field: CPURST - CPU reset flag. This bit is set when the CPU is reset. */
 #define TMS570_SYS1_SYSESR_CPURST BSP_BIT32(5)
 
