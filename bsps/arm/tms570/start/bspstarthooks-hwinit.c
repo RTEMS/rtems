@@ -289,17 +289,18 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
   /* NOTE : Please Refer DEVICE DATASHEET for the list of Supported Memories and their channel numbers.
             Memory Initialization is perfomed only on the user selected memories in HALCoGen's GUI SAFETY INIT tab.
    */
-  tms570_memory_init( (uint32_t) ( (uint32_t) 1U << 1U ) |  /* DMA RAM */
-    (uint32_t) ( (uint32_t) 1U << 2U ) |                /* VIM RAM */
-    (uint32_t) ( (uint32_t) 1U << 5U ) |                /* CAN1 RAM */
-    (uint32_t) ( (uint32_t) 1U << 6U ) |                /* CAN2 RAM */
-    (uint32_t) ( (uint32_t) 1U << 10U ) |               /* CAN3 RAM */
-    (uint32_t) ( (uint32_t) 1U << 8U ) |                /* ADC1 RAM */
-    (uint32_t) ( (uint32_t) 1U << 14U ) |               /* ADC2 RAM */
-    (uint32_t) ( (uint32_t) 1U << 3U ) |                /* HET1 RAM */
-    (uint32_t) ( (uint32_t) 1U << 4U ) |                /* HTU1 RAM */
-    (uint32_t) ( (uint32_t) 1U << 15U ) |               /* HET2 RAM */
-    (uint32_t) ( (uint32_t) 1U << 16U )                 /* HTU2 RAM */
+  tms570_memory_init(
+    ( UINT32_C(1) << 1 ) |                /* DMA RAM */
+    ( UINT32_C(1) << 2 ) |                /* VIM RAM */
+    ( UINT32_C(1) << 5 ) |                /* CAN1 RAM */
+    ( UINT32_C(1) << 6 ) |                /* CAN2 RAM */
+    ( UINT32_C(1) << 10 ) |               /* CAN3 RAM */
+    ( UINT32_C(1) << 8 ) |                /* ADC1 RAM */
+    ( UINT32_C(1) << 14 ) |               /* ADC2 RAM */
+    ( UINT32_C(1) << 3 ) |                /* HET1 RAM */
+    ( UINT32_C(1) << 4 ) |                /* HTU1 RAM */
+    ( UINT32_C(1) << 15 ) |               /* HET2 RAM */
+    ( UINT32_C(1) << 16 )                 /* HTU2 RAM */
   );
 
   /* Disable parity */
