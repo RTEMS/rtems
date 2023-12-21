@@ -54,7 +54,7 @@ tms570_bsp_pin_to_pinmmrx(volatile uint32_t **pinmmrx, uint32_t *pin_shift,
                           uint32_t config)
 {
   uint32_t pin_num = (config & TMS570_PIN_NUM_MASK) >> TMS570_PIN_NUM_SHIFT;
-  *pinmmrx = &TMS570_IOMM.PINMUX.PINMMR0 + (pin_num >> 2);
+  *pinmmrx = TMS570_PINMUX + (pin_num >> 2);
   *pin_shift = (pin_num & 0x3)*8;
 }
 
@@ -178,7 +178,7 @@ tms570_bsp_pinmmr_config(const uint32_t *pinmmr_values, int reg_start, int reg_c
 
   tms570_pin_config_prepare();
 
-  pinmmrx = (&TMS570_IOMM.PINMUX.PINMMR0) + reg_start;
+  pinmmrx = TMS570_PINMUX + reg_start;
   pval = pinmmr_values;
   cnt = reg_count;
 

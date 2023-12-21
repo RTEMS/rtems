@@ -131,11 +131,10 @@
 #endif
 #if TMS570_VARIANT == 4357
 #define TMS570_IOMM (*(volatile tms570_iomm_t*)0xFFFF1C00)
-#define TMS570_PINMUX (*(volatile tms570_pinmux_t*)0xFFFF1D10)
 #else
 #define TMS570_IOMM (*(volatile tms570_iomm_t*)0xFFFFEA00)
-#define TMS570_PINMUX (*(volatile tms570_pinmux_t*)0xFFFFEB10)
 #endif
+#define TMS570_PINMUX ((volatile uint32_t*)TMS570_IOMM.PINMMR)
 #define TMS570_LIN (*(volatile tms570_lin_t*)0xFFF7E400)
 #if TMS570_VARIANT == 4357
 #define TMS570_LIN2 (*(volatile tms570_lin_t*)0xFFF7E600)

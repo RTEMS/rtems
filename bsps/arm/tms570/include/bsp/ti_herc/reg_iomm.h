@@ -50,40 +50,7 @@
 #define LIBBSP_ARM_TMS570_IOMM
 
 #include <bsp/utility.h>
-
-typedef struct{
-  uint32_t PINMMR0;           /*Pin Multiplexing Control Register 0*/
-  uint32_t PINMMR1;           /*Pin Multiplexing Control Register 1*/
-  uint32_t PINMMR2;           /*Pin Multiplexing Control Register 2*/
-  uint32_t PINMMR3;           /*Pin Multiplexing Control Register 3*/
-  uint32_t PINMMR4;           /*Pin Multiplexing Control Register 4*/
-  uint32_t PINMMR5;           /*Pin Multiplexing Control Register 5*/
-  uint32_t PINMMR6;           /*Pin Multiplexing Control Register 6*/
-  uint32_t PINMMR7;           /*Pin Multiplexing Control Register 7*/
-  uint32_t PINMMR8;           /*Pin Multiplexing Control Register 8*/
-  uint32_t PINMMR9;           /*Pin Multiplexing Control Register 9*/
-  uint32_t PINMMR10;          /*Pin Multiplexing Control Register 10*/
-  uint32_t PINMMR11;          /*Pin Multiplexing Control Register 11*/
-  uint32_t PINMMR12;          /*Pin Multiplexing Control Register 12*/
-  uint32_t PINMMR13;          /*Pin Multiplexing Control Register 13*/
-  uint32_t PINMMR14;          /*Pin Multiplexing Control Register 14*/
-  uint32_t PINMMR15;          /*Pin Multiplexing Control Register 15*/
-  uint32_t PINMMR16;          /*Pin Multiplexing Control Register 16*/
-  uint32_t PINMMR17;          /*Pin Multiplexing Control Register 17*/
-  uint32_t PINMMR18;          /*Pin Multiplexing Control Register 18*/
-  uint32_t PINMMR19;          /*Pin Multiplexing Control Register 19*/
-  uint32_t PINMMR20;          /*Pin Multiplexing Control Register 20*/
-  uint32_t PINMMR21;          /*Pin Multiplexing Control Register 21*/
-  uint32_t PINMMR22;          /*Pin Multiplexing Control Register 22*/
-  uint32_t PINMMR23;          /*Pin Multiplexing Control Register 23*/
-  uint32_t PINMMR24;          /*Pin Multiplexing Control Register 24*/
-  uint32_t PINMMR25;          /*Pin Multiplexing Control Register 25*/
-  uint32_t PINMMR26;          /*Pin Multiplexing Control Register 26*/
-  uint32_t PINMMR27;          /*Pin Multiplexing Control Register 27*/
-  uint32_t PINMMR28;          /*Pin Multiplexing Control Register 28*/
-  uint32_t PINMMR29;          /*Pin Multiplexing Control Register 29*/
-  uint32_t PINMMR30;          /*Pin Multiplexing Control Register 30*/
-} tms570_pinmux_t;
+#include <bspopts.h>
 
 typedef struct{
   uint32_t REVISION_REG;      /*Revision Register*/
@@ -102,7 +69,14 @@ typedef struct{
   uint32_t FAULT_STATUS_REG;  /*Fault Status Register*/
   uint32_t FAULT_CLEAR_REG;   /*Fault Clear Register*/
   uint8_t reserved5 [16];
-  tms570_pinmux_t PINMUX;     /*Pin Multiplexing Control Registers*/
+#if TMS570_VARIANT == 4357
+  uint32_t PINMMR[180]; /* 0x110 - 1A4 : Output Pin Multiplexing Control
+                           Registers (38 registers); 0x250 - 0x29C : Input Pin
+                           Multiplexing Control Registers (20); 0X390 - 3DC :
+                           Special Functionality Control Registers (20) */
+#else
+  uint32_t PINMMR[30]; /*Pin Multiplexing Control Register 0-30*/
+#endif
 } tms570_iomm_t;
 
 
