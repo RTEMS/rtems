@@ -10,6 +10,7 @@
  */
 
 /*
+ * Copyright (C) 2022 Airbus U.S. Space & Defense, Inc
  * Copyright (C) 2014 Premysl Houdek <kom541000@gmail.com>
  *
  * Google Summer of Code 2014 at
@@ -70,14 +71,23 @@ void _mpuInit_( void );
 
 void tms570_emif_sdram_init( void );
 void tms570_memory_init( uint32_t ram );
-void tms570_system_hw_init( void );
 void tms570_pinmux_init( void );
-void tms570_pll_init( void );
 void tms570_trim_lpo_init( void );
 void tms570_flash_init( void );
 void tms570_periph_init( void );
 void tms570_map_clock_init( void );
 void tms570_system_hw_init( void );
 void tms570_esm_init( void );
+
+/*
+ * The following functions that must be implemented on a per-board basis for
+ * any BSP variant with hardware initialization.  These configure MCU
+ * peripherals that are specific to a particular board.
+ */
+
+/**
+ * @brief Initialize PLLs source divider/multipliers.
+ */
+void tms570_pll_init(void);
 
 #endif /* LIBBSP_ARM_TMS570_HWINIT_H */

@@ -51,62 +51,6 @@
 #include <bsp/tms570_hwinit.h>
 
 /**
- * @brief Setup all system PLLs (HCG:setupPLL)
- *
- */
-void tms570_pll_init( void )
-{
-  uint32_t pll12_dis = 0x42;
-
-  /* Disable PLL1 and PLL2 */
-  TMS570_SYS1.CSDISSET = pll12_dis;
-
-  /*SAFETYMCUSW 28 D MR:NA <APPROVED> "Hardware status bit read check" */
-  while ( ( TMS570_SYS1.CSDIS & pll12_dis ) != pll12_dis ) {
-    /* Wait */
-  }
-
-  /* Clear Global Status Register */
-  TMS570_SYS1.GLBSTAT = TMS570_SYS1_GLBSTAT_FBSLIP |
-                        TMS570_SYS1_GLBSTAT_RFSLIP |
-                        TMS570_SYS1_GLBSTAT_OSCFAIL;
-  /** - Configure PLL control registers */
-  /** @b Initialize @b Pll1: */
-
-  /* Setup pll control register 1 */
-  TMS570_SYS1.PLLCTL1 = TMS570_SYS1_PLLCTL1_ROS * 0 |
-                        TMS570_SYS1_PLLCTL1_MASK_SLIP( 1 ) |
-                        TMS570_SYS1_PLLCTL1_PLLDIV( 0x1f ) | /* max value */
-                        TMS570_SYS1_PLLCTL1_ROF * 0 |
-                        TMS570_SYS1_PLLCTL1_REFCLKDIV( 6 - 1 ) |
-                        TMS570_SYS1_PLLCTL1_PLLMUL( ( 120 - 1 ) << 8 );
-
-  /* Setup pll control register 2 */
-  TMS570_SYS1.PLLCTL2 = TMS570_SYS1_PLLCTL2_FMENA * 0 |
-                        TMS570_SYS1_PLLCTL2_SPREADINGRATE( 255 ) |
-                        TMS570_SYS1_PLLCTL2_MULMOD( 7 ) |
-                        TMS570_SYS1_PLLCTL2_ODPLL( 2 - 1 ) |
-                        TMS570_SYS1_PLLCTL2_SPR_AMOUNT( 61 );
-
-  /** @b Initialize @b Pll2: */
-
-  /* Setup pll2 control register */
-  TMS570_SYS2.PLLCTL3 = TMS570_SYS2_PLLCTL3_ODPLL2( 2 - 1 ) |
-                        TMS570_SYS2_PLLCTL3_PLLDIV2( 0x1F ) | /* max value */
-                        TMS570_SYS2_PLLCTL3_REFCLKDIV2( 6 - 1 ) |
-                        TMS570_SYS2_PLLCTL3_PLLMUL2( ( 120 - 1 ) << 8 );
-
-  /** - Enable PLL(s) to start up or Lock */
-  TMS570_SYS1.CSDIS = 0x00000000 | /* CLKSR0 on */
-                      0x00000000 | /* CLKSR1 on */
-                      0x00000008 | /* CLKSR3 off */
-                      0x00000000 | /* CLKSR4 on */
-                      0x00000000 | /* CLKSR5 on */
-                      0x00000000 | /* CLKSR6 on */
-                      0x00000080;  /* CLKSR7 off */
-}
-
-/**
  * @brief Adjust Low-Frequency (LPO) oscilator (HCG:trimLPO)
  *
  */

@@ -5,14 +5,17 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by:
-- TMS570_USE_HWINIT_STARTUP
+enabled-by: TMS570_USE_HWINIT_STARTUP
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/bsp/ti_herc
   source:
   - bsps/arm/tms570/include/bsp/ti_herc/errata_SSWF021_45.h
-links: []
+links:
+- role: build-dependency
+  uid: objhwinitls3137hdk
+- role: build-dependency
+  uid: objhwinitlc4357hdk
 source:
 - bsps/arm/tms570/start/bspstarthooks.c
 - bsps/arm/tms570/start/bspstarthooks-hwinit.c
