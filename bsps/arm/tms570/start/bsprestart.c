@@ -1,21 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @ingroup RTEMSBSPsARMTMS570
- *
- * @brief This header file provides BSP-specific interfaces.
- */
-
 /*
- * Copyright (C) 2014 Premysl Houdek <kom541000@gmail.com>
- *
- * Google Summer of Code 2014 at
- * Czech Technical University in Prague
- * Zikova 1903/4
- * 166 36 Praha 6
- * Czech Republic
+ * Copyright (c) 2017 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -39,40 +25,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_ARM_TMS570_BSP_H
-#define LIBBSP_ARM_TMS570_BSP_H
+#include <bsp.h>
 
-/**
- * @defgroup RTEMSBSPsARMTMS570 TMS570
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief TMS570 Board Support Package.
- *
- * @{
- */
+void bsp_restart( const void *addr )
+{
+  rtems_interrupt_level level;
+  void(*start)(void) = (void(*)(void))(addr);
 
-#include <bspopts.h>
+  rtems_interrupt_disable(level);
+  (void)level;
+  rtems_cache_disable_instruction();
+  rtems_cache_disable_data();
 
-#define BSP_FEATURE_IRQ_EXTENSION
-
-#ifndef ASM
-
-#include <rtems.h>
-#include <bsp/default-initial-extension.h>
-
-#if TMS570_VARIANT == 4357
-#define BSP_OSCILATOR_CLOCK 16000000
-#define BSP_PLL_OUT_CLOCK 150000000
-#else
-#define BSP_OSCILATOR_CLOCK 8000000
-#define BSP_PLL_OUT_CLOCK 160000000
-#endif
-
-RTEMS_NO_RETURN void bsp_restart(const void *addr);
-
-#endif /* ASM */
-
-/* @} */
-
-#endif /* LIBBSP_ARM_TMS570_BSP_H */
+  start();
+  RTEMS_UNREACHABLE();
+}
