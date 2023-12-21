@@ -40,9 +40,34 @@
  */
 
 #include <bsp/start.h>
+#include <libcpu/arm-cp15.h>
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1( void )
 {
+  uint32_t ctrl;
+  size_t size;
+
+  ctrl = arm_cp15_get_control();
+
+  if ( ( ctrl & ARM_CP15_CTRL_I ) == 0 ) {
+    rtems_cache_invalidate_entire_instruction();
+    ctrl |= ARM_CP15_CTRL_I;
+    arm_cp15_set_control(ctrl);
+  }
+
+  if ( ( ctrl & ARM_CP15_CTRL_C ) == 0 ) {
+    rtems_cache_invalidate_entire_data();
+    ctrl |= ARM_CP15_CTRL_C;
+    arm_cp15_set_control(ctrl);
+  }
+
   bsp_start_copy_sections_compact();
   bsp_start_clear_bss();
+
+  size =(size_t) bsp_section_fast_text_size;
+  RTEMS_OBFUSCATE_VARIABLE( size );
+
+  if ( size != 0 ) {
+    rtems_cache_flush_multiple_data_lines( bsp_section_fast_text_begin, size );
+  }
 }
