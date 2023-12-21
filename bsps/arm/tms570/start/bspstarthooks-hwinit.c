@@ -88,53 +88,6 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
   _errata_CORTEXR4_57_();
 #endif
 
-  /* check for power-on reset condition */
-  /*SAFETYMCUSW 139 S MR:13.7 <APPROVED> "Hardware status bit read check" */
-  if ( ( TMS570_SYS1.SYSESR & TMS570_SYS1_SYSESR_PORST ) != 0U ) {
-    /* clear all reset status flags */
-    TMS570_SYS1.SYSESR = 0xFFFFU;
-
-    /* continue with normal start-up sequence */
-  }
-  /*SAFETYMCUSW 139 S MR:13.7 <APPROVED> "Hardware status bit read check" */
-  else if ( ( TMS570_SYS1.SYSESR & TMS570_SYS1_SYSESR_OSCRST ) != 0U ) {
-    /* Reset caused due to oscillator failure.
-       Add user code here to handle oscillator failure */
-  }
-  /*SAFETYMCUSW 139 S MR:13.7 <APPROVED> "Hardware status bit read check" */
-  else if ( ( TMS570_SYS1.SYSESR & TMS570_SYS1_SYSESR_WDRST ) != 0U ) {
-    /* Reset caused due
-     *  1) windowed watchdog violation - Add user code here to handle watchdog violation.
-     *  2) ICEPICK Reset - After loading code via CCS / System Reset through CCS
-     */
-    /* Check the WatchDog Status register */
-    if ( TMS570_RTI.WDSTATUS != 0U ) {
-      /* Add user code here to handle watchdog violation. */
-      /* Clear the Watchdog reset flag in Exception Status register */
-      TMS570_SYS1.SYSESR = TMS570_SYS1_SYSESR_WDRST;
-    } else {
-      /* Clear the ICEPICK reset flag in Exception Status register */
-      TMS570_SYS1.SYSESR = TMS570_SYS1_SYSESR_WDRST;
-    }
-  }
-  /*SAFETYMCUSW 139 S MR:13.7 <APPROVED> "Hardware status bit read check" */
-  else if ( ( TMS570_SYS1.SYSESR & TMS570_SYS1_SYSESR_CPURST ) != 0U ) {
-    /* Reset caused due to CPU reset.
-       CPU reset can be caused by CPU self-test completion, or
-       by toggling the "CPU RESET" bit of the CPU Reset Control Register. */
-
-    /* clear all reset status flags */
-    TMS570_SYS1.SYSESR = TMS570_SYS1_SYSESR_CPURST;
-  }
-  /*SAFETYMCUSW 139 S MR:13.7 <APPROVED> "Hardware status bit read check" */
-  else if ( ( TMS570_SYS1.SYSESR & TMS570_SYS1_SYSESR_SWRST ) != 0U ) {
-    /* Reset caused due to software reset.
-       Add user code to handle software reset. */
-  } else {
-    /* Reset caused by nRST being driven low externally.
-       Add user code to handle external reset. */
-  }
-
   /*
    * Check if there were ESM group3 errors during power-up.
    * These could occur during eFuse auto-load or during reads from flash OTP
