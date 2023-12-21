@@ -7,10 +7,15 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
+- enabled-by:
+  - arm/tms570ls3137_hdk
+  - arm/tms570lc4357_hdk
+  value: true
 - enabled-by: true
   value: false
 description: |
-  Include BSP startup code for TMS570LS3137 which allows to start RTEMS application directly after reset
+  Include BSP startup code for TMS570LS3137 or TMS57LC4357 which allows to
+  start RTEMS application directly after reset.
 enabled-by: true
 links: []
 name: TMS570_USE_HWINIT_STARTUP
