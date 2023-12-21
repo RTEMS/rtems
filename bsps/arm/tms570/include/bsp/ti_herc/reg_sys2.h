@@ -60,9 +60,11 @@ typedef struct{
   uint8_t reserved3 [20];
   uint32_t CLK2CNTRL;         /*Clock 2 Control Register*/
   uint32_t VCLKACON1;         /*Peripheral Asynchronous Clock Configuration 1 Register*/
-  uint8_t reserved4 [44];
+  uint8_t reserved4 [16];
+  uint32_t HCLKCNTL;          /* 0x0054 */
+  uint8_t reserved5 [24];
   uint32_t CLKSLIP;           /*Clock Slip Register*/
-  uint8_t reserved5 [120];
+  uint8_t reserved6 [120];
   uint32_t EFC_CTLREG;        /*EFUSE Controller Control Register*/
   uint32_t DIEDL_REG0;        /*Die Identification Register*/
   uint32_t DIEDH_REG1;        /*Die Identification Register*/
