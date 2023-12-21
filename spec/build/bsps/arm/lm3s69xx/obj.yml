@@ -38,6 +38,7 @@ source:
 - bsps/arm/shared/irq/irq-dispatch-armv7m.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/shared/start/bspreset-armv7m.c
+- bsps/arm/shared/start/bspstarthook0-empty.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/cpucounter/cpucounterfrequency.c

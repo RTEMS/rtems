@@ -11,5 +11,6 @@ includes: []
 install: []
 links: []
 source:
+- bsps/arm/shared/start/bspstarthook0-empty.c
 - bsps/arm/tms570/start/bspstarthooks.c
 type: build

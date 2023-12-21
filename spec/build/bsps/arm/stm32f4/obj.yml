@@ -43,6 +43,7 @@ source:
 - bsps/arm/shared/irq/irq-armv7m.c
 - bsps/arm/shared/irq/irq-dispatch-armv7m.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/shared/start/bspstarthook0-empty.c
 - bsps/arm/stm32f4/console/console-config.c
 - bsps/arm/stm32f4/console/usart.c
 - bsps/arm/stm32f4/i2c/i2c-config.c

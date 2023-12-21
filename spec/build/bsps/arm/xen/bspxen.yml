@@ -65,6 +65,7 @@ source:
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/shared/start/bspstarthook0-empty.c
 - bsps/arm/xen/console/console.c
 - bsps/arm/xen/start/bspstart.c
 - bsps/arm/xen/start/bspstarthooks.c
