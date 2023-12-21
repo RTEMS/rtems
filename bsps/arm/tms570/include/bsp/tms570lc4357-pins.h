@@ -928,6 +928,11 @@
                 TMS570_PIN_AND_FNC(TMS570_BALL_B11, 5), \
                 TMS570_PIN_AND_FNC(TMS570_PIN_MMR_ALT_eQEP2S, 1))
 
+/// (TM) TODO: is this correct? LS3137ZWT uses TMS570_PIN_AND_FNC(TMS570_BALL_WITH_MMR(29, 3), 0)
+///   Per the schematic, this pin (called MII_RX_DV / RX_DV) attaches to pad B11 and can select
+///   between MII and RMII mode for the PHY. A pin like this is required for the lwip tms570 rtems port
+#define TMS570_MMR_SELECT_GMII_SEL TMS570_BALL_B11_MII_RX_DV
+
 #define TMS570_BALL_D8 TMS570_BALL_WITH_MMR(34, 3)
 #define TMS570_BALL_D8_HET2_01 TMS570_PIN_WITH_IN_ALT( \
                 TMS570_PIN_AND_FNC(TMS570_BALL_D8, 0), \
@@ -998,8 +1003,7 @@
 
 /* Default pinmux select */
 
-#define TMS570_PINMMR_DEFAULT_INIT_LIST(per_pin_action, common_arg) \
-  per_pin_action(common_arg, TMS570_BALL_N19_AD1EVT) \
+#define TMS570LC4357_PINMMR_DEFAULT_INIT_LIST(per_pin_action, common_arg) \
   per_pin_action(common_arg, TMS570_BALL_D4_EMIF_ADDR_00) \
   per_pin_action(common_arg, TMS570_BALL_D5_EMIF_ADDR_01) \
   per_pin_action(common_arg, TMS570_BALL_C4_EMIF_ADDR_06) \
@@ -1027,30 +1031,30 @@
   per_pin_action(common_arg, TMS570_BALL_R3_EMIF_nRAS) \
   per_pin_action(common_arg, TMS570_BALL_P3_EMIF_nWAIT) \
   per_pin_action(common_arg, TMS570_BALL_D17_EMIF_nWE) \
-  per_pin_action(common_arg, TMS570_BALL_E9_ETMDATA_08) \
-  per_pin_action(common_arg, TMS570_BALL_E8_ETMDATA_09) \
-  per_pin_action(common_arg, TMS570_BALL_E7_ETMDATA_10) \
-  per_pin_action(common_arg, TMS570_BALL_E6_ETMDATA_11) \
-  per_pin_action(common_arg, TMS570_BALL_E13_ETMDATA_12) \
-  per_pin_action(common_arg, TMS570_BALL_E12_ETMDATA_13) \
-  per_pin_action(common_arg, TMS570_BALL_E11_ETMDATA_14) \
-  per_pin_action(common_arg, TMS570_BALL_E10_ETMDATA_15) \
-  per_pin_action(common_arg, TMS570_BALL_K15_ETMDATA_16) \
-  per_pin_action(common_arg, TMS570_BALL_L15_ETMDATA_17) \
-  per_pin_action(common_arg, TMS570_BALL_M15_ETMDATA_18) \
-  per_pin_action(common_arg, TMS570_BALL_N15_ETMDATA_19) \
-  per_pin_action(common_arg, TMS570_BALL_E5_ETMDATA_20) \
-  per_pin_action(common_arg, TMS570_BALL_F5_ETMDATA_21) \
-  per_pin_action(common_arg, TMS570_BALL_G5_ETMDATA_22) \
-  per_pin_action(common_arg, TMS570_BALL_K5_ETMDATA_23) \
-  per_pin_action(common_arg, TMS570_BALL_L5_ETMDATA_24) \
-  per_pin_action(common_arg, TMS570_BALL_M5_ETMDATA_25) \
-  per_pin_action(common_arg, TMS570_BALL_N5_ETMDATA_26) \
-  per_pin_action(common_arg, TMS570_BALL_P5_ETMDATA_27) \
-  per_pin_action(common_arg, TMS570_BALL_R5_ETMDATA_28) \
-  per_pin_action(common_arg, TMS570_BALL_R6_ETMDATA_29) \
-  per_pin_action(common_arg, TMS570_BALL_R7_ETMDATA_30) \
-  per_pin_action(common_arg, TMS570_BALL_R8_ETMDATA_31) \
+  per_pin_action(common_arg, TMS570_BALL_E9_EMIF_ADDR_05) \
+  per_pin_action(common_arg, TMS570_BALL_E8_EMIF_ADDR_04) \
+  per_pin_action(common_arg, TMS570_BALL_E7_EMIF_ADDR_03) \
+  per_pin_action(common_arg, TMS570_BALL_E6_EMIF_ADDR_02) \
+  per_pin_action(common_arg, TMS570_BALL_E13_EMIF_BA_0) \
+  per_pin_action(common_arg, TMS570_BALL_E12_EMIF_nOE) \
+  per_pin_action(common_arg, TMS570_BALL_E11_EMIF_nDQM_1) \
+  per_pin_action(common_arg, TMS570_BALL_E10_EMIF_nDQM_0) \
+  per_pin_action(common_arg, TMS570_BALL_K15_EMIF_DATA_00) \
+  per_pin_action(common_arg, TMS570_BALL_L15_EMIF_DATA_01) \
+  per_pin_action(common_arg, TMS570_BALL_M15_EMIF_DATA_02) \
+  per_pin_action(common_arg, TMS570_BALL_N15_EMIF_DATA_03) \
+  per_pin_action(common_arg, TMS570_BALL_E5_EMIF_DATA_04) \
+  per_pin_action(common_arg, TMS570_BALL_F5_EMIF_DATA_05) \
+  per_pin_action(common_arg, TMS570_BALL_G5_EMIF_DATA_06) \
+  per_pin_action(common_arg, TMS570_BALL_K5_EMIF_DATA_07) \
+  per_pin_action(common_arg, TMS570_BALL_L5_EMIF_DATA_08) \
+  per_pin_action(common_arg, TMS570_BALL_M5_EMIF_DATA_09) \
+  per_pin_action(common_arg, TMS570_BALL_N5_EMIF_DATA_10) \
+  per_pin_action(common_arg, TMS570_BALL_P5_EMIF_DATA_11) \
+  per_pin_action(common_arg, TMS570_BALL_R5_EMIF_DATA_12) \
+  per_pin_action(common_arg, TMS570_BALL_R6_EMIF_DATA_13) \
+  per_pin_action(common_arg, TMS570_BALL_R7_EMIF_DATA_14) \
+  per_pin_action(common_arg, TMS570_BALL_R8_EMIF_DATA_15) \
   per_pin_action(common_arg, TMS570_BALL_R9_ETMTRACECLKIN) \
   per_pin_action(common_arg, TMS570_BALL_R10_ETMTRACECLKOUT) \
   per_pin_action(common_arg, TMS570_BALL_R11_ETMTRACECTL) \
@@ -1132,7 +1136,27 @@
   per_pin_action(common_arg, TMS570_BALL_U7_MII_TX_CLK) \
   per_pin_action(common_arg, TMS570_BALL_E2_HET2_03) \
   per_pin_action(common_arg, TMS570_BALL_N3_HET2_07) \
+  per_pin_action(common_arg, TMS570_BALL_K3_EMIF_CLK) \
+  per_pin_action(common_arg, TMS570_BALL_N19_MII_RX_ER) \
+  per_pin_action(common_arg, TMS570_BALL_F3_MII_COL) \
+  per_pin_action(common_arg, TMS570_BALL_E18_MII_TXD_3) \
+  per_pin_action(common_arg, TMS570_BALL_R2_MII_TXD_2) \
+  per_pin_action(common_arg, TMS570_BALL_J19_MII_TXD_1) \
+  per_pin_action(common_arg, TMS570_BALL_J18_MII_TXD_0) \
+  per_pin_action(common_arg, TMS570_BALL_H19_MII_TXEN) \
+  per_pin_action(common_arg, TMS570_BALL_D19_MII_TX_CLK) \
+  per_pin_action(common_arg, TMS570_BALL_B4_MII_CRS) \
+  per_pin_action(common_arg, TMS570_BALL_K19_MII_RXCLK) \
+  per_pin_action(common_arg, TMS570_BALL_H18_MII_RXD_3) \
+  per_pin_action(common_arg, TMS570_BALL_G19_MII_RXD_2) \
+  per_pin_action(common_arg, TMS570_BALL_A14_MII_RXD_1) \
+  per_pin_action(common_arg, TMS570_BALL_P1_MII_RXD_0) \
+  per_pin_action(common_arg, TMS570_BALL_B11_MII_RX_DV) \
+  per_pin_action(common_arg, TMS570_BALL_G3_MDIO) \
+  per_pin_action(common_arg, TMS570_BALL_V5_MDCLK)
 
 /* End of default PINMMR list */
+
+// Note EMIF Clock enable (EMIF_CKE) on Ball L3 has no alternate functions and is enabled by default
 
 #endif /*LIBBSP_ARM_TMS570_TMS570LC4357_PINS_H*/

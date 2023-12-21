@@ -23,7 +23,6 @@ source:
 - bsps/arm/tms570/start/fail_notification.c
 - bsps/arm/tms570/start/init_emif_sdram.c
 - bsps/arm/tms570/start/init_esm.c
-- bsps/arm/tms570/start/init_pinmux.c
 - bsps/arm/tms570/start/init_system.c
 - bsps/arm/tms570/start/tms570_selftest.c
 - bsps/arm/tms570/start/tms570_selftest_par_can.c

@@ -71,7 +71,6 @@ void _mpuInit_( void );
 
 void tms570_emif_sdram_init( void );
 void tms570_memory_init( uint32_t ram );
-void tms570_pinmux_init( void );
 void tms570_trim_lpo_init( void );
 void tms570_flash_init( void );
 void tms570_periph_init( void );
@@ -95,5 +94,11 @@ void tms570_pll_init(void);
  *   peripheral clocks (VCLK1-3, etc).
  */
 void tms570_map_clock_init(void);
+
+/**
+ * @brief Initialize the tms570 PINMUX peripheral. This maps signals to pin
+ *   terminals.
+ */
+void tms570_pinmux_init(void);
 
 #endif /* LIBBSP_ARM_TMS570_HWINIT_H */
