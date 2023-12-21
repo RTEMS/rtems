@@ -57,6 +57,8 @@
 #include <bsp/tms570_selftest.h>
 #include <bsp/tms570_hwinit.h>
 
+#if TMS570_VARIANT == 3137
+
 #define tcramA1bitError (*(volatile uint32_t *)(0x08400000U))
 #define tcramA2bitError (*(volatile uint32_t *)(0x08400010U))
 
@@ -181,3 +183,5 @@ void  tms570_check_tcram_ecc( void )
   tcramA2bit = tcramA2_bk;
   tcramB2bit = tcramB2_bk;
 }
+
+#endif /* TMS570_VARIANT */

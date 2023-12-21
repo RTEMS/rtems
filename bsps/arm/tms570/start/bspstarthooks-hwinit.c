@@ -229,6 +229,7 @@ static RTEMS_USED void tms570_start_hook_0( void )
 
   if ( !tms570_running_from_tcram() ) {
 
+#if TMS570_VARIANT == 3137
     /* Test the CPU ECC mechanism for RAM accesses.
      * The checkBxRAMECC functions cause deliberate single-bit and double-bit errors in TCRAM accesses
      * by corrupting 1 or 2 bits in the ECC. Reading from the TCRAM location with a 2-bit error
@@ -237,6 +238,7 @@ static RTEMS_USED void tms570_start_hook_0( void )
      * following the one that caused the abort.
      */
     tms570_check_tcram_ecc();
+#endif
 
     /* Wait for PBIST for CPU RAM to be completed */
     /*SAFETYMCUSW 28 D MR:NA <APPROVED> "Hardware status bit read check" */
