@@ -10,6 +10,7 @@
  */
 
 /*
+ * Copyright (C) 2023 embedded brains GmbH & Co. KG
  * Copyright (C) 2014 Premysl Houdek <kom541000@gmail.com>
  *
  * Google Summer of Code 2014 at
@@ -55,33 +56,33 @@
  *
  * @retval Void
  */
-static void tms570_debug_console_putc(char ch)
+static void tms570_debug_console_out(char ch)
 {
   tms570_sci_context *ctx = TMS570_CONSOLE;
   volatile tms570_sci_t *regs = ctx->regs;
-  rtems_interrupt_level level;
 
-  rtems_interrupt_disable(level);
-  while ( ( regs->FLR & TMS570_SCI_FLR_TXRDY ) == 0) {
-    rtems_interrupt_flash(level);
+  while ( true ) {
+    rtems_interrupt_level level;
+
+    while ( ( regs->FLR & TMS570_SCI_FLR_TXRDY ) == 0) {
+      /* Wait */
+    }
+
+    rtems_interrupt_disable( level );
+
+    if ( ( regs->FLR & TMS570_SCI_FLR_TXRDY ) != 0) {
+      regs->TD = ch;
+      rtems_interrupt_enable( level );
+
+      break;
+    }
+
+    rtems_interrupt_enable( level );
   }
-  regs->TD = ch;
+
   while ( ( regs->FLR & TMS570_SCI_FLR_TX_EMPTY ) == 0) {
-    rtems_interrupt_flash(level);
+    /* Wait */
   }
-  rtems_interrupt_enable(level);
-}
-
-/**
- * @brief debug console output
- *
- * debug functions always use serial dev 0 peripheral
- *
- * @retval Void
- */
-static void tms570_debug_console_out(char c)
-{
-  tms570_debug_console_putc(c);
 }
 
 static void tms570_debug_console_init(void)
