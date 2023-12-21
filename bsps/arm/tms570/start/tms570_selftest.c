@@ -264,7 +264,7 @@ void tms570_pbist_self_check( void )
   }
 
   /* Enable PBIST clocks and ROM clock */
-  TMS570_PBIST.PACT = 0x3U;
+  TMS570_PBIST.PACT = 0x1U;
 
   /* CPU control of PBIST */
   TMS570_PBIST.DLR = 0x10U;
@@ -353,7 +353,7 @@ void tms570_pbist_run(
   }
 
   /* Enable PBIST clocks and ROM clock */
-  TMS570_PBIST.PACT = 0x3U;
+  TMS570_PBIST.PACT = 0x1U;
 
   /* Select all algorithms to be tested */
   TMS570_PBIST.ALGO = algomask;
