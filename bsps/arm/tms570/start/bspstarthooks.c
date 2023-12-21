@@ -43,6 +43,6 @@
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1( void )
 {
-  bsp_start_copy_sections();
+  bsp_start_copy_sections_compact();
   bsp_start_clear_bss();
 }
