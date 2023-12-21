@@ -1,6 +1,12 @@
-Development Board: TMS570LS31x Hercules Development Kit from TI
+TI Hercules TMS570 series development boards:
+
+TMS570LS31:
 
 http://www.ti.com/tool/tmds570ls31hdk
+
+TMS570LC43:
+
+https://www.ti.com/tool/TMDX570LC43HDK
 
 Overview
 --------
@@ -12,77 +18,67 @@ Drivers:
   o Ethernet - external lwIP fork repository
 
 BSP variants:
-  tms570ls3137_hdk_intram - place code and data into internal SRAM
-  tms570ls3137_hdk_sdram - place code into external SDRAM and data to SRAM
-  tms570ls3137_hdk - variant for stand-alone RTEMS application stored
-                     and running directly from flash. This variant
-                     requires initialization of hardware to be integrated
-                     into RTEMS. RTEMS has to be configured with
-                       TMS570_USE_HWINIT_STARTUP=1
-                     and initialization code has to be included in the sources.
 
-Tool-chain used for development
+  TMS570LS3137:
+
+    tms570ls3137_hdk_intram - place code and data into internal SRAM
+    tms570ls3137_hdk_sdram - place code and data into external SDRAM
+    tms570ls3137_hdk - variant for stand-alone RTEMS application stored
+                    and running directly from flash..
+
+  TMS570LC4357:
+
+    tms570ls4357_hdk_sdram - place code and data into external SDRAM
+    tms570lc4357_hdk - variant for stand-alone RTEMS application stored
+                    and running directly from flash.
+
+Toolchain used for development
 -------------------------------
 
-  arm-rtems4.12-gcc (GCC) 6.1.1 20160526 + Newlib 2.4.0.20160527 + Binutils 2.26.20160125
+Example of RTEMS build configuration (config.ini) used for testing of self-contained applications
+running directly from flash:
 
-  CFLAGS="-O2 -pipe" LDFLAGS=-s \
-  ../../../src/gcc-6.1/configure --target=arm-rtems4.12 --prefix=/usr \
-               --enable-languages=c,c++ \
-               --disable-libstdcxx-pch \
-               --with-gnu-ld \
-               --with-gnu-as \
-               --enable-threads \
-               --enable-target-optspace \
-               --with-system-zlib \
-               --verbose \
-               --disable-nls --without-included-gettext \
-               --disable-win32-registry \
-               --with-newlib \
-               --enable-plugin \
-               --enable-newlib-io-c99-formats \
-               --enable-version-specific-runtime-libs \
-               --enable-newlib-iconv \
-               --disable-lto \
-               --disable-lto \
-               --enable-libgomp \
-               --enable-newlib-iconv \
-               --enable-newlib-iconv-encodings="iso_8859_1,utf_8" \
+    [arm/tms570lc4357_hdk]
 
 All patches required for Cortex-R and big-endian ARM support are already
-integrated in GCC the mainline.
+integrated into the GCC and RTEMS mainline.
 
-RTEMS build configuration used for testing of self contained
-applications to run directly from Flash
+MCU-specific flags used during compilation are located in
+`externs/rtems/spec/build/bsps/arm/tms570/abi.yml`
 
-  ../../../src/rtems/configure  --target=arm-rtems4.12 --prefix=/opt/rtems4.12 \
-    --enable-rtems-inlines --disable-multiprocessing --enable-cxx \
-    --enable-rdbg --enable-maintainer-mode --enable-tests=samples \
-    --disable-networking --enable-posix --enable-itron --disable-ada \
-    --disable-expada --disable-multilib --disable-docs \
-    --enable-rtemsbsp="tms570ls3137_hdk" \
-    --enable-rtems-debug \
-    TMS570_USE_HWINIT_STARTUP=1
+When linking an application to an RTEMs build, ensure the following flags are set
+(arm-rtems6-gcc/g++):
+
+    -mbe32
+    -qrtems
+    -T{RTEMS_BSP_VARIANT_LINKERSCRIPT}
+
+RTEMS_BSP_VARIANT_LINKERSCRIPT can be found with the static libraries built for rtems. There
+is one for each BSP variant type. For example `linkcmds.tms570lc4357_hdk`
 
 Execution
 ---------
 
-Application build by above process can be directly programmed
+Application built by the above process can be directly programmed
 into Flash and run.
 
-For test and debug purposes, TI's HalCoGen generated application
-is used to set up the board and then the RTEMS application
-image is loaded using OpenOCD to internal EEC SRAM or external SDRAM.
-This prevents wear of Flash which has limited guaranteed
-erase cycles count.
-
-The following features are implemented in the BSP only partially:
+The following features are implemented in the `_hdk` BSP variants:
 
  + Initial CPU and peripheral initialization
  + Cores Self-test
 
+For test and debug purposes, TI's HalCoGen generated application
+can be used to set up the board and then a RTEMS application
+can be loaded using OpenOCD to internal SRAM or external SDRAM.
+This prevents wear of Flash which has limited guaranteed
+erase cycles count.
+
 Setup application code is available there:
           https://github.com/hornmich/tms570ls3137-hdk-sdram
+
+A branch that enables loading to Flash via openocd on the TMS570LC4357
+can be found here:
+    https://github.com/len0rd/openocd
 
 TMDS570LS31HDK setup to use SDRAM to load and debug RTEMS applications
 -----------------------------------------------------------------------
@@ -98,36 +94,31 @@ For ETHERNET, the lwIP port for TMS570LS3137 has been developed
 at Industrial Informatics Group of Czech Technical University
 in Prague and development versions are available on SourceForge.
 
-The RTEMS and TMS570 support is included in uLAN project lwIP
-repository for now
+RTEMS and TMS570 support is included in uLAN project lwIP
+repository
 
   https://sourceforge.net/p/ulan/lwip-omk/
 
-But other place should be found when RTEMS lwIP
-integration with read, write, close etc. functions
-is implemented in future.
+This port has been consolidated with other RTEMS-LWIP ports here:
 
-Adapt BSP for another TMS570 based hardware
--------------------------------------------
+  https://git.rtems.org/rtems-lwip/tree/rtemslwip/tms570
 
-When TMS570_USE_HWINIT_STARTUP=1 then quite complete
-initialization and selft-test code is included in TMS570
-BSP build. The support included in hwinit subdirectory
-provides version of bsp_start_hook_0 and bsp_start_hook_1
-which proceeds many self-tests functions, clocks, PLLs
-peripherals and other subsystems configuration.
+A port to the TMS570LC4357 based off this work is underway.
+
+Adapt BSP for other TMS570 based hardware
+-----------------------------------------
 
 Complete pin multiplexer initialization according
 to the list of individual pins functions is included.
 Pins function definition can be found and altered
 in a file
 
- rtems/c/src/lib/libbsp/arm/tms570/hwinit/init_pinmux.c
+ `rtems/c/src/lib/libbsp/arm/tms570/hwinit/init_pinmux.c`
 
 Complete "database" of all possible pin functions for
-TMS570LS3137 chip is provided in a file
+a chip is provided in a file
 
-  rtems/c/src/lib/libbsp/arm/tms570/include/tms570ls3137zwt-pins.h
+  `rtems/c/src/lib/libbsp/arm/tms570/include/tms570<MODEL>-pins.h`
 
 If another package or chip is considered then tools found
 in next repository can be used or extended to generate header
@@ -142,4 +133,5 @@ Additional information about the BSP and board can be found at
   https://devel.rtems.org/wiki/TBR/BSP/Tms570
 
 Additional information about the CPU can be found at
-  http://www.ti.com/product/tms570ls3137
+  https://www.ti.com/product/tms570ls3137
+  https://www.ti.com/product/TMS570LC4357
