@@ -13,6 +13,7 @@
 /* https://github.com/AoLaD/rtems-tms570-utils/tree/headers/headers/python */
 
 /*
+ * Copyright (C) 2022 Airbus U.S. Space & Defense, Inc
  * Copyright (c) 2014-2015, Premysl Houdek <kom541000@gmail.com>
  *
  * Czech Technical University in Prague
@@ -164,5 +165,11 @@
 #define TMS570_STC (*(volatile tms570_stc_t*)0xFFFFE600)
 #define TMS570_SYS1 (*(volatile tms570_sys1_t*)0xFFFFFF00)
 #define TMS570_SYS2 (*(volatile tms570_sys2_t*)0xFFFFE100)
-#define TMS570_PCR (*(volatile tms570_pcr_t*)0xFFFFE000)
+#if TMS570_VARIANT == 4357
+#define TMS570_PCR1 (*(volatile tms570_pcr_t*)0xFFFF1000)
+#define TMS570_PCR2 (*(volatile tms570_pcr_t*)0xFCFF1000)
+#define TMS570_PCR3 (*(volatile tms570_pcr_t*)0xFFF78000)
+#else
+#define TMS570_PCR1 (*(volatile tms570_pcr_t*)0xFFFFE000)
+#endif
 #endif /* LIBBSP_ARM_TMS570 */
