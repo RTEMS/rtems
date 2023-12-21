@@ -46,6 +46,7 @@
 #include <bsp/tms570_selftest.h>
 #include <bsp/tms570_selftest_parity.h>
 #include <bsp/tms570_hwinit.h>
+#include <bsp/ti_herc/errata_SSWF021_45.h>
 
 #define PBIST_March13N_SP        0x00000008U  /**< March13 N Algo for 1 Port mem */
 
@@ -63,6 +64,14 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
   if ( TMS570_SYS1.DEVID == 0x802AAD05U ) {
     _esmCcmErrorsClear_();
   }
+#endif
+
+#if TMS570_VARIANT == 4357
+  uint32_t pll_result;
+
+  do {
+    pll_result = _errata_SSWF021_45_both_plls(10);
+  } while (pll_result != 0 && pll_result != 4);
 #endif
 
   /* Enable CPU Event Export */

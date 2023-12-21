@@ -51,6 +51,12 @@
 
 #include <bsp/utility.h>
 
+enum tms570_dcc1_cnt0_clksrc {
+    DCC1_CNT0_HF_LPO    = 0x5U,    /**< Alias for DCC1 CNT 0 CLOCK SOURCE 0*/
+    DCC1_CNT0_TCK       = 0xAU,    /**< Alias for DCC1 CNT 0 CLOCK SOURCE 1*/
+    DCC1_CNT0_OSCIN     = 0xFU,    /**< Alias for DCC1 CNT 0 CLOCK SOURCE 2*/
+};
+
 typedef struct{
   uint32_t GCTRL;             /*DCC Global Control Register*/
   uint32_t REV;               /*DCC Revision Id Register*/
