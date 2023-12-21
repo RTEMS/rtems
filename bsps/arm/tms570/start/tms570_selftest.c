@@ -49,6 +49,32 @@
 #include <bsp/tms570_selftest.h>
 #include <bsp/tms570_hwinit.h>
 
+/*
+ * According to the TMS570LS3137 (HCLK max 180MHz, VCLK max 100MHz) and
+ * TMS570LC4357 (GCLK1 max 300MHz, VCLK max 110MHz, HCLK max 150MHz)
+ * datasheets, the PBIST ROM clock frequency is limited to 90MHz.
+ *
+ * For LS3137 PBIST ROM clock frequency = HCLK  / (1 << MSTGCR[9:8])
+ *
+ * For LC4357 PBIST ROM clock frequency = GCLK1 / (1 << MSTGCR[9:8])
+ */
+#if TMS570_VARIANT == 4357
+#define MSTGCR_ENABLE_MEMORY_SELF_TEST 0x0000020a
+#define MSTGCR_DISABLE_MEMORY_SELF_TEST 0x00000205
+#define PBIST_RESET_DELAY (64 * 4)
+#else
+#define MSTGCR_ENABLE_MEMORY_SELF_TEST 0x0000010a
+#define MSTGCR_DISABLE_MEMORY_SELF_TEST 0x00000105
+#define PBIST_RESET_DELAY (32 * 2)
+#endif
+
+static void tms570_pbist_reset_delay( void )
+{
+  for ( int i = 0; i < PBIST_RESET_DELAY; ++i ) {
+    __asm__ volatile ( "" );
+  }
+}
+
 /**
  * @brief Checks to see if the EFUSE Stuck at zero test is completed successfully (HCG:efcStuckZeroTest).
  /
@@ -232,7 +258,6 @@ uint32_t tms570_efc_check( void )
 /* Requirements : HL_SR399 */
 void tms570_pbist_self_check( void )
 {
-  volatile uint32_t i = 0U;
   uint32_t          PBIST_wait_done_loop = 0U;
 
   /* Run a diagnostic check on the memory self-test controller */
@@ -241,15 +266,14 @@ void tms570_pbist_self_check( void )
   /* Disable PBIST clocks and ROM clock */
   TMS570_PBIST.PACT = 0x0U;
 
-  /* PBIST ROM clock frequency = HCLK frequency /2 */
   /* Disable memory self controller */
-  TMS570_SYS1.MSTGCR = 0x00000105U;
+  TMS570_SYS1.MSTGCR = MSTGCR_DISABLE_MEMORY_SELF_TEST;
 
   /* Disable Memory Initialization controller */
   TMS570_SYS1.MINITGCR = 0x5U;
 
   /* Enable memory self controller */
-  TMS570_SYS1.MSTGCR = 0x0000010AU;
+  TMS570_SYS1.MSTGCR = MSTGCR_ENABLE_MEMORY_SELF_TEST;
 
   /* Clear PBIST Done */
   TMS570_SYS1.MSTCGSTAT = 0x1U;
@@ -257,11 +281,7 @@ void tms570_pbist_self_check( void )
   /* Enable PBIST controller */
   TMS570_SYS1.MSIENA = 0x1U;
 
-  /* wait for 32 VBUS clock cycles at least, based on HCLK to VCLK ratio */
-  /*SAFETYMCUSW 134 S MR:12.2 <APPROVED> "Wait for few clock cycles (Value of i not used)" */
-  /*SAFETYMCUSW 134 S MR:12.2 <APPROVED> "Wait for few clock cycles (Value of i not used)" */
-  for ( i = 0U; i < ( 32U + ( 32U * 1U ) ); i++ ) { /* Wait */
-  }
+  tms570_pbist_reset_delay();
 
   /* Enable PBIST clocks and ROM clock */
   TMS570_PBIST.PACT = 0x1U;
@@ -331,11 +351,8 @@ void tms570_pbist_run(
   uint32_t algomask
 )
 {
-  volatile uint32_t i = 0U;
-
-  /* PBIST ROM clock frequency = HCLK frequency /2 */
   /* Disable memory self controller */
-  TMS570_SYS1.MSTGCR = 0x00000105U;
+  TMS570_SYS1.MSTGCR = MSTGCR_DISABLE_MEMORY_SELF_TEST;
 
   /* Disable Memory Initialization controller */
   TMS570_SYS1.MINITGCR = 0x5U;
@@ -344,13 +361,9 @@ void tms570_pbist_run(
   TMS570_SYS1.MSIENA = 0x1U;
 
   /* Enable memory self controller */
-  TMS570_SYS1.MSTGCR = 0x0000010AU;
+  TMS570_SYS1.MSTGCR = MSTGCR_ENABLE_MEMORY_SELF_TEST;
 
-  /* wait for 32 VBUS clock cycles at least, based on HCLK to VCLK ratio */
-  /*SAFETYMCUSW 134 S MR:12.2 <APPROVED> "Wait for few clock cycles (Value of i not used)" */
-  /*SAFETYMCUSW 134 S MR:12.2 <APPROVED> "Wait for few clock cycles (Value of i not used)" */
-  for ( i = 0U; i < ( 32U + ( 32U * 1U ) ); i++ ) { /* Wait */
-  }
+  tms570_pbist_reset_delay();
 
   /* Enable PBIST clocks and ROM clock */
   TMS570_PBIST.PACT = 0x1U;
