@@ -137,3 +137,75 @@ void tms570_pll_init( void )
     // Enable all clock sources except the following
     TMS570_SYS1.CSDIS = (TMS570_CLKDIS_SRC_EXT_CLK2 | TMS570_CLKDIS_SRC_EXT_CLK1 | TMS570_CLKDIS_SRC_RESERVED);
 }
+
+void tms570_map_clock_init(void)
+{
+    // based on HalCoGen mapClocks method
+    uint32_t sys_csvstat, sys_csdis;
+
+    TMS570_SYS2.HCLKCNTL = 1U;
+
+    /** @b Initialize @b Clock @b Tree: */
+    /** - Disable / Enable clock domain */
+    TMS570_SYS1.CDDIS = ( 0U << 4U ) |  /* AVCLK 1 ON */
+                        ( 1U << 5U ) |  /* AVCLK 2 OFF */
+                        ( 0U << 8U ) |  /* VCLK3 ON */
+                        ( 0U << 9U ) |  /* VCLK4 ON */
+                        ( 0U << 10U ) | /* AVCLK 3 ON */
+                        ( 0U << 11U );  /* AVCLK 4 ON */
+
+    /* Work Around for Errata SYS#46:
+    * Despite this being a LS3137 errata, hardware testing on the LC4357 indicates this wait is still necessary
+    */
+    sys_csvstat = TMS570_SYS1.CSVSTAT;
+    sys_csdis = TMS570_SYS1.CSDIS;
+
+    while ( ( sys_csvstat & ( ( sys_csdis ^ 0xFFU ) & 0xFFU ) ) !=
+            ( ( sys_csdis ^ 0xFFU ) & 0xFFU ) ) {
+        sys_csvstat = TMS570_SYS1.CSVSTAT;
+        sys_csdis = TMS570_SYS1.CSDIS;
+    }
+
+    TMS570_SYS1.GHVSRC =  TMS570_SYS1_GHVSRC_GHVWAKE(TMS570_SYS_CLK_SRC_PLL1)
+                        | TMS570_SYS1_GHVSRC_HVLPM(TMS570_SYS_CLK_SRC_PLL1)
+                        | TMS570_SYS1_GHVSRC_GHVSRC(TMS570_SYS_CLK_SRC_PLL1);
+
+    /** - Setup RTICLK1 and RTICLK2 clocks */
+    TMS570_SYS1.RCLKSRC = ((uint32_t)1U << 24U)        /* RTI2 divider (Not applicable for lock-step device)  */
+                        | ((uint32_t)TMS570_SYS_CLK_SRC_VCLK << 16U) /* RTI2 clock source (Not applicable for lock-step device) Field not in TRM? */
+                        | ((uint32_t)1U << 8U)         /* RTI1 divider */
+                        | ((uint32_t)TMS570_SYS_CLK_SRC_VCLK << 0U); /* RTI1 clock source */
+
+    /** - Setup asynchronous peripheral clock sources for AVCLK1 and AVCLK2 */
+    TMS570_SYS1.VCLKASRC =  TMS570_SYS1_VCLKASRC_VCLKA2S(TMS570_SYS_CLK_SRC_VCLK)
+                        | TMS570_SYS1_VCLKASRC_VCLKA1S(TMS570_SYS_CLK_SRC_VCLK);
+
+    /** - Setup synchronous peripheral clock dividers for VCLK1, VCLK2, VCLK3 */
+
+    // VCLK2 = PLL1 / HCLK_DIV / 2 = 75MHz
+    TMS570_SYS1.CLKCNTL  = (TMS570_SYS1.CLKCNTL & ~TMS570_SYS1_CLKCNTL_VCLK2R(0xF))
+                        | TMS570_SYS1_CLKCNTL_VCLK2R(0x1);
+    // VLCK1 = PLL1 / HCLK_DIV / 2 = 75MHz
+    TMS570_SYS1.CLKCNTL  = (TMS570_SYS1.CLKCNTL & ~TMS570_SYS1_CLKCNTL_VCLKR(0xF))
+                        | TMS570_SYS1_CLKCNTL_VCLKR(0x1);
+
+    // VCLK3 = PLL1 / HCLK_DIV / 3 = 50MHz
+    TMS570_SYS2.CLK2CNTRL = (TMS570_SYS2.CLK2CNTRL & ~TMS570_SYS2_CLK2CNTRL_VCLK3R(0xF))
+                        | TMS570_SYS2_CLK2CNTRL_VCLK3R(0x2);
+
+    TMS570_SYS2.VCLKACON1 =   TMS570_SYS2_VCLKACON1_VCLKA4R(1U - 1U)
+                            | (TMS570_SYS2_VCLKACON1_VCLKA4_DIV_CDDIS * 0)
+                            | TMS570_SYS2_VCLKACON1_VCLKA4S(TMS570_SYS_CLK_SRC_VCLK)
+                            | TMS570_SYS2_VCLKACON1_VCLKA3R(1U - 1U)
+                            | (TMS570_SYS2_VCLKACON1_VCLKA3_DIV_CDDIS * 0)
+                            | TMS570_SYS2_VCLKACON1_VCLKA3S(TMS570_SYS_CLK_SRC_VCLK);
+
+    /* Now the PLLs are locked and the PLL outputs can be sped up */
+    /* The R-divider was programmed to be 0xF. Now this divider is changed to programmed value */
+    TMS570_SYS1.PLLCTL1 = (TMS570_SYS1.PLLCTL1 & 0xE0FFFFFFU) | (uint32_t)((uint32_t)(1U - 1U) << 24U);
+    /*SAFETYMCUSW 134 S MR:12.2 <APPROVED> " Clear and write to the volatile register " */
+    TMS570_SYS2.PLLCTL3 = (TMS570_SYS2.PLLCTL3 & 0xE0FFFFFFU) | (uint32_t)((uint32_t)(1U - 1U) << 24U);
+
+    /* Enable/Disable Frequency modulation */
+    TMS570_SYS1.PLLCTL2 |= 0x00000000U;
+}

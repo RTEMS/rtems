@@ -75,7 +75,6 @@ void tms570_pinmux_init( void );
 void tms570_trim_lpo_init( void );
 void tms570_flash_init( void );
 void tms570_periph_init( void );
-void tms570_map_clock_init( void );
 void tms570_system_hw_init( void );
 void tms570_esm_init( void );
 
@@ -89,5 +88,12 @@ void tms570_esm_init( void );
  * @brief Initialize PLLs source divider/multipliers.
  */
 void tms570_pll_init(void);
+
+/**
+ * @brief Initialize the tms570 Global Clock Manager (GCM) registers which
+ *   sub-divide the input clock source (generally PLL) into the various
+ *   peripheral clocks (VCLK1-3, etc).
+ */
+void tms570_map_clock_init(void);
 
 #endif /* LIBBSP_ARM_TMS570_HWINIT_H */
