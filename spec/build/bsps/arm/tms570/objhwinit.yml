@@ -14,6 +14,7 @@ install:
   - bsps/arm/tms570/include/bsp/ti_herc/errata_SSWF021_45.h
 links: []
 source:
+- bsps/arm/tms570/start/bspstarthooks.c
 - bsps/arm/tms570/start/bspstarthooks-hwinit.c
 - bsps/arm/tms570/start/errata_SSWF021_45.c
 - bsps/arm/tms570/start/fail_notification.c

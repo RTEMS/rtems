@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSBSPsARMTMS570
  *
- * @brief This source file contains the start hooks implementation.
+ * @brief This source file contains the bsp_start_hook_1(0 implementation.
  */
 
 /*

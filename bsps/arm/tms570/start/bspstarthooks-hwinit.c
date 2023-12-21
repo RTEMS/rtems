@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSBSPsARMTMS570
  *
- * @brief This source file contains the start hooks implementation.
+ * @brief This source file contains the bsp_start_hook_0() implementation.
  */
 
 /*
@@ -335,6 +335,8 @@ static RTEMS_USED void tms570_start_hook_0( void )
   /* Configure system response to error conditions signaled to the ESM group1 */
   tms570_esm_init();
 
+  tms570_emif_sdram_init();
+
 #if 1
   /*
    * Do not depend on link register to be restored to
@@ -343,26 +345,6 @@ static RTEMS_USED void tms570_start_hook_0( void )
    */
   bsp_start_hook_0_done();
 #endif
-}
-
-BSP_START_TEXT_SECTION void bsp_start_hook_1( void )
-{
-  /* At this point we can use objects outside the .start section  */
-#if 0
-  /* Do not run attempt to initialize MPU when code is running from SDRAM */
-  if ( !tms570_running_from_sdram() ) {
-    /*
-     * MPU background areas setting has to be overlaid
-     * if execution of code is required from external memory/SDRAM.
-     * This region is non executable by default.
-     */
-    _mpuInit_();
-  }
-#endif
-  tms570_emif_sdram_init();
-
-  bsp_start_copy_sections();
-  bsp_start_clear_bss();
 }
 
 /*
