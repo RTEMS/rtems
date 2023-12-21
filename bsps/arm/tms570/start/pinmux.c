@@ -183,16 +183,6 @@ tms570_bsp_pinmmr_config(const uint32_t *pinmmr_values, int reg_start, int reg_c
   cnt = reg_count;
 
   do {
-    *pinmmrx = *pinmmrx & *pval;
-    pinmmrx++;
-    pval++;
-  } while( --cnt );
-
-  pinmmrx = (&TMS570_IOMM.PINMUX.PINMMR0) + reg_start;
-  pval = pinmmr_values;
-  cnt = reg_count;
-
-  do {
     *pinmmrx = *pval;
     pinmmrx++;
     pval++;
