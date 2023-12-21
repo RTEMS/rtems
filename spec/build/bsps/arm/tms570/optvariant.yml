@@ -5,9 +5,13 @@ actions:
   - 3137
   - 4357
 - define: null
+- env-assign: null
+- set-value: TMS570_VARIANT_${TMS570_VARIANT}
+- substitute: null
+- env-append: ENABLE
 build-type: option
 copyrights:
-- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
   value: 3137
