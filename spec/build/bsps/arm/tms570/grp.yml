@@ -41,8 +41,6 @@ links:
 - role: build-dependency
   uid: optscibaud
 - role: build-dependency
-  uid: opttms570ls3137
-- role: build-dependency
   uid: optlinkflags
 - role: build-dependency
   uid: ../../linkcmds
