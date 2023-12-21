@@ -40,6 +40,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef LIBBSP_ARM_TMS570_PINS_H
+#define LIBBSP_ARM_TMS570_PINS_H
+
 #include <bspopts.h>
 
 #if TMS570_VARIANT == 4357
@@ -47,3 +50,5 @@
 #else
 #include <bsp/tms570ls3137zwt-pins.h>
 #endif
+
+#endif /* LIBBSP_ARM_TMS570_PINS_H */
