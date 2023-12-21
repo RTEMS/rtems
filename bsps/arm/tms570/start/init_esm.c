@@ -9,6 +9,7 @@
  */
 
 /*
+ * Copyright (C) 2022 Airbus U.S. Space & Defense, Inc
  * Copyright (C) 2016 Pavel Pisa <pisa@cmp.felk.cvut.cz>
  *
  * Czech Technical University in Prague
@@ -68,8 +69,12 @@ void tms570_esm_init( void )
 
   /** - Reset error pin */
   if (TMS570_ESM.EPSR == 0U) {
-    TMS570_ESM.EKR = 0x00000005U;
-  } else {
+    /*
+     * Per TMS570LC4x Errata DEVICE#60, the error pin cannot be cleared with a
+     * normal EKR write upon system reset.  Put in diagnostic followed by
+     * normal mode instead.  This sequence works also on other chip variants.
+     */
+    TMS570_ESM.EKR = 0x0000000AU;
     TMS570_ESM.EKR = 0x00000000U;
   }
 
