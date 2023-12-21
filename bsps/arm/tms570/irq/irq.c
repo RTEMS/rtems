@@ -46,48 +46,112 @@
 #include <bsp/irq.h>
 #include <rtems/score/armv4.h>
 
-unsigned int priorityTable[BSP_INTERRUPT_VECTOR_COUNT];
+#define VIM_CHANCTRL_COUNT 24
+#define VIM_CHANMAP_MASK UINT32_C(0x7f)
+#define VIM_CHANMAP_SHIFT(i) (24 - (8 * (i)))
 
-/**
- * @brief Set priority of the interrupt vector.
- *
- * This function is here because of compability. It should set
- * priority of the interrupt vector.
- * @warning It does not set any priority at HW layer. It is nearly imposible to
- * @warning set priority of the interrupt on TMS570 in a nice way.
- * @param[in] vector vector of isr
- * @param[in] priority new priority assigned to the vector
- * @return Void
- */
-void tms570_irq_set_priority(
-  rtems_vector_number vector,
-  unsigned priority
-)
+static void vim_set_channel_request(uint32_t channel, uint32_t request)
 {
-  if ( bsp_interrupt_is_valid_vector(vector) ) {
-    priorityTable[vector] = priority;
-  }
+  uint32_t chanctrl;
+  int shift;
+
+  chanctrl = TMS570_VIM.CHANCTRL[channel / 4];
+  shift = VIM_CHANMAP_SHIFT(channel % 4);
+  chanctrl &= ~(VIM_CHANMAP_MASK << shift);
+  chanctrl |= request << shift;
+  TMS570_VIM.CHANCTRL[channel / 4] = chanctrl;
 }
 
-/**
- * @brief Gets priority of the interrupt vector.
- *
- * This function is here because of compability. It returns priority
- * of the isr vector last set by tms570_irq_set_priority function.
- *
- * @warning It does not return any real priority of the HW layer.
- * @param[in] vector vector of isr
- * @retval 0 vector is invalid.
- * @retval priority priority of the interrupt
- */
-unsigned tms570_irq_get_priority(
-  rtems_vector_number vector
+rtems_status_code tms570_irq_set_priority(
+  rtems_vector_number vector,
+  uint32_t            priority
 )
 {
-  if ( bsp_interrupt_is_valid_vector(vector) ) {
-   return priorityTable[vector];
- }
- return 0;
+  rtems_interrupt_level level;
+  uint32_t current_channel;
+  uint32_t chanctrl;
+  size_t i;
+  size_t j;
+
+  if (!bsp_interrupt_is_valid_vector(vector)) {
+   return RTEMS_INVALID_ID;
+  }
+
+  if (priority < 2) {
+    return RTEMS_INVALID_PRIORITY;
+  }
+
+  if (priority >= BSP_INTERRUPT_VECTOR_COUNT) {
+    return RTEMS_INVALID_PRIORITY;
+  }
+
+  rtems_interrupt_disable(level);
+  current_channel = TMS570_VIM.CHANCTRL[priority / 4];
+  current_channel >>= VIM_CHANMAP_SHIFT(priority % 4);
+  current_channel &= VIM_CHANMAP_MASK;
+
+  for (i = 0; i < VIM_CHANCTRL_COUNT; ++i) {
+    chanctrl = TMS570_VIM.CHANCTRL[i];
+
+    for (j = 0; j < 4; ++j) {
+      uint32_t channel_vector;
+
+      channel_vector = (chanctrl >> VIM_CHANMAP_SHIFT(j)) & VIM_CHANMAP_MASK;
+
+      if (channel_vector == vector) {
+        vim_set_channel_request(i * 4 + j, current_channel);
+        goto set_my_request;
+      }
+    }
+  }
+
+set_my_request:
+
+  vim_set_channel_request(priority, vector);
+  rtems_interrupt_enable(level);
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code tms570_irq_get_priority(
+  rtems_vector_number  vector,
+  unsigned            *priority
+)
+{
+  rtems_interrupt_level level;
+  size_t i;
+  size_t j;
+
+  if (priority == NULL) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  if (!bsp_interrupt_is_valid_vector(vector)) {
+   return RTEMS_INVALID_ID;
+  }
+
+  rtems_interrupt_disable(level);
+
+  for (i = 0; i < VIM_CHANCTRL_COUNT; ++i) {
+    uint32_t chanctrl;
+
+    chanctrl = TMS570_VIM.CHANCTRL[i];
+
+    for (j = 0; j < 4; ++j) {
+      uint32_t channel_vector;
+
+      channel_vector = (chanctrl >> VIM_CHANMAP_SHIFT(j)) & VIM_CHANMAP_MASK;
+
+      if (channel_vector == vector) {
+        rtems_interrupt_enable(level);
+        *priority = i * 4 + j;
+        return RTEMS_SUCCESSFUL;
+      }
+    }
+  }
+
+  rtems_interrupt_enable(level);
+  *priority = UINT32_MAX;
+  return RTEMS_NOT_DEFINED;
 }
 
 /**
@@ -204,7 +268,7 @@ void bsp_interrupt_facility_initialize(void)
     TMS570_VIM.REQENACLR[i] = 0xffffffff;
   }
   /* Map default events on interrupt vectors */
-  for ( i = 0; i < 24; i += 1, value += 0x04040404) {
+  for ( i = 0; i < VIM_CHANCTRL_COUNT; i += 1, value += 0x04040404) {
     TMS570_VIM.CHANCTRL[i] = value;
   }
   /* Set all vectors as IRQ (not FIR) */

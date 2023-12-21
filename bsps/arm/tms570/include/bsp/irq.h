@@ -140,33 +140,56 @@
 #ifndef ASM
 
 /**
- * @brief Set priority of the interrupt vector.
+ * @brief Sets the priority of the interrupt vector.
  *
- * This function is here because of compability. It should set
- * priority of the interrupt vector.
- * @warning It does not set any priority at HW layer. It is nearly imposible to
- * @warning set priority of the interrupt on TMS570 in a nice way.
- * @param[in] vector vector of isr
- * @param[in] priority new priority assigned to the vector
- * @return Void
+ * The priority is defined by the VIM interrupt channel.  Firstly, the VIM
+ * Interrupt Control (CHANCTRL) registers are searched to get the current
+ * channel associated with the interrupt vector.  The interrupt vector of the
+ * channel associated with the priority is assigned to this channel.  The
+ * specified interrupt vector is assigned to the channel associated with the
+ * priority.  So, this function swaps the channels of two interrupt vectors.
+ *
+ * @param vector is the number of the interrupt vector to set the priority.
+ *
+ * @param priority is the priority to set.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_INVALID_PRIORITY The interrupt priority specified in
+ *   ``priority`` was invalid.
  */
-void tms570_irq_set_priority(
+rtems_status_code tms570_irq_set_priority(
   rtems_vector_number vector,
-  unsigned            priority
+  uint32_t            priority
 );
 
 /**
- * @brief Gets priority of the interrupt vector.
+ * @brief Gets the priority of the interrupt vector.
  *
- * This function is here because of compability. It returns priority
- * of the isr vector last set by tms570_irq_set_priority function.
+ * The priority is defined by the VIM interrupt channel.  The VIM Interrupt
+ * Control (CHANCTRL) registers are searched to get the channel associated with
+ * the interrupt vector.
  *
- * @warning It does not return any real priority of the HW layer.
- * @param[in] vector vector of isr
- * @retval 0 vector is invalid.
- * @retval priority priority of the interrupt
+ * @param vector is the number of the interrupt vector to set the priority.
+ *
+ * @param priority is the priority to set.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``priority`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_NOT_DEFINED The interrupt has no associated priority.
  */
-unsigned tms570_irq_get_priority( rtems_vector_number vector );
+rtems_status_code tms570_irq_get_priority(
+  rtems_vector_number  vector,
+  uint32_t            *priority
+);
 
 #endif /* ASM */
 
