@@ -9,6 +9,7 @@
  */
 
 /*
+ * Copyright (C) 2022 Airbus U.S. Space & Defense, Inc
  * Copyright (C) 2009-2015 Texas Instruments Incorporated - www.ti.com
  *
  *
@@ -437,6 +438,33 @@ bool tms570_pbist_is_test_passed( void )
   }
 
   return status;
+}
+
+/**
+ * Helper method that will run a pbist test and blocks until it finishes
+ * Reduces code duplication in start system start hooks
+ */
+void tms570_pbist_run_and_check(uint32_t raminfoL, uint32_t algomask)
+{
+  /* Run PBIST on region */
+  tms570_pbist_run(raminfoL, algomask);
+
+  /* Wait for PBIST for region to be completed */
+  /*SAFETYMCUSW 28 D MR:NA <APPROVED> "Hardware status bit read check" */
+  while (!tms570_pbist_is_test_completed()) {
+  }                                                  /* Wait */
+
+  /* Check if PBIST on region passed the self-test */
+  if (!tms570_pbist_is_test_passed()) {
+    /* PBIST and region failed the self-test.
+     * Need custom handler to check the memory failure
+     * and to take the appropriate next step.
+     */
+    tms570_pbist_fail();
+  }
+
+  /* Disable PBIST clocks and disable memory self-test mode */
+  tms570_pbist_stop();
 }
 
 /**

@@ -198,6 +198,8 @@ void tms570_pbist_fail( void );
 
 void tms570_pbist_stop( void );
 
+void tms570_pbist_run_and_check( uint32_t raminfoL, uint32_t algomask );
+
 void tms570_enable_parity( void );
 
 void tms570_disable_parity( void );

@@ -155,46 +155,12 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
   tms570_pbist_self_check();
 
   /* Run PBIST on STC ROM */
-  tms570_pbist_run( (uint32_t) STC_ROM_PBIST_RAM_GROUP,
+  tms570_pbist_run_and_check( (uint32_t) STC_ROM_PBIST_RAM_GROUP,
     ( (uint32_t) PBIST_TripleReadSlow | (uint32_t) PBIST_TripleReadFast ) );
-
-  /* Wait for PBIST for STC ROM to be completed */
-  /*SAFETYMCUSW 28 D MR:NA <APPROVED> "Hardware status bit read check" */
-  while ( tms570_pbist_is_test_completed() != TRUE ) {
-  }                                                  /* Wait */
-
-  /* Check if PBIST on STC ROM passed the self-test */
-  if ( tms570_pbist_is_test_passed() != TRUE ) {
-    /* PBIST and STC ROM failed the self-test.
-     * Need custom handler to check the memory failure
-     * and to take the appropriate next step.
-     */
-    tms570_pbist_fail();
-  }
-
-  /* Disable PBIST clocks and disable memory self-test mode */
-  tms570_pbist_stop();
 
   /* Run PBIST on PBIST ROM */
-  tms570_pbist_run( (uint32_t) PBIST_ROM_PBIST_RAM_GROUP,
+  tms570_pbist_run_and_check( (uint32_t) PBIST_ROM_PBIST_RAM_GROUP,
     ( (uint32_t) PBIST_TripleReadSlow | (uint32_t) PBIST_TripleReadFast ) );
-
-  /* Wait for PBIST for PBIST ROM to be completed */
-  /*SAFETYMCUSW 28 D MR:NA <APPROVED> "Hardware status bit read check" */
-  while ( tms570_pbist_is_test_completed() != TRUE ) {
-  }                                                  /* Wait */
-
-  /* Check if PBIST ROM passed the self-test */
-  if ( tms570_pbist_is_test_passed() != TRUE ) {
-    /* PBIST and STC ROM failed the self-test.
-     * Need custom handler to check the memory failure
-     * and to take the appropriate next step.
-     */
-    tms570_pbist_fail();
-  }
-
-  /* Disable PBIST clocks and disable memory self-test mode */
-  tms570_pbist_stop();
 
   if ( !tms570_running_from_tcram() ) {
     /*
@@ -223,25 +189,8 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
      * The CPU RAM is a single-port memory. The actual "RAM Group" for all on-chip SRAMs is defined in the
      * device datasheet.
      */
-    tms570_pbist_run( 0x08300020U,   /* ESRAM Single Port PBIST */
+    tms570_pbist_run_and_check( 0x08300020U,   /* ESRAM Single Port PBIST */
       (uint32_t) PBIST_March13N_SP );
-
-    /* Wait for PBIST for CPU RAM to be completed */
-    /*SAFETYMCUSW 28 D MR:NA <APPROVED> "Hardware status bit read check" */
-    while ( tms570_pbist_is_test_completed() != TRUE ) {
-    }                                                  /* Wait */
-
-    /* Check if CPU RAM passed the self-test */
-    if ( tms570_pbist_is_test_passed() != TRUE ) {
-      /* CPU RAM failed the self-test.
-       * Need custom handler to check the memory failure
-       * and to take the appropriate next step.
-       */
-      tms570_pbist_fail();
-    }
-
-    /* Disable PBIST clocks and disable memory self-test mode */
-    tms570_pbist_stop();
 
     /*
      * Initialize CPU RAM.
