@@ -49,6 +49,8 @@
 #define VIM_CHANCTRL_COUNT 24
 #define VIM_CHANMAP_MASK UINT32_C(0x7f)
 #define VIM_CHANMAP_SHIFT(i) (24 - (8 * (i)))
+#define VIM_REQ_REG(vector) ((vector) >> 5)
+#define VIM_REQ_BIT(vector) (UINT32_C(1) << ((vector) & 0x1f))
 
 static void vim_set_channel_request(uint32_t channel, uint32_t request)
 {
@@ -169,6 +171,12 @@ void bsp_interrupt_dispatch(void)
   bsp_interrupt_handler_dispatch(vector);
 }
 
+static bool can_disable(rtems_vector_number vector)
+{
+  /* INT_REQ0 and INT_REQ1 are always enabled as FIQ/NMI */
+  return vector >= 2;
+}
+
 /**
  * @brief enables interrupt vector in the HW
  *
@@ -183,6 +191,20 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  bool can_disable_vector;
+
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(attributes != NULL);
+
+  can_disable_vector = can_disable(vector);
+  attributes->is_maskable = can_disable_vector;
+  attributes->can_enable = true;
+  attributes->maybe_enable = true;
+  attributes->can_disable = can_disable_vector;
+  attributes->maybe_disable = can_disable_vector;
+  attributes->can_get_affinity = true;
+  attributes->can_set_affinity = true;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -191,10 +213,14 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
+  uint32_t intreq;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
-  *pending = false;
-  return RTEMS_UNSATISFIED;
+
+  intreq = TMS570_VIM.INTREQ[VIM_REQ_REG(vector)];
+  *pending = (intreq & VIM_REQ_BIT(vector)) != 0;
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
@@ -214,10 +240,14 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bool               *enabled
 )
 {
+  uint32_t reqen;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
-  *enabled = false;
-  return RTEMS_UNSATISFIED;
+
+  reqen = TMS570_VIM.REQENASET[VIM_REQ_REG(vector)];
+  *enabled = (reqen & VIM_REQ_BIT(vector)) != 0;
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(
@@ -225,7 +255,7 @@ rtems_status_code bsp_interrupt_vector_enable(
 )
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  TMS570_VIM.REQENASET[vector >> 5] = 1 << (vector & 0x1f);
+  TMS570_VIM.REQENASET[VIM_REQ_REG(vector)] = VIM_REQ_BIT(vector);
   return RTEMS_SUCCESSFUL;
 }
 
@@ -242,8 +272,12 @@ rtems_status_code bsp_interrupt_vector_disable(
   rtems_vector_number vector
 )
 {
+  if (!can_disable(vector)) {
+    return RTEMS_UNSATISFIED;
+  }
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  TMS570_VIM.REQENACLR[vector >> 5] = 1 << (vector & 0x1f);
+  TMS570_VIM.REQENACLR[VIM_REQ_REG(vector)] = VIM_REQ_BIT(vector);
   return RTEMS_SUCCESSFUL;
 }
 
