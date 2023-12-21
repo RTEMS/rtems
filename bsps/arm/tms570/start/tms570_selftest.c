@@ -9,6 +9,7 @@
  */
 
 /*
+ * Copyright (C) 2023 embedded brains GmbH & Co. KG
  * Copyright (C) 2022 Airbus U.S. Space & Defense, Inc
  * Copyright (C) 2009-2015 Texas Instruments Incorporated - www.ti.com
  *
@@ -534,21 +535,27 @@ void tms570_pbist_fail( void )
 /* SourceId : SELFTEST_SourceId_002 */
 /* DesignId : SELFTEST_DesignId_004 */
 /* Requirements : HL_SR396 */
-void tms570_memory_init( uint32_t ram )
+__attribute__((__naked__)) void tms570_memory_init( uint32_t ram )
 {
-  /* Enable Memory Hardware Initialization */
-  TMS570_SYS1.MINITGCR = 0xAU;
-
-  /* Enable Memory Hardware Initialization for selected RAM's */
-  TMS570_SYS1.MSIENA = ram;
-
-  /* Wait until Memory Hardware Initialization complete */
-  /*SAFETYMCUSW 28 D MR:NA <APPROVED> "Hardware status bit read check" */
-  while ( ( TMS570_SYS1.MSTCGSTAT & 0x00000100U ) != 0x00000100U ) {
-  }                                                              /* Wait */
-
-  /* Disable Memory Hardware Initialization */
-  TMS570_SYS1.MINITGCR = 0x5U;
+  __asm__ volatile (
+    /* Load memory controller base address */
+    "ldr r1, =#0xffffff00\n"
+    /* Enable Memory Hardware Initialization (MINITGCR) */
+    "movs r2, #0xa\n"
+    "str r2, [r1, #0x5c]\n"
+    /* Enable Memory Hardware Initialization for selected RAM's (MSIENA) */
+    "str r0, [r1, #0x60]\n"
+    /* Wait until Memory Hardware Initialization completes (MSTCGSTAT) */
+    /*SAFETYMCUSW 28 D MR:NA <APPROVED> "Hardware status bit read check" */
+    "1: ldr r2, [r1, #0x68]\n"
+    "tst r2, #0x100\n"
+    "beq 1b\n"
+    /* Disable Memory Hardware Initialization (MINITGCR) */
+    "movs r2, #0x5\n"
+    "str r2, [r1, #0x5c]\n"
+    /* Return */
+    "bx lr\n"
+  );
 }
 
 volatile uint32_t *const
