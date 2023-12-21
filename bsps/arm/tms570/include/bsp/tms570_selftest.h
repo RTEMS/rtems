@@ -1,26 +1,25 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+
 /**
  * @file
  *
  * @ingroup RTEMSBSPsARMTMS570
  *
- * @brief Definition of TMS570 selftest error codes, addresses and functions.
+ * @brief This header file provides TMS570 selftest error codes, addresses and
+ *   functions.
  */
+
 /*
- * Copyright (c) 2016 Pavel Pisa <pisa@cmp.felk.cvut.cz>
+ * Copyright (C) 2016 Pavel Pisa <pisa@cmp.felk.cvut.cz>
  *
  * Czech Technical University in Prague
  * Zikova 1903/4
  * 166 36 Praha 6
  * Czech Republic
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
- *
  * Algorithms are based on Ti manuals and Ti HalCoGen generated
  * code available under following copyright.
- */
-/*
+ *
  * Copyright (C) 2009-2015 Texas Instruments Incorporated - www.ti.com
  *
  *

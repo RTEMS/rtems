@@ -1,10 +1,13 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+
 /**
  * @file
  *
  * @ingroup RTEMSBSPsARMTMS570
  *
- * @brief TMS570 selftest support functions implementation.
+ * @brief This source file contains the selftest support implementation.
  */
+
 /*
  * Copyright (C) 2009-2015 Texas Instruments Incorporated - www.ti.com
  *

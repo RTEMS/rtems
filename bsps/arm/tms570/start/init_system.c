@@ -1,6 +1,11 @@
-/** @file
+/* SPDX-License-Identifier: BSD-3-Clause */
 
-   based on Ti HalCoGen generated file
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMTMS570
+ *
+ * @brief This source file contains parts of the system initialization.
  */
 
 /*

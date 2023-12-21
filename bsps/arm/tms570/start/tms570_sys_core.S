@@ -1,3 +1,13 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMTMS570
+ *
+ * @brief This source file contains the parts of the system initialization.
+ */
+
 /*--------------------------------------------------------------------------
  tms570_sys_core.S
 
