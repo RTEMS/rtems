@@ -24,7 +24,7 @@
 
 #include <bsp.h>
 #include <bsp/irq-generic.h>
-#include <bsp/tms570-vim.h>
+#include <bsp/tms570.h>
 #include <bsp/irq.h>
 #include <rtems/score/armv4.h>
 
