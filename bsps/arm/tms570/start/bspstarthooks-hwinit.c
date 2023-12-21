@@ -47,22 +47,6 @@
 #include <bsp/tms570_selftest_parity.h>
 #include <bsp/tms570_hwinit.h>
 
-static inline
-int tms570_running_from_tcram( void )
-{
-  void *fncptr = (void*)bsp_start_hook_0;
-  return ( fncptr >= (void*)TMS570_TCRAM_START_PTR ) &&
-         ( fncptr < (void*)TMS570_TCRAM_WINDOW_END_PTR );
-}
-
-static inline
-int tms570_running_from_sdram( void )
-{
-  void *fncptr = (void*)bsp_start_hook_0;
-  return ( ( (void*)fncptr >= (void*)TMS570_SDRAM_START_PTR ) &&
-           ( (void*)fncptr < (void*)TMS570_SDRAM_WINDOW_END_PTR ) );
-}
-
 #define PBIST_March13N_SP        0x00000008U  /**< March13 N Algo for 1 Port mem */
 
 BSP_START_TEXT_SECTION void bsp_start_hook_0( void )

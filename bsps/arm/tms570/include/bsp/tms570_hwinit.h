@@ -43,11 +43,21 @@
 #ifndef LIBBSP_ARM_TMS570_HWINIT_H
 #define LIBBSP_ARM_TMS570_HWINIT_H
 
-#define TMS570_TCRAM_START_PTR       ( (void *) ( 0x08000000U ) )
-#define TMS570_TCRAM_WINDOW_END_PTR  ( (void *) ( 0x08080000U ) )
+#include <bspopts.h>
+#include <stdint.h>
+#include <bsp/start.h>
 
-#define TMS570_SDRAM_START_PTR      ( (void *) ( 0x80000000U ) )
-#define TMS570_SDRAM_WINDOW_END_PTR ( (void *) ( 0xA0000000U ) )
+static inline bool tms570_running_from_tcram( void )
+{
+  uintptr_t fncptr = (uintptr_t)bsp_start_hook_0;
+  return (fncptr - TMS570_MEMORY_SRAM_ORIGIN) < TMS570_MEMORY_SRAM_SIZE;
+}
+
+static inline bool tms570_running_from_sdram( void )
+{
+  uintptr_t fncptr = (uintptr_t)bsp_start_hook_0;
+  return (fncptr - TMS570_MEMORY_SDRAM_ORIGIN) < TMS570_MEMORY_SDRAM_SIZE;
+}
 
 /* Ti TMS570 core setup implemented in assembly */
 void _esmCcmErrorsClear_( void );

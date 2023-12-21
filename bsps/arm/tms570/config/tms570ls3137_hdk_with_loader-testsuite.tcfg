@@ -1,9 +1,0 @@
-#
-# tms570ls3137_hdk_with_loader RTEMS Test Database.
-#
-# Format is one line per test that is _NOT_ built.
-#
-
-include: testdata/small-memory-testsuite.tcfg
-
-exclude: linpack

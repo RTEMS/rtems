@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- env-assign: null
+- format-and-define: TMS570_MEMORY_SRAM_SIZE
+build-type: option
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+default:
+- enabled-by: TMS570_VARIANT_4357
+  value: 0x00080000
+- enabled-by: true
+  value: 0x00040000
+description: |
+  Size in bytes of the internal SRAM memory.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: TMS570_MEMORY_SRAM_SIZE
+type: build

@@ -50,8 +50,7 @@ void tms570_emif_sdram_init( void )
   uint32_t sdcr = 0;
 
   /* Do not run attempt to initialize SDRAM when code is running from it */
-  if ( ( (void*)tms570_emif_sdram_init >= (void*)TMS570_SDRAM_START_PTR ) &&
-       ( (void*)tms570_emif_sdram_init <= (void*)TMS570_SDRAM_WINDOW_END_PTR ) )
+  if ( tms570_running_from_sdram() )
     return;
 
   sdtimr = TMS570_EMIF_SDTIMR_T_RFC_SET( sdtimr, 6 - 1 );
@@ -88,7 +87,7 @@ void tms570_emif_sdram_init( void )
 
   TMS570_EMIF.SDCR = sdcr;
 
-  dummy = *(volatile uint32_t*)TMS570_SDRAM_START_PTR;
+  dummy = *(volatile uint32_t*)TMS570_MEMORY_SDRAM_ORIGIN;
   (void) dummy;
   TMS570_EMIF.SDRCR = 31;
 

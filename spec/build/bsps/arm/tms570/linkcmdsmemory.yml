@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  MEMORY {
+    ROM_INT : ORIGIN = ${TMS570_MEMORY_FLASH_ORIGIN:#010x}, LENGTH = ${TMS570_MEMORY_FLASH_SIZE:#010x}
+    RAM_INT  : ORIGIN = ${TMS570_MEMORY_SRAM_ORIGIN:#010x}, LENGTH = ${TMS570_MEMORY_SRAM_SIZE:#010x}
+    RAM_EXT : ORIGIN = ${TMS570_MEMORY_SDRAM_ORIGIN:#010x}, LENGTH = ${TMS570_MEMORY_SDRAM_SIZE:#010x}
+  }
+
+  tms570_memory_flash_begin = ORIGIN (ROM_INT);
+  tms570_memory_flash_end = ORIGIN (ROM_INT) + LENGTH (ROM_INT);
+  tms570_memory_flash_size = LENGTH (ROM_INT);
+
+  tms570_memory_sram_begin = ORIGIN (RAM_INT);
+  tms570_memory_sram_end = ORIGIN (RAM_INT) + LENGTH (RAM_INT);
+  tms570_memory_sram_size = LENGTH (RAM_INT);
+
+  tms570_memory_sdram_begin = ORIGIN (RAM_EXT);
+  tms570_memory_sdram_end = ORIGIN (RAM_EXT) + LENGTH (RAM_EXT);
+  tms570_memory_sdram_size = LENGTH (RAM_EXT);
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds.memory
+type: build
