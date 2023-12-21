@@ -70,7 +70,7 @@ extern "C" {
 
 #define TMS570_POM_REGADDRMASK    ((1<<23)-1)
 
-void tms570_initialize_and_clear(void);
+void tms570_pom_initialize_and_clear(void);
 void tms570_pom_remap(void);
 
 /** @} */

@@ -86,7 +86,7 @@ uint32_t pom_global_overlay_target_address_start =
  *
  * @retval Void
  */
-void tms570_initialize_and_clear(void)
+void tms570_pom_initialize_and_clear(void)
 {
   int i;
 

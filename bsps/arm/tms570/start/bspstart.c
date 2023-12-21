@@ -49,7 +49,7 @@ void bsp_start( void )
   void *need_remap_ptr;
   unsigned int need_remap_int;
 
-  tms570_initialize_and_clear();
+  tms570_pom_initialize_and_clear();
 
   /*
    * If RTEMS image does not start at address 0x00000000
