@@ -69,7 +69,6 @@ void _coreEnableRamEcc_( void );
 void _coreDisableRamEcc_( void );
 void _mpuInit_( void );
 
-void tms570_emif_sdram_init( void );
 void tms570_memory_init( uint32_t ram );
 void tms570_trim_lpo_init( void );
 void tms570_flash_init( void );
@@ -82,6 +81,11 @@ void tms570_esm_init( void );
  * any BSP variant with hardware initialization.  These configure MCU
  * peripherals that are specific to a particular board.
  */
+
+/**
+ * @brief Initialize the External Memory InterFace (EMIF) peripheral.
+ */
+void tms570_emif_sdram_init(void);
 
 /**
  * @brief Initialize PLLs source divider/multipliers.

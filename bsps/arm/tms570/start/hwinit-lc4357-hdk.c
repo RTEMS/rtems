@@ -129,6 +129,64 @@ void tms570_pinmux_init( void )
     tms570_pin_config_complete();
 }
 
+void tms570_emif_sdram_init( void )
+{
+    uint32_t dummy;
+
+    /* Do not run attempt to initialize SDRAM when code is running from it */
+    if ( tms570_running_from_sdram() )
+        return;
+
+    // Following the initialization procedure as described in EMIF-errata #5 for the tms570lc43
+    // at EMIF clock rates >= 40Mhz
+    // Note step one of this procedure is running this EMIF initialization sequence before PLL
+    // and clocks are mapped/enabled
+    // For additional details on startup procedure see tms570lc43 TRM s21.2.5.5.B
+
+    // Set SDRAM timings. These are dependent on the EMIF CLK rate, which = VCLK3
+    // Set these based on the final EMIF clock rate once PLL & VCLK is enabled
+    TMS570_EMIF.SDTIMR  = (uint32_t)1U << 27U|
+                (uint32_t)0U << 24U|
+                (uint32_t)0U << 20U|
+                (uint32_t)0U << 19U|
+                (uint32_t)1U << 16U|
+                (uint32_t)1U << 12U|
+                (uint32_t)1U << 8U|
+                (uint32_t)0U << 4U;
+
+    /* Minimum number of ECLKOUT cycles from Self-Refresh exit to any command */
+    // Also set this based on the final EMIF clk
+    TMS570_EMIF.SDSRETR = 2;
+    // Program the RR Field of SDRCR to provide 200us of initialization time
+    // Per Errata#5, for EMIF startup, set this based on the non-VLCK3 clk rate.
+    // The Errata is this register must be calculated as `SDRCR = 200us * EMIF_CLK`
+    //  (typically this would be `SDRCR = (200us * EMIF_CLK) / 8` ) 
+    //  Since the PLL's arent enabled yet, EMIF_CLK would be EXT_OSCIN / 2
+    TMS570_EMIF.SDRCR = 1600;
+
+    TMS570_EMIF.SDCR   = ((uint32_t)0U << 31U)|
+            ((uint32_t)1U << 14U)|
+            ((uint32_t)2U << 9U)|
+            ((uint32_t)1U << 8U)|
+            ((uint32_t)2U << 4U)|
+            ((uint32_t)0); // pagesize = 256
+
+    // Read of SDRAM memory location causes processor to wait until SDRAM Initialization completes
+    dummy = *(volatile uint32_t*)TMS570_MEMORY_SDRAM_ORIGIN;
+    (void) dummy;
+
+    // Program the RR field to the default Refresh Interval of the SDRAM
+    // Program this to the correct interval for the VCLK3/EMIF_CLK rate
+    // Do this in the typical way per TRM: SDRCR = ((200us * EMIF_CLK) / 8) + 1
+    TMS570_EMIF.SDRCR = 1251;
+
+    /* Place the EMIF in Self Refresh Mode For Clock Change          */
+    /* Must only write to the upper byte of the SDCR to avoid        */
+    /* a second initialization sequence                              */
+    /* The byte address depends on endian (0x3U in LE, 0x00 in BE32) */
+    *((volatile unsigned char *)(&TMS570_EMIF.SDCR) + 0x0U) = 0x80;
+}
+
 /**
  * @brief Setup all system PLLs (HCG:setupPLL)
  *

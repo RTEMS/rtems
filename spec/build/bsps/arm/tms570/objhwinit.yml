@@ -21,7 +21,6 @@ source:
 - bsps/arm/tms570/start/bspstarthooks-hwinit.c
 - bsps/arm/tms570/start/errata_SSWF021_45.c
 - bsps/arm/tms570/start/fail_notification.c
-- bsps/arm/tms570/start/init_emif_sdram.c
 - bsps/arm/tms570/start/init_esm.c
 - bsps/arm/tms570/start/init_system.c
 - bsps/arm/tms570/start/tms570_selftest.c
