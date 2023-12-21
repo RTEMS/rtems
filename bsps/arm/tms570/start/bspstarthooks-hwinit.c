@@ -9,6 +9,7 @@
  */
 
 /*
+ * Copyright (C) 2023 embedded brains GmbH & Co. KG
  * Copyright (C) 2016 Pavel Pisa <pisa@cmp.felk.cvut.cz>
  *
  * Czech Technical University in Prague
@@ -50,7 +51,32 @@
 
 #define PBIST_March13N_SP        0x00000008U  /**< March13 N Algo for 1 Port mem */
 
-BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
+/* Use assembly code to avoid using the stack */
+__attribute__((__naked__)) void bsp_start_hook_0( void )
+{
+  __asm__ volatile (
+    /* Check if we run in SRAM */
+    "ldr r0, =#" RTEMS_XSTRING( TMS570_MEMORY_SRAM_ORIGIN ) "\n"
+    "ldr r1, =#" RTEMS_XSTRING( TMS570_MEMORY_SRAM_SIZE ) "\n"
+    "sub r0, lr, r0\n"
+    "cmp r1, r0\n"
+    "blt 1f\n"
+
+    /*
+     * Initialize the SRAM if we are not running in SRAM.  While we are called,
+     * non-volatile register r7 is not used by start.S.
+     */
+    "movs r0, #0x1\n"
+    "mov r7, lr\n"
+    "bl tms570_memory_init\n"
+    "mov lr, r7\n"
+
+    /* Jump to the high level start hook */
+    "1: b tms570_start_hook_0\n"
+  );
+}
+
+static RTEMS_USED void tms570_start_hook_0( void )
 {
 #if TMS570_VARIANT == 3137
   /*
@@ -169,15 +195,6 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
      */
     tms570_pbist_run_and_check( 0x08300020U,   /* ESRAM Single Port PBIST */
       (uint32_t) PBIST_March13N_SP );
-
-    /*
-     * Initialize CPU RAM.
-     * This function uses the system module's hardware for auto-initialization of memories and their
-     * associated protection schemes. The CPU RAM is initialized by setting bit 0 of the MSIENA register.
-     * Hence the value 0x1 passed to the function.
-     * This function will initialize the entire CPU RAM and the corresponding ECC locations.
-     */
-    tms570_memory_init( 0x1U );
 
     /*
      * Enable ECC checking for TCRAM accesses.
