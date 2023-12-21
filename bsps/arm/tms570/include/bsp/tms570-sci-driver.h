@@ -28,7 +28,7 @@
 
 #include <rtems/termiostypes.h>
 #include <rtems/irq.h>
-#include <bsp/tms570-sci.h>
+#include <bsp/tms570.h>
 
 #ifdef __cplusplus
 extern "C" {

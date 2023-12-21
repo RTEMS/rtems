@@ -27,7 +27,6 @@
 #include <rtems/sysinit.h>
 #include <stdint.h>
 #include <string.h>
-#include <bsp/tms570-sci.h>
 #include <bsp/tms570-sci-driver.h>
 
 #define TMS570_CONSOLE (&driver_context_table[0])

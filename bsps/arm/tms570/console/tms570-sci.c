@@ -26,7 +26,6 @@
 #include <bspopts.h>
 #include <termios.h>
 #include <rtems/termiostypes.h>
-#include <bsp/tms570-sci.h>
 #include <bsp/tms570-sci-driver.h>
 #include <rtems/console.h>
 #include <bsp.h>

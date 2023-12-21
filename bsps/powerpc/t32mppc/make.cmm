@@ -1,0 +1,19 @@
+; Set CPU
+system.cpu mpc8540
+system.up
+
+; Set PVR
+per.s spr:0x11f %long %be 0x80200000
+
+; Load application
+Data.LOAD.Elf /home/EB/sebastian_h/src/rtems/build/powerpc/t32mppc/testsuites/validation/ts-validation-intr.exe
+
+; Configure memory-based terminal
+term.reset
+term.method buffere v.address("messagebufferout") v.address("messagebufferin") 
+term.gate
+ 
+; Initialize RTOS support
+task.config ~~/demo/powerpc/kernel/rtems/rtems.t32
+menu.reprogram ~~/demo/powerpc/kernel/rtems/rtems.men
+task.stack.pattern 0xa5

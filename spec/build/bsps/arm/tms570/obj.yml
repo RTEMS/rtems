@@ -19,7 +19,6 @@ install:
   - bsps/arm/tms570/include/bsp/tms570-pins.h
   - bsps/arm/tms570/include/bsp/tms570-pom.h
   - bsps/arm/tms570/include/bsp/tms570-sci-driver.h
-  - bsps/arm/tms570/include/bsp/tms570-sci.h
   - bsps/arm/tms570/include/bsp/tms570-vim.h
   - bsps/arm/tms570/include/bsp/tms570.h
   - bsps/arm/tms570/include/bsp/tms570_hwinit.h
