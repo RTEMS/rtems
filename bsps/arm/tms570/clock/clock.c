@@ -28,7 +28,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq.h>
-#include <bsp/tms570-rti.h>
+#include <bsp/tms570.h>
 #include <rtems/timecounter.h>
 
 static struct timecounter tms570_rti_tc;

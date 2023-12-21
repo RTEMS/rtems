@@ -25,7 +25,7 @@
 #ifndef LIBBSP_ARM_TMS570_SYSTEM_CLOCKS_H
 #define LIBBSP_ARM_TMS570_SYSTEM_CLOCKS_H
 
-#include <bsp/tms570-rti.h>
+#include <bsp/tms570.h>
 
 #ifdef __cplusplus
 extern "C" {

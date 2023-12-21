@@ -18,7 +18,6 @@ install:
   - bsps/arm/tms570/include/bsp/tms570-pinmux.h
   - bsps/arm/tms570/include/bsp/tms570-pins.h
   - bsps/arm/tms570/include/bsp/tms570-pom.h
-  - bsps/arm/tms570/include/bsp/tms570-rti.h
   - bsps/arm/tms570/include/bsp/tms570-sci-driver.h
   - bsps/arm/tms570/include/bsp/tms570-sci.h
   - bsps/arm/tms570/include/bsp/tms570-vim.h
