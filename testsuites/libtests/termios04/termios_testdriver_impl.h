@@ -271,7 +271,7 @@ rtems_device_driver termios_test_driver_open(
     #if defined(TASK_DRIVEN)
       TERMIOS_TASK_DRIVEN                    /* outputUsesInterrupts */
     #else
-      0                                      /* outputUsesInterrupts */
+      TERMIOS_POLLED                         /* outputUsesInterrupts */
     #endif
   };
 

@@ -539,7 +539,7 @@ const rtems_termios_callbacks sci_poll_callbacks = {
     _sh_sci_set_attributes,     /* setAttributes */
     NULL,                       /* stopRemoteTX */
     NULL,                       /* StartRemoteTX */
-    0                           /* outputUsesInterrupts */
+    TERMIOS_POLLED              /* outputUsesInterrupts */
 };
 
 /* FIXME: not yet supported */

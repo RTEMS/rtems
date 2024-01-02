@@ -681,7 +681,7 @@ rtems_device_driver console_open(
     mpc5200_uart_setAttributes,     /* setAttributes */
     NULL,
     NULL,
-    1                               /* outputUsesInterrupts */
+    TERMIOS_IRQ_DRIVEN              /* outputUsesInterrupts */
   };
 #else
   static const rtems_termios_callbacks pollCallbacks = {
@@ -692,7 +692,7 @@ rtems_device_driver console_open(
     mpc5200_uart_setAttributes,     /* setAttributes */
     NULL,
     NULL,
-    0                               /* output don't use Interrupts */
+    TERMIOS_POLLED                  /* output don't use Interrupts */
   };
 #endif
 

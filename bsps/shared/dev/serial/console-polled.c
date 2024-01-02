@@ -113,7 +113,7 @@ rtems_device_driver console_open(
     NULL,                        /* setAttributes */
     NULL,                        /* stopRemoteTx */
     NULL,                        /* startRemoteTx */
-    0                            /* outputUsesInterrupts */
+    TERMIOS_POLLED               /* outputUsesInterrupts */
   };
 
   assert( minor == 0 );

@@ -66,7 +66,7 @@ static void erc32_console_initialize(int minor);
     erc32_console_initialize,               /* deviceInitialize */
     NULL,                                   /* deviceWritePolled */
     NULL,                                   /* deviceSetAttributes */
-    TERMIOS_IRQ_DRIVEN                      /* deviceOutputUsesInterrupts */
+    true                                    /* deviceOutputUsesInterrupts */
   };
 #else
   const console_fns erc32_fns = {
@@ -78,7 +78,7 @@ static void erc32_console_initialize(int minor);
     erc32_console_initialize,               /* deviceInitialize */
     NULL,                                   /* deviceWritePolled */
     NULL,                                   /* deviceSetAttributes */
-    TERMIOS_POLLED                          /* deviceOutputUsesInterrupts */
+    false                                   /* deviceOutputUsesInterrupts */
   };
 #endif
 

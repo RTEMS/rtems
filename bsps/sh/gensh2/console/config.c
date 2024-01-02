@@ -54,7 +54,7 @@ const console_fns sh_sci_fns =
     sh_sci_initialize_interrupts, /* deviceInitialize */
     sh_sci_write_polled,          /* deviceWritePolled */
     sh_sci_set_attributes,        /* deviceSetAttributes */
-    TERMIOS_IRQ_DRIVEN           /* deviceOutputUsesInterrupts */
+    true                          /* deviceOutputUsesInterrupts */
 };
 
 /*
@@ -70,7 +70,7 @@ const console_fns sh_sci_fns_polled =
     sh_sci_init,                  /* deviceInitialize */
     sh_sci_write_polled,          /* deviceWritePolled */
     sh_sci_set_attributes,        /* deviceSetAttributes */
-    TERMIOS_POLLED                /* deviceOutputUsesInterrupts */
+    false                         /* deviceOutputUsesInterrupts */
 };
 
 #if 1 /* (CONSOLE_USE_INTERRUPTS) */

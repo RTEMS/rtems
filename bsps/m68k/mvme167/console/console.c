@@ -1515,7 +1515,7 @@ rtems_device_driver console_open(
     NULL,                       /* setAttributes */
     NULL,                       /* stopRemoteTx */
     NULL,                       /* startRemoteTx */
-    0                           /* outputUsesInterrupts */
+    TERMIOS_POLLED              /* outputUsesInterrupts */
   };
 
   static const rtems_termios_callbacks intrCallbacks = {
@@ -1526,7 +1526,7 @@ rtems_device_driver console_open(
     cd2401_setAttributes,       /* setAttributes */
     cd2401_stopRemoteTx,        /* stopRemoteTx */
     cd2401_startRemoteTx,       /* startRemoteTx */
-    1                           /* outputUsesInterrupts */
+    TERMIOS_IRQ_DRIVEN          /* outputUsesInterrupts */
   };
 
   if ( NVRAM_CONFIGURE )

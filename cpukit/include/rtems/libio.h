@@ -56,6 +56,7 @@
 #include <rtems/fs.h>
 #include <rtems/chain.h>
 #include <rtems/score/atomic.h>
+#include <rtems/termiosdevice.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -1902,7 +1903,7 @@ typedef struct rtems_termios_callbacks {
   int    (*setAttributes)(int minor, const struct termios *t);
   int    (*stopRemoteTx)(int minor);
   int    (*startRemoteTx)(int minor);
-  int    outputUsesInterrupts;
+  rtems_termios_device_mode outputUsesInterrupts;
 } rtems_termios_callbacks;
 
 static inline void rtems_termios_initialize( void )

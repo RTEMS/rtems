@@ -481,7 +481,7 @@ rtems_device_driver paux_open(
     NULL,	          /* setAttributes */
     NULL,	          /* stopRemoteTx */
     NULL,	          /* startRemoteTx */
-    0		          /* outputUsesInterrupts */
+    TERMIOS_POLLED	  /* outputUsesInterrupts */
   };
 
   status = rtems_termios_open (major, minor, arg, &cb );

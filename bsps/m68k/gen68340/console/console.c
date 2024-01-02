@@ -600,7 +600,7 @@ rtems_device_driver console_open(
 		SetAttributes,		/* setAttributes */
 		NULL,			/* stopRemoteTx */
 		NULL,			/* startRemoteTx */
-		1			/* outputUsesInterrupts */
+		TERMIOS_IRQ_DRIVEN	/* outputUsesInterrupts */
  };
 
  static const rtems_termios_callbacks pollCallbacks = {
@@ -611,7 +611,7 @@ rtems_device_driver console_open(
 		SetAttributes,		/* setAttributes */
 		NULL,			/* stopRemoteTx */
 		NULL,			/* startRemoteTx */
-		0			/* outputUsesInterrupts */
+		TERMIOS_POLLED		/* outputUsesInterrupts */
  };
 
  if (minor==UART_CHANNEL_A) {

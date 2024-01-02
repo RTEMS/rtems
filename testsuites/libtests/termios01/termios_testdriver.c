@@ -192,7 +192,7 @@ rtems_device_driver termios_test_driver_open(
     termios_test_driver_set_attributes,      /* setAttributes */
     NULL,                                    /* stopRemoteTx */
     NULL,                                    /* startRemoteTx */
-    0                                        /* outputUsesInterrupts */
+    TERMIOS_POLLED                           /* outputUsesInterrupts */
   };
 
   if ( minor > 2 ) {

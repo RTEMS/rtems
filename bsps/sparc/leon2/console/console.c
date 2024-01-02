@@ -327,7 +327,7 @@ rtems_device_driver console_open(
     NULL,                        /* setAttributes */
     NULL,                        /* stopRemoteTx */
     NULL,                        /* startRemoteTx */
-    0                            /* outputUsesInterrupts */
+    TERMIOS_POLLED               /* outputUsesInterrupts */
   };
 #else
   static const rtems_termios_callbacks pollCallbacks = {
@@ -338,7 +338,7 @@ rtems_device_driver console_open(
     NULL,                        /* setAttributes */
     NULL,                        /* stopRemoteTx */
     NULL,                        /* startRemoteTx */
-    0                            /* outputUsesInterrupts */
+    TERMIOS_POLLED               /* outputUsesInterrupts */
   };
 #endif
 

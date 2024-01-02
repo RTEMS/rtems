@@ -278,7 +278,7 @@ console_open(rtems_device_major_number major,
     console_set_attributes,    /* setAttributes */
     console_stop_remote_tx,    /* stopRemoteTx */
     console_start_remote_tx,   /* startRemoteTx */
-    1                          /* outputUsesInterrupts */
+    TERMIOS_IRQ_DRIVEN         /* outputUsesInterrupts */
   };
   static const rtems_termios_callbacks poll_callbacks = {
     console_first_open,        /* firstOpen */
@@ -288,7 +288,7 @@ console_open(rtems_device_major_number major,
     console_set_attributes,    /* setAttributes */
     console_stop_remote_tx,    /* stopRemoteTx */
     console_start_remote_tx,   /* startRemoteTx */
-    0                          /* outputUsesInterrupts */
+    TERMIOS_POLLED             /* outputUsesInterrupts */
   };
 
   switch (console_mode) {

@@ -268,7 +268,7 @@ static const rtems_termios_callbacks SciInterruptCallbacks =
     SciSetAttributes,                       /* set attributes */
     NULL,                                   /* stop remote xmit */
     NULL,                                   /* start remote xmit */
-    TRUE                                    /* output uses interrupts */
+    TERMIOS_IRQ_DRIVEN                      /* output uses interrupts */
 };
 
 /*****************************************************************************
@@ -284,7 +284,7 @@ static const rtems_termios_callbacks SciPolledCallbacks =
     SciSetAttributes,                       /* set attributes */
     NULL,                                   /* stop remote xmit */
     NULL,                                   /* start remote xmit */
-    FALSE                                   /* output uses interrupts */
+    TERMIOS_POLLED                          /* output uses interrupts */
 };
 
 

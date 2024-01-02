@@ -322,7 +322,7 @@ rtems_device_driver console_open(
     m8xx_uart_setAttributes,    	/* setAttributes */
     NULL,                       	/* stopRemoteTx */
     NULL,                       	/* startRemoteTx */
-    1                           	/* outputUsesInterrupts */
+    TERMIOS_IRQ_DRIVEN                  /* outputUsesInterrupts */
   };
 #else
 #if (UARTS_USE_TERMIOS == 1) && (UARTS_IO_MODE != 1)
@@ -334,7 +334,7 @@ rtems_device_driver console_open(
     m8xx_uart_setAttributes,      /* setAttributes */
     NULL,                       	/* stopRemoteTx */
     NULL,                       	/* startRemoteTx */
-    0                           	/* outputUsesInterrupts */
+    TERMIOS_POLLED                /* outputUsesInterrupts */
   };
 #endif
 

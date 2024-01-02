@@ -234,7 +234,11 @@ rtems_device_driver console_open(
     Callbacks.stopRemoteTx  = NULL;
     Callbacks.startRemoteTx = NULL;
   }
-  Callbacks.outputUsesInterrupts = cptr->pDeviceFns->deviceOutputUsesInterrupts;
+  if (cptr->pDeviceFns->deviceOutputUsesInterrupts) {
+    Callbacks.outputUsesInterrupts = TERMIOS_IRQ_DRIVEN;
+  } else {
+    Callbacks.outputUsesInterrupts = TERMIOS_POLLED;
+  }
 
   /* XXX what about
    *        Console_Port_Tbl[minor].ulMargin,

@@ -28,7 +28,7 @@ static rtems_termios_callbacks gMemCallbacks = {
         0,                /* SetAttr */
         0,                /* stopRemoteTx */
         0,                /* startRemoteTx */
-        0                 /* outputUsesInterrupts */
+        TERMIOS_POLLED    /* outputUsesInterrupts */
 };
 
 rtems_device_driver console_initialize(rtems_device_major_number major,

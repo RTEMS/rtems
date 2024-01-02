@@ -61,7 +61,7 @@ rtems_termios_callbacks imx_uart_cbacks = {
     .setAttributes        = imx_uart_set_attrs,
     .stopRemoteTx         = NULL,
     .startRemoteTx        = NULL,
-    .outputUsesInterrupts = 1,
+    .outputUsesInterrupts = TERMIOS_IRQ_DRIVEN,
 };
 #else
 rtems_termios_callbacks imx_uart_cbacks = {
@@ -72,7 +72,7 @@ rtems_termios_callbacks imx_uart_cbacks = {
     .setAttributes        = imx_uart_set_attrs,
     .stopRemoteTx         = NULL,
     .startRemoteTx        = NULL,
-    .outputUsesInterrupts = 0,
+    .outputUsesInterrupts = TERMIOS_POLLED,
 };
 #endif
 

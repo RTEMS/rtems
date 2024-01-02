@@ -308,7 +308,7 @@ rtems_device_driver console_open(
     smc1SetAttributes,  /* setAttributes */
     NULL,      /* stopRemoteTx */
     NULL,      /* startRemoteTx */
-    1      /* outputUsesInterrupts */
+    TERMIOS_IRQ_DRIVEN      /* outputUsesInterrupts */
   };
   static const rtems_termios_callbacks pollCallbacks = {
     smc1Initialize,    /* firstOpen */
@@ -318,7 +318,7 @@ rtems_device_driver console_open(
     smc1SetAttributes,  /* setAttributes */
     NULL,      /* stopRemoteTx */
     NULL,      /* startRemoteTx */
-    0      /* outputUsesInterrupts */
+    TERMIOS_POLLED      /* outputUsesInterrupts */
   };
 
   /*
