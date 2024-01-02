@@ -202,7 +202,7 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
                              fs_info->fat.vol.bpc,
                              &unused);
         if (rc != RC_OK)
-            goto err;
+            goto error;
 
         /*
          * dot and dotdot entries are identical to new node except the
