@@ -179,7 +179,7 @@ msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
                              length,
                              &new_length);
         if (rc == RC_OK && length != new_length) {
-            fat_file_truncate(&fs_info->fat, fat_fd, old_length);
+            (void) fat_file_truncate(&fs_info->fat, fat_fd, old_length);
             errno = ENOSPC;
             rc = -1;
         }
