@@ -39,6 +39,11 @@
 #include <rtems/thread.h>
 #include <sys/types.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 typedef struct rtems_flashdev rtems_flashdev;
 
 /**
@@ -453,6 +458,10 @@ void rtems_flashdev_destroy(
 void rtems_flashdev_destroy_and_free(
   rtems_flashdev *flash
 );
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */
 
