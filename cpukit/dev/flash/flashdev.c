@@ -320,7 +320,7 @@ static int rtems_flashdev_read_write(
   int status;
 
   if ( read_buff == NULL && write_buff == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
   /* Get flash address */
