@@ -323,7 +323,6 @@ int _POSIX_signals_Send(
    *    + sigprocmask() unblocks the signal, OR
    *    + sigaction() which changes the handler to SIG_IGN.
    */
-  the_thread = NULL;
   goto post_process_signal;
 
   /*

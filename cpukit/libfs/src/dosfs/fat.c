@@ -93,7 +93,6 @@ fat_buf_release(fat_fs_info_t *fs_info)
         uint32_t sec_num = fs_info->c.blk_num;
         bool     sec_of_fat = ((sec_num >= fs_info->vol.fat_loc) &&
                               (sec_num < fs_info->vol.rdir_loc));
-        uint32_t blk = fat_sector_num_to_block_num(fs_info, sec_num);
         uint32_t blk_ofs = fat_sector_offset_to_block_offset(fs_info,
                                                              sec_num,
                                                              0);
@@ -115,6 +114,7 @@ fat_buf_release(fat_fs_info_t *fs_info)
             for (i = 1; i < fs_info->vol.fats; i++)
             {
                 rtems_bdbuf_buffer *bd;
+                uint32_t blk;
 
                 sec_num = fs_info->c.blk_num + fs_info->vol.fat_length * i,
                 blk = fat_sector_num_to_block_num(fs_info, sec_num);

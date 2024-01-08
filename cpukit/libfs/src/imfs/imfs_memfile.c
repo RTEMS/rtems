@@ -638,7 +638,6 @@ ssize_t IMFS_memfile_write(
     fprintf(stdout, "write %d in %d: %*s\n", to_copy, block, to_copy, src );
     #endif
     memcpy( &(*block_ptr)[ 0 ], src, my_length );
-    my_length = 0;
     copied += to_copy;
   }
 

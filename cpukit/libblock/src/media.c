@@ -434,7 +434,7 @@ static rtems_status_code process_event(
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_status_code sc_retry = RTEMS_SUCCESSFUL;
-  rtems_media_state state = RTEMS_MEDIA_STATE_FAILED;
+  rtems_media_state state;
   char *dest = NULL;
 
   do {

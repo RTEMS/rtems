@@ -223,6 +223,11 @@ msdos_file_sync(rtems_libio_t *iop)
     }
 
     rc = fat_sync(&fs_info->fat);
+    if (rc != RC_OK)
+    {
+        msdos_fs_unlock(fs_info);
+        return rc;
+    }
 
     msdos_fs_unlock(fs_info);
 

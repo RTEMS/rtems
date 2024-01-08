@@ -288,7 +288,6 @@ msdos_long_to_short(rtems_dosfs_convert_control     *converter,
         &codepage_name_len);
     if (eno == EINVAL)
     {
-        eno = 0;
         type = MSDOS_NAME_LONG;
     }
     else
@@ -1747,6 +1746,8 @@ msdos_add_file (
     /* Get position of short file name entry */
     ret = msdos_get_pos(fs_info, fat_fd, bts2rd, short_file_offset,
                         &dir_pos->sname);
+    if (ret != RC_OK)
+        return ret;
 
     /*
      * Handle the entry writes.
