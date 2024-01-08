@@ -41,4 +41,4 @@ extern "C" {
 }
 #endif
 
-#endif	/* XIL_PRINTF_H */
+#endif	/* XPARAMETERS_H */
