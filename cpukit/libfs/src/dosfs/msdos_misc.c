@@ -1303,7 +1303,6 @@ static int
 msdos_find_file_in_directory (
     const uint8_t                        *filename_converted,
     const size_t                          name_len_for_compare,
-    const size_t                          name_len_for_save,
     const msdos_name_type_t               name_type,
     msdos_fs_info_t                      *fs_info,
     fat_file_fd_t                        *fat_fd,
@@ -1919,7 +1918,6 @@ msdos_find_name_in_fat_file (
       retval = msdos_find_file_in_directory (
           buffer,
           name_len_for_compare,
-          name_len_for_save,
           name_type,
           fs_info,
           fat_fd,
