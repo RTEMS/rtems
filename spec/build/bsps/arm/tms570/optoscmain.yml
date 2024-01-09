@@ -4,12 +4,17 @@ actions:
 - define: null
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2020, 2024 embedded brains GmbH & Co. KG
 default:
+- enabled-by:
+  - arm/tms570lc4357_hdk
+  - arm/tms570lc4357_hdk_sdram
+  value: 16000000
 - enabled-by: true
-  value: 12000000
+  value: 8000000
 description: |
-  main oscillator frequency in Hz
+  The option value shall be the main oscillator (OSCIN) frequency in Hz of the
+  board.
 enabled-by: true
 format: '{}'
 links: []
