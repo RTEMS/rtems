@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 embedded brains GmbH & Co. KG
+ * Copyright (C) 2017, 2024 embedded brains GmbH & Co. KG
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -143,21 +143,31 @@ static void do_bench(const char *name, void (*bench)(void), int n)
     (*bench)();
   }
   delta = omp_get_wtime() - start;
-  printf("\t\t<%sBench unit=\"s\">%f</%sBench>\n", name, delta, name);
+  printf(",\n    \"%s-bench\": %f", name, delta);
 }
+
+static const char *test_sep = "";
 
 static void microbench(int num_threads, int n)
 {
-  printf("\t<Microbench numThreads=\"%i\" majorLoopCount=\"%i\">\n", num_threads, n);
   omp_set_num_threads(num_threads);
-  do_bench("Barrier", barrier_bench, n);
-  do_bench("Parallel", parallel_bench, n);
-  do_bench("Static", static_bench, n);
-  do_bench("Dynamic", dynamic_bench, n);
-  do_bench("Guided", guided_bench, n);
-  do_bench("Runtime", runtime_bench, n);
-  do_bench("Single", single_bench, n);
-  printf("\t</Microbench>\n");
+  printf(
+    "%s{\n"
+    "    \"num-threads\": %i,\n"
+    "    \"major-loop-count\": %i",
+    test_sep,
+    num_threads,
+    n
+  );
+  test_sep = ", ";
+  do_bench("barrier", barrier_bench, n);
+  do_bench("parallel", parallel_bench, n);
+  do_bench("static", static_bench, n);
+  do_bench("dynamic", dynamic_bench, n);
+  do_bench("guided", guided_bench, n);
+  do_bench("runtime", runtime_bench, n);
+  do_bench("single", single_bench, n);
+  printf("\n  }");
 }
 
 static int estimate_3s_runtime_with_one_proc(void)
@@ -186,7 +196,7 @@ static void test(void)
   int num_procs;
   int n;
 
-  printf("<SMPOpenMP01>\n");
+  printf("*** BEGIN OF JSON DATA ***\n[\n  ");
 
   n = estimate_3s_runtime_with_one_proc();
   num_procs = omp_get_num_procs();
@@ -196,7 +206,7 @@ static void test(void)
     microbench(i, n);
   }
 
-  printf("</SMPOpenMP01>\n");
+  printf("\n]\n*** END OF JSON DATA ***\n");
 }
 
 #ifdef __rtems__

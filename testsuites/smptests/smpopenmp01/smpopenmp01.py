@@ -1,9 +1,6 @@
-#!/usr/bin/env python
-
 # SPDX-License-Identifier: BSD-2-Clause
 
-#
-# Copyright (c) 2017 embedded brains GmbH & Co. KG
+# Copyright (C) 2017, 2024 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -25,37 +22,39 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-#
 
+import json
 import re
-import libxml2
-from libxml2 import xmlNode
-import matplotlib.pyplot as plt
-data = open('smpopenmp01.scn').read()
-data = re.sub(r'\*\*\*.*', '', data)
-doc = libxml2.parseDoc(data)
-ctx = doc.xpathNewContext()
+import matplotlib.pyplot as plt  # type: ignore
+from matplotlib import ticker  # type: ignore
 
-plt.title('OpenMP Microbench')
-plt.xlabel('Number of Threads')
-plt.ylabel('Relative Duration')
 
-def m(n):
-	return float(n.getContent())
+def _plot(data: dict) -> None:
+    _, axes = plt.subplots()
+    axes.set_title("OpenMP Microbench")
+    axes.set_xlabel("Number of Threads")
+    axes.set_ylabel("Relative Duration")
+    x = list(range(1, len(data) + 1))
+    axes.xaxis.set_major_locator(ticker.FixedLocator(x))
+    for key in [
+            "barrier-bench", "dynamic-bench", "guided-bench", "parallel-bench",
+            "runtime-bench", "single-bench", "static-bench"
+    ]:
+        d = [results[key] for results in data]
+        y = [x / d[0] for x in d]
+        axes.plot(x, y, label=key.replace("-bench", ""), marker="o")
+    axes.legend(loc="best")
+    plt.savefig("smpopenmp01.png")
+    plt.savefig("smpopenmp01.pdf")
+    plt.close()
 
-def p(bench):
-	d = map(m, ctx.xpathEval('/SMPOpenMP01/Microbench/' + bench))
-	y = [x / d[0] for x in d]
-	x = range(1, len(y) + 1)
-	plt.xticks(x)
-	plt.plot(x, y, label = bench, marker = 'o')
 
-p('BarrierBench')
-p('ParallelBench')
-p('StaticBench')
-p('DynamicBench')
-p('GuidedBench')
-p('RuntimeBench')
-p('SingleBench')
-plt.legend(loc = 'best')
-plt.show()
+_JSON_DATA = re.compile(
+    r"\*\*\* BEGIN OF JSON DATA \*\*\*(.*)"
+    r"\*\*\* END OF JSON DATA \*\*\*", re.DOTALL)
+
+with open("smpopenmp01.scn", "r", encoding="utf-8") as src:
+    match = _JSON_DATA.search(src.read())
+    data = json.loads(match.group(1))
+
+_plot(data)
