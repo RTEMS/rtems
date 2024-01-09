@@ -27,15 +27,11 @@ links:
 - role: build-dependency
   uid: objnohwinit
 - role: build-dependency
-  uid: optcclk
-- role: build-dependency
   uid: optconirq
 - role: build-dependency
   uid: optmintskstksz
 - role: build-dependency
   uid: optoscmain
-- role: build-dependency
-  uid: optoscrtc
 - role: build-dependency
   uid: optreginit
 - role: build-dependency
