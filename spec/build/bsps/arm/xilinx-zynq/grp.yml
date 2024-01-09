@@ -19,8 +19,6 @@ links:
 - role: build-dependency
   uid: obj
 - role: build-dependency
-  uid: ../../objxilinxsupport
-- role: build-dependency
   uid: objsmp
 - role: build-dependency
   uid: opta9periphclk
