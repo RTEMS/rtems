@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2015, 2017 embedded brains GmbH & Co. KG
+ * Copyright (C) 2015, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -88,25 +88,50 @@ static rtems_interval test_init(
   return test_duration();
 }
 
+static const char *test_sep = "";
+
+static const char *counter_sep;
+
 static void test_fini(
-  const char *name,
+  const char *type,
+  const char *description,
   uint32_t *counters,
   size_t active_workers
 )
 {
+  const char *value_sep;
   size_t i;
 
-  printf("  <%s activeWorker=\"%zu\">\n", name, active_workers);
+  if (active_workers == 1) {
+    printf(
+      "%s{\n"
+      "    \"type\": \"%s\",\n"
+      "    \"description\": \"%s\",\n"
+      "    \"counter\": [",
+      test_sep,
+      type,
+      description
+    );
+    test_sep = ", ";
+    counter_sep = "\n      ";
+  }
+
+  printf("%s[", counter_sep);
+  counter_sep = "],\n      ";
+  value_sep = "";
 
   for (i = 0; i < active_workers; ++i) {
     printf(
-      "    <Counter worker=\"%zu\">%" PRIu32 "</Counter>\n",
-      i,
+      "%s%" PRIu32,
+      value_sep,
       counters[i]
     );
+    value_sep = ", ";
   }
 
-  printf("  </%s>\n", name);
+  if (active_workers == rtems_scheduler_get_processor_maximum()) {
+    printf("]\n    ]\n  }");
+  }
 }
 
 static void test_self_event_body(
@@ -150,7 +175,8 @@ static void test_self_event_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "SelfEvent",
+    "event",
+    "Send Event to Self",
     &ctx->self_event_ops[active_workers - 1][0],
     active_workers
   );
@@ -201,7 +227,8 @@ static void test_all_to_one_event_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "AllToOneEvent",
+    "event",
+    "Send Event to One",
     &ctx->all_to_one_event_ops[active_workers - 1][0],
     active_workers
   );
@@ -242,7 +269,8 @@ static void test_one_mutex_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "OneMutex",
+    "contested-mutex",
+    "Obtain/Release Contested Classic Inheritance Mutex",
     &ctx->one_mutex_ops[active_workers - 1][0],
     active_workers
   );
@@ -296,7 +324,8 @@ static void test_many_mutex_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "ManyMutex",
+    "private-mutex",
+    "Obtain/Release Private Classic Inheritance Mutex",
     &ctx->many_mutex_ops[active_workers - 1][0],
     active_workers
   );
@@ -347,7 +376,8 @@ static void test_self_msg_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "SelfMsg",
+    "message",
+    "Send Message to Self",
     &ctx->self_msg_ops[active_workers - 1][0],
     active_workers
   );
@@ -401,7 +431,8 @@ static void test_many_to_one_msg_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "ManyToOneMsg",
+    "message",
+    "Send Message to One Receiver",
     &ctx->many_to_one_msg_ops[active_workers - 1][0],
     active_workers
   );
@@ -439,7 +470,8 @@ static void test_many_sys_lock_mutex_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "ManySysLockMutex",
+    "private-mutex",
+    "Obtain/Release Private <sys/lock.h> Mutex",
     &ctx->many_sys_lock_mutex_ops[active_workers - 1][0],
     active_workers
   );
@@ -493,7 +525,8 @@ static void test_many_classic_ceiling_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "ManyClassicCeilingMutex",
+    "private-mutex",
+    "Obtain/Release Private Classic Ceiling Mutex",
     &ctx->many_classic_ceiling_ops[active_workers - 1][0],
     active_workers
   );
@@ -548,7 +581,8 @@ static void test_many_classic_mrsp_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "ManyClassicMrsPMutex",
+    "private-mutex",
+    "Obtain/Release Private Classic MrsP Mutex",
     &ctx->many_classic_mrsp_ops[active_workers - 1][0],
     active_workers
   );
@@ -591,7 +625,8 @@ static void test_many_pthread_spinlock_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "ManyPthreadSpinlock",
+    "private-mutex",
+    "Obtain/Release Private Pthread Spinlock",
     &ctx->many_pthread_spinlock_ops[active_workers - 1][0],
     active_workers
   );
@@ -645,7 +680,8 @@ static void test_many_pthread_mutex_inherit_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "ManyPthreadMutexInherit",
+    "private-mutex",
+    "Obtain/Release Private Pthread Inheritance Mutex",
     &ctx->many_pthread_mutex_inherit_ops[active_workers - 1][0],
     active_workers
   );
@@ -705,7 +741,8 @@ static void test_many_pthread_mutex_protect_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
-    "ManyPthreadMutexProtect",
+    "private-mutex",
+    "Obtain/Release Private Pthread Ceiling Mutex",
     &ctx->many_pthread_mutex_protect_ops[active_workers - 1][0],
     active_workers
   );
@@ -729,11 +766,6 @@ static const rtems_test_parallel_job test_jobs[] = {
     .cascade = true
   }, {
     .init = test_init,
-    .body = test_many_mutex_body,
-    .fini = test_many_mutex_fini,
-    .cascade = true
-  }, {
-    .init = test_init,
     .body = test_self_msg_body,
     .fini = test_self_msg_fini,
     .cascade = true
@@ -744,8 +776,28 @@ static const rtems_test_parallel_job test_jobs[] = {
     .cascade = true
   }, {
     .init = test_init,
+    .body = test_many_pthread_spinlock_body,
+    .fini = test_many_pthread_spinlock_fini,
+    .cascade = true
+  }, {
+    .init = test_init,
     .body = test_many_sys_lock_mutex_body,
     .fini = test_many_sys_lock_mutex_fini,
+    .cascade = true
+  }, {
+    .init = test_init,
+    .body = test_many_pthread_mutex_inherit_body,
+    .fini = test_many_pthread_mutex_inherit_fini,
+    .cascade = true
+  }, {
+    .init = test_init,
+    .body = test_many_mutex_body,
+    .fini = test_many_mutex_fini,
+    .cascade = true
+  }, {
+    .init = test_init,
+    .body = test_many_pthread_mutex_protect_body,
+    .fini = test_many_pthread_mutex_protect_fini,
     .cascade = true
   }, {
     .init = test_init,
@@ -757,28 +809,12 @@ static const rtems_test_parallel_job test_jobs[] = {
     .body = test_many_classic_mrsp_body,
     .fini = test_many_classic_mrsp_fini,
     .cascade = true
-  }, {
-    .init = test_init,
-    .body = test_many_pthread_spinlock_body,
-    .fini = test_many_pthread_spinlock_fini,
-    .cascade = true
-  }, {
-    .init = test_init,
-    .body = test_many_pthread_mutex_inherit_body,
-    .fini = test_many_pthread_mutex_inherit_fini,
-    .cascade = true
-  }, {
-    .init = test_init,
-    .body = test_many_pthread_mutex_protect_body,
-    .fini = test_many_pthread_mutex_protect_fini,
-    .cascade = true
   }
 };
 
 static void Init(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
-  const char *test = "TestTimeFine01";
   rtems_status_code sc;
   size_t i;
 
@@ -806,7 +842,7 @@ static void Init(rtems_task_argument arg)
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
 
-  printf("<%s>\n", test);
+  printf("*** BEGIN OF JSON DATA ***\n[\n  ");
 
   rtems_test_parallel(
     &ctx->base,
@@ -815,7 +851,7 @@ static void Init(rtems_task_argument arg)
     RTEMS_ARRAY_SIZE(test_jobs)
   );
 
-  printf("</%s>\n", test);
+  printf("\n]\n*** END OF JSON DATA ***\n");
 
   TEST_END();
   rtems_test_exit(0);
