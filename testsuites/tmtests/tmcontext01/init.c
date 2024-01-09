@@ -49,8 +49,6 @@ const char rtems_test_name[] = "TMCONTEXT 1";
 
 static rtems_counter_ticks t[SAMPLES];
 
-static volatile int prevent_optimization;
-
 static size_t cache_line_size;
 
 static size_t data_size;
@@ -72,17 +70,13 @@ static int dirty_data_cache(volatile int *data, size_t n, size_t clsz, int j)
   return i + j;
 }
 
-static int call_at_level(
+static __attribute__((__noipa__)) void call_at_level(
   int start,
   int fl,
   int s,
   bool dirty
 )
 {
-  int prevent_optimization;
-
-  prevent_optimization = start + fl;
-
   if (fl == start) {
     /*
      * Some architectures like the SPARC have register windows.  A side-effect
@@ -99,6 +93,7 @@ static int call_at_level(
       s,
       dirty
     );
+    __asm__ volatile ("" : : : "memory");
   } else {
     char *volatile space;
     rtems_counter_ticks a;
@@ -120,8 +115,6 @@ static int call_at_level(
     b = rtems_counter_read();
     t[s] = rtems_counter_difference(b, a);
   }
-
-  return prevent_optimization;
 }
 
 static void load_task(rtems_task_argument arg)
@@ -149,7 +142,7 @@ static void sort_t(void)
   qsort(&t[0], SAMPLES, sizeof(t[0]), cmp);
 }
 
-static void test_by_function_level(int fl, bool dirty)
+static __attribute__((__noipa__)) void test_by_function_level(int fl, bool dirty)
 {
   RTEMS_INTERRUPT_LOCK_DECLARE(, lock)
   rtems_interrupt_lock_context lock_context;
@@ -159,8 +152,6 @@ static void test_by_function_level(int fl, bool dirty)
   uint64_t q2;
   uint64_t q3;
   uint64_t max;
-
-  fl += prevent_optimization;
 
   rtems_interrupt_lock_initialize(&lock, "test");
   rtems_interrupt_lock_acquire(&lock, &lock_context);
