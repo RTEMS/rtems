@@ -73,36 +73,27 @@ static int dirty_data_cache(volatile int *data, size_t n, size_t clsz, int j)
 static __attribute__((__noipa__)) void call_at_level(
   int start,
   int fl,
-  int s,
-  bool dirty
+  int s
 )
 {
+#if defined(__sparc__)
   if (fl == start) {
-    /*
-     * Some architectures like the SPARC have register windows.  A side-effect
-     * of this context switch is that we start with a fresh window set.  On
-     * architectures like ARM or PowerPC this context switch has no effect.
-     */
-    _Context_Switch(&ctx, &ctx);
+    /* Flush register windows */
+    __asm__ volatile ("ta 3" : : : "memory");
   }
+#endif
 
   if (fl > 0) {
     call_at_level(
       start,
       fl - 1,
-      s,
-      dirty
+      s
     );
     __asm__ volatile ("" : : : "memory");
   } else {
     char *volatile space;
     rtems_counter_ticks a;
     rtems_counter_ticks b;
-
-    if (dirty) {
-      dirty_data_cache(main_data, data_size, cache_line_size, fl);
-      rtems_cache_invalidate_entire_instruction();
-    }
 
     a = rtems_counter_read();
 
@@ -157,7 +148,12 @@ static __attribute__((__noipa__)) void test_by_function_level(int fl, bool dirty
   rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   for (s = 0; s < SAMPLES; ++s) {
-    call_at_level(fl, fl, s, dirty);
+    if (dirty) {
+      dirty_data_cache(main_data, data_size, cache_line_size, fl);
+      rtems_cache_invalidate_entire_instruction();
+    }
+
+    call_at_level(fl, fl, s);
   }
 
   rtems_interrupt_lock_release(&lock, &lock_context);
