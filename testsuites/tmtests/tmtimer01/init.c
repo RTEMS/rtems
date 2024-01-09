@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (c) 2016 embedded brains GmbH & Co. KG
+ * Copyright (C) 2016, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -108,12 +108,13 @@ static void test_fire_and_cancel(
   rtems_test_assert(sc2 == RTEMS_SUCCESSFUL);
 
   printf(
-    "<%s unit=\"ns\">%" PRIu64 "</%s>",
+    ",\n      \"%s\": %" PRIu64,
     name,
-    rtems_counter_ticks_to_nanoseconds(d),
-    name
+    rtems_counter_ticks_to_nanoseconds(d)
   );
 }
+
+static const char *sep = "\n    ";
 
 static void test_case(test_context *ctx, size_t j, size_t k)
 {
@@ -130,13 +131,17 @@ static void test_case(test_context *ctx, size_t j, size_t k)
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
 
-  printf("  <Sample>\n    <ActiveTimers>%zu</ActiveTimers>", j);
+  printf(
+    "%s{\n"
+    "      \"active-timers\": %zu",
+    sep,
+    j
+  );
+  sep = "\n    }, ";
 
-  test_fire_and_cancel(ctx, j, 0, "First");
-  test_fire_and_cancel(ctx, j, j / 2, "Middle");
-  test_fire_and_cancel(ctx, j, j + 1, "Last");
-
-  printf("\n  </Sample>\n");
+  test_fire_and_cancel(ctx, j, 0, "first");
+  test_fire_and_cancel(ctx, j, j / 2, "middle");
+  test_fire_and_cancel(ctx, j, j + 1, "last");
 }
 
 static void test(void)
@@ -181,7 +186,13 @@ static void test(void)
     timer_count = n;
   }
 
-  printf("<TMTimer01 timerCount=\"%zu\">\n", timer_count);
+  printf(
+    "*** BEGIN OF JSON DATA ***\n"
+    "{\n"
+    "  \"timer-count\": %zu,\n"
+    "  \"samples\": [",
+    timer_count
+  );
 
   k = 0;
   j = 0;
@@ -194,7 +205,7 @@ static void test(void)
 
   test_case(ctx, n - 2, k);
 
-  printf("</TMTimer01>\n");
+  printf("\n    }\n  ]\n}\n*** END OF JSON DATA ***\n");
 }
 
 static void Init(rtems_task_argument arg)

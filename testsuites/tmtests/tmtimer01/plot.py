@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
-#
-# Copyright (c) 2016 embedded brains GmbH & Co. KG
+# Copyright (C) 2016, 2024 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -23,22 +22,35 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-#
 
-import libxml2
-from libxml2 import xmlNode
-import matplotlib.pyplot as plt
-doc = libxml2.parseFile('tmtimer01.scn')
-ctx = doc.xpathNewContext()
+import json
+import re
+import matplotlib.pyplot as plt  # type: ignore
+from matplotlib import ticker  # type: ignore
 
-plt.title('timer test')
-plt.xscale('log')
-plt.xlabel('active timers')
-plt.ylabel('timer fire and cancel [ns]')
 
-x = map(xmlNode.getContent, ctx.xpathEval('/TMTimer01/Sample/ActiveTimers'))
-for i in ['First', 'Middle', 'Last']:
-	y = map(xmlNode.getContent, ctx.xpathEval('/TMTimer01/Sample/' + i))
-	plt.plot(x, y, label = i)
-plt.legend(loc = 'best')
-plt.show()
+def _plot(data: dict) -> None:
+    _, axes = plt.subplots()
+    axes.set_title("Timer Fire and Cancel Timing Test")
+    axes.set_xlabel("Active Timers")
+    axes.set_xscale("log")
+    axes.set_ylabel("Timer Fire and Cancel Duration [μs]")
+    x = [sample["active-timers"] for sample in data["samples"]]
+    for key in ["first", "middle", "last"]:
+        y = [sample[key] / 1000.0 for sample in data["samples"]]
+        axes.plot(x, y, label=f"operate on {key} timer", marker='o')
+    axes.legend(loc='best')
+    plt.savefig("tmtimer01.png")
+    plt.savefig("tmtimer01.pdf")
+    plt.close()
+
+
+_JSON_DATA = re.compile(
+    r"\*\*\* BEGIN OF JSON DATA \*\*\*(.*)"
+    r"\*\*\* END OF JSON DATA \*\*\*", re.DOTALL)
+
+with open("tmtimer01.scn", "r", encoding="utf-8") as src:
+    match = _JSON_DATA.search(src.read())
+    data = json.loads(match.group(1))
+
+_plot(data)

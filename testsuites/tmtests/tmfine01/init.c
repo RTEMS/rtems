@@ -55,6 +55,8 @@ typedef struct {
 
 typedef struct {
   rtems_test_parallel_context base;
+  const char *test_sep;
+  const char *counter_sep;
   rtems_id master;
   rtems_id sema;
   rtems_id mq[CPU_COUNT];
@@ -88,11 +90,8 @@ static rtems_interval test_init(
   return test_duration();
 }
 
-static const char *test_sep = "";
-
-static const char *counter_sep;
-
 static void test_fini(
+  test_context *ctx,
   const char *type,
   const char *description,
   uint32_t *counters,
@@ -108,16 +107,16 @@ static void test_fini(
       "    \"type\": \"%s\",\n"
       "    \"description\": \"%s\",\n"
       "    \"counter\": [",
-      test_sep,
+      ctx->test_sep,
       type,
       description
     );
-    test_sep = ", ";
-    counter_sep = "\n      ";
+    ctx->test_sep = ", ";
+    ctx->counter_sep = "\n      ";
   }
 
-  printf("%s[", counter_sep);
-  counter_sep = "],\n      ";
+  printf("%s[", ctx->counter_sep);
+  ctx->counter_sep = "],\n      ";
   value_sep = "";
 
   for (i = 0; i < active_workers; ++i) {
@@ -175,6 +174,7 @@ static void test_self_event_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "event",
     "Send Event to Self",
     &ctx->self_event_ops[active_workers - 1][0],
@@ -227,6 +227,7 @@ static void test_all_to_one_event_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "event",
     "Send Event to One",
     &ctx->all_to_one_event_ops[active_workers - 1][0],
@@ -269,6 +270,7 @@ static void test_one_mutex_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "contested-mutex",
     "Obtain/Release Contested Classic Inheritance Mutex",
     &ctx->one_mutex_ops[active_workers - 1][0],
@@ -324,6 +326,7 @@ static void test_many_mutex_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "private-mutex",
     "Obtain/Release Private Classic Inheritance Mutex",
     &ctx->many_mutex_ops[active_workers - 1][0],
@@ -376,6 +379,7 @@ static void test_self_msg_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "message",
     "Send Message to Self",
     &ctx->self_msg_ops[active_workers - 1][0],
@@ -431,6 +435,7 @@ static void test_many_to_one_msg_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "message",
     "Send Message to One Receiver",
     &ctx->many_to_one_msg_ops[active_workers - 1][0],
@@ -470,6 +475,7 @@ static void test_many_sys_lock_mutex_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "private-mutex",
     "Obtain/Release Private <sys/lock.h> Mutex",
     &ctx->many_sys_lock_mutex_ops[active_workers - 1][0],
@@ -525,6 +531,7 @@ static void test_many_classic_ceiling_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "private-mutex",
     "Obtain/Release Private Classic Ceiling Mutex",
     &ctx->many_classic_ceiling_ops[active_workers - 1][0],
@@ -581,6 +588,7 @@ static void test_many_classic_mrsp_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "private-mutex",
     "Obtain/Release Private Classic MrsP Mutex",
     &ctx->many_classic_mrsp_ops[active_workers - 1][0],
@@ -625,6 +633,7 @@ static void test_many_pthread_spinlock_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "private-mutex",
     "Obtain/Release Private Pthread Spinlock",
     &ctx->many_pthread_spinlock_ops[active_workers - 1][0],
@@ -680,6 +689,7 @@ static void test_many_pthread_mutex_inherit_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "private-mutex",
     "Obtain/Release Private Pthread Inheritance Mutex",
     &ctx->many_pthread_mutex_inherit_ops[active_workers - 1][0],
@@ -741,6 +751,7 @@ static void test_many_pthread_mutex_protect_fini(
   test_context *ctx = (test_context *) base;
 
   test_fini(
+    ctx,
     "private-mutex",
     "Obtain/Release Private Pthread Ceiling Mutex",
     &ctx->many_pthread_mutex_protect_ops[active_workers - 1][0],
@@ -844,6 +855,7 @@ static void Init(rtems_task_argument arg)
 
   printf("*** BEGIN OF JSON DATA ***\n[\n  ");
 
+  ctx->test_sep = "";
   rtems_test_parallel(
     &ctx->base,
     NULL,

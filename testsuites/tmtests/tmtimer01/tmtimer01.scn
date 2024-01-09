@@ -1,137 +1,252 @@
-<TMTimer01 timerCount="65504">
-  <Sample>
-    <ActiveTimers>0</ActiveTimers><First unit="ns">8812</First><Middle unit="ns">1412</Middle><Last unit="ns">917</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>2</ActiveTimers><First unit="ns">1602</First><Middle unit="ns">1010</Middle><Last unit="ns">1367</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>4</ActiveTimers><First unit="ns">1524</First><Middle unit="ns">1089</Middle><Last unit="ns">1086</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>7</ActiveTimers><First unit="ns">1791</First><Middle unit="ns">1121</Middle><Last unit="ns">1838</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>10</ActiveTimers><First unit="ns">1488</First><Middle unit="ns">1016</Middle><Last unit="ns">2134</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>14</ActiveTimers><First unit="ns">1527</First><Middle unit="ns">1698</Middle><Last unit="ns">3186</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>19</ActiveTimers><First unit="ns">2078</First><Middle unit="ns">1665</Middle><Last unit="ns">3397</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>25</ActiveTimers><First unit="ns">1519</First><Middle unit="ns">2368</Middle><Last unit="ns">4464</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>32</ActiveTimers><First unit="ns">1243</First><Middle unit="ns">2623</Middle><Last unit="ns">3549</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>41</ActiveTimers><First unit="ns">2368</First><Middle unit="ns">2578</Middle><Last unit="ns">4105</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>52</ActiveTimers><First unit="ns">2322</First><Middle unit="ns">2563</Middle><Last unit="ns">4126</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>66</ActiveTimers><First unit="ns">2499</First><Middle unit="ns">1855</Middle><Last unit="ns">4919</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>83</ActiveTimers><First unit="ns">1689</First><Middle unit="ns">3128</Middle><Last unit="ns">5894</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>104</ActiveTimers><First unit="ns">2301</First><Middle unit="ns">2647</Middle><Last unit="ns">4595</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>130</ActiveTimers><First unit="ns">2880</First><Middle unit="ns">3183</Middle><Last unit="ns">6222</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>162</ActiveTimers><First unit="ns">2597</First><Middle unit="ns">2376</Middle><Last unit="ns">7118</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>201</ActiveTimers><First unit="ns">3519</First><Middle unit="ns">3466</Middle><Last unit="ns">6673</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>249</ActiveTimers><First unit="ns">2829</First><Middle unit="ns">3177</Middle><Last unit="ns">7784</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>308</ActiveTimers><First unit="ns">2614</First><Middle unit="ns">3396</Middle><Last unit="ns">7338</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>381</ActiveTimers><First unit="ns">3454</First><Middle unit="ns">4888</Middle><Last unit="ns">9114</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>470</ActiveTimers><First unit="ns">3397</First><Middle unit="ns">2443</Middle><Last unit="ns">7689</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>580</ActiveTimers><First unit="ns">2233</First><Middle unit="ns">4410</Middle><Last unit="ns">9355</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>715</ActiveTimers><First unit="ns">3787</First><Middle unit="ns">5891</Middle><Last unit="ns">6833</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>881</ActiveTimers><First unit="ns">3839</First><Middle unit="ns">5089</Middle><Last unit="ns">9232</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>1085</ActiveTimers><First unit="ns">2838</First><Middle unit="ns">2739</Middle><Last unit="ns">11575</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>1336</ActiveTimers><First unit="ns">3256</First><Middle unit="ns">5011</Middle><Last unit="ns">9684</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>1645</ActiveTimers><First unit="ns">2293</First><Middle unit="ns">5262</Middle><Last unit="ns">10183</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>2025</ActiveTimers><First unit="ns">4436</First><Middle unit="ns">5934</Middle><Last unit="ns">8804</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>2492</ActiveTimers><First unit="ns">4506</First><Middle unit="ns">7284</Middle><Last unit="ns">10389</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>3067</ActiveTimers><First unit="ns">3832</First><Middle unit="ns">4990</Middle><Last unit="ns">9536</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>3774</ActiveTimers><First unit="ns">5088</First><Middle unit="ns">4888</Middle><Last unit="ns">9633</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>4644</ActiveTimers><First unit="ns">5590</First><Middle unit="ns">5749</Middle><Last unit="ns">8975</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>5714</ActiveTimers><First unit="ns">4854</First><Middle unit="ns">6813</Middle><Last unit="ns">11603</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>7030</ActiveTimers><First unit="ns">6139</First><Middle unit="ns">6132</Middle><Last unit="ns">12630</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>8649</ActiveTimers><First unit="ns">6877</First><Middle unit="ns">3852</Middle><Last unit="ns">10973</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>10640</ActiveTimers><First unit="ns">6532</First><Middle unit="ns">6097</Middle><Last unit="ns">11725</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>13089</ActiveTimers><First unit="ns">5284</First><Middle unit="ns">5392</Middle><Last unit="ns">13246</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>16101</ActiveTimers><First unit="ns">7077</First><Middle unit="ns">7572</Middle><Last unit="ns">14820</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>19806</ActiveTimers><First unit="ns">7132</First><Middle unit="ns">8335</Middle><Last unit="ns">11668</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>24363</ActiveTimers><First unit="ns">8676</First><Middle unit="ns">7919</Middle><Last unit="ns">13937</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>29968</ActiveTimers><First unit="ns">5970</First><Middle unit="ns">10978</Middle><Last unit="ns">16035</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>36862</ActiveTimers><First unit="ns">8804</First><Middle unit="ns">8767</Middle><Last unit="ns">13089</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>45342</ActiveTimers><First unit="ns">8608</First><Middle unit="ns">10305</Middle><Last unit="ns">15709</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>55772</ActiveTimers><First unit="ns">8949</First><Middle unit="ns">10031</Middle><Last unit="ns">16262</Last>
-  </Sample>
-  <Sample>
-    <ActiveTimers>65503</ActiveTimers><First unit="ns">9199</First><Middle unit="ns">10309</Middle><Last unit="ns">19090</Last>
-  </Sample>
-</TMTimer01>
+
+ SIS - SPARC/RISCV instruction simulator 2.30,  copyright Jiri Gaisler 2020
+ Bug-reports to jiri@gaisler.se
+
+ GR740/LEON4 emulation enabled, 4 cpus online, delta 50 clocks
+
+ Loaded build/sparc/gr740/testsuites/tmtests/tmtimer01.exe, entry 0x00000000
+
+
+*** BEGIN OF TEST TMTIMER 1 ***
+*** TEST VERSION: 6.0.0.76c91ee7793fc70b92e2f87e601c3fdc2d2b7f3f
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_SMP
+*** TEST TOOLS: 13.2.0 20230727 (RTEMS 6, RSB d3d738c35a71ca05f675b188539225099401ac79, Newlib a021448)
+*** BEGIN OF JSON DATA ***
+{
+  "timer-count": 61024,
+  "samples": [
+    {
+      "active-timers": 0,
+      "first": 8560,
+      "middle": 8600,
+      "last": 8520
+    }, {
+      "active-timers": 2,
+      "first": 9020,
+      "middle": 11680,
+      "last": 8860
+    }, {
+      "active-timers": 4,
+      "first": 9480,
+      "middle": 9440,
+      "last": 11060
+    }, {
+      "active-timers": 7,
+      "first": 9360,
+      "middle": 9820,
+      "last": 12300
+    }, {
+      "active-timers": 10,
+      "first": 9860,
+      "middle": 9580,
+      "last": 11980
+    }, {
+      "active-timers": 14,
+      "first": 9860,
+      "middle": 10040,
+      "last": 12280
+    }, {
+      "active-timers": 19,
+      "first": 10360,
+      "middle": 10080,
+      "last": 13260
+    }, {
+      "active-timers": 25,
+      "first": 10360,
+      "middle": 10500,
+      "last": 14460
+    }, {
+      "active-timers": 32,
+      "first": 10240,
+      "middle": 10620,
+      "last": 13040
+    }, {
+      "active-timers": 41,
+      "first": 10820,
+      "middle": 10540,
+      "last": 15000
+    }, {
+      "active-timers": 52,
+      "first": 10740,
+      "middle": 10880,
+      "last": 13660
+    }, {
+      "active-timers": 66,
+      "first": 10820,
+      "middle": 10880,
+      "last": 13960
+    }, {
+      "active-timers": 83,
+      "first": 11160,
+      "middle": 11040,
+      "last": 14940
+    }, {
+      "active-timers": 104,
+      "first": 11160,
+      "middle": 11420,
+      "last": 14340
+    }, {
+      "active-timers": 130,
+      "first": 11160,
+      "middle": 11300,
+      "last": 14720
+    }, {
+      "active-timers": 162,
+      "first": 11460,
+      "middle": 11380,
+      "last": 14880
+    }, {
+      "active-timers": 201,
+      "first": 11500,
+      "middle": 11880,
+      "last": 17060
+    }, {
+      "active-timers": 249,
+      "first": 11580,
+      "middle": 11800,
+      "last": 16900
+    }, {
+      "active-timers": 308,
+      "first": 11380,
+      "middle": 12060,
+      "last": 15640
+    }, {
+      "active-timers": 381,
+      "first": 11760,
+      "middle": 11840,
+      "last": 19800
+    }, {
+      "active-timers": 470,
+      "first": 11880,
+      "middle": 12180,
+      "last": 16100
+    }, {
+      "active-timers": 580,
+      "first": 11760,
+      "middle": 12600,
+      "last": 16560
+    }, {
+      "active-timers": 715,
+      "first": 12140,
+      "middle": 12220,
+      "last": 17380
+    }, {
+      "active-timers": 881,
+      "first": 12260,
+      "middle": 12640,
+      "last": 18740
+    }, {
+      "active-timers": 1085,
+      "first": 12140,
+      "middle": 12560,
+      "last": 22320
+    }, {
+      "active-timers": 1336,
+      "first": 12720,
+      "middle": 12600,
+      "last": 17240
+    }, {
+      "active-timers": 1645,
+      "first": 12560,
+      "middle": 13020,
+      "last": 21140
+    }, {
+      "active-timers": 2025,
+      "first": 12720,
+      "middle": 12980,
+      "last": 19500
+    }, {
+      "active-timers": 2492,
+      "first": 12720,
+      "middle": 13400,
+      "last": 18160
+    }, {
+      "active-timers": 3067,
+      "first": 13060,
+      "middle": 13060,
+      "last": 19220
+    }, {
+      "active-timers": 3774,
+      "first": 12980,
+      "middle": 13560,
+      "last": 18620
+    }, {
+      "active-timers": 4644,
+      "first": 13260,
+      "middle": 13860,
+      "last": 18920
+    }, {
+      "active-timers": 5714,
+      "first": 13440,
+      "middle": 13520,
+      "last": 18920
+    }, {
+      "active-timers": 7030,
+      "first": 13440,
+      "middle": 13900,
+      "last": 19380
+    }, {
+      "active-timers": 8649,
+      "first": 13440,
+      "middle": 13820,
+      "last": 21640
+    }, {
+      "active-timers": 10640,
+      "first": 14020,
+      "middle": 13940,
+      "last": 19760
+    }, {
+      "active-timers": 13089,
+      "first": 13940,
+      "middle": 14160,
+      "last": 22100
+    }, {
+      "active-timers": 16101,
+      "first": 13900,
+      "middle": 14320,
+      "last": 22680
+    }, {
+      "active-timers": 19806,
+      "first": 13900,
+      "middle": 14700,
+      "last": 20840
+    }, {
+      "active-timers": 24363,
+      "first": 14360,
+      "middle": 14320,
+      "last": 21660
+    }, {
+      "active-timers": 29968,
+      "first": 14360,
+      "middle": 14540,
+      "last": 21300
+    }, {
+      "active-timers": 36862,
+      "first": 14360,
+      "middle": 15320,
+      "last": 21440
+    }, {
+      "active-timers": 45342,
+      "first": 14580,
+      "middle": 14700,
+      "last": 21600
+    }, {
+      "active-timers": 55772,
+      "first": 14700,
+      "middle": 15040,
+      "last": 22060
+    }, {
+      "active-timers": 61023,
+      "first": 14780,
+      "middle": 15080,
+      "last": 22960
+    }
+  ]
+}
+*** END OF JSON DATA ***
+
+*** END OF TEST TMTIMER 1 ***
+
+cpu 0 in error mode (tt = 0x80)
+ 522750200  00009b40:  91d02000   ta  0x0
