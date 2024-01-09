@@ -29,6 +29,8 @@ links:
 - role: build-dependency
   uid: ../objexc
 - role: build-dependency
+  uid: ../objvme
+- role: build-dependency
   uid: abi
 - role: build-dependency
   uid: obj

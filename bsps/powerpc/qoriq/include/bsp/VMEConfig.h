@@ -7,6 +7,9 @@
  *
  * @brief This header file provides the interfaces used by VME bus device
  *   drivers.
+ *
+ * Note that for the MVME2500, you need the PCIe support from libbsd for this to
+ * work.
  */
 
 /*
@@ -42,6 +45,53 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define _VME_DRIVER_TSI148
+
+/*
+ * Base address of the PCI that is used for the VME bridge. Value is set in
+ * libbsd during device discovery.
+ */
+extern uintptr_t bsp_vme_pcie_base_address;
+
+#define PCI_MEM_BASE 0
+#define PCI_DRAM_OFFSET 0
+
+/*
+ * NOTE: shared vmeconfig.c uses hardcoded window lengths that match this layout
+ *
+ * The memory length of the PCIe controllers on the P2020 processor is
+ * 0x20000000. The Tsi148 registers are mapped at the bsp_vme_pcie_base_address
+ * with a size of 0x1000. Therefore the VME windows are arranged a bit different
+ * then on other BSPs.
+ */
+#define _VME_A32_WIN0_ON_PCI   (bsp_vme_pcie_base_address + 0x10000000)
+#define _VME_A24_ON_PCI        (bsp_vme_pcie_base_address + 0x03000000)
+#define _VME_A16_ON_PCI        (bsp_vme_pcie_base_address + 0x02000000)
+#define _VME_CSR_ON_PCI        (bsp_vme_pcie_base_address + 0x01000000)
+
+/* FIXME: Make this a BSP config option */
+#define _VME_A32_WIN0_ON_VME 0x20000000
+
+/*
+ * FIXME: The fixed QORIQ_IRQ_EXT_0 is valid for the MVME2500 board. In theory
+ * there should be some possibility to get that information from the device tree
+ * or from PCI config space. But I didn't find it anywhere.
+ */
+#define BSP_VME_INSTALL_IRQ_MGR(err) \
+  do { \
+    err = qoriq_pic_set_sense_and_polarity(\
+      QORIQ_IRQ_EXT_0, \
+      QORIQ_EIRQ_TRIGGER_LEVEL_LOW, \
+      NULL \
+    ); \
+    if (err == 0) { \
+      err = vmeTsi148InstallIrqMgrAlt(0, 0, QORIQ_IRQ_EXT_0, -1); \
+    } \
+  } while (0)
+
+/* Add prototypes that are in all VMEConfig.h files */
+extern int BSP_VMEInit(void);
+extern int BSP_VMEIrqMgrInstall(void);
+extern unsigned short (*_BSP_clear_vmebridge_errors)(int);
 
 #ifdef __cplusplus
 }
