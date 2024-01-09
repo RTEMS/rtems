@@ -1,9 +1,6 @@
-#!/usr/bin/env python
-
 # SPDX-License-Identifier: BSD-2-Clause
 
-#
-# Copyright (c) 2016 embedded brains GmbH & Co. KG
+# Copyright (C) 2016, 2024 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -25,34 +22,39 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-#
 
+import json
 import re
-import libxml2
-from libxml2 import xmlNode
-import matplotlib.pyplot as plt
-data = open('smplock01.scn').read()
-data = re.sub(r'\*\*\*.*\*\*\*', '', data)
-doc = libxml2.parseDoc(data)
-ctx = doc.xpathNewContext()
+import matplotlib.pyplot as plt  # type: ignore
+from matplotlib import ticker  # type: ignore
 
-plt.title('SMP Lock Performance')
-plt.xlabel('Active Workers')
-plt.ylabel('Operation Count')
 
-y = map(xmlNode.getContent, ctx.xpathEval('/SMPLock01/GlobalTicketLockWithLocalCounter/SumOfLocalCounter'))
-x = range(1, len(y) + 1)
-plt.xticks(x)
-plt.plot(x, y, label = 'Ticket Lock', marker = 'o')
+def _plot(data: dict) -> None:
+    _, axes = plt.subplots()
+    axes.set_title("SMP Lock Performance")
+    axes.set_xlabel("Active Workers")
+    axes.set_ylabel("Operation Count")
+    x = list(range(1, len(data[0]["results"]) + 1))
+    axes.xaxis.set_major_locator(ticker.FixedLocator(x))
+    for samples in data:
+        if samples["lock-object"] != "global":
+            continue
+        if samples["section-type"] != "local counter":
+            continue
+        y = [sum(results["counter"]) for results in samples["results"]]
+        axes.plot(x, y, label=samples["lock-type"], marker="o")
+    axes.legend(loc="best")
+    plt.savefig("smplock01perf.png")
+    plt.savefig("smplock01perf.pdf")
+    plt.close()
 
-y = map(xmlNode.getContent, ctx.xpathEval('/SMPLock01/GlobalMCSLockWithLocalCounter/SumOfLocalCounter'))
-plt.plot(x, y, label = 'MCS Lock', marker = 'o')
 
-y = map(xmlNode.getContent, ctx.xpathEval('/SMPLock01/GlobalTASLockWithLocalCounter/SumOfLocalCounter'))
-plt.plot(x, y, label = 'TAS Lock', marker = 'o')
+_JSON_DATA = re.compile(
+    r"\*\*\* BEGIN OF JSON DATA \*\*\*(.*)"
+    r"\*\*\* END OF JSON DATA \*\*\*", re.DOTALL)
 
-y = map(xmlNode.getContent, ctx.xpathEval('/SMPLock01/GlobalTTASLockWithLocalCounter/SumOfLocalCounter'))
-plt.plot(x, y, label = 'TTAS Lock', marker = 'o')
+with open("smplock01.scn", "r", encoding="utf-8") as src:
+    match = _JSON_DATA.search(src.read())
+    data = json.loads(match.group(1))
 
-plt.legend(loc = 'best')
-plt.show()
+_plot(data)

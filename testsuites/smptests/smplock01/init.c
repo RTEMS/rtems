@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2013, 2016 embedded brains GmbH & Co. KG
+ * Copyright (C) 2013, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -47,6 +47,8 @@ const char rtems_test_name[] = "SMPLOCK 1";
 
 typedef struct {
   rtems_test_parallel_context base;
+  const char *test_sep;
+  const char *counter_sep;
   unsigned long counter[TEST_COUNT];
   unsigned long local_counter[CPU_COUNT][TEST_COUNT][CPU_COUNT];
   SMP_lock_Control lock RTEMS_ALIGNED(CPU_CACHE_LINE_BYTES);
@@ -84,40 +86,69 @@ static rtems_interval test_init(
   return test_duration();
 }
 
+static const rtems_test_parallel_job test_jobs[TEST_COUNT];
+
 static void test_fini(
   test_context *ctx,
-  const char *name,
+  const char *lock_type,
+  bool global_lock,
+  const char *section_type,
   size_t test,
   size_t active_workers
 )
 {
+  bool cascade = test_jobs[test].cascade;
   unsigned long sum = 0;
-  unsigned long n = active_workers;
-  unsigned long i;
+  const char *value_sep;
+  size_t i;
 
-  printf("  <%s activeWorker=\"%lu\">\n", name, n);
+  if (active_workers == 1 || !cascade) {
+    printf(
+      "%s{\n"
+      "    \"lock-type\": \"%s\",\n"
+      "    \"lock-object\": \"%s\",\n"
+      "    \"section-type\": \"%s\",\n"
+      "    \"results\": [",
+      ctx->test_sep,
+      lock_type,
+      global_lock ? "global" : "local",
+      section_type
+    );
+    ctx->test_sep = ", ";
+    ctx->counter_sep = "\n      ";
+  }
 
-  for (i = 0; i < n; ++i) {
+  printf(
+    "%s{\n"
+    "        \"counter\": [", ctx->counter_sep);
+  ctx->counter_sep = "\n      }, ";
+  value_sep = "";
+
+  for (i = 0; i < active_workers; ++i) {
     unsigned long local_counter =
       ctx->local_counter[active_workers - 1][test][i];
 
     sum += local_counter;
 
     printf(
-      "    <LocalCounter worker=\"%lu\">%lu</LocalCounter>\n",
-      i,
+      "%s%lu",
+      value_sep,
       local_counter
     );
+    value_sep = ", ";
   }
 
   printf(
-    "    <GlobalCounter>%lu</GlobalCounter>\n"
-    "    <SumOfLocalCounter>%lu</SumOfLocalCounter>\n"
-    "  </%s>\n",
+    "],\n"
+    "        \"global-counter\": %lu,\n"
+    "        \"sum-of-local-counter\": %lu",
     ctx->counter[test],
-    sum,
-    name
+    sum
   );
+
+  if (active_workers == rtems_scheduler_get_processor_maximum() || !cascade) {
+    printf("\n      }\n    ]\n  }");
+  }
 }
 
 static void test_0_body(
@@ -151,7 +182,9 @@ static void test_0_fini(
 
   test_fini(
     ctx,
-    "GlobalTicketLockWithLocalCounter",
+    "Ticket Lock",
+    true,
+    "local counter",
     0,
     active_workers
   );
@@ -188,7 +221,9 @@ static void test_1_fini(
 
   test_fini(
     ctx,
-    "GlobalMCSLockWithLocalCounter",
+    "MCS Lock",
+    true,
+    "local counter",
     1,
     active_workers
   );
@@ -226,7 +261,9 @@ static void test_2_fini(
 
   test_fini(
     ctx,
-    "GlobalTicketLockWithGlobalCounter",
+    "Ticket Lock",
+    true,
+    "global counter",
     2,
     active_workers
   );
@@ -264,7 +301,9 @@ static void test_3_fini(
 
   test_fini(
     ctx,
-    "GlobalMCSLockWithGlobalCounter",
+    "MCS Lock",
+    true,
+    "global counter",
     3,
     active_workers
   );
@@ -306,7 +345,9 @@ static void test_4_fini(
 
   test_fini(
     ctx,
-    "LocalTicketLockWithLocalCounter",
+    "Ticket Lock",
+    false,
+    "local counter",
     4,
     active_workers
   );
@@ -353,7 +394,9 @@ static void test_5_fini(
 
   test_fini(
     ctx,
-    "LocalMCSLockWithLocalCounter",
+    "MCS Lock",
+    false,
+    "local counter",
     5,
     active_workers
   );
@@ -399,7 +442,9 @@ static void test_6_fini(
 
   test_fini(
     ctx,
-    "LocalTicketLockWithGlobalCounter",
+    "Ticket Lock",
+    false,
+    "global counter",
     6,
     active_workers
   );
@@ -450,7 +495,9 @@ static void test_7_fini(
 
   test_fini(
     ctx,
-    "LocalMCSLockWithGlobalCounter",
+    "MCS Lock",
+    false,
+    "global counter",
     7,
     active_workers
   );
@@ -497,7 +544,9 @@ static void test_8_fini(
 
   test_fini(
     ctx,
-    "GlobalTicketLockWithBusySection",
+    "Ticket Lock",
+    true,
+    "busy loop",
     8,
     active_workers
   );
@@ -535,7 +584,9 @@ static void test_9_fini(
 
   test_fini(
     ctx,
-    "GlobalMCSLockWithBusySection",
+    "MCS Lock",
+    true,
+    "busy loop",
     9,
     active_workers
   );
@@ -595,7 +646,9 @@ static void test_10_fini(
 
   test_fini(
     ctx,
-    "SequenceLock",
+    "Sequence Lock",
+    true,
+    "two global counter",
     10,
     active_workers
   );
@@ -634,7 +687,9 @@ static void test_11_fini(
 
   test_fini(
     ctx,
-    "GlobalTASLockWithLocalCounter",
+    "TAS Lock",
+    true,
+    "local counter",
     11,
     active_workers
   );
@@ -675,7 +730,9 @@ static void test_12_fini(
 
   test_fini(
     ctx,
-    "GlobalTTASLockWithLocalCounter",
+    "TTAS Lock",
+    true,
+    "local counter",
     12,
     active_workers
   );
@@ -753,11 +810,11 @@ static const rtems_test_parallel_job test_jobs[TEST_COUNT] = {
 static void test(void)
 {
   test_context *ctx = &test_instance;
-  const char *test = "SMPLock01";
 
-  printf("<%s>\n", test);
+  printf("*** BEGIN OF JSON DATA ***\n[\n  ");
+  ctx->test_sep = "";
   rtems_test_parallel(&ctx->base, NULL, &test_jobs[0], TEST_COUNT);
-  printf("</%s>\n", test);
+  printf("\n]\n*** END OF JSON DATA ***\n");
 }
 
 static void Init(rtems_task_argument arg)
