@@ -1,9 +1,6 @@
-#!/usr/bin/env python
-
 # SPDX-License-Identifier: BSD-2-Clause
 
-#
-# Copyright (c) 2016 embedded brains GmbH & Co. KG
+# Copyright (C) 2016, 2024 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -25,37 +22,38 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-#
 
+import json
 import re
-import libxml2
-from libxml2 import xmlNode
-import matplotlib.pyplot as plt
-data = open('sptimecounter02.scn').read()
-data = re.sub(r'\*\*\*.*\*\*\*', '', data)
-doc = libxml2.parseDoc(data)
-ctx = doc.xpathNewContext()
+import matplotlib.pyplot as plt  # type: ignore
+from matplotlib import ticker  # type: ignore
 
-plt.title('Timestamp Performance')
-plt.xlabel('Active Workers')
-plt.ylabel('Operation Count')
 
-def m(n):
-	return int(n.getContent())
+def _plot(data: dict) -> None:
+    _, axes = plt.subplots()
+    axes.set_title("Timestamp Performance")
+    axes.set_xlabel("Active Workers")
+    axes.set_ylabel("Operation Count")
+    x = list(range(1, len(data[0]["counter"]) + 1))
+    axes.xaxis.set_major_locator(ticker.FixedLocator(x))
+    for samples in data:
+        y = [sum(values) for values in samples["counter"]]
+        axes.plot(x,
+                  y,
+                  label=samples["timecounter"],
+                  marker="o")
+    axes.legend(loc="best")
+    plt.savefig("sptimecounter02.png")
+    plt.savefig("sptimecounter02.pdf")
+    plt.close()
 
-def getCounterSums(variant):
-	w = 1
-	y = []
-	while True:
-		c = map(m, ctx.xpathEval('/SPTimecounter01/' + variant + '[@activeWorker="' + str(w) + '"]/Counter'))
-		if not c:
-			break
-		y.append(sum(c))
-		w = w + 1
-	return y
 
-y = getCounterSums('BinuptimeTest')
-x = range(1, len(y) + 1)
-plt.xticks(x)
-plt.plot(x, y, marker = 'o')
-plt.show()
+_JSON_DATA = re.compile(
+    r"\*\*\* BEGIN OF JSON DATA \*\*\*(.*)"
+    r"\*\*\* END OF JSON DATA \*\*\*", re.DOTALL)
+
+with open("sptimecounter02.scn", "r", encoding="utf-8") as src:
+    match = _JSON_DATA.search(src.read())
+    data = json.loads(match.group(1))
+
+_plot(data)

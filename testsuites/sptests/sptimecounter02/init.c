@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (c) 2015 embedded brains GmbH & Co. KG
+ * Copyright (C) 2015, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -61,6 +61,8 @@ const char rtems_test_name[] = "SPTIMECOUNTER 2";
 
 typedef struct {
   rtems_test_parallel_context base;
+  const char *test_sep;
+  const char *counter_sep;
   struct timecounter tc_null;
   uint32_t binuptime_per_job[CPU_COUNT];
   sbintime_t duration_per_job[CPU_COUNT];
@@ -88,6 +90,45 @@ static void install_tc_null(timecounter_context *ctx)
   tc_cpu->tc_frequency = rtems_counter_nanoseconds_to_ticks(1000000000);
   tc_cpu->tc_quality = 2000;
   rtems_timecounter_install(tc_cpu);
+}
+
+static void test_print_results(
+  const char *driver,
+  timecounter_context *ctx,
+  size_t active_workers
+)
+{
+  const char *value_sep;
+  size_t i;
+
+  if (active_workers == 1) {
+    printf(
+      "%s{\n"
+      "    \"timecounter\": \"%s\",\n"
+      "    \"counter\": [",
+      ctx->test_sep,
+      driver
+    );
+    ctx->test_sep = ", ";
+    ctx->counter_sep = "\n      ";
+  }
+
+  printf("%s[", ctx->counter_sep);
+  ctx->counter_sep = "],\n      ";
+  value_sep = "";
+
+  for (i = 0; i < active_workers; ++i) {
+    printf(
+      "%s%" PRIu32,
+      value_sep,
+      ctx->binuptime_per_job[i]
+    );
+    value_sep = ", ";
+  }
+
+  if (active_workers == rtems_scheduler_get_processor_maximum()) {
+    printf("]\n    ]\n  }");
+  }
 }
 
 static rtems_interval test_bintime_init(
@@ -133,25 +174,14 @@ static void test_bintime_fini(
   timecounter_context *ctx = (timecounter_context *) base;
   size_t i;
 
-  printf("  <BinuptimeTest activeWorker=\"%zu\">\n", active_workers);
-
   for (i = 0; i < active_workers; ++i) {
     sbintime_t error;
-
-    printf(
-      "    <Counter worker=\"%zu\">%" PRIu32 "</Counter>\n"
-      "    <Duration worker=\"%zu\" unit=\"sbintime\">%" PRId64 "</Duration>\n",
-      i + 1,
-      ctx->binuptime_per_job[i],
-      i + 1,
-      ctx->duration_per_job[i]
-    );
 
     error = DURATION_IN_SECONDS * SBT_1S - ctx->duration_per_job[i];
     rtems_test_assert(error * error < SBT_1MS * SBT_1MS);
   }
 
-  printf("  </BinuptimeTest>\n");
+  test_print_results("Clock Driver", ctx, active_workers);
 }
 
 static rtems_interval test_bintime_null_init(
@@ -192,20 +222,7 @@ static void test_bintime_null_fini(
   size_t active_workers
 )
 {
-  timecounter_context *ctx = (timecounter_context *) base;
-  size_t i;
-
-  printf("  <BinuptimeNullTest activeWorker=\"%zu\">\n", active_workers);
-
-  for (i = 0; i < active_workers; ++i) {
-    printf(
-      "    <Counter worker=\"%zu\">%" PRIu32 "</Counter>\n",
-      i + 1,
-      ctx->binuptime_per_job[i]
-    );
-  }
-
-  printf("  </BinuptimeNullTest>\n");
+  test_print_results("Null", (timecounter_context *) base, active_workers);
 }
 
 static const rtems_test_parallel_job timecounter_jobs[] = {
@@ -231,14 +248,17 @@ static void Init(rtems_task_argument arg)
 
   TEST_BEGIN();
 
-  printf("<SPTimecounter01>\n");
+  printf("*** BEGIN OF JSON DATA ***\n[\n  ");
 
+  ctx->test_sep = "";
   rtems_test_parallel(
     &ctx->base,
     NULL,
     &timecounter_jobs[0],
     RTEMS_ARRAY_SIZE(timecounter_jobs)
   );
+
+  printf("\n]\n*** END OF JSON DATA ***\n");
 
   /* Check for all functions available in the bsd.h user space */
 
@@ -254,8 +274,6 @@ static void Init(rtems_task_argument arg)
   rtems_bsd_getbinuptime(&bt);
   rtems_bsd_getmicrouptime(&tv);
   rtems_bsd_getnanouptime(&ts);
-
-  printf("</SPTimecounter01>\n");
 
   TEST_END();
   rtems_test_exit(0);
