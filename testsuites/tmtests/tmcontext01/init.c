@@ -168,14 +168,8 @@ static __attribute__((__noipa__)) void test_by_function_level(int fl, bool dirty
   max = t[SAMPLES - 1];
 
   printf(
-    "    <Sample functionNestLevel=\"%i\">\n"
-    "      <Min unit=\"ns\">%" PRIu64 "</Min>"
-      "<Q1 unit=\"ns\">%" PRIu64 "</Q1>"
-      "<Q2 unit=\"ns\">%" PRIu64 "</Q2>"
-      "<Q3 unit=\"ns\">%" PRIu64 "</Q3>"
-      "<Max unit=\"ns\">%" PRIu64 "</Max>\n"
-    "    </Sample>\n",
-    fl,
+    "%s\n      [%" PRIu64 ", %" PRIu64 ", %" PRIu64 ", %" PRIu64 ", %" PRIu64 "]",
+    fl == 0 ? "" : ",",
     rtems_counter_ticks_to_nanoseconds(min),
     rtems_counter_ticks_to_nanoseconds(q1),
     rtems_counter_ticks_to_nanoseconds(q2),
@@ -184,26 +178,38 @@ static __attribute__((__noipa__)) void test_by_function_level(int fl, bool dirty
   );
 }
 
-static void test(bool dirty, uint32_t load)
+static void test(bool first, bool dirty, uint32_t load)
 {
   int fl;
 
   printf(
-    "  <ContextSwitchTest environment=\"%s\"",
-    dirty ? "dirty" : "normal"
+    "\n  %s{\n"
+    "    \"environment\": \"",
+    first ? "" : "}, "
   );
 
-  if (load > 0) {
-    printf(" load=\"%" PRIu32 "\"", load);
+  if (dirty) {
+    if (load > 0) {
+      printf("Load/%" PRIu32 "", load);
+    } else {
+      printf("DirtyCache");
+    }
+  } else {
+    printf("HotCache");
   }
 
-  printf(">\n");
+  printf(
+    "\",\n"
+    "    \"stats-by-function-nest-level\": ["
+  );
 
   for (fl = 0; fl < FUNCTION_LEVELS; ++fl) {
     test_by_function_level(fl, dirty);
   }
 
-  printf("  </ContextSwitchTest>\n");
+  printf(
+    "\n    ]"
+  );
 }
 
 static void Init(rtems_task_argument arg)
@@ -212,7 +218,7 @@ static void Init(rtems_task_argument arg)
 
   TEST_BEGIN();
 
-  printf("<Test>\n");
+  printf("*** BEGIN OF JSON DATA ***\n[");
 
   cache_line_size = rtems_cache_get_data_line_size();
   if (cache_line_size == 0) {
@@ -227,8 +233,8 @@ static void Init(rtems_task_argument arg)
   main_data = malloc(data_size);
   rtems_test_assert(main_data != NULL);
 
-  test(false, load);
-  test(true, load);
+  test(true, false, load);
+  test(false, true, load);
 
   for (load = 1; load < rtems_scheduler_get_processor_maximum(); ++load) {
     rtems_status_code sc;
@@ -253,10 +259,10 @@ static void Init(rtems_task_argument arg)
     sc = rtems_task_start(id, load_task, (rtems_task_argument) load_data);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    test(true, load);
+    test(false, true, load);
   }
 
-  printf("</Test>\n");
+  printf("\n  }\n]\n*** END OF JSON DATA ***\n");
 
   TEST_END();
   rtems_test_exit(0);
