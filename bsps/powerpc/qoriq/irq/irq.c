@@ -338,6 +338,62 @@ rtems_status_code qoriq_pic_set_priority(
 	return sc;
 }
 
+rtems_status_code qoriq_pic_set_sense_and_polarity(
+  rtems_vector_number vector,
+  qoriq_eirq_sense_and_polarity new_sense_and_polarity,
+  qoriq_eirq_sense_and_polarity *old_sense_and_polarity
+)
+{
+	rtems_status_code sc = RTEMS_SUCCESSFUL;
+	uint32_t old_vpr = 0;
+	volatile qoriq_pic_src_cfg *src_cfg;
+	rtems_interrupt_lock_context lock_context;
+	uint32_t new_p_s = 0;
+
+	if (!QORIQ_IRQ_IS_EXT(vector)) {
+		return RTEMS_UNSATISFIED;
+	}
+
+	if (new_sense_and_polarity == QORIQ_EIRQ_TRIGGER_EDGE_RISING ||
+	    new_sense_and_polarity == QORIQ_EIRQ_TRIGGER_LEVEL_HIGH) {
+		new_p_s |= VPR_P;
+	}
+
+	if (new_sense_and_polarity == QORIQ_EIRQ_TRIGGER_LEVEL_HIGH ||
+	    new_sense_and_polarity == QORIQ_EIRQ_TRIGGER_LEVEL_LOW) {
+		new_p_s |= VPR_S;
+	}
+
+	src_cfg = get_src_cfg(vector);
+
+	rtems_interrupt_lock_acquire(&lock, &lock_context);
+	old_vpr = src_cfg->vpr;
+	src_cfg->vpr = (old_vpr & ~(VPR_P | VPR_S)) | new_p_s;
+	rtems_interrupt_lock_release(&lock, &lock_context);
+
+	if (old_sense_and_polarity != NULL) {
+		if ((old_vpr & VPR_P) == 0) {
+			if ((old_vpr & VPR_S) == 0) {
+				*old_sense_and_polarity =
+					QORIQ_EIRQ_TRIGGER_EDGE_FALLING;
+			} else {
+				*old_sense_and_polarity =
+					QORIQ_EIRQ_TRIGGER_LEVEL_LOW;
+			}
+		} else {
+			if ((old_vpr & VPR_S) == 0) {
+				*old_sense_and_polarity =
+					QORIQ_EIRQ_TRIGGER_EDGE_RISING;
+			} else {
+				*old_sense_and_polarity =
+					QORIQ_EIRQ_TRIGGER_LEVEL_HIGH;
+			}
+		}
+	}
+
+	return sc;
+}
+
 rtems_status_code bsp_interrupt_set_affinity(
 	rtems_vector_number vector,
 	const Processor_mask *affinity
