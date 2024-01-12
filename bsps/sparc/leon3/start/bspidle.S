@@ -34,14 +34,24 @@
 
 #include <rtems/asm.h>
 
-/* LEON specific power-down function */
+/*
+ * LEON specific power-down function
+ *
+ * This implementation contains the workaround for the GR712RC
+ * power-down errata described in GR712RC-UM, version 2.16, section
+ * 1.7.8. The workaround is compatible with other LEON3 components.
+ */
 
         .align 4
         PUBLIC(bsp_idle_thread)
         PUBLIC(leon3_power_down_loop)
 SYM(bsp_idle_thread):
 SYM(leon3_power_down_loop):
-pwdloop:  mov   %g0, %asr19
-          lda   [%sp] 1, %g0            ! Needed for UT699 and GR712
+pwdloop:
+          set     0xfffffff0, %o0
+          .align 32
+          mov     %g0, %asr19
+          lda     [%o0] 0x1c, %g0
+          .align 32
           ba,a    pwdloop
            nop
