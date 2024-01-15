@@ -685,6 +685,7 @@ static void PrepareOwnerScheduled( Context *ctx )
   SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_B_ID, PRIO_HIGH );
   SetPriority( ctx->worker_id[ WORKER_A ], PRIO_NORMAL );
   MakeBusy( ctx, WORKER_C );
+  WaitForBusy( ctx, WORKER_C );
   MakeBusy( ctx, WORKER_A );
 }
 
