@@ -41,6 +41,7 @@
 
 #include <bspopts.h>
 #include <bsp/uart-bridge.h>
+#include <rtems/termiostypes.h>
 
 #define TRANSMIT_EVENT RTEMS_EVENT_13
 

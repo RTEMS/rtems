@@ -36,7 +36,7 @@
 #ifndef LIBBSP_POWERPC_QORIQ_UART_BRIDGE_H
 #define LIBBSP_POWERPC_QORIQ_UART_BRIDGE_H
 
-#include <rtems/termiostypes.h>
+#include <rtems/termiosdevice.h>
 
 #include <bsp/intercom.h>
 
