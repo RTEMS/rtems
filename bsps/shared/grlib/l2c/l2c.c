@@ -123,9 +123,6 @@
 #define L2C_MTRR_ACCESSCONTROL_ENABLE L2C_MTRR_AC
 #define L2C_MTRR_ACCESSCONTROL_DISABLE 0
 
-#define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
-#define REG_READ(addr) (*(volatile unsigned int *)(addr))
-
 /*
  * L2CACHE FLUSHMEM register fields
  */
@@ -319,6 +316,7 @@ struct l2cache_priv {
 	int mtrr;
 	int ft_support;
 	int split_support;
+	int atomic_flush;
 
 	/* User defined ISR */
 	l2cache_isr_t isr;
@@ -385,6 +383,25 @@ static struct l2cache_priv *l2cachepriv = NULL;
 static char * repl_names[4] = {"LRU","Random","Master-Idx-1","Master-IDx-2"};
 #endif
 
+#define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
+#define REG_READ(addr) (*(volatile unsigned int *)(addr))
+
+#if defined(__sparc__)
+static inline uint32_t atomic_swap32(uint32_t *addr, uint32_t val) {
+	__asm__ volatile (
+		"swapa [%1] 1, %0\n" :
+		"+r" (val) : /* output and input */
+		"r" (addr) : /* input */
+		"memory"
+	);
+	return val;
+}
+
+#define REG_WRITE_ATOMIC(addr, val) atomic_swap32((uint32_t *)addr, val)
+#else
+#define REG_WRITE_ATOMIC(addr, val) REG_WRITE(addr, val)
+#endif
+
 /* L2CACHE DRIVER */
 
 struct drvmgr_drv_ops l2cache_ops =
@@ -448,6 +465,8 @@ STATIC int l2cache_init(struct l2cache_priv *priv)
 	priv->index = ((priv->waysize)/(priv->linesize));
 	priv->mtrr = (status & L2C_STAT_MTRR) >> L2C_STAT_MTRR_BIT;
 	priv->ft_support = (status & L2C_STAT_MP) >> L2C_STAT_MP_BIT;
+
+	priv->atomic_flush = 1;
 
 	/* Probe split support. */
 	int split_old = 0;
@@ -619,35 +638,52 @@ UNUSED STATIC INLINE unsigned int l2cache_reg_mtrr_get(int index)
 STATIC INLINE int l2cache_reg_flushmem(unsigned int addr, int options)
 {
 	struct l2cache_priv *priv = l2cachepriv;
+	unsigned int val;
 
 	options = (options & ~(L2C_FLUSH_ADDR));
-	REG_WRITE(&priv->regs->flush_mem_addr, (addr & L2C_FLUSH_ADDR) | options);
+	val = (addr & L2C_FLUSH_ADDR) | options;
+
+	if (priv->atomic_flush)
+		REG_WRITE_ATOMIC(&priv->regs->flush_mem_addr, val);
+	else
+		REG_WRITE(&priv->regs->flush_mem_addr, val);
+
 	return 0;
 }
 
 STATIC INLINE int l2cache_reg_flushline(int way, int index, int options)
 {
 	struct l2cache_priv *priv = l2cachepriv;
+	unsigned int val;
 
 	options = 0 | (options & (L2C_FLUSHSI_FMODE));
-	REG_WRITE(&priv->regs->flush_set_index, 
-			((index << L2C_FLUSHSI_INDEX_BIT) & L2C_FLUSHSI_INDEX) |
-			((way << L2C_FLUSHSI_WAY_BIT) & L2C_FLUSHSI_WAY) | 
-			options
-	);
+	val = ((index << L2C_FLUSHSI_INDEX_BIT) & L2C_FLUSHSI_INDEX) |
+			((way << L2C_FLUSHSI_WAY_BIT) & L2C_FLUSHSI_WAY) |
+			options;
+
+	if (priv->atomic_flush)
+		REG_WRITE_ATOMIC(&priv->regs->flush_set_index, val);
+	else
+		REG_WRITE(&priv->regs->flush_set_index, val);
+
 	return 0;
 }
 
 STATIC INLINE int l2cache_reg_flushway(unsigned int tag, int way, int options)
 {
 	struct l2cache_priv *priv = l2cachepriv;
+	unsigned int val;
 
-	options = (options & ~(L2C_FLUSHSI_TAG | L2C_FLUSHSI_WAY)) 
+	options = (options & ~(L2C_FLUSHSI_TAG | L2C_FLUSHSI_WAY))
 		| L2C_FLUSHSI_WF;
-	REG_WRITE(&priv->regs->flush_set_index, 
-			(tag & L2C_FLUSHSI_TAG) | 
-			( (way << L2C_FLUSHSI_WAY_BIT) & L2C_FLUSHSI_WAY) | 
-			options);
+	val = (tag & L2C_FLUSHSI_TAG) |
+		  ( (way << L2C_FLUSHSI_WAY_BIT) & L2C_FLUSHSI_WAY) |
+		    options;
+	if (priv->atomic_flush)
+		REG_WRITE_ATOMIC(&priv->regs->flush_set_index, val);
+	else
+		REG_WRITE(&priv->regs->flush_set_index, val);
+
 	return 0;
 }
 
