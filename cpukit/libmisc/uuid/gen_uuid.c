@@ -171,7 +171,12 @@ static int get_random_fd(void)
 				fcntl(fd, F_SETFD, i | FD_CLOEXEC);
 		}
 #endif
+#ifdef __rtems__
+		srand((((time_t)getpid()) << ((sizeof(pid_t)*CHAR_BIT)>>1)) ^ getuid()
+		      ^ tv.tv_sec ^ tv.tv_usec);
+#else
 		srand((getpid() << ((sizeof(pid_t)*CHAR_BIT)>>1)) ^ getuid() ^ tv.tv_sec ^ tv.tv_usec);
+#endif
 #ifdef DO_JRAND_MIX
 		jrand_seed[0] = getpid() ^ (tv.tv_sec & 0xFFFF);
 		jrand_seed[1] = getppid() ^ (tv.tv_usec & 0xFFFF);
