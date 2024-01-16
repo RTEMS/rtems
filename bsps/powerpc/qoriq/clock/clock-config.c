@@ -38,6 +38,7 @@
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <bsp/qoriq.h>
 #include <bsp/irq.h>
 
@@ -120,7 +121,7 @@ static void qoriq_clock_handler_install(void)
     NULL
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(0xdeadbeef);
+    bsp_fatal(QORIQ_FATAL_CLOCK_INTERRUPT_SET_PRIORITY);
   }
 
   rtems_interrupt_entry_initialize(
@@ -135,7 +136,7 @@ static void qoriq_clock_handler_install(void)
     &qoriq_clock_entry
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(0xdeadbeef);
+    bsp_fatal(QORIQ_FATAL_CLOCK_INTERRUPT_INSTALL);
   }
 }
 
