@@ -50,7 +50,7 @@
 /*#define DEBUG 1*/
 
 #ifdef DEBUG
-#define DBG(x...) printf(x)
+#define DBG(x...) printk(x)
 #else
 #define DBG(x...)
 #endif
