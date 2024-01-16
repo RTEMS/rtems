@@ -38,6 +38,7 @@
 #include <grlib/grlib.h>
 #include <bsp.h>
 #include <grlib/l2c.h>
+#include <grlib/grlib_impl.h>
 
 /*#define STATIC*/
 #define STATIC static
@@ -317,6 +318,8 @@ struct l2cache_priv {
 	int ft_support;
 	int split_support;
 	int atomic_flush;
+	/* Avoid concurrent accesses to L2C registers. */
+	SPIN_DECLARE(devlock);
 
 	/* User defined ISR */
 	l2cache_isr_t isr;
@@ -383,8 +386,25 @@ static struct l2cache_priv *l2cachepriv = NULL;
 static char * repl_names[4] = {"LRU","Random","Master-Idx-1","Master-IDx-2"};
 #endif
 
-#define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
-#define REG_READ(addr) (*(volatile unsigned int *)(addr))
+static void REG_WRITE(volatile unsigned int *addr, unsigned int val) {
+	struct l2cache_priv *priv = l2cachepriv;
+	SPIN_IRQFLAGS(irqflags);
+
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+	*addr = val;
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+}
+
+static unsigned int REG_READ(volatile unsigned int *addr) {
+	struct l2cache_priv *priv = l2cachepriv;
+	SPIN_IRQFLAGS(irqflags);
+	unsigned int val;
+
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+	val = *addr;
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+	return val;
+}
 
 #if defined(__sparc__)
 static inline uint32_t atomic_swap32(uint32_t *addr, uint32_t val) {
@@ -397,7 +417,15 @@ static inline uint32_t atomic_swap32(uint32_t *addr, uint32_t val) {
 	return val;
 }
 
-#define REG_WRITE_ATOMIC(addr, val) atomic_swap32((uint32_t *)addr, val)
+static void REG_WRITE_ATOMIC(volatile unsigned int *addr, unsigned int val) {
+	struct l2cache_priv *priv = l2cachepriv;
+	SPIN_IRQFLAGS(irqflags);
+
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+	atomic_swap32((uint32_t *) addr, val);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+}
+
 #else
 #define REG_WRITE_ATOMIC(addr, val) REG_WRITE(addr, val)
 #endif
@@ -513,6 +541,7 @@ int l2cache_init1(struct drvmgr_dev *dev)
 	priv->dev = dev;
 	strncpy(&priv->devname[0], "l2cache0", DEVNAME_LEN);
 	l2cachepriv = priv;
+	SPIN_INIT(&priv->devlock, priv->devname);
 
 	/* Initialize L2CACHE Hardware */
 	status = l2cache_init(priv);
