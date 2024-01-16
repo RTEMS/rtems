@@ -75,6 +75,9 @@ struct jffs2_sb_info {
 	uint32_t bad_size;
 	uint32_t sector_size;
 	uint32_t unchecked_size;
+#ifdef __rtems__
+	uint32_t obsolete_size;
+#endif
 
 	uint32_t nr_free_blocks;
 	uint32_t nr_erasing_blocks;

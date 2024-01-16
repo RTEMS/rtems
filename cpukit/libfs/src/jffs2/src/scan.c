@@ -264,14 +264,32 @@ int jffs2_scan_medium(struct jffs2_sb_info *c)
 	}
 #endif
 	if (c->nr_erasing_blocks) {
+#ifdef __rtems__
+		if (c->obsolete_size != c->dirty_size) {
+#endif
 		if (!c->used_size && !c->unchecked_size &&
 			((c->nr_free_blocks+empty_blocks+bad_blocks) != c->nr_blocks || bad_blocks == c->nr_blocks)) {
 			pr_notice("Cowardly refusing to erase blocks on filesystem with no valid JFFS2 nodes\n");
 			pr_notice("empty_blocks %d, bad_blocks %d, c->nr_blocks %d\n",
 				  empty_blocks, bad_blocks, c->nr_blocks);
+#ifdef __rtems__
+			pr_notice("nr_erasing_blocks %d, used 0x%x, dirty 0x%x, wasted 0x%x, free 0x%x, erasing 0x%x, bad 0x%x, obsolete 0x%x, unchecked 0x%x\n",
+				  c->nr_erasing_blocks,
+				  c->used_size,
+				  c->dirty_size,
+				  c->wasted_size,
+				  c->free_size,
+				  c->erasing_size,
+				  c->bad_size,
+				  c->obsolete_size,
+				  c->unchecked_size);
+#endif
 			ret = -EIO;
 			goto out;
 		}
+#ifdef __rtems__
+		}
+#endif
 		spin_lock(&c->erase_completion_lock);
 		jffs2_garbage_collect_trigger(c);
 		spin_unlock(&c->erase_completion_lock);
@@ -646,6 +664,9 @@ scan_more:
 				  sizeof(struct jffs2_unknown_node),
 				  jeb->offset, c->sector_size, ofs,
 				  sizeof(*node));
+#ifdef __rtems__
+			c->obsolete_size += (jeb->offset + c->sector_size - ofs);
+#endif
 			if ((err = jffs2_scan_dirty_space(c, jeb, (jeb->offset + c->sector_size)-ofs)))
 				return err;
 			break;
@@ -796,6 +817,9 @@ scan_more:
 			if ((err = jffs2_scan_dirty_space(c, jeb, PAD(je32_to_cpu(node->totlen)))))
 				return err;
 			ofs += PAD(je32_to_cpu(node->totlen));
+#ifdef __rtems__
+			c->obsolete_size += PAD(je32_to_cpu(node->totlen));
+#endif
 			continue;
 		}
 
