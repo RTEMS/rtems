@@ -139,6 +139,21 @@ volatile uint32_t    Clock_driver_ticks;
 #error "Clock_driver_support_shutdown_hardware() is no longer supported"
 #endif
 
+#if CLOCK_DRIVER_USE_FAST_IDLE
+static bool _Clock_Has_watchdogs(const Per_CPU_Control *cpu)
+{
+  size_t i;
+
+  for (i = 0; i < RTEMS_ARRAY_SIZE(cpu->Watchdog.Header); ++i) {
+    if (_Watchdog_Header_first(&cpu->Watchdog.Header[i]) != NULL) {
+      return true;
+    }
+  }
+
+  return false;
+}
+#endif
+
 /**
  *  @brief Clock_isr
  *
@@ -182,6 +197,7 @@ rtems_isr Clock_isr(
           cpu_self->thread_dispatch_disable_level == cpu_self->isr_nest_level
             && cpu_self->heir == cpu_self->executing
             && cpu_self->executing->is_idle
+            && _Clock_Has_watchdogs(cpu_self)
         ) {
           ISR_lock_Context lock_context;
 
