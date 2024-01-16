@@ -2107,8 +2107,8 @@ int l2cache_error_status(uint32_t * addr, uint32_t * status)
 	}
 
 	/* Get error register */
-	sts = priv->regs->error_status_control;
-	erraddr = priv->regs->error_addr;
+	sts = l2cache_reg_error();
+	erraddr = l2cache_reg_error_addr();
 
 	/* Check if an error occurred */
 	if (sts & L2C_ERROR_VALID){
