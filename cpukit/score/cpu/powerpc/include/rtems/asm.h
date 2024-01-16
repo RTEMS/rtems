@@ -75,23 +75,21 @@
 #define __PROC_LABEL_PREFIX__  __USER_LABEL_PREFIX__
 #endif
 
-#include <rtems/concat.h>
-
 /* Use the right prefix for global labels.  */
 
-#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
+#define SYM(x) RTEMS_XCONCAT (__USER_LABEL_PREFIX__, x)
 
 /* Use the right prefix for procedure labels.  */
 
-#define PROC(x) CONCAT1 (__PROC_LABEL_PREFIX__, x)
+#define PROC(x) RTEMS_XCONCAT (__PROC_LABEL_PREFIX__, x)
 
 /* Use the right prefix for registers.  */
 
-#define REG(x) CONCAT1 (__REGISTER_PREFIX__, x)
+#define REG(x) RTEMS_XCONCAT (__REGISTER_PREFIX__, x)
 
 /* Use the right prefix for floating point registers.  */
 
-#define FREG(x) CONCAT1 (__FLOAT_REGISTER_PREFIX__, x)
+#define FREG(x) RTEMS_XCONCAT (__FLOAT_REGISTER_PREFIX__, x)
 
 /*
  *  define macros for all of the registers on this CPU
