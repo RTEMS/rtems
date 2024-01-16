@@ -44,7 +44,6 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
-#include <bsp/console-termios.h>
 #include <bsp/fatal.h>
 #include <bsp/fdt.h>
 #include <bsp/intercom.h>
