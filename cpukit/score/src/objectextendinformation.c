@@ -59,7 +59,7 @@ Objects_Maximum _Objects_Extend_information(
   uint32_t          index_base;
   uint32_t          index_end;
   uint32_t          index;
-  Objects_Maximum   extend_count;
+  uint32_t          extend_count;
   Objects_Maximum   old_maximum;
   uint32_t          new_maximum;
   size_t            object_block_size;
