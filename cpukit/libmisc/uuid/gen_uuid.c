@@ -343,11 +343,17 @@ static int get_clock(uint32_t *clock_high, uint32_t *clock_low,
 		state_fd = open("/var/lib/libuuid/clock.txt",
 				O_RDWR|O_CREAT, 0660);
 		(void) umask(save_umask);
+#ifdef __rtems__
+		if (state_fd >= 0) {
+#endif
 		state_f = fdopen(state_fd, "r+");
 		if (!state_f) {
 			close(state_fd);
 			state_fd = -1;
 		}
+#ifdef __rtems__
+		}
+#endif
 	}
 	fl.l_type = F_WRLCK;
 	fl.l_whence = SEEK_SET;
