@@ -376,9 +376,9 @@ typedef struct {
   char *unit_name;
   volatile tsec_registers *reg_ptr;
   volatile tsec_registers *mdio_ptr;
-  rtems_irq_number irq_num_tx;
-  rtems_irq_number irq_num_rx;
-  rtems_irq_number irq_num_err;
+  rtems_vector_number irq_num_tx;
+  rtems_vector_number irq_num_rx;
+  rtems_vector_number irq_num_err;
   int phy_default;
 } tsec_config;
 

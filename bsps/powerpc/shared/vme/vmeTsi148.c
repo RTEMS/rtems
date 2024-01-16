@@ -53,6 +53,7 @@
 #include <stdlib.h>
 #include <rtems/bspIo.h>	/* printk */
 #include <rtems/error.h>	/* printk */
+#include <rtems/irq.h>
 #include <rtems/pci.h>
 #include <rtems/score/sysstate.h>
 #include <bsp.h>

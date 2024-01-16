@@ -37,8 +37,6 @@
 #define LIBBSP_POWERPC_QORIQ_IRQ_H
 
 #include <bsp.h>
-#include <rtems/irq.h>
-#include <rtems/irq-extension.h>
 #include <rtems/score/processormask.h>
 
 #ifdef __cplusplus
