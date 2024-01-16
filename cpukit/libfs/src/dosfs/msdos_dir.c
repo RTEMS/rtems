@@ -339,14 +339,14 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                     iop->offset = iop->offset + sizeof(struct dirent);
                     cmpltd += (sizeof(struct dirent));
                     count -= (sizeof(struct dirent));
+                }
 
-                    /* inode number extracted, close fat-file */
-                    rc = fat_file_close(&fs_info->fat, tmp_fat_fd);
-                    if (rc != RC_OK)
-                    {
-                        msdos_fs_unlock(fs_info);
-                        return rc;
-                    }
+                /* inode number extracted, close fat-file */
+                rc = fat_file_close(&fs_info->fat, tmp_fat_fd);
+                if (rc != RC_OK)
+                {
+                    msdos_fs_unlock(fs_info);
+                    return rc;
                 }
             }
 
