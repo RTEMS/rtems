@@ -216,17 +216,23 @@ bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 #endif
 }
 
+static rtems_interrupt_entry qoriq_ipi_entry;
+
 void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
 {
 #ifndef QORIQ_IS_HYPERVISOR_GUEST
   rtems_status_code sc;
 
-  sc = rtems_interrupt_handler_install(
-    QORIQ_IRQ_IPI_0 + IPI_INDEX,
-    "IPI",
-    RTEMS_INTERRUPT_UNIQUE,
+  rtems_interrupt_entry_initialize(
+    &qoriq_ipi_entry,
     bsp_inter_processor_interrupt,
-    NULL
+    NULL,
+    "IPI"
+  );
+  sc = rtems_interrupt_entry_install(
+    QORIQ_IRQ_IPI_0 + IPI_INDEX,
+    RTEMS_INTERRUPT_UNIQUE,
+    &qoriq_ipi_entry
   );
   if (sc != RTEMS_SUCCESSFUL) {
     bsp_fatal(QORIQ_FATAL_SMP_IPI_HANDLER_INSTALL);

@@ -99,6 +99,8 @@ static volatile qoriq_pic_global_timer *const qoriq_timecounter =
 
 #define CLOCK_INTERRUPT (QORIQ_IRQ_GT_BASE + QORIQ_CLOCK_TIMER)
 
+static rtems_interrupt_entry qoriq_clock_entry;
+
 static void qoriq_clock_handler_install(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -121,12 +123,16 @@ static void qoriq_clock_handler_install(void)
     rtems_fatal_error_occurred(0xdeadbeef);
   }
 
-  sc = rtems_interrupt_handler_install(
-    CLOCK_INTERRUPT,
-    "Clock",
-    RTEMS_INTERRUPT_UNIQUE,
+  rtems_interrupt_entry_initialize(
+    &qoriq_clock_entry,
     Clock_isr,
-    NULL
+    NULL,
+    "Clock"
+  );
+  sc = rtems_interrupt_entry_install(
+    CLOCK_INTERRUPT,
+    RTEMS_INTERRUPT_UNIQUE,
+    &qoriq_clock_entry
   );
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_fatal_error_occurred(0xdeadbeef);

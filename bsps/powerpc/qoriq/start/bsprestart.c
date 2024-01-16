@@ -117,6 +117,8 @@ static void raise_restart_interrupt(void)
   ppc_synchronize_instructions();
 }
 
+static rtems_interrupt_entry restart_entry;
+
 void bsp_restart(void *addr)
 {
   rtems_status_code sc;
@@ -130,12 +132,16 @@ void bsp_restart(void *addr)
     rtems_cache_flush_multiple_data_lines(spin_table, sizeof(*spin_table));
   }
 
-  sc = rtems_interrupt_handler_install(
-    QORIQ_IRQ_IPI_0 + RESTART_IPI_INDEX,
-    "Restart",
-    RTEMS_INTERRUPT_UNIQUE,
+  rtems_interrupt_entry_initialize(
+    &restart_entry,
     restart_interrupt,
-    addr
+    addr,
+    "Restart"
+  );
+  sc = rtems_interrupt_entry_install(
+    QORIQ_IRQ_IPI_0 + RESTART_IPI_INDEX,
+    RTEMS_INTERRUPT_UNIQUE,
+    &restart_entry
   );
   if (sc != RTEMS_SUCCESSFUL) {
     bsp_fatal(QORIQ_FATAL_RESTART_INSTALL_INTERRUPT);

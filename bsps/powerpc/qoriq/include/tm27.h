@@ -40,8 +40,6 @@
 #ifndef TMTESTS_TM27_H
 #define TMTESTS_TM27_H
 
-#include <assert.h>
-
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp/irq.h>
@@ -55,33 +53,38 @@
 
 static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
-  rtems_status_code sc;
+  static rtems_interrupt_entry entry_low;
+  static rtems_interrupt_entry entry_high;
   rtems_vector_number low = QORIQ_IRQ_IPI_0 + IPI_INDEX_LOW;
   rtems_vector_number high = QORIQ_IRQ_IPI_0 + IPI_INDEX_HIGH;
 
-  sc = rtems_interrupt_handler_install(
+  rtems_interrupt_entry_initialize(
+    &entry_low,
+    handler,
+    NULL,
+    "tm17 low"
+  );
+  (void) rtems_interrupt_entry_install(
     low,
-    "tm17 low",
     RTEMS_INTERRUPT_UNIQUE,
-    handler,
-    NULL
+    &entry_low
   );
-  assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = qoriq_pic_set_priority(low, 1, NULL);
-  assert(sc == RTEMS_SUCCESSFUL);
+  (void) qoriq_pic_set_priority(low, 1, NULL);
 
-  sc = rtems_interrupt_handler_install(
+  rtems_interrupt_entry_initialize(
+    &entry_high,
+    handler,
+    NULL,
+    "tm17 high"
+  );
+  (void) rtems_interrupt_entry_install(
     high,
-    "tm17 high",
     RTEMS_INTERRUPT_UNIQUE,
-    handler,
-    NULL
+    &entry_high
   );
-  assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = qoriq_pic_set_priority(high, 2, NULL);
-  assert(sc == RTEMS_SUCCESSFUL);
+  (void) qoriq_pic_set_priority(high, 2, NULL);
 }
 
 static inline void qoriq_tm27_cause(uint32_t ipi_index)
