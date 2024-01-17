@@ -356,7 +356,7 @@ fat_set_fat_cluster(
                     if (rc != RC_OK)
                         return rc;
 
-                     *sec_buf &= 0x00;
+                     *sec_buf = 0x00;
 
                      *sec_buf |= (uint8_t)((fat16_clv & 0xFF00)>>8);
 
@@ -364,7 +364,7 @@ fat_set_fat_cluster(
                 }
                 else
                 {
-                    *(sec_buf + ofs + 1) &= 0x00;
+                    *(sec_buf + ofs + 1) = 0x00;
 
                     *(sec_buf + ofs + 1) |= (uint8_t  )((fat16_clv & 0xFF00)>>8);
                 }
@@ -372,7 +372,7 @@ fat_set_fat_cluster(
             else
             {
                 fat16_clv = ((uint16_t  )in_val) & FAT_FAT12_MASK;
-                *(sec_buf + ofs) &= 0x00;
+                *(sec_buf + ofs) = 0x00;
 
                 *(sec_buf + ofs) |= (uint8_t)(fat16_clv & 0x00FF);
 
