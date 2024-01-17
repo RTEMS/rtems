@@ -4,7 +4,7 @@ bsp: imxrt1166-cm7-saltshaker
 build-type: bsp
 cflags: []
 copyrights:
-- Copyright (C) 2023 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
 cppflags: []
 enabled-by: true
 family: imxrt
