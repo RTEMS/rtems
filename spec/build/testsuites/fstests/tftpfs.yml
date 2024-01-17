@@ -17,9 +17,9 @@ source:
 - testsuites/fstests/tftpfs/init.c
 - testsuites/fstests/tftpfs/tftpfs_udp_network_fake.c
 - testsuites/fstests/tftpfs/tftpfs_interactions.c
-stlib:
-- tftpfs
+stlib: []
 target: testsuites/fstests/tftpfs.exe
 type: build
 use-after: []
-use-before: []
+use-before:
+- tftpfs
