@@ -28,7 +28,7 @@ links: []
 prepare-build: null
 prepare-configure: null
 stlib: []
-target: testsuites/libtests/psxftw01.exe
+target: testsuites/psxtests/psxftw01.exe
 type: build
 use-after:
 - z
