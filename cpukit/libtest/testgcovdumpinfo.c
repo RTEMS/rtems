@@ -75,10 +75,8 @@ void rtems_test_gcov_dump_info( void )
     _IO_Printf( rtems_put_char, NULL, "\n*** BEGIN OF GCOV INFO BASE64 ***\n" );
     _Hash_Initialize( &gcov_hash );
     _Gcov_Dump_info_base64( gcov_put_char, NULL );
-    _IO_Printf( rtems_put_char, NULL, "\n*** END OF GCOV INFO BASE64 ***\n" );
-    byte = '\n';
-    _Hash_Add_data( &gcov_hash, &byte, sizeof( byte ) );
     _Hash_Finalize( &gcov_hash, &result );
+    _IO_Printf( rtems_put_char, NULL, "*** END OF GCOV INFO BASE64 ***\n" );
     _IO_Printf(
       rtems_put_char,
       NULL,

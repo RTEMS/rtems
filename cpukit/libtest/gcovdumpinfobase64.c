@@ -102,5 +102,9 @@ void _Gcov_Dump_info_base64( IO_Put_char put_char, void *arg )
   ctx.put_char = put_char;
   ctx.arg = arg;
   _Gcov_Dump_info( _Gcov_Base64_encode, &ctx );
-  _Base64_Encode( _Gcov_Base64_put_char, &ctx, ctx.buf, ctx.index, NULL, INT_MAX );
+
+  if ( ctx.index > 0 ) {
+    _Base64_Encode( put_char, arg, ctx.buf, ctx.index, NULL, INT_MAX );
+    ( *put_char )( '\n', arg );
+  }
 }
