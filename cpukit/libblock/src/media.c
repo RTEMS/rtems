@@ -519,7 +519,7 @@ static rtems_status_code mount_worker(
       &mount_options
     );
     if (rv != 0) {
-      rmdir(mount_path);
+      (void) rmdir(mount_path);
       free(mount_path);
       (*mount_options.converter->handler->destroy)(mount_options.converter);
 
