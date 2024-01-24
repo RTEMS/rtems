@@ -2901,7 +2901,7 @@ rtems_bdbuf_set_block_size (rtems_disk_device *dd,
    * device later.
    */
   if (sync)
-    rtems_bdbuf_syncdev (dd);
+    (void) rtems_bdbuf_syncdev (dd);
 
   rtems_bdbuf_lock_cache ();
 

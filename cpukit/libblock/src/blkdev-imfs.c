@@ -269,7 +269,7 @@ static void rtems_blkdev_imfs_destroy(IMFS_jnode_t *node)
   rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_node(node);
   rtems_disk_device *dd = &ctx->dd;
 
-  rtems_bdbuf_syncdev(dd);
+  (void) rtems_bdbuf_syncdev(dd);
   rtems_bdbuf_purge_dev(dd);
 
   if (ctx->fd >= 0) {
