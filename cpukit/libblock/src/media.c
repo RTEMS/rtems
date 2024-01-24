@@ -194,7 +194,7 @@ static void error(
   const char *dest
 )
 {
-  notify(RTEMS_MEDIA_EVENT_ERROR, state, src, dest);
+  (void) notify(RTEMS_MEDIA_EVENT_ERROR, state, src, dest);
 }
 
 static media_item *get_media_item(
