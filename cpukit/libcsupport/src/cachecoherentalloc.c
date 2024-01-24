@@ -97,7 +97,7 @@ void rtems_cache_coherent_free( void *ptr )
   _RTEMS_Unlock_allocator();
 }
 
-static void add_area(
+static rtems_status_code add_area(
   void *area_begin,
   uintptr_t area_size
 )
@@ -105,31 +105,37 @@ static void add_area(
   Heap_Control *heap = cache_coherent_heap;
 
   if ( heap == NULL ) {
-    bool ok;
-
     heap = &cache_coherent_heap_instance;
 
-    ok = _Heap_Initialize( heap, area_begin, area_size, 0 );
-    if ( ok ) {
-      cache_coherent_heap = heap;
+    if ( _Heap_Initialize( heap, area_begin, area_size, 0 ) == 0 ) {
+      return RTEMS_UNSATISFIED;
     }
+    cache_coherent_heap = heap;
   } else {
-    _Heap_Extend( heap, area_begin, area_size, 0 );
+    if (_Heap_Extend( heap, area_begin, area_size, 0 ) == 0) {
+      return RTEMS_UNSATISFIED;
+    }
   }
+  return RTEMS_SUCCESSFUL;
 }
 
-void rtems_cache_coherent_add_area(
+rtems_status_code rtems_cache_coherent_add_area(
   void *area_begin,
   uintptr_t area_size
 )
 {
-  if ( _System_state_Is_up( _System_state_Get()) ) {
+  rtems_status_code sc;
+  bool needs_locking = _System_state_Is_up( _System_state_Get());
+
+  if ( needs_locking ) {
     _RTEMS_Lock_allocator();
-
-    add_area( area_begin, area_size );
-
-    _RTEMS_Unlock_allocator();
-  } else {
-    add_area( area_begin, area_size );
   }
+
+  sc = add_area( area_begin, area_size );
+
+  if ( needs_locking ) {
+    _RTEMS_Unlock_allocator();
+  }
+
+  return sc;
 }

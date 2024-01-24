@@ -59,6 +59,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <rtems/rtems/status.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -89,6 +90,10 @@ extern "C" {
  *
  * @param size is the size in bytes of the cache coherent memory area to add.
  *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_UNSATISFIED The requested operation was not successful.
+ *
  * @par Constraints
  * @parblock
  * The following constraints apply to this directive:
@@ -102,7 +107,7 @@ extern "C" {
  *   cause the calling task to be preempted.
  * @endparblock
  */
-void rtems_cache_coherent_add_area( void *begin, uintptr_t size );
+rtems_status_code rtems_cache_coherent_add_area( void *begin, uintptr_t size );
 
 /* Generated from spec:/rtems/cache/if/coherent-allocate */
 
