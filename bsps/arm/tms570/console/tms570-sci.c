@@ -49,8 +49,6 @@
 #include <bsp/fatal.h>
 #include <bsp/irq.h>
 
-#define TMS570_SCI_BUFFER_SIZE 1
-
 /**
  * @brief Table including all serial drivers
  *
@@ -169,33 +167,6 @@ rtems_device_driver console_initialize(
     }
   }
   return RTEMS_SUCCESSFUL;
-}
-
-/**
- * @brief Reads chars from HW
- *
- * Reads chars from HW peripheral specified in driver context.
- * TMS570 does not have HW buffer for serial line so this function can
- * return only 0 or 1 char
- *
- * @param[in] ctx context of the driver
- * @param[out] buf read data buffer
- * @param[in] N size of buffer
- * @retval x Number of read chars from peripherals
- */
-static int tms570_sci_read_received_chars(
-  tms570_sci_context * ctx,
-  char * buf,
-  int N)
-{
-  if ( N < 1 ) {
-    return 0;
-  }
-  if ( ctx->regs->RD != 0 ) {
-     buf[0] = ctx->regs->RD;
-    return 1;
-  }
-  return 0;
 }
 
 /**
@@ -351,23 +322,25 @@ static void tms570_sci_interrupt_handler(void * arg)
 {
   rtems_termios_tty *tty = arg;
   tms570_sci_context *ctx = rtems_termios_get_device_context(tty);
-  char buf[TMS570_SCI_BUFFER_SIZE];
-  size_t n;
 
   /*
    * Check if we have received something.
    */
    if ( (ctx->regs->FLR & TMS570_SCI_FLR_RXRDY ) == TMS570_SCI_FLR_RXRDY ) {
-      n = tms570_sci_read_received_chars(ctx, buf, TMS570_SCI_BUFFER_SIZE);
-      if ( n > 0 ) {
-        /* Hand the data over to the Termios infrastructure */
-        rtems_termios_enqueue_raw_characters(tty, buf, n);
-      }
+      char buf[1];
+
+      /* Read the received byte */
+      buf[0] = ctx->regs->RD & 0x000000FF;
+
+      /* Hand the data over to the Termios infrastructure */
+      rtems_termios_enqueue_raw_characters(tty, buf, 1);
     }
   /*
    * Check if we have something transmitted.
    */
   if ( (ctx->regs->FLR & TMS570_SCI_FLR_TXRDY ) == TMS570_SCI_FLR_TXRDY ) {
+    size_t n;
+
     n = tms570_sci_transmitted_chars(ctx);
     if ( n > 0 ) {
       /*
