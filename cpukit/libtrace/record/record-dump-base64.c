@@ -30,10 +30,11 @@
 #endif
 
 #include <rtems/recorddump.h>
-#include <rtems/dev/io.h>
 
 #include <limits.h>
 #include <string.h>
+
+#include <rtems/base64.h>
 
 typedef struct {
   IO_Put_char  put_char;
@@ -76,7 +77,7 @@ static void chunk( void *arg, const void *data, size_t length )
 
     if ( index == RTEMS_ARRAY_SIZE( ctx->buf ) - 1 ) {
       index = 0;
-      _IO_Base64(
+      _Base64_Encode(
         put_char,
         ctx,
         ctx->buf,
@@ -94,7 +95,7 @@ static void chunk( void *arg, const void *data, size_t length )
 
 static void flush( dump_context *ctx )
 {
-  _IO_Base64( put_char, ctx, ctx->buf, ctx->index, NULL, INT_MAX );
+  _Base64_Encode( put_char, ctx, ctx->buf, ctx->index, NULL, INT_MAX );
 }
 
 void rtems_record_dump_base64( IO_Put_char put_char, void *arg )

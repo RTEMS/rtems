@@ -35,7 +35,6 @@
  */
 
 #include <rtems/test.h>
-#include <rtems/dev/io.h>
 
 #include <limits.h>
 
@@ -44,6 +43,8 @@
 #else
 #include <openssl/sha.h>
 #endif
+
+#include <rtems/base64.h>
 
 typedef struct {
 	SHA256_CTX sha256;
@@ -94,7 +95,7 @@ T_report_hash_sha256_finalize(void)
 	ctx = &T_report_hash_sha256_instance;
 	SHA256_Final(hash, &ctx->sha256);
 	T_printf("Y:ReportHash:SHA256:");
-	(void)_IO_Base64url(ctx->putchar, ctx->putchar_arg, hash,
+	(void)_Base64url_Encode(ctx->putchar, ctx->putchar_arg, hash,
 	    sizeof(hash), NULL, INT_MAX);
 	T_printf("\n");
 }

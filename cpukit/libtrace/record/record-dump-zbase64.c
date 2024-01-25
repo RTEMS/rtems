@@ -30,10 +30,11 @@
 #endif
 
 #include <rtems/recorddump.h>
-#include <rtems/dev/io.h>
 
 #include <limits.h>
 #include <string.h>
+
+#include <rtems/base64.h>
 
 static void *dump_zalloc( void *opaque, unsigned items, unsigned size )
 {
@@ -96,7 +97,7 @@ static void chunk( void *arg, const void *data, size_t length )
       ctx->stream.next_out = &ctx->buf[ 0 ];
       ctx->stream.avail_out = sizeof( ctx->buf );
 
-      _IO_Base64( put_char, ctx, ctx->buf, sizeof( ctx->buf ), NULL, INT_MAX );
+      _Base64_Encode( put_char, ctx, ctx->buf, sizeof( ctx->buf ), NULL, INT_MAX );
     }
   }
 }
@@ -115,11 +116,11 @@ static void flush( rtems_record_dump_base64_zlib_context *ctx )
       ctx->stream.next_out = &ctx->buf[ 0 ];
       ctx->stream.avail_out = sizeof( ctx->buf );
 
-      _IO_Base64( put_char, ctx, ctx->buf, sizeof( ctx->buf ), NULL, INT_MAX );
+      _Base64_Encode( put_char, ctx, ctx->buf, sizeof( ctx->buf ), NULL, INT_MAX );
     }
   }
 
-  _IO_Base64(
+  _Base64_Encode(
     put_char,
     ctx,
     ctx->buf,

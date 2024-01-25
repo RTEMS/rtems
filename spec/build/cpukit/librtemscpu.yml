@@ -79,6 +79,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}/rtems
   source:
   - cpukit/include/rtems/assoc.h
+  - cpukit/include/rtems/base64.h
   - cpukit/include/rtems/bdbuf.h
   - cpukit/include/rtems/bdpart.h
   - cpukit/include/rtems/blkdev.h
@@ -527,6 +528,7 @@ source:
 - cpukit/compression/xz/xz_crc32.c
 - cpukit/compression/xz/xz_dec_lzma2.c
 - cpukit/compression/xz/xz_dec_stream.c
+- cpukit/base64/base64-encode.c
 - cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/eeprom.c
 - cpukit/dev/i2c/fpga-i2c-slave.c
@@ -539,7 +541,6 @@ source:
 - cpukit/dev/i2c/ti-lm25066a.c
 - cpukit/dev/i2c/ti-tmp112.c
 - cpukit/dev/i2c/xilinx-axi-i2c.c
-- cpukit/dev/iobase64.c
 - cpukit/dev/ioprintf.c
 - cpukit/dev/iorelax.c
 - cpukit/dev/iovprintf.c

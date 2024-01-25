@@ -3,14 +3,14 @@
 /**
  * @file
  *
- * @ingroup RTEMSDeviceIO
+ * @ingroup RTEMSImplBase64
  *
  * @brief This source file contains the implementation of
- *   _IO_Base64() and _IO_Base64url().
+ *   _Base64_Encode() and _Base64url_Encode().
  */
 
 /*
- * Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2020, 2024 embedded brains GmbH & Co. KG
  * Copyright (C) 2004, 2005, 2007, 2009  Internet Systems Consortium, Inc. ("ISC")
  * Copyright (C) 1998-2001, 2003  Internet Software Consortium.
  *
@@ -27,16 +27,16 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <rtems/dev/io.h>
+#include <rtems/base64.h>
 
 static void
-_IO_Put(int c, void *arg, IO_Put_char put_char)
+_Base64_Put(int c, void *arg, IO_Put_char put_char)
 {
 	(*put_char)(c, arg);
 }
 
 static int
-_IO_Base64_with_encoding(IO_Put_char put_char, void *arg, const void *src,
+_Base64_Do_encode(IO_Put_char put_char, void *arg, const void *src,
     size_t srclen, const char *wordbreak, int wordlen, const char *encoding)
 {
 	unsigned int loops = 0;
@@ -48,12 +48,12 @@ _IO_Base64_with_encoding(IO_Put_char put_char, void *arg, const void *src,
 	}
 
 	while (srclen > 2) {
-		_IO_Put(encoding[(in[0]>>2)&0x3f], arg, put_char);
-		_IO_Put(encoding[((in[0]<<4)&0x30)|
+		_Base64_Put(encoding[(in[0]>>2)&0x3f], arg, put_char);
+		_Base64_Put(encoding[((in[0]<<4)&0x30)|
 				((in[1]>>4)&0x0f)], arg, put_char);
-		_IO_Put(encoding[((in[1]<<2)&0x3c)|
+		_Base64_Put(encoding[((in[1]<<2)&0x3c)|
 				((in[2]>>6)&0x03)], arg, put_char);
-		_IO_Put(encoding[in[2]&0x3f], arg, put_char);
+		_Base64_Put(encoding[in[2]&0x3f], arg, put_char);
 		in += 3;
 		srclen -= 3;
 		out += 4;
@@ -65,24 +65,24 @@ _IO_Base64_with_encoding(IO_Put_char put_char, void *arg, const void *src,
 			const char *w = wordbreak;
 			loops = 0;
 			while (*w != '\0') {
-				_IO_Put(*w, arg, put_char);
+				_Base64_Put(*w, arg, put_char);
 				++w;
 				++out;
 			}
 		}
 	}
 	if (srclen == 2) {
-		_IO_Put(encoding[(in[0]>>2)&0x3f], arg, put_char);
-		_IO_Put(encoding[((in[0]<<4)&0x30)|
+		_Base64_Put(encoding[(in[0]>>2)&0x3f], arg, put_char);
+		_Base64_Put(encoding[((in[0]<<4)&0x30)|
 				((in[1]>>4)&0x0f)], arg, put_char);
-		_IO_Put(encoding[((in[1]<<2)&0x3c)], arg, put_char);
-		_IO_Put('=', arg, put_char);
+		_Base64_Put(encoding[((in[1]<<2)&0x3c)], arg, put_char);
+		_Base64_Put('=', arg, put_char);
 		out += 4;
 	} else if (srclen == 1) {
-		_IO_Put(encoding[(in[0]>>2)&0x3f], arg, put_char);
-		_IO_Put(encoding[((in[0]<<4)&0x30)], arg, put_char);
-		_IO_Put('=', arg, put_char);
-		_IO_Put('=', arg, put_char);
+		_Base64_Put(encoding[(in[0]>>2)&0x3f], arg, put_char);
+		_Base64_Put(encoding[((in[0]<<4)&0x30)], arg, put_char);
+		_Base64_Put('=', arg, put_char);
+		_Base64_Put('=', arg, put_char);
 		out += 4;
 	}
 	return out;
@@ -92,10 +92,10 @@ static const char base64[] =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
 int
-_IO_Base64(IO_Put_char put_char, void *arg, const void *src, size_t srclen,
+_Base64_Encode(IO_Put_char put_char, void *arg, const void *src, size_t srclen,
     const char *wordbreak, int wordlen)
 {
-	return _IO_Base64_with_encoding(put_char, arg, src, srclen, wordbreak,
+	return _Base64_Do_encode(put_char, arg, src, srclen, wordbreak,
 	    wordlen, base64);
 }
 
@@ -103,9 +103,9 @@ static const char base64url[] =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
 
 int
-_IO_Base64url(IO_Put_char put_char, void *arg, const void *src, size_t srclen,
-    const char *wordbreak, int wordlen)
+_Base64url_Encode(IO_Put_char put_char, void *arg, const void *src,
+    size_t srclen, const char *wordbreak, int wordlen)
 {
-	return _IO_Base64_with_encoding(put_char, arg, src, srclen, wordbreak,
+	return _Base64_Do_encode(put_char, arg, src, srclen, wordbreak,
 	    wordlen, base64url);
 }

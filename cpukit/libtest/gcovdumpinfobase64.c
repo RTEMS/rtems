@@ -43,6 +43,8 @@
 #include <limits.h>
 #include <string.h>
 
+#include <rtems/base64.h>
+
 typedef struct {
   IO_Put_char put_char;
   void       *arg;
@@ -77,7 +79,7 @@ static void _Gcov_Base64_encode( int c, void *arg )
 
   if ( index == RTEMS_ARRAY_SIZE( ctx->buf ) - 1 ) {
     index = 0;
-    _IO_Base64(
+    _Base64_Encode(
       _Gcov_Base64_put_char,
       ctx,
       ctx->buf,
@@ -100,5 +102,5 @@ void _Gcov_Dump_info_base64( IO_Put_char put_char, void *arg )
   ctx.put_char = put_char;
   ctx.arg = arg;
   _Gcov_Dump_info( _Gcov_Base64_encode, &ctx );
-  _IO_Base64( _Gcov_Base64_put_char, &ctx, ctx.buf, ctx.index, NULL, INT_MAX );
+  _Base64_Encode( _Gcov_Base64_put_char, &ctx, ctx.buf, ctx.index, NULL, INT_MAX );
 }

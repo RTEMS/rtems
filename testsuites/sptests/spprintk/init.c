@@ -32,6 +32,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/base64.h>
 #include <rtems/dev/io.h>
 
 /*
@@ -212,52 +213,52 @@ static void test_io_base64( test_context *ctx )
   int n;
 
   clear( ctx );
-  n = _IO_Base64( put_char, ctx, buf, 9, "\n", 0 );
+  n = _Base64_Encode( put_char, ctx, buf, 9, "\n", 0 );
   rtems_test_assert( n == 14 );
   rtems_test_assert( strcmp( ctx->buf, "YWJj\nZGVm\nZ2hp" ) == 0 );
 
   clear( ctx );
-  n = _IO_Base64( put_char, ctx, buf, 8, "\n", 4 );
+  n = _Base64_Encode( put_char, ctx, buf, 8, "\n", 4 );
   rtems_test_assert( n == 14 );
   rtems_test_assert( strcmp( ctx->buf, "YWJj\nZGVm\nZ2g=" ) == 0 );
 
   clear( ctx );
-  n = _IO_Base64( put_char, ctx, buf, 7, "\n", 4 );
+  n = _Base64_Encode( put_char, ctx, buf, 7, "\n", 4 );
   rtems_test_assert( n == 14 );
   rtems_test_assert( strcmp( ctx->buf, "YWJj\nZGVm\nZw==" ) == 0 );
 
   clear( ctx );
-  n = _IO_Base64( put_char, ctx, buf, 6, "\n", 4 );
+  n = _Base64_Encode( put_char, ctx, buf, 6, "\n", 4 );
   rtems_test_assert( n == 9 );
   rtems_test_assert( strcmp( ctx->buf, "YWJj\nZGVm" ) == 0 );
 
   clear( ctx );
-  n = _IO_Base64( put_char, ctx, buf, 5, "\n", 4 );
+  n = _Base64_Encode( put_char, ctx, buf, 5, "\n", 4 );
   rtems_test_assert( n == 9 );
   rtems_test_assert( strcmp( ctx->buf, "YWJj\nZGU=" ) == 0 );
 
   clear( ctx );
-  n = _IO_Base64( put_char, ctx, buf, 4, "\n", 4 );
+  n = _Base64_Encode( put_char, ctx, buf, 4, "\n", 4 );
   rtems_test_assert( n == 9 );
   rtems_test_assert( strcmp( ctx->buf, "YWJj\nZA==" ) == 0 );
 
   clear( ctx );
-  n = _IO_Base64( put_char, ctx, buf, 3, "\n", 4 );
+  n = _Base64_Encode( put_char, ctx, buf, 3, "\n", 4 );
   rtems_test_assert( n == 4 );
   rtems_test_assert( strcmp( ctx->buf, "YWJj" ) == 0 );
 
   clear( ctx );
-  n = _IO_Base64( put_char, ctx, buf, 2, "\n", 4 );
+  n = _Base64_Encode( put_char, ctx, buf, 2, "\n", 4 );
   rtems_test_assert( n == 4 );
   rtems_test_assert( strcmp( ctx->buf, "YWI=" ) == 0 );
 
   clear( ctx );
-  n = _IO_Base64( put_char, ctx, buf, 1, "\n", 4 );
+  n = _Base64_Encode( put_char, ctx, buf, 1, "\n", 4 );
   rtems_test_assert( n == 4 );
   rtems_test_assert( strcmp( ctx->buf, "YQ==" ) == 0 );
 
   clear( ctx );
-  n = _IO_Base64( put_char, ctx, buf, 0, "\n", 4 );
+  n = _Base64_Encode( put_char, ctx, buf, 0, "\n", 4 );
   rtems_test_assert( n == 0 );
 }
 
@@ -267,7 +268,7 @@ static void test_io_base64url( test_context *ctx )
   int n;
 
   clear( ctx );
-  n = _IO_Base64url( put_char, ctx, buf, sizeof( buf ), "\n", 0 );
+  n = _Base64url_Encode( put_char, ctx, buf, sizeof( buf ), "\n", 0 );
   rtems_test_assert( n == 9 );
   rtems_test_assert( strcmp( ctx->buf, "AAA-\nAAA_" ) == 0 );
 }

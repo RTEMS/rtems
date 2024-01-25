@@ -39,7 +39,7 @@
 
 #include <rtems/score/hash.h>
 #include <rtems/score/assert.h>
-#include <rtems/dev/io.h>
+#include <rtems/base64.h>
 
 #include <limits.h>
 
@@ -64,7 +64,7 @@ void _Hash_Finalize( Hash_Context *context, Hash_Control *hash )
   context->hash = hash;
   context->index = 0;
   hash->chars[ sizeof( *hash ) - 1 ] = '\0';
-  n = _IO_Base64url(
+  n = _Base64url_Encode(
     _Hash_Put_char,
     context,
     digest,
