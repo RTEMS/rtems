@@ -151,12 +151,6 @@ void zynq_uart_initialize(volatile zynq_uart *regs)
     | ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_NONE)
     | ZYNQ_UART_MODE_CHRL(ZYNQ_UART_MODE_CHRL_8)
     | mode_clks;
-
-  while (zynq_uart_read_char_polled(regs) >= 0) {
-    /* Drop */
-  }
-
-  zynq_uart_reset_tx_flush(regs);
 }
 
 int zynq_uart_read_char_polled(volatile zynq_uart *regs)
