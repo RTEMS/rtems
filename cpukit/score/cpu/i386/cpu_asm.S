@@ -67,11 +67,13 @@
 
         .p2align  1
         PUBLIC (_CPU_Context_switch)
+        PUBLIC (_CPU_Context_switch_no_return)
 
 .set RUNCONTEXT_ARG,   4                   /* save context argument */
 .set HEIRCONTEXT_ARG,  8                   /* restore context argument */
 
 SYM (_CPU_Context_switch):
+SYM (_CPU_Context_switch_no_return):
         movl      RUNCONTEXT_ARG(esp),eax  /* eax = running threads context */
         GET_SELF_CPU_CONTROL edx           /* edx has address for per_CPU information */
         movl      PER_CPU_ISR_DISPATCH_DISABLE(edx),ecx

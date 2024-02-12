@@ -33,6 +33,10 @@ enabled-by:
 - arm/xilinx_zynq_picozed
 - arm/xilinx_zynq_pynq
 - arm/xilinx_zynq_microzed
+- i386/pc386
+- i386/pc486
+- i386/pc586
+- i386/pc686
 - powerpc/qoriq_e500
 - powerpc/qoriq_e6500_32
 - powerpc/qoriq_e6500_64
