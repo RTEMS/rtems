@@ -8,8 +8,6 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- enabled-by: arm/xilinx_zynqmp_ultra96
-  value: 0x80000000
 - enabled-by: true
   value: 0x10000000
 description: |
