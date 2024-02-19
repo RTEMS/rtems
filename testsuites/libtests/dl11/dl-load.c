@@ -27,6 +27,8 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include "tmacros.h"
+#include <pthread.h>
 
 #include <dlfcn.h>
 
@@ -79,13 +81,60 @@ typedef int* (*ptr_call_t)(void);
 void* get_errno_ptr(void);
 int get_errno(void);
 
+int_call_t int_call;
+ptr_call_t ptr_call;
+static int perform_test(void)
+{
+  int    int_call_ret;
+  int*   ptr_call_ret;
+  ptr_call_ret = ptr_call ();
+  if (ptr_call_ret != get_errno_ptr())
+  {
+    printf("dlsym ptr_call failed: ret value bad\n");
+    return 1;
+  }
+
+  errno = 12345;
+  int_call_ret = int_call ();
+  if (int_call_ret != get_errno())
+  {
+    printf("dlsym int_call failed: ret value bad\n");
+    return 1;
+  }
+  errno = 0;
+
+  return 0;
+}
+
+static void *secondary_thread(void *arg)
+{
+  printf("Running test on secondary thread\n");
+  if (perform_test()) {
+    printf("Test failed on secondary task\n");
+    return (void *) 1;
+  }
+
+  return NULL;
+}
+
+static void start_secondary(void)
+{
+  /* Run the test on a secondary thread */
+  pthread_t threadId;
+  int status;
+  void *ret;
+  status = pthread_create( &threadId, NULL, secondary_thread, NULL );
+  rtems_test_assert( !status );
+
+  /* Wait on thread to exit */
+  status = pthread_join(threadId, &ret);
+  rtems_test_assert( !status );
+  rtems_test_assert( ret == NULL );
+}
+
 int dl_load_test(void)
 {
   void*  handle;
-  int_call_t int_call;
-  ptr_call_t ptr_call;
-  int    int_call_ret;
-  int*   ptr_call_ret;
   int    unresolved;
   char*  message = "loaded";
 
@@ -125,20 +174,13 @@ int dl_load_test(void)
     return 1;
   }
 
-  ptr_call_ret = ptr_call ();
-  if (ptr_call_ret != get_errno_ptr())
-  {
-    printf("dlsym ptr_call failed: ret value bad\n");
+  /* Run the test on the init thread */
+  printf("Running test on init task\n");
+  if (perform_test()) {
     return 1;
   }
 
-  errno = 12345;
-  int_call_ret = int_call ();
-  if (int_call_ret != get_errno())
-  {
-    printf("dlsym int_call failed: ret value bad\n");
-    return 1;
-  }
+  start_secondary();
 
   if (dlclose (handle) < 0)
   {
