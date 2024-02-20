@@ -13,7 +13,7 @@ have to set the following options:
   #define CONFIGURE_BSP_PREREQUISITE_DRIVERS I2C_DRIVER_TABLE_ENTRY
 
 Additional there has to be one free file descriptor to access the i2c. Set the
-CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS accordingly.
+CONFIGURE_MAXIMUM_FILE_DESCRIPTORS accordingly.
 
 Network
 -------
