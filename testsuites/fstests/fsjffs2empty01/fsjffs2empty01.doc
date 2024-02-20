@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: fsjffs2empty01
+
+directives:
+
+  - JFFS2 implementation
+
+concepts:
+
+  - Ensure that the JFFS2 library can remount a filesystem where every block has been written to and all files have been deleted.
