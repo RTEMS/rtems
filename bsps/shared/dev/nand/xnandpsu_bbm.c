@@ -653,7 +653,7 @@ static s32 XNandPsu_WriteBbt(XNandPsu *InstancePtr, XNandPsu_BbtDesc *Desc,
 		for(Index = 0U; Index < Desc->MaxBlocks; Index++) {
 			Block  = (EndBlock - Index);
 #ifdef __rtems__
-			if (XNandPsu_IsBlockBad(InstancePtr, Block) == XST_FAILURE) {
+			if (XNandPsu_IsBlockBad(InstancePtr, Block) != XST_FAILURE) {
 				continue;
 			}
 #else
