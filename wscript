@@ -1026,8 +1026,14 @@ class OptionItem(Item):
         return value
 
     def _script(self, conf, cic, value, arg):
-        exec(arg)
-        return value
+        local_variables = {
+            "self": self,
+            "conf": conf,
+            "cic": cic,
+            "value": value
+        }
+        exec(arg, None, local_variables)
+        return local_variables["value"]
 
     def _test_state_benchmark(self, conf, name):
         self._do_append_test_cppflags(conf, name, "-DTEST_STATE_BENCHMARK=1")
