@@ -56,6 +56,7 @@
 
 #include <bsp/vmeUniverse.h>
 #include <bsp/vmeUniverseDMA.h>
+#include <rtems/irq.h>
 
 #define UNIV_NUM_MPORTS		8 /* number of master ports */
 #define UNIV_NUM_SPORTS		8 /* number of slave ports */
