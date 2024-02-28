@@ -68,7 +68,6 @@ void rtems_test_gcov_dump_info( void )
 
   if ( !gcov_dump_done ) {
     Hash_Control result;
-    uint8_t      byte;
 
     gcov_dump_done = true;
 
