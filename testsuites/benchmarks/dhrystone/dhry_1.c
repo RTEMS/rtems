@@ -133,6 +133,7 @@ execution_start:
 
 #ifdef __rtems__
   /* avoid used uninitialized warning */
+  Int_1_Loc = 0;
   Int_2_Loc = 0;
 #endif
 
