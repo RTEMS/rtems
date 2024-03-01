@@ -217,6 +217,12 @@ extern "C" {
 #define XNANDPSU_NVDDR_CLK_5		((u16)100U * (u16)1000U * (u16)1000U)
 
 #define XNANDPSU_MAX_TIMING_MODE	5
+
+#ifdef __rtems__
+#define XNANDPSU_PAGE_CACHE_UNAVAILABLE	-2
+#define XNANDPSU_PAGE_CACHE_NONE	-1
+#endif
+
 /**
  * The XNandPsu_Config structure contains configuration information for NAND
  * controller.
@@ -390,6 +396,9 @@ typedef struct {
 	XNandPsu_EccCfg EccCfg;		/**< ECC configuration */
 	XNandPsu_Geometry Geometry;	/**< Flash geometry */
 	XNandPsu_Features Features;	/**< ONFI features */
+#ifdef __rtems__
+	int32_t PartialDataPageIndex;	/**< Cached page index */
+#endif
 #ifdef __ICCARM__
 	u8 PartialDataBuf[XNANDPSU_MAX_PAGE_SIZE];	/**< Partial read/write buffer */
 #pragma pack(pop)

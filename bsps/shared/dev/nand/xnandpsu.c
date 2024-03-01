@@ -244,6 +244,11 @@ s32 XNandPsu_CfgInitialize(XNandPsu *InstancePtr, XNandPsu_Config *ConfigPtr,
 	InstancePtr->DmaMode = XNANDPSU_MDMA;
 	InstancePtr->IsReady = XIL_COMPONENT_IS_READY;
 
+#ifdef __rtems__
+	/* Set page cache to unavailable */
+	InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_UNAVAILABLE;
+#endif
+
 	/* Initialize the NAND flash targets */
 	Status = XNandPsu_FlashInit(InstancePtr);
 	if (Status != XST_SUCCESS) {
@@ -278,6 +283,11 @@ s32 XNandPsu_CfgInitialize(XNandPsu *InstancePtr, XNandPsu_Config *ConfigPtr,
 #endif
 		goto Out;
 	}
+
+#ifdef __rtems__
+	/* Set page cache to none */
+	InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_NONE;
+#endif
 Out:
 	return Status;
 }
@@ -1454,6 +1464,12 @@ s32 XNandPsu_Write(XNandPsu *InstancePtr, u64 Offset, u64 Length, u8 *SrcBuf)
 		goto Out;
 	}
 
+#ifdef __rtems__
+	if (InstancePtr->PartialDataPageIndex != XNANDPSU_PAGE_CACHE_UNAVAILABLE) {
+		/* All writes invalidate the page cache */
+		InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_NONE;
+	}
+#endif
 	while (LengthVar > 0U) {
 		Block = (u32) (OffsetVar/InstancePtr->Geometry.BlockSize);
 		/*
@@ -1619,9 +1635,34 @@ s32 XNandPsu_Read(XNandPsu *InstancePtr, u64 Offset, u64 Length, u8 *DestBuf)
 					InstancePtr->Geometry.BytesPerPage :
 					(u32)LengthVar;
 		}
+#ifdef __rtems__
+		if (Page == InstancePtr->PartialDataPageIndex) {
+			/*
+			 * This is a whole page read for the currently cached
+			 * page. It will not be taken care of below, so perform
+			 * the copy here.
+			 */
+			if (PartialBytes == 0U) {
+				(void)Xil_MemCpy(DestBufPtr,
+						&InstancePtr->PartialDataBuf[0],
+						NumBytes);
+			}
+		} else {
+#endif
 		/* Read page */
 		Status = XNandPsu_ReadPage(InstancePtr, Target, Page, 0U,
 								BufPtr);
+#ifdef __rtems__
+			if (PartialBytes > 0U &&
+				InstancePtr->PartialDataPageIndex != XNANDPSU_PAGE_CACHE_UNAVAILABLE) {
+				/*
+				 * Partial read into page cache. Update the
+				 * cached page index.
+				 */
+				InstancePtr->PartialDataPageIndex = Page;
+			}
+		}
+#endif
 		if (Status != XST_SUCCESS) {
 			goto Out;
 		}
