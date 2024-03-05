@@ -13,11 +13,6 @@ default:
 description: |
   Enable the Symmetric Multiprocessing (SMP) support
 enabled-by:
-- aarch64/xilinx_zynqmp_ilp32_qemu
-- aarch64/xilinx_zynqmp_ilp32_zu3eg
-- aarch64/xilinx_zynqmp_lp64_cfc400x
-- aarch64/xilinx_zynqmp_lp64_qemu
-- aarch64/xilinx_zynqmp_lp64_zu3eg
 - arm/altcycv_devkit
 - arm/fvp_cortex_r52
 - arm/imx7
@@ -33,6 +28,7 @@ enabled-by:
 - arm/xilinx_zynq_picozed
 - arm/xilinx_zynq_pynq
 - arm/xilinx_zynq_microzed
+- bsps/aarch64/xilinx-zynqmp
 - i386/pc386
 - i386/pc486
 - i386/pc586

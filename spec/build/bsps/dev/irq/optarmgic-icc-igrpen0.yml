@@ -15,11 +15,7 @@ default:
   - aarch64/xilinx_versal_aiedge
   - aarch64/xilinx_versal_qemu
   - aarch64/xilinx_versal_vck190
-  - aarch64/xilinx_zynqmp_ilp32_qemu
-  - aarch64/xilinx_zynqmp_ilp32_zu3eg
-  - aarch64/xilinx_zynqmp_lp64_cfc400x
-  - aarch64/xilinx_zynqmp_lp64_qemu
-  - aarch64/xilinx_zynqmp_lp64_zu3eg
+  - bsps/aarch64/xilinx-zynqmp
   value: null
 - enabled-by: true
   value: 0x00000001
