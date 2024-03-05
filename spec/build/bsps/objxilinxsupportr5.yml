@@ -5,8 +5,7 @@ copyrights:
 - Copyright (C) 2022 On-Line Applications Research (OAR)
 cppflags: []
 cxxflags: []
-enabled-by:
-- arm/xilinx_zynqmp_mercuryxu5_rpu
+enabled-by: bsps/arm/xilinx-zynqmp-rpu
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
