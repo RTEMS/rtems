@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2023 Reflex Aerospace GmbH
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/xilinx-zynqmp-rpu/include/bsp.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/xilinx-zynqmp-rpu/include/bsp/irq.h
+- destination: ${BSP_INCLUDEDIR}/peripheral_maps
+  source:
+  - bsps/include/peripheral_maps/xilinx_zynqmp.h
+links: []
+source:
+- bsps/shared/cache/nocache.c
+- bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
+- bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/xilinx-zynqmp-rpu/console/console-config.c
+- bsps/arm/xilinx-zynqmp-rpu/start/bspreset.c
+- bsps/arm/xilinx-zynqmp-rpu/start/bspstart.c
+- bsps/arm/xilinx-zynqmp-rpu/start/bspstarthooks.c
+- bsps/arm/xilinx-zynqmp-rpu/start/bspstartmpu.c
+- bsps/shared/dev/clock/xil-ttc.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/irq/arm-gicv2.c
+- bsps/shared/dev/irq/arm-gicv2-zynqmp.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/gettargethash-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

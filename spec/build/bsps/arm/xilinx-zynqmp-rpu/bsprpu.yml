@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: arm
-bsp: xilinx_zynqmp_mercuryxu5_rpu
+bsp: xilinx_zynqmp_rpu
 build-type: bsp
 cflags: []
 copyrights:
-- Copyright (C) 2023 Reflex Aerospace GmbH
+- Copyright (C) 2024 embedded brains GmbH
 cppflags: []
 enabled-by: true
 family: xilinx-zynqmp-rpu
