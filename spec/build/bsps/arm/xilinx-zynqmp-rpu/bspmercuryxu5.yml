@@ -4,7 +4,7 @@ bsp: xilinx_zynqmp_mercuryxu5_rpu
 build-type: bsp
 cflags: []
 copyrights:
-- Copyright (C) 2023 Reflex Aerospace GmbH ( https://www.reflexaerospace.com/ )
+- Copyright (C) 2023 Reflex Aerospace GmbH
 cppflags: []
 enabled-by: true
 family: xilinx-zynqmp-rpu

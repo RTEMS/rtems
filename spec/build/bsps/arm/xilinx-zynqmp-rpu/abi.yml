@@ -5,7 +5,7 @@ actions:
 - env-append: null
 build-type: option
 copyrights:
-- Copyright (C) 2023 Reflex Aerospace GmbH ( https://www.reflexaerospace.com/ )
+- Copyright (C) 2023 Reflex Aerospace GmbH
 default:
 - enabled-by: true
   value:

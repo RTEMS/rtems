@@ -38,7 +38,7 @@ content: |
   _stack_end = bsp_section_stack_end;
   __undef_stack = bsp_section_stack_begin;
 copyrights:
-- Copyright (C) 2023 Reflex Aerospace GmbH ( https://www.reflexaerospace.com/ )
+- Copyright (C) 2023 Reflex Aerospace GmbH
 enabled-by: true
 install-path: ${BSP_LIBDIR}
 links: []
