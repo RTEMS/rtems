@@ -278,6 +278,12 @@ void XQspiPsu_Abort(XQspiPsu *InstancePtr)
 	u32 IntrStatus, ConfigReg, FifoStatus;
 	u32 DelayCount = 0U;
 
+#ifdef __rtems__
+	u32 FifoStatusMask = XQSPIPSU_ISR_RXEMPTY_MASK;
+	FifoStatusMask |= XQSPIPSU_ISR_TXEMPTY_MASK;
+	FifoStatusMask |= XQSPIPSU_ISR_GENFIFOEMPTY_MASK;
+#endif
+
 	Xil_AssertVoid(InstancePtr != NULL);
 #ifdef DEBUG
 	xil_printf("\nXQspiPsu_Abort\r\n");
@@ -329,8 +335,13 @@ void XQspiPsu_Abort(XQspiPsu *InstancePtr)
 	 */
 
 	FifoStatus = XQspiPsu_ReadReg(InstancePtr->Config.BaseAddress,
+#ifdef __rtems__
+					XQSPIPSU_ISR_OFFSET) & FifoStatusMask;
+	while(FifoStatus != FifoStatusMask) {
+#else
 					XQSPIPSU_FIFO_CTRL_OFFSET);
 	while(FifoStatus != 0U) {
+#endif
 		if (DelayCount == MAX_DELAY_CNT) {
 #ifdef DEBUG
 			xil_printf("Timeout error, FIFO reset failed.\r\n");
@@ -340,7 +351,11 @@ void XQspiPsu_Abort(XQspiPsu *InstancePtr)
 			usleep(1);
 			DelayCount++;
 			FifoStatus = XQspiPsu_ReadReg(InstancePtr->Config.BaseAddress,
+#ifdef __rtems__
+							XQSPIPSU_ISR_OFFSET) & FifoStatusMask;
+#else
 							XQSPIPSU_FIFO_CTRL_OFFSET);
+#endif
 		}
 	}
 
