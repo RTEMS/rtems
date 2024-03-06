@@ -39,8 +39,7 @@
 
 #ifndef ASM
 
-#include <rtems/irq.h>
-#include <rtems/irq-extension.h>
+#include <rtems.h>
 
 #include <dev/irq/arm-gic-irq.h>
 
