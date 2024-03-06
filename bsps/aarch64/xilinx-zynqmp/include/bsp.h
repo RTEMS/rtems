@@ -53,13 +53,14 @@
 #include <bsp/start.h>
 
 #include <rtems.h>
-#include <rtems/termiostypes.h>
 
 #include <dev/serial/zynq-uart-zynqmp.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+struct rtems_termios_device_context;
 
 #define BSP_ARM_GIC_CPUIF_BASE 0xf9020000
 #define BSP_ARM_GIC_DIST_BASE 0xf9010000
@@ -101,8 +102,9 @@ uint32_t zynqmp_clock_i2c1(void);
  * initialization. Provide in the application to override the defaults in the
  * BSP. This will only be called if the interface is found in the device tree.
  */
-__attribute__ ((weak))
-void zynqmp_configure_management_console(rtems_termios_device_context *base);
+void zynqmp_configure_management_console(
+  struct rtems_termios_device_context *base
+);
 
 #ifdef __cplusplus
 }
