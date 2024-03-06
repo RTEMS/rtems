@@ -86,16 +86,22 @@ static void arm_gt_clock_at_tick(arm_gt_clock_context *ctx)
 #endif /* ARM_GENERIC_TIMER_UNMASK_AT_TICK */
 }
 
+static rtems_interrupt_entry arm_gt_interrupt_entry;
+
 static void arm_gt_clock_handler_install(rtems_interrupt_handler handler)
 {
   rtems_status_code sc;
 
-  sc = rtems_interrupt_handler_install(
-    arm_gt_clock_instance.irq,
-    "Clock",
-    RTEMS_INTERRUPT_UNIQUE,
+  rtems_interrupt_entry_initialize(
+    &arm_gt_interrupt_entry,
     handler,
-    &arm_gt_clock_instance
+    &arm_gt_clock_instance,
+    "Clock"
+  );
+  sc = rtems_interrupt_entry_install(
+    arm_gt_clock_instance.irq,
+    RTEMS_INTERRUPT_UNIQUE,
+    &arm_gt_interrupt_entry
   );
   if (sc != RTEMS_SUCCESSFUL) {
     bsp_fatal(BSP_ARM_FATAL_GENERIC_TIMER_CLOCK_IRQ_INSTALL);
