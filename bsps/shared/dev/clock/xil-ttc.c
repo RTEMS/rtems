@@ -191,18 +191,24 @@ static void zynqmp_ttc_clock_driver_support_at_tick(ttc_clock_context *tc)
   /* Else, something is set up wrong, only match should be enabled */
 }
 
+static rtems_interrupt_entry zynqmp_ttc_interrupt_entry;
+
 static void zynqmp_ttc_clock_driver_support_install_isr(
   rtems_interrupt_handler handler
 )
 {
   rtems_status_code sc;
 
-  sc = rtems_interrupt_handler_install(
-    BSP_SELECTED_TTC_IRQ,
-    "Clock",
-    RTEMS_INTERRUPT_UNIQUE,
+  rtems_interrupt_entry_initialize(
+    &zynqmp_ttc_interrupt_entry,
     handler,
-    &ttc_clock_instance
+    &ttc_clock_instance,
+    "Clock"
+  );
+  sc = rtems_interrupt_entry_install(
+    BSP_SELECTED_TTC_IRQ,
+    RTEMS_INTERRUPT_UNIQUE,
+    &zynqmp_ttc_interrupt_entry
   );
   if ( sc != RTEMS_SUCCESSFUL ) {
     rtems_fatal_error_occurred(0xdeadbeef);
