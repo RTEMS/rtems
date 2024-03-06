@@ -48,20 +48,25 @@ uint32_t _CPU_SMP_Initialize( void )
   return arm_gic_irq_processor_count();
 }
 
+static rtems_interrupt_entry aarch64_ipi_entry;
+
 void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
 {
   if ( cpu_count > 0 ) {
     rtems_status_code sc;
 
-    sc = rtems_interrupt_handler_install(
-      ARM_GIC_IRQ_SGI_0,
-      "IPI",
-      RTEMS_INTERRUPT_UNIQUE,
+    rtems_interrupt_entry_initialize(
+      &aarch64_ipi_entry,
       bsp_inter_processor_interrupt,
-      NULL
+      NULL,
+      "IPI"
     );
-    _Assert( sc == RTEMS_SUCCESSFUL );
-    (void) sc;
+    sc = rtems_interrupt_entry_install(
+      ARM_GIC_IRQ_SGI_0,
+      RTEMS_INTERRUPT_UNIQUE,
+      &aarch64_ipi_entry
+    );
+    _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
 #if defined( BSP_DATA_CACHE_ENABLED ) || \
     defined( BSP_INSTRUCTION_CACHE_ENABLED )
