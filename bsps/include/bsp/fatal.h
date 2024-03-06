@@ -220,6 +220,9 @@ typedef enum {
 
   /* TMS570 fatal codes */
   TMS570_FATAL_RTI_IRQ_INSTALL = BSP_FATAL_CODE_BLOCK(18),
+
+  /* AArch64 fatal codes */
+  AARCH64_FATAL_MMU_CANNOT_MAP_BLOCK = BSP_FATAL_CODE_BLOCK(19),
 } bsp_fatal_code;
 
 RTEMS_NO_RETURN static inline void

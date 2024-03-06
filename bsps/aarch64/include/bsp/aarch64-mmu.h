@@ -371,7 +371,7 @@ aarch64_mmu_set_translation_table_entries(
   );
 
   if ( sc != RTEMS_SUCCESSFUL ) {
-    rtems_fatal_error_occurred( sc );
+    bsp_fatal( AARCH64_FATAL_MMU_CANNOT_MAP_BLOCK );
   }
 }
 
