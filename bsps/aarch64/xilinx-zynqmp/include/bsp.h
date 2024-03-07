@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSBSPsAArch64XilinxZynqMP
  *
- * @brief This header file provides the core BSP definitions
+ * @brief This header file provides BSP-specific interfaces.
  */
 
 /*
@@ -37,12 +37,6 @@
 #ifndef LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_H
 #define LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_H
 
-/**
- * @addtogroup RTEMSBSPsAArch64
- *
- * @{
- */
-
 #include <bspopts.h>
 
 #define BSP_FEATURE_IRQ_EXTENSION
@@ -61,6 +55,18 @@ extern "C" {
 #endif /* __cplusplus */
 
 struct rtems_termios_device_context;
+
+/**
+ * @defgroup RTEMSBSPsAArch64XilinxZynqMP \
+ *   AMD Zynq UltraScale+ MPSoC and RFSoC - Application Processing Unit
+ *
+ * @ingroup RTEMSBSPsAArch64
+ *
+ * @brief This group contains the BSP for the Application Processing Unit (APU)
+ *   contained in AMD Zynq UltraScale+ MPSoC and RFSoC devices.
+ *
+ * @{
+ */
 
 #define BSP_ARM_GIC_CPUIF_BASE 0xf9020000
 #define BSP_ARM_GIC_DIST_BASE 0xf9010000
@@ -106,12 +112,12 @@ void zynqmp_configure_management_console(
   struct rtems_termios_device_context *base
 );
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 #endif /* ASM */
-
-/** @} */
 
 #endif /* LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_H */
