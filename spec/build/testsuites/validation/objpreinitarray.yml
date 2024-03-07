@@ -6,6 +6,7 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by:
+- aarch64
 - arm
 - riscv
 includes: []
