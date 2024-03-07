@@ -1,18 +1,15 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
- * @ingroup zynqmp_tm27
- * @brief Interrupt mechanisms for tm27 test.
+ *
+ * @ingroup RTEMSBSPsARMZynqMP
+ *
+ * @brief This header file provides a Time Test 27 support implementation.
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
- * Copyright (C) 2013 embedded brains GmbH & Co. KG
- *
- * Copyright (C) 2019 DornerWorks
- *
- * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
- *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ * Copyright (C) 2013, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -42,12 +39,6 @@
 
 #ifndef __tm27_h
 #define __tm27_h
-
-/**
- * @defgroup zynqmp_tm27 TM27 Test Support
- * @ingroup RTEMSBSPsARMZynqMP
- * @brief Interrupt Mechanisms for tm27 test
- */
 
 #include <dev/irq/arm-gic-tm27.h>
 
