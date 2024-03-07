@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -74,14 +74,21 @@
  * This test case performs the following actions:
  *
  * - Construct a task with a task body which returns.  Check that the right
- *   fatal error occurs.
+ *   fatal error occurred.
  *
- * - Construct a task which performs a thread dispatch with maskable interrupts
- *   disabled.  Check that the right fatal error occurs or no fatal error
- *   occurs.
+ * - Construct a task which performs a direct thread dispatch with maskable
+ *   interrupts disabled.  Where robust thread dispatching is required, check
+ *   that the right fatal error occurred, otherwise check that no fatal error
+ *   occurred.
+ *
+ * - Construct a task which performs an on demand thread dispatch with maskable
+ *   interrupts disabled.  Where robust thread dispatching is required, check
+ *   that the right fatal error occurred, otherwise check that no fatal error
+ *   occurred.
  *
  * - Construct a task which performs a direct thread dispatch with a thread
- *   dispatch level not equal to one.  Check that the right fatal error occurs.
+ *   dispatch level not equal to one.  Check that the right fatal error
+ *   occurred.
  *
  * - Create a mutex and construct a task which produces a deadlock which
  *   involves the allocator mutex.
@@ -164,10 +171,11 @@ static void FatalBadThreadDispatchEnvironment(
 {
   Fatal( source, code, arg );
   _ISR_Set_level( 0 );
-  _Thread_Dispatch_direct_no_return( _Per_CPU_Get() );
+  _Thread_Dispatch_unnest( _Per_CPU_Get() );
+  rtems_task_exit();
 }
 
-static void ISRDisabledThreadDispatchTask( rtems_task_argument arg )
+static void ISRDisabledDirectThreadDispatchTask( rtems_task_argument arg )
 {
   rtems_interrupt_level level;
 
@@ -175,6 +183,16 @@ static void ISRDisabledThreadDispatchTask( rtems_task_argument arg )
   rtems_interrupt_local_disable( level );
   (void) level;
   rtems_task_exit();
+}
+
+static void ISRDisabledOnDemandThreadDispatchTask( rtems_task_argument arg )
+{
+  rtems_interrupt_level level;
+
+  (void) arg;
+  rtems_interrupt_local_disable( level );
+  (void) level;
+  SetSelfPriority( PRIO_VERY_HIGH );
 }
 
 static void FatalBadThreadDispatchDisableLevel(
@@ -245,7 +263,7 @@ static T_fixture ScoreValFatal_Fixture = {
 
 /**
  * @brief Construct a task with a task body which returns.  Check that the
- *   right fatal error occurs.
+ *   right fatal error occurred.
  */
 static void ScoreValFatal_Action_0( ScoreValFatal_Context *ctx )
 {
@@ -265,9 +283,10 @@ static void ScoreValFatal_Action_0( ScoreValFatal_Context *ctx )
 }
 
 /**
- * @brief Construct a task which performs a thread dispatch with maskable
- *   interrupts disabled.  Check that the right fatal error occurs or no fatal
- *   error occurs.
+ * @brief Construct a task which performs a direct thread dispatch with
+ *   maskable interrupts disabled.  Where robust thread dispatching is
+ *   required, check that the right fatal error occurred, otherwise check that
+ *   no fatal error occurred.
  */
 static void ScoreValFatal_Action_1( ScoreValFatal_Context *ctx )
 {
@@ -278,7 +297,40 @@ static void ScoreValFatal_Action_1( ScoreValFatal_Context *ctx )
   SetSelfPriority( PRIO_NORMAL );
   counter = ResetFatalInfo( ctx );
   id = CreateTask( "BENV", PRIO_HIGH );
-  StartTask( id, ISRDisabledThreadDispatchTask, NULL );
+  StartTask( id, ISRDisabledDirectThreadDispatchTask, NULL );
+
+  #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
+  if ( rtems_configuration_get_maximum_processors() > 1 ) {
+  #endif
+    T_eq_uint( GetFatalCounter( ctx ), counter + 1 );
+    T_eq_int( ctx->source, INTERNAL_ERROR_CORE );
+    T_eq_ulong( ctx->code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT );
+  #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
+  } else {
+    T_eq_uint( GetFatalCounter( ctx ), counter );
+  }
+  #endif
+
+  RestoreRunnerPriority();
+  SetFatalHandler( NULL, NULL );
+}
+
+/**
+ * @brief Construct a task which performs an on demand thread dispatch with
+ *   maskable interrupts disabled.  Where robust thread dispatching is
+ *   required, check that the right fatal error occurred, otherwise check that
+ *   no fatal error occurred.
+ */
+static void ScoreValFatal_Action_2( ScoreValFatal_Context *ctx )
+{
+  rtems_id     id;
+  unsigned int counter;
+
+  SetFatalHandler( FatalBadThreadDispatchEnvironment, ctx );
+  SetSelfPriority( PRIO_NORMAL );
+  counter = ResetFatalInfo( ctx );
+  id = CreateTask( "BENV", PRIO_HIGH );
+  StartTask( id, ISRDisabledOnDemandThreadDispatchTask, NULL );
 
   #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
   if ( rtems_configuration_get_maximum_processors() > 1 ) {
@@ -299,9 +351,9 @@ static void ScoreValFatal_Action_1( ScoreValFatal_Context *ctx )
 /**
  * @brief Construct a task which performs a direct thread dispatch with a
  *   thread dispatch level not equal to one.  Check that the right fatal error
- *   occurs.
+ *   occurred.
  */
-static void ScoreValFatal_Action_2( ScoreValFatal_Context *ctx )
+static void ScoreValFatal_Action_3( ScoreValFatal_Context *ctx )
 {
   rtems_id     id;
   unsigned int counter;
@@ -322,7 +374,7 @@ static void ScoreValFatal_Action_2( ScoreValFatal_Context *ctx )
  * @brief Create a mutex and construct a task which produces a deadlock which
  *   involves the allocator mutex.
  */
-static void ScoreValFatal_Action_3( ScoreValFatal_Context *ctx )
+static void ScoreValFatal_Action_4( ScoreValFatal_Context *ctx )
 {
   rtems_extensions_table extensions;
   rtems_status_code      sc;
@@ -374,7 +426,7 @@ static void ScoreValFatal_Action_3( ScoreValFatal_Context *ctx )
  *   SetFatalHandler() requires an initial extension this validates
  *   CONFIGURE_INITIAL_EXTENSIONS.
  */
-static void ScoreValFatal_Action_4( ScoreValFatal_Context *ctx )
+static void ScoreValFatal_Action_5( ScoreValFatal_Context *ctx )
 {
   unsigned int counter;
 
@@ -404,6 +456,7 @@ T_TEST_CASE_FIXTURE( ScoreValFatal, &ScoreValFatal_Fixture )
   ScoreValFatal_Action_2( ctx );
   ScoreValFatal_Action_3( ctx );
   ScoreValFatal_Action_4( ctx );
+  ScoreValFatal_Action_5( ctx );
 }
 
 /** @} */
