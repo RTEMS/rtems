@@ -40,6 +40,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/version.h>
 #include <rtems/score/heap.h>
+#include <rtems/score/smpimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <inttypes.h>
 
@@ -58,6 +59,26 @@ void bsp_fatal_extension(
    */
   rtems_interrupt_local_disable( level );
   (void) level;
+
+  #if defined(RTEMS_SMP)
+    if (
+      source == RTEMS_FATAL_SOURCE_SMP &&
+      code == SMP_FATAL_SHUTDOWN_RESPONSE
+    ) {
+      /*
+       * If this processor is requested to shutdown, use the default idle
+       * thread body which may place us in a low-power state waiting for
+       * interrupts.
+       */
+      _CPU_Thread_Idle_body( 0 );
+    }
+
+    /*
+     * Request other online processors to shutdown.  This reduces the
+     * likelihood to get concurrent output to the kernel I/O device.
+     */
+    _SMP_Request_shutdown();
+  #endif
 
   #if BSP_VERBOSE_FATAL_EXTENSION
     Thread_Control *executing;
