@@ -579,6 +579,9 @@ static int rtems_jffs2_ioctl(
 			break;
 		case RTEMS_JFFS2_FORCE_GARBAGE_COLLECTION:
 			eno = -jffs2_garbage_collect_pass(&inode->i_sb->jffs2_sb);
+			if (!eno) {
+			  eno = -jffs2_flush_wbuf_pad(&inode->i_sb->jffs2_sb);
+			}
 			break;
 		default:
 			eno = EINVAL;
@@ -1066,6 +1069,7 @@ static void rtems_jffs2_fsunmount(rtems_filesystem_mount_table_entry_t *mt_entry
 	/* Flush any pending writes */
 	if (!sb_rdonly(&fs_info->sb)) {
 		jffs2_flush_wbuf_gc(c, 0);
+		jffs2_flush_wbuf_pad(c);
 	}
 #endif
 
