@@ -56,7 +56,6 @@
 
 #include <bsp/vmeUniverse.h>
 #include <bsp/vmeUniverseDMA.h>
-#include <rtems/irq.h>
 
 #define UNIV_NUM_MPORTS		8 /* number of master ports */
 #define UNIV_NUM_SPORTS		8 /* number of slave ports */
@@ -1709,6 +1708,7 @@ LERegister1            dcpp = ld_le32(&d->dcpp);
 /* RTEMS interrupt subsystem */
 
 #include <bsp/irq.h>
+#include <rtems/irq.h>
 
 typedef struct
 UniverseIRQEntryRec_ {
