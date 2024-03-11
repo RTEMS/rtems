@@ -7,7 +7,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
 - enabled-by:
-  - aarch64/bsps/xilinx-zynqmp
+  - bsps/aarch64/xilinx-zynqmp
   - arm/xilinx_zynq_microzed
   value: 0
 - enabled-by: true
