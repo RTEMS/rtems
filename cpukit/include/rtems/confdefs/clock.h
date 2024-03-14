@@ -70,6 +70,10 @@
   #warning "The clock ticks per second is not an integer"
 #endif
 
+#if defined(CONFIGURE_TICKS_PER_TIMESLICE) && CONFIGURE_TICKS_PER_TIMESLICE <= 0
+  #error "CONFIGURE_TICKS_PER_TIMESLICE shall be greater than zero"
+#endif
+
 #if CONFIGURE_MICROSECONDS_PER_TICK <= 0
   #error "CONFIGURE_MICROSECONDS_PER_TICK must be positive"
 #endif

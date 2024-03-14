@@ -3312,8 +3312,7 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
- *   zero.
+ * * The value of the configuration option shall be greater than zero.
  *
  * * The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
