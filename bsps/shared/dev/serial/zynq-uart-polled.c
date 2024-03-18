@@ -124,10 +124,8 @@ int zynq_cal_baud_rate(uint32_t  baudrate,
   return 0;
 }
 
-void zynq_uart_initialize(rtems_termios_device_context *base)
+void zynq_uart_initialize(volatile zynq_uart *regs)
 {
-  zynq_uart_context *ctx = (zynq_uart_context *) base;
-  volatile zynq_uart *regs = ctx->regs;
   uint32_t brgr = 0x3e;
   uint32_t bauddiv = 0x6;
   uint32_t mode_clks = regs->mode & ZYNQ_UART_MODE_CLKS;
@@ -154,18 +152,15 @@ void zynq_uart_initialize(rtems_termios_device_context *base)
     | ZYNQ_UART_MODE_CHRL(ZYNQ_UART_MODE_CHRL_8)
     | mode_clks;
 
-  while (zynq_uart_read_polled(base) >= 0) {
+  while (zynq_uart_read_char_polled(regs) >= 0) {
     /* Drop */
   }
 
-  zynq_uart_reset_tx_flush(ctx);
+  zynq_uart_reset_tx_flush(regs);
 }
 
-int zynq_uart_read_polled(rtems_termios_device_context *base)
+int zynq_uart_read_char_polled(volatile zynq_uart *regs)
 {
-  zynq_uart_context *ctx = (zynq_uart_context *) base;
-  volatile zynq_uart *regs = ctx->regs;
-
   if ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_REMPTY) != 0) {
     return -1;
   } else {
@@ -173,14 +168,8 @@ int zynq_uart_read_polled(rtems_termios_device_context *base)
   }
 }
 
-void zynq_uart_write_polled(
-  rtems_termios_device_context *base,
-  char c
-)
+void zynq_uart_write_char_polled(volatile zynq_uart *regs, char c)
 {
-  zynq_uart_context *ctx = (zynq_uart_context *) base;
-  volatile zynq_uart *regs = ctx->regs;
-
   while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TNFUL) != 0) {
     /* Wait */
   }
@@ -188,13 +177,12 @@ void zynq_uart_write_polled(
   regs->tx_rx_fifo = ZYNQ_UART_TX_RX_FIFO_FIFO(c);
 }
 
-void zynq_uart_reset_tx_flush(zynq_uart_context *ctx)
+void zynq_uart_reset_tx_flush(volatile zynq_uart *regs)
 {
-  volatile zynq_uart *regs = ctx->regs;
-  int                 c = 4;
+  int c = 4;
 
   while (c-- > 0)
-    zynq_uart_write_polled(&ctx->base, '\r');
+    zynq_uart_write_char_polled(regs, '\r');
 
   while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TEMPTY) == 0 ||
          (regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TACTIVE) != 0) {

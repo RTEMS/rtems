@@ -44,24 +44,18 @@
 
 static void zynq_debug_console_out(char c)
 {
-  rtems_termios_device_context *base =
-    &zynq_uart_instances[BSP_CONSOLE_MINOR].base;
-
-  zynq_uart_write_polled(base, c);
+  zynq_uart_write_char_polled(zynq_uart_instances[BSP_CONSOLE_MINOR].regs, c);
 }
 
 static void zynq_debug_console_early_init(char c);
 
 static void zynq_debug_console_init(void)
 {
-  rtems_termios_device_context *base =
-    &zynq_uart_instances[BSP_CONSOLE_MINOR].base;
-
   if (BSP_output_char != zynq_debug_console_early_init) {
     return;
   }
 
-  zynq_uart_initialize(base);
+  zynq_uart_initialize(zynq_uart_instances[BSP_CONSOLE_MINOR].regs);
   BSP_output_char = zynq_debug_console_out;
 }
 
@@ -73,10 +67,7 @@ static void zynq_debug_console_early_init(char c)
 
 static int zynq_debug_console_in(void)
 {
-  rtems_termios_device_context *base =
-    &zynq_uart_instances[BSP_CONSOLE_MINOR].base;
-
-  return zynq_uart_read_polled(base);
+  return zynq_uart_read_char_polled(zynq_uart_instances[BSP_CONSOLE_MINOR].regs);
 }
 
 BSP_output_char_function_type BSP_output_char = zynq_debug_console_early_init;

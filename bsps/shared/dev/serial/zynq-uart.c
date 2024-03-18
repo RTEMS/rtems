@@ -67,14 +67,14 @@ static bool zynq_uart_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
-#ifdef ZYNQ_CONSOLE_USE_INTERRUPTS
   zynq_uart_context *ctx = (zynq_uart_context *) base;
   volatile zynq_uart *regs = ctx->regs;
+#ifdef ZYNQ_CONSOLE_USE_INTERRUPTS
   rtems_status_code sc;
 #endif
 
   rtems_termios_set_initial_baud(tty, ZYNQ_UART_DEFAULT_BAUD);
-  zynq_uart_initialize(base);
+  zynq_uart_initialize(regs);
 
 #ifdef ZYNQ_CONSOLE_USE_INTERRUPTS
   regs->rx_fifo_trg_lvl = 1;
@@ -109,15 +109,23 @@ static void zynq_uart_last_close(
 }
 #endif
 
+#ifndef ZYNQ_CONSOLE_USE_INTERRUPTS
+static int zynq_uart_read_polled(rtems_termios_device_context *base)
+{
+  zynq_uart_context *ctx = (zynq_uart_context *) base;
+  return zynq_uart_read_char_polled(ctx->regs);
+}
+#endif
+
 static void zynq_uart_write_support(
   rtems_termios_device_context *base,
   const char *buf,
   size_t len
 )
 {
-#ifdef ZYNQ_CONSOLE_USE_INTERRUPTS
   zynq_uart_context *ctx = (zynq_uart_context *) base;
   volatile zynq_uart *regs = ctx->regs;
+#ifdef ZYNQ_CONSOLE_USE_INTERRUPTS
 
   regs->irq_dis = ZYNQ_UART_TEMPTY;
 
@@ -135,9 +143,9 @@ static void zynq_uart_write_support(
     regs->irq_en = ZYNQ_UART_TEMPTY;
   }
 #else
-  ssize_t i;
+  size_t i;
   for (i = 0; i < len; ++i) {
-    zynq_uart_write_polled(base, buf[i]);
+    zynq_uart_write_char_polled(regs, buf[i]);
   }
 #endif
 }

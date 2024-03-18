@@ -59,29 +59,6 @@ typedef struct {
 
 extern const rtems_termios_device_handler zynq_uart_handler;
 
-#define ZYNQ_UART_DEFAULT_BAUD 115200
-
-void zynq_uart_initialize(rtems_termios_device_context *base);
-
-int zynq_uart_read_polled(rtems_termios_device_context *base);
-
-void zynq_uart_write_polled(
-  rtems_termios_device_context *base,
-  char c
-);
-
-/**
-  * Flush TX FIFO and wait until it is empty. Used in bsp_reset.
-  */
-void zynq_uart_reset_tx_flush(zynq_uart_context *ctx);
-
-int zynq_cal_baud_rate(
-  uint32_t  baudrate,
-  uint32_t* brgr,
-  uint32_t* bauddiv,
-  uint32_t  modereg
-);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

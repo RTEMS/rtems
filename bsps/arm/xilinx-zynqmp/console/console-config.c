@@ -37,6 +37,7 @@
 
 #include <bsp/irq.h>
 #include <dev/serial/zynq-uart.h>
+#include <dev/serial/zynq-uart-regs.h>
 
 #include <bspopts.h>
 
@@ -83,41 +84,29 @@ rtems_status_code console_initialize(
 
 void zynqmp_debug_console_flush(void)
 {
-  zynq_uart_reset_tx_flush(&zynqmp_uart_instances[BSP_CONSOLE_MINOR]);
+  zynq_uart_reset_tx_flush(zynqmp_uart_instances[BSP_CONSOLE_MINOR].regs);
 }
 
 static void zynqmp_debug_console_out(char c)
 {
-  rtems_termios_device_context *base =
-    &zynqmp_uart_instances[BSP_CONSOLE_MINOR].base;
-
-  zynq_uart_write_polled(base, c);
+  zynq_uart_write_char_polled(zynqmp_uart_instances[BSP_CONSOLE_MINOR].regs, c);
 }
 
 static void zynqmp_debug_console_init(void)
 {
-  rtems_termios_device_context *base =
-    &zynqmp_uart_instances[BSP_CONSOLE_MINOR].base;
-
-  zynq_uart_initialize(base);
+  zynq_uart_initialize(zynqmp_uart_instances[BSP_CONSOLE_MINOR].regs);
   BSP_output_char = zynqmp_debug_console_out;
 }
 
 static void zynqmp_debug_console_early_init(char c)
 {
-  rtems_termios_device_context *base =
-    &zynqmp_uart_instances[BSP_CONSOLE_MINOR].base;
-
-  zynq_uart_initialize(base);
+  zynq_uart_initialize(zynqmp_uart_instances[BSP_CONSOLE_MINOR].regs);
   zynqmp_debug_console_out(c);
 }
 
 static int zynqmp_debug_console_in(void)
 {
-  rtems_termios_device_context *base =
-    &zynqmp_uart_instances[BSP_CONSOLE_MINOR].base;
-
-  return zynq_uart_read_polled(base);
+  return zynq_uart_read_char_polled(zynqmp_uart_instances[BSP_CONSOLE_MINOR].regs);
 }
 
 BSP_output_char_function_type BSP_output_char = zynqmp_debug_console_early_init;

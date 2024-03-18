@@ -43,6 +43,8 @@
 
 #include <bsp/utility.h>
 
+#define ZYNQ_UART_DEFAULT_BAUD 115200
+
 #define ZYNQ_UART_FIFO_DEPTH 64
 
 typedef struct zynq_uart {
@@ -157,6 +159,24 @@ typedef struct zynq_uart {
 #define ZYNQ_UART_TX_FIFO_TRG_LVL_TTRIG_GET(reg) BSP_FLD32GET(reg, 0, 5)
 #define ZYNQ_UART_TX_FIFO_TRG_LVL_TTRIG_SET(reg, val) BSP_FLD32SET(reg, val, 0, 5)
 } zynq_uart;
+
+void zynq_uart_initialize(volatile zynq_uart *regs);
+
+int zynq_uart_read_char_polled(volatile zynq_uart *regs);
+
+void zynq_uart_write_char_polled(volatile zynq_uart *regs, char c);
+
+/**
+  * Flush TX FIFO and wait until it is empty. Used in bsp_reset.
+  */
+void zynq_uart_reset_tx_flush(volatile zynq_uart *regs);
+
+int zynq_cal_baud_rate(
+  uint32_t  baudrate,
+  uint32_t* brgr,
+  uint32_t* bauddiv,
+  uint32_t  modereg
+);
 
 /** @} */
 
