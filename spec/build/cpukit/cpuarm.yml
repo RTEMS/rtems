@@ -41,6 +41,7 @@ source:
 - cpukit/score/cpu/arm/arm_exc_interrupt.S
 - cpukit/score/cpu/arm/armv4-exception-default.S
 - cpukit/score/cpu/arm/armv4-sync-synchronize.c
+- cpukit/score/cpu/arm/armv4-isr-install-vector.c
 - cpukit/score/cpu/arm/armv7-thread-idle.c
 - cpukit/score/cpu/arm/armv7m-context-initialize.c
 - cpukit/score/cpu/arm/armv7m-context-restore.c
