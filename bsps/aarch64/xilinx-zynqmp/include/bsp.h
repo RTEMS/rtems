@@ -55,6 +55,8 @@
 #include <rtems.h>
 #include <rtems/termiostypes.h>
 
+#include <dev/serial/zynq-uart-zynqmp.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

@@ -3,13 +3,14 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsARMZynq
+ * @ingroup zynq_uart
  *
- * @brief This source file contains the definition of ::zynq_uart_instances.
+ * @brief This header file provides interfaces with respect to the Zynq
+ *   platform.
  */
 
 /*
- * Copyright (C) 2013, 2017 embedded brains GmbH & Co. KG
+ * Copyright (C) 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,18 +34,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp/irq.h>
-#include <dev/serial/zynq-uart.h>
-#include <dev/serial/zynq-uart-regs.h>
+#ifndef _DEV_SERIAL_ZYNQ_UART_ZYNQ_H
+#define _DEV_SERIAL_ZYNQ_UART_ZYNQ_H
 
-zynq_uart_context zynq_uart_instances[2] = {
-  {
-    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 0" ),
-    .regs = (volatile zynq_uart *) ZYNQ_UART_0_BASE_ADDR,
-    .irq = ZYNQ_IRQ_UART_0
-  }, {
-    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 1" ),
-    .regs = (volatile zynq_uart *) ZYNQ_UART_1_BASE_ADDR,
-    .irq = ZYNQ_IRQ_UART_1
-  }
-};
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+/**
+ * @addtogroup zynq_uart
+ *
+ * @{
+ */
+
+/**
+ * @brief This constant defines the Xilinx Zynq UART 0 base address.
+ */
+#define ZYNQ_UART_0_BASE_ADDR 0xe0000000
+
+/**
+ * @brief This constant defines the Xilinx Zynq UART 1 base address.
+ */
+#define ZYNQ_UART_1_BASE_ADDR 0xe0001000
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* _DEV_SERIAL_ZYNQ_UART_ZYNQ_H */

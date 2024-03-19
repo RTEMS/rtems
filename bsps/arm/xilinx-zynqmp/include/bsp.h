@@ -60,6 +60,8 @@
 #include <bsp/default-initial-extension.h>
 #include <bsp/start.h>
 
+#include <dev/serial/zynq-uart-zynqmp.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

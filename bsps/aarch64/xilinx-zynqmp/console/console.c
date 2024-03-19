@@ -188,11 +188,11 @@ RTEMS_SYSINIT_ITEM(
 static zynq_uart_context zynqmp_uart_instances[2] = {
   {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 0" ),
-    .regs = (volatile struct zynq_uart *) 0xff000000,
+    .regs = (volatile zynq_uart *) ZYNQ_UART_0_BASE_ADDR,
     .irq = ZYNQMP_IRQ_UART_0
   }, {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 1" ),
-    .regs = (volatile struct zynq_uart *) 0xff010000,
+    .regs = (volatile zynq_uart *) ZYNQ_UART_1_BASE_ADDR,
     .irq = ZYNQMP_IRQ_UART_1
   }
 };

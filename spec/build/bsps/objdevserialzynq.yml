@@ -12,6 +12,8 @@ install:
   source:
   - bsps/include/dev/serial/zynq-uart-regs.h
   - bsps/include/dev/serial/zynq-uart.h
+  - bsps/include/dev/serial/zynq-uart-zynq.h
+  - bsps/include/dev/serial/zynq-uart-zynqmp.h
 links: []
 source:
 - bsps/shared/dev/serial/zynq-uart-polled.c

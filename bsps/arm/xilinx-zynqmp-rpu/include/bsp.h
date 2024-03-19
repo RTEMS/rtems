@@ -61,6 +61,8 @@
 #include <bsp/start.h>
 #include <peripheral_maps/xilinx_zynqmp.h>
 
+#include <dev/serial/zynq-uart-zynqmp.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
