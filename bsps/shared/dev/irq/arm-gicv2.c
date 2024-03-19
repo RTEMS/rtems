@@ -400,9 +400,11 @@ void arm_gic_trigger_sgi(rtems_vector_number vector, uint32_t targets)
     | GIC_DIST_ICDSGIR_SGIINTID(vector);
 }
 
+#ifdef RTEMS_SMP
 uint32_t arm_gic_irq_processor_count(void)
 {
   volatile gic_dist *dist = ARM_GIC_DIST;
 
   return GIC_DIST_ICDICTR_CPU_NUMBER_GET(dist->icdictr) + 1;
 }
+#endif

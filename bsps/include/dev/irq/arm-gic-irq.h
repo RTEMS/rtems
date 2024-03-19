@@ -113,9 +113,11 @@ static inline rtems_status_code arm_gic_irq_generate_software_irq(
   return sc;
 }
 
+#ifdef RTEMS_SMP
 uint32_t arm_gic_irq_processor_count(void);
 
 void arm_gic_irq_initialize_secondary_cpu(void);
+#endif
 
 #ifdef __cplusplus
 }

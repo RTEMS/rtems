@@ -280,6 +280,7 @@ void arm_gic_trigger_sgi(rtems_vector_number vector, uint32_t targets)
   gicv3_trigger_sgi(vector, targets);
 }
 
+#ifdef RTEMS_SMP
 uint32_t arm_gic_irq_processor_count(void)
 {
   volatile gic_dist *dist = ARM_GIC_DIST;
@@ -306,3 +307,4 @@ uint32_t arm_gic_irq_processor_count(void)
 
   return cpu_count;
 }
+#endif
