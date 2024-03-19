@@ -35,14 +35,16 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
-#include <dev/serial/zynq-uart.h>
+#include <dev/serial/zynq-uart-regs.h>
 
 void bsp_reset(void)
 {
+  volatile zynq_uart *regs =
+    (volatile zynq_uart *) ZYNQ_UART_KERNEL_IO_BASE_ADDR;
   volatile uint32_t *slcr_unlock = (volatile uint32_t *) 0xf8000008;
   volatile uint32_t *pss_rst_ctrl = (volatile uint32_t *) 0xf8000200;
 
-  zynq_uart_reset_tx_flush(&zynq_uart_instances[BSP_CONSOLE_MINOR]);
+  zynq_uart_reset_tx_flush(regs);
 
   while (true) {
     *slcr_unlock = 0xdf0d;

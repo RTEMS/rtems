@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define-unquoted: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+default:
+- enabled-by:
+  - bsps/aarch64/xilinx-zynqmp
+  - arm/xilinx_zynq_microzed
+  value: ZYNQ_UART_0_BASE_ADDR
+- enabled-by: true
+  value: ZYNQ_UART_1_BASE_ADDR
+description: |
+  This option defines the Xilinx Zynq UART base address used by the kernel I/O
+  device.
+enabled-by: true
+format: '{}'
+links: []
+name: ZYNQ_UART_KERNEL_IO_BASE_ADDR
+type: build

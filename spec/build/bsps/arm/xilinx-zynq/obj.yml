@@ -26,9 +26,7 @@ source:
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
-- bsps/arm/xilinx-zynq/console/console-config.c
 - bsps/arm/xilinx-zynq/console/console-init.c
-- bsps/arm/xilinx-zynq/console/debug-console.c
 - bsps/shared/dev/i2c/cadence-i2c.c
 - bsps/arm/xilinx-zynq/start/bspreset.c
 - bsps/arm/xilinx-zynq/start/bspstart.c

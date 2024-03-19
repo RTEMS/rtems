@@ -54,7 +54,6 @@
 
 #include <bsp/default-initial-extension.h>
 #include <bsp/start.h>
-#include <dev/serial/zynq-uart.h>
 #include <dev/serial/zynq-uart-zynq.h>
 
 #ifdef __cplusplus
@@ -74,8 +73,6 @@ extern "C" {
 #define BSP_ARM_L2C_310_BASE 0xf8f02000
 
 #define BSP_ARM_L2C_310_ID 0x410000c8
-
-extern zynq_uart_context zynq_uart_instances[2];
 
 /**
  * @brief Zynq specific set up of the MMU.

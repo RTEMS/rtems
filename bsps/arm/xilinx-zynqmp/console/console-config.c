@@ -32,7 +32,6 @@
 
 #include <rtems/console.h>
 #include <rtems/bspIo.h>
-#include <rtems/sysinit.h>
 #include <rtems/termiostypes.h>
 
 #include <bsp/irq.h>
@@ -64,6 +63,7 @@ rtems_status_code console_initialize(
   rtems_termios_initialize();
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(zynqmp_uart_instances); ++i) {
+    zynq_uart_context *ctx = &zynqmp_uart_instances[i];
     char uart[] = "/dev/ttySX";
 
     uart[sizeof(uart) - 2] = (char) ('0' + i);
@@ -71,10 +71,10 @@ rtems_status_code console_initialize(
       &uart[0],
       &zynq_uart_handler,
       NULL,
-      &zynqmp_uart_instances[i].base
+      &ctx->base
     );
 
-    if (i == BSP_CONSOLE_MINOR) {
+    if (ctx->regs == (zynq_uart *) ZYNQ_UART_KERNEL_IO_BASE_ADDR) {
       link(&uart[0], CONSOLE_DEVICE_NAME);
     }
   }
@@ -84,37 +84,5 @@ rtems_status_code console_initialize(
 
 void zynqmp_debug_console_flush(void)
 {
-  zynq_uart_reset_tx_flush(zynqmp_uart_instances[BSP_CONSOLE_MINOR].regs);
+  zynq_uart_reset_tx_flush((zynq_uart *) ZYNQ_UART_KERNEL_IO_BASE_ADDR);
 }
-
-static void zynqmp_debug_console_out(char c)
-{
-  zynq_uart_write_char_polled(zynqmp_uart_instances[BSP_CONSOLE_MINOR].regs, c);
-}
-
-static void zynqmp_debug_console_init(void)
-{
-  zynq_uart_initialize(zynqmp_uart_instances[BSP_CONSOLE_MINOR].regs);
-  BSP_output_char = zynqmp_debug_console_out;
-}
-
-static void zynqmp_debug_console_early_init(char c)
-{
-  zynq_uart_initialize(zynqmp_uart_instances[BSP_CONSOLE_MINOR].regs);
-  zynqmp_debug_console_out(c);
-}
-
-static int zynqmp_debug_console_in(void)
-{
-  return zynq_uart_read_char_polled(zynqmp_uart_instances[BSP_CONSOLE_MINOR].regs);
-}
-
-BSP_output_char_function_type BSP_output_char = zynqmp_debug_console_early_init;
-
-BSP_polling_getchar_function_type BSP_poll_char = zynqmp_debug_console_in;
-
-RTEMS_SYSINIT_ITEM(
-  zynqmp_debug_console_init,
-  RTEMS_SYSINIT_BSP_START,
-  RTEMS_SYSINIT_ORDER_LAST_BUT_5
-);

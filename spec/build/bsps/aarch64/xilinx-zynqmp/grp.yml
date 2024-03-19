@@ -39,8 +39,6 @@ links:
 - role: build-dependency
   uid: optclkuart
 - role: build-dependency
-  uid: ../../optconminor
-- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq

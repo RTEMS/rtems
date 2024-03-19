@@ -29,7 +29,22 @@
 #include <rtems/termiostypes.h>
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
+#include <bsp/irq.h>
 #include <dev/serial/zynq-uart.h>
+#include <dev/serial/zynq-uart-regs.h>
+
+static zynq_uart_context zynq_uart_instances[2] = {
+  {
+    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 0" ),
+    .regs = (volatile zynq_uart *) ZYNQ_UART_0_BASE_ADDR,
+    .irq = ZYNQ_IRQ_UART_0
+  }, {
+    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 1" ),
+    .regs = (volatile zynq_uart *) ZYNQ_UART_1_BASE_ADDR,
+    .irq = ZYNQ_IRQ_UART_1
+  }
+};
 
 rtems_status_code console_initialize(
   rtems_device_major_number major,
@@ -42,6 +57,7 @@ rtems_status_code console_initialize(
   rtems_termios_initialize();
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(zynq_uart_instances); ++i) {
+    zynq_uart_context *ctx = &zynq_uart_instances[i];
     char uart[] = "/dev/ttySX";
 
     uart[sizeof(uart) - 2] = (char) ('0' + i);
@@ -49,10 +65,10 @@ rtems_status_code console_initialize(
       &uart[0],
       &zynq_uart_handler,
       NULL,
-      &zynq_uart_instances[i].base
+      &ctx->base
     );
 
-    if (i == BSP_CONSOLE_MINOR) {
+    if (ctx->regs == (zynq_uart *) ZYNQ_UART_KERNEL_IO_BASE_ADDR) {
       link(&uart[0], CONSOLE_DEVICE_NAME);
     }
   }

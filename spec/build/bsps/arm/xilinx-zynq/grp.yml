@@ -35,8 +35,6 @@ links:
 - role: build-dependency
   uid: optconirq
 - role: build-dependency
-  uid: ../../optconminor
-- role: build-dependency
   uid: optint0len
 - role: build-dependency
   uid: optint0ori
