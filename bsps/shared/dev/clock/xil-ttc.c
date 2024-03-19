@@ -126,7 +126,7 @@ static void zynqmp_ttc_clock_driver_support_initialize_hardware(void)
 
   /* Setup match register to generate tick IRQ */
   ttc_clock_instance.irq_match_interval =
-    (uint32_t) ((frequency * microsec_per_tick) / 1000000);
+    (uint32_t) (((uint64_t)frequency * microsec_per_tick) / 1000000);
   XTtcPs_WriteReg(BSP_SELECTED_TTC_ADDR, XTTCPS_MATCH_0_OFFSET,
                   ttc_clock_instance.irq_match_interval);
   /* Clear interupts (clear on read) */
