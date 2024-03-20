@@ -27,7 +27,6 @@
 
 #include <dev/irq/arm-gicv3.h>
 
-#include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <bsp/start.h>
 
@@ -242,6 +241,7 @@ rtems_status_code arm_gic_irq_get_priority(
   return sc;
 }
 
+#ifdef RTEMS_SMP
 rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity
@@ -274,6 +274,7 @@ rtems_status_code bsp_interrupt_get_affinity(
   _Processor_mask_From_uint32_t(affinity, targets, 0);
   return RTEMS_SUCCESSFUL;
 }
+#endif
 
 void arm_gic_trigger_sgi(rtems_vector_number vector, uint32_t targets)
 {

@@ -38,7 +38,6 @@
 #define LIBBSP_LEON3_IRQ_CONFIG_H
 
 #include <rtems.h>
-#include <rtems/score/processormask.h>
 
 #define BSP_INTERRUPT_VECTOR_MAX_STD 15 /* Standard IRQ controller */
 #define BSP_INTERRUPT_VECTOR_MAX_EXT 31 /* Extended IRQ controller */
@@ -47,15 +46,5 @@
 
 /* The check is different depending on IRQ controller, runtime detected */
 #define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
-
-rtems_status_code bsp_interrupt_set_affinity(
-  rtems_vector_number vector,
-  const Processor_mask *affinity
-);
-
-rtems_status_code bsp_interrupt_get_affinity(
-  rtems_vector_number vector,
-  Processor_mask *affinity
-);
 
 #endif /* LIBBSP_LEON3_IRQ_CONFIG_H */

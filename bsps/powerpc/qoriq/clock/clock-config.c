@@ -39,7 +39,7 @@
 
 #include <bsp.h>
 #include <bsp/qoriq.h>
-#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 
 static struct timecounter qoriq_clock_tc;
 

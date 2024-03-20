@@ -36,7 +36,6 @@
  * SUCH DAMAGE.
  */
 
-#include <bsp/irq.h>
 #include <bsp/fatal.h>
 #include <bsp/fdt.h>
 #include <bsp/irq-generic.h>

@@ -40,9 +40,6 @@
 #ifndef ASM
 
 #include <bsp.h>
-#include <rtems/irq.h>
-#include <rtems/irq-extension.h>
-#include <rtems/score/processormask.h>
 
 #define RISCV_INTERRUPT_VECTOR_SOFTWARE 0
 
@@ -55,16 +52,6 @@
 #define RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(x) ((x) - 2)
 
 #define BSP_INTERRUPT_VECTOR_COUNT RISCV_INTERRUPT_VECTOR_EXTERNAL(RISCV_MAXIMUM_EXTERNAL_INTERRUPTS)
-
-rtems_status_code bsp_interrupt_set_affinity(
-  rtems_vector_number vector,
-  const Processor_mask *affinity
-);
-
-rtems_status_code bsp_interrupt_get_affinity(
-  rtems_vector_number vector,
-  Processor_mask *affinity
-);
 
 #endif /* ASM */
 

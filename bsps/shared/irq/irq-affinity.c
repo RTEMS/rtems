@@ -36,7 +36,6 @@
 
 #include <bsp/irq-generic.h>
 
-#include <rtems/score/processormask.h>
 #include <rtems/score/smpimpl.h>
 
 rtems_status_code rtems_interrupt_set_affinity(

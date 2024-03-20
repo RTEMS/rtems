@@ -16,7 +16,7 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <bsp/fatal.h>
-#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <bsp/leon3.h>
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>

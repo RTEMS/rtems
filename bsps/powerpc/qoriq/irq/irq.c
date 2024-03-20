@@ -43,7 +43,6 @@
 #include <asm/epapr_hcalls.h>
 
 #include <bsp.h>
-#include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <bsp/vectors.h>
 #include <bsp/utility.h>

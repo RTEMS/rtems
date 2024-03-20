@@ -92,6 +92,28 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 	return RTEMS_SUCCESSFUL;
 }
 
+#if defined(RTEMS_SMP)
+rtems_status_code bsp_interrupt_get_affinity(
+  rtems_vector_number  vector,
+  Processor_mask      *affinity
+)
+{
+  (void) vector;
+  _Processor_mask_From_index( affinity, 0 );
+  return RTEMS_UNSATISFIED;
+}
+
+rtems_status_code bsp_interrupt_set_affinity(
+  rtems_vector_number   vector,
+  const Processor_mask *affinity
+)
+{
+  (void) vector;
+  (void) affinity;
+  return RTEMS_UNSATISFIED;
+}
+#endif
+
 void bsp_interrupt_facility_initialize(void)
 {
 	/* Nothing to do */
