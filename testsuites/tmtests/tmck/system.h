@@ -48,7 +48,6 @@ rtems_name Task_name[ OPERATION_COUNT+1 ]; /* array of task names */
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS              2
-#define CONFIGURE_TICKS_PER_TIMESLICE        0
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

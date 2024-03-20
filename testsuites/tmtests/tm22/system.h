@@ -49,7 +49,6 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS              4
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     1
-#define CONFIGURE_TICKS_PER_TIMESLICE        0
 
 
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \

@@ -49,7 +49,6 @@ rtems_id   Task_id[ OPERATION_COUNT+1 ];   /* array of task ids */
 
 #define CONFIGURE_MAXIMUM_TASKS              2
 #define CONFIGURE_MAXIMUM_PORTS              1
-#define CONFIGURE_TICKS_PER_TIMESLICE        0
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

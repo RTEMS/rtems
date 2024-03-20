@@ -113,7 +113,6 @@ rtems_task Init( rtems_task_argument ignored )
 /* configuration information */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
-#define CONFIGURE_TICKS_PER_TIMESLICE        0
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS 3
 #define CONFIGURE_INIT
