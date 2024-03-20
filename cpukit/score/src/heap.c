@@ -45,6 +45,8 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/interr.h>
 
+#include <string.h>
+
 #if CPU_ALIGNMENT == 0 || CPU_ALIGNMENT % 2 != 0
   #error "invalid CPU_ALIGNMENT value"
 #endif
