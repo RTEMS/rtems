@@ -70,8 +70,7 @@
   #warning "The clock ticks per second is not an integer"
 #endif
 
-#if defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) \
-  && defined(CONFIGURE_TICKS_PER_TIMESLICE) \
+#if defined(CONFIGURE_TICKS_PER_TIMESLICE) \
   && CONFIGURE_TICKS_PER_TIMESLICE <= 0
   #error "CONFIGURE_TICKS_PER_TIMESLICE shall be greater than zero"
 #endif
