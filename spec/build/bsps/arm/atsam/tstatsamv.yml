@@ -7,6 +7,7 @@ actions:
     - fileio
     - flashdisk01
     - fsdosfsname01
+    - fsjffs2empty01
     - jffs2fserror
     - jffs2fslink
     - jffs2fspatheval
@@ -15,6 +16,14 @@ actions:
     - jffs2fsscandir01
     - jffs2fssymlink
     - jffs2fstime
+    - jffs2nandfserror
+    - jffs2nandfslink
+    - jffs2nandfspatheval
+    - jffs2nandfspermission
+    - jffs2nandfsrdwr
+    - jffs2nandfsscandir01
+    - jffs2nandfssymlink
+    - jffs2nandfstime
     - linpack
     - psxconfig01
     - record02
