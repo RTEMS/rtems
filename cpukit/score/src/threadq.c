@@ -179,5 +179,7 @@ void _Thread_queue_MP_callout_do_nothing(
 )
 {
   /* Do nothing */
+  (void) the_proxy;
+  (void) mp_id;
 }
 #endif
