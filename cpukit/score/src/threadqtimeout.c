@@ -53,6 +53,7 @@ void _Thread_queue_Add_timeout_ticks(
 {
   Watchdog_Interval ticks;
 
+  (void) queue;
   ticks = queue_context->Timeout.ticks;
 
   if ( ticks != WATCHDOG_NO_TIMEOUT ) {

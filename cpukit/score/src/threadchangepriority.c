@@ -111,6 +111,7 @@ static void _Thread_Priority_action_change(
   void                 *arg
 )
 {
+  (void) arg;
   _Thread_Set_scheduler_node_priority(
     priority_aggregation,
     priority_group_order

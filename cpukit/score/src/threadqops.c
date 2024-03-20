@@ -156,6 +156,8 @@ static void _Thread_queue_FIFO_do_initialize(
 {
   Scheduler_Node *scheduler_node;
 
+  (void) queue;
+  (void) queue_context;
   scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
 
   _Chain_Initialize_node( &scheduler_node->Wait.Priority.Node.Node.Chain );

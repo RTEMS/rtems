@@ -118,6 +118,8 @@ void _User_extensions_Thread_begin_visitor(
 {
   User_extensions_thread_begin_extension callout = callouts->thread_begin;
 
+  (void) arg;
+
   if ( callout != NULL ) {
     (*callout)( executing );
   }

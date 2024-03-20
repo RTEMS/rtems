@@ -46,6 +46,7 @@ void bsp_fatal_extension(
 {
   rtems_interrupt_level level;
 
+  (void) always_set_to_false;
   rtems_interrupt_local_disable(level);
   (void) level;
 

@@ -400,6 +400,7 @@ void _Thread_queue_Deadlock_status( Thread_Control *the_thread )
 
 void _Thread_queue_Deadlock_fatal( Thread_Control *the_thread )
 {
+  (void) the_thread;
   _Internal_error( INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK );
 }
 

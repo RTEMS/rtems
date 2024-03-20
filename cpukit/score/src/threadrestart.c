@@ -83,6 +83,7 @@ static Thread_Control *_Thread_Join_flush_filter(
 {
   Thread_Join_context *join_context;
 
+  (void) queue;
   join_context = (Thread_Join_context *) queue_context;
 
   the_thread->Wait.return_argument = join_context->exit_value;
