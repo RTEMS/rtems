@@ -38,7 +38,6 @@
  *
  */
 
-#include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <bsp/irqimpl.h>
 

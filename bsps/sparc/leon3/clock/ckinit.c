@@ -42,9 +42,8 @@
 
 #include <bsp.h>
 #include <bsp/fatal.h>
-#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <bsp/leon3.h>
-#include <rtems/rtems/intr.h>
 #include <grlib/irqamp.h>
 #include <rtems/score/profiling.h>
 #include <rtems/timecounter.h>

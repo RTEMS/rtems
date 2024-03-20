@@ -37,7 +37,6 @@
 #define LIBBSP_POWERPC_QORIQ_IRQ_H
 
 #include <bsp.h>
-#include <rtems/score/processormask.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -407,16 +406,6 @@ rtems_status_code qoriq_pic_set_priority(
   rtems_vector_number vector,
   int new_priority,
   int *old_priority
-);
-
-rtems_status_code bsp_interrupt_set_affinity(
-  rtems_vector_number vector,
-  const Processor_mask *affinity
-);
-
-rtems_status_code bsp_interrupt_get_affinity(
-  rtems_vector_number vector,
-  Processor_mask *affinity
 );
 
 rtems_status_code qoriq_pic_msi_allocate(rtems_vector_number *vector);

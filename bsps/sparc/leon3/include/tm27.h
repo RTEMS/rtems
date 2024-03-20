@@ -40,7 +40,7 @@
 #define __tm27_h
 
 #include <bsp.h>
-#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 
 #if defined(RTEMS_SMP)
 #include <rtems/score/smpimpl.h>

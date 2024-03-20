@@ -34,7 +34,6 @@
  * SUCH DAMAGE.
  */
 
-#include <bsp/irq.h>
 #include <bsp/fatal.h>
 #include <bsp/irq-generic.h>
 #include <amba.h>

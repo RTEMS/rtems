@@ -29,35 +29,12 @@
 #define LIBBSP_POWERPC_T32MPPC_IRQ_H
 
 #include <rtems.h>
-#include <rtems/irq.h>
-#include <rtems/irq-extension.h>
-#include <rtems/score/processormask.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 #define BSP_INTERRUPT_VECTOR_COUNT 1
-
-static inline rtems_status_code bsp_interrupt_set_affinity(
-  rtems_vector_number   vector,
-  const Processor_mask *affinity
-)
-{
-  (void) vector;
-  (void) affinity;
-  return RTEMS_SUCCESSFUL;
-}
-
-static inline rtems_status_code bsp_interrupt_get_affinity(
-  rtems_vector_number  vector,
-  Processor_mask      *affinity
-)
-{
-  (void) vector;
-  _Processor_mask_From_index( affinity, 0 );
-  return RTEMS_SUCCESSFUL;
-}
 
 #ifdef __cplusplus
 }

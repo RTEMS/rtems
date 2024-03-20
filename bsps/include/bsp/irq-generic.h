@@ -12,7 +12,7 @@
 /*
  * Copyright (C) 2016 Chris Johns <chrisj@rtems.org>
  *
- * Copyright (C) 2008, 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2008, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -47,6 +47,7 @@
 
 #include <rtems/irq-extension.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/processormask.h>
 
 #ifdef RTEMS_SMP
   #include <rtems/score/atomic.h>
@@ -371,6 +372,55 @@ rtems_status_code bsp_interrupt_raise_on(
  *   clear a particular interrupt vector.
  */
 rtems_status_code bsp_interrupt_clear( rtems_vector_number vector );
+
+/**
+ * @brief Gets the processor affinity set of the interrupt vector.
+ *
+ * The function may have no implementation in uniprocessor configurations.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param[out] affinity is the pointer to a Processor_mask object.  When the
+ *   directive call is successful, the processor affinity set of the interrupt
+ *   vector will be stored in this object.  A set bit in the processor set
+ *   means that the corresponding processor is in the processor affinity set of
+ *   the interrupt vector, otherwise the bit is cleared.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to get the processor affinity of the
+ *   interrupt vector has not been satisfied.
+ */
+rtems_status_code bsp_interrupt_get_affinity(
+  rtems_vector_number  vector,
+  Processor_mask      *affinity
+);
+
+/**
+ * @brief Sets the processor affinity set of the interrupt vector.
+ *
+ * The function may have no implementation in uniprocessor configurations.
+ *
+ * @param vector is the interrupt vector number.  It shall be valid.
+ *
+ * @param affinity is the pointer to a Processor_mask object.  The processor set
+ *   defines the new processor affinity set of the interrupt vector.  A set bit
+ *   in the processor set means that the corresponding processor shall be in
+ *   the processor affinity set of the interrupt vector, otherwise the bit
+ *   shall be cleared.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The referenced processor set was not a valid
+ *   new processor affinity set for the interrupt vector.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to set the processor affinity of the
+ *   interrupt vector has not been satisfied.
+ */
+rtems_status_code bsp_interrupt_set_affinity(
+  rtems_vector_number   vector,
+  const Processor_mask *affinity
+);
 
 #if defined(RTEMS_SMP)
 /**
