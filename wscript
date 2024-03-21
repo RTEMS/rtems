@@ -110,12 +110,9 @@ class EnvWrapper(object):
         self._env = env
 
     def __getitem__(self, name):
-        fields = name.split(":")
-        v = self._env[fields[0]]
-        try:
-            fmt = "{:" + fields[1] + "}"
-        except IndexError:
-            fmt = "{}"
+        k, c, f = name.partition(":")
+        v = self._env[k]
+        fmt = "{" + c + f + "}"
         if isinstance(v, list):
             return " ".join([fmt.format(w) for w in v])
         return fmt.format(v)
