@@ -16,7 +16,7 @@ links:
 - role: interface-ingroup
   uid: group-general
 - role: constraint
-  uid: ../constraint/min-zero
+  uid: ../constraint/min-one
 - role: constraint
   uid: ../constraint/max-uint32
 name: CONFIGURE_TICKS_PER_TIMESLICE
