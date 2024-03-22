@@ -168,9 +168,9 @@ extern "C" {
  *
  * @return Returns the alignment requirement of the type.
  */
-#if __cplusplus >= 201103L
+#if defined( __cplusplus ) && __cplusplus >= 201103L
   #define RTEMS_ALIGNOF( _type_name ) alignof( _type_name )
-#elif __STDC_VERSION__ >= 201112L
+#elif defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
   #define RTEMS_ALIGNOF( _type_name ) _Alignof( _type_name )
 #else
   #define RTEMS_ALIGNOF( _type_name ) sizeof( _type_name )
@@ -376,9 +376,9 @@ extern "C" {
  * @brief Tells the compiler in a function declaration that this function does
  *   not return.
  */
-#if __cplusplus >= 201103L
+#if defined( __cplusplus ) && __cplusplus >= 201103L
   #define RTEMS_NO_RETURN [[noreturn]]
-#elif __STDC_VERSION__ >= 201112L
+#elif defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
   #define RTEMS_NO_RETURN _Noreturn
 #elif defined(__GNUC__)
   #define RTEMS_NO_RETURN __attribute__(( __noreturn__ ))
@@ -833,9 +833,9 @@ extern "C" {
  *
  * @param _msg is the error message in case the static assertion fails.
  */
-#if __cplusplus >= 201103L
+#if defined( __cplusplus ) && __cplusplus >= 201103L
   #define RTEMS_STATIC_ASSERT( _cond, _msg ) static_assert( _cond, # _msg )
-#elif __STDC_VERSION__ >= 201112L
+#elif defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
   #define RTEMS_STATIC_ASSERT( _cond, _msg ) _Static_assert( _cond, # _msg )
 #else
   #define RTEMS_STATIC_ASSERT( _cond, _msg ) \
