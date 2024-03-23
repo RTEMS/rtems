@@ -186,7 +186,7 @@ static void uart_probe(void)
 
   fdt = bsp_fdt_get();
 
-  node = fdt_node_offset_by_compatible(fdt, -1, "brcm,bcm2835-pl011");
+  node = fdt_node_offset_by_compatible(fdt, -1, "arm,pl011");
   init_ctx_arm_pl011(fdt, node);
 
   node = fdt_node_offset_by_compatible(fdt, -1, "brcm,bcm2835-aux-uart");
