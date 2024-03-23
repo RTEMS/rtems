@@ -10,11 +10,15 @@ definition:
   - definition: |
       [[noreturn]]
     enabled-by:
-    - ${/compiler/if/cplusplus:/name} >= 201103L
+      and:
+      - defined( ${/compiler/if/cplusplus:/name} )
+      - ${/compiler/if/cplusplus:/name} >= 201103L
   - definition: |
       _Noreturn
     enabled-by:
-    - ${/compiler/if/stdc-version:/name} >= 201112L
+      and:
+      - defined( ${/compiler/if/stdc-version:/name} )
+      - ${/compiler/if/stdc-version:/name} >= 201112L
   - definition: |
       __attribute__(( __noreturn__ ))
     enabled-by:

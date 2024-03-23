@@ -18,7 +18,9 @@ definition:
       params: []
       return: null
     enabled-by:
-    - ${/compiler/if/cplusplus:/name} >= 201103L
+      and:
+      - defined( ${/compiler/if/cplusplus:/name} )
+      - ${/compiler/if/cplusplus:/name} >= 201103L
   - definition:
       attributes: null
       body: |
@@ -26,7 +28,9 @@ definition:
       params: []
       return: null
     enabled-by:
-    - ${/compiler/if/stdc-version:/name} >= 201112L
+      and:
+      - defined( ${/compiler/if/stdc-version:/name} )
+      - ${/compiler/if/stdc-version:/name} >= 201112L
 description: null
 enabled-by: true
 index-entries: []
