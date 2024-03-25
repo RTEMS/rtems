@@ -467,7 +467,7 @@ static inline void bsp_interrupt_entry_store_release(
 #if defined(RTEMS_SMP)
   _Atomic_Store_uintptr(
     (Atomic_Uintptr *) ptr,
-    (Atomic_Uintptr) value,
+    (uintptr_t) value,
     ATOMIC_ORDER_RELEASE
   );
 #else
