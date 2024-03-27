@@ -1,23 +1,20 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
-- assert-uint32: null
+- assert-uint64: null
 - env-assign: null
 - format-and-define: null
 build-type: option
 copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default:
-- enabled-by:
-  - aarch64/xilinx_zynqmp_lp64_a53
-  - aarch64/xilinx_zynqmp_ilp32_zu3eg
-  - aarch64/xilinx_zynqmp_lp64_cfc400x
-  - aarch64/xilinx_zynqmp_lp64_zu3eg
-  value: 0x10000000
 - enabled-by: true
-  value: 0x40018000
+  value: 0x00010000
 description: |
-  base address of memory area available to the BSP
+  This option defines the base address of the DDR memory area which is
+  statically available to the application.  The default value takes a NULL
+  pointer protection area of 64KiB size into account.
 enabled-by: true
 format: '{:#010x}'
 links: []

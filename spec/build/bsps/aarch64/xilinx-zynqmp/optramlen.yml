@@ -1,17 +1,20 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
-- assert-uint32: null
+- assert-uint64: null
 - env-assign: null
 - format-and-define: null
 build-type: option
 copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default:
 - enabled-by: true
-  value: 0x10000000
+  value: 0x3fff0000
 description: |
-  length of memory area available to the BSP
+  This option defines the length in bytes of the DDR memory area which is
+  statically available to the application.  The default value takes a NULL
+  pointer protection are of 64KiB sizea into account.
 enabled-by: true
 format: '{:#010x}'
 links: []
