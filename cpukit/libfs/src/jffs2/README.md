@@ -29,9 +29,11 @@ generate the relevant patches:
     fs/jffs2/read.c \
     fs/jffs2/readinode.c \
     fs/jffs2/scan.c \
+    fs/jffs2/summary.c \
     fs/jffs2/summary.h \
     fs/jffs2/wbuf.c \
     fs/jffs2/write.c \
+    fs/jffs2/writev.c \
     fs/jffs2/xattr.h
 ```
 
