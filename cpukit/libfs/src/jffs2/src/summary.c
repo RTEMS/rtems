@@ -127,7 +127,27 @@ int jffs2_sum_add_inode_mem(struct jffs2_summary *s, struct jffs2_raw_inode *ri,
 	temp->totlen = ri->totlen;
 	temp->next = NULL;
 
+#ifdef __rtems__
+	/* cast through void* for type warnings */
+	void *alignment_temp = temp;
+	/*
+	 * logic copied from jffs2_sum_add_mem above to avoid array bounds
+	 * issues caused by unions
+	 */
+	if (!s->sum_list_head)
+		s->sum_list_head = alignment_temp;
+	if (s->sum_list_tail)
+		s->sum_list_tail->u.next = alignment_temp;
+	s->sum_list_tail = alignment_temp;
+
+	s->sum_size += JFFS2_SUMMARY_INODE_SIZE;
+	s->sum_num++;
+	dbg_summary("inode (%u) added to summary\n",
+				je32_to_cpu(temp->inode));
+	return 0;
+#else
 	return jffs2_sum_add_mem(s, (union jffs2_sum_mem *)temp);
+#endif
 }
 
 int jffs2_sum_add_dirent_mem(struct jffs2_summary *s, struct jffs2_raw_dirent *rd,
@@ -151,7 +171,12 @@ int jffs2_sum_add_dirent_mem(struct jffs2_summary *s, struct jffs2_raw_dirent *r
 
 	memcpy(temp->name, rd->name, rd->nsize);
 
+#ifdef __rtems__
+	void *alignment_cast = temp;
+	return jffs2_sum_add_mem(s, (union jffs2_sum_mem *)alignment_cast);
+#else
 	return jffs2_sum_add_mem(s, (union jffs2_sum_mem *)temp);
+#endif
 }
 
 #ifdef CONFIG_JFFS2_FS_XATTR
@@ -275,7 +300,12 @@ int jffs2_sum_add_kvec(struct jffs2_sb_info *c, const struct kvec *invecs,
 			temp->totlen = node->i.totlen;
 			temp->next = NULL;
 
+#ifdef __rtems__
+			void *alignment_cast = temp;
+			return jffs2_sum_add_mem(c->summary, (union jffs2_sum_mem *)alignment_cast);
+#else
 			return jffs2_sum_add_mem(c->summary, (union jffs2_sum_mem *)temp);
+#endif
 		}
 
 		case JFFS2_NODETYPE_DIRENT: {
@@ -309,7 +339,12 @@ int jffs2_sum_add_kvec(struct jffs2_sb_info *c, const struct kvec *invecs,
 					break;
 			}
 
+#ifdef __rtems__
+			void *alignment_cast = temp;
+			return jffs2_sum_add_mem(c->summary, (union jffs2_sum_mem *)alignment_cast);
+#else
 			return jffs2_sum_add_mem(c->summary, (union jffs2_sum_mem *)temp);
+#endif
 		}
 #ifdef CONFIG_JFFS2_FS_XATTR
 		case JFFS2_NODETYPE_XATTR: {

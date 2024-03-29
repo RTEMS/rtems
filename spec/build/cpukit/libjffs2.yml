@@ -16,7 +16,9 @@ install:
   source:
   - cpukit/include/rtems/jffs2.h
 install-path: ${BSP_LIBDIR}
-links: []
+links:
+- role: build-dependency
+  uid: objjffs2summary
 source:
 - cpukit/libfs/src/jffs2/src/build.c
 - cpukit/libfs/src/jffs2/src/compr.c
@@ -36,5 +38,6 @@ source:
 - cpukit/libfs/src/jffs2/src/scan.c
 - cpukit/libfs/src/jffs2/src/wbuf.c
 - cpukit/libfs/src/jffs2/src/write.c
+- cpukit/libfs/src/jffs2/src/writev.c
 target: jffs2
 type: build

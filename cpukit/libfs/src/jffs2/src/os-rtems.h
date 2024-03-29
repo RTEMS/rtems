@@ -182,7 +182,11 @@ static inline void jffs2_erase_pending_trigger(struct jffs2_sb_info *c)
 #define SECTOR_ADDR(x) ( ((unsigned long)(x) & ~(c->sector_size-1)) )
 #ifndef CONFIG_JFFS2_FS_WRITEBUFFER
 
+#ifdef CONFIG_JFFS2_SUMMARY
+#define jffs2_can_mark_obsolete(c) (0)
+#else
 #define jffs2_can_mark_obsolete(c) (1)
+#endif
 #define jffs2_is_writebuffered(c) (0)
 #define jffs2_cleanmarker_oob(c) (0)
 #define jffs2_write_nand_cleanmarker(c,jeb) (-EIO)
@@ -204,7 +208,11 @@ static inline void jffs2_erase_pending_trigger(struct jffs2_sb_info *c)
 #define MTD_BIT_WRITEABLE 0x800
 #define jffs2_is_writebuffered(c) (c->wbuf != NULL)
 
+#ifdef CONFIG_JFFS2_SUMMARY
+#define jffs2_can_mark_obsolete(c) (0)
+#else
 #define jffs2_can_mark_obsolete(c) (OFNI_BS_2SFFJ(c)->s_flash_control->block_is_bad == NULL)
+#endif
 
 #define jffs2_cleanmarker_oob(c) (OFNI_BS_2SFFJ(c)->s_flash_control->block_is_bad != NULL)
 

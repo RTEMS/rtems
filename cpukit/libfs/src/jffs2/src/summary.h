@@ -13,11 +13,20 @@
 #ifndef JFFS2_SUMMARY_H
 #define JFFS2_SUMMARY_H
 
+#ifndef __rtems__
 /* Limit summary size to 64KiB so that we can kmalloc it. If the summary
    is larger than that, we have to just ditch it and avoid using summary
    for the eraseblock in question... and it probably doesn't hurt us much
    anyway. */
 #define MAX_SUMMARY_SIZE 65536
+#else /* __rtems__ */
+/*
+ * RTEMS uses a flat memory space with no virtual addressing, so allocation for
+ * DMA purposes does not require the special consideration that the Linux kernel
+ * requires. Allow summary nodes to consume up to a sector.
+ */
+#define MAX_SUMMARY_SIZE c->sector_size
+#endif /* __rtems__ */
 
 #include <linux/uio.h>
 #include <linux/jffs2.h>
@@ -198,7 +207,18 @@ int jffs2_sum_scan_sumnode(struct jffs2_sb_info *c, struct jffs2_eraseblock *jeb
 #define jffs2_sum_disable_collecting(a)
 #define jffs2_sum_is_disabled(a) (0)
 #define jffs2_sum_reset_collected(a) do { } while (0)
+#ifndef __rtems__
 #define jffs2_sum_add_kvec(a,b,c,d) (0)
+#else
+#define jffs2_sum_add_kvec(a,b,c,d) \
+  ({         \
+    (void)a; \
+    (void)b; \
+    (void)c; \
+    (void)d; \
+    0;       \
+  })
+#endif
 #define jffs2_sum_move_collected(a,b) do { } while (0)
 #define jffs2_sum_write_sumnode(a) (0)
 #define jffs2_sum_add_padding_mem(a,b) do { } while (0)

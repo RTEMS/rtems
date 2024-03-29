@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2025 On-Line Applications Research (OAR) Corporation
+cppflags: []
+cxxflags: []
+enabled-by:
+- CONFIG_JFFS2_SUMMARY
+includes: []
+install: []
+links: []
+source:
+- cpukit/libfs/src/jffs2/src/summary.c
+type: build

@@ -52,8 +52,33 @@ static inline int mtd_is_bitflip(int err) { return (err == -EUCLEAN); }
 })
 #define mtd_block_markbad(mtd_sp, offset) \
   jffs2_flash_block_mark_bad(RTEMS_CONTAINER_OF(&(mtd_sp), struct jffs2_sb_info, mtd), offset)
-#define mtd_write(mtd_sp, ofs, len, retlen, buf) \
-  jffs2_flash_direct_write(RTEMS_CONTAINER_OF(&(mtd_sp), struct jffs2_sb_info, mtd), ofs, len, retlen, buf)
+#define mtd_write(mtd_sp, write_buffer_offset, size, return_size, write_buffer) \
+({ \
+  struct jffs2_sb_info *_c = RTEMS_CONTAINER_OF(&(mtd_sp), struct jffs2_sb_info, mtd); \
+  const struct super_block *_sb = OFNI_BS_2SFFJ(_c); \
+  rtems_jffs2_flash_control *_fc = _sb->s_flash_control; \
+  *return_size = size; \
+  (*_fc->write)(_fc, write_buffer_offset, write_buffer, size); \
+})
+#define mtd_writev(mtd_sp, vecs, count, to, retlen) \
+({ \
+  size_t _totlen = 0; \
+  size_t _thislen; \
+  int _ret = 0; \
+  for (int _i = 0; _i < count; _i++) { \
+    _ret = mtd_write(c->mtd, to, vecs[_i].iov_len, &_thislen, \
+          vecs[_i].iov_base); \
+    _totlen += _thislen; \
+    if (_ret || _thislen != vecs[_i].iov_len) { \
+      break; \
+    } \
+    to += vecs[_i].iov_len; \
+  } \
+  if (retlen) { \
+    *retlen = _totlen; \
+  } \
+  _ret; \
+})
 #define mtd_read(mtd_sp, ofs, len, retlen, buf) \
   jffs2_flash_direct_read(RTEMS_CONTAINER_OF(&(mtd_sp), struct jffs2_sb_info, mtd), ofs, len, retlen, buf)
 
