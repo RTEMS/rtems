@@ -81,5 +81,7 @@ links:
   uid: optnocoverageldflags
 - role: build-dependency
   uid: optversion
+- role: build-dependency
+  uid: optjffs2summary
 target: cpukit/include/rtems/score/cpuopts.h
 type: build

@@ -15,6 +15,7 @@
  */
 
 #include <linux/kernel.h>
+#include <linux/mtd/mtd.h>
 #include "nodelist.h"
 
 #ifndef CONFIG_JFFS2_FS_WRITEBUFFER
@@ -42,41 +43,6 @@ int jffs2_flash_direct_read(struct jffs2_sb_info * c,
 	*return_size = size;
 
 	return (*fc->read)(fc, read_buffer_offset, write_buffer, size);
-}
-
-int jffs2_flash_direct_write(struct jffs2_sb_info * c,
-			   loff_t write_buffer_offset, const size_t size,
-			   size_t * return_size, const unsigned char *read_buffer)
-{
-	const struct super_block *sb = OFNI_BS_2SFFJ(c);
-	rtems_jffs2_flash_control *fc = sb->s_flash_control;
-
-	*return_size = size;
-
-	return (*fc->write)(fc, write_buffer_offset, read_buffer, size);
-}
-
-int
-jffs2_flash_direct_writev(struct jffs2_sb_info *c, const struct iovec *vecs,
-		   unsigned long count, loff_t to, size_t * retlen)
-{
-	unsigned long i;
-	size_t totlen = 0, thislen;
-	int ret = 0;
-
-	for (i = 0; i < count; i++) {
-		ret = jffs2_flash_write(c, to, vecs[i].iov_len, &thislen,
-					vecs[i].iov_base);
-		totlen += thislen;
-		if (ret || thislen != vecs[i].iov_len)
-			break;
-		to += vecs[i].iov_len;
-	}
-
-	if (retlen)
-		*retlen = totlen;
-
-	return ret;
 }
 
 int jffs2_flash_erase(struct jffs2_sb_info * c,

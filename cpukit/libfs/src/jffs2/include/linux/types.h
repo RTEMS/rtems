@@ -1,6 +1,10 @@
 #ifndef __LINUX_TYPES_H__
 #define __LINUX_TYPES_H__
 
+#ifdef CONFIG_JFFS2_SUMMARY
+#include <sys/socket.h>
+#define __must_hold(a)
+#endif
 #include <sys/types.h>
 #include <stdint.h>
 
