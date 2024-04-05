@@ -136,6 +136,25 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
+rtems_status_code bsp_interrupt_set_priority(
+  rtems_vector_number vector,
+  uint32_t priority
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
+}
+
+rtems_status_code bsp_interrupt_get_priority(
+  rtems_vector_number vector,
+  uint32_t *priority
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(priority != NULL);
+  return RTEMS_UNSATISFIED;
+}
+
 static void set_exception_handler(rtems_vector_number vector, void_func handler)
 {
   void **vbr;

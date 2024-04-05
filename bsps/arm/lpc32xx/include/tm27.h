@@ -93,13 +93,19 @@ static inline void Clear_tm27_intr(void)
   volatile lpc_timer *timer = LPC32XX_TM27_TIMER;
 
   timer->ir = LPC_TIMER_IR_MR0;
-  lpc32xx_irq_set_priority(LPC32XX_TM27_IRQ, LPC32XX_IRQ_PRIORITY_LOWEST);
+  (void) rtems_interrupt_set_priority(
+    LPC32XX_TM27_IRQ,
+    LPC32XX_IRQ_PRIORITY_LOWEST
+  );
 }
 
 static inline void Lower_tm27_intr(void)
 {
   bsp_interrupt_vector_enable(LPC32XX_TM27_IRQ);
-  lpc32xx_irq_set_priority(LPC32XX_TM27_IRQ, LPC32XX_IRQ_PRIORITY_HIGHEST);
+  (void) rtems_interrupt_set_priority(
+    LPC32XX_TM27_IRQ,
+    LPC32XX_IRQ_PRIORITY_HIGHEST
+  );
 }
 
 #endif /* __tm27_h */

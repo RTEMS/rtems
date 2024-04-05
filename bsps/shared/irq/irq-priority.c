@@ -3,14 +3,14 @@
 /**
  * @file
  *
- * @ingroup DevIRQGIC
+ * @ingroup RTEMSImplClassicIntr
  *
  * @brief This source file contains the implementation of
- *   bsp_interrupt_get_attributes() for the GICv2.
+ *   rtems_interrupt_get_priority() and rtems_interrupt_set_priority().
  */
 
 /*
- * Copyright (C) 2013, 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,42 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dev/irq/arm-gic.h>
 #include <bsp/irq-generic.h>
 
-rtems_status_code bsp_interrupt_get_attributes(
-  rtems_vector_number         vector,
-  rtems_interrupt_attributes *attributes
+rtems_status_code rtems_interrupt_set_priority(
+  rtems_vector_number vector,
+  uint32_t priority
 )
 {
-  attributes->is_maskable = true;
-  attributes->maybe_enable = true;
-  attributes->maybe_disable = true;
-  attributes->can_raise = true;
-  attributes->can_get_priority = true;
-  attributes->can_set_priority = true;
-  attributes->maximum_priority = 255;
-
-  if ( vector <= ARM_GIC_IRQ_SGI_LAST ) {
-    /*
-     * It is implementation-defined whether implemented SGIs are permanently
-     * enabled, or can be enabled and disabled by writes to GICD_ISENABLER0 and
-     * GICD_ICENABLER0.
-     */
-    attributes->can_raise_on = true;
-    attributes->cleared_by_acknowledge = true;
-    attributes->trigger_signal = RTEMS_INTERRUPT_NO_SIGNAL;
-  } else {
-    attributes->can_disable = true;
-    attributes->can_clear = true;
-    attributes->trigger_signal = RTEMS_INTERRUPT_UNSPECIFIED_SIGNAL;
-
-    if ( vector > ARM_GIC_IRQ_PPI_LAST ) {
-      /* SPI */
-      attributes->can_get_affinity = true;
-      attributes->can_set_affinity = true;
-    }
+  if (!bsp_interrupt_is_valid_vector(vector)) {
+    return RTEMS_INVALID_ID;
   }
 
-  return RTEMS_SUCCESSFUL;
+  return bsp_interrupt_set_priority(vector, priority);
+}
+
+rtems_status_code rtems_interrupt_get_priority(
+  rtems_vector_number vector,
+  uint32_t *priority
+)
+{
+  if (priority == NULL) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  if (!bsp_interrupt_is_valid_vector(vector)) {
+    return RTEMS_INVALID_ID;
+  }
+
+  return bsp_interrupt_get_priority(vector, priority);
 }

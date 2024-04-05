@@ -81,7 +81,7 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
   );
   _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
-  sc = arm_gic_irq_set_priority(
+  sc = rtems_interrupt_set_priority(
     ARM_GIC_TM27_IRQ_LOW,
     ARM_GIC_TM27_PRIO_LOW
   );
@@ -100,7 +100,7 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
   );
   _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
-  sc = arm_gic_irq_set_priority(
+  sc = rtems_interrupt_set_priority(
     ARM_GIC_TM27_IRQ_HIGH,
     ARM_GIC_TM27_PRIO_HIGH
   );

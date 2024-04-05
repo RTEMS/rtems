@@ -43,6 +43,9 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  attributes->maximum_priority = 255;
+  attributes->can_get_priority = true;
+  attributes->can_set_priority = true;
   return RTEMS_SUCCESSFUL;
 }
 
@@ -91,6 +94,33 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   _ARMV7M_NVIC_Clear_enable((int) vector);
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_set_priority(
+  rtems_vector_number vector,
+  uint32_t priority
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  if (priority > 255) {
+    return RTEMS_INVALID_PRIORITY;
+  }
+
+  _ARMV7M_NVIC_Set_priority((int) vector, (int) priority);
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_get_priority(
+  rtems_vector_number vector,
+  uint32_t *priority
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(priority != NULL);
+
+  *priority = (uint32_t) _ARMV7M_NVIC_Get_priority((int) vector);
   return RTEMS_SUCCESSFUL;
 }
 

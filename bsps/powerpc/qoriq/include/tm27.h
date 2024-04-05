@@ -58,6 +58,9 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
   rtems_vector_number low = QORIQ_IRQ_IPI_0 + IPI_INDEX_LOW;
   rtems_vector_number high = QORIQ_IRQ_IPI_0 + IPI_INDEX_HIGH;
 
+  (void) rtems_interrupt_set_priority(low, 14);
+  (void) rtems_interrupt_set_priority(high, 13);
+
   rtems_interrupt_entry_initialize(
     &entry_low,
     handler,
@@ -70,8 +73,6 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
     &entry_low
   );
 
-  (void) qoriq_pic_set_priority(low, 1, NULL);
-
   rtems_interrupt_entry_initialize(
     &entry_high,
     handler,
@@ -83,8 +84,6 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
     RTEMS_INTERRUPT_UNIQUE,
     &entry_high
   );
-
-  (void) qoriq_pic_set_priority(high, 2, NULL);
 }
 
 static inline void qoriq_tm27_cause(uint32_t ipi_index)

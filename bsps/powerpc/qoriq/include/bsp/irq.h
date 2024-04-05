@@ -394,19 +394,20 @@ extern "C" {
  * @{
  */
 
-#define QORIQ_PIC_PRIORITY_LOWEST 1
-#define QORIQ_PIC_PRIORITY_HIGHEST 15
-#define QORIQ_PIC_PRIORITY_DISABLED 0
-#define QORIQ_PIC_PRIORITY_INVALID (QORIQ_PIC_PRIORITY_HIGHEST + 1)
-#define QORIQ_PIC_PRIORITY_DEFAULT (QORIQ_PIC_PRIORITY_LOWEST + 1)
+/*
+ * These are RTEMS API priority values, not PIC priority values.  We have:
+ *   15 - API-priority == PIC-priority
+ *
+ * The API-priority value 15 (which is PIC-priority 0) effectively disables the
+ * interrupt.
+ */
+#define QORIQ_PIC_PRIORITY_LOWEST 14
+#define QORIQ_PIC_PRIORITY_HIGHEST 0
+#define QORIQ_PIC_PRIORITY_DISABLED 15
+#define QORIQ_PIC_PRIORITY_INVALID 16
+#define QORIQ_PIC_PRIORITY_DEFAULT 13
 #define QORIQ_PIC_PRIORITY_IS_VALID(p) \
-  ((p) >= QORIQ_PIC_PRIORITY_DISABLED && (p) <= QORIQ_PIC_PRIORITY_HIGHEST)
-
-rtems_status_code qoriq_pic_set_priority(
-  rtems_vector_number vector,
-  int new_priority,
-  int *old_priority
-);
+  (((uint32_t) (p)) <= QORIQ_PIC_PRIORITY_DISABLED)
 
 rtems_status_code qoriq_pic_msi_allocate(rtems_vector_number *vector);
 

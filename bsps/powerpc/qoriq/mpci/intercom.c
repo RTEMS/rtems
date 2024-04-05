@@ -313,10 +313,9 @@ void qoriq_intercom_init(void)
 	);
 	assert(sc == RTEMS_SUCCESSFUL);
 
-	sc = qoriq_pic_set_priority(
+	sc = rtems_interrupt_set_priority(
 		QORIQ_IRQ_IPI_0,
-		QORIQ_PIC_PRIORITY_LOWEST,
-		NULL
+		QORIQ_PIC_PRIORITY_LOWEST
 	);
 	assert(sc == RTEMS_SUCCESSFUL);
 

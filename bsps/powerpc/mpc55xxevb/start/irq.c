@@ -45,35 +45,30 @@
 
 #include <rtems/status-checks.h>
 
-/**
- * @brief Returns the priority @a priority of IRQ @a vector from the INTC.
- */
-rtems_status_code mpc55xx_intc_get_priority( rtems_vector_number vector, unsigned *priority)
+rtems_status_code bsp_interrupt_get_priority(
+	rtems_vector_number vector,
+	uint32_t *priority
+)
 {
-	if (MPC55XX_IRQ_IS_VALID( vector)) {
-		*priority = INTC.PSR [vector].B.PRI;
-		return RTEMS_SUCCESSFUL;
-	} else {
-		*priority = MPC55XX_INTC_INVALID_PRIORITY;
-		return RTEMS_INVALID_NUMBER;
-	}
+	bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector));
+	bsp_interrupt_assert( priority != NULL);
+	*priority = MPC55XX_INTC_DISABLED_PRIORITY - INTC.PSR [vector].B.PRI;
+	return RTEMS_SUCCESSFUL;
 }
 
-/**
- * @brief Sets the priority of IRQ @a vector to @a priority at the INTC.
- */
-rtems_status_code mpc55xx_intc_set_priority( rtems_vector_number vector, unsigned priority)
+rtems_status_code bsp_interrupt_set_priority(
+	rtems_vector_number vector,
+	uint32_t priority
+)
 {
-	if (MPC55XX_IRQ_IS_VALID( vector) && MPC55XX_INTC_IS_VALID_PRIORITY( priority)) {
-		INTC.PSR [vector].B.PRI = priority;
-		if (INTC.PSR [vector].B.PRI == priority) {
-			return RTEMS_SUCCESSFUL;
-		} else {
-			return RTEMS_IO_ERROR;
-		}
-	} else {
-		return RTEMS_INVALID_NUMBER;
+	bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector));
+
+	if (!MPC55XX_INTC_IS_VALID_PRIORITY( priority)) {
+		return RTEMS_INVALID_PRIORITY;
 	}
+
+	INTC.PSR [vector].B.PRI = MPC55XX_INTC_DISABLED_PRIORITY - priority;
+	return RTEMS_SUCCESSFUL;
 }
 
 /**
@@ -120,7 +115,7 @@ rtems_status_code mpc55xx_interrupt_handler_install(
 		sc = rtems_interrupt_handler_install( vector, info, options, handler, arg);
 		RTEMS_CHECK_SC( sc, "Install interrupt handler");
 
-		return mpc55xx_intc_set_priority( vector, priority);
+		return rtems_interrupt_set_priority( vector, priority);
 	} else {
 		return RTEMS_INVALID_NUMBER;
 	}
@@ -168,6 +163,9 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  attributes->maximum_priority = MPC55XX_INTC_DISABLED_PRIORITY;
+  attributes->can_get_priority = true;
+  attributes->can_set_priority = true;
   return RTEMS_SUCCESSFUL;
 }
 
@@ -207,14 +205,10 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 
 rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector)
 {
-	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-	mpc55xx_intc_set_priority( vector, MPC55XX_INTC_DEFAULT_PRIORITY);
-	return RTEMS_SUCCESSFUL;
+	return bsp_interrupt_set_priority( vector, MPC55XX_INTC_DEFAULT_PRIORITY);
 }
 
 rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector)
 {
-	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-	mpc55xx_intc_set_priority( vector, MPC55XX_INTC_DISABLED_PRIORITY);
-	return RTEMS_SUCCESSFUL;
+	return bsp_interrupt_set_priority( vector, MPC55XX_INTC_DISABLED_PRIORITY);
 }

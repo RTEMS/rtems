@@ -132,19 +132,11 @@
 #ifdef ARM_MULTILIB_ARCH_V4
   #define LPC24XX_IRQ_PRIORITY_VALUE_MAX 15
 #else
-  #define LPC24XX_IRQ_PRIORITY_VALUE_MAX 31
+  #define LPC24XX_IRQ_PRIORITY_VALUE_MAX 255
 #endif
 #define LPC24XX_IRQ_PRIORITY_COUNT (LPC24XX_IRQ_PRIORITY_VALUE_MAX + 1)
 #define LPC24XX_IRQ_PRIORITY_HIGHEST LPC24XX_IRQ_PRIORITY_VALUE_MIN
 #define LPC24XX_IRQ_PRIORITY_LOWEST LPC24XX_IRQ_PRIORITY_VALUE_MAX
-
-#ifndef ASM
-
-void lpc24xx_irq_set_priority(rtems_vector_number vector, unsigned priority);
-
-unsigned lpc24xx_irq_get_priority(rtems_vector_number vector);
-
-#endif /* ASM */
 
 /** @} */
 

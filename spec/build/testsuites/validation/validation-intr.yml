@@ -22,11 +22,13 @@ source:
 - testsuites/validation/tc-intr-entry-remove.c
 - testsuites/validation/tc-intr-get-affinity.c
 - testsuites/validation/tc-intr-get-attributes.c
+- testsuites/validation/tc-intr-get-priority.c
 - testsuites/validation/tc-intr-handler-iterate.c
 - testsuites/validation/tc-intr-is-pending.c
 - testsuites/validation/tc-intr-raise.c
 - testsuites/validation/tc-intr-raise-on.c
 - testsuites/validation/tc-intr-set-affinity.c
+- testsuites/validation/tc-intr-set-priority.c
 - testsuites/validation/tc-intr-vector-disable.c
 - testsuites/validation/tc-intr-vector-enable.c
 - testsuites/validation/tc-intr-vector-is-enabled.c

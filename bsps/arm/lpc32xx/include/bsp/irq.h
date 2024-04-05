@@ -161,10 +161,6 @@ extern "C" {
 
 bool bsp_interrupt_is_valid_vector(rtems_vector_number vector);
 
-void lpc32xx_irq_set_priority(rtems_vector_number vector, unsigned priority);
-
-unsigned lpc32xx_irq_get_priority(rtems_vector_number vector);
-
 typedef enum {
   LPC32XX_IRQ_ACTIVE_LOW_OR_FALLING_EDGE,
   LPC32XX_IRQ_ACTIVE_HIGH_OR_RISING_EDGE

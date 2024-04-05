@@ -371,6 +371,9 @@ static inline void gicv3_get_attributes(
   attributes->maybe_enable = true;
   attributes->maybe_disable = true;
   attributes->can_raise = true;
+  attributes->can_get_priority = true;
+  attributes->can_set_priority = true;
+  attributes->maximum_priority = 255;
 
   if ( vector <= ARM_GIC_IRQ_SGI_LAST ) {
     /*

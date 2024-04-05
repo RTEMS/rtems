@@ -71,16 +71,6 @@ extern "C" {
 
 #define ARM_GIC_DIST ((volatile gic_dist *) BSP_ARM_GIC_DIST_BASE)
 
-rtems_status_code arm_gic_irq_set_priority(
-  rtems_vector_number vector,
-  uint8_t priority
-);
-
-rtems_status_code arm_gic_irq_get_priority(
-  rtems_vector_number vector,
-  uint8_t *priority
-);
-
 rtems_status_code arm_gic_irq_set_group(
   rtems_vector_number vector,
   gic_group group

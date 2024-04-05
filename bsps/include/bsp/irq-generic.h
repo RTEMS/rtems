@@ -374,6 +374,55 @@ rtems_status_code bsp_interrupt_raise_on(
 rtems_status_code bsp_interrupt_clear( rtems_vector_number vector );
 
 /**
+ * @brief Gets the priority of the interrupt vector.
+ *
+ * The return status shall correspond to the
+ * rtems_interrupt_attributes::can_get_priority value of the interrupt vector.
+ *
+ * @param vector is the interrupt vector number.  The vector number shall be
+ *   less than BSP_INTERRUPT_VECTOR_COUNT.
+ *
+ * @param[out] priority is the pointer to an uint32_t object.  When the
+ *   directive call is successful, the priority of the interrupt vector will be
+ *   stored in this object.  The pointer shall be valid.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_UNSATISFIED There is no priority associated with the
+ *   interrupt vector.  This status shall be returned if the function is not
+ *   implemented by the BSP.
+ */
+rtems_status_code bsp_interrupt_get_priority(
+  rtems_vector_number vector,
+  uint32_t           *priority
+);
+
+/**
+ * @brief Sets the priority of the interrupt vector.
+ *
+ * The return status shall correspond to the
+ * rtems_interrupt_attributes::can_set_priority value of the interrupt vector.
+ *
+ * @param vector is the interrupt vector number.  The vector number shall be
+ *   less than BSP_INTERRUPT_VECTOR_COUNT.
+ *
+ * @param priority is the new priority for the interrupt vector.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_PRIORITY The priority specified by ``priority`` was
+ *   not a valid new priority for the interrupt vector.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to set the priority of the interrupt
+ *   vector has not been satisfied.  This status shall be returned if the
+ *   function is not implemented by the BSP.
+ */
+rtems_status_code bsp_interrupt_set_priority(
+  rtems_vector_number vector,
+  uint32_t            priority
+);
+
+/**
  * @brief Gets the processor affinity set of the interrupt vector.
  *
  * The function may have no implementation in uniprocessor configurations.

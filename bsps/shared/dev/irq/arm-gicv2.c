@@ -272,40 +272,36 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
 }
 #endif
 
-rtems_status_code arm_gic_irq_set_priority(
+rtems_status_code bsp_interrupt_set_priority(
   rtems_vector_number vector,
-  uint8_t priority
+  uint32_t priority
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  volatile gic_dist *dist = ARM_GIC_DIST;
+  uint8_t gic_priority = (uint8_t) priority;
 
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    volatile gic_dist *dist = ARM_GIC_DIST;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-    gic_id_set_priority(dist, vector, priority);
-  } else {
-    sc = RTEMS_INVALID_ID;
+  if (gic_priority != priority) {
+    return RTEMS_INVALID_PRIORITY;
   }
 
-  return sc;
+  gic_id_set_priority(dist, vector, gic_priority);
+  return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code arm_gic_irq_get_priority(
+rtems_status_code bsp_interrupt_get_priority(
   rtems_vector_number vector,
-  uint8_t *priority
+  uint32_t *priority
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  volatile gic_dist *dist = ARM_GIC_DIST;
 
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    volatile gic_dist *dist = ARM_GIC_DIST;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(priority != NULL);
 
-    *priority = gic_id_get_priority(dist, vector);
-  } else {
-    sc = RTEMS_INVALID_ID;
-  }
-
-  return sc;
+  *priority = gic_id_get_priority(dist, vector);
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code arm_gic_irq_set_group(

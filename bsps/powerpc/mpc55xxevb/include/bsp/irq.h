@@ -453,13 +453,20 @@ extern "C" {
  * Interrupt controller
  */
 
-#define MPC55XX_INTC_MIN_PRIORITY 1U
-#define MPC55XX_INTC_MAX_PRIORITY 15U
-#define MPC55XX_INTC_DISABLED_PRIORITY 0U
-#define MPC55XX_INTC_INVALID_PRIORITY (MPC55XX_INTC_MAX_PRIORITY + 1)
-#define MPC55XX_INTC_DEFAULT_PRIORITY (MPC55XX_INTC_MIN_PRIORITY + 1)
+/*
+ * These are RTEMS API priority values, not INTC priority values.  We have:
+ *   15 - API-priority == INTC-priority
+ *
+ * The API-priority value 15 (which is INTC-priority 0) effectively disables
+ * the interrupt.
+ */
+#define MPC55XX_INTC_MIN_PRIORITY 14U
+#define MPC55XX_INTC_MAX_PRIORITY 0U
+#define MPC55XX_INTC_DISABLED_PRIORITY 15U
+#define MPC55XX_INTC_INVALID_PRIORITY 16U
+#define MPC55XX_INTC_DEFAULT_PRIORITY 13U
 #define MPC55XX_INTC_IS_VALID_PRIORITY(p) \
-  ((p) >= MPC55XX_INTC_DISABLED_PRIORITY && (p) <= MPC55XX_INTC_MAX_PRIORITY)
+  (((uint32_t) (p)) <= MPC55XX_INTC_DISABLED_PRIORITY)
 
 rtems_status_code mpc55xx_interrupt_handler_install(
   rtems_vector_number vector,
@@ -468,16 +475,6 @@ rtems_status_code mpc55xx_interrupt_handler_install(
   unsigned priority,
   rtems_interrupt_handler handler,
   void *arg
-);
-
-rtems_status_code mpc55xx_intc_get_priority(
-  rtems_vector_number vector,
-  unsigned *priority
-);
-
-rtems_status_code mpc55xx_intc_set_priority(
-  rtems_vector_number vector,
-  unsigned priority
 );
 
 rtems_status_code mpc55xx_intc_raise_software_irq(rtems_vector_number vector);

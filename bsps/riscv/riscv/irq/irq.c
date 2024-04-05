@@ -356,6 +356,8 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  bool is_external = RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector);
+
   attributes->is_maskable = true;
   attributes->can_enable = true;
   attributes->maybe_enable = true;
@@ -364,8 +366,13 @@ rtems_status_code bsp_interrupt_get_attributes(
   attributes->can_raise = (vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
   attributes->can_raise_on = attributes->can_raise;
   attributes->cleared_by_acknowledge = true;
-  attributes->can_get_affinity = RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector);
-  attributes->can_set_affinity = attributes->can_get_affinity;
+  attributes->can_get_affinity = is_external;
+  attributes->can_set_affinity = is_external;
+
+  /* The PLIC priority is defined by a 32-bit WARL register */
+  attributes->maximum_priority = UINT32_MAX;
+  attributes->can_get_priority = is_external;
+  attributes->can_set_priority = is_external;
 
   if (vector == RISCV_INTERRUPT_VECTOR_SOFTWARE) {
     attributes->trigger_signal = RTEMS_INTERRUPT_NO_SIGNAL;
@@ -616,6 +623,39 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
   clear_csr(mie, MIP_MSIP);
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_set_priority(
+  rtems_vector_number vector,
+  uint32_t priority
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  if (!RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  riscv_plic->priority[RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector)] =
+    UINT32_MAX - priority;
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_get_priority(
+  rtems_vector_number vector,
+  uint32_t *priority
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(priority != NULL);
+
+  if (!RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  *priority = UINT32_MAX -
+    riscv_plic->priority[RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector)];
   return RTEMS_SUCCESSFUL;
 }
 

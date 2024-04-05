@@ -208,53 +208,52 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
 }
 #endif
 
-rtems_status_code arm_gic_irq_set_priority(
+rtems_status_code bsp_interrupt_set_priority(
   rtems_vector_number vector,
-  uint8_t priority
+  uint32_t priority
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  uint8_t gic_priority = (uint8_t) priority;
 
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    if (vector >= 32) {
-      volatile gic_dist *dist = ARM_GIC_DIST;
-      gic_id_set_priority(dist, vector, priority);
-    } else {
-      gicv3_sgi_ppi_set_priority(
-        vector,
-        priority,
-        _SMP_Get_current_processor()
-      );
-    }
-  } else {
-    sc = RTEMS_INVALID_ID;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  if (gic_priority != priority) {
+    return RTEMS_INVALID_PRIORITY;
   }
 
-  return sc;
+  if (vector >= 32) {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+    gic_id_set_priority(dist, vector, priority);
+  } else {
+    gicv3_sgi_ppi_set_priority(
+      vector,
+      priority,
+      _SMP_Get_current_processor()
+    );
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code arm_gic_irq_get_priority(
+rtems_status_code bsp_interrupt_get_priority(
   rtems_vector_number vector,
-  uint8_t *priority
+  uint32_t *priority
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(priority != NULL);
 
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    if (vector >= 32) {
-      volatile gic_dist *dist = ARM_GIC_DIST;
-      *priority = gic_id_get_priority(dist, vector);
-    } else {
-      *priority = gicv3_sgi_ppi_get_priority(
-        vector,
-        _SMP_Get_current_processor()
-      );
-    }
+  if (vector >= 32) {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+    *priority = gic_id_get_priority(dist, vector);
   } else {
-    sc = RTEMS_INVALID_ID;
+    *priority = gicv3_sgi_ppi_get_priority(
+      vector,
+      _SMP_Get_current_processor()
+    );
   }
 
-  return sc;
+  return RTEMS_SUCCESSFUL;
 }
 
 #ifdef RTEMS_SMP

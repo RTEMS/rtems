@@ -160,39 +160,44 @@ static inline unsigned lpc32xx_irq_get_index(uint32_t val)
   return val;
 }
 
-void lpc32xx_irq_set_priority(rtems_vector_number vector, unsigned priority)
+rtems_status_code bsp_interrupt_set_priority(
+  rtems_vector_number vector,
+  uint32_t priority
+)
 {
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    rtems_interrupt_level level;
-    unsigned i = 0;
+  rtems_interrupt_level level;
+  uint32_t i;
 
-    if (priority > LPC32XX_IRQ_PRIORITY_LOWEST) {
-      priority = LPC32XX_IRQ_PRIORITY_LOWEST;
-    }
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-    lpc32xx_irq_priority_table [vector] = (uint8_t) priority;
-
-    for (i = LPC32XX_IRQ_PRIORITY_HIGHEST; i <= priority; ++i) {
-      rtems_interrupt_disable(level);
-      lpc32xx_irq_clear_bit_in_field(vector, &lpc32xx_irq_priority_masks [i]);
-      rtems_interrupt_enable(level);
-    }
-
-    for (i = priority + 1; i <= LPC32XX_IRQ_PRIORITY_LOWEST; ++i) {
-      rtems_interrupt_disable(level);
-      lpc32xx_irq_set_bit_in_field(vector, &lpc32xx_irq_priority_masks [i]);
-      rtems_interrupt_enable(level);
-    }
+  if (priority > LPC32XX_IRQ_PRIORITY_VALUE_MAX) {
+    return RTEMS_INVALID_PRIORITY;
   }
+
+  rtems_interrupt_disable(level);
+  lpc32xx_irq_priority_table [vector] = (uint8_t) priority;
+
+  for (i = LPC32XX_IRQ_PRIORITY_HIGHEST; i <= priority; ++i) {
+    lpc32xx_irq_clear_bit_in_field(vector, &lpc32xx_irq_priority_masks [i]);
+  }
+
+  for (i = priority + 1; i <= LPC32XX_IRQ_PRIORITY_LOWEST; ++i) {
+    lpc32xx_irq_set_bit_in_field(vector, &lpc32xx_irq_priority_masks [i]);
+  }
+
+  rtems_interrupt_enable(level);
+  return RTEMS_SUCCESSFUL;
 }
 
-unsigned lpc32xx_irq_get_priority(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_get_priority(
+  rtems_vector_number vector,
+  uint32_t *priority
+)
 {
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    return lpc32xx_irq_priority_table [vector];
-  } else {
-    return LPC32XX_IRQ_PRIORITY_LOWEST;
-  }
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(priority != NULL);
+  *priority = lpc32xx_irq_priority_table [vector];
+  return RTEMS_SUCCESSFUL;
 }
 
 void lpc32xx_irq_set_activation_polarity(rtems_vector_number vector, lpc32xx_irq_activation_polarity activation_polarity)
@@ -326,6 +331,9 @@ rtems_status_code bsp_interrupt_get_attributes(
   attributes->can_clear = is_sw_irq;
   attributes->can_get_affinity = true;
   attributes->can_set_affinity = true;
+  attributes->maximum_priority = LPC32XX_IRQ_PRIORITY_VALUE_MAX;
+  attributes->can_get_priority = true;
+  attributes->can_set_priority = true;
 
   return RTEMS_SUCCESSFUL;
 }

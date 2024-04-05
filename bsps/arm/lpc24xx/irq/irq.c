@@ -47,34 +47,6 @@ static inline bool lpc24xx_irq_is_valid(rtems_vector_number vector)
   return vector < BSP_INTERRUPT_VECTOR_COUNT;
 }
 
-void lpc24xx_irq_set_priority(rtems_vector_number vector, unsigned priority)
-{
-  if (lpc24xx_irq_is_valid(vector)) {
-    if (priority > LPC24XX_IRQ_PRIORITY_VALUE_MAX) {
-      priority = LPC24XX_IRQ_PRIORITY_VALUE_MAX;
-    }
-
-    #ifdef ARM_MULTILIB_ARCH_V4
-      VICVectPriorityBase [vector] = priority;
-    #else
-      _ARMV7M_NVIC_Set_priority((int) vector, (int) (priority << 3));
-    #endif
-  }
-}
-
-unsigned lpc24xx_irq_get_priority(rtems_vector_number vector)
-{
-  if (lpc24xx_irq_is_valid(vector)) {
-    #ifdef ARM_MULTILIB_ARCH_V4
-      return VICVectPriorityBase [vector];
-    #else
-      return (unsigned) (_ARMV7M_NVIC_Get_priority((int) vector) >> 3);
-    #endif
-  } else {
-    return LPC24XX_IRQ_PRIORITY_VALUE_MIN - 1U;
-  }
-}
-
 #ifdef ARM_MULTILIB_ARCH_V4
 
 rtems_status_code bsp_interrupt_get_attributes(
@@ -82,6 +54,9 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  attributes->maximum_priority = LPC24XX_IRQ_PRIORITY_VALUE_MAX;
+  attributes->can_get_priority = true;
+  attributes->can_set_priority = true;
   return RTEMS_SUCCESSFUL;
 }
 
@@ -130,6 +105,33 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   VICIntEnClear = 1U << vector;
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_set_priority(
+  rtems_vector_number vector,
+  uint32_t priority
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  if (priority > LPC24XX_IRQ_PRIORITY_VALUE_MAX) {
+    return RTEMS_INVALID_PRIORITY;
+  }
+
+  VICVectPriorityBase [vector] = priority;
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_get_priority(
+  rtems_vector_number vector,
+  uint32_t *priority
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(priority != NULL);
+
+  *priority = VICVectPriorityBase [vector];
   return RTEMS_SUCCESSFUL;
 }
 
