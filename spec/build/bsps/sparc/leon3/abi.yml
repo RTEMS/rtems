@@ -7,6 +7,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
+- enabled-by: RTEMS_CLANG_STATIC_ANALYZER
+  value:
+  - -mcpu=leon3
 - enabled-by: sparc/ut700
   value:
   - -mcpu=leon3
@@ -24,8 +27,7 @@ default:
   - -mcpu=leon3
 description: |
   ABI flags
-enabled-by:
-- gcc
+enabled-by: gcc
 links: []
 name: ABI_FLAGS
 type: build

@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- env-enable: null
+- define-condition: null
+- set-value: -D_Atomic=
+- env-append: CFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+default:
+- enabled-by: true
+  value: false
+description: |
+  Enable the Clang Static Analyzer support.
+enabled-by: true
+links: []
+name: RTEMS_CLANG_STATIC_ANALYZER
+type: build

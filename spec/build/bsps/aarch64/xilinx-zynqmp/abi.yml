@@ -7,6 +7,10 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default:
+- enabled-by: RTEMS_CLANG_STATIC_ANALYZER
+  value:
+  - -mno-outline-atomics
+  - -mcpu=cortex-a53
 - enabled-by:
   - aarch64/xilinx_zynqmp_ilp32_qemu
   - aarch64/xilinx_zynqmp_ilp32_zu3eg
