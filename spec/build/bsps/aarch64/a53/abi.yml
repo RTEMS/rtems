@@ -9,11 +9,17 @@ copyrights:
 default:
 - enabled-by: aarch64/a53_ilp32_qemu
   value:
-  - -mcpu=cortex-a53
   - -mabi=ilp32
+  - -mno-outline-atomics
+  - -mcpu=cortex-a53
+  - -mfix-cortex-a53-835769
+  - -mfix-cortex-a53-843419
 - enabled-by: true
   value:
+  - -mno-outline-atomics
   - -mcpu=cortex-a53
+  - -mfix-cortex-a53-835769
+  - -mfix-cortex-a53-843419
 description: |
   ABI flags
 enabled-by: true
