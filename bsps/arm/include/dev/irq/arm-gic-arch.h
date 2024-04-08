@@ -44,12 +44,14 @@
 extern "C" {
 #endif
 
-static inline void arm_interrupt_handler_dispatch(rtems_vector_number vector)
+static inline uint32_t arm_interrupt_enable_interrupts(void)
 {
-  uint32_t psr = _ARMV4_Status_irq_enable();
-  bsp_interrupt_handler_dispatch(vector);
+  return _ARMV4_Status_irq_enable();
+}
 
-  _ARMV4_Status_restore(psr);
+static inline void arm_interrupt_restore_interrupts(uint32_t status)
+{
+  _ARMV4_Status_restore(status);
 }
 
 static inline void arm_interrupt_facility_set_exception_handler(void)
