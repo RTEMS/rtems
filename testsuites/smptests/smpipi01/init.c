@@ -198,6 +198,43 @@ static const Per_CPU_Job_context counter_1_job_context = {
   .arg = &test_instance
 };
 
+static void sync_handler(void *arg)
+{
+  test_context *ctx = arg;
+  SMP_barrier_State *bs = &ctx->worker_barrier_state;
+
+  /* (E) */
+  barrier(ctx, bs);
+}
+
+static const Per_CPU_Job_context sync_context = {
+  .handler = sync_handler,
+  .arg = &test_instance
+};
+
+static void wait_for_ipi_done(test_context *ctx, Per_CPU_Control *cpu)
+{
+  Per_CPU_Job job;
+  unsigned long done;
+
+  job.context = &sync_context;
+  _Per_CPU_Submit_job(cpu, &job);
+
+  while (cpu->isr_nest_level == 0) {
+    RTEMS_COMPILER_MEMORY_BARRIER();
+  }
+
+  /* (E) */
+  barrier(ctx, &ctx->main_barrier_state);
+
+  while (cpu->isr_nest_level != 0) {
+    RTEMS_COMPILER_MEMORY_BARRIER();
+  }
+
+  done = _Atomic_Load_ulong( &job.done, ATOMIC_ORDER_ACQUIRE );
+  rtems_test_assert( done == PER_CPU_JOB_DONE );
+}
+
 static void test_send_message_flood(
   test_context *ctx,
   uint32_t cpu_count
@@ -211,19 +248,14 @@ static void test_send_message_flood(
 
     ctx->jobs[cpu_index][0].context = &counter_0_job_context;
     ctx->jobs[cpu_index][1].context = &counter_1_job_context;
-    _Per_CPU_Submit_job(cpu, &ctx->jobs[cpu_index][0]);
+    _Per_CPU_Add_job(cpu, &ctx->jobs[cpu_index][0]);
   }
 
   for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
     Per_CPU_Control *cpu;
-    Per_CPU_Control *cpu_self;
     uint32_t i;
 
     cpu = _Per_CPU_Get_by_index(cpu_index);
-
-    cpu_self = _Thread_Dispatch_disable();
-    _SMP_Synchronize();
-    _Thread_Dispatch_enable(cpu_self);
 
     for (i = 0; i < cpu_count; ++i) {
       if (i != cpu_index) {
@@ -233,6 +265,10 @@ static void test_send_message_flood(
 
     for (i = 0; i < 100000; ++i) {
       _SMP_Send_message(cpu, SMP_MESSAGE_PERFORM_JOBS);
+    }
+
+    if (cpu_index != cpu_index_self) {
+      wait_for_ipi_done(ctx, cpu);
     }
 
     for (i = 0; i < cpu_count; ++i) {
