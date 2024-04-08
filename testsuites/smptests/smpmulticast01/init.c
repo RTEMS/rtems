@@ -563,14 +563,16 @@ static void fatal_extension(
   bool ok;
 
   if (source == RTEMS_FATAL_SOURCE_SMP) {
-    T_step_eq_int(1, source, RTEMS_FATAL_SOURCE_SMP);
-    T_step_false(2, always_set_to_false, "unexpected argument value");
-    T_step_eq_int(3, code, SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS);
-    T_case_end();
+    if (code != SMP_FATAL_SHUTDOWN_RESPONSE) {
+      T_step_eq_int(1, source, RTEMS_FATAL_SOURCE_SMP);
+      T_step_false(2, always_set_to_false, "unexpected argument value");
+      T_step_eq_int(3, code, SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS);
+      T_case_end();
 
-    ok = T_run_finalize();
-    rtems_test_assert(ok);
-    TEST_END();
+      ok = T_run_finalize();
+      rtems_test_assert(ok);
+      TEST_END();
+    }
   } else if (source == RTEMS_FATAL_SOURCE_APPLICATION) {
     ok = T_run_finalize();
     rtems_test_assert(ok);
