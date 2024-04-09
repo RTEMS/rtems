@@ -221,7 +221,7 @@ static void ISRHandler( void *arg )
 
   (void) arg;
 
-#if defined(RTEMS_SMP)
+#if defined(RTEMS_SMP) && !(defined(__PPC__) || (__powerpc64__))
   Per_CPU_Control *cpu_self;
 
   cpu_self = _Per_CPU_Get();
