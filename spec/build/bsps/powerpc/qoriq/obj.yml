@@ -60,7 +60,6 @@ source:
 - bsps/powerpc/qoriq/start/restart.S
 - bsps/powerpc/shared/cache/cache.c
 - bsps/powerpc/shared/exceptions/ppc-exc-handler-table.c
-- bsps/powerpc/shared/mmu/e500-mmu.c
 - bsps/powerpc/shared/start/bsp-start-zero.S
 - bsps/powerpc/shared/start/bspidle.c
 - bsps/powerpc/shared/start/tictac.c
