@@ -40,7 +40,7 @@
 
 #include <rtems/score/smp.h>
 #include <rtems/score/percpu.h>
-#include <rtems/score/processormask.h>
+#include <rtems/score/processormaskimpl.h>
 #include <rtems/fatal.h>
 
 #ifdef __cplusplus

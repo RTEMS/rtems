@@ -39,7 +39,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/processormask.h>
+#include <rtems/score/processormaskimpl.h>
 
 const Processor_mask _Processor_mask_The_one_and_only = { .__bits[ 0 ] = 1 };
 
