@@ -15,6 +15,7 @@
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/processormaskimpl.h>
 
 #include <stdlib.h>
 #include <stdio.h>

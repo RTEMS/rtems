@@ -38,6 +38,7 @@
 
 #include <bsp/irq-generic.h>
 #include <bsp/start.h>
+#include <rtems/score/processormaskimpl.h>
 
 #define GIC_CPUIF ((volatile gic_cpuif *) BSP_ARM_GIC_CPUIF_BASE)
 

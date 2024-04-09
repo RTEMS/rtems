@@ -29,6 +29,7 @@
 
 #include <bsp.h>
 #include <bsp/irq-generic.h>
+#include <rtems/score/processormaskimpl.h>
 
 static inline int bsp_irq_cpu(int irq)
 {

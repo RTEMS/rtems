@@ -42,6 +42,7 @@
 #include <bsp.h>
 #include <rtems/clockdrv.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/processormaskimpl.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/timecounter.h>
 #include <rtems/score/thread.h>

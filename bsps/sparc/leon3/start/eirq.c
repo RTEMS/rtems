@@ -40,6 +40,7 @@
 
 #include <bsp/irq-generic.h>
 #include <bsp/irqimpl.h>
+#include <rtems/score/processormaskimpl.h>
 
 #if !defined(LEON3_IRQAMP_EXTENDED_INTERRUPT)
 /* GRLIB extended IRQ controller IRQ number */
