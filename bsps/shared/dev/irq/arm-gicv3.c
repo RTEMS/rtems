@@ -29,6 +29,7 @@
 
 #include <bsp/irq-generic.h>
 #include <bsp/start.h>
+#include <rtems/score/processormaskimpl.h>
 
 void bsp_interrupt_dispatch(void)
 {
