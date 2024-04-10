@@ -35,11 +35,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdlib.h>
-
-#include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <bsp/fatal.h>
 #include <peripheral_maps/xilinx_zynqmp.h>
 #include <dev/clock/xttcps_hw.h>
 #include <rtems/timecounter.h>
@@ -211,7 +209,7 @@ static void zynqmp_ttc_clock_driver_support_install_isr(
     &zynqmp_ttc_interrupt_entry
   );
   if ( sc != RTEMS_SUCCESSFUL ) {
-    rtems_fatal_error_occurred(0xdeadbeef);
+    bsp_fatal(XIL_FATAL_TTC_IRQ_INSTALL);
   }
 }
 

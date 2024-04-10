@@ -214,6 +214,9 @@ typedef enum {
 
   /* MicroBlaze fatal codes */
   MICROBLAZE_FATAL_CLOCK_IRQ_INSTALL = BSP_FATAL_CODE_BLOCK(16),
+
+  /* Xilinx fatal codes */
+  XIL_FATAL_TTC_IRQ_INSTALL = BSP_FATAL_CODE_BLOCK(17),
 } bsp_fatal_code;
 
 RTEMS_NO_RETURN static inline void

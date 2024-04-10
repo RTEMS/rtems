@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: bsps/arm/xilinx-zynqmp-rpu
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/validation/bsps/tr-fatal-clock-xil-ttc-irq-install.c
+- testsuites/validation/bsps/ts-fatal-clock-xil-ttc-irq-install.c
+stlib: []
+target: testsuites/validation/bsps/ts-fatal-clock-xil-ttc-irq-install.exe
+type: build
+use-after:
+- validation
+use-before: []

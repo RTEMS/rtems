@@ -79,6 +79,8 @@ links:
 - role: build-dependency
   uid: validation-tls-1
 - role: build-dependency
+  uid: bsps/fatal-clock-xil-ttc-irq-install
+- role: build-dependency
   uid: bsps/fatal-sparc-leon3-cache-snooping-disabled-boot
 - role: build-dependency
   uid: bsps/fatal-sparc-leon3-cache-snooping-disabled-secondary
