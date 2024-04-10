@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup arm_gic
+ * @ingroup DevIRQGIC
  *
- *  @brief ARM GIC Support
+ * @brief This header file provides interfaces of the ARM Generic Interrupt
+ *   Controller (GIC) support.
  */
 
 /*
@@ -45,11 +46,14 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- *  @defgroup arm_gic ARM GIC
+ * @defgroup DevIRQGIC ARM Generic Interrupt Controller (GIC) Support
  *
- *  @ingroup RTEMSBSPsARMShared
+ * @ingroup RTEMSImplClassicIntr
  *
- *  @brief ARM_GIC Support Package
+ * @brief This group contains the Interrupt Manager implementation parts
+ *   specific to the ARM Generic Interrupt Controller.
+ *
+ * @{
  */
 
 #define GIC_ID_TO_ONE_BIT_REG_INDEX(id) ((id) >> 5)
@@ -247,6 +251,8 @@ static inline void gic_id_set_handling_model(
 
   dist->icdicfr[i] = icdicfr;
 }
+
+/* @} */
 
 #ifdef __cplusplus
 }

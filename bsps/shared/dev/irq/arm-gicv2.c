@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsARMShared
+ * @ingroup DevIRQGIC
  *
- * @brief This source file contains the implementation of ARM GICv2 support.
+ * @brief This source file contains the implementation of the generic GICv2
+ *   support.
  */
 
 /*

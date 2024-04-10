@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup arm_gic
+ * @ingroup DevIRQGIC
  *
- *  @brief ARM GIC TM27 Support
+ * @brief This header file provides the TM27 support for the ARM Generic
+ *   Interrupt Controller (GIC).
  */
 
 /*

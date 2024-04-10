@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsARMShared
+ * @ingroup DevIRQGIC
  *
- * @brief ARM-specific IRQ handlers.
+ * @brief This header file provides interfaces of the ARM Generic Interrupt
+ *   Controller (GIC) support specific to the Arm architecture.
  */
 
 /*
@@ -44,6 +45,12 @@
 extern "C" {
 #endif
 
+/**
+ * @addtogroup DevIRQGIC
+ *
+ * @{
+ */
+
 static inline uint32_t arm_interrupt_enable_interrupts(void)
 {
   return _ARMV4_Status_irq_enable();
@@ -61,6 +68,8 @@ static inline void arm_interrupt_facility_set_exception_handler(void)
    * handler is already set by start.S.
    */
 }
+
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup arm_gic
+ * @ingroup DevIRQGIC
  *
- *  @brief ARM GIC Register definitions
+ * @brief This header file provides interfaces of the ARM Generic Interrupt
+ *   Controller (GIC) memory-mapped registers.
  */
 
 /*
@@ -37,6 +38,12 @@
 #define LIBBSP_ARM_SHARED_ARM_GIC_REGS_H
 
 #include <bsp/utility.h>
+
+/**
+ * @addtogroup DevIRQGIC
+ *
+ * @{
+ */
 
 typedef struct {
   uint32_t iccicr;
@@ -224,5 +231,7 @@ typedef struct {
   /* GICR_IGRPMODR0 */
   uint32_t icspigrpmodr[64];
 } gic_sgi_ppi;
+
+/** @} */
 
 #endif /* LIBBSP_ARM_SHARED_ARM_GIC_REGS_H */

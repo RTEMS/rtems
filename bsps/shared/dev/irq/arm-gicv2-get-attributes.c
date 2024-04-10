@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsShared
+ * @ingroup DevIRQGIC
  *
- * @brief This source file contains the interrupt get attribute implementation.
+ * @brief This source file contains the implementation of
+ *   bsp_interrupt_get_attributes() for the GICv2.
  */
 
 /*

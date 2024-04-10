@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsAArch64Shared
+ * @ingroup DevIRQGIC
  *
- * @brief AArch64-specific ARM GICv3 handlers.
+ * @brief This header file provides interfaces of the ARM Generic Interrupt
+ *   Controller (GIC) support specific to the AArch64 architecture.
  */
 
 /*
@@ -46,6 +47,12 @@
 extern "C" {
 #endif
 
+/**
+ * @addtogroup DevIRQGIC
+ *
+ * @{
+ */
+
 static inline uint32_t arm_interrupt_enable_interrupts(void)
 {
   uint32_t status = _CPU_ISR_Get_level();
@@ -71,6 +78,8 @@ static inline void arm_interrupt_facility_set_exception_handler(void)
     _AArch64_Exception_interrupt_nest
   );
 }
+
+/** @} */
 
 #ifdef __cplusplus
 }

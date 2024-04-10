@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup DevIRQGIC
+ *
+ * @brief This source file contains the implementation of the generic GICv3
+ *   support.
+ */
+
+/*
  * Copyright (C) 2019 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without

@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup arm_gic
+ * @ingroup DevIRQGIC
  *
- *  @brief ARM GIC IRQ
+ * @brief This header file provides interfaces of the ARM Generic Interrupt
+ *   Controller (GIC) support.
  */
 
 /*
@@ -42,6 +43,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @addtogroup DevIRQGIC
+ *
+ * @{
+ */
 
 #define ARM_GIC_IRQ_SGI_0 0
 #define ARM_GIC_IRQ_SGI_1 1
@@ -107,6 +114,8 @@ uint32_t arm_gic_irq_processor_count(void);
 
 void arm_gic_irq_initialize_secondary_cpu(void);
 #endif
+
+/** @} */
 
 #ifdef __cplusplus
 }
