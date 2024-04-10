@@ -380,6 +380,7 @@ install:
   - cpukit/include/rtems/score/prioritybitmapimpl.h
   - cpukit/include/rtems/score/priorityimpl.h
   - cpukit/include/rtems/score/processormask.h
+  - cpukit/include/rtems/score/processormaskimpl.h
   - cpukit/include/rtems/score/profiling.h
   - cpukit/include/rtems/score/protectedheap.h
   - cpukit/include/rtems/score/rbtree.h
