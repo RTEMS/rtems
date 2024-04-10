@@ -5,7 +5,7 @@ enabled-by: true
 identifier: RTEMSDeviceDrivers
 links:
 - role: requirement-refinement
-  uid: root
+  uid: /req/root
 non-functional-type: design-group
 rationale: null
 references: []

@@ -12,7 +12,7 @@ links:
 - role: interface-placement
   uid: gptimer-header
 - role: interface-ingroup
-  uid: /req/dev
+  uid: ../../req/group
 name: GRLIB
 text: |
   The device driver software component shall provide an interface to the GRLIB
