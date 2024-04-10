@@ -4,7 +4,7 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: ../if/group-clock
+  uid: group
 - role: requirement-refinement
   uid: /rtems/req/mem-basic
 non-functional-type: quality
