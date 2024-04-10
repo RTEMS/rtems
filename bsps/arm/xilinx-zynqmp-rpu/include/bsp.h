@@ -59,7 +59,6 @@
 
 #include <bsp/default-initial-extension.h>
 #include <bsp/start.h>
-#include <peripheral_maps/xilinx_zynqmp.h>
 
 #include <dev/serial/zynq-uart-zynqmp.h>
 
@@ -75,8 +74,6 @@ extern "C" {
 #define BSP_ARM_A9MPCORE_SCU_BASE 0
 
 #define BSP_ARM_A9MPCORE_GT_BASE 0
-
-#define BSP_SELECTED_TTC_ADDR ZYNQMP_TTC0
 
 /**
  * @brief Zynq UltraScale+ MPSoC specific set up of the MMU.

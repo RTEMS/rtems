@@ -5,12 +5,16 @@ copyrights:
 - Copyright (C) 2023 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by: bsps/sparc/leon3
+enabled-by:
+- bsps/arm/xilinx-zynqmp-rpu
+- bsps/sparc/leon3
 features: c cprogram
 includes: []
 ldflags:
 - -Wl,--wrap=_IO_Relax
 links:
+- role: build-dependency
+  uid: objclockxilttc
 - role: build-dependency
   uid: objgrlib
 - role: build-dependency

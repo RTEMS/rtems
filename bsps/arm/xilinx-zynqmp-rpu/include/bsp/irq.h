@@ -51,7 +51,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_SELECTED_TTC_IRQ ZYNQMP_IRQ_TTC_0_0
 #define BSP_INTERRUPT_VECTOR_COUNT 188
 
 /** @} */
