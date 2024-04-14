@@ -12,6 +12,36 @@
 /spec/build/cpukit/objdlaarch64.yml
 
 
+[Arch ARM] @chris @gedare @joel @opticron
+/bsps/arm/
+/bsps/include/arm/
+/bsps/include/xil/arm/
+/bsps/shared/freebsd/sys/arm/
+/bsps/shared/xil/arm/
+/cpukit/score/cpu/arm/
+/spec/build/bsps/arm/
+/cpukit/libdebugger/rtems-debugger-arm.c
+/cpukit/libdl/*arm*
+/spec/build/cpukit/cpuarm.yml
+/spec/build/cpukit/objdbgarm.yml
+/spec/build/cpukit/objdlarm.yml
+
+
+#[Arch Blackfin] @chris @gedare @joel @opticron
+#[Arch i386] @chris @gedare @joel
+#[Arch LatticeMicro32] @chris @gedare @joel
+#[Arch Motorolla 68000] @chris @gedare @joel
+#[Arch MicroBlaze] @joel @opticron
+
+#[Arch MIPS] @gedare @joel
+#[Arch Moxie] @joel
+#[Arch Nios II] @chris @gedare @joel
+#[Arch ork1] @joel
+#[Arch PowerPC] @gedare @joel
+#[Arch RISC-V] @chris @gedare @joel
+#[Arch SuperH] @joel
+
+
 [Arch SPARC] @joel @gedare
 /bsps/sparc/**
 /cpukit/score/cpu/sparc/**
@@ -20,6 +50,11 @@
 /spec/build/cpukit/objdlsparc.yml
 /spec/build/testsuites/validation/bsps/*-sparc-*
 /testsuites/validation/bsps/*-sparc-*
+
+
+#[Arch SPARC64] @gedare
+#[Arch V850] @gedare @joel
+#[Arch X86_64] @chris @gedare @joel
 
 
 # Everyone in the RTEMS group can approve in testsuites if they are not caught above
