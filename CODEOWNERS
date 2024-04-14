@@ -1,0 +1,27 @@
+# Please keep users, directories and files  sorted alphabetically.
+# Directories first
+
+[Arch AArch64] @chrisj @gedare @joel @kinsey
+/bsps/aarch64/
+/cpukit/score/cpu/aarch64/
+/spec/build/bsps/aarch64/
+/cpukit/libdebugger/rtems-debugger-aarch64.c
+/cpukit/libdl/rtl-mdreloc-aarch64.c
+/spec/build/cpukit/cpuaarch64.yml
+/spec/build/cpukit/objdbgaarch64.yml
+/spec/build/cpukit/objdlaarch64.yml
+
+
+[Arch SPARC] @joel @gedare
+/bsps/sparc/
+/cpukit/score/cpu/sparc/
+/spec/build/bsps/sparc/
+/spec/build/cpukit/cpusparc.yml
+/spec/build/cpukit/objdlsparc.yml
+/spec/build/testsuites/validation/bsps/*-sparc-*
+/testsuites/validation/bsps/*-sparc-*
+
+
+# Everyone in the RTEMS group can approve in testsuites if they are not caught above
+[Testsuites] @rtems
+/testsuites/
