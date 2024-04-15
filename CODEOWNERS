@@ -7,9 +7,7 @@
 /spec/build/bsps/aarch64/
 /cpukit/libdebugger/rtems-debugger-aarch64.v
 /cpukit/libdl/rtl-mdreloc-aarch64.c
-/spec/build/cpukit/cpuaarch64.yml
-/spec/build/cpukit/objdbgaarch64.yml
-/spec/build/cpukit/objdlaarch64.yml
+/spec/build/cpukit/*aarch64.yml
 
 
 [Arch ARM] @chris @gedare @joel @opticron
@@ -22,24 +20,103 @@
 /spec/build/bsps/arm/
 /cpukit/libdebugger/rtems-debugger-arm.c
 /cpukit/libdl/*arm*
-/spec/build/cpukit/cpuarm.yml
-/spec/build/cpukit/objdbgarm.yml
-/spec/build/cpukit/objdlarm.yml
+/spec/build/cpukit/*arm.yml
 
 
-#[Arch Blackfin] @chris @gedare @joel @opticron
-#[Arch i386] @chris @gedare @joel
-#[Arch LatticeMicro32] @chris @gedare @joel
-#[Arch Motorolla 68000] @chris @gedare @joel
-#[Arch MicroBlaze] @joel @opticron
+[Arch Blackfin] @chris @gedare @joel @opticron
+/bsps/bfin/
+/cpukit/score/cpu/bfin/
+/spec/build/bsps/bfin/
+/cpukit/libdl/rtl-mdreloc-bfin.c
+/spec/build/cpukit/cpubfin.yml
 
-#[Arch MIPS] @gedare @joel
-#[Arch Moxie] @joel
-#[Arch Nios II] @chris @gedare @joel
-#[Arch ork1] @joel
-#[Arch PowerPC] @gedare @joel
-#[Arch RISC-V] @chris @gedare @joel
-#[Arch SuperH] @joel
+
+[Arch i386] @chris @gedare @joel
+/bsps/i386/
+/cpukit/score/cpu/i386/
+/spec/build/bsps/i386/
+/cpukit/libdebugger/rtems-debugger-i386.c
+/cpukit/libdl/rtl-mdreloc-i386.c
+/spec/build/cpukit/*i386*
+
+
+[Arch LatticeMicro32] @chris @gedare @joel
+/bsps/lm32/
+/cpukit/score/cpu/lm32/
+/spec/build/bsps/lm32/
+/cpukit/libdl/rtl-mdreloc-lm32.c
+/spec/build/cpukit/cpulm32.yml
+
+
+[Arch Motorolla 68000] @chris @gedare @joel
+/bsps/m68k/
+/cpukit/score/cpu/m68k/
+/spec/build/bsps/m68k/
+/cpukit/libdl/rtl-mdreloc-m68k.c
+/spec/build/cpukit/*m68k*
+
+
+[Arch MicroBlaze] @joel @opticron
+/bsps/include/xil/microblaze/
+/bsps/microblaze/
+/cpukit/score/cpu/microblaze/
+/spec/build/bsps/microblaze/
+/cpukit/libdebugger/rtems-debugger-microblaze.c
+/cpukit/libdl/rtl-mdreloc-microblaze.c
+/spec/build/cpukit/*microblaze*
+
+
+[Arch MIPS] @gedare @joel
+/bsps/mips/
+/cpukit/score/cpu/mips/
+/spec/build/bsps/mips/
+/cpukit/libdl/rtl-mdreloc-mips.c
+/spec/build/cpukit/*mips.yml
+
+
+[Arch Moxie] @joel
+/bsps/moxie/
+/cpukit/score/cpu/moxie/
+/spec/build/bsps/moxie/
+/cpukit/libdl/rtl-mdreloc-moxie.c
+/spec/build/cpukit/*moxie.yml
+
+
+[Arch Nios II] @chris @gedare @joel
+/bsps/nios2/
+/cpukit/score/cpu/nios2/
+/spec/build/bsps/nios2/
+/spec/build/cpukit/*nios2.yml
+
+
+[Arch ork1] @joel
+/bsps/or1k/
+/cpukit/score/cpu/or1k/
+/spec/build/bsps/or1k/
+/spec/build/cpukit/*or1k.yml
+
+
+[Arch PowerPC] @gedare @joel
+/bsps/powerpc/
+/cpukit/score/cpu/powerpc/
+/spec/build/bsps/powerpc/
+/cpukit/libdl/rtl-mdreloc-powerpc.c
+/spec/build/cpukit/*powerpc.yml
+
+
+[Arch RISC-V] @chris @gedare @joel
+/bsps/riscv
+/cpukit/score/cpu/riscv
+/spec/build/bsps/riscv
+/cpukit/libdl/rtl-mdreloc-riscv.c
+/spec/build/cpukit/*riscv.yml
+
+
+[Arch SuperH] @joel
+/bsps/sh/
+/cpukit/score/cpu/sh/
+/spec/build/bsps/sh/
+/spec/build/cpukit/cpush.yml
 
 
 [Arch SPARC] @joel @gedare
@@ -52,10 +129,26 @@
 /testsuites/validation/bsps/*-sparc-*
 
 
-#[Arch SPARC64] @gedare
-#[Arch V850] @gedare @joel
-#[Arch X86_64] @chris @gedare @joel
+[Arch SPARC64] @gedare
+/bsps/sparc64/
+/cpukit/score/cpu/sparc64/
+/spec/build/bsps/sparc64/
+/spec/build/cpukit/*sparc64.yml
 
+
+[Arch V850] @gedare @joel
+/bsps/v850/
+/cpukit/score/cpu/v850/
+/spec/build/bsps/v850/
+/cpukit/libdl/rtl-mdreloc-v850.c
+/spec/build/cpukit/*v850.yml
+
+
+[Arch X86_64] @chris @gedare @joel
+/bsps/x86_64/
+/cpukit/score/cpu/x86_64/
+/spec/build/bsps/x86_64/
+/spec/build/cpukit/*x8664.yml
 
 # Everyone in the RTEMS group can approve in testsuites if they are not caught above
 [Testsuites] @rtems
