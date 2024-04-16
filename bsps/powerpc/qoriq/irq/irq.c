@@ -47,6 +47,7 @@
 #include <bsp/vectors.h>
 #include <bsp/utility.h>
 #include <bsp/qoriq.h>
+#include <rtems/score/processormaskimpl.h>
 
 #ifdef RTEMS_SMP
 #include <rtems/score/smpimpl.h>
