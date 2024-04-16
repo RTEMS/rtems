@@ -40,7 +40,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_INTERRUPT_VECTOR_COUNT 1024
+#define BSP_INTERRUPT_VECTOR_COUNT 1019
 
 /* Xen guest interrupts */
 #define GUEST_TIMER_VIRT_PPI 27
