@@ -9,6 +9,7 @@
 /**
  * Copyright (c) 2013 Alan Cudmore
  * Copyright (c) 2022 Mohd Noor Aman
+ * Copyright (c) 2024 Ning Yang
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -33,15 +34,18 @@
  * @brief Interrupt support.
  */
 
-#define BCM2835_INTC_TOTAL_IRQ       (64 + 8)
+#define BCM2835_INTC_TOTAL_IRQ       216
 
 #define BCM2835_IRQ_SET1_MIN         0
 #define BCM2835_IRQ_SET2_MIN         32
 
-#define BCM2835_IRQ_ID_GPU_TIMER_M0  0
-#define BCM2835_IRQ_ID_GPU_TIMER_M1  1
-#define BCM2835_IRQ_ID_GPU_TIMER_M2  2
-#define BCM2835_IRQ_ID_GPU_TIMER_M3  3
+#define BCM2711_IRQ_VC_PERIPHERAL_BASE 96
+
+/* Interrupt Vectors: System Timer */
+#define BCM2835_IRQ_ID_GPU_TIMER_M0    (BCM2711_IRQ_VC_PERIPHERAL_BASE + 0)
+#define BCM2835_IRQ_ID_GPU_TIMER_M1    (BCM2711_IRQ_VC_PERIPHERAL_BASE + 1)
+#define BCM2835_IRQ_ID_GPU_TIMER_M2    (BCM2711_IRQ_VC_PERIPHERAL_BASE + 2)
+#define BCM2835_IRQ_ID_GPU_TIMER_M3    (BCM2711_IRQ_VC_PERIPHERAL_BASE + 3)
 
 #define BCM2835_IRQ_ID_USB           9
 #define BCM2835_IRQ_ID_AUX           29

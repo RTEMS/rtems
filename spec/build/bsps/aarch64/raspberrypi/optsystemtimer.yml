@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+  - Copyright (C) 2024 Ning Yang
+
+type: build
+build-type: option
+
+enabled-by: true
+name: BSP_CLOCK_USE_SYSTEMTIMER
+description: |
+  The clock from the ARM timer is derived from the system clock. This clock can
+  change dynamically e.g. if the system goes into reduced power or in low power
+  mode. Thus the clock speed adapts to the overall system performance
+  capabilities. For accurate timing it is recommended to use the system timers.
+
+actions:
+  - get-boolean: null
+  - define-condition: null
+  - env-enable: null
+default:
+  - enabled-by:
+    - aarch64/raspberrypi4b
+    value: false
+
+links: []

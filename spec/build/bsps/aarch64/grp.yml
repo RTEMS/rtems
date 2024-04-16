@@ -12,9 +12,6 @@ install:
   source:
   - bsps/aarch64/include/bsp/linker-symbols.h
   - bsps/aarch64/include/bsp/start.h
-- destination: ${BSP_INCLUDEDIR}/dev/clock
-  source:
-  - bsps/include/dev/clock/arm-generic-timer.h
 - destination: ${BSP_INCLUDEDIR}/dev/irq
   source:
   - bsps/aarch64/include/dev/irq/arm-gic-arch.h

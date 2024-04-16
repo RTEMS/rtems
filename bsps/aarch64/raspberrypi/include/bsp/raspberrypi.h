@@ -8,6 +8,7 @@
 
 /*
  *  Copyright (c) 2022 Mohd Noor Aman
+ *  Copyright (c) 2024 Ning Yang
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -44,6 +45,7 @@
 
 #define BCM2711_REG(x)           (*(volatile uint64_t *)(x))
 #define BCM2711_BIT(n)           (1 << (n))
+#define BCM2835_REG(addr)        (*(volatile uint32_t*)(addr))
 
 /** @} */
 
@@ -198,6 +200,13 @@
 #define BCM2711_GPU_TIMER_C2         (BCM2711_GPU_TIMER_BASE + 0x14)
 #define BCM2711_GPU_TIMER_C3         (BCM2711_GPU_TIMER_BASE + 0x18)
 
+/**
+ * NOTE: compatible with the BCM2835 system timer
+ */
+#define BCM2835_GPU_TIMER_CS_M3      BCM2711_GPU_TIMER_CS_M3
+#define BCM2835_GPU_TIMER_C3         BCM2711_GPU_TIMER_C3
+#define BCM2835_GPU_TIMER_CLO        BCM2711_GPU_TIMER_CLO
+#define BCM2835_GPU_TIMER_CS         BCM2711_GPU_TIMER_CS
 /** @} */
 
 /**
