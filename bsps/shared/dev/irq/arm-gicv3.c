@@ -42,12 +42,18 @@
 
 void bsp_interrupt_dispatch(void)
 {
-  uint32_t icciar = READ_SR(ICC_IAR1);
-  rtems_vector_number vector = GIC_CPUIF_ICCIAR_ACKINTID_GET(icciar);
-  rtems_vector_number spurious = 1023;
+  while (true) {
+    uint32_t icciar = READ_SR(ICC_IAR1);
+    rtems_vector_number vector = GIC_CPUIF_ICCIAR_ACKINTID_GET(icciar);
+    uint32_t status;
 
-  if (vector != spurious) {
-    arm_interrupt_handler_dispatch(vector);
+    if (!bsp_interrupt_is_valid_vector(vector)) {
+      break;
+    }
+
+    status = arm_interrupt_enable_interrupts();
+    bsp_interrupt_handler_dispatch_unchecked(vector);
+    arm_interrupt_restore_interrupts(status);
 
     WRITE_SR(ICC_EOIR1, icciar);
   }
