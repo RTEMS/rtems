@@ -710,7 +710,7 @@ static void ScoreMtxReqSeizeWait_Post_Enqueued_Check(
 
     case ScoreMtxReqSeizeWait_Post_Enqueued_PriorityInherit: {
       /*
-       * The calling thread shall be enqueued in priority order with priorit
+       * The calling thread shall be enqueued in priority order with priority
        * inheritance.
        */
       ScoreTqReqEnqueuePriorityInherit_Run( &ctx->tq_ctx->base );
