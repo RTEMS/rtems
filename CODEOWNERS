@@ -10,7 +10,7 @@
 /spec/build/cpukit/*aarch64.yml
 
 
-[Arch ARM] @chris @gedare @joel @opticron
+[Arch ARM] @arch/arm
 /bsps/arm/
 /bsps/include/arm/
 /bsps/include/xil/arm/
