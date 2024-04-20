@@ -48,7 +48,7 @@
 /spec/build/cpukit/cpulm32.yml
 
 
-[Arch Motorolla 68000] arch/m68k
+[Arch Motorolla 68000] @arch/m68k
 /bsps/m68k/
 /cpukit/score/cpu/m68k/
 /spec/build/bsps/m68k/
