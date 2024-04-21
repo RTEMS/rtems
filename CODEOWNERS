@@ -89,7 +89,7 @@
 /spec/build/cpukit/*nios2.yml
 
 
-[Arch ork1] @arch/or1k
+[Arch OpenRISC 1000] @arch/or1k
 /bsps/or1k/
 /cpukit/score/cpu/or1k/
 /spec/build/bsps/or1k/
