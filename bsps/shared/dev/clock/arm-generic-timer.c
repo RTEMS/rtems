@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSDriverClockArmGenericTimer
+ *
+ * @brief This source file contains a Clock Driver implementation using
+ *   Armv7-AR/AArch64 Generic Timer.
+ */
+
 /*
  * Copyright (c) 2017 embedded brains GmbH & Co. KG
  *
@@ -36,14 +45,23 @@
 #include <rtems/timecounter.h>
 #include <rtems/score/smpimpl.h>
 
-/*
- * Clock driver using the ARMv7-AR/AArch64 Generic Timer.  The BSP must provide the
- * following function:
+/**
+ * @defgroup RTEMSDriverClockArmGenericTimer \
+ *   Armv7-AR/AArch64 Generic Timer Clock Driver
+ *
+ * @ingroup RTEMSDriverClockImpl
+ *
+ * @brief This group contains the Armv7-AR/AArch64 Generic Timer Clock Driver
+ *   implementation.
+ *
+ * The BSP must provide the following function:
  *
  * void arm_generic_timer_get_config(uint32_t *frequency, uint32_t *irq);
  *
  * The BSP may optionally define ARM_GENERIC_TIMER_USE_VIRTUAL in <bsp.h> to
  * use the virtual timer instead of the physical timer.
+ *
+ * @{
  */
 
 typedef struct {
@@ -190,6 +208,8 @@ RTEMS_SYSINIT_ITEM(
 
 #define Clock_driver_support_install_isr(isr) \
   arm_gt_clock_handler_install(isr)
+
+/** @} */
 
 /* Include shared source clock driver code */
 #include "../../shared/dev/clock/clockimpl.h"
