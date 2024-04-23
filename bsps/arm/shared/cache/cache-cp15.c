@@ -222,12 +222,12 @@ static inline size_t arm_cp15_get_cache_size(
   clidr = arm_cp15_get_cache_level_id();
   loc = arm_clidr_get_level_of_coherency(clidr);
 
-  if (level >= loc) {
-    return 0;
-  }
-
   if (level == 0) {
     level = loc - 1;
+  } else if (level - 1 >= loc) {
+    return 0;
+  } else {
+    --level;
   }
 
   ccsidr = arm_cp15_get_cache_size_id_for_level(
