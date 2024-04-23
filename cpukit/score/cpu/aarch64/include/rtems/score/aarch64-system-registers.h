@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUAArch64
+ *
  * @brief This header file provides the API to read and write the AArch64
  *   system registers.
  */

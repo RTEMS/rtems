@@ -1,9 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief CPU Thread Idle Body
+ * @ingroup RTEMSScoreCPUAArch64
+ *
+ * @brief This source file contains the AArch64-specific
+ *   _CPU_Thread_Idle_body() implementation.
  */
 
 /*

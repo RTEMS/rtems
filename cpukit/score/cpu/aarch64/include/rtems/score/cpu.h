@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief AArch64 Architecture Support API
+ * @brief This header file provides interfaces of the AArch64 CPU port.
  */
 
 /*
@@ -46,7 +46,11 @@
 #include <limits.h>
 
 /**
- * @addtogroup RTEMSScoreCPUAArch64
+ * @defgroup RTEMSScoreCPUAArch64 AArch64
+ *
+ * @ingroup RTEMSScoreCPU
+ *
+ * @brief This group contains the AArch64 CPU port.
  *
  * @{
  */
