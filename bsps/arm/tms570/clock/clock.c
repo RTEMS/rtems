@@ -41,6 +41,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <bsp/irq.h>
 #include <bsp/tms570.h>
 #include <rtems/timecounter.h>
@@ -117,19 +118,11 @@ static void tms570_clock_driver_support_at_tick(volatile tms570_rti_t *rti)
   rti->INTFLAG = TMS570_RTI_INTFLAG_INT0;
 }
 
-/**
- * @brief registers RTI interrupt handler
- *
- * @param[in] Clock_isr new ISR handler
- * @param[in] Old_ticker old ISR handler (unused and type broken)
- *
- * @retval Void
- */
 static void tms570_clock_driver_support_install_isr(
   rtems_interrupt_handler handler
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_status_code sc;
 
   sc = rtems_interrupt_handler_install(
     TMS570_IRQ_TIMER_0,
@@ -138,8 +131,8 @@ static void tms570_clock_driver_support_install_isr(
     handler,
     RTEMS_DEVOLATILE(tms570_rti_t *, &TMS570_RTI)
   );
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    rtems_fatal_error_occurred(0xdeadbeef);
+  if (sc != RTEMS_SUCCESSFUL) {
+    bsp_fatal(TMS570_FATAL_RTI_IRQ_INSTALL);
   }
 }
 

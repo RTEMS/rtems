@@ -217,6 +217,9 @@ typedef enum {
 
   /* Xilinx fatal codes */
   XIL_FATAL_TTC_IRQ_INSTALL = BSP_FATAL_CODE_BLOCK(17),
+
+  /* TMS570 fatal codes */
+  TMS570_FATAL_RTI_IRQ_INSTALL = BSP_FATAL_CODE_BLOCK(18),
 } bsp_fatal_code;
 
 RTEMS_NO_RETURN static inline void
