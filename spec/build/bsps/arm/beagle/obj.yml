@@ -21,6 +21,11 @@ install:
   - bsps/arm/beagle/include/bsp/pwmss.h
   - bsps/arm/beagle/include/bsp/qep.h
   - bsps/arm/beagle/include/bsp/spi.h
+- destination: ${BSP_INCLUDEDIR}/libcpu
+  source:
+  - bsps/arm/include/libcpu/am335x.h
+  - bsps/arm/include/libcpu/omap3.h
+  - bsps/arm/include/libcpu/omap_timer.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/arm/beagle/start/linkcmds
