@@ -68,7 +68,7 @@ static void tms570_cpu_counter_initialize(void)
 
 uint32_t _CPU_Counter_frequency(void)
 {
-  return 2 * BSP_PLL_OUT_CLOCK;
+  return TMS570_GCLK_HZ;
 }
 
 CPU_Counter_ticks _CPU_Counter_read(void)

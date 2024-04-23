@@ -33,6 +33,18 @@ links:
 - role: build-dependency
   uid: optoscmain
 - role: build-dependency
+  uid: optgclk
+- role: build-dependency
+  uid: opthclk
+- role: build-dependency
+  uid: optvclk
+- role: build-dependency
+  uid: optvclk2
+- role: build-dependency
+  uid: optvclk3
+- role: build-dependency
+  uid: optrticlk
+- role: build-dependency
   uid: optreginit
 - role: build-dependency
   uid: optscibaud

@@ -83,10 +83,10 @@ static void tms570_clock_driver_support_initialize_hardware( void )
   microsec_per_tick = rtems_configuration_get_microseconds_per_tick();
   tc_frequency = TMS570_PREFERRED_TC_FREQUENCY;
 
-  tc_prescaler = (BSP_PLL_OUT_CLOCK + tc_frequency) / (tc_frequency * 2);
+  tc_prescaler = (TMS570_RTICLK_HZ + tc_frequency) / (tc_frequency * 2);
 
   /* Recompute actual most close frequency which can be realized */
-  tc_frequency = (BSP_PLL_OUT_CLOCK + tc_prescaler) / (tc_prescaler * 2);
+  tc_frequency = (TMS570_RTICLK_HZ + tc_prescaler) / (tc_prescaler * 2);
 
   /*
    * Recompute tick period to adjust for configurable or exact

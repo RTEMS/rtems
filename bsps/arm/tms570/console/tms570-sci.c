@@ -297,7 +297,7 @@ bool tms570_sci_set_attributes(
 
   /* Apply baudrate to the hardware */
   baudrate *= 2 * 16;
-  bauddiv = (BSP_PLL_OUT_CLOCK + baudrate / 2) / baudrate;
+  bauddiv = (TMS570_VCLK_HZ + baudrate / 2) / baudrate;
   ctx->regs->BRS = bauddiv? bauddiv - 1: 0;
 
   ctx->regs->GCR1 |= TMS570_SCI_GCR1_SWnRST | TMS570_SCI_GCR1_TXENA |

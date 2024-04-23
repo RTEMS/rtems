@@ -61,12 +61,6 @@
 #include <rtems.h>
 #include <bsp/default-initial-extension.h>
 
-#if TMS570_VARIANT == 4357
-#define BSP_PLL_OUT_CLOCK 150000000
-#else
-#define BSP_PLL_OUT_CLOCK 160000000
-#endif
-
 RTEMS_NO_RETURN void bsp_restart(const void *addr);
 
 #endif /* ASM */
