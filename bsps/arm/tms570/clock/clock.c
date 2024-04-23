@@ -9,6 +9,7 @@
  */
 
 /*
+ * Copyright (C) 2024 embedded brains GmbH & Co. KG
  * Copyright (C) 2014 Premysl Houdek <kom541000@gmail.com>
  *
  * Google Summer of Code 2014 at
@@ -39,9 +40,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdlib.h>
-
-#include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/tms570.h>
@@ -54,57 +52,33 @@ static uint32_t tms570_rti_get_timecount(struct timecounter *tc)
   return TMS570_RTI.CNT[0].FRCx;
 }
 
-#ifndef TMS570_PREFERRED_TC_FREQUENCY
-/*
- * Define preferred main time base counter frequency
- * The value of 1MHz is the best matching RTEMS
- * timing system because then there is no need
- * to scale RTEMS configuration microseconds_per_tick
- * parameter
- */
-#define TMS570_PREFERRED_TC_FREQUENCY 1000000
-#endif /* TMS570_PREFERRED_TC_FREQUENCY */
-
-/**
- *  @brief Initialize the HW peripheral for clock driver
- *
- *  Clock driver is implemented by RTI module
- *
- * @retval Void
- */
 static void tms570_clock_driver_support_initialize_hardware( void )
 {
 
-  uint32_t microsec_per_tick;
+  uint64_t usec_per_tick;
   uint32_t tc_frequency;
-  uint32_t tc_prescaler;
   uint32_t tc_increments_per_tick;
+  struct timecounter *tc;
 
-  microsec_per_tick = rtems_configuration_get_microseconds_per_tick();
-  tc_frequency = TMS570_PREFERRED_TC_FREQUENCY;
+  usec_per_tick = rtems_configuration_get_microseconds_per_tick();
+  tc_frequency = TMS570_RTICLK_HZ / 2;
+  tc_increments_per_tick = (usec_per_tick * tc_frequency + 500000) / 1000000;
 
-  tc_prescaler = (TMS570_RTICLK_HZ + tc_frequency) / (tc_frequency * 2);
-
-  /* Recompute actual most close frequency which can be realized */
-  tc_frequency = (TMS570_RTICLK_HZ + tc_prescaler) / (tc_prescaler * 2);
-
-  /*
-   * Recompute tick period to adjust for configurable or exact
-   * preferred time base 1 usec resolution.
-   */
-  tc_increments_per_tick = ((uint64_t)microsec_per_tick * tc_frequency +
-                           500000) / 1000000;
-
-  /* Hardware specific initialize */
+  /* Initialize module */
   TMS570_RTI.GCTRL = 0;
-  TMS570_RTI.CNT[0].CPUCx = tc_prescaler - 1;
-  TMS570_RTI.TBCTRL = TMS570_RTI_TBCTRL_INC;
   TMS570_RTI.CAPCTRL = 0;
   TMS570_RTI.COMPCTRL = 0;
-  /* set counter to zero */
+  TMS570_RTI.TBCTRL = TMS570_RTI_TBCTRL_INC;
+  TMS570_RTI.INTCLRENABLE = 0x05050505;
+
+  /* Initialize counter 0 */
+  TMS570_RTI.CNT[0].CPUCx = 1;
   TMS570_RTI.CNT[0].UCx = 0;
   TMS570_RTI.CNT[0].FRCx = 0;
-  /* clear interrupts*/
+  TMS570_RTI.CMP[0].COMPx = tc_increments_per_tick;
+  TMS570_RTI.CMP[0].UDCPx = tc_increments_per_tick;
+
+  /* Clear interrupts */
   TMS570_RTI.CLEARINTENA = TMS570_RTI_CLEARINTENA_CLEAROVL1INT |
                            TMS570_RTI_CLEARINTENA_CLEAROVL0INT |
                            TMS570_RTI_CLEARINTENA_CLEARTBINT |
@@ -123,27 +97,21 @@ static void tms570_clock_driver_support_initialize_hardware( void )
                        TMS570_RTI_INTFLAG_INT2 |
                        TMS570_RTI_INTFLAG_INT1 |
                        TMS570_RTI_INTFLAG_INT0;
-  /* set timer */
-  TMS570_RTI.CMP[0].COMPx = TMS570_RTI.CNT[0].FRCx + tc_increments_per_tick;
-  TMS570_RTI.COMP0CLR = TMS570_RTI.CMP[0].COMPx + tc_increments_per_tick / 2;
-  TMS570_RTI.CMP[0].UDCPx = tc_increments_per_tick;
-  /* enable interupt */
-  TMS570_RTI.SETINTENA = TMS570_RTI_SETINTENA_SETINT0;
-  /* enable timer */
+
+  /* Enable counter 0 */
   TMS570_RTI.GCTRL = TMS570_RTI_GCTRL_CNT0EN;
-  /* set timecounter */
-  tms570_rti_tc.tc_get_timecount = tms570_rti_get_timecount;
-  tms570_rti_tc.tc_counter_mask = 0xffffffff;
-  tms570_rti_tc.tc_frequency = tc_frequency;
-  tms570_rti_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
-  rtems_timecounter_install(&tms570_rti_tc);
+
+  /* Enable interrupts for counter 0 */
+  TMS570_RTI.SETINTENA = TMS570_RTI_SETINTENA_SETINT0;
+
+  tc = &tms570_rti_tc;
+  tc->tc_get_timecount = tms570_rti_get_timecount;
+  tc->tc_counter_mask = 0xffffffff;
+  tc->tc_frequency = tc_frequency;
+  tc->tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(tc);
 }
 
-/**
- * @brief Clears interrupt source
- *
- * @retval Void
- */
 static void tms570_clock_driver_support_at_tick(volatile tms570_rti_t *rti)
 {
   rti->INTFLAG = TMS570_RTI_INTFLAG_INT0;
@@ -175,14 +143,11 @@ static void tms570_clock_driver_support_install_isr(
   }
 }
 
-#define Clock_driver_support_initialize_hardware \
-                        tms570_clock_driver_support_initialize_hardware
+#define Clock_driver_support_initialize_hardware() \
+  tms570_clock_driver_support_initialize_hardware()
 #define Clock_driver_support_at_tick(arg) \
-                        tms570_clock_driver_support_at_tick(arg)
-#define Clock_driver_support_initialize_hardware \
-                        tms570_clock_driver_support_initialize_hardware
-
+  tms570_clock_driver_support_at_tick(arg)
 #define Clock_driver_support_install_isr(handler) \
-              tms570_clock_driver_support_install_isr(handler)
+  tms570_clock_driver_support_install_isr(handler)
 
 #include "../../../shared/dev/clock/clockimpl.h"
