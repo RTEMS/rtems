@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSDriverClockArmv7MSysTick
+ *
+ * @brief This source file contains the Armv7-M SysTick CPU counter.
+ */
+
 /*
  * Copyright (C) 2016, 2018 embedded brains GmbH & Co. KG
  *

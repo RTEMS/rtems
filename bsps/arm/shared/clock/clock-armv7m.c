@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSDriverClockArmv7MSysTick
+ *
+ * @brief This source file contains the Armv7-M SysTick Clock Driver.
+ */
+
 /*
  * Copyright (C) 2020 embedded brains GmbH & Co. KG
  * Copyright (C) 2011, 2018 Sebastian Huber
