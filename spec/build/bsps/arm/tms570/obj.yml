@@ -78,7 +78,6 @@ source:
 - bsps/arm/tms570/clock/clock.c
 - bsps/arm/tms570/console/printk-support.c
 - bsps/arm/tms570/console/tms570-sci.c
-- bsps/arm/tms570/cpucounter/cpucounterread.c
 - bsps/arm/tms570/irq/irq.c
 - bsps/arm/tms570/start/bspreset.c
 - bsps/arm/tms570/start/bsprestart.c

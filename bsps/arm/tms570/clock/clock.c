@@ -44,9 +44,58 @@
 #include <bsp/fatal.h>
 #include <bsp/irq.h>
 #include <bsp/tms570.h>
+#include <rtems/counter.h>
+#include <rtems/sysinit.h>
 #include <rtems/timecounter.h>
 
 static struct timecounter tms570_rti_tc;
+
+uint32_t _CPU_Counter_frequency(void)
+{
+  return TMS570_RTICLK_HZ / 2;
+}
+
+CPU_Counter_ticks _CPU_Counter_read(void)
+{
+  return TMS570_RTI.CNT[0].FRCx;
+}
+
+static void tms570_rti_initialize( void )
+{
+  /* Initialize module */
+  TMS570_RTI.GCTRL = 0;
+  TMS570_RTI.CAPCTRL = 0;
+  TMS570_RTI.COMPCTRL = 0;
+  TMS570_RTI.TBCTRL = TMS570_RTI_TBCTRL_INC;
+  TMS570_RTI.INTCLRENABLE = 0x05050505;
+
+  /* Disable interrupts */
+  TMS570_RTI.CLEARINTENA = TMS570_RTI_CLEARINTENA_CLEAROVL1INT |
+                           TMS570_RTI_CLEARINTENA_CLEAROVL0INT |
+                           TMS570_RTI_CLEARINTENA_CLEARTBINT |
+                           TMS570_RTI_CLEARINTENA_CLEARDMA3 |
+                           TMS570_RTI_CLEARINTENA_CLEARDMA2 |
+                           TMS570_RTI_CLEARINTENA_CLEARDMA1 |
+                           TMS570_RTI_CLEARINTENA_CLEARDMA0 |
+                           TMS570_RTI_CLEARINTENA_CLEARINT3 |
+                           TMS570_RTI_CLEARINTENA_CLEARINT2 |
+                           TMS570_RTI_CLEARINTENA_CLEARINT1 |
+                           TMS570_RTI_CLEARINTENA_CLEARINT0;
+
+  /* Initialize counter 0 */
+  TMS570_RTI.CNT[0].CPUCx = 1;
+  TMS570_RTI.CNT[0].UCx = 0;
+  TMS570_RTI.CNT[0].FRCx = 0;
+
+  /* Enable counter 0 */
+  TMS570_RTI.GCTRL = TMS570_RTI_GCTRL_CNT0EN;
+}
+
+RTEMS_SYSINIT_ITEM(
+  tms570_rti_initialize,
+  RTEMS_SYSINIT_CPU_COUNTER,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
 static uint32_t tms570_rti_get_timecount(struct timecounter *tc)
 {
@@ -65,32 +114,11 @@ static void tms570_clock_driver_support_initialize_hardware( void )
   tc_frequency = TMS570_RTICLK_HZ / 2;
   tc_increments_per_tick = (usec_per_tick * tc_frequency + 500000) / 1000000;
 
-  /* Initialize module */
-  TMS570_RTI.GCTRL = 0;
-  TMS570_RTI.CAPCTRL = 0;
-  TMS570_RTI.COMPCTRL = 0;
-  TMS570_RTI.TBCTRL = TMS570_RTI_TBCTRL_INC;
-  TMS570_RTI.INTCLRENABLE = 0x05050505;
-
-  /* Initialize counter 0 */
-  TMS570_RTI.CNT[0].CPUCx = 1;
-  TMS570_RTI.CNT[0].UCx = 0;
-  TMS570_RTI.CNT[0].FRCx = 0;
-  TMS570_RTI.CMP[0].COMPx = tc_increments_per_tick;
+  /* Initialize compare 0 */
   TMS570_RTI.CMP[0].UDCPx = tc_increments_per_tick;
+  TMS570_RTI.CMP[0].COMPx = TMS570_RTI.CNT[0].FRCx + tc_increments_per_tick;
 
   /* Clear interrupts */
-  TMS570_RTI.CLEARINTENA = TMS570_RTI_CLEARINTENA_CLEAROVL1INT |
-                           TMS570_RTI_CLEARINTENA_CLEAROVL0INT |
-                           TMS570_RTI_CLEARINTENA_CLEARTBINT |
-                           TMS570_RTI_CLEARINTENA_CLEARDMA3 |
-                           TMS570_RTI_CLEARINTENA_CLEARDMA2 |
-                           TMS570_RTI_CLEARINTENA_CLEARDMA1 |
-                           TMS570_RTI_CLEARINTENA_CLEARDMA0 |
-                           TMS570_RTI_CLEARINTENA_CLEARINT3 |
-                           TMS570_RTI_CLEARINTENA_CLEARINT2 |
-                           TMS570_RTI_CLEARINTENA_CLEARINT1 |
-                           TMS570_RTI_CLEARINTENA_CLEARINT0;
   TMS570_RTI.INTFLAG = TMS570_RTI_INTFLAG_OVL1INT |
                        TMS570_RTI_INTFLAG_OVL0INT |
                        TMS570_RTI_INTFLAG_TBINT |
@@ -98,9 +126,6 @@ static void tms570_clock_driver_support_initialize_hardware( void )
                        TMS570_RTI_INTFLAG_INT2 |
                        TMS570_RTI_INTFLAG_INT1 |
                        TMS570_RTI_INTFLAG_INT0;
-
-  /* Enable counter 0 */
-  TMS570_RTI.GCTRL = TMS570_RTI_GCTRL_CNT0EN;
 
   /* Enable interrupts for counter 0 */
   TMS570_RTI.SETINTENA = TMS570_RTI_SETINTENA_SETINT0;
