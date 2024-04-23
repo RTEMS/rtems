@@ -54,6 +54,10 @@
   #define CPU_CACHE_SUPPORT_PROVIDES_DISABLE_DATA
 #endif
 
+#if __ARM_ARCH == 7 && __ARM_ARCH_PROFILE == 'R'
+  #define CACHE_CP15_IS_CORTEX_R5
+#endif
+
 static inline void _CPU_cache_flush_1_data_line(const void *d_addr)
 {
   arm_cache_l1_flush_1_data_line(d_addr);
@@ -128,7 +132,9 @@ static inline void _CPU_cache_unfreeze_instruction(void)
 static inline void _CPU_cache_flush_entire_data(void)
 {
   _ARM_Data_synchronization_barrier();
-#if __ARM_ARCH >= 7
+#if defined(CACHE_CP15_IS_CORTEX_R5)
+  arm_cp15_data_cache_clean_level(0);
+#elif __ARM_ARCH >= 7
   arm_cp15_data_cache_clean_all_levels();
 #else
   arm_cp15_data_cache_clean_and_invalidate();
@@ -139,7 +145,9 @@ static inline void _CPU_cache_flush_entire_data(void)
 
 static inline void _CPU_cache_invalidate_entire_data(void)
 {
-#if __ARM_ARCH >= 7
+#if defined(CACHE_CP15_IS_CORTEX_R5)
+  arm_cp15_data_cache_all_invalidate();
+#elif __ARM_ARCH >= 7
   arm_cp15_data_cache_invalidate_all_levels();
 #else
   arm_cp15_data_cache_invalidate();
