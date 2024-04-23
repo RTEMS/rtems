@@ -17,7 +17,6 @@ install:
   - bsps/arm/include/core_cm7.h
   - bsps/arm/include/core_cm4.h
   - bsps/arm/include/mpu_armv7.h
-  - bsps/arm/include/uart.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/include/bsp/arm-a9mpcore-clock.h
