@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup arm
+ * @ingroup RTEMSImplClassicCache
  *
- * @brief ARM cache defines and implementation.
+ * @brief This source file contains the Cache Manager implementation for
+ *   devices using the ARM CP15.
  */
 
 /*
