@@ -46,7 +46,7 @@ extern "C" {
 /**
  * @defgroup aarch64_linker Linker Support
  *
- * @ingroup RTEMSBSPsAARCH64Shared
+ * @ingroup RTEMSBSPsAArch64Shared
  *
  * @brief Linker support.
  *

@@ -48,7 +48,7 @@ extern "C" {
 /**
  * @defgroup aarch64_start System Start
  *
- * @ingroup RTEMSBSPsAarch64Shared
+ * @ingroup RTEMSBSPsAArch64Shared
  *
  * @brief Aarch64 system low level start.
  *
