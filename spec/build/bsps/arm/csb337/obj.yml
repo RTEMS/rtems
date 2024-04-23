@@ -42,7 +42,6 @@ source:
 - bsps/arm/csb337/start/memmap.c
 - bsps/arm/csb337/start/pmc.c
 - bsps/arm/shared/cache/cache-cp15.c
-- bsps/arm/shared/cp15/arm920-mmu.c
 - bsps/shared/dev/cpucounter/cpucounterfrequency.c
 - bsps/shared/dev/cpucounter/cpucounterread.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c

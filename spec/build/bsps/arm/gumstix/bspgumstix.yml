@@ -31,6 +31,8 @@ links:
 - role: build-dependency
   uid: start
 - role: build-dependency
+  uid: ../objarm920mmu
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq
@@ -50,7 +52,6 @@ source:
 - bsps/arm/gumstix/start/bspreset.c
 - bsps/arm/gumstix/start/bspstart.c
 - bsps/arm/gumstix/start/memmap.c
-- bsps/arm/shared/cp15/arm920-mmu.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/cpucounter/cpucounterfrequency.c
 - bsps/shared/dev/cpucounter/cpucounterread.c

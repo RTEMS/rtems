@@ -35,6 +35,8 @@ links:
 - role: build-dependency
   uid: start
 - role: build-dependency
+  uid: ../objarm920mmu
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq
@@ -46,7 +48,6 @@ links:
   uid: ../../bspopts
 source:
 - bsps/arm/shared/cache/cache-cp15.c
-- bsps/arm/shared/cp15/arm920-mmu.c
 - bsps/arm/smdk2410/btimer/btimer.c
 - bsps/arm/smdk2410/clock/clockdrv.c
 - bsps/arm/smdk2410/clock/support.c

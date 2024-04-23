@@ -41,6 +41,8 @@ links:
 - role: build-dependency
   uid: ../grp
 - role: build-dependency
+  uid: ../objarm920mmu
+- role: build-dependency
   uid: ../../linkcmds
 - role: build-dependency
   uid: ../../obj

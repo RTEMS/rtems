@@ -47,9 +47,6 @@ install:
   - bsps/include/dev/irq/arm-gic-regs.h
   - bsps/include/dev/irq/arm-gic-tm27.h
   - bsps/include/dev/irq/arm-gic.h
-- destination: ${BSP_INCLUDEDIR}/libcpu
-  source:
-  - bsps/arm/include/libcpu/mmu.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/arm/shared/start/linkcmds.armv4

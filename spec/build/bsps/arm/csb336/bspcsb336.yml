@@ -29,6 +29,8 @@ links:
 - role: build-dependency
   uid: ../grp
 - role: build-dependency
+  uid: ../objarm920mmu
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq
@@ -46,7 +48,6 @@ source:
 - bsps/arm/csb336/start/bspstart.c
 - bsps/arm/csb336/start/memmap.c
 - bsps/arm/shared/cache/cache-cp15.c
-- bsps/arm/shared/cp15/arm920-mmu.c
 - bsps/shared/dev/cpucounter/cpucounterfrequency.c
 - bsps/shared/dev/cpucounter/cpucounterread.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
