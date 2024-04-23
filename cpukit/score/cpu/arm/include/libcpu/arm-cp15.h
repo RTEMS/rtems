@@ -2371,6 +2371,23 @@ arm_cp15_set_diagnostic_control(uint32_t val)
   );
 }
 
+/* This is probably a Cortex-R5 specific operation */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_all_invalidate(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t sbz = 0;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[sbz], c15, c5, 0\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [sbz] "r" (sbz)
+    : "memory"
+  );
+}
+
 /**
  * @brief Sets the @a section_flags for the address range [@a begin, @a end).
  *
