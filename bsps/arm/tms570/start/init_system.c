@@ -201,29 +201,6 @@ void tms570_system_hw_init( void )
 
   /** - Wait for PLLs to start up and map clock domains to desired clock sources */
   tms570_map_clock_init();
-
-  /** - set ECLK pins functional mode */
-  TMS570_SYS1.SYSPC1 = 0U;
-
-  /** - set ECLK pins default output value */
-  TMS570_SYS1.SYSPC4 = 0U;
-
-  /** - set ECLK pins output direction */
-  TMS570_SYS1.SYSPC2 = 1U;
-
-  /** - set ECLK pins open drain enable */
-  TMS570_SYS1.SYSPC7 = 0U;
-
-  /** - set ECLK pins pullup/pulldown enable */
-  TMS570_SYS1.SYSPC8 = 0U;
-
-  /** - set ECLK pins pullup/pulldown select */
-  TMS570_SYS1.SYSPC9 = 1U;
-
-  /** - Setup ECLK */
-  TMS570_SYS1.ECPCNTL = TMS570_SYS1_ECPCNTL_ECPSSEL * 0 |
-                        TMS570_SYS1_ECPCNTL_ECPCOS * 0 |
-                        TMS570_SYS1_ECPCNTL_ECPDIV( 8 - 1 );
 }
 
 #if 0

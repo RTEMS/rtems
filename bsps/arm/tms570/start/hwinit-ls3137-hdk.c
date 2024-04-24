@@ -238,6 +238,29 @@ void tms570_pinmux_init( void )
 {
   tms570_bsp_pinmmr_config( tms570_pinmmr_init_data, 0,
     RTEMS_ARRAY_SIZE( tms570_pinmmr_init_data ) );
+
+  /** - set ECLK pins functional mode */
+  TMS570_SYS1.SYSPC1 = 0U;
+
+  /** - set ECLK pins default output value */
+  TMS570_SYS1.SYSPC4 = 0U;
+
+  /** - set ECLK pins output direction */
+  TMS570_SYS1.SYSPC2 = 1U;
+
+  /** - set ECLK pins open drain enable */
+  TMS570_SYS1.SYSPC7 = 0U;
+
+  /** - set ECLK pins pullup/pulldown enable */
+  TMS570_SYS1.SYSPC8 = 0U;
+
+  /** - set ECLK pins pullup/pulldown select */
+  TMS570_SYS1.SYSPC9 = 1U;
+
+  /** - Setup ECLK */
+  TMS570_SYS1.ECPCNTL = TMS570_SYS1_ECPCNTL_ECPSSEL * 0 |
+                        TMS570_SYS1_ECPCNTL_ECPCOS * 0 |
+                        TMS570_SYS1_ECPCNTL_ECPDIV( 8 - 1 );
 }
 
 void tms570_emif_sdram_init(void)

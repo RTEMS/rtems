@@ -127,6 +127,10 @@ void tms570_pinmux_init( void )
     tms570_pin_config_prepare();
     TMS570_PINMUX[174] = (TMS570_PINMUX[174] & ~(UINT32_C(0x3) << 8)) | (UINT32_C(0x2) << 8); // emif output-enable bit8= 0, bit9= 1
     tms570_pin_config_complete();
+
+    /* Set ECLK pin to GPIO input */
+    TMS570_SYS1.SYSPC1 = 0;
+    TMS570_SYS1.SYSPC2 = 0;
 }
 
 void tms570_emif_sdram_init( void )
