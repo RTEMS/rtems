@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/dev/spi
+  source:
+  - bsps/arm/include/dev/spi/imx-spi-gpio.h
+links: []
+source:
+- bsps/arm/shared/spi/imx-spi-gpio.c
+type: build

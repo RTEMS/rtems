@@ -65,6 +65,10 @@ links:
 - role: build-dependency
   uid: ../../objdevfsledma
 - role: build-dependency
+  uid: ../objdevimxspigpio
+- role: build-dependency
+  uid: ../../objdevspigpio
+- role: build-dependency
   uid: ../../objmem
 - role: build-dependency
   uid: ../../opto2
