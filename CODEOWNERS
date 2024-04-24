@@ -1,6 +1,9 @@
 # Please keep users, directories and files  sorted alphabetically.
 # Directories first
 
+[All Source][2] @rtems
+*
+
 [Arch AArch64] @arch/aarch
 /bsps/aarch64/
 /cpukit/score/cpu/aarch64/
