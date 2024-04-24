@@ -68,6 +68,11 @@ struct imx_gpio_pin {
   unsigned int shift;
   /** Whether the pin is an input, output, interrupt, ... */
   enum imx_gpio_mode mode;
+  /**
+   * Whether the pin is active low. Only used to store the last field of the FDT
+   * entries. Can be queried via the @ref imx_gpio_get_active_level.
+   */
+  bool is_active_low;
 };
 
 /**
@@ -117,7 +122,8 @@ rtems_status_code imx_gpio_init_from_fdt_property_pointer(
  *         IMX_GPIO_INTERRUPT_LOW, 1);
  *
  * NOTE: The information from the third parameter in the FDT (GPIO_ACTIVE_LOW in
- * the example) is currently ignored.
+ * the example) is only stored in the imx_gpio_pin structure. It can be queried
+ * but will not be applied automatically!
  */
 rtems_status_code imx_gpio_init_from_fdt_property(
   struct imx_gpio_pin *pin,
@@ -200,6 +206,24 @@ uint32_t imx_gpio_get_isr(struct imx_gpio_pin *pin);
  * Clear the interrupt status register for the given @a pin.
  */
 void imx_gpio_clear_isr(struct imx_gpio_pin *pin, uint32_t clr);
+
+/**
+ * Get the active level of the pin. Returns either 0x0 or 0xFFFFFFFF so that you
+ * can directly use it with the @ref imx_gpio_set_output function.
+ */
+static inline uint32_t imx_gpio_get_active_level(struct imx_gpio_pin *pin)
+{
+  return (pin->is_active_low) ? 0 : 0xFFFFFFFFU;
+}
+
+/**
+ * Get the inactive level of the pin. Returns either 0x0 or 0xFFFFFFFF so that
+ * you can directly use it with the @ref imx_gpio_set_output function.
+ */
+static inline uint32_t imx_gpio_get_inactive_level(struct imx_gpio_pin *pin)
+{
+  return ~imx_gpio_get_active_level(pin);
+}
 
 /**
  * Fast access macros for the GPIOs. Note that these assume a FDT based on the

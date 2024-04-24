@@ -34,6 +34,12 @@
 #include <rtems/sysinit.h>
 
 /*
+ * Define active levels like they are used in Linux Device Tree files.
+ */
+#define GPIO_ACTIVE_HIGH 0
+#define GPIO_ACTIVE_LOW 1
+
+/*
  * Most of the time it's gpio1 or gpio13.
  */
 #define IMX_GPIO_ALIAS_NAME "gpioXY"
@@ -206,6 +212,7 @@ rtems_status_code imx_gpio_init_from_fdt_property_pointer (
   const unsigned pin_length_dwords = 3;
   uint32_t gpio_phandle;
   uint32_t pin_nr;
+  uint32_t active_level;
   int cfgnode;
 
   memset(pin, 0, sizeof(*pin));
@@ -214,6 +221,7 @@ rtems_status_code imx_gpio_init_from_fdt_property_pointer (
   if (sc == RTEMS_SUCCESSFUL) {
     pin_nr = fdt32_to_cpu(prop_pointer[1]);
     gpio_phandle = fdt32_to_cpu(prop_pointer[0]);
+    active_level = fdt32_to_cpu(prop_pointer[2]);
 
     cfgnode = fdt_node_offset_by_phandle(fdt, gpio_phandle);
     /* FIXME: Check compatible strings here. */
@@ -229,6 +237,7 @@ rtems_status_code imx_gpio_init_from_fdt_property_pointer (
     pin->mask = 1u << pin_nr;
     pin->shift = pin_nr;
     pin->mode = mode;
+    pin->is_active_low = (active_level == GPIO_ACTIVE_LOW);
   }
   if (sc == RTEMS_SUCCESSFUL) {
     imx_gpio_init(pin);
