@@ -152,7 +152,3 @@
 /cpukit/score/cpu/x86_64/
 /spec/build/bsps/x86_64/
 /spec/build/cpukit/*x8664.yml
-
-# Everyone in the RTEMS group can approve in testsuites if they are not caught above
-[Testsuites] @rtems
-/testsuites/
