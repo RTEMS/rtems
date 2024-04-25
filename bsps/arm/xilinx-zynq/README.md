@@ -1,3 +1,18 @@
+Xilinx Zynq Support
+===================
+
+The Zynq is supports the common hard IP that is common to all
+versions of the Zynq device family.
+
+MMU
+---
+
+To access the PL (FPGA Logic) create an MMU table in your application
+and create the entries that map to your FPGA IP.
+
+QEMU
+----
+
 Tested only on Qemu.
 
 git clone git://git.qemu.org/qemu.git qemu
