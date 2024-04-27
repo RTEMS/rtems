@@ -1,10 +1,10 @@
 # Please keep users, directories and files  sorted alphabetically.
 # Directories first
 
-[General Approvers][1] @approvers
+[General Approvers][1] @approvers/general
 *
 
-[Arch AArch64] @arch/aarch
+[Arch AArch64] @approvers/arch/aarch
 /bsps/aarch64/
 /cpukit/score/cpu/aarch64/
 /spec/build/bsps/aarch64/
@@ -13,7 +13,7 @@
 /spec/build/cpukit/*aarch64.yml
 
 
-[Arch ARM] @arch/arm
+[Arch ARM] @approvers/arch/arm
 /bsps/arm/
 /bsps/include/arm/
 /bsps/include/xil/arm/
@@ -26,7 +26,7 @@
 /spec/build/cpukit/*arm.yml
 
 
-[Arch Blackfin] @arch/bfin
+[Arch Blackfin] @approvers/arch/bfin
 /bsps/bfin/
 /cpukit/score/cpu/bfin/
 /spec/build/bsps/bfin/
@@ -34,7 +34,7 @@
 /spec/build/cpukit/cpubfin.yml
 
 
-[Arch i386] @arch/i386
+[Arch i386] @approvers/arch/i386
 /bsps/i386/
 /cpukit/score/cpu/i386/
 /spec/build/bsps/i386/
@@ -43,7 +43,7 @@
 /spec/build/cpukit/*i386*
 
 
-[Arch LatticeMicro32] @arch/lm32
+[Arch LatticeMicro32] @approvers/arch/lm32
 /bsps/lm32/
 /cpukit/score/cpu/lm32/
 /spec/build/bsps/lm32/
@@ -51,7 +51,7 @@
 /spec/build/cpukit/cpulm32.yml
 
 
-[Arch Motorolla 68000] @arch/m68k
+[Arch Motorolla 68000] @approvers/arch/m68k
 /bsps/m68k/
 /cpukit/score/cpu/m68k/
 /spec/build/bsps/m68k/
@@ -59,7 +59,7 @@
 /spec/build/cpukit/*m68k*
 
 
-[Arch MicroBlaze] @arch/microblaze
+[Arch MicroBlaze] @approvers/arch/microblaze
 /bsps/include/xil/microblaze/
 /bsps/microblaze/
 /cpukit/score/cpu/microblaze/
@@ -69,7 +69,7 @@
 /spec/build/cpukit/*microblaze*
 
 
-[Arch MIPS] @arch/mips
+[Arch MIPS] @approvers/arch/mips
 /bsps/mips/
 /cpukit/score/cpu/mips/
 /spec/build/bsps/mips/
@@ -77,7 +77,7 @@
 /spec/build/cpukit/*mips.yml
 
 
-[Arch Moxie] @arch/moxie
+[Arch Moxie] @approvers/arch/moxie
 /bsps/moxie/
 /cpukit/score/cpu/moxie/
 /spec/build/bsps/moxie/
@@ -85,21 +85,21 @@
 /spec/build/cpukit/*moxie.yml
 
 
-[Arch Nios II] @arch/nios2
+[Arch Nios II] @approvers/arch/nios2
 /bsps/nios2/
 /cpukit/score/cpu/nios2/
 /spec/build/bsps/nios2/
 /spec/build/cpukit/*nios2.yml
 
 
-[Arch OpenRISC 1000] @arch/or1k
+[Arch OpenRISC 1000] @approvers/arch/or1k
 /bsps/or1k/
 /cpukit/score/cpu/or1k/
 /spec/build/bsps/or1k/
 /spec/build/cpukit/*or1k.yml
 
 
-[Arch PowerPC] @arch/powerpc
+[Arch PowerPC] @approvers/arch/powerpc
 /bsps/powerpc/
 /cpukit/score/cpu/powerpc/
 /spec/build/bsps/powerpc/
@@ -107,7 +107,7 @@
 /spec/build/cpukit/*powerpc.yml
 
 
-[Arch RISC-V] @arch/risc-v
+[Arch RISC-V] @approvers/arch/risc-v
 /bsps/riscv
 /cpukit/score/cpu/riscv
 /spec/build/bsps/riscv
@@ -115,14 +115,14 @@
 /spec/build/cpukit/*riscv.yml
 
 
-[Arch SuperH] @arch/superh
+[Arch SuperH] @approvers/arch/superh
 /bsps/sh/
 /cpukit/score/cpu/sh/
 /spec/build/bsps/sh/
 /spec/build/cpukit/cpush.yml
 
 
-[Arch SPARC] @arch/sparc
+[Arch SPARC] @approvers/arch/sparc
 /bsps/sparc/
 /cpukit/score/cpu/sparc/
 /spec/build/bsps/sparc/
@@ -132,14 +132,14 @@
 /testsuites/validation/bsps/*-sparc-*
 
 
-[Arch SPARC64] @arch/sparc64
+[Arch SPARC64] @approvers/arch/sparc64
 /bsps/sparc64/
 /cpukit/score/cpu/sparc64/
 /spec/build/bsps/sparc64/
 /spec/build/cpukit/*sparc64.yml
 
 
-[Arch V850] @arch/v850
+[Arch V850] @approvers/arch/v850
 /bsps/v850/
 /cpukit/score/cpu/v850/
 /spec/build/bsps/v850/
@@ -147,7 +147,7 @@
 /spec/build/cpukit/*v850.yml
 
 
-[Arch X86_64] @arch/x86_64
+[Arch X86_64] @approvers/arch/x86_64
 /bsps/x86_64/
 /cpukit/score/cpu/x86_64/
 /spec/build/bsps/x86_64/
