@@ -34,7 +34,7 @@ RTEMS Doxygen for CPUKit:
 
 RTEMS POSIX 1003.1 Compliance Guide:
 
-  * https://docs.rtems.org/branches/master/posix-compliance/index.html
+  * https://docs.rtems.org/branches/master/posix-compliance/
 
 
 RTEMS Mailing Lists for general purpose use the users list and for developers 
