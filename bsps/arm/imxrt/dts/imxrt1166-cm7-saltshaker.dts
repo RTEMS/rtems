@@ -277,9 +277,7 @@
 			IMXRT_PAD_GPIO_AD_19_GPIO9_IO18		0x00
 		>;
 	};
-};
 
-&iomuxc_lpsr {
 	pinctrl_lpi2c5: lpi2c5grp {
 		fsl,pins = <
 			IMXRT_PAD_GPIO_LPSR_09_LPI2C5_SCL	0x40000011
@@ -302,7 +300,4 @@
 			IMXRT_PAD_GPIO_LPSR_05_LPUART12_CTS_B	0x0d
 		>;
 	};
-};
-
-&iomuxc_snvs {
 };

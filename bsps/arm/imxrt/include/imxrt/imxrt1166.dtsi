@@ -103,9 +103,7 @@
 		iee-apc = &iee_apc;
 		iomuxc = &iomuxc;
 		iomuxc-gpr = &iomuxc_gpr;
-		iomuxc-lpsr = &iomuxc_lpsr;
 		iomuxc-lpsr-gpr = &iomuxc_lpsr_gpr;
-		iomuxc-snvs = &iomuxc_snvs;
 		iomuxc-snvs-gpr = &iomuxc_snvs_gpr;
 		keymgr = &keymgr;
 		kpp = &kpp;
@@ -212,6 +210,25 @@
 		#size-cells = <1>;
 		interrupt-parent = <&nvic>;
 		ranges;
+
+		iomuxc: pinctrl@0 {
+			compatible = "nxp,imxrt1166-iomuxc",
+			             "nxp,imxrt1050-iomuxc";
+			/*
+			 * Note: In reality, there are three iomuxc:
+			 * - normal iomuxc at 0x400e8000
+			 * - iomuxc for LPSR pins at 0x40c08000
+			 * - iomuxc for SNVR pins at 0x40c94000
+			 *
+			 * But there is a big disadvantage of that: Multiple
+			 * instances of the iomuxc would be necessary. That
+			 * makes handling pins in each application quite a bit
+			 * more effort.
+			 *
+			 * Just having one fake iomuxc at 0x0, simplifies a lot.
+			 */
+			reg = <0x00000000 0x50000000>;
+		};
 
 		aips_1: aips-bus@40000000 {
 			compatible = "fsl,aips-bus", "simple-bus";
@@ -488,12 +505,6 @@
 			iomuxc_gpr: iomuxc_gpr@400e4000 {
 				reg = <0x400e4000 0x4000>;
 				interrupts = <53>;
-			};
-
-			iomuxc: pinctrl@400e8000 {
-				compatible = "nxp,imxrt1166-iomuxc",
-				             "nxp,imxrt1050-iomuxc";
-				reg = <0x400e8000 0x4000>;
 			};
 
 			gpt1: timer@400ec000 {
@@ -946,12 +957,6 @@
 				reg = <0x40c04000 0x4000>;
 			};
 
-			iomuxc_lpsr: iomuxc_lpsr@40c08000 {
-				compatible = "nxp,imxrt1166-iomuxc",
-				             "nxp,imxrt1050-iomuxc";
-				reg = <0x40c08000 0x4000>;
-			};
-
 			iomuxc_lpsr_gpr: iomuxc_lpsr_gpr@40c0c000 {
 				reg = <0x40c0c000 0x4000>;
 			};
@@ -1129,12 +1134,6 @@
 			snvs: snvs@40c90000 {
 				reg = <0x40c90000 0x4000>;
 				interrupts = <66>, <67>, <68>;
-			};
-
-			iomuxc_snvs: iomuxc_snvs@40c94000 {
-				compatible = "nxp,imxrt1166-iomuxc",
-				             "nxp,imxrt1050-iomuxc";
-				reg = <0x40c94000 0x4000>;
 			};
 
 			iomuxc_snvs_gpr: iomuxc_snvs_gpr@40c98000 {
