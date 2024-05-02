@@ -58,6 +58,7 @@ static void _ARMV7M_Trigger_lazy_floating_point_context_save( void )
 #ifdef ARM_MULTILIB_VFP
   __asm__ volatile (
     "vmov.f32 s0, s0\n"
+    : : : "memory"
   );
 #endif
 }
@@ -75,12 +76,22 @@ void _ARMV7M_Pendable_service_call( void )
   if (
     ( cpu_self->isr_nest_level | cpu_self->thread_dispatch_disable_level ) == 0
   ) {
+    volatile ARMV7M_SCB *scb = _ARMV7M_SCB;
     ARMV7M_Exception_frame *ef;
 
     cpu_self->isr_nest_level = 1;
 
-    _ARMV7M_SCB->icsr = ARMV7M_SCB_ICSR_PENDSVCLR;
+    scb->icsr = ARMV7M_SCB_ICSR_PENDSVCLR;
     _ARMV7M_Trigger_lazy_floating_point_context_save();
+#ifdef ARM_MULTILIB_VFP
+    /*
+     * Set FPCCR[LSPACT] to mark the lazy state preservation as active.  This
+     * prevents that a floating-point context is restored from the
+     * uninitialized exception frame below in the return to
+     * _ARMV7M_Thread_dispatch().
+     */
+    scb->fpccr |= 0x1;
+#endif
 
     ef = (ARMV7M_Exception_frame *) _ARMV7M_Get_PSP();
     --ef;
