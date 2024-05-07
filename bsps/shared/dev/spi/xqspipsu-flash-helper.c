@@ -29,6 +29,8 @@
 
 #define TEST_ADDRESS		0x000000
 
+#define XQSPI_FLASH_MAX_READ_SIZE ((size_t)0x8000)
+
 #define ENTER_4B	1
 #define EXIT_4B		0
 
@@ -794,7 +796,7 @@ int QspiPsu_NOR_Erase(
   return 0;
 }
 
-int QspiPsu_NOR_Read(
+int QspiPsu_NOR_Read_Page(
   XQspiPsu *QspiPsuPtr,
   u32 Address,
   u32 ByteCount,
@@ -924,6 +926,70 @@ int QspiPsu_NOR_Read(
   }
   rtems_cache_invalidate_multiple_data_lines(ReadBuffer, ByteCount);
   return 0;
+}
+
+/*****************************************************************************/
+/**
+ *
+ * This function performs a read. Default setting is in DMA mode.
+ *
+ * @param	QspiPsuPtr is a pointer to the QSPIPSU driver component to use.
+ * @param	Address contains the address of the first sector which needs to
+ *		be erased.
+ * @param	ByteCount contains the total size to be erased.
+ * @param	ReadBfrPtr the read buffer to which valid received data
+ *		should be written
+ *
+ * @return	XST_SUCCESS if successful, else XST_FAILURE.
+ *
+ * @note	None.
+ *
+ ******************************************************************************/
+int QspiPsu_NOR_Read(
+  XQspiPsu *QspiPsuPtr,
+  u32 Address,
+  u32 ByteCount,
+  u8 *ReadBfr
+) {
+  uint8_t *tmp_buffer = NULL;
+  int status;
+  int startAlign = 0;
+
+  /* Align offset to two byte boundary */
+  if (Address%2) {
+    startAlign = 1;
+    Address = Address - 1;
+    ByteCount = ByteCount + 1;
+  }
+
+  while (count > XQSPI_FLASH_MAX_READ_SIZE) {
+    /* Read block and copy to buffer */
+    status = QspiPsu_NOR_Read_Page(QspiPsuPtr, Address,
+      XQSPI_FLASH_MAX_READ_SIZE, &tmp_buffer);
+
+    if (status == 0) {
+      memcpy(ReadBfr, tmp_buffer + startAlign,
+        XQSPI_FLASH_MAX_READ_SIZE - startAlign);
+      /* Update count, offset and buffer pointer */
+      count = count - XQSPI_FLASH_MAX_READ_SIZE;
+      buffer = buffer + XQSPI_FLASH_MAX_READ_SIZE - startAlign;
+      offset = offset + XQSPI_FLASH_MAX_READ_SIZE;
+      /* Clear startAlign once first block read */
+      if (startAlign) {
+        startAlign = 0;
+      }
+    } else {
+      return status;
+    }
+  }
+
+  status = QspiPsu_NOR_Read(QspiPsuPtr, Address, ByteCount,
+    &tmp_buffer);
+
+  if (status == 0) {
+    memcpy(ReadBfr, tmp_buffer + startAlign, ByteCount);
+  }
+  return status;
 }
 
 /*****************************************************************************/
@@ -2338,4 +2404,17 @@ u32 QspiPsu_NOR_Get_Device_Size(XQspiPsu *QspiPsuPtr)
     return Flash_Config_Table[FCTIndex].FlashDeviceSize * 2;
   }
   return Flash_Config_Table[FCTIndex].FlashDeviceSize;
+}
+
+u32 QspiPsu_NOR_Get_Page_Size(XQspiPsu *QspiPsuPtr)
+{
+  if(QspiPsuPtr->Config.ConnectionMode == XQSPIPSU_CONNECTION_MODE_STACKED) {
+    return Flash_Config_Table[FCTIndex].PageSize * 2;
+  }
+  return Flash_Config_Table[FCTIndex].PageSize;
+}
+
+u32 QspiPsu_NOR_Get_JEDEC_ID(XQspiPsu *QspiPsuPtr)
+{
+  return Flash_Config_Table[FCTIndex].jedec_id;
 }

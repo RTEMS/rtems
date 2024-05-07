@@ -61,6 +61,7 @@ extern "C" {
 #define VERSAL_IRQ_ETHERNET_0_WAKEUP 89
 #define VERSAL_IRQ_ETHERNET_1 90
 #define VERSAL_IRQ_ETHERNET_1_WAKEUP 91
+#define VERSAL_IRQ_QSPI 157
 
 /** @} */
 

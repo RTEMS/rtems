@@ -58,7 +58,7 @@ static int do_read(
   XQspiPsu *QspiPsuPtr = self->qspipsu;
   u8* ReadBuffer = NULL;
 
-  Status = QspiPsu_NOR_Read(
+  Status = QspiPsu_NOR_Read_Page(
     QspiPsuPtr,
     offset,
     size_of_buffer,
