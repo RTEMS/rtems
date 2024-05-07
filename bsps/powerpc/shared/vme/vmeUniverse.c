@@ -1746,11 +1746,14 @@ int shift = -1;
 	return shift;
 }
 
+RTEMS_INTERRUPT_LOCK_DEFINE( static, vmeUniverse_lock, "vmeUniverse_lock" )
+
 int
 vmeUniverseIntRoute(unsigned int level, unsigned int pin)
 {
 int				i, shift;
-unsigned long	mask, mapreg, flags, wire;
+unsigned long	mask, mapreg, wire;
+rtems_interrupt_lock_context lock_context;
 
 	if ( pin >= UNIV_NUM_WIRES || ! universe_wire[pin] || !vmeUniverseIrqMgrInstalled )
 		return -1;
@@ -1779,7 +1782,7 @@ unsigned long	mask, mapreg, flags, wire;
 	/* wires are offset by 1 so we can initialize the wire table to all zeros */
 	wire = (universe_wire[pin]-1) << shift;
 
-rtems_interrupt_disable(flags);
+	rtems_interrupt_lock_acquire( &vmeUniverse_lock, &lock_context );
 
 	for ( i = 0; i<UNIV_NUM_WIRES; i++ ) {
 		wire_mask[i] &= ~mask;
@@ -1790,27 +1793,27 @@ rtems_interrupt_disable(flags);
 	mask |= wire;
 	vmeUniverseWriteReg( mask, mapreg );
 
-rtems_interrupt_enable(flags);
+	rtems_interrupt_lock_release( &vmeUniverse_lock, &lock_context );
 	return 0;
 }
 
 VmeUniverseISR
 vmeUniverseISRGet(unsigned long vector, void **parg)
 {
-unsigned long             flags;
 VmeUniverseISR			  rval = 0;
 volatile UniverseIRQEntry *pe  = universeHdlTbl + vector;
+rtems_interrupt_lock_context lock_context;
 
 	if ( vector>=UNIV_NUM_INT_VECS || ! *pe )
 		return 0;
 
-	rtems_interrupt_disable(flags);
+	rtems_interrupt_lock_acquire( &vmeUniverse_lock, &lock_context );
 		if ( *pe ) {
 			if (parg)
 				*parg=(*pe)->usrData;
 			rval = (*pe)->isr;
 		}
-	rtems_interrupt_enable(flags);
+	rtems_interrupt_lock_release( &vmeUniverse_lock, &lock_context );
 	return rval;
 }
 
@@ -2251,8 +2254,8 @@ int
 vmeUniverseInstallISR(unsigned long vector, VmeUniverseISR hdl, void *arg)
 {
 UniverseIRQEntry          ip;
-unsigned long             flags;
 volatile UniverseIRQEntry *pe;
+rtems_interrupt_lock_context lock_context;
 
 		if (vector>sizeof(universeHdlTbl)/sizeof(universeHdlTbl[0]) || !vmeUniverseIrqMgrInstalled)
 				return -1;
@@ -2265,15 +2268,15 @@ volatile UniverseIRQEntry *pe;
 		ip->isr=hdl;
 		ip->usrData=arg;
 
-	rtems_interrupt_disable(flags);
+		rtems_interrupt_lock_acquire( &vmeUniverse_lock, &lock_context );
 		if ( *pe ) {
 			/* oops; someone intervened */
-			rtems_interrupt_enable(flags);
+			rtems_interrupt_lock_release( &vmeUniverse_lock, &lock_context );
 			free(ip);
 			return -1;
 		}
 		*pe = ip;
-	rtems_interrupt_enable(flags);
+		rtems_interrupt_lock_release( &vmeUniverse_lock, &lock_context );
 		return 0;
 }
 
@@ -2281,22 +2284,22 @@ int
 vmeUniverseRemoveISR(unsigned long vector, VmeUniverseISR hdl, void *arg)
 {
 UniverseIRQEntry          ip;
-unsigned long             flags;
 volatile UniverseIRQEntry *pe;
+rtems_interrupt_lock_context lock_context;
 
 		if (vector>sizeof(universeHdlTbl)/sizeof(universeHdlTbl[0]) || !vmeUniverseIrqMgrInstalled)
 				return -1;
 
 		pe = universeHdlTbl + vector;
 
-	rtems_interrupt_disable(flags);
+		rtems_interrupt_lock_acquire( &vmeUniverse_lock, &lock_context );
 		ip = *pe;
 		if (!ip || ip->isr!=hdl || ip->usrData!=arg) {
-			rtems_interrupt_enable(flags);
+			rtems_interrupt_lock_release( &vmeUniverse_lock, &lock_context );
 			return -1;
 		}
 		*pe = 0;
-	rtems_interrupt_enable(flags);
+		rtems_interrupt_lock_release( &vmeUniverse_lock, &lock_context );
 		free(ip);
 		return 0;
 }
@@ -2304,8 +2307,9 @@ volatile UniverseIRQEntry *pe;
 static int
 intDoEnDis(unsigned int level, int dis)
 {
-unsigned long	flags, v;
+unsigned long		v;
 int				shift;
+rtems_interrupt_lock_context lock_context;
 
 	if (  ! vmeUniverseIrqMgrInstalled || (shift = lvl2bit(level)) < 0 )
 		return -1;
@@ -2315,14 +2319,14 @@ int				shift;
 	if ( !dis )
 		return vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) & v ? 1 : 0;
 
-	rtems_interrupt_disable(flags);
+	rtems_interrupt_lock_acquire( &vmeUniverse_lock, &lock_context );
 	if ( dis<0 )
 		vmeUniverseWriteReg( vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) & ~v, UNIV_REGOFF_LINT_EN );
 	else {
 		vmeUniverseWriteReg( vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) |  v, UNIV_REGOFF_LINT_EN  );
 	}
-	rtems_interrupt_enable(flags);
-		return 0;
+	rtems_interrupt_lock_release( &vmeUniverse_lock, &lock_context );
+	return 0;
 }
 
 int
