@@ -199,7 +199,7 @@ int flashdev_shell_read(
   }
 
   /* Print buffer out in 32bit blocks */
-  printf("Reading %s at 0x%08x for %d bytes\n", dev_path, address, bytes);
+  printf("Reading %s at 0x%08x for 0x%x bytes\n", dev_path, address, bytes);
   for (int i = 0; i < (bytes/4); i++) {
     printf("%08x ", ((uint32_t*)buffer)[i]);
     if ((i+1)%4 == 0) {
@@ -281,6 +281,14 @@ int flashdev_shell_write(
     return -1;
   }
 
+  printf(
+    "Writing %s to %s at 0x%08x for 0x%jx bytes\n",
+    file_path,
+    dev_path,
+    address,
+    length
+  );
+
   /* Create buffer */
   buffer = calloc(1, 0x1000);
 
@@ -358,7 +366,7 @@ int flashdev_shell_erase(
     return -1;
   }
 
-  printf("Erasing at %08x for %x bytes\n", address, bytes);
+  printf("Erasing at 0x%08x for 0x%x bytes\n", address, bytes);
 
   /* Erase flash */
   args.offset = address;
