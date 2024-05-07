@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2023 Aaron Nyholm
+default:
+- enabled-by: true
+  value: 1
+description: Generate versal macro for XQspiPsu files.
+enabled-by: true
+format: '{}'
+links: []
+name: versal
+type: build
