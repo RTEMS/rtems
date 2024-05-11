@@ -40,6 +40,15 @@
 #include <bsp/start.h>
 #include <rtems/score/processormaskimpl.h>
 
+/*
+ * The GIC architecture reserves interrupt ID numbers 1020 to 1023 for special
+ * purposes. BSP_INTERRUPT_VECTOR_COUNT up to 1020 is valid since interrupt IDs
+ * start at 0.
+ */
+#if BSP_INTERRUPT_VECTOR_COUNT > 1020
+#error "BSP_INTERRUPT_VECTOR_COUNT is too large"
+#endif
+
 void bsp_interrupt_dispatch(void)
 {
   while (true) {
