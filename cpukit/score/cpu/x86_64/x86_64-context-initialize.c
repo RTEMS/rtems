@@ -87,8 +87,8 @@ void _CPU_Context_Initialize(
 
   _stack  = ((uintptr_t) stack_area_begin) + stack_area_size;
   _stack &= ~(CPU_STACK_ALIGNMENT - 1);
-  _stack -= sizeof(uintptr_t); /* fake return address for entry_point's frame;
-                                * this allows rsp+8 to be an aligned boundary */
+  _stack -= CPU_STACK_ALIGNMENT; /* fake return address for entry_point's frame;
+                                  * this allows rsp+8 to be an aligned boundary */
   *((void (**)(void)) _stack) = entry_point;
 
   the_context->rbp     = (void *) 0;

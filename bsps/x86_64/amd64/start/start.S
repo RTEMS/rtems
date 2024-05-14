@@ -40,7 +40,6 @@
 _start:
 	.cfi_startproc
 	movabsq	$_ISR_Stack_area_end, %rsp
-	subq	$8, %rsp
 	.cfi_def_cfa_offset 16
 	xorl	%edi, %edi
 #ifdef BSP_MULTIBOOT_SUPPORT

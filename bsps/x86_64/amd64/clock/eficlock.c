@@ -41,35 +41,13 @@ Clock_isr( void* );
 #error "EFIAPI not defined!"
 #endif
 
-
-/* no-sse attribute helps with enforcing GCC to generate code which does not use
-   SSE instructions requiring 16 byte alligned access on unaligned data hence
-   producing perfect GP fault. The code with SSE enabled looks:
-
-EFIAPI void
-efi_clock_tick_notify(EFI_EVENT e, VOID* ctx)
-{
-  10b2ba:       55                      push   rbp
-  10b2bb:       48 89 e5                mov    rbp,rsp
-  10b2be:       57                      push   rdi
-  10b2bf:       56                      push   rsi
-  10b2c0:       48 81 ec a0 00 00 00    sub    rsp,0xa0
-  10b2c7:       8b 02                   mov    eax,DWORD PTR [rdx]
-->10b2c9:       0f 29 b5 50 ff ff ff    movaps XMMWORD PTR [rbp-0xb0],xmm6
-  10b2d0:       0f 29 bd 60 ff ff ff    movaps XMMWORD PTR [rbp-0xa0],xmm7
-  10b2d7:       83 c0 01                add    eax,0x1
-
-and we get GP @ 10b2c9.
-
-CAVEAT: This function is to be called from the UEFI which means it needs to callable
-by using MS ABI!
-
+/*
+ * CAVEAT: This function is to be called from the UEFI which means it
+ * needs to be callable by using MS ABI!
  */
-__attribute__((target("no-sse")))
 EFIAPI void
 efi_clock_tick_notify(EFI_EVENT e, VOID* ctx);
 
-__attribute__((target("no-sse")))
 EFIAPI void
 efi_clock_tick_notify(EFI_EVENT e, VOID* ctx)
 {
