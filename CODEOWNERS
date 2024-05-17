@@ -43,7 +43,7 @@
 /spec/build/cpukit/*i386*
 
 
-[Arch LatticeMicro32] @approvers/arch/lm32
+[Arch LatticeMico32] @approvers/arch/lm32
 /bsps/lm32/
 /cpukit/score/cpu/lm32/
 /spec/build/bsps/lm32/
@@ -51,7 +51,7 @@
 /spec/build/cpukit/cpulm32.yml
 
 
-[Arch Motorolla 68000] @approvers/arch/m68k
+[Arch Motorola 68000] @approvers/arch/m68k
 /bsps/m68k/
 /cpukit/score/cpu/m68k/
 /spec/build/bsps/m68k/
