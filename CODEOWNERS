@@ -1,7 +1,7 @@
 # Please keep users, directories and files  sorted alphabetically.
 # Directories first
 
-[General Approvers][1] @approvers/general
+[General Approvers] @approvers/general
 *
 
 [Arch AArch64] @approvers/arch/aarch
@@ -153,5 +153,5 @@
 /spec/build/bsps/x86_64/
 /spec/build/cpukit/*x8664.yml
 
-[General Maintainer][1] @approvers/maintainer
+[General Maintainer] @approvers/maintainer
 *
