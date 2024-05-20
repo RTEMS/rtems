@@ -1,7 +1,7 @@
 # Please keep users, directories and files  sorted alphabetically.
 # Directories first
 
-[General Maintainer] @approvers/maintainer
+[General Maintainer] @approvers/general/maintainer
 *
 
 [Arch AArch64] @approvers/arch/aarch
