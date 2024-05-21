@@ -1,8 +1,30 @@
 # Please keep users, directories and files  sorted alphabetically.
 # Directories first
+#
+# If there is more than 1 user in a section it must be promoted to a group in
+# /approvers
 
-[General Maintainer] @approvers/general/maintainer
+[General Maintainer] @approvers/maintainer
 *
+
+# CPUKit
+########
+
+[CPUKit libdrvmgr] @joel
+/cpukit/libdrvmgr
+
+[CPUKit libgnat] @joel
+/cpukit/libgnat
+
+[CPUKit librtemscxx] @chris
+/cpukit/librtemscxx
+
+[CPUKit libstdthreads] @chris
+/cpukit/libstdthreads
+
+
+# Architectures
+###############
 
 [Arch AArch64] @approvers/arch/aarch
 /bsps/aarch64/
