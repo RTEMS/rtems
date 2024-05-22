@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2013, 2014 embedded brains GmbH & Co. KG
+ * Copyright (C) 2013, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -131,6 +131,28 @@ bool _SMP_barrier_Wait(
   SMP_barrier_State *state,
   unsigned int count
 );
+
+/**
+ * @brief Waits until count other threads wait on the SMP barrier to
+ *   rendezvous.
+ *
+ * In contrast to _SMP_barrier_Wait(), this function does not release the
+ * barrier.
+ *
+ * @param[in] control The SMP barrier control.
+ * @param count The count of other threads.
+ */
+static inline void _SMP_barrier_Wait_for_other(
+  const SMP_barrier_Control *control,
+  unsigned int count
+)
+{
+  unsigned int value;
+
+  do {
+    value = _Atomic_Load_uint( &control->value, ATOMIC_ORDER_ACQUIRE );
+  } while ( value != count );
+}
 
 /** @} */
 
