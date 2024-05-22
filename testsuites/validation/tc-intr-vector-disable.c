@@ -276,10 +276,62 @@ static void CheckVectorDisable(
   if ( !attr->maybe_disable ) {
     CheckUnsatisfied( ctx );
   } else if ( has_installed_entries ) {
+    cpu_set_t affinity_old;
+    cpu_set_t affinity_new;
+
+    CPU_ZERO(&affinity_old);
+    CPU_ZERO(&affinity_new);
     T_true( IsEnabled( ctx ) );
+
+    if ( attr->can_get_affinity ) {
+      /*
+       * On some targets, inter-processor interrupts are required to
+       * enable/disable processor-specific interrupts.  While the current
+       * test vector is such an inter-processor interrupt we have to make
+       * sure that we don't need it.
+       */
+      sc = rtems_task_get_affinity(
+        RTEMS_SELF,
+        sizeof( affinity_old ),
+        &affinity_old
+      );
+      T_rsc_success( sc );
+
+      sc = rtems_interrupt_get_affinity(
+        ctx->vector,
+        sizeof( affinity_new ),
+        &affinity_new
+      );
+      T_rsc_success( sc );
+
+      sc = rtems_task_set_affinity(
+        RTEMS_SELF,
+        sizeof( affinity_new ),
+        &affinity_new
+      );
+
+      if ( sc != RTEMS_SUCCESSFUL ) {
+        /*
+         * If we cannot set the task affinity to the interrupt affinity, then
+         * this interrupt is too complex to test for this generic test case.
+         */
+        return;
+      }
+    }
+
     Disable( ctx );
     T_true( !attr->can_disable || !IsEnabled( ctx ) );
     Enable( ctx );
+
+    if ( attr->can_get_affinity ) {
+      sc = rtems_task_set_affinity(
+        RTEMS_SELF,
+        sizeof( affinity_old ),
+        &affinity_old
+      );
+      T_rsc_success( sc );
+    }
+
     T_true( IsEnabled( ctx ) );
   } else if ( attr->is_maskable && attr->maybe_enable && attr->can_disable ) {
     rtems_interrupt_entry entry;
