@@ -16,10 +16,10 @@
 [CPUKit libgnat] @joel
 /cpukit/libgnat
 
-[CPUKit librtemscxx] @chris
+[CPUKit librtemscxx] @approvers/cpukit/librtemscxx
 /cpukit/librtemscxx
 
-[CPUKit libstdthreads] @chris
+[CPUKit libstdthreads] @approvers/cpukit/libstdthreads
 /cpukit/libstdthreads
 
 
