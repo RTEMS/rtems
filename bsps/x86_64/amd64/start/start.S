@@ -39,6 +39,12 @@
 	.type	_start, @function
 _start:
 	.cfi_startproc
+	/*
+	 * _ISR_Stack_area_end is aligned to CPU_INTERRUPT_STACK_ALIGNMENT (64 bits)
+	 * by compiler directive at /cpukit/include/rtems/confdefs/percpu.h
+	 * No reference will occur beyond the stack region since the call
+	 * instruction will decrement the %rsp and then save the value of %rip
+	 */
 	movabsq	$_ISR_Stack_area_end, %rsp
 	.cfi_def_cfa_offset 16
 	xorl	%edi, %edi
