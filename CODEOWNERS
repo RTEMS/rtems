@@ -26,7 +26,7 @@
 # Architectures
 ###############
 
-[Arch AArch64] @approvers/arch/aarch
+[Arch AArch64] @approvers/arch/aarch64
 /bsps/aarch64/
 /cpukit/score/cpu/aarch64/
 /spec/build/bsps/aarch64/
