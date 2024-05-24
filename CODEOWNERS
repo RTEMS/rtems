@@ -10,7 +10,13 @@
 # CPUKit
 ########
 
-[CPUKit libdrvmgr] @joel
+[CPUKit libdebugger] @approvers/cpukit/libdebugger
+/cpukit/libdebugger
+
+[CPUKit libdl] @approvers/cpukit/libdl
+/cpukit/libdl
+
+[CPUKit libdrvmgr] @approvers/cpukit/libdrvmgr
 /cpukit/libdrvmgr
 
 [CPUKit libgnat] @joel
@@ -21,6 +27,7 @@
 
 [CPUKit libstdthreads] @approvers/cpukit/libstdthreads
 /cpukit/libstdthreads
+
 
 
 # Architectures
