@@ -1,0 +1,17 @@
+SPDX-License-Identifier: BSD-2-Clause OR Apache-2.0 OR GPL-2.0-or-later
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2023-2024 Michal Lenc <michallenc@seznam.cz>
+default:
+- enabled-by: true
+  value: 64
+description: |
+  Default size in CAN frames of FIFO queues.
+enabled-by: true
+format: '{}'
+links: []
+name: RTEMS_CAN_FIFO_SIZE
+type: build

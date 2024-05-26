@@ -35,6 +35,18 @@ install:
 - destination: ${BSP_INCLUDEDIR}/arpa
   source:
   - cpukit/include/arpa/ftp.h
+- destination: ${BSP_INCLUDEDIR}/dev/can
+  source:
+  - cpukit/include/dev/can/can-bittiming.h
+  - cpukit/include/dev/can/can-bus.h
+  - cpukit/include/dev/can/can-devcommon.h
+  - cpukit/include/dev/can/can-filter.h
+  - cpukit/include/dev/can/can-frame.h
+  - cpukit/include/dev/can/can-helpers.h
+  - cpukit/include/dev/can/can-impl.h
+  - cpukit/include/dev/can/can-queue.h
+  - cpukit/include/dev/can/can-stats.h
+  - cpukit/include/dev/can/can.h
 - destination: ${BSP_INCLUDEDIR}/dev/i2c
   source:
   - cpukit/include/dev/i2c/eeprom.h
@@ -531,6 +543,11 @@ source:
 - cpukit/crc/crc24q.c
 - cpukit/base64/base64-encode.c
 - cpukit/base64/base64-decode.c
+- cpukit/dev/can/can-bittiming.c
+- cpukit/dev/can/can-bus.c
+- cpukit/dev/can/can-devcommon.c
+- cpukit/dev/can/can-quekern.c
+- cpukit/dev/can/can-queue.c
 - cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/eeprom.c
 - cpukit/dev/i2c/fpga-i2c-slave.c
