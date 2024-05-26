@@ -46,6 +46,7 @@ install:
   - cpukit/include/dev/can/can-impl.h
   - cpukit/include/dev/can/can-queue.h
   - cpukit/include/dev/can/can-stats.h
+  - cpukit/include/dev/can/can-virtual.h
   - cpukit/include/dev/can/can.h
 - destination: ${BSP_INCLUDEDIR}/dev/i2c
   source:
@@ -548,6 +549,7 @@ source:
 - cpukit/dev/can/can-devcommon.c
 - cpukit/dev/can/can-quekern.c
 - cpukit/dev/can/can-queue.c
+- cpukit/dev/can/can-virtual.c
 - cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/eeprom.c
 - cpukit/dev/i2c/fpga-i2c-slave.c
