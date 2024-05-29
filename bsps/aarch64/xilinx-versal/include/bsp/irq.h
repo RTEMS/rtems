@@ -47,7 +47,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_INTERRUPT_VECTOR_COUNT 1024
+#define BSP_INTERRUPT_VECTOR_COUNT 1020
 
 /* Interrupts vectors */
 #define BSP_TIMER_VIRT_PPI 27
