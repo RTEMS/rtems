@@ -3,13 +3,19 @@
 /**
  * @file
  *
- * @brief Processing of AIO Requests.
  * @ingroup POSIX_AIO
+ *
+ * @brief Private implementation for Asynchronous I/O.
+ *
+ * This file contains the implementation of private methods used for the processing of Asynchronous I/O requests.
  */
 
 /*
- * Copyright 2010-2011, Alin Rus <alin.codejunkie@gmail.com> 
+ *  Copyright 2010-2011, Alin Rus <alin.codejunkie@gmail.com>
  * 
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -32,6 +38,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 #include <pthread.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -39,16 +46,45 @@
 #include <rtems/posix/aio_misc.h>
 #include <errno.h>
 
+/**
+ * @brief Thread processing AIO requests.
+ * 
+ * @param[in,out] arg A pointer to the chain for the FD to be worked on.
+ * 
+ * @retval NULL if an error occurs
+ */
 static void *rtems_aio_handle( void *arg );
+
+/**
+ * @brief Helper function por request processing
+ * 
+ * @param[in,out] req A pointer to a single request.
+ *                    It will store the results of the request.
+ */
 static void rtems_aio_handle_helper( rtems_aio_request *req );
+
+/**
+ * @brief Move chain of requests from IQ to WQ
+ * 
+ * @param[in,out] r_chain the chain of requests to move in WQ
+ */
+static void rtems_aio_move_to_work( rtems_aio_request_chain *r_chain );
+
+/**
+ * @brief Add request to given FD chain.
+ *
+ * Inserts the request in a the fd chain, which is ordered by priority.
+ * 
+ * @param[in,out] chain A pointer to the chain of requests for a given FD.
+ * @param[in,out] req   A pointer to a request (see aio_misc.h).
+ */
+static void rtems_aio_insert_prio(
+  rtems_chain_control *chain,
+  rtems_aio_request *req 
+);
 
 rtems_aio_queue aio_request_queue;
 
-/**
- * @brief Initialize the request queue for AIO Operations.
- * 
- * @retval 0 The queue has bees succesfully initialized.
- */
 int rtems_aio_init( void )
 {
   int result = 0;
@@ -86,21 +122,11 @@ int rtems_aio_init( void )
   return result;
 }
 
- /**
- * @brief Search for and create a chain of requests for a given file descriptor.
- * 
- * @param[in] chain   A pointer to a chain of FD chains.
- * @param[in] filedes The file descriptor to search for.
- * @param[in] create  If create == 0, the function just searches for the given FD.
- *                    If create == 1, the function creates a new chain if none is found.
- * 
- * @retval A pointer to the chain if a chain for the given FD exists.
- * @retval NULL If create == 0 and no chain is found for the given FD.
- * @retval A pointer to a newly created chain if create == 1 and no chain
- *         is found for the given FD.
- */
-rtems_aio_request_chain *
-rtems_aio_search_fd( rtems_chain_control *chain, int fildes, int create )
+rtems_aio_request_chain *rtems_aio_search_fd(
+  rtems_chain_control *chain,
+  int fildes,
+  int create
+)
 {
   rtems_aio_request_chain *r_chain;
   rtems_chain_node *node;
@@ -135,13 +161,7 @@ rtems_aio_search_fd( rtems_chain_control *chain, int fildes, int create )
   return r_chain;
 }
 
- /**
- * @brief Move chain of requests from IQ to WQ
- * 
- * @param[in] r_chain the chain of requests to move in WQ
- */
-static void
-rtems_aio_move_to_work( rtems_aio_request_chain *r_chain )
+static void rtems_aio_move_to_work( rtems_aio_request_chain *r_chain )
 {
   rtems_chain_control *work_req_chain = &aio_request_queue.work_req;
   rtems_aio_request_chain *temp;
@@ -160,15 +180,11 @@ rtems_aio_move_to_work( rtems_aio_request_chain *r_chain )
 
   rtems_chain_insert( rtems_chain_previous( node ), &r_chain->next_fd );
 }
- 
- /**
- * @brief Add request to given FD chain. The chain is ordered by priority.
- * 
- * @param[in] chain A pointer to the chain of requests for a given FD.
- * @param[in] req   A pointer to a request (see aio_misc.h).
- */
-static void
-rtems_aio_insert_prio( rtems_chain_control *chain, rtems_aio_request *req )
+
+static void rtems_aio_insert_prio(
+  rtems_chain_control *chain,
+  rtems_aio_request *req
+)
 {
   rtems_chain_node *node;
 
@@ -194,11 +210,6 @@ rtems_aio_insert_prio( rtems_chain_control *chain, rtems_aio_request *req )
   }
 }
 
- /**
- * @brief Removes all the requests in a FD chain.
- * 
- * @param[in] r_chain A pointer to a chain of requests for a given FD
- */
 void rtems_aio_remove_fd( rtems_aio_request_chain *r_chain )
 {
   rtems_chain_control *chain;
@@ -216,15 +227,6 @@ void rtems_aio_remove_fd( rtems_aio_request_chain *r_chain )
   }
 }
 
- /**
- * @brief Remove request from given chain
- * 
- * @param[in] chain  A pointer to the FD chain that may contain the request
- * @param[in] aiocbp A pointer to the AIO control block of the request.
- * 
- * @retval AIO_CANCELED The request was canceled.
- * @retval AIO_NOTCANCELED The request was not canceled.
- */
 int rtems_aio_remove_req( rtems_chain_control *chain, struct aiocb *aiocbp )
 {
   if ( rtems_chain_is_empty( chain ) )
@@ -252,13 +254,6 @@ int rtems_aio_remove_req( rtems_chain_control *chain, struct aiocb *aiocbp )
   return AIO_CANCELED;
 }
 
- /**
- * @brief Enqueue requests, and creates threads to process them.
- * 
- * @param[in] req A pointer to the request (for more info see aio_misc.h).
- * 
- * @retval 0 if the request was added to the queue, errno otherwise.
- */
 int
 rtems_aio_enqueue( rtems_aio_request *req )
 {
@@ -363,13 +358,6 @@ rtems_aio_enqueue( rtems_aio_request *req )
   return 0;
 }
 
- /**
- * @brief Thread processing AIO requests.
- * 
- * @param[in] arg A pointer to the chain for the FD to be worked on.
- * 
- * @retval NULL if an error occurs
- */
 static void *rtems_aio_handle( void *arg )
 {
 
@@ -505,12 +493,6 @@ static void *rtems_aio_handle( void *arg )
   return NULL;
 }
 
- /**
- * @brief Helper function por request processing
- * 
- * @param[in,out] req A pointer to a single request.
- *                    It will store the results of the request.
- */
 static void rtems_aio_handle_helper( rtems_aio_request *req )
 {
   int result;

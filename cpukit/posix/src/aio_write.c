@@ -3,14 +3,14 @@
 /**
  * @file
  *
- * @ingroup POSIXAPI
+ * @ingroup POSIX_AIO
  *
- * @brief Function queues I/O request described by buffer pointed by aiocb 
+ * @brief Asynchronous write operation.
  */
 
 /*
  * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -33,7 +33,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -46,45 +45,34 @@
 #include <stdlib.h>
 #include <limits.h>
 
-/*
- *  aio_write
- *
- * Asynchronous write to a file
- *
- *  Input parameters:
- *        aiocbp - asynchronous I/O control block
- *
- *  Output parameters:
- *        -1 - request could not be enqueued
- *           - FD not opened for write
- *           - invalid aio_reqprio or aio_offset or
- *             aio_nbytes
- *           - not enough memory
- *         0 - otherwise
- */
-
 int
-aio_write (struct aiocb *aiocbp)
+aio_write( struct aiocb *aiocbp )
 {
   rtems_aio_request *req;
   int mode;
 
-  mode = fcntl (aiocbp->aio_fildes, F_GETFL);
-  if (!(((mode & O_ACCMODE) == O_WRONLY) || ((mode & O_ACCMODE) == O_RDWR)))
-    rtems_aio_set_errno_return_minus_one (EBADF, aiocbp);
+  mode = fcntl( aiocbp->aio_fildes, F_GETFL );
+  if (
+    !(
+      ( ( mode&O_ACCMODE ) == O_WRONLY ) ||
+      ( ( mode&O_ACCMODE ) == O_RDWR )
+    )
+  )
+    rtems_aio_set_errno_return_minus_one( EBADF, aiocbp );
 
-  if (aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX)
-    rtems_aio_set_errno_return_minus_one (EINVAL, aiocbp);
+  if ( aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX )
+    rtems_aio_set_errno_return_minus_one( EINVAL, aiocbp );
 
-  if (aiocbp->aio_offset < 0)
-    rtems_aio_set_errno_return_minus_one (EINVAL, aiocbp);
+  if ( aiocbp->aio_offset < 0 )
+    rtems_aio_set_errno_return_minus_one( EINVAL, aiocbp );
 
-  req = malloc (sizeof (rtems_aio_request));
-  if (req == NULL)
-    rtems_aio_set_errno_return_minus_one (EAGAIN, aiocbp);
+  req = malloc( sizeof( rtems_aio_request ) );
+  if ( req == NULL )
+    rtems_aio_set_errno_return_minus_one( EAGAIN, aiocbp );
 
   req->aiocbp = aiocbp;
   req->aiocbp->aio_lio_opcode = LIO_WRITE;
 
-  return rtems_aio_enqueue (req);
+  return rtems_aio_enqueue( req );
 }
+

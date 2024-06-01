@@ -3,13 +3,16 @@
 /**
  * @file
  *
- * @ingroup POSIXAPI
+ * @ingroup POSIX_AIO
  *
- * @brief Syncing of all Outstanding Asynchronous I/O Operations
+ * @brief Syncing of all Outstanding Asynchronous I/O Operations.
  */
 
 /*
- * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
+ *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
+ * 
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -43,22 +46,6 @@
 #include <rtems/posix/aio_misc.h>
 #include <rtems/seterr.h>
 
-/*
- *  aio_fsync
- *
- * Asynchronous file synchronization
- *
- *  Input parameters:
- *        op     - O_SYNC
- *        aiocbp - asynchronous I/O control block
- *
- *  Output parameters:
- *        -1 - request could not pe enqueued
- *           - FD not opened for write
- *           - not enough memory
- *           - op is not O_SYNC
- *         0 - otherwise
- */
 
 int aio_fsync(
   int            op,
@@ -68,20 +55,25 @@ int aio_fsync(
   rtems_aio_request *req;
   int mode;
 
-  if (op != O_SYNC)
-    rtems_aio_set_errno_return_minus_one (EINVAL, aiocbp);
+  if ( op != O_SYNC )
+    rtems_aio_set_errno_return_minus_one( EINVAL, aiocbp );
   
-  mode = fcntl (aiocbp->aio_fildes, F_GETFL);
-  if (!(((mode & O_ACCMODE) == O_WRONLY) || ((mode & O_ACCMODE) == O_RDWR)))
-    rtems_aio_set_errno_return_minus_one (EBADF, aiocbp);
+  mode = fcntl( aiocbp->aio_fildes, F_GETFL );
+  if (
+    !(
+      ((mode & O_ACCMODE) == O_WRONLY) ||
+      ((mode & O_ACCMODE) == O_RDWR)
+    )
+  )
+    rtems_aio_set_errno_return_minus_one( EBADF, aiocbp );
 
-  req = malloc (sizeof (rtems_aio_request));
-  if (req == NULL)
-    rtems_aio_set_errno_return_minus_one (EAGAIN, aiocbp);
+  req = malloc( sizeof( rtems_aio_request ) );
+  if ( req == NULL )
+    rtems_aio_set_errno_return_minus_one( EAGAIN, aiocbp );
 
   req->aiocbp = aiocbp;
-  req->aiocbp->aio_lio_opcode = LIO_SYNC; 
+  req->aiocbp->aio_lio_opcode = LIO_SYNC;
   
-  return rtems_aio_enqueue (req);
-    
+  return rtems_aio_enqueue( req );
 }
+

@@ -3,14 +3,19 @@
 /**
  * @file
  * 
- * @brief POSIX Asynchronous Input and Output Private Support
+ * @ingroup POSIX_AIO
+ *
+ * @brief POSIX Asynchronous I/O Private Support
  *
  * This defines private information for the AIO implementation.
  */
 
 /*
- * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
+ *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
  * 
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -33,6 +38,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 #ifndef _AIO_MISC_H
 #define _AIO_MISC_H
 
@@ -43,47 +49,79 @@
 #include <rtems.h>
 #include <rtems/chain.h>
 #include <rtems/seterr.h>
-  
+
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-  /* Actual request being processed */
-  typedef struct
-  {
-    rtems_chain_node next_prio; /* chain requests in order of priority */
-    int policy;                 /* If _POSIX_PRIORITIZED_IO and 
-		                   _POSIX_PRIORITY_SCHEDULING are defined */ 
-    int priority;               /* see above */
-    pthread_t caller_thread;    /* used for notification */
-    struct aiocb *aiocbp;       /* aio control block */
-  } rtems_aio_request;
+/**
+ * @brief The request being processed
+ */
+typedef struct
+{
+  /** @brief Chain requests in order of priority */
+  rtems_chain_node next_prio;
 
-  typedef struct
-  {
-    rtems_chain_node next_fd;   /* order fd chains in queue */
-    rtems_chain_control perfd;  /* chain of requests for this fd */
-    int fildes;                 /* file descriptor to be processed */
-    int new_fd;                 /* if this is a newly created chain */
-    pthread_mutex_t mutex;      
-    pthread_cond_t cond;
+  /** @brief If _POSIX_PRIORITIZED_IO and _POSIX_PRIORITY_SCHEDULING are defined */ 
+  int policy;
 
-  } rtems_aio_request_chain;
+  /** @brief see above */
+  int priority;
 
-  typedef struct
-  {
-    pthread_mutex_t mutex;
-    pthread_cond_t new_req;
-    pthread_attr_t attr;
+  /** @brief Used for notification */
+  pthread_t caller_thread;
 
-    rtems_chain_control work_req; /* chains being worked by active threads */
-    rtems_chain_control idle_req; /* fd chains waiting to be processed */
-    unsigned int initialized;     /* specific value if queue is initialized */
-    int active_threads;           /* the number of active threads */
-    int idle_threads;             /* number of idle threads */
+  /** @brief Aio control block */
+  struct aiocb *aiocbp;
+} rtems_aio_request;
 
-  } rtems_aio_queue;
+/**
+ * @brief A chain of requests for the same FD
+ */
+typedef struct
+{
+  /** @brief Order fd chains in queue */
+  rtems_chain_node next_fd;
+
+  /** @brief Chain of requests for this fd */
+  rtems_chain_control perfd;
+
+  /** @brief File descriptor to be processed */
+  int fildes;
+
+  /** @brief Indicates if this is a newly created chain */
+  int new_fd;
+
+  pthread_mutex_t mutex;
+  pthread_cond_t cond;
+
+} rtems_aio_request_chain;
+
+/**
+ * @brief The queue of all the requests in progress and waiting to be processed
+ */
+typedef struct
+{
+  pthread_mutex_t mutex;
+  pthread_cond_t new_req;
+  pthread_attr_t attr;
+
+  /** @brief Chains being worked by active threads */
+  rtems_chain_control work_req;
+
+  /** @brief Chains waiting to be processed */
+  rtems_chain_control idle_req;
+  
+  /** @brief Specific value if queue is initialized */
+  unsigned int initialized;
+
+  /** @brief The number of active threads */
+  int active_threads;
+
+  /** @brief The number of idle threads */
+  int idle_threads;
+
+} rtems_aio_queue;
 
 extern rtems_aio_queue aio_request_queue;
 
@@ -97,17 +135,61 @@ extern rtems_aio_queue aio_request_queue;
 #define AIO_MAX_QUEUE_SIZE 30
 #endif
 
-int rtems_aio_init (void);
-int rtems_aio_enqueue (rtems_aio_request *req);
-rtems_aio_request_chain *rtems_aio_search_fd 
-(
+/**
+ * @brief Initialize the request queue for AIO Operations.
+ * 
+ * @retval 0 The queue has bees succesfully initialized.
+ */
+int rtems_aio_init( void );
+
+/**
+ * @brief Enqueue requests, and creates threads to process them.
+ * 
+ * @param[in,out] req A pointer to the request.
+ * 
+ * @retval 0 if the request was added to the queue, errno otherwise.
+ */
+int rtems_aio_enqueue( rtems_aio_request *req );
+
+/**
+ * @brief Search for and create a chain of requests for a given file descriptor.
+ * 
+ * @param[in,out] chain   A pointer to a chain of FD chains.
+ * @param[in] fildes The file descriptor to search for.
+ * @param[in] create  If create == 0, the function just searches for the given FD.
+ *                    If create == 1, the function creates a new chain if none is found.
+ * 
+ * @retval NULL If create == 0 and no chain is found for the given FD.
+ * @return A pointer to the chain if a chain for the given FD exists.
+ * @return A pointer to a newly created chain if create == 1 and no chain
+ *         is found for the given FD.
+ */
+rtems_aio_request_chain *rtems_aio_search_fd(
   rtems_chain_control *chain,
   int fildes,
   int create
 );
-void rtems_aio_remove_fd (rtems_aio_request_chain *r_chain);
-int rtems_aio_remove_req (rtems_chain_control *chain,
-				 struct aiocb *aiocbp);
+
+/**
+ * @brief Removes all the requests in a FD chain.
+ * 
+ * @param[in,out] r_chain A pointer to a chain of requests for a given FD
+ */
+void rtems_aio_remove_fd( rtems_aio_request_chain *r_chain );
+
+/**
+ * @brief Remove request from given chain
+ * 
+ * @param[in,out] chain  A pointer to the FD chain that may contain the request
+ * @param[in,out] aiocbp A pointer to the AIO control block of the request.
+ * 
+ * @retval AIO_CANCELED The request was canceled.
+ * @retval AIO_NOTCANCELED The request was not canceled.
+ */
+int rtems_aio_remove_req(
+  rtems_chain_control *chain,
+	struct aiocb *aiocbp
+);
 
 #ifdef RTEMS_DEBUG
 #include <assert.h>
@@ -122,10 +204,11 @@ int rtems_aio_remove_req (rtems_chain_control *chain,
 #define rtems_aio_set_errno_return_minus_one( _error, _aiocbp ) \
   do { (_aiocbp)->error_code = (_error);			\
     (_aiocbp)->return_value = -1;				\
-    rtems_set_errno_and_return_minus_one (_error);} while(0)
+    rtems_set_errno_and_return_minus_one(_error);} while(0)
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+

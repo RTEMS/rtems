@@ -3,13 +3,16 @@
 /**
  * @file
  *
- * @ingroup POSIXAPI
+ * @ingroup POSIX_AIO
  *
- * @brief Final return status for Asynchronous I/O request pointed to by aiobcp
+ * @brief Final return status for Asynchronous I/O request.
  */
 
 /*
- * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
+ *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
+ *
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,6 +36,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -42,20 +46,9 @@
 
 #include <rtems/seterr.h>
 
-/*
- *  aio_return
- *
- * Retrieve return status of an asynchronous I/O operation
- *
- *  Input parameters:
- *        aiocbp - asynchronous I/O control block
- *
- *  Output parameters:
- *        aiocbp->return_value
- */
-
 ssize_t
-aio_return (const struct aiocb *aiocbp)
+aio_return( const struct aiocb *aiocbp )
 {
   return aiocbp->return_value;
 }
+

@@ -3,14 +3,12 @@
 /**
  * @file
  *
- * @ingroup POSIXAPI
+ * @ingroup POSIX_AIO
  *
- * @brief Suspends Process until Asynchronous I/O Operation completes
+ * @brief Wait for Asynchronous I/O Request.
  */
 
 /*
- *  6.7.7 Wait for Asynchronous I/O Request, P1003.1b-1993, p. 164
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -54,3 +52,4 @@ int aio_suspend(
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }
+

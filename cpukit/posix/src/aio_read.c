@@ -3,13 +3,17 @@
 /**
  * @file
  * 
- * @brief Asynchronously reads Data from a File
  * @ingroup POSIX_AIO
+ *
+ * @brief Asynchronous read operation.
  */
 
 /*
- * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
+ *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
  * 
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -32,7 +36,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -46,43 +49,33 @@
 #include <limits.h>
 
 
- /**
- * @brief Asynchronous read from a file
- * 
- * 6.7.2 Asynchronous Read, P1003.1b-1993, p. 154
- * 
- * @param[in] aiocbp is a pointer to the asynchronous I/O control block
- * 
- * @retval 0 The request has been successfuly enqueued.
- * @retval -1 The request has not been enqueued. The possible errors are:
- *         - FD not opened for read
- *         - invalid aio_reqprio or aio_offset or aio_nbytes
- *         - not enough memory
- *         - the starting position of the file is past the maximum offset
- *           for this file. 
- *
- */
-int aio_read(struct aiocb *aiocbp)
+int aio_read( struct aiocb *aiocbp )
 {
   rtems_aio_request *req;
   int mode;
 
-  mode = fcntl(aiocbp->aio_fildes, F_GETFL);
-  if ( !((( mode&O_ACCMODE ) == O_RDONLY ) || (( mode&O_ACCMODE ) == O_RDWR )))
-    rtems_aio_set_errno_return_minus_one(EBADF, aiocbp);
-  
-  if ( aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX )
-    rtems_aio_set_errno_return_minus_one(EINVAL, aiocbp);
-  
-  if ( aiocbp->aio_offset < 0 )
-    rtems_aio_set_errno_return_minus_one(EINVAL, aiocbp);
+  mode = fcntl( aiocbp->aio_fildes, F_GETFL );
+  if (
+    !(
+      (( mode&O_ACCMODE ) == O_RDONLY ) ||
+      (( mode&O_ACCMODE ) == O_RDWR )
+    )
+  )
+    rtems_aio_set_errno_return_minus_one( EBADF, aiocbp );
 
-  req = malloc(sizeof(rtems_aio_request));
+  if ( aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX )
+    rtems_aio_set_errno_return_minus_one( EINVAL, aiocbp );
+
+  if ( aiocbp->aio_offset < 0 )
+    rtems_aio_set_errno_return_minus_one( EINVAL, aiocbp );
+
+  req = malloc( sizeof( rtems_aio_request ) );
   if ( req == NULL )
-    rtems_aio_set_errno_return_minus_one(EAGAIN, aiocbp);
+    rtems_aio_set_errno_return_minus_one( EAGAIN, aiocbp );
 
   req->aiocbp = aiocbp;
   req->aiocbp->aio_lio_opcode = LIO_READ;
 
-  return rtems_aio_enqueue(req);
+  return rtems_aio_enqueue( req );
 }
+
