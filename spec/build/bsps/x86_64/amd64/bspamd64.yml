@@ -45,7 +45,6 @@ source:
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bspfatal-default.c
-- bsps/shared/start/bspreset-empty.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/x86_64/amd64/clock/clock.c
@@ -54,5 +53,6 @@ source:
 - bsps/x86_64/amd64/interrupts/isr_handler.S
 - bsps/x86_64/amd64/interrupts/pic.c
 - bsps/x86_64/amd64/start/bspstart.c
+- bsps/x86_64/amd64/start/bspreset.c
 - bsps/x86_64/amd64/start/page.c
 type: build
