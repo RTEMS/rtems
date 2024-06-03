@@ -2,6 +2,7 @@
 
 /*
  * Copyright (C) 2020 embedded brains GmbH & Co. KG
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -10,7 +11,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -31,7 +32,9 @@
  *     export BSP_DIR="${RTEMS_SRC_DIR}/bsps/arm/imxrt/"
  *     arm-rtems6-cpp -P -x assembler-with-cpp -I "${BSP_DIR}/include/" -include "${BSP_DIR}/dts/imxrt1050-evkb.dts" /dev/null | \
  *         dtc -O dtb -o "${BSP_DIR}/dts/imxrt1050-evkb.dtb" -b 0 -p 64
- *     rtems-bin2c -A 8 -C -N imxrt_dtb "${BSP_DIR}/dts/imxrt1050-evkb.dtb" "${BSP_DIR}/dts/imxrt1050-evkb.c"
+ *     rtems-bin2c -A 8 -C -N imxrt_dtb "${BSP_DIR}/dts/imxrt1050-evkb.dtb" "${BSP_DIR}/dts/imxrt1050-evkb.tmp.c"
+ *     head -27 "${BSP_DIR}/dts/imxrt1050-evkb.dts" > "${BSP_DIR}/dts/imxrt1050-evkb.c"
+ *     cat "${BSP_DIR}/dts/imxrt1050-evkb.tmp.c" >> "${BSP_DIR}/dts/imxrt1050-evkb.c"
  */
 
 /dts-v1/;
