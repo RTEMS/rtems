@@ -193,6 +193,7 @@ static void ISRDisabledOnDemandThreadDispatchTask( rtems_task_argument arg )
   rtems_interrupt_local_disable( level );
   (void) level;
   SetSelfPriority( PRIO_VERY_HIGH );
+  rtems_task_exit();
 }
 
 static void FatalBadThreadDispatchDisableLevel(
