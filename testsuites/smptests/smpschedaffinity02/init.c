@@ -109,6 +109,7 @@ static void task_verify( bool ran, bool change_affinity, int cpu )
 
   /* Release the semaphore */
   rtems_semaphore_release(task_sem);
+  test_delay(25);
 } 
 
 static void init_verify( int expect ) 
@@ -133,8 +134,8 @@ static void task(rtems_task_argument arg)
     if (sc == RTEMS_SUCCESSFUL) {
       task_data.actual_cpu = rtems_scheduler_get_processor();
       task_data.ran = true;
-      test_delay(25);
       rtems_semaphore_release(task_sem);
+      test_delay(25);
     }
   }
 }
