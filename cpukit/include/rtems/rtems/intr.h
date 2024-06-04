@@ -1773,10 +1773,16 @@ rtems_status_code rtems_interrupt_get_priority(
  * interrupt is changed, depends on the interrupt controller.  In general, you
  * should set the interrupt priority of an interrupt vector before a handler is
  * installed.  On some interrupt controllers, setting the priority to the
- * maximum value (lowest importance) effectively disables the interrupt. On
- * some architectures, a range of interrupt priority values may be not disabled
- * by the interrupt disable directives.  Handlers of such interrupts shall not
- * use operating system services.
+ * maximum value (lowest importance) effectively disables the interrupt.
+ *
+ * On some architectures, a range of interrupt priority values may be not
+ * disabled by the interrupt disable directives such as
+ * rtems_interrupt_disable() and rtems_interrupt_local_disable().  These
+ * interrupts are called non-maskable interrupts. Handlers of non-maskable
+ * interrupts shall not use operating system services. In addition,
+ * non-maskable interrupts may be not installable through
+ * rtems_interrupt_entry_install() or rtems_interrupt_handler_install(), and
+ * may require architecture-specific prologue and epilogue code.
  *
  * The interrupt priority settings affect the maximum nesting depth while
  * servicing interrupts.  The interrupt stack size calculation needs to take
@@ -1812,6 +1818,9 @@ rtems_status_code rtems_interrupt_get_priority(
  * contrast to the MPIC, a higher priority value is associated with a lower
  * importance. The maximum priority value of 15 (mapped to the value 0 for the
  * MPIC) inhibits signalling of this interrupt.
+ *
+ * Consult the *RTEMS CPU Architecture Supplement* and the BSP documentation in
+ * the *RTEMS User Manual* for further information.
  * @endparblock
  *
  * @par Constraints
