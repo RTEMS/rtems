@@ -45,11 +45,24 @@
 	/* Subtract stack frame */
 	addik r1, r1, -(CPU_INTERRUPT_FRAME_SIZE)
 
-	swi r5, r1, 8
+	/* Save stack frame */
+	swi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_R3
+	swi  r4, r1, MICROBLAZE_INTERRUPT_FRAME_R4
+	swi  r5, r1, MICROBLAZE_INTERRUPT_FRAME_R5
+	swi  r6, r1, MICROBLAZE_INTERRUPT_FRAME_R6
+	swi  r7, r1, MICROBLAZE_INTERRUPT_FRAME_R7
+	swi  r8, r1, MICROBLAZE_INTERRUPT_FRAME_R8
+	swi  r9, r1, MICROBLAZE_INTERRUPT_FRAME_R9
+	swi r10, r1, MICROBLAZE_INTERRUPT_FRAME_R10
+	swi r11, r1, MICROBLAZE_INTERRUPT_FRAME_R11
+	swi r12, r1, MICROBLAZE_INTERRUPT_FRAME_R12
+	swi r14, r1, MICROBLAZE_INTERRUPT_FRAME_R14
+	swi r15, r1, MICROBLAZE_INTERRUPT_FRAME_R15
+	swi r18, r1, MICROBLAZE_INTERRUPT_FRAME_R18
+	mfs r3, rmsr
+	swi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_MSR
 
 	/* Indicate unknown interrupt source */
-	addi r5, r0, 0xFF
-
 	braid _ISR_Handler
-	nop
+	addik r5, r0, 0xFF
 #endif /* __rtems__ */

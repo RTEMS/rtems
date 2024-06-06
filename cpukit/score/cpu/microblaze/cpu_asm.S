@@ -41,27 +41,10 @@
 	.align 2
 
 _ISR_Handler:
-	/* Save stack frame */
-	swi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_R3
-	swi  r4, r1, MICROBLAZE_INTERRUPT_FRAME_R4
-	swi  r6, r1, MICROBLAZE_INTERRUPT_FRAME_R6
-	swi  r7, r1, MICROBLAZE_INTERRUPT_FRAME_R7
-	swi  r8, r1, MICROBLAZE_INTERRUPT_FRAME_R8
-	swi  r9, r1, MICROBLAZE_INTERRUPT_FRAME_R9
-	swi r10, r1, MICROBLAZE_INTERRUPT_FRAME_R10
-	swi r11, r1, MICROBLAZE_INTERRUPT_FRAME_R11
-	swi r12, r1, MICROBLAZE_INTERRUPT_FRAME_R12
-	swi r15, r1, MICROBLAZE_INTERRUPT_FRAME_R15
-	swi r18, r1, MICROBLAZE_INTERRUPT_FRAME_R18
-	mfs r3, rmsr
-	swi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_MSR
-
 	/* Disable dispatching */
 	lwi r3, r0, _Per_CPU_Information + 16
 	addik r3, r3, 1
 	swi r3, r0, _Per_CPU_Information + 16
-
-	swi r14, r1, MICROBLAZE_INTERRUPT_FRAME_R14
 
 	/* Is SP < INTERRUPT_STACK_LOW? */
 	lwi r4, r0, _Per_CPU_Information
