@@ -6,7 +6,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
 default:
-- enabled-by: arm/nucleo-h743zi
+- enabled-by:
+  - arm/nucleo-h743zi
+  - arm/nucleo-h755zi
   value: GPIO_PIN_13
 description: |
   GPIO B pins used for the ETH pin configuration.

@@ -7,7 +7,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
 default:
-- enabled-by: arm/nucleo-h743zi
+- enabled-by:
+  - arm/nucleo-h743zi
+  - arm/nucleo-h755zi
   value: 8000000
 - enabled-by: arm/stm32h7b3i-dk
   value: 24000000
