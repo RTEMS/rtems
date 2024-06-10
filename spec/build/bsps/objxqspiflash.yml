@@ -14,9 +14,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}/dev/spi
   source:
   - bsps/include/dev/spi/xqspi_flash.h
-links:
-- role: build-dependency
-  uid: objxilinxsupport
+links: []
 source:
 - bsps/shared/dev/spi/xqspi_flash.c
 type: build
