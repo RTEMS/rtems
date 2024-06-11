@@ -16,6 +16,7 @@
 #include "xqspipsu-flash-helper.h"
 
 #include <rtems.h>
+#include <string.h>
 
 /*
  * Number of flash pages to be written.
@@ -951,7 +952,7 @@ int QspiPsu_NOR_Read(
   u32 ByteCount,
   u8 *ReadBfr
 ) {
-  uint8_t *tmp_buffer = NULL;
+  u8 *tmp_buffer = NULL;
   int status;
   int startAlign = 0;
 
@@ -962,7 +963,7 @@ int QspiPsu_NOR_Read(
     ByteCount = ByteCount + 1;
   }
 
-  while (count > XQSPI_FLASH_MAX_READ_SIZE) {
+  while (ByteCount > XQSPI_FLASH_MAX_READ_SIZE) {
     /* Read block and copy to buffer */
     status = QspiPsu_NOR_Read_Page(QspiPsuPtr, Address,
       XQSPI_FLASH_MAX_READ_SIZE, &tmp_buffer);
@@ -971,9 +972,9 @@ int QspiPsu_NOR_Read(
       memcpy(ReadBfr, tmp_buffer + startAlign,
         XQSPI_FLASH_MAX_READ_SIZE - startAlign);
       /* Update count, offset and buffer pointer */
-      count = count - XQSPI_FLASH_MAX_READ_SIZE;
-      buffer = buffer + XQSPI_FLASH_MAX_READ_SIZE - startAlign;
-      offset = offset + XQSPI_FLASH_MAX_READ_SIZE;
+      ByteCount -= XQSPI_FLASH_MAX_READ_SIZE;
+      ReadBfr += XQSPI_FLASH_MAX_READ_SIZE - startAlign;
+      Address += XQSPI_FLASH_MAX_READ_SIZE;
       /* Clear startAlign once first block read */
       if (startAlign) {
         startAlign = 0;
@@ -983,7 +984,7 @@ int QspiPsu_NOR_Read(
     }
   }
 
-  status = QspiPsu_NOR_Read(QspiPsuPtr, Address, ByteCount,
+  status = QspiPsu_NOR_Read_Page(QspiPsuPtr, Address, ByteCount,
     &tmp_buffer);
 
   if (status == 0) {
