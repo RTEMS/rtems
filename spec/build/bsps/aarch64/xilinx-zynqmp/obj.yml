@@ -18,7 +18,6 @@ install:
 links: []
 source:
 - bsps/aarch64/shared/cache/cache.c
-- bsps/aarch64/shared/clock/arm-generic-timer-aarch64.c
 - bsps/aarch64/shared/mmu/vmsav8-64.c
 - bsps/aarch64/xilinx-zynqmp/console/console.c
 - bsps/aarch64/xilinx-zynqmp/fdt/bsp_fdt.c
@@ -26,7 +25,6 @@ source:
 - bsps/aarch64/xilinx-zynqmp/start/bspstarthooks.c
 - bsps/aarch64/xilinx-zynqmp/start/bspstartmmu.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
-- bsps/shared/dev/clock/arm-generic-timer.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/irq/arm-gicv2.c
 - bsps/shared/dev/irq/arm-gicv2-zynqmp.c

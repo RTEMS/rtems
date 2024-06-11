@@ -29,6 +29,8 @@ links:
 - role: build-dependency
   uid: tsta72
 - role: build-dependency
+  uid: ../objclockarmgenerictimer
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq

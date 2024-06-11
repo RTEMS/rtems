@@ -45,6 +45,8 @@ links:
 - role: build-dependency
   uid: optxilversal
 - role: build-dependency
+  uid: ../objclockarmgenerictimer
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq
