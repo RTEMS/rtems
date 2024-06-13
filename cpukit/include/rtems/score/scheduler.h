@@ -326,6 +326,8 @@ typedef struct Scheduler_Context {
    * @brief The set of processors owned by this scheduler instance.
    */
   Processor_mask Processors;
+#else
+  char empty;
 #endif
 } Scheduler_Context;
 

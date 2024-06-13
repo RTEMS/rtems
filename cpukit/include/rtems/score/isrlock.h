@@ -72,6 +72,8 @@ extern "C" {
 typedef struct {
 #if defined( RTEMS_SMP )
   SMP_lock_Control Lock;
+#else
+  char empty;
 #endif
 } ISR_lock_Control;
 
@@ -198,7 +200,7 @@ static inline void _ISR_lock_Context_set_level(
   #define _ISR_lock_Initialize( _lock, _name ) \
     _SMP_lock_Initialize( &( _lock )->Lock, _name )
 #else
-  #define _ISR_lock_Initialize( _lock, _name )
+  #define _ISR_lock_Initialize( _lock, _name ) (void) _name;
 #endif
 
 /**

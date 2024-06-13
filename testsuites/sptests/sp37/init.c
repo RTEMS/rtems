@@ -206,9 +206,7 @@ static void test_isr_level( void )
 
 static void test_isr_locks( void )
 {
-#if defined(RTEMS_SMP)
   static const char name[] = "test";
-#endif
   ISR_Level normal_interrupt_level = _ISR_Get_level();
   ISR_lock_Control initialized = ISR_LOCK_INITIALIZER( name );
   ISR_lock_Control zero_initialized;
@@ -292,7 +290,7 @@ static void test_interrupt_locks( void )
   union {
     rtems_interrupt_lock lock;
     uint8_t bytes[ sizeof( rtems_interrupt_lock ) ];
-  } container;
+  } container = {0};
   rtems_interrupt_lock_context lock_context;
   size_t i;
   const uint8_t *initialized_bytes;
