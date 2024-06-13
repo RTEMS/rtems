@@ -4,6 +4,7 @@
 #
 # Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>
 # Copyright (C) 2019, 2020 embedded brains GmbH & Co. KG
+# Copyright (C) 2024 Contemporary Software <chris@contemporary.software>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -44,10 +45,10 @@ from waflib.TaskGen import after, before_method, feature
 
 is_windows_host = os.name == "nt" or sys.platform in ["msys", "cygwin"]
 version = {
-    "__RTEMS_MAJOR__": "6",
-    "__RTEMS_MINOR__": "0",
-    "__RTEMS_REVISION__": "0",
-    "RTEMS_VERSION_CONTROL_KEY": "git"
+    "__RTEMS_MAJOR__": "6",  # version
+    "__RTEMS_MINOR__": "0",  # revision
+    "__RTEMS_REVISION__": "0",  # not used
+    "RTEMS_RELEASE_VERSION_LABEL": "not-released"
 }
 default_prefix = "/opt/rtems/" + version["__RTEMS_MAJOR__"]
 compilers = ["gcc", "clang"]
@@ -63,6 +64,31 @@ def no_unicode(value):
     return value
 
 
+def get_repo_release_label(ctx):
+    from waflib.Build import Context
+    from waflib.Errors import WafError
+    release_label = "not-released"
+    try:
+        modified = ctx.cmd_and_log("git ls-files --modified",
+                                   quiet=Context.BOTH).strip()
+        release_label = ctx.cmd_and_log("git rev-parse --short HEAD",
+                                        quiet=Context.BOTH).strip()
+        if len(modified) != 0:
+            release_label += "-modified"
+    except WafError:
+        pass
+    return release_label
+
+
+#
+# This class is not aligned the project's release labelling. It will
+# not be changed for RTEMS 6. A VC key is a type of release label and
+# there are more types.
+#
+# The term `key` and a repo normally relates to the signing key of
+# repository which is security related and it is important we do not
+# imply this here. They are unrelated.
+#
 class VersionControlKeyHeader:
     _content = None
 
@@ -72,26 +98,19 @@ class VersionControlKeyHeader:
         if content is None:
             content = """/*
  * Automatically generated. Do not edit.
+ *
+ * Warning: This interface will be replaced with release labels
+ *          after RTEMS 6.
  */
 #if !defined(_RTEMS_VERSION_VC_KEY_H_)
 #define _RTEMS_VERSION_VC_KEY_H_
 """
-            key = bld.env.RTEMS_VERSION_CONTROL_KEY
-            if key == "git":
-                from waflib.Build import Context
-                from waflib.Errors import WafError
-
-                try:
-                    key = bld.cmd_and_log("git rev-parse HEAD",
-                                          quiet=Context.STDOUT).strip()
-                except WafError:
-                    key = ""
-            if key:
+            release_label = bld.env.RTEMS_RELEASE_VERSION_LABEL
+            if release_label == "not-released":
+                release_label = get_repo_release_label(bld)
+            if release_label:
                 content += """#define RTEMS_VERSION_CONTROL_KEY "{}"
-""".format(key)
-            else:
-                content += """/* No version control key found; release? */
-"""
+""".format(release_label)
             content += """#endif
 """
             VersionControlKeyHeader._content = content
@@ -1302,6 +1321,7 @@ def load_items_from_options(ctx):
 
 
 def options(ctx):
+    load_version(ctx)
     prefix = ctx.parser.get_option("--prefix")
     prefix.default = default_prefix
     prefix.help = "installation prefix [default: '{}']".format(default_prefix)
@@ -1369,19 +1389,52 @@ def check_environment(conf):
             conf.msg("Environment variable set", ev, color="RED")
 
 
-def configure_version(conf):
+def load_version(ctx):
+    global default_prefix
     cp = configparser.ConfigParser()
     version_file = "VERSION"
+    version_major = None
+    version_minor = None
+    version_label = None
+    prefix = None
     if cp.read([version_file]):
-        conf.msg("Configure RTEMS version from file",
-                 version_file,
-                 color="YELLOW")
-        for key in version:
-            try:
-                value = cp.get("RTEMS_VERSION", key)
-                version[key] = no_unicode(value)
-            except configparser.NoOptionError:
-                pass
+        try:
+            value = no_unicode(cp.get("version", "revision"))
+            # The revision is <major>.<minor>[-label]
+            # break is up and update the version
+            if "." not in value:
+                ctx.fatal("Invalid VERSION revision: no dot")
+            vs = value.split(".", 1)
+            version_major = vs[0]
+            vs[0] = vs[1]
+            if "." in vs[0]:
+                ctx.fatal("Invalid VERSION revision: too many dots")
+            if "-" in vs[0]:
+                value = vs[0]
+                vs = value.split("-", 1)
+                version_label = vs[1]
+            version_minor = vs[0]
+            prefix = "/opt/rtems/" + version_major
+        except configparser.NoOptionError:
+            pass
+    if version_major is not None:
+        version["__RTEMS_MAJOR__"] = version_major
+    if version_minor is not None:
+        version["__RTEMS_MINOR__"] = version_minor
+    if version_label is not None:
+        version["RTEMS_RELEASE_VERSION_LABEL"] = version_label
+    # Checking minor insures major and minor are valid
+    if version_minor is None:
+        version_label = get_repo_release_label(ctx)
+    return version_label
+
+
+def configure_version(conf):
+    version_label = load_version(conf)
+    v_str = version["__RTEMS_MAJOR__"] + "." + version["__RTEMS_MINOR__"]
+    if version_label != "":
+        v_str += "." + version_label
+    conf.msg("Configure RTEMS version", v_str, color="YELLOW")
 
 
 def load_config_files(ctx):
