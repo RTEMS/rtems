@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: script
+cflags: []
+copyrights:
+- Copyright (C) 2024 Ranulfo Raphael
+cppflags: []
+do-build: |
+  path = "testsuites/libtests/dl12/"
+  objs = []
+  objs.append(self.cc(bld, bic, path + "dl12-o1.c"))
+  objs.append(self.cc(bld, bic, path + "dl12-o2.c"))
+  def ld(self, bld, bic, flags, source, target):
+    bld(rule="${LD} " + flags + " ${SRC} -o ${TGT}",
+      source=source,
+      target=target)
+    return target
+  objs = [ld(self, bld, bic, '-r', objs, path + "dl12-inc.o")]
+  tar = path + "dl12.tar"
+  self.tar(bld, objs, [path], tar)
+  tar_c, tar_h = self.bin2c(bld, tar)
+  objs = []
+  objs.append(self.cc(bld, bic, tar_c))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_DL12_CPPFLAGS))
+  objs.append(self.cc(bld, bic, path + "dl-load.c"))
+  dl12_pre = path + "dl12.pre"
+  self.link_cc(bld, bic, objs, dl12_pre)
+  dl12_sym_o = path + "dl12-sym.o"
+  objs.append(dl12_sym_o)
+  self.rtems_syms(bld, dl12_pre, dl12_sym_o)
+  self.link_cc(bld, bic, objs, "testsuites/libtests/dl12.exe")
+do-configure: null
+enabled-by:
+- and:
+  - not: TEST_DL12_EXCLUDE
+  - BUILD_LIBDL
+includes:
+- testsuites/libtests/dl12
+ldflags: []
+links: []
+prepare-build: null
+prepare-configure: null
+stlib: []
+target: testsuites/libtests/dl12.exe
+type: build
+use-after: []
+use-before: []

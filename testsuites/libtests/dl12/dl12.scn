@@ -1,0 +1,15 @@
+*** BEGIN OF TEST libdl (RTL) 12 ***
+load: /dl12-inc.o
+handle: 0x4003d8d0 loaded
+
+About to call dl_o1_func at address 0x4003df80
+string_from_dl_o1_func
+dl_o1_func string literal address: 0x4003df40
+
+About to call dl_o2_func at address 0x4003dfa4
+string_from_dl_o2_func
+dl_o2_func string literal address: 0x4003df58
+
+handle: 0x4003d8d0 closed
+
+*** END OF TEST libdl (RTL) 12 ***
