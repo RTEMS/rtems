@@ -74,7 +74,7 @@ hex2ascii(int hex)
  * written in the buffer (i.e., the first character of the string).
  * The buffer pointed to by `nbuf' must have length >= MAXNBUF.
  */
-static char *
+static inline char *
 ksprintn(char *nbuf, uintmax_t num, int base, int *lenp, int upper)
 {
 	char *p;
@@ -84,8 +84,7 @@ ksprintn(char *nbuf, uintmax_t num, int base, int *lenp, int upper)
 	do {
 		*++p = hex2ascii_data[upper][num % base];
 	} while (num /= base);
-	if (lenp)
-		*lenp = p - nbuf;
+	*lenp = p - nbuf;
 	return (p);
 }
 
@@ -297,13 +296,13 @@ handle_nosign:
 handle_sign:
 			if (jflag)
 				num = va_arg(ap, intmax_t);
-#if __SIZEOF_PTRDIFF_T__ == __SIZEOF_LONG__
+#if __SIZEOF_PTRDIFF_T__ != __SIZEOF_LONG__
 			else if (tflag)
 				num = va_arg(ap, ptrdiff_t);
 #endif
 			else if (lflag)
 				num = va_arg(ap, long);
-#if __SIZEOF_SIZE_T__ == __SIZEOF_LONG__
+#if __SIZEOF_SIZE_T__ != __SIZEOF_LONG__
 			else if (zflag)
 				num = va_arg(ap, ssize_t);
 #endif
