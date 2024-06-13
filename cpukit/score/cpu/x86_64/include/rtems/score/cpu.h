@@ -170,29 +170,28 @@ extern Context_Control_fp _CPU_Null_fp_context;
 
 #define _CPU_ISR_Enable(_level)                             \
 {                                                           \
-  amd64_enable_interrupts();                                \
-  _level = 0;                                               \
-  (void) _level; /* Prevent -Wunused-but-set-variable */    \
+  if (_level == 0) {                                        \
+    amd64_enable_interrupts();                              \
+  }                                                         \
 }
 
 #define _CPU_ISR_Disable(_level)                            \
 {                                                           \
-  amd64_enable_interrupts();                                \
-  _level = 1;                                               \
-  (void) _level; /* Prevent -Wunused-but-set-variable */    \
+  _level = _CPU_ISR_Get_level();                            \
+  amd64_disable_interrupts();                               \
 }
 
 #define _CPU_ISR_Flash(_level)                              \
 {                                                           \
-  amd64_enable_interrupts();                                \
+  if (_level == 0) {                                        \
+    amd64_enable_interrupts();                              \
+  }                                                         \
   amd64_disable_interrupts();                               \
-  _level = 1;                                               \
-  (void) _level; /* Prevent -Wunused-but-set-variable */    \
 }
 
 static inline bool _CPU_ISR_Is_enabled(uint32_t level)
 {
-  return (level & EFLAGS_INTR_ENABLE) != 0;
+  return level == 0;
 }
 
 static inline void _CPU_ISR_Set_level(uint32_t new_level)
