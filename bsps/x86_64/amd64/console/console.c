@@ -56,7 +56,7 @@ static ns16550_context amd64_uart_context = {
  */
 const console_device console_device_table[] = {
   {
-    .device_file = "/dev/console",
+    .device_file = "/dev/ttyS0",
     .probe = console_device_probe_default,
     .handler = &ns16550_handler_polled,
     .context = &amd64_uart_context.base
