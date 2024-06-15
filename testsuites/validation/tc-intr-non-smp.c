@@ -142,7 +142,7 @@ static void RtemsIntrValIntrNonSmp_Action_0( void )
    * Check that rtems_interrupt_lock_initialize() expands to white space only.
    */
   s = RTEMS_XSTRING( rtems_interrupt_lock_initialize( x, y ) );
-  T_true( IsWhiteSpaceOnly( s ) );
+  T_true( IsEqualIgnoreWhiteSpace( s, "(void)y;" ) );
 
   /*
    * Check that rtems_interrupt_lock_acquire_isr() expands to a code block
