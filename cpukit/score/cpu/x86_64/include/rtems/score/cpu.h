@@ -232,7 +232,7 @@ void _CPU_Context_Initialize(
 
 /* end of Context handler macros */
 
-#define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
+#define CPU_USE_LIBC_INIT_FINI_ARRAY TRUE
 
 /* Bitfield handler macros */
 
