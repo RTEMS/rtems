@@ -46,6 +46,7 @@ msdos_rename(
 {
     int                rc = RC_OK;
     fat_file_fd_t     *old_fat_fd  = old_loc->node_access;
+    fat_dir_pos_t      old_pos = old_fat_fd->dir_pos;
 
     /*
      * create new directory entry as "hard link", copying relevant info from
@@ -63,7 +64,7 @@ msdos_rename(
      * mark file removed
      */
     rc = msdos_set_first_char4file_name(old_loc->mt_entry,
-                                        &old_fat_fd->dir_pos,
+                                        &old_pos,
                                         MSDOS_THIS_DIR_ENTRY_EMPTY);
 
     return rc;

@@ -64,7 +64,7 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
                  const char                              *name,
                  int                                      name_len,
                  mode_t                                   mode,
-                 const fat_file_fd_t                     *link_fd)
+                 fat_file_fd_t                           *link_fd)
 {
     int               rc = RC_OK;
     ssize_t           ret = 0;
@@ -173,6 +173,17 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
                              name_type, &dir_pos, short_node);
     if ( rc != RC_OK )
         return rc;
+
+    /*
+     * if it is performing a rename, update also the inode to prevent issues
+     * in case the fat file descriptor is opened not only for the rename operation.
+     */
+    if ( type == FAT_HARD_LINK )
+    {
+        rc = fat_file_get_new_inode_for(&fs_info->fat, &dir_pos, link_fd);
+        if ( rc != RC_OK )
+            return rc;
+    }
 
     /*
      * if we create a new file we are done, if directory there are more steps

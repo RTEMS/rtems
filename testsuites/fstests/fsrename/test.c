@@ -255,6 +255,41 @@ static void rename_file_twice_test (void)
   EXPECT_EQUAL (0, unlink, name03);
 }
 
+static void rename_opened_file_test (void)
+{
+  const char *name01 = "name01.txt";
+  const char *name02 = "name02.txt";
+  const char *message = "Test file content";
+  mode_t      mode;
+  int         fd1;
+  int         fd2;
+  int         result;
+  char        buffer[16];
+
+  puts ("\nRename opened file and open a new file\n");
+
+  mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  fd1 = open (name01, O_RDWR | O_CREAT, mode);
+  rtems_test_assert (fd1 >= 0);
+  result = write (fd1, message, strlen (message));
+  rtems_test_assert (result == strlen (message));
+
+  EXPECT_EQUAL (0, rename, name01, name02);
+
+  fd2 = open (name01, O_RDWR | O_CREAT, mode);
+  rtems_test_assert (fd1 >= 0);
+  EXPECT_EQUAL (0, read, fd2, buffer, sizeof (buffer));
+
+  result = close (fd1);
+  rtems_test_assert (result == 0);
+
+  result = close (fd2);
+  rtems_test_assert (result == 0);
+
+  EXPECT_EQUAL (0, unlink, name01);
+  EXPECT_EQUAL (0, unlink, name02);
+}
+
 static void same_file_test (void)
 {
   int fd;
@@ -1271,6 +1306,7 @@ void test (void)
   rename_file_twice_test ();
   same_file_test ();
   directory_test ();
+  rename_opened_file_test ();
   arg_test ();
   arg_format_test ();
   write_permission_test ();

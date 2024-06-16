@@ -255,6 +255,11 @@ int
 fat_file_update(fat_fs_info_t *fs_info,
                 fat_file_fd_t *fat_fd);
 
+int
+fat_file_get_new_inode_for(fat_fs_info_t *fs_info,
+                           fat_dir_pos_t *new_dir_pos,
+                           fat_file_fd_t *fat_fd);
+
 #ifdef __cplusplus
 }
 #endif

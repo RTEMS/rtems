@@ -147,6 +147,88 @@ fat_file_open(
     return RC_OK;
 }
 
+/* fat_file_get_new_inode_for --
+ *    Get a new inode for the fat file descriptor that is being
+ *    moved to the new directory position.
+ *    Firstly, it release the old inode of the fat file descriptor
+ *    taking also care to remove the mapping from the "vhash" table
+ *    Then it obtain a new inode corresponging to the new directory position
+ *    inserting the new mapping into the "vhash" table.
+ *    The function takes the responsability to update the inode number and
+ *    the directory position stored into the fat file descriptor.
+ *
+ * PARAMETERS:
+ *     fs_info      - FS info
+ *     new_dir_pos  - the new directory position for the fat file descriptor
+ *     fat_fd       - the fat file descriptor for which the inode has to be changed
+ *
+ * RETURNS:
+ *     RC_OK or an error
+ */
+int
+fat_file_get_new_inode_for(
+    fat_fs_info_t                         *fs_info,
+    fat_dir_pos_t                         *new_dir_pos,
+    fat_file_fd_t                         *fat_fd
+    )
+{
+    fat_file_fd_t *lfat_fd = NULL;
+    uint32_t old_key = 0;
+    uint32_t new_key = 0;
+    uint32_t old_inode = 0;
+    uint32_t new_inode = 0;
+    int rc = RC_OK;
+
+    /* construct the old key to later perform the due lookups */
+    old_key = fat_construct_key(fs_info, &fat_fd->dir_pos.sname);
+
+    /* construct the new key to later perform the due lookups */
+    new_key = fat_construct_key(fs_info, &new_dir_pos->sname);
+
+    /*
+     * access "valid" hash table with the new key,
+     * it is expected that no file can have such key, otherwise
+     * it means that the caller is renaming a file to an already
+     * existing destination.
+     */
+    rc = _hash_search(fs_info, fs_info->vhash, new_key, 0, &lfat_fd);
+    assert(rc != RC_OK);
+
+    /*
+     * Remove from the valid table the old mapping of the inode to the
+     * fat file descriptor
+     */
+    old_inode = fat_fd->ino;
+    _hash_delete(fs_info->vhash, old_key, old_inode, fat_fd);
+
+    /* Assign the new directory position to the fat file descriptor */
+    fat_fd->dir_pos = *new_dir_pos;
+
+    /*
+     * The old inode is no more required,
+     * Free it in case it has been allocated by fat_get_unique_ino
+     */
+    if (fat_ino_is_unique(fs_info, old_inode))
+        fat_free_unique_ino(fs_info, old_inode);
+
+    /*
+     * Check if the new key can be used as an inode or a unique
+     * inode should be obtained because the new directory position
+     * may be a still opened but removed file
+     */
+    rc = _hash_search(fs_info, fs_info->rhash, new_key, new_key, &lfat_fd);
+    if (rc != RC_OK) new_inode = new_key;
+    else new_inode = fat_get_unique_ino(fs_info);
+
+    /*
+     * Finally, insert the new inode in the hash table lookup and
+     * update the inode of the fat file descriptor.
+     */
+    _hash_insert(fs_info->vhash, new_key, new_inode, fat_fd);
+    fat_fd->ino = new_inode;
+    return RC_OK;
+}
+
 
 /* fat_file_reopen --
  *     Increment by 1 number of links

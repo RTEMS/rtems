@@ -370,7 +370,7 @@ int msdos_creat_node(const rtems_filesystem_location_info_t *parent_loc,
                      const char                             *name,
                      int                                     name_len,
                      mode_t                                  mode,
-                     const fat_file_fd_t                    *link_fd);
+                     fat_file_fd_t                          *link_fd);
 
 /* Misc prototypes */
 
