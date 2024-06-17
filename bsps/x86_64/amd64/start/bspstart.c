@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64
+ *
+ * @brief BSP start-up code
+ */
+
 /*
  * Copyright (c) 2018.
  * Amaan Cheval <amaan.cheval@gmail.com>

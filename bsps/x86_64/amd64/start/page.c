@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64
+ *
+ * @brief Paging initialization
+ */
+
 /*
  * This file sets up page sizes to 1GiB (i.e. huge pages, using only the PML4
  * and PDPT, skipping the PDT, and PT).

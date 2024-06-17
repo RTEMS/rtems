@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64
+ *
+ * @brief BSP reset code
+ */
+
 /*
  * Copyright (C) 2024 Matheus Pecoraro
  *

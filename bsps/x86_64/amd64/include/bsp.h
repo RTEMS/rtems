@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsX8664Amd64
+ * @ingroup RTEMSBSPsX8664AMD64
  *
  * @brief Global BSP definitions.
  */
@@ -44,7 +44,11 @@
 #define LIBBSP_X86_64_AMD64_BSP_H
 
 /**
- * @addtogroup RTEMSBSPsX8664
+ * @ingroup RTEMSBSPsX8664
+ *
+ * @defgroup RTEMSBSPsX8664AMD64 AMD64
+ *
+ * @brief AMD64 Board Support Package.
  *
  * @{
  */
