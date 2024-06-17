@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  If this define has a non-zero value, then the interrupt lock operations
+  require an object of type ${lock:/name}, otherwise no lock object is
+  required.
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+definition:
+  default: ${/score/isr/if/lock-needs-object:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+notes: |
+  This indication can be used to avoid the space overhead for lock objects when
+  they are not needed.  In this case, the lock operations will not use a lock
+  objects parameter.
+type: interface

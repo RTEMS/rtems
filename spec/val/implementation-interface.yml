@@ -126,10 +126,6 @@ links:
 - role: validation
   uid: /score/isr/if/lock-control
 - role: validation
-  uid: /score/isr/if/lock-declare
-- role: validation
-  uid: /score/isr/if/lock-define
-- role: validation
   uid: /score/isr/if/lock-destroy
 - role: validation
   uid: /score/isr/if/lock-initialize
@@ -140,9 +136,7 @@ links:
 - role: validation
   uid: /score/isr/if/lock-isr-disable-acquire
 - role: validation
-  uid: /score/isr/if/lock-member
-- role: validation
-  uid: /score/isr/if/lock-reference
+  uid: /score/isr/if/lock-needs-object
 - role: validation
   uid: /score/isr/if/lock-release-isr-enable
 - role: validation

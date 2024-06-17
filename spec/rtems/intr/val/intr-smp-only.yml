@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
 enabled-by: RTEMS_SMP
 links: []
 test-actions:
@@ -18,6 +18,16 @@ test-actions:
     RTEMS_INTERRUPT_LOCK_REFERENCE( ref, &the_lock )
     rtems_interrupt_lock_context lock_context;
   checks:
+  - brief: |
+      Assert that ${../if/lock-needs-object:/name} is a constant expression which
+      evaluates to a non-zero value.
+    code: |
+      RTEMS_STATIC_ASSERT( RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT, LOCK_NEEDS_OBJECT );
+    links:
+    - role: validation
+      uid: ../if/lock-needs-object
+    - role: validation
+      uid: ../req/lock-needs-object
   - brief: |
       Check that ${../if/lock-reference:/name} expanded to a lock reference
       definition.  Check that the lock is available after static

@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   This structure represents an ISR lock.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: ${/score/isr/if/lock-control:/name} ${.:/name}
@@ -17,7 +17,28 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_interrupt_lock
-notes: null
+notes: |
+  Lock objects are only needed in some RTEMS build configurations, for example
+  where the SMP support is enabled.  The ${lock-needs-object:/name} constant
+  can be used to determine whether a lock object is needed or not.  This may
+  help to reduce the memory demands of an application.  All lock operations do
+  not use the lock object parameter if lock objects are not needed.
+
+  .. code-block:: c
+      :linenos:
+
+      #include <rtems.h>
+
+      #if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+      rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER( "name" );
+      #endif
+
+      struct s {
+      #if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+        rtems_interrupt_lock lock;
+      #endif
+        int foobar;
+      };
 params: []
 return: null
 type: interface

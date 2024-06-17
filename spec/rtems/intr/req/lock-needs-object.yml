@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+enabled-by: RTEMS_SMP
+links:
+- role: interface-function
+  uid: ../if/lock-needs-object
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/lock-needs-object:/name} constant shall expand to a constant
+  expression which evaluates to a non-zero value.
+type: requirement

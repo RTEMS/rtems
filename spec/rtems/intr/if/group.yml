@@ -44,6 +44,8 @@ links:
 - role: placement-order
   uid: lock
 - role: placement-order
+  uid: lock-needs-object
+- role: placement-order
   uid: lock-context
 - role: placement-order
   uid: lock-initialize

@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Releases the ISR lock from within an ISR.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -24,7 +24,7 @@ definition:
       - ${lock:/name} *${.:/params[0]/name}
       - ${lock-context:/name} *${.:/params[1]/name}
       return: void
-    enabled-by: defined(${/build-options/if/smp:/name})
+    enabled-by: ${/score/isr/if/lock-needs-object:/name}
 description: |
   This directive releases the ISR lock specified by ${.:/params[0]/name} using
   the lock context provided by ${.:/params[1]/name}.  The interrupt level will

@@ -2,16 +2,24 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Defines an ISR lock member.
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
+- Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
     attributes: null
-    body: ${/score/isr/if/lock-member:/name}( ${.:/params[0]/name} )
+    body: null
     params:
     - ${.:/params[0]/name}
     return: null
-  variants: []
+  variants:
+  - definition:
+      attributes: null
+      body: |
+        ${lock:/name} ${.:/params[0]/name};
+      params:
+      - ${.:/params[0]/name}
+      return: null
+    enabled-by: ${/score/isr/if/lock-needs-object:/name}
 description: null
 enabled-by: true
 index-entries: []
