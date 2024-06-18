@@ -100,7 +100,9 @@
 #include <limits.h>
 #include <string.h>
 #include <rtems.h>
-ISR_LOCK_DEFINE(, _Timecounter_Lock, "Timecounter")
+#if ISR_LOCK_NEEDS_OBJECT
+ISR_lock_Control _Timecounter_Lock = ISR_LOCK_INITIALIZER( "Timecounter");
+#endif
 #define _Timecounter_Release(lock_context) \
   _ISR_lock_Release_and_ISR_enable(&_Timecounter_Lock, lock_context)
 #define hz rtems_clock_get_ticks_per_second()

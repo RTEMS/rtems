@@ -50,7 +50,10 @@ static RBTREE_DEFINE_EMPTY( _Thread_MP_Active_proxies );
 
 static CHAIN_DEFINE_EMPTY( _Thread_MP_Inactive_proxies );
 
-ISR_LOCK_DEFINE( static, _Thread_MP_Proxies_lock, "Thread MP Proxies" )
+#if ISR_LOCK_NEEDS_OBJECT
+static ISR_lock_Control _Thread_MP_Proxies_lock =
+  ISR_LOCK_INITIALIZER( "Thread MP Proxies" );
+#endif
 
 static void _Thread_MP_Proxies_acquire( ISR_lock_Context *lock_context )
 {

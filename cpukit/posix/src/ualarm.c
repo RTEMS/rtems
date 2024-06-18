@@ -45,7 +45,10 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/config.h>
 
-ISR_LOCK_DEFINE( static, _POSIX_signals_Ualarm_lock, "POSIX Ualarm" )
+#if ISR_LOCK_NEEDS_OBJECT
+static ISR_lock_Control _POSIX_signals_Ualarm_lock =
+  ISR_LOCK_INITIALIZER( "POSIX Ualarm" );
+#endif
 
 static uint32_t _POSIX_signals_Ualarm_interval;
 

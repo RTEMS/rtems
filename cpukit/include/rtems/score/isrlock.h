@@ -139,23 +139,6 @@ typedef struct {
 #endif
 
 /**
- * @brief Defines an ISR lock variable.
- *
- * Do not add a ';' after this macro.
- *
- * @param _qualifier The qualifier for the interrupt lock, e.g. static.
- * @param _designator The designator for the interrupt lock.
- * @param _name The name for the interrupt lock.  It must be a string.  The
- * name is only used if profiling is enabled.
- */
-#if defined( RTEMS_SMP )
-  #define ISR_LOCK_DEFINE( _qualifier, _designator, _name ) \
-    _qualifier ISR_lock_Control _designator = { SMP_LOCK_INITIALIZER( _name ) };
-#else
-  #define ISR_LOCK_DEFINE( _qualifier, _designator, _name )
-#endif
-
-/**
  * @brief Defines an ISR lock variable reference.
  *
  * Do not add a ';' after this macro.

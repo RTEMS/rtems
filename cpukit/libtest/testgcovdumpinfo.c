@@ -45,7 +45,9 @@
 #include <rtems/score/hash.h>
 #include <rtems/bspIo.h>
 
-ISR_LOCK_DEFINE( static, gcov_dump_lock, "gcov dump" );
+#if ISR_LOCK_NEEDS_OBJECT
+static ISR_lock_Control gcov_dump_lock = ISR_LOCK_INITIALIZER( "gcov dump" );
+#endif
 
 static bool gcov_dump_done;
 
