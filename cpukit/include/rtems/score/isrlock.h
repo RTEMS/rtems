@@ -110,18 +110,14 @@ typedef struct {
 #endif
 } ISR_lock_Context;
 
-/**
- * @brief Initializer for static initialization of ISR locks.
- *
- * @param _name The name for the interrupt lock.  It must be a string.  The
- * name is only used if profiling is enabled.
- */
-#if defined( RTEMS_SMP )
-  #define ISR_LOCK_INITIALIZER( _name ) \
-    { SMP_LOCK_INITIALIZER( _name ) }
-#else
-  #define ISR_LOCK_INITIALIZER( _name ) \
-    { }
+#if ISR_LOCK_NEEDS_OBJECT
+  /**
+   * @brief Initializer for static initialization of ISR locks.
+   *
+   * @param _name The name for the interrupt lock.  It must be a string.  The
+   * name is only used if profiling is enabled.
+   */
+  #define ISR_LOCK_INITIALIZER( _name ) { SMP_LOCK_INITIALIZER( _name ) }
 #endif
 
 /**

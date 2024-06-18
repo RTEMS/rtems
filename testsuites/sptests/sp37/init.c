@@ -208,19 +208,26 @@ static void test_isr_locks( void )
 {
   static const char name[] = "test";
   ISR_Level normal_interrupt_level = _ISR_Get_level();
+#if ISR_LOCK_NEEDS_OBJECT
   ISR_lock_Control initialized = ISR_LOCK_INITIALIZER( name );
   ISR_lock_Control zero_initialized;
   union {
     ISR_lock_Control lock;
     uint8_t bytes[ sizeof( ISR_lock_Control ) ];
   } container;
-  ISR_lock_Context lock_context;
   size_t i;
   const uint8_t *bytes;
+#endif
+  ISR_lock_Context lock_context;
   ISR_Level interrupt_level;
 
+#if ISR_LOCK_NEEDS_OBJECT
   memset( &container, 0xff, sizeof( container ) );
+#endif
+
   _ISR_lock_Initialize( &container.lock, name );
+
+#if ISR_LOCK_NEEDS_OBJECT
   bytes = (const uint8_t *) &initialized;
 
   for ( i = 0; i < sizeof( container ); ++i ) {
@@ -238,6 +245,7 @@ static void test_isr_locks( void )
       rtems_test_assert( container.bytes[ i ] == bytes[ i ] );
     }
   }
+#endif
 
   _ISR_lock_ISR_disable_and_acquire( &container.lock, &lock_context );
   rtems_test_assert( normal_interrupt_level != _ISR_Get_level() );
