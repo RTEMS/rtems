@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2013, 2019 embedded brains GmbH & Co. KG
+ * Copyright (C) 2013, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -62,6 +62,22 @@ extern "C" {
  *
  * @{
  */
+
+/**
+ * @brief If this define has a non-zero value, then the interrupt lock
+ *   operations require an object of type ::ISR_lock_Control, otherwise no
+ *   lock object is required.
+ *
+ * @par Notes
+ * This indication can be used to avoid the space overhead for lock objects
+ * when they are not needed.  In this case, the lock operations will not use a
+ * lock objects parameter.
+ */
+#if defined( RTEMS_SMP )
+  #define ISR_LOCK_NEEDS_OBJECT 1
+#else
+  #define ISR_LOCK_NEEDS_OBJECT 0
+#endif
 
 /**
  * @brief ISR lock control.

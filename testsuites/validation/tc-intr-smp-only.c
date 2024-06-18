@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -69,6 +69,9 @@
  *
  * - Validate the interrupt lock directives.
  *
+ *   - Assert that RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT is a constant expression
+ *     which evaluates to a non-zero value.
+ *
  *   - Check that RTEMS_INTERRUPT_LOCK_REFERENCE() expanded to a lock reference
  *     definition.  Check that the lock is available after static
  *     initialization.
@@ -124,6 +127,12 @@ static void RtemsIntrValIntrSmpOnly_Action_0( void )
 
   RTEMS_INTERRUPT_LOCK_REFERENCE( ref, &the_lock )
   rtems_interrupt_lock_context lock_context;
+
+  /*
+   * Assert that RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT is a constant expression
+   * which evaluates to a non-zero value.
+   */
+  RTEMS_STATIC_ASSERT( RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT, LOCK_NEEDS_OBJECT );
 
   /*
    * Check that RTEMS_INTERRUPT_LOCK_REFERENCE() expanded to a lock reference
