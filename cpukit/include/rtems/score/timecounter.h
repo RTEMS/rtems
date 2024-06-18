@@ -200,10 +200,12 @@ void _Timecounter_Install( struct timecounter *tc );
  */
 void _Timecounter_Tick( void );
 
+#if ISR_LOCK_NEEDS_OBJECT
 /**
  * @brief Lock to protect the timecounter mechanic.
  */
-ISR_LOCK_DECLARE( extern, _Timecounter_Lock )
+extern ISR_lock_Control _Timecounter_Lock;
+#endif
 
 /**
  * @brief Acquires the timecounter lock.

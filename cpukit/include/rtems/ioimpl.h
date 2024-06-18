@@ -68,7 +68,9 @@ extern bool _IO_All_drivers_initialized;
  */
 void _IO_Initialize_all_drivers( void );
 
-ISR_LOCK_DECLARE( extern, _IO_Driver_registration_lock )
+#if ISR_LOCK_NEEDS_OBJECT
+extern ISR_lock_Control _IO_Driver_registration_lock;
+#endif
 
 static inline void _IO_Driver_registration_acquire(
   ISR_lock_Context *lock_context
