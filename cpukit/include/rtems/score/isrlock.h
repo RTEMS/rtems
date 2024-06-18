@@ -139,21 +139,6 @@ typedef struct {
 #endif
 
 /**
- * @brief Defines an ISR lock variable reference.
- *
- * Do not add a ';' after this macro.
- *
- * @param _designator The designator for the interrupt lock reference.
- * @param _target The target for the interrupt lock reference.
- */
-#if defined( RTEMS_SMP )
-  #define ISR_LOCK_REFERENCE( _designator, _target ) \
-    ISR_lock_Control *_designator = _target;
-#else
-  #define ISR_LOCK_REFERENCE( _designator, _target )
-#endif
-
-/**
  * @brief Initializer for static initialization of ISR locks.
  *
  * @param _name The name for the interrupt lock.  It must be a string.  The
