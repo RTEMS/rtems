@@ -887,10 +887,7 @@ static inline uint32_t ppc_fsl_system_version_mnrev(uint32_t svr)
 static inline void ppc_msync(void)
 {
   __asm__ volatile (
-    ".machine push\n"
-    ".machine e500\n"
-    "msync\n"
-    ".machine pop"
+    "msync"
     :
     :
     : "memory"
@@ -900,10 +897,7 @@ static inline void ppc_msync(void)
 static inline void ppc_tlbre(void)
 {
   __asm__ volatile (
-    ".machine push\n"
-    ".machine e500\n"
-    "tlbre\n"
-    ".machine pop"
+    "tlbre"
     :
     :
     : "memory"
@@ -913,10 +907,7 @@ static inline void ppc_tlbre(void)
 static inline void ppc_tlbwe(void)
 {
   __asm__ volatile (
-    ".machine push\n"
-    ".machine e500\n"
-    "tlbwe\n"
-    ".machine pop"
+    "tlbwe"
     :
     :
     : "memory"
@@ -926,10 +917,7 @@ static inline void ppc_tlbwe(void)
 static inline void ppc_tlbsx(void *addr)
 {
   __asm__ volatile (
-    ".machine push\n"
-    ".machine e500\n"
-    "tlbsx 0, %0\n"
-    ".machine pop"
+    "tlbsx 0, %0"
     :
     : "r" (addr)
     : "memory"
@@ -939,20 +927,14 @@ static inline void ppc_tlbsx(void *addr)
 static inline void ppc_mtivpr(void *prefix)
 {
   __asm__ volatile (
-    ".machine push\n"
-    ".machine e500\n"
-    "mtivpr %0\n"
-    ".machine pop"
+    "mtivpr %0"
     :
     : "r" (prefix)
   );
 }
 
 #define ppc_mtivor(x, vec) __asm__ volatile ( \
-    ".machine push\n" \
-    ".machine e500\n" \
-    "mtivor" RTEMS_XSTRING(x) " %0\n" \
-    ".machine pop" \
+    "mtivor" RTEMS_XSTRING(x) " %0" \
     : \
     : "r" (vec) \
   )
