@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -69,6 +69,9 @@
  *
  * - Validate some interrupt lock macros.
  *
+ *   - Assert that RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT is a constant expression
+ *     which evaluates to a value of zero.
+ *
  *   - Check that RTEMS_INTERRUPT_LOCK_DECLARE() expands to white space only.
  *
  *   - Check that RTEMS_INTERRUPT_LOCK_DEFINE() expands to white space only.
@@ -100,6 +103,12 @@
 static void RtemsIntrValIntrNonSmp_Action_0( void )
 {
   const char *s;
+
+  /*
+   * Assert that RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT is a constant expression
+   * which evaluates to a value of zero.
+   */
+  RTEMS_STATIC_ASSERT( !RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT, LOCK_NEEDS_OBJECT );
 
   /*
    * Check that RTEMS_INTERRUPT_LOCK_DECLARE() expands to white space only.

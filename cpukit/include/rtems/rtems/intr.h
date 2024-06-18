@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (C) 2008, 2022 embedded brains GmbH & Co. KG
+ * Copyright (C) 2008, 2024 embedded brains GmbH & Co. KG
  * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -520,8 +520,49 @@ rtems_status_code rtems_interrupt_catch(
  * @ingroup RTEMSAPIClassicIntr
  *
  * @brief This structure represents an ISR lock.
+ *
+ * @par Notes
+ * @parblock
+ * Lock objects are only needed in some RTEMS build configurations, for example
+ * where the SMP support is enabled.  The #RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+ * constant can be usused to determine whether a lock object is needded or not.
+ * This may help to reduce the memory demands of an application.  All lock
+ * operations do not use the lock object parameter if lock objects are not
+ * needed.
+ *
+ * @code
+ * #include <rtems.h>
+ *
+ * #if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+ * rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER( "name" );
+ * #endif
+ *
+ * struct s {
+ * #if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+ *   rtems_interrupt_lock lock;
+ * #endif
+ *   int foobar;
+ * };
+ * @endcode
+ * @endparblock
  */
 typedef ISR_lock_Control rtems_interrupt_lock;
+
+/* Generated from spec:/rtems/intr/if/lock-needs-object */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief If this define has a non-zero value, then the interrupt lock
+ *   operations require an object of type ::rtems_interrupt_lock, otherwise no
+ *   lock object is required.
+ *
+ * @par Notes
+ * This indication can be used to avoid the space overhead for lock objects
+ * when they are not needed.  In this case, the lock operations will not use a
+ * lock objects parameter.
+ */
+#define RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT ISR_LOCK_NEEDS_OBJECT
 
 /* Generated from spec:/rtems/intr/if/lock-context */
 
@@ -728,7 +769,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
-#if defined(RTEMS_SMP)
+#if ISR_LOCK_NEEDS_OBJECT
   #define rtems_interrupt_lock_acquire_isr( _lock, _lock_context ) \
     _SMP_lock_Acquire( \
       &( _lock )->Lock, \
@@ -774,7 +815,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
-#if defined(RTEMS_SMP)
+#if ISR_LOCK_NEEDS_OBJECT
   #define rtems_interrupt_lock_release_isr( _lock, _lock_context ) \
     _SMP_lock_Release( \
       &( _lock )->Lock, \
@@ -825,8 +866,12 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @par Notes
  * Do not add a ";" after this macro.
  */
-#define RTEMS_INTERRUPT_LOCK_DECLARE( _specifier, _designator ) \
-  ISR_LOCK_DECLARE( _specifier, _designator )
+#if ISR_LOCK_NEEDS_OBJECT
+  #define RTEMS_INTERRUPT_LOCK_DECLARE( _specifier, _designator ) \
+    _specifier rtems_interrupt_lock _designator;
+#else
+  #define RTEMS_INTERRUPT_LOCK_DECLARE( _specifier, _designator )
+#endif
 
 /* Generated from spec:/rtems/intr/if/lock-define */
 
@@ -852,8 +897,12 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * RTEMS_INTERRUPT_LOCK_INITIALIZER().
  * @endparblock
  */
-#define RTEMS_INTERRUPT_LOCK_DEFINE( _specifier, _designator, _name ) \
-  ISR_LOCK_DEFINE( _specifier, _designator, _name )
+#if ISR_LOCK_NEEDS_OBJECT
+  #define RTEMS_INTERRUPT_LOCK_DEFINE( _specifier, _designator, _name ) \
+    _specifier rtems_interrupt_lock _designator = ISR_LOCK_INITIALIZER( _name );
+#else
+  #define RTEMS_INTERRUPT_LOCK_DEFINE( _specifier, _designator, _name )
+#endif
 
 /* Generated from spec:/rtems/intr/if/lock-initializer */
 
@@ -870,7 +919,11 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * rtems_interrupt_lock_initialize() or statically defined by
  * RTEMS_INTERRUPT_LOCK_DEFINE().
  */
-#define RTEMS_INTERRUPT_LOCK_INITIALIZER( _name ) ISR_LOCK_INITIALIZER( _name )
+#if ISR_LOCK_NEEDS_OBJECT
+  #define RTEMS_INTERRUPT_LOCK_INITIALIZER( _name ) ISR_LOCK_INITIALIZER( _name )
+#else
+  #define RTEMS_INTERRUPT_LOCK_INITIALIZER( _name ) {}
+#endif
 
 /* Generated from spec:/rtems/intr/if/lock-member */
 
@@ -884,8 +937,12 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @par Notes
  * Do not add a ";" after this macro.
  */
-#define RTEMS_INTERRUPT_LOCK_MEMBER( _designator ) \
-  ISR_LOCK_MEMBER( _designator )
+#if ISR_LOCK_NEEDS_OBJECT
+  #define RTEMS_INTERRUPT_LOCK_MEMBER( _designator ) \
+    rtems_interrupt_lock _designator;
+#else
+  #define RTEMS_INTERRUPT_LOCK_MEMBER( _designator )
+#endif
 
 /* Generated from spec:/rtems/intr/if/lock-reference */
 
@@ -901,8 +958,12 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @par Notes
  * Do not add a ";" after this macro.
  */
-#define RTEMS_INTERRUPT_LOCK_REFERENCE( _designator, _target ) \
-  ISR_LOCK_REFERENCE( _designator, _target )
+#if ISR_LOCK_NEEDS_OBJECT
+  #define RTEMS_INTERRUPT_LOCK_REFERENCE( _designator, _target ) \
+    rtems_interrupt_lock *_designator = _target;
+#else
+  #define RTEMS_INTERRUPT_LOCK_REFERENCE( _designator, _target )
+#endif
 
 /* Generated from spec:/rtems/intr/if/shared */
 
