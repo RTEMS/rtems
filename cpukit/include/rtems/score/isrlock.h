@@ -111,19 +111,6 @@ typedef struct {
 } ISR_lock_Context;
 
 /**
- * @brief Defines an ISR lock member.
- *
- * Do not add a ';' after this macro.
- *
- * @param _designator The designator for the interrupt lock.
- */
-#if defined( RTEMS_SMP )
-  #define ISR_LOCK_MEMBER( _designator ) ISR_lock_Control _designator;
-#else
-  #define ISR_LOCK_MEMBER( _designator )
-#endif
-
-/**
  * @brief Initializer for static initialization of ISR locks.
  *
  * @param _name The name for the interrupt lock.  It must be a string.  The

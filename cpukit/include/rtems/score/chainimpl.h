@@ -1012,7 +1012,9 @@ static inline void _Chain_Iterator_registry_update(
  * typedef struct {
  *   Chain_Control           Chain;
  *   Chain_Iterator_registry Iterators;
- *   ISR_LOCK_MEMBER(        Lock )
+ * #if ISR_LOCK_NEEDS_OBJECT
+ *   ISR_lock_Control        Lock;
+ * #endif
  * } Some_Control;
  *
  * void iterate(

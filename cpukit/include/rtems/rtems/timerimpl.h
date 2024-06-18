@@ -60,7 +60,9 @@ extern "C" {
  */
 
 typedef struct Timer_server_Control {
-  ISR_LOCK_MEMBER( Lock )
+#if ISR_LOCK_NEEDS_OBJECT
+  ISR_lock_Control Lock;
+#endif
 
   Chain_Control Pending;
 

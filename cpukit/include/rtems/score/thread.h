@@ -542,7 +542,9 @@ typedef struct {
  * @brief Information required to manage a thread timer.
  */
 typedef struct {
-  ISR_LOCK_MEMBER( Lock )
+#if ISR_LOCK_NEEDS_OBJECT
+  ISR_lock_Control Lock;
+#endif
   Watchdog_Header *header;
   Watchdog_Control Watchdog;
 } Thread_Timer_information;
