@@ -98,7 +98,9 @@ static void test_watchdog_init( test_watchdog *watchdog, int counter )
 
 static uint64_t test_watchdog_tick( Watchdog_Header *header, uint64_t now )
 {
-  ISR_LOCK_DEFINE( , lock, "Test" )
+#if ISR_LOCK_NEEDS_OBJECT
+  ISR_lock_Control lock = ISR_LOCK_INITIALIZER( "Test" );
+#endif
   ISR_lock_Context lock_context;
   Watchdog_Control *first;
 

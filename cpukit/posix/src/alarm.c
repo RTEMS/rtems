@@ -47,7 +47,10 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-ISR_LOCK_DEFINE( static, _POSIX_signals_Alarm_lock, "POSIX Alarm" )
+#if ISR_LOCK_NEEDS_OBJECT
+static ISR_lock_Control _POSIX_signals_Alarm_lock =
+  ISR_LOCK_INITIALIZER( "POSIX Alarm" );
+#endif
 
 static void _POSIX_signals_Alarm_TSR( Watchdog_Control *the_watchdog )
 {

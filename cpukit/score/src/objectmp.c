@@ -70,7 +70,10 @@ uint32_t _Objects_MP_Maximum_global_objects;
 
 static CHAIN_DEFINE_EMPTY( _Objects_MP_Inactive_global_objects );
 
-ISR_LOCK_DEFINE( static, _Objects_MP_Global_lock, "MP Objects" )
+#if ISR_LOCK_NEEDS_OBJECT
+static ISR_lock_Control _Objects_MP_Global_lock =
+  ISR_LOCK_INITIALIZER( "MP Objects" );
+#endif
 
 static void _Objects_MP_Global_acquire( ISR_lock_Context *lock_context )
 {

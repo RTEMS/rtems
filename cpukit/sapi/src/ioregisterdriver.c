@@ -44,7 +44,10 @@
 #include <rtems/ioimpl.h>
 #include <rtems/rtems/intr.h>
 
-ISR_LOCK_DEFINE( , _IO_Driver_registration_lock, "IO Driver Registration" )
+#if ISR_LOCK_NEEDS_OBJECT
+ISR_lock_Control _IO_Driver_registration_lock =
+  ISR_LOCK_INITIALIZER( "IO Driver Registration" );
+#endif
 
 static inline bool rtems_io_is_empty_table(
   const rtems_driver_address_table *table

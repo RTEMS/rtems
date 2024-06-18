@@ -29,7 +29,9 @@
 
 #include <rtems.h>
 
-ISR_LOCK_DEFINE (static, __rtld_tbg_lock, "RTLD TBG")
+#if ISR_LOCK_NEEDS_OBJECT
+static ISR_lock_Control __rtld_tbg_lock = ISR_LOCK_INITIALIZER ("RTLD TBG");
+#endif
 
 uint32_t
 rtems_trace_names_size (void)
