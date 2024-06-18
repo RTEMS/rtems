@@ -79,19 +79,14 @@ extern "C" {
   #define ISR_LOCK_NEEDS_OBJECT 0
 #endif
 
+#if ISR_LOCK_NEEDS_OBJECT
 /**
  * @brief ISR lock control.
- *
- * @warning Empty structures are implementation-defined in C.  GCC gives them a
- * size of zero.  In C++ empty structures have a non-zero size.
  */
 typedef struct {
-#if defined( RTEMS_SMP )
   SMP_lock_Control Lock;
-#else
-  char empty;
-#endif
 } ISR_lock_Control;
+#endif
 
 /**
  * @brief Local ISR lock context for acquire and release pairs.
