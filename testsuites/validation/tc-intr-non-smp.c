@@ -82,8 +82,8 @@
  *   - Check that RTEMS_INTERRUPT_LOCK_INITIALIZER() expands to an empty
  *     structure initializer.
  *
- *   - Check that rtems_interrupt_lock_initialize() expands to white space
- *     only.
+ *   - Check that rtems_interrupt_lock_initialize() expands to a code block
+ *     which marks the second parameter as used.
  *
  *   - Check that rtems_interrupt_lock_acquire_isr() expands to a code block
  *     which marks the second parameter as used.
@@ -139,10 +139,11 @@ static void RtemsIntrValIntrNonSmp_Action_0( void )
   T_true( IsEqualIgnoreWhiteSpace( s, "{}" ) );
 
   /*
-   * Check that rtems_interrupt_lock_initialize() expands to white space only.
+   * Check that rtems_interrupt_lock_initialize() expands to a code block which
+   * marks the second parameter as used.
    */
   s = RTEMS_XSTRING( rtems_interrupt_lock_initialize( x, y ) );
-  T_true( IsEqualIgnoreWhiteSpace( s, "(void)y;" ) );
+  T_true( IsEqualIgnoreWhiteSpace( s, "do{(void)y;}while(0)" ) );
 
   /*
    * Check that rtems_interrupt_lock_acquire_isr() expands to a code block

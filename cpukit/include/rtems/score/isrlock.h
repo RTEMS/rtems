@@ -200,7 +200,8 @@ static inline void _ISR_lock_Context_set_level(
   #define _ISR_lock_Initialize( _lock, _name ) \
     _SMP_lock_Initialize( &( _lock )->Lock, _name )
 #else
-  #define _ISR_lock_Initialize( _lock, _name ) (void) _name;
+  #define _ISR_lock_Initialize( _lock, _name ) \
+    do { (void) _name; } while (0)
 #endif
 
 /**
