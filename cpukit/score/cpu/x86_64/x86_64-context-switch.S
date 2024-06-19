@@ -68,10 +68,16 @@ SYM(_CPU_Context_switch):
   movq    HEIRCONTEXT_ARG, rax /* rax = heir threads context */
 
 restore:
-  pushq (0 * CPU_SIZEOF_POINTER)(rax)       /* push rflags */
-  popf                                      /* restore rflags */
   movq  (1 * CPU_SIZEOF_POINTER)(rax), rbx
   movq  (2 * CPU_SIZEOF_POINTER)(rax), rsp
+
+  /*
+   * We need to load rflags after rsp to avoid an interrupt while the ISR stack
+   * is still being used during the initialization process
+   */
+  pushq (0 * CPU_SIZEOF_POINTER)(rax)       /* push rflags */
+  popf                                      /* restore rflags */
+
   movq  (3 * CPU_SIZEOF_POINTER)(rax), rbp
   movq  (4 * CPU_SIZEOF_POINTER)(rax), r12
   movq  (5 * CPU_SIZEOF_POINTER)(rax), r13
