@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup raspberrypi
+ * @ingroup RTEMSBSPsX8664AMD64EFI
  *
  * @brief graphic text console font file
  *

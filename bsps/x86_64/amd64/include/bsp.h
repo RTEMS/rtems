@@ -3,6 +3,8 @@
  *
  * @ingroup RTEMSBSPsX8664AMD64
  *
+ * @ingroup RTEMSBSPsX8664AMD64EFI
+ *
  * @brief Global BSP definitions.
  */
 
@@ -49,8 +51,14 @@
  * @defgroup RTEMSBSPsX8664AMD64 AMD64
  *
  * @brief AMD64 Board Support Package.
+ */
+
+/**
+ * @ingroup RTEMSBSPsX8664
  *
- * @{
+ * @defgroup RTEMSBSPsX8664AMD64EFI AMD64EFI
+ *
+ * @brief AMD64EFI Board Support Package.
  */
 
 #include <bspopts.h>
@@ -65,7 +73,5 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-/** @} */
 
 #endif

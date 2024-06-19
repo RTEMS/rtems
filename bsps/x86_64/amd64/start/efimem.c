@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64EFI
+ *
+ * @brief EFI memory
+ */
+
 /*
  * Copyright (C) 2023 Karel Gardas
  *
@@ -91,7 +99,7 @@ allocate_biggest_block( void )
         printf("EFI: Can't read memory map\n");
         free(map);
         return 0;
-    }                  
+    }
     ndesc = sz / dsz;
 #ifdef BSP_EFI_MMAP_PRINTOUT
     if (first_run)
@@ -167,7 +175,7 @@ efi_memory_type(EFI_MEMORY_TYPE type)
 {
     switch (type) {
     case EfiReservedMemoryType:
-        return "Reserved"; 
+        return "Reserved";
     case EfiLoaderCode:
         return "LoaderCode";
     case EfiLoaderData:

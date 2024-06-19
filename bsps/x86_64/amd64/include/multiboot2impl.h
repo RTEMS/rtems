@@ -25,6 +25,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64EFI
+ *
+ * @brief Multiboot2 support routines
+ */
+
 void
 process_multiboot2_info(void);
 

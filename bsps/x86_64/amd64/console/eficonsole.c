@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64EFI
+ *
+ * @brief EFI console implementation
+ */
+
 /*
  * Copyright (C) 2023 Karel Gardas
  *
@@ -111,7 +119,7 @@ efi_console_initialize( void )
     BOOLEAN use_auto = false;
     int text_mode = -1;
     int graphic_mode = -1;
- 
+
     if (is_efi_console_initialized)
         return;
     if (ST == NULL)
@@ -190,7 +198,7 @@ efi_console_initialize( void )
     }
     if (get_boot_arg_int_value(boot_args(), "graphic_mode", &graphic_mode) == 0) {
         use_graphic = true;
-    }    
+    }
     if (use_text)
         efi_init_text_output(text_mode);
     if (use_graphic) {

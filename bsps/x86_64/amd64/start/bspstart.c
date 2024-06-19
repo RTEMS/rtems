@@ -3,6 +3,8 @@
  *
  * @ingroup RTEMSBSPsX8664AMD64
  *
+ * @ingroup RTEMSBSPsX8664AMD64EFI
+ *
  * @brief BSP start-up code
  */
 

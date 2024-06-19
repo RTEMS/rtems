@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup amd64
+ * @ingroup RTEMSBSPsX8664AMD64EFI
  *
  * @brief displaying characters on the console
  *

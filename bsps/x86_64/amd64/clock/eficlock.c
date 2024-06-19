@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64EFI
+ *
+ * @brief EFI clock implementation
+ */
+
 /*
  * Copyright (C) 2023 Karel Gardas
  *

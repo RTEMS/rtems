@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64EFI
+ *
+ * @brief EFI GOP implementation
+ */
+
 /*
  * Copyright (C) 2023 Karel Gardas
  *
@@ -99,7 +107,7 @@ frame_buffer_initialize
         printf("EFI/GOP: error: can't lock device mutex.\n" );
         return RTEMS_UNSATISFIED;
     }
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -208,7 +216,7 @@ efi_init_graphic_output(int hint)
     }
     if (init_gop(gop, hint) < 0) {
         return RTEMS_UNSATISFIED;
-    }        
+    }
     init_fb_from_gop(gop, &gopfb_var, &gopfb_fix);
     /* init RPi based character output */
     rpi_video_init();
@@ -222,9 +230,9 @@ init_gop(EFI_GRAPHICS_OUTPUT *gop, int hint)
     EFI_STATUS status;
     if (gop == NULL)
         return -1;
-    
+
     int imax = gop->Mode->MaxMode - 1;
-    
+
     if (hint != -1) {
         /* hint got from command-line does have highest priority */
         status = gop->SetMode(gop, hint);
@@ -267,19 +275,19 @@ init_fb_from_gop(EFI_GRAPHICS_OUTPUT *gop, struct fb_var_screeninfo* fbvar, stru
     if (gop == NULL)
         return -1;
     imax = gop->Mode->MaxMode;
-    
+
     printf("RTEMS: graphic output: current mode: %d, max mode: %d.\n", gop->Mode->Mode, (imax - 1));
- 
+
     for (i = 0; i < imax; i++) {
          EFI_GRAPHICS_OUTPUT_MODE_INFORMATION *Info = NULL;
          UINTN SizeOfInfo = 0;
- 
+
          status = gop->QueryMode(gop, i, &SizeOfInfo, &Info);
          if (EFI_ERROR(status) && status == EFI_NOT_STARTED) {
              gop->SetMode(gop, gop->Mode->Mode);
              status = gop->QueryMode(gop, i, &SizeOfInfo, &Info);
          }
- 
+
          if (EFI_ERROR(status)) {
              printf("ERROR: Bad response from QueryMode: %ld\n", status);
              continue;
@@ -325,10 +333,10 @@ find_gop()
     UINTN HandleCount = 0;
     EFI_STATUS status = EFI_SUCCESS;
     EFI_GRAPHICS_OUTPUT *gop = NULL;
-    
+
     EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
 
-    status = BS->HandleProtocol(ST->ConsoleOutHandle, 
+    status = BS->HandleProtocol(ST->ConsoleOutHandle,
                                 &gop_guid,
                                 (VOID **)&gop);
     if (!EFI_ERROR (status) && gop != NULL) {

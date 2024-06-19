@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64EFI
+ *
+ * @brief EFI Simple Text Output implementation
+ */
+
 /*
  * Copyright (C) 2023 Karel Gardas
  *
@@ -100,7 +108,7 @@ print_stop_info(SIMPLE_TEXT_OUTPUT_INTERFACE* stop)
             printf("%d. mode: error: can't obtain column x row values.\n", i);
         else {
             printf("%d. mode: %ld * %ld\n", i, columns, rows);
-        }            
+        }
     }
 }
 

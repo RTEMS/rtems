@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64EFI
+ *
+ * @brief EFI Simple Text Output header file
+ */
+
 /*
  * Copyright (C) 2023 Karel Gardas
  *
