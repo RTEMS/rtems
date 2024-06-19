@@ -169,14 +169,15 @@ uint32_t apic_timer_calibrate(void)
   );
 
   /*
-   * Disable interrupts while we calibrate for 2 reasons:
+   * Make sure interrupts are disabled while we calibrate for 2 reasons:
    *   - Writing values to the PIT should be atomic (for now, this is okay
    *     because we're the only ones ever touching the PIT ports, but an
    *     interrupt resetting the PIT could mess calibration up).
    *   - We need to make sure that no interrupts throw our synchronization of
    *     the APIC timer off.
    */
-  amd64_disable_interrupts();
+  rtems_interrupt_level level;
+  rtems_interrupt_local_disable(level);
 
   /* Set PIT reload value */
   uint32_t pit_ticks = PIT_CALIBRATE_TICKS;
@@ -222,8 +223,8 @@ uint32_t apic_timer_calibrate(void)
   /* We ran the PIT for a fraction of a second */
   apic_ticks_per_sec = apic_ticks_per_sec * PIT_CALIBRATE_DIVIDER;
 
-  /* Re-enable interrupts now that calibration is complete */
-  amd64_enable_interrupts();
+  /* Restore interrupts now that calibration is complete */
+  rtems_interrupt_local_enable(level);
 
   /* Confirm that the APIC timer never hit 0 and IRQ'd during calibration */
   assert(Clock_driver_ticks == 0);
