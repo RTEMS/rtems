@@ -12,6 +12,7 @@
  *   - rtemssroset section
  *   - noinit section
  *   - rtemsstack section
+ *   - rtemsrwset section
  */
 
 OUTPUT_FORMAT("elf64-x86-64", "elf64-x86-64",
@@ -201,6 +202,7 @@ SECTIONS
     SORT(CONSTRUCTORS)
   }
   .data1          : { *(.data1) }
+  .rtemsrwset     : { KEEP (*(SORT(.rtemsrwset.*))) }
   _edata = .; PROVIDE (edata = .);
   . = .;
   __bss_start = .;
