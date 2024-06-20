@@ -46,7 +46,6 @@
 #include <rtems/posix/aio_misc.h>
 #include <rtems/seterr.h>
 
-
 int aio_fsync(
   int            op,
   struct aiocb  *aiocbp
@@ -55,8 +54,11 @@ int aio_fsync(
   rtems_aio_request *req;
   int mode;
 
+  if ( aiocbp == NULL )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
   if ( op != O_SYNC )
-    rtems_aio_set_errno_return_minus_one( EINVAL, aiocbp );
+    rtems_set_errno_and_return_minus_one( EINVAL );
   
   mode = fcntl( aiocbp->aio_fildes, F_GETFL );
   if (
@@ -65,11 +67,11 @@ int aio_fsync(
       ((mode & O_ACCMODE) == O_RDWR)
     )
   )
-    rtems_aio_set_errno_return_minus_one( EBADF, aiocbp );
+    rtems_set_errno_and_return_minus_one( EBADF );
 
   req = malloc( sizeof( rtems_aio_request ) );
   if ( req == NULL )
-    rtems_aio_set_errno_return_minus_one( EAGAIN, aiocbp );
+    rtems_set_errno_and_return_minus_one( EAGAIN );
 
   req->aiocbp = aiocbp;
   req->aiocbp->aio_lio_opcode = LIO_SYNC;

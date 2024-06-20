@@ -36,19 +36,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <aio.h>
 #include <errno.h>
-
 #include <rtems/seterr.h>
 
-ssize_t
-aio_return( const struct aiocb *aiocbp )
+ssize_t aio_return( struct aiocb *aiocbp )
 {
-  return aiocbp->return_value;
+  if ( aiocbp == NULL )
+    rtems_set_errno_and_return_minus_one( ENOENT );
+  
+  if ( aiocbp->return_status == AIO_RETURNED )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  
+  aiocbp->return_status = AIO_RETURNED; 
+  if ( aiocbp->return_status < 0 )
+    rtems_set_errno_and_return_minus_one( aiocbp->error_code );
+  else
+    return aiocbp->return_value;
 }
 

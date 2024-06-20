@@ -45,9 +45,14 @@
 
 #include <rtems/seterr.h>
 
-int
-aio_error( const struct aiocb *aiocbp )
+int aio_error( const struct aiocb *aiocbp )
 {
+  if ( aiocbp == NULL )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
+  if ( aiocbp->return_status == AIO_RETURNED )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
   return aiocbp->error_code;
 }
 

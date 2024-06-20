@@ -48,11 +48,13 @@
 #include <stdlib.h>
 #include <limits.h>
 
-
 int aio_read( struct aiocb *aiocbp )
 {
   rtems_aio_request *req;
   int mode;
+
+  if ( aiocbp == NULL )
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   mode = fcntl( aiocbp->aio_fildes, F_GETFL );
   if (
@@ -61,17 +63,17 @@ int aio_read( struct aiocb *aiocbp )
       (( mode&O_ACCMODE ) == O_RDWR )
     )
   )
-    rtems_aio_set_errno_return_minus_one( EBADF, aiocbp );
+    rtems_set_errno_and_return_minus_one( EBADF );
 
   if ( aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX )
-    rtems_aio_set_errno_return_minus_one( EINVAL, aiocbp );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( aiocbp->aio_offset < 0 )
-    rtems_aio_set_errno_return_minus_one( EINVAL, aiocbp );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   req = malloc( sizeof( rtems_aio_request ) );
   if ( req == NULL )
-    rtems_aio_set_errno_return_minus_one( EAGAIN, aiocbp );
+    rtems_set_errno_and_return_minus_one( EAGAIN );
 
   req->aiocbp = aiocbp;
   req->aiocbp->aio_lio_opcode = LIO_READ;

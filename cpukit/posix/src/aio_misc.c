@@ -38,7 +38,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <pthread.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -283,6 +282,7 @@ rtems_aio_enqueue( rtems_aio_request *req )
   req->policy = policy;
   req->aiocbp->error_code = EINPROGRESS;
   req->aiocbp->return_value = 0;
+  req->aiocbp->return_status = AIO_NOTRETURNED;
 
   if (
     aio_request_queue.idle_threads == 0 &&
@@ -515,7 +515,7 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
         req->aiocbp->aio_nbytes, req->aiocbp->aio_offset
       );
       break;
-      
+
     case LIO_SYNC:
       AIO_printf( "sync\n" );
       result = fsync( req->aiocbp->aio_fildes );

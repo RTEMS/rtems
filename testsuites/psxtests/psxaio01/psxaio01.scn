@@ -1,14 +1,2 @@
 *** BEGIN OF TEST PSXAIO 1 ***
-Init: EBADF TESTS
-Init: aio_write() - EBADF
-Init: aio_read() - EBADF
-Init: aio_cancel() - EBADF
-Init: aio_fsync() - EBADF
-Init: aio_write() - EINVAL [aio_offset]
-Init: aio_read() - EINVAL [aio_offset]
-Init: aio_write() - EINVAL [aio_reqprio]
-Init: aio_read() - EINVAL [aio_reqprio]
-Init: aio_cancel() - EINVAL
-Init: aio_fsync() - EINVAL
-
 *** END OF TEST PSXAIO 1 ***

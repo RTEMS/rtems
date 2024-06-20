@@ -38,7 +38,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef _AIO_MISC_H
 #define _AIO_MISC_H
 
@@ -200,11 +199,6 @@ int rtems_aio_remove_req(
 #define AIO_assert(_x)
 #define AIO_printf(_x)
 #endif
-
-#define rtems_aio_set_errno_return_minus_one( _error, _aiocbp ) \
-  do { (_aiocbp)->error_code = (_error);			\
-    (_aiocbp)->return_value = -1;				\
-    rtems_set_errno_and_return_minus_one(_error);} while(0)
 
 #ifdef __cplusplus
 }

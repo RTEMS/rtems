@@ -71,9 +71,11 @@ extern "C" {
 
 /** All requested operations have been canceled */
 #define AIO_CANCELED    0
+
 /** Some operations could not be canceled since they are in progress */
 #define AIO_NOTCANCELED 1
-/** 
+
+/**
  * None of the requested operations could be canceled since
  * they are already complete
  */
@@ -81,6 +83,7 @@ extern "C" {
 
 /** Calling process is to be suspendes until the operation is complete */
 #define LIO_WAIT        0
+
 /**
  * Calling process is to continue execution while the operation is performed
  * and no notification shall be given when the operation is completed
@@ -89,13 +92,25 @@ extern "C" {
 
 /** No transfer is requested */
 #define LIO_NOP         0
+
 /** Request a read() */
 #define LIO_READ        1
+
 /** Request a write() */
 #define LIO_WRITE       2
+
 /** Needed by aio_fsync() */
 #define LIO_SYNC        3
 
+/*
+ * Constants to track return status
+ */
+
+/** The aio operation return value has been retrieved */
+#define AIO_RETURNED    0
+
+/** The aio operation return value has not been retrieved */
+#define AIO_NOTRETURNED 1
 
 /**
  * @brief Asynchronous I/O Control Block
@@ -122,10 +137,12 @@ struct aiocb {
 
   /** @name private */
 
+  /** @brief Field used for aio_return() */
+  int             return_status;
   /** @brief Field used for aio_error() */
-  int		  error_code;
+  int             error_code;
   /** @brief Filed used for aio_return() */
-  ssize_t	  return_value;
+  ssize_t         return_value;
 };
 
 /**
@@ -142,7 +159,7 @@ struct aiocb {
  *         - EAGAIN not enough memory
  *         - EINVAL the starting position of the file is past the maximum offset
  *           for this file.
- *
+ *         - EINVAL aiocbp is a NULL pointer
  */
 int aio_read(
   struct aiocb  *aiocbp
@@ -160,7 +177,7 @@ int aio_read(
  *         - EBADF FD not opened for write
  *         - EINVAL invalid aio_reqprio or aio_offset or aio_nbytes
  *         - EAGAIN not enough memory
- *
+ *         - EINVAL aiocbp is a NULL pointer
  */
 int aio_write(
   struct aiocb  *aiocbp
@@ -183,10 +200,13 @@ int lio_listio(
  * 
  * 6.7.5 Retrieve Error of Asynchronous I/O Operation, P1003.1b-1993, p. 161
  * 
- * @param[in] aiocbp is a pointer to the asynchronous I/O control block
+ * @param[in,out] aiocbp is a pointer to the asynchronous I/O control block
  * 
  * @retval 0 The operation has completed succesfully.
  * @retval EINPROGRESS The operation has not yet completed.
+ * @retval EINVAL The return status for the request associated with aiocbp
+ *                has already been retrieved.
+ * @retval EINVAL aiocbp is a NULL pointer.
  * @return The error status as described for the various operations.
  */
 int aio_error(
@@ -200,12 +220,17 @@ int aio_error(
  * 6.7.6 Retrieve Return Status of Asynchronous I/O Operation,
  *       P1003.1b-1993, p. 162
  * 
- * @param[in] aiocbp is a pointer to the asynchronous I/O control block
+ * @param[in,out] aiocbp is a pointer to the asynchronous I/O control block
  * 
+ * @retval -1 The operation returned with an error. errno is set to indicate
+ *            the error,as described for the various operations.
+ * @retval EINVAL The return status for the request associated with aiocbp
+ *                has already been retrieved.
+ * @retval EINVAL aiocbp is a NULL pointer.
  * @return The operation return status, stored in aiocbp->return_value
  */
 ssize_t aio_return(
-  const struct aiocb  *aiocbp
+  struct aiocb  *aiocbp
 );
 
 /**
@@ -258,6 +283,7 @@ int aio_suspend(
  *              by the aiocbp argument is not a valid file descriptor.
  *            - EINVAL A value of op other than O_SYNC was specified.
  *              The current implemetation only supports O_SYNC.
+ *            - EINVAL aiocbp is a NULL pointer.
  */
 int aio_fsync(
   int            op,
