@@ -49,6 +49,8 @@ links:
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq
+- role: build-dependency
+  uid: objgpio
 source:
 - bsps/aarch64/raspberrypi/console/console.c
 - bsps/aarch64/raspberrypi/start/bspstart.c

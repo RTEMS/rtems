@@ -210,6 +210,19 @@
 /** @} */
 
 /**
+ * @name GPIO Registers
+ *
+ * @{
+ */
+
+#define BCM2711_GPIO_BASE (RPI_PERIPHERAL_BASE + 0x200000)
+#define BCM2711_GPIO_SIZE 0xf4
+
+#define BCM2711_GPIO_PIN_COUNT 58
+
+/** @} */
+
+/**
  * @name EMMC Registers
  *
  * @{
