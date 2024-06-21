@@ -116,6 +116,8 @@ links:
 - role: build-dependency
   uid: mdosfsfsrdwr
 - role: build-dependency
+  uid: mdosfsfsrename
+- role: build-dependency
   uid: mdosfsfsscandir01
 - role: build-dependency
   uid: mdosfsfsstatvfs

@@ -45,6 +45,9 @@
 #include "fs_config.h"
 #include <tmacros.h>
 
+//#include "fstest_support.h"
+//#include <limits.h>
+
 const char rtems_test_name[] = "FSSYMLINK " FILESYSTEM;
 
 /*
@@ -176,11 +179,264 @@ static void symlink_loop_error_test(void )
   EXPECT_ERROR(ELOOP,rmdir,path);
 }
 
+static void symlink_rename_test (void)
+{
+  int fd;
+  int status;
+  int rv;
+
+  const char *name01 = "name01";
+  const char *name02 = "name02";
+
+  const char *symlink01 = "slink01";
+  const char *symlink02 = "slink02";
+
+  char path01[20];
+
+  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  const char *wd = __func__;
+
+  struct stat statbuf;
+
+  /*
+   * Create a new directory and change the current directory to this
+   */
+
+  status = mkdir (wd, mode);
+  rtems_test_assert (status == 0);
+  status = chdir (wd);
+  rtems_test_assert (status == 0);
+
+  /*
+   * The new argument points to a file and
+   * the old argument points to a symbolic link to another file.
+   */
+
+  puts ("\nOld is a simbolic link and rename operates on the simbolic link itself\n");
+
+  fd = creat (name01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  fd = creat (name02, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  status = symlink (name01, symlink01);
+  rtems_test_assert (status == 0);
+
+  EXPECT_EQUAL (0, rename, symlink01, name02);
+  EXPECT_EQUAL (0, lstat, name02, &statbuf);
+
+  puts ("Testing if name02 is now a symlink");
+
+  if(S_ISLNK(statbuf.st_mode) != 0)
+    FS_PASS ();
+  else
+    FS_FAIL ();
+
+  /*
+   * Clear directory
+   */
+
+  EXPECT_EQUAL (0, unlink, name01);
+  EXPECT_EQUAL (0, unlink, name02);
+  EXPECT_EQUAL (-1, unlink, symlink01);
+
+  /*
+   * The new argument points to a symbolic link to another file and
+   * the old argument points to a file.
+   */
+
+  puts ("\nNew is a simbolic link and rename operates on the simbolic link itself\n");
+
+  fd = creat (name01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  fd = creat (name02, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  status = symlink (name01, symlink01);
+  rtems_test_assert (status == 0);
+
+  EXPECT_EQUAL (0, rename, name02, symlink01);
+  EXPECT_EQUAL (0, lstat, symlink01, &statbuf);
+
+  puts ("Testing that symlink01 is not a symlink");
+
+  if(S_ISLNK(statbuf.st_mode) == 0)
+    FS_PASS ();
+  else
+    FS_FAIL ();
+
+  /*
+   * Clear directory
+   */
+
+  EXPECT_EQUAL (0, unlink, name01);
+  EXPECT_EQUAL (-1, unlink, name02);
+  EXPECT_EQUAL (0, unlink, symlink01);
+
+  /*
+   * The new argument points to a file inside a directory and
+   * the old argument points to a file which filepath contains
+   * a symbolic link loop.
+   */
+
+  puts ("\nTesting with symbolic link loop's\n");
+
+  status = symlink (symlink01, symlink02);
+  rtems_test_assert (status == 0);
+
+  status = symlink (symlink02, symlink01);
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path01, sizeof(path01), "%s/test", symlink01);
+  rtems_test_assert (rv < sizeof(path01));
+  EXPECT_ERROR (ELOOP, rename, path01, name01);
+
+  rv = snprintf (path01, sizeof(path01), "%s/test", symlink02);
+  rtems_test_assert (rv < sizeof(path01));
+  EXPECT_ERROR (ELOOP, rename, path01, name01);
+
+  /*
+   * Clear directory
+   */
+
+  EXPECT_EQUAL (-1, unlink, name01);
+  EXPECT_EQUAL (0, unlink, symlink01);
+  EXPECT_EQUAL (0, unlink, symlink02);
+
+  /*
+   * The new argument points to a file, which filepath contains
+   * a symbolic link loop, and
+   * the old argument points to a file inside a directory
+   */
+
+  fd = creat (name01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  status = symlink (symlink01, symlink02);
+  rtems_test_assert (status == 0);
+
+  status = symlink (symlink02, symlink01);
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path01, sizeof(path01), "%s/test", symlink01);
+  rtems_test_assert (rv < sizeof(path01));
+  EXPECT_ERROR (ELOOP, rename, name01, path01);
+
+  rv = snprintf (path01, sizeof(path01), "%s/test", symlink02);
+  rtems_test_assert (rv < sizeof(path01));
+  EXPECT_ERROR (ELOOP, rename, name01, path01);
+
+  /*
+   * Clear directory
+   */
+
+  EXPECT_EQUAL (0, unlink, name01);
+  EXPECT_EQUAL (0, unlink, symlink01);
+  EXPECT_EQUAL (0, unlink, symlink02);
+
+  /*
+   * Go back to parent directory
+   */
+
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+
+  /*
+   * Remove test directory
+   */
+
+  status = rmdir (wd);
+  rtems_test_assert (status == 0);
+}
+
+static void symlink_rename_self (void)
+{
+  int fd;
+  int status;
+  int rv;
+
+  const char *name01 = "name01";
+  const char *name02 = "name02";
+
+  const char *dir01 = "dir01";
+
+  char path01[30];
+
+  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  const char *wd = __func__;
+
+  /*
+   * Create a new directory and change the current directory to this
+   */
+
+  status = mkdir (wd, mode);
+  rtems_test_assert (status == 0);
+  status = chdir (wd);
+  rtems_test_assert (status == 0);
+
+  /*
+  * The new argument points to a file and
+  * the old argument points to the same file from another directory.
+  */
+
+  puts ("\nRename file with itself through a hard link in another directory\n");
+
+  fd = creat (name01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  status = mkdir (dir01, mode);
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name02);
+  rtems_test_assert (rv < sizeof(path01));
+  status = link (name01, path01);
+  rtems_test_assert (status == 0);
+
+  EXPECT_EQUAL (0, rename, name01, path01);
+
+  /*
+  * Clear directory
+  */
+
+  EXPECT_EQUAL (0, unlink, name01);
+  EXPECT_EQUAL (0, unlink, path01);
+  EXPECT_EQUAL (0, rmdir, dir01);
+
+  /*
+   * Go back to parent directory
+   */
+
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+
+  /*
+   * Remove test directory
+   */
+
+  status = rmdir (wd);
+  rtems_test_assert (status == 0);
+}
+
 void test(void )
 {
 
   symlink_test01();
   symlink_loop_error_test();
-
+  symlink_rename_test();
+  symlink_rename_self();
 }
 

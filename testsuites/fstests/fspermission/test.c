@@ -177,7 +177,7 @@ static void umask_test01(void )
 /*
  * Check the file mode in file and directory
  */
-static void test_premission01(void )
+static void test_permission01(void )
 {
   mode_t tmp_mode;
   struct stat statbuf;
@@ -411,7 +411,7 @@ static void test_premission01(void )
 /*
  * Test chown and chmod
  */
-static void  test_premission02(void )
+static void  test_permission02(void )
 {
   struct stat statbuf;
   int status = 0;
@@ -516,10 +516,394 @@ static void root_test(void )
   rtems_test_assert(fd==-1);
 }
 
+static void rename_write_permission_test (void)
+{
+  int fd;
+  int status;
+  int rv;
+
+  const char *name01 = "name01";
+  const char *name02 = "name02";
+
+  const char *dir01 = "dir01";
+  const char *dir02 = "dir02";
+
+  char path01[20];
+
+  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  mode_t no_write_access = S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP
+                         | S_IROTH | S_IXOTH;
+
+  const char *wd = __func__;
+
+  /*
+   * Create a new directory and change the current directory to this
+   */
+
+  status = mkdir (wd, mode);
+  rtems_test_assert (status == 0);
+  status = chdir (wd);
+  rtems_test_assert (status == 0);
+
+  /*
+   * The new argument points to a file and
+   * the old argument points to another file,
+   * both inside a directory with no write permission.
+   */
+
+  puts ("\nRename two files on a directory with no write permission \n");
+
+  status = mkdir (dir01, mode);
+  rtems_test_assert (status == 0);
+
+  status = chdir (dir01);
+  rtems_test_assert (status == 0);
+
+  fd = creat (name01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  fd = creat (name02, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  status = chmod (".", no_write_access);
+  rtems_test_assert (status == 0);
+
+  EXPECT_ERROR (EACCES, rename, name01 , name02);
+
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+
+  /*
+   * The new argument points to a file in a directory with no write access and
+   * the old argument points to another file on a directory with write access.
+   */
+
+  puts ("\nRename file between two directories, with and without write access\n");
+
+  status = mkdir (dir02, mode);
+  rtems_test_assert (status == 0);
+
+  status = chdir (dir02);
+  rtems_test_assert (status == 0);
+
+  fd = creat (name01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path01, sizeof(path01), "../%s/%s", dir01, name02);
+  rtems_test_assert (rv < sizeof(path01));
+  EXPECT_ERROR (EACCES, rename, name01, path01);
+
+  /*
+   * The new argument points to a file in a directory with write access and
+   * the old argument points to another file on a directory without write access.
+   */
+
+  EXPECT_ERROR (EACCES, rename, path01, name01);
+
+  /*
+   * Clear directory
+   */
+
+  EXPECT_EQUAL (0, unlink, name01);
+
+  rv = snprintf (path01, sizeof(path01), "../%s", dir01);
+  rtems_test_assert (rv < sizeof(path01));
+  status = chmod (path01, mode);
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path01, sizeof(path01), "../%s/%s", dir01, name01);
+  rtems_test_assert (rv < sizeof(path01));
+  EXPECT_EQUAL (0, unlink, path01);
+
+  rv = snprintf (path01, sizeof(path01), "../%s/%s", dir01, name02);
+  rtems_test_assert (rv < sizeof(path01));
+  EXPECT_EQUAL (0, unlink, path01);
+
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+
+  EXPECT_EQUAL (0, rmdir, dir01);
+  EXPECT_EQUAL (0, rmdir, dir02);
+
+  /*
+   * Go back to parent directory
+   */
+
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+
+  /*
+   * Remove test directory
+   */
+
+  status = rmdir (wd);
+  rtems_test_assert (status == 0);
+}
+
+static void rename_search_permission_test (void)
+{
+  int fd;
+  int status;
+  int rv;
+
+  const char *name01 = "name01";
+  const char *name02 = "name02";
+
+  const char *dir01 = "dir01";
+  const char *dir02 = "dir02";
+
+  char path01[20];
+  char path02[20];
+
+  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  mode_t no_execute_access = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP
+                           | S_IROTH | S_IWOTH;
+
+  const char *wd = __func__;
+
+  /*
+   * Create a new directory and change the current directory to this
+   */
+
+  status = mkdir (wd, mode);
+  rtems_test_assert (status == 0);
+  status = chdir (wd);
+  rtems_test_assert (status == 0);
+
+  /*
+   * The new argument points to a file and
+   * the old argument points to another file,
+   * both inside a directory with no execute permission.
+   */
+
+  puts ("\nRename two files on a directory with no execute permission \n");
+
+  status = mkdir (dir01, mode);
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
+  rtems_test_assert (rv < sizeof(path01));
+  fd = creat (path01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path02, sizeof(path02), "%s/%s", dir01, name02);
+  rtems_test_assert (rv < sizeof(path02));
+  fd = creat (path02, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  status = chmod (dir01, no_execute_access);
+  rtems_test_assert (status == 0);
+
+  EXPECT_ERROR (EACCES, rename, path01 , path02);
+
+  /*
+   * The new argument points to a file in a directory with no execute access and
+   * the old argument points to another file on a directory with execute access.
+   */
+
+  puts ("\nRename file between two directories, with and without execute access\n");
+
+  status = mkdir (dir02, mode);
+  rtems_test_assert (status == 0);
+
+  status = chdir (dir02);
+  rtems_test_assert (status == 0);
+
+  fd = creat (name01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir02, name01);
+  rtems_test_assert (rv < sizeof(path01));
+  EXPECT_ERROR (EACCES, rename, path01, path02);
+
+  /*
+   * The new argument points to a file in a directory with execute access and
+   * the old argument points to another file on a directory without execute access.
+   */
+
+  EXPECT_ERROR (EACCES, rename, path02, path01);
+
+  /*
+   * Clear directory
+   */
+
+  EXPECT_EQUAL (0, unlink, path01);
+
+  status = chmod (dir01, mode);
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
+  rtems_test_assert (rv < sizeof(path01));
+  EXPECT_EQUAL (0, unlink, path01);
+  EXPECT_EQUAL (0, unlink, path02);
+  EXPECT_EQUAL (0, rmdir, dir01);
+  EXPECT_EQUAL (0, rmdir, dir02);
+
+  /*
+   * Go back to parent directory
+   */
+
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+
+  /*
+   * Remove test directory
+   */
+
+  status = rmdir (wd);
+  rtems_test_assert (status == 0);
+}
+
+static void test_permission03 (void)
+{
+  int fd;
+  int status;
+  int rv;
+
+  const char *name01 = "name01";
+  const char *name02 = "name02";
+
+  const char *dir01 = "dir01";
+
+  char path01[30];
+
+  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  const char *wd = __func__;
+
+  /*
+   * Create a new directory and change the current directory to this
+   */
+
+  status = mkdir (wd, mode);
+  rtems_test_assert (status == 0);
+  status = chdir (wd);
+  rtems_test_assert (status == 0);
+
+  /*
+   * The new argument points to a file and
+   * the old argument points to another file on a directory with S_ISVTX.
+   */
+
+  puts ("\nRename files within directories protected with S_ISVTX\n");
+
+  status = mkdir (dir01, mode | S_ISVTX);
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
+  rtems_test_assert (rv < sizeof(path01));
+  fd = creat (path01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  fd = creat (name02, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  status = chown (path01, 65534, -1);
+  rtems_test_assert (status == 0);
+
+  status = chown (dir01, 65534, -1);
+  rtems_test_assert (status == 0);
+
+  EXPECT_EQUAL (-1, rename, path01, name02);
+
+  puts("Testing errno for EPERM or EACCES");
+
+  if(errno == EPERM || errno == EACCES)
+    FS_PASS ();
+  else
+    FS_FAIL ();
+
+  /*
+   * Clear directory
+   */
+
+  EXPECT_EQUAL (0, unlink, path01);
+  EXPECT_EQUAL (0, unlink, name02);
+  EXPECT_EQUAL (0, rmdir, dir01);
+
+  /*
+   * The new argument points to a file on a directory with S_ISVTX and
+   * the old argument points to a file outside that directory.
+   */
+
+  status = mkdir (dir01, mode | S_ISVTX);
+  rtems_test_assert (status == 0);
+
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
+  rtems_test_assert (rv < sizeof(path01));
+  fd = creat (path01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  fd = creat (name02, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  status = chown (path01, 65534, -1);
+  rtems_test_assert (status == 0);
+
+  status = chown (dir01, 65534, -1);
+  rtems_test_assert (status == 0);
+
+  EXPECT_EQUAL (-1, rename, name02, path01);
+
+  puts("Testing errno for EPERM or EACCES");
+
+  if(errno == EPERM || errno == EACCES)
+    FS_PASS ();
+  else
+    FS_FAIL ();
+
+  /*
+   * Clear directory
+   */
+
+  EXPECT_EQUAL (0, unlink, path01);
+  EXPECT_EQUAL (0, unlink, name02);
+  EXPECT_EQUAL (0, rmdir, dir01);
+
+  /*
+   * Go back to parent directory
+   */
+
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+
+  /*
+   * Remove test directory
+   */
+
+  status = rmdir (wd);
+  rtems_test_assert (status == 0);
+}
+
 void test(void )
 {
   umask_test01();
-  test_premission01();
-  test_premission02();
+  test_permission01();
+  test_permission02();
+  test_permission03();
   root_test();
+  rename_write_permission_test();
+  rename_search_permission_test();
 }
