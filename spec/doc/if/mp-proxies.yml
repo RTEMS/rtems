@@ -14,6 +14,6 @@ references:
 - identifier: MPCIProxies
   name: c-user
   type: document
-- identifier: https://docs.rtems.org/branches/master/c-user/multiprocessing.html#proxies
+- identifier: https://docs.rtems.org/branches/master/c-user/multiprocessing/background.html#proxies
   type: url
 type: interface
