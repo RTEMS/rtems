@@ -1967,8 +1967,8 @@
  *
  * then the event records are dumped in Base64 encoding in a fatal error
  * extension (see <a
- * href="https://docs.rtems.org/branches/master/c-user/fatal_error.html#announcing-a-fatal-error">Announcing
- * a Fatal Error</a>).
+ * href="https://docs.rtems.org/branches/master/c-user/fatal-error/background.html#terminate">System
+ * Termination Procedure</a>).
  *
  * @par Default Configuration
  * If this configuration option is undefined, then the described feature is not
@@ -1999,8 +1999,8 @@
  *
  * then the event records are compressed by zlib and dumped in Base64 encoding
  * in a fatal error extension (see <a
- * href="https://docs.rtems.org/branches/master/c-user/fatal_error.html#announcing-a-fatal-error">Announcing
- * a Fatal Error</a>).
+ * href="https://docs.rtems.org/branches/master/c-user/fatal-error/background.html#terminate">System
+ * Termination Procedure</a>).
  *
  * @par Default Configuration
  * If this configuration option is undefined, then the described feature is not
@@ -3128,9 +3128,16 @@
  * structures of type ::rtems_extensions_table.
  *
  * @par Notes
+ * @parblock
  * The value of this configuration option is placed before the entries of
  * #BSP_INITIAL_EXTENSION and after the entries of all other initial user
  * extensions.
+ *
+ * It is recommended that applications provide a fatal extension to customize
+ * the <a
+ * href="https://docs.rtems.org/branches/master/c-user/fatal-error/background.html#terminate">System
+ * Termination Procedure</a>.
+ * @endparblock
  */
 #define CONFIGURE_INITIAL_EXTENSIONS
 
@@ -4224,7 +4231,7 @@
  * Since a proxy is used to represent a remote task/thread which is blocking on
  * this node. This configuration parameter reflects the maximum number of
  * remote tasks/threads which can be blocked on objects on this node, see <a
- * href="https://docs.rtems.org/branches/master/c-user/multiprocessing.html#proxies">Proxies</a>.
+ * href="https://docs.rtems.org/branches/master/c-user/multiprocessing/background.html#proxies">Proxies</a>.
  *
  * This configuration option is only evaluated if @ref CONFIGURE_MP_APPLICATION
  * is defined.
