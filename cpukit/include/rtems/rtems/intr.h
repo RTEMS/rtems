@@ -505,7 +505,7 @@ rtems_status_code rtems_interrupt_catch(
  * @parblock
  * Lock objects are only needed in some RTEMS build configurations, for example
  * where the SMP support is enabled.  The #RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
- * constant can be usused to determine whether a lock object is needded or not.
+ * constant can be used to determine whether a lock object is needed or not.
  * This may help to reduce the memory demands of an application.  All lock
  * operations do not use the lock object parameter if lock objects are not
  * needed.
