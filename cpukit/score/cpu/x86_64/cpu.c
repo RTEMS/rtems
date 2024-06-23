@@ -46,8 +46,19 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *ctx)
 {
 }
 
+Context_Control_fp _CPU_Null_fp_context;
+
 void _CPU_Initialize(void)
 {
+ /*
+  * Save the FP context intialized by the UEFI firmware in "_CPU_Null_fp_context"
+  * which is given to each task at start and restart time.
+  * According to the UEFI specification this should mean that:
+  * _CPU_Null_fp_context.mxcsr = 0x1F80
+  * _CPU_Null_fp_context.fpucw = 0x37F
+  */
+  asm volatile( "stmxcsr %0" : "=m"(_CPU_Null_fp_context.mxcsr) );
+  asm volatile( "fstcw %0" : "=m"(_CPU_Null_fp_context.fpucw) );
 }
 
 void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )

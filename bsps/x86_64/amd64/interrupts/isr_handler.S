@@ -123,6 +123,19 @@ SYM(_ISR_Handler):
   /* Save the initial rsp */
   movq SAVED_RSP,   (0 * CPU_SIZEOF_POINTER)(rsp)
 
+  /* Save x87 FPU, MMX and SSE state */
+.set FXSAVE_SIZE, 512
+  /* Make space for FXSAVE */
+  subq $FXSAVE_SIZE, rsp
+  fwait
+  fxsave64 (rsp)
+  /* Reset to a clean state */
+  fninit
+  subq $4, rsp
+  movl $0x1F80, (rsp)
+  ldmxcsr (rsp)
+  addq $4, rsp
+
 .switch_stack_if_needed:
   /* Save current aligned rsp so we can find CPU_Interrupt_frame again later */
   movq rsp, SAVED_RSP
@@ -166,6 +179,12 @@ SYM(_ISR_Handler):
   call _Thread_Dispatch
 
 .restore_cpu_interrupt_frame:
+  /* Restore x87 FPU, MMX and SSE state */
+  fwait
+  fxrstor64 (rsp)
+  /* Restore rsp to CPU_Interrupt_frame */
+  addq $FXSAVE_SIZE, rsp
+
   /* Restore registers from CPU_Interrupt_frame */
   movq (8 * CPU_SIZEOF_POINTER)(rsp), rax
   movq (7 * CPU_SIZEOF_POINTER)(rsp), rcx

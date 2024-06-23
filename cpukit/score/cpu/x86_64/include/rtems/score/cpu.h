@@ -45,9 +45,9 @@ extern "C" {
 
 #define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
 #define CPU_ISR_PASSES_FRAME_POINTER FALSE
-#define CPU_HARDWARE_FP FALSE
+#define CPU_HARDWARE_FP TRUE
 #define CPU_SOFTWARE_FP FALSE
-#define CPU_ALL_TASKS_ARE_FP FALSE
+#define CPU_ALL_TASKS_ARE_FP TRUE
 #define CPU_IDLE_TASK_IS_FP FALSE
 #define CPU_USE_DEFERRED_FP_SWITCH FALSE
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
@@ -68,7 +68,7 @@ typedef struct {
 
   /**
    * Callee-saved registers as listed in the SysV ABI document:
-   * https://github.com/hjl-tools/x86-psABI/wiki/X86-psABI
+   * https://gitlab.com/x86-psABIs/x86-64-ABI
    */
   uint64_t rbx;
   void    *rsp;
@@ -84,6 +84,15 @@ typedef struct {
     volatile bool is_executing;
 #endif
 } Context_Control;
+
+typedef struct {
+  /**
+   * Callee-saved FP registers as listed in the SysV ABI document:
+   * https://gitlab.com/x86-psABIs/x86-64-ABI
+   */
+  uint32_t  mxcsr;
+  uint16_t  fpucw;
+} Context_Control_fp;
 
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->rsp
@@ -124,6 +133,10 @@ typedef struct {
    * - XMM?
    */
 } CPU_Interrupt_frame;
+
+extern Context_Control_fp _CPU_Null_fp_context;
+
+#define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
 #endif /* !ASM */
 
@@ -278,6 +291,14 @@ typedef struct {
   double float_registers [1];
 } CPU_Exception_frame;
 
+void _CPU_Context_save_fp(
+  Context_Control_fp **fp_context_ptr
+);
+
+void _CPU_Context_restore_fp(
+  Context_Control_fp **fp_context_ptr
+);
+
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 static inline uint32_t CPU_swap_u32(
@@ -294,6 +315,30 @@ static inline uint32_t CPU_swap_u32(
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
   return swapped;
 }
+
+#define _CPU_Context_save_fp(fp_context_pp) \
+  do {                                      \
+    __asm__ __volatile__(                   \
+      "fstcw %0"                            \
+      :"=m"((*(fp_context_pp))->fpucw)      \
+    );                                      \
+	__asm__ __volatile__(                     \
+      "stmxcsr %0"                          \
+      :"=m"((*(fp_context_pp))->mxcsr)      \
+    );                                      \
+  } while (0)
+
+#define _CPU_Context_restore_fp(fp_context_pp) \
+  do {                                         \
+    __asm__ __volatile__(                      \
+      "fldcw %0"                               \
+      :"=m"((*(fp_context_pp))->fpucw)         \
+    );                                         \
+  __asm__ __volatile__(                        \
+      "ldmxcsr %0"                             \
+      :"=m"((*(fp_context_pp))->mxcsr)         \
+    );                                         \
+  } while (0)
 
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
