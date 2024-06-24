@@ -369,18 +369,6 @@ static inline void arm_cache_l1_disable_data( void )
   arm_cp15_set_control( arm_cp15_get_control() & ~ARM_CP15_CTRL_C );
 }
 
-static inline void arm_cache_l1_disable_instruction( void )
-{
-  /* Synchronize the processor */
-  _ARM_Data_synchronization_barrier();
-
-  /* Invalidate the Instruction cache */
-  arm_cache_l1_invalidate_entire_instruction();
-
-  /* Disable the Instruction cache */
-  arm_cp15_set_control( arm_cp15_get_control() & ~ARM_CP15_CTRL_I );
-}
-
 static inline size_t arm_cache_l1_get_data_cache_size( void )
 {
   size_t   size;
