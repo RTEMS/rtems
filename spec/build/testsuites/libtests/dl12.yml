@@ -10,7 +10,7 @@ do-build: |
   objs.append(self.cc(bld, bic, path + "dl12-o1.c"))
   objs.append(self.cc(bld, bic, path + "dl12-o2.c"))
   def ld(self, bld, bic, flags, source, target):
-    bld(rule="${LD} " + flags + " ${SRC} -o ${TGT}",
+    bld(rule="${CC} ${ABI_FLAGS} " + flags + " ${SRC} -o ${TGT}",
       source=source,
       target=target)
     return target
