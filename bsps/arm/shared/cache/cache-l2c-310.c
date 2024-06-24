@@ -62,6 +62,16 @@
 
 #include "cache-cp15.h"
 
+/**
+ * @defgroup L2C310CacheSupport L2C-310 Cache Support
+ *
+ * @ingroup RTEMSImplClassicCache
+ *
+ * @brief This group contains the L2C-310 cache support.
+ *
+ * @{
+ */
+
 /* These two defines also ensure that the rtems_cache_* functions have bodies */
 #define CPU_DATA_CACHE_ALIGNMENT ARM_CACHE_L1_CPU_DATA_ALIGNMENT
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT ARM_CACHE_L1_CPU_INSTRUCTION_ALIGNMENT
@@ -95,16 +105,6 @@
 #define L2C_310_RTL_RELEASE_R3_P3 0x9
 
 #define BSP_ARM_L2C_310_RTL_RELEASE (BSP_ARM_L2C_310_ID & L2C_310_ID_RTL_MASK)
-
-/**
- * @defgroup L2C310CacheSupport L2C-310 Cache Support
- *
- * @ingroup RTEMSBSPsARMShared
- *
- * @brief This group contains the L2C-310 cache support.
- *
- * @{
- */
 
 /**
  * @brief L2CC Register Offsets
@@ -1331,5 +1331,7 @@ _CPU_cache_get_instruction_cache_size( const uint32_t level )
   }
   return size;
 }
+
+/** @} */
 
 #include "../../shared/cache/cacheimpl.h"
