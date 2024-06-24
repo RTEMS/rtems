@@ -10,7 +10,7 @@
 
 /*
  * Copyright (C) 2016 Pavel Pisa
- * Copyright (C) 2014, 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2014, 2024 embedded brains GmbH & Co. KG
  * Copyright (C) 2000, 2008 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -577,6 +577,14 @@ void rtems_cache_enable_data( void );
  * @ingroup RTEMSAPIClassicCache
  *
  * @brief Disables the data cache.
+ *
+ * @par Notes
+ * On some targets or configurations, calling this directive may cause a fatal
+ * error with a fatal source of INTERNAL_ERROR_CORE and fatal code of
+ * INTERNAL_ERROR_CANNOT_DISABLE_DATA_CACHE.   The data cache may be necessary
+ * to provide atomic operations. In SMP configurations, the data cache may be
+ * required to ensure data coherency.  See the BSP documentation in the *RTEMS
+ * User Manual* for more information.
  *
  * @par Constraints
  * @parblock

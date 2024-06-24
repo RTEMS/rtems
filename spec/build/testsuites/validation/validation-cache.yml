@@ -9,7 +9,11 @@ enabled-by: true
 features: c cprogram
 includes: []
 ldflags: []
-links: []
+links:
+- role: build-dependency
+  uid: objcachedisabledata
+- role: build-dependency
+  uid: objcachenodisabledata
 source:
 - testsuites/validation/tc-cache.c
 - testsuites/validation/ts-validation-cache.c

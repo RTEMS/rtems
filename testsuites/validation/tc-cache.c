@@ -65,11 +65,10 @@
  *
  * This test case performs the following actions:
  *
- * - Call the rtems_cache_disable_data() and rtems_cache_enable_data()
- *   directives.
+ * - Call the rtems_cache_enable_data() directive.
  *
- * - Call the rtems_cache_disable_data() and rtems_cache_enable_data()
- *   directives with maskable interrupts disabled.
+ * - Call the rtems_cache_enable_data() directive with maskable interrupts
+ *   disabled.
  *
  * - Call the rtems_cache_disable_instruction() and
  *   rtems_cache_enable_instruction() directives.
@@ -90,9 +89,6 @@
  * - Call the rtems_cache_freeze_instruction() and
  *   rtems_cache_unfreeze_instruction() directives with maskable interrupts
  *   disabled.
- *
- * - Call the rtems_cache_invalidate_entire_data() directive with maskable
- *   interrupts disabled.
  *
  * - Call the rtems_cache_invalidate_entire_instruction() directive.
  *
@@ -287,25 +283,22 @@ static void CallGetInstructionSize( void )
 }
 
 /**
- * @brief Call the rtems_cache_disable_data() and rtems_cache_enable_data()
- *   directives.
+ * @brief Call the rtems_cache_enable_data() directive.
  */
 static void RtemsCacheValCache_Action_0( void )
 {
-  rtems_cache_disable_data();
   rtems_cache_enable_data();
 }
 
 /**
- * @brief Call the rtems_cache_disable_data() and rtems_cache_enable_data()
- *   directives with maskable interrupts disabled.
+ * @brief Call the rtems_cache_enable_data() directive with maskable interrupts
+ *   disabled.
  */
 static void RtemsCacheValCache_Action_1( void )
 {
   rtems_interrupt_level level;
 
   rtems_interrupt_local_disable(level);
-  rtems_cache_disable_data();
   rtems_cache_enable_data();
   rtems_interrupt_local_enable(level);
 }
@@ -385,24 +378,9 @@ static void RtemsCacheValCache_Action_7( void )
 }
 
 /**
- * @brief Call the rtems_cache_invalidate_entire_data() directive with maskable
- *   interrupts disabled.
- */
-static void RtemsCacheValCache_Action_8( void )
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_local_disable(level);
-  rtems_cache_disable_data();
-  rtems_cache_invalidate_entire_data();
-  rtems_cache_enable_data();
-  rtems_interrupt_local_enable(level);
-}
-
-/**
  * @brief Call the rtems_cache_invalidate_entire_instruction() directive.
  */
-static void RtemsCacheValCache_Action_9( void )
+static void RtemsCacheValCache_Action_8( void )
 {
   rtems_cache_invalidate_entire_instruction();
 }
@@ -411,7 +389,7 @@ static void RtemsCacheValCache_Action_9( void )
  * @brief Call the rtems_cache_invalidate_entire_instruction() directive with
  *   maskable interrupts disabled.
  */
-static void RtemsCacheValCache_Action_10( void )
+static void RtemsCacheValCache_Action_9( void )
 {
   rtems_interrupt_level level;
 
@@ -423,7 +401,7 @@ static void RtemsCacheValCache_Action_10( void )
 /**
  * @brief Call the rtems_cache_flush_entire_data() directive.
  */
-static void RtemsCacheValCache_Action_11( void )
+static void RtemsCacheValCache_Action_10( void )
 {
   rtems_cache_flush_entire_data();
 }
@@ -432,7 +410,7 @@ static void RtemsCacheValCache_Action_11( void )
  * @brief Call the rtems_cache_flush_entire_data() directive with maskable
  *   interrupts disabled.
  */
-static void RtemsCacheValCache_Action_12( void )
+static void RtemsCacheValCache_Action_11( void )
 {
   rtems_interrupt_level level;
 
@@ -445,7 +423,7 @@ static void RtemsCacheValCache_Action_12( void )
  * @brief Call the rtems_cache_flush_multiple_data_lines() directive with a
  *   sample set of memory areas.
  */
-static void RtemsCacheValCache_Action_13( void )
+static void RtemsCacheValCache_Action_12( void )
 {
   CallFlushMultipleDataLines();
 }
@@ -454,7 +432,7 @@ static void RtemsCacheValCache_Action_13( void )
  * @brief Call the rtems_cache_flush_multiple_data_lines() directive with a
  *   sample set of memory areas with maskable interrupts disabled.
  */
-static void RtemsCacheValCache_Action_14( void )
+static void RtemsCacheValCache_Action_13( void )
 {
   rtems_interrupt_level level;
 
@@ -467,7 +445,7 @@ static void RtemsCacheValCache_Action_14( void )
  * @brief Call the rtems_cache_invalidate_multiple_data_lines() directive with
  *   a sample set of memory areas.
  */
-static void RtemsCacheValCache_Action_15( void )
+static void RtemsCacheValCache_Action_14( void )
 {
   CallInvalidateMultipleDataLines();
 }
@@ -476,7 +454,7 @@ static void RtemsCacheValCache_Action_15( void )
  * @brief Call the rtems_cache_invalidate_multiple_data_lines() directive with
  *   a sample set of memory areas with maskable interrupts disabled.
  */
-static void RtemsCacheValCache_Action_16( void )
+static void RtemsCacheValCache_Action_15( void )
 {
   rtems_interrupt_level level;
 
@@ -489,7 +467,7 @@ static void RtemsCacheValCache_Action_16( void )
  * @brief Call the rtems_cache_invalidate_multiple_instruction_lines()
  *   directive with a sample set of memory areas.
  */
-static void RtemsCacheValCache_Action_17( void )
+static void RtemsCacheValCache_Action_16( void )
 {
   CallInvalidateMultipleInstructionLines();
 }
@@ -499,7 +477,7 @@ static void RtemsCacheValCache_Action_17( void )
  *   directive with a sample set of memory areas with maskable interrupts
  *   disabled.
  */
-static void RtemsCacheValCache_Action_18( void )
+static void RtemsCacheValCache_Action_17( void )
 {
   rtems_interrupt_level level;
 
@@ -512,7 +490,7 @@ static void RtemsCacheValCache_Action_18( void )
  * @brief Call the rtems_cache_instruction_sync_after_code_change() directive
  *   with a sample set of memory areas.
  */
-static void RtemsCacheValCache_Action_19( void )
+static void RtemsCacheValCache_Action_18( void )
 {
   CallInstructionSyncAfterCodeChange();
 }
@@ -521,7 +499,7 @@ static void RtemsCacheValCache_Action_19( void )
  * @brief Call the rtems_cache_instruction_sync_after_code_change() directive
  *   with a sample set of memory areas with maskable interrupts disabled.
  */
-static void RtemsCacheValCache_Action_20( void )
+static void RtemsCacheValCache_Action_19( void )
 {
   rtems_interrupt_level level;
 
@@ -535,7 +513,7 @@ static void RtemsCacheValCache_Action_20( void )
  *   rtems_cache_get_instruction_line_size(), and the
  *   rtems_cache_get_maximal_line_size() directives.
  */
-static void RtemsCacheValCache_Action_21( void )
+static void RtemsCacheValCache_Action_20( void )
 {
   size_t data_line_size;
   size_t instruction_line_size;
@@ -564,7 +542,7 @@ static void RtemsCacheValCache_Action_21( void )
  *   rtems_cache_get_maximal_line_size() directives with maskable interrupts
  *   disabled.
  */
-static void RtemsCacheValCache_Action_22( void )
+static void RtemsCacheValCache_Action_21( void )
 {
   size_t data_line_size;
   size_t instruction_line_size;
@@ -594,7 +572,7 @@ static void RtemsCacheValCache_Action_22( void )
  * @brief Call the rtems_cache_get_data_cache_size() directive with increasing
  *   level starting with zero until it returns zero.
  */
-static void RtemsCacheValCache_Action_23( void )
+static void RtemsCacheValCache_Action_22( void )
 {
   CallGetDataSize();
 }
@@ -604,7 +582,7 @@ static void RtemsCacheValCache_Action_23( void )
  *   level starting with zero until it returns zero with maskable interrupts
  *   disabled.
  */
-static void RtemsCacheValCache_Action_24( void )
+static void RtemsCacheValCache_Action_23( void )
 {
   rtems_interrupt_level level;
 
@@ -617,7 +595,7 @@ static void RtemsCacheValCache_Action_24( void )
  * @brief Call the rtems_cache_get_instruction_cache_size() directive with
  *   increasing level starting with zero until it returns zero.
  */
-static void RtemsCacheValCache_Action_25( void )
+static void RtemsCacheValCache_Action_24( void )
 {
   CallGetInstructionSize();
 }
@@ -627,7 +605,7 @@ static void RtemsCacheValCache_Action_25( void )
  *   increasing level starting with zero until it returns zero with maskable
  *   interrupts disabled.
  */
-static void RtemsCacheValCache_Action_26( void )
+static void RtemsCacheValCache_Action_25( void )
 {
   rtems_interrupt_level level;
 
@@ -669,7 +647,6 @@ T_TEST_CASE( RtemsCacheValCache )
   RtemsCacheValCache_Action_23();
   RtemsCacheValCache_Action_24();
   RtemsCacheValCache_Action_25();
-  RtemsCacheValCache_Action_26();
 }
 
 /** @} */
