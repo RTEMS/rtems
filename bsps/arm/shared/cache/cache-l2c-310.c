@@ -1155,25 +1155,6 @@ l2c_310_enable( void )
 }
 
 static inline void
-l2c_310_disable( void )
-{
-  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  rtems_interrupt_lock_context lock_context;
-
-  if ( l2cc->ctrl & L2C_310_CTRL_ENABLE ) {
-    /* Clean and Invalidate L2 Cache */
-    l2c_310_flush_entire();
-    rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
-
-    l2c_310_wait_for_background_ops( l2cc );
-
-    /* Disable the L2 cache */
-    l2cc->ctrl &= ~L2C_310_CTRL_ENABLE;
-    rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
-  }
-}
-
-static inline void
 _CPU_cache_enable_data( void )
 {
   l2c_310_enable();
@@ -1182,8 +1163,7 @@ _CPU_cache_enable_data( void )
 static inline void
 _CPU_cache_disable_data( void )
 {
-  arm_cache_l1_disable_data();
-  l2c_310_disable();
+  _Internal_error( INTERNAL_ERROR_CANNOT_DISABLE_DATA_CACHE );
 }
 
 static void l2c_310_enable_instruction( void *arg )

@@ -360,15 +360,6 @@ static inline void arm_cache_l1_unfreeze_instruction( void )
   /* To be implemented as needed, if supported by hardware at all */
 }
 
-static inline void arm_cache_l1_disable_data( void )
-{
-  /* Clean and invalidate the Data cache */
-  arm_cache_l1_flush_entire_data();
-
-  /* Disable the Data cache */
-  arm_cp15_set_control( arm_cp15_get_control() & ~ARM_CP15_CTRL_C );
-}
-
 static inline size_t arm_cache_l1_get_data_cache_size( void )
 {
   size_t   size;
