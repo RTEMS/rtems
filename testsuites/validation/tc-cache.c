@@ -168,7 +168,7 @@
 
 static void CallFlushMultipleDataLines( void )
 {
-  uint8_t buf[256];
+  uint8_t buf[ 256 ];
   uintptr_t data;
   uintptr_t n;
   uintptr_t i;
@@ -192,13 +192,13 @@ static void CallFlushMultipleDataLines( void )
 
 static void CallInvalidateMultipleDataLines( void )
 {
-  uint8_t buf[256];
+  uint8_t buf[ 384 ];
   uintptr_t data;
   uintptr_t n;
   uintptr_t i;
 
   rtems_cache_invalidate_multiple_data_lines( NULL, 0 );
-  data = RTEMS_ALIGN_UP( (uintptr_t) &buf[ 1 ], 128 );
+  data = RTEMS_ALIGN_UP( (uintptr_t) &buf[ 128 ], 128 );
 
   for ( n = 16; n <= 128 ; n *= 2 ) {
     for ( i = 0; i < 3; ++i ) {
