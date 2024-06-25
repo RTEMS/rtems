@@ -9,50 +9,13 @@ cppflags: []
 enabled-by: true
 family: amd64
 includes: []
-install:
-- destination: ${BSP_INCLUDEDIR}
-  source:
-  - bsps/x86_64/amd64/include/apic.h
-  - bsps/x86_64/amd64/include/bsp.h
-  - bsps/x86_64/amd64/include/clock.h
-  - bsps/x86_64/amd64/include/pic.h
-  - bsps/x86_64/amd64/include/start.h
-- destination: ${BSP_LIBDIR}
-  source:
-  - bsps/x86_64/amd64/start/linkcmds
+install: []
 links:
-- role: build-dependency
-  uid: ../../obj
-- role: build-dependency
-  uid: ../../objirq
-- role: build-dependency
-  uid: ../../objmem
 - role: build-dependency
   uid: ../../opto2
 - role: build-dependency
-  uid: abi
-- role: build-dependency
-  uid: start
-- role: build-dependency
-  uid: ../grp
-- role: build-dependency
-  uid: ../../bspopts
+  uid: grp
 source:
-- bsps/shared/cache/nocache.c
-- bsps/shared/dev/btimer/btimer-cpucounter.c
-- bsps/shared/dev/getentropy/getentropy-cpucounter.c
-- bsps/shared/dev/serial/console-termios-init.c
-- bsps/shared/dev/serial/console-termios.c
-- bsps/shared/irq/irq-default-handler.c
-- bsps/shared/start/bspfatal-default.c
-- bsps/shared/start/gettargethash-default.c
-- bsps/shared/start/sbrk.c
 - bsps/x86_64/amd64/clock/clock.c
 - bsps/x86_64/amd64/console/console.c
-- bsps/x86_64/amd64/interrupts/idt.c
-- bsps/x86_64/amd64/interrupts/isr_handler.S
-- bsps/x86_64/amd64/interrupts/pic.c
-- bsps/x86_64/amd64/start/bspstart.c
-- bsps/x86_64/amd64/start/bspreset.c
-- bsps/x86_64/amd64/start/page.c
 type: build

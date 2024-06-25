@@ -7,6 +7,14 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
+- enabled-by: x86_64/amd64efi
+  value:
+  - -fshort-wchar
+  - -maccumulate-outgoing-args
+  - -fno-stack-protector
+  - -fno-stack-check
+  - -mno-red-zone
+  - -mcmodel=large
 - enabled-by: true
   value:
   - -mno-red-zone
