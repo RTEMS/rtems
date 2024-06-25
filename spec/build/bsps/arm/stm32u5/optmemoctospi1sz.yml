@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- env-assign: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+default:
+- enabled-by: true
+  value: 0x1000000
+description: |
+  Size of the memory connected to OCTOSPI 1 in bytes.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: STM32U5_MEMORY_OCTOSPI_1_SIZE
+type: build

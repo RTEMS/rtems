@@ -1,0 +1,69 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+cflags: []
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: obj
+- role: build-dependency
+  uid: optmemflashsz
+- role: build-dependency
+  uid: optmemnullsz
+- role: build-dependency
+  uid: optmemintsramsz
+- role: build-dependency
+  uid: optmemintsramlpbamsz
+- role: build-dependency
+  uid: optmemoctospi1sz
+- role: build-dependency
+  uid: optmemoctospi2sz
+- role: build-dependency
+  uid: optprintkinstance
+- role: build-dependency
+  uid: optusart1gpiopins
+- role: build-dependency
+  uid: optusart2gpiopins
+- role: build-dependency
+  uid: optusart3gpiopins
+- role: build-dependency
+  uid: optenusart1
+- role: build-dependency
+  uid: optenusart2
+- role: build-dependency
+  uid: optenusart3
+- role: build-dependency
+  uid: optlinkcmds
+- role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: linkcmds
+- role: build-dependency
+  uid: linkcmdsmemory
+- role: build-dependency
+  uid: ../../bspopts
+- role: build-dependency
+  uid: ../../optconsolebaud
+- role: build-dependency
+  uid: ../../optconsoleirq
+type: build
+use-after: []
+use-before: []

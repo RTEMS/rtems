@@ -1,0 +1,312 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/stm32u5/include/bsp.h
+  - bsps/arm/stm32u5/include/chip.h
+  - bsps/arm/stm32u5/include/tm27.h
+  - bsps/arm/stm32u5/include/stm32u5xx.h
+  - bsps/arm/stm32u5/include/stm32u5g9xx.h
+  - bsps/arm/stm32u5/include/system_stm32u5xx.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_cortex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_smbus.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_flash.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_exti.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_otfdec.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_adc_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_iwdg.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_hcd.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_sd_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_fmc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_spi.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_dsi.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_xspi.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_dma2d.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_tim_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_mdf.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_dma_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_mmc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_crc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_def.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_rtc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_sdmmc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_gtzc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_rng.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_dma.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_rng.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_gpu2d.h
+  - bsps/arm/stm32u5/include/stm32_assert.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_nand.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_tim.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_ucpd.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_wwdg.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_dcache.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_lpuart.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_spi.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_comp.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_fdcan.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_cryp_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_rng_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_rtc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_adc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_pwr.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_fmac.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_lptim.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_dma.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_sai.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_gfxtim.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_dac.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_dcache.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_crc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_crc_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_pwr_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_usart.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_rtc_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_opamp_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_sai_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_ospi.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_rcc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_system.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_usart_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_i2c_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_tsc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_smartcard.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_irda_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_pcd_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_jpeg.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_cortex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_tim.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_pka.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_cordic.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_pwr.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_gpio_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_gpio.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_dac.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_smbus_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_icache.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_opamp.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_bus.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_nor.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_pssi.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_dac_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_spi_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_crs.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_sd.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_ramcfg.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_wwdg.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_usart.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_i2c.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_uart_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_sram.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_opamp.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_exti.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_smartcard_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_iwdg.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_dma2d.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_ltdc_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_pka.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_mmc_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_cryp.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_pcd.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_adc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_gpio.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_comp.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_gfxmmu.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_dlyb.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_uart.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_cordic.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_i2c.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_hash.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_rcc_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_dcmi.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_flash_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_usb.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_fmac.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_lptim.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_utils.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_lpgpio.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_irda.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_icache.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_ltdc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_hash_ex.h
+  - bsps/arm/stm32u5/include/stm32u5xx_ll_rcc.h
+  - bsps/arm/stm32u5/include/stm32u5xx_hal_conf.h
+- destination: ${BSP_INCLUDEDIR}/Legacy
+  source:
+  - bsps/arm/stm32u5/include/Legacy/stm32_hal_legacy.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/stm32u5/include/bsp/irq.h
+- destination: ${BSP_INCLUDEDIR}/stm32u5
+  source:
+  - bsps/arm/stm32u5/include/stm32u5/hal.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/stm32u5/start/linkcmds.flash
+  - bsps/arm/stm32u5/start/linkcmds.flash+ospi
+  - bsps/arm/stm32u5/start/linkcmds.sram
+  - bsps/arm/stm32u5/start/linkcmds.ospi
+links: []
+source:
+- bsps/arm/shared/clock/clock-armv7m.c
+- bsps/arm/shared/cpucounter/cpucounter-armv7m.c
+- bsps/arm/shared/irq/irq-armv7m.c
+- bsps/arm/shared/irq/irq-dispatch-armv7m.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/shared/start/bspreset-armv7m.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/gettargethash-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+- bsps/arm/shared/cache/cache-v7m.c
+- bsps/arm/stm32u5/console/console.c
+- bsps/arm/stm32u5/console/printk-support.c
+- bsps/arm/stm32u5/console/console-usart1.c
+- bsps/arm/stm32u5/console/console-usart1-cfg.c
+- bsps/arm/stm32u5/console/console-usart2.c
+- bsps/arm/stm32u5/console/console-usart2-cfg.c
+- bsps/arm/stm32u5/console/console-usart3.c
+- bsps/arm/stm32u5/console/console-usart3-cfg.c
+- bsps/arm/stm32u5/start/bspstart.c
+- bsps/arm/stm32u5/start/bspstarthooks.c
+- bsps/arm/stm32u5/start/getentropy-rng.c
+- bsps/arm/stm32u5/start/stm32u5-hal.c
+- bsps/arm/stm32u5/start/stm32u5-config-clk.c
+- bsps/arm/stm32u5/start/stm32u5-config-osc.c
+- bsps/arm/stm32u5/start/stm32u5-config-per.c
+- bsps/arm/stm32u5/start/stm32u5-hal-uart.c
+- bsps/arm/stm32u5/start/stm32u5-hal-sdmmc.c
+- bsps/arm/stm32u5/start/stm32u5-init-octospi.c
+- bsps/arm/stm32u5/start/stm32u5-config-rtc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_rtc.c
+- bsps/arm/stm32u5/hal/system_stm32u5xx.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_dac_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_spi.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_opamp_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_nand.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_lptim.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_usart_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_gpio.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_uart_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_rng.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_timebase_rtc_alarm.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_comp.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_sai.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_dcmi.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_wwdg.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_usart.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_tsc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_ospi.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_crc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_dac.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_pcd.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_xspi.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_adc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_dma_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_dma2d.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_irda.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_rcc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_nor.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_pwr.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_adc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_usart.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_rcc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_otfdec.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_i2c_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_lpgpio.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_crs.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_sai_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_mmc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_mmc_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_sram.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_spi.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_timebase_tim.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_cordic.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_msp.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_pwr.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_dcache.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_ucpd.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_icache.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_hash_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_pka.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_fmac.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_opamp.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_ltdc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_pssi.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_jpeg.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_cordic.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_exti.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_pka.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_utils.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_cryp_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_fmac.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_rcc_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_icache.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_hcd.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_timebase_rtc_wakeup.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_uart.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_flash.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_gpio.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_rtc_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_smbus_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_smbus.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_dac.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_opamp.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_dsi.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_pwr_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_gfxmmu.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_cortex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_sdmmc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_fdcan.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_adc_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_tim.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_smartcard_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_smartcard.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_gfxtim.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_lptim.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_exti.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_tim_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_pcd_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_sd.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_flash_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_rng.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_lpuart.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_ramcfg.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_dlyb.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_sd_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_fmc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_tim.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_cryp.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_dma.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_dma.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_i2c.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_rtc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_spi_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_usb.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_crc_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_crc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_i2c.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_gpu2d.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_ltdc_ex.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_comp.c
+- bsps/arm/stm32u5/hal/stm32u5xx_ll_dma2d.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_iwdg.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_hash.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_mdf.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_gtzc.c
+- bsps/arm/stm32u5/hal/stm32u5xx_hal_rng_ex.c
+type: build

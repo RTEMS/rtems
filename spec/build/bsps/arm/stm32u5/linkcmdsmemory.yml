@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  MEMORY {
+    NULL           : ORIGIN = 0x00000000, LENGTH = ${STM32U5_MEMORY_NULL_SIZE:#010x}
+    FLASH          : ORIGIN = 0x08000000, LENGTH = ${STM32U5_MEMORY_FLASH_SIZE:#010x}
+    INT_SRAM       : ORIGIN = 0x20000000, LENGTH = ${STM32U5_MEMORY_INT_SRAM_SIZE:#010x}
+    INT_SRAM_LPBAM : ORIGIN = 0x28000000, LENGTH = ${STM32U5_MEMORY_INT_SRAM_LPBAM_SIZE:#010x}
+    OCTOSPI_2      : ORIGIN = 0x70000000, LENGTH = ${STM32U5_MEMORY_OCTOSPI_2_SIZE:#010x}
+    OCTOSPI_1      : ORIGIN = 0x90000000, LENGTH = ${STM32U5_MEMORY_OCTOSPI_1_SIZE:#010x}
+  }
+
+  stm32u5_memory_null_begin = ORIGIN (NULL);
+  stm32u5_memory_null_end = ORIGIN (NULL) + LENGTH (NULL);
+  stm32u5_memory_null_size = LENGTH (NULL);
+
+  stm32u5_memory_flash_begin = ORIGIN (FLASH);
+  stm32u5_memory_flash_end = ORIGIN (FLASH) + LENGTH (FLASH);
+  stm32u5_memory_flash_size = LENGTH (FLASH);
+
+  stm32u5_memory_int_sram_begin = ORIGIN (INT_SRAM);
+  stm32u5_memory_int_sram_end = ORIGIN (INT_SRAM) + LENGTH (INT_SRAM);
+  stm32u5_memory_int_sram_size = LENGTH (INT_SRAM);
+
+  stm32u5_memory_int_sram_lpbam_begin = ORIGIN (INT_SRAM_LPBAM);
+  stm32u5_memory_int_sram_lpbam_end = ORIGIN (INT_SRAM_LPBAM) + LENGTH (INT_SRAM_LPBAM);
+  stm32u5_memory_int_sram_lpbam_size = LENGTH (INT_SRAM_LPBAM);
+
+  stm32u5_memory_octospi_1_begin = ORIGIN (OCTOSPI_1);
+  stm32u5_memory_octospi_1_end = ORIGIN (OCTOSPI_1) + LENGTH (OCTOSPI_1);
+  stm32u5_memory_octospi_1_size = LENGTH (OCTOSPI_1);
+
+  stm32u5_memory_octospi_2_begin = ORIGIN (OCTOSPI_2);
+  stm32u5_memory_octospi_2_end = ORIGIN (OCTOSPI_2) + LENGTH (OCTOSPI_2);
+  stm32u5_memory_octospi_2_size = LENGTH (OCTOSPI_2);
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds.memory
+type: build

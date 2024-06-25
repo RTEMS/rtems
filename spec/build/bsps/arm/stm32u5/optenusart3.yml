@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+default:
+- enabled-by: true
+  value: false
+description: |
+  Enable USART3 device in console driver.
+enabled-by: true
+format: '{}'
+links: []
+name: STM32U5_CONSOLE_ENABLE_USART3
+type: build
