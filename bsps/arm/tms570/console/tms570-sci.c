@@ -296,7 +296,7 @@ bool tms570_sci_set_attributes(
   }
 
   /* Apply baudrate to the hardware */
-  baudrate *= 2 * 16;
+  baudrate *= 16;
   bauddiv = (TMS570_VCLK_HZ + baudrate / 2) / baudrate;
   ctx->regs->BRS = bauddiv? bauddiv - 1: 0;
 
