@@ -69,7 +69,7 @@
  *
  * This test case performs the following actions:
  *
- * - Call the rtems_cache_invalidate_entire_data() directive.
+ * - Call the rtems_cache_disable_data() directive.
  *
  *   - Check that the right fatal error occurred.
  *
@@ -104,7 +104,7 @@ static void FatalRecordAndJump(
 }
 
 /**
- * @brief Call the rtems_cache_invalidate_entire_data() directive.
+ * @brief Call the rtems_cache_disable_data() directive.
  */
 static void RtemsCacheValCacheNoDisableData_Action_0( void )
 {
