@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2014, 2019 embedded brains GmbH & Co. KG
+ * Copyright (C) 2014, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -53,6 +53,7 @@ typedef struct {
   SMP_barrier_State main_barrier_state;
   SMP_barrier_State worker_barrier_state;
   Per_CPU_Job jobs[CPU_COUNT][2];
+  Per_CPU_Job sync_jobs[2];
 } test_context;
 
 static test_context test_instance = {
@@ -198,40 +199,61 @@ static const Per_CPU_Job_context counter_1_job_context = {
   .arg = &test_instance
 };
 
-static void sync_handler(void *arg)
+static void sync_0_handler(void *arg)
 {
   test_context *ctx = arg;
-  SMP_barrier_State *bs = &ctx->worker_barrier_state;
+
+  _Per_CPU_Submit_job(_Per_CPU_Get(), &ctx->sync_jobs[1]);
 
   /* (E) */
-  barrier(ctx, bs);
+  barrier(ctx, &ctx->worker_barrier_state);
 }
 
-static const Per_CPU_Job_context sync_context = {
-  .handler = sync_handler,
+static void sync_1_handler(void *arg)
+{
+  test_context *ctx = arg;
+
+  /* (F) */
+  barrier(ctx, &ctx->worker_barrier_state);
+}
+
+static const Per_CPU_Job_context sync_0_context = {
+  .handler = sync_0_handler,
+  .arg = &test_instance
+};
+
+static const Per_CPU_Job_context sync_1_context = {
+  .handler = sync_1_handler,
   .arg = &test_instance
 };
 
 static void wait_for_ipi_done(test_context *ctx, Per_CPU_Control *cpu)
 {
-  Per_CPU_Job job;
   unsigned long done;
 
-  job.context = &sync_context;
-  _Per_CPU_Submit_job(cpu, &job);
+  ctx->sync_jobs[0].context = &sync_0_context;
+  ctx->sync_jobs[1].context = &sync_1_context;
+  _Per_CPU_Submit_job(cpu, &ctx->sync_jobs[0]);
 
-  while (cpu->isr_nest_level == 0) {
-    RTEMS_COMPILER_MEMORY_BARRIER();
-  }
-
-  /* (E) */
+  /*
+   * (E)
+   *
+   * At this point, the IPI is currently serviced.  Depending on the target and
+   * timing conditions, the IPI may be active and pending.  The main processor
+   * will no longer make this IPI pending after this point.  Let the
+   * sync_0_handler() make it pending again to go to (F).
+   */
   barrier(ctx, &ctx->main_barrier_state);
 
+  /* (F) */
+  barrier(ctx, &ctx->main_barrier_state);
+
+  /* Make sure that a potential counter_handler() finished */
   while (cpu->isr_nest_level != 0) {
     RTEMS_COMPILER_MEMORY_BARRIER();
   }
 
-  done = _Atomic_Load_ulong( &job.done, ATOMIC_ORDER_ACQUIRE );
+  done = _Atomic_Load_ulong( &ctx->sync_jobs[1].done, ATOMIC_ORDER_ACQUIRE );
   rtems_test_assert( done == PER_CPU_JOB_DONE );
 }
 
