@@ -174,6 +174,8 @@ rtems_task Init(rtems_task_argument ignored)
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
+#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
+
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
 /* end of file */
