@@ -336,6 +336,10 @@ SECTIONS {
 	.debug_rnglists 0 : { *(.debug_rnglists) }
 	.debug_str_offsets 0 : { *(.debug_str_offsets) }
 	.debug_sup      0 : { *(.debug_sup) }
+
+	/* Addition to let linker know about custom section for GDB pretty-printing support. */
+	.debug_gdb_scripts 0 : { *(.debug_gdb_scripts) }
+	
 	/DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
 
 	/*
