@@ -229,6 +229,7 @@ static void test_counting_semaphore(void)
 {
   rtems_counting_semaphore a = RTEMS_COUNTING_SEMAPHORE_INITIALIZER("a", 1);
   const char *name;
+  int eno;
 
   name = rtems_counting_semaphore_get_name(&a);
   rtems_test_assert(strcmp(name, "a") == 0);
@@ -245,9 +246,25 @@ static void test_counting_semaphore(void)
   name = rtems_counting_semaphore_get_name(&a);
   rtems_test_assert(strcmp(name, "c") == 0);
 
+  eno = rtems_counting_semaphore_try_wait(&a);
+  rtems_test_assert(eno == EAGAIN);
+
+  eno = rtems_counting_semaphore_wait_timed_ticks(&a, 1);
+  rtems_test_assert(eno == ETIMEDOUT);
+
   rtems_counting_semaphore_post(&a);
 
   rtems_counting_semaphore_wait(&a);
+
+  rtems_counting_semaphore_post(&a);
+
+  eno = rtems_counting_semaphore_try_wait(&a);
+  rtems_test_assert(eno == 0);
+
+  rtems_counting_semaphore_post(&a);
+
+  eno = rtems_counting_semaphore_wait_timed_ticks(&a, 1);
+  rtems_test_assert(eno == 0);
 
   rtems_counting_semaphore_destroy(&a);
 }

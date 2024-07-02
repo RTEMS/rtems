@@ -248,6 +248,21 @@ static __inline void rtems_counting_semaphore_wait(
   _Semaphore_Wait( counting_semaphore );
 }
 
+static __inline int rtems_counting_semaphore_wait_timed_ticks(
+  rtems_counting_semaphore *counting_semaphore,
+  uint32_t                  ticks
+)
+{
+  return _Semaphore_Wait_timed_ticks( counting_semaphore, ticks );
+}
+
+static __inline int rtems_counting_semaphore_try_wait(
+  rtems_counting_semaphore *counting_semaphore
+)
+{
+  return _Semaphore_Try_wait( counting_semaphore );
+}
+
 static __inline void rtems_counting_semaphore_post(
   rtems_counting_semaphore *counting_semaphore
 )
