@@ -17,7 +17,7 @@ install:
   - bsps/x86_64/amd64/include/start.h
 - destination: ${BSP_LIBDIR}
   source:
-  - bsps/i386/pc386/start/linkcmds
+  - bsps/x86_64/amd64/start/linkcmds
 links: []
 source:
 - bsps/shared/cache/nocache.c
