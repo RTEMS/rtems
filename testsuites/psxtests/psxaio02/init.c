@@ -148,6 +148,10 @@ void *POSIX_Init( void *argument )
   status = aio_fsync( O_SYNC, aiocbp[9] );
   rtems_test_assert( status != -1 );
 
+  aiocbp[9] = create_aiocb( fd[0] ); 
+  status = aio_fsync( O_DSYNC, aiocbp[9] );
+  rtems_test_assert( status != -1 );
+
   status = aio_cancel( WRONG_FD, NULL );
   rtems_test_assert( status == -1 );
 
@@ -169,6 +173,22 @@ void *POSIX_Init( void *argument )
 
   status = aio_cancel( fd[5], aiocbp[6] );
   rtems_test_assert( status == AIO_CANCELED );
+
+  /* tests for aio error and aio test */
+
+  int result = aio_error( aiocbp[6] );
+  rtems_test_assert( result == ECANCELED );
+
+  result = aio_return( aiocbp[6] );
+  rtems_test_assert( result == -1 );
+
+  result = aio_return( aiocbp[6] );
+  rtems_test_assert( result == -1 );
+
+  rtems_test_assert( errno == EINVAL );
+  result = aio_error( aiocbp[6] );
+  rtems_test_assert( result == -1 );
+  rtems_test_assert( errno == EINVAL );
 
   status = aio_cancel( fd[0], aiocbp[9] );
   rtems_test_assert( status == AIO_CANCELED );

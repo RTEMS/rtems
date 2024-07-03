@@ -98,19 +98,6 @@ extern "C" {
 /** Request a write() */
 #define LIO_WRITE       2
 
-/** Needed by aio_fsync() */
-#define LIO_SYNC        3
-
-/*
- * Constants to track return status
- */
-
-/** The aio operation return value has been retrieved */
-#define AIO_RETURNED    0
-
-/** The aio operation return value has not been retrieved */
-#define AIO_NOTRETURNED 1
-
 /**
  * @brief Asynchronous I/O Control Block
  * 
@@ -272,7 +259,7 @@ int aio_suspend(
  * 
  * 6.7.9 Asynchronous File Synchronization, P1003.1b-1993, p. 166
  * 
- * @param[in] op     O_SYNC
+ * @param[in] op     O_SYNC or O_DSYNC
  * @param[in,out] aiocbp is a pointer to the asynchronous I/O control block
  * 
  * @retval  0 The request was correctly enqueued. 
@@ -281,8 +268,7 @@ int aio_suspend(
  *              due to temporary resource limitations.
  *            - EBADF The aio_fildes member of the aiocb structure referenced
  *              by the aiocbp argument is not a valid file descriptor.
- *            - EINVAL A value of op other than O_SYNC was specified.
- *              The current implemetation only supports O_SYNC.
+ *            - EINVAL A value of op other than O_SYNC or O_DSYNC was specified.
  *            - EINVAL aiocbp is a NULL pointer.
  *            - EINVAL aiocbp->sigevent is not valid.
  */

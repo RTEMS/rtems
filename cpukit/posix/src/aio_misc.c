@@ -613,8 +613,8 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
 {
   int result;
 
-  switch ( req->aiocbp->aio_lio_opcode ) {
-    case LIO_READ:
+  switch ( req->op_type ) {
+    case AIO_OP_READ:
       AIO_printf( "read\n" );
       result = pread(
         req->aiocbp->aio_fildes,
@@ -623,7 +623,7 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
       );
       break;
 
-    case LIO_WRITE:
+    case AIO_OP_WRITE:
       AIO_printf( "write\n" );
       result = pwrite(
         req->aiocbp->aio_fildes,
@@ -632,9 +632,14 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
       );
       break;
 
-    case LIO_SYNC:
+    case AIO_OP_SYNC:
       AIO_printf( "sync\n" );
       result = fsync( req->aiocbp->aio_fildes );
+      break;
+    
+    case AIO_OP_DSYNC:
+      AIO_printf( "data sync\n" );
+      result = fdatasync( req->aiocbp->aio_fildes );
       break;
 
     default:

@@ -43,6 +43,7 @@
 #include <aio.h>
 #include <errno.h>
 #include <rtems/seterr.h>
+#include <rtems/posix/aio_misc.h>
 
 ssize_t aio_return( struct aiocb *aiocbp )
 {

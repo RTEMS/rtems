@@ -57,6 +57,30 @@
 extern "C" {
 #endif
 
+/** Constants to identify op type */
+
+/** Needed by aio_fsync() */
+#define AIO_OP_READ        0
+
+/** Needed by aio_fsync() */
+#define AIO_OP_WRITE       1
+
+/** Needed by aio_fsync() */
+#define AIO_OP_SYNC       2
+
+/** Needed by aio_fsync() */
+#define AIO_OP_DSYNC       3
+
+/*
+ * Constants to track return status
+ */
+
+/** The aio operation return value has been retrieved */
+#define AIO_RETURNED    0
+
+/** The aio operation return value has not been retrieved */
+#define AIO_NOTRETURNED 1
+
 /**
  * @brief The request being processed
  */
@@ -76,6 +100,10 @@ typedef struct
 
   /** @brief Aio control block */
   struct aiocb *aiocbp;
+
+  /** @brief Operation type */
+  int op_type;
+
 } rtems_aio_request;
 
 /**

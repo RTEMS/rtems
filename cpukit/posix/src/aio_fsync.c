@@ -57,7 +57,7 @@ int aio_fsync(
   if ( aiocbp == NULL )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  if ( op != O_SYNC )
+  if ( op != O_SYNC && op != O_DSYNC )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( rtems_aio_check_sigevent( &aiocbp->aio_sigevent ) == 0 )
@@ -77,7 +77,11 @@ int aio_fsync(
     rtems_set_errno_and_return_minus_one( EAGAIN );
 
   req->aiocbp = aiocbp;
-  req->aiocbp->aio_lio_opcode = LIO_SYNC;
+  if ( op == O_SYNC ) {
+    req->op_type = AIO_OP_SYNC;
+  } else {
+    req->op_type = AIO_OP_DSYNC;
+  }
   
   return rtems_aio_enqueue( req );
 }

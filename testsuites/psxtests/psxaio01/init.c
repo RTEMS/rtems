@@ -86,6 +86,41 @@ void *POSIX_Init( void *argument )
 
   TEST_BEGIN();
 
+  /* NULL aiocbp */
+
+  result = aio_write( NULL );
+  status = errno;
+  rtems_test_assert( result == -1 );
+  rtems_test_assert( status == EINVAL );
+
+  /* NULL aiocbp */
+
+  result = aio_read( NULL );
+  status = errno;
+  rtems_test_assert( result == -1 );
+  rtems_test_assert( status == EINVAL );
+
+  /* NULL aiocbp */
+
+  result = aio_fsync( O_SYNC, NULL );
+  status = errno;
+  rtems_test_assert( result == -1 );
+  rtems_test_assert( status == EINVAL );
+
+  /* NULL aiocbp */
+
+  result = aio_return( NULL );
+  status = errno;
+  rtems_test_assert( result == -1 );
+  rtems_test_assert( status == ENOENT );
+
+  /* NULL aiocbp */
+
+  result = aio_error( NULL );
+  status = errno;
+  rtems_test_assert( result == -1 );
+  rtems_test_assert( status == EINVAL );
+
   aiocbp = create_aiocb( WRONG_FD );
 
   /* Bad file descriptor */
@@ -147,7 +182,7 @@ void *POSIX_Init( void *argument )
   rtems_test_assert( result == -1 );
   rtems_test_assert( status == EINVAL );
 
-   /* Invalid request priority */
+  /* Invalid request priority */
 
   result = aio_read( aiocbp );
   status = errno;
@@ -165,6 +200,25 @@ void *POSIX_Init( void *argument )
 
   aiocbp->aio_fildes = WRONG_FD;
   result = aio_cancel( fd, aiocbp );
+  status = errno;
+  rtems_test_assert( result == -1 );
+  rtems_test_assert( status == EINVAL );
+  aiocbp->aio_fildes = fd;
+  
+  /* Bad sigevent */
+
+  aiocbp->aio_sigevent.sigev_notify = SIGEV_SIGNAL;
+  aiocbp->aio_sigevent.sigev_notify_function = NULL;
+  result = aio_fsync( O_SYNC, aiocbp );
+  status = errno;
+  rtems_test_assert( result == -1 );
+  rtems_test_assert( status == EINVAL );
+
+  /* Bad sigevent */
+
+  aiocbp->aio_sigevent.sigev_notify = SIGEV_THREAD;
+  aiocbp->aio_sigevent.sigev_signo = 0;
+  result = aio_fsync( O_SYNC, aiocbp );
   status = errno;
   rtems_test_assert( result == -1 );
   rtems_test_assert( status == EINVAL );

@@ -79,7 +79,7 @@ int aio_read( struct aiocb *aiocbp )
     rtems_set_errno_and_return_minus_one( EAGAIN );
 
   req->aiocbp = aiocbp;
-  req->aiocbp->aio_lio_opcode = LIO_READ;
+  req->op_type = AIO_OP_READ;
 
   return rtems_aio_enqueue( req );
 }

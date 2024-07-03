@@ -76,7 +76,7 @@ int aio_write( struct aiocb *aiocbp )
     rtems_set_errno_and_return_minus_one( EAGAIN );
 
   req->aiocbp = aiocbp;
-  req->aiocbp->aio_lio_opcode = LIO_WRITE;
+  req->op_type = AIO_OP_WRITE;
 
   return rtems_aio_enqueue( req );
 }

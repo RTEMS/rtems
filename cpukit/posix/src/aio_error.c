@@ -42,6 +42,7 @@
 
 #include <aio.h>
 #include <errno.h>
+#include <rtems/posix/aio_misc.h>
 
 #include <rtems/seterr.h>
 
