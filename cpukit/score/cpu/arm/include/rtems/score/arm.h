@@ -51,7 +51,10 @@ extern "C" {
  * @{
  */
 
-#if defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7EM__)
+#if __ARM_ARCH == 8 && __ARM_ARCH_PROFILE == 'M'
+  #define CPU_MODEL_NAME "ARMv8M"
+  #define ARM_MULTILIB_ARCH_V7M
+#elif __ARM_ARCH == 7 && __ARM_ARCH_PROFILE == 'M'
   #define CPU_MODEL_NAME "ARMv7M"
   #define ARM_MULTILIB_ARCH_V7M
 #elif defined(__ARM_ARCH_6M__)
@@ -70,15 +73,13 @@ extern "C" {
 #endif
 
 #ifndef ARM_DISABLE_THREAD_ID_REGISTER_USE
-  #if defined(__ARM_ARCH_7A__) \
-    || defined(__ARM_ARCH_7R__) \
-    || __ARM_ARCH >= 8 \
+  #if (__ARM_ARCH >= 7 && __ARM_ARCH_PROFILE != 'M') \
     || __ARM_ARCH == 6
     #define ARM_MULTILIB_HAS_THREAD_ID_REGISTER
   #endif
 #endif
 
-#if defined(__ARM_ARCH_7A__) || __ARM_ARCH >= 8
+#if defined(__ARM_ARCH_7A__) || (__ARM_ARCH >= 8 && __ARM_ARCH_PROFILE != 'M')
   #define ARM_MULTILIB_CACHE_LINE_MAX_64
 #endif
 
