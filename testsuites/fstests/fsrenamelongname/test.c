@@ -30,76 +30,79 @@
 #include "config.h"
 #endif
 
-#include <stdio.h>
-#include <errno.h>
+#include <sys/stat.h>
+#include <limits.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-
-#include <rtems.h>
-#include <rtems/userenv.h>
-
-#include "fstest_support.h"
-#include "fs_config.h"
 
 #include "fstest.h"
+#include "fs_config.h"
 #include <tmacros.h>
 
-void *volatile prevent_compiler_optimizations;
+const char rtems_test_name[] = "FSRENAMELONGNAME " FILESYSTEM;
+const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
-static int fs_test_failed = 0;
-extern const RTEMS_TEST_STATE rtems_test_state;
-
-void fs_test_notify_failure(void)
+void test (void)
 {
-  fs_test_failed = 1;
-}
+  int fd;
+  int status;
 
+  const char *name01 = "name01";
 
-/* Break out of a chroot() environment in C */
-static void break_out_of_chroot(void)
-{
-  int rv;
-  struct stat st;
+  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  const char *wd = __func__;
 
-  rtems_libio_use_global_env();
+  char filename[NAME_MAX + 2];
 
-  /* Perform deferred global location releases */
-  rv = stat(".", &st);
-  rtems_test_assert(rv == 0);
+  /*
+   * Create a new directory and change the current directory to this
+   */
 
-  /* Perform deferred memory frees */
-  prevent_compiler_optimizations = malloc(1);
-  free(prevent_compiler_optimizations);
-}
+  status = mkdir (wd, mode);
+  rtems_test_assert (status == 0);
+  status = chdir (wd);
+  rtems_test_assert (status == 0);
 
-/*
- *  Main entry point of every filesystem test
- */
+  /*
+   * The new argument is a name bigger than NAME_MAX and
+   * the old argument points to a file.
+   */
 
-rtems_task Init(
-    rtems_task_argument ignored)
-{
-  int rc=0;
+  puts ("\nRename file with a name size exceeding NAME_MAX\n");
 
-  rtems_test_begin(rtems_test_name, rtems_test_state);
+  fd = creat (name01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
 
-  puts( "Initializing filesystem " FILESYSTEM );
-  test_initialize_filesystem();
+  /* Generate string with NAME_MAX + 1 length */
+  memset(filename, 'a', NAME_MAX + 1);
+  filename[NAME_MAX + 1] = '\0';
 
-  rc=chroot(BASE_FOR_TEST);
-  rtems_test_assert(rc==0);
+  EXPECT_ERROR (ENAMETOOLONG, rename, name01, filename);
 
-  test();
+  /*
+   * Clear directory
+   */
 
-  break_out_of_chroot();
+  EXPECT_EQUAL (0, unlink, name01);
+  EXPECT_EQUAL (-1, unlink, filename);
 
-  puts( "\n\nShutting down filesystem " FILESYSTEM );
-  test_shutdown_filesystem();
+  /*
+   * Go back to parent directory
+   */
 
-  if (!fs_test_failed) rtems_test_end(rtems_test_name);
-  rtems_test_exit(0);
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+
+  /*
+   * Remove test directory
+   */
+
+  status = rmdir (wd);
+  rtems_test_assert (status == 0);
 }

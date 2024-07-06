@@ -30,76 +30,59 @@
 #include "config.h"
 #endif
 
-#include <stdio.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <sys/stat.h>
-#include <sys/types.h>
-
-#include <rtems.h>
-#include <rtems/userenv.h>
-
-#include "fstest_support.h"
-#include "fs_config.h"
+#include <limits.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <stdint.h>
+#include <unistd.h>
 
 #include "fstest.h"
+#include "fs_config.h"
 #include <tmacros.h>
 
-void *volatile prevent_compiler_optimizations;
+const char rtems_test_name[] = "FSRMDIRPARENT " FILESYSTEM;
+const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
-static int fs_test_failed = 0;
-extern const RTEMS_TEST_STATE rtems_test_state;
-
-void fs_test_notify_failure(void)
+static void rmdir_error (void)
 {
-  fs_test_failed = 1;
+  int status;
+  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+
+  const char *wd = __func__;
+
+  /*
+   * Create a new directory and change the current directory to  this
+   */
+  status = mkdir (wd, mode);
+  rtems_test_assert (status == 0);
+  status = chdir (wd);
+  rtems_test_assert (status == 0);
+
+  /*
+   * Create a new directory for test
+   */
+  status = mkdir ("tmp", mode);
+  rtems_test_assert (status == 0);
+
+  /*
+   * The path argument names a directory that is not an empty directory,
+   * or there are hard links to the directory other than
+   * dot or a single entry in dot-dot.
+   */
+
+  EXPECT_ERROR (ENOTEMPTY, rmdir, "..");
+
+  /*
+   * Go back to parent directory
+   */
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+
+
 }
 
-
-/* Break out of a chroot() environment in C */
-static void break_out_of_chroot(void)
+void test (void)
 {
-  int rv;
-  struct stat st;
-
-  rtems_libio_use_global_env();
-
-  /* Perform deferred global location releases */
-  rv = stat(".", &st);
-  rtems_test_assert(rv == 0);
-
-  /* Perform deferred memory frees */
-  prevent_compiler_optimizations = malloc(1);
-  free(prevent_compiler_optimizations);
-}
-
-/*
- *  Main entry point of every filesystem test
- */
-
-rtems_task Init(
-    rtems_task_argument ignored)
-{
-  int rc=0;
-
-  rtems_test_begin(rtems_test_name, rtems_test_state);
-
-  puts( "Initializing filesystem " FILESYSTEM );
-  test_initialize_filesystem();
-
-  rc=chroot(BASE_FOR_TEST);
-  rtems_test_assert(rc==0);
-
-  test();
-
-  break_out_of_chroot();
-
-  puts( "\n\nShutting down filesystem " FILESYSTEM );
-  test_shutdown_filesystem();
-
-  if (!fs_test_failed) rtems_test_end(rtems_test_name);
-  rtems_test_exit(0);
+  rmdir_error ();
 }

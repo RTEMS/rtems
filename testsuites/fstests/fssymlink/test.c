@@ -45,10 +45,8 @@
 #include "fs_config.h"
 #include <tmacros.h>
 
-//#include "fstest_support.h"
-//#include <limits.h>
-
 const char rtems_test_name[] = "FSSYMLINK " FILESYSTEM;
+const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
 /*
  * Test the function of symlink
@@ -232,10 +230,11 @@ static void symlink_rename_test (void)
 
   puts ("Testing if name02 is now a symlink");
 
-  if(S_ISLNK(statbuf.st_mode) != 0)
+  if (S_ISLNK(statbuf.st_mode) != 0) {
     FS_PASS ();
-  else
+  } else {
     FS_FAIL ();
+  }
 
   /*
    * Clear directory
@@ -270,10 +269,11 @@ static void symlink_rename_test (void)
 
   puts ("Testing that symlink01 is not a symlink");
 
-  if(S_ISLNK(statbuf.st_mode) == 0)
+  if (S_ISLNK(statbuf.st_mode) == 0) {
     FS_PASS ();
-  else
+  } else {
     FS_FAIL ();
+  }
 
   /*
    * Clear directory

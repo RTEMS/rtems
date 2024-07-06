@@ -47,6 +47,7 @@
 #include <tmacros.h>
 
 const char rtems_test_name[] = "FSTIME " FILESYSTEM;
+const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 #else
 #include <assert.h>
 #define rtems_test_assert(x) assert(x)

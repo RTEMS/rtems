@@ -46,6 +46,7 @@
 #include <tmacros.h>
 
 const char rtems_test_name[] = "FSLINK " FILESYSTEM;
+const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
 /*
  * Test if the successful call works as expect

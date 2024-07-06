@@ -48,6 +48,7 @@
 #include "tmacros.h"
 
 const char rtems_test_name[] = "FSFPATHCONF " FILESYSTEM;
+const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
 static void fpathconf_test(void){
 
@@ -105,7 +106,6 @@ static void fpathconf_test(void){
 }
 
 void test(void){
-
   fpathconf_test();
 }
 

@@ -45,6 +45,7 @@
 #include <tmacros.h>
 
 const char rtems_test_name[] = "FSERROR " FILESYSTEM;
+const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
 static void open_mkdir_error (void)
 {
@@ -135,7 +136,6 @@ static void rename_error (void)
   char *name01 = "name01";
   char *name02 = "name02";
   char *name03 = "name03";
-  char *nonexistence = "name04";
 
   char name[20];
 
@@ -172,26 +172,17 @@ static void rename_error (void)
   rtems_test_assert (status != 0);
   rtems_test_assert (errno == EEXIST || errno == ENOTEMPTY);
   /*
-   * The new directory pathname contains a path prefix
-   *  that names the old directory.
-   */
-  EXPECT_ERROR (EINVAL, rename, name01, name);
-  /*
    * The new argument points to a directory and
    *  the old argument points to a file that is not a directory.
    */
   fd = creat (name03, mode);
   status = close (fd);
   rtems_test_assert (status == 0);
-  EXPECT_ERROR (EISDIR, rename, name03, name02);
 
   /*
    * The link named by old does not name an existing file,
    *    or either old or new points to an empty string.
    */
-
-  EXPECT_ERROR (ENOENT, rename, nonexistence, name01);
-  EXPECT_ERROR (ENOENT, rename, "", name01);
   EXPECT_ERROR (ENOENT, rename, name01, "");
 
   /*
@@ -201,9 +192,7 @@ static void rename_error (void)
    */
 
   sprintf (name, "%s/%s", name03, name01);
-  EXPECT_ERROR (ENOTDIR, rename, name, name03);
   EXPECT_ERROR (ENOTDIR, rename, name03, name);
-  EXPECT_ERROR (ENOTDIR, rename, name02, name03);
 
   /*
    * Go back to parent directory
@@ -284,8 +273,6 @@ static void rmdir_unlink_error (void)
    * or there are hard links to the directory other than
    * dot or a single entry in dot-dot.
    */
-
-  EXPECT_ERROR (ENOTEMPTY, rmdir, "..");
   EXPECT_ERROR (ENOTEMPTY, rmdir, "tmp");
 
 

@@ -22,6 +22,69 @@ actions:
     state: expected-fail
     tests:
     - psxfenv01
+- set-test-state:
+    reason: |
+        Fails because of #2169, rename to existing entries is
+        not supported
+    state: expected-fail
+    tests:
+    - imfsfsrenameexisting
+    - imfsfsrenamepermexisting
+    - jffs2fsrenameexisting
+    - jffs2fsrenamepermexisting
+    - jffs2nandfsrenameexisting
+    - jffs2nandfsrenamepermexisting
+    - mdosfsfsrenameexisting
+    - mimfsfsrenameexisting
+    - mimfsfsrenamepermexisting
+    - mrfsfsrenameexisting
+    - mrfsfsrenamepermexisting
+- set-test-state:
+    reason: |
+        Fails because of #5071, dot-dot as last part of a path
+        is treated as valid
+    state: expected-fail
+    tests:
+    - imfsfsrmdirparent
+    - jffs2fsrmdirparent
+    - jffs2nandfsrmdirparent
+    - mdosfsfsrmdirparent
+    - mimfsfsrmdirparent
+    - mrfsfsrmdirparent
+- set-test-state:
+    reason: |
+        Fails because of #2169 and other rename issue
+    state: expected-fail
+    tests:
+    - imfsfssymlink
+    - jffs2fssymlink
+    - jffs2nandfssymlink
+    - mimfsfssymlink
+    - mrfsfssymlink
+- set-test-state:
+    reason: |
+        Fails because of #5069, NAME_MAX is ignored by RFS
+    state: expected-fail
+    tests:
+    - mrfsfsrenamelongname
+- set-test-state:
+    reason: |
+        Fails because of #5070, this test seems invalid
+    state: expected-fail
+    tests:
+    - jffs2fsrenamemaxlinks
+    - jffs2nandfsrenamemaxlinks
+    - mdosfsfsrenamemaxlinks
+    - mimfsfsrenamemaxlinks
+    - mrfsfsrenamemaxlinks
+- set-test-state:
+    reason: |
+        Fails because of #5073, JFFS2 seems to not have appart 
+        limits on file name length
+    state: expected-fail
+    tests:
+    - jffs2fsrenamelongname
+    - jffs2nandfsrenamelongname
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG

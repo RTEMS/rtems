@@ -46,6 +46,7 @@
 #define BUF_SIZE 100
 
 const char rtems_test_name[] = "FSPATHEVAL " FILESYSTEM;
+const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
 static void make_multiple_files (char **files,int is_directory)
 {
@@ -54,14 +55,14 @@ static void make_multiple_files (char **files,int is_directory)
   int fd;
 
   i = 0;
-  if (is_directory){
+  if (is_directory) {
     while (files[i]) {
       printf ("Making directory %s\n", files[i]);
       status = mkdir (files[i], S_IRWXU);
       rtems_test_assert (!status);
       i++;
     }
-  }else {
+  } else {
     while (files[i]) {
       printf ("Create file %s\n", files[i]);
       fd=creat(files[i],S_IRWXU);
@@ -84,14 +85,14 @@ static void remove_multiple_files (char **files,int is_directory)
     i++;
   }
 
-  if (is_directory){
+  if (is_directory) {
     while (i) {
       i--;
       printf ("Removing directory %s\n", files[i]);
       status = rmdir (files[i]);
       rtems_test_assert (!status);
     }
-  }else {
+  } else {
     while (i) {
       i--;
       printf ("Removing file %s\n", files[i]);

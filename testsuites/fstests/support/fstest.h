@@ -36,6 +36,7 @@
 #define FS_PASS() do {puts("PASS");} while (0)
 #define FS_FAIL() do {\
   printf( "FAIL   %s: %d \n", __FILE__, __LINE__ );\
+  fs_test_notify_failure(); \
  } while (0)
 
 
@@ -67,6 +68,8 @@
      FS_FAIL();\
    } while (0)
 
+
+void fs_test_notify_failure(void);
 void test(void);
 
 #define BASE_FOR_TEST "/mnt"

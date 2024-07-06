@@ -46,6 +46,7 @@
 #include <tmacros.h>
 
 const char rtems_test_name[] = "FSRDWR " FILESYSTEM;
+const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
 static const mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 

@@ -72,6 +72,12 @@ links:
 - role: build-dependency
   uid: imfsfsrdwr
 - role: build-dependency
+  uid: imfsfsrenameexisting
+- role: build-dependency
+  uid: imfsfsrenamepermexisting
+- role: build-dependency
+  uid: imfsfsrmdirparent
+- role: build-dependency
   uid: imfsfsscandir01
 - role: build-dependency
   uid: imfsfssymlink
@@ -87,6 +93,18 @@ links:
   uid: jffs2fspermission
 - role: build-dependency
   uid: jffs2fsrdwr
+- role: build-dependency
+  uid: jffs2fsrename
+- role: build-dependency
+  uid: jffs2fsrenameexisting
+- role: build-dependency
+  uid: jffs2fsrenamelongname
+- role: build-dependency
+  uid: jffs2fsrenamemaxlinks
+- role: build-dependency
+  uid: jffs2fsrenamepermexisting
+- role: build-dependency
+  uid: jffs2fsrmdirparent
 - role: build-dependency
   uid: jffs2fsscandir01
 - role: build-dependency
@@ -104,6 +122,18 @@ links:
 - role: build-dependency
   uid: jffs2nandfsrdwr
 - role: build-dependency
+  uid: jffs2nandfsrename
+- role: build-dependency
+  uid: jffs2nandfsrenameexisting
+- role: build-dependency
+  uid: jffs2nandfsrenamelongname
+- role: build-dependency
+  uid: jffs2nandfsrenamemaxlinks
+- role: build-dependency
+  uid: jffs2nandfsrenamepermexisting
+- role: build-dependency
+  uid: jffs2nandfsrmdirparent
+- role: build-dependency
   uid: jffs2nandfsscandir01
 - role: build-dependency
   uid: jffs2nandfssymlink
@@ -117,6 +147,14 @@ links:
   uid: mdosfsfsrdwr
 - role: build-dependency
   uid: mdosfsfsrename
+- role: build-dependency
+  uid: mdosfsfsrenameexisting
+- role: build-dependency
+  uid: mdosfsfsrenamelongname
+- role: build-dependency
+  uid: mdosfsfsrenamemaxlinks
+- role: build-dependency
+  uid: mdosfsfsrmdirparent
 - role: build-dependency
   uid: mdosfsfsscandir01
 - role: build-dependency
@@ -135,6 +173,16 @@ links:
   uid: mimfsfsrdwr
 - role: build-dependency
   uid: mimfsfsrename
+- role: build-dependency
+  uid: mimfsfsrenameexisting
+- role: build-dependency
+  uid: mimfsfsrenamelongname
+- role: build-dependency
+  uid: mimfsfsrenamemaxlinks
+- role: build-dependency
+  uid: mimfsfsrenamepermexisting
+- role: build-dependency
+  uid: mimfsfsrmdirparent
 - role: build-dependency
   uid: mimfsfsscandir01
 - role: build-dependency
@@ -155,6 +203,16 @@ links:
   uid: mrfsfsrdwr
 - role: build-dependency
   uid: mrfsfsrename
+- role: build-dependency
+  uid: mrfsfsrenameexisting
+- role: build-dependency
+  uid: mrfsfsrenamelongname
+- role: build-dependency
+  uid: mrfsfsrenamemaxlinks
+- role: build-dependency
+  uid: mrfsfsrenamepermexisting
+- role: build-dependency
+  uid: mrfsfsrmdirparent
 - role: build-dependency
   uid: mrfsfsscandir01
 - role: build-dependency

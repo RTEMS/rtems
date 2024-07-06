@@ -44,6 +44,7 @@
 #include <limits.h>
 
 const char rtems_test_name[] = "FSRENAME " FILESYSTEM;
+const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
 static void rename_file_twice_test (void)
 {
@@ -108,68 +109,12 @@ static void rename_opened_file_test (void)
   EXPECT_EQUAL (0, unlink, name02);
 }
 
-static void same_file_test (void)
-{
-  int fd;
-  int status;
-
-  const char *name01 = "name01";
-
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
-  const char *wd = __func__;
-
-  /*
-   * Create a new directory and change the current directory to this
-   */
-
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
-
-  /*
-   * The new argument points to a file and
-   * the old argument points to the same file on the same directory.
-   */
-
-  puts ("\nRename file with itself\n");
-
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
-
-  EXPECT_EQUAL (0, rename, name01, name01);
-
-  /*
-   * Clear directory
-   */
-
-  EXPECT_EQUAL (0, unlink, name01);
-
-  /*
-   * Go back to parent directory
-   */
-
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
-
-  /*
-   * Remove test directory
-   */
-
-  status = rmdir (wd);
-  rtems_test_assert (status == 0);
-}
-
 static void directory_test (void)
 {
   int fd;
   int status;
   int rv;
-  int i;
 
-  const char *name01 = "name01";
   const char *name02 = "name02";
 
   const char *dir01 = "dir01";
@@ -177,14 +122,8 @@ static void directory_test (void)
 
   char path01[30];
 
-  char link_name[10];
-
   mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
   const char *wd = __func__;
-
-  struct stat statbuf;
-
-  long LINK_MAX_val;
 
   /*
    * Create a new directory and change the current directory to this
@@ -194,78 +133,6 @@ static void directory_test (void)
   rtems_test_assert (status == 0);
   status = chdir (wd);
   rtems_test_assert (status == 0);
-
-  /*
-   * The new argument points to a file and
-   * the old argument points to a directory.
-   */
-
-  puts ("\nRename directory with file\n");
-
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
-
-  status = mkdir (dir01, mode);
-  rtems_test_assert (status == 0);
-
-  EXPECT_ERROR (ENOTDIR, rename, dir01, name01);
-
-  /*
-   * Clear directory
-   */
-
-  EXPECT_EQUAL (0, unlink, name01);
-  EXPECT_EQUAL (0, rmdir, dir01);
-
-  /*
-   * The new argument points to a directory and
-   * the old argument points to a file.
-   */
-
-  puts ("\nRename file with directory\n");
-
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
-
-  status = mkdir (dir01, mode);
-  rtems_test_assert (status == 0);
-
-  EXPECT_ERROR (EISDIR, rename, name01, dir01);
-
-  /*
-   * Clear directory
-   */
-
-  EXPECT_EQUAL (0, unlink, name01);
-  EXPECT_EQUAL (0, rmdir, dir01);
-
-  /*
-   * The new argument points to an empty directory and
-   * the old argument points to an ancestor directory of new.
-   */
-
-  puts ("\nRename directory with ancestor directory\n");
-
-  status = mkdir (dir02, mode);
-  rtems_test_assert (status == 0);
-
-  rv = snprintf (path01, sizeof(path01), "%s/%s", dir02, dir01);
-  rtems_test_assert (rv < sizeof(path01));
-  status = mkdir (path01, mode);
-  rtems_test_assert (status == 0);
-
-  EXPECT_ERROR (EINVAL, rename, dir02, path01);
-
-  /*
-   * Clear directory
-   */
-
-  EXPECT_EQUAL (0, rmdir, path01);
-  EXPECT_EQUAL (0, rmdir, dir02);
 
   /*
    * The new argument points to an empty directory and
@@ -291,10 +158,11 @@ static void directory_test (void)
 
   puts("Testing errno for EEXIST or ENOTEMPTY");
 
-  if(errno == EEXIST || errno == ENOTEMPTY)
+  if (errno == EEXIST || errno == ENOTEMPTY) {
     FS_PASS ();
-  else
+  } else {
     FS_FAIL ();
+  }
 
   /*
    * Clear directory
@@ -303,75 +171,6 @@ static void directory_test (void)
   EXPECT_EQUAL (0, unlink, path01);
   EXPECT_EQUAL (0, rmdir, dir01);
   EXPECT_EQUAL (0, rmdir, dir02);
-
-  /*
-   * The new argument points to an empty directory and
-   * the old argument points to other empty directory.
-   */
-
-  puts ("\nRename empty directory with another empty directory\n");
-
-  status = mkdir (dir01, mode);
-  rtems_test_assert (status == 0);
-
-  status = mkdir (dir02, mode);
-  rtems_test_assert (status == 0);
-
-  EXPECT_EQUAL (0, rename, dir01, dir02);
-
-  /*
-   * Clear directory
-   */
-
-  EXPECT_EQUAL (-1, rmdir, dir01);
-  EXPECT_EQUAL (0, rmdir, dir02);
-
-  /*
-   * The new argument points to a non existant directory and
-   * the old argument points to an existant directory at LINK_MAX.
-   */
-
-  status = mkdir (dir01, mode);
-  rtems_test_assert (status == 0);
-
-  LINK_MAX_val = pathconf (dir01, _PC_LINK_MAX);
-  rtems_test_assert (LINK_MAX_val >= 0);
-
-  status = stat (dir01, &statbuf);
-  rtems_test_assert (status == 0);
-
-  for(i = statbuf.st_nlink; i < LINK_MAX_val; i++)
-  {
-    rv = snprintf (link_name, sizeof(link_name), "%s/%d", dir01, i);
-    rtems_test_assert (rv < sizeof(link_name));
-
-    status = mkdir (link_name, mode);
-    rtems_test_assert (status == 0);
-  }
-
-  status = mkdir (dir02, mode);
-  rtems_test_assert (status == 0);
-
-  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, dir01);
-  rtems_test_assert (rv < sizeof(path01));
-  EXPECT_ERROR (EMLINK, rename, dir02, path01);
-
-  /*
-   * Clear directory
-   */
-
-  for(i = statbuf.st_nlink; i < LINK_MAX_val; i++)
-  {
-    rv = snprintf (link_name, sizeof(link_name), "%s/%d", dir01, i);
-    rtems_test_assert (rv < sizeof(link_name));
-
-    status = rmdir (link_name);
-    rtems_test_assert (status == 0);
-  }
-
-  EXPECT_EQUAL (-1, rmdir, path01);
-  EXPECT_EQUAL (0, rmdir, dir02);
-  EXPECT_EQUAL (0, rmdir, dir01);
 
   /*
    * Go back to parent directory
@@ -402,8 +201,7 @@ static void arg_test (void)
 
   mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
   const char *wd = __func__;
-
-  char filename[NAME_MAX + 2];
+  
   char path01[20];
 
   /*
@@ -435,25 +233,6 @@ static void arg_test (void)
 
   EXPECT_EQUAL (-1, unlink, name01);
   EXPECT_EQUAL (0, unlink, name02);
-
-  /*
-   * The new argument points to a file and
-   * the old argument points to a non existant file.
-   */
-
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
-
-  EXPECT_ERROR (ENOENT, rename, name02, name01);
-
-  /*
-   * Clear directory
-   */
-
-  EXPECT_EQUAL (0, unlink, name01);
-  EXPECT_EQUAL (-1, unlink, name02);
 
   /*
    * The new argument points to a non existant file and
@@ -495,173 +274,6 @@ static void arg_test (void)
 
   EXPECT_EQUAL (-1, rmdir, dir01);
   EXPECT_EQUAL (0, rmdir, dir02);
-
-  /*
-   * The new argument is a name bigger than NAME_MAX and
-   * the old argument points to a file.
-   */
-
-  puts ("\nRename file with a name size exceeding NAME_MAX\n");
-
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
-
-  /* Generate string with NAME_MAX + 1 length */
-  memset(filename, 'a', NAME_MAX + 1);
-  filename[NAME_MAX + 1] = '\0';
-
-  EXPECT_ERROR (ENAMETOOLONG, rename, name01, filename);
-
-  /*
-   * Clear directory
-   */
-
-  EXPECT_EQUAL (0, unlink, name01);
-  EXPECT_EQUAL (-1, unlink, filename);
-
-  /*
-   * Go back to parent directory
-   */
-
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
-
-  /*
-   * Remove test directory
-   */
-
-  status = rmdir (wd);
-  rtems_test_assert (status == 0);
-}
-
-static void arg_format_test (void)
-{
-  int fd;
-  int status;
-  const char *name01 = "name01";
-
-  const char *dir01 = "dir01";
-
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
-  const char *wd = __func__;
-
-  /*
-   * Create a new directory and change the current directory to this
-   */
-
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
-
-  /*
-   * The new argument points to a directory and
-   * the old argument points to current directory.
-   */
-
-  puts ("\nRename directory with current directory\n");
-
-  status = mkdir (dir01, mode);
-  rtems_test_assert (status == 0);
-
-  EXPECT_EQUAL (-1, rename, "." , dir01);
-
-  puts("Testing errno for EINVAL or EBUSY");
-
-  if(errno == EINVAL || errno == EBUSY)
-    FS_PASS ();
-  else
-    FS_FAIL ();
-
-  /*
-   * The new argument points to current directory and
-   * the old argument points to a directory.
-   */
-
-  EXPECT_EQUAL (-1, rename, dir01, ".");
-
-  puts("Testing errno for EINVAL or EBUSY");
-
-  if(errno == EINVAL || errno == EBUSY)
-    FS_PASS ();
-  else
-    FS_FAIL ();
-
-  /*
-   * The new argument points to a directory and
-   * the old argument points to previous directory.
-   */
-
-  puts ("\nRename directory with previous directory\n");
-
-  EXPECT_EQUAL (-1, rename, ".." , dir01);
-
-  puts("Testing errno for EINVAL or EBUSY");
-
-  if(errno == EINVAL || errno == EBUSY)
-    FS_PASS ();
-  else
-    FS_FAIL ();
-
-  /*
-   * The new argument points to previous directory and
-   * the old argument points to a directory.
-   */
-
-  EXPECT_EQUAL (-1, rename, dir01, "..");
-
-  puts("Testing errno for EINVAL or EBUSY");
-
-  if(errno == EINVAL || errno == EBUSY)
-    FS_PASS ();
-  else
-    FS_FAIL ();
-
-  /*
-   * Clear directory
-   */
-
-  EXPECT_EQUAL (0, rmdir, dir01);
-
-  /*
-   * The new argument points to a file and
-   * the old argument is an empty string.
-   */
-
-  puts("\nTesting empty filepaths\n");
-
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
-
-  EXPECT_ERROR (ENOENT, rename, name01, "");
-
-  /*
-   * Clear directory
-   */
-
-  EXPECT_EQUAL (0, unlink, name01);
-
-  /*
-   * The new argument is an empty string and
-   * the old argument points to a file.
-   */
-
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
-
-  EXPECT_ERROR (ENOENT, rename, "", name01);
-
-  /*
-   * Clear directory
-   */
-
-  EXPECT_EQUAL (0, unlink, name01);
 
   /*
    * Go back to parent directory
@@ -744,10 +356,8 @@ static void filesystem_test (void)
 void test (void)
 {
   rename_file_twice_test ();
-  same_file_test ();
   directory_test ();
   rename_opened_file_test ();
   arg_test ();
-  arg_format_test ();
   filesystem_test ();
 }
