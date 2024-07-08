@@ -30,42 +30,93 @@
 #include "config.h"
 #endif
 
+#define _GNU_SOURCE 1
 #include <sys/resource.h>
+#undef _GNU_SOURCE
+
 #include <errno.h>
 
 #include <rtems.h>
 #include <rtems/seterr.h>
 
-int getrusage(int who, struct rusage *usage)
-{
-  struct timespec uptime;
-  struct timeval  rtime;
+#include <rtems/score/threadimpl.h>
 
+struct usage_stats {
+  Timestamp_Control task;
+  Timestamp_Control idle;
+};
+
+static bool usage_visitor( Thread_Control *the_thread, void *arg )
+{
+  struct usage_stats *stats = (struct usage_stats *) arg;
+  Timestamp_Control   usage;
+  Timestamp_Control  *total;
+  usage = _Thread_Get_CPU_time_used( the_thread );
+  if ( the_thread->is_idle ) {
+    total = &stats->idle;
+  } else {
+    total = &stats->task;
+  }
+  _Timestamp_Add_to( total, &usage );
+  return false;
+}
+
+static int getrusage_RUSAGE_SELF(
+  struct rusage *usage
+)
+{
+  /*
+   *  RTEMS only has a single process so there are no children. The
+   *  single process has been running since the system was booted. We
+   *  account for IDLE time as system time so user or task time is the
+   *  uptime time.
+   */
+  struct usage_stats stats;
+
+  _Timestamp_Set_to_zero( &stats.task );
+  _Timestamp_Set_to_zero( &stats.idle );
+
+  rtems_task_iterate( usage_visitor, &stats );
+
+  _Timestamp_To_timeval( &stats.task, &usage->ru_utime );
+  _Timestamp_To_timeval( &stats.idle, &usage->ru_stime );
+
+  return 0;
+}
+
+static int getrusage_RUSAGE_THREAD(
+  struct rusage *usage
+)
+{
+  Thread_Control    *the_thread;
+  ISR_lock_Context   lock_context;
+  Timestamp_Control  used;
+  the_thread = _Thread_Get( OBJECTS_ID_OF_SELF, &lock_context );
+  used = _Thread_Get_CPU_time_used( the_thread );
+  _ISR_lock_ISR_enable( &lock_context );
+  _Timestamp_To_timeval( &used, &usage->ru_utime );
+  _Timestamp_Set_to_zero( &used );
+  _Timestamp_To_timeval( &used, &usage->ru_stime );
+  return 0;
+}
+
+int getrusage(
+  int who, struct rusage *usage
+)
+{
   if ( !usage )
     rtems_set_errno_and_return_minus_one( EFAULT );
 
-  /*
-   *  RTEMS only has a single process so there are no children.
-   *  The single process has been running since the system
-   *  was booted and since there is no distinction between system
-   *  and user time, we will just report the uptime.
-   */
-  if (who == RUSAGE_SELF) {
-    rtems_clock_get_uptime( &uptime );
-
-    rtime.tv_sec  = uptime.tv_sec;
-    rtime.tv_usec = uptime.tv_nsec / 1000;
-
-    usage->ru_utime = rtime;
-    usage->ru_stime = rtime;
-
-    return 0;
-  }
-
-  if (who == RUSAGE_CHILDREN) {
+  switch ( who ) {
+  case RUSAGE_SELF:
+    return getrusage_RUSAGE_SELF( usage );
+  case RUSAGE_THREAD:
+    return getrusage_RUSAGE_THREAD( usage );
+  case RUSAGE_CHILDREN:
     rtems_set_errno_and_return_minus_one( ENOSYS );
+  default:
+    break;
   }
 
   rtems_set_errno_and_return_minus_one( EINVAL );
 }
-

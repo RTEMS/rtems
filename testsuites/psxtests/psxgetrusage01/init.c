@@ -30,8 +30,11 @@
 #include "config.h"
 #endif
 
-#include <sys/time.h>
+#define _GNU_SOURCE 1
 #include <sys/resource.h>
+#undef _GNU_SOURCE
+
+#include <sys/time.h>
 #include <errno.h>
 
 #include <tmacros.h>
@@ -79,8 +82,8 @@ rtems_task Init(
 
   puts( "Consume CPU long enough to have non-zero usage" );
   rtems_test_spin_for_ticks( 5 );
-  
-  puts( "getrusage( RUSAGE_SELF, &usage ) -- EINVAL" );
+
+  puts( "getrusage( RUSAGE_SELF, &usage ) -- 0" );
   sc = getrusage( RUSAGE_SELF, &usage );
   rtems_test_assert( sc == 0 );
 
@@ -88,10 +91,20 @@ rtems_task Init(
   rtems_test_assert( usage.ru_utime.tv_sec == 0 );
   rtems_test_assert( usage.ru_utime.tv_usec != 0 );
 
-  /* System and user time is the same */
-  rtems_test_assert( usage.ru_utime.tv_sec == usage.ru_stime.tv_sec );
-  rtems_test_assert( usage.ru_utime.tv_usec == usage.ru_stime.tv_usec );
-  
+  /* System is the IDLE time and user is the total of task time */
+  rtems_test_assert( usage.ru_utime.tv_sec != usage.ru_stime.tv_sec );
+  rtems_test_assert( usage.ru_utime.tv_usec != usage.ru_stime.tv_usec );
+
+  puts( "getrusage( RUSAGE_THREAD, &usage ) -- 0" );
+  sc = getrusage( RUSAGE_THREAD, &usage );
+  rtems_test_assert( sc == 0 );
+
+  /* System is the 0 and user is the task time */
+  rtems_test_assert( usage.ru_utime.tv_sec != 0 ||
+		     usage.ru_utime.tv_usec != 0 );
+  rtems_test_assert( usage.ru_stime.tv_sec == 0 &&
+		     usage.ru_stime.tv_usec == 0 );
+
   TEST_END();
 
   rtems_test_exit(0);
