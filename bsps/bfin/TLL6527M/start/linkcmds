@@ -173,6 +173,9 @@ SECTIONS
   .debug_typenames 0 : { *(.debug_typenames) }
   .debug_varnames  0 : { *(.debug_varnames) } 
   /* These must appear regardless of  .  */   
+
+  /* Addition to let linker know about custom section for GDB pretty-printing support. */
+  .debug_gdb_scripts 0 : { *(.debug_gdb_scripts) }
 }
 
 __HeapSize = _HeapSize;
