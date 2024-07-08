@@ -317,4 +317,7 @@ SECTIONS {
   RamEnd = RamBase + RamSize;
   WorkAreaBase = bsp_section_work_begin;
   HeapSize = 0;
+
+  /* Addition to let linker know about custom section for GDB pretty-printing support. */
+  .debug_gdb_scripts 0 : { *(.debug_gdb_scripts) }
 }
