@@ -188,4 +188,7 @@ SECTIONS
   .debug_macinfo	0 : { *(.debug_macinfo)		}
   .debug_pubnames	0 : { *(.debug_pubnames)	}
   .debug_aranges	0 : { *(.debug_aranges)		}
+
+  /* Addition to let linker know about custom section for GDB pretty-printing support. */
+	.debug_gdb_scripts 0 : { *(.debug_gdb_scripts) }
 }
