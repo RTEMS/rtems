@@ -119,7 +119,7 @@ static TestNode node_array[ 100 ];
 
 static int Color( const RBTree_Node *n )
 {
-  return RB_COLOR( n, Node );
+  return RTEMS_RB_COLOR( n, Node );
 }
 
 static bool Less( const void *left, const RBTree_Node *right )
@@ -159,9 +159,9 @@ static int VerifyTree( RBTree_Node *root )
 
   /* Consecutive red links */
   if (
-    Color( root ) == RB_RED &&
-    ( ( ln != NULL && Color( ln ) == RB_RED ) ||
-      ( rn != NULL && Color( rn ) == RB_RED ) )
+    Color( root ) == RTEMS_RB_RED &&
+    ( ( ln != NULL && Color( ln ) == RTEMS_RB_RED ) ||
+      ( rn != NULL && Color( rn ) == RTEMS_RB_RED ) )
   ) {
     return -1;
   }
@@ -187,7 +187,7 @@ static int VerifyTree( RBTree_Node *root )
   }
 
   /* Only count black links */
-  return Color( root ) == RB_BLACK ? lh + 1 : lh;
+  return Color( root ) == RTEMS_RB_BLACK ? lh + 1 : lh;
 }
 
 #define TN( i ) &node_array[ i ].Node
@@ -239,11 +239,11 @@ static bool VisitNodes(
 }
 
 static const TestNodeDescription random_ops_tree_unique_1[] = {
-  { 0, NULL, NULL, NULL, RB_BLACK }
+  { 0, NULL, NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_1[] = {
-  { 0, NULL, NULL, NULL, RB_BLACK }
+  { 0, NULL, NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_2[] = {
@@ -253,679 +253,679 @@ static const TestNodeDescription random_ops_tree_multiple_2[] = {
 };
 
 static const TestNodeDescription random_ops_tree_unique_3[] = {
-  { 2, NULL, NULL, NULL, RB_BLACK }
+  { 2, NULL, NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_3[] = {
-  { 1, NULL, NULL, NULL, RB_BLACK }
+  { 1, NULL, NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_4[] = {
-  { 0, TN( 3 ), NULL, NULL, RB_RED },
-  { 3, NULL, TN( 0 ), NULL, RB_BLACK }
+  { 0, TN( 3 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, NULL, TN( 0 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_4[] = {
-  { 0, NULL, NULL, TN( 3 ), RB_BLACK },
-  { 1, TN( 0 ), NULL, NULL, RB_RED }
+  { 0, NULL, NULL, TN( 3 ), RTEMS_RB_BLACK },
+  { 1, TN( 0 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_5[] = {
-  { 0, TN( 1 ), NULL, NULL, RB_RED },
-  { 1, NULL, TN( 0 ), TN( 4 ), RB_BLACK },
-  { 4, TN( 1 ), NULL, NULL, RB_RED }
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, NULL, TN( 0 ), TN( 4 ), RTEMS_RB_BLACK },
+  { 4, TN( 1 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_5[] = {
-  { 0, TN( 1 ), NULL, NULL, RB_RED },
-  { 0, NULL, TN( 0 ), TN( 4 ), RB_BLACK },
-  { 2, TN( 1 ), NULL, NULL, RB_RED }
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 0, NULL, TN( 0 ), TN( 4 ), RTEMS_RB_BLACK },
+  { 2, TN( 1 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_6[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_RED },
-  { 2, NULL, TN( 0 ), NULL, RB_BLACK }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, NULL, TN( 0 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_6[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_RED },
-  { 1, NULL, TN( 0 ), NULL, RB_BLACK }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, NULL, TN( 0 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_7[] = {
-  { 0, TN( 2 ), NULL, TN( 1 ), RB_BLACK },
-  { 1, TN( 0 ), NULL, NULL, RB_RED },
-  { 2, NULL, TN( 0 ), TN( 5 ), RB_BLACK },
-  { 4, TN( 5 ), NULL, NULL, RB_RED },
-  { 5, TN( 2 ), TN( 4 ), NULL, RB_BLACK }
+  { 0, TN( 2 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 1, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, NULL, TN( 0 ), TN( 5 ), RTEMS_RB_BLACK },
+  { 4, TN( 5 ), NULL, NULL, RTEMS_RB_RED },
+  { 5, TN( 2 ), TN( 4 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_7[] = {
-  { 0, TN( 2 ), NULL, TN( 1 ), RB_BLACK },
-  { 0, TN( 0 ), NULL, NULL, RB_RED },
-  { 1, NULL, TN( 0 ), TN( 4 ), RB_BLACK },
-  { 2, TN( 4 ), NULL, NULL, RB_RED },
-  { 2, TN( 2 ), TN( 5 ), NULL, RB_BLACK }
+  { 0, TN( 2 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 0, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, NULL, TN( 0 ), TN( 4 ), RTEMS_RB_BLACK },
+  { 2, TN( 4 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, TN( 2 ), TN( 5 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_8[] = {
-  { 0, TN( 1 ), NULL, NULL, RB_BLACK },
-  { 1, NULL, TN( 0 ), TN( 6 ), RB_BLACK },
-  { 5, TN( 6 ), NULL, NULL, RB_RED },
-  { 6, TN( 1 ), TN( 5 ), NULL, RB_BLACK }
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 1, NULL, TN( 0 ), TN( 6 ), RTEMS_RB_BLACK },
+  { 5, TN( 6 ), NULL, NULL, RTEMS_RB_RED },
+  { 6, TN( 1 ), TN( 5 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_8[] = {
-  { 0, TN( 5 ), NULL, TN( 0 ), RB_BLACK },
-  { 0, TN( 1 ), NULL, NULL, RB_RED },
-  { 2, NULL, TN( 1 ), TN( 6 ), RB_BLACK },
-  { 3, TN( 5 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 5 ), NULL, TN( 0 ), RTEMS_RB_BLACK },
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, NULL, TN( 1 ), TN( 6 ), RTEMS_RB_BLACK },
+  { 3, TN( 5 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_9[] = {
-  { 1, TN( 2 ), NULL, NULL, RB_BLACK },
-  { 2, TN( 6 ), TN( 1 ), TN( 4 ), RB_RED },
-  { 4, TN( 2 ), NULL, TN( 5 ), RB_BLACK },
-  { 5, TN( 4 ), NULL, NULL, RB_RED },
-  { 6, NULL, TN( 2 ), TN( 7 ), RB_BLACK },
-  { 7, TN( 6 ), NULL, TN( 8 ), RB_BLACK },
-  { 8, TN( 7 ), NULL, NULL, RB_RED }
+  { 1, TN( 2 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 2, TN( 6 ), TN( 1 ), TN( 4 ), RTEMS_RB_RED },
+  { 4, TN( 2 ), NULL, TN( 5 ), RTEMS_RB_BLACK },
+  { 5, TN( 4 ), NULL, NULL, RTEMS_RB_RED },
+  { 6, NULL, TN( 2 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 7, TN( 6 ), NULL, TN( 8 ), RTEMS_RB_BLACK },
+  { 8, TN( 7 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_9[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_BLACK },
-  { 1, TN( 6 ), TN( 1 ), TN( 4 ), RB_RED },
-  { 2, TN( 2 ), NULL, TN( 5 ), RB_BLACK },
-  { 2, TN( 4 ), NULL, NULL, RB_RED },
-  { 3, NULL, TN( 2 ), TN( 7 ), RB_BLACK },
-  { 3, TN( 6 ), NULL, TN( 8 ), RB_BLACK },
-  { 4, TN( 7 ), NULL, NULL, RB_RED }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 1, TN( 6 ), TN( 1 ), TN( 4 ), RTEMS_RB_RED },
+  { 2, TN( 2 ), NULL, TN( 5 ), RTEMS_RB_BLACK },
+  { 2, TN( 4 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, NULL, TN( 2 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 3, TN( 6 ), NULL, TN( 8 ), RTEMS_RB_BLACK },
+  { 4, TN( 7 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_10[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_BLACK },
-  { 2, TN( 6 ), TN( 0 ), TN( 4 ), RB_RED },
-  { 3, TN( 4 ), NULL, NULL, RB_RED },
-  { 4, TN( 2 ), TN( 3 ), NULL, RB_BLACK },
-  { 6, NULL, TN( 2 ), TN( 8 ), RB_BLACK },
-  { 8, TN( 6 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 2, TN( 6 ), TN( 0 ), TN( 4 ), RTEMS_RB_RED },
+  { 3, TN( 4 ), NULL, NULL, RTEMS_RB_RED },
+  { 4, TN( 2 ), TN( 3 ), NULL, RTEMS_RB_BLACK },
+  { 6, NULL, TN( 2 ), TN( 8 ), RTEMS_RB_BLACK },
+  { 8, TN( 6 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_10[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_BLACK },
-  { 1, TN( 6 ), TN( 0 ), TN( 4 ), RB_RED },
-  { 1, TN( 4 ), NULL, NULL, RB_RED },
-  { 2, TN( 2 ), TN( 3 ), NULL, RB_BLACK },
-  { 3, NULL, TN( 2 ), TN( 8 ), RB_BLACK },
-  { 4, TN( 6 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 1, TN( 6 ), TN( 0 ), TN( 4 ), RTEMS_RB_RED },
+  { 1, TN( 4 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, TN( 2 ), TN( 3 ), NULL, RTEMS_RB_BLACK },
+  { 3, NULL, TN( 2 ), TN( 8 ), RTEMS_RB_BLACK },
+  { 4, TN( 6 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_11[] = {
-  { 2, TN( 6 ), NULL, NULL, RB_BLACK },
-  { 6, NULL, TN( 2 ), TN( 8 ), RB_BLACK },
-  { 7, TN( 8 ), NULL, NULL, RB_RED },
-  { 8, TN( 6 ), TN( 7 ), TN( 9 ), RB_BLACK },
-  { 9, TN( 8 ), NULL, NULL, RB_RED }
+  { 2, TN( 6 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 6, NULL, TN( 2 ), TN( 8 ), RTEMS_RB_BLACK },
+  { 7, TN( 8 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, TN( 6 ), TN( 7 ), TN( 9 ), RTEMS_RB_BLACK },
+  { 9, TN( 8 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_11[] = {
-  { 1, TN( 6 ), NULL, NULL, RB_BLACK },
-  { 3, NULL, TN( 2 ), TN( 8 ), RB_BLACK },
-  { 3, TN( 8 ), NULL, NULL, RB_RED },
-  { 4, TN( 6 ), TN( 7 ), TN( 9 ), RB_BLACK },
-  { 4, TN( 8 ), NULL, NULL, RB_RED }
+  { 1, TN( 6 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 3, NULL, TN( 2 ), TN( 8 ), RTEMS_RB_BLACK },
+  { 3, TN( 8 ), NULL, NULL, RTEMS_RB_RED },
+  { 4, TN( 6 ), TN( 7 ), TN( 9 ), RTEMS_RB_BLACK },
+  { 4, TN( 8 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_12[] = {
-  { 0, TN( 1 ), NULL, NULL, RB_RED },
-  { 1, TN( 3 ), TN( 0 ), TN( 2 ), RB_BLACK },
-  { 2, TN( 1 ), NULL, NULL, RB_RED },
-  { 3, TN( 5 ), TN( 1 ), TN( 4 ), RB_RED },
-  { 4, TN( 3 ), NULL, NULL, RB_BLACK },
-  { 5, NULL, TN( 3 ), TN( 9 ), RB_BLACK },
-  { 9, TN( 5 ), NULL, TN( 11 ), RB_BLACK },
-  { 11, TN( 9 ), NULL, NULL, RB_RED }
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 3 ), TN( 0 ), TN( 2 ), RTEMS_RB_BLACK },
+  { 2, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, TN( 5 ), TN( 1 ), TN( 4 ), RTEMS_RB_RED },
+  { 4, TN( 3 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 5, NULL, TN( 3 ), TN( 9 ), RTEMS_RB_BLACK },
+  { 9, TN( 5 ), NULL, TN( 11 ), RTEMS_RB_BLACK },
+  { 11, TN( 9 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_12[] = {
-  { 0, TN( 1 ), NULL, NULL, RB_BLACK },
-  { 0, TN( 5 ), TN( 0 ), TN( 3 ), RB_RED },
-  { 1, TN( 1 ), NULL, TN( 2 ), RB_BLACK },
-  { 1, TN( 3 ), NULL, NULL, RB_RED },
-  { 2, NULL, TN( 1 ), TN( 9 ), RB_BLACK },
-  { 2, TN( 9 ), NULL, NULL, RB_BLACK },
-  { 4, TN( 5 ), TN( 4 ), TN( 11 ), RB_RED },
-  { 5, TN( 9 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 0, TN( 5 ), TN( 0 ), TN( 3 ), RTEMS_RB_RED },
+  { 1, TN( 1 ), NULL, TN( 2 ), RTEMS_RB_BLACK },
+  { 1, TN( 3 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, NULL, TN( 1 ), TN( 9 ), RTEMS_RB_BLACK },
+  { 2, TN( 9 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 4, TN( 5 ), TN( 4 ), TN( 11 ), RTEMS_RB_RED },
+  { 5, TN( 9 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_13[] = {
-  { 0, TN( 1 ), NULL, NULL, RB_RED },
-  { 1, TN( 3 ), TN( 0 ), NULL, RB_BLACK },
-  { 3, TN( 8 ), TN( 1 ), TN( 5 ), RB_RED },
-  { 4, TN( 5 ), NULL, NULL, RB_RED },
-  { 5, TN( 3 ), TN( 4 ), TN( 6 ), RB_BLACK },
-  { 6, TN( 5 ), NULL, NULL, RB_RED },
-  { 8, NULL, TN( 3 ), TN( 11 ), RB_BLACK },
-  { 10, TN( 11 ), NULL, NULL, RB_RED },
-  { 11, TN( 8 ), TN( 10 ), NULL, RB_BLACK }
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 3 ), TN( 0 ), NULL, RTEMS_RB_BLACK },
+  { 3, TN( 8 ), TN( 1 ), TN( 5 ), RTEMS_RB_RED },
+  { 4, TN( 5 ), NULL, NULL, RTEMS_RB_RED },
+  { 5, TN( 3 ), TN( 4 ), TN( 6 ), RTEMS_RB_BLACK },
+  { 6, TN( 5 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, NULL, TN( 3 ), TN( 11 ), RTEMS_RB_BLACK },
+  { 10, TN( 11 ), NULL, NULL, RTEMS_RB_RED },
+  { 11, TN( 8 ), TN( 10 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_13[] = {
-  { 0, TN( 0 ), NULL, NULL, RB_RED },
-  { 0, TN( 3 ), TN( 1 ), NULL, RB_BLACK },
-  { 1, TN( 6 ), TN( 0 ), TN( 4 ), RB_RED },
-  { 2, TN( 3 ), NULL, TN( 5 ), RB_BLACK },
-  { 2, TN( 4 ), NULL, NULL, RB_RED },
-  { 3, NULL, TN( 3 ), TN( 11 ), RB_BLACK },
-  { 4, TN( 11 ), NULL, NULL, RB_RED },
-  { 5, TN( 6 ), TN( 8 ), TN( 10 ), RB_BLACK },
-  { 5, TN( 11 ), NULL, NULL, RB_RED }
+  { 0, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 0, TN( 3 ), TN( 1 ), NULL, RTEMS_RB_BLACK },
+  { 1, TN( 6 ), TN( 0 ), TN( 4 ), RTEMS_RB_RED },
+  { 2, TN( 3 ), NULL, TN( 5 ), RTEMS_RB_BLACK },
+  { 2, TN( 4 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, NULL, TN( 3 ), TN( 11 ), RTEMS_RB_BLACK },
+  { 4, TN( 11 ), NULL, NULL, RTEMS_RB_RED },
+  { 5, TN( 6 ), TN( 8 ), TN( 10 ), RTEMS_RB_BLACK },
+  { 5, TN( 11 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_14[] = {
-  { 3, TN( 5 ), NULL, NULL, RB_RED },
-  { 5, TN( 6 ), TN( 3 ), NULL, RB_BLACK },
-  { 6, NULL, TN( 5 ), TN( 12 ), RB_BLACK },
-  { 8, TN( 12 ), NULL, NULL, RB_BLACK },
-  { 12, TN( 6 ), TN( 8 ), TN( 13 ), RB_RED },
-  { 13, TN( 12 ), NULL, NULL, RB_BLACK }
+  { 3, TN( 5 ), NULL, NULL, RTEMS_RB_RED },
+  { 5, TN( 6 ), TN( 3 ), NULL, RTEMS_RB_BLACK },
+  { 6, NULL, TN( 5 ), TN( 12 ), RTEMS_RB_BLACK },
+  { 8, TN( 12 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 12, TN( 6 ), TN( 8 ), TN( 13 ), RTEMS_RB_RED },
+  { 13, TN( 12 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_14[] = {
-  { 1, TN( 5 ), NULL, NULL, RB_RED },
-  { 2, TN( 6 ), TN( 3 ), NULL, RB_BLACK },
-  { 3, NULL, TN( 5 ), TN( 13 ), RB_BLACK },
-  { 4, TN( 13 ), NULL, NULL, RB_BLACK },
-  { 6, TN( 6 ), TN( 8 ), TN( 12 ), RB_RED },
-  { 6, TN( 13 ), NULL, NULL, RB_BLACK }
+  { 1, TN( 5 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, TN( 6 ), TN( 3 ), NULL, RTEMS_RB_BLACK },
+  { 3, NULL, TN( 5 ), TN( 13 ), RTEMS_RB_BLACK },
+  { 4, TN( 13 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 6, TN( 6 ), TN( 8 ), TN( 12 ), RTEMS_RB_RED },
+  { 6, TN( 13 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_15[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_RED },
-  { 2, TN( 8 ), TN( 0 ), TN( 7 ), RB_BLACK },
-  { 7, TN( 2 ), NULL, NULL, RB_RED },
-  { 8, NULL, TN( 2 ), TN( 12 ), RB_BLACK },
-  { 9, TN( 12 ), NULL, TN( 10 ), RB_BLACK },
-  { 10, TN( 9 ), NULL, NULL, RB_RED },
-  { 12, TN( 8 ), TN( 9 ), TN( 13 ), RB_RED },
-  { 13, TN( 12 ), NULL, TN( 14 ), RB_BLACK },
-  { 14, TN( 13 ), NULL, NULL, RB_RED }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, TN( 8 ), TN( 0 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 7, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, NULL, TN( 2 ), TN( 12 ), RTEMS_RB_BLACK },
+  { 9, TN( 12 ), NULL, TN( 10 ), RTEMS_RB_BLACK },
+  { 10, TN( 9 ), NULL, NULL, RTEMS_RB_RED },
+  { 12, TN( 8 ), TN( 9 ), TN( 13 ), RTEMS_RB_RED },
+  { 13, TN( 12 ), NULL, TN( 14 ), RTEMS_RB_BLACK },
+  { 14, TN( 13 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_15[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_RED },
-  { 1, TN( 9 ), TN( 0 ), TN( 7 ), RB_BLACK },
-  { 3, TN( 2 ), NULL, NULL, RB_RED },
-  { 4, NULL, TN( 2 ), TN( 10 ), RB_BLACK },
-  { 4, TN( 10 ), NULL, NULL, RB_BLACK },
-  { 5, TN( 9 ), TN( 8 ), TN( 12 ), RB_RED },
-  { 6, TN( 12 ), NULL, NULL, RB_RED },
-  { 6, TN( 10 ), TN( 13 ), TN( 14 ), RB_BLACK },
-  { 7, TN( 12 ), NULL, NULL, RB_RED }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 9 ), TN( 0 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 3, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 4, NULL, TN( 2 ), TN( 10 ), RTEMS_RB_BLACK },
+  { 4, TN( 10 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 5, TN( 9 ), TN( 8 ), TN( 12 ), RTEMS_RB_RED },
+  { 6, TN( 12 ), NULL, NULL, RTEMS_RB_RED },
+  { 6, TN( 10 ), TN( 13 ), TN( 14 ), RTEMS_RB_BLACK },
+  { 7, TN( 12 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_16[] = {
-  { 0, TN( 5 ), NULL, TN( 3 ), RB_BLACK },
-  { 3, TN( 0 ), NULL, NULL, RB_RED },
-  { 5, TN( 10 ), TN( 0 ), TN( 7 ), RB_RED },
-  { 7, TN( 5 ), NULL, NULL, RB_BLACK },
-  { 10, NULL, TN( 5 ), TN( 12 ), RB_BLACK },
-  { 12, TN( 10 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 5 ), NULL, TN( 3 ), RTEMS_RB_BLACK },
+  { 3, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 5, TN( 10 ), TN( 0 ), TN( 7 ), RTEMS_RB_RED },
+  { 7, TN( 5 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 10, NULL, TN( 5 ), TN( 12 ), RTEMS_RB_BLACK },
+  { 12, TN( 10 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_16[] = {
-  { 0, TN( 5 ), NULL, TN( 3 ), RB_BLACK },
-  { 1, TN( 0 ), NULL, NULL, RB_RED },
-  { 2, TN( 10 ), TN( 0 ), TN( 7 ), RB_RED },
-  { 3, TN( 5 ), NULL, NULL, RB_BLACK },
-  { 5, NULL, TN( 5 ), TN( 12 ), RB_BLACK },
-  { 6, TN( 10 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 5 ), NULL, TN( 3 ), RTEMS_RB_BLACK },
+  { 1, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, TN( 10 ), TN( 0 ), TN( 7 ), RTEMS_RB_RED },
+  { 3, TN( 5 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 5, NULL, TN( 5 ), TN( 12 ), RTEMS_RB_BLACK },
+  { 6, TN( 10 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_17[] = {
-  { 0, TN( 1 ), NULL, NULL, RB_RED },
-  { 1, TN( 3 ), TN( 0 ), NULL, RB_BLACK },
-  { 3, TN( 7 ), TN( 1 ), TN( 5 ), RB_RED },
-  { 4, TN( 5 ), NULL, NULL, RB_RED },
-  { 5, TN( 3 ), TN( 4 ), NULL, RB_BLACK },
-  { 7, NULL, TN( 3 ), TN( 9 ), RB_BLACK },
-  { 8, TN( 9 ), NULL, NULL, RB_BLACK },
-  { 9, TN( 7 ), TN( 8 ), TN( 16 ), RB_RED },
-  { 16, TN( 9 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 3 ), TN( 0 ), NULL, RTEMS_RB_BLACK },
+  { 3, TN( 7 ), TN( 1 ), TN( 5 ), RTEMS_RB_RED },
+  { 4, TN( 5 ), NULL, NULL, RTEMS_RB_RED },
+  { 5, TN( 3 ), TN( 4 ), NULL, RTEMS_RB_BLACK },
+  { 7, NULL, TN( 3 ), TN( 9 ), RTEMS_RB_BLACK },
+  { 8, TN( 9 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 9, TN( 7 ), TN( 8 ), TN( 16 ), RTEMS_RB_RED },
+  { 16, TN( 9 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_17[] = {
-  { 0, TN( 0 ), NULL, NULL, RB_RED },
-  { 0, TN( 3 ), TN( 1 ), NULL, RB_BLACK },
-  { 1, TN( 7 ), TN( 0 ), TN( 5 ), RB_RED },
-  { 2, TN( 3 ), NULL, TN( 4 ), RB_BLACK },
-  { 2, TN( 5 ), NULL, NULL, RB_RED },
-  { 3, NULL, TN( 3 ), TN( 8 ), RB_BLACK },
-  { 4, TN( 8 ), NULL, NULL, RB_BLACK },
-  { 4, TN( 7 ), TN( 9 ), TN( 16 ), RB_RED },
-  { 8, TN( 8 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 0, TN( 3 ), TN( 1 ), NULL, RTEMS_RB_BLACK },
+  { 1, TN( 7 ), TN( 0 ), TN( 5 ), RTEMS_RB_RED },
+  { 2, TN( 3 ), NULL, TN( 4 ), RTEMS_RB_BLACK },
+  { 2, TN( 5 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, NULL, TN( 3 ), TN( 8 ), RTEMS_RB_BLACK },
+  { 4, TN( 8 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 4, TN( 7 ), TN( 9 ), TN( 16 ), RTEMS_RB_RED },
+  { 8, TN( 8 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_18[] = {
-  { 0, TN( 2 ), NULL, TN( 1 ), RB_BLACK },
-  { 1, TN( 0 ), NULL, NULL, RB_RED },
-  { 2, TN( 4 ), TN( 0 ), TN( 3 ), RB_BLACK },
-  { 3, TN( 2 ), NULL, NULL, RB_BLACK },
-  { 4, NULL, TN( 2 ), TN( 12 ), RB_BLACK },
-  { 5, TN( 6 ), NULL, NULL, RB_RED },
-  { 6, TN( 8 ), TN( 5 ), TN( 7 ), RB_BLACK },
-  { 7, TN( 6 ), NULL, NULL, RB_RED },
-  { 8, TN( 12 ), TN( 6 ), TN( 10 ), RB_RED },
-  { 9, TN( 10 ), NULL, NULL, RB_RED },
-  { 10, TN( 8 ), TN( 9 ), NULL, RB_BLACK },
-  { 12, TN( 4 ), TN( 8 ), TN( 17 ), RB_BLACK },
-  { 14, TN( 17 ), NULL, NULL, RB_RED },
-  { 17, TN( 12 ), TN( 14 ), NULL, RB_BLACK }
+  { 0, TN( 2 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 1, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, TN( 4 ), TN( 0 ), TN( 3 ), RTEMS_RB_BLACK },
+  { 3, TN( 2 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 4, NULL, TN( 2 ), TN( 12 ), RTEMS_RB_BLACK },
+  { 5, TN( 6 ), NULL, NULL, RTEMS_RB_RED },
+  { 6, TN( 8 ), TN( 5 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 7, TN( 6 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, TN( 12 ), TN( 6 ), TN( 10 ), RTEMS_RB_RED },
+  { 9, TN( 10 ), NULL, NULL, RTEMS_RB_RED },
+  { 10, TN( 8 ), TN( 9 ), NULL, RTEMS_RB_BLACK },
+  { 12, TN( 4 ), TN( 8 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 14, TN( 17 ), NULL, NULL, RTEMS_RB_RED },
+  { 17, TN( 12 ), TN( 14 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_18[] = {
-  { 0, TN( 3 ), NULL, TN( 1 ), RB_BLACK },
-  { 0, TN( 0 ), NULL, NULL, RB_RED },
-  { 1, TN( 4 ), TN( 0 ), TN( 2 ), RB_BLACK },
-  { 1, TN( 3 ), NULL, NULL, RB_BLACK },
-  { 2, NULL, TN( 3 ), TN( 12 ), RB_BLACK },
-  { 2, TN( 6 ), NULL, NULL, RB_RED },
-  { 3, TN( 8 ), TN( 5 ), TN( 7 ), RB_BLACK },
-  { 3, TN( 6 ), NULL, NULL, RB_RED },
-  { 4, TN( 12 ), TN( 6 ), TN( 10 ), RB_RED },
-  { 4, TN( 10 ), NULL, NULL, RB_RED },
-  { 5, TN( 8 ), TN( 9 ), NULL, RB_BLACK },
-  { 6, TN( 4 ), TN( 8 ), TN( 14 ), RB_BLACK },
-  { 7, TN( 12 ), NULL, TN( 17 ), RB_BLACK },
-  { 8, TN( 14 ), NULL, NULL, RB_RED }
+  { 0, TN( 3 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 0, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 4 ), TN( 0 ), TN( 2 ), RTEMS_RB_BLACK },
+  { 1, TN( 3 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 2, NULL, TN( 3 ), TN( 12 ), RTEMS_RB_BLACK },
+  { 2, TN( 6 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, TN( 8 ), TN( 5 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 3, TN( 6 ), NULL, NULL, RTEMS_RB_RED },
+  { 4, TN( 12 ), TN( 6 ), TN( 10 ), RTEMS_RB_RED },
+  { 4, TN( 10 ), NULL, NULL, RTEMS_RB_RED },
+  { 5, TN( 8 ), TN( 9 ), NULL, RTEMS_RB_BLACK },
+  { 6, TN( 4 ), TN( 8 ), TN( 14 ), RTEMS_RB_BLACK },
+  { 7, TN( 12 ), NULL, TN( 17 ), RTEMS_RB_BLACK },
+  { 8, TN( 14 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_19[] = {
-  { 1, TN( 2 ), NULL, NULL, RB_RED },
-  { 2, TN( 6 ), TN( 1 ), NULL, RB_BLACK },
-  { 6, TN( 11 ), TN( 2 ), TN( 8 ), RB_BLACK },
-  { 8, TN( 6 ), NULL, TN( 9 ), RB_BLACK },
-  { 9, TN( 8 ), NULL, NULL, RB_RED },
-  { 11, NULL, TN( 6 ), TN( 14 ), RB_BLACK },
-  { 12, TN( 14 ), NULL, NULL, RB_BLACK },
-  { 14, TN( 11 ), TN( 12 ), TN( 16 ), RB_BLACK },
-  { 16, TN( 14 ), NULL, NULL, RB_BLACK }
+  { 1, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, TN( 6 ), TN( 1 ), NULL, RTEMS_RB_BLACK },
+  { 6, TN( 11 ), TN( 2 ), TN( 8 ), RTEMS_RB_BLACK },
+  { 8, TN( 6 ), NULL, TN( 9 ), RTEMS_RB_BLACK },
+  { 9, TN( 8 ), NULL, NULL, RTEMS_RB_RED },
+  { 11, NULL, TN( 6 ), TN( 14 ), RTEMS_RB_BLACK },
+  { 12, TN( 14 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 14, TN( 11 ), TN( 12 ), TN( 16 ), RTEMS_RB_BLACK },
+  { 16, TN( 14 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_19[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_RED },
-  { 1, TN( 6 ), TN( 1 ), NULL, RB_BLACK },
-  { 3, TN( 11 ), TN( 2 ), TN( 9 ), RB_BLACK },
-  { 4, TN( 6 ), NULL, TN( 8 ), RB_BLACK },
-  { 4, TN( 9 ), NULL, NULL, RB_RED },
-  { 5, NULL, TN( 6 ), TN( 14 ), RB_BLACK },
-  { 6, TN( 14 ), NULL, NULL, RB_BLACK },
-  { 7, TN( 11 ), TN( 12 ), TN( 16 ), RB_BLACK },
-  { 8, TN( 14 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 6 ), TN( 1 ), NULL, RTEMS_RB_BLACK },
+  { 3, TN( 11 ), TN( 2 ), TN( 9 ), RTEMS_RB_BLACK },
+  { 4, TN( 6 ), NULL, TN( 8 ), RTEMS_RB_BLACK },
+  { 4, TN( 9 ), NULL, NULL, RTEMS_RB_RED },
+  { 5, NULL, TN( 6 ), TN( 14 ), RTEMS_RB_BLACK },
+  { 6, TN( 14 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 7, TN( 11 ), TN( 12 ), TN( 16 ), RTEMS_RB_BLACK },
+  { 8, TN( 14 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_20[] = {
-  { 0, TN( 3 ), NULL, TN( 1 ), RB_BLACK },
-  { 1, TN( 0 ), NULL, NULL, RB_RED },
-  { 3, TN( 9 ), TN( 0 ), TN( 7 ), RB_BLACK },
-  { 4, TN( 7 ), NULL, NULL, RB_RED },
-  { 7, TN( 3 ), TN( 4 ), NULL, RB_BLACK },
-  { 9, NULL, TN( 3 ), TN( 12 ), RB_BLACK },
-  { 10, TN( 12 ), NULL, NULL, RB_BLACK },
-  { 12, TN( 9 ), TN( 10 ), TN( 17 ), RB_BLACK },
-  { 14, TN( 17 ), NULL, NULL, RB_BLACK },
-  { 17, TN( 12 ), TN( 14 ), TN( 18 ), RB_RED },
-  { 18, TN( 17 ), NULL, TN( 19 ), RB_BLACK },
-  { 19, TN( 18 ), NULL, NULL, RB_RED }
+  { 0, TN( 3 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 1, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, TN( 9 ), TN( 0 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 4, TN( 7 ), NULL, NULL, RTEMS_RB_RED },
+  { 7, TN( 3 ), TN( 4 ), NULL, RTEMS_RB_BLACK },
+  { 9, NULL, TN( 3 ), TN( 12 ), RTEMS_RB_BLACK },
+  { 10, TN( 12 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 12, TN( 9 ), TN( 10 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 14, TN( 17 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 17, TN( 12 ), TN( 14 ), TN( 18 ), RTEMS_RB_RED },
+  { 18, TN( 17 ), NULL, TN( 19 ), RTEMS_RB_BLACK },
+  { 19, TN( 18 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_20[] = {
-  { 0, TN( 3 ), NULL, TN( 1 ), RB_BLACK },
-  { 0, TN( 0 ), NULL, NULL, RB_RED },
-  { 1, TN( 9 ), TN( 0 ), TN( 7 ), RB_BLACK },
-  { 2, TN( 7 ), NULL, NULL, RB_RED },
-  { 3, TN( 3 ), TN( 4 ), NULL, RB_BLACK },
-  { 4, NULL, TN( 3 ), TN( 14 ), RB_BLACK },
-  { 5, TN( 14 ), NULL, TN( 12 ), RB_BLACK },
-  { 6, TN( 10 ), NULL, NULL, RB_RED },
-  { 7, TN( 9 ), TN( 10 ), TN( 18 ), RB_BLACK },
-  { 8, TN( 18 ), NULL, NULL, RB_RED },
-  { 9, TN( 14 ), TN( 17 ), TN( 19 ), RB_BLACK },
-  { 9, TN( 18 ), NULL, NULL, RB_RED }
+  { 0, TN( 3 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 0, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 9 ), TN( 0 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 2, TN( 7 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, TN( 3 ), TN( 4 ), NULL, RTEMS_RB_BLACK },
+  { 4, NULL, TN( 3 ), TN( 14 ), RTEMS_RB_BLACK },
+  { 5, TN( 14 ), NULL, TN( 12 ), RTEMS_RB_BLACK },
+  { 6, TN( 10 ), NULL, NULL, RTEMS_RB_RED },
+  { 7, TN( 9 ), TN( 10 ), TN( 18 ), RTEMS_RB_BLACK },
+  { 8, TN( 18 ), NULL, NULL, RTEMS_RB_RED },
+  { 9, TN( 14 ), TN( 17 ), TN( 19 ), RTEMS_RB_BLACK },
+  { 9, TN( 18 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_21[] = {
-  { 0, TN( 3 ), NULL, TN( 1 ), RB_BLACK },
-  { 1, TN( 0 ), NULL, NULL, RB_RED },
-  { 3, TN( 11 ), TN( 0 ), TN( 5 ), RB_BLACK },
-  { 4, TN( 5 ), NULL, NULL, RB_BLACK },
-  { 5, TN( 3 ), TN( 4 ), TN( 8 ), RB_RED },
-  { 8, TN( 5 ), NULL, NULL, RB_BLACK },
-  { 11, NULL, TN( 3 ), TN( 15 ), RB_BLACK },
-  { 13, TN( 15 ), NULL, NULL, RB_BLACK },
-  { 15, TN( 11 ), TN( 13 ), TN( 17 ), RB_BLACK },
-  { 16, TN( 17 ), NULL, NULL, RB_RED },
-  { 17, TN( 15 ), TN( 16 ), NULL, RB_BLACK }
+  { 0, TN( 3 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 1, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, TN( 11 ), TN( 0 ), TN( 5 ), RTEMS_RB_BLACK },
+  { 4, TN( 5 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 5, TN( 3 ), TN( 4 ), TN( 8 ), RTEMS_RB_RED },
+  { 8, TN( 5 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 11, NULL, TN( 3 ), TN( 15 ), RTEMS_RB_BLACK },
+  { 13, TN( 15 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 15, TN( 11 ), TN( 13 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 16, TN( 17 ), NULL, NULL, RTEMS_RB_RED },
+  { 17, TN( 15 ), TN( 16 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_21[] = {
-  { 0, TN( 3 ), NULL, TN( 1 ), RB_BLACK },
-  { 0, TN( 0 ), NULL, NULL, RB_RED },
-  { 1, TN( 8 ), TN( 0 ), TN( 4 ), RB_BLACK },
-  { 2, TN( 3 ), NULL, TN( 5 ), RB_BLACK },
-  { 2, TN( 4 ), NULL, NULL, RB_RED },
-  { 4, NULL, TN( 3 ), TN( 13 ), RB_BLACK },
-  { 5, TN( 13 ), NULL, NULL, RB_BLACK },
-  { 6, TN( 8 ), TN( 11 ), TN( 17 ), RB_BLACK },
-  { 7, TN( 17 ), NULL, NULL, RB_BLACK },
-  { 8, TN( 13 ), TN( 15 ), TN( 16 ), RB_RED },
-  { 8, TN( 17 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 3 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 0, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 8 ), TN( 0 ), TN( 4 ), RTEMS_RB_BLACK },
+  { 2, TN( 3 ), NULL, TN( 5 ), RTEMS_RB_BLACK },
+  { 2, TN( 4 ), NULL, NULL, RTEMS_RB_RED },
+  { 4, NULL, TN( 3 ), TN( 13 ), RTEMS_RB_BLACK },
+  { 5, TN( 13 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 6, TN( 8 ), TN( 11 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 7, TN( 17 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 8, TN( 13 ), TN( 15 ), TN( 16 ), RTEMS_RB_RED },
+  { 8, TN( 17 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_22[] = {
-  { 1, TN( 3 ), NULL, TN( 2 ), RB_BLACK },
-  { 2, TN( 1 ), NULL, NULL, RB_RED },
-  { 3, TN( 8 ), TN( 1 ), TN( 7 ), RB_BLACK },
-  { 4, TN( 7 ), NULL, NULL, RB_RED },
-  { 7, TN( 3 ), TN( 4 ), NULL, RB_BLACK },
-  { 8, NULL, TN( 3 ), TN( 14 ), RB_BLACK },
-  { 10, TN( 11 ), NULL, NULL, RB_RED },
-  { 11, TN( 14 ), TN( 10 ), NULL, RB_BLACK },
-  { 14, TN( 8 ), TN( 11 ), TN( 18 ), RB_BLACK },
-  { 15, TN( 18 ), NULL, NULL, RB_BLACK },
-  { 18, TN( 14 ), TN( 15 ), TN( 21 ), RB_RED },
-  { 21, TN( 18 ), NULL, NULL, RB_BLACK }
+  { 1, TN( 3 ), NULL, TN( 2 ), RTEMS_RB_BLACK },
+  { 2, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, TN( 8 ), TN( 1 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 4, TN( 7 ), NULL, NULL, RTEMS_RB_RED },
+  { 7, TN( 3 ), TN( 4 ), NULL, RTEMS_RB_BLACK },
+  { 8, NULL, TN( 3 ), TN( 14 ), RTEMS_RB_BLACK },
+  { 10, TN( 11 ), NULL, NULL, RTEMS_RB_RED },
+  { 11, TN( 14 ), TN( 10 ), NULL, RTEMS_RB_BLACK },
+  { 14, TN( 8 ), TN( 11 ), TN( 18 ), RTEMS_RB_BLACK },
+  { 15, TN( 18 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 18, TN( 14 ), TN( 15 ), TN( 21 ), RTEMS_RB_RED },
+  { 21, TN( 18 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_22[] = {
-  { 0, TN( 3 ), NULL, NULL, RB_BLACK },
-  { 1, TN( 8 ), TN( 1 ), TN( 4 ), RB_BLACK },
-  { 1, TN( 4 ), NULL, NULL, RB_BLACK },
-  { 2, TN( 3 ), TN( 2 ), TN( 7 ), RB_RED },
-  { 3, TN( 4 ), NULL, NULL, RB_BLACK },
-  { 4, NULL, TN( 3 ), TN( 14 ), RB_BLACK },
-  { 5, TN( 14 ), NULL, TN( 10 ), RB_BLACK },
-  { 5, TN( 11 ), NULL, NULL, RB_RED },
-  { 7, TN( 8 ), TN( 11 ), TN( 18 ), RB_BLACK },
-  { 7, TN( 18 ), NULL, NULL, RB_BLACK },
-  { 9, TN( 14 ), TN( 15 ), TN( 21 ), RB_RED },
-  { 10, TN( 18 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 3 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 1, TN( 8 ), TN( 1 ), TN( 4 ), RTEMS_RB_BLACK },
+  { 1, TN( 4 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 2, TN( 3 ), TN( 2 ), TN( 7 ), RTEMS_RB_RED },
+  { 3, TN( 4 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 4, NULL, TN( 3 ), TN( 14 ), RTEMS_RB_BLACK },
+  { 5, TN( 14 ), NULL, TN( 10 ), RTEMS_RB_BLACK },
+  { 5, TN( 11 ), NULL, NULL, RTEMS_RB_RED },
+  { 7, TN( 8 ), TN( 11 ), TN( 18 ), RTEMS_RB_BLACK },
+  { 7, TN( 18 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 9, TN( 14 ), TN( 15 ), TN( 21 ), RTEMS_RB_RED },
+  { 10, TN( 18 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_23[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_RED },
-  { 2, TN( 8 ), TN( 0 ), TN( 7 ), RB_BLACK },
-  { 7, TN( 2 ), NULL, NULL, RB_RED },
-  { 8, TN( 12 ), TN( 2 ), TN( 11 ), RB_BLACK },
-  { 11, TN( 8 ), NULL, NULL, RB_BLACK },
-  { 12, NULL, TN( 8 ), TN( 17 ), RB_BLACK },
-  { 13, TN( 15 ), NULL, TN( 14 ), RB_BLACK },
-  { 14, TN( 13 ), NULL, NULL, RB_RED },
-  { 15, TN( 17 ), TN( 13 ), TN( 16 ), RB_RED },
-  { 16, TN( 15 ), NULL, NULL, RB_BLACK },
-  { 17, TN( 12 ), TN( 15 ), TN( 20 ), RB_BLACK },
-  { 20, TN( 17 ), NULL, TN( 21 ), RB_BLACK },
-  { 21, TN( 20 ), NULL, NULL, RB_RED }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, TN( 8 ), TN( 0 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 7, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, TN( 12 ), TN( 2 ), TN( 11 ), RTEMS_RB_BLACK },
+  { 11, TN( 8 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 12, NULL, TN( 8 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 13, TN( 15 ), NULL, TN( 14 ), RTEMS_RB_BLACK },
+  { 14, TN( 13 ), NULL, NULL, RTEMS_RB_RED },
+  { 15, TN( 17 ), TN( 13 ), TN( 16 ), RTEMS_RB_RED },
+  { 16, TN( 15 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 17, TN( 12 ), TN( 15 ), TN( 20 ), RTEMS_RB_BLACK },
+  { 20, TN( 17 ), NULL, TN( 21 ), RTEMS_RB_BLACK },
+  { 21, TN( 20 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_23[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_RED },
-  { 1, TN( 8 ), TN( 0 ), TN( 7 ), RB_BLACK },
-  { 3, TN( 2 ), NULL, NULL, RB_RED },
-  { 4, TN( 12 ), TN( 2 ), TN( 11 ), RB_BLACK },
-  { 5, TN( 8 ), NULL, NULL, RB_BLACK },
-  { 6, NULL, TN( 8 ), TN( 17 ), RB_BLACK },
-  { 6, TN( 15 ), NULL, NULL, RB_BLACK },
-  { 7, TN( 17 ), TN( 13 ), TN( 16 ), RB_RED },
-  { 7, TN( 16 ), NULL, NULL, RB_RED },
-  { 8, TN( 15 ), TN( 14 ), NULL, RB_BLACK },
-  { 8, TN( 12 ), TN( 15 ), TN( 20 ), RB_BLACK },
-  { 10, TN( 17 ), NULL, TN( 21 ), RB_BLACK },
-  { 10, TN( 20 ), NULL, NULL, RB_RED }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 8 ), TN( 0 ), TN( 7 ), RTEMS_RB_BLACK },
+  { 3, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 4, TN( 12 ), TN( 2 ), TN( 11 ), RTEMS_RB_BLACK },
+  { 5, TN( 8 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 6, NULL, TN( 8 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 6, TN( 15 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 7, TN( 17 ), TN( 13 ), TN( 16 ), RTEMS_RB_RED },
+  { 7, TN( 16 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, TN( 15 ), TN( 14 ), NULL, RTEMS_RB_BLACK },
+  { 8, TN( 12 ), TN( 15 ), TN( 20 ), RTEMS_RB_BLACK },
+  { 10, TN( 17 ), NULL, TN( 21 ), RTEMS_RB_BLACK },
+  { 10, TN( 20 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_24[] = {
-  { 4, TN( 6 ), NULL, TN( 5 ), RB_BLACK },
-  { 5, TN( 4 ), NULL, NULL, RB_RED },
-  { 6, TN( 14 ), TN( 4 ), TN( 10 ), RB_BLACK },
-  { 8, TN( 10 ), NULL, NULL, RB_RED },
-  { 10, TN( 6 ), TN( 8 ), NULL, RB_BLACK },
-  { 14, NULL, TN( 6 ), TN( 20 ), RB_BLACK },
-  { 15, TN( 16 ), NULL, NULL, RB_RED },
-  { 16, TN( 20 ), TN( 15 ), NULL, RB_BLACK },
-  { 20, TN( 14 ), TN( 16 ), TN( 22 ), RB_BLACK },
-  { 22, TN( 20 ), NULL, NULL, RB_BLACK }
+  { 4, TN( 6 ), NULL, TN( 5 ), RTEMS_RB_BLACK },
+  { 5, TN( 4 ), NULL, NULL, RTEMS_RB_RED },
+  { 6, TN( 14 ), TN( 4 ), TN( 10 ), RTEMS_RB_BLACK },
+  { 8, TN( 10 ), NULL, NULL, RTEMS_RB_RED },
+  { 10, TN( 6 ), TN( 8 ), NULL, RTEMS_RB_BLACK },
+  { 14, NULL, TN( 6 ), TN( 20 ), RTEMS_RB_BLACK },
+  { 15, TN( 16 ), NULL, NULL, RTEMS_RB_RED },
+  { 16, TN( 20 ), TN( 15 ), NULL, RTEMS_RB_BLACK },
+  { 20, TN( 14 ), TN( 16 ), TN( 22 ), RTEMS_RB_BLACK },
+  { 22, TN( 20 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_24[] = {
-  { 2, TN( 6 ), NULL, TN( 5 ), RB_BLACK },
-  { 2, TN( 4 ), NULL, NULL, RB_RED },
-  { 3, TN( 14 ), TN( 4 ), TN( 10 ), RB_BLACK },
-  { 4, TN( 10 ), NULL, NULL, RB_RED },
-  { 5, TN( 6 ), TN( 8 ), NULL, RB_BLACK },
-  { 7, NULL, TN( 6 ), TN( 20 ), RB_BLACK },
-  { 7, TN( 16 ), NULL, NULL, RB_RED },
-  { 8, TN( 20 ), TN( 15 ), NULL, RB_BLACK },
-  { 10, TN( 14 ), TN( 16 ), TN( 22 ), RB_BLACK },
-  { 11, TN( 20 ), NULL, NULL, RB_BLACK }
+  { 2, TN( 6 ), NULL, TN( 5 ), RTEMS_RB_BLACK },
+  { 2, TN( 4 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, TN( 14 ), TN( 4 ), TN( 10 ), RTEMS_RB_BLACK },
+  { 4, TN( 10 ), NULL, NULL, RTEMS_RB_RED },
+  { 5, TN( 6 ), TN( 8 ), NULL, RTEMS_RB_BLACK },
+  { 7, NULL, TN( 6 ), TN( 20 ), RTEMS_RB_BLACK },
+  { 7, TN( 16 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, TN( 20 ), TN( 15 ), NULL, RTEMS_RB_BLACK },
+  { 10, TN( 14 ), TN( 16 ), TN( 22 ), RTEMS_RB_BLACK },
+  { 11, TN( 20 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_25[] = {
-  { 0, TN( 1 ), NULL, NULL, RB_RED },
-  { 1, TN( 3 ), TN( 0 ), NULL, RB_BLACK },
-  { 3, TN( 13 ), TN( 1 ), TN( 5 ), RB_BLACK },
-  { 4, TN( 5 ), NULL, NULL, RB_BLACK },
-  { 5, TN( 3 ), TN( 4 ), TN( 6 ), RB_RED },
-  { 6, TN( 5 ), NULL, TN( 9 ), RB_BLACK },
-  { 9, TN( 6 ), NULL, NULL, RB_RED },
-  { 13, NULL, TN( 3 ), TN( 19 ), RB_BLACK },
-  { 14, TN( 15 ), NULL, NULL, RB_RED },
-  { 15, TN( 16 ), TN( 14 ), NULL, RB_BLACK },
-  { 16, TN( 19 ), TN( 15 ), TN( 17 ), RB_RED },
-  { 17, TN( 16 ), NULL, NULL, RB_BLACK },
-  { 19, TN( 13 ), TN( 16 ), TN( 23 ), RB_BLACK },
-  { 23, TN( 19 ), NULL, TN( 24 ), RB_BLACK },
-  { 24, TN( 23 ), NULL, NULL, RB_RED }
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 3 ), TN( 0 ), NULL, RTEMS_RB_BLACK },
+  { 3, TN( 13 ), TN( 1 ), TN( 5 ), RTEMS_RB_BLACK },
+  { 4, TN( 5 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 5, TN( 3 ), TN( 4 ), TN( 6 ), RTEMS_RB_RED },
+  { 6, TN( 5 ), NULL, TN( 9 ), RTEMS_RB_BLACK },
+  { 9, TN( 6 ), NULL, NULL, RTEMS_RB_RED },
+  { 13, NULL, TN( 3 ), TN( 19 ), RTEMS_RB_BLACK },
+  { 14, TN( 15 ), NULL, NULL, RTEMS_RB_RED },
+  { 15, TN( 16 ), TN( 14 ), NULL, RTEMS_RB_BLACK },
+  { 16, TN( 19 ), TN( 15 ), TN( 17 ), RTEMS_RB_RED },
+  { 17, TN( 16 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 19, TN( 13 ), TN( 16 ), TN( 23 ), RTEMS_RB_BLACK },
+  { 23, TN( 19 ), NULL, TN( 24 ), RTEMS_RB_BLACK },
+  { 24, TN( 23 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_25[] = {
-  { 0, TN( 3 ), NULL, TN( 1 ), RB_BLACK },
-  { 0, TN( 0 ), NULL, NULL, RB_RED },
-  { 1, TN( 13 ), TN( 0 ), TN( 4 ), RB_BLACK },
-  { 2, TN( 4 ), NULL, NULL, RB_BLACK },
-  { 2, TN( 3 ), TN( 5 ), TN( 6 ), RB_RED },
-  { 3, TN( 4 ), NULL, TN( 9 ), RB_BLACK },
-  { 4, TN( 6 ), NULL, NULL, RB_RED },
-  { 6, NULL, TN( 3 ), TN( 19 ), RB_BLACK },
-  { 7, TN( 17 ), NULL, TN( 14 ), RB_BLACK },
-  { 7, TN( 15 ), NULL, NULL, RB_RED },
-  { 8, TN( 19 ), TN( 15 ), TN( 16 ), RB_RED },
-  { 8, TN( 17 ), NULL, NULL, RB_BLACK },
-  { 9, TN( 13 ), TN( 17 ), TN( 23 ), RB_BLACK },
-  { 11, TN( 19 ), NULL, TN( 24 ), RB_BLACK },
-  { 12, TN( 23 ), NULL, NULL, RB_RED }
+  { 0, TN( 3 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 0, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 13 ), TN( 0 ), TN( 4 ), RTEMS_RB_BLACK },
+  { 2, TN( 4 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 2, TN( 3 ), TN( 5 ), TN( 6 ), RTEMS_RB_RED },
+  { 3, TN( 4 ), NULL, TN( 9 ), RTEMS_RB_BLACK },
+  { 4, TN( 6 ), NULL, NULL, RTEMS_RB_RED },
+  { 6, NULL, TN( 3 ), TN( 19 ), RTEMS_RB_BLACK },
+  { 7, TN( 17 ), NULL, TN( 14 ), RTEMS_RB_BLACK },
+  { 7, TN( 15 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, TN( 19 ), TN( 15 ), TN( 16 ), RTEMS_RB_RED },
+  { 8, TN( 17 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 9, TN( 13 ), TN( 17 ), TN( 23 ), RTEMS_RB_BLACK },
+  { 11, TN( 19 ), NULL, TN( 24 ), RTEMS_RB_BLACK },
+  { 12, TN( 23 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_26[] = {
-  { 0, TN( 1 ), NULL, NULL, RB_RED },
-  { 1, TN( 3 ), TN( 0 ), NULL, RB_BLACK },
-  { 3, TN( 11 ), TN( 1 ), TN( 9 ), RB_BLACK },
-  { 6, TN( 9 ), NULL, NULL, RB_RED },
-  { 9, TN( 3 ), TN( 6 ), TN( 10 ), RB_BLACK },
-  { 10, TN( 9 ), NULL, NULL, RB_RED },
-  { 11, NULL, TN( 3 ), TN( 14 ), RB_BLACK },
-  { 12, TN( 14 ), NULL, TN( 13 ), RB_BLACK },
-  { 13, TN( 12 ), NULL, NULL, RB_RED },
-  { 14, TN( 11 ), TN( 12 ), TN( 20 ), RB_BLACK },
-  { 18, TN( 20 ), NULL, NULL, RB_BLACK },
-  { 20, TN( 14 ), TN( 18 ), TN( 23 ), RB_RED },
-  { 21, TN( 23 ), NULL, NULL, RB_RED },
-  { 23, TN( 20 ), TN( 21 ), NULL, RB_BLACK }
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 3 ), TN( 0 ), NULL, RTEMS_RB_BLACK },
+  { 3, TN( 11 ), TN( 1 ), TN( 9 ), RTEMS_RB_BLACK },
+  { 6, TN( 9 ), NULL, NULL, RTEMS_RB_RED },
+  { 9, TN( 3 ), TN( 6 ), TN( 10 ), RTEMS_RB_BLACK },
+  { 10, TN( 9 ), NULL, NULL, RTEMS_RB_RED },
+  { 11, NULL, TN( 3 ), TN( 14 ), RTEMS_RB_BLACK },
+  { 12, TN( 14 ), NULL, TN( 13 ), RTEMS_RB_BLACK },
+  { 13, TN( 12 ), NULL, NULL, RTEMS_RB_RED },
+  { 14, TN( 11 ), TN( 12 ), TN( 20 ), RTEMS_RB_BLACK },
+  { 18, TN( 20 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 20, TN( 14 ), TN( 18 ), TN( 23 ), RTEMS_RB_RED },
+  { 21, TN( 23 ), NULL, NULL, RTEMS_RB_RED },
+  { 23, TN( 20 ), TN( 21 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_26[] = {
-  { 0, TN( 3 ), NULL, TN( 0 ), RB_BLACK },
-  { 0, TN( 1 ), NULL, NULL, RB_RED },
-  { 1, TN( 9 ), TN( 1 ), TN( 6 ), RB_BLACK },
-  { 3, TN( 3 ), NULL, NULL, RB_BLACK },
-  { 4, NULL, TN( 3 ), TN( 14 ), RB_BLACK },
-  { 5, TN( 12 ), NULL, TN( 10 ), RB_BLACK },
-  { 5, TN( 11 ), NULL, NULL, RB_RED },
-  { 6, TN( 14 ), TN( 11 ), TN( 13 ), RB_RED },
-  { 6, TN( 12 ), NULL, NULL, RB_BLACK },
-  { 7, TN( 9 ), TN( 12 ), TN( 20 ), RB_BLACK },
-  { 9, TN( 20 ), NULL, NULL, RB_BLACK },
-  { 10, TN( 14 ), TN( 18 ), TN( 23 ), RB_RED },
-  { 10, TN( 23 ), NULL, NULL, RB_RED },
-  { 11, TN( 20 ), TN( 21 ), NULL, RB_BLACK }
+  { 0, TN( 3 ), NULL, TN( 0 ), RTEMS_RB_BLACK },
+  { 0, TN( 1 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 9 ), TN( 1 ), TN( 6 ), RTEMS_RB_BLACK },
+  { 3, TN( 3 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 4, NULL, TN( 3 ), TN( 14 ), RTEMS_RB_BLACK },
+  { 5, TN( 12 ), NULL, TN( 10 ), RTEMS_RB_BLACK },
+  { 5, TN( 11 ), NULL, NULL, RTEMS_RB_RED },
+  { 6, TN( 14 ), TN( 11 ), TN( 13 ), RTEMS_RB_RED },
+  { 6, TN( 12 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 7, TN( 9 ), TN( 12 ), TN( 20 ), RTEMS_RB_BLACK },
+  { 9, TN( 20 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 10, TN( 14 ), TN( 18 ), TN( 23 ), RTEMS_RB_RED },
+  { 10, TN( 23 ), NULL, NULL, RTEMS_RB_RED },
+  { 11, TN( 20 ), TN( 21 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_27[] = {
-  { 3, TN( 8 ), NULL, NULL, RB_BLACK },
-  { 8, TN( 19 ), TN( 3 ), TN( 17 ), RB_BLACK },
-  { 12, TN( 17 ), NULL, NULL, RB_RED },
-  { 17, TN( 8 ), TN( 12 ), NULL, RB_BLACK },
-  { 19, NULL, TN( 8 ), TN( 24 ), RB_BLACK },
-  { 20, TN( 21 ), NULL, NULL, RB_RED },
-  { 21, TN( 24 ), TN( 20 ), TN( 23 ), RB_BLACK },
-  { 23, TN( 21 ), NULL, NULL, RB_RED },
-  { 24, TN( 19 ), TN( 21 ), TN( 25 ), RB_BLACK },
-  { 25, TN( 24 ), NULL, TN( 26 ), RB_BLACK },
-  { 26, TN( 25 ), NULL, NULL, RB_RED }
+  { 3, TN( 8 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 8, TN( 19 ), TN( 3 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 12, TN( 17 ), NULL, NULL, RTEMS_RB_RED },
+  { 17, TN( 8 ), TN( 12 ), NULL, RTEMS_RB_BLACK },
+  { 19, NULL, TN( 8 ), TN( 24 ), RTEMS_RB_BLACK },
+  { 20, TN( 21 ), NULL, NULL, RTEMS_RB_RED },
+  { 21, TN( 24 ), TN( 20 ), TN( 23 ), RTEMS_RB_BLACK },
+  { 23, TN( 21 ), NULL, NULL, RTEMS_RB_RED },
+  { 24, TN( 19 ), TN( 21 ), TN( 25 ), RTEMS_RB_BLACK },
+  { 25, TN( 24 ), NULL, TN( 26 ), RTEMS_RB_BLACK },
+  { 26, TN( 25 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_27[] = {
-  { 1, TN( 8 ), NULL, NULL, RB_BLACK },
-  { 4, TN( 19 ), TN( 3 ), TN( 17 ), RB_BLACK },
-  { 6, TN( 17 ), NULL, NULL, RB_RED },
-  { 8, TN( 8 ), TN( 12 ), NULL, RB_BLACK },
-  { 9, NULL, TN( 8 ), TN( 25 ), RB_BLACK },
-  { 10, TN( 21 ), NULL, NULL, RB_RED },
-  { 10, TN( 25 ), TN( 20 ), TN( 23 ), RB_BLACK },
-  { 11, TN( 21 ), NULL, NULL, RB_RED },
-  { 12, TN( 19 ), TN( 21 ), TN( 24 ), RB_BLACK },
-  { 12, TN( 25 ), NULL, TN( 26 ), RB_BLACK },
-  { 13, TN( 24 ), NULL, NULL, RB_RED }
+  { 1, TN( 8 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 4, TN( 19 ), TN( 3 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 6, TN( 17 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, TN( 8 ), TN( 12 ), NULL, RTEMS_RB_BLACK },
+  { 9, NULL, TN( 8 ), TN( 25 ), RTEMS_RB_BLACK },
+  { 10, TN( 21 ), NULL, NULL, RTEMS_RB_RED },
+  { 10, TN( 25 ), TN( 20 ), TN( 23 ), RTEMS_RB_BLACK },
+  { 11, TN( 21 ), NULL, NULL, RTEMS_RB_RED },
+  { 12, TN( 19 ), TN( 21 ), TN( 24 ), RTEMS_RB_BLACK },
+  { 12, TN( 25 ), NULL, TN( 26 ), RTEMS_RB_BLACK },
+  { 13, TN( 24 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_28[] = {
-  { 0, TN( 5 ), NULL, NULL, RB_BLACK },
-  { 5, TN( 13 ), TN( 0 ), TN( 7 ), RB_RED },
-  { 7, TN( 5 ), NULL, NULL, RB_BLACK },
-  { 13, NULL, TN( 5 ), TN( 17 ), RB_BLACK },
-  { 15, TN( 17 ), NULL, NULL, RB_BLACK },
-  { 17, TN( 13 ), TN( 15 ), TN( 26 ), RB_RED },
-  { 21, TN( 26 ), NULL, NULL, RB_RED },
-  { 26, TN( 17 ), TN( 21 ), NULL, RB_BLACK }
+  { 0, TN( 5 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 5, TN( 13 ), TN( 0 ), TN( 7 ), RTEMS_RB_RED },
+  { 7, TN( 5 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 13, NULL, TN( 5 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 15, TN( 17 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 17, TN( 13 ), TN( 15 ), TN( 26 ), RTEMS_RB_RED },
+  { 21, TN( 26 ), NULL, NULL, RTEMS_RB_RED },
+  { 26, TN( 17 ), TN( 21 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_28[] = {
-  { 0, TN( 5 ), NULL, NULL, RB_BLACK },
-  { 2, TN( 13 ), TN( 0 ), TN( 7 ), RB_RED },
-  { 3, TN( 5 ), NULL, NULL, RB_BLACK },
-  { 6, NULL, TN( 5 ), TN( 17 ), RB_BLACK },
-  { 7, TN( 17 ), NULL, NULL, RB_BLACK },
-  { 8, TN( 13 ), TN( 15 ), TN( 26 ), RB_RED },
-  { 10, TN( 26 ), NULL, NULL, RB_RED },
-  { 13, TN( 17 ), TN( 21 ), NULL, RB_BLACK }
+  { 0, TN( 5 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 2, TN( 13 ), TN( 0 ), TN( 7 ), RTEMS_RB_RED },
+  { 3, TN( 5 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 6, NULL, TN( 5 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 7, TN( 17 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 8, TN( 13 ), TN( 15 ), TN( 26 ), RTEMS_RB_RED },
+  { 10, TN( 26 ), NULL, NULL, RTEMS_RB_RED },
+  { 13, TN( 17 ), TN( 21 ), NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_unique_29[] = {
-  { 0, TN( 3 ), NULL, TN( 1 ), RB_BLACK },
-  { 1, TN( 0 ), NULL, NULL, RB_RED },
-  { 3, TN( 12 ), TN( 0 ), TN( 6 ), RB_BLACK },
-  { 4, TN( 6 ), NULL, NULL, RB_BLACK },
-  { 6, TN( 3 ), TN( 4 ), TN( 8 ), RB_RED },
-  { 7, TN( 8 ), NULL, NULL, RB_RED },
-  { 8, TN( 6 ), TN( 7 ), TN( 11 ), RB_BLACK },
-  { 11, TN( 8 ), NULL, NULL, RB_RED },
-  { 12, NULL, TN( 3 ), TN( 17 ), RB_BLACK },
-  { 13, TN( 17 ), NULL, TN( 14 ), RB_BLACK },
-  { 14, TN( 13 ), NULL, NULL, RB_RED },
-  { 17, TN( 12 ), TN( 13 ), TN( 25 ), RB_BLACK },
-  { 22, TN( 25 ), NULL, NULL, RB_RED },
-  { 25, TN( 17 ), TN( 22 ), TN( 27 ), RB_BLACK },
-  { 27, TN( 25 ), NULL, NULL, RB_RED }
+  { 0, TN( 3 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 1, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 3, TN( 12 ), TN( 0 ), TN( 6 ), RTEMS_RB_BLACK },
+  { 4, TN( 6 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 6, TN( 3 ), TN( 4 ), TN( 8 ), RTEMS_RB_RED },
+  { 7, TN( 8 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, TN( 6 ), TN( 7 ), TN( 11 ), RTEMS_RB_BLACK },
+  { 11, TN( 8 ), NULL, NULL, RTEMS_RB_RED },
+  { 12, NULL, TN( 3 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 13, TN( 17 ), NULL, TN( 14 ), RTEMS_RB_BLACK },
+  { 14, TN( 13 ), NULL, NULL, RTEMS_RB_RED },
+  { 17, TN( 12 ), TN( 13 ), TN( 25 ), RTEMS_RB_BLACK },
+  { 22, TN( 25 ), NULL, NULL, RTEMS_RB_RED },
+  { 25, TN( 17 ), TN( 22 ), TN( 27 ), RTEMS_RB_BLACK },
+  { 27, TN( 25 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_29[] = {
-  { 0, TN( 3 ), NULL, TN( 1 ), RB_BLACK },
-  { 0, TN( 0 ), NULL, NULL, RB_RED },
-  { 1, TN( 11 ), TN( 0 ), TN( 6 ), RB_BLACK },
-  { 2, TN( 6 ), NULL, NULL, RB_BLACK },
-  { 3, TN( 3 ), TN( 4 ), TN( 7 ), RB_RED },
-  { 3, TN( 6 ), NULL, TN( 8 ), RB_BLACK },
-  { 4, TN( 7 ), NULL, NULL, RB_RED },
-  { 5, NULL, TN( 3 ), TN( 22 ), RB_BLACK },
-  { 6, TN( 12 ), NULL, NULL, RB_BLACK },
-  { 6, TN( 22 ), TN( 13 ), TN( 17 ), RB_RED },
-  { 7, TN( 17 ), NULL, NULL, RB_RED },
-  { 8, TN( 12 ), TN( 14 ), NULL, RB_BLACK },
-  { 11, TN( 11 ), TN( 12 ), TN( 25 ), RB_BLACK },
-  { 12, TN( 22 ), NULL, TN( 27 ), RB_BLACK },
-  { 13, TN( 25 ), NULL, NULL, RB_RED }
+  { 0, TN( 3 ), NULL, TN( 1 ), RTEMS_RB_BLACK },
+  { 0, TN( 0 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 11 ), TN( 0 ), TN( 6 ), RTEMS_RB_BLACK },
+  { 2, TN( 6 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 3, TN( 3 ), TN( 4 ), TN( 7 ), RTEMS_RB_RED },
+  { 3, TN( 6 ), NULL, TN( 8 ), RTEMS_RB_BLACK },
+  { 4, TN( 7 ), NULL, NULL, RTEMS_RB_RED },
+  { 5, NULL, TN( 3 ), TN( 22 ), RTEMS_RB_BLACK },
+  { 6, TN( 12 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 6, TN( 22 ), TN( 13 ), TN( 17 ), RTEMS_RB_RED },
+  { 7, TN( 17 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, TN( 12 ), TN( 14 ), NULL, RTEMS_RB_BLACK },
+  { 11, TN( 11 ), TN( 12 ), TN( 25 ), RTEMS_RB_BLACK },
+  { 12, TN( 22 ), NULL, TN( 27 ), RTEMS_RB_BLACK },
+  { 13, TN( 25 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_30[] = {
-  { 0, TN( 4 ), NULL, NULL, RB_RED },
-  { 4, TN( 6 ), TN( 0 ), NULL, RB_BLACK },
-  { 6, TN( 13 ), TN( 4 ), TN( 9 ), RB_RED },
-  { 8, TN( 9 ), NULL, NULL, RB_RED },
-  { 9, TN( 6 ), TN( 8 ), TN( 12 ), RB_BLACK },
-  { 12, TN( 9 ), NULL, NULL, RB_RED },
-  { 13, NULL, TN( 6 ), TN( 18 ), RB_BLACK },
-  { 14, TN( 16 ), NULL, NULL, RB_RED },
-  { 16, TN( 18 ), TN( 14 ), TN( 17 ), RB_BLACK },
-  { 17, TN( 16 ), NULL, NULL, RB_RED },
-  { 18, TN( 13 ), TN( 16 ), TN( 27 ), RB_RED },
-  { 20, TN( 27 ), NULL, NULL, RB_RED },
-  { 27, TN( 18 ), TN( 20 ), TN( 28 ), RB_BLACK },
-  { 28, TN( 27 ), NULL, NULL, RB_RED }
+  { 0, TN( 4 ), NULL, NULL, RTEMS_RB_RED },
+  { 4, TN( 6 ), TN( 0 ), NULL, RTEMS_RB_BLACK },
+  { 6, TN( 13 ), TN( 4 ), TN( 9 ), RTEMS_RB_RED },
+  { 8, TN( 9 ), NULL, NULL, RTEMS_RB_RED },
+  { 9, TN( 6 ), TN( 8 ), TN( 12 ), RTEMS_RB_BLACK },
+  { 12, TN( 9 ), NULL, NULL, RTEMS_RB_RED },
+  { 13, NULL, TN( 6 ), TN( 18 ), RTEMS_RB_BLACK },
+  { 14, TN( 16 ), NULL, NULL, RTEMS_RB_RED },
+  { 16, TN( 18 ), TN( 14 ), TN( 17 ), RTEMS_RB_BLACK },
+  { 17, TN( 16 ), NULL, NULL, RTEMS_RB_RED },
+  { 18, TN( 13 ), TN( 16 ), TN( 27 ), RTEMS_RB_RED },
+  { 20, TN( 27 ), NULL, NULL, RTEMS_RB_RED },
+  { 27, TN( 18 ), TN( 20 ), TN( 28 ), RTEMS_RB_BLACK },
+  { 28, TN( 27 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_30[] = {
-  { 0, TN( 4 ), NULL, NULL, RB_BLACK },
-  { 2, TN( 13 ), TN( 0 ), TN( 9 ), RB_RED },
-  { 3, TN( 9 ), NULL, NULL, RB_RED },
-  { 4, TN( 4 ), TN( 6 ), TN( 8 ), RB_BLACK },
-  { 4, TN( 9 ), NULL, NULL, RB_RED },
-  { 6, TN( 14 ), TN( 4 ), TN( 12 ), RB_BLACK },
-  { 6, TN( 13 ), NULL, NULL, RB_BLACK },
-  { 7, NULL, TN( 13 ), TN( 18 ), RB_BLACK },
-  { 8, TN( 18 ), NULL, TN( 16 ), RB_BLACK },
-  { 8, TN( 17 ), NULL, NULL, RB_RED },
-  { 9, TN( 14 ), TN( 17 ), TN( 27 ), RB_BLACK },
-  { 10, TN( 27 ), NULL, NULL, RB_RED },
-  { 13, TN( 18 ), TN( 20 ), TN( 28 ), RB_BLACK },
-  { 14, TN( 27 ), NULL, NULL, RB_RED }
+  { 0, TN( 4 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 2, TN( 13 ), TN( 0 ), TN( 9 ), RTEMS_RB_RED },
+  { 3, TN( 9 ), NULL, NULL, RTEMS_RB_RED },
+  { 4, TN( 4 ), TN( 6 ), TN( 8 ), RTEMS_RB_BLACK },
+  { 4, TN( 9 ), NULL, NULL, RTEMS_RB_RED },
+  { 6, TN( 14 ), TN( 4 ), TN( 12 ), RTEMS_RB_BLACK },
+  { 6, TN( 13 ), NULL, NULL, RTEMS_RB_BLACK },
+  { 7, NULL, TN( 13 ), TN( 18 ), RTEMS_RB_BLACK },
+  { 8, TN( 18 ), NULL, TN( 16 ), RTEMS_RB_BLACK },
+  { 8, TN( 17 ), NULL, NULL, RTEMS_RB_RED },
+  { 9, TN( 14 ), TN( 17 ), TN( 27 ), RTEMS_RB_BLACK },
+  { 10, TN( 27 ), NULL, NULL, RTEMS_RB_RED },
+  { 13, TN( 18 ), TN( 20 ), TN( 28 ), RTEMS_RB_BLACK },
+  { 14, TN( 27 ), NULL, NULL, RTEMS_RB_RED }
 };
 
 static const TestNodeDescription random_ops_tree_unique_31[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_RED },
-  { 2, TN( 5 ), TN( 0 ), NULL, RB_BLACK },
-  { 5, TN( 11 ), TN( 2 ), TN( 9 ), RB_BLACK },
-  { 7, TN( 9 ), NULL, NULL, RB_RED },
-  { 9, TN( 5 ), TN( 7 ), NULL, RB_BLACK },
-  { 11, NULL, TN( 5 ), TN( 21 ), RB_BLACK },
-  { 14, TN( 16 ), NULL, NULL, RB_RED },
-  { 16, TN( 21 ), TN( 14 ), TN( 18 ), RB_BLACK },
-  { 18, TN( 16 ), NULL, NULL, RB_RED },
-  { 21, TN( 11 ), TN( 16 ), TN( 30 ), RB_BLACK },
-  { 30, TN( 21 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 2, TN( 5 ), TN( 0 ), NULL, RTEMS_RB_BLACK },
+  { 5, TN( 11 ), TN( 2 ), TN( 9 ), RTEMS_RB_BLACK },
+  { 7, TN( 9 ), NULL, NULL, RTEMS_RB_RED },
+  { 9, TN( 5 ), TN( 7 ), NULL, RTEMS_RB_BLACK },
+  { 11, NULL, TN( 5 ), TN( 21 ), RTEMS_RB_BLACK },
+  { 14, TN( 16 ), NULL, NULL, RTEMS_RB_RED },
+  { 16, TN( 21 ), TN( 14 ), TN( 18 ), RTEMS_RB_BLACK },
+  { 18, TN( 16 ), NULL, NULL, RTEMS_RB_RED },
+  { 21, TN( 11 ), TN( 16 ), TN( 30 ), RTEMS_RB_BLACK },
+  { 30, TN( 21 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 static const TestNodeDescription random_ops_tree_multiple_31[] = {
-  { 0, TN( 2 ), NULL, NULL, RB_RED },
-  { 1, TN( 5 ), TN( 0 ), NULL, RB_BLACK },
-  { 2, TN( 11 ), TN( 2 ), TN( 9 ), RB_BLACK },
-  { 3, TN( 9 ), NULL, NULL, RB_RED },
-  { 4, TN( 5 ), TN( 7 ), NULL, RB_BLACK },
-  { 5, NULL, TN( 5 ), TN( 21 ), RB_BLACK },
-  { 7, TN( 16 ), NULL, NULL, RB_RED },
-  { 8, TN( 21 ), TN( 14 ), TN( 18 ), RB_BLACK },
-  { 9, TN( 16 ), NULL, NULL, RB_RED },
-  { 10, TN( 11 ), TN( 16 ), TN( 30 ), RB_BLACK },
-  { 15, TN( 21 ), NULL, NULL, RB_BLACK }
+  { 0, TN( 2 ), NULL, NULL, RTEMS_RB_RED },
+  { 1, TN( 5 ), TN( 0 ), NULL, RTEMS_RB_BLACK },
+  { 2, TN( 11 ), TN( 2 ), TN( 9 ), RTEMS_RB_BLACK },
+  { 3, TN( 9 ), NULL, NULL, RTEMS_RB_RED },
+  { 4, TN( 5 ), TN( 7 ), NULL, RTEMS_RB_BLACK },
+  { 5, NULL, TN( 5 ), TN( 21 ), RTEMS_RB_BLACK },
+  { 7, TN( 16 ), NULL, NULL, RTEMS_RB_RED },
+  { 8, TN( 21 ), TN( 14 ), TN( 18 ), RTEMS_RB_BLACK },
+  { 9, TN( 16 ), NULL, NULL, RTEMS_RB_RED },
+  { 10, TN( 11 ), TN( 16 ), TN( 30 ), RTEMS_RB_BLACK },
+  { 15, TN( 21 ), NULL, NULL, RTEMS_RB_BLACK }
 };
 
 #define RANDOM_OPS_TREE( i ) \
