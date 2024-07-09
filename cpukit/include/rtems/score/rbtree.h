@@ -38,7 +38,7 @@
 #ifndef _RTEMS_SCORE_RBTREE_H
 #define _RTEMS_SCORE_RBTREE_H
 
-#include <sys/tree.h>
+#include <rtems/score/bsd-tree.h>
 #include <rtems/score/basedefs.h>
 #include <rtems/score/assert.h>
 

@@ -337,6 +337,7 @@ install:
   - cpukit/include/rtems/score/assert.h
   - cpukit/include/rtems/score/atomic.h
   - cpukit/include/rtems/score/basedefs.h
+  - cpukit/include/rtems/score/bsd-tree.h
   - cpukit/include/rtems/score/chain.h
   - cpukit/include/rtems/score/chainimpl.h
   - cpukit/include/rtems/score/context.h
