@@ -76,8 +76,8 @@ RTEMS_STATIC_ASSERT(
   rb_root_node
 );
 
-#undef RB_ROOT
-#define RB_ROOT ( (struct rb_root) { NULL } )
+#undef RTEMS_RB_ROOT
+#define RTEMS_RB_ROOT ( (struct rb_root) { NULL } )
 
 #define rb_entry( p, container, field ) RTEMS_CONTAINER_OF( p, container, field )
 

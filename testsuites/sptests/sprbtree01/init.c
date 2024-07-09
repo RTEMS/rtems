@@ -80,13 +80,13 @@ typedef struct {
 
 static test_node node_array[100];
 
-#define RED RB_RED
+#define RED RTEMS_RB_RED
 
-#define BLACK RB_BLACK
+#define BLACK RTEMS_RB_BLACK
 
 static int rb_color( const rtems_rbtree_node *n )
 {
-  return RB_COLOR( n, Node );
+  return RTEMS_RB_COLOR( n, Node );
 }
 
 static rtems_rbtree_compare_result test_compare_function (
@@ -1918,9 +1918,9 @@ static void postorder_tree_init(
     const postorder_node_description *pnd;
 
     pnd = &pt->tree[ i ];
-    RB_PARENT( TN( i ), Node) = pnd->parent;
-    RB_LEFT( TN( i ), Node) = pnd->left;
-    RB_RIGHT( TN( i ), Node) = pnd->right;
+    RTEMS_RB_PARENT( TN( i ), Node) = pnd->parent;
+    RTEMS_RB_LEFT( TN( i ), Node) = pnd->left;
+    RTEMS_RB_RIGHT( TN( i ), Node) = pnd->right;
   }
 }
 

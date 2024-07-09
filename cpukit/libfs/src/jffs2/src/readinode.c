@@ -474,7 +474,7 @@ static int jffs2_build_inode_fragtree(struct jffs2_sb_info *c,
 				      struct jffs2_readinode_info *rii)
 {
 	struct jffs2_tmp_dnode_info *pen, *last, *this;
-	struct rb_root ver_root = RB_ROOT;
+	struct rb_root ver_root = RTEMS_RB_ROOT;
 	uint32_t high_ver = 0;
 
 	if (rii->mdata_tn) {
@@ -571,7 +571,7 @@ static void jffs2_free_tmp_dnode_info_list(struct rb_root *list)
 			jffs2_free_tmp_dnode_info(tn);
 	}
 
-	*list = RB_ROOT;
+	*list = RTEMS_RB_ROOT;
 }
 
 static void jffs2_free_full_dirent_list(struct jffs2_full_dirent *fd)
@@ -1336,7 +1336,7 @@ static int jffs2_do_read_inode_internal(struct jffs2_sb_info *c,
 		/* OK. We're happy */
 		f->metadata = frag_first(&f->fragtree)->node;
 		jffs2_free_node_frag(frag_first(&f->fragtree));
-		f->fragtree = RB_ROOT;
+		f->fragtree = RTEMS_RB_ROOT;
 		break;
 	}
 	if (f->inocache->state == INO_STATE_READING)

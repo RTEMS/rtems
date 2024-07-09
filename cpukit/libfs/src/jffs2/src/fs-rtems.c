@@ -1650,7 +1650,7 @@ static inline void jffs2_init_inode_info(struct jffs2_inode_info *f)
 {
 	/* These must be set manually to preserve other members */
 	f->highest_version = 0;
-	f->fragtree = RB_ROOT;
+	f->fragtree = RTEMS_RB_ROOT;
 	f->metadata = NULL;
 	f->dents = NULL;
 	f->target = NULL;

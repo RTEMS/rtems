@@ -1,16 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @ingroup RTEMSScoreRBTree
- *
- * @brief This source file contains the implementation of
- *   _RBTree_Insert_color().
- */
-
 /*
- *  Copyright (c) 2010-2012 Gedare Bloom.
+ * Copyright (c) 2024 Gedare Bloom.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,19 +29,35 @@
 #include "config.h"
 #endif
 
+#include <tmacros.h>
+#include <rtems/rbtree.h>
 #include <rtems/score/rbtreeimpl.h>
 
-RTEMS_RB_GENERATE_INSERT_COLOR(
-  RBTree_Control,
-  RBTree_Node,
-  Node,
-  static inline
-)
+#include <linux/rbtree.h>
 
-void _RBTree_Insert_color(
-  RBTree_Control *the_rbtree,
-  RBTree_Node    *the_node
-)
+#include "sys/tree.h"
+
+const char rtems_test_name[] = "SPTREE 1";
+
+rtems_task Init( rtems_task_argument ignored )
 {
-  RBTree_Control_RTEMS_RB_INSERT_COLOR( the_rbtree, the_node );
+  TEST_BEGIN();
+
+  TEST_END();
+  rtems_test_exit(0);
 }
+
+/* configuration information */
+
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INIT
+#include <rtems/confdefs.h>
+
+/* global variables */

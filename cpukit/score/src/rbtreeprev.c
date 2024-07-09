@@ -41,9 +41,13 @@
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/basedefs.h>
 
-RB_GENERATE_PREV( RBTree_Control, RBTree_Node, Node, static inline )
+RTEMS_RB_GENERATE_PREV( RBTree_Control, RBTree_Node, Node, static inline )
 
 RBTree_Node *_RBTree_Predecessor( const RBTree_Node *node )
 {
-  return RB_PREV( RBTree_Control, NULL, RTEMS_DECONST( RBTree_Node *, node ) );
+  return RTEMS_RB_PREV(
+    RBTree_Control,
+    NULL,
+    RTEMS_DECONST( RBTree_Node *, node )
+  );
 }

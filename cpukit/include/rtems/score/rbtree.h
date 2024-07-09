@@ -71,7 +71,7 @@ struct RBTree_Control;
  * tree.
  */
 typedef struct RBTree_Node {
-  RB_ENTRY(RBTree_Node) Node;
+  RTEMS_RB_ENTRY(RBTree_Node) Node;
 } RBTree_Node;
 
 /**
@@ -80,13 +80,13 @@ typedef struct RBTree_Node {
  * This is used to manage a red-black tree.  A red-black tree consists of a
  * tree of zero or more nodes.
  */
-typedef RB_HEAD(RBTree_Control, RBTree_Node) RBTree_Control;
+typedef RTEMS_RB_HEAD(RBTree_Control, RBTree_Node) RBTree_Control;
 
 /**
  * @brief Initializer for an empty red-black tree with designator @a name.
  */
 #define RBTREE_INITIALIZER_EMPTY( name ) \
-  RB_INITIALIZER( name )
+  RTEMS_RB_INITIALIZER( name )
 
 /**
  * @brief Definition for an empty red-black tree with designator @a name.
@@ -105,7 +105,7 @@ typedef RB_HEAD(RBTree_Control, RBTree_Node) RBTree_Control;
  */
 static inline void _RBTree_Set_off_tree( RBTree_Node *the_node )
 {
-  RB_COLOR( the_node, Node ) = -1;
+  RTEMS_RB_COLOR( the_node, Node ) = -1;
 }
 
 /**
@@ -122,7 +122,7 @@ static inline bool _RBTree_Is_node_off_tree(
   const RBTree_Node *the_node
 )
 {
-  return RB_COLOR( the_node, Node ) == -1;
+  return RTEMS_RB_COLOR( the_node, Node ) == -1;
 }
 
 /**
@@ -167,7 +167,7 @@ static inline void _RBTree_Add_child(
 )
 {
   _Assert( _RBTree_Is_node_off_tree( child ) );
-  RB_SET( child, parent, Node );
+  RTEMS_RB_SET( child, parent, Node );
   *link = child;
 }
 
@@ -265,7 +265,7 @@ static inline RBTree_Node *_RBTree_Root(
   const RBTree_Control *the_rbtree
 )
 {
-  return RB_ROOT( the_rbtree );
+  return RTEMS_RB_ROOT( the_rbtree );
 }
 
 /**
@@ -280,7 +280,7 @@ static inline RBTree_Node **_RBTree_Root_reference(
   RBTree_Control *the_rbtree
 )
 {
-  return &RB_ROOT( the_rbtree );
+  return &RTEMS_RB_ROOT( the_rbtree );
 }
 
 /**
@@ -295,7 +295,7 @@ static inline RBTree_Node * const *_RBTree_Root_const_reference(
   const RBTree_Control *the_rbtree
 )
 {
-  return &RB_ROOT( the_rbtree );
+  return &RTEMS_RB_ROOT( the_rbtree );
 }
 
 /**
@@ -314,7 +314,7 @@ static inline RBTree_Node *_RBTree_Parent(
   const RBTree_Node *the_node
 )
 {
-  return RB_PARENT( the_node, Node );
+  return RTEMS_RB_PARENT( the_node, Node );
 }
 
 /**
@@ -330,7 +330,7 @@ static inline RBTree_Node *_RBTree_Left(
   const RBTree_Node *the_node
 )
 {
-  return RB_LEFT( the_node, Node );
+  return RTEMS_RB_LEFT( the_node, Node );
 }
 
 /**
@@ -345,7 +345,7 @@ static inline RBTree_Node **_RBTree_Left_reference(
   RBTree_Node *the_node
 )
 {
-  return &RB_LEFT( the_node, Node );
+  return &RTEMS_RB_LEFT( the_node, Node );
 }
 
 /**
@@ -361,7 +361,7 @@ static inline RBTree_Node *_RBTree_Right(
   const RBTree_Node *the_node
 )
 {
-  return RB_RIGHT( the_node, Node );
+  return RTEMS_RB_RIGHT( the_node, Node );
 }
 
 /**
@@ -376,7 +376,7 @@ static inline RBTree_Node **_RBTree_Right_reference(
   RBTree_Node *the_node
 )
 {
-  return &RB_RIGHT( the_node, Node );
+  return &RTEMS_RB_RIGHT( the_node, Node );
 }
 
 /**
@@ -394,7 +394,7 @@ static inline bool _RBTree_Is_empty(
   const RBTree_Control *the_rbtree
 )
 {
-  return RB_EMPTY( the_rbtree );
+  return RTEMS_RB_EMPTY( the_rbtree );
 }
 
 /**
@@ -429,7 +429,7 @@ static inline void _RBTree_Initialize_empty(
   RBTree_Control *the_rbtree
 )
 {
-  RB_INIT( the_rbtree );
+  RTEMS_RB_INIT( the_rbtree );
 }
 
 /**
@@ -445,11 +445,11 @@ static inline void _RBTree_Initialize_one(
 )
 {
   _Assert( _RBTree_Is_node_off_tree( the_node ) );
-  RB_ROOT( the_rbtree ) = the_node;
-  RB_PARENT( the_node, Node ) = NULL;
-  RB_LEFT( the_node, Node ) = NULL;
-  RB_RIGHT( the_node, Node ) = NULL;
-  RB_COLOR( the_node, Node ) = RB_BLACK;
+  RTEMS_RB_ROOT( the_rbtree ) = the_node;
+  RTEMS_RB_PARENT( the_node, Node ) = NULL;
+  RTEMS_RB_LEFT( the_node, Node ) = NULL;
+  RTEMS_RB_RIGHT( the_node, Node ) = NULL;
+  RTEMS_RB_COLOR( the_node, Node ) = RTEMS_RB_BLACK;
 }
 
 /**
