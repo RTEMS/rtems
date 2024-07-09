@@ -515,13 +515,14 @@ class Item(object):
         bld(rule=run, source=source, target=[target_c, target_h])
         return target_c, target_h
 
-    def rtems_syms(self, bld, source, target):
+    def rtems_syms(self, bld, bic, source, target):
+        syms_source = os.path.splitext(target)[0] + ".c"
         bld(
-            rule='${RTEMS_SYMS} -e -C ${CC} -c "${CFLAGS}" -o ${TGT} ${SRC}',
+            rule='${RTEMS_SYMS} -e -S ${TGT} ${SRC}',
             source=source,
-            target=target,
+            target=syms_source,
         )
-        return target
+        return self.cc(bld, bic, syms_source, target)
 
     def rtems_rap(self, bld, base, objects, libs, target):
 
