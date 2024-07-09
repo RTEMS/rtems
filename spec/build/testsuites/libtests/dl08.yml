@@ -28,7 +28,7 @@ do-build: |
   self.link_cc(bld, bic, objs, dl08_pre)
   dl08_sym_o = path + "dl08-sym.o"
   objs.append(dl08_sym_o)
-  self.rtems_syms(bld, dl08_pre, dl08_sym_o)
+  self.rtems_syms(bld, bic, dl08_pre, dl08_sym_o)
   self.link_cc(bld, bic, objs, "testsuites/libtests/dl08.exe")
 do-configure: null
 enabled-by:

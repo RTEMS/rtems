@@ -21,7 +21,7 @@ do-build: |
   self.link_cxx(bld, bic, objs, dl05_pre)
   dl05_sym_o = path + "dl05-sym.o"
   objs.append(dl05_sym_o)
-  self.rtems_syms(bld, dl05_pre, dl05_sym_o)
+  self.rtems_syms(bld, bic, dl05_pre, dl05_sym_o)
   self.link_cxx(bld, bic, objs, "testsuites/libtests/dl05.exe")
 do-configure: null
 enabled-by:
