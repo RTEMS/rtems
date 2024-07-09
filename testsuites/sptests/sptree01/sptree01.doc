@@ -33,4 +33,9 @@ directives:
 
 concepts:
 
-+ Ensure that namespace for sys/tree.h is clean with rtems.
++ Ensure that namespace for sys/tree.h is clean with rtems/score/bsd-tree.h.
+  These two files have shared lineage, but the rtems version has been forked
+  due to sticking with the red-black tree variation while the upstream has
+  removed the red-black tree support. The result of this fork is that including
+  both header files was causing some CPP redefinitions and clashes. This test
+  is a compile-time test to check for those kinds of problems.
