@@ -94,7 +94,7 @@ extern rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry;
  * The purpose of this location is to deliver the error return status for a
  * previous error condition which must set the errno accordingly.
  *
- * The usage of this null location instead of the NULL pointer eliminates 
+ * The usage of this null location instead of the NULL pointer eliminates
  * a lot of branches.
  *
  * The user environment root and current directory are statically initialized
@@ -462,6 +462,11 @@ int rtems_libio_to_fcntl_flags( unsigned int flags );
 void rtems_libio_free(
   rtems_libio_t *iop
 );
+
+/**
+ * Return the number of open iop descriptors
+ */
+int rtems_libio_count_open_iops( void );
 
 /*
  *  File System Routine Prototypes

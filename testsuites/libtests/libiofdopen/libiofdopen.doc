@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: libiofdopen
+
+directives:
+
+  rtems_libio_count_open_iops()
+
+concepts:
+
+  Check the number of open files

@@ -176,3 +176,21 @@ void rtems_libio_free(
 
   rtems_libio_unlock();
 }
+
+int rtems_libio_count_open_iops(
+  void
+)
+{
+  int open = 0;
+  int i;
+  /*
+   * No locking needed to count the open iops
+   */
+  for (i = 0; i < rtems_libio_number_iops; ++i) {
+    const rtems_libio_t *iop = &rtems_libio_iops[ i ];
+    if (( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_OPEN ) != 0 ) {
+      ++open;
+    }
+  }
+  return open;
+}

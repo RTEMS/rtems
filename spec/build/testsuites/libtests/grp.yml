@@ -171,6 +171,8 @@ links:
 - role: build-dependency
   uid: libfdt01
 - role: build-dependency
+  uid: libiofdopen
+- role: build-dependency
   uid: longjmp
 - role: build-dependency
   uid: lseek
