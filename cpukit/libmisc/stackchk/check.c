@@ -1,21 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- * @file
- *
- * @ingroup libmisc_stackchk Stack Checker Mechanism
- *
  * @brief Stack Overflow Check User Extension Set
- *
- * NOTE:  This extension set automatically determines at
- *         initialization time whether the stack for this
- *         CPU grows up or down and installs the correct
- *         extension routines for that direction.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2010.
- *  On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 1989-2024 On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 2024 Mohamed Hassan <muhammad.hamdy.hassan@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -149,7 +140,7 @@ static inline bool Stack_check_Frame_pointer_in_range(
 
 /*
  *  The assumption is that if the pattern gets overwritten, the task
- *  is too close.  This defines the usable stack memory.
+ *  is too close. This defines the usable stack memory.
  */
 #define Stack_check_Usable_stack_size(_the_stack) \
     ((_the_stack)->size - SANITY_PATTERN_SIZE_BYTES)
@@ -161,7 +152,7 @@ static Stack_Control Stack_check_Interrupt_stack[ 1 ];
 #endif
 
 /*
- *  Fill an entire stack area with BYTE_PATTERN.  This will be used
+ *  Fill an entire stack area with BYTE_PATTERN. This will be used
  *  to check for amount of actual stack used.
  */
 static void Stack_check_Dope_stack( Stack_Control *stack )
@@ -215,8 +206,8 @@ void rtems_stack_checker_begin_extension( Thread_Control *executing )
 
   /*
    * If appropriate, set up the interrupt stack of the current processor for
-   * high water testing also.  This must be done after multi-threading started,
-   * since the initialization stacks may reuse the interrupt stacks.  Disable
+   * high water testing also. This must be done after multi-threading started,
+   * since the initialization stacks may reuse the interrupt stacks. Disable
    * thread dispatching in SMP configurations to prevent thread migration.
    * Writing to the interrupt stack is only safe if done from the corresponding
    * processor in thread context.
@@ -255,15 +246,15 @@ void rtems_stack_checker_begin_extension( Thread_Control *executing )
 }
 
 /*
- *  Stack_check_report_blown_task
+ *  rtems_stack_checker_reporter_print_details
  *
- *  Report a blown stack.  Needs to be a separate routine
+ *  Report a blown stack. Needs to be a separate routine
  *  so that interrupt handlers can use this too.
  *
  *  NOTE: The system is in a questionable state... we may not get
  *        the following message out.
  */
-static void Stack_check_report_blown_task(
+void rtems_stack_checker_reporter_print_details(
   const Thread_Control *running,
   bool pattern_ok
 )
@@ -311,6 +302,17 @@ static void Stack_check_report_blown_task(
   );
 }
 
+void rtems_stack_checker_reporter_quiet(
+  const Thread_Control *running,
+  bool pattern_ok
+)
+{
+  rtems_fatal(
+    RTEMS_FATAL_SOURCE_STACK_CHECKER,
+    running->Object.name.name_u32
+    );
+}
+
 /*
  *  rtems_stack_checker_switch_extension
  */
@@ -333,13 +335,13 @@ void rtems_stack_checker_switch_extension(
     pattern_ok = Stack_check_Is_sanity_pattern_valid(
       &heir->Start.Initial_stack
     );
-    Stack_check_report_blown_task( heir, pattern_ok );
+    Stack_checker_Reporter( heir, pattern_ok );
   }
 
   pattern_ok = Stack_check_Is_sanity_pattern_valid( &running->Start.Initial_stack );
 
   if ( !pattern_ok ) {
-    Stack_check_report_blown_task( running, pattern_ok );
+    Stack_checker_Reporter( running, pattern_ok );
   }
 #else
   sp_ok = Stack_check_Frame_pointer_in_range( running );
@@ -347,7 +349,7 @@ void rtems_stack_checker_switch_extension(
   pattern_ok = Stack_check_Is_sanity_pattern_valid( &running->Start.Initial_stack );
 
   if ( !sp_ok || !pattern_ok ) {
-    Stack_check_report_blown_task( running, pattern_ok );
+    Stack_checker_Reporter( running, pattern_ok );
   }
 #endif
 

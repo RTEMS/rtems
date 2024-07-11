@@ -2,7 +2,6 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: test-program
 cflags: []
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
 - Copyright (C) 2024 Mohamed Hassan <muhammad.hamdy.hassan@gmail.com>
 cppflags: []
 cxxflags: []
@@ -13,11 +12,12 @@ ldflags: []
 links: []
 source:
 - testsuites/libtests/stackchk/blow.c
-- testsuites/libtests/stackchk/config.c
 - testsuites/libtests/stackchk/init.c
 - testsuites/libtests/stackchk/task1.c
+- testsuites/libtests/stackchk03/config.c
+- testsuites/libtests/stackchk03/reporter.c
 stlib: []
-target: testsuites/libtests/stackchk.exe
+target: testsuites/libtests/stackchk03.exe
 type: build
 use-after: []
 use-before: []

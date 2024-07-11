@@ -1,20 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*  Init
- *
- *  This routine is the initialization task for this test program.
- *  It is a user initialization task and has the responsibility for creating
- *  and starting the tasks that make up the test.  If the time of day
- *  clock is required for the test, it should also be set to a known
- *  value by this function.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
- *  On-Line Applications Research Corporation (OAR).
+/**
+ * @brief  Stack Checker Test Initialization File
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2024 On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 2024 Mohamed Hassan <muhammad.hamdy.hassan@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -42,12 +34,11 @@
 #include "config.h"
 #endif
 
-#define CONFIGURE_INIT
 #include "system.h"
 
 #include <rtems/bspIo.h>
 
-const char rtems_test_name[] = "STACKCHK";
+extern const char rtems_test_name[];
 
 rtems_task Init(
   rtems_task_argument argument
@@ -122,5 +113,6 @@ void Fatal_extension(
     printk( "unexpected fatal error\n" );
   } else {
     TEST_END();
+    rtems_test_exit(0);
   }
 }

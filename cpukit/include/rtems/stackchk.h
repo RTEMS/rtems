@@ -1,19 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- * @file
- *
- * @ingroup libmisc_stackchk
- *
- * @brief Stack Checker Information
- *
- * This include file contains information necessary to utilize
- * and install the stack checker mechanism.
+ * @brief Stack Checker Mechanism Details
+ * 
+ * This file contains the information necessary to install the stack 
+ * checker mechanism.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (c) 1989-2024 On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (c) 2024 Mohamed Hassan <muhammad.hamdy.hassan@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -42,6 +38,7 @@
 
 #include <rtems.h>
 #include <rtems/print.h>
+#include <rtems/score/threadimpl.h>
 
 /**
  *  @defgroup libmisc_stackchk Stack Checker Mechanism
@@ -60,8 +57,7 @@ extern "C" {
  * of the currently executing task is within bounds.
  *
  * @retval This method returns true if the currently executing task
- * has blown its stack.
- *
+ *         has blown its stack.
  */
 bool rtems_stack_checker_is_blown( void );
 
@@ -82,6 +78,7 @@ void rtems_stack_checker_report_usage( void );
  * task.
  *
  * @param[in] context is the context to pass to the print handler
+ * 
  * @param[in] print is the print handler
  *
  * @note It uses the caller's routine to print the report.
@@ -91,46 +88,45 @@ void rtems_stack_checker_report_usage_with_plugin(
 );
 
 /**
- * @brief This structure contains the stack information provided by the stack
- *   checker for a stack.
+ * @brief Stack information provided by the stack checker.
  */
 typedef struct {
   /**
-   * @brief This member contains the object identifier associated with the
-   *   object using the stack.
-   *
+   * This member contains the object identifier associated with the
+   * object using the stack.
+   * 
    * For interrupt stacks, the object identifier is the processor index.
    */
   rtems_id id;
 
   /**
-   * @brief This member provides the object name associated with the
-   *   object using the stack.
-   *
+   * This member provides the object name associated with the
+   * object using the stack.
+   * 
    * For interrupt stacks, the object name is "Interrupt Stack".
    */
   const char *name;
 
   /**
-   * @brief This member provides the begin address of the stack area.
+   * This member provides the begin address of the stack area.
    */
   const void *begin;
 
   /**
-   * @brief This member contains the size in byes of the stack area.
+   *  This member contains the size in bytes of the stack area.
    */
   uintptr_t size;
 
   /**
-   * @brief This member provides the current stack pointer of the stack.
-   *
-   * If the current stack pointer is not available, then the value is set to
-   * NULL.
+   * This member provides the current stack pointer of the stack.
+   * 
+   * If the current stack pointer is not available, then the value is 
+   * set to NULL.
    */
   const void *current;
 
   /**
-   * @brief This member contains the size in byes of the used stack area.
+   * This member contains the size in bytes of the used stack area.
    *
    * If the stack checker is not initialized, then the value is set to
    * UINTPTR_MAX.
@@ -139,12 +135,12 @@ typedef struct {
 } rtems_stack_checker_info;
 
 /**
- * @brief Visitor routines invoked by rtems_stack_checker_iterate() shall have
- *   this type.
+ * @brief Visitor routines invoked by rtems_stack_checker_iterate() shall 
+ *        have this type.
  *
- * @param info is the stack information.
+ * @param[in] info is the stack information.
  *
- * @param arg is the argument passed to rtems_stack_checker_iterate().
+ * @param[in] arg is the argument passed to rtems_stack_checker_iterate().
  */
 typedef void ( *rtems_stack_checker_visitor )(
   const rtems_stack_checker_info *info,
@@ -153,15 +149,15 @@ typedef void ( *rtems_stack_checker_visitor )(
 
 /**
  * @brief Iterates over all stacks used by the system and invokes the visitor
- *   routine for each stack.
+ *        routine for each stack.
  *
  * This method prints a stack usage report for the curently executing
  * task.
  *
- * @param visitor is the visitor routine invoked for each stack.
+ * @param[in] visitor is the visitor routine invoked for each stack.
  *
- * @param arg is the argument passed to each visitor routine invocation during
- *   the iteration.
+ * @param[in] arg is the argument passed to each visitor routine invocation 
+ *                during the iteration.
  */
 void rtems_stack_checker_iterate( rtems_stack_checker_visitor visit, void *arg );
 
@@ -177,6 +173,7 @@ void rtems_stack_checker_iterate( rtems_stack_checker_visitor visit, void *arg )
  * This method is the task create extension for the stack checker.
  *
  * @param[in] running points to the currently executing task
+ * 
  * @param[in] the_thread points to the newly created task
  *
  * @note If this this the first task created, the stack checker
@@ -195,8 +192,9 @@ void rtems_stack_checker_begin_extension( rtems_tcb *executing );
  * This method is the task context switch extension for the stack checker.
  *
  * @param[in] running points to the currently executing task which
- *            is being context switched out
- * @param[in] running points to the heir task which we are switching to
+ *                    is being context switched out
+ * 
+ * @param[in] heir points to the heir task which we are switching to
  *
  * @note This is called from the internal method _Thread_Dispatch.
  */
@@ -206,10 +204,39 @@ void rtems_stack_checker_switch_extension(
 );
 
 /**
+ * @brief A Quiet Version of Stack Checker Reporter.
+ * 
+ * @param[in] running running points to the currently executing thread which
+ *                    is being context switched out.
+ * 
+ * @param[in] pattern_ok bool variable to check if the pattern is
+ *                       still valid or not
+ */
+ 
+void rtems_stack_checker_reporter_quiet(
+  const Thread_Control *running,
+  bool pattern_ok
+);
+
+/**
+ * @brief The Default Function to Report a Blown Stack.
+ * 
+ * @param[in] running running points to the currently executing thread which
+ *                    is being context switched out.
+ * 
+ * @param[in] pattern_ok bool variable to check if the pattern is
+ *                       still valid or not
+ */
+void rtems_stack_checker_reporter_print_details(
+  const Thread_Control *running,
+  bool pattern_ok
+);
+
+/**
  *  @brief Stack Checker Extension Set Definition
  *
  *  This macro defines the user extension handler set for the stack
- *  checker.  This macro is normally only used by confdefs.h.
+ *  checker. This macro is normally only used by confdefs.h.
  */
 #define RTEMS_STACK_CHECKER_EXTENSION \
 { \
@@ -223,6 +250,27 @@ void rtems_stack_checker_switch_extension(
   0,                                           /* fatal        */ \
   0                                            /* terminate    */ \
 }
+
+/**
+ * @brief The Stack Checker Reporter Initialization Handler.
+ * 
+ * @param[in] running running points to the currently executing thread which
+ *                    is being context switched out.
+ * 
+ * @param[in] pattern_ok bool variable to check if the pattern is
+ *                       still valid or not.
+ */
+typedef void (*Stack_checker_Reporter_handler)(
+  const Thread_Control *running,
+  bool pattern_ok
+);
+
+/**
+ * @brief The Stack Checker Reporter Initialization Handler.
+ * 
+ * Application provided via <rtems/confdefs.h>
+ */
+extern const Stack_checker_Reporter_handler Stack_checker_Reporter;
 
 #ifdef __cplusplus
 }

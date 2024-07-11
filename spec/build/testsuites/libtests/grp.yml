@@ -265,6 +265,8 @@ links:
 - role: build-dependency
   uid: stackchk02
 - role: build-dependency
+  uid: stackchk03
+- role: build-dependency
   uid: stat
 - role: build-dependency
   uid: stringto01
