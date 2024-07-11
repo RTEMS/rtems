@@ -235,5 +235,5 @@ SECTIONS
   .debug_varnames  0 : { *(.debug_varnames) }  
 
   /* Addition to let linker know about custom section for GDB pretty-printing support. */
-	.debug_gdb_scripts 0 : { *(.debug_gdb_scripts) }
+  .debug_gdb_scripts 0 : { *(.debug_gdb_scripts) }
 }

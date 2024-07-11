@@ -190,5 +190,5 @@ SECTIONS
   .debug_aranges	0 : { *(.debug_aranges)		}
 
   /* Addition to let linker know about custom section for GDB pretty-printing support. */
-	.debug_gdb_scripts 0 : { *(.debug_gdb_scripts) }
+  .debug_gdb_scripts 0 : { *(.debug_gdb_scripts) }
 }
