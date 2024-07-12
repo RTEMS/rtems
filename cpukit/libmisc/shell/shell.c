@@ -805,26 +805,38 @@ void rtems_shell_print_env(
 }
 #endif
 
+static int get_ticks_from_ms(const int timeout_ms)
+{
+  int ticks = timeout_ms * 1000;
+
+  ticks /= rtems_configuration_get_microseconds_per_tick();
+
+  return MAX(1, ticks);
+}
+
 /*
  * Wait for the string to return or timeout.
  */
-static bool rtems_shell_term_wait_for(const int fd, const char* str, const int timeout)
+static bool rtems_shell_term_wait_for(const int fd,
+                                      const char* str,
+                                      const int timeout_ms)
 {
-  int msec = timeout;
+  const int timeout_ticks = get_ticks_from_ms(timeout_ms);
+  int tick_count = timeout_ticks;
   int i = 0;
-  while (msec-- > 0 && str[i] != '\0') {
+  while (tick_count-- > 0 && str[i] != '\0') {
     char ch[2];
     if (read(fd, &ch[0], 1) == 1) {
       fflush(stdout);
       if (ch[0] != str[i++]) {
         return false;
       }
-      msec = timeout;
+      tick_count = timeout_ticks;
     } else {
-      usleep(1000);
+      rtems_task_wake_after(1);
     }
   }
-  if (msec == 0) {
+  if (tick_count == 0) {
     return false;
   }
   return true;
@@ -837,13 +849,14 @@ static int rtems_shell_term_buffer_until(const int fd,
                                          char* buf,
                                          const int size,
                                          const char* end,
-                                         const int timeout)
+                                         const int timeout_ms)
 {
-  int msec = timeout;
+  const int timeout_ticks = get_ticks_from_ms(timeout_ms);
+  int tick_count = timeout_ticks;
   int i = 0;
   int e = 0;
   memset(&buf[0], 0, size);
-  while (msec-- > 0 && i < size && end[e] != '\0') {
+  while (tick_count-- > 0 && i < size && end[e] != '\0') {
     char ch[2];
     if (read(fd, &ch[0], 1) == 1) {
       fflush(stdout);
@@ -853,12 +866,12 @@ static int rtems_shell_term_buffer_until(const int fd,
       } else {
         e = 0;
       }
-      msec = timeout;
+      tick_count = timeout_ticks;
     } else {
-      usleep(1000);
+      rtems_task_wake_after(1);
     }
   }
-  if (msec == 0 || end[e] != '\0') {
+  if (tick_count == 0 || end[e] != '\0') {
     return -1;
   }
   i -= e;
