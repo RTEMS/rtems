@@ -936,6 +936,21 @@ static void rtems_shell_winsize( void )
   int lines = 0;
   int cols = 0;
   int r;
+  const char *detect = getenv("TERM_SIZE_DETECT");
+
+  if (detect) {
+    /* Skip window size detection if set to False, false, or 0 */
+    if (strcmp(detect, "false") == 0) {
+      return;
+    }
+    if (strcmp(detect, "False") == 0) {
+      return;
+    }
+    if (strcmp(detect, "0") == 0) {
+      return;
+    }
+  }
+
   r = ioctl(fd, TIOCGWINSZ, &ws);
   if (r == 0) {
     ok = true;
@@ -992,6 +1007,8 @@ static void rtems_shell_winsize( void )
     setenv("LINES", buf, 1);
     snprintf(buf, sizeof(buf) - 1, "%d", cols);
     setenv("COLUMNS", buf, 1);
+  } else {
+    setenv("TERM_SIZE_DETECT", "0", 1);
   }
 }
 
