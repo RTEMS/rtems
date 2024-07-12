@@ -3,6 +3,12 @@
 /* $FreeBSD: head/sys/sys/tree.h 347360 2019-05-08 18:47:00Z trasz $ */
 
 /**
+ * @file
+ *
+ * @ingroup RTEMSScoreRBTree
+ *
+ * @brief This header file provides a red-black tree implementation.
+ *
  * The contents of this file come from the above version of FreeBSD with local
  * changes applied in Newlib and then migrated to RTEMS. These changes lock
  * RTEMS to a specific version of this file. As a result, the macros defined
