@@ -37,7 +37,6 @@
 #include <aio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
 #include <sched.h>
 #include <fcntl.h>
 
@@ -61,13 +60,14 @@ struct aiocb *create_aiocb( int fd )
   aiocbp->aio_offset = 0;
   aiocbp->aio_reqprio = 0;
   aiocbp->aio_fildes = fd;
+  aiocbp->aio_sigevent.sigev_notify = SIGEV_NONE;
   return aiocbp;
 }
 
 void free_aiocb( struct aiocb *aiocbp )
 {
-  free ((char*) aiocbp->aio_buf);
-  free (aiocbp);
+  free( (void*) aiocbp->aio_buf );
+  free( aiocbp );
 }
 
 void *POSIX_Init( void *argument )

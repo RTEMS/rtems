@@ -59,6 +59,9 @@ int aio_fsync(
 
   if ( op != O_SYNC )
     rtems_set_errno_and_return_minus_one( EINVAL );
+
+  if ( rtems_aio_check_sigevent( &aiocbp->aio_sigevent ) == 0 )
+    rtems_set_errno_and_return_minus_one( EINVAL );
   
   mode = fcntl( aiocbp->aio_fildes, F_GETFL );
   if (

@@ -36,7 +36,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef _AIO_H
 #define _AIO_H
 
@@ -160,6 +159,7 @@ struct aiocb {
  *         - EINVAL the starting position of the file is past the maximum offset
  *           for this file.
  *         - EINVAL aiocbp is a NULL pointer
+ *         - EINVAL aiocbp->sigevent is not valid.
  */
 int aio_read(
   struct aiocb  *aiocbp
@@ -178,6 +178,7 @@ int aio_read(
  *         - EINVAL invalid aio_reqprio or aio_offset or aio_nbytes
  *         - EAGAIN not enough memory
  *         - EINVAL aiocbp is a NULL pointer
+ *         - EINVAL aiocbp->sigevent is not valid.
  */
 int aio_write(
   struct aiocb  *aiocbp
@@ -212,7 +213,6 @@ int lio_listio(
 int aio_error(
   const struct aiocb  *aiocbp
 );
-
 
 /**
  * @brief Retrieve Return Status of Asynchronous I/O Operation
@@ -284,6 +284,7 @@ int aio_suspend(
  *            - EINVAL A value of op other than O_SYNC was specified.
  *              The current implemetation only supports O_SYNC.
  *            - EINVAL aiocbp is a NULL pointer.
+ *            - EINVAL aiocbp->sigevent is not valid.
  */
 int aio_fsync(
   int            op,

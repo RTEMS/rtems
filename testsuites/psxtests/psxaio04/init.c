@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright 2011, Alin Rus <alin.codejunkie@gmail.com>
+ * Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -23,12 +23,7 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
  */
-
-#if !defined( OPERATION_COUNT )
-#define OPERATION_COUNT 100
-#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,19 +37,19 @@
 #include <aio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
 #include <sched.h>
 #include <fcntl.h>
-#include <rtems/chain.h>
+#include <signal.h>
 
-const char rtems_test_name[] = "PSXAIO 3";
+const char rtems_test_name[] = "PSXAIO 4";
+
+#define BUFSIZE 512
+#define WRONG_FD 404
 
 /* forward declarations to avoid warnings */
 struct aiocb *create_aiocb( int fd );
 void free_aiocb( struct aiocb *aiocbp );
-
-#define FD_COUNT 6
-#define BUFSIZE 128
+void notify( union sigval sig );
 
 struct aiocb *create_aiocb( int fd )
 {
@@ -77,81 +72,79 @@ void free_aiocb( struct aiocb *aiocbp )
   free( aiocbp );
 }
 
+void notify( union sigval sig )
+{
+  kill( getpid(), sig.sival_int );
+}
+
 void *POSIX_Init( void *argument )
 {
-  int fd[FD_COUNT];
-  struct aiocb *aiocbp[FD_COUNT+1];
-  int status, i, policy = SCHED_FIFO;
-  char filename[BUFSIZE];
-  struct sched_param param;
+  int fd, status, received_signal, sig;
+  struct aiocb *aiocbp;
+  sigset_t sig_set;
+  sig = SIGUSR1;
 
-  status = rtems_aio_init();
-  rtems_test_assert( status == 0 );
-
-  param.sched_priority = 30;
-  status = pthread_setschedparam( 
-    pthread_self(), 
-    policy, 
-    &param 
-  );
-  rtems_test_assert( status == 0 );
+  rtems_aio_init();
 
   status = mkdir( "/tmp", S_IRWXU );
   rtems_test_assert( !status );
+  
+  fd = open(
+    "/tmp/aio_fildes",
+    O_RDWR|O_CREAT,
+    S_IRWXU|S_IRWXG|S_IRWXO
+  );
+  rtems_test_assert( fd != -1 );
 
   TEST_BEGIN();
 
-  for ( i=0; i<FD_COUNT; i++ )
-    {
-      sprintf( filename, "/tmp/aio_fildes%d",i );
-      fd[i] = open( 
-        filename, 
-        O_RDWR|O_CREAT, 
-        S_IRWXU|S_IRWXG|S_IRWXO 
-      );
-      rtems_test_assert( fd[i] != -1 );
-    }
+  aiocbp = create_aiocb( fd );
+  aiocbp->aio_sigevent.sigev_notify = SIGEV_SIGNAL;
+  aiocbp->aio_sigevent.sigev_signo = SIGUSR1;
 
-  aiocbp[0] = create_aiocb( fd[0] );
-  status = aio_write( aiocbp[0] );
-  rtems_test_assert( status != -1 );
+  status =sigemptyset( &sig_set );
+  rtems_test_assert( status == 0 );
 
-  aiocbp[1] = create_aiocb( fd[1] );
-  status = aio_write( aiocbp[1] );
-  rtems_test_assert( status != -1 );
+  status =sigaddset( &sig_set, sig );
+  rtems_test_assert( status == 0 );
 
-  aiocbp[2] = create_aiocb( fd[1] );
-  status = aio_read( aiocbp[2] );
-  rtems_test_assert( status != -1 );
+  status = sigprocmask( SIG_BLOCK, &sig_set, NULL );
+  rtems_test_assert( status == 0 );
 
-  aiocbp[3] = create_aiocb( fd[2] );
-  status = aio_write( aiocbp[3] );
-  rtems_test_assert( status != -1 );
+  status = aio_write( aiocbp );
+  rtems_test_assert( status == 0 );
 
-  aiocbp[4] = create_aiocb( fd[3] );
-  status = aio_write( aiocbp[4] );
-  rtems_test_assert( status != -1 );
+  status = sigwait( &sig_set, &received_signal );
+  rtems_test_assert( status == 0 );
 
-  aiocbp[5] = create_aiocb( fd[4] );
-  status = aio_write( aiocbp[5] );
-  rtems_test_assert( status != -1 );
+  rtems_test_assert( received_signal == sig );
 
-  aiocbp[6] = create_aiocb( fd[5] );
-  status = aio_read( aiocbp[6] );
-  rtems_test_assert( status != -1 );
+  aiocbp = create_aiocb( fd );
+  aiocbp->aio_sigevent.sigev_notify = SIGEV_THREAD;
+  aiocbp->aio_sigevent.sigev_notify_attributes = NULL;
+  aiocbp->aio_sigevent.sigev_notify_function = &notify;
+  aiocbp->aio_sigevent.sigev_value.sival_int = sig;
 
-  sleep( 5 );
-  sleep( 5 );
-  sleep( 5 );
+  status =sigemptyset( &sig_set );
+  rtems_test_assert( status == 0 );
+
+  status =sigaddset( &sig_set, sig );
+  rtems_test_assert( status == 0 );
+
+  status = sigprocmask( SIG_BLOCK, &sig_set, NULL );
+  rtems_test_assert( status == 0 );
+
+  status = aio_write( aiocbp );
+  rtems_test_assert( status == 0 );
+
+  status = sigwait( &sig_set, &received_signal );
+  rtems_test_assert( status == 0 );
+
+  rtems_test_assert( received_signal == sig );
 
   TEST_END();
 
-  for( i = 0; i < FD_COUNT; i++ )
-    {
-      close( fd[i] );
-      free_aiocb( aiocbp[i] );
-    }
-  free_aiocb( aiocbp[i] );
+  close( fd );
   rtems_test_exit( 0 );
 
   return NULL;

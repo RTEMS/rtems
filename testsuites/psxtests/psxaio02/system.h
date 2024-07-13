@@ -32,7 +32,7 @@
 #include <errno.h>
 #include <sched.h>
 
-void *POSIX_Init (void *argument);
+void *POSIX_Init( void *argument );
 
 /* configuration information */
 
@@ -42,7 +42,7 @@ void *POSIX_Init (void *argument);
 #define CONFIGURE_MAXIMUM_TASKS             20
 #define CONFIGURE_MAXIMUM_SEMAPHORES        20
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES    20
-#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 20
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS  20
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

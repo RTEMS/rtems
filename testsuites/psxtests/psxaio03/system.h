@@ -16,7 +16,7 @@
 #include <errno.h>
 #include <sched.h>
 
-void *POSIX_Init (void *argument);
+void *POSIX_Init( void *argument );
 
 /* configuration information */
 
@@ -26,7 +26,7 @@ void *POSIX_Init (void *argument);
 #define CONFIGURE_MAXIMUM_TASKS             10
 #define CONFIGURE_MAXIMUM_SEMAPHORES        10
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES    10
-#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 10
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS  10
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
@@ -34,8 +34,8 @@ void *POSIX_Init (void *argument);
 #define CONFIGURE_MAXIMUM_POSIX_KEYS           10
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
-#define CONFIGURE_EXTRA_TASK_STACKS            (5 * RTEMS_MINIMUM_STACK_SIZE)
-#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE (5 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS            ( 5 * RTEMS_MINIMUM_STACK_SIZE )
+#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE ( 5 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
 

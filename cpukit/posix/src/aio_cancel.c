@@ -36,7 +36,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -76,7 +75,7 @@ int aio_cancel( int fildes, struct aiocb  *aiocbp )
           return AIO_ALLDONE;
         }
 
-        AIO_printf ( "Request chain on [IQ]\n" );
+        AIO_printf( "Request chain on [IQ]\n" );
 
         rtems_chain_extract( &r_chain->next_fd );
         rtems_aio_remove_fd( r_chain );

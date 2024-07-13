@@ -42,7 +42,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
+#include <signal.h> 
 #include <rtems/posix/aio_misc.h>
+#include <rtems/score/assert.h>
 #include <errno.h>
 
 /**
@@ -81,6 +83,31 @@ static void rtems_aio_insert_prio(
   rtems_chain_control *chain,
   rtems_aio_request *req 
 );
+
+/**
+ * @brief Wrapper for pthread_create() call.
+ *
+ * This function serves as a wrapper with the appropriate signature for a call 
+ * to pthread_create(). It receives a pointer to a sigevent structure that 
+ * contains a pointer to the function to be called and the parameters to be 
+ * passed to it.
+ * 
+ * @param args Pointer to the sigevent struct containing a pointer to the 
+ *             function and its parameters.
+ * @return void*
+ */
+static void *rtems_aio_notify_function_wrapper( void *args );
+
+/**
+ * @brief Generates a notification.
+ *
+ * The signal is generated using a sigevent struct, as defined from the 
+ * POSIX specifications.
+ * 
+ * @param sigp is a pointer to the sigevent struct that will be used 
+ *             to generate the signal
+ */
+static void rtems_aio_notify( struct sigevent *sigp );
 
 rtems_aio_queue aio_request_queue;
 
@@ -253,10 +280,8 @@ int rtems_aio_remove_req( rtems_chain_control *chain, struct aiocb *aiocbp )
   return AIO_CANCELED;
 }
 
-int
-rtems_aio_enqueue( rtems_aio_request *req )
+int rtems_aio_enqueue( rtems_aio_request *req )
 {
-
   rtems_aio_request_chain *r_chain;
   rtems_chain_control *chain;
   pthread_t thid;
@@ -358,9 +383,100 @@ rtems_aio_enqueue( rtems_aio_request *req )
   return 0;
 }
 
+int rtems_aio_check_sigevent( struct sigevent *sigp )
+{
+  _Assert( sigp != NULL );
+
+  switch ( sigp->sigev_notify ) {
+    case SIGEV_NONE:
+      break;
+
+    case SIGEV_SIGNAL:
+      if ( sigp->sigev_signo < 1 && sigp->sigev_signo > 32 ) {
+        return 0;
+      }
+      break;
+
+    case SIGEV_THREAD:
+      if ( sigp->sigev_notify_function == NULL ) {
+        return 0;
+      }
+      break;
+
+    default:
+      return 0;
+  }
+
+  return 1;
+}
+
+static void *rtems_aio_notify_function_wrapper( void *args )
+{
+  struct sigevent *sig = ( struct sigevent * ) args;
+  void (*notify_function)( union sigval ) = sig->sigev_notify_function;  
+  union sigval param = ( union sigval ) sig->sigev_value;
+
+  notify_function( param );
+
+  pthread_exit( NULL );
+}
+
+static void rtems_aio_notify( struct sigevent *sigp ) 
+{
+#ifdef RTEMS_POSIX_API
+
+  int result;
+#ifndef RTEMS_DEBUG
+  (void) result;
+#endif
+
+  _Assert( sigp != NULL );
+
+  switch ( sigp->sigev_notify ) {
+    case SIGEV_SIGNAL:
+      result = sigqueue(
+        getpid(),
+        sigp->sigev_signo,
+        sigp->sigev_value
+      );
+      _Assert( result == 0 );
+      break;
+
+    case SIGEV_THREAD:
+      pthread_t thread;
+      pthread_attr_t attr;
+      pthread_attr_t *attrp = sigp->sigev_notify_attributes;
+      
+      if ( attrp == NULL ) {
+        attrp = &attr;
+
+        result = pthread_attr_init( attrp );
+        _Assert( result == 0 );
+
+        result = pthread_attr_setdetachstate(
+          attrp, 
+          PTHREAD_CREATE_DETACHED
+        );
+        _Assert( result == 0 );
+      }
+
+      result = pthread_create( 
+        &thread,
+        attrp,
+        rtems_aio_notify_function_wrapper,
+        sigp
+      );
+      _Assert( result == 0 );
+      break;
+  }
+
+#else
+  (void) sigp;
+#endif
+}
+
 static void *rtems_aio_handle( void *arg )
 {
-
   rtems_aio_request_chain *r_chain = arg;
   rtems_aio_request *req;
   rtems_chain_control *chain;
@@ -524,6 +640,8 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
     default:
       result = -1;
   }
+
+  rtems_aio_notify( &req->aiocbp->aio_sigevent );
 
   if ( result < 0 ) {
     req->aiocbp->return_value = -1;

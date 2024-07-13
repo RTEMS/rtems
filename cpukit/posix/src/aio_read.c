@@ -71,6 +71,9 @@ int aio_read( struct aiocb *aiocbp )
   if ( aiocbp->aio_offset < 0 )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
+  if ( rtems_aio_check_sigevent( &aiocbp->aio_sigevent ) == 0 )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
   req = malloc( sizeof( rtems_aio_request ) );
   if ( req == NULL )
     rtems_set_errno_and_return_minus_one( EAGAIN );

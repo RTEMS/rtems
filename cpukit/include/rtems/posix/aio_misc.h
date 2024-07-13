@@ -41,13 +41,17 @@
 #ifndef _AIO_MISC_H
 #define _AIO_MISC_H
 
-#include <stdio.h>
 #include <string.h>
+#include <signal.h> 
 #include <aio.h>
 #include <pthread.h>
 #include <rtems.h>
 #include <rtems/chain.h>
 #include <rtems/seterr.h>
+
+#ifdef RTEMS_DEBUG
+#include <stdio.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -189,6 +193,17 @@ int rtems_aio_remove_req(
   rtems_chain_control *chain,
 	struct aiocb *aiocbp
 );
+
+/**
+ * @brief Checks the validity of a sigevent struct
+ *
+ * Checks if the pointer passed as parameter points to a valid sigevent struct.
+ * 
+ * @param sigp Is a pointer to the sigevent struct to check.
+ * @retval 0 The struct is not valid.
+ * @retval 1 The struct is valid.
+ */
+int rtems_aio_check_sigevent( struct sigevent *sigp );
 
 #ifdef RTEMS_DEBUG
 #include <assert.h>
