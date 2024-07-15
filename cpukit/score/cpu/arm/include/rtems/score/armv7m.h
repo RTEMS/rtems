@@ -203,18 +203,26 @@ typedef struct {
 } ARMV7M_Systick;
 
 typedef struct {
-  uint32_t iser [8];
-  uint32_t reserved_0 [24];
-  uint32_t icer [8];
-  uint32_t reserved_1 [24];
-  uint32_t ispr [8];
-  uint32_t reserved_2 [24];
-  uint32_t icpr [8];
-  uint32_t reserved_3 [24];
-  uint32_t iabr [8];
-  uint32_t reserved_4 [56];
+  uint32_t iser [16];
+  uint32_t reserved_0 [16];
+  uint32_t icer [16];
+  uint32_t reserved_1 [16];
+  uint32_t ispr [16];
+  uint32_t reserved_2 [16];
+  uint32_t icpr [16];
+  uint32_t reserved_3 [16];
+  uint32_t iabr [16];
+#if __ARM_ARCH >= 8
+  uint32_t reserved_4 [16];
+  uint32_t itns [16];
+  uint32_t reserved_5 [16];
+  uint8_t  ipr [496];
+  uint32_t reserved_6 [580];
+#else /* __ARM_ARCH < 8 */
+  uint32_t reserved_4 [48];
   uint8_t  ipr [240];
   uint32_t reserved_5 [644];
+#endif
   uint32_t stir;
 } ARMV7M_NVIC;
 
