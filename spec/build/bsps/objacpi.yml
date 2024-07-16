@@ -1,0 +1,222 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2024 Matheus Pecoraro
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes:
+- bsps/include/acpi/acpica/
+- bsps/include/acpi/acpica/platform/
+install:
+- destination: ${BSP_INCLUDEDIR}/acpi/acpica
+  source:
+  - bsps/include/acpi/acpica/acapps.h
+  - bsps/include/acpi/acpica/acbuffer.h
+  - bsps/include/acpi/acpica/acclib.h
+  - bsps/include/acpi/acpica/accommon.h
+  - bsps/include/acpi/acpica/acconfig.h
+  - bsps/include/acpi/acpica/acconvert.h
+  - bsps/include/acpi/acpica/acdebug.h
+  - bsps/include/acpi/acpica/acdisasm.h
+  - bsps/include/acpi/acpica/acdispat.h
+  - bsps/include/acpi/acpica/acevents.h
+  - bsps/include/acpi/acpica/acexcep.h
+  - bsps/include/acpi/acpica/acglobal.h
+  - bsps/include/acpi/acpica/achware.h
+  - bsps/include/acpi/acpica/acinterp.h
+  - bsps/include/acpi/acpica/aclocal.h
+  - bsps/include/acpi/acpica/acmacros.h
+  - bsps/include/acpi/acpica/acnames.h
+  - bsps/include/acpi/acpica/acnamesp.h
+  - bsps/include/acpi/acpica/acobject.h
+  - bsps/include/acpi/acpica/acopcode.h
+  - bsps/include/acpi/acpica/acoutput.h
+  - bsps/include/acpi/acpica/acparser.h
+  - bsps/include/acpi/acpica/acpi.h
+  - bsps/include/acpi/acpica/acpiosxf.h
+  - bsps/include/acpi/acpica/acpixf.h
+  - bsps/include/acpi/acpica/acpredef.h
+  - bsps/include/acpi/acpica/acresrc.h
+  - bsps/include/acpi/acpica/acrestyp.h
+  - bsps/include/acpi/acpica/acstruct.h
+  - bsps/include/acpi/acpica/actables.h
+  - bsps/include/acpi/acpica/actbinfo.h
+  - bsps/include/acpi/acpica/actbl.h
+  - bsps/include/acpi/acpica/actbl1.h
+  - bsps/include/acpi/acpica/actbl2.h
+  - bsps/include/acpi/acpica/actbl3.h
+  - bsps/include/acpi/acpica/actypes.h
+  - bsps/include/acpi/acpica/acutils.h
+  - bsps/include/acpi/acpica/acuuid.h
+  - bsps/include/acpi/acpica/amlcode.h
+  - bsps/include/acpi/acpica/amlresrc.h
+links: []
+source:
+- bsps/shared/acpi/acpica/dispatcher/dsargs.c
+- bsps/shared/acpi/acpica/dispatcher/dscontrol.c
+- bsps/shared/acpi/acpica/dispatcher/dsdebug.c
+- bsps/shared/acpi/acpica/dispatcher/dsfield.c
+- bsps/shared/acpi/acpica/dispatcher/dsinit.c
+- bsps/shared/acpi/acpica/dispatcher/dsmethod.c
+- bsps/shared/acpi/acpica/dispatcher/dsmthdat.c
+- bsps/shared/acpi/acpica/dispatcher/dsobject.c
+- bsps/shared/acpi/acpica/dispatcher/dsopcode.c
+- bsps/shared/acpi/acpica/dispatcher/dspkginit.c
+- bsps/shared/acpi/acpica/dispatcher/dsutils.c
+- bsps/shared/acpi/acpica/dispatcher/dswexec.c
+- bsps/shared/acpi/acpica/dispatcher/dswload.c
+- bsps/shared/acpi/acpica/dispatcher/dswload2.c
+- bsps/shared/acpi/acpica/dispatcher/dswscope.c
+- bsps/shared/acpi/acpica/dispatcher/dswstate.c
+- bsps/shared/acpi/acpica/events/evevent.c
+- bsps/shared/acpi/acpica/events/evglock.c
+- bsps/shared/acpi/acpica/events/evgpe.c
+- bsps/shared/acpi/acpica/events/evgpeblk.c
+- bsps/shared/acpi/acpica/events/evgpeinit.c
+- bsps/shared/acpi/acpica/events/evgpeutil.c
+- bsps/shared/acpi/acpica/events/evhandler.c
+- bsps/shared/acpi/acpica/events/evmisc.c
+- bsps/shared/acpi/acpica/events/evregion.c
+- bsps/shared/acpi/acpica/events/evrgnini.c
+- bsps/shared/acpi/acpica/events/evsci.c
+- bsps/shared/acpi/acpica/events/evxface.c
+- bsps/shared/acpi/acpica/events/evxfevnt.c
+- bsps/shared/acpi/acpica/events/evxfgpe.c
+- bsps/shared/acpi/acpica/events/evxfregn.c
+- bsps/shared/acpi/acpica/executer/exconcat.c
+- bsps/shared/acpi/acpica/executer/exconfig.c
+- bsps/shared/acpi/acpica/executer/exconvrt.c
+- bsps/shared/acpi/acpica/executer/excreate.c
+- bsps/shared/acpi/acpica/executer/exdebug.c
+- bsps/shared/acpi/acpica/executer/exdump.c
+- bsps/shared/acpi/acpica/executer/exfield.c
+- bsps/shared/acpi/acpica/executer/exfldio.c
+- bsps/shared/acpi/acpica/executer/exmisc.c
+- bsps/shared/acpi/acpica/executer/exmutex.c
+- bsps/shared/acpi/acpica/executer/exnames.c
+- bsps/shared/acpi/acpica/executer/exoparg1.c
+- bsps/shared/acpi/acpica/executer/exoparg2.c
+- bsps/shared/acpi/acpica/executer/exoparg3.c
+- bsps/shared/acpi/acpica/executer/exoparg6.c
+- bsps/shared/acpi/acpica/executer/exprep.c
+- bsps/shared/acpi/acpica/executer/exregion.c
+- bsps/shared/acpi/acpica/executer/exresnte.c
+- bsps/shared/acpi/acpica/executer/exresolv.c
+- bsps/shared/acpi/acpica/executer/exresop.c
+- bsps/shared/acpi/acpica/executer/exserial.c
+- bsps/shared/acpi/acpica/executer/exstore.c
+- bsps/shared/acpi/acpica/executer/exstoren.c
+- bsps/shared/acpi/acpica/executer/exstorob.c
+- bsps/shared/acpi/acpica/executer/exsystem.c
+- bsps/shared/acpi/acpica/executer/extrace.c
+- bsps/shared/acpi/acpica/executer/exutils.c
+- bsps/shared/acpi/acpica/hardware/hwacpi.c
+- bsps/shared/acpi/acpica/hardware/hwesleep.c
+- bsps/shared/acpi/acpica/hardware/hwgpe.c
+- bsps/shared/acpi/acpica/hardware/hwpci.c
+- bsps/shared/acpi/acpica/hardware/hwregs.c
+- bsps/shared/acpi/acpica/hardware/hwsleep.c
+- bsps/shared/acpi/acpica/hardware/hwtimer.c
+- bsps/shared/acpi/acpica/hardware/hwvalid.c
+- bsps/shared/acpi/acpica/hardware/hwxface.c
+- bsps/shared/acpi/acpica/hardware/hwxfsleep.c
+- bsps/shared/acpi/acpica/namespace/nsaccess.c
+- bsps/shared/acpi/acpica/namespace/nsalloc.c
+- bsps/shared/acpi/acpica/namespace/nsarguments.c
+- bsps/shared/acpi/acpica/namespace/nsconvert.c
+- bsps/shared/acpi/acpica/namespace/nsdump.c
+- bsps/shared/acpi/acpica/namespace/nsdumpdv.c
+- bsps/shared/acpi/acpica/namespace/nseval.c
+- bsps/shared/acpi/acpica/namespace/nsinit.c
+- bsps/shared/acpi/acpica/namespace/nsload.c
+- bsps/shared/acpi/acpica/namespace/nsnames.c
+- bsps/shared/acpi/acpica/namespace/nsobject.c
+- bsps/shared/acpi/acpica/namespace/nsparse.c
+- bsps/shared/acpi/acpica/namespace/nspredef.c
+- bsps/shared/acpi/acpica/namespace/nsprepkg.c
+- bsps/shared/acpi/acpica/namespace/nsrepair.c
+- bsps/shared/acpi/acpica/namespace/nsrepair2.c
+- bsps/shared/acpi/acpica/namespace/nssearch.c
+- bsps/shared/acpi/acpica/namespace/nsutils.c
+- bsps/shared/acpi/acpica/namespace/nswalk.c
+- bsps/shared/acpi/acpica/namespace/nsxfeval.c
+- bsps/shared/acpi/acpica/namespace/nsxfname.c
+- bsps/shared/acpi/acpica/namespace/nsxfobj.c
+- bsps/shared/acpi/acpica/parser/psargs.c
+- bsps/shared/acpi/acpica/parser/psloop.c
+- bsps/shared/acpi/acpica/parser/psobject.c
+- bsps/shared/acpi/acpica/parser/psopcode.c
+- bsps/shared/acpi/acpica/parser/psopinfo.c
+- bsps/shared/acpi/acpica/parser/psparse.c
+- bsps/shared/acpi/acpica/parser/psscope.c
+- bsps/shared/acpi/acpica/parser/pstree.c
+- bsps/shared/acpi/acpica/parser/psutils.c
+- bsps/shared/acpi/acpica/parser/pswalk.c
+- bsps/shared/acpi/acpica/parser/psxface.c
+- bsps/shared/acpi/acpica/resources/rsaddr.c
+- bsps/shared/acpi/acpica/resources/rscalc.c
+- bsps/shared/acpi/acpica/resources/rscreate.c
+- bsps/shared/acpi/acpica/resources/rsinfo.c
+- bsps/shared/acpi/acpica/resources/rsio.c
+- bsps/shared/acpi/acpica/resources/rsirq.c
+- bsps/shared/acpi/acpica/resources/rslist.c
+- bsps/shared/acpi/acpica/resources/rsmemory.c
+- bsps/shared/acpi/acpica/resources/rsmisc.c
+- bsps/shared/acpi/acpica/resources/rsserial.c
+- bsps/shared/acpi/acpica/resources/rsutils.c
+- bsps/shared/acpi/acpica/resources/rsxface.c
+- bsps/shared/acpi/acpica/tables/tbdata.c
+- bsps/shared/acpi/acpica/tables/tbfadt.c
+- bsps/shared/acpi/acpica/tables/tbfind.c
+- bsps/shared/acpi/acpica/tables/tbinstal.c
+- bsps/shared/acpi/acpica/tables/tbprint.c
+- bsps/shared/acpi/acpica/tables/tbutils.c
+- bsps/shared/acpi/acpica/tables/tbxface.c
+- bsps/shared/acpi/acpica/tables/tbxfload.c
+- bsps/shared/acpi/acpica/tables/tbxfroot.c
+- bsps/shared/acpi/acpica/utilities/utaddress.c
+- bsps/shared/acpi/acpica/utilities/utalloc.c
+- bsps/shared/acpi/acpica/utilities/utascii.c
+- bsps/shared/acpi/acpica/utilities/utbuffer.c
+- bsps/shared/acpi/acpica/utilities/utcache.c
+- bsps/shared/acpi/acpica/utilities/utcksum.c
+- bsps/shared/acpi/acpica/utilities/utclib.c
+- bsps/shared/acpi/acpica/utilities/utcopy.c
+- bsps/shared/acpi/acpica/utilities/utdebug.c
+- bsps/shared/acpi/acpica/utilities/utdecode.c
+- bsps/shared/acpi/acpica/utilities/utdelete.c
+- bsps/shared/acpi/acpica/utilities/uterror.c
+- bsps/shared/acpi/acpica/utilities/uteval.c
+- bsps/shared/acpi/acpica/utilities/utexcep.c
+- bsps/shared/acpi/acpica/utilities/utglobal.c
+- bsps/shared/acpi/acpica/utilities/uthex.c
+- bsps/shared/acpi/acpica/utilities/utids.c
+- bsps/shared/acpi/acpica/utilities/utinit.c
+- bsps/shared/acpi/acpica/utilities/utlock.c
+- bsps/shared/acpi/acpica/utilities/utmath.c
+- bsps/shared/acpi/acpica/utilities/utmisc.c
+- bsps/shared/acpi/acpica/utilities/utmutex.c
+- bsps/shared/acpi/acpica/utilities/utnonansi.c
+- bsps/shared/acpi/acpica/utilities/utobject.c
+- bsps/shared/acpi/acpica/utilities/utosi.c
+- bsps/shared/acpi/acpica/utilities/utownerid.c
+- bsps/shared/acpi/acpica/utilities/utpredef.c
+- bsps/shared/acpi/acpica/utilities/utresdecode.c
+- bsps/shared/acpi/acpica/utilities/utresrc.c
+- bsps/shared/acpi/acpica/utilities/utstate.c
+- bsps/shared/acpi/acpica/utilities/utstring.c
+- bsps/shared/acpi/acpica/utilities/utstrsuppt.c
+- bsps/shared/acpi/acpica/utilities/utstrtoul64.c
+- bsps/shared/acpi/acpica/utilities/uttrack.c
+- bsps/shared/acpi/acpica/utilities/utuuid.c
+- bsps/shared/acpi/acpica/utilities/utxface.c
+- bsps/shared/acpi/acpica/utilities/utxferror.c
+- bsps/shared/acpi/acpica/utilities/utxfinit.c
+- bsps/shared/acpi/acpica/utilities/utxfmutex.c
+- bsps/shared/acpi/osl/osl_misc.c
+- bsps/shared/acpi/osl/osl_output.c
+- bsps/shared/acpi/osl/osl_sched.c
+- bsps/shared/acpi/osl/osl_sync.c
+type: build
