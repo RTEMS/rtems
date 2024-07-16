@@ -360,6 +360,9 @@
 
 #elif defined(__ZEPHYR__)
 #include "aczephyr.h"
+
+#elif defined(__rtems__)
+#include <acpi/acpica/platform/acrtems.h>
 #else
 
 /* Unknown environment */
