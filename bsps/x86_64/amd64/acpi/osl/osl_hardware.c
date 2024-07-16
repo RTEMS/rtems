@@ -7,7 +7,7 @@
  *
  * @ingroup RTEMSBSPsX8664AMD64EFI
  *
- * @brief BSP reset code
+ * @brief ACPICA OS Services Layer interfaces
  */
 
 /*
@@ -36,20 +36,62 @@
  */
 
 #include <acpi/acpica/acpi.h>
-#include <bsp/bootcard.h>
+#include <rtems/score/cpu.h>
 
-#define KEYBOARD_CONTROLLER_PORT 0x64
-#define PULSE_RESET_LINE         0xFE
-
-void bsp_reset(void)
+ACPI_STATUS AcpiOsReadPort(ACPI_IO_ADDRESS InPort, UINT32* Value, UINT32 Width)
 {
-  ACPI_STATUS status = AcpiEnterSleepStatePrep(ACPI_STATE_S5);
-
-  if (status == AE_OK) {
-    amd64_disable_interrupts();
-    AcpiEnterSleepState(ACPI_STATE_S5);
+  switch (Width) {
+    case 8:
+      *Value = inport_byte((uint16_t) InPort);
+      break;
+    case 16:
+      *Value = inport_word((uint16_t) InPort);
+      break;
+    case 32:
+      *Value = inport_long((uint16_t) InPort);
+      break;
+    default:
+      return (AE_BAD_PARAMETER);
   }
 
-  /* Should be unreachable. As a fallback try the keyboard controller method */
-  outport_byte(KEYBOARD_CONTROLLER_PORT, PULSE_RESET_LINE);
+  return (AE_OK);
+}
+
+ACPI_STATUS AcpiOsWritePort(ACPI_IO_ADDRESS OutPort, UINT32 Value, UINT32 Width)
+{
+  switch (Width) {
+    case 8:
+      outport_byte((uint16_t) OutPort, (uint8_t) Value);
+      break;
+    case 16:
+      outport_word((uint16_t) OutPort, (uint16_t) Value);
+      break;
+    case 32:
+      outport_long((uint16_t) OutPort, Value);
+      break;
+    default:
+      return (AE_BAD_PARAMETER);
+  }
+
+  return (AE_OK);
+}
+
+ACPI_STATUS AcpiOsReadPciConfiguration(
+  ACPI_PCI_ID *PciId,
+  UINT32 Register,
+  UINT64 *Value,
+  UINT32 Width
+)
+{
+  return (AE_SUPPORT);
+}
+
+ACPI_STATUS AcpiOsWritePciConfiguration(
+  ACPI_PCI_ID *PciId,
+  UINT32 Register,
+  UINT64 Value,
+  UINT32 Width
+)
+{
+  return (AE_SUPPORT);
 }

@@ -39,6 +39,7 @@
 	.type	_start, @function
 _start:
 	.cfi_startproc
+        movq	%rsp, %rbp
 	/*
 	 * _ISR_Stack_area_end is aligned to CPU_INTERRUPT_STACK_ALIGNMENT (64 bits)
 	 * by compiler directive at /cpukit/include/rtems/confdefs/percpu.h
@@ -46,6 +47,22 @@ _start:
 	 * instruction will decrement the %rsp and then save the value of %rip
 	 */
 	movabsq	$_ISR_Stack_area_end, %rsp
+
+#ifndef BSP_MULTIBOOT_SUPPORT
+        /**
+         * The FreeBSD bootloader gives us control with the following stack:
+         * 0(%rsp) = 32 bit return address (cannot be used)
+         * 4(%rsp) = 32 bit modulep
+         * 8(%rsp) = 32 bit kernend
+         *
+         * We will extract the necessary info set up by the FreeBSD bootloader
+         * before dynamic memory is set up since it is stored in memory after
+         * the kernel
+         */
+        movl	4(%rbp), %edi
+        call	retrieve_info_from_freebsd_loader
+#endif
+
 	.cfi_def_cfa_offset 16
 	xorl	%edi, %edi
 #ifdef BSP_MULTIBOOT_SUPPORT
@@ -96,8 +113,9 @@ info_requests_start:
 #else
 	.long	0
 #endif
-        /* padding to 8 byte tags allignment */
-        .long   0
+        .long	MULTIBOOT_TAG_TYPE_ACPI_OLD
+        .long	MULTIBOOT_TAG_TYPE_ACPI_NEW
+        .long	0
 info_requests_end:
         /* header end*/
         .short  MULTIBOOT_HEADER_TAG_END

@@ -7,7 +7,7 @@
  *
  * @ingroup RTEMSBSPsX8664AMD64EFI
  *
- * @brief BSP reset code
+ * @brief ACPI implementation
  */
 
 /*
@@ -35,21 +35,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <assert.h>
+#include <acpi/acpi.h>
 #include <acpi/acpica/acpi.h>
-#include <bsp/bootcard.h>
+#include <rtems/sysinit.h>
 
-#define KEYBOARD_CONTROLLER_PORT 0x64
-#define PULSE_RESET_LINE         0xFE
+uint64_t acpi_rsdp_addr = 0;
 
-void bsp_reset(void)
+static void initialize_acpi(void)
 {
-  ACPI_STATUS status = AcpiEnterSleepStatePrep(ACPI_STATE_S5);
+  ACPI_STATUS status;
+  status = AcpiInitializeSubsystem();
+  assert(status == (AE_OK));
 
-  if (status == AE_OK) {
-    amd64_disable_interrupts();
-    AcpiEnterSleepState(ACPI_STATE_S5);
-  }
+  status = AcpiInitializeTables(NULL, ACPI_MAX_INIT_TABLES, FALSE);
+  assert(status == (AE_OK));
 
-  /* Should be unreachable. As a fallback try the keyboard controller method */
-  outport_byte(KEYBOARD_CONTROLLER_PORT, PULSE_RESET_LINE);
+  status = AcpiLoadTables();
+  assert(status == (AE_OK));
+
+  /* System Control Interrupts not supported */
+  status = AcpiEnableSubsystem(ACPI_NO_HANDLER_INIT);
+  assert(status == (AE_OK));
+
+  /* General Purpose Events not supported */
+  status = AcpiInitializeObjects(ACPI_NO_EVENT_INIT);
+  assert(status == (AE_OK));
 }
+
+RTEMS_SYSINIT_ITEM(
+  initialize_acpi,
+  RTEMS_SYSINIT_DEVICE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

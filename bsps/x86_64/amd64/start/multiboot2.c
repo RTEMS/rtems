@@ -33,6 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <acpi/acpi.h>
 #include <bsp.h>
 #include <inttypes.h>
 #include <multiboot2.h>
@@ -115,6 +116,19 @@ process_multiboot2_info()
 				    fbtag->common.framebuffer_pitch, fbtag->common.framebuffer_bpp,
 				    fbtag->common.framebuffer_type);
                     break;
+                case MULTIBOOT_TAG_TYPE_ACPI_OLD:
+                    if (acpi_rsdp_addr != 0) {
+                        break;
+                    }
+                    struct multiboot_tag_new_acpi* rsdp_old_tag = (struct multiboot_tag_new_acpi*) tag;
+                    printf("Multiboot2: ACPI 1.0 RSDP address: %p\n", rsdp_old_tag->rsdp);
+                    acpi_rsdp_addr = (uint64_t) rsdp_old_tag->rsdp;
+                break;
+                case MULTIBOOT_TAG_TYPE_ACPI_NEW:
+                    struct multiboot_tag_new_acpi* rsdp_new_tag = (struct multiboot_tag_new_acpi*) tag;
+                    printf("Multiboot2: ACPI 2.0 RSDP address: %p\n", rsdp_new_tag->rsdp);
+                    acpi_rsdp_addr = (uint64_t) rsdp_new_tag->rsdp;
+                break;
 #ifdef BSP_USE_EFI_BOOT_SERVICES
                 case MULTIBOOT_TAG_TYPE_EFI64:
                     printf("EFI64 system table @ 0x%llx\n", ((struct multiboot_tag_efi64 *) tag)->pointer);

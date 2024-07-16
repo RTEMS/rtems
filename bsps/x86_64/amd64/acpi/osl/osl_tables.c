@@ -7,7 +7,7 @@
  *
  * @ingroup RTEMSBSPsX8664AMD64EFI
  *
- * @brief BSP reset code
+ * @brief ACPICA OS Services Layer interfaces
  */
 
 /*
@@ -35,21 +35,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <acpi/acpi.h>
 #include <acpi/acpica/acpi.h>
-#include <bsp/bootcard.h>
 
-#define KEYBOARD_CONTROLLER_PORT 0x64
-#define PULSE_RESET_LINE         0xFE
-
-void bsp_reset(void)
+ACPI_PHYSICAL_ADDRESS AcpiOsGetRootPointer(void)
 {
-  ACPI_STATUS status = AcpiEnterSleepStatePrep(ACPI_STATE_S5);
+  return acpi_rsdp_addr;
+}
 
-  if (status == AE_OK) {
-    amd64_disable_interrupts();
-    AcpiEnterSleepState(ACPI_STATE_S5);
-  }
+ACPI_STATUS AcpiOsTableOverride(
+  ACPI_TABLE_HEADER* ExistingTable,
+  ACPI_TABLE_HEADER** NewTable
+)
+{
+  return (AE_SUPPORT);
+}
 
-  /* Should be unreachable. As a fallback try the keyboard controller method */
-  outport_byte(KEYBOARD_CONTROLLER_PORT, PULSE_RESET_LINE);
+ACPI_STATUS AcpiOsPhysicalTableOverride(
+  ACPI_TABLE_HEADER* ExistingTable,
+  ACPI_PHYSICAL_ADDRESS* NewAddress,
+  UINT32* NewTableLength
+)
+{
+  return (AE_SUPPORT);
 }

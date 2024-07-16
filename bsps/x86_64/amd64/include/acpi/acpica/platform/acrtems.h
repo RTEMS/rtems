@@ -1,15 +1,5 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @ingroup RTEMSBSPsX8664AMD64
- *
- * @ingroup RTEMSBSPsX8664AMD64EFI
- *
- * @brief BSP reset code
- */
-
 /*
  * Copyright (C) 2024 Matheus Pecoraro
  *
@@ -35,21 +25,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <acpi/acpica/acpi.h>
-#include <bsp/bootcard.h>
+#ifndef __ACRTEMS_H__
+#define __ACRTEMS_H__
 
-#define KEYBOARD_CONTROLLER_PORT 0x64
-#define PULSE_RESET_LINE         0xFE
+#include <stdint.h>
 
-void bsp_reset(void)
-{
-  ACPI_STATUS status = AcpiEnterSleepStatePrep(ACPI_STATE_S5);
+#define ACPI_MACHINE_WIDTH      64
 
-  if (status == AE_OK) {
-    amd64_disable_interrupts();
-    AcpiEnterSleepState(ACPI_STATE_S5);
-  }
+#define COMPILER_DEPENDENT_INT64       int64_t
+#define COMPILER_DEPENDENT_UINT64      uint64_t
 
-  /* Should be unreachable. As a fallback try the keyboard controller method */
-  outport_byte(KEYBOARD_CONTROLLER_PORT, PULSE_RESET_LINE);
-}
+#define ACPI_UINTPTR_T      uintptr_t
+
+#define ACPI_TO_INTEGER(p)  ((uintptr_t)(p))
+#define ACPI_OFFSET(d, f)   __offsetof(d, f)
+
+#define ACPI_USE_DO_WHILE_0
+#define ACPI_USE_LOCAL_CACHE
+#define ACPI_USE_NATIVE_DIVIDE
+#define ACPI_USE_NATIVE_MATH64
+#define ACPI_USE_SYSTEM_CLIBRARY
+#define ACPI_USE_STANDARD_HEADERS
+
+#endif /* __ACRTEMS_H__ */

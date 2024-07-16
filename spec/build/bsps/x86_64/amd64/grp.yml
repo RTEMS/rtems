@@ -25,6 +25,8 @@ links:
 - role: build-dependency
   uid: ../../objmem
 - role: build-dependency
+  uid: ../../objacpi
+- role: build-dependency
   uid: ../../bspopts
 type: build
 use-after: []

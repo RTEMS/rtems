@@ -7,7 +7,7 @@
  *
  * @ingroup RTEMSBSPsX8664AMD64EFI
  *
- * @brief BSP reset code
+ * @brief ACPI header file
  */
 
 /*
@@ -35,21 +35,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <acpi/acpica/acpi.h>
-#include <bsp/bootcard.h>
+#ifndef _AMD64_ACPI_H_
+#define _AMD64_ACPI_H_
 
-#define KEYBOARD_CONTROLLER_PORT 0x64
-#define PULSE_RESET_LINE         0xFE
+#include <bsp.h>
 
-void bsp_reset(void)
-{
-  ACPI_STATUS status = AcpiEnterSleepStatePrep(ACPI_STATE_S5);
+#define ACPI_MAX_INIT_TABLES 16
 
-  if (status == AE_OK) {
-    amd64_disable_interrupts();
-    AcpiEnterSleepState(ACPI_STATE_S5);
-  }
+extern uint64_t acpi_rsdp_addr;
 
-  /* Should be unreachable. As a fallback try the keyboard controller method */
-  outport_byte(KEYBOARD_CONTROLLER_PORT, PULSE_RESET_LINE);
-}
+#endif /* _AMD64_ACPI_H_ */

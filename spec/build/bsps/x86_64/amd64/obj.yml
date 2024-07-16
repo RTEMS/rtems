@@ -10,11 +10,17 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
-  - bsps/x86_64/amd64/include/apic.h
   - bsps/x86_64/amd64/include/bsp.h
   - bsps/x86_64/amd64/include/clock.h
+  - bsps/x86_64/amd64/include/freebsd_loader.h
   - bsps/x86_64/amd64/include/pic.h
   - bsps/x86_64/amd64/include/start.h
+- destination: ${BSP_INCLUDEDIR}/acpi
+  source:
+  - bsps/x86_64/amd64/include/acpi/acpi.h
+- destination: ${BSP_INCLUDEDIR}/acpi/acpica/platform
+  source:
+  - bsps/x86_64/amd64/include/acpi/acpica/platform/acrtems.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/x86_64/amd64/start/linkcmds
@@ -29,6 +35,12 @@ source:
 - bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
+- bsps/x86_64/amd64/acpi/acpi.c
+- bsps/x86_64/amd64/acpi/osl/osl_environment.c
+- bsps/x86_64/amd64/acpi/osl/osl_hardware.c
+- bsps/x86_64/amd64/acpi/osl/osl_interrupts.c
+- bsps/x86_64/amd64/acpi/osl/osl_memory.c
+- bsps/x86_64/amd64/acpi/osl/osl_tables.c
 - bsps/x86_64/amd64/interrupts/idt.c
 - bsps/x86_64/amd64/interrupts/isr_handler.S
 - bsps/x86_64/amd64/interrupts/pic.c
