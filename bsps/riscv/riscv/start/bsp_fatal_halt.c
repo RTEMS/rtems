@@ -26,18 +26,22 @@
  * SUCH DAMAGE.
  */
 
+#include <bsp/bootcard.h>
+
 #include <bsp/riscv.h>
 #include <bsp/fdt.h>
 #include <rtems/score/cpuimpl.h>
 
 #include <libfdt.h>
 
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   const char *fdt;
   int node;
   volatile uint32_t *sifive_test;
 
+  (void) source;
+  (void) code;
   fdt = bsp_fdt_get();
 
 #ifdef RISCV_ENABLE_HTIF_SUPPORT
@@ -60,4 +64,9 @@ void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
       *sifive_test = 0x5555;
     }
   }
+}
+
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
+{
+  bsp_reset( source, code );
 }
