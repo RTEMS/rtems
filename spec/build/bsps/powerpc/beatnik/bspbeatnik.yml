@@ -73,7 +73,6 @@ source:
 - bsps/powerpc/beatnik/pci/motload_fixup.c
 - bsps/powerpc/beatnik/pci/pci_io_remap.c
 - bsps/powerpc/beatnik/rtc/todcfg.c
-- bsps/powerpc/beatnik/start/bspclean.c
 - bsps/powerpc/beatnik/start/bspreset.c
 - bsps/powerpc/beatnik/start/bspstart.c
 - bsps/powerpc/beatnik/start/i2c_init.c
@@ -101,5 +100,6 @@ source:
 - bsps/powerpc/shared/start/zerobss.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/gettargethash-default.c
 type: build
