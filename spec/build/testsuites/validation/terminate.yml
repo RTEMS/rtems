@@ -9,7 +9,7 @@ enabled-by: true
 features: c cprogram
 includes: []
 ldflags:
-- -Wl,--wrap=_CPU_Fatal_halt
+- -Wl,--wrap=_CPU_Thread_Idle_body
 links: []
 source:
 - testsuites/validation/tc-terminate.c

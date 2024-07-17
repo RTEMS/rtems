@@ -41,6 +41,7 @@
 
 #include <rtems/score/interr.h>
 #include <rtems/score/cpuimpl.h>
+#include <rtems/score/isrlevel.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
@@ -52,10 +53,21 @@ void _Terminate(
   Internal_errors_t      the_error
 )
 {
+  ISR_Level level;
+
   _User_extensions_Fatal( the_source, the_error );
-  _System_state_Set( SYSTEM_STATE_TERMINATED );
-  _SMP_Request_shutdown();
-  _CPU_Fatal_halt( the_source, the_error );
+
+  /*
+   * Everything after invoking the fatal extensions is essentially dead code.
+   * At least one fatal extension of the initial extension sets should not
+   * return and for example reset the system.  See section "System Termination
+   * Procedure" in the RTEMS Classic API Guide.
+   *
+   * The following code is only executed in badly configured applications.
+   */
+  _ISR_Local_disable( level );
+  (void) level;
+  _CPU_Thread_Idle_body( 0 );
 }
 
 void _Internal_error( Internal_errors_Core_list core_error )

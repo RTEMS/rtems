@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup TestsuitesBspsFatalSparcLeon3Shutdown
+ * @ingroup TestsuitesBspsFatalExtension
  */
 
 /*
@@ -65,8 +65,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup TestsuitesBspsFatalSparcLeon3Shutdown \
- *   spec:/testsuites/bsps/fatal-sparc-leon3-shutdown
+ * @defgroup TestsuitesBspsFatalExtension spec:/testsuites/bsps/fatal-extension
  *
  * @ingroup RTEMSTestSuitesValidation
  *
@@ -76,7 +75,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "TestsuitesBspsFatalSparcLeon3Shutdown";
+const char rtems_test_name[] = "TestsuitesBspsFatalExtension";
 
 static char buffer[ 512 ];
 
@@ -97,11 +96,11 @@ static const T_config test_config = {
   .actions = actions
 };
 
-void __real__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code );
+void __real_bsp_reset( rtems_fatal_source source, rtems_fatal_code code );
 
-void __wrap__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code );
+void __wrap_bsp_reset( rtems_fatal_source source, rtems_fatal_code code );
 
-void __wrap__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
+void __wrap_bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   int exit_code;
 
@@ -115,8 +114,19 @@ void __wrap__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
 #if defined(RTEMS_GCOV_COVERAGE)
   rtems_test_gcov_dump_info();
 #endif
-  __real__CPU_Fatal_halt( source, code );
+  __real_bsp_reset( source, code );
 }
+
+#if !defined(RTEMS_SMP)
+void *__real__CPU_Thread_Idle_body( void *arg );
+
+void *__wrap__CPU_Thread_Idle_body( void *arg );
+
+void *__wrap__CPU_Thread_Idle_body( void *arg )
+{
+  return __real__CPU_Thread_Idle_body( arg );
+}
+#endif
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 

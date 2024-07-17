@@ -3,11 +3,11 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesFatalBspSparcLeon3ShutdownResponse
+ * @ingroup BspValFatalExtensionReset
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -52,43 +52,90 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/smpimpl.h>
+#include <rtems/sysinit.h>
 
-#include "tr-fatal-sparc-leon3-shutdown-response.h"
+#include "tx-support.h"
 
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesFatalBspSparcLeon3ShutdownResponse \
- *   spec:/testsuites/fatal-sparc-leon3-shutdown-response
+ * @defgroup BspValFatalExtensionReset spec:/bsp/val/fatal-extension-reset
  *
- * @ingroup RTEMSTestSuitesValidation
+ * @ingroup TestsuitesBspsFatalExtension
  *
- * @brief This validation test suite contains a test case which performs a
- *   system shutdown.
+ * @brief Tests the BSP-specific fatal extension.
+ *
+ * This test case performs the following actions:
+ *
+ * - Check the effects of the BSP-specific fatal extension.
+ *
+ *   - Check that no dynamic fatal error extension was invoked.  This shows
+ *     that the BSP-specific fatal extension called the wrapped bsp_reset()
+ *     function of the test suite.
  *
  * @{
  */
 
-const char rtems_test_name[] = "FatalBspSparcLeon3ShutdownResponse";
+static Atomic_Uint dynamic_fatal_extension_counter;
 
-#define FATAL_SYSINIT_RUN BspSparcLeon3ValFatalShutdownResponse_Run
+static rtems_status_code status;
 
-static void FatalSysinitExit( rtems_fatal_code exit_code )
+static unsigned int Add( Atomic_Uint *a, unsigned int b )
 {
-  if ( exit_code == 0 ) {
-    rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
-  } else {
-    rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, exit_code );
-  }
+  return _Atomic_Fetch_add_uint( a, b, ATOMIC_ORDER_RELAXED );
 }
 
-#define FATAL_SYSINIT_EXIT( exit_code ) FatalSysinitExit( exit_code )
+static void DynamicFatalHandler(
+  rtems_fatal_source source,
+  bool               always_set_to_false,
+  rtems_fatal_code   code
+)
+{
+  (void) source;
+  (void) code;
+  (void) always_set_to_false;
+  (void) Add( &dynamic_fatal_extension_counter, 1 );
+}
 
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+static void InitBspValFatalExtensionReset( void )
+{
+  rtems_extensions_table table = { .fatal = DynamicFatalHandler };
+  rtems_id               id;
 
-#define CONFIGURE_MAXIMUM_PROCESSORS 2
+  status = rtems_extension_create( OBJECT_NAME, &table, &id );
+}
 
-#include "ts-fatal-sysinit.h"
+RTEMS_SYSINIT_ITEM(
+  InitBspValFatalExtensionReset,
+  RTEMS_SYSINIT_DEVICE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+/**
+ * @brief Check the effects of the BSP-specific fatal extension.
+ */
+static void BspValFatalExtensionReset_Action_0( void )
+{
+  uint32_t counter;
+
+  /*
+   * Check that no dynamic fatal error extension was invoked.  This shows that
+   * the BSP-specific fatal extension called the wrapped bsp_reset() function
+   * of the test suite.
+   */
+  T_step_rsc_success( 0, status );
+  counter = Add( &dynamic_fatal_extension_counter, 0 );
+  T_step_eq_u32( 1, counter, 0 );
+}
+
+/**
+ * @fn void T_case_body_BspValFatalExtensionReset( void )
+ */
+T_TEST_CASE( BspValFatalExtensionReset )
+{
+  T_plan( 2 );
+
+  BspValFatalExtensionReset_Action_0();
+}
 
 /** @} */

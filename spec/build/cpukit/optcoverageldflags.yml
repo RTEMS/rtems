@@ -9,7 +9,6 @@ copyrights:
 default:
 - enabled-by: true
   value:
-  - -Wl,--wrap=_CPU_Fatal_halt
   - -Wl,--wrap=bsp_reset
   - -Wl,--start-group
   - -lrtemsbsp

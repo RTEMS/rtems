@@ -5,13 +5,10 @@ copyrights:
 - Copyright (C) 2023 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by:
-  and:
-  - RTEMS_SMP
-  - bsps/sparc/leon3
+enabled-by: RTEMS_SMP
 includes: []
 install: []
 links: []
 source:
-- testsuites/validation/bsps/tc-fatal-sparc-leon3-shutdown-request.c
+- testsuites/validation/bsps/tc-fatal-smp-shutdown.c
 type: build

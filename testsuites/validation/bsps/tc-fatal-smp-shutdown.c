@@ -3,11 +3,11 @@
 /**
  * @file
  *
- * @ingroup BspSparcLeon3ValFatalShutdownHalt
+ * @ingroup BspValFatalSmpShutdown
  */
 
 /*
- * Copyright (C) 2021, 2022 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -53,90 +53,119 @@
 #endif
 
 #include <rtems/sysinit.h>
+#include <rtems/score/smpimpl.h>
 
 #include "tx-support.h"
 
 #include <rtems/test.h>
 
 /**
- * @defgroup BspSparcLeon3ValFatalShutdownHalt \
- *   spec:/bsp/sparc/leon3/val/fatal-shutdown-halt
+ * @defgroup BspValFatalSmpShutdown spec:/bsp/val/fatal-smp-shutdown
  *
- * @ingroup TestsuitesBspsFatalSparcLeon3Shutdown
+ * @ingroup TestsuitesBspsFatalExtension
  *
- * @brief Tests the leon3 BSP family shutdown procedure.
+ * @brief Tests the BSP-specific fatal extension shutdown procedure.
  *
  * This test case performs the following actions:
  *
- * - Check the effects of the leon3 BSP family shutdown procedure.
+ * - Check the effects of the BSP-specific fatal extension.
  *
- *   - Check that no dynamic fatal error extension was invoked.  This shows
- *     that the leon3 BSP family shutdown procedure called the wrapped
- *     _CPU_Fatal_halt() function of the test suite.
+ *   - Wait until the second processor is idle.
+ *
+ *   - Check that the RTEMS_FATAL_SOURCE_SMP with SMP_FATAL_SHUTDOWN_RESPONSE
+ *     fatal error occurred exactly once.
+ *
+ *   - Check that the RTEMS_FATAL_SOURCE_SMP with SMP_FATAL_SHUTDOWN_RESPONSE
+ *     fatal error occurred on the second processor.
  *
  * @{
  */
 
-static Atomic_Uint dynamic_fatal_extension_counter;
+static Atomic_Uint shutdown_response_counter;
 
-static rtems_status_code status;
+static uint32_t shutdown_response_cpu_index = UINT32_MAX;
 
 static unsigned int Add( Atomic_Uint *a, unsigned int b )
 {
   return _Atomic_Fetch_add_uint( a, b, ATOMIC_ORDER_RELAXED );
 }
 
-static void DynamicFatalHandler(
+static void ShutdownFatalHandler(
   rtems_fatal_source source,
-  bool               always_set_to_false,
-  rtems_fatal_code   code
+  rtems_fatal_code   code,
+  void              *arg
 )
 {
-  (void) source;
-  (void) code;
-  (void) always_set_to_false;
-  (void) Add( &dynamic_fatal_extension_counter, 1 );
+  T_null( arg );
+
+  if (
+    source == RTEMS_FATAL_SOURCE_SMP &&
+    code == SMP_FATAL_SHUTDOWN_RESPONSE
+  ) {
+    (void) Add( &shutdown_response_counter, 1 );
+    shutdown_response_cpu_index = rtems_scheduler_get_processor();
+  }
 }
 
-static void InitBspSparcLeon3ValFatalShutdownHalt( void )
+static void InitBspValFatalSmpShutdown( void )
 {
-  rtems_extensions_table table = { .fatal = DynamicFatalHandler };
-  rtems_id               id;
-
-  status = rtems_extension_create( OBJECT_NAME, &table, &id );
+  SetFatalHandler( ShutdownFatalHandler, NULL );
 }
 
 RTEMS_SYSINIT_ITEM(
-  InitBspSparcLeon3ValFatalShutdownHalt,
+  InitBspValFatalSmpShutdown,
   RTEMS_SYSINIT_DEVICE_DRIVERS,
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 
-/**
- * @brief Check the effects of the leon3 BSP family shutdown procedure.
- */
-static void BspSparcLeon3ValFatalShutdownHalt_Action_0( void )
-{
-  uint32_t counter;
+static Atomic_Uint idle_counter;
 
-  /*
-   * Check that no dynamic fatal error extension was invoked.  This shows that
-   * the leon3 BSP family shutdown procedure called the wrapped
-   * _CPU_Fatal_halt() function of the test suite.
-   */
-  T_step_rsc_success( 0, status );
-  counter = Add( &dynamic_fatal_extension_counter, 0 );
-  T_step_eq_u32( 1, counter, 0 );
+void *__real__CPU_Thread_Idle_body( void *arg );
+
+void *__wrap__CPU_Thread_Idle_body( void *arg );
+
+void *__wrap__CPU_Thread_Idle_body( void *arg )
+{
+  (void) Add( &idle_counter, 1 );
+  return __real__CPU_Thread_Idle_body( arg );
 }
 
 /**
- * @fn void T_case_body_BspSparcLeon3ValFatalShutdownHalt( void )
+ * @brief Check the effects of the BSP-specific fatal extension.
  */
-T_TEST_CASE( BspSparcLeon3ValFatalShutdownHalt )
+static void BspValFatalSmpShutdown_Action_0( void )
+{
+  unsigned int counter;
+
+  /*
+   * Wait until the second processor is idle.
+   */
+  do {
+    counter = _Atomic_Load_uint( &idle_counter, ATOMIC_ORDER_RELAXED );
+  } while ( counter != 2U );
+
+  /*
+   * Check that the RTEMS_FATAL_SOURCE_SMP with SMP_FATAL_SHUTDOWN_RESPONSE
+   * fatal error occurred exactly once.
+   */
+  counter = Add( &shutdown_response_counter, 0 );
+  T_step_eq_uint( 0, counter, 1 );
+
+  /*
+   * Check that the RTEMS_FATAL_SOURCE_SMP with SMP_FATAL_SHUTDOWN_RESPONSE
+   * fatal error occurred on the second processor.
+   */
+  T_step_eq_u32( 1, shutdown_response_cpu_index, 1 );
+}
+
+/**
+ * @fn void T_case_body_BspValFatalSmpShutdown( void )
+ */
+T_TEST_CASE( BspValFatalSmpShutdown )
 {
   T_plan( 2 );
 
-  BspSparcLeon3ValFatalShutdownHalt_Action_0();
+  BspValFatalSmpShutdown_Action_0();
 }
 
 /** @} */

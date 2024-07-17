@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2022, 2024 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags:
+- -Wl,--wrap=bsp_reset
+- -Wl,--wrap=_CPU_Thread_Idle_body
+links:
+- role: build-dependency
+  uid: objsmpshutdown
+source:
+- testsuites/validation/bsps/tc-fatal-extension-reset.c
+- testsuites/validation/bsps/ts-fatal-extension.c
+stlib: []
+target: testsuites/validation/bsps/ts-fatal-extension.exe
+type: build
+use-after:
+- validation
+use-before: []

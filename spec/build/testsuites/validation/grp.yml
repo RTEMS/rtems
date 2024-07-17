@@ -81,13 +81,13 @@ links:
 - role: build-dependency
   uid: bsps/fatal-clock-xil-ttc-irq-install
 - role: build-dependency
+  uid: bsps/fatal-extension
+- role: build-dependency
   uid: bsps/fatal-sparc-leon3-cache-snooping-disabled-boot
 - role: build-dependency
   uid: bsps/fatal-sparc-leon3-cache-snooping-disabled-secondary
 - role: build-dependency
   uid: bsps/fatal-sparc-leon3-clock-initialization
-- role: build-dependency
-  uid: bsps/fatal-sparc-leon3-shutdown
 - role: build-dependency
   uid: bsps/validation-bsp-0
 type: build

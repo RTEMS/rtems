@@ -238,37 +238,68 @@ typedef enum {
 typedef CPU_Uint32ptr Internal_errors_t;
 
 /**
- * @brief Initiates system termination.
+ * @brief Initiates the system termination.
  *
- * This routine is invoked when the application or the executive itself
- * determines that a fatal error has occurred or a final system state is
- * reached (for example after exit()).
+ * This handler is invoked to terminate the system.  It is called by all
+ * services which determine that a system termination is required.  For
+ * example, it is called by all higher level directives which announce a fatal
+ * error like rtems_fatal() and exit().
  *
- * The first action of this function is to call the fatal handler of the user
- * extensions.  For the initial extensions the following conditions are
- * required
+ * The first action of the system termination handler is to disable maskable
+ * interrupts.  This ensures that interrupts on this processor do not interfere
+ * with the system termination procedure.  This reduces the likelihood to end
+ * up in a recursive system termination procedure.
+ *
+ * The second action of the system termination handler is to call the fatal
+ * extensions of the user extensions.
+ *
+ * The fatal extensions are called with three parameters:
+ *
+ * - the fatal source,
+ *
+ * - a legacy parameter which is always set to false, and
+ *
+ * - an error code with a fatal source dependent content.
+ *
+ * The fatal extensions of the initial extension sets are invoked first.  For
+ * them, the following execution environment is required
+ *
  * - a valid stack pointer and enough stack space,
+ *
  * - a valid code memory, and
+ *
  * - valid read-only data.
  *
- * For the initial extensions the read-write data (including BSS segment) is
- * not required on single processor configurations.  On SMP configurations
- * however the read-write data must be initialized since this function must
- * determine the state of the other processors and request them to shut-down if
- * necessary.
+ * In uniprocessor configurations, the read-write data (including ``.bss``
+ * segment) is not required.  In SMP configurations, however, the read-write
+ * data must have been initialized to determine the state of the other
+ * processors and request them to shut-down if necessary.  The board support
+ * package (BSP) may install an initial extension that performs a system reset.
+ * See the BSP documentation in the *RTEMS User Manual* for more information
+ * how the system reset is done.  The BSP provided fatal extension can be
+ * disabled by the #CONFIGURE_DISABLE_BSP_SETTINGS application configuration
+ * option.  It is recommended to provide an application-specific fatal
+ * extension using the #CONFIGURE_INITIAL_EXTENSIONS application configuration
+ * option.
  *
- * Non-initial extensions require in addition valid read-write data.  The BSP
- * may install an initial extension that performs a system reset.  In this case
- * the non-initial extensions will be not called.
+ * In certain error conditions, it may be unreliable to carry out the
+ * following steps of the termination procedure since the read-write data may
+ * be corrupt.  One of the fatal extensions of the initial extension set should
+ * reset the system to stop the system termination procedure.
  *
- * Once all fatal handler executed the system state is set to
- * SYSTEM_STATE_TERMINATED.
+ * After invoking the fatal extensions of the initial extension sets, the fatal
+ * extensions of the dynamic extension sets are invoked.  For this procedure
+ * valid read-write data is required.
  *
- * The final step is to call the CPU specific _CPU_Fatal_halt().
+ * The last action of the system termination handler is to execute the CPU port
+ * provided idle loop _CPU_Thread_Idle_body() with maskable interrupts
+ * disabled.  Please note, that properly configured applications should not
+ * reach this point.
  *
- * @param the_source The fatal source indicating the subsystem the fatal
- * condition originated in.
- * @param the_error The fatal error code.  This value must be interpreted
+ * @param the_source is the fatal source indicating the subsystem the fatal
+ *   condition originated in.
+ *
+ * @param the_error is the fatal error code.  This value must be interpreted
  * with respect to the source.
  *
  * @see rtems_fatal() and _Internal_error().

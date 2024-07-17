@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -58,8 +58,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/test-info.h>
 #include <rtems/score/atomic.h>
-#include <rtems/score/percpu.h>
-#include <rtems/score/sysstate.h>
+#include <rtems/score/isrlevel.h>
 
 #include "tc-userext.h"
 
@@ -78,9 +77,6 @@
  *   Delete three dynamic extension during the fatal extension invocation.
  *   Delete the two remaining dynamic extensions.
  *
- *   - Where the system was built with SMP support enabled, check that a
- *     shutdown request was issued.
- *
  *   - Delete the dynamic extension sets.
  *
  *   - Check that the fatal extensions were invoked with the expected source.
@@ -95,13 +91,11 @@
  *   - Check that the fatal extension in the deleted extension set was not
  *     invoked.
  *
- *   - Check that the system state is terminated.
+ *   - Check that maskable interrupts were enabled for the user extensions.
+ *     Check that the idle loop executes with maskable interrupts disabled.
  *
- *   - Check that the system was halted with the expected fatal source.
- *
- *   - Check that the system was halted with the expected fatal code.
- *
- *   - Check that the system was finally halted.
+ *   - Check that an idle loop executed after invocation of the user
+ *     extensions.
  *
  * @{
  */
@@ -123,11 +117,11 @@ static const rtems_extensions_table bsp = BSP_INITIAL_EXTENSION;
 
 static jmp_buf before_terminate;
 
-static unsigned int halt_counter;
+static unsigned int idle_counter;
 
-static rtems_fatal_source halt_source;
+static uint32_t extension_isr_level;
 
-static rtems_fatal_code halt_code;
+static uint32_t idle_isr_level;
 
 static rtems_id extension_ids[ 7 ];
 
@@ -136,22 +130,22 @@ static unsigned int GetCounter( void )
   return _Atomic_Fetch_add_uint( &counter, 1, ATOMIC_ORDER_RELAXED ) + 1;
 }
 
-void __real__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code );
+void *__real__CPU_Thread_Idle_body( void *arg );
 
-void __wrap__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code );
+void *__wrap__CPU_Thread_Idle_body( void *arg );
 
-void __wrap__CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
+void *__wrap__CPU_Thread_Idle_body( void *arg )
 {
   if ( test_case_active ) {
-    halt_counter = GetCounter();
-    halt_source = source;
-    halt_code = code;
+    idle_counter = GetCounter();
+    idle_isr_level = _ISR_Get_level();
+    _ISR_Set_level( 0 );
     longjmp( before_terminate, 1 );
   } else {
 #if defined(RTEMS_GCOV_COVERAGE)
     rtems_test_gcov_dump_info();
 #endif
-    __real__CPU_Fatal_halt( source, code );
+    return __real__CPU_Thread_Idle_body( arg );
   }
 }
 
@@ -178,6 +172,7 @@ void FatalExtension0(
   rtems_fatal_code   code
 )
 {
+  extension_isr_level = _ISR_Get_level();
   FatalExtension( source, always_set_to_false, code, 0 );
 }
 
@@ -259,14 +254,6 @@ static void ScoreInterrValTerminate_Action_0( void )
 {
   rtems_status_code      sc;
   rtems_extensions_table table;
-  bool                   shutdown_ok;
-
-  #if defined(RTEMS_SMP)
-  shutdown_ok =
-    ( _Per_CPU_Get_state( _Per_CPU_Get_snapshot() ) == PER_CPU_STATE_UP );
-  #else
-  shutdown_ok = true;
-  #endif
 
   memset( &table, 0, sizeof( table ) );
 
@@ -319,55 +306,44 @@ static void ScoreInterrValTerminate_Action_0( void )
   test_case_active = false;
 
   /*
-   * Where the system was built with SMP support enabled, check that a shutdown
-   * request was issued.
-   */
-  #if defined(RTEMS_SMP)
-  shutdown_ok = ( shutdown_ok && _ISR_Get_level() != 0 &&
-    _Per_CPU_Get_state( _Per_CPU_Get() ) == PER_CPU_STATE_SHUTDOWN );
-  _ISR_Set_level( 0 );
-  #endif
-  T_step_true( 5, shutdown_ok );
-
-  /*
    * Delete the dynamic extension sets.
    */
   sc = rtems_extension_delete( extension_ids[ 2 ] );
-  T_step_rsc_success( 6, sc );
+  T_step_rsc_success( 5, sc );
 
   sc = rtems_extension_delete( extension_ids[ 6 ] );
-  T_step_rsc_success( 7, sc );
+  T_step_rsc_success( 6, sc );
 
   /*
    * Check that the fatal extensions were invoked with the expected source.
    */
   T_step_eq_int(
-    8,
+    7,
     info[ 0 ].source,
     RTEMS_FATAL_SOURCE_APPLICATION
   );
   T_step_eq_int(
-    9,
+    8,
     info[ 1 ].source,
     RTEMS_FATAL_SOURCE_APPLICATION
   );
   T_step_eq_int(
-    10,
+    9,
     info[ 2 ].source,
     RTEMS_FATAL_SOURCE_APPLICATION
   );
   T_step_eq_int(
-    11,
+    10,
     info[ 4 ].source,
     RTEMS_FATAL_SOURCE_APPLICATION
   );
   T_step_eq_int(
-    12,
+    11,
     info[ 5 ].source,
     RTEMS_FATAL_SOURCE_APPLICATION
   );
   T_step_eq_int(
-    13,
+    12,
     info[ 6 ].source,
     RTEMS_FATAL_SOURCE_APPLICATION
   );
@@ -376,61 +352,58 @@ static void ScoreInterrValTerminate_Action_0( void )
    * Check that the fatal extensions were invoked with the expected always set
    * to false argument.
    */
-  T_step_false( 14, info[ 0 ].always_set_to_false );
-  T_step_false( 15, info[ 1 ].always_set_to_false );
-  T_step_false( 16, info[ 2 ].always_set_to_false );
-  T_step_false( 17, info[ 4 ].always_set_to_false );
-  T_step_false( 18, info[ 5 ].always_set_to_false );
-  T_step_false( 19, info[ 6 ].always_set_to_false );
+  T_step_false( 13, info[ 0 ].always_set_to_false );
+  T_step_false( 14, info[ 1 ].always_set_to_false );
+  T_step_false( 15, info[ 2 ].always_set_to_false );
+  T_step_false( 16, info[ 4 ].always_set_to_false );
+  T_step_false( 17, info[ 5 ].always_set_to_false );
+  T_step_false( 18, info[ 6 ].always_set_to_false );
 
   /*
    * Check that the fatal extensions were invoked with the expected code.
    */
-  T_step_eq_ulong( 20, info[ 0 ].code, 123456 );
-  T_step_eq_ulong( 21, info[ 1 ].code, 123456 );
-  T_step_eq_ulong( 22, info[ 2 ].code, 123456 );
-  T_step_eq_ulong( 23, info[ 4 ].code, 123456 );
-  T_step_eq_ulong( 24, info[ 5 ].code, 123456 );
-  T_step_eq_ulong( 25, info[ 6 ].code, 123456 );
+  T_step_eq_ulong( 19, info[ 0 ].code, 123456 );
+  T_step_eq_ulong( 20, info[ 1 ].code, 123456 );
+  T_step_eq_ulong( 21, info[ 2 ].code, 123456 );
+  T_step_eq_ulong( 22, info[ 4 ].code, 123456 );
+  T_step_eq_ulong( 23, info[ 5 ].code, 123456 );
+  T_step_eq_ulong( 24, info[ 6 ].code, 123456 );
 
   /*
    * Check that the fatal extensions were invoked in forward order.
    */
-  T_step_eq_uint( 26, info[ 0 ].counter, 1 );
-  T_step_eq_uint( 27, info[ 1 ].counter, 2 );
-  T_step_eq_uint( 28, info[ 2 ].counter, 3 );
-  T_step_eq_uint( 29, info[ 4 ].counter, 4 );
-  T_step_eq_uint( 30, info[ 5 ].counter, 5 );
-  T_step_eq_uint( 31, info[ 6 ].counter, 6 );
+  T_step_eq_uint( 25, info[ 0 ].counter, 1 );
+  T_step_eq_uint( 26, info[ 1 ].counter, 2 );
+  T_step_eq_uint( 27, info[ 2 ].counter, 3 );
+  T_step_eq_uint( 28, info[ 4 ].counter, 4 );
+  T_step_eq_uint( 29, info[ 5 ].counter, 5 );
+  T_step_eq_uint( 30, info[ 6 ].counter, 6 );
 
   /*
    * Check that the fatal extension in the deleted extension set was not
    * invoked.
    */
-  T_step_eq_int( 32, info[ 3 ].source, 0 );
-  T_step_false( 33, info[ 3 ].always_set_to_false );
-  T_step_eq_ulong( 34, info[ 3 ].code, 0 );
-  T_step_eq_uint( 35, info[ 3 ].counter, 0 );
+  T_step_eq_int( 31, info[ 3 ].source, 0 );
+  T_step_false( 32, info[ 3 ].always_set_to_false );
+  T_step_eq_ulong( 33, info[ 3 ].code, 0 );
+  T_step_eq_uint( 34, info[ 3 ].counter, 0 );
 
   /*
-   * Check that the system state is terminated.
+   * Check that maskable interrupts were enabled for the user extensions. Check
+   * that the idle loop executes with maskable interrupts disabled.
    */
-  T_step_eq_int( 36, _System_state_Get(), SYSTEM_STATE_TERMINATED );
+  T_step_eq_u32( 35, extension_isr_level, 0 );
+  T_step_ne_u32( 36, idle_isr_level, 0 );
 
   /*
-   * Check that the system was halted with the expected fatal source.
+   * Check that an idle loop executed after invocation of the user extensions.
    */
-  T_step_eq_int( 37, halt_source, RTEMS_FATAL_SOURCE_APPLICATION );
-
-  /*
-   * Check that the system was halted with the expected fatal code.
-   */
-  T_step_eq_ulong( 38, halt_code, 123456 );
-
-  /*
-   * Check that the system was finally halted.
-   */
-  T_step_eq_uint( 39, counter, 7 );
+  T_step_eq_uint( 37, idle_counter, 7 );
+  T_step_eq_uint(
+    38,
+    _Atomic_Load_uint( &counter, ATOMIC_ORDER_RELAXED ),
+    7
+  );
 }
 
 /**
@@ -438,7 +411,7 @@ static void ScoreInterrValTerminate_Action_0( void )
  */
 T_TEST_CASE( ScoreInterrValTerminate )
 {
-  T_plan( 40 );
+  T_plan( 39 );
 
   ScoreInterrValTerminate_Action_0();
 }
