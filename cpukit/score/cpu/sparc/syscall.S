@@ -43,9 +43,11 @@
 SYM(syscall):
 	ta	0			! syscall 1, halt with %g1,%g2,%g3 info
 
+	PUBLIC(bsp_reset)
 	PUBLIC(sparc_syscall_exit)
 	PUBLIC(_CPU_Fatal_halt)
 
+SYM(bsp_reset):
 SYM(sparc_syscall_exit):
 SYM(_CPU_Fatal_halt):
 

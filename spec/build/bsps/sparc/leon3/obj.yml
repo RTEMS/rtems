@@ -35,7 +35,7 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
-- bsps/shared/start/bspreset-loop.c
+- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/sbrk.c
 - bsps/sparc/leon3/btimer/btimer.c
 - bsps/sparc/leon3/btimer/watchdog.c
@@ -44,7 +44,6 @@ source:
 - bsps/sparc/leon3/console/printk_support.c
 - bsps/sparc/leon3/gnatsupp/gnatsupp.c
 - bsps/sparc/leon3/start/amba.c
-- bsps/sparc/leon3/start/bspclean.c
 - bsps/sparc/leon3/start/bspdelay.c
 - bsps/sparc/leon3/start/bspidle.S
 - bsps/sparc/leon3/start/bspstart.c
