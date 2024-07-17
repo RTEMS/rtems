@@ -345,18 +345,3 @@ RTEMS_STATIC_ASSERT(
   sizeof(CPU_Exception_frame) + FRAME_LINK_SPACE <= PPC_EXC_FRAME_SIZE,
   CPU_Exception_frame
 );
-
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
-{
-  ppc_interrupt_disable();
-  __asm__ volatile (
-    "mr 3, %0\n"
-    "mr 4, %1\n"
-    "1:\n"
-    "b 1b\n"
-    : \
-    : "r" (source), "r" (error)
-    : "memory"
-  );
-  RTEMS_UNREACHABLE();
-}

@@ -83,15 +83,6 @@ void _CPU_Initialize(void)
   _CPU_ISR_Dispatch_disable = 0;
 }
 
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
-{
-  uint32_t   level;
-
-  level = sparc_disable_interrupts();
-  __asm__ volatile ( "mov  %0, %%g1 " : "=r" (level) : "0" (level) );
-  while (1); /* loop forever */
-}
-
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
   void         *stack_base,

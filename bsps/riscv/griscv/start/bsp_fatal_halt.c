@@ -27,16 +27,10 @@
  */
 
 #include <bsp/bootcard.h>
-#include <rtems/score/cpuimpl.h>
 
 void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
     /* ecall is currently used to halt the griscv cpu */
     asm ("ecall");
     RTEMS_UNREACHABLE();
-}
-
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
-{
-    bsp_reset( source, code );
 }

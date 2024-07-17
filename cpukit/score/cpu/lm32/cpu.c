@@ -46,18 +46,6 @@ void _CPU_Initialize(void)
   /* FP context initialization support goes here */
 }
 
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
-{
-  ISR_Level level;
-
-  _CPU_ISR_Disable( level );
-  (void) level;
-
-  while ( true ) {
-    /* Do nothing */
-  }
-}
-
 uint32_t   _CPU_ISR_Get_level( void )
 {
   /*

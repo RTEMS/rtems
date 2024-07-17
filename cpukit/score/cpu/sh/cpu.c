@@ -76,13 +76,6 @@ void _CPU_Initialize(void)
   _CPU_ISR_Set_level( level ) ;
 }
 
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
-{
-  __asm__ volatile("mov.l %0,r0"::"m" (error));
-  __asm__ volatile("mov #1, r4");
-  __asm__ volatile("trapa #34");
-}
-
 /*
  *  _CPU_ISR_Get_level
  */

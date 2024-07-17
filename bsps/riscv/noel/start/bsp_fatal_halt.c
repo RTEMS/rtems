@@ -43,8 +43,3 @@ void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
   __asm__ volatile ("srai zero, zero, 0x7");
   RTEMS_UNREACHABLE();
 }
-
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
-{
-  bsp_reset( source, code );
-}

@@ -45,11 +45,9 @@ SYM(syscall):
 
 	PUBLIC(bsp_reset)
 	PUBLIC(sparc_syscall_exit)
-	PUBLIC(_CPU_Fatal_halt)
 
 SYM(bsp_reset):
 SYM(sparc_syscall_exit):
-SYM(_CPU_Fatal_halt):
 
 	mov	SYS_exit, %g1
 	mov	%o0, %g2	! Additional exit code 1

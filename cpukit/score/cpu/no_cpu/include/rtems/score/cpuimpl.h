@@ -120,17 +120,6 @@ register struct Per_CPU_Control *_CPU_Per_CPU_current asm( "rX" );
  */
 #define _CPU_Get_thread_executing() ( _CPU_Per_CPU_current->executing )
 
-/**
- * This routine copies _error into a known place -- typically a stack
- * location or a register, optionally disables interrupts, and
- * halts/stops the CPU.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error );
-
 /* end of Fatal Error manager macros */
 
 /**

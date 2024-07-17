@@ -178,16 +178,3 @@ void _CPU_Initialize( void )
 {
   /* Do nothing */
 }
-
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
-{
-  ISR_Level level;
-
-  _CPU_ISR_Disable( level );
-  (void) level;
-  __asm__ volatile ("mov x0, %0\n"
-                : "=r" (error)
-                : "0" (error)
-                : "x0" );
-  while (1);
-}

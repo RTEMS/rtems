@@ -47,20 +47,6 @@ void _CPU_Initialize(void)
   /* Do nothing */
 }
 
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
-{
-  ISR_Level level;
-
-  _CPU_ISR_Disable( level );
-  (void) level;
-
-  _OR1KSIM_CPU_Halt();
-
-  while ( true ) {
-    /* Do nothing */
-  }
-}
-
 /* end of Fatal Error manager macros */
 
 /**

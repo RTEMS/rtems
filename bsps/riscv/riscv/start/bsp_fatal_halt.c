@@ -30,7 +30,6 @@
 
 #include <bsp/riscv.h>
 #include <bsp/fdt.h>
-#include <rtems/score/cpuimpl.h>
 
 #include <libfdt.h>
 
@@ -64,9 +63,4 @@ void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
       *sifive_test = 0x5555;
     }
   }
-}
-
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr code )
-{
-  bsp_reset( source, code );
 }

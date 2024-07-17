@@ -51,7 +51,6 @@ source:
 - bsps/i386/pc386/console/tty_drv.c
 - bsps/i386/pc386/console/uart.c
 - bsps/i386/pc386/console/uart_bus_pci.c
-- bsps/i386/pc386/start/bsp_fatal_halt.c
 - bsps/i386/pc386/start/bspcmdline.c
 - bsps/i386/pc386/start/bspgetworkarea.c
 - bsps/i386/pc386/start/bspidle.S

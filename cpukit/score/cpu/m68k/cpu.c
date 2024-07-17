@@ -108,29 +108,6 @@ void _CPU_Initialize(void)
   m68k_install_interrupt_stack();
 }
 
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
-{
-#if ( defined(__mcoldfire__) )
-  __asm__ volatile( "move.w %%sr,%%d0\n\t"
-      	  "or.l %2,%%d0\n\t"
-      	  "move.w %%d0,%%sr\n\t"
-      	  "move.l %1,%%d0\n\t"
-      	  "move.l #0xDEADBEEF,%%d1\n\t"
-                "halt"
-      	  : "=g" (error)
-      	  : "0" (error), "d"(0x0700)
-      	  : "d0", "d1" );
- 
-#else
-  __asm__ volatile( "movl  %0,%%d0; "
-                "orw   #0x0700,%%sr; "
-                "stop  #0x2700" : "=d" ((error)) : "0" ((error)) );
-  
-#endif
-
-/* end of Fatal Error manager macros */
-}
-
 uint32_t   _CPU_ISR_Get_level( void )
 {
   uint32_t   level;

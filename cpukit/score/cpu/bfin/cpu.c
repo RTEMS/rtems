@@ -74,17 +74,6 @@ void _CPU_Initialize(void)
   __asm__ __volatile__ ("syscfg = %0" : : "d" (0x00000004));
 }
 
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
-{
-  __asm__ volatile ( "cli R1; R1 = %0; _halt: idle; jump _halt;"
-                     : : "r" (error) );
-}
-
-/* end of Fatal Error manager macros */
-
-
-
-
 /*
  *  _CPU_ISR_Get_level
  *

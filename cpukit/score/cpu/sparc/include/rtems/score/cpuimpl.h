@@ -223,8 +223,6 @@ register struct Per_CPU_Control *_SPARC_Per_CPU_current __asm__( "g6" );
 
 #define _CPU_Get_thread_executing() ( _SPARC_Per_CPU_current->executing )
 
-RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error );
-
 void _CPU_Context_volatile_clobber( uintptr_t pattern );
 
 void _CPU_Context_validate( uintptr_t pattern );

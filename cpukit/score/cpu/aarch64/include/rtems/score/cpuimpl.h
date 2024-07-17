@@ -61,8 +61,6 @@
 extern "C" {
 #endif
 
-RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error );
-
 typedef struct {
   uint64_t x0;
   uint64_t register_lr_original;

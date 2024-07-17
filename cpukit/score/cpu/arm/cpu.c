@@ -8,7 +8,7 @@
  * @brief This source file contains static assertions to ensure the consistency
  *   of interfaces used in C and assembler and it contains the ARM-specific
  *   implementation of _CPU_Initialize(), _CPU_ISR_Get_level(),
- *   _CPU_ISR_Set_level(), _CPU_Context_Initialize(), and _CPU_Fatal_halt().
+ *   _CPU_ISR_Set_level(), and _CPU_Context_Initialize().
  */
 
 /*
@@ -165,20 +165,3 @@ void _CPU_Initialize( void )
 }
 
 #endif /* ARM_MULTILIB_ARCH_V4 */
-
-void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
-{
-  ISR_Level level;
-
-  _CPU_ISR_Disable( level );
-  (void) level;
-
-  __asm__ volatile ("mov r0, %0\n"
-                : "=r" (error)
-                : "0" (error)
-                : "r0" );
-
-  while ( true ) {
-    /* Do nothing */
-  }
-}

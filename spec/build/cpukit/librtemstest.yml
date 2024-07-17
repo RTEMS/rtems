@@ -44,7 +44,6 @@ source:
 - cpukit/libtest/testbusy.c
 - cpukit/libtest/testexit.c
 - cpukit/libtest/testextension.c
-- cpukit/libtest/testgcovcpufatalhalt.c
 - cpukit/libtest/testgcovbspreset.c
 - cpukit/libtest/testgcovdumpinfo.c
 - cpukit/libtest/testparallel.c
