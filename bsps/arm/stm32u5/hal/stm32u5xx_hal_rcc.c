@@ -342,6 +342,7 @@ static HAL_StatusTypeDef RCC_SetFlashLatencyFromMSIRange(uint32_t msirange);
   * @{
   */
 
+#ifndef __rtems__
 /**
   * @brief  Reset the RCC clock configuration to the default reset state.
   * @note   The default reset state of the clock configuration is given below:
@@ -507,6 +508,7 @@ HAL_StatusTypeDef HAL_RCC_DeInit(void)
   return (HAL_InitTick(TICK_INT_PRIORITY));
 
 }
+#endif /* __rtems__ */
 
 /**
   * @brief  Initialize the RCC Oscillators according to the specified parameters in the
@@ -608,7 +610,11 @@ HAL_StatusTypeDef HAL_RCC_OscConfig(const RCC_OscInitTypeDef  *pRCC_OscInitStruc
         (void) HAL_RCC_GetHCLKFreq();
         /* Configure the source of time base considering new system clocks settings*/
 
+#ifndef __rtems__
         status = HAL_InitTick(uwTickPrio);
+#else /* __rtems__ */
+        status = HAL_OK;
+#endif /* __rtems__ */
         if (status != HAL_OK)
         {
           return status;
@@ -1602,7 +1608,11 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(const RCC_ClkInitTypeDef   *const pRCC_Clk
   SystemCoreClock = HAL_RCC_GetSysClockFreq() >> AHBPrescTable[(RCC->CFGR2 & RCC_CFGR2_HPRE) >> RCC_CFGR2_HPRE_Pos];
 
   /* Configure the source of time base considering new system clocks settings*/
+#ifndef __rtems__
   status = HAL_InitTick(uwTickPrio);
+#else /* __rtems__ */
+  status = HAL_OK;
+#endif /* __rtems__ */
   return status;
 }
 

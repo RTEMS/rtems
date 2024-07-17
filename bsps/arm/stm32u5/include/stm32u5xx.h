@@ -40,6 +40,11 @@
 #ifdef __cplusplus
  extern "C" {
 #endif /* __cplusplus */
+#ifdef __rtems__
+#ifndef USE_FULL_LL_DRIVER
+#define USE_FULL_LL_DRIVER
+#endif
+#endif /* __rtems__ */
 
 /** @addtogroup Library_configuration_section
   * @{

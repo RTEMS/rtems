@@ -74,9 +74,11 @@
 /** @defgroup HAL_Exported_Variables HAL Exported Variables
   * @{
   */
+#ifndef __rtems__
 __IO uint32_t uwTick;
 uint32_t uwTickPrio   = (1UL << __NVIC_PRIO_BITS); /* Invalid PRIO */
 HAL_TickFreqTypeDef uwTickFreq = HAL_TICK_FREQ_DEFAULT;  /* 1KHz */
+#endif /* __rtems__ */
 /**
   * @}
   */
@@ -153,11 +155,13 @@ HAL_StatusTypeDef HAL_Init(void)
   /* Select HCLK as SysTick clock source */
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
+#ifndef __rtems__
   /* Use systick as time base source and configure 1ms tick (default clock after Reset is HSI) */
   if (HAL_InitTick(TICK_INT_PRIORITY) != HAL_OK)
   {
     return HAL_ERROR;
   }
+#endif /* __rtems__ */
 
   /* Init the low level hardware */
   HAL_MspInit();
@@ -166,6 +170,7 @@ HAL_StatusTypeDef HAL_Init(void)
   return HAL_OK;
 }
 
+#ifndef __rtems__
 /**
   * @brief  This function de-Initializes common part of the HAL and stops the systick.
   *         This function is optional.
@@ -195,7 +200,9 @@ HAL_StatusTypeDef HAL_DeInit(void)
   /* Return function status */
   return HAL_OK;
 }
+#endif /* __rtems__ */
 
+#ifndef __rtems__
 /**
   * @brief  Initializes the MSP.
   * @retval None
@@ -290,6 +297,7 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   /* Return function status */
   return HAL_OK;
 }
+#endif /* __rtems__ */
 
 /**
   * @}
@@ -318,6 +326,7 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   * @{
   */
 
+#ifndef __rtems__
 /**
   * @brief This function is called to increment a global variable "uwTick"
   *        used as application time base.
@@ -443,6 +452,7 @@ __weak void HAL_ResumeTick(void)
   /* Enable SysTick Interrupt */
   SysTick->CTRL  |= SysTick_CTRL_TICKINT_Msk;
 }
+#endif /* __rtems__ */
 
 /**
   * @brief  Returns the HAL revision

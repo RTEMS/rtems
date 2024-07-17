@@ -102,6 +102,10 @@
 
 #include "stm32u5xx.h"
 #include <math.h>
+#ifdef __rtems__
+#include <bsp/linker-symbols.h>
+#include <bspopts.h>
+#endif /* __rtems__ */
 
 /**
   * @}
@@ -162,7 +166,11 @@
                is no need to call the 2 first functions listed above, since SystemCoreClock
                variable is updated automatically.
   */
+#ifndef __rtems__
   uint32_t SystemCoreClock = 4000000U;
+#else /* __rtems__ */
+  RTEMS_SECTION(".rtemsstack") uint32_t SystemCoreClock;
+#endif /* __rtems__ */
 
   const uint8_t  AHBPrescTable[16] = {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9U};
   const uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
@@ -218,12 +226,14 @@ void SystemInit(void)
   /* Disable all interrupts */
   RCC->CIER = 0U;
 
+#ifndef __rtems__
   /* Configure the Vector Table location add offset address ------------------*/
   #ifdef VECT_TAB_SRAM
     SCB->VTOR = SRAM1_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
   #else
     SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
   #endif
+#endif /* __rtems__ */
 }
 
 /**

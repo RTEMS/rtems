@@ -244,6 +244,8 @@ typedef enum
 #define __Vendor_SysTickConfig    0U        /* Set to 1 if different SysTick Config is used */
 #define __FPU_PRESENT             1U        /* FPU present */
 #define __DSP_PRESENT             1U        /* DSP extension present */
+#define __ICACHE_PRESENT          1U        /* ICACHE present */
+#define __DCACHE_PRESENT          1U        /* DCACHE present */
 
 /** @} */ /* End of group Configuration_of_CMSIS */
 
