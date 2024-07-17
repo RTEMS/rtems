@@ -10,7 +10,7 @@
 #include <bsp/bootcard.h>
 #include <lpc22xx.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
 #if ON_SKYEYE == 1
   #define SKYEYE_MAGIC_ADDRESS (*(volatile unsigned int *)(0xb0000000))
@@ -19,8 +19,8 @@ void bsp_reset(void)
 #else
   rtems_interrupt_level level;
 
-  (void) level;
   rtems_interrupt_disable(level);
+  (void) level;
 
   #ifdef __thumb__
     int tmp;
@@ -34,4 +34,7 @@ void bsp_reset(void)
   #endif
   while(1);
 #endif
+
+  (void) source;
+  (void) code;
 }

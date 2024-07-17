@@ -37,9 +37,11 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
 	uint32_t PSCI_FN_SYSTEM_RESET = 0x84000009;
+	(void) source;
+	(void) code;
 	__asm__ volatile(
 #if defined(AARCH64_MULTILIB_ARCH_V8) || defined(AARCH64_MULTILIB_ARCH_V8_ILP32)
 		"mov x0, %0\n"
@@ -53,4 +55,5 @@ void bsp_reset(void)
 #endif
 		: : "r" (PSCI_FN_SYSTEM_RESET)
 	);
+	RTEMS_UNREACHABLE();
 }

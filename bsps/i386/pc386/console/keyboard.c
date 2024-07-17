@@ -128,11 +128,16 @@ static void_fn do_null, enter, show_ptregs, send_intr, lastcons, caps_toggle,
   num, hold, scroll_forw, scroll_back, caps_on, compose,
   SAK, decr_console, incr_console, spawn_console, bare_num;
 
+static void bsp_reset_wrapper(void)
+{
+  bsp_reset(RTEMS_FATAL_SOURCE_BSP, 0);
+}
+
 static void_fnp spec_fn_table[] = {
   do_null,  enter,    show_ptregs,  show_mem,
   show_state,  send_intr,  lastcons,  caps_toggle,
   num,    hold,    scroll_forw,  scroll_back,
-  bsp_reset,  caps_on,  compose,  SAK,
+  bsp_reset_wrapper,  caps_on,  compose,  SAK,
   decr_console,  incr_console,  spawn_console,  bare_num
 };
 

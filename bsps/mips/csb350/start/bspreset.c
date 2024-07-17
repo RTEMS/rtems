@@ -26,13 +26,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems.h>
 #include <bsp/bootcard.h>
 #include <libcpu/au1x00.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   void (*reset_func)(void);
+
+  (void) source;
+  (void) code;
 
   reset_func = (void *)0xbfc00000;
 
@@ -40,4 +42,5 @@ void bsp_reset(void)
 
   /* Try to restart bootloader */
   reset_func();
+  RTEMS_UNREACHABLE();
 }

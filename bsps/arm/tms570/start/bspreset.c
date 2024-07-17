@@ -55,10 +55,13 @@ static void handle_esm_errors(uint32_t esm_irq_channel)
    }
 }
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
    rtems_interrupt_level level;
    uint32_t esm_irq_channel;
+
+   (void) source;
+   (void) code;
 
    rtems_interrupt_disable(level);
    (void) level;
@@ -73,4 +76,5 @@ void bsp_reset(void)
    /* Reset the board */
    /* write of value other than 1 cause system reset */
    TMS570_SYS1.SYSECR = TMS570_SYS1_SYSECR_RESET(2);
+   RTEMS_UNREACHABLE();
 }

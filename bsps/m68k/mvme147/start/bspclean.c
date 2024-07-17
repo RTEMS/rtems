@@ -54,15 +54,15 @@ static rtems_isr bsp_return_to_monitor_trap(
   __asm__ volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
 }
 
-void bsp_fatal_extension(
-  rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code error
-)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
    pcc->timer1_int_control = 0; /* Disable Timer 1 */
    pcc->timer2_int_control = 0; /* Disable Timer 2 */
 
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
    __asm__ volatile( "trap #13" );               /* ensures SUPV mode */
+   RTEMS_UNREACHABLE();
 }

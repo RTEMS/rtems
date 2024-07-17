@@ -215,7 +215,7 @@ int			quiet=0;
 			rtems_task_suspend(id);
 		} else {
 			printk("PANIC, rebooting...\n");
-			bsp_reset();
+			bsp_reset(RTEMS_FATAL_SOURCE_BSP, 0);
 		}
     }
 }

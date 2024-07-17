@@ -61,7 +61,7 @@ source:
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/start/bspfatal-default.c
-- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/bspreset-loop.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 type: build

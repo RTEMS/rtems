@@ -9,8 +9,11 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
 #if ON_SKYEYE == 1
   #define SKYEYE_MAGIC_ADDRESS (*(volatile unsigned int *)(0xb0000000))
 
@@ -22,8 +25,8 @@ void bsp_reset(void)
    */
   rtems_interrupt_level level;
 
-  (void) level;
   rtems_interrupt_disable(level);
+  (void) level;
   /* disable mmu, invalide i-cache and call swi #4 */
   __asm__ volatile(""
     "mrc    p15,0,r0,c1,c0,0  \n"
@@ -48,4 +51,6 @@ void bsp_reset(void)
   );
   /* we should be back in bios now */
 #endif
+
+  RTEMS_UNREACHABLE();
 }

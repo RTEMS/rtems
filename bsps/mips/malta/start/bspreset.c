@@ -32,12 +32,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems.h>
 #include <bsp/bootcard.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   uint32_t *reset;
+
+  (void) source;
+  (void) code;
 
   reset= (uint32_t *)0x9F000500;
   /*
@@ -50,4 +52,5 @@ void bsp_reset(void)
    */
   // *reset = 0x42;
   *reset = 0xFF;
+  RTEMS_UNREACHABLE();
 }

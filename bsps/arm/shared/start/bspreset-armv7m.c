@@ -33,9 +33,13 @@
 
 #ifdef ARM_MULTILIB_ARCH_V7M
 
-BSP_START_TEXT_SECTION __attribute__((flatten)) void bsp_reset(void)
+BSP_START_TEXT_SECTION __attribute__((flatten)) void
+bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   rtems_interrupt_level level;
+
+  (void) source;
+  (void) code;
 
   rtems_interrupt_local_disable(level);
   (void) level;

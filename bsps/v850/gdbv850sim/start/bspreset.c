@@ -32,11 +32,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems.h>
 #include <bsp/bootcard.h>
 #include <bsp/syscall.h>
 
-void bsp_reset( void )
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   TRAP0 (SYS_exit, 0, 0, 0);
+  RTEMS_UNREACHABLE();
 }

@@ -57,7 +57,7 @@ void stm32h7_init_oscillator(void)
 
   status = HAL_RCC_OscConfig(&stm32h7_config_oscillator);
   if (status != HAL_OK) {
-    bsp_reset();
+    bsp_reset(RTEMS_FATAL_SOURCE_BSP, 0);
   }
 }
 
@@ -70,7 +70,7 @@ void stm32h7_init_clocks(void)
     stm32h7_config_flash_latency
   );
   if (status != HAL_OK) {
-    bsp_reset();
+    bsp_reset(RTEMS_FATAL_SOURCE_BSP, 0);
   }
 }
 
@@ -80,7 +80,7 @@ void stm32h7_init_peripheral_clocks(void)
 
   status = HAL_RCCEx_PeriphCLKConfig(&stm32h7_config_peripheral_clocks);
   if (status != HAL_OK) {
-    bsp_reset();
+    bsp_reset(RTEMS_FATAL_SOURCE_BSP, 0);
   }
 }
 

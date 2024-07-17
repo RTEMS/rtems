@@ -34,7 +34,11 @@
 #include <bsp/bootcard.h>
 #include <bsp/alt_reset_manager.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   alt_reset_cold_reset();
+  RTEMS_UNREACHABLE();
 }

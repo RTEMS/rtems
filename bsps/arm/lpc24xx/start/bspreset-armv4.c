@@ -34,7 +34,6 @@
  */
 
 #include <rtems.h>
-#include <rtems/score/armv7m.h>
 
 #include <bsp/bootcard.h>
 #include <bsp/lpc24xx.h>
@@ -42,12 +41,16 @@
 
 #ifdef ARM_MULTILIB_ARCH_V4
 
-BSP_START_TEXT_SECTION __attribute__((flatten)) void bsp_reset(void)
+BSP_START_TEXT_SECTION __attribute__((flatten)) void
+bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   rtems_interrupt_level level;
 
-  (void) level;
+  (void) source;
+  (void) code;
+
   rtems_interrupt_disable(level);
+  (void) level;
 
   /* Trigger watchdog reset */
   WDCLKSEL = 0;

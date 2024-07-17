@@ -33,8 +33,11 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   zynqmp_debug_console_flush();
 
   while (true) {

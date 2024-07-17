@@ -21,7 +21,7 @@
 #define DM37XX_PRM_RSTCTRL_REG 0x250
 #define DM37XX_RST_DPLL3_BIT 2
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
 #if IS_DM3730
   static uint32_t reset_base = DM37XX_CM_BASE;
@@ -39,4 +39,7 @@ void bsp_reset(void)
              (1 << AM335X_RST_GLOBAL_WARM_SW_BIT));
   }
 #endif
+
+  (void) source;
+  (void) code;
 }

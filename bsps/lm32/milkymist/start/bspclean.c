@@ -48,14 +48,12 @@ static void reconf(void)
   icap_write(0, 0xffff); /* dummy word */
 }
 
-void bsp_fatal_extension(
-  rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code error
-)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
-  if (source == RTEMS_FATAL_SOURCE_EXIT && error)
+  if (source == RTEMS_FATAL_SOURCE_EXIT && code)
     reconf();
   else
     reboot();
+
+  RTEMS_UNREACHABLE();
 }

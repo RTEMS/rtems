@@ -39,8 +39,11 @@
 
 #include <mpc55xx/regs.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   while (true) {
     #if MPC55XX_CHIP_FAMILY == 564
       /* TODO */

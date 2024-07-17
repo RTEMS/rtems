@@ -44,10 +44,13 @@ static int find_rstcr_node(const void *fdt, int node)
   return fdt_node_offset_by_prop_value(fdt, node, "fsl,has-rstcr", NULL, 0);
 }
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   rtems_interrupt_level level;
   const char *fdt;
+
+  (void) source;
+  (void) code;
 
   rtems_interrupt_local_disable(level);
   (void) level;

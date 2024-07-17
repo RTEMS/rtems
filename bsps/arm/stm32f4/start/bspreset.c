@@ -10,12 +10,15 @@
 
 #include <bsp/bootcard.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   rtems_interrupt_level level;
 
-  (void) level;
+  (void) source;
+  (void) code;
+
   rtems_interrupt_disable(level);
+  (void) level;
 
   while (1);
 }

@@ -59,12 +59,12 @@ static void bsp_return_to_monitor_trap( void )
  *  167Bug because trap 13 is documented as being reserved for the internal
  *  use of the debugger.
  */
-void bsp_fatal_extension(
-  rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code error
-)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;
    __asm__ volatile( "trap #13" );
+   RTEMS_UNREACHABLE();
 }

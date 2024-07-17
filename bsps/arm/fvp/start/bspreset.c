@@ -40,8 +40,11 @@
 #include <bsp/bootcard.h>
 #include <bsp/semihosting.h>
 
-void bsp_reset( void )
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   while ( true ) {
     (void) arm_fvp_semihosting_call( SYS_EXIT, ADP_Stopped_ApplicationExit );
   }

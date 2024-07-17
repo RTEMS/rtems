@@ -33,8 +33,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdbool.h>
-
 #include <bspopts.h>
 #include <bsp/bootcard.h>
 #include <bsp/lpc32xx.h>
@@ -51,8 +49,11 @@ static void watchdog_reset(void)
   #endif
 }
 
-void bsp_reset( void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   watchdog_reset();
 
   while (true) {

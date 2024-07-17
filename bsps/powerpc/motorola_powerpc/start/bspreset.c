@@ -10,8 +10,12 @@
 |        Arguments: None.
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
-void bsp_reset(void)
+
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   printk("Printing a stack trace for your convenience :-)\n");
   CPU_print_stack();
   /* shutdown and reboot */
@@ -25,4 +29,5 @@ void bsp_reset(void)
    outb(1, 0x92);
 
 #endif
+   RTEMS_UNREACHABLE();
 } /* bsp_reset */

@@ -100,6 +100,7 @@
 #include <stdbool.h>
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 /*
  * Number of debug registers.
@@ -109,7 +110,6 @@
 /*
  * Prototypes we need to avoid warnings but not going into public space.
  */
-void bsp_reset(void);
 void breakpoint (void);
 void set_debug_traps(void);
 void set_mem_err(void);
@@ -1103,7 +1103,7 @@ handle_exception (int exceptionVector)
 
 	  /* kill the program */
 	case 'k':		/* do nothing */
-	  bsp_reset();
+	  bsp_reset(RTEMS_FATAL_SOURCE_BSP, 0);
 	  continue;
 
 	default:

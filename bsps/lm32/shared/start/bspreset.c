@@ -32,11 +32,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp.h>
 #include <bsp/bootcard.h>
 
-void bsp_reset( void )
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   /*
    * If on the GDB simulator, trap to it and exit.
    */
@@ -44,4 +46,6 @@ void bsp_reset( void )
      __asm__ volatile ( "mvi     r8, 1" );  /* 1 is SYS_exit */
      __asm__ volatile ( "scall" );
   #endif
+
+  RTEMS_UNREACHABLE();
 }

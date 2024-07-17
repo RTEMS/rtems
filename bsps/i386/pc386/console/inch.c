@@ -160,7 +160,7 @@ _IBMPC_scankey(char *outChar)
 
     case 0x53:
       if (ctrl_pressed && alt_pressed)
-        bsp_reset(); /* ctrl+alt+del -> reboot */
+        bsp_reset( RTEMS_FATAL_SOURCE_BSP, 0 ); /* ctrl+alt+del -> reboot */
       break;
 
     /*

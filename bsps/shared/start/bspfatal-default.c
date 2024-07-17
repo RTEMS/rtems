@@ -220,6 +220,6 @@ void bsp_fatal_extension(
    *  you must have meant to reset the board.
    */
   #if (BSP_PRESS_KEY_FOR_RESET) || (BSP_RESET_BOARD_AT_EXIT)
-    bsp_reset();
+    bsp_reset( source, code );
   #endif
 }

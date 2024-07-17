@@ -43,12 +43,12 @@
 
 #include <rtems/score/cpu.h>
 
-void __real_bsp_reset( void );
+void __real_bsp_reset( rtems_fatal_source source, rtems_fatal_code code );
 
-void __wrap_bsp_reset( void );
+void __wrap_bsp_reset( rtems_fatal_source source, rtems_fatal_code code );
 
-void __wrap_bsp_reset( void )
+void __wrap_bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   rtems_test_gcov_dump_info();
-  __real_bsp_reset();
+  __real_bsp_reset( source, code );
 }

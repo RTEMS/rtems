@@ -50,7 +50,7 @@ source:
 - bsps/bfin/shared/interrupt.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/start/bspfatal-default.c
-- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/bspreset-loop.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/setvec.c

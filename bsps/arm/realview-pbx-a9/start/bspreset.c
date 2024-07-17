@@ -27,10 +27,13 @@
 
 #include <bsp/bootcard.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   volatile uint32_t *sys_lock = (volatile uint32_t *) 0x10000020;
   volatile uint32_t *sys_resetctl = (volatile uint32_t *) 0x10000040;
+
+  (void) source;
+  (void) code;
 
   while (true) {
     *sys_lock = 0xa05f;

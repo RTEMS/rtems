@@ -41,8 +41,11 @@
 #define KEYBOARD_CONTROLLER_PORT 0x64
 #define PULSE_RESET_LINE         0xFE
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   ACPI_STATUS status = AcpiEnterSleepStatePrep(ACPI_STATE_S5);
 
   if (status == AE_OK) {
@@ -52,4 +55,5 @@ void bsp_reset(void)
 
   /* Should be unreachable. As a fallback try the keyboard controller method */
   outport_byte(KEYBOARD_CONTROLLER_PORT, PULSE_RESET_LINE);
+  RTEMS_UNREACHABLE();
 }

@@ -49,10 +49,14 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
-void
-bsp_reset(void)
+
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
 uint8_t v;
+
+	(void) source;
+	(void) code;
+
 	/*
 	 * AFAIK, the hardest reset available; cleared
 	 * some errors a VME-bus reset wouldn't (hung
@@ -62,6 +66,7 @@ uint8_t v;
 	v &= ~BSP_MVME3100_SYS_CR_RESET_MSK;
 	v |=  BSP_MVME3100_SYS_CR_RESET;
 	out_8( BSP_MVME3100_SYS_CR, v );
+	RTEMS_UNREACHABLE();
 }
 
 uint8_t

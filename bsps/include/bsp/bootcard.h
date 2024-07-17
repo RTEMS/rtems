@@ -62,7 +62,7 @@ extern const char *bsp_boot_cmdline;
 
 void bsp_start(void);
 
-void bsp_reset(void);
+RTEMS_NO_RETURN void bsp_reset(rtems_fatal_source source, rtems_fatal_code code);
 
 /**
  * @brief Standard system initialization procedure.

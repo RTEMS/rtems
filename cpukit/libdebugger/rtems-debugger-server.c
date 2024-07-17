@@ -46,11 +46,6 @@
  */
 
 /*
- * Hack to void including bsp.h. The reset needs a better API.
- */
-extern void bsp_reset(void);
-
-/*
  * Command lookup table.
  */
 typedef int (*rtems_debugger_command)(uint8_t* buffer, int size);

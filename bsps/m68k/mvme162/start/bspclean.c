@@ -36,12 +36,12 @@ static rtems_isr bsp_return_to_monitor_trap(
   __asm__ volatile( ".short 0x63" );    /* return to 162Bug (.RETURN) */
 }
 
-void bsp_fatal_extension(
-  rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code error
-)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
    __asm__ volatile( "trap #13" );               /* ensures SUPV mode */
+   RTEMS_UNREACHABLE();
 }

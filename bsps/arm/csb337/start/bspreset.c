@@ -16,9 +16,12 @@
 #include <at91rm9200_pmc.h>
 #include <at91rm9200_emac.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   rtems_interrupt_level level;
+
+  (void) source;
+  (void) code;
 
   rtems_interrupt_disable(level);
     (void) level; /* avoid set but not used warning */

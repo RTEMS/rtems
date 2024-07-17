@@ -29,9 +29,12 @@
 #include <bsp.h>
 #include <arm/freescale/imx/imx_wdogreg.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   volatile uint16_t *pcr;
+
+  (void) source;
+  (void) code;
 
   imx_uart_console_drain();
 

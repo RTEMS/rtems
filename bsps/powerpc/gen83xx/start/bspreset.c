@@ -24,12 +24,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp.h>
 #include <bsp/bootcard.h>
 
 #include <mpc83xx/mpc83xx.h>
 
-void bsp_reset(void)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   mpc83xx_reset();
+  RTEMS_UNREACHABLE();
 }
