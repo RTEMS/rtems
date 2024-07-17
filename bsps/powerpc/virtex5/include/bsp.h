@@ -108,8 +108,6 @@ void zero_bss(void);
 
 #endif /* ASM */
 
-void BSP_ask_for_reset(void);
-
 #ifdef __cplusplus
 }
 #endif

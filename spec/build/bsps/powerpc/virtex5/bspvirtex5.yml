@@ -59,13 +59,13 @@ source:
 - bsps/powerpc/shared/start/memcpy.c
 - bsps/powerpc/shared/start/zerobss.c
 - bsps/powerpc/virtex5/irq/irq_init.c
-- bsps/powerpc/virtex5/start/bspclean.c
 - bsps/powerpc/virtex5/start/bspstart.c
 - bsps/powerpc/virtex5/start/dummy_console.c
 - bsps/powerpc/virtex5/start/mmu.c
 - bsps/powerpc/virtex5/start/start.S
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/printk-dummy.c
+- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/bspreset-loop.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
