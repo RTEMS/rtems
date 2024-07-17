@@ -103,6 +103,7 @@ source:
 - bsps/shared/ofw/ofw.c
 - bsps/shared/rtems-version.c
 - bsps/shared/start/bootcard.c
+- bsps/shared/start/bspfatal-default.c
 - bsps/shared/freebsd/sys/arm/ti/ti_pinmux.c
 - bsps/shared/freebsd/sys/arm/ti/am335x/am335x_scm_padconf.c
 type: build

@@ -77,7 +77,6 @@ source:
 - bsps/shared/dev/rtc/rtc-support.c
 - bsps/shared/dev/serial/legacy-console.c
 - bsps/shared/irq/irq-default-handler.c
-- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/mallocinitone.c
 - bsps/shared/start/sbrk.c

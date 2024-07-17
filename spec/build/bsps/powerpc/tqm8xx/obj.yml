@@ -42,7 +42,6 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
-- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/bspreset-loop.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/mallocinitone.c

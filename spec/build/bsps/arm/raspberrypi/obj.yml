@@ -53,7 +53,6 @@ source:
 - bsps/shared/dev/gpio/gpio-support.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/start/bsp-fdt.c
-- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/mallocinitone.c
 - bsps/shared/start/sbrk.c

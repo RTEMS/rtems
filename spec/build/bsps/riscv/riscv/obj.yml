@@ -36,6 +36,5 @@ source:
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bsp-fdt.c
-- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/gettargethash-default.c
 type: build

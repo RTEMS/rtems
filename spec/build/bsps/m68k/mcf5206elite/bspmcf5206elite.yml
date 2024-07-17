@@ -63,7 +63,6 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
 - bsps/shared/dev/serial/printk-dummy.c
-- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/bspreset-loop.c
 - bsps/shared/start/bspstart-empty.c
 - bsps/shared/start/gettargethash-default.c

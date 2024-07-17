@@ -47,7 +47,6 @@ source:
 - bsps/m68k/uC5282/start/bspstart.c
 - bsps/m68k/uC5282/start/init5282.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
-- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/setvec.c
