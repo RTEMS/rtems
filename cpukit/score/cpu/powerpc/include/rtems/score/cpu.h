@@ -912,7 +912,7 @@ void _CPU_Context_Initialize(
 
 void _CPU_Initialize(void);
 
-void *_CPU_Thread_Idle_body( uintptr_t ignored );
+RTEMS_NO_RETURN void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /*
  *  _CPU_Context_switch

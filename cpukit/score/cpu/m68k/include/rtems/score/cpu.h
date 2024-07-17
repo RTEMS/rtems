@@ -419,7 +419,7 @@ void _CPU_Context_Initialize(
 
 /* end of Context handler macros */
 
-void *_CPU_Thread_Idle_body( uintptr_t ignored );
+RTEMS_NO_RETURN void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 #define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
 

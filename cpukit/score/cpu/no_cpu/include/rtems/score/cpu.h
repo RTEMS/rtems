@@ -1043,7 +1043,7 @@ void _CPU_ISR_install_vector(
  *
  * XXX document implementation including references if appropriate
  */
-void *_CPU_Thread_Idle_body( uintptr_t ignored );
+RTEMS_NO_RETURN void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /**
  * @brief Performs a context switch from the executing thread to the heir

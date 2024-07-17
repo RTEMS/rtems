@@ -435,7 +435,7 @@ void _CPU_ISR_install_vector(
   CPU_ISR_handler *old_handler
 );
 
-void *_CPU_Thread_Idle_body( uintptr_t );
+RTEMS_NO_RETURN void *_CPU_Thread_Idle_body( uintptr_t );
 
 /*
  *  _CPU_Context_switch

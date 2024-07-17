@@ -52,6 +52,4 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
   while ( true ) {
     /* Do nothing */
   }
-
-  return NULL;
 }

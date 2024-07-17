@@ -481,7 +481,7 @@ static inline void _CPU_ISR_install_vector(
   );
 }
 
-void *_CPU_Thread_Idle_body( uintptr_t ignored );
+RTEMS_NO_RETURN void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /*
  *  _CPU_Context_switch

@@ -195,6 +195,4 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
   while ( true ) {
     __asm__ volatile ( "wfi" );
   }
-
-  return NULL;
 }
