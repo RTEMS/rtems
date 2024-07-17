@@ -81,8 +81,6 @@
 extern "C" {
 #endif
 
-void BSP_ask_for_reset(void);
-
 /*
  * Prototypes for BSP methods shared across file boundaries
  */

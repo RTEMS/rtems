@@ -119,14 +119,6 @@ static void __bsp_outchar_to_memory(char c)
   *msgBuffer   = 0x00;                /* Overwrite next location to show EOM */
 }
 
-
-void BSP_ask_for_reset(void)
-{
-  printk("\nSystem stopped, issue RESET");
-
-  for(;;);
-}
-
 uint32_t _CPU_Counter_frequency(void)
 {
   return bsp_clicks_per_usec * 1000000;
