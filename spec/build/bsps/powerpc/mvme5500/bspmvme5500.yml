@@ -71,7 +71,6 @@ source:
 - bsps/powerpc/mvme5500/pci/pci.c
 - bsps/powerpc/mvme5500/pci/pci_interface.c
 - bsps/powerpc/mvme5500/rtc/todcfg.c
-- bsps/powerpc/mvme5500/start/bspclean.c
 - bsps/powerpc/mvme5500/start/bspreset.c
 - bsps/powerpc/mvme5500/start/bspstart.c
 - bsps/powerpc/mvme5500/start/exceptionhandler.c
@@ -96,5 +95,6 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/pci/pci_find_device.c
 - bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/gettargethash-default.c
 type: build
