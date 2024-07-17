@@ -25,17 +25,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp.h>
 #include <bsp/bootcard.h>
-#include <rtems/bspIo.h>
 
 #include "m5op.h"
 
-void bsp_fatal_extension(
-  rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code code
-)
+void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  (void) source;
+  (void) code;
+
   m5_exit(0); 
+  RTEMS_UNREACHABLE();
 }

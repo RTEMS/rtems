@@ -44,7 +44,7 @@ source:
 - bsps/shared/dev/serial/legacy-console-control.c
 - bsps/shared/dev/serial/legacy-console-select.c
 - bsps/shared/dev/serial/legacy-console.c
-- bsps/shared/start/bspreset-loop.c
+- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/bspstart-empty.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
