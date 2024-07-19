@@ -120,11 +120,11 @@ void rtems_rtl_symbol_table_close (rtems_rtl_symbols* symbols);
  * @param tls_offsets The TLS offsets table. If NULL none provided.
  * @param tls_size The number TLS offset entries in the table.
  */
-bool rtems_rtl_symbol_global_add (rtems_rtl_obj*        obj,
-                                  const unsigned char*  esyms,
-                                  unsigned int          size,
-                                  rtems_rtl_tls_offset* tls_offsets,
-                                  unsigned int          tls_size);
+bool rtems_rtl_symbol_global_add (rtems_rtl_obj*              obj,
+                                  const unsigned char*        esyms,
+                                  unsigned int                size,
+                                  const rtems_rtl_tls_offset* tls_offsets,
+                                  unsigned int                tls_size);
 
 /**
  * Find a symbol given the symbol label in the global symbol table.

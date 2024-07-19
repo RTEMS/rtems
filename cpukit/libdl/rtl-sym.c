@@ -77,10 +77,10 @@ rtems_rtl_symbol_global_insert (rtems_rtl_symbols* symbols,
                       &symbol->node);
 }
 
-static rtems_rtl_tls_offset*
-rtems_rtl_symbol_find_tls_offset (size_t                index,
-                                  rtems_rtl_tls_offset* tls_offsets,
-                                  size_t                tls_size)
+static const rtems_rtl_tls_offset*
+rtems_rtl_symbol_find_tls_offset (size_t                      index,
+                                  const rtems_rtl_tls_offset* tls_offsets,
+                                  size_t                      tls_size)
 {
   size_t entry;
   for (entry = 0; entry < tls_size; ++entry)
@@ -119,11 +119,11 @@ rtems_rtl_symbol_table_close (rtems_rtl_symbols* symbols)
 }
 
 bool
-rtems_rtl_symbol_global_add (rtems_rtl_obj*        obj,
-                             const unsigned char*  esyms,
-                             unsigned int          size,
-                             rtems_rtl_tls_offset* tls_offsets,
-                             unsigned int          tls_size)
+rtems_rtl_symbol_global_add (rtems_rtl_obj*              obj,
+                             const unsigned char*        esyms,
+                             unsigned int                size,
+                             const rtems_rtl_tls_offset* tls_offsets,
+                             unsigned int                tls_size)
 {
   rtems_rtl_symbols* symbols;
   rtems_rtl_obj_sym* sym;
@@ -194,7 +194,7 @@ rtems_rtl_symbol_global_add (rtems_rtl_obj*        obj,
       uint8_t data[sizeof (void*)];
       void*   voidp;
     } copy_voidp;
-    rtems_rtl_tls_offset* tls_off;
+    const rtems_rtl_tls_offset* tls_off;
     int b;
 
     sym->name = (const char*) &esyms[s];

@@ -396,10 +396,10 @@ bool rtems_rtl_path_prepend (const char* path);
  * @param tls_offsets The TLS offsets table. If NULL none provided.
  * @param tls_size The number TLS offset entries in the table.
  */
-void rtems_rtl_base_sym_global_add (const unsigned char*  esyms,
-                                    unsigned int          count,
-                                    rtems_rtl_tls_offset* tls_offsets,
-                                    unsigned int          tls_size);
+void rtems_rtl_base_sym_global_add (const unsigned char*        esyms,
+                                    unsigned int                count,
+                                    const rtems_rtl_tls_offset* tls_offsets,
+                                    unsigned int                tls_size);
 
 /**
  * Return the object file descriptor for the base image. The object file
