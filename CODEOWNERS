@@ -7,6 +7,12 @@
 [General Maintainer] @approvers/general/maintainer
 *
 
+[Documentation] @approvers/docs
+*/README
+*.md
+*.rst
+*.txt
+
 # CPUKit
 ########
 
