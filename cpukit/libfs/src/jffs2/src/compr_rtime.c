@@ -113,6 +113,11 @@ int rtems_jffs2_compressor_rtime_decompress(
 
 		positions[value]=outpos;
 		if (repeat) {
+#ifdef __rtems__
+			if ((repeat + outpos) >= destlen) {
+				return 1;
+			}
+#endif
 			if (backoffs + repeat >= outpos) {
 				while(repeat) {
 					cpage_out[outpos++] = cpage_out[backoffs++];
