@@ -39,9 +39,36 @@
 #define _AMD64_ACPI_H_
 
 #include <bsp.h>
+#include <acpi/acpica/acpi.h>
 
 #define ACPI_MAX_INIT_TABLES 16
 
 extern uint64_t acpi_rsdp_addr;
+
+/**
+ * @brief Initializes the ACPICA Table Manager. Requires dynamic memory.
+ *
+ * The ACPICA Table Manager is independent of the rest of the ACPICA subsystem
+ * and only requires dynamic memory to be initialized (unless a statically
+ * allocated array for the tables is provided). Since access to ACPI tables
+ * may be required before the entire ACPICA subsystem can be initialized
+ * this routine can be used earlier in the system intialization.
+ *
+ * @return true if successful.
+ */
+bool acpi_tables_initialize(void);
+
+/**
+ * @brief Walks through the subtables of an ACPI table.
+ *
+ * @param table Pointer to the table.
+ * @param size_of_header Size of the table header (used to offset into first subtable).
+ * @param handler Handler that is called for each subtable found.
+ */
+void acpi_walk_subtables(
+  ACPI_TABLE_HEADER *table,
+  size_t size_of_header,
+  void (*handler)(ACPI_SUBTABLE_HEADER*)
+);
 
 #endif /* _AMD64_ACPI_H_ */

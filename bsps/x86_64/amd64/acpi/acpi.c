@@ -37,10 +37,46 @@
 
 #include <assert.h>
 #include <acpi/acpi.h>
-#include <acpi/acpica/acpi.h>
 #include <rtems/sysinit.h>
 
 uint64_t acpi_rsdp_addr = 0;
+
+static bool acpi_tables_initialized = false;
+
+bool acpi_tables_initialize(void)
+{
+  ACPI_STATUS status;
+
+  status = AcpiInitializeTables(NULL, ACPI_MAX_INIT_TABLES, FALSE);
+
+  if (status == (AE_OK)) {
+    acpi_tables_initialized = true;
+    return true;
+  }
+  return false;
+}
+
+void acpi_walk_subtables(
+  ACPI_TABLE_HEADER* table,
+  size_t size_of_header,
+  void (*handler)(ACPI_SUBTABLE_HEADER*)
+)
+{
+  ACPI_SUBTABLE_HEADER* entry;
+  ACPI_SUBTABLE_HEADER* end;
+
+  if (table == NULL) {
+    return;
+  }
+
+  entry = (ACPI_SUBTABLE_HEADER*) ((uint8_t*) table + size_of_header);
+  end = (ACPI_SUBTABLE_HEADER*) ((uint8_t*) table + table->Length);
+
+  while (entry < end) {
+    handler(entry);
+    entry = (ACPI_SUBTABLE_HEADER*) ((uint8_t*) entry + entry->Length);
+  }
+}
 
 static void initialize_acpi(void)
 {
@@ -48,8 +84,10 @@ static void initialize_acpi(void)
   status = AcpiInitializeSubsystem();
   assert(status == (AE_OK));
 
-  status = AcpiInitializeTables(NULL, ACPI_MAX_INIT_TABLES, FALSE);
-  assert(status == (AE_OK));
+  if (acpi_tables_initialized == false) {
+    status = AcpiInitializeTables(NULL, ACPI_MAX_INIT_TABLES, FALSE);
+    assert(status == (AE_OK));
+  }
 
   status = AcpiLoadTables();
   assert(status == (AE_OK));
