@@ -55,9 +55,9 @@ extern "C" {
  * @brief Enumeration describing the possible types of ECC events
  */
 typedef enum {
-  /* L1 Cache event information is delivered via Cache_Error_Event struct. */
+  /* L1 Cache event information is delivered via Cache_Error_Info struct. */
   L1_CACHE,
-  /* L2 Cache event information is delivered via Cache_Error_Event struct. */
+  /* L2 Cache event information is delivered via Cache_Error_Info struct. */
   L2_CACHE,
   /*
    * L1 and L2 cache are on a combined interrupt on ZynqMP. They are enabled as
@@ -66,7 +66,9 @@ typedef enum {
    * both.
    */
   L1_L2_CACHE,
+  /* OCM RAM event information is delivered via OCM_Error_Info struct. */
   OCM_RAM,
+  /* DDR RAM event information is delivered via DDR_Error_Info struct. */
   DDR_RAM,
 } ECC_Event_Type;
 
@@ -106,7 +108,7 @@ typedef struct {
   uint8_t other_errors;
   /* Whether any of the errors represented have caused a data abort */
   bool abort;
-} Cache_Error_Event;
+} Cache_Error_Info;
 
 /**
  * @brief Typedef for ECC handlers

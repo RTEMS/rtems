@@ -85,7 +85,7 @@ static void cache_handler(void *arg)
 
   if (l1val & AARCH64_CPUMERRSR_EL1_VALID) {
     /* parse L1 data */
-    Cache_Error_Event cerr = {0, };
+    Cache_Error_Info cerr = {0, };
     cerr.abort = l1val & AARCH64_CPUMERRSR_EL1_FATAL;
     cerr.repeats = AARCH64_CPUMERRSR_EL1_REPEATERR_GET(l1val);
     cerr.other_errors = AARCH64_CPUMERRSR_EL1_OTHERERR_GET(l1val);
@@ -98,7 +98,7 @@ static void cache_handler(void *arg)
 
   if (l2val & AARCH64_L2MERRSR_EL1_VALID) {
     /* parse L2 data */
-    Cache_Error_Event cerr = {0, };
+    Cache_Error_Info cerr = {0, };
     cerr.abort = l2val & AARCH64_L2MERRSR_EL1_FATAL;
     cerr.repeats = AARCH64_L2MERRSR_EL1_REPEATERR_GET(l2val);
     cerr.other_errors = AARCH64_L2MERRSR_EL1_OTHERERR_GET(l2val);
