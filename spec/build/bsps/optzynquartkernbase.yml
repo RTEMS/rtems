@@ -8,7 +8,6 @@ copyrights:
 default:
 - enabled-by:
   - bsps/aarch64/xilinx-zynqmp
-  - arm/xilinx_zynq_microzed
   value: ZYNQ_UART_0_BASE_ADDR
 - enabled-by: true
   value: ZYNQ_UART_1_BASE_ADDR
