@@ -392,7 +392,7 @@ int rtems_aio_check_sigevent( struct sigevent *sigp )
       break;
 
     case SIGEV_SIGNAL:
-      if ( sigp->sigev_signo < 1 && sigp->sigev_signo > 32 ) {
+      if ( sigp->sigev_signo < 1 || sigp->sigev_signo > 32 ) {
         return 0;
       }
       break;
