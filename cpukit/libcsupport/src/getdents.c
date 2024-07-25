@@ -67,22 +67,27 @@ int getdents(
 {
   rtems_libio_t *iop;
   mode_t type;
+  int result;
 
   /*
    *  Get the file control block structure associated with the file descriptor
    */
-  iop = rtems_libio_iop( dd_fd );
+  LIBIO_GET_IOP_WITH_ACCESS( dd_fd, iop, LIBIO_FLAGS_READ, EBADF );
 
   /*
    *  Make sure we are working on a directory
    */
   type = rtems_filesystem_location_type( &iop->pathinfo );
-  if ( !S_ISDIR( type ) )
+  if ( !S_ISDIR( type ) ) {
+    rtems_libio_iop_drop( iop );
     rtems_set_errno_and_return_minus_one( ENOTDIR );
+  }
 
   /*
    *  Return the number of bytes that were actually transfered as a result
    *  of the read attempt.
    */
-  return (*iop->pathinfo.handlers->read_h)( iop, dd_buf, dd_len  );
+  result = (*iop->pathinfo.handlers->read_h)( iop, dd_buf, dd_len  );
+  rtems_libio_iop_drop( iop );
+  return result;
 }
