@@ -20,6 +20,10 @@ install:
   - bsps/aarch64/raspberrypi/include/bsp/raspberrypi.h
 links:
 - role: build-dependency
+  uid: optcorerate
+- role: build-dependency
+  uid: optspiirq
+- role: build-dependency
   uid: objclock
 - role: build-dependency
   uid: objsystemtimer
@@ -51,6 +55,8 @@ links:
   uid: ../../objirq
 - role: build-dependency
   uid: objgpio
+- role: build-dependency
+  uid: objspi
 source:
 - bsps/aarch64/raspberrypi/console/console.c
 - bsps/aarch64/raspberrypi/start/bspstart.c

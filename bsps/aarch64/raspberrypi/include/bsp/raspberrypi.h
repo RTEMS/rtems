@@ -238,6 +238,20 @@
 /** @} */
 
 /**
+* @name SPI Registers
+*
+* @{
+*/
+
+#define BCM2711_SPI0_BASE           (RPI_PERIPHERAL_BASE + 0x204000)
+#define BCM2711_SPI3_BASE           (RPI_PERIPHERAL_BASE + 0x204600)
+#define BCM2711_SPI4_BASE           (RPI_PERIPHERAL_BASE + 0x204800)
+#define BCM2711_SPI5_BASE           (RPI_PERIPHERAL_BASE + 0x204A00)
+#define BCM2711_SPI6_BASE           (RPI_PERIPHERAL_BASE + 0x204C00)
+
+/** @} */
+
+/**
 * @name Mailbox Registers
 *
 * @{
