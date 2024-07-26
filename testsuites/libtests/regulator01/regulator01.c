@@ -1256,7 +1256,7 @@ static void test_regulator_send_multiple_messages_OK(void)
 rtems_task test_regulator(rtems_task_argument);
 
 /**
- * @ingroup RegulatorTestshttps://devel.rtems.org/milestone/6.1
+ * @ingroup RegulatorTests
  * @brief Test entry task which invokes test cases
  */
 rtems_task test_regulator(rtems_task_argument arg)
