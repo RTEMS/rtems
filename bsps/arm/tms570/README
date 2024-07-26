@@ -110,8 +110,7 @@ But other place should be found when RTEMS lwIP
 integration with read, write, close etc. functions
 is implemented in future.
 
-Adapt BSP for another TMS570 based hardware
--------------------------------------------
+  https://gitlab.rtems.org/rtems/pkg/rtems-lwip/-/tree/main/rtemslwip/tms570
 
 When TMS570_USE_HWINIT_STARTUP=1 then quite complete
 initialization and selft-test code is included in TMS570
