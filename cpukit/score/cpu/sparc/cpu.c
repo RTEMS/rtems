@@ -160,7 +160,7 @@ RTEMS_STATIC_ASSERT(
   SPARC_MINIMUM_STACK_FRAME_SIZE
 );
 
-/* https://devel.rtems.org/ticket/2352 */
+/* See https://gitlab.rtems.org/rtems/rtos/rtems/-/issues/2352 */
 RTEMS_STATIC_ASSERT(
   sizeof(CPU_Interrupt_frame) % CPU_ALIGNMENT == 0,
   CPU_Interrupt_frame_alignment

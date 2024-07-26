@@ -129,9 +129,6 @@ files and pins "database"
 Links to additional information
 -------------------------------
 
-Additional information about the BSP and board can be found at
-  https://devel.rtems.org/wiki/TBR/BSP/Tms570
-
 Additional information about the CPU can be found at
   https://www.ti.com/product/tms570ls3137
   https://www.ti.com/product/TMS570LC4357

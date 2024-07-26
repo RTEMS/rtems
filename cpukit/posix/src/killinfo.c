@@ -141,7 +141,7 @@ int _POSIX_signals_Send(
     siginfo->si_value = *value;
   }
 
-  /* FIXME: https://devel.rtems.org/ticket/2690 */
+  /* FIXME: https://gitlab.rtems.org/rtems/rtos/rtems/-/issues/2690 */
   cpu_self = _Thread_Dispatch_disable();
 
   /*

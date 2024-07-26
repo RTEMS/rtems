@@ -61,7 +61,7 @@ static void test(void)
   /*
    * This will start a task with a priority of PRIORITY_MINIMUM.  Check that
    * this task and the test task did not preempt the current task.  See also
-   * https://devel.rtems.org/ticket/2365.
+   * https://gitlab.rtems.org/rtems/rtos/rtems/-/issues/2365
    */
   sc = rtems_timer_initiate_server(
     RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
