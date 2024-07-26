@@ -47,13 +47,13 @@
  * linked to the application is licensed under permissive open source licenses.
  * This means that the licenses do not propagate to the application software.
  * Most of the original RTEMS code is now under the [BSD 2-Clause
- * license](https://git.rtems.org/rtems/tree/LICENSE.BSD-2-Clause).  Some
- * code of RTEMS is under a legacy license, the [modified GPL 2.0 or later
+ * license](https://gitlab.rtems.org/rtems/rtos/rtems/-/blob/main/LICENSE.md).
+ * Some code of RTEMS is under a legacy license, the [modified GPL 2.0 or later
  * license with an exception for static
- * linking](https://git.rtems.org/rtems/tree/LICENSE).  It exposes no license
- * requirements on application code.  Everything necessary to build RTEMS
- * applications is available as open source software.  This makes you
- * completely vendor independent.
+ * linking](https://gitlab.rtems.org/rtems/rtos/rtems/-/blob/main/LICENSE.md).
+ * It exposes no license requirements on application code.  Everything necessary
+ * to build RTEMS applications is available as open source software.  This makes
+ * you completely vendor independent.
  *
  * RTEMS provides the following basic feature set:
  *
@@ -175,7 +175,7 @@
  *
  *     - JFFS2 (NOR flashes)
  *
- *     - [YAFFS2](https://git.rtems.org/sebh/rtems-yaffs2.git/)
+ *     - [YAFFS2](https://gitlab.rtems.org/sebhub/rtems-yaffs2)
  *       (NAND flashes, GPL or commercial license required)
  *
  * - Device drivers
@@ -196,7 +196,7 @@
  *
  *     - Application runs in kernel-space and can access hardware directly
  *
- * - [libbsd](https://git.rtems.org/rtems-libbsd/)
+ * - [libbsd](https://gitlab.rtems.org/rtems/pkg/rtems-libbsd)
  *
  *     - Port of FreeBSD user-space and kernel-space components to RTEMS
  *

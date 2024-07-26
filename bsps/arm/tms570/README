@@ -101,7 +101,7 @@ repository
 
 This port has been consolidated with other RTEMS-LWIP ports here:
 
-  https://git.rtems.org/rtems-lwip/tree/rtemslwip/tms570
+  https://gitlab.rtems.org/rtems/pkg/rtems-lwip/-/tree/main/rtemslwip/tms570
 
 A port to the TMS570LC4357 based off this work is underway.
 
