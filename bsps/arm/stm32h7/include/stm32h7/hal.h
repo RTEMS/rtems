@@ -31,6 +31,7 @@
 #include <stm32h7xx_hal.h>
 
 #include <rtems/termiostypes.h>
+#include <dev/spi/spi.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,6 +70,12 @@ typedef enum {
   STM32H7_MODULE_USB2_OTG_ULPI,
   STM32H7_MODULE_SDMMC1,
   STM32H7_MODULE_SDMMC2,
+  STM32H7_MODULE_SPI1,
+  STM32H7_MODULE_SPI2,
+  STM32H7_MODULE_SPI3,
+  STM32H7_MODULE_SPI4,
+  STM32H7_MODULE_SPI5,
+  STM32H7_MODULE_SPI6,
 } stm32h7_module_index;
 
 stm32h7_module_index stm32h7_get_module_index(const void *regs);
@@ -161,6 +168,57 @@ extern const RCC_ClkInitTypeDef stm32h7_config_clocks;
 extern const uint32_t stm32h7_config_flash_latency;
 
 extern const RCC_PeriphCLKInitTypeDef stm32h7_config_peripheral_clocks;
+
+#define STM32H7_NUM_SOFT_CS 4
+
+typedef struct {
+  /*
+   * Some SPI peripheral configurations require multiple GPIO blocks, so
+   * configure each pin separately.
+   */
+  stm32h7_gpio_config sck_gpio;
+  stm32h7_gpio_config miso_gpio;
+  stm32h7_gpio_config mosi_gpio;
+  stm32h7_gpio_config cs_gpio[STM32H7_NUM_SOFT_CS];
+  /*
+   * This is expected to be the maximum speed of the output clock which is a
+   * factor of 2 less than the input clock.
+   */
+  uint32_t max_speed_hz;
+} stm32h7_spi_config;
+
+typedef struct {
+  spi_bus bus;
+  SPI_HandleTypeDef spi;
+  bool transmitting;
+  const stm32h7_spi_config *config;
+  rtems_vector_number irq;
+} stm32h7_spi_context;
+
+extern stm32h7_spi_context stm32h7_spi1_instance;
+
+extern const stm32h7_spi_config stm32h7_spi1_config;
+
+extern stm32h7_spi_context stm32h7_spi2_instance;
+
+extern const stm32h7_spi_config stm32h7_spi2_config;
+
+extern stm32h7_spi_context stm32h7_spi3_instance;
+
+extern const stm32h7_spi_config stm32h7_spi3_config;
+
+extern stm32h7_spi_context stm32h7_spi4_instance;
+
+extern const stm32h7_spi_config stm32h7_spi4_config;
+
+extern stm32h7_spi_context stm32h7_spi5_instance;
+
+extern const stm32h7_spi_config stm32h7_spi5_config;
+
+extern stm32h7_spi_context stm32h7_spi6_instance;
+
+extern const stm32h7_spi_config stm32h7_spi6_config;
+
 
 #ifdef __cplusplus
 }

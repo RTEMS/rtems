@@ -224,6 +224,9 @@ typedef enum {
 
   /* AArch64 fatal codes */
   AARCH64_FATAL_MMU_CANNOT_MAP_BLOCK = BSP_FATAL_CODE_BLOCK(19),
+
+  /* STM32H7 fatal codes */
+  STM32H7_FATAL_MMU_CANNOT_REGISTER_SPI = BSP_FATAL_CODE_BLOCK(20),
 } bsp_fatal_code;
 
 RTEMS_NO_RETURN static inline void

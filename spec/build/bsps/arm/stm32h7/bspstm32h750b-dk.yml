@@ -21,5 +21,6 @@ source:
 - bsps/arm/stm32h7/boards/stm/stm32h747i-disco/stm32h7-config-osc.c
 - bsps/arm/stm32h7/boards/stm/stm32h750b-dk/stm32h7-config-per.c
 - bsps/arm/stm32h7/boards/stm/stm32h750b-dk/system_stm32h7xx.c
+- bsps/arm/stm32h7/boards/stm/stm32h750b-dk/spi2-cfg.c
 - bsps/arm/shared/cache/cache-v7m.c
 type: build

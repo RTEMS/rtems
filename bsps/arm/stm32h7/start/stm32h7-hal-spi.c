@@ -1,7 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMSTM32H7
+ *
+ * @brief This source file contains the SPI MSP initialization implementation.
+ */
+
 /*
- * Copyright (C) 2023 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2024 On-Line Applications Research (OAR) Corporation
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,33 +39,29 @@
 
 #include <stm32h7/hal.h>
 
-const RCC_PeriphCLKInitTypeDef stm32h7_config_peripheral_clocks = {
-  /* for stm32h750b-dk BSP we provide U(S)ART1/2/3 and SPI2 on STMOD+ */
-  .PeriphClockSelection = RCC_PERIPHCLK_USART1 | RCC_PERIPHCLK_USART2
-	  | RCC_PERIPHCLK_USART3
-#ifdef STM32H7_SPI2_ENABLE
-	  | RCC_PERIPHCLK_SPI2
-#endif
-	  ,
-  .PLL2.PLL2M = 3,
-  .PLL2.PLL2N = 48,
-  .PLL2.PLL2P = 5,
-  .PLL2.PLL2Q = 6,
-  .PLL2.PLL2R = 2,
-  .PLL2.PLL2RGE = RCC_PLL2VCIRANGE_3,
-  .PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE,
-  .PLL2.PLL2FRACN = 0,
-  .PLL3.PLL3M = 25,
-  .PLL3.PLL3N = 192,
-  .PLL3.PLL3P = 2,
-  .PLL3.PLL3Q = 4,
-  .PLL3.PLL3R = 3,
-  .PLL3.PLL3RGE = RCC_PLL3VCIRANGE_0,
-  .PLL3.PLL3VCOSEL = RCC_PLL3VCOWIDE,
-  .PLL3.PLL3FRACN = 0,
-  .Usart16ClockSelection = RCC_USART16CLKSOURCE_D2PCLK2,
-  .Usart234578ClockSelection = RCC_USART234578CLKSOURCE_D2PCLK1,
-#ifdef STM32H7_SPI2_ENABLE
-  .Spi123ClockSelection = RCC_SPI123CLKSOURCE_PLL2,
-#endif
-};
+void HAL_SPI_MspInit(SPI_HandleTypeDef *spi)
+{
+  stm32h7_spi_context *ctx;
+  const stm32h7_spi_config *config;
+  stm32h7_module_index index = stm32h7_get_module_index(spi->Instance);
+
+  ctx = RTEMS_CONTAINER_OF(spi, stm32h7_spi_context, spi);
+  config = ctx->config;
+  stm32h7_clk_enable(index);
+  stm32h7_gpio_init(&config->sck_gpio);
+  stm32h7_gpio_init(&config->miso_gpio);
+  stm32h7_gpio_init(&config->mosi_gpio);
+
+  /* Configure SPI CS GPIOs */
+  for (int i = 0; i < STM32H7_NUM_SOFT_CS; i++) {
+    if (config->cs_gpio[i].regs == NULL) {
+      continue;
+    }
+    /* TODO(kmoore) handle multiple pins in a single GPIO block */
+
+    /* configure GPIO CS and set output high */
+    stm32h7_gpio_init(&config->cs_gpio[i]);
+    /* Set all GPIO CS pins high */
+    HAL_GPIO_WritePin(config->cs_gpio[i].regs, config->cs_gpio[i].config.Pin, GPIO_PIN_SET);
+  }
+}

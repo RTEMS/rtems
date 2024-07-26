@@ -27,6 +27,18 @@ links:
 - role: build-dependency
   uid: ../optmpuctrl
 - role: build-dependency
+  uid: optenspi1
+- role: build-dependency
+  uid: optenspi2
+- role: build-dependency
+  uid: optenspi3
+- role: build-dependency
+  uid: optenspi4
+- role: build-dependency
+  uid: optenspi5
+- role: build-dependency
+  uid: optenspi6
+- role: build-dependency
   uid: optenuart4
 - role: build-dependency
   uid: optenuart5

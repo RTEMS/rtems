@@ -65,6 +65,14 @@ void stm32h7_init_peripheral_clocks(void);
 void stm32h7_init_qspi(void);
 void SystemInit_ExtMemCtl(void);
 
+/**
+ * @brief Register SPI interfaces
+ *
+ * This initializes and registers the configured SPI devices with the RTEMS SPI
+ * framework. SPI devices are configured at BSP build time.
+ */
+void stm32h7_register_spi_devices(void);
+
 /** @} */
 
 #ifdef __cplusplus

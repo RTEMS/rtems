@@ -333,6 +333,13 @@ source:
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_usart.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_usb.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_utils.c
+- bsps/arm/stm32h7/spi/spi-support.c
+- bsps/arm/stm32h7/spi/spi1.c
+- bsps/arm/stm32h7/spi/spi2.c
+- bsps/arm/stm32h7/spi/spi3.c
+- bsps/arm/stm32h7/spi/spi4.c
+- bsps/arm/stm32h7/spi/spi5.c
+- bsps/arm/stm32h7/spi/spi6.c
 - bsps/arm/stm32h7/start/bspstart.c
 - bsps/arm/stm32h7/start/bspstarthooks.c
 - bsps/arm/stm32h7/start/getentropy-rng.c
@@ -341,6 +348,7 @@ source:
 - bsps/arm/stm32h7/start/stm32h7-config-pwr.c
 - bsps/arm/stm32h7/start/stm32h7-hal-eth.c
 - bsps/arm/stm32h7/start/stm32h7-hal-sdmmc.c
+- bsps/arm/stm32h7/start/stm32h7-hal-spi.c
 - bsps/arm/stm32h7/start/stm32h7-hal-uart.c
 - bsps/arm/stm32h7/start/stm32h7-hal.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c

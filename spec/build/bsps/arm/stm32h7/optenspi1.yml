@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 On-Line Applications Research (OAR) Corporation
+default:
+- enabled-by: true
+  value: false
+description: |
+  Enable SPI1 device for usage by the application.
+enabled-by: true
+format: '{}'
+links: []
+name: STM32H7_SPI1_ENABLE
+type: build

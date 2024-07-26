@@ -529,6 +529,7 @@ HAL_StatusTypeDef HAL_SPI_DeInit(SPI_HandleTypeDef *hspi)
   return HAL_OK;
 }
 
+#ifndef __rtems__
 /**
   * @brief  Initialize the SPI MSP.
   * @param  hspi: pointer to a SPI_HandleTypeDef structure that contains
@@ -544,6 +545,7 @@ __weak void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
             the HAL_SPI_MspInit should be implemented in the user file
    */
 }
+#endif
 
 /**
   * @brief  De-Initialize the SPI MSP.
