@@ -324,7 +324,8 @@ Thread_Control *_MPCI_Process_response (
   _Assert( the_thread != NULL );
 
   /*
-   * FIXME: This is broken on SMP, see https://devel.rtems.org/ticket/2703.
+   * FIXME: This is broken on SMP, see
+   *        https://gitlab.rtems.org/rtems/rtos/rtems/-/issues/2703
    *
    * Should use _Thread_queue_Extract_critical() instead with a handler
    * function provided by the caller of _MPCI_Process_response().  Similar to
