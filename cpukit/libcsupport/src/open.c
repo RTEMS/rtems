@@ -142,16 +142,26 @@ static int do_open(
   rv = (*iop->pathinfo.handlers->open_h)( iop, path, oflag, mode );
 
   if ( rv == 0 ) {
-    rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_OPEN );
-
+    /*
+     * Postpone the setting of LIBIO_FLAGS_OPEN after the truncation of the
+     * file, this ensures that the file descriptor cannot be used or closed
+     * during or just before the truncation by some other thread.
+     */
     if ( truncate ) {
-      rv = ftruncate( fd, 0 );
+      if ( write_access ) {
+        rv = (*iop->pathinfo.handlers->ftruncate_h)( iop, 0 );
+      } else {
+        rv = -1;
+        errno = EINVAL;
+      }
+
       if ( rv != 0 ) {
         (*iop->pathinfo.handlers->close_h)( iop );
       }
     }
 
     if ( rv == 0 ) {
+      rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_OPEN );
       rv = fd;
     } else {
       rv = -1;
