@@ -378,8 +378,15 @@ rtems_task Init(
   );
 
   puts( "rtems_object_get_class_information - INVALID_NUMBER (bad API)" );
-  sc =
-    rtems_object_get_class_information(0, OBJECTS_INTERNAL_THREADS, &info);
+  sc = rtems_object_get_class_information(0, OBJECTS_INTERNAL_THREADS, &info);
+  fatal_directive_status(
+    sc,
+    RTEMS_INVALID_NUMBER,
+    "rtems_object_get_class_information (API)"
+  );
+
+  puts( "rtems_object_get_class_information - INVALID_NUMBER (API too high)" );
+  sc = rtems_object_get_class_information(0, 4, &info);
   fatal_directive_status(
     sc,
     RTEMS_INVALID_NUMBER,

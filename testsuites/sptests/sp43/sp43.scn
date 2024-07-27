@@ -5,6 +5,7 @@ rtems_object_get_classic_name - INVALID_ADDRESS
 rtems_object_get_classic_name - INVALID_ID (bad index)
 rtems_object_get_classic_name - INVALID_ID (unallocated index)
 rtems_object_get_classic_name - INVALID_ID (bad API)
+rtems_object_get_classic_name - INVALID_ID (API too high)
 UI1  - name returned by rtems_object_get_classic_name for Init task id
 UI1  - name returned by rtems_object_get_classic_name for RTEMS_SELF
 TEMP - rtems_build_name for TEMP
