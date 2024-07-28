@@ -1,4 +1,5 @@
-/*****************************************************/
+GDB stub
+========
 
 Debugged this stub against the MongooseV bsp.  Relies on putting break
 instructions on breakpoints and step targets- normal stuff, and does not
@@ -19,9 +20,6 @@ bugs I'm aware of.
 Greg Menke
 3/5/2002
 
-/*****************************************************/
-
-
 The contents of this directory are based upon the "r46kstub.tar.gz" package
 released to the net by
 
@@ -35,14 +33,12 @@ with gdb 4.16 and an IDT R4600 Orion.   The stub was modified to support
 R3000 class CPUs and to work within the mips-rtems exeception processing
 framework.
 
-THe file memlimits.h could end up being target board dependent.  If
+The file memlimits.h could end up being target board dependent.  If
 this is the case, copy it to your BSP directory and modify as necessary.
 
---joel
-8 February 2002
 
 Original README 
-===============
+---------------
 
 The r46kstub directory and its compressed archive (r46kstub.tar.gz) contain
 the 9/29/96 source code snapshot for a ROM-resident gdb-4.16 debug agent
@@ -56,6 +52,7 @@ of Phil Bunce's PMON program.
 
 The distribution consists of the following files:
 
+```
 -rw-r--r--   1    1178 Sep 29 16:34 ChangeLog
 -rw-r--r--   1     748 Jul 26 01:18 Makefile
 -rw-r--r--   1    6652 Sep 29 16:34 README
@@ -67,6 +64,7 @@ The distribution consists of the following files:
 -rw-r--r--   1   23874 Jul 21 20:31 r46kstub.c
 -rw-r--r--   1    1064 Jul  3 12:35 r46kstub.ld
 -rw-r--r--   1   13299 Sep 29 16:24 stubinit.S
+```
 
 With the exception of mips_opcode.h, which is a slightly modified version
 of a header file contributed by Ralph Campbell to 4.4 BSD and is therefore
@@ -109,6 +107,7 @@ to sign-extend a pointer (the next instruction address) into a long long
 code and it is doing what I had intended.  But you should not see any other
 warnings or errors.  Here is a log of the build:
 
+```shell
 mips64orion-idt-elf-gcc -g -Wa,-ahld -Wall -membedded-data \
 	-O3 -c r46kstub.c >r46kstub.L
 r46kstub.c: In function `doSStep':
@@ -140,6 +139,7 @@ stubinit.o
 r46kstub.o
 mips64orion-idt-elf-objcopy -S -R .bss -R .data -R .reginfo \
                                 -O srec r46kstub.out r46kstub.hex
+```
 
 Limitations: stubinit.S deliberately forces the PC (which is a 64-bit
 register) to contain a legitimate sign-extended 32-bit value.  This was

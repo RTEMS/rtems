@@ -1,30 +1,28 @@
-#
-# This package requires a version of GCC that supports the `-mcpu32' option.
-#
+gen68360
+========
 
-#
-# Copyright (c) 1996 Eric Norum <eric@norum.ca>
-#
+This package requires a version of GCC that supports the `-mcpu32` option.
 
-#
-# This board support package works with several different versions of
-# MC68360 systems.  See the conditional-compile tests in startup/init68360.c
-# for examples.
-#
-# Decisions made at compile time include:
-#	- If the CPU is a member of the 68040 family, the BSP is
-#	  compiled for a generic 68040/68360 system as described
-#	  in Chapter 9 of the MC68360 User's Manual.  This version
-#	  can be used with the Arnewsh SBC360 card.
-#	- If the preprocessor symbol M68360_ATLAS_HSB is defined,
-#	  the BSP is compiled for an Atlas HSB card.
-#	- If the preprocessor symbol M68360_IMD_PGH is defined,
-#	  the BSP is compiled for an IMD PGH360 card.
-#	- Otherwise, the BSP is compiled for a generic 68360 system
-#	  as described in Chapter 9 of the MC68360 User's Manual.  This
-#	  version works with the Atlas ACE360 card.
-#
+Copyright (c) 1996 Eric Norum <eric@norum.ca>
 
+This board support package works with several different versions of
+MC68360 systems.  See the conditional-compile tests in startup/init68360.c
+for examples.
+
+Decisions made at compile time include:
+- If the CPU is a member of the 68040 family, the BSP is
+  compiled for a generic 68040/68360 system as described
+  in Chapter 9 of the MC68360 User's Manual.  This version
+  can be used with the Arnewsh SBC360 card.
+- If the preprocessor symbol M68360_ATLAS_HSB is defined,
+  the BSP is compiled for an Atlas HSB card.
+- If the preprocessor symbol M68360_IMD_PGH is defined,
+  the BSP is compiled for an IMD PGH360 card.
+- Otherwise, the BSP is compiled for a generic 68360 system
+  as described in Chapter 9 of the MC68360 User's Manual.  This
+  version works with the Atlas ACE360 card.
+
+```
 BSP NAME:	    gen68360 or gen68360_040
 BOARD:              Generic 68360 as described in Motorola MC68360 User's Manual
 BOARD:              Atlas Computer Equipment Inc. High Speed Bridge (HSB)
@@ -37,9 +35,11 @@ COPROCESSORS:       none
 MODE:               not applicable
 
 DEBUG MONITOR:      none (Hardware provides BDM)
+```
 
 PERIPHERALS
-===========
+-----------
+```
 TIMERS:             PIT, Watchdog, 4 general purpose, 16 RISC
   RESOLUTION:       one microsecond
 SERIAL PORTS:       4 SCC, 2 SMC, 1 SPI
@@ -48,25 +48,27 @@ DMA:                Each serial port, 2 general purpose
 VIDEO:              none
 SCSI:               none
 NETWORKING:         Ethernet on SCC1.
+```
 
 DRIVER INFORMATION
-==================
+------------------
+```
 CLOCK DRIVER:       Programmable Interval Timer
 IOSUPP DRIVER:      Serial Management Controller 1
 SHMSUPP:            none
 TIMER DRIVER:       Timer 1
+```
 
 STDIO
-=====
+-----
+```
 PORT:               SMC1
 ELECTRICAL:         EIA-232 (if board supplies level shifter)
 BAUD:               9600
 BITS PER CHARACTER: 8
 PARITY:             None
 STOP BITS:          1
-
-NOTES
-=====
+```
 
 Board description
 -----------------
@@ -88,6 +90,7 @@ OPENSTEP 4.2 (Intel and Motorola), Solaris 2.5, Linux 2.0.29
 
 Verification (Standalone 68360)
 -------------------------------
+```
 Single processor tests:  Passed
 Multi-processort tests:  not applicable
 Timing tests:
@@ -265,6 +268,7 @@ Network tests:
        TCP throughput (as measured by ttcp):
                Receive: 1081 kbytes/sec
                Transmit: 953 kbytes/sec
+```
 
 Porting
 -------

@@ -1,7 +1,9 @@
+jmr3904
+=======
 Simple BSP for the TX3904 simulator built into gdb.
 
 Simulator Invocation
-====================
+--------------------
 The following is how the simulator is invoked.
 
 target sim --board=jmr3904
@@ -11,13 +13,13 @@ the simulator will not be built for the correct instruction
 and peripheral set.
 
 Simulator Information
-=====================
+---------------------
 The simulated system clock counts instructions.  Setting the clock
 source to "clock" and the divider to 1 results in the timer directly
 counting the number of instructions executed.
 
 Status
-======
+------
 
 + hello.exe locks up while running the global destructors.  This almost
   has to be a linkcmds issue.

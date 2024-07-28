@@ -1,29 +1,33 @@
-Description: Motorola MCF5329EVB Zoom + (LogicPD)
-============
+Motorola MCF5329EVB
+===================
+
+Zoom + (LogicPD)
+
+```
 CPU: MCF5329, 240MHz
 CORESRAM: 32K
 FLASH: 2M
 DRAM: 32M
-
+```
 This is a Motorola Zoom evaluation board that uses the MCF5329 Coldfire CPU on
 a logicPD card.  This board is running at 240MHz with DRAM clocking at 80MHz.
 
 The bsp is configured for the MT46V16M16TG-75:F DRAM.
 
-NOTES:
-======
+NOTES
+-----
 
 This BSP is based heavily off the 5235 BSP.
 
-TODO:
-======
+TODO
+-----
 
 Add other drivers for can, i2c, lcd (fb), qspi etc.
 
-============================================================================
 
-      Interrupt map
-
+Interrupt map
+-------------
+```
 +-----+
 |     |
 +-----+
@@ -43,8 +47,11 @@ Add other drivers for can, i2c, lcd (fb), qspi etc.
 +-----+
 |  1  |
 +-----+
+```
 
-============================================================================
+Timing tests
+------------
+```
       Timings
 
 *** TIME TEST 1 ***
@@ -338,5 +345,4 @@ rtems_rate_monotonic_cancel 0
 rtems_rate_monotonic_period 0
 rtems_multiprocessing_announce 0
 *** END OF TIME OVERHEAD ***
-
-
+```

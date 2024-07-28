@@ -1,23 +1,24 @@
-Description: embed-it dpu
-============================================================================
-CPU: MCF52259, ??MHz
-SRAM: 64K
-FLASH: 512K
+Motorola MCF52235EVB
+====================
 
-This is a embed-it board that uses the MCF52258 Coldfire CPU. 
-This board is running at ??MHz scaled from the internal relocation 8MHz oscillator.
+CPU: MCF52235, 60MHz
+SRAM: 32K
+FLASH: 256K
+
+This is a Motorola evaluation board that uses the MCF52235 Coldfire CPU. 
+This board is running at 60MHz scaled from a 25MHz oscillator.
 
 
-
-OLD-STUFF from MCF52235 EVB ... we have to change it ...
-============================================================================
 NOTES:
 
 Currently this BSP must be configured with most RTEMS features turned
 off as RAM usage is too high.
 
 Configure as follows:
-configure --target=m68k-rtems4.XXX --enable-rtemsbsp=mcf52235 ...
+
+```shell
+configure --target=m68k-rtems4.XXX --enable-rtemsbsp=mcf52235 \
+```
 
 To get the tests to compile (but not run) change the linkcmds to specify
 a larger sram memory region (256K works).  This of course will let you 
@@ -29,24 +30,27 @@ you need for this BSP!
 In you project before you include confdefs.h, define some or all of the
 following:
 
+```c
 #define CONFIGURE_INIT_TASK_STACK_SIZE x
 #define CONFIGURE_MINIMUM_TASK_STACK_SIZE x
 #define CONFIGURE_INTERRUPT_STACK_SIZE x
+```
 
 Note that the default stack size is 1K
 Note that the default number of priorities is 15
 
-============================================================================
+
 TODO:
 
 *) Add drivers for I2C, ADC, FEC
 *) Support for LWIP
 *) Recover the 1K stack space reserved in linkcmds used for board startup.
 
-============================================================================
 
-      Interrupt map
 
+Interrupt map
+-------------
+```
 +-----+-----------------------------------------------------------------------+
 |     |                                PRIORITY                               |
 +-----+--------+--------+--------+--------+--------+--------+--------+--------+
@@ -66,9 +70,11 @@ TODO:
 +-----+--------+--------+--------+--------+--------+--------+--------+--------+
 |  1  |        |        |        |        |        |        |        |        |
 +-----+--------+--------+--------+--------+--------+--------+--------+--------+ 
+```
 
-============================================================================
-
+Timing tests
+------------
+```
 *** TIME TEST 1 ***
 rtems_semaphore_create 8
 rtems_semaphore_delete 10
@@ -151,5 +157,4 @@ rtems_rate_monotonic_cancel 0
 rtems_rate_monotonic_period 0
 rtems_multiprocessing_announce 0
 *** END OF TIME OVERHEAD ***
-
-
+```
