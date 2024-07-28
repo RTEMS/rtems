@@ -1,4 +1,5 @@
 ZLIB DATA COMPRESSION LIBRARY
+=============================
 
 zlib 1.2.13 is a general purpose data compression library.  All the code is
 thread safe.  The data format used by the zlib library is described by RFCs

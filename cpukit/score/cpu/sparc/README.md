@@ -1,3 +1,6 @@
+SPARC
+=====
+
 This file discusses SPARC specific issues which are important to
 this port.  The primary topics in this file are:
 
@@ -7,7 +10,7 @@ this port.  The primary topics in this file are:
 
 
 Global Register Usage
-=====================
+---------------------
 
 This information on register usage is based heavily on a comment in the
 file gcc-2.7.0/config/sparc/sparc.h in the the gcc 2.7.0 source.
@@ -36,13 +39,13 @@ operating system, RTEMS does not assume any special use for them.
 
 
 Stack Frame
-===========
+-----------
 
 The stack grows downward (i.e. to lower addresses) on the SPARC architecture.
 
 The following is the organization of the stack frame:
 
-
+```
 
                 |        ...............        |
              fp |                               |
@@ -74,7 +77,7 @@ The following is the organization of the stack frame:
                 |      input register set       |  *  32 bytes
                 |                               |  *
             sp  +-------------------------------+  *
-
+```
 
 * = minimal stack frame
 

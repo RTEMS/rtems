@@ -1,4 +1,5 @@
-monitor task
+Monitor task
+============
 
 The monitor task is an optional task that knows about RTEMS
 data structures and can print out information about them.
@@ -12,11 +13,13 @@ greater than 1.
 To use the monitor:
 -------------------
 
+    ```c
     #include <rtems/monitor.h>
 
         ...
 
     rtems_monitor_init(0);
+    ```
 
     The parameter to rtems_monitor_init() tells the monitor whether
     to suspend itself on startup.  A value of 0 causes the monitor
@@ -39,6 +42,7 @@ Monitor commands
 
         Commands (may be abbreviated)
 
+```
           help      -- get this message or command specific help
           task      -- show task information
           queue     -- show message queue information
@@ -69,11 +73,13 @@ Monitor commands
         continue
           put the monitor to sleep waiting for an explicit wakeup from the
           program running.
+```
 
 
 Sample output from 'task' command
 ---------------------------------
 
+```
     rtems> task
       ID       NAME   PRIO   STAT   MODES  EVENTS   WAITID  WAITARG  NOTES
     ------------------------------------------------------------------------
@@ -89,4 +95,4 @@ Sample output from 'task' command
 
     It has no events.
     (this is the libc thread state)
-
+```

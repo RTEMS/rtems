@@ -1,3 +1,6 @@
+libmisc
+=======
+
 This directory contains for the "miscellaneous" library.  Currently
 this library contains a number of useful support libraries:
 

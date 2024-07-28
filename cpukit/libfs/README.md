@@ -1,3 +1,6 @@
+libfs
+=====
+
 This directory contains for the "file system" library. All supported
 file systems live under this tree.
 

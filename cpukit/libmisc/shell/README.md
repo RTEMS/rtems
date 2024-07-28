@@ -1,3 +1,6 @@
+Shell
+=====
+
 This directory contains a shell user extension
 primary features:
 

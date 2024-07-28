@@ -1,10 +1,7 @@
-#
-#  
-#  untar information
-#
-#  Author: Jake Janovetz 7.6.1999
-#
+untar
+=====
 
+Author: Jake Janovetz 7.6.1999
 untar.c contains two procedures for extracting files from a UNIX
 tar file:
 
@@ -21,4 +18,3 @@ file.  The fully qualified filename is passed through char *tar_name.
 
 
 BUGS: Please email janovetz@uiuc.edu
------

@@ -1,9 +1,7 @@
-#
-#  
-#  fsmount information
-#
-#  Author: Thomas Doerfler 02/07/2003
-#
+fsmount
+=======
+
+Author: Thomas Doerfler 02/07/2003
 
 fsmount.c contains the function fsmount. It processes the 
 fs table given as an parameter to create the listed mount points
@@ -18,5 +16,3 @@ The field "abort_reasons" specifies, what results of the mount point
 creation/mount operations should abort the function. Do not set the
 "abort_reasons" bit, unless you want to stop the processing of the
 fsmount table after the first successful mount.
-
-

@@ -1,3 +1,6 @@
+SPARC64
+=======
+
 A lot of explanation needed, will do when known.
 
 The score/cpu/sparc64 contains only code that can execute without accessing 

@@ -1,3 +1,6 @@
+libblock
+========
+
 This directory contains the block device (HDD, CDROMs, etc) support code.
 It includes:
    - block device driver interface

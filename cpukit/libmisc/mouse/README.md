@@ -1,3 +1,6 @@
+Mouse
+=====
+
 SOURCE: http://www.kryslix.com/nsfaq/Q.12.html
 
 Subject: What protocol do mice use?
@@ -16,6 +19,7 @@ can discriminate motion up to 50.8 inches/second while a 400 CPI mouse
 can only discriminate motion up to 12.7 inches/second.
 Pinout
 
+```
 9 pin  25 pin    Line    Comments
 shell  1         GND
 3      2         TD      Serial data from host to mouse (only for power)
@@ -25,6 +29,7 @@ shell  1         GND
 6      6         DSR
 5      7         SGND
 4      20        DTR     Positive voltage to mouse and reset/detection
+```
 
 RTS = Request to Send   CTS  = Clear to Send
 DSR = Data Set Ready    DTR  = Data Terminal Ready
@@ -45,11 +50,13 @@ Data packet format:
 Data is sent in 3 byte packets for each event (a button is pressed or
 released or the mouse moves):
 
+```
         D7      D6      D5      D4      D3      D2      D1      D0
  
 Byte 1  X       1       LB      RB      Y7      Y6      X7      X6
 Byte 2  X       0       X5      X4      X3      X2      X1      X0      
 Byte 3  X       0       Y5      Y4      Y3      Y2      Y1      Y0
+```
 
 LB is the state of the left button (1 means down)
 RB is the state of the right button (1 means down)
@@ -60,6 +67,7 @@ The high order bit of each byte (D7) is ignored. Bit D6 indicates the start of a
 
 Graphical representation of a packet
 
+```
               1st byte        2nd byte         3rd byte
           ================  ===============  ================
            - 1 ? ? Y Y X X  - 0 X X X X X X  - 0 Y Y Y Y Y Y
@@ -73,6 +81,7 @@ Graphical representation of a packet
                | |          0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0
  Left Button --/ |         ================ =================
 Right Button ----/            X increment      Y increment
+```
 
 3 Button Logitech extension
 
@@ -82,14 +91,16 @@ packet after it is released). If a 4th byte is encountered (i.e., an
 extra byte with D6 set to 0) then D5 of that byte (0x20) indicates the
 status of the middle mouse button.
 
+
 Mouse systems mouse
+-------------------
 
 Serial data parameters:
-
 1200bps, 8 databits, 1 stop-bit
 
 5 byte Mouse Systems packet
 
+```
         D7      D6      D5      D4      D3      D2      D1      D0
 
 Byte 1  1       0       0       0       0       LB      CB      RB
@@ -97,6 +108,7 @@ Byte 2  X7      X6      X5      X4      X3      X2      X1      X0
 Byte 3  Y7      Y6      Y5      Y4      Y3      Y4      Y1      Y0
 Byte 4  X7'     X6'     X5'     X4'     X3'     X2'     X1'     X0'
 Byte 5  Y7'     Y6'     Y5'     Y4'     Y3'     Y4'     Y1'     Y0'
+```
 
 LB is left button state (0=pressed, 1=released)
 CB is center button state (0=pressed, 1=released)
@@ -124,8 +136,10 @@ inch. The maximum tracking rate for PS/2 mouse is 40 reports/second *
 discriminate motion up to 102 inches per second while a 400 CPI mouse
 could discriminate motion up to 25.2 inches per second.
 
-Connector pinout
 
+Connector pinout
+----------------
+```
 Pin     Wire Name
 1       DATA
 2       Reserved
@@ -134,9 +148,11 @@ Pin     Wire Name
 5       CLK
 6       Reserved
 Shield  Chassis
+```
 
 Packet Format
-
+-------------
+```
         D7      D6      D5      D4      D3      D2      D1      D0
 Byte 1  XV      XV      YS      XS       1       M       R       L
 Byte 2  X7      X6      X5      X4      X3      X2      X1      X0
@@ -149,12 +165,15 @@ X0-X7   Movement in X direction
 Y0-Y7   Movement in Y direction
 XS,YS   Movement data sign bits (1 = negative)
 XV,YV   Movement data overflow bits (1 = overflow has occured)
+```
 
 Physical connector
+------------------
 
 The PS/2 mouse connector has the following pinout when looking at the
 connector on the back of the computer:
 
+```
         4 u 6
        1  .  2
         3   5
@@ -165,6 +184,7 @@ connector on the back of the computer:
 4.      CLOCK
 5.      Not used
 6.      Not used
+```
 
 Bi-directional transmission is controlled by the CLK and DATA lines. Both
 are fed by an open collector device which lets either host or mouse force

@@ -1,3 +1,6 @@
+libmisc
+=======
+
           RTEMS Performance Monitoring and Measurement Framework
 
           Copyright 2002-2007 Chris Johns (chrisj@rtems.org)
@@ -30,11 +33,13 @@ This is a target interface that provides a number of user commands via the
 RTEMS monitor. To use you need to provide the following in your
 application initialisation:
 
+```c
   #include <rtems/monitor.h>
   #include <rtems/capture-cli.h>
 
   rtems_monitor_init (0);
   rtems_capture_cli_init (0);
+```
 
 Check the file capture-cli.h for documentation of the interface. The parameter
 is a pointer to your board support package's time stamp handler. The time stamp
