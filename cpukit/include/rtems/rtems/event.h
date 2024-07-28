@@ -536,6 +536,12 @@ rtems_status_code rtems_event_system_send(
  */
 #define RTEMS_EVENT_SYSTEM_SERVER RTEMS_EVENT_30
 
+/**
+ * @brief This event set constant represents the reserved system event for
+ *   aio list completion, used when lio_listio is called using LIO_WAIT.
+ */
+#define RTEMS_EVENT_SYSTEM_AIO_LIST RTEMS_EVENT_28
+
 /* Generated from spec:/rtems/event/if/system-server-resume */
 
 /**

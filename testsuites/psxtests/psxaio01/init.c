@@ -2,6 +2,7 @@
 
 /*
  * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
+ * Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -46,10 +47,10 @@ const char rtems_test_name[] = "PSXAIO 1";
 #define WRONG_FD 404
 
 /* forward declarations to avoid warnings */
-struct aiocb *create_aiocb( int fd );
-void free_aiocb( struct aiocb *aiocbp );
+static struct aiocb *create_aiocb( int fd );
+static void free_aiocb( struct aiocb *aiocbp );
 
-struct aiocb *create_aiocb( int fd )
+static struct aiocb *create_aiocb( int fd )
 {
   struct aiocb *aiocbp;
 
@@ -64,7 +65,7 @@ struct aiocb *create_aiocb( int fd )
   return aiocbp;
 }
 
-void free_aiocb( struct aiocb *aiocbp )
+static void free_aiocb( struct aiocb *aiocbp )
 {
   free( (void*) aiocbp->aio_buf );
   free( aiocbp );

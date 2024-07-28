@@ -12,6 +12,7 @@
 
 /*
  *  Copyright 2010-2011, Alin Rus <alin.codejunkie@gmail.com>
+ *  Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
  * 
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
@@ -46,6 +47,7 @@
 #include <rtems/posix/aio_misc.h>
 #include <rtems/score/assert.h>
 #include <errno.h>
+#include <limits.h>
 
 /**
  * @brief Thread processing AIO requests.
@@ -143,9 +145,131 @@ int rtems_aio_init( void )
 
   aio_request_queue.active_threads = 0;
   aio_request_queue.idle_threads = 0;
+  atomic_init( &aio_request_queue.queued_requests, 0 );
   aio_request_queue.initialized = AIO_QUEUE_INITIALIZED;
 
   return result;
+}
+
+rtems_aio_request *init_write_req( struct aiocb* aiocbp )
+{
+  rtems_aio_request *req;
+  int mode;
+
+  if ( aiocbp == NULL ) {
+    errno = EINVAL;
+    return NULL;
+  }
+  
+  mode = fcntl( aiocbp->aio_fildes, F_GETFL );
+  if (
+    ( mode&O_ACCMODE ) != O_WRONLY &&
+    ( mode&O_ACCMODE ) != O_RDWR 
+  ) {
+    errno = EBADF;
+    return NULL;
+  }
+
+  if ( aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX ) {
+    errno = EINVAL;
+    return NULL;
+  }
+
+  if ( aiocbp->aio_offset < 0 ) {
+    errno = EINVAL;
+    return NULL;
+  }
+
+  if ( rtems_aio_check_sigevent( &aiocbp->aio_sigevent ) == 0 ) {
+    errno = EINVAL;
+    return NULL;
+  }
+
+  req = malloc( sizeof( rtems_aio_request ) );
+  if ( req == NULL ) {
+    errno = EAGAIN;
+    return NULL;
+  }
+
+  req->aiocbp = aiocbp;
+  req->op_type = AIO_OP_WRITE;
+  req->listcbp = NULL;
+
+  return req;
+}
+
+rtems_aio_request *init_read_req( struct aiocb* aiocbp )
+{
+  rtems_aio_request *req;
+  int mode;
+
+  if ( aiocbp == NULL ) {
+    errno = EINVAL;
+    return NULL;
+  }
+
+  mode = fcntl( aiocbp->aio_fildes, F_GETFL );
+  if (
+      ( mode&O_ACCMODE ) != O_RDONLY &&
+      ( mode&O_ACCMODE ) != O_RDWR
+  ) {
+    errno = EBADF;
+    return NULL;
+  }
+
+  if ( aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX ) {
+    errno = EINVAL;
+    return NULL;
+  }
+
+  if ( aiocbp->aio_offset < 0 ) {
+    errno = EINVAL;
+    return NULL;
+  }
+
+  if ( rtems_aio_check_sigevent( &aiocbp->aio_sigevent ) == 0 ) {
+    errno = EINVAL;
+    return NULL;
+  }
+
+  req = malloc( sizeof( rtems_aio_request ) );
+  if ( req == NULL ) {
+    errno = EAGAIN;
+    return NULL;
+  }
+
+  req->aiocbp = aiocbp;
+  req->op_type = AIO_OP_READ;
+  req->listcbp = NULL;
+
+  return req;
+}
+
+void rtems_aio_completed_list_op( listcb *listcbp )
+{
+  if (listcbp == NULL)
+    return;
+
+  pthread_mutex_lock( &listcbp->mutex );
+
+  if( --listcbp->requests_left == 0 ){
+    switch ( listcbp->notification_type ) {
+      case AIO_LIO_NO_NOTIFY:
+        break;
+      case AIO_LIO_SIGEV:
+        rtems_aio_notify( listcbp->lio_notification.sigp );
+        break;
+      case AIO_LIO_EVENT:
+        rtems_event_system_send(
+          listcbp->lio_notification.task_id,
+          RTEMS_EVENT_SYSTEM_AIO_LIST
+        );
+        break;
+    }
+    free( listcbp );
+  }
+
+  pthread_mutex_unlock( &listcbp->mutex );
 }
 
 rtems_aio_request_chain *rtems_aio_search_fd(
@@ -249,6 +373,8 @@ void rtems_aio_remove_fd( rtems_aio_request_chain *r_chain )
     rtems_chain_extract( &req->next_prio );
     req->aiocbp->error_code = ECANCELED;
     req->aiocbp->return_value = -1;
+    atomic_fetch_sub( &aio_request_queue.queued_requests, 1 );
+    rtems_aio_completed_list_op( req->listcbp );
     free( req );
   }
 }
@@ -274,6 +400,8 @@ int rtems_aio_remove_req( rtems_chain_control *chain, struct aiocb *aiocbp )
     rtems_chain_extract( node );
     current->aiocbp->error_code = ECANCELED;
     current->aiocbp->return_value = -1;
+    rtems_aio_completed_list_op( current->listcbp );
+    atomic_fetch_sub( &aio_request_queue.queued_requests, 1 );
     free( current );
   }
     
@@ -308,6 +436,7 @@ int rtems_aio_enqueue( rtems_aio_request *req )
   req->aiocbp->error_code = EINPROGRESS;
   req->aiocbp->return_value = 0;
   req->aiocbp->return_status = AIO_NOTRETURNED;
+  atomic_fetch_add( &aio_request_queue.queued_requests, 1 );
 
   if (
     aio_request_queue.idle_threads == 0 &&
@@ -510,8 +639,12 @@ static void *rtems_aio_handle( void *arg )
       req = (rtems_aio_request *) node;
 
       /* See _POSIX_PRIORITIZE_IO and _POSIX_PRIORITY_SCHEDULING
-         discussion in rtems_aio_enqueue () */
-      pthread_getschedparam( pthread_self(), &policy, &param );
+         discussion in rtems_aio_enqueue() */
+      pthread_getschedparam(
+        pthread_self(),
+        &policy,
+        &param
+      );
       param.sched_priority = req->priority;
       pthread_setschedparam( pthread_self(), req->policy, &param );
 
@@ -522,7 +655,15 @@ static void *rtems_aio_handle( void *arg )
       /* perform the requested operation*/
       rtems_aio_handle_helper( req );
 
-      /* notification needed for lio after final op is complete */
+      /* update queued_requests */
+      atomic_fetch_sub( &aio_request_queue.queued_requests, 1 );
+
+      /* notification for request completion */
+      rtems_aio_notify( &req->aiocbp->aio_sigevent );
+
+      /* notification for list completion */
+      rtems_aio_completed_list_op( req->listcbp );
+      req->listcbp = NULL;
 
     } else {
       /* If the fd chain is empty we unlock the fd chain and we lock
@@ -646,8 +787,6 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
       result = -1;
   }
 
-  rtems_aio_notify( &req->aiocbp->aio_sigevent );
-
   if ( result < 0 ) {
     req->aiocbp->return_value = -1;
     req->aiocbp->error_code = errno;
@@ -655,5 +794,12 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
     req->aiocbp->return_value = result;
     req->aiocbp->error_code = 0;
   }
+}
+
+void lio_notify_end_wait( union sigval attr ){
+  rtems_id id = attr.sival_int;
+  rtems_event_set event_in = RTEMS_EVENT_SYSTEM_AIO_LIST;
+
+  rtems_event_system_send( id, event_in );
 }
 

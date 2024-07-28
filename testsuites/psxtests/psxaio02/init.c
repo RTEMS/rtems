@@ -2,6 +2,7 @@
 
 /*
  * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
+ * Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -44,14 +45,14 @@
 const char rtems_test_name[] = "PSXAIO 2";
 
 /* forward declarations to avoid warnings */
-struct aiocb *create_aiocb( int fd );
-void free_aiocb( struct aiocb *aiocbp );
+static struct aiocb *create_aiocb( int fd );
+static void free_aiocb( struct aiocb *aiocbp );
 
 #define BUFSIZE 32
 #define FD_COUNT 10
 #define WRONG_FD 666
 
-struct aiocb *create_aiocb( int fd )
+static struct aiocb *create_aiocb( int fd )
 {
   struct aiocb *aiocbp;
 
@@ -66,7 +67,7 @@ struct aiocb *create_aiocb( int fd )
   return aiocbp;
 }
 
-void free_aiocb( struct aiocb *aiocbp )
+static void free_aiocb( struct aiocb *aiocbp )
 {
   free( (void*) aiocbp->aio_buf );
   free( aiocbp );
@@ -94,8 +95,6 @@ void *POSIX_Init( void *argument )
   rtems_test_assert( !status );
   
   TEST_BEGIN();
-  
-  puts( "Init: Open files" );
 
   for( i=0; i<FD_COUNT; i++ )
     {

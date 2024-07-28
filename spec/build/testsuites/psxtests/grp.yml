@@ -64,6 +64,8 @@ links:
 - role: build-dependency
   uid: psxaio04
 - role: build-dependency
+  uid: psxaio05
+- role: build-dependency
   uid: psxalarm01
 - role: build-dependency
   uid: psxautoinit01

@@ -50,13 +50,13 @@
 const char rtems_test_name[] = "PSXAIO 3";
 
 /* forward declarations to avoid warnings */
-struct aiocb *create_aiocb( int fd );
-void free_aiocb( struct aiocb *aiocbp );
+static struct aiocb *create_aiocb( int fd );
+static void free_aiocb( struct aiocb *aiocbp );
 
 #define FD_COUNT 6
 #define BUFSIZE 128
 
-struct aiocb *create_aiocb( int fd )
+static struct aiocb *create_aiocb( int fd )
 {
   struct aiocb *aiocbp;
 
@@ -71,7 +71,7 @@ struct aiocb *create_aiocb( int fd )
   return aiocbp;
 }
 
-void free_aiocb( struct aiocb *aiocbp )
+static void free_aiocb( struct aiocb *aiocbp )
 {
   free( (void*) aiocbp->aio_buf );
   free( aiocbp );

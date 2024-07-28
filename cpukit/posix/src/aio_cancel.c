@@ -10,6 +10,7 @@
 
 /*
  *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
+ *  Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
  * 
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).

@@ -25,6 +25,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <stdio.h>
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -41,15 +42,19 @@
 #include <fcntl.h>
 #include <signal.h>
 
-const char rtems_test_name[] = "PSXAIO 4";
+const char rtems_test_name[] = "PSXAIO 5";
 
 #define BUFSIZE 512
 #define WRONG_FD 404
+#define BAD_MODE 38576
 
 /* forward declarations to avoid warnings */
 static struct aiocb *create_aiocb( int fd );
 static void free_aiocb( struct aiocb *aiocbp );
-static void notify( union sigval sig );
+static void test_einval( struct aiocb** aiocbp );
+static void test_eio( struct aiocb** aiocbp );
+static void test_no_wait( struct aiocb** aiocbp );
+static void test_wait( struct aiocb** aiocbp );
 
 static struct aiocb *create_aiocb( int fd )
 {
@@ -63,6 +68,7 @@ static struct aiocb *create_aiocb( int fd )
   aiocbp->aio_reqprio = 0;
   aiocbp->aio_fildes = fd;
   aiocbp->aio_sigevent.sigev_notify = SIGEV_NONE;
+  aiocbp->aio_lio_opcode = LIO_READ;
   return aiocbp;
 }
 
@@ -72,22 +78,94 @@ static void free_aiocb( struct aiocb *aiocbp )
   free( aiocbp );
 }
 
-static void notify( union sigval sig )
+static void test_einval( struct aiocb** aiocbp )
 {
-  kill( getpid(), sig.sival_int );
+  int status;
+
+  status = lio_listio( LIO_WAIT, NULL, 1, NULL);
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EINVAL );
+  errno = 0;
+
+  status = lio_listio( BAD_MODE, aiocbp, 1, NULL);
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EINVAL );
+  errno = 0;
+
+  status = lio_listio( LIO_WAIT, aiocbp, -9, NULL);
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EINVAL );
+  errno = 0;
+
+  status = lio_listio( LIO_WAIT, aiocbp, 547, NULL);
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EINVAL );
+  errno = 0;
+}
+
+static void test_eio( struct aiocb** aiocbp )
+{
+  int status;
+
+  status = lio_listio( LIO_NOWAIT, &aiocbp[4], 1, NULL);
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EIO );
+  errno = 0;
+
+  status = lio_listio( LIO_WAIT, &aiocbp[4], 1, NULL);
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EIO );
+  errno = 0;
+}
+
+static void test_no_wait( struct aiocb** aiocbp )
+{
+  int status, received_signal, sig;
+  struct sigevent sigev;
+  sigset_t sig_set;
+  
+  sig = SIGUSR1;
+  sigev.sigev_notify = SIGEV_SIGNAL;
+  sigev.sigev_signo = sig;
+  sigev.sigev_value.sival_ptr  = NULL;
+
+  status = sigemptyset( &sig_set );
+  rtems_test_assert( status == 0 );
+
+  status = sigaddset( &sig_set, sig );
+  rtems_test_assert( status == 0 );
+
+  status = sigprocmask( SIG_BLOCK, &sig_set, NULL );
+  rtems_test_assert( status == 0 );
+
+  status = lio_listio( LIO_NOWAIT, aiocbp, 4, &sigev);
+  rtems_test_assert( status == 0 );
+
+  status = sigwait( &sig_set, &received_signal );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( received_signal == sig );
+
+  status = sigprocmask( SIG_UNBLOCK, &sig_set, NULL );
+  rtems_test_assert( status == 0 );
+}
+
+static void test_wait( struct aiocb** aiocbp )
+{
+  int status;
+
+  status = lio_listio( LIO_WAIT, aiocbp, 4, NULL);
+  rtems_test_assert( status == 0 );
 }
 
 void *POSIX_Init( void *argument )
 {
-  int fd, status, received_signal, sig;
-  struct aiocb *aiocbp;
-  sigset_t sig_set;
-  sig = SIGUSR1;
+  struct aiocb *aiocbp[] = { NULL, NULL, NULL, NULL, NULL };
+  int fd, result;
 
   rtems_aio_init();
 
-  status = mkdir( "/tmp", S_IRWXU );
-  rtems_test_assert( !status );
+  result = mkdir( "/tmp", S_IRWXU );
+  rtems_test_assert( result == 0 );
   
   fd = open(
     "/tmp/aio_fildes",
@@ -98,53 +176,25 @@ void *POSIX_Init( void *argument )
 
   TEST_BEGIN();
 
-  aiocbp = create_aiocb( fd );
-  aiocbp->aio_sigevent.sigev_notify = SIGEV_SIGNAL;
-  aiocbp->aio_sigevent.sigev_signo = SIGUSR1;
+  for (int i = 0; i<4; i++ ) {
+    aiocbp[i] = create_aiocb( fd );
+  }
+  aiocbp[4] = create_aiocb( WRONG_FD );
 
-  status =sigemptyset( &sig_set );
-  rtems_test_assert( status == 0 );
+  test_einval( aiocbp );
 
-  status =sigaddset( &sig_set, sig );
-  rtems_test_assert( status == 0 );
+  test_eio( aiocbp );
 
-  status = sigprocmask( SIG_BLOCK, &sig_set, NULL );
-  rtems_test_assert( status == 0 );
+  test_no_wait( aiocbp );
 
-  status = aio_write( aiocbp );
-  rtems_test_assert( status == 0 );
-
-  status = sigwait( &sig_set, &received_signal );
-  rtems_test_assert( status == 0 );
-
-  rtems_test_assert( received_signal == sig );
-
-  aiocbp = create_aiocb( fd );
-  aiocbp->aio_sigevent.sigev_notify = SIGEV_THREAD;
-  aiocbp->aio_sigevent.sigev_notify_attributes = NULL;
-  aiocbp->aio_sigevent.sigev_notify_function = &notify;
-  aiocbp->aio_sigevent.sigev_value.sival_int = sig;
-
-  status =sigemptyset( &sig_set );
-  rtems_test_assert( status == 0 );
-
-  status =sigaddset( &sig_set, sig );
-  rtems_test_assert( status == 0 );
-
-  status = sigprocmask( SIG_BLOCK, &sig_set, NULL );
-  rtems_test_assert( status == 0 );
-
-  status = aio_write( aiocbp );
-  rtems_test_assert( status == 0 );
-
-  status = sigwait( &sig_set, &received_signal );
-  rtems_test_assert( status == 0 );
-
-  rtems_test_assert( received_signal == sig );
+  test_wait( aiocbp );
 
   TEST_END();
 
-  free_aiocb( aiocbp );
+  for (int i = 0; i<5; i++ ) {
+    free_aiocb(aiocbp[i]);
+  }
+
   close( fd );
   rtems_test_exit( 0 );
 

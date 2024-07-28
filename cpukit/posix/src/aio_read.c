@@ -10,6 +10,7 @@
 
 /*
  *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
+ *  Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
  * 
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
@@ -51,36 +52,17 @@
 int aio_read( struct aiocb *aiocbp )
 {
   rtems_aio_request *req;
-  int mode;
 
-  if ( aiocbp == NULL )
-    rtems_set_errno_and_return_minus_one( EINVAL );
-
-  mode = fcntl( aiocbp->aio_fildes, F_GETFL );
-  if (
-    !(
-      (( mode&O_ACCMODE ) == O_RDONLY ) ||
-      (( mode&O_ACCMODE ) == O_RDWR )
-    )
-  )
-    rtems_set_errno_and_return_minus_one( EBADF );
-
-  if ( aiocbp->aio_reqprio < 0 || aiocbp->aio_reqprio > AIO_PRIO_DELTA_MAX )
-    rtems_set_errno_and_return_minus_one( EINVAL );
-
-  if ( aiocbp->aio_offset < 0 )
-    rtems_set_errno_and_return_minus_one( EINVAL );
-
-  if ( rtems_aio_check_sigevent( &aiocbp->aio_sigevent ) == 0 )
-    rtems_set_errno_and_return_minus_one( EINVAL );
-
-  req = malloc( sizeof( rtems_aio_request ) );
-  if ( req == NULL )
+  if ( 1 + atomic_load( &aio_request_queue.queued_requests ) > RTEMS_AIO_MAX ) {
     rtems_set_errno_and_return_minus_one( EAGAIN );
+  }
 
-  req->aiocbp = aiocbp;
-  req->op_type = AIO_OP_READ;
+  req = init_read_req( aiocbp );
 
-  return rtems_aio_enqueue( req );
+  if ( req != NULL ) {
+    return rtems_aio_enqueue( req );
+  } else {
+    return -1;
+  }
 }
 

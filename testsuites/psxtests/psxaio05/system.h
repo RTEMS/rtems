@@ -1,19 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @ingroup POSIX_AIO
- *
- * @brief Returns the error status for the Asynchronous I/O request.
- */
-
 /*
- *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
- *  Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
- * 
- *  COPYRIGHT (c) 1989-2011.
- *  On-Line Applications Research Corporation (OAR).
+ * Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,24 +25,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+/* functions */
 
-#include <aio.h>
+#include <pmacros.h>
+#include <pthread.h>
 #include <errno.h>
-#include <rtems/posix/aio_misc.h>
+#include <sched.h>
 
-#include <rtems/seterr.h>
+void *POSIX_Init( void *argument );
 
-int aio_error( const struct aiocb *aiocbp )
-{
-  if ( aiocbp == NULL )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+/* configuration information */
 
-  if ( aiocbp->return_status == AIO_RETURNED )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-  return aiocbp->error_code;
-}
+#define CONFIGURE_MAXIMUM_TASKS             20
+#define CONFIGURE_MAXIMUM_SEMAPHORES        20
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES    20
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS  20
 
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
+#define CONFIGURE_MAXIMUM_POSIX_THREADS        10
+#define CONFIGURE_MAXIMUM_POSIX_KEYS           10
+
+#define CONFIGURE_POSIX_INIT_THREAD_TABLE
+#define CONFIGURE_EXTRA_TASK_STACKS            ( 10 * RTEMS_MINIMUM_STACK_SIZE )
+#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE ( 10 * RTEMS_MINIMUM_STACK_SIZE )
+
+#include <rtems/confdefs.h>
+
+/* global variables */
+TEST_EXTERN pthread_t Init_id;
+
+/* end of include file */

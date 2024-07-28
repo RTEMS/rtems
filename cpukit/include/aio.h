@@ -139,13 +139,16 @@ struct aiocb {
  * @param[in,out] aiocbp is a pointer to the asynchronous I/O control block
  * 
  * @retval 0 The request has been successfuly enqueued.
- * @retval -1 The request has not been enqueued due to an error. The error is indicated in errno:
- *         - EBADF FD not opened for read
- *         - EINVAL invalid aio_reqprio or aio_offset or aio_nbytes
- *         - EAGAIN not enough memory
- *         - EINVAL the starting position of the file is past the maximum offset
+ * @retval -1 The request has not been enqueued due to an error.
+ *         The error is indicated in errno:
+ *         - EBADF FD not opened for read.
+ *         - EINVAL invalid aio_reqprio or aio_offset or aio_nbytes.
+ *         - EAGAIN not enough memory.
+ *         - EAGAIN the addition of a new request to the queue would
+ *           violate the RTEMS_AIO_MAX limit.
+ *         - EINVAL the starting position of the file is past the maximum offset.
  *           for this file.
- *         - EINVAL aiocbp is a NULL pointer
+ *         - EINVAL aiocbp is a NULL pointer.
  *         - EINVAL aiocbp->sigevent is not valid.
  */
 int aio_read(
@@ -160,11 +163,14 @@ int aio_read(
  * @param[in,out] aiocbp is a pointer to the asynchronous I/O control block
  * 
  * @retval 0 The request has been successfuly enqueued.
- * @retval -1 The request has not been enqueued due to an error. The error is indicated in errno:
- *         - EBADF FD not opened for write
- *         - EINVAL invalid aio_reqprio or aio_offset or aio_nbytes
- *         - EAGAIN not enough memory
- *         - EINVAL aiocbp is a NULL pointer
+ * @retval -1 The request has not been enqueued due to an error.
+ *         The error is indicated in errno:
+ *         - EBADF FD not opened for write.
+ *         - EINVAL invalid aio_reqprio or aio_offset or aio_nbytes.
+ *         - EAGAIN not enough memory.
+ *         - EAGAIN the addition of a new request to the queue would
+ *           violate the RTEMS_AIO_MAX limit.
+ *         - EINVAL aiocbp is a NULL pointer.
  *         - EINVAL aiocbp->sigevent is not valid.
  */
 int aio_write(
@@ -172,9 +178,29 @@ int aio_write(
 );
 
 /**
- * @brief List Directed I/O - NOT IMPLEMENTED
+ * @brief List Directed I/O
  *
  * 6.7.4 List Directed I/O, P1003.1b-1993, p. 158
+ * 
+ * @param[in] mode can be LIO_WAIT or LIO_NOWAIT
+ * @param[in,out] list is a pointer to the array of aiocb
+ * @param[in] nent is the number of element in list
+ * @param[in] sig if mode is LIO_NOWAIT, specifies how to notify list completion.
+ *
+ * @retval 0 the call to lio_listio() has completed successfuly.
+ * @retval -1 The call did not complete successfully.
+ *         The error is indicated in errno:
+ *         - EAGAIN the call failed due to resources limitations.
+ *         - EAGAIN the number of entries indicated by nent value would cause
+ *                  the RTEMS_AIO_MAX limit to be excedeed.
+ *         - EINVAL list is a NULL pointer.
+ *         - EINVAL mode is not a valid value.
+ *         - EINVAL the value of nent is not valid or higher than AIO_LISTIO_MAX.
+ *         - EINVAL list is a NULL pointer.
+ *         - EINVAL the sigevent struct pointed by sig is not valid.
+ *         - EINTR the wait for list completion during a LIO_WAIT operation was
+ *                 interrupted by an external event.
+ *         - EIO One or more of the individual I/O operations failed.
  */
 int lio_listio(
   int              mode,
@@ -266,6 +292,8 @@ int aio_suspend(
  * @retval -1 An error occured. errno indicated the error:
  *            - EAGAIN The requested asynchronous operation was not queued
  *              due to temporary resource limitations.
+ *            - EAGAIN the addition of a new request to the queue would
+ *              violate the RTEMS_AIO_MAX limit.
  *            - EBADF The aio_fildes member of the aiocb structure referenced
  *              by the aiocbp argument is not a valid file descriptor.
  *            - EINVAL A value of op other than O_SYNC or O_DSYNC was specified.

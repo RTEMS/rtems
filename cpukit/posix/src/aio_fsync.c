@@ -10,6 +10,7 @@
 
 /*
  *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
+ *  Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
  * 
  *  COPYRIGHT (c) 1989-2011, 2024.
  *  On-Line Applications Research Corporation (OAR).
@@ -64,6 +65,11 @@ int aio_fsync(
   rtems_aio_request *req;
   int mode;
 
+
+  if ( 1 + atomic_load( &aio_request_queue.queued_requests ) > RTEMS_AIO_MAX ) {
+    rtems_set_errno_and_return_minus_one( EAGAIN );
+  }
+
   if ( aiocbp == NULL )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
@@ -94,6 +100,7 @@ int aio_fsync(
    */
   req->aiocbp = aiocbp;
   req->op_type = AIO_OP_SYNC;
+  req->listcbp = NULL;
   
   return rtems_aio_enqueue( req );
 }

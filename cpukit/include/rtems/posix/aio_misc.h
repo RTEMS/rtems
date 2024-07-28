@@ -45,6 +45,7 @@
 #include <signal.h> 
 #include <aio.h>
 #include <pthread.h>
+#include <stdatomic.h>
 #include <rtems.h>
 #include <rtems/chain.h>
 #include <rtems/seterr.h>
@@ -66,7 +67,7 @@ extern "C" {
 #define AIO_OP_WRITE       1
 
 /** Needed by aio_fsync() */
-#define AIO_OP_SYNC       2
+#define AIO_OP_SYNC        2
 
 /** Needed by aio_fsync() */
 #define AIO_OP_DSYNC       3
@@ -80,6 +81,49 @@ extern "C" {
 
 /** The aio operation return value has not been retrieved */
 #define AIO_NOTRETURNED 1
+
+/** Constants to identify list completion notification */
+
+/** No notification required */
+#define AIO_LIO_NO_NOTIFY  0
+
+/** Notification via sigevent */
+#define AIO_LIO_SIGEV      1
+
+/** Notification via event delivery */
+#define AIO_LIO_EVENT      2
+
+/**
+ * @brief holds a pointer to a sigevent struct or a thread id 
+ *  
+ */
+typedef union
+{
+  /** @brief pointer to the sigevent for notification */
+  struct sigevent *sigp;
+
+  /** @brief id of the thread that called lio_listio() */
+  int task_id;
+
+} lio_notification_union;
+
+/**
+ * @brief Control block for every list enqueued with lio_listio()
+ */
+typedef struct
+{
+  pthread_mutex_t mutex;
+
+  /** @brief number of requests left to complete the list */
+  int requests_left;
+
+  /** @brief type of notification */
+  int notification_type;
+
+  /** @brief event to do at list completion*/
+  lio_notification_union lio_notification;
+
+} listcb;
 
 /**
  * @brief The request being processed
@@ -97,6 +141,9 @@ typedef struct
 
   /** @brief Used for notification */
   pthread_t caller_thread;
+
+  /** @brief pointer to list control block */
+  listcb *listcbp;
 
   /** @brief Aio control block */
   struct aiocb *aiocbp;
@@ -152,6 +199,9 @@ typedef struct
   /** @brief The number of idle threads */
   int idle_threads;
 
+  /** @brief The number of queued requests*/
+  atomic_int queued_requests;
+
 } rtems_aio_queue;
 
 extern rtems_aio_queue aio_request_queue;
@@ -162,8 +212,12 @@ extern rtems_aio_queue aio_request_queue;
 #define AIO_MAX_THREADS 5
 #endif
 
-#ifndef AIO_MAX_QUEUE_SIZE
-#define AIO_MAX_QUEUE_SIZE 30
+#ifndef AIO_LISTIO_MAX
+#define AIO_LISTIO_MAX 20
+#endif
+
+#ifndef RTEMS_AIO_MAX
+#define RTEMS_AIO_MAX 100
 #endif
 
 /**
@@ -232,6 +286,39 @@ int rtems_aio_remove_req(
  * @retval 1 The struct is valid.
  */
 int rtems_aio_check_sigevent( struct sigevent *sigp );
+
+/**
+ * @brief initializes a read rtems_aio_request
+ * 
+ * @param aiocb pointer to the aiocb describing the request
+ * @retval NULL the aiocb passed was invalid, errno indicates the error:
+ *          - 
+ * @return rtems_aio_request* a pointer to the newly created request.
+ */
+rtems_aio_request *init_write_req( struct aiocb* aiocbp );
+
+/**
+ * @brief initializes a write rtems_aio_request
+ * 
+ * @param aiocb pointer to the aiocb describing the request
+ * @retval NULL the aiocb passed was invalid, errno indicates the error:
+ *          - 
+ * @return rtems_aio_request* a pointer to the newly created request.
+ */
+rtems_aio_request *init_read_req( struct aiocb* aiocbp );
+
+/**
+ * @brief updates listcb after op completion
+ * 
+ * @param listcbp 
+ */
+void rtems_aio_completed_list_op( listcb *listcbp );
+
+/**
+ * @brief generates event at list completion to end wait in lio_listio().
+ * 
+ */
+void lio_notify_end_wait( union sigval attr );
 
 #ifdef RTEMS_DEBUG
 #include <assert.h>
