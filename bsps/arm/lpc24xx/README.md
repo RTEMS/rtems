@@ -1,3 +1,6 @@
+lpc24xx
+=======
+
 Development Board: QVGA Base Board from Embedded Artists
 
 http://www.embeddedartists.com/products/uclinux/oem_lpc2478.php

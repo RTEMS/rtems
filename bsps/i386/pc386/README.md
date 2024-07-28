@@ -1,6 +1,7 @@
-#
-# This board support package works with a target PC
-#
+pc386
+=====
+
+This board support package works with a target PC
 
 This BSP supports a standard Intel/AMD PC on i386 and up CPUs. If on
 a Pentium or above, the TSC register is used for timing calibration
@@ -9,8 +10,9 @@ purposes rather than relying entirely on the i8254.
 Partial support is implemented for more modern PCs which do not have
 a complete complement of legacy peripherals.
 
+
 Console/Printk Device Selection
-===============================
+-------------------------------
 The pc386 console device driver supports a variety of devices
 including the VGA/keyboard and a number of serial ports. The
 default console is selected based on which devices are present
@@ -31,9 +33,11 @@ are enabled. The configure time options are:
 
 An example of using these to force the console to COM1 is:
 
+```shell
 ../rtems/configure --target=i386-rtems4.12 \
   USE_COM1_AS_CONSOLE=1 --enable-rtemsbsp=pc386 \
   ... other arguments ...
+```
 
 The --console and --printk options can be used to specify the
 device associated with stdin, stdout, and stderr as well as
@@ -45,7 +49,9 @@ specify the console and kernel debug IO device. The --printk
 is then interpreted to specify the debug kernel IO device.
 For example,
 
+```shell
 --console=/dev/com1 --printk=/dev/vgacons
+```
 
 specifies that com1 is to be used for stdin, stdout, and stderr
 while the VGA console is to be used for kernel debug IO.
@@ -55,7 +61,9 @@ the RTEMS device /dev/com1.
 The device name may be followed by a baud rate. The following
 example illustrates this:
 
+```shell
 --console=/dev/com1,19200 --printk=/dev/vgacons
+```
 
 If the specified device is not present, then a suitable fallback
 device is selected. The fallback order is based upon the probe
@@ -64,12 +72,14 @@ order listed earlier.
 PCI UART devices are /dev/pcicom1 etc as they are probed and found.
 
 GDB
-===
+---
 
 GDB can be support using:
 
+```
  --gdb=/dev/com1,115200  : where the device and baudrate are selectable.
  --gdb-break             : halt at a break point in the BSP and wait for GDB.
  --gdb-remote-debug      : Output the GDB remote protocol data to printk
+```
 
 The GDB stub details and in shared/comm/GDB.HOWTO.

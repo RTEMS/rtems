@@ -1,3 +1,6 @@
+lm3s69xx
+========
+
 Tested only on Qemu simulator with git (git://git.qemu.org/qemu.git) version
 1.0.50.
 

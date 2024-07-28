@@ -1,3 +1,6 @@
+SMDK2410
+========
+
 SMDK2410 is a standard evaluation board for samsung s3c2410 ARM9 CPU
 
 This BSP was first developed by xiajiashan <ximenchuixue4016@sina.com>,

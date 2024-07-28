@@ -1,11 +1,14 @@
+lpc176x
+=======
+
 Development Board: Base Board from Embedded Artists
 
 http://www.embeddedartists.com/products/lpcxpresso/mbed.php
 
 Drivers:
 
-	o Console
-	o Clock
-	o Timer
-	o GPIO
-	o Watchdog
+  * Console
+  * Clock
+  * Timer
+  * GPIO
+  * Watchdog

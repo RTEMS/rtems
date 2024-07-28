@@ -1,3 +1,6 @@
+Raspberry PI
+============
+
 BSP for the Raspberry Pi ARM board
 This is a basic port that should work on either Model A or Model B.
 
@@ -13,6 +16,7 @@ It currently supports the following devices:
 
 To run an RTEMS binary, it must be stripped and loaded on the SD card along with
 the following files:
+
   bootcode.bin
   config.txt
   loader.bin

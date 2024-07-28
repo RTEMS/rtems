@@ -1,3 +1,6 @@
+lpc32xx
+=======
+
 Development board is phyCORE-LPC3250 RDK.  Basic initialization via stage 1
 bootloader or U-Boot will be assumed.  Drivers:
 

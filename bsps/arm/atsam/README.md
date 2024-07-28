@@ -1,3 +1,6 @@
+Atmel SAM
+=========
+
 Board support package for the Atmel SAM V71/V70/E70/S70 chip platform.
 
 The BSP is customized to a particular board/chip variant by means of configure
@@ -28,7 +31,8 @@ another setting in your external SDRAM, you should also use the
 ATSAM_CHANGE_CLOCK_FROM_SRAM=1 option. To overwrite the clock settings, define
 the following structures in your application:
 
---------
+
+```c
 const struct atsam_clock_config atsam_clock_config = {
   .pllar_init = my_custom_pllar_value,
   .mckr_init = my_custom_mckr_value,
@@ -41,7 +45,7 @@ const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
   .sdramc_mdr = my_custom_sdramc_mdr_value,
   .sdramc_cfr1 = my_custom_sdramc_cfr1_value
 };
---------
+```
 
 Use ATSAM_SLOWCLOCK_USE_XTAL=0 to disable the usage of the external 32kHz
 oscillator for the slow clock. This is useful for example for the SAM E70

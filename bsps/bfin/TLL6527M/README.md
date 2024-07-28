@@ -1,3 +1,7 @@
+TLL6527M
+========
+
+```
 BSP NAME:           TLL6527M
 BOARD:              TLL6527M 
 CPU FAMILY:         Blackfin
@@ -6,9 +10,12 @@ MODE:               32 bit mode
 
 DEBUG MONITOR:      
 SIMULATOR:          
+```
 
 PERIPHERALS
-===========
+-----------
+
+```
 TIMERS:             internal
   RESOLUTION:         1 milisecond
 SERIAL PORTS:       2 internal UART (polled/interrupt/dma)
@@ -17,29 +24,32 @@ DMA:                internal
 VIDEO:              none
 SCSI:               none
 NETWORKING:         none
-
+```
 
 DRIVER INFORMATION
-==================
+------------------
+```
 CLOCK DRIVER:       internal
 TIMER DRIVER:       internal
 I2C:
 SPI:
 PPI:
 SPORT:
-
+```
 
 STDIO
-=====
+-----
+```
 PORT:               Console port 1
 ELECTRICAL:         RS-232
 BAUD:               9600
 BITS PER CHARACTER: 8
 PARITY:             None
 STOP BITS:          1
+```
 
 NOTES
-=====
+-----
 The TLL56527M board contains analog devices blackfin 527 processor. In addition
 to the peripherals provided by bf527 the board has a temprature sensor, 
 accelerometer and power module connected via I2C. It also has LCD interface,
@@ -68,25 +78,25 @@ ports. Under bsp configure.ac files
   polling to transmit data over uart. This call is blocking. 
 
 TLL6527 specific file are mentioned below.
-=====================================
 c/src/lib/libcpu/bfin/bf52x/*
 c/src/lib/libbsp/bfin/TLL6527M/*
 
 
 The port was compiled using
-===========================
-1. bfin-rtems4.11-gcc (GCC) 4.5.2 20101216 
+---------------------------
+  1. bfin-rtems4.11-gcc (GCC) 4.5.2 20101216 
               (RTEMS gcc-4.5.2-3.el5/newlib-1.19.0-1.el5)
-2. automake (GNU automake) 1.11.1
-3. autoconf (GNU Autoconf) 2.68
+  2. automake (GNU automake) 1.11.1
+  3. autoconf (GNU Autoconf) 2.68
 
 
 The port was configured using the flags
-========================================== 
+---------------------------------------
 --target=bfin-rtems4.11 --enable-rtemsbsp=TLL6527M --enable-tests=samples 
 --disable-posix --disable-itron 
        
 
-ISSUES:
+ISSUES
+------
 Could not place code in l1code (SRAM) because it was not being loaded by the 
 gnu loaded.

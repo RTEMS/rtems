@@ -1,12 +1,15 @@
+Beagleboard
+===========
+
 BSP for beagleboard xm, beaglebone (original aka white), and beaglebone black.
 
 original beagleboard isn't tested.
 
-wiki: http://www.rtems.org/wiki/index.php/Beagleboard
 
-1.   *** CONFIGURING ************
-
+CONFIGURING
+-----------
 bsp-specific build options in the environment at build time:
+
 CONSOLE_POLLED=1 use polled i/o for console, required to run testsuite
 CONSOLE_BAUD=... override default console baud rate
 
@@ -22,8 +25,8 @@ distinctions are made in the future, so this can be done without changing the
 usage.
 
 
-2.   *** BUILDING    ************
-
+BUILDING
+--------
 To build BSPs for the beaglebone white and beagleboard xm, starting from
 a directory in which you have this source tree in rtems-src:
 
@@ -43,8 +46,8 @@ $ mkimage -A arm -O rtems -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d $exe
 
 All beagles have memory starting at 0x80000000 so the load & run syntax is the same.
 
-3.   *** BOOTING     ************
-
+BOOTING
+-------
 Then, boot the beaglebone with u-boot on an SD card and load rtems-app.img
 from u-boot. Interrupt the u-boot boot to get a prompt.
 
@@ -52,8 +55,9 @@ Set up a tftp server and a network connection for netbooting. And to
 copy rtems-app.img to the tftp dir. Otherwise copy the .img to the FAT
 partition on the SD card and make uboot load & run that.
 
-4.   *** BEAGLEBONES ************
 
+BEAGLEBONES
+-----------
 (tested on both beaglebones)
 
 Beaglebone original (white) or beaglebone black netbooting:
@@ -71,8 +75,9 @@ uboot# fatload mmc :1 0x80800000 ticker.img
 uboot# dcache off ; icache off
 uboot# bootm 0x80800000
 
-4.   *** BEAGLEBOARD ************
 
+BEAGLEBOARD
+-----------
 (tested on xm)
 
 For the beagleboard the necessary commands are a bit different because
@@ -88,8 +93,9 @@ uboot# tftp 0x80800000 rtems-app.img
 uboot# dcache off ; icache off
 uboot# bootm 0x80800000
 
-4.   *** SD CARD ****************
 
+SD CARD
+-------
 There is a script here that automatically writes an SD card for any of
 the beagle targets.
 
@@ -97,8 +103,10 @@ Let's write one for the Beaglebone Black. Assuming your source tree is
 at $HOME/development/rtems/rtems-src and your bsp is built and linked
 with examples and installed at $HOME/development/rtems/4.11.
 
+```shell
     % cd $HOME/development/rtems/rtems-src/c/src/lib/libbsp/arm/beagle/simscripts
     % sh sdcard.sh $HOME/development/rtems/4.11 $HOME/development/rtems/b-beagle/arm-rtems4.11/c/beagleboneblack/testsuites/samples/hello/hello.exe
+```
 
 The script should give you a whole bunch of output, ending in:
 

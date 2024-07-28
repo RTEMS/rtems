@@ -1,3 +1,6 @@
+xilinx-zynqmp
+=============
+
 Tested on an Ultra96 board with JTAG boot.
 
 Make sure to configure the boot mode switches for JTAG mode.

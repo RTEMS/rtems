@@ -1,3 +1,6 @@
+umon
+====
+
 #  Fernando Nicodemos <fgnicodemos@terra.com.br>
 #  from NCB - Sistemas Embarcados Ltda. (Brazil)
 #
@@ -15,7 +18,7 @@ application.  This directory contiains:
   available under RTEMS as a regular filesystem.
 
 Usage
-=====
+-----
 
 For any of this functionality to work, the application is
 responsible for connecting the library to the monitor.
@@ -28,21 +31,24 @@ To use the TFS filesystem, it is necessary to mount it
 by calling the rtems_initialize_tfs_filesystem() routine
 and providing it the name of the mount point directory.
 
+
 CONFIGURATION
-=============
+-------------
 The TFS filesystem uses a single Classic API Semaphore.
 
 The monlib functionality will eventually also use a single
 Classic API Semaphore.
 
+
 STATUS
-======
+------
 
 + Limited testing -- especially of TFS RTEMS filesystem.
 + monlib is NOT currently protected by a mutex.
 
+
 SOURCE ORIGIN
-=============
+-------------
 Some of the files in this directory are included in the
 MicroMonitor distribution and may need to be updated
 in the future.  

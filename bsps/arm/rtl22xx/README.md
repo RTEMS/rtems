@@ -1,3 +1,6 @@
+rtl22xx
+=======
+
 RTEMS BSP for Philips's ARM processor
 
 This BSP is designed for the following Philips' ARM microprocessors:

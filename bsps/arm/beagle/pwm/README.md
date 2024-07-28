@@ -1,3 +1,6 @@
+PWM
+===
+
 Pulse Width Modulation subsystem includes EPWM, ECAP , EQEP. There are
 different instances available for each one. For PWM there are three
 different individual EPWM module 0 , 1 and 2. So wherever pwmss word is
@@ -29,6 +32,7 @@ To generate different frequencies with the help of PWM module , SYSCLKOUT
 need to be scaled down, which will act as TBCLK and TBCLK will be base clock
 for the pwm subsystem.
 
+```
 TBCLK = SYSCLKOUT/(HSPCLKDIV * CLKDIV)
 
                  |----------------| 
@@ -40,10 +44,13 @@ TBCLK = SYSCLKOUT/(HSPCLKDIV * CLKDIV)
                    |           |
  TBCTL[CLKDIV]-----            ------TBCTL[HSPCLKDIV]
 
+```
 
 CLKDIV and HSPCLKDIV bits are part of the TBCTL register (Refer TRM).
 CLKDIV - These bits determine part of the time-base clock prescale value.
 Please use the following values of CLKDIV to scale down sysclk respectively.
+
+```
 0h (R/W) = /1 
 1h (R/W) = /2
 2h (R/W) = /4
@@ -52,9 +59,11 @@ Please use the following values of CLKDIV to scale down sysclk respectively.
 5h (R/W) = /32
 6h (R/W) = /64
 7h (R/W) = /128
-
+```
 These bits determine part of the time-base clock prescale value.
 Please use following value of HSPCLKDIV to scale down sysclk respectively
+
+```
 0h (R/W) = /1
 1h (R/W) = /2
 2h (R/W) = /4
@@ -63,7 +72,7 @@ Please use following value of HSPCLKDIV to scale down sysclk respectively
 5h (R/W) = /10
 6h (R/W) = /12
 7h (R/W) = /14
-
+```
 For example, if you set CLKDIV = 3h and HSPCLKDIV= 2h Then
 SYSCLKOUT will be divided by (1/8)(1/4). It means SYSCLKOUT/32
 
@@ -80,19 +89,22 @@ Here by default period is 1/100MHz = 10 nsec
 
 Following example shows value to be loaded into TBPRD
  
+```
 e.g. TBPRD = 1 = 1 count
   count x Period = 1 x 1ns = 1ns
   freq = 1/Period = 1 / 1ns = 100 MHz
+```
 
 For duty cycle CMPA and CMPB are the responsible registers.
 
 To generate single with 50% Duty cycle & 100MHz freq.
  
+```
  CMPA = count x Duty Cycle
        = TBPRD x Duty Cycle
        = 1 x 50/100
        = 0.2
-
+```
 The value in the active CMPA register is continuously compared to
 the time-base counter (TBCNT). When the values are equal, the
 counter-compare module generates a "time-base counter equal to
@@ -112,10 +124,12 @@ List of pins for that can be used for different PWM instance :
   |  BBB_P8_45_2A | BBB_P9_14_1A  | BBB_P9_29_0B |
   |  BBB_P8_46_2B | BBB_P9_16_1B  | BBB_P9_31_0A |
   ------------------------------------------------
+
 BBB_P8_13_2B represents P8 Header , pin number 13 , 2nd PWM instance and B channel. 
 
 Following sample program can be used to generate 7 Hz frequency.
 
+```c
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -194,4 +208,4 @@ rtems_task Init(
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
-
+```

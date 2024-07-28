@@ -1,3 +1,6 @@
+GDB Stub lm32
+=============
+
 This is a thread-aware gdb stub for the lm32 architecture. It has to be
 linked with the application, which should be debugged. The application has
 to call 'lm32_gdb_stub_install' to setup the stub.
@@ -44,6 +47,7 @@ NOTE2: make sure you have the following CFLAGS set:
 
 EXAMPLES
 
+```shell
   char gdb_get_debug_char(void)
   {
     /* Wait until there is a byte in RXTX */
@@ -79,4 +83,4 @@ EXAMPLES
   {
     lm32_interrupt_ack(1 << DEBUG_UART_IRQ);
   }
-
+```
