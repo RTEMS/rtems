@@ -41,18 +41,6 @@ actions:
     - mrfsfsrenamepermexisting
 - set-test-state:
     reason: |
-        Fails because of #5071, dot-dot as last part of a path
-        is treated as valid
-    state: expected-fail
-    tests:
-    - imfsfsrmdirparent
-    - jffs2fsrmdirparent
-    - jffs2nandfsrmdirparent
-    - mdosfsfsrmdirparent
-    - mimfsfsrmdirparent
-    - mrfsfsrmdirparent
-- set-test-state:
-    reason: |
         Fails because of #2169 and other rename issue
     state: expected-fail
     tests:
