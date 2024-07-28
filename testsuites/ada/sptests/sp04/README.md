@@ -1,3 +1,5 @@
+sp04
+====
 This test is broken as it is currently implemented.  It is illegal for
 a task to do Ada IO during a extension since the Ada run-time uses
 locks to safeguard data structures.  Dispatching is disabled and the

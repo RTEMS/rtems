@@ -1,3 +1,6 @@
+psxtmtests
+==========
+
 This directory contains the RTEMS POSIX Timing Test Suite.
 The tests in this directory are used to measure the execution
 time of RTEMS directive and some critical internal functions.

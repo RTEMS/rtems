@@ -1,3 +1,6 @@
+POSIX
+=====
+
 This testsuite consists of a collection of (non-functional) program snippets 
 to check an RTEMS toolchain consisting of 
 * GCC (libgcc etc.)
