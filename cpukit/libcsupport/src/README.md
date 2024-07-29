@@ -34,3 +34,37 @@ NOTE:
         This hack is necessary to allow the tmtests to avoid
         timing the extensions.
 
+
+Cases
+-----
+This is a list of cases to consider when implementing a file system:
+
+
+```
++ Given a tree of this form:
+
+        a ----- b
+               /
+             c
+```
+
+  Where a and b are directories and c is a link to directory b.  Consider
+  this sequence:
+
+    - rmdir a/b
+    - mknod c/b/x
+    - unlink c
+
+
+TODO
+----
++ newlib 1.8.0 has the wrong prototype for at least read() and write().
+
++ There should be a "eat it" stub for all system calls which are
+  available to make filling out an operations table easier.  
+  See device_lseek() for an example of where this would be nice.
+
++ Fix strerror() so it prints all error numbers.
+
++ Check the node allocation coment in the fchdir call.
++ Add an interface somewhere for this call.
