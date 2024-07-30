@@ -1,6 +1,9 @@
+mqueue
+======
 This program should print out the default attribute settings for a 
 POSIX message queue.
 
+```c
 #include <mqueue.h>
 #include <stdio.h>
 
@@ -31,4 +34,4 @@ main()
   (void) mq_close( mqfd );
   exit( 0 );
 }
-
+```

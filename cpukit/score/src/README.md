@@ -1,10 +1,11 @@
+Unlimited Local Node Objects
+============================
+
 This document explains how the unlimited objects support works.  This was
 written by Chris Johns <ccj@acm.org> of Objective Design Systems as a
 design document.  This was submitted as part of the patch which added
 this capability.  
 
-Unlimited Local Node Objects
-============================
 
 1. Why ?
 
@@ -356,5 +357,3 @@ o The Test
 
   A new sample test, unlimited is provided. It attempts to test this
   change.
-
-
