@@ -97,7 +97,7 @@ HAL_StatusTypeDef HAL_CRCEx_Polynomial_Set(CRC_HandleTypeDef *hcrc, uint32_t Pol
   /* Check the parameters */
   assert_param(IS_CRC_POL_LENGTH(PolyLength));
 
-  /* Ensure that the generating polynomial is odd */ 
+  /* Ensure that the generating polynomial is odd */
   if ((Pol & (uint32_t)(0x1U)) ==  0U)
   {
     status =  HAL_ERROR;
@@ -117,7 +117,7 @@ HAL_StatusTypeDef HAL_CRCEx_Polynomial_Set(CRC_HandleTypeDef *hcrc, uint32_t Pol
 
     switch (PolyLength)
     {
-          
+
       case CRC_POLYLENGTH_7B:
         if (msb >= HAL_CRC_LENGTH_7B)
         {
@@ -136,7 +136,7 @@ HAL_StatusTypeDef HAL_CRCEx_Polynomial_Set(CRC_HandleTypeDef *hcrc, uint32_t Pol
           status =   HAL_ERROR;
         }
         break;
- 
+
       case CRC_POLYLENGTH_32B:
         /* no polynomial definition vs. polynomial length issue possible */
         break;
