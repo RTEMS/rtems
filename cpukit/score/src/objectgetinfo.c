@@ -66,9 +66,6 @@ Objects_Information *_Objects_Get_information(
   if ( !_Objects_Information_table[ the_api ] )
     return NULL;
 
-  if ( the_class > OBJECTS_APIS_LAST )
-    return NULL;
-
   info = _Objects_Information_table[ the_api ][ the_class ];
   if ( !info )
     return NULL;
