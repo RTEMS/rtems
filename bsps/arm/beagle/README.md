@@ -124,3 +124,51 @@ Good luck & enjoy!
 
 Ben Gras
 beng@shrike-systems.com
+
+
+JTAG
+----
+To run RTEMS from scratch (without any other bootcode) on the beagles,
+you can comfortably load the executables over JTAG using gdb. This is
+necessarily target-specific however.
+
+1. BBXM
+
+  - For access to JTAG using openocd, see simscripts/bbxm.cfg.
+  - openocd then offers access to gdb using simscripts/gdbinit.bbxm.
+  - start openocd using bbxm.cfg
+  - copy your .exe to a new dir and that gdbinit file as .gdbinit in the same dir
+  - go there and start gdb:
+    $ arm-rtems4.11-gdb hello.exe
+  - gdb will invoke the BBXM hardware initialization in the bbxm.cfg
+    and load the ELF over JTAG. type 'c' (for continue) to run it.
+  - breakpoints, C statement and single-instruction stepping work.
+
+2. beaglebone white
+
+This has been tested with openocd and works but not in as much detail as for
+the BBXM yet (i.e. loading an executable from scratch).
+
+
+Testing
+-------
+To build and run the tests for this BSP, use the RTEMS tester.
+The necessary software can be built with the RTEMS source builder.
+
+To build the BSP for testing:
+	- set CONSOLE_POLLED=1 in the configure environment, some tests
+	  assume console i/o is polled
+	- add --enable-tests to the configure line
+
+1. Qemu
+
+Linaro Qemu can emulate the beagleboard xm and so run all regression
+tests in software. Build the bbxm.bset from the RTEMS source builder and
+you will get qemu linaro that can run them. There is a beagleboardxm_qemu
+bsp in the RTEMS tester to invoke it with every test.
+
+2. bbxm hardware
+
+This requires JTAG, see README.JTAG. Use the beagleboardxm bsp in the
+RTEMS tester. It starts gdb to connect to openocd to reset the target
+and load the RTEMS executable for each test iteration.
