@@ -1,3 +1,6 @@
+Status
+======
+
 17 Februrary 2011
 
 XXX
@@ -9,7 +12,7 @@ Anything not mentioned has not been touched at all and will
 most likely not be in the first release of the BSP.
 
 Working
-=======
+-------
 + Board initialization and shutdown
 + tty0 working polled
 + tty1 working polled (see note in issues)
@@ -18,7 +21,7 @@ Working
 
 
 Issues
-======
+------
 + We have small hack to Qemu so reset will exit.  This needs to be
   fixed to follow the PC386 Qemu model where a command line argument
   selects reset or exit on reset.
@@ -31,7 +34,7 @@ Issues
   as the characters are polled out.  
 
 TBD
-===
+---
 + Conversion to Programmable Interrupt Controller IRQ model
   using shared infrastructure
 + tty0 working interrupt driver

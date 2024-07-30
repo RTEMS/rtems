@@ -1,4 +1,5 @@
 i386/pc386 GDB Stub
+===================
 
 The i386 GDB stub has been updated to use the libchip drivers for the
 NS16550. Make sure you have detect the device and you have added a console
@@ -10,6 +11,7 @@ The pc386 BSP has boot command line options to manage GDB support.
 
 a) Find the minor number of the console device:
 
+```c
   #include <console_private.h>
 
   rtems_device_minor_number minor = 0;
@@ -17,11 +19,13 @@ a) Find the minor number of the console device:
   if (console_find_console_entry("/dev/com1",
                                  strlen("/dev/com1") - 1, &minor) == NULL)
     error("driver not found\n");
+```
 
 Note, this call is part of the private console API and may change.
 
 b) To start GDB stub, run this:
 
+```c
   #include <bsp.h>
 
   /* Init GDB glue  */
@@ -41,7 +45,9 @@ b) To start GDB stub, run this:
   breakpoint();
 
 c) To run use GDB:
+```
 
+```shell
   $ i386-rtems4.12-gdb hello.exe
   GNU gdb (GDB) 7.11
   Copyright (C) 2016 Free Software Foundation, Inc.
@@ -70,6 +76,7 @@ c) To run use GDB:
   Breakpoint 1, Init (ignored=1269800) at init.c:29
   29      {
   (gdb)
+```
 
 Pressing ^C works and if running the board should halt when GDB connects.
 
@@ -77,8 +84,12 @@ e) Use ser2net to provide reomve access over a network to a board. Install the
 ser2net package and add a configuration for the port GDB connects to. For
 example:
 
+```shell
  0005:raw:0:/dev/cuaU5:115200
+```
 
 Start ser2net running then connect GDB using:
 
+```shell
  (gdb) target remote myhost:30005
+```

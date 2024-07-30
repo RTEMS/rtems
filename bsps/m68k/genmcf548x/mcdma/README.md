@@ -1,4 +1,6 @@
-Multi-channel DMA API Release Notes
+Multi-channel DMA API
+=====================
+Release Notes
 
 Version 0.3
 
@@ -22,5 +24,3 @@ Version 0.1 (Initial release)
 Alpha version
 MCD_INCLUDE_EU functionality not supported.
 MCD_INCLUDE_JBIG not supported.
-
-

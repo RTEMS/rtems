@@ -1,10 +1,13 @@
-The information in this file describes the source of
-bsps/include/dev/clock/xttcps_hw.h.
+Version
+=======
+The information in this file describes the source of files in
+bsps/shared/dev/nand/ and bsps/include/dev/nand/.
 
 Import from:
 
-https://github.com/Xilinx/embeddedsw.git
+  https://github.com/Xilinx/embeddedsw.git
 
+```
 commit 5330a64c8efd14f0eef09befdbb8d3d738c33ec2
 Refs: <xilinx_v2022.2>
 Author:     Nicole Baze <nicole.baze@xilinx.com>
@@ -22,3 +25,4 @@ CommitDate: Fri Oct 7 10:26:16 2022 +0530
 
     Signed-off-by: Nicole Baze <nicole.baze@xilinx.com>
     Acked-by: Jesus De Haro <jesus.de-haro@xilinx.com>
+```
