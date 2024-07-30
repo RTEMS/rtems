@@ -1,3 +1,5 @@
+License
+=======
 The files in this directory and elsewhere which refer to this LICENCE
 file are part of JFFS2, the Journalling Flash File System v2.
 

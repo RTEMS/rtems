@@ -1,3 +1,6 @@
+License
+=======
+
 Copyright (C) 2001-2009 HelenOS project
 All rights reserved.
 

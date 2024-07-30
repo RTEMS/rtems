@@ -1,3 +1,6 @@
+License
+=======
+```
 /* NOTE: The terms described in this LICENSE file apply only to the
  *       files created by the author (see below). Consult individual
  *       file headers for more details. Some files were ported from
@@ -50,3 +53,4 @@
  * 
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */ 
+```

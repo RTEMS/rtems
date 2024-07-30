@@ -1,4 +1,6 @@
-
+License
+=======
+```
 Copyright (c) 2009 Public Software Group e. V., Berlin, Germany
 
 Permission is hereby granted, free of charge, to any person obtaining a
@@ -61,4 +63,4 @@ authorization of the copyright holder.
 Unicode and the Unicode logo are trademarks of Unicode, Inc., and may be
 registered in some jurisdictions. All other trademarks and registered
 trademarks mentioned herein are the property of their respective owners.
-
+```
