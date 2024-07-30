@@ -137,3 +137,112 @@ Port  VME-Addr   Size       PCI-Adrs   Mode:
 1:    0x00000000 0x00FF0000 0x9F000000 A24, Dat, Sup
 2:    0x00000000 0x00010000 0x9FFF0000 A16, Dat, Sup
 ```
+
+
+Booting
+=======
+
+Written by S. Kate Feng <feng1@bnl.gov>, Aug. 28, 2007
+
+The bootloader is adapted from Till Straumann's Generic Mini-loader,
+which he wrote originally for the SVGM powerpc board. 
+The BSP is built and tested on the 4.7 CVS RTEMS release.
+
+Booting requirement
+-------------------
+
+1) One needs to setup BOOTP/DHCP and TFTP servers and /etc/bootptab(BOOTP)
+   or /etc/dhcpd.conf (DHCP) properly to boot the system.
+   (Note : EPICS needs a NTP server).
+ 
+2) Please copy the prebuilt RTEMS binary (e.g. misc/rtems5500-cexp.bin)
+   and perhaps others (e.g. misc/st.sys) to the /tftpboot/epics/hostname/bin/
+   directory or the TFTPBOOT one you specified in the 'tftpGet'
+   command of the boot script (as shown in the following example).
+
+3) Example of the boot script setup carried out on the MOTLoad 
+   command line : 
+
+```shell
+MVME5500> gevEdit mot-script-boot
+(Blank line terminates input.)
+waitProbe
+tftpGet -a4000000 -cxx.xx.xx.xx -sxx.xx.xx.xx -m255.255.254.0 -d/dev/enet0 -fepics/hostname/bin/rtems5500-cexp.bin
+netShut
+go -a4000000
+
+Update Global Environment Area of NVRAM (Y/N) ? Y
+MVME5500>
+
+Note : (cxx.xx.xx.xx is the client IP address and 
+        sxx.xx.xx.xx is the server IP address)
+
+WARNING : It is extremely important that the MOTLoad "waitProbe", "netShut"
+          sequence be executed before booting RTEMS. Otherwise, network
+          interface interrupt handlers installed by MOTLoad may cause memory
+          corruption
+```
+
+4) Other reference web sites for mvme5500 BSP:
+http://lansce.lanl.gov/EPICS/presentations/KateFeng%20RTEMS-mvme55001.ppt
+http://www.nsls.bnl.gov/facility/expsys/software/EPICS/
+http://www.nsls.bnl.gov/facility/expsys/software/EPICS/FAQ.txt
+
+5) When generating code (especially C++) for this system, one should
+   use at least gcc-3.2 (preferrably a copy downloaded from the RTEMS
+   site [snapshot area] )
+
+6) To reboot the RTEMS-MVME5500 (board reset), one can invoke the
+   bsp_reset() command at Cexp> prompt.
+ 
+7) Please reference http://www.slac.stanford.edu/~strauman/rtems
+for the source code and installation guidance of cexp, GeSys and
+other useful utilities such as telnet, nfs, and so on. 
+
+8) To get started with RTEMS/EPICS and to build development
+tools and BSP, I would recommend one to reference
+http://www.aps.anl.gov/epics/base/RTEMS/tutorial/
+in additional to the RTEMS document.
+
+
+IRQ
+===
+Shuchen Kate Feng  <feng1@bnl.gov>, Sept. 2, 2007
+
+As per implementation in shared PPC code,
+the BSPirqPrioTable[96] listed in irq_init.c is where the
+software developers can change the levels of priority
+for all the interrupts based on the need of their
+applications.  The IRQs can be eanbled dynamically via the
+BSP_enable_pic_irq(), or disbaled dynamically via the
+BSP_disable_pic_irq(). 
+
+
+Support for run-time priority setup could be
+added easily, but there is no action taken yet due to concerns
+over computer security at VME CPU level. 
+
+
+The software developers are forbidden to setup picIsrTable[],
+as it is a powerful engine for the BSP to find the pending
+highest priority IRQ at run time. It ensures the fastest/faster
+interrupt service to the highest/higher priority IRQ, if pending.
+
+
+VME
+===
+Written by S. Kate Feng <feng1@bnl.gov> , 7/22/04
+
+Some VME modules(e.g. Oms58 motor controller) might require a PCI sync
+command following the out_xx() function (e.g. out_be16()) if mvme5500 is
+used as the SBC.  The mechanism is a hardware hook to help software
+synchronize between the CPU and PCI activities. The PCI sync is
+implemented in pci/pci_interface.c. For more example of the usage,one
+can reference the drvOMS58.cc file that is posted in synAppRTEMS of 
+http://www.nsls.bnl.gov/organization/UserScience/Detectors/Software/Default.htm.
+
+In spite of the PCI sync overhead for the Oms58 motor controller, I do
+not see the runtime performance of RTEMS-mvme5500 being compromised as
+compared with that of RTEMS-mvme2307.  For example, it takes the same
+time to run motor_init() of synAppRTEMS for 48 motor initializations
+running either RTEMS-mvme2307 or RTEMS-mvme5500.
