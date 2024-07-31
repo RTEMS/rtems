@@ -3,13 +3,13 @@
 /**
  * @file
  *
- * @ingroup shared_tod_mcp7940m_rtc
+ * @ingroup shared_tod_abeoz9_rtc
  *
- * @brief This file provides the interfaces of @ref shared_tod_mcp7940m_rtc.
+ * @brief This file provides the interfaces of @ref shared_tod_abeoz9_rtc.
  */
 
 /*
- * Copyright (C) 2023 embedded brains GmbH & Co. KG
+ * Copyright (C) 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,8 +33,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBCHIP_MCP7940M_RTC_H
-#define LIBCHIP_MCP7940M_RTC_H
+#ifndef LIBCHIP_ABEOZ9_RTC_H
+#define LIBCHIP_ABEOZ9_RTC_H
 
 #include <libchip/i2c-rtc.h>
 
@@ -43,48 +43,44 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup shared_tod_mcp7940m_rtc
+ * @defgroup shared_tod_abeoz9_rtc
  *
  * @ingroup shared_tod_i2c_rtc
  *
- * @brief RTC driver for the MCP7940M
+ * @brief RTC driver for the Abracon EOZ9 series.
  *
  * To use this driver, use the following initialization:
  *
  * Define a context for the RTC somewhere:
  *
- *   static struct mcp7940m_rtc rtc_ctx =
- *     MCP7940M_RTC_INITIALIZER("/dev/i2c-1", 0x6F, true);
+ *   static struct abeoz9_rtc rtc_ctx =
+ *     ABEOZ9_RTC_INITIALIZER("/dev/i2c-1", 0x56);
  *
  * Then you can use the following for the RTC_Table:
  *
- *   MCP7940M_RTC_TBL_ENTRY("/dev/rtc", &rtc_ctx)
+ *   ABEOZ9_RTC_TBL_ENTRY("/dev/rtc", &rtc_ctx)
  *
  * @{
  */
 
-struct mcp7940m_rtc {
+struct abeoz9_rtc {
   struct i2c_rtc_base base;
-
-  /** True if a crystal should be used. False if an oscillator is connected. */
-  bool crystal;
 };
 
 /** Hardware init. Used internally. */
-int mcp7940m_hw_init(struct i2c_rtc_base *base);
+int abeoz9_rtc_hw_init(struct i2c_rtc_base *base);
 
-#define MCP7940M_RTC_INITIALIZER(i2c_path, i2c_address, has_crystal) { \
+#define ABEOZ9_RTC_INITIALIZER(i2c_path, i2c_address) { \
     .base = I2C_RTC_INITIALIZER( \
         i2c_path, \
         i2c_address, \
-        0, \
-        "mcp7940", \
-        mcp7940m_hw_init), \
-    .crystal = has_crystal, \
+        8, \
+        "abeoz9", \
+        abeoz9_rtc_hw_init), \
   }
 
-#define MCP7940M_RTC_TBL_ENTRY(dev_name, mcp7940m_rtc_ctx) \
-          I2C_RTC_TBL_ENTRY(dev_name, mcp7940m_rtc_ctx)
+#define ABEOZ9_RTC_TBL_ENTRY(dev_name, abeoz9_rtc_ctx) \
+          I2C_RTC_TBL_ENTRY(dev_name, abeoz9_rtc_ctx)
 
 /** @} */
 
@@ -92,4 +88,4 @@ int mcp7940m_hw_init(struct i2c_rtc_base *base);
 }
 #endif /* __cplusplus */
 
-#endif /* LIBCHIP_MCP7940M_RTC_H */
+#endif /* LIBCHIP_ABEOZ9_RTC_H */

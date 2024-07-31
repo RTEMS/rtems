@@ -30,12 +30,14 @@ install:
   - bsps/include/ofw/ofw_compat.h
 - destination: ${BSP_INCLUDEDIR}/libchip
   source:
+  - bsps/include/libchip/abeoz9-rtc.h
   - bsps/include/libchip/ata.h
   - bsps/include/libchip/ata_internal.h
   - bsps/include/libchip/disp_hcms29xx.h
   - bsps/include/libchip/ds1375-rtc.h
   - bsps/include/libchip/i2c-2b-eeprom.h
   - bsps/include/libchip/i2c-ds1621.h
+  - bsps/include/libchip/i2c-rtc.h
   - bsps/include/libchip/i2c-sc620.h
   - bsps/include/libchip/icm7170.h
   - bsps/include/libchip/ide_ctrl.h
@@ -83,7 +85,9 @@ source:
 - bsps/shared/dev/ide/ata.c
 - bsps/shared/dev/ide/ata_util.c
 - bsps/shared/dev/ide/ide_controller.c
+- bsps/shared/dev/rtc/abeoz9.c
 - bsps/shared/dev/rtc/ds1375.c
+- bsps/shared/dev/rtc/i2c-rtc.c
 - bsps/shared/dev/rtc/icm7170.c
 - bsps/shared/dev/rtc/icm7170_reg.c
 - bsps/shared/dev/rtc/icm7170_reg2.c
