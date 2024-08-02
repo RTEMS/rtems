@@ -265,7 +265,7 @@ rtems_rtl_parse_arg_index (const char  opt,
     /*
      * Is this an option and does it match what we are looking for?
      */
-    if (argv[arg][0] == '-' && argv[arg][1] == opt && arg < argc)
+    if (arg < argc && argv[arg][0] == '-' && argv[arg][1] == opt)
       return arg + 1;
   }
   return -1;
