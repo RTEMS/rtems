@@ -862,6 +862,13 @@ fat_file_truncate(
         fat_fd->map.disk_cln = new_last_cln;
         fat_fd->map.last_cln = new_last_cln;
     }
+    else
+    {
+        fat_file_set_first_cluster_num(fat_fd, FAT_GENFAT_FREE);
+        fat_fd->map.file_cln = FAT_UNDEFINED_VALUE;
+        fat_fd->map.disk_cln = FAT_UNDEFINED_VALUE;
+        fat_fd->map.last_cln = FAT_UNDEFINED_VALUE;
+    }
     return RC_OK;
 }
 
