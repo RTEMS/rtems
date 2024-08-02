@@ -71,6 +71,7 @@ void _Objects_Initialize_information(
   /*
    *  Register this Object Class in the Object Information Table.
    */
+  _Assert( _Objects_Get_API( maximum_id ) <= OBJECTS_APIS_LAST );
   _Objects_Information_table[ _Objects_Get_API( maximum_id ) ]
     [ _Objects_Get_class( maximum_id ) ] = information;
 
