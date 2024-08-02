@@ -244,7 +244,7 @@ static rtems_status_code disp_hcms29xx_copy_font
 	  byte = src->latin1[glyph_idx]->bitmap[bcnt];
 	}
 	if (shift_cnt < 0) {
-	  byte = byte >> shift_cnt;
+	  byte = byte << -shift_cnt;
 	}
 	else if (shift_cnt > 0) {
 	  byte = byte >> shift_cnt;
