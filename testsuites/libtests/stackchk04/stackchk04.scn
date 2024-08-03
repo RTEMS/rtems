@@ -1,0 +1,24 @@
+*** TEST STACKCHK04 ***
+TA1  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA2  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA3  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA1  - rtems_clock_get_tod - 09:00:05   12/31/1988
+TA2  - rtems_clock_get_tod - 09:00:10   12/31/1988
+TA1  - rtems_clock_get_tod - 09:00:10   12/31/1988
+TA3  - rtems_clock_get_tod - 09:00:15   12/31/1988
+                             STACK USAGE BY THREAD
+ID         NAME                  LOW        HIGH       CURRENT     AVAIL   USED
+0x09010001 IDLE                  0x02015318 0x02016307 0x02016068   4080    564
+0x0a010002 TA1                   0x02017378 0x0201a367 0x0201a0e0  12272   1300
+0x0a010003 TA2                   0x0201a3a8 0x0201d397 0x0201d110  12272    716
+0x0a010004 TA3                   0x0201d3d8 0x020203c7 0x02020140  12272    716
+0x00000000 Interrupt Stack       0x02012c90 0x02013c7f 0x00000000   4080    548
+TA1  - rtems_clock_get_tod - 09:00:15   12/31/1988
+BLOWN STACK!!!
+task control block: 0x020123e0
+task ID: 0x0a010002
+task name: 0x54413120
+task name string: TA1 
+task stack area (12288 Bytes): 0x02017368 .. 0x0201a368
+damaged pattern area (16 Bytes): 0x02017368 .. 0x02017378
+*** END OF TEST STACKCHK04 ***

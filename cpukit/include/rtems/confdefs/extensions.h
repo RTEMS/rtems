@@ -96,7 +96,7 @@
 
   #else
     const Stack_checker_Reporter_handler Stack_checker_Reporter =
-      rtems_stack_checker_reporter_print_details; 
+      rtems_stack_checker_reporter_quiet; 
 
   #endif
 #endif

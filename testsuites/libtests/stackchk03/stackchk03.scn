@@ -1,3 +1,18 @@
 *** TEST STACKCHK03 ***
-custom stack check report!
+TA1  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA2  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA3  - rtems_clock_get_tod - 09:00:00   12/31/1988
+TA1  - rtems_clock_get_tod - 09:00:05   12/31/1988
+TA2  - rtems_clock_get_tod - 09:00:10   12/31/1988
+TA1  - rtems_clock_get_tod - 09:00:10   12/31/1988
+TA3  - rtems_clock_get_tod - 09:00:15   12/31/1988
+                             STACK USAGE BY THREAD
+ID         NAME                  LOW        HIGH       CURRENT     AVAIL   USED
+0x09010001 IDLE                  0x020151d8 0x020161c7 0x02015f28   4080    564
+0x0a010002 TA1                   0x02017238 0x0201a227 0x02019fa0  12272   1300
+0x0a010003 TA2                   0x0201a268 0x0201d257 0x0201cfd0  12272    716
+0x0a010004 TA3                   0x0201d298 0x02020287 0x02020000  12272    716
+0x00000000 Interrupt Stack       0x02012b50 0x02013b3f 0x00000000   4080    548
+TA1  - rtems_clock_get_tod - 09:00:15   12/31/1988
+RTEMS STACKCHK03 CUSTOM REPORTER !!!
 *** END OF TEST STACKCHK03 ***

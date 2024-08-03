@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2024 Mohamed Hassan <muhammad.hamdy.hassan@gmail.com>
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/libtests/stackchk/blow.c
+- testsuites/libtests/stackchk/init.c
+- testsuites/libtests/stackchk/task1.c
+- testsuites/libtests/stackchk04/config.c
+stlib: []
+target: testsuites/libtests/stackchk04.exe
+type: build
+use-after: []
+use-before: []
