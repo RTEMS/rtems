@@ -14,7 +14,7 @@ install:
   - make/lib.cfg
   - make/host.cfg
   - make/directory.cfg
-  - make/README
+  - make/README.md
 - destination: ${PREFIX}/share/rtems${__RTEMS_MAJOR__}/make/compilers
   source:
   - make/compilers/gcc-target-default.cfg
