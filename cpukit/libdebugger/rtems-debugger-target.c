@@ -217,22 +217,31 @@ rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr, DB_UINT kind)
     if (loc == swbreaks[i].address) {
       size_t remaining;
       if (!insert) {
-        if (target->breakpoint_size > 4)
-          memcpy(loc, swbreaks[i].contents, target->breakpoint_size);
-        else {
-          switch (target->breakpoint_size) {
-          case 4:
-            loc[3] = swbreaks[i].contents[3];
-          case 3:
-            loc[2] = swbreaks[i].contents[2];
-          case 2:
-            loc[1] = swbreaks[i].contents[1];
-          case 1:
-            loc[0] = swbreaks[i].contents[0];
-            break;
+        if (target->code_writer != NULL) {
+          r = target->code_writer(loc,
+                                  &swbreaks[i].contents[0],
+                                  target->breakpoint_size);
+          if (r < 0) {
+            return r;
           }
+        } else {
+          if (target->breakpoint_size > 4) {
+            memcpy(loc, &swbreaks[i].contents[0], target->breakpoint_size);
+          } else {
+            switch (target->breakpoint_size) {
+            case 4:
+              loc[3] = swbreaks[i].contents[3];
+            case 3:
+              loc[2] = swbreaks[i].contents[2];
+            case 2:
+              loc[1] = swbreaks[i].contents[1];
+            case 1:
+              loc[0] = swbreaks[i].contents[0];
+              break;
+            }
+          }
+          rtems_debugger_target_cache_sync(&swbreaks[i]);
         }
-        rtems_debugger_target_cache_sync(&swbreaks[i]);
         --target->swbreaks.level;
         remaining = (target->swbreaks.level - i) * swbreak_size;
         memmove(&swbreaks[i], &swbreaks[i + 1], remaining);
@@ -287,27 +296,36 @@ rtems_debugger_target_swbreak_insert(void)
       uint8_t* loc = swbreaks[i].address;
       if (rtems_debugger_verbose())
         rtems_debugger_printf("rtems-db:  bp:  in: %p\n", swbreaks[i].address);
-      if (target->breakpoint_size > 4)
-        memcpy(loc, &target->breakpoint[0], target->breakpoint_size);
-      else {
-        if (rtems_debugger_verbose())
-          rtems_debugger_printf("rtems-db:  bp:  in: %p %p %d %d %d\n",
-                                loc, &target->breakpoint[0],
-                                (int) target->breakpoint_size,
-                                (int) i, (int) target->swbreaks.level);
-        switch (target->breakpoint_size) {
-        case 4:
-          loc[3] = target->breakpoint[3];
-        case 3:
-          loc[2] = target->breakpoint[2];
-        case 2:
-          loc[1] = target->breakpoint[1];
-        case 1:
-          loc[0] = target->breakpoint[0];
-          break;
+      if (target->code_writer != NULL) {
+        r = target->code_writer(loc,
+                                &target->breakpoint[0],
+                                target->breakpoint_size);
+        if (r < 0) {
+          return r;
         }
+      } else {
+        if (target->breakpoint_size > 4) {
+          memcpy(loc, &target->breakpoint[0], target->breakpoint_size);
+        } else {
+          if (rtems_debugger_verbose())
+            rtems_debugger_printf("rtems-db:  bp:  in: %p %p %d %d %d\n",
+                                  loc, &target->breakpoint[0],
+                                  (int) target->breakpoint_size,
+                                  (int) i, (int) target->swbreaks.level);
+          switch (target->breakpoint_size) {
+          case 4:
+            loc[3] = target->breakpoint[3];
+          case 3:
+            loc[2] = target->breakpoint[2];
+          case 2:
+            loc[1] = target->breakpoint[1];
+          case 1:
+            loc[0] = target->breakpoint[0];
+            break;
+          }
+        }
+        r = rtems_debugger_target_cache_sync(&swbreaks[i]);
       }
-      r = rtems_debugger_target_cache_sync(&swbreaks[i]);
     }
   }
   return r;
@@ -328,22 +346,29 @@ rtems_debugger_target_swbreak_remove(void)
       uint8_t* contents = &swbreaks[i].contents[0];
       if (rtems_debugger_verbose())
         rtems_debugger_printf("rtems-db:  bp: out: %p\n", swbreaks[i].address);
-      if (target->breakpoint_size > 4)
-        memcpy(loc, contents, target->breakpoint_size);
-      else {
-        switch (target->breakpoint_size) {
-        case 4:
-          loc[3] = contents[3];
-        case 3:
-          loc[2] = contents[2];
-        case 2:
-          loc[1] = contents[1];
-        case 1:
-          loc[0] = contents[0];
-          break;
+      if (target->code_writer != NULL) {
+        r = target->code_writer(loc, contents, target->breakpoint_size);
+        if (r < 0) {
+          return r;
         }
+      } else {
+        if (target->breakpoint_size > 4) {
+          memcpy(loc, contents, target->breakpoint_size);
+        } else {
+          switch (target->breakpoint_size) {
+          case 4:
+            loc[3] = contents[3];
+          case 3:
+            loc[2] = contents[2];
+          case 2:
+            loc[1] = contents[1];
+          case 1:
+            loc[0] = contents[0];
+            break;
+          }
+        }
+        r = rtems_debugger_target_cache_sync(&swbreaks[i]);
       }
-      r = rtems_debugger_target_cache_sync(&swbreaks[i]);
     }
   }
   return r;

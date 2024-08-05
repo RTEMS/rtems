@@ -92,6 +92,15 @@ typedef struct rtems_debugger_target_swbreak {
 } rtems_debugger_target_swbreak;
 
 /**
+ * Target memory update handler. If set this is called to modify
+ * the executable memory. It may not be possible to make it
+ * read/write.
+ */
+typedef int (*rtems_debugger_target_code_writer)(void*       address,
+                                                 const void* data,
+                                                 size_t      size);
+
+/**
  * The target data.
  *
  * reg_offset: Table of size_t offset of a register in the register
@@ -99,16 +108,17 @@ typedef struct rtems_debugger_target_swbreak {
  *             the last entry is the size of the register table.
  */
 typedef struct rtems_debugger_target {
-  int                  capabilities;     /*<< The capabilities to report. */
-  size_t               reg_num;          /*<< The number of registers. */
-  const size_t*        reg_offset;       /*<< The reg offsettable, len = reg_num + 1. */
-  const uint8_t*       breakpoint;       /*<< The breakpoint instruction(s). */
-  size_t               breakpoint_size;  /*<< The breakpoint size. */
-  rtems_debugger_block swbreaks;         /*<< The software breakpoint block. */
-  bool                 memory_access;    /*<< Accessing target memory. */
-  jmp_buf              access_return;    /*<< Return from an access fault. */
-  uintptr_t            step_bp_address;  /*<< Stepping break point address */
-  rtems_id             step_tid;         /*<< Stepping task id */
+  int                               capabilities;     /*<< The capabilities to report. */
+  size_t                            reg_num;          /*<< The number of registers. */
+  const size_t*                     reg_offset;       /*<< The reg offsettable, len = reg_num + 1. */
+  const uint8_t*                    breakpoint;       /*<< The breakpoint instruction(s). */
+  size_t                            breakpoint_size;  /*<< The breakpoint size. */
+  rtems_debugger_block              swbreaks;         /*<< The software breakpoint block. */
+  rtems_debugger_target_code_writer code_writer;      /*<< If set use to write to code memory */
+  bool                              memory_access;    /*<< Accessing target memory. */
+  jmp_buf                           access_return;    /*<< Return from an access fault. */
+  uintptr_t                         step_bp_address;  /*<< Stepping break point address */
+  rtems_id                          step_tid;         /*<< Stepping task id */
 
 } rtems_debugger_target;
 
