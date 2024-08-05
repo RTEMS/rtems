@@ -1,5 +1,7 @@
-M68040FPSP -- Motorola 68040 floating point support package
------------------------------------------------------------
+M68040FPSP Floating Point
+=========================
+
+Motorola 68040 floating point support package
 
 Modified for RTEMS by Eric Norum (eric@norum.ca)
 
@@ -8,6 +10,7 @@ To include these routines in your application call
 	M68KFPSPInstallExceptionHandlers ();
 
 before performing any floating point operations.
+
 
 Acknowledgement
 ---------------
@@ -36,5 +39,3 @@ the description from that page:
 From this page one may download the original source code.  Inline with
 the first sentence of the second paragraph, we have integrated it with
 RTEMS.
-
-

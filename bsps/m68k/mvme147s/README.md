@@ -1,4 +1,5 @@
-Notes about the MVME147S bsp
+MVME147S
+========
 
 MVME147 port for TNI - Telecom Bretagne
 by Dominique LE CAMPION (Dominique.LECAMPION@enst-bretagne.fr)
@@ -11,8 +12,8 @@ are slight differences in the VMEchips used in the MVME147S and
 the MVME147 that should prevent the shmsupport and the startup
 code from running on a MVME147.
 
-Summary of the modifications that were made:
-
+Summary
+-------
  * include
  
    - bsp.h 
@@ -73,13 +74,13 @@ Summary of the modifications that were made:
    - unchanged
 
 
-To be done:
-
+TODO
+----
  * update the overheads in coverhead.h 
 
  * add support for serial ports 2,3 and 4.
 
-Other notes:
 
+Other notes
+-----------
  * All the timing tests and sp tests have been run
-

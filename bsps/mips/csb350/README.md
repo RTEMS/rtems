@@ -1,6 +1,5 @@
-#
-#  README
-#
+CSB350
+======
 
 BSP for the Cogent CSB350 Au1100 based board
 

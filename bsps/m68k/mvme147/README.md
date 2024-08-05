@@ -1,4 +1,5 @@
-Notes about the MVME147 bsp
+MVME147
+=======
 
 MVME147 port for TNI - Telecom Bretagne
 by Dominique LE CAMPION (Dominique.LECAMPION@enst-bretagne.fr)
@@ -7,8 +8,8 @@ May 1996
 
 This bsp is essentially based on the mvme136 bsp.
 
-Summary of the modifications that were made:
-
+Summary
+-------
  * include
  
    - bsp.h 
@@ -68,8 +69,9 @@ Other notes:
 
  * All the timing tests and sp tests have been run.
 
-Future work:
 
+Future work
+-----------
  * Add gdb serial remote support.
 
  * Shared memory support (I don't really need it, but I can do

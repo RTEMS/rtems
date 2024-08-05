@@ -1,3 +1,5 @@
+MVME167
+=======
 This is a README file for the MVME167 port of RTEMS 4.5.0.
 
 Please send any comments, improvements, or bug reports to:
@@ -113,10 +115,12 @@ RTEMS application.
 
 Console and printk port choices:
 
+```
   0 - /dev/tty0, Serial Port 1/Console on the MVME712M.
   1 - /dev/tty1, Serial Port 2/TTY01 on the MVME712M.
   2 - /dev/tty2, Serial Port 3 on the MVME712M.
   3 - /dev/tty3, Serial Port 4 on the MVME712M.
+```
 
 Setting the RTEMS console to port 0 when interrupt-driven I/O is specified
 will prevent 167-Bug from using that port.
@@ -430,6 +434,4 @@ Single processor tests:  All tests passed, except the following ones:
                          
 Multi-processort tests:  not applicable -- No MPCI layer yet.
 
-
-Timing tests: See rtems/c/src/lib/libbsp/m68k/mvme167/times
-  
+Timing tests: See `rtems/c/src/lib/libbsp/m68k/mvme167/times`
