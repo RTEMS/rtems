@@ -13,6 +13,7 @@
 *.rst
 *.txt
 
+
 # CPUKit
 ########
 
@@ -35,7 +36,6 @@
 /cpukit/libstdthreads
 
 
-
 # Architectures
 ###############
 
@@ -46,6 +46,10 @@
 /cpukit/libdebugger/rtems-debugger-aarch64.v
 /cpukit/libdl/rtl-mdreloc-aarch64.c
 /spec/build/cpukit/*aarch64.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch ARM] @approvers/arch/arm
@@ -59,6 +63,10 @@
 /cpukit/libdebugger/rtems-debugger-arm.c
 /cpukit/libdl/*arm*
 /spec/build/cpukit/*arm.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch Blackfin] @approvers/arch/bfin
@@ -67,6 +75,10 @@
 /spec/build/bsps/bfin/
 /cpukit/libdl/rtl-mdreloc-bfin.c
 /spec/build/cpukit/cpubfin.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch i386] @approvers/arch/i386
@@ -76,6 +88,10 @@
 /cpukit/libdebugger/rtems-debugger-i386.c
 /cpukit/libdl/rtl-mdreloc-i386.c
 /spec/build/cpukit/*i386*
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch LatticeMico32] @approvers/arch/lm32
@@ -84,6 +100,10 @@
 /spec/build/bsps/lm32/
 /cpukit/libdl/rtl-mdreloc-lm32.c
 /spec/build/cpukit/cpulm32.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch Motorola 68000] @approvers/arch/m68k
@@ -92,6 +112,10 @@
 /spec/build/bsps/m68k/
 /cpukit/libdl/rtl-mdreloc-m68k.c
 /spec/build/cpukit/*m68k*
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch MicroBlaze] @approvers/arch/microblaze
@@ -102,6 +126,10 @@
 /cpukit/libdebugger/rtems-debugger-microblaze.c
 /cpukit/libdl/rtl-mdreloc-microblaze.c
 /spec/build/cpukit/*microblaze*
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch MIPS] @approvers/arch/mips
@@ -110,6 +138,10 @@
 /spec/build/bsps/mips/
 /cpukit/libdl/rtl-mdreloc-mips.c
 /spec/build/cpukit/*mips.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch Moxie] @approvers/arch/moxie
@@ -118,6 +150,10 @@
 /spec/build/bsps/moxie/
 /cpukit/libdl/rtl-mdreloc-moxie.c
 /spec/build/cpukit/*moxie.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch Nios II] @approvers/arch/nios2
@@ -125,6 +161,10 @@
 /cpukit/score/cpu/nios2/
 /spec/build/bsps/nios2/
 /spec/build/cpukit/*nios2.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch OpenRISC 1000] @approvers/arch/or1k
@@ -132,6 +172,10 @@
 /cpukit/score/cpu/or1k/
 /spec/build/bsps/or1k/
 /spec/build/cpukit/*or1k.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch PowerPC] @approvers/arch/powerpc
@@ -140,6 +184,10 @@
 /spec/build/bsps/powerpc/
 /cpukit/libdl/rtl-mdreloc-powerpc.c
 /spec/build/cpukit/*powerpc.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch RISC-V] @approvers/arch/risc-v
@@ -148,6 +196,10 @@
 /spec/build/bsps/riscv
 /cpukit/libdl/rtl-mdreloc-riscv.c
 /spec/build/cpukit/*riscv.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch SuperH] @approvers/arch/superh
@@ -155,6 +207,10 @@
 /cpukit/score/cpu/sh/
 /spec/build/bsps/sh/
 /spec/build/cpukit/cpush.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch SPARC] @approvers/arch/sparc
@@ -165,6 +221,10 @@
 /spec/build/cpukit/objdlsparc.yml
 /spec/build/testsuites/validation/bsps/*-sparc-*
 /testsuites/validation/bsps/*-sparc-*
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch SPARC64] @approvers/arch/sparc64
@@ -172,6 +232,10 @@
 /cpukit/score/cpu/sparc64/
 /spec/build/bsps/sparc64/
 /spec/build/cpukit/*sparc64.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch V850] @approvers/arch/v850
@@ -180,6 +244,10 @@
 /spec/build/bsps/v850/
 /cpukit/libdl/rtl-mdreloc-v850.c
 /spec/build/cpukit/*v850.yml
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
 
 
 [Arch X86_64] @approvers/arch/x86_64
@@ -187,4 +255,7 @@
 /cpukit/score/cpu/x86_64/
 /spec/build/bsps/x86_64/
 /spec/build/cpukit/*x8664.yml
-
+*/README  @approvers/docs
+*.md  @approvers/docs
+*.rst  @approvers/docs
+*.txt  @approvers/docs
