@@ -11,7 +11,7 @@
 /*
  *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
  * 
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2011, 2024.
  *  On-Line Applications Research Corporation (OAR).
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -46,6 +46,16 @@
 #include <rtems/posix/aio_misc.h>
 #include <rtems/seterr.h>
 
+/*
+ * Coverity 1616108 reported that there is dead code based on checking
+ * both O_DSYNC and O_SYNC when they have the same value. Adding this
+ * #error so if they ever are not equal, we will immediately know and
+ * fix the code. It now assumes they are equal.
+ */
+#if (O_DSYNC != O_SYNC)
+  #error "Implementation assumes O_DSYNC == O_SYNC. Update if this changes."
+#endif
+
 int aio_fsync(
   int            op,
   struct aiocb  *aiocbp
@@ -57,7 +67,10 @@ int aio_fsync(
   if ( aiocbp == NULL )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  if ( op != O_SYNC && op != O_DSYNC )
+  /*
+   * If O_SYNC != O_DSYNC, then this code needs to check for each individually.
+   */
+  if ( op != O_DSYNC )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( rtems_aio_check_sigevent( &aiocbp->aio_sigevent ) == 0 )
@@ -76,12 +89,11 @@ int aio_fsync(
   if ( req == NULL )
     rtems_set_errno_and_return_minus_one( EAGAIN );
 
+  /*
+   * If O_SYNC != O_DSYNC, then this code needs to check for each individually.
+   */
   req->aiocbp = aiocbp;
-  if ( op == O_SYNC ) {
-    req->op_type = AIO_OP_SYNC;
-  } else {
-    req->op_type = AIO_OP_DSYNC;
-  }
+  req->op_type = AIO_OP_SYNC;
   
   return rtems_aio_enqueue( req );
 }
