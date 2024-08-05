@@ -349,11 +349,8 @@ rtems_debugger_target_swbreak_remove(void)
   return r;
 }
 
-uintptr_t saved_break_address = 0;
-rtems_id saved_tid = 0;
-
 static rtems_debugger_target_exc_action
-soft_step_and_continue(CPU_Exception_frame* frame)
+rtems_debugger_soft_step_and_continue(CPU_Exception_frame* frame)
 {
   uintptr_t              break_address;
   rtems_debugger_target *target = rtems_debugger->target;
@@ -378,43 +375,57 @@ soft_step_and_continue(CPU_Exception_frame* frame)
     return rtems_debugger_target_exc_cascade;
   }
 
-  /* Remove the current breakpoint */
+  /*
+   * Remove the current breakpoint
+   */
   rtems_debugger_target_swbreak_control(
     false,
     break_address,
     target->breakpoint_size
   );
 
-  /* Save off thread ID and break address for later usage */
-  saved_tid = tid;
-  saved_break_address = break_address;
+  /*
+   * Save the thread ID and break address to recover after stepping
+   */
+  target->step_tid = tid;
+  target->step_bp_address = break_address;
 
-  /* Populate the fake rtems_debugger_thread */
+  /*
+   * Populate the fake rtems_debugger_thread
+   */
   fake_debugger_thread.flags |= RTEMS_DEBUGGER_THREAD_FLAG_STEP;
   fake_debugger_thread.frame = frame;
   target_printk("rtems-db: stepping to the next instruction\n");
   rtems_debugger_target_thread_stepping(&fake_debugger_thread);
 
-  /* rtems_debugger_unlock() not called until the step is resolved */
+  /*
+   * rtems_debugger_unlock() not called until the step is resolved
+   */
   return rtems_debugger_target_exc_step;
 }
 
 rtems_debugger_target_exc_action
 rtems_debugger_target_exception(CPU_Exception_frame* frame)
 {
-  Thread_Control* thread = _Thread_Get_executing();
-  const rtems_id  tid = thread->Object.id;
+  rtems_debugger_target *target = rtems_debugger->target;
+  Thread_Control*        thread = _Thread_Get_executing();
+  const rtems_id         tid = thread->Object.id;
 
-  /* Resolve outstanding step+continue */
-  if ( saved_break_address != 0 && tid == saved_tid ) {
+  /*
+   * Resolve outstanding step+continue
+   */
+  if (target->step_bp_address != 0 && target->step_tid == tid) {
     rtems_debugger_target_swbreak_control(
       true,
-      saved_break_address,
+      target->step_bp_address,
       rtems_debugger->target->breakpoint_size
     );
-    saved_break_address = saved_tid = 0;
+    target->step_bp_address = 0;
+    target->step_tid = 0;
 
-    /* Release the debugger lock now that the step+continue is complete */
+    /*
+     * Release the debugger lock now that the step+continue is complete
+     */
     target_printk("rtems-db: resuming after step\n");
     rtems_debugger_unlock();
     return rtems_debugger_target_exc_consumed;
@@ -524,8 +535,10 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
 
   target_printk("[} tid:%08" PRIx32 ": exception in interrupt context\n", tid);
 
-  /* soft_step_and_continue releases the debugger lock */
-  return soft_step_and_continue( frame );
+  /*
+   * Soft_step_and_continue releases the debugger lock
+   */
+  return rtems_debugger_soft_step_and_continue(frame);
 }
 
 void

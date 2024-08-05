@@ -107,6 +107,9 @@ typedef struct rtems_debugger_target {
   rtems_debugger_block swbreaks;         /*<< The software breakpoint block. */
   bool                 memory_access;    /*<< Accessing target memory. */
   jmp_buf              access_return;    /*<< Return from an access fault. */
+  uintptr_t            step_bp_address;  /*<< Stepping break point address */
+  rtems_id             step_tid;         /*<< Stepping task id */
+
 } rtems_debugger_target;
 
 /**
