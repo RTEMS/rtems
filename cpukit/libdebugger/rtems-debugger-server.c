@@ -1797,7 +1797,16 @@ rtems_debugger_session(void)
 
   if (rtems_debugger_server_flag(RTEMS_DEBUGGER_FLAG_RESET)) {
     rtems_debugger_printf("rtems-db: shutdown\n");
+    /*
+     * Wait a moment to let any disconnection protocol a transport has
+     * complete. The legacy stack needs this to close the connection
+     * to GDB and clean up.
+     */
     sleep(2);
+    /*
+     * No special exit code, the user will asked GDB to kill the
+     * target
+     */
     rtems_fatal_error_occurred(1122);
   }
 

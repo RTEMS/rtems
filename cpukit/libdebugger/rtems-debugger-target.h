@@ -92,9 +92,11 @@ typedef struct rtems_debugger_target_swbreak {
 } rtems_debugger_target_swbreak;
 
 /**
- * Target memory update handler. If set this is called to modify
- * the executable memory. It may not be possible to make it
- * read/write.
+ * Target executable memory update handler. If set the handler is
+ * called to modify the executable memory. The target's executable
+ * memory may not be directly writable. The handler is responsible for
+ * making sure the code update is ready to be executed, for example
+ * caches are flushed.
  */
 typedef int (*rtems_debugger_target_code_writer)(void*       address,
                                                  const void* data,

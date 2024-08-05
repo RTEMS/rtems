@@ -20,6 +20,12 @@ enabled-by:
   - not: bsps/arm/stm32f4
 - i386
 - microblaze
+- and:
+  - powerpc
+  - not: bsps/powerpc/mpc55xxevb
+  - not: bsps/powerpc/qoriq
+  - not: bsps/powerpc/ss555
+  - not: bsps/powerpc/t32mppc
 links: []
 name: BUILD_LIBDEBUGGER
 type: build

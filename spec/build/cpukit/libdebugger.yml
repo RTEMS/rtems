@@ -20,6 +20,8 @@ links:
   uid: objdbgi386
 - role: build-dependency
   uid: objdbgmicroblaze
+- role: build-dependency
+  uid: objdbpowerpc
 source:
 - cpukit/libdebugger/rtems-debugger-block.c
 - cpukit/libdebugger/rtems-debugger-bsp.c

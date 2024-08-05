@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2023 Contemporary Software (CS)
+cppflags: []
+cxxflags: []
+enabled-by:
+- powerpc
+includes: []
+install: []
+links: []
+source:
+- cpukit/libdebugger/rtems-debugger-powerpc.c
+type: build
