@@ -11,6 +11,12 @@ actions:
     - jffs2fspatheval
     - jffs2fspermission
     - jffs2fsrdwr
+    - jffs2fsrename
+    - jffs2fsrenameexisting
+    - jffs2fsrenamelongname
+    - jffs2fsrenamemaxlinks
+    - jffs2fsrenamepermexisting
+    - jffs2fsrmdirparent
     - jffs2fsscandir01
     - jffs2fssymlink
     - jffs2fstime
@@ -19,6 +25,12 @@ actions:
     - jffs2nandfspatheval
     - jffs2nandfspermission
     - jffs2nandfsrdwr
+    - jffs2nandfsrename
+    - jffs2nandfsrenameexisting
+    - jffs2nandfsrenamelongname
+    - jffs2nandfsrenamemaxlinks
+    - jffs2nandfsrenamepermexisting
+    - jffs2nandfsrmdirparent
     - jffs2nandfsscandir01
     - jffs2nandfssymlink
     - jffs2nandfstime

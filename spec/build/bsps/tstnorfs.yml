@@ -11,6 +11,11 @@ actions:
     - mrfsfspermission
     - mrfsfsrdwr
     - mrfsfsrename
+    - mrfsfsrenameexisting
+    - mrfsfsrenamelongname
+    - mrfsfsrenamemaxlinks
+    - mrfsfsrenamepermexisting
+    - mrfsfsrmdirparent
     - mrfsfsscandir01
     - mrfsfssymlink
     - mrfsfstime
