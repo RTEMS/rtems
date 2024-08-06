@@ -275,6 +275,7 @@ static void ThreadQueueDeadlock(
   T_eq_int( source, INTERNAL_ERROR_CORE );
   T_eq_int( code, INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK );
   SetFatalHandler( NULL, NULL );
+  _ISR_Set_level( 0 );
   longjmp( ctx->before_enqueue, 1 );
 }
 

@@ -55,6 +55,14 @@ void _Terminate(
 {
   ISR_Level level;
 
+  /*
+   * Make sure that interrupts don't interfere with the fatal error handling on
+   * this processor.  This reduces the likelihood to end up in a recursive
+   * fatal error handling sequence.
+   */
+  _ISR_Local_disable( level );
+  (void) level;
+
   _User_extensions_Fatal( the_source, the_error );
 
   /*
@@ -65,8 +73,6 @@ void _Terminate(
    *
    * The following code is only executed in badly configured applications.
    */
-  _ISR_Local_disable( level );
-  (void) level;
   _CPU_Thread_Idle_body( 0 );
 }
 

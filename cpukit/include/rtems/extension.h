@@ -133,7 +133,8 @@ rtems_status_code rtems_extension_delete( rtems_id id );
  *
  * @par Notes
  * @parblock
- * The fatal extensions are invoked in extension forward order.
+ * The fatal extensions are invoked in extension forward order and with
+ * maskable interrupts disabled.
  *
  * The fatal extension should be extremely careful with respect to the RTEMS
  * directives it calls.  Depending on the system termination source, the system

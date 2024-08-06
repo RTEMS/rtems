@@ -654,6 +654,7 @@ static void Fatal(
   ctx = arg;
   ++ctx->calls.fatal;
   T_assert_eq_int( ctx->calls.fatal, 1 );
+  _ISR_Set_level( 0 );
   longjmp( ctx->thread_dispatch_context, 1 );
 }
 
@@ -670,6 +671,7 @@ static void ResumeThreadDispatch(
 
   ctx = arg;
   SetFatalHandler( Fatal, ctx );
+  _ISR_Set_level( 0 );
   longjmp( ctx->thread_dispatch_context, 1 );
 }
 

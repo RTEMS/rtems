@@ -191,12 +191,16 @@ static void FatalExtension2(
   rtems_fatal_code   code
 )
 {
-  rtems_status_code sc;
+  rtems_status_code     sc;
+  rtems_interrupt_level level;
 
   FatalExtension( source, always_set_to_false, code, 2 );
 
+  _ISR_Set_level( 0 );
   sc = rtems_extension_delete( extension_ids[ 3 ] );
   T_quiet_rsc_success( sc );
+  rtems_interrupt_local_disable( level );
+  (void) level;
 }
 
 static void FatalExtension3(
@@ -223,12 +227,16 @@ static void FatalExtension5(
   rtems_fatal_code   code
 )
 {
-  rtems_status_code sc;
+  rtems_status_code     sc;
+  rtems_interrupt_level level;
 
   FatalExtension( source, always_set_to_false, code, 5 );
 
+  _ISR_Set_level( 0 );
   sc = rtems_extension_delete( extension_ids[ 5 ] );
   T_quiet_rsc_success( sc );
+  rtems_interrupt_local_disable( level );
+  (void) level;
 }
 
 static void FatalExtension6(
@@ -237,12 +245,16 @@ static void FatalExtension6(
   rtems_fatal_code   code
 )
 {
-  rtems_status_code sc;
+  rtems_status_code     sc;
+  rtems_interrupt_level level;
 
   FatalExtension( source, always_set_to_false, code, 6 );
 
+  _ISR_Set_level( 0 );
   sc = rtems_extension_delete( extension_ids[ 4 ] );
   T_quiet_rsc_success( sc );
+  rtems_interrupt_local_disable( level );
+  (void) level;
 }
 
 /**
@@ -254,6 +266,7 @@ static void ScoreInterrValTerminate_Action_0( void )
 {
   rtems_status_code      sc;
   rtems_extensions_table table;
+  uint32_t               test_case_isr_level;
 
   memset( &table, 0, sizeof( table ) );
 
@@ -297,6 +310,7 @@ static void ScoreInterrValTerminate_Action_0( void )
   );
   T_step_rsc_success( 4, sc );
 
+  test_case_isr_level = _ISR_Get_level();
   test_case_active = true;
 
   if ( setjmp( before_terminate ) == 0 ) {
@@ -392,15 +406,16 @@ static void ScoreInterrValTerminate_Action_0( void )
    * Check that maskable interrupts were enabled for the user extensions. Check
    * that the idle loop executes with maskable interrupts disabled.
    */
-  T_step_eq_u32( 35, extension_isr_level, 0 );
-  T_step_ne_u32( 36, idle_isr_level, 0 );
+  T_step_eq_u32( 35, test_case_isr_level, 0 );
+  T_step_ne_u32( 36, extension_isr_level, 0 );
+  T_step_ne_u32( 37, idle_isr_level, 0 );
 
   /*
    * Check that an idle loop executed after invocation of the user extensions.
    */
-  T_step_eq_uint( 37, idle_counter, 7 );
+  T_step_eq_uint( 38, idle_counter, 7 );
   T_step_eq_uint(
-    38,
+    39,
     _Atomic_Load_uint( &counter, ATOMIC_ORDER_RELAXED ),
     7
   );
@@ -411,7 +426,7 @@ static void ScoreInterrValTerminate_Action_0( void )
  */
 T_TEST_CASE( ScoreInterrValTerminate )
 {
-  T_plan( 39 );
+  T_plan( 40 );
 
   ScoreInterrValTerminate_Action_0();
 }

@@ -146,6 +146,7 @@ static void Fatal(
   ctx->source = source;
   ctx->code = code;
   _Atomic_Fetch_add_uint( &ctx->counter, 1, ATOMIC_ORDER_RELAXED );
+  _ISR_Set_level( 0 );
 }
 
 static void FatalTaskExit(

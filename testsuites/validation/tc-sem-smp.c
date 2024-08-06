@@ -163,6 +163,7 @@ static void BadEnqueueFatal(
 
   SetFatalHandler( NULL, NULL );
 
+  _ISR_Set_level( 0 );
   cpu_self = _Per_CPU_Get();
   _Thread_Dispatch_unnest( cpu_self );
   _Thread_Dispatch_unnest( cpu_self );
