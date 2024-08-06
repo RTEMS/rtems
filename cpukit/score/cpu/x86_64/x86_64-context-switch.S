@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2024 Matheus Pecoraro
  * Copyright (c) 2018.
  * Amaan Cheval <amaan.cheval@gmail.com>
  *
@@ -45,6 +46,7 @@ BEGIN_CODE
 
 .p2align  1
 PUBLIC(_CPU_Context_switch)
+PUBLIC(_CPU_Context_switch_no_return)
 
 /* save context argument */
 .set RUNCONTEXT_ARG,   REG_ARG0
@@ -52,37 +54,83 @@ PUBLIC(_CPU_Context_switch)
 .set HEIRCONTEXT_ARG,  REG_ARG1
 
 SYM(_CPU_Context_switch):
-  movq    RUNCONTEXT_ARG, rax  /* rax = running threads context */
+SYM(_CPU_Context_switch_no_return):
+  movq    RUNCONTEXT_ARG, rax   /* rax = running threads context */
+  GET_SELF_CPU_CONTROL_RCX      /* rcx = per CPU information */
 
   /* Fill up Context_Control struct */
   pushf
-  popq               (0 * CPU_SIZEOF_POINTER)(rax) /* pop rflags into context */
-  movq    rbx,       (1 * CPU_SIZEOF_POINTER)(rax)
-  movq    rsp,       (2 * CPU_SIZEOF_POINTER)(rax)
-  movq    rbp,       (3 * CPU_SIZEOF_POINTER)(rax)
-  movq    r12,       (4 * CPU_SIZEOF_POINTER)(rax)
-  movq    r13,       (5 * CPU_SIZEOF_POINTER)(rax)
-  movq    r14,       (6 * CPU_SIZEOF_POINTER)(rax)
-  movq    r15,       (7 * CPU_SIZEOF_POINTER)(rax)
+  popq               CPU_CONTEXT_CONTROL_EFLAGS(rax) /* pop rflags into context */
+  movq    rbx,       CPU_CONTEXT_CONTROL_RBX(rax)
+  movq    rsp,       CPU_CONTEXT_CONTROL_RSP(rax)
+  movq    rbp,       CPU_CONTEXT_CONTROL_RBP(rax)
+  movq    r12,       CPU_CONTEXT_CONTROL_R12(rax)
+  movq    r13,       CPU_CONTEXT_CONTROL_R13(rax)
+  movq    r14,       CPU_CONTEXT_CONTROL_R14(rax)
+  movq    r15,       CPU_CONTEXT_CONTROL_R15(rax)
 
+  movl    PER_CPU_ISR_DISPATCH_DISABLE(rcx), %edx
+  movl    %edx, CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE(rax)
+
+  movq    rax, r8              /* r8  = running threads context */
   movq    HEIRCONTEXT_ARG, rax /* rax = heir threads context */
 
-restore:
-  movq  (1 * CPU_SIZEOF_POINTER)(rax), rbx
-  movq  (2 * CPU_SIZEOF_POINTER)(rax), rsp
+#ifdef RTEMS_SMP
+  /*
+   * The executing thread no longer executes on this processor.  Switch
+   * the stack to the temporary interrupt stack of this processor.  Mark
+   * the context of the executing thread as not executing.
+   */
+  leaq    PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE(rcx), rsp
+  movw    $0, CPU_CONTEXT_CONTROL_IS_EXECUTING(r8)
+
+.check_is_executing:
+  lock btsw $0, CPU_CONTEXT_CONTROL_IS_EXECUTING(rax) /* Indicator in carry flag */
+  jnc       .restore
+
+.get_potential_new_heir:
+  /* We may have a new heir */
+
+  /* Read the executing and heir */
+  movq    PER_CPU_OFFSET_EXECUTING(rcx), r9
+  movq    PER_CPU_OFFSET_HEIR(rcx), r10
+
+  /*
+   * Update the executing only if necessary to avoid cache line
+   * monopolization.
+   */
+  cmpq    r9, r10
+  je      .check_is_executing
+
+  /* Calculate the heir context pointer */
+  addq    r10, rax
+  subq    r9, rax
+
+  /* Update the executing */
+  movq    r10, PER_CPU_OFFSET_EXECUTING(rcx)
+
+  jmp     .check_is_executing
+#endif
+
+.restore:
+  movq  CPU_CONTEXT_CONTROL_RBX(rax), rbx
+  movq  CPU_CONTEXT_CONTROL_RSP(rax), rsp
 
   /*
    * We need to load rflags after rsp to avoid an interrupt while the ISR stack
    * is still being used during the initialization process
    */
-  pushq (0 * CPU_SIZEOF_POINTER)(rax)       /* push rflags */
-  popf                                      /* restore rflags */
+  pushq CPU_CONTEXT_CONTROL_EFLAGS(rax)       /* push rflags */
+  popf                                        /* restore rflags */
 
-  movq  (3 * CPU_SIZEOF_POINTER)(rax), rbp
-  movq  (4 * CPU_SIZEOF_POINTER)(rax), r12
-  movq  (5 * CPU_SIZEOF_POINTER)(rax), r13
-  movq  (6 * CPU_SIZEOF_POINTER)(rax), r14
-  movq  (7 * CPU_SIZEOF_POINTER)(rax), r15
+  movq  CPU_CONTEXT_CONTROL_RBP(rax), rbp
+  movq  CPU_CONTEXT_CONTROL_R12(rax), r12
+  movq  CPU_CONTEXT_CONTROL_R13(rax), r13
+  movq  CPU_CONTEXT_CONTROL_R14(rax), r14
+  movq  CPU_CONTEXT_CONTROL_R15(rax), r15
+
+  movl  CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE(rax), %edx
+  movl  %edx, PER_CPU_ISR_DISPATCH_DISABLE(rcx)
 
   /* XXX: TLS - load GDT and refresh FS segment selector */
 
@@ -100,7 +148,8 @@ PUBLIC(_CPU_Context_restore)
 
 SYM(_CPU_Context_restore):
   movq      NEWCONTEXT_ARG, rax  /* rax = running threads context */
-  jmp       restore
+  GET_SELF_CPU_CONTROL_RCX       /* rcx = per CPU information */
+  jmp       .restore
 
 END_CODE
 END

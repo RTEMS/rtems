@@ -7,6 +7,7 @@
  */
 
 /*
+ * Copyright (C) 2024 Matheus Pecoraro
  * Copyright (c) 2018.
  * Amaan Cheval <amaan.cheval@gmail.com>
  *
@@ -61,6 +62,20 @@ extern "C" {
 #define CPU_EFLAGS_INTERRUPTS_ON  0x00003202
 #define CPU_EFLAGS_INTERRUPTS_OFF 0x00003002
 
+#define CPU_CONTEXT_CONTROL_EFLAGS 0
+
+#define CPU_CONTEXT_CONTROL_RBX CPU_CONTEXT_CONTROL_EFLAGS + 8
+#define CPU_CONTEXT_CONTROL_RSP CPU_CONTEXT_CONTROL_RBX + 8
+#define CPU_CONTEXT_CONTROL_RBP CPU_CONTEXT_CONTROL_RSP + 8
+#define CPU_CONTEXT_CONTROL_R12 CPU_CONTEXT_CONTROL_RBP + 8
+#define CPU_CONTEXT_CONTROL_R13 CPU_CONTEXT_CONTROL_R12 + 8
+#define CPU_CONTEXT_CONTROL_R14 CPU_CONTEXT_CONTROL_R13 + 8
+#define CPU_CONTEXT_CONTROL_R15 CPU_CONTEXT_CONTROL_R14 + 8
+
+#define CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE CPU_CONTEXT_CONTROL_R15 + 8
+
+#define CPU_CONTEXT_CONTROL_IS_EXECUTING CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE + 4
+
 #ifndef ASM
 
 typedef struct {
@@ -78,10 +93,12 @@ typedef struct {
   uint64_t r14;
   uint64_t r15;
 
+  uint32_t isr_dispatch_disable;
+
   // XXX: FS segment descriptor for TLS
 
 #ifdef RTEMS_SMP
-    volatile bool is_executing;
+  volatile uint16_t is_executing;
 #endif
 } Context_Control;
 
@@ -97,17 +114,41 @@ typedef struct {
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->rsp
 
+#endif /* !ASM */
+
+#define CPU_INTERRUPT_FRAME_SSE_STATE 0
+
+#define CPU_INTERRUPT_FRAME_RAX CPU_INTERRUPT_FRAME_SSE_STATE + 512
+#define CPU_INTERRUPT_FRAME_RCX CPU_INTERRUPT_FRAME_RAX + 8
+#define CPU_INTERRUPT_FRAME_RDX CPU_INTERRUPT_FRAME_RCX + 8
+#define CPU_INTERRUPT_FRAME_RSI CPU_INTERRUPT_FRAME_RDX + 8
+#define CPU_INTERRUPT_FRAME_R8  CPU_INTERRUPT_FRAME_RSI + 8
+#define CPU_INTERRUPT_FRAME_R9  CPU_INTERRUPT_FRAME_R8 + 8
+#define CPU_INTERRUPT_FRAME_R10 CPU_INTERRUPT_FRAME_R9 + 8
+#define CPU_INTERRUPT_FRAME_R11 CPU_INTERRUPT_FRAME_R10 + 8
+#define CPU_INTERRUPT_FRAME_RSP CPU_INTERRUPT_FRAME_R11 + 8
+
+#ifndef ASM
+
 /*
  * Caller-saved registers for interrupt frames
  */
 typedef struct {
-  /**
-   * @note: rdi is a caller-saved register too, but it's used in function calls
-   * and is hence saved separately on the stack;
-   *
-   * @see DISTINCT_INTERRUPT_ENTRY
-   * @see _ISR_Handler
-   */
+  /* Registers saved by CPU */
+  uint64_t error_code; /* only in some exceptions */
+  uint64_t rip;
+  uint64_t cs;
+  uint64_t rflags;
+  uint64_t rsp;
+  uint64_t ss;
+
+  /* Saved in rtems_irq_prologue_* */
+  uint64_t rdi;
+  uint64_t rbp;
+  uint64_t rbx;
+
+  /* SSE state saved by the FXSAVE instruction */
+  uint8_t sse_state[512];
 
   uint64_t rax;
   uint64_t rcx;
@@ -126,12 +167,12 @@ typedef struct {
    */
   uint64_t saved_rsp;
 
-  /* XXX:
-   * - FS segment selector for TLS
-   * - x87 status word?
-   * - MMX?
-   * - XMM?
+  /**
+   * The caller-saved registers needs to start in a 16-byte aligned position
+   * on the stack for the FXSAVE instruction. Therefore, we have 8 extra bytes
+   * in case the interrupt handler needs to align it.
    */
+  uint8_t padding[8];
 } CPU_Interrupt_frame;
 
 extern Context_Control_fp _CPU_Null_fp_context;
@@ -140,7 +181,16 @@ extern Context_Control_fp _CPU_Null_fp_context;
 
 #endif /* !ASM */
 
-#define CPU_INTERRUPT_FRAME_SIZE 72
+#define CPU_INTERRUPT_FRAME_X86_64_SIZE       48
+#define CPU_INTERRUPT_FRAME_PROLOGUE_SIZE     24
+#define CPU_INTERRUPT_FRAME_CALLER_SAVED_SIZE (512 + 72)
+#define CPU_INTERRUPT_FRAME_PADDING_SIZE      8
+
+#define CPU_INTERRUPT_FRAME_SIZE           \
+  (CPU_INTERRUPT_FRAME_X86_64_SIZE       + \
+   CPU_INTERRUPT_FRAME_PROLOGUE_SIZE     + \
+   CPU_INTERRUPT_FRAME_CALLER_SAVED_SIZE + \
+   CPU_INTERRUPT_FRAME_PADDING_SIZE)
 
 /*
  * When SMP is enabled, percpuasm.c has a similar assert, but since we use the
@@ -155,7 +205,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
-#define CPU_STACK_MINIMUM_SIZE          (1024*4)
+#define CPU_STACK_MINIMUM_SIZE          (1024*8)
 #define CPU_SIZEOF_POINTER         8
 #define CPU_ALIGNMENT              16
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
@@ -165,6 +215,9 @@ extern Context_Control_fp _CPU_Null_fp_context;
 /*
  *  ISR handler macros
  */
+
+/* ISR_Level is an uint32_t meaning we can't use RFLAGS to represent it */
+#define CPU_ISR_LEVEL_ENABLED 0
 
 #ifndef ASM
 
@@ -282,6 +335,11 @@ void _CPU_Context_switch(
   Context_Control  *heir
 );
 
+RTEMS_NO_RETURN void _CPU_Context_switch_no_return(
+  Context_Control *executing,
+  Context_Control *heir
+);
+
 RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
 typedef struct {
@@ -349,7 +407,7 @@ uint32_t _CPU_Counter_frequency( void );
 CPU_Counter_ticks _CPU_Counter_read( void );
 
 #ifdef RTEMS_SMP
-   *
+
   uint32_t _CPU_SMP_Initialize( void );
 
   bool _CPU_SMP_Start_processor( uint32_t cpu_index );
@@ -358,16 +416,14 @@ CPU_Counter_ticks _CPU_Counter_read( void );
 
   void _CPU_SMP_Prepare_start_multitasking( void );
 
-  static inline uint32_t _CPU_SMP_Get_current_processor( void )
-  {
-    return 123;
-  }
+  uint32_t _CPU_SMP_Get_current_processor( void );
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
 
   static inline bool _CPU_Context_Get_is_executing(
     const Context_Control *context
   )
+  {
     return context->is_executing;
   }
 
@@ -376,6 +432,7 @@ CPU_Counter_ticks _CPU_Counter_read( void );
     bool is_executing
   )
   {
+    context->is_executing = is_executing;
   }
 
 #endif /* RTEMS_SMP */

@@ -40,6 +40,7 @@
 #endif
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/x86_64.h>
+#include <rtems/score/percpu.h>
 
 /**
  * @defgroup RTEMSScoreCPUx86-64ASM x86-64 Assembler Support
@@ -151,6 +152,53 @@
  */
 #define EXTERN(sym) .globl SYM (sym)
 
+#ifdef RTEMS_SMP
+/* REG32 must be the lower 32 bits of REG */
+.macro GET_CPU_INDEX REG REG32
+    .set LAPIC_ID,       0x20
+    .set LAPIC_ID_SHIFT, 24
+    movq amd64_lapic_base, \REG
+    movl LAPIC_ID(\REG), \REG32
+    shrq $LAPIC_ID_SHIFT, \REG                /* LAPIC_ID in REG */
+    movzbq amd64_lapic_to_cpu_map(\REG), \REG /* CPU ID in REG */
+.endm
+
+/* REG32 must be the lower 32 bits of REG */
+.macro GET_SELF_CPU_CONTROL REG REG32
+    GET_CPU_INDEX \REG \REG32
+    shlq $PER_CPU_CONTROL_SIZE_LOG2, \REG /* Calculate offset for CPU structure */
+    leaq _Per_CPU_Information(\REG), \REG /* Address of info for current CPU in REG */
+.endm
+#else
+.macro GET_CPU_INDEX REG REG32
+    movq $0, \REG
+.endm
+
+.macro GET_SELF_CPU_CONTROL REG REG32
+    leaq _Per_CPU_Information, \REG
+.endm
 #endif
+
+/* Couldn't find a better way to do this under the GNU as macro limitations */
+.macro GET_SELF_CPU_CONTROL_RAX
+    GET_SELF_CPU_CONTROL rax,%eax
+.endm
+.macro GET_SELF_CPU_CONTROL_RBX
+    GET_SELF_CPU_CONTROL rbx,%ebx
+.endm
+.macro GET_SELF_CPU_CONTROL_RCX
+    GET_SELF_CPU_CONTROL rcx,%ecx
+.endm
+.macro GET_SELF_CPU_CONTROL_RDX
+    GET_SELF_CPU_CONTROL rdx,%edx
+.endm
+.macro GET_SELF_CPU_CONTROL_RDI
+    GET_SELF_CPU_CONTROL rdi,%edi
+.endm
+.macro GET_SELF_CPU_CONTROL_RSI
+    GET_SELF_CPU_CONTROL rsi,%esi
+.endm
+
+#endif // _RTEMS_ASM_H
 
 /** @} */

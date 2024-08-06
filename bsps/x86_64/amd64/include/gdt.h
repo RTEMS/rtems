@@ -5,9 +5,7 @@
  *
  * @ingroup RTEMSBSPsX8664AMD64
  *
- * @ingroup RTEMSBSPsX8664AMD64EFI
- *
- * @brief BSP reset code
+ * @brief Global Descriptor Table
  */
 
 /*
@@ -35,30 +33,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <acpi/acpica/acpi.h>
-#include <bsp/bootcard.h>
+#ifndef GDT_H
+#define GDT_H
 
-#define KEYBOARD_CONTROLLER_PORT 0x64
-#define PULSE_RESET_LINE         0xFE
+#define GDT_CODE_SEG_OFFSET 0x8
+#define GDT_DATA_SEG_OFFSET 0x10
 
-void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
-{
-  (void) source;
-  (void) code;
+#ifndef ASM
+#include <rtems/score/basedefs.h>
 
-  /**
-   * It is possible that AcpiEnterSleepStatePrep causes a thread dispatch
-   * so we execute it with interrupts enabled
-   */
-  amd64_enable_interrupts();
-  ACPI_STATUS status = AcpiEnterSleepStatePrep(ACPI_STATE_S5);
-  amd64_disable_interrupts();
+#include <stdint.h>
 
-  if (status == AE_OK) {
-    AcpiEnterSleepState(ACPI_STATE_S5);
-  }
+typedef struct {
+    uint16_t limit_low;         /* Lower 16 bits of the limit */
+    uint16_t base_low;          /* Lower 16 bits of the base */
+    uint8_t  base_middle;       /* Next 8 bits of the base */
+    uint8_t  access;            /* Access flags */
+    uint8_t  gran_limit_middle; /* Granularity flags and upper 4 bits of the limit */
+    uint8_t  base_high;         /* Last 8 bits of the base */
+} RTEMS_PACKED gdt_entry;
 
-  /* Should be unreachable. As a fallback try the keyboard controller method */
-  outport_byte(KEYBOARD_CONTROLLER_PORT, PULSE_RESET_LINE);
-  RTEMS_UNREACHABLE();
-}
+typedef struct {
+    uint16_t size;
+    uint64_t addr;
+} RTEMS_PACKED gdt_desc;
+
+extern const gdt_desc amd64_gdt_descriptor;
+#endif // ASM
+
+#endif // GDT_H

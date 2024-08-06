@@ -27,6 +27,7 @@
  */
 
 #include <bspopts.h>
+#include <gdt.h>
 
 #ifdef BSP_MULTIBOOT_SUPPORT
 #include <multiboot2.h>
@@ -41,12 +42,31 @@ _start:
 	.cfi_startproc
         movq	%rsp, %rbp
 	/*
-	 * _ISR_Stack_area_end is aligned to CPU_INTERRUPT_STACK_ALIGNMENT (64 bits)
-	 * by compiler directive at /cpukit/include/rtems/confdefs/percpu.h
+	 * _ISR_Stack_size is aligned to CPU_INTERRUPT_STACK_ALIGNMENT (64 bits)
+	 * by compiler directive at /cpukit/include/rtems/confdefs/percpu.h.
 	 * No reference will occur beyond the stack region since the call
-	 * instruction will decrement the %rsp and then save the value of %rip
+	 * instruction will decrement the %rsp and then save the value of %rip.
 	 */
-	movabsq	$_ISR_Stack_area_end, %rsp
+	movabsq	$_ISR_Stack_area_begin, %rsp
+        addq $_ISR_Stack_size, %rsp
+
+#ifndef BSP_USE_EFI_BOOT_SERVICES
+        /* Use our own GDT instead of the one set up by UEFI */
+        lgdt amd64_gdt_descriptor
+
+        /* Load data segment registers */
+        movw $GDT_DATA_SEG_OFFSET, %ax
+        movw %ax, %ds
+        movw %ax, %es
+        movw %ax, %ss
+
+        /* Load code segment register */
+        pushq $GDT_CODE_SEG_OFFSET
+        pushq $after_load_gdt
+        retfq
+
+after_load_gdt:
+#endif
 
 #ifndef BSP_MULTIBOOT_SUPPORT
         /**

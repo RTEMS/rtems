@@ -34,13 +34,13 @@
  * SUCH DAMAGE.
  */
 
-#include <assert.h>
 #include <acpi/acpi.h>
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <libcpu/page.h>
 #include <bsp/irq-generic.h>
 #include <multiboot2impl.h>
+#include <rtems/score/assert.h>
 
 #if defined(BSP_USE_EFI_BOOT_SERVICES) && !defined(BSP_MULTIBOOT_SUPPORT)
 #error "RTEMS amd64efi BSP requires multiboot2 support!"
@@ -53,7 +53,8 @@ void bsp_start(void)
     if (!uefi_bootservices_running()) {
 #endif
         paging_init();
-        assert(acpi_tables_initialize());
+        bool acpi_table_result = acpi_tables_initialize();
+        _Assert(acpi_table_result);
         bsp_interrupt_initialize();
 #ifdef BSP_MULTIBOOT_SUPPORT
     }

@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2024 Matheus Pecoraro
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_SMP
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/x86_64/amd64/include/smp.h
+links: []
+source:
+- bsps/x86_64/amd64/start/ap_trampoline.S
+- bsps/x86_64/amd64/start/bspsmp.c
+type: build

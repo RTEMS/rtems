@@ -47,21 +47,33 @@ extern "C" {
 /* Value to hardware-enable the APIC through the APIC_BASE_MSR */
 #define APIC_BASE_MSR_ENABLE      0x800
 
+#define xAPIC_MAX_APIC_ID         0xFE
+
 /*
  * Since the LAPIC registers are contained in an array of 32-bit elements
  * these byte-offsets need to be divided by 4 to index the array.
  */
 #define LAPIC_OFFSET(val) (val >> 2)
 
-#define LAPIC_REGISTER_APICID        LAPIC_OFFSET(0x20)
+#define LAPIC_REGISTER_ID            LAPIC_OFFSET(0x20)
 #define LAPIC_REGISTER_EOI           LAPIC_OFFSET(0x0B0)
 #define LAPIC_REGISTER_SPURIOUS      LAPIC_OFFSET(0x0F0)
+#define LAPIC_REGISTER_ICR_LOW       LAPIC_OFFSET(0x300)
+#define LAPIC_REGISTER_ICR_HIGH      LAPIC_OFFSET(0x310)
 #define LAPIC_REGISTER_LVT_TIMER     LAPIC_OFFSET(0x320)
 #define LAPIC_REGISTER_TIMER_INITCNT LAPIC_OFFSET(0x380)
 #define LAPIC_REGISTER_TIMER_CURRCNT LAPIC_OFFSET(0x390)
 #define LAPIC_REGISTER_TIMER_DIV     LAPIC_OFFSET(0x3E0)
 
 #define LAPIC_LVT_MASK               0x10000
+
+#define LAPIC_ICR_HIGH_MASK          0x00FFFFFF
+#define LAPIC_ICR_LOW_MASK           0xFFF32000
+#define LAPIC_ICR_DELIV_INIT         0x500
+#define LAPIC_ICR_DELIV_START        0x600
+#define LAPIC_ICR_DELIV_STAT_PEND    0x1000
+#define LAPIC_ICR_ASSERT             0x4000
+#define LAPIC_ICR_TRIG_LEVEL         0x8000
 
 #define LAPIC_EOI_ACK                0
 #define LAPIC_SELECT_TMR_PERIODIC    0x20000
@@ -74,7 +86,7 @@ extern "C" {
 /* Value to set in register to pick the divide value above */
 #define LAPIC_TIMER_SELECT_DIVIDER   3
 
-/* PIT defines used during LAPIC timer calibration */
+/* PIT defines and macros used when calibrating the LAPIC timer and starting APs */
 #define PIT_FREQUENCY               1193180
 /*
  * The PIT_FREQUENCY determines how many times the PIT counter is decremented
@@ -119,7 +131,44 @@ RTEMS_STATIC_ASSERT(
 #define PIT_SELECT_ONE_SHOT_MODE    0b00000010
 #define PIT_SELECT_BINARY_MODE      0
 
+#define PIT_CHAN2_ENABLE(chan2_value)                                    \
+  /* Enable the channel 2 timer gate and disable the speaker output */   \
+  chan2_value = (inport_byte(PIT_PORT_CHAN2_GATE) | PIT_CHAN2_TIMER_BIT) \
+    & ~PIT_CHAN2_SPEAKER_BIT;                                            \
+  outport_byte(PIT_PORT_CHAN2_GATE, chan2_value);                        \
+  /* Initialize PIT in one-shot mode on Channel 2 */                     \
+  outport_byte(                                                          \
+    PIT_PORT_MCR,                                                        \
+    PIT_SELECT_CHAN2 | PIT_SELECT_ACCESS_LOHI |                          \
+      PIT_SELECT_ONE_SHOT_MODE | PIT_SELECT_BINARY_MODE                  \
+  );                                                                     \
+
+#define PIT_CHAN2_WRITE_TICKS(pit_ticks)                                 \
+  /* Set PIT reload value */                                             \
+  outport_byte(PIT_PORT_CHAN2, pit_ticks & 0xff);                        \
+  stub_io_wait();                                                        \
+  outport_byte(PIT_PORT_CHAN2, (pit_ticks >> 8) & 0xff);                 \
+
+#define PIT_CHAN2_START_DELAY(chan2_value)                               \
+  /* Restart PIT by disabling the gated input and then re-enabling it */ \
+  chan2_value &= ~PIT_CHAN2_TIMER_BIT;                                   \
+  outport_byte(PIT_PORT_CHAN2_GATE, chan2_value);                        \
+  chan2_value |= PIT_CHAN2_TIMER_BIT;                                    \
+  outport_byte(PIT_PORT_CHAN2_GATE, chan2_value);                        \
+
+#define PIT_CHAN2_WAIT_DELAY(pit_ticks)                                  \
+  do {                                                                   \
+    uint32_t curr_ticks = pit_ticks;                                     \
+    while ( curr_ticks <= pit_ticks ) {                                  \
+      /* Send latch command to read multi-byte value atomically */       \
+      outport_byte(PIT_PORT_MCR, PIT_SELECT_CHAN2);                      \
+      curr_ticks = inport_byte(PIT_PORT_CHAN2);                          \
+      curr_ticks |= inport_byte(PIT_PORT_CHAN2) << 8;                    \
+    }                                                                    \
+  } while(0);                                                            \
+
 extern volatile uint32_t* amd64_lapic_base;
+extern uint8_t amd64_lapic_to_cpu_map[xAPIC_MAX_APIC_ID + 1];
 
 /**
  * @brief Initializes the Local APIC by hardware and software enabling it.
@@ -133,14 +182,56 @@ extern volatile uint32_t* amd64_lapic_base;
 bool lapic_initialize(void);
 
 /**
- * @brief Initializes the Local APIC timer
+ * @brief Calculates the number of Local APIC timer ticks which can be used
+ *        with lapic_timer_enable to set up a timer of given frequency.
  *
- * Calibrates and initializes the Local APIC timer configuring it to
- * periodically generate interrupts on vector BSP_VECTOR_APIC_TIMER
+ * @param desired_freq_hz The frequency in Hz.
  *
- * @param desired_freq_hz The desired frequency of the Local APIC timer
+ * @return The number of Local APIC timer ticks.
  */
-void lapic_timer_initialize(uint64_t desired_freq_hz);
+uint32_t lapic_timer_calc_ticks(uint64_t desired_freq_hz);
+
+/**
+ * @brief Enables the Local APIC timer.
+ *
+ * @param reload_value Number of ticks per interrupt.
+ */
+void lapic_timer_enable(uint32_t reload_value);
+
+#ifdef RTEMS_SMP
+/**
+ * @brief Retrieves the number of available processors in the system
+ *
+ * @return Number of available processors
+ */
+uint32_t lapic_get_num_of_procesors(void);
+
+/**
+ * @brief Sends an interprocessor interrupt to a specified processor.
+ *
+ * @param target_cpu_index The processor index of the target processor.
+ * @param isr_vector The vector of the interrupt being sent.
+ */
+void lapic_send_ipi(uint32_t target_cpu_index, uint8_t isr_vector);
+
+/**
+ * @brief Starts the Application Processor that corresponds to cpu_index.
+ *
+ * @param cpu_index The processor to be started.
+ * @param page_vector The under 1MB 4KB page where the trampoline code is located.
+ */
+void lapic_start_ap(uint32_t cpu_index, uint8_t page_vector);
+#endif
+
+/**
+ * @brief Retrieves the Local APIC ID
+ * @return Local APIC ID
+ */
+uint8_t inline lapic_get_id(void)
+{
+  /* ID stored in highest 8 bits */
+  return amd64_lapic_base[LAPIC_REGISTER_ID]>>24;
+}
 
 /**
  * @brief Signals an end of interrupt to the Local APIC

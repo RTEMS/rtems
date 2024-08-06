@@ -4,6 +4,7 @@
  */
 
 /*
+ * Copyright (C) 2024 Matheus Pecoraro
  * Copyright (c) 2018.
  * Amaan Cheval <amaan.cheval@gmail.com>
  *
@@ -48,8 +49,8 @@ SYM(apic_spurious_handler):
  * interrupts as persistent scratch registers (i.e. calls will not destroy
  * them), as long as we also save and restore it for the interrupted task.
  */
-.set SCRATCH_REG0, rbp
-.set SCRATCH_REG1, rbx
+.set SCRATCH_REG0,    rbp
+.set SCRATCH_REG1,    rbx
 
 /*
  * We need to set a distinct handler for every interrupt vector so that
@@ -98,6 +99,7 @@ DISTINCT_INTERRUPT_ENTRY(29)
 DISTINCT_INTERRUPT_ENTRY(30)
 DISTINCT_INTERRUPT_ENTRY(31)
 DISTINCT_INTERRUPT_ENTRY(32)
+DISTINCT_INTERRUPT_ENTRY(33)
 
 SYM(_ISR_Handler):
 .save_cpu_interrupt_frame:
@@ -105,36 +107,32 @@ SYM(_ISR_Handler):
   movq rsp, SAVED_RSP
 
   /* Make space for CPU_Interrupt_frame */
-  subq $CPU_INTERRUPT_FRAME_SIZE, rsp
+  subq $CPU_INTERRUPT_FRAME_CALLER_SAVED_SIZE, rsp
 .set ALIGNMENT_MASK, ~(CPU_STACK_ALIGNMENT - 1)
   andq $ALIGNMENT_MASK, rsp
   // XXX: Save interrupt mask?
 
-  /* Save caller-saved registers to CPU_Interrupt_frame */
-  movq rax,         (8 * CPU_SIZEOF_POINTER)(rsp)
-  movq rcx,         (7 * CPU_SIZEOF_POINTER)(rsp)
-  movq rdx,         (6 * CPU_SIZEOF_POINTER)(rsp)
-  movq rsi,         (5 * CPU_SIZEOF_POINTER)(rsp)
-  movq r8,          (4 * CPU_SIZEOF_POINTER)(rsp)
-  movq r9,          (3 * CPU_SIZEOF_POINTER)(rsp)
-  movq r10,         (2 * CPU_SIZEOF_POINTER)(rsp)
-  movq r11,         (1 * CPU_SIZEOF_POINTER)(rsp)
-
-  /* Save the initial rsp */
-  movq SAVED_RSP,   (0 * CPU_SIZEOF_POINTER)(rsp)
-
   /* Save x87 FPU, MMX and SSE state */
-.set FXSAVE_SIZE, 512
-  /* Make space for FXSAVE */
-  subq $FXSAVE_SIZE, rsp
   fwait
-  fxsave64 (rsp)
+  fxsave64 (CPU_INTERRUPT_FRAME_SSE_STATE)(rsp)
   /* Reset to a clean state */
   fninit
-  subq $4, rsp
-  movl $0x1F80, (rsp)
-  ldmxcsr (rsp)
-  addq $4, rsp
+  /* Use CPU_INTERRUPT_FRAME_RAX as scratch space */
+  movl $0x1F80, (CPU_INTERRUPT_FRAME_RAX)(rsp)
+  ldmxcsr (CPU_INTERRUPT_FRAME_RAX)(rsp)
+
+  /* Save caller-saved registers to CPU_Interrupt_frame */
+  movq rax,         (CPU_INTERRUPT_FRAME_RAX)(rsp)
+  movq rcx,         (CPU_INTERRUPT_FRAME_RCX)(rsp)
+  movq rdx,         (CPU_INTERRUPT_FRAME_RDX)(rsp)
+  movq rsi,         (CPU_INTERRUPT_FRAME_RSI)(rsp)
+  movq r8,          (CPU_INTERRUPT_FRAME_R8)(rsp)
+  movq r9,          (CPU_INTERRUPT_FRAME_R9)(rsp)
+  movq r10,         (CPU_INTERRUPT_FRAME_R10)(rsp)
+  movq r11,         (CPU_INTERRUPT_FRAME_R11)(rsp)
+
+  /* Save the initial rsp */
+  movq SAVED_RSP,   (CPU_INTERRUPT_FRAME_RSP)(rsp)
 
 .switch_stack_if_needed:
   /* Save current aligned rsp so we can find CPU_Interrupt_frame again later */
@@ -145,18 +143,15 @@ SYM(_ISR_Handler):
    * outermost interrupt, which means we've been using the task's stack so far
    */
 
-#ifdef RTEMS_SMP
-  /* XXX: We should call _CPU_SMP_Get_current_processor here */
-#endif
 .set Per_CPU_Info, SCRATCH_REG1
-  movq $SYM(_Per_CPU_Information), Per_CPU_Info
-  cmpq $0, PER_CPU_ISR_NEST_LEVEL(Per_CPU_Info)
+  GET_SELF_CPU_CONTROL_RBX /* SCRATCH_REG1 == rbx */
+  cmpl $0, PER_CPU_ISR_NEST_LEVEL(Per_CPU_Info)
   jne  .skip_switch
 .switch_stack:
   movq PER_CPU_INTERRUPT_STACK_HIGH(Per_CPU_Info), rsp
 .skip_switch:
-  incq PER_CPU_ISR_NEST_LEVEL(Per_CPU_Info)
-  incq PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(Per_CPU_Info)
+  incl PER_CPU_ISR_NEST_LEVEL(Per_CPU_Info)
+  incl PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(Per_CPU_Info)
 
 .call_isr_dispatch:
   /* REG_ARG0 already includes the vector number, so we can simply call */
@@ -166,37 +161,61 @@ SYM(_ISR_Handler):
   /* If this is the outermost stack, this restores the task stack */
   movq SAVED_RSP, rsp
 
-  decq PER_CPU_ISR_NEST_LEVEL(Per_CPU_Info)
-  decq PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(Per_CPU_Info)
-  /* XXX: Bug in QEMU causing ZF to not be set by decq necessitating the cmpb */
-  cmpb $0, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(Per_CPU_Info)
-  /* If dispatch is non-zero, it is disabled, so skip scheduling it */
+  decl PER_CPU_ISR_NEST_LEVEL(Per_CPU_Info)
+  decl PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(Per_CPU_Info)
+  movl PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(Per_CPU_Info), %eax
+  orl PER_CPU_ISR_DISPATCH_DISABLE(Per_CPU_Info), %eax
+  /**
+   * If either thread dispatch disable level or ISR dispatch disable
+   * are non-zero skip scheduling the dispatch
+   */
+  cmpl $0, %eax
   jne  .restore_cpu_interrupt_frame
+  /* Only call _Thread_Do_dispatch if dispatch needed is not 0 */
+  cmpb $0, PER_CPU_DISPATCH_NEEDED(Per_CPU_Info)
+  je  .restore_cpu_interrupt_frame
 
 .schedule_dispatch:
+  /* Set ISR dispatch disable and thread dispatch disable level to one */
+  movl $1, PER_CPU_ISR_DISPATCH_DISABLE(Per_CPU_Info)
+  movl $1, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(Per_CPU_Info)
+
+  /* Call Thread_Do_dispatch(), this function will enable interrupts */
+  movq Per_CPU_Info, REG_ARG0
+  movq $CPU_ISR_LEVEL_ENABLED, REG_ARG1 /* Set interrupt flag manually */
+  call _Thread_Do_dispatch
+
+  /* Disable interrupts */
+  cli
+
+  /**
+   * It is possible that after returning from _Thread_Do_dispatch the
+   * Per_CPU_Info has changed
+   */
+  GET_SELF_CPU_CONTROL_RBX /* Per_CPU_Info == SCRATCH_REG1 == rbx */
   cmpb $0, PER_CPU_DISPATCH_NEEDED(Per_CPU_Info)
-  je   .restore_cpu_interrupt_frame
-  call _Thread_Dispatch
+  jne  .schedule_dispatch
+
+  /* Done with thread dispatching */
+  movl $0, PER_CPU_ISR_DISPATCH_DISABLE(Per_CPU_Info)
 
 .restore_cpu_interrupt_frame:
   /* Restore x87 FPU, MMX and SSE state */
   fwait
-  fxrstor64 (rsp)
-  /* Restore rsp to CPU_Interrupt_frame */
-  addq $FXSAVE_SIZE, rsp
+  fxrstor64 (CPU_INTERRUPT_FRAME_SSE_STATE)(rsp)
 
   /* Restore registers from CPU_Interrupt_frame */
-  movq (8 * CPU_SIZEOF_POINTER)(rsp), rax
-  movq (7 * CPU_SIZEOF_POINTER)(rsp), rcx
-  movq (6 * CPU_SIZEOF_POINTER)(rsp), rdx
-  movq (5 * CPU_SIZEOF_POINTER)(rsp), rsi
-  movq (4 * CPU_SIZEOF_POINTER)(rsp), r8
-  movq (3 * CPU_SIZEOF_POINTER)(rsp), r9
-  movq (2 * CPU_SIZEOF_POINTER)(rsp), r10
-  movq (1 * CPU_SIZEOF_POINTER)(rsp), r11
+  movq (CPU_INTERRUPT_FRAME_RAX)(rsp), rax
+  movq (CPU_INTERRUPT_FRAME_RCX)(rsp), rcx
+  movq (CPU_INTERRUPT_FRAME_RDX)(rsp), rdx
+  movq (CPU_INTERRUPT_FRAME_RSI)(rsp), rsi
+  movq (CPU_INTERRUPT_FRAME_R8)(rsp), r8
+  movq (CPU_INTERRUPT_FRAME_R9)(rsp), r9
+  movq (CPU_INTERRUPT_FRAME_R10)(rsp), r10
+  movq (CPU_INTERRUPT_FRAME_R11)(rsp), r11
 
   /* Restore the rsp value from just before _ISR_Handler was called */
-  movq (0 * CPU_SIZEOF_POINTER)(rsp), SAVED_RSP
+  movq (CPU_INTERRUPT_FRAME_RSP)(rsp), SAVED_RSP
   movq SAVED_RSP, rsp
 
   /* Restore args DISTINCT_INTERRUPT_ENTRY pushed to task stack */

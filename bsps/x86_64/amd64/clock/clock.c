@@ -44,6 +44,7 @@
 #include <rtems/score/cpuimpl.h>
 #include <rtems/score/x86_64.h>
 #include <bsp/irq-generic.h>
+#include <rtems/score/smpimpl.h>
 
 static struct timecounter amd64_clock_tc;
 
@@ -60,6 +61,14 @@ static void lapic_timer_isr(void *param)
   Clock_isr(param);
   lapic_eoi();
 }
+
+#ifdef RTEMS_SMP
+static void smp_lapic_timer_enable(void* arg)
+{
+  uint32_t* lapic_reload_value = (uint32_t*) arg;
+  lapic_timer_enable(*lapic_reload_value);
+}
+#endif
 
 void lapic_timer_install_handler(void)
 {
@@ -84,7 +93,12 @@ void amd64_clock_driver_initialize(void)
   );
 
   /* Setup and initialize the Local APIC timer */
-  lapic_timer_initialize(irq_ticks_per_sec);
+  uint32_t lapic_reload_value = lapic_timer_calc_ticks(irq_ticks_per_sec);
+#ifdef RTEMS_SMP
+  _SMP_Broadcast_action(smp_lapic_timer_enable, &lapic_reload_value);
+#else
+  lapic_timer_enable(lapic_reload_value);
+#endif
 
   amd64_clock_tc.tc_get_timecount = amd64_clock_get_timecount;
   amd64_clock_tc.tc_counter_mask = 0xffffffff;

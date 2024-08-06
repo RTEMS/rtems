@@ -127,6 +127,11 @@ static inline void stub_io_wait(void)
    */
 }
 
+static inline void amd64_spinwait(void)
+{
+  __asm__ volatile("pause" : : : "memory");
+}
+
 #endif /* !ASM */
 
 #endif

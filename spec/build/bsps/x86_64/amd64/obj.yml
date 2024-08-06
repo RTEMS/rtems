@@ -14,6 +14,7 @@ install:
   - bsps/x86_64/amd64/include/bsp.h
   - bsps/x86_64/amd64/include/clock.h
   - bsps/x86_64/amd64/include/freebsd_loader.h
+  - bsps/x86_64/amd64/include/gdt.h
   - bsps/x86_64/amd64/include/pic.h
   - bsps/x86_64/amd64/include/start.h
 - destination: ${BSP_INCLUDEDIR}/acpi
@@ -47,5 +48,6 @@ source:
 - bsps/x86_64/amd64/interrupts/pic.c
 - bsps/x86_64/amd64/start/bspstart.c
 - bsps/x86_64/amd64/start/bspreset.c
+- bsps/x86_64/amd64/start/gdt.c
 - bsps/x86_64/amd64/start/page.c
 type: build

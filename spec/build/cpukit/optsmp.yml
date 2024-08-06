@@ -52,6 +52,7 @@ enabled-by:
 - sparc/gr712rc
 - sparc/gr740
 - sparc/leon3
+- x86_64/amd64
 links: []
 name: RTEMS_SMP
 type: build

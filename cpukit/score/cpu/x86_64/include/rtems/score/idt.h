@@ -47,6 +47,8 @@ extern "C" {
 #define BSP_VECTOR_SPURIOUS    0xFF
 /* Target vector number for the APIC timer */
 #define BSP_VECTOR_APIC_TIMER  32
+/* Target vector number for the APIC timer */
+#define BSP_VECTOR_IPI         33
 
 typedef struct _interrupt_descriptor {
   uint16_t offset_0;              // bits 0-15
@@ -59,12 +61,13 @@ typedef struct _interrupt_descriptor {
   uint32_t reserved_zero;
 } interrupt_descriptor;
 
-extern interrupt_descriptor amd64_idt[IDT_SIZE];
-
 struct idt_record {
   uint16_t  limit;      /* Size of IDT array - 1 */
   uintptr_t base;       /* Pointer to IDT array  */
 } RTEMS_PACKED;
+
+extern interrupt_descriptor amd64_idt[IDT_SIZE];
+extern struct idt_record amd64_idtr;
 
 RTEMS_STATIC_ASSERT(
   sizeof(struct idt_record) == 10,
@@ -123,6 +126,7 @@ extern void rtems_irq_prologue_29(void);
 extern void rtems_irq_prologue_30(void);
 extern void rtems_irq_prologue_31(void);
 extern void rtems_irq_prologue_32(void);
+extern void rtems_irq_prologue_33(void);
 
 #ifdef __cplusplus
 }

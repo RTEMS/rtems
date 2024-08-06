@@ -5,9 +5,7 @@
  *
  * @ingroup RTEMSBSPsX8664AMD64
  *
- * @ingroup RTEMSBSPsX8664AMD64EFI
- *
- * @brief BSP reset code
+ * @brief BSP SMP definitions
  */
 
 /*
@@ -35,30 +33,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <acpi/acpica/acpi.h>
-#include <bsp/bootcard.h>
+#define TRAMPOLINE_ADDR               0x8000
+#define TRAMPOLINE_PAGE_VECTOR        (TRAMPOLINE_ADDR>>12)
+#define TRAMPOLINE_AP_FLAG_OFFSET     0x10
 
-#define KEYBOARD_CONTROLLER_PORT 0x64
-#define PULSE_RESET_LINE         0xFE
+#define WAIT_FOR_AP_TIMEOUT_MS 10
 
-void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
-{
-  (void) source;
-  (void) code;
-
-  /**
-   * It is possible that AcpiEnterSleepStatePrep causes a thread dispatch
-   * so we execute it with interrupts enabled
-   */
-  amd64_enable_interrupts();
-  ACPI_STATUS status = AcpiEnterSleepStatePrep(ACPI_STATE_S5);
-  amd64_disable_interrupts();
-
-  if (status == AE_OK) {
-    AcpiEnterSleepState(ACPI_STATE_S5);
-  }
-
-  /* Should be unreachable. As a fallback try the keyboard controller method */
-  outport_byte(KEYBOARD_CONTROLLER_PORT, PULSE_RESET_LINE);
-  RTEMS_UNREACHABLE();
-}
+#ifndef ASM
+/**
+ * @brief This routine will be called by the trampoline code
+ */
+RTEMS_NO_RETURN void smp_init_ap(void);
+#endif

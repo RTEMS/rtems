@@ -5,9 +5,7 @@
  *
  * @ingroup RTEMSBSPsX8664AMD64
  *
- * @ingroup RTEMSBSPsX8664AMD64EFI
- *
- * @brief BSP reset code
+ * @brief Global Descriptor Table
  */
 
 /*
@@ -35,30 +33,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <acpi/acpica/acpi.h>
-#include <bsp/bootcard.h>
+#include <gdt.h>
 
-#define KEYBOARD_CONTROLLER_PORT 0x64
-#define PULSE_RESET_LINE         0xFE
+static const gdt_entry gdt_entries[] = {
+    {0, 0, 0, 0, 0, 0},               /* NULL segment */
+    {0xFFFF, 0, 0, 0x9E, 0xAF, 0},    /* Code segment */
+    {0xFFFF, 0, 0, 0x92, 0xCF, 0}     /* Data segment */
+};
 
-void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
-{
-  (void) source;
-  (void) code;
-
-  /**
-   * It is possible that AcpiEnterSleepStatePrep causes a thread dispatch
-   * so we execute it with interrupts enabled
-   */
-  amd64_enable_interrupts();
-  ACPI_STATUS status = AcpiEnterSleepStatePrep(ACPI_STATE_S5);
-  amd64_disable_interrupts();
-
-  if (status == AE_OK) {
-    AcpiEnterSleepState(ACPI_STATE_S5);
-  }
-
-  /* Should be unreachable. As a fallback try the keyboard controller method */
-  outport_byte(KEYBOARD_CONTROLLER_PORT, PULSE_RESET_LINE);
-  RTEMS_UNREACHABLE();
-}
+const gdt_desc amd64_gdt_descriptor = {
+    sizeof(gdt_entries) - 1,
+    (uint64_t) gdt_entries
+};

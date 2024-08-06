@@ -44,6 +44,13 @@ extern void apic_spurious_handler(void);
 
 volatile uint32_t* amd64_lapic_base;
 
+#ifdef RTEMS_SMP
+/* Maps the processor index to the Local APIC ID */
+uint8_t amd64_lapic_to_cpu_map[xAPIC_MAX_APIC_ID + 1];
+static uint8_t cpu_to_lapic_map[xAPIC_MAX_APIC_ID + 1];
+static uint32_t lapic_count = 0;
+#endif
+
 /**
  * @brief Returns wheather the system contains a local APIC or not.
  *
@@ -68,6 +75,19 @@ static bool has_lapic_support(void)
 static void madt_subtables_handler(ACPI_SUBTABLE_HEADER* entry)
 {
   switch (entry->Type) {
+#ifdef RTEMS_SMP
+    case ACPI_MADT_TYPE_LOCAL_APIC:
+      ACPI_MADT_LOCAL_APIC* lapic_entry = (ACPI_MADT_LOCAL_APIC*) entry;
+
+      if (lapic_count >= xAPIC_MAX_APIC_ID + 1 ||
+          lapic_get_id() == lapic_entry->Id) {
+        break;
+      }
+
+      amd64_lapic_to_cpu_map[lapic_entry->Id] = (uint8_t) lapic_count;
+      cpu_to_lapic_map[lapic_count++] = lapic_entry->Id;
+      break;
+#endif
     case ACPI_MADT_TYPE_LOCAL_APIC_OVERRIDE:
       ACPI_MADT_LOCAL_APIC_OVERRIDE* lapic_override =
                                         (ACPI_MADT_LOCAL_APIC_OVERRIDE*) entry;
@@ -93,6 +113,13 @@ static bool parse_madt(void)
     return false;
   }
 
+#ifdef RTEMS_SMP
+  /* Ensure the boot processor is cpu index 0 */
+  uint8_t lapic_id = lapic_get_id();
+  amd64_lapic_to_cpu_map[lapic_id] = (uint8_t) lapic_count;
+  cpu_to_lapic_map[lapic_count++] = lapic_id;
+#endif
+
   amd64_lapic_base = (uint32_t*) ((uintptr_t) madt->Address);
   acpi_walk_subtables(
     (ACPI_TABLE_HEADER*) madt,
@@ -103,23 +130,19 @@ static bool parse_madt(void)
   return true;
 }
 
-static uint32_t lapic_timer_calibrate(void)
+/**
+ * @brief Calculates the amount of LAPIC timer ticks per second using the PIT.
+ *
+ * @return The amount of ticks per second calculated.
+ */
+static uint32_t lapic_timer_calc_ticks_per_sec(void)
 {
   /* Configure LAPIC timer in one-shot mode to prepare for calibration */
   amd64_lapic_base[LAPIC_REGISTER_LVT_TIMER] = BSP_VECTOR_APIC_TIMER;
   amd64_lapic_base[LAPIC_REGISTER_TIMER_DIV] = LAPIC_TIMER_SELECT_DIVIDER;
 
-  /* Enable the channel 2 timer gate and disable the speaker output */
-  uint8_t chan2_value = (inport_byte(PIT_PORT_CHAN2_GATE) | PIT_CHAN2_TIMER_BIT)
-    & ~PIT_CHAN2_SPEAKER_BIT;
-  outport_byte(PIT_PORT_CHAN2_GATE, chan2_value);
-
-  /* Initialize PIT in one-shot mode on Channel 2 */
-  outport_byte(
-    PIT_PORT_MCR,
-    PIT_SELECT_CHAN2 | PIT_SELECT_ACCESS_LOHI |
-      PIT_SELECT_ONE_SHOT_MODE | PIT_SELECT_BINARY_MODE
-  );
+  uint8_t chan2_value;
+  PIT_CHAN2_ENABLE(chan2_value);
 
   /*
    * Make sure interrupts are disabled while we calibrate for 2 reasons:
@@ -132,31 +155,16 @@ static uint32_t lapic_timer_calibrate(void)
   rtems_interrupt_level level;
   rtems_interrupt_local_disable(level);
 
-  /* Set PIT reload value */
   uint32_t pit_ticks = PIT_CALIBRATE_TICKS;
-  uint8_t low_tick = pit_ticks & 0xff;
-  uint8_t high_tick = (pit_ticks >> 8) & 0xff;
-
-  outport_byte(PIT_PORT_CHAN2, low_tick);
-  stub_io_wait();
-  outport_byte(PIT_PORT_CHAN2, high_tick);
+  PIT_CHAN2_WRITE_TICKS(pit_ticks);
 
   /* Start LAPIC timer's countdown */
   const uint32_t lapic_calibrate_init_count = 0xffffffff;
 
-  /* Restart PIT by disabling the gated input and then re-enabling it */
-  chan2_value &= ~PIT_CHAN2_TIMER_BIT;
-  outport_byte(PIT_PORT_CHAN2_GATE, chan2_value);
-  chan2_value |= PIT_CHAN2_TIMER_BIT;
-  outport_byte(PIT_PORT_CHAN2_GATE, chan2_value);
+  PIT_CHAN2_START_DELAY(chan2_value);
   amd64_lapic_base[LAPIC_REGISTER_TIMER_INITCNT] = lapic_calibrate_init_count;
 
-  while ( pit_ticks <= PIT_CALIBRATE_TICKS ) {
-    /* Send latch command to read multi-byte value atomically */
-    outport_byte(PIT_PORT_MCR, PIT_SELECT_CHAN2);
-    pit_ticks = inport_byte(PIT_PORT_CHAN2);
-    pit_ticks |= inport_byte(PIT_PORT_CHAN2) << 8;
-  }
+  PIT_CHAN2_WAIT_DELAY(pit_ticks);
   uint32_t lapic_currcnt = amd64_lapic_base[LAPIC_REGISTER_TIMER_CURRCNT];
 
   DBG_PRINTF("PIT stopped at 0x%" PRIx32 "\n", pit_ticks);
@@ -193,6 +201,30 @@ static uint32_t lapic_timer_calibrate(void)
   return lapic_ticks_per_sec;
 }
 
+#ifdef RTEMS_SMP
+/**
+ * @brief Sends an interprocessor interrupt
+ *
+ * @param dest_id Local APIC ID of the destination
+ * @param icr_low The flags to be written to the low value of the ICR
+ */
+static void send_ipi(uint8_t dest_id, uint32_t icr_low)
+{
+  amd64_lapic_base[LAPIC_REGISTER_ICR_HIGH] =
+    (amd64_lapic_base[LAPIC_REGISTER_ICR_HIGH] & LAPIC_ICR_HIGH_MASK) | (dest_id << 24);
+
+  amd64_lapic_base[LAPIC_REGISTER_ICR_LOW] =
+    (amd64_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_LOW_MASK) | icr_low;
+}
+
+static void wait_ipi(void)
+{
+  while (amd64_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_DELIV_STAT_PEND) {
+    amd64_spinwait();
+  }
+}
+#endif
+
 bool lapic_initialize(void)
 {
   if (has_lapic_support() == false || parse_madt() == false) {
@@ -210,8 +242,8 @@ bool lapic_initialize(void)
   DBG_PRINTF("APIC is at 0x%" PRIxPTR "\n", (uintptr_t) amd64_lapic_base);
   DBG_PRINTF(
     "APIC ID at *0x%" PRIxPTR "=0x%" PRIx32 "\n",
-    (uintptr_t) &amd64_lapic_base[LAPIC_REGISTER_APICID],
-    amd64_lapic_base[LAPIC_REGISTER_APICID]
+    (uintptr_t) &amd64_lapic_base[LAPIC_REGISTER_ID],
+    amd64_lapic_base[LAPIC_REGISTER_ID]
   );
 
   DBG_PRINTF(
@@ -248,14 +280,12 @@ bool lapic_initialize(void)
   return true;
 }
 
-void lapic_timer_initialize(uint64_t desired_freq_hz)
+uint32_t lapic_timer_calc_ticks(uint64_t desired_freq_hz)
 {
   uint32_t lapic_ticks_per_sec = 0;
-  uint32_t lapic_tick_collections[LAPIC_TIMER_NUM_CALIBRATIONS] = {0};
   uint64_t lapic_tick_total = 0;
   for (uint32_t i = 0; i < LAPIC_TIMER_NUM_CALIBRATIONS; i++) {
-    lapic_tick_collections[i] = lapic_timer_calibrate();
-    lapic_tick_total += lapic_tick_collections[i];
+    lapic_tick_total += lapic_timer_calc_ticks_per_sec();
   }
   lapic_ticks_per_sec = lapic_tick_total / LAPIC_TIMER_NUM_CALIBRATIONS;
 
@@ -264,14 +294,73 @@ void lapic_timer_initialize(uint64_t desired_freq_hz)
    * frequency (and we use a frequency divider).
    *
    * This means:
-   *   apic_ticks_per_sec = (cpu_bus_frequency / timer_divide_value)
+   *   lapic_ticks_per_sec = (cpu_bus_frequency / timer_divide_value)
    *
    * Therefore:
-   *   reload_value = apic_ticks_per_sec / desired_freq_hz
+   *   reload_value = lapic_ticks_per_sec / desired_freq_hz
    */
-  uint32_t lapic_timer_reload_value = lapic_ticks_per_sec / desired_freq_hz;
+  return lapic_ticks_per_sec / desired_freq_hz;
+}
 
+void lapic_timer_enable(uint32_t reload_value)
+{
   amd64_lapic_base[LAPIC_REGISTER_LVT_TIMER] = BSP_VECTOR_APIC_TIMER | LAPIC_SELECT_TMR_PERIODIC;
   amd64_lapic_base[LAPIC_REGISTER_TIMER_DIV] = LAPIC_TIMER_SELECT_DIVIDER;
-  amd64_lapic_base[LAPIC_REGISTER_TIMER_INITCNT] = lapic_timer_reload_value;
+  amd64_lapic_base[LAPIC_REGISTER_TIMER_INITCNT] = reload_value;
 }
+
+#ifdef RTEMS_SMP
+uint32_t lapic_get_num_of_procesors(void)
+{
+  return lapic_count;
+}
+
+void lapic_send_ipi(uint32_t target_cpu_index, uint8_t isr_vector)
+{
+  uint8_t target_lapic_id = cpu_to_lapic_map[target_cpu_index];
+  send_ipi(target_lapic_id, isr_vector);
+  wait_ipi();
+}
+
+/**
+ * This routine attempts to follow the algorithm described in the
+ * Intel Multiprocessor Specification v1.4 in section B.4.
+ */
+void lapic_start_ap(uint32_t cpu_index, uint8_t page_vector)
+{
+  if (cpu_index >= lapic_count) {
+    return;
+  }
+
+  uint8_t lapic_id = cpu_to_lapic_map[cpu_index];
+
+  uint8_t chan2_value;
+  PIT_CHAN2_ENABLE(chan2_value);
+  uint32_t pit_ticks = PIT_FREQUENCY/100; /* 10 miliseconds */
+  PIT_CHAN2_WRITE_TICKS(pit_ticks);
+
+  /* INIT IPI */
+  send_ipi(lapic_id, LAPIC_ICR_DELIV_INIT | LAPIC_ICR_ASSERT | LAPIC_ICR_TRIG_LEVEL);
+  wait_ipi();
+  /* Deassert INIT IPI */
+  send_ipi(lapic_id, LAPIC_ICR_DELIV_INIT  | LAPIC_ICR_TRIG_LEVEL);
+  /* Wait 10ms */
+  PIT_CHAN2_START_DELAY(chan2_value);
+  PIT_CHAN2_WAIT_DELAY(pit_ticks);
+
+  pit_ticks = PIT_FREQUENCY/5000; /* 200 microseconds */
+  PIT_CHAN2_WRITE_TICKS(pit_ticks);
+
+  /* STARTUP IPI */
+  send_ipi(lapic_id, LAPIC_ICR_DELIV_START | page_vector);
+  wait_ipi();
+  /* Wait 200us */
+  PIT_CHAN2_START_DELAY(chan2_value);
+  PIT_CHAN2_WAIT_DELAY(pit_ticks);
+  /**
+   * It is possible that the first STARTUP IPI sent is ignored
+   * so we send it twice.
+   */
+  send_ipi(lapic_id, LAPIC_ICR_DELIV_START | page_vector);
+}
+#endif
