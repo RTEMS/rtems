@@ -10,6 +10,7 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
+  - bsps/x86_64/amd64/include/apic.h
   - bsps/x86_64/amd64/include/bsp.h
   - bsps/x86_64/amd64/include/clock.h
   - bsps/x86_64/amd64/include/freebsd_loader.h
@@ -41,6 +42,7 @@ source:
 - bsps/x86_64/amd64/acpi/osl/osl_interrupts.c
 - bsps/x86_64/amd64/acpi/osl/osl_memory.c
 - bsps/x86_64/amd64/acpi/osl/osl_tables.c
+- bsps/x86_64/amd64/interrupts/apic.c
 - bsps/x86_64/amd64/interrupts/idt.c
 - bsps/x86_64/amd64/interrupts/isr_handler.S
 - bsps/x86_64/amd64/interrupts/pic.c

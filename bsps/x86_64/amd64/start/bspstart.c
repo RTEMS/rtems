@@ -34,6 +34,8 @@
  * SUCH DAMAGE.
  */
 
+#include <assert.h>
+#include <acpi/acpi.h>
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <libcpu/page.h>
@@ -51,6 +53,7 @@ void bsp_start(void)
     if (!uefi_bootservices_running()) {
 #endif
         paging_init();
+        assert(acpi_tables_initialize());
         bsp_interrupt_initialize();
 #ifdef BSP_MULTIBOOT_SUPPORT
     }

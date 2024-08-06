@@ -32,13 +32,16 @@
  * SUCH DAMAGE.
  */
 
-#include <stdint.h>
+#include <apic.h>
+#include <bsp/fatal.h>
+#include <bsp/irq-generic.h>
 #include <rtems.h>
 #include <rtems/score/idt.h>
 #include <rtems/score/basedefs.h>
 #include <rtems/score/x86_64.h>
 #include <rtems/score/cpuimpl.h>
-#include <bsp/irq-generic.h>
+
+#include <stdint.h>
 
 /*
  * The IDT maps every interrupt vector to an interrupt_descriptor based on the
@@ -145,6 +148,10 @@ void bsp_interrupt_facility_initialize(void)
   }
 
   lidt(&idtr);
+
+  if (lapic_initialize() == false) {
+    bsp_fatal(BSP_FATAL_INTERRUPT_INITIALIZATION);
+  }
 }
 
 rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
