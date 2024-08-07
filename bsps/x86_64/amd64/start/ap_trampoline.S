@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsX8664AMD64
+ *
+ * @brief Contains the trampoline code that will be executed by every
+ * Application Processor when first started.
+ */
+
+/*
  * Copyright (C) 2024 Matheus Pecoraro
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,11 +32,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-
-/**
- * This file contains the trampoline code that will be executed by every
- * Application Processor when first started.
  */
 
 #include <gdt.h>

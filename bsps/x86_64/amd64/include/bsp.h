@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
@@ -8,14 +10,8 @@
  * @brief Global BSP definitions.
  */
 
-/*  bsp.h
- *
- *  This include file contains all board IO definitions.
- */
-
 /*
- * Copyright (c) 2018.
- * Amaan Cheval <amaan.cheval@gmail.com>
+ * Copyright (c) 2018 Amaan Cheval <amaan.cheval@gmail.com>
  *
  * Copyright (c) 1989-1999.
  * On-Line Applications Research Corporation (OAR).

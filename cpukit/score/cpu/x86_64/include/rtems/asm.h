@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
@@ -21,8 +23,7 @@
  *  notice.  This file is freely distributable as long as the source
  *  of the file is noted.  This file is:
  *
- *  COPYRIGHT (c) 2018.
- *  Amaan Cheval <amaan.cheval@gmail.com>
+ *  COPYRIGHT (c) 2018 Amaan Cheval <amaan.cheval@gmail.com>
  *
  *  COPYRIGHT (c) 1994-2006.
  *  On-Line Applications Research Corporation (OAR).

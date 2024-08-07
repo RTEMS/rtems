@@ -5,8 +5,7 @@
  */
 
 /*
- * Copyright (c) 2018.
- * Amaan Cheval <amaan.cheval@gmail.com>
+ * Copyright (c) 2018 Amaan Cheval <amaan.cheval@gmail.com>
  *
  * Copyright (C) 2013, 2016 embedded brains GmbH & Co. KG
  *

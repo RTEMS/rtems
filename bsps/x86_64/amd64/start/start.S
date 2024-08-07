@@ -1,6 +1,7 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
+ * Copyright (C) 2024 Matheus Pecoraro
  * Copyright (C) 2023 Karel Gardas
  * Copyright (C) 2018 embedded brains GmbH & Co. KG
  *

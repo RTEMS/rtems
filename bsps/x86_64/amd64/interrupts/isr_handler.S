@@ -1,12 +1,17 @@
-/*
- * This file contains the _ISR_Handler that acts as the common handler for all
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664AMD64
+ *
+ * @brief Contains the _ISR_Handler that acts as the common handler for all
  * vectors to be managed by the RTEMS interrupt manager.
  */
 
 /*
  * Copyright (C) 2024 Matheus Pecoraro
- * Copyright (c) 2018.
- * Amaan Cheval <amaan.cheval@gmail.com>
+ * Copyright (c) 2018 Amaan Cheval <amaan.cheval@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
