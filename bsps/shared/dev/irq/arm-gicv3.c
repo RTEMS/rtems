@@ -322,11 +322,10 @@ uint32_t arm_gic_irq_processor_count(void)
     for (i = 0; i < CPU_MAXIMUM_PROCESSORS; ++i) {
       volatile gic_redist *redist = gicv3_get_redist(i);
 
+      ++cpu_count;
       if ((redist->icrtyper & GIC_REDIST_ICRTYPER_LAST) != 0) {
         break;
       }
-
-      ++cpu_count;
     }
   }
 
