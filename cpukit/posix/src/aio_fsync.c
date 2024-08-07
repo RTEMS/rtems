@@ -85,7 +85,7 @@ int aio_fsync(
   )
     rtems_set_errno_and_return_minus_one( EBADF );
 
-  req = malloc( sizeof( rtems_aio_request ) );
+  req = (rtems_aio_request *) calloc( 1, sizeof( *req ) );
   if ( req == NULL )
     rtems_set_errno_and_return_minus_one( EAGAIN );
 
