@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+- env-enable: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 Kevin Kirspel
+default:
+- enabled-by: true
+  value: false
+description: |
+  enables support for the NIOS V/g processor FPU (disabled by default)
+enabled-by: true
+links: []
+name: NIOSV_HAS_FP
+type: build

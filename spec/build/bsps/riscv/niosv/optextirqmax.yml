@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 Kevin Kirspel
+default:
+- enabled-by: true
+  value: 16
+description: |
+  maximum number of external interrupts supported by the BSP (default 16)
+enabled-by: true
+format: '{}'
+links: []
+name: NIOSV_MAXIMUM_EXTERNAL_INTERRUPTS
+type: build

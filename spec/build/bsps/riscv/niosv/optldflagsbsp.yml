@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-value:
+  - -L${TOP}/bsps/${ARCH}/shared/start
+  - -L${TOP}/bsps/${ARCH}/${BSP_FAMILY}/start
+- substitute: null
+- env-append: LDFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2024 Kevin Kirspel
+default: []
+description: ''
+enabled-by: true
+links: []
+name: LDFLAGS
+type: build

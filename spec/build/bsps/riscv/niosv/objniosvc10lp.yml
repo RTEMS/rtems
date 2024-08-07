@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2024 Kevin Kirspel
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/riscv/niosv/niosvc10lp/include/bsp.h
+  - bsps/riscv/niosv/niosvc10lp/include/bsp_system.h
+  - bsps/riscv/niosv/niosvc10lp/include/bsp_system_vm.h
+  - bsps/riscv/niosv/niosvc10lp/include/bsp_system_vg.h
+  - bsps/riscv/niosv/niosvc10lp/include/altera_avalon_hbus_regs.h
+  - bsps/riscv/niosv/niosvc10lp/include/altera_avalon_pio_regs.h
+  - bsps/riscv/niosv/niosvc10lp/include/altera_avalon_sysid_qsys_regs.h
+  - bsps/riscv/niosv/niosvc10lp/include/status_led_device_driver.h
+  - bsps/riscv/niosv/niosvc10lp/include/system_device_driver.h
+links: []
+source:
+- bsps/riscv/niosv/console/console-config.c
+- bsps/riscv/niosv/flash/altera_epcq_driver.c
+- bsps/riscv/niosv/niosvc10lp/bspstart.c
+- bsps/riscv/niosv/niosvc10lp/status_led_device_driver.c
+- bsps/riscv/niosv/niosvc10lp/system_device_driver.c
+type: build

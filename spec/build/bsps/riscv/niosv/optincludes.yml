@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-value: |
+    bsps/include bsps/${ARCH}/include bsps/${ARCH}/${BSP_FAMILY}/include bsps/${ARCH}/${BSP_FAMILY}/${BSP_NAME}/include
+- substitute: null
+- split: null
+- env-assign: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+default: []
+description: ''
+enabled-by: true
+links: []
+name: BSP_INCLUDES
+type: build

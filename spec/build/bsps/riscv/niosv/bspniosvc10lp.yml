@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: riscv
+bsp: niosvc10lp
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2024 Kevin Kirspel
+cppflags: []
+enabled-by: true
+family: niosv
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: grp
+- role: build-dependency
+  uid: objniosvc10lp
+source: []
+type: build

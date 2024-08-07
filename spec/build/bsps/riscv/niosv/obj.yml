@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2024 Kevin Kirspel
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/riscv/niosv/include/alt_cache.h
+  - bsps/riscv/niosv/include/altera_avalon_jtag_uart_regs.h
+  - bsps/riscv/niosv/include/altera_avalon_timer_regs.h
+  - bsps/riscv/niosv/include/altera_avalon_epcq_regs.h
+  - bsps/riscv/niosv/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/riscv/niosv/include/bsp/irq.h
+  - bsps/riscv/niosv/include/bsp/niosv.h
+links: []
+source:
+- bsps/riscv/niosv/clock/clockdrv.c
+- bsps/riscv/niosv/irq/irq.c
+- bsps/riscv/niosv/cache/alt_cache.c
+- bsps/riscv/niosv/start/bsp_fatal_halt.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/gettargethash-default.c
+type: build

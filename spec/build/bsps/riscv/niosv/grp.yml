@@ -1,0 +1,65 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+cflags: []
+copyrights:
+- Copyright (C) 2024 Kevin Kirspel
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../optclang
+- role: build-dependency
+  uid: ../../optconsolebaud
+- role: build-dependency
+  uid: ../../optgcc
+- role: build-dependency
+  uid: optextirqmax
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: optonchiprambegin
+- role: build-dependency
+  uid: optonchipramsize
+- role: build-dependency
+  uid: optonchiprombegin
+- role: build-dependency
+  uid: optonchipromsize
+- role: build-dependency
+  uid: optextrambegin
+- role: build-dependency
+  uid: optextramsize
+- role: build-dependency
+  uid: optepcqrombegin
+- role: build-dependency
+  uid: optepcqromsize
+- role: build-dependency
+  uid: optisniosvg
+- role: build-dependency
+  uid: optniosvghasfp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: obj
+- role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
+  uid: linkcmds
+- role: build-dependency
+  uid: ../linkcmdsbase
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: ../../bspopts
+- role: build-dependency
+  uid: optincludes
+type: build
+use-after: []
+use-before: []

@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 Kevin Kirspel
+default:
+- enabled-by:
+  - and:
+    - NIOSV_IS_NIOSVG
+    - NIOSV_HAS_FP
+  value:
+  - -march=rv32imf
+  - -mabi=ilp32f
+- enabled-by: NIOSV_IS_NIOSVG
+  value:
+  - -march=rv32im
+  - -mabi=ilp32
+- enabled-by: true
+  value:
+  - -march=rv32i
+  - -mabi=ilp32
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build
