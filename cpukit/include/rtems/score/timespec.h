@@ -206,7 +206,7 @@ bool _Timespec_Less_than(
  *
  * @return The number of seconds @a time increased by.
  */
-uint32_t _Timespec_Add_to(
+time_t _Timespec_Add_to(
   struct timespec       *time,
   const struct timespec *add
 );
