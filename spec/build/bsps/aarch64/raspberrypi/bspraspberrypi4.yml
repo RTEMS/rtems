@@ -57,6 +57,8 @@ links:
   uid: objgpio
 - role: build-dependency
   uid: objspi
+- role: build-dependency
+  uid: objwatchdog
 source:
 - bsps/aarch64/raspberrypi/console/console.c
 - bsps/aarch64/raspberrypi/start/bspstart.c

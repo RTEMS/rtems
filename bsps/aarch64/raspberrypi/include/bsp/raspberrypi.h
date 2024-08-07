@@ -93,7 +93,7 @@
 /** @} */
 
 /**
- * @name Power Management and Watchdog  Registers
+ * @name Power Management and Watchdog Registers
  *
  * @{
  */
@@ -124,10 +124,12 @@
 #define BCM2711_PM_RSTC_DRCFG    0x00000003
 #define BCM2711_PM_RSTC_WRCFG    0x00000030
 #define BCM2711_PM_RSTC_WRCFG_FULL   0x00000020
+#define BCM2711_PM_RSTC_WRCFG_CLR    0xffffffcf
 #define BCM2711_PM_RSTC_SRCFG    0x00000300
 #define BCM2711_PM_RSTC_QRCFG    0x00003000
 #define BCM2711_PM_RSTC_FRCFG    0x00030000
 #define BCM2711_PM_RSTC_HRCFG    0x00300000
+#define BCM2711_PM_RSTC_RESET    0x00000102
 
 #define BCM2711_PM_RSTS          (BCM2711_PM_BASE + 0x20)
 #define BCM2711_PM_RSTS_HADDRQ   0x00000001
@@ -142,6 +144,7 @@
 #define BCM2711_PM_RSTS_HADPOR   0x00001000
 
 #define BCM2711_PM_WDOG          (BCM2711_PM_BASE + 0x24)
+#define BCM2711_PM_WDOG_MASK     0x000fffff
 
 /** @} */
 
