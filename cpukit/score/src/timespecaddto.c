@@ -43,12 +43,12 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdog.h>
 
-uint32_t _Timespec_Add_to(
+time_t _Timespec_Add_to(
   struct timespec       *time,
   const struct timespec *add
 )
 {
-  uint32_t seconds = add->tv_sec;
+  time_t seconds = add->tv_sec;
 
   /* Add the basics */
   time->tv_sec += add->tv_sec;

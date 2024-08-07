@@ -102,7 +102,7 @@ static inline bool rtems_timespec_less_than(
  *
  * @return This method returns the number of seconds @a time increased by.
  */
-static inline uint32_t rtems_timespec_add_to(
+static inline time_t rtems_timespec_add_to(
   struct timespec       *time,
   const struct timespec *add
 )
