@@ -356,6 +356,9 @@ SECTIONS {
 	.debug_sup      0 : { *(.debug_sup) }
 	.gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
 
+	/* Addition to let linker know about custom section for GDB pretty-printing support. */
+	.debug_gdb_scripts 0 : { *(.debug_gdb_scripts) }
+
 	/DISCARD/ : {
 		*(.note.GNU-stack) *(.gnu_debuglink)
 	}
