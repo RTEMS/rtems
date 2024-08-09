@@ -208,8 +208,14 @@ rtems_status_code rtems_bdpart_unregister(
 
 cleanup:
 
+  /*
+   * When we get here, logical_disk_name is guaranteed to be non-NULL
+   * but fd may be -1. Coverity flagged passing a bad value to close().
+   */
   free( logical_disk_name);
-  close( fd);
+  if (fd > 0) {
+    close( fd);
+  }
 
   return esc;
 }
