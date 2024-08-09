@@ -15,12 +15,14 @@ default:
   - -mcpu=cortex-m4
   - -mfpu=fpv4-sp-d16
   - -mfloat-abi=hard
+  - -mno-unaligned-access
 - enabled-by: true
   value:
   - -mthumb
   - -mcpu=cortex-m7
   - -mfpu=fpv5-d16
   - -mfloat-abi=hard
+  - -mno-unaligned-access
 description: |
   ABI flags
 enabled-by: true
