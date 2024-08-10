@@ -1011,7 +1011,7 @@ rtems_fdisk_seg_write_page_desc_flags (const rtems_flashdisk*       fd,
     if ((flash_flags & page_desc->flags) != page_desc->flags)
     {
       rtems_fdisk_error ("  seg-write-page-flags: %02d-%03d-%03d: "
-                         "flags not erased: 0x%04 -> 0x%04x",
+                         "flags not erased: 0x%04x-> 0x%04x",
                          sc->device, sc->segment, page,
                          flash_flags, page_desc->flags);
       return ret;
