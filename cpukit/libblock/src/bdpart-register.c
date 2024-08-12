@@ -213,7 +213,7 @@ cleanup:
    * but fd may be -1. Coverity flagged passing a bad value to close().
    */
   free( logical_disk_name);
-  if (fd > 0) {
+  if (fd >= 0) {
     close( fd);
   }
 
