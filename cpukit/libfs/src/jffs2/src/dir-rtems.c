@@ -80,6 +80,10 @@ int jffs2_create(struct _inode *dir_i, const char *d_name, size_t d_namelen, int
 	qstr.name = d_name;
 	qstr.len = d_namelen;
 
+	if (d_namelen > JFFS2_MAX_NAME_LEN) {
+		return -ENAMETOOLONG;
+	}
+
 	ri = jffs2_alloc_raw_inode();
 	if (!ri)
 		return -ENOMEM;
@@ -148,6 +152,10 @@ int jffs2_link (struct _inode *old_d_inode, struct _inode *dir_i, const unsigned
 	uint8_t type = (old_d_inode->i_mode & S_IFMT) >> 12;
 	if (!type) type = DT_REG;
 
+	if (d_namelen > JFFS2_MAX_NAME_LEN) {
+		return -ENAMETOOLONG;
+	}
+
 	ret = jffs2_do_link(c, dir_f, f->inocache->ino, type,
                             (const char * )d_name,
                             d_namelen, get_seconds());
@@ -183,7 +191,7 @@ int jffs2_mknod(
 
 	/* FIXME: If you care. We'd need to use frags for the data
 	   if it grows much more than this */
-	if (datalen > 254)
+	if (datalen > 254 || d_namelen > JFFS2_MAX_NAME_LEN)
 		return -ENAMETOOLONG;
 
 	ri = jffs2_alloc_raw_inode();
@@ -372,6 +380,10 @@ int jffs2_rename (struct _inode *old_dir_i, struct _inode *d_inode, const unsign
 		}
 	}
 #endif
+
+	if (new_d_namelen > JFFS2_MAX_NAME_LEN) {
+		return -ENAMETOOLONG;
+	}
 
 	/* XXX: We probably ought to alloc enough space for
 	   both nodes at the same time. Writing the new link,

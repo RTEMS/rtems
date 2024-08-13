@@ -65,14 +65,6 @@ actions:
     - mdosfsfsrenamemaxlinks
     - mimfsfsrenamemaxlinks
     - mrfsfsrenamemaxlinks
-- set-test-state:
-    reason: |
-        Fails because of #5073, JFFS2 seems to not have appart 
-        limits on file name length
-    state: expected-fail
-    tests:
-    - jffs2fsrenamelongname
-    - jffs2nandfsrenamelongname
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
