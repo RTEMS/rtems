@@ -1,10 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- * @brief Stack Checker Mechanism Details
- * 
- * This file contains the information necessary to install the stack 
- * checker mechanism.
+ * @file
+ *
+ * @ingroup libmisc_stackchk
+ *
+ * @brief This header file provides the Stack Checker API.
  */
 
 /*
