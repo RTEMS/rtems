@@ -19,6 +19,7 @@
 #include <rtems/printer.h>
 #include <rtems/stackchk.h>
 #include <rtems/shell.h>
+#include <rtems/score/threadimpl.h>
 #include "internal.h"
 
 static int rtems_shell_main_stackuse(
