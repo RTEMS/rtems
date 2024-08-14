@@ -1,12 +1,17 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- * @brief User Extensions Configuration Options Evaluator
+ * @file
+ *
+ * @ingroup RTEMSImplApplConfig
+ *
+ * @brief This header file evaluates configuration options related to the user
+ *   extensions configuration.
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH & Co. KG
  * Copyright (C) 2024 Mohamed Hassan <muhammad.hamdy.hassan@gmail.com>
+ * Copyright (C) 2020 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -85,24 +90,12 @@
   #endif
 #endif
 
+#if !defined(CONFIGURE_STACK_CHECKER_ENABLED) && defined(CONFIGURE_STACK_CHECKER_REPORTER)
+  #error "Stack checker is disabled but a custom reporter is configured"
+#endif
+
 #ifdef CONFIGURE_STACK_CHECKER_ENABLED
   #include <rtems/stackchk.h>
-#endif
-
-#ifdef CONFIGURE_STACK_CHECKER_ENABLED
-  #ifdef CONFIGURE_STACK_CHECKER_REPORTER
-    const Stack_checker_Reporter_handler Stack_checker_Reporter =
-      CONFIGURE_STACK_CHECKER_REPORTER;
-
-  #else
-    const Stack_checker_Reporter_handler Stack_checker_Reporter =
-      rtems_stack_checker_reporter_quiet; 
-
-  #endif
-#endif
-
-#if !defined(CONFIGURE_STACK_CHECKER_ENABLED) && defined(CONFIGURE_STACK_CHECKER_REPORTER)
-#error "Stack checker is disabled but a custom reporter is configured"
 #endif
 
 #ifdef CONFIGURE_EXCEPTION_TO_SIGNAL_MAPPING
@@ -216,6 +209,16 @@ extern "C" {
     RTEMS_SYSINIT_RECORD,
     RTEMS_SYSINIT_ORDER_LAST
   );
+#endif
+
+#ifdef CONFIGURE_STACK_CHECKER_ENABLED
+  #ifdef CONFIGURE_STACK_CHECKER_REPORTER
+    const Stack_checker_Reporter_handler Stack_checker_Reporter =
+      CONFIGURE_STACK_CHECKER_REPORTER;
+  #else
+    const Stack_checker_Reporter_handler Stack_checker_Reporter =
+      rtems_stack_checker_reporter_quiet;
+  #endif
 #endif
 
 #ifdef __cplusplus
