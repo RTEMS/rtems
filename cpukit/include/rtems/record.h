@@ -121,9 +121,17 @@ static inline unsigned int _Record_Index(
   return index & control->mask;
 }
 
-static inline unsigned int _Record_Head( const Record_Control *control )
+static inline unsigned int _Record_Head( Record_Control *control )
 {
-  return _Atomic_Load_uint( &control->head, ATOMIC_ORDER_RELAXED );
+#ifdef RTEMS_SMP
+  /*
+   * Use a read-modify-write operation to get the last value stored by the
+   * record producer.
+   */
+  return _Atomic_Fetch_add_uint( &control->head, 0, ATOMIC_ORDER_ACQUIRE );
+#else
+  return _Atomic_Load_uint( &control->head, ATOMIC_ORDER_ACQUIRE );
+#endif
 }
 
 static inline unsigned int _Record_Tail( const Record_Control *control )
@@ -1905,6 +1913,133 @@ void _Record_Drain(
  * @param arg The argument for the visitor function.
  */
 void rtems_record_drain( rtems_record_drain_visitor visitor, void *arg );
+
+/**
+ * @brief This structure controls the record fetching performed by rtems_record_fetch().
+ *
+ * The structure shall be initialized by rtems_record_fetch_initialize().
+ */
+typedef struct {
+  /**
+   * @brief This member references the first item fetched by the last call to
+   *   rtems_record_fetch().
+   */
+  rtems_record_item *fetched_items;
+
+  /**
+   * @brief This member contains the count of items fetched by the last call to
+   *   rtems_record_fetch().
+   */
+  size_t fetched_count;
+
+  /**
+   * @brief The following members should only be accessed by
+   *   rtems_record_fetch_initialize() and rtems_record_fetch().
+   */
+  struct {
+#ifdef RTEMS_SMP
+    /**
+     * @brief This member contains the index of the processor from which the next
+     *   records are fetched.
+     */
+    uint32_t cpu_index;
+#endif
+
+    /**
+     * @brief This member contains the count of records which need to be fetched
+     *   from the current processor before the next processor is selected.
+     */
+    size_t cpu_todo;
+
+    /**
+     * @brief This member references the item array used to store fetched items.
+     */
+    rtems_record_item *storage_items;
+
+    /**
+     * @brief This member contains the count of items of the array referenced by
+     *   ``storage_items``.
+     */
+    size_t storage_item_count;
+  } internal;
+} rtems_record_fetch_control;
+
+/**
+ * @brief This enumeration provides status codes returned by
+ *   rtems_record_fetch().
+ */
+typedef enum {
+  /**
+   * @brief This enumerator indicates that the current round of record fetches
+   *   for all configure processors is done.
+   */
+  RTEMS_RECORD_FETCH_DONE,
+
+  /**
+   * @brief This enumerator indicates that the current round of record fetches
+   *   for all configure processors has to continue.
+   */
+  RTEMS_RECORD_FETCH_CONTINUE,
+
+  /**
+   * @brief This enumerator indicates that the item count passed to
+   *   rtems_record_fetch() is invalid.
+   */
+  RTEMS_RECORD_FETCH_INVALID_ITEM_COUNT
+} rtems_record_fetch_status;
+
+/**
+ * @brief Returns the count of items which allows getting all available items
+ *   for one processor through one call to rtems_record_fetch().
+ *
+ * The value depends on @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS and
+ * implementation details fo rtems_record_fetch().
+ */
+size_t rtems_record_get_item_count_for_fetch( void );
+
+/**
+ * @brief Initializes the record fetch control structure.
+ *
+ * This function shall be called before a record fetch control structure is
+ * passed to rtems_record_fetch().
+ *
+ * @param[out] control is the structure to initialize.
+ *
+ * @param[out] items is a reference to an item array which is used to store the
+ *   fetched items.
+ *
+ * @param count is the count of items in the referenced array.  See
+ *   rtems_record_get_item_count_for_fetch().
+ */
+void rtems_record_fetch_initialize(
+  rtems_record_fetch_control *control,
+  rtems_record_item          *items,
+  size_t                      count
+);
+
+/**
+ * @brief Fetches records from the record buffers of the processors.
+ *
+ * The fetched items and count of fetched items is returned through the control
+ * structure.
+ *
+ * @param[in, out] control is the structure used to control the record
+ *   fetching.  Use rtems_record_fetch_initialize() to initialize it before the
+ *   first call to rtems_record_fetch().
+ *
+ * @retval RTEMS_RECORD_FETCH_DONE This return status indicates that the
+ *   current round of record fetches for all configure processors is done.
+ *
+ * @retval RTEMS_RECORD_FETCH_CONTINUE This return status indicates that the
+ *   current round of record fetches for all configure processors has to
+ *   continue.
+ *
+ * @retval RTEMS_RECORD_FETCH_INVALID_ITEM_COUNT This return status indicates
+ *   that the specified item count was invalid.
+ */
+rtems_record_fetch_status rtems_record_fetch(
+  rtems_record_fetch_control *control
+);
 
 /** @} */
 

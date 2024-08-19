@@ -994,6 +994,7 @@ source:
 - cpukit/libtrace/record/record-dump-zbase64.c
 - cpukit/libtrace/record/record-dump-zfatal.c
 - cpukit/libtrace/record/record-dump.c
+- cpukit/libtrace/record/record-fetch.c
 - cpukit/libtrace/record/record-server.c
 - cpukit/libtrace/record/record-stream-header.c
 - cpukit/libtrace/record/record-sysinit.c

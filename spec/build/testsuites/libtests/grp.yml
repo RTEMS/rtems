@@ -235,6 +235,10 @@ links:
 - role: build-dependency
   uid: record02
 - role: build-dependency
+  uid: record03
+- role: build-dependency
+  uid: record04
+- role: build-dependency
   uid: regulator01
 - role: build-dependency
   uid: rtmonuse
