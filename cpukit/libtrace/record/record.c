@@ -131,8 +131,9 @@ void _Record_Drain(
   void                       *arg
 )
 {
-  unsigned int tail;
-  unsigned int head;
+  rtems_record_item header[ 3 ];
+  unsigned int      tail;
+  unsigned int      head;
 
   tail = _Record_Tail( control );
   head = _Atomic_Load_uint( &control->head, ATOMIC_ORDER_ACQUIRE );
@@ -143,13 +144,13 @@ void _Record_Drain(
 
   control->tail = head;
 
-  control->Header[ 0 ].event = RTEMS_RECORD_PROCESSOR;
-  control->Header[ 0 ].data = cpu_index;
-  control->Header[ 1 ].event = RTEMS_RECORD_PER_CPU_TAIL;
-  control->Header[ 1 ].data = tail;
-  control->Header[ 2 ].event = RTEMS_RECORD_PER_CPU_HEAD;
-  control->Header[ 2 ].data = head;
-  ( *visitor )( control->Header, RTEMS_ARRAY_SIZE( control->Header ), arg );
+  header[ 0 ].event = RTEMS_RECORD_PROCESSOR;
+  header[ 0 ].data = cpu_index;
+  header[ 1 ].event = RTEMS_RECORD_PER_CPU_TAIL;
+  header[ 1 ].data = tail;
+  header[ 2 ].event = RTEMS_RECORD_PER_CPU_HEAD;
+  header[ 2 ].data = head;
+  ( *visitor )( header, RTEMS_ARRAY_SIZE( header ), arg );
 
   if ( _Record_Is_overflow( control, tail, head ) ) {
     tail = head + 1;

@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2018, 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2018, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -46,7 +46,6 @@ typedef struct Record_Control {
   unsigned int      tail;
   unsigned int      mask;
   Watchdog_Control  Watchdog;
-  rtems_record_item Header[ 3 ];
   RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
     rtems_record_item Items[ RTEMS_ZERO_LENGTH_ARRAY ];
 } Record_Control;
