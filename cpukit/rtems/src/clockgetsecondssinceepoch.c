@@ -43,15 +43,15 @@
 #include <rtems/score/todimpl.h>
 
 rtems_status_code rtems_clock_get_seconds_since_epoch(
-  rtems_interval *the_interval
+  rtems_interval *seconds_since_rtems_epoch
 )
 {
-  if ( !the_interval )
+  if ( !seconds_since_rtems_epoch )
     return RTEMS_INVALID_ADDRESS;
 
   if ( !_TOD_Is_set() )
     return RTEMS_NOT_DEFINED;
 
-  *the_interval = _TOD_Seconds_since_epoch();
+  *seconds_since_rtems_epoch = _TOD_Seconds_since_epoch();
   return RTEMS_SUCCESSFUL;
 }
