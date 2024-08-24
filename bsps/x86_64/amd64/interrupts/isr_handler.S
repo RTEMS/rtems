@@ -115,7 +115,7 @@ SYM(_ISR_Handler):
   subq $CPU_INTERRUPT_FRAME_CALLER_SAVED_SIZE, rsp
 .set ALIGNMENT_MASK, ~(CPU_STACK_ALIGNMENT - 1)
   andq $ALIGNMENT_MASK, rsp
-  // XXX: Save interrupt mask?
+  /* XXX: Save interrupt mask? (See #5122) */
 
   /* Save x87 FPU, MMX and SSE state */
   fwait

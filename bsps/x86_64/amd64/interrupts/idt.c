@@ -231,6 +231,7 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 }
 
 #ifdef RTEMS_SMP
+/* TODO: See #5121 */
 rtems_status_code bsp_interrupt_get_affinity(
   rtems_vector_number  vector,
   Processor_mask      *affinity
@@ -241,6 +242,7 @@ rtems_status_code bsp_interrupt_get_affinity(
   return RTEMS_UNSATISFIED;
 }
 
+/* TODO: See #5121 */
 rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number   vector,
   const Processor_mask *affinity
