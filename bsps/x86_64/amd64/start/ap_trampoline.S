@@ -113,6 +113,7 @@ SYM(_Trampoline_start):
   movw %ax, %ds
   movw %ax, %es
   movw %ax, %ss
+  movw %ax, %fs
 
   # Acquire the processor's stack
   GET_SELF_CPU_CONTROL_RAX

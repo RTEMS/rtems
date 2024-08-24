@@ -60,6 +60,7 @@ _start:
         movw %ax, %ds
         movw %ax, %es
         movw %ax, %ss
+        movw %ax, %fs
 
         /* Load code segment register */
         pushq $GDT_CODE_SEG_OFFSET

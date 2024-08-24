@@ -56,25 +56,25 @@ PUBLIC(_CPU_Context_switch_no_return)
 
 SYM(_CPU_Context_switch):
 SYM(_CPU_Context_switch_no_return):
-  movq    RUNCONTEXT_ARG, rax   /* rax = running threads context */
-  GET_SELF_CPU_CONTROL_RCX      /* rcx = per CPU information */
+  movq    RUNCONTEXT_ARG, r10   /* r10 = running threads context */
+  GET_SELF_CPU_CONTROL_R11      /* r11 = per CPU information */
 
   /* Fill up Context_Control struct */
   pushf
-  popq               CPU_CONTEXT_CONTROL_EFLAGS(rax) /* pop rflags into context */
-  movq    rbx,       CPU_CONTEXT_CONTROL_RBX(rax)
-  movq    rsp,       CPU_CONTEXT_CONTROL_RSP(rax)
-  movq    rbp,       CPU_CONTEXT_CONTROL_RBP(rax)
-  movq    r12,       CPU_CONTEXT_CONTROL_R12(rax)
-  movq    r13,       CPU_CONTEXT_CONTROL_R13(rax)
-  movq    r14,       CPU_CONTEXT_CONTROL_R14(rax)
-  movq    r15,       CPU_CONTEXT_CONTROL_R15(rax)
+  popq               CPU_CONTEXT_CONTROL_EFLAGS(r10) /* pop rflags into context */
+  movq    rbx,       CPU_CONTEXT_CONTROL_RBX(r10)
+  movq    rsp,       CPU_CONTEXT_CONTROL_RSP(r10)
+  movq    rbp,       CPU_CONTEXT_CONTROL_RBP(r10)
+  movq    r12,       CPU_CONTEXT_CONTROL_R12(r10)
+  movq    r13,       CPU_CONTEXT_CONTROL_R13(r10)
+  movq    r14,       CPU_CONTEXT_CONTROL_R14(r10)
+  movq    r15,       CPU_CONTEXT_CONTROL_R15(r10)
 
-  movl    PER_CPU_ISR_DISPATCH_DISABLE(rcx), %edx
-  movl    %edx, CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE(rax)
+  movl    PER_CPU_ISR_DISPATCH_DISABLE(r11), %edx
+  movl    %edx, CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE(r10)
 
-  movq    rax, r8              /* r8  = running threads context */
-  movq    HEIRCONTEXT_ARG, rax /* rax = heir threads context */
+  movq    r10, r8              /* r8  = running threads context */
+  movq    HEIRCONTEXT_ARG, r10 /* r10 = heir threads context */
 
 #ifdef RTEMS_SMP
   /*
@@ -82,58 +82,63 @@ SYM(_CPU_Context_switch_no_return):
    * the stack to the temporary interrupt stack of this processor.  Mark
    * the context of the executing thread as not executing.
    */
-  leaq    PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE(rcx), rsp
+  leaq    PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE(r11), rsp
   movw    $0, CPU_CONTEXT_CONTROL_IS_EXECUTING(r8)
 
 .check_is_executing:
-  lock btsw $0, CPU_CONTEXT_CONTROL_IS_EXECUTING(rax) /* Indicator in carry flag */
+  lock btsw $0, CPU_CONTEXT_CONTROL_IS_EXECUTING(r10) /* Indicator in carry flag */
   jnc       .restore
 
 .get_potential_new_heir:
   /* We may have a new heir */
 
   /* Read the executing and heir */
-  movq    PER_CPU_OFFSET_EXECUTING(rcx), r9
-  movq    PER_CPU_OFFSET_HEIR(rcx), r10
+  movq    PER_CPU_OFFSET_EXECUTING(r11), r8
+  movq    PER_CPU_OFFSET_HEIR(r11), r9
 
   /*
    * Update the executing only if necessary to avoid cache line
    * monopolization.
    */
-  cmpq    r9, r10
+  cmpq    r8, r9
   je      .check_is_executing
 
   /* Calculate the heir context pointer */
-  addq    r10, rax
-  subq    r9, rax
+  addq    r9, r10
+  subq    r8, r10
 
   /* Update the executing */
-  movq    r10, PER_CPU_OFFSET_EXECUTING(rcx)
+  movq    r9, PER_CPU_OFFSET_EXECUTING(r11)
 
   jmp     .check_is_executing
 #endif
 
 .restore:
-  movq  CPU_CONTEXT_CONTROL_RBX(rax), rbx
-  movq  CPU_CONTEXT_CONTROL_RSP(rax), rsp
+  movl  CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE(r10), %edx
+  movl  %edx, PER_CPU_ISR_DISPATCH_DISABLE(r11)
+
+  movq  CPU_CONTEXT_CONTROL_RBX(r10), rbx
+  movq  CPU_CONTEXT_CONTROL_RSP(r10), rsp
 
   /*
    * We need to load rflags after rsp to avoid an interrupt while the ISR stack
    * is still being used during the initialization process
    */
-  pushq CPU_CONTEXT_CONTROL_EFLAGS(rax)       /* push rflags */
+  pushq CPU_CONTEXT_CONTROL_EFLAGS(r10)       /* push rflags */
   popf                                        /* restore rflags */
 
-  movq  CPU_CONTEXT_CONTROL_RBP(rax), rbp
-  movq  CPU_CONTEXT_CONTROL_R12(rax), r12
-  movq  CPU_CONTEXT_CONTROL_R13(rax), r13
-  movq  CPU_CONTEXT_CONTROL_R14(rax), r14
-  movq  CPU_CONTEXT_CONTROL_R15(rax), r15
+  movq  CPU_CONTEXT_CONTROL_RBP(r10), rbp
+  movq  CPU_CONTEXT_CONTROL_R12(r10), r12
+  movq  CPU_CONTEXT_CONTROL_R13(r10), r13
+  movq  CPU_CONTEXT_CONTROL_R14(r10), r14
+  movq  CPU_CONTEXT_CONTROL_R15(r10), r15
 
-  movl  CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE(rax), %edx
-  movl  %edx, PER_CPU_ISR_DISPATCH_DISABLE(rcx)
-
-  /* XXX: TLS - load GDT and refresh FS segment selector */
+  movq CPU_CONTEXT_CONTROL_FS(r10), rax
+  /* High bits in %edx and low bits in %eax */
+  movq rax, rdx
+  shrq $32, rdx
+  movl $FSBASE_MSR, %ecx
+  wrmsr
 
   ret
 
@@ -148,8 +153,8 @@ PUBLIC(_CPU_Context_restore)
 .set NEWCONTEXT_ARG,   REG_ARG0       /* context to restore argument */
 
 SYM(_CPU_Context_restore):
-  movq      NEWCONTEXT_ARG, rax  /* rax = running threads context */
-  GET_SELF_CPU_CONTROL_RCX       /* rcx = per CPU information */
+  movq      NEWCONTEXT_ARG, r10  /* r10 = running threads context */
+  GET_SELF_CPU_CONTROL_R11       /* r11 = per CPU information */
   jmp       .restore
 
 END_CODE

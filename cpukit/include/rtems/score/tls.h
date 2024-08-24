@@ -116,9 +116,9 @@ typedef struct {
 } TLS_Dynamic_thread_vector;
 
 typedef struct TLS_Thread_control_block {
-#ifdef __i386__
+#if defined(__i386__) || defined(__x86_64__)
   struct TLS_Thread_control_block *tcb;
-#else /* !__i386__ */
+#else /* !(__i386__ || __x86_64__) */
   TLS_Dynamic_thread_vector *dtv;
 /*
  * GCC under AArch64/LP64 expects a 16 byte TCB at the beginning of the TLS
@@ -127,7 +127,7 @@ typedef struct TLS_Thread_control_block {
 #if CPU_SIZEOF_POINTER == 4 || defined(AARCH64_MULTILIB_ARCH_V8)
   uintptr_t reserved;
 #endif
-#endif /* __i386__ */
+#endif /* __i386__ || __x86_64__ */
 } TLS_Thread_control_block;
 
 typedef struct {
@@ -204,7 +204,7 @@ static inline void _TLS_Initialize_TCB_and_DTV(
   TLS_Dynamic_thread_vector *dtv
 )
 {
-#ifdef __i386__
+#if defined(__i386__) || defined(__x86_64__)
   (void) dtv;
   tcb->tcb = tcb;
 #else
@@ -242,7 +242,7 @@ static inline void *_TLS_Initialize_area( void *tls_area )
   config = &_TLS_Configuration;
   alignment = (uintptr_t) config->alignment;
 
-#ifdef __i386__
+#if defined(__i386__) || defined(__x86_64__)
   dtv = NULL;
 #else
   dtv = (TLS_Dynamic_thread_vector *) tls_area;

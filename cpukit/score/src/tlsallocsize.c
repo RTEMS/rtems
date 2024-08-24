@@ -101,7 +101,7 @@ uintptr_t _TLS_Get_allocation_size( void )
     stack_align = CPU_STACK_ALIGNMENT;
     tls_align = RTEMS_ALIGN_UP( (uintptr_t) config->alignment, stack_align );
 
-#ifndef __i386__
+#if !defined(__i386__) && !defined(__x86_64__)
     /* Reserve space for the dynamic thread vector */
     allocation_size +=
       RTEMS_ALIGN_UP( sizeof( TLS_Dynamic_thread_vector ), stack_align );

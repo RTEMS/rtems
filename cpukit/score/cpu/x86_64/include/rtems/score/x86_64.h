@@ -38,6 +38,8 @@ extern "C" {
 
 #define EFLAGS_INTR_ENABLE 0x200
 
+#define FSBASE_MSR 0xC0000100
+
 #if DEBUG
 #define DBG_PRINTF(format, args...)             \
   printf(format, ## args)

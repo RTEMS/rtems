@@ -86,15 +86,16 @@ static inline void _CPU_Use_thread_local_storage(
   const Context_Control *context
 )
 {
-  (void) context;
+  uint32_t high = (uint32_t) (context->fs >> 32);
+  uint32_t low = (uint32_t) context->fs;
+  wrmsr(FSBASE_MSR, low, high);
 }
 
 static inline void *_CPU_Get_TLS_thread_pointer(
   const Context_Control *context
 )
 {
-  (void) context;
-  return NULL;
+  return (void*) context->fs;
 }
 
 #ifdef __cplusplus

@@ -73,7 +73,9 @@ extern "C" {
 #define CPU_CONTEXT_CONTROL_R14 CPU_CONTEXT_CONTROL_R13 + 8
 #define CPU_CONTEXT_CONTROL_R15 CPU_CONTEXT_CONTROL_R14 + 8
 
-#define CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE CPU_CONTEXT_CONTROL_R15 + 8
+#define CPU_CONTEXT_CONTROL_FS CPU_CONTEXT_CONTROL_R15 + 8
+
+#define CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE CPU_CONTEXT_CONTROL_FS + 8
 
 #define CPU_CONTEXT_CONTROL_IS_EXECUTING CPU_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE + 4
 
@@ -94,9 +96,10 @@ typedef struct {
   uint64_t r14;
   uint64_t r15;
 
-  uint32_t isr_dispatch_disable;
+  /* Thread pointer */
+  uint64_t fs;
 
-  // XXX: FS segment descriptor for TLS
+  uint32_t isr_dispatch_disable;
 
 #ifdef RTEMS_SMP
   volatile uint16_t is_executing;
