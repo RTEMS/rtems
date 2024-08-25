@@ -6,7 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
-- enabled-by: riscv/bvf
+- enabled-by: riscv/beaglevfire
   value: 1
 - enabled-by: riscv/mpfs64imafdc
   value: 1
