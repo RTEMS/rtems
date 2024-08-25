@@ -7,7 +7,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
 - enabled-by:
-  - riscv/bvf
+  - riscv/beaglevfire
   - riscv/mpfs64imafdc
   - riscv/kendrytek210
   value: true

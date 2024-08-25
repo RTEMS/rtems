@@ -18,7 +18,7 @@ default:
   value: 0x00000000
 - enabled-by: riscv/griscv
   value: 0x40000000
-- enabled-by: riscv/bvf
+- enabled-by: riscv/beaglevfire
   value: 0x1000000000
 - enabled-by: riscv/mpfs64imafdc
   value: 0x1000000000

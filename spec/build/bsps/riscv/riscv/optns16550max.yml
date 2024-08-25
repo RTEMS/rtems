@@ -10,7 +10,7 @@ default:
   - riscv/frdme310arty
   - riscv/kendrytek210
   value: null
-- enabled-by: riscv/bvf
+- enabled-by: riscv/beaglevfire
   value: 1
 - enabled-by: riscv/mpfs64imafdc
   value: 1

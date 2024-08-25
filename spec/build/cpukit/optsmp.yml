@@ -28,7 +28,7 @@ enabled-by:
 - powerpc/qoriq_e500
 - powerpc/qoriq_e6500_32
 - powerpc/qoriq_e6500_64
-- riscv/bvf
+- riscv/beaglevfire
 - riscv/griscv
 - riscv/grv32imac
 - riscv/grv32imafdc
