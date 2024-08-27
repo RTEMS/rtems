@@ -409,7 +409,6 @@ static inline void *Stack_check_Find_high_water_mark(
      * match pattern
      */
 
-    base += SANITY_PATTERN_SIZE_WORDS;
     for (ebase = base + length; base < ebase; base++)
       if (*base != U32_PATTERN)
         return (void *) base;
