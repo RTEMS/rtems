@@ -13,6 +13,7 @@ install:
   - bsps/aarch64/xilinx-zynqmp/include/bsp.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
+  - bsps/aarch64/xilinx-zynqmp/include/bsp/ecc.h
   - bsps/aarch64/xilinx-zynqmp/include/bsp/irq.h
   - bsps/aarch64/include/bsp/aarch64-mmu.h
 links: []
