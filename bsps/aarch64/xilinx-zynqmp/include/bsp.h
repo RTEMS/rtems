@@ -68,6 +68,14 @@ struct rtems_termios_device_context;
  * @{
  */
 
+/*
+ * DDRMC mapping
+ */
+LINKER_SYMBOL(bsp_r0_ram_base)
+LINKER_SYMBOL(bsp_r0_ram_end)
+LINKER_SYMBOL(bsp_r1_ram_base)
+LINKER_SYMBOL(bsp_r1_ram_end)
+
 #define BSP_ARM_GIC_CPUIF_BASE 0xf9020000
 #define BSP_ARM_GIC_DIST_BASE 0xf9010000
 
