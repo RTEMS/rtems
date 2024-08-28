@@ -200,17 +200,6 @@ static inline uint32_t get_id_count(volatile gic_dist *dist)
   return id_count;
 }
 
-static void enable_fiq(void)
-{
-#ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
-  rtems_interrupt_level level;
-
-  rtems_interrupt_local_disable(level);
-  level &= ~ARM_PSR_F;
-  rtems_interrupt_local_enable(level);
-#endif
-}
-
 void bsp_interrupt_facility_initialize(void)
 {
   volatile gic_cpuif *cpuif = GIC_CPUIF;
@@ -240,8 +229,6 @@ void bsp_interrupt_facility_initialize(void)
   cpuif->iccicr = CPUIF_ICCICR;
 
   dist->icddcr = GIC_DIST_ICDDCR_ENABLE_GRP_1 | GIC_DIST_ICDDCR_ENABLE;
-
-  enable_fiq();
 }
 
 #ifdef RTEMS_SMP
@@ -267,8 +254,6 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
   cpuif->iccpmr = GIC_CPUIF_ICCPMR_PRIORITY(0xff);
   cpuif->iccbpr = GIC_CPUIF_ICCBPR_BINARY_POINT(0x0);
   cpuif->iccicr = CPUIF_ICCICR;
-
-  enable_fiq();
 }
 #endif
 
