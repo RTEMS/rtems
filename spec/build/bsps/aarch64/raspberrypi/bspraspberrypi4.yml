@@ -50,6 +50,8 @@ links:
 - role: build-dependency
   uid: linkercmds
 - role: build-dependency
+  uid: ../../dev/irq/objarmgicv2
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq
@@ -66,7 +68,6 @@ source:
 - bsps/aarch64/raspberrypi/start/bspstartmmu.c
 - bsps/aarch64/shared/cache/cache.c
 - bsps/aarch64/shared/mmu/vmsav8-64.c
-- bsps/shared/dev/irq/arm-gicv2.c
 - bsps/shared/dev/irq/arm-gicv2-get-attributes.c
 - bsps/shared/dev/serial/console-termios-init.c
 - bsps/shared/dev/serial/console-termios.c

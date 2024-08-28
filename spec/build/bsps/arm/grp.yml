@@ -39,13 +39,6 @@ install:
   - bsps/arm/include/bsp/lpc-lcd.h
   - bsps/arm/include/bsp/lpc-timer.h
   - bsps/arm/include/bsp/start.h
-- destination: ${BSP_INCLUDEDIR}/dev/irq
-  source:
-  - bsps/arm/include/dev/irq/arm-gic-arch.h
-  - bsps/include/dev/irq/arm-gic-irq.h
-  - bsps/include/dev/irq/arm-gic-regs.h
-  - bsps/include/dev/irq/arm-gic-tm27.h
-  - bsps/include/dev/irq/arm-gic.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/arm/shared/start/linkcmds.armv4

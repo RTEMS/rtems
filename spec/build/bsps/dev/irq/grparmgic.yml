@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+cflags: []
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: arm
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/dev/irq
+  source:
+  - bsps/arm/include/dev/irq/arm-gic-arch.h
+ldflags: []
+links: []
+type: build
+use-after: []
+use-before: []

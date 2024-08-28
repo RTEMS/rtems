@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/dev/irq
+  source:
+  - bsps/include/dev/irq/arm-gic.h
+  - bsps/include/dev/irq/arm-gic-irq.h
+  - bsps/include/dev/irq/arm-gic-regs.h
+  - bsps/include/dev/irq/arm-gic-tm27.h
+links:
+- role: build-dependency
+  uid: grpaarch64gic
+- role: build-dependency
+  uid: grparmgic
+source:
+- bsps/shared/dev/irq/arm-gicv2.c
+type: build

@@ -96,6 +96,8 @@ links:
 - role: build-dependency
   uid: ../start
 - role: build-dependency
+  uid: ../../dev/irq/objarmgicv2
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq
@@ -129,7 +131,6 @@ source:
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
-- bsps/shared/dev/irq/arm-gicv2.c
 - bsps/shared/dev/irq/arm-gicv2-get-attributes.c
 - bsps/shared/dev/rtc/rtc-support.c
 - bsps/shared/dev/serial/console-termios-init.c

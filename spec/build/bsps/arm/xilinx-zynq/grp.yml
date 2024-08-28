@@ -53,6 +53,8 @@ links:
 - role: build-dependency
   uid: optresetvec
 - role: build-dependency
+  uid: ../../dev/irq/objarmgicv2
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq
