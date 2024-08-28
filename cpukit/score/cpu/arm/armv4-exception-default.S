@@ -98,7 +98,7 @@ _ARMV4_Exception_fiq_default:
 
 save_more_context:
 
-	/* Save more context */
+	/* Save more context, clear VFP context pointer */
 	mov	r2, lr
 	mrs	r3, spsr
 	mrs	r7, cpsr
@@ -115,11 +115,6 @@ save_more_context:
 	/* Argument for high level handler */
 	mov	r0, sp
 
-	/* Clear VFP context pointer */
-	add	r3, sp, #ARM_EXCEPTION_FRAME_VFP_CONTEXT_OFFSET
-	mov	r1, #0
-	str	r1, [r3]
-
 #ifdef ARM_MULTILIB_VFP
 	/* Ensure that the FPU is enabled */
 	vmrs	r1, FPEXC
@@ -130,7 +125,7 @@ save_more_context:
 	sub	sp, #(ARM_VFP_CONTEXT_SIZE + 8)
 	add	r4, sp, #8
 	bic	r4, r4, #7
-	str	r4, [r3]
+	str	r4, [r0, #ARM_EXCEPTION_FRAME_VFP_CONTEXT_OFFSET]
 	vmrs	r2, FPSCR
 	stmia	r4!, {r1-r2}
 	vstmia	r4!, {d0-d15}
