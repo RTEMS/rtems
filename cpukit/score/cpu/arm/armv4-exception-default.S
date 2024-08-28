@@ -103,7 +103,6 @@ save_more_context:
 	mrs	r3, spsr
 	mrs	r7, cpsr
 	orr	r5, r5, r3
-	bic	r5, #ARM_PSR_T
 	msr	cpsr, r5
 	mov	r0, sp
 	mov	r1, lr
