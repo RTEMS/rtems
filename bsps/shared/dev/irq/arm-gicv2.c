@@ -56,18 +56,18 @@
 /*
  * The following variants
  *
- *  - GICv1 with Security Extensions,
- *  - GICv2 without Security Extensions, or
- *  - within Secure processor mode
+ * - GICv1 with Security Extensions,
+ * - GICv2 without Security Extensions, and
+ * - GICv2 with Security Extensions and in Secure processor mode
  *
  * have the ability to assign group 0 or 1 to individual interrupts.  Group
  * 0 interrupts can be configured to raise an FIQ exception.  This enables
  * the use of NMIs with respect to RTEMS.
  *
- * BSPs can enable this feature with the BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
- * define.  Use arm_gic_irq_set_group() to change the group of an
- * interrupt (default group is 1, if BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0 is
- * defined).
+ * Use arm_gic_irq_set_group() to change the group of an interrupt (default
+ * group is 1, if BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0 is defined).  To use FIQ
+ * interrupts, you have to install an FIQ exception handler and enable FIQs in
+ * the Current Program Status Register (CPSR).
  */
 #ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
 #define DIST_ICDDCR (GIC_DIST_ICDDCR_ENABLE_GRP_1 | GIC_DIST_ICDDCR_ENABLE)

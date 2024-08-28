@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+default:
+- enabled-by:
+  - bsps/arm/altera-cyclone-v
+  - bsps/arm/xilinx-zynq
+  value: true
+- enabled-by: true
+  value: false
+description: |
+  This option enables the use FIQ interrupts for GIC group 0 interrupts.  The
+  ARM Generic Interrupt Controller (GIC) variants GICv1 with Security
+  Extensions, GICv2 without Security Extensions, GICv2 with Security Extensions
+  and in Secure processor mode, GICv3 and GICv4 in Secure processor mode, GICv3
+  and GICv4 with GICD_CTLR.DS == 1 have the ability to assign group 0 or 1 to
+  individual interrupts.  Group 0 interrupts can be configured to raise an FIQ
+  exception.  This enables the use of NMIs with respect to RTEMS.  Use
+  arm_gic_irq_set_group() to change the group of an interrupt (default group is
+  1, if BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0 is defined).  To use FIQ interrupts,
+  you have to install an FIQ exception handler and enable FIQs in the Current
+  Program Status Register (CPSR).
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
+type: build

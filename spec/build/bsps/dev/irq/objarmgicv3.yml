@@ -17,6 +17,8 @@ install:
   - bsps/include/dev/irq/arm-gicv3.h
 links:
 - role: build-dependency
+  uid: optarmgic-enable-fiq-for-group-0
+- role: build-dependency
   uid: optarmgic-icc-bpr0
 - role: build-dependency
   uid: optarmgic-icc-bpr1
