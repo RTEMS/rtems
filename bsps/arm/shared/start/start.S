@@ -71,8 +71,11 @@ bsp_start_vector_table_begin:
 	ldr	pc, .Lhandler_addr_prefetch
 	ldr	pc, .Lhandler_addr_abort
 
-	/* Program signature checked by boot loader */
-	.word	0xb8a06f58
+#ifdef BSP_START_VECTOR_RESERVED_SLOT
+	BSP_START_VECTOR_RESERVED_SLOT
+#else
+	udf
+#endif
 
 	ldr	pc, .Lhandler_addr_irq
 	ldr	pc, .Lhandler_addr_fiq
