@@ -137,7 +137,7 @@ handler_addr_abort:
         .word  _ARMV4_Exception_data_abort_default
 
 handler_addr_reserved:
-        .word  _ARMV4_Exception_reserved_default
+        .word  0
 
 handler_addr_irq:
         .word  _ARMV4_Exception_interrupt

@@ -42,7 +42,6 @@
 .globl _ARMV4_Exception_swi_default
 .globl _ARMV4_Exception_data_abort_default
 .globl _ARMV4_Exception_pref_abort_default
-.globl _ARMV4_Exception_reserved_default
 .globl _ARMV4_Exception_fiq_default
 
 .section ".text"
@@ -85,16 +84,6 @@ _ARMV4_Exception_data_abort_default:
 	sub	sp, #MORE_CONTEXT_SIZE
 	stmdb	sp!, {r0-r12}
 	mov	r4, #4
-	mov	r5, #ARM_PSR_I
-
-	b	save_more_context
-
-_ARMV4_Exception_reserved_default:
-
-	/* Save context and load vector */
-	sub	sp, #MORE_CONTEXT_SIZE
-	stmdb	sp!, {r0-r12}
-	mov	r4, #5
 	mov	r5, #ARM_PSR_I
 
 	b	save_more_context

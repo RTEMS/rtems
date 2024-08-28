@@ -7,7 +7,6 @@ b _ARMV4_Exception_undef_default
 b _ARMV4_Exception_swi_default
 b _ARMV4_Exception_pref_abort_default
 b _ARMV4_Exception_data_abort_default
-b _ARMV4_Exception_reserved_default
 b _ARMV4_Exception_irq_default
 b _ARMV4_Exception_fiq_default
 

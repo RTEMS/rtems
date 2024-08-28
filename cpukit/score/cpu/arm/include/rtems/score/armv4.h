@@ -77,8 +77,6 @@ void _ARMV4_Exception_data_abort_default( void );
 
 void _ARMV4_Exception_pref_abort_default( void );
 
-void _ARMV4_Exception_reserved_default( void );
-
 void _ARMV4_Exception_fiq_default( void );
 
 static inline uint32_t _ARMV4_Status_irq_enable( void )
