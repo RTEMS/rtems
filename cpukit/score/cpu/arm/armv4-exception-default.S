@@ -103,10 +103,12 @@ save_more_context:
 	mrs	r3, spsr
 	mrs	r7, cpsr
 	orr	r5, r5, r3
+	add	sp, #ARM_EXCEPTION_FRAME_SIZE
 	msr	cpsr, r5
 	mov	r0, sp
 	mov	r1, lr
 	msr	cpsr, r7
+	sub	sp, #ARM_EXCEPTION_FRAME_SIZE
 	mov	r5, #0
 	add	r6, sp, #ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET
 	stm	r6, {r0-r5}
