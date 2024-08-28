@@ -56,6 +56,7 @@ _ARMV4_Exception_undef_default:
 	sub	sp, #MORE_CONTEXT_SIZE
 	stmdb	sp!, {r0-r12}
 	mov	r4, #1
+	mov	r5, #ARM_PSR_I
 
 	b	save_more_context
 
@@ -65,6 +66,7 @@ _ARMV4_Exception_swi_default:
 	sub	sp, #MORE_CONTEXT_SIZE
 	stmdb	sp!, {r0-r12}
 	mov	r4, #2
+	mov	r5, #ARM_PSR_I
 
 	b	save_more_context
 
@@ -74,6 +76,7 @@ _ARMV4_Exception_pref_abort_default:
 	sub	sp, #MORE_CONTEXT_SIZE
 	stmdb	sp!, {r0-r12}
 	mov	r4, #3
+	mov	r5, #ARM_PSR_I
 
 	b	save_more_context
 
@@ -83,6 +86,7 @@ _ARMV4_Exception_data_abort_default:
 	sub	sp, #MORE_CONTEXT_SIZE
 	stmdb	sp!, {r0-r12}
 	mov	r4, #4
+	mov	r5, #ARM_PSR_I
 
 	b	save_more_context
 
@@ -92,6 +96,7 @@ _ARMV4_Exception_reserved_default:
 	sub	sp, #MORE_CONTEXT_SIZE
 	stmdb	sp!, {r0-r12}
 	mov	r4, #5
+	mov	r5, #ARM_PSR_I
 
 	b	save_more_context
 
@@ -101,6 +106,7 @@ _ARMV4_Exception_irq_default:
 	sub	sp, #MORE_CONTEXT_SIZE
 	stmdb	sp!, {r0-r12}
 	mov	r4, #6
+	mov	r5, #ARM_PSR_I
 
 	b	save_more_context
 
@@ -110,14 +116,7 @@ _ARMV4_Exception_fiq_default:
 	sub	sp, #MORE_CONTEXT_SIZE
 	stmdb	sp!, {r0-r12}
 	mov	r4, #7
-
-	/*
-	 * Don't enable FIQs yet. Set the FIQ disable bit in the SPSR
-	 * (which we'll load into the CPSR in save_more_context).
-	 */
-	mrs r2, spsr
-	orr r2, #ARM_PSR_F
-	msr spsr_c, r2
+	mov	r5, #(ARM_PSR_I | ARM_PSR_F)
 
 save_more_context:
 
@@ -125,7 +124,7 @@ save_more_context:
 	mov	r2, lr
 	mrs	r3, spsr
 	mrs	r7, cpsr
-	orr	r5, r3, #ARM_PSR_I
+	orr	r5, r5, r3
 	bic	r5, #ARM_PSR_T
 	msr	cpsr, r5
 	mov	r0, sp
