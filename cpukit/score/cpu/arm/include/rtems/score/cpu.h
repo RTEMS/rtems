@@ -657,7 +657,7 @@ typedef struct {
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
-void _ARM_Exception_default( CPU_Exception_frame *frame );
+RTEMS_NO_RETURN void _ARM_Exception_default( CPU_Exception_frame *frame );
 
 /** Type that can store a 32-bit integer or a pointer. */
 typedef uintptr_t CPU_Uint32ptr;

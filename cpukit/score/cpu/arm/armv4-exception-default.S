@@ -174,8 +174,4 @@ save_more_context:
 	SWITCH_FROM_ARM_TO_THUMB	r1
 	bl	_ARM_Exception_default
 
-	/* Just in case */
-twiddle:
-	b	twiddle
-
 #endif /* ARM_MULTILIB_ARCH_V4 */
