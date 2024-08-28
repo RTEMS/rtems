@@ -1,7 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the default exception handlers.
+ */
+
 /*
- * Copyright (c) 2013 embedded brains GmbH & Co. KG
+ * Copyright (c) 2013, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,7 +42,7 @@
 #ifdef ARM_MULTILIB_ARCH_V4
 
 #define MORE_CONTEXT_SIZE \
-  (ARM_EXCEPTION_FRAME_SIZE - ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET)
+  (ARM_EXCEPTION_FRAME_SIZE - ARM_EXCEPTION_FRAME_REGISTER_R8_OFFSET)
 
 .extern _ARM_Exception_default
 
@@ -52,7 +60,7 @@ _ARMV4_Exception_undef_default:
 
 	/* Save context and load vector */
 	sub	sp, #MORE_CONTEXT_SIZE
-	stmdb	sp!, {r0-r12}
+	stmdb	sp!, {r0-r7}
 	mov	r4, #1
 	mov	r5, #ARM_PSR_I
 
@@ -62,7 +70,7 @@ _ARMV4_Exception_swi_default:
 
 	/* Save context and load vector */
 	sub	sp, #MORE_CONTEXT_SIZE
-	stmdb	sp!, {r0-r12}
+	stmdb	sp!, {r0-r7}
 	mov	r4, #2
 	mov	r5, #ARM_PSR_I
 
@@ -72,7 +80,7 @@ _ARMV4_Exception_pref_abort_default:
 
 	/* Save context and load vector */
 	sub	sp, #MORE_CONTEXT_SIZE
-	stmdb	sp!, {r0-r12}
+	stmdb	sp!, {r0-r7}
 	mov	r4, #3
 	mov	r5, #ARM_PSR_I
 
@@ -82,7 +90,7 @@ _ARMV4_Exception_data_abort_default:
 
 	/* Save context and load vector */
 	sub	sp, #MORE_CONTEXT_SIZE
-	stmdb	sp!, {r0-r12}
+	stmdb	sp!, {r0-r7}
 	mov	r4, #4
 	mov	r5, #ARM_PSR_I
 
@@ -92,7 +100,7 @@ _ARMV4_Exception_fiq_default:
 
 	/* Save context and load vector */
 	sub	sp, #MORE_CONTEXT_SIZE
-	stmdb	sp!, {r0-r12}
+	stmdb	sp!, {r0-r7}
 	mov	r4, #7
 	mov	r5, #(ARM_PSR_I | ARM_PSR_F)
 
@@ -103,15 +111,14 @@ save_more_context:
 	mrs	r3, spsr
 	mrs	r7, cpsr
 	orr	r5, r5, r3
+	add	r6, sp, #ARM_EXCEPTION_FRAME_REGISTER_R8_OFFSET
 	add	sp, #ARM_EXCEPTION_FRAME_SIZE
 	msr	cpsr, r5
-	mov	r0, sp
-	mov	r1, lr
+	stmia	r6!, {r8-r14}
 	msr	cpsr, r7
 	sub	sp, #ARM_EXCEPTION_FRAME_SIZE
 	mov	r5, #0
-	add	r6, sp, #ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET
-	stm	r6, {r0-r5}
+	stm	r6, {r2-r5}
 
 	/* Argument for high level handler */
 	mov	r0, sp
