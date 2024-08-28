@@ -183,6 +183,8 @@ static inline void *_CPU_Get_TLS_thread_pointer(
   return (void *) context->thread_id;
 }
 
+RTEMS_NO_RETURN void _CPU_Exception_resume( const CPU_Exception_frame *frame );
+
 #ifdef __cplusplus
 }
 #endif
