@@ -39,13 +39,16 @@
 #include <bsp.h>
 #include <dev/serial/arm-pl011.h>
 #include <bsp/console-termios.h>
+#include <bsp/irq.h>
 
 #include <bspopts.h>
 
 arm_pl011_context raspberrypi_4_context = {
   .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("PL011"),
-  .regs = (volatile pl011 *) BSP_RPI4_PL011_BASE,
-  .initial_baud = 115200
+  .regs = (arm_pl011_uart *)BSP_RPI4_PL011_BASE,
+  .initial_baud = 115200,
+  .clock = 48000000,
+  .irq = BCM2711_IRQ_PL011_UART
 };
 
 const console_device console_device_table[] = {

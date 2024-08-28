@@ -26,87 +26,141 @@
  */
 
 #include <dev/serial/versal-uart.h>
-#include <dev/serial/versal-uart-regs.h>
+#include <dev/serial/arm-pl011.h>
 #include <bsp/irq.h>
 
 #include <bspopts.h>
 
 static uint32_t versal_uart_intr_all(void)
 {
-  return VERSAL_UARTI_OEI |
-    VERSAL_UARTI_BEI |
-    VERSAL_UARTI_PEI |
-    VERSAL_UARTI_FEI |
-    VERSAL_UARTI_RTI |
-    VERSAL_UARTI_TXI |
-    VERSAL_UARTI_RXI |
-    VERSAL_UARTI_DSRMI |
-    VERSAL_UARTI_DCDMI |
-    VERSAL_UARTI_CTSMI |
-    VERSAL_UARTI_RIMI;
+  return PL011_UARTI_OEI |
+    PL011_UARTI_BEI |
+    PL011_UARTI_PEI |
+    PL011_UARTI_FEI |
+    PL011_UARTI_RTI |
+    PL011_UARTI_TXI |
+    PL011_UARTI_RXI |
+    PL011_UARTI_DSRMI |
+    PL011_UARTI_DCDMI |
+    PL011_UARTI_CTSMI |
+    PL011_UARTI_RIMI;
 }
 
-#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
-static void versal_uart_intr_clear(volatile versal_uart *regs, uint32_t ints)
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
+static void versal_uart_intr_clear(volatile arm_pl011_uart *regs, uint32_t ints)
 {
-  regs->uarticr = ints;
+  regs->base.uarticr = ints;
 }
 
-static void versal_uart_intr_clearall(volatile versal_uart *regs)
+static void versal_uart_intr_clearall(volatile arm_pl011_uart *regs)
 {
   versal_uart_intr_clear(regs, versal_uart_intr_all());
 }
 
-static void versal_uart_intr_enable(volatile versal_uart *regs, uint32_t ints)
+static void versal_uart_intr_enable(volatile arm_pl011_uart *regs, uint32_t ints)
 {
-  regs->uartimsc |= ints;
+  regs->base.uartimsc |= ints;
 }
 #endif
 
-static void versal_uart_intr_disable(volatile versal_uart *regs, uint32_t ints)
+static void versal_uart_intr_disable(volatile arm_pl011_uart *regs, uint32_t ints)
 {
-  regs->uartimsc &= ~ints;
+  regs->base.uartimsc &= ~ints;
 }
 
-static void versal_uart_intr_disableall(volatile versal_uart *regs)
+static void versal_uart_intr_disableall(volatile arm_pl011_uart *regs)
 {
   versal_uart_intr_disable(regs, versal_uart_intr_all());
 }
 
-#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
-static bool versal_uart_flags_clear(volatile versal_uart *regs, uint32_t flags)
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
+static bool versal_uart_flags_clear(volatile arm_pl011_uart *regs, uint32_t flags)
 {
-  return (regs->uartfr & flags) == 0;
+  return (regs->base.uartfr & flags) == 0;
 }
 
 static void versal_uart_interrupt(void *arg)
 {
   rtems_termios_tty *tty = arg;
-  versal_uart_context *ctx = rtems_termios_get_device_context(tty);
-  volatile versal_uart *regs = ctx->regs;
-  uint32_t uartmis = regs->uartmis;
+  versal_pl011_context *ctx = rtems_termios_get_device_context(tty);
+  volatile arm_pl011_uart *regs = (volatile arm_pl011_uart *) ctx->pl011_ctx.regs;
+  uint32_t uartmis = regs->base.uartmis;
 
   versal_uart_intr_clear(regs, uartmis);
 
-  if ((uartmis & (VERSAL_UARTI_RTI | VERSAL_UARTI_RXI)) != 0) {
+  if ((uartmis & (PL011_UARTI_RTI | PL011_UARTI_RXI)) != 0) {
     char buf[32];
     int c = 0;
     while (c < sizeof(buf) &&
-           versal_uart_flags_clear(regs, VERSAL_UARTFR_RXFE)) {
-      buf[c++] = (char) VERSAL_UARTDR_DATA_GET(regs->uartdr);
+           versal_uart_flags_clear(regs, PL011_UARTFR_RXFE)) {
+      buf[c++] = (char) PL011_UARTDR_DATA_GET(regs->base.uartdr);
     }
     rtems_termios_enqueue_raw_characters(tty, buf, c);
   }
 
   if (ctx->transmitting) {
-    int sent = ctx->tx_queued;
+    int sent = ctx->pl011_ctx.tx_queued_chars;
     ctx->transmitting = false;
-    ctx->tx_queued = 0;
-    versal_uart_intr_disable(regs, VERSAL_UARTI_TXI);
+    ctx->pl011_ctx.tx_queued_chars = 0;
+    versal_uart_intr_disable(regs, PL011_UARTI_TXI);
     rtems_termios_dequeue_characters(tty, sent);
   }
 }
 #endif
+
+void versal_uart_reset_tx_flush(rtems_termios_device_context *base)
+{
+  volatile arm_pl011_uart *regs = (volatile arm_pl011_uart *) arm_pl011_get_regs(base);
+  int c = 4;
+
+  while (c-- > 0) {
+    arm_pl011_write_polled(base, '\r');
+  }
+
+  while ((regs->base.uartfr & PL011_UARTFR_TXFE) == 0) {
+    /* Wait for empty */
+  }
+  while ((regs->base.uartfr & PL011_UARTFR_BUSY) != 0) {
+    /* Wait for empty */
+  }
+}
+
+int versal_uart_initialize(rtems_termios_device_context *base)
+{
+  volatile pl011_base *regs = (volatile pl011_base *)arm_pl011_get_regs(base);
+  arm_pl011_context *ctx = (arm_pl011_context *) base;
+  uint32_t maxerr = 3;
+  uint32_t ibauddiv = 0;
+  uint32_t fbauddiv = 0;
+  int rv;
+
+  versal_uart_reset_tx_flush(base);
+
+  rv = arm_pl011_compute_baudrate_params(
+    &ibauddiv,
+    &fbauddiv,
+    VERSAL_UART_DEFAULT_BAUD,
+    ctx->clock,
+    maxerr
+  );
+  if (rv != 0) {
+    return rv;
+  }
+
+  /* Line control: 8-bit word length, no parity, no FIFO, 1 stop bit */
+  regs->uartlcr_h = PL011_UARTLCR_H_WLEN( PL011_UARTLCR_H_WLEN_8 )
+    | PL011_UARTLCR_H_FEN;
+
+  /* Control: receive, transmit, uart enable, no CTS, no RTS, no loopback */
+  regs->uartcr = PL011_UARTCR_RXE
+    | PL011_UARTCR_TXE
+    | PL011_UARTCR_UARTEN;
+
+  regs->uartibrd = ibauddiv;
+  regs->uartfbrd = fbauddiv;
+
+  return 0;
+}
 
 static bool versal_uart_first_open(
   rtems_termios_tty *tty,
@@ -115,25 +169,25 @@ static bool versal_uart_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
-#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
-  versal_uart_context *ctx = (versal_uart_context *) base;
-  volatile versal_uart *regs = ctx->regs;
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
+  versal_pl011_context *ctx = (versal_pl011_context *) base;
+  volatile arm_pl011_uart *regs = (volatile arm_pl011_uart *) ctx->pl011_ctx.regs;
   rtems_status_code sc;
 
   ctx->transmitting = false;
-  ctx->tx_queued = 0;
-  ctx->first_send = true;
+  ctx->pl011_ctx.tx_queued_chars = 0;
+  ctx->pl011_ctx.needs_sw_triggered_tx_irq = true;
 #endif
 
   rtems_termios_set_initial_baud(tty, VERSAL_UART_DEFAULT_BAUD);
   versal_uart_initialize(base);
 
-#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
-  regs->uartifls = VERSAL_UARTIFLS_RXIFLSEL(2) | VERSAL_UARTIFLS_TXIFLSEL(2);
-  regs->uartlcr_h |= VERSAL_UARTLCR_H_FEN;
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
+  regs->base.uartifls = PL011_UARTIFLS_RXIFLSEL(2) | PL011_UARTIFLS_TXIFLSEL(2);
+  regs->base.uartlcr_h |= PL011_UARTLCR_H_FEN;
   versal_uart_intr_disableall(regs);
   sc = rtems_interrupt_handler_install(
-    ctx->irq,
+    ctx->pl011_ctx.irq,
     "UART",
     RTEMS_INTERRUPT_SHARED,
     versal_uart_interrupt,
@@ -143,21 +197,21 @@ static bool versal_uart_first_open(
     return false;
   }
   versal_uart_intr_clearall(regs);
-  versal_uart_intr_enable(regs, VERSAL_UARTI_RTI | VERSAL_UARTI_RXI);
+  versal_uart_intr_enable(regs, PL011_UARTI_RTI | PL011_UARTI_RXI);
 #endif
 
   return true;
 }
 
-#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
 static void versal_uart_last_close(
   rtems_termios_tty *tty,
   rtems_termios_device_context *base,
   rtems_libio_open_close_args_t *args
 )
 {
-  versal_uart_context *ctx = (versal_uart_context *) base;
-  rtems_interrupt_handler_remove(ctx->irq, versal_uart_interrupt, tty);
+  versal_pl011_context *ctx = (versal_pl011_context *) base;
+  rtems_interrupt_handler_remove(ctx->pl011_ctx.irq, versal_uart_interrupt, tty);
 }
 #endif
 
@@ -167,37 +221,37 @@ static void versal_uart_write_support(
   size_t len
 )
 {
-#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
-  versal_uart_context *ctx = (versal_uart_context *) base;
-  volatile versal_uart *regs = ctx->regs;
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
+  versal_pl011_context *ctx = (versal_pl011_context *) base;
+  volatile arm_pl011_uart *regs = (volatile arm_pl011_uart *) ctx->pl011_ctx.regs;
 
   if (len > 0) {
     size_t len_remaining = len;
     const char *p = &buf[0];
-    versal_uart_intr_enable(regs, VERSAL_UARTI_TXI);
+    versal_uart_intr_enable(regs, PL011_UARTI_TXI);
     /*
      * The PL011 IP in the Versal needs preloading the TX FIFO with
      * exactly 17 characters for the first TX interrupt to be
      * generated.
      */
-    if (ctx->first_send) {
-      ctx->first_send = false;
+    if (ctx->pl011_ctx.needs_sw_triggered_tx_irq) {
+      ctx->pl011_ctx.needs_sw_triggered_tx_irq = false;
       for (int i = 0; i < 17; ++i) {
-        regs->uartdr = VERSAL_UARTDR_DATA('\r');
+        regs->base.uartdr = PL011_UARTDR_DATA('\r');
       }
     }
-    while (versal_uart_flags_clear(regs, VERSAL_UARTFR_TXFF) &&
+    while (versal_uart_flags_clear(regs, PL011_UARTFR_TXFF) &&
            len_remaining > 0) {
-      regs->uartdr = VERSAL_UARTDR_DATA(*p++);
+      regs->base.uartdr = PL011_UARTDR_DATA(*p++);
       --len_remaining;
     }
-    ctx->tx_queued = len - len_remaining;
+    ctx->pl011_ctx.tx_queued_chars = len - len_remaining;
     ctx->transmitting = true;
   }
 #else
   ssize_t i;
   for (i = 0; i < len; ++i) {
-    versal_uart_write_polled(base, buf[i]);
+    arm_pl011_write_polled(base, buf[i]);
   }
 #endif
 }
@@ -207,8 +261,8 @@ static bool versal_uart_set_attributes(
   const struct termios *term
 )
 {
-  versal_uart_context *ctx = (versal_uart_context *) context;
-  volatile versal_uart *regs = ctx->regs;
+  versal_pl011_context *ctx = (versal_pl011_context *) context;
+  volatile arm_pl011_uart *regs = (volatile arm_pl011_uart *) ctx->pl011_ctx.regs;
   int32_t baud;
   uint32_t ibauddiv = 0;
   uint32_t fbauddiv = 0;
@@ -223,11 +277,12 @@ static bool versal_uart_set_attributes(
   if (baud > 0) {
     uint32_t maxerr = 3;
 
-    rc = versal_cal_baud_rate(
-        VERSAL_UART_DEFAULT_BAUD,
-        maxerr,
-        &ibauddiv,
-        &fbauddiv
+    rc = arm_pl011_compute_baudrate_params(
+      &ibauddiv,
+      &fbauddiv,
+      baud,
+      ctx->pl011_ctx.clock,
+      maxerr
     );
     if (rc != 0) {
       return rc;
@@ -237,15 +292,15 @@ static bool versal_uart_set_attributes(
   /*
    * Configure the mode register
    */
-  mode = regs->uartlcr_h & VERSAL_UARTLCR_H_FEN;
+  mode = regs->base.uartlcr_h & PL011_UARTLCR_H_FEN;
 
   /*
    * Parity
    */
   if ((term->c_cflag & PARENB) != 0) {
-    mode |= VERSAL_UARTLCR_H_PEN;
+    mode |= PL011_UARTLCR_H_PEN;
     if ((term->c_cflag & PARODD) == 0) {
-      mode |= VERSAL_UARTLCR_H_EPS;
+      mode |= PL011_UARTLCR_H_EPS;
     }
   }
 
@@ -255,17 +310,17 @@ static bool versal_uart_set_attributes(
   switch (term->c_cflag & CSIZE)
   {
   case CS5:
-    mode = VERSAL_UARTLCR_H_WLEN_SET(mode, VERSAL_UARTLCR_H_WLEN_5);
+    mode = PL011_UARTLCR_H_WLEN_SET(mode, PL011_UARTLCR_H_WLEN_5);
     break;
   case CS6:
-    mode = VERSAL_UARTLCR_H_WLEN_SET(mode, VERSAL_UARTLCR_H_WLEN_6);
+    mode = PL011_UARTLCR_H_WLEN_SET(mode, PL011_UARTLCR_H_WLEN_6);
     break;
   case CS7:
-    mode = VERSAL_UARTLCR_H_WLEN_SET(mode, VERSAL_UARTLCR_H_WLEN_7);
+    mode = PL011_UARTLCR_H_WLEN_SET(mode, PL011_UARTLCR_H_WLEN_7);
     break;
   case CS8:
   default:
-    mode = VERSAL_UARTLCR_H_WLEN_SET(mode, VERSAL_UARTLCR_H_WLEN_8);
+    mode = PL011_UARTLCR_H_WLEN_SET(mode, PL011_UARTLCR_H_WLEN_8);
     break;
   }
 
@@ -274,7 +329,7 @@ static bool versal_uart_set_attributes(
    */
   if (term->c_cflag & CSTOPB) {
     /* 2 stop bits */
-    mode |= VERSAL_UARTLCR_H_STP2;
+    mode |= PL011_UARTLCR_H_STP2;
   }
 
   versal_uart_intr_disableall(regs);
@@ -283,27 +338,27 @@ static bool versal_uart_set_attributes(
    * Wait for any data in the TXFIFO to be sent then wait while the
    * transmiter is active.
    */
-  while ((regs->uartfr & VERSAL_UARTFR_TXFE) == 0 ||
-         (regs->uartfr & VERSAL_UARTFR_BUSY) != 0) {
+  while ((regs->base.uartfr & PL011_UARTFR_TXFE) == 0 ||
+         (regs->base.uartfr & PL011_UARTFR_BUSY) != 0) {
     /* Wait */
   }
 
-  regs->uartcr = VERSAL_UARTCR_UARTEN;
+  regs->base.uartcr = PL011_UARTCR_UARTEN;
   /* Ignore baud rate of B0. There are no modem control lines to de-assert */
   if (baud > 0) {
-    regs->uartibrd = VERSAL_UARTIBRD_BAUD_DIVINT(ibauddiv);
-    regs->uartfbrd = VERSAL_UARTFBRD_BAUD_DIVFRAC(fbauddiv);
+    regs->base.uartibrd = ibauddiv;
+    regs->base.uartfbrd = fbauddiv;
   }
-  regs->uartlcr_h = mode;
+  regs->base.uartlcr_h = mode;
 
   /* Control: receive, transmit, uart enable, no CTS, no RTS, no loopback */
-  regs->uartcr = VERSAL_UARTCR_RXE
-    | VERSAL_UARTCR_TXE
-    | VERSAL_UARTCR_UARTEN;
+  regs->base.uartcr = PL011_UARTCR_RXE
+    | PL011_UARTCR_TXE
+    | PL011_UARTCR_UARTEN;
 
-#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
   versal_uart_intr_clearall(regs);
-  versal_uart_intr_enable(regs, VERSAL_UARTI_RTI | VERSAL_UARTI_RXI);
+  versal_uart_intr_enable(regs, PL011_UARTI_RTI | PL011_UARTI_RXI);
 #endif
 
   return true;
@@ -313,11 +368,11 @@ const rtems_termios_device_handler versal_uart_handler = {
   .first_open = versal_uart_first_open,
   .set_attributes = versal_uart_set_attributes,
   .write = versal_uart_write_support,
-#ifdef VERSAL_CONSOLE_USE_INTERRUPTS
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
   .last_close = versal_uart_last_close,
   .mode = TERMIOS_IRQ_DRIVEN
 #else
-  .poll_read = versal_uart_read_polled,
+  .poll_read = arm_pl011_read_polled,
   .mode = TERMIOS_POLLED
 #endif
 };

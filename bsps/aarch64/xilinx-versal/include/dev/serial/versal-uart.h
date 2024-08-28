@@ -37,6 +37,8 @@
 #define LIBBSP_ARM_XILINX_VERSAL_UART_H
 
 #include <rtems/termiostypes.h>
+#include <dev/serial/arm-pl011.h>
+#include <dev/serial/arm-pl011-regs.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -52,13 +54,9 @@ extern "C" {
  */
 
 typedef struct {
-  rtems_termios_device_context base;
-  volatile struct versal_uart *regs;
-  volatile size_t tx_queued;
+  arm_pl011_context pl011_ctx;
   volatile bool transmitting;
-  bool first_send;
-  rtems_vector_number irq;
-} versal_uart_context;
+} versal_pl011_context;
 
 extern const rtems_termios_device_handler versal_uart_handler;
 
@@ -66,24 +64,7 @@ extern const rtems_termios_device_handler versal_uart_handler;
 
 int versal_uart_initialize(rtems_termios_device_context *base);
 
-int versal_uart_read_polled(rtems_termios_device_context *base);
-
-void versal_uart_write_polled(
-  rtems_termios_device_context *base,
-  char c
-);
-
-/**
-  * Flush TX FIFO and wait until it is empty.
-  */
 void versal_uart_reset_tx_flush(rtems_termios_device_context *base);
-
-int versal_cal_baud_rate(
-  uint32_t  baudrate,
-  uint32_t  maxerror,
-  uint32_t* ibdiv,
-  uint32_t* fbdiv
-);
 
 #ifdef __cplusplus
 }

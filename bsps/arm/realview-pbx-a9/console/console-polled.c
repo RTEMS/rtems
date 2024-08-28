@@ -28,14 +28,15 @@
 #include <bsp/console.h>
 #include <bsp.h>
 #include <bsp/irq.h>
-
+#include <dev/serial/arm-pl011.h>
 #include <rtems/bspIo.h>
 
 arm_pl011_context rvpbx_pl011_context = {
   .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("PL011"),
-  .regs = (volatile pl011 *) 0x10009000,
+  .regs = (arm_pl011_uart *) 0x10009000,
   .irq = RVPBXA9_IRQ_UART_0,
-  .initial_baud = 115200
+  .initial_baud = 115200,
+  .clock = 24000000
 };
 
 static void output_char(char c)

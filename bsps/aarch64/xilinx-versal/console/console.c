@@ -38,19 +38,28 @@
 #include <rtems/sysinit.h>
 
 #include <bsp/irq.h>
+#include <dev/serial/arm-pl011.h>
 #include <dev/serial/versal-uart.h>
 
 #include <bspopts.h>
 
-static versal_uart_context versal_uart_instances[2] = {
+static versal_pl011_context versal_uart_instances[2] = {
   {
-    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Versal UART 0" ),
-    .regs = (volatile struct versal_uart *) 0xff000000,
-    .irq = VERSAL_IRQ_UART_0
+    .pl011_ctx = {
+      .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("Versal UART 0"),
+      .regs = (arm_pl011_uart *) 0xff000000,
+      .irq = VERSAL_IRQ_UART_0,
+      .clock = VERSAL_CLOCK_UART,
+      .initial_baud = VERSAL_UART_DEFAULT_BAUD
+    }
   }, {
-    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Versal UART 1" ),
-    .regs = (volatile struct versal_uart *) 0xff010000,
-    .irq = VERSAL_IRQ_UART_1
+    .pl011_ctx = {
+      .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("Versal UART 1"),
+      .regs = (arm_pl011_uart *) 0xff010000,
+      .irq = VERSAL_IRQ_UART_1,
+      .clock = VERSAL_CLOCK_UART,
+      .initial_baud = VERSAL_UART_DEFAULT_BAUD
+    }
   }
 };
 
@@ -72,7 +81,7 @@ rtems_status_code console_initialize(
       &uart[0],
       &versal_uart_handler,
       NULL,
-      &versal_uart_instances[i].base
+      &versal_uart_instances[i].pl011_ctx.base
     );
 
     if (i == BSP_CONSOLE_MINOR) {
@@ -85,21 +94,23 @@ rtems_status_code console_initialize(
 
 void versal_debug_console_flush(void)
 {
-  versal_uart_reset_tx_flush(&versal_uart_instances[BSP_CONSOLE_MINOR].base);
+  versal_uart_reset_tx_flush(
+    &versal_uart_instances[BSP_CONSOLE_MINOR].pl011_ctx.base
+  );
 }
 
 static void versal_debug_console_out(char c)
 {
   rtems_termios_device_context *base =
-    &versal_uart_instances[BSP_CONSOLE_MINOR].base;
+    &versal_uart_instances[BSP_CONSOLE_MINOR].pl011_ctx.base;
 
-  versal_uart_write_polled(base, c);
+  arm_pl011_write_polled(base, c);
 }
 
 static void versal_debug_console_init(void)
 {
   rtems_termios_device_context *base =
-    &versal_uart_instances[BSP_CONSOLE_MINOR].base;
+    &versal_uart_instances[BSP_CONSOLE_MINOR].pl011_ctx.base;
 
   (void) versal_uart_initialize(base);
   BSP_output_char = versal_debug_console_out;
@@ -108,7 +119,7 @@ static void versal_debug_console_init(void)
 static void versal_debug_console_early_init(char c)
 {
   rtems_termios_device_context *base =
-    &versal_uart_instances[BSP_CONSOLE_MINOR].base;
+    &versal_uart_instances[BSP_CONSOLE_MINOR].pl011_ctx.base;
 
   (void) versal_uart_initialize(base);
   BSP_output_char = versal_debug_console_out;
@@ -118,9 +129,9 @@ static void versal_debug_console_early_init(char c)
 static int versal_debug_console_in(void)
 {
   rtems_termios_device_context *base =
-    &versal_uart_instances[BSP_CONSOLE_MINOR].base;
+    &versal_uart_instances[BSP_CONSOLE_MINOR].pl011_ctx.base;
 
-  return versal_uart_read_polled(base);
+  return arm_pl011_read_polled(base);
 }
 
 BSP_output_char_function_type BSP_output_char = versal_debug_console_early_init;

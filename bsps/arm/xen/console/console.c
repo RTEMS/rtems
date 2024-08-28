@@ -37,9 +37,10 @@
 
 arm_pl011_context xen_vpl011_context = {
   .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("PL011"),
-  .regs = (volatile pl011 *) BSP_XEN_VPL011_BASE,
+  .regs = (arm_pl011_uart *) BSP_XEN_VPL011_BASE,
   .irq = GUEST_VPL011_SPI,
-  .initial_baud = 115200
+  .initial_baud = 115200,
+  .clock = 24000000
 };
 
 const console_device console_device_table[] = {

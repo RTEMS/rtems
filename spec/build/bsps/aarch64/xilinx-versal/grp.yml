@@ -25,7 +25,9 @@ links:
 - role: build-dependency
   uid: obj
 - role: build-dependency
-  uid: optconirq
+  uid: ../../optconsolefifo
+- role: build-dependency
+  uid: ../../optconsoleirq
 - role: build-dependency
   uid: optloadoff
 - role: build-dependency

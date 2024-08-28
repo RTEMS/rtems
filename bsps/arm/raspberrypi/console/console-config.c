@@ -46,7 +46,9 @@
 #define MINIUART  "/dev/ttyS0"
 #define FBCONS    "/dev/fbcons"
 
-arm_pl011_context pl011_context;
+arm_pl011_context pl011_context = {
+  .clock = 48000000
+};
 ns16550_context mini_uart_context;
 
 rpi_fb_context fb_context;

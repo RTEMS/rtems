@@ -40,6 +40,10 @@ links:
 - role: build-dependency
   uid: abi
 - role: build-dependency
+  uid: ../../optconsolefifo
+- role: build-dependency
+  uid: ../../optconsoleirq
+- role: build-dependency
   uid: ../../optcachedata
 - role: build-dependency
   uid: ../../optcacheinst

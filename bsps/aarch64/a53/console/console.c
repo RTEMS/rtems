@@ -44,8 +44,9 @@
 
 arm_pl011_context a53_qemu_vpl011_context = {
   .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("PL011"),
-  .regs = (volatile pl011 *) BSP_A53_QEMU_VPL011_BASE,
-  .initial_baud = 115200
+  .regs = (arm_pl011_uart *) BSP_A53_QEMU_VPL011_BASE,
+  .initial_baud = 115200,
+  .clock = 24000000
 };
 
 const console_device console_device_table[] = {

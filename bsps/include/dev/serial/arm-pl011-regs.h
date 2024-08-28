@@ -33,6 +33,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * @defgroup ARM PL011 UART Register Definitions
+ * @ingroup RTEMSBSPsARMShared
+ * @brief UART Register Definitions
+ * @{
+ */
+
 #ifndef LIBBSP_ARM_SHARED_ARM_PL011_REGS_H
 #define LIBBSP_ARM_SHARED_ARM_PL011_REGS_H
 
@@ -69,10 +76,16 @@ typedef struct {
 #define PL011_UARTILPR_ILPDVSR_GET(reg) BSP_FLD32GET(reg, 0, 7)
 #define PL011_UARTILPR_ILPDVSR_SET(reg, val) BSP_FLD32SET(reg, val, 0, 7)
   uint32_t uartibrd;
+#define PL011_UARTIBRD_BAUD_DIVINT_WIDTH 16
+#define PL011_UARTIBRD_BAUD_DIVINT_MASK \
+  BSP_MSK32(0, PL011_UARTIBRD_BAUD_DIVINT_WIDTH - 1)
 #define PL011_UARTIBRD_BAUD_DIVINT(val) BSP_FLD32(val, 0, 15)
 #define PL011_UARTIBRD_BAUD_DIVINT_GET(reg) BSP_FLD32GET(reg, 0, 15)
 #define PL011_UARTIBRD_BAUD_DIVINT_SET(reg, val) BSP_FLD32SET(reg, val, 0, 15)
   uint32_t uartfbrd;
+#define PL011_UARTFBRD_BAUD_DIVFRAC_WIDTH 6
+#define PL011_UARTFBRD_BAUD_DIVFRAC_MASK \
+  BSP_MSK32(0, PL011_UARTFBRD_BAUD_DIVFRAC_WIDTH - 1)
 #define PL011_UARTFBRD_BAUD_DIVFRAC(val) BSP_FLD32(val, 0, 5)
 #define PL011_UARTFBRD_BAUD_DIVFRAC_GET(reg) BSP_FLD32GET(reg, 0, 5)
 #define PL011_UARTFBRD_BAUD_DIVFRAC_SET(reg, val) BSP_FLD32SET(reg, val, 0, 5)
@@ -125,19 +138,13 @@ typedef struct {
 #define PL011_UARTI_DCDMI BSP_BIT32(2)
 #define PL011_UARTI_CTSMI BSP_BIT32(1)
 #define PL011_UARTI_RIMI BSP_BIT32(0)
+#define PL011_UARTI_MASK BSP_MSK32(0, 10)
   uint32_t uartdmacr;
 #define PL011_UARTDMACR_DMAONERR BSP_BIT32(2)
 #define PL011_UARTDMACR_TXDMAE BSP_BIT32(1)
 #define PL011_UARTDMACR_RXDMAE BSP_BIT32(0)
-  uint32_t reserved_4c[997];
-  uint32_t uartperiphid0;
-  uint32_t uartperiphid1;
-  uint32_t uartperiphid2;
-  uint32_t uartperiphid3;
-  uint32_t uartpcellid0;
-  uint32_t uartpcellid1;
-  uint32_t uartpcellid2;
-  uint32_t uartpcellid3;
-} pl011;
+} pl011_base;
+
+/** @} */
 
 #endif /* LIBBSP_ARM_SHARED_ARM_PL011_REGS_H */

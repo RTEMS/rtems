@@ -50,6 +50,11 @@
 /* Interrupt Vectors: SPI */
 #define BCM2711_IRQ_SPI         (BCM2711_IRQ_VC_PERIPHERAL_BASE + 54)
 
+/* Interrupt Vectors: Videocore */
+#define BCM2711_IRQ_VC_PERIPHERAL_BASE 96
+#define BCM2711_IRQ_AUX                (BCM2711_IRQ_VC_PERIPHERAL_BASE + 29)
+#define BCM2711_IRQ_PL011_UART         (BCM2711_IRQ_VC_PERIPHERAL_BASE + 57)
+
 #define BCM2835_IRQ_ID_USB           9
 #define BCM2835_IRQ_ID_AUX           29
 #define BCM2835_IRQ_ID_SPI_SLAVE     43
