@@ -1,13 +1,15 @@
 /**
  * @file
- * @ingroup zynq_uart
- * @brief UART support.
+ *
+ * @ingroup RTEMSDeviceSerialZynq
+ *
+ * @brief This header file provides Zynq UART Termios driver interfaces.
  */
 
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2013, XXX embedded brains GmbH & Co. KG
+ * Copyright (C) 2013, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -41,12 +43,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup zynq_uart UART Support
- * @ingroup RTEMSBSPsARMZynq
- * @brief UART Support
+ * @addtogroup RTEMSDeviceSerialZynq
  *
- * This driver operates an instance of the Cadence UART present in the
- * family of Xilinx Zynq SoCs.
+ * @{
  */
 
 typedef struct {
@@ -58,6 +57,8 @@ typedef struct {
 } zynq_uart_context;
 
 extern const rtems_termios_device_handler zynq_uart_handler;
+
+/** @} */
 
 #ifdef __cplusplus
 }

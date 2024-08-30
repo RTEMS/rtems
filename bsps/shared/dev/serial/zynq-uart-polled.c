@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsARMZynq
+ * @ingroup RTEMSDeviceSerialZynq
  *
  * @brief This source file contains the implementation of the polled Zynq UART
  *   support.

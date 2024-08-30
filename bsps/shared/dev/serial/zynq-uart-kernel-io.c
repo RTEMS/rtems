@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup zynq_uart
+ * @ingroup RTEMSDeviceSerialZynq
  *
  * @brief This source file contains the definition of ::BSP_output_char and
  *   ::BSP_poll_char.

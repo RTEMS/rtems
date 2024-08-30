@@ -1,7 +1,9 @@
 /**
  * @file
- * @ingroup zynq_uart_regs
- * @brief UART register definitions.
+ *
+ * @ingroup RTEMSDeviceSerialZynq
+ *
+ * @brief This header file provides Zynq UART interfaces.
  */
 
 /*
@@ -32,9 +34,12 @@
  */
 
 /**
- * @defgroup zynq_uart_regs UART Register Definitions
- * @ingroup zynq_uart
- * @brief UART Register Definitions
+ * @defgroup RTEMSDeviceSerialZynq Zynq UART Support
+ *
+ * @ingroup RTEMSDeviceConsole
+ *
+ * @brief This group contains the Zynq UART support.
+ *
  * @{
  */
 

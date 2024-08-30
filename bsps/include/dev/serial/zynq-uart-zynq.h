@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup zynq_uart
+ * @ingroup RTEMSDeviceSerialZynq
  *
  * @brief This header file provides interfaces with respect to the Zynq
  *   platform.
@@ -42,7 +42,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @addtogroup zynq_uart
+ * @addtogroup RTEMSDeviceSerialZynq
  *
  * @{
  */
