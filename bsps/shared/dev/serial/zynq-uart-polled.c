@@ -39,6 +39,7 @@
 #include <bspopts.h>
 
 #include <rtems/dev/io.h>
+#include <rtems/score/assert.h>
 
 /*
  * Make weak and let the user override.
@@ -50,94 +51,94 @@ uint32_t zynq_uart_input_clock(void)
   return ZYNQ_CLOCK_UART;
 }
 
-int zynq_cal_baud_rate(uint32_t  baudrate,
-                              uint32_t* brgr,
-                              uint32_t* bauddiv,
-                              uint32_t  modereg)
+static uint32_t zync_uart_baud_error(
+  uint32_t selected_clock,
+  uint32_t desired_baud,
+  uint32_t cd,
+  uint32_t bdiv_plus_one
+)
 {
-  uint32_t brgr_value;    /* Calculated value for baud rate generator */
-  uint32_t calcbaudrate;  /* Calculated baud rate */
-  uint32_t bauderror;     /* Diff between calculated and requested baud rate */
-  uint32_t best_error = 0xFFFFFFFF;
-  uint32_t percenterror;
-  uint32_t bdiv;
-  uint32_t inputclk = zynq_uart_input_clock();
+  uint32_t actual_baud = selected_clock / ( cd * bdiv_plus_one );
 
-  /*
-   * Make sure the baud rate is not impossilby large.
-   * Fastest possible baud rate is Input Clock / 2.
-   */
-  if ((baudrate * 2) > inputclk) {
-    return -1;
-  }
-  /*
-   * Check whether the input clock is divided by 8
-   */
-  if(modereg & ZYNQ_UART_MODE_CLKS) {
-    inputclk = inputclk / 8;
+  if ( actual_baud > desired_baud ) {
+    return actual_baud - desired_baud;
   }
 
-  /*
-   * Determine the Baud divider. It can be 4to 254.
-   * Loop through all possible combinations
-   */
-  for (bdiv = 4; bdiv < 255; bdiv++) {
+  return desired_baud - actual_baud;
+}
 
-    /*
-     * Calculate the value for BRGR register
-     */
-    brgr_value = inputclk / (baudrate * (bdiv + 1));
+uint32_t zynq_uart_calculate_baud(
+  uint32_t  desired_baud,
+  uint32_t  mode_clks,
+  uint32_t *cd_ptr,
+  uint32_t *bdiv_ptr
+)
+{
+  uint32_t best_error = UINT32_MAX;
+  uint32_t best_cd;
+  uint32_t best_bdiv_plus_one;
+  uint32_t bdiv_plus_one;
+  uint32_t selected_clock;
 
-    /*
-     * Calculate the baud rate from the BRGR value
-     */
-    calcbaudrate = inputclk/ (brgr_value * (bdiv + 1));
+  _Assert((mode_clks & ~ZYNQ_UART_MODE_CLKS) == 0);
+  selected_clock = zynq_uart_input_clock() / (1U << (3 * mode_clks));
 
-    /*
-     * Avoid unsigned integer underflow
-     */
-    if (baudrate > calcbaudrate) {
-      bauderror = baudrate - calcbaudrate;
-    }
-    else {
-      bauderror = calcbaudrate - baudrate;
+  for (bdiv_plus_one = 5; bdiv_plus_one <= 256; ++bdiv_plus_one) {
+    uint32_t cd = ( selected_clock / bdiv_plus_one ) / desired_baud;
+    uint32_t error;
+
+    if (cd == 0 ) {
+      cd = 1;
+    } else if ( cd > 65535 ) {
+      cd = 65535;
     }
 
+    error = zync_uart_baud_error(
+      selected_clock,
+      desired_baud,
+      cd,
+      bdiv_plus_one
+    );
+
     /*
-     * Find the calculated baud rate closest to requested baud rate.
+     * The procedure to detect a start bit uses three samples in the middle of
+     * an RX-bit.  If the sample set is too small, there may be a sample in
+     * another bit in case the baud setting is not accurate.  Most noise is in
+     * the form of small peaks, if the sample rate is too high, then noise may
+     * get detected as a bit.
+     *
+     * Prefer an sample set of around 16 per RX-bit.
      */
-    if (best_error > bauderror) {
-      *brgr = brgr_value;
-      *bauddiv = bdiv;
-      best_error = bauderror;
+    if (error < best_error || (bdiv_plus_one <= 20 && error <= best_error)) {
+      best_error = error;
+      best_cd = cd;
+      best_bdiv_plus_one = bdiv_plus_one;
     }
   }
 
-  /*
-   * Make sure the best error is not too large.
-   */
-  percenterror = (best_error * 100) / baudrate;
-#define XUARTPS_MAX_BAUD_ERROR_RATE		 3	/* max % error allowed */
-  if (XUARTPS_MAX_BAUD_ERROR_RATE < percenterror) {
-    return -1;
-  }
-
-  return 0;
+  *cd_ptr = best_cd;
+  *bdiv_ptr = best_bdiv_plus_one - 1;
+  return best_error;
 }
 
 void zynq_uart_initialize(volatile zynq_uart *regs)
 {
-  uint32_t brgr = 0x3e;
-  uint32_t bauddiv = 0x6;
   uint32_t mode_clks = regs->mode & ZYNQ_UART_MODE_CLKS;
+  uint32_t cd;
+  uint32_t bdiv;
 
   zynq_uart_reset_tx_flush(regs);
-  zynq_cal_baud_rate(ZYNQ_UART_DEFAULT_BAUD, &brgr, &bauddiv, mode_clks);
+  (void) zynq_uart_calculate_baud(
+    ZYNQ_UART_DEFAULT_BAUD,
+    mode_clks,
+    &cd,
+    &bdiv
+  );
 
   regs->control = 0;
   regs->control = ZYNQ_UART_CONTROL_RXDIS | ZYNQ_UART_CONTROL_TXDIS;
-  regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(brgr);
-  regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(bauddiv);
+  regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(cd);
+  regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(bdiv);
   /* A Tx/Rx logic reset must be issued after baud rate manipulation */
   regs->control = ZYNQ_UART_CONTROL_RXDIS | ZYNQ_UART_CONTROL_TXDIS;
   regs->control = ZYNQ_UART_CONTROL_RXRES | ZYNQ_UART_CONTROL_TXRES;
