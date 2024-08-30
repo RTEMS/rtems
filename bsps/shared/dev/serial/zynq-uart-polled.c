@@ -174,10 +174,6 @@ void zynq_uart_write_char_polled(volatile zynq_uart *regs, char c)
 
 void zynq_uart_reset_tx_flush(volatile zynq_uart *regs)
 {
-  int c = 4;
-
-  while (c-- > 0)
-    zynq_uart_write_char_polled(regs, '\r');
 
   while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TEMPTY) == 0 ||
          (regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TACTIVE) != 0) {
