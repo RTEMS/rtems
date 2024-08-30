@@ -34,10 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dev/serial/zynq-uart.h>
 #include <dev/serial/zynq-uart-regs.h>
 
 #include <bspopts.h>
+
+#include <rtems/dev/io.h>
 
 /*
  * Make weak and let the user override.
@@ -165,7 +166,7 @@ int zynq_uart_read_char_polled(volatile zynq_uart *regs)
 void zynq_uart_write_char_polled(volatile zynq_uart *regs, char c)
 {
   while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TNFUL) != 0) {
-    /* Wait */
+    _IO_Relax();
   }
 
   regs->tx_rx_fifo = ZYNQ_UART_TX_RX_FIFO_FIFO(c);
