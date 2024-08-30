@@ -55,6 +55,14 @@
  */
 
 /**
+ * @defgroup RTEMSDeviceConsole Console Drivers
+ *
+ * @ingroup RTEMSDeviceDrivers
+ *
+ * @brief This group contains the console drivers.
+ */
+
+/**
  * @defgroup RTEMSImpl Implementation
  *
  * @brief This group contains the RTEMS implementation components.
