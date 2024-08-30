@@ -177,6 +177,11 @@ void zynq_uart_write_char_polled(volatile zynq_uart *regs, char c);
 void zynq_uart_reset_tx_flush(volatile zynq_uart *regs);
 
 /**
+ * @brief Returns the Zynq UART input clock frequency in Hz.
+ */
+uint32_t zynq_uart_input_clock(void);
+
+/**
  * @brief Calculates the clock and baud divisor of the best approximation of
  *   the desired baud.
  *

@@ -18,6 +18,7 @@ links:
 - role: build-dependency
   uid: optzynquartkernbase
 source:
+- bsps/shared/dev/serial/zynq-uart-input-clock.c
 - bsps/shared/dev/serial/zynq-uart-kernel-io.c
 - bsps/shared/dev/serial/zynq-uart-polled.c
 - bsps/shared/dev/serial/zynq-uart.c

@@ -41,16 +41,6 @@
 #include <rtems/dev/io.h>
 #include <rtems/score/assert.h>
 
-/*
- * Make weak and let the user override.
- */
-uint32_t zynq_uart_input_clock(void) __attribute__ ((weak));
-
-uint32_t zynq_uart_input_clock(void)
-{
-  return ZYNQ_CLOCK_UART;
-}
-
 static uint32_t zync_uart_baud_error(
   uint32_t selected_clock,
   uint32_t desired_baud,
