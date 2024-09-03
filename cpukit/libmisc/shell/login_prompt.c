@@ -69,7 +69,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <errno.h>
-
+#include <string.h>
 #include <rtems/shell.h>
 
 static int rtems_shell_discard( int c, FILE *stream)
@@ -177,6 +177,8 @@ bool rtems_shell_login_prompt(
     result = rtems_shell_get_text( in, out, user, sizeof(user) );
     if ( !result )
       break;
+    if (0 == strlen(user))
+      continue;
 
     fflush( in);
     fprintf( out, "Password: ");
