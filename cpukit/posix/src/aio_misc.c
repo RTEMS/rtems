@@ -267,9 +267,9 @@ void rtems_aio_completed_list_op( listcb *listcbp )
         break;
     }
     free( listcbp );
+  } else {
+    pthread_mutex_unlock( &listcbp->mutex );
   }
-
-  pthread_mutex_unlock( &listcbp->mutex );
 }
 
 rtems_aio_request_chain *rtems_aio_search_fd(
