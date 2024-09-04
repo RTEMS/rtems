@@ -272,7 +272,7 @@ void stm32h7_gpio_init(const stm32h7_gpio_config *config)
 
   index = stm32h7_get_module_index(config->regs);
   stm32h7_clk_enable(index);
-  HAL_GPIO_Init(config->regs, &config->config);
+  HAL_GPIO_Init(config->regs, RTEMS_DECONST( GPIO_InitTypeDef *, &config->config ));
 }
 
 void stm32h7_uart_polled_write(rtems_termios_device_context *base, char c)
