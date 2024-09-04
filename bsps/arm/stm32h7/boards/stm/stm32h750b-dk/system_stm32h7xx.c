@@ -131,6 +131,8 @@
 #if defined (DATA_IN_ExtSDRAM)
   static void SystemInit_ExtMemCtl(void);
 #endif /* DATA_IN_ExtSDRAM */
+#else
+#include <bsp.h>
 #endif
 
 /**

@@ -63,6 +63,7 @@ void stm32h7_init_oscillator(void);
 void stm32h7_init_clocks(void);
 void stm32h7_init_peripheral_clocks(void);
 void stm32h7_init_qspi(void);
+void SystemInit_ExtMemCtl(void);
 
 /** @} */
 
