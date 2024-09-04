@@ -26,6 +26,7 @@ source:
 - testsuites/validation/tc-task-mode.c
 - testsuites/validation/tc-task-set-affinity.c
 - testsuites/validation/tc-task-set-priority.c
+- testsuites/validation/tc-task-timeslice.c
 - testsuites/validation/tc-task-wake-after.c
 - testsuites/validation/ts-validation-one-cpu-0.c
 stlib: []
