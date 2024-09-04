@@ -131,7 +131,7 @@ void bsp_interrupt_facility_initialize(void)
 
   vector_table = (ARMV7M_Exception_handler *) bsp_vector_table_begin;
 
-  if (bsp_vector_table_begin != bsp_start_vector_table_begin) {
+  if (&bsp_vector_table_begin[0] != &bsp_start_vector_table_begin[0]) {
     memcpy(
       vector_table,
       bsp_start_vector_table_begin,
