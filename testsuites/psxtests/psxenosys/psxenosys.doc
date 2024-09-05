@@ -31,14 +31,7 @@ test set name:  psxenosys
 
 directives:
 
-  aio_read
-  aio_write
-  lio_listio
-  aio_error
-  aio_return
-  aio_cancel
   aio_suspend
-  aio_fsync
   clock_getcpuclockid
   execl
   execle

@@ -552,25 +552,21 @@ static void *rtems_aio_notify_function_wrapper( void *args )
 
 static void rtems_aio_notify( struct sigevent *sigp ) 
 {
-#ifdef RTEMS_POSIX_API
-
   int result;
-#ifndef RTEMS_DEBUG
-  (void) result;
-#endif
 
   _Assert( sigp != NULL );
 
   switch ( sigp->sigev_notify ) {
+#ifdef RTEMS_POSIX_API
     case SIGEV_SIGNAL:
       result = sigqueue(
         getpid(),
         sigp->sigev_signo,
         sigp->sigev_value
       );
-      _Assert( result == 0 );
+      _Assert_Unused_variable_equals( result, 0 );
       break;
-
+#endif
     case SIGEV_THREAD:
       pthread_t thread;
       pthread_attr_t attr;
@@ -580,13 +576,13 @@ static void rtems_aio_notify( struct sigevent *sigp )
         attrp = &attr;
 
         result = pthread_attr_init( attrp );
-        _Assert( result == 0 );
+        _Assert_Unused_variable_equals( result, 0 );
 
         result = pthread_attr_setdetachstate(
           attrp, 
           PTHREAD_CREATE_DETACHED
         );
-        _Assert( result == 0 );
+        _Assert_Unused_variable_equals( result, 0 );
       }
 
       result = pthread_create( 
@@ -595,13 +591,9 @@ static void rtems_aio_notify( struct sigevent *sigp )
         rtems_aio_notify_function_wrapper,
         sigp
       );
-      _Assert( result == 0 );
+      _Assert_Unused_variable_equals( result, 0 );
       break;
   }
-
-#else
-  (void) sigp;
-#endif
 }
 
 static void *rtems_aio_handle( void *arg )

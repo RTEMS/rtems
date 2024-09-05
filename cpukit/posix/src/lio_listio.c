@@ -57,6 +57,7 @@ int lio_listio(
   struct sigevent *__restrict sig
 )
 {
+#ifdef RTEMS_POSIX_API 
   int result, error;
   listcb *listcbp;
   rtems_aio_request *req;
@@ -204,5 +205,8 @@ int lio_listio(
   }
 
   return 0;
+#else
+  rtems_set_errno_and_return_minus_one( ENOSYS );
+#endif
 }
 

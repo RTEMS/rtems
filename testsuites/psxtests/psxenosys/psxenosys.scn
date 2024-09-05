@@ -1,22 +1,2 @@
 *** BEGIN OF TEST PSXENOSYS ***
-lio_listio -- ENOSYS
-aio_suspend -- ENOSYS
-clock_getcpuclockid -- ENOSYS
-execl -- ENOSYS
-execle -- ENOSYS
-execlp -- ENOSYS
-execv -- ENOSYS
-execve -- ENOSYS
-execvp -- ENOSYS
-fork -- ENOSYS
-pthread_atfork -- 0
-pthread_getcpuclockid -- ENOSYS
-sched_setparam -- ENOSYS
-sched_getparam -- ENOSYS
-sched_setscheduler -- ENOSYS
-sched_getscheduler -- ENOSYS
-wait -- ENOSYS
-waitpid -- ENOSYS
-mprotect -- stub implementation - OK
-vfork -- stub implementation - OK
 *** END OF TEST PSXENOSYS ***
