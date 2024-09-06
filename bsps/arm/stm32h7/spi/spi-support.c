@@ -298,13 +298,19 @@ static int stm32h7_spi_transfer(
       return 1;
     }
     /* perform transfer */
-    if (msg->tx_buf != NULL) {
+    if (msg->tx_buf != NULL && msg->rx_buf != NULL) {
+      status = HAL_SPI_TransmitReceive(
+        &ctx->spi, msg->tx_buf, msg->rx_buf, msg->len, 100
+      );
+      if (status != HAL_OK) {
+        return 1;
+      }
+    } else if (msg->tx_buf != NULL) {
       status = HAL_SPI_Transmit(&ctx->spi, msg->tx_buf, msg->len, 100);
       if (status != HAL_OK) {
         return 1;
       }
-    }
-    if (msg->rx_buf != NULL) {
+    } else if (msg->rx_buf != NULL) {
       status = HAL_SPI_Receive(&ctx->spi, msg->rx_buf, msg->len, 100);
       if (status != HAL_OK) {
         return 1;
