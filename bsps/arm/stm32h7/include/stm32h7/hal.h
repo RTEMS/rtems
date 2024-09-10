@@ -76,6 +76,8 @@ typedef enum {
   STM32H7_MODULE_SPI4,
   STM32H7_MODULE_SPI5,
   STM32H7_MODULE_SPI6,
+  STM32H7_MODULE_DMA1,
+  STM32H7_MODULE_DMA2,
 } stm32h7_module_index;
 
 stm32h7_module_index stm32h7_get_module_index(const void *regs);

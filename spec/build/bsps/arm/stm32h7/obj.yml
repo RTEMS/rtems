@@ -177,6 +177,7 @@ install:
   - bsps/arm/stm32h7/include/Legacy/stm32h7xx_hal_eth_legacy.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
+  - bsps/arm/stm32h7/include/bsp/dma.h
   - bsps/arm/stm32h7/include/bsp/irq.h
 - destination: ${BSP_INCLUDEDIR}/stm32h7
   source:
@@ -213,6 +214,7 @@ source:
 - bsps/arm/stm32h7/console/console-usart6.c
 - bsps/arm/stm32h7/console/console.c
 - bsps/arm/stm32h7/console/printk-support.c
+- bsps/arm/stm32h7/dma/dma-allocator.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_adc.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_adc_ex.c

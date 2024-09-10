@@ -102,6 +102,10 @@ stm32h7_module_index stm32h7_get_module_index(const void *regs)
       return STM32H7_MODULE_SPI5;
     case SPI6_BASE:
       return STM32H7_MODULE_SPI6;
+    case DMA1_BASE:
+      return STM32H7_MODULE_DMA1;
+    case DMA2_BASE:
+      return STM32H7_MODULE_DMA2;
   }
 
   return STM32H7_MODULE_INVALID;
@@ -169,6 +173,8 @@ static const stm32h7_clk_info stm32h7_clk[] = {
   [STM32H7_MODULE_SPI4] = { &RCC->APB2ENR, RCC_APB2ENR_SPI4EN },
   [STM32H7_MODULE_SPI5] = { &RCC->APB2ENR, RCC_APB2ENR_SPI5EN },
   [STM32H7_MODULE_SPI6] = { &RCC->APB4ENR, RCC_APB4ENR_SPI6EN },
+  [STM32H7_MODULE_DMA1] = { &RCC->AHB1ENR, RCC_AHB1ENR_DMA1EN },
+  [STM32H7_MODULE_DMA2] = { &RCC->AHB1ENR, RCC_AHB1ENR_DMA2EN },
 };
 
 void stm32h7_clk_enable(stm32h7_module_index index)
@@ -258,6 +264,8 @@ static const stm32h7_clk_info stm32h7_clk_low_power[] = {
   [STM32H7_MODULE_SPI4] = { &RCC->APB2LPENR, RCC_APB2LPENR_SPI4LPEN },
   [STM32H7_MODULE_SPI5] = { &RCC->APB2LPENR, RCC_APB2LPENR_SPI5LPEN },
   [STM32H7_MODULE_SPI6] = { &RCC->APB4LPENR, RCC_APB4LPENR_SPI6LPEN },
+  [STM32H7_MODULE_DMA1] = { &RCC->AHB1LPENR, RCC_AHB1LPENR_DMA1LPEN },
+  [STM32H7_MODULE_DMA2] = { &RCC->AHB1LPENR, RCC_AHB1LPENR_DMA2LPEN },
 };
 
 void stm32h7_clk_low_power_enable(stm32h7_module_index index)
