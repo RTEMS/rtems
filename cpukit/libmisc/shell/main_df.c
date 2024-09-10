@@ -56,7 +56,7 @@ static unsigned rtems_shell_df_parse_size(const char *str)
   return result;
 }
 
-static char *rtems_shell_df_humanize_size(unsigned block_size, char *buf,
+static char *rtems_shell_df_humanize_size(uint64_t block_size, char *buf,
     size_t size)
 {
   int i = 0;
@@ -67,7 +67,7 @@ static char *rtems_shell_df_humanize_size(unsigned block_size, char *buf,
     i++;
   }
 
-  snprintf(buf, size, "%d%c", block_size, suffixes[i]);
+  snprintf(buf, size, "%"PRIu64"%c", block_size, suffixes[i]);
   return buf;
 }
 
@@ -78,7 +78,7 @@ static bool rtems_shell_df_print_entry(
 
   struct statvfs svfs;
   int code;
-  char f_buf[16], u_buf[16], a_buf[16];
+  char f_buf[20], u_buf[20], a_buf[20];
 
   if ((code = statvfs(mt_entry->target, &svfs)))
     return false;
