@@ -146,6 +146,7 @@ void _CPU_Context_Initialize(
   }
 }
 
+#if !defined(RTEMS_PARAVIRT)
 void _CPU_ISR_Set_level( uint32_t level )
 {
   /* Set the mask bit if interrupts are disabled */
@@ -173,6 +174,7 @@ uint32_t _CPU_ISR_Get_level( void )
 
   return ( level & AARCH64_PSTATE_I ) != 0;
 }
+#endif /* RTEMS_PARAVIRT */
 
 void _CPU_Initialize( void )
 {

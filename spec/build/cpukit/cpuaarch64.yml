@@ -26,6 +26,7 @@ install:
   - cpukit/score/cpu/aarch64/include/rtems/score/cpuimpl.h
   - cpukit/score/cpu/aarch64/include/rtems/score/aarch64.h
   - cpukit/score/cpu/aarch64/include/rtems/score/cpu_irq.h
+  - cpukit/score/cpu/aarch64/include/rtems/score/paravirt.h
 links: []
 source:
 - cpukit/score/cpu/aarch64/aarch64-context-validate.S
