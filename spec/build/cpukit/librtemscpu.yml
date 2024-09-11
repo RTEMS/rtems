@@ -25,7 +25,6 @@ install:
   - cpukit/include/md5.h
   - cpukit/include/memory.h
   - cpukit/include/mqueue.h
-  - cpukit/include/poll.h
   - cpukit/include/rtems.h
   - cpukit/include/sha224.h
   - cpukit/include/sha256.h
@@ -456,7 +455,6 @@ install:
   - cpukit/include/sys/endian.h
   - cpukit/include/sys/event.h
   - cpukit/include/sys/exec_elf.h
-  - cpukit/include/sys/poll.h
   - cpukit/include/sys/priority.h
   - cpukit/include/sys/statvfs.h
   - cpukit/include/sys/timeffc.h
