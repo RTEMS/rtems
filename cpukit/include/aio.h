@@ -190,6 +190,7 @@ int aio_write(
  * @retval 0 the call to lio_listio() has completed successfuly.
  * @retval -1 The call did not complete successfully.
  *         The error is indicated in errno:
+ *         - ENOSYS the project has been built with RTEMS_POSIX_API not defined.
  *         - EAGAIN the call failed due to resources limitations.
  *         - EAGAIN the number of entries indicated by nent value would cause
  *                  the RTEMS_AIO_MAX limit to be excedeed.

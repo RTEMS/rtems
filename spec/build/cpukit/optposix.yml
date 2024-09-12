@@ -10,7 +10,7 @@ default:
 - enabled-by: true
   value: false
 description: |
-  Enable support for POSIX signals
+  Enable support for POSIX signals, sporadic server and lio_listio()
 enabled-by: true
 links: []
 name: RTEMS_POSIX_API
