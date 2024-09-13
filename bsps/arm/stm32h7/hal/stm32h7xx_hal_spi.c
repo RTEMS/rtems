@@ -3138,6 +3138,7 @@ void HAL_SPI_IRQHandler(SPI_HandleTypeDef *hspi)
   }
 }
 
+#ifndef __rtems__
 /**
   * @brief Tx Transfer completed callback.
   * @param  hspi: pointer to a SPI_HandleTypeDef structure that contains
@@ -3185,6 +3186,7 @@ __weak void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi) /* Derogation MISR
             the HAL_SPI_TxRxCpltCallback should be implemented in the user file
    */
 }
+#endif
 
 /**
   * @brief Tx Half Transfer completed callback.
@@ -3234,6 +3236,7 @@ __weak void HAL_SPI_TxRxHalfCpltCallback(SPI_HandleTypeDef *hspi) /* Derogation 
    */
 }
 
+#ifndef __rtems__
 /**
   * @brief SPI error callback.
   * @param  hspi: pointer to a SPI_HandleTypeDef structure that contains
@@ -3252,6 +3255,7 @@ __weak void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi) /* Derogation MISRAC2
             and user can use HAL_SPI_GetError() API to check the latest error occurred
    */
 }
+#endif
 
 /**
   * @brief  SPI Abort Complete callback.

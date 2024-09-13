@@ -193,6 +193,11 @@ typedef struct {
   bool transmitting;
   const stm32h7_spi_config *config;
   rtems_vector_number irq;
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  rtems_interrupt_entry spi_irq_entry;
+  rtems_binary_semaphore sem;
+  int error;
+#endif
 } stm32h7_spi_context;
 
 extern stm32h7_spi_context stm32h7_spi1_instance;

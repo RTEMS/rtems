@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 On-Line Applications Research (OAR) 
+default:
+- enabled-by: true
+  value: true
+description: |
+  Use SPI devices in interrupt mode
+enabled-by: true
+format: '{}'
+links: []
+name: STM32H7_SPI_USE_INTERRUPTS
+type: build

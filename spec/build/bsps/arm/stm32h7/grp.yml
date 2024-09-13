@@ -103,6 +103,8 @@ links:
 - role: build-dependency
   uid: optpwrsupply
 - role: build-dependency
+  uid: optspiirq
+- role: build-dependency
   uid: optbootcore
 - role: build-dependency
   uid: optusart1gpiopins

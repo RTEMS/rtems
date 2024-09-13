@@ -43,9 +43,15 @@
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
 #include <stdio.h>
+#include <stm32h7xx_hal_dma.h>
+#include <stm32h7xx_hal_spi.h>
 
 #include <stm32h7/hal.h>
 #include <rtems/score/prioritybitmapimpl.h>
+
+#define STM32H7_SPI_COMPLETE 0
+#define STM32H7_SPI_ERROR 1
+#define SPI_TIMEOUT_MS 100
 
 /* NULLs are included for disabled devices to preserve index */
 static stm32h7_spi_context * const stm32h7_spi_instances[] = {
@@ -187,11 +193,11 @@ static int stm32h7_spi_setup(spi_bus *base)
   stm32h7_spi_context *ctx = RTEMS_CONTAINER_OF(base, stm32h7_spi_context, bus);
 
   if (stm32h7_spi_set_prescaler(ctx, ctx->bus.speed_hz)) {
-    return 1;
+    return -EINVAL;
   }
 
   if (stm32h7_spi_set_bpw(ctx, ctx->bus.bits_per_word)) {
-    return 1;
+    return -EINVAL;
   }
 
   stm32h7_spi_set_mode(ctx, ctx->bus.mode);
@@ -203,6 +209,9 @@ static void stm32h7_spi_destroy(spi_bus *base)
 {
   stm32h7_spi_context *ctx = RTEMS_CONTAINER_OF(base, stm32h7_spi_context, bus);
 
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  rtems_binary_semaphore_destroy(&ctx->sem);
+#endif
   HAL_SPI_DeInit(&ctx->spi);
 
   spi_bus_destroy(base);
@@ -282,6 +291,108 @@ static void stm32h7_spi_apply_postmessage_settings(
   }
 }
 
+static int stm32h7_spi_transfer_wait(stm32h7_spi_context *ctx, uint32_t timeout_ms)
+{
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  int status;
+  uint32_t timeout_ticks = timeout_ms;
+
+  timeout_ticks /= rtems_configuration_get_milliseconds_per_tick();
+
+  status = rtems_binary_semaphore_wait_timed_ticks(&ctx->sem, timeout_ticks);
+  if (status != 0) {
+    return -ETIME;
+  }
+  if (ctx->error == STM32H7_SPI_ERROR) {
+    return -EIO;
+  }
+#else
+  (void) timeout_ms;
+#endif
+  return 0;
+}
+
+static int hal_status_to_errno(HAL_StatusTypeDef status)
+{
+  _Assert(status != HAL_OK);
+
+  switch (status) {
+  case HAL_BUSY:
+    return -EBUSY;
+  case HAL_ERROR:
+    return -EINVAL;
+  case HAL_TIMEOUT:
+    return -ETIME;
+  case HAL_OK:
+    return -EIO;
+  }
+
+  return -EIO;
+}
+
+static int stm32h7_spi_txrx(
+  stm32h7_spi_context *ctx,
+  const uint8_t *pTxData,
+  uint8_t *pRxData,
+  uint16_t Size
+)
+{
+  HAL_StatusTypeDef status;
+
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  status = HAL_SPI_TransmitReceive_IT(&ctx->spi, pTxData, pRxData, Size);
+#else
+  status = HAL_SPI_TransmitReceive(
+    &ctx->spi, pTxData, pRxData, Size, SPI_TIMEOUT_MS
+  );
+#endif
+  if (status != HAL_OK) {
+    return hal_status_to_errno(status);
+  }
+
+  return stm32h7_spi_transfer_wait(ctx, SPI_TIMEOUT_MS);
+}
+
+static int stm32h7_spi_tx(
+  stm32h7_spi_context *ctx,
+  const uint8_t *pData,
+  uint16_t Size
+)
+{
+  HAL_StatusTypeDef status;
+
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  status = HAL_SPI_Transmit_IT(&ctx->spi, pData, Size);
+#else
+  status = HAL_SPI_Transmit(&ctx->spi, pData, Size, SPI_TIMEOUT_MS);
+#endif
+  if (status != HAL_OK) {
+    return hal_status_to_errno(status);
+  }
+
+  return stm32h7_spi_transfer_wait(ctx, SPI_TIMEOUT_MS);
+}
+
+static int stm32h7_spi_rx(
+  stm32h7_spi_context *ctx,
+  uint8_t *pData,
+  uint16_t Size
+)
+{
+  HAL_StatusTypeDef status;
+
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  status = HAL_SPI_Receive_IT(&ctx->spi, pData, Size);
+#else
+  status = HAL_SPI_Receive(&ctx->spi, pData, Size, SPI_TIMEOUT_MS);
+#endif
+  if (status != HAL_OK) {
+    return hal_status_to_errno(status);
+  }
+
+  return stm32h7_spi_transfer_wait(ctx, SPI_TIMEOUT_MS);
+}
+
 static int stm32h7_spi_transfer(
   spi_bus *base,
   const spi_ioc_transfer *msgs,
@@ -292,28 +403,25 @@ static int stm32h7_spi_transfer(
 
   for (int i = 0; i < msg_count; i++) {
     const spi_ioc_transfer *msg = &msgs[i];
-    HAL_StatusTypeDef status;
 
     if (stm32h7_spi_apply_premessage_settings(ctx, msg)) {
-      return 1;
+      return -EINVAL;
     }
     /* perform transfer */
     if (msg->tx_buf != NULL && msg->rx_buf != NULL) {
-      status = HAL_SPI_TransmitReceive(
-        &ctx->spi, msg->tx_buf, msg->rx_buf, msg->len, 100
-      );
-      if (status != HAL_OK) {
-        return 1;
+      int ret = stm32h7_spi_txrx(ctx, msg->tx_buf, msg->rx_buf, msg->len);
+      if (ret != 0) {
+        return ret;
       }
     } else if (msg->tx_buf != NULL) {
-      status = HAL_SPI_Transmit(&ctx->spi, msg->tx_buf, msg->len, 100);
-      if (status != HAL_OK) {
-        return 1;
+      int ret = stm32h7_spi_tx(ctx, msg->tx_buf, msg->len);
+      if (ret != 0) {
+        return ret;
       }
     } else if (msg->rx_buf != NULL) {
-      status = HAL_SPI_Receive(&ctx->spi, msg->rx_buf, msg->len, 100);
-      if (status != HAL_OK) {
-        return 1;
+      int ret = stm32h7_spi_rx(ctx, msg->rx_buf, msg->len);
+      if (ret != 0) {
+        return ret;
       }
     }
     /* set final to true on last iteration */
@@ -323,6 +431,55 @@ static int stm32h7_spi_transfer(
   return 0;
 }
 
+void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *spi)
+{
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  stm32h7_spi_context *ctx = RTEMS_CONTAINER_OF(spi, stm32h7_spi_context, spi);
+
+  ctx->error = STM32H7_SPI_ERROR;
+  rtems_binary_semaphore_post(&ctx->sem);
+#endif
+}
+
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *spi)
+{
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  stm32h7_spi_context *ctx = RTEMS_CONTAINER_OF(spi, stm32h7_spi_context, spi);
+
+  ctx->error = STM32H7_SPI_COMPLETE;
+  rtems_binary_semaphore_post(&ctx->sem);
+#endif
+}
+
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *spi)
+{
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  stm32h7_spi_context *ctx = RTEMS_CONTAINER_OF(spi, stm32h7_spi_context, spi);
+
+  ctx->error = STM32H7_SPI_COMPLETE;
+  rtems_binary_semaphore_post(&ctx->sem);
+#endif
+}
+
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *spi)
+{
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  stm32h7_spi_context *ctx = RTEMS_CONTAINER_OF(spi, stm32h7_spi_context, spi);
+
+  ctx->error = STM32H7_SPI_COMPLETE;
+  rtems_binary_semaphore_post(&ctx->sem);
+#endif
+}
+
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+static void stm32h7_spi_irq_handler(void *arg)
+{
+  stm32h7_spi_context *ctx = arg;
+
+  HAL_SPI_IRQHandler(&ctx->spi);
+}
+#endif
+
 static int stm32h7_register_spi_device(
   stm32h7_spi_context *ctx,
   uint8_t device_index
@@ -330,6 +487,9 @@ static int stm32h7_register_spi_device(
 {
   char path[sizeof("/dev/spiXXX")];
   int rv;
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  rtems_status_code sc;
+#endif
   spi_bus *bus = &ctx->bus;
 
   rv = spi_bus_init(bus);
@@ -373,6 +533,25 @@ static int stm32h7_register_spi_device(
   if (HAL_SPI_Init(&ctx->spi)) {
     return 1;
   }
+
+#ifdef STM32H7_SPI_USE_INTERRUPTS
+  /* Configure interrupt */
+  rtems_interrupt_entry_initialize(
+    &ctx->spi_irq_entry,
+    stm32h7_spi_irq_handler,
+    ctx,
+    "SPI"
+  );
+  sc = rtems_interrupt_entry_install(
+    ctx->irq,
+    RTEMS_INTERRUPT_SHARED,
+    &ctx->spi_irq_entry
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    return false;
+  }
+  rtems_binary_semaphore_init(&ctx->sem, "STM32H7 SPI");
+#endif
 
   snprintf(path, sizeof(path), "/dev/spi%" PRIu8, device_index);
   rv = spi_bus_register(bus, path);
