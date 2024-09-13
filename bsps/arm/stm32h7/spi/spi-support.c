@@ -38,6 +38,7 @@
 #endif
 
 #include <bsp.h>
+#include <bsp/dma.h>
 #include <bsp/fatal.h>
 #include <inttypes.h>
 #include <rtems/bspIo.h>
@@ -330,6 +331,44 @@ static int hal_status_to_errno(HAL_StatusTypeDef status)
   return -EIO;
 }
 
+#ifdef STM32H7_SPI_USE_DMA
+static uint32_t stm32h7_spi_get_dma_tx_req(uintptr_t base)
+{
+  switch (base) {
+  case SPI1_BASE:
+    return DMA_REQUEST_SPI1_TX;
+  case SPI2_BASE:
+    return DMA_REQUEST_SPI2_TX;
+  case SPI3_BASE:
+    return DMA_REQUEST_SPI3_TX;
+  case SPI4_BASE:
+    return DMA_REQUEST_SPI4_TX;
+  case SPI5_BASE:
+    return DMA_REQUEST_SPI5_TX;
+  }
+
+  return 0;
+}
+
+static uint32_t stm32h7_spi_get_dma_rx_req(uintptr_t base)
+{
+  switch (base) {
+  case SPI1_BASE:
+    return DMA_REQUEST_SPI1_RX;
+  case SPI2_BASE:
+    return DMA_REQUEST_SPI2_RX;
+  case SPI3_BASE:
+    return DMA_REQUEST_SPI3_RX;
+  case SPI4_BASE:
+    return DMA_REQUEST_SPI4_RX;
+  case SPI5_BASE:
+    return DMA_REQUEST_SPI5_RX;
+  }
+
+  return 0;
+}
+#endif
+
 static int stm32h7_spi_txrx(
   stm32h7_spi_context *ctx,
   const uint8_t *pTxData,
@@ -338,19 +377,72 @@ static int stm32h7_spi_txrx(
 )
 {
   HAL_StatusTypeDef status;
+  int ret;
 
 #ifdef STM32H7_SPI_USE_INTERRUPTS
-  status = HAL_SPI_TransmitReceive_IT(&ctx->spi, pTxData, pRxData, Size);
+#ifdef STM32H7_SPI_USE_DMA
+  /* DMA rx requires a 32-byte aligned buffer */
+  if (((uintptr_t) pRxData) % 32 != 0) {
+    return -EINVAL;
+  }
+  /* SPI6 only supports BDMA, not HDMA */
+  if ((uintptr_t) ctx->spi.Instance != SPI6_BASE) {
+    ctx->spi.hdmatx = stm32h7_dma_alloc(
+      &ctx->spi,
+      stm32h7_spi_get_dma_tx_req((uintptr_t) ctx->spi.Instance),
+      DMA_MEMORY_TO_PERIPH,
+      DMA_PRIORITY_LOW
+    );
+    ctx->spi.hdmarx = stm32h7_dma_alloc(
+      &ctx->spi,
+      stm32h7_spi_get_dma_rx_req((uintptr_t) ctx->spi.Instance),
+      DMA_PERIPH_TO_MEMORY,
+      DMA_PRIORITY_HIGH
+    );
+    if (ctx->spi.hdmatx == NULL || ctx->spi.hdmarx == NULL) {
+      if (ctx->spi.hdmatx != NULL) {
+        stm32h7_dma_free(ctx->spi.hdmatx);
+        ctx->spi.hdmatx = NULL;
+      }
+      if (ctx->spi.hdmarx != NULL) {
+        stm32h7_dma_free(ctx->spi.hdmarx);
+        ctx->spi.hdmarx = NULL;
+      }
+    }
+  }
+#endif
+
+  if (ctx->spi.hdmatx == NULL) {
+    status = HAL_SPI_TransmitReceive_IT(&ctx->spi, pTxData, pRxData, Size);
+  } else {
+    rtems_cache_flush_multiple_data_lines(pTxData, Size);
+    status = HAL_SPI_TransmitReceive_DMA(&ctx->spi, pTxData, pRxData, Size);
+    rtems_cache_invalidate_multiple_data_lines(pRxData, Size);
+  }
 #else
   status = HAL_SPI_TransmitReceive(
     &ctx->spi, pTxData, pRxData, Size, SPI_TIMEOUT_MS
   );
 #endif
+
   if (status != HAL_OK) {
     return hal_status_to_errno(status);
   }
 
-  return stm32h7_spi_transfer_wait(ctx, SPI_TIMEOUT_MS);
+  ret = stm32h7_spi_transfer_wait(ctx, SPI_TIMEOUT_MS);
+
+#ifdef STM32H7_SPI_USE_DMA
+  if (ctx->spi.hdmarx != NULL) {
+    stm32h7_dma_free(ctx->spi.hdmarx);
+    ctx->spi.hdmarx = NULL;
+  }
+  if (ctx->spi.hdmatx != NULL) {
+    stm32h7_dma_free(ctx->spi.hdmatx);
+    ctx->spi.hdmatx = NULL;
+  }
+#endif
+
+  return ret;
 }
 
 static int stm32h7_spi_tx(
@@ -360,17 +452,46 @@ static int stm32h7_spi_tx(
 )
 {
   HAL_StatusTypeDef status;
+  int ret;
+  ctx->spi.hdmatx = NULL;
 
 #ifdef STM32H7_SPI_USE_INTERRUPTS
-  status = HAL_SPI_Transmit_IT(&ctx->spi, pData, Size);
+#ifdef STM32H7_SPI_USE_DMA
+  /* SPI6 only supports BDMA, not HDMA */
+  if ((uintptr_t) ctx->spi.Instance != SPI6_BASE) {
+    ctx->spi.hdmatx = stm32h7_dma_alloc(
+      &ctx->spi,
+      stm32h7_spi_get_dma_tx_req((uintptr_t) ctx->spi.Instance),
+      DMA_MEMORY_TO_PERIPH,
+      DMA_PRIORITY_LOW
+    );
+  }
+#endif
+
+  if (ctx->spi.hdmatx == NULL) {
+    status = HAL_SPI_Transmit_IT(&ctx->spi, pData, Size);
+  } else {
+    rtems_cache_flush_multiple_data_lines(pData, Size);
+    status = HAL_SPI_Transmit_DMA(&ctx->spi, pData, Size);
+  }
 #else
   status = HAL_SPI_Transmit(&ctx->spi, pData, Size, SPI_TIMEOUT_MS);
 #endif
+
   if (status != HAL_OK) {
     return hal_status_to_errno(status);
   }
 
-  return stm32h7_spi_transfer_wait(ctx, SPI_TIMEOUT_MS);
+  ret = stm32h7_spi_transfer_wait(ctx, SPI_TIMEOUT_MS);
+
+#ifdef STM32H7_SPI_USE_DMA
+  if (ctx->spi.hdmatx != NULL) {
+    stm32h7_dma_free(ctx->spi.hdmatx);
+    ctx->spi.hdmatx = NULL;
+  }
+#endif
+
+  return ret;
 }
 
 static int stm32h7_spi_rx(
@@ -380,17 +501,50 @@ static int stm32h7_spi_rx(
 )
 {
   HAL_StatusTypeDef status;
+  int ret;
+  ctx->spi.hdmarx = NULL;
 
 #ifdef STM32H7_SPI_USE_INTERRUPTS
-  status = HAL_SPI_Receive_IT(&ctx->spi, pData, Size);
+#ifdef STM32H7_SPI_USE_DMA
+  /* DMA rx requires a 32-byte aligned buffer */
+  if (((uintptr_t) pData) % 32 != 0) {
+    return -EINVAL;
+  }
+  /* SPI6 only supports BDMA, not HDMA */
+  if ((uintptr_t) ctx->spi.Instance != SPI6_BASE) {
+    ctx->spi.hdmarx = stm32h7_dma_alloc(
+      &ctx->spi,
+      stm32h7_spi_get_dma_rx_req((uintptr_t) ctx->spi.Instance),
+      DMA_PERIPH_TO_MEMORY,
+      DMA_PRIORITY_HIGH
+    );
+  }
+#endif
+
+  if (ctx->spi.hdmarx == NULL) {
+    status = HAL_SPI_Receive_IT(&ctx->spi, pData, Size);
+  } else {
+    status = HAL_SPI_Receive_DMA(&ctx->spi, pData, Size);
+    rtems_cache_invalidate_multiple_data_lines(pData, Size);
+  }
 #else
   status = HAL_SPI_Receive(&ctx->spi, pData, Size, SPI_TIMEOUT_MS);
 #endif
+
   if (status != HAL_OK) {
     return hal_status_to_errno(status);
   }
 
-  return stm32h7_spi_transfer_wait(ctx, SPI_TIMEOUT_MS);
+  ret = stm32h7_spi_transfer_wait(ctx, SPI_TIMEOUT_MS);
+
+#ifdef STM32H7_SPI_USE_DMA
+  if (ctx->spi.hdmarx != NULL) {
+    stm32h7_dma_free(ctx->spi.hdmarx);
+    ctx->spi.hdmarx = NULL;
+  }
+#endif
+
+  return ret;
 }
 
 static int stm32h7_spi_transfer(
