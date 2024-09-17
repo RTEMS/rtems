@@ -133,9 +133,11 @@ int rtems_aio_init( void )
   if ( result != 0 )
     pthread_attr_destroy( &aio_request_queue.attr );
 
+  pthread_mutex_lock( &aio_request_queue.mutex );
 
   result = pthread_cond_init( &aio_request_queue.new_req, NULL );
   if ( result != 0 ) {
+    pthread_mutex_unlock( &aio_request_queue.mutex );
     pthread_mutex_destroy( &aio_request_queue.mutex );
     pthread_attr_destroy( &aio_request_queue.attr );
   }
@@ -147,6 +149,8 @@ int rtems_aio_init( void )
   aio_request_queue.idle_threads = 0;
   atomic_init( &aio_request_queue.queued_requests, 0 );
   aio_request_queue.initialized = AIO_QUEUE_INITIALIZED;
+
+  pthread_mutex_unlock( &aio_request_queue.mutex );
 
   return result;
 }
