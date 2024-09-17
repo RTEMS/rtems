@@ -470,14 +470,21 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
       }
 
       if (!parsing) {
+        uint16_t bl_tmp;
+
         sign = (tmp >> 24) & 1;
         *(uint16_t *)where = (uint16_t)((upper_insn & 0xf800) | (sign << 10) |
                                         ((tmp >> 12) & 0x3ff));
 
-        *((uint16_t *)where + 1) = (uint16_t)((lower_insn & 0xd000)|
-                                              ((sign ^ (~(tmp >> 23) & 1)) << 13) |
-                                              ((sign ^ (~(tmp >> 22) & 1)) << 11) |
-                                              ((tmp >> 1) & 0x7ff));
+        bl_tmp = (uint16_t)((lower_insn & 0xd000)|
+                           ((sign ^ (~(tmp >> 23) & 1)) << 13) |
+                           ((sign ^ (~(tmp >> 22) & 1)) << 11) |
+                           ((tmp >> 1) & 0x7ff));
+        /* Thumb jumps to ARM mode must have 0 in the LSB of the BLX */
+        if ((bl_tmp & 0xf000) == 0xe000) {
+          bl_tmp &= 0xfffe;
+        }
+        *((uint16_t *)where + 1) = bl_tmp;
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC)){
           printf ("rtl: THM_CALL/JUMP24 %p @ %p in %s\n",
