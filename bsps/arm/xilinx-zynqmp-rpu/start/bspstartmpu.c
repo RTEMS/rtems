@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsARMZynqMPRPU
+ *
+ * @brief This source file contains the implementation of
+ * zynqmp_setup_mpu_and_cache().
+ */
+
+/*
  * Copyright (C) 2023 Reflex Aerospace GmbH
  *
  * Written by Philip Kirkpatrick <p.kirkpatrick@reflexaerospace.com>

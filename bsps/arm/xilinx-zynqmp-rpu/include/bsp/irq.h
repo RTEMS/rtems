@@ -1,18 +1,16 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
- * @ingroup zynqmp_interrupt
- * @brief Interrupt definitions.
+ *
+ * @ingroup RTEMSBSPsARMZynqMPRPU
+ *
+ * @brief This header file provides BSP-specific interrupt interfaces.
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
- * Copyright (C) 2013 embedded brains GmbH
- *
- * Copyright (C) 2019 DornerWorks
- *
- * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
- *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ * Copyright (C) 2024 embedded brains GmbH & Co. KG
+ * Copyright (C) 2023 Reflex Aerospace GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_ARM_XILINX_ZYNQMP_IRQ_H
-#define LIBBSP_ARM_XILINX_ZYNQMP_IRQ_H
+#ifndef LIBBSP_ARM_XILINX_ZYNQMP_RPU_IRQ_H
+#define LIBBSP_ARM_XILINX_ZYNQMP_RPU_IRQ_H
 
 #ifndef ASM
 
@@ -60,4 +58,4 @@ extern "C" {
 
 #endif /* ASM */
 
-#endif /* LIBBSP_ARM_XILINX_ZYNQMP_IRQ_H */
+#endif /* LIBBSP_ARM_XILINX_ZYNQMP_RPU_IRQ_H */

@@ -1,12 +1,16 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMZynqMPRPU
+ *
+ * @brief This source file contains the implementation of bsp_start_hook_0().
+ */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
- * Copyright (C) 2013, 2014 embedded brains GmbH
- *
- * Copyright (C) 2019 DornerWorks
- *
- * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
- *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ * Copyright (C) 2024 embedded brains GmbH & Co. KG
+ * Copyright (C) 2023 Reflex Aerospace GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

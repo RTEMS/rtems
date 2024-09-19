@@ -1,18 +1,14 @@
 /**
  * @file
- * @ingroup RTEMSBSPsARMZynqMP
- * @brief Global BSP definitions.
+ *
+ * @ingroup RTEMSBSPsARMZynqMPRPU
+ *
+ * @brief This header file provides BSP-specific interfaces.
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
- * Copyright (C) 2013, 2014 embedded brains GmbH
- *
- * Copyright (C) 2019 DornerWorks
- *
- * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
- *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ * Copyright (C) 2024 embedded brains GmbH & Co. KG
+ * Copyright (C) 2023 Reflex Aerospace GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -40,11 +36,13 @@
 #define LIBBSP_ARM_XILINX_ZYNQMP_BSP_H
 
 /**
- * @defgroup RTEMSBSPsARMZynqMP Xilinx Zynq UltraScale+ MPSoC
+ * @defgroup RTEMSBSPsARMZynqMPRPU \
+ *   AMD Zynq UltraScale+ MPSoC and RFSoC - Real-time Processing Unit
  *
  * @ingroup RTEMSBSPsARM
  *
- * @brief Xilinx Zynq UltraScale+ MPSoC Board Support Package.
+ * @brief This group contains the BSP for the Real-time Processing Unit (RPU)
+ *   contained in AMD Zynq UltraScale+ MPSoC and RFSoC devices.
  *
  * @{
  */
