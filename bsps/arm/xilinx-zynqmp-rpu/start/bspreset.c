@@ -39,12 +39,26 @@
 
 void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+  /* CRL_APB_RESET_CTRL */
+  volatile uint32_t *reset_ctrl = (volatile uint32_t *) 0xff5e0218;
+
   (void) source;
   (void) code;
 
   zynqmp_debug_console_flush();
 
+  /*
+   * This is a workaround for:
+   *
+   * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108658
+   */
+  __asm__ volatile ("");
+
   while (true) {
-    /* Wait */
+    /*
+     * Request a soft system reset.  This is a system-level reset which is the
+     * equivalent to asserting the external PS_SRST_B reset signal pin.
+     */
+    *reset_ctrl |= UINT32_C(0x10);
   }
 }
