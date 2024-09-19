@@ -69,10 +69,6 @@ extern "C" {
 
 #define BSP_ARM_GIC_DIST_BASE 0xF9000000
 
-#define BSP_ARM_A9MPCORE_SCU_BASE 0
-
-#define BSP_ARM_A9MPCORE_GT_BASE 0
-
 /**
  * @brief Zynq UltraScale+ MPSoC specific set up of the MMU.
  *
