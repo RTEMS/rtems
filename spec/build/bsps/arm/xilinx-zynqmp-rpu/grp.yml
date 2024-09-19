@@ -19,8 +19,6 @@ links:
 - role: build-dependency
   uid: abi
 - role: build-dependency
-  uid: optclkfastidle
-- role: build-dependency
   uid: optclkuart
 - role: build-dependency
   uid: optconirq
