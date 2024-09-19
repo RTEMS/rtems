@@ -21,7 +21,6 @@ links: []
 source:
 - bsps/shared/cache/nocache.c
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
-- bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/xilinx-zynqmp-rpu/console/console-config.c
 - bsps/arm/xilinx-zynqmp-rpu/start/bspreset.c
