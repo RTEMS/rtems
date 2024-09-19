@@ -20,6 +20,8 @@ install:
   - cpukit/score/cpu/arm/include/rtems/asm.h
 - destination: ${BSP_INCLUDEDIR}/rtems/score
   source:
+  - cpukit/score/cpu/arm/include/rtems/score/aarch32-pmsa.h
+  - cpukit/score/cpu/arm/include/rtems/score/aarch32-system-registers.h
   - cpukit/score/cpu/arm/include/rtems/score/arm.h
   - cpukit/score/cpu/arm/include/rtems/score/armv4.h
   - cpukit/score/cpu/arm/include/rtems/score/armv7m.h
