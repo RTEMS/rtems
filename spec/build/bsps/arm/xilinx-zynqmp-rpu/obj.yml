@@ -19,7 +19,8 @@ install:
   - bsps/include/peripheral_maps/xilinx_zynqmp.h
 links: []
 source:
-- bsps/shared/cache/nocache.c
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/cache/cache-v7ar-disable-data.S
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/xilinx-zynqmp-rpu/console/console-config.c
