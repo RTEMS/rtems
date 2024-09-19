@@ -6,13 +6,14 @@ actions:
 - format-and-define: null
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
-  value: 0x00010000
-description: ''
+  value: 0x40000000
+description: |
+  This option defines the length in bytes of the PL device memory area.
 enabled-by: true
 format: '{:#010x}'
 links: []
-name: ZYNQMP_RPU_RAM_INT_0_LENGTH
+name: ZYNQMP_MEMORY_DEVPL_LENGTH
 type: build

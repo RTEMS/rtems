@@ -39,20 +39,44 @@
 #include <bsp/memory.h>
 #include <bsp/start.h>
 
-#include <xil_mpu.h>
-#include <xil_cache.h>
 #include <xreg_cortexr5.h>
 
-BSP_START_TEXT_SECTION void zynqmp_setup_mpu_and_cache(void)
-{
-  for (size_t i = 0; i < zynqmp_mpu_region_count; ++i) {
-    const ARMV7_PMSA_Region *region = &zynqmp_mpu_regions[i];
-    if (region->size > 0) {
-      Xil_SetMPURegion(region->begin, region->size, region->attributes);
-    }
+BSP_START_DATA_SECTION const ARMV7_PMSA_Region
+zynqmp_mpu_regions[] = {
+  {
+    .begin = (uintptr_t)zynqmp_memory_atcm_begin,
+    .size = (uintptr_t)zynqmp_memory_atcm_size,
+    .attributes = NORM_NSHARED_NCACHE | PRIV_RW_USER_RW,
+  }, {
+    .begin = (uintptr_t)zynqmp_memory_btcm_begin,
+    .size = (uintptr_t)zynqmp_memory_btcm_size,
+    .attributes = NORM_NSHARED_NCACHE | PRIV_RW_USER_RW,
+  }, {
+    .begin = (uintptr_t)zynqmp_memory_ddr_begin,
+    .size = (uintptr_t)zynqmp_memory_ddr_size,
+    .attributes = NORM_NSHARED_WB_WA | PRIV_RW_USER_RW,
+  }, {
+    .begin = (uintptr_t)zynqmp_memory_devpl_begin,
+    .size = (uintptr_t)zynqmp_memory_devpl_size,
+    .attributes = STRONG_ORDERD_SHARED | PRIV_RW_USER_RW,
+  }, {
+    .begin = (uintptr_t)zynqmp_memory_devps_begin,
+    .size = (uintptr_t)zynqmp_memory_devps_size,
+    .attributes = DEVICE_NONSHARED | PRIV_RW_USER_RW,
+  }, {
+    .begin = (uintptr_t)zynqmp_memory_ocm_begin,
+    .size = (uintptr_t)zynqmp_memory_ocm_size,
+    .attributes = NORM_NSHARED_WB_WA | PRIV_RW_USER_RW,
+  }, {
+    .begin = (uintptr_t)bsp_section_rodata_begin,
+    .size = (uintptr_t)bsp_section_rodata_size,
+    .attributes = NORM_NSHARED_WB_WA | PRIV_RO_USER_RO,
+  }, {
+    .begin = (uintptr_t)zynqmp_memory_nocache_begin,
+    .size = (uintptr_t)zynqmp_memory_nocache_size,
+    .attributes = NORM_SHARED_NCACHE | PRIV_RW_USER_RW,
   }
+};
 
-  Xil_EnableMPU();
-  Xil_DCacheEnable();
-  Xil_ICacheEnable();
-}
+BSP_START_DATA_SECTION const size_t
+zynqmp_mpu_region_count = RTEMS_ARRAY_SIZE(zynqmp_mpu_regions);

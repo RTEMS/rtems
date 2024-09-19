@@ -56,7 +56,6 @@
 #include <rtems.h>
 
 #include <bsp/default-initial-extension.h>
-#include <bsp/start.h>
 
 #include <dev/serial/zynq-uart-zynqmp.h>
 
@@ -69,12 +68,9 @@ extern "C" {
 
 #define BSP_ARM_GIC_DIST_BASE 0xF9000000
 
-/**
- * @brief Zynq UltraScale+ MPSoC specific set up of the MMU.
- *
- * Provide in the application to override the defaults in the BSP.
- */
-BSP_START_TEXT_SECTION void zynqmp_setup_mpu_and_cache(void);
+#if !defined(ZYNQMP_RPU_LOCK_STEP_MODE) && ZYNQMP_RPU_CORE_INDEX != 0
+#define BSP_ARM_GIC_MULTI_PROCESSOR_SECONDARY
+#endif
 
 void zynqmp_debug_console_flush(void);
 

@@ -38,11 +38,12 @@
  */
 
 #include <bsp.h>
-#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <bsp/fatal.h>
 #include <dev/clock/xttcps_hw.h>
 #include <rtems/sysinit.h>
 #include <rtems/timecounter.h>
+#include <rtems/score/processormaskimpl.h>
 
 #if XTTCPS_COUNT_VALUE_MASK != UINT32_MAX
 #error "unexpected XTTCPS_COUNT_VALUE_MASK value"
@@ -183,6 +184,16 @@ static void xil_ttc_clock_driver_support_install_isr(
 )
 {
   rtems_status_code sc;
+
+#if !defined(ZYNQMP_RPU_LOCK_STEP_MODE) && ZYNQMP_RPU_SPLIT_INDEX != 0
+  Processor_mask affinity;
+  _Processor_mask_From_uint32_t(
+    &affinity,
+    UINT32_C(1) << ZYNQMP_RPU_SPLIT_INDEX,
+    0
+  );
+  (void) bsp_interrupt_set_affinity(XIL_CLOCK_TTC_IRQ, &affinity);
+#endif
 
   rtems_interrupt_entry_initialize(
     &xil_ttc_interrupt_entry,

@@ -41,12 +41,17 @@
 
 #include <rtems.h>
 
+#include <bspopts.h>
 #include <dev/irq/arm-gic-irq.h>
 #include <peripheral_maps/xilinx_zynqmp.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+#ifndef ZYNQMP_RPU_LOCK_STEP_MODE
+#define BSP_IRQ_HAVE_GET_SET_AFFINITY
+#endif
 
 #define BSP_INTERRUPT_VECTOR_COUNT 188
 

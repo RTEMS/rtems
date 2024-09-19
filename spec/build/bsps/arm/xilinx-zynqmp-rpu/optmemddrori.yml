@@ -1,20 +1,23 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
+- assert-uint32: null
+- env-assign: null
 - format-and-define: null
 build-type: option
 copyrights:
 - Copyright (C) 2024 embedded brains GmbH & Co. KG
 default:
 - enabled-by: ZYNQMP_RPU_SPLIT_INDEX_1
-  value: 0xff110004
+  value: 0x60000000
 - enabled-by: true
-  value: 0xff110000
+  value: 0x40000000
 description: |
-  This option defines the Xilinx Triple-Timer Counter (TTC) base address used by
-  the Clock Driver.
+  This option defines the address of the DDR memory area used by the RPU.  If
+  the non-cacheble memory area is located in the DDR memory, then this area
+  shall be excluded from the area specified by this option.
 enabled-by: true
 format: '{:#010x}'
 links: []
-name: XIL_CLOCK_TTC_BASE_ADDR
+name: ZYNQMP_MEMORY_DDR_ORIGIN
 type: build

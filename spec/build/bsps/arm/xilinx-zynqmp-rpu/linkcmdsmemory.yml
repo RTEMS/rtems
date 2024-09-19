@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  MEMORY {
+    ATCM : ORIGIN = ${ZYNQMP_MEMORY_ATCM_ORIGIN:#010x}, LENGTH = ${ZYNQMP_MEMORY_ATCM_LENGTH:#010x}
+    BTCM : ORIGIN = ${ZYNQMP_MEMORY_BTCM_ORIGIN:#010x}, LENGTH = ${ZYNQMP_MEMORY_BTCM_LENGTH:#010x}
+    DDR : ORIGIN = ${ZYNQMP_MEMORY_DDR_ORIGIN:#010x}, LENGTH = ${ZYNQMP_MEMORY_DDR_LENGTH:#010x}
+    NOCACHE : ORIGIN = ${ZYNQMP_MEMORY_NOCACHE_ORIGIN:#010x}, LENGTH = ${ZYNQMP_MEMORY_NOCACHE_LENGTH:#010x}
+    DEVPL : ORIGIN = ${ZYNQMP_MEMORY_DEVPL_ORIGIN:#010x}, LENGTH = ${ZYNQMP_MEMORY_DEVPL_LENGTH:#010x}
+    DEVPS : ORIGIN = ${ZYNQMP_MEMORY_DEVPS_ORIGIN:#010x}, LENGTH = ${ZYNQMP_MEMORY_DEVPS_LENGTH:#010x}
+    OCM : ORIGIN = ${ZYNQMP_MEMORY_OCM_ORIGIN:#010x}, LENGTH = ${ZYNQMP_MEMORY_OCM_LENGTH:#010x}
+  }
+
+  zynqmp_memory_atcm_begin = ORIGIN (ATCM);
+  zynqmp_memory_atcm_end = ORIGIN (ATCM) + LENGTH (ATCM);
+  zynqmp_memory_atcm_size = LENGTH (ATCM);
+
+  zynqmp_memory_btcm_begin = ORIGIN (BTCM);
+  zynqmp_memory_btcm_end = ORIGIN (BTCM) + LENGTH (BTCM);
+  zynqmp_memory_btcm_size = LENGTH (BTCM);
+
+  zynqmp_memory_ddr_begin = ORIGIN (DDR);
+  zynqmp_memory_ddr_end = ORIGIN (DDR) + LENGTH (DDR);
+  zynqmp_memory_ddr_size = LENGTH (DDR);
+
+  zynqmp_memory_nocache_begin = ORIGIN (NOCACHE);
+  zynqmp_memory_nocache_end = ORIGIN (NOCACHE) + LENGTH (NOCACHE);
+  zynqmp_memory_nocache_size = LENGTH (NOCACHE);
+
+  zynqmp_memory_devpl_begin = ORIGIN (DEVPL);
+  zynqmp_memory_devpl_end = ORIGIN (DEVPL) + LENGTH (DEVPL);
+  zynqmp_memory_devpl_size = LENGTH (DEVPL);
+
+  zynqmp_memory_devps_begin = ORIGIN (DEVPS);
+  zynqmp_memory_devps_end = ORIGIN (DEVPS) + LENGTH (DEVPS);
+  zynqmp_memory_devps_size = LENGTH (DEVPS);
+
+  zynqmp_memory_ocm_begin = ORIGIN (OCM);
+  zynqmp_memory_ocm_end = ORIGIN (OCM) + LENGTH (OCM);
+  zynqmp_memory_ocm_size = LENGTH (OCM);
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds.memory
+type: build

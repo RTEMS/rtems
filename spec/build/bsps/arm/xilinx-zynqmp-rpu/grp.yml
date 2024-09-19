@@ -19,6 +19,38 @@ links:
 - role: build-dependency
   uid: abi
 - role: build-dependency
+  uid: optlockstep
+- role: build-dependency
+  uid: optsplitindex
+- role: build-dependency
+  uid: optmematcmori
+- role: build-dependency
+  uid: optmematcmlen
+- role: build-dependency
+  uid: optmembtcmori
+- role: build-dependency
+  uid: optmembtcmlen
+- role: build-dependency
+  uid: optmemocmori
+- role: build-dependency
+  uid: optmemocmlen
+- role: build-dependency
+  uid: optmemddrori
+- role: build-dependency
+  uid: optmemddrlen
+- role: build-dependency
+  uid: optmemnocacheori
+- role: build-dependency
+  uid: optmemnocachelen
+- role: build-dependency
+  uid: optmemdevplori
+- role: build-dependency
+  uid: optmemdevpllen
+- role: build-dependency
+  uid: optmemdevpsori
+- role: build-dependency
+  uid: optmemdevpslen
+- role: build-dependency
   uid: optclkuart
 - role: build-dependency
   uid: optconirq
@@ -29,21 +61,7 @@ links:
 - role: build-dependency
   uid: ../../optxilclockttcrefclk
 - role: build-dependency
-  uid: optint0len
-- role: build-dependency
-  uid: optint0ori
-- role: build-dependency
-  uid: optint1len
-- role: build-dependency
-  uid: optint1ori
-- role: build-dependency
-  uid: optramlen
-- role: build-dependency
-  uid: optramori
-- role: build-dependency
   uid: optresetvec
-- role: build-dependency
-  uid: optnocachelen
 - role: build-dependency
   uid: obj
 - role: build-dependency
@@ -64,6 +82,8 @@ links:
   uid: ../../opto2
 - role: build-dependency
   uid: linkcmds
+- role: build-dependency
+  uid: linkcmdsmemory
 - role: build-dependency
   uid: ../../bspopts
 - role: build-dependency

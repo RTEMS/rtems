@@ -14,6 +14,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/xilinx-zynqmp-rpu/include/bsp/irq.h
+  - bsps/arm/xilinx-zynqmp-rpu/include/bsp/memory.h
 - destination: ${BSP_INCLUDEDIR}/peripheral_maps
   source:
   - bsps/include/peripheral_maps/xilinx_zynqmp.h
@@ -28,6 +29,7 @@ source:
 - bsps/arm/xilinx-zynqmp-rpu/start/bspstart.c
 - bsps/arm/xilinx-zynqmp-rpu/start/bspstarthooks.c
 - bsps/arm/xilinx-zynqmp-rpu/start/bspstartmpu.c
+- bsps/arm/xilinx-zynqmp-rpu/start/mpu-config.c
 - bsps/shared/dev/clock/xil-ttc.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c

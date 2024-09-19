@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-in-set:
+  - 0
+  - 1
+- format-and-define: null
+- env-assign: null
+- set-value: ZYNQMP_RPU_SPLIT_INDEX_${ZYNQMP_RPU_SPLIT_INDEX}
+- substitute: null
+- env-append: ENABLE
+build-type: option
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+default:
+- enabled-by: arm/zynqmp_rpu_split_1
+  value: 1
+- enabled-by: true
+  value: 0
+description: |
+  This option defines the RPU core index (0 or 1).
+enabled-by:
+  not: ZYNQMP_RPU_LOCK_STEP_MODE
+format: '{}'
+links: []
+name: ZYNQMP_RPU_SPLIT_INDEX
+type: build

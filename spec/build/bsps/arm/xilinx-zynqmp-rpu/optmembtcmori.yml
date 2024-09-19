@@ -6,13 +6,15 @@ actions:
 - format-and-define: null
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
-  value: 0x00100000
-description: ''
+  value: 0x00020000
+description: |
+  This option defines the address for the tightly-coupled memory B (BTCM)
+  origin.
 enabled-by: true
 format: '{:#010x}'
 links: []
-name: ZYNQMP_RPU_RAM_ORIGIN
+name: ZYNQMP_MEMORY_BTCM_ORIGIN
 type: build

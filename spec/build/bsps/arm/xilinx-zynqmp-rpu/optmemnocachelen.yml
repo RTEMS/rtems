@@ -1,20 +1,19 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
-- define: null
+- assert-uint32: null
+- env-assign: null
+- format-and-define: null
 build-type: option
 copyrights:
 - Copyright (C) 2024 embedded brains GmbH & Co. KG
 default:
-- enabled-by: ZYNQMP_RPU_SPLIT_INDEX_1
-  value: 69
 - enabled-by: true
-  value: 68
+  value: 0x00000000
 description: |
-  This option defines the Xilinx Triple-Timer Counter (TTC) interrupt vector
-  number used by the Clock Driver.
+  This option defines the length in bytes of the non-cacheable memory area.
 enabled-by: true
-format: '{}'
+format: '{:#010x}'
 links: []
-name: XIL_CLOCK_TTC_IRQ
+name: ZYNQMP_MEMORY_NOCACHE_LENGTH
 type: build

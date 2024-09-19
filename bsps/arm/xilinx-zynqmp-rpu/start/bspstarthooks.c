@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp.h>
 #include <bsp/start.h>
+#include <bsp/memory.h>
 
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {

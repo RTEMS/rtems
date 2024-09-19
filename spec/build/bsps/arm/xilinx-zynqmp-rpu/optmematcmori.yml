@@ -6,14 +6,15 @@ actions:
 - format-and-define: null
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
-  value: 0x00100000
+  value: 0x00000000
 description: |
-  length of nocache RAM region
+  This option defines the address of the tightly-coupled memory A (ATCM)
+  origin.
 enabled-by: true
 format: '{:#010x}'
 links: []
-name: ZYNQMP_RPU_RAM_NOCACHE_LENGTH
+name: ZYNQMP_MEMORY_ATCM_ORIGIN
 type: build

@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+- env-enable: null
+- comment: |
+    In lock step mode, the ATCM and BTCM can be used together as a contiguous
+    memory region.  In this case, we set the ATCM size to the combined size,
+    the BTCM size is set to zero, and the ZYNQMP_MEMORY_ATCM_OR_BTCM
+    environment variable is set to ATCM.  In split mode, the ATCM and BTCM are
+    separate memory regions.  In this case, the ZYNQMP_MEMORY_ATCM_OR_BTCM
+    environment variable is set to BTCM.  The ZYNQMP_MEMORY_ATCM_OR_BTCM
+    environment variable is used by the linker script to select memory regions.
+- set-value-enabled-by:
+  - enabled-by: ZYNQMP_RPU_LOCK_STEP_MODE
+    value: ATCM
+  - enabled-by: true
+    value: BTCM
+- env-assign: ZYNQMP_MEMORY_ATCM_OR_BTCM
+build-type: option
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+default:
+- enabled-by:
+  - arm/zynqmp_rpu_split_0
+  - arm/zynqmp_rpu_split_1
+  value: false
+- enabled-by: true
+  value: true
+description: |
+  If this option is true, then the Cortex-R5F cores of the RPU shall operate in
+  lock-step mode, otherwise they shall operate in split mode.
+enabled-by: true
+format: '{}'
+links: []
+name: ZYNQMP_RPU_LOCK_STEP_MODE
+type: build

@@ -8,6 +8,7 @@ copyrights:
 default:
 - enabled-by:
   - bsps/aarch64/xilinx-zynqmp
+  - ZYNQMP_RPU_SPLIT_INDEX_0
   value: ZYNQ_UART_0_BASE_ADDR
 - enabled-by: true
   value: ZYNQ_UART_1_BASE_ADDR

@@ -6,13 +6,14 @@ actions:
 - format-and-define: null
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
   value: 0x00000000
-description: ''
+description: |
+  This option defines the address of the non-cacheable memory area.
 enabled-by: true
 format: '{:#010x}'
 links: []
-name: ZYNQMP_RPU_RAM_INT_0_ORIGIN
+name: ZYNQMP_MEMORY_NOCACHE_ORIGIN
 type: build

@@ -6,14 +6,17 @@ actions:
 - format-and-define: null
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
 default:
+- enabled-by: ZYNQMP_RPU_LOCK_STEP_MODE
+  value: 0x00000000
 - enabled-by: true
-  value: 0x10000000
+  value: 0x00020000
 description: |
-  override a BSP's default RAM length
+  This option defines the length in bytes of the tightly-coupled memory B
+  (BTCM).
 enabled-by: true
 format: '{:#010x}'
 links: []
-name: ZYNQMP_RPU_RAM_LENGTH
+name: ZYNQMP_MEMORY_BTCM_LENGTH
 type: build
