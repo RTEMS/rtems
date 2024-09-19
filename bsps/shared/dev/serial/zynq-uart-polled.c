@@ -65,8 +65,8 @@ uint32_t zynq_uart_calculate_baud(
 )
 {
   uint32_t best_error = UINT32_MAX;
-  uint32_t best_cd;
-  uint32_t best_bdiv_plus_one;
+  uint32_t best_cd = 0x28b;
+  uint32_t best_bdiv_plus_one = 16;
   uint32_t bdiv_plus_one;
   uint32_t selected_clock;
 
