@@ -6,8 +6,11 @@ build-type: option
 copyrights:
 - Copyright (C) 2024 embedded brains GmbH & Co. KG
 default:
+- enabled-by: ZYNQMP_RPU_SPLIT_INDEX_1
+  value: ZYNQ_UART_1_BASE_ADDR
 - enabled-by:
   - bsps/aarch64/xilinx-zynqmp
+  - bsps/arm/xilinx-zynqmp-rpu
   - ZYNQMP_RPU_SPLIT_INDEX_0
   value: ZYNQ_UART_0_BASE_ADDR
 - enabled-by: true
