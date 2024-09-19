@@ -343,7 +343,7 @@ rtems_status_code arm_gic_irq_get_group(
   return sc;
 }
 
-#ifdef RTEMS_SMP
+#if defined(BSP_IRQ_HAVE_GET_SET_AFFINITY)
 rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity

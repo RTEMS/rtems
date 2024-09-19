@@ -265,7 +265,7 @@ rtems_status_code bsp_interrupt_get_priority(
   return RTEMS_SUCCESSFUL;
 }
 
-#ifdef RTEMS_SMP
+#if defined(BSP_IRQ_HAVE_GET_SET_AFFINITY)
 rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity

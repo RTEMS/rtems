@@ -65,7 +65,7 @@ rtems_status_code rtems_interrupt_set_affinity(
     return RTEMS_INVALID_NUMBER;
   }
 
-#if defined(RTEMS_SMP)
+#if defined(BSP_IRQ_HAVE_GET_SET_AFFINITY)
   return bsp_interrupt_set_affinity( vector, &set );
 #else
   return RTEMS_SUCCESSFUL;
@@ -89,7 +89,7 @@ rtems_status_code rtems_interrupt_get_affinity(
   _Processor_mask_Zero( &set );
 
   if ( bsp_interrupt_is_valid_vector( vector ) ) {
-#if defined(RTEMS_SMP)
+#if defined(BSP_IRQ_HAVE_GET_SET_AFFINITY)
     sc = bsp_interrupt_get_affinity( vector, &set );
 #else
     _Processor_mask_From_index( &set, 0 );
