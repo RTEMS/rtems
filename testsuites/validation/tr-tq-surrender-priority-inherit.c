@@ -537,10 +537,14 @@ static void Cleanup( Context *ctx )
   TQWaitForExecutionStop( ctx->tq_ctx, NEW_OWNER );
 
 #if defined(RTEMS_SMP)
-  TQSendAndWaitForExecutionStop(
+  TQSendAndSynchronizeRunner(
     ctx->tq_ctx,
     NEW_OWNER,
     TQ_EVENT_MUTEX_B_RELEASE
+  );
+  TQWaitForExecutionStop(
+    ctx->tq_ctx,
+    NEW_OWNER
   );
 
   if ( ctx->gains_new_priority ) {
