@@ -25,6 +25,7 @@ install:
   - cpukit/score/cpu/arm/include/rtems/score/arm.h
   - cpukit/score/cpu/arm/include/rtems/score/armv4.h
   - cpukit/score/cpu/arm/include/rtems/score/armv7m.h
+  - cpukit/score/cpu/arm/include/rtems/score/armv7-pmsa.h
   - cpukit/score/cpu/arm/include/rtems/score/cpu.h
   - cpukit/score/cpu/arm/include/rtems/score/cpu_asm.h
   - cpukit/score/cpu/arm/include/rtems/score/cpuimpl.h
