@@ -339,17 +339,13 @@ RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
   void _CPU_SMP_Prepare_start_multitasking( void );
 
-  static inline uint32_t _CPU_SMP_Get_current_processor( void )
-  {
-    uint32_t mpidr;
-
-    __asm__ volatile (
-      "mrs %[mpidr], mpidr_el1\n"
-      : [mpidr] "=&r" (mpidr)
-    );
-
-    return mpidr & 0xffU;
-  }
+  /**
+   * @brief Returns the index of the current processor.
+   *
+   * The function depends on _CPU_Get_current_per_CPU_control().
+   * It shall not be used before the TPIDR_EL1 is initialized.
+   */
+  uint32_t _CPU_SMP_Get_current_processor( void );
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
 
