@@ -307,6 +307,7 @@ rtems_status_code bsp_interrupt_get_priority(
   return RTEMS_SUCCESSFUL;
 }
 
+#ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
 rtems_status_code arm_gic_irq_set_group(
   rtems_vector_number vector,
   gic_group group
@@ -342,6 +343,7 @@ rtems_status_code arm_gic_irq_get_group(
 
   return sc;
 }
+#endif
 
 #if defined(BSP_IRQ_HAVE_GET_SET_AFFINITY)
 rtems_status_code bsp_interrupt_set_affinity(
