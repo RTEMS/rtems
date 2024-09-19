@@ -47,6 +47,8 @@ links:
 - role: build-dependency
   uid: ../../obj
 - role: build-dependency
+  uid: ../../objdevserialarmpl011
+- role: build-dependency
   uid: ../../objirq
 - role: build-dependency
   uid: ../../objmem

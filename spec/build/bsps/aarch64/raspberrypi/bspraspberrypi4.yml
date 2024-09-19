@@ -40,8 +40,6 @@ links:
 - role: build-dependency
   uid: abi
 - role: build-dependency
-  uid: ../../optconsolefifo
-- role: build-dependency
   uid: ../../optconsoleirq
 - role: build-dependency
   uid: ../../optcachedata
@@ -57,6 +55,8 @@ links:
   uid: ../../dev/irq/objarmgicv2
 - role: build-dependency
   uid: ../../obj
+- role: build-dependency
+  uid: ../../objdevserialarmpl011
 - role: build-dependency
   uid: ../../objirq
 - role: build-dependency
@@ -75,7 +75,6 @@ source:
 - bsps/shared/dev/irq/arm-gicv2-get-attributes.c
 - bsps/shared/dev/serial/console-termios-init.c
 - bsps/shared/dev/serial/console-termios.c
-- bsps/shared/dev/serial/arm-pl011.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/irq/irq-default-handler.c

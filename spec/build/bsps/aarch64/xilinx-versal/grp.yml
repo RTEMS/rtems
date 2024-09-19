@@ -25,10 +25,6 @@ links:
 - role: build-dependency
   uid: obj
 - role: build-dependency
-  uid: ../../optconsolefifo
-- role: build-dependency
-  uid: ../../optconsoleirq
-- role: build-dependency
   uid: optloadoff
 - role: build-dependency
   uid: optnocachelen
@@ -51,6 +47,8 @@ links:
 - role: build-dependency
   uid: ../../obj
 - role: build-dependency
+  uid: ../../objdevserialarmpl011
+- role: build-dependency
   uid: ../../objirq
 - role: build-dependency
   uid: ../../dev/irq/objarmgicv3
@@ -68,6 +66,8 @@ links:
   uid: ../../optcachedata
 - role: build-dependency
   uid: ../../optcacheinst
+- role: build-dependency
+  uid: ../../optconsoleirq
 - role: build-dependency
   uid: ../../opto2
 - role: build-dependency
