@@ -200,14 +200,10 @@ static inline uint32_t get_id_count(volatile gic_dist *dist)
   return id_count;
 }
 
-void bsp_interrupt_facility_initialize(void)
+static inline void init_distributor(volatile gic_dist *dist)
 {
-  volatile gic_cpuif *cpuif = GIC_CPUIF;
-  volatile gic_dist *dist = ARM_GIC_DIST;
   uint32_t id_count = get_id_count(dist);
   uint32_t id;
-
-  arm_interrupt_facility_set_exception_handler();
 
   for (id = 0; id < id_count; id += 32) {
 #ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
@@ -223,19 +219,12 @@ void bsp_interrupt_facility_initialize(void)
   for (id = 32; id < id_count; ++id) {
     gic_id_set_targets(dist, id, 0x01);
   }
-
-  cpuif->iccpmr = GIC_CPUIF_ICCPMR_PRIORITY(0xff);
-  cpuif->iccbpr = GIC_CPUIF_ICCBPR_BINARY_POINT(0x0);
-  cpuif->iccicr = CPUIF_ICCICR;
-
-  dist->icddcr = GIC_DIST_ICDDCR_ENABLE_GRP_1 | GIC_DIST_ICDDCR_ENABLE;
 }
 
-#ifdef RTEMS_SMP
-BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
+static inline void wait_for_distributor_and_init_sgi_ppi(
+  volatile gic_dist *dist
+)
 {
-  volatile gic_cpuif *cpuif = GIC_CPUIF;
-  volatile gic_dist *dist = ARM_GIC_DIST;
   uint32_t id;
 
   while ((dist->icddcr & GIC_DIST_ICDDCR_ENABLE) == 0) {
@@ -250,6 +239,35 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
   for (id = 0; id <= ARM_GIC_IRQ_PPI_LAST; ++id) {
     gic_id_set_priority(dist, id, PRIORITY_DEFAULT);
   }
+}
+
+void bsp_interrupt_facility_initialize(void)
+{
+  volatile gic_cpuif *cpuif = GIC_CPUIF;
+  volatile gic_dist *dist = ARM_GIC_DIST;
+
+  arm_interrupt_facility_set_exception_handler();
+
+#ifdef BSP_ARM_GIC_MULTI_PROCESSOR_SECONDARY
+  wait_for_distributor_and_init_sgi_ppi(dist);
+#else
+  init_distributor(dist);
+#endif
+
+  cpuif->iccpmr = GIC_CPUIF_ICCPMR_PRIORITY(0xff);
+  cpuif->iccbpr = GIC_CPUIF_ICCBPR_BINARY_POINT(0x0);
+  cpuif->iccicr = CPUIF_ICCICR;
+
+  dist->icddcr = GIC_DIST_ICDDCR_ENABLE_GRP_1 | GIC_DIST_ICDDCR_ENABLE;
+}
+
+#ifdef RTEMS_SMP
+BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
+{
+  volatile gic_cpuif *cpuif = GIC_CPUIF;
+  volatile gic_dist *dist = ARM_GIC_DIST;
+
+  wait_for_distributor_and_init_sgi_ppi(dist);
 
   cpuif->iccpmr = GIC_CPUIF_ICCPMR_PRIORITY(0xff);
   cpuif->iccbpr = GIC_CPUIF_ICCBPR_BINARY_POINT(0x0);
