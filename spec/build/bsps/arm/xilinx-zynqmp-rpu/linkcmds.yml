@@ -26,10 +26,6 @@ content: |
   bsp_vector_table_in_start_section = 1;
 
   INCLUDE linkcmds.armv4
-
-  # define symbols needed by the R5 xil_cache.c
-  _stack_end = bsp_section_stack_end;
-  __undef_stack = bsp_section_stack_begin;
 copyrights:
 - Copyright (C) 2024 embedded brains GmbH & Co. KG
 enabled-by: true

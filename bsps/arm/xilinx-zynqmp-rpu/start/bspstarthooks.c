@@ -35,43 +35,47 @@
  */
 
 #include <bsp/start.h>
+
+#define ARM_CP15_TEXT_SECTION BSP_START_TEXT_SECTION
+#define ARMV7_PMSA_TEXT_SECTION BSP_START_TEXT_SECTION
+
 #include <bsp/memory.h>
+#include <libcpu/arm-cp15.h>
 
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
-    /*
-     * On reset, V will be set.  This points the exceptions to the FSBL's vectors.  The FSBL
-     * should clear this bit before booting RTEMS but in some debugging
-     * configurations the bit may not be.  The other bits should already be clear
-     * on reset.  Since the correct settings in these bits are critical,
-     * make sure SCTLR[M, I, A, C, V] are cleared.  Afterwards, exceptions are
-     * handled by RTEMS.
-     * After setting the SCTLR, invalidate the caches.
-     * Note 1: The APU also does these steps in start.S in _start in the #if block:
-     *         `#if (__ARM_ARCH >= 7 && __ARM_ARCH_PROFILE == 'A') || __ARM_ARCH >= 8`
-     * Note 2: Not all Arm R cores need this (like the TMS570).  So, this probably should
-     *         be in this hook and not in start.S
-     *
-     * Ref: https://developer.arm.com/documentation/ddi0460/c/System-Control/Register-descriptions/c1--System-Control-Register?lang=en
-     */
-
-    __asm__ volatile(
-      "mrc p15, 0, r0, c1, c0, 0 \n"
-      "bic r1, r0, #0x3000 \n"     /* Clear V[13] and I[12] */
-      "bic r1, r1, #0x7 \n"        /* Clear C[2] A[1] and M[0] */
-      "mcr p15, 0, r1, c1, c0, 0 \n"
-
-      /* Invalidate caches */
-      "mov      r0,#0 \n"
-      "dsb \n"
-      "mcr      p15, 0, r0, c7, c5, 0 \n"
-      "mcr      p15, 0, r0, c15, c5, 0 \n"
-      "isb \n"
-        : :);
+  /* Do nothing */
 }
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
 {
-  zynqmp_setup_mpu_and_cache();
+  uint32_t index = 0;
+
+  for (size_t i = 0; i < zynqmp_mpu_region_count; ++i) {
+    const ARMV7_PMSA_Region *region = &zynqmp_mpu_regions[i];
+    index = _ARMV7_PMSA_Add_regions(
+      index,
+      region->begin,
+      region->size,
+      region->attributes
+    );
+  }
+
+  arm_cp15_instruction_cache_invalidate();
+  arm_cp15_data_cache_all_invalidate();
+  _ARM_Data_synchronization_barrier();
+  _ARM_Instruction_synchronization_barrier();
+
+  uint32_t control = arm_cp15_get_control();
+  control &= ~ARM_CP15_CTRL_A;
+  control &= ~ARM_CP15_CTRL_V;
+  control |= ARM_CP15_CTRL_M;
+  control |= ARM_CP15_CTRL_C;
+  control |= ARM_CP15_CTRL_I;
+  control |= ARM_CP15_CTRL_Z;
+  arm_cp15_set_control(control);
+  _ARM_Data_synchronization_barrier();
+  _ARM_Instruction_synchronization_barrier();
+
   bsp_start_clear_bss();
 }

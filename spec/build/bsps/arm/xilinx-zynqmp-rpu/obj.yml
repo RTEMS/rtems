@@ -28,7 +28,6 @@ source:
 - bsps/arm/xilinx-zynqmp-rpu/start/bspreset.c
 - bsps/arm/xilinx-zynqmp-rpu/start/bspstart.c
 - bsps/arm/xilinx-zynqmp-rpu/start/bspstarthooks.c
-- bsps/arm/xilinx-zynqmp-rpu/start/bspstartmpu.c
 - bsps/arm/xilinx-zynqmp-rpu/start/mpu-config.c
 - bsps/shared/dev/clock/xil-ttc.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
