@@ -638,22 +638,28 @@ typedef struct {
 } ARM_VFP_context;
 
 typedef struct {
-  uint32_t register_r0;
-  uint32_t register_r1;
-  uint32_t register_r2;
-  uint32_t register_r3;
-  uint32_t register_r4;
-  uint32_t register_r5;
-  uint32_t register_r6;
-  uint32_t register_r7;
-  uint32_t register_r8;
-  uint32_t register_r9;
-  uint32_t register_r10;
-  uint32_t register_r11;
-  uint32_t register_r12;
-  uint32_t register_sp;
-  void *register_lr;
-  void *register_pc;
+  union {
+    struct {
+      uint32_t register_r0;
+      uint32_t register_r1;
+      uint32_t register_r2;
+      uint32_t register_r3;
+      uint32_t register_r4;
+      uint32_t register_r5;
+      uint32_t register_r6;
+      uint32_t register_r7;
+      uint32_t register_r8;
+      uint32_t register_r9;
+      uint32_t register_r10;
+      uint32_t register_r11;
+      uint32_t register_r12;
+      uint32_t register_sp;
+      void *register_lr;
+      void *register_pc;
+    };
+
+    uint32_t registers[ 16 ];
+  };
 #if defined(ARM_MULTILIB_ARCH_V4)
   uint32_t register_cpsr;
   Arm_symbolic_exception_name vector;
