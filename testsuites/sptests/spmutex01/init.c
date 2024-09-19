@@ -727,6 +727,7 @@ static void fatal_extension(
   ) {
     test_context *ctx = &test_instance;
 
+    _ISR_Set_level(0);
     longjmp(ctx->deadlock_return_context, 1);
   }
 }

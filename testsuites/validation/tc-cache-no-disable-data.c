@@ -100,6 +100,7 @@ static void FatalRecordAndJump(
   fatal_source = source;
   fatal_code = code;
   _Atomic_Fetch_add_uint( &fatal_counter, 1, ATOMIC_ORDER_RELAXED );
+  _ISR_Set_level( 0 );
   longjmp( fatal_before, 1 );
 }
 
