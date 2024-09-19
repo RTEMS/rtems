@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsARMZynq
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_SMP_Start_processor() for Xilinx Zynq 7000 devices.
+ */
+
+/*
  * Copyright (C) 2014 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without

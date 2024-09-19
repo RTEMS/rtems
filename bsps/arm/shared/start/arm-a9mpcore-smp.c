@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMShared
+ *
+ * @brief This source file contains the SMP support some Arm devices.
+ */
+
 /*
  * Copyright (C) 2013, 2018 embedded brains GmbH & Co. KG
  *
