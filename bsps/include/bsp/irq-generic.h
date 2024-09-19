@@ -71,6 +71,10 @@ extern "C" {
   #define BSP_INTERRUPT_DISPATCH_TABLE_SIZE BSP_INTERRUPT_VECTOR_COUNT
 #endif
 
+#if !defined(BSP_IRQ_HAVE_GET_SET_AFFINITY) && defined(RTEMS_SMP)
+  #define BSP_IRQ_HAVE_GET_SET_AFFINITY
+#endif
+
 #define bsp_interrupt_assert(e) _Assert(e)
 
 /**
