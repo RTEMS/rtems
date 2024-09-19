@@ -29,6 +29,9 @@ content: |
    * POSSIBILITY OF SUCH DAMAGE.
    */
 
+  DDRMC_REGION_0_BASE = 0x00000000000;
+  DDRMC_REGION_0_LENGTH = 0x00080000000;
+
   MEMORY {
     RAM       : ORIGIN = ${BSP_XILINX_ZYNQMP_RAM_BASE} + ${BSP_XILINX_ZYNQMP_LOAD_OFFSET}, LENGTH = ${BSP_XILINX_ZYNQMP_RAM_LENGTH} - ${BSP_XILINX_ZYNQMP_LOAD_OFFSET} - ${BSP_XILINX_ZYNQMP_NOCACHE_LENGTH} - (0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES})
     NOCACHE   : ORIGIN = ${BSP_XILINX_ZYNQMP_RAM_BASE} + ${BSP_XILINX_ZYNQMP_RAM_LENGTH} - (0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES}) - ${BSP_XILINX_ZYNQMP_NOCACHE_LENGTH}, LENGTH = ${BSP_XILINX_ZYNQMP_NOCACHE_LENGTH}
@@ -58,6 +61,11 @@ content: |
   bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1M;
 
   bsp_vector_table_in_start_section = 1;
+
+  bsp_r0_ram_base = DDRMC_REGION_0_BASE;
+  bsp_r0_ram_end = ORIGIN (RAM) + LENGTH (RAM);
+  bsp_r1_ram_base = 0;
+  bsp_r1_ram_end = 0;
 
   bsp_translation_table_base = ORIGIN (RAM_MMU);
   bsp_translation_table_end = ORIGIN (RAM_MMU) + LENGTH (RAM_MMU);
