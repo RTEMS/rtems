@@ -89,7 +89,7 @@ void _CPU_SMP_Prepare_start_multitasking(void)
 
 #if defined(RTEMS_PARAVIRT) \
   || (!defined(__leon__) && !defined(__PPC__) \
-    && !defined(__arm__) && !defined(__riscv) && !defined(__aarch64__))
+    && !defined(__arm__) && !defined(__riscv))
 uint32_t _CPU_SMP_Get_current_processor(void)
 {
   return 0;
