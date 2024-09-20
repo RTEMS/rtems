@@ -1,0 +1,41 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: script
+cflags: []
+copyrights:
+- Copyright (C) 2024 On-Line Applications Research (OAR)
+cppflags: []
+do-build: |
+  path = "testsuites/libtests/dl13/"
+  objs = []
+  objs.append(self.cc(bld, bic, path + "dl13-o1.c"))
+  tar = path + "dl13.tar"
+  self.tar(bld, objs, [path], tar)
+  tar_c, tar_h = self.bin2c(bld, tar)
+  objs = []
+  objs.append(self.cc(bld, bic, tar_c))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_dl13_CPPFLAGS))
+  objs.append(self.cc(bld, bic, path + "dl-load.c"))
+  objs.append(self.cc(bld, bic, path + "dl13-arm_mode.c"))
+  dl13_pre = path + "dl13.pre"
+  self.link_cc(bld, bic, objs, dl13_pre)
+  dl13_sym_o = path + "dl13-sym.o"
+  objs.append(dl13_sym_o)
+  self.rtems_syms(bld, bic, dl13_pre, dl13_sym_o)
+  self.link_cc(bld, bic, objs, "testsuites/libtests/dl13.exe")
+do-configure: null
+enabled-by:
+- and:
+  - not: TEST_dl13_EXCLUDE
+  - BUILD_LIBDL
+  - arm
+includes:
+- testsuites/libtests/dl13
+ldflags: []
+links: []
+prepare-build: null
+prepare-configure: null
+stlib: []
+target: testsuites/libtests/dl13.exe
+type: build
+use-after: []
+use-before: []
