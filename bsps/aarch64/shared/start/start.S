@@ -219,12 +219,8 @@ _el2_start:
 _el1_start:
 
 #ifdef RTEMS_SMP
-  /* Read MPIDR and get current processor index */
-  mrs x7, mpidr_el1
-  and x7, x7, #0xff
-#endif
+  bl _AArch64_Get_current_processor_for_system_start
 
-#ifdef RTEMS_SMP
   /*
    * Get current per-CPU control and store it in PL1 only Thread ID
    * Register (TPIDR_EL1).
@@ -234,7 +230,7 @@ _el1_start:
 #else
   ldr x1, =_Per_CPU_Information
 #endif
-  add x1, x1, x7, lsl #PER_CPU_CONTROL_SIZE_LOG2
+  add x1, x1, x0, lsl #PER_CPU_CONTROL_SIZE_LOG2
   msr TPIDR_EL1, x1
 
 #endif
@@ -246,7 +242,7 @@ _el1_start:
   ldr x1, =_ISR_Stack_size
 #endif
 #ifdef RTEMS_SMP
-  add x3, x7, #1
+  add x3, x0, #1
   mul x1, x1, x3
 #endif
 #ifdef AARCH64_MULTILIB_ARCH_V8_ILP32

@@ -21,6 +21,7 @@ source:
 - bsps/aarch64/a72/start/bspstarthooks.c
 - bsps/aarch64/shared/cache/cache.c
 - bsps/aarch64/shared/mmu/vmsav8-64-nommu.c
+- bsps/aarch64/shared/start/start-cpu-mpidr.S
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-termios-init.c

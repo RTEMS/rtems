@@ -147,6 +147,19 @@ struct Per_CPU_Control *_AARCH64_Get_current_per_CPU_control( void )
 #define _CPU_Get_current_per_CPU_control() \
   _AARCH64_Get_current_per_CPU_control()
 
+/**
+ * @brief Returns the index of the current processor to start the system.
+ *
+ * This function is provided by the BSP.  The default implementation uses the
+ * affinity level 0 reported by the MPIDR_EL1.  Some BSPs may use more complex
+ * methods to determine the processor index, for example a device tree provided
+ * by the bootloader.
+ *
+ * The intended use case is to set up the TPIDR_EL1 register and the system
+ * initialization stack.
+ */
+uint64_t _AArch64_Get_current_processor_for_system_start( void );
+
 #endif /* RTEMS_SMP */
 
 void _CPU_Context_volatile_clobber( uintptr_t pattern );
