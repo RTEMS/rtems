@@ -1070,6 +1070,12 @@ class OptionItem(Item):
     def _set_value(self, conf, cic, value, arg):
         return arg
 
+    def _set_value_enabled_by(self, conf, cic, value, arg):
+        for value_enabled_by in arg:
+            if _is_enabled(conf.env.ENABLE, value_enabled_by["enabled-by"]):
+                return value_enabled_by["value"]
+        return None
+
     def _split(self, conf, cic, value, arg):
         return value.split()
 
@@ -1117,6 +1123,7 @@ class OptionItem(Item):
             "script": self._script,
             "set-test-state": self._set_test_state,
             "set-value": self._set_value,
+            "set-value-enabled-by": self._set_value_enabled_by,
             "split": self._split,
             "substitute": self._substitute,
         }
