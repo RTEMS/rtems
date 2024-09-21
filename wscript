@@ -934,6 +934,9 @@ class OptionItem(Item):
         )
         return value and result
 
+    def _comment(self, conf, cic, value, arg):
+        return value
+
     def _define_condition(self, conf, cic, value, arg):
         name = self.data["name"] if arg is None else arg
         conf.define_cond(name, value)
@@ -1098,6 +1101,7 @@ class OptionItem(Item):
             "assert-uint64": self._assert_uint64,
             "check-cc": self._check_cc,
             "check-cxx": self._check_cxx,
+            "comment": self._comment,
             "define-condition": self._define_condition,
             "define": self._define,
             "define-unquoted": self._define_unquoted,
