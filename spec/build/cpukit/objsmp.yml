@@ -11,7 +11,6 @@ install: []
 links: []
 source:
 - cpukit/score/src/percpujobs.c
-- cpukit/score/src/percpustatewait.c
 - cpukit/score/src/profilingsmplock.c
 - cpukit/score/src/schedulerdefaultmakecleansticky.c
 - cpukit/score/src/schedulerdefaultpinunpin.c

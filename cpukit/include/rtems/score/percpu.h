@@ -846,36 +846,6 @@ static inline void _Per_CPU_Set_state(
 }
 
 /**
- * @brief Waits for a processor to change into a non-initial state.
- *
- * This function should be called only in _CPU_SMP_Start_processor() if
- * required by the CPU port or BSP.
- *
- * @code
- * bool _CPU_SMP_Start_processor(uint32_t cpu_index)
- * {
- *   uint32_t timeout = 123456;
- *
- *   start_the_processor(cpu_index);
- *
- *   return _Per_CPU_State_wait_for_non_initial_state(cpu_index, timeout);
- * }
- * @endcode
- *
- * @param[in] cpu_index The processor index.
- * @param[in] timeout_in_ns The timeout in nanoseconds.  Use a value of zero to
- * wait forever if necessary.
- *
- * @retval true The processor is in a non-initial state.
- * @retval false The timeout expired before the processor reached a non-initial
- * state.
- */
-bool _Per_CPU_State_wait_for_non_initial_state(
-  uint32_t cpu_index,
-  uint32_t timeout_in_ns
-);
-
-/**
  * @brief Performs the jobs of the specified processor in FIFO order.
  *
  * @param[in, out] cpu The jobs of this processor will be performed.
