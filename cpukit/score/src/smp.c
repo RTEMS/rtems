@@ -94,6 +94,8 @@ static void _SMP_Start_processors( uint32_t cpu_max )
   uint32_t         cpu_index;
 
   cpu_self = _Per_CPU_Get();
+  cpu_self->boot = true;
+  cpu_self->online = true;
 
   for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
     const Scheduler_Assignment *assignment;
@@ -113,17 +115,15 @@ static void _SMP_Start_processors( uint32_t cpu_max )
       } else {
         started = false;
       }
+
+      cpu->online = started;
     } else {
-      started = true;
-
-      cpu->boot = true;
-
       if ( !_Scheduler_Should_start_processor( assignment ) ) {
         _SMP_Fatal( SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER );
       }
-    }
 
-    cpu->online = started;
+      started = true;
+    }
 
     if ( started ) {
       const Scheduler_Control *scheduler;
