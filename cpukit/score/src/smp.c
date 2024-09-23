@@ -90,10 +90,10 @@ static bool _Scheduler_Should_start_processor(
 
 static void _SMP_Start_processors( uint32_t cpu_max )
 {
-  uint32_t cpu_index_self;
-  uint32_t cpu_index;
+  Per_CPU_Control *cpu_self;
+  uint32_t         cpu_index;
 
-  cpu_index_self = _SMP_Get_current_processor();
+  cpu_self = _Per_CPU_Get();
 
   for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
     const Scheduler_Assignment *assignment;
@@ -103,7 +103,7 @@ static void _SMP_Start_processors( uint32_t cpu_max )
     assignment = _Scheduler_Get_initial_assignment( cpu_index );
     cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    if ( cpu_index != cpu_index_self ) {
+    if ( cpu != cpu_self ) {
       if ( _Scheduler_Should_start_processor( assignment ) ) {
         started = _CPU_SMP_Start_processor( cpu_index );
 
@@ -279,23 +279,23 @@ void _SMP_Start_multitasking_on_secondary_processor(
 
 void _SMP_Request_shutdown( void )
 {
-  ISR_Level level;
-  uint32_t  cpu_max;
-  uint32_t  cpu_index_self;
-  uint32_t  cpu_index;
+  ISR_Level              level;
+  const Per_CPU_Control *cpu_self;
+  uint32_t               cpu_max;
+  uint32_t               cpu_index;
 
   _ISR_Local_disable( level );
   (void) level;
 
   cpu_max = _SMP_Processor_configured_maximum;
-  cpu_index_self = _SMP_Get_current_processor();
+  cpu_self = _Per_CPU_Get();
 
   for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     Per_CPU_Control *cpu;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    if ( cpu_index == cpu_index_self ) {
+    if ( cpu == cpu_self ) {
       _Per_CPU_Set_state( cpu, PER_CPU_STATE_SHUTDOWN );
     } else {
       _Atomic_Fetch_or_ulong(
