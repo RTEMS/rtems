@@ -118,16 +118,14 @@ uint32_t _CPU_SMP_Initialize(void)
 
 void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
 {
-  if (cpu_count > 0) {
-    rtems_status_code sc = rtems_interrupt_handler_install(
-      BSP_VECTOR_IPI,
-      "IPI",
-      RTEMS_INTERRUPT_UNIQUE,
-      bsp_inter_processor_interrupt,
-      NULL
-    );
-    assert(sc == RTEMS_SUCCESSFUL);
-  }
+  rtems_status_code sc = rtems_interrupt_handler_install(
+    BSP_VECTOR_IPI,
+    "IPI",
+    RTEMS_INTERRUPT_UNIQUE,
+    bsp_inter_processor_interrupt,
+    NULL
+  );
+  assert(sc == RTEMS_SUCCESSFUL);
 }
 
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)

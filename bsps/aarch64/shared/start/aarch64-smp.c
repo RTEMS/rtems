@@ -52,28 +52,26 @@ static rtems_interrupt_entry aarch64_ipi_entry;
 
 void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
 {
-  if ( cpu_count > 0 ) {
-    rtems_status_code sc;
+  rtems_status_code sc;
 
-    rtems_interrupt_entry_initialize(
-      &aarch64_ipi_entry,
-      bsp_inter_processor_interrupt,
-      NULL,
-      "IPI"
-    );
-    sc = rtems_interrupt_entry_install(
-      ARM_GIC_IRQ_SGI_0,
-      RTEMS_INTERRUPT_UNIQUE,
-      &aarch64_ipi_entry
-    );
-    _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
+  rtems_interrupt_entry_initialize(
+    &aarch64_ipi_entry,
+    bsp_inter_processor_interrupt,
+    NULL,
+    "IPI"
+  );
+  sc = rtems_interrupt_entry_install(
+    ARM_GIC_IRQ_SGI_0,
+    RTEMS_INTERRUPT_UNIQUE,
+    &aarch64_ipi_entry
+  );
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
 #if defined( BSP_DATA_CACHE_ENABLED ) || \
-    defined( BSP_INSTRUCTION_CACHE_ENABLED )
-    /* Enable unified L2 cache */
-    rtems_cache_enable_data();
+  defined( BSP_INSTRUCTION_CACHE_ENABLED )
+  /* Enable unified L2 cache */
+  rtems_cache_enable_data();
 #endif
-  }
 }
 
 void _CPU_SMP_Prepare_start_multitasking( void )
