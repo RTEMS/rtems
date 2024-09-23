@@ -42,37 +42,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems/score/smpimpl.h>
+#include <rtems/score/cpu.h>
 
-#include <bsp/start.h>
 #include <bsp/raspberrypi.h>
-#include <bsp.h>
-#include <bsp/arm-cp15-start.h>
-#include <libcpu/arm-cp15.h>
-#include <rtems.h>
-#include <bsp/irq-generic.h>
-#include <assert.h>
+#include <bsp/start.h>
 
 bool _CPU_SMP_Start_processor( uint32_t cpu_index )
 {
-  bool started;
-  uint32_t cpu_index_self = _SMP_Get_current_processor();
+  BCM2835_REG(BCM2836_MAILBOX_3_WRITE_SET_BASE + 0x10 * cpu_index) = (uint32_t)_start;
+  _ARM_Send_event();
 
-  if (cpu_index != cpu_index_self) {
-
-    BCM2835_REG(BCM2836_MAILBOX_3_WRITE_SET_BASE + 0x10 * cpu_index) = (uint32_t)_start;
-    _ARM_Send_event();
-
-    /*
-     * Wait for secondary processor to complete its basic initialization so
-     * that we can enable the unified L2 cache.
-     */
-    started = _Per_CPU_State_wait_for_non_initial_state(cpu_index, 0);
-  } else {
-    started = false;
-  }
-
-  return started;
+  return true;
 }
 
 uint32_t _CPU_SMP_Initialize(void)
