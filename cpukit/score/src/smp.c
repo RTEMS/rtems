@@ -181,7 +181,7 @@ void _SMP_Handler_initialize( void )
   _CPU_SMP_Finalize_initialization( cpu_max );
 }
 
-void _SMP_Request_start_multitasking( void )
+void _SMP_Wait_for_ready_to_start_multitasking( void )
 {
   Per_CPU_Control *cpu_self;
   uint32_t         cpu_max;
@@ -190,13 +190,6 @@ void _SMP_Request_start_multitasking( void )
   cpu_max = _SMP_Get_processor_maximum();
   cpu_self = _Per_CPU_Get();
 
-  /*
-   * Wait until all other online processors reached the
-   * PER_CPU_STATE_READY_TO_START_MULTITASKING state.  The waiting is done
-   * without a timeout.  If secondary processors cannot reach this state, then
-   * it is expected that they indicate this failure with an
-   * ::SMP_MESSAGE_SHUTDOWN message or reset the system.
-   */
   for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     Per_CPU_Control *cpu;
 
@@ -213,7 +206,11 @@ void _SMP_Request_start_multitasking( void )
       }
     }
   }
+}
 
+void _SMP_Request_start_multitasking( void )
+{
+  _SMP_Wait_for_ready_to_start_multitasking();
   _Atomic_Store_uint(
     &_SMP_Ready_to_start_multitasking,
     1U,

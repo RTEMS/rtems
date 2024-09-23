@@ -316,6 +316,19 @@ void _SMP_Unicast_action(
  */
 void _SMP_Synchronize( void );
 
+/**
+ * @brief Waits until all other online processors reached the
+ *   ::PER_CPU_STATE_READY_TO_START_MULTITASKING state.
+ *
+ * The waiting is done without a timeout.  If secondary processors cannot reach
+ * this state, then it is expected that they indicate this failure with an
+ * ::SMP_MESSAGE_SHUTDOWN message or reset the system.
+ *
+ * While waiting for state changes, SMP messages for the current processor are
+ * processed.
+ */
+void _SMP_Wait_for_ready_to_start_multitasking( void );
+
 #endif /* defined( RTEMS_SMP ) */
 
 /**
