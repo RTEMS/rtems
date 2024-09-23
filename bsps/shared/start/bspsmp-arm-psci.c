@@ -84,9 +84,5 @@ bool _CPU_SMP_Start_processor( uint32_t cpu_index )
     REGISTER_PREFIX "3"
   );
 
-  if ( ret != 0 ) {
-    return false;
-  }
-
-  return _Per_CPU_State_wait_for_non_initial_state( cpu_index, 0 );
+  return ret == 0;
 }

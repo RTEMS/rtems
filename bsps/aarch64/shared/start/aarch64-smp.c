@@ -66,12 +66,6 @@ void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
     &aarch64_ipi_entry
   );
   _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
-
-#if defined( BSP_DATA_CACHE_ENABLED ) || \
-  defined( BSP_INSTRUCTION_CACHE_ENABLED )
-  /* Enable unified L2 cache */
-  rtems_cache_enable_data();
-#endif
 }
 
 void _CPU_SMP_Prepare_start_multitasking( void )
