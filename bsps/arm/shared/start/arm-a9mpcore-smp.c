@@ -60,7 +60,11 @@ void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
   _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
 
 #if defined(BSP_DATA_CACHE_ENABLED) || defined(BSP_INSTRUCTION_CACHE_ENABLED)
-  /* Enable unified L2 cache */
+  /*
+   * When all secondary processors are ready to start multitasking, enable the
+   * unified L2 cache.
+   */
+  _SMP_Wait_for_ready_to_start_multitasking();
   rtems_cache_enable_data();
 #endif
 }
