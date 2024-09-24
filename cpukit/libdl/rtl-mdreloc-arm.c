@@ -101,11 +101,35 @@ set_veneer(void* tramopline, Elf_Addr target)
   return tramp;
 }
 
+static void*
+set_thumb_bx_veneer(void* tramopline, Elf_Addr target)
+{
+  /*
+   * http://shell-storm.org/online/Online-Assembler-and-Disassembler/
+   *
+   *  Thumb mode:
+   *    ldr.w r12, [pc, 4]
+   *    bx r12
+   *    .word target
+   *
+   */
+  uint16_t* tramp = (uint16_t*) tramopline;
+  /* ldr.w r12, [pc, 4]*/
+  *tramp++ = 0xf8df;
+  *tramp++ = 0xc002;
+  /* bx r12 */
+  *tramp++ = 0x4760;
+  *tramp++ = (uint16_t) target & 0xffff;
+  *tramp++ = (uint16_t) ((target >> 16) & 0xffff);
+  return tramp;
+}
+
 static size_t
 get_veneer_size(int type)
 {
   (void) type;
-  return 8;
+  /* BX veneers need 10 bytes */
+  return 10;
 }
 
 uint32_t rtems_rtl_obj_tramp_alignment (const rtems_rtl_obj* obj)
@@ -423,10 +447,6 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
       else {
         if (ELF_R_TYPE(rel->r_info) == R_TYPE(THM_JUMP24)) {
           tmp = (tmp + 2) & ~3; /* aligned to 4 bytes only for JUMP24 */
-#if !ALLOW_UNTESTED_RELOCS
-          printf("THM_JUMP24 to arm not supported\n");
-          return rtems_rtl_elf_rel_failure;
-#endif
         }
         else {
           /* THM_CALL bl-->blx */
@@ -443,7 +463,31 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
       tmp = symvalue + addend;
       tmp = tmp - (Elf_Addr)where;
 
-      if (((Elf_Sword)tmp > 0x7fffff) || ((Elf_Sword)tmp < -0x800000)) {
+      if (isThumb(symvalue) == false && ELF_R_TYPE(rel->r_info) == R_TYPE(THM_JUMP24)) {
+        Elf_Word tramp_addr;
+        size_t   tramp_size = get_veneer_size(ELF_R_TYPE(rel->r_info));
+
+        if (parsing) {
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+            printf ("rtl: THM_JUMP24 tramp add: %08x - %p = %i\n",
+                    symvalue + addend, where, (Elf_Sword) tmp);
+          return rtems_rtl_elf_rel_tramp_add;
+        }
+
+        if (!rtems_rtl_obj_has_tramp_space (obj, tramp_size)) {
+          rtems_rtl_set_error (EINVAL,
+                               "%s: THM_JUMP24: overflow: no tramp memory",
+                               sect->name);
+          return rtems_rtl_elf_rel_failure;
+        }
+
+        tramp_addr = (Elf_Addr) obj->tramp_brk;
+        obj->tramp_brk = set_thumb_bx_veneer(obj->tramp_brk, symvalue);
+
+
+        tmp = tramp_addr + addend;
+        tmp = tmp - (Elf_Addr)where;
+      } else if (((Elf_Sword)tmp > 0x7fffff) || ((Elf_Sword)tmp < -0x800000)) {
         Elf_Word tramp_addr;
         size_t   tramp_size = get_veneer_size(ELF_R_TYPE(rel->r_info));
 
