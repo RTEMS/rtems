@@ -13,7 +13,7 @@ links: []
 source:
 - testsuites/samples/minimum/init.c
 stlib: []
-target: testsuites/samples/minimum.exe
+target: testsuites/samples/minimum.norun.exe
 type: build
 use-after: []
 use-before: []
