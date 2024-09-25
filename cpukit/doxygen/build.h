@@ -44,7 +44,7 @@
 /**
  * @ingroup RTEMSImplBuild
  *
- * @file bsps/include/bspopts.h
+ * @file bspopts.h
  *
  * @brief This header file provides the BSP options definitions.
  */
@@ -52,7 +52,7 @@
 /**
  * @ingroup RTEMSImplBuild
  *
- * @file cpukit/include/version-vc-key.h
+ * @file version-vc-key.h
  *
  * @brief This header file provides the version control key definitions.
  */
@@ -60,7 +60,7 @@
 /**
  * @ingroup RTEMSImplBuild
  *
- * @file cpukit/include/config.h
+ * @file config.h
  *
  * @brief This header file provides system configuration definitions.
  */
@@ -68,7 +68,7 @@
 /**
  * @ingroup RTEMSImplBuild
  *
- * @file cpukit/include/rtems/testopts.h
+ * @file rtems/testopts.h
  *
  * @brief This header file provides test program definitions.
  */
@@ -76,7 +76,7 @@
 /**
  * @ingroup RTEMSImplBuild
  *
- * @file cpukit/include/rtems/score/cpuopts.h
+ * @file rtems/score/cpuopts.h
  *
  * @brief This header file provides the CPU options definitions.
  */
