@@ -71,6 +71,23 @@ sign_extend31(Elf_Addr val)
 }
 
 static void*
+set_arm_veneer(void* trampoline, Elf_Addr target)
+{
+  /*
+   *  ARM mode:
+   *    ldr pc, [pc, #-4]
+   */
+  uint32_t* tramp = (uint32_t*) trampoline;
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  *tramp++ = 0xe51ff004;
+#else
+  *tramp++ = 0xe51ff004; /* not tested */
+#endif
+  *tramp++ = (uint32_t) target;
+  return tramp;
+}
+
+static void*
 set_veneer(void* trampoline, Elf_Addr target)
 {
   /*
@@ -79,26 +96,19 @@ set_veneer(void* trampoline, Elf_Addr target)
    *  Thumb mode:
    *    ldr.w pc, [pc]
    *
-   *  ARM mode:
-   *    ldr pc, [pc, #-4]
-   *
    */
-  uint32_t* tramp = (uint32_t*) trampoline;
 #if defined(__thumb__)
+  uint32_t* tramp = (uint32_t*) trampoline;
  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
   *tramp++ = 0xf000f8df;
  #else
   *tramp++ = 0xf8dff000; /* not tested */
  #endif
-#else
- #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-  *tramp++ = 0xe51ff004;
- #else
-  *tramp++ = 0xe51ff004; /* not tested */
- #endif
-#endif
   *tramp++ = (uint32_t) target;
   return tramp;
+#else
+  return set_arm_veneer(trampoline, target);
+#endif
 }
 
 static void*
@@ -443,15 +453,10 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
         addend = (tmp | ((sign ? 0 : 1) << 24)) - (1 << 24);
       }
 
-      if (isThumb(symvalue)) ;/*Thumb to Thumb call, nothing to care */
-      else {
-        if (ELF_R_TYPE(rel->r_info) == R_TYPE(THM_JUMP24)) {
-          tmp = (tmp + 2) & ~3; /* aligned to 4 bytes only for JUMP24 */
-        }
-        else {
-          /* THM_CALL bl-->blx */
-          lower_insn &= ~(1<<12);
-        }
+      if (isThumb(symvalue) == false
+        && ELF_R_TYPE(rel->r_info) != R_TYPE(THM_JUMP24)) {
+        /* THM_CALL bl-->blx */
+        lower_insn &= ~(1<<12);
       }
 
       if (parsing && sect->base == 0) {
@@ -461,7 +466,15 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
       }
 
       tmp = symvalue + addend;
-      tmp = tmp - (Elf_Addr)where;
+      if (isThumb(symvalue)) {
+        tmp = tmp - (Elf_Addr)where;
+      } else {
+        /*
+         * where[1:0] are set to 0 for ARM-targeted relocations because the jump
+         * offset[1:0] are also 0
+         */
+        tmp = tmp - (Elf_Addr)((uintptr_t)where & 0xfffffffc);
+      }
 
       if (isThumb(symvalue) == false && ELF_R_TYPE(rel->r_info) == R_TYPE(THM_JUMP24)) {
         Elf_Word tramp_addr;
@@ -486,6 +499,7 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
 
 
         tmp = tramp_addr + addend;
+        /* This targets a thumb trampoline, so no need to adjust the PC */
         tmp = tmp - (Elf_Addr)where;
       } else if (((Elf_Sword)tmp > 0x7fffff) || ((Elf_Sword)tmp < -0x800000)) {
         Elf_Word tramp_addr;
@@ -506,11 +520,24 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
         }
 
         tramp_addr = ((Elf_Addr) obj->tramp_brk) | (symvalue & 1);
-        obj->tramp_brk = set_veneer(obj->tramp_brk, symvalue);
-
-
         tmp = tramp_addr + addend;
-        tmp = tmp - (Elf_Addr)where;
+        if (isThumb(symvalue)) {
+          obj->tramp_brk = set_veneer(obj->tramp_brk, symvalue);
+          tmp = tmp - (Elf_Addr)where;
+        } else {
+          /*
+	   * The B[L]X expects ARM code at the target. Align tramp_brk as
+	   * necessary.
+	   */
+          obj->tramp_brk = (void *)RTEMS_ALIGN_UP((uintptr_t)obj->tramp_brk, 4);
+	  tramp_addr = (Elf_Addr) obj->tramp_brk;
+          obj->tramp_brk = set_arm_veneer(obj->tramp_brk, symvalue);
+          /*
+           * where[1:0] are set to 0 for ARM-targeted relocations because the jump
+           * offset[1:0] are also 0
+           */
+          tmp = tmp - (Elf_Addr)((uintptr_t)where & 0xfffffffc);
+        }
       }
 
       if (!parsing) {
