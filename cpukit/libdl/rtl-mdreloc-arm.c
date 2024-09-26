@@ -71,7 +71,7 @@ sign_extend31(Elf_Addr val)
 }
 
 static void*
-set_veneer(void* tramopline, Elf_Addr target)
+set_veneer(void* trampoline, Elf_Addr target)
 {
   /*
    * http://shell-storm.org/online/Online-Assembler-and-Disassembler/
@@ -83,7 +83,7 @@ set_veneer(void* tramopline, Elf_Addr target)
    *    ldr pc, [pc, #-4]
    *
    */
-  uint32_t* tramp = (uint32_t*) tramopline;
+  uint32_t* tramp = (uint32_t*) trampoline;
 #if defined(__thumb__)
  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
   *tramp++ = 0xf000f8df;
@@ -102,7 +102,7 @@ set_veneer(void* tramopline, Elf_Addr target)
 }
 
 static void*
-set_thumb_bx_veneer(void* tramopline, Elf_Addr target)
+set_thumb_bx_veneer(void* trampoline, Elf_Addr target)
 {
   /*
    * http://shell-storm.org/online/Online-Assembler-and-Disassembler/
@@ -113,7 +113,7 @@ set_thumb_bx_veneer(void* tramopline, Elf_Addr target)
    *    .word target
    *
    */
-  uint16_t* tramp = (uint16_t*) tramopline;
+  uint16_t* tramp = (uint16_t*) trampoline;
   /* ldr.w r12, [pc, 4]*/
   *tramp++ = 0xf8df;
   *tramp++ = 0xc002;

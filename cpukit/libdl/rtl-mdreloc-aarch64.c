@@ -137,7 +137,7 @@ checkalign(Elf_Addr addr, int alignbyte, void *where, Elf64_Addr off)
 #define ALLOW_UNTESTED_RELOCS 1
 
 static void*
-set_veneer(void* tramopline, Elf_Addr target)
+set_veneer(void* trampoline, Elf_Addr target)
 {
   /*
    * http://shell-storm.org/online/Online-Assembler-and-Disassembler/
@@ -146,7 +146,7 @@ set_veneer(void* tramopline, Elf_Addr target)
    * br x9
    *
    */
-  uint64_t* tramp = (uint64_t*) tramopline;
+  uint64_t* tramp = (uint64_t*) trampoline;
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
   *tramp++ = 0xd61f012058000049;
 #else

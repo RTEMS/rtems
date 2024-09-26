@@ -223,7 +223,7 @@ rtems_rtl_elf_relocate_tramp_max_size (void)
 }
 
 static void*
-set_veneer (void* tramopline, Elf_Addr target)
+set_veneer (void* trampoline, Elf_Addr target)
 {
   /*
    * http://shell-storm.org/online/Online-Assembler-and-Disassembler/
@@ -239,7 +239,7 @@ set_veneer (void* tramopline, Elf_Addr target)
                 " mtctr 12\n" \
                 " bctr\n");
 #endif
-  uint32_t* tramp = (uint32_t*) tramopline;
+  uint32_t* tramp = (uint32_t*) trampoline;
   *tramp++ = 0x3d800000 | (target >> 16);
   *tramp++ = 0x618c0000 | (target & 0xffff);
   *tramp++ = 0x7d8903a6;
