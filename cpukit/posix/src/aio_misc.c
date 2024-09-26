@@ -118,20 +118,24 @@ int rtems_aio_init( void )
   int result = 0;
 
   result = pthread_attr_init( &aio_request_queue.attr );
-  if ( result != 0 )
-    return result;
+  if ( result != 0 ){
+    return -1;
+  }
 
   result = pthread_attr_setdetachstate(
     &aio_request_queue.attr,
     PTHREAD_CREATE_DETACHED
   );
-  if ( result != 0 )
+  if ( result != 0 ) {
     pthread_attr_destroy( &aio_request_queue.attr );
-
+    return -1;
+  }
 
   result = pthread_mutex_init( &aio_request_queue.mutex, NULL );
-  if ( result != 0 )
+  if ( result != 0 ) {
     pthread_attr_destroy( &aio_request_queue.attr );
+    return -1;
+  }
 
   pthread_mutex_lock( &aio_request_queue.mutex );
 
@@ -140,6 +144,7 @@ int rtems_aio_init( void )
     pthread_mutex_unlock( &aio_request_queue.mutex );
     pthread_mutex_destroy( &aio_request_queue.mutex );
     pthread_attr_destroy( &aio_request_queue.attr );
+    return -1;
   }
 
   rtems_chain_initialize_empty( &aio_request_queue.work_req );
@@ -152,7 +157,7 @@ int rtems_aio_init( void )
 
   pthread_mutex_unlock( &aio_request_queue.mutex );
 
-  return result;
+  return 0;
 }
 
 rtems_aio_request *init_write_req( struct aiocb* aiocbp )

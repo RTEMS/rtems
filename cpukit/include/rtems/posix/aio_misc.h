@@ -224,6 +224,7 @@ extern rtems_aio_queue aio_request_queue;
  * @brief Initialize the request queue for AIO Operations.
  * 
  * @retval 0 The queue has bees succesfully initialized.
+ * @retval -1 An error occured while initializing the queue.
  */
 int rtems_aio_init( void );
 
