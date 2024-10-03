@@ -1,14 +1,6 @@
-aclocal.m4
-autom4te.cache
 /build
-config.h.in
-configure
 doc
 /*.ini
 .lock*
-Makefile.in
 *.pyc
-/testsuites/build/bin/fake-rtems5-g++
-/testsuites/build/build
-/testsuites/build/wscript
 .waf*
