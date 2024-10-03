@@ -712,6 +712,29 @@ static void *rtems_aio_handle( void *arg )
             timeout.tv_sec += 3;
             timeout.tv_nsec = 0;
 
+            /* Coverity detected an error, but after review,
+              it was deemed a false positive.
+
+              The concern was whether there would be an issue
+              if the thread was interrupted while waiting.
+              According to the POSIX specification of
+              pthread_cond_timedwait:
+
+              "If a signal is delivered to a thread waiting
+              on a condition variable, the thread either resumes
+              waiting as if not interrupted or returns zero due
+              to spurious wakeup."
+
+              Both scenarios are safe:
+
+              - If pthread_cond_timedwait resumes waiting,
+                there are no issues.
+              - If it returns zero, the thread continues
+                as if an element was added. Since no element
+                is added, in the next iteration of the loop
+                handling requests, the queue stays empty, and
+                the thread waits again. */
+                
             result = pthread_cond_timedwait(
               &aio_request_queue.new_req,
               &aio_request_queue.mutex,
