@@ -28,6 +28,13 @@ enabled-by:
   - not: TEST_dl13_EXCLUDE
   - BUILD_LIBDL
   - arm
+  - not: bsps/arm/atsam
+  - not: bsps/arm/imxrt
+  - not: bsps/arm/lm3s69xx
+  - not: bsps/arm/lpc176x
+  - not: bsps/arm/lpc24xx
+  - not: bsps/arm/stm32h7
+  - not: bsps/arm/stm32f4
 includes:
 - testsuites/libtests/dl13
 ldflags: []
