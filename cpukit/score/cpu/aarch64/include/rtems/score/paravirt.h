@@ -47,7 +47,7 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief This handler encapulates the functionality (primarily conditional
+ * @brief This handler encapsulates the functionality (primarily conditional
  *        feature defines) related to paravirtualization on the AArch64.
  *
  * Paravirtualization on the AArch64 makes the following assumptions:
