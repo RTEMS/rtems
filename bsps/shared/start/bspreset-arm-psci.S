@@ -5,10 +5,12 @@
  *
  * @ingroup RTEMSBSPsShared
  *
- * @brief PSCI-based BSP reset hook.
+ * @brief This source file contains the PSCI-based bsp_reset() implementation.
  */
 
 /*
+ * Copyright (C) 2024 embedded brains GmbH & Co. KG
+ *
  * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
  * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
@@ -35,25 +37,19 @@
  */
 
 #include <bsp.h>
-#include <bsp/bootcard.h>
 
-void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
-{
-	uint32_t PSCI_FN_SYSTEM_RESET = 0x84000009;
-	(void) source;
-	(void) code;
-	__asm__ volatile(
-#if defined(AARCH64_MULTILIB_ARCH_V8) || defined(AARCH64_MULTILIB_ARCH_V8_ILP32)
-		"mov x0, %0\n"
-#else
-		"mov r0, %0\n"
-#endif
+#include <rtems/asm.h>
+
+FUNCTION_ENTRY(bsp_reset)
+
+	/* PSCI_FN_SYSTEM_RESET = 0x84000009 */
+	mov	x0, 9
+	movk	x0, 0x8400, lsl 16
+
 #ifdef BSP_RESET_SMC
-		"smc #0\n"
+	smc	#0
 #else
-		"hvc #0\n"
+	hvc	#0
 #endif
-		: : "r" (PSCI_FN_SYSTEM_RESET)
-	);
-	RTEMS_UNREACHABLE();
-}
+
+FUNCTION_END(bsp_reset)

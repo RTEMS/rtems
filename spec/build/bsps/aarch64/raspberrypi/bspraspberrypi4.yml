@@ -79,7 +79,7 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/irq/irq-default-handler.c
-- bsps/shared/start/bspreset-arm-psci.c
+- bsps/shared/start/bspreset-arm-psci.S
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/wkspaceinitone.c

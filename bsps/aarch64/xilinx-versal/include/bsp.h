@@ -44,6 +44,8 @@
 
 #include <bspopts.h>
 
+#define BSP_RESET_SMC
+
 #ifndef ASM
 
 #include <bsp/default-initial-extension.h>
@@ -59,8 +61,6 @@ extern "C" {
 #define BSP_ARM_GIC_CPUIF_BASE 0xf9040000
 #define BSP_ARM_GIC_DIST_BASE 0xf9000000
 #define BSP_ARM_GIC_REDIST_BASE 0xf9080000
-
-#define BSP_RESET_SMC
 
 /*
  * DDRMC mapping

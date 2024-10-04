@@ -41,6 +41,10 @@
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
+#define BSP_RESET_SMC
+
+#define BSP_CPU_ON_USES_SMC
+
 #ifndef ASM
 
 #include <bsp/default-initial-extension.h>
@@ -78,9 +82,6 @@ LINKER_SYMBOL(bsp_r1_ram_end)
 
 #define BSP_ARM_GIC_CPUIF_BASE 0xf9020000
 #define BSP_ARM_GIC_DIST_BASE 0xf9010000
-
-#define BSP_RESET_SMC
-#define BSP_CPU_ON_USES_SMC
 
 #define BSP_FDT_IS_SUPPORTED
 extern unsigned int zynqmp_dtb_len;
