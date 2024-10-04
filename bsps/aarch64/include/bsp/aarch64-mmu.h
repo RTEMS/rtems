@@ -49,9 +49,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/* AArch64 uses levels 0, 1, 2, and 3 */
-#define MMU_MAX_SUBTABLE_PAGE_BITS ( 3 * MMU_BITS_PER_LEVEL + MMU_PAGE_BITS )
-
 typedef struct {
   uintptr_t begin;
   uintptr_t end;
@@ -145,274 +142,45 @@ extern const aarch64_mmu_config_entry aarch64_mmu_config_table[];
  */
 extern const size_t aarch64_mmu_config_table_size;
 
-/* setup straight mapped block entries */
-BSP_START_TEXT_SECTION static inline void aarch64_mmu_page_table_set_blocks(
-  uint64_t *page_table,
-  uint64_t base,
-  uint32_t bits_offset,
-  uint64_t default_attr
-)
-{
-  uint64_t page_flag = 0;
-
-  if ( bits_offset == MMU_PAGE_BITS ) {
-    page_flag = MMU_DESC_TYPE_PAGE;
-  }
-
-  for ( uint64_t i = 0; i < ( 1 << MMU_BITS_PER_LEVEL ); i++ ) {
-    page_table[i] = base | ( i << bits_offset );
-    page_table[i] |= default_attr | page_flag;
-  }
-}
-
-BSP_START_TEXT_SECTION static inline rtems_status_code
-aarch64_mmu_page_table_alloc( uint64_t **page_table )
-{
-  /* First page table is already in use as TTB0 */
-  static uintptr_t current_page_table =
-    (uintptr_t) bsp_translation_table_base;
-
-  current_page_table += MMU_PAGE_SIZE;
-  *page_table = (uint64_t *) current_page_table;
-
-  /* Out of linker-allocated page tables? */
-  uintptr_t consumed_pages = (uintptr_t) current_page_table;
-  consumed_pages -= (uintptr_t) bsp_translation_table_base;
-  consumed_pages /= MMU_PAGE_SIZE;
-
-  if ( consumed_pages > AARCH64_MMU_TRANSLATION_TABLE_PAGES ) {
-    *page_table = NULL;
-    return RTEMS_NO_MEMORY;
-  }
-
-  return RTEMS_SUCCESSFUL;
-}
-
-BSP_START_TEXT_SECTION static inline uintptr_t aarch64_mmu_get_index(
-  uintptr_t root_address,
-  uintptr_t vaddr,
-  uint32_t shift
-)
-{
-  uintptr_t mask = ( 1 << ( MMU_BITS_PER_LEVEL + 1 ) ) - 1;
-
-  return ( ( vaddr - root_address ) >> shift ) & mask;
-}
-
-BSP_START_TEXT_SECTION static inline rtems_status_code
-aarch64_mmu_get_sub_table(
-  uint64_t *page_table_entry,
-  uint64_t **sub_table,
-  uintptr_t physical_root_address,
-  uint32_t shift
-)
-{
-  /* check if the index already has a page table */
-  if ( ( *page_table_entry & MMU_DESC_TYPE_TABLE ) == MMU_DESC_TYPE_TABLE ) {
-    /* extract page table address */
-    uint64_t table_pointer = *page_table_entry & MMU_DESC_PAGE_TABLE_MASK;
-    /* This cast should be safe since the address was inserted in this mode */
-    *sub_table = (uint64_t *) (uintptr_t) table_pointer;
-  } else {
-    /* allocate new page table and set block */
-    rtems_status_code sc = aarch64_mmu_page_table_alloc( sub_table );
-
-    if ( sc != RTEMS_SUCCESSFUL ) {
-      return sc;
-    }
-
-    aarch64_mmu_page_table_set_blocks(
-      *sub_table,
-      physical_root_address,
-      shift - MMU_BITS_PER_LEVEL,
-      *page_table_entry & ~MMU_DESC_PAGE_TABLE_MASK
-    );
-    *page_table_entry = (uintptr_t) *sub_table;
-    *page_table_entry |= MMU_DESC_TYPE_TABLE | MMU_DESC_VALID;
-  }
-
-  return RTEMS_SUCCESSFUL;
-}
-
-BSP_START_TEXT_SECTION static inline rtems_status_code aarch64_mmu_map_block(
-  uint64_t *page_table,
-  uint64_t root_address,
-  uint64_t addr,
-  uint64_t size,
-  int8_t level,
-  uint64_t flags
-)
-{
-  uint32_t shift = ( 2 - level ) * MMU_BITS_PER_LEVEL + MMU_PAGE_BITS;
-  uint64_t granularity = 1LLU << shift;
-  uint64_t page_flag = 0;
-
-  if ( level == 2 ) {
-    page_flag = MMU_DESC_TYPE_PAGE;
-  }
-
-  while ( size > 0 ) {
-    uintptr_t index = aarch64_mmu_get_index( root_address, addr, shift );
-    uint64_t block_bottom = RTEMS_ALIGN_DOWN( addr, granularity );
-    uint64_t chunk_size = granularity;
-
-    /* check for perfect block match */
-    if ( block_bottom == addr ) {
-      if ( size >= chunk_size ) {
-        /* level -1 can't contain block descriptors, fall through to subtable */
-        if ( level != -1 ) {
-          /* when page_flag is set the last level must be a page descriptor */
-          if ( page_flag || ( page_table[index] & MMU_DESC_TYPE_TABLE ) != MMU_DESC_TYPE_TABLE ) {
-            /* no sub-table, apply block properties */
-            page_table[index] = addr | flags | page_flag;
-            size -= chunk_size;
-            addr += chunk_size;
-            continue;
-          }
-        }
-      } else {
-        /* block starts on a boundary, but is short */
-        chunk_size = size;
-
-        /* it isn't possible to go beyond page table level 2 */
-        if ( page_flag ) {
-          /* no sub-table, apply block properties */
-          page_table[index] = addr | flags | page_flag;
-          size -= chunk_size;
-          addr += chunk_size;
-          continue;
-        }
-      }
-    } else {
-      uintptr_t block_top = RTEMS_ALIGN_UP( addr, granularity );
-      chunk_size = block_top - addr;
-
-      if ( chunk_size > size ) {
-        chunk_size = size;
-      }
-    }
-
-    /* Deal with any subtable modification  */
-    uint64_t new_root_address = root_address + index * granularity;
-    uint64_t *sub_table = NULL;
-    rtems_status_code sc;
-
-    sc = aarch64_mmu_get_sub_table(
-      &page_table[index],
-      &sub_table,
-      new_root_address,
-      shift
-    );
-
-    if ( sc != RTEMS_SUCCESSFUL ) {
-      return sc;
-    }
-
-    sc = aarch64_mmu_map_block(
-      sub_table,
-      new_root_address,
-      addr,
-      chunk_size,
-      level + 1,
-      flags
-    );
-
-    if ( sc != RTEMS_SUCCESSFUL ) {
-      return sc;
-    }
-
-    size -= chunk_size;
-    addr += chunk_size;
-  }
-
-  return RTEMS_SUCCESSFUL;
-}
-
-BSP_START_DATA_SECTION extern const aarch64_mmu_config_entry
-  aarch64_mmu_config_table[];
-
-BSP_START_DATA_SECTION extern const size_t
-  aarch64_mmu_config_table_size;
-
-/* Get the maximum number of bits supported by this hardware */
-BSP_START_TEXT_SECTION static inline uint64_t
-aarch64_mmu_get_cpu_pa_bits( void )
-{
-  uint64_t id_reg = _AArch64_Read_id_aa64mmfr0_el1();
-
-  switch ( AARCH64_ID_AA64MMFR0_EL1_PARANGE_GET( id_reg ) ) {
-  case 0:
-	  return 32;
-  case 1:
-	  return 36;
-  case 2:
-	  return 40;
-  case 3:
-	  return 42;
-  case 4:
-	  return 44;
-  case 5:
-	  return 48;
-  case 6:
-	  return 52;
-  default:
-	  return 48;
-  }
-  return 48;
-}
-
-BSP_START_TEXT_SECTION static inline void
-aarch64_mmu_set_translation_table_entries(
+/**
+ * @brief Sets the MMU translation table entries associated with the memory
+ *   region.
+ *
+ * @param[in] config is the configuration entry with the memory region and
+ *   region attributes.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The begin address of the memory region
+ *   cannot be mapped by the MMU.
+ *
+ * @retval ::RTEMS_INVALID_SIZE The end address of the memory region cannot be
+ *   mapped by the MMU.
+ *
+ * @retval ::RTEMS_NO_MEMORY There were no page table entries available to
+ *   perform the mapping.
+ */
+rtems_status_code aarch64_mmu_set_translation_table_entries(
   uint64_t *ttb,
   const aarch64_mmu_config_entry *config
-)
-{
-  /* Force alignemnt to 4k page size */
-  uintptr_t begin = RTEMS_ALIGN_DOWN( config->begin, MMU_PAGE_SIZE );
-  uintptr_t end = RTEMS_ALIGN_UP( config->end, MMU_PAGE_SIZE );
-  uint64_t max_mappable = 1LLU << aarch64_mmu_get_cpu_pa_bits();
-  rtems_status_code sc;
+);
 
-  if ( begin >= max_mappable || end > max_mappable ) {
-    bsp_fatal( BSP_FATAL_MMU_ADDRESS_INVALID );
-  }
-
-  sc = aarch64_mmu_map_block(
-    ttb,
-    0x0,
-    begin,
-    end - begin,
-    -1,
-    config->flags
-  );
-
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    bsp_fatal( AARCH64_FATAL_MMU_CANNOT_MAP_BLOCK );
-  }
-}
-
-BSP_START_TEXT_SECTION static inline void aarch64_mmu_setup_translation_table(
+/**
+ * @brief Sets up the MMU translation table.
+ *
+ * The memory regions of the configuration table are mapped by the MMU.  If a
+ * mapping is infeasible, then the BSP fatal error
+ * ::AARCH64_FATAL_MMU_CANNOT_MAP_BLOCK will be issued.
+ *
+ * @param[in] config_table is the configuration table with memory regions and
+ *   region attributes.
+ *
+ * @param config_count is the count of configuration table entries.
+ */
+void aarch64_mmu_setup_translation_table(
   const aarch64_mmu_config_entry *config_table,
   size_t config_count
-)
-{
-  size_t i;
-  uint64_t *ttb = (uint64_t *) bsp_translation_table_base;
-
-  aarch64_mmu_page_table_set_blocks(
-    ttb,
-    (uintptr_t) NULL,
-    MMU_MAX_SUBTABLE_PAGE_BITS,
-    0
-  );
-
-  _AArch64_Write_ttbr0_el1( (uintptr_t) ttb );
-
-  /* Configure entries required for each memory section */
-  for ( i = 0; i < config_count; ++i ) {
-    aarch64_mmu_set_translation_table_entries( ttb, &config_table[i] );
-  }
-}
+);
 
 BSP_START_TEXT_SECTION static inline void
 aarch64_mmu_enable( void )
@@ -424,6 +192,9 @@ aarch64_mmu_enable( void )
   /* Flush and invalidate cache */
   rtems_cache_flush_entire_data();
   rtems_cache_invalidate_entire_data();
+
+  _AArch64_Write_ttbr0_el1( (uintptr_t) bsp_translation_table_base );
+  _AARCH64_Instruction_synchronization_barrier();
 
   /* Enable MMU and cache */
   sctlr = _AArch64_Read_sctlr_el1();

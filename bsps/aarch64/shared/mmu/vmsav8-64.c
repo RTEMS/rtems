@@ -46,19 +46,13 @@ rtems_status_code aarch64_mmu_map(
   uint64_t flags
 )
 {
+  aarch64_mmu_config_entry config = {
+    .begin = addr,
+    .end = addr + size,
+    .flags = flags
+  };
   rtems_status_code sc;
   ISR_Level        level;
-  uint64_t mapping_base;
-  uint64_t mapping_size;
-  uint64_t max_mappable = 1LLU << aarch64_mmu_get_cpu_pa_bits();
-
-  if ( addr >= max_mappable || (addr + size) > max_mappable ) {
-    return RTEMS_INVALID_ADDRESS;
-  }
-
-  /* Adjust the address and size to multiples of the page table size */
-  mapping_base = RTEMS_ALIGN_DOWN(addr, MMU_PAGE_SIZE);
-  mapping_size = RTEMS_ALIGN_UP(size + addr - mapping_base, MMU_PAGE_SIZE);
 
   /*
    * Disable interrupts so they don't run while the MMU tables are being
@@ -66,13 +60,9 @@ rtems_status_code aarch64_mmu_map(
    */
   _ISR_Local_disable( level );
 
-  sc = aarch64_mmu_map_block(
+  sc = aarch64_mmu_set_translation_table_entries(
     (uint64_t *) bsp_translation_table_base,
-    0x0,
-    mapping_base,
-    mapping_size,
-    -1,
-    flags
+    &config
   );
   _AARCH64_Data_synchronization_barrier();
   __asm__ volatile(
