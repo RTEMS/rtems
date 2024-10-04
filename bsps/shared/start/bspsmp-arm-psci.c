@@ -34,8 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems/score/smpimpl.h>
-
 #include <bsp/start.h>
 #include <bsp.h>
 #if defined( AARCH64_MULTILIB_ARCH_V8 ) || \
