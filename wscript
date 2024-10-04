@@ -1071,9 +1071,9 @@ class OptionItem(Item):
         return arg
 
     def _set_value_enabled_by(self, conf, cic, value, arg):
-        for pair in arg:
-            if self._is_enabled(conf, conf.env.ENABLE, pair["enabled-by"]):
-                return pair["value"]
+        for value_enabled_by in arg:
+            if _is_enabled(conf.env.ENABLE, value_enabled_by["enabled-by"]):
+                return value_enabled_by["value"]
         return None
 
     def _split(self, conf, cic, value, arg):
