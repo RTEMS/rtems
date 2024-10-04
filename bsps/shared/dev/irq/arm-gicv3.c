@@ -207,12 +207,6 @@ void bsp_interrupt_facility_initialize(void)
 #ifdef RTEMS_SMP
 BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
 {
-  volatile gic_dist *dist = ARM_GIC_DIST;
-
-  while ((dist->icddcr & GIC_DIST_ICDDCR_ENABLE) == 0) {
-    /* Wait */
-  }
-
   gicv3_init_cpu_interface(_SMP_Get_current_processor());
 }
 #endif

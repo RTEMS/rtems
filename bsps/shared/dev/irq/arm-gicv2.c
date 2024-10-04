@@ -222,15 +222,9 @@ static inline void init_distributor(volatile gic_dist *dist)
   }
 }
 
-static inline void wait_for_distributor_and_init_sgi_ppi(
-  volatile gic_dist *dist
-)
+static inline void init_sgi_ppi(volatile gic_dist *dist)
 {
   uint32_t id;
-
-  while ((dist->icddcr & GIC_DIST_ICDDCR_ENABLE) == 0) {
-    /* Wait */
-  }
 
 #ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
   dist->icdigr[0] = 0xffffffff;
@@ -250,7 +244,11 @@ void bsp_interrupt_facility_initialize(void)
   arm_interrupt_facility_set_exception_handler();
 
 #ifdef BSP_ARM_GIC_MULTI_PROCESSOR_SECONDARY
-  wait_for_distributor_and_init_sgi_ppi(dist);
+  while ((dist->icddcr & GIC_DIST_ICDDCR_ENABLE) == 0) {
+    /* Wait */
+  }
+
+  init_sgi_ppi(dist);
 #else
   init_distributor(dist);
 #endif
@@ -268,7 +266,7 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
   volatile gic_cpuif *cpuif = GIC_CPUIF;
   volatile gic_dist *dist = ARM_GIC_DIST;
 
-  wait_for_distributor_and_init_sgi_ppi(dist);
+  init_sgi_ppi(dist);
 
   cpuif->iccpmr = GIC_CPUIF_ICCPMR_PRIORITY(0xff);
   cpuif->iccbpr = GIC_CPUIF_ICCBPR_BINARY_POINT(0x0);
