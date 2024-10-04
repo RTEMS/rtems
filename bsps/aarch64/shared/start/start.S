@@ -231,6 +231,24 @@ _start:
   bl _AArch64_Get_current_processor_for_system_start
 
   /*
+   * Check that this is a configured processor.  If not, then there is
+   * not much that can be done since we do not have a stack available for
+   * this processor.  Just loop forever in this case.
+   */
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+  ldr w1, =_SMP_Processor_configured_maximum
+#else
+  ldr x1, =_SMP_Processor_configured_maximum
+#endif
+  ldr w1, [x1]
+  cmp x1, x0
+  bgt .Lconfigured_processor
+.Linvalid_processor_wait_for_ever:
+  wfe
+  b .Linvalid_processor_wait_for_ever
+.Lconfigured_processor:
+
+  /*
    * Get current per-CPU control and store it in PL1 only Thread ID
    * Register (TPIDR_EL1).
    */
