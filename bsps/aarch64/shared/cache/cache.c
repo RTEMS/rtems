@@ -335,18 +335,9 @@ static inline void _CPU_cache_enable_data(void)
   rtems_interrupt_local_enable(level);
 }
 
-static inline void _CPU_cache_disable_data(void)
+static RTEMS_NO_RETURN inline void _CPU_cache_disable_data(void)
 {
-  rtems_interrupt_level level;
-  uint64_t sctlr;
-
-  rtems_interrupt_local_disable(level);
-  AArch64_data_cache_clean_all_levels();
-  AArch64_data_cache_invalidate_all_levels();
-  sctlr = _AArch64_Read_sctlr_el1();
-  sctlr &= ~AARCH64_SCTLR_EL1_C;
-  _AArch64_Write_sctlr_el1(sctlr);
-  rtems_interrupt_local_enable(level);
+  _Internal_error( INTERNAL_ERROR_CANNOT_DISABLE_DATA_CACHE );
 }
 
 #ifdef RTEMS_SMP

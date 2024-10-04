@@ -5,7 +5,9 @@ copyrights:
 - Copyright (C) 2024 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by: bsps/arm/xilinx-zynq
+enabled-by:
+- bsps/aarch64/xilinx-zynqmp
+- bsps/arm/xilinx-zynq
 includes: []
 install: []
 links: []
