@@ -40,6 +40,7 @@
 #include <bsp/linker-symbols.h>
 #include <bsp/start.h>
 #include <rtems/score/aarch64-system-registers.h>
+#include <rtems/score/assert.h>
 
 aarch64_mmu_control aarch64_mmu_instance = {
   .ttb = (uint64_t *) bsp_translation_table_base,
@@ -143,11 +144,6 @@ BSP_START_TEXT_SECTION static inline rtems_status_code aarch64_mmu_map_block(
 {
   uint32_t shift = ( 2 - level ) * MMU_BITS_PER_LEVEL + MMU_PAGE_BITS;
   uint64_t granularity = 1LLU << shift;
-  uint64_t page_flag = 0;
-
-  if ( level == 2 ) {
-    page_flag = MMU_DESC_TYPE_PAGE;
-  }
 
   do {
     uintptr_t index = aarch64_mmu_get_index( root_address, addr, shift );
@@ -159,6 +155,12 @@ BSP_START_TEXT_SECTION static inline rtems_status_code aarch64_mmu_map_block(
       if ( size >= chunk_size ) {
         /* level -1 can't contain block descriptors, fall through to subtable */
         if ( level != -1 ) {
+          uint64_t page_flag = 0;
+
+          if ( level == 2 ) {
+            page_flag = MMU_DESC_TYPE_PAGE;
+          }
+
           /* when page_flag is set the last level must be a page descriptor */
           if ( page_flag || ( page_table[index] & MMU_DESC_TYPE_TABLE ) != MMU_DESC_TYPE_TABLE ) {
             /* no sub-table, apply block properties */
@@ -169,17 +171,15 @@ BSP_START_TEXT_SECTION static inline rtems_status_code aarch64_mmu_map_block(
           }
         }
       } else {
-        /* block starts on a boundary, but is short */
+        /*
+         * Block starts on a boundary, but is short.
+         *
+         * The size is >= MMU_PAGE_SIZE since
+         * aarch64_mmu_set_translation_table_entries() aligns the memory region
+         * to page boundaries.  The minimum chunk_size is MMU_PAGE_SIZE.
+         */
+        _Assert( level < 2 );
         chunk_size = size;
-
-        /* it isn't possible to go beyond page table level 2 */
-        if ( page_flag ) {
-          /* no sub-table, apply block properties */
-          page_table[index] = addr | flags | page_flag;
-          size -= chunk_size;
-          addr += chunk_size;
-          continue;
-        }
       }
     } else {
       uintptr_t block_top = RTEMS_ALIGN_UP( addr, granularity );
