@@ -144,22 +144,31 @@ typedef struct {
 #define GIC_DIST_ICDIIDR_IMPLEMENTER(val) BSP_FLD32(val, 0, 11)
 #define GIC_DIST_ICDIIDR_IMPLEMENTER_GET(reg) BSP_FLD32GET(reg, 0, 11)
 #define GIC_DIST_ICDIIDR_IMPLEMENTER_SET(reg, val) BSP_FLD32SET(reg, val, 0, 11)
-  uint32_t reserved_0c[29];
+  uint32_t gicd_typer2;
+  uint32_t gicd_statusr;
+  uint32_t reserved_14[11];
+  uint32_t gicd_setspi_nsr;
+  uint32_t reserved_44[1];
+  uint32_t gicd_clrspi_nsr;
+  uint32_t reserved_4c[1];
+  uint32_t gicd_setspi_sr;
+  uint32_t reserved_54[1];
+  uint32_t gicd_clrspi_sr;
+  uint32_t reserved_5c[9];
   uint32_t icdigr[32];
   uint32_t icdiser[32];
   uint32_t icdicer[32];
   uint32_t icdispr[32];
   uint32_t icdicpr[32];
   uint32_t icdabr[32];
-  uint32_t reserved_380[32];
-  uint8_t icdipr[256];
-  uint32_t reserved_500[192];
-  uint8_t icdiptr[256];
-  uint32_t reserved_900[192];
+  uint32_t gicd_icactiver[32];
+  uint8_t icdipr[1024];
+  uint8_t icdiptr[1024];
   uint32_t icdicfr[64];
   /* GICD_IGRPMODR GICv3 only, reserved in GICv1/GICv2 */
   uint32_t icdigmr[32];
-  uint32_t reserved_d80[96];
+  uint32_t reserved_d80[32];
+  uint32_t gicd_nsacr[64];
   uint32_t icdsgir;
 #define GIC_DIST_ICDSGIR_TARGET_LIST_FILTER(val) BSP_FLD32(val, 24, 25)
 #define GIC_DIST_ICDSGIR_TARGET_LIST_FILTER_GET(reg) BSP_FLD32GET(reg, 24, 25)
@@ -171,6 +180,37 @@ typedef struct {
 #define GIC_DIST_ICDSGIR_SGIINTID(val) BSP_FLD32(val, 0, 3)
 #define GIC_DIST_ICDSGIR_SGIINTID_GET(reg) BSP_FLD32GET(reg, 0, 3)
 #define GIC_DIST_ICDSGIR_SGIINTID_SET(reg, val) BSP_FLD32SET(reg, val, 0, 3)
+  uint32_t reserved_f04[3];
+  uint32_t gicd_cpendsgir[4];
+  uint32_t gicd_spendsgir[4];
+  uint32_t reserved_f80[20];
+  uint32_t gicd_inmir[32];
+  uint32_t gicd_igroupre[32];
+  uint32_t reserved_1080[96];
+  uint32_t gicd_isenablere[32];
+  uint32_t reserved_1280[96];
+  uint32_t gicd_icenablere[32];
+  uint32_t reserved_1480[96];
+  uint32_t gicd_ispendre[32];
+  uint32_t reserved_1680[96];
+  uint32_t gicd_icpendre[32];
+  uint32_t reserved_1880[96];
+  uint32_t gicd_isactivere[32];
+  uint32_t reserved_1a80[96];
+  uint32_t gicd_icactivere[32];
+  uint32_t reserved_1c80[224];
+  uint8_t gicd_ipriorityre[1024];
+  uint32_t reserved_2400[768];
+  uint32_t gicd_icfgre[64];
+  uint32_t reserved_3100[192];
+  uint32_t gicd_igrpmodre[32];
+  uint32_t reserved_3480[96];
+  uint32_t gicd_nsacre[32];
+  uint32_t reserved_3680[288];
+  uint32_t gicd_inmire[32];
+  uint32_t reserved_3b80[2400];
+  uint64_t gicd_irouter[992];
+  uint64_t gicd_iroutere[4096];
 } gic_dist;
 
 /* GICv3 only */
