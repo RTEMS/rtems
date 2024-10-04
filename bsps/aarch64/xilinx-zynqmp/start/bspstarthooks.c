@@ -45,10 +45,12 @@
 #include <bsp/irq-generic.h>
 #endif
 
+#ifdef BSP_START_ENABLE_EL3_START_SUPPORT
 BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
 {
   /* do nothing */
 }
+#endif
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1( void )
 {

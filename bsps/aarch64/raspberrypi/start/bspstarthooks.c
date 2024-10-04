@@ -39,10 +39,12 @@
 #include <bsp/start.h>
 #include <rtems/score/cpu.h>
 
+#ifdef BSP_START_ENABLE_EL3_START_SUPPORT
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
   /* Do nothing */
 }
+#endif
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
 {

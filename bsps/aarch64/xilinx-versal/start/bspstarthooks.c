@@ -38,10 +38,12 @@
 #include <bsp/irq-generic.h>
 #include <bsp/start.h>
 
+#ifdef BSP_START_ENABLE_EL3_START_SUPPORT
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
   bsp_interrupt_facility_initialize();
 }
+#endif
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
 {

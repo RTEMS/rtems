@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+default:
+- enabled-by: bsps/aarch64/xilinx-zynqmp
+  value: false
+- enabled-by: true
+  value: true
+description: |
+  If this option is defined, then starting the system in exception level 3
+  (EL3) is supported.
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_START_ENABLE_EL3_START_SUPPORT
+type: build

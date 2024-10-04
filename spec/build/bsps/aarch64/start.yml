@@ -7,7 +7,11 @@ cppflags: []
 enabled-by: true
 includes: []
 install-path: ${BSP_LIBDIR}
-links: []
+links:
+- role: build-dependency
+  uid: optstartel2
+- role: build-dependency
+  uid: optstartel3
 source:
 - bsps/aarch64/shared/start/start.S
 target: start.o

@@ -137,13 +137,18 @@ _start:
 #endif
   msr SCTLR_EL1, x0
 
+#if defined(BSP_START_ENABLE_EL2_START_SUPPORT) || \
+  defined(BSP_START_ENABLE_EL3_START_SUPPORT)
   mrs x0, CurrentEL
   cmp x0, #(1<<2)
-  b.eq _el1_start
-  cmp x0, #(2<<2)
-  b.eq _el2_start
+  b.eq .L_el1_start
+#endif
 
-_el3_start:
+#if defined(BSP_START_ENABLE_EL3_START_SUPPORT)
+  cmp x0, #(2<<2)
+  b.eq .L_el2_start
+
+.L_el3_start:
   /*
    * Before leaving the Secure World, we need to initialize the GIC. We
    * do that here in an early stack context in EL3. This will NOT work
@@ -189,11 +194,14 @@ _el3_start:
   msr SPSR_EL3, x0
 
   /* Set EL2 entry point */
-  adr x0, _el2_start
+  adr x0, .L_el2_start
   msr ELR_EL3, x0
   eret
+#endif
 
-_el2_start:
+#if defined(BSP_START_ENABLE_EL2_START_SUPPORT) || \
+  defined(BSP_START_ENABLE_EL3_START_SUPPORT)
+.L_el2_start:
   /* Drop from EL2 to EL1 */
 
   /* Configure HCR_EL2 */
@@ -212,11 +220,12 @@ _el2_start:
   msr SPSR_EL2, x0
 
   /* Set EL1 entry point */
-  adr x0, _el1_start
+  adr x0, .L_el1_start
   msr ELR_EL2, x0
   eret
 
-_el1_start:
+.L_el1_start:
+#endif
 
 #ifdef RTEMS_SMP
   bl _AArch64_Get_current_processor_for_system_start
