@@ -185,7 +185,8 @@ AArch64_ccsidr_get_num_sets(uint64_t ccsidr)
 }
 
 
-static inline void AArch64_data_cache_clean_level(uint64_t level)
+static inline void
+AArch64_data_cache_clean_and_invalidate_level(uint64_t level)
 {
   uint64_t ccsidr;
   uint64_t line_power;
@@ -209,7 +210,7 @@ static inline void AArch64_data_cache_clean_level(uint64_t level)
         | ((level - 1) << 1);
 
       __asm__ volatile (
-        "dc csw, %[set_and_way]"
+        "dc cisw, %[set_and_way]"
         :
         : [set_and_way] "r" (set_and_way)
         : "memory"
@@ -229,7 +230,7 @@ static inline uint64_t AArch64_clidr_get_level_of_coherency(uint64_t clidr)
   return AARCH64_CLIDR_EL1_LOC_GET(clidr);
 }
 
-static inline void AArch64_data_cache_clean_all_levels(void)
+static inline void AArch64_data_cache_clean_and_invalidate_all_levels(void)
 {
   uint64_t clidr = _AArch64_Read_clidr_el1();
   uint64_t loc = AArch64_clidr_get_level_of_coherency(clidr);
@@ -237,7 +238,7 @@ static inline void AArch64_data_cache_clean_all_levels(void)
 
   for (level = 1; level <= loc; ++level) {
     /* Assume that all levels have a data cache */
-    AArch64_data_cache_clean_level(level);
+    AArch64_data_cache_clean_and_invalidate_level(level);
   }
 }
 
@@ -247,7 +248,7 @@ static inline void _CPU_cache_flush_entire_data(void)
 
   rtems_interrupt_local_disable(isr_level);
   _AARCH64_Data_synchronization_barrier();
-  AArch64_data_cache_clean_all_levels();
+  AArch64_data_cache_clean_and_invalidate_all_levels();
   _AARCH64_Data_synchronization_barrier();
   rtems_interrupt_local_enable(isr_level);
 }

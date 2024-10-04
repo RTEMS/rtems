@@ -219,7 +219,6 @@ aarch64_mmu_enable( const aarch64_mmu_control *control )
 
   /* Flush and invalidate cache */
   rtems_cache_flush_entire_data();
-  rtems_cache_invalidate_entire_data();
 
   _AArch64_Write_ttbr0_el1( (uintptr_t) control->ttb );
   _AARCH64_Instruction_synchronization_barrier();
