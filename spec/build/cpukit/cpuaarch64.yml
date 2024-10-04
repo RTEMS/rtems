@@ -33,6 +33,7 @@ source:
 - cpukit/score/cpu/aarch64/aarch64-context-volatile-clobber.S
 - cpukit/score/cpu/aarch64/aarch64-exception-default.S
 - cpukit/score/cpu/aarch64/aarch64-exception-default.c
+- cpukit/score/cpu/aarch64/aarch64-exception-frame.c
 - cpukit/score/cpu/aarch64/aarch64-exception-frame-print.c
 - cpukit/score/cpu/aarch64/aarch64-exception-interrupt.S
 - cpukit/score/cpu/aarch64/aarch64-exception-resume.S
