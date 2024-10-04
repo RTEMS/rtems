@@ -73,12 +73,15 @@ raspberrypi_4_setup_mmu_and_cache( void ) __attribute__ ((weak));
 BSP_START_TEXT_SECTION void
 raspberrypi_4_setup_mmu_and_cache( void )
 {
+  aarch64_mmu_control *control = &aarch64_mmu_instance;
+
   aarch64_mmu_setup();
 
   aarch64_mmu_setup_translation_table(
+    control,
     &raspberrypi_4_mmu_config_table[ 0 ],
     RTEMS_ARRAY_SIZE( raspberrypi_4_mmu_config_table )
   );
 
-  aarch64_mmu_enable();
+  aarch64_mmu_enable( control );
 }

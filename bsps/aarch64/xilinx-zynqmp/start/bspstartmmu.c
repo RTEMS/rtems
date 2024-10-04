@@ -69,14 +69,17 @@ zynqmp_setup_mmu_and_cache( void ) __attribute__ ((weak));
 BSP_START_TEXT_SECTION void
 zynqmp_setup_mmu_and_cache( void )
 {
+  aarch64_mmu_control *control = &aarch64_mmu_instance;
+
   aarch64_mmu_setup();
 
   aarch64_mmu_setup_translation_table(
+    control,
     &aarch64_mmu_config_table[ 0 ],
     aarch64_mmu_config_table_size
   );
 
-  aarch64_mmu_enable();
+  aarch64_mmu_enable( control );
 }
 
 /*
@@ -87,9 +90,11 @@ __attribute__ ( ( weak ) );
 
 BSP_START_TEXT_SECTION void zynqmp_setup_secondary_cpu_mmu_and_cache( void )
 {
+  aarch64_mmu_control *control = &aarch64_mmu_instance;
+
   /* Perform basic MMU setup */
   aarch64_mmu_setup();
-  aarch64_mmu_enable();
+  aarch64_mmu_enable( control );
 }
 
 void bsp_r1_heap_extend(void);

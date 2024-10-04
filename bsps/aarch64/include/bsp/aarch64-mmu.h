@@ -143,8 +143,33 @@ extern const aarch64_mmu_config_entry aarch64_mmu_config_table[];
 extern const size_t aarch64_mmu_config_table_size;
 
 /**
+ * @brief This structure represents the state to maintain the MMU translation
+ *   tables.
+ */
+typedef struct {
+  /**
+   * @brief This member references the translation table base.
+   */
+  uint64_t *ttb;
+
+  /**
+   * @brief This member contains the count of used page tables.
+   *
+   * A maximum of ::AARCH64_MMU_TRANSLATION_TABLE_PAGES can be used.
+   */
+  size_t used_page_tables;
+} aarch64_mmu_control;
+
+/**
+ * @brief This object is used to maintain the MMU translation tables.
+ */
+extern aarch64_mmu_control aarch64_mmu_instance;
+
+/**
  * @brief Sets the MMU translation table entries associated with the memory
  *   region.
+ *
+ * @param[in, out] control is a reference to the MMU control state.
  *
  * @param[in] config is the configuration entry with the memory region and
  *   region attributes.
@@ -157,11 +182,11 @@ extern const size_t aarch64_mmu_config_table_size;
  * @retval ::RTEMS_INVALID_SIZE The end address of the memory region cannot be
  *   mapped by the MMU.
  *
- * @retval ::RTEMS_NO_MEMORY There were no page table entries available to
- *   perform the mapping.
+ * @retval ::RTEMS_TOO_MANY There was no page table entry available to perform
+ *   the mapping.
  */
 rtems_status_code aarch64_mmu_set_translation_table_entries(
-  uint64_t *ttb,
+  aarch64_mmu_control *control,
   const aarch64_mmu_config_entry *config
 );
 
@@ -172,18 +197,21 @@ rtems_status_code aarch64_mmu_set_translation_table_entries(
  * mapping is infeasible, then the BSP fatal error
  * ::AARCH64_FATAL_MMU_CANNOT_MAP_BLOCK will be issued.
  *
+ * @param[in, out] control is a reference to the MMU control state.
+ *
  * @param[in] config_table is the configuration table with memory regions and
  *   region attributes.
  *
  * @param config_count is the count of configuration table entries.
  */
 void aarch64_mmu_setup_translation_table(
+  aarch64_mmu_control *control,
   const aarch64_mmu_config_entry *config_table,
   size_t config_count
 );
 
 BSP_START_TEXT_SECTION static inline void
-aarch64_mmu_enable( void )
+aarch64_mmu_enable( const aarch64_mmu_control *control )
 {
   uint64_t sctlr;
 
@@ -193,7 +221,7 @@ aarch64_mmu_enable( void )
   rtems_cache_flush_entire_data();
   rtems_cache_invalidate_entire_data();
 
-  _AArch64_Write_ttbr0_el1( (uintptr_t) bsp_translation_table_base );
+  _AArch64_Write_ttbr0_el1( (uintptr_t) control->ttb );
   _AARCH64_Instruction_synchronization_barrier();
 
   /* Enable MMU and cache */
