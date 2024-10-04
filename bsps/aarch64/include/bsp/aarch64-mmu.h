@@ -129,6 +129,22 @@ typedef struct {
     .flags = AARCH64_MMU_CODE_RW_CACHED \
   }
 
+/**
+ * @brief This is the AArch64 MMU configuration table.
+ *
+ * The default table is provided by the BSP.  Applications may provide their
+ * own.
+ */
+extern const aarch64_mmu_config_entry aarch64_mmu_config_table[];
+
+/**
+ * @brief This is the count of entries in the AArch64 MMU configuration table.
+ *
+ * The default table is provided by the BSP.  Applications may provide their
+ * own.
+ */
+extern const size_t aarch64_mmu_config_table_size;
+
 /* setup straight mapped block entries */
 BSP_START_TEXT_SECTION static inline void aarch64_mmu_page_table_set_blocks(
   uint64_t *page_table,

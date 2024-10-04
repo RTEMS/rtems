@@ -35,39 +35,11 @@
  */
 
 #include <bsp.h>
-#include <bsp/start.h>
 #include <bsp/aarch64-mmu.h>
 #include <libcpu/mmu-vmsav8-64.h>
 
 #include <rtems/malloc.h>
 #include <rtems/sysinit.h>
-
-BSP_START_DATA_SECTION static const aarch64_mmu_config_entry
-zynqmp_mmu_config_table[] = {
-  AARCH64_MMU_DEFAULT_SECTIONS,
-  {
-    .begin = 0xf9000000U,
-    .end = 0xf9100000U,
-    .flags = AARCH64_MMU_DEVICE
-  }, {
-    .begin = 0xfd000000U,
-    .end = 0xffc00000U,
-    .flags = AARCH64_MMU_DEVICE
-  /* Map OCM space */
-  }, {
-    .begin = 0xfffc0000U,
-    .end = 0x100000000U,
-    .flags = AARCH64_MMU_DATA_RW
-  }, { /* DDRMC_region1_mem, if not used size is 0 and ignored */
-    .begin = (uintptr_t) bsp_r1_ram_base,
-    .end = (uintptr_t) bsp_r1_ram_end,
-    .flags = AARCH64_MMU_DATA_RW_CACHED
-  }, {
-    .begin = 0x80000000U,
-    .end = 0x80100000U,
-    .flags = 0
-  }
-};
 
 /*
  * Create an MMU table to get the R1 base and end. This avoids
@@ -100,8 +72,8 @@ zynqmp_setup_mmu_and_cache( void )
   aarch64_mmu_setup();
 
   aarch64_mmu_setup_translation_table(
-    &zynqmp_mmu_config_table[ 0 ],
-    RTEMS_ARRAY_SIZE( zynqmp_mmu_config_table )
+    &aarch64_mmu_config_table[ 0 ],
+    aarch64_mmu_config_table_size
   );
 
   aarch64_mmu_enable();

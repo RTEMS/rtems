@@ -30,6 +30,7 @@ source:
 - bsps/aarch64/xilinx-zynqmp/start/bspstarthooks.c
 - bsps/aarch64/xilinx-zynqmp/start/bspstartmmu.c
 - bsps/aarch64/xilinx-zynqmp/start/i2c-clocks.c
+- bsps/aarch64/xilinx-zynqmp/start/mmu-config.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/irq/arm-gicv2-zynqmp.c
