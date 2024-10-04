@@ -39,6 +39,7 @@
 
 #include <bsp/irq-generic.h>
 #include <bsp/start.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/processormaskimpl.h>
 
 /*
@@ -133,7 +134,7 @@ rtems_status_code bsp_interrupt_raise_on(
   uint32_t            cpu_index
 )
 {
-  if (vector >= 16) {
+  if (vector > ARM_GIC_IRQ_SGI_LAST) {
     return RTEMS_UNSATISFIED;
   }
 
@@ -356,18 +357,11 @@ rtems_status_code bsp_interrupt_set_affinity(
   rtems_interrupt_attributes attr;
   rtems_status_code sc;
 
-  memset( &attr, 0, sizeof( attr ) );
+  attr.can_set_affinity = false;
   sc = bsp_interrupt_get_attributes( vector, &attr );
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
-  if ( sc ) {
-    return sc;
-  }
-
-  if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
-    return RTEMS_UNSATISFIED;
-  }
-
-  if ( attr.can_set_affinity == 0 ) {
+  if ( !attr.can_set_affinity ) {
     return RTEMS_UNSATISFIED;
   }
 
@@ -385,20 +379,13 @@ rtems_status_code bsp_interrupt_get_affinity(
   rtems_interrupt_attributes attr;
   rtems_status_code sc;
 
-  memset( &attr, 0, sizeof( attr ) );
+  attr.can_get_affinity = false;
   sc = bsp_interrupt_get_attributes( vector, &attr );
-
-  if ( sc ) {
-    return sc;
-  }
-
-  if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
-    return RTEMS_UNSATISFIED;
-  }
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
   targets = gic_id_get_targets(dist, vector);
 
-  if ( attr.can_get_affinity == 0 ) {
+  if ( !attr.can_get_affinity ) {
     return RTEMS_UNSATISFIED;
   }
 
