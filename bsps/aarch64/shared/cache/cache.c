@@ -247,9 +247,13 @@ static inline void AArch64_data_cache_clean_all_levels(void)
 
 static inline void _CPU_cache_flush_entire_data(void)
 {
+  rtems_interrupt_level isr_level;
+
+  rtems_interrupt_local_disable(isr_level);
   _AARCH64_Data_synchronization_barrier();
   AArch64_data_cache_clean_all_levels();
   _AARCH64_Data_synchronization_barrier();
+  rtems_interrupt_local_enable(isr_level);
 }
 
 static inline void AArch64_cache_invalidate_level(uint64_t level)
@@ -303,19 +307,25 @@ static inline void AArch64_data_cache_invalidate_all_levels(void)
 
 static inline void _CPU_cache_invalidate_entire_data(void)
 {
+  rtems_interrupt_level isr_level;
+
+  rtems_interrupt_local_disable(isr_level);
+  _AARCH64_Data_synchronization_barrier();
   AArch64_data_cache_invalidate_all_levels();
+  _AARCH64_Data_synchronization_barrier();
+  rtems_interrupt_local_enable(isr_level);
 }
 
 static inline void _CPU_cache_enable_data(void)
 {
-  rtems_interrupt_level level;
+  rtems_interrupt_level isr_level;
   uint64_t sctlr;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable(isr_level);
   sctlr = _AArch64_Read_sctlr_el1();
   sctlr |= AARCH64_SCTLR_EL1_C;
   _AArch64_Write_sctlr_el1(sctlr);
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable(isr_level);
 }
 
 static RTEMS_NO_RETURN inline void _CPU_cache_disable_data(void)
@@ -351,26 +361,26 @@ static inline void _CPU_cache_invalidate_entire_instruction(void)
 
 static inline void _CPU_cache_enable_instruction(void)
 {
-  rtems_interrupt_level level;
+  rtems_interrupt_level isr_level;
   uint64_t sctlr;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable(isr_level);
   sctlr = _AArch64_Read_sctlr_el1();
   sctlr |= AARCH64_SCTLR_EL1_I;
   _AArch64_Write_sctlr_el1(sctlr);
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable(isr_level);
 }
 
 static inline void _CPU_cache_disable_instruction(void)
 {
-  rtems_interrupt_level level;
+  rtems_interrupt_level isr_level;
   uint64_t sctlr;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable(isr_level);
   sctlr = _AArch64_Read_sctlr_el1();
   sctlr &= ~AARCH64_SCTLR_EL1_I;
   _AArch64_Write_sctlr_el1(sctlr);
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable(isr_level);
 }
 
 static inline size_t AArch64_get_cache_size(
@@ -378,6 +388,7 @@ static inline size_t AArch64_get_cache_size(
   bool instruction
 )
 {
+  rtems_interrupt_level isr_level;
   uint64_t clidr;
   uint64_t loc;
   uint64_t ccsidr;
@@ -389,7 +400,9 @@ static inline size_t AArch64_get_cache_size(
     return 0;
   }
 
+  rtems_interrupt_local_disable(isr_level);
   ccsidr = AArch64_get_ccsidr_for_level(level, instruction);
+  rtems_interrupt_local_enable(isr_level);
 
   return (1U << (AArch64_ccsidr_get_line_power(ccsidr)+4))
     * AArch64_ccsidr_get_associativity(ccsidr)
