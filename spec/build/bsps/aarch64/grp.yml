@@ -10,8 +10,9 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
-  - bsps/aarch64/include/bsp/linker-symbols.h
+  - bsps/aarch64/include/bsp/linker-symbols-arch.h
   - bsps/aarch64/include/bsp/start.h
+  - bsps/include/bsp/linker-symbols.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/aarch64/shared/start/linkcmds.base

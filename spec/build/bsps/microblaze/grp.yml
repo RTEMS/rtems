@@ -10,7 +10,8 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
-  - bsps/microblaze/include/bsp/linker-symbols.h
+  - bsps/include/bsp/linker-symbols.h
+  - bsps/microblaze/include/bsp/linker-symbols-arch.h
 ldflags: []
 links: []
 type: build

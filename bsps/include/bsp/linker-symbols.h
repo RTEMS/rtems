@@ -3,13 +3,14 @@
 /**
  * @file
  *
- * @ingroup arm_linker
+ * @ingroup RTEMSBSPsLinkerSymbols
  *
- * @brief Symbols defined in linker command base file.
+ * @brief This header file provides interfaces to BSP-specific linker symbols
+ *   and sections.
  */
 
 /*
- * Copyright (C) 2008, 2016 embedded brains GmbH & Co. KG
+ * Copyright (C) 2008, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,8 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H
-#define LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H
+#ifndef BSP_LINKER_SYMBOLS_H
+#define BSP_LINKER_SYMBOLS_H
+
+#include <bsp/linker-symbols-arch.h>
 
 #include <rtems/score/basedefs.h>
 
@@ -43,33 +46,19 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup arm_linker Linker Support
+ * @defgroup RTEMSBSPsLinkerSymbols Linker Symbols and Sections
  *
- * @ingroup RTEMSBSPsARMShared
+ * @ingroup RTEMSBSPsShared
  *
- * @brief Linker support.
+ * @brief This group provides support for BSP-specific linker symbols and
+ *   sections.
  *
  * @{
  */
 
-#ifndef ASM
-  #define LINKER_SYMBOL(sym) extern char sym [];
-#else
-  #define LINKER_SYMBOL(sym) .extern sym
-#endif
-
-LINKER_SYMBOL(bsp_stack_fiq_size)
-LINKER_SYMBOL(bsp_stack_abt_size)
-LINKER_SYMBOL(bsp_stack_und_size)
-LINKER_SYMBOL(bsp_stack_hyp_size)
-
 LINKER_SYMBOL(bsp_section_start_begin)
 LINKER_SYMBOL(bsp_section_start_end)
 LINKER_SYMBOL(bsp_section_start_size)
-
-LINKER_SYMBOL(bsp_section_vector_begin)
-LINKER_SYMBOL(bsp_section_vector_end)
-LINKER_SYMBOL(bsp_section_vector_size)
 
 LINKER_SYMBOL(bsp_section_text_begin)
 LINKER_SYMBOL(bsp_section_text_end)
@@ -135,17 +124,6 @@ LINKER_SYMBOL(bsp_section_nocacheheap_begin)
 LINKER_SYMBOL(bsp_section_nocacheheap_end)
 LINKER_SYMBOL(bsp_section_nocacheheap_size)
 
-LINKER_SYMBOL(bsp_vector_table_begin)
-LINKER_SYMBOL(bsp_vector_table_end)
-LINKER_SYMBOL(bsp_vector_table_size)
-
-LINKER_SYMBOL(bsp_start_vector_table_begin)
-LINKER_SYMBOL(bsp_start_vector_table_end)
-LINKER_SYMBOL(bsp_start_vector_table_size)
-
-LINKER_SYMBOL(bsp_translation_table_base)
-LINKER_SYMBOL(bsp_translation_table_end)
-
 #define BSP_FAST_TEXT_SECTION \
   RTEMS_SECTION(".bsp_fast_text")
 
@@ -170,4 +148,4 @@ LINKER_SYMBOL(bsp_translation_table_end)
 }
 #endif /* __cplusplus */
 
-#endif /* LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H */
+#endif /* BSP_LINKER_SYMBOLS_H */

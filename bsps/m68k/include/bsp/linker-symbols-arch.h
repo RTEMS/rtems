@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup bsp_linker
+ * @ingroup RTEMSBSPsLinkerSymbolsM68k
  *
- * @brief Symbols defined in linker command base file.
+ * @brief This header file provides interfaces to Motorola 68000 specific
+ *   linker symbols and sections.
  */
 
 /*
@@ -41,11 +42,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup RTEMSBSPsM68kSharedLinker Linker Support
+ * @defgroup RTEMSBSPsLinkerSymbolsM68k Motorola 68000 Linker Symbols
  *
- * @ingroup RTEMSBSPsM68kShared
+ * @ingroup RTEMSBSPsLinkerSymbols
  *
- * @brief Linker support.
+ * @brief This group provides support for Motorola 68000 specific linker
+ *   symbols and sections.
  *
  * @{
  */
@@ -63,26 +65,6 @@ LINKER_SYMBOL(bsp_vector0_size)
 LINKER_SYMBOL(bsp_vector1_begin)
 LINKER_SYMBOL(bsp_vector1_end)
 LINKER_SYMBOL(bsp_vector1_size)
-
-LINKER_SYMBOL(bsp_section_text_begin)
-LINKER_SYMBOL(bsp_section_text_end)
-LINKER_SYMBOL(bsp_section_text_size)
-LINKER_SYMBOL(bsp_section_text_load_begin)
-LINKER_SYMBOL(bsp_section_text_load_end)
-
-LINKER_SYMBOL(bsp_section_data_begin)
-LINKER_SYMBOL(bsp_section_data_end)
-LINKER_SYMBOL(bsp_section_data_size)
-LINKER_SYMBOL(bsp_section_data_load_begin)
-LINKER_SYMBOL(bsp_section_data_load_end)
-
-LINKER_SYMBOL(bsp_section_bss_begin)
-LINKER_SYMBOL(bsp_section_bss_end)
-LINKER_SYMBOL(bsp_section_bss_size)
-
-LINKER_SYMBOL(bsp_section_work_begin)
-LINKER_SYMBOL(bsp_section_work_end)
-LINKER_SYMBOL(bsp_section_work_size)
 
 LINKER_SYMBOL(bsp_initstack_begin)
 LINKER_SYMBOL(bsp_initstack_end)

@@ -1,7 +1,17 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsLinkerSymbolsAArch64
+ *
+ * @brief This header file provides interfaces to AArch64-specific linker
+ *   symbols and sections.
+ */
+
 /*
- * Copyright (C) 2015 Hesham Almatary
+ * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
+ * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -25,19 +35,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_MICROBLAZE_SHARED_LINKER_SYMBOLS_H
-#define LIBBSP_MICROBLAZE_SHARED_LINKER_SYMBOLS_H
+#ifndef LIBBSP_AARCH64_SHARED_LINKER_SYMBOLS_H
+#define LIBBSP_AARCH64_SHARED_LINKER_SYMBOLS_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup microblaze Linker Support
+ * @defgroup RTEMSBSPsLinkerSymbolsAArch64 AArch64 Linker Symbols
  *
- * @ingroup microblaze_shared
+ * @ingroup RTEMSBSPsLinkerSymbols
  *
- * @brief Linker support.
+ * @brief This group provides support for AArch64-specific linker symbols and
+ *   sections.
  *
  * @{
  */
@@ -48,43 +59,12 @@ extern "C" {
   #define LINKER_SYMBOL(sym) .extern sym
 #endif
 
-LINKER_SYMBOL(bsp_section_start_begin)
-LINKER_SYMBOL(bsp_section_start_end)
-LINKER_SYMBOL(bsp_section_start_size)
+LINKER_SYMBOL(bsp_stack_exception_size)
+LINKER_SYMBOL(bsp_stack_hyp_size)
 
 LINKER_SYMBOL(bsp_section_vector_begin)
 LINKER_SYMBOL(bsp_section_vector_end)
 LINKER_SYMBOL(bsp_section_vector_size)
-
-LINKER_SYMBOL(bsp_section_text_begin)
-LINKER_SYMBOL(bsp_section_text_end)
-LINKER_SYMBOL(bsp_section_text_size)
-LINKER_SYMBOL(bsp_section_text_load_begin)
-LINKER_SYMBOL(bsp_section_text_load_end)
-
-LINKER_SYMBOL(bsp_section_rodata_begin)
-LINKER_SYMBOL(bsp_section_rodata_end)
-LINKER_SYMBOL(bsp_section_rodata_size)
-LINKER_SYMBOL(bsp_section_rodata_load_begin)
-LINKER_SYMBOL(bsp_section_rodata_load_end)
-
-LINKER_SYMBOL(bsp_section_data_begin)
-LINKER_SYMBOL(bsp_section_data_end)
-LINKER_SYMBOL(bsp_section_data_size)
-LINKER_SYMBOL(bsp_section_data_load_begin)
-LINKER_SYMBOL(bsp_section_data_load_end)
-
-LINKER_SYMBOL(bsp_section_bss_begin)
-LINKER_SYMBOL(bsp_section_bss_end)
-LINKER_SYMBOL(bsp_section_bss_size)
-
-LINKER_SYMBOL(bsp_section_work_begin)
-LINKER_SYMBOL(bsp_section_work_end)
-LINKER_SYMBOL(bsp_section_work_size)
-
-LINKER_SYMBOL(bsp_section_stack_begin)
-LINKER_SYMBOL(bsp_section_stack_end)
-LINKER_SYMBOL(bsp_section_stack_size)
 
 LINKER_SYMBOL(bsp_vector_table_begin)
 LINKER_SYMBOL(bsp_vector_table_end)
@@ -103,4 +83,4 @@ LINKER_SYMBOL(bsp_translation_table_end)
 }
 #endif /* __cplusplus */
 
-#endif /* LIBBSP_MICROBLAZE_SHARED_LINKER_SYMBOLS_H */
+#endif /* LIBBSP_AARCH64_SHARED_LINKER_SYMBOLS_H */

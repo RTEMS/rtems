@@ -17,6 +17,7 @@ install:
   - bsps/powerpc/include/nvram.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
+  - bsps/include/bsp/linker-symbols.h
   - bsps/powerpc/include/bsp/VME.h
   - bsps/powerpc/include/bsp/VMEDMA.h
   - bsps/powerpc/include/bsp/bspVmeDmaList.h
@@ -24,7 +25,7 @@ install:
   - bsps/powerpc/include/bsp/flashPgm.h
   - bsps/powerpc/include/bsp/flashPgmPvt.h
   - bsps/powerpc/include/bsp/irq_supp.h
-  - bsps/powerpc/include/bsp/linker-symbols.h
+  - bsps/powerpc/include/bsp/linker-symbols-arch.h
   - bsps/powerpc/include/bsp/motorola.h
   - bsps/powerpc/include/bsp/openpic.h
   - bsps/powerpc/include/bsp/pci.h

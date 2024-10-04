@@ -13,7 +13,8 @@ install:
   - bsps/m68k/include/mvme16x_hw.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
-  - bsps/m68k/include/bsp/linker-symbols.h
+  - bsps/include/bsp/linker-symbols.h
+  - bsps/m68k/include/bsp/linker-symbols-arch.h
 - destination: ${BSP_INCLUDEDIR}/mcf5206
   source:
   - bsps/m68k/include/mcf5206/mcf5206e.h

@@ -10,7 +10,8 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
-  - bsps/or1k/include/bsp/linker-symbols.h
+  - bsps/include/bsp/linker-symbols.h
+  - bsps/or1k/include/bsp/linker-symbols-arch.h
 ldflags: []
 links: []
 type: build

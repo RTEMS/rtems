@@ -32,13 +32,14 @@ install:
   - bsps/arm/include/bsp/arm-release-id.h
   - bsps/arm/include/bsp/armv7m-irq.h
   - bsps/arm/include/bsp/clock-armv7m.h
-  - bsps/arm/include/bsp/linker-symbols.h
+  - bsps/arm/include/bsp/linker-symbols-arch.h
   - bsps/arm/include/bsp/lpc-dma.h
   - bsps/arm/include/bsp/lpc-emc.h
   - bsps/arm/include/bsp/lpc-i2s.h
   - bsps/arm/include/bsp/lpc-lcd.h
   - bsps/arm/include/bsp/lpc-timer.h
   - bsps/arm/include/bsp/start.h
+  - bsps/include/bsp/linker-symbols.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/arm/shared/start/linkcmds.armv4
