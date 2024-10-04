@@ -21,13 +21,11 @@ enabled-by:
 - arm/xilinx_zynqmp_ultra96
 - bsps/aarch64/xilinx-zynqmp
 - bsps/arm/xilinx-zynq
+- bsps/powerpc/qoriq
 - i386/pc386
 - i386/pc486
 - i386/pc586
 - i386/pc686
-- powerpc/qoriq_e500
-- powerpc/qoriq_e6500_32
-- powerpc/qoriq_e6500_64
 - riscv/beaglevfire
 - riscv/griscv
 - riscv/grv32imac
