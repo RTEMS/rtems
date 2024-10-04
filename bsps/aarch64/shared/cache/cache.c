@@ -221,25 +221,7 @@ static inline void AArch64_data_cache_clean_level(uint64_t level)
 static inline
 uint64_t AArch64_clidr_get_cache_type(uint64_t clidr, uint64_t level)
 {
-  switch (level)
-  {
-  case 1:
-    return AARCH64_CLIDR_EL1_CTYPE1_GET(clidr);
-  case 2:
-    return AARCH64_CLIDR_EL1_CTYPE2_GET(clidr);
-  case 3:
-    return AARCH64_CLIDR_EL1_CTYPE3_GET(clidr);
-  case 4:
-    return AARCH64_CLIDR_EL1_CTYPE4_GET(clidr);
-  case 5:
-    return AARCH64_CLIDR_EL1_CTYPE5_GET(clidr);
-  case 6:
-    return AARCH64_CLIDR_EL1_CTYPE6_GET(clidr);
-  case 7:
-    return AARCH64_CLIDR_EL1_CTYPE7_GET(clidr);
-  default:
-    return 0;
-  }
+  return (clidr >> (3 * level)) & 0x7;
 }
 
 static inline uint64_t AArch64_clidr_get_level_of_coherency(uint64_t clidr)
