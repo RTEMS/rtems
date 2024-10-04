@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSBSPsAArch64XilinxZynqMP
  *
- * @brief This source file contains the implementation of bsp_start().
+ * @brief This source file contains the implementation of zynqmp_clock_i2c0()
+ *   and zynqmp_clock_i2c1().
  */
 
 /*
@@ -35,17 +36,13 @@
  */
 
 #include <bsp.h>
-#include <bsp/bootcard.h>
-#include <bsp/ecc_priv.h>
-#include <bsp/irq-generic.h>
-#include <bsp/linker-symbols.h>
 
-void bsp_start( void )
+RTEMS_WEAK uint32_t zynqmp_clock_i2c0(void)
 {
-  bsp_interrupt_initialize();
-  rtems_cache_coherent_add_area(
-    bsp_section_nocacheheap_begin,
-    (uintptr_t) bsp_section_nocacheheap_size
-  );
-  zynqmp_ecc_init();
+  return ZYNQMP_CLOCK_I2C0;
+}
+
+RTEMS_WEAK uint32_t zynqmp_clock_i2c1(void)
+{
+  return ZYNQMP_CLOCK_I2C1;
 }
