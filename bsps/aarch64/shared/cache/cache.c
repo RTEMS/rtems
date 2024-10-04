@@ -340,43 +340,30 @@ static RTEMS_NO_RETURN inline void _CPU_cache_disable_data(void)
   _Internal_error( INTERNAL_ERROR_CANNOT_DISABLE_DATA_CACHE );
 }
 
-#ifdef RTEMS_SMP
-static inline
-void AArch64_instruction_cache_inner_shareable_invalidate_all(void)
-{
-  __asm__ volatile (
-    "ic ialluis\n"
-    :
-    :
-    : "memory"
-  );
-}
-#endif /* RTEMS_SMP */
-
-static inline void AArch64_instruction_cache_invalidate(void)
-{
-  __asm__ volatile (
-    "ic iallu\n"
-    :
-    :
-    : "memory"
-  );
-}
-
 static inline void _CPU_cache_invalidate_entire_instruction(void)
 {
-  /* There is no way to manage branch prediction in AArch64.
-   * See D4.4.12 in the ARMv8 technical manual. */
+  /*
+   * There is no way to manage branch prediction in AArch64.  See D4.4.12 in
+   * the ARM Architecture Reference Manual, ARMv8, for ARMv8-A architecture
+   * profile (ARM DDI 0487D.a).
+   */
 
-  #ifdef RTEMS_SMP
-  /* invalidate I-cache inner shareable */
-  AArch64_instruction_cache_inner_shareable_invalidate_all();
-  #endif /* RTEMS_SMP */
-
-  /* I+BTB cache invalidate */
-  AArch64_instruction_cache_invalidate();
-
-  _AARCH64_Instruction_synchronization_barrier();
+  __asm__ volatile (
+#ifdef RTEMS_SMP
+    /*
+     * Invalidate all instruction caches up to
+     * Point of Unification, Inner Shareable.
+     */
+    "ic ialluis\n"
+#else
+    /* Invalidate all instruction caches up to Point of Unification */
+    "ic iallu\n"
+#endif
+    "isb"
+    :
+    :
+    : "memory"
+  );
 }
 
 static inline void _CPU_cache_enable_instruction(void)
