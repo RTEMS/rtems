@@ -236,12 +236,8 @@ static inline void AArch64_data_cache_clean_all_levels(void)
   uint64_t level = 0;
 
   for (level = 1; level <= loc; ++level) {
-    uint64_t ctype = AArch64_clidr_get_cache_type(clidr, level);
-
-    /* Check if this level has a data cache or unified cache */
-    if (((ctype & (0x6)) == 2) || (ctype == 4)) {
-      AArch64_data_cache_clean_level(level);
-    }
+    /* Assume that all levels have a data cache */
+    AArch64_data_cache_clean_level(level);
   }
 }
 
@@ -296,12 +292,8 @@ static inline void AArch64_data_cache_invalidate_all_levels(void)
   uint64_t level = 0;
 
   for (level = 1; level <= loc; ++level) {
-    uint64_t ctype = AArch64_clidr_get_cache_type(clidr, level);
-
-    /* Check if this level has a data cache or unified cache */
-    if ((ctype & 0x2) || (ctype == 4)) {
-      AArch64_cache_invalidate_level(level);
-    }
+    /* Assume that all levels have a data cache */
+    AArch64_cache_invalidate_level(level);
   }
 }
 
