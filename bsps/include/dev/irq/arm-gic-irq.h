@@ -83,22 +83,6 @@ rtems_status_code arm_gic_irq_get_group(
 
 void arm_gic_trigger_sgi(rtems_vector_number vector, uint32_t targets);
 
-static inline rtems_status_code arm_gic_irq_generate_software_irq(
-  rtems_vector_number vector,
-  uint32_t targets
-)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-
-  if (vector <= ARM_GIC_IRQ_SGI_15) {
-    arm_gic_trigger_sgi(vector, targets);
-  } else {
-    sc = RTEMS_INVALID_ID;
-  }
-
-  return sc;
-}
-
 #ifdef RTEMS_SMP
 uint32_t arm_gic_irq_processor_count(void);
 

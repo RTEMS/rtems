@@ -111,9 +111,9 @@ static inline void Cause_tm27_intr(void)
 {
   rtems_status_code sc;
 
-  sc = arm_gic_irq_generate_software_irq(
+  sc = rtems_interrupt_raise_on(
     ARM_GIC_TM27_IRQ_LOW,
-    1U << _SMP_Get_current_processor()
+    _SMP_Get_current_processor()
   );
   _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 }
@@ -127,9 +127,9 @@ static inline void Lower_tm27_intr(void)
 {
   rtems_status_code sc;
 
-  sc = arm_gic_irq_generate_software_irq(
+  sc = rtems_interrupt_raise_on(
     ARM_GIC_TM27_IRQ_HIGH,
-    1U << _SMP_Get_current_processor()
+    _SMP_Get_current_processor()
   );
   _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 }
