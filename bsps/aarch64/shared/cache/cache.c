@@ -162,6 +162,7 @@ static inline uint64_t AArch64_get_ccsidr_for_level(
   csselr |= instruction ? AARCH64_CSSELR_EL1_IND : 0;
 
   _AArch64_Write_csselr_el1(csselr);
+  _AARCH64_Instruction_synchronization_barrier();
   return _AArch64_Read_ccsidr_el1();
 }
 
