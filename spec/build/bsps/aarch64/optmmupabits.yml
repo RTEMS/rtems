@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-in-set:
+  - 32
+  - 36
+  - 40
+  - 42
+  - 44
+  - 48
+  - 52
+  - 48
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+default:
+- enabled-by: bsps/aarch64/xilinx-zynqmp
+  value: 40
+- enabled-by: true
+  value: null
+description: |
+  If defined, then it specifies the physical address range bits of the EL1 MMU.
+  If not defined, then the value is obtained at runtime by reading the AArch64
+  Memory Model Feature Register 0 (ID_AA64MMFR0_EL1).
+enabled-by: true
+format: '{}'
+links: []
+name: AARCH64_MMU_PHYSICAL_ADDRESS_RANGE_BITS
+type: build

@@ -229,6 +229,9 @@ BSP_START_TEXT_SECTION static inline rtems_status_code aarch64_mmu_map_block(
 BSP_START_TEXT_SECTION static inline uint64_t
 aarch64_mmu_get_cpu_pa_bits( void )
 {
+#ifdef AARCH64_MMU_PHYSICAL_ADDRESS_RANGE_BITS
+  return AARCH64_MMU_PHYSICAL_ADDRESS_RANGE_BITS;
+#else
   uint64_t id_reg = _AArch64_Read_id_aa64mmfr0_el1();
 
   switch ( AARCH64_ID_AA64MMFR0_EL1_PARANGE_GET( id_reg ) ) {
@@ -250,6 +253,7 @@ aarch64_mmu_get_cpu_pa_bits( void )
 	  return 48;
   }
   return 48;
+#endif
 }
 
 BSP_START_TEXT_SECTION rtems_status_code
