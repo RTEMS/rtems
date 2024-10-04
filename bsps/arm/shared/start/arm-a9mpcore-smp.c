@@ -84,7 +84,7 @@ void _CPU_SMP_Prepare_start_multitasking( void )
 
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
-  arm_gic_irq_generate_software_irq(
+  arm_gic_trigger_sgi(
     ARM_GIC_IRQ_SGI_0,
     1U << target_processor_index
   );
