@@ -132,6 +132,23 @@ typedef struct {
    * UINTPTR_MAX.
    */
   uintptr_t used;
+
+  /**
+   * This member points to the currently executing thread which is being 
+   * context switched out.
+   */
+  const rtems_tcb *running;
+
+  /**
+   * This member points to the next executing thread which will be 
+   * context switched out.
+   */
+  const rtems_tcb *heir;
+
+  /**
+   * This member checks if the pattern is still valid or not.
+   */
+  bool pattern_ok;
 } rtems_stack_checker_info;
 
 /**
@@ -206,30 +223,20 @@ void rtems_stack_checker_switch_extension(
 /**
  * @brief A Quiet Version of Stack Checker Reporter.
  * 
- * @param[in] running running points to the currently executing thread which
- *                    is being context switched out.
- * 
- * @param[in] pattern_ok bool variable to check if the pattern is
- *                       still valid or not
+ * @param[in] info is the stack information.
  */
  
 void rtems_stack_checker_reporter_quiet(
-  const rtems_tcb *running,
-  bool pattern_ok
+  const rtems_stack_checker_info *info
 );
 
 /**
  * @brief The Default Function to Report a Blown Stack.
  * 
- * @param[in] running running points to the currently executing thread which
- *                    is being context switched out.
- * 
- * @param[in] pattern_ok bool variable to check if the pattern is
- *                       still valid or not
+ * @param[in] info is the stack information.
  */
 void rtems_stack_checker_reporter_print_details(
-  const rtems_tcb *running,
-  bool pattern_ok
+  const rtems_stack_checker_info *info
 );
 
 /**
@@ -254,15 +261,10 @@ void rtems_stack_checker_reporter_print_details(
 /**
  * @brief The Stack Checker Reporter Initialization Handler.
  * 
- * @param[in] running running points to the currently executing thread which
- *                    is being context switched out.
- * 
- * @param[in] pattern_ok bool variable to check if the pattern is
- *                       still valid or not.
+ * @param[in] info is the stack information.
  */
 typedef void (*Stack_checker_Reporter_handler)(
-  const rtems_tcb *running,
-  bool pattern_ok
+  const rtems_stack_checker_info *info
 );
 
 /**

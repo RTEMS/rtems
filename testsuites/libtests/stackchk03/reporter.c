@@ -37,21 +37,20 @@
 #include <rtems.h>
 #include <rtems/score/thread.h>
 #include <rtems/bspIo.h>
+#include <rtems/stackchk.h>
 
 void stackchk03_blown_stack_reporter(
-  const Thread_Control *running,
-  bool pattern_ok
+  const rtems_stack_checker_info *info
 );
 
 void stackchk03_blown_stack_reporter(
-  const Thread_Control *running,
-  bool pattern_ok
+  const rtems_stack_checker_info *info
 )
 {
   /* custom stack report funtion to be implemented here */
   printk("RTEMS STACKCHK03 CUSTOM REPORTER !!!\n");
   rtems_fatal(
     RTEMS_FATAL_SOURCE_STACK_CHECKER,
-    running->Object.name.name_u32
+    info->running->Object.name.name_u32
     );
 }

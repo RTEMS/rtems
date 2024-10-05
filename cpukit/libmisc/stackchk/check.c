@@ -262,22 +262,21 @@ void rtems_stack_checker_begin_extension( Thread_Control *executing )
  *        the following message out.
  */
 void rtems_stack_checker_reporter_print_details(
-  const Thread_Control *running,
-  bool pattern_ok
+  const rtems_stack_checker_info *info
 )
 {
-  const Stack_Control *stack = &running->Start.Initial_stack;
+  const Stack_Control *stack = &info->running->Start.Initial_stack;
   void                *pattern_area = Stack_check_Get_pattern(stack);
   char                 name[2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE];
 
   printk("BLOWN STACK!!!\n");
-  printk("task control block: 0x%08" PRIxPTR "\n", (intptr_t) running);
-  printk("task ID: 0x%08lx\n", (unsigned long) running->Object.id);
+  printk("task control block: 0x%08" PRIxPTR "\n", (intptr_t) info->running);
+  printk("task ID: 0x%08lx\n", (unsigned long) info->running->Object.id);
   printk(
     "task name: 0x%08" PRIx32 "\n",
-    running->Object.name.name_u32
+    info->running->Object.name.name_u32
   );
-  _Thread_Get_name(running, name, sizeof(name));
+  _Thread_Get_name(info->running, name, sizeof(name));
   printk("task name string: %s\n", name);
   printk(
     "task stack area (%lu Bytes): 0x%08" PRIxPTR " .. 0x%08" PRIxPTR "\n",
@@ -285,7 +284,7 @@ void rtems_stack_checker_reporter_print_details(
     (intptr_t) stack->area,
     (intptr_t) ((char *) stack->area + stack->size)
   );
-  if (!pattern_ok) {
+  if (!info->pattern_ok) {
     printk(
       "damaged pattern area (%lu Bytes): 0x%08" PRIxPTR " .. 0x%08" PRIxPTR "\n",
       (unsigned long) SANITY_PATTERN_SIZE_BYTES,
@@ -305,18 +304,17 @@ void rtems_stack_checker_reporter_print_details(
 
   rtems_fatal(
     RTEMS_FATAL_SOURCE_STACK_CHECKER,
-    running->Object.name.name_u32
+    info->running->Object.name.name_u32
   );
 }
 
 void rtems_stack_checker_reporter_quiet(
-  const Thread_Control *running,
-  bool pattern_ok
+  const rtems_stack_checker_info *info
 )
 {
   rtems_fatal(
     RTEMS_FATAL_SOURCE_STACK_CHECKER,
-    running->Object.name.name_u32
+    info->running->Object.name.name_u32
     );
 }
 
@@ -329,8 +327,11 @@ void rtems_stack_checker_switch_extension(
 )
 {
   bool sp_ok;
-  bool pattern_ok;
   const Stack_Control *stack;
+
+  rtems_stack_checker_info info;
+  info.running = running;
+  info.heir = heir;
 
   /*
    *  Check for an out of bounds stack pointer or an overwrite
@@ -339,24 +340,28 @@ void rtems_stack_checker_switch_extension(
   sp_ok = Stack_check_Frame_pointer_in_range( heir );
 
   if ( !sp_ok ) {
-    pattern_ok = Stack_check_Is_sanity_pattern_valid(
+    info.pattern_ok = Stack_check_Is_sanity_pattern_valid(
       &heir->Start.Initial_stack
     );
-    Stack_checker_Reporter( heir, pattern_ok );
+    Stack_checker_Reporter( &info );
   }
 
-  pattern_ok = Stack_check_Is_sanity_pattern_valid( &running->Start.Initial_stack );
+  info.pattern_ok = Stack_check_Is_sanity_pattern_valid( 
+    &running->Start.Initial_stack 
+    );
 
-  if ( !pattern_ok ) {
-    Stack_checker_Reporter( running, pattern_ok );
+  if ( !info.pattern_ok ) {
+    Stack_checker_Reporter( &info );
   }
 #else
   sp_ok = Stack_check_Frame_pointer_in_range( running );
 
-  pattern_ok = Stack_check_Is_sanity_pattern_valid( &running->Start.Initial_stack );
+  info.pattern_ok = Stack_check_Is_sanity_pattern_valid( 
+    &running->Start.Initial_stack 
+    );
 
-  if ( !sp_ok || !pattern_ok ) {
-    Stack_checker_Reporter( running, pattern_ok );
+  if ( !sp_ok || !info.pattern_ok ) {
+    Stack_checker_Reporter( &info );
   }
 #endif
 
