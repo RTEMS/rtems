@@ -329,7 +329,7 @@ int ASCS_input_select(int slave) {
     return -GRASCS_ERROR_TRANSACTIVE;
   }
   
-  cfg->regs->cmd = ((cfg->regs->cmd &= ~GRASCS_CMD_SLAVESEL) |
+  cfg->regs->cmd = ((cfg->regs->cmd & ~GRASCS_CMD_SLAVESEL) |
 		    (slave << GRASCS_CMD_SLAVESEL_BITS));
 
   rtems_semaphore_release(cfg->tmsem1);
@@ -364,7 +364,7 @@ int ASCS_etr_select(int etr, int freq) {
   }
   
   cfg->regs->clk = ASCS_calc_clkreg(cfg->caps->clkfreq,freq);
-  cfg->regs->cmd = ((cfg->regs->cmd &= ~GRASCS_CMD_ETRCTRL) |
+  cfg->regs->cmd = ((cfg->regs->cmd & ~GRASCS_CMD_ETRCTRL) |
 		    (etr << GRASCS_CMD_ETRCTRL_BITS));
 
   return 0;
