@@ -499,7 +499,7 @@ static rtems_status_code grpwm_config_channel(
 	unsigned int pctrl, wctrl=0;
 
 	pwm = priv->channels[channel];
-	if ( pwm->pwmregs->ctrl & GRPWM_PCTRL_EN_BIT ) {
+	if ( pwm->pwmregs->ctrl & GRPWM_PCTRL_EN ) {
 		return RTEMS_RESOURCE_IN_USE;
 	}
 	if ( cfg->options & ~GRPWM_CONFIG_OPTION_MASK ) {
