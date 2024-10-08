@@ -173,8 +173,6 @@ void *gr1553bm_open(int minor)
 fail:
 	if ( pdev )
 		gr1553_bm_close(pdev);
-	if ( priv )
-		free(priv);
 	return NULL;
 }
 
