@@ -111,22 +111,15 @@ typedef struct {
   uint32_t overflow;
 
   /**
-   * @brief If true, then hold back items for overflow or initial ramp up
-   * processing.
+   * @brief If true, then hold back items.
    */
   bool hold_back;
 
   /**
    * @brief Storage for hold back items.
    *
-   * In case of a ring buffer overflow, the rtems_record_drain() will push the
-   * complete ring buffer content to the client.  While the items are processed
-   * by the client, new items may overwrite some items being processed.  The
-   * overwritten items can be detected in the following iteration once the next
-   * tail/head information is pushed to the client.
-   *
-   * In case of the initial ramp up, the items are stored in the hold back
-   * buffer to determine the uptime of the first event.
+   * Once the time stamp association with the uptime is known, the hold back
+   * items can be processed.
    */
   rtems_record_item_64 *items;
 

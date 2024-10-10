@@ -1891,29 +1891,6 @@ uint32_t rtems_record_interrupt_disable( void );
  */
 void rtems_record_interrupt_enable( uint32_t level );
 
-typedef void ( *rtems_record_drain_visitor )(
-  const rtems_record_item *items,
-  size_t                   count,
-  void                    *arg
-);
-
-void _Record_Drain(
-  Record_Control             *control,
-  uint32_t                    cpu_index,
-  rtems_record_drain_visitor  visitor,
-  void                       *arg
-);
-
-/**
- * @brief Drains the record items on all processors.
- *
- * Calls the visitor function for each drained item set.
- *
- * @param visitor The visitor function.
- * @param arg The argument for the visitor function.
- */
-void rtems_record_drain( rtems_record_drain_visitor visitor, void *arg );
-
 /**
  * @brief This structure controls the record fetching performed by rtems_record_fetch().
  *

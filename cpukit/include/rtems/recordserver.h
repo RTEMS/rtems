@@ -38,18 +38,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @brief Drains the record items on all processors an writes them to the file
- * descriptor.
- *
- * @param fd The file descriptor.
- * @param written Set to true if items were written to the file descriptor,
- *   otherwise set to false.
- *
- * @retval The bytes written to the file descriptor.
- */
-ssize_t rtems_record_writev( int fd, bool *written );
-
-/**
  * @brief Runs a record TCP server loop.
  *
  * @param port The TCP port to listen in host byte order.
