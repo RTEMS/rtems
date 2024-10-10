@@ -179,10 +179,19 @@ static void Init(rtems_task_argument arg)
   _Record_Fatal_dump_base64(RTEMS_FATAL_SOURCE_APPLICATION, false, 123);
 
   generate_events();
-
-  TEST_END();
-  rtems_test_exit(0);
 }
+
+static void fatal_extension(
+  rtems_fatal_source source,
+  bool always_set_to_false,
+  rtems_fatal_code code
+)
+{
+  TEST_END();
+}
+
+#define INITIAL_EXTENSION \
+  { NULL, NULL, NULL, NULL, NULL, NULL, NULL, fatal_extension, NULL }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
@@ -190,7 +199,8 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  INITIAL_EXTENSION, RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
