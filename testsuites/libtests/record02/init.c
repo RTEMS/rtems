@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2018, 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2018, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -80,20 +80,6 @@ static rtems_record_client_status client_handler(
   return RTEMS_RECORD_CLIENT_SUCCESS;
 }
 
-static void drain_visitor(
-  const rtems_record_item *items,
-  size_t                   count,
-  void                    *arg
-)
-{
-  test_context *ctx;
-  rtems_record_client_status cs;
-
-  ctx = arg;
-  cs = rtems_record_client_run(&ctx->client, items, count * sizeof(*items));
-  rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
-}
-
 static void generate_events(void)
 {
   int i;
@@ -155,6 +141,31 @@ static void generate_events(void)
   rtems_record_interrupt_enable(level);
 }
 
+static void fetch(test_context *ctx)
+{
+  rtems_record_client_status cs;
+  rtems_record_fetch_control control;
+  rtems_record_item          items[256];
+  rtems_record_fetch_status  fs;
+
+  rtems_record_fetch_initialize(
+    &control,
+    &items[0],
+    RTEMS_ARRAY_SIZE( items )
+  );
+
+  do {
+    fs = rtems_record_fetch(&control);
+    cs = rtems_record_client_run(
+      &ctx->client,
+      control.fetched_items,
+      control.fetched_count * sizeof(*control.fetched_items)
+    );
+    rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
+  } while (fs == RTEMS_RECORD_FETCH_CONTINUE);
+
+}
+
 static void Init(rtems_task_argument arg)
 {
   test_context *ctx;
@@ -171,7 +182,7 @@ static void Init(rtems_task_argument arg)
   size = _Record_Stream_header_initialize(&header);
   cs = rtems_record_client_run(&ctx->client, &header, size);
   rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
-  rtems_record_drain(drain_visitor, ctx);
+  fetch(ctx);
   rtems_record_client_destroy(&ctx->client);
 
   generate_events();

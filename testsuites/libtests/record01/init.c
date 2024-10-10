@@ -112,6 +112,7 @@ static const rtems_record_item expected_items_7[ITEM_COUNT] = {
   { .event = TE(10, UE(9)), .data = 11 }
 };
 
+#ifdef RTEMS_NETWORKING
 static const rtems_record_item expected_items_8[] = {
   { .event = TE(0, RTEMS_RECORD_PROCESSOR), .data = 0 },
   { .event = TE(0, RTEMS_RECORD_PER_CPU_TAIL), .data = 0 },
@@ -154,7 +155,6 @@ static const rtems_record_item expected_items_12[] = {
   { .event = TE(44, UE(43)), .data = 45 }
 };
 
-#ifdef RTEMS_NETWORKING
 static const rtems_record_item expected_items_13[] = {
   { .event = TE(0, RTEMS_RECORD_THREAD_ID), .data = 0x9010001 },
   {
@@ -394,124 +394,6 @@ static void test_produce_n(test_context *ctx, Record_Control *control)
   rtems_test_assert(memcmp(control->Items, expected_items_4, ITEM_SIZE) == 0);
   rtems_test_assert(_Record_Head(control) == 5);
   rtems_test_assert(_Record_Tail(control) == 0);
-}
-
-typedef struct {
-  size_t todo;
-  const rtems_record_item *items;
-} visitor_context;
-
-static void visitor(const rtems_record_item *items, size_t count, void *arg)
-{
-  visitor_context *vctx;
-
-  vctx = arg;
-  rtems_test_assert(vctx->todo >= count);
-
-  while (count > 0) {
-    rtems_test_assert(memcmp(items, vctx->items, sizeof(*items)) == 0);
-    ++items;
-    ++vctx->items;
-    --count;
-    --vctx->todo;
-  }
-}
-
-static void test_drain(test_context *ctx, Record_Control *control)
-{
-  visitor_context vctx;
-
-  init_context(ctx);
-
-  vctx.todo = 0;
-  vctx.items = NULL;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
-
-  rtems_record_produce(UE(1), 3);
-  set_time(&control->Items[0], 2);
-  rtems_record_produce(UE(4), 6);
-  set_time(&control->Items[1], 5);
-  rtems_record_produce(UE(7), 9);
-  set_time(&control->Items[2], 8);
-
-  vctx.todo = RTEMS_ARRAY_SIZE(expected_items_8);
-  vctx.items = expected_items_8;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
-
-  vctx.todo = 0;
-  vctx.items = NULL;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
-
-  rtems_record_produce(UE(10), 12);
-  set_time(&control->Items[3], 11);
-  rtems_record_produce(UE(13), 15);
-  set_time(&control->Items[0], 14);
-
-  vctx.todo = RTEMS_ARRAY_SIZE(expected_items_9);
-  vctx.items = expected_items_9;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
-
-  vctx.todo = 0;
-  vctx.items = NULL;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
-
-  rtems_record_produce(UE(16), 18);
-  set_time(&control->Items[1], 17);
-  rtems_record_produce(UE(19), 21);
-  set_time(&control->Items[2], 20);
-  rtems_record_produce(UE(22), 24);
-  set_time(&control->Items[3], 23);
-
-  vctx.todo = RTEMS_ARRAY_SIZE(expected_items_10);
-  vctx.items = expected_items_10;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
-
-  vctx.todo = 0;
-  vctx.items = NULL;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
-
-  rtems_record_produce(UE(25), 27);
-  set_time(&control->Items[0], 26);
-
-  vctx.todo = RTEMS_ARRAY_SIZE(expected_items_11);
-  vctx.items = expected_items_11;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
-
-  vctx.todo = 0;
-  vctx.items = NULL;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
-
-  rtems_record_produce(UE(28), 30);
-  set_time(&control->Items[1], 29);
-  rtems_record_produce(UE(31), 33);
-  set_time(&control->Items[2], 32);
-  rtems_record_produce(UE(34), 36);
-  set_time(&control->Items[3], 35);
-  rtems_record_produce(UE(37), 39);
-  set_time(&control->Items[0], 38);
-  rtems_record_produce(UE(40), 42);
-  set_time(&control->Items[1], 41);
-  rtems_record_produce(UE(43), 45);
-  set_time(&control->Items[2], 44);
-
-  vctx.todo = RTEMS_ARRAY_SIZE(expected_items_12);
-  vctx.items = expected_items_12;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
-
-  vctx.todo = 0;
-  vctx.items = NULL;
-  rtems_record_drain(visitor, &vctx);
-  rtems_test_assert(vctx.todo == 0);
 }
 
 #ifdef RTEMS_NETWORKING
@@ -757,7 +639,6 @@ static void Init(rtems_task_argument arg)
   test_produce(ctx, &ctx->control);
   test_produce_2(ctx, &ctx->control);
   test_produce_n(ctx, &ctx->control);
-  test_drain(ctx, &ctx->control);
 #ifdef RTEMS_NETWORKING
   test_server(ctx, &ctx->control);
 #endif

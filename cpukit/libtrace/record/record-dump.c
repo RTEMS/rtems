@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2020, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -80,29 +80,36 @@ static bool thread_names_visitor( rtems_tcb *tcb, void *arg )
   return false;
 }
 
-static void drain_visitor(
-  const rtems_record_item *items,
-  size_t                   count,
-  void                    *arg
-)
-{
-  dump_chunk( arg, items, count * sizeof( *items ) );
-}
-
 void rtems_record_dump(
   rtems_record_dump_chunk  chunk,
   void                    *arg
 )
 {
-  Record_Stream_header header;
-  size_t               size;
-  dump_context         ctx;
+  Record_Stream_header       header;
+  size_t                     size;
+  dump_context               ctx;
+  rtems_record_fetch_control control;
+  rtems_record_item          items[ 128 ];
+  rtems_record_fetch_status  status;
 
   ctx.chunk = chunk;
   ctx.arg = arg;
 
   size = _Record_Stream_header_initialize( &header );
   dump_chunk( &ctx, &header, size );
-  rtems_task_iterate( thread_names_visitor, &ctx );
-  rtems_record_drain( drain_visitor, &ctx );
+  _Thread_Iterate( thread_names_visitor, &ctx );
+  rtems_record_fetch_initialize(
+    &control,
+    &items[ 0 ],
+    RTEMS_ARRAY_SIZE( items )
+  );
+
+  do {
+    status = rtems_record_fetch( &control );
+    dump_chunk(
+      &ctx,
+      control.fetched_items,
+      control.fetched_count * sizeof( *control.fetched_items )
+    );
+  } while ( status == RTEMS_RECORD_FETCH_CONTINUE );
 }

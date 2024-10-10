@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2018, 2019 embedded brains GmbH & Co. KG
+ * Copyright (C) 2018, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,59 +36,11 @@
 #include <sys/socket.h>
 #include <sys/uio.h>
 
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 #include <netinet/in.h>
-
-#ifdef RTEMS_SMP
-#define CHUNKS (3 * CPU_MAXIMUM_PROCESSORS)
-#else
-#define CHUNKS 4
-#endif
-
-typedef struct {
-  int           available;
-  struct iovec *current;
-  struct iovec  iov[CHUNKS];
-} writev_visitor_context;
-
-static void writev_visitor(
-  const rtems_record_item *items,
-  size_t                   count,
-  void                    *arg
-)
-{
-  writev_visitor_context *ctx;
-
-  ctx = arg;
-
-  if ( ctx->available > 0 ) {
-    ctx->current->iov_base = RTEMS_DECONST( rtems_record_item *, items );
-    ctx->current->iov_len = count * sizeof( *items );
-    --ctx->available;
-    ++ctx->current;
-  }
-}
-
-ssize_t rtems_record_writev( int fd, bool *written )
-{
-  writev_visitor_context ctx;
-  int n;
-
-  ctx.available = CHUNKS;
-  ctx.current = &ctx.iov[ 0 ];
-  rtems_record_drain( writev_visitor, &ctx );
-  n = CHUNKS - ctx.available;
-
-  if ( n > 0 ) {
-    *written = true;
-    return writev( fd, &ctx.iov[ 0 ], n );
-  } else {
-    *written = false;
-    return 0;
-  }
-}
 
 #define WAKEUP_EVENT RTEMS_EVENT_0
 
@@ -198,6 +150,38 @@ static void send_thread_names( int fd )
   }
 }
 
+static void fetch_and_write(
+  int fd,
+  rtems_record_item *items,
+  size_t count
+)
+{
+  rtems_record_fetch_control control;
+
+  rtems_record_fetch_initialize( &control, items, count );
+
+  while ( true ) {
+    rtems_record_fetch_status status;
+
+    do {
+      ssize_t n;
+
+      status = rtems_record_fetch( &control );
+      n = write(
+        fd,
+        control.fetched_items,
+        control.fetched_count * sizeof( *control.fetched_items )
+      );
+
+      if ( n <= 0 ) {
+        return;
+      }
+    } while ( status == RTEMS_RECORD_FETCH_CONTINUE );
+
+    wait( RTEMS_WAIT );
+  }
+}
+
 void rtems_record_server( uint16_t port, rtems_interval period )
 {
   rtems_status_code sc;
@@ -206,13 +190,21 @@ void rtems_record_server( uint16_t port, rtems_interval period )
   struct sockaddr_in addr;
   int sd;
   int rv;
+  size_t count;
+  rtems_record_item *items;
 
   sd = -1;
   self = rtems_task_self();
 
+  count = rtems_record_get_item_count_for_fetch();
+  items = calloc( count, sizeof( *items ) );
+  if ( items == NULL ) {
+    return;
+  }
+
   sc = rtems_timer_create( rtems_build_name( 'R', 'C', 'R', 'D' ), &timer );
   if ( sc != RTEMS_SUCCESSFUL ) {
-    return;
+    goto error;
   }
 
   sd = socket( PF_INET, SOCK_STREAM, 0 );
@@ -237,8 +229,6 @@ void rtems_record_server( uint16_t port, rtems_interval period )
 
   while ( true ) {
     int cd;
-    bool written;
-    ssize_t n;
 
     cd = accept( sd, NULL, NULL );
 
@@ -250,23 +240,14 @@ void rtems_record_server( uint16_t port, rtems_interval period )
     (void) rtems_timer_fire_after( timer, period, wakeup_timer, &self );
     send_header( cd );
     send_thread_names( cd );
-
-    while ( true ) {
-      n = rtems_record_writev( cd, &written );
-
-      if ( written && n <= 0 ) {
-        break;
-      }
-
-      wait( RTEMS_WAIT );
-    }
-
+    fetch_and_write( cd, items, count );
     (void) rtems_timer_cancel( timer );
     (void) close( cd );
   }
 
 error:
 
+  free( items );
   (void) close( sd );
   (void) rtems_timer_delete( timer );
 }
