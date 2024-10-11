@@ -137,8 +137,9 @@ static uint64_t time_bt(
   rtems_record_event                 event
 )
 {
-  uint64_t bt;
   uint64_t time_accumulated;
+  uint64_t last_bt;
+  uint64_t bt;
 
   time_accumulated = per_cpu->uptime.time_accumulated;
 
@@ -148,10 +149,25 @@ static uint64_t time_bt(
     per_cpu->uptime.time_accumulated = time_accumulated;
   }
 
+  last_bt = per_cpu->last_bt;
   bt = per_cpu->uptime.uptime_bt;
   bt += ( time_accumulated * ctx->to_bt_scaler ) >> 31;
 
-  return bt;
+  if ( bt >= last_bt ) {
+    per_cpu->last_bt = bt;
+
+    return bt;
+  }
+
+  (void) ( *ctx->handler )(
+    last_bt,
+    ctx->cpu,
+    RTEMS_RECORD_TIME_ADJUSTMENT,
+    last_bt - bt,
+    ctx->handler_arg
+  );
+
+  return last_bt;
 }
 
 static rtems_record_client_status call_handler(
