@@ -122,7 +122,7 @@ static void set_to_bt_scaler(
   uint64_t bin_per_s;
 
   bin_per_s = UINT64_C( 1 ) << 32;
-  ctx->to_bt_scaler = ( ( bin_per_s << 31 ) + frequency - 1 ) / frequency;
+  ctx->to_bt_scaler = ( ( bin_per_s << 31 ) + frequency / 2 ) / frequency;
 }
 
 static bool has_time( rtems_record_event event )
