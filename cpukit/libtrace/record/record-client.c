@@ -127,24 +127,7 @@ static void set_to_bt_scaler(
 
 static bool has_time( rtems_record_event event )
 {
-  switch ( event ) {
-    case RTEMS_RECORD_ARCH:
-    case RTEMS_RECORD_BSP:
-    case RTEMS_RECORD_FREQUENCY:
-    case RTEMS_RECORD_MULTILIB:
-    case RTEMS_RECORD_PER_CPU_COUNT:
-    case RTEMS_RECORD_PER_CPU_OVERFLOW:
-    case RTEMS_RECORD_PROCESSOR:
-    case RTEMS_RECORD_PROCESSOR_MAXIMUM:
-    case RTEMS_RECORD_THREAD_ID:
-    case RTEMS_RECORD_THREAD_NAME:
-    case RTEMS_RECORD_TOOLS:
-    case RTEMS_RECORD_VERSION:
-    case RTEMS_RECORD_VERSION_CONTROL_KEY:
-      return false;
-    default:
-      return true;
-  }
+  return event > RTEMS_RECORD_NO_TIME_LAST;
 }
 
 static uint64_t time_bt(
@@ -709,6 +692,13 @@ void rtems_record_client_destroy(
     per_cpu = &ctx->per_cpu[ cpu ];
 
     if ( per_cpu->hold_back && per_cpu->item_index > 0 ) {
+      (void) call_handler(
+        ctx,
+        per_cpu,
+        0,
+        RTEMS_RECORD_UNRELIABLE_TIME,
+        0
+      );
       calculate_best_effort_uptime( ctx, per_cpu );
       (void) resolve_hold_back( ctx, per_cpu );
     }
