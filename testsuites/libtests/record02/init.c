@@ -53,25 +53,25 @@ static rtems_record_client_status client_handler(
   void               *arg
 )
 {
+  uint32_t seconds;
+  uint32_t nanoseconds;
+
   (void) arg;
 
-  if ( bt != 0 ) {
-    uint32_t seconds;
-    uint32_t nanoseconds;
-
-    rtems_record_client_bintime_to_seconds_and_nanoseconds(
-      bt,
-      &seconds,
-      &nanoseconds
-    );
-
-    printf( "%" PRIu32 ".%09" PRIu32 ":", seconds, nanoseconds );
-  } else {
-    printf( "*:" );
+  if (event == RTEMS_RECORD_USER_5) {
+    return RTEMS_RECORD_CLIENT_SUCCESS;
   }
 
+  rtems_record_client_bintime_to_seconds_and_nanoseconds(
+    bt,
+    &seconds,
+    &nanoseconds
+  );
   printf(
+    "%" PRIu32 ".%09" PRIu32 ":"
     "%" PRIu32 ":%s:%" PRIx64 "\n",
+    seconds,
+    nanoseconds,
     cpu,
     rtems_record_event_text( event ),
     data
@@ -163,7 +163,17 @@ static void fetch(test_context *ctx)
     );
     rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
   } while (fs == RTEMS_RECORD_FETCH_CONTINUE);
+}
 
+static void overflow(void)
+{
+  int i;
+
+  for (i = 0; i < 512; ++i) {
+    rtems_record_produce(RTEMS_RECORD_USER_5, 0);
+  }
+
+  rtems_record_produce(RTEMS_RECORD_USER_6, 0);
 }
 
 static void Init(rtems_task_argument arg)
@@ -172,17 +182,25 @@ static void Init(rtems_task_argument arg)
   Record_Stream_header header;
   size_t size;
   rtems_record_client_status cs;
+  rtems_interrupt_level level;
 
   TEST_BEGIN();
   ctx = &test_instance;
 
   generate_events();
 
-  rtems_record_client_init(&ctx->client, client_handler, NULL);
+  cs = rtems_record_client_init(&ctx->client, client_handler, NULL);
+  rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
   size = _Record_Stream_header_initialize(&header);
   cs = rtems_record_client_run(&ctx->client, &header, size);
   rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
   fetch(ctx);
+
+  rtems_interrupt_local_disable(level);
+  overflow();
+  fetch(ctx);
+  rtems_interrupt_local_enable(level);
+
   rtems_record_client_destroy(&ctx->client);
 
   generate_events();

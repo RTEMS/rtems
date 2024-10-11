@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2018, 2019 embedded brains GmbH & Co. KG
+ * Copyright (C) 2018, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -73,42 +73,27 @@ typedef rtems_record_client_status ( *rtems_record_client_handler )(
 );
 
 typedef struct {
+  uint64_t uptime_bt;
+  uint32_t time_last;
+  uint64_t time_accumulated;
+} rtems_record_client_uptime;
+
+/**
+ * @brief This constant defines the maximum capacity of the hold back item
+ *   storage in case a reallocation is necessary.
+ */
+#define RTEMS_RECORD_CLIENT_HOLD_BACK_REALLOCATION_LIMIT 0x100000
+
+typedef struct {
   /**
    * @brief Event time to uptime maintenance.
    */
-  struct {
-    uint64_t bt;
-    uint32_t time_at_bt;
-    uint32_t time_last;
-    uint32_t time_accumulated;
-  } uptime;
+  rtems_record_client_uptime uptime;
 
   /**
-   * @brief The current or previous ring buffer tail.
-   *
-   * Indexed by the tail_head_index member.
+   * @brief Last RTEMS_RECORD_UPTIME_LOW data.
    */
-  uint32_t tail[ 2 ];
-
-  /**
-   * @brief The current or previous ring buffer head.
-   *
-   * Indexed by the tail_head_index member.
-   */
-  uint32_t head[ 2 ];
-
-  /**
-   * @brief The index of the tail and head members.
-   *
-   * This index is used to maintain the current and previous tail/head
-   * positions to detect ring buffer overflows.
-   */
-  size_t tail_head_index;
-
-  /**
-   * @brief Count of lost items due to ring buffer overflows.
-   */
-  uint32_t overflow;
+  uint32_t uptime_low;
 
   /**
    * @brief If true, then hold back items.
@@ -124,6 +109,11 @@ typedef struct {
   rtems_record_item_64 *items;
 
   /**
+   * @brief The item capacity of the hold back storage.
+   */
+  size_t item_capacity;
+
+  /**
    * @brief The index for the next hold back item.
    */
   size_t item_index;
@@ -134,7 +124,7 @@ typedef struct rtems_record_client_context {
   rtems_record_client_per_cpu per_cpu[ RTEMS_RECORD_CLIENT_MAXIMUM_CPU_COUNT ];
   uint32_t cpu;
   uint32_t cpu_count;
-  uint32_t count;
+  uint32_t per_cpu_items;
   union {
     rtems_record_item_32 format_32;
     rtems_record_item_64 format_64;
@@ -163,7 +153,7 @@ typedef struct rtems_record_client_context {
  * @param handler The handler is invoked for each received record item.
  * @param arg The handler argument.
  */
-void rtems_record_client_init(
+rtems_record_client_status rtems_record_client_init(
   rtems_record_client_context *ctx,
   rtems_record_client_handler  handler,
   void                        *arg
