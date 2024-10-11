@@ -63,8 +63,9 @@ void _Record_Initialize( void )
 
 static void _Record_Watchdog( Watchdog_Control *watchdog )
 {
-  ISR_Level  level;
-  sbintime_t now;
+  ISR_Level            level;
+  rtems_record_context context;
+  sbintime_t           now;
 
   _ISR_Local_disable( level );
   _Watchdog_Per_CPU_insert_ticks(
@@ -72,15 +73,20 @@ static void _Record_Watchdog( Watchdog_Control *watchdog )
     _Watchdog_Get_CPU( watchdog ),
     _Record_Tick_interval
   );
-  _ISR_Local_enable( level );
-
   now = _Timecounter_Sbinuptime();
-  rtems_record_produce_2(
+  rtems_record_prepare_critical( &context, _Per_CPU_Get() );
+  rtems_record_add(
+    &context,
     RTEMS_RECORD_UPTIME_LOW,
-    (uint32_t) ( now >> 0 ),
+    (uint32_t) ( now >> 0 )
+  );
+  rtems_record_add(
+    &context,
     RTEMS_RECORD_UPTIME_HIGH,
     (uint32_t) ( now >> 32 )
   );
+  rtems_record_commit_critical( &context );
+  _ISR_Local_enable( level );
 }
 
 static void _Record_Initialize_watchdogs( void )
