@@ -91,6 +91,11 @@ typedef struct {
   rtems_record_client_uptime uptime;
 
   /**
+   * @brief The binary time of the last item.
+   */
+  uint64_t last_bt;
+
+  /**
    * @brief Last RTEMS_RECORD_UPTIME_LOW data.
    */
   uint32_t uptime_low;
