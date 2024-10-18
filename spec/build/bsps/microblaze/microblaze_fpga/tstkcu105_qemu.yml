@@ -2,12 +2,6 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
     reason: |
-      Expected to fail, do not compile these.
-    state: exclude
-    tests:
-    - minimum
-- set-test-state:
-    reason: |
       Expected to fail due to GCC issues.
     state: expected-fail
     tests:

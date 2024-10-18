@@ -13,7 +13,7 @@ links:
 - role: build-dependency
   uid: grp
 - role: build-dependency
-  uid: tstqemu
+  uid: ../../tstqemu
 type: build
 use-after: []
 use-before: []

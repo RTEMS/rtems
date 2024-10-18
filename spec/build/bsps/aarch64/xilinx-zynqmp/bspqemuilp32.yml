@@ -14,7 +14,7 @@ links:
 - role: build-dependency
   uid: grp
 - role: build-dependency
-  uid: tstqemu
+  uid: ../../tstqemu
 - role: build-dependency
   uid: linkcmds_ilp32
 - role: build-dependency

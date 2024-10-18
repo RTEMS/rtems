@@ -27,7 +27,7 @@ links:
 - role: build-dependency
   uid: optramori
 - role: build-dependency
-  uid: tsta53
+  uid: ../../tstqemu
 - role: build-dependency
   uid: ../objclockarmgenerictimer
 - role: build-dependency
