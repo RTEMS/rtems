@@ -9,10 +9,10 @@ copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default:
 - enabled-by:
-  - aarch64/xilinx_zynqmp_lp64_a53
-  - aarch64/xilinx_zynqmp_ilp32_zu3eg
-  - aarch64/xilinx_zynqmp_lp64_cfc400x
-  - aarch64/xilinx_zynqmp_lp64_zu3eg
+  - aarch64/zynqmp_a53
+  - aarch64/zynqmp_cfc400x
+  - aarch64/zynqmp_zu3eg_ilp32
+  - aarch64/zynqmp_zu3eg
   value: 0x00000000
 - enabled-by: true
   value: 0x00008000

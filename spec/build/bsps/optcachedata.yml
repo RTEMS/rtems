@@ -13,8 +13,8 @@ default:
   - aarch64/a72_ilp32_qemu
   - aarch64/a72_lp64_qemu
   - aarch64/xilinx_versal_qemu
-  - aarch64/xilinx_zynqmp_ilp32_qemu
-  - aarch64/xilinx_zynqmp_lp64_qemu
+  - aarch64/zynqmp_qemu_ilp32
+  - aarch64/zynqmp_qemu
   - arm/lm3s6965_qemu
   - arm/realview_pbx_a9_qemu
   - arm/xilinx_zynq_a9_qemu

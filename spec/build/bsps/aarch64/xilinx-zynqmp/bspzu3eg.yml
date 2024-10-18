@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: aarch64
-bsp: xilinx_zynqmp_lp64_zu3eg
+bsp: zynqmp_zu3eg
 build-type: bsp
 cflags: []
 copyrights:
@@ -12,7 +12,7 @@ includes: []
 install: []
 links:
 - role: build-dependency
-  uid: grp_zu3eg
+  uid: grp_hardware
 - role: build-dependency
   uid: linkcmds_lp64
 - role: build-dependency
