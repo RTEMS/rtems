@@ -851,8 +851,8 @@ class OptionItem(Item):
     def _assert_in_set(self, conf, cic, value, arg):
         if value is not None and value not in arg:
             conf.fatal(
-                "Value '{}' for option '{}' is not an element of {}"
-                .format(value, self.data["name"], arg))
+                "Value '{}' for option '{}' is not an element of {}".format(
+                    value, self.data["name"], arg))
         return value
 
     def _assert_in_interval(self, conf, cic, value, arg):
@@ -1008,7 +1008,7 @@ class OptionItem(Item):
         except configparser.NoOptionError:
             value = self.default_value(conf.env.ENABLE)
         if not value:
-                return None
+            return None
         try:
             return eval(value)
         except Exception as e:
