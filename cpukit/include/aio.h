@@ -269,9 +269,21 @@ int aio_cancel(
 );
 
 /**
- * @brief Wait for Asynchronous I/O Request - NOT IMPLEMENTED
+ * @brief Wait for Asynchronous I/O Request
  *
  * 6.7.7 Wait for Asynchronous I/O Request, P1003.1b-1993, p. 164
+ * 
+ * @param list Is a pointer to the array of aiocbs.
+ * @param nent Is the number of aiocbs in the array.
+ * @param timeout Specifies the timeout time.
+ *
+ * @retval 0 One of the operation specified in list completed.
+ * @retval EINVAL Invalid nent value.
+ * @retval EAGAIN Could not suspend due to resource limitation.
+ * @retval ENOMEM Could not suspend due to memory limitation.
+ * @retval EAGAIN No asynchronous I/O indicated in the list referenced by list
+           completed in the time interval indicated by timeout.
+ * @retval EINTR An event interrupted the aio_suspend() function.
  */
 int aio_suspend(
   const struct aiocb  * const   list[],

@@ -68,9 +68,6 @@ void *POSIX_Init(
   check_enosys( sc );
 #endif
 
-  sc = aio_suspend( NULL, 0, NULL );
-  check_enosys( sc );
-
   sc = clock_getcpuclockid( 0, NULL );
   check_enosys( sc );
 

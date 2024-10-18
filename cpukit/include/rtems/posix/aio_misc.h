@@ -93,6 +93,11 @@ extern "C" {
 /** Notification via event delivery */
 #define AIO_LIO_EVENT      2
 
+/* Constants needed by aio_suspend() */
+
+/** Signal generated for suspend call */
+#define AIO_SIGNALED   1
+
 /**
  * @brief holds a pointer to a sigevent struct or a thread id 
  *  
@@ -126,6 +131,24 @@ typedef struct
 } listcb;
 
 /**
+ * @brief Control block for every list involved in a aio_suspend() call.
+ */
+typedef struct
+{
+  pthread_mutex_t mutex;
+
+  /** @brief number of requests left to complete the list */
+  int requests_left;
+
+  /** @brief id of the thread that called aio_suspend() */
+  int task_id;
+
+  /** @brief controls if the notification already happend */
+  int notified;
+
+} rtems_aio_suspendcb;
+
+/**
  * @brief The request being processed
  */
 typedef struct
@@ -144,6 +167,9 @@ typedef struct
 
   /** @brief pointer to list control block */
   listcb *listcbp;
+
+  /** @brief pointer to suspend control block */
+  rtems_aio_suspendcb *suspendcbp;
 
   /** @brief Aio control block */
   struct aiocb *aiocbp;
@@ -311,9 +337,28 @@ rtems_aio_request *init_read_req( struct aiocb* aiocbp );
 /**
  * @brief updates listcb after op completion
  * 
- * @param listcbp 
+ * @param listcbp a pointer to the list control block.
  */
 void rtems_aio_completed_list_op( listcb *listcbp );
+
+/**
+ * @brief updates suspendcb after related op completion
+ * 
+ * @param suspendcbp a pointer to the suspend control block.
+ */
+void rtems_aio_update_suspendcbp( rtems_aio_suspendcb *suspendcbp );
+
+/**
+ * @brief Search a request in an fd chain.
+ * 
+ * @param aiocbp 
+ * @retval NULL The request identified by aiocbp is not present in fd_chain.
+ * @return A pointer to the rtems_aio_request referenced by aiocbp.
+ */
+rtems_aio_request * rtems_aio_search_in_chain(
+  const struct aiocb* aiocbp,
+  rtems_chain_control *fd_chain
+);
 
 #ifdef RTEMS_DEBUG
 #include <assert.h>

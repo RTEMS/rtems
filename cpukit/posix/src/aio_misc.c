@@ -276,9 +276,47 @@ void rtems_aio_completed_list_op( listcb *listcbp )
         break;
     }
     pthread_mutex_unlock( &listcbp->mutex );
+    pthread_mutex_destroy( &listcbp->mutex );
     free( listcbp );
   } else {
     pthread_mutex_unlock( &listcbp->mutex );
+  }
+}
+
+void rtems_aio_update_suspendcbp( rtems_aio_suspendcb *suspendcbp )
+{
+  
+  int send_event = 0;
+  int finished = 0;
+  rtems_id id;
+  if ( suspendcbp == NULL )
+    return;
+
+  pthread_mutex_lock( &suspendcbp->mutex );
+  
+  id = suspendcbp->task_id;
+  
+  if ( --suspendcbp->requests_left == 0 ) {
+    finished = 1;
+  }
+
+  if ( suspendcbp->notified == !AIO_SIGNALED ) {
+    send_event = 1;
+    suspendcbp->notified = AIO_SIGNALED;
+  }
+  
+  pthread_mutex_unlock( &suspendcbp->mutex );
+
+  if ( send_event ) {
+    rtems_event_system_send(
+      id,
+      RTEMS_EVENT_SYSTEM_AIO_SUSPENSION_TERMINATED
+    );
+  }
+
+  if( finished ) {
+    pthread_mutex_destroy( &suspendcbp->mutex );
+    free( suspendcbp );
   }
 }
 
@@ -393,28 +431,22 @@ int rtems_aio_remove_req( rtems_chain_control *chain, struct aiocb *aiocbp )
 {
   if ( rtems_chain_is_empty( chain ) )
     return AIO_ALLDONE;
-
-  rtems_chain_node *node = rtems_chain_first( chain );
-  rtems_aio_request *current;
-
-  current = (rtems_aio_request *) node;
-
-  while ( !rtems_chain_is_tail( chain, node ) && current->aiocbp != aiocbp ) {
-    node = rtems_chain_next( node );
-    current = (rtems_aio_request *) node;
-  }
-
-  if ( rtems_chain_is_tail( chain, node ) )
+  
+  rtems_aio_request *request = rtems_aio_search_in_chain( aiocbp, chain );
+  if ( request == NULL ) {
     return AIO_NOTCANCELED;
-  else {
-    rtems_chain_extract( node );
-    current->aiocbp->error_code = ECANCELED;
-    current->aiocbp->return_value = -1;
-    rtems_aio_completed_list_op( current->listcbp );
-    atomic_fetch_sub( &aio_request_queue.queued_requests, 1 );
-    free( current );
   }
-    
+  
+  rtems_chain_node *node = (rtems_chain_node *) request;
+  rtems_chain_extract( node );
+
+  request->aiocbp->error_code = ECANCELED;
+  request->aiocbp->return_value = -1;
+  rtems_aio_completed_list_op( request->listcbp );
+  rtems_aio_update_suspendcbp( request->suspendcbp );
+  atomic_fetch_sub( &aio_request_queue.queued_requests, 1 );
+  free( request );
+
   return AIO_CANCELED;
 }
 
@@ -665,7 +697,12 @@ static void *rtems_aio_handle( void *arg )
 
       /* notification for list completion */
       rtems_aio_completed_list_op( req->listcbp );
+
+      /* notification for aio_suspend() */
+      rtems_aio_update_suspendcbp( req->suspendcbp );
+
       req->listcbp = NULL;
+      req->suspendcbp = NULL;
 
     } else {
       /* If the fd chain is empty we unlock the fd chain and we lock
@@ -821,3 +858,25 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
   }
 }
 
+rtems_aio_request * rtems_aio_search_in_chain(
+  const struct aiocb* aiocbp,
+  rtems_chain_control *fd_chain
+)
+{
+  rtems_aio_request *current;
+  rtems_chain_node *node;
+
+  node = rtems_chain_first( fd_chain );
+  current = (rtems_aio_request *) node;
+
+  while ( !rtems_chain_is_tail( fd_chain, node ) && current->aiocbp != aiocbp ) {
+    node = rtems_chain_next( node );
+    current = (rtems_aio_request *) node;
+  }
+      
+  if ( rtems_chain_is_tail( fd_chain, node ) ) {
+    return NULL;
+  }
+
+  return current;
+}
