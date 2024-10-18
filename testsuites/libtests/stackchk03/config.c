@@ -37,11 +37,11 @@
 #endif
 
 #include <rtems/score/thread.h>
-#include <rtems/stackchk.h>
 
 /* functions */
 void stackchk03_blown_stack_reporter(
-  const rtems_stack_checker_info *info
+  const Thread_Control *running,
+  bool pattern_ok
 );
 
 const char rtems_test_name[] = "STACKCHK03";
