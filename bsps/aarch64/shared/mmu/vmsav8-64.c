@@ -53,6 +53,7 @@ rtems_status_code aarch64_mmu_map(
   };
   rtems_status_code sc;
   ISR_Level        level;
+  aarch64_mmu_control *control = &aarch64_mmu_instance;
 
   /*
    * Disable interrupts so they don't run while the MMU tables are being
@@ -61,7 +62,7 @@ rtems_status_code aarch64_mmu_map(
   _ISR_Local_disable( level );
 
   sc = aarch64_mmu_set_translation_table_entries(
-    (uint64_t *) bsp_translation_table_base,
+    control,
     &config
   );
   _AARCH64_Data_synchronization_barrier();
