@@ -39,6 +39,8 @@
 
 #include <rtems/rtems/options.h>
 
+#include <stdbool.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -59,11 +61,9 @@ extern "C" {
  *  This function returns TRUE if the RTEMS_NO_WAIT option is enabled in
  *  option_set, and FALSE otherwise.
  */
-static inline bool _Options_Is_no_wait (
-  rtems_option option_set
-)
+static inline bool _Options_Is_no_wait( rtems_option option_set )
 {
-   return (option_set & RTEMS_NO_WAIT) ? true : false;
+  return ( option_set & RTEMS_NO_WAIT ) != 0;
 }
 
 /**
@@ -72,11 +72,9 @@ static inline bool _Options_Is_no_wait (
  *  This function returns TRUE if the RTEMS_EVENT_ANY option is enabled in
  *  OPTION_SET, and FALSE otherwise.
  */
-static inline bool _Options_Is_any (
-  rtems_option option_set
-)
+static inline bool _Options_Is_any( rtems_option option_set )
 {
-   return (option_set & RTEMS_EVENT_ANY) ? true : false;
+  return ( option_set & RTEMS_EVENT_ANY ) != 0;
 }
 
 /**@}*/
