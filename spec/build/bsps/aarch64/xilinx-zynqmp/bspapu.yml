@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: aarch64
-bsp: zynqmp_zu3eg
+bsp: zynqmp_apu
 build-type: bsp
 cflags: []
 copyrights:
-- Copyright (C) 2020 On-Line Applications Research (OAR)
+- Copyright (C) 2024 embedded brains GmbH
 cppflags: []
 enabled-by: true
 family: xilinx-zynqmp

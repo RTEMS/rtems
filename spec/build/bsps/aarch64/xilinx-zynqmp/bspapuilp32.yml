@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: aarch64
-bsp: zynqmp_zu3eg_ilp32
+bsp: zynqmp_apu_ilp32
 build-type: bsp
 cflags: []
 copyrights:
