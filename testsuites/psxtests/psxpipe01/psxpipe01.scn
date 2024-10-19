@@ -1,6 +1,8 @@
 *** TEST POSIX PIPE CREATION - 01 ***
 Init - attempt to create pipe -- expect EFAULT
 Init - create pipe -- OK
+Init - dup pipe -- OK
+Init - read pipe -- OK
 Init - create pipe -- OK
 Init - attempt to create pipe -- expect ENOMEM
 Init - create pipe -- expect ENFILE

@@ -58,6 +58,7 @@ static int duplicate_iop( rtems_libio_t *iop )
     rtems_filesystem_location_clone( &diop->pathinfo, &iop->pathinfo );
     rtems_filesystem_instance_unlock( &iop->pathinfo );
 
+    rtems_libio_iop_flags_set( diop, rtems_libio_fcntl_flags( oflag ) );
     /*
      * XXX: We call the open handler here to have a proper open and close pair.
      *
@@ -65,10 +66,7 @@ static int duplicate_iop( rtems_libio_t *iop )
      */
     rv = (*diop->pathinfo.handlers->open_h)( diop, NULL, oflag, 0 );
     if ( rv == 0 ) {
-      rtems_libio_iop_flags_set(
-        diop,
-        LIBIO_FLAGS_OPEN | rtems_libio_fcntl_flags( oflag )
-      );
+      rtems_libio_iop_flags_set( diop, LIBIO_FLAGS_OPEN );
       rv = rtems_libio_iop_to_descriptor( diop );
     } else {
       rtems_libio_free( diop );

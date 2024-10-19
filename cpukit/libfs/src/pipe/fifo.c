@@ -151,6 +151,9 @@ void pipe_release(
   pipe_control_t *pipe = *pipep;
   uint32_t mode;
 
+  if (!pipe)
+    return;
+
   pipe_lock();
   PIPE_LOCK(pipe);
 
@@ -275,6 +278,9 @@ ssize_t pipe_read(
 {
   int chunk, chunk1, read = 0, ret = 0;
 
+  if (!pipe)
+    return -EPIPE;
+
   PIPE_LOCK(pipe);
 
   while (PIPE_EMPTY(pipe)) {
@@ -330,6 +336,9 @@ ssize_t pipe_write(
 )
 {
   int chunk, chunk1, written = 0, ret = 0;
+
+  if (!pipe)
+    return -EPIPE;
 
   /* Write nothing */
   if (count == 0)
@@ -401,6 +410,10 @@ int pipe_ioctl(
   rtems_libio_t   *iop
 )
 {
+
+  if (!pipe)
+    return -EPIPE;
+
   if (cmd == FIONREAD) {
     if (buffer == NULL)
       return -EFAULT;

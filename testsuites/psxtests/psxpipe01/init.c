@@ -45,14 +45,28 @@ const char rtems_test_name[] = "PSXPIPE 1";
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument ignored);
 
+static int dup_fd_test(int *fd)
+{
+  int r;
+
+  if ((r = fcntl(*fd, F_DUPFD, 0)) < 0 ||
+      fcntl(r, F_SETFD, FD_CLOEXEC) < 0 ||
+      fcntl(r, F_SETFL, O_NONBLOCK))
+    return -1;
+  (void)close(*fd);
+  (*fd = r);
+  return 0;
+}
+
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
   int fd[2] = {0,0};
-  int dummy_fd[2] = {0,0};
+  int dummy_fd[4] = {0,0};
   int status = 0;
   void *opaque = NULL;
+  char c;
 
   TEST_BEGIN();
 
@@ -65,8 +79,16 @@ rtems_task Init(
   status = pipe( fd );
   rtems_test_assert( status == 0 );
 
-  status = close( fd[0] );
-  status |= close( fd[1] );
+  puts( "Init - dup pipe -- OK" );
+  status = dup_fd_test(&fd[0]);
+  status |= dup_fd_test(&fd[1]);
+  rtems_test_assert( status == 0 );
+
+  /* close pipe writer, so reader can return immediately */
+  puts( "Init - read pipe -- OK" );
+  status = close( fd[1] );
+  status |= read(fd[0], &c, 1);
+  status |= close( fd[0] );
   rtems_test_assert( status == 0 );
 
   puts( "Init - create pipe -- OK" );
@@ -91,6 +113,10 @@ rtems_task Init(
   rtems_test_assert( dummy_fd[0] != -1 );
   dummy_fd[1] = open( "/file02", O_RDONLY | O_CREAT, S_IRWXU );
   rtems_test_assert( dummy_fd[1] != -1 );
+  dummy_fd[2] = open( "/file03", O_RDONLY | O_CREAT, S_IRWXU );
+  rtems_test_assert( dummy_fd[2] != -1 );
+  dummy_fd[3] = open( "/file04", O_RDONLY | O_CREAT, S_IRWXU );
+  rtems_test_assert( dummy_fd[3] != -1 );
 
   /* case where fifo_open for read => open fails */
   puts( "Init - create pipe -- expect ENFILE" );
@@ -98,8 +124,8 @@ rtems_task Init(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENFILE );
 
-  status = close( dummy_fd[1] );
-  status |= unlink( "/file02" );
+  status = close( dummy_fd[3] );
+  status |= unlink( "/file04" );
   rtems_test_assert( status == 0 );
 
   /* case where fifo_open for write => open fails */
@@ -110,6 +136,10 @@ rtems_task Init(
 
   status = close( dummy_fd[0] );
   status |= unlink( "/file01" );
+  status |= close( dummy_fd[1] );
+  status |= unlink( "/file02" );
+  status |= close( dummy_fd[2] );
+  status |= unlink( "/file03" );
   rtems_test_assert( status == 0 );
 
   TEST_END();
@@ -121,7 +151,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 5
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 7
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
