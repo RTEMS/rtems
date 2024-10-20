@@ -7,7 +7,7 @@ cppflags: []
 cxxflags: []
 enabled-by:
 - bsps/aarch64/xilinx_versal
-- aarch64/zynqmp_a53
+- aarch64/zynqmp_apu
 - aarch64/zynqmp_cfc400x
 - aarch64/zynqmp_qemu
 - aarch64/zynqmp_zu3eg
