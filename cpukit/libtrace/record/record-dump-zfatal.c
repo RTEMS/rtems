@@ -34,6 +34,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/score/isrlock.h>
 #include <rtems/score/smpimpl.h>
+#include <rtems/score/timecounter.h>
 
 #if ISR_LOCK_NEEDS_OBJECT
 static ISR_lock_Control _Record_Dump_base64_zlib_lock =
@@ -50,14 +51,39 @@ void _Record_Fatal_dump_base64_zlib(
   Internal_errors_t      code
 )
 {
-  ISR_lock_Context lock_context;
+  ISR_lock_Context     lock_context;
+  Per_CPU_Control     *cpu_self;
+  rtems_record_context record_context;
+  sbintime_t           now;
 
-  rtems_record_produce_2(
+  cpu_self = _Per_CPU_Get();
+
+  now = _Timecounter_Sbinuptime();
+  rtems_record_prepare_critical( &record_context, cpu_self );
+  rtems_record_add(
+    &record_context,
+    RTEMS_RECORD_UPTIME_LOW,
+    (uint32_t) ( now >> 0 )
+  );
+  rtems_record_add(
+    &record_context,
+    RTEMS_RECORD_UPTIME_HIGH,
+    (uint32_t) ( now >> 32 )
+  );
+  rtems_record_commit_critical( &record_context );
+
+  rtems_record_prepare_critical( &record_context, cpu_self );
+  rtems_record_add(
+    &record_context,
     RTEMS_RECORD_FATAL_SOURCE,
-    source,
+    source
+  );
+  rtems_record_add(
+    &record_context,
     RTEMS_RECORD_FATAL_CODE,
     code
   );
+  rtems_record_commit_critical( &record_context );
 
 #if defined(RTEMS_SMP)
   if (
