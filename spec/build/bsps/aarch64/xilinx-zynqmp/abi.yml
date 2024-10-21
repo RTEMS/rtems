@@ -8,8 +8,8 @@ copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default:
 - enabled-by:
+  - aarch64/zynqmp_apu_ilp32
   - aarch64/zynqmp_qemu_ilp32
-  - aarch64/zynqmp_zu3eg_ilp32
   value:
   - -mabi=ilp32
   - -mno-outline-atomics

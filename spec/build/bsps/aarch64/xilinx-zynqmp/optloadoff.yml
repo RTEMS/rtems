@@ -10,9 +10,8 @@ copyrights:
 default:
 - enabled-by:
   - aarch64/zynqmp_apu
+  - aarch64/zynqmp_apu_ilp32
   - aarch64/zynqmp_cfc400x
-  - aarch64/zynqmp_zu3eg_ilp32
-  - aarch64/zynqmp_zu3eg
   value: 0x00000000
 - enabled-by: true
   value: 0x00008000

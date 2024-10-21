@@ -17,7 +17,7 @@ default:
   value: arm/cortexa9
 - enabled-by:
   - aarch64/zynqmp_qemu_ilp32
-  - aarch64/zynqmp_zu3eg_ilp32
+  - aarch64/zynqmp_apu_ilp32
   value: arm/ARMv8/32bit
 - enabled-by:
   - aarch64/xilinx_versal_aiedge
@@ -26,7 +26,6 @@ default:
   - aarch64/zynqmp_apu
   - aarch64/zynqmp_cfc400x
   - aarch64/zynqmp_qemu
-  - aarch64/zynqmp_zu3eg
   value: arm/ARMv8/64bit
 description: Set the Xilinx support path
 enabled-by: true

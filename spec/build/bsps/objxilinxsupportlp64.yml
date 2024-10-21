@@ -10,7 +10,6 @@ enabled-by:
 - aarch64/zynqmp_apu
 - aarch64/zynqmp_cfc400x
 - aarch64/zynqmp_qemu
-- aarch64/zynqmp_zu3eg
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}

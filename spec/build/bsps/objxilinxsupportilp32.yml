@@ -6,8 +6,8 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by:
+- aarch64/zynqmp_apu_ilp32
 - aarch64/zynqmp_qemu_ilp32
-- aarch64/zynqmp_zu3eg_ilp32
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
