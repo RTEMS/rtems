@@ -80,14 +80,18 @@ static rtems_record_client_status client_handler(
   return RTEMS_RECORD_CLIENT_SUCCESS;
 }
 
-static void generate_events(void)
+static void wait(void)
 {
   int i;
-  uint32_t level;
 
   for (i = 0; i < 10; ++i) {
     rtems_task_wake_after(1);
   }
+}
+
+static void generate_events(void)
+{
+  uint32_t level;
 
   rtems_record_line();
   rtems_record_line_2(RTEMS_RECORD_USER_0, 0);
@@ -187,6 +191,7 @@ static void Init(rtems_task_argument arg)
   TEST_BEGIN();
   ctx = &test_instance;
 
+  wait();
   generate_events();
 
   cs = rtems_record_client_init(&ctx->client, client_handler, NULL);
@@ -203,11 +208,9 @@ static void Init(rtems_task_argument arg)
 
   rtems_record_client_destroy(&ctx->client);
 
+  wait();
   generate_events();
-
-  _Record_Fatal_dump_base64(RTEMS_FATAL_SOURCE_APPLICATION, false, 123);
-
-  generate_events();
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, 0 );
 }
 
 static void fatal_extension(
@@ -216,6 +219,8 @@ static void fatal_extension(
   rtems_fatal_code code
 )
 {
+  generate_events();
+  _Record_Fatal_dump_base64(source, always_set_to_false, code);
   TEST_END();
 }
 

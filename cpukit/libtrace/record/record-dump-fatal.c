@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2020, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,7 +30,17 @@
 #endif
 
 #include <rtems/recorddump.h>
+
 #include <rtems/bspIo.h>
+#include <rtems/score/isrlock.h>
+#include <rtems/score/smpimpl.h>
+
+#if ISR_LOCK_NEEDS_OBJECT
+static ISR_lock_Control _Record_Dump_base64_lock =
+  ISR_LOCK_INITIALIZER( "Record Dump base64" );
+#endif
+
+static bool _Record_Dump_base64_done;
 
 void _Record_Fatal_dump_base64(
   Internal_errors_Source source,
@@ -38,13 +48,36 @@ void _Record_Fatal_dump_base64(
   Internal_errors_t      code
 )
 {
+  ISR_lock_Context lock_context;
+
   rtems_record_produce_2(
     RTEMS_RECORD_FATAL_SOURCE,
     source,
     RTEMS_RECORD_FATAL_CODE,
     code
   );
-  printk( "\n*** BEGIN OF RECORDS BASE64 ***\n" );
-  rtems_record_dump_base64( rtems_put_char, NULL );
-  printk( "\n*** END OF RECORDS BASE64 ***\n" );
+
+#if defined(RTEMS_SMP)
+  if (
+    source == RTEMS_FATAL_SOURCE_SMP &&
+    code == SMP_FATAL_SHUTDOWN_RESPONSE
+  ) {
+    return;
+  }
+
+  /* Request other online processors to shutdown to stop event generation */
+  _SMP_Request_shutdown();
+#endif
+
+  _ISR_lock_Acquire( &_Record_Dump_base64_lock, &lock_context );
+
+  if ( !_Record_Dump_base64_done ) {
+    _Record_Dump_base64_done = true;
+
+    printk( "\n*** BEGIN OF RECORDS BASE64 ***\n" );
+    rtems_record_dump_base64( rtems_put_char, NULL );
+    printk( "\n*** END OF RECORDS BASE64 ***\n" );
+  }
+
+  _ISR_lock_Release( &_Record_Dump_base64_lock, &lock_context );
 }
