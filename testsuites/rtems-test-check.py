@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 #
 # Copyright 2018 Chris Johns (chrisj@rtems.org)
 # All rights reserved.
@@ -33,12 +33,9 @@
 # Python version the rtems-test-check script.
 #
 
-from __future__ import print_function
-
 import os
 import os.path
 import re
-import sre_constants
 import sys
 
 def eprint(*args, **kwargs):
@@ -219,7 +216,7 @@ for test in tests:
                 for e in testdata['rexclude']:
                     try:
                         m = re.compile(e).match(test)
-                    except sre_constants.error as ree:
+                    except re.error as ree:
                         eprint('error: invalid rexclude regx: %s: %s' % (e, ree))
                         print('INVALID-TEST-DATA')
                         sys.exit(1)
@@ -229,7 +226,7 @@ for test in tests:
                             for i in testdata['rinclude']:
                                 try:
                                     m = re.compile(i).match(test)
-                                except sre_constants.error as ree:
+                                except re.error as ree:
                                     eprint('error: invalid rinclude regx: %s: %s' % (i, ree))
                                     print('INVALID-TEST-DATA')
                                     sys.exit(1)
@@ -248,7 +245,7 @@ for test in tests:
         for ftest in testdata['flags'][mode]:
             try:
                 m = re.compile(ftest).match(test)
-            except sre_constants.error as ref:
+            except re.error as ref:
                 eprint('error: invalid flags test regx: %s: %s' % (ftest, ref))
                 print('INVALID-TEST-DATA')
                 sys.exit(1)
