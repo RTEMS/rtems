@@ -46,8 +46,8 @@ static void kernel_summary(void) {
   printf(
     "RTEMS: %d.%d.%d",
     rtems_version_major(), rtems_version_minor(), rtems_version_revision());
-  if (rtems_version_control_key_is_valid(rtems_version_control_key())) {
-    printf(" (%s)", rtems_version_control_key());
+  if (rtems_version_release_label_is_valid()) {
+    printf(" (%s)", rtems_version_release_label());
   }
 #if RTEMS_SMP
     printf(" SMP:%d cores", rtems_scheduler_get_processor_maximum());
@@ -130,11 +130,11 @@ static int rtems_shell_main_rtems(
       tools_summary();
       opts_summary();
     } else {
-      printf("error: invalid command\n");
+      printf("error: invalid command; try `help`\n");
       return 1;
     }
   } else {
-    printf("error: invalid command\n");
+    printf("error: invalid command; try `help`\n");
     return 1;
   }
   return 0;

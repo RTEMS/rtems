@@ -104,6 +104,8 @@ int rtems_version_minor( void );
 int rtems_version_revision( void );
 
 /**
+ * @deprecated
+ *
  * @brief Returns the version control key for the current version of code that
  * has been built.
  *
@@ -118,6 +120,8 @@ int rtems_version_revision( void );
 const char *rtems_version_control_key( void );
 
 /**
+ * @deprecated
+ *
  * @brief Returns true, if the version control key is valid, otherwise false.
  *
  * @retval true The version control key is valid.
@@ -127,6 +131,28 @@ static inline bool rtems_version_control_key_is_valid( const char *key )
 {
   return key[ 0 ] != '\0';
 }
+
+/**
+ * @brief Returns the revision label for the current version of code
+ * that has been built.
+ *
+ * The release label is a string of characters. Only the RTEMS project
+ * released sources can have an empty release label.
+ *
+ * Use rtems_version_release_label_is_valid() to check if the release label
+ * is valid.
+ *
+ * @return The release label.
+ */
+const char *rtems_version_release_label( void );
+
+/**
+ * @brief Returns true, if the release label is valid, otherwise false.
+ *
+ * @retval true The release label is valid.
+ * @retval false Otherwise.
+ */
+bool rtems_version_release_label_is_valid( void );
 
 /**
  * @brief Returns the board support package name.

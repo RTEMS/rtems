@@ -10,15 +10,16 @@
  *   and rtems_version_revision().
  *
  * The version strings are created from the various pieces of version
- * information.  The main version number is part of the build system and is
- * stamped into <rtems/score/cpuopts.h>.  The version control key string is
- * extracted from the version control tool when the code is being built and is
- * updated if it has changed.  It is defined in "version-vc-key.h".  The key
- * may indicate there are local modification.
+ * information.  The main version number is part of the build system
+ * and is stamped into <rtems/score/cpuopts.h>. The revision label is
+ * determined by the build system and is a string. It can be used and
+ * so set when deploying the sources or the release label can be
+ * formed using the version control tool when the code is not released
+ * and being built with a version controlled repository.
  */
 
 /*
- *  Copyright (C) 2017.
+ *  Copyright (C) 2017, 2024.
  *  Chris Johns <chrisj@rtems.org>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -83,4 +84,23 @@ const char *rtems_version_control_key( void )
 #else
   return "";
 #endif
+}
+
+const char *rtems_version_release_label( void )
+{
+  /*
+   * RTEMS 5 and 6 only provide the VC key. The VC key header will be
+   * moved to `version-release-label.h` after RTEMS 6
+   */
+#ifdef RTEMS_VERSION_CONTROL_KEY
+  return RTEMS_VERSION_CONTROL_KEY;
+#else
+  return "";
+#endif
+}
+
+bool rtems_version_release_label_is_valid( void )
+{
+  const char* release_label = rtems_version_release_label( );
+  return release_label[ 0 ] != '\0';
 }

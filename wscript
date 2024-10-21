@@ -1391,10 +1391,19 @@ def check_environment(conf):
 
 def load_version(ctx):
     global default_prefix
+
+    def _check_num(s):
+        try:
+            i = int(s)
+        except:
+            ctx.fatal(
+                "Invalid VERSION number: version number is not a number: " + s)
+
     cp = configparser.ConfigParser()
     version_file = "VERSION"
     version_major = None
     version_minor = None
+    version_revision = None
     version_label = None
     prefix = None
     if cp.read([version_file]):
@@ -1403,24 +1412,33 @@ def load_version(ctx):
             # The revision is <major>.<minor>[-label]
             # break is up and update the version
             if "." not in value:
-                ctx.fatal("Invalid VERSION revision: no dot")
-            vs = value.split(".", 1)
+                ctx.fatal(
+                    "Invalid VERSION revision: no number (dot) separator")
+            # version-string => major.minor[.revsion][-label]
+            vs = value.split(".", 2)
+            _check_num(vs[0])
             version_major = vs[0]
-            vs[0] = vs[1]
-            if "." in vs[0]:
-                ctx.fatal("Invalid VERSION revision: too many dots")
-            if "-" in vs[0]:
-                value = vs[0]
-                vs = value.split("-", 1)
-                version_label = vs[1]
-            version_minor = vs[0]
+            if "-" in vs[-1]:
+                ls = vs[-1].split("-", 1)
+                vs[-1] = ls[0]
+                version_label = ls[1]
+            _check_num(vs[1])
+            version_minor = vs[1]
+            if len(vs) == 3:
+                _check_num(vs[2])
+                version_revision = vs[2]
             prefix = "/opt/rtems/" + version_major
         except configparser.NoOptionError:
             pass
+    if version_label is None and version_revision is not None:
+        ctx.fatal(
+            "Invalid VERSION revision: a revision number requires a label")
     if version_major is not None:
         version["__RTEMS_MAJOR__"] = version_major
     if version_minor is not None:
         version["__RTEMS_MINOR__"] = version_minor
+    if version_revision is not None:
+        version["__RTEMS_REVISION__"] = version_revision
     if version_label is not None:
         version["RTEMS_RELEASE_VERSION_LABEL"] = version_label
     # Checking minor insures major and minor are valid
@@ -1432,6 +1450,8 @@ def load_version(ctx):
 def configure_version(conf):
     version_label = load_version(conf)
     v_str = version["__RTEMS_MAJOR__"] + "." + version["__RTEMS_MINOR__"]
+    if int(version["__RTEMS_REVISION__"]) != 0 and version_label != "":
+        v_str += "." + version["__RTEMS_REVISION__"]
     if version_label != "":
         v_str += "." + version_label
     conf.msg("Configure RTEMS version", v_str, color="YELLOW")
