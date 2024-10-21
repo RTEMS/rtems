@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 #
 # RTEMS (http://www.rtems.org/)
 # Copyright 2020, 2022 Chris Johns (chrisj@rtems.org)
