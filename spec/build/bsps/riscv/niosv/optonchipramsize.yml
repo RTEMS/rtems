@@ -10,7 +10,7 @@ copyrights:
 - Copyright (C) 2024 Kevin Kirspel
 default:
 - enabled-by: true
-  value: 0
+  value: 8192
 description: ''
 enabled-by: true
 format: '{:#010x}'
