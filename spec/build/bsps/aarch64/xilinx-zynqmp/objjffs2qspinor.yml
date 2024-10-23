@@ -8,8 +8,6 @@ cxxflags: []
 enabled-by: true
 includes:
 - bsps/include/dev/spi/
-- bsps/include/xil/
-- bsps/include/xil/${XIL_SUPPORT_PATH}/
 install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:

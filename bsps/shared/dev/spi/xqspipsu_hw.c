@@ -36,8 +36,12 @@
 
 #include "xqspipsu.h"
 #include "xqspipsu_control.h"
+#ifndef __rtems__
 #if defined (__aarch64__)
 #include "xil_smc.h"
+#endif
+#else
+#include <bsp/xil-compat.h>
 #endif
 /************************** Constant Definitions *****************************/
 

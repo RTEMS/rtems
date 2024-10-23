@@ -98,8 +98,10 @@
 /***************************** Include Files *********************************/
 #include "xnandpsu.h"
 #include "xnandpsu_bbm.h"
+#ifndef __rtems__
 #include "sleep.h"
 #include "xil_mem.h"
+#endif
 /************************** Constant Definitions *****************************/
 
 static const XNandPsu_EccMatrix EccMatrix[] = {

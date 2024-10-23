@@ -181,12 +181,18 @@ extern "C" {
 
 /***************************** Include Files *********************************/
 
+#ifndef __rtems__
 #include "xstatus.h"
+#endif
 #include "xqspipsu_hw.h"
+#ifndef __rtems__
 #include "xil_cache.h"
 #include "xil_mem.h"
 #if defined  (XCLOCKING)
 #include "xil_clocking.h"
+#endif
+#else
+#include <bsp/xil-compat.h>
 #endif
 
 /**************************** Type Definitions *******************************/

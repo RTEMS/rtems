@@ -167,6 +167,7 @@ extern "C" {
 #endif
 
 /***************************** Include Files *********************************/
+#ifndef __rtems__
 #include "xil_types.h"
 #include <string.h>
 #include "xstatus.h"
@@ -176,6 +177,12 @@ extern "C" {
 #include "xil_cache.h"
 #if defined  (XCLOCKING)
 #include "xil_clocking.h"
+#endif
+#else
+#include <bsp/xil-compat.h>
+#include <string.h>
+#include "xnandpsu_hw.h"
+#include "xnandpsu_onfi.h"
 #endif
 /************************** Constant Definitions *****************************/
 

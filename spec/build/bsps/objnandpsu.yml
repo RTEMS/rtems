@@ -9,8 +9,6 @@ cxxflags: []
 enabled-by: true
 includes:
 - bsps/include/dev/nand/
-- bsps/include/xil/
-- bsps/include/xil/${XIL_SUPPORT_PATH}/
 install:
 - destination: ${BSP_INCLUDEDIR}/dev/nand
   source:

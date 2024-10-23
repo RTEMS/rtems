@@ -6,9 +6,7 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by: true
-includes:
-- bsps/include/xil
-- bsps/include/xil/${XIL_SUPPORT_PATH}
+includes: []
 install: []
 ldflags: []
 links:
@@ -86,8 +84,6 @@ links:
   uid: linkcmdsmemory
 - role: build-dependency
   uid: ../../bspopts
-- role: build-dependency
-  uid: ../../objxilinxsupport
 type: build
 use-after: []
 use-before: []

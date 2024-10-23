@@ -57,8 +57,6 @@ links:
 - role: build-dependency
   uid: ../../objmem
 - role: build-dependency
-  uid: ../../objxilinxsupport
-- role: build-dependency
   uid: ../../optcachedata
 - role: build-dependency
   uid: ../../optcacheinst

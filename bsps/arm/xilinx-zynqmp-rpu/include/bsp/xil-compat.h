@@ -1,7 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
- * Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
+ * @ingroup RTEMSBSPsArmXilinxZynqMPRPU
+ *
+ * @brief This header file provides BSP-specific interfaces.
+ */
+
+/*
+ * Copyright (C) 2024 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -25,20 +33,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XIL_PRINTF_H
-#define XIL_PRINTF_H
+#ifndef LIBBSP_ARM_XILINX_ZYNQMP_RPU_BSP_XIL_COMPAT_H
+#define LIBBSP_ARM_XILINX_ZYNQMP_RPU_BSP_XIL_COMPAT_H
 
-#ifdef __cplusplus
-extern "C" {
+#include <bsp/xil-compat-common.h>
+#define ARMR5
+
 #endif
-
-#include <stdio.h>
-
-#define xil_printf(args...) printf(args)
-#define print(args...) printf(args)
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif	/* XIL_PRINTF_H */

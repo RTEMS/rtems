@@ -17,9 +17,6 @@ install:
   - bsps/microblaze/microblaze_fpga/include/bsp/jffs2_qspi.h
   - bsps/microblaze/microblaze_fpga/include/bsp/microblaze-gpio.h
   - bsps/microblaze/include/bsp/microblaze-fdt-support.h
-  - bsps/microblaze/include/common/xil_types.h
-  - bsps/microblaze/include/dev/serial/uartlite.h
-  - bsps/microblaze/include/dev/serial/uartlite_l.h
 links: []
 source:
 - bsps/microblaze/microblaze_fpga/clock/clock.c

@@ -1,8 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsAArch64XilinxZynqMP
+ *
+ * @brief This header file provides BSP-specific interfaces.
+ */
+
 /*
- *  COPYRIGHT (c) 2023.
- *  On-Line Applications Research Corporation (OAR).
+ * Copyright (C) 2024 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,12 +33,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_SHARED_XIL_SYSTEM_H
-#define LIBBSP_SHARED_XIL_SYSTEM_H
+#ifndef LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_XIL_COMPAT_H
+#define LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_XIL_COMPAT_H
 
-/*
- * This file defines anything necessary for the Xilinx support infrastructure to
- * function properly on a particular platform.
- */
+#include <bsp/xil-compat-common.h>
 
 #endif

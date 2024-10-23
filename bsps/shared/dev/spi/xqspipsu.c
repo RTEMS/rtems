@@ -83,8 +83,10 @@
 
 #include "xqspipsu.h"
 #include "xqspipsu_control.h"
+#ifndef __rtems__
 #include "sleep.h"
-#ifdef __rtems__
+#else
+#include <bsp/xil-compat.h>
 #include <rtems/rtems/cache.h>
 #endif
 

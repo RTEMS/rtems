@@ -32,7 +32,11 @@ extern "C" {
 #endif
 
 /***************************** Include Files *********************************/
+#ifndef __rtems__
 #include "xil_types.h"
+#else
+#include <bsp/xil-compat.h>
+#endif
 
 /************************** Constant Definitions *****************************/
 /* Standard ONFI 3.1 Commands */

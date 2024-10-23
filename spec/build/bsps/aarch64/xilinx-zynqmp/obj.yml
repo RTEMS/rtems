@@ -15,7 +15,9 @@ install:
   source:
   - bsps/aarch64/xilinx-zynqmp/include/bsp/ecc.h
   - bsps/aarch64/xilinx-zynqmp/include/bsp/irq.h
+  - bsps/aarch64/xilinx-zynqmp/include/bsp/xil-compat.h
   - bsps/aarch64/include/bsp/aarch64-mmu.h
+  - bsps/include/bsp/xil-compat-common.h
 links: []
 source:
 - bsps/aarch64/shared/cache/cache.c

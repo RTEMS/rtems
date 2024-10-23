@@ -47,16 +47,7 @@ extern "C" {
 #include "xil_assert.h"
 #include "xil_io.h"
 #else
-#include <common/xil_types.h>
-static inline u32 Xil_In32(UINTPTR Addr)
-{
-	return *(volatile u32 *) Addr;
-}
-static inline void Xil_Out32(UINTPTR Addr, u32 Value)
-{
-	volatile u32 *LocalAddr = (volatile u32 *)Addr;
-	*LocalAddr = Value;
-}
+#include <bsp/xil-compat.h>
 #endif /* __rtems__ */
 
 /*

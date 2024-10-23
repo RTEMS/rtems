@@ -43,10 +43,14 @@ extern "C" {
 
 /***************************** Include Files *********************************/
 
+#ifndef __rtems__
 #include "xil_types.h"
 #include "xil_assert.h"
 #include "xil_io.h"
 #include "xparameters.h"
+#else
+#include <bsp/xil-compat.h>
+#endif
 
 /************************** Constant Definitions *****************************/
 /**

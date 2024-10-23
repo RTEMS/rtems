@@ -14,7 +14,9 @@ install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/aarch64/xilinx-versal/include/bsp/irq.h
+  - bsps/aarch64/xilinx-versal/include/bsp/xil-compat.h
   - bsps/aarch64/include/bsp/aarch64-mmu.h
+  - bsps/include/bsp/xil-compat-common.h
 - destination: ${BSP_INCLUDEDIR}/dev/serial
   source:
   - bsps/aarch64/xilinx-versal/include/dev/serial/versal-uart.h

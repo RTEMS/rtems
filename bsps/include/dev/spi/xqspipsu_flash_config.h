@@ -41,7 +41,11 @@ extern "C" {
 
 /***************************** Include Files *********************************/
 
+#ifndef __rtems__
 #include "xparameters.h"	/* SDK generated parameters */
+#else
+#include <bsp/xil-compat.h>
+#endif
 #include "xqspipsu.h"		/* QSPIPSU device driver */
 
 /************************** Constant Definitions *****************************/

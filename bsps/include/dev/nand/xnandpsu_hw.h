@@ -39,7 +39,11 @@ extern "C" {
 #endif
 
 /***************************** Include Files *********************************/
+#ifndef __rtems__
 #include "xil_io.h"
+#else
+#include <bsp/xil-compat.h>
+#endif
 
 /************************** Constant Definitions *****************************/
 

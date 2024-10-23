@@ -35,10 +35,14 @@
 
 /***************************** Include Files *********************************/
 #include <string.h>	/**< For Xil_MemCpy and memset */
+#ifndef __rtems__
 #include "xil_types.h"
+#endif
 #include "xnandpsu.h"
 #include "xnandpsu_bbm.h"
+#ifndef __rtems__
 #include "xil_mem.h"
+#endif
 
 /************************** Constant Definitions *****************************/
 
