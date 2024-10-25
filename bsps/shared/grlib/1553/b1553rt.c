@@ -745,7 +745,7 @@ static void b1553rt_interrupt(void *arg)
         tsw = READ_DMA(&rt->mem[tx*0x3E0+suba]); 
 
         /* Build Message Information Word (B1553BRM-style) */
-        miw = (wc<<11) | (tsw&RT_TSW_BUS)>>4 | !(tsw&RT_TSW_OK)>>7 | (tsw&RT_TSW_ILL)>>5 | 
+        miw = (wc<<11) | (tsw&RT_TSW_BUS)>>4 | !(tsw&RT_TSW_OK)<<7 | (tsw&RT_TSW_ILL)>>5 | 
             (tsw&RT_TSW_PAR)>>5 | (tsw&RT_TSW_MAN)>>7;
 
         descriptor = (tx << 5) | suba;
