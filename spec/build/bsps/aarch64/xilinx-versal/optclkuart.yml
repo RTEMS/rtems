@@ -6,7 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
 default:
-- enabled-by: aarch64/xilinx_versal_qemu
+- enabled-by: aarch64/versal_qemu
   value: 24000000
 - enabled-by: true
   value: 100000000

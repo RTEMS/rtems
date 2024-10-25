@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: aarch64
-bsp: xilinx_versal_vck190
+bsp: versal_vck190
 build-type: bsp
 cflags: []
 copyrights:
