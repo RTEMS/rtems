@@ -329,7 +329,7 @@ static int rtems_shell_line_editor(
   }
 
   if (out != NULL && prompt != NULL)
-    fprintf(out, "\r%s", prompt);
+    fprintf(out, "%s", prompt);
 
   line[0] = 0;
   new_line[0] = 0;
