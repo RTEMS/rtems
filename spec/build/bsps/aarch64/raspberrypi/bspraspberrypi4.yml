@@ -40,8 +40,6 @@ links:
 - role: build-dependency
   uid: abi
 - role: build-dependency
-  uid: ../../optconsoleirq
-- role: build-dependency
   uid: ../../optcachedata
 - role: build-dependency
   uid: ../../optcacheinst
@@ -56,9 +54,9 @@ links:
 - role: build-dependency
   uid: ../../obj
 - role: build-dependency
-  uid: ../../objdevserialarmpl011
-- role: build-dependency
   uid: ../../objirq
+- role: build-dependency
+  uid: objconsole
 - role: build-dependency
   uid: objgpio
 - role: build-dependency
@@ -66,7 +64,6 @@ links:
 - role: build-dependency
   uid: objwatchdog
 source:
-- bsps/aarch64/raspberrypi/console/console.c
 - bsps/aarch64/raspberrypi/start/bspstart.c
 - bsps/aarch64/raspberrypi/start/bspstarthooks.c
 - bsps/aarch64/raspberrypi/start/bspstartmmu.c
@@ -75,8 +72,6 @@ source:
 - bsps/aarch64/shared/mmu/vmsav8-64.c
 - bsps/aarch64/shared/start/start-cpu-mpidr.S
 - bsps/shared/dev/irq/arm-gicv2-get-attributes.c
-- bsps/shared/dev/serial/console-termios-init.c
-- bsps/shared/dev/serial/console-termios.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/irq/irq-default-handler.c

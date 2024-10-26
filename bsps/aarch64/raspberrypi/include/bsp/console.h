@@ -3,14 +3,14 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsAArch64Raspberrypi4
+ * @ingroup RTEMSBSPsAArch64RaspberryPi
  *
- * @brief Core BSP definitions
+ * @brief Console Configuration
  */
 
 /*
- * Copyright (C) 2022 Mohd Noor Aman
- *
+ * Copyright (C) 2023 Utkarsh Verma
+ * Copyright (C) 2024 Ning Yang
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,40 +34,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H
-#define LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H
-
-/**
- * @addtogroup RTEMSBSPsAArch64
- *
- * @{
- */
+#ifndef LIBBSP_AARCH64_RASPBERRYPI_BSP_CONSOLE_H
+#define LIBBSP_AARCH64_RASPBERRYPI_BSP_CONSOLE_H
 
 #include <bspopts.h>
+#include <bsp/raspberrypi-uart.h>
 
-#ifndef ASM
+#define CONSOLE_DEVICES RASPBERRYPI_CONSOLE_DEVICES
 
-#include <bsp/default-initial-extension.h>
-#include <bsp/start.h>
+#define CONSOLE_DEVICE_PORT2ENUM(port_no) UART##port_no
+#define CONSOLE_DEVICE_ENUM(port_no, ...) CONSOLE_DEVICE_PORT2ENUM(port_no),
 
-#include <rtems.h>
+typedef enum {
+  CONSOLE_DEVICES(CONSOLE_DEVICE_ENUM)
+  CONSOLE_DEVICE_COUNT,
+} raspberrypi_console_device_port;
 
-/*Raspberry pi MMU initialization */
-BSP_START_TEXT_SECTION void raspberrypi_4_setup_mmu_and_cache(void);
+/**
+ * @brief Initialize gpio of UART and install UART to the dev directory.
+ *
+ * @param uart_num The optional devices are UART0, UART2, UART3, UART4, UART5.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_NUMBER This status code indicates that a specified
+ *         number was invalid.
+ * @retval RTEMS_NO_MEMORY Not enough memory to create a device node.
+ * @retval RTEMS_UNSATISFIED Creation of the device file failed.
+ * @retval RTEMS_INCORRECT_STATE Termios is not initialized.
+ */
+rtems_status_code raspberrypi_uart_init(
+  raspberrypi_console_device_port uart_num
+);
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#undef CONSOLE_DEVICE_ENUM
 
-#define BSP_ARM_GIC_CPUIF_BASE 0xFF842000
-#define BSP_ARM_GIC_DIST_BASE 0xFF841000
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* ASM */
-
-/** @} */
-
-#endif /* LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H */
+#endif /* LIBBSP_AARCH64_RASPBERRYPI_BSP_CONSOLE_H */

@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+  - get-string: null
+  - define-unquoted: null
+  - assert-in-set:
+    - UART0
+    - UART2
+    - UART3
+    - UART4
+    - UART5
+build-type: option
+copyrights:
+  - Copyright (C) 2023 Utkarsh Verma
+default:
+  - enabled-by:
+      - aarch64/raspberrypi4b
+    value: UART0
+description: Default UART port for the console device.
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_CONSOLE_PORT
+type: build

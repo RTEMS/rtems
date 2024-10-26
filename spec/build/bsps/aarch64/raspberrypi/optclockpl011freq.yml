@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+  - get-integer: null
+  - define: null
+build-type: option
+copyrights:
+  - Copyright (C) 2023 Utkarsh Verma
+default:
+  - enabled-by:
+      - aarch64/raspberrypi4b
+    value: 48000000
+description: PL011 UART clock frequency in Hz.
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_PL011_CLOCK_FREQ
+type: build

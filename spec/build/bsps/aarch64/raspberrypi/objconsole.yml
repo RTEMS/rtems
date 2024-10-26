@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+  - Copyright (C) 2023 Utkarsh Verma
+  - Copyright (C) 2024 Ning Yang
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+  - destination: ${BSP_INCLUDEDIR}/bsp
+    source:
+      - bsps/aarch64/raspberrypi/include/bsp/console.h
+  - destination: ${BSP_INCLUDEDIR}/bsp
+    source:
+      - bsps/aarch64/raspberrypi/include/bsp/raspberrypi-uart.h
+links:
+  - role: build-dependency
+    uid: ../../optconsoleirq
+  - role: build-dependency
+    uid: ../../objdevserialarmpl011
+  - role: build-dependency
+    uid: optclockpl011freq
+  - role: build-dependency
+    uid: optconsoleport
+source:
+  - bsps/aarch64/raspberrypi/console/console.c
+  - bsps/shared/dev/serial/console-termios.c
+type: build
