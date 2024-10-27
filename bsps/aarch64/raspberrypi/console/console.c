@@ -119,8 +119,6 @@ static rtems_status_code console_device_init_gpio(
       return status;
 
   status = raspberrypi_gpio_set_pull(gpio->tx, GPIO_PULL_NONE);
-  if (status != RTEMS_SUCCESSFUL)
-      return status;
 
   return status;
 }
@@ -149,9 +147,6 @@ rtems_status_code raspberrypi_uart_init(
   status = rtems_termios_device_install(
     device->file, device->handler, NULL, device->context
   );
-  if (status != RTEMS_SUCCESSFUL) {
-    return status;
-  }
 
   return status;
 }
