@@ -8,6 +8,7 @@ copyrights:
 default:
 - enabled-by:
   - riscv/kendrytek210
+  - riscv/beaglevfire
   value: false
 - enabled-by: true
   value: true
