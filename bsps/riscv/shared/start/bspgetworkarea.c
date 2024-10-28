@@ -60,11 +60,6 @@ static void* get_end_of_memory_from_fdt(void)
   int ac;
   int sc;
   int len;
-  /* start64, size64, start32, and size32 help to avoid unaligned access */
-  uint64_t start64;
-  uint64_t size64;
-  uint64_t start32;
-  uint64_t size32;
   uintptr_t start;
   uintptr_t size;
 
@@ -105,22 +100,16 @@ static void* get_end_of_memory_from_fdt(void)
   }
 
   if (ac == 1) {
-    start32 = fdt32_ld(&((fdt32_t *)val)[0]);
-    start = fdt32_to_cpu(start32);
-    size32 = fdt32_ld(&((fdt32_t *)val)[1]);
-    size = fdt32_to_cpu(size32);
+    start = fdt32_ld(&((fdt32_t *)val)[0]);
+    size = fdt32_ld(&((fdt32_t *)val)[1]);
   }
 
   if (ac == 2) {
-    start64 = fdt64_ld(&((fdt64_t *)val)[0]);
-    start = fdt64_to_cpu(start64);
+    start = fdt64_ld(&((fdt64_t *)val)[0]);
     if (sc == 1) {
-      size32 = fdt32_ld(&((fdt32_t *)(val+8))[0]);
-      size = fdt32_to_cpu(size32);
-    }
-    else {
-      size64 = fdt64_ld(&((fdt64_t *)val)[1]);
-      size = fdt64_to_cpu(size64);
+      size = fdt32_ld(&((fdt32_t *)(val+8))[0]);
+    } else {
+      size = fdt64_ld(&((fdt64_t *)val)[1]);
     }
   }
 
