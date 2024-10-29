@@ -1662,11 +1662,6 @@ def append_variant_builds(bld):
         waflib.Options.commands.append(bld.cmd + "_" + var)
 
 
-def long_command_line_workaround(bld):
-    if is_windows_host:
-        bld.load("long_gcc")
-
-
 def build(bld):
     if not bld.variant:
         check_forbidden_options(
@@ -1677,7 +1672,6 @@ def build(bld):
         items.load_on_demand(bld)
         append_variant_builds(bld)
         return
-    long_command_line_workaround(bld)
     bic = BuildItemContext(bld.env.ARCH_INCLUDES.split(), [], [], [], [], [],
                            [])
     items[bld.env.BSP_UID].build(bld, bic)
