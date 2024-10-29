@@ -202,12 +202,24 @@ void _User_extensions_Iterate(
 
   _User_extensions_Acquire( &lock_context );
 
+  /*
+   * Ignore this warning:
+   *
+   * - storing the address of local variable 'iter' ... [-Wdangling-pointer=]
+   *
+   * We store the local variable &iter.Iterator here on the
+   * &User_extensions_List.Iterators, and then remove it from the list below
+   * at the call to _Chain_Iterator_destroy(). So it is not left dangling.
+   */
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wdangling-pointer="
   _Chain_Iterator_initialize(
     &_User_extensions_List.Active,
     &_User_extensions_List.Iterators,
     &iter.Iterator,
     direction
   );
+  #pragma GCC diagnostic pop
 
   if ( executing != NULL ) {
     iter.previous = executing->last_user_extensions_iterator;
