@@ -42,6 +42,18 @@
 
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
+  /* CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR is an indicator for QEMU BSPs */
+#if defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR) && defined(RTEMS_SMP)
+  uint32_t cpu_id = arm_cortex_a9_get_multiprocessor_cpu_id();
+
+  /* QEMU starts both cores, so wait until this core is intended to start. */
+  if (cpu_id != 0) {
+    volatile uint32_t *kick_address = (uint32_t *)0xfffffff0;
+    while (*kick_address == 0) {
+      _ARM_Wait_for_event();
+    }
+  }
+#endif
   arm_a9mpcore_start_hook_0();
 }
 
