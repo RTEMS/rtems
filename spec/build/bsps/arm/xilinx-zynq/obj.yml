@@ -19,6 +19,12 @@ install:
   source:
   - bsps/include/dev/i2c/cadence-i2c-regs.h
   - bsps/include/dev/i2c/cadence-i2c.h
+- destination: ${BSP_INCLUDEDIR}/dev/devcfg
+  source:
+  - bsps/arm/xilinx-zynq/include/dev/devcfg/zynq-devcfg.h
+- destination: ${BSP_INCLUDEDIR}/dev/slcr
+  source:
+  - bsps/arm/xilinx-zynq/include/dev/slcr/zynq-slcr.h
 links: []
 source:
 - bsps/arm/shared/cache/cache-l2c-310.c
@@ -40,4 +46,6 @@ source:
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/stackalloc.c
+- bsps/arm/xilinx-zynq/dev/devcfg/zynq-devcfg.c
+- bsps/arm/xilinx-zynq/dev/slcr/zynq-slcr.c
 type: build
