@@ -68,6 +68,8 @@ links:
   uid: objmpci
 - role: build-dependency
   uid: objnosmp
+- role: build-dependency
+  uid: optclkbootcpu
 source:
 - bsps/shared/dev/display/disp_hcms29xx.c
 - bsps/shared/dev/display/font_hcms29xx.c
