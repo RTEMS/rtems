@@ -46,7 +46,6 @@
  *
  * Author: Patrick Gauvin <gauvin@hcs.ufl.edu>
  */
-#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -60,7 +59,9 @@
 #include <dev/devcfg/zynq-devcfg.h>
 #include <dev/devcfg/zynq-devcfg-regs.h>
 
-#define WARN( msg ) printf( "%s:%s: %s", __FILE__, __func__, msg )
+#include <rtems/bspIo.h>
+
+#define WARN( msg ) printk( "%s:%s: %s", __FILE__, __func__, msg )
 /* Timeout for interrupt waits, 2 seconds should be enough for any operation.
  */
 #define INT_TIMEOUT ( 2 * rtems_clock_get_ticks_per_second() )
@@ -228,11 +229,11 @@ static int pcap_dma_xfer(
   }
 
 #ifdef ZYNQ_DEVCFG_DEBUG
-  printf( "DMA TRANSFER REQUESTED:\n" );
-  printf( "Source: %p\n", src );
-  printf( "Source length: %zu\n", src_len );
-  printf( "Destination: %p\n", dst );
-  printf( "Destination length: %zu\n", dst_len );
+  printk( "DMA TRANSFER REQUESTED:\n" );
+  printk( "Source: %p\n", src );
+  printk( "Source length: %zu\n", src_len );
+  printk( "Destination: %p\n", dst );
+  printk( "Destination length: %zu\n", dst_len );
 #endif /* ZYNQ_DEVCFG_DEBUG */
 
   /* Check if the command queue is full */
