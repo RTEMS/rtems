@@ -47,6 +47,8 @@ extern "C" {
 
 #include <rtems.h>
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 #ifdef BSP_MICROBLAZE_FPGA_USE_FDT
 #define BSP_FDT_IS_SUPPORTED
 #ifndef BSP_START_COPY_FDT_FROM_U_BOOT
