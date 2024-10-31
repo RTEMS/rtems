@@ -69,9 +69,9 @@
 typedef struct {
   volatile zynq_devcfg_regs *regs;
   /* Used to restrict the device to being opened once at a time. */
-  rtems_id                   sem_id_open;
+  rtems_mutex                open_lock;
   /* Used for mutual exclusion between read/write/ioctl. */
-  rtems_id                   sem_id_internal;
+  rtems_mutex                internal_lock;
   /* Indicates if the PCAP will be used for a secure bitstream. Secure
    * bitstreams are untested with this driver. Defaults to false.
    */
@@ -493,30 +493,9 @@ rtems_device_driver zynq_devcfg_init(
   data.secure = false;
   data.current_task = RTEMS_INVALID_ID;
   data.write_mode_restricted = true;
-  status = rtems_semaphore_create(
-    rtems_build_name( 'D', 'e', 'v', 'C' ),
-    1,
-    RTEMS_LOCAL | RTEMS_SIMPLE_BINARY_SEMAPHORE,
-    RTEMS_NO_PRIORITY,
-    &data.sem_id_open
-  );
-  if ( RTEMS_SUCCESSFUL != status )
-  {
-    status = RTEMS_UNSATISFIED;
-    goto err;
-  }
-  status = rtems_semaphore_create(
-    rtems_build_name( 'D', 'v', 'C', 'i' ),
-    1,
-    RTEMS_LOCAL | RTEMS_SIMPLE_BINARY_SEMAPHORE,
-    RTEMS_NO_PRIORITY,
-    &data.sem_id_internal
-  );
-  if ( RTEMS_SUCCESSFUL != status )
-  {
-    status = RTEMS_UNSATISFIED;
-    goto err_sem_internal;
-  }
+
+  rtems_mutex_init( &data.open_lock, "DevC" );
+  rtems_mutex_init( &data.internal_lock, "DvCi" );
 
   /* Mask and clear all interrupts and install handler */
   data.regs->int_mask |= ZYNQ_DEVCFG_INT_ALL;
@@ -532,7 +511,7 @@ rtems_device_driver zynq_devcfg_init(
   {
     WARN( "Failed to assign interrupt handler\n" );
     status = RTEMS_INTERNAL_ERROR;
-    goto err_intr;
+    goto err;
   }
 
   status = rtems_io_register_name( ZYNQ_DEVCFG_NAME, major, minor );
@@ -549,10 +528,6 @@ err_register:
     zynq_devcfg_isr,
     NULL
   );
-err_intr:
-  rtems_semaphore_delete( data.sem_id_internal );
-err_sem_internal:
-  rtems_semaphore_delete( data.sem_id_open );
 err:
   return status;
 }
@@ -563,23 +538,17 @@ rtems_device_driver zynq_devcfg_open(
   void                      *args
 )
 {
-  rtems_status_code rstatus;
+  int rstatus;
 
   (void) major;
   (void) minor;
   (void) args;
 
-  rstatus = rtems_semaphore_obtain(
-    data.sem_id_open,
-    RTEMS_NO_WAIT,
-    0
-  );
-  if ( RTEMS_SUCCESSFUL == rstatus )
-    return RTEMS_SUCCESSFUL;
-  else if ( RTEMS_UNSATISFIED == rstatus )
+  rstatus = rtems_mutex_try_lock( &data.open_lock );
+  if ( EBUSY == rstatus )
     return RTEMS_RESOURCE_IN_USE;
-  else
-    return RTEMS_INTERNAL_ERROR;
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_device_driver zynq_devcfg_close(
@@ -588,20 +557,13 @@ rtems_device_driver zynq_devcfg_close(
   void                      *args
 )
 {
-  rtems_status_code rstatus;
-
   (void) major;
   (void) minor;
   (void) args;
 
-  rstatus = rtems_semaphore_release( data.sem_id_open );
-  if ( RTEMS_SUCCESSFUL != rstatus )
-  {
-    WARN( rtems_status_text( rstatus ) );
-    return RTEMS_INTERNAL_ERROR;
-  }
-  else
-    return RTEMS_SUCCESSFUL;
+  rtems_mutex_unlock( &data.open_lock );
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_device_driver zynq_devcfg_read(
@@ -612,7 +574,6 @@ rtems_device_driver zynq_devcfg_read(
 {
   rtems_libio_rw_args_t *rw_args;
   int                    status;
-  rtems_status_code      rstatus;
   rtems_status_code      final_status;
   dma_buf                data_buf;
 
@@ -621,8 +582,8 @@ rtems_device_driver zynq_devcfg_read(
   rw_args = args;
   rw_args->bytes_moved = 0;
 
-  rstatus = rtems_semaphore_obtain( data.sem_id_internal, RTEMS_NO_WAIT, 0 );
-  if ( RTEMS_SUCCESSFUL != rstatus )
+  status = rtems_mutex_try_lock( &data.internal_lock );
+  if ( EBUSY == status )
   {
     final_status = RTEMS_RESOURCE_IN_USE;
     goto err_obtain;
@@ -690,10 +651,8 @@ rtems_device_driver zynq_devcfg_read(
 err_dma:
   if ( data_buf.buf != (uint8_t *)rw_args->buffer )
     dma_buf_release( data_buf );
-  rstatus = rtems_semaphore_release( data.sem_id_internal );
+  rtems_mutex_unlock( &data.internal_lock );
 err_insane:
-  if ( RTEMS_SUCCESSFUL != rstatus )
-    final_status = RTEMS_INTERNAL_ERROR;
 err_obtain:
   return final_status;
 }
@@ -706,7 +665,6 @@ rtems_device_driver zynq_devcfg_write(
 {
   rtems_libio_rw_args_t *rw_args;
   int                    status;
-  rtems_status_code      rstatus;
   rtems_status_code      final_status;
   dma_buf                data_buf;
 
@@ -715,8 +673,8 @@ rtems_device_driver zynq_devcfg_write(
   rw_args = args;
   rw_args->bytes_moved = 0;
 
-  rstatus = rtems_semaphore_obtain( data.sem_id_internal, RTEMS_NO_WAIT, 0 );
-  if ( RTEMS_SUCCESSFUL != rstatus )
+  status = rtems_mutex_try_lock( &data.internal_lock );
+  if ( EBUSY == status )
   {
     final_status = RTEMS_RESOURCE_IN_USE;
     goto err_obtain;
@@ -799,9 +757,7 @@ rtems_device_driver zynq_devcfg_write(
 err_dma:
   if ( data_buf.buf != (uint8_t *)rw_args->buffer )
     dma_buf_release( data_buf );
-  rstatus = rtems_semaphore_release( data.sem_id_internal );
-  if ( RTEMS_SUCCESSFUL != rstatus )
-    final_status = RTEMS_INTERNAL_ERROR;
+  rtems_mutex_unlock( &data.internal_lock );
 err_obtain:
   return final_status;
 }
@@ -815,23 +771,17 @@ rtems_device_driver zynq_devcfg_control(
   rtems_libio_ioctl_args_t *ioctl_args;
   char                     *str;
   int                       status;
-  rtems_status_code         rstatus;
   rtems_status_code         final_status;
 
   (void) major;
   (void) minor;
   ioctl_args = args;
 
-  rstatus = rtems_semaphore_obtain( data.sem_id_internal, RTEMS_NO_WAIT, 0 );
-  if ( RTEMS_UNSATISFIED == rstatus )
+  status = rtems_mutex_try_lock( &data.internal_lock );
+  if ( EBUSY == status )
   {
     ioctl_args->ioctl_return = -1;
     return RTEMS_RESOURCE_IN_USE;
-  }
-  else if ( RTEMS_SUCCESSFUL != rstatus )
-  {
-    ioctl_args->ioctl_return = -1;
-    return RTEMS_INTERNAL_ERROR;
   }
 
   final_status = RTEMS_SUCCESSFUL;
@@ -893,8 +843,7 @@ rtems_device_driver zynq_devcfg_control(
     break;
   }
 
-  rstatus = rtems_semaphore_release( data.sem_id_internal );
-  if ( rstatus != RTEMS_SUCCESSFUL )
-    WARN( "Failed to release internal semaphore\n" );
+  rtems_mutex_unlock( &data.internal_lock );
+
   return final_status;
 }
