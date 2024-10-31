@@ -63,13 +63,18 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define ZYNQ_DEVCFG_NAME "/dev/fgpa"
+#define ZYNQ_DEVCFG_NAME "/dev/fpga"
 /*
  * Add to CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
  */
 #define ZYNQ_DEVCFG_DRIVER_TABLE_ENTRY \
   { zynq_devcfg_init, zynq_devcfg_open, zynq_devcfg_close, zynq_devcfg_read, \
     zynq_devcfg_write, zynq_devcfg_control }
+
+/* PCAP DMA transfers must be 64-byte aligned.
+   Use this to read or write an aligned buffer avoiding the
+   use of the heap in the driver. */
+#define ZYNQ_DEVCFG_PCAP_DMA_ALIGN 64
 
 /* Configuration command words. */
 #define ZYNQ_DEVCFG_CFG_DUMMY ( 0xffffffff )

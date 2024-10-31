@@ -62,8 +62,6 @@ extern "C" {
 #define ZYNQ_DEVCFG_BASE_ADDR 0xF8007000UL
 /* For use with the PCAP DMA */
 #define ZYNQ_DEVCFG_BITSTREAM_ADDR 0xFFFFFFFFUL
-/* PCAP DMA transfers must be 64-byte aligned */
-#define ZYNQ_DEVCFG_PCAP_DMA_ALIGN 64
 #define ZYNQ_DEVCFG_INTERRUPT_VECTOR 40
 
 typedef struct {
