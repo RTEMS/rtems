@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  * Xilinx Zynq7000 Device Configuration Driver Implementation
  *
