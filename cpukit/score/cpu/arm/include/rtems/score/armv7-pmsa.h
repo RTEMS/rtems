@@ -38,6 +38,7 @@
 #define _RTEMS_SCORE_ARMV7_PMSA_H
 
 #include <rtems/score/aarch32-system-registers.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/cpu.h>
 
 #ifdef __cplusplus
@@ -366,6 +367,32 @@ ARMV7_PMSA_TEXT_SECTION static inline uint32_t _ARMV7_PMSA_Find_region(
     }
 
     ++index;
+  }
+
+  return UINT32_MAX;
+}
+
+ARMV7_PMSA_TEXT_SECTION
+static inline bool _ARMV7_PMSA_Is_region_enabled(uint32_t index)
+{
+  _Assert(index < _ARMV7_PMSA_Get_max_regions());
+
+  _ARMV7_Write_rgnr(ARMV7_RGNR_REGION(index));
+  _ARM_Instruction_synchronization_barrier();
+
+  return (_ARMV7_Read_drsr() & ARMV7_RSR_EN) != 0;
+}
+
+ARMV7_PMSA_TEXT_SECTION
+static inline uint32_t _ARMV7_PMSA_Find_available_region(void)
+{
+  uint32_t region_count = _ARMV7_PMSA_Get_max_regions();
+  uint32_t index;
+
+  for (index = 0; index < region_count; index++) {
+    if (!_ARMV7_PMSA_Is_region_enabled(index)) {
+      return index;
+    }
   }
 
   return UINT32_MAX;
