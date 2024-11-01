@@ -37,6 +37,7 @@
 #ifndef _RTEMS_SCORE_ARMV7_PMSA_H
 #define _RTEMS_SCORE_ARMV7_PMSA_H
 
+#include <rtems/score/aarch32-system-registers.h>
 #include <rtems/score/cpu.h>
 
 #ifdef __cplusplus
@@ -322,10 +323,22 @@ _ARMV7_PMSA_Add_regions(uint32_t index, uint32_t b, uint32_t s, uint32_t attr) {
   return index + 1;
 }
 
+ARMV7_PMSA_TEXT_SECTION static inline uint32_t _ARMV7_PMSA_Get_max_regions(
+  void
+)
+{
+  uint32_t region_count = _AArch32_Read_mpuir();
+
+  region_count &= AARCH32_MPUIR_REGION_MASK;
+  region_count >>= AARCH32_MPUIR_REGION_SHIFT;
+
+  return region_count;
+}
+
 ARMV7_PMSA_TEXT_SECTION static inline uint32_t _ARMV7_PMSA_Find_region(
     uintptr_t address,
     uint32_t index) {
-  uint32_t region_count = _ARMV7_Read_rgnr();
+  uint32_t region_count = _ARMV7_PMSA_Get_max_regions();
 
   while (index < region_count) {
     _ARMV7_Write_rgnr(ARMV7_RGNR_REGION(index));
