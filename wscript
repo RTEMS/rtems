@@ -71,9 +71,9 @@ def get_repo_release_label(ctx):
     try:
         modified = ctx.cmd_and_log("git ls-files --modified",
                                    quiet=Context.BOTH).strip()
-        release_label = ctx.cmd_and_log("git rev-parse --short HEAD",
+        release_label = ctx.cmd_and_log("git rev-parse HEAD",
                                         quiet=Context.BOTH).strip()
-        if len(modified) != 0:
+        if modified:
             release_label += "-modified"
     except WafError:
         pass
