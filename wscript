@@ -1250,7 +1250,7 @@ def load_from_yaml(load, ctx, data_by_uid, base, path):
 
 
 def load_items_in_directory(ctx, ctors, path):
-    p = "c4che/" + re.sub(r"[^\w]", "_", path) + ".pickle"
+    p = re.sub(r"[^\w]", "_", path) + ".pickle"
     try:
         f = ctx.bldnode.make_node(p)
     except AttributeError:
