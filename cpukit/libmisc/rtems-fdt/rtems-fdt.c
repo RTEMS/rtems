@@ -43,8 +43,8 @@
 
 typedef struct
 {
-  const char *             name;         /**< The full path of the FDT item. */
-  int                      offset;       /**< The offset of the item in the FDT blob. */
+  const char* name;         /**< The full path of the FDT item. */
+  int         offset;       /**< The offset of the item in the FDT blob. */
 } rtems_fdt_index_entry;
 
 typedef struct
@@ -97,6 +97,30 @@ rtems_fdt_lock (void)
 
   rtems_mutex_lock (&fdt->lock);
   return fdt;
+}
+
+/**
+ * Compare node paths
+ */
+static int rtems_fdt_node_path_compare(const char* n1,
+                                       const char* n2,
+                                       size_t      namelen)
+{
+  if (namelen == 0)
+  {
+    return strcmp(n1, n2);
+  }
+  return strncmp(n1, n2, namelen);
+}
+
+/**
+ * Compare index entries
+ */
+static int rtems_fdt_index_compare(const void* a, const void* b)
+{
+  const rtems_fdt_index_entry* e1 = (const rtems_fdt_index_entry*) a;
+  const rtems_fdt_index_entry* e2 = (const rtems_fdt_index_entry*) b;
+  return rtems_fdt_node_path_compare(e1->name, e2->name, 0);
 }
 
 /**
@@ -232,6 +256,14 @@ rtems_fdt_init_index (rtems_fdt_handle* fdt, rtems_fdt_blob* blob)
     }
   }
 
+  if (num_entries != 0)
+  {
+    qsort(entries,
+          num_entries,
+          sizeof(rtems_fdt_index_entry),
+          rtems_fdt_index_compare);
+  }
+
   fdt->blob->index.entries = entries;
   fdt->blob->index.num_entries = num_entries;
   fdt->blob->index.names = names;
@@ -279,7 +311,9 @@ rtems_fdt_index_find_by_name(rtems_fdt_index* index,
   while (min < max)
   {
     int middle = (min + max) / 2;
-    int cmp = strncmp(name, index->entries[middle].name, namelen);
+    int cmp = rtems_fdt_node_path_compare(name,
+                                          index->entries[middle].name,
+                                          namelen);
     if (cmp == 0)
     {
       /* 'namelen' characters are equal but 'index->entries[middle].name' */
