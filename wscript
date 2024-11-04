@@ -1321,7 +1321,7 @@ except ImportError:
                     load_from_yaml(ctx, data_by_uid, base, path2)
 
     def load_items_in_directory(ctx, path):
-        p = "c4che/" + re.sub(r"[^\w]", "_", path) + ".pickle"
+        p = re.sub(r"[^\w]", "_", path) + ".pickle"
         try:
             f = ctx.bldnode.make_node(p)
         except AttributeError:
