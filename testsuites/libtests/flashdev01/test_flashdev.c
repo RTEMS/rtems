@@ -33,6 +33,8 @@
 #define TEST_DATA_SIZE (PAGE_SIZE * PAGE_COUNT)
 #define PAGE_COUNT 16
 #define PAGE_SIZE 128
+#define SECTOR_COUNT 4
+#define SECTOR_SIZE (TEST_DATA_SIZE / SECTOR_COUNT)
 #define WB_SIZE 1
 #define MAX_NUM_REGIONS 48
 #define BITALLOC_SIZE 32
@@ -71,6 +73,18 @@ int test_flashdev_page_count(
 int test_flashdev_wb_size(
   rtems_flashdev *flash,
   size_t *write_block_size
+);
+
+int test_flashdev_sector_by_off(
+  rtems_flashdev *flash,
+  off_t search_offset,
+  off_t *sector_offset,
+  size_t *sector_size
+);
+
+int test_flashdev_sector_count(
+  rtems_flashdev *flash,
+  int *sector_count
 );
 
 uint32_t test_flashdev_jedec_id(
@@ -145,6 +159,25 @@ int test_flashdev_wb_size(
 )
 {
   *write_block_size = WB_SIZE;
+  return 0;
+}
+
+int test_flashdev_sector_by_off(
+  rtems_flashdev *flash,
+  off_t search_offset,
+  off_t *sector_offset,
+  size_t *sector_size
+) {
+  *sector_offset = search_offset - (search_offset%SECTOR_SIZE);
+  *sector_size = SECTOR_SIZE;
+  return 0;
+}
+
+int test_flashdev_sector_count(
+  rtems_flashdev *flash,
+  int *sector_count
+) {
+  *sector_count = SECTOR_COUNT;
   return 0;
 }
 
@@ -269,6 +302,8 @@ rtems_flashdev* test_flashdev_init(void)
   flash->page_info_by_index = &test_flashdev_page_by_index;
   flash->page_count = &test_flashdev_page_count;
   flash->write_block_size = &test_flashdev_wb_size;
+  flash->sector_info_by_offset = &test_flashdev_sector_by_off;
+  flash->sector_count = &test_flashdev_sector_count;
   flash->region_table = ftable;
 
   return flash;

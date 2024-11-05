@@ -41,6 +41,8 @@ static int flashdev_shell_page_off(char *dev_path, int argc, char *argv[]);
 static int flashdev_shell_page_idx(char *dev_path, int argc, char *argv[]);
 static int flashdev_shell_pg_count(char *dev_path);
 static int flashdev_shell_wb_size(char *dev_path);
+static int flashdev_shell_sector_off(char *dev_path, int argc, char *argv[]);
+static int flashdev_shell_sector_count(char *dev_path);
 
 static int flashdev_shell_ioctl_value(
   char *dev_path,
@@ -68,6 +70,9 @@ static const char rtems_flashdev_shell_usage [] =
   "   -i <index>            Print the page information of page at index\n"
   "   -p                    Print the number of pages\n"
   "   -b                    Print the write block size\n"
+  "   -s <address>          Print the sector information of erase sector"
+    " at address\n"
+  "   -c                    Print the number of erase sectors\n"
   "   -h                    Print this help\n";
 
 
@@ -115,6 +120,12 @@ static int rtems_flashdev_shell_main( int argc, char *argv[] ) {
       case ('b'):
         /* Write block size */
         return flashdev_shell_wb_size(dev_path);
+      case ('s'):
+        /* Sector info by offset */
+        return flashdev_shell_sector_off(dev_path, argc, &argv[i]);
+      case ('c'):
+        /* Sector count */
+        return flashdev_shell_sector_count(dev_path);
       case ('h'):
       default:
         /* Help */
@@ -506,6 +517,76 @@ static int flashdev_shell_wb_size( char *dev_path )
     return status;
   } else {
     printf("Write block size: 0x%zx\n", ret);
+  }
+  return 0;
+}
+
+static int flashdev_shell_sector_off(
+  char *dev_path,
+  int argc,
+  char *argv[]
+)
+{
+  rtems_flashdev_ioctl_sector_info sec_info;
+  int fd;
+  int status;
+
+  /* Check arguments */
+  if (argc < 4) {
+    printf("Missing argument\n");
+    return -1;
+  }
+
+  /* Get arguments */
+  errno = 0;
+  sec_info.location = (off_t) strtoul(argv[1], NULL, 0);
+  if (errno != 0) {
+    printf("Could not read address\n");
+  }
+
+  /* Open flash device */
+  fd = open(dev_path, O_RDWR);
+  if (fd == -1) {
+    printf("Couldn't open %s\n", dev_path);
+    return -1;
+  }
+
+  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_SECTORINFO_BY_OFFSET, &sec_info);
+  if (status == -1) {
+    printf("Failed to get sector info\n");
+    close(fd);
+    return -1;
+  }
+
+  printf(
+    "Sector offset: 0x%jx\nPage length: 0x%zx\n",
+    sec_info.sector_info.offset,
+    sec_info.sector_info.size
+  );
+
+  /* Clean up */
+  close(fd);
+  return 0;
+}
+
+static int flashdev_shell_sector_count( char *dev_path )
+{
+  uint32_t ret;
+  int status;
+
+  /* Get Page Count */
+  status = flashdev_shell_ioctl_value(
+    dev_path,
+    RTEMS_FLASHDEV_IOCTL_SECTOR_COUNT,
+    &ret
+  );
+
+  /* Print Page Count */
+  if (status) {
+    printf("Failed to get sector count\n");
+    return status;
+  } else {
+    printf("Sector count: 0x%x\n", ret);
   }
   return 0;
 }

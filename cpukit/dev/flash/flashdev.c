@@ -123,6 +123,16 @@ static int rtems_flashdev_ioctl_page_count(
   void *arg
 );
 
+static int rtems_flashdev_ioctl_sectorinfo_offset(
+  rtems_flashdev *flash,
+  void *arg
+);
+
+static int rtems_flashdev_ioctl_sector_count(
+  rtems_flashdev *flash,
+  void *arg
+);
+
 static int rtems_flashdev_ioctl_write_block_size(
   rtems_flashdev *flash,
   void *arg
@@ -386,6 +396,12 @@ static int rtems_flashdev_ioctl(
       break;
     case RTEMS_FLASHDEV_IOCTL_PAGE_COUNT:
       err = rtems_flashdev_ioctl_page_count( flash, arg );
+      break;
+    case RTEMS_FLASHDEV_IOCTL_SECTORINFO_BY_OFFSET:
+      err = rtems_flashdev_ioctl_sectorinfo_offset( flash, arg );
+      break;
+    case RTEMS_FLASHDEV_IOCTL_SECTOR_COUNT:
+      err = rtems_flashdev_ioctl_sector_count( flash, arg );
       break;
     case RTEMS_FLASHDEV_IOCTL_WRITE_BLOCK_SIZE:
       err = rtems_flashdev_ioctl_write_block_size( flash, arg );
@@ -841,6 +857,39 @@ static int rtems_flashdev_ioctl_page_count( rtems_flashdev *flash, void *arg )
     return 0;
   } else {
     return ( *flash->page_count )( flash, ( (int *) arg ) );
+  }
+}
+
+static int rtems_flashdev_ioctl_sectorinfo_offset(
+  rtems_flashdev *flash,
+  void *arg
+)
+{
+  rtems_flashdev_ioctl_sector_info *sector_info;
+
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  if ( flash->sector_info_by_offset == NULL ) {
+    return 0;
+  } else {
+    sector_info = (rtems_flashdev_ioctl_sector_info *) arg;
+    return ( *flash->sector_info_by_offset )( flash,
+                                         sector_info->location,
+                                         &sector_info->sector_info.offset,
+                                         &sector_info->sector_info.size );
+  }
+}
+
+static int rtems_flashdev_ioctl_sector_count( rtems_flashdev *flash, void *arg )
+{
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  if ( flash->sector_count == NULL ) {
+    return 0;
+  } else {
+    return ( *flash->sector_count )( flash, ( (int *) arg ) );
   }
 }
 

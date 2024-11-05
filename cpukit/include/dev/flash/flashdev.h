@@ -145,6 +145,24 @@ typedef struct rtems_flashdev rtems_flashdev;
 #define RTEMS_FLASHDEV_IOCTL_WRITE_BLOCK_SIZE 10
 
 /**
+ * @brief Get the size and address of flash erase sector at given offset
+ *
+ * The offset ignores the region limiting. To find sector of region
+ * limited offset add the base of the region to the desired offset.
+ *
+ * @param[in,out] rtems_flashdev_ioctl_sector_info arg Pointer to struct
+ * with offset and space for return values.
+ */
+#define RTEMS_FLASHDEV_IOCTL_SECTORINFO_BY_OFFSET 11
+
+/**
+ * @brief Get the number of erase sectors in flash device.
+ *
+ * @param[out] count Integer containing the number of sectors.
+ */
+#define RTEMS_FLASHDEV_IOCTL_SECTOR_COUNT 12
+
+/**
  * @brief The maximum number of region limited file descriptors
  * allowed to be open at once.
  */
@@ -215,6 +233,22 @@ typedef struct rtems_flashdev_ioctl_page_info {
    */
   rtems_flashdev_region page_info;
 } rtems_flashdev_ioctl_page_info;
+
+/**
+ * @brief Sector information returned from IOCTL calls.
+ */
+typedef struct rtems_flashdev_ioctl_sector_info {
+  /**
+   * @brief Offset or index to find sector at.
+   */
+  off_t location;
+
+  /**
+   * @brief Information returned about the sector. Including the
+   * base offset and size of sector.
+   */
+  rtems_flashdev_region sector_info;
+} rtems_flashdev_ioctl_sector_info;
 
 /**
  * @brief Flash device.
@@ -362,6 +396,40 @@ struct rtems_flashdev {
   int ( *write_block_size )(
     rtems_flashdev *flashdev,
     size_t *write_block_size
+  );
+
+  /**
+   * @brief Call to device driver to get size and offset of sector at
+   * given offset.
+   *
+   * @param[in] flash The flash device
+   * @param[in] search_offset The offset of the sector which info is to be
+   * returned.
+   * @param[out] sector_offset The offset of the start of the page
+   * @param[out] sector_size The size of the page
+   *
+   * @retval 0 Success.
+   * @retval non-zero Failed.
+   */
+  int ( *sector_info_by_offset )(
+    rtems_flashdev *flash,
+    off_t search_offset,
+    off_t *sector_offset,
+    size_t *sector_size
+  );
+
+  /**
+   * @brief Call to device driver to return the number of sectors on the flash
+   * device.
+   *
+   * @param[out] sector_count The number of sector on the flash device.
+   *
+   * @retval 0 Success.
+   * @retval non-zero Failed.
+   */
+  int ( *sector_count )(
+    rtems_flashdev *flashdev,
+    int *page_count
   );
 
   /**

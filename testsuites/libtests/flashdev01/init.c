@@ -39,6 +39,8 @@
 #define TEST_DATA_SIZE (PAGE_SIZE * PAGE_COUNT)
 #define PAGE_COUNT 16
 #define PAGE_SIZE 128
+#define SECTOR_COUNT 4
+#define SECTOR_SIZE (TEST_DATA_SIZE / SECTOR_COUNT)
 #define WB_SIZE 1
 
 const char rtems_test_name[] = "FLASHDEV 1";
@@ -55,9 +57,11 @@ static void run_test(void) {
   char* read_data;
   rtems_flashdev_region e_args;
   rtems_flashdev_ioctl_page_info pg_info;
+  rtems_flashdev_ioctl_sector_info sec_info;
   rtems_flashdev_region region;
   uint32_t jedec;
   int page_count;
+  int sector_count;
   int type;
   size_t wb_size;
 
@@ -131,6 +135,19 @@ static void run_test(void) {
   status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_PAGE_COUNT, &page_count);
   rtems_test_assert(!status);
   rtems_test_assert(page_count == PAGE_COUNT);
+
+  /* Test getting sector info from offset */
+  sec_info.location = SECTOR_SIZE + SECTOR_SIZE/2;
+
+  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_SECTORINFO_BY_OFFSET, &sec_info);
+  rtems_test_assert(!status);
+  rtems_test_assert(sec_info.sector_info.offset == SECTOR_SIZE);
+  rtems_test_assert(sec_info.sector_info.size == SECTOR_SIZE);
+
+  /* Test getting sector count */
+  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_SECTOR_COUNT, &sector_count);
+  rtems_test_assert(!status);
+  rtems_test_assert(sector_count == SECTOR_COUNT);
 
   /* Test getting write block size */
   status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_WRITE_BLOCK_SIZE, &wb_size);
