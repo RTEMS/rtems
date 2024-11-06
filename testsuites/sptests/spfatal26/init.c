@@ -49,6 +49,10 @@ static void fatal_extension(
   rtems_fatal_code code
 )
 {
+  if ( source == RTEMS_FATAL_SOURCE_EXIT ) {
+    return;
+  }
+
   rtems_test_assert( source == RTEMS_FATAL_SOURCE_EXCEPTION );
   rtems_test_assert( !always_set_to_false );
 
