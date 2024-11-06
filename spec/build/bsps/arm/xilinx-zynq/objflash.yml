@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+ - Copyright (C) 2024 Aaron Nyholm
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/dev/spi
+  source:
+  - bsps/arm/xilinx-zynq/include/dev/spi/jedec_flash.h
+  - bsps/arm/xilinx-zynq/include/dev/spi/zynq-qspi-flashdev.h
+  - bsps/arm/xilinx-zynq/include/dev/spi/zynq-qspi-flash.h
+  - bsps/arm/xilinx-zynq/include/dev/spi/zynq-qspi-flash-defs.h
+links: []
+source:
+  - bsps/arm/xilinx-zynq/dev/spi/zynq-qspi-flashdev.c
+  - bsps/arm/xilinx-zynq/dev/spi/zynq-qspi-flash.c
+  - bsps/arm/xilinx-zynq/dev/spi/zynq-qspi-flash-transfer.c
+type: build
