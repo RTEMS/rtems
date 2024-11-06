@@ -46,7 +46,7 @@
 
 static void force_error( void )
 {
-  RTEMS_UNREACHABLE();
+  rtems_test_assert( 0 );
 }
 
 #include "../spfatal_support/spfatalimpl.h"
