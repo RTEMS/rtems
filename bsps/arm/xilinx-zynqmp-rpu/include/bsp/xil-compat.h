@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsArmXilinxZynqMPRPU
+ * @ingroup RTEMSBSPsARMZynqMPRPU
  *
  * @brief This header file provides BSP-specific interfaces.
  */

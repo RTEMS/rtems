@@ -7,9 +7,7 @@
 /**
 *
 * @file xttcps_hw.h
-* @addtogroup ttcps_v3_15
-* @{
-*
+* @ingroup RTEMSDriverClockXilTTC
 * This file defines the hardware interface to one of the three timer counters
 * in the Ps block.
 *
@@ -27,6 +25,8 @@
 *                       zynq ultrascale+mpsoc "
 * </pre>
 *
+* @addtogroup RTEMSDriverClockXilTTC
+* @{
 ******************************************************************************/
 
 #ifndef XTTCPS_HW_H		/* prevent circular inclusions */
