@@ -43,21 +43,15 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define REG_RTCSEC 0x00u
-
 #define RTCSEC_SECBCD_SHIFT  0u
 #define RTCSEC_SECBCD_MASK   (0x7fu << RTCSEC_SECBCD_SHIFT)
 #define RTCSEC_SECBCD(x)     (((x) << RTCSEC_SECBCD_SHIFT) & RTCSEC_SECBCD_MASK)
 #define RTCSEC_SECBCD_GET(x) (((x) & RTCSEC_SECBCD_MASK) >> RTCSEC_SECBCD_SHIFT)
 
-#define REG_RTCMIN 0x01u
-
 #define RTCMIN_MINBCD_SHIFT  0u
 #define RTCMIN_MINBCD_MASK   (0x7fu << RTCMIN_MINBCD_SHIFT)
 #define RTCMIN_MINBCD(x)     (((x) << RTCMIN_MINBCD_SHIFT) & RTCMIN_MINBCD_MASK)
 #define RTCMIN_MINBCD_GET(x) (((x) & RTCMIN_MINBCD_MASK) >> RTCMIN_MINBCD_SHIFT)
-
-#define REG_RTCHOUR 0x02u
 
 #define RTCHOUR_HRBCD12_SHIFT  0u
 #define RTCHOUR_HRBCD12_MASK   (0x1fu << RTCHOUR_HRBCD12_SHIFT)
@@ -72,33 +66,27 @@
 #define RTCHOUR_AMPM           (0x01u << 5)
 #define RTCHOUR_1224           (0x01u << 6)
 
-#define REG_RTCWKDAY 0x03u
-
 #define RTCWKDAY_WKDAY_SHIFT   0u
 #define RTCWKDAY_WKDAY_MASK    (0x7u << RTCWKDAY_WKDAY_SHIFT)
 #define RTCWKDAY_WKDAY(x)      (((x) << RTCWKDAY_WKDAY_SHIFT) & RTCWKDAY_WKDAY_MASK)
 #define RTCWKDAY_WKDAY_GET(x)  (((x) & RTCWKDAY_WKDAY_MASK) >> RTCWKDAY_WKDAY_SHIFT)
-
-#define REG_RTCDATE 0x04u
 
 #define RTCDATE_DATEBCD_SHIFT  0u
 #define RTCDATE_DATEBCD_MASK   (0x3fu << RTCDATE_DATEBCD_SHIFT)
 #define RTCDATE_DATEBCD(x)     (((x) << RTCDATE_DATEBCD_SHIFT) & RTCDATE_DATEBCD_MASK)
 #define RTCDATE_DATEBCD_GET(x) (((x) & RTCDATE_DATEBCD_MASK) >> RTCDATE_DATEBCD_SHIFT)
 
-#define REG_RTCMTH 0x05u
-
 #define RTCMTH_MTHBCD_SHIFT    0u
 #define RTCMTH_MTHBCD_MASK     (0x1fu << RTCMTH_MTHBCD_SHIFT)
 #define RTCMTH_MTHBCD(x)       (((x) << RTCMTH_MTHBCD_SHIFT) & RTCMTH_MTHBCD_MASK)
 #define RTCMTH_MTHBCD_GET(x)   (((x) & RTCMTH_MTHBCD_MASK) >> RTCMTH_MTHBCD_SHIFT)
 
-#define REG_RTCYEAR 0x06u
-
 #define RTCYEAR_YRBCD_SHIFT    0u
 #define RTCYEAR_YRBCD_MASK     (0xffu << RTCYEAR_YRBCD_SHIFT)
 #define RTCYEAR_YRBCD(x)       (((x) << RTCYEAR_YRBCD_SHIFT) & RTCYEAR_YRBCD_MASK)
 #define RTCYEAR_YRBCD_GET(x)   (((x) & RTCYEAR_YRBCD_MASK) >> RTCYEAR_YRBCD_SHIFT)
+
+#define NR_RTC_REGISTERS 0x07u
 
 static inline uint8_t bcd_to_bin(uint8_t bcd)
 {
@@ -214,7 +202,7 @@ static int i2c_rtc_initialize_once(struct i2c_rtc_base *ctx)
 static int i2c_rtc_get_time(int minor, rtems_time_of_day *time)
 {
   int rv = 0;
-  uint8_t buf[REG_RTCYEAR + 1];
+  uint8_t buf[NR_RTC_REGISTERS];
   struct i2c_rtc_base *ctx = i2c_rtc_get_context(minor);
 
   if (!_System_state_Is_up(_System_state_Get())) {
@@ -226,21 +214,21 @@ static int i2c_rtc_get_time(int minor, rtems_time_of_day *time)
   rv = i2c_rtc_initialize_once(ctx);
 
   if (rv == 0) {
-    rv = i2c_rtc_read(ctx, REG_RTCSEC + ctx->clock_offset, buf, sizeof(buf));
+    rv = i2c_rtc_read(ctx, ctx->clock_offset, buf, sizeof(buf));
   }
 
   if (rv == 0) {
-    unsigned year = bcd_to_bin(RTCYEAR_YRBCD_GET(buf[REG_RTCYEAR])) +
+    unsigned year = bcd_to_bin(RTCYEAR_YRBCD_GET(buf[ctx->order.year])) +
                     (TOD_BASE_YEAR / 100 * 100);
     if (year < TOD_BASE_YEAR) {
       year += 100;
     }
     time->year = year;
-    time->month = bcd_to_bin(RTCMTH_MTHBCD_GET(buf[REG_RTCMTH]));
-    time->day = bcd_to_bin(RTCDATE_DATEBCD_GET(buf[REG_RTCDATE]));
-    time->hour = bcd_to_bin(RTCHOUR_HRBCD24_GET(buf[REG_RTCHOUR]));
-    time->minute = bcd_to_bin(RTCMIN_MINBCD_GET(buf[REG_RTCMIN]));
-    time->second = bcd_to_bin(RTCSEC_SECBCD_GET(buf[REG_RTCSEC]));
+    time->month = bcd_to_bin(RTCMTH_MTHBCD_GET(buf[ctx->order.month]));
+    time->day = bcd_to_bin(RTCDATE_DATEBCD_GET(buf[ctx->order.day]));
+    time->hour = bcd_to_bin(RTCHOUR_HRBCD24_GET(buf[ctx->order.hour]));
+    time->minute = bcd_to_bin(RTCMIN_MINBCD_GET(buf[ctx->order.min]));
+    time->second = bcd_to_bin(RTCSEC_SECBCD_GET(buf[ctx->order.sec]));
     time->ticks  = 0;
   }
 
@@ -252,7 +240,7 @@ static int i2c_rtc_get_time(int minor, rtems_time_of_day *time)
 static int i2c_rtc_set_time(int minor, const rtems_time_of_day *time)
 {
   int rv = 0;
-  uint8_t buf[REG_RTCYEAR + 1];
+  uint8_t buf[NR_RTC_REGISTERS];
   struct i2c_rtc_base *ctx = i2c_rtc_get_context(minor);
 
   if (!_System_state_Is_up(_System_state_Get())) {
@@ -264,35 +252,35 @@ static int i2c_rtc_set_time(int minor, const rtems_time_of_day *time)
   rv = i2c_rtc_initialize_once(ctx);
 
   if (rv == 0) {
-    rv = i2c_rtc_read(ctx, REG_RTCSEC + ctx->clock_offset, buf, sizeof(buf));
+    rv = i2c_rtc_read(ctx, ctx->clock_offset, buf, sizeof(buf));
   }
 
   if (rv == 0) {
     /* Make sure weekday is not 0 (out of range). Otherwise it's not used. */
-    if (RTCWKDAY_WKDAY_GET(buf[REG_RTCWKDAY]) < 1) {
-      buf[REG_RTCWKDAY] &= ~RTCWKDAY_WKDAY_MASK;
-      buf[REG_RTCWKDAY] |= RTCWKDAY_WKDAY(1);
+    if (RTCWKDAY_WKDAY_GET(buf[ctx->order.wkday]) < 1) {
+      buf[ctx->order.wkday] &= ~RTCWKDAY_WKDAY_MASK;
+      buf[ctx->order.wkday] |= RTCWKDAY_WKDAY(1);
     }
 
-    buf[REG_RTCYEAR] &= ~RTCYEAR_YRBCD_MASK;
-    buf[REG_RTCYEAR] |= RTCYEAR_YRBCD(bin_to_bcd(time->year % 100));
+    buf[ctx->order.year] &= ~RTCYEAR_YRBCD_MASK;
+    buf[ctx->order.year] |= RTCYEAR_YRBCD(bin_to_bcd(time->year % 100));
 
-    buf[REG_RTCMTH] &= ~RTCMTH_MTHBCD_MASK;
-    buf[REG_RTCMTH] |= RTCMTH_MTHBCD(bin_to_bcd(time->month));
+    buf[ctx->order.month] &= ~RTCMTH_MTHBCD_MASK;
+    buf[ctx->order.month] |= RTCMTH_MTHBCD(bin_to_bcd(time->month));
 
-    buf[REG_RTCDATE] &= ~RTCDATE_DATEBCD_MASK;
-    buf[REG_RTCDATE] |= RTCDATE_DATEBCD(bin_to_bcd(time->day));
+    buf[ctx->order.day] &= ~RTCDATE_DATEBCD_MASK;
+    buf[ctx->order.day] |= RTCDATE_DATEBCD(bin_to_bcd(time->day));
 
-    buf[REG_RTCHOUR] &= ~(RTCHOUR_HRBCD24_MASK | RTCHOUR_1224);
-    buf[REG_RTCHOUR] |= RTCHOUR_HRBCD24(bin_to_bcd(time->hour));
+    buf[ctx->order.hour] &= ~(RTCHOUR_HRBCD24_MASK | RTCHOUR_1224);
+    buf[ctx->order.hour] |= RTCHOUR_HRBCD24(bin_to_bcd(time->hour));
 
-    buf[REG_RTCMIN] &= ~RTCMIN_MINBCD_MASK;
-    buf[REG_RTCMIN] |= RTCMIN_MINBCD(bin_to_bcd(time->minute));
+    buf[ctx->order.min] &= ~RTCMIN_MINBCD_MASK;
+    buf[ctx->order.min] |= RTCMIN_MINBCD(bin_to_bcd(time->minute));
 
-    buf[REG_RTCSEC] &= ~RTCSEC_SECBCD_MASK;
-    buf[REG_RTCSEC] |= RTCSEC_SECBCD(bin_to_bcd(time->second));
+    buf[ctx->order.sec] &= ~RTCSEC_SECBCD_MASK;
+    buf[ctx->order.sec] |= RTCSEC_SECBCD(bin_to_bcd(time->second));
 
-    rv = i2c_rtc_write(ctx, REG_RTCSEC + ctx->clock_offset, buf, sizeof(buf));
+    rv = i2c_rtc_write(ctx, ctx->clock_offset, buf, sizeof(buf));
   }
 
   rtems_mutex_unlock(&ctx->mutex);

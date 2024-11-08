@@ -78,6 +78,7 @@ int mcp7940m_hw_init(struct i2c_rtc_base *base);
         i2c_path, \
         i2c_address, \
         0, \
+        I2C_RTC_ORDER_sec_min_hour_wkday_day_month_year, \
         "mcp7940", \
         mcp7940m_hw_init), \
     .crystal = has_crystal, \

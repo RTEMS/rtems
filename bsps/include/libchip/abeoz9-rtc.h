@@ -75,6 +75,7 @@ int abeoz9_rtc_hw_init(struct i2c_rtc_base *base);
         i2c_path, \
         i2c_address, \
         8, \
+        I2C_RTC_ORDER_sec_min_hour_day_wkday_month_year, \
         "abeoz9", \
         abeoz9_rtc_hw_init), \
   }

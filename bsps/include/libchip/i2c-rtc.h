@@ -54,26 +54,26 @@ extern "C" {
  *
  * Expects a register block with the following time format:
  *
- * * <base>+0:
+ * * <base>+off.second:
  *    * Bit 0 to 6: Seconds (BCD encoded)
  *    * Bit 7: Don't care
- * * <base>+1:
+ * * <base>+off.minute:
  *    * Bit 0 to 6: Minutes (BCD encoded)
  *    * Bit 7: Don't care
- * * <base>+2:
+ * * <base>+off.hour:
  *    * Bit 0 to 5: Hours (BCD encoded); Bit 5 indicates AM (0) and PM (1) in 12
  *      hour mode
  *    * Bit 6: 0 for 24 hour mode; 1 for 12 hour mode
- * * <base>+3:
- *    * Bit 0 to 5: Day (BCD encoded)
- *    * Bit 6 and 7: Don't care
- * * <base>+4:
+ * * <base>+off.wkday:
  *    * Bit 0 to 2: Day of Week
  *    * Bit 3 to 7: Don't care
- * * <base>+5:
+ * * <base>+off.day:
+ *    * Bit 0 to 5: Day (BCD encoded)
+ *    * Bit 6 and 7: Don't care
+ * * <base>+off.month:
  *    * Bit 0 to 4: Month (BCD encoded)
  *    * Bit 5 to 7: Don't care
- * * <base>+6:
+ * * <base>+off.year:
  *    * Bit 0 to 6: Year (BCD encoded)
  *    * Bit 7: Don't care
  *
@@ -115,8 +115,19 @@ struct i2c_rtc_base {
    */
   int (*hw_init) (struct i2c_rtc_base *ctx);
 
-  /** Offset of the clock register block. */
+  /** Offset of the start of the clock register block. */
   size_t clock_offset;
+
+  /** Order of the fields of the date. */
+  struct {
+    size_t year;
+    size_t month;
+    size_t wkday;
+    size_t day;
+    size_t hour;
+    size_t min;
+    size_t sec;
+  } order;
 };
 
 /**
@@ -135,7 +146,14 @@ int i2c_rtc_read(struct i2c_rtc_base *ctx, uint8_t addr, uint8_t *buf,
 int i2c_rtc_write(struct i2c_rtc_base *ctx, uint8_t addr, const uint8_t *buf,
     size_t len);
 
-#define I2C_RTC_INITIALIZER(i2c_path, i2c_address, offset, driver_name, hwinit)\
+#define I2C_RTC_ORDER_sec_min_hour_wkday_day_month_year \
+  { .sec = 0, .min = 1, .hour = 2, .day = 4, .wkday = 3, .month = 5, .year = 6 }
+
+#define I2C_RTC_ORDER_sec_min_hour_day_wkday_month_year \
+  { .sec = 0, .min = 1, .hour = 2, .day = 3, .wkday = 4, .month = 5, .year = 6 }
+
+#define I2C_RTC_INITIALIZER(i2c_path, i2c_address, offset, reg_order, \
+    driver_name, hwinit)\
   { \
     .mutex = RTEMS_MUTEX_INITIALIZER(driver_name), \
     .i2c_bus_path = i2c_path, \
@@ -143,6 +161,7 @@ int i2c_rtc_write(struct i2c_rtc_base *ctx, uint8_t addr, const uint8_t *buf,
     .initialized = false, \
     .hw_init = hwinit, \
     .clock_offset = offset, \
+    .order = reg_order, \
   }
 
 #define I2C_RTC_TBL_ENTRY(dev_name, i2c_rtc_ctx) \
