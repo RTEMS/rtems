@@ -166,7 +166,6 @@ install:
   - cpukit/include/rtems/rtems-rfs-format.h
   - cpukit/include/rtems/rtems-rfs-shell.h
   - cpukit/include/rtems/rtems-rfs.h
-  - cpukit/include/rtems/rtemsdialer.h
   - cpukit/include/rtems/scheduler.h
   - cpukit/include/rtems/serial_mouse.h
   - cpukit/include/rtems/seterr.h
