@@ -308,18 +308,24 @@ static rtems_record_client_status visit(
       break;
     case RTEMS_RECORD_UPTIME_LOW:
       per_cpu->uptime_low = (uint32_t) data;
+      per_cpu->uptime_low_valid = true;
       break;
     case RTEMS_RECORD_UPTIME_HIGH:
-      per_cpu->uptime.uptime_bt = ( data << 32 ) | per_cpu->uptime_low;
-      per_cpu->uptime.time_last = time;
-      per_cpu->uptime.time_accumulated = 0;
+      if ( per_cpu->uptime_low_valid ) {
+        per_cpu->uptime_low_valid = false;
+        per_cpu->uptime.uptime_bt = ( data << 32 ) | per_cpu->uptime_low;
+        per_cpu->uptime.time_last = time;
+        per_cpu->uptime.time_accumulated = 0;
 
-      if (do_hold_back) {
-        status = resolve_hold_back( ctx, per_cpu );
+        if (do_hold_back) {
+          status = resolve_hold_back( ctx, per_cpu );
 
-        if ( status != RTEMS_RECORD_CLIENT_SUCCESS ) {
-          return status;
+          if ( status != RTEMS_RECORD_CLIENT_SUCCESS ) {
+            return status;
+          }
         }
+
+        do_hold_back = false;
       }
 
       break;

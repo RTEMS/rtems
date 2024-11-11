@@ -101,6 +101,11 @@ typedef struct {
   uint32_t uptime_low;
 
   /**
+   * @brief If true, then uptime low value is valid.
+   */
+  bool uptime_low_valid;
+
+  /**
    * @brief If true, then hold back items.
    */
   bool hold_back;
