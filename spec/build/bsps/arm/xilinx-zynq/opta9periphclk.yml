@@ -11,6 +11,7 @@ default:
   - arm/xilinx_zynq_zc702
   - arm/xilinx_zynq_zc706
   - arm/xilinx_zynq_zedboard
+  - arm/xilinx_zynq_microzed
   - arm/xilinx_zynq_picozed
   - arm/xilinx_zynq_zybo_z7
   - arm/xilinx_zynq_zybo_microzed
