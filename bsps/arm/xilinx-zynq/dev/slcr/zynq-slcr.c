@@ -43,8 +43,11 @@
 #include <dev/slcr/zynq-slcr-regs.h>
 
 static uint32_t rst_mask = 0xf;
+
+#if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
 static rtems_interrupt_lock zynq_slcr_lock =
     RTEMS_INTERRUPT_LOCK_INITIALIZER( "zynq_slcr" );
+#endif
 
 static inline void slcr_unlock( void )
 {
