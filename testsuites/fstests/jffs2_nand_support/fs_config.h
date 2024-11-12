@@ -28,6 +28,6 @@
 #ifndef __JFFS2_SUPPORT_h
 #define __JFFS2_SUPPORT_h
 
-#define FILESYSTEM "JFFS2"
+#define FILESYSTEM "JFFS2 NAND"
 
 #endif
