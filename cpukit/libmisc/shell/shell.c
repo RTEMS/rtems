@@ -958,11 +958,11 @@ static void rtems_shell_winsize( void )
     cols = ws.ws_col;
   } else if (isatty(fd)) {
     struct termios cterm;
-    if (tcgetattr(fd, &cterm) >= 0) {
+    if (tcgetattr(fd, &cterm) == 0) {
       struct termios term = cterm;
       term.c_cc[VMIN] = 0;
       term.c_cc[VTIME] = 0;
-      if (tcsetattr (fd, TCSADRAIN, &term) >= 0) {
+      if (tcsetattr (fd, TCSADRAIN, &term) == 0) {
         memset(&buf[0], 0, sizeof(buf));
         /*
          * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h3-Miscellaneous
@@ -1252,6 +1252,7 @@ bool rtems_shell_main_loop(
   struct termios  previous_term;
   bool            result;
   bool            interactive = true;
+  bool            have_previous_term = false;
   FILE           *stdinToClose = NULL;
   FILE           *stdoutToClose = NULL;
   FILE           *line_editor_output;
@@ -1329,7 +1330,8 @@ bool rtems_shell_main_loop(
       return false;
     }
     /* Make a raw terminal, Linux Manuals */
-    if (tcgetattr(fileno(stdin), &previous_term) >= 0) {
+    have_previous_term = (tcgetattr(fileno(stdin), &previous_term) == 0);
+    if (have_previous_term) {
       term = previous_term;
       term.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
       term.c_oflag &= ~OPOST;
@@ -1365,7 +1367,7 @@ bool rtems_shell_main_loop(
 
   if (stdinToClose) {
     fclose( stdinToClose );
-  } else {
+  } else if (have_previous_term) {
     if (tcsetattr(fileno(stdin), TCSADRAIN, &previous_term) < 0) {
       fprintf(
         stderr,
