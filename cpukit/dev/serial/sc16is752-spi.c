@@ -53,10 +53,9 @@ static int sc16is752_spi_write_reg(
 
   _Assert(len < RTEMS_ARRAY_SIZE(unused));
 
+  tx_cmd = addr << 3;
   msg_init(&msg[0], ctx->cs, ctx->speed_hz, 1, &unused[0], &tx_cmd);
   msg_init(&msg[1], ctx->cs, ctx->speed_hz, len, &unused[0], &data[0]);
-
-  tx_cmd = addr << 3;
   msg[1].cs_change = 1;
 
   return ioctl(ctx->fd, SPI_IOC_MESSAGE(2), &msg[0]);
@@ -77,10 +76,9 @@ static int sc16is752_spi_read_reg(
 
   _Assert(len < RTEMS_ARRAY_SIZE(tx_buf));
 
+  tx_cmd = 0x80 | (addr << 3);
   msg_init(&msg[0], ctx->cs, ctx->speed_hz, 1, &unused, &tx_cmd);
   msg_init(&msg[1], ctx->cs, ctx->speed_hz, len, &data[0], &tx_buf[0]);
-
-  tx_cmd = 0x80 | (addr << 3);
   msg[1].cs_change = 1;
 
   return ioctl(ctx->fd, SPI_IOC_MESSAGE(2), &msg[0]);
@@ -99,13 +97,12 @@ static int sc16is752_spi_read_2_reg(
   uint8_t tx_cmd_0;
   uint8_t tx_cmd_1;
 
+  tx_cmd_0 = 0x80 | (addr_0 << 3);
+  tx_cmd_1 = 0x80 | (addr_1 << 3);
   msg_init(&msg[0], ctx->cs, ctx->speed_hz, 1, &unused, &tx_cmd_0);
   msg_init(&msg[1], ctx->cs, ctx->speed_hz, 1, &data[0], &unused);
   msg_init(&msg[2], ctx->cs, ctx->speed_hz, 1, &unused, &tx_cmd_1);
   msg_init(&msg[3], ctx->cs, ctx->speed_hz, 1, &data[1], &unused);
-
-  tx_cmd_0 = 0x80 | (addr_0 << 3);
-  tx_cmd_1 = 0x80 | (addr_1 << 3);
   msg[1].cs_change = 1;
   msg[3].cs_change = 1;
 
