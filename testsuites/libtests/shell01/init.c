@@ -243,7 +243,7 @@ static void test(void)
   rtems_test_assert(!ok);
 
   ok = rtems_shell_login_check(NULL, NULL);
-  rtems_test_assert(ok);
+  rtems_test_assert(!ok);
 
   rtems_test_assert(getuid() == 0);
   rtems_test_assert(geteuid() == 0);
