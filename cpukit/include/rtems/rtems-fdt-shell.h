@@ -54,6 +54,28 @@ void rtems_fdt_add_shell_command (void);
  */
 rtems_fdt_handle* rtems_fdt_get_shell_handle (void);
 
+/**
+ * Write handler call to write from the address property.
+ */
+typedef void (*rtems_fdt_write_handler)(uintptr_t address, uint32_t value);
+
+/**
+ * Read handler call to read from the address property.
+ */
+typedef uint32_t (*rtems_fdt_read_handler)(uintptr_t address);
+
+/**
+ * Set the write handler returning the current handler.
+ */
+rtems_fdt_write_handler
+rtems_fdt_set_shell_write_handler (rtems_fdt_write_handler handler);
+
+/**
+ * Set the read handler returning the current handler.
+ */
+rtems_fdt_read_handler
+rtems_fdt_set_shell_read_handler (rtems_fdt_read_handler handler);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

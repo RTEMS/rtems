@@ -70,18 +70,40 @@ static long rtems_fdt_test_timeout = 5;
  */
 static rtems_fdt_handle cmd_fdt_handle;
 
+/**
+ * The write and read handlers.
+ */
+static void rtems_fdt_default_write (uintptr_t address, uint32_t value);
+static uint32_t rtems_fdt_default_read (uintptr_t address);
+
+static rtems_fdt_write_handler write_handler = rtems_fdt_default_write;;
+static rtems_fdt_read_handler read_handler = rtems_fdt_default_read;
+
 static void
-rtems_fdt_write (uintptr_t address, uint32_t value)
+rtems_fdt_default_write (uintptr_t address, uint32_t value)
 {
   volatile uint32_t* ap = (uint32_t*) address;
   *ap = value;
 }
 
 static uint32_t
-rtems_fdt_read (uintptr_t address)
+rtems_fdt_default_read (uintptr_t address)
 {
   volatile uint32_t* ap = (uint32_t*) address;
   return *ap;
+}
+
+
+static void
+rtems_fdt_write (uintptr_t address, uint32_t value)
+{
+  write_handler (address, value);
+}
+
+static uint32_t
+rtems_fdt_read (uintptr_t address)
+{
+  return read_handler (address);
 }
 
 static int
@@ -784,4 +806,20 @@ rtems_fdt_handle*
 rtems_fdt_get_shell_handle (void)
 {
   return &cmd_fdt_handle;
+}
+
+rtems_fdt_write_handler
+rtems_fdt_set_shell_write_handler (rtems_fdt_write_handler handler)
+{
+  rtems_fdt_write_handler tmp = write_handler;
+  write_handler = handler;
+  return tmp;
+}
+
+rtems_fdt_read_handler
+rtems_fdt_set_shell_read_handler (rtems_fdt_read_handler handler)
+{
+  rtems_fdt_read_handler tmp = read_handler;
+  read_handler = handler;
+  return tmp;
 }
