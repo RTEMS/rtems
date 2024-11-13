@@ -45,6 +45,7 @@ void test_compare(void);
 void test_validity(void);
 void test_subtract(void);
 void test_convert(void);
+void test_greaterthan32bits(void);
 
 struct timespec *timespec1;
 struct timespec *timespec2;
@@ -70,11 +71,28 @@ rtems_task Init(
   test_validity();
   test_subtract();
   test_convert();
+  test_greaterthan32bits();
 
   TEST_END();
 
   rtems_test_exit(0);
 }
+
+
+void test_greaterthan32bits()
+{
+  /* Basic test to see if addition works with a value greater than 32 bits */
+  time_t returned_timeT;
+  rtems_timespec_set( timespec1, 4294967296LL, 1 );
+  rtems_timespec_set( timespec2, 1, 1 );
+  returned_timeT = rtems_timespec_add_to( timespec1, timespec2 );
+  rtems_test_assert(
+    returned_timeT == rtems_timespec_add_to( timespec1, timespec2 )
+  );
+  
+  puts("rtems_timespec_add_to test greater than 32 bits PASSED");
+}
+
 
 void test_add(){
 /* Basic add_to test. tv_nsec in result is in range 
@@ -87,7 +105,7 @@ void test_add(){
   rtems_timespec_set(timespec1, 13, (TOD_NANOSECONDS_PER_SECOND-300));
   rtems_timespec_set(timespec2, 26, 5000);
   rtems_timespec_add_to(timespec1, timespec2);
-  rtems_test_assert( (timespec1->tv_sec==40)&&(timespec1->tv_nsec==4700) );
+  rtems_test_assert( (timespec1->tv_sec==40) && (timespec1->tv_nsec==4700) );
 
   puts( "\n rtems_timespec_add_to test PASSED " );
 }
