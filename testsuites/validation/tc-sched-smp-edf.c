@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -67,17 +67,31 @@
  *
  * This test case performs the following actions:
  *
- * - Validate a set affinity error case with an unsupported subset.
+ * - Validate a set affinity error case with an unsupported subset.  This
+ *   requires an affinity set with at least two processors.  On a system with
+ *   exactly two processors, this is the set of all online processors and the
+ *   unsupported subset is infeasible since the scheduler would select an
+ *   affinity to all processors.  On systems with three or more processors,
+ *   unsupported subsets are possible to construct.
  *
  * @{
  */
 
 /**
- * @brief Validate a set affinity error case with an unsupported subset.
+ * @brief Validate a set affinity error case with an unsupported subset.  This
+ *   requires an affinity set with at least two processors.  On a system with
+ *   exactly two processors, this is the set of all online processors and the
+ *   unsupported subset is infeasible since the scheduler would select an
+ *   affinity to all processors.  On systems with three or more processors,
+ *   unsupported subsets are possible to construct.
  */
 static void ScoreSchedSmpEdfValEdf_Action_0( void )
 {
-  if ( rtems_scheduler_get_processor_maximum() >= 3 ) {
+  uint32_t cpu_count;
+
+  cpu_count = rtems_scheduler_get_processor_maximum();
+
+  if ( cpu_count > 2 ) {
     rtems_status_code sc;
     cpu_set_t         affinity;
 
@@ -97,6 +111,8 @@ static void ScoreSchedSmpEdfValEdf_Action_0( void )
     RemoveProcessor( SCHEDULER_B_ID, 2 );
     AddProcessor( SCHEDULER_B_ID, 1 );
     AddProcessor( SCHEDULER_C_ID, 2 );
+  } else {
+    T_eq_u32( cpu_count, 2 );
   }
 }
 
