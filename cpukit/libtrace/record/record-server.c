@@ -193,7 +193,6 @@ void rtems_record_server( uint16_t port, rtems_interval period )
   size_t count;
   rtems_record_item *items;
 
-  sd = -1;
   self = rtems_task_self();
 
   count = rtems_record_get_item_count_for_fetch();
@@ -204,12 +203,12 @@ void rtems_record_server( uint16_t port, rtems_interval period )
 
   sc = rtems_timer_create( rtems_build_name( 'R', 'C', 'R', 'D' ), &timer );
   if ( sc != RTEMS_SUCCESSFUL ) {
-    goto error;
+    goto timer_error;
   }
 
   sd = socket( PF_INET, SOCK_STREAM, 0 );
   if (sd < 0) {
-    goto error;
+    goto socket_error;
   }
 
   memset( &addr, 0, sizeof( addr ) );
@@ -247,9 +246,15 @@ void rtems_record_server( uint16_t port, rtems_interval period )
 
 error:
 
-  free( items );
   (void) close( sd );
+
+socket_error:
+
   (void) rtems_timer_delete( timer );
+
+timer_error:
+
+  free( items );
 }
 
 typedef struct {
