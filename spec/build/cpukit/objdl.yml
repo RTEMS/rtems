@@ -45,6 +45,8 @@ links:
 - role: build-dependency
   uid: objdlpowerpc
 - role: build-dependency
+  uid: objdlriscv
+- role: build-dependency
   uid: objdlsparc
 source:
 - cpukit/libdl/dlfcn-shell.c

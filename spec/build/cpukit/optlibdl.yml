@@ -16,6 +16,7 @@ enabled-by:
 - mips
 - moxie
 - powerpc
+- riscv
 - sparc
 links: []
 name: BUILD_LIBDL
