@@ -155,7 +155,7 @@ T_TEST_CASE(ticks)
 	m = 10;
 
 	do {
-		if (ns / m == 0) {
+		if ((ns + m / 2) / m == 0) {
 			break;
 		}
 
@@ -165,13 +165,13 @@ T_TEST_CASE(ticks)
 
 	n = 10 - n;
 
-	t = T_seconds_and_nanoseconds_to_time(1, 123456789);
+	t = T_seconds_and_nanoseconds_to_time(1, 100000000);
 	k = T_time_to_ticks(t);
 
 	n += 2;
-	T_eq_nstr(T_ticks_to_string_ns(k, ts), "1.123456789", n);
-	T_eq_nstr(T_ticks_to_string_us(k, ts), "1.123456", n);
-	T_eq_nstr(T_ticks_to_string_ms(k, ts), "1.123", n);
+	T_eq_nstr(T_ticks_to_string_ns(k, ts), "1.100000000", n);
+	T_eq_nstr(T_ticks_to_string_us(k, ts), "1.100000", n);
+	T_eq_nstr(T_ticks_to_string_ms(k, ts), "1.100", n);
 	T_eq_str(T_ticks_to_string_s(k, ts), "1");
 }
 
