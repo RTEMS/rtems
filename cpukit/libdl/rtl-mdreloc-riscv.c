@@ -160,19 +160,15 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
                           const Elf_Byte            syminfo,
                           const Elf_Word            symvalue,
                           const bool parsing) {
-  Elf_Word *where;
-  Elf_Word  tmp;
-  Elf_Word addend = (Elf_Word) rela->r_addend;
-  Elf_Word local = 0;
+  Elf_Addr *where;
 
   char bits = (sizeof(Elf_Word) * 8);
   where = (Elf_Addr *)(sect->base + rela->r_offset);
 
   // Final PCREL value
-  Elf_Word pcrel_val = symvalue - ((Elf_Word) where);
+  Elf_Word pcrel_val = symvalue - ((Elf_Word)(uintptr_t) where);
 
   if (syminfo == STT_SECTION) {
-    local = 1;
     return rtems_rtl_elf_rel_no_error;
   }
 
@@ -371,7 +367,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
 
   default:
     rtems_rtl_set_error (EINVAL,
-                         "%s: Unsupported relocation type %ld "
+                         "%s: Unsupported relocation type %u "
                          "in non-PLT relocations",
                          sect->name, (uint32_t) ELF_R_TYPE(rela->r_info));
     return rtems_rtl_elf_rel_failure;
