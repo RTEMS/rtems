@@ -104,6 +104,8 @@ BSP_START_TEXT_SECTION void zynqmp_setup_mmu_and_cache(void);
  */
 BSP_START_TEXT_SECTION void zynqmp_setup_secondary_cpu_mmu_and_cache( void );
 
+void zynqmp_management_console_termios_init(void);
+
 void zynqmp_debug_console_flush(void);
 
 uint32_t zynqmp_clock_i2c0(void);

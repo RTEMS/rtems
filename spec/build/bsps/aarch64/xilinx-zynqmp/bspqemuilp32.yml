@@ -20,5 +20,6 @@ links:
 - role: build-dependency
   uid: objfdtzynqmp
 source:
+- bsps/aarch64/xilinx-zynqmp/console/management_apu.c
 - bsps/aarch64/xilinx-zynqmp/start/bspstartecc_qemu.c
 type: build

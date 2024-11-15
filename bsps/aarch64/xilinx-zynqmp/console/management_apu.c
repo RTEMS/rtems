@@ -5,12 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64XilinxZynqMP
  *
- * @brief This source file contains the definition of ::aarch64_mmu_config_table
- *   and ::aarch64_mmu_config_table_size.
+ * @brief This source file contains the management console implementation.
  */
 
 /*
- * Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2024 On-Line Applications Research Corporation (OAR)
  * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,36 +35,7 @@
  */
 
 #include <bsp.h>
-#include <bsp/aarch64-mmu.h>
-#include <bsp/start.h>
-#include <libcpu/mmu-vmsav8-64.h>
 
-BSP_START_DATA_SECTION const aarch64_mmu_config_entry
-aarch64_mmu_config_table[] = {
-  AARCH64_MMU_DEFAULT_SECTIONS,
-  {
-    .begin = 0xf9000000U,
-    .end = 0xf9100000U,
-    .flags = AARCH64_MMU_DEVICE
-  }, {
-    .begin = 0xfd000000U,
-    .end = 0xffc00000U,
-    .flags = AARCH64_MMU_DEVICE
-  /* Map OCM space */
-  }, {
-    .begin = 0xfffc0000U,
-    .end = 0x100000000U,
-    .flags = AARCH64_MMU_DATA_RW
-  }, { /* DDRMC_region1_mem, if not used size is 0 and ignored */
-    .begin = (uintptr_t) bsp_r1_ram_base,
-    .end = (uintptr_t) bsp_r1_ram_end,
-    .flags = AARCH64_MMU_DATA_RW_CACHED
-  }, {
-    .begin = 0xb0000000U,
-    .end = 0xb0200000U,
-    .flags = AARCH64_MMU_DATA_RW
-  }
-};
-
-BSP_START_DATA_SECTION const size_t aarch64_mmu_config_table_size =
-  RTEMS_ARRAY_SIZE(aarch64_mmu_config_table);
+void zynqmp_management_console_termios_init(void)
+{
+}
