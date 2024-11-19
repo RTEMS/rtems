@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Explicit thread priority changes and thread priority changes carried out by
+  thread queues shall be serialized.
+type: requirement
