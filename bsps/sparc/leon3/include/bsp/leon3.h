@@ -378,6 +378,16 @@ typedef struct {
  */
 extern leon3_timecounter leon3_timecounter_instance;
 
+#if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+/**
+ * @brief This interrupt lock prevents concurrent access to L2C registers.
+ *
+ * This is required as a workaround for the in GR740 errata: Level-2 Cache
+ * Issues H1 2023 (GRLIB-TN-0021).
+ */
+extern rtems_interrupt_lock leon3_l2c_lock;
+#endif
+
 /** @} */
 
 #ifdef __cplusplus

@@ -40,6 +40,10 @@
 #include <grlib/l2c.h>
 #include <grlib/grlib_impl.h>
 
+#if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+extern rtems_interrupt_lock leon3_l2c_lock;
+#endif
+
 /*#define STATIC*/
 #define STATIC static
 
@@ -318,8 +322,6 @@ struct l2cache_priv {
 	int ft_support;
 	int split_support;
 	int atomic_flush;
-	/* Avoid concurrent accesses to L2C registers. */
-	SPIN_DECLARE(devlock);
 
 	/* User defined ISR */
 	l2cache_isr_t isr;
@@ -387,22 +389,20 @@ static char * repl_names[4] = {"LRU","Random","Master-Idx-1","Master-IDx-2"};
 #endif
 
 static void REG_WRITE(volatile unsigned int *addr, unsigned int val) {
-	struct l2cache_priv *priv = l2cachepriv;
 	SPIN_IRQFLAGS(irqflags);
 
-	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+	SPIN_LOCK_IRQ(&leon3_l2c_lock, irqflags);
 	*addr = val;
-	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+	SPIN_UNLOCK_IRQ(&leon3_l2c_lock, irqflags);
 }
 
 static unsigned int REG_READ(volatile unsigned int *addr) {
-	struct l2cache_priv *priv = l2cachepriv;
 	SPIN_IRQFLAGS(irqflags);
 	unsigned int val;
 
-	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+	SPIN_LOCK_IRQ(&leon3_l2c_lock, irqflags);
 	val = *addr;
-	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+	SPIN_UNLOCK_IRQ(&leon3_l2c_lock, irqflags);
 	return val;
 }
 
@@ -418,12 +418,11 @@ static inline uint32_t atomic_swap32(uint32_t *addr, uint32_t val) {
 }
 
 static void REG_WRITE_ATOMIC(volatile unsigned int *addr, unsigned int val) {
-	struct l2cache_priv *priv = l2cachepriv;
 	SPIN_IRQFLAGS(irqflags);
 
-	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+	SPIN_LOCK_IRQ(&leon3_l2c_lock, irqflags);
 	atomic_swap32((uint32_t *) addr, val);
-	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+	SPIN_UNLOCK_IRQ(&leon3_l2c_lock, irqflags);
 }
 
 #else
@@ -541,7 +540,6 @@ int l2cache_init1(struct drvmgr_dev *dev)
 	priv->dev = dev;
 	strncpy(&priv->devname[0], "l2cache0", DEVNAME_LEN);
 	l2cachepriv = priv;
-	SPIN_INIT(&priv->devlock, priv->devname);
 
 	/* Initialize L2CACHE Hardware */
 	status = l2cache_init(priv);
