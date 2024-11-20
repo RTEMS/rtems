@@ -296,6 +296,20 @@ static void _Thread_Priority_apply(
     priority_action_type
   );
   queue = the_thread->Wait.queue;
+
+#if defined(RTEMS_SMP)
+  if ( queue != NULL ) {
+    /*
+     * If the thread waits on a thread queue, then we have to acquire the path
+     * before the priority action prepared above is carried out.  For example,
+     * when a priority inheritance queue is involved, the priority action may
+     * produce more actions using scheduler nodes of other threads.  Using
+     * these nodes is only safe once the thread queue path is acquired.
+     */
+    (void) _Thread_queue_Path_acquire( queue, the_thread, queue_context );
+  }
+#endif
+
   _Thread_Priority_do_perform_actions(
     the_thread,
     queue,
@@ -305,14 +319,14 @@ static void _Thread_Priority_apply(
   );
 
   if ( !_Priority_Actions_is_empty( &queue_context->Priority.Actions ) ) {
-#if defined(RTEMS_SMP)
-    (void) _Thread_queue_Path_acquire( queue, the_thread, queue_context );
-#endif
     _Thread_Priority_perform_actions( queue->owner, queue_context );
-#if defined(RTEMS_SMP)
-    _Thread_queue_Path_release( queue_context );
-#endif
   }
+
+#if defined(RTEMS_SMP)
+  if (queue != NULL ) {
+    _Thread_queue_Path_release( queue_context );
+  }
+#endif
 }
 
 void _Thread_Priority_add(
