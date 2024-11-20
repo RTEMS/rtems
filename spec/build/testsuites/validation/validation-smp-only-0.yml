@@ -10,6 +10,7 @@ features: c cprogram
 includes: []
 ldflags:
 - -Wl,--wrap=_Scheduler_EDF_SMP_Yield
+- -Wl,--wrap=_Thread_queue_Path_acquire
 links: []
 source:
 - testsuites/validation/tc-acfg-scheduler-edf-smp.c
