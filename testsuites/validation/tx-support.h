@@ -583,6 +583,26 @@ void TicketLockWaitForOthers(
   unsigned int                   others
 );
 
+typedef struct {
+  const SMP_ticket_lock_Control *lock;
+  unsigned int                   next_ticket;
+} TicketLockState;
+
+void TicketLockGetState(
+  const SMP_ticket_lock_Control *lock,
+  TicketLockState               *state
+);
+
+void TicketLockWaitForAcquires(
+  const TicketLockState *state,
+  unsigned int           acquire_count
+);
+
+void TicketLockWaitForReleases(
+  const TicketLockState *state,
+  unsigned int           release_count
+);
+
 static inline bool ISRLockIsAvailable( const ISR_lock_Control *lock )
 {
   return TicketLockIsAvailable( &lock->Lock.Ticket_lock );
