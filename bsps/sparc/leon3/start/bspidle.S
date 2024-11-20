@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCShared
+ *
+ * @brief This assembler source file contains the LEON3-specific
+ *   bsp_idle_thread() implementation.
+ */
+
 /*
  *  Idle Thread Body
  *
@@ -48,10 +57,29 @@
 SYM(bsp_idle_thread):
 SYM(leon3_power_down_loop):
 pwdloop:
+          /*
+           * Address 0xfffffff0 is the read-only AHB plug & play region at
+           * least for the UT699, GR712RC, and GR740.
+           */
           set     0xfffffff0, %o0
+
+          /*
+           * Make sure the following two instructions are in one cache line.
+           * This ensures that the instructions are fetched from the
+           * instruction cache when the processor leaves power-down mode
+           * (unless a SEU occurs in the instruction cache line).
+           *
+           * Use a load which bypasses the MMU and cache (ASI 0x1c).
+           */
           .align 32
           mov     %g0, %asr19
           lda     [%o0] 0x1c, %g0
+
+          /*
+           * Place the branch far enough away from the preceding load, to make
+           * sure the preceding load is executed before the branch to prevent
+           * an instruction fetch from memory.
+           */
           .align 32
           ba,a    pwdloop
            nop
