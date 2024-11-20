@@ -37,6 +37,23 @@
 
 #define CPU_DATA_CACHE_ALIGNMENT 64
 
+#if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+rtems_interrupt_lock leon3_l2c_lock =
+  RTEMS_INTERRUPT_LOCK_INITIALIZER( "LEON3 L2C" );
+#endif
+
+static inline uint32_t l2c_load_32(const volatile uint32_t *address)
+{
+  rtems_interrupt_lock_context lock_context;
+  uint32_t value;
+
+  rtems_interrupt_lock_acquire(&leon3_l2c_lock, &lock_context);
+  value = grlib_load_32(address);
+  rtems_interrupt_lock_release(&leon3_l2c_lock, &lock_context);
+
+  return value;
+}
+
 #if !defined(LEON3_L2CACHE_BASE)
 static inline l2cache *get_l2c_regs(void)
 {
@@ -85,7 +102,7 @@ static inline size_t get_l2_size(void)
   }
 #endif
 
-  status = grlib_load_32(&regs->l2cs);
+  status = l2c_load_32(&regs->l2cs);
   ways = L2CACHE_L2CS_WAY_GET(status) + 1;
   set_size = L2CACHE_L2CS_WAY_SIZE_GET(status) * 1024;
 
