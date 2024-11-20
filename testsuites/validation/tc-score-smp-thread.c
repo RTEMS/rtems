@@ -107,6 +107,23 @@
  *
  *   - Clean up all used resources.
  *
+ * - Create four worker threads and three mutexes.  Provoke an explicit thread
+ *   priority change while a priority inheritance change is in progress.  The
+ *   explicit thread priority change propagates through priority inheritance.
+ *
+ *   - Create the following dependencies MA -> WA and TC -> MB -> WA.
+ *
+ *   - Acquire the worker A default thread wait lock.  Start creating the
+ *     dependency TB -> MB (we already have MB -> WA).  Make sure it stops
+ *     while acquiring the worker A default thread wait lock.  Prepare the
+ *     worker A default thread wait lock release.  Raise the worker C priority.
+ *     This operation will call the wrapped _Thread_queue_Path_acquire() and
+ *     trigger the prepared release of the worker A default thread wait lock.
+ *     The worker A default wait lock critical sections will execute now in the
+ *     prepared sequence.
+ *
+ *   - Clean up all used resources.
+ *
  * @{
  */
 
@@ -130,9 +147,14 @@ typedef struct {
   rtems_id worker_c_id;
 
   /**
-   * @brief This member contains the mutex identifier.
+   * @brief This member contains the mutex A identifier.
    */
-  rtems_id mutex_id;
+  rtems_id mutex_a_id;
+
+  /**
+   * @brief This member contains the mutex B identifier.
+   */
+  rtems_id mutex_b_id;
 
   /**
    * @brief If this member is true, then the worker shall busy wait.
@@ -154,26 +176,44 @@ typedef struct {
    * @brief This member contains the barrier state for the runner processor.
    */
   SMP_barrier_State barrier_state;
+
+  /**
+   * @brief This member references the processor on which the worker A wait
+   *   default lock was acquired.
+   */
+  Per_CPU_Control *worker_a_wait_default_lock_cpu;
+
+  /**
+   * @brief This member contains the lock context for the worker A wait default
+   *   lock acquire and release.
+   */
+  ISR_lock_Context worker_a_wait_default_lock_context;
 } ScoreThreadValSmp_Context;
 
 static ScoreThreadValSmp_Context
   ScoreThreadValSmp_Instance;
 
-#define EVENT_OBTAIN RTEMS_EVENT_0
+#define EVENT_A_OBTAIN RTEMS_EVENT_0
 
-#define EVENT_RELEASE RTEMS_EVENT_1
+#define EVENT_A_RELEASE RTEMS_EVENT_1
 
-#define EVENT_COUNT_EARLY RTEMS_EVENT_2
+#define EVENT_B_OBTAIN RTEMS_EVENT_2
 
-#define EVENT_BUSY RTEMS_EVENT_3
+#define EVENT_B_RELEASE RTEMS_EVENT_3
 
-#define EVENT_COUNT RTEMS_EVENT_4
+#define EVENT_COUNT_EARLY RTEMS_EVENT_4
 
-#define EVENT_LET_WORKER_C_COUNT RTEMS_EVENT_5
+#define EVENT_BUSY RTEMS_EVENT_5
 
-#define EVENT_SET_TASK_SWITCH_EXTENSION RTEMS_EVENT_6
+#define EVENT_COUNT RTEMS_EVENT_6
+
+#define EVENT_LET_WORKER_C_COUNT RTEMS_EVENT_7
+
+#define EVENT_SET_TASK_SWITCH_EXTENSION RTEMS_EVENT_8
 
 typedef ScoreThreadValSmp_Context Context;
+
+static Context *release_worker_a_wait_default;
 
 static void TaskSwitchExtension( rtems_tcb *executing, rtems_tcb *heir )
 {
@@ -210,12 +250,20 @@ static void WorkerTask( rtems_task_argument arg )
 
     events = ReceiveAnyEvents();
 
-    if ( ( events & EVENT_OBTAIN ) != 0 ) {
-      ObtainMutex( ctx->mutex_id );
+    if ( ( events & EVENT_A_OBTAIN ) != 0 ) {
+      ObtainMutex( ctx->mutex_a_id );
     }
 
-    if ( ( events & EVENT_RELEASE ) != 0 ) {
-      ReleaseMutex( ctx->mutex_id );
+    if ( ( events & EVENT_A_RELEASE ) != 0 ) {
+      ReleaseMutex( ctx->mutex_a_id );
+    }
+
+    if ( ( events & EVENT_B_OBTAIN ) != 0 ) {
+      ObtainMutex( ctx->mutex_b_id );
+    }
+
+    if ( ( events & EVENT_B_RELEASE ) != 0 ) {
+      ReleaseMutex( ctx->mutex_b_id );
     }
 
     if ( ( events & EVENT_COUNT_EARLY ) != 0 ) {
@@ -298,6 +346,64 @@ static void WaitForCounter( const Context *ctx, uint32_t expected )
   }
 }
 
+static void DoMutexOperation(
+  rtems_id        worker_id,
+  rtems_id        mutex_id,
+  rtems_event_set event
+)
+{
+  Thread_queue_Queue *queue;
+  TicketLockState     lock_state;
+
+  queue = GetMutexThreadQueue( mutex_id );
+  TicketLockGetState( &queue->Lock, &lock_state );
+  SendEvents( worker_id, event );
+  TicketLockWaitForReleases( &lock_state, 1 );
+}
+
+Thread_queue_Deadlock_status __wrap__Thread_queue_Path_acquire(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+);
+
+Thread_queue_Deadlock_status __real__Thread_queue_Path_acquire(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+);
+
+Thread_queue_Deadlock_status __wrap__Thread_queue_Path_acquire(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  Context *ctx;
+
+  ctx = release_worker_a_wait_default;
+
+  if (
+    ctx != NULL &&
+    ctx->worker_a_wait_default_lock_cpu == _Per_CPU_Get()
+  ) {
+    Thread_Control *worker_a;
+
+    release_worker_a_wait_default = NULL;
+    worker_a = GetThread( ctx->worker_a_id );
+    _Thread_Wait_release_default_critical(
+      worker_a,
+      &ctx->worker_a_wait_default_lock_context
+    );
+  }
+
+  return __real__Thread_queue_Path_acquire(
+    queue,
+    the_thread,
+    queue_context
+  );
+}
+
 static void ScoreThreadValSmp_Setup( ScoreThreadValSmp_Context *ctx )
 {
   SetSelfPriority( PRIO_NORMAL );
@@ -344,7 +450,7 @@ static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
   executing = _Thread_Get_executing();
   ctx->counter = 0;
 
-  ctx->mutex_id = CreateMutex();
+  ctx->mutex_a_id = CreateMutex();
 
   ctx->worker_a_id = CreateTask( "WRKA", PRIO_NORMAL );
   SetScheduler( ctx->worker_a_id, SCHEDULER_B_ID, PRIO_NORMAL );
@@ -356,8 +462,8 @@ static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
   ctx->worker_c_id = CreateTask( "WRKC", PRIO_LOW );
   StartTask( ctx->worker_c_id, WorkerTask, ctx );
 
-  ObtainMutex( ctx->mutex_id );
-  SendEvents( ctx->worker_a_id, EVENT_OBTAIN | EVENT_RELEASE );
+  ObtainMutex( ctx->mutex_a_id );
+  SendEvents( ctx->worker_a_id, EVENT_A_OBTAIN | EVENT_A_RELEASE );
 
   ctx->busy = true;
   SendEvents( ctx->worker_b_id, EVENT_BUSY );
@@ -400,7 +506,7 @@ static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
   /*
    * Release the mutex.
    */
-  ReleaseMutex( ctx->mutex_id);
+  ReleaseMutex( ctx->mutex_a_id);
   T_eq_u32( rtems_scheduler_get_processor(), 0 );
 
   /*
@@ -431,7 +537,7 @@ static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
   DeleteTask( ctx->worker_a_id );
   DeleteTask( ctx->worker_b_id );
   DeleteTask( ctx->worker_c_id );
-  DeleteMutex( ctx->mutex_id );
+  DeleteMutex( ctx->mutex_a_id );
 }
 
 /**
@@ -448,7 +554,7 @@ static void ScoreThreadValSmp_Action_1( ScoreThreadValSmp_Context *ctx )
   _SMP_barrier_State_initialize( &ctx->barrier_state );
 
   ctx->counter = 0;
-  ctx->mutex_id = CreateMutex();
+  ctx->mutex_a_id = CreateMutex();
 
   ctx->worker_a_id = CreateTask( "WRKA", PRIO_NORMAL );
   SetScheduler( ctx->worker_a_id, SCHEDULER_B_ID, PRIO_NORMAL );
@@ -468,11 +574,11 @@ static void ScoreThreadValSmp_Action_1( ScoreThreadValSmp_Context *ctx )
   ctx->busy = true;
   SendEvents(
     ctx->worker_a_id,
-    EVENT_OBTAIN | EVENT_COUNT_EARLY | EVENT_BUSY | EVENT_COUNT
+    EVENT_A_OBTAIN | EVENT_COUNT_EARLY | EVENT_BUSY | EVENT_COUNT
   );
   WaitForCounter( ctx, 1 );
 
-  SendEvents( ctx->worker_b_id, EVENT_OBTAIN );
+  SendEvents( ctx->worker_b_id, EVENT_A_OBTAIN );
   SetPriority( ctx->worker_b_id, PRIO_LOW );
   SendEvents( ctx->worker_c_id, EVENT_SET_TASK_SWITCH_EXTENSION );
 
@@ -526,16 +632,89 @@ static void ScoreThreadValSmp_Action_1( ScoreThreadValSmp_Context *ctx )
   /*
    * Clean up all used resources.
    */
-  SendEvents( ctx->worker_a_id, EVENT_RELEASE | EVENT_COUNT );
+  SendEvents( ctx->worker_a_id, EVENT_A_RELEASE | EVENT_COUNT );
   WaitForCounter( ctx, 3 );
 
   SetPriority( ctx->worker_b_id, PRIO_HIGH );
-  SendEvents( ctx->worker_b_id, EVENT_RELEASE );
+  SendEvents( ctx->worker_b_id, EVENT_A_RELEASE );
 
   DeleteTask( ctx->worker_a_id );
   DeleteTask( ctx->worker_b_id );
   DeleteTask( ctx->worker_c_id );
-  DeleteMutex( ctx->mutex_id );
+  DeleteMutex( ctx->mutex_a_id );
+}
+
+/**
+ * @brief Create four worker threads and three mutexes.  Provoke an explicit
+ *   thread priority change while a priority inheritance change is in progress.
+ *   The explicit thread priority change propagates through priority
+ *   inheritance.
+ */
+static void ScoreThreadValSmp_Action_2( ScoreThreadValSmp_Context *ctx )
+{
+  Thread_Control *worker_a;
+
+  ctx->mutex_a_id = CreateMutex();
+  ctx->mutex_b_id = CreateMutex();
+
+  ctx->worker_a_id = CreateTask( "WRKA", PRIO_HIGH );
+  StartTask( ctx->worker_a_id, WorkerTask, ctx );
+
+  ctx->worker_b_id = CreateTask( "WRKB", PRIO_NORMAL );
+  SetScheduler( ctx->worker_b_id, SCHEDULER_B_ID, PRIO_NORMAL );
+  StartTask( ctx->worker_b_id, WorkerTask, ctx );
+
+  ctx->worker_c_id = CreateTask( "WRKC", PRIO_NORMAL );
+  SetScheduler( ctx->worker_c_id, SCHEDULER_B_ID, PRIO_NORMAL );
+  StartTask( ctx->worker_c_id, WorkerTask, ctx );
+
+  /*
+   * Create the following dependencies MA -> WA and TC -> MB -> WA.
+   */
+  DoMutexOperation( ctx->worker_a_id, ctx->mutex_a_id, EVENT_A_OBTAIN );
+  DoMutexOperation( ctx->worker_a_id, ctx->mutex_b_id, EVENT_B_OBTAIN );
+  DoMutexOperation( ctx->worker_c_id, ctx->mutex_a_id, EVENT_A_OBTAIN );
+
+  /*
+   * Acquire the worker A default thread wait lock.  Start creating the
+   * dependency TB -> MB (we already have MB -> WA).  Make sure it stops while
+   * acquiring the worker A default thread wait lock.  Prepare the worker A
+   * default thread wait lock release.  Raise the worker C priority.  This
+   * operation will call the wrapped _Thread_queue_Path_acquire() and trigger
+   * the prepared release of the worker A default thread wait lock.  The worker
+   * A default wait lock critical sections will execute now in the prepared
+   * sequence.
+   */
+  worker_a = GetThread( ctx->worker_a_id );
+  _ISR_lock_ISR_disable( &ctx->worker_a_wait_default_lock_context );
+  _Thread_Wait_acquire_default_critical(
+    worker_a,
+    &ctx->worker_a_wait_default_lock_context
+  );
+  ctx->worker_a_wait_default_lock_cpu = _Per_CPU_Get();
+  _ISR_lock_ISR_enable( &ctx->worker_a_wait_default_lock_context );
+
+  SendEvents( ctx->worker_b_id, EVENT_B_OBTAIN );
+  TicketLockWaitForOthers( &worker_a->Wait.Lock.Default.Lock.Ticket_lock, 1 );
+
+  release_worker_a_wait_default = ctx;
+
+  SetPriority( ctx->worker_c_id, PRIO_HIGH );
+
+  /*
+   * Clean up all used resources.
+   */
+  DoMutexOperation( ctx->worker_a_id, ctx->mutex_a_id, EVENT_A_RELEASE );
+  DoMutexOperation( ctx->worker_a_id, ctx->mutex_b_id, EVENT_B_RELEASE );
+  DoMutexOperation( ctx->worker_b_id, ctx->mutex_b_id, EVENT_B_RELEASE );
+  DoMutexOperation( ctx->worker_c_id, ctx->mutex_a_id, EVENT_A_RELEASE );
+
+  DeleteTask( ctx->worker_a_id );
+  DeleteTask( ctx->worker_b_id );
+  DeleteTask( ctx->worker_c_id );
+
+  DeleteMutex( ctx->mutex_a_id );
+  DeleteMutex( ctx->mutex_b_id );
 }
 
 /**
@@ -549,6 +728,7 @@ T_TEST_CASE_FIXTURE( ScoreThreadValSmp, &ScoreThreadValSmp_Fixture )
 
   ScoreThreadValSmp_Action_0( ctx );
   ScoreThreadValSmp_Action_1( ctx );
+  ScoreThreadValSmp_Action_2( ctx );
 }
 
 /** @} */
