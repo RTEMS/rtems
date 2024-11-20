@@ -1030,4 +1030,49 @@ void TicketLockWaitForOthers(
     actual = _Atomic_Load_uint( &lock->next_ticket, ATOMIC_ORDER_RELAXED );
   } while ( expected != actual );
 }
+
+void TicketLockGetState(
+  const SMP_ticket_lock_Control *lock,
+  TicketLockState               *state
+)
+{
+  state->lock = lock;
+  state->next_ticket =
+    _Atomic_Load_uint( &lock->next_ticket, ATOMIC_ORDER_RELAXED );
+}
+
+void TicketLockWaitForAcquires(
+  const TicketLockState *state,
+  unsigned int           acquire_count
+)
+{
+  const SMP_ticket_lock_Control *lock;
+  unsigned int                   expected;
+  unsigned int                   actual;
+
+  lock = state->lock;
+  expected = state->next_ticket + acquire_count;
+
+  do {
+    actual = _Atomic_Load_uint( &lock->next_ticket, ATOMIC_ORDER_RELAXED );
+  } while ( expected != actual );
+}
+
+void TicketLockWaitForReleases(
+  const TicketLockState *state,
+  unsigned int           release_count
+)
+{
+  const SMP_ticket_lock_Control *lock;
+  unsigned int                   expected;
+  unsigned int                   actual;
+
+  lock = state->lock;
+  expected = state->next_ticket + release_count;
+
+  do {
+    actual = _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_RELAXED );
+  } while ( expected != actual );
+}
+
 #endif
