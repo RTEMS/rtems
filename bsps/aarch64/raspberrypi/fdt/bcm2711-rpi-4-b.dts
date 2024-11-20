@@ -5,12 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64Raspberrypi4
  *
- * @brief Core BSP definitions
+ * @brief This file provides the base Raspberrypi4 device tree
  */
 
 /*
- * Copyright (C) 2022 Mohd Noor Aman
- *
+ * Copyright (C) 2024 Ning Yang
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,44 +33,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H
-#define LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H
+/dts-v1/;
 
-/**
- * @addtogroup RTEMSBSPsAArch64
- *
- * @{
- */
+/ {
+	#address-cells = <2>;
+	#size-cells = <1>;
 
-#include <bspopts.h>
+	amba@7c000000 {
+		compatible = "simple-bus";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges = <0x7c000000 0x00 0xfc000000 0x3800000>, <0x40000000 0x00 0xff800000 0x800000>;
 
-#ifndef ASM
+		interrupt-controller@40041000 {
+			compatible = "arm,gic-400";
+			#address-cells = <2>;
+			#interrupt-cells = <3>;
+			reg = <0x40041000 0x1000>, <0x40042000 0x2000>, <0x40044000 0x2000>, <0x40046000 0x2000>;
+			interrupt-controller;
+			phandle = <1>;
+		};
 
-#include <bsp/default-initial-extension.h>
-#include <bsp/start.h>
+		ethernet@7d580000 {
+			phy-mode = "rgmii-rxid";
+			phy-handle = <&phy0>;
+			compatible = "brcm,bcm2711-genet-v5";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			reg = <0x7d580000 0x10000>;
+			interrupt-parent = <1>;
+			interrupts = <0x0 0x9d 0x4> , <0x0 0x9e 0x4>;
 
-#include <rtems.h>
+			mdio@e14 {
+				compatible = "brcm,genet-mdio-v5";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				reg = <0xe14 0x8>;
 
-/*Raspberry pi MMU initialization */
-BSP_START_TEXT_SECTION void raspberrypi_4_setup_mmu_and_cache(void);
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-#define BSP_FDT_IS_SUPPORTED
-extern const unsigned char bcm2711_rpi_4_b_dtb[];
-extern const size_t bcm2711_rpi_4_b_dtb_size;
-
-#define BSP_ARM_GIC_CPUIF_BASE 0xFF842000
-#define BSP_ARM_GIC_DIST_BASE 0xFF841000
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* ASM */
-
-/** @} */
-
-#endif /* LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H */
+				phy0: ethernet-phy@1 {
+					reg = <0x1>;
+				};
+			};
+		};
+	};
+};

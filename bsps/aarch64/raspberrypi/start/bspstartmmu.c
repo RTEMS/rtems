@@ -61,6 +61,12 @@ raspberrypi_4_mmu_config_table[] = {
     .begin = 0xFF800000U,
     .end = 0xFFA00000U,
     .flags = AARCH64_MMU_DEVICE
+  },
+
+  { /* RPI genet address */
+    .begin = (unsigned)0xFD580000,
+    .end = (unsigned)0xFD580000 + (unsigned)0x10000,
+    .flags = AARCH64_MMU_DEVICE
   }
 
 };

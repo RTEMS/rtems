@@ -64,6 +64,8 @@ links:
 - role: build-dependency
   uid: objwatchdog
 source:
+- bsps/aarch64/raspberrypi/fdt/bsp_fdt.c
+- bsps/aarch64/raspberrypi/fdt/rpi4b_dtb.c
 - bsps/aarch64/raspberrypi/start/bspstart.c
 - bsps/aarch64/raspberrypi/start/bspstarthooks.c
 - bsps/aarch64/raspberrypi/start/bspstartmmu.c

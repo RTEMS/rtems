@@ -5,12 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64Raspberrypi4
  *
- * @brief Core BSP definitions
+ * @brief This source file contains the implementatin of bsp_fdt_get().
  */
 
 /*
- * Copyright (C) 2022 Mohd Noor Aman
- *
+ * Copyright (C) 2024 Ning Yang
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,44 +33,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H
-#define LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H
+#include <bsp.h>
+#include <bsp/fdt.h>
 
-/**
- * @addtogroup RTEMSBSPsAArch64
- *
- * @{
- */
-
-#include <bspopts.h>
-
-#ifndef ASM
-
-#include <bsp/default-initial-extension.h>
-#include <bsp/start.h>
-
-#include <rtems.h>
-
-/*Raspberry pi MMU initialization */
-BSP_START_TEXT_SECTION void raspberrypi_4_setup_mmu_and_cache(void);
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-#define BSP_FDT_IS_SUPPORTED
-extern const unsigned char bcm2711_rpi_4_b_dtb[];
-extern const size_t bcm2711_rpi_4_b_dtb_size;
-
-#define BSP_ARM_GIC_CPUIF_BASE 0xFF842000
-#define BSP_ARM_GIC_DIST_BASE 0xFF841000
-
-#ifdef __cplusplus
+const void *bsp_fdt_get(void)
+{
+  return bcm2711_rpi_4_b_dtb;
 }
-#endif /* __cplusplus */
 
-#endif /* ASM */
-
-/** @} */
-
-#endif /* LIBBSP_AARCH64_RASPBERRYPI_4_BSP_H */
+uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
+{
+  if (icells != 3) {
+    return 0;
+  }
+  return (intr[0] == 0 ? 32 : 16) + intr[1];
+}

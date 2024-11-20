@@ -30,7 +30,8 @@ content: |
 
   MEMORY {
   RAM_MMU  : ORIGIN = 0x0, LENGTH = (0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES})
-  RAM      : ORIGIN = 0x80000, LENGTH = 1024M
+  RAM      : ORIGIN = 0x80000, LENGTH = 1024M - 0x80000 - 16M
+  RAM_NOCACHE  : ORIGIN = 0x40000000 - 16M, LENGTH = 16M
   }
 
   REGION_ALIAS ("REGION_START",          RAM);
@@ -48,8 +49,8 @@ content: |
   REGION_ALIAS ("REGION_BSS",            RAM);
   REGION_ALIAS ("REGION_WORK",           RAM);
   REGION_ALIAS ("REGION_STACK",          RAM);
-  REGION_ALIAS ("REGION_NOCACHE",        RAM);
-  REGION_ALIAS ("REGION_NOCACHE_LOAD",   RAM);
+  REGION_ALIAS ("REGION_NOCACHE",        RAM_NOCACHE);
+  REGION_ALIAS ("REGION_NOCACHE_LOAD",   RAM_NOCACHE);
 
   bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
 
