@@ -159,6 +159,7 @@ static inline void _Priority_Actions_add(
    * Priority aggregations are only added to action lists, so do not care about
    * the current next pointer value.
    */
+  _Assert( aggregation->Action.next == NULL );
   aggregation->Action.next = actions->actions;
 #endif
   actions->actions = aggregation;
@@ -334,6 +335,7 @@ static inline void _Priority_Set_action_node(
   Priority_Node        *node
 )
 {
+  _Assert( aggregation->Action.next == NULL );
   aggregation->Action.node = node;
 }
 
@@ -348,6 +350,7 @@ static inline void _Priority_Set_action_type(
   Priority_Action_type  type
 )
 {
+  _Assert( aggregation->Action.next == NULL );
   aggregation->Action.type = type;
 }
 
@@ -365,6 +368,7 @@ static inline void _Priority_Set_action(
   Priority_Action_type  type
 )
 {
+  _Assert( aggregation->Action.next == NULL );
   aggregation->Action.node = node;
   aggregation->Action.type = type;
 }
@@ -379,10 +383,21 @@ static inline void _Priority_Set_action(
  *   is no next action.
  */
 static inline Priority_Aggregation *_Priority_Get_next_action(
+#if defined(RTEMS_DEBUG)
+  Priority_Aggregation *aggregation
+#else
   const Priority_Aggregation *aggregation
+#endif
 )
 {
-  return aggregation->Action.next;
+  Priority_Aggregation *next;
+
+  next = aggregation->Action.next;
+#if defined(RTEMS_DEBUG)
+  aggregation->Action.next = NULL;
+#endif
+
+  return next;
 }
 #endif
 

@@ -68,6 +68,16 @@ void _Thread_queue_Do_nothing_priority_actions(
   Priority_Actions   *priority_actions
 )
 {
+#if defined(RTEMS_DEBUG)
+  Priority_Aggregation *priority_aggregation;
+
+  priority_aggregation = _Priority_Actions_move( priority_actions );
+
+  while ( priority_aggregation != NULL ) {
+    priority_aggregation = _Priority_Get_next_action( priority_aggregation );
+  }
+#endif
+
   (void) queue;
   _Priority_Actions_initialize_empty( priority_actions );
 }
@@ -366,9 +376,16 @@ static void _Thread_queue_Priority_priority_actions(
   priority_aggregation = _Priority_Actions_move( priority_actions );
 
   do {
+#if defined(RTEMS_SMP)
+    Priority_Aggregation        *next_aggregation;
+#endif
     Scheduler_Node              *scheduler_node;
     Thread_queue_Priority_queue *priority_queue;
     Priority_Action_type         priority_action_type;
+
+#if defined(RTEMS_SMP)
+    next_aggregation = _Priority_Get_next_action( priority_aggregation );
+#endif
 
     scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY( priority_aggregation );
     priority_queue = _Thread_queue_Priority_queue( heads, scheduler_node );
@@ -408,7 +425,7 @@ static void _Thread_queue_Priority_priority_actions(
     }
 
 #if defined(RTEMS_SMP)
-    priority_aggregation = _Priority_Get_next_action( priority_aggregation );
+    priority_aggregation = next_aggregation;
   } while ( priority_aggregation != NULL );
 #else
   } while ( false );
@@ -1366,6 +1383,9 @@ static void _Thread_queue_Priority_inherit_do_surrender(
      * _Thread_Priority_perform_actions().
      */
     _Thread_queue_Context_add_priority_update( queue_context, previous_owner );
+#if defined(RTEMS_DEBUG)
+    _Thread_queue_Do_nothing_priority_actions( queue, &queue_context->Priority.Actions );
+#endif
   }
 
   _Thread_Wait_release_default_critical( previous_owner, &lock_context );
