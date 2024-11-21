@@ -198,7 +198,8 @@ class Item(object):
                 uid = link["uid"]
                 if not os.path.isabs(uid):
                     uid = os.path.normpath(
-                        os.path.join(os.path.dirname(self.uid), uid))
+                        os.path.join(os.path.dirname(self.uid),
+                                     uid)).replace("\\", "/")
                 self._links.append(items[uid])
         self.links = self._yield_links
         for link in self._links:
@@ -1232,7 +1233,7 @@ try:
                 path2 = os.path.join(path, name)
                 if name.endswith(".yml") and not name.startswith("."):
                     uid = "/" + os.path.relpath(path2, base).replace(
-                        ".yml", "")
+                        ".yml", "").replace("\\", "/")
                     with open(path2, "r") as f:
                         data = load(f.read(), SafeLoader)
                         if data["type"] == "build":
