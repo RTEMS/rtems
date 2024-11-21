@@ -178,7 +178,7 @@ int lio_listio(
   } else if ( mode == LIO_WAIT ) {
     rtems_event_set event_out; 
     rtems_event_system_receive(
-      RTEMS_EVENT_SYSTEM_AIO_LIST,
+      RTEMS_EVENT_SYSTEM_LIO_LIST_COMPLETED,
       RTEMS_DEFAULT_OPTIONS,
       RTEMS_NO_TIMEOUT,
       &event_out

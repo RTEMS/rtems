@@ -315,12 +315,6 @@ rtems_aio_request *init_read_req( struct aiocb* aiocbp );
  */
 void rtems_aio_completed_list_op( listcb *listcbp );
 
-/**
- * @brief generates event at list completion to end wait in lio_listio().
- * 
- */
-void lio_notify_end_wait( union sigval attr );
-
 #ifdef RTEMS_DEBUG
 #include <assert.h>
 
