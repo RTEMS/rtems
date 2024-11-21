@@ -529,7 +529,7 @@ zqspi_error zqspi_erase(zqspiflash *driver, uint32_t address, size_t length)
       return fe;
     }
 
-    if (length < driver->flash_erase_sector_size) {
+    if (length <= driver->flash_erase_sector_size) {
       done = true;
     } else {
       address += driver->flash_erase_sector_size;
