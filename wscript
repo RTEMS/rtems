@@ -41,7 +41,6 @@ except:
 from waflib.Errors import WafError
 from waflib.TaskGen import after, before_method, feature
 
-is_windows_host = os.name == "nt" or sys.platform in ["msys", "cygwin"]
 version = {
     "__RTEMS_MAJOR__": "6",
     "__RTEMS_MINOR__": "0",

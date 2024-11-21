@@ -27,10 +27,7 @@ actions:
 - substitute: null
 - env-append: ABI_FLAGS
 - script: |
-    load = "ar asm clang clang++"
-    if not is_windows_host:
-        load += " gccdeps"
-    conf.load(load)
+    conf.load("ar asm clang clang++ gccdeps")
 build-type: option
 copyrights:
 - Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>

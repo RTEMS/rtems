@@ -20,10 +20,7 @@ actions:
 - find-program: null
 - env-assign: LD
 - script: |
-    load = "ar g++ gas gcc"
-    if not is_windows_host:
-        load += " gccdeps"
-    conf.load(load)
+    conf.load("ar g++ gas gcc gccdeps")
 - set-value: -qrtems
 - env-append: LDFLAGS
 - env-append: PKGCONFIG_LDFLAGS
