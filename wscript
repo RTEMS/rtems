@@ -217,7 +217,8 @@ class Item(object):
                 uid = link["uid"]
                 if not os.path.isabs(uid):
                     uid = os.path.normpath(
-                        os.path.join(os.path.dirname(self.uid), uid))
+                        os.path.join(os.path.dirname(self.uid),
+                                     uid)).replace("\\", "/")
                 self._links.append(items[uid])
         self.links = self._yield_links
         for link in self._links:
@@ -1229,7 +1230,8 @@ def load_from_yaml(load, ctx, data_by_uid, base, path):
     for name in names:
         path2 = os.path.join(path, name)
         if name.endswith(".yml") and not name.startswith("."):
-            uid = "/" + os.path.relpath(path2, base).replace(".yml", "")
+            uid = "/" + os.path.relpath(path2, base).replace(
+                ".yml", "").replace("\\", "/")
             with open(path2, "r") as f:
                 data_by_uid[uid] = load(f.read())
         else:
