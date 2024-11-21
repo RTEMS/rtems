@@ -26,8 +26,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import print_function
-
 import pickle
 import os
 import re
@@ -53,14 +51,6 @@ version = {
 default_prefix = "/opt/rtems/" + version["__RTEMS_MAJOR__"]
 compilers = ["gcc", "clang"]
 bsps = {}
-
-
-def no_unicode(value):
-    if sys.version_info[0] > 2:
-        return value
-    if isinstance(value, unicode):
-        return str(value)
-    return value
 
 
 class VersionControlKeyHeader:
@@ -1025,7 +1015,6 @@ class OptionItem(Item):
         try:
             value = cic.cp.get(conf.variant, name)
             cic.add_option(name)
-            value = no_unicode(value)
         except configparser.NoOptionError:
             value = self.default_value(conf.env.ENABLE)
         return value
@@ -1265,14 +1254,10 @@ try:
 except ImportError:
     #
     # Fall back to the Python implementation provided by the project.  This
-    # reduces the host system requirements to a simple Python 2.7 or 3
-    # installation without extra modules.
+    # reduces the host system requirements to a simple Python 3 installation
+    # without extra modules.
     #
-    if sys.version_info[0] == 2:
-        yaml_path = "yaml/lib"
-    else:
-        yaml_path = "yaml/lib3"
-    sys.path += [yaml_path]
+    sys.path.append("yaml/lib3")
     from yaml import load, SafeLoader
 
     def is_one_item_newer(ctx, path, mtime):
@@ -1457,8 +1442,7 @@ def configure_version(conf):
                  color="YELLOW")
         for key in version:
             try:
-                value = cp.get("RTEMS_VERSION", key)
-                version[key] = no_unicode(value)
+                version[key] = cp.get("RTEMS_VERSION", key)
             except configparser.NoOptionError:
                 pass
 
@@ -1486,7 +1470,6 @@ def inherit(conf, cp, bsp_map, arch, bsp, path):
     try:
         base = cp.get(variant, "INHERIT")
         cp.remove_option(variant, "INHERIT")
-        base = no_unicode(base)
         base_variant = arch + "/" + base
         conf.msg(
             "Inherit options from '{}'".format(base_variant),
@@ -1514,7 +1497,6 @@ def inherit(conf, cp, bsp_map, arch, bsp, path):
 def resolve_option_inheritance(conf, cp):
     bsp_map = {}
     for variant in cp.sections():
-        variant = no_unicode(variant)
         try:
             arch, bsp = variant.split("/")
         except:
@@ -1535,7 +1517,6 @@ def get_compiler(conf, cp, variant):
     try:
         value = cp.get(variant, "COMPILER")
         cp.remove_option(variant, "COMPILER")
-        value = no_unicode(value)
         check_compiler(conf, value)
     except configparser.NoOptionError:
         value = "gcc"
@@ -1634,7 +1615,6 @@ def configure(conf):
     path_list = get_path_list(conf)
     variant_list = []
     for variant in cp.sections():
-        variant = no_unicode(variant)
         variant_list.append(variant)
         configure_variant(conf, cp, bsp_map, path_list, top_group, variant)
     conf.setenv("")
