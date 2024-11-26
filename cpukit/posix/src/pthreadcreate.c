@@ -301,6 +301,9 @@ int pthread_create(
     the_attr->schedparam.sched_ss_max_repl;
 
   if ( schedpolicy == SCHED_SPORADIC ) {
+#if defined(RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS)
+    the_thread->is_scheduler_change_inhibited = true;
+#endif
     _POSIX_Threads_Sporadic_timer( &api->Sporadic.Timer );
   }
 #endif
