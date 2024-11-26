@@ -271,7 +271,7 @@ void rtems_aio_completed_list_op( listcb *listcbp )
       case AIO_LIO_EVENT:
         rtems_event_system_send(
           listcbp->lio_notification.task_id,
-          RTEMS_EVENT_SYSTEM_AIO_LIST
+          RTEMS_EVENT_SYSTEM_LIO_LIST_COMPLETED
         );
         break;
     }
@@ -819,12 +819,5 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
     req->aiocbp->return_value = result;
     req->aiocbp->error_code = 0;
   }
-}
-
-void lio_notify_end_wait( union sigval attr ){
-  rtems_id id = attr.sival_int;
-  rtems_event_set event_in = RTEMS_EVENT_SYSTEM_AIO_LIST;
-
-  rtems_event_system_send( id, event_in );
 }
 
