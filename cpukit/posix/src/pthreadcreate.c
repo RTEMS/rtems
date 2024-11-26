@@ -348,7 +348,7 @@ void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
   _Thread_queue_Context_clear_priority_updates( &queue_context );
   _Thread_Wait_acquire( the_thread, &queue_context );
 
-  if ( _Priority_Node_is_active( &api->Sporadic.Low_priority ) ) {
+  if ( !_Priority_Node_is_active( &the_thread->Real_priority ) ) {
     _Thread_Priority_add(
       the_thread,
       &the_thread->Real_priority,
@@ -359,7 +359,6 @@ void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
       &api->Sporadic.Low_priority,
       &queue_context
     );
-    _Priority_Node_set_inactive( &api->Sporadic.Low_priority );
   }
 
   _Watchdog_Per_CPU_remove_ticks( &api->Sporadic.Timer );
@@ -388,7 +387,7 @@ static void _POSIX_Threads_Sporadic_budget_callout(
    */
   the_thread->CPU_budget.available = UINT32_MAX;
 
-  if ( !_Priority_Node_is_active( &api->Sporadic.Low_priority ) ) {
+  if ( _Priority_Node_is_active( &the_thread->Real_priority ) ) {
     _Thread_Priority_add(
       the_thread,
       &api->Sporadic.Low_priority,
@@ -399,6 +398,7 @@ static void _POSIX_Threads_Sporadic_budget_callout(
       &the_thread->Real_priority,
       &queue_context
     );
+    _Priority_Node_set_inactive( &the_thread->Real_priority );
   }
 
   _Thread_Wait_release( the_thread, &queue_context );
