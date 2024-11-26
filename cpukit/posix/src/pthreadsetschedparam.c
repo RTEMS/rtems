@@ -98,7 +98,7 @@ static int _POSIX_Set_sched_param(
   _Priority_Node_set_priority( &the_thread->Real_priority, core_normal_prio );
 
 #if defined(RTEMS_POSIX_API)
-  if ( _Priority_Node_is_active( &api->Sporadic.Low_priority ) ) {
+  if ( !_Priority_Node_is_active( &the_thread->Real_priority ) ) {
     _Thread_Priority_add(
       the_thread,
       &the_thread->Real_priority,
@@ -109,7 +109,6 @@ static int _POSIX_Set_sched_param(
       &api->Sporadic.Low_priority,
       queue_context
     );
-    _Priority_Node_set_inactive( &api->Sporadic.Low_priority );
   } else {
 #endif
     _Thread_Priority_changed(
