@@ -942,6 +942,12 @@ static inline Status_Control _Scheduler_Set(
 
 #endif
 
+#if defined(RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS)
+  if ( the_thread->is_scheduler_change_inhibited ) {
+    return STATUS_RESOURCE_IN_USE;
+  }
+#endif
+
   if ( the_thread->Wait.queue != NULL ) {
     return STATUS_RESOURCE_IN_USE;
   }

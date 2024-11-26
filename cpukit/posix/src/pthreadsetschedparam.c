@@ -78,6 +78,10 @@ static int _POSIX_Set_sched_param(
     return EINVAL;
   }
 
+#if defined(RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS)
+  the_thread->is_scheduler_change_inhibited = ( policy == SCHED_SPORADIC );
+#endif
+
 #if defined(RTEMS_POSIX_API)
   if ( policy == SCHED_SPORADIC ) {
     low_prio = param->sched_ss_low_priority;
