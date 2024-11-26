@@ -112,6 +112,16 @@ extern "C" {
 #define RTEMS_SCORE_THREAD_REAL_PRIORITY_MAY_BE_INACTIVE
 #endif
 
+#if defined(RTEMS_POSIX_API) && defined(RTEMS_SMP)
+/**
+ * @brief This define enables support to inhibit scheduler changes.
+ *
+ * For example, the POSIX sporadic server adds a second priority to a thread.
+ * We cannot account for this priority in a scheduler change.
+ */
+#define RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS
+#endif
+
 /**
  *  @brief Type of the numeric argument of a thread entry function with at
  *  least one numeric argument.
@@ -910,6 +920,16 @@ struct _Thread_Control {
    * (PTHREAD_INHERIT_SCHED), and false otherwise.
    */
   bool was_created_with_inherited_scheduler;
+
+#if defined(RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS)
+  /**
+   * @brief This field is true, if scheduler changes are inhibited.
+   *
+   * Currently, the POSIX sporadic server is the only inhibitor.  If more are
+   * added, then this needs to be changed to a counter or a bit field.
+   */
+  bool is_scheduler_change_inhibited;
+#endif
 
   /**
    * @brief This member contains the CPU budget control used to manage the CPU
