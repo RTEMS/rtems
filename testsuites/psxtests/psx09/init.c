@@ -39,10 +39,6 @@
 
 const char rtems_test_name[] = "PSX 9";
 
-static int CEILING_PRIORITY;
-static int HIGH_PRIORITY;
-static int LOW_PRIORITY;
-
 static int get_current_prio( pthread_t thread )
 {
   rtems_status_code sc;
@@ -114,12 +110,15 @@ void *POSIX_Init(
   pthread_mutexattr_t  attr;
   time_t               start;
   time_t               now;
+  int                  ceiling_priority;
+  int                  high_priority;
+  int                  low_priority;
 
   TEST_BEGIN();
 
-  CEILING_PRIORITY = sched_get_priority_max( SCHED_SPORADIC );
-  HIGH_PRIORITY = sched_get_priority_max( SCHED_SPORADIC ) - 1;
-  LOW_PRIORITY = sched_get_priority_max( SCHED_SPORADIC ) - 2;
+  ceiling_priority = sched_get_priority_max( SCHED_SPORADIC );
+  high_priority = ceiling_priority - 1;
+  low_priority = ceiling_priority - 2;
 
   test_destroy_locked_mutex();
 
@@ -147,8 +146,8 @@ void *POSIX_Init(
   schedparam.sched_ss_init_budget.tv_sec = 0;
   schedparam.sched_ss_init_budget.tv_nsec = 250000000;    /* 1/4 second */
 
-  schedparam.sched_priority = HIGH_PRIORITY;
-  schedparam.sched_ss_low_priority = LOW_PRIORITY;
+  schedparam.sched_priority = high_priority;
+  schedparam.sched_ss_low_priority = low_priority;
 
   puts( "Init: pthread_setschedparam - SUCCESSFUL (sporadic server)" );
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
@@ -184,8 +183,8 @@ void *POSIX_Init(
   schedparam.sched_ss_init_budget.tv_sec = 0;
   schedparam.sched_ss_init_budget.tv_nsec = 250000000;    /* 1/4 second */
 
-  schedparam.sched_priority = HIGH_PRIORITY;
-  schedparam.sched_ss_low_priority = LOW_PRIORITY;
+  schedparam.sched_priority = high_priority;
+  schedparam.sched_ss_low_priority = low_priority;
 
   puts( "Init: pthread_setschedparam - SUCCESSFUL (sporadic server)" );
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
@@ -198,7 +197,7 @@ void *POSIX_Init(
   status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_PROTECT );
   rtems_test_assert( !status );
 
-  status = pthread_mutexattr_setprioceiling( &attr, CEILING_PRIORITY );
+  status = pthread_mutexattr_setprioceiling( &attr, ceiling_priority );
   rtems_test_assert( !status );
 
   puts( "Init: Creating a mutex" );
@@ -223,7 +222,7 @@ void *POSIX_Init(
   do {
     priority = get_current_prio( pthread_self() );
 
-    if ( priority != CEILING_PRIORITY ) {
+    if ( priority != ceiling_priority ) {
       puts( "ERROR - Init's priority lowered while holding mutex" );
       rtems_test_exit(0);
     }
@@ -243,7 +242,7 @@ void *POSIX_Init(
   print_current_time( "Init: ", buffer );
 
   for ( ; ; ) {
-    if ( get_current_prio( pthread_self() ) == LOW_PRIORITY )
+    if ( get_current_prio( pthread_self() ) == low_priority )
       break;
   }
 
