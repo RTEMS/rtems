@@ -800,6 +800,14 @@ static inline void _Thread_Priority_change(
 )
 {
   _Priority_Node_set_priority( priority_node, new_priority );
+
+#if defined(RTEMS_SCORE_THREAD_REAL_PRIORITY_MAY_BE_INACTIVE)
+  if ( !_Priority_Node_is_active( priority_node ) ) {
+    /* The priority change is picked up once the node is added */
+    return;
+  }
+#endif
+
   _Thread_Priority_changed(
     the_thread,
     priority_node,

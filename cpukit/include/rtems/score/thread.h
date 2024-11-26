@@ -96,7 +96,20 @@ extern "C" {
  */
 
 #if defined(RTEMS_DEBUG)
+/**
+ * @brief This define enables the thread resource count support.
+ */
 #define RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT
+#endif
+
+#if defined(RTEMS_POSIX_API)
+/**
+ * @brief This define enables support for an inactive real thread priority.
+ *
+ * For example, the POSIX sporadic server may temporarily remove the real
+ * priority of a thread while it is in low priority mode.
+ */
+#define RTEMS_SCORE_THREAD_REAL_PRIORITY_MAY_BE_INACTIVE
 #endif
 
 /**
