@@ -112,6 +112,26 @@ void *POSIX_Init(
   int                  ceiling_priority;
   int                  high_priority;
   int                  low_priority;
+  rtems_id             scheduler_id;
+  rtems_task_priority  rtems_priority;
+  rtems_status_code    sc;
+
+  if (argument != NULL ) {
+    /* We end up here due to the rtems_task_restart() below */
+
+    ceiling_priority = sched_get_priority_max( SCHED_SPORADIC );
+    low_priority = ceiling_priority - 2;
+    rtems_test_assert( get_current_prio() == low_priority );
+
+    while ( get_current_prio() == low_priority ) {
+      /* Be busy until sched_ss_repl_period elapses */
+    }
+
+    rtems_test_assert( get_current_prio() == 2 );
+
+    TEST_END();
+    rtems_test_exit( 0 );
+  }
 
   TEST_BEGIN();
 
@@ -248,8 +268,112 @@ void *POSIX_Init(
   rtems_test_assert( !status );
   rtems_test_assert( get_current_prio() == low_priority );
 
-  TEST_END();
-  rtems_test_exit( 0 );
+  status = pthread_mutex_destroy( &Mutex_id );
+  rtems_test_assert( status == 0 );
+
+  puts( "Init: Go into low priority and change scheduler parameters" );
+
+  while ( get_current_prio() == high_priority ) {
+    /* Be busy until sched_ss_init_budget elapses */
+  }
+
+  rtems_test_assert( get_current_prio() == low_priority );
+  schedparam.sched_priority = ceiling_priority;
+  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( get_current_prio() == ceiling_priority );
+
+  puts( "Init: Go into low priority and set POSIX priority" );
+
+  schedparam.sched_priority = high_priority;
+  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( get_current_prio() == high_priority );
+
+  while ( get_current_prio() == high_priority ) {
+    /* Be busy until sched_ss_init_budget elapses */
+  }
+
+  rtems_test_assert( get_current_prio() == low_priority );
+  status = pthread_setschedprio( pthread_self(), ceiling_priority );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( get_current_prio() == low_priority );
+
+  while ( get_current_prio() == low_priority ) {
+    /* Be busy until sched_ss_repl_period elapses */
+  }
+
+  rtems_test_assert( get_current_prio() == ceiling_priority );
+
+  puts( "Init: Go into low priority and set RTEMS priority" );
+
+  sc = rtems_task_get_scheduler( RTEMS_SELF, &scheduler_id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  sc = rtems_scheduler_map_priority_from_posix(
+    scheduler_id,
+    ceiling_priority,
+    &rtems_priority
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  schedparam.sched_priority = high_priority;
+  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( get_current_prio() == high_priority );
+
+  while ( get_current_prio() == high_priority ) {
+    /* Be busy until sched_ss_init_budget elapses */
+  }
+
+  rtems_test_assert( get_current_prio() == low_priority );
+  sc = rtems_task_set_priority( RTEMS_SELF, rtems_priority, &rtems_priority );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( get_current_prio() == low_priority );
+
+  while ( get_current_prio() == low_priority ) {
+    /* Be busy until sched_ss_repl_period elapses */
+  }
+
+  rtems_test_assert( get_current_prio() == ceiling_priority );
+
+  puts( "Init: Go into low priority and set scheduler" );
+
+  sc = rtems_scheduler_ident_by_processor( 1, &scheduler_id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  schedparam.sched_priority = high_priority;
+  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( get_current_prio() == high_priority );
+
+  while ( get_current_prio() == high_priority ) {
+    /* Be busy until sched_ss_init_budget elapses */
+  }
+
+  rtems_test_assert( get_current_prio() == low_priority );
+  sc = rtems_task_set_scheduler( RTEMS_SELF, scheduler_id, 1 );
+  rtems_test_assert( sc == RTEMS_RESOURCE_IN_USE );
+  rtems_test_assert( get_current_prio() == low_priority );
+
+  while ( get_current_prio() == low_priority ) {
+    /* Be busy until sched_ss_repl_period elapses */
+  }
+
+  rtems_test_assert( get_current_prio() == high_priority );
+
+  puts( "Init: Go into low priority and restart task" );
+
+  schedparam.sched_priority = high_priority;
+  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( get_current_prio() == high_priority );
+
+  while ( get_current_prio() == high_priority ) {
+    /* Be busy until sched_ss_init_budget elapses */
+  }
+
+  rtems_test_assert( get_current_prio() == low_priority );
+  (void) rtems_task_restart( RTEMS_SELF, 1 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

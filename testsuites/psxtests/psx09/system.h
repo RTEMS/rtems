@@ -58,6 +58,28 @@ void *Task_2(
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
+#ifdef RTEMS_SMP
+
+#define CONFIGURE_MAXIMUM_PROCESSORS 2
+
+#define CONFIGURE_SCHEDULER_EDF_SMP
+
+#include <rtems/scheduler.h>
+
+RTEMS_SCHEDULER_EDF_SMP( a );
+
+RTEMS_SCHEDULER_EDF_SMP( b );
+
+#define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
+  RTEMS_SCHEDULER_TABLE_EDF_SMP( a, rtems_build_name( 'M', 'A', 'I', 'N' ) ), \
+  RTEMS_SCHEDULER_TABLE_EDF_SMP( b, rtems_build_name( 'O', 'T', 'H', 'R' ) )
+
+#define CONFIGURE_SCHEDULER_ASSIGNMENTS \
+  RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
+  RTEMS_SCHEDULER_ASSIGN( 1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL )
+
+#endif /* RTEMS_SMP */
+
 #include <rtems/confdefs.h>
 
 /* global variables */
