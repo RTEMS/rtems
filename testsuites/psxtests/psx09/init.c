@@ -39,13 +39,13 @@
 
 const char rtems_test_name[] = "PSX 9";
 
-static int get_current_prio( pthread_t thread )
+static int get_current_prio( void )
 {
   rtems_status_code sc;
   rtems_task_priority prio;
   int max;
 
-  sc = rtems_task_set_priority( thread, RTEMS_CURRENT_PRIORITY, &prio );
+  sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   max = sched_get_priority_max( SCHED_FIFO );
@@ -109,7 +109,6 @@ void *POSIX_Init(
   char                 buffer[ 80 ];
   pthread_mutexattr_t  attr;
   time_t               start;
-  time_t               now;
   int                  ceiling_priority;
   int                  high_priority;
   int                  low_priority;
@@ -141,10 +140,10 @@ void *POSIX_Init(
   sprintf( buffer, " - current priority = %d", priority );
   print_current_time( "Init: ", buffer );
 
-  schedparam.sched_ss_repl_period.tv_sec = 0;
-  schedparam.sched_ss_repl_period.tv_nsec = 500000000;  /* 1/2 second */
-  schedparam.sched_ss_init_budget.tv_sec = 0;
-  schedparam.sched_ss_init_budget.tv_nsec = 250000000;    /* 1/4 second */
+  schedparam.sched_ss_repl_period.tv_sec = 2;
+  schedparam.sched_ss_repl_period.tv_nsec = 0;
+  schedparam.sched_ss_init_budget.tv_sec = 1;
+  schedparam.sched_ss_init_budget.tv_nsec = 0;
 
   schedparam.sched_priority = high_priority;
   schedparam.sched_ss_low_priority = low_priority;
@@ -153,7 +152,7 @@ void *POSIX_Init(
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
   rtems_test_assert( !status );
 
-  sprintf( buffer, " - new priority = %d", get_current_prio( pthread_self() ) );
+  sprintf( buffer, " - new priority = %d", get_current_prio() );
   print_current_time( "Init: ", buffer );
 
   /* go into a loop consuming CPU time to watch our priority change */
@@ -161,7 +160,7 @@ void *POSIX_Init(
   for ( passes=0 ; passes <= 3 ; ) {
     int current_priority;
 
-    current_priority = get_current_prio( pthread_self() );
+    current_priority = get_current_prio();
 
     if ( priority != current_priority ) {
       priority = current_priority;
@@ -206,48 +205,48 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   rtems_test_assert( !status );
 
-  sprintf( buffer, " - new priority = %d", get_current_prio( pthread_self() ) );
+  sprintf( buffer, " - new priority = %d", get_current_prio() );
   print_current_time( "Init: ", buffer );
-
-  /* go into a loop consuming CPU time to watch our priority NOT lower */
 
   start = time( &start );
 
-  puts( "Init: pthread_mutex_lock acquire the lock" );
+  puts( "Init: Go into low priority and lock/unlock ceiling mutex" );
+
+  while ( get_current_prio() == low_priority ) {
+    /* Be busy until sched_ss_repl_period elapses */
+  }
+
+  rtems_test_assert( get_current_prio() == high_priority );
   status = pthread_mutex_lock( &Mutex_id );
   if ( status )
     printf( "status = %d %s\n", status, strerror(status) );
   rtems_test_assert( !status );
+  rtems_test_assert( get_current_prio() == ceiling_priority );
 
-  do {
-    priority = get_current_prio( pthread_self() );
+  status = pthread_mutex_unlock( &Mutex_id );
+  if ( status )
+    printf( "status = %d %s\n", status, strerror(status) );
+  rtems_test_assert( !status );
+  rtems_test_assert( get_current_prio() == high_priority );
 
-    if ( priority != ceiling_priority ) {
-      puts( "ERROR - Init's priority lowered while holding mutex" );
-      rtems_test_exit(0);
-    }
+  puts( "Init: Go into high priority and lock/unlock ceiling mutex" );
 
-    now = time( &now );
-  } while ( now - start < 3 );
+  while ( get_current_prio() == high_priority ) {
+    /* Be busy until sched_ss_init_budget elapses */
+  }
 
-  /* with this unlock we should be able to go to low priority */
+  rtems_test_assert( get_current_prio() == low_priority );
+  status = pthread_mutex_lock( &Mutex_id );
+  if ( status )
+    printf( "status = %d %s\n", status, strerror(status) );
+  rtems_test_assert( !status );
+  rtems_test_assert( get_current_prio() == ceiling_priority );
 
-  puts( "Init: unlock mutex" );
   status = pthread_mutex_unlock( &Mutex_id );
   if ( status )
     printf( "status = %d\n", status );
   rtems_test_assert( !status );
-
-  sprintf( buffer, " - new priority = %d", get_current_prio( pthread_self() ) );
-  print_current_time( "Init: ", buffer );
-
-  for ( ; ; ) {
-    if ( get_current_prio( pthread_self() ) == low_priority )
-      break;
-  }
-
-  sprintf( buffer, " - new priority = %d", get_current_prio( pthread_self() ) );
-  print_current_time( "Init: ", buffer );
+  rtems_test_assert( get_current_prio() == low_priority );
 
   TEST_END();
   rtems_test_exit( 0 );
