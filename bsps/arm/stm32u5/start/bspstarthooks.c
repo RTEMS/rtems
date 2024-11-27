@@ -135,19 +135,37 @@ void BSP_START_TEXT_SECTION bsp_start_hook_0( void )
   HAL_GetTick_ptr            = Startup_HAL_GetTick;
   startup_delay_call_counter = 0;
 
-  SystemInit();
-  SystemCoreClockUpdate();
-  stm32u5_rcc_power_clock_enable();
-  stm32u5_init_oscillator();
-  stm32u5_init_clocks();
-  stm32u5_init_power();
-  stm32u5_init_peripheral_clocks();
+  /*
+   * If we are running from OctoSPI, we must not touch the clocks and pins.
+   * Otherwise the OSPI RAM won't work any more.
+   *
+   * Doing this check here instead of using a compile time option has the
+   * advantage, that only one BSP is necessary to compile (for example) a
+   * bootloader running from Flash and an application that runs from OSPI RAM.
+   * They would only use a different linker command file.
+   *
+   * It's not really relevant, which symbol is checked. So pick
+   * stm32u5_init_octospi at random.
+   */
+  if ( stm32u5_init_octospi < stm32u5_memory_octospi_1_begin ||
+       stm32u5_init_octospi > stm32u5_memory_octospi_1_end ) {
+    SystemInit();
+    SystemCoreClockUpdate();
+    stm32u5_rcc_power_clock_enable();
+    stm32u5_init_oscillator();
+    stm32u5_init_clocks();
+    stm32u5_init_power();
+    stm32u5_init_peripheral_clocks();
+  }
   HAL_Init();
 }
 
 void BSP_START_TEXT_SECTION bsp_start_hook_1( void )
 {
-  /* Init OctoSPI only if we are not running from it */
+  /*
+   * Init OctoSPI only if we are not running from it. See start hook 0 for
+   * details.
+   */
   if ( stm32u5_init_octospi < stm32u5_memory_octospi_1_begin ||
        stm32u5_init_octospi > stm32u5_memory_octospi_1_end ) {
     stm32u5_init_octospi();
