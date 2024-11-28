@@ -13,6 +13,7 @@ content: |
   includedir=$${libdir}/include
 
   ABI_FLAGS=${ABI_FLAGS}
+  LDFLAGS=-B$${libdir} ${PKGCONFIG_LDFLAGS}
   RTEMS_ARCH=${ARCH}
   RTEMS_BSP=${BSP_NAME}
   RTEMS_BSP_BASE=${BSP_BASE}
