@@ -801,9 +801,7 @@ rtems_capture_flush (bool prime)
     _Thread_Iterate (rtems_capture_flush_tcb, NULL);
 
     if (prime)
-      capture_flags_global &= ~(RTEMS_CAPTURE_TRIGGERED | RTEMS_CAPTURE_OVERFLOW);
-    else
-      capture_flags_global &= ~RTEMS_CAPTURE_OVERFLOW;
+      capture_flags_global &= ~RTEMS_CAPTURE_TRIGGERED;
 
     for (cpu=0; cpu < rtems_scheduler_get_processor_maximum(); cpu++) {
       RTEMS_INTERRUPT_LOCK_REFERENCE( lock, &(capture_lock_on_cpu( cpu )) )
@@ -811,6 +809,7 @@ rtems_capture_flush (bool prime)
 
       rtems_interrupt_lock_acquire (lock, &lock_context_per_cpu);
       capture_count_on_cpu(cpu) = 0;
+      capture_flags_on_cpu(cpu) &= ~RTEMS_CAPTURE_OVERFLOW;
       if (capture_records_on_cpu(cpu).buffer)
         rtems_capture_buffer_flush( &capture_records_on_cpu(cpu) );
       rtems_interrupt_lock_release (lock, &lock_context_per_cpu);
