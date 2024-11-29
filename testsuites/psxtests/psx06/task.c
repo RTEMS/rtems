@@ -56,7 +56,7 @@ void *Task_1(
   rtems_test_assert( !status );
 
   key_data = pthread_getspecific( Key_id );
-  printf( "Task_1: Got the key value of %ld\n",
+  printf( "Task_1: Got the key value of %lu\n",
           (unsigned long) ((uint32_t   *)key_data - Data_array) );
   if ( status )
     printf( "status = %d\n", status );

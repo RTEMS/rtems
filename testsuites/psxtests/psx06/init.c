@@ -118,7 +118,7 @@ void *POSIX_Init(
      /* switch to task 1 */
 
   key_data = pthread_getspecific( Key_id );
-  printf( "Init: Got the key value of %ld\n",
+  printf( "Init: Got the key value of %lu\n",
           (unsigned long) ((uint32_t   *)key_data - Data_array) );
 
   remaining = sleep( 3 );
