@@ -147,13 +147,22 @@ validate_structure (struct tm *tim_p)
     }
 }
 
+#ifdef __rtems__
+time_t _TOD_mktime (struct tm *tim_p);
+
 time_t 
+_TOD_mktime (struct tm *tim_p)
+#else
+time_t
 mktime (struct tm *tim_p)
+#endif
 {
   time_t tim = 0;
   long days = 0;
   int year, isdst=0;
+#ifndef __rtems__
   __tzinfo_type *tz = __gettzinfo ();
+#endif
 
   /* validate structure */
   validate_structure (tim_p);
@@ -190,10 +199,13 @@ mktime (struct tm *tim_p)
   /* compute total seconds */
   tim += (time_t)days * _SEC_IN_DAY;
 
+#ifndef __rtems__
   TZ_LOCK;
 
   _tzset_unlocked ();
+#endif
 
+#ifndef __rtems__
   if (_daylight)
     {
       int tm_isdst;
@@ -262,14 +274,17 @@ mktime (struct tm *tim_p)
 	    }
 	}
     }
+#endif
 
   /* add appropriate offset to put time in gmt format */
+#ifndef __rtems__
   if (isdst == 1)
     tim += (time_t) tz->__tzrule[1].offset;
   else /* otherwise assume std time */
     tim += (time_t) tz->__tzrule[0].offset;
 
   TZ_UNLOCK;
+#endif
 
   /* reset isdst flag to what we have calculated */
   tim_p->tm_isdst = isdst;

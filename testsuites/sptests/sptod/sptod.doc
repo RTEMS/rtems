@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: sptod
+
+directives:
++ rtems_clock_get_tod
++ rtems_clock_set_tod
+
+concepts:
+
++ test if rtems_clock_get_tod returns the correct time as was set

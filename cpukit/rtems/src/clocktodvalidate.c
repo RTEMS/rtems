@@ -54,6 +54,36 @@ static const uint32_t _TOD_Days_per_month[ 2 ][ 13 ] = {
   { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 };
 
+/**
+ * @brief Maps the year to the leap year index.
+ *
+ * @param year is the year to map.
+ *
+ * @retval 0 The year is a leap year.
+ *
+ * @retval 1 The year is not a leap year.
+ */
+static inline size_t _TOD_Get_leap_year_index( uint32_t year )
+{
+  /* Not divisible by 4 -> not a leap year */
+  if ( year % 4 != 0 ) {
+    return 1;
+  }
+
+  /* Divisible by 400 -> is a leap year */
+  if ( year % 400 == 0 ) {
+    return 0;
+  }
+
+  /* Divisible by 100 -> not a leap year */
+  if ( year % 100 == 0 ) {
+    return 1;
+  }
+
+  /* must be a leap year */
+  return 0;
+}
+
 rtems_status_code _TOD_Validate(
   const rtems_time_of_day *the_tod,
   TOD_Ticks_validation     ticks_validation
@@ -91,7 +121,11 @@ rtems_status_code _TOD_Validate(
     return RTEMS_INVALID_CLOCK;
   }
 
-  if ( the_tod->year < TOD_BASE_YEAR || the_tod->year > TOD_LATEST_YEAR ) {
+  if ( the_tod->year < TOD_BASE_YEAR ) {
+    return RTEMS_INVALID_CLOCK;
+  }
+
+  if ( the_tod->year > TOD_LATEST_YEAR ) {
     return RTEMS_INVALID_CLOCK;
   }
 

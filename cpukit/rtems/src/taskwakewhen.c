@@ -48,6 +48,7 @@
 rtems_status_code rtems_task_wake_when( const rtems_time_of_day *time_buffer )
 {
   uint32_t          seconds;
+  time_t            seconds_time_t;
   Thread_Control   *executing;
   Per_CPU_Control  *cpu_self;
   rtems_status_code status;
@@ -62,7 +63,12 @@ rtems_status_code rtems_task_wake_when( const rtems_time_of_day *time_buffer )
     return status;
   }
 
-  seconds = _TOD_To_seconds( time_buffer );
+  seconds_time_t = _TOD_To_seconds( time_buffer );
+  if ( seconds_time_t > UINT32_MAX ) {
+    return RTEMS_INVALID_CLOCK;
+  }
+
+  seconds = seconds_time_t;
 
   if ( seconds <= _TOD_Seconds_since_epoch() ) {
     return RTEMS_INVALID_CLOCK;

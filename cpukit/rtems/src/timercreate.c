@@ -147,6 +147,7 @@ rtems_status_code _Timer_Fire_when(
 )
 {
   rtems_status_code status;
+  time_t            seconds_time_t;
   rtems_interval    seconds;
 
   if ( !_TOD_Is_set() ) {
@@ -163,7 +164,12 @@ rtems_status_code _Timer_Fire_when(
     return status;
   }
 
-  seconds = _TOD_To_seconds( wall_time );
+  seconds_time_t = _TOD_To_seconds( wall_time );
+  if ( seconds_time_t > UINT32_MAX ) {
+    return RTEMS_INVALID_CLOCK;
+  }
+
+  seconds = seconds_time_t;
   if ( seconds <= _TOD_Seconds_since_epoch() ) {
     return RTEMS_INVALID_CLOCK;
   }

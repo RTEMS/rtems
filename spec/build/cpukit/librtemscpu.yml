@@ -1006,6 +1006,8 @@ source:
 - cpukit/libmisc/monitor/mon-task.c
 - cpukit/libmisc/mouse/contrib/mouse_parser.c
 - cpukit/libmisc/mouse/serial_mouse.c
+- contrib/cpukit/posix-newlib/gmtime_r.c
+- contrib/cpukit/posix-newlib/mktime.c
 - cpukit/libmisc/redirector/stdio-redirect.c
 - cpukit/libmisc/regulator/regulator.c
 - cpukit/libmisc/rtems-fdt/rtems-fdt-shell.c

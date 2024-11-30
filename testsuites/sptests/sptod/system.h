@@ -1,16 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @ingroup RTEMSImplClassicClock
- *
- * @brief This source file contains the implementation of
- *   _TOD_To_seconds().
- */
-
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,25 +30,23 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/clockimpl.h>
-#include <rtems/score/todimpl.h>
+#include <tmacros.h> /* instantiate buffering code if needed */
 
-time_t _TOD_To_seconds( const rtems_time_of_day *the_tod )
-{
-  time_t    time;
-  struct tm tm;
+rtems_task Init( rtems_task_argument argument );
 
-  tm.tm_sec = the_tod->second;
-  tm.tm_min = the_tod->minute;
-  tm.tm_hour = the_tod->hour;
-  tm.tm_mday = the_tod->day;
-  tm.tm_mon = the_tod->month - 1;
-  tm.tm_year = the_tod->year - 1900;
-  tm.tm_wday = 0;
-  tm.tm_yday = 0;
-  tm.tm_isdst = 0;
+/* configuration information */
 
-  time = _TOD_mktime( &tm );
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-  return time;
-}
+#define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
+
+/* end of file */

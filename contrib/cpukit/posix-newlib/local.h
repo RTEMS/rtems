@@ -1,7 +1,9 @@
 /* local header used by libc/time routines */
 #include <_ansi.h>
 #include <time.h>
+#ifndef __rtems__
 #include <sys/_tz_structs.h>
+#endif
 
 #define SECSPERMIN	60L
 #define MINSPERHOUR	60L
@@ -20,6 +22,7 @@
 
 #define isleap(y) ((((y) % 4) == 0 && ((y) % 100) != 0) || ((y) % 400) == 0)
 
+#ifndef __rtems__
 int         __tzcalc_limits (int __year);
 
 extern const int __month_lengths[2][MONSPERYEAR];
@@ -38,4 +41,5 @@ void _tzset_unlocked (void);
 
 void __tz_lock (void);
 void __tz_unlock (void);
+#endif
 

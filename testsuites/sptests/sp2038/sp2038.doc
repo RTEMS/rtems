@@ -37,3 +37,5 @@ directives:
 concepts:
 
 + Ensure that special time values lead to the expected result
+
++ Ensure setting the time works until the latest date supported

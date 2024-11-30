@@ -317,8 +317,8 @@ int checkRealTime(void)
 {
   rtems_time_of_day rtems_tod;
   rtems_time_of_day rtc_tod;
-  uint32_t   rtems_time;
-  uint32_t   rtc_time;
+  time_t   rtems_time;
+  time_t   rtc_time;
 
   if (!RTC_Is_present())
     return -1;

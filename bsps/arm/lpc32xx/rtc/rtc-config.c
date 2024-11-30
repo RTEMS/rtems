@@ -130,8 +130,17 @@ static int lpc32xx_rtc_get_time(int minor, rtems_time_of_day *tod)
 static int lpc32xx_rtc_set_time(int minor, const rtems_time_of_day *tod)
 {
   (void) minor;
+  time_t tod_time_t;
+  uint32 tod;
 
-  lpc32xx_rtc_set(_TOD_To_seconds(tod));
+  tod_time_t = _TOD_To_seconds(tod);
+  if (tod_time_t > UINT32_MAX) {
+    return -1;
+  }
+
+  tod = tod_time_t;
+
+  lpc32xx_rtc_set(tod);
 
   return 0;
 }

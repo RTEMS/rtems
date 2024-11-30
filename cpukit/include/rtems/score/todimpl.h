@@ -153,24 +153,23 @@ extern "C" {
 #define TOD_BASE_YEAR 1988
 
 /**
- *  @brief Latest year to which a time of day can be initialized.
+ * @brief Latest year to which a time of day can be initialized.
  *
- *  The following constant defines the latest year to which an
- *  RTEMS time of day can be set using rtems_clock_set().
+ * The following constant defines the latest year to which an
+ * RTEMS time of day can be set using rtems_clock_set().
  *
- *  32 bits can accept as latest point in time 2106-Feb-7 6:28:15
- *  but to simplify the implementation, is was decided to only
- *  check that the year is not greater than the year of this constant.
- *  The year 2099 was chosen because all years evenly divisible by 4 from 1988
- *  to 2099 are leap years.  In this time frame, years evenly divisible by 100
- *  are no leap years unless they are evenly divisible by 400.  Thus the year
- *  2000 is a leap year.
+ * This reflects the need for a day to be skipped around 4183 due to
+ * a build up of the rounding error in the length of a year.
+ * See https://users.rtems.org/t/rtems-time-representation-limits-or-rtems-end-of-time/483
+ * for a detailed discussion of this and limits on time representations.
  *
- *  The internal CLOCK_REALTIME can run centuries longer but in
- *  contrast to the POSIX API, the RTEMS Classic API does not
- *  support this for efficiency reasons.
+ * The internal CLOCK_REALTIME based on seconds and nanoseconds
+ * from the POSIX epoch does not have this limitation. But it cannot
+ * be reliably converted to a "broken down" representation.
+ *
+ * This is the RTEMS Y4K limit. :)
  */
-#define TOD_LATEST_YEAR 2099
+#define TOD_LATEST_YEAR 4095
 
 /**
  * @addtogroup RTEMSScoreTOD
@@ -244,21 +243,6 @@ static inline void _TOD_Acquire( ISR_lock_Context *lock_context )
 static inline void _TOD_Release( ISR_lock_Context *lock_context )
 {
   _Timecounter_Release( lock_context );
-}
-
-/**
- * @brief Maps the year to the leap year index.
- *
- * @param year is the year to map.
- *
- * @retval 0 The year is a leap year.
- *
- * @retval 1 The year is not a leap year.
- */
-static inline size_t _TOD_Get_leap_year_index( uint32_t year )
-{
-  _Assert( year % 4 != 0 || year % 100 != 0 || year % 400 == 0 );
-  return ( ( year % 4 ) + 3 ) / 4;
 }
 
 /**
@@ -459,6 +443,22 @@ void _TOD_Hook_Unregister( TOD_Hook *hook );
  * @retval other Some error occurred.
  */
 Status_Control _TOD_Hook_Run( TOD_Action action, const struct timespec *tod );
+
+/**
+ * @brief mktime() without timezone
+ *
+ * This method converts the broken down time of day pointed to by @a tim_p
+ * to the number of seconds since the POSIX epoch.
+ *
+ * This method is the POSIX mktime() function with the timezone functionality
+ * disabled. Timezone support is in the C Library. RTEMS manages time at UTC.
+ * This avoids pulling in TLS variables.
+ *
+ * @param[in] tim_p points to the struct tm instance
+ *
+ * @retval seconds since the POSIX epoch.
+ */
+time_t _TOD_mktime( struct tm *tim_p );
 
 /** @} */
 
