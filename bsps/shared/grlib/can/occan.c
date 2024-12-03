@@ -1000,7 +1000,9 @@ static void convert_timing_to_btrs(
 {
 	btrs->btr0 = (t->rsj << OCCAN_BUSTIM_SJW_BIT) |
 	             (t->scaler & OCCAN_BUSTIM_BRP);
-	btrs->btr1 = (0<<7) | (t->ps2 << OCCAN_BUSTIM_TSEG2_BIT) | t->ps1;
+
+	/* Core adds +1 to the register values, so compensate here by decrementing */
+	btrs->btr1 = (0<<7) | ((t->ps2-1) << OCCAN_BUSTIM_TSEG2_BIT) | (t->ps1-1);
 }
 
 static int occan_set_speedregs(occan_priv *priv, occan_speed_regs *timing)
