@@ -62,7 +62,8 @@ int grlib_canbtrs_calc_timing(
 	     tseg++) {
 		/* calculate scaler */
 		tmp = ((br->divfactor + tseg) * baud);
-		sc = (core_hz * 2)/ tmp - core_hz / tmp;
+		/* Core frequency is always divided by 2 before scaler */
+		sc = core_hz / (2 * tmp);
 		if (sc <= 0 || sc > br->max_scaler)
 			continue;
 		if (br->has_bpr &&
@@ -71,7 +72,7 @@ int grlib_canbtrs_calc_timing(
 		    ((sc > 256 * 4) && (sc <= 256 * 8) && (sc & 0x7))))
 			continue;
 
-		error = baud - core_hz / (sc * (br->divfactor + tseg));
+		error = baud - core_hz / (2 * sc * (br->divfactor + tseg));
 #ifdef GRLIB_CANBTRS_DEBUG
 		printf("  baud=%d, tseg=%d, sc=%d, error=%d\n",
 		       baud, tseg, sc, error);
