@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (C) 2010, 2017 embedded brains GmbH & Co. KG
+ * Copyright (C) 2010, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -162,8 +162,6 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
 void bsp_interrupt_dispatch(uintptr_t exception_number)
 {
-	unsigned int vector;
-
 	if (exception_number == 10) {
 		qoriq_decrementer_dispatch();
 		return;
@@ -176,22 +174,25 @@ void bsp_interrupt_dispatch(uintptr_t exception_number)
 	}
 #endif
 
-	/*
-	 * This works only if the "has-external-proxy" property is present in the
-	 * "epapr,hv-pic" device tree node.
-	 */
-	PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_EPR, vector);
-
-	if (vector != SPURIOUS) {
+	while (true) {
+		unsigned int vector;
 		uint32_t msr;
+
+		/*
+		 * This works only if the "has-external-proxy" property is present in the
+		 * "epapr,hv-pic" device tree node.
+		 */
+		PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_EPR, vector);
+
+		if (vector == SPURIOUS) {
+			return;
+		}
 
 		msr = ppc_external_exceptions_enable();
 		bsp_interrupt_handler_dispatch(vector);
 		ppc_external_exceptions_disable(msr);
 
 		ev_int_eoi(vector);
-	} else {
-		bsp_interrupt_handler_default(vector);
 	}
 }
 
@@ -586,19 +587,20 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
 void bsp_interrupt_dispatch(uintptr_t exception_number)
 {
-	rtems_vector_number vector = qoriq.pic.iack;
+	while (true) {
+		rtems_vector_number vector = qoriq.pic.iack;
+		uint32_t msr;
 
-	if (vector != SPURIOUS) {
-		uint32_t msr = ppc_external_exceptions_enable();
+		if (vector == SPURIOUS) {
+			return;
+		}
 
+		msr = ppc_external_exceptions_enable();
 		bsp_interrupt_handler_dispatch(vector);
-
 		ppc_external_exceptions_disable(msr);
 
 		qoriq.pic.eoi = 0;
-		qoriq.pic.whoami;
-	} else {
-		bsp_interrupt_handler_default(vector);
+		ppc_enforce_in_order_execution_of_io();
 	}
 }
 
