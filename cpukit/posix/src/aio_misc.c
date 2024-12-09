@@ -704,6 +704,8 @@ static void *rtems_aio_handle( void *arg )
       req->listcbp = NULL;
       req->suspendcbp = NULL;
 
+      free(req);
+
     } else {
       /* If the fd chain is empty we unlock the fd chain and we lock
          the queue chain, this will ensure that we have at most
