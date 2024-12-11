@@ -393,18 +393,24 @@ static void rtems_aio_insert_prio(
     AIO_printf( "First in chain \n" );
     rtems_chain_prepend( chain, &req->next_prio );
   } else {
-    AIO_printf( "Add by priority \n" );
-    int prio = ((rtems_aio_request *) node)->aiocbp->aio_reqprio;
 
-    while (
-      req->aiocbp->aio_reqprio > prio &&
-      !rtems_chain_is_tail( chain, node )
-    ) {
-      node = rtems_chain_next( node );
-      prio = ((rtems_aio_request *) node)->aiocbp->aio_reqprio;
+    if ( req->op_type == AIO_OP_SYNC ) {
+      AIO_printf( "Sync request. Append to end of chain \n" );
+      rtems_chain_append( chain, &req->next_prio );
+    } else {
+      AIO_printf( "Add by priority \n" );
+      int prio = ((rtems_aio_request *) node)->aiocbp->aio_reqprio;
+
+      while (
+        req->aiocbp->aio_reqprio > prio &&
+        !rtems_chain_is_tail( chain, node )
+      ) {
+        node = rtems_chain_next( node );
+        prio = ((rtems_aio_request *) node)->aiocbp->aio_reqprio;
+      }
+
+      rtems_chain_insert( node->previous, &req->next_prio );
     }
-
-    rtems_chain_insert( node->previous, &req->next_prio );
   }
 }
 
