@@ -7,12 +7,13 @@ copyrights:
 - Copyright (C) 2023 On-Line Applications Research (OAR)
 default:
 - enabled-by:
+  - arm/nucleo-h753zi
   - arm/stm32h750b-dk
   value: ( GPIO_PIN_5 | GPIO_PIN_6 )
 - enabled-by: true
   value: ( GPIO_PIN_2 | GPIO_PIN_3 )
 description: |
-  GPIO pins used for the USART1 pin configuration.
+  GPIO pins used for the USART2 pin configuration.
 enabled-by: true
 format: '{}'
 links: []

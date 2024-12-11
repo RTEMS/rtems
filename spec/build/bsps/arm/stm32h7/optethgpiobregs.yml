@@ -8,6 +8,7 @@ copyrights:
 default:
 - enabled-by:
   - arm/nucleo-h743zi
+  - arm/nucleo-h753zi
   - arm/nucleo-h755zi
   value: GPIO_PIN_13
 description: |

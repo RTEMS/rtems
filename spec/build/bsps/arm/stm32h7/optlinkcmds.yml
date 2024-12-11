@@ -8,6 +8,7 @@ copyrights:
 default:
 - enabled-by:
   - arm/nucleo-h743zi
+  - arm/nucleo-h753zi
   - arm/nucleo-h755zi
   - arm/stm32h747i-disco
   - arm/stm32h747i-disco-m4
