@@ -590,7 +590,7 @@ int ns16550_set_attributes(
      *        turn into the LSB and MSB divisor latch registers.
      */
 
-    (*setReg)(pNS16550, NS16550_LINE_CONTROL, SP_LINE_DLAB);
+    (*setReg)(pNS16550, NS16550_LINE_CONTROL, SP_LINE_DLAB | ucLineControl);
     (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, ulBaudDivisor&0xff);
     (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, (ulBaudDivisor>>8)&0xff);
 
