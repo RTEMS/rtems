@@ -42,7 +42,7 @@ except:
 from waflib.TaskGen import after, before_method, feature
 
 version = {
-    "__RTEMS_MAJOR__": "6",  # version
+    "__RTEMS_MAJOR__": "7",  # version
     "__RTEMS_MINOR__": "0",  # revision
     "__RTEMS_REVISION__": "0",  # not used
     "RTEMS_RELEASE_VERSION_LABEL": "not-released"
