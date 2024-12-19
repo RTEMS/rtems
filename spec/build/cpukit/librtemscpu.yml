@@ -485,8 +485,6 @@ links:
 - role: build-dependency
   uid: cpuarm
 - role: build-dependency
-  uid: cpubfin
-- role: build-dependency
   uid: cpui386
 - role: build-dependency
   uid: cpulm32
