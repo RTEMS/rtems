@@ -503,8 +503,6 @@ links:
 - role: build-dependency
   uid: cpuriscv
 - role: build-dependency
-  uid: cpush
-- role: build-dependency
   uid: cpusparc
 - role: build-dependency
   uid: cpusparc64
