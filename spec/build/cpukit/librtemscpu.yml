@@ -505,8 +505,6 @@ links:
 - role: build-dependency
   uid: cpusparc
 - role: build-dependency
-  uid: cpuv850
-- role: build-dependency
   uid: cpux8664
 - role: build-dependency
   uid: objdl
