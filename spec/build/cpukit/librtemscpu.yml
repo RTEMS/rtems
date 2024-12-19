@@ -487,8 +487,6 @@ links:
 - role: build-dependency
   uid: cpui386
 - role: build-dependency
-  uid: cpulm32
-- role: build-dependency
   uid: cpum68k
 - role: build-dependency
   uid: cpumips
