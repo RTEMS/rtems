@@ -53,6 +53,8 @@
 #endif
 
 #include <rtems.h>
+#include <rtems/score/processormaskimpl.h>
+#include <rtems/score/smpimpl.h>
 
 #include "tx-support.h"
 
@@ -71,8 +73,9 @@
  *   requires an affinity set with at least two processors.  On a system with
  *   exactly two processors, this is the set of all online processors and the
  *   unsupported subset is infeasible since the scheduler would select an
- *   affinity to all processors.  On systems with three or more processors,
- *   unsupported subsets are possible to construct.
+ *   affinity to all processors.  In this case, fake the set of online
+ *   processors.  On systems with three or more processors, unsupported subsets
+ *   are possible to construct.
  *
  * @{
  */
@@ -82,38 +85,35 @@
  *   requires an affinity set with at least two processors.  On a system with
  *   exactly two processors, this is the set of all online processors and the
  *   unsupported subset is infeasible since the scheduler would select an
- *   affinity to all processors.  On systems with three or more processors,
- *   unsupported subsets are possible to construct.
+ *   affinity to all processors.  In this case, fake the set of online
+ *   processors.  On systems with three or more processors, unsupported subsets
+ *   are possible to construct.
  */
 static void ScoreSchedSmpEdfValEdf_Action_0( void )
 {
-  uint32_t cpu_count;
+  rtems_status_code sc;
+  cpu_set_t         affinity;
 
-  cpu_count = rtems_scheduler_get_processor_maximum();
+  CPU_ZERO( &affinity );
+  CPU_SET( 0, &affinity );
+  CPU_SET( 1, &affinity );
 
-  if ( cpu_count > 2 ) {
-    rtems_status_code sc;
-    cpu_set_t         affinity;
+  RemoveProcessor( SCHEDULER_B_ID, 1 );
+  AddProcessor( SCHEDULER_A_ID, 1 );
 
-    CPU_ZERO( &affinity );
-    CPU_SET( 0, &affinity );
-    CPU_SET( 1, &affinity );
-
-    RemoveProcessor( SCHEDULER_B_ID, 1 );
-    RemoveProcessor( SCHEDULER_C_ID, 2 );
-    AddProcessor( SCHEDULER_A_ID, 1 );
-    AddProcessor( SCHEDULER_B_ID, 2 );
-
-    sc = rtems_task_set_affinity( RTEMS_SELF, sizeof( affinity), &affinity );
-    T_rsc( sc, RTEMS_INVALID_NUMBER );
-
-    RemoveProcessor( SCHEDULER_A_ID, 1 );
-    RemoveProcessor( SCHEDULER_B_ID, 2 );
-    AddProcessor( SCHEDULER_B_ID, 1 );
-    AddProcessor( SCHEDULER_C_ID, 2 );
-  } else {
-    T_eq_u32( cpu_count, 2 );
+  if ( rtems_scheduler_get_processor_maximum() < 3 ) {
+    _Processor_mask_Set( &_SMP_Online_processors, 2 );
   }
+
+  sc = rtems_task_set_affinity( RTEMS_SELF, sizeof( affinity), &affinity );
+  T_rsc( sc, RTEMS_INVALID_NUMBER );
+
+  if ( rtems_scheduler_get_processor_maximum() < 3 ) {
+    _Processor_mask_Clear( &_SMP_Online_processors, 2 );
+  }
+
+  RemoveProcessor( SCHEDULER_A_ID, 1 );
+  AddProcessor( SCHEDULER_B_ID, 1 );
 }
 
 /**
