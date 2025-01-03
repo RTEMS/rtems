@@ -386,7 +386,19 @@ static rtems_task Init(
   /* print new times to make sure it has changed and we can get the realtime */
   sc = clock_gettime( CLOCK_PROCESS_CPUTIME_ID, &tv );
   rtems_test_assert( !sc );
-  printf("Time since boot: (%" PRIdtime_t ", %ld)\n", tv.tv_sec,tv.tv_nsec );
+  printf(
+    "Time since last CPU usage reset: (%" PRIdtime_t ", %ld)\n",
+    tv.tv_sec,
+    tv.tv_nsec
+  );
+
+  sc = clock_gettime( CLOCK_THREAD_CPUTIME_ID, &tv );
+  rtems_test_assert( !sc );
+  printf(
+    "CPU time used since last CPU usage reset: (%" PRIdtime_t ", %ld)\n",
+    tv.tv_sec,
+    tv.tv_nsec
+  );
 
   sc = clock_gettime( CLOCK_REALTIME, &tv );
   rtems_test_assert( !sc );
@@ -499,14 +511,6 @@ static rtems_task Init(
   printf( ctime( &tv.tv_sec ) );
 
   empty_line();
-  puts( "clock_gettime - CLOCK_THREAD_CPUTIME_ID -- ENOSYS" );
-  #if defined(_POSIX_THREAD_CPUTIME)
-    {
-      struct timespec tp;
-      sc = clock_gettime( CLOCK_THREAD_CPUTIME_ID, &tp );
-      check_enosys( sc );
-    }
-  #endif
 
   puts( "clock_settime - CLOCK_PROCESS_CPUTIME_ID -- ENOSYS" );
   #if defined(_POSIX_CPUTIME)

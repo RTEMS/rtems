@@ -40,13 +40,12 @@
 #endif
 
 #include <rtems/cpuuse.h>
+#include <rtems/cpuuseimpl.h>
 #include <rtems/rtems/scheduler.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/watchdogimpl.h>
-
-#include "cpuuseimpl.h"
 
 static bool CPU_usage_Per_thread_handler(
   Thread_Control *the_thread,

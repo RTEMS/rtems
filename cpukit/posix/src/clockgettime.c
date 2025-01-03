@@ -5,10 +5,12 @@
  *
  * @ingroup POSIXAPI
  *
- * @brief Retrieves the Specified Clock Time
+ * @brief This source file contains the implementation of clock_gettime().
  */
 
 /*
+ * Copyright (C) 2024 embedded brains GmbH & Co. KG
+ *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -41,6 +43,9 @@
 #include <time.h>
 #include <errno.h>
 
+#include <rtems/cpuuseimpl.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/timestampimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/seterr.h>
 
@@ -70,17 +75,29 @@ int clock_gettime(
 
 #ifdef _POSIX_CPUTIME
   if ( clock_id == CLOCK_PROCESS_CPUTIME_ID ) {
-    _Timecounter_Nanouptime( tp );
+    Timestamp_Control uptime;
+    Timestamp_Control last_reset;
+    Timestamp_Control process_time;
+
+    last_reset = CPU_usage_Uptime_at_last_reset;
+    _TOD_Get_uptime( &uptime );
+    _Timestamp_Subtract( &last_reset, &uptime, &process_time );
+    _Timestamp_To_timespec( &process_time, tp );
     return 0;
   }
 #endif
 
 #ifdef _POSIX_THREAD_CPUTIME
-  if ( clock_id == CLOCK_THREAD_CPUTIME_ID )
-    rtems_set_errno_and_return_minus_one( ENOSYS );
+  if ( clock_id == CLOCK_THREAD_CPUTIME_ID ) {
+    Timestamp_Control used;
+
+    used = _Thread_Get_CPU_time_used_after_last_reset(
+      _Thread_Get_executing()
+    );
+    _Timestamp_To_timespec( &used, tp );
+    return 0;
+  }
 #endif
 
   rtems_set_errno_and_return_minus_one( EINVAL );
-
-  return 0;
 }

@@ -46,11 +46,10 @@
 #include <inttypes.h>
 
 #include <rtems/cpuuse.h>
+#include <rtems/cpuuseimpl.h>
 #include <rtems/printer.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
-
-#include "cpuuseimpl.h"
 
 typedef struct {
   const rtems_printer *printer;

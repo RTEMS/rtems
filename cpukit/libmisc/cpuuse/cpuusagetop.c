@@ -53,6 +53,7 @@
 #include <inttypes.h>
 
 #include <rtems/cpuuse.h>
+#include <rtems/cpuuseimpl.h>
 #include <rtems/printer.h>
 #include <rtems/malloc.h>
 #include <rtems/score/objectimpl.h>
@@ -63,8 +64,6 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/rtems/tasksimpl.h>
-
-#include "cpuuseimpl.h"
 
 /*
  * Use a struct for all data to allow more than one top and to support the
