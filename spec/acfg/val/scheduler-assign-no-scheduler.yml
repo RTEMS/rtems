@@ -1,0 +1,52 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+enabled-by: RTEMS_SMP
+links: []
+test-actions:
+- action-brief: |
+    Check the effect of ${/acfg/if/scheduler-assign-no-scheduler:/name}.
+  action-code: |
+    rtems_status_code sc;
+    rtems_id          id;
+  checks:
+  - brief: |
+      Check that the two configured processors are present.
+    code: |
+      T_eq_u32( rtems_scheduler_get_processor_maximum(), 2 );
+    links: []
+  - brief: |
+      Check that the second processor has no scheduler assigned.
+    code: |
+      sc = rtems_scheduler_ident_by_processor( 1, &id );
+      T_rsc( sc, RTEMS_INCORRECT_STATE );
+    links:
+    - role: validation
+      uid: ../req/scheduler-assign-no-scheduler
+  - brief: |
+      Check that the second processor cannot be assigned to a scheduler.
+    code: |
+      sc = rtems_scheduler_ident_by_processor( 0, &id );
+      T_rsc_success( sc );
+
+      sc = rtems_scheduler_add_processor( id, 1 );
+      T_rsc( sc, RTEMS_NOT_CONFIGURED );
+    links:
+    - role: validation
+      uid: ../req/scheduler-assign-no-scheduler
+  links: []
+test-brief: |
+  Tests the effect of ${/acfg/if/scheduler-assign-no-scheduler:/name}.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-acfg-assign-no-scheduler.c
+test-teardown: null
+type: test-case
