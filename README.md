@@ -40,7 +40,7 @@ RTEMS POSIX 1003.1 Compliance Guide:
 RTEMS Mailing Lists for general purpose use the users list and for developers 
 use the devel list.
 
-  * https://lists.rtems.org/mailman/listinfo
+* https://lists.rtems.org/mailman/listinfo
 
 
 The version number for this software is indicated in the VERSION file.
