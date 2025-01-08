@@ -335,7 +335,9 @@ static inline void _Priority_Set_action_node(
   Priority_Node        *node
 )
 {
+#if defined(RTEMS_SMP)
   _Assert( aggregation->Action.next == NULL );
+#endif
   aggregation->Action.node = node;
 }
 
@@ -350,7 +352,9 @@ static inline void _Priority_Set_action_type(
   Priority_Action_type  type
 )
 {
+#if defined(RTEMS_SMP)
   _Assert( aggregation->Action.next == NULL );
+#endif
   aggregation->Action.type = type;
 }
 
@@ -368,7 +372,9 @@ static inline void _Priority_Set_action(
   Priority_Action_type  type
 )
 {
+#if defined(RTEMS_SMP)
   _Assert( aggregation->Action.next == NULL );
+#endif
   aggregation->Action.node = node;
   aggregation->Action.type = type;
 }
