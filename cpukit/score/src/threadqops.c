@@ -68,7 +68,7 @@ void _Thread_queue_Do_nothing_priority_actions(
   Priority_Actions   *priority_actions
 )
 {
-#if defined(RTEMS_DEBUG)
+#if defined(RTEMS_DEBUG) && defined(RTEMS_SMP)
   Priority_Aggregation *priority_aggregation;
 
   priority_aggregation = _Priority_Actions_move( priority_actions );
