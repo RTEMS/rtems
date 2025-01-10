@@ -35,7 +35,7 @@ import os.path
 import re
 import sys
 
-rtems_version = 6
+rtems_version = 7
 
 
 _BUILD_TYPE_BSP = re.compile(r"build-type:\s*bsp\n")
