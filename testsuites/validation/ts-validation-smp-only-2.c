@@ -52,6 +52,8 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/percpu.h>
+
 #include "ts-config.h"
 
 #include <rtems/test.h>
@@ -72,11 +74,26 @@
 
 const char rtems_test_name[] = "TestsuitesValidationSmpOnly2";
 
+/*
+ * On some targets, secondary processors start without a call to
+ * _CPU_SMP_Start_processor().  Make sure they do not end up in the
+ * SMP_FATAL_MULTITASKING_START_ON_NOT_ONLINE_PROCESSOR fatal error.
+ */
+static void Wait( void *arg )
+{
+  (void) _CPU_Thread_Idle_body( (uintptr_t) arg );
+}
+
+static const Per_CPU_Job_context job_context = { .handler = Wait };
+
+static Per_CPU_Job job;
+
 bool __wrap__CPU_SMP_Start_processor( uint32_t cpu_index );
 
 bool __wrap__CPU_SMP_Start_processor( uint32_t cpu_index )
 {
-  (void) cpu_index;
+  job.context = &job_context;
+  _Per_CPU_Submit_job( _Per_CPU_Get_by_index( cpu_index ), &job );
   return false;
 }
 
