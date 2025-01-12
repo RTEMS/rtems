@@ -55,7 +55,7 @@
 #include <rtems.h>
 #include <bsp/irq-generic.h>
 
-#include "tx-support.h"
+#include "tr-intr-set-priority.h"
 
 #include <rtems/test.h>
 
@@ -66,32 +66,6 @@
  *
  * @{
  */
-
-typedef enum {
-  RtemsIntrReqSetPriority_Pre_Vector_Valid,
-  RtemsIntrReqSetPriority_Pre_Vector_Invalid,
-  RtemsIntrReqSetPriority_Pre_Vector_NA
-} RtemsIntrReqSetPriority_Pre_Vector;
-
-typedef enum {
-  RtemsIntrReqSetPriority_Pre_Priority_Valid,
-  RtemsIntrReqSetPriority_Pre_Priority_Invalid,
-  RtemsIntrReqSetPriority_Pre_Priority_NA
-} RtemsIntrReqSetPriority_Pre_Priority;
-
-typedef enum {
-  RtemsIntrReqSetPriority_Pre_CanSetPriority_Yes,
-  RtemsIntrReqSetPriority_Pre_CanSetPriority_No,
-  RtemsIntrReqSetPriority_Pre_CanSetPriority_NA
-} RtemsIntrReqSetPriority_Pre_CanSetPriority;
-
-typedef enum {
-  RtemsIntrReqSetPriority_Post_Status_Ok,
-  RtemsIntrReqSetPriority_Post_Status_InvId,
-  RtemsIntrReqSetPriority_Post_Status_InvPrio,
-  RtemsIntrReqSetPriority_Post_Status_Unsat,
-  RtemsIntrReqSetPriority_Post_Status_NA
-} RtemsIntrReqSetPriority_Post_Status;
 
 typedef struct {
   uint8_t Skip : 1;
@@ -106,27 +80,42 @@ typedef struct {
  */
 typedef struct {
   /**
-   * @brief If this member is true, then the ``vector`` parameter shall be
-   *   valid.
+   * @brief This member contains the current priority value.
    */
-  bool valid_vector;
+  uint32_t current_priority;
 
   /**
-   * @brief If this member is true, then the ``priority`` parameter shall be
-   *   valid.
+   * @brief This member specifies the ``vector`` parameter value.
    */
-  bool valid_priority;
+  rtems_vector_number vector;
 
   /**
-   * @brief If this member is true, then setting the priority shall be
-   *   supported.
+   * @brief This member specifies the ``priority`` parameter value.
+   */
+  uint32_t priority;
+
+  /**
+   * @brief This member contains the return status.
+   */
+  rtems_status_code status;
+
+  /**
+   * @brief This member contains a copy of the corresponding
+   *   RtemsIntrReqSetPriority_Run() parameter.
+   */
+  rtems_vector_number valid_vector;
+
+  /**
+   * @brief This member contains a copy of the corresponding
+   *   RtemsIntrReqSetPriority_Run() parameter.
+   */
+  uint32_t maximum_priority;
+
+  /**
+   * @brief This member contains a copy of the corresponding
+   *   RtemsIntrReqSetPriority_Run() parameter.
    */
   bool can_set_priority;
-
-  /**
-   * @brief This member specifies the expected status.
-   */
-  rtems_status_code expected_status;
 
   struct {
     /**
@@ -191,23 +180,6 @@ static const char * const * const RtemsIntrReqSetPriority_PreDesc[] = {
   NULL
 };
 
-typedef RtemsIntrReqSetPriority_Context Context;
-
-static void CheckSetPriority( Context *ctx, rtems_vector_number vector )
-{
-  rtems_status_code sc;
-  uint32_t          priority;
-
-  if ( ctx->valid_priority ) {
-    (void) rtems_interrupt_get_priority( vector, &priority );
-  } else {
-    priority = UINT32_MAX;
-  }
-
-  sc = rtems_interrupt_set_priority( vector, priority );
-  T_rsc( sc, ctx->expected_status );
-}
-
 static void RtemsIntrReqSetPriority_Pre_Vector_Prepare(
   RtemsIntrReqSetPriority_Context   *ctx,
   RtemsIntrReqSetPriority_Pre_Vector state
@@ -218,7 +190,7 @@ static void RtemsIntrReqSetPriority_Pre_Vector_Prepare(
       /*
        * While the ``vector`` parameter is associated with an interrupt vector.
        */
-      ctx->valid_vector = true;
+      ctx->vector = ctx->valid_vector;
       break;
     }
 
@@ -227,7 +199,7 @@ static void RtemsIntrReqSetPriority_Pre_Vector_Prepare(
        * While the ``vector`` parameter is not associated with an interrupt
        * vector.
        */
-      ctx->valid_vector = false;
+      ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
       break;
     }
 
@@ -246,7 +218,7 @@ static void RtemsIntrReqSetPriority_Pre_Priority_Prepare(
       /*
        * While the ``priority`` parameter is a valid priority value.
        */
-      ctx->valid_priority = true;
+      ctx->priority = ctx->current_priority;
       break;
     }
 
@@ -254,7 +226,11 @@ static void RtemsIntrReqSetPriority_Pre_Priority_Prepare(
       /*
        * While the ``priority`` parameter is an invalid priority value.
        */
-      ctx->valid_priority = false;
+      if ( ctx->maximum_priority < UINT32_MAX ) {
+        ctx->priority = UINT32_MAX;
+      } else {
+        ctx->Map.skip = true;
+      }
       break;
     }
 
@@ -274,7 +250,9 @@ static void RtemsIntrReqSetPriority_Pre_CanSetPriority_Prepare(
        * While setting the priority for the interrupt vector specified by
        * ``vector`` parameter is supported.
        */
-      ctx->can_set_priority = true;
+      if ( !ctx->can_set_priority ) {
+        ctx->Map.skip = true;
+      }
       break;
     }
 
@@ -283,7 +261,9 @@ static void RtemsIntrReqSetPriority_Pre_CanSetPriority_Prepare(
        * While setting the priority for the interrupt vector specified by
        * ``vector`` parameter is not supported.
        */
-      ctx->can_set_priority = false;
+      if ( ctx->can_set_priority ) {
+        ctx->Map.skip = true;
+      }
       break;
     }
 
@@ -303,7 +283,7 @@ static void RtemsIntrReqSetPriority_Post_Status_Check(
        * The return status of rtems_interrupt_set_priority() shall be
        * RTEMS_SUCCESSFUL.
        */
-      ctx->expected_status = RTEMS_SUCCESSFUL;
+      T_rsc_success( ctx->status );
       break;
     }
 
@@ -312,7 +292,7 @@ static void RtemsIntrReqSetPriority_Post_Status_Check(
        * The return status of rtems_interrupt_set_priority() shall be
        * RTEMS_INVALID_ID.
        */
-      ctx->expected_status = RTEMS_INVALID_ID;
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
       break;
     }
 
@@ -321,7 +301,7 @@ static void RtemsIntrReqSetPriority_Post_Status_Check(
        * The return status of rtems_interrupt_set_priority() shall be
        * RTEMS_INVALID_PRIORITY.
        */
-      ctx->expected_status = RTEMS_INVALID_PRIORITY;
+      T_rsc( ctx->status, RTEMS_INVALID_PRIORITY );
       break;
     }
 
@@ -330,7 +310,7 @@ static void RtemsIntrReqSetPriority_Post_Status_Check(
        * The return status of rtems_interrupt_set_priority() shall be
        * RTEMS_UNSATISFIED.
        */
-      ctx->expected_status = RTEMS_UNSATISFIED;
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
       break;
     }
 
@@ -339,44 +319,29 @@ static void RtemsIntrReqSetPriority_Post_Status_Check(
   }
 }
 
-static void RtemsIntrReqSetPriority_Action( void )
+static void RtemsIntrReqSetPriority_Prepare(
+  RtemsIntrReqSetPriority_Context *ctx
+)
 {
-  /* Action carried out by CheckSetPriority() */
+  ctx->current_priority = 0;
+  (void) rtems_interrupt_get_priority(
+    ctx->valid_vector,
+    &ctx->current_priority
+  );
+}
+
+static void RtemsIntrReqSetPriority_Action(
+  RtemsIntrReqSetPriority_Context *ctx
+)
+{
+  ctx->status = rtems_interrupt_set_priority( ctx->vector, ctx->priority );
 }
 
 static void RtemsIntrReqSetPriority_Cleanup(
   RtemsIntrReqSetPriority_Context *ctx
 )
 {
-  if ( ctx->valid_vector ) {
-    rtems_vector_number vector;
-
-    for (
-      vector = 0;
-      vector < BSP_INTERRUPT_VECTOR_COUNT;
-      ++vector
-    ) {
-      rtems_interrupt_attributes attr;
-      rtems_status_code          sc;
-
-      memset( &attr, 0, sizeof( attr ) );
-      sc = rtems_interrupt_get_attributes( vector, &attr );
-
-      if ( sc == RTEMS_INVALID_ID ) {
-        continue;
-      }
-
-      T_rsc_success( sc );
-
-      if ( attr.can_set_priority != ctx->can_set_priority ) {
-        continue;
-      }
-
-      CheckSetPriority( ctx, vector );
-    }
-  } else {
-    CheckSetPriority( ctx, BSP_INTERRUPT_VECTOR_COUNT );
-  }
+  (void) rtems_interrupt_set_priority( ctx->valid_vector, ctx->current_priority );
 }
 
 static const RtemsIntrReqSetPriority_Entry
@@ -418,14 +383,46 @@ static T_fixture RtemsIntrReqSetPriority_Fixture = {
   .initial_context = &RtemsIntrReqSetPriority_Instance
 };
 
+static const uint8_t RtemsIntrReqSetPriority_Weights[] = {
+  4, 2, 1
+};
+
+static void RtemsIntrReqSetPriority_Skip(
+  RtemsIntrReqSetPriority_Context *ctx,
+  size_t                           index
+)
+{
+  switch ( index + 1 ) {
+    case 1:
+      ctx->Map.pci[ 1 ] = RtemsIntrReqSetPriority_Pre_Priority_NA - 1;
+      /* Fall through */
+    case 2:
+      ctx->Map.pci[ 2 ] = RtemsIntrReqSetPriority_Pre_CanSetPriority_NA - 1;
+      break;
+  }
+}
+
 static inline RtemsIntrReqSetPriority_Entry RtemsIntrReqSetPriority_PopEntry(
   RtemsIntrReqSetPriority_Context *ctx
 )
 {
   size_t index;
 
-  index = ctx->Map.index;
+  if ( ctx->Map.skip ) {
+    size_t i;
+
+    ctx->Map.skip = false;
+    index = 0;
+
+    for ( i = 0; i < 3; ++i ) {
+      index += RtemsIntrReqSetPriority_Weights[ i ] * ctx->Map.pci[ i ];
+    }
+  } else {
+    index = ctx->Map.index;
+  }
+
   ctx->Map.index = index + 1;
+
   return RtemsIntrReqSetPriority_Entries[
     RtemsIntrReqSetPriority_Map[ index ]
   ];
@@ -456,24 +453,50 @@ static void RtemsIntrReqSetPriority_TestVariant(
 {
   RtemsIntrReqSetPriority_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsIntrReqSetPriority_Pre_Priority_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+
+  if ( ctx->Map.skip ) {
+    RtemsIntrReqSetPriority_Skip( ctx, 1 );
+    return;
+  }
+
   RtemsIntrReqSetPriority_Pre_CanSetPriority_Prepare( ctx, ctx->Map.pcs[ 2 ] );
-  RtemsIntrReqSetPriority_Action();
+
+  if ( ctx->Map.skip ) {
+    RtemsIntrReqSetPriority_Skip( ctx, 2 );
+    return;
+  }
+
+  RtemsIntrReqSetPriority_Action( ctx );
   RtemsIntrReqSetPriority_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
 }
 
-/**
- * @fn void T_case_body_RtemsIntrReqSetPriority( void )
- */
-T_TEST_CASE_FIXTURE(
-  RtemsIntrReqSetPriority,
-  &RtemsIntrReqSetPriority_Fixture
+static T_fixture_node RtemsIntrReqSetPriority_Node;
+
+static T_remark RtemsIntrReqSetPriority_Remark = {
+  .next = NULL,
+  .remark = "RtemsIntrReqSetPriority"
+};
+
+void RtemsIntrReqSetPriority_Run(
+  rtems_vector_number valid_vector,
+  uint32_t            maximum_priority,
+  bool                can_set_priority
 )
 {
   RtemsIntrReqSetPriority_Context *ctx;
 
-  ctx = T_fixture_context();
+  ctx = &RtemsIntrReqSetPriority_Instance;
+  ctx->valid_vector = valid_vector;
+  ctx->maximum_priority = maximum_priority;
+  ctx->can_set_priority = can_set_priority;
+
+  ctx = T_push_fixture(
+    &RtemsIntrReqSetPriority_Node,
+    &RtemsIntrReqSetPriority_Fixture
+  );
   ctx->Map.in_action_loop = true;
   ctx->Map.index = 0;
+  ctx->Map.skip = false;
 
   for (
     ctx->Map.pci[ 0 ] = RtemsIntrReqSetPriority_Pre_Vector_Valid;
@@ -492,11 +515,15 @@ T_TEST_CASE_FIXTURE(
       ) {
         ctx->Map.entry = RtemsIntrReqSetPriority_PopEntry( ctx );
         RtemsIntrReqSetPriority_SetPreConditionStates( ctx );
+        RtemsIntrReqSetPriority_Prepare( ctx );
         RtemsIntrReqSetPriority_TestVariant( ctx );
         RtemsIntrReqSetPriority_Cleanup( ctx );
       }
     }
   }
+
+  T_add_remark( &RtemsIntrReqSetPriority_Remark );
+  T_pop_fixture();
 }
 
 /** @} */

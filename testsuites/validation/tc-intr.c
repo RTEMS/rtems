@@ -53,8 +53,10 @@
 #endif
 
 #include <rtems.h>
-#include <rtems/irq-extension.h>
+#include <bsp/irq-generic.h>
 
+#include "tr-intr-get-priority.h"
+#include "tr-intr-set-priority.h"
 #include "tx-support.h"
 
 #include <rtems/test.h>
@@ -62,7 +64,7 @@
 /**
  * @defgroup RtemsIntrValIntr spec:/rtems/intr/val/intr
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationIntr
  *
  * @brief Tests some @ref RTEMSAPIClassicIntr directives.
  *
@@ -115,6 +117,10 @@
  *
  *   - Call rtems_interrupt_entry_initialize().  Check that the entry is
  *     properly initialized by rtems_interrupt_entry_initialize().
+ *
+ * - Check rtems_interrupt_get_priority() for each valid vector.
+ *
+ * - Check rtems_interrupt_set_priority() for each valid vector.
  *
  * @{
  */
@@ -274,6 +280,64 @@ static void RtemsIntrValIntr_Action_2( void )
 }
 
 /**
+ * @brief Check rtems_interrupt_get_priority() for each valid vector.
+ */
+static void RtemsIntrValIntr_Action_3( void )
+{
+  rtems_vector_number vector;
+
+  for (
+    vector = 0;
+    vector < BSP_INTERRUPT_VECTOR_COUNT;
+    ++vector
+  ) {
+    rtems_interrupt_attributes attr;
+    rtems_status_code          sc;
+
+    memset( &attr, 0, sizeof( attr ) );
+    sc = rtems_interrupt_get_attributes( vector, &attr );
+
+    if ( sc == RTEMS_INVALID_ID ) {
+      continue;
+    }
+
+    T_rsc_success( sc );
+    RtemsIntrReqGetPriority_Run( vector, attr.can_get_priority );
+  }
+}
+
+/**
+ * @brief Check rtems_interrupt_set_priority() for each valid vector.
+ */
+static void RtemsIntrValIntr_Action_4( void )
+{
+  rtems_vector_number vector;
+
+  for (
+    vector = 0;
+    vector < BSP_INTERRUPT_VECTOR_COUNT;
+    ++vector
+  ) {
+    rtems_interrupt_attributes attr;
+    rtems_status_code          sc;
+
+    memset( &attr, 0, sizeof( attr ) );
+    sc = rtems_interrupt_get_attributes( vector, &attr );
+
+    if ( sc == RTEMS_INVALID_ID ) {
+      continue;
+    }
+
+    T_rsc_success( sc );
+    RtemsIntrReqSetPriority_Run(
+      vector,
+      attr.maximum_priority,
+      attr.can_set_priority
+    );
+  }
+}
+
+/**
  * @fn void T_case_body_RtemsIntrValIntr( void )
  */
 T_TEST_CASE( RtemsIntrValIntr )
@@ -281,6 +345,8 @@ T_TEST_CASE( RtemsIntrValIntr )
   RtemsIntrValIntr_Action_0();
   RtemsIntrValIntr_Action_1();
   RtemsIntrValIntr_Action_2();
+  RtemsIntrValIntr_Action_3();
+  RtemsIntrValIntr_Action_4();
 }
 
 /** @} */
