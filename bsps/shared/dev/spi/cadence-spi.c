@@ -27,6 +27,7 @@
 
 
 #include <bsp.h>
+#include <strings.h>
 
 #include <rtems/irq-extension.h>
 #include <sys/param.h> /* MAX() */
