@@ -1439,10 +1439,10 @@ def load_version(ctx):
 def configure_version(conf):
     version_label = load_version(conf)
     v_str = version["__RTEMS_MAJOR__"] + "." + version["__RTEMS_MINOR__"]
-    if int(version["__RTEMS_REVISION__"]) != 0 and version_label != "":
+    if int(version["__RTEMS_REVISION__"]) != 0:
         v_str += "." + version["__RTEMS_REVISION__"]
-    if version_label != "":
-        v_str += "." + version_label
+    if version_label is not None and version_label != "":
+            v_str += "." + version_label
     conf.msg("Configure RTEMS version", v_str, color="YELLOW")
 
 
