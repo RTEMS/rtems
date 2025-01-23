@@ -315,6 +315,10 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
           return rtems_rtl_elf_rel_failure;
         }
 
+        /*
+         * Align tramp_brk as necessary.
+         */
+        obj->tramp_brk = (void *)RTEMS_ALIGN_UP((uintptr_t)obj->tramp_brk, 4);
         tramp_addr = ((Elf_Addr) obj->tramp_brk) | (symvalue & 1);
         obj->tramp_brk = set_veneer(obj->tramp_brk, symvalue);
 
@@ -519,6 +523,10 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
           return rtems_rtl_elf_rel_failure;
         }
 
+        /*
+         * Align tramp_brk as necessary.
+         */
+        obj->tramp_brk = (void *)RTEMS_ALIGN_UP((uintptr_t)obj->tramp_brk, 4);
         tramp_addr = ((Elf_Addr) obj->tramp_brk) | (symvalue & 1);
         tmp = tramp_addr + addend;
         if (isThumb(symvalue)) {
@@ -526,11 +534,9 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
           tmp = tmp - (Elf_Addr)where;
         } else {
           /*
-	   * The B[L]X expects ARM code at the target. Align tramp_brk as
-	   * necessary.
-	   */
-          obj->tramp_brk = (void *)RTEMS_ALIGN_UP((uintptr_t)obj->tramp_brk, 4);
-	  tramp_addr = (Elf_Addr) obj->tramp_brk;
+           * The B[L]X expects ARM code at the target.
+           */
+          tramp_addr = (Elf_Addr) obj->tramp_brk;
           obj->tramp_brk = set_arm_veneer(obj->tramp_brk, symvalue);
           /*
            * where[1:0] are set to 0 for ARM-targeted relocations because the jump
