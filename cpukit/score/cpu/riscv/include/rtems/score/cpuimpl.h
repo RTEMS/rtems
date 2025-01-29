@@ -298,12 +298,12 @@
 extern "C" {
 #endif
 
-static inline uint32_t _RISCV_Map_hardid_to_cpu_index( uint32_t hardid )
+static inline uint32_t _RISCV_Map_hartid_to_cpu_index( uint32_t hartid )
 {
-  return hardid - RISCV_BOOT_HARTID;
+  return hartid - RISCV_BOOT_HARTID;
 }
 
-static inline uint32_t _RISCV_Map_cpu_index_to_hardid( uint32_t cpu_index )
+static inline uint32_t _RISCV_Map_cpu_index_to_hartid( uint32_t cpu_index )
 {
   return cpu_index + RISCV_BOOT_HARTID;
 }

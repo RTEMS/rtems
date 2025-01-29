@@ -204,7 +204,7 @@ static void riscv_clint_init(const void *fdt)
     hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
 
 #ifdef RTEMS_SMP
-    cpu_index = _RISCV_Map_hardid_to_cpu_index(hart_index);
+    cpu_index = _RISCV_Map_hartid_to_cpu_index(hart_index);
     if (cpu_index >= rtems_configuration_get_maximum_processors()) {
       continue;
     }
@@ -292,7 +292,7 @@ static void riscv_plic_init(const void *fdt)
     hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
 
 #ifdef RTEMS_SMP
-    cpu_index = _RISCV_Map_hardid_to_cpu_index(hart_index);
+    cpu_index = _RISCV_Map_hartid_to_cpu_index(hart_index);
     if (cpu_index >= rtems_configuration_get_maximum_processors()) {
       continue;
     }
