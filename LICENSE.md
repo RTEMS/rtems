@@ -44,7 +44,7 @@ https://spdx.org/licenses/BSD-2-Clause.html
 
 SPDX-License-Identifier: BSD-2-Clause
 
-Copyright (C) <FIRST YEAR>, <LAST YEAR> <COPYRIGHT HOLDER>
+Copyright (C) [YYYY], [YYYY] [COPYRIGHT HOLDER]
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
