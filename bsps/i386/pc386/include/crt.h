@@ -8,8 +8,6 @@
 
 /*
  * crt.h  - This file contains definitions for constants related to PC console.
- *          More information can be found at
- *	<http://millenium.atcg.com/~taco/helppc/tables.html>
  *
  * Copyright (C) 1998  Eric Valette (eric.valette@free.fr)
  *                     Canon Centre Recherche France.
