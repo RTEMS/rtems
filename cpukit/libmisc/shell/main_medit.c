@@ -57,7 +57,7 @@ static int rtems_shell_main_medit(
     unsigned char tmpc;
 
     if ( rtems_string_to_unsigned_char(argv[i], &tmpc, NULL, 0) ) {
-      printf( "Value (%s) is not a number\n", argv[i] );
+      printf( "Value (%s) is not a number or out of range\n", argv[i] );
       continue;
     }
 
@@ -67,9 +67,13 @@ static int rtems_shell_main_medit(
   return 0;
 }
 
+static const char rtems_medit_shell_usage[] =
+  "medit address value1 [value2 ...]\n"
+  "\tValues must not exceed 255 or 0xff\n";
+
 rtems_shell_cmd_t rtems_shell_MEDIT_Command = {
   "medit",                                      /* name */
-  "medit address value1 [value2 ...]",          /* usage */
+  rtems_medit_shell_usage,                      /* usage */
   "mem",                                        /* topic */
   rtems_shell_main_medit,                       /* command */
   NULL,                                         /* alias */
