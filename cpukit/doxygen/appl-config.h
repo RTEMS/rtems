@@ -2489,17 +2489,9 @@
  * The default value is 15.
  *
  * @par Constraints
- * @parblock
- * The following constraints apply to this configuration option:
- *
- * * The configuration option is not included in the pre-qualified feature set
- *   of RTEMS.  Applications which are restricted to only use interfaces of the
- *   pre-qualified feature set of RTEMS shall not use the configuration option.
- *
- * * The value of the configuration option shall be a valid Classic API task
- *   priority.  The set of valid task priorities depends on the scheduler
- *   configuration.
- * @endparblock
+ * The value of the configuration option shall be a valid Classic API task
+ * priority.  The set of valid task priorities depends on the scheduler
+ * configuration.
  */
 #define CONFIGURE_JFFS2_DELAYED_WRITE_TASK_PRIORITY
 
