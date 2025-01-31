@@ -15,7 +15,7 @@
  */
 
 /*
- * Copyright (C) 2020 Chris Johns (http://contemporary.software)
+ * Copyright (C) 2020 Chris Johns <chris@contemporary.software>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
