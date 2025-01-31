@@ -7,13 +7,14 @@
  *
  * @brief This source file is part of CAN/CAN FD bus common support. It
  *        implements bit timing calculation.
+ *
+ * Implementation is based on original LinCAN - Linux CAN bus driver
+ * Part of OrtCAN project https://ortcan.sourceforge.net/
  */
 
 /*
  * Copyright (C) 2023-2024 Michal Lenc <michallenc@seznam.cz>
- * Implementation is based on original LinCAN - Linux CAN bus driver
- * Part of OrtCAN project https://ortcan.sourceforge.net/
- * Copyright (C) 2002-2009 DCE FEE CTU Prague <http://control.fel.cvut.cz>
+ * Copyright (C) 2002-2009 DCE FEE CTU Prague
  * Copyright (C) 2002-2024 Pavel Pisa <pisa@cmp.felk.cvut.cz>
  * Copyright (C) 2005      Stanislav Marek
  *
