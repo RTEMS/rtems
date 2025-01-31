@@ -10,7 +10,6 @@
  *  Modifications by:
  *  (C) Copyright 1997 -
  *    NavIST Group - Real-Time Distributed Systems and Industrial Automation
- *    http://pandora.ist.utl.pt
  *    Instituto Superior Tecnico * Lisboa * PORTUGAL
  *
  *  This file is provided "AS IS" without warranty of any kind, either

@@ -12,8 +12,6 @@
  * Till Straumann, <strauman@slac.stanford.edu>, 12/20/2001
  * separate BSP specific stuff from generics...
  *
- * http://pandora.ist.utl.pt
- *
  * Instituto Superior Tecnico * Lisboa * PORTUGAL
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

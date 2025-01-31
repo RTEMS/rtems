@@ -138,8 +138,6 @@ HOWTO
 | (C) Copyright 1998 -                                                        |
 | - NavIST Group - Real-Time Distributed Systems and Industrial Automation    |
 |                                                                             |
-| http://pandora.ist.utl.pt                                                   |
-|                                                                             |
 | Instituto Superior Tecnico * Lisboa * PORTUGAL                              |
 +-----------------------------------------------------------------------------+
 | Disclaimer:                                                                 |

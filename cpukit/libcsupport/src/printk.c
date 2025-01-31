@@ -10,8 +10,6 @@
  * (C) Copyright 1997 -
  * - NavIST Group - Real-Time Distributed Systems and Industrial Automation
  *
- * http://pandora.ist.utl.pt
- *
  * Instituto Superior Tecnico * Lisboa * PORTUGAL
  *
  * Disclaimer:

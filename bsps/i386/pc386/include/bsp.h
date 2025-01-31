@@ -14,8 +14,6 @@
 | (C) Copyright 1997 -
 | - NavIST Group - Real-Time Distributed Systems and Industrial Automation
 |
-| http://pandora.ist.utl.pt
-|
 | Instituto Superior Tecnico * Lisboa * PORTUGAL
 +--------------------------------------------------------------------------+
 | Modified by Eric Valette the 20/05/98 in order to add definitions used
