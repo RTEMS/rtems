@@ -534,8 +534,8 @@ static void ctucanfd_set_mode(
              ( mode_reg & ~REG_MODE_FDE );
 
   mode_reg = ( ctrlmode & CAN_CTRLMODE_PRESUME_ACK ) ?
-             ( mode_reg | REG_MODE_SAM ) :
-             ( mode_reg & ~REG_MODE_SAM );
+             ( mode_reg | REG_MODE_STM ) :
+             ( mode_reg & ~REG_MODE_STM );
 
   mode_reg = ( ctrlmode & CAN_CTRLMODE_FD_NON_ISO ) ?
              ( mode_reg | REG_MODE_NISOFD ) :
