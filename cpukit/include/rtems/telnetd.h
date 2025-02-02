@@ -3,7 +3,6 @@
  * 
  * @brief Telnet Daemon Interface
  */
-
 /*
  * Copyright (C) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  * Copyright (C) 2009 embedded brains GmbH & Co. KG

@@ -30,7 +30,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 /*
  * Based on work from Chris Johns and Fernando Ruiz.
  *
