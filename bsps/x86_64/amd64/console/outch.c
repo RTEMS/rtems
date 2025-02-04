@@ -16,7 +16,7 @@
  *
  * Copyright (c) 2015 Yang Qiao
  * based on work by:
- * Copyright (C) 1998  Eric Valette (valette@crf.canon.fr)
+ * Copyright (C) 1998  Eric Valette (eric.valette@free.fr)
  *                     Canon Centre Recherche France.
  *
  *  The license and distribution terms for this file may be

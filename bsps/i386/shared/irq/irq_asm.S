@@ -3,7 +3,7 @@
  */
 
 /*
- *  Copyright (C) 1998 valette@crf.canon.fr
+ *  Copyright (C) 1998 eric.valette@free.fr
  *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).

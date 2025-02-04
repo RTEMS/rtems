@@ -1,7 +1,7 @@
 /*
  *  start.S :	  RTEMS entry point
  *
- *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

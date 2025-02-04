@@ -35,7 +35,7 @@ I have also splitted the original code to have a more modular
 design enabling to reuse code between the loader and RTEMS
 initialization (e.g printk, ...).
 
-Eric Valette (valette@crf.canon.fr)
+Eric Valette (eric.valette@free.fr)
 
 
 2003/5/7, Greg Menke, gregory.menke@gsfc.nasa.gov

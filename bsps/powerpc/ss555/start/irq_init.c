@@ -11,7 +11,7 @@
  *
  *  Derived from libbsp/powerpc/mbx8xx/irq/irq_init.c:
  *
- *  CopyRight (C) 2001 valette@crf.canon.fr
+ *  CopyRight (C) 2001 eric.valette@free.fr
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

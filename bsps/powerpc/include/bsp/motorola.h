@@ -3,7 +3,7 @@
  *  This include file describe the data structure and the functions implemented
  *  by rtems to identify motorola boards.
  *
- *  CopyRight (C) 1999 valette@crf.canon.fr
+ *  CopyRight (C) 1999 eric.valette@free.fr
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

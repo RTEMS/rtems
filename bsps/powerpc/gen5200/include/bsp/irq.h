@@ -20,7 +20,7 @@
  */
 
 /*
- * Copyright (C) 1999 valette@crf.canon.fr
+ * Copyright (C) 1999 eric.valette@free.fr
  *
  * Modified for mpc8260 by Andy Dachs <a.dachs@sstl.co.uk>
  * Surrey Satellite Technology Limited

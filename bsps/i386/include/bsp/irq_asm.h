@@ -10,7 +10,7 @@
  *  to program and manage the  Intel 8259 interrupt controller
  *
  *
- *  COPYRIGHT (c) 1998 valette@crf.canon.fr
+ *  COPYRIGHT (c) 1998 eric.valette@free.fr
  *
  *  Copyright (c) 2016 Chris Johns <chrisj@rtems.org>
  *

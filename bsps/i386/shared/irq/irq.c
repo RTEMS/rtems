@@ -4,7 +4,7 @@
 
 /*
  *  Copyright (c) 2009 embedded brains GmbH & Co. KG
- *  Copyright (C) 1998 valette@crf.canon.fr
+ *  Copyright (C) 1998 eric.valette@free.fr
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

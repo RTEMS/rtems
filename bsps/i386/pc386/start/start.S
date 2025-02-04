@@ -12,7 +12,7 @@
 |
 | Instituto Superior Tecnico * Lisboa * PORTUGAL
 +--------------------------------------------------------------------------+
-| Modified the 20/05/1998  by valette@crf.canon.fr in order to give a working
+| Modified the 20/05/1998  by eric.valette@free.fr in order to give a working
 | example of eraly stage debugging via the DEBUG_EARLY_START define.
 +--------------------------------------------------------------------------+
 | Disclaimer:

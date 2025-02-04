@@ -1,7 +1,7 @@
 /*
  *  console.c  -- console I/O package
  *
- *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
  *
  * This code is based on the pc386 BSP console.c so the following
  * copyright also applies :

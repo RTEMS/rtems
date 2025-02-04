@@ -11,7 +11,7 @@
  *  http://www.rtems.org/license/LICENSE.
  *
  *  Modified to support the MPC750.
- *  Modifications Copyright (c) 1999 Eric Valette valette@crf.canon.fr
+ *  Modifications Copyright (c) 1999 Eric Valette eric.valette@free.fr
  */
 
 #include <bsp.h>

@@ -8,7 +8,7 @@
  */
 
 /*
- *  CopyRight (C) 1998 valette@crf.canon.fr
+ *  CopyRight (C) 1998 eric.valette@free.fr
  *
  *  This code is heavilly inspired by the public specification of STREAM V2
  *  that can be found at :

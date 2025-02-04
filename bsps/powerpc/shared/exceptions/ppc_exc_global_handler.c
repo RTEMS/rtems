@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 1999 Eric Valette (valette@crf.canon.fr)
+ * Copyright (C) 1999 Eric Valette (eric.valette@free.fr)
  *                    Canon Centre Recherche France.
  *
  * Derived from file "libcpu/powerpc/new-exceptions/bspsupport/vectors_init.c".

@@ -3,7 +3,7 @@
  *  This file contains the implementation of rtems initialization
  *  related to interrupt handling.
  *
- *  CopyRight (C) 1999 valette@crf.canon.fr
+ *  CopyRight (C) 1999 eric.valette@free.fr
  *
  * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
  * to make it valid for MVME2300 Motorola boards.

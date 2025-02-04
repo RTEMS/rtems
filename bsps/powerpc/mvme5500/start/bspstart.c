@@ -11,7 +11,7 @@
  *  http://www.rtems.org/license/LICENSE.
  *
  *  Modified to support the MCP750.
- *  Modifications Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *  Modifications Copyright (C) 1999 Eric Valette. eric.valette@free.fr
  *
  *  Modified to support the Synergy VGM & Motorola PowerPC boards
  *  (C) by Till Straumann, <strauman@slac.stanford.edu>, 2002, 2004, 2005

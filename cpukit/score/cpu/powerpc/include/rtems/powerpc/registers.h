@@ -11,7 +11,7 @@
  */
 
 /*
- * COPYRIGHT (C) 1999  Eric Valette (valette@crf.canon.fr)
+ * COPYRIGHT (C) 1999  Eric Valette (eric.valette@free.fr)
  *                     Canon Centre Recherche France.
  *
  *  Added MPC8260 Andy Dachs <a.dachs@sstl.co.uk>

@@ -15,7 +15,7 @@
  *  COPYRIGHT (c) 1989-2016.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (C) 1998  Eric Valette (valette@crf.canon.fr)
+ *  Copyright (C) 1998  Eric Valette (eric.valette@free.fr)
  *                     Canon Centre Recherche France.
  *
  * Redistribution and use in source and binary forms, with or without

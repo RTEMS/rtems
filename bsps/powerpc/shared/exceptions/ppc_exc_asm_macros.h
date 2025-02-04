@@ -1,5 +1,5 @@
 /*
- * (c) 1999, Eric Valette valette@crf.canon.fr
+ * (c) 1999, Eric Valette eric.valette@free.fr
  *
  * Modified and partially rewritten by Till Straumann, 2007-2008
  *

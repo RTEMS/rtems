@@ -4,7 +4,7 @@
  */
 
 /*
- *  Copyright (C) 1999 valette@crf.canon.fr
+ *  Copyright (C) 1999 eric.valette@free.fr
  *
  *  Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
  *  to make it valid for MVME2300 Motorola boards.

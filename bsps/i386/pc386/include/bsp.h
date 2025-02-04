@@ -21,7 +21,7 @@
 | Modified by Eric Valette the 20/05/98 in order to add definitions used
 | to enhance video putchar capabilities.
 |
-| Copyright (C) 1998  valette@crf.canon.fr
+| Copyright (C) 1998  eric.valette@free.fr
 |
 | Canon Centre Recherche France.
 |

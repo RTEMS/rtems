@@ -15,7 +15,7 @@
  *
  *  Derived from libcpu/powerpc/mpc8xx/exceptions/raw_exception.h:
  *
- *  Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
+ *  Copyright (C) 1999  Eric Valette (eric.valette@free.fr)
  *                     Canon Centre Recherche France.
  *
  *  The license and distribution terms for this file may be

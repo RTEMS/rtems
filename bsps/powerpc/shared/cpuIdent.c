@@ -1,7 +1,7 @@
 /*
  *  cpuIdent.c -- Cpu identification code
  *
- *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
  *
  *  Added MPC8260 Andy Dachs <a.dachs@sstl.co.uk>
  *  Surrey Satellite Technology Limited

@@ -1,7 +1,7 @@
 /*
  * @file
  *
- * Copyright (C) 1998  Eric Valette (valette@crf.canon.fr)
+ * Copyright (C) 1998  Eric Valette (eric.valette@free.fr)
  *                     Canon Centre Recherche France.
  *
  *  The license and distribution terms for this file may be

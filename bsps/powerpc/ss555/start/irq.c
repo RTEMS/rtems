@@ -8,7 +8,7 @@
  *
  *  Derived from libbsp/powerpc/mbx8xx/irq/irq.c:
  *
- *  Copyright (C) 1998, 1999 valette@crf.canon.fr
+ *  Copyright (C) 1998, 1999 eric.valette@free.fr
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

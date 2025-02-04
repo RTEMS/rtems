@@ -22,7 +22,7 @@
  */
 
 /*
- * COPYRIGHT (C) 1998  Eric Valette (valette@crf.canon.fr)
+ * COPYRIGHT (C) 1998  Eric Valette (eric.valette@free.fr)
  *                     Canon Centre Recherche France.
  *
  * Redistribution and use in source and binary forms, with or without

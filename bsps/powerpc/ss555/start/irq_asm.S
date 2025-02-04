@@ -15,7 +15,7 @@
  *  Derived from libbsp/powerpc/mbx8xx/irq/irq_asm.S:
  *
  *  Modified to support the MCP750.
- *  Modifications Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *  Modifications Copyright (C) 1999 Eric Valette. eric.valette@free.fr
  *
  *  Till Straumann <strauman@slac.stanford.edu>, 2003/7:
  *    - store isr nesting level in _ISR_Nest_level rather than

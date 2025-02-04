@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 1999 Eric Valette (valette@crf.canon.fr)
+ * Copyright (C) 1999 Eric Valette (eric.valette@free.fr)
  *                    Canon Centre Recherche France.
  *
  * Copyright (C) 2009, 2011 embedded brains GmbH & Co. KG

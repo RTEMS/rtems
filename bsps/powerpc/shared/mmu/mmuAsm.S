@@ -1,7 +1,7 @@
 /*
  *  mmuAsm.S
  *
- *  Copyright (C) 1999 Eric Valette (valette@crf.canon.fr)
+ *  Copyright (C) 1999 Eric Valette (eric.valette@free.fr)
  *
  *  This file contains the low-level support for various MMU
  *  features.

@@ -8,7 +8,7 @@
  *  to define more capability bits, pick up more CPU model information,
  *  and add more model strings. --joel (April 2010)
  *
- *  COPYRIGHT (c) 1998 valette@crf.canon.fr
+ *  COPYRIGHT (c) 1998 eric.valette@free.fr
  *  COPYRIGHT (c) 2010 OAR Corporation
  *
  *  The license and distribution terms for this file may be

@@ -10,7 +10,7 @@
  *
  *  Derived from libbsp/powerpc/mbx8xx/vectors/vectors.S,
  *
- *  (c) 1999, Eric Valette valette@crf.canon.fr
+ *  (c) 1999, Eric Valette eric.valette@free.fr
  */
 
 #include <rtems/asm.h>

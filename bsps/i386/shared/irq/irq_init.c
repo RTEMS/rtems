@@ -4,7 +4,7 @@
  *  related to interrupt handling.
  *
  *  Copyright (c) 2009 embedded brains GmbH & Co. KG
- *  CopyRight (C) 1998 valette@crf.canon.fr
+ *  CopyRight (C) 1998 eric.valette@free.fr
  *
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).

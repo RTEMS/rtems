@@ -1,7 +1,7 @@
 /*
  *  start.S :	  RTEMS entry point
  *
- *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
  *
  *  S. Kate Feng <feng1@bnl.gov>, April 2004
  *  Mapped the 2nd 256MB of RAM to support the MVME5500/MVME6100 boards

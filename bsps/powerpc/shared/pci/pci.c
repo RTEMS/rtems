@@ -1,7 +1,7 @@
 /*
  * pci.c :  this file contains basic PCI Io functions.
  *
- *  Copyright (C) 1999 valette@crf.canon.fr
+ *  Copyright (C) 1999 eric.valette@free.fr
  *
  *  This code is heavily inspired by the public specification of STREAM V2
  *  that can be found at :

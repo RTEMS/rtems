@@ -11,7 +11,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1998 valette@crf.canon.fr
+ *  COPYRIGHT (c) 1998 eric.valette@free.fr
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

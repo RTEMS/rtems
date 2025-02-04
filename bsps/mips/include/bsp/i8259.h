@@ -9,7 +9,7 @@
  *  This include file describe the data structure and the functions implemented
  *  by RTEMS to control the i8259 chip.
  *
- *  Copyright (C) 1999 valette@crf.canon.fr
+ *  Copyright (C) 1999 eric.valette@free.fr
  *
  *  This code is heavilly inspired by the public specification of STREAM V2
  *  that can be found at :

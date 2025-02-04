@@ -14,7 +14,7 @@
  */
 
 /*
- *  Copyright (C) 1998, 1999 valette@crf.canon.fr
+ *  Copyright (C) 1998, 1999 eric.valette@free.fr
  */
 
 #include <bsp.h>

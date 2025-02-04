@@ -58,7 +58,7 @@ Booting
 
 This file documents the on board monitor (PPCBUG) configuration used
 to be able to boot the archives located in powerpc-rtems/c/mcp750/bin.
-This information was provided by Eric Valette <valette@crf.canon.fr>
+This information was provided by Eric Valette <eric.valette@free.fr>
 
 NOTE (by Till Straumann <strauman@slac.stanford.edu>, 2003):
 Apparently, PPCBug fails to shut down the network interface after

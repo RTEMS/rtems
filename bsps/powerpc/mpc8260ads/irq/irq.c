@@ -2,7 +2,7 @@
  *
  *  This file contains the implementation of the function described in irq.h
  *
- *  Copyright (C) 1998, 1999 valette@crf.canon.fr
+ *  Copyright (C) 1998, 1999 eric.valette@free.fr
  *
  *  Modified for mpc8260 Andy Dachs <a.dachs@sstl.co.uk>
  *  Surrey Satellite Technology Limited, 2000

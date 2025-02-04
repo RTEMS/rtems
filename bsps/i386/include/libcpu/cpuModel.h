@@ -5,7 +5,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1998 valette@crf.canon.fr
+ *  COPYRIGHT (c) 1998 eric.valette@free.fr
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
