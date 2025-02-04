@@ -86,7 +86,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}/rtems/powerpc
   source:
   - bsps/powerpc/include/rtems/powerpc/cache.h
-  - bsps/powerpc/include/rtems/powerpc/debugmod.h
   - bsps/powerpc/include/rtems/powerpc/powerpc.h
 ldflags: []
 links: []
