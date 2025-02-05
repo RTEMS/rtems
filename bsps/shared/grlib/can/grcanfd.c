@@ -347,7 +347,7 @@ static int grcan_hw_write_try_fd(
 				return GRCAN_RET_INVARG;
 			break;
 		}
-		dest->head[1] = (dlc << 28) |
+		dest->head[1] = ((dlc & 0xf) << 28) |
 				((source->fdopts & GRCAN_FDMASK) << 25);
 		dp = &dest->data0;
 		for (i = 0; i < ((source->len + 7) / 8); i++) {
