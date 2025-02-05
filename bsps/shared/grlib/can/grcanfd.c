@@ -94,7 +94,7 @@ static uint8_t len2fddlc[14] = {
 };
 
 /* Convert length in bytes to descriptor length field */
-static inline uint8_t grcan_len2dlc(int len)
+static inline int8_t grcan_len2dlc(int len)
 {
 	if (len <= 8)
 		return len;
@@ -313,7 +313,7 @@ static int grcan_hw_write_try_fd(
 	unsigned int tmp;
 	int i, bds;
 	uint64_t *dp;
-	uint8_t dlc;
+	int8_t dlc;
 	SPIN_IRQFLAGS(oldLevel);
 
 	DBGC(DBG_TX, "\n");
