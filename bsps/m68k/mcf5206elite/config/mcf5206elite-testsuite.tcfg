@@ -1,8 +1,0 @@
-#
-# mcf5206elite RTEMS Test Database
-#
-# Format is one line per test that is _NOT_ built.
-#
-
-exclude: fsdosfsname01
-exclude: dl05
