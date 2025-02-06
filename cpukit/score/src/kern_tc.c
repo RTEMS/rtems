@@ -282,11 +282,10 @@ struct timecounter *timecounter = &dummy_timecounter;
 
 #ifndef __rtems__
 volatile time_t time_second = 1;
-volatile time_t time_uptime = 1;
 #else /* __rtems__ */
 volatile time_t time_second = TOD_SECONDS_1970_THROUGH_1988;
-volatile int32_t time_uptime = 1;
 #endif /* __rtems__ */
+volatile time_t time_uptime = 1;
 
 #ifndef __rtems__
 /*

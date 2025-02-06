@@ -43,7 +43,7 @@
 
 __BEGIN_DECLS
 extern volatile time_t _Timecounter_Time_second;
-extern volatile int32_t _Timecounter_Time_uptime;
+extern volatile time_t _Timecounter_Time_uptime;
 extern struct bintime _Timecounter_Boottimebin;
 
 void   _Timecounter_Binuptime(struct bintime *);
