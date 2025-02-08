@@ -139,6 +139,11 @@ void *POSIX_Init(
 
   TEST_BEGIN();
 
+  /* invalid signum return SIG_ERR */
+  sighandler_t old_handler =  signal( 0, SIG_DFL );
+  rtems_test_assert( old_handler == SIG_ERR );
+  rtems_test_assert( errno == EINVAL );
+
   block_all_signals();
 
   /* set the time of day, and print our buffer in multiple ways */

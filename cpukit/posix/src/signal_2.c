@@ -74,6 +74,8 @@ sighandler_t signal(
   s.sa_flags   = 0;
 #endif
 
-  sigaction( signum, &s, &old );
+  if ( sigaction( signum, &s, &old ) < 0 )
+    return (SIG_ERR);
+
   return (sighandler_t) old.sa_handler;
 }
