@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  * RTEMS generic MPC5200 BSP
  *
@@ -13,34 +15,31 @@
  */
 
 /*
- * Modified for the Motorola PQII ADS board by
- * Andy Dachs <a.dachs@sstl.co.uk> 23-11-00.
- * Surrey Satellite Technology Limited
- *
- * Based on the one by Jay Monkman (jmonkman@fracsa.com)
- * which in turn was based on the dlentry.s file for the Papyrus BSP,
- * written by:
- *
- * Author: Andrew Bray <andy@i-cubed.co.uk>
- * Copyright (c) 1995 by i-cubed ltd.
- *
- * To anyone who acknowledges that this file is provided "AS IS"
- * without any express or implied warranty:
- *    permission to use, copy, modify, and distribute this file
- *    for any purpose is hereby granted without fee, provided that
- *    the above copyright notice and this notice appears in all
- *    copies, and that the name of i-cubed limited not be used in
- *    advertising or publicity pertaining to distribution of the
- *    software without specific, written prior permission.
- *    i-cubed limited makes no representations about the suitability
- *    of this software for any purpose.
- *
- * Copyright (c) 2003 IPR Engineering
  * Copyright (c) 2005 embedded brains GmbH & Co. KG
+ * Copyright (c) 2003 IPR Engineering
+ * Copyright (C) 2000 Andy Dachs <a.dachs@sstl.co.uk>
+ * Copyright (C) 1995 Andrew Bray, i-cubed ltd <andy@i-cubed.co.uk>
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include <rtems/asm.h>
