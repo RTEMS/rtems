@@ -135,7 +135,7 @@ int rtems_initialize_tfs_filesystem(
     return -1;
   }
 
-  strncpy( TFS_PATHNAME_PREFIX, path, sizeof(TFS_PATHNAME_PREFIX) );
+  strncpy( TFS_PATHNAME_PREFIX, path, sizeof(TFS_PATHNAME_PREFIX)-1 );
 
   status = mkdir( TFS_PATHNAME_PREFIX, S_IRWXU | S_IRWXG | S_IRWXO );
   if ( status == -1 ) {
