@@ -606,9 +606,9 @@ static int rtems_tfs_ftruncate(
 }
 
 static int rtems_tfs_ioctl(
-  rtems_libio_t *iop,
-  uint32_t       cmd,
-  void          *buf
+  rtems_libio_t   *iop,
+  ioctl_command_t  cmd,
+  void            *buf
 )
 {
   int ret;
