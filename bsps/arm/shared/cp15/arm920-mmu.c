@@ -9,10 +9,11 @@
 
 #include <libcpu/mmu.h>
 #include <libcpu/arm-cp15.h>
+#include <bsp/linker-symbols.h>
 
 typedef uint32_t mmu_lvl1_t;
 
-extern uint32_t _ttbl_base;
+LINKER_SYMBOL(_ttbl_base);
 
 static void mmu_set_map_inval(mmu_lvl1_t *base);
 
@@ -53,7 +54,7 @@ void mmu_init(mmu_sect_map_t *map)
     /* set manage mode access for all domains */
     arm_cp15_set_domain_access_control(0xffffffff);
 
-    lvl1_base = (mmu_lvl1_t *)&_ttbl_base;
+    lvl1_base = (mmu_lvl1_t *)_ttbl_base;
 
     /* set up the trans table */
     mmu_set_map_inval(lvl1_base);
