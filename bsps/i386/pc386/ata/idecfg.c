@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  * RTEMS PC386 IDE harddisc driver tables
  *

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  *  Coldfire MCF5272 definitions.
  *  Contents of this file based on information provided in

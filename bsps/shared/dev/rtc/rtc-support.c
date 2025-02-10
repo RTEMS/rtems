@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  *  Real Time Clock Driver Wrapper for Libchip
  */

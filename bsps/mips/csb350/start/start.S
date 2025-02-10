@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  * start.S -- startup file for Cogent CSB350 Au1100 based board
 */

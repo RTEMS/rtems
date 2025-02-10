@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  *  This file implements a benchmark timer using the count/compare
  *  CP0 registers.

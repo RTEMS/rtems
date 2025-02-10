@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  *  This include file contains all private driver definitions for the
  *  Zilog z85c30.
