@@ -58,6 +58,8 @@ void   _Timecounter_Getmicrouptime(struct timeval *);
 void   _Timecounter_Getbintime(struct bintime *);
 void   _Timecounter_Getnanotime(struct timespec *);
 void   _Timecounter_Getmicrotime(struct timeval *);
+void   _Timecounter_Getboottime(struct timeval *);
+void   _Timecounter_Getboottimebin(struct bintime *);
 __END_DECLS
 
 #endif /* _MACHINE__TIMECOUNTER_H_ */
