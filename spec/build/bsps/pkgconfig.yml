@@ -13,7 +13,6 @@ content: |
   includedir=$${libdir}/include
 
   ABI_FLAGS=${ABI_FLAGS}
-  LDFLAGS=-B$${libdir} ${PKGCONFIG_LDFLAGS}
   RTEMS_ARCH=${ARCH}
   RTEMS_BSP=${BSP_NAME}
   RTEMS_BSP_BASE=${BSP_BASE}
@@ -26,6 +25,7 @@ content: |
   Version: ${RTEMS_VERSION}
   Description: RTEMS BSP ${ARCH}/${BSP_NAME}
   Cflags: $${ABI_FLAGS} -isystem$${includedir}
+  Ldflags: $${ABI_FLAGS} -B$${libdir} ${PKGCONFIG_LDFLAGS}
   Libs: $${ABI_FLAGS} -B$${libdir} ${PKGCONFIG_LDFLAGS}
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
