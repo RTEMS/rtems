@@ -66,6 +66,10 @@ static bool _POSIX_signals_Clear_signals_helper(
   bool                        do_callout;
   POSIX_signals_Siginfo_node *psiginfo;
 
+  if ( !is_valid_signo( signo ) ) {
+    return false;
+  }
+
   mask = signo_to_mask( signo );
 
   do_callout = false;

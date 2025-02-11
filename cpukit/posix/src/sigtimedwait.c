@@ -182,26 +182,27 @@ int sigtimedwait(
     &queue_context
   );
 
-  /*
-   * When the thread is set free by a signal, it is need to eliminate
-   * the signal.
-   */
-
-  _POSIX_signals_Clear_signals(
-    api,
-    the_info->si_signo,
-    the_info,
-    false,
-    false,
-    true
-  );
-
   /* Set errno only if return code is not EINTR or
    * if EINTR was caused by a signal being caught, which
    * was not in our set.
    */
 
   error = _POSIX_Get_error_after_wait( executing );
+
+  /*
+   * When the thread is set free by a signal, it is need to eliminate
+   * the signal.
+   */
+
+  if ( error == EINTR )
+    _POSIX_signals_Clear_signals(
+      api,
+      the_info->si_signo,
+      the_info,
+      false,
+      false,
+      true
+    );
 
   if (
     error != EINTR

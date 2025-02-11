@@ -34,6 +34,7 @@
 #define TEST_STRING              "User Signals"
 #define SIGNAL_ONE               SIGUSR1
 #define SIGNAL_TWO               SIGUSR2
+#define SIGNAL_TEST              31
 
 #include <pmacros.h>
 #include <signal.h>
@@ -86,6 +87,7 @@ void *POSIX_Init(
   act.sa_flags   = SA_SIGINFO;
   sigaction( SIGNAL_ONE, &act, NULL );
   sigaction( SIGNAL_TWO, &act, NULL );
+  sigaction( SIGNAL_TEST, &act, NULL );
 
   printf(
    "Init - _POSIX_signals_Clear_signals when signals pending but\n"
@@ -94,6 +96,8 @@ void *POSIX_Init(
 
   /* cheat and put signal directly in */
   _POSIX_signals_Pending |= signo_to_mask( SIGUSR1 );
+
+  rtems_test_assert( _POSIX_signals_Pending == signo_to_mask( SIGUSR1 ) );
 
   bc = _POSIX_signals_Clear_signals(
     _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ],
@@ -104,6 +108,34 @@ void *POSIX_Init(
     true               /* do_signals_acquire_release */
   );
   rtems_test_assert( bc );
+  rtems_test_assert( _POSIX_signals_Pending == 0 );
+
+  /* cheat and put signal directly in */
+  _POSIX_signals_Pending |= signo_to_mask( SIGNAL_TEST );
+
+  rtems_test_assert( _POSIX_signals_Pending == signo_to_mask( SIGNAL_TEST ) );
+  /* clear invalid signo */
+  bc = _POSIX_signals_Clear_signals(
+    _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ],
+    -1,
+    &info,
+    true,              /* is_global */
+    false,             /* check_blocked */
+    true               /* do_signals_acquire_release */
+  );
+  rtems_test_assert( !bc );
+  rtems_test_assert( _POSIX_signals_Pending == signo_to_mask( SIGNAL_TEST ) );
+
+  bc = _POSIX_signals_Clear_signals(
+    _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ],
+    SIGNAL_TEST,
+    &info,
+    true,              /* is_global */
+    false,             /* check_blocked */
+    true               /* do_signals_acquire_release */
+  );
+  rtems_test_assert( bc );
+  rtems_test_assert( _POSIX_signals_Pending == 0 );
 
   TEST_END();
   rtems_test_exit(0);
