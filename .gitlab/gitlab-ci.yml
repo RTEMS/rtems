@@ -1,0 +1,4 @@
+include:
+  - project: 'administration/integration'
+    file:
+      - 'ci/config/rtems.yml'
