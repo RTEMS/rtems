@@ -55,8 +55,10 @@ extern uint32_t bsp_clicks_per_usec;
 /*
  *  ISR Handler
  */
-rtems_isr Clock_isr(rtems_vector_number vector)
+rtems_isr Clock_isr(void *unused)
 {
+  (void) unused;
+
   usiu.piscrk = USIU_UNLOCK_KEY;
   usiu.piscr |= USIU_PISCR_PS;			/* acknowledge interrupt */
   usiu.piscrk = 0;

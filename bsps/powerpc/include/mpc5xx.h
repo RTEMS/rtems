@@ -608,7 +608,7 @@ extern volatile imb_t imb;		/* defined in linkcmds */
 void clockOn(void* unused);
 void clockOff(void* unused);
 int clockIsOn(void* unused);
-rtems_isr Clock_isr(rtems_vector_number vector);
+rtems_isr Clock_isr(void *unused);
 
 #ifdef __cplusplus
 }
