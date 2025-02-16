@@ -95,10 +95,12 @@ files = [
     "cpukit/libdl/fastlz.h"
 ]
 
-[[ignore."cpukit/libfdt"]]
+[[ignore."cpukit/dtc"]]
 files = [
     "cpukit/dtc/libfdt/*.c",
-    "cpukit/dtc/libfdt/*.h"
+    "cpukit/dtc/libfdt/*.h",
+    "cpukit/dtc/README.license",
+    "cpukit/dtc/VERSION"
 ]
 
 [[ignore."cpukit/mghttpd"]]
