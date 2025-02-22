@@ -194,6 +194,9 @@ def process_start_files(self):
 
 
 def make_tar_info_reproducible(info):
+    # Reduce dependency on umask settings
+    info.mode &= ~(stat.S_IRWXG | stat.S_IRWXO)
+
     info.uid = 0
     info.gid = 0
     info.mtime = 0
