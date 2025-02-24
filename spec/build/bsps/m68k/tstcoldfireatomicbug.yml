@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    reason: "Coldfire ISA A atomics missing. See RTEMS Issue 5217"
+    state: exclude
+    tests:
+    - spcxx01
+build-type: option
+copyrights:
+- Copyright (C) 2025 OAR Corporation
+default: []
+description: 'spcxx01 disable to avoid atomics issue. See 5217"
+enabled-by: true
+links: []
+type: build
