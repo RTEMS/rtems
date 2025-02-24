@@ -150,7 +150,7 @@ typedef struct {
  *  @return This method returns the stack pointer.
  */
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->r1
+  (uintptr_t)(_context)->r1
 
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 

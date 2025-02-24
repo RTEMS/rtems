@@ -418,13 +418,15 @@ typedef struct {
  * @addtogroup Management
  *
  * This macro returns the stack pointer associated with @a _context.
+ * The stack pointer returned is of type uintptr_t to support the
+ * use cases.
  *
  * @param[in] _context is the thread context area to access
  *
- * @return This method returns the stack pointer.
+ * @return This method returns the stack pointer as a uintptr_t.
  */
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->stack_pointer
+  (uintptr_t)(_context)->stack_pointer
 
 /**
  * @addtogroup Management

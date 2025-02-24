@@ -116,7 +116,7 @@ typedef struct {
 } Context_Control_fp;
 
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->rsp
+  (uintptr_t)(_context)->rsp
 
 #endif /* !ASM */
 

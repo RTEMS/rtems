@@ -189,7 +189,7 @@ typedef struct {
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->r1
+  (uintptr_t)(_context)->r1
 
 typedef Context_Control CPU_Interrupt_frame;
 

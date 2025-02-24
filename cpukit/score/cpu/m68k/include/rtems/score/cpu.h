@@ -149,7 +149,7 @@ typedef struct {
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->a7_msp
+  (uintptr_t)(_context)->a7_msp
 
 /*
  *  Floating point context areas and support routines

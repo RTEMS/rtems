@@ -410,7 +410,7 @@ typedef struct {
  * CPU architecture dependent.
  */
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->o6_sp
+  (uintptr_t)(_context)->o6_sp
 
 #ifdef RTEMS_SMP
   static inline bool _CPU_Context_Get_is_executing(

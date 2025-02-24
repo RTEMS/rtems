@@ -141,7 +141,7 @@ typedef struct {
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->sp
+  (uintptr_t)(_context)->sp
 
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 

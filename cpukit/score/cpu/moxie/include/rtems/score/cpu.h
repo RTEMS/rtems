@@ -185,7 +185,7 @@ typedef struct {
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->sp
+  (uintptr_t)(_context)->sp
 
 typedef struct {
     uint32_t   special_interrupt_register;

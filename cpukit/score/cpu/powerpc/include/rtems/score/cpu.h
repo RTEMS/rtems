@@ -329,7 +329,7 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 }
 
 #define _CPU_Context_Get_SP( _context ) \
-  ppc_get_context(_context)->gpr1
+  (uintptr_t)ppc_get_context(_context)->gpr1
 
 #ifdef RTEMS_SMP
   static inline bool _CPU_Context_Get_is_executing(

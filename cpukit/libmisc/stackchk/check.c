@@ -477,7 +477,7 @@ static bool Stack_check_Visit_thread(
 {
   Stack_check_Visitor *visitor;
   char                 name[ 22 ];
-  uintptr_t sp = (uintptr_t) _CPU_Context_Get_SP( &the_thread->Registers );
+  uintptr_t            sp = _CPU_Context_Get_SP( &the_thread->Registers );
 
   visitor = arg;
   _Thread_Get_name( the_thread, name, sizeof( name ) );

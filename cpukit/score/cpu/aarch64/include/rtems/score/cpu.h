@@ -280,7 +280,7 @@ void _CPU_Context_Initialize(
 );
 
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->register_sp
+  (uintptr_t)(_context)->register_sp
 
 #ifdef RTEMS_SMP
   static inline bool _CPU_Context_Get_is_executing(
