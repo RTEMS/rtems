@@ -415,8 +415,8 @@ extern "C" {
   __asm__ volatile ( "movec   %0,%%vbr " : : "r" (vbr))
 
 #elif ( defined(__mcoldfire__) )
-extern void*                     _VBR;
-#define m68k_get_vbr( _vbr ) _vbr = &_VBR
+extern char _VBR[];
+#define m68k_get_vbr( _vbr ) _vbr = (void *)&_VBR
 
 #define m68k_set_vbr( _vbr ) \
   do { \
