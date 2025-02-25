@@ -165,7 +165,7 @@
  *
  * @param name is the scheduler instantiation name.
  *
- * @param name is the scheduler object name.
+ * @param obj_name is the scheduler object name.
  */
 #define RTEMS_SCHEDULER_TABLE_CBS( name, obj_name ) \
   { \
@@ -217,7 +217,7 @@
  *
  * @param name is the scheduler instantiation name.
  *
- * @param name is the scheduler object name.
+ * @param obj_name is the scheduler object name.
  */
 #define RTEMS_SCHEDULER_TABLE_EDF( name, obj_name ) \
   { \
@@ -272,7 +272,7 @@
  *
  * @param name is the scheduler instantiation name.
  *
- * @param name is the scheduler object name.
+ * @param obj_name is the scheduler object name.
  */
 #define RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name ) \
   { \
@@ -338,7 +338,7 @@
  *
  * @param name is the scheduler instantiation name.
  *
- * @param name is the scheduler object name.
+ * @param obj_name is the scheduler object name.
  */
 #define RTEMS_SCHEDULER_TABLE_PRIORITY( name, obj_name ) \
   { \
@@ -399,7 +399,7 @@
  *
  * @param name is the scheduler instantiation name.
  *
- * @param name is the scheduler object name.
+ * @param obj_name is the scheduler object name.
  */
 #define RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( name, obj_name ) \
   { \
@@ -463,7 +463,7 @@
  *
  * @param name is the scheduler instantiation name.
  *
- * @param name is the scheduler object name.
+ * @param obj_name is the scheduler object name.
  */
 #define RTEMS_SCHEDULER_TABLE_PRIORITY_SMP( name, obj_name ) \
   { \
@@ -524,7 +524,7 @@
  *
  * @param name is the scheduler instantiation name.
  *
- * @param name is the scheduler object name.
+ * @param obj_name is the scheduler object name.
  */
 #define RTEMS_SCHEDULER_TABLE_STRONG_APA( name, obj_name ) \
   { \
@@ -585,7 +585,7 @@
  *
  * @param name is the scheduler instantiation name.
  *
- * @param name is the scheduler object name.
+ * @param obj_name is the scheduler object name.
  */
 #define RTEMS_SCHEDULER_TABLE_SIMPLE( name, obj_name ) \
   { \
@@ -638,7 +638,7 @@
  *
  * @param name is the scheduler instantiation name.
  *
- * @param name is the scheduler object name.
+ * @param obj_name is the scheduler object name.
  */
 #define RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( name, obj_name ) \
   { \
