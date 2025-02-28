@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ * @brief profreport Shell Command Implementation
+ */
+
 /*
  * Copyright (C) 2015 embedded brains GmbH & Co. KG
  *

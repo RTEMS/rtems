@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief DIR Shell Command Implmentation
+ * @brief DIR Shell Command Implementation
  */
 
 /*

@@ -34,7 +34,6 @@
 
 /*
  * Based on work from Chris Johns and Fernando Ruiz.
- *
  * Derived from file "cpukit/libmisc/shell/shell.c".
  */
 

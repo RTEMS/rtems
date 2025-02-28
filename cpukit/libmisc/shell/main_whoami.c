@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief WHOAMI Shell Command Implmentation
+ * @brief WHOAMI Shell Command Implementation
  */
 
 /*

@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ * @brief cpuinfo Shell Command Implementation
+ */
+
 /*
  * Copyright (C) 2016 embedded brains GmbH & Co. KG
  *

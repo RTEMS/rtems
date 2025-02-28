@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief CHDIR Shell Command Implmentation
+ * @brief chdir Shell Command Implementation
  */
 
 /*

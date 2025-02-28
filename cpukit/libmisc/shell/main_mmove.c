@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief MMOVE Shell Command Implmentation
+ * @brief MMOVE Shell Command Implementation
  */
 
 /*

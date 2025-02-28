@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief XXX -- Just monitor commands until those can be integrated better
+ * @brief Integrate monitor commands as a set
  */
 
 /*

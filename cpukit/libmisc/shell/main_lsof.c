@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ * @brief lsof Shell Command Implementation
+ */
+
 /*
  * Copyright (C) 2012, 2014 embedded brains GmbH & Co. KG
  *

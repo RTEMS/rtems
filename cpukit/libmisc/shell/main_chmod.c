@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief CHMOD Shell Command Implmentation
+ * @brief chmod Shell Command Implementation
  */
 
 /*

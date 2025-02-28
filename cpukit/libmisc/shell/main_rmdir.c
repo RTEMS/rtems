@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief RMDIR Shell Command Implmentation
+ * @brief RMDIR Shell Command Implementation
  */
 
 /*

@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief LOGOFF Shell Command Implmentation
+ * @brief LOGOFF Shell Command Implementation
  */
 
 /*

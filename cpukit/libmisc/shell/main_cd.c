@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief CD Shell Command Implmentation
+ * @brief CD Shell Command Implementation
  */
 
 /*

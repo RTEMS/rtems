@@ -1,9 +1,9 @@
 /**
- *  df Shell Command Implmentation
+ * @file
  *
  * @ingroup libfs_msdos MSDOS FileSystem
  *
- * @brief Obtain MS-DOS filesystem information
+ * @brief df Shell Command Implementation
  */
 
 /*

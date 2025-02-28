@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief DATE Shell Command Implmentation
+ * @brief DATE Shell Command Implementation
  */
 
 /*

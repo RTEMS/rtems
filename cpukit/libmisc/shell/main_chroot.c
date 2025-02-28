@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief CHROOT Shell Command Implmentation
+ * @brief CHROOT Shell Command Implementation
  */
 
 /*

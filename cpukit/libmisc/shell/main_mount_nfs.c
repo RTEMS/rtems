@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief Shell Command Implmentation
+ * @brief Mount NFS Shell Command Implementation
  */
 
 /*

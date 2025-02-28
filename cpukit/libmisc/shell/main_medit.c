@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief MEDIT Shell Command Implmentation
+ * @brief MEDIT Shell Command Implementation
  */
 
 /*

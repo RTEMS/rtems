@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ * @brief blkstats Shell Command Implementation
+ */
+
 /*
  * Copyright (C) 2012 embedded brains GmbH & Co. KG
  *

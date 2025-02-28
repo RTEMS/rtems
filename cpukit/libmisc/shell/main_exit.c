@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief exit Shell Command Implmentation
+ * @brief exit Shell Command Implementation
  */
 
 /*

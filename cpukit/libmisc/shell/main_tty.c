@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @brief TTY Shell Command Implmentation
+ * @brief TTY Shell Command Implementation
  */
 
 /*

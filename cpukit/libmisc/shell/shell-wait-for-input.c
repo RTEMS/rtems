@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ * @brief Shell Wait for Input Implementation
+ */
+
 /*
  * Copyright (C) 2011 embedded brains GmbH & Co. KG
  *
