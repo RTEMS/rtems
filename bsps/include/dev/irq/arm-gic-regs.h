@@ -209,6 +209,11 @@ typedef struct {
   uint32_t reserved_3680[288];
   uint32_t gicd_inmire[32];
   uint32_t reserved_3b80[2400];
+  /*
+   * GICD_IROUTER's offset is 0x6100 because its first entry points to IRQ 32.
+   * IRQ 0-31 are reserved for GICD_IROUTER, otherwise its offset would be
+   * 0x6000.
+   */
   uint64_t gicd_irouter[992];
   uint64_t gicd_iroutere[4096];
 } gic_dist;
