@@ -440,15 +440,6 @@ typedef uint32_t rtems_event_set;
 /**
  * @brief This event set constant represents the reserved system event that is
  *   internally used by aio_suspend to notify of suspension termination.
- *
- * @par Constraints
- * @parblock
- * The following constraints apply to this constant:
- *
- * * The constant is not included in the pre-qualified feature set of RTEMS.
- *   Applications which are restricted to only use interfaces of the
- *   pre-qualified feature set of RTEMS shall not use the constant.
- * @endparblock
  */
 #define RTEMS_EVENT_SYSTEM_AIO_SUSPENSION_TERMINATED RTEMS_EVENT_27
 
