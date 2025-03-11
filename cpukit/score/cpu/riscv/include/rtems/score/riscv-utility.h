@@ -1,5 +1,10 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /* Copyright (c) 2013, The Regents of the University of California (Regents).
  * All Rights Reserved.
+ *
+ * Modifications for RTEMS
+ * COPYRIGHT (c) 2015 Hesham Almatary <hesham@alumni.york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,21 +31,13 @@
  */
 
 /**
-  * @file
-  *
-  * @brief RISCV utility
-  */
-/*
- * COPYRIGHT (c) 2015 Hesham Almatary <hesham@alumni.york.ac.uk>
+ * @file
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * @brief RISCV utility
+ * This file is copied from riscv-tools/encoding.h with
+ * additions/modifications to work with RTEMS.
  */
 
-/* This file is copied from riscv-tools/encoding.h with additions/modifications to work
- * with RTEMS.
- */
 #ifndef _RTEMS_SCORE_RISCV_UTILITY_H
 #define _RTEMS_SCORE_RISCV_UTILITY_H
 
