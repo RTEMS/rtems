@@ -349,6 +349,43 @@ rtems_status_code rtems_barrier_wait( rtems_id id, rtems_interval timeout );
  */
 rtems_status_code rtems_barrier_release( rtems_id id, uint32_t *released );
 
+/* Generated from spec:/rtems/barrier/if/get-number-waiting */
+
+/**
+ * @ingroup RTEMSAPIClassicBarrier
+ *
+ * @brief Gets the number of tasks waiting at the barrier.
+ *
+ * @param id is the barrier identifier.
+ *
+ * @param[out] waiting is the pointer to an uint32_t object. When the directive
+ *   call is successful, the number of waiting tasks will be stored in this
+ *   object.
+ *
+ * This directive gets the number of tasks waiting at the barrier specified by
+ * ``id``. The number of waiting tasks will be returned in ``waiting``.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``waiting`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no barrier associated with the
+ *   identifier specified by ``id``.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within task context.
+ * @endparblock
+ */
+rtems_status_code rtems_barrier_get_number_waiting(
+  rtems_id  id,
+  uint32_t *waiting
+);
+
 #ifdef __cplusplus
 }
 #endif

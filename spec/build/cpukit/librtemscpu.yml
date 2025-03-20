@@ -1206,6 +1206,7 @@ source:
 - cpukit/rtems/src/barrierdelete.c
 - cpukit/rtems/src/barrierident.c
 - cpukit/rtems/src/barrierrelease.c
+- cpukit/rtems/src/barriergetnumwaiting.c
 - cpukit/rtems/src/barrierwait.c
 - cpukit/rtems/src/clockgetsecondssinceepoch.c
 - cpukit/rtems/src/clockgettickssinceboot.c
