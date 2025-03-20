@@ -36,6 +36,7 @@ directives:
   status = rtems_barrier_ident
   status = rtems_barrier_wait
   status = rtems_barrier_release
+  status = rtems_barrier_get_number_waiting
 
 concepts:
 

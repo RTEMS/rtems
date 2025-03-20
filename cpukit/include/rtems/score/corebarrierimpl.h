@@ -189,6 +189,23 @@ static inline void _CORE_barrier_Flush(
   );
 }
 
+/**
+ * @brief Gets the number of threads waiting at the barrier.
+ *
+ * This routine returns the count of threads currently waiting at the barrier.
+ *
+ * @param[in] the_barrier The barrier to check.
+ * @param[in] queue_context The thread queue context.
+ *
+ * @return The number of threads currently waiting at the barrier.
+ */
+static inline uint32_t _CORE_barrier_Get_number_waiting(
+  const CORE_barrier_Control *the_barrier
+)
+{
+  return the_barrier->number_of_waiting_threads;
+}
+
 /** @} */
 
 #ifdef __cplusplus
