@@ -15,6 +15,9 @@ install:
 - destination: ${BSP_INCLUDEDIR}/drvmgr
   source:
   - bsps/sparc/include/drvmgr/leon2_amba_bus.h
+- destination: ${BSP_INCLUDEDIR}/grlib
+  source:
+  - bsps/sparc/include/grlib/io.h
 ldflags: []
 links:
 - role: build-dependency
