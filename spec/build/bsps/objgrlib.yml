@@ -16,6 +16,7 @@ install:
   - bsps/include/grlib/ambapp_bus_grlib.h
   - bsps/include/grlib/ambapp_ids.h
   - bsps/include/grlib/apbuart.h
+  - bsps/include/grlib/apbuart-regs.h
   - bsps/include/grlib/apbuart_cons.h
   - bsps/include/grlib/apbuart_termios.h
   - bsps/include/grlib/b1553brm.h
@@ -28,6 +29,7 @@ install:
   - bsps/include/grlib/genirq.h
   - bsps/include/grlib/gpiolib.h
   - bsps/include/grlib/gptimer.h
+  - bsps/include/grlib/gptimer-regs.h
   - bsps/include/grlib/gr1553b.h
   - bsps/include/grlib/gr1553bc.h
   - bsps/include/grlib/gr1553bc_list.h
@@ -59,6 +61,7 @@ install:
   - bsps/include/grlib/grtc.h
   - bsps/include/grlib/grtm.h
   - bsps/include/grlib/i2cmst.h
+  - bsps/include/grlib/irqamp-regs.h
   - bsps/include/grlib/l2c.h
   - bsps/include/grlib/l4stat.h
   - bsps/include/grlib/mctrl.h
