@@ -319,6 +319,8 @@ static void _Thread_Priority_apply(
   );
 
   if ( !_Priority_Actions_is_empty( &queue_context->Priority.Actions ) ) {
+    /* Priority actions are only created if a thread queue exists */
+    _Assert( queue != NULL );
     _Thread_Priority_perform_actions( queue->owner, queue_context );
   }
 
