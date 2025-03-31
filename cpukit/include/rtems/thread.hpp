@@ -362,17 +362,34 @@ namespace rtems
         Parms p;
 
         template<size_t Index>
-        static std::__tuple_element_t<Index, Parms>&& declval();
+        static std::tuple_element_t<Index, Parms>&& declval();
+
+        template<size_t... _Indexes> struct _Index_tuple { };
+
+        template<size_t _Num>
+        struct _Build_index_tuple
+        {
+#if __has_builtin(__make_integer_seq)
+          template<typename, size_t... _Indices>
+          using _IdxTuple = _Index_tuple<_Indices...>;
+
+          // Clang defines __make_integer_seq for this purpose.
+          using __type = __make_integer_seq<_IdxTuple, size_t, _Num>;
+#else
+          // For GCC and other compilers, use __integer_pack instead.
+          using __type = _Index_tuple<__integer_pack(_Num)...>;
+#endif
+        };
 
         template<size_t... Ind>
-        auto invoke(std::_Index_tuple<Ind...>)
+        auto invoke(_Index_tuple<Ind...>)
           noexcept(noexcept(std::invoke(declval<Ind>()...)))
           -> decltype(std::invoke(declval<Ind>()...)) {
           return std::invoke(std::get<Ind>(std::move(p))...);
         }
 
         using indices =
-          typename std::_Build_index_tuple<std::tuple_size<Parms>::value>::__type;
+          typename _Build_index_tuple<std::tuple_size<Parms>::value>::__type;
 
         void run() {
           invoke(indices());
@@ -453,7 +470,13 @@ namespace rtems
     }
 
     inline std::thread::id thread::get_id() const noexcept {
+#ifdef __clang__
+      /* clang does not allow construction of std::thread::id with
+         an id so fail this call */
+      return std::thread::id();
+#else
       return std::thread::id(id_.id_);
+#endif
     }
 
     inline bool
@@ -469,7 +492,11 @@ namespace rtems
     template<class C, class T>
     inline std::basic_ostream<C, T>&
     operator<<(std::basic_ostream<C, T>& out, thread::id id_) {
+#ifdef __clang__
+      return out << id_.id_;
+#else
       return out << std::thread::id(id_.id_);
+#endif
     }
   };
 };
