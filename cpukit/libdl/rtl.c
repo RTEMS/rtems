@@ -79,16 +79,46 @@ static rtems_rtl_data* rtl;
 static bool            rtl_data_init;
 
 /**
+ * The single symbol forced into the global symbol table that is used to load a
+ * symbol table from an object file.
+ */
+static rtems_rtl_obj_sym default_global_syms =
+{
+  .name  = "rtems_rtl_base_sym_global_add",
+  .value = (void*) rtems_rtl_base_sym_global_add
+};
+
+/**
  * Define a default base global symbol loader function that is weak
  * so a real table can be linked in when the user wants one.
+ *
+ * The default init handler add the one symbol used when loading
+ * symbols with an object file. It is an unresolved external in that
+ * object file.
  */
 void rtems_rtl_base_global_syms_init (void) __attribute__ ((weak));
 void
 rtems_rtl_base_global_syms_init (void)
 {
-  /*
-   * Do nothing.
-   */
+  rtems_rtl_symbols* symbols;
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_GLOBAL_SYM))
+    printf ("rtl: adding default global symbol\n");
+
+  if (!rtems_rtl_lock ())
+  {
+    rtems_rtl_set_error (EINVAL, "global add cannot lock rtl");
+    return;
+  }
+
+  symbols = rtems_rtl_global_symbols ();
+
+  rtl->base->global_table = &default_global_syms;
+  rtl->base->global_syms = 1;
+
+  rtems_rtl_symbol_global_insert (symbols, &default_global_syms);
+
+  rtems_rtl_unlock ();
 }
 
 static bool

@@ -98,6 +98,15 @@ bool rtems_rtl_symbol_table_open (rtems_rtl_symbols* symbols,
 void rtems_rtl_symbol_table_close (rtems_rtl_symbols* symbols);
 
 /**
+ * Insert a symbol into a symbol table.
+ *
+ * @param symbols Symbol table
+ * @param symbols Symbol to add
+ */
+void rtems_rtl_symbol_global_insert (rtems_rtl_symbols* symbols,
+                                     rtems_rtl_obj_sym* symbol);
+
+/**
  * Add a table of exported symbols to the symbol table.
  *
  * The export table is a series of symbol records and each record has two

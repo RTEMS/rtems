@@ -557,6 +557,8 @@ rtems_rtl_elf_relocate_worker (rtems_rtl_obj*              obj,
       resolved = rtems_rtl_elf_find_symbol (obj,
                                             &sym, symname,
                                             &symbol, &symvalue);
+    if (symname != NULL && strlen(symname) == 0)
+      resolved = true;
 
     if (!handler (obj,
                   is_rela, relbuf, targetsect,

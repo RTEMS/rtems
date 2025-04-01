@@ -48,16 +48,6 @@
 #include <rtems/rtl/rtl-sym.h>
 #include <rtems/rtl/rtl-trace.h>
 
-/**
- * The single symbol forced into the global symbol table that is used to load a
- * symbol table from an object file.
- */
-static rtems_rtl_obj_sym global_sym_add =
-{
-  .name  = "rtems_rtl_base_sym_global_add",
-  .value = (void*) rtems_rtl_base_sym_global_add
-};
-
 static uint_fast32_t
 rtems_rtl_symbol_hash (const char *s)
 {
@@ -66,15 +56,6 @@ rtems_rtl_symbol_hash (const char *s)
   for (c = *s; c != '\0'; c = *++s)
     h = h * 33 + c;
   return h & 0xffffffff;
-}
-
-static void
-rtems_rtl_symbol_global_insert (rtems_rtl_symbols* symbols,
-                                rtems_rtl_obj_sym* symbol)
-{
-  uint_fast32_t hash = rtems_rtl_symbol_hash (symbol->name);
-  rtems_chain_append (&symbols->buckets[hash % symbols->nbuckets],
-                      &symbol->node);
 }
 
 static const rtems_rtl_tls_offset*
@@ -108,7 +89,6 @@ rtems_rtl_symbol_table_open (rtems_rtl_symbols* symbols,
   symbols->nbuckets = buckets;
   for (buckets = 0; buckets < symbols->nbuckets; ++buckets)
     rtems_chain_initialize_empty (&symbols->buckets[buckets]);
-  rtems_rtl_symbol_global_insert (symbols, &global_sym_add);
   return true;
 }
 
@@ -116,6 +96,15 @@ void
 rtems_rtl_symbol_table_close (rtems_rtl_symbols* symbols)
 {
   rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, symbols->buckets);
+}
+
+void
+rtems_rtl_symbol_global_insert (rtems_rtl_symbols* symbols,
+                                rtems_rtl_obj_sym* symbol)
+{
+  uint_fast32_t hash = rtems_rtl_symbol_hash (symbol->name);
+  rtems_chain_append (&symbols->buckets[hash % symbols->nbuckets],
+                      &symbol->node);
 }
 
 bool
