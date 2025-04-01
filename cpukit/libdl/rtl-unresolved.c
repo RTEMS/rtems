@@ -562,10 +562,18 @@ rtems_rtl_unresolved_add (rtems_rtl_obj*        obj,
   rtems_rtl_unresolv_block* block;
   rtems_rtl_unresolv_rec*   rec;
   int                       name_index;
+  const int                 name_len = (int) strlen(name);
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
-    printf ("rtl: unresolv: add: %s(s:%d) -> %s\n",
-            rtems_rtl_obj_oname (obj), sect, name);
+    printf ("rtl: unresolv: add: %s(s:%d) -> '%s' (len: %i)\n",
+            rtems_rtl_obj_oname (obj), sect, name, name_len);
+
+  /*
+   * No name or an empty name is not able to resolved?
+   */
+  if (name_len == 0) {
+    return false;
+  }
 
   unresolved = rtems_rtl_unresolved_unprotected ();
   if (!unresolved)

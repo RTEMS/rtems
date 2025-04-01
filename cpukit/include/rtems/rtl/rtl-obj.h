@@ -374,7 +374,7 @@ static inline size_t rtems_rtl_obj_align (size_t   offset,
 }
 
 /**
- * Is the symbol in this object's files globa symbol table?
+ * Is the symbol in this object's files global symbol table?
  *
  * @param obj The object file's descriptor to search.
  * @param sym The symbol to check.
