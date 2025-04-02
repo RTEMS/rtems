@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
-    reason: null
+    reason: "Fails due to lack of TLS support in rtems-ld and RAP format"
     state: expected-fail
     tests:
     - dl06

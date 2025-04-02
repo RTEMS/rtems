@@ -16,6 +16,8 @@ links:
 - role: build-dependency
   uid: ../../tstqemu
 - role: build-dependency
+  uid: ../../tst-xfail-dl06
+- role: build-dependency
   uid: linkcmds_lp64
 - role: build-dependency
   uid: objfdtzynqmp
