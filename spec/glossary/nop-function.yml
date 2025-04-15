@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2025 embedded brains GmbH & Co. KG
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: no-operation function
+text: |
+  A *no-operation function* is a function which has no side-effects and just
+  returns to the caller with no return value or a default return value.
+type: glossary
