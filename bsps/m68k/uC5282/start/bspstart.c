@@ -478,7 +478,7 @@ fpga_trampoline (rtems_vector_number v)
       rtems_interrupt_level level;
       rtems_interrupt_disable(level);
       printk(
-        "\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%lx) -- "
+        "\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%x) -- "
         "DISABLING ALL FPGA INTERRUPTS.\n",
         v & 0x3f
       );
@@ -493,7 +493,7 @@ fpga_trampoline (rtems_vector_number v)
       rtems_interrupt_level level;
       rtems_vector_number nv;
       rtems_interrupt_disable(level);
-      printk("\nSPURIOUS FPGA INTERRUPT (0x%lx).\n", v & 0x3f);
+      printk("\nSPURIOUS FPGA INTERRUPT (0x%x).\n", v & 0x3f);
       if ((((nv = FPGA_IRQ_INFO) & 0x80) != 0)
           && ((nv & 0x3f) == (v & 0x3f))) {
         printk("DISABLING ALL FPGA INTERRUPTS.\n");
