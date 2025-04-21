@@ -289,6 +289,9 @@ inline static void alt_clk_mgr_wait(void* reg, uint32_t cnt)
         // how many loops to wait for the SDRAM clock to come around
         // to zero and allow for writing a new divisor ratio to it
 
+#ifdef __rtems__
+static
+#endif /* __rtems__ */
 ALT_STATUS_CODE alt_clk_plls_settle_wait(void)
 {
     int32_t     i = ALT_BYPASS_TIMEOUT_CNT;
@@ -805,6 +808,9 @@ ALT_STATUS_CODE alt_clk_pll_is_bypassed(ALT_CLK_t pll)
 /* alt_clk_pll_source_get() returns the current input of the specified PLL.             */
 /****************************************************************************************/
 
+#ifdef __rtems__
+static
+#endif /* __rtems__ */
 ALT_CLK_t alt_clk_pll_source_get(ALT_CLK_t pll)
 {
     ALT_CLK_t      ret = ALT_CLK_UNKNOWN;
@@ -5131,6 +5137,7 @@ ALT_STATUS_CODE alt_clk_group_cfg_raw_set(const ALT_CLK_GROUP_RAW_CFG_t * clk_gr
 //
 // alt_clk_id_to_string() converts a clock ID to a text string.
 //
+#ifndef __rtems__
 ALT_STATUS_CODE alt_clk_id_to_string(ALT_CLK_t clk_id, char * output, size_t size)
 {
     char * name = NULL;
@@ -5398,11 +5405,15 @@ ALT_STATUS_CODE alt_clk_id_to_string(ALT_CLK_t clk_id, char * output, size_t siz
         return ALT_E_BAD_ARG;
     }
 }
+#endif /* __rtems__ */
 
 
 //
 // alt_clk_pll_cntr_maxfreq_recalc() recalculate the maxmum frequency of the specified clock.
 //
+#ifdef __rtems__
+static
+#endif /* __rtems__ */
 ALT_STATUS_CODE alt_clk_pll_cntr_maxfreq_recalc(ALT_CLK_t clk, ALT_PLL_CNTR_FREQMAX_t * maxfreq)
 {
     ALT_STATUS_CODE ret = ALT_E_BAD_ARG;

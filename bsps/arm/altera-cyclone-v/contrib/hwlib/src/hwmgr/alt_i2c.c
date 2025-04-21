@@ -1086,6 +1086,9 @@ ALT_STATUS_CODE alt_i2c_master_transmit(ALT_I2C_DEV_t *i2c_dev,
     return status;
 }
 
+#ifdef __rtems__
+static
+#endif
 ALT_STATUS_CODE alt_i2c_master_receive_helper(ALT_I2C_DEV_t *i2c_dev,
                                               uint8_t * buffer,
                                               size_t size,

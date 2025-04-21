@@ -2415,6 +2415,7 @@ ALT_STATUS_CODE alt_qspi_device_bank_select(uint32_t bank)
 
 /////
 
+#ifndef __rtems__
 static bool alt_qspi_is_enabled(void)
 {
     uint32_t cfg = alt_read_word(ALT_QSPI_CFG_ADDR);
@@ -2623,3 +2624,4 @@ ALT_STATUS_CODE alt_qspi_ecc_start(void * block, size_t size)
 
     return status;
 }
+#endif

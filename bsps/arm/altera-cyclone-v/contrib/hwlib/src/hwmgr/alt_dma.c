@@ -3693,6 +3693,7 @@ ALT_STATUS_CODE alt_dma_periph_to_memory(ALT_DMA_CHANNEL_t channel,
 
 /////
 
+#ifndef __rtems__
 static bool alt_dma_is_init(void)
 {
     uint32_t permodrst = alt_read_word(ALT_RSTMGR_PERMODRST_ADDR);
@@ -3753,3 +3754,4 @@ ALT_STATUS_CODE alt_dma_ecc_start(void * block, size_t size)
 
     return ALT_E_SUCCESS;
 }
+#endif /* __rtems__ */
