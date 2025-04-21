@@ -40,8 +40,6 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/tls.h>
 
-#include <assert.h>
-
 void *__tls_get_addr( const TLS_Index *ti );
 
 void *__tls_get_addr( const TLS_Index *ti )
