@@ -125,6 +125,7 @@ static void stm32h7_dma_free_nolock(DMA_HandleTypeDef *dma_channel)
     &ctx->dma_entry
   );
   _Assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
 
   dma_channels &= ~dma_mask;
 
