@@ -9,7 +9,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2025.
  *  On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,21 +50,19 @@
 #include <stdio.h>
 
 /*
- *  _POSIX_signals_Clear_signals
+ * Having a helper makes the flow analysis easier and avoids
+ * seeing "maybe used uninitialized" for queue_context.
  */
-
-bool _POSIX_signals_Clear_signals(
+static bool _POSIX_signals_Clear_signals_helper(
   POSIX_API_Control  *api,
   int                 signo,
   siginfo_t          *info,
   bool                is_global,
-  bool                check_blocked,
-  bool                do_signals_acquire_release
+  bool                check_blocked
 )
 {
   sigset_t                    mask;
   sigset_t                    signals_unblocked;
-  Thread_queue_Context        queue_context;
   bool                        do_callout;
   POSIX_signals_Siginfo_node *psiginfo;
 
@@ -84,44 +82,74 @@ bool _POSIX_signals_Clear_signals(
   /* XXX is this right for siginfo type signals? */
   /* XXX are we sure they can be cleared the same way? */
 
-  if ( do_signals_acquire_release ) {
-    _Thread_queue_Context_initialize( &queue_context );
-    _POSIX_signals_Acquire( &queue_context );
-  }
-
-    if ( is_global ) {
-       if ( mask & (_POSIX_signals_Pending & signals_unblocked) ) {
-         if ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) {
-           psiginfo = (POSIX_signals_Siginfo_node *)
-             _Chain_Get_unprotected( &_POSIX_signals_Siginfo[ signo ] );
-           _POSIX_signals_Clear_process_signals( signo );
-           /*
-            *  It may be impossible to get here with an empty chain
-            *  BUT until that is proven we need to be defensive and
-            *  protect against it.
-            */
-           if ( psiginfo ) {
-             *info = psiginfo->Info;
-             _Chain_Append_unprotected(
-               &_POSIX_signals_Inactive_siginfo,
-               &psiginfo->Node
-             );
-           } else
-             do_callout = false;
-         }
+  if ( is_global ) {
+     if ( mask & (_POSIX_signals_Pending & signals_unblocked) ) {
+       if ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) {
+         psiginfo = (POSIX_signals_Siginfo_node *)
+           _Chain_Get_unprotected( &_POSIX_signals_Siginfo[ signo ] );
          _POSIX_signals_Clear_process_signals( signo );
-         do_callout = true;
+         /*
+          *  It may be impossible to get here with an empty chain
+          *  BUT until that is proven we need to be defensive and
+          *  protect against it.
+          */
+         if ( psiginfo ) {
+           *info = psiginfo->Info;
+           _Chain_Append_unprotected(
+             &_POSIX_signals_Inactive_siginfo,
+             &psiginfo->Node
+           );
+         } else
+           do_callout = false;
        }
-    } else {
-      if ( mask & (api->signals_pending & signals_unblocked) ) {
-        api->signals_pending &= ~mask;
-        do_callout = true;
-      }
+       _POSIX_signals_Clear_process_signals( signo );
+       do_callout = true;
+     }
+  } else {
+    if ( mask & (api->signals_pending & signals_unblocked) ) {
+      api->signals_pending &= ~mask;
+      do_callout = true;
     }
-
-  if ( do_signals_acquire_release ) {
-    _POSIX_signals_Release( &queue_context );
   }
 
   return do_callout;
+}
+/*
+ *  _POSIX_signals_Clear_signals
+ */
+
+bool _POSIX_signals_Clear_signals(
+  POSIX_API_Control  *api,
+  int                 signo,
+  siginfo_t          *info,
+  bool                is_global,
+  bool                check_blocked,
+  bool                do_signals_acquire_release
+)
+{
+  bool                 retval;
+  Thread_queue_Context  queue_context;
+
+  if ( do_signals_acquire_release ) {
+    _Thread_queue_Context_initialize( &queue_context );
+    _POSIX_signals_Acquire( &queue_context );
+    retval = _POSIX_signals_Clear_signals_helper(
+      api,
+      signo,
+      info,
+      is_global,
+      check_blocked
+    );
+    _POSIX_signals_Release( &queue_context );
+  } else {
+    retval = _POSIX_signals_Clear_signals_helper(
+      api,
+      signo,
+      info,
+      is_global,
+      check_blocked
+    );
+  }
+
+  return retval;
 }
