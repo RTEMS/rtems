@@ -34,6 +34,9 @@
   */
 
 #include <stm32h7xx_hal.h>
+#ifdef __rtems__
+#include <bsp.h> /* for SystemInit_ExtMemCtl */
+#endif
 
 #define DATA_IN_ExtSRAM
 #define DATA_IN_ExtSDRAM

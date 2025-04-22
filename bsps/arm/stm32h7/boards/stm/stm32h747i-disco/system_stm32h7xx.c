@@ -174,11 +174,13 @@
 /** @addtogroup STM32H7xx_System_Private_FunctionPrototypes
   * @{
   */
-#ifndef __rtems__
 #if defined (DATA_IN_ExtSDRAM)
+#if defined(__rtems__)
+  void SystemInit_ExtMemCtl(void); 
+#else
   static void SystemInit_ExtMemCtl(void); 
-#endif /* DATA_IN_ExtSDRAM */
 #endif /* __rtems__ */
+#endif /* DATA_IN_ExtSDRAM */
 /**
   * @}
   */
@@ -559,7 +561,12 @@ void SystemInit_ExtMemCtl(void)
   for (index = 0; index<1000; index++);
   
   /* PALL command */ 
+  #if defined(__rtems__)
+  /* RTEMS build detects incorrect/misleading indentation */
+  FMC_Bank5_6_R->SDCMR = 0x0000000A; 	
+  #else
     FMC_Bank5_6_R->SDCMR = 0x0000000A; 	
+  #endif
   timeout = 0xFFFF;
   while((tmpreg != 0) && (timeout-- > 0))
   {

@@ -178,11 +178,13 @@
 /** @addtogroup STM32H7xx_System_Private_FunctionPrototypes
   * @{
   */
-#ifndef __rtems__
 #if defined (DATA_IN_ExtSRAM) || defined (DATA_IN_ExtSDRAM)
+#if defined(__rtems__)
+  void SystemInit_ExtMemCtl(void); 
+#else
   static void SystemInit_ExtMemCtl(void); 
-#endif /* DATA_IN_ExtSRAM || DATA_IN_ExtSDRAM */
 #endif /* __rtems__ */
+#endif /* DATA_IN_ExtSRAM || DATA_IN_ExtSDRAM */
 
 /**
   * @}
