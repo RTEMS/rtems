@@ -50,13 +50,14 @@
 void bsp_start(void)
 {
 #ifdef BSP_MULTIBOOT_SUPPORT
-    process_multiboot2_info();
-    if (!uefi_bootservices_running()) {
+   process_multiboot2_info();
+   if (!uefi_bootservices_running()) {
 #endif
-        paging_init();
-        bool acpi_table_result = acpi_tables_initialize();
-        _Assert(acpi_table_result);
-        bsp_interrupt_initialize();
+     paging_init();
+     bool acpi_table_result = acpi_tables_initialize();
+     _Assert(acpi_table_result);
+     (void) acpi_table_result;
+     bsp_interrupt_initialize();
 #ifdef BSP_MULTIBOOT_SUPPORT
     }
 #endif
