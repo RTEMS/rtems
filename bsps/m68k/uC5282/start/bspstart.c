@@ -47,7 +47,8 @@ uint32_t BSP_pll_ref_clock = (uint32_t)_PLLRefClockSpeed;
  * 6.1 Description
  * The cache on the MCF5282 was enhanced to function as a unified data and
  * instruction cache, an instruction cache, or an operand cache.  The cache
- * function and organization is controlled by the cache control register (CACR).
+ * function and organization is controlled by the cache control
+ * register (CACR).
  * The CINV (Bit 24 = cache invalidate) bit in the CACR causes a cache clear.
  * If the cache is configured as a unified cache and the CINV bit is set, the
  * scope of the cache clear is controlled by two other bits in the CACR,
@@ -255,7 +256,9 @@ void bsp_start( void )
 		mfd = ( 0 << 8 ) | ( 2 << 12 );
 	} else {
 		if ( 0xf8 != byte ) {
-			printk("FATAL ERROR: Unexpected SYNSR contents (0x%02x), can't proceed\n", byte);
+			printk(
+				"FATAL ERROR: Unexpected SYNSR contents "
+				"(0x%02x), can't proceed\n", byte);
 			bsp_sysReset(0);
 		}
 		mfd = MCF5282_CLOCK_SYNCR;
@@ -393,8 +396,10 @@ syscall_1(unsigned const char *, gethwaddr, int, a)
 syscall_1(const char *, getbenv, const char *, a)
 syscall_1(int, setbenv, const char *, a)
 syscall_2(int, program, bsp_mnode_t *, chain, int, flags)
-syscall_3(int, flash_erase_range, volatile unsigned short *, flashptr, int, start, int, end);
-syscall_3(int, flash_write_range, volatile unsigned short *, flashptr, bsp_mnode_t *, chain, int, offset);
+syscall_3(int, flash_erase_range, volatile unsigned short *,
+          flashptr, int, start, int, end);
+syscall_3(int, flash_write_range, volatile unsigned short *,
+          flashptr, bsp_mnode_t *, chain, int, offset);
 
 /* Provide a dummy-implementation of these syscalls
  * for qemu (which lacks the firmware).
@@ -621,7 +626,8 @@ BSP_removeVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
 }
 
 int
-BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocaladdr)
+BSP_vme2local_adrs(
+  unsigned am, unsigned long vmeaddr, unsigned long *plocaladdr)
 {
   unsigned long offset;
 
