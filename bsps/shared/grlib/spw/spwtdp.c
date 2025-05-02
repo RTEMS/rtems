@@ -51,8 +51,6 @@
 /*#define UNUSED*/
 #define UNUSED __attribute__((unused))
 
-#define DEBUG 1
-
 #ifdef DEBUG
 #define DBG(x...) printf(x)
 #else
