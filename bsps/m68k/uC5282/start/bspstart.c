@@ -28,6 +28,12 @@
 #define VME_TWO_BASE    0x31000000
 
 /*
+ * Offset of first trap ISR. 16 of these total.
+ */
+#define UC5282_FIRST_TRAP_ISR 32
+#define UC5282_TRAP_ISR(_n) (UC5282_FIRST_TRAP_ISR+((_n) & 0xF))
+
+/*
  * Linker Script Defined Variables
  */
 extern char RamSize[];
@@ -37,6 +43,8 @@ extern char _PLLRefClockSpeed[];
 
 uint32_t BSP_sys_clk_speed = (uint32_t)_CPUClockSpeed;
 uint32_t BSP_pll_ref_clock = (uint32_t)_PLLRefClockSpeed;
+
+typedef void(*uC5282_ISR)(int);
 
 /*
  * CPU-space access
@@ -93,43 +101,58 @@ uint32_t mcf5282_acr1_mode = 0;
 
 extern void bsp_fake_syscall(int);
 
+void bsp_default_isr_handler(int pc);
+
 /*
  * The Arcturus boot ROM prints exception information improperly
  * so use this default exception handler instead.  This one also
- * prints a call backtrace
+ * prints a call backtrace.
  */
-static void handler(int pc)
+void bsp_default_isr_handler(int param)
 {
+    /**
+     * Mapped onto the stack. 'param' is pc here,
+     * info is located at -4, fp is at -8.
+     */
+    typedef struct {
+        uint32_t fp;
+        uint32_t info;
+        uint32_t pc;
+    } stack_frame_t;
+
     int level;
     static volatile int reent;
 
     rtems_interrupt_disable(level);
     if (reent++) bsp_sysReset(0);
     {
-    int *p = &pc;
-    int info = p[-1];
-    int pc = p[0];
-    int format = (info >> 28) & 0xF;
-    int faultStatus = ((info >> 24) & 0xC) | ((info >> 16) & 0x3);
-    int vector = (info >> 18) & 0xFF;
-    int statusRegister = info & 0xFFFF;
-    int *fp;
+        uintptr_t tmp = (uintptr_t)&param;
+        tmp -= 2 * sizeof(uint32_t);
+        stack_frame_t *sf = (stack_frame_t *) tmp;
 
-    printk("\n\nPC:%x  SR:%x  VEC:%x  FORMAT:%x  STATUS:%x\n", pc,
+        uint32_t info = sf->info;
+        uint32_t pc   = sf->pc;
+        uint32_t format = (info >> 28) & 0xF;
+        uint32_t faultStatus = ((info >> 24) & 0xC) | ((info >> 16) & 0x3);
+        uint32_t vector = (info >> 18) & 0xFF;
+        uint32_t statusRegister = info & 0xFFFF;
+        uint32_t *fp;
+
+        printk("\n\nPC:%x  SR:%x  VEC:%x  FORMAT:%x  STATUS:%x\n", pc,
                                                                statusRegister,
                                                                vector,
                                                                format,
                                                                faultStatus);
-    fp = &p[-2];
-    for(;;) {
-        int *nfp = (int *)*fp;
-        if ((nfp <= fp)
-         || ((char *)nfp >= RamSize)
-         || ((char *)(nfp[1]) >= RamSize))
-            break;
-        printk("FP:%p -> %p    PC:%x\n", fp, nfp, nfp[1]);
-        fp = nfp;
-    }
+        fp = &sf->fp;
+        for(;;) {
+            uint32_t *nfp = (uint32_t *)*fp;
+            if ((nfp <= fp)
+            || ((char *)nfp >= RamSize)
+            || ((char *)(nfp[1]) >= RamSize))
+               break;
+            printk("FP:%p -> %p    PC:%x\n", fp, nfp, nfp[1]);
+            fp = nfp;
+        }
     }
     rtems_task_suspend(0);
     rtems_panic("done");
@@ -153,8 +176,8 @@ void bsp_start( void )
    * Set up default exception handler
    */
   for (i = 2 ; i < 256 ; i++)
-      if (i != (32+2)) /* Catch all but bootrom system calls */
-          *((void (**)(int))(i * 4)) = handler;
+      if (i != UC5282_TRAP_ISR(2)) /* Catch all but bootrom system calls */
+          *((uC5282_ISR*)(_VBR + i * 4)) = bsp_default_isr_handler;
 
   /*
    * Invalidate the cache and disable it
@@ -181,8 +204,9 @@ void bsp_start( void )
    * Qemu has no trap handler; install our fake syscall
    * implementation if there is no existing handler.
    */
-  if ( 0 == *((void (**)(int))((32+2) * 4)) )
-    *((void (**)(int))((32+2) * 4)) = bsp_fake_syscall;
+  uC5282_ISR* trapIsr = (uC5282_ISR*)(_VBR + UC5282_TRAP_ISR(2) * 4);
+  if ( *trapIsr == 0 )
+    *trapIsr = bsp_fake_syscall;
 
   /*
    * Read/write copy of cache registers
