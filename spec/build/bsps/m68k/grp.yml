@@ -23,10 +23,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}/mcf5223x
   source:
   - bsps/m68k/include/mcf5223x/mcf5223x.h
-- destination: ${BSP_INCLUDEDIR}/mcf5225x
-  source:
-  - bsps/m68k/include/mcf5225x/fec.h
-  - bsps/m68k/include/mcf5225x/mcf5225x.h
 - destination: ${BSP_INCLUDEDIR}/mcf5235
   source:
   - bsps/m68k/include/mcf5235/mcf5235.h
