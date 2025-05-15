@@ -62,7 +62,15 @@
 #define TM27_USE_VECTOR_HANDLER
 
 #define Install_tm27_vector( handler ) \
-  set_vector( (handler), TEST_VECTOR, 1 );
+  rtems_interrupt_handler_install( \
+    TEST_VECTOR, \
+    "test tm27 interrupt", \
+    RTEMS_INTERRUPT_UNIQUE, \
+    handler, \
+    NULL \
+  ); \
+  SPARC_Clear_and_unmask_interrupt(TEST_VECTOR);
+  
 
 #define Cause_tm27_intr() \
   __asm__ volatile( "ta 0x10; nop " );

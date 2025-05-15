@@ -39,6 +39,9 @@ bool           Is_TX_active[ 2 ];
 
 void *console_termios_data[ 2 ];
 
+static rtems_interrupt_entry leon_UART_1;
+static rtems_interrupt_entry leon_UART_2;
+
 /*
  *  console_isr_a
  *
@@ -204,11 +207,35 @@ void console_initialize_interrupts( void )
   LEON_REG.UART_Control_1 |= LEON_REG_UART_CTRL_RI | LEON_REG_UART_CTRL_TI;
   LEON_REG.UART_Control_2 |= LEON_REG_UART_CTRL_RI | LEON_REG_UART_CTRL_TI;
 
-  set_vector( console_isr_a, CONSOLE_UART_1_TRAP, 1 );
-#ifdef RDB_BREAK_IN
-  if (trap_table[0x150/4] == 0x91d02000)
-#endif
-  set_vector( console_isr_b, CONSOLE_UART_2_TRAP, 1 );
+  rtems_interrupt_entry_initialize(
+    &leon_UART_1,
+    console_isr_a,
+    NULL,
+    "process UART 1"
+  );
+  rtems_interrupt_entry_install(
+    LEON_INTERRUPT_UART_1_RX_TX,
+    RTEMS_INTERRUPT_UNIQUE,
+    &leon_UART_1
+  );
+  SPARC_Clear_and_unmask_interrupt(CONSOLE_UART_1_TRAP);
+
+  rtems_interrupt_entry_initialize(
+    &leon_UART_2,
+    console_isr_b,
+    NULL,
+    "process UART 2"
+  );
+  #ifdef RDB_BREAK_IN
+    if (trap_table[0x150/4] == 0x91d02000)
+  #endif
+  rtems_interrupt_entry_install(
+    LEON_INTERRUPT_UART_2_RX_TX,
+    RTEMS_INTERRUPT_UNIQUE,
+    &leon_UART_2
+  );
+  SPARC_Clear_and_unmask_interrupt(CONSOLE_UART_2_TRAP);
+  
 }
 
 /*

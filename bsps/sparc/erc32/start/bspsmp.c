@@ -66,7 +66,7 @@ void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 }
 
 static rtems_isr bsp_inter_processor_interrupt(
-  rtems_vector_number vector
+  void *vector
 )
 {
   _SMP_Inter_processor_interrupt_handler( _Per_CPU_Get() );
@@ -74,7 +74,21 @@ static rtems_isr bsp_inter_processor_interrupt(
 
 static void erc32_install_inter_processor_interrupt( void )
 {
-  set_vector( bsp_inter_processor_interrupt, IPI_VECTOR, 1 );
+  rtems_interrupt_entry erc32_handle_ipi;
+  rtems_interrupt_entry_initialize(
+    &erc32_handle_ipi,
+    bsp_inter_processor_interrupt,
+    NULL,
+    "process IPI Interrupt"
+  );
+
+  rtems_interrupt_entry_install(
+    IPI_VECTOR,
+    RTEMS_INTERRUPT_UNIQUE,
+    &erc32_handle_ipi
+  );
+
+  SPARC_Clear_and_unmask_interrupt(IPI_VECTOR);
 }
 
 RTEMS_SYSINIT_ITEM(

@@ -63,7 +63,7 @@ source:
 - bsps/sparc/erc32/start/bspidle.c
 - bsps/sparc/erc32/start/bspstart.c
 - bsps/sparc/erc32/start/erc32mec.c
-- bsps/sparc/erc32/start/setvec.c
+- bsps/sparc/shared/start/sparctrap.c
 - bsps/sparc/shared/gnatcommon.c
 - bsps/sparc/shared/irq/bsp_isr_handler.c
 - bsps/sparc/shared/irq/irq-shared.c

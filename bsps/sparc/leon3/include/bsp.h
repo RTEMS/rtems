@@ -122,13 +122,7 @@ extern int   CLOCK_SPEED;
 
 extern int   end;        /* last address in the program */
 
-/* miscellaneous stuff assumed to exist */
-
-rtems_isr_entry set_vector(                     /* returns old vector */
-    rtems_isr_entry     handler,                /* isr routine        */
-    rtems_vector_number vector,                 /* vector number      */
-    int                 type                    /* RTEMS or RAW intr  */
-);
+void SPARC_Clear_and_unmask_interrupt(rtems_vector_number vector);
 
 void BSP_fatal_exit(uint32_t error);
 
