@@ -243,25 +243,25 @@ This is the RTEMS build environment structure I used to create the RTEMS NIOSV
 BSP, boot loader, and application.
 
 ```
-└──  home directory               // the home directory of the user
-     └── sandbox2                 // a sandbox directory for development
-         ├── rtems                // the rtems base directory for all things
-             │                    // RTEMS (source code and install directory)
-             ├── 6                // the rtems install directory
-             └── src              // the rtems directory for gitlab repos
-                 ├── rsb          // the rtems source builder repo directory
-                 ├── rtems        // the rtems OS repo directory
-                 └── rtems-tools  // the rtems tools repo directory
-         ├── bin                  // the directory where the boot and app exe
-         │                        // outputs will be placed
-         ├── gdb                  // the directory where the boot and app
-         │                        // debug ELF outputs will be placed
-         ├── head_file            // an application that will place the
-         │                        // <file_header_t> information in the binary
-         │                        // output
-         ├── boot                 // the NIOSV bootloader directory for On-Chip
-         │                        // Memory (ROM)
-         └── app                  // the user application directory (RTEMS
++--  home directory               // the home directory of the user
+     +-- sandbox2                 // a sandbox directory for development
+         +---+-- rtems            // the rtems base directory for all things
+         |    |                    // RTEMS (source code and install directory)
+         |    |-- 6                // the rtems install directory
+         |    +-- src              // the rtems directory for gitlab repos
+         |        |-- rsb          // the rtems source builder repo directory
+         |        |-- rtems        // the rtems OS repo directory
+         |        +-- rtems-tools  // the rtems tools repo directory
+         +-- bin                  // the directory where the boot and app exe
+         |                       // outputs will be placed
+         +-- gdb                  // the directory where the boot and app
+         |                        // debug ELF outputs will be placed
+         +-- head_file            // an application that will place the
+         |                        // <file_header_t> information in the binary
+         |                        // output
+         +-- boot                 // the NIOSV bootloader directory for On-Chip
+         |                        // Memory (ROM)
+         +-- app                  // the user application directory (RTEMS
                                   // console app)
 ```
 
@@ -283,29 +283,29 @@ Please see the **head_file.zip** file that contains an application to add the
 This is the RTEMS BSP build environment structure I used.
 
 ```
-└──  rtems src directory            // the rtems top level directory
-     ├── bsps                       // the rtems bsps directory
-         ├── riscv                  // the rtems riscv bsp top level directory
-             └── niosv              // the rtems niosv bsp top level directory
-                 ├── cache          // the niosv cache implementation
-                 ├── clock          // the niosv clock device implementation
-                 ├── console        // the niosv console implementation using
-                 │                  // the JTAG UART
-                 ├── flash          // the niosv EPCQ device implementation
-                 ├── include        // the niosv base bsp include files
-                 ├── irq            // the niosv IRQ implementation
-                 ├── niosvc10lp     // the Intel Cyclone 10 LP evaluation board
-                 │                  // bsp example
-                 ├── start          // the niosv bsp start up implementation
-                 ├── README.md      // this file
-                 └── supporting.zip // a zip file containing all the supporting
++--  rtems src directory            // the rtems top level directory
+     +-- bsps                       // the rtems bsps directory
+         +-- riscv                  // the rtems riscv bsp top level directory
+             +-- niosv              // the rtems niosv bsp top level directory
+                 +-- cache          // the niosv cache implementation
+                 +-- clock          // the niosv clock device implementation
+                 +-- console        // the niosv console implementation using
+                 |                  // the JTAG UART
+                 +-- flash          // the niosv EPCQ device implementation
+                 +-- include        // the niosv base bsp include files
+                 +-- irq            // the niosv IRQ implementation
+                 +-- niosvc10lp     // the Intel Cyclone 10 LP evaluation board
+                 |                  // bsp example
+                 +-- start          // the niosv bsp start up implementation
+                 +-- README.md      // this file
+                 +-- supporting.zip // a zip file containing all the supporting
                                     // code and files referenced in
                                     // this README.md
-      └── spec                      // the rtems spec directory
-         └── build                  // the rtems spec build directory
-             └── bsps               // the rtems spec bsps directory
-                 └── riscv          // the rtems spec riscv directory
-                     └── niosv      // the rtems spec niosv directory containing
+      +-- spec                      // the rtems spec directory
+         +-- build                  // the rtems spec build directory
+             +-- bsps               // the rtems spec bsps directory
+                 +-- riscv          // the rtems spec riscv directory
+                     +-- niosv      // the rtems spec niosv directory containing
                                     // the configuration for all niosv bsps. Add
                                     // new BSP configurations here.
 ```
