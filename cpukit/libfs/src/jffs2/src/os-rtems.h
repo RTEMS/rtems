@@ -1,8 +1,8 @@
 /*
  * JFFS2 -- Journalling Flash File System, Version 2.
  *
- * Copyright © 2002-2003 Free Software Foundation, Inc.
- * Copyright © 2013 embedded brains GmbH & Co. KG
+ * Copyright (c) 2002-2003 Free Software Foundation, Inc.
+ * Copyright (c) 2013 embedded brains GmbH & Co. KG
  *
  * Created by David Woodhouse <dwmw2@cambridge.redhat.com>
  *

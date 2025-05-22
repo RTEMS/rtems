@@ -3,7 +3,7 @@ License
 The files in this directory and elsewhere which refer to this LICENCE
 file are part of JFFS2, the Journalling Flash File System v2.
 
-	Copyright © 2001-2007 Red Hat, Inc. and others
+	Copyright (c) 2001-2007 Red Hat, Inc. and others
 
 JFFS2 is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free
