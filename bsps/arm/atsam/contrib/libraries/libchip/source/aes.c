@@ -249,7 +249,7 @@ void AES_SetGcmHash(uint32_t *hash)
 
 /**
  * \brief Get The four 32-bit Tag which contain the final 128-bit GCM
- * Authentication tag ¡°T¡± when GCM processing is complete.
+ * Authentication tag T when GCM processing is complete.
  * \param tag point to the word of the tag.
  */
 void AES_GetGcmTag(uint32_t *tag)

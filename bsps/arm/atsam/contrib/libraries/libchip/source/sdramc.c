@@ -128,7 +128,7 @@ extern void SDRAMC_Configure(SSdramc_Memory *pMemory,
 	SDRAMC->SDRAMC_MDR = SDRAMC_MDR_MD_SDRAM;
 
 	/* Step 4 */
-	/* A minimum pause of 200 ¦Ìs is provided to precede any signal toggle.
+	/* A minimum pause of 200 us is provided to precede any signal toggle.
 	   (6 core cycles per iteration) */
 	for (dw = 0; dw < ((dwClockFrequency / 1000000) * 200 / 6); dw++);
 

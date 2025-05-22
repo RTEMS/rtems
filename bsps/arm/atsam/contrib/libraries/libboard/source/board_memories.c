@@ -196,7 +196,7 @@ void BOARD_ConfigureSdram(void)
 	SDRAMC->SDRAMC_MDR = BOARD_Sdram_Config.sdramc_mdr;
 #endif /* __rtems__ */
 
-	/* 4. A minimum pause of 200 ¦Ìs is provided to precede any signal toggle.*/
+	/* 4. A minimum pause of 200 us is provided to precede any signal toggle.*/
 	for (i = 0; i < 100000; i++);
 
 	/* 5. (1)A NOP command is issued to the SDRAM devices. The application must
@@ -277,10 +277,10 @@ void BOARD_ConfigureSdram(void)
 
 	/* 11. Write the refresh rate into the count field in the SDRAMC Refresh
 	Timer register. (Refresh rate = delay between refresh cycles).
-	The SDRAM device requires a refresh every 15.625 ¦Ìs or 7.81 ¦Ìs.
+	The SDRAM device requires a refresh every 15.625 us or 7.81 us.
 	With a 100 MHz frequency, the Refresh Timer Counter Register must be set
-	with the value 1562(15.625 ¦Ìs x 100 MHz) or 781(7.81 ¦Ìs x 100 MHz). */
-	// For IS42S16100E, 2048 refresh cycle every 32ms, every 15.625 ¦Ìs
+	with the value 1562(15.625 us x 100 MHz) or 781(7.81 us x 100 MHz). */
+	// For IS42S16100E, 2048 refresh cycle every 32ms, every 15.625 us
 	/* ((32 x 10(^-3))/2048) x150 x (10^6) */
 #ifndef __rtems__
 	SDRAMC->SDRAMC_TR = 1562;
