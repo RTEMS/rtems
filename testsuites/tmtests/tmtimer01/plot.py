@@ -34,7 +34,7 @@ def _plot(data: dict) -> None:
     axes.set_title("Timer Fire and Cancel Timing Test")
     axes.set_xlabel("Active Timers")
     axes.set_xscale("log")
-    axes.set_ylabel("Timer Fire and Cancel Duration [μs]")
+    axes.set_ylabel("Timer Fire and Cancel Duration [us]")
     x = [sample["active-timers"] for sample in data["samples"]]
     for key in ["first", "middle", "last"]:
         y = [sample[key] / 1000.0 for sample in data["samples"]]

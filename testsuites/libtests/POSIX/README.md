@@ -24,6 +24,6 @@ NB:
   in RTEMS/GCC/newlib's history.
 
 References:
-[1] The Open Group Base Specifications Issue 7, IEEE Std 1003.1™-2008,
+[1] The Open Group Base Specifications Issue 7, IEEE Std 1003.1(tm)-2008,
     http://www.opengroup.org/onlinepubs/9699919799
 

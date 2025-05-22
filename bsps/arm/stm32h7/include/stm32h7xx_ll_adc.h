@@ -391,7 +391,7 @@ extern "C" {
 #if defined (STM32H742xx) || defined (STM32H743xx) || defined (STM32H753xx) 
 #define TEMPSENSOR_CAL2_TEMP               ((((DBGMCU->IDCODE) >> 16) <= ((uint32_t)0x1003)) ? 110L : 130L)            /* Internal temperature sensor , 
                                            temperature at which temperature sensor has been calibrated in production for data into TEMPSENSOR_CAL2_ADDR
-                                            110 °C for revision Y and 130 °C for revision V (tolerance: +-5 DegC) (unit: DegC). */
+                                            110 DegC for revision Y and 130 DegC for revision V (tolerance: +-5 DegC) (unit: DegC). */
 #else
 #define TEMPSENSOR_CAL2_TEMP               (110L)                       /* Internal temperature sensor, temperature at which temperature sensor has been
                                            calibrated in production for data into TEMPSENSOR_CAL2_ADDR (tolerance: +-5 DegC) (unit: DegC). */

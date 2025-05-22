@@ -9,7 +9,7 @@ License
 
    --------------------------------------------------------------
 
-   Copyright © 2004, Brookhaven National Laboratory and
+   Copyright (c) 2004, Brookhaven National Laboratory and
 		 Shuchen K. Feng <feng1@bnl.gov>
 
    The "RTEMS-MVME5500 Board Support Package" is distributed

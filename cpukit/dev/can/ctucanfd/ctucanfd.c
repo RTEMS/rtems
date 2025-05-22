@@ -105,9 +105,9 @@ enum ctucanfd_txtb_status {
 enum ctucanfd_txtb_command {
   /* Requests TXT buffer to move to "Empty" state */
   TXT_CMD_SET_EMPTY   = 0x01,
-  /* Requests TXT buffer to move to “Aborted” or “Abort in progress” state */
+  /* Requests TXT buffer to move to "Aborted" or "Abort in progress" state */
   TXT_CMD_SET_READY   = 0x02,
-  /* Requests TXT buffer to move to “Ready” state*/
+  /* Requests TXT buffer to move to "Ready" state*/
   TXT_CMD_SET_ABORT   = 0x04
 };
 

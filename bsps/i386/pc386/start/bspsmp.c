@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2020 Jan Sommer, Deutsches Zentrum für Luft- und Raumfahrt e. V. (DLR)
+ * Copyright (C) 2020 Jan Sommer, Deutsches Zentrum fur Luft- und Raumfahrt e. V. (DLR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

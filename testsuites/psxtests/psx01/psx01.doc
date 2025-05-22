@@ -49,4 +49,4 @@ concepts:
 + Verify that thread creation fails before thread limit is exceeded
 + Verify that thread yielding is operational
 + Verify that pthread_equal works as expected for different combinations of
-  legitimate and illegitimate thread id’s
+  legitimate and illegitimate thread id's

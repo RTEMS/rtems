@@ -27,7 +27,7 @@
 
 This test benchmarks the following operations:
 
-+ pthread_barrier_wait – releasing, preempt
++ pthread_barrier_wait - releasing, preempt
 
 This file describes the directives and concepts tested by this test set.
 

@@ -59,7 +59,7 @@ The interrupt vector values are switched at the IPIC.  See also [1] IPIC 1.
 
 REFERENCES:
 
-[1]	MPC8313ECE Rev. 3, 3/2008: "MPC8313E PowerQUICC™ II Pro Integrated Host
+[1]	MPC8313ECE Rev. 3, 3/2008: "MPC8313E PowerQUICC(tm) II Pro Integrated Host
 	Processor Device Errata"
 
 Example U-Boot Sequence

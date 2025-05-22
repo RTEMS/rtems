@@ -59,7 +59,7 @@
  * including "red-black" and "AVL" trees.  The set of conditions applied here
  * are the "weak-AVL" conditions of Haeupler, Sen and Tarjan presented in in
  * "Rank Balanced Trees", ACM Transactions on Algorithms Volume 11 Issue 4 June
- * 2015 Article No.: 30pp 1–26 https://doi.org/10.1145/2689412 (the HST paper):
+ * 2015 Article No.: 30pp 1-26 https://doi.org/10.1145/2689412 (the HST paper):
  *	- every rank-difference is 1 or 2.
  *	- the rank of any leaf is 1.
  *

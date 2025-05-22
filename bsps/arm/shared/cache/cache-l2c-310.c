@@ -784,12 +784,12 @@ static void l2c_310_check_errata( uint32_t rtl_release )
 
     assert( 0 == ( l2cc->aux_ctrl & L2C_310_AUX_HPSODRE_MASK ) );
 
-    /* Erratum: 729815 The “High Priority for SO and Dev reads” feature can
+    /* Erratum: 729815 The "High Priority for SO and Dev reads" feature can
      * cause Quality of Service issues to cacheable read transactions*/
 
     /* Conditions
        This problem occurs when the following conditions are met:
-       1. Bit[10] “High Priority for SO and Dev reads enable” of the PL310
+       1. Bit[10] "High Priority for SO and Dev reads enable" of the PL310
           Auxiliary Control Register is set to 1.
        2. PL310 receives a cacheable read that misses in the L2 cache.
        3. PL310 receives a continuous flow of Strongly Ordered or Device
@@ -797,7 +797,7 @@ static void l2c_310_check_errata( uint32_t rtl_release )
        Workaround
        A workaround is only necessary in systems that are able to issue a
        continuous flow of Strongly Ordered or Device reads. In such a case,
-       the workaround is to disable the “High Priority for SO and Dev reads”
+       the workaround is to disable the "High Priority for SO and Dev reads"
        feature. This is the default behavior.*/
   }
 

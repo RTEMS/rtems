@@ -33,7 +33,7 @@ def _plot(data: dict) -> None:
     _, axes = plt.subplots()
     axes.set_title("Context Switch Timing Test")
     axes.set_xlabel("Function Nest Level")
-    axes.set_ylabel("Context Switch Time [μs]")
+    axes.set_ylabel("Context Switch Time [us]")
     x = list(range(0, len(data[0]["stats-by-function-nest-level"])))
     axes.xaxis.set_major_locator(ticker.FixedLocator(x))
     for samples in data:

@@ -73,7 +73,7 @@ SECTIONS
       PROVIDE_HIDDEN (__rela_iplt_end = .);
     }
   .rtemsroset : {
-    /* for pre–RTEMS libbsd FreeBSD code */
+    /* for pre-RTEMS libbsd FreeBSD code */
     __start_set_sysctl_set = .;
     *(set_sysctl_*);
     __stop_set_sysctl_set = .;

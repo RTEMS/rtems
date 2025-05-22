@@ -204,7 +204,7 @@ bool _Heap_Free( Heap_Control *heap, void *addr );
  * @param source If @a dump is @c true, this is used to mark the output lines.
  * @param dump Indicates whether diagnostic messages will be printed to standard output.
  *
- * @retval true No errors occurred, the heap´s integrity is not violated.
+ * @retval true No errors occurred, the heap's integrity is not violated.
  * @retval false The heap is corrupt.
  */
 bool _Heap_Walk(

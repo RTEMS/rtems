@@ -612,7 +612,7 @@ extern "C" {
                 } B;
             } SDF;
 
-            uint32_t NBYTES;   /* inner (minor) byte count */
+            uint32_t NBYTES;   /* inner (minor) byte count */
 
             int32_t SLAST;     /* last destination address adjustment, or
                                    scatter/gather address (if e_sg = 1) */

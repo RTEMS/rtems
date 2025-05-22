@@ -103,7 +103,7 @@ static bool ppc_exc_create_branch_op(
    * minimal prologues in a read-only area are relocatable.
    */
   if ((branch_target_address & ~BRANCH_OP_MSK) != 0) {
-    /* Target to far for relative branch (PC ± 32M) */
+    /* Target to far for relative branch (PC +/- 32M) */
     if (target_address >= 0xfe000001 || target_address < 0x01fffffd) {
       /* Can use an absolute branch */
       branch_target_address = (target_address | BRANCH_OP_ABS) & BRANCH_OP_MSK;

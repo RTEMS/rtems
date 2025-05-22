@@ -1,3 +1,3 @@
 *** POSIX TIME TEST PSXTMBARRIER 03 ***
-pthread_barrier_wait – releasing, no preempt 50
+pthread_barrier_wait - releasing, no preempt 50
 *** END OF POSIX TIME TEST PSXTMBARRIER 03 ***
