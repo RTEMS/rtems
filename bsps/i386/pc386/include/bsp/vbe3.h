@@ -13,7 +13,7 @@
  */
 
 /*
- * Copyright (C) 2014  Jan Doležal (dolezj21@fel.cvut.cz)
+ * Copyright (C) 2014  Jan Dolezal (dolezj21@fel.cvut.cz)
  *                     CTU in Prague.
  *
  *  The license and distribution terms for this file may be

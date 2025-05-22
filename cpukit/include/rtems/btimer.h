@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 2011 Ralf Corsépius Ulm/Germany
+ *  COPYRIGHT (c) 2011 Ralf Corsepius Ulm/Germany
  *
  *  Derived from libcsupport/include/timerdrv.h:
  *

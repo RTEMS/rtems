@@ -6,7 +6,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2018 Marçal Comajoan Cara
+ * Copyright (C) 2018 Marcal Comajoan Cara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

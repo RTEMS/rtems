@@ -10,7 +10,7 @@
  *  COPYRIGHT (c) 2009.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2011  Ralf Corsépius, Ulm, Germany.
+ *  Copyright (c) 2011  Ralf Corsepius, Ulm, Germany.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

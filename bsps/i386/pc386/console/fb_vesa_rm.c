@@ -31,7 +31,7 @@
 
 /*
  * Copyright (c) 2014 - CTU in Prague
- *                      Jan Doležal ( dolezj21@fel.cvut.cz )
+ *                      Jan Dolezal ( dolezj21@fel.cvut.cz )
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
