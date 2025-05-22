@@ -47,11 +47,13 @@ files = ["cpukit/include/machine/*.h"]
 
 [[ignore."cpukit/jffs2"]]
 files = [
+    "cpukit/libfs/src/jffs2/include/linux/jffs2.h",
     "cpukit/libfs/src/jffs2/src/acl.h",
     "cpukit/libfs/src/jffs2/src/build.c",
     "cpukit/libfs/src/jffs2/src/compat-crc32.c",
     "cpukit/libfs/src/jffs2/src/compr_rtime.c",
     "cpukit/libfs/src/jffs2/src/compr_zlib.c",
+    "cpukit/libfs/src/jffs2/src/compr_rubin.c",
     "cpukit/libfs/src/jffs2/src/compr.c",
     "cpukit/libfs/src/jffs2/src/compr.h",
     "cpukit/libfs/src/jffs2/src/debug.c",
@@ -275,4 +277,18 @@ files = [
     "cpukit/compression/zlib/doc/*",
     "cpukit/compression/zlib/ChangeLog.zlib",
     "cpukit/compression/zlib/FAQ"
+]
+
+# These files have test characters that fail the char test
+[[ignore."testsuites/fstests/fsdosfsname01"]]
+exclude = ["char"]
+files = [
+	"testsuites/fstests/fsdosfsname01/init.c",
+	"testsuites/fstests/fsdosfsname01/create_files.cs",
+	"testsuites/fstests/fsdosfsname01/files.h"
+]
+
+[[ignore."yaml"]]
+files = [
+    "yaml/*"
 ]
