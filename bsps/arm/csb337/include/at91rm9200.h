@@ -141,7 +141,7 @@ typedef volatile unsigned long vulong;
 #define USART3_BASE             0xFFFCC000
 /*
  *  WARNING: The USART3_BASE at the AT91RM9200 Manual is wrong!!!
- *  Manual revision: Rev. 1768H-ATARM–16-Jun-09
+ *  Manual revision: Rev. 1768H-ATARM-16-Jun-09
  *  USART3_BASE is NOT 0xFFECC000
  */
 

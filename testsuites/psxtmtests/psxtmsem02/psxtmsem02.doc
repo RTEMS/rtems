@@ -28,7 +28,7 @@
 This test benchmarks the following operations:
 
 + sem_getvalue
-+ sem_wait – available
++ sem_wait - available
 + sem_post - no threads waiting
 + sem_trywait - available
 + sem_trywait - not available

@@ -82,10 +82,10 @@ extern "C" {
  * necessity of scheduling tasks to run within a specified time limit after the
  * occurrence of an event. For example, software embedded in life-support
  * systems used to monitor hospital patients must take instant action if a
- * change in the patient’s status is detected.
+ * change in the patient's status is detected.
  *
  * The component of RTEMS responsible for providing this capability is
- * appropriately called the scheduler. The scheduler’s sole purpose is to
+ * appropriately called the scheduler. The scheduler's sole purpose is to
  * allocate the all important resource of processor time to the various tasks
  * competing for attention.
  */

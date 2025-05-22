@@ -86,7 +86,7 @@ typedef struct {
   uint32_t child_bus;
   /** The physical address within the parent bus address space */
   uint32_t parent_bus;
-  /** The size of the range in the child’s address space */
+  /** The size of the range in the child's address space */
   uint32_t size;
 } rtems_ofw_ranges;
 

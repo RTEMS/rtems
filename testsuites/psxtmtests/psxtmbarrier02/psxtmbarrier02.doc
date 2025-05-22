@@ -27,4 +27,4 @@
 
 This test benchmarks the following operations:
 
-+ pthread_barrier_wait – blocking
++ pthread_barrier_wait - blocking

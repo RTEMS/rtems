@@ -1,5 +1,5 @@
 /*
- * COPYRIGHT (c) 2014, 2016 ÅAC Microtec AB <www.aacmicrotec.com>
+ * COPYRIGHT (c) 2014, 2016 AAC Microtec AB <www.aacmicrotec.com>
  * Contributor(s):
  *  Karol Gugala <kgugala@antmicro.com>
  *  Martin Werner <martin.werner@aacmicrotec.com>
