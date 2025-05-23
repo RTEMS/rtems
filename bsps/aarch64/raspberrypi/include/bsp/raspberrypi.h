@@ -11,6 +11,7 @@
 /*
  * Copyright (c) 2022 Mohd Noor Aman
  * Copyright (c) 2024 Ning Yang
+ * Copyright (c) 2025 Shaunak Datar
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -281,6 +282,42 @@
 #define BCM2711_SPI4_BASE ( RPI_PERIPHERAL_BASE + 0x204800 )
 #define BCM2711_SPI5_BASE ( RPI_PERIPHERAL_BASE + 0x204A00 )
 #define BCM2711_SPI6_BASE ( RPI_PERIPHERAL_BASE + 0x204C00 )
+
+/** @} */
+
+/**
+ * @name PWM Clock Manager Register and Offsets
+ *
+ * @{
+ */
+
+#define BCM2711_CM_PWM_BASE ( RPI_PERIPHERAL_BASE + 0x00101000 )
+#define BCM2711_CM_PWM_CTL 0xA0
+#define BCM2711_CM_PWM_DIV 0xA4
+#define CM_PWM_PASSWD ( 0x5A << 24 )
+#define CM_PWM_CTL_SRC_OSC BSP_BIT32( 0 )
+#define CM_PWM_CTL_BUSY BSP_BIT32( 7 )
+#define CM_PWM_CTL_ENAB BSP_BIT32( 4 )
+#define CM_PWM_DIV_MASK 0xFFF
+
+/** @} */
+
+/**
+ * @name PWM Registers and offsets
+ *
+ * @{
+ */
+
+#define BCM2711_PWM0_BASE ( RPI_PERIPHERAL_BASE + 0x0020C000 )
+#define BCM2711_PWM1_BASE ( RPI_PERIPHERAL_BASE + 0x0020C800 )
+#define BCM2711_PWM_CONTROL 0x00
+#define BCM2711_PWM_STATUS 0x04
+#define BCM2711_PWM_DMAC 0x08
+#define BCM2711_PWM_RNG1 0x10
+#define BCM2711_PWM_DAT1 0x14
+#define BCM2711_PWM_FIFO 0x18
+#define BCM2711_PWM_RNG2 0x20
+#define BCM2711_PWM_DAT2 0x24
 
 /** @} */
 
