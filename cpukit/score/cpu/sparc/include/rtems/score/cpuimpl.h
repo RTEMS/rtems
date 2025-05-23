@@ -216,8 +216,16 @@ typedef struct {
 /**
  * @brief The pointer to the current per-CPU control is available via register
  * g6.
+ *
+ * @note Older C and C++ standards have made the register keyword a hint
+ * at block scope level. C17 defines register as a reserved keyword with
+ * no meaning. Using __extension__ allows the GNU behavior for global
+ * file scope. See RTEMS Issue 5250
+ * (https://gitlab.rtems.org/rtems/rtos/rtems/-/issues/5250) for a detailed
+ * discussion.
  */
-register struct Per_CPU_Control *_SPARC_Per_CPU_current __asm__( "g6" );
+__extension__ register struct
+   Per_CPU_Control *_SPARC_Per_CPU_current __asm__( "g6" );
 
 #define _CPU_Get_current_per_CPU_control() _SPARC_Per_CPU_current
 
