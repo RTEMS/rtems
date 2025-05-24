@@ -74,7 +74,7 @@ SYM(_start):
 	 * not much that can be done since we do not have a stack available for
 	 * this processor.  Just loop forever in this case.
 	 */
-	LREG	t3, _SMP_Processor_configured_maximum
+	lw	t3, _SMP_Processor_configured_maximum
 	bgeu	s0, t3, .Lwfi
 
 	LADDR	t0, _Per_CPU_Information
