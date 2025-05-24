@@ -30,6 +30,7 @@
 
 #include "recorddata.h"
 
+#include <rtems/rtems/intr.h>
 #include <rtems/score/atomic.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/interr.h>
@@ -67,6 +68,8 @@ extern const Record_Configuration _Record_Configuration;
 void _Record_Initialize( void );
 
 void _Record_Interrupt_initialize( void );
+
+extern rtems_interrupt_entry *_Record_Interrupt_dispatch_table[];
 
 bool _Record_Thread_create(
   struct _Thread_Control *executing,
