@@ -225,6 +225,7 @@ ata_io_data_request(ata_ide_dev_t *ata_dev, rtems_blkdev_request *req)
       areq->breq->bufnum * (areq->breq->bufs[0].length / ATA_SECTOR_SIZE);
 
     /* add request to the queue of awaiting requests to the controller */
+    rtems_chain_set_off_chain(&areq->link);
     ata_add_to_controller_queue(ctrl_minor, areq);
 
     return RTEMS_SUCCESSFUL;
@@ -1249,6 +1250,7 @@ rtems_ata_initialize(rtems_device_major_number major,
                 rtems_message_queue_delete(ata_queue_id);
                 return status;
             }
+            rtems_chain_set_off_chain(&int_st->link);
 #if CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE
             rtems_chain_append(
                 &ata_int_vec[IDE_Controller_Table[ctrl_minor].int_vec],
