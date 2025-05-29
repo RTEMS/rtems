@@ -51,6 +51,7 @@ default_prefix = "/opt/rtems/" + version["__RTEMS_MAJOR__"]
 compilers = ["gcc", "clang"]
 items = {}
 bsps = {}
+variant_errors = []
 
 
 def get_repo_release_label(ctx):
@@ -1442,7 +1443,7 @@ def configure_version(conf):
     if int(version["__RTEMS_REVISION__"]) != 0:
         v_str += "." + version["__RTEMS_REVISION__"]
     if version_label is not None and version_label != "":
-            v_str += "." + version_label
+        v_str += "." + version_label
     conf.msg("Configure RTEMS version", v_str, color="YELLOW")
 
 
@@ -1633,9 +1634,23 @@ def append_variant_builds(bld):
                   UninstallContext):
             name = c.__name__.replace("Context", "").lower()
 
-            class magic(c):
+            class rtems_context(c):
                 cmd = name + "_" + var
                 variant = var
+                last_variant = var == bld.env["VARIANTS"][-1]
+
+                def compile(self):
+                    global variant_errors
+                    try:
+                        super().compile()
+                    except:
+                        variant_errors += [self.variant]
+                        if not self.keep:
+                            raise
+                    if self.keep and self.last_variant and len(
+                            variant_errors) > 0:
+                        raise self.fatal('error: BSP(s) in errors: ' +
+                                         ' '.join(variant_errors))
 
         waflib.Options.commands.append(bld.cmd + "_" + var)
 
