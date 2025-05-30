@@ -89,7 +89,7 @@ bool rtems_filesystem_iterate(
 
 typedef struct {
   const char *type;
-  rtems_filesystem_fsmount_me_t mount_h;
+  rtems_filesystem_mount_t mount_h;
 } find_arg;
 
 static bool find_handler(const rtems_filesystem_table_t *entry, void *arg)
@@ -105,7 +105,7 @@ static bool find_handler(const rtems_filesystem_table_t *entry, void *arg)
   }
 }
 
-rtems_filesystem_fsmount_me_t
+rtems_filesystem_mount_t
 rtems_filesystem_get_mount_handler(
   const char *type
 )
@@ -124,8 +124,8 @@ rtems_filesystem_get_mount_handler(
 
 int
 rtems_filesystem_register(
-  const char                    *type,
-  rtems_filesystem_fsmount_me_t  mount_h
+  const char               *type,
+  rtems_filesystem_mount_t  mount_h
 )
 {
   rtems_chain_control *chain = &filesystem_chain;

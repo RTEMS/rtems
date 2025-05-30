@@ -136,7 +136,7 @@ static int register_subordinate_file_system(
     rtems_filesystem_eval_path_extract_currentloc( &ctx, &targetloc );
     mt_point_node = rtems_filesystem_location_transform_to_global( &targetloc );
     mt_entry->mt_point_node = mt_point_node;
-    rv = (*mt_point_node->location.mt_entry->ops->mount_h)( mt_entry );
+    rv = (*mt_point_node->location.mt_entry->ops->mount_h)( mt_entry, target );
     if ( rv == 0 ) {
       rtems_filesystem_mt_lock();
       rtems_chain_append_unprotected(
@@ -208,10 +208,10 @@ int mount(
     options == RTEMS_FILESYSTEM_READ_ONLY
       || options == RTEMS_FILESYSTEM_READ_WRITE
   ) {
-    rtems_filesystem_fsmount_me_t fsmount_me_h =
+    rtems_filesystem_mount_t mount_h =
       rtems_filesystem_get_mount_handler( filesystemtype );
 
-    if ( fsmount_me_h != NULL ) {
+    if ( mount_h != NULL ) {
       size_t target_length = 0;
       rtems_filesystem_mount_table_entry_t *mt_entry = alloc_mount_table_entry(
         source,
@@ -223,7 +223,7 @@ int mount(
       if ( mt_entry != NULL ) {
         mt_entry->writeable = options == RTEMS_FILESYSTEM_READ_WRITE;
 
-        rv = (*fsmount_me_h)( mt_entry, data );
+        rv = (*mount_h)( mt_entry, data );
         if ( rv == 0 ) {
           if ( target != NULL ) {
             rv = register_subordinate_file_system( mt_entry, target );

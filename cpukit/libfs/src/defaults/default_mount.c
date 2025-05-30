@@ -39,7 +39,8 @@
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_mount (
-   rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
+  rtems_filesystem_mount_table_entry_t *mt_entry,    /* IN */
+  const void *data
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

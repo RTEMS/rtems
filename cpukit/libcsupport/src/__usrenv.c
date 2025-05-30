@@ -143,7 +143,8 @@ static int null_op_clonenode(
 }
 
 static int null_op_mount(
-  rtems_filesystem_mount_table_entry_t *mt_entry
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void *data
 )
 {
   return -1;

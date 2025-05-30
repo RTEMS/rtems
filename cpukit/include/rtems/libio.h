@@ -278,22 +278,6 @@ typedef void (*rtems_filesystem_freenode_t)(
  * @see rtems_filesystem_default_mount().
  */
 typedef int (*rtems_filesystem_mount_t) (
-  rtems_filesystem_mount_table_entry_t *mt_entry
-);
-
-/**
- * @brief Initializes a file system instance.
- *
- * This function must initialize the file system root node in the mount table
- * entry.
- *
- * @param[in] mt_entry The mount table entry.
- * @param[in] data The data provided by the user.
- *
- * @retval 0 Successful operation.
- * @retval -1 An error occurred.  The errno is set to indicate the error.
- */
-typedef int (*rtems_filesystem_fsmount_me_t)(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   const void *data
 );
@@ -637,7 +621,8 @@ void rtems_filesystem_default_freenode(
  * @see rtems_filesystem_mount_t.
  */
 int rtems_filesystem_default_mount (
-   rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
+  rtems_filesystem_mount_table_entry_t *mt_entry,     /* IN */
+  const void *data
 );
 
 /**
@@ -1295,7 +1280,7 @@ typedef off_t rtems_off64_t __attribute__((deprecated));
  * @return The file system mount handler associated with the @a type, or
  * @c NULL if no such association exists.
  */
-rtems_filesystem_fsmount_me_t
+rtems_filesystem_mount_t
 rtems_filesystem_get_mount_handler(
   const char *type
 );
@@ -1673,8 +1658,8 @@ typedef enum {
  * @brief File system table entry.
  */
 typedef struct rtems_filesystem_table_t {
-  const char                    *type;
-  rtems_filesystem_fsmount_me_t  mount_h;
+  const char               *type;
+  rtems_filesystem_mount_t  mount_h;
 } rtems_filesystem_table_t;
 
 /**
@@ -1695,8 +1680,8 @@ extern rtems_chain_control rtems_filesystem_mount_table;
  * @retval -1 An error occurred.  The @c errno indicates the error.
  */
 int rtems_filesystem_register(
-  const char                    *type,
-  rtems_filesystem_fsmount_me_t  mount_h
+  const char               *type,
+  rtems_filesystem_mount_t  mount_h
 );
 
 /**

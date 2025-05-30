@@ -43,10 +43,12 @@
 
 #include <rtems/imfs.h>
 
-int IMFS_mount( rtems_filesystem_mount_table_entry_t *mt_entry )
+int IMFS_mount( rtems_filesystem_mount_table_entry_t *mt_entry, const void *data )
 {
   int rv = 0;
   IMFS_jnode_t *node = mt_entry->mt_point_node->location.node_access;
+
+  (void) data; /* runtime options checks can be added here */
 
   if ( IMFS_is_directory( node ) ) {
     IMFS_directory_t *dir = (IMFS_directory_t *) node;

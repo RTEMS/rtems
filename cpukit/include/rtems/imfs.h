@@ -855,7 +855,8 @@ extern int IMFS_make_generic_node(
  * @brief Mount an IMFS.
  */
 extern int IMFS_mount(
-  rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
+  rtems_filesystem_mount_table_entry_t *mt_entry,  /* IN */
+  const void *data
 );
 
 /**
