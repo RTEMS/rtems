@@ -246,7 +246,6 @@ void gr_rasta_tmtc_isr (void *arg)
 {
 	struct gr_rasta_tmtc_priv *priv = arg;
 	unsigned int status, tmp;
-	int irq;
 	SPIN_ISR_IRQFLAGS(irqflags);
 
 	tmp = status = priv->irq->ipend;
@@ -254,7 +253,7 @@ void gr_rasta_tmtc_isr (void *arg)
 	/* printk("GR-RASTA-TMTC: IRQ 0x%x\n",status); */
 
 	SPIN_LOCK(&priv->devlock, irqflags);
-	for(irq=0; irq<32; irq++) {
+	for(uint32_t irq=0; irq<32; irq++) {
 		if ( status & (1<<irq) ) {
 			genirq_doirq(priv->genirq, irq);
 			priv->irq->iclear = (1<<irq);
