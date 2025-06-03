@@ -141,12 +141,14 @@ source:
 - testsuites/psxtests/psxhdrs/dirent/alphasort.c
 - testsuites/psxtests/psxhdrs/dirent/closedir.c
 - testsuites/psxtests/psxhdrs/dirent/opendir.c
+- testsuites/psxtests/psxhdrs/dirent/posix_getdents.c
 - testsuites/psxtests/psxhdrs/dirent/readdir.c
 - testsuites/psxtests/psxhdrs/dirent/readdir_r.c
 - testsuites/psxtests/psxhdrs/dirent/rewinddir.c
 - testsuites/psxtests/psxhdrs/dirent/scandir.c
 - testsuites/psxtests/psxhdrs/dirent/seekdir.c
 - testsuites/psxtests/psxhdrs/dirent/telldir.c
+- testsuites/psxtests/psxhdrs/dlfcn/dladdr.c
 - testsuites/psxtests/psxhdrs/dlfcn/dlclose.c
 - testsuites/psxtests/psxhdrs/dlfcn/dlerror.c
 - testsuites/psxtests/psxhdrs/dlfcn/dlopen.c
@@ -404,6 +406,7 @@ source:
 - testsuites/psxtests/psxhdrs/netdb/sethostent.c
 - testsuites/psxtests/psxhdrs/netdb/setnetent.c
 - testsuites/psxtests/psxhdrs/netdb/setservent.c
+- testsuites/psxtests/psxhdrs/poll/ppoll.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_attr_destroy.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_attr_getdetachstate.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_attr_getguardsize.c
@@ -427,6 +430,7 @@ source:
 - testsuites/psxtests/psxhdrs/pthread/pthread_cancel.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_cleanup.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_cond_broadcast.c
+- testsuites/psxtests/psxhdrs/pthread/pthread_cond_clockwait.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_cond_destroy.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_cond_init.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_cond_signal.c
@@ -447,6 +451,7 @@ source:
 - testsuites/psxtests/psxhdrs/pthread/pthread_join.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_key_create.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_key_delete.c
+- testsuites/psxtests/psxhdrs/pthread/pthread_mutex_clocklock.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_mutex_destroy.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_mutex_getprioceiling.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_mutex_init.c
@@ -464,6 +469,8 @@ source:
 - testsuites/psxtests/psxhdrs/pthread/pthread_mutexattr_setprotocol.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_mutexattr_setpshared.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_once.c
+- testsuites/psxtests/psxhdrs/pthread/pthread_rwlock_clockrdlock.c
+- testsuites/psxtests/psxhdrs/pthread/pthread_rwlock_clockwrlock.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_self.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_setcancelstate.c
 - testsuites/psxtests/psxhdrs/pthread/pthread_setcanceltype.c
@@ -490,6 +497,7 @@ source:
 - testsuites/psxtests/psxhdrs/sched/sched_setparam.c
 - testsuites/psxtests/psxhdrs/sched/sched_setscheduler.c
 - testsuites/psxtests/psxhdrs/sched/sched_yield.c
+- testsuites/psxtests/psxhdrs/semaphore/sem_clockwait.c
 - testsuites/psxtests/psxhdrs/semaphore/sem_close.c
 - testsuites/psxtests/psxhdrs/semaphore/sem_destroy.c
 - testsuites/psxtests/psxhdrs/semaphore/sem_getvalue.c
@@ -586,6 +594,7 @@ source:
 - testsuites/psxtests/psxhdrs/stdlib/a64l.c
 - testsuites/psxtests/psxhdrs/stdlib/abort.c
 - testsuites/psxtests/psxhdrs/stdlib/abs.c
+- testsuites/psxtests/psxhdrs/stdlib/at_quick_exit.c
 - testsuites/psxtests/psxhdrs/stdlib/atexit.c
 - testsuites/psxtests/psxhdrs/stdlib/atof.c
 - testsuites/psxtests/psxhdrs/stdlib/atoi.c
@@ -619,6 +628,7 @@ source:
 - testsuites/psxtests/psxhdrs/stdlib/posix_memalign.c
 - testsuites/psxtests/psxhdrs/stdlib/putenv.c
 - testsuites/psxtests/psxhdrs/stdlib/qsort.c
+- testsuites/psxtests/psxhdrs/stdlib/quick_exit.c
 - testsuites/psxtests/psxhdrs/stdlib/rand.c
 - testsuites/psxtests/psxhdrs/stdlib/rand_r.c
 - testsuites/psxtests/psxhdrs/stdlib/random.c
@@ -782,6 +792,7 @@ source:
 - testsuites/psxtests/psxhdrs/time/timer_getoverrun.c
 - testsuites/psxtests/psxhdrs/time/timer_gettime.c
 - testsuites/psxtests/psxhdrs/time/timer_settime.c
+- testsuites/psxtests/psxhdrs/time/timespec_get.c
 - testsuites/psxtests/psxhdrs/unistd/alarm.c
 - testsuites/psxtests/psxhdrs/unistd/fdatasync.c
 - testsuites/psxtests/psxhdrs/unistd/fsync.c
