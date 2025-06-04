@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2012, 2020 embedded brains GmbH & Co. KG
  *
+ * Copyright (C) 2025 Contemporary Software
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -44,6 +46,7 @@ const char rtems_test_name[] = "FSCLOSE 1";
 
 typedef enum {
   ACTION_CLOSE,
+  ACTION_CLOSE_BUSY,
   ACTION_FCNTL,
   ACTION_FDATASYNC,
   ACTION_FCHDIR,
@@ -67,6 +70,7 @@ typedef struct {
   test_action action;
   bool wait_in_close;
   bool wait_in_fstat;
+  bool test_close_busy;
   int close_count;
   int fcntl_count;
   int fdatasync_count;
@@ -83,6 +87,16 @@ typedef struct {
 } test_context;
 
 static test_context test_instance;
+
+static size_t free_iops(void) {
+  size_t count = 0;
+  rtems_libio_t *iop = rtems_libio_iop_free_head;
+  while (iop != NULL) {
+    ++count;
+    iop = iop->data1;
+  }
+  return count;
+}
 
 static void wait(void)
 {
@@ -111,6 +125,10 @@ static int handler_open(
 
   ctx = IMFS_generic_get_context_by_iop(iop);
   ++ctx->open_count;
+
+  if (ctx->action == ACTION_CLOSE_BUSY) {
+    iop->flags |= LIBIO_FLAGS_CLOSE_BUSY;
+  }
 
   return 0;
 }
@@ -344,6 +362,12 @@ static void worker_task(rtems_task_argument arg)
         rv = close(ctx->fd);
         rtems_test_assert(rv == 0);
         break;
+      case ACTION_CLOSE_BUSY:
+        ctx->wait_in_fstat = true;
+        rv = fstat(ctx->fd, &st);
+        rtems_test_assert(rv == -1);
+        rtems_test_assert(errno == EBADF);
+        break;
       case ACTION_FCNTL:
         rv = fcntl(ctx->fd, F_GETFD);
         rtems_test_assert(rv >= 0);
@@ -418,6 +442,7 @@ static void worker_task(rtems_task_argument arg)
 
 static void test_fd_free_fifo(const char *path)
 {
+  const size_t iops_free = free_iops();
   int a;
   int b;
   int rv;
@@ -435,10 +460,13 @@ static void test_fd_free_fifo(const char *path)
   rtems_test_assert(rv == 0);
 
   rtems_test_assert(a != b);
+
+  rtems_test_assert(iops_free == free_iops());
 }
 
 static void test_close(test_context *ctx)
 {
+  const size_t iops_free = free_iops();
   const char *path = "generic";
   int rv;
   rtems_status_code sc;
@@ -483,40 +511,47 @@ static void test_close(test_context *ctx)
 
     wakeup_worker(ctx);
     rv = close(ctx->fd);
-    rtems_test_assert(rv == -1);
 
-    if (ac == ACTION_CLOSE) {
-      rtems_test_assert(errno == EBADF);
-
-      flags = rtems_libio_iop_hold(iop);
-      expected_flags = LIBIO_FLAGS_READ_WRITE;
-      rtems_test_assert(flags == expected_flags);
-      flags = rtems_libio_iop_flags(iop);
-      expected_flags = LIBIO_FLAGS_REFERENCE_INC | LIBIO_FLAGS_READ_WRITE;
-      rtems_test_assert(flags == expected_flags);
-    } else {
-      rtems_test_assert(errno == EBUSY);
+    switch (ac) {
+      case ACTION_CLOSE:
+        rtems_test_assert(rv == -1);
+        rtems_test_assert(errno == EBADF);
+        flags = rtems_libio_iop_flags(iop);
+        expected_flags = LIBIO_FLAGS_READ_WRITE;
+        rtems_test_assert(flags == expected_flags);
+        rtems_test_assert((iops_free - 1) == free_iops());
+        break;
+      case ACTION_CLOSE_BUSY:
+        rtems_test_assert(rv == 0);
+        break;
+      default:
+        rtems_test_assert(rv == -1);
+        rtems_test_assert(errno == EBUSY);
+        break;
     }
 
     wakeup_worker(ctx);
 
-    if (ac == ACTION_CLOSE) {
-      flags = rtems_libio_iop_flags(iop);
-      expected_flags = LIBIO_FLAGS_REFERENCE_INC;
-      rtems_test_assert(flags == expected_flags);
-      rtems_libio_iop_drop(iop);
-      flags = rtems_libio_iop_flags(iop);
-      expected_flags = 0;
-      rtems_test_assert(flags == expected_flags);
+    switch (ac) {
+      case ACTION_CLOSE:
+        rtems_test_assert(rtems_libio_iop_is_free(iop));
+      default:
+        break;
     }
 
     rv = close(ctx->fd);
 
-    if (ac == ACTION_CLOSE) {
-      rtems_test_assert(rv == -1);
-      rtems_test_assert(errno == EBADF);
-    } else {
-      rtems_test_assert(rv == 0);
+    rtems_test_assert(iops_free == free_iops());
+
+    switch (ac) {
+      case ACTION_CLOSE:
+      case ACTION_CLOSE_BUSY:
+        rtems_test_assert(rv == -1);
+        rtems_test_assert(errno == EBADF);
+        break;
+      default:
+        rtems_test_assert(rv == 0);
+        break;
     }
   }
 
@@ -526,20 +561,80 @@ static void test_close(test_context *ctx)
   rv = unlink(path);
   rtems_test_assert(rv == 0);
 
-  rtems_test_assert(ctx->close_count == 17);
+  rtems_test_assert(ctx->close_count == 18);
   rtems_test_assert(ctx->fcntl_count == 1);
   rtems_test_assert(ctx->fdatasync_count == 1);
-  rtems_test_assert(ctx->fstat_count == 42);
+  rtems_test_assert(ctx->fstat_count == 45);
   rtems_test_assert(ctx->fsync_count == 1);
   rtems_test_assert(ctx->ftruncate_count == 1);
   rtems_test_assert(ctx->ioctl_count == 1);
   rtems_test_assert(ctx->lseek_count == 1);
-  rtems_test_assert(ctx->open_count == 17);
+  rtems_test_assert(ctx->open_count == 18);
   rtems_test_assert(ctx->read_count == 1);
   rtems_test_assert(ctx->readv_count == 1);
   rtems_test_assert(ctx->write_count == 1);
   rtems_test_assert(ctx->writev_count == 1);
 }
+
+static void test_iop(test_context *ctx) {
+  const size_t iops_free = free_iops();
+  rtems_libio_t *iop;
+  rtems_libio_t *iop2;
+  unsigned int flags;
+  unsigned int expected;
+  /* test allocatior */
+  iop = rtems_libio_allocate();
+  rtems_test_assert(iop != NULL);
+  rtems_test_assert(iop->flags == 0);
+  iop2 = rtems_libio_allocate();
+  rtems_test_assert(iop2 != NULL);
+  rtems_test_assert(rtems_libio_allocate() == NULL);
+  rtems_libio_free(iop2);
+  rtems_test_assert(iop2->flags == LIBIO_FLAGS_FREE);
+  /* test flags, flag set/clear and bit tests */
+  rtems_test_assert(!rtems_libio_iop_is_open(iop));
+  rtems_libio_iop_flags_set(iop, LIBIO_FLAGS_OPEN);
+  rtems_test_assert(rtems_libio_iop_is_open(iop));
+  rtems_test_assert(!rtems_libio_iop_is_no_delay(iop));
+  rtems_libio_iop_flags_set(iop, LIBIO_FLAGS_NO_DELAY);
+  rtems_test_assert(rtems_libio_iop_is_no_delay(iop));
+  rtems_test_assert(!rtems_libio_iop_is_readable(iop));
+  rtems_libio_iop_flags_set(iop, LIBIO_FLAGS_READ);
+  rtems_test_assert(rtems_libio_iop_is_readable(iop));
+  rtems_test_assert(!rtems_libio_iop_is_writeable(iop));
+  rtems_libio_iop_flags_set(iop, LIBIO_FLAGS_WRITE);
+  rtems_test_assert(rtems_libio_iop_is_writeable(iop));
+  rtems_test_assert(!rtems_libio_iop_is_append(iop));
+  rtems_libio_iop_flags_set(iop, LIBIO_FLAGS_APPEND);
+  rtems_test_assert(rtems_libio_iop_is_append(iop));
+  /* test hold and drop and if drop frees the iop */
+  expected =
+    LIBIO_FLAGS_OPEN | LIBIO_FLAGS_NO_DELAY | LIBIO_FLAGS_READ |
+    LIBIO_FLAGS_WRITE | LIBIO_FLAGS_APPEND;
+  flags = rtems_libio_iop_flags(iop);
+  rtems_test_assert((flags & LIBIO_FLAGS_FLAGS_MASK) == expected);
+  rtems_test_assert((flags & LIBIO_FLAGS_REFERENCE_MASK) == 0);
+  flags = rtems_libio_iop_hold(iop);
+  rtems_test_assert((flags & LIBIO_FLAGS_FLAGS_MASK) == expected);
+  flags = rtems_libio_iop_flags(iop);
+  rtems_test_assert(
+    (flags & LIBIO_FLAGS_REFERENCE_MASK) == LIBIO_FLAGS_REFERENCE_INC);
+  rtems_libio_free(iop);
+  flags = rtems_libio_iop_flags(iop);
+  rtems_test_assert((flags & LIBIO_FLAGS_FLAGS_MASK) == expected);
+  rtems_test_assert(
+    (flags & LIBIO_FLAGS_REFERENCE_MASK) == LIBIO_FLAGS_REFERENCE_INC);
+  rtems_libio_iop_drop(iop);
+  flags = rtems_libio_iop_flags(iop);
+  rtems_test_assert((flags & LIBIO_FLAGS_FLAGS_MASK) == expected);
+  rtems_libio_iop_flags_clear(iop, LIBIO_FLAGS_OPEN);
+  rtems_libio_iop_hold(iop);
+  rtems_libio_iop_drop(iop);
+  flags = rtems_libio_iop_flags(iop);
+  rtems_test_assert(flags == LIBIO_FLAGS_FREE);
+  rtems_test_assert(iops_free == free_iops());
+}
+
 
 static void test_tmpfile(test_context *ctx)
 {
@@ -566,6 +661,7 @@ static void test_tmpfile(test_context *ctx)
 static void Init(rtems_task_argument arg)
 {
   TEST_BEGIN();
+  test_iop(&test_instance);
   test_close(&test_instance);
   test_tmpfile(&test_instance);
   TEST_END();

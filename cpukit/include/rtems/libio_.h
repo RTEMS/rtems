@@ -103,6 +103,63 @@ extern rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry;
  */
 extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
 
+/*
+ *  File Descriptor Routine Prototypes
+ */
+
+/**
+ * This routine searches the IOP Table for an unused entry.  If it
+ * finds one, it returns it.  Otherwise, it returns NULL.
+ */
+rtems_libio_t *rtems_libio_allocate(void);
+
+/**
+ * Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
+ */
+unsigned int rtems_libio_from_fcntl_flags( int fcntl_flags );
+
+/**
+ * Convert RTEMS internal flags to UNIX fnctl(2) flags
+ */
+int rtems_libio_to_fcntl_flags( unsigned int flags );
+
+/**
+ * This routine frees the resources associated with an IOP (file
+ * descriptor) and clears the slot in the IOP Table. No checks are
+ * made on the state of the IOP.
+ */
+void rtems_libio_free_iop(
+  rtems_libio_t *iop
+);
+
+/**
+ * This routine frees the resources associated with an IOP (file
+ * descriptor) and clears the slot in the IOP Table. The IOP has to
+ * close (open flag not set) and no references held or the call will
+ * ignore the request.
+ */
+static inline void rtems_libio_free(
+  rtems_libio_t *iop
+)
+{
+  /*
+   * The IOP cannot be open and there can be no references held for it
+   * to be returned to the free list.
+   *
+   * Note, the open flag indicates the user owns the fd that indexes
+   * the iop so consider it an indirect reference. We cannot return
+   * the iop to the free list while the user owns the fd.
+   *
+   * Read the flags once as it is an atomic and we need to test 2
+   * flags. No convenience call as this is the only case we have.
+   */
+  const unsigned int flags = rtems_libio_iop_flags( iop );
+  if ( ( ( flags & LIBIO_FLAGS_OPEN ) == 0 )
+       && ( ( flags & LIBIO_FLAGS_REFERENCE_MASK ) == 0 ) ) {
+    rtems_libio_free_iop( iop );
+  }
+}
+
 /**
  * @brief Sets the specified flags in the iop.
  *
@@ -184,6 +241,7 @@ static inline void rtems_libio_iop_drop( rtems_libio_t *iop )
     _Assert( flags >= LIBIO_FLAGS_REFERENCE_INC );
 
     desired = flags - LIBIO_FLAGS_REFERENCE_INC;
+
     success = _Atomic_Compare_exchange_uint(
       &iop->flags,
       &flags,
@@ -199,6 +257,8 @@ static inline void rtems_libio_iop_drop( rtems_libio_t *iop )
     ATOMIC_ORDER_RELEASE
   );
 #endif
+  /* free the IOP is not open or held */
+  rtems_libio_free( iop );
 }
 
 /*
@@ -218,56 +278,83 @@ static inline void rtems_libio_iop_drop( rtems_libio_t *iop )
  */
 
 #define rtems_libio_check_is_open(_iop) \
-  do {                                               \
-      if ((rtems_libio_iop_flags(_iop) & LIBIO_FLAGS_OPEN) == 0) { \
-          errno = EBADF;                             \
-          return -1;                                 \
-      }                                              \
+  do {                                     \
+      if (rtems_libio_iop_is_open(_iop)) { \
+          errno = EBADF;                   \
+          return -1;                       \
+      }                                    \
   } while (0)
 
 /**
- * @brief Macro to get the iop for the specified file descriptor.
+ * @brief Function to get the iop for the specified file descriptor.
  *
  * Checks that the file descriptor is in the valid range and open.
  */
+static inline int rtems_libio_get_iop( int fd, rtems_libio_t **iop )
+{
+  unsigned int flags;
+  if ( (uint32_t) ( fd ) >= rtems_libio_number_iops ) {
+    return EBADF;
+  }
+  *iop = rtems_libio_iop( fd );
+  flags = rtems_libio_iop_hold( *iop );
+  if ( rtems_libio_iop_flags_bad_fd( flags ) ) {
+      rtems_libio_iop_drop( *iop );
+      return EBADF;
+  }
+  return 0;
+}
+
+/**
+ * @brief Macro to get the iop for the specified file descriptor.
+ */
 #define LIBIO_GET_IOP( _fd, _iop ) \
   do { \
-    unsigned int _flags; \
-    if ( (uint32_t) ( _fd ) >= rtems_libio_number_iops ) { \
-      rtems_set_errno_and_return_minus_one( EBADF ); \
-    } \
-    _iop = rtems_libio_iop( _fd ); \
-    _flags = rtems_libio_iop_hold( _iop ); \
-    if ( ( _flags & LIBIO_FLAGS_OPEN ) == 0 ) { \
-      rtems_libio_iop_drop( _iop ); \
-      rtems_set_errno_and_return_minus_one( EBADF ); \
+    int _error = rtems_libio_get_iop( _fd, &_iop ); \
+    if ( _error != 0 ) { \
+      rtems_set_errno_and_return_minus_one( _error ); \
     } \
   } while ( 0 )
 
 /**
- * @brief Macro to get the iop for the specified file descriptor with access
- * flags and error.
+ * @brief Function to get the iop for the specified file descriptor
+ * with access flags and error.
  *
  * Checks that the file descriptor is in the valid range and open.
  */
+static inline int rtems_libio_get_iop_with_access(
+  int fd, rtems_libio_t **iop, unsigned int access_flags, int access_error
+)
+{
+  const unsigned int mandatory = LIBIO_FLAGS_OPEN | access_flags ;
+  unsigned int flags;
+  if ( (uint32_t) ( fd ) >= rtems_libio_number_iops ) {
+    return EBADF;
+  }
+  *iop = rtems_libio_iop( fd );
+  flags = rtems_libio_iop_hold( *iop );
+  if ( ( flags & mandatory ) != mandatory ) {
+    rtems_libio_iop_drop( *iop );
+    *iop = NULL;
+    if ( ( flags & LIBIO_FLAGS_OPEN ) == 0 ) {
+      return EBADF;
+    } else {
+      return access_error;
+    }
+  }
+  return 0;
+}
+
+/**
+ * @brief Macro to wrap the function to allow returning the IOP and
+ * using the error set and return macro.
+ */
 #define LIBIO_GET_IOP_WITH_ACCESS( _fd, _iop, _access_flags, _access_error ) \
   do { \
-    unsigned int _flags; \
-    unsigned int _mandatory; \
-    if ( (uint32_t) ( _fd ) >= rtems_libio_number_iops ) { \
-      rtems_set_errno_and_return_minus_one( EBADF ); \
-    } \
-    _iop = rtems_libio_iop( _fd ); \
-    _flags = rtems_libio_iop_hold( _iop ); \
-    _mandatory = LIBIO_FLAGS_OPEN | ( _access_flags ); \
-    if ( ( _flags & _mandatory ) != _mandatory ) { \
-      int _error; \
-      rtems_libio_iop_drop( _iop ); \
-      if ( ( _flags & LIBIO_FLAGS_OPEN ) == 0 ) { \
-        _error = EBADF; \
-      } else { \
-        _error = _access_error; \
-      } \
+    int _error = rtems_libio_get_iop_with_access( \
+      _fd, &_iop, _access_flags, _access_error \
+    ); \
+    if ( _error != 0 ) { \
       rtems_set_errno_and_return_minus_one( _error ); \
     } \
   } while ( 0 )
@@ -433,34 +520,6 @@ int rtems_filesystem_utime_check_permissions(
 int rtems_filesystem_utime_update(
   const struct timespec times[2],
   struct timespec new_times[2]
-);
-
-/*
- *  File Descriptor Routine Prototypes
- */
-
-/**
- * This routine searches the IOP Table for an unused entry.  If it
- * finds one, it returns it.  Otherwise, it returns NULL.
- */
-rtems_libio_t *rtems_libio_allocate(void);
-
-/**
- * Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
- */
-unsigned int rtems_libio_fcntl_flags( int fcntl_flags );
-
-/**
- * Convert RTEMS internal flags to UNIX fnctl(2) flags
- */
-int rtems_libio_to_fcntl_flags( unsigned int flags );
-
-/**
- * This routine frees the resources associated with an IOP (file descriptor)
- * and clears the slot in the IOP Table.
- */
-void rtems_libio_free(
-  rtems_libio_t *iop
 );
 
 /**
