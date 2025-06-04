@@ -137,7 +137,7 @@ static int do_open(
   rtems_filesystem_eval_path_extract_currentloc( &ctx, &iop->pathinfo );
   rtems_filesystem_eval_path_cleanup( &ctx );
 
-  rtems_libio_iop_flags_set( iop, rtems_libio_fcntl_flags( oflag ) );
+  rtems_libio_iop_flags_set( iop, rtems_libio_from_fcntl_flags( oflag ) );
 
   rv = (*iop->pathinfo.handlers->open_h)( iop, path, oflag, mode );
 
@@ -168,10 +168,6 @@ static int do_open(
     }
   }
 
-  if ( rv < 0 ) {
-    rtems_libio_free( iop );
-  }
-
   return rv;
 }
 
@@ -192,6 +188,9 @@ int open( const char *path, int oflag, ... )
   iop = rtems_libio_allocate();
   if ( iop != NULL ) {
     rv = do_open( iop, path, oflag, mode );
+    if ( rv < 0 ) {
+      rtems_libio_free( iop );
+    }
   } else {
     errno = ENFILE;
     rv = -1;

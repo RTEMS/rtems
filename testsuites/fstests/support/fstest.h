@@ -35,7 +35,7 @@
 
 #define FS_PASS() do {puts("PASS");} while (0)
 #define FS_FAIL() do {\
-  printf( "FAIL   %s: %d \n", __FILE__, __LINE__ );\
+  printf( "FAIL errno=%s  %s: %d \n", strerror(errno), __FILE__, __LINE__ );\
   fs_test_notify_failure(); \
  } while (0)
 

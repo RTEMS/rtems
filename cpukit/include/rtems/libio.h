@@ -18,6 +18,8 @@
  * Modifications to support reference counting in the file system are
  * Copyright (C) 2012 embedded brains GmbH & Co. KG
  *
+ * Copyright (C) 2025 Contemporary Software
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -1378,24 +1380,43 @@ typedef struct {
 } rtems_libio_ioctl_args_t;
 
 /**
- * @name Flag Values
+ * @name Flag Values and Masks
  */
 /**@{**/
 
-#define LIBIO_FLAGS_NO_DELAY      0x0001U  /* return immediately if no data */
-#define LIBIO_FLAGS_READ          0x0002U  /* reading */
-#define LIBIO_FLAGS_WRITE         0x0004U  /* writing */
-#define LIBIO_FLAGS_OPEN          0x0100U  /* device is open */
-#define LIBIO_FLAGS_APPEND        0x0200U  /* all writes append */
-#define LIBIO_FLAGS_CLOSE_ON_EXEC 0x0800U  /* close on process exec() */
-#define LIBIO_FLAGS_READ_WRITE    (LIBIO_FLAGS_READ | LIBIO_FLAGS_WRITE)
-#define LIBIO_FLAGS_REFERENCE_INC 0x1000U
+#define LIBIO_FLAGS_FREE           0x0001U  /* on the free list */
+#define LIBIO_FLAGS_NO_DELAY       0x0002U  /* return immediately if no data */
+#define LIBIO_FLAGS_READ           0x0004U  /* reading */
+#define LIBIO_FLAGS_WRITE          0x0008U  /* writing */
+#define LIBIO_FLAGS_OPEN           0x0100U  /* device is open */
+#define LIBIO_FLAGS_APPEND         0x0200U  /* all writes append */
+#define LIBIO_FLAGS_CLOSE_BUSY     0x0400U  /* close with refs held */
+#define LIBIO_FLAGS_CLOSE_ON_EXEC  0x0800U  /* close on process exec() */
+#define LIBIO_FLAGS_REFERENCE_INC  0x1000U
+/* masks */
+#define LIBIO_FLAGS_READ_WRITE     (LIBIO_FLAGS_READ | LIBIO_FLAGS_WRITE)
+#define LIBIO_FLAGS_FLAGS_MASK     (LIBIO_FLAGS_REFERENCE_INC - 1U)
+#define LIBIO_FLAGS_REFERENCE_MASK (~LIBIO_FLAGS_FLAGS_MASK)
 
 /** @} */
 
 static inline unsigned int rtems_libio_iop_flags( const rtems_libio_t *iop )
 {
   return _Atomic_Load_uint( &iop->flags, ATOMIC_ORDER_RELAXED );
+}
+
+/**
+ * @brief Returns true if the iop is a bad file descriptor, otherwise
+ * returns false. A bad file descriptor means free or not open.
+ *
+ * @param[in] flags The flags.
+ */
+static inline unsigned int rtems_libio_iop_flags_bad_fd(
+  const unsigned int flags
+)
+{
+  return ( ( flags & LIBIO_FLAGS_FREE ) != 0 )
+    || ( ( flags & LIBIO_FLAGS_OPEN ) == 0 );
 }
 
 /**
@@ -1429,6 +1450,16 @@ static inline bool rtems_libio_iop_is_writeable( const rtems_libio_t *iop )
 }
 
 /**
+ * @brief Returns true if the iop is open, otherwise returns false.
+ *
+ * @param[in] iop The iop.
+ */
+static inline bool rtems_libio_iop_is_open( const rtems_libio_t *iop )
+{
+  return ( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_OPEN ) != 0;
+}
+
+/**
  * @brief Returns true if this is an append iop, otherwise returns false.
  *
  * @param[in] iop The iop.
@@ -1436,6 +1467,28 @@ static inline bool rtems_libio_iop_is_writeable( const rtems_libio_t *iop )
 static inline bool rtems_libio_iop_is_append( const rtems_libio_t *iop )
 {
   return ( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_APPEND ) != 0;
+}
+
+/**
+ * @brief Returns true if the iop is held, otherwise returns false.
+ *
+ * @param[in] iop The iop.
+ */
+static inline bool rtems_libio_iop_is_held( const rtems_libio_t *iop )
+{
+  const unsigned int ref_count =
+    rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_REFERENCE_MASK;
+  return ref_count != 0;
+}
+
+/**
+ * @brief Returns true if the iop is free, otherwise returns false.
+ *
+ * @param[in] iop The iop.
+ */
+static inline bool rtems_libio_iop_is_free( const rtems_libio_t *iop )
+{
+  return ( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_FREE ) != 0;
 }
 
 /**
