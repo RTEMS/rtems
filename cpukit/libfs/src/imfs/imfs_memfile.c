@@ -38,6 +38,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/libcsupport.h>
 #include <rtems/imfsimpl.h>
 
 #include <stdlib.h>
@@ -831,7 +832,7 @@ void *memfile_alloc_block(void)
 {
   void *memory;
 
-  memory = (void *)calloc(1, IMFS_MEMFILE_BYTES_PER_BLOCK);
+  memory = imfs_memfile_ops.allocate_block();
   if ( memory )
     memfile_blocks_allocated++;
 
@@ -847,8 +848,23 @@ void memfile_free_block(
   void *memory
 )
 {
-  free(memory);
+  imfs_memfile_ops.free_block(memory);
   memfile_blocks_allocated--;
+}
+
+void *IMFS_default_allocate_block(void)
+{
+  return (void *)calloc(1, IMFS_MEMFILE_BYTES_PER_BLOCK);
+}
+
+void IMFS_default_deallocate_block(void *memory)
+{
+  free(memory);
+}
+
+size_t IMFS_default_free_space(void)
+{
+  return malloc_free_space();
 }
 
 static const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {

@@ -200,6 +200,15 @@ extern "C" {
 
 const int imfs_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
 
+/*
+ * Using the default ops if user doesn't configure ops
+ */
+#ifndef CONFIGURE_IMFS_MEMFILE_OPS
+  #define CONFIGURE_IMFS_MEMFILE_OPS IMFS_MEMFILE_DEFAULT_OPS
+#endif
+
+IMFS_memfile_ops_t imfs_memfile_ops = CONFIGURE_IMFS_MEMFILE_OPS;
+
 static IMFS_fs_info_t IMFS_root_fs_info;
 
 static const rtems_filesystem_operations_table IMFS_root_ops = {

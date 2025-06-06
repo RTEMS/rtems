@@ -61,6 +61,9 @@ extern "C" {
 struct IMFS_jnode_tt;
 typedef struct IMFS_jnode_tt IMFS_jnode_t;
 
+typedef struct IMFS_memfile_ops_t IMFS_memfile_ops_t;
+extern IMFS_memfile_ops_t imfs_memfile_ops;
+
 /**
  *  IMFS "memfile" information
  *
@@ -282,6 +285,65 @@ struct IMFS_jnode_tt {
   time_t              stat_ctime;            /* Time of last status change */
   const IMFS_node_control *control;
 };
+
+/**
+ * @brief The type of allocator function pointer.
+ */
+typedef void *(*IMFS_memfile_allocator)(void);
+
+/**
+ * @brief The type of deallocator function pointer.
+ */
+typedef void (*IMFS_memfile_deallocator)(
+  void *memory
+);
+
+/**
+ * @brief The get_free_space function pointer.
+ */
+typedef size_t (*IMFS_memfile_free_space)(void);
+
+/**
+ * @brief The ops table for user defined allocator-deallocator for
+ * IMFS memfile data blocks.
+ *
+ * @param allocate The function which will be used to allocate IMFS blocks.
+ * @param deallocate The function to deallocate the allocated data blocks.
+ * @param get_free_space The function used by kernel to get the free space.
+ */
+struct IMFS_memfile_ops_t {
+  IMFS_memfile_allocator allocate_block;
+  IMFS_memfile_deallocator free_block;
+  IMFS_memfile_free_space get_free_space;
+};
+
+/**
+ * @brief The default imfs block allocator
+ *
+ * @details The allocator uses the memory from the heap.
+ */
+void *IMFS_default_allocate_block(void);
+
+/**
+ * @brief The default imfs block deallocator
+ *
+ * @details The deallocator frees the memory which was taken from heap.
+ */
+void IMFS_default_deallocate_block(void *);
+
+/**
+ * @brief The default free space calculator
+ *
+ * @details The free_space function calculates the free space in heap.
+ */
+size_t IMFS_default_free_space(void);
+
+#define IMFS_MEMFILE_DEFAULT_OPS \
+{ \
+  .allocate_block = IMFS_default_allocate_block, \
+  .free_block = IMFS_default_deallocate_block, \
+  .get_free_space = IMFS_default_free_space \
+}
 
 typedef struct {
   IMFS_jnode_t                          Node;

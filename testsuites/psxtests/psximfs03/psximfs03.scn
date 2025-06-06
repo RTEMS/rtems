@@ -1,4 +1,5 @@
-*** TEST IMFS 01 ***
+*** BEGIN OF TEST PSXIMFS 3 ***
+
 open(biggie) - OK 
 statvfs(biggie) - OK 
 write(biggie) - OK 
@@ -19,4 +20,5 @@ Seek to end .. returned 1295
 lseek/ftruncate loop..
 close(biggie) - OK 
 unlink(biggie) - OK
-*** END OF TEST IMFS 01 ***
+
+*** END OF TEST PSXIMFS 3 ***

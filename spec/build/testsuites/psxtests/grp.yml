@@ -142,6 +142,8 @@ links:
 - role: build-dependency
   uid: psximfs02
 - role: build-dependency
+  uid: psximfs03
+- role: build-dependency
   uid: psxintrcritical01
 - role: build-dependency
   uid: psxinttypes01

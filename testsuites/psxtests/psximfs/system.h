@@ -1,13 +1,5 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @ingroup IMFS
- *
- * @brief FIFO Support
- */
-
 /*
  * Copyright (c) 2025 On-Line Application Research Corporation (OAR)
  * Copyright (c) 2025 Bhavya Shah <bhavyashah8443@gmail.com>
@@ -33,25 +25,39 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+#ifndef PSXIMFS_SYSTEM_H
+#define PSXIMFS_SYSTEM_H
 
-#include <rtems/imfsimpl.h>
-#include <limits.h>
+#include <tmacros.h>
+#include "test_support.h"
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/statvfs.h>
+#include <fcntl.h>
+#include <errno.h>
 #include <rtems/libcsupport.h>
 
-int IMFS_statvfs(
-  const rtems_filesystem_location_info_t *loc,
-  struct statvfs *buf
-)
-{
-  IMFS_fs_info_t *fs_info = loc->mt_entry->fs_info;
-  buf->f_bsize = IMFS_MEMFILE_BYTES_PER_BLOCK;
-  buf->f_frsize = IMFS_MEMFILE_BYTES_PER_BLOCK;
-  buf->f_blocks = UINT_MAX / IMFS_MEMFILE_BYTES_PER_BLOCK;
-  buf->f_bfree = imfs_memfile_ops.get_free_space() / IMFS_MEMFILE_BYTES_PER_BLOCK;
-  buf->f_bavail = imfs_memfile_ops.get_free_space() / IMFS_MEMFILE_BYTES_PER_BLOCK;
-  buf->f_files = fs_info->jnode_count;
-  buf->f_fsid = 1;
-  buf->f_flag = loc->mt_entry->writeable;
-  buf->f_namemax = IMFS_NAME_MAX;
-  return 0;
-}
+
+/* macros */
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+/* functions */
+
+void *empty_space(void);
+void fill_space(void *);
+
+rtems_task Init(
+  rtems_task_argument argument
+);
+
+#include <rtems/confdefs.h>
+#endif

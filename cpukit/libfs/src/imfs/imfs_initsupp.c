@@ -40,6 +40,7 @@
 
 #include <rtems/imfs.h>
 
+#include <stdlib.h>
 #include <errno.h>
 
 int IMFS_initialize_support(
@@ -51,6 +52,10 @@ int IMFS_initialize_support(
   IMFS_fs_info_t          *fs_info;
   const IMFS_node_control *node_control;
   IMFS_jnode_t            *root_node;
+
+  _Assert(imfs_memfile_ops.allocate_block != NULL);
+  _Assert(imfs_memfile_ops.free_block != NULL);
+  _Assert(imfs_memfile_ops.get_free_space != NULL);
 
   mount_data = data;
 
