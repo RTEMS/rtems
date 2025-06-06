@@ -30,7 +30,9 @@
 #ifndef BSP_POWERPC_IRQ_H
 #define BSP_POWERPC_IRQ_H
 
+#ifndef BSP_SHARED_HANDLER_SUPPORT
 #define BSP_SHARED_HANDLER_SUPPORT      1
+#endif
 #include <rtems/irq.h>
 
 #ifndef ASM

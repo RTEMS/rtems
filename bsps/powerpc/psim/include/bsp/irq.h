@@ -19,7 +19,9 @@
 #ifndef LIBBSP_POWERPC_IRQ_H
 #define LIBBSP_POWERPC_IRQ_H
 
+#ifndef BSP_SHARED_HANDLER_SUPPORT
 #define BSP_SHARED_HANDLER_SUPPORT      1
+#endif
 
 #ifndef ASM
 

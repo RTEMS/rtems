@@ -22,7 +22,9 @@
 #ifndef LIBBSP_POWERPC_MOT_PPC_NEW_IRQ_IRQ_H
 #define LIBBSP_POWERPC_MOT_PPC_NEW_IRQ_IRQ_H
 
+#ifndef BSP_SHARED_HANDLER_SUPPORT
 #define BSP_SHARED_HANDLER_SUPPORT      1
+#endif
 #include <rtems/irq.h>
 #include <bsp/vectors.h>
 #include <bsp/irq-default.h>
