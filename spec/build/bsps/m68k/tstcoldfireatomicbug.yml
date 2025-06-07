@@ -9,7 +9,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2025 OAR Corporation
 default: []
-description: 'spcxx01 disable to avoid atomics issue. See 5217"
+description: 'spcxx01 disable to avoid atomics issue. See 5217'
 enabled-by: true
 links: []
 type: build
