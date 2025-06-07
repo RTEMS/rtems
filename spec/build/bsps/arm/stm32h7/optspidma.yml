@@ -4,7 +4,7 @@ actions:
 - define-condition: null
 build-type: option
 copyrights:
-- Copyright (C) 2024 On-Line Applications Research (OAR) 
+- Copyright (C) 2024 On-Line Applications Research (OAR)
 default:
 - enabled-by: true
   value: true

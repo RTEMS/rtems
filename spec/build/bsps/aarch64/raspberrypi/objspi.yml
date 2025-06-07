@@ -2,16 +2,16 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: objects
 cflags: []
 copyrights:
-  - Copyright (C) 2024 Ning Yang
+- Copyright (C) 2024 Ning Yang
 cppflags: []
 cxxflags: []
 enabled-by: true
 includes: []
 install:
-  - destination: ${BSP_INCLUDEDIR}/bsp
-    source:
-      - bsps/aarch64/raspberrypi/include/bsp/raspberrypi-spi.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/aarch64/raspberrypi/include/bsp/raspberrypi-spi.h
 links: []
 source:
-  - bsps/aarch64/raspberrypi/spi/raspberrypi-spi.c
+- bsps/aarch64/raspberrypi/spi/raspberrypi-spi.c
 type: build

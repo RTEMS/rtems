@@ -24,8 +24,8 @@ actions:
     - psxfenv01
 - set-test-state:
     reason: |
-        Fails because of #2169, rename to existing entries is
-        not supported
+      Fails because of #2169, rename to existing entries is
+      not supported
     state: expected-fail
     tests:
     - imfsfsrenameexisting
@@ -41,7 +41,7 @@ actions:
     - mrfsfsrenamepermexisting
 - set-test-state:
     reason: |
-        Fails because of #2169 and other rename issue
+      Fails because of #2169 and other rename issue
     state: expected-fail
     tests:
     - imfsfssymlink
@@ -51,13 +51,13 @@ actions:
     - mrfsfssymlink
 - set-test-state:
     reason: |
-        Fails because of #5069, NAME_MAX is ignored by RFS
+      Fails because of #5069, NAME_MAX is ignored by RFS
     state: expected-fail
     tests:
     - mrfsfsrenamelongname
 - set-test-state:
     reason: |
-        Fails because of #5070, this test seems invalid
+      Fails because of #5070, this test seems invalid
     state: expected-fail
     tests:
     - jffs2fsrenamemaxlinks

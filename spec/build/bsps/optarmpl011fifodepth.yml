@@ -8,12 +8,12 @@ build-type: option
 copyrights:
 - Copyright (C) 2024 Ning Yang
 default:
-- enabled-by: 
+- enabled-by:
   - aarch64/versal_aiedge
   - aarch64/versal_qemu
   - aarch64/versal_vck190
   value: 64
-- enabled-by: 
+- enabled-by:
   - aarch64/raspberrypi4b
   value: 32
 description: |

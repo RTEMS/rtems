@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-  - Copyright (C) 2024 Ning Yang
+- Copyright (C) 2024 Ning Yang
 
 type: build
 enabled-by:
@@ -14,10 +14,10 @@ includes: []
 install: []
 
 source:
-  - bsps/shared/dev/clock/bcm2835-system-timer.c
-  - bsps/shared/dev/cpucounter/cpucounterfrequency.c
-  - bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/clock/bcm2835-system-timer.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
 
 links:
-  - role: build-dependency
-    uid: optsystemtimer
+- role: build-dependency
+  uid: optsystemtimer
