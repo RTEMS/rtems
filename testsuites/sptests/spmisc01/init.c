@@ -104,7 +104,7 @@ typedef struct {
   uint8_t aligned_member RTEMS_ALIGNED(64);
 } aligned_member_struct;
 
-static void unreachable(void)
+static void test_unreachable(void)
 {
   if (0) {
     RTEMS_UNREACHABLE();
@@ -245,7 +245,7 @@ static void Init(rtems_task_argument arg)
   rtems_test_assert(weak_2() == 111);
   rtems_test_assert(((uintptr_t) &aligned_variable) % 64 == 0);
   rtems_test_assert(offsetof(aligned_member_struct, aligned_member) % 64 == 0);
-  unreachable();
+  test_unreachable();
   rtems_test_assert(printflike_func("%i", 0) == 56);
   rtems_test_assert(obfuscate_variable(63) == 63);
   rtems_test_assert(
