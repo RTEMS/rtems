@@ -329,8 +329,7 @@ char   *program_vers;
 
 /* floating point exception receiver */
 void
-_sigfpe (x)
-int x;
+_sigfpe (int x)
 {
     fpecount++;
     printf ("\n* * * FLOATING-POINT ERROR %d * * *\n", x);
@@ -351,9 +350,10 @@ int paranoia(int, char**);
 #endif
 
 int
-main (argc, argv)
-int argc;
-char **argv;
+main (
+  int argc,
+  char **argv
+)
 {
     /* First two assignments use integer right-hand sides. */
     Zero = 0;
@@ -1959,8 +1959,7 @@ the system traps on overflow.\n");
 }
 
 FLOAT
-Sign (X)
-     FLOAT   X;
+Sign (FLOAT   X)
 {
     return X >= 0. ? 1.0 : -1.0;
 }
@@ -1984,9 +1983,7 @@ Pause ()
 }
 
 void
-TstCond (K, Valid, T)
-     int     K, Valid;
-     char   *T;
+TstCond (int     K, int Valid, char   *T)
 {
 #ifdef CYGNUS
     printf ("TEST: %s\n", T);
@@ -2001,9 +1998,7 @@ TstCond (K, Valid, T)
 }
 
 void
-BadCond (K, T)
-     int     K;
-     char   *T;
+BadCond (int     K, char   *T)
 {
     static char *msg[] =
     {"FAILURE", "SERIOUS DEFECT", "DEFECT", "FLAW"};
@@ -2037,8 +2032,7 @@ Random ()
 }
 
 void
-SqXMinX (ErrKind)
-     int     ErrKind;
+SqXMinX (int     ErrKind)
 {
     FLOAT   XA, XB;
 
@@ -2190,16 +2184,14 @@ TstPtUf ()
 }
 
 void
-notify (s)
-     char   *s;
+notify (char   *s)
 {
     printf ("%s test appears to be inconsistent...\n", s);
     printf ("   PLEASE NOTIFY KARPINKSI!\n");
 }
 
 void
-msglist (s)
-     char  **s;
+msglist (char  **s)
 {
     while (*s)
         printf ("%s\n", *s++);
