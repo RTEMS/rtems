@@ -48,7 +48,7 @@ void *__tls_get_addr(const TLS_Index *ti)
   void *tls_data = (char *) executing->Registers.thread_id
     + _TLS_Get_thread_control_block_area_size( &_TLS_Configuration );
 
-  assert(ti->module == 1);
+  _Assert(ti->module == 1);
 
   return (char *) tls_data + ti->offset;
 }
