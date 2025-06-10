@@ -5,15 +5,12 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Node Removal Handler
+ * @brief FIFO Support
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  Modifications to support reference counting in the file system are
- *  Copyright (c) 2012 embedded brains GmbH & Co. KG
+ * Copyright (c) 2025 On-Line Application Research Corporation (OAR)
+ * Copyright (c) 2025 Bhavya Shah <bhavyashah8443@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,32 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include <rtems/imfsimpl.h>
+#include <limits.h>
+#include <rtems/libcsupport.h>
 
-#include <rtems/imfs.h>
-
-int IMFS_rmnod(
-  const rtems_filesystem_location_info_t *parentloc,
-  const rtems_filesystem_location_info_t *loc
+int IMFS_statvfs(
+  const rtems_filesystem_location_info_t *loc,
+  struct statvfs *buf
 )
 {
-  int rv = 0;
-  IMFS_jnode_t *node = loc->node_access;
   IMFS_fs_info_t *fs_info = loc->mt_entry->fs_info;
-
-  node = (*node->control->node_remove)( node );
-  if ( node != NULL ) {
-    --node->reference_count;
-    --node->st_nlink;
-    if ( node->Parent != NULL ) {
-      IMFS_remove_from_directory( node );
-    }
-  } else {
-    rv = -1;
-  }
-  fs_info->jnode_count--;
-
-  return rv;
+  buf->f_bsize = IMFS_MEMFILE_BYTES_PER_BLOCK;
+  buf->f_frsize = IMFS_MEMFILE_BYTES_PER_BLOCK;
+  buf->f_blocks = UINT_MAX / IMFS_MEMFILE_BYTES_PER_BLOCK;
+  buf->f_bfree = malloc_free_space() / IMFS_MEMFILE_BYTES_PER_BLOCK;
+  buf->f_bavail = malloc_free_space() / IMFS_MEMFILE_BYTES_PER_BLOCK;
+  buf->f_files = fs_info->jnode_count;
+  buf->f_fsid = 1;
+  buf->f_flag = loc->mt_entry->writeable;
+  buf->f_namemax = IMFS_NAME_MAX;
+  return 0;
 }

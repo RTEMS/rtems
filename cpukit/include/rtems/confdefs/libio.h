@@ -260,7 +260,7 @@ static const rtems_filesystem_operations_table IMFS_root_ops = {
   #else
     IMFS_rename,
   #endif
-  rtems_filesystem_default_statvfs
+  IMFS_statvfs
 };
 
 static const IMFS_mknod_controls IMFS_root_mknod_controls = {

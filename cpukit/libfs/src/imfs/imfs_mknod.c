@@ -69,7 +69,7 @@ int IMFS_mknod(
 )
 {
   int rv = 0;
-  const IMFS_fs_info_t *fs_info = parentloc->mt_entry->fs_info;
+  IMFS_fs_info_t *fs_info = parentloc->mt_entry->fs_info;
   const IMFS_mknod_control *mknod_control =
     get_control( fs_info->mknod_controls, mode );
   IMFS_jnode_t *new_node;
@@ -90,6 +90,7 @@ int IMFS_mknod(
   } else {
     rv = -1;
   }
+  fs_info->jnode_count++;
 
   return rv;
 }

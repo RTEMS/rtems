@@ -62,7 +62,7 @@ static const rtems_filesystem_operations_table IMFS_ops = {
   .symlink_h = IMFS_symlink,
   .readlink_h = IMFS_readlink,
   .rename_h = IMFS_rename,
-  .statvfs_h = rtems_filesystem_default_statvfs
+  .statvfs_h = IMFS_statvfs
 };
 
 static const IMFS_mknod_controls IMFS_default_mknod_controls = {

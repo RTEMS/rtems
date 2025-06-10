@@ -38,11 +38,14 @@ directives:
   + lseek
   + ftruncate
   + unlink
+  + statvfs
 
 concepts:
 
 + Create an IMFS instance with the smallest possible block size.  This
 ensures the maximum file size is relatively small.
+
++ Ensures the IMFS block size is correctly configured.
 
 + Create, write, and read a file of maximum size.
 

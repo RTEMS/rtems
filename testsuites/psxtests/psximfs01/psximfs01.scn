@@ -1,5 +1,6 @@
 *** TEST IMFS 01 ***
 open(biggie) - OK 
+statvfs(biggie) - OK 
 write(biggie) - OK 
 Total written = 1280
 close(biggie) - OK 

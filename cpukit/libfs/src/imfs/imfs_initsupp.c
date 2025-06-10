@@ -56,6 +56,7 @@ int IMFS_initialize_support(
 
   fs_info = mount_data->fs_info;
   fs_info->mknod_controls = mount_data->mknod_controls;
+  fs_info->jnode_count = 0;
   node_control = &mount_data->mknod_controls->directory->node_control;
   root_node = &fs_info->Root_directory.Node;
 

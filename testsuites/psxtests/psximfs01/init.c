@@ -36,10 +36,12 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/statvfs.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <rtems/libcsupport.h>
 
+#define BLOCK_SIZE 16
 const char rtems_test_name[] = "PSXIMFS 1";
 
 /* forward declarations to avoid warnings */
@@ -51,6 +53,7 @@ void truncate_helper(void);
 void extend_helper(int eno);
 void close_it(void);
 void unlink_it(void);
+void statvfs_helper(void);
 
 int TestFd;
 uint8_t Buffer[256];
@@ -228,6 +231,16 @@ void unlink_it(void)
   rtems_test_assert( rc == 0 );
 }
 
+void statvfs_helper(void)
+{
+  struct statvfs imfs_statvfs;
+  puts( "statvfs(" FILE_NAME ") - OK " );
+  int rc = statvfs(FILE_NAME, &imfs_statvfs);
+  rtems_test_assert(rc == 0);
+  rtems_test_assert(imfs_statvfs.f_bsize == BLOCK_SIZE);
+  rtems_test_assert(imfs_statvfs.f_files == 2);
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -245,6 +258,9 @@ rtems_task Init(
     Buffer[i] = (uint8_t) i;
 
   open_it(false, true);
+
+  statvfs_helper();
+
   write_helper();
   close_it();
 
@@ -292,7 +308,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
-#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK 16
+#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK BLOCK_SIZE
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

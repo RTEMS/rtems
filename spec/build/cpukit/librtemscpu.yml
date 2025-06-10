@@ -891,6 +891,7 @@ source:
 - cpukit/libfs/src/imfs/imfs_rename.c
 - cpukit/libfs/src/imfs/imfs_rmnod.c
 - cpukit/libfs/src/imfs/imfs_stat.c
+- cpukit/libfs/src/imfs/imfs_statvfs.c
 - cpukit/libfs/src/imfs/imfs_stat_file.c
 - cpukit/libfs/src/imfs/imfs_symlink.c
 - cpukit/libfs/src/imfs/imfs_unmount.c
