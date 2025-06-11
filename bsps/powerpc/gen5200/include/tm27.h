@@ -26,13 +26,28 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-static void nullFunc(void) {}
+static void stub_rtems_irq_enable(const struct __rtems_irq_connect_data__*i)
+{
+  (void) i;
+}
+
+static void stub_rtems_irq_disable(const struct __rtems_irq_connect_data__*i)
+{
+  (void) i;
+}
+
+static int  stub_rtems_irq_is_enabled(const struct __rtems_irq_connect_data__*i)
+{
+  (void) i;
+  return 0;
+}
 
 static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
                                               0,
-                                              (rtems_irq_enable) nullFunc,
-                                              (rtems_irq_disable) nullFunc,
-                                              (rtems_irq_is_enabled) nullFunc};
+                                              0,
+                                              stub_rtems_irq_enable,
+                                              stub_rtems_irq_disable,
+                                              stub_rtems_irq_is_enabled};
 
 static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
