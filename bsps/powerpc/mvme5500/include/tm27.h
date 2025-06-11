@@ -25,58 +25,69 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-static void stub_rtems_irq_enable(const struct __rtems_irq_connect_data__*i)
+static void stub_rtems_irq_enable( const struct __rtems_irq_connect_data__ *i )
 {
   (void) i;
 }
 
-static void stub_rtems_irq_disable(const struct __rtems_irq_connect_data__*i)
+static void stub_rtems_irq_disable( const struct __rtems_irq_connect_data__ *i )
 {
   (void) i;
 }
 
-static int  stub_rtems_irq_is_enabled(const struct __rtems_irq_connect_data__*i)
+static int stub_rtems_irq_is_enabled(
+  const struct __rtems_irq_connect_data__ *i
+)
 {
   (void) i;
   return 0;
 }
 
-static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
-                                              0,
-                                              0,
-                                              stub_rtems_irq_enable,
-                                              stub_rtems_irq_disable,
-                                              stub_rtems_irq_is_enabled};
+static rtems_irq_connect_data clockIrqData = {
+  BSP_DECREMENTER,
+  0,
+  0,
+  stub_rtems_irq_enable,
+  stub_rtems_irq_disable,
+  stub_rtems_irq_is_enabled
+};
 
 static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
   clockIrqData.hdl = handler;
-  if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
-        printk("Error installing clock interrupt handler!\n");
-        rtems_fatal_error_occurred(1);
+  if ( !BSP_install_rtems_irq_handler( &clockIrqData ) ) {
+    printk( "Error installing clock interrupt handler!\n" );
+    rtems_fatal_error_occurred( 1 );
   }
 }
 
-#define Cause_tm27_intr()  \
-  do { \
-    uint32_t _clicks = 1; \
-    __asm__ volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
-  } while (0)
+#define Cause_tm27_intr()                   \
+  do {                                      \
+    uint32_t _clicks = 1;                   \
+    __asm__ volatile( "mtdec %0"            \
+                      : "=r"(( _clicks ))   \
+                      : "r"(( _clicks )) ); \
+  } while ( 0 )
 
+#define Clear_tm27_intr()                   \
+  do {                                      \
+    uint32_t _clicks = 0xffffffff;          \
+    __asm__ volatile( "mtdec %0"            \
+                      : "=r"(( _clicks ))   \
+                      : "r"(( _clicks )) ); \
+  } while ( 0 )
 
-#define Clear_tm27_intr() \
-  do { \
-    uint32_t _clicks = 0xffffffff; \
-    __asm__ volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
-  } while (0)
-
-#define Lower_tm27_intr() \
-  do { \
-    uint32_t _msr = 0; \
-    _ISR_Set_level( 0 ); \
-    __asm__ volatile( "mfmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
-    _msr |=  0x8002; \
-    __asm__ volatile( "mtmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
-  } while (0)
+#define Lower_tm27_intr()              \
+  do {                                 \
+    uint32_t _msr = 0;                 \
+    _ISR_Set_level( 0 );               \
+    __asm__ volatile( "mfmsr %0 ;"     \
+                      : "=r"( _msr )   \
+                      : "r"( _msr ) ); \
+    _msr |= 0x8002;                    \
+    __asm__ volatile( "mtmsr %0 ;"     \
+                      : "=r"( _msr )   \
+                      : "r"( _msr ) ); \
+  } while ( 0 )
 
 #endif
