@@ -15,5 +15,6 @@ links:
   uid: ../../opto2
 - role: build-dependency
   uid: grp
-source: []
+source:
+- bsps/shared/atomics/__atomic_test_and_set.c
 type: build

@@ -26,4 +26,5 @@ source:
 - bsps/riscv/niosv/niosvc10lp/bspstart.c
 - bsps/riscv/niosv/niosvc10lp/status_led_device_driver.c
 - bsps/riscv/niosv/niosvc10lp/system_device_driver.c
+- bsps/shared/atomics/__atomic_test_and_set.c
 type: build
