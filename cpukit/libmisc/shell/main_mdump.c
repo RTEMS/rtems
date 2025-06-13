@@ -131,6 +131,10 @@ int args_parse(int    argc,
         }
       }
     }
+  } else {
+    // Handle missing address argument
+    printf("Usage: %s [address [length [size]]]\n", argv[0]);
+    return -1;
   }
   return 0;
 }
