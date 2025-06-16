@@ -216,11 +216,12 @@ extern unsigned int leon3_timer_prescaler;
  * @brief This constant defines the index of the GPTIMER timer used by the
  *   clock driver.
  */
-#if defined(RTEMS_MULTIPROCESSING)
-#define LEON3_CLOCK_INDEX \
-  ( leon3_timer_core_index != 0 ? 0 : 2 * LEON3_Cpu_Index )
-#else
+#if !defined(RTEMS_MULTIPROCESSING)
 #define LEON3_CLOCK_INDEX 0
+#elif defined(LEON3_GPTIMER_BASE)
+#define LEON3_CLOCK_INDEX ( 2 * LEON3_Cpu_Index )
+#else
+#define LEON3_CLOCK_INDEX ( leon3_timer_core_index != 0 ? 0 : 2 * LEON3_Cpu_Index )
 #endif
 
 /**

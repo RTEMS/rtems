@@ -21,14 +21,6 @@
 #include <leon.h>
 #include <rtems/btimer.h>
 
-#if defined(RTEMS_MULTIPROCESSING)
-  #define LEON3_TIMER_INDEX \
-      ((rtems_configuration_get_user_multiprocessing_table()) ? \
-        (rtems_configuration_get_user_multiprocessing_table()->node) - 1 : 1)
-#else
-  #define LEON3_TIMER_INDEX 0
-#endif
-
 bool benchmark_timer_find_average_overhead;
 
 bool benchmark_timer_is_initialized = false;
@@ -39,7 +31,7 @@ void benchmark_timer_initialize(void)
    *  Timer runs long and accurate enough not to require an interrupt.
    */
   if (LEON3_Timer_Regs) {
-    gptimer_timer *timer = &LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX];
+    gptimer_timer *timer = &LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX];
     if ( benchmark_timer_is_initialized == false ) {
       /* approximately 1 us per countdown */
       grlib_store_32( &timer->trldval, 0xffffff );
@@ -61,7 +53,7 @@ benchmark_timer_t benchmark_timer_read(void)
 
   if (LEON3_Timer_Regs) {
     total =
-      grlib_load_32( &LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].tcntval );
+      grlib_load_32( &LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].tcntval );
 
     total = 0xffffff - total;
 
