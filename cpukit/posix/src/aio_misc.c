@@ -344,6 +344,10 @@ rtems_aio_request_chain *rtems_aio_search_fd(
       r_chain = NULL;
     } else {
       r_chain = calloc( 1, sizeof( rtems_aio_request_chain ) );
+      if ( r_chain == NULL ) {
+        errno = EAGAIN;
+        return NULL;
+      }
       rtems_chain_initialize_empty( &r_chain->perfd );
       rtems_chain_initialize_node( &r_chain->next_fd );
 
