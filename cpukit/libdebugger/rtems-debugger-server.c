@@ -33,6 +33,7 @@
 
 #include <rtems/bspIo.h>
 #include <rtems/score/smp.h>
+#include <rtems/score/tls.h>
 
 #include <rtems/rtems-debugger.h>
 #include <rtems/debugger/rtems-debugger-server.h>
@@ -696,6 +697,25 @@ remote_packet_out_append_hex(const uint8_t* data, size_t size)
   return 0;
 }
 
+/* output data in big-endian instead of little-endian */
+static int
+remote_packet_out_append_hex_be(const uint8_t* data, size_t size)
+{
+  size_t ol = rtems_debugger->output_level;
+  size_t i = size;
+  while (i > 0) {
+    uint8_t byte = data[--i];
+    if (rtems_debugger->output_level >= (RTEMS_DEBUGGER_BUFFER_SIZE - 2)) {
+      rtems_debugger->output_level = ol;
+      rtems_debugger_printf("rtems-db: output overflow\n");
+      return -1;
+    }
+    rtems_debugger->output[rtems_debugger->output_level++] = hex_encode(byte >> 4);
+    rtems_debugger->output[rtems_debugger->output_level++] = hex_encode(byte);
+  }
+  return 0;
+}
+
 static int
 remote_packet_out_append_str(const char* str)
 {
@@ -1019,6 +1039,115 @@ remote_gq_attached(uint8_t* buffer, int size)
   return 0;
 }
 
+static rtems_debugger_thread* get_debugger_thread_from_id(const char* thread_id)
+{
+  int r;
+  DB_UINT pid = 0;
+  DB_UINT tid = 0;
+  bool    extended;
+  rtems_debugger_threads* threads = rtems_debugger->threads;
+  rtems_debugger_thread* current;
+
+  extended = thread_id_decode(thread_id, &pid, &tid);
+  if (!extended && !check_pid(pid)) {
+    return NULL;
+  }
+
+  r = rtems_debugger_thread_find_index(tid);
+  if (r < 0) {
+    return NULL;
+  }
+
+  current = rtems_debugger_thread_current(threads);
+  return &current[r];
+}
+
+static int
+parse_get_tls_addr(
+  uint8_t* buffer,
+  int size,
+  const char** thread_id_str,
+  const char** offset_str,
+  const char** lm_str
+)
+{
+  if (thread_id_str == NULL || offset_str == NULL || lm_str == NULL) {
+    return 1;
+  }
+
+  *thread_id_str = strchr((const char*) buffer, ':') + 1;
+  if (*thread_id_str == NULL || *thread_id_str - (char*)buffer > size) {
+    /* malformed packet */
+    return 1;
+  }
+
+  *offset_str = strchr(*thread_id_str, ',') + 1;
+  if (*offset_str == NULL || *offset_str - (char*)buffer > size) {
+    /* malformed packet */
+    return 1;
+  }
+
+  *lm_str = strchr(*offset_str, ',') + 1;
+  if (*lm_str == NULL || *lm_str - (char*)buffer > size) {
+    /* malformed packet */
+    return 1;
+  }
+
+  return 0;
+}
+
+static int
+remote_gq_get_tls_addr(uint8_t* buffer, int size)
+{
+  const char* thread_id_str;
+  const char* offset_str;
+  const char* lm_str;
+  uint64_t target_address;
+  int r;
+  rtems_debugger_thread* thread;
+  DB_UINT offset;
+  DB_UINT lm;
+
+  if (parse_get_tls_addr(buffer, size, &thread_id_str, &offset_str, &lm_str)) {
+    /* malformed packet */
+    remote_packet_out_str(r_E01);
+    remote_packet_out_send();
+    return 0;
+  }
+
+  offset = hex_decode_uint((const uint8_t*) offset_str);
+  lm = hex_decode_uint((const uint8_t*) lm_str);
+  if (lm != 0) {
+    /*
+     * TODO(kmoore) lm is the load module identifier. It is ignored and expected
+     * to be 0 until TLS support for dynamically loaded modules is added.
+     */
+    remote_packet_out_str(r_E01);
+    remote_packet_out_send();
+    return 0;
+  }
+
+  thread = get_debugger_thread_from_id(thread_id_str);
+  if (thread == NULL) {
+    remote_packet_out_str(r_E01);
+    remote_packet_out_send();
+    return 0;
+  }
+
+  target_address = thread->tcb->Registers.thread_id;
+  target_address += sizeof(TLS_Thread_control_block) + offset;
+
+  remote_packet_out_reset();
+  r = remote_packet_out_append_hex_be((const uint8_t*) &target_address,
+                                   sizeof(target_address));
+
+  if (r < 0) {
+    remote_packet_out_str(r_E01);
+  }
+  remote_packet_out_send();
+  return 0;
+}
+
 static const rtems_debugger_packet general_query[] = {
   { .label   = "qfThreadInfo",
     .command = remote_gq_thread_info_first },
@@ -1032,6 +1161,8 @@ static const rtems_debugger_packet general_query[] = {
     .command = remote_gq_attached },
   { .label   = "qXfer",
     .command = remote_gq_uninterpreted_transfer },
+  { .label   = "qGetTLSAddr",
+    .command = remote_gq_get_tls_addr },
 };
 
 #define REMOTE_GENERAL_QUERIES RTEMS_DEBUGGER_NUMOF(general_query)
