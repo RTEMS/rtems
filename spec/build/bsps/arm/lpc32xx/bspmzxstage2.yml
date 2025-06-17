@@ -14,6 +14,8 @@ links:
 - role: build-dependency
   uid: ../../opto2
 - role: build-dependency
+  uid: ../optsyncdmblinkflags
+- role: build-dependency
   uid: grp
 source: []
 type: build

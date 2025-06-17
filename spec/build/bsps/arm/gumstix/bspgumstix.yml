@@ -41,6 +41,8 @@ links:
 - role: build-dependency
   uid: ../../opto2
 - role: build-dependency
+  uid: ../optsyncdmblinkflags
+- role: build-dependency
   uid: ../../bspopts
 source:
 - bsps/arm/gumstix/btimer/btimer.c

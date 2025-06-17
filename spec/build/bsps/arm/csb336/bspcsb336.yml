@@ -40,6 +40,8 @@ links:
   uid: ../../opto2
 - role: build-dependency
   uid: ../../bspopts
+- role: build-dependency
+  uid: ../optsyncdmblinkflags
 source:
 - bsps/arm/csb336/btimer/btimer.c
 - bsps/arm/csb336/clock/clockdrv.c

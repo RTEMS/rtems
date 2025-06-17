@@ -39,6 +39,8 @@ links:
 - role: build-dependency
   uid: ../../opto2
 - role: build-dependency
+  uid: ../optsyncdmblinkflags
+- role: build-dependency
   uid: ../../bspopts
 source:
 - bsps/arm/edb7312/btimer/btimer.c

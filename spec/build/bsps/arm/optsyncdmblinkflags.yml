@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: LINKFLAGS
+- env-append: PKGCONFIG_LDFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2025 OAR Corporation
+default:
+- enabled-by: true
+  value:
+  - -Wl,--defsym=__sync_synchronize=__sync_synchronize_rtems
+description: |
+  GCC depends on having an implementation of __sync_synchronize. On some ARM
+  CPUs, the documented mechanism involves using special GCC spec files. Instead
+  we are using the same linker option to map to a symbol name which we can be
+  assured is coming from RTEMS.
+
+  See RTEMS issue #5268 for more information.
+enabled-by: true
+links: []
+name: SYNC_DMB_LINKFLAGS
+type: build

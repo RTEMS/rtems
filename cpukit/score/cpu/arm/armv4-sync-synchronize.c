@@ -35,7 +35,27 @@
 
 #include <rtems/score/cpu.h>
 
-void __sync_synchronize( void )
+/*
+ * This function is present because GCC 14 links many BSPs with an
+ * older core to a stub which generates a warning telling you to
+ * pick a functional implementation and use either special GCC spec
+ * files at link time or add a "--defsym" to the linking command
+ * to specifically name the desired implementation. If we use the
+ * specs approach, you MUST be using gcc 14 or later. If just use
+ * "--defsym" directly, we can rename the __sync_synchronize to an
+ * RTEMS specific one. This assures we can check the desired
+ * implementation is selected.
+ *
+ * See RTEMS issue #5268 for more information.
+ */
+void __sync_synchronize_rtems( void );
+
+void __sync_synchronize_rtems( void )
 {
   _ARM_Data_memory_barrier();
+}
+
+void __sync_synchronize( void )
+{
+  __sync_synchronize_rtems();
 }
