@@ -38,7 +38,7 @@ static inline void arm_pl011_write_char(
   const char ch
 )
 {
-  regs_base->uartdr = PL011_UARTDR_DATA_SET(regs_base->uartdr, ch);
+  regs_base->uartdr = PL011_UARTDR_DATA(ch);
 }
 
 static inline bool arm_pl011_is_rxfifo_empty(volatile pl011_base *regs_base)
