@@ -181,11 +181,14 @@ rtems_status_code console_initialize(
 
   rtems_termios_initialize();
 
-  const rtems_termios_device_handler *handler = &apbuart_handler_polled;
+  const rtems_termios_device_handler *handler;
 
-  if (BSP_CONSOLE_USE_INTERRUPTS) {
+#ifdef BSP_CONSOLE_USE_INTERRUPTS
     handler = &apbuart_handler_interrupt;
-  }
+#else
+    handler = &apbuart_handler_polled;
+#endif
+
   for (size_t i = 0; i < apbuart_devices; ++i) {
     struct apbuart_context *ctx;
 
