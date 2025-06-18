@@ -284,8 +284,20 @@ extern int rtems_debugger_target_cache_sync(rtems_debugger_target_swbreak* swbre
 /**
  * Start a target memory access. If 0 is return the access can proceed and if
  * -1 is return the access has failed.
+ *
+ * The call to setjmp() must not reside inside a stack frame relative to the
+ * expected location of the possible failure. If the debugger is already
+ * executing in exception context and setjmp is called with its own stack frame,
+ * that stack frame will be released before the failure. The failure causes an
+ * exception which will continue using the same stack and is highly likely to
+ * overwrite stack information which is critical for the debugger to continue
+ * execution.
  */
-extern int rtems_debugger_target_start_memory_access(void);
+#define rtems_debugger_target_start_memory_access() \
+  ({ \
+    rtems_debugger->target->memory_access = true, \
+    setjmp(rtems_debugger->target->access_return); \
+  })
 
 /**
  * End a target memory access.

@@ -601,14 +601,6 @@ rtems_debugger_target_exception_thread_resume(rtems_debugger_thread* thread)
   }
 }
 
-int
-rtems_debugger_target_start_memory_access(void)
-{
-  rtems_debugger_target* target = rtems_debugger->target;
-  target->memory_access = true;
-  return setjmp(target->access_return);
-}
-
 void
 rtems_debugger_target_end_memory_access(void)
 {
