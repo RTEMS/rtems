@@ -200,5 +200,5 @@ void Clock_exit( void )
 
 void _Clock_Initialize( void )
 {
-  Install_clock( Clock_isr );
+  Install_clock( (void *)Clock_isr );
 }
