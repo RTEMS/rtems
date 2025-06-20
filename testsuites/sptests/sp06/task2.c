@@ -41,8 +41,7 @@
 
 #include "system.h"
 
-rtems_task Task_2( argument )
-rtems_task_argument argument;
+rtems_task Task_2( rtems_task_argument argument )
 {
   rtems_status_code status;
 
