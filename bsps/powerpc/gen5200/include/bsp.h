@@ -60,33 +60,33 @@
  * Some symbols defined in the linker command file.
  */
 
-LINKER_SYMBOL(bsp_ram_start);
-LINKER_SYMBOL(bsp_ram_end);
-LINKER_SYMBOL(bsp_ram_size);
+LINKER_SYMBOL(bsp_ram_start)
+LINKER_SYMBOL(bsp_ram_end)
+LINKER_SYMBOL(bsp_ram_size)
 
-LINKER_SYMBOL(bsp_rom_start);
-LINKER_SYMBOL(bsp_rom_end);
-LINKER_SYMBOL(bsp_rom_size);
+LINKER_SYMBOL(bsp_rom_start)
+LINKER_SYMBOL(bsp_rom_end)
+LINKER_SYMBOL(bsp_rom_size)
 
-LINKER_SYMBOL(bsp_dpram_start);
-LINKER_SYMBOL(bsp_dpram_end);
-LINKER_SYMBOL(bsp_dpram_size);
+LINKER_SYMBOL(bsp_dpram_start)
+LINKER_SYMBOL(bsp_dpram_end)
+LINKER_SYMBOL(bsp_dpram_size)
 
-LINKER_SYMBOL(bsp_section_text_start);
-LINKER_SYMBOL(bsp_section_text_end);
-LINKER_SYMBOL(bsp_section_text_size);
+LINKER_SYMBOL(bsp_section_text_start)
+LINKER_SYMBOL(bsp_section_text_end)
+LINKER_SYMBOL(bsp_section_text_size)
 
-LINKER_SYMBOL(bsp_section_data_start);
-LINKER_SYMBOL(bsp_section_data_end);
-LINKER_SYMBOL(bsp_section_data_size);
+LINKER_SYMBOL(bsp_section_data_start)
+LINKER_SYMBOL(bsp_section_data_end)
+LINKER_SYMBOL(bsp_section_data_size)
 
-LINKER_SYMBOL(bsp_section_bss_start);
-LINKER_SYMBOL(bsp_section_bss_end);
-LINKER_SYMBOL(bsp_section_bss_size);
+LINKER_SYMBOL(bsp_section_bss_start)
+LINKER_SYMBOL(bsp_section_bss_end)
+LINKER_SYMBOL(bsp_section_bss_size)
 
-LINKER_SYMBOL(bsp_work_area_start);
+LINKER_SYMBOL(bsp_work_area_start)
 
-LINKER_SYMBOL(MBAR);
+LINKER_SYMBOL(MBAR)
 
 /* Provide legacy defines */
 
