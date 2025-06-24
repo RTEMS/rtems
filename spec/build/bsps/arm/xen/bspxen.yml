@@ -29,7 +29,7 @@ links:
 - role: build-dependency
   uid: ../optgtusevirt
 - role: build-dependency
-  uid: optgentmunmask
+  uid: ../../optgentmunmask
 - role: build-dependency
   uid: optloadoff
 - role: build-dependency
