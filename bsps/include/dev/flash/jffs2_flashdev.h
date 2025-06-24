@@ -32,6 +32,10 @@
 #include <rtems/jffs2.h>
 #include <rtems/rtems/status.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /**
  * This function mounts a JFFS2 partition over the specified region on a
  * flashdev-controlled device file.
@@ -52,5 +56,9 @@ rtems_status_code jffs2_flashdev_mount(
   rtems_jffs2_compressor_control *compressor_control,
   bool read_only
 );
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* JFFS2_FLASHDEV_H */
