@@ -106,6 +106,20 @@ SYM(_RISCV_Exception_handler):
 	/* Check if this is a synchronous or interrupt exception */
 	bgez	a0, .Lsynchronous_exception
 
+	/*
+	 * Interrupt exception, clear MDT bit.
+	 * This is only necessary if the Smdbltrp extension is implemented.
+	 * In that case not clearing the MDT bit would prevent us from setting
+	 * the MIE bit later.
+	 */
+#if __riscv_xlen == 64
+	li	t0, RISCV_MSTATUS_MDT
+	csrrc	zero, mstatus, t0
+#elif __riscv_xlen == 32
+	li	t0, RISCV_MSTATUSH_MDT
+	csrrc	zero, mstatush, t0
+#endif
+
 	/* Increment interrupt nest and thread dispatch disable level */
 	lw	t0, PER_CPU_ISR_NEST_LEVEL(s0)
 	lw	t1, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(s0)
@@ -185,7 +199,6 @@ SYM(_RISCV_Exception_handler):
 	/* Restore */
 	LREG	a0, RISCV_INTERRUPT_FRAME_MSTATUS(sp)
 	LREG	a1, RISCV_INTERRUPT_FRAME_MEPC(sp)
-	LREG	a2, RISCV_INTERRUPT_FRAME_A2(sp)
 	LREG	s0, RISCV_INTERRUPT_FRAME_S0(sp)
 	LREG	s1, RISCV_INTERRUPT_FRAME_S1(sp)
 	LREG	ra, RISCV_INTERRUPT_FRAME_RA(sp)
@@ -201,6 +214,20 @@ SYM(_RISCV_Exception_handler):
 	LREG	t4, RISCV_INTERRUPT_FRAME_T4(sp)
 	LREG	t5, RISCV_INTERRUPT_FRAME_T5(sp)
 	LREG	t6, RISCV_INTERRUPT_FRAME_T6(sp)
+
+	/*
+	 * Clear MDT bit before restoring mstatus register.
+	 * This is only necessary if the Smdbltrp extension is implemented.
+	 * In that case, writing to mstatus with MDT set would clear the MIE
+	 * bit, regardless of the MIE value written.
+	 * On RV32, the MDT bit is in the mstatush CSR which is not restored.
+	 */
+#if __riscv_xlen == 64
+	li	a2, RISCV_MSTATUS_MDT
+	not	a2, a2
+	and	a0, a0, a2
+#endif
+
 	csrw	mstatus, a0
 	csrw	mepc, a1
 #if __riscv_flen > 0
@@ -229,6 +256,7 @@ SYM(_RISCV_Exception_handler):
 #endif
 	LREG	a0, RISCV_INTERRUPT_FRAME_A0(sp)
 	LREG	a1, RISCV_INTERRUPT_FRAME_A1(sp)
+	LREG	a2, RISCV_INTERRUPT_FRAME_A2(sp)
 
 	addi	sp, sp, CPU_INTERRUPT_FRAME_SIZE
 
