@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: aarch64
+bsp: xen
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2025 On-Line Applications Research
+cppflags: []
+enabled-by: true
+family: xen
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: grp
+- role: build-dependency
+  uid: linkcmds
+source: []
+type: build

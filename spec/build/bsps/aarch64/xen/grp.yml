@@ -1,0 +1,61 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+cflags: []
+copyrights:
+- Copyright (C) 2025 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: obj
+- role: build-dependency
+  uid: optloadoff
+- role: build-dependency
+  uid: optnocachelen
+- role: build-dependency
+  uid: optramlen
+- role: build-dependency
+  uid: optramori
+- role: build-dependency
+  uid: ../../optgentmunmask
+- role: build-dependency
+  uid: ../optimghdr
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../objclockarmgenerictimer
+- role: build-dependency
+  uid: ../optgtusevirt
+- role: build-dependency
+  uid: ../optmmupabits
+- role: build-dependency
+  uid: ../optmmupages
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: ../../bspopts
+- role: build-dependency
+  uid: ../../dev/irq/objarmgicv2
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
+  uid: ../../optcachedata
+- role: build-dependency
+  uid: ../../optcacheinst
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../objdevserialarmpl011
+type: build
+use-after: []
+use-before: []

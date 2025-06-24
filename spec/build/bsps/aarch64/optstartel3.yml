@@ -6,7 +6,9 @@ build-type: option
 copyrights:
 - Copyright (C) 2024 embedded brains GmbH & Co. KG
 default:
-- enabled-by: bsps/aarch64/xilinx-zynqmp
+- enabled-by:
+  - bsps/aarch64/xilinx-zynqmp
+  - bsps/aarch64/xen
   value: false
 - enabled-by: true
   value: true

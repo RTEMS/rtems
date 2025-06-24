@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2025 On-Line Applications Research (OAR)
+default:
+- enabled-by: true
+  value:
+  - -mno-outline-atomics
+  - -mcpu=cortex-a53
+  - -mfix-cortex-a53-835769
+  - -mfix-cortex-a53-843419
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build

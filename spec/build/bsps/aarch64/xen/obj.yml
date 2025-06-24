@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2025 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/aarch64/xen/include/bsp.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/aarch64/xen/include/bsp/irq.h
+  - bsps/aarch64/include/bsp/aarch64-mmu.h
+links: []
+source:
+- bsps/aarch64/shared/cache/cache.c
+- bsps/aarch64/shared/mmu/mmu-setup.c
+- bsps/aarch64/shared/mmu/vmsav8-64.c
+- bsps/aarch64/shared/start/start-cpu-mpidr.S
+- bsps/aarch64/xen/console/console.c
+- bsps/aarch64/xen/start/bspstart.c
+- bsps/aarch64/xen/start/bspstarthooks.c
+- bsps/aarch64/xen/start/bspstartmmu.c
+- bsps/aarch64/xen/start/mmu-config.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/irq/arm-gicv2-get-attributes.c
+- bsps/shared/dev/serial/console-termios-init.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspreset-arm-psci.S
+- bsps/shared/start/gettargethash-default.c
+- bsps/shared/start/sbrk.c
+type: build
