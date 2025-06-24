@@ -106,7 +106,7 @@ void arm_generic_timer_get_config( uint32_t *frequency, uint32_t *irq )
   );
   *frequency = val;
 
-#ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
+#ifdef AARCH64_GENERIC_TIMER_USE_VIRTUAL
   *irq = BSP_TIMER_VIRT_PPI;
 #elif defined(AARCH64_GENERIC_TIMER_USE_PHYSICAL_SECURE)
   *irq = BSP_TIMER_PHYS_S_PPI;
