@@ -45,6 +45,8 @@ extern "C" {
 #include <rtems/score/riscv.h>
 
 #define RISCV_MSTATUS_MIE 0x8
+#define RISCV_MSTATUS_MDT 0x40000000000
+#define RISCV_MSTATUSH_MDT 0x400
 
 #define CPU_ISR_PASSES_FRAME_POINTER FALSE
 
