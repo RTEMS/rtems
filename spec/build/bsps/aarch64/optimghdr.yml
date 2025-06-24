@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2025 On-Line Applications Research (OAR)
+default:
+- enabled-by: true
+  value: true
+description: |
+  include zImage boot header
+enabled-by: true
+links: []
+name: BSP_START_IMAGE_HEADER
+type: build

@@ -37,11 +37,34 @@
 #include <rtems/asm.h>
 #include <rtems/score/percpu.h>
 
+#include <bsp.h>
 #include <bspopts.h>
 
   /* Global symbols */
   .globl _start
   .section ".bsp_start_text", "ax"
+
+#ifdef BSP_START_IMAGE_HEADER
+  /*
+   * This format is defined by:
+   * https://www.kernel.org/doc/Documentation/arm64/booting.txt
+   */
+  mov	x0, x0
+  b	_start
+  /*
+   * This must be defined by the BSP as different environments may not treat it
+   * the same. Xen treats it as an offset from 0x40000000 while QEMU treats it
+   * as an absolute offset (RAM origin + load offset).
+   */
+  .dword  BSP_START_IMAGE_HEADER_LOAD_OFFSET
+  .dword  0 /* image size */
+  .dword  0 /* kernel flags, LE, page size unspecified, place near RAM start */
+  .dword  0 /* reserved 2 */
+  .dword  0 /* reserved 3 */
+  .dword  0 /* reserved 4 */
+  .word   0x644d5241 /* magic, ascii ['A', 'R', 'M', 64] LE */
+  .word   0 /* reserved 5, PE COFF offset */
+#endif /* BSP_START_IMAGE_HEADER */
 
 /* Start entry */
 
