@@ -407,40 +407,94 @@ typedef enum {
   AARCH64_EXCEPTION_MAKE_ENUM_64_BIT = INT_MAX
 } AArch64_symbolic_exception_name;
 
+typedef void(*AArch64_Exception_Handler)(void);
+extern AArch64_Exception_Handler aarch64_exception_sp0_synchronous;
+extern AArch64_Exception_Handler aarch64_exception_sp0_irq;
+extern AArch64_Exception_Handler aarch64_exception_sp0_fiq;
+extern AArch64_Exception_Handler aarch64_exception_sp0_serror;
+extern AArch64_Exception_Handler aarch64_exception_spx_synchronous;
+extern AArch64_Exception_Handler aarch64_exception_spx_irq;
+extern AArch64_Exception_Handler aarch64_exception_spx_fiq;
+extern AArch64_Exception_Handler aarch64_exception_spx_serror;
+extern AArch64_Exception_Handler aarch64_exception_lel64_synchronous;
+extern AArch64_Exception_Handler aarch64_exception_lel64_irq;
+extern AArch64_Exception_Handler aarch64_exception_lel64_fiq;
+extern AArch64_Exception_Handler aarch64_exception_lel64_serror;
+extern AArch64_Exception_Handler aarch64_exception_lel32_synchronous;
+extern AArch64_Exception_Handler aarch64_exception_lel32_irq;
+extern AArch64_Exception_Handler aarch64_exception_lel32_fiq;
+extern AArch64_Exception_Handler aarch64_exception_lel32_serror;
+
 #define VECTOR_POINTER_OFFSET 0x78
 #define VECTOR_ENTRY_SIZE 0x80
 void _AArch64_Exception_interrupt_no_nest( void );
 void _AArch64_Exception_interrupt_nest( void );
-static inline void* AArch64_set_exception_handler(
+static inline AArch64_Exception_Handler AArch64_set_exception_handler(
   AArch64_symbolic_exception_name exception,
-  void (*handler)(void)
+  AArch64_Exception_Handler handler
 )
 {
-  /* get current table address */
-  char *vbar = (char*)AArch64_get_vector_base_address();
+  AArch64_Exception_Handler *target_address;
+  switch (exception) {
+  case AARCH64_EXCEPTION_SP0_SYNCHRONOUS:
+    target_address = &aarch64_exception_sp0_synchronous;
+    break;
+  case AARCH64_EXCEPTION_SP0_IRQ:
+    target_address = &aarch64_exception_sp0_irq;
+    break;
+  case AARCH64_EXCEPTION_SP0_FIQ:
+    target_address = &aarch64_exception_sp0_fiq;
+    break;
+  case AARCH64_EXCEPTION_SP0_SERROR:
+    target_address = &aarch64_exception_sp0_serror;
+    break;
+  case AARCH64_EXCEPTION_SPx_SYNCHRONOUS:
+    target_address = &aarch64_exception_spx_synchronous;
+    break;
+  case AARCH64_EXCEPTION_SPx_IRQ:
+    target_address = &aarch64_exception_spx_irq;
+    break;
+  case AARCH64_EXCEPTION_SPx_FIQ:
+    target_address = &aarch64_exception_spx_fiq;
+    break;
+  case AARCH64_EXCEPTION_SPx_SERROR:
+    target_address = &aarch64_exception_spx_serror;
+    break;
+  case AARCH64_EXCEPTION_LEL64_SYNCHRONOUS:
+    target_address = &aarch64_exception_lel64_synchronous;
+    break;
+  case AARCH64_EXCEPTION_LEL64_IRQ:
+    target_address = &aarch64_exception_lel64_irq;
+    break;
+  case AARCH64_EXCEPTION_LEL64_FIQ:
+    target_address = &aarch64_exception_lel64_fiq;
+    break;
+  case AARCH64_EXCEPTION_LEL64_SERROR:
+    target_address = &aarch64_exception_lel64_serror;
+    break;
+  case AARCH64_EXCEPTION_LEL32_SYNCHRONOUS:
+    target_address = &aarch64_exception_lel32_synchronous;
+    break;
+  case AARCH64_EXCEPTION_LEL32_IRQ:
+    target_address = &aarch64_exception_lel32_irq;
+    break;
+  case AARCH64_EXCEPTION_LEL32_FIQ:
+    target_address = &aarch64_exception_lel32_fiq;
+    break;
+  case AARCH64_EXCEPTION_LEL32_SERROR:
+    target_address = &aarch64_exception_lel32_serror;
+    break;
+  default:
+    return NULL;
+  }
 
-  /* calculate address of vector to be replaced */
-  char *cvector_address = vbar + VECTOR_ENTRY_SIZE * exception
-    + VECTOR_POINTER_OFFSET;
-
-  /* get current vector pointer */
-  void (**vector_address)(void) = (void(**)(void))cvector_address;
-  void (*current_vector_pointer)(void);
-  current_vector_pointer = *vector_address;
+  AArch64_Exception_Handler current_vector_pointer = *target_address;
 
   /* replace vector pointer */
-  *vector_address = handler;
+  *target_address = handler;
 
   /* return now-previous vector pointer */
-
-/*
- * This was put in to fix the following warning:
- * warning: ISO C forbids conversion of function pointer to object pointer type.
- */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpedantic"
- return (void*)current_vector_pointer;
-#pragma GCC diagnostic pop
+  return current_vector_pointer;
 }
 
 typedef struct {

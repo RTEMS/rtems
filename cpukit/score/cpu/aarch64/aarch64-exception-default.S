@@ -44,11 +44,29 @@
 #include <rtems/asm.h>
 
 .extern _AArch64_Exception_default
+.extern aarch64_exception_sp0_synchronous
+.extern aarch64_exception_sp0_irq
+.extern aarch64_exception_sp0_fiq
+.extern aarch64_exception_sp0_serror
+.extern aarch64_exception_spx_synchronous
+.extern aarch64_exception_spx_irq
+.extern aarch64_exception_spx_fiq
+.extern aarch64_exception_spx_serror
+.extern aarch64_exception_lel64_synchronous
+.extern aarch64_exception_lel64_irq
+.extern aarch64_exception_lel64_fiq
+.extern aarch64_exception_lel64_serror
+.extern aarch64_exception_lel32_synchronous
+.extern aarch64_exception_lel32_irq
+.extern aarch64_exception_lel32_fiq
+.extern aarch64_exception_lel32_serror
 
 .globl	bsp_start_vector_table_begin
 .globl	bsp_start_vector_table_end
 .globl	bsp_start_vector_table_size
 .globl	bsp_vector_table_size
+.globl	aarch64_exception_dump_sp0
+.globl	aarch64_exception_dump_spx
 
 .section ".text"
 
@@ -72,64 +90,24 @@
  * * The exception returns to the previous execution state
  */
 
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+#define JUMP_REG(reg_num) w##reg_num
+#else
+#define JUMP_REG(reg_num) x##reg_num
+#endif
+
 	.macro	JUMP_HANDLER
-/* Mask to use in BIC, lower 7 bits */
-	mov x0, #0x7f
-/* LR contains PC, mask off to the base of the current vector */
-	bic x0,	lr,	x0
-/* Load address from the last word in the vector */
-	ldr x0,	[x0,	#0x78]
+/* x0 holds the address of the variable that holds the jump target */
+	ldr JUMP_REG(0), [x0]
 /*
  * Branch and link to the address in x0. There is no reason to save the current
- * LR since it has already been saved and the current contents are junk.
+ * LR since it has already been saved.
  */
 	blr x0
 /* Pop x0,lr from stack */
 	ldp x0,	lr,	[sp],	#0x10
 /* Return from exception */
 	eret
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.endm
-
-	.macro	JUMP_TARGET_SP0
-/* Takes up the space of 2 instructions */
-#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
-	.word .print_exception_dump_sp0
-	.word 0x0
-#else
-	.dword .print_exception_dump_sp0
-#endif
-	.endm
-
-	.macro	JUMP_TARGET_SPx
-/* Takes up the space of 2 instructions */
-#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
-	.word .print_exception_dump_spx
-	.word 0x0
-#else
-	.dword .print_exception_dump_spx
-#endif
 	.endm
 
 bsp_start_vector_table_begin:
@@ -152,7 +130,8 @@ curr_el_sp0_sync:
 curr_el_sp0_sync_get_pc:			/* The current PC is now in LR */
 	mov x0, #0x7f				/* Mask to use in BIC, lower 7 bits */
 	bic x0,	lr,	x0			/* Mask LR to base of current vector */
-	ldr x1,	[x0,	#0x78]			/* Load target from last word in vector */
+	ldr JUMP_REG(1), =aarch64_exception_sp0_synchronous
+	ldr JUMP_REG(1), [x1]
 	and lr, lr, #0x780			/* Mask off bits for vector number */
 	lsr lr, lr, #7				/* Shift the vector bits down */
 /* Store the vector */
@@ -160,44 +139,18 @@ curr_el_sp0_sync_get_pc:			/* The current PC is now in LR */
 	mov x0, sp
 	blr x1
 	b twiddle
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-/* Takes up the space of 2 instructions */
-#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
-	.word _AArch64_Exception_default
-	.word 0x0
-#else
-	.dword _AArch64_Exception_default
-#endif
 .balign 0x80
 /* The exception handler for IRQ exceptions from the current EL using SP0. */
 curr_el_sp0_irq:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl curr_el_sp0_irq_get_pc	/* Get current execution address */
-curr_el_sp0_irq_get_pc:			/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_sp0_synchronous
 	JUMP_HANDLER
-	JUMP_TARGET_SP0
 .balign 0x80
 /* The exception handler for FIQ exceptions from the current EL using SP0. */
 curr_el_sp0_fiq:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl curr_el_sp0_fiq_get_pc	/* Get current execution address */
-curr_el_sp0_fiq_get_pc:			/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_sp0_fiq
 	JUMP_HANDLER
-	JUMP_TARGET_SP0
 .balign 0x80
 /*
  * The exception handler for system error exceptions from the current EL using
@@ -205,10 +158,8 @@ curr_el_sp0_fiq_get_pc:			/* The current PC is now in LR */
  */
 curr_el_sp0_serror:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl curr_el_sp0_serror_get_pc	/* Get current execution address */
-curr_el_sp0_serror_get_pc:		/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_sp0_serror
 	JUMP_HANDLER
-	JUMP_TARGET_SP0
 .balign 0x80
 /*
  * The exception handler for synchronous exceptions from the current EL using
@@ -230,7 +181,8 @@ curr_el_spx_sync:
 curr_el_spx_sync_get_pc:			/* The current PC is now in LR */
 	mov x0, #0x7f				/* Mask to use in BIC, lower 7 bits */
 	bic x0,	lr,	x0			/* Mask LR to base of current vector */
-	ldr x1,	[x0,	#0x78]			/* Load target from last word in vector */
+	ldr JUMP_REG(1), =aarch64_exception_spx_synchronous
+	ldr JUMP_REG(1), [x1]
 	and lr, lr, #0x780			/* Mask off bits for vector number */
 	lsr lr, lr, #7				/* Shift the vector bits down */
 /* Store the vector */
@@ -238,25 +190,6 @@ curr_el_spx_sync_get_pc:			/* The current PC is now in LR */
 	mov x0, sp
 	blr x1
 	b twiddle
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-/* Takes up the space of 2 instructions */
-#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
-	.word _AArch64_Exception_default
-	.word 0x0
-#else
-	.dword _AArch64_Exception_default
-#endif
 .balign 0x80
 /*
  * The exception handler for IRQ exceptions from the current EL using the
@@ -264,10 +197,8 @@ curr_el_spx_sync_get_pc:			/* The current PC is now in LR */
  */
 curr_el_spx_irq:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl curr_el_spx_irq_get_pc	/* Get current execution address */
-curr_el_spx_irq_get_pc:			/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_spx_irq
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 .balign 0x80
 /*
  * The exception handler for FIQ exceptions from the current EL using the
@@ -275,10 +206,8 @@ curr_el_spx_irq_get_pc:			/* The current PC is now in LR */
  */
 curr_el_spx_fiq:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl curr_el_spx_fiq_get_pc	/* Get current execution address */
-curr_el_spx_fiq_get_pc:			/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_spx_fiq
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 .balign 0x80
 /*
  * The exception handler for system error exceptions from the current EL using
@@ -286,36 +215,28 @@ curr_el_spx_fiq_get_pc:			/* The current PC is now in LR */
  */
 curr_el_spx_serror:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl curr_el_spx_serror_get_pc	/* Get current execution address */
-curr_el_spx_serror_get_pc:		/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_spx_serror
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 .balign 0x80
 /*
  * The exception handler for synchronous exceptions from a lower EL (AArch64).
  */
 lower_el_aarch64_sync:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl lower_el_aarch64_sync_get_pc	/* Get current execution address */
-lower_el_aarch64_sync_get_pc:		/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_lel64_synchronous
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 .balign 0x80
 /* The exception handler for IRQ exceptions from a lower EL (AArch64). */
 lower_el_aarch64_irq:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl lower_el_aarch64_irq_get_pc	/* Get current execution address */
-lower_el_aarch64_irq_get_pc:		/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_lel64_irq
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 .balign 0x80
 /* The exception handler for FIQ exceptions from a lower EL (AArch64). */
 lower_el_aarch64_fiq:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl lower_el_aarch64_fiq_get_pc	/* Get current execution address */
-lower_el_aarch64_fiq_get_pc:		/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_lel64_fiq
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 .balign 0x80
 /*
  * The exception handler for system error exceptions from a lower EL(AArch64).
@@ -323,37 +244,28 @@ lower_el_aarch64_fiq_get_pc:		/* The current PC is now in LR */
 lower_el_aarch64_serror:
 /* Push x0,lr on to the stack */
 	stp x0,	lr,	[sp, #-0x10]!
-/* Get current execution address */
-	bl lower_el_aarch64_serror_get_pc
-lower_el_aarch64_serror_get_pc:		/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_lel64_serror
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 .balign 0x80
 /*
  * The exception handler for the synchronous exception from a lower EL(AArch32).
  */
 lower_el_aarch32_sync:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl lower_el_aarch32_sync_get_pc	/* Get current execution address */
-lower_el_aarch32_sync_get_pc:		/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_lel32_synchronous
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 .balign 0x80
 /* The exception handler for the IRQ exception from a lower EL (AArch32). */
 lower_el_aarch32_irq:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl lower_el_aarch32_irq_get_pc	/* Get current execution address */
-lower_el_aarch32_irq_get_pc:		/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_lel32_irq
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 .balign 0x80
 /* The exception handler for the FIQ exception from a lower EL (AArch32). */
 lower_el_aarch32_fiq:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl lower_el_aarch32_fiq_get_pc	/* Get current execution address */
-lower_el_aarch32_fiq_get_pc:		/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_lel32_fiq
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 .balign 0x80
 /*
  * The exception handler for the system error exception from a lower EL
@@ -362,11 +274,8 @@ lower_el_aarch32_fiq_get_pc:		/* The current PC is now in LR */
 lower_el_aarch32_serror:
 /* Push x0,lr on to the stack */
 	stp x0,	lr,	[sp, #-0x10]!
-/* Get current execution address */
-	bl lower_el_aarch32_serror_get_pc
-lower_el_aarch32_serror_get_pc	:		/* The current PC is now in LR */
+	ldr JUMP_REG(0), =aarch64_exception_lel32_fiq
 	JUMP_HANDLER
-	JUMP_TARGET_SPx
 
 bsp_start_vector_table_end:
 
@@ -378,7 +287,7 @@ bsp_start_vector_table_end:
  * and need to be retrieved while the lr upon entry contains the pointer into
  * the AArch64 vector table
  */
-.print_exception_dump_spx:
+aarch64_exception_dump_spx:
 /* Switch to exception stack (SP0) */
 	msr spsel, #0
 /* Save space for exception context */
@@ -416,7 +325,7 @@ bsp_start_vector_table_end:
 	/* Just in case */
 	b	twiddle
 
-.print_exception_dump_sp0:
+aarch64_exception_dump_sp0:
 /* Save space for exception context */
 	sub sp, sp, #AARCH64_EXCEPTION_FRAME_SIZE
 /*

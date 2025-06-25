@@ -37,6 +37,7 @@ source:
 - cpukit/score/cpu/aarch64/aarch64-exception-frame-print.c
 - cpukit/score/cpu/aarch64/aarch64-exception-interrupt.S
 - cpukit/score/cpu/aarch64/aarch64-exception-resume.S
+- cpukit/score/cpu/aarch64/aarch64-exception-targets.c
 - cpukit/score/cpu/aarch64/aarch64-thread-idle.c
 - cpukit/score/cpu/aarch64/cpu.c
 - cpukit/score/cpu/aarch64/cpu_asm.S

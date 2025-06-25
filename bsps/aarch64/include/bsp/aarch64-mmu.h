@@ -117,13 +117,9 @@ typedef struct {
     .end = (uintptr_t) bsp_translation_table_end, \
     .flags = AARCH64_MMU_DATA_RW_CACHED \
   }, { \
-/*
- * The vector table must be in writable and executable memory as it stores both
- * exception code and the mutable pointer to which it jumps
- */ \
     .begin = (uintptr_t) bsp_start_vector_table_begin, \
     .end = (uintptr_t) bsp_start_vector_table_end, \
-    .flags = AARCH64_MMU_CODE_RW_CACHED \
+    .flags = AARCH64_MMU_CODE_CACHED \
   }
 
 /**
