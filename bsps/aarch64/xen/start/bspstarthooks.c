@@ -37,9 +37,34 @@
 #include <bsp.h>
 #include <bsp/start.h>
 
+#ifdef RTEMS_SMP
+#include <rtems/score/aarch64-system-registers.h>
+#include <rtems/score/smpimpl.h>
+
+#include <bsp/irq-generic.h>
+#endif
+
 BSP_START_TEXT_SECTION void bsp_start_hook_1( void )
 {
   AArch64_start_set_vector_base();
+
+#ifdef RTEMS_SMP
+  uint32_t cpu_index_self;
+
+  cpu_index_self = _SMP_Get_current_processor();
+
+  if ( cpu_index_self != 0 ) {
+    xen_setup_secondary_cpu_mmu_and_cache();
+    arm_gic_irq_initialize_secondary_cpu();
+
+    bsp_interrupt_vector_enable( ARM_GIC_IRQ_SGI_0 );
+    _SMP_Start_multitasking_on_secondary_processor(
+      _Per_CPU_Get_by_index( cpu_index_self )
+    );
+    /* Unreached */
+  }
+#endif /* RTEMS_SMP */
+
   xen_setup_mmu_and_cache();
   bsp_start_clear_bss();
 }

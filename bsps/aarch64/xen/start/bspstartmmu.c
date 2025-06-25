@@ -56,3 +56,12 @@ xen_setup_mmu_and_cache( void )
 
   aarch64_mmu_enable( control );
 }
+
+BSP_START_TEXT_SECTION void xen_setup_secondary_cpu_mmu_and_cache( void )
+{
+  aarch64_mmu_control *control = &aarch64_mmu_instance;
+
+  /* Perform basic MMU setup */
+  aarch64_mmu_setup();
+  aarch64_mmu_enable( control );
+}

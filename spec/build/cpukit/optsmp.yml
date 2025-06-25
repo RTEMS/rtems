@@ -21,6 +21,7 @@ enabled-by:
 - arm/realview_pbx_a9_qemu
 - arm/xilinx_zynqmp_ultra96
 - bsps/aarch64/xilinx-zynqmp
+- bsps/aarch64/xen
 - bsps/arm/xilinx-zynq
 - bsps/powerpc/qoriq
 - i386/pc586sse

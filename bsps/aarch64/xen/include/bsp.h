@@ -71,6 +71,14 @@ extern "C" {
 
 BSP_START_TEXT_SECTION void xen_setup_mmu_and_cache( void );
 
+/**
+ * @brief Xen-specific set up of the MMU for non-primary
+ * cores.
+ *
+ * Provide in the application to override the defaults in the BSP.
+ */
+BSP_START_TEXT_SECTION void xen_setup_secondary_cpu_mmu_and_cache( void );
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
