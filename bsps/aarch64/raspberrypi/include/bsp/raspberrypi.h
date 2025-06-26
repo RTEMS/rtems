@@ -345,6 +345,53 @@ extern "C" {
 /** @} */
 
 /**
+ * @name DMA Registers
+ *
+ * @{
+ */
+
+#define BCM2711_DMA0_BASE ( RPI_PERIPHERAL_BASE + 0x00007000 )
+#define BCM2711_DMA1_BASE ( BCM2711_DMA0_BASE + 0x100 )
+#define BCM2711_DMA2_BASE ( BCM2711_DMA0_BASE + 0x200 )
+#define BCM2711_DMA3_BASE ( BCM2711_DMA0_BASE + 0x300 )
+#define BCM2711_DMA4_BASE ( BCM2711_DMA0_BASE + 0x400 )
+#define BCM2711_DMA5_BASE ( BCM2711_DMA0_BASE + 0x500 )
+#define BCM2711_DMA6_BASE ( BCM2711_DMA0_BASE + 0x600 )
+#define BCM2711_DMA7_BASE ( BCM2711_DMA0_BASE + 0x700 )
+#define BCM2711_DMA8_BASE ( BCM2711_DMA0_BASE + 0x800 )
+#define BCM2711_DMA9_BASE ( BCM2711_DMA0_BASE + 0x900 )
+#define BCM2711_DMA10_BASE ( BCM2711_DMA0_BASE + 0xa00 )
+#define BCM2711_DMA11_BASE ( BCM2711_DMA0_BASE + 0xb00 )
+#define BCM2711_DMA12_BASE ( BCM2711_DMA0_BASE + 0xc00 )
+#define BCM2711_DMA13_BASE ( BCM2711_DMA0_BASE + 0xd00 )
+#define BCM2711_DMA14_BASE ( BCM2711_DMA0_BASE + 0xe00 )
+#define ENABLE ( RPI_PERIPHERAL_BASE + 0x00007FF0 )
+#define CS_OFFSET 0x00
+#define CONBLK_AD_OFFSET 0x04
+#define DEBUG_OFFSET 0x020
+#define INT_STATUS_OFFSET 0xfe0
+#define CS_RESET ( 1 << 31 )
+#define CS_ABORT ( 1 << 30 )
+#define CS_END ( 1 << 1 )
+#define CS_WAIT_FOR_OUTSTANDING_WRITES ( 1 << 28 )
+#define CS_PRIORITY_SHIFT ( 1 << 16 )
+#define CS_PANIC_PRIORITY_SHIFT ( 15 << 20 )
+#define CS_ACTIVE ( 1 << 0 )
+#define CS_ERROR ( 1 << 8 )
+#define TI_DEST_INC ( 1 << 4 )
+#define TI_SRC_INC ( 1 << 8 )
+#define TI_SRC_WIDTH ( 1 << 9 )
+#define TI_DEST_WIDTH ( 1 << 5 )
+#define TI_PERMAP( x ) ( ( x ) << 16 )
+#define TI_SRC_DREQ ( 1 << 10 )
+#define TI_DEST_DREQ ( 1 << 6 )
+#define TI_WAIT_RESP ( 1 << 3 )
+#define TI_NO_WIDE_BURSTS ( 1 << 26 )
+#define SI_SRC_INC ( 1 << 12 )
+#define DI_DEST_INC ( 1 << 12 )
+/** @} */
+
+/**
  * @name Mailbox Registers
  *
  * @{

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2025 Shaunak Datar
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/aarch64/raspberrypi/include/bsp/raspberrypi-dma.h
+links: []
+source:
+- bsps/aarch64/raspberrypi/dma/raspberrypi-dma.c
+type: build

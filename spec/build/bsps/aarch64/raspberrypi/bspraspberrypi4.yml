@@ -69,6 +69,8 @@ links:
   uid: objpwm
 - role: build-dependency
   uid: obji2c
+- role: build-dependency
+  uid: objdma
 source:
 - bsps/aarch64/raspberrypi/fdt/bsp_fdt.c
 - bsps/aarch64/raspberrypi/fdt/rpi4b_dtb.c
