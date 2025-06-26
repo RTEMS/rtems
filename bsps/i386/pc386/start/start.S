@@ -110,12 +110,12 @@ speakl:	jmp	speakl             # and SPIN!!!
 	movl	eax, ebx
 	movl	$SYM(_boot_multiboot_info), edi
         /* save flags, always present */
-	movsd
+	movsl
 	/* flag 1 is memory */
 	and	$1, eax
 	je	1f
 	movl	$2, ecx
-	rep movsd
+	rep movsl
 	/* flag 2 is the command line */
 1:	movl	ebx, eax
 	and	$4, eax
