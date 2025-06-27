@@ -98,11 +98,11 @@ typedef std::memory_order Atomic_Order;
 
 #define ATOMIC_ORDER_SEQ_CST std::memory_order_seq_cst
 
-#define ATOMIC_INITIALIZER_UINT( value ) ATOMIC_VAR_INIT( value )
+#define ATOMIC_INITIALIZER_UINT( value ) ( value )
 
-#define ATOMIC_INITIALIZER_ULONG( value ) ATOMIC_VAR_INIT( value )
+#define ATOMIC_INITIALIZER_ULONG( value ) ( value )
 
-#define ATOMIC_INITIALIZER_UINTPTR( value ) ATOMIC_VAR_INIT( value )
+#define ATOMIC_INITIALIZER_UINTPTR( value ) ( value )
 
 #define ATOMIC_INITIALIZER_FLAG ATOMIC_FLAG_INIT
 
@@ -128,11 +128,11 @@ typedef memory_order Atomic_Order;
 
 #define ATOMIC_ORDER_SEQ_CST memory_order_seq_cst
 
-#define ATOMIC_INITIALIZER_UINT( value ) ATOMIC_VAR_INIT( value )
+#define ATOMIC_INITIALIZER_UINT( value ) ( value )
 
-#define ATOMIC_INITIALIZER_ULONG( value ) ATOMIC_VAR_INIT( value )
+#define ATOMIC_INITIALIZER_ULONG( value ) ( value )
 
-#define ATOMIC_INITIALIZER_UINTPTR( value ) ATOMIC_VAR_INIT( value )
+#define ATOMIC_INITIALIZER_UINTPTR( value ) ( value )
 
 #define ATOMIC_INITIALIZER_FLAG ATOMIC_FLAG_INIT
 
