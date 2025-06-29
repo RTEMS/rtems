@@ -211,12 +211,12 @@ static void bsp_early( void )
   E500_tlb_va_cache_t *tlb;
 
 VpdBufRec          vpdData [] = {
- { key: ProductIdent, instance: 0, buf: BSP_productIdent, buflen: sizeof(BSP_productIdent) - 1 },
- { key: SerialNumber, instance: 0, buf: BSP_serialNumber, buflen: sizeof(BSP_serialNumber) - 1 },
- { key: BusClockHz,   instance: 0, buf: &BSP_pci_bus_frequency, buflen: sizeof(BSP_pci_bus_frequency)  },
- { key: EthernetAddr, instance: 0, buf: BSP_enetAddr0, buflen: sizeof(BSP_enetAddr0) },
- { key: EthernetAddr, instance: 1, buf: BSP_enetAddr1, buflen: sizeof(BSP_enetAddr1) },
- { key: EthernetAddr, instance: 2, buf: BSP_enetAddr2, buflen: sizeof(BSP_enetAddr2) },
+ { .key = ProductIdent, .instance = 0, .buf = BSP_productIdent, .buflen = sizeof(BSP_productIdent) - 1 },
+ { .key = SerialNumber, .instance = 0, .buf = BSP_serialNumber, .buflen = sizeof(BSP_serialNumber) - 1 },
+ { .key = BusClockHz,   .instance = 0, .buf = &BSP_pci_bus_frequency, .buflen = sizeof(BSP_pci_bus_frequency)  },
+ { .key = EthernetAddr, .instance = 0, .buf = BSP_enetAddr0, .buflen = sizeof(BSP_enetAddr0) },
+ { .key = EthernetAddr, .instance = 1, .buf = BSP_enetAddr1, .buflen = sizeof(BSP_enetAddr1) },
+ { .key = EthernetAddr, .instance = 2, .buf = BSP_enetAddr2, .buflen = sizeof(BSP_enetAddr2) },
  VPD_END
 };
 

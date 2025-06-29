@@ -435,17 +435,17 @@ i2c_write_bytes(rtems_libi2c_bus_t *bh, unsigned char *buf, int len)
 /********* Driver Glue Vars **********/
 
 static rtems_libi2c_bus_ops_t  myops = {
-	init:            i2c_init,
-	send_start:      i2c_start,
-	send_stop:       i2c_stop,
-	send_addr:       i2c_send_addr,
-	read_bytes:      i2c_read_bytes,
-	write_bytes:     i2c_write_bytes,
+	.init            = i2c_init,
+	.send_start      = i2c_start,
+	.send_stop       = i2c_stop,
+	.send_addr       = i2c_send_addr,
+	.read_bytes      = i2c_read_bytes,
+	.write_bytes     = i2c_write_bytes,
 };
 
 static rtems_libi2c_bus_t my_bus_tbl = {
-	ops:	&myops,
-	size:   sizeof(my_bus_tbl),
+	.ops	= &myops,
+	.size   = sizeof(my_bus_tbl),
 };
 
 /********* Global Driver Handle ******/

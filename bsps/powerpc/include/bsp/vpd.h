@@ -41,7 +41,7 @@ typedef struct {
 } VpdBufRec, *VpdBuf;
 
 
-#define VPD_END	{ key:End, }
+#define VPD_END	{ .key = End, }
 
 
 /* Scan the VPD EEPROM for a number of fields

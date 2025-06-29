@@ -110,7 +110,7 @@ uint32_t mhz = BSP_bus_frequency/BSP_time_base_divisor/1000;
 
 /* BSP ops (detect banks, handle write-protection on board) */
 struct flash_bsp_ops BSP_flashBspOps = {
-	bankcheck: 	   bankcheck,
-	flash_wp:  	   flash_wp,
-	read_us_timer: read_us_timer,
+	.bankcheck       = bankcheck,
+	.flash_wp        = flash_wp,
+	.read_us_timer   = read_us_timer,
 };
