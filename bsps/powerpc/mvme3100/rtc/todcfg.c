@@ -11,10 +11,13 @@
 #include <bsp.h>
 #include <libchip/rtc.h>
 #include <libchip/ds1375-rtc.h>
+#include <rtems/rtems/sem.h>
+
+static struct i2c_rtc_base ds1375_ctx = DS1375_RTC_INITIALIZER("/dev/i2c0", 0x68);
 
 /* The following table configures the RTC drivers used in this BSP */
 rtc_tbl RTC_Table[] = {
-	DS1375_RTC_TBL_ENTRY(BSP_I2C_DS1375_RAW_DEV_NAME),
+	DS1375_RTC_TBL_ENTRY("/dev/rtc", &ds1375_ctx),
 };
 
 /* Some information used by the RTC driver */

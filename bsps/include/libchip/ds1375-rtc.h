@@ -52,45 +52,34 @@
 #include <rtems.h>
 #include <libchip/rtc.h>
 #include <stdint.h>
+#include <libchip/i2c-rtc.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern rtc_fns rtc_ds1375_fns;
-
-bool
-rtc_ds1375_device_probe( int minor );
-
-uint32_t
-rtc_ds1375_get_register( uintptr_t port, uint8_t reg );
-
-void
-rtc_ds1375_set_register( uintptr_t port, uint8_t reg, uint32_t value );
+int
+rtc_ds1375_hw_init(struct i2c_rtc_base *base);
 
 /*
- * BSP must supply string constant argument 'i2cname' which matches
- * the registered device name of the raw i2c device (created with mknod).
- * E.g., "/dev/i2c.ds1375-raw"
- *
- * NOTE: The i2c bus driver must already be up and 'i2cname' already
- *       be available when this ENTRY is registered or initialized.
- *
- *       If you want to allow applications to add the RTC driver to
- *       the configuration table then the i2c subsystem must be
- *       initialized by the BSP from the predriver_hook.
+ * BSP must supply the ds1375_rtc_ctx argument, which is i2c_rtc_base*
+ * Use with the DS1375_RTC_INITIALIZER macro:
+ *   struct i2c_rtc_base ctx = DS1375_RTC_INITIALIZER("/dev/i2c0", 0x68);
+ *   ...
+ *   DS1375_RTC_TBL_ENTRY("/dev/rtc", &ctx)
  */
-#define DS1375_RTC_TBL_ENTRY(i2cname) \
-{                                              	      \
-	sDeviceName:	"/dev/rtc",                       \
-	deviceType:	RTC_CUSTOM,                       \
-	pDeviceFns:	&rtc_ds1375_fns,                  \
-	deviceProbe:	rtc_ds1375_device_probe,          \
-	ulCtrlPort1:	(uintptr_t)(i2cname),             \
-	ulDataPort:	0,                                \
-	getRegister:	rtc_ds1375_get_register,          \
-	setRegister:	rtc_ds1375_set_register,          \
-}
+ #define DS1375_RTC_TBL_ENTRY(dev_name, ds1375_rtc_ctx) \
+ I2C_RTC_TBL_ENTRY(dev_name, ds1375_rtc_ctx)
+
+#define DS1375_RTC_INITIALIZER(i2c_path, i2c_address) \
+    I2C_RTC_INITIALIZER( \
+        i2c_path, \
+        i2c_address, \
+        0, \
+        I2C_RTC_ORDER_sec_min_hour_wkday_day_month_year, \
+        "ds1375", \
+        rtc_ds1375_hw_init)
+
 
 #ifdef __cplusplus
 }
