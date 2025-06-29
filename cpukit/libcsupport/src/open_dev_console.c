@@ -47,14 +47,22 @@
  */
 void rtems_libio_post_driver(void)
 {
+  int fd = 0;
   /*
    * Attempt to open /dev/console.
    */
-  if ( open( CONSOLE_DEVICE_NAME, O_RDONLY, 0 ) != STDIN_FILENO ) {
+  if ( ( fd = open( CONSOLE_DEVICE_NAME, O_RDONLY, 0 ) ) != STDIN_FILENO ) {
     /*
      * There may not be a console driver so this is OK.
      */
-    return;
+    if ( fd < 0 ) {
+      return;
+    }
+
+    /*
+     * If open succeeds, but doesn't give us the stdin fileno we expect, bail out...
+     */
+    _Internal_error( INTERNAL_ERROR_LIBIO_STDIN_FD_OPEN_FAILED );
   }
 
   /*
