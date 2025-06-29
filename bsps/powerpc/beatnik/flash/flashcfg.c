@@ -87,9 +87,9 @@ static struct bankdesc mvme6100Flash[] = {
 };
 
 struct flash_bsp_ops BSP_flashBspOps = {
-	bankcheck    : bankcheck,
-	flash_wp     : flash_wp,
-	read_us_timer: read_us_timer,
+	.bankcheck     = bankcheck,
+	.flash_wp      = flash_wp,
+	.read_us_timer = read_us_timer,
 };
 
 /* set (enbl:1), clear (enbl:0) or query (enbl:-1) write protection

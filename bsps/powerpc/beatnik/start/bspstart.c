@@ -174,12 +174,12 @@ static void bsp_early( void )
   Triv121PgTbl	pt=0;
 
   VpdBufRec vpdData [] = {
-	{ key: ProductIdent, instance: 0, buf: BSP_productIdent, buflen: sizeof(BSP_productIdent) - 1 },
-	{ key: SerialNumber, instance: 0, buf: BSP_serialNumber, buflen: sizeof(BSP_serialNumber) - 1 },
-	{ key: CpuClockHz,   instance: 0, buf: &BSP_processor_frequency, buflen: sizeof(BSP_processor_frequency)  },
-	{ key: BusClockHz,   instance: 0, buf: &BSP_bus_frequency, buflen: sizeof(BSP_bus_frequency)  },
-	{ key: EthernetAddr, instance: 0, buf: BSP_enetAddr0, buflen: sizeof(BSP_enetAddr0) },
-	{ key: EthernetAddr, instance: 1, buf: BSP_enetAddr1, buflen: sizeof(BSP_enetAddr1) },
+	{ .key = ProductIdent, .instance = 0, .buf = BSP_productIdent, .buflen = sizeof(BSP_productIdent) - 1 },
+	{ .key = SerialNumber, .instance = 0, .buf = BSP_serialNumber, .buflen = sizeof(BSP_serialNumber) - 1 },
+	{ .key = CpuClockHz,   .instance = 0, .buf = &BSP_processor_frequency, .buflen = sizeof(BSP_processor_frequency)  },
+	{ .key = BusClockHz,   .instance = 0, .buf = &BSP_bus_frequency, .buflen = sizeof(BSP_bus_frequency)  },
+	{ .key = EthernetAddr, .instance = 0, .buf = BSP_enetAddr0, .buflen = sizeof(BSP_enetAddr0) },
+	{ .key = EthernetAddr, .instance = 1, .buf = BSP_enetAddr1, .buflen = sizeof(BSP_enetAddr1) },
 	VPD_END
   };
 
@@ -315,7 +315,7 @@ static void bsp_early( void )
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk(
-    "Configuration.work_space_size = %x\n",
+    "Configuration.work_space_size = %lx\n",
     rtems_configuration_get_work_space_size()
   );
 #endif

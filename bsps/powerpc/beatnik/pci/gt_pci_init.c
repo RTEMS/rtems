@@ -56,12 +56,12 @@ typedef struct {
 
 static PciHoseCfg hoses[2] = {
 	{
-		pci_config_addr:	(volatile unsigned char *)(MV64x60_PCI0_CONFIG_ADDR),
-		pci_config_data:	(volatile unsigned char *)(MV64x60_PCI0_CONFIG_DATA),
+		.pci_config_addr =	(volatile unsigned char *)(MV64x60_PCI0_CONFIG_ADDR),
+		.pci_config_data =	(volatile unsigned char *)(MV64x60_PCI0_CONFIG_DATA),
 	},
 	{
-		pci_config_addr:	(volatile unsigned char *)(MV64x60_PCI1_CONFIG_ADDR),
-		pci_config_data:	(volatile unsigned char *)(MV64x60_PCI1_CONFIG_DATA),
+		.pci_config_addr =	(volatile unsigned char *)(MV64x60_PCI1_CONFIG_ADDR),
+		.pci_config_data =	(volatile unsigned char *)(MV64x60_PCI1_CONFIG_DATA),
 	}
 };
 

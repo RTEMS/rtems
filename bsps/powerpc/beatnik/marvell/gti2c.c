@@ -88,24 +88,24 @@ STATIC int
 gt_i2c_write_bytes(rtems_libi2c_bus_t *bh, unsigned char *buf, int len);
 
 static rtems_libi2c_bus_ops_t myops = {
-	init:			gt_i2c_init,
-	send_start:		gt_i2c_send_start,
-	send_stop:		gt_i2c_send_stop,
-	send_addr:		gt_i2c_send_addr,
-	read_bytes:		gt_i2c_read_bytes,
-	write_bytes:	gt_i2c_write_bytes,
+	.init			= gt_i2c_init,
+	.send_start		= gt_i2c_send_start,
+	.send_stop		= gt_i2c_send_stop,
+	.send_addr		= gt_i2c_send_addr,
+	.read_bytes		= gt_i2c_read_bytes,
+	.write_bytes	= gt_i2c_write_bytes,
 };
 
 static gti2c_desc_rec my_bus_tbl = {
 	{
-		ops:	&myops,
-		size:	sizeof(my_bus_tbl),
+		.ops	= &myops,
+		.size	= sizeof(my_bus_tbl),
 	},/* public fields */
 	{
-		sc_gt:		BSP_MV64x60_BASE,
-		sc_cntl:	I2C_Control_TWSIEn,
-		sc_inited:	0,
-		sc_sync:	0
+		.sc_gt		= BSP_MV64x60_BASE,
+		.sc_cntl	= I2C_Control_TWSIEn,
+		.sc_inited	= 0,
+		.sc_sync	= 0
 	} /* our private fields */
 };
 
@@ -258,11 +258,11 @@ unsigned					m,n,N;
 
 		if ( _System_state_Is_up(_System_state_Get()) ) {
 			rtems_irq_connect_data ii = {
-				name:	BSP_IRQ_I2C,
-				hdl:	gt_i2c_intr,
-				on:		0,
-				off:	0,
-				isOn:	0
+				.name	= BSP_IRQ_I2C,
+				.hdl	= gt_i2c_intr,
+				.on		= 0,
+				.off	= 0,
+				.isOn	= 0
 			};
 			rtems_status_code err;
 			/* synchronization semaphore */

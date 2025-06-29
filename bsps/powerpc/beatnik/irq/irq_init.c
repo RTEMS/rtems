@@ -50,12 +50,12 @@ static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings    initial_config;
 static rtems_irq_prio				rtemsPrioTbl[BSP_IRQ_NUMBER];
 static rtems_irq_connect_data     	defaultIrq = {
-  name:   0,
-  hdl:    nop_func,
-  handle: 0,
-  on:     0,
-  off:    0,
-  isOn:   0
+  .name   = 0,
+  .hdl    = nop_func,
+  .handle = 0,
+  .on     = 0,
+  .off    = 0,
+  .isOn   = 0
 };
 
 
