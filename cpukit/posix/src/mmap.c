@@ -141,11 +141,11 @@ void *mmap(
 
   /* Check for illegal addresses. Watch out for address wrap. */
   if ( map_fixed ) {
-    if ((uintptr_t)addr & PAGE_MASK) {
+    if ( addr == NULL ) {
       errno = EINVAL;
       return MAP_FAILED;
     }
-    if ( addr == NULL ) {
+    if ((uintptr_t)addr & PAGE_MASK) {
       errno = EINVAL;
       return MAP_FAILED;
     }
