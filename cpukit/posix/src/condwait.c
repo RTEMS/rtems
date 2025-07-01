@@ -73,6 +73,7 @@ int pthread_cond_wait(
   return _POSIX_Condition_variables_Wait_support(
     cond,
     mutex,
-    NULL
+    NULL,
+    CLOCK_REALTIME
   );
 }

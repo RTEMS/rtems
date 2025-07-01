@@ -34,3 +34,7 @@ This test benchmarks the following operations:
 + pthread_mutex_unlock - no threads waiting 
 + pthread_mutex_timedlock - available 
 + pthread_mutex_unlock - no threads waiting 
++ pthread_mutex_clocklock - available CLOCK_MONOTONIC 
++ pthread_mutex_unlock - no threads waiting 
++ pthread_mutex_clocklock - available CLOCK_REALTIME
++ pthread_mutex_unlock - no threads waiting 

@@ -39,6 +39,12 @@
 #elif defined(USE_TIMEDWAIT_WAIT_VALUE_IN_PAST)
   #define TEST_NUMBER "10"
   #define TEST_CASE "pthread_cond_timedwait: time in past error"
+#elif defined(USE_CLOCKWAIT_WITH_VALUE)
+  #define TEST_NUMBER "11"
+  #define TEST_CASE "pthread_cond_clockwait: blocking"
+#elif defined(USE_CLOCKWAIT_WAIT_VALUE_IN_PAST)
+  #define TEST_NUMBER "12"
+  #define TEST_CASE "pthread_cond_clockwait: time in past error"
 #else
   #error "How am I being compiled?"
 #endif
@@ -69,6 +75,7 @@ void *Low(void *argument);
 pthread_cond_t  CondID;
 pthread_mutex_t MutexID;
 struct timespec sleepTime;
+clockid_t clock_id;
 
 void *Low(
   void *argument
@@ -126,7 +133,25 @@ void *Middle(
       rtems_test_assert(rc == ETIMEDOUT);
       benchmark_timer_read();
     }
+  #elif defined(USE_CLOCKWAIT_WITH_VALUE)
+    /* adjust sleepTime to get something obviously in the future */
+    ++sleepTime.tv_sec;
+
+    rc = pthread_cond_clockwait( &CondID, &MutexID, clock_id, &sleepTime );
+    rtems_test_assert( rc == 0 );
+
+  #elif defined(USE_CLOCKWAIT_WAIT_VALUE_IN_PAST)
+    {
+      /* override sleepTime with something obviously in the past */
+      sleepTime.tv_sec = 0;
+      sleepTime.tv_nsec = 5;
+
+      rc = pthread_cond_clockwait( &CondID, &MutexID, clock_id, &sleepTime );
+      rtems_test_assert(rc == ETIMEDOUT);
+      benchmark_timer_read();
+    }
   #endif
+
 
   pthread_mutex_unlock(&MutexID);
   #if defined(USE_TIMEDWAIT_WAIT_VALUE_IN_PAST)
@@ -159,6 +184,8 @@ void *POSIX_Init(
   /* Convert from timeval to timespec */
   sleepTime.tv_sec  = tp.tv_sec;
   sleepTime.tv_nsec = tp.tv_usec * 1000;
+
+  clock_id = CLOCK_MONOTONIC;
 
   rc = pthread_cond_init(&CondID, NULL);
   rtems_test_assert( rc == 0 );
@@ -199,3 +226,4 @@ void *POSIX_Init(
 
 #include <rtems/confdefs.h>
   /* end of file */
+  

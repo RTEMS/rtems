@@ -51,6 +51,7 @@ void *POSIX_Init(
   pthread_cond_t cond5 = PTHREAD_COND_INITIALIZER;
   pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
   struct timespec to;
+  clockid_t clock_id;
 
   TEST_BEGIN();
 
@@ -75,6 +76,13 @@ void *POSIX_Init(
   to.tv_nsec = 1;
   sc = pthread_cond_timedwait( &cond4, &mtx, &to );
   fatal_posix_service_status( sc, ETIMEDOUT, "cond timedwait OK" );
+
+  puts( "Init - pthread_cond_clockwait - auto initialize - OK" );
+  to.tv_sec = 1;
+  to.tv_nsec = 1;
+  clock_id = CLOCK_MONOTONIC;
+  sc = pthread_cond_clockwait( &cond4, &mtx, clock_id, &to );
+  fatal_posix_service_status( sc, ETIMEDOUT, "cond clockwait OK" );
 
   puts( "Init - pthread_mutex_unlock - OK" );
   sc = pthread_mutex_unlock( &mtx );

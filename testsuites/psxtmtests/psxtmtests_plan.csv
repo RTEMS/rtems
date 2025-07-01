@@ -10,6 +10,8 @@
 "pthread_mutex_unlock: thread waiting: preempt","psxtmmutex06","psxtmtest_unblocking_preempt","Yes"
 "pthread_mutex_timedlock: available","psxtmmutex03","psxtmtest_single","Yes"
 "pthread_mutex_timedlock: not available: block","psxtmmutex04","psxtmtest_blocking","Yes"
+"pthread_mutex_clocklock: available","psxtmmutex03","psxtmtest_single","Yes"
+"pthread_mutex_clocklock: not available: block","psxtmmutex08","psxtmtest_blocking","Yes"
 "pthread_mutex_setprioceiling","psxtmmutex07","psxtmtest_single","Yes"
 "pthread_mutex_getprioceiling","psxtmmutex07","psxtmtest_single","Yes"
 
@@ -36,6 +38,8 @@
 "pthread_cond_wait: blocks","psxtmcond08","psxtmtest_blocking","Yes"
 "pthread_cond_timedwait: blocks","psxtmcond09","psxtmtest_blocking","Yes"
 "pthread_cond_timedwait: time in past error","psxtmcond10","psxtmtest_blocking","Yes"
+"pthread_cond_clockwait: blocks","psxtmcond11","psxtmtest_blocking","Yes"
+"pthread_cond_clockwait: time in past error","psxtmcond12","psxtmtest_blocking","Yes"
 
 "pthread_create: no preempt","psxtmthread01","psxtmtest_single","Yes"
 "pthread_create: preempt","psxtmthread02","psxtmtest_single","Yes"
@@ -115,6 +119,8 @@
 "pthread_rwlock_tryrdlock: not available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_timedrdlock: available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_timedrdlock: not available: blocks","psxtmrwlock03","psxtmtest_blocking","Yes"
+"pthread_rwlock_clockrdlock: available","psxtmrwlock01","psxtmtest_single","Yes"
+"pthread_rwlock_clockrdlock: not available: blocks","psxtmrwlock08","psxtmtest_blocking","Yes"
 "pthread_rwlock_unlock: no threads waiting","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_unlock: thread waiting: no preempt","psxtmrwlock06",,"Yes"
 "pthread_rwlock_unlock: thread waiting: preempt","psxtmrwlock07",,"Yes"
@@ -124,6 +130,8 @@
 "pthread_rwlock_trywrlock: not available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_timedwrlock: available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_timedwrlock: not available: blocks","psxtmrwlock05","psxtmtest_blocking","Yes"
+"pthread_rwlock_clockwrlock: available","psxtmrwlock01","psxtmtest_single","Yes"
+"pthread_rwlock_clockwrlock: not available: blocks","psxtmrwlock09","psxtmtest_blocking","Yes"
 
 "mq_open: first open","psxtmmq01","psxtmtest_init_destroy","Yes"
 "mq_close: close of first","psxtmmq01","psxtmtest_init_destroy","Yes"

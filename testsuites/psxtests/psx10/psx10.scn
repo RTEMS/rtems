@@ -38,16 +38,24 @@ Task_2: back from pthread_cond_wait release mutex
 Task_2: task exit
 Init: pthread_cond_timedwait for 3 seconds
 Init: pthread_cond_timedwait - ETIMEDOUT - (mutex not acquired)
+Init: pthread_cond_clockwait for 3 seconds
+Init: pthread_cond_clockwait - ETIMEDOUT - (mutex not acquired)
 
 Init: pthread_cond_signal - EINVAL (cond invalid)
 Init: pthread_cond_broadcast - EINVAL (cond invalid)
 Init: pthread_cond_wait - EINVAL (cond invalid)
 Init: pthread_cond_timedwait - EINVAL (cond invalid)
+Init: pthread_cond_clockwait - EINVAL (cond invalid)
 Init: pthread_cond_wait - EINVAL (mutex invalid)
 Init: pthread_cond_timedwait - EINVAL (mutex invalid)
+Init: pthread_cond_clockwait - EINVAL (mutex invalid)
 Init: pthread_cond_timedwait - EINVAL (abstime NULL)
+Init: pthread_cond_clockwait - EINVAL (abstime NULL)
+Init: pthread_cond_clockwait - EINVAL (clock invalid)
 Init: pthread_cond_timedwait - ETIMEDOUT (abstime->tv_sec < current time)
 Init: pthread_cond_timedwait - ETIMEDOUT (abstime->tv_nsec < current time)
+Init: pthread_cond_clockwait - ETIMEDOUT (abstime->tv_sec < current time)
+Init: pthread_cond_clockwait - ETIMEDOUT (abstime->tv_nsec < current time)
 Init: pthread_cond_wait - EINVAL (mutex not locked before call)
 Init: pthread_cond_timedwait - EINVAL (mutex not locked before call)
 

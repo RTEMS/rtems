@@ -45,6 +45,8 @@ void benchmark_mutex_unlock_no_threads_waiting(void);
 void benchmark_mutex_trylock_available(void);
 void benchmark_mutex_trylock_not_available(void);
 void benchmark_mutex_timedlock_available(void);
+void benchmark_mutex_clocklock_available_clockmonotonic(void);
+void benchmark_mutex_clocklock_available_clockrealtime(void);
 
 pthread_mutex_t MutexId;
 
@@ -148,6 +150,44 @@ void benchmark_mutex_timedlock_available(void)
   );
 }
 
+void benchmark_mutex_clocklock_available_clockmonotonic(void)
+{
+  benchmark_timer_t end_time;
+  int  status;
+
+  benchmark_timer_initialize();
+    status = pthread_mutex_clocklock( &MutexId, CLOCK_MONOTONIC, 0 );
+  end_time = benchmark_timer_read();
+  rtems_test_assert( !status );
+
+  put_time(
+    "pthread_mutex_clocklock: available CLOCK_MONOTONIC ",
+    end_time,
+    1,
+    0,
+    0
+  );
+}
+
+void benchmark_mutex_clocklock_available_clockrealtime(void)
+{
+  benchmark_timer_t end_time;
+  int  status;
+
+  benchmark_timer_initialize();
+    status = pthread_mutex_clocklock( &MutexId, CLOCK_REALTIME, 0 );
+  end_time = benchmark_timer_read();
+  rtems_test_assert( !status );
+
+  put_time(
+    "pthread_mutex_clocklock: available CLOCK_REALTIME",
+    end_time,
+    1,
+    0,
+    0
+  );
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -172,6 +212,10 @@ void *POSIX_Init(
   benchmark_mutex_trylock_not_available();
   benchmark_mutex_unlock_no_threads_waiting();
   benchmark_mutex_timedlock_available();
+  benchmark_mutex_unlock_no_threads_waiting();
+  benchmark_mutex_clocklock_available_clockmonotonic();
+  benchmark_mutex_unlock_no_threads_waiting();
+  benchmark_mutex_clocklock_available_clockrealtime();
   benchmark_mutex_unlock_no_threads_waiting();
 
 

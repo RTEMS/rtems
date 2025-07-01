@@ -5,12 +5,12 @@
  *
  * @ingroup POSIXAPI
  *
- * @brief Waiting on a Condition
+ * @brief This source file contains the implementation of 
+ *  pthread_rwlock_clockrdlock().
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+ * Copyright (C) 2025, Mazen Adel Elmessady
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,34 +38,44 @@
 #include "config.h"
 #endif
 
-#include <rtems/posix/condimpl.h>
+#include <rtems/posix/posixapi.h>
+#include <rtems/posix/rwlockimpl.h>
 
-/*
- *  11.4.4 Waiting on a Condition, P1003.1c/Draft 10, p. 105
- */
-
-int pthread_cond_timedwait(
-  pthread_cond_t        *cond,
-  pthread_mutex_t       *mutex,
+int pthread_rwlock_clockrdlock(
+  pthread_rwlock_t      *rwlock,
+  clockid_t              clock_id,
   const struct timespec *abstime
 )
 {
-  POSIX_Condition_variables_Control *the_cond;
-  unsigned long                      flags;
-  clockid_t                          clock_id;
+  POSIX_RWLock_Control *the_rwlock;
+  Thread_queue_Context  queue_context;
+  Status_Control        status;
 
-  if ( abstime == NULL ) {
-    return EINVAL; /* not specified */
+  the_rwlock = _POSIX_RWLock_Get( rwlock );
+  POSIX_RWLOCK_VALIDATE_OBJECT( the_rwlock );
+
+  _Thread_queue_Context_initialize( &queue_context );
+
+  if ( clock_id == CLOCK_REALTIME ) {
+    _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
+      &queue_context,
+      abstime,
+      true
+    );
+  } else if ( clock_id == CLOCK_MONOTONIC ) {
+    _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
+      &queue_context,
+      abstime,
+      true
+    );
+  } else {
+    return EINVAL;
   }
 
-  the_cond = _POSIX_Condition_variables_Get( cond );
-  POSIX_CONDITION_VARIABLES_VALIDATE_OBJECT( the_cond, flags );
-  clock_id = _POSIX_Condition_variables_Get_clock( flags );
-
-  return _POSIX_Condition_variables_Wait_support(
-    cond,
-    mutex,
-    abstime,
-    clock_id
+  status = _CORE_RWLock_Seize_for_reading(
+    &the_rwlock->RWLock,
+    true,
+    &queue_context
   );
+  return _POSIX_Get_error( status );
 }

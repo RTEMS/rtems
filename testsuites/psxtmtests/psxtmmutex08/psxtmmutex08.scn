@@ -1,0 +1,3 @@
+*** POSIX TIME TEST PSXTMMUTEX08 ***
+pthread_mutex_clocklock: not available block - 113
+*** END OF POSIX TIME TEST PSXTMMUTEX08 ***

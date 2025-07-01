@@ -41,6 +41,7 @@ static void test_cond_null( void )
   pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
   int eno;
   struct timespec to;
+  clockid_t clock_id;
 
   eno = pthread_cond_init( NULL, NULL );
   rtems_test_assert( eno == EINVAL );
@@ -54,6 +55,10 @@ static void test_cond_null( void )
   to.tv_sec = 1;
   to.tv_nsec = 1;
   eno = pthread_cond_timedwait( NULL, &mtx, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  clock_id = CLOCK_MONOTONIC;
+  eno = pthread_cond_clockwait( NULL, &mtx, clock_id, &to );
   rtems_test_assert( eno == EINVAL );
 
   eno = pthread_mutex_unlock( &mtx );
@@ -78,6 +83,7 @@ static void test_cond_not_initialized( void )
   pthread_cond_t cond;
   int eno;
   struct timespec to;
+  clockid_t clock_id;
 
   memset( &cond, 0xff, sizeof( cond ) );
 
@@ -90,6 +96,10 @@ static void test_cond_not_initialized( void )
   to.tv_sec = 1;
   to.tv_nsec = 1;
   eno = pthread_cond_timedwait( &cond, &mtx, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  clock_id = CLOCK_MONOTONIC;
+  eno = pthread_cond_clockwait( &cond, &mtx, clock_id, &to );
   rtems_test_assert( eno == EINVAL );
 
   eno = pthread_mutex_unlock( &mtx );
@@ -115,6 +125,7 @@ static void test_cond_invalid_copy( void )
   pthread_cond_t cond2;
   int eno;
   struct timespec to;
+  clockid_t clock_id;
 
   eno = pthread_cond_init( &cond, NULL );
   rtems_test_assert( eno == 0 );
@@ -130,6 +141,10 @@ static void test_cond_invalid_copy( void )
   to.tv_sec = 1;
   to.tv_nsec = 1;
   eno = pthread_cond_timedwait( &cond2, &mtx, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  clock_id = CLOCK_MONOTONIC;
+  eno = pthread_cond_clockwait( &cond2, &mtx, clock_id, &to );
   rtems_test_assert( eno == EINVAL );
 
   eno = pthread_mutex_unlock( &mtx );
@@ -161,6 +176,7 @@ void *POSIX_Init(
   int                 pshared;
   pthread_cond_t      cond;
   struct timespec     timeout;
+  clockid_t clock_id;
 
   TEST_BEGIN();
 
@@ -331,6 +347,29 @@ void *POSIX_Init(
   status = pthread_mutex_unlock( &Mutex_id );
   rtems_test_assert( !status );
 
+/* clockwait case - timeout */
+
+  status = pthread_mutex_lock( &Mutex_id );
+  rtems_test_assert( !status );
+
+/* set timeout to 3 seconds */
+
+  status = clock_gettime( CLOCK_REALTIME, &timeout );
+  rtems_test_assert( !status );
+  timeout.tv_sec += 3;
+  timeout.tv_nsec = 0;
+  clock_id = CLOCK_REALTIME;
+
+  puts( "Init: pthread_cond_clockwait for 3 seconds" );
+  status = pthread_cond_clockwait( &Cond1_id, &Mutex_id, clock_id ,&timeout );
+  if ( status != ETIMEDOUT )
+    printf( "status = %d\n", status );
+  rtems_test_assert( status == ETIMEDOUT );
+  puts( "Init: pthread_cond_clockwait - ETIMEDOUT - (mutex not acquired)" );
+
+  status = pthread_mutex_unlock( &Mutex_id );
+  rtems_test_assert( !status );
+
 /* remaining error messages */
 
   empty_line();
@@ -366,6 +405,12 @@ void *POSIX_Init(
   rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_cond_timedwait - EINVAL (cond invalid)" );
 
+  status = pthread_cond_clockwait( NULL, &Mutex_id, clock_id, &timeout );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  rtems_test_assert( status == EINVAL );
+  puts( "Init: pthread_cond_clockwait - EINVAL (cond invalid)" );
+
   status = pthread_cond_wait( &Cond1_id, NULL );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
@@ -378,11 +423,30 @@ void *POSIX_Init(
   rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_cond_timedwait - EINVAL (mutex invalid)" );
 
+  status = pthread_cond_clockwait( &Cond1_id, NULL, clock_id, &timeout );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  rtems_test_assert( status == EINVAL );
+  puts( "Init: pthread_cond_clockwait - EINVAL (mutex invalid)" );
+
   status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, NULL );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
   rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_cond_timedwait - EINVAL (abstime NULL)" );
+
+  status = pthread_cond_clockwait( &Cond1_id, &Mutex_id, clock_id,NULL );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  rtems_test_assert( status == EINVAL );
+  puts( "Init: pthread_cond_clockwait - EINVAL (abstime NULL)" );
+
+  clock_id = (clockid_t) 99 ; //invalid clock value
+  status = pthread_cond_clockwait( &Cond1_id, NULL, clock_id, &timeout );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  rtems_test_assert( status == EINVAL );
+  puts( "Init: pthread_cond_clockwait - EINVAL (clock invalid)" );
 
   status = clock_gettime( CLOCK_REALTIME, &timeout );
   rtems_test_assert( !status );
@@ -410,6 +474,33 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   rtems_test_assert( status == ETIMEDOUT );
   puts( "Init: pthread_cond_timedwait - ETIMEDOUT (abstime->tv_nsec < current time)" );
+  status = pthread_mutex_unlock( &Mutex_id );
+  rtems_test_assert( !status );
+
+  status = clock_gettime( CLOCK_MONOTONIC, &timeout );
+  rtems_test_assert( !status );
+  timeout.tv_sec -= 1;
+  clock_id = CLOCK_MONOTONIC;
+  status = pthread_cond_clockwait( &Cond1_id, &Mutex_id, clock_id, &timeout );
+  if ( status != ETIMEDOUT )
+    printf( "status = %d\n", status );
+  rtems_test_assert( status == ETIMEDOUT );
+  puts( "Init: pthread_cond_clockwait - ETIMEDOUT (abstime->tv_sec < current time)" );
+  status = pthread_mutex_unlock( &Mutex_id );
+  rtems_test_assert( !status );
+
+  do {
+    status = clock_gettime( CLOCK_MONOTONIC, &timeout );
+    rtems_test_assert( !status );
+    timeout.tv_nsec -= 1;
+  } while ( timeout.tv_nsec < 0);
+
+  clock_id = CLOCK_MONOTONIC;
+  status = pthread_cond_clockwait( &Cond1_id, &Mutex_id, clock_id, &timeout );
+  if ( status != ETIMEDOUT )
+    printf( "status = %d\n", status );
+  rtems_test_assert( status == ETIMEDOUT );
+  puts( "Init: pthread_cond_clockwait - ETIMEDOUT (abstime->tv_nsec < current time)" );
   status = pthread_mutex_unlock( &Mutex_id );
   rtems_test_assert( !status );
 

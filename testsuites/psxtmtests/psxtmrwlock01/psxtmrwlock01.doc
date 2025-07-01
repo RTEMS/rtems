@@ -33,8 +33,10 @@ This test benchmarks the following operations:
 + pthread_rwlock_tryrdlock - available 
 + pthread_rwlock_tryrdlock - not available
 + pthread_rwlock_timedrdlock - available 
++ pthread_rwlock_clockrdlock - available 
 + pthread_rwlock_wrlock - available
 + pthread_rwlock_trywrlock - available
 + pthread_rwlock_trywrlock - not available 
 + pthread_rwlock_timedwrlock - available 
++ pthread_rwlock_clockwrlock - available 
 + pthread_rwlock_destroy 

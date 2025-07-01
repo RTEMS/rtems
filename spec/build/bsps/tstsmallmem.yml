@@ -60,6 +60,8 @@ actions:
 - append-test-cppflags: psxtmcond08
 - append-test-cppflags: psxtmcond09
 - append-test-cppflags: psxtmcond10
+- append-test-cppflags: psxtmcond11
+- append-test-cppflags: psxtmcond12
 - append-test-cppflags: psxtmkey01
 - append-test-cppflags: psxtmkey02
 - append-test-cppflags: psxtmmq01
@@ -72,6 +74,7 @@ actions:
 - append-test-cppflags: psxtmmutex05
 - append-test-cppflags: psxtmmutex06
 - append-test-cppflags: psxtmmutex07
+- append-test-cppflags: psxtmmutex08
 - append-test-cppflags: psxtmmutexattr01
 - append-test-cppflags: psxtmnanosleep01
 - append-test-cppflags: psxtmnanosleep02
@@ -83,6 +86,8 @@ actions:
 - append-test-cppflags: psxtmrwlock05
 - append-test-cppflags: psxtmrwlock06
 - append-test-cppflags: psxtmrwlock07
+- append-test-cppflags: psxtmrwlock08
+- append-test-cppflags: psxtmrwlock09
 - append-test-cppflags: psxtmsem01
 - append-test-cppflags: psxtmsem02
 - append-test-cppflags: psxtmsem03

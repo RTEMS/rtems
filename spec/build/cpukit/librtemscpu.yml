@@ -1032,6 +1032,7 @@ source:
 - cpukit/posix/src/condattrsetclock.c
 - cpukit/posix/src/condattrsetpshared.c
 - cpukit/posix/src/condbroadcast.c
+- cpukit/posix/src/condclockwait.c
 - cpukit/posix/src/conddefaultattributes.c
 - cpukit/posix/src/conddestroy.c
 - cpukit/posix/src/condinit.c
@@ -1081,6 +1082,7 @@ source:
 - cpukit/posix/src/mutexattrsetprotocol.c
 - cpukit/posix/src/mutexattrsetpshared.c
 - cpukit/posix/src/mutexattrsettype.c
+- cpukit/posix/src/mutexclocklock.c
 - cpukit/posix/src/mutexdestroy.c
 - cpukit/posix/src/mutexgetprioceiling.c
 - cpukit/posix/src/mutexinit.c
@@ -1095,6 +1097,8 @@ source:
 - cpukit/posix/src/pbarrierinit.c
 - cpukit/posix/src/pbarrierwait.c
 - cpukit/posix/src/posix_madvise.c
+- cpukit/posix/src/prwlockclockrdlock.c
+- cpukit/posix/src/prwlockclockwrlock.c
 - cpukit/posix/src/prwlockdestroy.c
 - cpukit/posix/src/prwlockinit.c
 - cpukit/posix/src/prwlockrdlock.c

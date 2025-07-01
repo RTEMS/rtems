@@ -171,7 +171,8 @@ int _POSIX_Condition_variables_Signal_support(
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
   pthread_mutex_t           *mutex,
-  const struct timespec     *abstime
+  const struct timespec     *abstime,
+  clockid_t                  clock_id
 );
 
 bool _POSIX_Condition_variables_Auto_initialization(

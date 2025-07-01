@@ -5,12 +5,11 @@
  *
  * @ingroup POSIXAPI
  *
- * @brief Waiting on a Condition
+ * @brief This source file contains the implementation of pthread_mutex_clocklock().
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+ * Copyright (C) 2025, Mazen Adel Elmessady
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,34 +37,27 @@
 #include "config.h"
 #endif
 
-#include <rtems/posix/condimpl.h>
+#include <rtems/posix/muteximpl.h>
 
-/*
- *  11.4.4 Waiting on a Condition, P1003.1c/Draft 10, p. 105
- */
-
-int pthread_cond_timedwait(
-  pthread_cond_t        *cond,
+int pthread_mutex_clocklock(
   pthread_mutex_t       *mutex,
+  clockid_t              clock_id,
   const struct timespec *abstime
 )
 {
-  POSIX_Condition_variables_Control *the_cond;
-  unsigned long                      flags;
-  clockid_t                          clock_id;
-
-  if ( abstime == NULL ) {
-    return EINVAL; /* not specified */
-  }
-
-  the_cond = _POSIX_Condition_variables_Get( cond );
-  POSIX_CONDITION_VARIABLES_VALIDATE_OBJECT( the_cond, flags );
-  clock_id = _POSIX_Condition_variables_Get_clock( flags );
-
-  return _POSIX_Condition_variables_Wait_support(
-    cond,
-    mutex,
-    abstime,
-    clock_id
-  );
+  if ( clock_id == CLOCK_REALTIME ) {
+    return _POSIX_Mutex_Lock_support(
+      mutex,
+      abstime,
+      _Thread_queue_Add_timeout_realtime_timespec
+    );
+  } else if ( clock_id == CLOCK_MONOTONIC ) {
+    return _POSIX_Mutex_Lock_support(
+      mutex,
+      abstime,
+      _Thread_queue_Add_timeout_monotonic_timespec
+    );
+  } 
+  
+  return EINVAL;
 }

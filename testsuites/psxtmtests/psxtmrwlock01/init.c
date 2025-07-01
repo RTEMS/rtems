@@ -153,6 +153,26 @@ static void benchmark_pthread_rwlock_timedrdlock(void)
 
 }
 
+static void benchmark_pthread_rwlock_clockrdlock(void)
+{
+  benchmark_timer_t end_time;
+  int  status;
+
+  benchmark_timer_initialize();
+    status = pthread_rwlock_clockrdlock( &rwlock, CLOCK_MONOTONIC, 0 );
+  end_time = benchmark_timer_read();
+  rtems_test_assert( status == 0 );
+
+  put_time(
+    "pthread_rwlock_clockrdlock: available",
+    end_time,
+    1,        /* Only executed once */
+    0,
+    0
+  );
+
+}
+
 static void benchmark_pthread_rwlock_wrlock(void)
 {
   benchmark_timer_t end_time;
@@ -221,6 +241,26 @@ static void benchmark_pthread_rwlock_timedwrlock(void)
   );
 }
 
+static void benchmark_pthread_rwlock_clockwrlock(void)
+{
+  benchmark_timer_t end_time;
+  int  status;
+
+  benchmark_timer_initialize();
+    status = pthread_rwlock_clockwrlock( &rwlock, CLOCK_MONOTONIC, 0 );
+  end_time = benchmark_timer_read();
+  rtems_test_assert( status == 0 );
+
+  put_time(
+    "pthread_rwlock_clockwrlock: available",
+    end_time,
+    1,        /* Only executed once */
+    0,
+    0
+  );
+}
+
+
 static void benchmark_pthread_rwlock_destroy(void)
 {
   benchmark_timer_t end_time;
@@ -261,6 +301,10 @@ void *POSIX_Init(
   benchmark_pthread_rwlock_timedrdlock();
   /* unlocking rwlock */
   benchmark_pthread_rwlock_unlock(0);
+  /* applying a clock read lock */
+  benchmark_pthread_rwlock_clockrdlock();
+  /* unlocking rwlock */
+  benchmark_pthread_rwlock_unlock(0);
   /* applying a write lock */
   benchmark_pthread_rwlock_wrlock();
   /* trying to get read lock, when is not available*/
@@ -275,6 +319,10 @@ void *POSIX_Init(
   benchmark_pthread_rwlock_unlock(0);
   /* applying a timed write lock */
   benchmark_pthread_rwlock_timedwrlock();
+  /* unlocking rwlock */
+  benchmark_pthread_rwlock_unlock(0);
+  /* applying a clock write lock */
+  benchmark_pthread_rwlock_clockwrlock();
   /* unlocking rwlock */
   benchmark_pthread_rwlock_unlock(1);
   /* destroying rwlock */

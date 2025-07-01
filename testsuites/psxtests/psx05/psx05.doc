@@ -43,6 +43,7 @@ directives:
 + pthread_mutex_lock
 + pthread_mutex_unlock
 + pthread_mutex_timedlock
++ pthread_mutex_clocklock
 + pthread_mutex_destroy
 + pthread_setschedparam
 + pthread_getschedparam

@@ -97,7 +97,8 @@ static void _POSIX_Condition_variables_Enqueue_with_timeout_by_clock_id(
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
   pthread_mutex_t           *mutex,
-  const struct timespec     *abstime
+  const struct timespec     *abstime,
+  clockid_t                 clock_id
 )
 {
   POSIX_Condition_variables_Control *the_cond;

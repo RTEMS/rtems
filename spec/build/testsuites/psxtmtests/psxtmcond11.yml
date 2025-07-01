@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2025 Mazen Adel Elmessady
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/psxtmtests/psxtmcond11/init.c
+- testsuites/support/src/tmtests_empty_function.c
+- testsuites/support/src/tmtests_support.c
+stlib: []
+target: testsuites/psxtmtests/psxtmcond11.exe
+type: build
+use-after: []
+use-before: []

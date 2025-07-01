@@ -292,6 +292,7 @@ static void test_mutex_null( void )
 {
   struct timespec to;
   int eno;
+  clockid_t clock_id;
 
   eno = pthread_mutex_destroy( NULL );
   rtems_test_assert( eno == EINVAL );
@@ -307,6 +308,10 @@ static void test_mutex_null( void )
   eno = pthread_mutex_timedlock( NULL, &to );
   rtems_test_assert( eno == EINVAL );
 
+  clock_id = CLOCK_MONOTONIC;
+  eno = pthread_mutex_clocklock( NULL, clock_id, &to );
+  rtems_test_assert( eno == EINVAL );
+
   eno = pthread_mutex_trylock( NULL );
   rtems_test_assert( eno == EINVAL );
 
@@ -319,6 +324,7 @@ static void test_mutex_not_initialized( void )
   pthread_mutex_t mutex;
   struct timespec to;
   int eno;
+  clockid_t clock_id;
 
   memset( &mutex, 0xff, sizeof( mutex ) );
 
@@ -331,6 +337,10 @@ static void test_mutex_not_initialized( void )
   to.tv_sec = 1;
   to.tv_nsec = 1;
   eno = pthread_mutex_timedlock( &mutex, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  clock_id = CLOCK_MONOTONIC;
+  eno = pthread_mutex_clocklock( NULL, clock_id, &to );
   rtems_test_assert( eno == EINVAL );
 
   eno = pthread_mutex_trylock( &mutex );
@@ -346,6 +356,7 @@ static void test_mutex_invalid_copy( void )
   pthread_mutex_t mutex2;
   struct timespec to;
   int eno;
+  clockid_t clock_id;
 
   eno = pthread_mutex_init( &mutex, NULL );
   rtems_test_assert( eno == 0 );
@@ -363,6 +374,10 @@ static void test_mutex_invalid_copy( void )
   eno = pthread_mutex_timedlock( &mutex2, &to );
   rtems_test_assert( eno == EINVAL );
 
+  clock_id = CLOCK_MONOTONIC;
+  eno = pthread_mutex_clocklock( NULL, clock_id, &to );
+  rtems_test_assert( eno == EINVAL );
+
   eno = pthread_mutex_trylock( &mutex2 );
   rtems_test_assert( eno == EINVAL );
 
@@ -377,6 +392,7 @@ static void test_mutex_auto_initialization( void )
 {
   struct timespec to;
   int eno;
+  clockid_t clock_id;
 
   {
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -413,6 +429,16 @@ static void test_mutex_auto_initialization( void )
   {
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
+    to.tv_sec = 1;
+    to.tv_nsec = 1;
+    clock_id = CLOCK_MONOTONIC;
+    eno = pthread_mutex_clocklock( &mutex, clock_id, &to );
+    rtems_test_assert( eno == 0 );
+  }
+
+  {
+    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
     eno = pthread_mutex_trylock( &mutex );
     rtems_test_assert( eno == 0 );
   }
@@ -432,6 +458,7 @@ static void test_mutex_prio_protect_with_cv( void )
   pthread_cond_t cond;
   int eno;
   struct timespec timeout;
+  clockid_t       clock_id;
 
   eno = pthread_mutexattr_init( &attr );
   rtems_test_assert( eno == 0 );
@@ -455,6 +482,10 @@ static void test_mutex_prio_protect_with_cv( void )
   timeout.tv_nsec = 0;
 
   eno = pthread_cond_timedwait( &cond, &mutex, &timeout );
+  rtems_test_assert( eno == ETIMEDOUT );
+
+  clock_id = CLOCK_MONOTONIC;
+  eno = pthread_cond_clockwait( &cond, &mutex, clock_id, &timeout );
   rtems_test_assert( eno == ETIMEDOUT );
 
   eno = pthread_mutex_unlock( &mutex );
@@ -482,6 +513,7 @@ void *POSIX_Init(
   int                  ceiling;
   int                  old_ceiling;
   int                  priority;
+  clockid_t            clock_id;
 
   Mutex_bad_id = NULL;
 
@@ -815,6 +847,29 @@ void *POSIX_Init(
      /* switch to idle */
 
   puts( "Init: pthread_mutex_timedlock - EAGAIN (timeout)" );
+
+  /* destroy a mutex */
+
+  clock_id = CLOCK_REALTIME;
+  puts( "Init: pthread_mutex_clocklock - time out in 1/2 second" );
+  calculate_abstimeout( &times, 0, (TOD_NANOSECONDS_PER_SECOND / 2) );
+
+  status = pthread_mutex_clocklock( &Mutex_id, clock_id,&times );
+  if ( status != ETIMEDOUT )
+    printf( "status = %d\n", status );
+  rtems_test_assert( status == ETIMEDOUT );
+
+  puts( "Init: pthread_mutex_clocklock - time out in the past" );
+  calculate_abstimeout( &times, -1, (TOD_NANOSECONDS_PER_SECOND / 2) );
+
+  status = pthread_mutex_clocklock( &Mutex_id, clock_id, &times );
+  if ( status != ETIMEDOUT )
+    printf( "status = %d\n", status );
+  rtems_test_assert( status == ETIMEDOUT );
+
+     /* switch to idle */
+
+  puts( "Init: pthread_mutex_clocklock - EAGAIN (timeout)" );
 
   /* destroy a mutex */
 

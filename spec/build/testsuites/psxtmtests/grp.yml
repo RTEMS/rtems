@@ -54,6 +54,10 @@ links:
 - role: build-dependency
   uid: psxtmcond10
 - role: build-dependency
+  uid: psxtmcond11
+- role: build-dependency
+  uid: psxtmcond12
+- role: build-dependency
   uid: psxtmkey01
 - role: build-dependency
   uid: psxtmkey02
@@ -78,6 +82,8 @@ links:
 - role: build-dependency
   uid: psxtmmutex07
 - role: build-dependency
+  uid: psxtmmutex08
+- role: build-dependency
   uid: psxtmmutexattr01
 - role: build-dependency
   uid: psxtmnanosleep01
@@ -99,6 +105,10 @@ links:
   uid: psxtmrwlock06
 - role: build-dependency
   uid: psxtmrwlock07
+- role: build-dependency
+  uid: psxtmrwlock08
+- role: build-dependency
+  uid: psxtmrwlock09
 - role: build-dependency
   uid: psxtmsem01
 - role: build-dependency
