@@ -125,6 +125,12 @@ rtems_task Init(
   sbrk_count = 0;
   offset     = 256;
   _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
+
+  /* Some BSPs provide multiple memory areas.  Make them empty. */
+  for ( i = 1; i < _Memory_Get_count( mem ); ++i ) {
+    _Memory_Initialize_by_size( _Memory_Get_area( mem, i ), NULL, 0 );
+  }
+
   _Malloc_Initialize();
 
   errno = 0;
