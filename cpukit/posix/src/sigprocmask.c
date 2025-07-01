@@ -57,7 +57,15 @@ int sigprocmask(
    */
 
 #if defined(RTEMS_POSIX_API)
-  return pthread_sigmask( how, set, oset );
+  int status;
+
+  status = pthread_sigmask( how, set, oset );
+
+  if ( status == 0 ) {
+    return 0;
+  }
+
+  return -1;
 #else
   return -1;
 #endif

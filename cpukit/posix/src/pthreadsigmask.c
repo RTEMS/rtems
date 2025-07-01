@@ -58,8 +58,9 @@ int pthread_sigmask(
 {
   POSIX_API_Control  *api;
 
-  if ( !set && !oset )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+  if ( !set && !oset ) {
+    return EINVAL;
+  }
 
   api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
 
@@ -80,7 +81,7 @@ int pthread_sigmask(
       api->signals_unblocked = ~*set;
       break;
     default:
-      rtems_set_errno_and_return_minus_one( EINVAL );
+      return EINVAL;
   }
 
   /* XXX are there critical section problems here? */

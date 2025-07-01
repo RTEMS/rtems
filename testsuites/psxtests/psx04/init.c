@@ -535,15 +535,15 @@ void *POSIX_Init(
   puts( "Init: sigaction - EINVAL (SIGKILL)" );
 
   status = pthread_sigmask( SIG_BLOCK, NULL, NULL );
-  if ( status != -1 )
+  if ( status != EINVAL )
     printf( "status = %d\n", status );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_sigmask - EINVAL (set and oset invalid)" );
 
   status = pthread_sigmask( 999, &pending_set, NULL );
-  if ( status != -1 )
+  if ( status != EINVAL )
     printf( "status = %d\n", status );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_sigmask - EINVAL (how invalid)" );
 
   status = sigpending( NULL );
@@ -557,14 +557,14 @@ void *POSIX_Init(
   if ( status != -1 )
     printf( "status = %d\n", status );
   rtems_test_assert( errno == EINVAL );
-  puts( "Init: pthread_sigmask - EINVAL (timout->nsec invalid < 0)" );
+  puts( "Init: sigtimedwait - EINVAL (timout->nsec invalid < 0)" );
 
   timeout.tv_nsec = 0x7fffffff;
   status = sigtimedwait( &mask, &info, &timeout );
   if ( status != -1 )
     printf( "status = %d\n", status );
   rtems_test_assert( errno == EINVAL );
-  puts( "Init: pthread_sigmask - EINVAL (timout->nsec invalid to large)" );
+  puts( "Init: sigtimedwait - EINVAL (timout->nsec invalid to large)" );
 
   status = pthread_kill( Init_id, 999 );
   rtems_test_assert( status == EINVAL );
