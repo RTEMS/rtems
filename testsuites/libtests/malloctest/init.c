@@ -1543,6 +1543,7 @@ static void test_early_malloc( void )
   void *r;
   void *s;
   void *t;
+  void *u;
 
   p = malloc( 1 );
   rtems_test_assert( p != NULL );
@@ -1556,15 +1557,8 @@ static void test_early_malloc( void )
 
   free( q );
 
-/*
- * This was added to address the following warning.
- * warning: pointer 'q' used after 'free'
- */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wuse-after-free"
-  r = realloc( q, 128 );
-  rtems_test_assert( r == q );
-#pragma GCC diagnostic pop
+  r = realloc( NULL, 128 );
+  rtems_test_assert( r != q );
 
   s = malloc( 1 );
   rtems_test_assert( s != NULL );
@@ -1575,7 +1569,10 @@ static void test_early_malloc( void )
   rtems_test_assert( t != NULL );
   rtems_test_assert( t != r );
 
-  free( t );
+  u = realloc( t, 384 );
+  rtems_test_assert( t == u );
+
+  free( u );
 }
 
 RTEMS_SYSINIT_ITEM(
