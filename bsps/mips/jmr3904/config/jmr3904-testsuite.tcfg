@@ -1,9 +1,0 @@
-#
-# The GDB MIPS JMR3904 simulator in GDB
-#
-
-include: testdata/disable-intrcritical-tests.tcfg
-
-# The simulator catches the data access fault and exits before the
-# simulated MIPS handler can run.
-exclude: spfatal26

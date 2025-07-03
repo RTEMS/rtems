@@ -1,9 +1,0 @@
-#
-# lpc24xx_plx800_rom_int RTEMS Test Database.
-#
-# Format is one line per test that is _NOT_ built.
-#
-
-include: testdata/disable-iconv-tests.tcfg
-exclude: fsdosfsname01
-exclude: record02

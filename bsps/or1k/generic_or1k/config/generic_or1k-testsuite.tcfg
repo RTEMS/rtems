@@ -1,6 +1,0 @@
-#
-# generic_or1k RTEMS Test Database.
-#
-
-include: testdata/disable-iconv-tests.tcfg
-include: testdata/disable-intrcritical-tests.tcfg

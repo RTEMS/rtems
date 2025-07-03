@@ -1,7 +1,0 @@
-#
-# phycore_mpc5554 RTEMS Test Database.
-#
-# Format is one line per test that is _NOT_ built.
-#
-
-include: testdata/small-memory-testsuite.tcfg
