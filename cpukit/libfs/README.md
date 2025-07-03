@@ -12,7 +12,7 @@ Currently the supported file systems in this library are:
    files, directories, device nodes and mount points. It can also be
    configured to be the miniIMFS.
 
-- TFTP and FTP filesystem are part of the libnetworking library.
+- TFTP and FTP filesystem require networking support.
 
 - DEVFS or Device File system
 

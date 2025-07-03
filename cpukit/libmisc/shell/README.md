@@ -18,7 +18,7 @@ NOTES:
 2.  You only need a termios dev to start a new session, add your new commands
     and enjoy it.
 
-3.  Telnetd daemon uses this (browse libnetworking/rtems_telnetd)
+3.  Telnetd daemon uses this.
     Enjoy it.
 
 FUTURE:
