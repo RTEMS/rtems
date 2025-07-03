@@ -132,6 +132,6 @@ static void generic_or1k_clock_initialize(void)
 #define Clock_driver_support_initialize_hardware() generic_or1k_clock_initialize()
 
 #define Clock_driver_support_install_isr(isr) \
-  generic_or1k_clock_handler_install(isr)
+  generic_or1k_clock_handler_install((CPU_ISR_handler) isr)
 
 #include "../../../shared/dev/clock/clockimpl.h"
