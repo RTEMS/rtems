@@ -87,12 +87,19 @@ extern volatile uint32_t Clock_driver_ticks;
 
 
 #ifdef RTEMS_SMP
+/*
+ * SMP_Action_handler function type takes a single void * argument.
+ * rtems_timecounter_tick() takes no arguments. The cast is safe
+ * because rtems_timecounter_tick() does not look at its arguments.
+ * The alternative would be to provide a wrapper function which adds
+ * overhead on every SMP clock tick.
+ */
 #define Clock_driver_support_at_tick(arg) \
   do {                                                              \
     Processor_mask targets;                                         \
     _Processor_mask_Assign(&targets, _SMP_Get_online_processors()); \
     _Processor_mask_Clear(&targets, _SMP_Get_current_processor());  \
-    _SMP_Multicast_action(&targets, rtems_timecounter_tick, NULL);               \
+    _SMP_Multicast_action(&targets, (SMP_Action_handler)rtems_timecounter_tick, NULL);               \
   } while (0)
 #endif
 
