@@ -55,6 +55,15 @@ actions:
     - top
     - ttest01
     - utf8proc01
+- set-test-state:
+    reason: "These are too large to link with Debug enabled"
+    state: exclude
+    tests:
+    - mdosfsfsrename
+    - mdosfsfsrenameexisting
+    - mdosfsfsrenamelongname
+    - mdosfsfsrenamemaxlinks
+    - mdosfsfsrmdirparent
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
