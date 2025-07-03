@@ -11,6 +11,8 @@ default:
   value:
   - -mcpu=cortex-a72
   - -mabi=ilp32
+  - -Wno-deprecated
+  - -Wno-error=deprecated
 - enabled-by: true
   value:
   - -mcpu=cortex-a72

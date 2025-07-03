@@ -10,6 +10,8 @@ default:
 - enabled-by: aarch64/a53_ilp32_qemu
   value:
   - -mabi=ilp32
+  - -Wno-deprecated
+  - -Wno-error=deprecated
   - -mno-outline-atomics
   - -mcpu=cortex-a53
   - -mfix-cortex-a53-835769

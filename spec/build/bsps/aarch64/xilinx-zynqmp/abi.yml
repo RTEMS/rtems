@@ -12,6 +12,8 @@ default:
   - aarch64/zynqmp_qemu_ilp32
   value:
   - -mabi=ilp32
+  - -Wno-deprecated
+  - -Wno-error=deprecated
   - -mno-outline-atomics
   - -mcpu=cortex-a53
   - -mfix-cortex-a53-835769
