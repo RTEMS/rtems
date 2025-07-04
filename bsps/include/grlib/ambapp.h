@@ -36,6 +36,8 @@
 
 #include <stddef.h>
 
+#include <rtems/score/basedefs.h>
+
 /* Include VENDOR and DEVICE definitions */
 #include "ambapp_ids.h"
 
@@ -102,7 +104,7 @@ struct ambapp_dev {
 	unsigned short device;		/* Device ID */
 
 	/* Device info (APB/AHB dep. on type) */
-	struct ambapp_common_info devinfo[0];
+	struct ambapp_common_info devinfo[RTEMS_ZERO_LENGTH_ARRAY];
 };
 
 /* Describes a complete AMBA Core. Each device may consist of 3 interfaces */
