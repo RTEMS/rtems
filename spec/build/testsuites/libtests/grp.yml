@@ -125,6 +125,8 @@ links:
 - role: build-dependency
   uid: exit03
 - role: build-dependency
+  uid: exit04
+- role: build-dependency
   uid: fcntl
 - role: build-dependency
   uid: flashdev01
