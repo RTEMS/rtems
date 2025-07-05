@@ -32,7 +32,9 @@ bool benchmark_timer_find_average_overhead;
 
 #define TIMER_REGS ((altera_avalon_timer_regs*)NIOS2_IO_BASE(TIMER_BASE))
 
-static rtems_isr timerisr(rtems_vector_number vector)
+static rtems_interrupt_entry timer_interrupt;
+
+static rtems_isr timerisr(void *vector)
 {
   TIMER_REGS->status = 0;
   Timer_interrupts++;
@@ -44,7 +46,18 @@ void benchmark_timer_initialize( void )
 
   TIMER_REGS->control = ALTERA_AVALON_TIMER_CONTROL_STOP_MSK;
 
-  set_vector(timerisr, TIMER_VECTOR, 1);
+  rtems_interrupt_entry_initialize(
+    &timer_interrupt,
+    timerisr,
+    NULL,
+    "handle timer interrupt"
+  );
+  rtems_interrupt_entry_install(
+    TIMER_VECTOR,
+    RTEMS_INTERRUPT_UNIQUE,
+    &timer_interrupt
+  );
+  // set_vector(timerisr, TIMER_VECTOR, 1);
 
   /* Enable interrupt processing */
 
