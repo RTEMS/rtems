@@ -26,8 +26,6 @@
       (void *)(_new), \
       NULL \
     );
-  // set_vector(_new, CLOCK_VECTOR, 1)
-  
 
 /*
  * Set up the clock hardware

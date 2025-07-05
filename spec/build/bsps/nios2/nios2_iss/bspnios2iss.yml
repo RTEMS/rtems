@@ -39,7 +39,6 @@ source:
 - bsps/nios2/nios2_iss/clock/clock.c
 - bsps/nios2/nios2_iss/console/console.c
 - bsps/nios2/nios2_iss/start/bspstart.c
-- bsps/nios2/nios2_iss/start/setvec.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-polled.c

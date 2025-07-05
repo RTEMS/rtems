@@ -57,7 +57,6 @@ void benchmark_timer_initialize( void )
     RTEMS_INTERRUPT_UNIQUE,
     &timer_interrupt
   );
-  // set_vector(timerisr, TIMER_VECTOR, 1);
 
   /* Enable interrupt processing */
 
