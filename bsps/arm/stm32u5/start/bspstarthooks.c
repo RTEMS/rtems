@@ -147,8 +147,8 @@ void BSP_START_TEXT_SECTION bsp_start_hook_0( void )
    * It's not really relevant, which symbol is checked. So pick
    * stm32u5_init_octospi at random.
    */
-  if ( stm32u5_init_octospi < stm32u5_memory_octospi_1_begin ||
-       stm32u5_init_octospi > stm32u5_memory_octospi_1_end ) {
+  if ( (void*) stm32u5_init_octospi < (void*) stm32u5_memory_octospi_1_begin ||
+       (void*) stm32u5_init_octospi > (void*) stm32u5_memory_octospi_1_end ) {
     SystemInit();
     SystemCoreClockUpdate();
     stm32u5_rcc_power_clock_enable();
@@ -166,8 +166,8 @@ void BSP_START_TEXT_SECTION bsp_start_hook_1( void )
    * Init OctoSPI only if we are not running from it. See start hook 0 for
    * details.
    */
-  if ( stm32u5_init_octospi < stm32u5_memory_octospi_1_begin ||
-       stm32u5_init_octospi > stm32u5_memory_octospi_1_end ) {
+  if ( (void*) stm32u5_init_octospi < (void*) stm32u5_memory_octospi_1_begin ||
+       (void*) stm32u5_init_octospi > (void*) stm32u5_memory_octospi_1_end ) {
     stm32u5_init_octospi();
   }
   bsp_start_copy_sections();
