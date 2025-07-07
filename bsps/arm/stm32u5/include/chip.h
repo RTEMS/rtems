@@ -36,7 +36,6 @@
 #ifndef LIBBSP_ARM_STM32U5_CHIP_H
 #define LIBBSP_ARM_STM32U5_CHIP_H
 
-#include <core_cm33.h>
 #include <stm32u5xx.h>
 
 #endif /* LIBBSP_ARM_STM32U5_CHIP_H */
