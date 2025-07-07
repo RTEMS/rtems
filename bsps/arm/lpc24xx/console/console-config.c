@@ -43,6 +43,8 @@
 #include <bsp/io.h>
 #include <bsp/console-termios.h>
 
+#if defined(LPC24XX_CONFIG_CONSOLE) || defined(LPC24XX_CONFIG_UART_1) || \
+    defined(LPC24XX_CONFIG_UART_2) || defined(LPC24XX_CONFIG_UART_3)
 static uint8_t lpc24xx_uart_get_register(uintptr_t addr, uint8_t i)
 {
   volatile uint32_t *reg = (volatile uint32_t *) addr;
@@ -56,6 +58,7 @@ static void lpc24xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 
   reg [i] = val;
 }
+#endif
 
 #ifdef LPC24XX_CONFIG_CONSOLE
 static ns16550_context lpc24xx_uart_context_0 = {
