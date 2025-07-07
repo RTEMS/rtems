@@ -68,7 +68,7 @@
       .begin = (uint32_t) bsp_section_fast_data_begin,
       .end = (uint32_t) bsp_section_fast_data_end,
       .flags = LPC32XX_MMU_READ_WRITE_DATA
-#ifdef LPC32XX_SCRATCH_AREA_SIZE
+#if LPC32XX_SCRATCH_AREA_SIZE
     }, {
       .begin = (uint32_t) &lpc32xx_scratch_area [0],
       .end = (uint32_t) &lpc32xx_scratch_area [LPC32XX_SCRATCH_AREA_SIZE],

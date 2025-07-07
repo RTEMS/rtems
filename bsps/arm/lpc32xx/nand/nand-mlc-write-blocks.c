@@ -61,7 +61,7 @@ rtems_status_code lpc32xx_mlc_write_blocks(
   uint32_t block_end,
   const void *src,
   size_t src_size,
-  uint32_t *page_data_buffer
+  uint32_t page_buffer [MLC_LARGE_DATA_WORD_COUNT]
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -92,10 +92,10 @@ rtems_status_code lpc32xx_mlc_write_blocks(
       size_t delta = remainder < page_size ? remainder : page_size;
 
       if (remainder > 0) {
-        memcpy(page_data_buffer, current, delta);
+        memcpy(page_buffer, current, delta);
         sc = lpc32xx_mlc_write_page_with_ecc(
           page,
-          page_data_buffer,
+          page_buffer,
           ones_spare
         );
         if (sc != RTEMS_SUCCESSFUL) {

@@ -187,9 +187,9 @@ extern uint32_t lpc32xx_magic_zero_end [];
  */
 extern uint32_t lpc32xx_magic_zero_size [];
 
-#ifdef LPC32XX_SCRATCH_AREA_SIZE
+#if LPC32XX_SCRATCH_AREA_SIZE
   /**
-   * @rief Scratch area.
+   * @brief Scratch area.
    *
    * The usage is application specific.
    */
