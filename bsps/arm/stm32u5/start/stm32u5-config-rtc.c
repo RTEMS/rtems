@@ -45,7 +45,7 @@ RTC_HandleTypeDef hrtc  = { 0 };
 RTC_TimeTypeDef   sTime = { 0 };
 RTC_DateTypeDef   sDate = { 0 };
 
-void stm32u5_rtc_get_time( rtems_time_of_day *tod )
+static void stm32u5_rtc_get_time( rtems_time_of_day *tod )
 {
   if ( HAL_RTC_GetTime( &hrtc, &sTime, RTC_FORMAT_BIN ) != HAL_OK ) {
     bsp_fatal( STM32U5_FATAL_RTC );
