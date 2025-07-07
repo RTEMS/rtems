@@ -238,39 +238,51 @@
 #define LPC32XX_RESERVE(a, b) uint8_t reserved_ ## b [b - a]
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_nand_slc;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_ssp;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_spi;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_sd_card;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_usb;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_lcd;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_etb;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_syscon;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_uart_ctrl;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_uart;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_ms_timer;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_hs_timer;
 
 /**
@@ -345,18 +357,23 @@ typedef struct {
 } lpc32xx_wdt;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_debug;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_adc;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_keyscan;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_pwm;
 
 typedef struct {
+  uint32_t unused;
 } lpc32xx_mcpwm;
 
 typedef struct {
