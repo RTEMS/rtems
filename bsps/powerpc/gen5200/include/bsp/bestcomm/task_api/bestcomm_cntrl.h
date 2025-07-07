@@ -118,16 +118,18 @@
 #define SDMA_INT_ENABLE(RegAddr, Bit) \
   do { \
     rtems_interrupt_level level; \
+    volatile uint32 *reg = (volatile uint32 *) RegAddr; \
     rtems_interrupt_disable(level); \
-    *((volatile uint32 *) RegAddr) &= ~((uint32) (1 << Bit)); \
+    *reg &= ~((uint32) (1 << Bit)); \
     rtems_interrupt_enable(level); \
   } while (0)
 
 #define SDMA_INT_DISABLE(RegAddr, Bit) \
   do { \
     rtems_interrupt_level level; \
+    volatile uint32 *reg = (volatile uint32 *) RegAddr; \
     rtems_interrupt_disable(level); \
-    *((volatile uint32 *) (RegAddr)) |= ((uint32)(1 << Bit)); \
+    *reg |= ((uint32)(1 << Bit)); \
     rtems_interrupt_enable(level); \
   } while (0)
 
@@ -147,7 +149,8 @@
 
 /* Clear the IntPend bit */
 #define SDMA_CLEAR_IEVENT(RegAddr, Bit) {	\
-	*((volatile uint32 *)RegAddr) = ((uint32)(1<<Bit)); \
+	volatile uint32 *reg = (volatile uint32 *) RegAddr; \
+	*reg = ((uint32)(1<<Bit)); \
 }
 
 #define SDMA_GET_PENDINGBIT(sdma, Bit)	\
