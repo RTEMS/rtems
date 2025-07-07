@@ -3709,7 +3709,11 @@ HAL_StatusTypeDef LPTIM_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t src, uint
   /* Enable the DMA channel */
   if ((hdma->Mode & DMA_LINKEDLIST) == DMA_LINKEDLIST)
   {
+#ifndef __rtems__
     if ((hdma->LinkedListQueue != 0U) && (hdma->LinkedListQueue->Head != 0U))
+#else /* __rtems__ */
+    if ((hdma->LinkedListQueue != NULL) && (hdma->LinkedListQueue->Head != NULL))
+#endif /* __rtems__ */
     {
       /* Enable the DMA channel */
       hdma->LinkedListQueue->Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET] = length;

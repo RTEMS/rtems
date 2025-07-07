@@ -686,7 +686,11 @@ HAL_StatusTypeDef HAL_SRAM_Read_DMA(SRAM_HandleTypeDef *hsram, uint32_t *pAddres
 
     if ((hsram->hdma->Mode & DMA_LINKEDLIST) == DMA_LINKEDLIST)
     {
+#ifndef __rtems__
       if ((hsram->hdma->LinkedListQueue != 0U) && (hsram->hdma->LinkedListQueue->Head != 0U))
+#else /* __rtems__ */
+      if ((hsram->hdma->LinkedListQueue != NULL) && (hsram->hdma->LinkedListQueue->Head != NULL))
+#endif /* __rtems__ */
       {
         /* Check destination data width and set the size to be transferred */
         data_width = hsram->hdma->LinkedListQueue->Head->LinkRegisters[NODE_CTR1_DEFAULT_OFFSET] & DMA_CTR1_DDW_LOG2;
@@ -788,7 +792,11 @@ HAL_StatusTypeDef HAL_SRAM_Write_DMA(SRAM_HandleTypeDef *hsram, uint32_t *pAddre
 
     if ((hsram->hdma->Mode & DMA_LINKEDLIST) == DMA_LINKEDLIST)
     {
+#ifndef __rtems__
       if ((hsram->hdma->LinkedListQueue != 0U) && (hsram->hdma->LinkedListQueue->Head != 0U))
+#else /* __rtems__ */
+      if ((hsram->hdma->LinkedListQueue != NULL) && (hsram->hdma->LinkedListQueue->Head != NULL))
+#endif /* __rtems__ */
       {
         /* Check destination data width and set the size to be transferred */
         data_width = hsram->hdma->LinkedListQueue->Head->LinkRegisters[NODE_CTR1_DEFAULT_OFFSET] & DMA_CTR1_DDW_LOG2;

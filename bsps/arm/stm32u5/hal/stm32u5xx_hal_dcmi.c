@@ -424,7 +424,11 @@ HAL_StatusTypeDef HAL_DCMI_Start_DMA(DCMI_HandleTypeDef *hdcmi, uint32_t DCMI_Mo
     /* Enable the DMA Stream */
     if ((hdcmi->DMA_Handle->Mode & DMA_LINKEDLIST) == DMA_LINKEDLIST)
     {
+#ifndef __rtems__
       if ((hdcmi->DMA_Handle->LinkedListQueue != 0U) && (hdcmi->DMA_Handle->LinkedListQueue->Head != 0U))
+#else /* __rtems__ */
+      if ((hdcmi->DMA_Handle->LinkedListQueue != NULL) && (hdcmi->DMA_Handle->LinkedListQueue->Head != NULL))
+#endif /* __rtems__ */
       {
         /* Set Source , Destination , Length for DMA Xfer */
 
@@ -478,7 +482,11 @@ HAL_StatusTypeDef HAL_DCMI_Start_DMA(DCMI_HandleTypeDef *hdcmi, uint32_t DCMI_Mo
 
     if ((hdcmi->DMA_Handle->Mode & DMA_LINKEDLIST) == DMA_LINKEDLIST)
     {
+#ifndef __rtems__
       if ((hdcmi->DMA_Handle->LinkedListQueue != 0U) && (hdcmi->DMA_Handle->LinkedListQueue->Head != 0U))
+#else /* __rtems__ */
+      if ((hdcmi->DMA_Handle->LinkedListQueue != NULL) && (hdcmi->DMA_Handle->LinkedListQueue->Head != NULL))
+#endif /* __rtems__ */
       {
         /* Update first node */
 
