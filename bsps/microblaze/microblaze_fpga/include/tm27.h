@@ -47,7 +47,10 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector( handler ) /* set_vector( (handler), 6, 1 ) */
+#define Install_tm27_vector( handler ) \
+  do { \
+    (void) (handler); \
+  } while (0)
 
 #define Cause_tm27_intr()  /* empty */
 
