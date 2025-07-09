@@ -319,6 +319,8 @@ typedef struct {
 
 static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
+  (void) level;
+
   return true;
 }
 
