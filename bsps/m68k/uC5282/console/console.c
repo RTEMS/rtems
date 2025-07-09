@@ -44,10 +44,14 @@ _BSP_null_char( char c )
 
 	rtems_interrupt_disable(level);
     while ( (MCF5282_UART_USR(CONSOLE_PORT) & MCF5282_UART_USR_TXRDY) == 0 )
+    {
         continue;
+    }
     MCF5282_UART_UTB(CONSOLE_PORT) = c;
     while ( (MCF5282_UART_USR(CONSOLE_PORT) & MCF5282_UART_USR_TXRDY) == 0 )
+    {
         continue;
+    }
 	rtems_interrupt_enable(level);
 }
 
