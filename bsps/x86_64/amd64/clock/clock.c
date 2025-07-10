@@ -88,7 +88,7 @@ void amd64_clock_driver_initialize(void)
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
   uint64_t irq_ticks_per_sec = 1000000 / us_per_tick;
   DBG_PRINTF(
-    "us_per_tick = %d\nDesired frequency = %d irqs/sec\n",
+    "us_per_tick = %" PRIu64 "\nDesired frequency = %" PRIu64 "irqs/sec\n",
     us_per_tick,
     irq_ticks_per_sec
   );
