@@ -447,7 +447,7 @@ typedef struct {
 extern au1x00_uart_t *uart0;
 extern au1x00_uart_t *uart3;
 
-void static inline au_sync(void)
+static inline void au_sync(void)
 {
 	__asm__ volatile ("sync");
 }
