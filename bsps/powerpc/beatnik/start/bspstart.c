@@ -22,6 +22,8 @@
  *
  *  T. Straumann: 2005-2007; stolen again for 'beatnik'...
  */
+
+#include <inttypes.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -315,7 +317,7 @@ static void bsp_early( void )
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk(
-    "Configuration.work_space_size = %lx\n",
+    "Configuration.work_space_size = %" PRIxPTR "\n",
     rtems_configuration_get_work_space_size()
   );
 #endif
