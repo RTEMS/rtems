@@ -40,11 +40,14 @@ extern "C" {
 
 #define FSBASE_MSR 0xC0000100
 
-#if DEBUG
-#define DBG_PRINTF(format, args...)             \
-  printf(format, ## args)
+#ifndef ASM
+#ifdef DEBUG
+#include <inttypes.h>
+#include <rtems/bspIo.h>
+#define DBG_PRINTF(...) printk(__VA_ARGS__)
 #else
-#define DBG_PRINTF(format, args...)
+#define DBG_PRINTF(...)
+#endif
 #endif
 
 #ifdef __cplusplus
