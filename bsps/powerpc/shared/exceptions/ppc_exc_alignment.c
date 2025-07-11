@@ -39,7 +39,7 @@ int ppc_exc_alignment_handler(BSP_Exception_frame *frame, unsigned excNum)
     unsigned b = (opcode >> 11) & 0x1f;
     PPC_GPR_TYPE *regs = &frame->GPR0;
     unsigned *current = (unsigned *)
-      (((a == 0 ? 0 : (unsigned) regs[a]) + (unsigned) regs[b]) & (clsz - 1));
+      (((a == 0 ? 0 : (uintptr_t) regs[a]) + (uintptr_t) regs[b]) & (clsz - 1));
     unsigned *end = current + clsz / sizeof(*current);
 
     while (current != end) {

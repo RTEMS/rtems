@@ -379,7 +379,7 @@ typedef uint32_t pci_ulong;
 #ifndef PCI_DRAM_OFFSET
 #define PCI_DRAM_OFFSET 0
 #endif
-#define BSP_LOCAL2PCI_ADDR(l)	(((uint32_t)l)+PCI_DRAM_OFFSET)
+#define BSP_LOCAL2PCI_ADDR(l)	(((uintptr_t)l)+PCI_DRAM_OFFSET)
 #endif
 
 /* PCI_MEM_BASE is a possible offset between CPU- and PCI addresses.
@@ -464,7 +464,7 @@ unsigned short		wrd;
 		return -1;
 	/* Assume upper BAR is zero */
 
-	*pbase=(BERegister*)(((pci_ulong)BSP_PCI2LOCAL_ADDR(busaddr)) & ~0xff);
+	*pbase=(BERegister*)(((uintptr_t)BSP_PCI2LOCAL_ADDR(busaddr)) & ~0xff);
 
 	if (BSP_PCI_CONFIG_IN_BYTE(bus,dev,fun,PCI_INTERRUPT_LINE,&irqline))
 		return -1;
@@ -490,8 +490,8 @@ BERegister *base;
 	if ((irq=vmeTsi148FindPciBase(instance,&base)) < 0) {
 		uprintf(stderr,"unable to find a Tsi148 in pci config space\n");
 	} else {
-		uprintf(stderr,"Tundra Tsi148 PCI-VME bridge detected at 0x%08x, IRQ %d\n",
-				(unsigned int)base, irq);
+		uprintf(stderr,"Tundra Tsi148 PCI-VME bridge detected at %p, IRQ %d\n",
+				base, irq);
 	}
 	devs[0].base    = base;
 	devs[0].irqLine = irq;
@@ -1486,7 +1486,7 @@ rtems_interrupt_lock_context lock_context;
 static void
 tsiVMEISR(rtems_irq_hdl_param arg)
 {
-int					pin = (int)arg;
+uintptr_t			pin = (uintptr_t)arg;
 BERegister			*b  = THEBASE;
 IRQEntry			ip;
 unsigned long	 	msk,lintstat,vector, vecarg;
@@ -1597,7 +1597,7 @@ rtems_irq_connect_data	xx;
 	xx.off    = my_no_op;
 	xx.isOn   = my_isOn;
 	xx.hdl    = isr;
-	xx.handle = (rtems_irq_hdl_param)slot;
+	xx.handle = (rtems_irq_hdl_param)((uintptr_t)slot);
 	xx.name   = pic_line;
 
 	if ( shared ) {
@@ -2401,7 +2401,7 @@ VmeTsi148DmaListDescriptor d = p;
 	if ( 0 == n ) {
 		st_be32( &d->dnlal, TSI_DNLAL_LLA );
 	} else {
-		st_be32( &d->dnlal, BSP_LOCAL2PCI_ADDR((uint32_t)n) );
+		st_be32( &d->dnlal, BSP_LOCAL2PCI_ADDR((uintptr_t)n) );
 	}
 }
 

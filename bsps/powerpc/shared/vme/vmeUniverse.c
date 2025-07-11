@@ -340,7 +340,7 @@ unsigned char irqline;
 		   || ((unsigned long)(busaddr) & 1))
 			return -1;
 	}
-	*pbase=(volatile LERegister*)BSP_PCI2LOCAL_ADDR(busaddr);
+	*pbase=(volatile LERegister*)(uintptr_t)BSP_PCI2LOCAL_ADDR(busaddr);
 
 	if (BSP_PCI_CONFIG_IN_BYTE(bus,dev,fun,PCI_INTERRUPT_LINE,&irqline))
 		return -1;
@@ -1030,7 +1030,7 @@ int rval;
 		vmeUniverse0PciIrqLine = rval;
 		rval                   = 0;
 		uprintf(stderr,"Universe II PCI-VME bridge detected at 0x%08x, IRQ %d\n",
-				(unsigned int)vmeUniverse0BaseAddr, vmeUniverse0PciIrqLine);
+				(uintptr_t)vmeUniverse0BaseAddr, vmeUniverse0PciIrqLine);
 	}
 	return rval;
 }
@@ -1601,7 +1601,7 @@ VmeUniverseDmaListDesc d = p;
 	if ( 0 == n ) {
 		st_le32( &d->dcpp, UNIV_DCPP_IMG_NULL );
 	} else {
-		st_le32( &d->dcpp, BSP_LOCAL2PCI_ADDR( (uint32_t)n));
+		st_le32( &d->dcpp, BSP_LOCAL2PCI_ADDR( (uintptr_t)n));
 	}
 }
 
@@ -1683,7 +1683,7 @@ uint32_t			dgcs;
     vmeUniverseWriteRegXX( base, 0x0, UNIV_REGOFF_DTBC);
 
     /* set the address of the descriptor chain */
-    vmeUniverseWriteRegXX( base, BSP_LOCAL2PCI_ADDR((uint32_t)p), UNIV_REGOFF_DCPP);
+    vmeUniverseWriteRegXX( base, BSP_LOCAL2PCI_ADDR((uintptr_t)p), UNIV_REGOFF_DCPP);
 
 	/* and GO */
 	dgcs |= UNIV_DGCS_GO;
@@ -1892,7 +1892,7 @@ register unsigned long		s;
 static void
 universeVMEISR(rtems_irq_hdl_param arg)
 {
-int					pin = (int)arg;
+uintptr_t		pin = (uintptr_t)arg;
 UniverseIRQEntry	ip;
 unsigned long	 	msk,lintstat,status;
 int					lvl;
@@ -2033,7 +2033,7 @@ rtems_irq_connect_data	aarrggh;
 	aarrggh.off    = my_no_op;
 	aarrggh.isOn   = my_isOn;
 	aarrggh.hdl    = isr;
-	aarrggh.handle = (rtems_irq_hdl_param)pic_pin;
+	aarrggh.handle = (rtems_irq_hdl_param)(uintptr_t)pic_pin;
 	aarrggh.name   = pic_line;
 
 	if ( shared ) {
