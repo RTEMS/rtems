@@ -332,6 +332,8 @@ typedef struct {
     __MIPS_FPU_REGISTER_TYPE fp30;
     __MIPS_FPU_REGISTER_TYPE fp31;
     uint32_t fpcs;
+#else
+    uint32_t unused; /* avoid empty structure warning */
 #endif
 } Context_Control_fp;
 
