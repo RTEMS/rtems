@@ -26,9 +26,10 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
+extern rtems_irq_connect_data tm27IrqData;
+
 #define Install_tm27_vector( handler )					\
 {									\
-  extern rtems_irq_connect_data tm27IrqData;                            \
   usiu.siel |= (1 << 17); 						\
   usiu.sipend |= (1 << 17); 						\
 									\
