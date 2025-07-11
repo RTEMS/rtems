@@ -72,8 +72,7 @@ typedef struct VMEDmaListNodeRec_ {
 static void
 lprint(VMEDmaListNode d)
 {
-	printf("n 0x%08" PRIu32", p: 0x%08" PRIu32 ", n: 0x%08" PRIu32 " d: 0x%08" PRIu32 "\n",
-		(uint32_t)d, (uint32_t)d->p, (uint32_t)d->n, (uint32_t)d->d);
+	printf("n %p, p: %p, n: 0x%p, d: %p\n", d, d->p, d->n, d->d);
 }
 #endif
 
@@ -130,7 +129,7 @@ int i;
 			}
 
 			/* align memory ptr; must not be freed() anymore */
-			memptr = (char*)( ((uint32_t)memptr + algnmsk) & ~ algnmsk );
+			memptr = (char*)( ((uintptr_t)memptr + algnmsk) & ~ algnmsk );
 
 			for ( i = 0; i<(LCHUNK); i++, memptr+=blksize ) {
 				memset(memptr, 0, blksize);
