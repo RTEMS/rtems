@@ -7,8 +7,9 @@
  *
  * @brief This source file contains the implementation of
  *   _Thread_queue_Add_timeout_ticks(), _Thread_queue_Add_timeout_timespec(),
- *   _Thread_queue_Add_timeout_monotonic_timespec(), and
- *   _Thread_queue_Add_timeout_realtime_timespec().
+ *   _Thread_queue_Add_timeout_monotonic_timespec(),
+ *   _Thread_queue_Add_timeout_realtime_timespec(), and
+ *   _Thread_queue_Add_timeout_by_clock_id_timespec().
  */
 
 /*
@@ -162,4 +163,31 @@ void _Thread_queue_Add_timeout_realtime_timespec(
     &cpu_self->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ],
     &now
   );
+}
+
+void _Thread_queue_Add_timeout_by_clock_id_timespec(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+)
+{
+  _Assert( queue_context->clock_id == CLOCK_REALTIME
+  || queue_context->clock_id == CLOCK_MONOTONIC);
+
+  if ( queue_context->clock_id == CLOCK_MONOTONIC ) {
+    _Thread_queue_Add_timeout_monotonic_timespec(
+      queue,
+      the_thread,
+      cpu_self,
+      queue_context
+    );
+  } else {
+    _Thread_queue_Add_timeout_realtime_timespec(
+      queue,
+      the_thread,
+      cpu_self,
+      queue_context
+    );
+  }
 }

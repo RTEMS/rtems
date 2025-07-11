@@ -147,6 +147,22 @@ void _Thread_queue_Add_timeout_realtime_timespec(
 );
 
 /**
+ * @brief Adds a timeout to the thread queue context and sets the enqueue
+ * callout to add a timeout based on the clock_id.
+ *
+ * @param queue The thread queue.
+ * @param the_thread The thread to add the timeout.
+ * @param cpu_self The current processor.
+ * @param queue_context The thread queue context.
+ */
+void _Thread_queue_Add_timeout_by_clock_id_timespec(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+);
+
+/**
  * @brief Sets the thread wait return code to STATUS_DEADLOCK.
  *
  * @param[out] the_thread The thread to set the wait return code to
@@ -340,6 +356,34 @@ _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
   queue_context->Timeout.arg = timeout;
   queue_context->timeout_absolute = absolute;
   queue_context->enqueue_callout = _Thread_queue_Add_timeout_realtime_timespec;
+}
+
+/**
+ * @brief Sets the enqueue callout to add a timeout based on the clock identifier.
+ *
+ * @param[out] queue_context is the thread queue context.
+ *
+ * @param timeout is the absolute or relative timeout.
+ *
+ * @param absolute is true, if the timeout shall be absolute, otherwise it
+ *   shall be relative to the current time of the clock.
+ *
+ * @param clock_id is the clock identifier to use for timeout operations.
+ *   Valid values are CLOCK_REALTIME and CLOCK_MONOTONIC.
+ *
+ * @see _Thread_queue_Enqueue().
+ */
+static inline void _Thread_queue_Context_set_enqueue_timeout_by_clock_id_timespec(
+  Thread_queue_Context  *queue_context,
+  const struct timespec *timeout,
+  bool                   absolute,
+  clockid_t              clock_id
+)
+{
+  queue_context->Timeout.arg = timeout;
+  queue_context->timeout_absolute = absolute;
+  queue_context->clock_id = clock_id;
+  queue_context->enqueue_callout = _Thread_queue_Add_timeout_by_clock_id_timespec;
 }
 
 /**

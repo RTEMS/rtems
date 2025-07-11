@@ -103,6 +103,19 @@ static inline bool _POSIX_Is_valid_pshared( int pshared )
     pshared == PTHREAD_PROCESS_SHARED;
 }
 
+/**
+ * @brief Validates a clock identifier for POSIX operations.
+ *
+ * @param clock_id The clock identifier to validate.
+ *
+ * @retval true The clock identifier is valid (CLOCK_REALTIME or CLOCK_MONOTONIC).
+ * @retval false The clock identifier is not valid.
+ */
+static inline bool _POSIX_Is_valid_clock_id( clockid_t clock_id )
+{
+  return ( clock_id == CLOCK_MONOTONIC || clock_id == CLOCK_REALTIME );
+}
+
 /** @} */
 
 #endif

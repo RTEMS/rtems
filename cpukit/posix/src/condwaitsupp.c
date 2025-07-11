@@ -78,30 +78,14 @@ static void _POSIX_Condition_variables_Enqueue_no_timeout(
   _POSIX_Condition_variables_Mutex_unlock( queue, the_thread, queue_context );
 }
 
-static void _POSIX_Condition_variables_Enqueue_with_timeout_monotonic(
+static void _POSIX_Condition_variables_Enqueue_with_timeout_by_clock_id(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
   Per_CPU_Control      *cpu_self,
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Add_timeout_monotonic_timespec(
-    queue,
-    the_thread,
-    cpu_self,
-    queue_context
-  );
-  _POSIX_Condition_variables_Mutex_unlock( queue, the_thread, queue_context );
-}
-
-static void _POSIX_Condition_variables_Enqueue_with_timeout_realtime(
-  Thread_queue_Queue   *queue,
-  Thread_Control       *the_thread,
-  Per_CPU_Control      *cpu_self,
-  Thread_queue_Context *queue_context
-)
-{
-  _Thread_queue_Add_timeout_realtime_timespec(
+  _Thread_queue_Add_timeout_by_clock_id_timespec(
     queue,
     the_thread,
     cpu_self,
@@ -128,19 +112,17 @@ int _POSIX_Condition_variables_Wait_support(
   _Thread_queue_Context_initialize( &queue_context );
 
   if ( abstime != NULL ) {
-    _Thread_queue_Context_set_timeout_argument( &queue_context, abstime, true );
+    _Thread_queue_Context_set_enqueue_timeout_by_clock_id_timespec(
+      &queue_context,
+      abstime,
+      true,
+      _POSIX_Condition_variables_Get_clock( flags )
+    );
 
-    if ( _POSIX_Condition_variables_Get_clock( flags ) == CLOCK_MONOTONIC ) {
-      _Thread_queue_Context_set_enqueue_callout(
+    _Thread_queue_Context_set_enqueue_callout(
         &queue_context,
-        _POSIX_Condition_variables_Enqueue_with_timeout_monotonic
+        _POSIX_Condition_variables_Enqueue_with_timeout_by_clock_id
       );
-    } else {
-      _Thread_queue_Context_set_enqueue_callout(
-        &queue_context,
-        _POSIX_Condition_variables_Enqueue_with_timeout_realtime
-      );
-    }
   } else {
     _Thread_queue_Context_set_enqueue_callout(
       &queue_context,

@@ -46,6 +46,7 @@
 #include <rtems/score/rbtree.h>
 #include <rtems/score/states.h>
 #include <rtems/score/watchdogticks.h>
+#include <sys/types.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -261,6 +262,14 @@ struct Thread_queue_Context {
    *   shall be relative to the current time of the clock.
    */
   bool timeout_absolute;
+
+  /**
+   * @brief The clock identifier used for timeout operations.
+   *
+   * This member specifies which clock to use when handling timeouts.
+   * Valid values are CLOCK_REALTIME and CLOCK_MONOTONIC.
+   */
+  clockid_t clock_id;
 
 #if defined(RTEMS_SMP)
   /**
