@@ -35,6 +35,7 @@ enabled-by:
   - not: bsps/arm/lpc24xx
   - not: bsps/arm/stm32h7
   - not: bsps/arm/stm32f4
+  - not: bsps/arm/stm32u5
 includes:
 - testsuites/libtests/dl13
 ldflags: []
