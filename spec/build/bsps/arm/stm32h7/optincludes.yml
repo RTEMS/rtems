@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-value: |
+    bsps/include bsps/${ARCH}/include bsps/${ARCH}/${BSP_FAMILY}/include bsps/${ARCH}/${BSP_FAMILY}/${BSP_NAME}/include contrib/bsps/arm/stm32h7/stm32h7xx_hal_driver/Inc/ contrib/bsps/arm/stm32h7/cmsis-device-h7/Include/
+- substitute: null
+- split: null
+- env-assign: null
+build-type: option
+copyrights:
+- Copwyright (C) 2025 Amar Takhar <amar@coeval.ca>
+default: []
+description: ''
+enabled-by: true
+links: []
+name: BSP_INCLUDES
+type: build

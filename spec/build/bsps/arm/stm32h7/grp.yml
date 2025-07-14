@@ -156,6 +156,8 @@ links:
   uid: linkcmdsflashsdram
 - role: build-dependency
   uid: ../../bspopts
+- role: build-dependency
+  uid: optincludes
 type: build
 use-after: []
 use-before: []
