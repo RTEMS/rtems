@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
-- set-value: cpukit/include cpukit/score/cpu/${ARCH}/include
+- set-value: cpukit/include cpukit/score/cpu/${ARCH}/include contrib/cpukit/fastlz/
 - substitute: null
 - env-assign: null
 build-type: option
