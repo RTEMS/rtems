@@ -747,7 +747,7 @@ __STATIC_INLINE uint32_t LL_CRS_IsEnabledIT_ESYNC(void)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup CRS_LL_EF_Init Initialization and de-initialization functions
   * @{
   */
