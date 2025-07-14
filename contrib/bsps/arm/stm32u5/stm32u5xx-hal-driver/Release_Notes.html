@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Release Notes for STM32CubeU5 HAL and LL drivers</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
+</head>
+<body>
+<div class="row">
+<div class="col-sm-12 col-lg-4">
+<center>
+<h1 id="release-notes-for-stm32cubeu5-hal-and-ll-drivers">Release Notes for <mark>STM32CubeU5 HAL and LL drivers</mark></h1>
+<p>Copyright ©  2021 STMicroelectronics<br />
+</p>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+</center>
+<h1 id="purpose">Purpose</h1>
+<p>The STM32Cube HAL and LL, an STM32 abstraction layer embedded software, ensure maximized portability across STM32 portfolio.</p>
+<p>The portable APIs layer provides a generic, multi instanced and simple set of APIs to interact with the upper layer (application, libraries and stacks). It is composed of native and extended APIs set. It is directly built around a generic architecture and allows the build-upon layers, like the middleware layer, to implement its functions without knowing in-depth the used STM32 device. This improves the library code reusability and guarantees an easy portability on other devices and STM32 families.</p>
+<p>The Low Layer (LL) drivers are part of the STM32Cube firmware HAL that provides a basic set of optimized and one-shot services. The Low layer drivers, contrary to the HAL ones are not fully portable across the STM32 families; the availability of some functions depends on the physical availability of the relative features on the product. The Low Layer (LL) drivers are designed to offer the following features:</p>
+<ul>
+<li>New set of inline functions for direct and atomic register access</li>
+<li>One-shot operations that can be used by the HAL drivers or from application level</li>
+<li>Full independence from HAL and standalone usage (without HAL drivers)</li>
+<li>Full features coverage of all the supported peripherals</li>
+</ul>
+</div>
+<div class="col-sm-12 col-lg-8">
+<h1 id="update-history">Update History</h1>
+<div class="collapse">
+<input type="checkbox" id="collapse-section8" checked aria-hidden="true"> <label for="collapse-section8" checked aria-hidden="true"><strong>V1.5.0 / 13-February-2024</strong></label>
+<div>
+<h2 id="main-changes">Main Changes</h2>
+<ul>
+<li><strong>HAL and LL drivers</strong> Maintenance Release for <strong>STM32U535xx/STM32U545xx, STM32U575xx/STM32U585xx, STM32U599xx/STM32U5A9xx, STM32U595xx/STM32U5A5xx, STM32U5F9xx/STM32U5G9xx</strong> and <strong>STM32U5F7xx/STM32U5G7xx</strong> devices</li>
+<li>Add the <strong>HAL MMC</strong> replay protected memory block management feature</li>
+<li>The HAL and LL drivers provided within this package are <strong>MISRA-C, Coverity</strong> and <strong>MCU ASTYLE compliant</strong>, and have been reviewed with a static analysis tool to eliminate possible run-time errors</li>
+</ul>
+<h3 id="hal-drivers-updates"><strong>HAL Drivers</strong> updates</h3>
+<ul>
+<li><strong>HAL CORDIC</strong> driver
+<ul>
+<li>Fix incorrect word ‘surcharged’ in functions headers</li>
+</ul></li>
+<li><strong>HAL CORTEX</strong> driver
+<ul>
+<li>Fix MPU_ACCESS_OUTER_SHAREABLE and LL_MPU_ACCESS_OUTER_SHAREABLE definitions</li>
+<li>Add HAL_SYSTICK_GetCLKSourceConfig, HAL_MPU_EnableRegion, HAL_MPU_DisableRegion, HAL_MPU_EnableRegion_NS and HAL_MPU_DisableRegion_NS functions</li>
+</ul></li>
+<li><strong>HAL FMAC</strong> driver
+<ul>
+<li>Fix incorrect word ‘surcharged’ in functions headers</li>
+</ul></li>
+<li><strong>HAL DSI</strong> driver
+<ul>
+<li>Align DSI Initialization sequence to the recommended ‘Programming procedure overview’ part to avoid DSI read LCD controller register 0x0A error</li>
+</ul></li>
+<li><strong>HAL GPIO</strong> driver
+<ul>
+<li>Remove IS_GPIO_SINGLE_PIN define</li>
+</ul></li>
+<li><strong>HAL ICACHE</strong> driver
+<ul>
+<li>Update HAL_ICACHE_DeInit to set registers to reset value</li>
+<li>Update HAL_ICACHE_Invalidate() to prevent launching an invalidation if one has already been launched</li>
+</ul></li>
+<li><strong>HAL I2C</strong> driver
+<ul>
+<li>Update HAL_I2C_Mem_Write_IT API to initialize XferSize at 0</li>
+<li>Update I2C_Slave_ISR_IT, I2C_Slave_ISR_DMA and I2C_ITSlaveCplt to prevent the call of HAL_I2C_ListenCpltCallback twice</li>
+<li>Update I2C_WaitOnRXNEFlagUntilTimeout to check I2C_FLAG_AF independently from I2C_FLAG_RXNE</li>
+<li>Remove the unusable code in HAL_I2C_IsDeviceReady function</li>
+<li>Update HAL_I2C_Slave_Transmit to check if the received NACK is the good one</li>
+</ul></li>
+<li><strong>HAL </strong> driver
+<ul>
+<li>Add HAL_SYSCFG_EnableIOAnalogSwitchVoltageSelection and HAL_SYSCFG_DisableIOAnalogSwitchVoltageSelection functions</li>
+</ul></li>
+<li><strong>HAL LPTIM</strong> driver
+<ul>
+<li>Removed references to COMP2 for STM32U535xx/STM32U545xx devices</li>
+<li>Remove IS_LPTIM_AUTORELOAD define</li>
+</ul></li>
+<li><strong>HAL MMC</strong> driver
+<ul>
+<li>Add the replay protected memory block management defines:
+<ul>
+<li>HAL_MMC_ERROR_RPMB_OPERATION_OK<br />
+</li>
+<li>HAL_MMC_ERROR_RPMB_GENERAL_FAILURE<br />
+</li>
+<li>HAL_MMC_ERROR_RPMB_AUTHENTICATION_FAILURE<br />
+</li>
+<li>HAL_MMC_ERROR_RPMB_COUNTER_FAILURE<br />
+</li>
+<li>HAL_MMC_ERROR_RPMB_ADDRESS_FAILURE<br />
+</li>
+<li>HAL_MMC_ERROR_RPMB_WRITE_FAILURE<br />
+</li>
+<li>HAL_MMC_ERROR_RPMB_READ_FAILURE<br />
+</li>
+<li>HAL_MMC_ERROR_RPMB_KEY_NOT_YET_PROG<br />
+</li>
+<li>HAL_MMC_ERROR_RPMB_COUNTER_EXPIRED</li>
+<li>HAL_MMC_RPMB_ProgramAuthenticationKey</li>
+<li>HAL_MMC_RPMB_ProgramAuthenticationKey_IT</li>
+<li>HAL_MMC_RPMB_GetWriteCounter</li>
+<li>HAL_MMC_RPMB_GetWriteCounter_IT</li>
+<li>HAL_MMC_RPMB_WriteBlocks<br />
+</li>
+<li>HAL_MMC_RPMB_WriteBlocks_IT</li>
+<li>HAL_MMC_RPMB_ReadBlocks</li>
+<li>HAL_MMC_RPMB_ReadBlocks_IT</li>
+<li>MMC_RPMB_KEYMAC_POSITION<br />
+</li>
+<li>MMC_RPMB_DATA_POSITION<br />
+</li>
+<li>MMC_RPMB_NONCE_POSITION<br />
+</li>
+<li>MMC_RPMB_WRITE_COUNTER_POSITION</li>
+</ul></li>
+<li>Add HAL_MMC_SwitchPartition and HAL_MMC_GetRPMBError functions</li>
+<li>Add the MMC partitions type defines:
+<ul>
+<li>HAL_MMC_USER_AREA_PARTITION</li>
+<li>HAL_MMC_BOOT_PARTITION1<br />
+</li>
+<li>HAL_MMC_BOOT_PARTITION2<br />
+</li>
+<li>HAL_MMC_RPMB_PARTITION</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL PKA</strong> driver
+<ul>
+<li>Add PKA_ECCMulExInTypeDef operation structure definition</li>
+<li>Add HAL_PKA_ECCMulEx and HAL_PKA_ECCMulEx_IT functions</li>
+</ul></li>
+<li><strong>HAL PSSI</strong> driver
+<ul>
+<li>Replace hdmatx by hdmarx in HAL_PSSI_Receive_DMA() function</li>
+</ul></li>
+<li><strong>HAL PWR</strong> driver
+<ul>
+<li>Add PWR_SLEEPENTRY_WFE_NO_EVT_CLEAR and PWR_STOPENTRY_WFE_NO_EVT_CLEAR defines</li>
+</ul></li>
+<li><strong>HAL RCC</strong> driver
+<ul>
+<li>Update HAL_RCC_NMI_IRQHandler, clear flag before callback</li>
+</ul></li>
+<li><strong>HAL RNG</strong> driver
+<ul>
+<li>Add RNG noise source control</li>
+</ul></li>
+<li><strong>HAL SAI</strong> driver
+<ul>
+<li>Improve audio quality to avoid potential glitch</li>
+<li>Fix incorrect word ‘surcharged’ in functions headers</li>
+</ul></li>
+<li><strong>HAL SMBUS</strong> driver
+<ul>
+<li>Remove HAL_SMBUS_STATE_TIMEOUT and HAL_SMBUS_STATE_ERROR defines</li>
+</ul></li>
+<li><strong>HAL TIM</strong> driver
+<ul>
+<li>Rename TIM_OCMODE_ASSYMETRIC_PWM1 to TIM_OCMODE_ASYMMETRIC_PWM1 define</li>
+<li>Rename TIM_OCMODE_ASSYMETRIC_PWM2 to TIM_OCMODE_ASYMMETRIC_PWM2 define</li>
+<li>Removed references to COMP2 for STM32U535xx/STM32U545xxxx devices</li>
+</ul></li>
+<li><strong>HAL UART</strong> driver
+<ul>
+<li>Fix incorrect gState check in HAL_UART_RegisterRxEventCallback and HAL_UART_UnRegisterRxEventCallback to allow user Rx Event Callback registration when a transmit is ongoing</li>
+</ul></li>
+<li><strong>HAL USB</strong> driver
+<ul>
+<li>Add HCD_PDWN_EXIT_CNT define</li>
+</ul></li>
+</ul>
+<h3 id="ll-drivers-updates"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li><strong>LL CORTEX</strong> driver
+<ul>
+<li>Rename LL_SYSTICK_CLKSOURCE_HCLK_DIV8 to LL_SYSTICK_CLKSOURCE_EXTERNAL</li>
+</ul></li>
+<li><strong>LL I2C</strong> driver
+<ul>
+<li>Update LL_I2C_HandleTranfer function to prevent undefined behavior of volatile usage before updating the CR2 register</li>
+</ul></li>
+<li><strong>LL PWR</strong> driver
+<ul>
+<li>Rename PWR_SECCFGR_WUP8SEC to PWR_SECCFGR_LPMSEC define</li>
+<li>Rename PWR_SECCFGR_WUP8SEC to PWR_SECCFGR_VDMSEC define</li>
+<li>Rename PWR_SECCFGR_WUP8SEC to PWR_SECCFGR_VBSEC define</li>
+<li>Rename PWR_SECCFGR_WUP8SEC to PWR_SECCFGR_APCSEC define</li>
+</ul></li>
+<li><strong>LL TIM</strong> driver
+<ul>
+<li>Rename LL_TIM_OCMODE_ASSYMETRIC_PWM1 to LL_TIM_OCMODE_ASYMMETRIC_PWM1 define</li>
+<li>Rename LL_TIM_OCMODE_ASSYMETRIC_PWM2 to LL_TIM_OCMODE_ASYMMETRIC_PWM2 define</li>
+</ul></li>
+<li><strong>LL USB</strong> driver
+<ul>
+<li>Add HAL_USB_TIMEOUT and HAL_USB_CURRENT_MODE_MAX_DELAY_MS defines</li>
+<li>Prevent masking NAK IT during start split transfer</li>
+</ul></li>
+<li><strong>LL UTILS</strong> driver
+<ul>
+<li>Add LL_UTILS_PACKAGETYPE_WLCSP72_SMPS and LL_UTILS_PACKAGETYPE_LQFP144_DSI_SMPS defines</li>
+<li>Add LL_Init1msTick_HCLK_Div8, LL_Init1msTick_LSE and LL_Init1msTick_LSI functions</li>
+<li>Rename LL_UTILS_PACKAGETYPE_WLCSP144 to LL_UTILS_PACKAGETYPE_UFBGA64 define</li>
+<li>Rename LL_UTILS_PACKAGETYPE_UFBGA144 to LL_UTILS_PACKAGETYPE_UFBGA100 define</li>
+<li>Rename LL_UTILS_PACKAGETYPE_WLCSP144_SMPS to LL_UTILS_PACKAGETYPE_LQFP100_DSI_SMPS define</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations">Known Limitations</h2>
+<ul>
+<li>N/A</li>
+</ul>
+<h2 id="backward-compatibility">Backward compatibility</h2>
+<ul>
+<li>N/A</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" checked aria-hidden="true"><strong>V1.4.0 / 20-October-2023</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<ul>
+<li><strong>HAL and LL drivers</strong> Maintenance Release for <strong>STM32U5XX</strong> devices</li>
+<li>Update <strong>ADC</strong> HAL and LL drivers to fix known defects and add implementation enhancements</li>
+<li>The HAL and LL drivers provided within this package are <strong>MISRA-C, MCU ASTYLE and CodeSonar compliant</strong>, and have been reviewed with a static analysis tool to eliminate possible run-time errors</li>
+</ul>
+<h3 id="hal-drivers-updates-1"><strong>HAL Drivers</strong> updates</h3>
+<ul>
+<li><strong>HAL ADC</strong> driver
+<ul>
+<li>Add new Helper macro for differential mode raw data to voltage conversion</li>
+</ul></li>
+<li><strong>HAL ADC_EX</strong> driver
+<ul>
+<li>Enhance calibration procedure implementation</li>
+</ul></li>
+</ul>
+<h3 id="ll-drivers-updates-1"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li><strong>LL ADC</strong> driver
+<ul>
+<li>Add new Helper macro for differential mode raw data to voltage conversion</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations-1">Known Limitations</h2>
+<ul>
+<li>N/A</li>
+</ul>
+<h2 id="backward-compatibility-1">Backward compatibility</h2>
+<ul>
+<li>N/A</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" checked aria-hidden="true"><strong>V1.3.0 / 09-June-2023</strong></label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<ul>
+<li><strong>HAL and LL drivers</strong> official Release for <strong>STM32U5F7xx/STM32U5G7xx</strong>, <strong>STM32U5F9xx/STM32U5G9xx</strong>, <strong>STM32U535xx/STM32U545xx, STM32U575xx/STM32U585xx, STM32U595xx/STM32U5A5xx</strong> and <strong>STM32U599xx/STM32U5A9xx</strong> devices</li>
+<li>Add <strong>2 new HAL drivers</strong> : <strong>GFXTIM</strong> and <strong>JPEG</strong> highlighting the graphics aspect of STM32U5F7/STM32U5G7/STM32U5F9/STM32U5G9 devices</li>
+<li>The HAL and LL drivers provided within this package are <strong>MISRA-C, MCU ASTYLE and CodeSonar compliant</strong>, and have been reviewed with a static analysis tool to eliminate possible run-time errors</li>
+<li>General updates to fix known defects and implementation enhancements</li>
+</ul>
+<h3 id="hal-drivers-updates-2"><strong>HAL Drivers</strong> updates</h3>
+<ul>
+<li><strong>HAL CRYP</strong> driver
+<ul>
+<li>Add HAL_CRYP_ERROR_RNG and CRYP_IVCONFIG_ONCE defines</li>
+</ul></li>
+<li><strong>HAL DMA</strong> driver
+<ul>
+<li>Add NODE_MAXIMUM_SIZE define</li>
+</ul></li>
+<li><strong>HAL FMAC</strong> driver
+<ul>
+<li>Add FMAC_PARAM_P_MAX_IIR define</li>
+<li>Add FMAC_PARAM_P_MAX_FIR define</li>
+<li>Add FMAC_PARAM_P_MIN define</li>
+<li>Add FMAC_PARAM_Q_MAX define</li>
+<li>Add FMAC_PARAM_Q_MIN define</li>
+<li>Add FMAC_PARAM_R_MAX define</li>
+</ul></li>
+<li><strong>HAL GFXTIM</strong> driver
+<ul>
+<li>Add new GFXTIM HAL driver highlighting the <strong>graphic Timer</strong> features to manage the functionalities of the Multi-function Digital Filter</li>
+</ul></li>
+<li><strong>HAL GPIO_EX</strong> driver
+<ul>
+<li>Add GPIO_AF8_SDMMC2 define</li>
+<li>Add GPIO_AF10_DSI define</li>
+<li>Add GPIO_AF14_FMC define</li>
+</ul></li>
+<li><strong>HAL JPEG</strong> driver
+<ul>
+<li>Add new JPEG HAL driver highlighting the <strong>graphic encoder/decoder</strong> features</li>
+</ul></li>
+<li><strong>HAL TIM</strong> driver
+<ul>
+<li>Add IS_TIM_CCX_CHANNEL define</li>
+</ul></li>
+</ul>
+<h3 id="ll-drivers-updates-2"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li><strong>LL PWR</strong> driver
+<ul>
+<li>Replace LL_PWR_EnableVDDUSB by LL_PWR_EnableVddUSB define</li>
+<li>Replace LL_PWR_DisableVDDUSB by LL_PWR_DisableVddUSB define</li>
+<li>Replace LL_PWR_IsEnabledVDDUSB by LL_PWR_IsEnabledVddUSB define</li>
+<li>Replace LL_PWR_EnableVDDIO2 by LL_PWR_EnableVddIO2 define</li>
+<li>Replace LL_PWR_DisableVDDIO2 by LL_PWR_DisableVddIO2 define</li>
+<li>Replace LL_PWR_IsEnabledVDDIO2 by LL_PWR_IsEnabledVddIO2 define</li>
+<li>Replace LL_PWR_EnableVDDA by LL_PWR_EnableVddA define</li>
+<li>Replace LL_PWR_DisableVDDA by LL_PWR_DisableVddA define</li>
+<li>Replace LL_PWR_IsEnabledVDDA by LL_PWR_IsEnabledVddA define</li>
+<li>Replace LL_PWR_EnableVDDUSBMonitor by LL_PWR_EnableVddUSBMonitor define</li>
+<li>Replace LL_PWR_DisableVDDUSBMonitor by LL_PWR_DisableVddUSBMonitor define</li>
+<li>Replace LL_PWR_IsEnabledVDDUSBMonitor by LL_PWR_IsEnabledVddUSBMonitor define</li>
+<li>Replace LL_PWR_EnableVDDIO2Monitor by LL_PWR_EnableVddIO2Monitor define</li>
+<li>Replace LL_PWR_DisableVDDIO2Monitor by LL_PWR_DisableVddIO2Monitor define</li>
+<li>Replace LL_PWR_IsEnabledVDDIO2Monitor by LL_PWR_IsEnabledVddIO2Monitor define</li>
+<li>Replace LL_PWR_EnableVDDAMonitor1 by LL_PWR_EnableVddAMonitor1 define</li>
+<li>Replace LL_PWR_DisableVDDAMonitor1 by LL_PWR_DisableVddAMonitor1 define</li>
+<li>Replace LL_PWR_IsEnabledVDDAMonitor1 by LL_PWR_IsEnabledVddAMonitor1 define</li>
+<li>Replace LL_PWR_EnableVDDAMonitor2 by LL_PWR_EnableVddAMonitor2 define</li>
+<li>Replace LL_PWR_DisableVDDAMonitor2 by LL_PWR_DisableVddAMonitor2 define</li>
+<li>Replace LL_PWR_IsEnabledVDDAMonitor2 by LL_PWR_IsEnabledVddAMonitor2 define</li>
+</ul></li>
+<li><strong>LL RTC</strong> driver
+<ul>
+<li>invert the RTC ALARM OUTPUT TYPE:
+<ul>
+<li>Set LL_RTC_ALARM_OUTPUTTYPE_PUSHPULL to zero in RTC_ALARM is push-pull output</li>
+<li>Replace LL_RTC_ALARM_OUTPUTTYPE_OPENDRAIN by RTC_CR_TAMPALRM_TYPE in RTC_ALARM is open-drain output</li>
+</ul></li>
+</ul></li>
+<li><strong>LL SDMMC</strong> driver
+<ul>
+<li>Add SDMMC_SWDATATIMEOUT define</li>
+<li>Add SDMMC_FIFO_SIZE define</li>
+</ul></li>
+<li><strong>LL TIM</strong> driver
+<ul>
+<li>Add LL_TIM_CC_IsEnabledPreload define</li>
+</ul></li>
+</ul>
+<p>Note: HAL/LL Backward compatibility ensured by legacy defines.</p>
+<h2 id="known-limitations-2">Known Limitations</h2>
+<ul>
+<li>N/A</li>
+</ul>
+<h2 id="backward-compatibility-2">Backward compatibility</h2>
+<ul>
+<li>N/A</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" checked aria-hidden="true"><strong>V1.2.0 / 08-February-2023</strong></label>
+<div>
+<h2 id="main-changes-3">Main Changes</h2>
+<ul>
+<li><strong>HAL and LL drivers</strong> Official Release for STM32U535xx / STM32U545xx, STM32U575xx / STM32U585xx, STM32U595xx, STM32U5A5xx, STM32U599xx and STM32U5A9xx devices.</li>
+<li>Update STM32U545xx_User_Manual, STM32U585xx_User_Manual and STM32U5A9xx_User_Manual CHM User Manuals</li>
+</ul>
+<h3 id="hal-drivers-updates-3"><strong>HAL Drivers</strong> updates</h3>
+<ul>
+<li><strong>HAL ADC</strong> driver
+<ul>
+<li>Rename ADC4_RESOLUTION_12B to ADC_RESOLUTION_12B</li>
+<li>Rename ADC4_RESOLUTION_10B to ADC_RESOLUTION_10B</li>
+<li>Rename ADC4_RESOLUTION_8B to ADC_RESOLUTION_8B</li>
+<li>Rename ADC4_RESOLUTION_6B to ADC_RESOLUTION_6B</li>
+<li>Add HAL_ADC_END_OF_CALIBRATION_CB_ID, HAL_ADC_VOLTAGE_REGULATOR_CB_ID and HAL_ADC_ADC_READY_CB_ID callbacks</li>
+<li>Add ADC_IT_EOCAL, ADC_IT_LDORDY, ADC_FLAG_EOCAL and ADC_FLAG_LDORDY defines</li>
+</ul></li>
+<li><strong>HAL ADC_EX</strong> driver
+<ul>
+<li>Add IS_ADC4_OVERSAMPLING_RATIO and IS_ADC12_RIGHT_BIT_SHIFT defines</li>
+</ul></li>
+<li><strong>HAL COMP</strong> driver
+<ul>
+<li>Rename macro __HAL_COMP_COMP1_EXTI_CLEAR_RASING_FLAG to __HAL_COMP_COMP1_EXTI_CLEAR_RISING_FLAG</li>
+</ul></li>
+<li><strong>HAL DMA2D</strong> driver
+<ul>
+<li>Add DMA2D_INPUT_YCBCR define</li>
+<li>Add DMA2D_NO_CSS, DMA2D_CSS_422 and DMA2D_CSS_420 defines</li>
+<li>Add IS_DMA2D_CHROMA_SUB_SAMPLING and IS_DMA2D_INPUT_COLOR_MODE defines</li>
+</ul></li>
+<li><strong>HAL DSI</strong> driver
+<ul>
+<li>Enhance the implementation of the following functions:
+<ul>
+<li>HAL_DSI_EnterULPMData()</li>
+<li>HAL_DSI_ExitULPMData()</li>
+<li>HAL_DSI_EnterULPM()</li>
+<li>HAL_DSI_ExitULPM()</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL EXTI</strong> driver
+<ul>
+<li>Add HAL_EXTI_LockAttributes and HAL_EXTI_GetLockAttributes functions</li>
+<li>Add EXTI_LINE_23, EXTI_LINE_24 and EXTI_LINE_25 defines</li>
+</ul></li>
+<li><strong>HAL FLASH</strong> driver
+<ul>
+<li>Rename OB_USER_SRAM134_RST to OB_USER_SRAM_RST</li>
+<li>Rename OB_SRAM134_RST_ERASE to OB_SRAM_RST_ERASE</li>
+<li>Rename OB_SRAM134_RST_NOT_ERASE to OB_SRAM_RST_NOT_ERASE</li>
+</ul></li>
+<li><strong>HAL GFXMMU</strong> driver
+<ul>
+<li>Add GFXMMU_ADDRESSCACHE_LOCK_BUFFER0, GFXMMU_ADDRESSCACHE_LOCK_BUFFER1, GFXMMU_ADDRESSCACHE_LOCK_BUFFER2 and GFXMMU_ADDRESSCACHE_LOCK_BUFFER3 defines</li>
+<li>Add IS_GFXMMU_ADDRESSCACHE_LOCK_BUFFER define</li>
+</ul></li>
+<li><strong>HAL GPIO</strong> driver
+<ul>
+<li>Add HAL_GPIO_WriteMultipleStatePin() function</li>
+</ul></li>
+<li><strong>HAL GPIO_EX</strong> driver
+<ul>
+<li>Rename GPIO_AF0_S2DSTOP to GPIO_AF0_SRDSTOP</li>
+<li>Rename GPIO_AF11_LPGPIO to GPIO_AF11_LPGPIO1</li>
+</ul></li>
+<li><strong>HAL GTZC</strong> driver
+<ul>
+<li>Rename GTZC_MCPBB_NB_VCTR_REG_MAX to GTZC_MPCBB_NB_VCTR_REG_MAX</li>
+<li>Rename GTZC_MCPBB_NB_LCK_VCTR_REG_MAX to GTZC_MPCBB_NB_LCK_VCTR_REG_MAX</li>
+<li>Rename GTZC_MCPBB_SUPERBLOCK_UNLOCKED to GTZC_MPCBB_SUPERBLOCK_UNLOCKED</li>
+<li>Rename GTZC_MCPBB_SUPERBLOCK_LOCKED to GTZC_MPCBB_SUPERBLOCK_LOCKED</li>
+<li>Rename GTZC_MCPBB_BLOCK_NSEC to GTZC_MPCBB_BLOCK_NSEC</li>
+<li>Rename GTZC_MCPBB_BLOCK_SEC to GTZC_MPCBB_BLOCK_SEC<br />
+</li>
+<li>Rename GTZC_MCPBB_BLOCK_NPRIV to GTZC_MPCBB_BLOCK_NPRIV</li>
+<li>Rename GTZC_MCPBB_BLOCK_PRIV to GTZC_MPCBB_BLOCK_PRIV</li>
+<li>Rename GTZC_MCPBB_LOCK_OFF to GTZC_MPCBB_LOCK_OFF</li>
+<li>Rename GTZC_MCPBB_LOCK_ON to GTZC_MPCBB_LOCK_ON</li>
+<li>Add GTZC_PERIPH_LTDCUSB define</li>
+</ul></li>
+<li><strong>HAL</strong> driver
+<ul>
+<li>Add SYSCFG_OTG_HS_PHY_PREEMP_DISABLED, SYSCFG_OTG_HS_PHY_PREEMP_1X, SYSCFG_OTG_HS_PHY_PREEMP_2X and SYSCFG_OTG_HS_PHY_PREEMP_3X defines</li>
+<li>Add SYSCFG_OTG_HS_PHY_SQUELCH_15PERCENT and SYSCFG_OTG_HS_PHY_SQUELCH_0PERCENT defines</li>
+<li>Add SYSCFG_OTG_HS_PHY_DISCONNECT_5_9PERCENT and SYSCFG_OTG_HS_PHY_DISCONNECT_0PERCENT defines</li>
+<li>Add HAL_GetUIDw0(), HAL_GetUIDw1() and HAL_GetUIDw2()</li>
+<li>Add __HAL_DBGMCU_FREEZE_I2C5 and __HAL_DBGMCU_UNFREEZE_I2C5 macros</li>
+<li>Add __HAL_DBGMCU_FREEZE_I2C6 and __HAL_DBGMCU_UNFREEZE_I2C6 macros</li>
+</ul></li>
+<li><strong>HAL I2C_EX</strong> driver
+<ul>
+<li>Add IS_I2C_TRIG_INPUT_INSTANCE define</li>
+</ul></li>
+<li><strong>HAL LPTIM</strong> driver
+<ul>
+<li>Add IS_LPTIM_INPUT2_SOURCE define</li>
+</ul></li>
+<li><strong>HAL NOR</strong> driver
+<ul>
+<li>Add NOR_CMD_ADDRESS_FIRST_BYTE, NOR_CMD_ADDRESS_FIRST_CFI_BYTE, NOR_CMD_ADDRESS_SECOND_BYTE and NOR_CMD_ADDRESS_THIRD_BYTE defines</li>
+</ul></li>
+<li><strong>HAL OPAMP</strong> driver
+<ul>
+<li>Rename HAL_OPAMP_MSP_INIT_CB_ID to HAL_OPAMP_MSPINIT_CB_ID</li>
+<li>Rename HAL_OPAMP_MSP_DEINIT_CB_ID to HAL_OPAMP_MSPDEINIT_CB_ID</li>
+</ul></li>
+<li><strong>HAL PWR_EX</strong> driver
+<ul>
+<li>Add HAL_PWREx_EnableOTGHSPHYLowPowerRetention and HAL_PWREx_DisableOTGHSPHYLowPowerRetention functions</li>
+<li>Add HAL_PWREx_EnableVDD11USB and HAL_PWREx_DisableVDD11USB functions</li>
+<li>Rename PWR_SRAM6_PAGE1_STOP_RETENTION to PWR_SRAM6_PAGE1_STOP</li>
+<li>Rename PWR_SRAM6_PAGE2_STOP_RETENTION to PWR_SRAM6_PAGE2_STOP</li>
+<li>Rename PWR_SRAM6_PAGE3_STOP_RETENTION to PWR_SRAM6_PAGE3_STOP</li>
+<li>Rename PWR_SRAM6_PAGE4_STOP_RETENTION to PWR_SRAM6_PAGE4_STOP</li>
+<li>Rename PWR_SRAM6_PAGE5_STOP_RETENTION to PWR_SRAM6_PAGE5_STOP</li>
+<li>Rename PWR_SRAM6_PAGE6_STOP_RETENTION to PWR_SRAM6_PAGE6_STOP</li>
+<li>Rename PWR_SRAM6_PAGE7_STOP_RETENTION to PWR_SRAM6_PAGE7_STOP</li>
+<li>Rename PWR_SRAM6_PAGE8_STOP_RETENTION to PWR_SRAM6_PAGE8_STOP</li>
+<li>Rename PWR_SRAM6_FULL_STOP_RETENTION to PWR_SRAM6_FULL_STOP</li>
+</ul></li>
+<li><strong>HAL RCC</strong> driver
+<ul>
+<li>Remove __HAL_RCC_WWDG_CLK_DISABLE macro</li>
+<li>Add __HAL_RCC_USB_FS_CLK_ENABLE, __HAL_RCC_USB_FS_CLK_DISABLE, __HAL_RCC_USB_IS_CLK_ENABLED, __HAL_RCC_USB_OTG_FS_IS_CLK_ENABLED, __HAL_RCC_USB_IS_CLK_DISABLED, __HAL_RCC_USB_OTG_FS_IS_CLK_DISABLED, __HAL_RCC_USB_FS_IS_CLK_ENABLED, __HAL_RCC_USB_FS_IS_CLK_DISABLED macros</li>
+<li>Add __HAL_RCC_USB_FORCE_RESET, __HAL_RCC_USB_OTG_FS_FORCE_RESET, __HAL_RCC_USB_RELEASE_RESET, __HAL_RCC_USB_OTG_FS_RELEASE_RESET, __HAL_RCC_USB_FS_FORCE_RESET, __HAL_RCC_USB_FS_RELEASE_RESET, __HAL_RCC_USB_CLK_SLEEP_ENABLE, __HAL_RCC_USB_OTG_FS_CLK_SLEEP_ENABLE, __HAL_RCC_USB_CLK_SLEEP_DISABLE, __HAL_RCC_USB_OTG_FS_CLK_SLEEP_DISABLE, __HAL_RCC_USB_FS_CLK_SLEEP_ENABLE and __HAL_RCC_USB_FS_CLK_SLEEP_DISABLE macros</li>
+<li>Add TSC_GROUPX_NOT_SUPPORTED</li>
+<li>Rename RCC_SPI4CLKSOURCE_D2PCLK1 to RCC_SPI4CLKSOURCE_D2PCLK2</li>
+<li>Rename RCC_SPI5CLKSOURCE_D2PCLK1 to RCC_SPI5CLKSOURCE_D2PCLK2</li>
+<li>Rename RCC_SPI45CLKSOURCE_D2PCLK1 to RCC_SPI45CLKSOURCE_D2PCLK2</li>
+<li>Rename RCC_SPI45CLKSOURCE_CDPCLK1 to RCC_SPI45CLKSOURCE_CDPCLK2</li>
+<li>Rename RCC_SPI45CLKSOURCE_PCLK1 to RCC_SPI45CLKSOURCE_PCLK2</li>
+<li>Rename __HAL_RCC_PLLFRACN_ENABLE to __HAL_RCC_PLL_FRACN_ENABLE</li>
+<li>Rename __HAL_RCC_PLLFRACN_DISABLE to __HAL_RCC_PLL_FRACN_DISABLE</li>
+<li>Rename __HAL_RCC_PLLFRACN_CONFIG to __HAL_RCC_PLL_FRACN_CONFIG</li>
+<li>Rename IS_RCC_PLLFRACN_VALUE to IS_RCC_PLL_FRACN_VALUE</li>
+</ul></li>
+<li><strong>HAL RCC_EX</strong> driver
+<ul>
+<li>Add HAL_RCCEx_EnableLSECSS_IT, HAL_RCCEx_EnableMSIPLLUNLCK_IT, HAL_RCCEx_MSIPLLUNLCK_IRQHandler and HAL_RCCEx_MSIPLLUNLCK_Callback functions</li>
+</ul></li>
+<li><strong>HAL RTC</strong> driver
+<ul>
+<li>Add __HAL_RTC_IS_CALENDAR_INITIALIZED macro</li>
+</ul></li>
+<li><strong>HAL RTC_EX</strong> driver
+<ul>
+<li>Add RTC_ATAMP_ASYNCPRES_RTCCLK_2048 macro</li>
+</ul></li>
+<li><strong>HAL SMBUS_EX</strong> driver
+<ul>
+<li>Add IS_SMBUS_TRIG_INPUT_INSTANCE define</li>
+</ul></li>
+<li><strong>HAL USB</strong> driver
+<ul>
+<li>Add __HAL_HCD_SET_HC_CSPLT, __HAL_HCD_CLEAR_HC_CSPLT and __HAL_HCD_CLEAR_HC_SSPLT macros</li>
+<li>Add HAL_HCD_HC_SetHubInfo and HAL_HCD_HC_ClearHubInfo macros</li>
+</ul></li>
+</ul>
+<h3 id="ll-drivers-updates-3"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li><strong>LL ADC</strong> driver
+<ul>
+<li>Add ADC4_OVERSAMPLING_RATIO_PARAMETER and ADC4_OVERSAMPLING_RATIO_PARAMETER_MASK defines</li>
+</ul></li>
+<li><strong>LL BUS</strong> driver
+<ul>
+<li>Add LL_APB2_GRP1_PERIPH_USB_FS define</li>
+</ul></li>
+<li><strong>LL EXTI</strong> driver
+<ul>
+<li>Add LL_EXTI_LockAttributes and LL_EXTI_GetLockAttributes functions</li>
+</ul></li>
+<li><strong>LL I2C</strong> driver
+<ul>
+<li>Add LL_I2C_EnableAutoClearFlag_ADDR, LL_I2C_DisableAutoClearFlag_ADDR, LL_I2C_IsEnabledAutoClearFlag_ADDR, LL_I2C_EnableAutoClearFlag_STOP, LL_I2C_DisableAutoClearFlag_STOP, LL_I2C_IsEnabledAutoClearFlag_STOP functions</li>
+</ul></li>
+<li><strong>LL PWR</strong> driver
+<ul>
+<li>Add LL_PWR_EnableOTGHSPHYLowPowerRetention, LL_PWR_DisableOTGHSPHYLowPowerRetention and LL_PWR_IsEnabledOTGHSPHYLowPowerRetention functions</li>
+<li>Add LL_PWR_EnableVDD11USB, LL_PWR_DisableVDD11USB and LL_PWR_IsEnabledVDD11USB functions</li>
+</ul></li>
+<li><strong>LL RCC</strong> driver
+<ul>
+<li>Add LL_RCC_IsEnabledPLLMode function</li>
+</ul></li>
+<li><strong>LL RTC</strong> driver
+<ul>
+<li>Add LL_RTC_TAMPER_ATAMP_ASYNCPRES_RTCCLK_2048 define</li>
+<li>Add ISO_SPLT_MPS, HCSPLT_BEGIN, HCSPLT_MIDDLE, HCSPLT_END and HCSPLT_FULL defines</li>
+</ul></li>
+<li><strong>LL USB</strong> driver
+<ul>
+<li>Add USB_EMBEDDED_PHY define</li>
+</ul></li>
+<li><strong>LL UTILS</strong> driver
+<ul>
+<li>Add LL_UTILS_PACKAGETYPE_UFBGA100_SMPS, LL_UTILS_PACKAGETYPE_WLCSP56_SMPS and LL_UTILS_PACKAGETYPE_WLCSP150_SMPS defines</li>
+</ul></li>
+</ul>
+<p>Note: HAL/LL Backward compatibility ensured by legacy defines.</p>
+<h2 id="known-limitations-3">Known Limitations</h2>
+<ul>
+<li>N/A</li>
+</ul>
+<h2 id="backward-compatibility-3">Backward compatibility</h2>
+<ul>
+<li>N/A</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" checked aria-hidden="true"><strong>V1.1.0 / 16-February-2022</strong></label>
+<div>
+<h2 id="main-changes-4">Main Changes</h2>
+<ul>
+<li><strong>HAL and LL drivers</strong> Maintenance Release for STM32U575xx / STM32U585xx devices and new support of STM32U595xx, STM32U5A5xx, STM32U599xx and STM32U5A9xx devices</li>
+<li>Add <strong>New LTDC, GFXMMU, DSI, GPU2D HAL drivers</strong> highlighting the graphics aspect of STM32U595/STM32U5A5/STM32U599/STM32U5A9 devices</li>
+<li>Add <strong>New HAL XSPI driver</strong> which supports OCTOSPI and Hexa-Deca SPI interface for both STM32U575/STM32U585 and STM32U595/STM32U5A5/STM32U599/STM32U5A9 devices</li>
+<li><strong>All the HAL/LL drivers</strong> are updated to support both STM32U575/STM32U585 and STM32U595/STM32U5A5/STM32U599/STM32U5A9 devices</li>
+<li>General updates to fix known defects and implementation enhancements</li>
+<li>The HAL and LL drivers provided within this package are <strong>MISRA-C, MCU ASTYLE and CodeSonar compliant</strong>, and have been reviewed with a static analysis tool to eliminate possible run-time errors</li>
+</ul>
+<h3 id="hal-drivers-updates-4"><strong>HAL Drivers</strong> updates</h3>
+<ul>
+<li>All the <strong>HAL</strong> drivers are updated to support both STM32U575/STM32U585 and STM32U595/STM32U5A5/STM32U599/STM32U5A9 devices</li>
+<li><strong>HAL ADC</strong> driver
+<ul>
+<li>Add the following functions:
+<ul>
+<li>HAL_ADCEx_MultiModeStart_DMA_Data32()</li>
+<li>HAL_ADCEx_MultiModeGetValue_Data32()</li>
+</ul></li>
+<li>Update the DMA data length management implementation according to source/destination width</li>
+<li>Enhance HAL_ADCEx_Calibration_GetValue() function implementation for proper ADC4 instance support<br />
+</li>
+<li>Enhance HAL_ADC_DeInit() and HAL_ADC_ConfigChannel() function implementation</li>
+</ul></li>
+<li><strong>HAL DCACHE</strong> driver
+<ul>
+<li>Add HAL_DCACHE_IsEnabled API to check whether the DCACHE is enabled or not</li>
+<li>Enhance HAL_DCACHE_UnRegisterCallback() API</li>
+<li>Enhance the timeout management</li>
+<li>Enhance error code management by :
+<ul>
+<li>Resetting DCACHE handle error code any time a new operation is launched</li>
+<li>Adding HAL_DCACHE_ERROR_INVALID_OPERATION error code: used in HAL_DCACHE_SetReadBurstType() API when DCACHE is enabled</li>
+<li>Adding HAL_DCACHE_ERROR_EVICTION_CLEAN error code: used in HAL_DCACHE_IRQHandler() API when DCACHE error interrupt flag is set</li>
+</ul></li>
+<li>Change the returned HAL status when there is an ongoing operation from HAL_ERROR to HAL_BUSY</li>
+<li>Change DCACHE handle state to HAL_DCACHE_STATE_READY any time a new operation is launched</li>
+</ul></li>
+<li><strong>HAL DMA</strong> driver
+<ul>
+<li>Enhance LinkAllocatedPort implementation</li>
+</ul></li>
+<li><strong>HAL GPIO</strong> driver
+<ul>
+<li>Reorder EXTI configuration in HAL_GPIO_Init() API</li>
+</ul></li>
+<li><strong>HAL GTZC</strong> driver
+<ul>
+<li>Rename GTZC_PERIPH_DCMI define to GTZC_PERIPH_DCMI_PSSI</li>
+</ul></li>
+<li><strong>HAL</strong> driver
+<ul>
+<li>Add the following functions:
+<ul>
+<li>HAL_SYSCFG_SetOTGPHYReferenceClockSelection()
+<ul>
+<li>HAL_SYSCFG_SetOTGPHYPowerDownConfig()</li>
+<li>HAL_SYSCFG_EnableOTGPHY()</li>
+</ul></li>
+<li>HAL_SYSCFG_EnableVddCompensationCell()
+<ul>
+<li>HAL_SYSCFG_EnableVddIO2CompensationCell()</li>
+<li>HAL_SYSCFG_EnableVddHSPICompensationCell()</li>
+<li>HAL_SYSCFG_DisableVddCompensationCell()</li>
+<li>HAL_SYSCFG_DisableVddIO2CompensationCell()</li>
+<li>HAL_SYSCFG_DisableVddHSPICompensationCell()</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><strong>HAL HCD</strong> driver
+<ul>
+<li>Fix handling of ODDFRM bit in OTG_HCCHARx for Isochronous IN transactions</li>
+</ul></li>
+<li><strong>HAL ICACHE</strong> driver
+<ul>
+<li>Add HAL_ICACHE_IsEnabled() API to check whether the ICACHE is enabled or not<br />
+</li>
+</ul></li>
+<li><strong>HAL LPTIM</strong> driver
+<ul>
+<li>Add HAL_LPTIM_IC_GetOffset() function</li>
+<li>Rename HAL_LPTIM_ReadCompare to HAL_LPTIM_ReadCapturedValue</li>
+<li>Add parameters checks in HAL_LPTIM_xxx_Start_DMA functions</li>
+</ul></li>
+<li><strong>HAL MMC</strong> driver
+<ul>
+<li>Add the following functions:
+<ul>
+<li>HAL_MMC_SleepDevice()</li>
+<li>HAL_MMC_AwakeDevice()</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL PCD</strong> driver
+<ul>
+<li>Add the following functions:
+<ul>
+<li>HAL_PCD_EP_Abort()</li>
+<li>HAL_PCD_SetTestMode()</li>
+</ul></li>
+<li>Correct received transfer length with USB DMA activated</li>
+<li>Add handling of USB OUT Endpoint disable interrupt</li>
+<li>Fix device IN endpoint isoc incomplete transfer interrupt handling</li>
+<li>Fix USB device Isoc OUT Endpoint incomplete transfer interrupt handling</li>
+<li>Set DCD timeout to minimum value of 300ms before starting BCD primary detection process</li>
+</ul></li>
+<li><strong>HAL PWR</strong> driver
+<ul>
+<li>Add the following functions:
+<ul>
+<li>HAL_PWREx_EnableUSBHSTranceiverSupply()</li>
+<li>HAL_PWREx_DisableUSBHSTranceiverSupply()</li>
+<li>Rename PWR_SRAMx_PAGEx_MODE_RETENTION to PWR_SRAMx_PAGEx_MODE</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL RCC</strong> driver
+<ul>
+<li>Enhance HAL_RCC_ClockConfig() function implementation</li>
+<li>Update HAL_RCC_OscConfig() function implementation on PWR clocking control</li>
+<li>Update HAL_RCC_OscConfig() function implementation to be tolerant to an identical PLL1 parameters re-configuration</li>
+<li>Enhance of PLL1 outputs clearing time in HAL_RCC_OscConfig()</li>
+<li>Remove RCC_PLL_SOURCE_NONE from correct parameters list on PLL1 configuration</li>
+<li>Rename RCC_PERIPHCLK_CLK48 to RCC_PERIPHCLK_ICLK defines</li>
+<li>Rename RCC_CLK48CLKSOURCE_XXX to RCC_ICLK_CLKSOURCE_XXX defines</li>
+<li>Rename __HAL_RCC_ADC1_XXX_YYY to __HAL_RCC_ADC12_XXX_YYY macros</li>
+<li>Rename __HAL_RCC_USB_OTG_FS_CLK_XXX to __HAL_RCC_USB_CLK_XXX macros</li>
+<li>Rename Clk48ClockSelection to IclkClockSelection in RCC_PeriphCLKInitTypeDef</li>
+</ul></li>
+<li><strong>HAL SPI</strong> driver
+<ul>
+<li>Fix compilation warning with GNU compiler</li>
+</ul></li>
+<li><strong>HAL TIM</strong> driver
+<ul>
+<li>Add IS_TIM_PERIOD macro in HAL_TIM_xxx_Init functions<br />
+</li>
+</ul></li>
+<li><strong>HAL UART</strong> driver
+<ul>
+<li>Rework HAL_UART_DMAPause() function in order to use DMA instead of UART to pause data transfer</li>
+<li>Rework HAL_UART_DMAResume() function in order to use DMA instead of UART to resume data transfer</li>
+</ul></li>
+<li><strong>HAL USART</strong> driver
+<ul>
+<li>Rework HAL_USART_DMAPause() function in order to use DMA instead of USART to pause data transfer</li>
+<li>Rework HAL_USART_DMAResume() function in order to use DMA instead of USART to resume data transfer</li>
+</ul></li>
+</ul>
+<h3 id="ll-drivers-updates-4"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li>All the <strong>LL</strong> drivers are updated to support both STM32U575/STM32U585 and STM32U595/STM32U5A5/STM32U599/STM32U5A9 devices</li>
+<li><strong>LL ADC</strong> driver
+<ul>
+<li>Add the following functions:
+<ul>
+<li>LL_ADC_SetVrefProtection()</li>
+<li>LL_ADC_GetVrefProtection()</li>
+</ul></li>
+</ul></li>
+<li><strong>LL I2C</strong> driver
+<ul>
+<li>Add I2C instances 5 and 6 configuration within LL driver</li>
+</ul></li>
+<li><strong>LL LPTIM</strong> driver
+<ul>
+<li>Add LL_LPTIM_IC_GET_OFFSET macro</li>
+<li>Rename the following static inline functions:
+<ul>
+<li>LL_LPTIM_SetCompareCH1 to LL_LPTIM_OC_SetCompareCH1</li>
+<li>LL_LPTIM_SetCompareCH2 to LL_LPTIM_OC_SetCompareCH2</li>
+<li>LL_LPTIM_GetCompareCH1 to LL_LPTIM_OC_GetCompareCH1</li>
+<li>LL_LPTIM_GetCompareCH2 to LL_LPTIM_OC_GetCompareCH2</li>
+</ul></li>
+</ul></li>
+<li><strong>LL OPAMP</strong> driver
+<ul>
+<li>Add __LL_OPAMP_COMMON_INSTANCE macro</li>
+</ul></li>
+<li><strong>LL LPUART</strong> driver
+<ul>
+<li>Add LL_LPUART_RequestTxDataFlush macro</li>
+</ul></li>
+<li><strong>LL RCC</strong> driver
+<ul>
+<li>Add the following functions:
+<ul>
+<li>LL_RCC_SetUSBPHYClockSource()</li>
+<li>LL_RCC_PLL3_EnableDomain_HSPI_LTDC()</li>
+<li>LL_RCC_PLL3_DisableDomain_HSPI_LTDC()</li>
+<li>LL_RCC_PLL3_ConfigDomain_HSPI_LTDC()</li>
+<li>LL_RCC_PLL1_IsEnabledDomain_SAI()</li>
+<li>LL_RCC_PLL1_IsEnabledDomain_48M()</li>
+<li>LL_RCC_PLL1_IsEnabledDomain_SYS()</li>
+<li>LL_RCC_PLL2_IsEnabledDomain_SAI()</li>
+<li>LL_RCC_PLL2_IsEnabledDomain_48M()</li>
+<li>LL_RCC_PLL2_IsEnabledDomain_ADC()</li>
+<li>LL_RCC_PLL3_IsEnabledDomain_SAI()</li>
+<li>LL_RCC_PLL3_IsEnabledDomain_48M()</li>
+<li>LL_RCC_PLL3_IsEnabledDomain_HSPI_LTDC()</li>
+</ul></li>
+<li>Enhance the following functions implementation:
+<ul>
+<li>LL_RCC_GetUSARTClockFreq(): Fix LPUART1 returned frequency when PCLK3 is set as clock source</li>
+<li>LL_RCC_GetPPPClockFreq: Add check of PLL output enable bit status</li>
+</ul></li>
+<li>Rename the macro __LL_RCC_CALC_PLL3CLK_HSPI_FREQ to __LL_RCC_CALC_PLL3CLK_HSPI_LTDC_FREQ</li>
+<li>Rename the static API RCC_PLL3_GetFreqDomain_HSPI to RCC_PLL3_GetFreqDomain_HSPI_LTDC</li>
+<li>Rename LL_RCC_USART6_CLKSOURCE_PCLK2 to LL_RCC_USART6_CLKSOURCE_PCLK1</li>
+</ul></li>
+<li><strong>LL SDMMC</strong> driver
+<ul>
+<li>Add SDMMC_TRANSFER_MODE_SDIO define</li>
+<li>Add SDMMC_CmdBlockCount function</li>
+</ul></li>
+<li><strong>LL RTC</strong> driver
+<ul>
+<li>Add LL_RTC_IsActiveFlag_ITAMP7() function</li>
+</ul></li>
+<li><strong>LL USART</strong> driver
+<ul>
+<li>Add USART instance 6 configuration within LL driver</li>
+</ul></li>
+<li><strong>LL USB</strong> driver
+<ul>
+<li>Add USB_EPStopXfer() function</li>
+</ul></li>
+</ul>
+<p>Backward compatibility ensured by legacy defines</p>
+<h2 id="known-limitations-4">Known Limitations</h2>
+<ul>
+<li>N/A</li>
+</ul>
+<h2 id="backward-compatibility-4">Backward compatibility</h2>
+<ul>
+<li>N/A</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" checked aria-hidden="true"><strong>V1.0.2 / 14-October-2021</strong></label>
+<div>
+<h2 id="main-changes-5">Main Changes</h2>
+<ul>
+<li>Patch release V1.0.2 of <strong>HAL and LL drivers</strong> for <strong>STM32U575xx / STM32U585xx</strong> devices</li>
+</ul>
+<h3 id="ll-drivers-updates-5"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li><strong>LL DAC</strong> driver
+<ul>
+<li>Rename of the LPTIM1/3 trigger of the LL DAC to be in line with Reference Manual:
+<ul>
+<li>Rename LL_DAC_TRIG_EXT_LPTIM1_OUT to LL_DAC_TRIG_EXT_LPTIM1_CH1</li>
+<li>Rename LL_DAC_TRIG_EXT_LPTIM3_OUT to LL_DAC_TRIG_EXT_LPTIM3_CH1</li>
+</ul></li>
+</ul></li>
+<li>Backward compatibility ensured by legacy defines</li>
+</ul>
+<h2 id="known-limitations-5">Known Limitations</h2>
+<ul>
+<li>N/A</li>
+</ul>
+<h2 id="backward-compatibility-5">Backward compatibility</h2>
+<ul>
+<li>N/A</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" checked aria-hidden="true"><strong>V1.0.1 / 01-October-2021</strong></label>
+<div>
+<h2 id="main-changes-6">Main Changes</h2>
+<ul>
+<li>Patch release V1.0.1 of <strong>HAL and LL drivers</strong> for <strong>STM32U575xx / STM32U585xx</strong> devices</li>
+</ul>
+<h3 id="hal-drivers-updates-5"><strong>HAL Drivers</strong> updates</h3>
+<ul>
+<li><strong>HAL ADC</strong> driver
+<ul>
+<li>Update the DMA data length management implementation according source/destination width</li>
+<li>Finetune HAL_ADCEx_Calibration_GetValue API to return correct calibration value for ADC4</li>
+</ul></li>
+<li><strong>HAL DAC</strong> driver
+<ul>
+<li>Rename of the LPTIM1/3 trigger of the DAC to be in line with Reference Manual:
+<ul>
+<li>Rename DAC_TRIGGER_STOP_LPTIM1_OUT to DAC_TRIGGER_STOP_LPTIM1_CH1</li>
+<li>Rename DAC_TRIGGER_STOP_LPTIM3_OUT to DAC_TRIGGER_STOP_LPTIM3_CH1</li>
+<li>Rename DAC_TRIGGER_LPTIM1_OUT to DAC_TRIGGER_LPTIM1_CH1</li>
+<li>Rename DAC_TRIGGER_LPTIM3_OUT to DAC_TRIGGER_LPTIM3_CH1</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL DMA</strong> driver
+<ul>
+<li>Fix DMA register callback error returning in case of invalid callback.</li>
+<li>Enhance HAL_DMA_GetLockChannelAttributes API implementation to detect wrong parameters values</li>
+<li>Enhance IS_DMA_ATTRIBUTES macro implementation to detect uncovered cases.</li>
+<li>Optimize DMA_List_CheckNodesBaseAddresses API implementation by reducing parameters number</li>
+<li>Optimize DMA_List_CheckNodesTypes API implementation by reducing parameters number</li>
+</ul></li>
+<li><strong>HAL GTZC</strong> driver
+<ul>
+<li>Fix issue with the APIs HAL_GTZC_MPCBB_ConfigMem : The CFGLOCK register should be updated after the update of SECCFGR and PRIVCFGR</li>
+</ul></li>
+<li><strong>HAL I2C </strong> driver
+<ul>
+<li>Add handle errors support in polling mode</li>
+</ul></li>
+<li><strong>HAL RCC </strong> driver
+<ul>
+<li>Fix setting Flash latency from MSIRange in Oscillator Configuration</li>
+</ul></li>
+</ul>
+<h3 id="ll-drivers-updates-6"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li><strong>LL I2C</strong> driver
+<ul>
+<li>Add LL_I2C_EnableFastModePlus, LL_I2C_DisableFastModePlus and LL_I2C_IsEnabledFastModePlus APIs</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations-6">Known Limitations</h2>
+<ul>
+<li>N/A</li>
+</ul>
+<h2 id="backward-compatibility-6">Backward compatibility</h2>
+<ul>
+<li>N/A</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" checked aria-hidden="true"><strong>V1.0.0 / 28-June-2021</strong></label>
+<div>
+<h2 id="main-changes-7">Main Changes</h2>
+<ul>
+<li>First official release of <strong>HAL and LL drivers</strong> for <strong>STM32U575xx / STM32U585xx</strong> devices</li>
+</ul>
+<h2 id="known-limitations-7">Known Limitations</h2>
+<ul>
+<li>N/A</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<footer class="sticky">
+<p>For complete documentation on STM32 Microcontrollers </mark> , visit: <span style="font-color: blue;"><a href="http://www.st.com/stm32">www.st.com/stm32</a></span></p>
+This release note uses up to date web standards and, for this reason, should not be opened with Internet Explorer but preferably with popular browsers such as Google Chrome, Mozilla Firefox, Opera or Microsoft Edge.
+</footer>
+</body>
+</html>
