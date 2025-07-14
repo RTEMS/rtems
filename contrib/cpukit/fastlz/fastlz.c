@@ -219,7 +219,15 @@ static FASTLZ_INLINE int FASTLZ_COMPRESSOR(const void* input, int length, void* 
     if(ip[0] == ip[-1] && FASTLZ_READU16(ip-1)==FASTLZ_READU16(ip+1))
     {
       distance = 1;
-      ip += 3;
+      #ifndef __rtems__
+        /*
+         * ip is assigned a value here, but is immediately assigned another
+         * value when it goes to match (line 269). The value that was initially
+         * assigned is not used, and this results in a Coverity issue. See CID
+         * 1399751
+         */
+        ip += 3;
+      #endif
       ref = anchor - 1 + 3;
       goto match;
     }
