@@ -2961,7 +2961,11 @@ HAL_StatusTypeDef HAL_DMAEx_List_ConvertQToDynamic(DMA_QListTypeDef *const pQLis
   DMA_List_GetCLLRNodeInfo(pQList->Head, NULL, &cllr_offset);
 
   /* Check queue circularity */
+#ifndef __rtems__
   if (pQList->FirstCircularNode != 0U)
+#else /* __rtems__ */
+  if (pQList->FirstCircularNode != NULL)
+#endif /* __rtems__ */
   {
     /* Find the last queue node and get its position in selected queue */
     node_info.cllr_offset = cllr_offset;
@@ -4591,7 +4595,11 @@ static void DMA_List_UpdateDynamicQueueNodesCLLR(DMA_QListTypeDef const *const p
   }
 
   /* Check queue circularity */
+#ifndef __rtems__
   if (pQList->FirstCircularNode != 0U)
+#else /* __rtems__ */
+  if (pQList->FirstCircularNode != NULL)
+#endif /* __rtems__ */
   {
     /* First circular queue is not last queue node */
     if (LastNode_IsCircular == 0U)

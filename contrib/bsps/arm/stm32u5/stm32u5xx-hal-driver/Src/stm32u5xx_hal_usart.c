@@ -375,6 +375,7 @@ HAL_StatusTypeDef HAL_USART_DeInit(USART_HandleTypeDef *husart)
   return HAL_OK;
 }
 
+#ifndef __rtems__
 /**
   * @brief Initialize the USART MSP.
   * @param husart USART handle.
@@ -389,6 +390,7 @@ __weak void HAL_USART_MspInit(USART_HandleTypeDef *husart)
             the HAL_USART_MspInit can be implemented in the user file
    */
 }
+#endif /* __rtems__ */
 
 /**
   * @brief DeInitialize the USART MSP.
