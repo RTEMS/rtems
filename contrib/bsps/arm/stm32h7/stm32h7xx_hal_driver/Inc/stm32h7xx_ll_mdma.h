@@ -78,7 +78,7 @@ static const uint32_t LL_MDMA_CH_OFFSET_TAB[] =
 
 /* Private macros ------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup MDMA_LL_ES_INIT MDMA Exported Init structure
   * @{
   */
@@ -4319,7 +4319,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_TC(MDMA_TypeDef *MDMAx, uint32_t Ch
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup MDMA_LL_EF_Init Initialization and de-initialization functions
   * @{
   */

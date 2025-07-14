@@ -71,7 +71,7 @@ static const uint8_t LL_BDMA_CH_OFFSET_TAB[] =
   * @}
   */
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup BDMA_LL_ES_INIT BDMA Exported Init structure
   * @{
   */
@@ -258,7 +258,7 @@ typedef struct
 #define LL_BDMA_CHANNEL_5                  0x00000005U /*!< BDMA Channel 5 */
 #define LL_BDMA_CHANNEL_6                  0x00000006U /*!< BDMA Channel 6 */
 #define LL_BDMA_CHANNEL_7                  0x00000007U /*!< BDMA Channel 7 */
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 #define LL_BDMA_CHANNEL_ALL                0xFFFF0000U /*!< BDMA Channel all (used only for function @ref LL_BDMA_DeInit(). */
 #endif /*USE_FULL_LL_DRIVER*/
 /**
@@ -2451,7 +2451,7 @@ __STATIC_INLINE uint32_t LL_BDMA_IsEnabledIT_TE(BDMA_TypeDef *BDMAx, uint32_t Ch
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup BDMA_LL_EF_Init Initialization and de-initialization functions
   * @{
   */

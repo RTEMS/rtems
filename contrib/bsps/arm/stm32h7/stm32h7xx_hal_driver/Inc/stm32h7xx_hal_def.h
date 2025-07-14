@@ -29,6 +29,13 @@
 #include "stm32h7xx.h"
 #include "Legacy/stm32_hal_legacy.h"
 #include <stddef.h>
+#ifdef __rtems__
+/* this is to avoid definition of log function which conflicts with
+ * freebsd's systm.h log function. Whole theatre just to make sure
+ * we do have float_t available (defined in math.h) which is later
+ * used in HAL */
+#define __math_68881 1
+#endif /* __rtems__ */
 #include <math.h>
 
 /* Exported types ------------------------------------------------------------*/

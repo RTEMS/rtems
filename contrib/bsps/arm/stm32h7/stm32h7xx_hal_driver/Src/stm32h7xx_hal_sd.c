@@ -608,6 +608,7 @@ HAL_StatusTypeDef HAL_SD_DeInit(SD_HandleTypeDef *hsd)
 }
 
 
+#ifndef __rtems__
 /**
   * @brief  Initializes the SD MSP.
   * @param  hsd: Pointer to SD handle
@@ -622,6 +623,7 @@ __weak void HAL_SD_MspInit(SD_HandleTypeDef *hsd)
             the HAL_SD_MspInit could be implemented in the user file
    */
 }
+#endif /* __rtems__ */
 
 /**
   * @brief  De-Initialize SD MSP.

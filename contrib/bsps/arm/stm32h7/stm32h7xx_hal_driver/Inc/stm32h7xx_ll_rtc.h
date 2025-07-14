@@ -64,7 +64,7 @@ extern "C" {
   */
 
 /* Private macros ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RTC_LL_Private_Macros RTC Private Macros
   * @{
   */
@@ -74,7 +74,7 @@ extern "C" {
 #endif /*USE_FULL_LL_DRIVER*/
 
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RTC_LL_ES_INIT RTC Exported Init structure
   * @{
   */
@@ -200,7 +200,7 @@ typedef struct
   * @{
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RTC_LL_EC_FORMAT FORMAT
   * @{
   */
@@ -5168,7 +5168,7 @@ __STATIC_INLINE uint32_t LL_RTC_IsActiveFlag_ATAMP_SEEDF(void)
   */
 
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RTC_LL_EF_Init Initialization and de-initialization functions
   * @{
   */
