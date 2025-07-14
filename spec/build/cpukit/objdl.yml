@@ -51,7 +51,7 @@ links:
 source:
 - cpukit/libdl/dlfcn-shell.c
 - cpukit/libdl/dlfcn.c
-- cpukit/libdl/fastlz.c
+- contrib/cpukit/fastlz/fastlz.c
 - cpukit/libdl/rap-shell.c
 - cpukit/libdl/rap.c
 - cpukit/libdl/rtl-alloc-heap.c
