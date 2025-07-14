@@ -4690,8 +4690,13 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t 
   if (hdma != NULL)
   {
 
+#ifndef __rtems__
     if (((hdma->Mode & DMA_LINKEDLIST) == DMA_LINKEDLIST) && (hdma->LinkedListQueue != 0U)
         && (hdma->LinkedListQueue->Head != 0U))
+#else /* __rtems__ */
+    if (((hdma->Mode & DMA_LINKEDLIST) == DMA_LINKEDLIST) && (hdma->LinkedListQueue != NULL)
+        && (hdma->LinkedListQueue->Head != NULL))
+#endif /* __rtems__ */
     {
       data_width = hdma->LinkedListQueue->Head->LinkRegisters[0] & DMA_CTR1_SDW_LOG2;
     }
@@ -5145,8 +5150,13 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t B
   if (hdma != NULL)
   {
 
+#ifndef __rtems__
     if (((hdma->Mode & DMA_LINKEDLIST) == DMA_LINKEDLIST) && (hdma->LinkedListQueue != 0U)
         && (hdma->LinkedListQueue->Head != 0U))
+#else /* __rtems__ */
+    if (((hdma->Mode & DMA_LINKEDLIST) == DMA_LINKEDLIST) && (hdma->LinkedListQueue != NULL)
+        && (hdma->LinkedListQueue->Head != NULL))
+#endif /* __rtems__ */
     {
       data_width = hdma->LinkedListQueue->Head->LinkRegisters[0] & DMA_CTR1_SDW_LOG2;
     }
@@ -6082,7 +6092,11 @@ HAL_StatusTypeDef TIM_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t src, uint32
   /* Enable the DMA channel */
   if ((hdma->Mode & DMA_LINKEDLIST) == DMA_LINKEDLIST)
   {
+#ifndef __rtems__
     if ((hdma->LinkedListQueue != 0U) && (hdma->LinkedListQueue->Head != 0U))
+#else /* __rtems__ */
+    if ((hdma->LinkedListQueue != NULL) && (hdma->LinkedListQueue->Head != NULL))
+#endif /* __rtems__ */
     {
       /* Enable the DMA channel */
       hdma->LinkedListQueue->Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET] = length;
