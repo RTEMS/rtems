@@ -64,6 +64,8 @@ links:
   uid: ../../optconsolebaud
 - role: build-dependency
   uid: ../../optconsoleirq
+- role: build-dependency
+  uid: optincludes
 type: build
 use-after: []
 use-before: []
