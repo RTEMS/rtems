@@ -751,7 +751,7 @@ __STATIC_INLINE uint32_t LL_CORDIC_ReadData(const CORDIC_TypeDef *CORDICx)
 
 
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup CORDIC_LL_EF_Init Initialization and de-initialization functions
   * @{
   */

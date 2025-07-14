@@ -1035,7 +1035,7 @@ __STATIC_INLINE void LL_FMAC_ConfigFunc(FMAC_TypeDef *FMACx, uint8_t Start, uint
 
 
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup FMAC_LL_EF_Init Initialization and de-initialization functions
   * @{
   */

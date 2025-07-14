@@ -15,7 +15,7 @@
   *
   ******************************************************************************
   */
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_ll_adc.h"

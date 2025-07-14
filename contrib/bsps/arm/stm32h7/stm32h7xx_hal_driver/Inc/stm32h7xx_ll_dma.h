@@ -79,7 +79,7 @@ static const uint8_t LL_DMA_STR_OFFSET_TAB[] =
   */
 
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DMA_LL_ES_INIT DMA Exported Init structure
   * @{
   */
@@ -3286,7 +3286,7 @@ __STATIC_INLINE uint32_t LL_DMA_IsEnabledIT_FE(DMA_TypeDef *DMAx, uint32_t Strea
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DMA_LL_EF_Init Initialization and de-initialization functions
   * @{
   */
