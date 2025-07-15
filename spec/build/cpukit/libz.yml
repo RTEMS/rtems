@@ -8,29 +8,30 @@ cppflags: []
 cxxflags:
 - ${COVERAGE_COMPILER_FLAGS}
 enabled-by: true
-includes: []
+includes:
+- contrib/cpukit/libz
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
-  - cpukit/include/zconf.h
-  - cpukit/include/zlib.h
+  - contrib/cpukit/zlib/zconf.h
+  - contrib/cpukit/zlib/zlib.h
 install-path: ${BSP_LIBDIR}
 links: []
 source:
-- cpukit/compression/zlib/adler32.c
-- cpukit/compression/zlib/compress.c
-- cpukit/compression/zlib/crc32.c
-- cpukit/compression/zlib/deflate.c
-- cpukit/compression/zlib/gzclose.c
-- cpukit/compression/zlib/gzlib.c
-- cpukit/compression/zlib/gzread.c
-- cpukit/compression/zlib/gzwrite.c
-- cpukit/compression/zlib/infback.c
-- cpukit/compression/zlib/inffast.c
-- cpukit/compression/zlib/inflate.c
-- cpukit/compression/zlib/inftrees.c
-- cpukit/compression/zlib/trees.c
-- cpukit/compression/zlib/uncompr.c
-- cpukit/compression/zlib/zutil.c
+- contrib/cpukit/zlib/adler32.c
+- contrib/cpukit/zlib/compress.c
+- contrib/cpukit/zlib/crc32.c
+- contrib/cpukit/zlib/deflate.c
+- contrib/cpukit/zlib/gzclose.c
+- contrib/cpukit/zlib/gzlib.c
+- contrib/cpukit/zlib/gzread.c
+- contrib/cpukit/zlib/gzwrite.c
+- contrib/cpukit/zlib/infback.c
+- contrib/cpukit/zlib/inffast.c
+- contrib/cpukit/zlib/inflate.c
+- contrib/cpukit/zlib/inftrees.c
+- contrib/cpukit/zlib/trees.c
+- contrib/cpukit/zlib/uncompr.c
+- contrib/cpukit/zlib/zutil.c
 target: z
 type: build

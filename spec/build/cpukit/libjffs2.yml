@@ -11,6 +11,7 @@ cxxflags:
 enabled-by: true
 includes:
 - cpukit/libfs/src/jffs2/include
+- contrib/cpukit/zlib
 install:
 - destination: ${BSP_INCLUDEDIR}/rtems
   source:
