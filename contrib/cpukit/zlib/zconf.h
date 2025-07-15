@@ -7,6 +7,10 @@
 
 #ifndef ZCONF_H
 #define ZCONF_H
+#ifdef __rtems__
+#define ZLIB_CONST 1
+#define Z_PREFIX 1
+#endif /* __rtems__ */
 
 /*
  * If you *really* need a unique prefix for all types and library functions,
@@ -416,6 +420,7 @@ typedef uLong FAR uLongf;
    typedef Byte       *voidp;
 #endif
 
+#ifndef __rtems__
 #if !defined(Z_U4) && !defined(Z_SOLO) && defined(STDC)
 #  include <limits.h>
 #  if (UINT_MAX == 0xffffffffUL)
@@ -426,11 +431,23 @@ typedef uLong FAR uLongf;
 #    define Z_U4 unsigned short
 #  endif
 #endif
+#else /* __rtems__ */
+#include <stdint.h>
+#define Z_U4 uint32_t
+#endif /* __rtems__ */
 
 #ifdef Z_U4
    typedef Z_U4 z_crc_t;
 #else
    typedef unsigned long z_crc_t;
+#endif
+
+#ifdef __rtems__
+#  define Z_HAVE_UNISTD_H
+#endif
+
+#ifdef __rtems__
+#  define Z_HAVE_STDARG_H
 #endif
 
 #ifdef HAVE_UNISTD_H    /* may be set to #if 1 by ./configure */
