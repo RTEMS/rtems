@@ -474,6 +474,10 @@ static inline bool rc_is_finished(const struct rc_dec *rc)
 	return rc->code == 0;
 }
 
+#ifdef __rtems__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wattributes"
+#endif /* __rtems__ */
 /* Read the next input byte if needed. */
 static __always_inline void rc_normalize(struct rc_dec *rc)
 {
@@ -548,6 +552,9 @@ static __always_inline void rc_bittree_reverse(struct rc_dec *rc,
 		}
 	} while (++i < limit);
 }
+#ifdef __rtems__
+#pragma GCC diagnostic pop
+#endif /* __rtems__ */
 
 /* Decode direct bits (fixed fifty-fifty probability) */
 static inline void rc_direct(struct rc_dec *rc, uint32_t *dest, uint32_t limit)
