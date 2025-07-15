@@ -35,6 +35,12 @@ For example:
 
 The path is `contrib/bsps/arm/stm32u5/stm32u5xx-hal-driver` with `1.5.0` being the version.
 
+### No available version
+
+If there is no version then take the commit date + hash used for the import for example with `xz`:
+
+- contrib/cpukit/xz-embedded/2015-11-03-e75f4eb
+
 ## Current Sources
 
 These are the current source directories and where they are from. Look at the
