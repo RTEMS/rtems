@@ -1573,7 +1573,7 @@ static volatile lpc_i2s * const lpc176x_i2s = (lpc_i2s *) I2S_BASE_ADDR;
 #define ADC_CR_START( val ) BSP_FLD32( val, 24, 26 )
 #define ADC_CR_EDGE BSP_BIT32( 27 )
 
-#define ADC_DR_VALUE( reg ) BSP_FLD32GET( reg, 6, 15 )
+#define ADC_DR_VALUE( reg ) BSP_FLD32GET( reg, 4, 15 )
 #define ADC_DR_OVERRUN BSP_BIT32( 30 )
 #define ADC_DR_DONE BSP_BIT32( 31 )
 
