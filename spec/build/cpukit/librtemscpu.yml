@@ -529,9 +529,9 @@ links:
 - role: build-dependency
   uid: vckey
 source:
-- cpukit/compression/xz/xz_crc32.c
-- cpukit/compression/xz/xz_dec_lzma2.c
-- cpukit/compression/xz/xz_dec_stream.c
+- contrib/cpukit/xz-embedded/linux/lib/xz/xz_crc32.c
+- contrib/cpukit/xz-embedded/linux/lib/xz/xz_dec_lzma2.c
+- contrib/cpukit/xz-embedded/linux/lib/xz/xz_dec_stream.c
 - cpukit/crc/crc24q.c
 - cpukit/base64/base64-encode.c
 - cpukit/base64/base64-decode.c
