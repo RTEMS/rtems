@@ -47,3 +47,4 @@ Git log in order to find out version and update details
 | bsps/arm/stm32u5/stm32u5xx-hal-driver | https://github.com/STMicroelectronics/stm32h7xx_hal_driver.git |
 | cpukit/fastlz                         | https://github.com/ariya/FastLZ                                |
 | cpukit/libz                           | https://github.com/madler/zlib                                 |
+| cpukit/xz-embedded                    | https://github.com/tukaani-project/xz-embedded                 |
