@@ -101,17 +101,17 @@ static void uC5282_tc_tick(void)
         unsigned long long N;                                            \
         int level;                                                       \
         int preScaleCode = 0;                                            \
-		N  = bsp_get_CPU_clock_speed();                                  \
-		N *= rtems_configuration_get_microseconds_per_tick();            \
-		N /= 2*1000000; /* min_prescale * us_per_s */                    \
-		while ( N > 0x10000 ) {                                          \
-			preScaleCode++;                                              \
-			N >>= 1;                                                     \
-		}                                                                \
-		PITC_PER_TICK  = N;                                              \
-		N  = 2000000000ULL << preScaleCode;                              \
-		N /= bsp_get_CPU_clock_speed();                                  \
-		NSEC_PER_PITC  = N;                                              \
+        N  = bsp_get_CPU_clock_speed();                                  \
+        N *= rtems_configuration_get_microseconds_per_tick();            \
+        N /= 2*1000000; /* min_prescale * us_per_s */                    \
+        while ( N > 0x10000 ) {                                          \
+          preScaleCode++;                                                \
+          N >>= 1;                                                       \
+        }                                                                \
+        PITC_PER_TICK  = N;                                              \
+        N  = 2000000000ULL << preScaleCode;                              \
+        N /= bsp_get_CPU_clock_speed();                                  \
+        NSEC_PER_PITC  = N;                                              \
         IDLE_COUNTER   = 0;                                              \
         FILTERED_IDLE  = 0;                                              \
         MAX_IDLE_COUNT = 0;                                              \

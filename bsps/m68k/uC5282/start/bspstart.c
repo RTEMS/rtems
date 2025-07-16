@@ -255,67 +255,70 @@ void bsp_start( void )
   printk("Checking ENV variable SYS_CLOCK_SPEED:\n");
   if ( (clk_speed_str = bsp_getbenv("SYS_CLOCK_SPEED")) ) {
     printk("Found: %s\n", clk_speed_str);
-	for ( clk_speed = 0, i=0;
-	      clk_speed_str[i] >= '0' && clk_speed_str[i] <= '9';
-	      i++ ) {
-		clk_speed = 10*clk_speed + clk_speed_str[i] - '0';
-	}
-	if ( 0 != clk_speed_str[i] ) {
-		printk("Not a decimal number; I'm not using this setting\n");
-		clk_speed = 0;
-	}
+    for ( clk_speed = 0, i=0;
+          clk_speed_str[i] >= '0' && clk_speed_str[i] <= '9';
+          i++ ) {
+      clk_speed = 10*clk_speed + clk_speed_str[i] - '0';
+    }
+    if ( 0 != clk_speed_str[i] ) {
+      printk("Not a decimal number; I'm not using this setting\n");
+      clk_speed = 0;
+    }
   } else {
     printk("Not set.\n");
   }
 
-  if ( 0 == clk_speed )
-	clk_speed = BSP_sys_clk_speed;
-
   if ( 0 == clk_speed ) {
-	printk("Using some heuristics to determine clock speed...\n");
-	byte = MCF5282_CLOCK_SYNSR;
-	if ( 0 == byte ) {
-		printk("SYNSR == 0; assuming QEMU at 66MHz\n");
-		BSP_pll_ref_clock = 8250000;
-		mfd = ( 0 << 8 ) | ( 2 << 12 );
-	} else {
-		if ( 0xf8 != byte ) {
-			printk(
-				"FATAL ERROR: Unexpected SYNSR contents "
-				"(0x%02x), can't proceed\n", byte);
-			bsp_sysReset(0);
-		}
-		mfd = MCF5282_CLOCK_SYNCR;
-	}
-	printk("Assuming %" PRIu32 "Hz PLL ref. clock\n", BSP_pll_ref_clock);
-	rfd = (mfd >>  8) & 7;
-	mfd = (mfd >> 12) & 7;
-	/* Check against 'known' cases */
-	if ( 0 != rfd || (2 != mfd && 3 != mfd) ) {
-	  printk("WARNING: Pll divisor/multiplier has unknown value; \n");
-	  printk("         either your board is not 64MHz or 80Mhz or\n");
-	  printk("         it uses a PLL reference other than 8MHz.\n");
-	  printk("         I'll proceed anyways but you might have to\n");
-	  printk("         reset the board and set uCbootloader ENV\n");
-	  printk("         variable \"SYS_CLOCK_SPEED\".\n");
-	}
-	mfd = 2 * (mfd + 2);
-	/* sysclk = pll_ref * 2 * (MFD + 2) / 2^(rfd) */
-	printk(
-          "PLL multiplier: %" PRIu32", output divisor: %" PRIu32 "\n",
-          mfd,
-          rfd
-        );
-	clk_speed = (BSP_pll_ref_clock * mfd) >> rfd;
+    clk_speed = BSP_sys_clk_speed;
   }
 
   if ( 0 == clk_speed ) {
-	printk("FATAL ERROR: Unable to determine system clock speed\n");
-	bsp_sysReset(0);
+    printk("Using some heuristics to determine clock speed...\n");
+    byte = MCF5282_CLOCK_SYNSR;
+    if ( 0 == byte ) {
+      printk("SYNSR == 0; assuming QEMU at 66MHz\n");
+      BSP_pll_ref_clock = 8250000;
+      mfd = ( 0 << 8 ) | ( 2 << 12 );
+    } else {
+      if ( 0xf8 != byte ) {
+        printk(
+          "FATAL ERROR: Unexpected SYNSR contents "
+          "(0x%02x), can't proceed\n", byte
+        );
+        bsp_sysReset(0);
+      }
+      mfd = MCF5282_CLOCK_SYNCR;
+    }
+    printk("Assuming %" PRIu32 "Hz PLL ref. clock\n", BSP_pll_ref_clock);
+    rfd = (mfd >>  8) & 7;
+    mfd = (mfd >> 12) & 7;
+    /* Check against 'known' cases */
+    if ( 0 != rfd || (2 != mfd && 3 != mfd) ) {
+      printk("WARNING: Pll divisor/multiplier has unknown value; \n");
+      printk("         either your board is not 64MHz or 80Mhz or\n");
+      printk("         it uses a PLL reference other than 8MHz.\n");
+      printk("         I'll proceed anyways but you might have to\n");
+      printk("         reset the board and set uCbootloader ENV\n");
+      printk("         variable \"SYS_CLOCK_SPEED\".\n");
+    }
+    mfd = 2 * (mfd + 2);
+    /* sysclk = pll_ref * 2 * (MFD + 2) / 2^(rfd) */
+    printk(
+      "PLL multiplier: %" PRIu32", output divisor: %" PRIu32 "\n",
+      mfd,
+      rfd
+    );
+    clk_speed = (BSP_pll_ref_clock * mfd) >> rfd;
+  }
+
+  if ( 0 == clk_speed ) {
+    printk("FATAL ERROR: Unable to determine system clock speed\n");
+    bsp_sysReset(0);
   } else {
-  	BSP_sys_clk_speed = clk_speed;
-	printk(
-          "System clock speed: %" PRIu32 "Hz\n", bsp_get_CPU_clock_speed());
+    BSP_sys_clk_speed = clk_speed;
+    printk(
+      "System clock speed: %" PRIu32 "Hz\n", bsp_get_CPU_clock_speed()
+    );
   }
 }
 

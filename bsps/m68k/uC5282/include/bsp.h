@@ -166,14 +166,14 @@ typedef struct mcf5282BufferDescriptor_ {
 } mcf5282BufferDescriptor_t;
 
 extern struct {
-	uint32_t                  idle_counter;
-	uint32_t                  filtered_idle;
-	uint32_t                  max_idle_count;
-	uint32_t                  pitc_per_tick;
-	uint32_t                  nsec_per_pitc;
-	uint32_t                  pad[3]; /* align to 16-bytes for descriptors */
-	mcf5282BufferDescriptor_t fec_descriptors[];
-	/* buffer descriptors are allocated from here */
+    uint32_t                  idle_counter;
+    uint32_t                  filtered_idle;
+    uint32_t                  max_idle_count;
+    uint32_t                  pitc_per_tick;
+    uint32_t                  nsec_per_pitc;
+    uint32_t                  pad[3]; /* align to 16-bytes for descriptors */
+    mcf5282BufferDescriptor_t fec_descriptors[];
+    /* buffer descriptors are allocated from here */
 
     /* initial stack is at top of SRAM (start.S)  */
 } __SRAMBASE;
