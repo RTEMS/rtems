@@ -65,7 +65,7 @@ uint32_t _CPU_Counter_frequency(void)
  */
 void bsp_start(void)
 {
-  char* intrStack;
+  uintptr_t intrStack;
 
   /*
    * Get CPU identification dynamically.  Note that the get_ppc_cpu_type()
@@ -78,8 +78,8 @@ void bsp_start(void)
   /*
    * Initialize some SPRG registers related to irq handling
    */
-  intrStack = (char *)_ISR_Stack_area_end -
-     PPC_MINIMUM_STACK_FRAME_SIZE;
+  intrStack = (uintptr_t)_ISR_Stack_area_end;
+  intrStack -= PPC_MINIMUM_STACK_FRAME_SIZE;
   _write_SPRG1((unsigned int)intrStack);
 
   /*
