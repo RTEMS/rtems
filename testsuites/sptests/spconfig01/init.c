@@ -113,13 +113,17 @@ static void Init(rtems_task_argument arg)
   rtems_test_exit(0);
 }
 
+/*
+ * Override interrupt stack size and prerequisite driver settings from
+ * the BSP. Historically, these overrides included a #warning but we
+ * want to eliminate all warnings from building RTEMS including BSPs
+ * and tests.
+ */
 #ifdef BSP_INTERRUPT_STACK_SIZE
-#warning "BSP_INTERRUPT_STACK_SIZE will be #undef for this test"
 #undef BSP_INTERRUPT_STACK_SIZE
 #endif
 
 #ifdef CONFIGURE_BSP_PREREQUISITE_DRIVERS
-#warning "CONFIGURE_BSP_PREREQUISITE_DRIVERS will be #undef for this test"
 #undef CONFIGURE_BSP_PREREQUISITE_DRIVERS
 #endif
 
