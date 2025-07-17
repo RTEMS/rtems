@@ -340,7 +340,7 @@ rtems_bdbuf_avl_insert(rtems_bdbuf_buffer** root,
   rtems_blkdev_bnum block = node->block;
 
   rtems_bdbuf_buffer*  p = *root;
-  rtems_bdbuf_buffer*  q;
+  rtems_bdbuf_buffer*  q = NULL;
   rtems_bdbuf_buffer*  p1;
   rtems_bdbuf_buffer*  p2;
   rtems_bdbuf_buffer*  buf_stack[RTEMS_BDBUF_AVL_MAX_HEIGHT];
