@@ -143,7 +143,7 @@ void bsp_cacr_clear_flags( uint32_t flags)
    * Cache enabled for entire SDRAM (64 MB)
    */
   m68k_set_acr1(MCF548X_ACR_BA((uint32_t)(_SdramBase))                       |
-                MCF548X_ACR_ADMSK_AMM((uint32_t)(_SdramSize - 1))            |
+                MCF548X_ACR_ADMSK_AMM((uint32_t)((uintptr_t)_SdramSize - 1)) |
                 MCF548X_ACR_E                                                |
                 MCF548X_ACR_SP               /* supervisor protection */     |
                 MCF548X_ACR_S(S_ACCESS_SUPV) /* always in supervisor mode */ |
@@ -153,7 +153,8 @@ void bsp_cacr_clear_flags( uint32_t flags)
    * Cache enabled for entire boot flash (2 MB)
    */
   m68k_set_acr2(MCF548X_ACR_BA((uint32_t)(_BootFlashBase))                   |
-                MCF548X_ACR_ADMSK_AMM((uint32_t)(_BootFlashSize - 1))        |
+                MCF548X_ACR_ADMSK_AMM(
+                           (uint32_t)((uintptr_t)_BootFlashSize - 1))        |
                 MCF548X_ACR_E                                                |
                 MCF548X_ACR_SP               /* supervisor protection */     |
                 MCF548X_ACR_S(S_ACCESS_SUPV) /* always in supervisor mode */ |
@@ -163,7 +164,8 @@ void bsp_cacr_clear_flags( uint32_t flags)
    * Cache enabled for entire code flash (16 MB)
    */
   m68k_set_acr3(MCF548X_ACR_BA((uint32_t)(_CodeFlashBase))                   |
-                MCF548X_ACR_ADMSK_AMM((uint32_t)(_CodeFlashSize - 1))        |
+                MCF548X_ACR_ADMSK_AMM(
+                            (uint32_t)((uintptr_t)_CodeFlashSize - 1))       |
                 MCF548X_ACR_E                                                |
                 MCF548X_ACR_SP               /* supervisor protection */     |
                 MCF548X_ACR_S(S_ACCESS_SUPV) /* always in supervisor mode */ |
