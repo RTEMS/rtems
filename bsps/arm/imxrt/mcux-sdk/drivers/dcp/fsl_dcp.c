@@ -21,7 +21,11 @@
 #endif
 
 /*! Compile time sizeof() check */
+#ifndef __rtems__
 #define BUILD_ASSURE(condition, msg) extern int msg[1 - 2 * (!(condition))] __attribute__((unused))
+#else /* __rtems__ */
+#define BUILD_ASSURE(condition, msg) _Static_assert((condition), #msg)
+#endif /* __rtems__ */
 
 #define dcp_memcpy memcpy
 
