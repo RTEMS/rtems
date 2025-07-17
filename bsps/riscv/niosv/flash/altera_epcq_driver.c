@@ -601,6 +601,7 @@ static int alt_epcq_controller2_write_block (
       EPCQ_MEM_32[write_offset_32] = word_to_write;
       alt_epcq_poll_for_write_in_progress(epcq_flash_info);
       dummy_read = EPCQ_MEM_32[write_offset_32];
+      (void) dummy_read;
     }
 
     /* check whether write triggered a illegal write interrupt */
