@@ -338,7 +338,7 @@ typedef enum {
   OR1K_EXCPETION_RESERVED2 = 16,
   OR1K_EXCPETION_RESERVED3 = 17,
   MAX_EXCEPTIONS = 17,
-  OR1K_EXCEPTION_MAKE_ENUM_32_BIT = 0xffffffff
+  OR1K_EXCEPTION_MAKE_ENUM_32_BIT = 0x7fffffff
 } OR1K_Symbolic_exception_name;
 
 static inline uint32_t _OR1K_mfspr(uint32_t reg)
