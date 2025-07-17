@@ -474,6 +474,7 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 	LDREG	t1, (t0)
 	NOP
 	beqz	t1,1f
+	NOP
 
 	STREG	zero, (t0)			/* and clear it */
 	NOP
@@ -702,6 +703,7 @@ FRAME(_ISR_Handler,sp,0,ra)
 
 	and      t1,t0,CAUSE_EXCMASK
         beq      t1, 0, _ISR_Handler_1
+	NOP
 
 _ISR_Handler_Exception:
 
