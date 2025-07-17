@@ -87,15 +87,11 @@ restore:  movml    a0@,d1-d7/a2-a7       | restore context
         .global SYM (_CPU_Context_Restart_self)
 .set    CONTEXT_ARG, 4                   | context arg
 
-#if defined( __mcoldfire__ ) && ( M68K_HAS_FPU == 1 )
-/* XXX _CPU_Context_switch maintains FPU context -- do we have to restore
- *     that, too??
- */
-#warning "_CPU_Context_Restart_self restoring FPU context not implemented"
-#endif
+/* Floating point is restored in _Thread_Handler. */
 SYM(_CPU_Context_Restart_self):
          moval    a7@(CONTEXT_ARG),a0
          bra      restore
+
 /*
  * Floating point context save and restore.
  *
