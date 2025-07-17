@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <rtems.h>
@@ -761,8 +762,12 @@ rtems_status_code mscan_channel_initialize(rtems_device_major_number major,
                            (rtems_id *) & (chan->tx_rb_sid));
 
   /* Set up interrupts */
-  if (!BSP_install_rtems_irq_handler(&(mpc5200_mscan_irq_data[minor])))
-    rtems_panic("Can't attach MPC5x00 MSCAN interrupt handler %ld\n", minor);
+  if (!BSP_install_rtems_irq_handler(&(mpc5200_mscan_irq_data[minor]))) {
+    rtems_panic(
+      "Can't attach MPC5x00 MSCAN interrupt handler %" PRIu32 "\n",
+      minor
+    );
+  }
 
   /* basic setup for channel info. struct. */
   chan->regs = (mscan *) &(mpc5200.mscan[minor]);
