@@ -62,7 +62,9 @@
 /*
  * SDATA allocator.
  */
+#if !_ARCH_PPC64
 static rtems_rtl_bit_alloc* sdata;
+#endif
 
 static Elf_Addr
 get_sda_base (void)
@@ -82,17 +84,15 @@ get_sda_base (void)
   __asm__ volatile (" lis %0, " #_l "@h\n" \
                     " ori %0, %0, " #_l "@l\n" : "=r" (_v))
 
+#if !_ARCH_PPC64
 static void*
 get_sdata_start (void)
 {
-#if _ARCH_PPC64
-  return NULL;
-#else
   Elf_Addr addr;
   GET_ADDR(__SDATA_START__, addr);
   return (void*) addr;
-#endif
 }
+#endif
 
 #if !_ARCH_PPC64
 static size_t
@@ -494,9 +494,10 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
       break;
 
     default:
-      printf ("rtl: reloc unknown: sym = %" PRIu32 ", type = %" PRIu32 ", offset = %p, "
+      printf ("rtl: reloc unknown: sym = %" PRIu64 ", type = %" PRIu32 ", offset = %p, "
               "contents = %p\n",
-              ELF_R_SYM(rela->r_info), (uint32_t) ELF_R_TYPE(rela->r_info),
+              (uint64_t)ELF_R_SYM(rela->r_info),
+              (uint32_t) ELF_R_TYPE(rela->r_info),
               (void *)rela->r_offset, (void *)*where);
       rtems_rtl_set_error (EINVAL,
                            "%s: Unsupported relocation type %" PRId32
