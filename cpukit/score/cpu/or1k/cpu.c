@@ -116,6 +116,19 @@ void _CPU_ISR_install_raw_handler(
    _ISR_Local_enable( level );
 }
 
+void _CPU_ISR_install_vector(
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
+)
+{
+  _CPU_ISR_install_raw_handler(
+    vector,
+    (CPU_ISR_raw_handler) new_handler,
+    (CPU_ISR_raw_handler *) old_handler
+  );
+}
+
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
   do {

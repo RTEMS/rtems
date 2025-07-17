@@ -468,18 +468,11 @@ void _CPU_ISR_install_raw_handler(
 
 typedef void ( *CPU_ISR_handler )( uint32_t );
 
-static inline void _CPU_ISR_install_vector(
+void _CPU_ISR_install_vector(
   uint32_t         vector,
   CPU_ISR_handler  new_handler,
   CPU_ISR_handler *old_handler
-)
-{
-  _CPU_ISR_install_raw_handler(
-    vector,
-    (CPU_ISR_raw_handler) new_handler,
-    (CPU_ISR_raw_handler *) old_handler
-  );
-}
+);
 
 RTEMS_NO_RETURN void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
