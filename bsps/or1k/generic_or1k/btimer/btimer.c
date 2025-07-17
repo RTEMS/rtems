@@ -73,7 +73,7 @@ benchmark_timer_t benchmark_timer_read( void )
     if ( total < LEAST_VALID )
       return 0;            /* below timer resolution */
 
-      return (total - AVG_OVERHEAD);
+    return (total - AVG_OVERHEAD);
   }
 }
 
