@@ -37,7 +37,7 @@ void Init5329(void)
   /*
    * Copy the vector table to RAM
    */
-  if (&_VBR != (void *) _INTERRUPT_VECTOR) {
+  if ((uintptr_t)&_VBR != (uintptr_t)_INTERRUPT_VECTOR) {
     sp = (uint32_t *) _INTERRUPT_VECTOR;
     dp = (uint32_t *) &_VBR;
     for (i = 0; i < 256; i++) {
@@ -50,7 +50,7 @@ void Init5329(void)
   /*
    * Move initialized data from ROM to RAM.
    */
-  if (_data_src_start != _data_dest_start) {
+  if ((uintptr_t)_data_src_start != (uintptr_t)_data_dest_start) {
     dbp = (uint8_t *) _data_dest_start;
     sbp = (uint8_t *) _data_src_start;
     i = _data_dest_end - _data_dest_start;
@@ -62,7 +62,7 @@ void Init5329(void)
    * Zero uninitialized data
    */
 
-  if (_clear_start != _clear_end) {
+  if ((uintptr_t)_clear_start != (uintptr_t)_clear_end) {
     sbp = _clear_start;
     dbp = _clear_end;
     i = dbp - sbp;
