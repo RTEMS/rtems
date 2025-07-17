@@ -153,7 +153,7 @@ static void CallWithinISRIsHandlerInstalled(
   (void) option;
   (void) handler_arg;
 
-  if ( handler == CallWithinISRHandler && handler_arg == NULL ) {
+  if ( handler == (void *)CallWithinISRHandler && handler_arg == NULL ) {
     *(bool *) arg = true;
   }
 }
