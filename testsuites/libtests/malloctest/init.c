@@ -42,6 +42,7 @@
 #include <rtems/score/protectedheap.h>
 #include <rtems/malloc.h>
 #include <rtems/sysinit.h>
+#include <malloc.h>
 
 const char rtems_test_name[] = "MALLOCTEST";
 
@@ -1414,6 +1415,39 @@ static void test_alloc_zero_size(void)
   rtems_test_assert( errno == -1 );
 }
 
+static void test_malloc_usable_size(void)
+{
+  void *p1, *p2;
+  size_t sz1, sz2;
+
+  p1 = malloc( 120 );
+  rtems_test_assert( p1 != NULL );
+  rtems_test_assert( errno == -1 );
+
+  sz1 = malloc_usable_size( p1 );
+  rtems_test_assert( sz1 != 0 );
+  rtems_test_assert( sz1 >= 120 );
+
+  p2 = malloc( 500 );
+  rtems_test_assert( p2 != NULL );
+  rtems_test_assert( errno == -1 );
+
+  sz2 = malloc_usable_size( p2 );
+  rtems_test_assert( sz2 != 0 );
+  rtems_test_assert( sz2 >= 500 );
+
+  p1 = realloc( p1, 500 );
+  rtems_test_assert( p1 != NULL );
+  rtems_test_assert( errno == -1 );
+
+  sz1 = malloc_usable_size( p1 );
+  rtems_test_assert( sz1 != 0 );
+  rtems_test_assert( sz1 >= 500 );
+
+  free( p1 );
+  free( p2 );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -1459,6 +1493,7 @@ rtems_task Init(
   test_rtems_calloc();
   test_greedy_allocate();
   test_alloc_zero_size();
+  test_malloc_usable_size();
 
   test_posix_memalign();
 
