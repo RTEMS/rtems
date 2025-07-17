@@ -227,7 +227,7 @@ static void atsam_spi_setup_real_rx_dma_desc(
           | XDMA_UBC_NVIEW_NDV2
           | XDMA_UBC_NDE_FETCH_EN;
         desc[1].mbr_da = (uint32_t) dma->rx_bounce_tail_buf;
-        desc[1].mbr_ubc = n & m | XDMA_UBC_NVIEW_NDV2;
+        desc[1].mbr_ubc = (n & m) | XDMA_UBC_NVIEW_NDV2;
       }
     } else {
       if ((e & m) == 0) {
@@ -236,7 +236,7 @@ static void atsam_spi_setup_real_rx_dma_desc(
           | XDMA_UBC_NVIEW_NDV2
           | XDMA_UBC_NDE_FETCH_EN;
         desc[1].mbr_da = a;
-        desc[1].mbr_ubc = ae - a | XDMA_UBC_NVIEW_NDV2;
+        desc[1].mbr_ubc = (ae - a) | XDMA_UBC_NVIEW_NDV2;
       } else if ((ae - a) == 0) {
         bus->rx_bounce_head_len = n;
         bus->rx_bounce_tail_len = 0;
@@ -253,7 +253,7 @@ static void atsam_spi_setup_real_rx_dma_desc(
           | XDMA_UBC_NVIEW_NDV2
           | XDMA_UBC_NDE_FETCH_EN;
         desc[2].mbr_da = (uint32_t) dma->rx_bounce_tail_buf;
-        desc[2].mbr_ubc = e - ae | XDMA_UBC_NVIEW_NDV2;
+        desc[2].mbr_ubc = (e - ae) | XDMA_UBC_NVIEW_NDV2;
       }
     }
 
