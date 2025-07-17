@@ -76,23 +76,28 @@ static int IntUartSetAttributes(int minor, const struct termios *t);
 static void
 psc_output_char( char c )
 {
-	rtems_interrupt_level level;
+  rtems_interrupt_level level;
 
-	rtems_interrupt_disable(level);
-    while (!((MCF548X_PSC_SR(CONSOLE_PORT) & MCF548X_PSC_SR_TXRDY)))
-        continue;
-    *((uint8_t *) &MCF548X_PSC_TB(CONSOLE_PORT)) = c;
-    while (!((MCF548X_PSC_SR(CONSOLE_PORT) & MCF548X_PSC_SR_TXRDY)))
-        continue;
-	rtems_interrupt_enable(level);
+  rtems_interrupt_disable(level);
+  while (!((MCF548X_PSC_SR(CONSOLE_PORT) & MCF548X_PSC_SR_TXRDY))) {
+    continue;
+  }
+
+  *((uint8_t *) &MCF548X_PSC_TB(CONSOLE_PORT)) = c;
+
+  while (!((MCF548X_PSC_SR(CONSOLE_PORT) & MCF548X_PSC_SR_TXRDY))) {
+    continue;
+  }
+
+  rtems_interrupt_enable(level);
 }
 
 static void
 psc_output_char_init(char c)
 {
-	IntUartSetAttributes(CONSOLE_PORT, NULL);
-	BSP_output_char = psc_output_char;
-	psc_output_char(c);
+  IntUartSetAttributes(CONSOLE_PORT, NULL);
+  BSP_output_char = psc_output_char;
+  psc_output_char(c);
 }
 
 BSP_output_char_function_type     BSP_output_char = psc_output_char_init;
