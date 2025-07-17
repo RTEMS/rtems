@@ -1374,7 +1374,7 @@ int rtems_jffs2_initialize(
 	);
 	bool do_mount_fs_was_successful = false;
 	struct super_block *sb;
-	struct jffs2_sb_info *c;
+	struct jffs2_sb_info *c = NULL;
 	int err;
 
 	if (fs_info != NULL) {
