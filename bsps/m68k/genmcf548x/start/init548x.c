@@ -95,13 +95,13 @@ void mcf548x_init(void)
 #endif /* defined(HAS_LOW_LEVEL_INIT) */
 
     /* Copy the vector table to RAM if necessary */
-    if (bsp_vector0_size == bsp_vector1_size) {
+    if (&bsp_vector0_size[0] == &bsp_vector1_size[0]) {
       memcpy(bsp_vector1_begin, bsp_vector0_begin, (size_t) bsp_vector1_size);
       m68k_set_vbr((uint32_t)bsp_vector1_begin);
     }
 
     /* Move initialized data from ROM to RAM. */
-    if (bsp_section_data_begin != bsp_section_data_load_begin) {
+    if (&bsp_section_data_begin[0] != &bsp_section_data_load_begin[0]) {
       memcpy(
         bsp_section_data_begin,
         bsp_section_data_load_begin,
