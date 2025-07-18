@@ -32,6 +32,10 @@
  * %End-Header%
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "uuidP.h"
 
 void uuid_copy(uuid_t dst, const uuid_t src)
