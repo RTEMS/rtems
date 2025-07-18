@@ -54,6 +54,10 @@ links:
   uid: ../../optfdtro
 - role: build-dependency
   uid: ../../optfdtuboot
+- role: build-dependency
+  uid: optpl011baud
+- role: build-dependency
+  uid: optminiuartbaud
 type: build
 use-after: []
 use-before: []

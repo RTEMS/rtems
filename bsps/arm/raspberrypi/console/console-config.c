@@ -47,7 +47,8 @@
 #define FBCONS    "/dev/fbcons"
 
 arm_pl011_context pl011_context = {
-  .clock = 48000000
+  .clock = 48000000,
+  .initial_baud = PL011_DEFAULT_BAUD,
 };
 ns16550_context mini_uart_context;
 
