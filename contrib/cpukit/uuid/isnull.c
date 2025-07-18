@@ -32,6 +32,10 @@
  * %End-Header%
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "uuidP.h"
 
 /* Returns 1 if the uuid is the NULL uuid */

@@ -32,6 +32,10 @@
  * %End-Header%
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /*
  * Force inclusion of SVID stuff since we need it if we're compiling in
  * gcc-wall wall mode
@@ -44,6 +48,7 @@
 #define UUID MYUUID
 #endif
 #include <stdio.h>
+#include <limits.h> /* for CHAR_BIT */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -90,6 +95,18 @@
 #include <sys/resource.h>
 #endif
 
+#if SIZEOF_TIME_T == 8
+#define PRIutime_t	PRIu64
+#define SCNutime_t	SCNu64
+#define utime_t		uint64_t
+#elif SIZEOF_TIME_T == 4
+#define PRIutime_t	PRIu32
+#define SCNutime_t	SCNu32
+#define utime_t		uint32_t
+#else
+#error "unsupport size of time_t"
+#endif
+
 #include "uuidP.h"
 #include "uuidd.h"
 
@@ -110,7 +127,7 @@ THREAD_LOCAL unsigned short jrand_seed[3];
 #endif
 
 #ifdef _WIN32
-static void gettimeofday (struct timeval *tv, void *dummy)
+static void gettimeofday (struct timeval *__restrict tv, void *__restrict dummy)
 {
 	FILETIME	ftime;
 	uint64_t	n;
@@ -148,10 +165,18 @@ static int get_random_fd(void)
 		if (fd >= 0) {
 			i = fcntl(fd, F_GETFD);
 			if (i >= 0)
+			#ifdef __rtems__
+				(void)
+			#endif
 				fcntl(fd, F_SETFD, i | FD_CLOEXEC);
 		}
 #endif
-		srand((getpid() << 16) ^ getuid() ^ tv.tv_sec ^ tv.tv_usec);
+#ifdef __rtems__
+		srand((((time_t)getpid()) << ((sizeof(pid_t)*CHAR_BIT)>>1)) ^ getuid()
+		      ^ tv.tv_sec ^ tv.tv_usec);
+#else
+		srand((getpid() << ((sizeof(pid_t)*CHAR_BIT)>>1)) ^ getuid() ^ tv.tv_sec ^ tv.tv_usec);
+#endif
 #ifdef DO_JRAND_MIX
 		jrand_seed[0] = getpid() ^ (tv.tv_sec & 0xFFFF);
 		jrand_seed[1] = getppid() ^ (tv.tv_usec & 0xFFFF);
@@ -175,7 +200,9 @@ static void get_random_bytes(void *buf, int nbytes)
 	int i, n = nbytes, fd = get_random_fd();
 	int lose_counter = 0;
 	unsigned char *cp = (unsigned char *) buf;
+#ifdef DO_JRAND_MIX
 	unsigned short tmp_seed[3];
+#endif
 
 	if (fd >= 0) {
 		while (n > 0) {
@@ -321,11 +348,17 @@ static int get_clock(uint32_t *clock_high, uint32_t *clock_low,
 		state_fd = open("/var/lib/libuuid/clock.txt",
 				O_RDWR|O_CREAT, 0660);
 		(void) umask(save_umask);
+#ifdef __rtems__
+		if (state_fd >= 0) {
+#endif
 		state_f = fdopen(state_fd, "r+");
 		if (!state_f) {
 			close(state_fd);
 			state_fd = -1;
 		}
+#ifdef __rtems__
+		}
+#endif
 	}
 	fl.l_type = F_WRLCK;
 	fl.l_whence = SEEK_SET;
@@ -345,10 +378,11 @@ static int get_clock(uint32_t *clock_high, uint32_t *clock_low,
 	}
 	if (state_fd >= 0) {
 		unsigned int cl;
-		unsigned long tv1, tv2;
+		utime_t tv1;
+		unsigned long tv2;
 		int a;
 
-		if (fscanf(state_f, "clock: %04x tv: %lu %lu adj: %d\n",
+		if (fscanf(state_f, "clock: %04x tv: %" SCNutime_t " %lu adj: %d\n",
 			   &cl, &tv1, &tv2, &a) == 4) {
 			clock_seq = cl & 0x3FFF;
 			last.tv_sec = tv1;
@@ -382,7 +416,7 @@ try_again:
 		last = tv;
 	}
 
-	clock_reg = tv.tv_usec*10 + adjustment;
+	clock_reg = ((uint64_t) tv.tv_usec)*10 + adjustment;
 	clock_reg += ((uint64_t) tv.tv_sec)*10000000;
 	clock_reg += (((uint64_t) 0x01B21DD2) << 32) + 0x13814000;
 
@@ -396,8 +430,8 @@ try_again:
 
 	if (state_fd > 0) {
 		rewind(state_f);
-		len = fprintf(state_f, 
-			      "clock: %04x tv: %016lu %08lu adj: %08d\n",
+		len = fprintf(state_f,
+			      "clock: %04x tv: %016" PRIutime_t " %08lu adj: %08d\n",
 			      clock_seq, last.tv_sec, last.tv_usec, adjustment);
 		fflush(state_f);
 		if (ftruncate(state_fd, len) < 0) {
@@ -406,6 +440,9 @@ try_again:
 		}
 		rewind(state_f);
 		fl.l_type = F_UNLCK;
+	#ifdef __rtems__
+		(void)
+	#endif
 		fcntl(state_fd, F_SETLK, &fl);
 	}
 
@@ -415,6 +452,8 @@ try_again:
 	return 0;
 }
 
+/* unused */
+#if defined(USE_UUIDD) && defined(HAVE_SYS_UN_H)
 static ssize_t read_all(int fd, char *buf, size_t count)
 {
 	ssize_t ret;
@@ -434,6 +473,9 @@ static ssize_t read_all(int fd, char *buf, size_t count)
 	}
 	return c;
 }
+#endif
+
+#if defined(USE_UUIDD) && defined(HAVE_SYS_UN_H)
 
 /*
  * Close all file descriptors
@@ -458,6 +500,8 @@ static void close_all_fds(void)
 	for (i=0; i < max; i++)
 		close(i);
 }
+
+#endif
 
 
 /*
