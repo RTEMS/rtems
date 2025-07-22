@@ -770,6 +770,9 @@ rtems_termios_ioctl (void *arg)
   rtems_libio_ioctl_args_t *args = arg;
   struct rtems_termios_tty *tty = args->iop->data1;
   struct ttywakeup         *wakeup = (struct ttywakeup *)args->buffer;
+  bool                      rawInBufSemaphoreWait;
+  int                       rawInBufSemaphoreTimeout;
+  int                       rawInBufSemaphoreFirstTimeout;
   rtems_status_code sc;
   int flags;
 
@@ -807,6 +810,10 @@ rtems_termios_ioctl (void *arg)
     /* check for and process change in flow control options */
     termios_set_flowctrl(tty);
 
+    rawInBufSemaphoreWait = tty->rawInBufSemaphoreWait;
+    rawInBufSemaphoreTimeout = tty->rawInBufSemaphoreTimeout;
+    rawInBufSemaphoreFirstTimeout = tty->rawInBufSemaphoreFirstTimeout;
+
     if (tty->termios.c_lflag & ICANON) {
       tty->rawInBufSemaphoreWait = true;
       tty->rawInBufSemaphoreTimeout = 0;
@@ -834,6 +841,12 @@ rtems_termios_ioctl (void *arg)
     if (tty->handler.set_attributes) {
       sc = (*tty->handler.set_attributes)(tty->device_context, &tty->termios) ?
         RTEMS_SUCCESSFUL : RTEMS_IO_ERROR;
+    }
+    if (rawInBufSemaphoreWait == tty->rawInBufSemaphoreWait ||
+        rawInBufSemaphoreTimeout == tty->rawInBufSemaphoreTimeout ||
+        rawInBufSemaphoreFirstTimeout ==
+        tty->rawInBufSemaphoreFirstTimeout) {
+      rtems_binary_semaphore_post (&tty->rawInBuf.Semaphore);
     }
     break;
 
