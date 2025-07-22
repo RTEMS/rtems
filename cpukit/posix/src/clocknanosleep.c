@@ -67,6 +67,8 @@ int clock_nanosleep(
   Thread_Control      *executing;
   int                  eno;
 
+  pthread_testcancel();
+
   if ( clock_id != CLOCK_REALTIME && clock_id != CLOCK_MONOTONIC ) {
     return ENOTSUP;
   }
@@ -149,5 +151,6 @@ int clock_nanosleep(
 #endif
   }
 
+  pthread_testcancel();
   return eno;
 }

@@ -35,6 +35,50 @@
 
 const char rtems_test_name[] = "PSXCANCEL 1";
 
+#define TIMEOUT 5
+static int cleanup_flag;
+
+/*
+ * Cleanup function that the thread executes when it is canceled.  So if
+ * cleanup_flag is 1, it means that the thread was canceled.
+ */
+static void a_cleanup_func()
+{
+  cleanup_flag = 1;
+}
+
+static void *a_thread_func()
+{
+  int err;
+
+  err = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+  if (err != 0) {
+    fprintf(stderr, "pthread_setcancelstate: %s", strerror(err));
+    goto thread_exit_failure;
+  }
+
+  err = pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
+  if (err != 0) {
+    fprintf(stderr, "pthread_setcanceltype: %s", strerror(err));
+    goto thread_exit_failure;
+  }
+
+  /* Set up the cleanup handler */
+  pthread_cleanup_push(a_cleanup_func, NULL);
+
+  /* Wait for a timeout period for the cancel request to be sent. */
+  sleep(TIMEOUT);
+
+  /* Should not get here, but just in case pthread_testcancel() didn't
+   * work -- the cancel request timed out. */
+  pthread_cleanup_pop(0);
+
+thread_exit_failure:
+  cleanup_flag = -1;
+
+  return NULL;
+}
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -135,6 +179,7 @@ void *POSIX_Init(
   rtems_status_code status;
   int               eno;
   void             *value;
+  pthread_t new_th;
 
   TEST_BEGIN();
 
@@ -156,6 +201,17 @@ void *POSIX_Init(
   rtems_test_assert( eno == 0 );
   rtems_test_assert( value == PTHREAD_CANCELED );
 
+  status = pthread_create(&new_th, NULL, a_thread_func, NULL);
+  rtems_test_assert( !status);
+  /* Remove potential for race */
+  sleep(TIMEOUT / 2);
+  status = pthread_cancel(new_th);
+  rtems_test_assert( !status);
+  status  = pthread_join(new_th, NULL);
+  rtems_test_assert( !status);
+
+  rtems_test_assert(cleanup_flag == 1);
+
   TEST_END();
   rtems_test_exit(0);
   return NULL; /* just so the compiler thinks we returned something */
@@ -170,7 +226,7 @@ void *POSIX_Init(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS        2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS        4
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
