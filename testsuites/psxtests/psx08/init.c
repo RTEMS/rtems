@@ -151,12 +151,27 @@ static void test_delete_deadlock( void )
   rtems_test_assert( ctx.delete_status == RTEMS_INCORRECT_STATE );
 }
 
+static void *a_thread_func()
+{
+
+  pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+
+  /* If the thread wasn't canceled in 10 seconds, time out */
+  sleep(10);
+
+  puts("Thread couldn't be canceled (at cleanup time), timing out\n");
+  pthread_exit(0);
+  return NULL;
+}
+
 void *POSIX_Init(
   void *argument
 )
 {
   int    status;
   void  *return_pointer;
+  pthread_attr_t new_attr;
+  pthread_t new_th;
 
   TEST_BEGIN();
 
@@ -232,6 +247,27 @@ void *POSIX_Init(
       return_pointer,
       &Task2_id
     );
+
+  /* Initialize attribute */
+  status = pthread_attr_init(&new_attr);
+  rtems_test_assert(!status);
+
+  /* Set the attribute object to be detached */
+  status = pthread_attr_setdetachstate(&new_attr, PTHREAD_CREATE_DETACHED);
+  rtems_test_assert(!status);
+
+  /* Create the thread */
+  status = pthread_create(&new_th, &new_attr, a_thread_func, NULL);
+  rtems_test_assert(!status);
+
+  /* Detach the thread. */
+  status = pthread_detach(new_th);
+
+  /* Cleanup and cancel the thread */
+  pthread_cancel(new_th);
+
+  /* Check return value of pthread_detach() */
+  rtems_test_assert(status == EINVAL);
 
   puts( "Init: exitting" );
   return NULL;

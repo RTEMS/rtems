@@ -60,6 +60,11 @@ int pthread_detach( pthread_t thread )
     return ESRCH;
   }
 
+  if (the_thread->Life.state & THREAD_LIFE_DETACHED) {
+    _ISR_lock_ISR_enable( &lock_context );
+    return EINVAL;
+  }
+
   _Thread_State_acquire_critical( the_thread, &lock_context );
 
   the_thread->Life.state |= THREAD_LIFE_DETACHED;
