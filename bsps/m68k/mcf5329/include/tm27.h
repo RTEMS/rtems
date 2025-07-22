@@ -26,7 +26,14 @@
 
 #define TM27_USE_VECTOR_HANDLER
 
-#define Install_tm27_vector( handler ) set_vector( (handler), 35, 1 )
+#define Install_tm27_vector( handler ) \
+    rtems_interrupt_handler_install( \
+        35, \
+        "Install tm27 interrupt", \
+        RTEMS_INTERRUPT_UNIQUE, \
+        (void *)handler, \
+        NULL \
+    );
 
 #define Cause_tm27_intr()	asm volatile ("trap #3");
 

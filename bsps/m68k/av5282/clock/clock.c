@@ -23,7 +23,13 @@
  * Attach clock interrupt handler
  */
 #define Clock_driver_support_install_isr( _new ) \
-    set_vector(_new, CLOCK_VECTOR, 1)
+    rtems_interrupt_handler_install( \
+        CLOCK_VECTOR, \
+        "Install clock interrupt", \
+        RTEMS_INTERRUPT_UNIQUE, \
+        (void *)_new, \
+        NULL \
+    );
 
 /*
  * Set up the clock hardware
