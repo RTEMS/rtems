@@ -30,6 +30,10 @@
 
 #include <bsp/utility.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
     uint32_t reserved1[7];
     uint32_t globalirq;
@@ -84,5 +88,9 @@ typedef struct {
     uint32_t tx_fifo_len;
     uint32_t rx_fifo_len;
 } xilinx_axi_spi;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* LIBBSP_ARM_XILINX_AXI_SPI_REGS_H */

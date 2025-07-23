@@ -3,7 +3,14 @@
 * SPDX-License-Identifier: MIT
 ******************************************************************************/
 
+#ifndef LIBBSP_DEV_SPI_XQSPIPSU_HELPER_H
+#define LIBBSP_DEV_SPI_XQSPIPSU_HELPER_H
+
 #include "xqspipsu.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 int QspiPsu_NOR_Initialize(
   XQspiPsu *QspiPsuInstancePtr,
@@ -231,3 +238,9 @@ u32 QspiPsu_NOR_Get_Page_Size(XQspiPsu *QspiPsuPtr);
  * @return The JEDEC ID of attached flash in bytes.
  ******************************************************************************/
 u32 QspiPsu_NOR_Get_JEDEC_ID(XQspiPsu *QspiPsuPtr);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* LIBBSP_DEV_SPI_XQSPIPSU_HELPER_H */
