@@ -30,6 +30,10 @@
 
 #include <bsp/utility.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
     uint32_t config;
 #define CADENCE_SPI_CONFIG_MODEFAIL_EN BSP_BIT32(17)
@@ -81,5 +85,9 @@ typedef struct {
 	uint32_t unused[51];
 	uint32_t moduleid;
 } cadence_spi;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* LIBBSP_ARM_XILINX_ZYNQ_CADENCE_SPI_REGS_H */
