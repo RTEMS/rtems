@@ -89,12 +89,6 @@ extern "C" {
 
 uint32_t get_CPU_clock_speed(void);
 
-rtems_isr_entry set_vector(
-  rtems_isr_entry     handler,
-  rtems_vector_number vector,
-  int                 type
-);
-
 /* Initial values for the interrupt level and priority registers (INTC_ICRn) */
 extern const uint8_t mcf548x_intc_icr_init_values[64];
 

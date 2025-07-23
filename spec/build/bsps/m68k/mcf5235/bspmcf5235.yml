@@ -54,5 +54,4 @@ source:
 - bsps/shared/start/bspreset-loop.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
-- bsps/shared/start/setvec.c
 type: build

@@ -49,6 +49,5 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
-- bsps/shared/start/setvec.c
 - bsps/shared/atomics/__atomic_test_and_set.c
 type: build

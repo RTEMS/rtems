@@ -86,12 +86,6 @@ const char *bsp_getbenv(const char *a);
 int bsp_flash_erase_range(volatile unsigned short *flashptr, int start, int end);
 int bsp_flash_write_range(volatile unsigned short *flashptr, bsp_mnode_t *chain, int offset);
 
-rtems_isr_entry set_vector(
-  rtems_isr_entry     handler,
-  rtems_vector_number vector,
-  int                 type
-);
-
 /*
  * Interrupt assignments
  *  Highest-priority listed first
