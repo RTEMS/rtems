@@ -10,6 +10,9 @@
  * consists of modified functions from Xilinx's flash example in
  * examples/xqspipsu_generic_flash_interrupt_example.c of the qspipsu driver.
  *
+ * Since the comment blocks and general form of the functions has not changed,
+ * the Xilinx copyright above is maintained, but this file is not part of the
+ * upstream embeddedsw distribution.
  */
 
 #include "xqspipsu_flash_config.h"
