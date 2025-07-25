@@ -8,7 +8,8 @@ cppflags: []
 cxxflags:
 - ${COVERAGE_COMPILER_FLAGS}
 enabled-by: true
-includes: []
+includes:
+- contrib/cpukit/uuid/
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
@@ -477,7 +478,7 @@ install:
   - cpukit/include/sys/utsname.h
 - destination: ${BSP_INCLUDEDIR}/uuid
   source:
-  - cpukit/include/uuid/uuid.h
+  - contrib/cpukit/uuid/uuid/uuid.h
 install-path: ${BSP_LIBDIR}
 links:
 - role: build-dependency
@@ -984,16 +985,16 @@ source:
 - cpukit/libmisc/untar/untar.c
 - cpukit/libmisc/untar/untar_tgz.c
 - cpukit/libmisc/untar/untar_txz.c
-- cpukit/libmisc/uuid/clear.c
-- cpukit/libmisc/uuid/compare.c
-- cpukit/libmisc/uuid/copy.c
-- cpukit/libmisc/uuid/gen_uuid.c
-- cpukit/libmisc/uuid/isnull.c
-- cpukit/libmisc/uuid/pack.c
-- cpukit/libmisc/uuid/parse.c
-- cpukit/libmisc/uuid/unpack.c
-- cpukit/libmisc/uuid/unparse.c
-- cpukit/libmisc/uuid/uuid_time.c
+- contrib/cpukit/uuid/clear.c
+- contrib/cpukit/uuid/compare.c
+- contrib/cpukit/uuid/copy.c
+- contrib/cpukit/uuid/gen_uuid.c
+- contrib/cpukit/uuid/isnull.c
+- contrib/cpukit/uuid/pack.c
+- contrib/cpukit/uuid/parse.c
+- contrib/cpukit/uuid/unpack.c
+- contrib/cpukit/uuid/unparse.c
+- contrib/cpukit/uuid/uuid_time.c
 - cpukit/libstdthreads/call_once.c
 - cpukit/libstdthreads/cnd.c
 - cpukit/libstdthreads/mtx.c
