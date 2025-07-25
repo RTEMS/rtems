@@ -36,7 +36,7 @@
 #include <errno.h>
 #include <iconv.h>
 #include <rtems/dosfs.h>
-#include <utf8proc/utf8proc.h>
+#include <utf8proc.h>
 #include "msdos.h"
 
 #define INVALID_ICONV_DESC ( (iconv_t) -1 )

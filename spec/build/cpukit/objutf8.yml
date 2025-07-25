@@ -6,12 +6,13 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by: true
-includes: []
+includes:
+- contrib/cpukit/utf8proc/
 install:
-- destination: ${BSP_INCLUDEDIR}/utf8proc
+- destination: ${BSP_INCLUDEDIR}/
   source:
-  - cpukit/include/utf8proc/utf8proc.h
+  - contrib/cpukit/utf8proc/utf8proc.h
 links: []
 source:
-- cpukit/libmisc/utf8proc/utf8proc.c
+- contrib/cpukit/utf8proc/utf8proc.c
 type: build

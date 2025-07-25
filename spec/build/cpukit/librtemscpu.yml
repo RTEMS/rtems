@@ -10,6 +10,7 @@ cxxflags:
 enabled-by: true
 includes:
 - contrib/cpukit/uuid/
+- contrib/cpukit/utf8proc/
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:

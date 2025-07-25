@@ -32,7 +32,7 @@
 #include "tmacros.h"
 
 #include <string.h>
-#include <utf8proc/utf8proc.h>
+#include <utf8proc.h>
 
 const char rtems_test_name[] = "UTF8PROC 1";
 
