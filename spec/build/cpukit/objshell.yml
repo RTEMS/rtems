@@ -6,7 +6,8 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by: true
-includes: []
+includes:
+- contrib/cpukit/uuid/
 install: []
 links: []
 source:
