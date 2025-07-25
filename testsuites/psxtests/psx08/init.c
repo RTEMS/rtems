@@ -151,8 +151,9 @@ static void test_delete_deadlock( void )
   rtems_test_assert( ctx.delete_status == RTEMS_INCORRECT_STATE );
 }
 
-static void *a_thread_func()
+static void *a_thread_func(void *ignored)
 {
+  (void) ignored;
 
   pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 
