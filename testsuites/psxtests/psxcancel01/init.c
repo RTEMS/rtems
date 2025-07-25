@@ -42,13 +42,17 @@ static int cleanup_flag;
  * Cleanup function that the thread executes when it is canceled.  So if
  * cleanup_flag is 1, it means that the thread was canceled.
  */
-static void a_cleanup_func()
+static void a_cleanup_func(void *ignored)
 {
+  (void) ignored;
+
   cleanup_flag = 1;
 }
 
-static void *a_thread_func()
+static void *a_thread_func(void *ignored)
 {
+  (void) ignored;
+
   int err;
 
   err = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
