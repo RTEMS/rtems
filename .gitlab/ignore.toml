@@ -16,7 +16,6 @@ files = [
     "cpukit/include/link.h",
     "cpukit/include/md4.h",
     "cpukit/include/md5.h",
-    "cpukit/include/mghttpd/mongoose.h",
     "cpukit/include/rtems/jffs2.h",
     "cpukit/include/rtems/mouse_parser.h",
     "cpukit/include/sha224.h",
@@ -103,11 +102,6 @@ files = [
     "cpukit/dtc/libfdt/*.h",
     "cpukit/dtc/README.license",
     "cpukit/dtc/VERSION"
-]
-
-[[ignore."cpukit/mghttpd"]]
-files = [
-    "cpukit/mghttpd/mongoose.c",
 ]
 
 [[ignore."cpukit/mouse"]]
