@@ -152,6 +152,20 @@ class ArchBsps:
             count += len(self.archs[arch])
         return count
 
+    def json(self):
+        """Returns BSPs in JSON format by architecture and family"""
+        import json
+        map_arch = {}
+
+        for arch in sorted(self.archs.keys()):
+            map_arch[arch] = []
+            for family in sorted(self.archs[arch].keys()):
+                for bsp in sorted(self.archs[arch][family].keys()):
+                    path = os.path.join('bsps', self.archs[arch][family][bsp])
+                    map_arch[arch].append((bsp, family, path))
+
+        print(json.dumps(map_arch, sort_keys=True, indent="\t"))
+
     def bsps(self, arch=None, family=None):
         """Returns the number of BSPs we have for an architecture or a family"""
         count = 0
@@ -397,6 +411,11 @@ def run(args):
                        help='Output architectures and BSPs in CPU/BSP format',
                        action='store_true')
     argsp.add_argument(
+        '-j',
+        '--json',
+        help='Output "arch: [(bsp, family, path)]" in JSON format',
+        action='store_true')
+    argsp.add_argument(
         '-C',
         '--config',
         help='Output architectures and BSPs in `config.ini` format',
@@ -419,6 +438,8 @@ def run(args):
         ab.pairs(arch_selector=argopts.arch,
                  family_selector=argopts.family,
                  show_path=argopts.paths)
+    elif argopts.json:
+        ab.json()
     elif argopts.config:
         ab.config(arch_selector=argopts.arch, family_selector=argopts.family)
     else:
