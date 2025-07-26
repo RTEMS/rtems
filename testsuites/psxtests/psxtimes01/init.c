@@ -30,10 +30,10 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
 #include "test_support.h"
-#include <sys/times.h>
 #include <errno.h>
+#include <sys/times.h>
+#include <tmacros.h>
 
 const char rtems_test_name[] = "PSXTIMES 1";
 
@@ -42,9 +42,7 @@ rtems_task Init(rtems_task_argument argument);
 clock_t _times_r(struct _reent *ptr, struct tms  *ptms);
 clock_t _times(struct tms  *ptms);
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+static void test_times_functions( void )
 {
   (void) argument;
 
@@ -57,7 +55,7 @@ rtems_task Init(
   struct tms end_tm;
   int        interval = 5;
 
-  TEST_BEGIN();
+  puts( "\n*** Testing times() functions ***" );
 
   puts( "times( NULL ) -- EFAULT" );
   sc = times( NULL );
@@ -91,6 +89,66 @@ rtems_task Init(
   rtems_test_assert( end_tm.tms_stime - start_tm.tms_stime >= interval );
   rtems_test_assert( end_tm.tms_cutime == 0 );
   rtems_test_assert( end_tm.tms_cstime == 0 );
+}
+
+static void test_timespec_functions( void )
+{
+  struct timespec start_ts;
+  struct timespec end_ts;
+  struct timespec clock_ts;
+  int             result;
+  int             interval = 5;
+
+  puts( "\n*** Testing timespec_get() functions ***" );
+
+  puts( "timespec_get( NULL, TIME_UTC ) returns 0" );
+  result = timespec_get( NULL, TIME_UTC );
+  rtems_test_assert( result == 0 );
+
+  puts( "timespec_get( &start_ts, 999 ) returns 0" );
+  result = timespec_get( &start_ts, 999 );
+  rtems_test_assert( result == 0 );
+
+  while ( rtems_clock_get_ticks_since_boot() <= 2 )
+    ;
+
+  puts( "timespec_get( &start_ts, TIME_UTC ) -- OK" );
+  result = timespec_get( &start_ts, TIME_UTC );
+  rtems_test_assert( result == TIME_UTC );
+  rtems_test_assert( start_ts.tv_sec > 0 );
+  rtems_test_assert( start_ts.tv_nsec >= 0 );
+
+  rtems_test_spin_for_ticks( interval );
+
+  puts( "timespec_get( &end_ts, TIME_UTC ) -- OK" );
+  result = timespec_get( &end_ts, TIME_UTC );
+  rtems_test_assert( result == TIME_UTC );
+  
+  rtems_test_assert( 
+    (end_ts.tv_sec > start_ts.tv_sec) || 
+    (end_ts.tv_sec == start_ts.tv_sec && end_ts.tv_nsec > start_ts.tv_nsec)
+  );
+
+  result = timespec_get( &start_ts, TIME_UTC );
+  clock_gettime( CLOCK_REALTIME, &clock_ts );
+  
+  rtems_test_assert( result == TIME_UTC );
+  
+  /* timespec_get and clock_gettime should be very close */
+  rtems_test_assert( start_ts.tv_sec >= clock_ts.tv_sec - 1 );
+  rtems_test_assert( start_ts.tv_sec <= clock_ts.tv_sec + 1 );
+}
+
+rtems_task Init(
+  rtems_task_argument argument
+)
+{
+  (void) argument;
+
+  TEST_BEGIN();
+
+  test_times_functions();
+  test_timespec_functions();
   
   TEST_END();
 

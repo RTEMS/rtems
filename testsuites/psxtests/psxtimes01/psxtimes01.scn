@@ -1,7 +1,16 @@
-*** TEST TIMES 01 ***
+*** BEGIN OF TEST PSXTIMES 1 ***
+
+*** Testing times() functions ***
 times( NULL ) -- EFAULT
 _times_r( NULL, NULL ) -- EFAULT
 _times( &start_tm ) -- OK
 _times( &end_tm ) -- OK
 Check various values
-*** END OF TEST TIMES 01 ***
+
+*** Testing timespec_get() functions ***
+timespec_get( NULL, TIME_UTC ) returns 0
+timespec_get( &start_ts, 999 ) returns 0
+timespec_get( &start_ts, TIME_UTC ) -- OK
+timespec_get( &end_ts, TIME_UTC ) -- OK
+
+*** END OF TEST PSXTIMES 1 ***
