@@ -1134,7 +1134,8 @@ remote_gq_get_tls_addr(uint8_t* buffer, int size)
     return 0;
   }
 
-  target_address = thread->tcb->Registers.thread_id;
+  target_address =
+    (uintptr_t)_CPU_Get_TLS_thread_pointer(&thread->tcb->Registers);
   target_address += sizeof(TLS_Thread_control_block) + offset;
 
   remote_packet_out_reset();
