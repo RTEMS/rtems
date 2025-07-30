@@ -73,11 +73,6 @@ const console_fns mc68681_fns_polled =
   false,                               /* deviceOutputUsesInterrupts */
 };
 
-
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-  extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
-#endif
-
 /*
  *  Console Device Driver Entry Points
  */
@@ -456,7 +451,13 @@ MC68681_STATIC void mc68681_initialize_interrupts(int minor)
   Console_Port_Data[minor].bActive = FALSE;
 
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-  set_vector(mc68681_isr, Console_Port_Tbl[minor]->ulIntVector, 1);
+  rtems_interrupt_handler_install(
+    Console_Port_Tbl[minor]->ulIntVector,
+    "Install serial port handler for mc68681",
+    RTEMS_INTERRUPT_UNIQUE,
+    (void *) mc68681_isr,
+    NULL
+  );
 #endif
 
   mc68681_enable_interrupts(minor,MC68681_IMR_ENABLE_ALL_EXCEPT_TX);

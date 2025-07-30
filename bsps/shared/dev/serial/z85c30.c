@@ -81,10 +81,6 @@ const console_fns z85c30_fns_polled = {
   false                              /* deviceOutputUsesInterrupts */
 };
 
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-  extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
-#endif
-
 /*
  *  z85c30_initialize_port
  *
@@ -743,7 +739,13 @@ Z85C30_STATIC void z85c30_initialize_interrupts(
   }
 
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-  set_vector(z85c30_isr, Console_Port_Tbl[minor]->ulIntVector, 1);
+  rtems_interrupt_handler_install(
+    Console_Port_Tbl[ minor ]->ulIntVector,
+    "Install serial port handler for z85c30",
+    RTEMS_INTERRUPT_UNIQUE,
+    (void *) z85c30_isr,
+    NULL
+  );
 #endif
 
   z85c30_enable_interrupts(minor, SCC_ENABLE_ALL_INTR_EXCEPT_TX);
