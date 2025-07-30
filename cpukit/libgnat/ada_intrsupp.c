@@ -120,8 +120,7 @@ int __gnat_binary_semaphore_flush(
   return 0;
 }
 
-typedef void (*ISRHandler)(void*);
-  void *set_vector( void *, rtems_vector_number, int );
+typedef void (*ISRHandler)(void *);
 
 int __gnat_interrupt_connect(
   int         vector,
@@ -129,8 +128,23 @@ int __gnat_interrupt_connect(
   void       *parameter
 )
 {
+  rtems_status_code status;
+
   printk( "__gnat_interrupt_connect( %d, %p, %p )\n", vector, handler, parameter  );
-  set_vector( handler, vector, 1 );
+
+  status = rtems_interrupt_handler_install(
+    vector,
+    "Ada interrupt handler",
+    RTEMS_INTERRUPT_UNIQUE,
+    (rtems_interrupt_handler) handler,
+    parameter
+  );
+
+  if ( status != RTEMS_SUCCESSFUL ) {
+    printk( "__gnat_interrupt_connect failed: %d\n", status );
+    return -1;
+  }
+
   return 0;
 }
 
@@ -139,9 +153,23 @@ int __gnat_interrupt_set(
   ISRHandler  handler
 )
 {
+  rtems_status_code status;
+
   printk( "__gnat_interrupt_set( %d, %p )\n", vector, handler );
 
-  set_vector( handler, vector, 1 );
+  status = rtems_interrupt_handler_install(
+    vector,
+    "Ada interrupt handler",
+    RTEMS_INTERRUPT_UNIQUE,
+    (rtems_interrupt_handler) handler,
+    NULL
+  );
+
+  if ( status != RTEMS_SUCCESSFUL ) {
+    printk( "__gnat_interrupt_set failed: %d\n", status );
+    return -1;
+  }
+
   return 0;
 }
 
@@ -160,4 +188,3 @@ int __gnat_interrupt_number_to_vector(
   printk( "__gnat_interrupt_number_to_vector( %d )\n", intNum );
   return intNum;
 }
-
