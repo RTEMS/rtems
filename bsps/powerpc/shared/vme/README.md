@@ -44,7 +44,6 @@ question regarding a ppcn_60x BSP port:
 I looked through the ppcn_60x BSP. Here's what I found:
 
  - this BSP does NOT adhere to neither the 'old' nor the 'new' API
-   but provides its own (startup/setvec.c: set_vector()).
  - the BSP has a 'driver' for vmeUniverse although mine is far more
    complete (including support for VME interrupts, DMA etc.).
  - Porting my driver to your BSP should not be too hard:
@@ -66,7 +65,8 @@ I looked through the ppcn_60x BSP. Here's what I found:
             #define BSP_PIC_DO_EOI do {} while (0)
    3) Install the VME ISR dispatcher: replace the 'new' style
       interrupt installer (BSP_install_rtems_irq_handler()) by
-      a proper call to 'set_vector()'
+      a proper call to 'rtems_interrupt_handler_install()' or
+      'rtems_insterrupt_entry_initialize' with 'rtems_interrupt_entry_install'
    4) I might have missed something... 
 
 I attach the latest version of the vmeUniverse driver in case you want
@@ -83,7 +83,8 @@ possible to override some things without having to modify the driver code.
       (you still need to supply pci_find_device)
  3)   create your own version of vmeUniverseInstallIrqMgr():
       copy to a separate file and replace   
-      BSP_rtems_install_irq_handler() by a proper call to set_vector.
+      BSP_rtems_install_irq_handler() by a proper call to 
+      rtems_interrupt_handler_install().
  
  4)   Send me email :-)
 
