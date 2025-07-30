@@ -59,14 +59,6 @@
 extern "C" {
 #endif
 
-/* functions */
-
-rtems_isr_entry set_vector(                     /* returns old vector */
-  rtems_isr_entry     handler,                  /* isr routine        */
-  rtems_vector_number vector,                   /* vector number      */
-  int                 type                      /* RTEMS or RAW intr  */
-);
-
 #ifdef __cplusplus
 }
 #endif

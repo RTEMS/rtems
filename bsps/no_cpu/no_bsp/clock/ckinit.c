@@ -65,7 +65,7 @@ uint32_t         Clock_isrs;              /* ISRs until next tick */
 /*
  *  The previous ISR on this clock tick interrupt vector.
  */
-rtems_isr_entry  Old_ticker;
+rtems_interrupt_entry Old_ticker;
 
 static void Clock_exit( void );
 
@@ -103,7 +103,19 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs = rtems_configuration_get_microseconds_per_tick() / 1000;
 
-  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  rtems_interrupt_entry_initialize(
+    &Old_ticker,
+    (void *) clock_isr,
+    NULL,
+    "Install clock ticker isr"
+  );
+
+  rtems_interrupt_entry_install(
+    CLOCK_VECTOR,
+    RTEMS_INTERRUPT_UNIQUE,
+    &Old_ticker
+  );
+
   /*
    *  Hardware specific initialize goes here
    */
