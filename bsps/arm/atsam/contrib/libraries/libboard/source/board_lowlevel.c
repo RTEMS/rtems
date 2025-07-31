@@ -352,7 +352,7 @@ void _SetupMemoryRegion(void)
 		((uintptr_t)atsam_memory_null_begin) |
 		MPU_REGION_VALID |
 		MPU_NULL_REGION;
-	if (atsam_memory_null_begin != atsam_memory_itcm_end) {
+	if ((uintptr_t) atsam_memory_null_begin != (uintptr_t) atsam_memory_itcm_end) {
 		dwRegionAttr =
 			MPU_AP_NO_ACCESS |
 			MPU_REGION_EXECUTE_NEVER |
