@@ -317,15 +317,14 @@ static rtems_status_code get_pin_bitmask(
       return RTEMS_INVALID_ID;
     }
 
-    bank = BANK_NUMBER(pin_number);
-
     if ( i == 0 ) {
+      bank = BANK_NUMBER(pin_number);
       *bank_number = bank;
 
       ACQUIRE_LOCK(gpio_bank_state[bank].lock);
     }
-    else if ( bank != *bank_number ) {
-      RELEASE_LOCK(gpio_bank_state[*bank_number].lock);
+    else if ( bank != BANK_NUMBER(pin_number) ) {
+      RELEASE_LOCK(gpio_bank_state[bank].lock);
 
       return RTEMS_UNSATISFIED;
     }
