@@ -210,11 +210,23 @@ void PMC_EnableAllPeripherals(void)
 {
 	PMC->PMC_PCER0 = MASK_STATUS0;
 
+#ifndef __rtems__
 	while ((PMC->PMC_PCSR0 & MASK_STATUS0) != MASK_STATUS0);
+#else
+	while ((PMC->PMC_PCSR0 & MASK_STATUS0) != MASK_STATUS0) {
+		;
+	}
+#endif
 
 	PMC->PMC_PCER1 = MASK_STATUS1;
 
+#ifndef __rtems__
 	while ((PMC->PMC_PCSR1 & MASK_STATUS1) != MASK_STATUS1);
+#else
+	while ((PMC->PMC_PCSR1 & MASK_STATUS1) != MASK_STATUS1) {
+		;
+	}
+#endif
 
 	TRACE_DEBUG("Enable all periph clocks\n\r");
 }
@@ -226,11 +238,23 @@ void PMC_DisableAllPeripherals(void)
 {
 	PMC->PMC_PCDR0 = MASK_STATUS0;
 
+#ifndef __rtems__
 	while ((PMC->PMC_PCSR0 & MASK_STATUS0) != 0);
+#else
+	while ((PMC->PMC_PCSR0 & MASK_STATUS0) != 0) {
+		;
+	}
+#endif
 
 	PMC->PMC_PCDR1 = MASK_STATUS1;
 
+#ifndef __rtems__
 	while ((PMC->PMC_PCSR1 & MASK_STATUS1) != 0);
+#else
+	while ((PMC->PMC_PCSR1 & MASK_STATUS1) != 0) {
+		;
+	}
+#endif
 
 	TRACE_DEBUG("Disable all periph clocks\n\r");
 }
