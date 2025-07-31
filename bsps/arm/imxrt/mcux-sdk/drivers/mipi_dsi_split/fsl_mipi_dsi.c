@@ -624,9 +624,15 @@ uint32_t DSI_InitDphy(const MIPI_DSI_Type *base, const dsi_dphy_config_t *config
     DSI_HOST_Type *host                        = base->host;
 
 #if !((defined(FSL_FEATURE_MIPI_NO_DPHY_PLL)) && (0 != FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL))
+#ifndef __rtems__
     uint32_t cn;
     uint32_t cm;
     uint32_t co;
+#else
+    uint32_t cn = 0;
+    uint32_t cm = 0;
+    uint32_t co = 0;
+#endif
     uint32_t outputPllFreq;
 
     outputPllFreq = DSI_DphyGetPllDivider(&cn, &cm, &co, refClkFreq_Hz, config->txHsBitClk_Hz);
