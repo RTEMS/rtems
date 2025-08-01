@@ -38,6 +38,10 @@
 #define DATA_IN_ExtSRAM
 #define DATA_IN_ExtSDRAM
 
+#ifdef __rtems__
+/* needs prototype and do not want to include <bsp.h> */
+void  SystemInit_ExtMemCtl(void);
+#endif
 void  SystemInit_ExtMemCtl(void)
 {
 
