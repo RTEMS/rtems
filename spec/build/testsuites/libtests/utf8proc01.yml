@@ -7,8 +7,7 @@ cppflags: []
 cxxflags: []
 enabled-by: true
 features: c cprogram
-includes:
-- contrib/cpukit/utf8proc/
+includes: []
 ldflags: []
 links: []
 source:

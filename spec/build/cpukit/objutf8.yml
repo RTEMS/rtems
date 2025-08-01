@@ -6,8 +6,7 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by: true
-includes:
-- contrib/cpukit/utf8proc/
+includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/
   source:
