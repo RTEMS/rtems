@@ -158,7 +158,7 @@ extern void BSP_motload_pci_fixup(void);
 #define  BSP_I2C_DS1621_RAW_DEV_NAME      (BSP_I2C_BUS0_NAME "." BSP_I2C_DS1621_RAW_NAME)
 
 
-/* Initialize the I2C driver and register all devices 
+/* Initialize the I2C driver and register all devices
  * RETURNS 0 on success, -1 on error.
  *
  * Access to the VPD and user EEPROMS as well
@@ -202,9 +202,19 @@ void BSP_pci_initialize(void);
  * may be changed by application startup code (EPICS uses 11)
  */
 #define BSP_EXCEPTION_NOTEPAD    14
-  
+
 #ifndef ASM
 
+#if 0
+/*
+ * These definitions are wrong because the in/out methods assume that
+ * the port is a real address. The shared drivers using the inport_
+ * and outport_ functions pass in IO Space offset values. These values
+ * can not and should not be cast to memory space pointers.
+ *
+ * If these turn out to be needed in the future, the Beatnick IO
+ * space base address will need to be added.
+ */
 #define outport_byte(port,value) outb(value,port)
 #define outport_word(port,value) outw(value,port)
 #define outport_long(port,value) outl(value,port)
@@ -212,6 +222,8 @@ void BSP_pci_initialize(void);
 #define inport_byte(port,value) (value = inb(port))
 #define inport_word(port,value) (value = inw(port))
 #define inport_long(port,value) (value = inl(port))
+#endif
+
 /*
  * Vital Board data Start using DATA RESIDUAL
  */
