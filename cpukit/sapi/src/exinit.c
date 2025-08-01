@@ -69,7 +69,7 @@ RTEMS_SECTION(".rtemsroset.copyright") const char _Copyright_Notice[] =
  */
 
 asm( \
-  ".pushsection \".debug_gdb_scripts\", \"MS\",@progbits,1\n" \
+  ".pushsection \".debug_gdb_scripts\", \"MS\",%progbits,1\n" \
   ".byte 4\n" \
   ".ascii \"gdb.inlined-script\\n\"\n" \
   ".ascii \"import sys\\n\"\n" \
