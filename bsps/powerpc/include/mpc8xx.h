@@ -1478,7 +1478,13 @@ typedef struct m8xx_ {
   m8xxSPIparms_t        spip;
   uint8_t         _rsv5[0xDB0-0xD80-sizeof(m8xxSPIparms_t)];
   m8xxTimerParms_t      tmp;
+  /*
+   * This calculation results in a zero length array which is interpreted
+   * differently starting in C17. No padding is needed and there is a
+   * static assert below to double check the assumption.
+   *
   uint8_t         _rsv6[0xDC0-0xDB0-sizeof(m8xxTimerParms_t)];
+   */
   m8xxIDMAparms_t       idma2p;
   uint8_t         _rsv7[0xE00-0xDC0-sizeof(m8xxIDMAparms_t)];
 
@@ -1498,6 +1504,15 @@ typedef struct m8xx_ {
 } m8xx_t;
 
 extern volatile m8xx_t m8xx;
+
+/*
+ * The sizeof(m8xxTimerParms_t) is 16 and the _rsv6 element is not needed and
+ * is commented out. If the assumption breaks, it needs to be added back.
+ */
+RTEMS_STATIC_ASSERT(
+  0xDC0-0xDB0-sizeof(m8xxTimerParms_t) == 0,
+  _rsv6 size computation
+);
 
 #ifdef __cplusplus
 }
