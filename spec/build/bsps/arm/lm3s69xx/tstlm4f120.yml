@@ -12,6 +12,9 @@ actions:
     - psxaio01
     - psxaio02
     - psxaio03
+    - psxaio04
+    - psxaio05
+    - psxaio06
     - psxsignal07
     - rcxx01
     - sp16
