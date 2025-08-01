@@ -237,8 +237,6 @@ typedef struct {
 #define RCC_CFGR_PPRE1_BY_8 BSP_FLD32( 6, 10, 12 )
 #define RCC_CFGR_PPRE1_BY_16 BSP_FLD32( 7, 10, 12 )
 
-#define RCC_CFGR_PPRE2 13
-#define RCC_CFGR_PPRE2 BSP_MSK32( 13, 15 )
 #define RCC_CFGR_PPRE2_BY_1 0
 #define RCC_CFGR_PPRE2_BY_2 BSP_FLD32( 4, 13, 15 )
 #define RCC_CFGR_PPRE2_BY_4 BSP_FLD32( 5, 13, 15 )
