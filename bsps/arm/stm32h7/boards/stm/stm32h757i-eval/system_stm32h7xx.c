@@ -578,7 +578,12 @@ void SystemInit_ExtMemCtl(void)
   for (index = 0; index<1000; index++);
   
   /* PALL command */ 
+#ifdef __rtems__
+  /* Fix misleading indentation */
+  FMC_Bank5_6_R->SDCMR = 0x0000000A;
+#else
     FMC_Bank5_6_R->SDCMR = 0x0000000A; 	
+#endif
   timeout = 0xFFFF;
   while((tmpreg != 0) && (timeout-- > 0))
   {
