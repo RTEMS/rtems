@@ -54,7 +54,12 @@ aarch64_mmu_config_table[] = {
   /* Map OCM space */
   }, {
     .begin = 0xfffc0000U,
-    .end = 0x100000000U,
+    /*
+     * This should be 4GB, but uintptr_t can't hold that for ILP32. This will be
+     * rounded up to MMU page alignment during initial setup and will end up
+     * being 4GB anyway.
+     */
+    .end = 0xffffffffU,
     .flags = AARCH64_MMU_DATA_RW
   }, { /* DDRMC_region1_mem, if not used size is 0 and ignored */
     .begin = (uintptr_t) bsp_r1_ram_base,

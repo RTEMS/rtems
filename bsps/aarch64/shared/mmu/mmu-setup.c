@@ -264,9 +264,9 @@ aarch64_mmu_set_translation_table_entries(
 {
   uint64_t max_mappable = 1LLU << aarch64_mmu_get_cpu_pa_bits();
   /* Align to page boundaries */
-  uintptr_t begin = RTEMS_ALIGN_DOWN( config->begin, MMU_PAGE_SIZE );
-  uintptr_t end = RTEMS_ALIGN_UP( config->end, MMU_PAGE_SIZE );
-  uintptr_t size = end - begin;
+  uint64_t begin = RTEMS_ALIGN_DOWN( config->begin, MMU_PAGE_SIZE );
+  uint64_t end = RTEMS_ALIGN_UP( (uint64_t) config->end, MMU_PAGE_SIZE );
+  uint64_t size = end - begin;
 
   if ( config->begin == config->end ) {
     return RTEMS_SUCCESSFUL;
