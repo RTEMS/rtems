@@ -15,7 +15,7 @@ install:
   - bsps/arm/imx/include/bsp.h
 - destination: ${BSP_INCLUDEDIR}/arm/freescale/imx
   source:
-  - bsps/arm/imx/include/arm/freescale/imx/imx_ccmvar.h
+  - bsps/arm/include/arm/freescale/imx/imx_ccmvar.h
   - bsps/arm/imx/include/arm/freescale/imx/imx_ecspireg.h
   - bsps/arm/imx/include/arm/freescale/imx/imx_gpcreg.h
   - bsps/arm/imx/include/arm/freescale/imx/imx_i2creg.h

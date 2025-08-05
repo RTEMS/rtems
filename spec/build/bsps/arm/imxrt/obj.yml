@@ -15,6 +15,7 @@ install:
   - bsps/arm/imxrt/include/fsl_clock_config.h
 - destination: ${BSP_INCLUDEDIR}/arm/freescale/imx
   source:
+  - bsps/arm/include/arm/freescale/imx/imx_ccmvar.h
   - bsps/arm/include/arm/freescale/imx/imx_iomuxreg.h
   - bsps/arm/include/arm/freescale/imx/imx_iomuxvar.h
 - destination: ${BSP_INCLUDEDIR}/bsp

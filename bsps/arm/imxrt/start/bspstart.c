@@ -27,6 +27,7 @@
 
 #include <rtems/sysinit.h>
 
+#include <arm/freescale/imx/imx_ccmvar.h>
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <bsp/fdt.h>
