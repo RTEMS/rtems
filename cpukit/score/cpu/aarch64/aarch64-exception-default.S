@@ -143,7 +143,7 @@ curr_el_sp0_sync_get_pc:			/* The current PC is now in LR */
 /* The exception handler for IRQ exceptions from the current EL using SP0. */
 curr_el_sp0_irq:
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	ldr JUMP_REG(0), =aarch64_exception_sp0_synchronous
+	ldr JUMP_REG(0), =aarch64_exception_sp0_irq
 	JUMP_HANDLER
 .balign 0x80
 /* The exception handler for FIQ exceptions from the current EL using SP0. */
@@ -274,7 +274,7 @@ lower_el_aarch32_fiq:
 lower_el_aarch32_serror:
 /* Push x0,lr on to the stack */
 	stp x0,	lr,	[sp, #-0x10]!
-	ldr JUMP_REG(0), =aarch64_exception_lel32_fiq
+	ldr JUMP_REG(0), =aarch64_exception_lel32_serror
 	JUMP_HANDLER
 
 bsp_start_vector_table_end:
