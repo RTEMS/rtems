@@ -118,6 +118,7 @@ Vector_table_el3:
  * using SP0.
  */
 curr_el_sp0_sync:
+	msr spsel, #0
 	sub sp, sp, #AARCH64_EXCEPTION_FRAME_SIZE			/* reserve space for CEF */
 	str lr, [sp, #AARCH64_EXCEPTION_FRAME_REGISTER_LR_OFFSET]	/* shove lr into CEF */
 	bl .push_exception_context_start				/* bl to CEF store routine */
@@ -142,12 +143,14 @@ curr_el_sp0_sync_get_pc:			/* The current PC is now in LR */
 .balign 0x80
 /* The exception handler for IRQ exceptions from the current EL using SP0. */
 curr_el_sp0_irq:
+	msr spsel, #0
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	ldr JUMP_REG(0), =aarch64_exception_sp0_irq
 	JUMP_HANDLER
 .balign 0x80
 /* The exception handler for FIQ exceptions from the current EL using SP0. */
 curr_el_sp0_fiq:
+	msr spsel, #0
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	ldr JUMP_REG(0), =aarch64_exception_sp0_fiq
 	JUMP_HANDLER
@@ -157,6 +160,7 @@ curr_el_sp0_fiq:
  * SP0.
  */
 curr_el_sp0_serror:
+	msr spsel, #0
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	ldr JUMP_REG(0), =aarch64_exception_sp0_serror
 	JUMP_HANDLER
