@@ -1,6 +1,6 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*-
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (c) 2019 Hesham Almatary
  *
  * This software was developed by SRI International and the University of
