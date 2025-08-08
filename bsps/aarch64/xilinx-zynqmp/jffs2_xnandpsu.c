@@ -1,6 +1,6 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2023 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without

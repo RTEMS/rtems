@@ -1,6 +1,6 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2022 Chris Johns <chris@contemporary.software>
  *
  * Redistribution and use in source and binary forms, with or without

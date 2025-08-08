@@ -1,6 +1,6 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2021 On-Line Applications Research (OAR)
  * Copyright (C) 2014 embedded brains GmbH & Co. KG
  *

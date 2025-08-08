@@ -1,6 +1,6 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2022 Chris Johns <chris@contemporary.software>
  * Copyright (C) 2014 embedded brains GmbH & Co. KG
  *
