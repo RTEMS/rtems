@@ -1,11 +1,11 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  *  @file
  *  @brief wctrans_l() API Conformance Test
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2018 Jacob Shin
  *
  * Redistribution and use in source and binary forms, with or without

@@ -1,11 +1,11 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  *  @file
  *  @brief tcflush() API Conformance Test
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2019 Jacob Shin
  *
  * Redistribution and use in source and binary forms, with or without

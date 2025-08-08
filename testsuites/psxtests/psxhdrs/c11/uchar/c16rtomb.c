@@ -1,11 +1,11 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  *  @file
  *  @brief c16rtomb() API Conformance Test. This is a C11 method.
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2018 Marcal Comajoan Cara
  *
  * Redistribution and use in source and binary forms, with or without
