@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
@@ -7,8 +9,6 @@
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (c) 2020, 2021 James Fitzsimons <james.fitzsimons@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without

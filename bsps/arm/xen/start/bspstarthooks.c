@@ -1,6 +1,6 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2019 DornerWorks
  * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
  *

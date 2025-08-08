@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  * @ingroup RTEMSBSPsARMZynq
@@ -5,8 +7,6 @@
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2013, 2014 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without

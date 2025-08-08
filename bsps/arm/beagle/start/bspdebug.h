@@ -1,6 +1,6 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2019 Chris Johns <chrisj@rtems.org>.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
