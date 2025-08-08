@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
@@ -7,8 +9,6 @@
  *   rtems_configuration_get_stack_space_size().
  */
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2014, 2019 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without

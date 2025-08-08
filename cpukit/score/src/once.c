@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
@@ -8,8 +10,6 @@
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2019 embedded brains GmbH & Co. KG
  * Copyright (C) 2019 Sebastian Huber
  *
