@@ -1,6 +1,6 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2019 Pragnesh Patel <pragnesh.patel@sifive.com>
  * Copyright (c) 2019 Sachin Ghadi <sachin.ghadi@sifive.com>
  *
