@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  * @brief psxsignal08 - Ensure initial signal mask and Classic Task inheritance
  */
@@ -6,8 +8,6 @@
  * COPYRIGHT (c) 2019.
  * On-Line Applications Research Corporation (OAR).
  *
- * SPDX-License-Identifier: BSD-2-Clause
- */
 
 
 #ifdef HAVE_CONFIG_H

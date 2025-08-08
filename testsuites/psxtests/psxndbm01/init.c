@@ -1,11 +1,11 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  *  @file
  *  @brief Test suite for ndbm.h methods
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2019 Vaibhav Gupta
  *
  * Redistribution and use in source and binary forms, with or without

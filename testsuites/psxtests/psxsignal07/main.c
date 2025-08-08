@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  * @brief psxsignal07 - Ensure initial signal mask and thread inheritance
  */
@@ -6,8 +8,6 @@
  * COPYRIGHT (c) 2019.
  * On-Line Applications Research Corporation (OAR).
  *
- * SPDX-License-Identifier: BSD-2-Clause
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

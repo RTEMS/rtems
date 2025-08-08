@@ -1,9 +1,9 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  * COPYRIGHT (c) 2019.
  * On-Line Applications Research Corporation (OAR).
  *
- * SPDX-License-Identifier: BSD-2-Clause
- */
 
 #include <rtems.h>
 #include <stdlib.h>

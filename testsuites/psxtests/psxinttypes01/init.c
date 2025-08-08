@@ -1,11 +1,11 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  *  @file
  *  @brief Test suite for inttypes.h methods
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2020, Eshan Dhawan
  * Copyright (C) 2019, Aditya Upadhyay and Vaibhav Gupta
  *

@@ -1,11 +1,11 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  *  @file
  *  @brief Test suite for ftw.h methods
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2020 Eshan Dhawan, embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without

@@ -1,9 +1,9 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*	$NetBSD: tree.h,v 1.8 2004/03/28 19:38:30 provos Exp $	*/
 /*	$OpenBSD: tree.h,v 1.7 2002/10/17 21:51:54 art Exp $	*/
 
 /*-
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright 2002 Niels Provos <provos@citi.umich.edu>
  * All rights reserved.
  *

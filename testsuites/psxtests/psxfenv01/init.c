@@ -1,11 +1,11 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  *  @file
  *  @brief Test suite for fenv.h methods
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2020 Eshan Dhawan
  * Copyright (C) 2019 Vaibhav Gupta
  *
