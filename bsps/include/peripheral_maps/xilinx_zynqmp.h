@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  * @ingroup RTEMSBSPsShared
@@ -5,8 +7,6 @@
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
  * Copyright (C) 2023 Reflex Aerospace GmbH
  *
  * Written by Philip Kirkpatrick <p.kirkpatrick@reflexaerospace.com>
