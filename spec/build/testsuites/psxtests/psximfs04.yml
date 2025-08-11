@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2025 Bhavya Shah <bhavyashah8443@gmail.com>
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/psxtests/psximfs04/init.c
+stlib: []
+target: testsuites/psxtests/psximfs04.exe
+type: build
+use-after: []
+use-before: []

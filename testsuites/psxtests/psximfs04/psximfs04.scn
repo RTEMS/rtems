@@ -1,0 +1,7 @@
+*** BEGIN OF TEST PSXIMFS 4 ***
+
+open(biggie) - OK
+close(biggie) - OK
+statvfs(biggie) - OK
+
+*** END OF TEST PSXIMFS 4 ***
