@@ -265,9 +265,9 @@ _CPU_altivec_vscr_initval:
 	 *           _O2 contains original _O1 + 256 - 64
 	 */
 	.macro S_V0TOV19 _LRU, _B0, _B1, _B2, _B3, _O1, _O2
-	S8VEC_P   \_LRU _VR=v0  _B0=\_B0 _B1=\_B1 _B2=\_B2 _B3=\_B3 _O1=\_O1 _O2=\_O2
-	S8VEC_P   \_LRU _VR=v8  _B0=\_B0 _B1=\_B1 _B2=\_B2 _B3=\_B3 _O1=\_O1 _O2=\_O2
-	LDST4 stvx\_LRU _VR=v16 _B0=\_B0 _B1=\_B1 _B2=\_B2 _B3=\_B3 _RO=\_O1
+	S8VEC_P   \_LRU _VR=0  _B0=\_B0 _B1=\_B1 _B2=\_B2 _B3=\_B3 _O1=\_O1 _O2=\_O2
+	S8VEC_P   \_LRU _VR=8  _B0=\_B0 _B1=\_B1 _B2=\_B2 _B3=\_B3 _O1=\_O1 _O2=\_O2
+	LDST4 stvx\_LRU _VR=16 _B0=\_B0 _B1=\_B1 _B2=\_B2 _B3=\_B3 _RO=\_O1
 	.endm
 
 	/*
@@ -280,8 +280,8 @@ _CPU_altivec_vscr_initval:
 	 *           _O2 contains original _O1 + 128 - 64
 	 */
 	.macro S_V20TOV31 _LRU, _B0, _B1, _B2, _B3, _O1, _O2
-	S8VEC_P   \_LRU _VR=v20 _B0=\_B0 _B1=\_B1 _B2=\_B2 _B3=\_B3 _O1=\_O1 _O2=\_O2
-	LDST4 stvx\_LRU v28 \_B0 \_B1 \_B2 \_B3 \_O1
+	S8VEC_P   \_LRU _VR=20 _B0=\_B0 _B1=\_B1 _B2=\_B2 _B3=\_B3 _O1=\_O1 _O2=\_O2
+	LDST4 stvx\_LRU 28 \_B0 \_B1 \_B2 \_B3 \_O1
 	.endm
 
 	/*
@@ -292,11 +292,11 @@ _CPU_altivec_vscr_initval:
 	 *           _O2 contains original _O1 + 512 - 64
 	 */
 	.macro S_V0TOV31 _B0, _B1, _B2, _B3, _O1, _O2
-	S8VEC_P   l  v0  \_B0 \_B1 \_B2 \_B3 \_O1 \_O2
-	S8VEC_P   l  v8  \_B0 \_B1 \_B2 \_B3 \_O1 \_O2
-	S8VEC_P   l v16  \_B0 \_B1 \_B2 \_B3 \_O1 \_O2
-	S4VEC_P   l v24  \_B0 \_B1 \_B2 \_B3 \_O1 \_O2
-	LDST4 stvxl v28  \_B0 \_B1 \_B2 \_B3 \_O2
+	S8VEC_P   l  0  \_B0 \_B1 \_B2 \_B3 \_O1 \_O2
+	S8VEC_P   l  8  \_B0 \_B1 \_B2 \_B3 \_O1 \_O2
+	S8VEC_P   l 16  \_B0 \_B1 \_B2 \_B3 \_O1 \_O2
+	S4VEC_P   l 24  \_B0 \_B1 \_B2 \_B3 \_O1 \_O2
+	LDST4 stvxl 28  \_B0 \_B1 \_B2 \_B3 \_O2
 	.endm
 
 
@@ -424,9 +424,9 @@ _CPU_altivec_vscr_initval:
 	 *           VR0..VR19 loaded from memory.
 	 */ 
 	.macro L_V0TOV19 _B0, _B1, _B2, _B3, _O1, _O2
-	L8VEC_A  DO_DCBT,  v0, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
-	L8VEC_A  DO_DCBT,  v8, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
-	LDST4    lvxl,    v16, \_B0, \_B1, \_B2, \_B3, \_O1
+	L8VEC_A  DO_DCBT,  0, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
+	L8VEC_A  DO_DCBT,  8, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
+	LDST4    lvxl,    16, \_B0, \_B1, \_B2, \_B3, \_O1
 	.endm
 
 	/*
@@ -445,19 +445,19 @@ _CPU_altivec_vscr_initval:
 	 *           VR20..VR31 loaded from memory.
 	 */
 	.macro L_V20TOV31 _B0, _B1, _B2, _B3, _O1, _O2
-	L8VEC_A  NO_DCBT, v20, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
-	LDST4    lvxl,    v28, \_B0, \_B1, \_B2, \_B3, \_O1
+	L8VEC_A  NO_DCBT, 20, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
+	LDST4    lvxl,    28, \_B0, \_B1, \_B2, \_B3, \_O1
 	.endm
 
 	/*
 	 * Load all registers from memory area.
 	 */
 	.macro L_V0TOV31 _B0, _B1, _B2, _B3, _O1, _O2
-	L8VEC_A  DO_DCBT,  v0, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
-	L8VEC_A  DO_DCBT,  v8, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
-	L8VEC_A  DO_DCBT, v16, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
-	L4VEC_A  DO_DCBT, v24, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
-	LDST4    lvxl,    v28, \_B0, \_B1, \_B2, \_B3, \_O2
+	L8VEC_A  DO_DCBT,  0, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
+	L8VEC_A  DO_DCBT,  8, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
+	L8VEC_A  DO_DCBT, 16, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
+	L4VEC_A  DO_DCBT, 24, \_B0, \_B1, \_B2, \_B3, \_O1, \_O2
+	LDST4    lvxl,    28, \_B0, \_B1, \_B2, \_B3, \_O2
 	.endm
 
 	/*
