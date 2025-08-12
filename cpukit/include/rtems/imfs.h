@@ -75,12 +75,12 @@ typedef struct IMFS_jnode_tt IMFS_jnode_t;
  *  is a list of maximum file sizes based on various settings
  *
  *  @code
- *    max_filesize with blocks of   16 is         1,328
- *    max_filesize with blocks of   32 is        18,656
- *    max_filesize with blocks of   64 is       279,488
- *    max_filesize with blocks of  128 is     4,329,344
- *    max_filesize with blocks of  256 is    68,173,568
- *    max_filesize with blocks of  512 is 1,082,195,456
+ *    max_filesize with blocks of   16 is         1,344
+ *    max_filesize with blocks of   32 is        18,688
+ *    max_filesize with blocks of   64 is       279,552
+ *    max_filesize with blocks of  128 is     4,329,472
+ *    max_filesize with blocks of  256 is    68,173,824
+ *    max_filesize with blocks of  512 is 1,082,195,968
  *  @endcode
  */
 #define IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK     128
@@ -111,7 +111,7 @@ typedef block_p *block_ptr;
         IMFS_MEMFILE_BLOCK_SLOTS * IMFS_MEMFILE_BLOCK_SLOTS))
 
 #define IMFS_MEMFILE_MAXIMUM_SIZE \
-  (LAST_TRIPLY_INDIRECT * IMFS_MEMFILE_BYTES_PER_BLOCK)
+  ((LAST_TRIPLY_INDIRECT + 1) * IMFS_MEMFILE_BYTES_PER_BLOCK)
 
 /** @} */
 
