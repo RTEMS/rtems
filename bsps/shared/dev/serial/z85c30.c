@@ -717,28 +717,25 @@ Z85C30_STATIC void z85c30_enable_interrupts(
  *  This routine initializes the port to use interrupts.
  */
 
-Z85C30_STATIC void z85c30_initialize_interrupts(
-  int minor
-)
+Z85C30_STATIC void z85c30_initialize_interrupts( int minor )
 {
-  uint32_t       ulCtrlPort1;
-  setRegister_f  setReg;
+  uint32_t      ulCtrlPort1;
+  setRegister_f setReg;
 
-  ulCtrlPort1 = Console_Port_Tbl[minor]->ulCtrlPort1;
-  setReg      = Console_Port_Tbl[minor]->setRegister;
+  ulCtrlPort1 = Console_Port_Tbl[ minor ]->ulCtrlPort1;
+  setReg      = Console_Port_Tbl[ minor ]->setRegister;
 
+  z85c30_init( minor );
 
-  z85c30_init(minor);
-
-  Console_Port_Data[minor].bActive=FALSE;
+  Console_Port_Data[ minor ].bActive = FALSE;
 
   z85c30_initialize_port( minor );
 
-  if (Console_Port_Tbl[minor]->pDeviceFlow != &z85c30_flow_RTSCTS) {
-    z85c30_negate_RTS(minor);
+  if ( Console_Port_Tbl[ minor ]->pDeviceFlow != &z85c30_flow_RTSCTS ) {
+    z85c30_negate_RTS( minor );
   }
 
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
+#if ( CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE )
   rtems_interrupt_handler_install(
     Console_Port_Tbl[ minor ]->ulIntVector,
     "Install serial port handler for z85c30",
@@ -748,16 +745,16 @@ Z85C30_STATIC void z85c30_initialize_interrupts(
   );
 #endif
 
-  z85c30_enable_interrupts(minor, SCC_ENABLE_ALL_INTR_EXCEPT_TX);
+  z85c30_enable_interrupts( minor, SCC_ENABLE_ALL_INTR_EXCEPT_TX );
 
-  (*setReg)(ulCtrlPort1, SCC_WR0_SEL_WR2, 0);              /* XXX vector */
-  (*setReg)(ulCtrlPort1, SCC_WR0_SEL_WR9, SCC_WR9_MIE);
+  ( *setReg )( ulCtrlPort1, SCC_WR0_SEL_WR2, 0 ); /* XXX vector */
+  ( *setReg )( ulCtrlPort1, SCC_WR0_SEL_WR9, SCC_WR9_MIE );
 
   /*
    * Reset interrupts
    */
 
-  (*setReg)(ulCtrlPort1, SCC_WR0_SEL_WR0, SCC_WR0_RST_INT);
+  ( *setReg )( ulCtrlPort1, SCC_WR0_SEL_WR0, SCC_WR0_RST_INT );
 }
 
 /*
