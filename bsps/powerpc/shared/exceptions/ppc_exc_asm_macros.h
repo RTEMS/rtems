@@ -239,7 +239,7 @@ TEST_LOCK_crit_done_\_FLVR:
 	 *      EQ(CR_LOCK) = (ppc_exc_lock_std == 0) && ! (*pc == <write std lock instruction>)
 	 *  }
 	 */
-	crandc	EQ(CR_LOCK), EQ(CR_LOCK), EQ(cr0)
+	crandc	EQ(CR_LOCK), EQ(CR_LOCK), EQ(0 /* cr0 */)
 
 	.endm
 
