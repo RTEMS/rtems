@@ -120,17 +120,18 @@ int __gnat_binary_semaphore_flush(
   return 0;
 }
 
-typedef void (*ISRHandler)(void *);
+typedef void ( *ISRHandler )( void * );
 
-int __gnat_interrupt_connect(
-  int         vector,
-  ISRHandler  handler,
-  void       *parameter
-)
+int __gnat_interrupt_connect( int vector, ISRHandler handler, void *parameter )
 {
   rtems_status_code status;
 
-  printk( "__gnat_interrupt_connect( %d, %p, %p )\n", vector, handler, parameter  );
+  printk(
+    "__gnat_interrupt_connect( %d, %p, %p )\n",
+    vector,
+    handler,
+    parameter
+  );
 
   status = rtems_interrupt_handler_install(
     vector,
@@ -148,10 +149,7 @@ int __gnat_interrupt_connect(
   return 0;
 }
 
-int __gnat_interrupt_set(
-  int         vector,
-  ISRHandler  handler
-)
+int __gnat_interrupt_set( int vector, ISRHandler handler )
 {
   rtems_status_code status;
 
@@ -173,17 +171,13 @@ int __gnat_interrupt_set(
   return 0;
 }
 
-ISRHandler __gnat_interrupt_get(
-  int         vector
-)
+ISRHandler __gnat_interrupt_get( int vector )
 {
   printk( "__gnat_interrupt_get( %d )\n", vector );
   return 0;
 }
 
-int __gnat_interrupt_number_to_vector(
-  int intNum
-)
+int __gnat_interrupt_number_to_vector( int intNum )
 {
   printk( "__gnat_interrupt_number_to_vector( %d )\n", intNum );
   return intNum;
