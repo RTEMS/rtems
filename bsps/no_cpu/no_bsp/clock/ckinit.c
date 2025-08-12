@@ -60,7 +60,7 @@ volatile uint32_t         Clock_driver_ticks;
  *  length of time between the user configured microseconds per tick
  *  has passed.
  */
-uint32_t         Clock_isrs;              /* ISRs until next tick */
+uint32_t Clock_isrs; /* ISRs until next tick */
 
 /*
  *  The previous ISR on this clock tick interrupt vector.
@@ -72,9 +72,7 @@ static void Clock_exit( void );
 /*
  *  Isr Handler
  */
-static rtems_isr Clock_isr(
-  rtems_vector_number vector
-)
+static rtems_isr Clock_isr( rtems_vector_number vector )
 {
   /*
    * bump the number of clock driver ticks since initialization
@@ -92,9 +90,7 @@ static rtems_isr Clock_isr(
  *  Install a clock tick handler and reprograms the chip.  This
  *  is used to initially establish the clock tick.
  */
-void Install_clock(
-  rtems_isr_entry clock_isr
-)
+void Install_clock( rtems_isr_entry clock_isr )
 {
   /*
    *  Initialize the clock tick device driver variables
