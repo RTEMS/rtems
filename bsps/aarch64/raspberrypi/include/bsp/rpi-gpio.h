@@ -39,6 +39,10 @@
 #include <bspopts.h>
 #include <rtems/rtems/status.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief  Raspberry Pi GPIO functions.
  */
@@ -114,5 +118,9 @@ rtems_status_code raspberrypi_gpio_set_pull(
   const unsigned int pin,
   const raspberrypi_gpio_pull value
 );
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBBSP_AARCH64_RASPBERRYPI_BSP_RPI_GPIO_H */

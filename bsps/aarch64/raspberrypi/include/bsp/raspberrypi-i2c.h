@@ -41,6 +41,10 @@
 #include <bsp/utility.h>
 #include <dev/i2c/i2c.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief I2C controller instances on Raspberry Pi 4.
  */
@@ -88,5 +92,9 @@ rtems_status_code rpi_i2c_init(
   raspberrypi_bsc_masters device,
   uint32_t                bus_clock
 );
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBBSP_AARCH64_RASPBERRYPI_I2C_H */

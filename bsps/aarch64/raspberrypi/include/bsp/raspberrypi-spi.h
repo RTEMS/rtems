@@ -39,6 +39,10 @@
 #include <bsp/utility.h>
 #include <bsp/rpi-gpio.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct 
 {
   uint32_t spics;
@@ -118,5 +122,9 @@ typedef enum {
  *         not satisfied.
  */
 rtems_status_code raspberrypi_spi_init(raspberrypi_spi_device device);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBBSP_AARCH64_RASPBERRYPI_4_SPI_H */

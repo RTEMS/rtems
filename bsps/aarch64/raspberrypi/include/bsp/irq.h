@@ -43,8 +43,12 @@
 #include <rtems.h>
 #include <dev/irq/arm-gic-irq.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
- * @defgroup raspberrypi_interrupt Interrrupt Support
+ * @defgroup raspberrypi_interrupt Interrupt Support
  *
  * @ingroup RTEMSBSPsARMRaspberryPi
  *
@@ -105,6 +109,10 @@
 #define BSP_INTERRUPT_VECTOR_INVALID (UINT32_MAX)
 
 #define BSP_IRQ_COUNT               (BCM2835_INTC_TOTAL_IRQ)
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* ASM */
 #endif /* LIBBSP_ARM_RASPBERRYPI_IRQ_H */

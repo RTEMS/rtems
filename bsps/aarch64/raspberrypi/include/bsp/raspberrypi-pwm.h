@@ -40,6 +40,10 @@
 #include "bsp/rpi-gpio.h"
 #include "bsp/utility.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum { raspberrypi_pwm0, raspberrypi_pwm1 } raspberrypi_pwm_channel;
 
 typedef enum {
@@ -106,5 +110,9 @@ rtems_status_code rpi_pwm_init(
   uint32_t                range,
   uint32_t                data
 );
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBBSP_AARCH64_RASPBERRYPI_4_PWM_H */

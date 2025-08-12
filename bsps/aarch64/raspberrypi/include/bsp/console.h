@@ -40,6 +40,10 @@
 #include <bspopts.h>
 #include <bsp/raspberrypi-uart.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #define CONSOLE_DEVICES RASPBERRYPI_CONSOLE_DEVICES
 
 #define CONSOLE_DEVICE_PORT2ENUM(port_no) UART##port_no
@@ -67,5 +71,9 @@ rtems_status_code raspberrypi_uart_init(
 );
 
 #undef CONSOLE_DEVICE_ENUM
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBBSP_AARCH64_RASPBERRYPI_BSP_CONSOLE_H */

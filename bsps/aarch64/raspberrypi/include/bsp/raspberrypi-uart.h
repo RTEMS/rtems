@@ -42,6 +42,10 @@
 #include <bsp/rpi-gpio.h>
 #include <dev/serial/arm-pl011.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * This macro exists to serve as a common point of definition for the
  * parameters of the UARTs present in the Raspberry Pi 4. It is used in
@@ -69,4 +73,9 @@
      5, "/dev/ttyAMA4", BCM2711_UART5_BASE, BCM2711_UART5_SIZE, \
       BSP_PL011_CLOCK_FREQ, BCM2711_IRQ_PL011_UART, arm_pl011_context, \
       &arm_pl011_fns, arm_pl011_write_polled, 13, 12, GPIO_AF4)
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 #endif /* LIBBSP_AARCH64_RASPBERRYPI_BSP_RASPBERRYPI_UART_H */

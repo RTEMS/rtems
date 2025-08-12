@@ -42,6 +42,10 @@
 #include <bspopts.h>
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @defgroup raspberrypi_reg Register Definitions
  *
@@ -580,5 +584,9 @@
 #define BCM2711_ARMC_SWIRQ_CLEAR ( BCM2711_ARMC_REGS_BASE + 0x1F4 )
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBBSP_ARM_RASPBERRYPI_RASPBERRYPI_H */
