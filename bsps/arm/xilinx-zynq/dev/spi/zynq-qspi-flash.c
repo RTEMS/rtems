@@ -64,7 +64,7 @@ void zqspi_transfer_trace(
   if (zqspi_trace)
   {
     size_t c;
-    zqspi_transferTraceHeader(message, transfer);
+    zqspi_transfer_trace_header(message, transfer);
     for (c = 0; c < transfer->length; ++c)
     {
       if ((c % 16) == 0)
