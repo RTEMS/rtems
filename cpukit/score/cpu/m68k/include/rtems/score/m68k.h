@@ -420,8 +420,8 @@ extern char _VBR[];
 
 #define m68k_set_vbr( _vbr ) \
   do { \
+    _Assert( (uintptr_t) ( _vbr ) == (uintptr_t) _VBR ); \
     __asm__ volatile ( "movec   %0,%%vbr " : : "r" (_vbr)); \
-    _VBR = (void *)_vbr; \
   } while(0)
 
 #else
