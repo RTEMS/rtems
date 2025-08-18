@@ -65,6 +65,7 @@
 
 typedef struct {
   i2c_bus                 base;
+  rtems_binary_semaphore  sem;
   uint32_t                input_clock;
   uintptr_t               base_address;
   raspberrypi_bsc_masters device;
@@ -75,65 +76,54 @@ typedef struct {
   bool                    read_transfer;
 } raspberrypi_i2c_bus;
 
-static int i2c_polling_read( raspberrypi_i2c_bus *bus )
+static int rpi_i2c_bus_transfer( raspberrypi_i2c_bus *bus )
 {
-  while ( !( S_REG( bus ) & S_DONE ) && ( bus->remaining_bytes > 0 ) ) {
-    while ( ( S_REG( bus ) & S_RXD ) && ( bus->remaining_bytes > 0 ) ) {
+  while ( bus->remaining_bytes > 0 ) {
+    if ( bus->read_transfer ) {
+      while ( ( S_REG( bus ) & ( S_RXD | S_CLKT ) ) == 0 ) {
+      }
+      if ( S_REG( bus ) & S_CLKT ) {
+        return -EIO;
+      }
       *bus->current_buffer = BCM2835_REG(
                                bus->base_address + BCM2711_I2C_FIFO
                              ) &
                              BCM2711_I2C_FIFO_MASK;
-      bus->current_buffer++;
-      bus->remaining_bytes--;
 
-      /* Check for errors */
-      if ( S_REG( bus ) & ( S_CLKT | S_ERR ) ) {
+      ++bus->current_buffer;
+      if ( ( S_REG( bus ) & S_ERR ) || ( S_REG( bus ) & S_CLKT ) ) {
+        return -EIO;
+      }
+    } else {
+#ifdef BSP_I2C_USE_INTERRUPTS
+      C_REG( bus ) |= C_INTT;
+
+      if ( rtems_binary_semaphore_wait_timed_ticks(
+             &bus->sem,
+             bus->base.timeout
+           ) != RTEMS_SUCCESSFUL ) {
+        rtems_binary_semaphore_try_wait( &bus->sem );
+        return -ETIMEDOUT;
+      }
+#else
+      while ( ( S_REG( bus ) & ( S_TXW | S_CLKT ) ) == 0 ) {
+      }
+      if ( S_REG( bus ) & S_CLKT ) {
+        return -EIO;
+      }
+#endif
+      BCM2835_REG(
+        bus->base_address + BCM2711_I2C_FIFO
+      ) = *bus->current_buffer;
+
+      ++bus->current_buffer;
+      if ( ( S_REG( bus ) & S_ERR ) || ( S_REG( bus ) & S_CLKT ) ) {
         return -EIO;
       }
     }
-  }
-  return 0;
-}
-
-static int i2c_polling_write( raspberrypi_i2c_bus *bus )
-{
-  while ( !( S_REG( bus ) & S_DONE ) && ( bus->remaining_bytes > 0 ) ) {
-    while ( bus->remaining_bytes > 0 && ( S_REG( bus ) & S_TXD ) ) {
-      BCM2835_REG( bus->base_address + BCM2711_I2C_FIFO ) = *(
-        bus->current_buffer
-      );
-      bus->current_buffer++;
-      bus->remaining_bytes--;
-
-      /* Check for errors */
-      if ( S_REG( bus ) & ( S_CLKT | S_ERR ) ) {
-        return -EIO;
-      }
-    }
-  }
-  return 0;
-}
-
-static int rpi_i2c_bus_transfer( raspberrypi_i2c_bus *bus )
-{
-  int rv;
-  if ( bus->read_transfer ) {
-    rv = i2c_polling_read( bus );
-    if ( rv < 0 ) {
-      return rv;
-    }
-  } else {
-    rv = i2c_polling_write( bus );
-    if ( rv < 0 ) {
-      return rv;
-    }
-  }
-  if ( ( S_REG( bus ) & S_ERR ) || ( S_REG( bus ) & S_CLKT ) ||
-       ( bus->remaining_bytes != 0 ) ) {
-    return -EIO;
+    --bus->remaining_bytes;
   }
 
-  S_REG( bus ) = S_DONE;
   return 0;
 }
 
@@ -172,9 +162,10 @@ static int rpi_i2c_setup_and_transfer( raspberrypi_i2c_bus *bus )
                              BCM2711_I2C_DLEN_MASK :
                              ( bus->current_buffer_size & BCM2711_I2C_DLEN_MASK
                              );
-    BCM2835_REG( bus->base_address + BCM2711_I2C_DLEN ) = bus->remaining_bytes;
+    BCM2835_REG( bus->base_address + BCM2711_I2C_DLEN )  = bus->remaining_bytes;
     /* Clear the error bits before starting new transfer */
-    S_REG( bus )                                        = S_ERROR;
+    S_REG( bus )                                         = S_ERROR;
+    C_REG( bus )                                        |= C_ST;
 
     rv = rpi_i2c_bus_transfer( bus );
 
@@ -182,10 +173,40 @@ static int rpi_i2c_setup_and_transfer( raspberrypi_i2c_bus *bus )
       return rv;
     }
 
+#ifdef BSP_I2C_USE_INTERRUPTS
+    C_REG( bus ) |= C_INTD;
+    if ( rtems_binary_semaphore_wait_timed_ticks(
+           &bus->sem,
+           bus->base.timeout
+         ) != 0 ) {
+      rtems_binary_semaphore_try_wait( &bus->sem );
+      return -ETIMEDOUT;
+    }
+#else
+    while ( ( S_REG( bus ) & ( S_DONE | S_CLKT ) ) == 0 ) {
+    }
+    if ( S_REG( bus ) & S_CLKT ) {
+      return -EIO;
+    }
+#endif
+
     --bus->remaining_transfers;
   }
   return 0;
 }
+
+#ifdef BSP_I2C_USE_INTERRUPTS
+static void i2c_handler( void *args )
+{
+  raspberrypi_i2c_bus *bus = (raspberrypi_i2c_bus *) args;
+  if ( C_REG( bus ) & C_INTT ) {
+    C_REG( bus ) &= ~C_INTT;
+  } else if ( C_REG( bus ) & C_INTD ) {
+    C_REG( bus ) &= ~C_INTD;
+  }
+  rtems_binary_semaphore_post( &bus->sem );
+}
+#endif
 
 static int rpi_i2c_transfer( i2c_bus *base, i2c_msg *msgs, uint32_t msg_count )
 {
@@ -231,10 +252,11 @@ static int rpi_i2c_transfer( i2c_bus *base, i2c_msg *msgs, uint32_t msg_count )
     }
 
     if ( msgs[ i ].flags & I2C_M_RD ) {
-      C_REG( bus )       |= C_CLEAR | C_READ | C_ST; // Read packet transfer
+      C_REG( bus )       |= C_CLEAR | C_READ;
       bus->read_transfer  = true;
     } else {
-      C_REG( bus )       |= C_CLEAR | C_ST; // Write packet transfer
+      C_REG( bus )       |= C_CLEAR;
+      C_REG( bus )       &= ~C_READ;
       bus->read_transfer  = false;
     }
     /* Disable clock stretch timeout */
@@ -345,6 +367,20 @@ rtems_status_code rpi_i2c_init(
   /* Enable I2C */
   C_REG( bus ) = C_CLEAR;
   C_REG( bus ) = C_I2CEN;
+
+#ifdef BSP_I2C_USE_INTERRUPTS
+  sc = rtems_interrupt_handler_install(
+    BCM2711_IRQ_I2C,
+    "I2C",
+    RTEMS_INTERRUPT_SHARED,
+    (rtems_interrupt_handler) i2c_handler,
+    bus
+  );
+  rtems_binary_semaphore_init( &bus->sem, "RPII2C" );
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    return -EIO;
+  }
+#endif
 
   sc = rpi_i2c_set_clock( &bus->base, bus_clock );
   if ( sc != RTEMS_SUCCESSFUL ) {

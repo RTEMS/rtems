@@ -71,6 +71,9 @@ extern "C" {
 /* Interrupt Vectors: SPI */
 #define BCM2711_IRQ_SPI         (BCM2711_IRQ_VC_PERIPHERAL_BASE + 54)
 
+/* Interrupt Vectors: I2C */
+#define BCM2711_IRQ_I2C ( BCM2711_IRQ_VC_PERIPHERAL_BASE + 53 )
+
 /* Interrupt Vectors: Videocore */
 #define BCM2711_IRQ_VC_PERIPHERAL_BASE 96
 #define BCM2711_IRQ_AUX                (BCM2711_IRQ_VC_PERIPHERAL_BASE + 29)
