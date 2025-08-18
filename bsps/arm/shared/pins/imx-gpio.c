@@ -68,7 +68,7 @@ struct imx_gpio_regs {
 
 struct imx_gpio {
   char name[sizeof(IMX_GPIO_ALIAS_NAME)];
-  struct imx_gpio_regs *regs;
+  volatile struct imx_gpio_regs *regs;
   rtems_interrupt_lock lock;
 };
 

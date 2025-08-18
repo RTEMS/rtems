@@ -58,7 +58,7 @@ enum imx_gpio_mode {
  */
 struct imx_gpio_pin {
   /** Management structure for the GPIO. Get with @ref imx_gpio_get_by_index. */
-  volatile struct imx_gpio* gpio;
+  struct imx_gpio* gpio;
   /**
    * Select the pins you want to handle with this mask. The mask is not
    * influenced by the @a shift field.
