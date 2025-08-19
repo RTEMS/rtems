@@ -141,7 +141,7 @@ rtems_status_code rtems_chain_get_with_notification(
  * @brief Gets the first @a node from the @a chain with an @a events wait if
  * empty.
  *
- * This routine gets the first @a node of the @a chain if it is available,
+ * This directive gets the first @a node of the @a chain if it is available,
  * otherwise it waits for the calling task to receive all @a events and then
  * tries to get the first node again.  The get and wait is retried indefinitely
  * until either a node is available or the event receive times out.
