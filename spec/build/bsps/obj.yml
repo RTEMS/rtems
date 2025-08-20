@@ -73,6 +73,8 @@ links:
   uid: objnosmp
 - role: build-dependency
   uid: optclkbootcpu
+- role: build-dependency
+  uid: optclkfastidle
 source:
 - bsps/shared/dev/display/disp_hcms29xx.c
 - bsps/shared/dev/display/font_hcms29xx.c

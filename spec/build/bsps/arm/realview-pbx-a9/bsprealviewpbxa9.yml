@@ -34,8 +34,6 @@ links:
 - role: build-dependency
   uid: optcacheinst
 - role: build-dependency
-  uid: optclkfastidle
-- role: build-dependency
   uid: ../optmmusmallpages
 - role: build-dependency
   uid: optresetvec

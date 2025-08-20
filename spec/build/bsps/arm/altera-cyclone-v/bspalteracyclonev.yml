@@ -66,8 +66,6 @@ links:
 - role: build-dependency
   uid: optcacheinst
 - role: build-dependency
-  uid: optclkfastidle
-- role: build-dependency
   uid: optconcfg
 - role: build-dependency
   uid: optconuart1

@@ -31,8 +31,6 @@ links:
 - role: build-dependency
   uid: optclkcpu1x
 - role: build-dependency
-  uid: optclkfastidle
-- role: build-dependency
   uid: optclkuart
 - role: build-dependency
   uid: optconirq

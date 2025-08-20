@@ -47,8 +47,6 @@ links:
 - role: build-dependency
   uid: ../../objmem
 - role: build-dependency
-  uid: optclkfastidle
-- role: build-dependency
   uid: optsbrk
 - role: build-dependency
   uid: optsprg
