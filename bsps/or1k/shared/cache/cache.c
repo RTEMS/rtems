@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * COPYRIGHT (c) 2014, 2016 AAC Microtec AB <www.aacmicrotec.com>
  * Contributor(s):
