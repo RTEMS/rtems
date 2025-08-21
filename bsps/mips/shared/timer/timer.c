@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /**
  *  @file
  *  @brief IDT 4650 Timer Driver.

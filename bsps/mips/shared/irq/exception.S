@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This file contains a customized MIPS exception handler.
  *  It hooks into the exception handler present in the resident
