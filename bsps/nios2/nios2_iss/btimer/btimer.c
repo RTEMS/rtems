@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * This file manages the benchmark timer used by the RTEMS Timing Test
  * Suite.  Each measured time period is demarcated by calls to

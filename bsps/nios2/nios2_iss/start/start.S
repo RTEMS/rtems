@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*  NIOS2 startup code
  *
  *  This is the entry point on reset and when loading the

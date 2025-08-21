@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*  main()
  *
  *  This is the entry point for the application.  It calls

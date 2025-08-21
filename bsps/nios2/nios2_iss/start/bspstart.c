@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This routine starts the application.  It includes application,
  *  board, and monitor specific initialization and configuration.

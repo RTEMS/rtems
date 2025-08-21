@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*  NIOS2 crtn.asm fix
  *
  *  COPYRIGHT (c) 2005-2006 Kolja Waschk rtemsdev/ixo.de
