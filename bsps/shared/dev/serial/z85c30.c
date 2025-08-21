@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This file contains the console driver chip level routines for the
  *  Zilog z85c30 chip.

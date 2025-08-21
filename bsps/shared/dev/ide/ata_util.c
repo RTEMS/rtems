@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * Copyright (c) 2010 embedded brains GmbH & Co. KG
  *
