@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  Coldfire MCF5206e on-chip peripherial definitions.
  *  Contents of this file based on information provided in

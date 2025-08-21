@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This routine does the bulk of the system initialisation.
  */

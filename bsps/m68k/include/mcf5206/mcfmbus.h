@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * MCF5206e MBUS module (I2C bus) driver header file
  *

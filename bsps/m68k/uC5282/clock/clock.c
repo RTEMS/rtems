@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * Use the last periodic interval timer (PIT3) as the system clock.
  */

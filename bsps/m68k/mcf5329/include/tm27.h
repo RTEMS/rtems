@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * @file
  * @ingroup m68k_mcf5329
