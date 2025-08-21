@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * Cogent CSB337 - AT91RM9200 Startup Code
  *

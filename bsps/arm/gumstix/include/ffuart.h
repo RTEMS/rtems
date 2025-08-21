@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  FFUART for PXA250 CPU by Yang Xi<hiyangxi@gmail.com>
  *

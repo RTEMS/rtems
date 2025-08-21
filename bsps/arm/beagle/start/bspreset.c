@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * Copyright (c) 2014 Ben Gras <beng@shrike-systems.com>. All rights reserved.
  *

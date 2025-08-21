@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /* irq.c
  *
  *  This file contains the implementation of the function described in irq.h

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  Console driver for GUMSTIX by Yang Xi <hiyangxi@gmail.com>
  *

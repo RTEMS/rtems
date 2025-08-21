@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
  *

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * CSB337 and CSB637 (KIT637_V6) Memory map
  *

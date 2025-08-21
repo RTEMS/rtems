@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * Copyright (c) 2013 Chris Nott.  All rights reserved.
  *

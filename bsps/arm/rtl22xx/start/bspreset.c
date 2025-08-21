@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  Copyright (c) 2007 by Ray Xu <rayx.cn@gmail.com>
  *
