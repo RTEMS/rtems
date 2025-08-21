@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This routine initializes the Real Time Clock Counter Timer which is
  *  part of the MEC on the ERC32 CPU.

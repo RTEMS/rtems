@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*  timer.c
  *
  *  This file implements a benchmark timer using the General Purpose Timer on

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*  Shm_Convert_address
  *
  *  No address range conversion is required.
