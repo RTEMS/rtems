@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*--------------------------------------------------------------------------+
  * start16.s v1.0 - PC386 BSP - 1998/04/13
  * startAP.s 05/2019

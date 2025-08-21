@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  The contents of this file were formerly in console.c which
  *  had the following copyright notice:

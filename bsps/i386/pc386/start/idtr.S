@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*  cpu_asm.S
  *
  *  This file contains all assembly code for the Intel i386 IDT

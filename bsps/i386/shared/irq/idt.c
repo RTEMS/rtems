@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * cpu.c  - This file contains implementation of C function to
  *          instantiate IDT entries. More detailled information can be found

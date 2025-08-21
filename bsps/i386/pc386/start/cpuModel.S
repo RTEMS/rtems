@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*  cpuModel.S
  *
  *  This file contains all assembly code for the Intel Cpu identification.

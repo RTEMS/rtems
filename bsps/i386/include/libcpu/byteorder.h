@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

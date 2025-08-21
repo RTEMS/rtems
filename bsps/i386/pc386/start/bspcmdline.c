@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*-------------------------------------------------------------------------+
 | This file contains the PC386 BSP startup package. It includes application,
 | board, and monitor specific initialization and configuration. The generic CPU

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * page.c :- This file contains implementation of C function to
  *           Instanciate paging. More detailled information

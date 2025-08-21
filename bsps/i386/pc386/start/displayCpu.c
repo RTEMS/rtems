@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This file contains code for displaying the Intel Cpu identification
  *  that has been performed by checkCPUtypeSetCr0 function.

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * outch.c  - This file contains code for displaying characters
  *	      on the console uisng information that should be

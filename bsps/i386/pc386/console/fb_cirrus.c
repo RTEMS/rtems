@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  FB driver for Cirrus GD5446 graphic hardware.
  *  Tested to be compatible with QEMU GD5446 emulation but not on real HW.

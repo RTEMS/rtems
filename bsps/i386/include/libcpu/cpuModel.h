@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This file contains declaration for variables and code
  *  that may be used to get the Intel Cpu identification
