@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /**
  * @file PIC-independent implementation of the functions described in irq.h
  */

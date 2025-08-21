@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This file contains the implementation of rtems initialization
  *  related to interrupt handling

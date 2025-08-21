@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*  cpu_asm.s	1.1 - 95/12/04
  *
  *  This file contains the assembly code for the PowerPC implementation

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This file contains the implementation of the function described in irq.h
  *  related to Intel 8259 Programmable Interrupt controller.

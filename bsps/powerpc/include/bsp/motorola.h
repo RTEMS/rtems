@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /* motorola.h
  *
  *  This include file describe the data structure and the functions implemented

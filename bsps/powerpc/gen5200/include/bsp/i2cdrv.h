@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * i2cdrv.h -- I2C bus driver prototype and definitions
  *

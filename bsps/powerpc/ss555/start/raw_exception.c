@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * raw_exception.c  - This file contains implementation of C functions to
  *          	      Instantiate mpc5xx primary exception entries.

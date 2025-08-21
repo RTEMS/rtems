@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This routine initializes the PIT on the MPC5xx.
  *  The tick frequency is specified by the BSP.

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /* I2C bus common (driver-independent) primitives implementation.
  *
  * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia

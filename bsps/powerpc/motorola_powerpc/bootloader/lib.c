@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /* lib.c
  *
  *  This file contains the implementation of functions that are unresolved

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  This file contains the entry veneer for RTEMS programs on the Intec
  *  SS555 board.  It jumps to the BSP which is responsible for performing

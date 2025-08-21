@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /* PowerPC exception handling middleware; consult README for more
  * information.
  *

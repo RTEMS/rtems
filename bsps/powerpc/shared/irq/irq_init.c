@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /* irq_init.c
  *
  *  This file contains the implementation of rtems initialization

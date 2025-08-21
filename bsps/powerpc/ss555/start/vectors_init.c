@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  * vectors_init.c Exception hanlding initialisation (and generic handler).
  *
