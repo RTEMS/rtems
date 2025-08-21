@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-with-RTEMS-exception */
+
 /*
  *  lchown() - POSIX 1003.1b 5.6.5 - Change Owner and Group of a File
  *             But Do Not Follow a Symlink
