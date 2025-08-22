@@ -1,7 +1,7 @@
 Updating
 ========
 
-This directory contains a port of the JFFS2 file system from Linux v5.9.
+This directory contains a port of the JFFS2 file system from Linux.
 
 To update to a newer Linux version use this command in a Git clone of Linux to
 generate the relevant patches:
