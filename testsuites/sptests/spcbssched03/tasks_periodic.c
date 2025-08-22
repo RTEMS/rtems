@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*  Tasks_Periodic
  *
  *  This routine serves as a test task for the CBS scheduler

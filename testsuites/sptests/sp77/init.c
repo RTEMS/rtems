@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  COPYRIGHT (c) 2012.
  *  Krzysztof Miesowicz <krzysztof.miesowicz@gmail.com>

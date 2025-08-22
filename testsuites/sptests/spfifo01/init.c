@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  COPYRIGHT (c) 2010
  *  Bharath Suri<bharath.s.jois@gmail.com>.

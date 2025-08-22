@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
 /*
  *  Based upon test code posted on the RTEMS User's Mailing List
  *  by Sergio Faustino <sergio.faustino@edisoft.pt>:
