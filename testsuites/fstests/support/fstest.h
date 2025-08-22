@@ -30,7 +30,7 @@
 #define __FSTEST_H
 
 #define TIME_PRECISION  (2)
-#define TIME_EQUAL(x,y) (abs((x)-(y))<TIME_PRECISION)
+#define TIME_EQUAL(x,y) (llabs((x)-(y))<TIME_PRECISION)
 
 
 #define FS_PASS() do {puts("PASS");} while (0)

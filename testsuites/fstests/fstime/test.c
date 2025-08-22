@@ -52,7 +52,7 @@ const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 #include <assert.h>
 #define rtems_test_assert(x) assert(x)
 #define TIME_PRECISION  (2)
-#define TIME_EQUAL(x,y) (abs((x)-(y))<TIME_PRECISION)
+#define TIME_EQUAL(x,y) (llabs((x)-(y))<TIME_PRECISION)
 #endif
 
 static int do_create(const char *path, int oflag, mode_t mode)
