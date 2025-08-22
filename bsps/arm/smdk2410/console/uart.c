@@ -1,7 +1,9 @@
-/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+/* SPDX-License-Identifier: BSD-2-Clause */
 
-/*
- *  console driver for S3C2400 UARTs
+/**
+ * @file
+ *
+ * @brief  console driver for S3C2400 UARTs
  *
  *  This driver uses the shared console driver in
  *  ...../libbsp/shared/console.c
@@ -9,14 +11,34 @@
  *  If you want the driver to be interrupt driven, you
  *  need to write the ISR, and in the ISR insert the
  *  chars into termios's queue.
+ */
+
+/*
+ * Copyright (C) 2004 Cogent Computer Systems
+ * Written by Jay Monkman <jtm@lopingdog.com>
  *
- *  Copyright (c) 2004 Cogent Computer Systems
- *  Written by Jay Monkman <jtm@lopingdog.com>
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
-*/
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #include <bsp.h>                /* Must be before libio.h */
 #include <rtems/libio.h>
 #include <termios.h>
