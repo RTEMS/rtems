@@ -33,8 +33,6 @@ links:
 - role: build-dependency
   uid: librtemstest
 - role: build-dependency
-  uid: libtelnetd
-- role: build-dependency
   uid: libtftpfs
 - role: build-dependency
   uid: libz

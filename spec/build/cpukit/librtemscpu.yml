@@ -153,7 +153,6 @@ install:
   - cpukit/include/rtems/mw_uid.h
   - cpukit/include/rtems/nvdisk-sram.h
   - cpukit/include/rtems/nvdisk.h
-  - cpukit/include/rtems/passwd.h
   - cpukit/include/rtems/pci.h
   - cpukit/include/rtems/pipe.h
   - cpukit/include/rtems/print.h
