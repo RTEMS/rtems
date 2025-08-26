@@ -12,5 +12,5 @@ text: |
   context to store its internal state.  Each processor in the system is
   owned by at most one scheduler instance.  The processor to scheduler
   instance assignment is determined at application configuration time.  See
-  :ref:`Configuring a System`.
+  ${/doc/if/config-scheduler-clustered:/name}
 type: glossary
