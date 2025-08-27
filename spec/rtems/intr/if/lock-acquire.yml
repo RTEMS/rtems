@@ -42,23 +42,22 @@ notes: |
   This directive establishes a non-preemptive critical section with system wide
   mutual exclusion on the local node in all RTEMS build configurations.
 
-  .. code-block:: c
-      :linenos:
+  ```c
+  #include <rtems.h>
 
-      #include <rtems.h>
+  void critical_section( rtems_interrupt_lock *lock )
+  {
+    rtems_interrupt_lock_context lock_context;
 
-      void critical_section( rtems_interrupt_lock *lock )
-      {
-        rtems_interrupt_lock_context lock_context;
+    rtems_interrupt_lock_acquire( lock, &lock_context );
 
-        rtems_interrupt_lock_acquire( lock, &lock_context );
+    // Here is the critical section.  Maskable interrupts are disabled.
+    // Where the system was built with SMP support enabled, this section
+    // is protected by an SMP lock.
 
-        // Here is the critical section.  Maskable interrupts are disabled.
-        // Where the system was built with SMP support enabled, this section
-        // is protected by an SMP lock.
-
-        rtems_interrupt_lock_release( lock, &lock_context );
-      }
+    rtems_interrupt_lock_release( lock, &lock_context );
+  }
+  ```
 params:
 - description: |
     is the ISR lock to acquire.

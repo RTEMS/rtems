@@ -58,36 +58,35 @@ notes: |
   with another semaphore may be subject to the lost wake-up problem.  The
   following attempt to implement a condition variable is broken.
 
-  .. code-block:: c
-      :linenos:
+  ```c
+  #include <rtems.h>
+  #include <assert.h>
 
-      #include <rtems.h>
-      #include <assert.h>
+  void cnd_wait( rtems_id cnd, rtems_id mtx )
+  {
+    rtems_status_code sc;
 
-      void cnd_wait( rtems_id cnd, rtems_id mtx )
-      {
-        rtems_status_code sc;
+    sc = rtems_semaphore_release( mtx );
+    assert( sc == RTEMS_SUCCESSFUL );
 
-        sc = rtems_semaphore_release( mtx );
-        assert( sc == RTEMS_SUCCESSFUL );
+    // Here, a higher priority task may run and satisfy the condition.
+    // We may never wake up from the next semaphore obtain.
 
-        // Here, a higher priority task may run and satisfy the condition.
-        // We may never wake up from the next semaphore obtain.
+    sc = rtems_semaphore_obtain( cnd, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+    assert( sc == RTEMS_UNSATISFIED );
 
-        sc = rtems_semaphore_obtain( cnd, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-        assert( sc == RTEMS_UNSATISFIED );
+    sc = rtems_semaphore_obtain( mtx, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+    assert( sc == RTEMS_SUCCESSFUL );
+  }
 
-        sc = rtems_semaphore_obtain( mtx, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-        assert( sc == RTEMS_SUCCESSFUL );
-      }
+  void cnd_broadcast( rtems_id cnd )
+  {
+    rtems_status_code sc;
 
-      void cnd_broadcast( rtems_id cnd )
-      {
-        rtems_status_code sc;
-
-        sc = rtems_semaphore_flush( cnd );
-        assert( sc == RTEMS_SUCCESSFUL );
-      }
+    sc = rtems_semaphore_flush( cnd );
+    assert( sc == RTEMS_SUCCESSFUL );
+  }
+  ```
 params:
 - description: |
     is the semaphore identifier.

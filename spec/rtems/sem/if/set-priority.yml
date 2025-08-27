@@ -55,96 +55,95 @@ name: rtems_semaphore_set_priority
 notes: |
   Please have a look at the following example:
 
-  .. code-block:: c
-      :linenos:
+  ```c
+  #include <assert.h>
+  #include <rtems.h>
 
-      #include <assert.h>
-      #include <rtems.h>
+  #define SCHED_A rtems_build_name( ' ', ' ', ' ', 'A' )
+  #define SCHED_B rtems_build_name( ' ', ' ', ' ', 'B' )
 
-      #define SCHED_A rtems_build_name( ' ', ' ', ' ', 'A' )
-      #define SCHED_B rtems_build_name( ' ', ' ', ' ', 'B' )
+  static void Init( rtems_task_argument arg )
+  {
+    rtems_status_code   sc;
+    rtems_id            semaphore_id;
+    rtems_id            scheduler_a_id;
+    rtems_id            scheduler_b_id;
+    rtems_task_priority prio;
 
-      static void Init( rtems_task_argument arg )
-      {
-        rtems_status_code   sc;
-        rtems_id            semaphore_id;
-        rtems_id            scheduler_a_id;
-        rtems_id            scheduler_b_id;
-        rtems_task_priority prio;
+    (void) arg;
 
-        (void) arg;
+    // Get the scheduler identifiers
+    sc = rtems_scheduler_ident( SCHED_A, &scheduler_a_id );
+    assert( sc == RTEMS_SUCCESSFUL );
+    sc = rtems_scheduler_ident( SCHED_B, &scheduler_b_id );
+    assert( sc == RTEMS_SUCCESSFUL );
 
-        // Get the scheduler identifiers
-        sc = rtems_scheduler_ident( SCHED_A, &scheduler_a_id );
-        assert( sc == RTEMS_SUCCESSFUL );
-        sc = rtems_scheduler_ident( SCHED_B, &scheduler_b_id );
-        assert( sc == RTEMS_SUCCESSFUL );
+    // Create a local, binary semaphore using the MrsP locking protocol
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'M', 'R', 'S', 'P' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      1,
+      &semaphore_id
+    );
+    assert( sc == RTEMS_SUCCESSFUL );
 
-        // Create a local, binary semaphore using the MrsP locking protocol
-        sc = rtems_semaphore_create(
-          rtems_build_name( 'M', 'R', 'S', 'P' ),
-          1,
-          RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
-            RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
-          1,
-          &semaphore_id
-        );
-        assert( sc == RTEMS_SUCCESSFUL );
+    // The ceiling priority for each scheduler is equal to the priority
+    // specified for the semaphore creation.
+    prio = RTEMS_CURRENT_PRIORITY;
+    sc = rtems_semaphore_set_priority( semaphore_id, scheduler_a_id, prio, &prio );
+    assert( sc == RTEMS_SUCCESSFUL );
+    assert( prio == 1 );
 
-        // The ceiling priority for each scheduler is equal to the priority
-        // specified for the semaphore creation.
-        prio = RTEMS_CURRENT_PRIORITY;
-        sc = rtems_semaphore_set_priority( semaphore_id, scheduler_a_id, prio, &prio );
-        assert( sc == RTEMS_SUCCESSFUL );
-        assert( prio == 1 );
+    // Check the old value and set a new ceiling priority for scheduler B
+    prio = 2;
+    sc = rtems_semaphore_set_priority( semaphore_id, scheduler_b_id, prio, &prio );
+    assert( sc == RTEMS_SUCCESSFUL );
+    assert( prio == 1 );
 
-        // Check the old value and set a new ceiling priority for scheduler B
-        prio = 2;
-        sc = rtems_semaphore_set_priority( semaphore_id, scheduler_b_id, prio, &prio );
-        assert( sc == RTEMS_SUCCESSFUL );
-        assert( prio == 1 );
+    // Check the ceiling priority values
+    prio = RTEMS_CURRENT_PRIORITY;
+    sc = rtems_semaphore_set_priority( semaphore_id, scheduler_a_id, prio, &prio );
+    assert( sc == RTEMS_SUCCESSFUL );
+    assert( prio == 1 );
+    prio = RTEMS_CURRENT_PRIORITY;
+    sc = rtems_semaphore_set_priority( semaphore_id, scheduler_b_id, prio, &prio );
+    assert( sc == RTEMS_SUCCESSFUL );
+    assert( prio == 2 );
 
-        // Check the ceiling priority values
-        prio = RTEMS_CURRENT_PRIORITY;
-        sc = rtems_semaphore_set_priority( semaphore_id, scheduler_a_id, prio, &prio );
-        assert( sc == RTEMS_SUCCESSFUL );
-        assert( prio == 1 );
-        prio = RTEMS_CURRENT_PRIORITY;
-        sc = rtems_semaphore_set_priority( semaphore_id, scheduler_b_id, prio, &prio );
-        assert( sc == RTEMS_SUCCESSFUL );
-        assert( prio == 2 );
+    sc = rtems_semaphore_delete( semaphore_id );
+    assert( sc == RTEMS_SUCCESSFUL );
 
-        sc = rtems_semaphore_delete( semaphore_id );
-        assert( sc == RTEMS_SUCCESSFUL );
+    rtems_shutdown_executive( 0 );
+  }
 
-        rtems_shutdown_executive( 0 );
-      }
+  #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+  #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+  #define CONFIGURE_MAXIMUM_TASKS 1
+  #define CONFIGURE_MAXIMUM_SEMAPHORES 1
+  #define CONFIGURE_MAXIMUM_PROCESSORS 2
 
-      #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-      #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-      #define CONFIGURE_MAXIMUM_TASKS 1
-      #define CONFIGURE_MAXIMUM_SEMAPHORES 1
-      #define CONFIGURE_MAXIMUM_PROCESSORS 2
+  #define CONFIGURE_SCHEDULER_SIMPLE_SMP
 
-      #define CONFIGURE_SCHEDULER_SIMPLE_SMP
+  #include <rtems/scheduler.h>
 
-      #include <rtems/scheduler.h>
+  RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP( a );
+  RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP( b );
 
-      RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP( a );
-      RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP( b );
+  #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
+      RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( a, SCHED_A ), \
+      RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( b, SCHED_B )
 
-      #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-          RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( a, SCHED_A ), \
-          RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( b, SCHED_B )
+  #define CONFIGURE_SCHEDULER_ASSIGNMENTS \
+      RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
+      RTEMS_SCHEDULER_ASSIGN( 1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
 
-      #define CONFIGURE_SCHEDULER_ASSIGNMENTS \
-          RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
-          RTEMS_SCHEDULER_ASSIGN( 1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
+  #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+  #define CONFIGURE_INIT
 
-      #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-      #define CONFIGURE_INIT
-
-      #include <rtems/confdefs.h>
+  #include <rtems/confdefs.h>
+  ```
 params:
 - description: |
     is the semaphore identifier.

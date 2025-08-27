@@ -41,39 +41,38 @@ notes: |
   This directive is implemented as a macro which sets the ${.:/params[0]/name}
   parameter.
 
-  .. code-block:: c
-      :linenos:
+  ```c
+  #include <rtems.h>
 
-      #include <rtems.h>
+  void local_critical_section( void )
+  {
+    rtems_interrupt_level level;
 
-      void local_critical_section( void )
-      {
-        rtems_interrupt_level level;
+    // Please note that the rtems_interrupt_disable() is a macro.  The
+    // previous interrupt level (before the maskable interrupts are
+    // disabled) is returned here in the level macro parameter.  This
+    // would be wrong:
+    //
+    // rtems_interrupt_disable( &level );
+    rtems_interrupt_disable( level );
 
-        // Please note that the rtems_interrupt_disable() is a macro.  The
-        // previous interrupt level (before the maskable interrupts are
-        // disabled) is returned here in the level macro parameter.  This
-        // would be wrong:
-        //
-        // rtems_interrupt_disable( &level );
-        rtems_interrupt_disable( level );
+    // Here is the critical section: maskable interrupts are disabled
 
-        // Here is the critical section: maskable interrupts are disabled
+    {
+      rtems_interrupt_level nested_level;
 
-        {
-          rtems_interrupt_level nested_level;
+      rtems_interrupt_disable( nested_level );
 
-          rtems_interrupt_disable( nested_level );
+      // Here is a nested critical section
 
-          // Here is a nested critical section
+      rtems_interrupt_enable( nested_level );
+    }
 
-          rtems_interrupt_enable( nested_level );
-        }
+    // Maskable interrupts are still disabled
 
-        // Maskable interrupts are still disabled
-
-        rtems_interrupt_enable( level );
-      }
+    rtems_interrupt_enable( level );
+  }
+  ```
 params:
 - description: |
     is a variable of type ${level:/name} which will be used to save the

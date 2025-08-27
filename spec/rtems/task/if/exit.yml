@@ -33,21 +33,21 @@ notes: |
   The directive is an optimized variant of the following code sequences, see
   also ${delete:/name}:
 
-  .. code-block:: c
+  ```c
+  #include <pthread.h>
+  #include <rtems.h>
 
-      #include <pthread.h>
-      #include <rtems.h>
+  void classic_delete_self( void )
+  {
+    (void) rtems_task_delete( RTEMS_SELF );
+  }
 
-      void classic_delete_self( void )
-      {
-        (void) rtems_task_delete( RTEMS_SELF );
-      }
-
-      void posix_delete_self( void )
-      {
-        (void) pthread_detach( pthread_self() );
-        (void) pthread_exit( NULL);
-      }
+  void posix_delete_self( void )
+  {
+    (void) pthread_detach( pthread_self() );
+    (void) pthread_exit( NULL);
+  }
+  ```
 params: []
 return: null
 type: interface

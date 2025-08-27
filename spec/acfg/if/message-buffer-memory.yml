@@ -40,9 +40,9 @@ notes: |
   The interface for the ``CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE()`` help
   macro is as follows:
 
-  .. code-block:: c
-
-      CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( max_messages, max_msg_size )
+  ```c
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( max_messages, max_msg_size )
+  ```
 
   Where ``max_messages`` is the maximum number of pending messages and
   ``max_msg_size`` is the maximum size in bytes of the messages of the
@@ -60,16 +60,16 @@ notes: |
   pending messages with the message structure defined by the type
   ``other_message_type``.
 
-  .. code-block:: c
-
-      #define CONFIGURE_MESSAGE_BUFFER_MEMORY ( \
-          CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
-            24, \
-            sizeof( one_message_type ) \
-          ) \
-          + CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
-            500, \
-            sizeof( other_message_type ) \
-          ) \
-        )
+  ```c
+  #define CONFIGURE_MESSAGE_BUFFER_MEMORY ( \
+      CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
+        24, \
+        sizeof( one_message_type ) \
+      ) \
+      + CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
+        500, \
+        sizeof( other_message_type ) \
+      ) \
+    )
+  ```
 type: interface

@@ -24,21 +24,20 @@ notes: |
   help to reduce the memory demands of an application.  All lock operations do
   not use the lock object parameter if lock objects are not needed.
 
-  .. code-block:: c
-      :linenos:
+  ```c
+  #include <rtems.h>
 
-      #include <rtems.h>
+  #if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+  rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER( "name" );
+  #endif
 
-      #if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
-      rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER( "name" );
-      #endif
-
-      struct s {
-      #if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
-        rtems_interrupt_lock lock;
-      #endif
-        int foobar;
-      };
+  struct s {
+  #if RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT
+    rtems_interrupt_lock lock;
+  #endif
+    int foobar;
+  };
+  ```
 params: []
 return: null
 type: interface
