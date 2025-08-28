@@ -203,7 +203,7 @@ typedef struct {
     storage_area[ MAXIMUM_PENDING_MESSAGES];
 
   /**
-   * @brief This member contains always the same arbitrary number ``magic``.
+   * @brief This member contains always the same arbitrary number `magic`.
    *
    * It is used for run-time type checking.
    */
@@ -271,7 +271,7 @@ typedef struct {
 
   /**
    * @brief This member contains a pointer to a function which is executed
-   *   while the worker is waiting to receive a message (`delete(), nop()``).
+   *   while the worker is waiting to receive a message (`delete(), nop()`).
    */
   void (*concurrent_activity)( void *ctx_in );
 
@@ -704,7 +704,7 @@ static void RtemsMessageReqReceive_Pre_Size_Prepare(
   switch ( state ) {
     case RtemsMessageReqReceive_Pre_Size_Valid: {
       /*
-       * While the ``size`` parameter references an object of type ``size_t``.
+       * While the ``size`` parameter references an object of type `size_t`.
        */
       ctx->size_param = &ctx->receive_size;
       break;

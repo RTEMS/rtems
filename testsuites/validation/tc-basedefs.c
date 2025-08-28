@@ -130,8 +130,8 @@
  *   - It cannot automatically be checked that the
  *     RTEMS_COMPILER_DEPRECATED_ATTRIBUTE macro has the desired effect. The
  *     gcc compiler should issue a warning about the use of a deprecated
- *     variable on the above line where the ``compiler_deprecated_attribute``
- *     is used.
+ *     variable on the above line where the `compiler_deprecated_attribute` is
+ *     used.
  *
  * - Use the RTEMS_COMPILER_MEMORY_BARRIER() macro.
  *
@@ -202,7 +202,7 @@
  *   - It cannot automatically be checked that the RTEMS_DEPRECATED macro has
  *     the desired effect. The gcc compiler should issue a warning about the
  *     use of a deprecated function on the above line where the
- *     ``deprecated_func`` is used.
+ *     `deprecated_func` is used.
  *
  * - Use the RTEMS_DEQUALIFY_DEPTHX() macro.
  *
@@ -256,7 +256,7 @@
  *   - It cannot be checked that the RTEMS_NO_RETURN macro has the desired
  *     effect. It is only checked that such a macro exists.
  *
- * - Use the RTEMS_NOINIT macro on ``noinit_variable`` at the beginning of this
+ * - Use the RTEMS_NOINIT macro on `noinit_variable` at the beginning of this
  *   file.
  *
  *   - It cannot be checked that the RTEMS_NOINIT macro has the desired effect.
@@ -305,8 +305,8 @@
  *   - The check confirms that a RTEMS_RETURN_ADDRESS() macro exists and that
  *     it produces the correct code.
  *
- * - Use the RTEMS_SECTION() macro on ``section_variable`` and ``section_func``
- *   at the beginning of this file.
+ * - Use the RTEMS_SECTION() macro on `section_variable` and `section_func` at
+ *   the beginning of this file.
  *
  *   - It cannot be checked that the RTEMS_SECTION() macro has the desired
  *     effect. Yet, the check confirms that such a macro exists and can be
@@ -384,28 +384,28 @@
  *
  *   - It cannot be checked that the RTEMS_WARN_UNUSED_RESULT macro has the
  *     desired effect. The GNU C compiler should issue a warning about the
- *     disregarded result returned by the call to the ``warn_unused_func()``
+ *     disregarded result returned by the call to the `warn_unused_func()`
  *     function.
  *
- * - Use of ``basedefs_weak_alias_0/1_func()`` which are defined with the
+ * - Use of `basedefs_weak_alias_0/1_func()` which are defined with the
  *   RTEMS_WEAK_ALIAS() macro at the beginning of this file.
  *
  *   - There exists no strong alias for basedefs_weak_alias_0_func(). Check
  *     that ori_func() and basedefs_weak_alias_0_func() are the same function.
  *
- *   - File ``tc_basedefs_pndant.c`` defines a strong function for
+ *   - File `tc_basedefs_pndant.c` defines a strong function for
  *     basedefs_weak_alias_1_func(). Check that ori_func() and
  *     basedefs_weak_alias_1_func() are not the same function.
  *
- * - Use of ``basedefs_weak_0/1_var`` and ``basedefs_weak_0/1_func()`` which
- *   are defined with the RTEMS_WEAK macro at the beginning of this file.
+ * - Use of `basedefs_weak_0/1_var` and `basedefs_weak_0/1_func()` which are
+ *   defined with the RTEMS_WEAK macro at the beginning of this file.
  *
- *   - For ``basedefs_weak_0_var`` and ``basedefs_weak_0_func()`` there exists
- *     no other symbols with the same name. Hence, the checks test that the
- *     weak symbols are used.
+ *   - For `basedefs_weak_0_var` and `basedefs_weak_0_func()` there exists no
+ *     other symbols with the same name. Hence, the checks test that the weak
+ *     symbols are used.
  *
- *   - ``basedefs_weak_1_var`` and ``basedefs_weak_1_func()`` are overwritten
- *     by strong symbols defined in file ``tc_basedefs_pendant.c``. Hence, the
+ *   - `basedefs_weak_1_var` and `basedefs_weak_1_func()` are overwritten by
+ *     strong symbols defined in file `tc_basedefs_pendant.c`. Hence, the
  *     checks test that the strong variants are used.
  *
  * - Invoke the RTEMS_XCONCAT() macro on examples.
@@ -892,7 +892,7 @@ static void RtemsBasedefsValBasedefs_Action_9( void )
    * It cannot automatically be checked that the
    * RTEMS_COMPILER_DEPRECATED_ATTRIBUTE macro has the desired effect. The gcc
    * compiler should issue a warning about the use of a deprecated variable on
-   * the above line where the ``compiler_deprecated_attribute`` is used.
+   * the above line where the `compiler_deprecated_attribute` is used.
    */
   /*
    * Derivation from Coding Style:
@@ -1137,8 +1137,7 @@ static void RtemsBasedefsValBasedefs_Action_21( void )
   /*
    * It cannot automatically be checked that the RTEMS_DEPRECATED macro has the
    * desired effect. The gcc compiler should issue a warning about the use of a
-   * deprecated function on the above line where the ``deprecated_func`` is
-   * used.
+   * deprecated function on the above line where the `deprecated_func` is used.
    */
   T_step_eq_int( 50, deprecated_result, 15 );
 }
@@ -1388,7 +1387,7 @@ static void RtemsBasedefsValBasedefs_Action_31( void )
 }
 
 /**
- * @brief Use the RTEMS_NOINIT macro on ``noinit_variable`` at the beginning of
+ * @brief Use the RTEMS_NOINIT macro on `noinit_variable` at the beginning of
  *   this file.
  */
 static void RtemsBasedefsValBasedefs_Action_32( void )
@@ -1557,8 +1556,8 @@ static void RtemsBasedefsValBasedefs_Action_39( void )
 }
 
 /**
- * @brief Use the RTEMS_SECTION() macro on ``section_variable`` and
- *   ``section_func`` at the beginning of this file.
+ * @brief Use the RTEMS_SECTION() macro on `section_variable` and
+ *   `section_func` at the beginning of this file.
  */
 static void RtemsBasedefsValBasedefs_Action_40( void )
 {
@@ -1798,14 +1797,14 @@ static void RtemsBasedefsValBasedefs_Action_50( void )
   /*
    * It cannot be checked that the RTEMS_WARN_UNUSED_RESULT macro has the
    * desired effect. The GNU C compiler should issue a warning about the
-   * disregarded result returned by the call to the ``warn_unused_func()``
+   * disregarded result returned by the call to the `warn_unused_func()`
    * function.
    */
   T_step_eq_int( 112, warn_unused_result, 11 );
 }
 
 /**
- * @brief Use of ``basedefs_weak_alias_0/1_func()`` which are defined with the
+ * @brief Use of `basedefs_weak_alias_0/1_func()` which are defined with the
  *   RTEMS_WEAK_ALIAS() macro at the beginning of this file.
  */
 static void RtemsBasedefsValBasedefs_Action_51( void )
@@ -1822,7 +1821,7 @@ static void RtemsBasedefsValBasedefs_Action_51( void )
   T_step_eq_int( 113, weak_alias_0_result, 16 );
 
   /*
-   * File ``tc_basedefs_pndant.c`` defines a strong function for
+   * File `tc_basedefs_pndant.c` defines a strong function for
    * basedefs_weak_alias_1_func(). Check that ori_func() and
    * basedefs_weak_alias_1_func() are not the same function.
    */
@@ -1830,8 +1829,8 @@ static void RtemsBasedefsValBasedefs_Action_51( void )
 }
 
 /**
- * @brief Use of ``basedefs_weak_0/1_var`` and ``basedefs_weak_0/1_func()``
- *   which are defined with the RTEMS_WEAK macro at the beginning of this file.
+ * @brief Use of `basedefs_weak_0/1_var` and `basedefs_weak_0/1_func()` which
+ *   are defined with the RTEMS_WEAK macro at the beginning of this file.
  */
 static void RtemsBasedefsValBasedefs_Action_52( void )
 {
@@ -1841,7 +1840,7 @@ static void RtemsBasedefsValBasedefs_Action_52( void )
   weak_1_result = basedefs_weak_1_func();
 
   /*
-   * For ``basedefs_weak_0_var`` and ``basedefs_weak_0_func()`` there exists no
+   * For `basedefs_weak_0_var` and `basedefs_weak_0_func()` there exists no
    * other symbols with the same name. Hence, the checks test that the weak
    * symbols are used.
    */
@@ -1849,9 +1848,9 @@ static void RtemsBasedefsValBasedefs_Action_52( void )
   T_step_eq_int( 116, weak_0_result, 63 );
 
   /*
-   * ``basedefs_weak_1_var`` and ``basedefs_weak_1_func()`` are overwritten by
-   * strong symbols defined in file ``tc_basedefs_pendant.c``. Hence, the
-   * checks test that the strong variants are used.
+   * `basedefs_weak_1_var` and `basedefs_weak_1_func()` are overwritten by
+   * strong symbols defined in file `tc_basedefs_pendant.c`. Hence, the checks
+   * test that the strong variants are used.
    */
   T_step_eq_int( 117, basedefs_weak_1_var, 62 );
   T_step_eq_int( 118, weak_1_result, 65 );

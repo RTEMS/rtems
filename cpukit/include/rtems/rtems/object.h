@@ -352,8 +352,8 @@ rtems_status_code rtems_object_get_classic_name(
  * @param[out] name is the pointer to a buffer of the specified length.
  *
  * The object name is stored in the name buffer.  If the name buffer length is
- * greater than zero, then the stored object name will be ``NUL`` terminated.
- * The stored object name may be truncated to fit the length.  There is no
+ * greater than zero, then the stored object name will be `NUL` terminated. The
+ * stored object name may be truncated to fit the length.  There is no
  * indication if a truncation occurred.  Every attempt is made to return name
  * as a printable string even if the object has the Classic API 32-bit integer
  * style name.

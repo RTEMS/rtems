@@ -365,7 +365,7 @@ static void ScoreTqReqTimeout_Teardown_Wrap( void *arg )
 static void ScoreTqReqTimeout_Action( ScoreTqReqTimeout_Context *ctx )
 {
   /*
-   * The action is performed by the ``WaitState`` pre-condition preparation.
+   * The action is performed by the `WaitState` pre-condition preparation.
    */
 }
 

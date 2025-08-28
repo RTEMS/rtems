@@ -264,7 +264,7 @@ rtems_status_code rtems_scheduler_get_maximum_priority(
  *
  * @param priority is the Classic API task priority to map.
  *
- * @param[out] posix_priority is the pointer to an ``int`` object.  When the
+ * @param[out] posix_priority is the pointer to an `int` object.  When the
  *   directive call is successful, the POSIX thread priority value
  *   corresponding to the specified Classic API task priority value will be
  *   stored in this object.

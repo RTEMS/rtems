@@ -801,7 +801,7 @@ static void RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare(
        * While the interrupt vector associated with the ``vector`` parameter
        * may be disabled.
        */
-      /* See comment for ``Yes`` state */
+      /* See comment for `Yes` state */
       break;
     }
 
@@ -810,7 +810,7 @@ static void RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare(
        * While the interrupt vector associated with the ``vector`` parameter
        * cannot be disabled.
        */
-      /* See comment for ``Yes`` state */
+      /* See comment for `Yes` state */
       break;
     }
 
@@ -977,7 +977,7 @@ static void RtemsIntrReqEntryRemove_Post_Disabled_Check(
       /*
        * The interrupt vector specified by ``vector`` may be disabled.
        */
-      /* The comment of pre-condition ``CanDisable`` for the ``Yes`` state. */
+      /* The comment of pre-condition `CanDisable` for the `Yes` state. */
       if ( ctx->attributes.can_disable ) {
         T_false( ctx->enabled_after );
       }
@@ -988,7 +988,7 @@ static void RtemsIntrReqEntryRemove_Post_Disabled_Check(
       /*
        * The interrupt vector specified by ``vector`` shall not be disabled.
        */
-      /* The comment of pre-condition ``CanDisable`` for the ``Yes`` state. */
+      /* The comment of pre-condition `CanDisable` for the `Yes` state. */
       if ( ctx->attributes.can_disable ) {
         T_false( ctx->enabled_after );
       }

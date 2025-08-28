@@ -388,7 +388,7 @@ rtems_status_code rtems_partition_delete( rtems_id id );
  *
  * @param id is the partition identifier.
  *
- * @param[out] buffer is the pointer to a ``void`` pointer object.  When the
+ * @param[out] buffer is the pointer to a `void` pointer object.  When the
  *   directive call is successful, the pointer to the allocated buffer will be
  *   stored in this object.
  *

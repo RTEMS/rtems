@@ -475,8 +475,8 @@ rtems_status_code rtems_interrupt_catch(
  *
  * @brief Checks if an ISR is in progress on the current processor.
  *
- * This directive returns ``true``, if the current processor is currently
- * servicing an interrupt, and ``false`` otherwise.  A return value of ``true``
+ * This directive returns `true`, if the current processor is currently
+ * servicing an interrupt, and `false` otherwise.  A return value of `true`
  * indicates that the caller is an interrupt service routine, **not** a task.
  * The directives available to an interrupt service routine are restricted.
  *
@@ -843,7 +843,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @brief Declares an ISR lock object.
  *
  * @param _specifier is the storage-class specifier for the ISR lock to
- *   declare, for example ``extern`` or ``static``.
+ *   declare, for example `extern` or `static`.
  *
  * @param _designator is the ISR lock object designator.
  *
@@ -865,7 +865,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @brief Defines an ISR lock object.
  *
  * @param _specifier is the storage-class specifier for the ISR lock to
- *   declare, for example ``extern`` or ``static``.
+ *   declare, for example `extern` or `static`.
  *
  * @param _designator is the ISR lock object designator.
  *
@@ -1447,7 +1447,7 @@ rtems_status_code rtems_interrupt_handler_remove(
  *
  * @param vector is the interrupt vector number.
  *
- * @param[out] enabled is the pointer to a ``bool`` object.  When the directive
+ * @param[out] enabled is the pointer to a `bool` object.  When the directive
  *   call is successful, the enabled status of the interrupt associated with
  *   the interrupt vector specified by ``vector`` will be stored in this
  *   object.  When the interrupt was enabled for the processor executing the
@@ -1585,7 +1585,7 @@ rtems_status_code rtems_interrupt_vector_disable( rtems_vector_number vector );
  *
  * @param vector is the interrupt vector number.
  *
- * @param[out] pending is the pointer to a ``bool`` object.  When the directive
+ * @param[out] pending is the pointer to a `bool` object.  When the directive
  *   call is successful, the pending status of the interrupt associated with
  *   the interrupt vector specified by ``vector`` will be stored in this
  *   object.  When the interrupt was pending for the processor executing the

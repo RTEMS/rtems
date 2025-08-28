@@ -403,7 +403,7 @@ rtems_status_code rtems_region_extend(
  * @param timeout is the timeout in clock ticks if the #RTEMS_WAIT option is
  *   set.  Use #RTEMS_NO_TIMEOUT to wait potentially forever.
  *
- * @param[out] segment is the pointer to a ``void`` pointer object.  When the
+ * @param[out] segment is the pointer to a `void` pointer object.  When the
  *   directive call is successful, the begin address of the allocated segment
  *   will be stored in this object.
  *

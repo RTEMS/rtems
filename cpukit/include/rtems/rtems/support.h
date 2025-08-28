@@ -230,7 +230,7 @@ static inline void rtems_name_to_characters(
  *
  * @param bytes is the number of bytes to allocated.
  *
- * @param[out] pointer is the pointer to a ``void`` pointer object.  When the
+ * @param[out] pointer is the pointer to a `void` pointer object.  When the
  *   directive call is successful, the begin address of the allocated memory
  *   area will be stored in this object.
  *

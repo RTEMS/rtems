@@ -160,8 +160,8 @@ static void RtemsReqIdentLocal_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsReqIdentLocal_Pre_Name_Invalid: {
       /*
-       * While the ``name`` parameter is not associated with an active object
-       * of the specified class .
+       * While the `name` parameter is not associated with an active object of
+       * the specified class .
        */
       ctx->name = 1;
       break;
@@ -169,8 +169,8 @@ static void RtemsReqIdentLocal_Pre_Name_Prepare(
 
     case RtemsReqIdentLocal_Pre_Name_Valid: {
       /*
-       * While the ``name`` parameter is associated with an active object of
-       * the specified class .
+       * While the `name` parameter is associated with an active object of the
+       * specified class .
        */
       ctx->name = ctx->name_local_object;
       break;
@@ -189,7 +189,7 @@ static void RtemsReqIdentLocal_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsReqIdentLocal_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
@@ -198,7 +198,7 @@ static void RtemsReqIdentLocal_Pre_Id_Prepare(
 
     case RtemsReqIdentLocal_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is NULL.
+       * While the `id` parameter is NULL.
        */
       ctx->id = NULL;
       break;

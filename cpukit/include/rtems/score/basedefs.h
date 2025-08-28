@@ -432,7 +432,7 @@ extern "C" {
  *
  * @brief Gets the pointer reference type.
  *
- * @param _level is the pointer indirection level expressed in ``*``.
+ * @param _level is the pointer indirection level expressed in `*`.
  *
  * @param _target is the reference target type.
  *
@@ -511,7 +511,7 @@ extern "C" {
  * @brief Performs a type cast which removes qualifiers without warnings to the
  *   type for the variable.
  *
- * @param _ptr_level is the pointer indirection level expressed in ``*``.
+ * @param _ptr_level is the pointer indirection level expressed in `*`.
  *
  * @param _type is the target type of the cast.
  *

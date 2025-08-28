@@ -155,8 +155,8 @@ typedef struct {
    * by rtems_task_construct() fails.
    *
    * The actual thread-local storage size is determined when the application
-   * executable is linked.  The ``rtems-exeinfo`` command line tool included in
-   * the RTEMS Tools can be used to obtain the thread-local storage size and
+   * executable is linked.  The `rtems-exeinfo` command line tool included in the
+   * RTEMS Tools can be used to obtain the thread-local storage size and
    * alignment of an application executable.
    *
    * The application may configure the maximum thread-local storage size for all
@@ -495,8 +495,7 @@ typedef bool( *rtems_task_visitor )( rtems_tcb *, void * );
  *   #RTEMS_NO_ASR,
  *
  * * the interrupt level of the task: RTEMS_INTERRUPT_LEVEL() with a default of
- *   ``RTEMS_INTERRUPT_LEVEL( 0 )`` which is associated with enabled
- *   interrupts.
+ *   `RTEMS_INTERRUPT_LEVEL( 0 )` which is associated with enabled interrupts.
  *
  * The **initial preemption mode** of the task is enabled or disabled.
  *
@@ -914,11 +913,11 @@ rtems_id rtems_task_self( void );
  * @par Notes
  * @parblock
  * The type of the entry point argument is an unsigned integer type.  However,
- * the integer type has the property that any valid pointer to ``void`` can be
- * converted to this type and then converted back to a pointer to ``void``.
- * The result will compare equal to the original pointer.  The type can
- * represent at least 32 bits.  Some applications use the entry point argument
- * as an index into a parameter table to get task-specific parameters.
+ * the integer type has the property that any valid pointer to `void` can be
+ * converted to this type and then converted back to a pointer to `void`.  The
+ * result will compare equal to the original pointer.  The type can represent
+ * at least 32 bits.  Some applications use the entry point argument as an
+ * index into a parameter table to get task-specific parameters.
  *
  * Any actions performed on a dormant task such as suspension or change of
  * priority are nullified when the task is initiated via the rtems_task_start()
@@ -977,11 +976,11 @@ rtems_status_code rtems_task_start(
  * @par Notes
  * @parblock
  * The type of the entry point argument is an unsigned integer type.  However,
- * the integer type has the property that any valid pointer to ``void`` can be
- * converted to this type and then converted back to a pointer to ``void``.
- * The result will compare equal to the original pointer.  The type can
- * represent at least 32 bits.  Some applications use the entry point argument
- * as an index into a parameter table to get task-specific parameters.
+ * the integer type has the property that any valid pointer to `void` can be
+ * converted to this type and then converted back to a pointer to `void`.  The
+ * result will compare equal to the original pointer.  The type can represent
+ * at least 32 bits.  Some applications use the entry point argument as an
+ * index into a parameter table to get task-specific parameters.
  *
  * A new entry point argument may be used to distinguish between the initial
  * rtems_task_start() of the task and any ensuing calls to rtems_task_restart()
@@ -1461,8 +1460,7 @@ rtems_status_code rtems_task_get_priority(
  *   #RTEMS_NO_ASR,
  *
  * * the interrupt level of the task: RTEMS_INTERRUPT_LEVEL() with a default of
- *   ``RTEMS_INTERRUPT_LEVEL( 0 )`` which is associated with enabled
- *   interrupts.
+ *   `RTEMS_INTERRUPT_LEVEL( 0 )` which is associated with enabled interrupts.
  *
  * The **mode mask** specified in ``mask`` is built through a *bitwise or* of
  * the mode mask constants described below.

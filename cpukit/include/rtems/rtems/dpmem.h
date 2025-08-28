@@ -253,7 +253,7 @@ rtems_status_code rtems_port_delete( rtems_id id );
  *
  * @param external is the external address to convert.
  *
- * @param[out] internal is the pointer to a ``void`` pointer object.  When the
+ * @param[out] internal is the pointer to a `void` pointer object.  When the
  *   directive call is successful, the external address associated with the
  *   internal address will be stored in this object.
  *
@@ -299,7 +299,7 @@ rtems_status_code rtems_port_external_to_internal(
  *
  * @param internal is the internal address to convert.
  *
- * @param[out] external is the pointer to a ``void`` pointer object.  When the
+ * @param[out] external is the pointer to a `void` pointer object.  When the
  *   directive call is successful, the external address associated with the
  *   internal address will be stored in this object.
  *
