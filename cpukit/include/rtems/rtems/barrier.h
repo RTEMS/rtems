@@ -9,6 +9,7 @@
  */
 
 /*
+ * Copyright (C) 2025 Mazen Adel Elmessady
  * Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
  * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
  *
