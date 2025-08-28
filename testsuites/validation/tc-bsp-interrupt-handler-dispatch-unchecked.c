@@ -311,7 +311,7 @@ static void BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Prepare(
     case BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Null: {
       /*
        * While the first loaded value of the pointer to the first interrupt
-       * entry of the interrupt vector specified by the ``vector`` parameter is
+       * entry of the interrupt vector specified by the `vector` parameter is
        * equal to NULL.
        */
       *ctx->first = NULL;
@@ -321,7 +321,7 @@ static void BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Prepare(
     case BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Entry: {
       /*
        * While the first loaded value of the pointer to the first interrupt
-       * entry of the interrupt vector specified by the ``vector`` parameter
+       * entry of the interrupt vector specified by the `vector` parameter
        * references an object of type rtems_interrupt_entry.
        */
       *ctx->first = &ctx->entry;
@@ -342,7 +342,7 @@ static void BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Prepare(
     case BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Null: {
       /*
        * While the second loaded value of the pointer to the first interrupt
-       * entry of the interrupt vector specified by the ``vector`` parameter is
+       * entry of the interrupt vector specified by the `vector` parameter is
        * equal to NULL.
        */
       ctx->first_again = NULL;
@@ -352,7 +352,7 @@ static void BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Prepare(
     case BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Entry: {
       /*
        * While the second loaded value of the pointer to the first interrupt
-       * entry of the interrupt vector specified by the ``vector`` parameter
+       * entry of the interrupt vector specified by the `vector` parameter
        * references an object of type rtems_interrupt_entry.
        */
       ctx->first_again = &ctx->entry;
@@ -382,7 +382,7 @@ static void BspReqInterruptHandlerDispatchUnchecked_Post_Result_Check(
     case BspReqInterruptHandlerDispatchUnchecked_Post_Result_Dispatch: {
       /*
        * The interrupt entries installed at the interrupt vector specified by
-       * the ``vector`` parameter shall be dispatched.
+       * the `vector` parameter shall be dispatched.
        */
       T_eq_u32( ctx->entry_counter, 1 );
       T_eq_u32( ctx->fatal_counter, 0 );
@@ -422,7 +422,7 @@ static void BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_Check(
   switch ( state ) {
     case BspReqInterruptHandlerDispatchUnchecked_Post_FatalCode_Vector: {
       /*
-       * The fatal code shall be equal to the ``vector`` parameter.
+       * The fatal code shall be equal to the `vector` parameter.
        */
       T_eq_ulong( ctx->fatal_code, ctx->test_vector );
       break;

@@ -1043,7 +1043,7 @@
  *
  * * @ref CONFIGURE_INIT_TASK_STACK_SIZE and
  *
- * * ``CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE``
+ * * `CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE`
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -1061,11 +1061,11 @@
  * Classic API initialization task.
  *
  * @par Default Value
- * The default value is ``Init``.
+ * The default value is `Init`.
  *
  * @par Constraints
  * The value of the configuration option shall be defined to a valid function
- * pointer of the type ``void ( *entry_point )( rtems_task_argument )``.
+ * pointer of the type `void ( *entry_point )( rtems_task_argument )`.
  *
  * @par Notes
  * The application shall provide the function referenced by this configuration
@@ -1103,7 +1103,7 @@
  * initialization task.
  *
  * @par Default Value
- * The default value is ``rtems_build_name( 'U', 'I', '1', ' ' )``.
+ * The default value is `rtems_build_name( 'U', 'I', '1', ' ' )`.
  *
  * @par Constraints
  * The value of the configuration option shall be convertible to an integer of
@@ -1168,7 +1168,7 @@
  * @parblock
  * The
  *
- * * ``CONFIGURE_INIT_TASK_STACK_SIZE`` and
+ * * `CONFIGURE_INIT_TASK_STACK_SIZE` and
  *
  * * @ref CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
  *
@@ -1196,7 +1196,7 @@
  * The application shall define at least one of the following configuration
  * options
  *
- * * ``CONFIGURE_RTEMS_INIT_TASKS_TABLE``,
+ * * `CONFIGURE_RTEMS_INIT_TASKS_TABLE`,
  *
  * * @ref CONFIGURE_POSIX_INIT_THREAD_TABLE, or
  *
@@ -1252,7 +1252,7 @@
  *
  * * @ref CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER,
  *
- * * ``CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER``, or
+ * * `CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER`, or
  *
  * * @ref CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER,
  *
@@ -1348,7 +1348,7 @@
  * The application shall define exactly one of the following configuration
  * options
  *
- * * ``CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER``,
+ * * `CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER`,
  *
  * * @ref CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER, or
  *
@@ -1380,7 +1380,7 @@
  *
  * @par Notes
  * @parblock
- * The Console Driver is responsible for providing the ``/dev/console`` device
+ * The Console Driver is responsible for providing the `/dev/console` device
  * file.  This device is used to initialize the standard input, output, and
  * error file descriptors.
  *
@@ -1389,7 +1389,7 @@
  *
  * The
  *
- * * ``CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER``,
+ * * `CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER`,
  *
  * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and
  *
@@ -1466,8 +1466,8 @@
  *
  * @anchor CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
  *
- * In case this configuration option is defined, then the ``/dev/null`` Driver
- * is initialized during system initialization.
+ * In case this configuration option is defined, then the `/dev/null` Driver is
+ * initialized during system initialization.
  *
  * @par Default Configuration
  * If this configuration option is undefined, then the described feature is not
@@ -1534,7 +1534,7 @@
  *
  * @par Notes
  * @parblock
- * This device driver is responsible for providing the ``/dev/console`` device
+ * This device driver is responsible for providing the `/dev/console` device
  * file.  This device is used to initialize the standard input, output, and
  * error file descriptors.
  *
@@ -1549,7 +1549,7 @@
  *
  * * @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER,
  *
- * * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER``, and
+ * * `CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER`, and
  *
  * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
  *
@@ -1579,7 +1579,7 @@
  *
  * @par Notes
  * @parblock
- * This device driver is responsible for providing the ``/dev/console`` device
+ * This device driver is responsible for providing the `/dev/console` device
  * file.  This device is used to initialize the standard input, output, and
  * error file descriptors.
  *
@@ -1593,8 +1593,8 @@
  * This task runs with the least important priority. The write buffer size is
  * 2047 characters and it is not configurable.
  *
- * Use ``fsync( STDOUT_FILENO )`` or ``fdatasync( STDOUT_FILENO )`` to drain
- * the write buffer.
+ * Use `fsync( STDOUT_FILENO )` or `fdatasync( STDOUT_FILENO )` to drain the
+ * write buffer.
  *
  * The Termios framework is not used.  There is no support to change device
  * settings, e.g.  baud, stop bits, parity, etc.
@@ -1605,7 +1605,7 @@
  *
  * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and
  *
- * * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER``
+ * * `CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER`
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -1668,7 +1668,7 @@
  *
  * * @ref CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER, or
  *
- * * ``CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER``,
+ * * `CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER`,
  *
  * otherwise a compile time error will occur.
  * @endparblock
@@ -1712,8 +1712,8 @@
  *
  * @anchor CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
  *
- * In case this configuration option is defined, then the ``/dev/zero`` Driver
- * is initialized during system initialization.
+ * In case this configuration option is defined, then the `/dev/zero` Driver is
+ * initialized during system initialization.
  *
  * @par Default Configuration
  * If this configuration option is undefined, then the described feature is not
@@ -2926,7 +2926,7 @@
  * @anchor CONFIGURE_DIRTY_MEMORY
  *
  * In case this configuration option is defined, then the memory areas used for
- * the RTEMS Workspace and the C Program Heap are dirtied with a ``0xCF`` byte
+ * the RTEMS Workspace and the C Program Heap are dirtied with a `0xCF` byte
  * pattern during system initialization.
  *
  * @par Default Configuration
@@ -3177,7 +3177,7 @@
  * @parblock
  * There is one interrupt stack available for each configured processor (@ref
  * CONFIGURE_MAXIMUM_PROCESSORS).  The interrupt stack areas are statically
- * allocated in a special linker section (``.rtemsstack.interrupt``). The
+ * allocated in a special linker section (`.rtemsstack.interrupt`). The
  * placement of this linker section is BSP-specific.
  *
  * Some BSPs use the interrupt stack as the initialization stack which is used
@@ -3203,7 +3203,7 @@
  *
  * In case this configuration option is defined, then each memory area returned
  * by C Program Heap allocator functions such as malloc() is dirtied with a
- * ``0xCF`` byte pattern before it is handed over to the application.
+ * `0xCF` byte pattern before it is handed over to the application.
  *
  * @par Default Configuration
  * If this configuration option is undefined, then the described feature is not
@@ -3257,7 +3257,7 @@
  *
  * @par Notes
  * The default value of three file descriptors allows RTEMS to support standard
- * input, output, and error I/O streams on ``/dev/console``.
+ * input, output, and error I/O streams on `/dev/console`.
  */
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
 
@@ -3343,8 +3343,8 @@
  * meet the minimum alignment requirement of a thread-local storage area.
  *
  * The actual thread-local storage size is determined when the application
- * executable is linked.  The ``rtems-exeinfo`` command line tool included in
- * the RTEMS Tools can be used to obtain the thread-local storage size and
+ * executable is linked.  The `rtems-exeinfo` command line tool included in the
+ * RTEMS Tools can be used to obtain the thread-local storage size and
  * alignment of an application executable.
  * @endparblock
  */
@@ -3358,7 +3358,7 @@
  * @anchor CONFIGURE_MAXIMUM_THREAD_NAME_SIZE
  *
  * The value of this configuration option defines the maximum thread name size
- * including the terminating ``NUL`` character.
+ * including the terminating `NUL` character.
  *
  * @par Default Value
  * The default value is 16.
@@ -3481,31 +3481,31 @@
  * configured by this option.  For each message queue you have to reserve some
  * memory for the message buffers.  The size depends on the maximum number of
  * pending messages and the maximum size of the messages of a message queue.
- * Use the ``CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE()`` macro to specify the
- * message buffer memory for each message queue and sum them up to define the
- * value for ``CONFIGURE_MAXIMUM_MESSAGE_QUEUES``.
+ * Use the `CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE()` macro to specify the message
+ * buffer memory for each message queue and sum them up to define the value for
+ * `CONFIGURE_MAXIMUM_MESSAGE_QUEUES`.
  *
- * The interface for the ``CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE()`` help macro
- * is as follows:
+ * The interface for the `CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE()` help macro is
+ * as follows:
  *
  * @code
  * CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( max_messages, max_msg_size )
  * @endcode
  *
- * Where ``max_messages`` is the maximum number of pending messages and
- * ``max_msg_size`` is the maximum size in bytes of the messages of the
+ * Where `max_messages` is the maximum number of pending messages and
+ * `max_msg_size` is the maximum size in bytes of the messages of the
  * corresponding message queue.  Both parameters shall be compile time
- * constants.  Not using this help macro (e.g. just using ``max_messages *
- * max_msg_size``) may result in an underestimate of the RTEMS Workspace size.
+ * constants.  Not using this help macro (e.g. just using `max_messages *
+ * max_msg_size`) may result in an underestimate of the RTEMS Workspace size.
  *
  * The following example illustrates how the
- * ``CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE()`` help macro can be used to assist
- * in calculating the message buffer memory required.  In this example, there
- * are two message queues used in this application.  The first message queue
- * has a maximum of 24 pending messages with the message structure defined by
- * the type ``one_message_type``.  The other message queue has a maximum of 500
+ * `CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE()` help macro can be used to assist in
+ * calculating the message buffer memory required.  In this example, there are
+ * two message queues used in this application.  The first message queue has a
+ * maximum of 24 pending messages with the message structure defined by the
+ * type `one_message_type`.  The other message queue has a maximum of 500
  * pending messages with the message structure defined by the type
- * ``other_message_type``.
+ * `other_message_type`.
  *
  * @code
  * #define CONFIGURE_MESSAGE_BUFFER_MEMORY ( \
@@ -3620,7 +3620,7 @@
  * of POSIX threads.  This can be changed with the @ref
  * CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE configuration option.
  *
- * In releases before RTEMS 5.1 the ``CONFIGURE_MINIMUM_TASK_STACK_SIZE`` was
+ * In releases before RTEMS 5.1 the `CONFIGURE_MINIMUM_TASK_STACK_SIZE` was
  * used to define the default value of @ref CONFIGURE_INTERRUPT_STACK_SIZE.
  * @endparblock
  */
@@ -3651,7 +3651,7 @@
  * the time required to create tasks as well as adding overhead to each context
  * switch.
  *
- * In 4.9 and older, this configuration option was named ``STACK_CHECKER_ON``.
+ * In 4.9 and older, this configuration option was named `STACK_CHECKER_ON`.
  * @endparblock
  */
 #define CONFIGURE_STACK_CHECKER_ENABLED
@@ -3731,8 +3731,8 @@
  * configuration option defines the default objects maximum of all object
  * classes supporting <a
  * href="https://docs.rtems.org/branches/master/c-user/config/intro.html#unlimited-objects">Unlimited
- * Objects</a> to ``rtems_resource_unlimited(
- * CONFIGURE_UNLIMITED_ALLOCATION_SIZE )``.
+ * Objects</a> to `rtems_resource_unlimited(
+ * CONFIGURE_UNLIMITED_ALLOCATION_SIZE )`.
  *
  * @par Default Value
  * The default value is 8.
@@ -3826,7 +3826,7 @@
  * @anchor CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
  *
  * In case this configuration option is defined, then the memory areas used for
- * the RTEMS Workspace and the C Program Heap are zeroed with a ``0x00`` byte
+ * the RTEMS Workspace and the C Program Heap are zeroed with a `0x00` byte
  * pattern during system initialization.
  *
  * @par Default Configuration
@@ -3873,11 +3873,11 @@
  * If the @ref CONFIGURE_DISABLE_BSP_SETTINGS configuration option is not
  * defined and #BSP_IDLE_TASK_BODY is provided by the BSP, then the default
  * value is defined by #BSP_IDLE_TASK_BODY, otherwise the default value is
- * ``_CPU_Thread_Idle_body``.
+ * `_CPU_Thread_Idle_body`.
  *
  * @par Constraints
  * The value of the configuration option shall be defined to a valid function
- * pointer of the type ``void *( *idle_body )( uintptr_t )``.
+ * pointer of the type `void *( *idle_body )( uintptr_t )`.
  *
  * @par Notes
  * @parblock
@@ -3932,7 +3932,7 @@
  *
  * * @ref CONFIGURE_POSIX_INIT_THREAD_TABLE, or
  *
- * * ``CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION``
+ * * `CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
  *
  * otherwise a compile time error in the configuration file will occur.
  *
@@ -4026,7 +4026,7 @@
  *
  * The
  *
- * * ``CONFIGURE_IDLE_TASK_STORAGE_SIZE``, and
+ * * `CONFIGURE_IDLE_TASK_STORAGE_SIZE`, and
  *
  * * @ref CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
  *
@@ -4250,7 +4250,7 @@
  * Table.
  *
  * @par Default Value
- * The default value is ``&MPCI_table``.
+ * The default value is `&MPCI_table`.
  *
  * @par Constraints
  * @parblock
@@ -4287,7 +4287,7 @@
  * in a multiprocessor system.
  *
  * @par Default Value
- * The default value is ``NODE_NUMBER``.
+ * The default value is `NODE_NUMBER`.
  *
  * @par Constraints
  * @parblock
@@ -4307,9 +4307,9 @@
  * @par Notes
  * @parblock
  * In the RTEMS Multiprocessing Test Suite, the node number is derived from the
- * Makefile variable ``NODE_NUMBER``. The same code is compiled with the
- * ``NODE_NUMBER`` set to different values. The test programs behave
- * differently based upon their node number.
+ * Makefile variable `NODE_NUMBER`. The same code is compiled with the
+ * `NODE_NUMBER` set to different values. The test programs behave differently
+ * based upon their node number.
  *
  * This configuration option is only evaluated if @ref CONFIGURE_MP_APPLICATION
  * is defined.
@@ -4513,7 +4513,7 @@
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
  *
  * * The value of the configuration option shall be zero if the POSIX API is
- *   not enabled (e.g. RTEMS was built without the ``RTEMS_POSIX_API = True``
+ *   not enabled (e.g. RTEMS was built without the `RTEMS_POSIX_API = True`
  *   build configuration option).  Otherwise a compile time error in the
  *   configuration file will occur.
  * @endparblock
@@ -4726,7 +4726,7 @@
  *   other constraints of the configuration option.
  *
  * * The value of the configuration option shall be zero if the POSIX API is
- *   not enabled (e.g. RTEMS was built without the ``RTEMS_POSIX_API = True``
+ *   not enabled (e.g. RTEMS was built without the `RTEMS_POSIX_API = True`
  *   build configuration option).  Otherwise a compile time error in the
  *   configuration file will occur.
  * @endparblock
@@ -4803,7 +4803,7 @@
  * POSIX API initialization thread.
  *
  * @par Default Value
- * The default value is ``POSIX_Init``.
+ * The default value is `POSIX_Init`.
  *
  * @par Constraints
  * @parblock
@@ -4814,7 +4814,7 @@
  *   pre-qualified feature set of RTEMS shall not use the configuration option.
  *
  * * The value of the configuration option shall be defined to a valid function
- *   pointer of the type ``void *( *entry_point )( void * )``.
+ *   pointer of the type `void *( *entry_point )( void * )`.
  * @endparblock
  *
  * @par Notes
@@ -4881,7 +4881,7 @@
  *
  * * @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE,
  *
- * * ``CONFIGURE_POSIX_INIT_THREAD_TABLE``, or
+ * * `CONFIGURE_POSIX_INIT_THREAD_TABLE`, or
  *
  * * @ref CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
  *
@@ -5021,9 +5021,9 @@
  * the amount of memory allocated by the schedulers listed above.  These
  * schedulers use a chain control structure per priority and this structure
  * consists of three pointers.  On a 32-bit architecture, the allocated memory
- * is 12 bytes * (``CONFIGURE_MAXIMUM_PRIORITY`` + 1), e.g. 3072 bytes for 256
+ * is 12 bytes * (`CONFIGURE_MAXIMUM_PRIORITY` + 1), e.g. 3072 bytes for 256
  * priority levels (default), 48 bytes for 4 priority levels
- * (``CONFIGURE_MAXIMUM_PRIORITY == 3``).
+ * (`CONFIGURE_MAXIMUM_PRIORITY == 3`).
  *
  * The default value is 255, because RTEMS shall support 256 priority levels to
  * be compliant with various standards.  These priorities range from 0 to 255.
@@ -5052,20 +5052,20 @@
  * * The value of the configuration option shall be a list of the following
  *   macros:
  *
- *   * ``RTEMS_SCHEDULER_ASSIGN( scheduler_index, attributes )``
+ *   * `RTEMS_SCHEDULER_ASSIGN( scheduler_index, attributes )`
  *
- *   * ``RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER``
+ *   * `RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER`
  *
- *   The ``scheduler_index`` macro parameter shall be a valid index of the
+ *   The `scheduler_index` macro parameter shall be a valid index of the
  *   scheduler table defined by the @ref CONFIGURE_SCHEDULER_TABLE_ENTRIES
  *   configuration option.
  *
- *   The ``attributes`` macro parameter shall be set to exactly one of the
+ *   The `attributes` macro parameter shall be set to exactly one of the
  *   following constants:
  *
- *   * ``RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY``
+ *   * `RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY`
  *
- *   * ``RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL``
+ *   * `RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL`
  *
  * * The value of the configuration option shall be a list of exactly @ref
  *   CONFIGURE_MAXIMUM_PROCESSORS elements.
@@ -5199,35 +5199,35 @@
  * @parblock
  * The default value is
  *
- * * ``"MEDF"`` for the <a
+ * * `"MEDF"` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#earliest-deadline-first-smp-scheduler">Earliest
  *   Deadline First SMP Scheduler</a>,
  *
- * * ``"MPA "`` for the <a
+ * * `"MPA "` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#arbitrary-processor-affinity-priority-smp-scheduler">Arbitrary
  *   Processor Affinity Priority SMP Scheduler</a>,
  *
- * * ``"MPD "`` for the <a
+ * * `"MPD "` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#deterministic-priority-smp-scheduler">Deterministic
  *   Priority SMP Scheduler</a>,
  *
- * * ``"MPS "`` for the <a
+ * * `"MPS "` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#simple-priority-smp-scheduler">Simple
  *   Priority SMP Scheduler</a>,
  *
- * * ``"UCBS"`` for the <a
+ * * `"UCBS"` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#constant-bandwidth-server-scheduling-cbs">Constant
  *   Bandwidth Server Scheduling (CBS)</a>,
  *
- * * ``"UEDF"`` for the <a
+ * * `"UEDF"` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#earliest-deadline-first-scheduler">Earliest
  *   Deadline First Scheduler</a>,
  *
- * * ``"UPD "`` for the <a
+ * * `"UPD "` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#deterministic-priority-scheduler">Deterministic
  *   Priority Scheduler</a>, and
  *
- * * ``"UPS "`` for the <a
+ * * `"UPS "` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#simple-priority-scheduler">Simple
  *   Priority Scheduler</a>.
  * @endparblock
@@ -5483,31 +5483,31 @@
  * * The value of the configuration option shall be a list of the following
  *   macros:
  *
- *   * ``RTEMS_SCHEDULER_TABLE_CBS( name, obj_name )``
+ *   * `RTEMS_SCHEDULER_TABLE_CBS( name, obj_name )`
  *
- *   * ``RTEMS_SCHEDULER_TABLE_EDF( name, obj_name )``
+ *   * `RTEMS_SCHEDULER_TABLE_EDF( name, obj_name )`
  *
- *   * ``RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name )``
+ *   * `RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name )`
  *
- *   * ``RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( name, obj_name )``
+ *   * `RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( name, obj_name )`
  *
- *   * ``RTEMS_SCHEDULER_TABLE_PRIORITY( name, obj_name )``
+ *   * `RTEMS_SCHEDULER_TABLE_PRIORITY( name, obj_name )`
  *
- *   * ``RTEMS_SCHEDULER_TABLE_PRIORITY_SMP( name, obj_name )``
+ *   * `RTEMS_SCHEDULER_TABLE_PRIORITY_SMP( name, obj_name )`
  *
- *   * ``RTEMS_SCHEDULER_TABLE_SIMPLE( name, obj_name )``
+ *   * `RTEMS_SCHEDULER_TABLE_SIMPLE( name, obj_name )`
  *
- *   * ``RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( name, obj_name )``
+ *   * `RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( name, obj_name )`
  *
- *   * ``RTEMS_SCHEDULER_TABLE_STRONG_APA( name, obj_name )``
+ *   * `RTEMS_SCHEDULER_TABLE_STRONG_APA( name, obj_name )`
  *
- *   The ``name`` macro parameter shall be the name associated with the
- *   scheduler data structures, see <a
+ *   The `name` macro parameter shall be the name associated with the scheduler
+ *   data structures, see <a
  *   href="https://docs.rtems.org/branches/master/c-user/config/scheduler-clustered.html">Clustered
  *   Scheduler Configuration</a>.
  *
- *   The ``obj_name`` macro parameter shall be the scheduler object name.  It
- *   is recommended to define the scheduler object name through
+ *   The `obj_name` macro parameter shall be the scheduler object name.  It is
+ *   recommended to define the scheduler object name through
  *   rtems_build_name().
  *
  * * Where the system was build with SMP support enabled, the table shall have
@@ -5552,26 +5552,26 @@
  * Think twice before you use it.
  *
  * RTEMS allows the application to provide its own task/thread scheduling
- * algorithm. In order to do this, one shall define
- * ``CONFIGURE_SCHEDULER_USER`` to indicate the application provides its own
- * scheduling algorithm. If ``CONFIGURE_SCHEDULER_USER`` is defined then the
- * following additional macros shall be defined:
+ * algorithm. In order to do this, one shall define `CONFIGURE_SCHEDULER_USER`
+ * to indicate the application provides its own scheduling algorithm. If
+ * `CONFIGURE_SCHEDULER_USER` is defined then the following additional macros
+ * shall be defined:
  *
- * * ``CONFIGURE_SCHEDULER`` shall be defined to a static definition of the
+ * * `CONFIGURE_SCHEDULER` shall be defined to a static definition of the
  *   scheduler data structures of the user scheduler.
  *
- * * ``CONFIGURE_SCHEDULER_TABLE_ENTRIES`` shall be defined to a scheduler
- *   table entry initializer for the user scheduler.
+ * * `CONFIGURE_SCHEDULER_TABLE_ENTRIES` shall be defined to a scheduler table
+ *   entry initializer for the user scheduler.
  *
- * * ``CONFIGURE_SCHEDULER_USER_PER_THREAD`` shall be defined to the type of
- *   the per-thread information of the user scheduler.
+ * * `CONFIGURE_SCHEDULER_USER_PER_THREAD` shall be defined to the type of the
+ *   per-thread information of the user scheduler.
  *
  * At this time, the mechanics and requirements for writing a new scheduler are
  * evolving and not fully documented.  It is recommended that you look at the
  * existing Deterministic Priority Scheduler in
- * ``cpukit/score/src/schedulerpriority*.c`` for guidance.  For guidance on the
+ * `cpukit/score/src/schedulerpriority*.c` for guidance.  For guidance on the
  * configuration macros, please examine
- * ``cpukit/include/rtems/confdefs/scheduler.h`` for how these are defined for
+ * `cpukit/include/rtems/confdefs/scheduler.h` for how these are defined for
  * the Deterministic Priority Scheduler.
  * @endparblock
  */
@@ -5607,12 +5607,12 @@
  * allocate handler.
  *
  * @par Default Value
- * The default value is ``_Workspace_Allocate``, which indicates that task
- * stacks will be allocated from the RTEMS Workspace.
+ * The default value is `_Workspace_Allocate`, which indicates that task stacks
+ * will be allocated from the RTEMS Workspace.
  *
  * @par Constraints
  * The value of the configuration option shall be defined to a valid function
- * pointer of the type ``void *( *allocate )( size_t )``.
+ * pointer of the type `void *( *allocate )( size_t )`.
  *
  * @par Notes
  * @parblock
@@ -5621,7 +5621,7 @@
  *
  * * @ref CONFIGURE_TASK_STACK_ALLOCATOR_INIT
  *
- * * ``CONFIGURE_TASK_STACK_ALLOCATOR``
+ * * `CONFIGURE_TASK_STACK_ALLOCATOR`
  *
  * * @ref CONFIGURE_TASK_STACK_DEALLOCATOR
  * @endparblock
@@ -5668,7 +5668,7 @@
  * The following constraints apply to this configuration option:
  *
  * * The value of the configuration option shall be defined to a valid function
- *   pointer of the type ``void *( *allocate )( uint32_t, size_t * )``.
+ *   pointer of the type `void *( *allocate )( uint32_t, size_t * )`.
  *
  * * The IDLE task stack allocator shall return a pointer to the allocated
  *   memory area or terminate the system with a fatal error if the allocation
@@ -5691,7 +5691,7 @@
  *
  * * @ref CONFIGURE_IDLE_TASK_STORAGE_SIZE, and
  *
- * * ``CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE``
+ * * `CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE`
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -5721,7 +5721,7 @@
  *   pre-qualified feature set of RTEMS shall not use the configuration option.
  *
  * * The value of the configuration option shall be defined to a valid function
- *   pointer of the type ``void ( *initialize )( size_t )`` or to <a
+ *   pointer of the type `void ( *initialize )( size_t )` or to <a
  *   href="https://en.cppreference.com/w/c/types/NULL">NULL</a>.
  * @endparblock
  *
@@ -5730,7 +5730,7 @@
  * A correctly configured system shall configure the following to be
  * consistent:
  *
- * * ``CONFIGURE_TASK_STACK_ALLOCATOR_INIT``
+ * * `CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
  *
  * * @ref CONFIGURE_TASK_STACK_ALLOCATOR
  *
@@ -5750,12 +5750,12 @@
  * deallocate handler.
  *
  * @par Default Value
- * The default value is ``_Workspace_Free``, which indicates that task stacks
+ * The default value is `_Workspace_Free`, which indicates that task stacks
  * will be allocated from the RTEMS Workspace.
  *
  * @par Constraints
  * The value of the configuration option shall be defined to a valid function
- * pointer of the type ``void ( *deallocate )( void * )``.
+ * pointer of the type `void ( *deallocate )( void * )`.
  *
  * @par Notes
  * @parblock
@@ -5766,7 +5766,7 @@
  *
  * * @ref CONFIGURE_TASK_STACK_ALLOCATOR
  *
- * * ``CONFIGURE_TASK_STACK_DEALLOCATOR``
+ * * `CONFIGURE_TASK_STACK_DEALLOCATOR`
  * @endparblock
  */
 #define CONFIGURE_TASK_STACK_DEALLOCATOR

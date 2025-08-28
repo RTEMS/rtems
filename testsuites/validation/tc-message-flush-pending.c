@@ -400,7 +400,7 @@ static void RtemsMessageReqFlushPending_Pre_Count_Prepare(
   switch ( state ) {
     case RtemsMessageReqFlushPending_Pre_Count_Valid: {
       /*
-       * While the ``count`` parameter references an ``uint32_t`` object.
+       * While the ``count`` parameter references an `uint32_t` object.
        */
       ctx->count_param = &ctx->count;
       break;

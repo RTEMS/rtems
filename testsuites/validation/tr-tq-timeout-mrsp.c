@@ -367,7 +367,7 @@ static void ScoreTqReqTimeoutMrsp_Prepare( ScoreTqReqTimeoutMrsp_Context *ctx )
 static void ScoreTqReqTimeoutMrsp_Action( ScoreTqReqTimeoutMrsp_Context *ctx )
 {
   /*
-   * The action is performed by the ``WaitState`` pre-condition preparation.
+   * The action is performed by the `WaitState` pre-condition preparation.
    */
 }
 

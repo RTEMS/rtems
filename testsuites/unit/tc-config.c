@@ -66,7 +66,7 @@
  *
  * @brief Unit tests for the configuration manager.
  *
- * Parts of the file ``cpukit/sapi/src/getconfigmax.c`` are only executed when
+ * Parts of the file `cpukit/sapi/src/getconfigmax.c` are only executed when
  * unlimited objects are configured.  The space qualified code subset does not
  * support this feature.  This test exercises the code parts otherwise not
  * reached in order to achieve full code coverage.
@@ -92,7 +92,7 @@
 typedef struct {
   /**
    * @brief This member contains the original value of
-   *   ``_Semaphore_Information->objects_per_block``.
+   *   `_Semaphore_Information->objects_per_block`.
    */
   Objects_Maximum objects_per_block_ori;
 } RtemsConfigUnitConfig_Context;

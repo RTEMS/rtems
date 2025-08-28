@@ -220,8 +220,7 @@ static void RtemsPartReqGetBuffer_Pre_Buf_Prepare(
   switch ( state ) {
     case RtemsPartReqGetBuffer_Pre_Buf_Valid: {
       /*
-       * While the ``buffer`` parameter references an object of type ``void
-       * *``.
+       * While the ``buffer`` parameter references an object of type `void *`.
        */
       ctx->buffer = &ctx->buffer_pointer;
       break;

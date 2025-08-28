@@ -482,23 +482,22 @@ rtems_status_code rtems_rate_monotonic_period(
  * specified by ``id``.  The detailed status of the period will be returned in
  * the members of the period status object referenced by ``status``:
  *
- * * The ``owner`` member is set to the identifier of the owner task of the
+ * * The `owner` member is set to the identifier of the owner task of the
  *   period.
  *
- * * The ``state`` member is set to the current state of the period.
+ * * The `state` member is set to the current state of the period.
  *
- * * The ``postponed_jobs_count`` member is set to the count of jobs which are
+ * * The `postponed_jobs_count` member is set to the count of jobs which are
  *   not released yet.
  *
  * * If the current state of the period is ::RATE_MONOTONIC_INACTIVE, the
- *   ``since_last_period`` and ``executed_since_last_period`` members will be
- *   set to zero.  Otherwise, both members will contain time information since
- *   the last successful invocation of the rtems_rate_monotonic_period()
- *   directive by the owner task.  More specifically, the ``since_last_period``
- *   member will be set to the time elapsed since the last successful
- *   invocation.  The ``executed_since_last_period`` member will be set to the
- *   processor time consumed by the owner task since the last successful
- *   invocation.
+ *   `since_last_period` and `executed_since_last_period` members will be set
+ *   to zero.  Otherwise, both members will contain time information since the
+ *   last successful invocation of the rtems_rate_monotonic_period() directive
+ *   by the owner task.  More specifically, the `since_last_period` member will
+ *   be set to the time elapsed since the last successful invocation.  The
+ *   `executed_since_last_period` member will be set to the processor time
+ *   consumed by the owner task since the last successful invocation.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -540,27 +539,27 @@ rtems_status_code rtems_rate_monotonic_get_status(
  * by ``id``.  The statistics of the period will be returned in the members of
  * the period statistics object referenced by ``status``:
  *
- * * The ``count`` member is set to the number of periods executed.
+ * * The `count` member is set to the number of periods executed.
  *
- * * The ``missed_count`` member is set to the number of periods missed.
+ * * The `missed_count` member is set to the number of periods missed.
  *
- * * The ``min_cpu_time`` member is set to the least amount of processor time
+ * * The `min_cpu_time` member is set to the least amount of processor time
  *   used in the period.
  *
- * * The ``max_cpu_time`` member is set to the highest amount of processor time
+ * * The `max_cpu_time` member is set to the highest amount of processor time
  *   used in the period.
  *
- * * The ``total_cpu_time`` member is set to the total amount of processor time
+ * * The `total_cpu_time` member is set to the total amount of processor time
  *   used in the period.
  *
- * * The ``min_wall_time`` member is set to the least amount of CLOCK_MONOTONIC
+ * * The `min_wall_time` member is set to the least amount of CLOCK_MONOTONIC
  *   time used in the period.
  *
- * * The ``max_wall_time`` member is set to the highest amount of
- *   CLOCK_MONOTONIC time used in the period.
+ * * The `max_wall_time` member is set to the highest amount of CLOCK_MONOTONIC
+ *   time used in the period.
  *
- * * The ``total_wall_time`` member is set to the total amount of
- *   CLOCK_MONOTONIC time used in the period.
+ * * The `total_wall_time` member is set to the total amount of CLOCK_MONOTONIC
+ *   time used in the period.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *

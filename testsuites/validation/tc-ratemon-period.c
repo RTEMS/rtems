@@ -191,15 +191,15 @@ typedef struct {
    *   action.
    *
    * The action is either executed by the owner task or by the worker task
-   * depending on the function pointer used here.  ``ctx_arg`` must be a
-   * pointer to this context structure.
+   * depending on the function pointer used here.  `ctx_arg` must be a pointer
+   * to this context structure.
    */
   uint32_t ( *do_action )( void *ctx, void (*todo)( void *ctx_arg ) );
 
   /**
    * @brief This member serves to pass the pointer to the function which the
-   *   work owner task shall execute from function ``OwnerDoWork`` to function
-   *   ``WorkerTask``.
+   *   work owner task shall execute from function `OwnerDoWork` to function
+   *   `WorkerTask`.
    */
   void (*worker_todo)( void *ctx );
 
@@ -888,7 +888,7 @@ static void RtemsRatemonReqPeriod_Post_Scheduler_Check(
     case RtemsRatemonReqPeriod_Post_Scheduler_Called: {
       /*
        * The last call of the rtems_rate_monotonic_period() function shall
-       * execute the ``release_job`` scheduler operation of the home scheduler.
+       * execute the `release_job` scheduler operation of the home scheduler.
        */
       /* Cannot be tested as the effect is unknown. */
       break;

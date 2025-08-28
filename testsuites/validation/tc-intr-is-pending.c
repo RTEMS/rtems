@@ -129,7 +129,7 @@ typedef struct {
   rtems_vector_number vector;
 
   /**
-   * @brief This member provides the ``bool`` object.
+   * @brief This member provides the `bool` object.
    */
   bool pending_obj;
 
@@ -388,7 +388,7 @@ static void RtemsIntrReqIsPending_Pre_Pending_Prepare(
   switch ( state ) {
     case RtemsIntrReqIsPending_Pre_Pending_Obj: {
       /*
-       * While the ``pending`` parameter references an object of type ``bool``.
+       * While the ``pending`` parameter references an object of type `bool`.
        */
       ctx->pending = &ctx->pending_obj;
       break;

@@ -176,8 +176,8 @@ static void RtemsReqIdent_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsReqIdent_Pre_Name_Invalid: {
       /*
-       * While the ``name`` parameter is not associated with an active object
-       * of the specified class .
+       * While the `name` parameter is not associated with an active object of
+       * the specified class .
        */
       ctx->name = 1;
       break;
@@ -185,8 +185,8 @@ static void RtemsReqIdent_Pre_Name_Prepare(
 
     case RtemsReqIdent_Pre_Name_Valid: {
       /*
-       * While the ``name`` parameter is associated with an active object of
-       * the specified class .
+       * While the `name` parameter is associated with an active object of the
+       * specified class .
        */
       ctx->name = ctx->name_local_object;
       break;
@@ -205,7 +205,7 @@ static void RtemsReqIdent_Pre_Node_Prepare(
   switch ( state ) {
     case RtemsReqIdent_Pre_Node_Local: {
       /*
-       * While the ``node`` parameter is the local node number.
+       * While the `node` parameter is the local node number.
        */
       ctx->node = 1;
       break;
@@ -213,7 +213,7 @@ static void RtemsReqIdent_Pre_Node_Prepare(
 
     case RtemsReqIdent_Pre_Node_Remote: {
       /*
-       * While the ``node`` parameter is a remote node number.
+       * While the `node` parameter is a remote node number.
        */
       ctx->node = 2;
       break;
@@ -221,7 +221,7 @@ static void RtemsReqIdent_Pre_Node_Prepare(
 
     case RtemsReqIdent_Pre_Node_Invalid: {
       /*
-       * While the ``node`` parameter is an invalid node number.
+       * While the `node` parameter is an invalid node number.
        */
       ctx->node = 256;
       break;
@@ -229,7 +229,7 @@ static void RtemsReqIdent_Pre_Node_Prepare(
 
     case RtemsReqIdent_Pre_Node_SearchAll: {
       /*
-       * While the ``node`` parameter is RTEMS_SEARCH_ALL_NODES.
+       * While the `node` parameter is RTEMS_SEARCH_ALL_NODES.
        */
       ctx->node = RTEMS_SEARCH_ALL_NODES;
       break;
@@ -237,7 +237,7 @@ static void RtemsReqIdent_Pre_Node_Prepare(
 
     case RtemsReqIdent_Pre_Node_SearchOther: {
       /*
-       * While the ``node`` parameter is RTEMS_SEARCH_OTHER_NODES.
+       * While the `node` parameter is RTEMS_SEARCH_OTHER_NODES.
        */
       ctx->node = RTEMS_SEARCH_OTHER_NODES;
       break;
@@ -245,7 +245,7 @@ static void RtemsReqIdent_Pre_Node_Prepare(
 
     case RtemsReqIdent_Pre_Node_SearchLocal: {
       /*
-       * While the ``node`` parameter is RTEMS_SEARCH_LOCAL_NODE.
+       * While the `node` parameter is RTEMS_SEARCH_LOCAL_NODE.
        */
       ctx->node = RTEMS_SEARCH_LOCAL_NODE;
       break;
@@ -264,7 +264,7 @@ static void RtemsReqIdent_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsReqIdent_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
@@ -273,7 +273,7 @@ static void RtemsReqIdent_Pre_Id_Prepare(
 
     case RtemsReqIdent_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is NULL.
+       * While the `id` parameter is NULL.
        */
       ctx->id = NULL;
       break;

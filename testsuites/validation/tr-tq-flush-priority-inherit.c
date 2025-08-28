@@ -347,7 +347,7 @@ static void ScoreTqReqFlushPriorityInherit_Post_PriorityUpdate_Check(
        * The current priority of the owner of the thread queue shall not be
        * updated by the thread queue flush operation.
        */
-      /* Checked by ``Extract`` post-condition state ``Nop`` */
+      /* Checked by `Extract` post-condition state `Nop` */
       break;
     }
 
@@ -357,7 +357,7 @@ static void ScoreTqReqFlushPriorityInherit_Post_PriorityUpdate_Check(
        * by the thread queue flush operation to reflect the loss of inherited
        * priorities of the flushed threads.
        */
-      /* Checked by ``Extract`` post-condition state ``All`` */
+      /* Checked by `Extract` post-condition state `All` */
       break;
     }
 

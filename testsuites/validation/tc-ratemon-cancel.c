@@ -160,7 +160,7 @@ typedef struct {
    *   action.
    *
    * The action is either executed by the owner task or by the worker task
-   * depending on the function pointer used here.  ``argument`` is a pointer to
+   * depending on the function pointer used here.  `argument` is a pointer to
    * this context structure.
    */
   void ( *do_action )( void *ctx );
@@ -580,7 +580,7 @@ static void RtemsRatemonReqCancel_Post_Scheduler_Check(
     case RtemsRatemonReqCancel_Post_Scheduler_Called: {
       /*
        * The last call of the rtems_rate_monotonic_cancel() function shall
-       * execute the ``cancel_job`` scheduler operation of the home scheduler.
+       * execute the `cancel_job` scheduler operation of the home scheduler.
        */
       /* Cannot be tested as the effect is unknown. */
       break;

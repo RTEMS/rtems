@@ -168,7 +168,7 @@ typedef struct {
     storage_area[ MAXIMUM_PENDING_MESSAGES];
 
   /**
-   * @brief This member contains always the same arbitrary number ``magic``.
+   * @brief This member contains always the same arbitrary number `magic`.
    *
    * It is used for run-time type checking.
    */

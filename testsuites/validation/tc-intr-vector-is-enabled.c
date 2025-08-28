@@ -130,7 +130,7 @@ typedef struct {
   bool is_enabled;
 
   /**
-   * @brief This member provides the ``bool`` object.
+   * @brief This member provides the `bool` object.
    */
   bool enabled_obj;
 
@@ -402,7 +402,7 @@ static void RtemsIntrReqVectorIsEnabled_Pre_Enabled_Prepare(
   switch ( state ) {
     case RtemsIntrReqVectorIsEnabled_Pre_Enabled_Obj: {
       /*
-       * While the ``enabled`` parameter references an object of type ``bool``.
+       * While the ``enabled`` parameter references an object of type `bool`.
        */
       ctx->enabled = &ctx->enabled_obj;
       break;

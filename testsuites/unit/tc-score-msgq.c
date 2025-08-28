@@ -68,12 +68,11 @@
  *
  * @brief Unit tests for the Message Queue Handler.
  *
- * Parts of the files ``cpukit/score/src/coremsginsert.c``,
- * ``cpukit/score/src/coremsgseize.c``, and
- * ``cpukit/score/src/coremsgsubmit.c`` are only executed by the POSIX API.
- * Currently, the pre-qualified subset of RTEMS does not contain the POSIX API.
- * This test exercises the code parts otherwise only reached by the POSIX API
- * to achieve full code coverage.
+ * Parts of the files `cpukit/score/src/coremsginsert.c`,
+ * `cpukit/score/src/coremsgseize.c`, and `cpukit/score/src/coremsgsubmit.c`
+ * are only executed by the POSIX API.  Currently, the pre-qualified subset of
+ * RTEMS does not contain the POSIX API.  This test exercises the code parts
+ * otherwise only reached by the POSIX API to achieve full code coverage.
  *
  * This test case performs the following actions:
  *
@@ -128,8 +127,8 @@ typedef struct {
 
   /**
    * @brief This member indicated whether the worker task is currently sending
-   *   a message (``true``) or whether it is waiting to receive an event
-   *   (``false``).
+   *   a message (`true`) or whether it is waiting to receive an event
+   *   (`false`).
    */
   bool is_worker_working;
 

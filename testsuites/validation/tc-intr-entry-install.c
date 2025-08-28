@@ -795,7 +795,7 @@ static void RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare(
        * While the interrupt vector associated with the ``vector`` parameter
        * may be enabled.
        */
-      /* See comment for ``Yes`` state */
+      /* See comment for `Yes` state */
       break;
     }
 
@@ -804,7 +804,7 @@ static void RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare(
        * While the interrupt vector associated with the ``vector`` parameter
        * cannot be enabled.
        */
-      /* See comment for ``Yes`` state */
+      /* See comment for `Yes` state */
       break;
     }
 
@@ -1017,7 +1017,7 @@ static void RtemsIntrReqEntryInstall_Post_Enable_Check(
        * Interrupt vectors which cannot be enabled are not selected as a
        * testable interrupt vector by GetTestableInterruptVector(), so this
        * path is not validated by this test.  See also comment for
-       * ``CanEnable`` pre-condition state ``Yes``.
+       * `CanEnable` pre-condition state `Yes`.
        */
       T_true( ctx->enabled_after || ctx->handler_counter > 3 );
       break;
@@ -1031,7 +1031,7 @@ static void RtemsIntrReqEntryInstall_Post_Enable_Check(
        * Interrupt vectors which cannot be enabled are not selected as a
        * testable interrupt vector by GetTestableInterruptVector(), so this
        * path is not validated by this test.  See also comment for
-       * ``CanEnable`` pre-condition state ``Yes``.
+       * `CanEnable` pre-condition state `Yes`.
        */
       T_true( ctx->enabled_after || ctx->handler_counter > 3 );
       break;

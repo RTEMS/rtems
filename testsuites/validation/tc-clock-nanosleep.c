@@ -191,14 +191,12 @@ typedef struct {
   TaskTimerInfo timer_info;
 
   /**
-   * @brief This member provides the object referenced by the ``rqtp``
-   *   parameter.
+   * @brief This member provides the object referenced by the `rqtp` parameter.
    */
   struct timespec rqtp_obj;
 
   /**
-   * @brief This member provides the object referenced by the ``rmtp``
-   *   parameter.
+   * @brief This member provides the object referenced by the `rmtp` parameter.
    */
   struct timespec rmtp_obj;
 
@@ -209,22 +207,22 @@ typedef struct {
   int status;
 
   /**
-   * @brief This member specifies the ``clock_id`` parameter value.
+   * @brief This member specifies the `clock_id` parameter value.
    */
   clockid_t clock_id;
 
   /**
-   * @brief This member specifies the ``flags`` parameter value.
+   * @brief This member specifies the `flags` parameter value.
    */
   int flags;
 
   /**
-   * @brief This member specifies the ``rqtp`` parameter value.
+   * @brief This member specifies the `rqtp` parameter value.
    */
   const struct timespec *rqtp;
 
   /**
-   * @brief This member specifies the ``rmtp`` parameter value.
+   * @brief This member specifies the `rmtp` parameter value.
    */
   struct timespec *rmtp;
 
@@ -359,7 +357,7 @@ static void CReqClockNanosleep_Pre_ClockId_Prepare(
   switch ( state ) {
     case CReqClockNanosleep_Pre_ClockId_Monotonic: {
       /*
-       * While the ``clock_id`` parameter is equal to CLOCK_MONOTONIC.
+       * While the `clock_id` parameter is equal to CLOCK_MONOTONIC.
        */
       ctx->clock_id = CLOCK_MONOTONIC;
       break;
@@ -367,7 +365,7 @@ static void CReqClockNanosleep_Pre_ClockId_Prepare(
 
     case CReqClockNanosleep_Pre_ClockId_Realtime: {
       /*
-       * While the ``clock_id`` parameter is equal to CLOCK_REALTIME.
+       * While the `clock_id` parameter is equal to CLOCK_REALTIME.
        */
       ctx->clock_id = CLOCK_REALTIME;
       break;
@@ -375,7 +373,7 @@ static void CReqClockNanosleep_Pre_ClockId_Prepare(
 
     case CReqClockNanosleep_Pre_ClockId_Invalid: {
       /*
-       * While the ``clock_id`` parameter is an invalid clock identifier.
+       * While the `clock_id` parameter is an invalid clock identifier.
        */
       ctx->clock_id = INT_MAX;
       break;
@@ -394,7 +392,7 @@ static void CReqClockNanosleep_Pre_Abstime_Prepare(
   switch ( state ) {
     case CReqClockNanosleep_Pre_Abstime_Yes: {
       /*
-       * While the ``flags`` parameter indicates an absolute time.
+       * While the `flags` parameter indicates an absolute time.
        */
       ctx->flags |= TIMER_ABSTIME;
       break;
@@ -402,7 +400,7 @@ static void CReqClockNanosleep_Pre_Abstime_Prepare(
 
     case CReqClockNanosleep_Pre_Abstime_No: {
       /*
-       * While the ``flags`` parameter does not indicate an absolute time.
+       * While the `flags` parameter does not indicate an absolute time.
        */
       /* This is the default */
       break;
@@ -421,7 +419,7 @@ static void CReqClockNanosleep_Pre_RQTp_Prepare(
   switch ( state ) {
     case CReqClockNanosleep_Pre_RQTp_Valid: {
       /*
-       * While the ``rqtp`` parameter references an object of type struct
+       * While the `rqtp` parameter references an object of type struct
        * timespec.
        */
       ctx->rqtp = &ctx->rqtp_obj;
@@ -430,7 +428,7 @@ static void CReqClockNanosleep_Pre_RQTp_Prepare(
 
     case CReqClockNanosleep_Pre_RQTp_Null: {
       /*
-       * While the ``rqtp`` parameter is equal to NULL.
+       * While the `rqtp` parameter is equal to NULL.
        */
       ctx->rqtp = NULL;
       break;
@@ -449,7 +447,7 @@ static void CReqClockNanosleep_Pre_RQTpNSec_Prepare(
   switch ( state ) {
     case CReqClockNanosleep_Pre_RQTpNSec_Valid: {
       /*
-       * While the ``tv_nsec`` member of the object referenced by the ``rqtp``
+       * While the `tv_nsec` member of the object referenced by the `rqtp`
        * parameter is a valid nanoseconds value.
        */
       ctx->rqtp_obj.tv_nsec = 999999999;
@@ -458,7 +456,7 @@ static void CReqClockNanosleep_Pre_RQTpNSec_Prepare(
 
     case CReqClockNanosleep_Pre_RQTpNSec_Invalid: {
       /*
-       * While the ``tv_nsec`` member of the object referenced by the ``rqtp``
+       * While the `tv_nsec` member of the object referenced by the `rqtp`
        * parameter is an invalid nanoseconds value.
        */
       ctx->rqtp_obj.tv_nsec = -1;
@@ -478,7 +476,7 @@ static void CReqClockNanosleep_Pre_RQTpSec_Prepare(
   switch ( state ) {
     case CReqClockNanosleep_Pre_RQTpSec_Negative: {
       /*
-       * While the ``tv_sec`` member of the object referenced by the ``rqtp``
+       * While the `tv_sec` member of the object referenced by the `rqtp`
        * parameter is negative.
        */
       ctx->rqtp_obj.tv_sec = -238479;
@@ -487,7 +485,7 @@ static void CReqClockNanosleep_Pre_RQTpSec_Prepare(
 
     case CReqClockNanosleep_Pre_RQTpSec_FarFuture: {
       /*
-       * While the ``tv_sec`` member of the object referenced by the ``rqtp``
+       * While the `tv_sec` member of the object referenced by the `rqtp`
        * parameter specifies a time point which is past the implementation
        * limit.
        */
@@ -497,9 +495,9 @@ static void CReqClockNanosleep_Pre_RQTpSec_Prepare(
 
     case CReqClockNanosleep_Pre_RQTpSec_Future: {
       /*
-       * While the ``tv_sec`` member of the object referenced by the ``rqtp``
+       * While the `tv_sec` member of the object referenced by the `rqtp`
        * parameter specifies a time point which is after the current time of
-       * the clock specified by the ``clock_id`` parameter and is within the
+       * the clock specified by the `clock_id` parameter and is within the
        * implementation limits.
        */
       ctx->rqtp_obj.tv_sec = 1621322302;
@@ -508,9 +506,9 @@ static void CReqClockNanosleep_Pre_RQTpSec_Prepare(
 
     case CReqClockNanosleep_Pre_RQTpSec_PastOrNow: {
       /*
-       * While the ``tv_sec`` member of the object referenced by the ``rqtp``
+       * While the `tv_sec` member of the object referenced by the `rqtp`
        * parameter is non-negative and specifies a time point which is before
-       * or at the current time of the clock specified by the ``clock_id``
+       * or at the current time of the clock specified by the `clock_id`
        * parameter.
        */
       ctx->rqtp_obj.tv_sec = 0;
@@ -534,7 +532,7 @@ static void CReqClockNanosleep_Pre_RMTp_Prepare(
   switch ( state ) {
     case CReqClockNanosleep_Pre_RMTp_Valid: {
       /*
-       * While the ``rmtp`` parameter references an object of type struct
+       * While the `rmtp` parameter references an object of type struct
        * timespec.
        */
       ctx->rmtp = &ctx->rmtp_obj;
@@ -543,7 +541,7 @@ static void CReqClockNanosleep_Pre_RMTp_Prepare(
 
     case CReqClockNanosleep_Pre_RMTp_Null: {
       /*
-       * While the ``rmtp`` parameter is equal to NULL.
+       * While the `rmtp` parameter is equal to NULL.
        */
       ctx->rmtp = NULL;
       break;
@@ -637,7 +635,7 @@ static void CReqClockNanosleep_Post_Expire_Check(
     case CReqClockNanosleep_Post_Expire_Last: {
       /*
        * The timer of the calling task shall expire at the last valid time
-       * point of the clock specified by the ``clock_id`` parameter.
+       * point of the clock specified by the `clock_id` parameter.
        */
       T_eq_u64( ctx->timer_info.expire_ticks, 0xffffffffffffffff );
       break;
@@ -646,7 +644,7 @@ static void CReqClockNanosleep_Post_Expire_Check(
     case CReqClockNanosleep_Post_Expire_Absolute: {
       /*
        * The timer of the calling task shall expire at the time point specified
-       * by the ``rqtp`` parameter.
+       * by the `rqtp` parameter.
        */
       T_eq_i64( ctx->timer_info.expire_timespec.tv_sec, ctx->rqtp_obj.tv_sec );
       T_eq_long(
@@ -660,7 +658,7 @@ static void CReqClockNanosleep_Post_Expire_Check(
       /*
        * The timer of the calling task shall expire at the time point specified
        * by the sum of the current time of the clock specified by
-       * CLOCK_MONOTONIC and the interval specified by the ``rqtp`` parameter.
+       * CLOCK_MONOTONIC and the interval specified by the `rqtp` parameter.
        */
       expire = ctx->now_monotonic;
       expire.tv_sec += ctx->rqtp_obj.tv_sec;
@@ -740,8 +738,8 @@ static void CReqClockNanosleep_Post_RMTp_Check(
   switch ( state ) {
     case CReqClockNanosleep_Post_RMTp_Zero: {
       /*
-       * The object referenced by the ``rmtp`` parameter shall be cleared to
-       * zero after the return of the clock_nanosleep() call.
+       * The object referenced by the `rmtp` parameter shall be cleared to zero
+       * after the return of the clock_nanosleep() call.
        */
       T_eq_i64( ctx->rmtp_obj.tv_sec, 0 );
       T_eq_long( ctx->rmtp_obj.tv_nsec, 0 );
@@ -750,7 +748,7 @@ static void CReqClockNanosleep_Post_RMTp_Check(
 
     case CReqClockNanosleep_Post_RMTp_Nop: {
       /*
-       * Objects referenced by the ``rmtp`` parameter in past calls to
+       * Objects referenced by the `rmtp` parameter in past calls to
        * clock_nanosleep() shall not be accessed by the clock_nanosleep() call.
        */
       T_eq_i64( ctx->rmtp_obj.tv_sec, -1 );

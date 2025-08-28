@@ -392,7 +392,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_Before_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_Before_All: {
       /*
-       * While task ``T`` is affine to all processors of its home scheduler
+       * While task `T` is affine to all processors of its home scheduler
        * before the new thread to processor affinity is set.
        */
       CPU_FILL( &ctx->task_affinity_before );
@@ -401,7 +401,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_Before_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_Before_X: {
       /*
-       * While task ``T`` is affine to processor ``X`` before the new thread to
+       * While task `T` is affine to processor `X` before the new thread to
        * processor affinity is set.
        */
       CPU_ZERO( &ctx->task_affinity_before );
@@ -422,7 +422,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_After_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_After_All: {
       /*
-       * While task ``T`` is set to be affine to all processors of its home
+       * While task `T` is set to be affine to all processors of its home
        * scheduler.
        */
       CPU_FILL( &ctx->task_affinity_after );
@@ -431,7 +431,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_After_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_After_X: {
       /*
-       * While task ``T`` is set to be affine to processor ``X``.
+       * While task `T` is set to be affine to processor `X`.
        */
       CPU_ZERO( &ctx->task_affinity_after );
       CPU_SET( 0, &ctx->task_affinity_after );
@@ -440,7 +440,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_After_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_After_Y: {
       /*
-       * While task ``T`` is set to be affine to processor ``Y``.
+       * While task `T` is set to be affine to processor `Y`.
        */
       CPU_ZERO( &ctx->task_affinity_after );
       CPU_SET( 1, &ctx->task_affinity_after );
@@ -460,7 +460,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_Priority_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_Priority_High: {
       /*
-       * While task ``T`` has a high priority.
+       * While task `T` has a high priority.
        */
       ctx->task_priority = PRIO_HIGH;
       break;
@@ -468,7 +468,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_Priority_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_Priority_Low: {
       /*
-       * While task ``T`` has a low priority.
+       * While task `T` has a low priority.
        */
       ctx->task_priority = PRIO_NORMAL;
       break;
@@ -487,7 +487,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_State_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_State_Ready: {
       /*
-       * While task ``T`` is ready.
+       * While task `T` is ready.
        */
       ctx->task_ready = true;
       break;
@@ -495,7 +495,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_State_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_State_Blocked: {
       /*
-       * While task ``T`` is blocked.
+       * While task `T` is blocked.
        */
       ctx->task_ready = false;
       break;
@@ -514,7 +514,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_Sticky_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_Sticky_Yes: {
       /*
-       * While task ``T`` is sticky.
+       * While task `T` is sticky.
        */
       ctx->task_sticky = true;
       break;
@@ -522,7 +522,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_Sticky_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_Sticky_No: {
       /*
-       * While task ``T`` is not sticky.
+       * While task `T` is not sticky.
        */
       ctx->task_sticky = false;
       break;
@@ -541,7 +541,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_Pinned_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_Pinned_Yes: {
       /*
-       * While task ``T`` is pinned to a processor.
+       * While task `T` is pinned to a processor.
        */
       ctx->task_pinned = true;
       break;
@@ -549,7 +549,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_Pinned_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_Pinned_No: {
       /*
-       * While task ``T`` is not pinned to a processor.
+       * While task `T` is not pinned to a processor.
        */
       ctx->task_pinned = false;
       break;
@@ -568,7 +568,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaPriority_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaPriority_High: {
       /*
-       * While task ``A`` has a high priority.
+       * While task `A` has a high priority.
        */
       ctx->alpha_priority = PRIO_HIGH;
       break;
@@ -576,7 +576,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaPriority_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaPriority_Low: {
       /*
-       * While task ``A`` has a low priority.
+       * While task `A` has a low priority.
        */
       ctx->alpha_priority = PRIO_NORMAL;
       break;
@@ -595,7 +595,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaAffinity_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaAffinity_All: {
       /*
-       * While task ``A`` is affine to all processors of its home scheduler.
+       * While task `A` is affine to all processors of its home scheduler.
        */
       CPU_FILL( &ctx->alpha_affinity );
       break;
@@ -603,7 +603,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaAffinity_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaAffinity_X: {
       /*
-       * While task ``A`` is affine to processor ``X``.
+       * While task `A` is affine to processor `X`.
        */
       CPU_ZERO( &ctx->alpha_affinity );
       CPU_SET( 0, &ctx->alpha_affinity );
@@ -623,7 +623,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaIdle_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaIdle_Yes: {
       /*
-       * While task ``A`` is sticky, while task ``A`` is blocked.
+       * While task `A` is sticky, while task `A` is blocked.
        */
       ctx->alpha_idle = true;
       break;
@@ -631,7 +631,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaIdle_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaIdle_No: {
       /*
-       * While task ``A`` is not sticky.
+       * While task `A` is not sticky.
        */
       ctx->alpha_idle = false;
       break;
@@ -650,7 +650,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_BetaPriority_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_BetaPriority_High: {
       /*
-       * While task ``B`` has a high priority.
+       * While task `B` has a high priority.
        */
       ctx->beta_priority = PRIO_HIGH;
       break;
@@ -658,7 +658,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_BetaPriority_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_BetaPriority_Low: {
       /*
-       * While task ``B`` has a low priority.
+       * While task `B` has a low priority.
        */
       ctx->beta_priority = PRIO_NORMAL;
       break;
@@ -677,7 +677,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_BetaAffinity_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_BetaAffinity_All: {
       /*
-       * While task ``B`` is affine to all processors of its home scheduler.
+       * While task `B` is affine to all processors of its home scheduler.
        */
       CPU_FILL( &ctx->beta_affinity );
       break;
@@ -685,7 +685,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_BetaAffinity_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_BetaAffinity_Y: {
       /*
-       * While task ``B`` is affine to processor ``Y``.
+       * While task `B` is affine to processor `Y`.
        */
       CPU_ZERO( &ctx->beta_affinity );
       CPU_SET( 1, &ctx->beta_affinity );
@@ -705,7 +705,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_BetaIdle_Prepare(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Pre_BetaIdle_Yes: {
       /*
-       * While task ``B`` is sticky, while task ``B`` is blocked.
+       * While task `B` is sticky, while task `B` is blocked.
        */
       ctx->beta_idle = true;
       break;
@@ -713,7 +713,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Pre_BetaIdle_Prepare(
 
     case ScoreSchedSmpEdfReqSetAffinity_Pre_BetaIdle_No: {
       /*
-       * While task ``B`` is not sticky,
+       * While task `B` is not sticky,
        */
       ctx->beta_idle = false;
       break;
@@ -739,7 +739,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_X_Check(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Post_X_Task: {
       /*
-       * The task ``T`` shall be scheduled on processor ``X``.
+       * The task `T` shall be scheduled on processor `X`.
        */
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ TASK ] );
       break;
@@ -747,8 +747,8 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_X_Check(
 
     case ScoreSchedSmpEdfReqSetAffinity_Post_X_TaskIdle: {
       /*
-       * An idle task on behalf of task ``T`` shall be scheduled on processor
-       * ``X``.
+       * An idle task on behalf of task `T` shall be scheduled on processor
+       * `X`.
        */
       T_true( scheduled->is_idle );
       scheduler_node = _Thread_Scheduler_get_home_node(
@@ -760,7 +760,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_X_Check(
 
     case ScoreSchedSmpEdfReqSetAffinity_Post_X_Alpha: {
       /*
-       * The task ``A`` shall be scheduled on processor ``X``.
+       * The task `A` shall be scheduled on processor `X`.
        */
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ ALPHA ] );
       break;
@@ -768,8 +768,8 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_X_Check(
 
     case ScoreSchedSmpEdfReqSetAffinity_Post_X_AlphaIdle: {
       /*
-       * An idle task on behalf of task ``A`` shall be scheduled on processor
-       * ``X``.
+       * An idle task on behalf of task `A` shall be scheduled on processor
+       * `X`.
        */
       T_true( scheduled->is_idle );
       scheduler_node = _Thread_Scheduler_get_home_node(
@@ -781,7 +781,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_X_Check(
 
     case ScoreSchedSmpEdfReqSetAffinity_Post_X_Beta: {
       /*
-       * The task ``B`` shall be scheduled on processor ``X``.
+       * The task `B` shall be scheduled on processor `X`.
        */
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ BETA ] );
       break;
@@ -789,8 +789,8 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_X_Check(
 
     case ScoreSchedSmpEdfReqSetAffinity_Post_X_BetaIdle: {
       /*
-       * An idle task on behalf of task ``B`` shall be scheduled on processor
-       * ``X``.
+       * An idle task on behalf of task `B` shall be scheduled on processor
+       * `X`.
        */
       T_true( scheduled->is_idle );
       scheduler_node = _Thread_Scheduler_get_home_node(
@@ -820,7 +820,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_Y_Check(
   switch ( state ) {
     case ScoreSchedSmpEdfReqSetAffinity_Post_Y_Task: {
       /*
-       * The task ``T`` shall be scheduled on processor ``Y``.
+       * The task `T` shall be scheduled on processor `Y`.
        */
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ TASK ] );
       break;
@@ -828,8 +828,8 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_Y_Check(
 
     case ScoreSchedSmpEdfReqSetAffinity_Post_Y_TaskIdle: {
       /*
-       * An idle task on behalf of task ``T`` shall be scheduled on processor
-       * ``Y``.
+       * An idle task on behalf of task `T` shall be scheduled on processor
+       * `Y`.
        */
       T_true( scheduled->is_idle );
       scheduler_node = _Thread_Scheduler_get_home_node(
@@ -841,7 +841,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_Y_Check(
 
     case ScoreSchedSmpEdfReqSetAffinity_Post_Y_Alpha: {
       /*
-       * The task ``A`` shall be scheduled on processor ``Y``.
+       * The task `A` shall be scheduled on processor `Y`.
        */
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ ALPHA ] );
       break;
@@ -849,8 +849,8 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_Y_Check(
 
     case ScoreSchedSmpEdfReqSetAffinity_Post_Y_AlphaIdle: {
       /*
-       * An idle task on behalf of task ``A`` shall be scheduled on processor
-       * ``Y``.
+       * An idle task on behalf of task `A` shall be scheduled on processor
+       * `Y`.
        */
       T_true( scheduled->is_idle );
       scheduler_node = _Thread_Scheduler_get_home_node(
@@ -862,7 +862,7 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_Y_Check(
 
     case ScoreSchedSmpEdfReqSetAffinity_Post_Y_Beta: {
       /*
-       * The task ``B`` shall be scheduled on processor ``Y``.
+       * The task `B` shall be scheduled on processor `Y`.
        */
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ BETA ] );
       break;
@@ -870,8 +870,8 @@ static void ScoreSchedSmpEdfReqSetAffinity_Post_Y_Check(
 
     case ScoreSchedSmpEdfReqSetAffinity_Post_Y_BetaIdle: {
       /*
-       * An idle task on behalf of task ``B`` shall be scheduled on processor
-       * ``Y``.
+       * An idle task on behalf of task `B` shall be scheduled on processor
+       * `Y`.
        */
       T_true( scheduled->is_idle );
       scheduler_node = _Thread_Scheduler_get_home_node(
