@@ -125,9 +125,9 @@ extern "C" {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_scheduler_ident( rtems_name name, rtems_id *id );
@@ -158,9 +158,9 @@ rtems_status_code rtems_scheduler_ident( rtems_name name, rtems_id *id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_scheduler_ident_by_processor(
@@ -207,9 +207,9 @@ rtems_status_code rtems_scheduler_ident_by_processor(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_scheduler_ident_by_processor_set(
@@ -242,9 +242,9 @@ rtems_status_code rtems_scheduler_ident_by_processor_set(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_scheduler_get_maximum_priority(
@@ -282,9 +282,9 @@ rtems_status_code rtems_scheduler_get_maximum_priority(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_scheduler_map_priority_to_posix(
@@ -323,9 +323,9 @@ rtems_status_code rtems_scheduler_map_priority_to_posix(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_scheduler_map_priority_from_posix(
@@ -361,9 +361,9 @@ rtems_status_code rtems_scheduler_map_priority_from_posix(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_scheduler_get_processor( void );
@@ -395,9 +395,9 @@ uint32_t rtems_scheduler_get_processor( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_scheduler_get_processor_maximum( void );
@@ -436,9 +436,9 @@ uint32_t rtems_scheduler_get_processor_maximum( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_scheduler_get_processor_set(
@@ -479,12 +479,12 @@ rtems_status_code rtems_scheduler_get_processor_set(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -530,12 +530,12 @@ rtems_status_code rtems_scheduler_add_processor(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */

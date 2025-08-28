@@ -208,14 +208,14 @@ typedef struct {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_timer_get_information(
@@ -300,18 +300,18 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )( rtem
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The number of timers available to the application is configured through
+ * - The number of timers available to the application is configured through
  *   the @ref CONFIGURE_MAXIMUM_TIMERS application configuration option.
  *
- * * Where the object class corresponding to the directive is configured to use
+ * - Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS
  *   Workspace.
  * @endparblock
@@ -360,9 +360,9 @@ rtems_status_code rtems_timer_create( rtems_name name, rtems_id *id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_timer_ident( rtems_name name, rtems_id *id );
@@ -391,14 +391,14 @@ rtems_status_code rtems_timer_ident( rtems_name name, rtems_id *id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_timer_cancel( rtems_id id );
@@ -427,18 +427,18 @@ rtems_status_code rtems_timer_cancel( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The calling task does not have to be the task that created the object.
+ * - The calling task does not have to be the task that created the object.
  *   Any local task that knows the object identifier can delete the object.
  *
- * * Where the object class corresponding to the directive is configured to use
+ * - Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may free memory to the RTEMS Workspace.
  * @endparblock
  */
@@ -479,14 +479,14 @@ rtems_status_code rtems_timer_delete( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_timer_fire_after(
@@ -534,14 +534,14 @@ rtems_status_code rtems_timer_fire_after(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_timer_fire_when(
@@ -592,18 +592,18 @@ rtems_status_code rtems_timer_fire_when(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The number of timers available to the application is configured through
+ * - The number of timers available to the application is configured through
  *   the @ref CONFIGURE_MAXIMUM_TIMERS application configuration option.
  *
- * * Where the object class corresponding to the directive is configured to use
+ * - Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS
  *   Workspace.
  * @endparblock
@@ -651,14 +651,14 @@ rtems_status_code rtems_timer_initiate_server(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_timer_server_fire_after(
@@ -708,14 +708,14 @@ rtems_status_code rtems_timer_server_fire_after(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_timer_server_fire_when(
@@ -762,14 +762,14 @@ rtems_status_code rtems_timer_server_fire_when(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_timer_reset( rtems_id id );

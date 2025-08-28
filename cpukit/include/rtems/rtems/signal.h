@@ -127,9 +127,9 @@ extern "C" {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_signal_catch(
@@ -183,17 +183,17 @@ rtems_status_code rtems_signal_catch(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * When the directive operates on a local object, the directive will not
+ * - When the directive operates on a local object, the directive will not
  *   cause the calling task to be preempted.
  *
- * * When the directive operates on a remote object, the directive sends a
+ * - When the directive operates on a remote object, the directive sends a
  *   message to the remote node and waits for a reply.  This will preempt the
  *   calling task.
  * @endparblock

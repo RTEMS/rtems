@@ -110,10 +110,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be an integral multiple of
+ * - The value of the configuration option shall be an integral multiple of
  *   @ref CONFIGURE_BDBUF_BUFFER_MIN_SIZE.
  * @endparblock
  */
@@ -136,10 +136,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  */
@@ -162,10 +162,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
  * @endparblock
  */
@@ -188,10 +188,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  *
@@ -219,10 +219,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  */
@@ -264,14 +264,14 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   task stack space calculation carried out by ``<rtems/confdefs.h>`` does
  *   not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
@@ -296,10 +296,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  */
@@ -322,10 +322,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  */
@@ -367,10 +367,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  */
@@ -427,17 +427,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -467,17 +467,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -508,17 +508,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -548,17 +548,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -588,17 +588,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -628,17 +628,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -668,17 +668,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -717,22 +717,22 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   task stack space calculation carried out by ``<rtems/confdefs.h>`` does
  *   not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -778,17 +778,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -818,13 +818,13 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  * @endparblock
@@ -851,10 +851,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to @ref
+ * - The value of the configuration option shall be less than or equal to @ref
  *   CONFIGURE_MAXIMUM_TASKS.
  * @endparblock
  *
@@ -939,10 +939,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
- * * The value of the configuration option shall be defined using
+ * - The value of the configuration option shall be defined using
  *   RTEMS_TASK_STORAGE_SIZE().
  * @endparblock
  *
@@ -1078,10 +1078,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   task stack space calculation carried out by ``<rtems/confdefs.h>`` does
  *   not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
@@ -1717,13 +1717,13 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
  *
- * * The value of the configuration option shall be greater than or equal than
+ * - The value of the configuration option shall be greater than or equal than
  *   the number of statically configured device drivers.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  * @endparblock
@@ -1874,15 +1874,15 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   16.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
  *
- * * The value of the configuration option shall be a power of two.
+ * - The value of the configuration option shall be a power of two.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  * @endparblock
@@ -2703,13 +2703,13 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINTPTR_MAX</a>.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  * @endparblock
@@ -2738,10 +2738,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   task stack space calculation carried out by ``<rtems/confdefs.h>`` does
  *   not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
@@ -2826,15 +2826,15 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to a
+ * - The value of the configuration option shall be greater than or equal to a
  *   BSP-specific and application-specific minimum value.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   interrupt stack area calculation carried out by ``<rtems/confdefs.h>``
  *   does not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/size_t">size_t</a>.
  *
- * * The value of the configuration option shall be aligned according to
+ * - The value of the configuration option shall be aligned according to
  *   #CPU_INTERRUPT_STACK_ALIGNMENT.
  * @endparblock
  *
@@ -2902,13 +2902,13 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  * @endparblock
@@ -2939,10 +2939,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   one.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   #CPU_MAXIMUM_PROCESSORS.
  * @endparblock
  *
@@ -2977,13 +2977,13 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
  *
- * * The value of the configuration option shall be an integral multiple of
+ * - The value of the configuration option shall be an integral multiple of
  *   #RTEMS_TASK_STORAGE_ALIGNMENT.
  * @endparblock
  *
@@ -3025,13 +3025,13 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  * @endparblock
@@ -3067,14 +3067,14 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   RTEMS Workspace size calculation carried out by ``<rtems/confdefs.h>``
  *   does not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
@@ -3106,14 +3106,14 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   RTEMS Workspace size calculation carried out by ``<rtems/confdefs.h>``
  *   does not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
@@ -3201,13 +3201,13 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to a
+ * - The value of the configuration option shall be greater than or equal to a
  *   value defined by the Clock Driver.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   value defined by the Clock Driver.
  *
- * * The resulting clock ticks per second should be an integer.
+ * - The resulting clock ticks per second should be an integer.
  * @endparblock
  *
  * @par Notes
@@ -3238,12 +3238,12 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   task stack space calculation carried out by ``<rtems/confdefs.h>`` does
  *   not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
  *
- * * The value of the configuration option shall be greater than or equal to a
+ * - The value of the configuration option shall be greater than or equal to a
  *   BSP-specific and application-specific minimum value.
  * @endparblock
  *
@@ -3314,10 +3314,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   one.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  *
@@ -3578,10 +3578,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to a
+ * - The value of the configuration option shall be greater than or equal to a
  *   BSP-specific and application-specific minimum value.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   IDLE task stack area calculation carried out by ``<rtems/confdefs.h>``
  *   does not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/size_t">size_t</a>.
@@ -3687,13 +3687,13 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   MPCI receive server stack area calculation carried out by
  *   ``<rtems/confdefs.h>`` does not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/size_t">size_t</a>.
@@ -3745,10 +3745,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  *
@@ -3780,10 +3780,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  *
@@ -3811,10 +3811,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  *
@@ -3877,10 +3877,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  * @endparblock
  *
@@ -3931,17 +3931,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -3972,17 +3972,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -4018,22 +4018,22 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   RTEMS Workspace size calculation carried out by ``<rtems/confdefs.h>``
  *   does not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -4064,19 +4064,19 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   RTEMS Workspace size calculation carried out by ``<rtems/confdefs.h>``
  *   does not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
  *
- * * The value of the configuration option shall be zero if the POSIX API is
+ * - The value of the configuration option shall be zero if the POSIX API is
  *   not enabled (e.g. RTEMS was built without the ``RTEMS_POSIX_API = True``
  *   build configuration option).  Otherwise a compile time error in the
  *   configuration file will occur.
@@ -4109,22 +4109,22 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   RTEMS Workspace size calculation carried out by ``<rtems/confdefs.h>``
  *   does not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -4160,22 +4160,22 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   RTEMS Workspace size calculation carried out by ``<rtems/confdefs.h>``
  *   does not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
@@ -4205,17 +4205,17 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   task stack space calculation carried out by ``<rtems/confdefs.h>`` does
  *   not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
@@ -4258,22 +4258,22 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to
+ * - The value of the configuration option shall be less than or equal to
  *   65535.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  *
- * * The value of the configuration option may be defined through
+ * - The value of the configuration option may be defined through
  *   rtems_resource_unlimited() the enable unlimited objects for the object
  *   class, if the value passed to rtems_resource_unlimited() satisfies all
  *   other constraints of the configuration option.
  *
- * * The value of the configuration option shall be zero if the POSIX API is
+ * - The value of the configuration option shall be zero if the POSIX API is
  *   not enabled (e.g. RTEMS was built without the ``RTEMS_POSIX_API = True``
  *   build configuration option).  Otherwise a compile time error in the
  *   configuration file will occur.
@@ -4309,12 +4309,12 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   task stack space calculation carried out by ``<rtems/confdefs.h>`` does
  *   not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
  *
- * * The value of the configuration option shall be greater than or equal to a
+ * - The value of the configuration option shall be greater than or equal to a
  *   BSP-specific and application-specific minimum value.
  * @endparblock
  */
@@ -4376,10 +4376,10 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE.
  *
- * * The value of the configuration option shall be small enough so that the
+ * - The value of the configuration option shall be small enough so that the
  *   task stack space calculation carried out by ``<rtems/confdefs.h>`` does
  *   not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
@@ -4477,13 +4477,13 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be greater than or equal to
+ * - The value of the configuration option shall be greater than or equal to
  *   zero.
  *
- * * The value of the configuration option shall be less than or equal to <a
+ * - The value of the configuration option shall be less than or equal to <a
  *   href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
  *
- * * The value of the configuration option shall be less than or equal to a
+ * - The value of the configuration option shall be less than or equal to a
  *   BSP-specific and application-specific value which depends on the size of
  *   the memory available to the application.
  * @endparblock
@@ -4572,7 +4572,7 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be a list of the following
+ * - The value of the configuration option shall be a list of the following
  *   macros:
  *
  *   * ``RTEMS_SCHEDULER_ASSIGN( scheduler_index, attributes )``
@@ -4590,7 +4590,7 @@
  *
  *   * ``RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL``
  *
- * * The value of the configuration option shall be a list of exactly @ref
+ * - The value of the configuration option shall be a list of exactly @ref
  *   CONFIGURE_MAXIMUM_PROCESSORS elements.
  * @endparblock
  *
@@ -4968,7 +4968,7 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be a list of the following
+ * - The value of the configuration option shall be a list of the following
  *   macros:
  *
  *   * ``RTEMS_SCHEDULER_TABLE_CBS( name, obj_name )``
@@ -4998,7 +4998,7 @@
  *   is recommended to define the scheduler object name through
  *   rtems_build_name().
  *
- * * Where the system was build with SMP support enabled, the table shall have
+ * - Where the system was build with SMP support enabled, the table shall have
  *   one or more entries, otherwise it shall have exactly one entry.
  * @endparblock
  *
@@ -5150,14 +5150,14 @@
  * @parblock
  * The following constraints apply to this configuration option:
  *
- * * The value of the configuration option shall be defined to a valid function
+ * - The value of the configuration option shall be defined to a valid function
  *   pointer of the type ``void *( *allocate )( uint32_t, size_t * )``.
  *
- * * The IDLE task stack allocator shall return a pointer to the allocated
+ * - The IDLE task stack allocator shall return a pointer to the allocated
  *   memory area or terminate the system with a fatal error if the allocation
  *   request cannot be satisfied.
  *
- * * The IDLE task stack allocator may increase the size of the allocated
+ * - The IDLE task stack allocator may increase the size of the allocated
  *   memory area.
  * @endparblock
  *

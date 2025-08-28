@@ -191,9 +191,9 @@ typedef struct {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_barriers( void );
@@ -218,9 +218,9 @@ uint32_t rtems_configuration_get_maximum_barriers( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_message_queues( void );
@@ -245,9 +245,9 @@ uint32_t rtems_configuration_get_maximum_message_queues( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_partitions( void );
@@ -272,9 +272,9 @@ uint32_t rtems_configuration_get_maximum_partitions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_periods( void );
@@ -299,9 +299,9 @@ uint32_t rtems_configuration_get_maximum_periods( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_ports( void );
@@ -326,9 +326,9 @@ uint32_t rtems_configuration_get_maximum_ports( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_regions( void );
@@ -353,9 +353,9 @@ uint32_t rtems_configuration_get_maximum_regions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_semaphores( void );
@@ -380,9 +380,9 @@ uint32_t rtems_configuration_get_maximum_semaphores( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_tasks( void );
@@ -407,9 +407,9 @@ uint32_t rtems_configuration_get_maximum_tasks( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_timers( void );
@@ -428,9 +428,9 @@ uint32_t rtems_configuration_get_maximum_timers( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 const rtems_api_configuration_table *

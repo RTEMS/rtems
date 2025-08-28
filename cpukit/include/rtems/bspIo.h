@@ -129,9 +129,9 @@ extern BSP_output_char_function_type BSP_output_char;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 void rtems_putc( char c );
@@ -154,9 +154,9 @@ void rtems_putc( char c );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 void rtems_put_char( int c, void *unused );
@@ -188,9 +188,9 @@ void rtems_put_char( int c, void *unused );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int putk( const char *s );
@@ -224,11 +224,11 @@ int putk( const char *s );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * Formatting of floating point numbers is not supported.
+ * - Formatting of floating point numbers is not supported.
  * @endparblock
  */
 RTEMS_PRINTFLIKE( 1, 2 ) int printk( const char *fmt, ... );
@@ -262,11 +262,11 @@ RTEMS_PRINTFLIKE( 1, 2 ) int printk( const char *fmt, ... );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * Formatting of floating point numbers is not supported.
+ * - Formatting of floating point numbers is not supported.
  * @endparblock
  */
 int vprintk( const char *fmt, va_list ap );
@@ -302,11 +302,11 @@ int vprintk( const char *fmt, va_list ap );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * Formatting of floating point numbers is not supported.
+ * - Formatting of floating point numbers is not supported.
  * @endparblock
  */
 int rtems_printk_printer( void *unused, const char *fmt, va_list ap );
@@ -359,9 +359,9 @@ extern BSP_polling_getchar_function_type BSP_poll_char;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int getchark( void );

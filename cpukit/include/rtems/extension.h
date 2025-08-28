@@ -100,15 +100,15 @@ extern "C" {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The calling task does not have to be the task that created the object.
+ * - The calling task does not have to be the task that created the object.
  *   Any local task that knows the object identifier can delete the object.
  * @endparblock
  */
@@ -217,10 +217,10 @@ typedef Internal_errors_Source rtems_fatal_source;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_extension_ident( rtems_name name, rtems_id *id );
@@ -298,15 +298,15 @@ typedef User_extensions_Table rtems_extensions_table;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The number of extension sets available to the application is configured
+ * - The number of extension sets available to the application is configured
  *   through the @ref CONFIGURE_MAXIMUM_USER_EXTENSIONS application
  *   configuration option.
  * @endparblock
@@ -345,9 +345,9 @@ rtems_status_code rtems_extension_create(
  * @parblock
  * The following constraints apply to functions of this type:
  *
- * * Thread dispatching is enabled.
+ * - Thread dispatching is enabled.
  *
- * * The executing thread is not the owner of the object allocator mutex.
+ * - The executing thread is not the owner of the object allocator mutex.
  * @endparblock
  */
 typedef User_extensions_thread_begin_extension rtems_task_begin_extension;
@@ -389,21 +389,21 @@ typedef User_extensions_thread_begin_extension rtems_task_begin_extension;
  * @parblock
  * The following constraints apply to functions of this type:
  *
- * * While the system is initialized, thread dispatching is disabled.
+ * - While the system is initialized, thread dispatching is disabled.
  *
- * * While the system is in the multitasking state, thread dispatching is
+ * - While the system is in the multitasking state, thread dispatching is
  *   enabled.
  *
- * * While an idle thread or another internal system thread is created, the
+ * - While an idle thread or another internal system thread is created, the
  *   object allocator mutex has no owner.
  *
- * * While a task is created by rtems_task_create(), the executing thread is
+ * - While a task is created by rtems_task_create(), the executing thread is
  *   the owner of the object allocator mutex.
  *
- * * While a task is constructed by rtems_task_construct(), the executing
+ * - While a task is constructed by rtems_task_construct(), the executing
  *   thread is the owner of the object allocator mutex.
  *
- * * While a task is created by pthread_create(), the executing thread is the
+ * - While a task is created by pthread_create(), the executing thread is the
  *   owner of the object allocator mutex.
  * @endparblock
  */
@@ -439,21 +439,21 @@ typedef User_extensions_thread_create_extension rtems_task_create_extension;
  * @parblock
  * The following constraints apply to functions of this type:
  *
- * * While the system is initialized, thread dispatching is disabled.
+ * - While the system is initialized, thread dispatching is disabled.
  *
- * * While the system is in the multitasking state, thread dispatching is
+ * - While the system is in the multitasking state, thread dispatching is
  *   enabled.
  *
- * * While an idle thread or another internal system thread is created, the
+ * - While an idle thread or another internal system thread is created, the
  *   object allocator mutex has no owner.
  *
- * * While a task is created by rtems_task_create(), the executing thread is
+ * - While a task is created by rtems_task_create(), the executing thread is
  *   the owner of the object allocator mutex.
  *
- * * While a task is constructed by rtems_task_construct(), the executing
+ * - While a task is constructed by rtems_task_construct(), the executing
  *   thread is the owner of the object allocator mutex.
  *
- * * While a task is created by pthread_create(), the executing thread is the
+ * - While a task is created by pthread_create(), the executing thread is the
  *   owner of the object allocator mutex.
  * @endparblock
  */
@@ -475,7 +475,7 @@ typedef User_extensions_thread_delete_extension rtems_task_delete_extension;
  * @parblock
  * The following constraints apply to functions of this type:
  *
- * * Thread dispatching is enabled.
+ * - Thread dispatching is enabled.
  * @endparblock
  */
 typedef User_extensions_thread_exitted_extension rtems_task_exitted_extension;
@@ -508,11 +508,11 @@ typedef User_extensions_thread_exitted_extension rtems_task_exitted_extension;
  * @parblock
  * The following constraints apply to functions of this type:
  *
- * * Thread dispatching is enabled.
+ * - Thread dispatching is enabled.
  *
- * * Thread life is protected.
+ * - Thread life is protected.
  *
- * * The executing thread is not the owner of the object allocator mutex.
+ * - The executing thread is not the owner of the object allocator mutex.
  * @endparblock
  */
 typedef User_extensions_thread_restart_extension rtems_task_restart_extension;
@@ -544,7 +544,7 @@ typedef User_extensions_thread_restart_extension rtems_task_restart_extension;
  * @parblock
  * The following constraints apply to functions of this type:
  *
- * * Thread dispatching is disabled.
+ * - Thread dispatching is disabled.
  * @endparblock
  */
 typedef User_extensions_thread_start_extension rtems_task_start_extension;
@@ -599,9 +599,9 @@ typedef User_extensions_thread_start_extension rtems_task_start_extension;
  * @parblock
  * The following constraints apply to functions of this type:
  *
- * * Thread dispatching is disabled.
+ * - Thread dispatching is disabled.
  *
- * * Where the system was built with SMP support enabled, maskable interrupts
+ * - Where the system was built with SMP support enabled, maskable interrupts
  *   are disabled for the executing thread.
  * @endparblock
  */
@@ -634,11 +634,11 @@ typedef User_extensions_thread_switch_extension rtems_task_switch_extension;
  * @parblock
  * The following constraints apply to functions of this type:
  *
- * * Thread dispatching is enabled.
+ * - Thread dispatching is enabled.
  *
- * * Thread life is protected.
+ * - Thread life is protected.
  *
- * * The executing thread is not the owner of the object allocator mutex.
+ * - The executing thread is not the owner of the object allocator mutex.
  * @endparblock
  */
 typedef User_extensions_thread_terminate_extension rtems_task_terminate_extension;
