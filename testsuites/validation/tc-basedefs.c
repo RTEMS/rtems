@@ -1716,7 +1716,6 @@ static void RtemsBasedefsValBasedefs_Action_47( void )
    * unused_func().
    */
 
-
   /*
    * It cannot automatically be checked that the RTEMS_UNUSED macro has the
    * desired effect. It is checked that such a macro exists and one can
@@ -1732,7 +1731,6 @@ static void RtemsBasedefsValBasedefs_Action_47( void )
    * manually check that no compiler warnings are produced for the
    * unused_struct.
    */
-
 
   /*
    * It cannot automatically be checked that the RTEMS_UNUSED macro has the
