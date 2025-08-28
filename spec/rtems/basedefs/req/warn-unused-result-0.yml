@@ -13,7 +13,7 @@ text: |
   When the code is compiled with the GNU C compiler,
   and the ${../if/warn-unused-result:/name} macro is used as last part
   of a function declaration or attached to a function definition,
-  and that function has a return type other than ``void``,
+  and that function has a return type other than `void`,
   and the returned value is not used,
   the macro shall cause the compiler to show a compiler warning.
 type: requirement

@@ -3,7 +3,7 @@ appl-config-option-type: integer
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
-  The default value is ``rtems_build_name( 'U', 'I', '1', ' ' )``.
+  The default value is `rtems_build_name( 'U', 'I', '1', ' ' )`.
 description: |
   The value of this configuration option defines the name of the Classic API
   initialization task.

@@ -11,10 +11,10 @@ references: []
 requirement-type: functional
 text: |
   When the code is compiled with a C compiler and
-  the ``__STDC_VERSION__`` symbol is defined with version ``201112L`` or
+  the `__STDC_VERSION__` symbol is defined with version `201112L` or
   higher or
   the code is compiled with a C++ compiler
-  and the ``__cplusplus`` symbol is defined with version ``201103L`` or higher,
+  and the `__cplusplus` symbol is defined with version `201103L` or higher,
   the macro ${../if/alignof:/name} shall not evaluate its
   argument ${../if/alignof:/params[0]/name}.
 type: requirement

@@ -34,7 +34,7 @@ text: |
   When the code is compiled with the GNU C compiler,
   and the ${../if/zero-length-array:/name} macro is used as
   element count of an array declaration,
-  and that array declaration is the last member of a ``struct`` that is
+  and that array declaration is the last member of a `struct` that is
   otherwise non-empty,
   and that structure is never used as member of another structure or
   array,

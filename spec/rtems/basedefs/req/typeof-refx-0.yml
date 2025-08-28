@@ -15,11 +15,11 @@ references: []
 requirement-type: functional
 text: |
   When the argument value of ${../if/typeof-refx:/params[0]/name} consists
-  of a sequence of *i* ``*`` and the type of the other argument
+  of a sequence of *i* `*` and the type of the other argument
   has *i* or less than *i* nested pointers
-  (for example ``*`` for a pointer to ``int``,
-  ``**`` for a pointer to a pointer of ``int``, ``***`` for a pointer to
-  a pointer to a pointer to ``int``),
+  (for example `*` for a pointer to `int`,
+  `**` for a pointer to a pointer of `int`, `***` for a pointer to
+  a pointer to a pointer to `int`),
   and ${../if/typeof-refx:/params[1]/name} is either a pointer type
   (possibly with qualifiers) or an expression of such a pointer type,
   the macro ${../if/typeof-refx:/name} shall result in a type expression

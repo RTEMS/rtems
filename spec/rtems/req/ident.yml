@@ -84,13 +84,13 @@ pre-conditions:
     test-code: |
       ctx->name = 1;
     text: |
-      While the ``name`` parameter is not associated with an active object of
+      While the `name` parameter is not associated with an active object of
       the specified class .
   - name: Valid
     test-code: |
       ctx->name = ctx->name_local_object;
     text: |
-      While the ``name`` parameter is associated with an active object of the
+      While the `name` parameter is associated with an active object of the
       specified class .
   test-epilogue: null
   test-prologue: null
@@ -100,32 +100,32 @@ pre-conditions:
     test-code: |
       ctx->node = 1;
     text: |
-      While the ``node`` parameter is the local node number.
+      While the `node` parameter is the local node number.
   - name: Remote
     test-code: |
       ctx->node = 2;
     text: |
-      While the ``node`` parameter is a remote node number.
+      While the `node` parameter is a remote node number.
   - name: Invalid
     test-code: |
       ctx->node = 256;
     text: |
-      While the ``node`` parameter is an invalid node number.
+      While the `node` parameter is an invalid node number.
   - name: SearchAll
     test-code: |
       ctx->node = RTEMS_SEARCH_ALL_NODES;
     text: |
-      While the ``node`` parameter is ${../object/if/search-all-nodes:/name}.
+      While the `node` parameter is ${../object/if/search-all-nodes:/name}.
   - name: SearchOther
     test-code: |
       ctx->node = RTEMS_SEARCH_OTHER_NODES;
     text: |
-      While the ``node`` parameter is ${../object/if/search-other-nodes:/name}.
+      While the `node` parameter is ${../object/if/search-other-nodes:/name}.
   - name: SearchLocal
     test-code: |
       ctx->node = RTEMS_SEARCH_LOCAL_NODE;
     text: |
-      While the ``node`` parameter is ${../object/if/search-local-node:/name}.
+      While the `node` parameter is ${../object/if/search-local-node:/name}.
   test-epilogue: null
   test-prologue: null
 - name: Id
@@ -135,13 +135,13 @@ pre-conditions:
       ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
     text: |
-      While the ``id`` parameter references an object of type
+      While the `id` parameter references an object of type
       ${../type/if/id:/name}.
   - name: 'Null'
     test-code: |
       ctx->id = NULL;
     text: |
-      While the ``id`` parameter is ${/c/if/null:/name}.
+      While the `id` parameter is ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 rationale: null

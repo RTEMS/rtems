@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: initializer
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-default-value: '``&MPCI_table``'
+default-value: '`&MPCI_table`'
 description: |
   The value of this configuration option initializes the MPCI Configuration
   Table.

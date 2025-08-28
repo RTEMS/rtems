@@ -64,7 +64,7 @@ definition:
       construction by ${construct:/name} fails.
 
       The actual thread-local storage size is determined when the application
-      executable is linked.  The ``rtems-exeinfo`` command line tool included
+      executable is linked.  The `rtems-exeinfo` command line tool included
       in the RTEMS Tools can be used to obtain the thread-local storage size
       and alignment of an application executable.
 

@@ -46,7 +46,7 @@ notes: |
 
   * ${init-task-stack-size:/name} and
 
-  * ``CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE``
+  * `CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE`
 
   configuration options are mutually exclusive.
 type: interface

@@ -4,7 +4,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: |
   In case this configuration option is defined, then the memory areas used for
-  the RTEMS Workspace and the C Program Heap are dirtied with a ``0xCF`` byte
+  the RTEMS Workspace and the C Program Heap are dirtied with a `0xCF` byte
   pattern during system initialization.
 enabled-by: true
 index-entries: []

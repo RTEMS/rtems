@@ -9,5 +9,5 @@ method: by-analysis
 references: []
 text: |
   There is no errata workaround necessary for the window overflow trap, since
-  the window overflow trap always returns to a ``save`` instruction.
+  the window overflow trap always returns to a `save` instruction.
 type: validation

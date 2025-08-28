@@ -9,5 +9,5 @@ rationale: null
 text: |
   The value of the application configuration option shall be defined to a valid
   function pointer of the type
-  ``void ( *entry_point )( rtems_task_argument )``.
+  `void ( *entry_point )( rtems_task_argument )`.
 type: constraint

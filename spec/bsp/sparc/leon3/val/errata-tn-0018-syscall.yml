@@ -11,5 +11,5 @@ references:
   hash: QDjhpRe0UrN3OhoVJEGSnJU0028ZHBGjXYFXrZsRwO4=
   type: file
 text: |
-  The ``syscall`` trap handler shuts down the system and never returns.
+  The `syscall` trap handler shuts down the system and never returns.
 type: validation

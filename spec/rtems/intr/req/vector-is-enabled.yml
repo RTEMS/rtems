@@ -78,7 +78,7 @@ pre-conditions:
       ctx->enabled = &ctx->enabled_obj;
     text: |
       While the ${../if/vector-is-enabled:/params[1]/name} parameter references an
-      object of type ``bool``.
+      object of type `bool`.
   - name: 'Null'
     test-code: |
       ctx->enabled = NULL;
@@ -173,7 +173,7 @@ test-context:
   member: |
     bool is_enabled
 - brief: |
-    This member provides the ``bool`` object.
+    This member provides the `bool` object.
   description: null
   member: |
     bool enabled_obj

@@ -14,6 +14,6 @@ references:
   hash: J6qNYoUFUVXetylnUNrz7MY1jrBs4AbuS5mxyZ4FxEc=
   type: file
 text: |
-  A special ``rett`` sequence errata workaround was implemented for the
+  A special `rett` sequence errata workaround was implemented for the
   interrupt trap handler.
 type: validation

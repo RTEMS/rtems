@@ -14,8 +14,8 @@ references: []
 requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler starting at version 2.5
-  or the ``__cplusplus`` symbol is defined with version ``201103L`` or higher
-  or the ``__STDC_VERSION__`` symbol is defined with version ``201112L``
+  or the `__cplusplus` symbol is defined with version `201103L` or higher
+  or the `__STDC_VERSION__` symbol is defined with version `201112L`
   or higher,
   and the ${../if/no-return:/name} macro is used as first part of a
   function declaration or definition,

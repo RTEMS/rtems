@@ -11,6 +11,6 @@ references: []
 requirement-type: functional
 text: |
   When the ${../if/entry-initializer:/name} is used to statically initialize an
-  object of type ${../if/entry:/name}, the ``next`` member of the object shall
+  object of type ${../if/entry:/name}, the `next` member of the object shall
   be initialized to a value equal to ${/c/if/null:/name}.
 type: requirement

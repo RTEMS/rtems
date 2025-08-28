@@ -9,7 +9,7 @@ links:
 rationale: |
   Counting of arguments starts at 1 from the left with the
   exception of non-static C++ methods where the counting starts with
-  2 due to the implicit ``this`` argument.
+  2 due to the implicit `this` argument.
 references: []
 requirement-type: functional
 text: |
@@ -20,10 +20,10 @@ text: |
   ${../if/printflike:/params[1]/name} are constant numbers
   referring to two different arguments of that function,
   and the function argument number ${../if/printflike:/params[0]/name}
-  is a ``printf``-format string,
+  is a `printf`-format string,
   and the function argument number ${../if/printflike:/params[1]/name}
-  is the first argument to be used in the ``printf``-format string,
-  and all other arguments used in the ``printf``-format string
+  is the first argument to be used in the `printf`-format string,
+  and all other arguments used in the `printf`-format string
   are arguments ${../if/printflike:/params[1]/name} + 1,
   ${../if/printflike:/params[1]/name} + 2,
   ${../if/printflike:/params[1]/name} + 3, and so on,

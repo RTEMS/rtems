@@ -12,5 +12,5 @@ requirement-type: functional
 text: |
   When the simple timecounter tick service is called, the time points of the
   current timehand shall be advanced by the time interval specified by the
-  ``delta`` parameter.
+  `delta` parameter.
 type: requirement

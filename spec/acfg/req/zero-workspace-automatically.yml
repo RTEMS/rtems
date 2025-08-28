@@ -13,6 +13,6 @@ references: []
 requirement-type: functional
 text: |
   The application configuration option shall enable that the memory areas used
-  for the RTEMS Workspace and the C Program Heap are zeroed with a ``0x00``
+  for the RTEMS Workspace and the C Program Heap are zeroed with a `0x00`
   byte pattern during system initialization.
 type: requirement

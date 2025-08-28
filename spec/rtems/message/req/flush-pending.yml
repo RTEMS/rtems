@@ -113,7 +113,7 @@ pre-conditions:
       ctx->count_param = &ctx->count;
     text: |
       While the ${../if/flush:/params[1]/name} parameter references
-      an ``uint32_t`` object.
+      an `uint32_t` object.
   - name: 'Null'
     test-code: |
       ctx->count_param = NULL;

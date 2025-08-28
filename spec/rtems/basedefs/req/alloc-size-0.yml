@@ -19,5 +19,5 @@ text: |
   and the declared function returns a pointer to memory with the size in bytes
   provided by the function argument number ${../if/alloc-size:/params[0]/name},
   the macro shall cause the compiler to improve the correctness of
-  ``__builtin_object_sizepointer`` analysis.
+  `__builtin_object_sizepointer` analysis.
 type: requirement

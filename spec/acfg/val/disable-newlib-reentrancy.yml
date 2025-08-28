@@ -26,7 +26,7 @@ text: |
   ${../if/disable-newlib-reentrancy:/name} is not defined.  For the
   pre-qualified only build of RTEMS, this would lead to an unresolved reference
   linker error.  If ${../if/disable-newlib-reentrancy:/name} is defined, then
-  the ``__getreent()`` function is not provided by RTEMS.  If
+  the `__getreent()` function is not provided by RTEMS.  If
   ${../if/disable-newlib-reentrancy:/name} is defined, then the Newlib
   reentrancy structure is not contained in the ${/glossary/tcb:/term}.  This
   shows that the ${../req/disable-newlib-reentrancy:/spec} requirement is implemented

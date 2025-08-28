@@ -81,7 +81,7 @@ pre-conditions:
       ctx->buffer = &ctx->buffer_pointer;
     text: |
       While the ${../if/get-buffer:/params[1]/name} parameter references an
-      object of type ``void *``.
+      object of type `void *`.
   - name: 'Null'
     test-code: |
       ctx->buffer = NULL;

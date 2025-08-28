@@ -31,7 +31,7 @@ notes: |
   ${/rtems/io/if/putc:/name}.  This task runs with the least important priority.
   The write buffer size is 2047 characters and it is not configurable.
 
-  Use ``fsync( STDOUT_FILENO )`` or ``fdatasync( STDOUT_FILENO )`` to drain the
+  Use `fsync( STDOUT_FILENO )` or `fdatasync( STDOUT_FILENO )` to drain the
   write buffer.
 
   The Termios framework is not used.  There is no support to change device
@@ -43,7 +43,7 @@ notes: |
 
   * ${appl-needs-simple-console-driver:/name}, and
 
-  * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER``
+  * `CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER`
 
   configuration options are mutually exclusive.
 type: interface

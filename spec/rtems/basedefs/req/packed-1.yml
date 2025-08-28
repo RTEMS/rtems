@@ -16,7 +16,7 @@ text: |
   When the code is compiled with the GNU C compiler,
   and the ${../if/packed:/name} macro is attached to a
   struct, union, or C++ class type definition,
-  and the ``aligned`` attribute or ${../if/aligned:/name} macro
+  and the `aligned` attribute or ${../if/aligned:/name} macro
   is not used on the struct, union, or C++ class type definition or
   any member thereof,
   the ${../if/packed:/name} macro shall cause all structure, union, or class

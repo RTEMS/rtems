@@ -20,7 +20,7 @@ notes: |
 
   The application shall define exactly one of the following configuration options
 
-  * ``CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER``,
+  * `CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER`,
 
   * ${appl-does-not-need-clock-driver:/name}, or
 

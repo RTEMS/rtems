@@ -11,7 +11,7 @@ references: []
 requirement-type: functional
 text: |
   When the ${../if/entry-initializer:/name} is used to statically initialize an
-  object of type ${../if/entry:/name}, the ``arg`` member of the object
+  object of type ${../if/entry:/name}, the `arg` member of the object
   shall be initialized to the value of the
   ${../if/entry-initializer:/params[1]/name}.
 type: requirement

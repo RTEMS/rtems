@@ -30,7 +30,7 @@ name: CONFIGURE_INTERRUPT_STACK_SIZE
 notes: |
   There is one interrupt stack available for each configured processor
   (${max-processors:/name}).  The interrupt stack areas are
-  statically allocated in a special linker section (``.rtemsstack.interrupt``).
+  statically allocated in a special linker section (`.rtemsstack.interrupt`).
   The placement of this linker section is BSP-specific.
 
   Some BSPs use the interrupt stack as the initialization stack which is used

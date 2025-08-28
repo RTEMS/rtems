@@ -96,7 +96,7 @@ pre-conditions:
       ctx->memptr = &ctx->memptr_obj;
     text: |
       While the memptr parameter references an object of type
-      ``void *``.
+      `void *`.
   - name: 'Null'
     test-code: |
       ctx->memptr = NULL;

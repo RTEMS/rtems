@@ -11,6 +11,6 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/idle-thread:/name} function shall perform an endless loop which
-  sets the processor into the power-down mode using a write to ``%asr19`` in
+  sets the processor into the power-down mode using a write to `%asr19` in
   each iteration.
 type: requirement

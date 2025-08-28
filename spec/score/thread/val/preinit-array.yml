@@ -7,20 +7,20 @@ enabled-by:
 links: []
 test-actions:
 - action-brief: |
-    Validate the ``.preinit_array`` constructor invocation.  Mark that the test
+    Validate the `.preinit_array` constructor invocation.  Mark that the test
     case executed.
   action-code: |
     test_case_executed = true;
   checks:
   - brief: |
-      Check that the ``.preinit_array`` constructor was called exactly once.
+      Check that the `.preinit_array` constructor was called exactly once.
     code: |
       T_eq_u32( constructor_calls, 1 );
     links:
     - role: validation
       uid: ../req/global-construction-preinit-array
   - brief: |
-      Check that the ``.preeinit_array`` construction was done by the Classic
+      Check that the `.preeinit_array` construction was done by the Classic
       API user initialization task.
     code: |
       T_eq_u32( constructor_id, rtems_task_self() );
@@ -28,7 +28,7 @@ test-actions:
     - role: validation
       uid: ../req/global-construction-classic
   - brief: |
-      Check that the ``.preinit_array`` constructor was called before the
+      Check that the `.preinit_array` constructor was called before the
       global constructor invocations.
     code: |
       T_eq_u32( constructor_counter, 1 );
@@ -38,7 +38,7 @@ test-actions:
       uid: ../req/global-construction-preinit-array-before-constructors
   links: []
 test-brief: |
-  Tests the ``.preinit_array`` constructor handling of the C runtime support.
+  Tests the `.preinit_array` constructor handling of the C runtime support.
 test-context: []
 test-context-support: null
 test-description: null

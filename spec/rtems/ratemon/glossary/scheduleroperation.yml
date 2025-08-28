@@ -13,7 +13,7 @@ text: |
   ${/glossary/task:/plural} for CPU time.  What exactly happens depends on the
   ${/glossary/scheduler-home:/term} of the ${/glossary/task:/term}.  Directives
   like ${../if/period:/name} or ${../if/cancel:/name} invoke
-  ${/glossary/scheduler:/term} operations like ``release_job`` or ``cancel_job``.
+  ${/glossary/scheduler:/term} operations like `release_job` or `cancel_job`.
   The ${/glossary/scheduler-home:/term} often changes the
   ${/glossary/priority-task:/term}.
 type: glossary

@@ -14,9 +14,9 @@ rationale: |
   * When the top of the stack has been reached, this function returns
     an unspecified value.
   * Additional post-processing of the returned value may be needed, see
-    ``__builtin_extract_return_addr``.
+    `__builtin_extract_return_addr`.
   * The stored representation of the return address in memory may be
-    different from the address returned by ``__builtin_return_address``.
+    different from the address returned by `__builtin_return_address`.
 
   Under these circumstances it is at least difficult to specify
   what the actual result of this macro is.
@@ -25,5 +25,5 @@ requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler,
   the ${../if/return-address:/name} macro shall evaluate to the
-  code ``__builtin_return_address( 0 )``.
+  code `__builtin_return_address( 0 )`.
 type: requirement

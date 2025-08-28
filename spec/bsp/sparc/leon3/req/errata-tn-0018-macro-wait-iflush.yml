@@ -10,5 +10,5 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The ``TN0018_WAIT_IFLUSH`` macro shall flush the instruction cache.
+  The `TN0018_WAIT_IFLUSH` macro shall flush the instruction cache.
 type: requirement

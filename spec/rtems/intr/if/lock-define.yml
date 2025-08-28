@@ -41,8 +41,8 @@ notes: |
   statically by ${lock-initializer:/name}.
 params:
 - description: |
-    is the storage-class specifier for the ISR lock to declare, for example ``extern``
-    or ``static``.
+    is the storage-class specifier for the ISR lock to declare, for example `extern`
+    or `static`.
   dir: null
   name: _specifier
 - description: |

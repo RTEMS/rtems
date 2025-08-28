@@ -11,6 +11,6 @@ references: []
 requirement-type: functional
 text: |
   While the timehand is updated, when the ${/glossary/ntp:/term} handler is
-  called, the value returned by the ``adjustment`` parameter shall be used to
+  called, the value returned by the `adjustment` parameter shall be used to
   adjust the timecounter frequency of the timehand.
 type: requirement

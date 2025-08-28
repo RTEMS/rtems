@@ -15,7 +15,7 @@ text: |
   When the code is compiled with the GNU C compiler,
   and the ${../if/packed:/name} macro is used as last part of a
   structure member declaration,
-  and the ``aligned`` attribute or ${../if/aligned:/name} macro
+  and the `aligned` attribute or ${../if/aligned:/name} macro
   is not used on this structure member,
   the ${../if/packed:/name} macro shall cause the structure member
   to be aligned at one bit for a bit-field member and one byte otherwise.

@@ -10,6 +10,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The ``TN0018_WRITE_PSR`` macro shall write the source register to register
-  ``%psr``.
+  The `TN0018_WRITE_PSR` macro shall write the source register to register
+  `%psr`.
 type: requirement

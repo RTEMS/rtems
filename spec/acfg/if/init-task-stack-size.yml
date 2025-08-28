@@ -24,7 +24,7 @@ name: CONFIGURE_INIT_TASK_STACK_SIZE
 notes: |
   The
 
-  * ``CONFIGURE_INIT_TASK_STACK_SIZE`` and
+  * `CONFIGURE_INIT_TASK_STACK_SIZE` and
 
   * ${init-task-construct-storage-size:/name}
 

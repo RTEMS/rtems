@@ -140,7 +140,7 @@ post-conditions:
       /* Cannot be tested as the effect is unknown. */
     text: |
       The last call of the ${../if/period:/name} function shall execute
-      the ``release_job`` ${../glossary/scheduleroperation:/term} of the
+      the `release_job` ${../glossary/scheduleroperation:/term} of the
       ${/glossary/scheduler-home:/term}.
   - name: Nop
     test-code: |
@@ -334,14 +334,14 @@ test-context:
   description: |
     The action is either executed by the ${../glossary/ownertask:/term}
     or by the worker ${/glossary/task:/term} depending on the function
-    pointer used here.  ``ctx_arg`` must be a pointer to this context
+    pointer used here.  `ctx_arg` must be a pointer to this context
     structure.
   member: |
     uint32_t ( *do_action )( void *ctx, void (*todo)( void *ctx_arg ) )
 - brief: |
     This member serves to pass the pointer to the function
     which the work ${../glossary/ownertask:/term} shall execute from
-    function ``OwnerDoWork`` to function ``WorkerTask``.
+    function `OwnerDoWork` to function `WorkerTask`.
   description: null
   member: |
     void (*worker_todo)( void *ctx )

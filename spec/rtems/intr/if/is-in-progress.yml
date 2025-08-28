@@ -12,8 +12,8 @@ definition:
     return: ${/c/if/bool:/name}
   variants: []
 description: |
-  This directive returns ``true``, if the current processor is currently
-  servicing an interrupt, and ``false`` otherwise.  A return value of ``true``
+  This directive returns `true`, if the current processor is currently
+  servicing an interrupt, and `false` otherwise.  A return value of `true`
   indicates that the caller is an interrupt service routine, **not** a task.
   The directives available to an interrupt service routine are restricted.
 enabled-by: true

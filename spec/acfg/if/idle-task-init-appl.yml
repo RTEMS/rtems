@@ -38,7 +38,7 @@ notes: |
 
   * ${posix-init-thread-table:/name}, or
 
-  * ``CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION``
+  * `CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
 
   otherwise a compile time error in the configuration file will occur.
 

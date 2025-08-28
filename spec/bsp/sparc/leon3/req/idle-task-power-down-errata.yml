@@ -11,5 +11,5 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/idle-thread:/name} function shall be implemented according to
-  ``Workaround 2`` of {errata-gr712rc-08}.
+  `Workaround 2` of {errata-gr712rc-08}.
 type: requirement

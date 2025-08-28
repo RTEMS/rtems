@@ -15,11 +15,11 @@ text: |
   as the function,
   and the macro is not used in block scope,
   and the macro is used in this form:
-  ``<return-type> newname([argument-type-list]) ${../if/alias:/name}(oldname)``;,
-  and the ``<return-type>`` and ``argument-type-list`` match the
-  signature of the function ``oldname``,
+  `<return-type> newname([argument-type-list]) ${../if/alias:/name}(oldname)`;,
+  and the `<return-type>` and `argument-type-list` match the
+  signature of the function `oldname`,
   and the code is compiled with the GNU C compiler,
   the ${../if/alias:/name} macro shall cause the compiler to create
-  an additional name (``newname`` in the syntax) for the function
+  an additional name (`newname` in the syntax) for the function
   given as argument ${../if/alias:/params[0]/name}.
 type: requirement

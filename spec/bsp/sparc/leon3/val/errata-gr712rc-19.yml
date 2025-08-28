@@ -15,6 +15,6 @@ references:
   type: file
 text: |
   The ${/glossary/sourcecode:/term} of the software product was reviewed for
-  uses of the ``sta`` instruction with the ASI set to 0x1c.  No use of this
+  uses of the `sta` instruction with the ASI set to 0x1c.  No use of this
   instruction was found.
 type: validation

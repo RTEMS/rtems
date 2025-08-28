@@ -8,5 +8,5 @@ links:
 rationale: null
 text: |
   The user of the software product shall not use interfaces provided by the
-  software product those name starts with an underscore (``_``).
+  software product those name starts with an underscore (`_`).
 type: constraint

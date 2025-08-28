@@ -8,6 +8,6 @@ links:
 rationale: null
 text: |
   The value of the application configuration option shall be defined to a valid
-  function pointer of the type ``void ( *initialize )( size_t )`` or to
+  function pointer of the type `void ( *initialize )( size_t )` or to
   ${/c/if/null:/name}.
 type: constraint

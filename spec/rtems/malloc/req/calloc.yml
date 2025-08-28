@@ -47,7 +47,7 @@ post-conditions:
       T_ge_uptr( size, ctx->nelem * ctx->elsize );
     text: |
       The size of the allocated memory area shall greater than or equal to the
-      product of the ``nelem`` and ``elsize`` parameters.
+      product of the `nelem` and `elsize` parameters.
   test-epilogue: null
   test-prologue: |
     void     *ptr;
@@ -70,18 +70,18 @@ pre-conditions:
     test-code: |
       ctx->nelem = SIZE_MAX;
     text: |
-      While the ``nelem`` parameter is not equal to zero, while the ``nelem``
+      While the `nelem` parameter is not equal to zero, while the `nelem`
       parameter is too large to allocate a memory area with the specified size.
   - name: Zero
     test-code: |
       ctx->nelem = 0;
     text: |
-      While the ``nelem`` parameter is equal to zero.
+      While the `nelem` parameter is equal to zero.
   - name: Valid
     test-code: |
       ctx->nelem = 1;
     text: |
-      While the ``nelem`` parameter is not equal to zero, while the ``nelem``
+      While the `nelem` parameter is not equal to zero, while the `nelem`
       parameter is small enough to allocate a memory area with the specified
       size.
   test-epilogue: null
@@ -92,18 +92,18 @@ pre-conditions:
     test-code: |
       ctx->elsize = SIZE_MAX;
     text: |
-      While the ``elsize`` parameter is not equal to zero, while the ``elsize``
+      While the `elsize` parameter is not equal to zero, while the `elsize`
       parameter is too large to allocate a memory area with the specified size.
   - name: Zero
     test-code: |
       ctx->elsize = 0;
     text: |
-      While the ``elsize`` parameter is equal to zero.
+      While the `elsize` parameter is equal to zero.
   - name: Valid
     test-code: |
       ctx->elsize = sizeof( uint64_t );
     text: |
-      While the ``elsize`` parameter is not equal to zero, while the ``elsize``
+      While the `elsize` parameter is not equal to zero, while the `elsize`
       parameter is small enough to allocate a memory area with the specified
       size.
   test-epilogue: null
@@ -128,12 +128,12 @@ test-context:
   member: |
     void *ptr
 - brief: |
-    This member specifies if the ``nelem`` parameter value.
+    This member specifies if the `nelem` parameter value.
   description: null
   member: |
     size_t nelem
 - brief: |
-    This member specifies if the ``elsize`` parameter value.
+    This member specifies if the `elsize` parameter value.
   description: null
   member: |
     size_t elsize

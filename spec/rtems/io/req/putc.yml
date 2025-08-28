@@ -16,7 +16,7 @@ post-conditions:
       T_eq_sz( ctx->output_count, 2 );
     text: |
       The function referenced by ${../if/bsp-output-char:/name} shall be called
-      with a ``CR`` character followed by a call with a ``NL`` character.
+      with a `CR` character followed by a call with a `NL` character.
   - name: Other
     test-code: |
       T_eq_int( ctx->output[ 0 ], 0xff );
@@ -34,13 +34,13 @@ pre-conditions:
       ctx->character = '\n';
     text: |
       While the ${../if/putc:/params[0]/name} parameter is
-      equal to ``NL``.
+      equal to `NL`.
   - name: Other
     test-code: |
       ctx->character = (char) 0xff;
     text: |
       While the ${../if/putc:/params[0]/name} parameter is
-      not equal to ``NL``.
+      not equal to `NL`.
   test-epilogue: null
   test-prologue: null
 rationale: null

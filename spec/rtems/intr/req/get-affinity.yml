@@ -107,7 +107,7 @@ pre-conditions:
       ctx->cpusetsize = sizeof( ctx->cpuset_obj );
     text: |
       While the ${../if/get-affinity:/params[1]/name} parameter is an integral
-      multiple of the size of ``long``,
+      multiple of the size of `long`,
       while the ${../if/get-affinity:/params[1]/name} parameter specifies a
       processor set which is large enough to contain the processor affinity set
       of the interrupt specified by ${../if/get-affinity:/params[0]/name}.
@@ -116,7 +116,7 @@ pre-conditions:
       ctx->cpusetsize = 0;
     text: |
       While the ${../if/get-affinity:/params[1]/name} parameter is an integral
-      multiple of the size of ``long``,
+      multiple of the size of `long`,
       while the ${../if/get-affinity:/params[1]/name} parameter specifies a
       processor set which is not large enough to contain the processor affinity
       set of the interrupt specified by ${../if/get-affinity:/params[0]/name}.
@@ -125,7 +125,7 @@ pre-conditions:
       ctx->cpusetsize = SIZE_MAX;
     text: |
       While the ${../if/get-affinity:/params[1]/name} parameter is not an
-      integral multiple of the size of ``long``.
+      integral multiple of the size of `long`.
   test-epilogue: null
   test-prologue: null
 - name: CPUSet

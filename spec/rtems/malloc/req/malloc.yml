@@ -47,7 +47,7 @@ post-conditions:
       T_ge_uptr( size, ctx->size );
     text: |
       The size of the allocated memory area shall greater than or equal to the
-      ``size`` parameter.
+      `size` parameter.
   test-epilogue: null
   test-prologue: |
     void     *ptr;
@@ -61,18 +61,18 @@ pre-conditions:
     test-code: |
       ctx->size = SIZE_MAX;
     text: |
-      While the ``size`` parameter is not equal to zero, while the ``size``
+      While the `size` parameter is not equal to zero, while the `size`
       parameter is too large to allocate a memory area with the specified size.
   - name: Zero
     test-code: |
       ctx->size = 0;
     text: |
-      While the ``size`` parameter is equal to zero.
+      While the `size` parameter is equal to zero.
   - name: Valid
     test-code: |
       ctx->size = 1;
     text: |
-      While the ``size`` parameter is not equal to zero, while the ``size``
+      While the `size` parameter is not equal to zero, while the `size`
       parameter is small enough to allocate a memory area with the specified
       size.
   test-epilogue: null
@@ -97,7 +97,7 @@ test-context:
   member: |
     void *ptr
 - brief: |
-    This member specifies if the ``size`` parameter value.
+    This member specifies if the `size` parameter value.
   description: null
   member: |
     size_t size

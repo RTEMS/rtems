@@ -14,7 +14,7 @@ requirement-type: functional
 text: |
   When the argument ${../if/aligned:/params[0]/name} is a
   positive power of two integer,
-  and the macro ${../if/aligned:/name} is used on a none-``static``
+  and the macro ${../if/aligned:/name} is used on a none-`static`
   variable or structure field,
   and the used linker supports alignments of the size given by the
   ${../if/aligned:/params[0]/name} argument,

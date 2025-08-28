@@ -39,6 +39,6 @@ notes: |
   ${min-posix-thread-stack-size:/name}
   configuration option.
 
-  In releases before RTEMS 5.1 the ``CONFIGURE_MINIMUM_TASK_STACK_SIZE`` was
+  In releases before RTEMS 5.1 the `CONFIGURE_MINIMUM_TASK_STACK_SIZE` was
   used to define the default value of ${interrupt-stack-size:/name}.
 type: interface

@@ -26,7 +26,7 @@ notes: |
 
   * ${appl-does-not-need-clock-driver:/name}, or
 
-  * ``CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER``,
+  * `CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER`,
 
   otherwise a compile time error will occur.
 type: interface

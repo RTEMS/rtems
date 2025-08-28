@@ -42,7 +42,7 @@ params:
   dir: null
   name: vector
 - description: |
-    is the pointer to a ``bool`` object.  When the directive call is
+    is the pointer to a `bool` object.  When the directive call is
     successful, the enabled status of the interrupt associated with the
     interrupt vector specified by ${.:/params[0]/name} will be stored in this
     object.  When the interrupt was enabled for the processor executing the

@@ -20,7 +20,7 @@ text: |
   and there is another symbol at global scope with the same name as the above
   mentioned function or variable,
   and this other symbol is not defined with the ${../if/weak:/name} macro or
-  otherwise defined or declared ``weak``,
+  otherwise defined or declared `weak`,
   and both functions or variables have the same type,
   and in case of variables both variables have the same alignment and
   storage size,

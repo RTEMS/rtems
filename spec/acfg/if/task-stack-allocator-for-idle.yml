@@ -39,7 +39,7 @@ notes: |
 
   * ${idle-task-storage-size:/name}, and
 
-  * ``CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE``
+  * `CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE`
 
   configuration options are mutually exclusive.
 type: interface

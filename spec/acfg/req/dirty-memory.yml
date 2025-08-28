@@ -13,6 +13,6 @@ references: []
 requirement-type: functional
 text: |
   The application configuration option shall enable that the memory areas used
-  for the RTEMS Workspace and the C Program Heap are dirtied with a ``0xCF``
+  for the RTEMS Workspace and the C Program Heap are dirtied with a `0xCF`
   byte pattern during system initialization.
 type: requirement

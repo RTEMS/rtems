@@ -22,7 +22,7 @@ notes: |
 
   * ${rtems-init-tasks-table:/name},
 
-  * ``CONFIGURE_POSIX_INIT_THREAD_TABLE``, or
+  * `CONFIGURE_POSIX_INIT_THREAD_TABLE`, or
 
   * ${idle-task-init-appl:/name}
 

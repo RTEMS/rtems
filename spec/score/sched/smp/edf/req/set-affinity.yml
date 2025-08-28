@@ -13,7 +13,7 @@ post-conditions:
     test-code: |
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ TASK ] );
     text: |
-      The task ``T`` shall be scheduled on processor ``X``.
+      The task `T` shall be scheduled on processor `X`.
   - name: TaskIdle
     test-code: |
       T_true( scheduled->is_idle );
@@ -22,13 +22,13 @@ post-conditions:
       );
       T_eq_ptr( scheduler_node->user, scheduled );
     text: |
-      An idle task on behalf of task ``T`` shall be scheduled on processor
-      ``X``.
+      An idle task on behalf of task `T` shall be scheduled on processor
+      `X`.
   - name: Alpha
     test-code: |
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ ALPHA ] );
     text: |
-      The task ``A`` shall be scheduled on processor ``X``.
+      The task `A` shall be scheduled on processor `X`.
   - name: AlphaIdle
     test-code: |
       T_true( scheduled->is_idle );
@@ -37,13 +37,13 @@ post-conditions:
       );
       T_eq_ptr( scheduler_node->user, scheduled );
     text: |
-      An idle task on behalf of task ``A`` shall be scheduled on processor
-      ``X``.
+      An idle task on behalf of task `A` shall be scheduled on processor
+      `X`.
   - name: Beta
     test-code: |
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ BETA ] );
     text: |
-      The task ``B`` shall be scheduled on processor ``X``.
+      The task `B` shall be scheduled on processor `X`.
   - name: BetaIdle
     test-code: |
       T_true( scheduled->is_idle );
@@ -52,8 +52,8 @@ post-conditions:
       );
       T_eq_ptr( scheduler_node->user, scheduled );
     text: |
-      An idle task on behalf of task ``B`` shall be scheduled on processor
-      ``X``.
+      An idle task on behalf of task `B` shall be scheduled on processor
+      `X`.
   test-epilogue: null
   test-prologue: |
     const Per_CPU_Control *cpu;
@@ -68,7 +68,7 @@ post-conditions:
     test-code: |
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ TASK ] );
     text: |
-      The task ``T`` shall be scheduled on processor ``Y``.
+      The task `T` shall be scheduled on processor `Y`.
   - name: TaskIdle
     test-code: |
       T_true( scheduled->is_idle );
@@ -77,13 +77,13 @@ post-conditions:
       );
       T_eq_ptr( scheduler_node->user, scheduled );
     text: |
-      An idle task on behalf of task ``T`` shall be scheduled on processor
-      ``Y``.
+      An idle task on behalf of task `T` shall be scheduled on processor
+      `Y`.
   - name: Alpha
     test-code: |
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ ALPHA ] );
     text: |
-      The task ``A`` shall be scheduled on processor ``Y``.
+      The task `A` shall be scheduled on processor `Y`.
   - name: AlphaIdle
     test-code: |
       T_true( scheduled->is_idle );
@@ -92,13 +92,13 @@ post-conditions:
       );
       T_eq_ptr( scheduler_node->user, scheduled );
     text: |
-      An idle task on behalf of task ``A`` shall be scheduled on processor
-      ``Y``.
+      An idle task on behalf of task `A` shall be scheduled on processor
+      `Y`.
   - name: Beta
     test-code: |
       T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ BETA ] );
     text: |
-      The task ``B`` shall be scheduled on processor ``Y``.
+      The task `B` shall be scheduled on processor `Y`.
   - name: BetaIdle
     test-code: |
       T_true( scheduled->is_idle );
@@ -107,8 +107,8 @@ post-conditions:
       );
       T_eq_ptr( scheduler_node->user, scheduled );
     text: |
-      An idle task on behalf of task ``B`` shall be scheduled on processor
-      ``Y``.
+      An idle task on behalf of task `B` shall be scheduled on processor
+      `Y`.
   test-epilogue: null
   test-prologue: |
     const Per_CPU_Control *cpu;
@@ -124,7 +124,7 @@ pre-conditions:
     test-code: |
       CPU_FILL( &ctx->task_affinity_before );
     text: |
-      While task ``T`` is affine to all processors of its
+      While task `T` is affine to all processors of its
       ${/glossary/scheduler-home:/term} before the new thread to processor
       affinity is set.
   - name: X
@@ -132,7 +132,7 @@ pre-conditions:
       CPU_ZERO( &ctx->task_affinity_before );
       CPU_SET( 0, &ctx->task_affinity_before );
     text: |
-      While task ``T`` is affine to processor ``X`` before the new thread to
+      While task `T` is affine to processor `X` before the new thread to
       processor affinity is set.
   test-epilogue: null
   test-prologue: null
@@ -142,20 +142,20 @@ pre-conditions:
     test-code: |
       CPU_FILL( &ctx->task_affinity_after );
     text: |
-      While task ``T`` is set to be affine to all processors of its
+      While task `T` is set to be affine to all processors of its
       ${/glossary/scheduler-home:/term}.
   - name: X
     test-code: |
       CPU_ZERO( &ctx->task_affinity_after );
       CPU_SET( 0, &ctx->task_affinity_after );
     text: |
-      While task ``T`` is set to be affine to processor ``X``.
+      While task `T` is set to be affine to processor `X`.
   - name: Y
     test-code: |
       CPU_ZERO( &ctx->task_affinity_after );
       CPU_SET( 1, &ctx->task_affinity_after );
     text: |
-      While task ``T`` is set to be affine to processor ``Y``.
+      While task `T` is set to be affine to processor `Y`.
   test-epilogue: null
   test-prologue: null
 - name: Priority
@@ -164,12 +164,12 @@ pre-conditions:
     test-code: |
       ctx->task_priority = PRIO_HIGH;
     text: |
-      While task ``T`` has a high priority.
+      While task `T` has a high priority.
   - name: Low
     test-code: |
       ctx->task_priority = PRIO_NORMAL;
     text: |
-      While task ``T`` has a low priority.
+      While task `T` has a low priority.
   test-epilogue: null
   test-prologue: null
 - name: State
@@ -178,12 +178,12 @@ pre-conditions:
     test-code: |
       ctx->task_ready = true;
     text: |
-      While task ``T`` is ready.
+      While task `T` is ready.
   - name: Blocked
     test-code: |
       ctx->task_ready = false;
     text: |
-      While task ``T`` is blocked.
+      While task `T` is blocked.
   test-epilogue: null
   test-prologue: null
 - name: Sticky
@@ -192,12 +192,12 @@ pre-conditions:
     test-code: |
       ctx->task_sticky = true;
     text: |
-      While task ``T`` is sticky.
+      While task `T` is sticky.
   - name: 'No'
     test-code: |
       ctx->task_sticky = false;
     text: |
-      While task ``T`` is not sticky.
+      While task `T` is not sticky.
   test-epilogue: null
   test-prologue: null
 - name: Pinned
@@ -206,12 +206,12 @@ pre-conditions:
     test-code: |
       ctx->task_pinned = true;
     text: |
-      While task ``T`` is pinned to a processor.
+      While task `T` is pinned to a processor.
   - name: 'No'
     test-code: |
       ctx->task_pinned = false;
     text: |
-      While task ``T`` is not pinned to a processor.
+      While task `T` is not pinned to a processor.
   test-epilogue: null
   test-prologue: null
 - name: AlphaPriority
@@ -220,12 +220,12 @@ pre-conditions:
     test-code: |
       ctx->alpha_priority = PRIO_HIGH;
     text: |
-      While task ``A`` has a high priority.
+      While task `A` has a high priority.
   - name: Low
     test-code: |
       ctx->alpha_priority = PRIO_NORMAL;
     text: |
-      While task ``A`` has a low priority.
+      While task `A` has a low priority.
   test-epilogue: null
   test-prologue: null
 - name: AlphaAffinity
@@ -234,14 +234,14 @@ pre-conditions:
     test-code: |
       CPU_FILL( &ctx->alpha_affinity );
     text: |
-      While task ``A`` is affine to all processors of its
+      While task `A` is affine to all processors of its
       ${/glossary/scheduler-home:/term}.
   - name: X
     test-code: |
       CPU_ZERO( &ctx->alpha_affinity );
       CPU_SET( 0, &ctx->alpha_affinity );
     text: |
-      While task ``A`` is affine to processor ``X``.
+      While task `A` is affine to processor `X`.
   test-epilogue: null
   test-prologue: null
 - name: AlphaIdle
@@ -250,13 +250,13 @@ pre-conditions:
     test-code: |
       ctx->alpha_idle = true;
     text: |
-      While task ``A`` is sticky,
-      while task ``A`` is blocked.
+      While task `A` is sticky,
+      while task `A` is blocked.
   - name: 'No'
     test-code: |
       ctx->alpha_idle = false;
     text: |
-      While task ``A`` is not sticky.
+      While task `A` is not sticky.
   test-epilogue: null
   test-prologue: null
 - name: BetaPriority
@@ -265,12 +265,12 @@ pre-conditions:
     test-code: |
       ctx->beta_priority = PRIO_HIGH;
     text: |
-      While task ``B`` has a high priority.
+      While task `B` has a high priority.
   - name: Low
     test-code: |
       ctx->beta_priority = PRIO_NORMAL;
     text: |
-      While task ``B`` has a low priority.
+      While task `B` has a low priority.
   test-epilogue: null
   test-prologue: null
 - name: BetaAffinity
@@ -279,14 +279,14 @@ pre-conditions:
     test-code: |
       CPU_FILL( &ctx->beta_affinity );
     text: |
-      While task ``B`` is affine to all processors of its
+      While task `B` is affine to all processors of its
       ${/glossary/scheduler-home:/term}.
   - name: Y
     test-code: |
       CPU_ZERO( &ctx->beta_affinity );
       CPU_SET( 1, &ctx->beta_affinity );
     text: |
-      While task ``B`` is affine to processor ``Y``.
+      While task `B` is affine to processor `Y`.
   test-epilogue: null
   test-prologue: null
 - name: BetaIdle
@@ -295,13 +295,13 @@ pre-conditions:
     test-code: |
       ctx->beta_idle = true;
     text: |
-      While task ``B`` is sticky,
-      while task ``B`` is blocked.
+      While task `B` is sticky,
+      while task `B` is blocked.
   - name: 'No'
     test-code: |
       ctx->beta_idle = false;
     text: |
-      While task ``B`` is not sticky,
+      While task `B` is not sticky,
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -593,7 +593,7 @@ test-teardown:
     AddProcessor( SCHEDULER_B_ID, 1 );
   description: null
 text: |
-  When the thread to processor affinity is set for task ``T``.
+  When the thread to processor affinity is set for task `T`.
 transition-map:
 - enabled-by: true
   post-conditions:

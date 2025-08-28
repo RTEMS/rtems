@@ -3,7 +3,7 @@ appl-config-option-type: initializer
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
-  The default value is ``Init``.
+  The default value is `Init`.
 description: |
   The value of this configuration option initializes the entry point of the
   Classic API initialization task.

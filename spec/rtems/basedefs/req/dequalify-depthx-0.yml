@@ -12,14 +12,14 @@ references: []
 requirement-type: functional
 text: |
   When the argument value of ${../if/dequalify-depthx:/params[0]/name} consists
-  of a sequence of *i* ``*`` and the types of both other arguments both
-  have *i* nested pointers (for example ``*`` for a pointer to ``int``,
-  ``**`` for a pointer to a pointer of ``int``, ``***`` for a pointer to
-  a pointer to a pointer to ``int``),
+  of a sequence of *i* `*` and the types of both other arguments both
+  have *i* nested pointers (for example `*` for a pointer to `int`,
+  `**` for a pointer to a pointer of `int`, `***` for a pointer to
+  a pointer to a pointer to `int`),
   and ${../if/dequalify-depthx:/params[1]/name} is a pointer type with
   different (compared to the type of
   ${../if/dequalify-depthx:/params[2]/name}) qualifiers
-  (such as ``const`` or ``volatile``) or the same qualifiers or
+  (such as `const` or `volatile`) or the same qualifiers or
   without any qualifiers,
   and the types of ${../if/dequalify-depthx:/params[1]/name} and
   ${../if/dequalify-depthx:/params[2]/name} are compatible in the sense of C,

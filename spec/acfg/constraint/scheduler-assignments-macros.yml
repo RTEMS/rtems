@@ -10,18 +10,18 @@ text: |
   The value of the application configuration option shall be a list of the
   following macros:
 
-  * ``RTEMS_SCHEDULER_ASSIGN( scheduler_index, attributes )``
+  * `RTEMS_SCHEDULER_ASSIGN( scheduler_index, attributes )`
 
-  * ``RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER``
+  * `RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER`
 
-  The ``scheduler_index`` macro parameter shall be a valid index of the
+  The `scheduler_index` macro parameter shall be a valid index of the
   scheduler table defined by the ${../if/scheduler-table-entries:/name}
   application configuration option.
 
-  The ``attributes`` macro parameter shall be set to exactly one of the
+  The `attributes` macro parameter shall be set to exactly one of the
   following constants:
 
-  * ``RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY``
+  * `RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY`
 
-  * ``RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL``
+  * `RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL`
 type: constraint

@@ -90,7 +90,7 @@ requirement-type: functional
 skip-reasons: {}
 test-action: |
   /*
-   * The action is performed by the ``WaitState`` pre-condition preparation.
+   * The action is performed by the `WaitState` pre-condition preparation.
    */
 test-brief: null
 test-cleanup: null

@@ -59,13 +59,13 @@ pre-conditions:
     test-code: |
       ctx->name = 1;
     text: |
-      While the ``name`` parameter is not associated with an active object of
+      While the `name` parameter is not associated with an active object of
       the specified class .
   - name: Valid
     test-code: |
       ctx->name = ctx->name_local_object;
     text: |
-      While the ``name`` parameter is associated with an active object of the
+      While the `name` parameter is associated with an active object of the
       specified class .
   test-epilogue: null
   test-prologue: null
@@ -76,13 +76,13 @@ pre-conditions:
       ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
     text: |
-      While the ``id`` parameter references an object of type
+      While the `id` parameter references an object of type
       ${../type/if/id:/name}.
   - name: 'Null'
     test-code: |
       ctx->id = NULL;
     text: |
-      While the ``id`` parameter is ${/c/if/null:/name}.
+      While the `id` parameter is ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 rationale: null

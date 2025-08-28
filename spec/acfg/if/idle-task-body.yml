@@ -8,7 +8,7 @@ default-value: |
   ${/bsp/if/acfg-idle-task-body:/name} is provided by the
   ${/glossary/bsp:/term}, then the default value is defined by
   ${/bsp/if/acfg-idle-task-body:/name}, otherwise the default value is
-  ``_CPU_Thread_Idle_body``.
+  `_CPU_Thread_Idle_body`.
 description: |
   The value of this configuration option initializes the IDLE thread body.
 enabled-by: true

@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-default-value: '``NODE_NUMBER``'
+default-value: '`NODE_NUMBER`'
 description: |
   The value of this configuration option defines the node number of this node
   in a multiprocessor system.
@@ -23,8 +23,8 @@ links:
 name: CONFIGURE_MP_NODE_NUMBER
 notes: |
   In the RTEMS Multiprocessing Test Suite, the node number is derived from
-  the Makefile variable ``NODE_NUMBER``. The same code is compiled with the
-  ``NODE_NUMBER`` set to different values. The test programs behave
+  the Makefile variable `NODE_NUMBER`. The same code is compiled with the
+  `NODE_NUMBER` set to different values. The test programs behave
   differently based upon their node number.
 
   This configuration option is only evaluated if

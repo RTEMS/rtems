@@ -47,7 +47,7 @@ notes: |
 
   The
 
-  * ``CONFIGURE_IDLE_TASK_STORAGE_SIZE``, and
+  * `CONFIGURE_IDLE_TASK_STORAGE_SIZE`, and
 
   * ${task-stack-allocator-for-idle:/name}
 

@@ -16,11 +16,11 @@ references:
   type: file
 text: |
   Inspection of the referenced ${/glossary/sourcecode:/term} file showed that
-  the ``Workaround 2`` is implemented.  Contrary to the recommendation in the
+  the `Workaround 2` is implemented.  Contrary to the recommendation in the
   errata workaround description, the stack pointer is used as the source
   operand of the load instruction.  This is not an issue, since the idle thread
   does not use the loaded value.  Inspection showed also that an infinite loop
-  is implemented which uses a write to ``%asr19`` to enter the power-down mode.
+  is implemented which uses a write to `%asr19` to enter the power-down mode.
 
   The errata workaround is implemented unconditionally since it is harmless and
   may be considered a performance optimization.  It is some sort of a data

@@ -5,21 +5,21 @@ copyrights:
 default-value: |
   The default value is
 
-  * ``"MEDF"`` for the ${/doc/if/scheduler-smp-edf:/name},
+  * `"MEDF"` for the ${/doc/if/scheduler-smp-edf:/name},
 
-  * ``"MPA "`` for the ${/doc/if/scheduler-smp-priority-affinity:/name},
+  * `"MPA "` for the ${/doc/if/scheduler-smp-priority-affinity:/name},
 
-  * ``"MPD "`` for the ${/doc/if/scheduler-smp-priority:/name},
+  * `"MPD "` for the ${/doc/if/scheduler-smp-priority:/name},
 
-  * ``"MPS "`` for the ${/doc/if/scheduler-smp-priority-simple:/name},
+  * `"MPS "` for the ${/doc/if/scheduler-smp-priority-simple:/name},
 
-  * ``"UCBS"`` for the ${/doc/if/scheduler-cbs:/name},
+  * `"UCBS"` for the ${/doc/if/scheduler-cbs:/name},
 
-  * ``"UEDF"`` for the ${/doc/if/scheduler-edf:/name},
+  * `"UEDF"` for the ${/doc/if/scheduler-edf:/name},
 
-  * ``"UPD "`` for the ${/doc/if/scheduler-priority:/name}, and
+  * `"UPD "` for the ${/doc/if/scheduler-priority:/name}, and
 
-  * ``"UPS "`` for the ${/doc/if/scheduler-priority-simple:/name}.
+  * `"UPS "` for the ${/doc/if/scheduler-priority-simple:/name}.
 description: |
   The value of this configuration option defines the name of the default
   scheduler.

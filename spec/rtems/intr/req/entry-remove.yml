@@ -68,7 +68,7 @@ post-conditions:
       shall be disabled.
   - name: Maybe
     test-code: |
-      /* The comment of pre-condition ``CanDisable`` for the ``Yes`` state. */
+      /* The comment of pre-condition `CanDisable` for the `Yes` state. */
       if ( ctx->attributes.can_disable ) {
         T_false( ctx->enabled_after );
       }
@@ -77,7 +77,7 @@ post-conditions:
       may be disabled.
   - name: 'No'
     test-code: |
-      /* The comment of pre-condition ``CanDisable`` for the ``Yes`` state. */
+      /* The comment of pre-condition `CanDisable` for the `Yes` state. */
       if ( ctx->attributes.can_disable ) {
         T_false( ctx->enabled_after );
       }
@@ -302,13 +302,13 @@ pre-conditions:
       ${../if/entry-remove:/params[0]/name} parameter can be disabled.
   - name: Maybe
     test-code: |
-      /* See comment for ``Yes`` state */
+      /* See comment for `Yes` state */
     text: |
       While the interrupt vector associated with the
       ${../if/entry-remove:/params[0]/name} parameter may be disabled.
   - name: 'No'
     test-code: |
-      /* See comment for ``Yes`` state */
+      /* See comment for `Yes` state */
     text: |
       While the interrupt vector associated with the
       ${../if/entry-remove:/params[0]/name} parameter cannot be disabled.

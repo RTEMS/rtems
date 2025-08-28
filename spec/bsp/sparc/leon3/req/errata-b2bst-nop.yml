@@ -10,7 +10,7 @@ rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  The software product shall use the define ``SPARC_LEON3FT_B2BST_NOP`` in
+  The software product shall use the define `SPARC_LEON3FT_B2BST_NOP` in
   ${/glossary/assemblerlanguage:/term} ${/glossary/sourcecode:/term} to insert
-  ``nop`` instructions required by the errata workaround.
+  `nop` instructions required by the errata workaround.
 type: requirement

@@ -9,5 +9,5 @@ method: by-analysis
 references: []
 text: |
   There is no errata workaround necessary for the window underflow trap, since
-  the window underflow trap always returns to a ``restore`` instruction.
+  the window underflow trap always returns to a `restore` instruction.
 type: validation

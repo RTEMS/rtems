@@ -12,7 +12,7 @@ requirement-type: functional
 text: |
   When the code is compiled with the GNU C compiler,
   and the ${../if/unused:/name} macro is appended to a label in this form:
-  ``<label>: ${../if/unused:/name};``,
+  `<label>: ${../if/unused:/name};`,
   the ${../if/unused:/name} macro shall prevent the compiler from emitting
   a warning if this label is not used.
 type: requirement

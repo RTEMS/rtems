@@ -21,7 +21,7 @@ post-conditions:
       T_eq_u32( ctx->fatal_counter, 0 );
     text: |
       The interrupt entries installed at the interrupt vector specified by the
-      ``vector`` parameter shall be dispatched.
+      `vector` parameter shall be dispatched.
   test-epilogue: null
   test-prologue: null
 - name: FatalSource
@@ -40,7 +40,7 @@ post-conditions:
     test-code: |
       T_eq_ulong( ctx->fatal_code, ctx->test_vector );
     text: |
-      The fatal code shall be equal to the ``vector`` parameter.
+      The fatal code shall be equal to the `vector` parameter.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -51,14 +51,14 @@ pre-conditions:
       *ctx->first = NULL;
     text: |
       While the first loaded value of the pointer to the first interrupt entry
-      of the interrupt vector specified by the ``vector`` parameter is equal to
+      of the interrupt vector specified by the `vector` parameter is equal to
       ${/c/if/null:/name}.
   - name: Entry
     test-code: |
       *ctx->first = &ctx->entry;
     text: |
       While the first loaded value of the pointer to the first interrupt entry
-      of the interrupt vector specified by the ``vector`` parameter references
+      of the interrupt vector specified by the `vector` parameter references
       an object of type ${/rtems/intr/if/entry:/name}.
   test-epilogue: null
   test-prologue: null
@@ -69,14 +69,14 @@ pre-conditions:
       ctx->first_again = NULL;
     text: |
       While the second loaded value of the pointer to the first interrupt entry
-      of the interrupt vector specified by the ``vector`` parameter is equal to
+      of the interrupt vector specified by the `vector` parameter is equal to
       ${/c/if/null:/name}.
   - name: Entry
     test-code: |
       ctx->first_again = &ctx->entry;
     text: |
       While the second loaded value of the pointer to the first interrupt entry
-      of the interrupt vector specified by the ``vector`` parameter references
+      of the interrupt vector specified by the `vector` parameter references
       an object of type ${/rtems/intr/if/entry:/name}.
   test-epilogue: null
   test-prologue: null

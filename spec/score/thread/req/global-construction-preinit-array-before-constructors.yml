@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The handlers registered in the ``.preinit_array`` table shall be called
+  The handlers registered in the `.preinit_array` table shall be called
   before the global constructors.
 type: requirement

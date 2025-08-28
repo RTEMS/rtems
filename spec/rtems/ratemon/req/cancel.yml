@@ -74,7 +74,7 @@ post-conditions:
       /* Cannot be tested as the effect is unknown. */
     text: |
       The last call of the ${../if/cancel:/name} function shall execute
-      the ``cancel_job`` ${../glossary/scheduleroperation:/term} of the
+      the `cancel_job` ${../glossary/scheduleroperation:/term} of the
       ${/glossary/scheduler-home:/term}.
   - name: Nop
     test-code: |
@@ -219,7 +219,7 @@ test-context:
   description: |
     The action is either executed by the ${../glossary/ownertask:/term}
     or by the worker ${/glossary/task:/term} depending on the function pointer
-    used here.  ``argument`` is a pointer to this context structure.
+    used here.  `argument` is a pointer to this context structure.
   member: |
     void ( *do_action )( void *ctx )
 - brief: |

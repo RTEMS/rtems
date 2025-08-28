@@ -5,7 +5,7 @@ copyrights:
 default-value: 16
 description: |
   The value of this configuration option defines the maximum thread name size
-  including the terminating ``NUL`` character.
+  including the terminating `NUL` character.
 enabled-by: true
 index-entries:
 - maximum thread name size

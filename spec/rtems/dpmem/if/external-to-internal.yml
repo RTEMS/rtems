@@ -50,7 +50,7 @@ params:
   dir: null
   name: external
 - description: |
-    is the pointer to a ``void`` pointer object.  When the directive call is
+    is the pointer to a `void` pointer object.  When the directive call is
     successful, the external address associated with the internal address will
     be stored in this object.
   dir: out

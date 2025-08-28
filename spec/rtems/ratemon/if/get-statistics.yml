@@ -19,26 +19,26 @@ description: |
   the members of the period statistics object referenced by
   ${.:/params[1]/name}:
 
-  * The ``count`` member is set to the number of periods executed.
+  * The `count` member is set to the number of periods executed.
 
-  * The ``missed_count`` member is set to the number of periods missed.
+  * The `missed_count` member is set to the number of periods missed.
 
-  * The ``min_cpu_time`` member is set to the least amount of processor time
+  * The `min_cpu_time` member is set to the least amount of processor time
     used in the period.
 
-  * The ``max_cpu_time`` member is set to the highest amount of processor time
+  * The `max_cpu_time` member is set to the highest amount of processor time
     used in the period.
 
-  * The ``total_cpu_time`` member is set to the total amount of processor time
+  * The `total_cpu_time` member is set to the total amount of processor time
     used in the period.
 
-  * The ``min_wall_time`` member is set to the least amount of
+  * The `min_wall_time` member is set to the least amount of
     ${/glossary/clock-monotonic:/term} time used in the period.
 
-  * The ``max_wall_time`` member is set to the highest amount of
+  * The `max_wall_time` member is set to the highest amount of
     ${/glossary/clock-monotonic:/term} time used in the period.
 
-  * The ``total_wall_time`` member is set to the total amount of
+  * The `total_wall_time` member is set to the total amount of
     ${/glossary/clock-monotonic:/term} time used in the period.
 enabled-by: true
 index-entries:

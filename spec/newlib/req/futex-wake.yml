@@ -32,7 +32,7 @@ post-conditions:
     test-code: |
       ${/score/tq/req/flush-fifo:/test-run}( &ctx->tq_ctx, true );
     text: |
-      The first count threads specified by the ``count`` parameter shall be
+      The first count threads specified by the `count` parameter shall be
       extracted from the thread queue of the futex object in
       ${/glossary/fifo:/term} order.
   test-epilogue: null
@@ -44,12 +44,12 @@ pre-conditions:
     test-code: |
       /* This state is prepared by Enqueue() */
     text: |
-      While the ``count`` parameter is less or equal to than zero.
+      While the `count` parameter is less or equal to than zero.
   - name: Positive
     test-code: |
       /* This state is prepared by Flush() */
     text: |
-      While the ``count`` parameter is greater than zero.
+      While the `count` parameter is greater than zero.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -57,7 +57,7 @@ references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
-  /* The action is performed in the ``Flush`` post-condition ``All`` state. */
+  /* The action is performed in the `Flush` post-condition `All` state. */
 test-brief: null
 test-cleanup: |
   _Futex_Destroy( &ctx->futex );

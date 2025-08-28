@@ -80,7 +80,7 @@ pre-conditions:
       ctx->pending = &ctx->pending_obj;
     text: |
       While the ${../if/is-pending:/params[1]/name} parameter references an
-      object of type ``bool``.
+      object of type `bool`.
   - name: 'Null'
     test-code: |
       ctx->pending = NULL;
@@ -166,7 +166,7 @@ test-context:
   member: |
     rtems_vector_number vector
 - brief: |
-    This member provides the ``bool`` object.
+    This member provides the `bool` object.
   description: null
   member: |
     bool pending_obj

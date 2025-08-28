@@ -7,17 +7,17 @@ links:
 - role: interface-function
   uid: ../if/alignof
 rationale: |
-  Note that if not ``__STDC_VERSION__ >= 201112L`` and neither
-  ``__cplusplus >= 201103L``, the result of this call may return a value
+  Note that if not `__STDC_VERSION__ >= 201112L` and neither
+  `__cplusplus >= 201103L`, the result of this call may return a value
   which is not appropriate for alignment.
 references: []
 requirement-type: functional
 text: |
   When the code is compiled with a C compiler and
-  the ``__STDC_VERSION__`` symbol is defined with version ``201112L`` or
+  the `__STDC_VERSION__` symbol is defined with version `201112L` or
   higher or
   the code is compiled with a C++ compiler
-  and the ``__cplusplus`` symbol is defined with version ``201103L`` or higher,
+  and the `__cplusplus` symbol is defined with version `201103L` or higher,
   and the argument ${../if/alignof:/params[0]/name} is a type,
   and the argument ${../if/alignof:/params[0]/name} is not a function type,
   and the argument ${../if/alignof:/params[0]/name} is a complete type,

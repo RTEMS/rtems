@@ -40,8 +40,8 @@ links:
 name: rtems_task_start
 notes: |
   The type of the entry point argument is an unsigned integer type.  However,
-  the integer type has the property that any valid pointer to ``void`` can be
-  converted to this type and then converted back to a pointer to ``void``.  The
+  the integer type has the property that any valid pointer to `void` can be
+  converted to this type and then converted back to a pointer to `void`.  The
   result will compare equal to the original pointer.  The type can represent at
   least 32 bits.  Some applications use the entry point argument as an index
   into a parameter table to get task-specific parameters.

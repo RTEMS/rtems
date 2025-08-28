@@ -32,7 +32,7 @@ notes: |
 
   * ${appl-needs-console-driver:/name},
 
-  * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER``, and
+  * `CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER`, and
 
   * ${appl-needs-simple-task-console-driver:/name}
 

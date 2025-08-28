@@ -88,7 +88,7 @@ post-conditions:
        * Interrupt vectors which cannot be enabled are not selected as a
        * testable interrupt vector by GetTestableInterruptVector(), so this
        * path is not validated by this test.  See also comment for
-       * ``CanEnable`` pre-condition state ``Yes``.
+       * `CanEnable` pre-condition state `Yes`.
        */
       T_true( ctx->enabled_after || ctx->handler_counter > 3 );
     text: |
@@ -100,7 +100,7 @@ post-conditions:
        * Interrupt vectors which cannot be enabled are not selected as a
        * testable interrupt vector by GetTestableInterruptVector(), so this
        * path is not validated by this test.  See also comment for
-       * ``CanEnable`` pre-condition state ``Yes``.
+       * `CanEnable` pre-condition state `Yes`.
        */
       T_true( ctx->enabled_after || ctx->handler_counter > 3 );
     text: |
@@ -293,13 +293,13 @@ pre-conditions:
       ${../if/entry-remove:/params[0]/name} parameter can be enabled.
   - name: Maybe
     test-code: |
-      /* See comment for ``Yes`` state */
+      /* See comment for `Yes` state */
     text: |
       While the interrupt vector associated with the
       ${../if/entry-remove:/params[0]/name} parameter may be enabled.
   - name: 'No'
     test-code: |
-      /* See comment for ``Yes`` state */
+      /* See comment for `Yes` state */
     text: |
       While the interrupt vector associated with the
       ${../if/entry-remove:/params[0]/name} parameter cannot be enabled.

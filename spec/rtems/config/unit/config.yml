@@ -29,14 +29,14 @@ test-brief: |
 test-context:
 - brief: |
     This member contains the original value of
-    ``_Semaphore_Information->objects_per_block``.
+    `_Semaphore_Information->objects_per_block`.
   description: null
   member: |
     Objects_Maximum objects_per_block_ori
 test-context-support: |
   #define SEMAPHORES_PER_BLOCK 32
 test-description: |
-  Parts of the file ``cpukit/sapi/src/getconfigmax.c``
+  Parts of the file `cpukit/sapi/src/getconfigmax.c`
   are only executed when unlimited objects are configured.  The
   space qualified code subset does not support this feature.  This test
   exercises the code parts otherwise not reached in order to achieve full

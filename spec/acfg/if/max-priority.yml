@@ -44,9 +44,9 @@ notes: |
   the amount of memory allocated by the schedulers listed above.  These
   schedulers use a chain control structure per priority and this structure
   consists of three pointers.  On a 32-bit architecture, the allocated memory
-  is 12 bytes * (``CONFIGURE_MAXIMUM_PRIORITY`` + 1), e.g. 3072 bytes for 256
+  is 12 bytes * (`CONFIGURE_MAXIMUM_PRIORITY` + 1), e.g. 3072 bytes for 256
   priority levels (default), 48 bytes for 4 priority levels
-  (``CONFIGURE_MAXIMUM_PRIORITY == 3``).
+  (`CONFIGURE_MAXIMUM_PRIORITY == 3`).
 
   The default value is 255, because RTEMS shall support 256 priority levels to
   be compliant with various standards.  These priorities range from 0 to 255.

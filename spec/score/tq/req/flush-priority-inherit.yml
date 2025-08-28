@@ -80,13 +80,13 @@ post-conditions:
   states:
   - name: 'No'
     test-code: |
-      /* Checked by ``Extract`` post-condition state ``Nop`` */
+      /* Checked by `Extract` post-condition state `Nop` */
     text: |
       The ${/glossary/priority-current:/term} of the owner of the thread queue
       shall not be updated by the thread queue flush operation.
   - name: 'Yes'
     test-code: |
-      /* Checked by ``Extract`` post-condition state ``All`` */
+      /* Checked by `Extract` post-condition state `All` */
     text: |
       The ${/glossary/priority-current:/term} of the owner of the thread queue
       shall be updated by the thread queue flush operation to reflect the loss

@@ -199,7 +199,7 @@ pre-conditions:
       ctx->size_param = &ctx->receive_size;
     text: |
       While the ${../if/receive:/params[2]/name} parameter references an object
-      of type ``size_t``.
+      of type `size_t`.
   - name: 'Null'
     test-code: |
       ctx->size_param = NULL;
@@ -369,7 +369,7 @@ test-context:
     RTEMS_MESSAGE_QUEUE_BUFFER( MAXIMUM_MESSAGE_SIZE )
       storage_area[ MAXIMUM_PENDING_MESSAGES]
 - brief: |
-    This member contains always the same arbitrary number ``magic``.
+    This member contains always the same arbitrary number `magic`.
   description: |
     It is used for run-time type checking.
   member: |
@@ -444,7 +444,7 @@ test-context:
     rtems_id worker_id
 - brief: |
     This member contains a pointer to a function which is executed while
-    the worker is waiting to receive a message (`delete(), nop()``).
+    the worker is waiting to receive a message (`delete(), nop()`).
   description: null
   member: |
     void (*concurrent_activity)( void *ctx_in )

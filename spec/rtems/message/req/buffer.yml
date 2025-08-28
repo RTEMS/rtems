@@ -14,11 +14,11 @@ text: |
   the largest possible message in bytes
   (the same value as member ${../if/config:/definition[2]/default/name} of type
   ${../if/config:/name}),
-  and ``MAXIMUM_PENDING_MESSAGES`` is the maximum number of messages
+  and `MAXIMUM_PENDING_MESSAGES` is the maximum number of messages
   which can be stored in the message queue
   (the same value as member ${../if/config:/definition[1]/default/name} of type
   ${../if/config:/name}),
-  and ``storage_area`` is a variable or structure member,
+  and `storage_area` is a variable or structure member,
   the expression
   ${../if/buffer:/name}( ${../if/buffer:/params[0]/name} )
   storage_area[ MAXIMUM_PENDING_MESSAGES ]

@@ -175,8 +175,8 @@ test-context:
     rtems_id worker_id
 - brief: |
     This member indicated whether the worker ${/glossary/task:/term}
-    is currently sending a message (``true``) or whether it is
-    waiting to receive an event (``false``).
+    is currently sending a message (`true`) or whether it is
+    waiting to receive an event (`false`).
   description: null
   member: |
     bool is_worker_working
@@ -192,8 +192,8 @@ test-context-support: |
 
   static void WorkerTask( rtems_task_argument argument );
 test-description: |
-  Parts of the files ``cpukit/score/src/coremsginsert.c``,
-  ``cpukit/score/src/coremsgseize.c``, and ``cpukit/score/src/coremsgsubmit.c``
+  Parts of the files `cpukit/score/src/coremsginsert.c`,
+  `cpukit/score/src/coremsgseize.c`, and `cpukit/score/src/coremsgsubmit.c`
   are only executed by the POSIX API.  Currently, the pre-qualified subset of
   RTEMS does not contain the POSIX API.  This test exercises the code parts
   otherwise only reached by the POSIX API to achieve full code coverage.

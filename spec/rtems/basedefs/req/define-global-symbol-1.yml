@@ -11,5 +11,5 @@ references: []
 requirement-type: functional
 text: |
   The macro ${../if/define-global-symbol:/name} shall define
-  a global symbol of ``void`` pointer type with the value being an address.
+  a global symbol of `void` pointer type with the value being an address.
 type: requirement

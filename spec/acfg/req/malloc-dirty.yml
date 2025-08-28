@@ -14,6 +14,6 @@ requirement-type: functional
 text: |
   The application configuration option shall enable that each memory area
   returned by C Program Heap allocator functions such as ${/c/if/malloc:/name}
-  is dirtied with a ``0xCF`` byte pattern before it is handed over to the
+  is dirtied with a `0xCF` byte pattern before it is handed over to the
   application.
 type: requirement

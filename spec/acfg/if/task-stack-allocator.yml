@@ -3,7 +3,7 @@ appl-config-option-type: initializer
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
-  The default value is ``_Workspace_Allocate``, which indicates that task
+  The default value is `_Workspace_Allocate`, which indicates that task
   stacks will be allocated from the RTEMS Workspace.
 description: |
   The value of this configuration option initializes the stack allocator
@@ -25,7 +25,7 @@ notes: |
 
   * ${task-stack-allocator-init:/name}
 
-  * ``CONFIGURE_TASK_STACK_ALLOCATOR``
+  * `CONFIGURE_TASK_STACK_ALLOCATOR`
 
   * ${task-stack-deallocator:/name}
 type: interface

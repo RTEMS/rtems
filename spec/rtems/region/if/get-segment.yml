@@ -103,7 +103,7 @@ params:
   dir: null
   name: timeout
 - description: |
-    is the pointer to a ``void`` pointer object.  When the directive call is
+    is the pointer to a `void` pointer object.  When the directive call is
     successful, the begin address of the allocated segment will be stored in
     this object.
   dir: out

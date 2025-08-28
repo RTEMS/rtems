@@ -11,6 +11,6 @@ references: []
 requirement-type: functional
 text: |
   When the simple timecounter tick service is called, the timecounter offset of
-  the current timehand shall be set to the offset specified by the ``offset``
+  the current timehand shall be set to the offset specified by the `offset`
   parameter.
 type: requirement

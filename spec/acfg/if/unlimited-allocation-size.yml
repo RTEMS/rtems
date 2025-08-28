@@ -7,7 +7,7 @@ description: |
   If ${unlimited-objects:/name} is defined, then the value of this
   configuration option defines the default objects maximum of all object
   classes supporting ${/doc/if/config-unlimited-objects:/name} to
-  ``rtems_resource_unlimited( CONFIGURE_UNLIMITED_ALLOCATION_SIZE )``.
+  `rtems_resource_unlimited( CONFIGURE_UNLIMITED_ALLOCATION_SIZE )`.
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

@@ -13,5 +13,5 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/string:/name} macro shall result in a string formed by
-  the C pre-processor ``#`` operator placed before the formal parameter.
+  the C pre-processor `#` operator placed before the formal parameter.
 type: requirement

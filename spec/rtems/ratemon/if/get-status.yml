@@ -20,21 +20,21 @@ description: |
   returned in the members of the period status object referenced by
   ${.:/params[1]/name}:
 
-  * The ``owner`` member is set to the identifier of the owner task of the
+  * The `owner` member is set to the identifier of the owner task of the
     period.
 
-  * The ``state`` member is set to the current state of the period.
+  * The `state` member is set to the current state of the period.
 
-  * The ``postponed_jobs_count`` member is set to the count of jobs which are
+  * The `postponed_jobs_count` member is set to the count of jobs which are
     not released yet.
 
   * If the current state of the period is ${inactive:/name}, the
-    ``since_last_period`` and ``executed_since_last_period`` members will be
+    `since_last_period` and `executed_since_last_period` members will be
     set to zero.  Otherwise, both members will contain time information since
     the last successful invocation of the ${period:/name} directive by the
-    owner task.  More specifically, the ``since_last_period`` member will be
+    owner task.  More specifically, the `since_last_period` member will be
     set to the time elapsed since the last successful invocation.  The
-    ``executed_since_last_period`` member will be set to the processor time
+    `executed_since_last_period` member will be set to the processor time
     consumed by the owner task since the last successful invocation.
 enabled-by: true
 index-entries:

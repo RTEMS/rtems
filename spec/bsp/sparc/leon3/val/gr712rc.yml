@@ -5,12 +5,12 @@ enabled-by: sparc/gr712rc
 links: []
 test-actions:
 - action-brief: |
-    Validate the use of the ``-mfix-gr712rc`` compiler option.
+    Validate the use of the `-mfix-gr712rc` compiler option.
   action-code: |
     const char *s;
   checks:
   - brief: |
-      Check that the compiler built-in define ``__FIX_LEON3FT_B2BST`` is
+      Check that the compiler built-in define `__FIX_LEON3FT_B2BST` is
       defined.
     code: |
       #if !defined(__FIX_LEON3FT_B2BST)
@@ -20,7 +20,7 @@ test-actions:
     - role: validation
       uid: ../req/errata-gr712rc-compiler-fix
   - brief: |
-      Check that the compiler built-in define ``__FIX_LEON3FT_TN0018`` is
+      Check that the compiler built-in define `__FIX_LEON3FT_TN0018` is
       defined.
     code: |
       #if !defined(__FIX_LEON3FT_TN0018)
@@ -30,7 +30,7 @@ test-actions:
     - role: validation
       uid: ../req/errata-gr712rc-compiler-fix
   - brief: |
-      Check that the ``SPARC_LEON3FT_B2BST_NOP`` define expands to a ``nop``
+      Check that the `SPARC_LEON3FT_B2BST_NOP` define expands to a `nop`
       instruction.
     code: |
       s = RTEMS_XSTRING( SPARC_LEON3FT_B2BST_NOP );
@@ -41,7 +41,7 @@ test-actions:
   links: []
 test-brief: |
   This test case collection provides validation test cases for the
-  ``sparc/gr712rc`` ${/glossary/bsp:/term}.
+  `sparc/gr712rc` ${/glossary/bsp:/term}.
 test-context: []
 test-context-support: null
 test-description: null

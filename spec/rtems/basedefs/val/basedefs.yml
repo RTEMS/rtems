@@ -255,7 +255,7 @@ test-actions:
       ${../if/compiler-deprecated-attribute:/name} macro has the desired
       effect. The gcc compiler should issue a warning about the use of a
       deprecated variable on the above line
-      where the ``compiler_deprecated_attribute`` is used.
+      where the `compiler_deprecated_attribute` is used.
     code: |
       /*
        * Derivation from Coding Style:
@@ -508,7 +508,7 @@ test-actions:
       ${../if/deprecated:/name} macro has the desired
       effect. The gcc compiler should issue a warning about the use of a
       deprecated function on the above line
-      where the ``deprecated_func`` is used.
+      where the `deprecated_func` is used.
     code: |
       T_step_eq_int( ${.:/step}, deprecated_result, 15 );
     links:
@@ -763,7 +763,7 @@ test-actions:
       uid: ../req/no-return-0
   links: []
 - action-brief: |
-    Use the ${../if/noinit:/name} macro on ``noinit_variable`` at the
+    Use the ${../if/noinit:/name} macro on `noinit_variable` at the
     beginning of this file.
   action-code: |
     /* No action */
@@ -941,8 +941,8 @@ test-actions:
       uid: ../req/return-address-0
   links: []
 - action-brief: |
-    Use the ${../if/section:/name} macro on ``section_variable`` and
-    ``section_func`` at the beginning of this file.
+    Use the ${../if/section:/name} macro on `section_variable` and
+    `section_func` at the beginning of this file.
   action-code: |
     short section_result;
     section_result = section_func( 1234567 );
@@ -1190,7 +1190,7 @@ test-actions:
       It cannot be checked that the ${../if/warn-unused-result:/name} macro
       has the desired effect. The GNU C compiler should issue a warning
       about the disregarded result returned by the call
-      to the ``warn_unused_func()`` function.
+      to the `warn_unused_func()` function.
     code: |
       T_step_eq_int( ${.:/step}, warn_unused_result, 11 );
     links:
@@ -1198,7 +1198,7 @@ test-actions:
       uid: ../req/warn-unused-result-0
   links: []
 - action-brief: |
-    Use of ``basedefs_weak_alias_0/1_func()`` which are defined with the
+    Use of `basedefs_weak_alias_0/1_func()` which are defined with the
     ${../if/weak-alias:/name} macro at the beginning of this file.
   action-code: |
     int weak_alias_0_result;
@@ -1216,7 +1216,7 @@ test-actions:
     - role: validation
       uid: ../req/weak-alias-0
   - brief: |
-      File ``tc_basedefs_pndant.c`` defines a strong function for
+      File `tc_basedefs_pndant.c` defines a strong function for
       basedefs_weak_alias_1_func().
       Check that ori_func() and basedefs_weak_alias_1_func() are not
       the same function.
@@ -1227,7 +1227,7 @@ test-actions:
       uid: ../req/weak-alias-1
   links: []
 - action-brief: |
-    Use of ``basedefs_weak_0/1_var`` and ``basedefs_weak_0/1_func()``
+    Use of `basedefs_weak_0/1_var` and `basedefs_weak_0/1_func()`
     which are defined with the ${../if/weak:/name} macro at the
     beginning of this file.
   action-code: |
@@ -1237,7 +1237,7 @@ test-actions:
     weak_1_result = basedefs_weak_1_func();
   checks:
   - brief: |
-      For ``basedefs_weak_0_var`` and ``basedefs_weak_0_func()`` there
+      For `basedefs_weak_0_var` and `basedefs_weak_0_func()` there
       exists no other symbols with the same name.
       Hence, the checks test that the weak symbols are used.
     code: |
@@ -1247,9 +1247,9 @@ test-actions:
     - role: validation
       uid: ../req/weak-0
   - brief: |
-      ``basedefs_weak_1_var`` and ``basedefs_weak_1_func()``
+      `basedefs_weak_1_var` and `basedefs_weak_1_func()`
       are overwritten by strong symbols defined in file
-      ``tc_basedefs_pendant.c``. Hence, the checks test that the strong
+      `tc_basedefs_pendant.c`. Hence, the checks test that the strong
       variants are used.
     code: |
       T_step_eq_int( ${.:/step}, basedefs_weak_1_var, 62 );

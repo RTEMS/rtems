@@ -17,6 +17,6 @@ rationale: |
 references: []
 requirement-type: non-functional
 text: |
-  The software product shall be compiled using the ``-mfix-gr712rc`` compiler
+  The software product shall be compiled using the `-mfix-gr712rc` compiler
   option.
 type: requirement

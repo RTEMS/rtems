@@ -4,7 +4,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: |
   In case this configuration option is defined, then the memory areas used for
-  the RTEMS Workspace and the C Program Heap are zeroed with a ``0x00`` byte
+  the RTEMS Workspace and the C Program Heap are zeroed with a `0x00` byte
   pattern during system initialization.
 enabled-by: true
 index-entries:

@@ -8,11 +8,11 @@ links:
   uid: ../if/have-member-same-type
 rationale: |
   The ${../if/have-member-same-type:/name} does only work in C.
-  Type qualifiers do not matter (``const int`` is
-  compatible to ``int``); arrays with undefined length are compatible
-  with arrays of defined length (``int[]`` is compatible
-  to ``int[5]``); enums are always incompatible; the number of pointer
-  indirection matters (``**int`` is not compatible with ``*int``).
+  Type qualifiers do not matter (`const int` is
+  compatible to `int`); arrays with undefined length are compatible
+  with arrays of defined length (`int[]` is compatible
+  to `int[5]`); enums are always incompatible; the number of pointer
+  indirection matters (`**int` is not compatible with `*int`).
   See https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005ftypes_005fcompatible_005fp
 references: []
 requirement-type: functional

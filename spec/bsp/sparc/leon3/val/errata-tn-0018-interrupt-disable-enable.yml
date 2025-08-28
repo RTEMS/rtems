@@ -14,8 +14,8 @@ references:
   hash: X8UNM08ffHOazOxa3gY4Vqsn2ZJmX8rrM3drT_8QpLQ=
   type: file
 text: |
-  For the ``syscall_irqdis`` and ``syscall_irqen`` traps a workaround was
-  implemented by inserting a ``nop`` instruction in system call generation.
-  Thus the corresponding trap handler always returns to a non-``jmpl``
+  For the `syscall_irqdis` and `syscall_irqen` traps a workaround was
+  implemented by inserting a `nop` instruction in system call generation.
+  Thus the corresponding trap handler always returns to a non-`jmpl`
   instruction.
 type: validation
