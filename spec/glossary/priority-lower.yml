@@ -8,6 +8,6 @@ links:
   uid: group
 term: lower priority
 text: |
-  A ${task:/term} ``L`` has a lower ${priority:/term} than a task ``H``, if
-  task ``L`` is less important than task ``H``.
+  A ${task:/term} `L` has a lower ${priority:/term} than a task `H`, if
+  task `L` is less important than task `H`.
 type: glossary

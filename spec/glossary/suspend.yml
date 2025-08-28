@@ -9,5 +9,5 @@ links:
 term: suspend
 text: |
   A term used to describe a task that is not competing for the CPU because it
-  has had a ``rtems_task_suspend`` directive.
+  has had a `rtems_task_suspend` directive.
 type: glossary

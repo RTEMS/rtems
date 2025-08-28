@@ -10,6 +10,6 @@ term: OMIP
 text: |
   This term is an acronym for O(m) Independence-Preserving Protocol.  OMIP is a
   generalization of the ${priorityinheritance:/term} locking protocol to
-  clustered scheduling.  The ``m`` denotes the number of processors in the
+  clustered scheduling.  The `m` denotes the number of processors in the
   system.
 type: glossary

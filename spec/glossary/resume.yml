@@ -9,6 +9,6 @@ links:
 term: resume
 text: |
   Removing a task from the suspend state.  If the task's state is ready
-  following a call to the ``rtems_task_resume`` directive, then the task is
+  following a call to the `rtems_task_resume` directive, then the task is
   available for scheduling.
 type: glossary
