@@ -10,6 +10,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  Let :math:`J\in\{0, 1, ..., 31\}`.  The ${../if/set:/name} integer type shall
-  be able to represent the integer representation of signal :math:`J`.
+  Let {math}`J\in\{0, 1, ..., 31\}`.  The ${../if/set:/name} integer type shall
+  be able to represent the integer representation of signal {math}`J`.
 type: requirement

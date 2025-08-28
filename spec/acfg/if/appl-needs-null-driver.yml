@@ -3,7 +3,7 @@ appl-config-option-type: feature-enable
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: |
-  In case this configuration option is defined, then the :file:`/dev/null`
+  In case this configuration option is defined, then the {file}`/dev/null`
   Driver is initialized during system initialization.
 enabled-by: true
 index-entries:

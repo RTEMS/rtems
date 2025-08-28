@@ -47,14 +47,14 @@ test-teardown:
     return tic == toc;
   description: null
 text: |
-  Let U and V be two tasks with the same home scheduler.  Let :math:`B`
+  Let U and V be two tasks with the same home scheduler.  Let {math}`B`
   be a time point measured by U right before a call to
   ${../if/obtain:/name} which blocks on the mutex with no timeout.  Let
-  :math:`E` be a time point measured by V right after the first context
-  switch after :math:`B`.
+  {math}`E` be a time point measured by V right after the first context
+  switch after {math}`B`.
 
   While the execution environment is ${.:/environment}, while the semaphore is
-  a priority inheritance mutex, while the measurement sample is :math:`E - B`,
+  a priority inheritance mutex, while the measurement sample is {math}`E - B`,
   when exactly ${../val/perf:/params/sample-count} samples are collected, the
   ${.:/limit-kind} shall be ${.:/limit-condition}.
 type: requirement

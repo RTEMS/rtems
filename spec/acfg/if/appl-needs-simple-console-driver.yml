@@ -17,7 +17,7 @@ links:
   uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 notes: |
-  This device driver is responsible for providing the :file:`/dev/console`
+  This device driver is responsible for providing the {file}`/dev/console`
   device file.  This device is used to initialize the standard input, output,
   and error file descriptors.
 

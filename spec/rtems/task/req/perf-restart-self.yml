@@ -43,10 +43,10 @@ test-teardown:
     return tic == toc;
   description: null
 text: |
-  Let :math:`B` be a time point measured by a task right before a call to
-  ${../if/restart:/name} which restarts the caller.  Let :math:`E` be a time
-  point measured by V right after the first context switch after :math:`B`.
+  Let {math}`B` be a time point measured by a task right before a call to
+  ${../if/restart:/name} which restarts the caller.  Let {math}`E` be a time
+  point measured by V right after the first context switch after {math}`B`.
 
   While the execution environment is ${.:/environment}, while the measurement
-  sample is :math:`E - B`, the ${.:/limit-kind} shall be ${.:/limit-condition}.
+  sample is {math}`E - B`, the ${.:/limit-kind} shall be ${.:/limit-condition}.
 type: requirement

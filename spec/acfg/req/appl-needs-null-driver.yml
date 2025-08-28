@@ -13,5 +13,5 @@ references: []
 requirement-type: functional
 text: |
   The application configuration option shall enable the initialization of the
-  :file:`/dev/null` Driver during system initialization.
+  {file}`/dev/null` Driver during system initialization.
 type: requirement

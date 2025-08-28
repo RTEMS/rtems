@@ -17,7 +17,7 @@ links:
   uid: ../constraint/option-pre-qualified-mandatory
 name: CONFIGURE_DISABLE_NEWLIB_REENTRANCY
 notes: |
-  You can enable this option to reduce the size of the :term:`TCB`.  Use this
+  You can enable this option to reduce the size of the {term}`TCB`.  Use this
   option with care, since it can lead to race conditions and undefined system
   behaviour.  For example, ${/c/if/errno:/name} is no longer a thread-local
   variable if this option is enabled.

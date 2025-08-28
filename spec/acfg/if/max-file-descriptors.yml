@@ -26,5 +26,5 @@ links:
 name: CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
 notes: |
   The default value of three file descriptors allows RTEMS to support standard
-  input, output, and error I/O streams on :file:`/dev/console`.
+  input, output, and error I/O streams on {file}`/dev/console`.
 type: interface

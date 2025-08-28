@@ -72,7 +72,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  Let :math:`J\in\{0, 1, ..., 31\}`.  The :math:`J`-th signal constant shall be
+  Let {math}`J\in\{0, 1, ..., 31\}`.  The {math}`J`-th signal constant shall be
   a constant expression which evaluates to the integer representation of signal
-  :math:`J`.
+  {math}`J`.
 type: requirement

@@ -10,6 +10,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  Let :math:`J\in\{0, 1, ..., 31\}`.  The event number :math:`J` shall be
-  represented by the integer :math:`2^J`.
+  Let {math}`J\in\{0, 1, ..., 31\}`.  The event number {math}`J` shall be
+  represented by the integer {math}`2^J`.
 type: requirement

@@ -72,7 +72,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  Let :math:`J\in\{0, 1, ..., 31\}`.  The :math:`J`-th event number constant
+  Let {math}`J\in\{0, 1, ..., 31\}`.  The {math}`J`-th event number constant
   shall be a constant expression which evaluates to the integer representation
-  of event number :math:`J`.
+  of event number {math}`J`.
 type: requirement
