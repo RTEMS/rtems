@@ -3004,8 +3004,8 @@
  * pre-qualified feature set of RTEMS shall define the configuration option.
  *
  * @par Notes
- * You can enable this option to reduce the size of the :term:`TCB`.  Use this
- * option with care, since it can lead to race conditions and undefined system
+ * You can enable this option to reduce the size of the `TCB`.  Use this option
+ * with care, since it can lead to race conditions and undefined system
  * behaviour.  For example, #errno is no longer a thread-local variable if this
  * option is enabled.
  */
