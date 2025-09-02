@@ -93,7 +93,7 @@ struct taskSwitchLog {
 
 extern struct taskSwitchLog taskSwitchLog[];
 extern int taskSwitchLogIndex;
-volatile extern int testsFinished;
+extern volatile int testsFinished;
 
 
 /* end of include file */
