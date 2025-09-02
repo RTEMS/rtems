@@ -867,7 +867,7 @@ static inline int alt_epcq_validate_read_write_arguments (
  * -EINVAL -> Invalid arguments
  * -ETIME  -> Time out and skipping the looping after 0.7 sec.
  */
-int static alt_epcq_poll_for_write_in_progress (
+static int alt_epcq_poll_for_write_in_progress (
  alt_epcq_controller2_dev* epcq_flash_info
 )
 {
