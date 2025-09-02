@@ -68,7 +68,7 @@ __FBSDID("$FreeBSD$");
 		.muxmodes[7] = m7, \
 	}
 
-const static struct ti_pinmux_padstate ti_padstate_devmap[] = {
+static const struct ti_pinmux_padstate ti_padstate_devmap[] = {
 	{"output",		PADCONF_OUTPUT },
 	{"output_pullup",	PADCONF_OUTPUT_PULLUP },
 	{"input",		PADCONF_INPUT },
@@ -78,7 +78,7 @@ const static struct ti_pinmux_padstate ti_padstate_devmap[] = {
 	{ .state = NULL }
 };
 
-const static struct ti_pinmux_padconf ti_padconf_devmap[] = {
+static const struct ti_pinmux_padconf ti_padconf_devmap[] = {
 	_PIN(0x000, "GPMC_AD0",		32, 7,"gpmc_ad0", "mmc1_dat0", NULL, NULL, NULL, NULL, NULL, "gpio1_0"),
 	_PIN(0x004, "GPMC_AD1",		33, 7,"gpmc_ad1", "mmc1_dat1", NULL, NULL, NULL, NULL, NULL, "gpio1_1"),
 	_PIN(0x008, "GPMC_AD2",		34, 7,"gpmc_ad2", "mmc1_dat2", NULL, NULL, NULL, NULL, NULL, "gpio1_2"),

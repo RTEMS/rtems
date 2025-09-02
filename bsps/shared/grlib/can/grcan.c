@@ -97,7 +97,7 @@ int state2err[4] = {
 	/* STATE_AHBERR  */ GRCAN_RET_AHBERR
 };
 
-static void __inline__ grcan_hw_reset(struct grcan_regs *regs);
+static __inline__ void grcan_hw_reset(struct grcan_regs *regs);
 
 static void grcan_hw_config(
 	struct grcan_priv *pDev,
@@ -319,7 +319,7 @@ int grcan_device_init(struct grcan_priv *pDev)
 	return 0;
 }
 
-static void __inline__ grcan_hw_reset(struct grcan_regs *regs)
+static __inline__ void grcan_hw_reset(struct grcan_regs *regs)
 {
 	regs->ctrl = GRCAN_CTRL_RESET;
 }

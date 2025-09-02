@@ -496,7 +496,7 @@ static void grtc_hw_get_defaults(struct grtc_priv *pDev, struct grtc_ioc_config 
 }
 
 /* bufsize is given in bytes */
-static int __inline__ grtc_hw_data_avail_upper(unsigned int rrp, unsigned rwp, unsigned int bufsize)
+static __inline__ int grtc_hw_data_avail_upper(unsigned int rrp, unsigned rwp, unsigned int bufsize)
 {
 	if ( rrp == rwp )
 		return 0;
@@ -509,7 +509,7 @@ static int __inline__ grtc_hw_data_avail_upper(unsigned int rrp, unsigned rwp, u
 }
 
 /* bufsize is given in bytes */
-static int __inline__ grtc_hw_data_avail_lower(unsigned int rrp, unsigned rwp, unsigned int bufsize)
+static __inline__ int grtc_hw_data_avail_lower(unsigned int rrp, unsigned rwp, unsigned int bufsize)
 {
 	if ( rrp == rwp )
 		return 0;
@@ -522,7 +522,7 @@ static int __inline__ grtc_hw_data_avail_lower(unsigned int rrp, unsigned rwp, u
 }
 
 /* bufsize is given in bytes */
-static int __inline__ grtc_hw_data_avail(unsigned int rrp, unsigned rwp, unsigned int bufsize)
+static __inline__ int grtc_hw_data_avail(unsigned int rrp, unsigned rwp, unsigned int bufsize)
 {
 	if ( rrp == rwp )
 		return 0;
