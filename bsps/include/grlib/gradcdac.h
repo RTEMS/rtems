@@ -122,37 +122,37 @@ extern unsigned int gradcdac_get_cfg(void *cookie);
 
 extern unsigned int gradcdac_get_status(void *cookie);
 
-static int __inline__ gradcdac_DAC_ReqRej(unsigned int status)
+static __inline__ int gradcdac_DAC_ReqRej(unsigned int status)
 {
 	return (status & GRADCDAC_STATUS_DACNO);
 }
 
-static int __inline__ gradcdac_DAC_isCompleted(unsigned int status)
+static __inline__ int gradcdac_DAC_isCompleted(unsigned int status)
 {
 	return (status & GRADCDAC_STATUS_DACRDY);
 }
 
-static int __inline__ gradcdac_DAC_isOngoing(unsigned int status)
+static __inline__ int gradcdac_DAC_isOngoing(unsigned int status)
 {
 	return (status & GRADCDAC_STATUS_DACON);
 }
 
-static int __inline__ gradcdac_ADC_isTimeouted(unsigned int status)
+static __inline__ int gradcdac_ADC_isTimeouted(unsigned int status)
 {
 	return (status & GRADCDAC_STATUS_ADCTO);
 }
 
-static int __inline__ gradcdac_ADC_ReqRej(unsigned int status)
+static __inline__ int gradcdac_ADC_ReqRej(unsigned int status)
 {
 	return (status & GRADCDAC_STATUS_ADCNO);
 }
 
-static int __inline__ gradcdac_ADC_isCompleted(unsigned int status)
+static __inline__ int gradcdac_ADC_isCompleted(unsigned int status)
 {
 	return (status & GRADCDAC_STATUS_ADCRDY);
 }
 
-static int __inline__ gradcdac_ADC_isOngoing(unsigned int status)
+static __inline__ int gradcdac_ADC_isOngoing(unsigned int status)
 {
 	return (status & GRADCDAC_STATUS_ADCON);
 }

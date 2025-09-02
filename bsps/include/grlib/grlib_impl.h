@@ -155,7 +155,7 @@ static inline uint64_t grlib_read_uncached64(uint64_t *address)
 
 #else
 
-static unsigned char __inline__ grlib_read_uncached8(unsigned int address)
+static __inline__ unsigned char grlib_read_uncached8(unsigned int address)
 {
 	unsigned char tmp = (*(volatile unsigned char *)(address));
 	return tmp;
