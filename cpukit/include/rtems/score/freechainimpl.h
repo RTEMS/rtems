@@ -113,7 +113,7 @@ static inline void *_Freechain_Pop( Freechain_Control *freechain )
  * @param freechain The freechain control.
  * @param node The node to push back.  The node shall not be @c NULL.
  */
-void static inline _Freechain_Push(
+static inline void _Freechain_Push(
   Freechain_Control *freechain,
   void              *node
 )
