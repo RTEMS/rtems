@@ -521,7 +521,7 @@ static int rdwt_tftp_client_file(
   void **tftp_handle
 )
 {
-  const static size_t buffer_size = 4001;
+  static const size_t buffer_size = 4001;
   char *data_buffer;
   int res = 0;
   ssize_t i;
