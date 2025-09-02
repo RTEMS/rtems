@@ -50,7 +50,7 @@ static const rtems_vector_number gpio_bank_vector[] =
   	AM335X_INT_GPIOINT3A };
 
 /* Get the value of Base Register + Offset */
-uint32_t static inline bbb_reg(uint32_t bank, uint32_t reg)
+static inline uint32_t bbb_reg(uint32_t bank, uint32_t reg)
 {
   return (gpio_bank_addrs[bank] + reg);
 }

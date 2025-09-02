@@ -29,10 +29,10 @@ static uint32_t TMPSNS_AIReadAccess(uint32_t address);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-const static float s_Ts20   = 133.6f;
-const static float s_Ts21   = -5.39f;
-const static float s_Ts21_2 = 29.0521f; /*!< It means (s_Ts21* s_Ts21) */
-const static float s_Ts22   = 0.002f;
+static const float s_Ts20   = 133.6f;
+static const float s_Ts21   = -5.39f;
+static const float s_Ts21_2 = 29.0521f; /*!< It means (s_Ts21* s_Ts21) */
+static const float s_Ts22   = 0.002f;
 static float s_Ts25c;
 
 /*******************************************************************************
