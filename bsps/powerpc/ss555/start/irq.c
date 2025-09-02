@@ -88,7 +88,7 @@ static inline int is_proc_irq(const rtems_irq_number irqLine)
  * and ILVL7.
  *
  */
-const static unsigned int USIU_IvectMask[CPU_USIU_IRQ_COUNT] =
+static const unsigned int USIU_IvectMask[CPU_USIU_IRQ_COUNT] =
 {
   0,		 		/* external IRQ 0 */
   0xFFFFFFFF << 31, 		/* internal level 0 */

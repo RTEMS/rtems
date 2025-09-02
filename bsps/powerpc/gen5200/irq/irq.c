@@ -51,7 +51,7 @@
  * be set to enable the relevant interrupt, mask of 32 is for unused entries
  *
  */
-const static unsigned int SIU_MaskBit [BSP_SIU_IRQ_NUMBER] = {
+static const unsigned int SIU_MaskBit [BSP_SIU_IRQ_NUMBER] = {
   0, 1, 2, 3,                   /* smart_comm, psc1, psc2, psc3            */
   4, 5, 6, 7,                   /* irda/psc6, eth, usb, ata                */
   8, 9, 10, 11,                 /* pci_ctrl, pci_sc_rx, pci_sc_tx, psc4    */
