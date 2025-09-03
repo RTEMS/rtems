@@ -634,11 +634,11 @@ rtems_status_code rtems_region_resize_segment(
  *
  * @par Notes
  * @parblock
- * This is primarily intended as a mechanism to obtain a diagnostic
- * information. This method forms am O(n) scan of the free and an O(n) scan of
- * the used blocks in the region to calculate the information provided. Given
- * that the execution time is driven by the number of used and free blocks, it
- * can take a non-deterministic time to execute.
+ * This is primarily intended as a mechanism to obtain diagnostic information.
+ * This directive performs an O(n) scan of the free and an O(n) scan of the
+ * used blocks in the region to calculate the information provided. Given that
+ * the execution time is driven by the number of used and free blocks, it can
+ * take a non-deterministic time to execute.
  *
  * To get only the free information of the region use
  * rtems_region_get_free_information().
@@ -692,12 +692,12 @@ rtems_status_code rtems_region_get_information(
  * rtems_region_get_information() directive but does not fill in the used
  * information.
  *
- * This is primarily intended as a mechanism to obtain a diagnostic
- * information. This method forms am O(n) scan of the free in the region to
+ * This is primarily intended as a mechanism to obtain diagnostic information.
+ * This directive performs an O(n) scan of the free blocks in the region to
  * calculate the information provided. Given that the execution time is driven
  * by the number of used and free blocks, it can take a non-deterministic time
  * to execute. Typically, there are many used blocks and a much smaller number
- * of used blocks making a call to this directive less expensive than a call to
+ * of free blocks making a call to this directive less expensive than a call to
  * rtems_region_get_information().
  * @endparblock
  *
