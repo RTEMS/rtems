@@ -631,16 +631,16 @@ static rtems_status_code gpio_multi_select(
 
       return RTEMS_RESOURCE_IN_USE;
     }
-  }
 
-  for ( i = 0; i < pin_count; ++i ) {
     sc = rtems_gpio_request_configuration(&pins[i]);
 
     if ( sc != RTEMS_SUCCESSFUL ) {
+      RELEASE_LOCK(gpio_bank_state[bank].lock);
       return sc;
     }
 
     gpio_pin_state[pins[i].pin_number].on_group = on_group;
+    RELEASE_LOCK(gpio_bank_state[bank].lock);
   }
 
   return RTEMS_SUCCESSFUL;
@@ -1366,6 +1366,9 @@ rtems_status_code rtems_gpio_request_pin(
   uint32_t bank;
   uint32_t pin;
 
+#if defined(DEBUG)
+  printk("rtems_gpio_request_pin : pinNr: %d, function = %d, bsp_specific = %p\n", pin_number, function, bsp_specific);
+#endif
   if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
