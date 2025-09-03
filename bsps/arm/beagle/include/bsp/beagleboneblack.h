@@ -37,6 +37,10 @@
 #define BBB_LED_USR3  56 /* USR LED3 */
 
 /* Header P8 of BeagleBone Black */
+#define BBB_P8_3      38 /* GPIO1_6 */
+#define BBB_P8_4      39 /* GPIO1_7 */
+#define BBB_P8_5      34 /* GPIO1_2 */
+#define BBB_P8_6      35 /* GPIO1_3 */
 #define BBB_P8_7      66 /* GPIO2_2 */
 #define BBB_P8_8      67 /* GPIO2_3 */
 #define BBB_P8_9      69 /* GPIO2_5 */
@@ -50,7 +54,33 @@
 #define BBB_P8_17     27 /* GPIO0_27 */
 #define BBB_P8_18     65 /* GPIO2_1 */
 #define BBB_P8_19     22 /* GPIO0_22 */
+#define BBB_P8_20     63 /* GPIO1_31 */
+#define BBB_P8_21     62 /* GPIO1_30 */
+#define BBB_P8_22     37 /* GPIO1_5 */
+#define BBB_P8_23     36 /* GPIO1_4 */
+#define BBB_P8_24     33 /* GPIO1_1 */
+#define BBB_P8_25     32 /* GPIO1_0 */
 #define BBB_P8_26     61 /* GPIO1_29 */
+#define BBB_P8_27     86 /* GPIO2_22 */
+#define BBB_P8_28     88 /* GPIO2_24 */
+#define BBB_P8_29     87 /* GPIO2_23 */
+#define BBB_P8_30     89 /* GPIO2_25 */
+#define BBB_P8_31     10 /* GPIO0_10 */
+#define BBB_P8_32     11 /* GPIO0_11 */
+#define BBB_P8_33     9 /* GPIO0_9 */
+#define BBB_P8_34     81 /* GPIO2_17 */
+#define BBB_P8_35     8 /* GPIO0_8 */
+#define BBB_P8_36     80 /* GPIO2_16 */
+#define BBB_P8_37     78 /* GPIO2_14 */
+#define BBB_P8_38     79 /* GPIO2_15 */
+#define BBB_P8_39     76 /* GPIO2_12 */
+#define BBB_P8_40     77 /* GPIO2_13 */
+#define BBB_P8_41     74 /* GPIO2_10 */
+#define BBB_P8_42     75 /* GPIO2_11 */
+#define BBB_P8_43     72 /* GPIO2_8 */
+#define BBB_P8_44     73 /* GPIO2_9 */
+#define BBB_P8_45     70 /* GPIO2_6 */
+#define BBB_P8_46     71 /* GPIO2_7 */
 	
 /* Header P9 of BeagleBone Black */
 #define BBB_P9_11     30 /* GPIO0_30 */
@@ -61,12 +91,39 @@
 #define BBB_P9_16     51 /* GPIO1_19 */
 #define BBB_P9_17      5 /* GPIO0_5 */
 #define BBB_P9_18      4 /* GPIO0_4 */
+
+#define BBB_P9_19     13 /* GPIO0_13 */
+#define BBB_P9_20     12 /* GPIO0_12 */
+#define BBB_P9_21      3 /* GPIO0_3 */
+#define BBB_P9_22      2 /* GPIO0_2 */
+
 #define BBB_P9_23     49 /* GPIO1_17 */
 #define BBB_P9_24     15 /* GPIO0_15 */
+
+#define BBB_P9_25     117 /* GPIO3_21 */
+
 #define BBB_P9_26     14 /* GPIO1_14 */
-#define BBB_P9_27     115/* GPIO3_19 */
-#define BBB_P9_30     112/* GPIO3_16 */
-#define BBB_P9_41     20 /* GPIO0_20 */
+#define BBB_P9_27     115 /* GPIO3_19 */
+
+#define BBB_P9_28     113 /* GPIO3_17 */
+#define BBB_P9_29     111 /* GPIO3_15 */
+
+#define BBB_P9_30     112 /* GPIO3_16 */
+
+#define BBB_P9_31     110 /* GPIO3_14 */
+
+#define BBB_P9_41A     20 /* GPIO0_20 */
+#define BBB_P9_41B     116 /* GPIO3_20 */
 #define BBB_P9_42      7 /* GPIO0_7 */
+
+/* ADC pins on the BeagleBone Black */
+#define BBB_P9_33      4 /* AIN_4 */
+#define BBB_P9_34      7 /* AIN_7 */
+#define BBB_P9_35      6 /* AIN_6 */
+#define BBB_P9_36      5 /* AIN_5 */
+#define BBB_P9_37      2 /* AIN_2 */
+#define BBB_P9_38      3 /* AIN_3 */
+#define BBB_P9_39      0 /* AIN_0 */
+#define BBB_P9_40      1 /* AIN_1 */
 
 #endif /* LIBBSP_ARM_BEAGLE_GPIO_H */

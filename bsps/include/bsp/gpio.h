@@ -335,6 +335,13 @@ extern rtems_status_code rtems_gpio_group_bsp_specific_operation(
   void *arg
 );
 
+extern rtems_status_code rtems_bsp_select_specific_io(
+  uint32_t bank,
+  uint32_t pin,
+  uint32_t function,
+  void *pin_data
+);
+
 /**
  * @brief Requests a GPIO pin configuration.
  *
@@ -929,6 +936,12 @@ extern rtems_status_code rtems_gpio_bsp_enable_interrupt(
   rtems_gpio_interrupt interrupt
 );
 
+extern rtems_status_code rtems_bsp_enable_interrupt(
+  uint32_t bank,
+  uint32_t pin,
+  rtems_gpio_interrupt interrupt
+);
+
 /**
  * @brief Stops interrupts from being generated on a given GPIO pin.
  *        This must be implemented by each BSP.
@@ -941,6 +954,12 @@ extern rtems_status_code rtems_gpio_bsp_enable_interrupt(
  * @retval RTEMS_UNSATISFIED Could not disable interrupts on this pin.
  */
 extern rtems_status_code rtems_gpio_bsp_disable_interrupt(
+  uint32_t bank,
+  uint32_t pin,
+  rtems_gpio_interrupt interrupt
+);
+
+extern rtems_status_code rtems_bsp_disable_interrupt(
   uint32_t bank,
   uint32_t pin,
   rtems_gpio_interrupt interrupt

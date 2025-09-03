@@ -21,6 +21,7 @@ install:
   - bsps/arm/beagle/include/bsp/pwmss.h
   - bsps/arm/beagle/include/bsp/qep.h
   - bsps/arm/beagle/include/bsp/spi.h
+  - bsps/arm/beagle/include/bsp/bbb-adc.h
 - destination: ${BSP_INCLUDEDIR}/libcpu
   source:
   - bsps/arm/include/libcpu/am335x.h
@@ -34,6 +35,7 @@ source:
 - bsps/arm/beagle/clock/clock.c
 - bsps/arm/beagle/console/console-config.c
 - bsps/arm/beagle/gpio/bbb-gpio.c
+- bsps/arm/beagle/adc/bbb-adc.c
 - bsps/arm/beagle/i2c/bbb-i2c.c
 - bsps/arm/beagle/irq/irq.c
 - bsps/arm/beagle/pwm/pwm.c
