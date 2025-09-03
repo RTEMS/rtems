@@ -288,7 +288,7 @@ rtems_status_code rtems_regulator_create(
   /**
    * Allocate memory for regulator instance
    */
-  the_regulator = (_Regulator_Control *) calloc(sizeof(_Regulator_Control), 1);
+  the_regulator = (_Regulator_Control *) calloc(1, sizeof(_Regulator_Control));
   if (the_regulator == NULL) {
     return RTEMS_NO_MEMORY;
   }
