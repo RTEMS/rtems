@@ -1353,16 +1353,16 @@ rtems_bdbuf_do_init (void)
   /*
    * Allocate the memory for the buffer descriptors.
    */
-  bdbuf_cache.bds = calloc (sizeof (rtems_bdbuf_buffer),
-                            bdbuf_cache.buffer_min_count);
+  bdbuf_cache.bds = calloc (bdbuf_cache.buffer_min_count,
+                            sizeof (rtems_bdbuf_buffer));
   if (!bdbuf_cache.bds)
     goto error;
 
   /*
    * Allocate the memory for the buffer descriptors.
    */
-  bdbuf_cache.groups = calloc (sizeof (rtems_bdbuf_group),
-                               bdbuf_cache.group_count);
+  bdbuf_cache.groups = calloc (bdbuf_cache.group_count,
+                               sizeof (rtems_bdbuf_group));
   if (!bdbuf_cache.groups)
     goto error;
 
