@@ -12,6 +12,7 @@ default:
 - enabled-by: true
   value:
   - -Wall
+  - -Wcalloc-transposed-args
   - -Werror
 description: |
   Warning flags passed to the C and C++ compiler
