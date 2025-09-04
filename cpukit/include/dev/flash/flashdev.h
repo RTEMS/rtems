@@ -405,8 +405,8 @@ struct rtems_flashdev {
    * @param[in] flash The flash device
    * @param[in] search_offset The offset of the sector which info is to be
    * returned.
-   * @param[out] sector_offset The offset of the start of the page
-   * @param[out] sector_size The size of the page
+   * @param[out] sector_offset The offset of the start of the sector
+   * @param[out] sector_size The size of the sector
    *
    * @retval 0 Success.
    * @retval non-zero Failed.
@@ -422,14 +422,16 @@ struct rtems_flashdev {
    * @brief Call to device driver to return the number of sectors on the flash
    * device.
    *
-   * @param[out] sector_count The number of sector on the flash device.
+   * @param[in] flashdev The flash device
+   * @param[out] sector_count The number of sectors on the flash device. On NAND
+   *   devices these are called blocks.
    *
    * @retval 0 Success.
    * @retval non-zero Failed.
    */
   int ( *sector_count )(
     rtems_flashdev *flashdev,
-    int *page_count
+    int *sector_count
   );
 
   /**
