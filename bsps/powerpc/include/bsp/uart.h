@@ -2,7 +2,7 @@
 /*
  * This software is Copyright (C) 1998 by T.sqware - all rights limited
  * It is provided in to the public domain "as is", can be freely modified
- * as far as this copyight notice is kept unchanged, but does not imply
+ * as far as this copyright notice is kept unchanged, but does not imply
  * an endorsement by T.sqware of the product in which it is included.
  */
 
