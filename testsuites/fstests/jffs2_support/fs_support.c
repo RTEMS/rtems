@@ -30,130 +30,79 @@
 #endif
 #include <tmacros.h>
 
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <string.h>
 
+#include <dev/flash/flash_sim_flashdev.h>
+#include <dev/flash/jffs2_flashdev.h>
 #include <rtems/jffs2.h>
 #include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 
 #include "fstest.h"
 #include "fstest_support.h"
 
-#define BLOCK_SIZE (16UL * 1024UL)
+#define FLASH_PAGE_SIZE ( 1024UL )
+#define PAGES_PER_SECTOR ( 16UL )
+#define SECTORS_PER_DEVICE ( 8UL )
 
-#define FLASH_SIZE (8UL * BLOCK_SIZE)
-
-typedef struct {
-  rtems_jffs2_flash_control super;
-  unsigned char area[FLASH_SIZE];
-} flash_control;
-
-static flash_control *get_flash_control(rtems_jffs2_flash_control *super)
-{
-  return (flash_control *) super;
-}
-
-static int flash_read(
-  rtems_jffs2_flash_control *super,
-  uint32_t offset,
-  unsigned char *buffer,
-  size_t size_of_buffer
-)
-{
-  flash_control *self = get_flash_control(super);
-  unsigned char *chunk = &self->area[offset];
-
-  memcpy(buffer, chunk, size_of_buffer);
-
-  return 0;
-}
-
-static int flash_write(
-  rtems_jffs2_flash_control *super,
-  uint32_t offset,
-  const unsigned char *buffer,
-  size_t size_of_buffer
-)
-{
-  flash_control *self = get_flash_control(super);
-  unsigned char *chunk = &self->area[offset];
-  size_t i;
-
-  for (i = 0; i < size_of_buffer; ++i) {
-    chunk[i] &= buffer[i];
-  }
-
-  return 0;
-}
-
-static int flash_erase(
-  rtems_jffs2_flash_control *super,
-  uint32_t offset
-)
-{
-  flash_control *self = get_flash_control(super);
-  unsigned char *chunk = &self->area[offset];
-
-  memset(chunk, 0xff, BLOCK_SIZE);
-
-  return 0;
-}
-
-static flash_control flash_instance = {
-  .super = {
-    .block_size = BLOCK_SIZE,
-    .flash_size = FLASH_SIZE,
-    .read = flash_read,
-    .write = flash_write,
-    .erase = flash_erase
-  }
-};
+#define FLASHDEV_PATH "dev/flashdev0"
 
 static rtems_jffs2_compressor_control compressor_instance = {
   .compress = rtems_jffs2_compressor_rtime_compress,
   .decompress = rtems_jffs2_compressor_rtime_decompress
 };
 
-static const rtems_jffs2_mount_data mount_data = {
-  .flash_control = &flash_instance.super,
-  .compressor_control = &compressor_instance
-};
+static rtems_flashdev *flash = NULL;
 
-static void erase_all(void)
-{
-  memset(&flash_instance.area[0], 0xff, FLASH_SIZE);
-}
-
-static rtems_resource_snapshot before_mount;
-
-void test_initialize_filesystem(void)
+void test_initialize_filesystem( void )
 {
   int rv;
+  int status;
+  rtems_status_code sc;
+  rtems_flashdev_region region;
+  struct flash_sim_flashdev_attributes attr;
 
-  erase_all();
+  attr.read_delay_ns = 0;
+  attr.write_delay_ns = 0;
+  attr.erase_delay_ns = 0;
+  attr.page_size_bytes = FLASH_PAGE_SIZE;
+  attr.pages_per_sector = PAGES_PER_SECTOR;
+  attr.total_sectors = SECTORS_PER_DEVICE;
+  attr.type = RTEMS_FLASHDEV_NOR;
+  attr.alloc = NULL;
+  attr.free = NULL;
 
-  rv = mkdir(BASE_FOR_TEST, S_IRWXU | S_IRWXG | S_IRWXO);
-  rtems_test_assert(rv == 0);
+  flash = flash_sim_flashdev_init( &attr );
+  rtems_test_assert( flash != NULL );
 
-  rtems_resource_snapshot_take(&before_mount);
+  /* Register the flashdev as a device */
+  status = rtems_flashdev_register( flash, FLASHDEV_PATH );
+  rtems_test_assert( !status );
 
-  rv = mount(
-    NULL,
+  rv = mkdir( BASE_FOR_TEST, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( rv == 0 );
+
+  region.offset = 0;
+  region.size = FLASH_PAGE_SIZE * PAGES_PER_SECTOR * SECTORS_PER_DEVICE;
+
+  sc = jffs2_flashdev_mount(
+    FLASHDEV_PATH,
     BASE_FOR_TEST,
-    RTEMS_FILESYSTEM_TYPE_JFFS2,
-    RTEMS_FILESYSTEM_READ_WRITE,
-    &mount_data
+    &region,
+    &compressor_instance,
+    false
   );
-  rtems_test_assert(rv == 0);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-void test_shutdown_filesystem(void)
+void test_shutdown_filesystem( void )
 {
-  int rv = unmount(BASE_FOR_TEST);
-  rtems_test_assert(rv == 0);
-  rtems_test_assert(rtems_resource_snapshot_check(&before_mount));
+  int rv = unmount( BASE_FOR_TEST );
+  rtems_test_assert( rv == 0 );
+
+  rv = rtems_flashdev_unregister( FLASHDEV_PATH );
+  rtems_test_assert( rv == 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

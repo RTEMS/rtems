@@ -57,6 +57,7 @@ install:
   - bsps/include/libchip/wd80x3.h
 - destination: ${BSP_INCLUDEDIR}/dev/flash
   source:
+  - bsps/include/dev/flash/flash_sim_flashdev.h
   - bsps/include/dev/flash/jffs2_flashdev.h
 - destination: ${BSP_INCLUDEDIR}/rtems/zilog
   source:
@@ -76,6 +77,7 @@ links:
 source:
 - bsps/shared/dev/display/disp_hcms29xx.c
 - bsps/shared/dev/display/font_hcms29xx.c
+- bsps/shared/dev/flash/flash_sim_flashdev.c
 - bsps/shared/dev/flash/jffs2_flashdev.c
 - bsps/shared/dev/i2c/i2c-2b-eeprom.c
 - bsps/shared/dev/i2c/i2c-ds1621.c
