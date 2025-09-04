@@ -29,24 +29,23 @@
 
 #include "test_flashdev.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <dev/flash/flash_sim_flashdev.h>
 #include <fcntl.h>
 #include <rtems/libcsupport.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/ioctl.h>
 
 #define TEST_NAME_LENGTH 10
 
-#define TEST_DATA_SIZE (PAGE_SIZE * PAGE_COUNT)
+#define TEST_DATA_SIZE ( PAGE_SIZE * PAGE_COUNT )
 #define PAGE_COUNT 16
 #define PAGE_SIZE 128
 #define SECTOR_COUNT 4
-#define SECTOR_SIZE (TEST_DATA_SIZE / SECTOR_COUNT)
+#define SECTOR_SIZE ( TEST_DATA_SIZE / SECTOR_COUNT )
 #define WB_SIZE 1
 
 const char rtems_test_name[] = "FLASHDEV 1";
-
-static void run_test(void);
 
 static void run_test(void) {
 
@@ -219,6 +218,47 @@ static void run_test(void) {
   rtems_test_assert(!status);
 }
 
+static void run_flash_sim_test( void )
+{
+  FILE *file;
+  rtems_flashdev* flash;
+  int status;
+  rtems_resource_snapshot snapshot;
+
+  /* Check resource usage on creation and deletion */
+  rtems_resource_snapshot_take( &snapshot );
+
+  flash = flash_sim_flashdev_init( NULL );
+  rtems_test_assert( flash != NULL );
+
+  rtems_flashdev_destroy( flash );
+  flash = NULL;
+
+  rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
+
+  /* Initialize the flash device driver and flashdev */
+  rtems_resource_snapshot_take( &snapshot );
+
+  flash = flash_sim_flashdev_init( NULL );
+  rtems_test_assert( flash != NULL );
+
+  /* Register the flashdev as a device */
+  status = rtems_flashdev_register( flash, "dev/flashdev0" );
+  rtems_test_assert( !status );
+
+  /* Open the flashdev */
+  file = fopen( "dev/flashdev0", "r+" );
+  rtems_test_assert( file != NULL );
+
+  status = fclose( file );
+  rtems_test_assert( !status );
+
+  status = rtems_flashdev_unregister( "dev/flashdev0" );
+  rtems_test_assert( !status );
+
+  rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
+}
+
 static void Init(rtems_task_argument arg)
 {
   (void) arg;
@@ -226,6 +266,7 @@ static void Init(rtems_task_argument arg)
   TEST_BEGIN();
 
   run_test();
+  run_flash_sim_test();
 
   TEST_END();
   rtems_test_exit(0);
