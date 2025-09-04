@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
  * Copyright (C) 2023 Aaron Nyholm
  *
