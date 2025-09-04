@@ -37,8 +37,8 @@ links:
   uid: /constraint/object-allocator
 name: rtems_region_get_information
 notes: |
-  This is primarily intended as a mechanism to obtain a diagnostic information.
-  This method forms am O(n) scan of the free and an O(n) scan of the used
+  This is primarily intended as a mechanism to obtain diagnostic information.
+  This directive performs an O(n) scan of the free and an O(n) scan of the used
   blocks in the region to calculate the information provided. Given that the
   execution time is driven by the number of used and free blocks, it can take a
   non-deterministic time to execute.
