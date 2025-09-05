@@ -126,6 +126,11 @@ static int rtems_flashdev_ioctl_page_count(
   void *arg
 );
 
+static int rtems_flashdev_ioctl_write_block_size(
+  rtems_flashdev *flash,
+  void *arg
+);
+
 static int rtems_flashdev_ioctl_sectorinfo_offset(
   rtems_flashdev *flash,
   void *arg
@@ -136,8 +141,38 @@ static int rtems_flashdev_ioctl_sector_count(
   void *arg
 );
 
-static int rtems_flashdev_ioctl_write_block_size(
+static int rtems_flashdev_ioctl_region_sectorinfo_offset(
   rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  void *arg
+);
+
+static int rtems_flashdev_ioctl_oob_bytes_per_page(
+  rtems_flashdev *flash,
+  void *arg
+);
+
+static int rtems_flashdev_ioctl_region_sector_mark_bad(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  void *arg
+);
+
+static int rtems_flashdev_ioctl_region_sectorhealth(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  void *arg
+);
+
+static int rtems_flashdev_ioctl_region_oob_read(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  void *arg
+);
+
+static int rtems_flashdev_ioctl_region_oob_write(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
   void *arg
 );
 
@@ -152,6 +187,12 @@ static int rtems_flashdev_get_abs_addr(
   rtems_flashdev *flash,
   rtems_libio_t *iop,
   size_t count,
+  off_t *addr
+);
+
+static int rtems_flashdev_get_region_addr(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
   off_t *addr
 );
 
@@ -400,14 +441,32 @@ static int rtems_flashdev_ioctl(
     case RTEMS_FLASHDEV_IOCTL_PAGE_COUNT:
       err = rtems_flashdev_ioctl_page_count( flash, arg );
       break;
+    case RTEMS_FLASHDEV_IOCTL_WRITE_BLOCK_SIZE:
+      err = rtems_flashdev_ioctl_write_block_size( flash, arg );
+      break;
     case RTEMS_FLASHDEV_IOCTL_SECTORINFO_BY_OFFSET:
       err = rtems_flashdev_ioctl_sectorinfo_offset( flash, arg );
       break;
     case RTEMS_FLASHDEV_IOCTL_SECTOR_COUNT:
       err = rtems_flashdev_ioctl_sector_count( flash, arg );
       break;
-    case RTEMS_FLASHDEV_IOCTL_WRITE_BLOCK_SIZE:
-      err = rtems_flashdev_ioctl_write_block_size( flash, arg );
+    case RTEMS_FLASHDEV_IOCTL_REGION_SECTORINFO_BY_OFFSET:
+      err = rtems_flashdev_ioctl_region_sectorinfo_offset( flash, iop, arg );
+      break;
+    case RTEMS_FLASHDEV_IOCTL_OOB_BYTES_PER_PAGE:
+      err = rtems_flashdev_ioctl_oob_bytes_per_page( flash, arg );
+      break;
+    case RTEMS_FLASHDEV_IOCTL_REGION_OOB_READ:
+      err = rtems_flashdev_ioctl_region_oob_read( flash, iop, arg );
+      break;
+    case RTEMS_FLASHDEV_IOCTL_REGION_OOB_WRITE:
+      err = rtems_flashdev_ioctl_region_oob_write( flash, iop, arg );
+      break;
+    case RTEMS_FLASHDEV_IOCTL_REGION_SECTOR_MARK_BAD:
+      err = rtems_flashdev_ioctl_region_sector_mark_bad( flash, iop, arg );
+      break;
+    case RTEMS_FLASHDEV_IOCTL_REGION_SECTOR_HEALTH:
+      err = rtems_flashdev_ioctl_region_sectorhealth( flash, iop, arg );
       break;
     default:
       err = EINVAL;
@@ -627,6 +686,21 @@ static int rtems_flashdev_get_abs_addr(
   }
   return 0;
 }
+
+static int rtems_flashdev_get_region_addr(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  off_t *addr
+)
+{
+  /* Get address for operation */
+  if ( rtems_flashdev_is_region_defined( iop ) ) {
+    *addr -= rtems_flashdev_get_region_offset( flash, iop );
+    return 0;
+  }
+  return -1;
+}
+
 static int rtems_flashdev_update_and_return(
   rtems_libio_t *iop,
   int status,
@@ -875,6 +949,21 @@ static int rtems_flashdev_ioctl_page_count( rtems_flashdev *flash, void *arg )
   }
 }
 
+static int rtems_flashdev_ioctl_write_block_size(
+  rtems_flashdev *flash,
+  void *arg
+)
+{
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  if ( flash->write_block_size == NULL ) {
+    return 0;
+  } else {
+    return ( *flash->write_block_size )( flash, ( (size_t *) arg ) );
+  }
+}
+
 static int rtems_flashdev_ioctl_sectorinfo_offset(
   rtems_flashdev *flash,
   void *arg
@@ -908,7 +997,194 @@ static int rtems_flashdev_ioctl_sector_count( rtems_flashdev *flash, void *arg )
   }
 }
 
-static int rtems_flashdev_ioctl_write_block_size(
+static int rtems_flashdev_ioctl_region_sectorinfo_offset(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  void *arg
+)
+{
+  int status;
+  rtems_flashdev_ioctl_sector_info *sector_info = arg;
+  off_t original_location;
+
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  original_location = sector_info->location;
+
+  if (rtems_flashdev_get_abs_addr(flash, iop, 0, &sector_info->location) != 0) {
+    return -1;
+  }
+
+  status = rtems_flashdev_ioctl_sectorinfo_offset(flash, arg);
+
+  /* restore region-relative location */
+  sector_info->location = original_location;
+
+  if (status != 0) {
+    return status;
+  }
+
+  /* translate offset to region relative */
+  if (rtems_flashdev_get_region_addr(
+    flash, iop, &sector_info->sector_info.offset) != 0) {
+    return -1;
+  }
+  return 0;
+}
+
+static int rtems_flashdev_ioctl_oob_bytes_per_page(
+  rtems_flashdev *flash, void *arg
+)
+{
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  if ( flash->oob_bytes_per_page == NULL ) {
+    return 0;
+  } else {
+    return ( *flash->oob_bytes_per_page )( flash, ( (size_t *) arg ) );
+  }
+}
+
+static int rtems_flashdev_ioctl_oob_read( rtems_flashdev *flash, void *arg )
+{
+  rtems_flashdev_ioctl_oob_rw_info *rw_info;
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  if ( flash->oob_read == NULL ) {
+    return 0;
+  } else {
+    rw_info = (rtems_flashdev_ioctl_oob_rw_info *) arg;
+    return ( *flash->oob_read )(
+      flash, rw_info->offset, rw_info->count, rw_info->buffer
+    );
+  }
+}
+
+static int get_region_first_page_index(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  off_t *region_page_index
+)
+{
+  off_t region_start = rtems_flashdev_get_region_offset( flash, iop );
+  size_t region_page_size = 0;
+  int status = 0;
+  off_t unused = 0;
+
+  /* get page size for region which should be consistent across NAND devices */
+  if (flash->page_info_by_offset == NULL) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  status = ( *flash->page_info_by_offset )(
+    flash,
+    region_start,
+    &unused,
+    &region_page_size
+  );
+  if (status != 0) {
+    rtems_set_errno_and_return_minus_one( status );
+  }
+
+  *region_page_index = region_start / region_page_size;
+  return 0;
+}
+
+static int rtems_flashdev_get_region_oob_addr(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  off_t *offset
+)
+{
+  int status = 0;
+  size_t oob_bytes_per_page = 0;
+  off_t region_page_index;
+
+  /* get oob bytes per page which should be consistent across NAND devices */
+  if (flash->oob_bytes_per_page == NULL) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  status = ( *flash->oob_bytes_per_page )( flash, &oob_bytes_per_page );
+  if (status != 0) {
+    rtems_set_errno_and_return_minus_one( status );
+  }
+
+  /* get index of first page in region */
+  status = get_region_first_page_index(flash, iop, &region_page_index);
+  if (status != 0) {
+    rtems_set_errno_and_return_minus_one( status );
+  }
+
+  /* add oob offset of region start to provided offset */
+  *offset += region_page_index * oob_bytes_per_page;
+
+  return 0;
+}
+
+static int rtems_flashdev_ioctl_region_oob_read(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  void *arg
+)
+{
+  int status = 0;
+  rtems_flashdev_ioctl_oob_rw_info *rw_info = arg;
+
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  status = rtems_flashdev_get_region_oob_addr( flash, iop, &rw_info->offset);
+  if (status != 0) {
+    rtems_set_errno_and_return_minus_one( status );
+  }
+
+  return rtems_flashdev_ioctl_oob_read(flash, arg);
+}
+
+static int rtems_flashdev_ioctl_oob_write( rtems_flashdev *flash, void *arg )
+{
+  rtems_flashdev_ioctl_oob_rw_info *rw_info;
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  if ( flash->oob_write == NULL ) {
+    return 0;
+  } else {
+    rw_info = (rtems_flashdev_ioctl_oob_rw_info *) arg;
+    return ( *flash->oob_write )(
+      flash, rw_info->offset, rw_info->count, rw_info->buffer
+    );
+  }
+}
+
+static int rtems_flashdev_ioctl_region_oob_write(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  void *arg
+)
+{
+  int status = 0;
+  rtems_flashdev_ioctl_oob_rw_info *rw_info = arg;
+
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  status = rtems_flashdev_get_region_oob_addr( flash, iop, &rw_info->offset);
+  if (status != 0) {
+    rtems_set_errno_and_return_minus_one( status );
+  }
+
+  return rtems_flashdev_ioctl_oob_write(flash, arg);
+}
+
+static int rtems_flashdev_ioctl_sector_mark_bad(
   rtems_flashdev *flash,
   void *arg
 )
@@ -916,11 +1192,67 @@ static int rtems_flashdev_ioctl_write_block_size(
   if ( arg == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
-  if ( flash->write_block_size == NULL ) {
+  if ( flash->sector_mark_bad == NULL ) {
     return 0;
   } else {
-    return ( *flash->write_block_size )( flash, ( (size_t *) arg ) );
+    return ( *flash->sector_mark_bad)( flash, *(uintptr_t *) arg );
   }
+}
+
+static int rtems_flashdev_ioctl_region_sector_mark_bad(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  void *arg
+)
+{
+  off_t *sector_offset = arg;
+
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  if (rtems_flashdev_get_abs_addr(flash, iop, 0, sector_offset) != 0) {
+    return -1;
+  }
+
+  return rtems_flashdev_ioctl_sector_mark_bad(flash, arg);
+}
+
+static int rtems_flashdev_ioctl_sectorhealth(
+  rtems_flashdev *flash,
+  void *arg
+)
+{
+  rtems_flashdev_ioctl_sector_health *sector_health;
+
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  if ( flash->sector_health == NULL ) {
+    return 0;
+  } else {
+    sector_health = arg;
+    return ( *flash->sector_health)( flash, sector_health->location, &sector_health->sector_bad );
+  }
+}
+
+static int rtems_flashdev_ioctl_region_sectorhealth(
+  rtems_flashdev *flash,
+  rtems_libio_t *iop,
+  void *arg
+)
+{
+  rtems_flashdev_ioctl_sector_health *sector_health = arg;
+
+  if ( arg == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  if (rtems_flashdev_get_abs_addr(flash, iop, 0, &sector_health->location) != 0) {
+    return -1;
+  }
+
+  return rtems_flashdev_ioctl_sectorhealth(flash, arg);
 }
 
 static uint32_t rtems_flashdev_find_unallocated_region(

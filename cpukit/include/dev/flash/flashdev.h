@@ -163,6 +163,71 @@ typedef struct rtems_flashdev rtems_flashdev;
 #define RTEMS_FLASHDEV_IOCTL_SECTOR_COUNT 12
 
 /**
+ * @brief Get the size and address of flash erase sector at given offset
+ *
+ * The offset ignores the region limiting. To find sector of region
+ * limited offset add the base of the region to the desired offset.
+ *
+ * @param[in,out] rtems_flashdev_ioctl_sector_info arg Pointer to struct
+ * with offset and space for return values.
+ */
+#define RTEMS_FLASHDEV_IOCTL_REGION_SECTORINFO_BY_OFFSET 13
+
+/**
+ * @brief Get the number of bytes per page of out of band space.
+ *
+ * This IOCTL is only applicable to devices which have out of band space,
+ * typically NAND.
+ *
+ * @param[out] count size_t containing the number of bytes.
+ */
+#define RTEMS_FLASHDEV_IOCTL_OOB_BYTES_PER_PAGE 14
+
+/**
+ * @brief Read bytes from the out of band space.
+ *
+ * This IOCTL is only applicable to devices which have out of band space,
+ * typically NAND.
+ *
+ * @param[in,out] rtems_flashdev_ioctl_oob_rw_info arg Pointer to struct
+ * with offset and space for return values.
+ */
+#define RTEMS_FLASHDEV_IOCTL_REGION_OOB_READ 15
+
+/**
+ * @brief Read bytes from the out of band space.
+ *
+ * This IOCTL is only applicable to devices which have out of band space,
+ * typically NAND.
+ *
+ * @param[in,out] rtems_flashdev_ioctl_oob_rw_info arg Pointer to struct
+ * with offset and space for return values.
+ */
+#define RTEMS_FLASHDEV_IOCTL_REGION_OOB_WRITE 16
+
+/**
+ * @brief Mark a sector as bad.
+ *
+ * Sectors are referred to as blocks in NAND devices. Not all devices have bad
+ * sector management.
+ *
+ * @param[in,out] off_t arg Pointer to a off_t holding the offset of the
+ * sector to be marked bad
+ */
+#define RTEMS_FLASHDEV_IOCTL_REGION_SECTOR_MARK_BAD 17
+
+/**
+ * @brief Check whether a sector is bad.
+ *
+ * Sectors are referred to as blocks in NAND devices. Not all devices have bad
+ * sector management.
+ *
+ * @param[in,out] rtems_flashdev_ioctl_sector_health arg Pointer to struct
+ * with offset and return value.
+ */
+#define RTEMS_FLASHDEV_IOCTL_REGION_SECTOR_HEALTH 18
+
+/**
  * @brief The maximum number of region limited file descriptors
  * allowed to be open at once.
  */
@@ -249,6 +314,43 @@ typedef struct rtems_flashdev_ioctl_sector_info {
    */
   rtems_flashdev_region sector_info;
 } rtems_flashdev_ioctl_sector_info;
+
+/**
+ * @brief Sector information returned from IOCTL calls.
+ */
+typedef struct rtems_flashdev_ioctl_sector_health {
+  /**
+   * @brief Offset or index to find sector at.
+   */
+  off_t location;
+
+  /**
+   * @brief Health information returned about the sector.
+   *
+   * Non-zero value indicates the sector is bad.
+   */
+  uint8_t sector_bad;
+} rtems_flashdev_ioctl_sector_health;
+
+/**
+ * @brief Read/write information used with OOB IOCTL calls.
+ */
+typedef struct rtems_flashdev_ioctl_oob_rw_info {
+  /**
+   * @brief Offset at which to operate.
+   */
+  off_t offset;
+
+  /**
+   * @brief Buffer on which to operate.
+   */
+  void *buffer;
+
+  /**
+   * @brief Number of bytes to transfer.
+   */
+  size_t count;
+} rtems_flashdev_ioctl_oob_rw_info;
 
 /**
  * @brief Flash device.
@@ -432,6 +534,92 @@ struct rtems_flashdev {
   int ( *sector_count )(
     rtems_flashdev *flashdev,
     int *sector_count
+  );
+
+  /**
+   * @brief Call to device driver to return the size of the out of band space.
+   *
+   * @param[in] flashdev Pointer to flash device.
+   * @param[out] oob_bytes_per_page The number of bytes of OOB space per page.
+   *
+   * @retval 0 Success.
+   * @retval non-zero Failed.
+   */
+  int ( *oob_bytes_per_page )(
+    rtems_flashdev *flashdev,
+    size_t *oob_bytes_per_page
+  );
+
+  /**
+   * @brief Call to the device driver to read the out of band space of the flash
+   * device.
+   *
+   * @param[in] flash Pointer to flash device.
+   * @param[in] offset Address to read from.
+   * @param[in] count Number of bytes to read.
+   * @param[out] buffer Buffer for data to be read into.
+   *
+   * @retval 0 Successful operation.
+   * @retval 1 Failed operation.
+   */
+  int ( *oob_read )(
+    rtems_flashdev *flash,
+    uintptr_t offset,
+    size_t count,
+    void *buffer
+  );
+
+  /**
+   * @brief Call to the device driver to write to the out of band space of the
+   * flash device.
+   *
+   * @param[in] flash Pointer to flash device.
+   * @param[in] offset Address to write to.
+   * @param[in] count Number of bytes to read.
+   * @param[in] buffer Buffer for data to be written from.
+   *
+   * @retval 0 Successful operation.
+   * @retval 1 Failed operation.
+   */
+  int ( *oob_write )(
+    rtems_flashdev *flash,
+    uintptr_t offset,
+    size_t count,
+    const void *buffer
+  );
+
+  /**
+   * @brief Call to the device driver to mark a sector as being bad.
+   *
+   * Sectors are referred to as blocks in NAND devices. Not all devices have bad
+   * sector management.
+   *
+   * @param[in] flash Pointer to flash device.
+   * @param[in] offset Address of the beginning of the sector.
+   *
+   * @retval 0 Successful operation.
+   * @retval 1 Failed operation.
+   */
+  int ( *sector_mark_bad )(
+    rtems_flashdev *flash,
+    off_t offset
+  );
+
+  /**
+   * @brief Call to device driver to get health of sector at given offset.
+   *
+   * @param[in] flash The flash device
+   * @param[in] search_offset The offset of the sector which info is to be
+   * returned.
+   * @param[out] sector_bad The disposition of the sector, non-zero being bad
+   *
+   * @retval 0 Success.
+   * @retval non-zero Failed.
+   */
+  int ( *sector_health )(
+    rtems_flashdev *flash,
+    off_t search_offset,
+    uint8_t *sector_bad
   );
 
   /**
