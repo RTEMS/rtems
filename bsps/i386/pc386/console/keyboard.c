@@ -775,8 +775,9 @@ void setledstate(struct kbd_struct *kbd, unsigned int led) {
   if (!(led & ~7)) {
     ledioctl = led;
      kbd->ledmode = LED_SHOW_IOCTL;
-  } else
+  } else {
     ;
+  }
   kbd->ledmode = LED_SHOW_FLAGS;
   set_leds();
 }

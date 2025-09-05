@@ -62,7 +62,7 @@
 #ifdef DEBUG 
 #define DBG(args...) printk(args)
 #else
-#define DBG(args...)
+#define DBG(args...) do { } while (0)
 #endif
 
 int pcibus_bus_init1(struct drvmgr_bus *bus);

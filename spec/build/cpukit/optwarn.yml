@@ -12,6 +12,7 @@ default:
 - enabled-by: true
   value:
   - -Wall
+  - -Wempty-body
   - -Werror
 description: |
   Warning flags passed to the C and C++ compiler

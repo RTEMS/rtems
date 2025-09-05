@@ -69,7 +69,7 @@
 #ifdef DEBUG_PCI
   #define JPRINTK(fmt, ...) printk("%s: " fmt, __FUNCTION__, ##__VA_ARGS__)
 #else
-  #define JPRINTK(fmt, ...)
+  #define JPRINTK(fmt, ...) do { } while (0)
 #endif
 
 #ifndef  PCI_CONFIG_WR_ADDR
