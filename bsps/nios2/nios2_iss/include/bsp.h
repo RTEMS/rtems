@@ -8,12 +8,7 @@
  * @brief Global BSP definitions.
  */
 
-/*  bsp.h
- *
- *  This include file contains all board IO definitions.
- *
- *  XXX : put yours in here
- *
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
