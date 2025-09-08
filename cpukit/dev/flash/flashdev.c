@@ -510,16 +510,8 @@ static int rtems_flashdev_do_init(
 {
   rtems_recursive_mutex_init( &flash->mutex, "RTEMS_FLASHDEV Flash" );
   flash->destroy = destroy;
-  flash->read = NULL;
-  flash->write = NULL;
-  flash->erase = NULL;
-  flash->jedec_id = NULL;
-  flash->flash_type = NULL;
-  flash->page_info_by_offset = NULL;
-  flash->page_info_by_index = NULL;
-  flash->page_count = NULL;
-  flash->write_block_size = NULL;
-  flash->region_table = NULL;
+  /* other fields are guaranteed nulled by caller */
+
   return 0;
 }
 
