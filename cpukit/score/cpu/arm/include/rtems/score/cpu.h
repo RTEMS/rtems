@@ -10,9 +10,6 @@
  */
 
 /*
- *  This include file contains information pertaining to the ARM
- *  processor.
- *
  *  Copyright (C) 2009, 2017 embedded brains GmbH & Co. KG
  *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
