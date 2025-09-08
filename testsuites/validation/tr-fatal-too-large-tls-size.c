@@ -103,7 +103,7 @@ typedef struct {
 static AcfgValFatalTooLargeTlsSize_Context
   AcfgValFatalTooLargeTlsSize_Instance;
 
-_Thread_local static volatile uint8_t large_tls_object[ RTEMS_TASK_STORAGE_ALIGNMENT + 1 ];
+static _Thread_local volatile uint8_t large_tls_object[ RTEMS_TASK_STORAGE_ALIGNMENT + 1 ];
 
 static volatile bool shall_not_load_the_value;
 
