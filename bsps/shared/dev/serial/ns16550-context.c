@@ -284,6 +284,8 @@ static void ns16550_isr(void *arg)
   ns16550_get_reg get = ctx->get_reg;
   int i = 0;
   char buf [SP_FIFO_SIZE];
+  rtems_interrupt_lock_context lock_context;
+  size_t out_pending;
 
   /* Iterate until no more interrupts are pending */
   do {
@@ -300,19 +302,16 @@ static void ns16550_isr(void *arg)
     rtems_termios_enqueue_raw_characters(tty, buf, i);
 
     /* Do transmit */
-    if (ctx->out_total > 0
+    rtems_termios_device_lock_acquire(&ctx->base, &lock_context);
+    out_pending = ctx->out_pending;
+    if (out_pending > 0
         && (get(port, NS16550_LINE_STATUS) & SP_LSR_THOLD) != 0) {
-      size_t current = ctx->out_current;
+      ctx->out_pending = 0;
+      rtems_termios_device_lock_release(&ctx->base, &lock_context);
 
-      ctx->out_buf += current;
-      ctx->out_remaining -= current;
-
-      if (ctx->out_remaining > 0) {
-        ctx->out_current =
-          ns16550_write_to_fifo(ctx, ctx->out_buf, ctx->out_remaining);
-      } else {
-        rtems_termios_dequeue_characters(tty, ctx->out_total);
-      }
+      rtems_termios_dequeue_characters(tty, out_pending);
+    } else {
+      rtems_termios_device_lock_release(&ctx->base, &lock_context);
     }
   } while ((get( port, NS16550_INTERRUPT_ID) & SP_IID_0) == 0);
 }
@@ -322,28 +321,25 @@ static void ns16550_isr_task(void *arg)
   rtems_termios_tty *tty = arg;
   ns16550_context *ctx = rtems_termios_get_device_context(tty);
   uint8_t status = (*ctx->get_reg)(ctx->port, NS16550_LINE_STATUS);
+  rtems_interrupt_lock_context lock_context;
+  size_t out_pending;
 
   if ((status & SP_LSR_RDY) != 0) {
     ns16550_clear_and_set_interrupts(ctx, SP_INT_RX_ENABLE, 0);
     rtems_termios_rxirq_occured(tty);
   }
 
-  if (ctx->out_total > 0 && (status & SP_LSR_THOLD) != 0) {
-    size_t current = ctx->out_current;
+  rtems_termios_device_lock_acquire(&ctx->base, &lock_context);
+  out_pending = ctx->out_pending;
 
-    ctx->out_buf += current;
-    ctx->out_remaining -= current;
+  if (out_pending > 0 && (status & SP_LSR_THOLD) != 0) {
+    ctx->out_pending = 0;
+    rtems_termios_device_lock_release(&ctx->base, &lock_context);
 
-    if (ctx->out_remaining > 0) {
-      ctx->out_current =
-        ns16550_write_to_fifo(ctx, ctx->out_buf, ctx->out_remaining);
-    } else {
-      size_t done = ctx->out_total;
-
-      ctx->out_total = 0;
-      ns16550_clear_and_set_interrupts(ctx, SP_INT_TX_ENABLE, 0);
-      rtems_termios_dequeue_characters(tty, done);
-    }
+    ns16550_clear_and_set_interrupts(ctx, SP_INT_TX_ENABLE, 0);
+    rtems_termios_dequeue_characters(tty, out_pending);
+  } else {
+    rtems_termios_device_lock_release(&ctx->base, &lock_context);
   }
 }
 
@@ -781,12 +777,10 @@ static void ns16550_write_support_int(
 {
   ns16550_context *ctx = (ns16550_context *) base;
 
-  ctx->out_total = len;
-
   if (len > 0) {
-    ctx->out_remaining = len;
-    ctx->out_buf = buf;
-    ctx->out_current = ns16550_write_to_fifo(ctx, buf, len);
+    if (ctx->out_pending == 0) {
+      ctx->out_pending = ns16550_write_to_fifo(ctx, buf, len);
+    }
 
     ns16550_enable_interrupts(ctx, NS16550_ENABLE_ALL_INTR);
   } else {
@@ -802,12 +796,10 @@ static void ns16550_write_support_task(
 {
   ns16550_context *ctx = (ns16550_context *) base;
 
-  ctx->out_total = len;
-
   if (len > 0) {
-    ctx->out_remaining = len;
-    ctx->out_buf = buf;
-    ctx->out_current = ns16550_write_to_fifo(ctx, buf, len);
+    if (ctx->out_pending == 0) {
+      ctx->out_pending = ns16550_write_to_fifo(ctx, buf, len);
+    }
 
     ns16550_clear_and_set_interrupts(ctx, 0, SP_INT_TX_ENABLE);
   }

@@ -79,10 +79,7 @@ struct ns16550_context{
   uint8_t modem_control;
   uint8_t line_control;
   uint32_t baud_divisor;
-  size_t out_total;
-  size_t out_remaining;
-  size_t out_current;
-  const char *out_buf;
+  size_t out_pending;
   rtems_termios_tty *tty;
   ns16550_calculate_baud_divisor calculate_baud_divisor;
 };
