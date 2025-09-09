@@ -1,10 +1,25 @@
-/*
- *  This is where the real hardware setup is done. A minimal stack
- *  has been provided by the start.S code. No normal C or RTEMS
- *  functions can be called from here.
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
+/**
+ * @file
+ * @ingroup RTEMSBSPsM68kAV5282
+ *
+ * @brief Initialization support
+ *
+ * This is where the real hardware setup is done. A minimal stack
+ * has been provided by the start.S code. No normal C or RTEMS
+ * functions can be called from here.
  *
  * This routine is pretty simple for the uC5282 because all the hard
  * work has been done by the bootstrap dBUG code.
+ */
+
+/*
+ * Copyright (C) 2005 Mike Bertosh <mbertosh@motioncontrol.org>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <bsp.h>
