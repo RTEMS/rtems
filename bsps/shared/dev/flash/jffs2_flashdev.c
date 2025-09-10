@@ -112,6 +112,79 @@ static int do_erase(
   return 0;
 }
 
+static int do_block_is_bad(
+  rtems_jffs2_flash_control *super,
+  uint32_t offset,
+  bool *bad
+)
+{
+  int status;
+  int fd = fileno(get_flash_control( super )->handle);
+  rtems_flashdev_ioctl_sector_health args;
+
+  args.location = offset;
+
+  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_REGION_SECTOR_HEALTH, &args);
+  *bad = args.sector_bad;
+
+  return status;
+}
+
+static int do_block_mark_bad(
+  rtems_jffs2_flash_control *super,
+  uint32_t offset
+)
+{
+  int fd = fileno(get_flash_control( super )->handle);
+  off_t o_offset = offset;
+
+  return ioctl(fd, RTEMS_FLASHDEV_IOCTL_REGION_SECTOR_MARK_BAD, &o_offset);
+}
+
+static int do_read_oob(
+  rtems_jffs2_flash_control *super,
+  uint32_t offset,
+  uint8_t *oobbuf,
+  uint32_t ooblen
+)
+{
+  int fd = fileno(get_flash_control( super )->handle);
+  rtems_flashdev_ioctl_oob_rw_info args;
+
+  args.offset = offset;
+  args.count = ooblen;
+  args.buffer = oobbuf;
+
+  return ioctl(fd, RTEMS_FLASHDEV_IOCTL_REGION_OOB_READ, &args);
+}
+
+static int do_write_oob(
+  rtems_jffs2_flash_control *super,
+  uint32_t offset,
+  uint8_t *oobbuf,
+  uint32_t ooblen
+)
+{
+  int fd = fileno(get_flash_control( super )->handle);
+  rtems_flashdev_ioctl_oob_rw_info args;
+
+  args.offset = offset;
+  args.count = ooblen;
+  args.buffer = oobbuf;
+
+  return ioctl(fd, RTEMS_FLASHDEV_IOCTL_REGION_OOB_WRITE, &args);
+}
+
+static uint32_t do_get_oob_size(
+  rtems_jffs2_flash_control *super
+)
+{
+  int fd = fileno(get_flash_control( super )->handle);
+  size_t bytes_per_page = 0;
+
+  return ioctl(fd, RTEMS_FLASHDEV_IOCTL_OOB_BYTES_PER_PAGE, &bytes_per_page);
+}
+
 static void do_destroy( rtems_jffs2_flash_control *super )
 {
   flash_control *self = get_flash_control( super );
@@ -125,7 +198,7 @@ static int get_sector_size(int fd, uint32_t *size)
   rtems_flashdev_ioctl_sector_info sec_info = {0, };
   int status;
 
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_SECTORINFO_BY_OFFSET, &sec_info);
+  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_REGION_SECTORINFO_BY_OFFSET, &sec_info);
   if (status == 0) {
     *size = sec_info.sector_info.size;
   }
@@ -260,6 +333,11 @@ rtems_status_code jffs2_flashdev_mount(
    */
   if (flash_type == RTEMS_FLASHDEV_NAND) {
     instance->super.write_size = write_size;
+    instance->super.block_is_bad = do_block_is_bad;
+    instance->super.block_mark_bad = do_block_mark_bad;
+    instance->super.oob_read = do_read_oob;
+    instance->super.oob_write = do_write_oob;
+    instance->super.get_oob_size = do_get_oob_size;
   }
 
   status = mount(
