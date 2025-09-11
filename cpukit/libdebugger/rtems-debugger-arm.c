@@ -80,9 +80,7 @@
  *
  * If the variant only supports thumb insturctions disable the support.
  */
-#define NEEDS_THUMB_SWITCH !ARM_THUMB_ONLY && defined(__thumb__)
-
-#if NEEDS_THUMB_SWITCH
+#if !ARM_THUMB_ONLY && defined(__thumb__)
   #define ARM_SWITCH_REG       uint32_t arm_switch_reg
   #define ARM_SWITCH_REG_ASM   [arm_switch_reg] "=&r" (arm_switch_reg)
   #define ARM_SWITCH_REG_ASM_L ARM_SWITCH_REG_ASM,
