@@ -175,6 +175,10 @@ rtems_status_code jffs2_flashdev_mount(
   rtems_jffs2_mount_data *mount_data;
   flash_control *instance;
   rtems_flashdev_flash_type flash_type;
+  uint64_t jedec_id = 0;
+  uint64_t max_jffs2_size = 0x100000000LU;
+  uint32_t block_size = 0;
+  uint32_t write_size = 0;
 
   file = fopen(flashdev_path, read_only ? "r" : "r+");
   if (file == NULL) {
@@ -186,6 +190,38 @@ rtems_status_code jffs2_flashdev_mount(
   if (status) {
     fclose(file);
     return RTEMS_NOT_IMPLEMENTED;
+  }
+
+  /* Get JEDEC ID, device_identifier is a 64bit dev_t */
+  status = get_jedec_id(fd, &jedec_id);
+  if ( status != 0 ) {
+    return status;
+  }
+
+  /* Retrieve page size as sector/block size */
+  status = get_sector_size(fd, &block_size);
+  if ( status != 0 ) {
+    return status;
+  }
+
+  /* JFFS2 maximum FS size is one block less than 4GB */
+  max_jffs2_size -= block_size;
+
+  /* Enforce maximum JFFS2 filesystem size */
+  if (region->size > max_jffs2_size) {
+    return RTEMS_INVALID_SIZE;
+  }
+
+  status = get_flash_type(fd, &flash_type);
+  if ( status != 0 ) {
+    return status;
+  }
+
+  if (flash_type == RTEMS_FLASHDEV_NAND) {
+    status = get_page_size(fd, &write_size);
+    if ( status != 0 ) {
+      return status;
+    }
   }
 
   mount_data = malloc(sizeof(*mount_data));
@@ -212,36 +248,18 @@ rtems_status_code jffs2_flashdev_mount(
   instance->super.write = do_write;
   instance->super.erase = do_erase;
   instance->super.destroy = do_destroy;
-
-  /* Get JEDEC ID, device_identifier is a 64bit dev_t */
-  status = get_jedec_id(fd, &instance->super.device_identifier);
-  if ( status != 0 ) {
-    return status;
-  }
+  instance->super.device_identifier = jedec_id;
+  instance->super.block_size = block_size;
 
   /* Set flash size from region size */
   instance->super.flash_size = region->size;
-
-  /* Retrieve page size as sector/block size */
-  status = get_sector_size(fd, &instance->super.block_size);
-  if ( status != 0 ) {
-    return status;
-  }
-
-  status = get_flash_type(fd, &flash_type);
-  if ( status != 0 ) {
-    return status;
-  }
 
   /*
    * Write size should only be provided to JFFS2 for NAND flash since JFFS2 uses
    * a write size of 0 to indicate non-NAND flash to disable write buffers.
    */
   if (flash_type == RTEMS_FLASHDEV_NAND) {
-    status = get_page_size(fd, &instance->super.write_size);
-    if ( status != 0 ) {
-      return status;
-    }
+    instance->super.write_size = write_size;
   }
 
   status = mount(
@@ -252,6 +270,8 @@ rtems_status_code jffs2_flashdev_mount(
     mount_data
   );
   if ( status != 0 ) {
+    free(mount_data);
+    free(instance);
     return status;
   }
 
