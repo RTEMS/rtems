@@ -41,6 +41,7 @@
 
 #include <rtems/score/prioritybitmapimpl.h>
 
+// clang-format off
 const unsigned char _Bitfield_Leading_zeros[256] = {
     7, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
