@@ -472,7 +472,7 @@ static const char * const * const RtemsTaskReqConstruct_PreDesc[] = {
 
 typedef RtemsTaskReqConstruct_Context Context;
 
-static volatile _Thread_local int tls_object;
+static _Thread_local volatile int tls_object;
 
 #define MAX_TLS_SIZE RTEMS_ALIGN_UP( 128, RTEMS_TASK_STORAGE_ALIGNMENT )
 
