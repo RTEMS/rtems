@@ -10,6 +10,9 @@ enabled-by: true
 includes:
 - bsps/include/dev/nand/
 install:
+- destination: ${BSP_INCLUDEDIR}/dev/flash
+  source:
+  - bsps/include/dev/flash/xnandpsu_flashdev.h
 - destination: ${BSP_INCLUDEDIR}/dev/nand
   source:
   - bsps/include/dev/nand/xnandpsu_bbm.h
@@ -21,4 +24,5 @@ source:
 - bsps/shared/dev/nand/xnandpsu_bbm.c
 - bsps/shared/dev/nand/xnandpsu.c
 - bsps/shared/dev/nand/xnandpsu_onfi.c
+- bsps/shared/dev/flash/xnandpsu_flashdev.c
 type: build
