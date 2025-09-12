@@ -96,9 +96,9 @@ extern "C" {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive should be called by boot_card() only.
+ * - The directive should be called by boot_card() only.
  *
- * * The directive will not return to the caller.
+ * - The directive will not return to the caller.
  * @endparblock
  */
 RTEMS_NO_RETURN void rtems_initialize_executive( void );
@@ -120,17 +120,17 @@ RTEMS_NO_RETURN void rtems_initialize_executive( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not return to the caller.
+ * - The directive will not return to the caller.
  *
- * * The directive invokes the fatal error extensions in extension forward
+ * - The directive invokes the fatal error extensions in extension forward
  *   order.
  *
- * * The directive does not invoke handlers registered by atexit() or
+ * - The directive does not invoke handlers registered by atexit() or
  *   on_exit().
  *
- * * The directive may terminate the system.
+ * - The directive may terminate the system.
  * @endparblock
  */
 RTEMS_NO_RETURN void rtems_shutdown_executive( uint32_t fatal_code );

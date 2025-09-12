@@ -308,7 +308,7 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSetSize_Prepare(
     case RtemsIntrReqGetAffinity_Pre_CPUSetSize_Valid: {
       /*
        * While the ``affinity_size`` parameter is an integral multiple of the
-       * size of ``long``, while the ``affinity_size`` parameter specifies a
+       * size of `long`, while the ``affinity_size`` parameter specifies a
        * processor set which is large enough to contain the processor affinity
        * set of the interrupt specified by ``vector``.
        */
@@ -319,7 +319,7 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSetSize_Prepare(
     case RtemsIntrReqGetAffinity_Pre_CPUSetSize_TooSmall: {
       /*
        * While the ``affinity_size`` parameter is an integral multiple of the
-       * size of ``long``, while the ``affinity_size`` parameter specifies a
+       * size of `long`, while the ``affinity_size`` parameter specifies a
        * processor set which is not large enough to contain the processor
        * affinity set of the interrupt specified by ``vector``.
        */
@@ -330,7 +330,7 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSetSize_Prepare(
     case RtemsIntrReqGetAffinity_Pre_CPUSetSize_Askew: {
       /*
        * While the ``affinity_size`` parameter is not an integral multiple of
-       * the size of ``long``.
+       * the size of `long`.
        */
       ctx->cpusetsize = SIZE_MAX;
       break;

@@ -435,6 +435,14 @@ extern "C" {
  */
 typedef uint32_t rtems_event_set;
 
+/* Generated from spec:/rtems/event/if/system-aio-suspension-terminated */
+
+/**
+ * @brief This event set constant represents the reserved system event that is
+ *   internally used by aio_suspend to notify of suspension termination.
+ */
+#define RTEMS_EVENT_SYSTEM_AIO_SUSPENSION_TERMINATED RTEMS_EVENT_27
+
 /* Generated from spec:/rtems/event/if/system-lio-list-completed */
 
 /**
@@ -493,12 +501,12 @@ typedef uint32_t rtems_event_set;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The timeout functionality of the directive requires a clock tick.
+ * - The timeout functionality of the directive requires a clock tick.
  * @endparblock
  */
 rtems_status_code rtems_event_system_receive(
@@ -521,14 +529,14 @@ rtems_status_code rtems_event_system_receive(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may unblock a task.  This may cause the calling task to be
+ * - The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
  * @endparblock
  */
@@ -570,12 +578,12 @@ rtems_status_code rtems_event_system_send(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 static inline void rtems_event_transient_clear( void )
@@ -603,12 +611,12 @@ static inline void rtems_event_transient_clear( void )
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The timeout functionality of the directive requires a clock tick.
+ * - The timeout functionality of the directive requires a clock tick.
  * @endparblock
  */
 static inline rtems_status_code rtems_event_transient_receive(
@@ -637,14 +645,14 @@ static inline rtems_status_code rtems_event_transient_receive(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may unblock a task.  This may cause the calling task to be
+ * - The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
  * @endparblock
  */
@@ -711,14 +719,14 @@ static inline rtems_status_code rtems_event_transient_send( rtems_id id )
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may unblock a task.  This may cause the calling task to be
+ * - The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
  * @endparblock
  */
@@ -822,12 +830,12 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The timeout functionality of the directive requires a clock tick.
+ * - The timeout functionality of the directive requires a clock tick.
  * @endparblock
  */
 rtems_status_code rtems_event_receive(

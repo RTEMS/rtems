@@ -136,18 +136,18 @@ struct bintime;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive may change the priority of a task.  This may cause the
+ * - The directive may change the priority of a task.  This may cause the
  *   calling task to be preempted.
  *
- * * The directive may unblock a task.  This may cause the calling task to be
+ * - The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
  *
- * * The time of day set by the directive shall be
+ * - The time of day set by the directive shall be
  *   1988-01-01T00:00:00.000000000Z or later.
  *
- * * The time of day set by the directive shall be before
+ * - The time of day set by the directive shall be before
  *   2100-01-01T00:00:00.000000000Z.
  * @endparblock
  */
@@ -176,11 +176,11 @@ rtems_status_code rtems_clock_set( const rtems_time_of_day *time_of_day );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 rtems_status_code rtems_clock_get_tod( rtems_time_of_day *time_of_day );
@@ -209,11 +209,11 @@ rtems_status_code rtems_clock_get_tod( rtems_time_of_day *time_of_day );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 rtems_status_code rtems_clock_get_tod_timeval( struct timeval *time_of_day );
@@ -246,11 +246,11 @@ rtems_status_code rtems_clock_get_tod_timeval( struct timeval *time_of_day );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_realtime( struct timespec *time_snapshot );
@@ -283,11 +283,11 @@ void rtems_clock_get_realtime( struct timespec *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_realtime_bintime( struct bintime *time_snapshot );
@@ -320,11 +320,11 @@ void rtems_clock_get_realtime_bintime( struct bintime *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_realtime_timeval( struct timeval *time_snapshot );
@@ -358,11 +358,11 @@ void rtems_clock_get_realtime_timeval( struct timeval *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_realtime_coarse( struct timespec *time_snapshot );
@@ -396,11 +396,11 @@ void rtems_clock_get_realtime_coarse( struct timespec *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_realtime_coarse_bintime( struct bintime *time_snapshot );
@@ -434,11 +434,11 @@ void rtems_clock_get_realtime_coarse_bintime( struct bintime *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_realtime_coarse_timeval( struct timeval *time_snapshot );
@@ -473,11 +473,11 @@ void rtems_clock_get_realtime_coarse_timeval( struct timeval *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_monotonic( struct timespec *time_snapshot );
@@ -511,11 +511,11 @@ void rtems_clock_get_monotonic( struct timespec *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_monotonic_bintime( struct bintime *time_snapshot );
@@ -545,11 +545,11 @@ void rtems_clock_get_monotonic_bintime( struct bintime *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 int64_t rtems_clock_get_monotonic_sbintime( void );
@@ -583,11 +583,11 @@ int64_t rtems_clock_get_monotonic_sbintime( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_monotonic_timeval( struct timeval *time_snapshot );
@@ -623,11 +623,11 @@ void rtems_clock_get_monotonic_timeval( struct timeval *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_monotonic_coarse( struct timespec *time_snapshot );
@@ -663,11 +663,11 @@ void rtems_clock_get_monotonic_coarse( struct timespec *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_monotonic_coarse_bintime( struct bintime *time_snapshot );
@@ -703,11 +703,11 @@ void rtems_clock_get_monotonic_coarse_bintime( struct bintime *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_monotonic_coarse_timeval( struct timeval *time_snapshot );
@@ -734,11 +734,11 @@ void rtems_clock_get_monotonic_coarse_timeval( struct timeval *time_snapshot );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_boot_time( struct timespec *boot_time );
@@ -765,11 +765,11 @@ void rtems_clock_get_boot_time( struct timespec *boot_time );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_boot_time_bintime( struct bintime *boot_time );
@@ -796,11 +796,11 @@ void rtems_clock_get_boot_time_bintime( struct bintime *boot_time );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_boot_time_timeval( struct timeval *boot_time );
@@ -830,11 +830,11 @@ void rtems_clock_get_boot_time_timeval( struct timeval *boot_time );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 rtems_status_code rtems_clock_get_seconds_since_epoch(
@@ -860,9 +860,9 @@ rtems_status_code rtems_clock_get_seconds_since_epoch(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_interval rtems_clock_get_ticks_per_second( void );
@@ -891,9 +891,9 @@ rtems_interval rtems_clock_get_ticks_per_second( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_interval rtems_clock_get_ticks_since_boot( void );
@@ -922,11 +922,11 @@ rtems_interval rtems_clock_get_ticks_since_boot( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 rtems_status_code rtems_clock_get_uptime( struct timespec *uptime );
@@ -949,11 +949,11 @@ rtems_status_code rtems_clock_get_uptime( struct timespec *uptime );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 void rtems_clock_get_uptime_timeval( struct timeval *uptime );
@@ -974,11 +974,11 @@ void rtems_clock_get_uptime_timeval( struct timeval *uptime );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 time_t rtems_clock_get_uptime_seconds( void );
@@ -999,11 +999,11 @@ time_t rtems_clock_get_uptime_seconds( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 uint64_t rtems_clock_get_uptime_nanoseconds( void );
@@ -1025,11 +1025,11 @@ uint64_t rtems_clock_get_uptime_nanoseconds( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 static inline rtems_interval rtems_clock_tick_later( rtems_interval delta )
@@ -1054,11 +1054,11 @@ static inline rtems_interval rtems_clock_tick_later( rtems_interval delta )
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 static inline rtems_interval rtems_clock_tick_later_usec(
@@ -1115,11 +1115,11 @@ static inline rtems_interval rtems_clock_tick_later_usec(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  * @endparblock
  */
 static inline bool rtems_clock_tick_before( rtems_interval ticks )
@@ -1140,12 +1140,12 @@ static inline bool rtems_clock_tick_before( rtems_interval ticks )
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  * @endparblock
  */
 rtems_status_code rtems_clock_tick( void );

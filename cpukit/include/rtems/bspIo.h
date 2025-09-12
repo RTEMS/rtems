@@ -103,8 +103,8 @@ typedef void ( *BSP_output_char_function_type )( char );
  * This function pointer shall never be NULL.  It shall be provided by the BSP
  * and statically initialized.  The referenced function shall output exactly
  * the character specified by the parameter.  In particular, it shall not
- * perform character translations, for example ``NL`` to ``CR`` followed by
- * ``NR``.  The function shall not block.
+ * perform character translations, for example `NL` to `CR` followed by `NR`.
+ * The function shall not block.
  */
 extern BSP_output_char_function_type BSP_output_char;
 
@@ -120,7 +120,7 @@ extern BSP_output_char_function_type BSP_output_char;
  * The directive outputs the character specified by ``c`` to the kernel
  * character output device using the polled character output implementation
  * provided by #BSP_output_char.  The directive performs a character
- * translation from ``NL`` to ``CR`` followed by ``NR``.
+ * translation from `NL` to `CR` followed by `NR`.
  *
  * If the kernel character output device is concurrently accessed, then
  * interleaved output may occur.
@@ -129,9 +129,9 @@ extern BSP_output_char_function_type BSP_output_char;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 void rtems_putc( char c );
@@ -154,9 +154,9 @@ void rtems_putc( char c );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 void rtems_put_char( int c, void *unused );
@@ -178,7 +178,7 @@ void rtems_put_char( int c, void *unused );
  * @parblock
  * The directive may be used to print debug and test information.  It uses
  * rtems_putc() to output the characters.  This directive performs a character
- * translation from ``NL`` to ``CR`` followed by ``NR``.
+ * translation from `NL` to `CR` followed by `NR`.
  *
  * If the kernel character output device is concurrently accessed, then
  * interleaved output may occur.
@@ -188,9 +188,9 @@ void rtems_put_char( int c, void *unused );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int putk( const char *s );
@@ -214,7 +214,7 @@ int putk( const char *s );
  * @parblock
  * The directive may be used to print debug and test information.  It uses
  * rtems_putc() to output the characters.  This directive performs a character
- * translation from ``NL`` to ``CR`` followed by ``NR``.
+ * translation from `NL` to `CR` followed by `NR`.
  *
  * If the kernel character output device is concurrently accessed, then
  * interleaved output may occur.
@@ -224,11 +224,11 @@ int putk( const char *s );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * Formatting of floating point numbers is not supported.
+ * - Formatting of floating point numbers is not supported.
  * @endparblock
  */
 RTEMS_PRINTFLIKE( 1, 2 ) int printk( const char *fmt, ... );
@@ -252,7 +252,7 @@ RTEMS_PRINTFLIKE( 1, 2 ) int printk( const char *fmt, ... );
  * @parblock
  * The directive may be used to print debug and test information.  It uses
  * rtems_putc() to output the characters.  This directive performs a character
- * translation from ``NL`` to ``CR`` followed by ``NR``.
+ * translation from `NL` to `CR` followed by `NR`.
  *
  * If the kernel character output device is concurrently accessed, then
  * interleaved output may occur.
@@ -262,11 +262,11 @@ RTEMS_PRINTFLIKE( 1, 2 ) int printk( const char *fmt, ... );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * Formatting of floating point numbers is not supported.
+ * - Formatting of floating point numbers is not supported.
  * @endparblock
  */
 int vprintk( const char *fmt, va_list ap );
@@ -292,7 +292,7 @@ int vprintk( const char *fmt, va_list ap );
  * @parblock
  * The directive may be used to print debug and test information.  It uses
  * rtems_putc() to output the characters.  This directive performs a character
- * translation from ``NL`` to ``CR`` followed by ``NR``.
+ * translation from `NL` to `CR` followed by `NR`.
  *
  * If the kernel character output device is concurrently accessed, then
  * interleaved output may occur.
@@ -302,11 +302,11 @@ int vprintk( const char *fmt, va_list ap );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * Formatting of floating point numbers is not supported.
+ * - Formatting of floating point numbers is not supported.
  * @endparblock
  */
 int rtems_printk_printer( void *unused, const char *fmt, va_list ap );
@@ -359,9 +359,9 @@ extern BSP_polling_getchar_function_type BSP_poll_char;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int getchark( void );

@@ -208,7 +208,7 @@ static void NewlibReqFutexWake_Pre_Count_Prepare(
   switch ( state ) {
     case NewlibReqFutexWake_Pre_Count_NegativeOrZero: {
       /*
-       * While the ``count`` parameter is less or equal to than zero.
+       * While the `count` parameter is less or equal to than zero.
        */
       /* This state is prepared by Enqueue() */
       break;
@@ -216,7 +216,7 @@ static void NewlibReqFutexWake_Pre_Count_Prepare(
 
     case NewlibReqFutexWake_Pre_Count_Positive: {
       /*
-       * While the ``count`` parameter is greater than zero.
+       * While the `count` parameter is greater than zero.
        */
       /* This state is prepared by Flush() */
       break;
@@ -264,7 +264,7 @@ static void NewlibReqFutexWake_Post_Flush_Check(
 
     case NewlibReqFutexWake_Post_Flush_Yes: {
       /*
-       * The first count threads specified by the ``count`` parameter shall be
+       * The first count threads specified by the `count` parameter shall be
        * extracted from the thread queue of the futex object in FIFO order.
        */
       ScoreTqReqFlushFifo_Run( &ctx->tq_ctx, true );
@@ -320,7 +320,7 @@ static void NewlibReqFutexWake_Prepare( NewlibReqFutexWake_Context *ctx )
 
 static void NewlibReqFutexWake_Action( NewlibReqFutexWake_Context *ctx )
 {
-  /* The action is performed in the ``Flush`` post-condition ``All`` state. */
+  /* The action is performed in the `Flush` post-condition `All` state. */
 }
 
 static void NewlibReqFutexWake_Cleanup( NewlibReqFutexWake_Context *ctx )

@@ -61,21 +61,21 @@
  *
  * @ingroup TestsuitesValidationNoClock0
  *
- * @brief Tests the ``.preinit_array`` constructor handling of the C runtime
+ * @brief Tests the `.preinit_array` constructor handling of the C runtime
  *   support.
  *
  * This test case performs the following actions:
  *
- * - Validate the ``.preinit_array`` constructor invocation.  Mark that the
- *   test case executed.
+ * - Validate the `.preinit_array` constructor invocation.  Mark that the test
+ *   case executed.
  *
- *   - Check that the ``.preinit_array`` constructor was called exactly once.
+ *   - Check that the `.preinit_array` constructor was called exactly once.
  *
- *   - Check that the ``.preeinit_array`` construction was done by the Classic
+ *   - Check that the `.preeinit_array` construction was done by the Classic
  *     API user initialization task.
  *
- *   - Check that the ``.preinit_array`` constructor was called before the
- *     global constructor invocations.
+ *   - Check that the `.preinit_array` constructor was called before the global
+ *     constructor invocations.
  *
  * @{
  */
@@ -113,26 +113,26 @@ static RTEMS_USED RTEMS_SECTION( ".preinit_array" ) void
   ( * const constructor_registration )( void ) = Constructor;
 
 /**
- * @brief Validate the ``.preinit_array`` constructor invocation.  Mark that
- *   the test case executed.
+ * @brief Validate the `.preinit_array` constructor invocation.  Mark that the
+ *   test case executed.
  */
 static void ScoreThreadValPreinitArray_Action_0( void )
 {
   test_case_executed = true;
 
   /*
-   * Check that the ``.preinit_array`` constructor was called exactly once.
+   * Check that the `.preinit_array` constructor was called exactly once.
    */
   T_eq_u32( constructor_calls, 1 );
 
   /*
-   * Check that the ``.preeinit_array`` construction was done by the Classic
-   * API user initialization task.
+   * Check that the `.preeinit_array` construction was done by the Classic API
+   * user initialization task.
    */
   T_eq_u32( constructor_id, rtems_task_self() );
 
   /*
-   * Check that the ``.preinit_array`` constructor was called before the global
+   * Check that the `.preinit_array` constructor was called before the global
    * constructor invocations.
    */
   T_eq_u32( constructor_counter, 1 );

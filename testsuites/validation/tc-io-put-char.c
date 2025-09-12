@@ -179,7 +179,7 @@ static void RtemsIoReqPutChar_Pre_Char_Prepare(
   switch ( state ) {
     case RtemsIoReqPutChar_Pre_Char_Nl: {
       /*
-       * While the ``c`` parameter is equal to ``NL``.
+       * While the ``c`` parameter is equal to `NL`.
        */
       ctx->character = '\n';
       break;
@@ -187,7 +187,7 @@ static void RtemsIoReqPutChar_Pre_Char_Prepare(
 
     case RtemsIoReqPutChar_Pre_Char_Other: {
       /*
-       * While the ``c`` parameter is not equal to ``NL``.
+       * While the ``c`` parameter is not equal to `NL`.
        */
       ctx->character = 0xff;
       break;
@@ -206,8 +206,8 @@ static void RtemsIoReqPutChar_Post_Output_Check(
   switch ( state ) {
     case RtemsIoReqPutChar_Post_Output_CrNl: {
       /*
-       * The function referenced by BSP_output_char shall be called with a
-       * ``CR`` character followed by a call with a ``NL`` character.
+       * The function referenced by BSP_output_char shall be called with a `CR`
+       * character followed by a call with a `NL` character.
        */
       T_eq_int( ctx->output[ 0 ], (unsigned char) '\r' );
       T_eq_int( ctx->output[ 1 ], (unsigned char) '\n' );

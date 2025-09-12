@@ -139,17 +139,17 @@ typedef CPU_Exception_frame rtems_exception_frame;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not return to the caller.
+ * - The directive will not return to the caller.
  *
- * * The directive invokes the fatal error extensions in extension forward
+ * - The directive invokes the fatal error extensions in extension forward
  *   order.
  *
- * * The directive does not invoke handlers registered by atexit() or
+ * - The directive does not invoke handlers registered by atexit() or
  *   on_exit().
  *
- * * The directive may terminate the system.
+ * - The directive may terminate the system.
  * @endparblock
  */
 RTEMS_NO_RETURN static inline void rtems_fatal(
@@ -180,17 +180,17 @@ RTEMS_NO_RETURN static inline void rtems_fatal(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not return to the caller.
+ * - The directive will not return to the caller.
  *
- * * The directive invokes the fatal error extensions in extension forward
+ * - The directive invokes the fatal error extensions in extension forward
  *   order.
  *
- * * The directive does not invoke handlers registered by atexit() or
+ * - The directive does not invoke handlers registered by atexit() or
  *   on_exit().
  *
- * * The directive may terminate the system.
+ * - The directive may terminate the system.
  * @endparblock
  */
 RTEMS_NO_RETURN RTEMS_PRINTFLIKE( 1, 2 ) void rtems_panic(
@@ -235,7 +235,7 @@ static inline void rtems_exception_frame_print(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  * @endparblock
  */
 const char *rtems_fatal_source_text( rtems_fatal_source fatal_source );
@@ -259,7 +259,7 @@ const char *rtems_fatal_source_text( rtems_fatal_source fatal_source );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  * @endparblock
  */
 const char *rtems_internal_error_text( rtems_fatal_code internal_error_code );
@@ -286,17 +286,17 @@ const char *rtems_internal_error_text( rtems_fatal_code internal_error_code );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not return to the caller.
+ * - The directive will not return to the caller.
  *
- * * The directive invokes the fatal error extensions in extension forward
+ * - The directive invokes the fatal error extensions in extension forward
  *   order.
  *
- * * The directive does not invoke handlers registered by atexit() or
+ * - The directive does not invoke handlers registered by atexit() or
  *   on_exit().
  *
- * * The directive may terminate the system.
+ * - The directive may terminate the system.
  * @endparblock
  */
 RTEMS_NO_RETURN void rtems_fatal_error_occurred( uint32_t fatal_code );

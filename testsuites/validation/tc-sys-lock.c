@@ -69,7 +69,7 @@
  *
  * @ingroup TestsuitesValidationNoClock0
  *
- * @brief Tests the <sys/lock.h> mutex directives.
+ * @brief Tests the `<sys/lock.h>` mutex directives.
  *
  * This test case performs the following actions:
  *

@@ -155,8 +155,8 @@ typedef struct {
    * by rtems_task_construct() fails.
    *
    * The actual thread-local storage size is determined when the application
-   * executable is linked.  The ``rtems-exeinfo`` command line tool included in
-   * the RTEMS Tools can be used to obtain the thread-local storage size and
+   * executable is linked.  The `rtems-exeinfo` command line tool included in the
+   * RTEMS Tools can be used to obtain the thread-local storage size and
    * alignment of an application executable.
    *
    * The application may configure the maximum thread-local storage size for all
@@ -495,8 +495,7 @@ typedef bool( *rtems_task_visitor )( rtems_tcb *, void * );
  *   #RTEMS_NO_ASR,
  *
  * * the interrupt level of the task: RTEMS_INTERRUPT_LEVEL() with a default of
- *   ``RTEMS_INTERRUPT_LEVEL( 0 )`` which is associated with enabled
- *   interrupts.
+ *   `RTEMS_INTERRUPT_LEVEL( 0 )` which is associated with enabled interrupts.
  *
  * The **initial preemption mode** of the task is enabled or disabled.
  *
@@ -632,25 +631,25 @@ typedef bool( *rtems_task_visitor )( rtems_tcb *, void * );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * When the directive operates on a global object, the directive sends a
+ * - When the directive operates on a global object, the directive sends a
  *   message to remote nodes.  This may preempt the calling task.
  *
- * * The number of tasks available to the application is configured through the
+ * - The number of tasks available to the application is configured through the
  *   @ref CONFIGURE_MAXIMUM_TASKS application configuration option.
  *
- * * Where the object class corresponding to the directive is configured to use
+ * - Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS
  *   Workspace.
  *
- * * The number of global objects available to the application is configured
+ * - The number of global objects available to the application is configured
  *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
  *   configuration option.
  * @endparblock
@@ -750,25 +749,25 @@ rtems_status_code rtems_task_create(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * When the directive operates on a global object, the directive sends a
+ * - When the directive operates on a global object, the directive sends a
  *   message to remote nodes.  This may preempt the calling task.
  *
- * * The number of tasks available to the application is configured through the
+ * - The number of tasks available to the application is configured through the
  *   @ref CONFIGURE_MAXIMUM_TASKS application configuration option.
  *
- * * Where the object class corresponding to the directive is configured to use
+ * - Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS
  *   Workspace.
  *
- * * The number of global objects available to the application is configured
+ * - The number of global objects available to the application is configured
  *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
  *   configuration option.
  * @endparblock
@@ -845,9 +844,9 @@ rtems_status_code rtems_task_construct(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_task_ident(
@@ -871,12 +870,12 @@ rtems_status_code rtems_task_ident(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_id rtems_task_self( void );
@@ -914,11 +913,11 @@ rtems_id rtems_task_self( void );
  * @par Notes
  * @parblock
  * The type of the entry point argument is an unsigned integer type.  However,
- * the integer type has the property that any valid pointer to ``void`` can be
- * converted to this type and then converted back to a pointer to ``void``.
- * The result will compare equal to the original pointer.  The type can
- * represent at least 32 bits.  Some applications use the entry point argument
- * as an index into a parameter table to get task-specific parameters.
+ * the integer type has the property that any valid pointer to `void` can be
+ * converted to this type and then converted back to a pointer to `void`.  The
+ * result will compare equal to the original pointer.  The type can represent
+ * at least 32 bits.  Some applications use the entry point argument as an
+ * index into a parameter table to get task-specific parameters.
  *
  * Any actions performed on a dormant task such as suspension or change of
  * priority are nullified when the task is initiated via the rtems_task_start()
@@ -929,14 +928,14 @@ rtems_id rtems_task_self( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may unblock a task.  This may cause the calling task to be
+ * - The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
  * @endparblock
  */
@@ -977,11 +976,11 @@ rtems_status_code rtems_task_start(
  * @par Notes
  * @parblock
  * The type of the entry point argument is an unsigned integer type.  However,
- * the integer type has the property that any valid pointer to ``void`` can be
- * converted to this type and then converted back to a pointer to ``void``.
- * The result will compare equal to the original pointer.  The type can
- * represent at least 32 bits.  Some applications use the entry point argument
- * as an index into a parameter table to get task-specific parameters.
+ * the integer type has the property that any valid pointer to `void` can be
+ * converted to this type and then converted back to a pointer to `void`.  The
+ * result will compare equal to the original pointer.  The type can represent
+ * at least 32 bits.  Some applications use the entry point argument as an
+ * index into a parameter table to get task-specific parameters.
  *
  * A new entry point argument may be used to distinguish between the initial
  * rtems_task_start() of the task and any ensuing calls to rtems_task_restart()
@@ -995,17 +994,17 @@ rtems_status_code rtems_task_start(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may change the priority of a task.  This may cause the
+ * - The directive may change the priority of a task.  This may cause the
  *   calling task to be preempted.
  *
- * * The directive may unblock a task.  This may cause the calling task to be
+ * - The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
  * @endparblock
  */
@@ -1084,21 +1083,21 @@ rtems_status_code rtems_task_restart(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * When the directive operates on a global object, the directive sends a
+ * - When the directive operates on a global object, the directive sends a
  *   message to remote nodes.  This may preempt the calling task.
  *
- * * The calling task does not have to be the task that created the object.
+ * - The calling task does not have to be the task that created the object.
  *   Any local task that knows the object identifier can delete the object.
  *
- * * Where the object class corresponding to the directive is configured to use
+ * - Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may free memory to the RTEMS Workspace.
  * @endparblock
  */
@@ -1139,11 +1138,11 @@ rtems_status_code rtems_task_delete( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not return to the caller.
+ * - The directive will not return to the caller.
  *
- * * While thread dispatching is disabled, if the directive performs a thread
+ * - While thread dispatching is disabled, if the directive performs a thread
  *   dispatch, then the fatal error with the fatal source INTERNAL_ERROR_CORE
  *   and the fatal code INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL will
  *   occur.
@@ -1186,14 +1185,14 @@ RTEMS_NO_RETURN void rtems_task_exit( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * When the directive operates on a remote object, the directive sends a
+ * - When the directive operates on a remote object, the directive sends a
  *   message to the remote node and waits for a reply.  This will preempt the
  *   calling task.
  * @endparblock
@@ -1225,17 +1224,17 @@ rtems_status_code rtems_task_suspend( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may unblock a task.  This may cause the calling task to be
+ * - The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
  *
- * * When the directive operates on a remote object, the directive sends a
+ * - When the directive operates on a remote object, the directive sends a
  *   message to the remote node and waits for a reply.  This will preempt the
  *   calling task.
  * @endparblock
@@ -1268,14 +1267,14 @@ rtems_status_code rtems_task_resume( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_task_is_suspended( rtems_id id );
@@ -1334,17 +1333,17 @@ rtems_status_code rtems_task_is_suspended( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may change the priority of a task.  This may cause the
+ * - The directive may change the priority of a task.  This may cause the
  *   calling task to be preempted.
  *
- * * When the directive operates on a remote object, the directive sends a
+ * - When the directive operates on a remote object, the directive sends a
  *   message to the remote node and waits for a reply.  This will preempt the
  *   calling task.
  * @endparblock
@@ -1399,14 +1398,14 @@ rtems_status_code rtems_task_set_priority(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_task_get_priority(
@@ -1461,8 +1460,7 @@ rtems_status_code rtems_task_get_priority(
  *   #RTEMS_NO_ASR,
  *
  * * the interrupt level of the task: RTEMS_INTERRUPT_LEVEL() with a default of
- *   ``RTEMS_INTERRUPT_LEVEL( 0 )`` which is associated with enabled
- *   interrupts.
+ *   `RTEMS_INTERRUPT_LEVEL( 0 )` which is associated with enabled interrupts.
  *
  * The **mode mask** specified in ``mask`` is built through a *bitwise or* of
  * the mode mask constants described below.
@@ -1522,12 +1520,12 @@ rtems_status_code rtems_task_get_priority(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * When the directive enables preemption for the calling task, another task
+ * - When the directive enables preemption for the calling task, another task
  *   may preempt the calling task.
  *
- * * While thread dispatching is disabled, if the directive performs a thread
+ * - While thread dispatching is disabled, if the directive performs a thread
  *   dispatch, then the fatal error with the fatal source INTERNAL_ERROR_CORE
  *   and the fatal code INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL will
  *   occur.
@@ -1572,11 +1570,11 @@ rtems_status_code rtems_task_mode(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  *
- * * While thread dispatching is disabled, if the directive performs a thread
+ * - While thread dispatching is disabled, if the directive performs a thread
  *   dispatch, then the fatal error with the fatal source INTERNAL_ERROR_CORE
  *   and the fatal code INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL will
  *   occur.
@@ -1613,11 +1611,11 @@ rtems_status_code rtems_task_wake_after( rtems_interval ticks );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive requires a Clock Driver.
+ * - The directive requires a Clock Driver.
  *
- * * While thread dispatching is disabled, if the directive performs a thread
+ * - While thread dispatching is disabled, if the directive performs a thread
  *   dispatch, then the fatal error with the fatal source INTERNAL_ERROR_CORE
  *   and the fatal code INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL will
  *   occur.
@@ -1655,14 +1653,14 @@ rtems_status_code rtems_task_wake_when( const rtems_time_of_day *time_buffer );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_task_get_scheduler(
@@ -1724,14 +1722,14 @@ rtems_status_code rtems_task_get_scheduler(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may change the priority of a task.  This may cause the
+ * - The directive may change the priority of a task.  This may cause the
  *   calling task to be preempted.
  * @endparblock
  */
@@ -1779,14 +1777,14 @@ rtems_status_code rtems_task_set_scheduler(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_task_get_affinity(
@@ -1831,14 +1829,14 @@ rtems_status_code rtems_task_get_affinity(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may change the processor affinity of a task.  This may cause
+ * - The directive may change the processor affinity of a task.  This may cause
  *   the calling task to be preempted.
  * @endparblock
  */
@@ -1877,12 +1875,12 @@ rtems_status_code rtems_task_set_affinity(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */

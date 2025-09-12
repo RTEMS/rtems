@@ -208,26 +208,26 @@ extern "C" {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * When the directive operates on a global object, the directive sends a
+ * - When the directive operates on a global object, the directive sends a
  *   message to remote nodes.  This may preempt the calling task.
  *
- * * The number of partitions available to the application is configured
+ * - The number of partitions available to the application is configured
  *   through the @ref CONFIGURE_MAXIMUM_PARTITIONS application configuration
  *   option.
  *
- * * Where the object class corresponding to the directive is configured to use
+ * - Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may allocate memory from the RTEMS
  *   Workspace.
  *
- * * The number of global objects available to the application is configured
+ * - The number of global objects available to the application is configured
  *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
  *   configuration option.
  * @endparblock
@@ -308,9 +308,9 @@ rtems_status_code rtems_partition_create(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_partition_ident(
@@ -359,21 +359,21 @@ rtems_status_code rtems_partition_ident(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * When the directive operates on a global object, the directive sends a
+ * - When the directive operates on a global object, the directive sends a
  *   message to remote nodes.  This may preempt the calling task.
  *
- * * The calling task does not have to be the task that created the object.
+ * - The calling task does not have to be the task that created the object.
  *   Any local task that knows the object identifier can delete the object.
  *
- * * Where the object class corresponding to the directive is configured to use
+ * - Where the object class corresponding to the directive is configured to use
  *   unlimited objects, the directive may free memory to the RTEMS Workspace.
  * @endparblock
  */
@@ -388,7 +388,7 @@ rtems_status_code rtems_partition_delete( rtems_id id );
  *
  * @param id is the partition identifier.
  *
- * @param[out] buffer is the pointer to a ``void`` pointer object.  When the
+ * @param[out] buffer is the pointer to a `void` pointer object.  When the
  *   directive call is successful, the pointer to the allocated buffer will be
  *   stored in this object.
  *
@@ -422,15 +422,15 @@ rtems_status_code rtems_partition_delete( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * When the directive operates on a local object, the directive may be called
+ * - When the directive operates on a local object, the directive may be called
  *   from within interrupt context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * When the directive operates on a local object, the directive will not
+ * - When the directive operates on a local object, the directive will not
  *   cause the calling task to be preempted.
  *
- * * When the directive operates on a remote object, the directive sends a
+ * - When the directive operates on a remote object, the directive sends a
  *   message to the remote node and waits for a reply.  This will preempt the
  *   calling task.
  * @endparblock
@@ -467,15 +467,15 @@ rtems_status_code rtems_partition_get_buffer( rtems_id id, void **buffer );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * When the directive operates on a local object, the directive may be called
+ * - When the directive operates on a local object, the directive may be called
  *   from within interrupt context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * When the directive operates on a local object, the directive will not
+ * - When the directive operates on a local object, the directive will not
  *   cause the calling task to be preempted.
  *
- * * When the directive operates on a remote object, the directive sends a
+ * - When the directive operates on a remote object, the directive sends a
  *   message to the remote node and waits for a reply.  This will preempt the
  *   calling task.
  * @endparblock

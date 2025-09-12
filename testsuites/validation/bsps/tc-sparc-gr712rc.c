@@ -64,49 +64,47 @@
  * @ingroup TestsuitesBspsValidationBsp0
  *
  * @brief This test case collection provides validation test cases for the
- *   ``sparc/gr712rc`` BSP.
+ *   `sparc/gr712rc` BSP.
  *
  * This test case performs the following actions:
  *
- * - Validate the use of the ``-mfix-gr712rc`` compiler option.
+ * - Validate the use of the `-mfix-gr712rc` compiler option.
  *
- *   - Check that the compiler built-in define ``__FIX_LEON3FT_B2BST`` is
+ *   - Check that the compiler built-in define `__FIX_LEON3FT_B2BST` is
  *     defined.
  *
- *   - Check that the compiler built-in define ``__FIX_LEON3FT_TN0018`` is
+ *   - Check that the compiler built-in define `__FIX_LEON3FT_TN0018` is
  *     defined.
  *
- *   - Check that the ``SPARC_LEON3FT_B2BST_NOP`` define expands to a ``nop``
+ *   - Check that the `SPARC_LEON3FT_B2BST_NOP` define expands to a `nop`
  *     instruction.
  *
  * @{
  */
 
 /**
- * @brief Validate the use of the ``-mfix-gr712rc`` compiler option.
+ * @brief Validate the use of the `-mfix-gr712rc` compiler option.
  */
 static void BspSparcLeon3ValGr712rc_Action_0( void )
 {
   const char *s;
 
   /*
-   * Check that the compiler built-in define ``__FIX_LEON3FT_B2BST`` is
-   * defined.
+   * Check that the compiler built-in define `__FIX_LEON3FT_B2BST` is defined.
    */
   #if !defined(__FIX_LEON3FT_B2BST)
   #error "__FIX_LEON3FT_B2BST is not defined"
   #endif
 
   /*
-   * Check that the compiler built-in define ``__FIX_LEON3FT_TN0018`` is
-   * defined.
+   * Check that the compiler built-in define `__FIX_LEON3FT_TN0018` is defined.
    */
   #if !defined(__FIX_LEON3FT_TN0018)
   #error "__FIX_LEON3FT_TN0018 is not defined"
   #endif
 
   /*
-   * Check that the ``SPARC_LEON3FT_B2BST_NOP`` define expands to a ``nop``
+   * Check that the `SPARC_LEON3FT_B2BST_NOP` define expands to a `nop`
    * instruction.
    */
   s = RTEMS_XSTRING( SPARC_LEON3FT_B2BST_NOP );
