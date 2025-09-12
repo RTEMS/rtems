@@ -21,6 +21,7 @@ source:
 - testsuites/validation/tc-attr.c
 - testsuites/validation/tc-barrier-create.c
 - testsuites/validation/tc-barrier-delete.c
+- testsuites/validation/tc-barrier-get-number-waiting.c
 - testsuites/validation/tc-barrier-ident.c
 - testsuites/validation/tc-barrier-release.c
 - testsuites/validation/tc-barrier-wait.c
