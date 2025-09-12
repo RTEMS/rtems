@@ -1,9 +1,20 @@
-/************************************************
- * NAME     : s3c2400.h
- * Version  : 3.7.2002
+/* SPDX-License-Identifier: GPL-2.0-with-RTEMS-exception */
+
+/**
+ * @file
+ *
+ * @brief smdk2400 CPU Support
  *
  * Based on 24x.h for the Samsung Development Board
- ************************************************/
+ */
+
+/*
+ * Copyright (C) 2005 Philippe Simons <loki_666@fastmail.fm>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef S3C2400_H_
 #define S3C2400_H_

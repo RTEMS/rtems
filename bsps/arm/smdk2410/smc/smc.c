@@ -1,9 +1,21 @@
-/*
- * s3c2400 smc disk block device implementation
+/* SPDX-License-Identifier: GPL-2.0-with-RTEMS-exception */
+
+/**
+ * @file
+ *
+ * @brief s3c2400 smc disk block device implementation
  *
  * Squidge's SMC Low-level access routines.
  * Inspired and derived from routines provided by Samsung Electronics
  *  M/M R&D Center & FireFly.
+ */
+
+/*
+ * Copyright (C) 2005 Philippe Simons <loki_666@fastmail.fm>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems.h>

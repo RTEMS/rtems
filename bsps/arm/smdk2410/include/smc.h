@@ -1,7 +1,19 @@
+/* SPDX-License-Identifier: GPL-2.0-with-RTEMS-exception */
+
 /**
  * @file
+ *
  * @ingroup smdk2410_smc
+ *
  * @brief SMC disk driver initialization entry point
+ */
+
+/*
+ * Copyright (C) 2005 Philippe Simons <loki_666@fastmail.fm>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #ifndef __SMC_H__

@@ -1,16 +1,29 @@
-#include <rtems.h>
-#include <bsp.h>
-#include <s3c24xx.h>
+/* SPDX-License-Identifier: GPL-2.0-with-RTEMS-exception */
 
-/* ------------------------------------------------------------------------- */
-/* NOTE: This describes the proper use of this file.
+/**
+ * @file
+ *
+ * @brief smdk2410 BSP Support
  *
  * BSP_OSC_FREQ should be defined as the input frequency of the PLL.
  *
  * get_FCLK(), get_HCLK(), get_PCLK() and get_UCLK() return the clock of
  * the specified bus in HZ.
  */
-/* ------------------------------------------------------------------------- */
+
+/*
+ * Copyright (C) 2005 Philippe Simons <loki_666@fastmail.fm>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
+#include <rtems.h>
+#include <rtems/libio.h>
+#include <rtems.h>
+#include <bsp.h>
+#include <s3c24xx.h>
 
 /* return FCLK frequency */
 uint32_t get_FCLK(void)
