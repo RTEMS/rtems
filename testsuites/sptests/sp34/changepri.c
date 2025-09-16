@@ -32,9 +32,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems/tm27-default.h>
-
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
