@@ -121,6 +121,12 @@ static int xqspi_erase_wrapper(
   return QspiPsu_NOR_Erase(flash_driver, (uint32_t)offset, (uint32_t)count);
 }
 
+static void xqspi_flash_priv_destroy(rtems_flashdev* flash)
+{
+  free(flash->region_table->regions);
+  free(flash->region_table);
+}
+
 rtems_flashdev* xqspi_flash_init(XQspiPsu *xQspiDev)
 {
   xqspi_flash_region_table *xtable =
@@ -152,6 +158,7 @@ rtems_flashdev* xqspi_flash_init(XQspiPsu *xQspiDev)
   }
 
   flash->driver = xQspiDev;
+  flash->priv_destroy = &xqspi_flash_priv_destroy;
   flash->read = &xqspi_read_wrapper;
   flash->write = &xqspi_write_wrapper;
   flash->erase = &xqspi_erase_wrapper;
@@ -164,11 +171,4 @@ rtems_flashdev* xqspi_flash_init(XQspiPsu *xQspiDev)
   flash->region_table = ftable;
 
   return flash;
-}
-
-void xqspi_flash_destroy(rtems_flashdev* flash)
-{
-  free(flash->region_table->regions);
-  free(flash->region_table);
-  rtems_flashdev_destroy_and_free(flash);
 }

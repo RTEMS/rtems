@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <rtems/libcsupport.h>
 #include <sys/ioctl.h>
 
 #define TEST_NAME_LENGTH 10
@@ -64,6 +65,32 @@ static void run_test(void) {
   int sector_count;
   int type;
   size_t wb_size;
+  rtems_resource_snapshot snapshot;
+
+  /* Check resource usage on creation and deletion */
+  rtems_resource_snapshot_take(&snapshot);
+
+  flash = test_flashdev_init();
+  rtems_test_assert(flash != NULL);
+
+  rtems_flashdev_destroy(flash);
+  flash = NULL;
+
+  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+
+  /* Check resource usage on registration */
+  rtems_resource_snapshot_take(&snapshot);
+
+  flash = test_flashdev_init();
+  rtems_test_assert(flash != NULL);
+
+  status = rtems_flashdev_register(flash, "dev/flashdev0");
+  rtems_test_assert(!status);
+
+  status = rtems_flashdev_unregister("dev/flashdev0");
+  rtems_test_assert(!status);
+
+  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 
   /* Initalize the flash device driver and flashdev */
   flash = test_flashdev_init();
@@ -77,6 +104,12 @@ static void run_test(void) {
   file = fopen("dev/flashdev0", "r+");
   rtems_test_assert(file != NULL);
   fd = fileno(file);
+
+  /* Initial read to establish cached buffers */
+  read_data = fgets(buff, TEST_DATA_SIZE, file);
+  rtems_test_assert(read_data != NULL);
+
+  rtems_resource_snapshot_take(&snapshot);
 
   /* Read data from flash */
   read_data = fgets(buff, TEST_DATA_SIZE, file);
@@ -176,6 +209,14 @@ static void run_test(void) {
   fseek(file, 0x400, SEEK_SET);
   fgets(buff, 11, file);
   rtems_test_assert(strncmp(buff, "HELLO WORLD", 11));
+
+  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+
+  status = fclose(file);
+  rtems_test_assert(!status);
+
+  status = rtems_flashdev_unregister("dev/flashdev0");
+  rtems_test_assert(!status);
 }
 
 static void Init(rtems_task_argument arg)

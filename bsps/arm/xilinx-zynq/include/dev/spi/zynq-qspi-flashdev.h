@@ -32,10 +32,11 @@
 #define ZQSPI_FLASH_MAX_REGIONS ((size_t)32)
 
 /*
- * @brief Initializes a flash device using zynq qspi flash
- * driver. The flash device is not registered in this call.
- * If an rtems_flashdev is created using zqspi_flash_init it must be
- * destroyed using xqspi_flash_destroy.
+ * @brief Initializes a flash device using zynq qspi flash driver.
+ *
+ * The flash device is not registered in this call. If an rtems_flashdev is
+ * created using zqspi_flash_init and is not registered, it must be destroyed
+ * using rtems_flashdev_destroy.
  *
  * @param[in] zqspiflash A initialised zqspiflash device to wrap.
  *
@@ -43,16 +44,6 @@
  * @retval NULL on failure.
 */
 rtems_flashdev* zqspi_flashdev_init(zqspiflash *bmdriver);
-
-/*
- * @brief Destroys a rtems_flashdev initialised with zqspi_flash_init.
- * If an rtems_flashdev is created using zqspi_flash_init it must be
- * destroyed using zqspi_flash_destroy. The zqspiflash originally passed in
- * is untouched.
- *
- * @param[in] flash The flashdev to destroy
-*/
-void zqspi_flashdev_destroy(rtems_flashdev* flash);
 
 /*
  * @brief Struct allocating memory space for flash regions. Used by

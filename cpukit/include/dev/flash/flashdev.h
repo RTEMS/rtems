@@ -442,6 +442,16 @@ struct rtems_flashdev {
   );
 
   /**
+   * @brief Callback to destroy private data not owned directly by the flashdev
+   * framework.
+   *
+   * @param[in] flash Pointer to flash device.
+   */
+  void ( *priv_destroy )(
+    rtems_flashdev *flashdev
+  );
+
+  /**
    * @brief Pointer to device driver.
    */
   void *driver;
@@ -493,7 +503,8 @@ int rtems_flashdev_init(
 /**
  * @brief Register the flash device.
  *
- * This function always claims ownership of the flash device.
+ * This function always claims ownership of the flash device passed to it. Once
+ * registered, the flash device can only be destroyed by unregistering it.
  *
  * After initialization and before registration read, write, erase, jedec_id
  * and flash_type functions need to be set in the flashdev.
@@ -510,7 +521,22 @@ int rtems_flashdev_register(
 );
 
 /**
+ * @brief Unregister the flash device.
+ *
+ * @param[in] flash The flash device.
+ *
+ * @retval 0 Successful operation.
+ * @retval non-zero Failed operation.
+ */
+int rtems_flashdev_unregister(
+  const char *flash_path
+);
+
+/**
  * @brief Destroys the flash device.
+ *
+ * This function must only be used on rtems_flashdev instances that have not
+ * been registered.
  *
  * @param[in] flash The flash device.
  */
@@ -520,6 +546,9 @@ void rtems_flashdev_destroy(
 
 /**
  * @brief Destroys the flash device and frees its memory.
+ *
+ * This function must only be used on rtems_flashdev instances that have not
+ * been registered.
  *
  * @param[in] flash The flash device.
  */
