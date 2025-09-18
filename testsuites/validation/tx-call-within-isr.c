@@ -107,6 +107,14 @@ static void CallWithinISRHandler( void *arg )
   }
 }
 
+/*
+ * On some architectures, GCC gives a warning for a dangling pointer.
+ * This is because "request" is a local variable and its address is
+ * passed to another function. GCC cannot detect that "request" is
+ * added to a chain in the foreground and removed in the ISR.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-pointer"
 void CallWithinISR( void ( *handler )( void * ), void *arg )
 {
   CallWithinISRRequest request;
@@ -116,6 +124,7 @@ void CallWithinISR( void ( *handler )( void * ), void *arg )
   CallWithinISRSubmit( &request );
   CallWithinISRWait( &request );
 }
+#pragma GCC diagnostic pop
 
 void CallWithinISRSubmit( CallWithinISRRequest *request )
 {
