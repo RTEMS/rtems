@@ -281,6 +281,9 @@ static rtems_isr SLINK_interrupt_handler(void *v)
 				cfg->rword = wrd;
 				break;
 			}
+#ifdef __rtems__
+			RTEMS_FALL_THROUGH();
+#endif
 		default: /* Unsolicited request */
 			SLINK_enqueue(wrd);
 			break;

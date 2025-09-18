@@ -46,6 +46,9 @@
 #define _INSIDE_MONLIB
 #include <umon/monlib.h>
 
+#ifdef __rtems__
+#include <rtems/score/basedefs.h>
+#endif /* __rtems__ */
 static int		(*_tfsseek)(int,int,int);
 static int 		(*_tfsgetline)(int,char *,int);
 static int		(*_tfsipmod)(char *,char *,int,int);
@@ -386,6 +389,9 @@ monUnlock(void)
 				break;
 			case 2:
 				ignorelock--;
+#ifdef __rtems__
+                                RTEMS_FALL_THROUGH();
+#endif
 			default:
 				_monunlock();
 				break;

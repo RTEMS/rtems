@@ -134,6 +134,7 @@ printk("config data is %p\n", BSP_pci_configuration.pci_config_data);
 					case 0x20:
 					return (rval = GT_64260_B);
 				}
+				RTEMS_FALL_THROUGH();
 
 			default:
 				if ( assertion ) {

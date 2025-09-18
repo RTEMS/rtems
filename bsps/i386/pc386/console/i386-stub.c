@@ -1023,7 +1023,9 @@ handle_exception (int exceptionVector)
 	      break;
 	    case '2':
 	      reg = 1;
+	      RTEMS_FALL_THROUGH();
 	    case '3':
+	      RTEMS_FALL_THROUGH();
 	    case '4':
 	    default:
 	      reg = 3;

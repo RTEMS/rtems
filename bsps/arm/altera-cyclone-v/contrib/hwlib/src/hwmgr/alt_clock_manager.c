@@ -45,6 +45,9 @@
 #include <bsp/hwlib.h>
 #include <bsp/alt_clock_manager.h>
 #include <bsp/alt_mpu_registers.h>
+#ifdef __rtems__
+#include <rtems/score/basedefs.h>
+#endif /* __rtems__ */
 
 #define UINT12_MAX              (4096)
 
@@ -4693,6 +4696,9 @@ ALT_STATUS_CODE alt_clk_freq_get(ALT_CLK_t clk, alt_freq_t* freq)
     case ALT_CLK_NAND:
         denom = 4;
         // the absence of a break statement here is not a mistake
+#ifdef __rtems__
+        RTEMS_FALL_THROUGH();
+#endif /* __rtems__ */
     case ALT_CLK_NAND_X:
         temp = ALT_CLKMGR_PERPLL_SRC_NAND_GET(alt_read_word(ALT_CLKMGR_PERPLL_SRC_ADDR));
         if (temp == ALT_CLKMGR_PERPLL_SRC_NAND_E_F2S_PERIPH_REF_CLK)

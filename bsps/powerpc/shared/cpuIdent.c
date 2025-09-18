@@ -169,6 +169,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
     case PPC_7455:
     case PPC_7457:
 		current_ppc_features.has_8_bats			= 1;
+		RTEMS_FALL_THROUGH();
     case PPC_7400:
 	/* NOTE: PSIM PVR doesn't tell us anything (its
      *       contents are not set based on what model
@@ -181,12 +182,14 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
 	 */
 	case PPC_PSIM:
 		current_ppc_features.has_altivec		= 1;
+		RTEMS_FALL_THROUGH();
 	case PPC_604:
 	case PPC_604e:
 	case PPC_604r:
 	case PPC_750:
 	case PPC_750_IBM:
 		current_ppc_features.has_hw_ptbl_lkup	= 1;
+		RTEMS_FALL_THROUGH();
 	case PPC_8260:
 	case PPC_8245:
 	case PPC_601:
@@ -195,6 +198,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
 	case PPC_603ev:
 	case PPC_603le:
 		current_ppc_features.is_60x				= 1;
+		RTEMS_FALL_THROUGH();
 	default:
 	break;
   }

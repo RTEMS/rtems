@@ -137,6 +137,7 @@ _IBMPC_scankey(char *outChar)
     case 0x2a:
       if (extended)
         return false;
+      RTEMS_FALL_THROUGH();
     case 0x36:
       shift_pressed = 1;
       return false;
@@ -144,6 +145,7 @@ _IBMPC_scankey(char *outChar)
     case 0xaa:
       if (extended)
         return false;
+      RTEMS_FALL_THROUGH();
     case 0xb6:
       shift_pressed = 0;
       return false;

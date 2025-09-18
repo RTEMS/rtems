@@ -176,18 +176,25 @@ static void mpc5200_mscan_interrupt_handler(rtems_irq_hdl_param handle)
             switch (m->txdlr) {
               case 8:
                 m->txdsr7 = tx_mess_ptr->mess_data[7];
+                RTEMS_FALL_THROUGH();
               case 7:
                 m->txdsr6 = tx_mess_ptr->mess_data[6];
+                RTEMS_FALL_THROUGH();
               case 6:
                 m->txdsr5 = tx_mess_ptr->mess_data[5];
+                RTEMS_FALL_THROUGH();
               case 5:
                 m->txdsr4 = tx_mess_ptr->mess_data[4];
+                RTEMS_FALL_THROUGH();
               case 4:
                 m->txdsr3 = tx_mess_ptr->mess_data[3];
+                RTEMS_FALL_THROUGH();
               case 3:
                 m->txdsr2 = tx_mess_ptr->mess_data[2];
+                RTEMS_FALL_THROUGH();
               case 2:
                 m->txdsr1 = tx_mess_ptr->mess_data[1];
+                RTEMS_FALL_THROUGH();
               case 1:
                 m->txdsr0 = tx_mess_ptr->mess_data[0];
                 break;
@@ -278,20 +285,28 @@ static void mpc5200_mscan_interrupt_handler(rtems_irq_hdl_param handle)
         switch (rx_mess_ptr->mess_len) {
           case 8:
             rx_mess_ptr->mess_data[7] = m->rxdsr7;
+            RTEMS_FALL_THROUGH();
           case 7:
             rx_mess_ptr->mess_data[6] = m->rxdsr6;
+            RTEMS_FALL_THROUGH();
           case 6:
             rx_mess_ptr->mess_data[5] = m->rxdsr5;
+            RTEMS_FALL_THROUGH();
           case 5:
             rx_mess_ptr->mess_data[4] = m->rxdsr4;
+            RTEMS_FALL_THROUGH();
           case 4:
             rx_mess_ptr->mess_data[3] = m->rxdsr3;
+            RTEMS_FALL_THROUGH();
           case 3:
             rx_mess_ptr->mess_data[2] = m->rxdsr2;
+            RTEMS_FALL_THROUGH();
           case 2:
             rx_mess_ptr->mess_data[1] = m->rxdsr1;
+            RTEMS_FALL_THROUGH();
           case 1:
             rx_mess_ptr->mess_data[0] = m->rxdsr0;
+            RTEMS_FALL_THROUGH();
           case 0:
           default:
             break;
@@ -1161,6 +1176,7 @@ rtems_device_driver mscan_control(rtems_device_major_number major,
           break;
 
       }
+      RTEMS_FALL_THROUGH();
 
       /* set tx buffer ID */
     case MSCAN_SET_TX_ID:

@@ -623,6 +623,7 @@ unsigned long tm   = TSI_TM_SCT_IDX;
 				case 3:	tm = TSI_TM_BLT_IDX; break;
 				default: break;
 			}
+			RTEMS_FALL_THROUGH();
 
 		case VME_AM_STD_SUP_DATA:
 		case VME_AM_STD_USR_DATA:
@@ -645,6 +646,7 @@ unsigned long tm   = TSI_TM_SCT_IDX;
 				case 3:	tm = TSI_TM_BLT_IDX; break;
 				default: break;
 			}
+			RTEMS_FALL_THROUGH();
 
 		case VME_AM_EXT_SUP_DATA:
 		case VME_AM_EXT_USR_DATA:
