@@ -11,7 +11,7 @@
 
 /*
  * Copyright (C) 2014 Pavel Pisa
- * Copyright (C) 2011, 2013 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2011, 2025 On-Line Applications Research Corporation (OAR)
  * Copyright (C) 2009, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
@@ -1030,6 +1030,28 @@ extern "C" {
   #define RTEMS_ZERO_LENGTH_ARRAY
 #else
   #define RTEMS_ZERO_LENGTH_ARRAY 0
+#endif
+
+/**
+ * @ingroup RTEMSAPIBaseDefs
+ *
+ * @brief This macro expands to a fall through hint.
+ *
+ * In C switch statement, it is possible for one case to "fall through"
+ * to the next. Until C23, there was no standard way for the programmer
+ * to tell the compiler this was intentional. Many times, not having
+ * a "break" statement is an error. This macro standardizes the hint
+ * for RTEMS source code.
+ *
+ * @note GCC recognizes many comment strings with "fall through" as
+ *       a hint. But a cpp macro cannot insert a comment.
+ */
+#if __STDC_VERSION__ >= 202311L
+  #define RTEMS_FALL_THROUGH() [[fallthrough]]
+#elif __GNUC__
+  #define RTEMS_FALL_THROUGH() __attribute__ ((fallthrough))
+#else
+  #define RTEMS_FALL_THROUGH() 
 #endif
 
 #ifdef __cplusplus
