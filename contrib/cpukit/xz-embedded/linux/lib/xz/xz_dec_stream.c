@@ -10,6 +10,9 @@
 #include "xz_private.h"
 #include "xz_stream.h"
 
+#ifdef __rtems__
+#include <rtems/score/basedefs.h>
+#endif
 #ifdef XZ_USE_CRC64
 #	define IS_CRC64(check_type) ((check_type) == XZ_CHECK_CRC64)
 #else
@@ -603,6 +606,9 @@ static enum xz_ret dec_main(struct xz_dec *s, struct xz_buf *b)
 			ret = dec_stream_header(s);
 			if (ret != XZ_OK)
 				return ret;
+#ifdef __rtems__
+			RTEMS_FALL_THROUGH();
+#endif
 
 		case SEQ_BLOCK_START:
 			/* We need one byte of input to continue. */
@@ -626,6 +632,9 @@ static enum xz_ret dec_main(struct xz_dec *s, struct xz_buf *b)
 			s->temp.size = s->block_header.size;
 			s->temp.pos = 0;
 			s->sequence = SEQ_BLOCK_HEADER;
+#ifdef __rtems__
+			RTEMS_FALL_THROUGH();
+#endif
 
 		case SEQ_BLOCK_HEADER:
 			if (!fill_temp(s, b))
@@ -636,6 +645,9 @@ static enum xz_ret dec_main(struct xz_dec *s, struct xz_buf *b)
 				return ret;
 
 			s->sequence = SEQ_BLOCK_UNCOMPRESS;
+#ifdef __rtems__
+			RTEMS_FALL_THROUGH();
+#endif
 
 		case SEQ_BLOCK_UNCOMPRESS:
 			ret = dec_block(s, b);
@@ -663,6 +675,9 @@ static enum xz_ret dec_main(struct xz_dec *s, struct xz_buf *b)
 			}
 
 			s->sequence = SEQ_BLOCK_CHECK;
+#ifdef __rtems__
+			RTEMS_FALL_THROUGH();
+#endif
 
 		case SEQ_BLOCK_CHECK:
 			if (s->check_type == XZ_CHECK_CRC32) {
@@ -712,6 +727,9 @@ static enum xz_ret dec_main(struct xz_dec *s, struct xz_buf *b)
 				return XZ_DATA_ERROR;
 
 			s->sequence = SEQ_INDEX_CRC32;
+#ifdef __rtems__
+			RTEMS_FALL_THROUGH();
+#endif
 
 		case SEQ_INDEX_CRC32:
 			ret = crc_validate(s, b, 32);
@@ -720,6 +738,9 @@ static enum xz_ret dec_main(struct xz_dec *s, struct xz_buf *b)
 
 			s->temp.size = STREAM_HEADER_SIZE;
 			s->sequence = SEQ_STREAM_FOOTER;
+#ifdef __rtems__
+			RTEMS_FALL_THROUGH();
+#endif
 
 		case SEQ_STREAM_FOOTER:
 			if (!fill_temp(s, b))
