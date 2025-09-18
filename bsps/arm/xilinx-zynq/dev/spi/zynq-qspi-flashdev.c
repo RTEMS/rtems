@@ -149,6 +149,12 @@ static int zqspi_sector_count(
   return 0;
 }
 
+static void zqspi_priv_destroy(rtems_flashdev* flash)
+{
+  free(flash->region_table->regions);
+  free(flash->region_table);
+}
+
 rtems_flashdev* zqspi_flashdev_init(zqspiflash *bmdriver)
 {
   zqspi_flash_region_table *xtable =
@@ -180,6 +186,7 @@ rtems_flashdev* zqspi_flashdev_init(zqspiflash *bmdriver)
   }
 
   flash->driver = bmdriver;
+  flash->priv_destroy = &zqspi_priv_destroy;
   flash->read = &zqspi_read_wrapper;
   flash->write = &zqspi_write_wrapper;
   flash->erase = &zqspi_erase_wrapper;
@@ -194,11 +201,4 @@ rtems_flashdev* zqspi_flashdev_init(zqspiflash *bmdriver)
   flash->region_table = ftable;
 
   return flash;
-}
-
-void zqspi_flashdev_destroy(rtems_flashdev* flash)
-{
-  free(flash->region_table->regions);
-  free(flash->region_table);
-  rtems_flashdev_destroy_and_free(flash);
 }

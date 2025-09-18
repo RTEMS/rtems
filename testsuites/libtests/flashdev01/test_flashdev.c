@@ -264,6 +264,14 @@ int test_flashdev_erase(
   return 0;
 }
 
+static void test_flashdev_priv_destroy(rtems_flashdev *flash)
+{
+  test_flashdev* flash_driver = flash->driver;
+  free(flash_driver->data);
+  free(flash->driver);
+  free(flash->region_table);
+}
+
 /* Initialize Flashdev and underlying driver. */
 rtems_flashdev* test_flashdev_init(void)
 {
@@ -295,6 +303,7 @@ rtems_flashdev* test_flashdev_init(void)
   ftable->bit_allocator = flash_driver->bit_allocator;
 
   flash->driver = flash_driver;
+  flash->priv_destroy = &test_flashdev_priv_destroy;
   flash->read = &test_flashdev_read;
   flash->write = &test_flashdev_write;
   flash->erase = &test_flashdev_erase;

@@ -38,10 +38,10 @@ extern "C" {
 #define XQSPI_FLASH_MAX_REGIONS ((size_t)32)
 
 /*
- * @brief Initializes a flash device using Xilinx's xqspi flash
- * driver. The flash device is not registered in this call.
- * If an rtems_flashdev is created using xqspi_flash_init it must be
- * destroyed using xqspi_flash_destroy.
+ * @brief Initializes a flash device using Xilinx's xqspi flash driver.
+ *
+ * The flash device is not registered in this call. The returned object must be
+ * destroyed with rtems_flashdev_destroy_and_free if it has not been registered.
  *
  * @param[in] xQspiDev A configured XQspiPsu device to initialise.
  *
@@ -49,16 +49,6 @@ extern "C" {
  * @retval NULL on failure.
 */
 rtems_flashdev* xqspi_flash_init(XQspiPsu *xQspiDev);
-
-/*
- * @brief Destroys a rtems_flashdev initialised with xqspi_flash_init.
- * If an rtems_flashdev is created using xqspi_flash_init it must be
- * destroyed using xqspi_flash_destroy. The XQspiPsu originally passed in
- * is untouched.
- *
- * @param[in] flash The flashdev to destroy
-*/
-void xqspi_flash_destroy(rtems_flashdev* flash);
 
 /*
  * @brief Struct allocating memory space for flash regions. Used by

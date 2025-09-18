@@ -36,6 +36,7 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -503,6 +504,13 @@ int rtems_flashdev_register(
   return rv;
 }
 
+int rtems_flashdev_unregister(
+  const char *flash_path
+)
+{
+  return unlink(flash_path);
+}
+
 static int rtems_flashdev_do_init(
   rtems_flashdev *flash,
   void ( *destroy )( rtems_flashdev *flash )
@@ -517,25 +525,38 @@ static int rtems_flashdev_do_init(
 
 void rtems_flashdev_destroy( rtems_flashdev *flash )
 {
-  rtems_recursive_mutex_destroy( &flash->mutex );
+  ( *flash->destroy )( flash );
 }
 
 void rtems_flashdev_destroy_and_free( rtems_flashdev *flash )
 {
+  rtems_flashdev_destroy( flash );
+}
+
+static void flashdev_destroy_internal( rtems_flashdev *flash )
+{
+  if (flash->priv_destroy != NULL) {
+    ( *flash->priv_destroy )( flash );
+  }
+
+  rtems_recursive_mutex_destroy( &flash->mutex );
+}
+
+static void flashdev_destroy_and_free_internal( rtems_flashdev *flash )
+{
   if ( flash == NULL ) {
     return;
   }
-  rtems_recursive_mutex_destroy( &( flash->mutex ) );
+  flashdev_destroy_internal( flash );
   free( flash );
   flash = NULL;
-  return;
 }
 
 int rtems_flashdev_init( rtems_flashdev *flash )
 {
   memset( flash, 0, sizeof( *flash ) );
 
-  return rtems_flashdev_do_init( flash, rtems_flashdev_destroy );
+  return rtems_flashdev_do_init( flash, flashdev_destroy_internal );
 }
 
 rtems_flashdev *rtems_flashdev_alloc_and_init( size_t size )
@@ -547,7 +568,7 @@ rtems_flashdev *rtems_flashdev_alloc_and_init( size_t size )
     if ( flash != NULL ) {
       int rv;
 
-      rv = rtems_flashdev_do_init( flash, rtems_flashdev_destroy_and_free );
+      rv = rtems_flashdev_do_init( flash, flashdev_destroy_and_free_internal );
       if ( rv != 0 ) {
         rtems_recursive_mutex_destroy( &flash->mutex );
         free( flash );
