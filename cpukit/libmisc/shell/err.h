@@ -43,11 +43,12 @@
  */
 #include <machine/ansi.h>
 #include <sys/cdefs.h>
+#include <rtems/score/basedefs.h>
 
 #include <stdarg.h>
 #define _BSD_VA_LIST_ va_list
 
-#define __dead
+#define __dead RTEMS_NO_RETURN
 
 #define err    rtems_shell_err
 #define verr   rtems_shell_verr
