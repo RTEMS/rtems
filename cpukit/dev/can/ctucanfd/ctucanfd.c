@@ -1076,6 +1076,7 @@ static void ctucanfd_handle_txtb_done(
         ctucanfd_txb_free( internal, txb_order_idx );
         break;
       }
+      RTEMS_FALL_THROUGH();
     case TXT_ERR:
   #ifdef CTUCANFD_DEBUG
         printk("CTUCANFD TXT_ERR\n");

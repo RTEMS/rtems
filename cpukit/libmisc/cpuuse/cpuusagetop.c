@@ -238,20 +238,21 @@ task_usage(Thread_Control* thread, void* arg)
       {
         default:
           data->sort_order = RTEMS_TOP_SORT_CURRENT;
-          /* drop through */
+          RTEMS_FALL_THROUGH();
         case RTEMS_TOP_SORT_CURRENT:
           if (CPU_usage_Equal_to(&current, &data->zero) ||
               CPU_usage_Less_than(&current, &data->current_usage[j]))
             continue;
+          RTEMS_FALL_THROUGH();
         case RTEMS_TOP_SORT_TOTAL:
           if (CPU_usage_Equal_to(&usage, &data->zero) ||
               CPU_usage_Less_than(&usage, &data->usage[j]))
             continue;
-          /* Fall through */
+          RTEMS_FALL_THROUGH();
         case RTEMS_TOP_SORT_REAL_PRI:
           if (thread->Real_priority.priority > data->tasks[j]->Real_priority.priority)
             continue;
-          /* Fall through */
+          RTEMS_FALL_THROUGH();
         case RTEMS_TOP_SORT_CURRENT_PRI:
           if (
             _Thread_Get_priority( thread )
@@ -259,7 +260,7 @@ task_usage(Thread_Control* thread, void* arg)
           ) {
             continue;
           }
-          /* Fall through */
+          RTEMS_FALL_THROUGH();
         case RTEMS_TOP_SORT_ID:
           if (thread->Object.id < data->tasks[j]->Object.id)
             continue;

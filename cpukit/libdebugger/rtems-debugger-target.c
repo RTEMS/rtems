@@ -231,10 +231,13 @@ rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr, DB_UINT kind)
             switch (target->breakpoint_size) {
             case 4:
               loc[3] = swbreaks[i].contents[3];
+              RTEMS_FALL_THROUGH();
             case 3:
               loc[2] = swbreaks[i].contents[2];
+              RTEMS_FALL_THROUGH();
             case 2:
               loc[1] = swbreaks[i].contents[1];
+              RTEMS_FALL_THROUGH();
             case 1:
               loc[0] = swbreaks[i].contents[0];
               break;
@@ -269,10 +272,13 @@ rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr, DB_UINT kind)
     switch (target->breakpoint_size) {
     case 4:
       contents[3] = loc[3];
+      RTEMS_FALL_THROUGH();
     case 3:
       contents[2] = loc[2];
+      RTEMS_FALL_THROUGH();
     case 2:
       contents[1] = loc[1];
+      RTEMS_FALL_THROUGH();
     case 1:
       contents[0] = loc[0];
       break;
@@ -315,10 +321,13 @@ rtems_debugger_target_swbreak_insert(void)
           switch (target->breakpoint_size) {
           case 4:
             loc[3] = target->breakpoint[3];
+            RTEMS_FALL_THROUGH();
           case 3:
             loc[2] = target->breakpoint[2];
+            RTEMS_FALL_THROUGH();
           case 2:
             loc[1] = target->breakpoint[1];
+            RTEMS_FALL_THROUGH();
           case 1:
             loc[0] = target->breakpoint[0];
             break;
@@ -358,10 +367,13 @@ rtems_debugger_target_swbreak_remove(void)
           switch (target->breakpoint_size) {
           case 4:
             loc[3] = contents[3];
+            RTEMS_FALL_THROUGH();
           case 3:
             loc[2] = contents[2];
+            RTEMS_FALL_THROUGH();
           case 2:
             loc[1] = contents[1];
+            RTEMS_FALL_THROUGH();
           case 1:
             loc[0] = contents[0];
             break;

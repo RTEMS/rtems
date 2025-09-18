@@ -529,6 +529,9 @@ copy(rtems_shell_cp_globals* cp_globals,
 		case S_IFSOCK:
 			warnx("%s is a socket (not copied).",
 				    curr->fts_path);
+#ifdef __rtems__
+			RTEMS_FALL_THROUGH();
+#endif
 		case S_IFIFO:
 			if (Rflag) {
 				if (copy_fifo(cp_globals, curr->fts_statp, !dne))

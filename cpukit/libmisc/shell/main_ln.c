@@ -186,12 +186,15 @@ main_ln(rtems_shell_ln_globals* globals, int argc, char *argv[])
 	case 0:
 		usage(globals);
 		/* NOTREACHED */
+		RTEMS_UNREACHABLE();
 	case 1:				/* ln target */
 		exit(linkit(globals, argv[0], ".", 1));
 		/* NOTREACHED */
+		RTEMS_UNREACHABLE();
 	case 2:				/* ln target source */
 		exit(linkit(globals, argv[0], argv[1], 0));
 		/* NOTREACHED */
+		RTEMS_UNREACHABLE();
 	}
 
 					/* ln target1 target2 directory */

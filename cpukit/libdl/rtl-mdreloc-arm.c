@@ -633,6 +633,7 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
     case R_TYPE(TLS_LE12):
     case R_TYPE(TLS_IE12GP):
       printf("TSL relocations not supported\n");
+      RTEMS_FALL_THROUGH();
 
     default:
       printf ("rtl: reloc unknown: sym = %" PRIu32 ", type = %" PRIu32 ", offset = %p",

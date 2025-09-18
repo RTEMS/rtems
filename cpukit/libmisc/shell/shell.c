@@ -577,7 +577,7 @@ static int rtems_shell_line_editor(
           }
 
           up = 1;
-          /* drop through */
+          RTEMS_FALL_THROUGH();
 
         case 14:                        /* Control-N */
         {

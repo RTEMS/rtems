@@ -1338,6 +1338,7 @@ int rtems_debugger_target_exception_to_signal( CPU_Exception_frame *frame )
          return RTEMS_DEBUGGER_SIGNAL_TRAP;
        }
 
+       RTEMS_FALL_THROUGH();
      default:
        return RTEMS_DEBUGGER_SIGNAL_ILL;
     }
