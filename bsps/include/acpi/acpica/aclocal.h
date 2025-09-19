@@ -480,6 +480,9 @@ ACPI_STATUS (*ACPI_INTERNAL_METHOD) (
  */
 typedef struct acpi_name_info
 {
+#ifdef __rtems__
+    __attribute__ ((nonstring))
+#endif /* rtems */
     char                        Name[ACPI_NAMESEG_SIZE];
     UINT16                      ArgumentList;
     UINT8                       ExpectedBtypes;
@@ -568,6 +571,9 @@ typedef ACPI_STATUS (*ACPI_OBJECT_CONVERTER) (
 
 typedef struct acpi_simple_repair_info
 {
+#ifdef __rtems__
+    __attribute__ ((nonstring))
+#endif /* rtems */
     char                        Name[ACPI_NAMESEG_SIZE];
     UINT32                      UnexpectedBtypes;
     UINT32                      PackageIndex;

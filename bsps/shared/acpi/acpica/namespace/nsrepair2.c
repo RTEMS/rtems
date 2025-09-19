@@ -169,6 +169,9 @@ ACPI_STATUS (*ACPI_REPAIR_FUNCTION) (
 
 typedef struct acpi_repair_info
 {
+#ifdef __rtems__
+    __attribute__ ((nonstring))
+#endif /* rtems */
     char                    Name[ACPI_NAMESEG_SIZE];
     ACPI_REPAIR_FUNCTION    RepairFunction;
 
