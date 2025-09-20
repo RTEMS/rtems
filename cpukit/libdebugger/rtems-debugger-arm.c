@@ -41,6 +41,7 @@
 
 #include <rtems/debugger/rtems-debugger-bsp.h>
 
+#include "rtems-debugger-smp.h"
 #include "rtems-debugger-target.h"
 #include "rtems-debugger-threads.h"
 
@@ -1975,16 +1976,29 @@ rtems_debugger_get_int_reg(rtems_debugger_thread* thread, size_t reg)
   return value;
 }
 
+static rtems_task
+rtems_debugger_setup_on_cpu(rtems_task_argument arg)
+{
+  (void) arg;
+  rtems_debugger_target_set_mmu();
+  rtems_debugger_target_set_vectors();
+}
+
 int
 rtems_debugger_target_enable(void)
 {
-  rtems_interrupt_lock_context lock_context;
+  rtems_status_code sc;
+  rtems_status_code error = RTEMS_SUCCESSFUL;
   arm_debug_break_unload();
   arm_debug_break_clear_all();
-  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
-  rtems_debugger_target_set_mmu();
-  rtems_debugger_target_set_vectors();
-  rtems_interrupt_lock_release(&target_lock, &lock_context);
+  sc = rtems_debugger_cpu_run_all(
+    rtems_debugger_setup_on_cpu,  (rtems_task_argument) &error);
+  if (sc != RTEMS_SUCCESSFUL) {
+    return -1;
+  }
+  if (error != RTEMS_SUCCESSFUL) {
+    return -1;
+  }
   debug_session_active = true;
   return 0;
 }

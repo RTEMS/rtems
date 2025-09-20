@@ -4,6 +4,7 @@ cflags:
 - ${COVERAGE_COMPILER_FLAGS}
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2025 Chris Johns
 cppflags: []
 cxxflags:
 - ${COVERAGE_COMPILER_FLAGS}
@@ -29,6 +30,7 @@ source:
 - cpukit/libdebugger/rtems-debugger-remote-tcp.c
 - cpukit/libdebugger/rtems-debugger-remote.c
 - cpukit/libdebugger/rtems-debugger-server.c
+- cpukit/libdebugger/rtems-debugger-smp.c
 - cpukit/libdebugger/rtems-debugger-target.c
 - cpukit/libdebugger/rtems-debugger-threads.c
 target: debugger
