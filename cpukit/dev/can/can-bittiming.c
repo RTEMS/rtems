@@ -89,7 +89,9 @@ static int can_update_sample_point(
     sample_point = 1000 * ( tseg + CAN_CALC_SYNC_SEG - tseg2 ) /
         ( tseg + CAN_CALC_SYNC_SEG );
 
-    sample_point_error = abs( sample_point_nominal - sample_point );
+    sample_point_error = sample_point_nominal > sample_point ?
+                         sample_point_nominal - sample_point :
+                         sample_point - sample_point_nominal;
 
     if ( ( sample_point <= sample_point_nominal ) &&
         ( sample_point_error < best_sample_point_error ) ) {
@@ -167,7 +169,9 @@ int rtems_can_bitrate2bittiming(
     }
 
     bitrate = chip->freq / ( brp * tsegall );
-    bitrate_error = abs( bt->bitrate - bitrate );
+    bitrate_error = bt->bitrate > bitrate ?
+                    bt->bitrate - bitrate :
+                    bitrate - bt->bitrate;
 
     /* tseg brp biterror */
     if ( bitrate_error > best_bitrate_error ) {
