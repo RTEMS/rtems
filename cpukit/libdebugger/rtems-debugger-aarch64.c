@@ -51,161 +51,13 @@ extern char bsp_section_fast_text_end[];
 
 #include <rtems/debugger/rtems-debugger-bsp.h>
 
+#include "rtems-debugger-smp.h"
 #include "rtems-debugger-target.h"
 #include "rtems-debugger-threads.h"
 
 #if TARGET_DEBUG
 #include <rtems/bspIo.h>
 #endif
-
-/*
- * Structure used to manage a task executing a function on available cores on
- * a scheduler.
- */
-typedef struct {
-  rtems_id allCPUsBarrier;
-  rtems_task_entry work_function;
-  rtems_task_argument arg;
-  rtems_status_code sc;
-} run_across_cpus_context;
-
-/*
- * The function that runs as the body of the task which moves itself among the
- * various cores registered to a scheduler.
- */
-static rtems_task run_across_cpus_task( rtems_task_argument arg )
-{
-  uint32_t                 released = 0;
-  rtems_status_code        sc;
-  run_across_cpus_context *ctx = (run_across_cpus_context *) arg;
-  cpu_set_t                set;
-  cpu_set_t                scheduler_set;
-  rtems_id                 scheduler_id;
-
-  sc = rtems_task_get_scheduler( RTEMS_SELF, &scheduler_id );
-
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    ctx->sc = sc;
-    rtems_task_exit();
-  }
-
-  CPU_ZERO( &scheduler_set );
-  sc = rtems_scheduler_get_processor_set(
-    scheduler_id,
-    sizeof( scheduler_set ),
-    &scheduler_set
-  );
-
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    ctx->sc = sc;
-    rtems_task_exit();
-  }
-
-  for (
-    int cpu_index = 0;
-    cpu_index < rtems_scheduler_get_processor_maximum();
-    cpu_index++
-  ) {
-    if ( !CPU_ISSET( cpu_index, &scheduler_set ) ) {
-      continue;
-    }
-
-    CPU_ZERO( &set );
-    CPU_SET( cpu_index, &set );
-    sc = rtems_task_set_affinity( RTEMS_SELF, sizeof( set ), &set );
-
-    if ( sc != RTEMS_SUCCESSFUL ) {
-      ctx->sc = sc;
-      rtems_task_exit();
-    }
-
-    /* execute task on selected CPU */
-    ctx->work_function( ctx->arg );
-  }
-
-  sc = rtems_barrier_release( ctx->allCPUsBarrier, &released );
-
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    ctx->sc = sc;
-  }
-
-  rtems_task_exit();
-}
-
-/*
- * The function used to run a provided function with arbitrary argument across
- * all cores registered to the current scheduler. This is similar to the Linux
- * kernel's on_each_cpu() call and always waits for the task to complete before
- * returning.
- */
-static rtems_status_code run_across_cpus(
-  rtems_task_entry    task_entry,
-  rtems_task_argument arg
-)
-{
-  rtems_status_code       sc;
-  rtems_id                Task_id;
-  run_across_cpus_context ctx;
-
-  ctx.work_function = task_entry;
-  ctx.arg = arg;
-  ctx.sc = RTEMS_SUCCESSFUL;
-
-  memset( &ctx.allCPUsBarrier, 0, sizeof( ctx.allCPUsBarrier ) );
-  sc = rtems_barrier_create(
-    rtems_build_name( 'B', 'c', 'p', 'u' ),
-    RTEMS_BARRIER_MANUAL_RELEASE,
-    2,
-    &ctx.allCPUsBarrier
-  );
-
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    return sc;
-  }
-
-  sc = rtems_task_create(
-    rtems_build_name( 'T', 'c', 'p', 'u' ),
-    1,
-    RTEMS_MINIMUM_STACK_SIZE * 2,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_FLOATING_POINT | RTEMS_DEFAULT_ATTRIBUTES,
-    &Task_id
-  );
-
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    rtems_barrier_delete( ctx.allCPUsBarrier );
-    return sc;
-  }
-
-  sc = rtems_task_start(
-    Task_id,
-    run_across_cpus_task,
-    ( rtems_task_argument ) & ctx
-  );
-
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    rtems_task_delete( Task_id );
-    rtems_barrier_delete( ctx.allCPUsBarrier );
-    return sc;
-  }
-
-  /* wait on task */
-  sc = rtems_barrier_wait( ctx.allCPUsBarrier, RTEMS_NO_TIMEOUT );
-
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    rtems_task_delete( Task_id );
-    rtems_barrier_delete( ctx.allCPUsBarrier );
-    return sc;
-  }
-
-  rtems_barrier_delete( ctx.allCPUsBarrier );
-
-  if ( ctx.sc != RTEMS_SUCCESSFUL ) {
-    return ctx.sc;
-  }
-
-  return sc;
-}
 
 /*
  * Number of registers.
@@ -1338,7 +1190,7 @@ int rtems_debugger_target_enable( void )
   aarch64_debug_break_clear();
 #endif
   aarch64_debug_disable_debug_exceptions();
-  sc = run_across_cpus(
+  sc = rtems_debugger_cpu_run_all(
     setup_debugger_on_cpu,
     ( rtems_task_argument ) & init_error
   );
@@ -1384,7 +1236,7 @@ int rtems_debugger_target_disable( void )
   aarch64_debug_break_unload();
   aarch64_debug_break_clear();
 #endif
-  sc = run_across_cpus(
+  sc = rtems_debugger_cpu_run_all(
     teardown_debugger_on_cpu,
     ( rtems_task_argument ) & deinit_error
   );
