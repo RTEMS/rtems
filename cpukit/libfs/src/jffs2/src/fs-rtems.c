@@ -73,7 +73,7 @@ static void icache_evict(struct _inode *root_i, struct _inode *i)
 	struct _inode *this = root_i, *next;
 
  restart:
-	D2(printf("icache_evict\n"));
+	D2(printk("icache_evict\n"));
 	// If this is an absolute search path from the root,
 	// remove all cached inodes with i_count of zero (these are only 
 	// held where needed for dotdot filepaths)
@@ -1517,7 +1517,7 @@ static struct _inode *new_inode(struct super_block *sb)
 	if (inode == NULL)
 		return 0;
 
-	D2(printf
+	D2(printk
 	   ("malloc new_inode %x ####################################\n",
 	    inode));
 
@@ -1548,7 +1548,7 @@ static struct _inode *ilookup(struct super_block *sb, cyg_uint32 ino)
 {
 	struct _inode *inode = NULL;
 
-	D2(printf("ilookup\n"));
+	D2(printk("ilookup\n"));
 	// Check for this inode in the cache
 	for (inode = sb->s_root; inode != NULL; inode = inode->i_cache_next) {
 		if (inode->i_ino == ino) {
@@ -1570,7 +1570,7 @@ struct _inode *jffs2_iget(struct super_block *sb, cyg_uint32 ino)
 	struct _inode *inode;
 	int err;
 
-	D2(printf("jffs2_iget\n"));
+	D2(printk("jffs2_iget\n"));
 
 	inode = ilookup(sb, ino);
 	if (inode)
