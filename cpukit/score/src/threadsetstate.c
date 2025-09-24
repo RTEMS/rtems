@@ -41,9 +41,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/threadimpl.h>
 
 States_Control _Thread_Set_state_locked(
   Thread_Control *the_thread,
@@ -57,7 +57,7 @@ States_Control _Thread_Set_state_locked(
   _Assert( _Thread_State_is_owner( the_thread ) );
 
   previous_state = the_thread->current_state;
-  next_state = _States_Set( state, previous_state);
+  next_state = _States_Set( state, previous_state );
   the_thread->current_state = next_state;
 
   if ( _States_Is_ready( previous_state ) ) {

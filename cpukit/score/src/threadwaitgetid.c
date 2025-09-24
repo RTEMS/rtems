@@ -44,7 +44,7 @@ Objects_Id _Thread_Wait_get_id( const Thread_Control *the_thread )
 {
   const Thread_queue_Queue *queue;
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( _States_Is_waiting_for_rpc_reply( the_thread->current_state ) ) {
     return the_thread->Wait.remote_id;
   }

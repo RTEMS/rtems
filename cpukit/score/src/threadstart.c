@@ -39,8 +39,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/isrlevel.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/userextimpl.h>
 
 Status_Control _Thread_Start(

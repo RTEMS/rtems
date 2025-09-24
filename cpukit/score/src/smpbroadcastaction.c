@@ -40,10 +40,7 @@
 
 #include <rtems/score/smpimpl.h>
 
-void _SMP_Broadcast_action(
-  SMP_Action_handler  handler,
-  void               *arg
-)
+void _SMP_Broadcast_action( SMP_Action_handler handler, void *arg )
 {
   _SMP_Multicast_action( _SMP_Get_online_processors(), handler, arg );
 }

@@ -41,7 +41,7 @@
 
 #include <rtems/score/userextimpl.h>
 
-void _User_extensions_Handler_initialization(void)
+void _User_extensions_Handler_initialization( void )
 {
   const User_extensions_Table    *initial_table;
   User_extensions_Switch_control *initial_switch_controls;
@@ -52,7 +52,7 @@ void _User_extensions_Handler_initialization(void)
   initial_switch_controls = _User_extensions_Initial_switch_controls;
   n = _User_extensions_Initial_count;
 
-  for ( i = 0 ; i < n ; ++i ) {
+  for ( i = 0; i < n; ++i ) {
     User_extensions_thread_switch_extension callout;
 
     callout = initial_table[ i ].thread_switch;

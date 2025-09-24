@@ -39,8 +39,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/smpimpl.h>
 
 #define _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, lock_context ) \
   _ISR_lock_ISR_disable_and_acquire( &( cpu )->Jobs.Lock, lock_context )
@@ -50,8 +50,8 @@
 
 void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu )
 {
-  ISR_lock_Context  lock_context;
-  Per_CPU_Job      *job;
+  ISR_lock_Context lock_context;
+  Per_CPU_Job     *job;
 
   _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
   job = cpu->Jobs.head;
@@ -99,14 +99,10 @@ void _Per_CPU_Submit_job( Per_CPU_Control *cpu, Per_CPU_Job *job )
   _SMP_Send_message( cpu, SMP_MESSAGE_PERFORM_JOBS );
 }
 
-void _Per_CPU_Wait_for_job(
-  const Per_CPU_Control *cpu,
-  const Per_CPU_Job     *job
-)
+void _Per_CPU_Wait_for_job( const Per_CPU_Control *cpu, const Per_CPU_Job *job )
 {
   while (
-    _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE )
-      != PER_CPU_JOB_DONE
+    _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE ) != PER_CPU_JOB_DONE
   ) {
     Per_CPU_Control *cpu_self;
 

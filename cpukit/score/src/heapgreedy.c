@@ -42,21 +42,21 @@
 #include <rtems/score/heapimpl.h>
 
 Heap_Block *_Heap_Greedy_allocate(
-  Heap_Control *heap,
+  Heap_Control    *heap,
   const uintptr_t *block_sizes,
-  size_t block_count
+  size_t           block_count
 )
 {
   Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
-  Heap_Block *allocated_blocks = NULL;
-  Heap_Block *blocks = NULL;
-  Heap_Block *current;
-  size_t i;
+  Heap_Block       *allocated_blocks = NULL;
+  Heap_Block       *blocks = NULL;
+  Heap_Block       *current;
+  size_t            i;
 
   _Heap_Protection_free_all_delayed_blocks( heap );
 
-  for (i = 0; i < block_count; ++i) {
-    void *next = _Heap_Allocate( heap, block_sizes [i] );
+  for ( i = 0; i < block_count; ++i ) {
+    void *next = _Heap_Allocate( heap, block_sizes[ i ] );
 
     if ( next != NULL ) {
       Heap_Block *next_block = _Heap_Block_of_alloc_area(
@@ -69,7 +69,7 @@ Heap_Block *_Heap_Greedy_allocate(
     }
   }
 
-  while ( (current = _Heap_Free_list_first( heap )) != free_list_tail ) {
+  while ( ( current = _Heap_Free_list_first( heap ) ) != free_list_tail ) {
     _Heap_Block_allocate(
       heap,
       current,
@@ -92,7 +92,7 @@ Heap_Block *_Heap_Greedy_allocate(
 
 Heap_Block *_Heap_Greedy_allocate_all_except_largest(
   Heap_Control *heap,
-  uintptr_t *allocatable_size
+  uintptr_t    *allocatable_size
 )
 {
   Heap_Information info;
@@ -100,7 +100,8 @@ Heap_Block *_Heap_Greedy_allocate_all_except_largest(
   _Heap_Get_free_information( heap, &info );
 
   if ( info.largest > 0 ) {
-    *allocatable_size = info.largest - HEAP_BLOCK_HEADER_SIZE + HEAP_ALLOC_BONUS;
+    *allocatable_size = info.largest - HEAP_BLOCK_HEADER_SIZE +
+                        HEAP_ALLOC_BONUS;
   } else {
     *allocatable_size = 0;
   }
@@ -108,10 +109,7 @@ Heap_Block *_Heap_Greedy_allocate_all_except_largest(
   return _Heap_Greedy_allocate( heap, allocatable_size, 1 );
 }
 
-void _Heap_Greedy_free(
-  Heap_Control *heap,
-  Heap_Block *blocks
-)
+void _Heap_Greedy_free( Heap_Control *heap, Heap_Block *blocks )
 {
   while ( blocks != NULL ) {
     Heap_Block *current = blocks;

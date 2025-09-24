@@ -54,10 +54,10 @@ static bool _Objects_Name_char_is_printable( char c )
 }
 
 size_t _Objects_Name_to_string(
-  Objects_Name  name,
-  bool          is_string,
-  char         *buffer,
-  size_t        buffer_size
+  Objects_Name name,
+  bool         is_string,
+  char        *buffer,
+  size_t       buffer_size
 )
 {
   char        lname[ 5 ];
@@ -68,10 +68,10 @@ size_t _Objects_Name_to_string(
   if ( is_string ) {
     s = name.name_p;
   } else {
-    lname[ 0 ] = (name.name_u32 >> 24) & 0xff;
-    lname[ 1 ] = (name.name_u32 >> 16) & 0xff;
-    lname[ 2 ] = (name.name_u32 >>  8) & 0xff;
-    lname[ 3 ] = (name.name_u32 >>  0) & 0xff;
+    lname[ 0 ] = ( name.name_u32 >> 24 ) & 0xff;
+    lname[ 1 ] = ( name.name_u32 >> 16 ) & 0xff;
+    lname[ 2 ] = ( name.name_u32 >> 8 ) & 0xff;
+    lname[ 3 ] = ( name.name_u32 >> 0 ) & 0xff;
     lname[ 4 ] = '\0';
     s = lname;
   }
@@ -82,7 +82,7 @@ size_t _Objects_Name_to_string(
   if ( s != NULL ) {
     while ( *s != '\0' ) {
       if ( i < buffer_size ) {
-        *d = _Objects_Name_char_is_printable(*s) ? *s : '*';
+        *d = _Objects_Name_char_is_printable( *s ) ? *s : '*';
         ++d;
       }
 
@@ -104,28 +104,28 @@ size_t _Objects_Name_to_string(
  *  overflowing the user's string and about returning unprintable characters.
  */
 
-char *_Objects_Get_name_as_string(
-  Objects_Id        id,
-  size_t            length,
-  char             *name
-)
+char *_Objects_Get_name_as_string( Objects_Id id, size_t length, char *name )
 {
   const Objects_Information *information;
   const Objects_Control     *the_object;
   ISR_lock_Context           lock_context;
   Objects_Id                 tmpId;
 
-  if ( length == 0 )
+  if ( length == 0 ) {
     return NULL;
+  }
 
-  if ( name == NULL )
+  if ( name == NULL ) {
     return NULL;
+  }
 
-  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Get_executing()->Object.id : id;
+  tmpId = ( id == OBJECTS_ID_OF_SELF ) ? _Thread_Get_executing()->Object.id
+                                       : id;
 
   information = _Objects_Get_information_id( tmpId );
-  if ( !information )
+  if ( !information ) {
     return NULL;
+  }
 
   the_object = _Objects_Get( tmpId, &lock_context, information );
   if ( the_object == NULL ) {

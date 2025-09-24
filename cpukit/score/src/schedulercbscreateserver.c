@@ -42,31 +42,35 @@
 #include <rtems/score/schedulercbs.h>
 #include <rtems/score/scheduleredfimpl.h>
 
-int _Scheduler_CBS_Create_server (
-  Scheduler_CBS_Parameters     *params,
-  Scheduler_CBS_Budget_overrun  budget_overrun_callback,
-  rtems_id                     *server_id
+int _Scheduler_CBS_Create_server(
+  Scheduler_CBS_Parameters    *params,
+  Scheduler_CBS_Budget_overrun budget_overrun_callback,
+  rtems_id                    *server_id
 )
 {
-  unsigned int i;
+  unsigned int          i;
   Scheduler_CBS_Server *the_server;
 
-  if ( params->budget <= 0 ||
-       params->deadline <= 0 ||
-       params->budget >= SCHEDULER_EDF_PRIO_MSB ||
-       params->deadline >= SCHEDULER_EDF_PRIO_MSB )
+  if (
+    params->budget <= 0 || params->deadline <= 0 ||
+    params->budget >= SCHEDULER_EDF_PRIO_MSB ||
+    params->deadline >= SCHEDULER_EDF_PRIO_MSB
+  ) {
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
-
-  for ( i = 0; i<_Scheduler_CBS_Maximum_servers; i++ ) {
-    if ( !_Scheduler_CBS_Server_list[i].initialized )
-      break;
   }
 
-  if ( i == _Scheduler_CBS_Maximum_servers )
+  for ( i = 0; i < _Scheduler_CBS_Maximum_servers; i++ ) {
+    if ( !_Scheduler_CBS_Server_list[ i ].initialized ) {
+      break;
+    }
+  }
+
+  if ( i == _Scheduler_CBS_Maximum_servers ) {
     return SCHEDULER_CBS_ERROR_FULL;
+  }
 
   *server_id = i;
-  the_server = &_Scheduler_CBS_Server_list[*server_id];
+  the_server = &_Scheduler_CBS_Server_list[ *server_id ];
   the_server->parameters = *params;
   the_server->task_id = -1;
   the_server->cbs_budget_overrun = budget_overrun_callback;

@@ -44,7 +44,7 @@
 #include <rtems/score/atomic.h>
 #include <rtems/score/isrlevel.h>
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /*
  * For real SMP targets this is not useful.  The main purpose is support for
  * testing on simulators like SIS.
@@ -59,7 +59,7 @@ __uint32_t _Libatomic_Protect_start( void *ptr )
   (void) ptr;
   _ISR_Local_disable( isr_level );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   while (
     _Atomic_Flag_test_and_set( &_Libatomic_The_one_lock, ATOMIC_ORDER_SEQ_CST )
   ) {
@@ -74,15 +74,16 @@ void _Libatomic_Protect_end( void *ptr, __uint32_t isr_level )
 {
   (void) ptr;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Atomic_Flag_clear( &_Libatomic_The_one_lock, ATOMIC_ORDER_SEQ_CST );
 #endif
 
   _ISR_Local_enable( isr_level );
 }
 
-static API_Mutex_Control _Libatomic_Mutex =
-  API_MUTEX_INITIALIZER( "_Libatomic" );
+static API_Mutex_Control _Libatomic_Mutex = API_MUTEX_INITIALIZER(
+  "_Libatomic"
+);
 
 void _Libatomic_Lock_n( void *ptr, __size_t n )
 {

@@ -39,37 +39,34 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/objectimpl.h>
 #include <rtems/score/address.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/isrlevel.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/wkspace.h>
 
-#include <string.h>  /* for memcpy() */
+#include <string.h> /* for memcpy() */
 
-Objects_Maximum _Objects_Extend_information(
-  Objects_Information *information
-)
+Objects_Maximum _Objects_Extend_information( Objects_Information *information )
 {
-  Objects_Control  *the_object;
-  uint32_t          block_count;
-  uint32_t          block;
-  uint32_t          index_base;
-  uint32_t          index_end;
-  uint32_t          index;
-  uint32_t          extend_count;
-  Objects_Maximum   old_maximum;
-  uint32_t          new_maximum;
-  size_t            object_block_size;
-  Objects_Control  *new_object_block;
-  bool              do_extend;
-  Objects_Id        api_class_and_node;
+  Objects_Control *the_object;
+  uint32_t         block_count;
+  uint32_t         block;
+  uint32_t         index_base;
+  uint32_t         index_end;
+  uint32_t         index;
+  uint32_t         extend_count;
+  Objects_Maximum  old_maximum;
+  uint32_t         new_maximum;
+  size_t           object_block_size;
+  Objects_Control *new_object_block;
+  bool             do_extend;
+  Objects_Id       api_class_and_node;
 
   _Assert(
-    _Objects_Allocator_is_owner()
-      || !_System_state_Is_up( _System_state_Get() )
+    _Objects_Allocator_is_owner() || !_System_state_Is_up( _System_state_Get() )
   );
   _Assert( _Objects_Is_auto_extend( information ) );
 
@@ -82,9 +79,9 @@ Objects_Maximum _Objects_Extend_information(
    *  Search for a free block of indexes. If we do NOT need to allocate or
    *  extend the block table, then we will change do_extend.
    */
-  do_extend     = true;
-  index_base    = extend_count;
-  block         = 1;
+  do_extend = true;
+  index_base = extend_count;
+  block = 1;
 
   if ( information->object_blocks == NULL ) {
     block_count = 1;
@@ -95,8 +92,9 @@ Objects_Maximum _Objects_Extend_information(
       if ( information->object_blocks[ block ] == NULL ) {
         do_extend = false;
         break;
-      } else
+      } else {
         index_base += extend_count;
+      }
     }
   }
 
@@ -160,10 +158,9 @@ Objects_Maximum _Objects_Extend_information(
      *  Allocate the tables and break it up.
      */
     object_blocks_size = block_count * sizeof( *object_blocks );
-    local_table_size =  new_maximum * sizeof( *local_table );
-    table_size = object_blocks_size
-      + local_table_size
-      + block_count * sizeof( *inactive_per_block );
+    local_table_size = new_maximum * sizeof( *local_table );
+    table_size = object_blocks_size + local_table_size +
+                 block_count * sizeof( *inactive_per_block );
     object_blocks = _Workspace_Allocate( table_size );
     if ( object_blocks == NULL ) {
       _Workspace_Free( new_object_block );
@@ -173,14 +170,8 @@ Objects_Maximum _Objects_Extend_information(
     /*
      *  Break the block into the various sections.
      */
-    local_table = _Addresses_Add_offset(
-      object_blocks,
-      object_blocks_size
-    );
-    inactive_per_block = _Addresses_Add_offset(
-      local_table,
-      local_table_size
-    );
+    local_table = _Addresses_Add_offset( object_blocks, object_blocks_size );
+    inactive_per_block = _Addresses_Add_offset( local_table, local_table_size );
 
     /*
      *  Take the block count down. Saves all the (block_count - 1)
@@ -198,7 +189,7 @@ Objects_Maximum _Objects_Extend_information(
        * This is being done out of an abundance of caution since we could have
        * easily flagged this as a false positive and ignored it completely.
        */
-      _Assert(information->object_blocks != NULL);
+      _Assert( information->object_blocks != NULL );
 
       /*
        *  Copy each section of the table over. This has to be performed as
@@ -228,7 +219,7 @@ Objects_Maximum _Objects_Extend_information(
     /*
      *  Initialise the new entries in the table.
      */
-    for ( index = index_base ; index < index_end ; ++index ) {
+    for ( index = index_base; index < index_end; ++index ) {
       local_table[ index ] = NULL;
     }
 
@@ -240,8 +231,8 @@ Objects_Maximum _Objects_Extend_information(
     information->object_blocks = object_blocks;
     information->inactive_per_block = inactive_per_block;
     information->local_table = local_table;
-    information->maximum_id = api_class_and_node
-      | (new_maximum << OBJECTS_INDEX_START_BIT);
+    information->maximum_id = api_class_and_node |
+                              ( new_maximum << OBJECTS_INDEX_START_BIT );
 
     _ISR_lock_ISR_enable( &lock_context );
 
@@ -261,9 +252,9 @@ Objects_Maximum _Objects_Extend_information(
    *  Append to inactive chain.
    */
   the_object = new_object_block;
-  for ( index = index_base ; index < index_end ; ++index ) {
-    the_object->id = api_class_and_node
-      | ( ( index + OBJECTS_INDEX_MINIMUM ) << OBJECTS_INDEX_START_BIT );
+  for ( index = index_base; index < index_end; ++index ) {
+    the_object->id = api_class_and_node | ( ( index + OBJECTS_INDEX_MINIMUM )
+                                            << OBJECTS_INDEX_START_BIT );
 
     _Chain_Initialize_node( &the_object->Node );
     _Chain_Append_unprotected( &information->Inactive, &the_object->Node );

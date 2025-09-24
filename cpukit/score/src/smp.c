@@ -44,11 +44,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/smpimpl.h>
+#include <rtems/config.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/smpimpl.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/config.h>
 
 #if CPU_USE_DEFERRED_FP_SWITCH == TRUE
   #error "deferred FP switch not implemented for SMP"
@@ -78,7 +78,7 @@ static bool _Scheduler_Is_mandatory_processor(
   const Scheduler_Assignment *assignment
 )
 {
-  return (assignment->attributes & SCHEDULER_ASSIGN_PROCESSOR_MANDATORY) != 0;
+  return ( assignment->attributes & SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ) != 0;
 }
 
 static bool _Scheduler_Should_start_processor(
@@ -97,7 +97,7 @@ static void _SMP_Start_processors( uint32_t cpu_max )
   cpu_self->boot = true;
   cpu_self->online = true;
 
-  for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     const Scheduler_Assignment *assignment;
     Per_CPU_Control            *cpu;
     bool                        started;
@@ -148,7 +148,7 @@ void _SMP_Handler_initialize( void )
 
   cpu_config_max = rtems_configuration_get_maximum_processors();
 
-  for ( cpu_index = 0 ; cpu_index < cpu_config_max; ++cpu_index ) {
+  for ( cpu_index = 0; cpu_index < cpu_config_max; ++cpu_index ) {
     Per_CPU_Control *cpu;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
@@ -166,7 +166,7 @@ void _SMP_Handler_initialize( void )
   cpu_max = cpu_max < cpu_config_max ? cpu_max : cpu_config_max;
   _SMP_Processor_maximum = cpu_max;
 
-  for ( cpu_index = cpu_max ; cpu_index < cpu_config_max; ++cpu_index ) {
+  for ( cpu_index = cpu_max; cpu_index < cpu_config_max; ++cpu_index ) {
     const Scheduler_Assignment *assignment;
 
     assignment = _Scheduler_Get_initial_assignment( cpu_index );
@@ -190,7 +190,7 @@ void _SMP_Wait_for_ready_to_start_multitasking( void )
   cpu_max = _SMP_Get_processor_maximum();
   cpu_self = _Per_CPU_Get();
 
-  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     Per_CPU_Control *cpu;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
@@ -242,9 +242,7 @@ static void _SMP_Wait_for_start_multitasking( Per_CPU_Control *cpu_self )
   } while ( ready == 0U );
 }
 
-void _SMP_Start_multitasking_on_secondary_processor(
-  Per_CPU_Control *cpu_self
-)
+void _SMP_Start_multitasking_on_secondary_processor( Per_CPU_Control *cpu_self )
 {
   uint32_t cpu_index_self;
 
@@ -287,7 +285,7 @@ void _SMP_Request_shutdown( void )
   cpu_max = _SMP_Processor_configured_maximum;
   cpu_self = _Per_CPU_Get();
 
-  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     Per_CPU_Control *cpu;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
@@ -351,10 +349,7 @@ void _SMP_Try_to_process_message(
 
 void _SMP_Send_message( Per_CPU_Control *cpu, unsigned long message )
 {
-  (void) _Atomic_Fetch_or_ulong(
-    &cpu->message, message,
-    ATOMIC_ORDER_RELEASE
-  );
+  (void) _Atomic_Fetch_or_ulong( &cpu->message, message, ATOMIC_ORDER_RELEASE );
 
   if ( _Per_CPU_Get_state( cpu ) == PER_CPU_STATE_UP ) {
     _CPU_SMP_Send_interrupt( _Per_CPU_Get_index( cpu ) );

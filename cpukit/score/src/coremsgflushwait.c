@@ -40,34 +40,34 @@
 #endif
 
 #include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>
+#include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
 
-#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+#if defined( FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API )
 
-  void _CORE_message_queue_Flush_waiting_threads(
-    CORE_message_queue_Control *the_message_queue
-  )
-  {
-    /* XXX this is not supported for global message queues */
+void _CORE_message_queue_Flush_waiting_threads(
+  CORE_message_queue_Control *the_message_queue
+)
+{
+  /* XXX this is not supported for global message queues */
 
-    /*
-     *  IF there are no pending messages,
-     *  THEN threads may be blocked waiting to RECEIVE a message,
-     *
-     *  IF the pending message queue is full
-     *  THEN threads may be blocked waiting to SEND a message
-     *
-     *  But in either case, we will return "unsatisfied nowait"
-     *  to indicate that the blocking condition was not satisfied
-     *  and that the blocking state was canceled.
-     */
+  /*
+   *  IF there are no pending messages,
+   *  THEN threads may be blocked waiting to RECEIVE a message,
+   *
+   *  IF the pending message queue is full
+   *  THEN threads may be blocked waiting to SEND a message
+   *
+   *  But in either case, we will return "unsatisfied nowait"
+   *  to indicate that the blocking condition was not satisfied
+   *  and that the blocking state was canceled.
+   */
 
-    _Thread_queue_Flush(
-      &the_message_queue->Wait_queue,
-      NULL,
-      CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT
-    );
-  }
+  _Thread_queue_Flush(
+    &the_message_queue->Wait_queue,
+    NULL,
+    CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT
+  );
+}
 #endif

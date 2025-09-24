@@ -41,11 +41,9 @@
 
 #include <rtems/score/objectimpl.h>
 
-unsigned int _Objects_API_maximum_class(
-  uint32_t api
-)
+unsigned int _Objects_API_maximum_class( uint32_t api )
 {
-  switch (api) {
+  switch ( api ) {
     case OBJECTS_INTERNAL_API:
       return OBJECTS_INTERNAL_CLASSES_LAST;
     case OBJECTS_CLASSIC_API:
@@ -58,4 +56,3 @@ unsigned int _Objects_API_maximum_class(
   }
   return 0;
 }
-

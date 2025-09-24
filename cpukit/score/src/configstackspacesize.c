@@ -39,8 +39,8 @@
 
 #include <rtems/config.h>
 #include <rtems/score/stack.h>
-#include <rtems/score/tls.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/tls.h>
 
 uintptr_t rtems_configuration_get_stack_space_size( void )
 {

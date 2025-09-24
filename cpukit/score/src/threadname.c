@@ -42,10 +42,7 @@
 
 #include <string.h>
 
-Status_Control _Thread_Set_name(
-  Thread_Control *the_thread,
-  const char     *name
-)
+Status_Control _Thread_Set_name( Thread_Control *the_thread, const char *name )
 {
   size_t length;
 

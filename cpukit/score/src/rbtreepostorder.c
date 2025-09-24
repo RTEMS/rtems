@@ -56,10 +56,7 @@ static void *_RBTree_Postorder_dive_left(
   }
 }
 
-void *_RBTree_Postorder_next(
-  const RBTree_Node *the_node,
-  size_t             offset
-)
+void *_RBTree_Postorder_next( const RBTree_Node *the_node, size_t offset )
 {
   const RBTree_Node *parent;
 
@@ -68,20 +65,14 @@ void *_RBTree_Postorder_next(
     return NULL;
   }
 
-  if (
-    the_node == _RBTree_Left( parent )
-      && _RBTree_Right( parent ) != NULL
-  ) {
+  if ( the_node == _RBTree_Left( parent ) && _RBTree_Right( parent ) != NULL ) {
     return _RBTree_Postorder_dive_left( _RBTree_Right( parent ), offset );
   }
 
   return (void *) ( (uintptr_t) parent - offset );
 }
 
-void *_RBTree_Postorder_first(
-  const RBTree_Control *the_rbtree,
-  size_t                offset
-)
+void *_RBTree_Postorder_first( const RBTree_Control *the_rbtree, size_t offset )
 {
   const RBTree_Node *the_node;
 

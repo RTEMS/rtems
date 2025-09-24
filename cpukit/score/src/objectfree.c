@@ -39,8 +39,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/objectimpl.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/objectimpl.h>
 
 void _Objects_Free_unlimited(
   Objects_Information *information,

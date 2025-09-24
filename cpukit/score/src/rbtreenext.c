@@ -39,8 +39,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/basedefs.h>
+#include <rtems/score/rbtreeimpl.h>
 
 RTEMS_RB_GENERATE_NEXT( RBTree_Control, RBTree_Node, Node, static )
 

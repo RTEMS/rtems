@@ -42,18 +42,20 @@
 #include <rtems/score/protectedheap.h>
 
 bool _Protected_heap_Get_information(
-  Heap_Control            *the_heap,
-  Heap_Information_block  *the_info
+  Heap_Control           *the_heap,
+  Heap_Information_block *the_info
 )
 {
-  if ( !the_heap )
+  if ( !the_heap ) {
     return false;
+  }
 
-  if ( !the_info )
+  if ( !the_info ) {
     return false;
+  }
 
   _RTEMS_Lock_allocator();
-    _Heap_Get_information( the_heap, the_info );
+  _Heap_Get_information( the_heap, the_info );
   _RTEMS_Unlock_allocator();
 
   return true;

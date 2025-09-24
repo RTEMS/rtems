@@ -40,14 +40,11 @@
 
 #include <rtems/score/threadimpl.h>
 
-void _Thread_Iterate(
-  Thread_Visitor  visitor,
-  void           *arg
-)
+void _Thread_Iterate( Thread_Visitor visitor, void *arg )
 {
   int api_index;
 
-  for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; ++api_index ) {
+  for ( api_index = 1; api_index <= OBJECTS_APIS_LAST; ++api_index ) {
     const Objects_Information *information;
     Objects_Maximum            maximum;
     Objects_Maximum            index;
@@ -61,7 +58,7 @@ void _Thread_Iterate(
 
     maximum = _Objects_Get_maximum_index( information );
 
-    for ( index = 0 ; index < maximum ; ++index ) {
+    for ( index = 0; index < maximum; ++index ) {
       Thread_Control *the_thread;
 
       the_thread = (Thread_Control *) information->local_table[ index ];
@@ -69,7 +66,7 @@ void _Thread_Iterate(
       if ( the_thread != NULL ) {
         bool done;
 
-        done = (* visitor )( the_thread, arg );
+        done = ( *visitor )( the_thread, arg );
 
         if ( done ) {
           return;

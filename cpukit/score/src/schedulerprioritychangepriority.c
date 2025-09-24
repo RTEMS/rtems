@@ -58,8 +58,7 @@ void _Scheduler_priority_Update_priority(
   }
 
   the_node = _Scheduler_priority_Node_downcast( node );
-  new_priority = (unsigned int)
-    _Scheduler_Node_get_priority( &the_node->Base );
+  new_priority = (unsigned int) _Scheduler_Node_get_priority( &the_node->Base );
   unmapped_priority = SCHEDULER_PRIORITY_UNMAP( new_priority );
 
   if ( unmapped_priority == the_node->Ready_queue.current_priority ) {

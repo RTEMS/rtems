@@ -39,8 +39,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/stackimpl.h>
 #include <rtems/config.h>
+#include <rtems/score/stackimpl.h>
 
 void _Stack_Free( void *stack_area )
 {

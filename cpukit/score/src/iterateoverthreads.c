@@ -56,9 +56,7 @@ static bool routine_adaptor( rtems_tcb *tcb, void *arg )
 
 void rtems_iterate_over_all_threads( rtems_per_thread_routine routine )
 {
-  routine_arg arg = {
-    .routine = routine
-  };
+  routine_arg arg = { .routine = routine };
 
   if ( routine != NULL ) {
     _Thread_Iterate( routine_adaptor, &arg );

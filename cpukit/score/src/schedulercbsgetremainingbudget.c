@@ -42,9 +42,9 @@
 #include <rtems/score/schedulercbs.h>
 #include <rtems/score/threadimpl.h>
 
-int _Scheduler_CBS_Get_remaining_budget (
-  Scheduler_CBS_Server_id  server_id,
-  time_t                  *remaining_budget
+int _Scheduler_CBS_Get_remaining_budget(
+  Scheduler_CBS_Server_id server_id,
+  time_t                 *remaining_budget
 )
 {
   Scheduler_CBS_Server *server;

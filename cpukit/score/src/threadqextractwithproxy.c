@@ -39,9 +39,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/statesimpl.h>
+#include <rtems/score/threadimpl.h>
 
 void _Thread_MP_Extract_proxy( Thread_Control *the_thread )
 {
@@ -53,9 +53,9 @@ void _Thread_MP_Extract_proxy( Thread_Control *the_thread )
     _States_Is_waiting_for_rpc_reply( state ) &&
     _States_Is_locally_blocked( state )
   ) {
-    Objects_Id                            id;
-    const Objects_Information            *the_information;
-    Objects_Thread_queue_Extract_callout  proxy_extract_callout;
+    Objects_Id                           id;
+    const Objects_Information           *the_information;
+    Objects_Thread_queue_Extract_callout proxy_extract_callout;
 
     id = the_thread->Wait.remote_id;
     the_information = _Objects_Get_information_id( id );

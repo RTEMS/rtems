@@ -38,9 +38,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/thread.h>
 #include <rtems/score/freechainimpl.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
 static void _Thread_Extend_information( Objects_Information *base )

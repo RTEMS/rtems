@@ -38,8 +38,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/todimpl.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/todimpl.h>
 
 TOD_Control _TOD;
 
@@ -55,7 +55,7 @@ void _TOD_Unlock( void )
   _API_Mutex_Unlock( &_TOD_Mutex );
 }
 
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
 bool _TOD_Is_owner( void )
 {
   return _API_Mutex_Is_owner( &_TOD_Mutex );

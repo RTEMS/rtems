@@ -38,18 +38,18 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/profiling.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/profiling.h>
 
 void _Profiling_Outer_most_interrupt_entry_and_exit(
-  Per_CPU_Control *cpu,
+  Per_CPU_Control  *cpu,
   CPU_Counter_ticks interrupt_entry_instant,
   CPU_Counter_ticks interrupt_exit_instant
 )
 {
-#if defined(RTEMS_PROFILING)
-  Per_CPU_Stats     *stats;
-  CPU_Counter_ticks  delta;
+#if defined( RTEMS_PROFILING )
+  Per_CPU_Stats    *stats;
+  CPU_Counter_ticks delta;
 
   _Assert( cpu->isr_nest_level == 1 );
 

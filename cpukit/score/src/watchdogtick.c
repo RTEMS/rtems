@@ -38,10 +38,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/timecounter.h>
+#include <rtems/score/watchdogimpl.h>
 
 void _Watchdog_Do_tickle(
   Watchdog_Header  *header,

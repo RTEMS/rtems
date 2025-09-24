@@ -42,21 +42,23 @@
 #include <rtems/score/timespec.h>
 #include <rtems/score/todimpl.h>
 
-bool _Timespec_Is_valid(
-  const struct timespec *time
-)
+bool _Timespec_Is_valid( const struct timespec *time )
 {
-  if ( !time )
+  if ( !time ) {
     return false;
+  }
 
-  if ( time->tv_sec < 0 )
+  if ( time->tv_sec < 0 ) {
     return false;
+  }
 
-  if ( time->tv_nsec < 0 )
+  if ( time->tv_nsec < 0 ) {
     return false;
+  }
 
-  if ( time->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
+  if ( time->tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
     return false;
+  }
 
   return true;
 }

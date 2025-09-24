@@ -43,16 +43,18 @@
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulercbs.h>
 
-int _Scheduler_CBS_Get_approved_budget (
-  Scheduler_CBS_Server_id  server_id,
-  time_t                  *approved_budget
+int _Scheduler_CBS_Get_approved_budget(
+  Scheduler_CBS_Server_id server_id,
+  time_t                 *approved_budget
 )
 {
-  if ( server_id >= _Scheduler_CBS_Maximum_servers )
+  if ( server_id >= _Scheduler_CBS_Maximum_servers ) {
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
-  if ( !_Scheduler_CBS_Server_list[server_id].initialized )
+  }
+  if ( !_Scheduler_CBS_Server_list[ server_id ].initialized ) {
     return SCHEDULER_CBS_ERROR_NOSERVER;
+  }
 
-  *approved_budget = _Scheduler_CBS_Server_list[server_id].parameters.budget;
+  *approved_budget = _Scheduler_CBS_Server_list[ server_id ].parameters.budget;
   return SCHEDULER_CBS_OK;
 }

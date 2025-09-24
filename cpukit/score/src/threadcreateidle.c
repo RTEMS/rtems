@@ -58,9 +58,9 @@ static void _Thread_Create_idle_for_CPU(
   uintptr_t        storage_size
 )
 {
-  Thread_Configuration  config;
-  Thread_Control       *idle;
-  Status_Control        status;
+  Thread_Configuration config;
+  Thread_Control      *idle;
+  Status_Control       status;
 
   memset( &config, 0, sizeof( config ) );
   config.scheduler = _Scheduler_Get_by_CPU( cpu );
@@ -105,9 +105,9 @@ static void _Thread_Create_idle_for_CPU(
    *  WARNING!!! This is necessary to "kick" start the system and
    *             MUST be done before _Thread_Start is invoked.
    */
-  cpu->heir      = idle;
+  cpu->heir = idle;
   cpu->executing = idle;
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   cpu->ancestor = idle;
 #endif
 
@@ -125,19 +125,19 @@ static void _Thread_Create_idle_for_CPU(
 void _Thread_Create_idle( void )
 {
   uintptr_t storage_size;
-#if defined(RTEMS_SMP)
-  uint32_t  cpu_max;
-  uint32_t  cpu_index;
+#if defined( RTEMS_SMP )
+  uint32_t cpu_max;
+  uint32_t cpu_index;
 #endif
 
   storage_size = _TLS_Get_allocation_size() +
-    CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE +
-    _Thread_Idle_stack_size;
+                 CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE +
+                 _Thread_Idle_stack_size;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   cpu_max = _SMP_Get_processor_maximum();
 
-  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
     if ( _Per_CPU_Is_processor_online( cpu ) ) {

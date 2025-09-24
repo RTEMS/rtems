@@ -58,7 +58,7 @@ int _Sched_Index( void )
 int _Sched_Name_to_index( const char *name, size_t len )
 {
   uint32_t name_32 = 0;
-  size_t i = 0;
+  size_t   i = 0;
 
   while ( i < 4 && i < len ) {
     name_32 |= ( (uint32_t) ( (uint8_t) *name ) ) << ( ( 3 - i ) * 8 );
@@ -66,7 +66,7 @@ int _Sched_Name_to_index( const char *name, size_t len )
     ++i;
   }
 
-  for ( i = 0 ; i < _Scheduler_Count ; ++i ) {
+  for ( i = 0; i < _Scheduler_Count; ++i ) {
     const Scheduler_Control *scheduler = &_Scheduler_Table[ i ];
 
     if ( scheduler->name == name_32 ) {

@@ -37,9 +37,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/hash.h>
-#include <rtems/score/assert.h>
 #include <rtems/base64.h>
+#include <rtems/score/assert.h>
+#include <rtems/score/hash.h>
 
 #include <limits.h>
 

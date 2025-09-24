@@ -39,10 +39,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isrlevel.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/userextimpl.h>
 
 /*
@@ -50,23 +50,22 @@
  *  initialization this target and compiler version uses.
  */
 RTEMS_STATIC_ASSERT(
-  CPU_USE_LIBC_INIT_FINI_ARRAY == TRUE
-    || CPU_USE_LIBC_INIT_FINI_ARRAY == FALSE,
+  CPU_USE_LIBC_INIT_FINI_ARRAY == TRUE || CPU_USE_LIBC_INIT_FINI_ARRAY == FALSE,
   CPU_USE_LIBC_INIT_FINI_ARRAY
 );
-#if defined(__USE_INIT_FINI__)
+#if defined( __USE_INIT_FINI__ )
   #if CPU_USE_LIBC_INIT_FINI_ARRAY == TRUE
     #define INIT_NAME __libc_init_array
   #else
     #define INIT_NAME _init
   #endif
 
-  extern void INIT_NAME(void);
+extern void INIT_NAME( void );
   #define EXECUTE_GLOBAL_CONSTRUCTORS
 #endif
 
-#if defined(__USE__MAIN__)
-  extern void __main(void);
+#if defined( __USE__MAIN__ )
+extern void __main( void );
   #define INIT_NAME __main
   #define EXECUTE_GLOBAL_CONSTRUCTORS
 #endif
@@ -75,7 +74,7 @@ Objects_Id _Thread_Global_constructor;
 
 static void _Thread_Global_construction( Thread_Control *executing )
 {
-#if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
+#if defined( EXECUTE_GLOBAL_CONSTRUCTORS )
   if ( executing->Object.id == _Thread_Global_constructor ) {
     /*
      * Prevent double construction in case the initialization thread is deleted
@@ -122,7 +121,7 @@ void _Thread_Handler( void )
    */
   _Thread_Restore_fp( executing );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _User_extensions_Thread_switch( NULL, executing );
 #endif
 

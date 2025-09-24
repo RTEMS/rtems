@@ -38,8 +38,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/threadimpl.h>
 
 void _Thread_Yield( Thread_Control *executing )
 {

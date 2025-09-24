@@ -43,7 +43,7 @@
 
 #include <rtems/score/schedulerpriorityimpl.h>
 
-void _Scheduler_priority_Unblock (
+void _Scheduler_priority_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -56,7 +56,7 @@ void _Scheduler_priority_Unblock (
 
   context = _Scheduler_priority_Get_context( scheduler );
   the_node = _Scheduler_priority_Node_downcast( node );
-  priority = (unsigned int ) _Scheduler_Node_get_priority( &the_node->Base );
+  priority = (unsigned int) _Scheduler_Node_get_priority( &the_node->Base );
   unmapped_priority = SCHEDULER_PRIORITY_UNMAP( priority );
 
   if ( unmapped_priority != the_node->Ready_queue.current_priority ) {

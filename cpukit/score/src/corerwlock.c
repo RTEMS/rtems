@@ -42,9 +42,7 @@
 #include <rtems/score/corerwlockimpl.h>
 #include <rtems/score/threadqimpl.h>
 
-void _CORE_RWLock_Initialize(
-  CORE_RWLock_Control *the_rwlock
-)
+void _CORE_RWLock_Initialize( CORE_RWLock_Control *the_rwlock )
 {
   the_rwlock->number_of_readers = 0;
   the_rwlock->current_state = CORE_RWLOCK_UNLOCKED;

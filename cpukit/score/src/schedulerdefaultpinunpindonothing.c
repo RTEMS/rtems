@@ -38,8 +38,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/scheduler.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/sysinit.h>
 

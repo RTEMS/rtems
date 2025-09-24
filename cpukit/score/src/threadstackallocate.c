@@ -39,8 +39,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/stackimpl.h>
 #include <rtems/config.h>
+#include <rtems/score/stackimpl.h>
 
 void *_Stack_Allocate( size_t stack_size )
 {

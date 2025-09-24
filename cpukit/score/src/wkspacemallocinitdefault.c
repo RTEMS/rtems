@@ -40,5 +40,5 @@
 
 #include <rtems/score/wkspacedata.h>
 
-struct Heap_Control *( * const _Workspace_Malloc_initializer )( void ) =
+struct Heap_Control *( *const _Workspace_Malloc_initializer )( void ) =
   _Workspace_Malloc_initialize_separate;

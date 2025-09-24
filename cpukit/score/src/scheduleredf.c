@@ -43,8 +43,7 @@
 
 void _Scheduler_EDF_Initialize( const Scheduler_Control *scheduler )
 {
-  Scheduler_EDF_Context *context =
-    _Scheduler_EDF_Get_context( scheduler );
+  Scheduler_EDF_Context *context = _Scheduler_EDF_Get_context( scheduler );
 
   _RBTree_Initialize_empty( &context->Ready );
 }

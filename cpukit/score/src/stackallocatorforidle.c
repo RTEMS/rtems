@@ -38,19 +38,19 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/stack.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/stack.h>
 
 void *_Stack_Allocator_allocate_for_idle_static(
-  uint32_t  cpu_index,
-  size_t   *storage_size
+  uint32_t cpu_index,
+  size_t  *storage_size
 )
 {
   size_t size;
 
   size = _Stack_Allocator_allocate_for_idle_storage_size;
   *storage_size = size;
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return &_Stack_Allocator_allocate_for_idle_storage_areas[ cpu_index * size ];
 #else
   _Assert( cpu_index == 0 );

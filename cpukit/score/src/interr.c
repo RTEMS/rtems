@@ -39,8 +39,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/interr.h>
 #include <rtems/score/cpuimpl.h>
+#include <rtems/score/interr.h>
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/sysstate.h>

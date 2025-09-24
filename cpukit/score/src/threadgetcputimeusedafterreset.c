@@ -38,8 +38,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/threadimpl.h>
 
 Timestamp_Control _Thread_Get_CPU_time_used_after_last_reset(
   Thread_Control *the_thread

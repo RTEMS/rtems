@@ -41,9 +41,7 @@
 
 #include <rtems/score/threadimpl.h>
 
-void _Thread_Load_environment(
-  Thread_Control *the_thread
-)
+void _Thread_Load_environment( Thread_Control *the_thread )
 {
   const Thread_CPU_budget_operations *cpu_budget_operations;
 
@@ -54,7 +52,7 @@ void _Thread_Load_environment(
   }
 #endif
 
-  the_thread->is_preemptible   = the_thread->Start.is_preemptible;
+  the_thread->is_preemptible = the_thread->Start.is_preemptible;
 
   cpu_budget_operations = the_thread->Start.cpu_budget_operations;
   the_thread->CPU_budget.operations = cpu_budget_operations;

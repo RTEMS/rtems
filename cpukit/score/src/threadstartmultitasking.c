@@ -39,16 +39,16 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/smpimpl.h>
+#include <rtems/score/threadimpl.h>
 
 void _Thread_Start_multitasking( void )
 {
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
   Thread_Control  *heir;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Per_CPU_Set_state( cpu_self, PER_CPU_STATE_UP );
   _SMP_Try_to_process_message( cpu_self, SMP_MESSAGE_FORCE_PROCESSING );
 #endif
@@ -57,13 +57,13 @@ void _Thread_Start_multitasking( void )
 
   _Profiling_Thread_dispatch_disable( cpu_self, 0 );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _CPU_SMP_Prepare_start_multitasking();
 #endif
 
-#if defined(_CPU_Start_multitasking)
+#if defined( _CPU_Start_multitasking )
   _CPU_Start_multitasking( &heir->Registers );
-#elif defined(RTEMS_SMP)
+#elif defined( RTEMS_SMP )
 #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
 #error "The CPU port has to provide _CPU_Start_multitasking()"
 #endif

@@ -39,7 +39,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/todimpl.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/todimpl.h>
 
 Chain_Control _TOD_Hooks = CHAIN_INITIALIZER_EMPTY( _TOD_Hooks );

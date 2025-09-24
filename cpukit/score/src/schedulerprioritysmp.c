@@ -51,16 +51,18 @@
 
 #include <rtems/score/schedulerprioritysmpimpl.h>
 
-static Scheduler_priority_SMP_Context *
-_Scheduler_priority_SMP_Get_context( const Scheduler_Control *scheduler )
+static Scheduler_priority_SMP_Context *_Scheduler_priority_SMP_Get_context(
+  const Scheduler_Control *scheduler
+)
 {
   return (Scheduler_priority_SMP_Context *) _Scheduler_Get_context( scheduler );
 }
 
 void _Scheduler_priority_SMP_Initialize( const Scheduler_Control *scheduler )
 {
-  Scheduler_priority_SMP_Context *self =
-    _Scheduler_priority_SMP_Get_context( scheduler );
+  Scheduler_priority_SMP_Context *self = _Scheduler_priority_SMP_Get_context(
+    scheduler
+  );
 
   _Scheduler_SMP_Initialize( &self->Base );
   self->idle_ready_queue = &self->Ready[ scheduler->maximum_priority ];
@@ -105,15 +107,15 @@ static Scheduler_Node *_Scheduler_priority_SMP_Get_highest_ready(
   Scheduler_Node    *node
 )
 {
-  Scheduler_priority_SMP_Context *self =
-    _Scheduler_priority_SMP_Get_self( context );
+  Scheduler_priority_SMP_Context *self = _Scheduler_priority_SMP_Get_self(
+    context
+  );
 
   (void) node;
 
-  return (Scheduler_Node *) _Scheduler_priority_Ready_queue_first(
-    &self->Bit_map,
-    &self->Ready[ 0 ]
-  );
+  return (
+    Scheduler_Node *
+  ) _Scheduler_priority_Ready_queue_first( &self->Bit_map, &self->Ready[ 0 ] );
 }
 
 void _Scheduler_priority_SMP_Block(

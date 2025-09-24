@@ -41,13 +41,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadqimpl.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 void _Thread_queue_Extract( Thread_Control *the_thread )
 {
-  Thread_queue_Context  queue_context;
-  Thread_queue_Queue   *queue;
+  Thread_queue_Context queue_context;
+  Thread_queue_Queue  *queue;
 
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_clear_priority_updates( &queue_context );
@@ -61,7 +61,7 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
       &queue_context,
       _Thread_queue_MP_callout_do_nothing
     );
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     _Thread_queue_MP_set_callout( the_thread, &queue_context );
 #endif
     ( *the_thread->Wait.operations->extract )(

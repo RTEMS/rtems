@@ -39,9 +39,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/threadimpl.h>
 
 States_Control _Thread_Clear_state_locked(
   Thread_Control *the_thread,

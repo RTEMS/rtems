@@ -38,8 +38,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/wkspacedata.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/score/wkspacedata.h>
 
 Heap_Control *_Workspace_Malloc_initialize_unified( void )
 {

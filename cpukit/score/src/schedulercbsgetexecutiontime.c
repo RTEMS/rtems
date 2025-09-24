@@ -42,10 +42,10 @@
 #include <rtems/score/schedulercbs.h>
 #include <rtems/score/threadimpl.h>
 
-int _Scheduler_CBS_Get_execution_time (
-  Scheduler_CBS_Server_id   server_id,
-  time_t                   *exec_time,
-  time_t                   *abs_time
+int _Scheduler_CBS_Get_execution_time(
+  Scheduler_CBS_Server_id server_id,
+  time_t                 *exec_time,
+  time_t                 *abs_time
 )
 {
   Scheduler_CBS_Server *server;

@@ -43,10 +43,7 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdog.h>
 
-time_t _Timespec_Add_to(
-  struct timespec       *time,
-  const struct timespec *add
-)
+time_t _Timespec_Add_to( struct timespec *time, const struct timespec *add )
 {
   time_t seconds = add->tv_sec;
 

@@ -42,10 +42,7 @@
 
 #include <string.h>
 
-char *_Workspace_String_duplicate(
-  const char *string,
-  size_t      len
-)
+char *_Workspace_String_duplicate( const char *string, size_t len )
 {
   char *dup;
 

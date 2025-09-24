@@ -38,8 +38,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/wkspace.h>
 #include <rtems/score/heapimpl.h>
+#include <rtems/score/wkspace.h>
 
 void *_Workspace_Allocate( size_t size )
 {

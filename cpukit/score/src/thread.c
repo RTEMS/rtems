@@ -40,28 +40,29 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/freechainimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/scheduler.h>
+#include <rtems/score/threadimpl.h>
 
-#define THREAD_OFFSET_ASSERT( field ) \
-  RTEMS_STATIC_ASSERT( \
-    offsetof( Thread_Control, field ) == offsetof( Thread_Proxy_control, field ), \
-    field \
+#define THREAD_OFFSET_ASSERT( field )          \
+  RTEMS_STATIC_ASSERT(                         \
+    offsetof( Thread_Control, field ) ==       \
+      offsetof( Thread_Proxy_control, field ), \
+    field                                      \
   )
 
 THREAD_OFFSET_ASSERT( Object );
 THREAD_OFFSET_ASSERT( Join_queue );
 THREAD_OFFSET_ASSERT( current_state );
 THREAD_OFFSET_ASSERT( Real_priority );
-#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+#if defined( RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT )
 THREAD_OFFSET_ASSERT( resource_count );
 #endif
 THREAD_OFFSET_ASSERT( Scheduler );
 THREAD_OFFSET_ASSERT( Wait );
 THREAD_OFFSET_ASSERT( Timer );
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 THREAD_OFFSET_ASSERT( receive_packet );
 #endif
 
@@ -77,9 +78,9 @@ void _Thread_Initialize_information( Thread_Information *information )
   );
 }
 
-void _Thread_Handler_initialization(void)
+void _Thread_Handler_initialization( void )
 {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   _Thread_MP_Handler_initialization( _MPCI_Configuration.maximum_proxies );
 #endif
 

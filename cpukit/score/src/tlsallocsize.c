@@ -38,9 +38,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/tls.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/tls.h>
 
 extern char _TLS_Data_begin[];
 
@@ -101,10 +101,12 @@ uintptr_t _TLS_Get_allocation_size( void )
     stack_align = CPU_STACK_ALIGNMENT;
     tls_align = RTEMS_ALIGN_UP( (uintptr_t) config->alignment, stack_align );
 
-#if !defined(__i386__) && !defined(__x86_64__)
+#if !defined( __i386__ ) && !defined( __x86_64__ )
     /* Reserve space for the dynamic thread vector */
-    allocation_size +=
-      RTEMS_ALIGN_UP( sizeof( TLS_Dynamic_thread_vector ), stack_align );
+    allocation_size += RTEMS_ALIGN_UP(
+      sizeof( TLS_Dynamic_thread_vector ),
+      stack_align
+    );
 #endif
 
     /* Reserve space for the thread control block */

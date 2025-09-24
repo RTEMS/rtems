@@ -42,9 +42,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/status.h>
+#include <rtems/score/threadimpl.h>
 
 Thread_Control *_Thread_queue_Flush_default_filter(
   Thread_Control       *the_thread,
@@ -138,8 +138,9 @@ size_t _Thread_queue_Flush_critical(
       );
     }
 
-    priority_updates +=
-      _Thread_queue_Context_get_priority_updates( queue_context );
+    priority_updates += _Thread_queue_Context_get_priority_updates(
+      queue_context
+    );
     ++flushed;
   }
 
@@ -150,7 +151,10 @@ size_t _Thread_queue_Flush_critical(
     Per_CPU_Control *cpu_self;
 
     cpu_self = _Thread_queue_Dispatch_disable( queue_context );
-    _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
+    _Thread_queue_Queue_release(
+      queue,
+      &queue_context->Lock_context.Lock_context
+    );
 
     do {
       Scheduler_Node *scheduler_node;
@@ -178,7 +182,10 @@ size_t _Thread_queue_Flush_critical(
 
     _Thread_Dispatch_enable( cpu_self );
   } else {
-    _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
+    _Thread_queue_Queue_release(
+      queue,
+      &queue_context->Lock_context.Lock_context
+    );
   }
 
   return flushed;

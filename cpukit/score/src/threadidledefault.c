@@ -38,7 +38,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadidledata.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/threadidledata.h>
 
 const Thread_Idle_body _Thread_Idle_body = _CPU_Thread_Idle_body;

@@ -40,10 +40,7 @@
 
 #include <rtems/score/watchdogimpl.h>
 
-void _Watchdog_Remove(
-  Watchdog_Header  *header,
-  Watchdog_Control *the_watchdog
-)
+void _Watchdog_Remove( Watchdog_Header *header, Watchdog_Control *the_watchdog )
 {
   if ( _Watchdog_Is_scheduled( the_watchdog ) ) {
     if ( header->first == &the_watchdog->Node.RBTree ) {

@@ -41,7 +41,7 @@
 
 #include <assert.h>
 
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
 void _Debug_Unreachable( const char *file, int line, const char *func )
 {
   __assert_func( file, line, func, "reached unreachable code" );

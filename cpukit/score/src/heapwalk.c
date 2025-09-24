@@ -39,17 +39,17 @@
 #include "config.h"
 #endif
 
+#include <rtems/bspIo.h>
 #include <rtems/score/address.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/interr.h>
-#include <rtems/bspIo.h>
+#include <rtems/score/sysstate.h>
 
-typedef void (*Heap_Walk_printer)(int, bool, const char*, ...);
+typedef void ( *Heap_Walk_printer )( int, bool, const char *, ... );
 
 static void _Heap_Walk_print_nothing(
-  int source,
-  bool error,
+  int         source,
+  bool        error,
   const char *fmt,
   ...
 )
@@ -73,20 +73,20 @@ static void _Heap_Walk_print( int source, bool error, const char *fmt, ... )
 }
 
 static bool _Heap_Walk_check_free_list(
-  int source,
+  int               source,
   Heap_Walk_printer printer,
-  Heap_Control *heap
+  Heap_Control     *heap
 )
 {
-  uintptr_t const page_size = heap->page_size;
+  uintptr_t const         page_size = heap->page_size;
   const Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
   const Heap_Block *const first_free_block = _Heap_Free_list_first( heap );
-  const Heap_Block *prev_block = free_list_tail;
-  const Heap_Block *free_block = first_free_block;
+  const Heap_Block       *prev_block = free_list_tail;
+  const Heap_Block       *free_block = first_free_block;
 
   while ( free_block != free_list_tail ) {
     if ( !_Heap_Is_block_in_heap( heap, free_block ) ) {
-      (*printer)(
+      ( *printer )(
         source,
         true,
         "free block 0x%08x: not in heap\n",
@@ -96,10 +96,11 @@ static bool _Heap_Walk_check_free_list(
       return false;
     }
 
-    if (
-      !_Heap_Is_aligned( _Heap_Alloc_area_of_block( free_block ), page_size )
-    ) {
-      (*printer)(
+    if ( !_Heap_Is_aligned(
+           _Heap_Alloc_area_of_block( free_block ),
+           page_size
+         ) ) {
+      ( *printer )(
         source,
         true,
         "free block 0x%08x: alloc area not page aligned\n",
@@ -110,18 +111,13 @@ static bool _Heap_Walk_check_free_list(
     }
 
     if ( _Heap_Is_used( free_block ) ) {
-      (*printer)(
-        source,
-        true,
-        "free block 0x%08x: is used\n",
-        free_block
-      );
+      ( *printer )( source, true, "free block 0x%08x: is used\n", free_block );
 
       return false;
     }
 
     if ( free_block->prev != prev_block ) {
-      (*printer)(
+      ( *printer )(
         source,
         true,
         "free block 0x%08x: invalid previous block 0x%08x\n",
@@ -139,13 +135,10 @@ static bool _Heap_Walk_check_free_list(
   return true;
 }
 
-static bool _Heap_Walk_is_in_free_list(
-  Heap_Control *heap,
-  Heap_Block *block
-)
+static bool _Heap_Walk_is_in_free_list( Heap_Control *heap, Heap_Block *block )
 {
   const Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
-  const Heap_Block *free_block = _Heap_Free_list_first( heap );
+  const Heap_Block       *free_block = _Heap_Free_list_first( heap );
 
   while ( free_block != free_list_tail ) {
     if ( free_block == block ) {
@@ -158,50 +151,49 @@ static bool _Heap_Walk_is_in_free_list(
 }
 
 static bool _Heap_Walk_check_control(
-  int source,
+  int               source,
   Heap_Walk_printer printer,
-  Heap_Control *heap
+  Heap_Control     *heap
 )
 {
-  uintptr_t const page_size = heap->page_size;
-  uintptr_t const min_block_size = heap->min_block_size;
+  uintptr_t const   page_size = heap->page_size;
+  uintptr_t const   min_block_size = heap->min_block_size;
   Heap_Block *const first_free_block = _Heap_Free_list_first( heap );
   Heap_Block *const last_free_block = _Heap_Free_list_last( heap );
   Heap_Block *const first_block = heap->first_block;
   Heap_Block *const last_block = heap->last_block;
 
-  (*printer)(
+  ( *printer )(
     source,
     false,
     "page size %u, min block size %u\n"
-      "\tarea begin 0x%08x, area end 0x%08x\n"
-      "\tfirst block 0x%08x, last block 0x%08x\n"
-      "\tfirst free 0x%08x, last free 0x%08x\n",
-    page_size, min_block_size,
-    heap->area_begin, heap->area_end,
-    first_block, last_block,
-    first_free_block, last_free_block
+    "\tarea begin 0x%08x, area end 0x%08x\n"
+    "\tfirst block 0x%08x, last block 0x%08x\n"
+    "\tfirst free 0x%08x, last free 0x%08x\n",
+    page_size,
+    min_block_size,
+    heap->area_begin,
+    heap->area_end,
+    first_block,
+    last_block,
+    first_free_block,
+    last_free_block
   );
 
   if ( page_size == 0 ) {
-    (*printer)( source, true, "page size is zero\n" );
+    ( *printer )( source, true, "page size is zero\n" );
 
     return false;
   }
 
   if ( !_Addresses_Is_aligned( (void *) page_size ) ) {
-    (*printer)(
-      source,
-      true,
-      "page size %u not CPU aligned\n",
-      page_size
-    );
+    ( *printer )( source, true, "page size %u not CPU aligned\n", page_size );
 
     return false;
   }
 
   if ( !_Heap_Is_aligned( min_block_size, page_size ) ) {
-    (*printer)(
+    ( *printer )(
       source,
       true,
       "min block size %u not page aligned\n",
@@ -211,10 +203,11 @@ static bool _Heap_Walk_check_control(
     return false;
   }
 
-  if (
-    !_Heap_Is_aligned( _Heap_Alloc_area_of_block( first_block ), page_size )
-  ) {
-    (*printer)(
+  if ( !_Heap_Is_aligned(
+         _Heap_Alloc_area_of_block( first_block ),
+         page_size
+       ) ) {
+    ( *printer )(
       source,
       true,
       "first block 0x%08x: alloc area not page aligned\n",
@@ -225,7 +218,7 @@ static bool _Heap_Walk_check_control(
   }
 
   if ( !_Heap_Is_prev_used( first_block ) ) {
-    (*printer)(
+    ( *printer )(
       source,
       true,
       "first block: HEAP_PREV_BLOCK_USED is cleared\n"
@@ -235,11 +228,7 @@ static bool _Heap_Walk_check_control(
   }
 
   if ( _Heap_Is_free( last_block ) ) {
-    (*printer)(
-      source,
-      true,
-      "last block: is free\n"
-    );
+    ( *printer )( source, true, "last block: is free\n" );
 
     return false;
   }
@@ -247,7 +236,7 @@ static bool _Heap_Walk_check_control(
   if (
     _Heap_Block_at( last_block, _Heap_Block_size( last_block ) ) != first_block
   ) {
-    (*printer)(
+    ( *printer )(
       source,
       true,
       "last block: next block is not the first block\n"
@@ -260,38 +249,38 @@ static bool _Heap_Walk_check_control(
 }
 
 static bool _Heap_Walk_check_free_block(
-  int source,
+  int               source,
   Heap_Walk_printer printer,
-  Heap_Control *heap,
-  Heap_Block *block
+  Heap_Control     *heap,
+  Heap_Block       *block
 )
 {
   Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
   Heap_Block *const free_list_head = _Heap_Free_list_head( heap );
   Heap_Block *const first_free_block = _Heap_Free_list_first( heap );
   Heap_Block *const last_free_block = _Heap_Free_list_last( heap );
-  bool const prev_used = _Heap_Is_prev_used( block );
-  uintptr_t const block_size = _Heap_Block_size( block );
+  bool const        prev_used = _Heap_Is_prev_used( block );
+  uintptr_t const   block_size = _Heap_Block_size( block );
   Heap_Block *const next_block = _Heap_Block_at( block, block_size );
 
-  (*printer)(
+  ( *printer )(
     source,
     false,
     "block 0x%08x: size %u, prev 0x%08x%s, next 0x%08x%s\n",
     block,
     block_size,
     block->prev,
-    block->prev == first_free_block ?
-      " (= first free)"
-        : (block->prev == free_list_head ? " (= head)" : ""),
+    block->prev == first_free_block
+      ? " (= first free)"
+      : ( block->prev == free_list_head ? " (= head)" : "" ),
     block->next,
-    block->next == last_free_block ?
-      " (= last free)"
-        : (block->next == free_list_tail ? " (= tail)" : "")
+    block->next == last_free_block
+      ? " (= last free)"
+      : ( block->next == free_list_tail ? " (= tail)" : "" )
   );
 
   if ( block_size != next_block->prev_size ) {
-    (*printer)(
+    ( *printer )(
       source,
       true,
       "block 0x%08x: size %u != size %u (in next block 0x%08x)\n",
@@ -305,7 +294,7 @@ static bool _Heap_Walk_check_free_block(
   }
 
   if ( !prev_used ) {
-    (*printer)(
+    ( *printer )(
       source,
       true,
       "block 0x%08x: two consecutive blocks are free\n",
@@ -316,7 +305,7 @@ static bool _Heap_Walk_check_free_block(
   }
 
   if ( !_Heap_Walk_is_in_free_list( heap, block ) ) {
-    (*printer)(
+    ( *printer )(
       source,
       true,
       "block 0x%08x: free block not in free list\n",
@@ -329,19 +318,15 @@ static bool _Heap_Walk_check_free_block(
   return true;
 }
 
-bool _Heap_Walk(
-  Heap_Control *heap,
-  int source,
-  bool dump
-)
+bool _Heap_Walk( Heap_Control *heap, int source, bool dump )
 {
-  uintptr_t const page_size = heap->page_size;
-  uintptr_t const min_block_size = heap->min_block_size;
+  uintptr_t const   page_size = heap->page_size;
+  uintptr_t const   min_block_size = heap->min_block_size;
   Heap_Block *const first_block = heap->first_block;
   Heap_Block *const last_block = heap->last_block;
-  Heap_Block *block = first_block;
-  Heap_Walk_printer printer = dump ?
-    _Heap_Walk_print : _Heap_Walk_print_nothing;
+  Heap_Block       *block = first_block;
+  Heap_Walk_printer printer = dump ? _Heap_Walk_print
+                                   : _Heap_Walk_print_nothing;
 
   if ( !_System_state_Is_up( _System_state_Get() ) ) {
     return true;
@@ -352,15 +337,15 @@ bool _Heap_Walk(
   }
 
   do {
-    uintptr_t const block_begin = (uintptr_t) block;
-    uintptr_t const block_size = _Heap_Block_size( block );
-    bool const prev_used = _Heap_Is_prev_used( block );
+    uintptr_t const   block_begin = (uintptr_t) block;
+    uintptr_t const   block_size = _Heap_Block_size( block );
+    bool const        prev_used = _Heap_Is_prev_used( block );
     Heap_Block *const next_block = _Heap_Block_at( block, block_size );
-    uintptr_t const next_block_begin = (uintptr_t) next_block;
-    bool const is_not_last_block = block != last_block;
+    uintptr_t const   next_block_begin = (uintptr_t) next_block;
+    bool const        is_not_last_block = block != last_block;
 
     if ( !_Heap_Is_block_in_heap( heap, next_block ) ) {
-      (*printer)(
+      ( *printer )(
         source,
         true,
         "block 0x%08x: next block 0x%08x not in heap\n",
@@ -372,7 +357,7 @@ bool _Heap_Walk(
     }
 
     if ( !_Heap_Is_aligned( block_size, page_size ) && is_not_last_block ) {
-      (*printer)(
+      ( *printer )(
         source,
         true,
         "block 0x%08x: block size %u not page aligned\n",
@@ -384,7 +369,7 @@ bool _Heap_Walk(
     }
 
     if ( block_size < min_block_size && is_not_last_block ) {
-      (*printer)(
+      ( *printer )(
         source,
         true,
         "block 0x%08x: size %u < min block size %u\n",
@@ -397,7 +382,7 @@ bool _Heap_Walk(
     }
 
     if ( next_block_begin <= block_begin && is_not_last_block ) {
-      (*printer)(
+      ( *printer )(
         source,
         true,
         "block 0x%08x: next block 0x%08x is not a successor\n",
@@ -412,8 +397,8 @@ bool _Heap_Walk(
       if ( !_Heap_Walk_check_free_block( source, printer, heap, block ) ) {
         return false;
       }
-    } else if (prev_used) {
-      (*printer)(
+    } else if ( prev_used ) {
+      ( *printer )(
         source,
         false,
         "block 0x%08x: size %u\n",
@@ -421,7 +406,7 @@ bool _Heap_Walk(
         block_size
       );
     } else {
-      (*printer)(
+      ( *printer )(
         source,
         false,
         "block 0x%08x: size %u, prev_size %u\n",

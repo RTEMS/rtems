@@ -41,7 +41,7 @@
 
 #include <rtems/score/coremsgimpl.h>
 
-uint32_t   _CORE_message_queue_Flush(
+uint32_t _CORE_message_queue_Flush(
   CORE_message_queue_Control *the_message_queue,
   Thread_queue_Context       *queue_context
 )

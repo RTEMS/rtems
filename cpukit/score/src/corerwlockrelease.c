@@ -39,8 +39,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/corerwlockimpl.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/corerwlockimpl.h>
 
 static bool _CORE_RWLock_Is_waiting_for_reading(
   const Thread_Control *the_thread
@@ -62,11 +62,7 @@ static Thread_Control *_CORE_RWLock_Flush_filter(
 {
   CORE_RWLock_Control *the_rwlock;
 
-  the_rwlock = RTEMS_CONTAINER_OF(
-    queue,
-    CORE_RWLock_Control,
-    Queue.Queue
-  );
+  the_rwlock = RTEMS_CONTAINER_OF( queue, CORE_RWLock_Control, Queue.Queue );
 
   switch ( the_rwlock->current_state ) {
     case CORE_RWLOCK_LOCKED_FOR_READING:
@@ -107,7 +103,7 @@ Status_Control _CORE_RWLock_Surrender( CORE_RWLock_Control *the_rwlock )
   _Thread_queue_Context_initialize( &queue_context );
   _CORE_RWLock_Acquire( the_rwlock, &queue_context );
 
-  if ( the_rwlock->current_state == CORE_RWLOCK_UNLOCKED){
+  if ( the_rwlock->current_state == CORE_RWLOCK_UNLOCKED ) {
     /* This is an error at the caller site */
     _CORE_RWLock_Release( the_rwlock, &queue_context );
     return STATUS_SUCCESSFUL;
@@ -124,9 +120,9 @@ Status_Control _CORE_RWLock_Surrender( CORE_RWLock_Control *the_rwlock )
   }
 
   _Assert(
-    the_rwlock->current_state == CORE_RWLOCK_LOCKED_FOR_WRITING
-      || ( the_rwlock->current_state == CORE_RWLOCK_LOCKED_FOR_READING
-        && the_rwlock->number_of_readers == 0 )
+    the_rwlock->current_state == CORE_RWLOCK_LOCKED_FOR_WRITING ||
+    ( the_rwlock->current_state == CORE_RWLOCK_LOCKED_FOR_READING &&
+      the_rwlock->number_of_readers == 0 )
   );
 
   /*

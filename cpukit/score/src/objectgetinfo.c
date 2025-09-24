@@ -42,40 +42,45 @@
 #include <rtems/score/objectimpl.h>
 
 Objects_Information *_Objects_Get_information(
-  Objects_APIs   the_api,
-  uint16_t       the_class
+  Objects_APIs the_api,
+  uint16_t     the_class
 )
 {
   Objects_Information *info;
-  int the_class_api_maximum;
+  int                  the_class_api_maximum;
 
-  if ( !the_class )
+  if ( !the_class ) {
     return NULL;
+  }
 
   /*
    *  This call implicitly validates the_api so we do not call
    *  _Objects_Is_api_valid above here.
    */
   the_class_api_maximum = _Objects_API_maximum_class( the_api );
-  if ( the_class_api_maximum == 0 )
+  if ( the_class_api_maximum == 0 ) {
     return NULL;
+  }
 
-  if ( the_class > (uint32_t) the_class_api_maximum )
+  if ( the_class > (uint32_t) the_class_api_maximum ) {
     return NULL;
+  }
 
-  if ( !_Objects_Information_table[ the_api ] )
+  if ( !_Objects_Information_table[ the_api ] ) {
     return NULL;
+  }
 
   info = _Objects_Information_table[ the_api ][ the_class ];
-  if ( !info )
+  if ( !info ) {
     return NULL;
+  }
 
   /*
    * In a multiprocessing configuration, we may access remote objects.
    * Thus we may have 0 local instances and still have a valid object
    * pointer.
    */
-#if !defined(RTEMS_MULTIPROCESSING)
+#if !defined( RTEMS_MULTIPROCESSING )
   if ( _Objects_Get_maximum_index( info ) == 0 ) {
     return NULL;
   }
@@ -83,4 +88,3 @@ Objects_Information *_Objects_Get_information(
 
   return info;
 }
-

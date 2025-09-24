@@ -44,8 +44,9 @@
 
 void _Scheduler_priority_Initialize( const Scheduler_Control *scheduler )
 {
-  Scheduler_priority_Context *context =
-    _Scheduler_priority_Get_context( scheduler );
+  Scheduler_priority_Context *context = _Scheduler_priority_Get_context(
+    scheduler
+  );
 
   _Priority_bit_map_Initialize( &context->Bit_map );
   _Scheduler_priority_Ready_queue_initialize(

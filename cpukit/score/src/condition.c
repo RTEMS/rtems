@@ -41,9 +41,9 @@
 #include "config.h"
 #endif
 
-#include <sys/lock.h>
 #include <errno.h>
 #include <limits.h>
+#include <sys/lock.h>
 
 #include <rtems/score/atomic.h>
 #include <rtems/score/chainimpl.h>
@@ -59,8 +59,8 @@ typedef struct {
 } Condition_Control;
 
 RTEMS_STATIC_ASSERT(
-  offsetof( Condition_Control, Queue )
-    == offsetof( struct _Condition_Control, _Queue ),
+  offsetof( Condition_Control, Queue ) ==
+    offsetof( struct _Condition_Control, _Queue ),
   CONDITION_CONTROL_QUEUE
 );
 
@@ -192,9 +192,9 @@ int _Condition_Wait_timed(
   const struct timespec     *abstime
 )
 {
-  Condition_Enqueue_context  context;
-  Thread_Control            *executing;
-  int                        eno;
+  Condition_Enqueue_context context;
+  Thread_Control           *executing;
+  int                       eno;
 
   _Thread_queue_Context_initialize( &context.Base );
   _Thread_queue_Context_set_enqueue_callout(
@@ -246,10 +246,10 @@ int _Condition_Wait_recursive_timed(
   const struct timespec           *abstime
 )
 {
-  Condition_Enqueue_context  context;
-  Thread_Control            *executing;
-  int                        eno;
-  unsigned int               nest_level;
+  Condition_Enqueue_context context;
+  Thread_Control           *executing;
+  int                       eno;
+  unsigned int              nest_level;
 
   _Thread_queue_Context_initialize( &context.Base );
   _Thread_queue_Context_set_enqueue_callout(
@@ -292,8 +292,8 @@ static Thread_Control *_Condition_Flush_filter(
 
 static void _Condition_Wake( struct _Condition_Control *_condition, int count )
 {
-  Condition_Control       *condition;
-  Condition_Flush_context  context;
+  Condition_Control      *condition;
+  Condition_Flush_context context;
 
   condition = _Condition_Get( _condition );
   _Thread_queue_Context_initialize( &context.Base );

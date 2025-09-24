@@ -40,9 +40,9 @@
 #endif
 
 #include <rtems/score/corerwlockimpl.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/statesimpl.h>
 #include <rtems/score/watchdog.h>
 
 Status_Control _CORE_RWLock_Seize_for_reading(
@@ -96,13 +96,13 @@ Status_Control _CORE_RWLock_Seize_for_reading(
 
   _Thread_queue_Context_set_thread_state(
     queue_context,
-   STATES_WAITING_FOR_RWLOCK
+    STATES_WAITING_FOR_RWLOCK
   );
   _Thread_queue_Enqueue(
-     &the_rwlock->Queue.Queue,
-     CORE_RWLOCK_TQ_OPERATIONS,
-     executing,
-     queue_context
+    &the_rwlock->Queue.Queue,
+    CORE_RWLOCK_TQ_OPERATIONS,
+    executing,
+    queue_context
   );
   return _Thread_Wait_get_status( executing );
 }

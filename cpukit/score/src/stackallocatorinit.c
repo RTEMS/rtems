@@ -38,8 +38,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/stack.h>
 #include <rtems/config.h>
+#include <rtems/score/stack.h>
 
 void _Stack_Allocator_do_initialize( void )
 {

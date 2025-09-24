@@ -7,7 +7,8 @@
  *
  * @brief This source file contains the implementation of _Thread_Cancel(),
  *   _Thread_Change_life(), _Thread_Close(), _Thread_Exit(), _Thread_Join(),
- *   _Thread_Kill_zombies(), _Thread_Restart(), and _Thread_Set_life_protection().
+ *   _Thread_Kill_zombies(), _Thread_Restart(), and
+ *   _Thread_Set_life_protection().
  */
 
 /*
@@ -42,13 +43,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/isrlock.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
@@ -64,15 +65,15 @@ static void _Thread_Life_action_handler(
 );
 
 Thread_Zombie_registry _Thread_Zombies = {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   .Lock = ISR_LOCK_INITIALIZER( "Thread Zombies" ),
 #endif
   .Chain = CHAIN_INITIALIZER_EMPTY( _Thread_Zombies.Chain )
 };
 
 typedef struct {
-  Thread_queue_Context  Base;
-  void                 *exit_value;
+  Thread_queue_Context Base;
+  void                *exit_value;
 } Thread_Join_context;
 
 static Thread_Control *_Thread_Join_flush_filter(
@@ -122,7 +123,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
 {
   Thread_Information *information;
 
-#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+#if defined( RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT )
   if ( _Thread_Owns_resources( the_thread ) ) {
     _Internal_error( INTERNAL_ERROR_RESOURCE_IN_USE );
   }
@@ -146,7 +147,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
 
 static void _Thread_Wait_for_execution_stop( const Thread_Control *the_thread )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /*
    * It is very unlikely that we see an executing thread here.  It can happen
    * in case the thread termination sequence is interrupted by a slow interrupt
@@ -190,10 +191,10 @@ void _Thread_Kill_zombies( void )
 }
 
 static Thread_Life_state _Thread_Change_life_locked(
-  Thread_Control    *the_thread,
-  Thread_Life_state  life_states_to_clear,
-  Thread_Life_state  life_states_to_set,
-  Thread_Life_state  ignored_life_states
+  Thread_Control   *the_thread,
+  Thread_Life_state life_states_to_clear,
+  Thread_Life_state life_states_to_set,
+  Thread_Life_state ignored_life_states
 )
 {
   Thread_Life_state previous;
@@ -208,8 +209,7 @@ static Thread_Life_state _Thread_Change_life_locked(
   state &= ~ignored_life_states;
 
   if (
-    _Thread_Is_life_change_allowed( state )
-      && _Thread_Is_life_changing( state )
+    _Thread_Is_life_change_allowed( state ) && _Thread_Is_life_changing( state )
   ) {
     _Thread_Add_post_switch_action(
       the_thread,
@@ -231,8 +231,8 @@ static Per_CPU_Control *_Thread_Wait_for_join(
   _Thread_State_acquire( executing, &lock_context );
 
   if (
-    _Thread_Is_joinable( executing )
-      && _Thread_queue_Is_empty( &executing->Join_queue.Queue )
+    _Thread_Is_joinable( executing ) &&
+    _Thread_queue_Is_empty( &executing->Join_queue.Queue )
   ) {
     _Thread_Set_state_locked( executing, STATES_WAITING_FOR_JOIN_AT_EXIT );
     _Thread_State_release( executing, &lock_context );
@@ -254,8 +254,8 @@ void _Thread_Life_action_handler(
   ISR_lock_Context *lock_context
 )
 {
-  Thread_Life_state  previous_life_state;
-  Per_CPU_Control   *cpu_self;
+  Thread_Life_state previous_life_state;
+  Per_CPU_Control  *cpu_self;
 
   (void) action;
 
@@ -292,9 +292,9 @@ void _Thread_Life_action_handler(
    * may have set STATES_LIFE_IS_CHANGING.
    */
   _Assert(
-    executing->current_state == STATES_READY
-      || executing->current_state == STATES_SUSPENDED
-      || executing->current_state == STATES_LIFE_IS_CHANGING
+    executing->current_state == STATES_READY ||
+    executing->current_state == STATES_SUSPENDED ||
+    executing->current_state == STATES_LIFE_IS_CHANGING
   );
 
   _Thread_Change_life_locked(
@@ -356,8 +356,8 @@ static void _Thread_Remove_life_change_request( Thread_Control *the_thread )
      */
     _Thread_Clear_state_locked(
       the_thread,
-      STATES_LIFE_IS_CHANGING | STATES_SUSPENDED
-        | ( STATES_BLOCKED & ~STATES_LOCALLY_BLOCKED )
+      STATES_LIFE_IS_CHANGING | STATES_SUSPENDED |
+        ( STATES_BLOCKED & ~STATES_LOCALLY_BLOCKED )
     );
   }
 
@@ -414,9 +414,9 @@ static void _Thread_Set_exit_value(
 }
 
 static void _Thread_Try_life_change_request(
-  Thread_Control    *the_thread,
-  Thread_Life_state  previous,
-  ISR_lock_Context  *lock_context
+  Thread_Control   *the_thread,
+  Thread_Life_state previous,
+  ISR_lock_Context *lock_context
 )
 {
   if ( _Thread_Is_life_change_allowed( previous ) ) {
@@ -499,8 +499,8 @@ Status_Control _Thread_Close(
 }
 
 RTEMS_NO_RETURN void _Thread_Exit(
-  void              *exit_value,
-  Thread_Life_state  life_states_to_set
+  void             *exit_value,
+  Thread_Life_state life_states_to_set
 )
 {
   Per_CPU_Control *cpu_self;
@@ -515,8 +515,8 @@ RTEMS_NO_RETURN void _Thread_Exit(
     _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
   );
   _Assert(
-    executing->current_state == STATES_READY
-      || executing->current_state == STATES_SUSPENDED
+    executing->current_state == STATES_READY ||
+    executing->current_state == STATES_SUSPENDED
   );
 
   _Thread_State_acquire_critical( executing, &lock_context );
@@ -553,8 +553,9 @@ Status_Control _Thread_Restart(
   }
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  is_self_restart = ( the_thread == _Per_CPU_Get_executing( cpu_self ) &&
-    !_Per_CPU_Is_ISR_in_progress( cpu_self ) );
+  is_self_restart =
+    ( the_thread == _Per_CPU_Get_executing( cpu_self ) &&
+      !_Per_CPU_Is_ISR_in_progress( cpu_self ) );
 
   if ( is_self_restart ) {
     ignored_life_states = THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED;
@@ -600,10 +601,10 @@ Thread_Life_state _Thread_Change_life(
   Thread_Life_state ignored_life_states
 )
 {
-  ISR_lock_Context   lock_context;
-  Thread_Control    *executing;
-  Per_CPU_Control   *cpu_self;
-  Thread_Life_state  previous;
+  ISR_lock_Context  lock_context;
+  Thread_Control   *executing;
+  Per_CPU_Control  *cpu_self;
+  Thread_Life_state previous;
 
   executing = _Thread_State_acquire_for_executing( &lock_context );
 

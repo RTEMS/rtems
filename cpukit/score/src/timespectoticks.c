@@ -39,36 +39,36 @@
 #include "config.h"
 #endif
 
+#include <rtems/config.h>
 #include <rtems/score/timespec.h>
 #include <rtems/score/todimpl.h>
-#include <rtems/config.h>
 
 /**
  *
  *  This routines converts a timespec to the corresponding number of ticks.
  */
 
-uint32_t _Timespec_To_ticks(
-  const struct timespec *time
-)
+uint32_t _Timespec_To_ticks( const struct timespec *time )
 {
-  uint32_t  ticks;
-  uint32_t  nanoseconds_per_tick;
+  uint32_t ticks;
+  uint32_t nanoseconds_per_tick;
 
-  if ( (time->tv_sec == 0) && (time->tv_nsec == 0) )
+  if ( ( time->tv_sec == 0 ) && ( time->tv_nsec == 0 ) ) {
     return 0;
+  }
 
   /**
    *  We should ensure the ticks not be truncated by integer division.  We
    *  need to have it be greater than or equal to the requested time.  It
    *  should not be shorter.
    */
-  ticks                 = time->tv_sec * TOD_TICKS_PER_SECOND;
-  nanoseconds_per_tick  = rtems_configuration_get_nanoseconds_per_tick();
-  ticks                += time->tv_nsec / nanoseconds_per_tick;
+  ticks = time->tv_sec * TOD_TICKS_PER_SECOND;
+  nanoseconds_per_tick = rtems_configuration_get_nanoseconds_per_tick();
+  ticks += time->tv_nsec / nanoseconds_per_tick;
 
-  if ( (time->tv_nsec % nanoseconds_per_tick) != 0 )
+  if ( ( time->tv_nsec % nanoseconds_per_tick ) != 0 ) {
     ticks += 1;
+  }
 
   return ticks;
 }

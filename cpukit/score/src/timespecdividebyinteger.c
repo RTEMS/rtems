@@ -54,7 +54,7 @@ void _Timespec_Divide_by_integer(
    *  For math simplicity just convert the timespec to nanoseconds
    *  in a 64-bit integer.
    */
-  t  = time->tv_sec;
+  t = time->tv_sec;
   t *= TOD_NANOSECONDS_PER_SECOND;
   t += time->tv_nsec;
 
@@ -68,6 +68,6 @@ void _Timespec_Divide_by_integer(
    *  Put it back in the timespec result
    */
 
-  result->tv_sec  = t / TOD_NANOSECONDS_PER_SECOND;
+  result->tv_sec = t / TOD_NANOSECONDS_PER_SECOND;
   result->tv_nsec = t % TOD_NANOSECONDS_PER_SECOND;
 }

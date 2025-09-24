@@ -50,7 +50,7 @@ void _RBTree_Replace_node(
   RBTree_Node **link;
   RBTree_Node  *child;
 
-  if (parent != NULL) {
+  if ( parent != NULL ) {
     if ( victim == _RBTree_Left( parent ) ) {
       link = _RBTree_Left_reference( parent );
     } else {

@@ -46,8 +46,9 @@ void _API_Mutex_Lock( API_Mutex_Control *the_mutex )
 {
   Thread_Life_state previous_thread_life_state;
 
-  previous_thread_life_state =
-    _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
+  previous_thread_life_state = _Thread_Set_life_protection(
+    THREAD_LIFE_PROTECTED
+  );
 
   _Mutex_recursive_Acquire( &the_mutex->Mutex );
 

@@ -38,8 +38,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/smpimpl.h>
 
 typedef struct {
   Per_CPU_Job_context Context;

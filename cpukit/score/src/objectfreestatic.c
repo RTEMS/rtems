@@ -38,8 +38,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/objectdata.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/objectdata.h>
 
 void _Objects_Free_static(
   Objects_Information *information,

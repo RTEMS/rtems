@@ -57,7 +57,6 @@ void _CORE_message_queue_Close(
   Thread_queue_Context       *queue_context
 )
 {
-
   /*
    *  This will flush blocked threads whether they were blocked on
    *  a send or receive.

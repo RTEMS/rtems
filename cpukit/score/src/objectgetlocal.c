@@ -61,8 +61,8 @@ Objects_Control *_Objects_Get(
     _ISR_Local_disable( level );
     _ISR_lock_Context_set_level( lock_context, level );
 
-    the_object =
-      information->local_table[ end - OBJECTS_INDEX_MINIMUM - delta ];
+    the_object = information
+                   ->local_table[ end - OBJECTS_INDEX_MINIMUM - delta ];
     if ( RTEMS_PREDICT_TRUE( the_object != NULL ) ) {
       /* ISR disabled on behalf of caller */
       return the_object;

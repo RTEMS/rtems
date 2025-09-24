@@ -38,8 +38,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadqimpl.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 #include <string.h>
 

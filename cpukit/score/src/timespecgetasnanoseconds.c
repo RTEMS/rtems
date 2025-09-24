@@ -41,9 +41,7 @@
 #include <rtems/score/timespec.h>
 #include <rtems/score/todimpl.h>
 
-uint64_t _Timespec_Get_as_nanoseconds(
-  const struct timespec *time
-)
+uint64_t _Timespec_Get_as_nanoseconds( const struct timespec *time )
 {
-  return ( ((uint64_t) time->tv_sec) * 1000000000ULL ) + time->tv_nsec;
+  return ( ( (uint64_t) time->tv_sec ) * 1000000000ULL ) + time->tv_nsec;
 }

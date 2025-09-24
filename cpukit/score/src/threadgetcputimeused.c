@@ -38,28 +38,24 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/threadimpl.h>
 
 static bool _Thread_Is_scheduled( const Thread_Control *the_thread )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return the_thread->Scheduler.state == THREAD_SCHEDULER_SCHEDULED;
 #else
   return _Thread_Is_executing( the_thread );
 #endif
 }
 
-Timestamp_Control _Thread_Get_CPU_time_used_locked(
-  Thread_Control *the_thread
-)
+Timestamp_Control _Thread_Get_CPU_time_used_locked( Thread_Control *the_thread )
 {
   _Assert( _Thread_State_is_owner( the_thread ) );
-  _Assert(
-    _ISR_lock_Is_owner(
-      &_Scheduler_Get_context( _Thread_Scheduler_get_home( the_thread ) )->Lock
-    )
-  );
+  _Assert( _ISR_lock_Is_owner(
+    &_Scheduler_Get_context( _Thread_Scheduler_get_home( the_thread ) )->Lock
+  ) );
 
   if ( _Thread_Is_scheduled( the_thread ) ) {
     _Thread_Update_CPU_time_used( the_thread, _Thread_Get_CPU( the_thread ) );

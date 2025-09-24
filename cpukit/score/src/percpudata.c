@@ -38,27 +38,27 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/percpudata.h>
+#include <rtems/config.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/memory.h>
-#include <rtems/config.h>
+#include <rtems/score/percpudata.h>
 #include <rtems/sysinit.h>
 
 #include <string.h>
 
 RTEMS_LINKER_RWSET(
   _Per_CPU_Data,
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /*
    * In SMP configurations, prevent false cache line sharing of per-processor
    * data with a proper alignment.
    */
   RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 #endif
-  char
+    char
 );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 static void _Per_CPU_Data_initialize( void )
 {
   uintptr_t size;
@@ -82,15 +82,15 @@ static void _Per_CPU_Data_initialize( void )
 
     cpu_max = rtems_configuration_get_maximum_processors();
 
-    for ( cpu_index = 1 ; cpu_index < cpu_max ; ++cpu_index ) {
+    for ( cpu_index = 1; cpu_index < cpu_max; ++cpu_index ) {
       cpu = _Per_CPU_Get_by_index( cpu_index );
       cpu->data = _Memory_Allocate( mem, size, CPU_CACHE_LINE_BYTES );
 
-      if( cpu->data == NULL ) {
+      if ( cpu->data == NULL ) {
         _Internal_error( INTERNAL_ERROR_NO_MEMORY_FOR_PER_CPU_DATA );
       }
 
-      memcpy( cpu->data, data_begin, size);
+      memcpy( cpu->data, data_begin, size );
     }
   }
 }
