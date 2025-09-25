@@ -48,6 +48,8 @@ int pthread_spin_destroy( pthread_spinlock_t *spinlock )
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock );
   _SMP_ticket_lock_Destroy( &the_spinlock->Lock );
+#else
+  (void) spinlock;
 #endif
   return 0;
 }

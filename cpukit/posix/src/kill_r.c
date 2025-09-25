@@ -56,6 +56,8 @@ int _kill_r(
   int            sig
 )
 {
+  (void) ptr;
+
   return _POSIX_signals_Send( pid, sig, NULL );
 }
 #endif

@@ -47,5 +47,7 @@ int wait(
   int   *stat_loc
 )
 {
+  (void) stat_loc;
+
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }

@@ -49,11 +49,15 @@ int pthread_spin_init(
   int                  pshared
 )
 {
+  (void) pshared;
+
 #if defined(RTEMS_SMP)
   POSIX_Spinlock_Control *the_spinlock;
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock );
   _SMP_ticket_lock_Initialize( &the_spinlock->Lock );
+#else
+  (void) spinlock;
 #endif
   return 0;
 }

@@ -50,5 +50,8 @@ int pthread_getcpuclockid(
   clockid_t   *clock_id
 )
 {
+  (void) pid;
+  (void) clock_id;
+
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }

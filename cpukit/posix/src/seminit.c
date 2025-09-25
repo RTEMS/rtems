@@ -52,6 +52,8 @@ int sem_init(
   unsigned int   value
 )
 {
+  (void) pshared;
+
   if ( sem == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }

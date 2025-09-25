@@ -51,6 +51,8 @@ static void _POSIX_Condition_variables_Mutex_unlock(
   Thread_queue_Context *queue_context
 )
 {
+  (void) queue_context;
+
   POSIX_Condition_variables_Control *the_cond;
   int                                mutex_error;
 
@@ -75,6 +77,8 @@ static void _POSIX_Condition_variables_Enqueue_no_timeout(
   Thread_queue_Context *queue_context
 )
 {
+  (void) cpu_self;
+
   _POSIX_Condition_variables_Mutex_unlock( queue, the_thread, queue_context );
 }
 
@@ -101,6 +105,8 @@ int _POSIX_Condition_variables_Wait_support(
   clockid_t                 clock_id
 )
 {
+  (void) clock_id;
+
   POSIX_Condition_variables_Control *the_cond;
   unsigned long                      flags;
   Thread_queue_Context               queue_context;

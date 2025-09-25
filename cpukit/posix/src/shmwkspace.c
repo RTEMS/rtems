@@ -106,6 +106,8 @@ void * _POSIX_Shm_Object_mmap_from_workspace(
   off_t off
 )
 {
+  (void) prot;
+
   if ( shm_obj == NULL || shm_obj->handle == NULL )
     return 0;
 
