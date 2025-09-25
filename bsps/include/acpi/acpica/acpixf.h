@@ -1390,6 +1390,11 @@ AcpiBiosWarning (
     ...))
 
 
+#ifdef __rtems__
+/* The debug output is ugly macro code which generates unused parameter warnings. */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif /* rtems */
 /*
  * Debug output
  */
@@ -1424,6 +1429,10 @@ AcpiTracePoint (
     BOOLEAN                 Begin,
     UINT8                   *Aml,
     char                    *Pathname))
+#ifdef __rtems__
+/* Reenable unused parameter warnings. */
+#pragma GCC diagnostic pop
+#endif /* rtems */
 
 ACPI_STATUS
 AcpiInitializeDebugger (
