@@ -135,6 +135,8 @@ static void CReqFlsl_Pre_Value_Prepare(
   CReqFlsl_Pre_Value state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case CReqFlsl_Pre_Value_Zero: {
       /*
@@ -162,6 +164,8 @@ static void CReqFlsl_Post_Result_Check(
   CReqFlsl_Post_Result state
 )
 {
+  (void) ctx;
+
   int    expected_result;
   long   value;
   size_t i;
@@ -198,6 +202,8 @@ static void CReqFlsl_Post_Result_Check(
 
 static void CReqFlsl_Action( CReqFlsl_Context *ctx )
 {
+  (void) ctx;
+
   /* The action is performed in the post-condition states */
 }
 

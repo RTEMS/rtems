@@ -213,6 +213,9 @@ static bool RtemsBarrierReqPerfReleaseAuto_Teardown(
   unsigned int                 retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   return tic == toc;
@@ -397,6 +400,8 @@ static void RtemsBarrierReqPerfReleaseManual_Setup(
   RtemsBarrierValPerf_Context *ctx
 )
 {
+  (void) ctx;
+
   Yield();
 }
 
@@ -439,6 +444,9 @@ static bool RtemsBarrierReqPerfReleaseManual_Teardown(
   unsigned int                 retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   return tic == toc;
@@ -545,6 +553,8 @@ static bool RtemsBarrierReqPerfReleaseManualPreempt_Teardown(
   unsigned int                 retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;

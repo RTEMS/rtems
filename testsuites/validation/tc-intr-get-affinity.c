@@ -374,6 +374,8 @@ static void RtemsIntrReqGetAffinity_Pre_CanGetAffinity_Prepare(
   RtemsIntrReqGetAffinity_Pre_CanGetAffinity state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqGetAffinity_Pre_CanGetAffinity_Yes: {
       /*
@@ -459,6 +461,8 @@ static void RtemsIntrReqGetAffinity_Post_CPUSetObj_Check(
   RtemsIntrReqGetAffinity_Post_CPUSetObj state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqGetAffinity_Post_CPUSetObj_Set: {
       /*

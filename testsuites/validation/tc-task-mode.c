@@ -1235,6 +1235,8 @@ static void RtemsTaskReqMode_Action( RtemsTaskReqMode_Context *ctx )
 
 static void RtemsTaskReqMode_Cleanup( RtemsTaskReqMode_Context *ctx )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_mode        mode;
 

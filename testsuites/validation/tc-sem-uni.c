@@ -123,6 +123,8 @@ static void ObtainReleaseMrsPTask( rtems_task_argument arg )
 
 static void RtemsSemValUni_Setup( RtemsSemValUni_Context *ctx )
 {
+  (void) ctx;
+
   SetSelfPriority( PRIO_NORMAL );
 }
 
@@ -136,6 +138,8 @@ static void RtemsSemValUni_Setup_Wrap( void *arg )
 
 static void RtemsSemValUni_Teardown( RtemsSemValUni_Context *ctx )
 {
+  (void) ctx;
+
   RestoreRunnerPriority();
 }
 

@@ -262,6 +262,8 @@ static const char * const * const RtemsTaskReqSetPriority_PreDesc[] = {
 
 static void Worker( rtems_task_argument arg )
 {
+  (void) arg;
+
   (void) ReceiveAnyEvents();
   (void) ReceiveAnyEvents();
 }
@@ -570,6 +572,8 @@ static void RtemsTaskReqSetPriority_Setup(
   RtemsTaskReqSetPriority_Context *ctx
 )
 {
+  (void) ctx;
+
   SetSelfPriority( PRIO_ULTRA_HIGH );
 }
 
@@ -586,6 +590,8 @@ static void RtemsTaskReqSetPriority_Teardown(
   RtemsTaskReqSetPriority_Context *ctx
 )
 {
+  (void) ctx;
+
   RestoreRunnerPriority();
 }
 

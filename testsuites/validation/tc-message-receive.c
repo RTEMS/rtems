@@ -905,6 +905,8 @@ static void RtemsMessageReqReceive_Pre_Storage_Prepare(
   RtemsMessageReqReceive_Pre_Storage state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsMessageReqReceive_Pre_Storage_Nop: {
       /*

@@ -310,6 +310,8 @@ static void RtemsSemReqObtain_Pre_Id_Prepare(
   RtemsSemReqObtain_Pre_Id   state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsSemReqObtain_Pre_Id_Valid: {
       /*

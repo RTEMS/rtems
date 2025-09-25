@@ -107,6 +107,9 @@ typedef RtemsTimerValTimer_Context Context;
 
 static void Timer( rtems_id timer, void *arg )
 {
+  (void) arg;
+  (void) timer;
+
   Context      *ctx;
   unsigned int *counter;
 

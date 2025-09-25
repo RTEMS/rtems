@@ -378,6 +378,8 @@ static void ScoreThreadValThread_Action_1( ScoreThreadValThread_Context *ctx )
  */
 static void ScoreThreadValThread_Action_2( ScoreThreadValThread_Context *ctx )
 {
+  (void) ctx;
+
   test_case_executed = true;
 
   /*

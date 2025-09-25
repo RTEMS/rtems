@@ -244,6 +244,8 @@ static bool RtemsEventReqPerfIsrPreempt_Teardown(
   unsigned int               retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -317,6 +319,9 @@ static bool RtemsEventReqPerfOther_Teardown(
   unsigned int               retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   SetPriority( ctx->worker_id, PRIO_HIGH );
@@ -454,6 +459,9 @@ static bool RtemsEventReqPerfOtherNotSatisfied_Teardown(
   unsigned int               retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   Send( ctx, EVENT_END );
@@ -521,6 +529,8 @@ static bool RtemsEventReqPerfOtherPreempt_Teardown(
   unsigned int               retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;

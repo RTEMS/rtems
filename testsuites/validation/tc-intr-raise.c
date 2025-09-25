@@ -379,6 +379,8 @@ static void RtemsIntrReqRaise_Pre_CanRaise_Prepare(
   RtemsIntrReqRaise_Pre_CanRaise state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqRaise_Pre_CanRaise_Yes: {
       /*
@@ -452,6 +454,8 @@ static void RtemsIntrReqRaise_Post_Pending_Check(
   RtemsIntrReqRaise_Post_Pending state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqRaise_Post_Pending_Yes: {
       /*

@@ -341,6 +341,8 @@ static void ScoreTqReqFlushPriorityInherit_Post_PriorityUpdate_Check(
   ScoreTqReqFlushPriorityInherit_Post_PriorityUpdate state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case ScoreTqReqFlushPriorityInherit_Post_PriorityUpdate_No: {
       /*

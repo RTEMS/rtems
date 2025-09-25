@@ -267,6 +267,8 @@ static void RtemsTaskReqWakeWhen_Pre_TODSet_Prepare(
   RtemsTaskReqWakeWhen_Pre_TODSet state
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_time_of_day tod;
 

@@ -465,6 +465,8 @@ static void RtemsRatemonReqGetStatus_Pre_Elapsed_Prepare(
   RtemsRatemonReqGetStatus_Pre_Elapsed state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsRatemonReqGetStatus_Pre_Elapsed_Time: {
       /*
@@ -883,6 +885,8 @@ static void RtemsRatemonReqGetStatus_Prepare(
   RtemsRatemonReqGetStatus_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code status;
   status =  rtems_rate_monotonic_create(
     rtems_build_name( 'R', 'M', 'O', 'N' ),

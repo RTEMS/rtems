@@ -387,6 +387,8 @@ static void RtemsIntrReqClear_Pre_CanClear_Prepare(
   RtemsIntrReqClear_Pre_CanClear state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqClear_Pre_CanClear_Yes: {
       /*
@@ -460,6 +462,8 @@ static void RtemsIntrReqClear_Post_Cleared_Check(
   RtemsIntrReqClear_Post_Cleared state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqClear_Post_Cleared_Yes: {
       /*

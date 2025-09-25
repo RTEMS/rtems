@@ -404,6 +404,8 @@ static void TimerServiceRoutine(
   void *user_data
 )
 {
+  (void) timer_id;
+
   RtemsTimerReqServerFireAfter_Context *ctx = user_data;
   ++( ctx->invocations );
   ctx->routine_user_data = user_data;
@@ -427,6 +429,8 @@ static void RtemsTimerReqServerFireAfter_Pre_Server_Prepare(
   RtemsTimerReqServerFireAfter_Pre_Server state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsTimerReqServerFireAfter_Pre_Server_Init: {
       /*
@@ -1009,6 +1013,8 @@ static void RtemsTimerReqServerFireAfter_Teardown(
   RtemsTimerReqServerFireAfter_Context *ctx
 )
 {
+  (void) ctx;
+
   UnsetClock();
 }
 

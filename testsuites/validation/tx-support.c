@@ -915,6 +915,8 @@ void StartDelayThreadDispatch( uint32_t cpu_index )
       &delay_thread_dispatch_job
     );
   }
+#else
+  (void) cpu_index;
 #endif
 }
 
@@ -932,6 +934,8 @@ void StopDelayThreadDispatch( uint32_t cpu_index )
     );
     _Thread_Dispatch_enable( cpu_self );
   }
+#else
+  (void) cpu_index;
 #endif
 }
 

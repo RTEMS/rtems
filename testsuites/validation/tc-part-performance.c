@@ -244,6 +244,9 @@ static bool RtemsPartReqPerfGetBuffer_Teardown(
   unsigned int              retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   rtems_status_code sc;
 
   T_quiet_rsc_success( ctx->status );
@@ -317,6 +320,9 @@ static bool RtemsPartReqPerfGetNoBuffer_Teardown(
   unsigned int              retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc( ctx->status, RTEMS_UNSATISFIED );
 
   return tic == toc;
@@ -404,6 +410,9 @@ static bool RtemsPartReqPerfReturnBuffer_Teardown(
   unsigned int              retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   return tic == toc;

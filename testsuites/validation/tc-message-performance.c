@@ -323,6 +323,9 @@ static bool RtemsMessageReqPerfReceiveTry_Teardown(
   unsigned int                 retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc( ctx->status, RTEMS_UNSATISFIED );
 
   return tic == toc;
@@ -410,6 +413,8 @@ static bool RtemsMessageReqPerfReceiveWaitForever_Teardown(
   unsigned int                 retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -506,6 +511,8 @@ static bool RtemsMessageReqPerfReceiveWaitTimed_Teardown(
   unsigned int                 retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -574,6 +581,9 @@ static bool RtemsMessageReqPerfSend_Teardown(
   unsigned int                 retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   rtems_status_code sc;
   uint32_t          count;
 
@@ -662,6 +672,9 @@ static bool RtemsMessageReqPerfSendOther_Teardown(
   unsigned int                 retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   SetPriority( ctx->worker_id, PRIO_HIGH );
@@ -858,6 +871,8 @@ static bool RtemsMessageReqPerfSendPreempt_Teardown(
   unsigned int                 retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;

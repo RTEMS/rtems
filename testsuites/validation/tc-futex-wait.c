@@ -170,6 +170,8 @@ static Context *ToContext( TQContext *tq_ctx )
 
 static Status_Control Enqueue( TQContext *tq_ctx, TQWait wait )
 {
+  (void) wait;
+
   Context *ctx;
   int      eno;
 
@@ -322,6 +324,8 @@ static void NewlibReqFutexWait_Prepare( NewlibReqFutexWait_Context *ctx )
 
 static void NewlibReqFutexWait_Action( NewlibReqFutexWait_Context *ctx )
 {
+  (void) ctx;
+
   /* The action is performed in the post-conditions. */
 }
 

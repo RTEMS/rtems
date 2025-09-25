@@ -1381,6 +1381,8 @@ static void RtemsTaskReqConstruct_Post_FloatingPoint_Check(
   RtemsTaskReqConstruct_Post_FloatingPoint state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsTaskReqConstruct_Post_FloatingPoint_Yes: {
       /*

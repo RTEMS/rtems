@@ -97,22 +97,32 @@ static RTEMS_ALIGNED( 64 ) int allocated_memory_dummy;
 
 void *basedefs_malloclike_func( size_t size )
 {
+  (void) size;
+
   return &allocated_memory_dummy;
 }
 
 void *basedefs_alloc_align_func( size_t size, void **p, size_t alignment )
 {
+  (void) size;
+  (void) alignment;
+
   *p = &allocated_memory_dummy;
   return &allocated_memory_dummy;
 }
 
 void *basedefs_alloc_size_func( size_t size )
 {
+  (void) size;
+
   return &allocated_memory_dummy;
 }
 
 void *basedefs_alloc_size_2_func( size_t size0, size_t size1 )
 {
+  (void) size0;
+  (void) size1;
+
   return &allocated_memory_dummy;
 }
 

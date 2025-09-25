@@ -363,6 +363,8 @@ static void RtemsTimerReqInitiateServer_Pre_Started_Prepare(
   RtemsTimerReqInitiateServer_Pre_Started state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsTimerReqInitiateServer_Pre_Started_Yes: {
       /*
@@ -485,6 +487,8 @@ static void RtemsTimerReqInitiateServer_Post_Started_Check(
   RtemsTimerReqInitiateServer_Post_Started state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsTimerReqInitiateServer_Post_Started_Yes: {
       /*
@@ -625,6 +629,8 @@ static void RtemsTimerReqInitiateServer_Teardown(
   RtemsTimerReqInitiateServer_Context *ctx
 )
 {
+  (void) ctx;
+
   DeleteTimerServer();
 }
 

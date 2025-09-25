@@ -378,6 +378,8 @@ static void TimerServiceRoutineA(
   void *user_data
 )
 {
+  (void) timer_id;
+
   RtemsTimerReqReset_Context *ctx =
     *(RtemsTimerReqReset_Context **) user_data;
   ++( ctx->invocations_a );
@@ -389,6 +391,8 @@ static void TimerServiceRoutineB(
   void *user_data
 )
 {
+  (void) timer_id;
+
   RtemsTimerReqReset_Context *ctx =
     *(RtemsTimerReqReset_Context **) user_data;
   ++( ctx->invocations_b );
@@ -400,6 +404,8 @@ static void RtemsTimerReqReset_Pre_Id_Prepare(
   RtemsTimerReqReset_Pre_Id   state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsTimerReqReset_Pre_Id_Valid: {
       /*
@@ -427,6 +433,8 @@ static void RtemsTimerReqReset_Pre_Context_Prepare(
   RtemsTimerReqReset_Pre_Context state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsTimerReqReset_Pre_Context_None: {
       /*
@@ -850,6 +858,8 @@ static void RtemsTimerReqReset_Post_UserData_Check(
 
 static void RtemsTimerReqReset_Setup( RtemsTimerReqReset_Context *ctx )
 {
+  (void) ctx;
+
   rtems_status_code status;
   status = rtems_timer_initiate_server(
     RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
@@ -874,6 +884,8 @@ static void RtemsTimerReqReset_Setup_Wrap( void *arg )
  */
 static void RtemsTimerReqReset_Teardown( RtemsTimerReqReset_Context *ctx )
 {
+  (void) ctx;
+
   DeleteTimerServer();
   UnsetClock();
 }

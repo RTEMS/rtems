@@ -377,6 +377,8 @@ static void RtemsClockReqGetTod_Action( RtemsClockReqGetTod_Context *ctx )
 
 static void RtemsClockReqGetTod_Cleanup( RtemsClockReqGetTod_Context *ctx )
 {
+  (void) ctx;
+
   UnsetClock();
 }
 

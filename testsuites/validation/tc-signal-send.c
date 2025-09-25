@@ -254,6 +254,8 @@ static void WorkerDone( const Context *ctx )
   if ( rtems_scheduler_get_processor_maximum() > 1 ) {
     SendEvents( ctx->runner_id, EVENT_WORKER_DONE );
   }
+#else
+  (void) ctx;
 #endif
 }
 

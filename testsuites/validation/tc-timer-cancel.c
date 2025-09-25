@@ -275,6 +275,8 @@ static void TimerServiceRoutine(
   void *user_data
 )
 {
+  (void) timer_id;
+
   RtemsTimerReqCancel_Context *ctx = user_data;
   ++( ctx->invocations );
 }
@@ -617,6 +619,8 @@ static void RtemsTimerReqCancel_Post_State_Check(
 
 static void RtemsTimerReqCancel_Setup( RtemsTimerReqCancel_Context *ctx )
 {
+  (void) ctx;
+
   rtems_status_code status;
   status = rtems_timer_initiate_server(
     RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
@@ -641,6 +645,8 @@ static void RtemsTimerReqCancel_Setup_Wrap( void *arg )
  */
 static void RtemsTimerReqCancel_Teardown( RtemsTimerReqCancel_Context *ctx )
 {
+  (void) ctx;
+
   DeleteTimerServer();
   UnsetClock();
 }

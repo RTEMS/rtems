@@ -274,6 +274,9 @@ static bool RtemsSemReqPerfMtxPiObtain_Teardown(
   unsigned int             retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   ReleaseMutex( ctx->mutex_id );
@@ -347,6 +350,9 @@ static bool RtemsSemReqPerfMtxPiRelease_Teardown(
   unsigned int             retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   return tic == toc;
@@ -430,6 +436,9 @@ static bool RtemsSemReqPerfMtxPiReleaseOne_Teardown(
   unsigned int             retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   SetSelfPriority( PRIO_NORMAL );
@@ -626,6 +635,8 @@ static bool RtemsSemReqPerfMtxPiReleasePreempt_Teardown(
   unsigned int             retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   *delta = ctx->end - ctx->begin;
@@ -696,6 +707,9 @@ static bool RtemsSemReqPerfMtxPiTry_Teardown(
   unsigned int             retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc( ctx->status, RTEMS_UNSATISFIED );
 
   return tic == toc;
@@ -787,6 +801,8 @@ static bool RtemsSemReqPerfMtxPiWaitForever_Teardown(
   unsigned int             retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   *delta = ctx->end - ctx->begin;
@@ -876,6 +892,8 @@ static bool RtemsSemReqPerfMtxPiWaitTimed_Teardown(
   unsigned int             retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   *delta = ctx->end - ctx->begin;

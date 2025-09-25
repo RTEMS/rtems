@@ -637,6 +637,8 @@ static void RtemsMessageReqBroadcast_Pre_Storage_Prepare(
   RtemsMessageReqBroadcast_Pre_Storage state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsMessageReqBroadcast_Pre_Storage_Nop: {
       /*

@@ -164,6 +164,8 @@ static Context *ToContext( TQContext *tq_ctx )
 
 static Status_Control Enqueue( TQContext *tq_ctx, TQWait wait )
 {
+  (void) wait;
+
   Context *ctx;
   int      count;
   int      eno;
@@ -205,6 +207,8 @@ static void NewlibReqFutexWake_Pre_Count_Prepare(
   NewlibReqFutexWake_Pre_Count state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case NewlibReqFutexWake_Pre_Count_NegativeOrZero: {
       /*
@@ -232,6 +236,8 @@ static void NewlibReqFutexWake_Post_Result_Check(
   NewlibReqFutexWake_Post_Result state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case NewlibReqFutexWake_Post_Result_Count: {
       /*
@@ -320,6 +326,8 @@ static void NewlibReqFutexWake_Prepare( NewlibReqFutexWake_Context *ctx )
 
 static void NewlibReqFutexWake_Action( NewlibReqFutexWake_Context *ctx )
 {
+  (void) ctx;
+
   /* The action is performed in the `Flush` post-condition `All` state. */
 }
 

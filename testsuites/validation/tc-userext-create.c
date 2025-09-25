@@ -210,6 +210,8 @@ static const char * const * const RtemsUserextReqCreate_PreDesc[] = {
 
 static rtems_status_code Create( void *arg, uint32_t *id )
 {
+  (void) arg;
+
   static const rtems_extensions_table table;
 
   return rtems_extension_create(
@@ -544,6 +546,8 @@ static inline RtemsUserextReqCreate_Entry RtemsUserextReqCreate_PopEntry(
   RtemsUserextReqCreate_Context *ctx
 )
 {
+  (void) ctx;
+
   size_t index;
 
   index = ctx->Map.index;

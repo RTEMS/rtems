@@ -786,6 +786,8 @@ static void RtemsSemReqSetPriority_Teardown(
   RtemsSemReqSetPriority_Context *ctx
 )
 {
+  (void) ctx;
+
   RestoreRunnerPriority();
 }
 

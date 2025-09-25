@@ -135,6 +135,8 @@ static T_fixture ScoreCpuValPerf_Fixture = {
  */
 static void ScoreCpuReqPerfEmpty_Body( ScoreCpuValPerf_Context *ctx )
 {
+  (void) ctx;
+
   /* No code */
 }
 
@@ -157,6 +159,10 @@ static bool ScoreCpuReqPerfEmpty_Teardown(
   unsigned int             retry
 )
 {
+  (void) ctx;
+  (void) delta;
+  (void) retry;
+
   return tic == toc;
 }
 
@@ -187,6 +193,8 @@ static bool ScoreCpuReqPerfEmpty_Teardown_Wrap(
  */
 static void ScoreCpuReqPerfNops_Body( ScoreCpuValPerf_Context *ctx )
 {
+  (void) ctx;
+
   #define NOPS_10 \
     _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
     _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
@@ -226,6 +234,10 @@ static bool ScoreCpuReqPerfNops_Teardown(
   unsigned int             retry
 )
 {
+  (void) ctx;
+  (void) delta;
+  (void) retry;
+
   return tic == toc;
 }
 

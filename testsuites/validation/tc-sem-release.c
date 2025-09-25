@@ -288,6 +288,8 @@ static void RtemsSemReqRelease_Pre_Id_Prepare(
   RtemsSemReqRelease_Pre_Id   state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsSemReqRelease_Pre_Id_Valid: {
       /*

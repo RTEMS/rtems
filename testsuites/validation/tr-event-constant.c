@@ -210,6 +210,8 @@ static void RtemsEventValEventConstant_Action_0(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   /* No action */
 
   /*
@@ -237,6 +239,8 @@ static void RtemsEventValEventConstant_Action_1(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -266,6 +270,8 @@ static void RtemsEventValEventConstant_Action_2(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -296,6 +302,8 @@ static void RtemsEventValEventConstant_Action_3(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -326,6 +334,8 @@ static void RtemsEventValEventConstant_Action_4(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -403,6 +413,8 @@ static void RtemsEventValEventConstant_Action_7(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -462,6 +474,8 @@ static void RtemsEventValEventConstant_Action_9(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -509,6 +523,8 @@ static void RtemsEventValEventConstant_Action_11(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -568,6 +584,8 @@ static void RtemsEventValEventConstant_Action_13(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -628,6 +646,8 @@ static void RtemsEventValEventConstant_Action_15(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -657,6 +677,8 @@ static void RtemsEventValEventConstant_Action_16(
   RtemsEventValEventConstant_Context *ctx
 )
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_event_set   out;
 
