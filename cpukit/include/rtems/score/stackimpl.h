@@ -112,6 +112,8 @@ static inline bool _Stack_Is_enough(
   if ( is_fp ) {
     minimum += CONTEXT_FP_SIZE;
   }
+#else
+  (void) is_fp;
 #endif
 
   return ( size >= minimum );

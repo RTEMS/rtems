@@ -598,6 +598,7 @@ static inline const Processor_mask *_Scheduler_Get_processors(
 #if defined(RTEMS_SMP)
   return &_Scheduler_Get_context( scheduler )->Processors;
 #else
+  (void) scheduler;
   return &_Processor_mask_The_one_and_only;
 #endif
 }
@@ -934,12 +935,14 @@ static inline Status_Control _Scheduler_Set(
   Priority_Control         priority
 )
 {
+#ifndef RTEMS_SMP
+   (void) new_scheduler;
+#endif
   Scheduler_Node          *new_scheduler_node;
   Scheduler_Node          *old_scheduler_node;
 #if defined(RTEMS_SMP)
   ISR_lock_Context         lock_context;
   const Scheduler_Control *old_scheduler;
-
 #endif
 
 #if defined(RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS)

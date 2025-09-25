@@ -510,6 +510,8 @@ static inline void rtems_can_queue_activate_edge(
   struct rtems_can_queue_edge *qedge
 )
 {
+  (void) input_ends;
+
   struct rtems_can_queue_ends *output_ends = qedge->output_ends;
 
   if ( qedge->edge_prio >= RTEMS_CAN_QUEUE_PRIO_NR ) {

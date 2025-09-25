@@ -1146,7 +1146,11 @@ static inline void _Thread_Save_fp( Thread_Control *executing )
 #if ( CPU_USE_DEFERRED_FP_SWITCH != TRUE )
   if ( executing->fp_context != NULL )
     _Context_Save_fp( &executing->fp_context );
+#else
+  (void) executing;
 #endif
+#else
+  (void) executing;
 #endif
 }
 
@@ -1170,6 +1174,8 @@ static inline void _Thread_Restore_fp( Thread_Control *executing )
   if ( executing->fp_context != NULL )
     _Context_Restore_fp( &executing->fp_context );
 #endif
+#else
+  (void) executing;
 #endif
 }
 
@@ -1805,6 +1811,9 @@ static inline void _Thread_Wait_acquire_default_critical(
 )
 {
   _ISR_lock_Acquire( &the_thread->Wait.Lock.Default, lock_context );
+#ifndef RTEMS_SMP
+  (void) the_thread;
+#endif
 }
 
 /**
@@ -1865,6 +1874,9 @@ static inline void _Thread_Wait_release_default_critical(
 )
 {
   _ISR_lock_Release( &the_thread->Wait.Lock.Default, lock_context );
+#ifndef RTEMS_SMP
+   (void) the_thread;
+#endif
 }
 
 /**

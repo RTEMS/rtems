@@ -160,6 +160,8 @@ static inline void _Scheduler_uniprocessor_Unblock(
   Priority_Control         priority
 )
 {
+  (void) scheduler;
+
   Thread_Control *heir;
 
   heir = _Thread_Heir;

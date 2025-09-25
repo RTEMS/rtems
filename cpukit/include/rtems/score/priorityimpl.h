@@ -306,6 +306,7 @@ static inline const Scheduler_Control *_Priority_Get_scheduler(
 #if defined(RTEMS_SMP)
   return aggregation->scheduler;
 #else
+  (void) aggregation;
   return &_Scheduler_Table[ 0 ];
 #endif
 }

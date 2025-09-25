@@ -806,6 +806,7 @@ static inline bool _Thread_queue_Is_lock_owner(
 #if defined(RTEMS_SMP)
   return the_thread_queue->owner == _SMP_lock_Who_am_I();
 #else
+  (void) the_thread_queue;
   return _ISR_Get_level() != 0;
 #endif
 }
@@ -1356,6 +1357,8 @@ static inline void _Thread_queue_Destroy(
 #if defined(RTEMS_SMP)
   _SMP_ticket_lock_Destroy( &the_thread_queue->Queue.Lock );
   _SMP_lock_Stats_destroy( &the_thread_queue->Lock_stats );
+#else
+   (void) the_thread_queue;
 #endif
 }
 

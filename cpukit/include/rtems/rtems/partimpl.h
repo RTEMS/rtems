@@ -87,6 +87,9 @@ static inline void _Partition_Acquire_critical(
 )
 {
   _ISR_lock_Acquire( &the_partition->Lock, lock_context );
+#ifndef RTEMS_SMP
+   (void) the_partition;
+#endif
 }
 
 /**
@@ -102,6 +105,9 @@ static inline void _Partition_Release(
 )
 {
   _ISR_lock_Release_and_ISR_enable( &the_partition->Lock, lock_context );
+#ifndef RTEMS_SMP
+   (void) the_partition;
+#endif
 }
 
 /**@}*/

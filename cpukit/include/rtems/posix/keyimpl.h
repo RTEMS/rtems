@@ -100,6 +100,9 @@ static inline void _POSIX_Keys_Key_value_acquire(
 )
 {
   _ISR_lock_ISR_disable_and_acquire( &the_thread->Keys.Lock, lock_context );
+#ifndef RTEMS_SMP
+   (void) the_thread;
+#endif
 }
 
 static inline void _POSIX_Keys_Key_value_release(
@@ -108,6 +111,9 @@ static inline void _POSIX_Keys_Key_value_release(
 )
 {
   _ISR_lock_Release_and_ISR_enable( &the_thread->Keys.Lock, lock_context );
+#ifndef RTEMS_SMP
+   (void) the_thread;
+#endif
 }
 
 POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_allocate( void );

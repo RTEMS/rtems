@@ -207,6 +207,9 @@ static inline void _Timer_server_Acquire_critical(
 )
 {
   _ISR_lock_Acquire( &timer_server->Lock, lock_context );
+#ifndef RTEMS_SMP
+   (void) timer_server;
+#endif
 }
 
 static inline void _Timer_server_Release_critical(
@@ -215,6 +218,9 @@ static inline void _Timer_server_Release_critical(
 )
 {
   _ISR_lock_Release( &timer_server->Lock, lock_context );
+#ifndef RTEMS_SMP
+   (void) timer_server;
+#endif
 }
 
 /**@}*/

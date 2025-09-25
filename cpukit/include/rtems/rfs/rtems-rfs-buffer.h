@@ -221,6 +221,8 @@ static inline int
 rtems_rfs_buffer_handle_open (rtems_rfs_file_system*   fs,
                               rtems_rfs_buffer_handle* handle)
 {
+  (void) fs;
+
   handle->dirty = false;
   handle->bnum  = 0;
   handle->buffer = NULL;

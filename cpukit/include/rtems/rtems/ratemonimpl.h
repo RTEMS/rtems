@@ -86,6 +86,9 @@ static inline void _Rate_monotonic_Acquire_critical(
 )
 {
   _ISR_lock_Acquire( &the_period->Lock, lock_context );
+#ifndef RTEMS_SMP
+   (void) the_period;
+#endif
 }
 
 static inline void _Rate_monotonic_Release(
@@ -94,6 +97,9 @@ static inline void _Rate_monotonic_Release(
 )
 {
   _ISR_lock_Release_and_ISR_enable( &the_period->Lock, lock_context );
+#ifndef RTEMS_SMP
+   (void) the_period;
+#endif
 }
 
 static inline Rate_monotonic_Control *_Rate_monotonic_Get(

@@ -272,6 +272,7 @@ static inline const Scheduler_Control *_POSIX_Mutex_Get_scheduler(
 #if defined(RTEMS_SMP)
   return the_mutex->scheduler;
 #else
+   (void) the_mutex;
   return &_Scheduler_Table[ 0 ];
 #endif
 }

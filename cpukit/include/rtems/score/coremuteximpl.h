@@ -349,6 +349,8 @@ static inline void _CORE_ceiling_mutex_Initialize(
   _Priority_Node_initialize( &the_mutex->Priority_ceiling, priority_ceiling );
 #if defined(RTEMS_SMP)
   the_mutex->scheduler = scheduler;
+#else
+  (void) scheduler;
 #endif
 }
 
@@ -367,6 +369,7 @@ _CORE_ceiling_mutex_Get_scheduler(
 #if defined(RTEMS_SMP)
   return the_mutex->scheduler;
 #else
+  (void) the_mutex;
   return &_Scheduler_Table[ 0 ];
 #endif
 }

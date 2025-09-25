@@ -147,6 +147,8 @@ static inline qos_rv qres_attach_thread (
   tid_t      task_id
 )
 {
+  (void) pid;
+
   return _Scheduler_CBS_Attach_thread( server_id, task_id );
 }
 
@@ -163,6 +165,8 @@ static inline qos_rv qres_detach_thread (
   tid_t      task_id
 )
 {
+  (void) pid;
+
   return _Scheduler_CBS_Detach_thread( server_id, task_id );
 }
 
@@ -194,6 +198,8 @@ static inline qos_rv qres_get_sid (
   qres_sid_t *server_id
 )
 {
+  (void) pid;
+
   return _Scheduler_CBS_Get_server_id( task_id, server_id );
 }
 

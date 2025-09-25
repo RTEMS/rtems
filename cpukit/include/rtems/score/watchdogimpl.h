@@ -198,6 +198,7 @@ static inline Per_CPU_Control *_Watchdog_Get_CPU(
 #if defined(RTEMS_SMP)
   return the_watchdog->cpu;
 #else
+  (void) the_watchdog;
   return _Per_CPU_Get_by_index( 0 );
 #endif
 }
@@ -216,6 +217,7 @@ static inline void _Watchdog_Set_CPU(
 #if defined(RTEMS_SMP)
   the_watchdog->cpu = cpu;
 #else
+  (void) the_watchdog;
   (void) cpu;
 #endif
 }
@@ -614,6 +616,9 @@ static inline void _Watchdog_Per_CPU_acquire_critical(
 )
 {
   _ISR_lock_Acquire( &cpu->Watchdog.Lock, lock_context );
+#ifndef RTEMS_SMP
+   (void) cpu;
+#endif
 }
 
 /**
@@ -628,6 +633,9 @@ static inline void _Watchdog_Per_CPU_release_critical(
 )
 {
   _ISR_lock_Release( &cpu->Watchdog.Lock, lock_context );
+#ifndef RTEMS_SMP
+   (void) cpu;
+#endif
 }
 
 /**
