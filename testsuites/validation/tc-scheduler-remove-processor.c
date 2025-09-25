@@ -948,7 +948,7 @@ static void RtemsSchedulerReqRemoveProcessor_Setup(
   RtemsSchedulerReqRemoveProcessor_Context *ctx
 )
 {
-  #if defined(RTEMS_SMP)
+#if defined(RTEMS_SMP)
   rtems_status_code   sc;
   rtems_task_priority priority;
 
@@ -1001,7 +1001,9 @@ static void RtemsSchedulerReqRemoveProcessor_Setup(
   StartTask( ctx->worker_id[ WORKER_B ], WorkerB, ctx );
 
   WrapThreadQueueInitialize( &ctx->wrap_tq_ctx, RequestISR, ctx );
-  #endif
+#else
+  (void) ctx;
+#endif
 }
 
 static void RtemsSchedulerReqRemoveProcessor_Setup_Wrap( void *arg )
@@ -1017,7 +1019,7 @@ static void RtemsSchedulerReqRemoveProcessor_Teardown(
   RtemsSchedulerReqRemoveProcessor_Context *ctx
 )
 {
-  #if defined(RTEMS_SMP)
+#if defined(RTEMS_SMP)
   DeleteTask( ctx->worker_id[ WORKER_A ] );
   DeleteTask( ctx->worker_id[ WORKER_B ] );
   DeleteTask( ctx->worker_id[ WORKER_C ] );
@@ -1031,7 +1033,9 @@ static void RtemsSchedulerReqRemoveProcessor_Teardown(
 
   RestoreRunnerPriority();
   SetSelfAffinityAll();
-  #endif
+#else
+  (void) ctx;
+#endif
 }
 
 static void RtemsSchedulerReqRemoveProcessor_Teardown_Wrap( void *arg )

@@ -264,6 +264,8 @@ static void ScoreSemReqSeizeWait_Post_Timer_Check(
   ScoreSemReqSeizeWait_Post_Timer state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case ScoreSemReqSeizeWait_Post_Timer_Optional: {
       /*
@@ -303,6 +305,8 @@ static void ScoreSemReqSeizeWait_Prepare( ScoreSemReqSeizeWait_Context *ctx )
 
 static void ScoreSemReqSeizeWait_Action( ScoreSemReqSeizeWait_Context *ctx )
 {
+  (void) ctx;
+
   /* Action performed by Status post-condition */
 }
 

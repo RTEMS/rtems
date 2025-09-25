@@ -523,6 +523,8 @@ RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
   static void compiler_no_return_attribute_func( int i );
 static void compiler_no_return_attribute_func( int i )
 {
+  (void) i;
+
   while ( true ) {
     /* Loop forever */
   }
@@ -570,6 +572,8 @@ RTEMS_NO_INLINE static int no_inline_func( void )
 
 RTEMS_NO_RETURN static void no_return_func( int i )
 {
+  (void) i;
+
   while ( true ) {
     /* Loop forever */
   }

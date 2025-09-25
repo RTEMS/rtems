@@ -275,6 +275,8 @@ static void TickTheClock(
   uint32_t ticks
 )
 {
+  (void) ctx;
+
   uint32_t i;
   for ( i = 0; i < ticks; ++i ) {
     TimecounterTick();
@@ -576,6 +578,8 @@ static void RtemsRatemonReqCancel_Post_Scheduler_Check(
   RtemsRatemonReqCancel_Post_Scheduler state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsRatemonReqCancel_Post_Scheduler_Called: {
       /*

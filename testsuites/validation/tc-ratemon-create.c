@@ -190,6 +190,8 @@ static const char * const * const RtemsRatemonReqCreate_PreDesc[] = {
 
 static rtems_status_code Create( void *arg, uint32_t *id )
 {
+  (void) arg;
+
   return rtems_rate_monotonic_create(
     rtems_build_name( 'S', 'I', 'Z', 'E' ),
     id

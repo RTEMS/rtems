@@ -343,6 +343,8 @@ static void RtemsIntrReqSetPriority_Action(
   RtemsIntrReqSetPriority_Context *ctx
 )
 {
+  (void) ctx;
+
   /* Action carried out by CheckSetPriority() */
 }
 

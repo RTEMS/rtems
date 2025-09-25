@@ -171,6 +171,8 @@ static void *ShutdownIdleBody( uintptr_t arg )
 
   return _CPU_Thread_Idle_body( arg );
 #else
+  (void) arg;
+
   rtems_test_begin( rtems_test_name, TEST_STATE );
   rtems_fatal( RTEMS_FATAL_SOURCE_APPLICATION, 123 );
 #endif

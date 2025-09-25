@@ -204,6 +204,8 @@ static void ScoreTqReqEnqueueDeadlock_Post_Result_Check(
   ScoreTqReqEnqueueDeadlock_Post_Result state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case ScoreTqReqEnqueueDeadlock_Post_Result_Status: {
       /*

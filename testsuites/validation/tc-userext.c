@@ -548,11 +548,15 @@ void *IdleBody( uintptr_t arg )
 
 static void RtemsUserextValUserext_Setup( void *ctx )
 {
+  (void) ctx;
+
   SetSelfPriority( PRIO_NORMAL );
 }
 
 static void RtemsUserextValUserext_Teardown( void *ctx )
 {
+  (void) ctx;
+
   RestoreRunnerPriority();
 }
 

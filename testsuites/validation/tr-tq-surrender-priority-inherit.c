@@ -588,6 +588,8 @@ static void SetupSticky( Context *ctx )
   );
   TQSetPriority( ctx->tq_ctx, NEW_OWNER_NEW_HELPER, PRIO_VERY_HIGH );
   TQSetPriority( ctx->tq_ctx, PREV_OWNER, PRIO_NORMAL );
+#else
+  (void) ctx;
 #endif
 }
 
@@ -675,6 +677,8 @@ static void ActionSticky( Context *ctx )
     ctx->tq_ctx->worker_tcb[ NEW_OWNER ]
   );
   ctx->priority_after = TQGetPriority( ctx->tq_ctx, PREV_OWNER );
+#else
+  (void) ctx;
 #endif
 }
 
@@ -729,6 +733,8 @@ static void CleanupSticky( Context *ctx )
   }
 
   T_eq_u32( rtems_scheduler_get_processor(), 0 );
+#else
+  (void) ctx;
 #endif
 }
 
@@ -976,6 +982,8 @@ static void ScoreTqReqSurrenderPriorityInherit_Post_Dequeue_Check(
   ScoreTqReqSurrenderPriorityInherit_Post_Dequeue state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case ScoreTqReqSurrenderPriorityInherit_Post_Dequeue_Priority: {
       /*
@@ -1280,6 +1288,8 @@ static void ScoreTqReqSurrenderPriorityInherit_Teardown(
   ScoreTqReqSurrenderPriorityInherit_Context *ctx
 )
 {
+  (void) ctx;
+
   SetSelfScheduler( SCHEDULER_A_ID, PRIO_NORMAL );
 }
 

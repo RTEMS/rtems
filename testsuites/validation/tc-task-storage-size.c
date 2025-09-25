@@ -176,6 +176,8 @@ static const char * const * const RtemsTaskReqStorageSize_PreDesc[] = {
 
 static void Worker( rtems_task_argument arg )
 {
+  (void) arg;
+
   while ( true ) {
     /* Do nothing */
   }

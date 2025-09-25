@@ -259,6 +259,8 @@ static void Worker( rtems_task_argument arg )
 
 static rtems_status_code Create( void *arg, uint32_t *id )
 {
+  (void) arg;
+
   return rtems_barrier_create(
     rtems_build_name( 'S', 'I', 'Z', 'E' ),
     RTEMS_DEFAULT_ATTRIBUTES,

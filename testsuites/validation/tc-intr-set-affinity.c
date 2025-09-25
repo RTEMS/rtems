@@ -466,6 +466,8 @@ static void RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Prepare(
   RtemsIntrReqSetAffinity_Pre_CanSetAffinity state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Yes: {
       /*
@@ -551,6 +553,8 @@ static void RtemsIntrReqSetAffinity_Post_SetAffinity_Check(
   RtemsIntrReqSetAffinity_Post_SetAffinity state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqSetAffinity_Post_SetAffinity_Set: {
       /*

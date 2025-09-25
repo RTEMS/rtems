@@ -370,6 +370,9 @@ static void CheckForNoMessage(
 )
 {
   (void) ctx;
+  (void) message_buffer;
+  (void) message_size;
+
   T_rsc( status, RTEMS_UNSATISFIED  );
 }
 
@@ -459,7 +462,9 @@ static void PopMessage(
 }
 
 static void CheckForNoMessageInQueue( void *ctx_in )
-{}
+{
+  (void) ctx_in;
+}
 
 static void CheckForOneMessageInQueue( void *ctx_in )
 {
@@ -714,6 +719,8 @@ static void RtemsMessageReqUrgentSend_Pre_Storage_Prepare(
   RtemsMessageReqUrgentSend_Pre_Storage state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsMessageReqUrgentSend_Pre_Storage_Nop: {
       /*

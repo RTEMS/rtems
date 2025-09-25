@@ -207,6 +207,8 @@ static const char * const * const RtemsTimerReqCreate_PreDesc[] = {
 
 static rtems_status_code Create( void *arg, uint32_t *id )
 {
+  (void) arg;
+
   return rtems_timer_create( rtems_build_name( 'S', 'I', 'Z', 'E' ), id );
 }
 
@@ -215,6 +217,8 @@ static void RtemsTimerReqCreate_Pre_Name_Prepare(
   RtemsTimerReqCreate_Pre_Name state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsTimerReqCreate_Pre_Name_Valid: {
       /*

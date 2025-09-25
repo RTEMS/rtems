@@ -541,6 +541,8 @@ static void RtemsMessageReqFlushPending_Pre_Storage_Prepare(
   RtemsMessageReqFlushPending_Pre_Storage state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsMessageReqFlushPending_Pre_Storage_Nop: {
       /*

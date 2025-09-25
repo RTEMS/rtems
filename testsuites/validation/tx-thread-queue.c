@@ -64,6 +64,9 @@ void TQWaitForEventsReceived( const TQContext *ctx, TQWorkerKind worker )
   while ( !ctx->event_received[ worker ] ) {
     /* Wait */
   }
+#else
+  (void) ctx;
+  (void) worker;
 #endif
 }
 
@@ -71,6 +74,9 @@ void TQWaitForExecutionStop( const TQContext *ctx, TQWorkerKind worker )
 {
 #if defined( RTEMS_SMP )
   WaitForExecutionStop( ctx->worker_id[ worker ] );
+#else
+  (void) ctx;
+  (void) worker;
 #endif
 }
 

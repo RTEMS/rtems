@@ -780,6 +780,8 @@ static void RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare(
   RtemsIntrReqEntryRemove_Pre_CanDisable state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Pre_CanDisable_Yes: {
       /*

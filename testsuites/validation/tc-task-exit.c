@@ -412,6 +412,9 @@ static void ThreadDelete( rtems_tcb *executing, rtems_tcb *deleted )
 
 static void ThreadRestart( rtems_tcb *executing, rtems_tcb *restarted )
 {
+  (void) executing;
+  (void) restarted;
+
   Context *ctx;
 
   ctx = T_fixture_context();

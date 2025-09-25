@@ -412,6 +412,8 @@ static void RtemsIntrReqIsPending_Pre_IsPending_Prepare(
   RtemsIntrReqIsPending_Pre_IsPending state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqIsPending_Pre_IsPending_Yes: {
       /*

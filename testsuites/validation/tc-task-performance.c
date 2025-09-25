@@ -189,6 +189,8 @@ static void RtemsTaskValPerf_Setup_Context( RtemsTaskValPerf_Context *ctx )
  */
 static void RtemsTaskValPerf_Setup( RtemsTaskValPerf_Context *ctx )
 {
+  (void) ctx;
+
   SetSelfPriority( PRIO_NORMAL );
 }
 
@@ -206,6 +208,8 @@ static void RtemsTaskValPerf_Setup_Wrap( void *arg )
  */
 static void RtemsTaskValPerf_Teardown( RtemsTaskValPerf_Context *ctx )
 {
+  (void) ctx;
+
   RestoreRunnerPriority();
 }
 
@@ -258,6 +262,9 @@ static bool RtemsTaskReqPerfConstruct_Teardown(
   unsigned int              retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   DeleteTask( ctx->worker_id );
@@ -327,6 +334,9 @@ static bool RtemsTaskReqPerfRestart_Teardown(
   unsigned int              retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   return tic == toc;
@@ -408,6 +418,8 @@ static bool RtemsTaskReqPerfRestartPreempt_Teardown(
   unsigned int              retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -492,6 +504,8 @@ static bool RtemsTaskReqPerfRestartSelf_Teardown(
   unsigned int              retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -656,6 +670,9 @@ static bool RtemsTaskReqPerfSetSchedulerNop_Teardown(
   unsigned int              retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   return tic == toc;
@@ -958,6 +975,9 @@ static bool RtemsTaskReqPerfStart_Teardown(
   unsigned int              retry
 )
 {
+  (void) delta;
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   DeleteTask( ctx->worker_id );
@@ -1037,6 +1057,8 @@ static bool RtemsTaskReqPerfStartPreempt_Teardown(
   unsigned int              retry
 )
 {
+  (void) retry;
+
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;

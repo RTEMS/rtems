@@ -389,6 +389,8 @@ static bool IntendsToBlockForEvent( Context *ctx, Thread_Wait_flags flags )
 
 static bool IsReady( Context *ctx, Thread_Wait_flags flags )
 {
+  (void) ctx;
+
   return flags == THREAD_WAIT_STATE_READY;
 }
 

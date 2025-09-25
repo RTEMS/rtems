@@ -774,6 +774,8 @@ static void RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare(
   RtemsIntrReqEntryInstall_Pre_CanEnable state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqEntryInstall_Pre_CanEnable_Yes: {
       /*

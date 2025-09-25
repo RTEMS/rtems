@@ -352,6 +352,8 @@ static void RtemsSemReqFlush_Pre_Id_Prepare(
   RtemsSemReqFlush_Pre_Id   state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsSemReqFlush_Pre_Id_Valid: {
       /*

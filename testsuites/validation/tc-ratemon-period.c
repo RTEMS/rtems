@@ -884,6 +884,8 @@ static void RtemsRatemonReqPeriod_Post_Scheduler_Check(
   RtemsRatemonReqPeriod_Post_Scheduler state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsRatemonReqPeriod_Post_Scheduler_Called: {
       /*

@@ -233,6 +233,8 @@ static rtems_timer_service_routine _TOD_timer_routine(
   void      *user_data
 )
 {
+  (void) timer_id;
+
   Context *ctx = user_data;
   rtems_status_code status;
   ++ctx->timer_routine_counter;

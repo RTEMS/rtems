@@ -789,6 +789,8 @@ static void RtemsRatemonReqTimeout_Cleanup(
   RtemsRatemonReqTimeout_Context *ctx
 )
 {
+  (void) ctx;
+
   ClockTick();
   Yield();
 }

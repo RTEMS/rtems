@@ -402,6 +402,8 @@ static void RtemsIntrReqVectorEnable_Pre_IsEnabled_Prepare(
   RtemsIntrReqVectorEnable_Pre_IsEnabled state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqVectorEnable_Pre_IsEnabled_Yes: {
       /*
@@ -437,6 +439,8 @@ static void RtemsIntrReqVectorEnable_Pre_CanEnable_Prepare(
   RtemsIntrReqVectorEnable_Pre_CanEnable state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqVectorEnable_Pre_CanEnable_Yes: {
       /*
@@ -528,6 +532,8 @@ static void RtemsIntrReqVectorEnable_Post_IsEnabled_Check(
   RtemsIntrReqVectorEnable_Post_IsEnabled state
 )
 {
+  (void) ctx;
+
   switch ( state ) {
     case RtemsIntrReqVectorEnable_Post_IsEnabled_Nop: {
       /*

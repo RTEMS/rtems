@@ -401,6 +401,8 @@ static void RtemsIntrReqGetPriority_Action(
   RtemsIntrReqGetPriority_Context *ctx
 )
 {
+  (void) ctx;
+
   /* Action carried out by CheckGetPriority() */
 }
 
