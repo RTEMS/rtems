@@ -1,5 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtems_fdt
+ *
+ * @brief RTEMS Flattened Device Tree Shell Command
+ *
+ * Command to play with the memory in a FDT.
+ */
+
 /*
  *  COPYRIGHT (c) 2013-2017 Chris Johns <chrisj@rtems.org>
  *
@@ -23,15 +33,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-/**
- * @file
- *
- * @ingroup rtems_fdt
- *
- * @brief RTEMS Flattened Device Tree Shell Command
- *
- * Command to play with the memory in a FDT.
  */
 
 #include <ctype.h>
