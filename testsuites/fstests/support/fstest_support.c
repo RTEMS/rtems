@@ -83,6 +83,8 @@ static void break_out_of_chroot(void)
 rtems_task Init(
     rtems_task_argument ignored)
 {
+  (void) ignored;
+
   int rc=0;
 
   rtems_test_begin(rtems_test_name, rtems_test_state);

@@ -47,4 +47,6 @@ void benchmark_timer_empty_operation(
   void  *argument
 )
 {
+  (void) iteration;
+  (void) argument;
 }

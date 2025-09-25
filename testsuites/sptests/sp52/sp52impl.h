@@ -70,6 +70,9 @@ static rtems_timer_service_routine TIMER_service_routine(
   void     *user_data
 )
 {
+  (void) ignored_id;
+  (void) user_data;
+
   rtems_status_code status;
   rtems_time_of_day now;
 
@@ -86,6 +89,8 @@ static rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   rtems_id          timer_id;
   rtems_name        timer_name;

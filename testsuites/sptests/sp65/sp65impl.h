@@ -62,6 +62,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   int                  status;
   rtems_id             Mutex_id, Task_id;
 

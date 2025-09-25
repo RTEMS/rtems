@@ -83,6 +83,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   rtems_id          task_id;
 
@@ -109,6 +111,8 @@ rtems_task test_init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code   status;
   int                 index;
   rtems_id            task_id;
@@ -165,6 +169,8 @@ rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   (void) rtems_semaphore_obtain(
     Semaphore_id,
     RTEMS_DEFAULT_OPTIONS,
@@ -178,6 +184,8 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   (void) rtems_semaphore_obtain(
     Semaphore_id,
     RTEMS_DEFAULT_OPTIONS,

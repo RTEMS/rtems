@@ -85,6 +85,10 @@ void Signal_handler(
   void      *arg
 )
 {
+  (void) signo;
+  (void) info;
+  (void) arg;
+
   Signal_occurred = true;
   Signal_thread   = pthread_self();
 }
@@ -171,6 +175,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int                 sc;
   pthread_t           id;
   struct sigaction    act;

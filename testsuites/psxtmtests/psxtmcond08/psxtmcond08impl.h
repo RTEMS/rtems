@@ -81,6 +81,8 @@ void *Low(
   void *argument
 )
 {
+  (void) argument;
+
   uint32_t end_time;
 
   end_time = benchmark_timer_read();
@@ -103,8 +105,9 @@ void *Middle(
   void *argument
 )
 {
-  int             rc;
+  (void) argument;
 
+  int             rc;
 
   rc = pthread_mutex_lock(&MutexID);
   rtems_test_assert( rc == 0 );
@@ -170,6 +173,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int             i;
   int             status;
   pthread_t       threadId;
@@ -226,4 +231,4 @@ void *POSIX_Init(
 
 #include <rtems/confdefs.h>
   /* end of file */
-  
+

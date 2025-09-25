@@ -85,6 +85,8 @@ void termios_test_driver_set_rx(
 
 int termios_test_driver_inbyte_nonblocking( int port )
 {
+  (void) port;
+
   if ( Rx_FirstTime == true ) {
     Rx_FirstTime = false;
     return -1;
@@ -99,6 +101,8 @@ void termios_test_driver_outbyte_polled(
   char ch
 )
 {
+  (void) port;
+
   Tx_Buffer[Tx_Index++] = (uint8_t) ch;
 }
 
@@ -122,6 +126,9 @@ int termios_test_driver_set_attributes(
   const struct termios *t
 )
 {
+  (void) minor;
+  (void) t;
+
   return 0;
 }
 
@@ -134,6 +141,9 @@ rtems_device_driver termios_test_driver_initialize(
   void                      *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   rtems_termios_initialize();
 
   /*
@@ -179,6 +189,9 @@ rtems_device_driver termios_test_driver_close(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_close (arg);
 }
 
@@ -188,6 +201,9 @@ rtems_device_driver termios_test_driver_read(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_read (arg);
 }
 
@@ -197,6 +213,9 @@ rtems_device_driver termios_test_driver_write(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_write (arg);
 }
 
@@ -206,5 +225,8 @@ rtems_device_driver termios_test_driver_control(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_ioctl (arg);
 }

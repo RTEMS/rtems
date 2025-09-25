@@ -99,6 +99,8 @@ bool           Rx_EnqueueNow = false;
 #if defined(TASK_DRIVEN)
   int termios_test_driver_inbyte_nonblocking( int port )
   {
+    (void) port;
+
     if ( Rx_FirstTime == true ) {
       Rx_FirstTime = false;
       return -1;
@@ -114,6 +116,9 @@ rtems_timer_service_routine Rx_ISR(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   uint8_t ch;
 
   if ( Rx_Index >= Rx_Length )
@@ -133,6 +138,9 @@ rtems_timer_service_routine Tx_ISR(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_termios_dequeue_characters (Ttyp, 1);
 
   (void) rtems_timer_fire_after( Tx_Timer, 10, Tx_ISR, NULL );
@@ -172,6 +180,8 @@ ssize_t termios_test_driver_write_helper(
   size_t      len
 )
 {
+  (void) port;
+
   if (len > 0) {
     Tx_Buffer[Tx_Index++] = buf[0];
     (void) rtems_timer_fire_after( Tx_Timer, 10, Tx_ISR, NULL );
@@ -188,6 +198,9 @@ int termios_test_driver_set_attributes(
   const struct termios *t
 )
 {
+  (void) minor;
+  (void) t;
+
   return 0;
 }
 
@@ -200,6 +213,9 @@ rtems_device_driver termios_test_driver_initialize(
   void                      *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   rtems_termios_initialize();
 
   /*
@@ -212,6 +228,10 @@ rtems_device_driver termios_test_driver_initialize(
 
 static int first_open(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   status = rtems_timer_create(rtems_build_name('T', 'M', 'R', 'X'), &Rx_Timer);
@@ -227,6 +247,10 @@ static int first_open(int major, int minor, void *arg)
 
 static int last_close(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   status = rtems_timer_cancel(Rx_Timer);
@@ -294,6 +318,9 @@ rtems_device_driver termios_test_driver_close(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_close (arg);
 }
 
@@ -303,6 +330,9 @@ rtems_device_driver termios_test_driver_read(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_read (arg);
 }
 
@@ -312,6 +342,9 @@ rtems_device_driver termios_test_driver_write(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_write (arg);
 }
 
@@ -321,5 +354,8 @@ rtems_device_driver termios_test_driver_control(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_ioctl (arg);
 }

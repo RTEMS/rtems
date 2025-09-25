@@ -136,6 +136,8 @@ static void test_read_for_signal(
  */
 static void *POSIX_Init(void *argument)
 {
+  (void) argument;
+
   int rc;
 
   TEST_BEGIN();

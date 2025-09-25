@@ -42,6 +42,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   print_test_begin_message();
   force_error();
   printk( "Fatal error (%s) NOT hit\n", FATAL_ERROR_DESCRIPTION );

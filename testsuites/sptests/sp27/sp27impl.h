@@ -67,6 +67,8 @@ rtems_task subtask(
   rtems_task_argument arg
 )
 {
+  (void) arg;
+
   rtems_status_code sc;
 
   for (;;) {
@@ -83,6 +85,8 @@ void starttask(
   int arg
 )
 {
+  (void) arg;
+
   rtems_id tid;
   rtems_status_code sc;
   rtems_task_priority priority;
@@ -136,6 +140,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   TEST_BEGIN();
   puts( "Testing " TEST_SEMAPHORE_TYPE " semaphore flush" );
   doTest();

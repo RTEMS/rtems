@@ -87,6 +87,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   Print_Warning();
@@ -168,6 +170,8 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   /* start blocking rtems_semaphore_obtain time */
   benchmark_timer_initialize();
 
@@ -182,6 +186,8 @@ rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   (void) rtems_semaphore_obtain(
     Semaphore_id,
     RTEMS_DEFAULT_OPTIONS,
@@ -193,6 +199,8 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   end_time = benchmark_timer_read();
 
   put_time(
