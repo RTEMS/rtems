@@ -48,6 +48,9 @@ int __gcov_execl( const char *, char *, ... );
 
 int __gcov_execl( const char *path, char *arg, ... )
 {
+  (void) path;
+  (void) arg;
+
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
@@ -55,6 +58,9 @@ int __gcov_execlp( const char *, char *, ... );
 
 int __gcov_execlp( const char *path, char *arg, ... )
 {
+  (void) path;
+  (void) arg;
+
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
@@ -62,6 +68,9 @@ int __gcov_execle( const char *, char *, ... );
 
 int __gcov_execle( const char *path, char *arg, ... )
 {
+  (void) path;
+  (void) arg;
+
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
@@ -69,6 +78,9 @@ int __gcov_execv( const char *, char *const[] );
 
 int __gcov_execv( const char *path, char *const argv[] )
 {
+  (void) path;
+  (void) argv;
+
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
@@ -76,6 +88,9 @@ int __gcov_execvp( const char *, char *const[] );
 
 int __gcov_execvp( const char *path, char *const argv[] )
 {
+  (void) path;
+  (void) argv;
+
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
@@ -83,6 +98,10 @@ int __gcov_execve( const char *, char *const[], char *const[] );
 
 int __gcov_execve( const char *path, char *const argv[], char *const envp[] )
 {
+  (void) path;
+  (void) argv;
+  (void) envp;
+
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 

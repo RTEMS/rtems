@@ -45,6 +45,9 @@ static _READ_WRITE_RETURN_TYPE fprintf_putc_write(
   _READ_WRITE_BUFSIZE_TYPE  n
 )
 {
+  (void) ptr;
+  (void) cookie;
+
   _READ_WRITE_RETURN_TYPE i;
   _READ_WRITE_RETURN_TYPE m;
 

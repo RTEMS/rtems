@@ -332,6 +332,9 @@ deviceAcquireMutex(
   rtems_interrupt_lock_context *lock_context
 )
 {
+  (void) ctx;
+  (void) lock_context;
+
   rtems_mutex_lock (&ctx->lock.mutex);
 }
 
@@ -341,6 +344,8 @@ deviceReleaseMutex(
   rtems_interrupt_lock_context *lock_context
 )
 {
+  (void) lock_context;
+
   rtems_mutex_unlock (&ctx->lock.mutex);
 }
 
@@ -1329,6 +1334,9 @@ rtems_termios_iproc_status_code rtems_termios_default_isig_handler(
   struct rtems_termios_tty *tty
 )
 {
+  (void) c;
+  (void) tty;
+
   return RTEMS_TERMIOS_IPROC_CONTINUE;
 }
 
@@ -2088,6 +2096,9 @@ static int
 rtems_termios_imfs_open (rtems_libio_t *iop,
   const char *path, int oflag, mode_t mode)
 {
+  (void) path;
+  (void) oflag;
+
   rtems_termios_device_node *device_node;
   rtems_libio_open_close_args_t args;
   struct rtems_termios_tty *tty;

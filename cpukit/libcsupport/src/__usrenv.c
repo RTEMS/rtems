@@ -52,6 +52,11 @@ static int null_handler_open(
   mode_t mode
 )
 {
+  (void) iop;
+  (void) path;
+  (void) oflag;
+  (void) mode;
+
   return -1;
 }
 
@@ -60,6 +65,9 @@ static int null_handler_fstat(
   struct stat *buf
 )
 {
+  (void) pathloc;
+  (void) buf;
+
   return -1;
 }
 
@@ -86,6 +94,8 @@ static void null_op_lock_or_unlock(
   const rtems_filesystem_mount_table_entry_t *mt_entry
 )
 {
+  (void) mt_entry;
+
   /* Do nothing */
 }
 
@@ -97,6 +107,12 @@ static int null_op_mknod(
   dev_t dev
 )
 {
+  (void) parentloc;
+  (void) name;
+  (void) namelen;
+  (void) mode;
+  (void) dev;
+
   return -1;
 }
 
@@ -105,6 +121,9 @@ static int null_op_rmnod(
   const rtems_filesystem_location_info_t *loc
 )
 {
+  (void) parentloc;
+  (void) loc;
+
   return -1;
 }
 
@@ -115,6 +134,11 @@ static int null_op_link(
   size_t namelen
 )
 {
+  (void) parentloc;
+  (void) targetloc;
+  (void) name;
+  (void) namelen;
+
   return -1;
 }
 
@@ -123,6 +147,9 @@ static int null_op_fchmod(
   mode_t mode
 )
 {
+  (void) pathloc;
+  (void) mode;
+
   return -1;
 }
 
@@ -132,6 +159,10 @@ static int null_op_chown(
   gid_t group
 )
 {
+  (void) loc;
+  (void) owner;
+  (void) group;
+
   return -1;
 }
 
@@ -139,6 +170,8 @@ static int null_op_clonenode(
   rtems_filesystem_location_info_t *loc
 )
 {
+  (void) loc;
+
   return -1;
 }
 
@@ -147,6 +180,9 @@ static int null_op_mount(
   const void *data
 )
 {
+  (void) mt_entry;
+  (void) data;
+
   return -1;
 }
 
@@ -154,6 +190,8 @@ static int null_op_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry
 )
 {
+  (void) mt_entry;
+
   return -1;
 }
 
@@ -161,6 +199,8 @@ static void null_op_fsunmount_me(
   rtems_filesystem_mount_table_entry_t *mt_entry
 )
 {
+  (void) mt_entry;
+
   /* Do nothing */
 }
 
@@ -169,6 +209,9 @@ static int null_op_utimens(
   struct timespec times[2]
 )
 {
+  (void) loc;
+  (void) times;
+
   return -1;
 }
 
@@ -179,6 +222,11 @@ static int null_op_symlink(
   const char *target
 )
 {
+  (void) parentloc;
+  (void) name;
+  (void) namelen;
+  (void) target;
+
   return -1;
 }
 
@@ -188,6 +236,10 @@ static ssize_t null_op_readlink(
   size_t bufsize
 )
 {
+  (void) loc;
+  (void) buf;
+  (void) bufsize;
+
   return -1;
 }
 
@@ -199,6 +251,12 @@ static int null_op_rename(
   size_t namelen
 )
 {
+  (void) oldparentloc;
+  (void) oldloc;
+  (void) newparentloc;
+  (void) name;
+  (void) namelen;
+
   return -1;
 }
 
@@ -207,6 +265,9 @@ static int null_op_statvfs(
   struct statvfs *__restrict buf
 )
 {
+  (void) loc;
+  (void) buf;
+
   return -1;
 }
 

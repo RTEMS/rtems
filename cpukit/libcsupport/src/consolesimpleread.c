@@ -36,6 +36,8 @@ ssize_t _Console_simple_Read(
   size_t         count
 )
 {
+  (void) iop;
+
   char    *buf;
   ssize_t  i;
   ssize_t  n;

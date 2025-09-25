@@ -48,6 +48,8 @@ void newlib_terminate_hook(
 )
 {
 #ifdef _REENT_THREAD_LOCAL
+  (void) current_task;
+
   _reclaim_reent(NULL);
 #else
   _reclaim_reent(current_task->libc_reent);

@@ -41,6 +41,8 @@ static ssize_t _Console_simple_Write(
   size_t         count
 )
 {
+  (void) iop;
+
   const char *buf;
   ssize_t     i;
   ssize_t     n;

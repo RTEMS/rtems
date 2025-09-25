@@ -49,6 +49,9 @@ int rtems_deviceio_open(
   rtems_device_minor_number minor
 )
 {
+  (void) path;
+  (void) oflag;
+
   rtems_status_code status;
   rtems_libio_open_close_args_t args;
 

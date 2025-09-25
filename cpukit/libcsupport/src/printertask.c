@@ -59,6 +59,8 @@ static void printer_task_acquire(
   rtems_interrupt_lock_context *lock_context
 )
 {
+  (void) ctx;
+
   rtems_interrupt_lock_acquire( &ctx->lock, lock_context );
 }
 
@@ -67,6 +69,8 @@ static void printer_task_release(
   rtems_interrupt_lock_context *lock_context
 )
 {
+  (void) ctx;
+
   rtems_interrupt_lock_release( &ctx->lock, lock_context );
 }
 
@@ -75,6 +79,8 @@ static printer_task_buffer *printer_task_get_buffer(
   rtems_chain_control        *chain
 )
 {
+  (void) ctx;
+
   rtems_interrupt_lock_context  lock_context;
   printer_task_buffer          *buffer;
 
