@@ -285,6 +285,8 @@ rtems_status_code rtems_rbheap_free(rtems_rbheap_control *control, void *ptr)
 
 void rtems_rbheap_extend_descriptors_never(rtems_rbheap_control *control)
 {
+  (void) control;
+
   /* Do nothing */
 }
 
