@@ -46,6 +46,8 @@ void _Scheduler_EDF_Schedule(
   Thread_Control          *the_thread
 )
 {
+  (void) the_thread;
+
   _Scheduler_uniprocessor_Schedule(
     scheduler,
     _Scheduler_EDF_Get_highest_ready

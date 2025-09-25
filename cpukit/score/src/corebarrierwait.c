@@ -80,6 +80,8 @@ Status_Control _CORE_barrier_Seize(
   Thread_queue_Context *queue_context
 )
 {
+  (void) wait;
+
   uint32_t new_number_of_waiting_threads;
 
   _CORE_barrier_Acquire_critical( the_barrier, queue_context );

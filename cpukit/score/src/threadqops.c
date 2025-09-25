@@ -184,6 +184,9 @@ static void _Thread_queue_FIFO_do_enqueue(
   Thread_queue_Heads   *heads
 )
 {
+  (void) queue;
+  (void) queue_context;
+
   Scheduler_Node *scheduler_node;
 
   scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
@@ -203,10 +206,12 @@ static void _Thread_queue_FIFO_do_extract(
   Thread_Control       *the_thread
 )
 {
-  Scheduler_Node *scheduler_node;
-
+  (void) queue;
+  (void) heads;
   (void) current_or_previous_owner;
   (void) queue_context;
+
+  Scheduler_Node *scheduler_node;
 
   scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
 
@@ -439,6 +444,11 @@ static void _Thread_queue_Priority_do_initialize(
   Thread_queue_Heads   *heads
 )
 {
+#if !defined(RTEMS_SMP)
+  (void) queue;
+  (void) queue_context;
+#endif
+
   Scheduler_Node              *scheduler_node;
   Thread_queue_Priority_queue *priority_queue;
 #if defined(RTEMS_SMP)
@@ -513,6 +523,9 @@ static void _Thread_queue_Priority_do_enqueue(
     wait_node = _Chain_Next( &scheduler_node->Thread.Wait_node );
   } while ( wait_node != wait_tail );
 #else
+  (void) queue;
+  (void) queue_context;
+
   Scheduler_Node              *scheduler_node;
   Thread_queue_Priority_queue *priority_queue;
 
@@ -561,6 +574,8 @@ static void _Thread_queue_Priority_do_extract(
     wait_node = _Chain_Next( &scheduler_node->Thread.Wait_node );
   } while ( wait_node != wait_tail );
 #else
+  (void) queue;
+
   Scheduler_Node              *scheduler_node;
   Thread_queue_Priority_queue *priority_queue;
 
@@ -656,6 +671,8 @@ static Thread_Control *_Thread_queue_Priority_surrender(
   Thread_queue_Context *queue_context
 )
 {
+  (void)  previous_owner;
+
   Thread_Control *first;
 
   first = _Thread_queue_Priority_first( heads );
@@ -731,6 +748,8 @@ static void _Thread_queue_Priority_inherit_do_priority_actions_change(
   void                 *arg
 )
 {
+  (void)  priority_group_order;
+
   _Thread_queue_Priority_inherit_do_priority_actions_action(
     priority_aggregation,
     priority_actions,
@@ -938,6 +957,8 @@ static void _Thread_queue_Priority_inherit_do_enqueue_change(
     &scheduler_node_of_owner->Wait.Priority
   );
 #else
+  (void)  priority_group_order;
+
   Thread_queue_Queue   *queue;
   Thread_Control       *owner;
   Scheduler_Node       *scheduler_node_of_owner;
@@ -1118,6 +1139,8 @@ static void _Thread_queue_Priority_inherit_do_extract_change(
   void                 *arg
 )
 {
+  (void) priority_group_order;
+
   _Thread_queue_Priority_inherit_do_extract_action(
     priority_actions,
     arg,
@@ -1182,6 +1205,8 @@ static void _Thread_queue_Priority_inherit_do_extract(
     _Thread_Priority_perform_actions( owner, queue_context );
   }
 #else
+  (void) queue;
+
   scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
   priority_queue = _Thread_queue_Priority_queue( heads, scheduler_node );
 
@@ -1442,6 +1467,8 @@ static void _Thread_queue_Priority_inherit_do_surrender(
     fifo_node = _Chain_Next( fifo_node );
   }
 #else
+  (void) queue;
+
   scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
   priority_queue = _Thread_queue_Priority_queue( heads, scheduler_node );
   scheduler_node_of_owner = priority_queue->scheduler_node;

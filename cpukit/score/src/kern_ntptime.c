@@ -443,6 +443,9 @@ static
 int
 kern_ntp_adjtime(struct thread *td, struct timex *ntv, int *retvalp)
 {
+#ifdef __rtems__
+	(void) td;
+#endif
 	long freq;		/* frequency ns/s) */
 	int modes;		/* mode bits from structure */
 #ifndef __rtems__

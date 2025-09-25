@@ -60,6 +60,9 @@ static Thread_Control *_CORE_RWLock_Flush_filter(
   Thread_queue_Context *queue_context
 )
 {
+  (void) queue;
+  (void) queue_context;
+
   CORE_RWLock_Control *the_rwlock;
 
   the_rwlock = RTEMS_CONTAINER_OF(

@@ -147,6 +147,8 @@
     Heap_Block *block
   )
   {
+    (void) heap;
+
     block->Protection_begin.protector [0] = HEAP_BEGIN_PROTECTOR_0;
     block->Protection_begin.protector [1] = HEAP_BEGIN_PROTECTOR_1;
     block->Protection_begin.next_delayed_free_block = NULL;

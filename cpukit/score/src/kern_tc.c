@@ -185,6 +185,8 @@ dummy_get_timecount(struct timecounter *tc)
 
 	return (++now);
 #else /* __rtems__ */
+	(void) tc;
+
 	return 0;
 #endif /* __rtems__ */
 }

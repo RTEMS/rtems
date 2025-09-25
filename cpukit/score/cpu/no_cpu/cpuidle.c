@@ -42,6 +42,8 @@
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
+  (void) ignored;
+
   /*
    * This is a workaround for:
    *

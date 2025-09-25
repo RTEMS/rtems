@@ -124,6 +124,10 @@ static void _Condition_Enqueue_no_timeout(
   Thread_queue_Context *queue_context
 )
 {
+  (void) queue;
+  (void) the_thread;
+  (void) cpu_self;
+
   _Condition_Mutex_release( queue_context );
 }
 
@@ -277,6 +281,8 @@ static Thread_Control *_Condition_Flush_filter(
   Thread_queue_Context *queue_context
 )
 {
+  (void) queue;
+
   Condition_Flush_context *context;
 
   context = (Condition_Flush_context *) queue_context;

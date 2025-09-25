@@ -172,6 +172,8 @@ static Thread_Control *_Futex_Flush_filter(
   Thread_queue_Context *queue_context
 )
 {
+  (void) queue;
+
   Futex_Context *context;
 
   context = (Futex_Context *) queue_context;

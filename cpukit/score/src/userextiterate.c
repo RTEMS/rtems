@@ -131,6 +131,8 @@ void _User_extensions_Thread_exitted_visitor(
   const User_extensions_Table *callouts
 )
 {
+  (void) arg;
+
   User_extensions_thread_exitted_extension callout = callouts->thread_exitted;
 
   if ( callout != NULL ) {
@@ -144,6 +146,8 @@ void _User_extensions_Fatal_visitor(
   const User_extensions_Table *callouts
 )
 {
+  (void) executing;
+
   User_extensions_fatal_extension callout = callouts->fatal;
 
   if ( callout != NULL ) {
@@ -159,6 +163,8 @@ void _User_extensions_Thread_terminate_visitor(
   const User_extensions_Table *callouts
 )
 {
+  (void) arg;
+
   User_extensions_thread_terminate_extension callout =
     callouts->thread_terminate;
 

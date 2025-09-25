@@ -75,6 +75,8 @@ static void _Thread_queue_Add_timeout_timespec(
   const struct timespec *now
 )
 {
+  (void) queue;
+
   const struct timespec *abstime;
   struct timespec        base;
 

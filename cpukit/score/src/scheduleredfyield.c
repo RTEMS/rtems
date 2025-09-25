@@ -47,6 +47,8 @@ void _Scheduler_EDF_Yield(
   Scheduler_Node          *node
 )
 {
+  (void) the_thread;
+
   Scheduler_EDF_Context *context;
   Scheduler_EDF_Node    *the_node;
 

@@ -365,6 +365,8 @@ Thread_queue_Deadlock_status _Thread_queue_Path_acquire(
     owner = queue->owner;
   } while ( owner != NULL );
 #else
+  (void) queue_context;
+
   do {
     owner = queue->owner;
 
@@ -390,6 +392,11 @@ void _Thread_queue_Enqueue_do_nothing_extra(
   Thread_queue_Context *queue_context
 )
 {
+  (void) queue;
+  (void) the_thread;
+  (void) cpu_self;
+  (void) queue_context;
+
   /* Do nothing */
 }
 

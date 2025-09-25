@@ -54,6 +54,10 @@ static void _Heap_Walk_print_nothing(
   ...
 )
 {
+  (void) source;
+  (void) error;
+  (void) fmt;
+
   /* Do nothing */
 }
 

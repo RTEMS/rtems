@@ -205,6 +205,7 @@ static ISR_Level _Thread_Preemption_intervention(
 
   _Per_CPU_Release( cpu_self, &lock_context );
 #else
+  (void) executing;
   (void) cpu_self;
 #endif
 

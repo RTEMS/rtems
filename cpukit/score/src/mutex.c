@@ -137,6 +137,8 @@ static void _Mutex_Acquire_slow(
   Thread_queue_Context *queue_context
 )
 {
+  (void) owner;
+
   _Thread_queue_Context_set_thread_state(
     queue_context,
     STATES_WAITING_FOR_MUTEX

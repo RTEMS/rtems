@@ -45,6 +45,8 @@ Priority_Control _Scheduler_default_Map_priority(
   Priority_Control         priority
 )
 {
+  (void) scheduler;
+
   return SCHEDULER_PRIORITY_MAP( priority );
 }
 
@@ -53,5 +55,7 @@ Priority_Control _Scheduler_default_Unmap_priority(
   Priority_Control         priority
 )
 {
+  (void) scheduler;
+
   return SCHEDULER_PRIORITY_UNMAP( priority );
 }

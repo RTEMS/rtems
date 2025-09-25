@@ -48,6 +48,8 @@ int _Scheduler_CBS_Get_execution_time (
   time_t                   *abs_time
 )
 {
+  (void) abs_time;
+
   Scheduler_CBS_Server *server;
   ISR_lock_Context      lock_context;
   Thread_Control       *the_thread;
