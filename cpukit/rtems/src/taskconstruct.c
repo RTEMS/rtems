@@ -306,6 +306,8 @@ static void _RTEMS_tasks_Start_extension(
   Thread_Control *started
 )
 {
+  (void) executing;
+
   RTEMS_API_Control *api;
 
   api = started->API_Extensions[ THREAD_API_RTEMS ];

@@ -52,6 +52,8 @@ static void _Timer_server_Acquire(
   ISR_lock_Context     *lock_context
 )
 {
+  (void) ts;
+
   _ISR_lock_ISR_disable_and_acquire( &ts->Lock, lock_context );
 }
 
@@ -60,6 +62,8 @@ static void _Timer_server_Release(
   ISR_lock_Context     *lock_context
 )
 {
+  (void) ts;
+
   _ISR_lock_Release_and_ISR_enable( &ts->Lock, lock_context );
 }
 

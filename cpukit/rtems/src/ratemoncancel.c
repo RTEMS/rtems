@@ -48,6 +48,8 @@ void _Rate_monotonic_Cancel(
   ISR_lock_Context       *lock_context
 )
 {
+  (void) owner;
+
   Per_CPU_Control      *cpu_self;
   Thread_queue_Context  queue_context;
 

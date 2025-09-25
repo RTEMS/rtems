@@ -83,6 +83,8 @@ static void _Rate_monotonic_Release_postponed_job(
   ISR_lock_Context       *lock_context
 )
 {
+  (void) next_length;
+
   Per_CPU_Control      *cpu_self;
   Thread_queue_Context  queue_context;
 
