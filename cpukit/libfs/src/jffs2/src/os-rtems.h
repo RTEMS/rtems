@@ -177,7 +177,9 @@ int jffs2_rename (struct _inode *old_dir_i, struct _inode *d_inode, const unsign
 
 /* erase.c */
 static inline void jffs2_erase_pending_trigger(struct jffs2_sb_info *c)
-{ }
+{
+  (void) c;
+}
 
 #define SECTOR_ADDR(x) ( ((unsigned long)(x) & ~(c->sector_size-1)) )
 #ifndef CONFIG_JFFS2_FS_WRITEBUFFER

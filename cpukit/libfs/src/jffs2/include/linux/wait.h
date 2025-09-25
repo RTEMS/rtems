@@ -9,6 +9,9 @@ typedef struct { } wait_queue_head_t;
 #define remove_wait_queue(wait,old_wait) do{} while (0)
 #define DECLARE_WAITQUEUE(wait,current) do{} while (0)
 
-static inline void wake_up(wait_queue_head_t *erase_wait) { }
+static inline void wake_up(wait_queue_head_t *erase_wait)
+{
+  (void) erase_wait;
+}
 
 #endif /* __LINUX_WAIT_H__ */
