@@ -432,6 +432,9 @@ static int rtems_tftp_open(
     mode_t         mode
 )
 {
+    (void) new_name;
+    (void) mode;
+
     tftpfs_info_t *fs;
     char          *full_path_name;
     int           err;

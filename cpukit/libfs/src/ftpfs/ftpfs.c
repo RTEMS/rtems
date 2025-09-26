@@ -878,6 +878,8 @@ static int rtems_ftpfs_open_data_connection_passive(
   const struct timeval *timeout
 )
 {
+  (void) timeout;
+
   int rv = 0;
   rtems_ftpfs_reply reply = RTEMS_FTPFS_REPLY_ERROR;
   struct sockaddr_in sa;
@@ -1030,6 +1032,10 @@ static int rtems_ftpfs_open(
   mode_t mode
 )
 {
+  (void) path;
+  (void) oflag;
+  (void) mode;
+
   int eno = 0;
   rtems_ftpfs_entry *e = iop->pathinfo.node_access;
   rtems_ftpfs_mount_entry *me = iop->pathinfo.mt_entry->fs_info;
@@ -1171,6 +1177,9 @@ static int rtems_ftpfs_close(rtems_libio_t *iop)
 /* Dummy version to let fopen(*,"w") work properly */
 static int rtems_ftpfs_ftruncate(rtems_libio_t *iop, off_t count)
 {
+  (void) iop;
+  (void) count;
+
   return 0;
 }
 
@@ -1268,6 +1277,8 @@ int rtems_ftpfs_initialize(
   const void                           *d
 )
 {
+  (void) d;
+
   rtems_ftpfs_mount_entry *me = calloc(1, sizeof(*me));
 
   /* Mount entry for FTP file system instance */
@@ -1370,6 +1381,8 @@ static void rtems_ftpfs_lock_or_unlock(
   const rtems_filesystem_mount_table_entry_t *mt_entry
 )
 {
+  (void) mt_entry;
+
   /* Do nothing */
 }
 

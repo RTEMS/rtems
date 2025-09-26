@@ -785,7 +785,9 @@ static ssize_t prepare_data_packet_for_sending (
     const void *not_used
 )
 {
+    (void) force_retransmission;
     (void) not_used;
+
     ssize_t len;
     *send_buf = get_send_buffer_packet (tp, tp->blocknum);
 
@@ -834,6 +836,8 @@ static ssize_t prepare_ack_packet_for_sending (
     const void *path_name
 )
 {
+    (void) path_name;
+
     (void) wait_for_packet_reception;
     if (!force_retransmission &&
         tp->blocknum_of_first_packet_of_window - 1 +
@@ -894,6 +898,8 @@ static ssize_t prepare_request_packet_for_sending (
     const void *path_name
 )
 {
+    (void) force_retransmission;
+
     (void) wait_for_packet_reception;
     ssize_t len;
     *send_buf = tp->send_buf;
