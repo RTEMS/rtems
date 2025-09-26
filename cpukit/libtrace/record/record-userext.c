@@ -37,6 +37,8 @@ bool _Record_Thread_create(
   struct _Thread_Control *created
 )
 {
+  (void) executing;
+
   rtems_record_data data;
   char              name[ 2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE ];
   rtems_record_item items[ 1 + sizeof( name ) / sizeof( data ) ];
@@ -64,6 +66,8 @@ void _Record_Thread_start(
   struct _Thread_Control *started
 )
 {
+  (void) executing;
+
   rtems_record_produce(
     RTEMS_RECORD_THREAD_START,
     started->Object.id
@@ -75,6 +79,8 @@ void _Record_Thread_restart(
   struct _Thread_Control *restarted
 )
 {
+  (void) executing;
+
   rtems_record_produce(
     RTEMS_RECORD_THREAD_RESTART,
     restarted->Object.id
@@ -86,6 +92,8 @@ void _Record_Thread_delete(
   struct _Thread_Control *deleted
 )
 {
+  (void) executing;
+
   rtems_record_produce(
     RTEMS_RECORD_THREAD_DELETE,
     deleted->Object.id

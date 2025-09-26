@@ -49,6 +49,8 @@ void _Record_Fatal_dump_base64(
   Internal_errors_t      code
 )
 {
+  (void) always_set_to_false;
+
   ISR_lock_Context     lock_context;
   Per_CPU_Control     *cpu_self;
   rtems_record_context record_context;
