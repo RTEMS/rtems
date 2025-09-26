@@ -100,6 +100,8 @@ void drvmgr_print_devs(unsigned int options)
 
 static intptr_t drvmgr_topo_func(struct drvmgr_dev *dev, void *arg)
 {
+	(void) arg;
+
 	char prefix[32];
 	int depth = dev->parent->depth;
 
@@ -250,6 +252,8 @@ void drvmgr_summary(void)
 
 static void print_info(void *p, char *str)
 {
+	(void) p;
+
 	printf("  ");
 	puts(str);
 }
