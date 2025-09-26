@@ -280,6 +280,9 @@ static int pcibus_get_freq(
 	int options,
 	unsigned int *freq_hz)
 {
+	(void) dev;
+	(void) options;
+
 	/* Standard PCI Bus frequency */
 	*freq_hz = 33000000;
 	return 0;
@@ -287,6 +290,8 @@ static int pcibus_get_freq(
 
 int pcibus_get_params(struct drvmgr_dev *dev, struct drvmgr_bus_params *params)
 {
+	(void) dev;
+
 	/* No device prefix */
 	params->dev_prefix = NULL;
 

@@ -51,6 +51,8 @@
 /* Enumrate one bus if device is a bridge, and all it's subordinate buses */
 static int pci_init_dev(struct pci_dev *dev, void *unused)
 {
+	(void) unused;
+
 	uint32_t tmp;
 	uint16_t tmp16, cmd;
 	struct pci_bus *bridge;

@@ -114,6 +114,8 @@ static void pci_cfg_print_device(struct pci_dev *dev, char *prefix)
 
 static int pci_cfg_print_dev(struct pci_dev *dev, void *unused)
 {
+	(void) unused;
+
 	if (dev->flags & PCI_DEV_BRIDGE) {
 		pci_cfg_print_bus((struct pci_bus *)dev);
 	} else {
@@ -160,6 +162,8 @@ int pci_cfg_print_bus(struct pci_bus *bus)
 
 static int pci_cfg_print_forw_dev(struct pci_dev *dev, void *unused)
 {
+	(void) unused;
+
 	if ((dev->flags & PCI_DEV_BRIDGE) == 0) {
 		printf("static struct pci_dev dev_%x_%x_%x;\n",
 			PCI_DEV_EXPAND(dev->busdevfun));

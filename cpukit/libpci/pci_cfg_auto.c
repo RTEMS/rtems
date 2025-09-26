@@ -493,6 +493,8 @@ static void pci_find_bar(struct pci_dev *dev, int bar)
 
 static int pci_find_res_dev(struct pci_dev *dev, void *unused)
 {
+	(void) unused;
+
 	struct pci_bus *bridge;
 	uint32_t tmp;
 	uint16_t tmp16;
@@ -794,6 +796,8 @@ static void pci_set_bar(struct pci_dev *dev, int residx)
 
 static int pci_set_res_dev(struct pci_dev *dev, void *unused)
 {
+	(void) unused;
+
 	int i, maxbars;
 
 	if (dev->flags & PCI_DEV_BRIDGE)
