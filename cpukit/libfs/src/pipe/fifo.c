@@ -428,6 +428,7 @@ int pipe_ioctl(
   rtems_libio_t   *iop
 )
 {
+  (void) iop;
 
   if (!pipe)
     return -EPIPE;
