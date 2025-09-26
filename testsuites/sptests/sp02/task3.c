@@ -36,6 +36,8 @@ rtems_task Task_3(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   puts( "TA3 - rtems_task_wake_after - sleep 5 seconds" );

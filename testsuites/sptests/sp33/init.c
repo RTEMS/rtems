@@ -88,6 +88,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_status_code status;
   rtems_name        name = rtems_build_name('B','A','R','1');
   uint32_t          released;

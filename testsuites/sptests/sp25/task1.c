@@ -36,6 +36,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   void                   *address_1;
   void                   *address_2;
   void                   *address_3;

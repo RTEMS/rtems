@@ -43,6 +43,8 @@ static rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_print_printer_fprintf_putc(&rtems_test_printer);
   TEST_BEGIN();
   rtems_test_assert(thread_stacks_count == 2);
@@ -69,6 +71,8 @@ static void *allocate_helper(size_t size)
 
 static void thread_stacks_initialize(size_t stack_space_size)
 {
+  (void) stack_space_size;
+
   rtems_test_assert(thread_stacks_count == 0xff);
   thread_stacks_count = 0;
 }
@@ -82,6 +86,8 @@ static void *thread_stacks_allocate(size_t stack_size)
 
 static void thread_stacks_free(void *addr)
 {
+  (void) addr;
+
   rtems_test_assert(false);
 }
 
@@ -90,6 +96,8 @@ static void *thread_stacks_allocate_for_idle(
   size_t   *stack_size
 )
 {
+  (void) cpu;
+
   rtems_test_assert(thread_stacks_count == 0);
   thread_stacks_count++;
   return allocate_helper(*stack_size);

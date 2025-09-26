@@ -56,6 +56,8 @@ static void test_main(void)
 
 rtems_task Init(rtems_task_argument not_used)
 {
+  (void) not_used;
+
   test_main();
   rtems_test_exit(0);
 }

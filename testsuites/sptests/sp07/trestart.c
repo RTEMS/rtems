@@ -46,6 +46,8 @@ void Task_restart_extension(
   rtems_tcb *restarted_task
 )
 {
+  (void) unused;
+
   ssize_t task = task_number( restarted_task->Object.id );
 
   if (task > 0) {

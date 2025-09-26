@@ -53,6 +53,9 @@ rtems_timer_service_routine Malloc_From_TSR(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_status_code  status;
 
   TSR_fired = 2;
@@ -71,6 +74,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code  status;
 
   TEST_BEGIN();

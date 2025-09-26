@@ -46,6 +46,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id            self_id;
   rtems_task_priority previous_priority;
   rtems_status_code   status;

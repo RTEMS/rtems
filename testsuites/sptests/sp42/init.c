@@ -189,6 +189,8 @@ static rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_task_priority prio;
   rtems_status_code status;
 

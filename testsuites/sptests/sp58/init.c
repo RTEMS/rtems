@@ -85,6 +85,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   TEST_BEGIN();
 
   timespec_divide_by_zero();

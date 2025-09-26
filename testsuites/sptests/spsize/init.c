@@ -55,6 +55,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
 #if defined(HAVE_MENU)
   int choice = 0;
 #endif

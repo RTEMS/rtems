@@ -39,6 +39,8 @@ rtems_task Init(rtems_task_argument argument);
 
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_status_code sc;
   rtems_id          q;
   uint32_t          flushed;

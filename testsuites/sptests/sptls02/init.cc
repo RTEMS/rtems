@@ -275,6 +275,8 @@ static void testWorkerTask()
 
 extern "C" void Init(rtems_task_argument arg)
 {
+	(void) arg;
+
 	TEST_BEGIN();
 
 	printf("A::globalCounter() = %li\n", A::globalCounter());

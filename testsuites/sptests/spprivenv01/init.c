@@ -44,6 +44,8 @@ rtems_task task_routine(rtems_task_argument not_used);
 
 rtems_task task_routine(rtems_task_argument not_used)
 {
+  (void) not_used;
+
   rtems_status_code sc;
 
   puts( "task_routine - setting up a private environment" );
@@ -62,6 +64,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code       sc;
   void                   *opaque;
   rtems_id                task_id;

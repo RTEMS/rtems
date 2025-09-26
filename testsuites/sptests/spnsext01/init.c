@@ -35,6 +35,8 @@ const char rtems_test_name[] = "SPNSEXT 1";
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   RTEMS_INTERRUPT_LOCK_DECLARE(, lock)
   rtems_interrupt_lock_context lock_context;

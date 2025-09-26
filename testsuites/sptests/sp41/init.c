@@ -40,6 +40,8 @@ const char rtems_test_name[] = "SP 41";
 
 static bool visitor( Thread_Control *thread, void *arg )
 {
+  (void) thread;
+
   int *counter = arg;
   ++( *counter );
   return false;
@@ -47,12 +49,15 @@ static bool visitor( Thread_Control *thread, void *arg )
 
 static void iterator( Thread_Control *thread )
 {
+  (void) thread;
 }
 
 static rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   void *tmp;
   int   counter;
 

@@ -44,6 +44,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id           ptid_1;
   rtems_id           ptid_2;
   void              *buffer_address_1;

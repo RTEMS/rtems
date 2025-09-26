@@ -49,6 +49,10 @@ static rtems_interval test_binuptime_init(
   size_t active_workers
 )
 {
+  (void) ctx;
+  (void) arg;
+  (void) active_workers;
+
   return 10 * rtems_clock_get_ticks_per_second();
 }
 
@@ -59,6 +63,11 @@ static void test_binuptime_body(
   size_t worker_index
 )
 {
+  (void) ctx;
+  (void) arg;
+  (void) active_workers;
+  (void) worker_index;
+
   struct bintime start;
   struct bintime end;
 
@@ -80,6 +89,10 @@ static void test_binuptime_fini(
   size_t active_workers
 )
 {
+  (void) ctx;
+  (void) arg;
+  (void) active_workers;
+
   /* Nothing to do */
 }
 
@@ -94,6 +107,8 @@ static const rtems_test_parallel_job jobs[] = {
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   rtems_test_parallel(&ctx, NULL, &jobs[0], RTEMS_ARRAY_SIZE(jobs));

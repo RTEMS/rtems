@@ -39,6 +39,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_event_set   event_out;
   rtems_time_of_day time;
   struct timeval    tv;

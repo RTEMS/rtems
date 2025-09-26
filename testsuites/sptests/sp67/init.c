@@ -63,6 +63,8 @@ rtems_timer_service_routine TIMER_service_routine(
   void     *user_data
 )
 {
+  (void) ignored_id;
+
   bool *passed = (bool *)user_data;
   *passed = TRUE;
 }
@@ -71,6 +73,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   rtems_id          timer1;
   rtems_id          timer2;

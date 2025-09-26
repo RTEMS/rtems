@@ -193,6 +193,8 @@ rtems_task Low_Exec(rtems_task_argument TaskArg)
 
 rtems_task LocalHwSim_Exec(rtems_task_argument TaskArg)
 {
+  (void) TaskArg;
+
 #if 0
   int ISRCount = 0;
 #endif
@@ -226,6 +228,8 @@ rtems_task LocalHwSim_Exec(rtems_task_argument TaskArg)
 
 rtems_isr  LocalHwIsr(/*in*/ rtems_vector_number   Vector)
 {
+  (void) Vector;
+
   rtems_status_code status;
 
   /* Signal synchroniztion semaphore to invoke waiting task */
@@ -300,6 +304,8 @@ void AccessRemoteHw(void)
 /* The Init operation (the Init-task) */
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_status_code status;
 #if defined(TEST_USE_ISR)
   rtems_isr_entry   DummyIsr;

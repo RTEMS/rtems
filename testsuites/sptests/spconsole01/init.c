@@ -298,6 +298,8 @@ static void test(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   rtems_print_printer_fprintf_putc(&rtems_test_printer);

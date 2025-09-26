@@ -47,6 +47,8 @@ void Task_switch(
   rtems_tcb *heir
 )
 {
+  (void) unused;
+
   uint32_t    index;
   rtems_time_of_day time;
   rtems_status_code status;

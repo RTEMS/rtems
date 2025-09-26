@@ -242,6 +242,8 @@ static void forbidden_task(rtems_task_argument arg)
 
 static void restart_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
 
   if (arg == 0) {
@@ -273,6 +275,8 @@ static void restart_task(rtems_task_argument arg)
 
 static void sema_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
 
   sc = rtems_semaphore_obtain(sema_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -713,6 +717,8 @@ static void test_task_get_priority(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_resource_snapshot snapshot;
 
   TEST_BEGIN();

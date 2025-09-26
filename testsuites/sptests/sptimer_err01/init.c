@@ -46,6 +46,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   rtems_status_code        status;
@@ -272,6 +274,9 @@ rtems_timer_service_routine Delayed_routine(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   /* Empty routine that gets passed to rtems_timer_fire_when */
 }
 

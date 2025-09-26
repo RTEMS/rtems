@@ -54,6 +54,8 @@ const char rtems_test_name[] = "SPTLS 4";
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
   test();
   TEST_END();

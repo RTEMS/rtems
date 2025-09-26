@@ -169,6 +169,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   size_t    i;
 
   TEST_BEGIN();

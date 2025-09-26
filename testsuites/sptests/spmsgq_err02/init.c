@@ -39,6 +39,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   long              buffer[ 4 ];
   rtems_status_code status;
 

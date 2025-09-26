@@ -342,6 +342,8 @@ static void simple_tests(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_static_and_dynamic_initialization();

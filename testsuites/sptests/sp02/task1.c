@@ -36,6 +36,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id          tid2;
   rtems_id          tid3;
   rtems_status_code status;

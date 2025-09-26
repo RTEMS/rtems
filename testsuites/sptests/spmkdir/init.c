@@ -67,6 +67,8 @@ static void test_mkdir(const char *path, mode_t omode, int expected_rv)
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   mode_t omode = S_IRWXU | S_IRWXG | S_IRWXO;
   int rv = 0;
 

@@ -117,6 +117,8 @@ static void test_install(test_context *ctx)
 
 void boot_card(const char *cmdline)
 {
+  (void) cmdline;
+
   test_context *ctx;
   struct timecounter *tc;
   struct bintime bt;

@@ -211,6 +211,8 @@ static void delete_extension(
 
 static void terminate_extension(Thread_Control *executing)
 {
+  (void) executing;
+
   test_context *ctx = &test_instance;
 
   rtems_test_assert(ctx->worker_task_id == rtems_task_self());
@@ -246,6 +248,8 @@ static void terminate_extension(Thread_Control *executing)
 
 static void worker_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
 
   while (true) {
@@ -442,6 +446,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

@@ -40,6 +40,8 @@ void overrun_handler_task_4(
   rtems_cbs_server_id server_id
 )
 {
+  (void) server_id;
+
   printk( "Signal overrun, fixing the task\n" );
   Violating_task[ 4 ] = 0;
   /* rtems_task_restart( RTEMS_SELF, 4 ); might be also possible*/
@@ -50,6 +52,8 @@ rtems_task Tasks_Periodic(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id          rmid;
   rtems_id          test_rmid;
   rtems_status_code status;

@@ -39,6 +39,8 @@ static void Task_harmless_extension_one(
   rtems_tcb *unused_one
 )
 {
+  (void) unused_one;
+
   /* Do nothing */
 }
 
@@ -47,6 +49,9 @@ static void Task_harmless_extension_two(
   rtems_tcb *unused_two
 )
 {
+  (void) unused_one;
+  (void) unused_two;
+
   /* Do nothing */
 }
 
@@ -55,6 +60,9 @@ static bool Task_harmless_extension_true_two(
   rtems_tcb *unused_two
 )
 {
+  (void) unused_one;
+  (void) unused_two;
+
   return true;
 }
 
@@ -84,6 +92,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   rtems_id          id;
 

@@ -45,6 +45,8 @@ rtems_timer_service_routine Resume_task(
   void     *ignored_address
 )
 {
+  (void) ignored_address;
+
   rtems_id          task_to_resume;
   rtems_status_code status;
 

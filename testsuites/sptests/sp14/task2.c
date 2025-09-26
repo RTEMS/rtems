@@ -45,6 +45,8 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   status = rtems_task_wake_after(rtems_clock_get_ticks_per_second());

@@ -52,6 +52,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_mode        previous_mode;
   rtems_status_code status;
 

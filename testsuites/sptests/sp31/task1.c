@@ -48,6 +48,9 @@ rtems_timer_service_routine Should_not_fire_TSR(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   TSR_fired = 1;
 }
 
@@ -56,6 +59,9 @@ static rtems_timer_service_routine Do_nothing(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   /* Do nothing */
 }
 
@@ -63,6 +69,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id                 tmid;
   rtems_id                 tmid2;
   rtems_time_of_day        time;

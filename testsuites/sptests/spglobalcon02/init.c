@@ -68,6 +68,8 @@ static __attribute__((__destructor__)) void d(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
   rtems_test_assert(i == 4);
   ++i;

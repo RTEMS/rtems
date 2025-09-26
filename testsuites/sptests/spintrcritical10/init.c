@@ -216,6 +216,8 @@ static T_interrupt_test_state all_satisfy_before_timeout_interrupt(void *arg)
 
 static void all_satisfy_before_timeout_action(void *arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
   rtems_event_set out;
 
@@ -292,6 +294,8 @@ static T_interrupt_test_state timeout_before_satisfied_interrupt(void *arg)
 
 static void timeout_before_satisfied_action(void *arg)
 {
+  (void) arg;
+
   rtems_event_set out;
   rtems_status_code sc;
 
@@ -324,6 +328,8 @@ T_TEST_CASE(EventTimeoutBeforeSatisfied)
 
 static rtems_task Init( rtems_task_argument argument )
 {
+  (void) argument;
+
   rtems_test_run( argument, TEST_STATE );
 }
 

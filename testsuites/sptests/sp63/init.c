@@ -145,6 +145,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   TEST_BEGIN();
 
   test_case_one();

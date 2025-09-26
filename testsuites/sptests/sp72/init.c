@@ -45,6 +45,8 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   puts( "Task - rtems_semaphore_obtain - wait w/timeout " );
@@ -61,6 +63,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   rtems_id          task_id;
 

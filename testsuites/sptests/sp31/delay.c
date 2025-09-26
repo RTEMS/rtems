@@ -45,6 +45,9 @@ rtems_timer_service_routine Delayed_resume(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_status_code status;
 
   status = rtems_task_resume( Task_id[ 1 ] );

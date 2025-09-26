@@ -306,6 +306,8 @@ static void test_every_day(void)
 
 rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   test_tod_to_seconds();

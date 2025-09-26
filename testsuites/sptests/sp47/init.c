@@ -32,6 +32,8 @@ rtems_task Init(rtems_task_argument ignored);
 
 rtems_task test_asr(rtems_task_argument unused)
 {
+  (void) unused;
+
   rtems_mode mode;
 
   rtems_task_mode(0, RTEMS_CURRENT_MODE, &mode);
@@ -51,6 +53,8 @@ rtems_task test_asr(rtems_task_argument unused)
 
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_status_code sc;
   rtems_id ti;
 

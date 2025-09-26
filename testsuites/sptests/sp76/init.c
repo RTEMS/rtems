@@ -38,6 +38,8 @@ static rtems_task High_task(
   rtems_task_argument index
 )
 {
+  (void) index;
+
   rtems_status_code  status;
   rtems_name         name;
 
@@ -55,6 +57,8 @@ static rtems_task Equal_task(
   rtems_task_argument index
 )
 {
+  (void) index;
+
   rtems_test_assert( 0 );
 }
 
@@ -62,6 +66,8 @@ static rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code     status;
   rtems_id              id;
   rtems_task_priority 	old;

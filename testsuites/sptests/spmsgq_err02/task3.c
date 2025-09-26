@@ -46,6 +46,8 @@ rtems_task Task_3(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   long              buffer[ 4 ];
   size_t            size;

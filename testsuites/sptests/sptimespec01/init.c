@@ -59,6 +59,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   timespec1=&ts1;
   timespec2=&ts2;
 

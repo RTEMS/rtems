@@ -54,6 +54,8 @@ rtems_task Init(
   rtems_task_argument not_used
 )
 {
+  (void) not_used;
+
   int fd = -1;
   int status = -1;
   off_t offset = 4;

@@ -36,6 +36,8 @@ rtems_task Preempt_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   puts( "PREEMPT - rtems_task_delete - deleting self" );
   rtems_task_exit();
 }

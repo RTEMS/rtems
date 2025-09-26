@@ -89,6 +89,8 @@ typedef struct {
 
 static void isr_level_check_task( rtems_task_argument arg )
 {
+  (void) arg;
+
   test_isr_level_context *ctx = (test_isr_level_context *) arg;
   rtems_status_code sc;
 
@@ -471,6 +473,8 @@ rtems_task blocked_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code     status;
 
   puts( "Blocking task... suspending self" );
@@ -493,6 +497,8 @@ rtems_timer_service_routine test_unblock_task(
   void     *arg
 )
 {
+  (void) arg;
+
   bool               in_isr;
   rtems_status_code  status;
   Per_CPU_Control   *cpu_self;
@@ -576,6 +582,9 @@ rtems_timer_service_routine test_isr_in_progress(
   void     *arg
 )
 {
+  (void) timer;
+  (void) arg;
+
   check_isr_in_progress_inline();
 
   isr_in_progress_body = rtems_interrupt_is_in_progress() ? 1 : 2;
@@ -585,6 +594,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_time_of_day     time;
   rtems_status_code     status;
   rtems_id              timer;

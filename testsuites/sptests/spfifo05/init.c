@@ -60,6 +60,8 @@ char sendBuf[SEND_RCV_BUFSIZ] = {0};
 
 rtems_task read_task(rtems_task_argument not_used)
 {
+  (void) not_used;
+
   int fd = 0;
   int status = -1;
   uint32_t released = 0;
@@ -147,6 +149,8 @@ rtems_task Init(
   rtems_task_argument not_used
 )
 {
+  (void) not_used;
+
   rtems_id readTaskID;
 
   rtems_name readTaskName;

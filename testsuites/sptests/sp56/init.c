@@ -49,6 +49,9 @@ bool task_create(
   Thread_Control *created
 )
 {
+  (void) executing;
+  (void) created;
+
   return false;
 }
 
@@ -67,6 +70,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_status_code    status;
   rtems_id             extension;
   rtems_id             task_id;

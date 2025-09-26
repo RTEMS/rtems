@@ -29,6 +29,8 @@ typedef struct {
 
 static void mutex_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   mutex_context *m;
   int rv;
 
@@ -163,6 +165,8 @@ typedef struct {
 
 static void signal_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   signal_context *s;
 
   s = (signal_context *) arg;
@@ -315,6 +319,8 @@ static void test_binary_semaphore(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_mutex();

@@ -46,6 +46,8 @@ rtems_task Task_4(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   status = rtems_rate_monotonic_cancel( Period_id[ 1 ] );

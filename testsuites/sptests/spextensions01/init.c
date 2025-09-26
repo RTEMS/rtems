@@ -96,6 +96,9 @@ static void assert_reverse_order(int index)
 
 static bool zero_thread_create(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(0);
   assert_allocator_protected_thread_context();
   return true;
@@ -103,35 +106,51 @@ static bool zero_thread_create(rtems_tcb *a, rtems_tcb *b)
 
 static void zero_thread_start(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(0);
   assert_thread_dispatch_disabled_context();
 }
 
 static void zero_thread_restart(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(0);
   assert_life_protected_thread_context();
 }
 
 static void zero_thread_delete(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_reverse_order(0);
   assert_allocator_protected_thread_context();
 }
 
 static void zero_thread_switch(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(0);
 }
 
 static void zero_thread_begin(rtems_tcb *a)
 {
+  (void) a;
+
   assert_forward_order(0);
   assert_normal_thread_context();
 }
 
 static void zero_thread_exitted(rtems_tcb *a)
 {
+  (void) a;
+
   assert_forward_order(0);
   assert_normal_thread_context();
 }
@@ -142,6 +161,9 @@ static void zero_fatal(
   rtems_fatal_code code
 )
 {
+  (void) always_set_to_false;
+  (void) code;
+
   if (source == RTEMS_FATAL_SOURCE_EXIT) {
     assert_forward_order(0);
   }
@@ -149,12 +171,17 @@ static void zero_fatal(
 
 static void zero_thread_terminate(rtems_tcb *a)
 {
+  (void) a;
+
   assert_reverse_order(0);
   assert_life_protected_thread_context();
 }
 
 static bool one_thread_create(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(1);
   assert_allocator_protected_thread_context();
   return true;
@@ -162,35 +189,51 @@ static bool one_thread_create(rtems_tcb *a, rtems_tcb *b)
 
 static void one_thread_start(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(1);
   assert_thread_dispatch_disabled_context();
 }
 
 static void one_thread_restart(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(1);
   assert_life_protected_thread_context();
 }
 
 static void one_thread_delete(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_reverse_order(1);
   assert_allocator_protected_thread_context();
 }
 
 static void one_thread_switch(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(1);
 }
 
 static void one_thread_begin(rtems_tcb *a)
 {
+  (void) a;
+
   assert_forward_order(1);
   assert_normal_thread_context();
 }
 
 static void one_thread_exitted(rtems_tcb *a)
 {
+  (void) a;
+
   assert_forward_order(1);
   assert_normal_thread_context();
 }
@@ -201,6 +244,9 @@ static void one_fatal(
   rtems_fatal_code code
 )
 {
+  (void) always_set_to_false;
+  (void) code;
+
   if (source == RTEMS_FATAL_SOURCE_EXIT) {
     assert_forward_order(1);
   }
@@ -208,12 +254,17 @@ static void one_fatal(
 
 static void one_thread_terminate(rtems_tcb *a)
 {
+  (void) a;
+
   assert_reverse_order(1);
   assert_life_protected_thread_context();
 }
 
 static bool two_thread_create(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(2);
   assert_allocator_protected_thread_context();
   return true;
@@ -221,35 +272,51 @@ static bool two_thread_create(rtems_tcb *a, rtems_tcb *b)
 
 static void two_thread_start(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(2);
   assert_thread_dispatch_disabled_context();
 }
 
 static void two_thread_restart(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(2);
   assert_life_protected_thread_context();
 }
 
 static void two_thread_delete(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_reverse_order(2);
   assert_allocator_protected_thread_context();
 }
 
 static void two_thread_switch(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(2);
 }
 
 static void two_thread_begin(rtems_tcb *a)
 {
+  (void) a;
+
   assert_forward_order(2);
   assert_normal_thread_context();
 }
 
 static void two_thread_exitted(rtems_tcb *a)
 {
+  (void) a;
+
   assert_forward_order(2);
   assert_normal_thread_context();
 }
@@ -260,6 +327,9 @@ static void two_fatal(
   rtems_fatal_code code
 )
 {
+  (void) always_set_to_false;
+  (void) code;
+
   if (source == RTEMS_FATAL_SOURCE_EXIT) {
     assert_forward_order(2);
   }
@@ -267,12 +337,17 @@ static void two_fatal(
 
 static void two_thread_terminate(rtems_tcb *a)
 {
+  (void) a;
+
   assert_reverse_order(2);
   assert_life_protected_thread_context();
 }
 
 static bool three_thread_create(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(3);
   assert_allocator_protected_thread_context();
   return true;
@@ -280,35 +355,51 @@ static bool three_thread_create(rtems_tcb *a, rtems_tcb *b)
 
 static void three_thread_start(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(3);
   assert_thread_dispatch_disabled_context();
 }
 
 static void three_thread_restart(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(3);
   assert_life_protected_thread_context();
 }
 
 static void three_thread_delete(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_reverse_order(3);
   assert_allocator_protected_thread_context();
 }
 
 static void three_thread_switch(rtems_tcb *a, rtems_tcb *b)
 {
+  (void) a;
+  (void) b;
+
   assert_forward_order(3);
 }
 
 static void three_thread_begin(rtems_tcb *a)
 {
+  (void) a;
+
   assert_forward_order(3);
   assert_normal_thread_context();
 }
 
 static void three_thread_exitted(rtems_tcb *a)
 {
+  (void) a;
+
   assert_forward_order(3);
   assert_normal_thread_context();
 }
@@ -319,6 +410,9 @@ static void three_fatal(
   rtems_fatal_code code
 )
 {
+  (void) always_set_to_false;
+  (void) code;
+
   if (source == RTEMS_FATAL_SOURCE_EXIT) {
     assert_forward_order(3);
     assert(counter == 68);
@@ -328,6 +422,8 @@ static void three_fatal(
 
 static void three_thread_terminate(rtems_tcb *a)
 {
+  (void) a;
+
   assert_reverse_order(3);
   assert_life_protected_thread_context();
 }
@@ -411,6 +507,8 @@ static void wait_for_worker(void)
 
 static void worker(rtems_task_argument arg)
 {
+  (void) arg;
+
   wake_up_master();
 
   (void) rtems_task_suspend(RTEMS_SELF);
@@ -509,6 +607,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

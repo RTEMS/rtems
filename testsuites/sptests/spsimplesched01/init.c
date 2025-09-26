@@ -48,6 +48,8 @@ rtems_task Test_task(
   rtems_task_argument unused
 )
 {
+  (void) unused;
+
   rtems_id           tid;
   rtems_time_of_day  time;
   uint32_t           task_index;
@@ -77,6 +79,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code   status;
   rtems_time_of_day   time;
   rtems_task_priority old;

@@ -48,6 +48,8 @@ rtems_task Delay_task(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_status_code    status;
 
   puts( "Delay - rtems_task_wake_after - OK" );
@@ -62,6 +64,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_status_code    status;
   rtems_id             task_id;
 

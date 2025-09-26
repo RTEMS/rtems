@@ -56,6 +56,8 @@ isSuspended (rtems_id tid)
 static void
 subTask1 (rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
 
   rtems_task_wake_after (ticksPerSecond * 3);
@@ -75,6 +77,8 @@ subTask1 (rtems_task_argument arg)
 static void
 subTask2 (rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
   rtems_event_set ev;
 

@@ -307,6 +307,8 @@ static void change_prio(
 
 static void helper(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
 
   while (true) {
@@ -318,6 +320,8 @@ static void helper(rtems_task_argument arg)
 
 static void worker(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   task_id id = arg;
 
@@ -687,6 +691,8 @@ static void tear_down(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_resource_snapshot snapshot;
 

@@ -45,6 +45,8 @@ rtems_asr Process_asr(
   rtems_signal_set signal_set
 )
 {
+  (void) signal_set;
+
   rtems_status_code status;
 
   status = rtems_task_resume( Task_id[ 2 ] );

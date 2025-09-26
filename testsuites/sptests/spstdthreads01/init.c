@@ -259,6 +259,8 @@ static void test_tss(test_context *ctx)
 
 static int thrd(void *arg)
 {
+  (void) arg;
+
   thrd_exit(123);
 }
 
@@ -306,6 +308,8 @@ static void test_thrd(test_context *ctx)
 
 static void high_task(rtems_task_argument idx)
 {
+  (void) idx;
+
   test_context *ctx = &test_instance;
 
   while (true) {
@@ -409,6 +413,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

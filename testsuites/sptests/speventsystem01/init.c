@@ -125,6 +125,8 @@ static void test_get_pending_events(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_with_normal_and_system_event();

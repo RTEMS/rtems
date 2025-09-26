@@ -44,6 +44,8 @@ volatile bool  timerRan;
 
 rtems_timer_service_routine Timer_Routine(rtems_id id, void *ignored)
 {
+  (void) ignored;
+
   rtems_status_code status;
 
   Fired++;
@@ -63,6 +65,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code sc;
   rtems_id          timer1;
   struct timespec   uptime;

@@ -48,6 +48,8 @@ rtems_task Periodic_Task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code  status;
   rtems_name         period_name = rtems_build_name('P','E','R','a');
   rtems_id           period_id;
@@ -84,6 +86,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code  status;
   rtems_id           task_id;
 

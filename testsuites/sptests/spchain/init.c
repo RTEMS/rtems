@@ -498,6 +498,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_chain_control  chain1;
   rtems_chain_node    *p;
   test_node            node1, node2;

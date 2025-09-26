@@ -50,6 +50,8 @@ rtems_task Blocker(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_status_code  sc;
   void              *segment_address_2;
 
@@ -76,6 +78,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_id           task_id;
   rtems_status_code  sc;
   void              *segment_address_1;

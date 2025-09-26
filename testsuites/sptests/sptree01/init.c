@@ -41,6 +41,8 @@ const char rtems_test_name[] = "SPTREE 1";
 
 static rtems_task Init( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   TEST_BEGIN();
 
   TEST_END();

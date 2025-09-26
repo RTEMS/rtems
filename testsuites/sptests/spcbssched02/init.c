@@ -40,6 +40,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   rtems_cbs_server_id server_id, server_id2;
   time_t approved_budget, exec_time, abs_time, remaining_budget;

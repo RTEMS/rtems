@@ -44,6 +44,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id           rnid;
   void              *segment_address_1;
   void              *segment_address_2;

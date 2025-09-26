@@ -46,6 +46,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id           dpid;
   void              *to_be_converted;
   void              *converted;

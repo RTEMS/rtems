@@ -39,6 +39,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
   #if (CPU_SIMPLE_VECTORED_INTERRUPTS == FALSE)
     puts(

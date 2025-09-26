@@ -56,6 +56,8 @@ static void check_tls_item(uint32_t expected)
 
 static void task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
 
   check_tls_item(123);
@@ -163,6 +165,8 @@ static void test_idle_during_system_init(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test();
 
   rtems_test_assert(!rtems_stack_checker_is_blown());

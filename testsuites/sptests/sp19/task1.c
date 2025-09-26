@@ -37,6 +37,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   rtems_id          tid;
   rtems_time_of_day time;

@@ -54,6 +54,8 @@ rtems_task Test_task(
   rtems_task_argument unused
 )
 {
+  (void) unused;
+
   rtems_id          tid;
   rtems_status_code status;
 
@@ -95,6 +97,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code   status;
 
   TEST_BEGIN();

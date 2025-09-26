@@ -63,6 +63,9 @@ cpu_set_t set3;
 
 void test_cpu_and_case_1(size_t cpu1, size_t cpu2)
 {
+  (void) cpu1;
+  (void) cpu2;
+
   size_t i;
 
   /*  AND set1 and set2 */
@@ -81,6 +84,9 @@ void test_cpu_and_case_1(size_t cpu1, size_t cpu2)
 
 void test_cpu_nand_case_1(size_t cpu1, size_t cpu2)
 {
+  (void) cpu1;
+  (void) cpu2;
+
   size_t i;
 
   /*
@@ -125,6 +131,9 @@ void test_cpu_or_case_1(size_t cpu1, size_t cpu2)
 
 void test_cpu_xor_case_1(size_t cpu1, size_t cpu2)
 {
+  (void) cpu1;
+  (void) cpu2;
+
   size_t i;
 
   /*  XOR set1 and set2 */

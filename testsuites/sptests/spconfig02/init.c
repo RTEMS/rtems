@@ -404,6 +404,8 @@ static void test_some_id_to_name(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_barrier_create();
   test_barrier_delete();
   test_barrier_get();

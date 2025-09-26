@@ -143,6 +143,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   name = malloc(40);
   TEST_BEGIN();
 

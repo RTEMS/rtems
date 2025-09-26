@@ -297,6 +297,8 @@ static void do_negative_case(bool use_posix)
 
 static rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   // rtems_status_code status;
   int               i;
 

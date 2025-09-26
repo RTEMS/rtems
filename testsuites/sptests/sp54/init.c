@@ -47,6 +47,8 @@ const char rtems_test_name[] = "SP 54";
 
 static void *Init( uintptr_t ignored )
 {
+  (void) ignored;
+
   rtems_status_code                    status;
   rtems_task_priority                  pri;
   rtems_id                             id;

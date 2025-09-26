@@ -119,6 +119,8 @@ static void test_with_timeout(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_with_request_server();

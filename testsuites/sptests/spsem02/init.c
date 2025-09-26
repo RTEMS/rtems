@@ -66,6 +66,8 @@ rtems_name sem_name[2];
 
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_status_code status;
   rtems_attribute sem_attr;
 
@@ -140,6 +142,8 @@ rtems_task Init(rtems_task_argument ignored)
 /* Task01 starts with priority 36 */
 rtems_task Task01(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_status_code status;
   printf("TA01: started with priority %d\n", getprio());
 
@@ -177,6 +181,8 @@ rtems_task Task01(rtems_task_argument ignored)
 /* TA02 starts at Task02 with priority 34 */
 rtems_task Task02(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_status_code status;
 
   printf("TA02: started with priority %d\n", getprio());
@@ -194,6 +200,8 @@ rtems_task Task02(rtems_task_argument ignored)
 /* Task03 starts with priority 32 */
 rtems_task Task03(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_status_code status;
   printf("TA03: started with priority %d\n", getprio());
 

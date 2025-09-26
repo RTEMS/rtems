@@ -85,6 +85,8 @@ static void print_info(void)
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_name name = rtems_build_name('S', 'T', 'K', 'A');
   rtems_id id = RTEMS_ID_NONE;
@@ -189,6 +191,8 @@ static void *task_stack_allocate(size_t stack_size)
 
 static void *task_stack_allocate_for_idle(uint32_t unused, size_t *stack_size)
 {
+  (void) unused;
+
   return rtems_heap_allocate_aligned_with_boundary(
     *stack_size,
     CPU_STACK_ALIGNMENT,

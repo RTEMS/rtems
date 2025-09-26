@@ -63,6 +63,8 @@ static volatile double f = 1.0;
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   f *= 123.456;

@@ -46,6 +46,8 @@ rtems_task Blocking_task(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_status_code    status;
   void                *address_1;
 
@@ -69,6 +71,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_status_code     status;
   rtems_id              task_id;
   void                 *address_1;

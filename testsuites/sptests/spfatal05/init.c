@@ -47,6 +47,7 @@ rtems_task EmptyTask(
   rtems_task_argument unused
 )
 {
+  (void) unused;
 }
 
 static void force_error(void)

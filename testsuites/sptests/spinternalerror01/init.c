@@ -42,6 +42,8 @@ const char rtems_test_name[] = "SPINTERNALERROR 1";
 
 void boot_card( const char *cmdline )
 {
+  (void) cmdline;
+
   _Terminate( FATAL_SOURCE, FATAL_ERROR );
 }
 
@@ -64,6 +66,8 @@ static void fatal_extension(
 
 static void *idle_body(uintptr_t ignored)
 {
+  (void) ignored;
+
   while ( true ) {
     /* Do nothing */
   }

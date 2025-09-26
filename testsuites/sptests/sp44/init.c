@@ -90,6 +90,8 @@ rtems_task TaskAB_entry(rtems_task_argument me)
 
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   static rtems_status_code status;
 
   TEST_BEGIN();

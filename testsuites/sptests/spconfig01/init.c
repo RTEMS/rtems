@@ -39,6 +39,10 @@ static rtems_status_code bsp_prerequisite_drivers_init(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   TEST_BEGIN();
   checkpoint(0);
   return RTEMS_SUCCESSFUL;
@@ -50,6 +54,10 @@ static rtems_status_code app_prerequisite_drivers_init(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   struct stat st;
   int rv;
 
@@ -69,6 +77,10 @@ static rtems_status_code app_extra_drivers_init(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   struct stat st;
   int rv;
 
@@ -107,6 +119,8 @@ static void test_stack_config(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   checkpoint(3);
   test_stack_config();
   TEST_END();

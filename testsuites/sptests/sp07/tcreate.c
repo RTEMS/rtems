@@ -46,6 +46,8 @@ bool Task_create_extension(
   rtems_tcb *created_task
 )
 {
+  (void) unused;
+
   ssize_t task = task_number( created_task->Object.id );
 
   if (task > 0) {

@@ -489,6 +489,8 @@ static void test_cache_coherent_alloc(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_data_flush_and_invalidate();
@@ -507,6 +509,9 @@ static void fatal_extension(
   rtems_fatal_code error
 )
 {
+  (void) always_set_to_false;
+  (void) error;
+
   if (source == RTEMS_FATAL_SOURCE_EXCEPTION && do_longjmp) {
     _ISR_Set_level(0);
     longjmp(instruction_invalidate_return_context, 1);

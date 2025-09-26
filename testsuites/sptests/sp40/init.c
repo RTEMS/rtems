@@ -49,6 +49,10 @@ static rtems_device_driver test_open(
      void                      *ignored
 )
 {
+  (void) minor;
+  (void) major;
+  (void) ignored;
+
   return RTEMS_IO_ERROR;
 }
 
@@ -77,6 +81,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code         sc;
   rtems_device_major_number registered;
   rtems_device_major_number registered_not;

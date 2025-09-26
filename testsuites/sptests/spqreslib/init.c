@@ -42,6 +42,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   qres_sid_t server_id, server_id2;
   time_t approved_budget, exec_time, abs_time, current_budget;

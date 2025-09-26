@@ -87,6 +87,8 @@ static void test_status_text(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_internal_error_text();

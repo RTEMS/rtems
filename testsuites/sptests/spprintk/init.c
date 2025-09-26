@@ -277,6 +277,8 @@ static rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   do_putk();

@@ -974,6 +974,8 @@ static void do_use_global_user_env(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   next_step(INIT_TASK);
   do_barrier_create();
   do_extensions_create();
@@ -999,6 +1001,8 @@ static void Init(rtems_task_argument arg)
 
 static void *POSIX_Init(void *arg)
 {
+  (void) arg;
+
   return NULL;
 }
 

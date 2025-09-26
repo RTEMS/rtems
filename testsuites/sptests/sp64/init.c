@@ -46,6 +46,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_id                region1;
   rtems_id                region2;
   rtems_status_code       sc;

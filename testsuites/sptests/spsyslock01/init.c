@@ -568,6 +568,8 @@ static void test_sched(void)
 
 static void mid_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_test_assert(0);
 }
 
@@ -743,6 +745,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

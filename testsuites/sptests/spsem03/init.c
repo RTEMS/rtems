@@ -101,11 +101,15 @@ static void obtain_sema(rtems_id id)
 
 static void inversion_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_test_assert(0);
 }
 
 static void mid_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
 
   obtain_sema(ctx->sem_b);
@@ -114,6 +118,8 @@ static void mid_task(rtems_task_argument arg)
 
 static void high_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
 
   start_task(ctx->inversion, inversion_task);
@@ -122,6 +128,8 @@ static void high_task(rtems_task_argument arg)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
 
   TEST_BEGIN();

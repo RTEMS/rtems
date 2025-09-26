@@ -51,6 +51,9 @@ int fs_mount(
   const void                           *data
 )
 {
+  (void) mt_entry;
+  (void) data;
+
   return 0;
 }
 
@@ -58,6 +61,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int status = 0;
   void *greedy;
 

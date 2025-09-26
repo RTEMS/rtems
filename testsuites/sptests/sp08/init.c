@@ -48,6 +48,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_mode        previous_mode;
   rtems_status_code status;
 

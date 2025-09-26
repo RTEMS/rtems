@@ -62,11 +62,16 @@ static volatile double f = 1.0;
 
 static void timer(rtems_id id, void *arg)
 {
+  (void) id;
+  (void) arg;
+
   f *= 123.456;
 }
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
   rtems_id id;
 

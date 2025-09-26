@@ -51,6 +51,8 @@ void signal_handler(
   rtems_signal_set signals
 )
 {
+  (void) signals;
+
   signal_processed = TRUE;
 }
 
@@ -59,6 +61,9 @@ rtems_timer_service_routine test_signal_from_isr(
   void     *arg
 )
 {
+  (void) timer;
+  (void) arg;
+
   rtems_status_code     status;
 
   status = rtems_signal_send( main_task, 0x0a0b0c0d );
@@ -71,6 +76,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code     status;
   rtems_id              timer;
   rtems_interval        start;

@@ -49,6 +49,8 @@ void          *StackDeallocated = NULL;
 
 static void *StackAllocator(size_t size)
 {
+  (void) size;
+
   if (stackToAlloc < MAXIMUM_STACKS)
     return &Stacks[stackToAlloc++];
   return NULL;
@@ -63,6 +65,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_status_code rc;
   rtems_id          taskId;
   rtems_id          taskId1;

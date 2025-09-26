@@ -25,6 +25,8 @@ typedef struct {
 
 static rtems_task Init(rtems_task_argument ignored)
 {
+    (void) ignored;
+
     Freechain_Control fc;
     test_node *node;
     test_node node2;

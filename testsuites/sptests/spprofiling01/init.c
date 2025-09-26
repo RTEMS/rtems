@@ -96,6 +96,8 @@ static void visitor(void *arg, const rtems_profiling_data *data)
 
 static void lock_init(rtems_interrupt_lock *lock, const char *name)
 {
+  (void) lock;
+
   rtems_interrupt_lock_context lock_context;
 
   rtems_interrupt_lock_initialize(lock, name);
@@ -140,6 +142,8 @@ static void test_report_xml(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_iterate();

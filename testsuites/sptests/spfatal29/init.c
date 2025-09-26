@@ -40,6 +40,9 @@
 
 static void timer(rtems_id id, void *arg)
 {
+  (void) id;
+  (void) arg;
+
   rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
 }
 

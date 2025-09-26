@@ -42,6 +42,8 @@ rtems_task Test_task(
   rtems_task_argument index
 )
 {
+  (void) index;
+
   puts( "Successfully yielded it to higher priority task" );
 
   TEST_END();
@@ -52,6 +54,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code  status;
   rtems_id           id;
 

@@ -1980,6 +1980,8 @@ static void test_rbtree_postorder( void )
 
 rtems_task Init( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   rtems_rbtree_control  rbtree1;
   rtems_rbtree_node    *p;
   test_node            node1, node2;

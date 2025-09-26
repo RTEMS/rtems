@@ -129,6 +129,8 @@ static void switch_priorities(test_context *self)
 
 static void clobber_and_switch_timer(rtems_id timer, void *arg)
 {
+  (void) timer;
+
   uintptr_t pattern = (uintptr_t) 0xffffffffffffffffU;
   test_context *self = arg;
 
@@ -265,6 +267,8 @@ static const char *desc(int i)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *self = &test_instance;
   int i;
   int j;
@@ -291,6 +295,9 @@ static void Init(rtems_task_argument arg)
 
 static void switch_extension(Thread_Control *executing, Thread_Control *heir)
 {
+  (void) executing;
+  (void) heir;
+
   uintptr_t pattern = (uintptr_t) 0xffffffffffffffffU;
 
   _CPU_Context_volatile_clobber(pattern);

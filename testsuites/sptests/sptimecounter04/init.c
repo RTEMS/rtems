@@ -40,6 +40,8 @@ const char rtems_test_name[] = "SPTIMECOUNTER 4";
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   struct timespec real_start;
   struct timespec mono_start;
   struct timespec real_end;

@@ -48,6 +48,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   puts( "TA1 - rtems_signal_catch: initializing signal catcher" );

@@ -40,6 +40,8 @@ rtems_task Init(rtems_task_argument argument);
 rtems_task Init(
     rtems_task_argument ignored
 ) {
+  (void) ignored;
+
   rtems_status_code  status;
   rtems_interval     timestamps[6],
                      wantintervals[5] = { 1, 50, 200, 25, 3 };

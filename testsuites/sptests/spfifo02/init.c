@@ -71,6 +71,8 @@ static rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   void *p;
   int num_opens = 0;
   int index = 0;

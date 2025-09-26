@@ -42,6 +42,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code  sc;
   rtems_id           mutex;
   Per_CPU_Control   *cpu_self;

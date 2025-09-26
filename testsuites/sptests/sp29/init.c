@@ -73,6 +73,8 @@ void startTask(rtems_id arg);
 rtems_task
 subtask (rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
   rtems_id          sem = (rtems_id)arg;
 
@@ -115,6 +117,8 @@ startTask (rtems_id arg)
 
 rtems_task Init (rtems_task_argument ignored)
 {
+  (void) ignored;
+
   int i;
   rtems_id semrec, semnorec;
   rtems_status_code sc;

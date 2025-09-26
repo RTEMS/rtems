@@ -63,6 +63,8 @@ static test_context test_instance;
 
 static void wait_for_worker(test_context *ctx)
 {
+  (void) ctx;
+
   rtems_status_code sc;
 
   sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -139,6 +141,8 @@ static void posix_worker(test_context *ctx)
 
 static rtems_task worker(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) arg;
 
   rtems_test_assert(get_wait_id(ctx) == 0);
@@ -280,6 +284,8 @@ static rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   test_context *ctx = &test_instance;
 
   TEST_BEGIN();

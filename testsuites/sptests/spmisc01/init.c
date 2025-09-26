@@ -113,6 +113,8 @@ static void test_unreachable(void)
 
 RTEMS_PRINTFLIKE(1, 2) static int printflike_func(const char *fmt, ...)
 {
+  (void) fmt;
+
   return 56;
 }
 
@@ -224,6 +226,8 @@ static int concat(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   void *p;
   int   v;
 

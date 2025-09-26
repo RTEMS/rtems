@@ -38,6 +38,8 @@ const char rtems_test_name[] = "SPFATAL 26";
 
 static void Init( rtems_task_argument arg )
 {
+  (void) arg;
+
   TEST_BEGIN();
   _CPU_Instruction_illegal();
   rtems_test_assert( 0 );

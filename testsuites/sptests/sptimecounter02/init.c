@@ -78,6 +78,8 @@ static rtems_interval test_duration(void)
 
 static uint32_t test_get_timecount_null(struct timecounter *tc)
 {
+  (void) tc;
+
   return 0;
 }
 
@@ -137,6 +139,10 @@ static rtems_interval test_bintime_init(
   size_t active_workers
 )
 {
+  (void) base;
+  (void) arg;
+  (void) active_workers;
+
   rtems_test_spin_until_next_tick();
 
   return test_duration();
@@ -149,6 +155,9 @@ static void test_bintime_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   timecounter_context *ctx = (timecounter_context *) base;
   uint32_t counter = 1;
   struct bintime start;
@@ -171,6 +180,8 @@ static void test_bintime_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   timecounter_context *ctx = (timecounter_context *) base;
   size_t i;
 
@@ -190,6 +201,10 @@ static rtems_interval test_bintime_null_init(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) base;
+  (void) active_workers;
+
   timecounter_context *ctx = &test_instance;
 
   install_tc_null(ctx);
@@ -204,6 +219,9 @@ static void test_bintime_null_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   timecounter_context *ctx = (timecounter_context *) base;
   struct bintime bt;
   uint32_t counter = 0;
@@ -222,6 +240,8 @@ static void test_bintime_null_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_print_results("Null", (timecounter_context *) base, active_workers);
 }
 
@@ -241,6 +261,8 @@ static const rtems_test_parallel_job timecounter_jobs[] = {
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   timecounter_context *ctx = &test_instance;
   struct bintime bt;
   struct timespec ts;

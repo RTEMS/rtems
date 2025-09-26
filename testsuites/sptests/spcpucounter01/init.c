@@ -250,6 +250,8 @@ static void test_report(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
 
   rtems_print_printer_fprintf_putc(&rtems_test_printer);

@@ -44,6 +44,9 @@ rtems_timer_service_routine TA1_send_18_to_self_5_seconds(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_18 );
@@ -55,6 +58,9 @@ rtems_timer_service_routine TA1_send_8_to_self_60_seconds(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_8 );
@@ -66,6 +72,9 @@ rtems_timer_service_routine TA1_send_9_to_self_60_seconds(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_9 );
@@ -77,6 +86,9 @@ rtems_timer_service_routine TA1_send_10_to_self(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_10 );
@@ -88,6 +100,9 @@ rtems_timer_service_routine TA1_send_1_to_self_every_second(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_1 );
@@ -99,6 +114,9 @@ rtems_timer_service_routine TA1_send_11_to_self(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_11 );
@@ -110,6 +128,9 @@ rtems_timer_service_routine TA2_send_10_to_self(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 2 ], RTEMS_EVENT_10 );

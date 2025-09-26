@@ -37,6 +37,8 @@ static bool did_run;
 
 static void do_not_run(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_test_assert(0);
 }
 
@@ -78,6 +80,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

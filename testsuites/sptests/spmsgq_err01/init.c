@@ -38,6 +38,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   long              buffer[ 4 ];
   uint32_t          count;
   size_t            size;

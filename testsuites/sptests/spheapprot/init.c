@@ -49,6 +49,9 @@ const char rtems_test_name[] = "SPHEAPPROT";
      Heap_Error_reason reason
   )
   {
+    (void) block;
+    (void) reason;
+
     bool *error = heap->Protection.handler_data;
 
     *error = true;
@@ -143,6 +146,8 @@ const char rtems_test_name[] = "SPHEAPPROT";
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   test_heap_protection();

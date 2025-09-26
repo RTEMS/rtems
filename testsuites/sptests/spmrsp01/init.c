@@ -322,6 +322,8 @@ static void test_mrsp_timeout_and_not_owner_of_resource(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_resource_snapshot snapshot;
 
   TEST_BEGIN();

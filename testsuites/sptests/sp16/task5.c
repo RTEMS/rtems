@@ -45,6 +45,8 @@ rtems_task Task5(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   void              *segment_address_1;
   void              *segment_address_2;
   rtems_status_code  status;

@@ -57,6 +57,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id                                period_id;
   rtems_name                              period_name;
   rtems_rate_monotonic_period_status      period_status;

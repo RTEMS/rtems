@@ -54,6 +54,8 @@ rtems_id Barrier;
 
 rtems_task read_task(rtems_task_argument not_used)
 {
+  (void) not_used;
+
   int fd = 0;
   int status = -1;
 
@@ -217,6 +219,8 @@ rtems_task Init(
   rtems_task_argument not_used
 )
 {
+  (void) not_used;
+
   test_main();
   rtems_test_exit(0);
 }

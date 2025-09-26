@@ -56,6 +56,8 @@ static rtems_task Task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code                          status;
   rtems_id                                   RM_period;
   rtems_id                                   selfid=rtems_task_self();
@@ -116,6 +118,8 @@ static rtems_task Init(
 	rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t     index;
   rtems_status_code status;
 

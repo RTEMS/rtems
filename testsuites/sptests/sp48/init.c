@@ -44,6 +44,8 @@ rtems_id Semaphores[SEMA_COUNT];
 
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_status_code sc;
   int               i;
   int               created;

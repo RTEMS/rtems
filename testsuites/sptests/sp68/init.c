@@ -110,6 +110,9 @@ static void assert_time(rtems_interval expected)
 
 static void obtain_callback(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   char buf [1];
   size_t size = sizeof(buf);
@@ -165,6 +168,9 @@ static void obtain_callback(rtems_id timer_id, void *arg)
 
 static void release_callback(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   char buf [1] = { 0 };
   size_t size = sizeof(buf);
@@ -210,6 +216,9 @@ static void release_callback(rtems_id timer_id, void *arg)
 
 static void interrupt_triggered_callback(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+  (void) arg;
+
   /*
    * This callback is scheduled to fire at T3, but is delayed due to the
    * blocked obtain callback.
@@ -228,6 +237,9 @@ static void interrupt_triggered_callback(rtems_id timer_id, void *arg)
 
 static void interrupt_callback(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   assert_time(T2);
@@ -254,6 +266,9 @@ static void interrupt_callback(rtems_id timer_id, void *arg)
 
 static void server_triggered_callback(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+  (void) arg;
+
   assert_time(T5);
 
   rtems_test_assert(
@@ -269,6 +284,9 @@ static void server_triggered_callback(rtems_id timer_id, void *arg)
 
 static void delayed_callback(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   assert_time(T4);
@@ -394,6 +412,8 @@ static void test_case(enum resource_type rt)
 
 rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   char region_area [256];
   enum resource_type rt = SEMAPHORE;

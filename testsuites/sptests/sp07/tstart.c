@@ -46,6 +46,8 @@ void Task_start_extension(
   rtems_tcb *started_task
 )
 {
+  (void) unused;
+
   ssize_t task = task_number( started_task->Object.id );
 
   if (task > 0) {

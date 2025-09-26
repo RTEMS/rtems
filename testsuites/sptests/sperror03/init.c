@@ -56,6 +56,8 @@ static rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
   rtems_panic( fmt );
   rtems_test_assert(0);

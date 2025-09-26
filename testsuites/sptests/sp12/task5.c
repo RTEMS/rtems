@@ -46,6 +46,8 @@ rtems_task Task5(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   puts( "TA5 - rtems_semaphore_obtain - wait forever on SM1" );

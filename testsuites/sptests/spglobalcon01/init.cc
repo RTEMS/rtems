@@ -49,6 +49,8 @@ static A a;
 
 static void *idle_body(uintptr_t ignored)
 {
+  (void) ignored;
+
   TEST_BEGIN();
 
   rtems_test_assert(a.i == 0);

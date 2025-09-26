@@ -49,6 +49,8 @@ const char rtems_test_name[] = "SP 19";
 
 void thread_switch_extension( Thread_Control *executing, Thread_Control *heir )
 {
+  (void) executing;
+
   if ( heir->is_fp ) {
     rtems_print_printer_fprintf_putc( &rtems_test_printer );
   } else {
@@ -60,6 +62,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   TEST_BEGIN();

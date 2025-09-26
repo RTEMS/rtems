@@ -53,6 +53,8 @@ static const rtems_time_of_day start = {
 
 static void cancel(rtems_id id, void *arg)
 {
+  (void) id;
+
   test_context *ctx = arg;
   rtems_status_code sc;
 
@@ -65,6 +67,9 @@ static void cancel(rtems_id id, void *arg)
 
 static void never(rtems_id id, void *arg)
 {
+  (void) id;
+  (void) arg;
+
   rtems_test_assert(0);
 }
 
@@ -119,6 +124,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

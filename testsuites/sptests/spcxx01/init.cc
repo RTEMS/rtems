@@ -67,6 +67,8 @@ static void test_future(void)
 
 extern "C" void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_aligned_new();

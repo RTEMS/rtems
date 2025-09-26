@@ -138,6 +138,8 @@ rtems_task BlockingTasks(rtems_task_argument arg)
 
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_status_code   status;
   int                 i;
 

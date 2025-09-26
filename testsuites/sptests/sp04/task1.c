@@ -61,6 +61,8 @@ static rtems_id low_task_id;
 
 static void high_task( rtems_task_argument arg )
 {
+  (void) arg;
+
   rtems_status_code sc;
 
   rtems_test_assert( test_no_preempt_step == 2 );
@@ -75,6 +77,8 @@ static void high_task( rtems_task_argument arg )
 
 static void low_task( rtems_task_argument arg )
 {
+  (void) arg;
+
   rtems_test_assert( test_no_preempt_step == 1 );
   test_no_preempt_step = 2;
 
@@ -84,6 +88,9 @@ static void low_task( rtems_task_argument arg )
 
 static void no_preempt_timer( rtems_id id, void *arg )
 {
+  (void) id;
+  (void) arg;
+
   rtems_status_code sc;
 
   rtems_test_assert( test_no_preempt_step == 0 );
@@ -154,6 +161,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t    seconds;
   uint32_t    old_seconds;
   rtems_mode        previous_mode;

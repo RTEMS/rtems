@@ -78,6 +78,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id              main_task;
   int                   count;
   Objects_Control      *o;

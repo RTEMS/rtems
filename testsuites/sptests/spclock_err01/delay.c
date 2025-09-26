@@ -45,4 +45,6 @@ rtems_timer_service_routine Delayed_routine(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
 }

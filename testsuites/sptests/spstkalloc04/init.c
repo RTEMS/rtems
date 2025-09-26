@@ -43,6 +43,8 @@ static rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_print_printer_fprintf_putc(&rtems_test_printer);
   TEST_BEGIN();
   rtems_test_assert(thread_stacks_count == 1);
@@ -72,6 +74,8 @@ static void *thread_stacks_allocate_for_idle(
   size_t   *stack_size
 )
 {
+  (void) cpu;
+
   rtems_test_assert(thread_stacks_count == 0);
   thread_stacks_count++;
   return allocate_helper(*stack_size);

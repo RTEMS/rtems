@@ -43,6 +43,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_id                task_id;
   rtems_status_code       sc;
   bool                    ok;

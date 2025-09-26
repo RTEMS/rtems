@@ -41,6 +41,8 @@ static rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   const char *key;
   const char *valid;
 

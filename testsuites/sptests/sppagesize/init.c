@@ -44,6 +44,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+    (void) argument;
+
     TEST_BEGIN();
 
     rtems_test_assert(PAGESIZE == PAGE_SIZE);
