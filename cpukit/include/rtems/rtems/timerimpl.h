@@ -138,7 +138,7 @@ static inline bool _Timer_Is_interval_class(
   Timer_Classes the_class
 )
 {
-  int mask;
+  uint32_t mask;
 
   mask = TIMER_CLASS_BIT_NOT_DORMANT | TIMER_CLASS_BIT_TIME_OF_DAY;
   return ( the_class & mask ) == TIMER_CLASS_BIT_NOT_DORMANT;
@@ -148,7 +148,7 @@ static inline bool _Timer_Is_on_task_class(
   Timer_Classes the_class
 )
 {
-  int mask;
+  uint32_t mask;
 
   mask = TIMER_CLASS_BIT_NOT_DORMANT | TIMER_CLASS_BIT_ON_TASK;
   return ( the_class & mask ) == mask;
