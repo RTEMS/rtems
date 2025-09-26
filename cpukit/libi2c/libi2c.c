@@ -212,6 +212,9 @@ rtems_status_code
 rtems_i2c_init (rtems_device_major_number major, rtems_device_minor_number minor,
           void *arg)
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code rval;
   /* No busses or drivers can be registered at this point;
    * avoid the macro aborting with an error
