@@ -137,6 +137,9 @@ rtems_rfs_get_fs (const char* path, rtems_rfs_file_system** fs)
 static int
 rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
 {
+  (void) argc;
+  (void) argv;
+
   size_t blocks;
   size_t inodes;
   int    bpcent;

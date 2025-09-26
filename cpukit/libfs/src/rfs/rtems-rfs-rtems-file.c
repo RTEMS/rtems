@@ -58,6 +58,8 @@ rtems_rfs_rtems_file_open (rtems_libio_t* iop,
                            int            oflag,
                            mode_t         mode)
 {
+  (void) oflag;
+
   rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (&iop->pathinfo);
   rtems_rfs_ino          ino;
   rtems_rfs_file_handle* file;

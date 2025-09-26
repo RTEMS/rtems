@@ -92,6 +92,8 @@ rtems_rfs_rtems_is_directory(
   void *arg
 )
 {
+  (void) ctx;
+
   rtems_rfs_inode_handle* inode = arg;
 
   return S_ISDIR (rtems_rfs_inode_get_mode (inode));

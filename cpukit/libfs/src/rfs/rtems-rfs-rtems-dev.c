@@ -195,6 +195,9 @@ rtems_rfs_rtems_device_ioctl (rtems_libio_t*  iop,
 static int
 rtems_rfs_rtems_device_ftruncate (rtems_libio_t* iop, off_t length)
 {
+  (void) iop;
+  (void) length;
+
   return 0;
 }
 

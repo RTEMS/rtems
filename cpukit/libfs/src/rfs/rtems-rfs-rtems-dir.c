@@ -60,6 +60,10 @@ rtems_rfs_rtems_dir_open (rtems_libio_t* iop,
                           int            oflag,
                           mode_t         mode)
 {
+  (void) pathname;
+  (void) oflag;
+  (void) mode;
+
   rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (&iop->pathinfo);
   rtems_rfs_ino          ino = rtems_rfs_rtems_get_iop_ino (iop);
   rtems_rfs_inode_handle inode;
@@ -98,6 +102,8 @@ rtems_rfs_rtems_dir_open (rtems_libio_t* iop,
 static int
 rtems_rfs_rtems_dir_close (rtems_libio_t* iop)
 {
+  (void) iop;
+
   /*
    * The RFS does not hold any resources. Nothing to do.
    */
