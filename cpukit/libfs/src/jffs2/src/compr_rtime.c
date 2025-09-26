@@ -89,6 +89,9 @@ int rtems_jffs2_compressor_rtime_decompress(
 	uint32_t destlen
 )
 {
+#ifdef __rtems__
+	(void) srclen;
+#endif
 	unsigned short positions[256];
 	int outpos = 0;
 	int pos=0;

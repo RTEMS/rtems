@@ -1018,6 +1018,9 @@ struct jffs2_inode_cache *jffs2_scan_make_ino_cache(struct jffs2_sb_info *c, uin
 static int jffs2_scan_inode_node(struct jffs2_sb_info *c, struct jffs2_eraseblock *jeb,
 				 struct jffs2_raw_inode *ri, uint32_t ofs, struct jffs2_summary *s)
 {
+#ifdef __rtems__
+	(void) s;
+#endif
 	struct jffs2_inode_cache *ic;
 	uint32_t crc, ino = je32_to_cpu(ri->ino);
 
@@ -1072,6 +1075,9 @@ static int jffs2_scan_inode_node(struct jffs2_sb_info *c, struct jffs2_erasebloc
 static int jffs2_scan_dirent_node(struct jffs2_sb_info *c, struct jffs2_eraseblock *jeb,
 				  struct jffs2_raw_dirent *rd, uint32_t ofs, struct jffs2_summary *s)
 {
+#ifdef __rtems__
+	(void) s;
+#endif
 	struct jffs2_full_dirent *fd;
 	struct jffs2_inode_cache *ic;
 	uint32_t checkedlen;

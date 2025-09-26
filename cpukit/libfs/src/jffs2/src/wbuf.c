@@ -186,6 +186,9 @@ static struct jffs2_raw_node_ref **jffs2_incore_replace_raw(struct jffs2_sb_info
 							    struct jffs2_raw_node_ref *raw,
 							    union jffs2_node_union *node)
 {
+#ifdef __rtems__
+	(void) c;
+#endif
 	struct jffs2_node_frag *frag;
 	struct jffs2_full_dirent *fd;
 

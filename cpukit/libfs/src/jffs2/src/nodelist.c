@@ -172,6 +172,9 @@ static int no_overlapping_node(struct jffs2_sb_info *c, struct rb_root *root,
 		 	       struct jffs2_node_frag *newfrag,
 			       struct jffs2_node_frag *this, uint32_t lastend)
 {
+#ifdef __rtems__
+	(void) c;
+#endif
 	if (lastend < newfrag->node->ofs) {
 		/* put a hole in before the new fragment */
 		struct jffs2_node_frag *holefrag;

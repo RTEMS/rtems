@@ -86,6 +86,8 @@ static struct jffs2_raw_node_ref *jffs2_alloc_refblock(void)
 int jffs2_prealloc_raw_node_refs(struct jffs2_sb_info *c,
 				 struct jffs2_eraseblock *jeb, int nr)
 {
+	(void) c;
+
 	struct jffs2_raw_node_ref **p, *ref;
 	int i = nr;
 

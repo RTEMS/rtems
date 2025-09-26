@@ -799,6 +799,8 @@ static bool rtems_jffs2_eval_is_directory(
 	void *arg
 )
 {
+	(void) arg;
+
 	rtems_filesystem_location_info_t *currentloc =
 		rtems_filesystem_eval_path_get_currentloc(ctx);
 	struct _inode *inode = rtems_jffs2_get_inode_by_location(currentloc);
@@ -813,6 +815,8 @@ static rtems_filesystem_eval_path_generic_status rtems_jffs2_eval_token(
 	size_t tokenlen
 )
 {
+	(void) arg;
+
 	rtems_filesystem_eval_path_generic_status status =
 		RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_DONE;
 	rtems_filesystem_location_info_t *currentloc =
@@ -937,6 +941,8 @@ static int rtems_jffs2_mknod(
 	dev_t dev
 )
 {
+	(void) dev;
+
 	struct _inode *dir_i = rtems_jffs2_get_inode_by_location(parentloc);
 	int eno;
 
@@ -1767,6 +1773,8 @@ static int jffs2_read_inode (struct _inode *inode)
 void jffs2_gc_release_inode(struct jffs2_sb_info *c,
 				   struct jffs2_inode_info *f)
 {
+	(void) c;
+
 	jffs2_iput(OFNI_EDONI_2SFFJ(f));
 }
 

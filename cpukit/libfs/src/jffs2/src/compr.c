@@ -41,6 +41,9 @@ uint16_t jffs2_compress(struct jffs2_sb_info *c, struct jffs2_inode_info *f,
 			unsigned char *data_in, unsigned char **cpage_out,
 			uint32_t *datalen, uint32_t *cdatalen)
 {
+#ifdef __rtems__
+	(void) f;
+#endif
 	struct super_block *sb = OFNI_BS_2SFFJ(c);
 	rtems_jffs2_compressor_control *cc = sb->s_compressor_control;
 	int ret;
@@ -63,6 +66,9 @@ int jffs2_decompress(struct jffs2_sb_info *c, struct jffs2_inode_info *f,
 		     uint16_t comprtype, unsigned char *cdata_in,
 		     unsigned char *data_out, uint32_t cdatalen, uint32_t datalen)
 {
+#ifdef __rtems__
+	(void) f;
+#endif
 	struct super_block *sb = OFNI_BS_2SFFJ(c);
 	rtems_jffs2_compressor_control *cc = sb->s_compressor_control;
 

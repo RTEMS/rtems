@@ -760,6 +760,9 @@ static int jffs2_garbage_collect_pristine(struct jffs2_sb_info *c,
 static int jffs2_garbage_collect_metadata(struct jffs2_sb_info *c, struct jffs2_eraseblock *jeb,
 					struct jffs2_inode_info *f, struct jffs2_full_dnode *fn)
 {
+#ifdef __rtems__
+	(void) jeb;
+#endif
 	struct jffs2_full_dnode *new_fn;
 	struct jffs2_raw_inode ri;
 	struct jffs2_node_frag *last_frag;
@@ -858,6 +861,9 @@ static int jffs2_garbage_collect_metadata(struct jffs2_sb_info *c, struct jffs2_
 static int jffs2_garbage_collect_dirent(struct jffs2_sb_info *c, struct jffs2_eraseblock *jeb,
 					struct jffs2_inode_info *f, struct jffs2_full_dirent *fd)
 {
+#ifdef __rtems__
+	(void) jeb;
+#endif
 	struct jffs2_full_dirent *new_fd;
 	struct jffs2_raw_dirent rd;
 	uint32_t alloclen;
@@ -1022,6 +1028,9 @@ static int jffs2_garbage_collect_hole(struct jffs2_sb_info *c, struct jffs2_eras
 				      struct jffs2_inode_info *f, struct jffs2_full_dnode *fn,
 				      uint32_t start, uint32_t end)
 {
+#ifdef __rtems__
+	(void) jeb;
+#endif
 	struct jffs2_raw_inode ri;
 	struct jffs2_node_frag *frag;
 	struct jffs2_full_dnode *new_fn;
@@ -1173,6 +1182,10 @@ static int jffs2_garbage_collect_dnode(struct jffs2_sb_info *c, struct jffs2_era
 				       struct jffs2_inode_info *f, struct jffs2_full_dnode *fn,
 				       uint32_t start, uint32_t end)
 {
+#ifdef __rtems__
+	(void) orig_jeb;
+	(void) fn;
+#endif
 #ifndef __rtems__
 	struct inode *inode = OFNI_EDONI_2SFFJ(f);
 #endif /* __rtems__ */
