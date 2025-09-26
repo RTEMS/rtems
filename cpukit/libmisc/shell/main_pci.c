@@ -100,6 +100,9 @@ static int shell_pci_pcfg(
 	char *argv[],
 	struct shell_pci_modifier *mod)
 {
+  (void) argv;
+  (void) mod;
+
   if (argc != 2)
     return -1;
 
@@ -113,6 +116,8 @@ static int shell_pci_ls(
 	char *argv[],
 	struct shell_pci_modifier *mod)
 {
+  (void) mod;
+
   unsigned long pciid;
 
   if (argc == 2) {
@@ -295,6 +300,8 @@ static int shell_pci_pciid(
 	char *argv[],
 	struct shell_pci_modifier *mod)
 {
+  (void) mod;
+
   unsigned long pciid;
 
   if (argc != 3)
@@ -313,6 +320,11 @@ static int shell_pci_getdev(
 	char *argv[],
 	struct shell_pci_modifier *mod)
 {
+  (void) argc;
+  (void) argv;
+  (void) mod;
+
+
   unsigned long pciid;
   struct pci_dev *dev;
 
@@ -337,6 +349,8 @@ static int shell_pci_infodev(
 	char *argv[],
 	struct shell_pci_modifier *mod)
 {
+  (void) mod;
+
   unsigned long arg;
   struct pci_dev *dev;
   struct pci_bus *bus;
@@ -475,6 +489,10 @@ static int shell_pci_usage(
 	char *argv[],
 	struct shell_pci_modifier *mod)
 {
+  (void) argc;
+  (void) argv;
+  (void) mod;
+
   usage();
   return 0;
 }

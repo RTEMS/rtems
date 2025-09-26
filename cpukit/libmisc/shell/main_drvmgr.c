@@ -68,6 +68,9 @@ static void show_drvmgr_info(void)
 
 static int shell_drvmgr_topo(int argc, char *argv[])
 {
+  (void) argc;
+  (void) argv;
+
   drvmgr_print_topo();
   return 0;
 }
@@ -122,6 +125,9 @@ static int shell_drvmgr_info(int argc, char *argv[])
 
 static int shell_drvmgr_remove(int argc, char *argv[])
 {
+  (void) argc;
+  (void) argv;
+
   puts(" Not implemented");
   return 0;
 }
@@ -278,24 +284,36 @@ static int shell_drvmgr_res(int argc, char *argv[])
 
 static int shell_drvmgr_buses(int argc, char *argv[])
 {
+  (void) argc;
+  (void) argv;
+
   drvmgr_info_buses(OPTION_INFO_ALL);
   return 0;
 }
 
 static int shell_drvmgr_devs(int argc, char *argv[])
 {
+  (void) argc;
+  (void) argv;
+
   drvmgr_info_devs(OPTION_INFO_ALL);
   return 0;
 }
 
 static int shell_drvmgr_drvs(int argc, char *argv[])
 {
+  (void) argc;
+  (void) argv;
+
   drvmgr_info_drvs(OPTION_INFO_ALL);
   return 0;
 }
 
 static int shell_drvmgr_mem(int argc, char *argv[])
 {
+  (void) argc;
+  (void) argv;
+
   drvmgr_print_mem();
   return 0;
 }
@@ -370,6 +388,9 @@ static void usage(void)
 
 static int shell_drvmgr_usage(int argc, char *argv[])
 {
+  (void) argc;
+  (void) argv;
+
   usage();
   return 0;
 }

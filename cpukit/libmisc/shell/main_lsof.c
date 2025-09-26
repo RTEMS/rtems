@@ -111,6 +111,9 @@ static void lsof(void)
 
 static int rtems_shell_main_lsof(int argc, char **argv)
 {
+  (void) argc;
+  (void) argv;
+
   lsof();
 
   return 0;

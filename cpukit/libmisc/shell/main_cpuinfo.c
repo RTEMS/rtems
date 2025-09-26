@@ -41,6 +41,9 @@
 
 static int rtems_shell_main_cpuinfo(int argc, char **argv)
 {
+  (void) argc;
+  (void) argv;
+
   rtems_printer printer;
 
   rtems_print_printer_fprintf(&printer, stdout);

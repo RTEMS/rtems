@@ -163,6 +163,8 @@ static const char *spec = ".#-+ 0123456789";
 int
 size(rtems_shell_hexdump_globals* globals, FS *fs)
 {
+	(void) globals;
+
 	FU *fu;
 	int bcnt, cursize;
 	unsigned char *fmt;

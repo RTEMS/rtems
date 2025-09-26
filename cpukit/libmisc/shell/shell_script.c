@@ -68,6 +68,8 @@ static int findOnPATH(
   size_t      scriptFileLength
 )
 {
+  (void) scriptFileLength;
+
   int sc;
   char *cwd;
 

@@ -94,6 +94,9 @@ summary(rtems_shell_dd_globals* globals)
 void
 summaryx(rtems_shell_dd_globals* globals, int __unused_arg)
 {
+#ifdef __rtems__
+	(void) __unused_arg;
+#endif
 	int save_errno = errno;
 
 	summary(globals);

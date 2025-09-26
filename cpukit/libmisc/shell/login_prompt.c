@@ -98,6 +98,8 @@
 
 static int rtems_shell_discard( int c, FILE *stream)
 {
+  (void) stream;
+
   return c;
 }
 

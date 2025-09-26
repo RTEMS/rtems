@@ -48,6 +48,8 @@
 
 static bool print_filesystem(const rtems_filesystem_table_t *entry, void *arg)
 {
+  (void) arg;
+
   printf("%s ", entry->type);
 
   return false;

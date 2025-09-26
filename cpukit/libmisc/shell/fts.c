@@ -536,6 +536,9 @@ name:		t = sp->fts_path + NAPPEND(p->fts_parent);
 int
 fts_set(FTS *sp, FTSENT *p, int instr)
 {
+#ifdef __rtems__
+	(void) sp;
+#endif
 
 	_DIAGASSERT(sp != NULL);
 	_DIAGASSERT(p != NULL);

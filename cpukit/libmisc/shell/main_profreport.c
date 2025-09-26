@@ -43,6 +43,9 @@
 
 static int rtems_shell_main_profreport(int argc, char **argv)
 {
+  (void) argc;
+  (void) argv;
+
   rtems_printer printer;
   rtems_print_printer_printf(&printer);
   rtems_profiling_report_xml(

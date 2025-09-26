@@ -102,6 +102,8 @@ rtems_trace_buffering_print_timestamp (uint64_t uptime)
 static int
 rtems_trace_buffering_shell_status (int argc, char *argv[])
 {
+  (void) argv;
+
   uint32_t buffer_size;
   uint32_t buffer_in;
   bool     finished;
@@ -132,6 +134,8 @@ rtems_trace_buffering_shell_status (int argc, char *argv[])
 static int
 rtems_trace_buffering_shell_funcs (int argc, char *argv[])
 {
+  (void) argv;
+
   size_t traces = rtems_trace_names_size ();
   size_t t;
   size_t max = 0;
@@ -166,6 +170,8 @@ rtems_trace_buffering_shell_funcs (int argc, char *argv[])
 static int
 rtems_trace_buffering_shell_start (int argc, char *argv[])
 {
+  (void) argv;
+
   if (argc != 1)
     return rtems_trace_buffering_wrong_number_of_args ();
 
@@ -188,6 +194,8 @@ rtems_trace_buffering_shell_start (int argc, char *argv[])
 static int
 rtems_trace_buffering_shell_stop (int argc, char *argv[])
 {
+  (void) argv;
+
   if (argc != 1)
     return rtems_trace_buffering_wrong_number_of_args ();
 
@@ -210,6 +218,8 @@ rtems_trace_buffering_shell_stop (int argc, char *argv[])
 static int
 rtems_trace_buffering_shell_resume (int argc, char *argv[])
 {
+  (void) argv;
+
   if (argc != 1)
     return rtems_trace_buffering_wrong_number_of_args ();
 
