@@ -40,4 +40,5 @@ void rtems_filesystem_default_fsunmount(
    rtems_filesystem_mount_table_entry_t *mt_entry    /* IN */
 )
 {
+  (void) mt_entry;
 }

@@ -43,5 +43,7 @@ int rtems_filesystem_default_clonenode(
   rtems_filesystem_location_info_t *loc
 )
 {
+  (void) loc;
+
   return 0;
 }

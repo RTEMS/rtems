@@ -46,5 +46,10 @@ int rtems_filesystem_default_link(
   size_t namelen
 )
 {
+  (void) parentloc;
+  (void) targetloc;
+  (void) name;
+  (void) namelen;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }

@@ -47,5 +47,9 @@ ssize_t rtems_filesystem_default_readlink(
   size_t bufsize
 )
 {
+  (void) loc;
+  (void) buf;
+  (void) bufsize;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }

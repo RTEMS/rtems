@@ -44,5 +44,8 @@ int rtems_filesystem_default_fchmod(
   mode_t mode
 )
 {
+  (void) loc;
+  (void) mode;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }

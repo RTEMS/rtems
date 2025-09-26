@@ -46,5 +46,9 @@ off_t rtems_filesystem_default_lseek(
   int            whence
 )
 {
+  (void) iop;
+  (void) offset;
+  (void) whence;
+
   rtems_set_errno_and_return_minus_one( ESPIPE );
 }

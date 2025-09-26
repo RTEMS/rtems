@@ -49,5 +49,11 @@ int rtems_filesystem_default_mknod(
   dev_t dev
 )
 {
+  (void) parentloc;
+  (void) name;
+  (void) namelen;
+  (void) mode;
+  (void) dev;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }

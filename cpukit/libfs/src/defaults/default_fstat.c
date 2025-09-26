@@ -45,6 +45,8 @@ int rtems_filesystem_default_fstat(
   struct stat *buf
 )
 {
+  (void) loc;
+
   buf->st_mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
   return 0;

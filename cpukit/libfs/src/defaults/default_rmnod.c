@@ -46,5 +46,8 @@ int rtems_filesystem_default_rmnod(
   const rtems_filesystem_location_info_t *loc
 )
 {
+  (void) parentloc;
+  (void) loc;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }

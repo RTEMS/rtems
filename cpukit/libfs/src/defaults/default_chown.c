@@ -45,5 +45,9 @@ int rtems_filesystem_default_chown(
   gid_t group
 )
 {
+  (void) loc;
+  (void) owner;
+  (void) group;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }

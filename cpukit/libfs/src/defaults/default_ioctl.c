@@ -46,5 +46,9 @@ int rtems_filesystem_default_ioctl(
   void            *buffer
 )
 {
+  (void) iop;
+  (void) request;
+  (void) buffer;
+
   rtems_set_errno_and_return_minus_one( ENOTTY );
 }

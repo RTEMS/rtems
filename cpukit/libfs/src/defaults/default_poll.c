@@ -46,6 +46,9 @@ int rtems_filesystem_default_poll(
   int            events
 )
 {
+  (void) iop;
+  (void) events;
+
   return POLLERR;
 }
 

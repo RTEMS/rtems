@@ -44,5 +44,7 @@ int rtems_filesystem_default_fsync_or_fdatasync(
   rtems_libio_t *iop
 )
 {
+  (void) iop;
+
   rtems_set_errno_and_return_minus_one( EINVAL );
 }

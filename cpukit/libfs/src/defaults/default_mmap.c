@@ -47,6 +47,12 @@ int rtems_filesystem_default_mmap(
   off_t           off
 )
 {
+  (void) iop;
+  (void) addr;
+  (void) len;
+  (void) prot;
+  (void) off;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }
 

@@ -49,5 +49,11 @@ int rtems_filesystem_default_rename(
   size_t namelen
 )
 {
+  (void) oldparentloc;
+  (void) oldloc;
+  (void) newparentloc;
+  (void) name;
+  (void) namelen;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }

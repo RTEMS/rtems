@@ -43,5 +43,8 @@ int rtems_filesystem_default_mount (
   const void *data
 )
 {
+  (void) mt_entry;
+  (void) data;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }

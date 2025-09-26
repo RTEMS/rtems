@@ -43,6 +43,8 @@ void rtems_filesystem_default_lock(
   const rtems_filesystem_mount_table_entry_t *mt_entry
 )
 {
+  (void) mt_entry;
+
   rtems_libio_lock();
 }
 
@@ -50,5 +52,7 @@ void rtems_filesystem_default_unlock(
   const rtems_filesystem_mount_table_entry_t *mt_entry
 )
 {
+  (void) mt_entry;
+
   rtems_libio_unlock();
 }

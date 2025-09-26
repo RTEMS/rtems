@@ -47,5 +47,10 @@ int rtems_filesystem_default_open(
   mode_t         mode
 )
 {
+  (void) iop;
+  (void) path;
+  (void) oflag;
+  (void) mode;
+
   return 0;
 }

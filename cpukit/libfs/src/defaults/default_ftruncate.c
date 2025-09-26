@@ -46,5 +46,8 @@ int rtems_filesystem_default_ftruncate(
   off_t          length
 )
 {
+  (void) iop;
+  (void) length;
+
   rtems_set_errno_and_return_minus_one( EINVAL );
 }

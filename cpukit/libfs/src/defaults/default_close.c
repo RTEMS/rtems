@@ -38,5 +38,7 @@ int rtems_filesystem_default_close(
   rtems_libio_t *iop
 )
 {
+  (void) iop;
+
   return 0;
 }

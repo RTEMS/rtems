@@ -44,5 +44,8 @@ int rtems_filesystem_default_statvfs(
   struct statvfs *buf
 )
 {
+  (void) loc;
+  (void) buf;
+
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }

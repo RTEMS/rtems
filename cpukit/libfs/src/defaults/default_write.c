@@ -44,5 +44,9 @@ ssize_t rtems_filesystem_default_write(
   size_t         count
 )
 {
+  (void) iop;
+  (void) buffer;
+  (void) count;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }

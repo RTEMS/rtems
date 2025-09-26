@@ -48,5 +48,10 @@ int rtems_filesystem_default_symlink(
   const char *target
 )
 {
+  (void) parentloc;
+  (void) name;
+  (void) namelen;
+  (void) target;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }

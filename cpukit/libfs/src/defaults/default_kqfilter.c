@@ -44,6 +44,9 @@ int rtems_filesystem_default_kqfilter(
   struct knote  *kn
 )
 {
+  (void) iop;
+  (void) kn;
+
   return EINVAL;
 }
 

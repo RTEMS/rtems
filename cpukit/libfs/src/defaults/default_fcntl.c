@@ -43,5 +43,8 @@ int rtems_filesystem_default_fcntl(
   int cmd
 )
 {
+  (void) iop;
+  (void) cmd;
+
   return 0;
 }

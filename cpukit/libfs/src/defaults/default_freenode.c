@@ -44,5 +44,7 @@ void rtems_filesystem_default_freenode(
   const rtems_filesystem_location_info_t *loc
 )
 {
+  (void) loc;
+
   /* Do nothing */
 }

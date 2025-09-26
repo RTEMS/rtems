@@ -43,5 +43,7 @@ int rtems_filesystem_default_fsync_or_fdatasync_success(
   rtems_libio_t *iop
 )
 {
+  (void) iop;
+
   return 0;
 }

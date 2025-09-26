@@ -45,5 +45,8 @@ int rtems_filesystem_default_utimens(
   struct timespec times[2]
 )
 {
+  (void) loc;
+  (void) times;
+
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }
