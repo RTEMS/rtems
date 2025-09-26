@@ -27,6 +27,8 @@ int
 msdos_rmnod(const rtems_filesystem_location_info_t *parent_pathloc,
             const rtems_filesystem_location_info_t *pathloc)
 {
+    (void) parent_pathloc;
+
     int                rc = RC_OK;
     msdos_fs_info_t   *fs_info = pathloc->mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = pathloc->node_access;

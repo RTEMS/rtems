@@ -45,6 +45,8 @@ int msdos_mknod(
     dev_t dev
 )
 {
+    (void) dev;
+
     int                  rc = RC_OK;
     fat_file_type_t      type = FAT_DIRECTORY;
 

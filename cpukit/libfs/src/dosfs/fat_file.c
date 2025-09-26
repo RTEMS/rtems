@@ -1036,6 +1036,8 @@ static inline void
 _hash_insert(rtems_chain_control *hash, uint32_t   key1, uint32_t   key2,
              fat_file_fd_t *el)
 {
+    (void) key2;
+
     rtems_chain_append_unprotected((hash) + ((key1) % FAT_HASH_MODULE), &(el)->link);
 }
 
@@ -1056,6 +1058,10 @@ static inline void
 _hash_delete(rtems_chain_control *hash, uint32_t   key1, uint32_t   key2,
              fat_file_fd_t *el)
 {
+    (void) hash;
+    (void) key1;
+    (void) key2;
+
     rtems_chain_extract_unprotected(&(el)->link);
 }
 

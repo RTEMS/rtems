@@ -63,6 +63,8 @@ msdos_rename(
     size_t new_namelen
 )
 {
+    (void) old_parent_loc;
+
     int                rc = RC_OK;
     fat_file_fd_t     *old_fat_fd  = old_loc->node_access;
     fat_dir_pos_t      old_pos = old_fat_fd->dir_pos;

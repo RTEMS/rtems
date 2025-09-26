@@ -68,6 +68,8 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
                  mode_t                                   mode,
                  fat_file_fd_t                           *link_fd)
 {
+    (void) mode;
+
     int               rc = RC_OK;
     ssize_t           ret = 0;
     msdos_fs_info_t  *fs_info = parent_loc->mt_entry->fs_info;

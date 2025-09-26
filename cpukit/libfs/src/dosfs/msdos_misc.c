@@ -1316,6 +1316,8 @@ msdos_find_file_in_directory (
     uint32_t                             *empty_file_offset,
     uint32_t                             *empty_entry_count)
 {
+    (void) name_type;
+
     int               rc                = RC_OK;
     ssize_t           bytes_read;
     uint32_t          dir_entry;
