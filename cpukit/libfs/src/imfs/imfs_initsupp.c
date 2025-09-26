@@ -84,6 +84,9 @@ static IMFS_jnode_t *IMFS_node_initialize_enosys(
   void *arg
 )
 {
+  (void) node;
+  (void) arg;
+
   errno = ENOSYS;
 
   return NULL;
@@ -94,6 +97,8 @@ IMFS_jnode_t *IMFS_node_initialize_default(
   void *arg
 )
 {
+  (void) arg;
+
   return node;
 }
 

@@ -68,6 +68,10 @@ static int IMFS_linfile_open(
   mode_t         mode
 )
 {
+  (void) pathname;
+  (void) oflag;
+  (void) mode;
+
   IMFS_file_t *file;
 
   file = iop->pathinfo.node_access;

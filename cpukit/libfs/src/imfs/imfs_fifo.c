@@ -60,6 +60,10 @@ static int IMFS_fifo_open(
   mode_t         mode
 )
 {
+  (void) pathname;
+  (void) oflag;
+  (void) mode;
+
   IMFS_jnode_t *jnode = iop->pathinfo.node_access;
 
   int err = fifo_open(&JNODE2PIPE(jnode), iop);

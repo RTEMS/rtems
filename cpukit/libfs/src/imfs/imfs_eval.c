@@ -50,6 +50,8 @@ static bool IMFS_eval_is_directory(
   void *arg
 )
 {
+  (void) arg;
+
   rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_get_currentloc( ctx );
   IMFS_jnode_t *node = currentloc->node_access;
@@ -115,6 +117,8 @@ static rtems_filesystem_eval_path_generic_status IMFS_eval_token(
   size_t tokenlen
 )
 {
+  (void) arg;
+
   rtems_filesystem_eval_path_generic_status status =
     RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_DONE;
   rtems_filesystem_location_info_t *currentloc =

@@ -74,6 +74,8 @@ int IMFS_rename(
   size_t namelen
 )
 {
+  (void) oldparentloc;
+
   IMFS_jnode_t         *node;
   IMFS_jnode_t         *new_parent;
   IMFS_renamed_control *control;

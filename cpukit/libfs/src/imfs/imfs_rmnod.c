@@ -48,6 +48,8 @@ int IMFS_rmnod(
   const rtems_filesystem_location_info_t *loc
 )
 {
+  (void) parentloc;
+
   int rv = 0;
   IMFS_jnode_t *node = loc->node_access;
   IMFS_fs_info_t *fs_info = loc->mt_entry->fs_info;

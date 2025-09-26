@@ -43,6 +43,8 @@ IMFS_jnode_t *IMFS_node_initialize_directory(
   void *arg
 )
 {
+  (void) arg;
+
   IMFS_directory_t *dir = (IMFS_directory_t *) node;
 
   rtems_chain_initialize_empty( &dir->Entries );

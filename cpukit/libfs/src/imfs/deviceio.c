@@ -130,5 +130,8 @@ int device_ftruncate(
   off_t          length
 )
 {
+  (void) iop;
+  (void) length;
+
   return 0;
 }

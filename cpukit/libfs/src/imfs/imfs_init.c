@@ -77,6 +77,8 @@ int IMFS_initialize(
   const void                           *data
 )
 {
+  (void) data;
+
   IMFS_fs_info_t *fs_info = calloc( 1, sizeof( *fs_info ) );
   IMFS_mount_data mount_data = {
     .fs_info = fs_info,
