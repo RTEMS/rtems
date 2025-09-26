@@ -230,6 +230,8 @@ int rtems_can_queue_abort_inslot(
   struct rtems_can_queue_slot *slot
 )
 {
+  (void) qends;
+
   int ret;
 
   ret = rtems_can_queue_fifo_abort_inslot( &qedge->fifo, slot );

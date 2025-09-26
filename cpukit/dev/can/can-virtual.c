@@ -132,6 +132,9 @@ static int virtual_chip_ioctl(
   void *arg
 )
 {
+  (void) chip;
+  (void) arg;
+
   int ret;
 
   switch( command ) {

@@ -276,6 +276,10 @@ static int can_bus_open(
   mode_t mode
 )
 {
+  (void) path;
+  (void) oflag;
+  (void) mode;
+
   struct rtems_can_queue_ends_user_t *qends_user;
   struct rtems_can_queue_ends *qends;
   struct rtems_can_queue_edge *edge4read = NULL;

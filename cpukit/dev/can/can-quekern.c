@@ -85,6 +85,8 @@ static inline struct rtems_can_queue_edge *can_queue_dead_edges_cut_first( void 
 
 static rtems_task can_queue_dead_func( rtems_task_argument arg )
 {
+  (void) arg;
+
   struct rtems_can_queue_edge *qedge;
   struct rtems_can_queue_ends *qends;
   struct rtems_can_queue_ends *entry;
