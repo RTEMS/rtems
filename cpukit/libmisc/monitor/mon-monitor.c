@@ -306,7 +306,10 @@ rtems_monitor_reset_cmd(
   bool verbose
 )
 {
-
+    (void) argc;
+    (void) argv;
+    (void) command_arg;
+    (void) verbose;
 }
 
 void

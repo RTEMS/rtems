@@ -52,6 +52,8 @@ static bool CPU_usage_Per_thread_handler(
   void           *arg
 )
 {
+  (void) arg;
+
   const Scheduler_Control *scheduler;
   ISR_lock_Context         state_lock_context;
   ISR_lock_Context         scheduler_lock_context;

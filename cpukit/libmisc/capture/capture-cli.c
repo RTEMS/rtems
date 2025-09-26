@@ -212,6 +212,8 @@ rtems_capture_cli_disable (int                                argc RC_UNUSED,
 static bool
 rtems_capture_cli_print_task (rtems_tcb *tcb, void *arg)
 {
+  (void) arg;
+
   rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority   floor = rtems_capture_watch_get_floor ();
   rtems_task_priority   priority;
@@ -267,6 +269,8 @@ rtems_capture_cli_print_task (rtems_tcb *tcb, void *arg)
 static bool
 rtems_capture_cli_count_tasks (rtems_tcb *tcb, void *arg)
 {
+  (void) tcb;
+
   uint32_t *task_count = arg;
   ++(*task_count);
   return false;

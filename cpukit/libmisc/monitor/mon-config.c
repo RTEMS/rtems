@@ -56,6 +56,8 @@ rtems_monitor_config_canonical(
     const void             *config_void
 )
 {
+    (void) config_void;
+
     const rtems_api_configuration_table *r;
 
     r = rtems_configuration_get_rtems_api_configuration();

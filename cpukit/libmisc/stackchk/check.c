@@ -207,6 +207,8 @@ bool rtems_stack_checker_create_extension(
 
 void rtems_stack_checker_begin_extension( Thread_Control *executing )
 {
+  (void) executing;
+
   Per_CPU_Control *cpu_self;
   uint32_t         cpu_self_index;
   Stack_Control   *stack;
@@ -314,6 +316,8 @@ void rtems_stack_checker_reporter_quiet(
   bool pattern_ok
 )
 {
+  (void) pattern_ok;
+
   rtems_fatal(
     RTEMS_FATAL_SOURCE_STACK_CHECKER,
     running->Object.name.name_u32
@@ -328,6 +332,8 @@ void rtems_stack_checker_switch_extension(
   Thread_Control *heir
 )
 {
+  (void) heir;
+
   bool sp_ok;
   bool pattern_ok;
   const Stack_Control *stack;

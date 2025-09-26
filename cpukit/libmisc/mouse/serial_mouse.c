@@ -53,6 +53,8 @@ const char *serial_mouse_type;
 
 static int serial_mouse_l_rint(int c, struct rtems_termios_tty *tp)
 {
+  (void) tp;
+
   unsigned char buf = c;
 
   /* call mouse_parser( void *ptr, char *buffer, int size ) */
@@ -81,6 +83,9 @@ rtems_device_driver serial_mouse_initialize(
   void                      *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   bsp_get_serial_mouse_device(
     &serial_mouse_device,
     &serial_mouse_type
@@ -102,6 +107,10 @@ rtems_device_driver serial_mouse_open(
   void                      *args
 )
 {
+  (void) major;
+  (void) minor;
+  (void) args;
+
   struct termios  termios_attr;
   int             status;
   int             disc = 6;
@@ -154,6 +163,10 @@ rtems_device_driver serial_mouse_close(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   close( serial_mouse_fd );
 
   return RTEMS_SUCCESSFUL;
@@ -165,6 +178,10 @@ rtems_device_driver serial_mouse_read(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -175,6 +192,10 @@ rtems_device_driver serial_mouse_write(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -185,6 +206,9 @@ rtems_device_driver serial_mouse_control(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_ioctl_args_t *args = (rtems_libio_ioctl_args_t *)arg;
 
   switch( args->command ) {

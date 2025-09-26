@@ -299,6 +299,8 @@ rtems_capture_find_control (rtems_name name, rtems_id id)
 static bool
 rtems_capture_initialize_control (rtems_tcb *tcb, void *arg)
 {
+  (void) arg;
+
   if (tcb->Capture.control == NULL)
   {
     rtems_name             name = rtems_build_name(0, 0, 0, 0);
@@ -773,6 +775,8 @@ rtems_capture_set_monitor (bool enable)
 static bool
 rtems_capture_flush_tcb (rtems_tcb *tcb, void *arg)
 {
+  (void) arg;
+
   tcb->Capture.flags &= ~RTEMS_CAPTURE_TRACED;
   return false;
 }

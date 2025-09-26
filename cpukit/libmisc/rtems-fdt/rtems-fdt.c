@@ -1177,6 +1177,8 @@ rtems_fdt_get_value (const char* path,
                      size_t      size,
                      uintptr_t*  value)
 {
+  (void) size;
+
   rtems_fdt_handle fdt;
   const void*      prop;
   int              node;

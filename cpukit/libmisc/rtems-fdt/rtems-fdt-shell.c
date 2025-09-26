@@ -150,6 +150,11 @@ rtems_fdt_get_value32 (const char* path,
                        size_t      size,
                        uint32_t*   value)
 {
+  (void) path;
+  (void) property;
+  (void) size;
+  (void) value;
+
   return true;
 }
 

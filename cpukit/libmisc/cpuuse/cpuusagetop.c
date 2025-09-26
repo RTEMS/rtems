@@ -176,8 +176,10 @@ print_time(rtems_cpu_usage_data*    data,
  * Count the number of tasks.
  */
 static bool
-task_counter(Thread_Control *thrad, void* arg)
+task_counter(Thread_Control *thread, void* arg)
 {
+  (void) thread;
+
   rtems_cpu_usage_data* data = (rtems_cpu_usage_data*) arg;
   ++data->task_count;
 
