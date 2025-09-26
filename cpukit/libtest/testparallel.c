@@ -36,6 +36,8 @@
 
 static void stop_worker_timer(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+
   rtems_test_parallel_context *ctx = arg;
 
   _Atomic_Store_ulong(&ctx->stop, 1, ATOMIC_ORDER_RELAXED);
