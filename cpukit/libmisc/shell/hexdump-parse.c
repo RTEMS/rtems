@@ -506,25 +506,25 @@ escape(char *p1)
 	}
 }
 
-void
+__dead void
 badcnt(rtems_shell_hexdump_globals* globals, char *s)
 {
 	errx(exit_jump, 1, "%s: bad byte count", s);
 }
 
-void
+__dead void
 badsfmt(rtems_shell_hexdump_globals* globals)
 {
 	errx(exit_jump, 1, "%%s: requires a precision or a byte count");
 }
 
-void
+__dead void
 badfmt(rtems_shell_hexdump_globals* globals, const char *fmt)
 {
 	errx(exit_jump, 1, "\"%s\": bad format", fmt);
 }
 
-void
+__dead void
 badconv(rtems_shell_hexdump_globals* globals, char *ch)
 {
 	errx(exit_jump, 1, "%%%s: bad conversion character", ch);
