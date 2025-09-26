@@ -552,6 +552,8 @@ rtems_rtl_find_obj_with_symbol (const rtems_rtl_obj_sym* sym)
 rtems_rtl_obj*
 rtems_rtl_load_object (const char* name, int mode)
 {
+  (void) mode;
+
   rtems_rtl_obj* obj;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))

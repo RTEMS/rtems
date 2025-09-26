@@ -339,6 +339,8 @@ rtems_rtl_archive_new (rtems_rtl_archives* archives,
                        const char*         path,
                        const char*         name)
 {
+  (void) archives;
+
   rtems_rtl_archive* archive;
   size_t             path_size;
   size_t             size;

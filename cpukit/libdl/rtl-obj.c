@@ -156,6 +156,8 @@ rtems_rtl_obj_unresolved_dependent (rtems_rtl_obj* obj,
                                     rtems_rtl_obj* dependent,
                                     void*          data)
 {
+  (void) obj;
+
   rtems_rtl_obj_unresolved_data* ud;
   ud = (rtems_rtl_obj_unresolved_data*) data;
   if ((dependent->flags & RTEMS_RTL_OBJ_DEP_VISITED) == 0)
@@ -1012,6 +1014,8 @@ rtems_rtl_obj_sections_locate (uint32_t            mask,
                                rtems_rtl_obj*      obj,
                                uint8_t*            base)
 {
+  (void) tag;
+
   rtems_chain_control* sections = &obj->sections;
   rtems_chain_node*    node = rtems_chain_first (sections);
   size_t               base_offset = 0;

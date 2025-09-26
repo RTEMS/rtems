@@ -229,6 +229,9 @@ rtems_rtl_rap_loader (rtems_rtl_obj*      obj,
                       rtems_rtl_obj_sect* sect,
                       void*               data)
 {
+  (void) obj;
+  (void) fd;
+
   rtems_rtl_rap* rap = (rtems_rtl_rap*) data;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))

@@ -81,6 +81,9 @@ shell_dlopen (int argc, char* argv[])
 int
 shell_dlclose (int argc, char* argv[])
 {
+  (void) argc;
+  (void) argv;
+
   return 0;
 }
 

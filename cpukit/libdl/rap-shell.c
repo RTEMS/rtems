@@ -77,6 +77,9 @@ shell_rap_list_handler (void* handle)
 static int
 shell_rap_list (int argc, char* argv[])
 {
+  (void) argc;
+  (void) argv;
+
   printf (" App        DL Handle  Name\n");
   return rtems_rap_iterate (shell_rap_list_handler) ? 0 : 1;
 }

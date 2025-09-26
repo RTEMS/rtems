@@ -63,6 +63,8 @@ rtems_rtl_chain_iterate (rtems_chain_control* chain,
 static bool
 rtems_rtl_count_iterator (rtems_chain_node* node, void* data)
 {
+  (void) node;
+
   int* count = data;
   ++(*count);
   return true;

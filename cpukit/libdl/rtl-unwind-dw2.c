@@ -59,6 +59,8 @@ rtems_rtl_elf_unwind_dw2_parse (const rtems_rtl_obj* obj,
                                 const char*          name,
                                 uint32_t             flags)
 {
+  (void) obj;
+
   return
     ((flags & RTEMS_RTL_OBJ_SECT_CONST) != 0) &&
     ((strcmp(name, ".eh_frame") == 0) ||

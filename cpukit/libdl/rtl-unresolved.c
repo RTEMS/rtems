@@ -388,6 +388,8 @@ static bool
 rtems_rtl_unresolved_archive_search_iterator (rtems_rtl_unresolv_rec* rec,
                                               void*                   data)
 {
+  (void) data;
+
   if (rec->type == rtems_rtl_unresolved_symbol)
     rec->rec.name.flags |= RTEMS_RTL_UNRESOLV_SYM_SEARCH_ARCHIVE;
   return false;
@@ -415,6 +417,8 @@ rtems_rtl_unresolved_clean_block (rtems_rtl_unresolv_block* block,
                                   size_t                    count,
                                   size_t                    recs_per_block)
 {
+  (void) recs_per_block;
+
   size_t index = rtems_rtl_unresolved_rec_index (block, rec);
   size_t bytes =
     (block->recs - index - count) * sizeof (rtems_rtl_unresolv_rec);

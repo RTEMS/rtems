@@ -112,6 +112,9 @@ rtems_rtl_shell_status (const rtems_printer* printer,
                         int                  argc,
                         char*                argv[])
 {
+  (void) argc;
+  (void) argv;
+
   rtems_rtl_obj_summary summary;
   size_t                total_memory;
   rtems_rtl_data*       rtl;

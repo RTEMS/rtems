@@ -45,6 +45,8 @@ rtems_rtl_alloc_heap (rtems_rtl_alloc_cmd cmd,
                       void**              address,
                       size_t              size)
 {
+  (void) tag;
+
   switch (cmd)
   {
     case RTEMS_RTL_ALLOC_NEW:

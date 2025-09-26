@@ -347,6 +347,8 @@ rtems_rtl_elf_reloc_relocator (rtems_rtl_obj*      obj,
                                bool                resolved,
                                void*               data)
 {
+  (void) data;
+
   const Elf_Rela* rela = (const Elf_Rela*) relbuf;
   const Elf_Rel*  rel = (const Elf_Rel*) relbuf;
 
@@ -871,6 +873,8 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
                             rtems_rtl_obj_sect* sect,
                             void*               data)
 {
+  (void) data;
+
   rtems_rtl_obj_cache* symbols;
   rtems_rtl_obj_cache* strings;
   rtems_rtl_obj_sect*  strtab;
@@ -1210,6 +1214,10 @@ rtems_rtl_elf_symbols_locate (rtems_rtl_obj*      obj,
                               rtems_rtl_obj_sect* sect,
                               void*               data)
 {
+  (void) fd;
+  (void) sect;
+  (void) data;
+
   int sym;
 
   for (sym = 0; sym < obj->local_syms; ++sym)
@@ -1254,6 +1262,9 @@ rtems_rtl_elf_arch_alloc (rtems_rtl_obj*      obj,
                           rtems_rtl_obj_sect* sect,
                           void*               data)
 {
+  (void) fd;
+  (void) data;
+
   if (rtems_rtl_obj_sect_is_arch_alloc (sect))
     return rtems_rtl_elf_arch_section_alloc (obj, sect);
   return true;
@@ -1284,6 +1295,8 @@ rtems_rtl_elf_loader (rtems_rtl_obj*      obj,
                       rtems_rtl_obj_sect* sect,
                       void*               data)
 {
+  (void) data;
+
   uint8_t* base_offset;
   size_t   len;
 

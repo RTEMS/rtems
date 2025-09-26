@@ -155,6 +155,9 @@ uint32_t
 rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
                              const Elf_Shdr*      shdr)
 {
+  (void) obj;
+  (void) shdr;
+
   return 0;
 }
 
@@ -249,6 +252,8 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Byte            syminfo,
                              const Elf_Word            symvalue)
 {
+  (void) syminfo;
+
   Elf_Addr *where;
   Elf_Word type, value, mask;
   Elf_Addr tmp = 0;
