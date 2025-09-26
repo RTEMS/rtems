@@ -62,6 +62,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   int fd[2] = {0,0};
   int dummy_fd[4] = {0,0};
   int status = 0;

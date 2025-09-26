@@ -43,6 +43,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int            sc;
   pthread_cond_t cond1 = PTHREAD_COND_INITIALIZER;
   pthread_cond_t cond2 = PTHREAD_COND_INITIALIZER;

@@ -51,11 +51,14 @@
 
 static void *stack_allocator(size_t unused)
 {
+  (void) unused;
+
   return NULL;
 }
 
 static void stack_deallocator(void *unused)
 {
+  (void) unused;
 }
 
 #define CONFIGURE_TASK_STACK_ALLOCATOR stack_allocator

@@ -46,6 +46,8 @@ void *Task_1_through_3(
   void *argument
 )
 {
+  (void) argument;
+
   unsigned int seconds;
   int          i;
   int          status;

@@ -46,6 +46,8 @@ void *TestThread(
   void *argument
 )
 {
+  (void) argument;
+
   int *index = (int *)argument;
 
   *index = 7; 
@@ -56,6 +58,8 @@ void *TestThread(
 
 void *POSIX_Init(void *argument)
 {
+  (void) argument;
+
   int             status;
   pthread_t       id;
   pthread_attr_t  attr;

@@ -60,6 +60,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   unsigned int      remaining;
   int               sc;
   struct sigaction  act;

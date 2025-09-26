@@ -50,6 +50,8 @@ static sigset_t main_sigmask;
 
 static void fetch_sigmask(const char *name, sigset_t *sigset_p)
 {
+  (void) name;
+
   int   rc;
 
   rc = sigemptyset(sigset_p);
@@ -100,6 +102,8 @@ static void block_sigmask(int signo, sigset_t *sigset_p)
 
 static void *thread_body(void *arg)
 {
+  (void) arg;
+
   sigset_t    mask;
 
   /*
@@ -115,6 +119,9 @@ static void *thread_body(void *arg)
 
 int main(int argc, char **argv)
 {
+  (void) argc;
+  (void) argv;
+
   int        rc;
   pthread_t  id;
   sigset_t   empty;

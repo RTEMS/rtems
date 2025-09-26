@@ -46,6 +46,8 @@ void *Task_2(
   void *argument
 )
 {
+  (void) argument;
+
   int   status;
 
   puts( "Task_2: sleep 1 second" );

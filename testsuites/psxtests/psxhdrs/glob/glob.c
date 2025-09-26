@@ -29,6 +29,9 @@ int test(void);
 
 static int errfunc (const char *epath, int eerrno)
 {
+  (void) epath;
+  (void) eerrno;
+
   return 0;
 }
 

@@ -71,6 +71,8 @@ void *Task_1(
   void *argument
 )
 {
+  (void) argument;
+
   int status;
   struct timespec start;
   struct timespec current;

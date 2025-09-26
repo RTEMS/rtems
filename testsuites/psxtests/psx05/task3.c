@@ -45,6 +45,8 @@ void *Task_3(
   void *argument
 )
 {
+  (void) argument;
+
   int                 status;
   struct sched_param  param;
   int                 policy;

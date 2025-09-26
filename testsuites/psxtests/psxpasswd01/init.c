@@ -85,6 +85,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   struct passwd *pw;
   struct group  *gr;
 

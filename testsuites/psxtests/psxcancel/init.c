@@ -59,11 +59,15 @@ static sem_t workerSem;
 
 static void countTask_cancel_handler(void *ignored)
 {
+  (void) ignored;
+
   countTask_handler = true;
 }
 
 static void *countTaskDeferred(void *ignored)
 {
+  (void) ignored;
+
   int i=0;
   int type,state;
   int sc;
@@ -83,6 +87,8 @@ static void *countTaskDeferred(void *ignored)
 
 static void *countTaskAsync(void *ignored)
 {
+  (void) ignored;
+
   int i=0;
   int type,state;
   int sc;
@@ -108,6 +114,8 @@ static void *countTaskAsync(void *ignored)
 
 static void *taskAsyncAndDetached(void *ignored)
 {
+  (void) ignored;
+
   int sc;
 
   sc = pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, NULL );
@@ -124,6 +132,8 @@ static void *taskAsyncAndDetached(void *ignored)
 
 static void *taskSelfDetach(void *ignored)
 {
+  (void) ignored;
+
   int sc;
 
   sc = sem_post( &workerSem );
@@ -157,6 +167,9 @@ static void resourceSnapshotCheck( void )
   int main(int argc, char **argv)
 #endif
 {
+#if defined(__rtems__)
+  (void) ignored;
+#endif
   pthread_t task;
   int       taskparameter = 0;
   int       sc;

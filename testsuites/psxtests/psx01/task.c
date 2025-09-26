@@ -53,6 +53,8 @@ void *Task_1_through_3(
   void *argument
 )
 {
+  (void) argument;
+
   int            status;
 
   puts( "Task_1: sched_yield to Init" );

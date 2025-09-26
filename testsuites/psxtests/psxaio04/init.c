@@ -79,6 +79,8 @@ static void notify( union sigval sig )
 
 void *POSIX_Init( void *argument )
 {
+  (void) argument;
+
   int fd, status, received_signal, sig;
   struct aiocb *aiocbp;
   sigset_t sig_set;

@@ -48,6 +48,8 @@ void *BlockingThread(
   void *argument
 )
 {
+  (void) argument;
+
   int sc;
 
   puts( "BlockingThread - pthread_cond_wait with mutex not locked - EPERM" );
@@ -109,6 +111,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int        sc;
   pthread_t  Thread;
 

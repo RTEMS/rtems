@@ -36,6 +36,8 @@ void *POSIX_Init(void *argument);
 
 void *POSIX_Init(void *argument)
 {
+  (void) argument;
+
   clock_t start, end;
   int diff = 0;
 

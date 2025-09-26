@@ -42,6 +42,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int                  status;
   struct sched_param   param;
   pthread_attr_t       attr;

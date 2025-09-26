@@ -53,6 +53,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   static const char mount_point [] = "dir01";
   static const char fs_type [] = RTEMS_FILESYSTEM_TYPE_IMFS;
   static const char slink_2_name [] = "node-slink-2";

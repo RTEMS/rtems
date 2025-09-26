@@ -40,6 +40,8 @@ static int handler_fstat(
   struct stat *buf
 )
 {
+  (void) loc;
+
   buf->st_mode = S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO;
   return 0;
 }
@@ -52,6 +54,10 @@ static int handler_mmap(
   off_t off
 )
 {
+  (void) iop;
+  (void) prot;
+  (void) off;
+
   if ( len <= sizeof(test_data) ) {
     *addr = test_data;
   } else {

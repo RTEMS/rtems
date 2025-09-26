@@ -128,6 +128,8 @@ static void test_restart_with_cleanup(void)
 
 static void cleaner(void *arg)
 {
+  (void) arg;
+
   puts( "clean was not supposed to run" );
   rtems_test_assert(0);
 }
@@ -136,6 +138,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   test_restart_with_cleanup();

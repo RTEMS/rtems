@@ -59,6 +59,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int               status;
   struct timespec   timeout;
   struct sigaction  act;

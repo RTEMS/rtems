@@ -117,6 +117,8 @@ void *Thread_1(
   void *argument
 )
 {
+  (void) argument;
+
   pthread_attr_t      attr;
   struct sched_param  param;
   int                 sc;
@@ -195,6 +197,8 @@ void *POSIX_Init(
   void *ignored
 )
 {
+  (void) ignored;
+
   int                 sc;
   pthread_attr_t      attribute;
   void               *stackaddr;

@@ -41,6 +41,8 @@ int test( int arg1, ... );
 
 int test( int arg1, ... )
 {
+  (void) arg1;
+
   FILE *stream;
   va_list ap;
   int result;

@@ -71,6 +71,8 @@ void Handler_1(
   int signo
 )
 {
+  (void) signo;
+
   Signal_count++;
   printf(
     "Handler_1: Signal: %d caught by 0x%" PRIxpthread_t " (%d)\n",
@@ -101,6 +103,8 @@ void Signal_info_handler(
   void      *context
 )
 {
+  (void) context;
+
   Signal_count++;
   printf(
     "Signal_info: %d caught by 0x%" PRIxpthread_t " (%d) si_signo= %d si_code= %d value= %d\n",
@@ -119,6 +123,9 @@ rtems_timer_service_routine Signal_duringISR_TSR(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   int  status;
 
   status = pthread_kill( pthread_self(), SIGUSR1 );
@@ -130,6 +137,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int               status;
   struct sigaction  act;
   sigset_t          mask;

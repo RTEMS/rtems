@@ -45,6 +45,8 @@ int test(char *fmt, ...);
 
 int test(char *fmt, ...)
 {
+  (void) fmt;
+
   FILE *file;
   const wchar_t *wc;
   va_list va;

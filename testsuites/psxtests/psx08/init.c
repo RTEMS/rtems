@@ -40,6 +40,8 @@ const char rtems_test_name[] = "PSX 8";
 
 static void *async_join_thread( void *arg )
 {
+  (void) arg;
+
   pthread_t *th;
   int        eno;
   int        type;
@@ -89,6 +91,8 @@ typedef struct {
 
 static void *protected_join_thread( void *arg )
 {
+  (void) arg;
+
   delete_deadlock_context *ctx;
   int                      state;
   int                      eno;
@@ -117,6 +121,8 @@ static void *protected_join_thread( void *arg )
 
 static void *deleter_thread( void *arg )
 {
+  (void) arg;
+
   delete_deadlock_context *ctx;
 
   ctx = arg;
@@ -169,6 +175,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int    status;
   void  *return_pointer;
   pthread_attr_t new_attr;

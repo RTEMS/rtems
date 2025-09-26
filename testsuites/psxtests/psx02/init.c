@@ -58,6 +58,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int               status;
   struct timespec   tv;
   struct timespec   tr;

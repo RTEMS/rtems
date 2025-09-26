@@ -51,6 +51,8 @@ static bool rtems_init_done;
 
 extern "C" void Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   rtems_test_assert(a.i == 1);
@@ -63,6 +65,8 @@ extern "C" void Init(rtems_task_argument argument)
 
 static void *POSIX_Init(void *argument)
 {
+  (void) argument;
+
   rtems_test_assert(rtems_init_done);
   rtems_test_assert(a.i == 1);
 

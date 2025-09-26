@@ -159,6 +159,8 @@ static void test_wait( struct aiocb** aiocbp )
 
 void *POSIX_Init( void *argument )
 {
+  (void) argument;
+
   struct aiocb *aiocbp[] = { NULL, NULL, NULL, NULL, NULL };
   int fd, result;
 

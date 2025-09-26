@@ -46,6 +46,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   clock_t    start;
   clock_t    end;
   clock_t    now;

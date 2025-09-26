@@ -51,6 +51,8 @@ static rtems_name name1, name2;
 
 static rtems_task test_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc = 0;
   const void *value_p;
   const void *value_p2;
@@ -77,6 +79,8 @@ static rtems_task test_task(rtems_task_argument arg)
 
 static rtems_task Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code        sc;
   int                      eno;
   rtems_resource_snapshot  snapshot;

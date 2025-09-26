@@ -55,6 +55,10 @@ void Signal_handler(
   void      *arg
 )
 {
+  (void) signo;
+  (void) info;
+  (void) arg;
+
   puts( "Signal handler hit" );
   rtems_test_exit(0);
 }
@@ -76,6 +80,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   struct sigaction    act;
   siginfo_t           info;
   bool                bc;

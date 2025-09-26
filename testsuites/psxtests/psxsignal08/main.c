@@ -53,6 +53,8 @@ static sigset_t main_sigmask;
 
 static void fetch_sigmask(const char *name, sigset_t *sigset_p)
 {
+  (void) name;
+
   int   rc;
 
   rc = sigemptyset(sigset_p);
@@ -118,6 +120,9 @@ static rtems_task task_body(rtems_task_argument arg)
 
 int main(int argc, char **argv)
 {
+  (void) argc;
+  (void) argv;
+
   sigset_t          empty;
   rtems_status_code status;
   rtems_id          id;

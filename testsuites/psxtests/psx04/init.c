@@ -66,6 +66,8 @@ void Signal_info_handler(
   void      *context
 )
 {
+  (void) context;
+
   Signal_count++;
   printf(
     "Signal_info: %d caught by 0x%" PRIxpthread_t " (%d) si_signo= %d si_code= %d value= %d\n",
@@ -83,6 +85,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   unsigned int      remaining;
   int               status;
   struct sigaction  act;

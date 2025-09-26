@@ -45,6 +45,8 @@ void *Task_2(
   void *argument
 )
 {
+  (void) argument;
+
   int status;
 
   printf( "Task_2: sending SIGUSR1\n" );

@@ -63,6 +63,8 @@ void Signal_handler(
   int signo
 )
 {
+  (void) signo;
+
   Signal_occurred = true;
   Signal_thread   = pthread_self();
 }
@@ -132,6 +134,8 @@ Test_t Threads[] = {
 
 void *Test_Thread(void *arg)
 {
+  (void) arg;
+
   Test_t *test = (Test_t *)arg;
 
   Install_Signal_Handler( test->name );
@@ -158,6 +162,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int                 i;
   int                 sc;
   pthread_t           id;

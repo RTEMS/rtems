@@ -53,6 +53,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   struct mq_attr         attr;
   mqd_t                  mq;
 

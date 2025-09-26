@@ -46,6 +46,8 @@ void *Task_1(
   void *argument
 )
 {
+  (void) argument;
+
   int               status;
   uint32_t   *key_data;
 

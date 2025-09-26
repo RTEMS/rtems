@@ -44,6 +44,8 @@ void *Task_1(
   void *argument
 )
 {
+  (void) argument;
+
   int  status;
 
 /* wait for a condition variable signal from Init */

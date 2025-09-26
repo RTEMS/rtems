@@ -43,6 +43,8 @@ rtems_task Init(rtems_task_argument ignored);
 
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   pthread_key_t           key1;
   pthread_key_t           key2;
   int                     eno;

@@ -96,6 +96,8 @@ static pthread_t thread;
 
 static void *suspend_self( void *arg )
 {
+  (void) arg;
+
   int               eno;
   rtems_status_code status;
 
@@ -115,6 +117,9 @@ static rtems_timer_service_routine Cancel_duringISR_TSR(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   TSR_status = pthread_cancel( thread );
   TSR_occurred = 1;
 }
@@ -124,6 +129,9 @@ static rtems_timer_service_routine SetState_duringISR_TSR(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   int oldstate;
 
   TSR_status = pthread_setcancelstate( 0, &oldstate );
@@ -135,6 +143,9 @@ static rtems_timer_service_routine SetType_duringISR_TSR(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   int oldtype;
 
   TSR_status = pthread_setcanceltype( 0, &oldtype );
@@ -180,6 +191,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   int               eno;
   void             *value;

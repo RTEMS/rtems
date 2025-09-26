@@ -49,6 +49,8 @@ void *Stack_High;
 
 void *Test_Thread(void *arg)
 {
+  (void) arg;
+
   #if defined(__GNUC__)
     void *sp = __builtin_frame_address(0);
 
@@ -73,6 +75,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int                 sc;
   pthread_t           id;
   pthread_attr_t      attr;

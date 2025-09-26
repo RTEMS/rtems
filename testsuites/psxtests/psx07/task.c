@@ -47,6 +47,8 @@ void *Task_1(
   void *argument
 )
 {
+  (void) argument;
+
   puts( "Task_1 - exitting" );
   pthread_exit( NULL );
 
@@ -57,6 +59,8 @@ void *Task_2(
   void *argument
 )
 {
+  (void) argument;
+
   int i = 0;
   time_t now, start;
 

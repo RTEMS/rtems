@@ -79,6 +79,8 @@ static void free_aiocb( struct aiocb *aiocbp )
 
 void *POSIX_Init( void *argument )
 {
+  (void) argument;
+
   int fd[FD_COUNT];
   struct aiocb *aiocbp[FD_COUNT+1];
   int status, i, policy = SCHED_FIFO;

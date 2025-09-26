@@ -247,6 +247,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   pthread_attr_t attr;              /* task attributes */
   int            status;
   lock_t         l;

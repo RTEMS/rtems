@@ -43,6 +43,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int              status;
   struct itimerval itimer;
   struct itimerval otimer;

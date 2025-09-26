@@ -18,6 +18,8 @@ const char rtems_test_name[] = "PSXCLEANUP 2";
 
 static void *POSIX_Init(void *arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   main(0, NULL);

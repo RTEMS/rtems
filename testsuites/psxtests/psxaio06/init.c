@@ -72,6 +72,8 @@ static void free_aiocb( struct aiocb *aiocbp )
 
 void *POSIX_Init( void *argument )
 {
+  (void) argument;
+
   struct aiocb *aiocbp;
   struct timespec timespec;
   int fd, result;

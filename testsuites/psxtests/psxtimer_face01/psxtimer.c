@@ -47,8 +47,9 @@ const char rtems_test_name[] = "PSXTIMER FACE 1";
 static void *POSIX_Init (
   void *argument
 )
-
 {
+  (void) argument;
+
   struct sigevent   event;
   int               status;
   timer_t           timer;

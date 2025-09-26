@@ -1194,6 +1194,8 @@ void verify_timedout_mq_timedreceive(
   int   is_blocking
 )
 {
+  (void) is_blocking;
+
   char             message[ 100 ];
   struct timespec  tm;
   struct timeval   tv1, tv2, tv3;
@@ -1241,6 +1243,8 @@ void verify_timedout_mq_timedsend(
   int  is_blocking
 )
 {
+  (void) is_blocking;
+
   struct timespec timeout;
   struct timeval  tv1, tv2, tv3;
   struct timezone tz1, tz2;
@@ -1283,6 +1287,8 @@ void verify_mq_send(void)
 
 static void *receive_maxmsg_plus_one( void *arg )
 {
+  (void) arg;
+
   mqd_t                 mq;
   const Test_Message_t *m;
   int                   i;
@@ -1361,6 +1367,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   validate_mq_open_error_codes( );
@@ -1392,6 +1400,8 @@ void *Task_1 (
   void *argument
 )
 {
+  (void) argument;
+
   /* Block Waiting for a message */
 
   print_current_time( "Task_1: ", "" );
@@ -1411,6 +1421,8 @@ void *Task_2(
   void *argument
 )
 {
+  (void) argument;
+
   print_current_time( "Task_2: ", "" );
 
 
@@ -1431,6 +1443,7 @@ void *Task_3 (
   void *argument
 )
 {
+  (void) argument;
 
   print_current_time( "Task_3: ", "" );
 
@@ -1452,6 +1465,8 @@ void *Task_4 (
   void *argument
 )
 {
+  (void) argument;
+
   struct mq_attr  attr;
   int             status;
   int             count;
@@ -1491,6 +1506,7 @@ void *Task_5 (
   void *argument
 )
 {
+  (void) argument;
 
   print_current_time( "Task_5: ", "" );
 

@@ -46,6 +46,8 @@ void *Task_1(
   void *argument
 )
 {
+  (void) argument;
+
   int status;
 
   printf( "Task: pthread_mutex_trylock already locked\n" );

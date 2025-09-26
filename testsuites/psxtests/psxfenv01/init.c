@@ -57,6 +57,8 @@ rtems_task Init( rtems_task_argument ignored );
 /* Test Function Begins */
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   double a, b, c;
   int r;
   fexcept_t excepts;

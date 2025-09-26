@@ -308,6 +308,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int rv;
 
   TEST_BEGIN();

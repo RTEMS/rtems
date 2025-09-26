@@ -114,6 +114,8 @@ static uint32_t delta_in_ms( test_context *ctx )
 
 static void *sporadic_server( void *argument )
 {
+  (void) argument;
+
   test_context *ctx;
   size_t        i;
 
@@ -133,6 +135,8 @@ static void *sporadic_server( void *argument )
 
 static void *POSIX_Init( void *argument )
 {
+  (void) argument;
+
   test_context       *ctx;
   int                 status;
   pthread_attr_t      attr;

@@ -245,6 +245,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int i;
   void *alloc_ptr = (void *)0;
   off_t position;

@@ -51,6 +51,8 @@ static pthread_cond_t create_condition_var, set_condition_var;
 
 static rtems_task Test_Thread(rtems_task_argument argument)
 {
+  (void) argument;
+
   int sc;
   int *value_p, *value_p2;
 
@@ -83,6 +85,8 @@ static rtems_task Test_Thread(rtems_task_argument argument)
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   rtems_status_code  rc;
   int                sc;
   struct timespec    delay_request;

@@ -73,6 +73,8 @@ static void free_aiocb( struct aiocb *aiocbp )
 
 void *POSIX_Init( void *argument )
 {
+  (void) argument;
+
   int result, fd;
   struct aiocb *aiocbp;
   int status;

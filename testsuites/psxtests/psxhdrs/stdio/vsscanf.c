@@ -41,6 +41,8 @@ int test( int arg1, ... );
 
 int test( int arg1, ... )
 {
+  (void) arg1;
+
   char *tokenstring = "15 12 14";
   va_list ap;
   int result;

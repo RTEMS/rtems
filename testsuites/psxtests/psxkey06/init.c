@@ -67,6 +67,8 @@ static void Wait_For_Worker(void)
 
 static rtems_task Test_Thread1( rtems_task_argument argument )
 {
+  (void) argument;
+
   int sc;
   int *value;
   struct timespec  delay_request;
@@ -98,6 +100,8 @@ static rtems_task Test_Thread1( rtems_task_argument argument )
 
 static rtems_task Test_Thread2( rtems_task_argument argument )
 {
+  (void) argument;
+
   int sc;
   int *value;
 
@@ -128,6 +132,8 @@ static void Key3_Destructor( void *value )
 
 static rtems_task Test_Thread3( rtems_task_argument argument )
 {
+  (void) argument;
+
   int   sc;
   void *value;
 
@@ -152,6 +158,8 @@ static rtems_task Test_Thread3( rtems_task_argument argument )
 
 static rtems_task Init( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   rtems_id          thread1;
   rtems_id          thread2;
   rtems_id          thread3;

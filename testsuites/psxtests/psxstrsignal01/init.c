@@ -112,6 +112,8 @@ void *POSIX_Init(
   void *unused
 )
 {
+  (void) unused;
+
   TEST_BEGIN();
 
   do_test();

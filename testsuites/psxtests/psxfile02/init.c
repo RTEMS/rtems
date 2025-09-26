@@ -135,6 +135,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int   status;
   int   fd;
 

@@ -45,6 +45,8 @@ void key_destructor(
   void *argument
 )
 {
+  (void) argument;
+
 }
 
 int test( void )

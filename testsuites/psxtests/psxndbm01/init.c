@@ -80,6 +80,8 @@ static int count_no_of_records( DBM *db_local )
 /* Test Function Begins */
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   datum name          = { NAME, sizeof( NAME ) };
   datum put_phone_no  = { PHONE_NO, sizeof( PHONE_NO ) };
   datum name2         = { NAME2, sizeof( NAME2 ) };

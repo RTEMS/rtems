@@ -55,6 +55,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   struct region *p;
   int fd;
   int err;

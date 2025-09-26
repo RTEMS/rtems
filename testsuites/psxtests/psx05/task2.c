@@ -45,6 +45,8 @@ void *Task_2(
   void *argument
 )
 {
+  (void) argument;
+
   int status;
 
   printf( "Task 2: pthread_mutex_lock unavailable (inherit case)\n" );

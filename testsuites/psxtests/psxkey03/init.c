@@ -48,6 +48,8 @@ volatile bool destructor_ran;
 
 void destructor(void *value)
 {
+  (void) value;
+
   destructor_ran = true;
 }
 
@@ -66,6 +68,8 @@ rtems_task Test_Thread( rtems_task_argument value )
 
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_id          thread;
   rtems_status_code rc;
   int               sc;

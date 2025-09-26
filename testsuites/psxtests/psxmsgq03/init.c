@@ -54,6 +54,9 @@ rtems_timer_service_routine mq_send_timer(
   void     *arg
 )
 {
+  (void) timer;
+  (void) arg;
+
   int msg = 4;
 
   tsr_fired = true;
@@ -66,6 +69,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   struct mq_attr     attr;
   int                status;
   rtems_id           timer;

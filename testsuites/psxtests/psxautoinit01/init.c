@@ -43,6 +43,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int             sc;
   pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
   pthread_mutex_t mutex2 = PTHREAD_MUTEX_INITIALIZER;

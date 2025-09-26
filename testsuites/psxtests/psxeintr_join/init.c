@@ -72,17 +72,23 @@ static void print_sig_mask( const char * str )
 
 void GC_suspend_handler( int sig )
 {
+  (void) sig;
+
   puts( "run in GC_suspend_handler" );
   sem_post( &GC_suspend_ack_sem );
 }
 
 void GC_restart_handler( int sig )
 {
+  (void) sig;
+
   puts( "run in GC_restart_handler" );
 }
 
 void *run( void *arg )
 {
+  (void) arg;
+
   int       status;
   pthread_t id = *(pthread_t *)arg;
 
@@ -101,6 +107,8 @@ void *run( void *arg )
 
 void *POSIX_Init( void *arg )
 {
+  (void) arg;
+
   struct sigaction act;
   pthread_t        newThread;
   pthread_t        mainThread;

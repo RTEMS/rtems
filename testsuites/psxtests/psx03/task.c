@@ -46,6 +46,8 @@ void *Task_1(
   void *argument
 )
 {
+  (void) argument;
+
   int status;
 
   /* send SIGUSR2 to Init which is waiting on SIGUSR1 */
@@ -67,6 +69,8 @@ void *Task_2(
   void *argument
 )
 {
+  (void) argument;
+
   int status;
 
   /* send SIGUSR1 to Init which is waiting on SIGUSR1 */

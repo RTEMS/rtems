@@ -43,6 +43,8 @@ rtems_task Init( rtems_task_argument ignored );
 
 rtems_task Init( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   pthread_key_t    key1, key2;
   int              sc, *value;
   int Data_array[2] = {1, 2};

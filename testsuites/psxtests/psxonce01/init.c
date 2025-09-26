@@ -65,9 +65,9 @@ static void routine_b( void )
 
 static void use_b( rtems_task_argument arg )
 {
-  int status;
-
   (void) arg;
+
+  int status;
 
   status = pthread_once( &once_b, routine_b );
   rtems_test_assert( status == 0 );
@@ -114,6 +114,8 @@ static void routine_a( void )
 
 rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   int status;
   pthread_once_t once = PTHREAD_ONCE_INIT;
 

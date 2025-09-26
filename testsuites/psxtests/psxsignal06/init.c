@@ -50,12 +50,15 @@ void Handler(
   int signo
 )
 {
+  (void) signo;
 }
 
 void *TestThread(
   void *argument
 )
 {
+  (void) argument;
+
   int               status;
   sigset_t          mask;
   struct sigaction  act;
@@ -94,6 +97,8 @@ void *TestThread(
 
 void *POSIX_Init(void *argument)
 {
+  (void) argument;
+
   int status;
 
   TEST_BEGIN();

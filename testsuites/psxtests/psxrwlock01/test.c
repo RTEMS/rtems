@@ -60,6 +60,8 @@ pthread_rwlock_t RWLock;
  */
 void *ReadLockThread(void *arg)
 {
+  (void) arg;
+
   int status;
 
   /*
@@ -82,6 +84,8 @@ void *ReadLockThread(void *arg)
  */
 void *WriteLockThread(void *arg)
 {
+  (void) arg;
+
   int status;
 
   /*

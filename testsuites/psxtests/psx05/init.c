@@ -172,6 +172,8 @@ static void test_get_priority( void )
 
 static void *counter_task(void *arg)
 {
+  (void) arg;
+
   int *counter;
 
   counter = arg;
@@ -502,6 +504,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int                  status;
   pthread_mutexattr_t  attr;
   pthread_mutexattr_t  destroyed_attr;

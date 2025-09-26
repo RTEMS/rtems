@@ -44,6 +44,8 @@ void *Task_2(
   void *argument
 )
 {
+  (void) argument;
+
   int  status;
 
   Task_id = pthread_self();

@@ -45,6 +45,8 @@ void *test_task(
   void * arg
 )
 {
+  (void) arg;
+
   for ( ; ; )
     ;
   return NULL;

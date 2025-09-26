@@ -50,6 +50,8 @@ pthread_key_t Key;
 
 rtems_task Test_Thread1( rtems_task_argument argument )
 {
+  (void) argument;
+
   int              sc;
   int             *value;
   struct timespec  delay_request;
@@ -73,6 +75,8 @@ rtems_task Test_Thread1( rtems_task_argument argument )
 
 rtems_task Test_Thread2( rtems_task_argument argument )
 {
+  (void) argument;
+
   int sc;
   int *value;
 
@@ -89,6 +93,8 @@ rtems_task Test_Thread2( rtems_task_argument argument )
 
 rtems_task Init( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   int               sc;
   rtems_status_code rc;
   struct timespec   delay_request;

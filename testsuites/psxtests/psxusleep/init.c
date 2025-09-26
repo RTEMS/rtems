@@ -43,6 +43,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   struct tm       tm;
   struct timespec tv;
   useconds_t      remaining;

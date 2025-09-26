@@ -61,6 +61,8 @@ void *POSIX_Init(
   void *ignored
 )
 {
+  (void) ignored;
+
   int                 sc;
   pthread_mutexattr_t attr;
   int                 type;

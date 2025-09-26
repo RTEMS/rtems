@@ -45,6 +45,8 @@ void *Task_1(
   void *argument
 )
 {
+  (void) argument;
+
   unsigned int seconds;
 
   printf( "Task_1: sleeping for 5 seconds\n" );

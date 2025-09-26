@@ -53,6 +53,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int               status;
   useconds_t        result;
   struct sigaction  act;

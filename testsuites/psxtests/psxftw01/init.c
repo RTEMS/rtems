@@ -69,6 +69,9 @@ static int file_order;
 static int fn_function (const char *fpath, const struct stat *sb,
 int tflag, struct FTW *ftwbuf)
 {
+  (void) sb;
+  (void) tflag;
+
   strcpy(file_traverse_order [file_order], fpath + ftwbuf->base) ;
   file_order = file_order + 1;
   return 0; /* to make nftw run further */

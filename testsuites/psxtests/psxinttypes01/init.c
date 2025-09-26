@@ -50,6 +50,8 @@ rtems_task Init(rtems_task_argument ignored);
 
 rtems_task Init(rtems_task_argument ignored)
 {
+  (void) ignored;
+
   int       base            = 10;
   int       invalid_base    = 40;
 

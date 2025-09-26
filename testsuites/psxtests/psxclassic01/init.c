@@ -59,12 +59,16 @@ static void handler(int signo)
 
 static void handler_info(int signo, siginfo_t *info, void *context)
 {
+  (void) context;
+
   Caught_signo = signo;
   Caught_siginfo = *info;
 }
 
 static rtems_task test_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   int sc;
   struct sigaction new_action;
   sigset_t mask;
@@ -215,6 +219,8 @@ static rtems_id create_task( void )
 
 static rtems_task Init( rtems_task_argument arg )
 {
+  (void) arg;
+
   rtems_id  task_id;
   int       status;
   void     *retval;

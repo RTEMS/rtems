@@ -170,6 +170,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int                 status;
   pthread_condattr_t  attr;
   pthread_condattr_t  attr_error;

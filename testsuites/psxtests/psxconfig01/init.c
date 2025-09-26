@@ -223,13 +223,17 @@ static char *get_posix_name(char a, char b, char c, int i)
   return posix_name;
 }
 
-static void *posix_thread(void *arg RTEMS_UNUSED)
+static void *posix_thread(void *arg)
 {
+  (void) arg;
+
   rtems_test_assert(0);
 }
 
-static void posix_key_dtor(void *key RTEMS_UNUSED)
+static void posix_key_dtor(void *key)
 {
+  (void) key;
+
   /* Do nothing */
 }
 
@@ -257,6 +261,8 @@ static void print_info(void)
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   int eno = 0;
   rtems_id id = RTEMS_ID_NONE;

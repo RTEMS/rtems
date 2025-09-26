@@ -45,6 +45,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   struct timespec tr;
   int             status;
   int             priority;

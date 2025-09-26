@@ -59,8 +59,9 @@ const char rtems_test_name[] = "PSXTIMER 2";
 void *POSIX_Init (
   void *argument
 )
-
 {
+  (void) argument;
+
   struct timespec   now;
   struct sigevent   event;
   int               status;

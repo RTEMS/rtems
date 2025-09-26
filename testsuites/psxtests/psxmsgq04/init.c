@@ -50,6 +50,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   struct mq_attr          attr;
   mqd_t                   Queue, second_Queue;
   int                     sc;

@@ -49,6 +49,8 @@ void *POSIX_Init(void *argument);
 
 static void *sem_wait_task(void *arg)
 {
+  (void) arg;
+
   sem_t *sem;
   int    rv;
 
@@ -350,6 +352,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int             status;
   int             value;
   int             i;

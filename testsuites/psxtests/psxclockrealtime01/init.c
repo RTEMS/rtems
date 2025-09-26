@@ -569,6 +569,8 @@ const char rtems_test_name[] = "PSXCLOCKREALTIME 1";
 
 static void *POSIX_Init(void *arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
   test(&test_instance);
   TEST_END();

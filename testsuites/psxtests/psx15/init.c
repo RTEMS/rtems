@@ -57,6 +57,8 @@ static void thread_delete_hook(
   Thread_Control *deleted
 )
 {
+  (void) executing;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   if (deleted->Object.id == task_0) {
@@ -79,6 +81,8 @@ static void suicide_task(rtems_task_argument arg)
 
 void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   TEST_BEGIN();

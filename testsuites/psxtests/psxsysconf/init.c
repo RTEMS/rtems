@@ -44,6 +44,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   long  sc;
 
   TEST_BEGIN();

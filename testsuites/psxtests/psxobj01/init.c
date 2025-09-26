@@ -52,6 +52,8 @@ static rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   Objects_Get_by_name_error  error;
   Objects_Control           *the_object;
   char                       name[64];

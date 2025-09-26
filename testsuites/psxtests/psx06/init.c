@@ -42,6 +42,8 @@ void Key_destructor(
  void *key_data
 )
 {
+  (void) key_data;
+
   Destructor_invoked++;
 
   /*
@@ -57,6 +59,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int               status;
   unsigned int      remaining;
   uint32_t   *key_data;

@@ -43,10 +43,13 @@ void Key_destructor(void *key_data);
 
 void Key_destructor(void *key_data)
 {
+  (void) key_data;
 }
 
 rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   int    status;
 
   TEST_BEGIN();

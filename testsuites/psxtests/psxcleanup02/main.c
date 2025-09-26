@@ -18,6 +18,8 @@ static int step;
 
 static void destroy(void *arg)
 {
+  (void) arg;
+
   assert(step == 2);
   step = 3;
   printf("destroy\n");
@@ -25,6 +27,8 @@ static void destroy(void *arg)
 
 static void cleanup(void *arg)
 {
+  (void) arg;
+
   assert(step == 1);
   step = 2;
   printf("cleanup\n");
@@ -32,6 +36,8 @@ static void cleanup(void *arg)
 
 static void *task(void *arg)
 {
+  (void) arg;
+
   pthread_key_t key;
   int eno;
 
@@ -54,6 +60,9 @@ static void *task(void *arg)
 
 int main(int argc, char **argv)
 {
+  (void) argc;
+  (void) argv;
+
   pthread_t t;
   int eno;
 

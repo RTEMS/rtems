@@ -53,6 +53,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   test_main();
   rtems_test_exit( 0 );
 }

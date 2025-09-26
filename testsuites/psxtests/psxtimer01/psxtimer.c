@@ -113,6 +113,8 @@ void StopTimer(
 /* task A  */
 void * task_a (void *arg)
 {
+  (void) arg;
+
    struct   timespec my_period;
    int      my_sig, received_sig;
    struct   itimerspec timerdata;
@@ -185,6 +187,8 @@ void * task_a (void *arg)
 
 void * task_b (void *arg)
 {
+  (void) arg;
+
    struct   timespec my_period;
    struct   timespec now;
    int      my_sig, received_sig;
@@ -270,6 +274,8 @@ void * task_b (void *arg)
 
 void * task_c (void *arg)
 {
+  (void) arg;
+
    int      count;
    struct   timespec my_period;
    int      my_sig, received_sig;
@@ -364,8 +370,9 @@ void * task_c (void *arg)
 void *POSIX_Init (
   void *argument
 )
-
 {
+  (void) argument;
+
    pthread_mutexattr_t mutexattr;    /* mutex attributes */
    pthread_condattr_t  condattr;     /* condition attributes */
    pthread_attr_t attr;              /* task attributes */

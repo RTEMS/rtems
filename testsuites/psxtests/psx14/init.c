@@ -42,6 +42,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   char               name[128];
   char              *ptr;
   rtems_status_code  status;

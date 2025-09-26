@@ -49,6 +49,8 @@ static A a;
 
 static void *POSIX_Init(void *argument)
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   rtems_test_assert(a.i == 1);
