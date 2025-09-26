@@ -322,6 +322,8 @@ static int get_node_id(unsigned char *node_id)
 		}
 	}
 	close(sd);
+#else
+	(void) node_id;
 #endif
 	return 0;
 }
@@ -578,6 +580,10 @@ static int get_uuid_via_daemon(int op, uuid_t out, int *num)
 
 fail:
 	close(s);
+#else
+	(void) op;
+	(void) out;
+	(void) num;
 #endif
 	return -1;
 }
