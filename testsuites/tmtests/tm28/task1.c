@@ -54,6 +54,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   Print_Warning();
@@ -80,6 +82,8 @@ rtems_task Test_task (
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_name         name;
   uint32_t     index;
   void              *converted;

@@ -55,6 +55,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Print_Warning();
 
   TEST_BEGIN();
@@ -99,6 +101,8 @@ rtems_task test_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code   status;
   uint32_t            index;
   rtems_task_priority old_priority;
@@ -246,6 +250,8 @@ rtems_task test_task1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   end_time = benchmark_timer_read();
 
   put_time(

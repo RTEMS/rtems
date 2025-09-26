@@ -68,6 +68,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Print_Warning();
 
   TEST_BEGIN();
@@ -114,6 +116,8 @@ rtems_task Highest_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_task_priority old_priority;
   rtems_status_code   status;
 
@@ -162,6 +166,8 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code   status;
   uint32_t      index;
   rtems_name          name;
@@ -361,6 +367,8 @@ rtems_task Low_tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id          id;
   rtems_status_code status;
   rtems_mode        prev;
@@ -408,6 +416,8 @@ rtems_task Restart_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   if ( argument == 1 )
     (void) rtems_semaphore_obtain(
       Semaphore_id,

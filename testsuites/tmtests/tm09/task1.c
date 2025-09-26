@@ -52,6 +52,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   Print_Warning();
@@ -78,6 +80,8 @@ rtems_task Test_task (
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   benchmark_timer_initialize();
     rtems_message_queue_create(
       1,

@@ -59,6 +59,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Print_Warning();
 
   TEST_BEGIN();
@@ -93,6 +95,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   uint32_t    index;
 
@@ -181,6 +185,8 @@ rtems_task null_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   while ( FOREVER )
     ;
 }

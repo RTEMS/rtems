@@ -64,6 +64,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Print_Warning();
 
   TEST_BEGIN();
@@ -147,6 +149,8 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   size_t  size;
 
   benchmark_timer_initialize();
@@ -163,6 +167,8 @@ rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   size_t  size;
 
   (void) rtems_message_queue_receive(
@@ -179,6 +185,8 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   end_time = benchmark_timer_read();
 
   put_time(

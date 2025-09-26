@@ -158,12 +158,15 @@ rtems_task null_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
 }
 
 rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t    index;
   rtems_id          task_id;
   rtems_status_code status;
@@ -283,6 +286,8 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_interrupt_level level;
 
   _Thread_Dispatch_disable();
@@ -328,6 +333,8 @@ rtems_task Middle_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Scheduler_priority_Context *scheduler_context =
     _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
 
@@ -361,6 +368,8 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Scheduler_priority_Context *scheduler_context =
     _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
   Thread_Control             *executing;
@@ -401,6 +410,8 @@ rtems_task Floating_point_task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Scheduler_priority_Context *scheduler_context =
     _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
   Thread_Control             *executing;
@@ -457,6 +468,8 @@ rtems_task Floating_point_task_2(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Scheduler_priority_Context *scheduler_context =
     _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
   Thread_Control             *executing;

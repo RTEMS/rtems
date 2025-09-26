@@ -55,6 +55,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id          task_id;
   uint32_t    index;
   rtems_status_code status;
@@ -107,6 +109,8 @@ rtems_task High_tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   (void) rtems_semaphore_obtain(
     Semaphore_id,
     RTEMS_DEFAULT_OPTIONS,
@@ -118,6 +122,8 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   benchmark_timer_initialize();
     (void) rtems_clock_tick();
   end_time = benchmark_timer_read();

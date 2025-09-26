@@ -165,6 +165,8 @@ static void test_classic_prio_bsem(task_context *tc)
 
 static void worker_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   task_context *tc;
 
   tc = (task_context *) arg;
@@ -271,6 +273,8 @@ static void run(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
 

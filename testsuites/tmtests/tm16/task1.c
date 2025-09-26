@@ -61,6 +61,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id          id;
   rtems_status_code status;
 
@@ -88,6 +90,8 @@ rtems_task test_init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_task_priority priority;
   rtems_status_code   status;
   int                 index;
@@ -133,6 +137,8 @@ rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_event_set event_out;
 
   (void) rtems_event_receive(              /* task blocks */
@@ -154,6 +160,8 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_event_set event_out;
 
   (void) rtems_event_receive(                /* task blocks */

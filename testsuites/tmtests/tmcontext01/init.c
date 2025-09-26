@@ -110,6 +110,8 @@ static __attribute__((__noipa__)) void call_at_level(
 
 static void load_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   volatile int *load_data = (volatile int *) arg;
   size_t n = data_size;
   size_t clsz = cache_line_size;
@@ -214,6 +216,8 @@ static void test(bool first, bool dirty, uint32_t load)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   uint32_t load = 0;
 
   TEST_BEGIN();

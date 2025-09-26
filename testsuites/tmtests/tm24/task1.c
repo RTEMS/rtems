@@ -55,6 +55,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id          id;
   uint32_t    index;
   rtems_status_code status;
@@ -97,6 +99,8 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t    index;
 
   benchmark_timer_initialize();
@@ -126,6 +130,8 @@ rtems_task Tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Task_count++;
 
   if ( Task_count == 1 )

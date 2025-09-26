@@ -71,6 +71,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   Print_Warning();
@@ -175,6 +177,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Scheduler_priority_Context *scheduler_context =
     _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
 #if defined(RTEMS_SMP)
@@ -294,6 +298,8 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Thread_Control *executing = _Thread_Get_executing();
   const Scheduler_Control    *scheduler;
   Scheduler_priority_Context *scheduler_context;

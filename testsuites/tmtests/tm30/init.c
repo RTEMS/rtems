@@ -52,6 +52,8 @@ static void benchmark_barrier_create(
   void  *argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   status = rtems_barrier_create(
@@ -68,6 +70,8 @@ static void benchmark_barrier_ident(
   void  *argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   rtems_id          id;
 
@@ -80,6 +84,8 @@ static void benchmark_barrier_delete(
   void  *argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   status = rtems_barrier_delete( barrier[iteration] );
@@ -90,6 +96,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   rtems_time_test_measure_operation(

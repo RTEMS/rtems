@@ -49,6 +49,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   Print_Warning();
@@ -79,6 +81,8 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t    semaphore_obtain_time;
   uint32_t    semaphore_release_time;
   uint32_t    semaphore_obtain_no_wait_time;

@@ -61,6 +61,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   Print_Warning();
@@ -113,6 +115,8 @@ rtems_asr Process_asr_for_pass_1(
   rtems_signal_set signals
 )
 {
+  (void) signals;
+
   end_time = benchmark_timer_read();
 
   put_time(
@@ -130,6 +134,8 @@ rtems_asr Process_asr_for_pass_2(
   rtems_signal_set signals
 )
 {
+  (void) signals;
+
   rtems_status_code status;
 
   status = rtems_task_resume( Task_id[ 3 ] );
@@ -142,6 +148,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   benchmark_timer_initialize();
@@ -199,6 +207,8 @@ rtems_asr Process_asr_for_task_2(
   rtems_signal_set signals
 )
 {
+  (void) signals;
+
   ;
 }
 
@@ -206,6 +216,8 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   status = rtems_signal_catch( Process_asr_for_task_2, RTEMS_DEFAULT_MODES );
@@ -218,6 +230,8 @@ rtems_task Task_3(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   (void) rtems_task_suspend( RTEMS_SELF );
 
   end_time = benchmark_timer_read();

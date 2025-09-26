@@ -87,6 +87,10 @@ static rtems_interval test_init(
   size_t active_workers
 )
 {
+  (void) base;
+  (void) arg;
+  (void) active_workers;
+
   return test_duration();
 }
 
@@ -140,6 +144,8 @@ static void test_self_event_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   rtems_id id = rtems_task_self();
   uint32_t counter = 0;
@@ -171,6 +177,8 @@ static void test_self_event_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -189,6 +197,8 @@ static void test_all_to_one_event_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   rtems_id id = rtems_task_self();
   bool is_master = rtems_test_parallel_is_master_worker(worker_index);
@@ -224,6 +234,8 @@ static void test_all_to_one_event_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -242,6 +254,8 @@ static void test_one_mutex_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   rtems_id id = ctx->sema;
   uint32_t counter = 0;
@@ -267,6 +281,8 @@ static void test_one_mutex_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -285,6 +301,8 @@ static void test_many_mutex_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   rtems_status_code sc;
   rtems_id id;
@@ -323,6 +341,8 @@ static void test_many_mutex_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -341,6 +361,8 @@ static void test_self_msg_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   rtems_id id = ctx->mq[worker_index];
   uint32_t counter = 0;
@@ -376,6 +398,8 @@ static void test_self_msg_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -394,6 +418,8 @@ static void test_many_to_one_msg_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   rtems_id id = ctx->mq[0];
   bool is_master = rtems_test_parallel_is_master_worker(worker_index);
@@ -432,6 +458,8 @@ static void test_many_to_one_msg_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -450,6 +478,8 @@ static void test_many_sys_lock_mutex_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   struct _Mutex_Control mtx;
   uint32_t counter = 0;
@@ -472,6 +502,8 @@ static void test_many_sys_lock_mutex_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -490,6 +522,8 @@ static void test_many_classic_ceiling_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   rtems_status_code sc;
   rtems_id id;
@@ -528,6 +562,8 @@ static void test_many_classic_ceiling_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -546,6 +582,8 @@ static void test_many_classic_mrsp_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   rtems_status_code sc;
   rtems_id id;
@@ -585,6 +623,8 @@ static void test_many_classic_mrsp_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -603,6 +643,8 @@ static void test_many_pthread_spinlock_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   int eno;
   pthread_spinlock_t spin;
@@ -630,6 +672,8 @@ static void test_many_pthread_spinlock_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -648,6 +692,8 @@ static void test_many_pthread_mutex_inherit_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   int eno;
   pthread_mutexattr_t attr;
@@ -686,6 +732,8 @@ static void test_many_pthread_mutex_inherit_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -704,6 +752,8 @@ static void test_many_pthread_mutex_protect_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   int eno;
   pthread_mutexattr_t attr;
@@ -748,6 +798,8 @@ static void test_many_pthread_mutex_protect_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -825,6 +877,8 @@ static const rtems_test_parallel_job test_jobs[] = {
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   size_t i;

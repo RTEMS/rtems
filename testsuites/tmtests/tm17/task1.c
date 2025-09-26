@@ -62,6 +62,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_task_entry  task_entry;
   int               index;
   rtems_status_code status;
@@ -101,6 +103,8 @@ rtems_task First_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_task_priority previous_priority;
 
   benchmark_timer_initialize();
@@ -119,6 +123,8 @@ rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_task_priority previous_priority;
 
   Task_priority--;
@@ -135,6 +141,8 @@ rtems_task Last_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int index;
 
   end_time = benchmark_timer_read();

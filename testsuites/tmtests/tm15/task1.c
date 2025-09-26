@@ -58,6 +58,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Print_Warning();
 
   TEST_BEGIN();
@@ -156,6 +158,8 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t    index;
   rtems_event_set   event_out;
 
@@ -225,6 +229,8 @@ rtems_task High_tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   if ( time_set )
     (void) rtems_event_receive(
       RTEMS_EVENT_16,

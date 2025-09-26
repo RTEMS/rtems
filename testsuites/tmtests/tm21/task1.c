@@ -52,6 +52,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id          id;
   rtems_status_code status;
 
@@ -79,6 +81,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t    index;
   rtems_id          id;
   rtems_status_code status;

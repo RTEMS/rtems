@@ -68,6 +68,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
 
   rtems_task_priority priority;
   int                 index;
@@ -117,12 +118,16 @@ void null_delay(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
 }
 
 rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t    index;
   rtems_status_code status;
   int i;
@@ -309,6 +314,8 @@ rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   (void) rtems_task_wake_when( &time_of_day );
 }
 
@@ -316,6 +323,8 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   end_time = benchmark_timer_read();
 
   put_time(

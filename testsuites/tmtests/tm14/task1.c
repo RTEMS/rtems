@@ -65,6 +65,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id          task_id;
   rtems_status_code status;
 
@@ -92,6 +94,8 @@ rtems_task test_init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int                  index;
   rtems_task_entry     task_entry;
   rtems_task_priority  priority;
@@ -136,6 +140,8 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int  index;
 
   benchmark_timer_initialize();
@@ -164,6 +170,8 @@ rtems_task Low_tasks(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   size_t  size;
 
   (void) rtems_message_queue_receive(
