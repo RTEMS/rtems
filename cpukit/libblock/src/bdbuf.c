@@ -2949,6 +2949,8 @@ rtems_bdbuf_set_block_size (rtems_disk_device *dd,
 static rtems_task
 rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_chain_control *chain = &bdbuf_cache.read_ahead_chain;
 
   while (bdbuf_cache.read_ahead_enabled)

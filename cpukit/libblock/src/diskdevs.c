@@ -217,6 +217,10 @@ static int null_handler(
   void *argp
 )
 {
+  (void) dd;
+  (void) req;
+  (void) argp;
+
   return -1;
 }
 
