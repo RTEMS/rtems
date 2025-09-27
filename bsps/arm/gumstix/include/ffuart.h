@@ -1,11 +1,17 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
- *  FFUART for PXA250 CPU by Yang Xi<hiyangxi@gmail.com>
+/**
+ * @file
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * @brief FFUART for PXA250 CPU
+ */
+
+/*
+ * Copyright (c) 2009 Yang Xi <hiyangxi@gmail.com>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #ifndef __FFUART_H__

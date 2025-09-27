@@ -1,5 +1,14 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @brief PXA255 Interrupt Support
+ */
+
 /*
  * Copyright (C) 2010 embedded brains GmbH & Co. KG
+ * Copyright (c) 2009 Yang Xi <hiyangxi@gmail.com>
  * Copyright (C) 2004 by Jay Monkman <jtm@lopingdog.com>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,10 +31,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-
-/*
- * PXA255 Interrupt handler by Yang Xi <hiyangxi@gmail.com>
  */
 
 #include <rtems/score/armv4.h>

@@ -1,12 +1,11 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
 /*
- *  By Yang Xi <hiyangxi@gmail.com>.
- *  Based upon CSB337
+ * Copyright (c) 2009 Yang Xi <hiyangxi@gmail.com>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems/asm.h>

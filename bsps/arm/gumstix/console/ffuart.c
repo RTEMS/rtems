@@ -1,12 +1,13 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
 /*
- * Console driver for pxa255 full function port by Yang Xi <hiyangxi@gmail.com>
+ * Copyright (c) 2009 Yang Xi <hiyangxi@gmail.com>
+ *    - Console driver for pxa255 full function port
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <bsp.h>

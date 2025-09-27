@@ -6,7 +6,7 @@
  */
 
 /*
- * PXA255 timer by Yang Xi <hiyangxi@gmail.com>
+ * Copyright (c) 2009 PXA255 timer by Yang Xi <hiyangxi@gmail.com>
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
  *
  * The license and distribution terms for this file may be

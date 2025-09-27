@@ -1,17 +1,19 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
- *  PXA255 clock specific using the System Timer
+/**
+ * @file
  *
- *  RTEMS uses IRQ 26 as Clock Source
+ * @brief PXA255 clock specific using the System Timer
+ *
+ * RTEMS uses IRQ 26 as Clock Source
  */
 
 /*
- *  By Yang Xi <hiyangxi@gmail.com>
+ * Copyright (c) 2009 Yang Xi <hiyangxi@gmail.com>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems.h>
