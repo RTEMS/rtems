@@ -417,7 +417,17 @@ int jffs2_garbage_collect_pass(struct jffs2_sb_info *c)
 
 		   A: Small enough that I don't care :)
 		*/
+#ifndef __rtems__
 		return 0;
+#else
+		/*
+		 * Since RTEMS uses monolithic locking around JFFS2, returning 0
+		 * here results in a livelock since no other progress will ever
+		 * be made as some callers are in a tight loop with no relevant
+		 * lock modification.
+		 */
+		return -EIO;
+#endif
 	}
 
 	/* OK. Now if the inode is in state INO_STATE_GC, we are going to copy the
