@@ -21,3 +21,4 @@ type: build
 use-after: []
 use-before:
 - jffs2
+- z
