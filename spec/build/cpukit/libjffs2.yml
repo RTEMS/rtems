@@ -20,7 +20,6 @@ install-path: ${BSP_LIBDIR}
 links: []
 source:
 - cpukit/libfs/src/jffs2/src/build.c
-- cpukit/libfs/src/jffs2/src/compat-crc32.c
 - cpukit/libfs/src/jffs2/src/compr.c
 - cpukit/libfs/src/jffs2/src/compr_rtime.c
 - cpukit/libfs/src/jffs2/src/compr_zlib.c

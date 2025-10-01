@@ -20,3 +20,4 @@ use-after: []
 use-before:
 - testjffs2
 - jffs2
+- z
