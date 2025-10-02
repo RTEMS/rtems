@@ -53,6 +53,8 @@ sem_t           *n_sem1;
 
 void *Blocker( void *argument)
 {
+  (void) argument;
+
   (void) sem_wait(&sem1);
   /* should never return */
   rtems_test_assert( FALSE );
@@ -62,6 +64,8 @@ void *Blocker( void *argument)
 
 void *POSIX_Init(void *argument)
 {
+  (void) argument;
+
   int        status;
   pthread_t  threadId;
   benchmark_timer_t end_time;

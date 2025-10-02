@@ -72,6 +72,8 @@ void *thread(
   void *argument
 )
 {
+  (void) argument;
+
   uint32_t end_time;
 
   end_time = benchmark_timer_read();
@@ -89,6 +91,7 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
 
   TEST_BEGIN();
 

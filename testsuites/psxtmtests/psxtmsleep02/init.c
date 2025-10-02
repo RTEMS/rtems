@@ -47,6 +47,8 @@ void *Low(
   void *argument
 )
 {
+  (void) argument;
+
   benchmark_timer_t end_time;
 
   end_time = benchmark_timer_read();
@@ -69,6 +71,8 @@ void *Middle(
   void *argument
 )
 {
+  (void) argument;
+
   sleep(1);
   return NULL;
 }
@@ -77,6 +81,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int        i;
   int        status;
   pthread_t  threadId;

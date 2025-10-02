@@ -55,6 +55,8 @@ void *Low(
   void *argument
 )
 {
+  (void) argument;
+
   benchmark_timer_t end_time;
 
   /*
@@ -85,6 +87,8 @@ void *Middle(
   void *argument
 )
 {
+  (void) argument;
+
   /*
    * Now we have finished the thread startup overhead,
    * so let other threads run.  When we return, we can
@@ -104,6 +108,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int        i;
   int        status;
   pthread_t  threadId;

@@ -49,6 +49,8 @@ void *Blocker(
   void *argument
 )
 {
+  (void) argument;
+
   (void) pthread_rwlock_wrlock(&rwlock);
   /* should never return */
   rtems_test_assert( FALSE );
@@ -60,6 +62,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int                   status;
   pthread_t             threadId;
   benchmark_timer_t end_time;

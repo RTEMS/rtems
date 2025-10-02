@@ -279,6 +279,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
   /* create the first message queue READWRITE */
   benchmark_mq_open(1);

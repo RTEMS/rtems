@@ -48,6 +48,7 @@ int status = 1;
 
 static void routine(void *arg)
 {
+  (void) arg;
 }
 
 static void benchmark_pthread_cleanup_push_pull(void)
@@ -86,6 +87,7 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
 
   TEST_BEGIN();
 

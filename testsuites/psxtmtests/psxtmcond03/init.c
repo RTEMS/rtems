@@ -50,6 +50,8 @@ void *Blocker(
   void *argument
 )
 {
+  (void) argument;
+
   int status;
 
   status = pthread_mutex_lock(&MutexID);
@@ -68,6 +70,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int        status;
   pthread_t  threadId;
   uint32_t   end_time;

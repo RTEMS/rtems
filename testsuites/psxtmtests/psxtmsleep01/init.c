@@ -45,6 +45,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   benchmark_timer_t end_time;
 
   TEST_BEGIN();

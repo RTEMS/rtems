@@ -54,6 +54,8 @@ void *Blocker(
   void *argument
 )
 {
+  (void) argument;
+
   (void) pthread_barrier_wait( &barrier );
   rtems_test_assert( FALSE );
   return NULL;
@@ -63,6 +65,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int        status;
   pthread_t  threadId;
   benchmark_timer_t end_time;

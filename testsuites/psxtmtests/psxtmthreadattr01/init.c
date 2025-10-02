@@ -384,6 +384,8 @@ static void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   benchmark_create_pthread_attr();

@@ -72,6 +72,8 @@ void *test_thread(
   void *argument
 )
 {
+  (void) argument;
+
   uint32_t end_time;
 
   sched_yield();
@@ -95,6 +97,7 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
 
   TEST_BEGIN();
   benchmark_pthread_setschedparam();

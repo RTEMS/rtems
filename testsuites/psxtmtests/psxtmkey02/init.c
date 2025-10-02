@@ -87,6 +87,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int  status;
 
   TEST_BEGIN();

@@ -59,6 +59,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int              i;
   int              status;
   int              oflag = O_CREAT |O_RDWR;
@@ -97,6 +99,8 @@ void *Middle(
   void *argument
 )
 {
+  (void) argument;
+
   sched_yield();
 
     /* let other threads run */
@@ -111,6 +115,8 @@ void *Low(
   void *argument
 )
 {
+  (void) argument;
+
   benchmark_timer_t end_time;
 
   sched_yield();

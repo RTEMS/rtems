@@ -52,6 +52,8 @@ void *TestThread(
   void *argument
 )
 {
+  (void) argument;
+
   return NULL;
 }
 
@@ -61,6 +63,9 @@ static void benchmark_pthread_create(
   void  *argument
 )
 {
+  (void) iteration;
+  (void) argument;
+
   int status;
 
   status = pthread_create( &ThreadId, NULL, TestThread, NULL );
@@ -71,6 +76,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   rtems_time_test_measure_operation(

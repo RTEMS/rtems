@@ -85,6 +85,7 @@ static void benchmark_pthread_key_delete(void)
 
 void *POSIX_Init(void *argument)
 {
+  (void) argument;
 
   TEST_BEGIN();
 

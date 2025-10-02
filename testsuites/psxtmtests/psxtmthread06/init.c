@@ -71,6 +71,8 @@ void *test_thread(
   void *argument
 )
 {
+  (void) argument;
+
   uint32_t end_time;
 
   /* switch to POSIX_Init */
@@ -96,6 +98,7 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
 
   TEST_BEGIN();
   benchmark_pthread_setschedparam();

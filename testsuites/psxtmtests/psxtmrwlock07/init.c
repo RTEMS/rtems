@@ -50,6 +50,8 @@ void *Low(
   void *argument
 )
 {
+  (void) argument;
+
   int      status;
   benchmark_timer_t end_time;
 
@@ -76,6 +78,8 @@ void *Middle(
   void *argument
 )
 {
+  (void) argument;
+
   int status;
 
   /* write locking */
@@ -97,6 +101,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int                 i;
   int                 status;
   pthread_t           threadId;

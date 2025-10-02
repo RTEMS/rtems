@@ -69,6 +69,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   pthread_cond_init(&CondID, NULL);

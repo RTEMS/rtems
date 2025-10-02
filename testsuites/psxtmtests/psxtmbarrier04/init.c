@@ -54,6 +54,8 @@ void *Blocker(
   void *argument
 )
 {
+  (void) argument;
+
   benchmark_timer_t end_time;
 
   /* block on barrier wait, switch back to first thread */
@@ -78,6 +80,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int        status;
   pthread_t  threadId;
   int policy;

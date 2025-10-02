@@ -50,6 +50,7 @@ void *Blocker(
   void *argument
 )
 {
+  (void) argument;
 
   uint32_t end_time;
   struct   sched_param param;
@@ -83,6 +84,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int        status;
   pthread_t  threadId;
 

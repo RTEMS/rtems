@@ -145,6 +145,8 @@ static void benchmark_sem_trywait_not_available(void)
 
 void *POSIX_Init(void *argument)
 {
+  (void) argument;
+
   int status;
   TEST_BEGIN();
 

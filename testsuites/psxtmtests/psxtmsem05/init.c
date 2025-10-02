@@ -55,6 +55,8 @@ void *Low(
   void *argument
 )
 {
+  (void) argument;
+
   int      status;
   benchmark_timer_t end_time;
 
@@ -80,6 +82,8 @@ void *Middle(
   void *argument
 )
 {
+  (void) argument;
+
   int status;
 
     status = sem_wait(&sem1); /* semaphore blocks */
@@ -101,6 +105,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int                 i;
   int                 status;
   pthread_t           threadId;

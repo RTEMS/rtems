@@ -184,6 +184,7 @@ static void benchmark_sem_close_second(void)
 
 void *POSIX_Init(void *argument)
 {
+  (void) argument;
 
   TEST_BEGIN();
 

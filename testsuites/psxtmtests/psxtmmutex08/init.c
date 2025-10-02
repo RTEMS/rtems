@@ -48,6 +48,8 @@ pthread_mutex_t MutexId;
 
 void *Low( void *argument )
 {
+  (void) argument;
+
   benchmark_timer_t end_time;
 
   /*
@@ -76,6 +78,8 @@ void *Low( void *argument )
 
 void *Middle( void *argument )
 {
+  (void) argument;
+
   int status;
 
   /*
@@ -94,6 +98,8 @@ void *Middle( void *argument )
 
 void *POSIX_Init( void *argument )
 {
+  (void) argument;
+
   int       i;
   int       status;
   pthread_t threadId;

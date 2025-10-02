@@ -52,6 +52,8 @@ void *Blocker(
   void *argument
 )
 {
+  (void) argument;
+
   int                status;
   benchmark_timer_t  end_time;
 
@@ -80,6 +82,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  (void) argument;
+
   int                 status;
   int                 i;
   pthread_t           threadId;
