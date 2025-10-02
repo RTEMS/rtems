@@ -100,6 +100,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

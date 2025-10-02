@@ -853,6 +853,9 @@ static void print_image(
   const char* image_name
 )
 {
+  (void) include_guard;
+  (void) image_name;
+
   /* Nothing to be done */
 }
 #endif /* PRINT_DISK_IMAGE */
@@ -1430,6 +1433,8 @@ static void test( void )
 
 static void Init( rtems_task_argument arg )
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

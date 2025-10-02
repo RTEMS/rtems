@@ -150,6 +150,8 @@ static void test(const char *rda, const char *mnt, const char *file)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test("/dev/rda", "/mnt", "/mnt/file");

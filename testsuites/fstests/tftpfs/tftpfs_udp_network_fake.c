@@ -578,6 +578,8 @@ static uint16_t get_ip_addr_as_str(
   size_t buf_size
 )
 {
+  (void) addrlen;
+
   uint16_t port = 0xFFFF;
   *buf = '\0';
 

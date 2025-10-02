@@ -179,6 +179,8 @@ static void test_shutdown_filesystem(void)
 static rtems_task Init(
     rtems_task_argument ignored)
 {
+  (void) ignored;
+
   int rv;
 
   TEST_BEGIN();

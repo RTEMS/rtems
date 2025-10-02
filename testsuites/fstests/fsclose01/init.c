@@ -121,6 +121,10 @@ static int handler_open(
   mode_t mode
 )
 {
+  (void) path;
+  (void) oflag;
+  (void) mode;
+
   test_context *ctx;
 
   ctx = IMFS_generic_get_context_by_iop(iop);
@@ -156,6 +160,9 @@ static ssize_t handler_read(
   size_t count
 )
 {
+  (void) buffer;
+  (void) count;
+
   test_context *ctx;
 
   ctx = IMFS_generic_get_context_by_iop(iop);
@@ -171,6 +178,9 @@ static ssize_t handler_write(
   size_t count
 )
 {
+  (void) buffer;
+  (void) count;
+
   test_context *ctx;
 
   ctx = IMFS_generic_get_context_by_iop(iop);
@@ -186,6 +196,9 @@ static int handler_ioctl(
   void *buffer
 )
 {
+  (void) request;
+  (void) buffer;
+
   test_context *ctx;
 
   ctx = IMFS_generic_get_context_by_iop(iop);
@@ -201,6 +214,9 @@ static off_t handler_lseek(
   int whence
 )
 {
+  (void) length;
+  (void) whence;
+
   test_context *ctx;
 
   ctx = IMFS_generic_get_context_by_iop(iop);
@@ -234,6 +250,8 @@ static int handler_ftruncate(
   off_t length
 )
 {
+  (void) length;
+
   test_context *ctx;
 
   ctx = IMFS_generic_get_context_by_iop(iop);
@@ -274,6 +292,8 @@ static int handler_fcntl(
   int cmd
 )
 {
+  (void) cmd;
+
   test_context *ctx;
 
   ctx = IMFS_generic_get_context_by_iop(iop);
@@ -290,6 +310,10 @@ static ssize_t handler_readv(
   ssize_t total
 )
 {
+  (void) iov;
+  (void) iovcnt;
+  (void) total;
+
   test_context *ctx;
 
   ctx = IMFS_generic_get_context_by_iop(iop);
@@ -306,6 +330,10 @@ static ssize_t handler_writev(
   ssize_t total
 )
 {
+  (void) iov;
+  (void) iovcnt;
+  (void) total;
+
   test_context *ctx;
 
   ctx = IMFS_generic_get_context_by_iop(iop);
@@ -340,6 +368,8 @@ static const IMFS_node_control node_control = {
 
 static void worker_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx;
   int rv;
   char buf[1];
@@ -577,6 +607,8 @@ static void test_close(test_context *ctx)
 }
 
 static void test_iop(test_context *ctx) {
+  (void) ctx;
+
   const size_t iops_free = free_iops();
   rtems_libio_t *iop;
   rtems_libio_t *iop2;
@@ -638,6 +670,8 @@ static void test_iop(test_context *ctx) {
 
 static void test_tmpfile(test_context *ctx)
 {
+  (void) ctx;
+
   rtems_resource_snapshot before;
   FILE *f;
   int rv;
@@ -660,6 +694,8 @@ static void test_tmpfile(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
   test_iop(&test_instance);
   test_close(&test_instance);

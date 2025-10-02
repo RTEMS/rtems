@@ -206,6 +206,8 @@ static const T_fixture fixture_small_opt_size = {
 
 static void setup_mount_point( void *context )
 {
+  (void) context;
+
   int result;
 
   _Tftp_Reset();
@@ -215,6 +217,8 @@ static void setup_mount_point( void *context )
 
 static void teardown_mount_point( void *context )
 {
+  (void) context;
+
   int result;
 
   result = rmdir( tftpfs_mount_point );
@@ -6900,6 +6904,8 @@ const char rtems_test_name[] = "TFTPFS";
 
 static void Init( rtems_task_argument argument )
 {
+  (void) argument;
+
   rtems_test_run( argument, TEST_STATE );
 }
 

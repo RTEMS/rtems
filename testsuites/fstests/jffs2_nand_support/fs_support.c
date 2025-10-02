@@ -156,6 +156,9 @@ static int flash_block_is_bad(
   bool *bad
 )
 {
+  (void) super;
+  (void) orig_offset;
+
   *bad = false;
   return 0;
 }
@@ -165,6 +168,9 @@ static int flash_block_mark_bad(
   uint32_t orig_offset
 )
 {
+  (void) super;
+  (void) orig_offset;
+
   return 0;
 }
 
@@ -172,6 +178,8 @@ static uint32_t flash_get_oob_size(
   rtems_jffs2_flash_control *super
 )
 {
+  (void) super;
+
   return FLASH_PAGE_OOB_SIZE;
 }
 

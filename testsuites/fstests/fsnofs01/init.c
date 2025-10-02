@@ -510,6 +510,8 @@ static void test_check_access(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_initial_values();

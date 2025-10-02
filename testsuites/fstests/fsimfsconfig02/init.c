@@ -42,6 +42,8 @@ const char rtems_test_name[] = "FSIMFSCONFIG 2";
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   const char *mnt = "mnt";
   const char *link = "link";
   char buf[1];

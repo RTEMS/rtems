@@ -221,6 +221,8 @@ static void test_ide_part_table(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_bdpart();

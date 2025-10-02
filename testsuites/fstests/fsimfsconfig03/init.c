@@ -51,6 +51,8 @@ static const IMFS_node_control node_control = IMFS_GENERIC_INITIALIZER(
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   const struct utimbuf times = {0};
   const char *generic = "generic";
   const char *mnt = "mnt";

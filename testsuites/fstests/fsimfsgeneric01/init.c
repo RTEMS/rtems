@@ -73,6 +73,10 @@ static int handler_open(
   mode_t mode
 )
 {
+  (void) path;
+  (void) oflag;
+  (void) mode;
+
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
   rtems_test_assert(*state == TEST_FSTAT_OPEN_1);
@@ -99,6 +103,9 @@ static ssize_t handler_read(
   size_t count
 )
 {
+  (void) buffer;
+  (void) count;
+
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
   rtems_test_assert(*state == TEST_OPEN);
@@ -113,6 +120,9 @@ static ssize_t handler_write(
   size_t count
 )
 {
+  (void) buffer;
+  (void) count;
+
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
   rtems_test_assert(*state == TEST_READ);
@@ -127,6 +137,9 @@ static int handler_ioctl(
   void *buffer
 )
 {
+  (void) request;
+  (void) buffer;
+
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
   rtems_test_assert(*state == TEST_WRITE);
@@ -141,6 +154,9 @@ static off_t handler_lseek(
   int whence
 )
 {
+  (void) length;
+  (void) whence;
+
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
   rtems_test_assert(*state == TEST_IOCTL);
@@ -181,6 +197,8 @@ static int handler_ftruncate(
   off_t length
 )
 {
+  (void) length;
+
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
   rtems_test_assert(*state == TEST_LSEEK);
@@ -218,6 +236,8 @@ static int handler_fcntl(
   int cmd
 )
 {
+  (void) cmd;
+
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
   rtems_test_assert(*state == TEST_FDATASYNC);
@@ -233,6 +253,10 @@ static ssize_t handler_readv(
   ssize_t total
 )
 {
+  (void) iov;
+  (void) iovcnt;
+  (void) total;
+
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
   rtems_test_assert(*state == TEST_FCNTL);
@@ -248,6 +272,10 @@ static ssize_t handler_writev(
   ssize_t total
 )
 {
+  (void) iov;
+  (void) iovcnt;
+  (void) total;
+
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
   rtems_test_assert(*state == TEST_READV);
@@ -391,6 +419,9 @@ static IMFS_jnode_t *node_initialize_error(
   void *arg
 )
 {
+  (void) node;
+  (void) arg;
+
   errno = EIO;
 
   return NULL;
@@ -405,6 +436,8 @@ static IMFS_jnode_t *node_remove_inhibited(IMFS_jnode_t *node)
 
 static void node_destroy_inhibited(IMFS_jnode_t *node)
 {
+  (void) node;
+
   rtems_test_assert(false);
 }
 
@@ -633,6 +666,8 @@ static void test_imfs_add_node_errors(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_imfs_make_generic_node();
