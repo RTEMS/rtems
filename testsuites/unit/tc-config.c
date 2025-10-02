@@ -147,6 +147,8 @@ static void RtemsConfigUnitConfig_Action_0(
   RtemsConfigUnitConfig_Context *ctx
 )
 {
+  (void) ctx;
+
   uint32_t max = rtems_configuration_get_maximum_semaphores();
 
   /*
