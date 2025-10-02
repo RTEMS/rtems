@@ -38,7 +38,7 @@ void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
   uint64_t args[2] = {ADP_Stopped_ApplicationExit, code};
   __asm__ volatile ("li a0, %0" ::"i"(TARGET_SYS_EXIT_EXTENDED));
   __asm__ volatile ("mv a1, %0" ::"r"(&args));
-  __asm__ volatile ("slli zero, zero, 0x1f");
+  __asm__ volatile (".align 4; slli zero, zero, 0x1f");
   __asm__ volatile ("ebreak");
   __asm__ volatile ("srai zero, zero, 0x7");
   RTEMS_UNREACHABLE();
