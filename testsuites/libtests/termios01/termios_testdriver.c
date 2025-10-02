@@ -60,6 +60,8 @@ int termios_test_driver_set_attributes(
 
 int termios_test_driver_inbyte_nonblocking( int port )
 {
+  (void) port;
+
   return -1;
 }
 
@@ -68,6 +70,8 @@ void termios_test_driver_outbyte_polled(
   char ch
 )
 {
+  (void) port;
+  (void) ch;
 }
 
 ssize_t termios_test_driver_write_support(
@@ -98,6 +102,8 @@ int termios_test_driver_set_attributes(
   const struct termios *t
 )
 {
+  (void) minor;
+
   int                    baud_requested;
   int                    number;
   const char            *parity = "NONE";
@@ -156,6 +162,9 @@ rtems_device_driver termios_test_driver_initialize(
   void                      *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code sc;
 
   rtems_termios_initialize();
@@ -179,6 +188,9 @@ rtems_device_driver termios_test_driver_open(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   rtems_status_code sc;
   int               rc;
   rtems_libio_open_close_args_t *args = arg;
@@ -248,6 +260,9 @@ rtems_device_driver termios_test_driver_close(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_close (arg);
 }
 
@@ -257,6 +272,9 @@ rtems_device_driver termios_test_driver_read(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_read (arg);
 }
 
@@ -266,6 +284,9 @@ rtems_device_driver termios_test_driver_write(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_write (arg);
 }
 
@@ -275,5 +296,8 @@ rtems_device_driver termios_test_driver_control(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_ioctl (arg);
 }

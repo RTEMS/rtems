@@ -621,6 +621,8 @@ static void test_server(test_context *ctx, Record_Control *control)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx;
   Per_CPU_Control *cpu_self;
 

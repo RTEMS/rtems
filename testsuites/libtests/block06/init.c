@@ -1130,6 +1130,8 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
 static void
 bdbuf_tests_task_0 (rtems_task_argument arg)
 {
+  (void) arg;
+
   bdbuf_task_control* tc = (bdbuf_task_control*) arg;
 
   while (!tc->die)
@@ -1244,6 +1246,8 @@ bdbuf_tests_ranged_get_release (bdbuf_task_control* tc,
 static void
 bdbuf_tests_task_1 (rtems_task_argument arg)
 {
+  (void) arg;
+
   bdbuf_task_control* tc = (bdbuf_task_control*) arg;
 
   while (!tc->die)
@@ -1300,6 +1304,8 @@ bdbuf_tests_task_2_test_2 (bdbuf_task_control* tc)
 static void
 bdbuf_tests_task_2 (rtems_task_argument arg)
 {
+  (void) arg;
+
   bdbuf_task_control* tc = (bdbuf_task_control*) arg;
 
   while (!tc->die)
@@ -1775,6 +1781,8 @@ bdbuf_tester (void)
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   bdbuf_tester ();

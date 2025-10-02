@@ -1452,6 +1452,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   void             *p1;
   rtems_time_of_day time;
   rtems_status_code status;

@@ -674,6 +674,8 @@ out:
 
 static void raw_input( struct termios *tp )
 {
+  (void) tp;
+
   printf( "\nTesting raw input input\n\n" );
   printf( "Hit 'q' to terminate the test\n" );
 
@@ -700,6 +702,9 @@ void usage( void )
 
 static void notification( int fd, int seconds_remaining, void *arg )
 {
+  (void) fd;
+  (void) arg;
+
   printf(
     "Press any key to check the termios input capabilities (%is remaining)\n",
     seconds_remaining
@@ -712,6 +717,8 @@ static void notification( int fd, int seconds_remaining, void *arg )
 rtems_task
 Init (rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_status_code status;
   char c ;
   struct termios orig_termios, test_termios;

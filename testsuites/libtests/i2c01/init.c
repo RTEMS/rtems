@@ -128,6 +128,8 @@ static int test_simple_read_write_transfer(
   test_device *base
 )
 {
+  (void) bus;
+
   test_device_simple_read_write *dev = (test_device_simple_read_write *) base;
 
   if (msg_count == 1 && msgs[0].len == sizeof(dev->buf)) {
@@ -150,6 +152,8 @@ static int test_gpio_nxp_pca9535_transfer(
   test_device *base
 )
 {
+  (void) bus;
+
   test_device_gpio_nxp_pca9535 *dev = (test_device_gpio_nxp_pca9535 *) base;
   i2c_msg *first = &msgs[0];
   i2c_msg *second = &msgs[1];
@@ -208,6 +212,8 @@ static int test_eeprom_transfer(
   test_device *base
 )
 {
+  (void) bus;
+
   test_device_eeprom *dev = (test_device_eeprom *) base;
   i2c_msg *msg = &msgs[0];
   uint32_t i;
@@ -254,6 +260,8 @@ static int test_switch_nxp_pca9548a_transfer(
   test_device *base
 )
 {
+  (void) bus;
+
   test_device_switch_nxp_pca9548a *dev = (test_device_switch_nxp_pca9548a *) base;
   uint32_t i;
 
@@ -356,6 +364,8 @@ typedef struct {
 
 static void bus_obtainer_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_event_set e = 0;
   bus_obtainer_ctx *c = (bus_obtainer_ctx *) arg;
   int rv;
@@ -383,6 +393,8 @@ static void bus_obtainer_task(rtems_task_argument arg)
 
 static void test_nonblock_read_write(test_bus *bus, int fd)
 {
+  (void) bus;
+
   int flags;
   int rv;
   char buf[3];
@@ -774,6 +786,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

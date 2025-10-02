@@ -45,6 +45,8 @@ rtems_task Task_1_through_5(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int i;
   unsigned int passes = 0;
   rtems_id          tid;

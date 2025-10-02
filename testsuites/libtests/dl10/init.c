@@ -64,6 +64,9 @@ static int test(void)
 
 static void notification(int fd, int seconds_remaining, void *arg)
 {
+  (void) fd;
+  (void) arg;
+
   printf(
     "Press any key to enter shell (%is remaining)\n",
     seconds_remaining
@@ -72,6 +75,8 @@ static void notification(int fd, int seconds_remaining, void *arg)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   int e;
   rtems_status_code sc;
 

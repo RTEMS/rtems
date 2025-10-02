@@ -52,6 +52,9 @@ int rtems_main_o4 (int argc, const char* argv[]);
 
 int rtems_main_o4 (int argc, const char* argv[])
 {
+  (void) argc;
+  (void) argv;
+
   printf (DL_NAME ": module: %s\n", dl_localise_file (__FILE__));
   printf (DL_NAME ":         dl01_bss1: %4zu: %p: %d\n",   PAINT_VAR (dl01_bss1));
   printf (DL_NAME ":         dl01_bss2: %4zu: %p: %f\n",   PAINT_VAR (dl01_bss2[0]));

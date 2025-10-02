@@ -254,6 +254,8 @@ static void test_diskdevs(void)
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   test_diskdevs();

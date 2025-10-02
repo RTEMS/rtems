@@ -108,6 +108,8 @@ static int perform_test(void)
 
 static void *secondary_thread(void *arg)
 {
+  (void) arg;
+
   printf("Running test on secondary thread\n");
   if (perform_test()) {
     printf("Test failed on secondary task\n");

@@ -86,6 +86,9 @@ static rtems_status_code invalid_initialize(
   void *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code sc;
 
   sc = rtems_io_register_name(&dev_invalid[0], major, 0);
@@ -100,6 +103,10 @@ static rtems_status_code invalid_control(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_INVALID_NUMBER;
 }
 
@@ -413,6 +420,8 @@ static void test_blkdev_imfs_errors(void)
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   test_blkdev_imfs_read_and_write();

@@ -72,6 +72,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   puts( "putenv(\"FOO=BAR\") - expected to work" );

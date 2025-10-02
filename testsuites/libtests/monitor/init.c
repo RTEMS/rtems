@@ -48,6 +48,8 @@ rtems_task Task_1_through_5(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   for ( ; ; ) {
@@ -58,6 +60,9 @@ rtems_task Task_1_through_5(
 
 static void notification(int fd, int seconds_remaining, void *arg)
 {
+  (void) fd;
+  (void) arg;
+
   printf(
     "Press any key to enter monitor (%is remaining)\n",
     seconds_remaining
@@ -68,6 +73,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t    index;
   rtems_status_code status;
 

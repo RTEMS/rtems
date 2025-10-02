@@ -82,6 +82,8 @@ static void fatal_extension(
 
 static void *exit_thread( void *arg )
 {
+  (void) arg;
+
   int       eno;
   uintptr_t max_free_size = 0;
   void     *greedy;
@@ -107,6 +109,8 @@ static void *exit_thread( void *arg )
 
 static void Init( rtems_task_argument arg )
 {
+  (void) arg;
+
   pthread_t thread;
   int       eno;
 

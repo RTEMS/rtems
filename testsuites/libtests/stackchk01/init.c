@@ -44,6 +44,8 @@ static void stack_visitor( const rtems_stack_checker_info *info, void *arg )
 
 static rtems_task Init( rtems_task_argument argument )
 {
+  (void) argument;
+
   bool      blown;
   uintptr_t used;
   uintptr_t limit;

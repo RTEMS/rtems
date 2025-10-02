@@ -47,6 +47,9 @@ rtems_timer_service_routine test_operation_from_isr(
   void     *arg
 )
 {
+  (void) timer;
+  (void) arg;
+
   /* free memory from ISR so it is deferred */
   free( Pointer1 );
 
@@ -57,6 +60,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code     status;
   rtems_id              timer;
   void                 *pointer2;

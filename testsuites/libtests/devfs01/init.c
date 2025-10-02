@@ -36,6 +36,8 @@ const char rtems_test_name[] = "DEVFS 1";
 
 static void Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   TEST_END();

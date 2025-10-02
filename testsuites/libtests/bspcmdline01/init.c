@@ -159,6 +159,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   const char *bspcmdline;
 
   TEST_BEGIN();

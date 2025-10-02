@@ -48,6 +48,8 @@ void stackchk03_blown_stack_reporter(
   bool pattern_ok
 )
 {
+  (void) pattern_ok;
+
   /* custom stack report funtion to be implemented here */
   printk("RTEMS STACKCHK03 CUSTOM REPORTER !!!\n");
   rtems_fatal(

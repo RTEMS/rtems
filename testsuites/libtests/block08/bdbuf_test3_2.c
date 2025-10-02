@@ -127,6 +127,8 @@ bdbuf_test3_2_main()
 static rtems_task
 bdbuf_test3_2_thread1(rtems_task_argument arg)
 {
+    (void) arg;
+
     rtems_status_code   rc;
     rtems_bdbuf_buffer *bd = NULL;
 
@@ -158,6 +160,8 @@ bdbuf_test3_2_thread1(rtems_task_argument arg)
 static rtems_task
 bdbuf_test3_2_thread2(rtems_task_argument arg)
 {
+    (void) arg;
+
     rtems_status_code   rc;
     rtems_bdbuf_buffer *bd = NULL;
 
@@ -188,6 +192,8 @@ bdbuf_test3_2_thread2(rtems_task_argument arg)
 static rtems_task
 bdbuf_test3_2_thread3(rtems_task_argument arg)
 {
+    (void) arg;
+
     rtems_status_code   rc;
     rtems_bdbuf_buffer *bd = NULL;
 

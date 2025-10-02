@@ -164,6 +164,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   TEST_BEGIN();
   test_rtems_string_to_pointer();
   test_rtems_string_to_unsigned_char();

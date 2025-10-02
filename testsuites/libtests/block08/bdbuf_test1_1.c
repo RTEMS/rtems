@@ -117,6 +117,8 @@ bdbuf_test1_1_main()
 static rtems_task
 bdbuf_test1_1_thread1(rtems_task_argument arg)
 {
+    (void) arg;
+
     rtems_status_code   rc;
     rtems_bdbuf_buffer *bd1 = NULL;
     rtems_bdbuf_buffer *bd2 = NULL;

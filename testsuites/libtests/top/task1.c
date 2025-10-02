@@ -75,6 +75,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   char              str[80];
   uint32_t          i,j;

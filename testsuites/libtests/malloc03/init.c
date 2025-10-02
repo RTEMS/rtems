@@ -38,6 +38,8 @@ static rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   void *p1;
 
   TEST_BEGIN();

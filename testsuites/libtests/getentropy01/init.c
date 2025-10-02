@@ -88,6 +88,8 @@ static void test_getentropy(size_t nr_bytes)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   size_t i;
 
   TEST_BEGIN();

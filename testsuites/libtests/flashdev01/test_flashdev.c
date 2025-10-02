@@ -126,6 +126,8 @@ int test_flashdev_page_by_off(
   size_t *page_size
 )
 {
+  (void) flash;
+
   *page_offset = search_offset - (search_offset%PAGE_SIZE);
   *page_size = PAGE_SIZE;
   return 0;
@@ -139,6 +141,8 @@ int test_flashdev_page_by_index(
   size_t *page_size
 )
 {
+  (void) flash;
+
   *page_offset = search_index * PAGE_SIZE;
   *page_size = PAGE_SIZE;
   return 0;
@@ -150,6 +154,8 @@ int test_flashdev_page_count(
   int *page_count
 )
 {
+  (void) flash;
+
   *page_count = PAGE_COUNT;
   return 0;
 }
@@ -160,6 +166,8 @@ int test_flashdev_wb_size(
   size_t *write_block_size
 )
 {
+  (void) flash;
+
   *write_block_size = WB_SIZE;
   return 0;
 }
@@ -170,6 +178,8 @@ int test_flashdev_sector_by_off(
   off_t *sector_offset,
   size_t *sector_size
 ) {
+  (void) flash;
+
   *sector_offset = search_offset - (search_offset%SECTOR_SIZE);
   *sector_size = SECTOR_SIZE;
   return 0;
@@ -179,6 +189,8 @@ int test_flashdev_sector_count(
   rtems_flashdev *flash,
   int *sector_count
 ) {
+  (void) flash;
+
   *sector_count = SECTOR_COUNT;
   return 0;
 }
@@ -190,6 +202,8 @@ uint32_t test_flashdev_jedec_id(
   rtems_flashdev* flash
 )
 {
+  (void) flash;
+
   test_flashdev* driver = flash->driver;
   return driver->jedec_id;
 }
@@ -200,6 +214,8 @@ int test_flashdev_type(
   rtems_flashdev_flash_type *type
 )
 {
+  (void) flash;
+
   *type = RTEMS_FLASHDEV_NOR;
   return 0;
 }

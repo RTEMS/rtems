@@ -77,6 +77,8 @@ const void *__wrap_bsp_fdt_get(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   int rv;
   phandle_t d;
   phandle_t l;

@@ -96,6 +96,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Heap_Control *real_heap;
   const Memory_Information *mem;
   Memory_Area *area;

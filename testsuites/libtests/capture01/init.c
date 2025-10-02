@@ -58,6 +58,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_status_code   sc;
   rtems_task_priority old_priority;
   rtems_mode          old_mode;

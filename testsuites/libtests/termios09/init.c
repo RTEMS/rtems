@@ -93,6 +93,9 @@ static bool first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
   device_context *dev = (device_context *) base;
 
   dev->tty = tty;
@@ -459,6 +462,8 @@ static void test_inlcr(test_context *ctx)
 
 static void callback(struct termios *tty, void *arg)
 {
+  (void) tty;
+
   device_context *ctx = arg;
 
   ++ctx->callback_counter;
@@ -1009,6 +1014,8 @@ set_self_prio(rtems_task_priority prio)
 
 static void flush_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) arg;
 
   while (true) {
@@ -1162,6 +1169,8 @@ static void test_tx_callback(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
 
   TEST_BEGIN();
@@ -1193,6 +1202,9 @@ static void Init(rtems_task_argument arg)
 
 static void switch_extension(Thread_Control *executing, Thread_Control *heir)
 {
+  (void) executing;
+  (void) heir;
+
   test_context *ctx = &test_instance;
 
   ++ctx->context_switch_counter;

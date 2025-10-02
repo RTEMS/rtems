@@ -182,6 +182,8 @@ static void overflow(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx;
   Record_Stream_header header;
   size_t size;

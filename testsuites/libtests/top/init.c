@@ -69,6 +69,9 @@ void add_some(
 
 static void notification(int fd, int seconds_remaining, void *arg)
 {
+  (void) fd;
+  (void) arg;
+
   printf(
     "Press any key to enter top test (%is remaining)\n",
     seconds_remaining
@@ -79,6 +82,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   rtems_time_of_day time;
 

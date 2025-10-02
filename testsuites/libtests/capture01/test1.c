@@ -67,6 +67,8 @@ capture_wait (uint32_t period)
 static void
 capture_CT1a (rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_id mutex = (rtems_id) arg;
   rtems_status_code sc;
 
@@ -90,6 +92,8 @@ capture_CT1a (rtems_task_argument arg)
 static void
 capture_CT1b (rtems_task_argument arg)
 {
+  (void) arg;
+
   volatile int i;
 
   while (!capture_CT1c_deleted)
@@ -103,6 +107,8 @@ capture_CT1b (rtems_task_argument arg)
 static void
 capture_CT1c (rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_id          mutex = (rtems_id) arg;
   rtems_status_code sc;
 

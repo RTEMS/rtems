@@ -48,6 +48,8 @@ const char rtems_test_name[] = "LIBIO FD OPEN";
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   int fd[10];
   int i;
   int base_count;

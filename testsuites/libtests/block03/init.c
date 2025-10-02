@@ -74,6 +74,8 @@ static rtems_id task_id_high;
 
 static void task_low(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
@@ -97,6 +99,8 @@ static void task_low(rtems_task_argument arg)
 
 static void task_high(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
@@ -163,6 +167,8 @@ static void do_ramdisk_register(
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 

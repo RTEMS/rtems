@@ -47,6 +47,8 @@ static rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int status;
   int fdr = 0, fdw = 0;
   char buf[10];

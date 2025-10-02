@@ -148,6 +148,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   bool more_data;
 
   TEST_BEGIN();

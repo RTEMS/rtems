@@ -47,6 +47,8 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_cpu_usage_top();
   TEST_END();
   rtems_test_exit( 0 );

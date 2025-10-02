@@ -44,6 +44,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   int sc;
   pid_t pid;
   char *term_name_p;

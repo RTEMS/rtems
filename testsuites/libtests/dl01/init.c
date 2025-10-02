@@ -62,6 +62,8 @@ static int test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   int te;
 
   TEST_BEGIN();

@@ -71,18 +71,24 @@ void pppasyncattach(void)
 
 int  pppopen(struct rtems_termios_tty *tty)
 {
+  (void) tty;
+
   puts( "pppopen called" );
   return 0;
 }
 
 int  pppclose(struct rtems_termios_tty *tty)
 {
+  (void) tty;
+
   puts( "pppclose called" );
   return 0;
 }
 
 int  pppread(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args)
 {
+  (void) rw_args;
+
   puts( "pppread called" );
   
   rtems_termios_enqueue_raw_characters( tty, (char *)RXExpected, RXLength );
@@ -106,18 +112,26 @@ int  pppwrite(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args)
 
 int  pppioctl(struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args)
 {
+  (void) tty;
+  (void) args;
+
   puts( "pppioctl called" );
   return 0;
 }
 
 int  pppinput(int c, struct rtems_termios_tty *tty)
 {
+  (void) tty;
+
   printf( "pppinput called - with (%c)\n", c );
   return 0;
 }
 
 int  pppstart(struct rtems_termios_tty *tp, int len)
 {
+  (void) tp;
+  (void) len;
+
   puts( "pppstart called" );
   return 0;
 }

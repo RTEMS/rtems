@@ -73,6 +73,8 @@ int main( void )
 #endif
 {
 #if __rtems__
+  (void) ignored;
+
   rtems_print_printer_fprintf_putc(&rtems_test_printer);
   TEST_BEGIN();
 #endif

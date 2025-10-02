@@ -247,6 +247,8 @@ static void rel(rtems_bdbuf_buffer *bd, enum rel_type type)
 
 static void task_low(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   while (true) {
@@ -265,6 +267,8 @@ static void task_low(rtems_task_argument arg)
 
 static void task_high(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   while (true) {
@@ -283,6 +287,8 @@ static void task_high(rtems_task_argument arg)
 
 static void task_resume(rtems_task_argument arg)
 {
+  (void) arg;
+
   while (true) {
     bool do_resume = false;
 
@@ -436,6 +442,8 @@ static void disk_register(
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   unsigned i = 0;
 

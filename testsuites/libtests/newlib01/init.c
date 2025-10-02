@@ -132,6 +132,8 @@ static void test_lrand48(void)
 
 static void stdio_file_worker(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   FILE *output;
   char buf[1] = { 'x' };
@@ -165,6 +167,8 @@ static void stdio_file_worker(rtems_task_argument arg)
 
 static void non_stdio_file_worker(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   FILE *fp;
   char buf[1] = { 'y' };
@@ -194,6 +198,11 @@ static int handler_open(
   mode_t mode
 )
 {
+  (void) iop;
+  (void) path;
+  (void) oflag;
+  (void) mode;
+
   test_context *ctx = &test_instance;
 
   rtems_test_assert(ctx->current == INIT);
@@ -206,6 +215,8 @@ static int handler_close(
   rtems_libio_t *iop
 )
 {
+  (void) iop;
+
   test_context *ctx = &test_instance;
 
   rtems_test_assert(ctx->current == WRITTEN);
@@ -220,6 +231,10 @@ static ssize_t handler_read(
   size_t count
 )
 {
+  (void) iop;
+  (void) buffer;
+  (void) count;
+
   rtems_test_assert(0);
 
   return 0;
@@ -231,6 +246,8 @@ static ssize_t handler_write(
   size_t count
 )
 {
+  (void) buffer;
+
   test_context *ctx = &test_instance;
 
   rtems_test_assert(ctx->current == OPEN);
@@ -247,6 +264,10 @@ static int handler_ioctl(
   void *buffer
 )
 {
+  (void) iop;
+  (void) request;
+  (void) buffer;
+
   rtems_test_assert(0);
 
   return 0;
@@ -258,6 +279,10 @@ static off_t handler_lseek(
   int whence
 )
 {
+  (void) iop;
+  (void) length;
+  (void) whence;
+
   rtems_test_assert(0);
 
   return 0;
@@ -268,6 +293,9 @@ static int handler_ftruncate(
   off_t length
 )
 {
+  (void) iop;
+  (void) length;
+
   rtems_test_assert(0);
 
   return 0;
@@ -277,6 +305,8 @@ static int handler_fsync(
   rtems_libio_t *iop
 )
 {
+  (void) iop;
+
   rtems_test_assert(0);
 
   return 0;
@@ -286,6 +316,8 @@ static int handler_fdatasync(
   rtems_libio_t *iop
 )
 {
+  (void) iop;
+
   rtems_test_assert(0);
 
   return 0;
@@ -296,6 +328,9 @@ static int handler_fcntl(
   int cmd
 )
 {
+  (void) iop;
+  (void) cmd;
+
   rtems_test_assert(0);
 
   return 0;
@@ -308,6 +343,11 @@ static ssize_t handler_readv(
   ssize_t total
 )
 {
+  (void) iop;
+  (void) iov;
+  (void) iovcnt;
+  (void) total;
+
   rtems_test_assert(0);
 
   return 0;
@@ -320,6 +360,11 @@ static ssize_t handler_writev(
   ssize_t total
 )
 {
+  (void) iop;
+  (void) iov;
+  (void) iovcnt;
+  (void) total;
+
   rtems_test_assert(0);
 
   return 0;
@@ -499,6 +544,8 @@ static void test_exit_handling(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   FILE *file;
   int rv;

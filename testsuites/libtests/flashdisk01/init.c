@@ -95,6 +95,8 @@ static int test_rfs_mount_handler(
   void *arg
 )
 {
+  (void) arg;
+
   return mount_and_make_target_path(
     disk_path,
     mount_path,
@@ -109,6 +111,8 @@ static int test_rfs_format_handler(
   void *arg
 )
 {
+  (void) arg;
+
   flashdisk_print_status(disk_path);
 
   rtems_test_assert(0);
@@ -162,6 +166,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();
@@ -207,6 +213,8 @@ static int flashdisk_read(
   uint32_t size
 )
 {
+  (void) device;
+
   int eno = 0;
   const uint8_t *data = get_data_pointer(sd, segment, offset);
 
@@ -224,6 +232,8 @@ static int flashdisk_write(
   uint32_t size
 )
 {
+  (void) device;
+
   int eno = 0;
   uint8_t *data = get_data_pointer(sd, segment, offset);
 
@@ -240,6 +250,8 @@ static int flashdisk_blank(
   uint32_t size
 )
 {
+  (void) device;
+
   int eno = 0;
   const uint8_t *current = get_data_pointer(sd, segment, offset);
   const uint8_t *end = current + size;
@@ -263,6 +275,8 @@ static int flashdisk_verify(
   uint32_t size
 )
 {
+  (void) device;
+
   int eno = 0;
   uint8_t *data = get_data_pointer(sd, segment, offset);
 
@@ -279,6 +293,8 @@ static int flashdisk_erase(
   uint32_t segment
 )
 {
+  (void) device;
+
   int eno = 0;
   uint8_t *data = get_data_pointer(sd, segment, 0);
 
@@ -292,6 +308,9 @@ static int flashdisk_erase_device(
   uint32_t device
 )
 {
+  (void) sd;
+  (void) device;
+
   int eno = 0;
 
   erase_device();

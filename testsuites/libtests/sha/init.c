@@ -384,6 +384,8 @@ static void test_sha512_256(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_sha224();

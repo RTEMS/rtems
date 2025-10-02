@@ -635,6 +635,10 @@ static rtems_status_code test_early_device_install(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   static const rtems_termios_device_handler handler;
   static const char dev[] = "/foobar";
 
@@ -862,6 +866,8 @@ static rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   int                       rc;
   rtems_status_code         sc;
   rtems_device_major_number registered;

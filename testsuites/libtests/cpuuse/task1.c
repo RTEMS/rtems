@@ -45,6 +45,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t    seconds;
   uint32_t    old_seconds;
   rtems_mode        previous_mode;

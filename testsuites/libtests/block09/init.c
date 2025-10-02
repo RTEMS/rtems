@@ -181,6 +181,8 @@ static void check_read(
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
   rtems_disk_device *dd = NULL;

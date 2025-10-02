@@ -254,6 +254,8 @@ static void purge(char task)
 
 static void task_purger(rtems_task_argument arg)
 {
+  (void) arg;
+
   while (true) {
     suspend(RTEMS_SELF);
 
@@ -273,6 +275,8 @@ static void activate_purger(rtems_task_priority prio)
 
 static void task_waiter(rtems_task_argument arg)
 {
+  (void) arg;
+
   while (true) {
     rtems_bdbuf_buffer *bd = NULL;
 
@@ -404,6 +408,8 @@ static const char *purger_assoc_table [PURGER_COUNT] = {
 
 static rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   size_t i_w = 0;
   size_t i_ac = 0;

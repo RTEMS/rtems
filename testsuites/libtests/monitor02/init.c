@@ -54,6 +54,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int                i;
   int                argc;
   char               *argv[MAX_ARGS];

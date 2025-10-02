@@ -518,6 +518,8 @@ static void test_free_merge_left_or_right(bool left)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_init_begin_greater_than_end();

@@ -52,6 +52,9 @@ int rtems_main (int argc, const char* argv[]);
 
 int rtems_main (int argc, const char* argv[])
 {
+  (void) argc;
+  (void) argv;
+
   func1_t        f1;
   double         d;
   unsigned short s[7] = { 12, 34, 56, 78, 90, 13, 57 };

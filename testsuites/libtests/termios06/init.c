@@ -77,6 +77,9 @@ void Rx_Wake(
   void           *arg
 )
 {
+  (void) tty;
+  (void) arg;
+
   printk( "Rx_Wake - invoked\n" );
 }
 
@@ -85,6 +88,9 @@ void Tx_Wake(
   void           *arg
 )
 {
+  (void) tty;
+  (void) arg;
+
   printk( "Tx_Wake - invoked\n" );
 }
 
@@ -208,6 +214,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   pppasyncattach();

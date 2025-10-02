@@ -51,6 +51,8 @@ const char rtems_test_name[] = "BLOCK 8";
 
 rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   TEST_BEGIN();
   run_bdbuf_tests();
   TEST_END();

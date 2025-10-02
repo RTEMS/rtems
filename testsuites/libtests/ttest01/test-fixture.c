@@ -46,6 +46,7 @@ teardown(void *ctx)
 static size_t
 scope(void *ctx, char *buf, size_t n)
 {
+	(void) ctx;
 
 	return T_str_copy(buf, "/More", n);
 }
@@ -104,6 +105,7 @@ teardown_2(void *ctx)
 static size_t
 scope_2(void *ctx, char *buf, size_t n)
 {
+	(void) ctx;
 
 	return T_str_copy(buf, "/AndMore", n);
 }

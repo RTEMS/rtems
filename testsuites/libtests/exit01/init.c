@@ -80,6 +80,8 @@ static void fatal_extension(
 
 static void exit_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   int rv;
 
   rv = atexit(atexit_2);
@@ -96,6 +98,8 @@ static void exit_task(rtems_task_argument arg)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
   rtems_id id;
 
