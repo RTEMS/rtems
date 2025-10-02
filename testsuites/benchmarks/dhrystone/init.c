@@ -37,6 +37,8 @@ int main(int argc, char **argv);
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   char *argv[] = {
     "dhrystone",
     "1000000",

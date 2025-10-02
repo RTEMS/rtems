@@ -80,6 +80,9 @@ int main (int argc, char **argv)
   /* main program, corresponds to procedures        */
   /* Main and Proc_0 in the Ada version             */
 {
+#ifdef __rtems__
+        (void) argc;
+#endif
         One_Fifty       Int_1_Loc;
   REG   One_Fifty       Int_2_Loc;
         One_Fifty       Int_3_Loc;

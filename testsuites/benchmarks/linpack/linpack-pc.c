@@ -255,6 +255,9 @@ REAL ddot (int n, REAL dx[], int incx, REAL dy[], int incy);
 
 int main (int argc, char **argv)
 {
+#ifdef __rtems__
+	(void) argc;
+#endif
         static REAL aa[200*200],a[200*201],b[200],x[200];       
         REAL cray,ops,total,norma,normx;
         REAL resid,residn,eps,t1,tm2,epsn,x1,x2;
