@@ -238,6 +238,9 @@ shell_nvdisk_erase (int argc, char* argv[])
 static int
 shell_bdbuf_trace (int argc, char* argv[])
 {
+  (void) argc;
+  (void) argv;
+
 #if RTEMS_BDBUF_TRACE
   extern bool rtems_bdbuf_tracer;
   rtems_bdbuf_tracer = !rtems_bdbuf_tracer;
@@ -1144,12 +1147,17 @@ static void fileio_menu (void)
 static rtems_task
 fileio_task (rtems_task_argument ignored)
 {
+  (void) ignored;
+
   fileio_menu();
 }
 
 static void
 notification (int fd, int seconds_remaining, void *arg)
 {
+  (void) fd;
+  (void) arg;
+
   printf(
     "Press any key to start file I/O sample (%is remaining)\n",
     seconds_remaining
@@ -1162,6 +1170,8 @@ notification (int fd, int seconds_remaining, void *arg)
 rtems_task
 Init (rtems_task_argument ignored)
 {
+  (void) ignored;
+
   rtems_name Task_name;
   rtems_id   Task_id;
   rtems_status_code status;

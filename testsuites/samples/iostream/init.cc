@@ -52,6 +52,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   TEST_BEGIN();
   std::cout << "Hello World" << std::endl;
   TEST_END();

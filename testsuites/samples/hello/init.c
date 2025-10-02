@@ -39,6 +39,8 @@ static rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_print_printer_fprintf_putc(&rtems_test_printer);
   TEST_BEGIN();
   printf( "Hello World\n" );

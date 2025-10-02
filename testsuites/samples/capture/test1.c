@@ -91,6 +91,8 @@ capture_CT1a (rtems_task_argument arg)
 static void
 capture_CT1b (rtems_task_argument arg)
 {
+  (void) arg;
+
   volatile int i;
 
   while (!capture_CT1c_deleted)
@@ -130,6 +132,11 @@ capture_test_1 (int                                argc,
                 const rtems_monitor_command_arg_t* command_arg,
                 bool                               verbose)
 {
+  (void) argc;
+  (void) argv;
+  (void) command_arg;
+  (void) verbose;
+
   rtems_status_code sc;
   rtems_name        name;
   rtems_id          id[3];

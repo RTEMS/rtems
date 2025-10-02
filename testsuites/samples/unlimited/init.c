@@ -45,6 +45,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
   uint32_t            task;

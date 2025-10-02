@@ -355,6 +355,10 @@ main (
   char **argv
 )
 {
+#ifdef __rtems__
+    (void) argc;
+#endif
+
     /* First two assignments use integer right-hand sides. */
     Zero = 0;
     One = 1;

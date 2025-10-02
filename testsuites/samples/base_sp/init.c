@@ -46,6 +46,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_name        task_name;
   rtems_id          tid;
   rtems_status_code status;

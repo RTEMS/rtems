@@ -45,6 +45,8 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  (void) ignored;
+
   /*
    *  Install whatever optional floating point assistance package
    *  is required by this CPU.

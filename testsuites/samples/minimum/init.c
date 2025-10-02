@@ -41,6 +41,8 @@
 
 static void *Init( uintptr_t ignored )
 {
+  (void) ignored;
+
   /* initialize application */
 
   /* Real application would call idle loop functionality */
