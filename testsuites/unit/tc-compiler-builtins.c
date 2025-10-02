@@ -161,11 +161,15 @@ static void Fatal(
 
 static void CompilerUnitBuiltins_Setup( void *ctx )
 {
+  (void) ctx;
+
   SetFatalHandler( Fatal, exception_return_context );
 }
 
 static void CompilerUnitBuiltins_Teardown( void *ctx )
 {
+  (void) ctx;
+
   SetFatalHandler( NULL, NULL );
 }
 
