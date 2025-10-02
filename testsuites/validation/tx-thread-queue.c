@@ -285,9 +285,19 @@ static void ThreadQueueDeadlock(
   longjmp( ctx->before_enqueue, 1 );
 }
 
+/*
+ * This warning flags when the caller of setjmp() is assuming a local
+ * variable survives the longjmp() back. In this specific case, this
+ * assumption is OK because it never returns from the thread body and
+ * the variable "events" is preserved.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclobbered"
+
 static void Worker( rtems_task_argument arg, TQWorkerKind worker )
 {
   TQContext *ctx;
+
 
   ctx = (TQContext *) arg;
 
@@ -444,6 +454,8 @@ static void Worker( rtems_task_argument arg, TQWorkerKind worker )
     ctx->done[ worker ] = true;
   }
 }
+
+#pragma GCC diagnostic pop
 
 static void BlockerA( rtems_task_argument arg )
 {
