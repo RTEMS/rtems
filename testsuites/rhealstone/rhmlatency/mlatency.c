@@ -33,6 +33,8 @@ void Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   Print_Warning();
@@ -84,6 +86,8 @@ void Init(
 
 rtems_task Task01( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   rtems_status_code status;
 
   /* Put a message in the queue so recieve overhead can be found. */
@@ -104,6 +108,8 @@ rtems_task Task01( rtems_task_argument ignored )
 
 rtems_task Task02( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   size_t size;
 
   /* find recieve overhead - no preempt or task switch */

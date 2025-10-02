@@ -29,6 +29,8 @@ rtems_status_code  status;
 
 rtems_task Task01( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   /* Start up TA02, get preempted */
   status = rtems_task_start( Task_id[1], Task02, 0);
   directive_failed( status, "rtems_task_start of TA02");
@@ -47,6 +49,8 @@ rtems_task Task01( rtems_task_argument ignored )
 
 rtems_task Task02( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   /* Find overhead of task switch back to TA01 (not a preemption) */
   benchmark_timer_initialize();
   rtems_task_suspend( RTEMS_SELF );
@@ -71,6 +75,8 @@ rtems_task Task02( rtems_task_argument ignored )
 
 rtems_task Init( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   Print_Warning();
 
   TEST_BEGIN();

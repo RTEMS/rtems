@@ -27,6 +27,8 @@ uint32_t    sem_exe;
 
 rtems_task Init( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   rtems_status_code    status;
   rtems_attribute      sem_attr;
   rtems_task_priority  pri;
@@ -90,6 +92,8 @@ rtems_task Init( rtems_task_argument ignored )
 
 rtems_task Task01( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   rtems_status_code status;
 
   /* Start up TA02, yield so it can run */
@@ -121,6 +125,7 @@ rtems_task Task01( rtems_task_argument ignored )
 
 rtems_task Task02( rtems_task_argument ignored )
 {
+  (void) ignored;
 
   /* Benchmark code */
   benchmark_timer_initialize();

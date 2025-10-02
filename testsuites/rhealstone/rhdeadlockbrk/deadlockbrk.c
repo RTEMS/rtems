@@ -30,6 +30,8 @@ uint32_t sem_exe;
 
 rtems_task Init( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   rtems_attribute      sem_attr;
   rtems_task_priority  pri;
   rtems_mode           prev_mode;
@@ -109,6 +111,8 @@ rtems_task Init( rtems_task_argument ignored )
 
 rtems_task Task01( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   /* All tasks have had time to start up once TA01 is running */
 
   /* Benchmark code */
@@ -151,6 +155,8 @@ rtems_task Task01( rtems_task_argument ignored )
 
 rtems_task Task02( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   /* Start up TA01, get preempted */
   if ( sem_exe == 1) {
     status = rtems_task_restart( Task_id[0], 0);
@@ -172,6 +178,8 @@ rtems_task Task02( rtems_task_argument ignored )
 
 rtems_task Task03( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   if (sem_exe == 1) {
     /* Low priority task holds mutex */
     rtems_semaphore_obtain( sem_id, RTEMS_WAIT, 0 );

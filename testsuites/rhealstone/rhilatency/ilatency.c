@@ -48,6 +48,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
   rtems_id Task_id;
 
@@ -103,6 +105,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   Install_tm27_vector( Isr_handler ) ;
   Interrupt_nest = 0;
 

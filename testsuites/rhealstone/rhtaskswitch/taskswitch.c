@@ -24,6 +24,8 @@ rtems_status_code  status;
 
 rtems_task Task02( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   uint32_t telapsed;
 
   /* All overhead accounted for now, we can begin benchmark */
@@ -48,6 +50,8 @@ rtems_task Task02( rtems_task_argument ignored )
 
 rtems_task Task01( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   status = rtems_task_start( Task_id[1], Task02, 0 );
   directive_failed( status, "rtems_task_start of TA02" );
 
@@ -65,6 +69,8 @@ rtems_task Task01( rtems_task_argument ignored )
 
 rtems_task Init( rtems_task_argument ignored )
 {
+  (void) ignored;
+
   Print_Warning();
 
   TEST_BEGIN();
