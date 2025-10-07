@@ -52,7 +52,7 @@ int close(
     rtems_set_errno_and_return_minus_one( EBADF );
   }
 
-  iop = rtems_libio_iop( fd );
+  LIBIO_GET_IOP( fd, iop );
   flags = rtems_libio_iop_flags( iop );
 
   while ( true ) {
@@ -60,13 +60,8 @@ int close(
     bool         success;
 
     if ( ( flags & LIBIO_FLAGS_OPEN ) == 0 ) {
+      rtems_libio_iop_drop( iop );
       rtems_set_errno_and_return_minus_one( EBADF );
-    }
-
-    /* The expected flags depends on close when busy flag. If set
-     * there can be references held when calling the close handler */
-    if ( ( flags & LIBIO_FLAGS_CLOSE_BUSY ) == 0 ) {
-      flags &= LIBIO_FLAGS_FLAGS_MASK;
     }
 
     desired = flags & ~LIBIO_FLAGS_OPEN;
@@ -82,14 +77,15 @@ int close(
       break;
     }
 
-    if ( ( flags & LIBIO_FLAGS_REFERENCE_MASK ) != 0 ) {
+    if ( ( flags & LIBIO_FLAGS_REFERENCE_MASK ) != LIBIO_FLAGS_REFERENCE_INC ) {
+      rtems_libio_iop_drop( iop );
       rtems_set_errno_and_return_minus_one( EBUSY );
     }
   }
 
   rc = (*iop->pathinfo.handlers->close_h)( iop );
 
-  rtems_libio_free( iop );
+  rtems_libio_iop_drop( iop );
 
   return rc;
 }
