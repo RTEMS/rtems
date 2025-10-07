@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This macro expands to a fall through hint.
+copyrights:
+- Copyright (C) 2025 On-Line Applications Research Corporation (OAR)
+definition:
+  default: 'do {} while ( 0 ) /* Fall through */'
+  variants:
+  - definition: |
+      [[fallthrough]]
+    enabled-by:
+      and:
+      - defined( ${/compiler/if/stdc-version:/name} )
+      - ${/compiler/if/stdc-version:/name} >= 202311L
+  - definition: |
+      __attribute__(( __fallthrough__ ))
+    enabled-by:
+      - defined(${/compiler/if/gnuc:/name})
+description: |
+  In C switch statements, it is possible for one case to "fall through"
+  to the next. Until C23, there was no standard way for the programmer
+  to tell the compiler this was intentional. Many times, not having
+  a "break" statement is an error. This macro standardizes the hint
+  that fall through is intentional for RTEMS source code.
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_FALL_THROUGH()
+notes: GCC recognizes many comment strings with "fall through" as a hint. But
+  a cpp macro cannot insert a comment.
+type: interface

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2025 Gedare Bloom
+enabled-by: true
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/fallthrough
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the ${../if/fallthrough:/name} macro is used prior to a case statement,
+  the ${../if/fallthrough:/name} macro shall prevent the compiler from
+  emitting a warning that the statement may fall through.
+type: requirement

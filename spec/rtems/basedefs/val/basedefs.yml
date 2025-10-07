@@ -274,6 +274,28 @@ test-actions:
       uid: ../req/compiler-deprecated-attribute-0
   links: []
 - action-brief: |
+    Use the ${../if/fallthrough:/name} macro before a case statement.
+  action-code: |
+      int x = 0;
+      switch (x) {
+        case 0:
+          x = 1;
+          RTEMS_FALL_THROUGH();
+        default:
+          x = 0;
+      }
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/fallthrough:/name}
+      macro has the desired effect. It is checked that such a macro exists
+      and one can manually check that no compiler warnings are produced
+      for falling through to the default case.
+    code: ''
+    links:
+    - role: validation
+      uid: ../req/fallthrough-0
+  links: []
+- action-brief: |
     Use the ${../if/compiler-memory-barrier:/name} macro.
   action-code: |
     RTEMS_COMPILER_MEMORY_BARRIER();
