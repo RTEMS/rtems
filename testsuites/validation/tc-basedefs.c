@@ -133,6 +133,13 @@
  *     variable on the above line where the `compiler_deprecated_attribute` is
  *     used.
  *
+ * - Use the RTEMS_FALL_THROUGH() macro before a case statement.
+ *
+ *   - It cannot be checked that the RTEMS_FALL_THROUGH() macro has the desired
+ *     effect. It is checked that such a macro exists and one can manually
+ *     check that no compiler warnings are produced for falling through to the
+ *     default case.
+ *
  * - Use the RTEMS_COMPILER_MEMORY_BARRIER() macro.
  *
  *   - It cannot be checked that the RTEMS_COMPILER_MEMORY_BARRIER() macro has
@@ -913,9 +920,32 @@ static void RtemsBasedefsValBasedefs_Action_9( void )
 }
 
 /**
- * @brief Use the RTEMS_COMPILER_MEMORY_BARRIER() macro.
+ * @brief Use the RTEMS_FALL_THROUGH() macro before a case statement.
  */
 static void RtemsBasedefsValBasedefs_Action_10( void )
+{
+  int x = 0;
+  switch (x) {
+    case 0:
+      x = 1;
+      RTEMS_FALL_THROUGH();
+    default:
+      x = 0;
+  }
+
+  /*
+   * It cannot be checked that the RTEMS_FALL_THROUGH() macro has the desired
+   * effect. It is checked that such a macro exists and one can manually check
+   * that no compiler warnings are produced for falling through to the default
+   * case.
+   */
+
+}
+
+/**
+ * @brief Use the RTEMS_COMPILER_MEMORY_BARRIER() macro.
+ */
+static void RtemsBasedefsValBasedefs_Action_11( void )
 {
   RTEMS_COMPILER_MEMORY_BARRIER();
 
@@ -930,7 +960,7 @@ static void RtemsBasedefsValBasedefs_Action_10( void )
  * @brief Use of the RTEMS_COMPILER_NO_RETURN_ATTRIBUTE macro at the beginning
  *   of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_11( void )
+static void RtemsBasedefsValBasedefs_Action_12( void )
 {
   (void) compiler_no_return_attribute_func;
 
@@ -944,7 +974,7 @@ static void RtemsBasedefsValBasedefs_Action_11( void )
 /**
  * @brief Use the RTEMS_COMPILER_PACKED_ATTRIBUTE macro.
  */
-static void RtemsBasedefsValBasedefs_Action_12( void )
+static void RtemsBasedefsValBasedefs_Action_13( void )
 {
   typedef struct {
     uint8_t c;
@@ -964,7 +994,7 @@ static void RtemsBasedefsValBasedefs_Action_12( void )
  * @brief Use the RTEMS_COMPILER_PURE_ATTRIBUTE macro at the beginning of this
  *   file.
  */
-static void RtemsBasedefsValBasedefs_Action_13( void )
+static void RtemsBasedefsValBasedefs_Action_14( void )
 {
   int compiler_pure_attribute_result;
   int compiler_pure_attribute_result_2;
@@ -983,7 +1013,7 @@ static void RtemsBasedefsValBasedefs_Action_13( void )
 /**
  * @brief Use the RTEMS_COMPILER_UNUSED_ATTRIBUTE macro.
  */
-static void RtemsBasedefsValBasedefs_Action_14( void )
+static void RtemsBasedefsValBasedefs_Action_15( void )
 {
   int compiler_unused_attribute_var RTEMS_COMPILER_UNUSED_ATTRIBUTE;
 
@@ -999,7 +1029,7 @@ static void RtemsBasedefsValBasedefs_Action_14( void )
 /**
  * @brief Invoke the  RTEMS_CONCAT() macro on examples.
  */
-static void RtemsBasedefsValBasedefs_Action_15( void )
+static void RtemsBasedefsValBasedefs_Action_16( void )
 {
   int concat0_result;
   int concat1_result;
@@ -1022,7 +1052,7 @@ static void RtemsBasedefsValBasedefs_Action_15( void )
 /**
  * @brief Use the RTEMS_CONST macro at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_16( void )
+static void RtemsBasedefsValBasedefs_Action_17( void )
 {
   int const_result;
   int const_result_2;
@@ -1040,7 +1070,7 @@ static void RtemsBasedefsValBasedefs_Action_16( void )
 /**
  * @brief Use the RTEMS_CONTAINER_OF() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_17( void )
+static void RtemsBasedefsValBasedefs_Action_18( void )
 {
   typedef struct {
     int a;
@@ -1065,7 +1095,7 @@ static void RtemsBasedefsValBasedefs_Action_17( void )
  * @brief Use the RTEMS_DECLARE_GLOBAL_SYMBOL() macro in the file
  *   tc-basedefs-pendant.h.
  */
-static void RtemsBasedefsValBasedefs_Action_18( void )
+static void RtemsBasedefsValBasedefs_Action_19( void )
 {
   /* No action */
 
@@ -1085,7 +1115,7 @@ static void RtemsBasedefsValBasedefs_Action_18( void )
 /**
  * @brief Use the RTEMS_DECONST() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_19( void )
+static void RtemsBasedefsValBasedefs_Action_20( void )
 {
   const int deconst_array[] = { 52, 55 };
   int *deconst_pointer;
@@ -1105,7 +1135,7 @@ static void RtemsBasedefsValBasedefs_Action_19( void )
  * @brief Use the RTEMS_DEFINE_GLOBAL_SYMBOL() macro at the beginning of this
  *   file.
  */
-static void RtemsBasedefsValBasedefs_Action_20( void )
+static void RtemsBasedefsValBasedefs_Action_21( void )
 {
   /* No action */
 
@@ -1123,7 +1153,7 @@ static void RtemsBasedefsValBasedefs_Action_20( void )
 /**
  * @brief Use a function declared with the RTEMS_DEPRECATED macro.
  */
-static void RtemsBasedefsValBasedefs_Action_21( void )
+static void RtemsBasedefsValBasedefs_Action_22( void )
 {
   int deprecated_result;
   /*
@@ -1149,7 +1179,7 @@ static void RtemsBasedefsValBasedefs_Action_21( void )
 /**
  * @brief Use the RTEMS_DEQUALIFY_DEPTHX() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_22( void )
+static void RtemsBasedefsValBasedefs_Action_23( void )
 {
   const volatile int dequalify_depthx_array[] = { 52, 55 };
   const char dequalify_depthx_var = 'a';
@@ -1179,7 +1209,7 @@ static void RtemsBasedefsValBasedefs_Action_22( void )
 /**
  * @brief Use the RTEMS_DEQUALIFY() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_23( void )
+static void RtemsBasedefsValBasedefs_Action_24( void )
 {
   const volatile int dequalify_array[] = { 52, 55 };
   int *dequalify_pointer;
@@ -1198,7 +1228,7 @@ static void RtemsBasedefsValBasedefs_Action_23( void )
 /**
  * @brief Use the RTEMS_DEVOLATILE() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_24( void )
+static void RtemsBasedefsValBasedefs_Action_25( void )
 {
   volatile int devolatile_array[] = { 52, 55 };
   int *devolatile_pointer;
@@ -1217,7 +1247,7 @@ static void RtemsBasedefsValBasedefs_Action_24( void )
 /**
  * @brief Invoke the  RTEMS_EXPAND() macro on an example.
  */
-static void RtemsBasedefsValBasedefs_Action_25( void )
+static void RtemsBasedefsValBasedefs_Action_26( void )
 {
   int expand_result;
   expand_result = RTEMS_EXPAND( EXPAND )();
@@ -1231,7 +1261,7 @@ static void RtemsBasedefsValBasedefs_Action_25( void )
 /**
  * @brief Invoke the  FALSE macro on an example.
  */
-static void RtemsBasedefsValBasedefs_Action_26( void )
+static void RtemsBasedefsValBasedefs_Action_27( void )
 {
   char *false_result;
   false_result = _TO_STR( FALSE );
@@ -1245,7 +1275,7 @@ static void RtemsBasedefsValBasedefs_Action_26( void )
 /**
  * @brief Invoke the  RTEMS_HAVE_MEMBER_SAME_TYPE() macro on examples.
  */
-static void RtemsBasedefsValBasedefs_Action_27( void )
+static void RtemsBasedefsValBasedefs_Action_28( void )
 {
   typedef union {
     short s;
@@ -1303,7 +1333,7 @@ static void RtemsBasedefsValBasedefs_Action_27( void )
  *   inline_routine_func() at the beginning of this file. Obtain the text the
  *   macro RTEMS_INLINE_ROUTINE produces.
  */
-static void RtemsBasedefsValBasedefs_Action_28( void )
+static void RtemsBasedefsValBasedefs_Action_29( void )
 {
   const int inline_routine_step = 74;
   int inline_routine_result;
@@ -1328,7 +1358,7 @@ static void RtemsBasedefsValBasedefs_Action_28( void )
 /**
  * @brief Use a function declared with the RTEMS_MALLOCLIKE macro.
  */
-static void RtemsBasedefsValBasedefs_Action_29( void )
+static void RtemsBasedefsValBasedefs_Action_30( void )
 {
   void *malloclike_ptr;
   /*
@@ -1354,7 +1384,7 @@ static void RtemsBasedefsValBasedefs_Action_29( void )
 /**
  * @brief Use a function declared with the RTEMS_NO_INLINE macro.
  */
-static void RtemsBasedefsValBasedefs_Action_30( void )
+static void RtemsBasedefsValBasedefs_Action_31( void )
 {
   int no_inline_result;
   /*
@@ -1379,7 +1409,7 @@ static void RtemsBasedefsValBasedefs_Action_30( void )
 /**
  * @brief Use of the RTEMS_NO_RETURN macro at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_31( void )
+static void RtemsBasedefsValBasedefs_Action_32( void )
 {
   (void) no_return_func;
 
@@ -1394,7 +1424,7 @@ static void RtemsBasedefsValBasedefs_Action_31( void )
  * @brief Use the RTEMS_NOINIT macro on `noinit_variable` at the beginning of
  *   this file.
  */
-static void RtemsBasedefsValBasedefs_Action_32( void )
+static void RtemsBasedefsValBasedefs_Action_33( void )
 {
   /* No action */
 
@@ -1408,7 +1438,7 @@ static void RtemsBasedefsValBasedefs_Action_32( void )
 /**
  * @brief Use the RTEMS_OBFUSCATE_VARIABLE() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_33( void )
+static void RtemsBasedefsValBasedefs_Action_34( void )
 {
   short obfuscate_variable = 66;
   RTEMS_OBFUSCATE_VARIABLE( obfuscate_variable );
@@ -1424,7 +1454,7 @@ static void RtemsBasedefsValBasedefs_Action_33( void )
 /**
  * @brief Use the RTEMS_PACKED macro.
  */
-static void RtemsBasedefsValBasedefs_Action_34( void )
+static void RtemsBasedefsValBasedefs_Action_35( void )
 {
   int packed_offset;
   int packed_full_i_offset;
@@ -1470,7 +1500,7 @@ static void RtemsBasedefsValBasedefs_Action_34( void )
 /**
  * @brief Use the RTEMS_PREDICT_FALSE() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_35( void )
+static void RtemsBasedefsValBasedefs_Action_36( void )
 {
   /* No action */
 
@@ -1484,7 +1514,7 @@ static void RtemsBasedefsValBasedefs_Action_35( void )
 /**
  * @brief Use the RTEMS_PREDICT_TRUE() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_36( void )
+static void RtemsBasedefsValBasedefs_Action_37( void )
 {
   /* No action */
 
@@ -1498,7 +1528,7 @@ static void RtemsBasedefsValBasedefs_Action_36( void )
 /**
  * @brief Use a function declared with the RTEMS_PRINTFLIKE() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_37( void )
+static void RtemsBasedefsValBasedefs_Action_38( void )
 {
   int printflike_result;
   printflike_result = printflike_func(
@@ -1521,7 +1551,7 @@ static void RtemsBasedefsValBasedefs_Action_37( void )
 /**
  * @brief Use the RTEMS_PURE macro at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_38( void )
+static void RtemsBasedefsValBasedefs_Action_39( void )
 {
   int pure_result;
   int pure_result_2;
@@ -1539,7 +1569,7 @@ static void RtemsBasedefsValBasedefs_Action_38( void )
 /**
  * @brief Get the code the RTEMS_RETURN_ADDRESS() macro produces as string.
  */
-static void RtemsBasedefsValBasedefs_Action_39( void )
+static void RtemsBasedefsValBasedefs_Action_40( void )
 {
   /*
    * If this code is not compiled using GNU C, I still have to run a check
@@ -1563,7 +1593,7 @@ static void RtemsBasedefsValBasedefs_Action_39( void )
  * @brief Use the RTEMS_SECTION() macro on `section_variable` and
  *   `section_func` at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_40( void )
+static void RtemsBasedefsValBasedefs_Action_41( void )
 {
   short section_result;
   section_result = section_func( 1234567 );
@@ -1579,7 +1609,7 @@ static void RtemsBasedefsValBasedefs_Action_40( void )
 /**
  * @brief Evaluate if RTEMS_STATIC_ANALYSIS is defined.
  */
-static void RtemsBasedefsValBasedefs_Action_41( void )
+static void RtemsBasedefsValBasedefs_Action_42( void )
 {
   #if defined(RTEMS_STATIC_ANALYSIS)
   bool defined = true;
@@ -1596,7 +1626,7 @@ static void RtemsBasedefsValBasedefs_Action_41( void )
 /**
  * @brief Use the RTEMS_STATIC_ASSERT() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_42( void )
+static void RtemsBasedefsValBasedefs_Action_43( void )
 {
   RTEMS_STATIC_ASSERT( STATIC_ASSERT_COND 1, RTEMS_STATIC_ASSERT_test );
 
@@ -1611,7 +1641,7 @@ static void RtemsBasedefsValBasedefs_Action_42( void )
 /**
  * @brief Use the RTEMS_STRING() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_43( void )
+static void RtemsBasedefsValBasedefs_Action_44( void )
 {
   const char *string_var;
   const char *string_empty_var;
@@ -1634,7 +1664,7 @@ static void RtemsBasedefsValBasedefs_Action_43( void )
 /**
  * @brief Use the RTEMS_SYMBOL_NAME() macro with an example object.
  */
-static void RtemsBasedefsValBasedefs_Action_44( void )
+static void RtemsBasedefsValBasedefs_Action_45( void )
 {
   /* Nothing to do */
 
@@ -1648,7 +1678,7 @@ static void RtemsBasedefsValBasedefs_Action_44( void )
 /**
  * @brief Invoke the  TRUE macro on an example.
  */
-static void RtemsBasedefsValBasedefs_Action_45( void )
+static void RtemsBasedefsValBasedefs_Action_46( void )
 {
   char *true_result;
   true_result = _TO_STR( TRUE );
@@ -1664,7 +1694,7 @@ static void RtemsBasedefsValBasedefs_Action_45( void )
  *   is already the test as the statements will not compile without error if
  *   the macro did not evaluate to the correct type.
  */
-static void RtemsBasedefsValBasedefs_Action_46( void )
+static void RtemsBasedefsValBasedefs_Action_47( void )
 {
   int type_refx_val = 7;
   char type_refx_chr = 'c';
@@ -1703,7 +1733,7 @@ static void RtemsBasedefsValBasedefs_Action_46( void )
  * @brief Use the RTEMS_UNUSED macro. See also unused_func() at the beginning
  *   of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_47( void )
+static void RtemsBasedefsValBasedefs_Action_48( void )
 {
   int unused_var RTEMS_UNUSED;
   typedef struct RTEMS_UNUSED {
@@ -1748,7 +1778,7 @@ static void RtemsBasedefsValBasedefs_Action_47( void )
  * @brief Use of the RTEMS_UNREACHABLE() macro in function definition of
  *   unreachable_func() at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_48( void )
+static void RtemsBasedefsValBasedefs_Action_49( void )
 {
   int unreachable_result;
   unreachable_result = unreachable_func(2101);
@@ -1765,7 +1795,7 @@ static void RtemsBasedefsValBasedefs_Action_48( void )
  * @brief Use of the RTEMS_USED macro in function definition of used_func() at
  *   the beginning of this file and with used_var above.
  */
-static void RtemsBasedefsValBasedefs_Action_49( void )
+static void RtemsBasedefsValBasedefs_Action_50( void )
 {
   /* No action */
 
@@ -1780,7 +1810,7 @@ static void RtemsBasedefsValBasedefs_Action_49( void )
  * @brief Use of the RTEMS_WARN_UNUSED_RESULT macro in function definition of
  *   warn_unused_func() at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_50( void )
+static void RtemsBasedefsValBasedefs_Action_51( void )
 {
   int warn_unused_result;
   warn_unused_result = warn_unused_func( 33 );
@@ -1811,7 +1841,7 @@ static void RtemsBasedefsValBasedefs_Action_50( void )
  * @brief Use of `basedefs_weak_alias_0/1_func()` which are defined with the
  *   RTEMS_WEAK_ALIAS() macro at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_51( void )
+static void RtemsBasedefsValBasedefs_Action_52( void )
 {
   int weak_alias_0_result;
   int weak_alias_1_result;
@@ -1836,7 +1866,7 @@ static void RtemsBasedefsValBasedefs_Action_51( void )
  * @brief Use of `basedefs_weak_0/1_var` and `basedefs_weak_0/1_func()` which
  *   are defined with the RTEMS_WEAK macro at the beginning of this file.
  */
-static void RtemsBasedefsValBasedefs_Action_52( void )
+static void RtemsBasedefsValBasedefs_Action_53( void )
 {
   int weak_0_result;
   int weak_1_result;
@@ -1863,7 +1893,7 @@ static void RtemsBasedefsValBasedefs_Action_52( void )
 /**
  * @brief Invoke the RTEMS_XCONCAT() macro on examples.
  */
-static void RtemsBasedefsValBasedefs_Action_53( void )
+static void RtemsBasedefsValBasedefs_Action_54( void )
 {
   int xconcat0_result;
   int xconcat1_result;
@@ -1903,7 +1933,7 @@ static void RtemsBasedefsValBasedefs_Action_53( void )
 /**
  * @brief Use the RTEMS_XSTRING() macro.
  */
-static void RtemsBasedefsValBasedefs_Action_54( void )
+static void RtemsBasedefsValBasedefs_Action_55( void )
 {
   const char *xstring_var;
   const char *xstring_empty_var;
@@ -1927,7 +1957,7 @@ static void RtemsBasedefsValBasedefs_Action_54( void )
  * @brief Use of the RTEMS_ZERO_LENGTH_ARRAY macro in a declaration of a
  *   structure.
  */
-static void RtemsBasedefsValBasedefs_Action_55( void )
+static void RtemsBasedefsValBasedefs_Action_56( void )
 {
   typedef struct {
     char chr;
@@ -1954,7 +1984,7 @@ static void RtemsBasedefsValBasedefs_Action_55( void )
  * @brief Use the RTEMS_DEFINE_GLOBAL_SYMBOL() macro at the beginning of this
  *   file and assign the address of the symbol to an object.
  */
-static void RtemsBasedefsValBasedefs_Action_56( void )
+static void RtemsBasedefsValBasedefs_Action_57( void )
 {
   /* No action */
 
@@ -2029,6 +2059,7 @@ T_TEST_CASE( RtemsBasedefsValBasedefs )
   RtemsBasedefsValBasedefs_Action_54();
   RtemsBasedefsValBasedefs_Action_55();
   RtemsBasedefsValBasedefs_Action_56();
+  RtemsBasedefsValBasedefs_Action_57();
 }
 
 /** @} */

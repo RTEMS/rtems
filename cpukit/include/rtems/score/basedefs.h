@@ -581,6 +581,31 @@ extern "C" {
  */
 #define RTEMS_DEVOLATILE( _type, _var ) RTEMS_DEQUALIFY_DEPTHX( *, _type, _var )
 
+/* Generated from spec:/rtems/basedefs/if/fallthrough */
+
+/**
+ * @ingroup RTEMSAPIBaseDefs
+ *
+ * @brief This macro expands to a fall through hint.
+ *
+ * In C switch statements, it is possible for one case to "fall through" to the
+ * next. Until C23, there was no standard way for the programmer to tell the
+ * compiler this was intentional. Many times, not having a "break" statement is
+ * an error. This macro standardizes the hint that fall through is intentional
+ * for RTEMS source code.
+ *
+ * @par Notes
+ * GCC recognizes many comment strings with "fall through" as a hint. But a cpp
+ * macro cannot insert a comment.
+ */
+#if defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 202311L
+  #define RTEMS_FALL_THROUGH() [[fallthrough]]
+#elif defined(__GNUC__)
+  #define RTEMS_FALL_THROUGH() __attribute__(( __fallthrough__ ))
+#else
+  #define RTEMS_FALL_THROUGH() do {} while ( 0 ) /* Fall through */
+#endif
+
 #if !defined(FALSE)
   /* Generated from spec:/rtems/basedefs/if/false */
 
@@ -1030,28 +1055,6 @@ extern "C" {
   #define RTEMS_ZERO_LENGTH_ARRAY
 #else
   #define RTEMS_ZERO_LENGTH_ARRAY 0
-#endif
-
-/**
- * @ingroup RTEMSAPIBaseDefs
- *
- * @brief This macro expands to a fall through hint.
- *
- * In C switch statement, it is possible for one case to "fall through"
- * to the next. Until C23, there was no standard way for the programmer
- * to tell the compiler this was intentional. Many times, not having
- * a "break" statement is an error. This macro standardizes the hint
- * for RTEMS source code.
- *
- * @note GCC recognizes many comment strings with "fall through" as
- *       a hint. But a cpp macro cannot insert a comment.
- */
-#if __STDC_VERSION__ >= 202311L
-  #define RTEMS_FALL_THROUGH() [[fallthrough]]
-#elif __GNUC__
-  #define RTEMS_FALL_THROUGH() __attribute__ ((fallthrough))
-#else
-  #define RTEMS_FALL_THROUGH() 
 #endif
 
 #ifdef __cplusplus
