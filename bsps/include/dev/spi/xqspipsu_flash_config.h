@@ -215,6 +215,9 @@ typedef struct{
 } FlashInfo;
 
 /************************** Variable Definitions *****************************/
+#ifdef __rtems__
+static
+#endif
 FlashInfo Flash_Config_Table[] = {
 	/* Spansion */
 	/*s25fl064l*/
