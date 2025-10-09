@@ -777,12 +777,7 @@ static void Signal( rtems_signal_set signals )
         SetFatalHandler( ResumeThreadDispatch, ctx );
         (void) _Thread_Dispatch_disable();
 
-        int jumped = setjmp( ctx->thread_dispatch_context );
-
-        /* cpu_self can be clobbered by setjmp/longjmp, so reload it */
-        cpu_self = _Per_CPU_Get();
-
-        if ( jumped == 0 ) {
+        if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
           Block( ctx );
         } else {
           _Thread_Dispatch_unnest( _Per_CPU_Get() );
