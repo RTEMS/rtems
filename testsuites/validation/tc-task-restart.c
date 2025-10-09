@@ -777,19 +777,15 @@ static void Signal( rtems_signal_set signals )
     if ( ctx->interrupt || ctx->nested_request ) {
       if ( ctx->blocked ) {
         SetFatalHandler( ResumeThreadDispatch, ctx );
-        cpu_self = _Thread_Dispatch_disable();
+        (void) _Thread_Dispatch_disable();
 
-        int jumped = setjmp( ctx->thread_dispatch_context );
-
-        /* cpu_self can be clobbered by setjmp/longjmp, so reload it */
-        cpu_self = _Per_CPU_Get();
-
-        if ( jumped == 0 ) {
+        if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
           Block( ctx );
         } else {
-          _Thread_Dispatch_unnest( cpu_self );
+          _Thread_Dispatch_unnest( _Per_CPU_Get() );
         }
 
+        cpu_self = _Per_CPU_Get();
         if ( ctx->interrupt ) {
           CallWithinISR( Restart, ctx );
         } else {
