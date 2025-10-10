@@ -168,6 +168,8 @@ static bool stm32u5_uart_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   stm32u5_uart_context *ctx;
   UART_HandleTypeDef   *uart;
 #ifdef BSP_CONSOLE_USE_INTERRUPTS
@@ -210,6 +212,8 @@ static void stm32u5_uart_last_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
 #ifdef BSP_CONSOLE_USE_INTERRUPTS
   stm32u5_uart_context *ctx;
 
@@ -220,6 +224,9 @@ static void stm32u5_uart_last_close(
     stm32u5_uart_interrupt,
     tty
   );
+#else
+  (void) tty;
+  (void) base;
 #endif
 }
 
@@ -272,6 +279,10 @@ rtems_status_code console_initialize(
   void                     *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   size_t i;
 
   rtems_termios_initialize();

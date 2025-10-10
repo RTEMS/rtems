@@ -1666,6 +1666,10 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(const RCC_ClkInitTypeDef   *const pRCC_Clk
   */
 void HAL_RCC_MCOConfig(uint32_t RCC_MCOx, uint32_t RCC_MCOSource, uint32_t RCC_MCODiv)
 {
+#ifdef __rtems__
+  (void) RCC_MCOx;
+#endif
+
   GPIO_InitTypeDef gpio_initstruct;
   /* Check the parameters */
   assert_param(IS_RCC_MCO(RCC_MCOx));
@@ -2108,6 +2112,10 @@ void HAL_RCC_ConfigAttributes(uint32_t Item, uint32_t Attributes)
       CLEAR_BIT(RCC->PRIVCFGR, RCC_PRIVCFGR_NSPRIV);
       break;
 #else
+#ifdef __rtems__
+  (void) Item;
+#endif
+
     /* Non-secure Privilege attribute */
     case RCC_NSEC_PRIV:
       SET_BIT(RCC->PRIVCFGR, RCC_PRIVCFGR_NSPRIV);
@@ -2162,6 +2170,10 @@ HAL_StatusTypeDef HAL_RCC_GetConfigAttributes(uint32_t Item, uint32_t *pAttribut
     attributes = ((RCC->PRIVCFGR & RCC_PRIVCFGR_NSPRIV) == 0U) ? RCC_NSEC_NPRIV : RCC_NSEC_PRIV;
   }
 #else
+#ifdef __rtems__
+  (void) Item;
+#endif
+
   /* Get Non-Secure privileges attribute */
   attributes = ((RCC->PRIVCFGR & RCC_PRIVCFGR_NSPRIV) == 0U) ? RCC_NSEC_NPRIV : RCC_NSEC_PRIV;
 #endif /* __ARM_FEATURE_CMSE */

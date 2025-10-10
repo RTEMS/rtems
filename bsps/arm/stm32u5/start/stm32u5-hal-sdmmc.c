@@ -74,6 +74,8 @@ static const stm32u5_gpio_config gpiod_af12 = {
 
 void HAL_SD_MspInit( SD_HandleTypeDef *hsd )
 {
+  (void) hsd;
+
   /* Set PD7 to LOW to enable power to SD Card. */
   GPIO_InitTypeDef GPIO_InitStruct = { 0 };
   __HAL_RCC_GPIOD_CLK_ENABLE();

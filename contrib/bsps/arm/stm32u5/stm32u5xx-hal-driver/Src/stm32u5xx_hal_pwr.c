@@ -933,6 +933,10 @@ HAL_StatusTypeDef HAL_PWR_GetConfigAttributes(uint32_t Item, uint32_t *pAttribut
     attributes = ((PWR->PRIVCFGR & PWR_PRIVCFGR_NSPRIV) == 0U) ? PWR_NSEC_NPRIV : PWR_NSEC_PRIV;
   }
 #else
+#ifdef __rtems__
+  (void) Item;
+#endif
+
   /* Get Non-Secure privileges attribute */
   attributes = ((PWR->PRIVCFGR & PWR_PRIVCFGR_NSPRIV) == 0U) ? PWR_NSEC_NPRIV : PWR_NSEC_PRIV;
 #endif /* __ARM_FEATURE_CMSE */

@@ -146,6 +146,10 @@
   */
 ErrorStatus LL_DAC_DeInit(const DAC_TypeDef *DACx)
 {
+#ifdef __rtems__
+  (void) DACx;
+#endif
+
   /* Check the parameters */
   assert_param(IS_DAC_ALL_INSTANCE(DACx));
 

@@ -66,6 +66,8 @@ static void stm32u5_rtc_get_time( rtems_time_of_day *tod )
 
 static void stm32u5_rtc_device_initialize( int minor )
 {
+  (void) minor;
+
   hrtc.Instance            = RTC;
   hrtc.Init.HourFormat     = RTC_HOURFORMAT_24;
   hrtc.Init.AsynchPrediv   = 127;
@@ -83,6 +85,8 @@ static void stm32u5_rtc_device_initialize( int minor )
 
 static int stm32u5_rtc_device_get_time( int minor, rtems_time_of_day *tod )
 {
+  (void) minor;
+
   stm32u5_rtc_get_time( tod );
 
   return 0;
@@ -93,6 +97,8 @@ static int stm32u5_rtc_device_set_time(
   const rtems_time_of_day *tod
 )
 {
+  (void) minor;
+
   sTime.Hours   = (uint8_t) tod->hour;
   sTime.Minutes = (uint8_t) tod->minute;
   sTime.Seconds = (uint8_t) tod->second;
@@ -113,6 +119,8 @@ static int stm32u5_rtc_device_set_time(
 
 static bool stm32u5_rtc_device_probe( int minor )
 {
+  (void) minor;
+
   return true;
 }
 
@@ -131,6 +139,8 @@ rtc_tbl RTC_Table[] = {
 
 void BSP_START_TEXT_SECTION HAL_RTC_MspInit( RTC_HandleTypeDef *hrtc )
 {
+  (void) hrtc;
+
   /* Enable peripheral clocks and battery backup. */
   __HAL_RCC_PWR_CLK_ENABLE();
   HAL_PWR_EnableBkUpAccess();
