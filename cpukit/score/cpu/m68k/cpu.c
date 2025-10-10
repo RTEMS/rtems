@@ -244,6 +244,8 @@ void _CPU_Context_Initialize(
   void *tls_area
 )
 {
+  (void) is_fp;
+
   uint32_t stack;
 
   the_context->sr      = 0x3000 | (new_level << 8);
