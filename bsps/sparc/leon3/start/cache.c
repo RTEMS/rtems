@@ -170,6 +170,9 @@ static inline void _CPU_cache_flush_data_range(
   size_t n_bytes
 )
 {
+  (void) d_addr;
+  (void) n_bytes;
+
   /* TODO */
 }
 
@@ -178,6 +181,9 @@ static inline void _CPU_cache_invalidate_data_range(
   size_t n_bytes
 )
 {
+  (void) d_addr;
+  (void) n_bytes;
+
   /* TODO */
 }
 
@@ -204,6 +210,9 @@ static inline void _CPU_cache_invalidate_instruction_range(
   size_t n_bytes
 )
 {
+  (void) i_addr;
+  (void) n_bytes;
+
   _CPU_cache_invalidate_entire_instruction();
 }
 

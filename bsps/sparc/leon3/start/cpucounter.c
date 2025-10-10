@@ -46,6 +46,8 @@ static uint32_t leon3_timecounter_get_asr_22_23_up_counter(
   struct timecounter *tc
 )
 {
+  (void) tc;
+
   return leon3_up_counter_low();
 }
 

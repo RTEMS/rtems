@@ -41,6 +41,8 @@ void Shm_Get_configuration(
   shm_config_table **shmcfg
 )
 {
+  (void) localnode;
+
   int i;
   unsigned int tmp;
   const rtems_multiprocessing_table *mptable;
