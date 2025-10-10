@@ -147,6 +147,10 @@ char *save_boot_params(
   char *cmdline_end
 )
 {
+(void) r3;
+(void) r4;
+(void) r5;
+
 int             i=cmdline_end-cmdline_start;
 	if ( i >= CMDLINE_BUF_SIZE )
 		i = CMDLINE_BUF_SIZE-1;

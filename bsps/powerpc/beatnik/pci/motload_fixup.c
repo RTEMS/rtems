@@ -60,6 +60,8 @@
 static int
 fixup_irq_line(int bus, int slot, int fun, void *uarg)
 {
+(void) uarg;
+
 unsigned char line;
 	pci_read_config_byte( bus, slot, fun, PCI_INTERRUPT_LINE, &line);
 	if ( line < BSP_IRQ_GPP_0 ) {

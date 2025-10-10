@@ -46,7 +46,7 @@ extern void decrementer_exception_vector_prolog_code(void);
 /*
  * default handler
  */
-static void nop_func(void *arg){}
+static void nop_func(void *arg){ (void) arg; }
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings    initial_config;
@@ -70,6 +70,8 @@ static rtems_irq_connect_data     	defaultIrq = {
 
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
+(void) cpuId;
+
 int i;
 
 	/*

@@ -819,6 +819,8 @@ register unsigned		cse,ocse;
  */
 int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
+(void) frame;
+
 register int             irq;
 int				         loop, last_irq;
 rtems_irq_prio           pri;

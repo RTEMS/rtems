@@ -251,6 +251,8 @@ BSP_timers_uninstall(void)
 uint32_t
 BSP_timer_clock_get(uint32_t timer)
 {
+  (void) timer;
+
   return BSP_bus_frequency;
 }
 

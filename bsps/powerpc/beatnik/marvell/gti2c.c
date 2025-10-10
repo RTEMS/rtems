@@ -180,6 +180,8 @@ gt_i2c_wait(struct gti2c_softc *sc, uint32_t control, uint32_t desired_status)
 static void
 gt_i2c_intr(void *arg)
 {
+	(void) arg;
+
 struct gti2c_softc * const sc = &my_bus_tbl.pvt;
 	uint32_t v;
 
