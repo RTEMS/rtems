@@ -177,6 +177,10 @@ rtems_status_code console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   char path[] = "/dev/ttyS?";
 
   rtems_termios_initialize();
