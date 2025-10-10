@@ -197,6 +197,8 @@ void bsp_start(void)
 
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
+  (void) icells;
+
 #ifndef QORIQ_IS_HYPERVISOR_GUEST
   return intr[0] - 16;
 #else

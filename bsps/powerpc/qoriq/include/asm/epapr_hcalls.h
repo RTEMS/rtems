@@ -500,6 +500,10 @@ static unsigned long epapr_hypercall(unsigned long *in,
 				   unsigned long *out,
 				   unsigned long nr)
 {
+	(void) in;
+	(void) out;
+	(void) nr;
+
 	return EV_UNIMPLEMENTED;
 }
 #endif

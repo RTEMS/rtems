@@ -92,6 +92,8 @@ static void start_thread_if_necessary(uint32_t cpu_index_self)
       PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_TENS, 1U << i);
     }
   }
+#else
+  (void) cpu_index_self;
 #endif
 }
 
@@ -111,6 +113,8 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
 #ifndef QORIQ_IS_HYPERVISOR_GUEST
 static void bsp_inter_processor_interrupt(void *arg)
 {
+  (void) arg;
+
   _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
 }
 #endif

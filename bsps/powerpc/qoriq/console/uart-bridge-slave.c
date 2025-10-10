@@ -138,6 +138,9 @@ static bool first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
   uart_bridge_slave_context *ctx = (uart_bridge_slave_context *) base;
   intercom_type type = ctx->type;
 
@@ -155,6 +158,9 @@ static void last_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) tty;
+  (void) args;
+
   uart_bridge_slave_context *ctx = (uart_bridge_slave_context *) base;
 
   qoriq_intercom_service_remove(ctx->type);
@@ -196,6 +202,9 @@ static bool set_attributes(
   const struct termios *term
 )
 {
+  (void) base;
+  (void) term;
+
   return false;
 }
 

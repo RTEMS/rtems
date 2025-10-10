@@ -552,6 +552,8 @@ rtems_status_code bsp_interrupt_raise_on(
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -587,6 +589,8 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
 void bsp_interrupt_dispatch(uintptr_t exception_number)
 {
+	(void) exception_number;
+
 	while (true) {
 		rtems_vector_number vector = qoriq.pic.iack;
 		uint32_t msr;

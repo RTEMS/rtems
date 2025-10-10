@@ -51,5 +51,7 @@ benchmark_timer_t benchmark_timer_read(void)
 
 void benchmark_timer_disable_subtracting_average_overhead(bool find_average_overhead)
 {
+  (void) find_average_overhead;
+
   /* VOID */
 }

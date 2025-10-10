@@ -39,21 +39,31 @@
 
 static void qoriq_rtc_initialize(int minor)
 {
+  (void) minor;
+
   /* FIXME */
 }
 
 static int qoriq_rtc_get_time(int minor, rtems_time_of_day *tod)
 {
+  (void) minor;
+  (void) tod;
+
   return -1;
 }
 
 static int qoriq_rtc_set_time(int minor, const rtems_time_of_day *tod)
 {
+  (void) minor;
+  (void) tod;
+
   return -1;
 }
 
 static bool qoriq_rtc_probe(int minor)
 {
+  (void) minor;
+
   return false;
 }
 

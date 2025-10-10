@@ -177,6 +177,11 @@ static bool first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) tty;
+  (void) base;
+  (void) term;
+  (void) args;
+
   return false;
 }
 
@@ -185,6 +190,9 @@ static bool set_attributes(
   const struct termios *term
 )
 {
+  (void) base;
+  (void) term;
+
   return false;
 }
 

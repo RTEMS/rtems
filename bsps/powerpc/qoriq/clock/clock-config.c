@@ -141,6 +141,8 @@ static void qoriq_clock_handler_install(rtems_interrupt_handler handler)
 
 static uint32_t qoriq_clock_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   uint32_t ccr = qoriq_timecounter->ccr;
 
   return GTCCR_COUNT_GET(-ccr);

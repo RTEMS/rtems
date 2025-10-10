@@ -161,6 +161,8 @@ void qoriq_intercom_free_packet(intercom_packet *packet)
 
 static void default_service(intercom_packet *packet, void *arg)
 {
+	(void) arg;
+
 	qoriq_intercom_free_packet(packet);
 }
 
@@ -200,6 +202,8 @@ static void process_core_fifo(core_fifo *fifo, intercom_service *services, void 
 
 static void intercom_task(rtems_task_argument arg)
 {
+	(void) arg;
+
 	uint32_t self = ppc_processor_id();
 	free_list *free_lists = &intercom->free_lists [0];
 	intercom_service *services = &intercom->services [self][0];
