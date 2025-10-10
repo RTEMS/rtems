@@ -206,6 +206,11 @@ int lio_listio(
 
   return 0;
 #else
+  (void) mode;
+  (void) list;
+  (void) nent;
+  (void) sig;
+
   rtems_set_errno_and_return_minus_one( ENOSYS );
 #endif
 }

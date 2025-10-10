@@ -476,6 +476,8 @@ static inline void _Objects_Namespace_remove_u32(
   Objects_Control           *the_object
 )
 {
+  (void) information;
+
   _Assert( !_Objects_Has_string_name( information ) );
   the_object->name.name_u32 = 0;
 }

@@ -58,6 +58,10 @@ static int _POSIX_Set_sched_param(
   Thread_queue_Context       *queue_context
 )
 {
+#if !defined(RTEMS_POSIX_API)
+  (void) policy;
+#endif
+
   const Scheduler_Control            *scheduler;
   int                                 normal_prio;
   bool                                valid;

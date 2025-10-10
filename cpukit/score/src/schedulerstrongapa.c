@@ -345,6 +345,8 @@ static inline void _Scheduler_strong_APA_Insert_ready(
   Priority_Control   insert_priority
 )
 {
+  (void) insert_priority;
+
   Scheduler_strong_APA_Context *self;
   Scheduler_strong_APA_Node    *node;
 
@@ -545,6 +547,8 @@ static inline void _Scheduler_strong_APA_Extract_from_ready(
   Scheduler_Node    *node_to_extract
 )
 {
+  (void) context;
+
   Scheduler_strong_APA_Node    *node;
 
   node = _Scheduler_strong_APA_Node_downcast( node_to_extract );
@@ -861,6 +865,8 @@ static inline  void  _Scheduler_strong_APA_Do_set_affinity(
   void              *arg
 )
 {
+  (void) context;
+
   Scheduler_strong_APA_Node *node;
 
   node = _Scheduler_strong_APA_Node_downcast( node_base );

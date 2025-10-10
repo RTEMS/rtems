@@ -286,6 +286,9 @@ static int ctucanfd_check_state(
   struct ctucanfd_internal *internal,
   const char *where
 ) {
+  (void) internal;
+  (void) where;
+
   return 0;
 }
 

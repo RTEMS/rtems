@@ -47,6 +47,8 @@ void _Objects_Namespace_remove_string(
   Objects_Control           *the_object
 )
 {
+  (void) information;
+
   char *name;
 
   _Assert( _Objects_Has_string_name( information ) );

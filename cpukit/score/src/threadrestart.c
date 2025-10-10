@@ -437,6 +437,8 @@ Thread_Cancel_state _Thread_Cancel(
   Thread_Life_state life_states_to_clear
 )
 {
+  (void) executing;
+
   ISR_lock_Context  lock_context;
   Thread_Life_state previous;
 

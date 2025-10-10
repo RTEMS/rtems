@@ -165,6 +165,8 @@ rtems_debugger_thread_find_index(rtems_id id)
 static bool
 snapshot_thread(rtems_tcb* tcb, void* arg)
 {
+  (void) arg;
+
   rtems_debugger_threads* threads = rtems_debugger->threads;
   rtems_id                id = tcb->Object.id;
   char                    name[RTEMS_DEBUGGER_THREAD_NAME_SIZE];

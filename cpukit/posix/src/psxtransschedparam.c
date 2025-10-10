@@ -71,6 +71,8 @@ int _POSIX_Thread_Translate_sched_param(
   Thread_Configuration     *config
 )
 {
+  (void) param;
+
   config->cpu_budget_operations = NULL;
 
   if ( policy == SCHED_FIFO ) {

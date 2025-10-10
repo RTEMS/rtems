@@ -36,6 +36,9 @@
 #if !defined(RTEMS_POSIX_API)
 int kill( pid_t pid, int sig )
 {
+  (void) pid;
+  (void) sig;
+
   return 0;
 }
 
@@ -44,6 +47,10 @@ int kill( pid_t pid, int sig )
 
 int _kill_r( struct _reent *ptr, pid_t pid, int sig )
 {
+  (void) ptr;
+  (void) pid;
+  (void) sig;
+
   return 0;
 }
 #endif

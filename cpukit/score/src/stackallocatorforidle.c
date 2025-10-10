@@ -46,6 +46,10 @@ void *_Stack_Allocator_allocate_for_idle_static(
   size_t   *storage_size
 )
 {
+#if !defined(RTEMS_SMP)
+  (void) cpu_index;
+#endif
+
   size_t size;
 
   size = _Stack_Allocator_allocate_for_idle_storage_size;

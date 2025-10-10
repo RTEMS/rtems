@@ -173,6 +173,8 @@ _Scheduler_EDF_SMP_Challenge_highest_ready(
   RBTree_Control            *ready_queue
 )
 {
+  (void) self;
+
   Scheduler_EDF_SMP_Node *other;
 
   other = (Scheduler_EDF_SMP_Node *) _RBTree_Minimum( ready_queue );
@@ -826,6 +828,8 @@ static inline void _Scheduler_EDF_SMP_Do_set_affinity(
   void              *arg
 )
 {
+  (void) context;
+
   Scheduler_EDF_SMP_Node *node;
   const uint8_t          *rqi;
 
@@ -859,6 +863,8 @@ void _Scheduler_EDF_SMP_Pin(
   struct Per_CPU_Control  *cpu
 )
 {
+  (void) thread;
+
   Scheduler_EDF_SMP_Node *node;
   uint8_t                 rqi;
 
@@ -881,6 +887,8 @@ void _Scheduler_EDF_SMP_Unpin(
   struct Per_CPU_Control  *cpu
 )
 {
+  (void) thread;
+
   Scheduler_EDF_SMP_Node *node;
 
   (void) scheduler;

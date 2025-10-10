@@ -42,6 +42,8 @@
 
 static void _SMP_Do_nothing_action( void *arg )
 {
+  (void) arg;
+
   /* Do nothing */
 }
 

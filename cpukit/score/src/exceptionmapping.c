@@ -49,6 +49,8 @@ static void _Exception_Raise_handler(
   ISR_lock_Context *lock_context
 )
 {
+  (void) action;
+
   _Thread_State_release( executing, lock_context );
   raise( raise_signal );
   _Thread_State_acquire( executing, lock_context );
@@ -64,6 +66,8 @@ void _Exception_Raise_signal(
   Internal_errors_t      code
 )
 {
+  (void) always_set_to_false;
+
   CPU_Exception_frame *ef;
   Per_CPU_Control     *cpu_self = _Per_CPU_Get();
   bool                 system_up;

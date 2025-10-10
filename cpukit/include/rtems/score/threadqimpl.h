@@ -652,6 +652,8 @@ static inline void _Thread_queue_Queue_do_acquire_critical(
 )
 {
 #if defined(RTEMS_SMP)
+  (void) lock_context;
+
   _SMP_ticket_lock_Acquire(
     &queue->Lock,
     lock_stats,
@@ -685,6 +687,8 @@ static inline void _Thread_queue_Queue_release_critical(
 )
 {
 #if defined(RTEMS_SMP)
+  (void) lock_context;
+
   _SMP_ticket_lock_Release(
     &queue->Lock,
     &lock_context->Lock_context.Stats_context

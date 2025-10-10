@@ -177,6 +177,8 @@ static void _Semaphore_MP_Send_response_packet (
   Thread_Control                 *the_thread
 )
 {
+  (void) semaphore_id;
+
   Semaphore_MP_Packet *the_packet;
 
   switch ( operation ) {

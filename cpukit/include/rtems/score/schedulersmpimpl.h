@@ -1526,6 +1526,8 @@ static inline void _Scheduler_SMP_Yield(
   Scheduler_SMP_Enqueue_scheduled enqueue_scheduled
 )
 {
+  (void) thread;
+
   Scheduler_SMP_Node_state node_state;
   Priority_Control         insert_priority;
 
@@ -1807,6 +1809,8 @@ static inline void _Scheduler_SMP_Make_sticky(
   Scheduler_SMP_Enqueue    enqueue
 )
 {
+  (void) the_thread;
+
   Scheduler_SMP_Node_state node_state;
 
   node_state = _Scheduler_SMP_Node_state( node );
@@ -1851,6 +1855,8 @@ static inline void _Scheduler_SMP_Clean_sticky(
   Scheduler_Release_idle_node       release_idle_node
 )
 {
+  (void) the_thread;
+
   Scheduler_SMP_Node_state node_state;
 
   node_state = _Scheduler_SMP_Node_state( node );
@@ -1970,6 +1976,8 @@ static inline Thread_Control *_Scheduler_SMP_Remove_processor(
   Scheduler_Release_idle_node release_idle_node
 )
 {
+  (void) extract_from_ready;
+
   Scheduler_SMP_Context *self;
   Chain_Node            *chain_node;
   Scheduler_Node        *victim_node;
@@ -2060,6 +2068,8 @@ static inline void _Scheduler_SMP_Set_affinity(
   Scheduler_Release_idle_node      release_idle_node
 )
 {
+  (void) thread;
+
   Scheduler_SMP_Node_state node_state;
   Priority_Control         insert_priority;
 

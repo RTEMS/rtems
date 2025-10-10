@@ -205,6 +205,7 @@ static inline void _TLS_Initialize_TCB_and_DTV(
 )
 {
 #if defined(__i386__) || defined(__x86_64__)
+  (void) tls_data;
   (void) dtv;
   tcb->tcb = tcb;
 #else

@@ -67,6 +67,10 @@ int sigprocmask(
 
   return -1;
 #else
+  (void) how;
+  (void) set;
+  (void) oset;
+
   return -1;
 #endif
 }

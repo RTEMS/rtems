@@ -55,6 +55,8 @@ rtems_monitor_mpci_canonical(
     const void           *config_void
 )
 {
+    (void) config_void;
+
     const rtems_multiprocessing_table *m;
     const rtems_mpci_table *mt;
 
@@ -94,6 +96,9 @@ rtems_monitor_mpci_next(
     rtems_id              *next_id
 )
 {
+    (void) object_info;
+    (void) canonical_mpci;
+
     int n = rtems_object_id_get_index(*next_id);
 
     if (n >= 1)
@@ -115,6 +120,8 @@ rtems_monitor_mpci_dump_header(
     bool verbose
 )
 {
+    (void) verbose;
+
     fprintf(stdout,"\
            max     max     max     default    max\n\
    node   nodes  globals  proxies  timeout  pktsize\n");

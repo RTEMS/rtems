@@ -346,6 +346,7 @@ void _MPCI_Receive_server(
   Thread_Entry_numeric_type ignored
 )
 {
+  (void) ignored;
 
   MP_packet_Prefix      *the_packet;
   MPCI_Packet_processor  the_function;

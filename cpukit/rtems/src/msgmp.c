@@ -337,6 +337,8 @@ static void _Message_queue_MP_Send_response_packet (
   Thread_Control                     *the_thread
 )
 {
+  (void) message_queue_id;
+
   Message_queue_MP_Packet *the_packet;
 
   switch ( operation ) {

@@ -91,6 +91,8 @@ static void _Thread_Global_construction( Thread_Control *executing )
      */
     INIT_NAME();
   }
+#else
+  (void) executing;
 #endif
 }
 

@@ -196,6 +196,8 @@ static void _Partition_MP_Send_response_packet (
   Thread_Control                 *the_thread
 )
 {
+  (void) partition_id;
+
   Partition_MP_Packet *the_packet;
 
   switch ( operation ) {
