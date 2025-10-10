@@ -253,6 +253,8 @@ static bool imx_uart_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   imx_uart_context *ctx;
   volatile imx_uart *regs;
 #ifdef CONSOLE_USE_INTERRUPTS
@@ -300,10 +302,16 @@ static void imx_uart_last_close(
 )
 {
 #ifdef CONSOLE_USE_INTERRUPTS
+  (void) args;
+
   imx_uart_context *ctx;
 
   ctx = (imx_uart_context *) base;
   rtems_interrupt_handler_remove(ctx->irq, imx_uart_interrupt, tty);
+#else
+  (void) tty;
+  (void) base;
+  (void) args;
 #endif
 }
 
@@ -367,6 +375,10 @@ rtems_status_code console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   char path[] = "/dev/ttyS?";
   size_t i;
 
