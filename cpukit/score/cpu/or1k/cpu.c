@@ -131,6 +131,8 @@ void _CPU_ISR_install_vector(
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
+  (void) ignored;
+
   do {
      _OR1K_CPU_Sleep();
   } while (1);

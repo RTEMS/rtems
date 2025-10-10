@@ -48,6 +48,10 @@ void _CPU_Context_Initialize(
   void *tls_area
 )
 {
+  (void) new_level;
+  (void) is_fp;
+  (void) tls_area;
+
   /* Decrement 200 byte to account for red-zone */
   uint32_t stack = ((uint32_t) stack_area_begin) - 200;
   uint32_t sr;

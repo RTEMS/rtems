@@ -37,5 +37,7 @@ void _OR1K_Exception_default(uint32_t vector, CPU_Exception_frame *frame);
 
 void _OR1K_Exception_default(uint32_t vector, CPU_Exception_frame *frame)
 {
+  (void) vector;
+
   rtems_fatal( RTEMS_FATAL_SOURCE_EXCEPTION, (rtems_fatal_code) frame );
 }
