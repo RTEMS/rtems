@@ -115,6 +115,7 @@ static int xlite_write_char(uint32_t base, char ch)
 
 static void xlite_init(int minor )
 {
+   (void) minor;
    /* Nothing to do */
 }
 
@@ -147,6 +148,9 @@ static int xlite_open(
   void    *arg
 )
 {
+  (void) major;
+  (void) arg;
+
    const console_tbl *ct = Console_Port_Tbl[minor];
    uint32_t base = ct->ulCtrlPort1;
 #if VIRTEX_CONSOLE_USE_INTERRUPTS
@@ -181,6 +185,9 @@ static int xlite_close(
   void    *arg
 )
 {
+  (void) major;
+  (void) arg;
+
    const console_tbl *ct = Console_Port_Tbl[minor];
    uint32_t base = ct->ulCtrlPort1;
 #if VIRTEX_CONSOLE_USE_INTERRUPTS
@@ -279,6 +286,9 @@ static void xlite_write_char_polled(
 
 static int xlite_set_attributes(int minor, const struct termios *t)
 {
+   (void) minor;
+   (void) t;
+
    return RTEMS_SUCCESSFUL;
 }
 
