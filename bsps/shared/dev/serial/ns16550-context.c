@@ -427,6 +427,10 @@ static void ns16550_initialize_interrupts(
         rtems_fatal_error_occurred( 0xdeadbeef);
       }
     }
+  #else
+    (void) tty;
+    (void) ctx;
+    (void) isr;
   #endif
 }
 
@@ -441,6 +445,9 @@ static bool ns16550_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
   ns16550_context *ctx = (ns16550_context *) base;
 
   ctx->tty = tty;
@@ -490,6 +497,10 @@ static void ns16550_cleanup_interrupts(
       printk("%s: Error: Remove interrupt handler\n", __func__);
       rtems_fatal_error_occurred(0xdeadbeef);
     }
+  #else
+    (void) tty;
+    (void) ctx;
+    (void) isr;
   #endif
 }
 
@@ -503,6 +514,8 @@ static void ns16550_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   ns16550_context *ctx = (ns16550_context *) base;
 
   ns16550_enable_interrupts(ctx, NS16550_DISABLE_ALL_INTR);

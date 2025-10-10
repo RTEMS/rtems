@@ -150,6 +150,8 @@ static void fsl_edma_interrupt_handler(void *arg)
 
 static void edma_interrupt_error_handler(void *arg)
 {
+  (void) arg;
+
   rtems_chain_control *chain = &edma_channel_chain;
   rtems_chain_node *node = rtems_chain_first(chain);
 
@@ -351,6 +353,8 @@ static rtems_status_code fsl_edma_install_obtained_channel(
     ctx
   );
 #elif defined(LIBBSP_ARM_IMXRT_BSP_H)
+  (void) irq_priority;
+
   sc = rtems_interrupt_handler_install(
     DMA0_DMA16_IRQn + (channel_index % 16),
     "eDMA Channel",

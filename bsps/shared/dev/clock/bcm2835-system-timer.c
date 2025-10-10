@@ -46,6 +46,8 @@ static struct timecounter raspberrypi_tc;
 
 static uint32_t raspberrypi_clock_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   return BCM2835_REG(BCM2835_GPU_TIMER_CLO);
 }
 

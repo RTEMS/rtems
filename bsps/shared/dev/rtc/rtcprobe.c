@@ -36,5 +36,7 @@ bool rtc_probe(
   int minor
 )
 {
+  (void) minor;
+
   return true;
 }

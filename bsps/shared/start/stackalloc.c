@@ -45,6 +45,8 @@ static Heap_Control bsp_stack_heap;
 
 void bsp_stack_allocate_init(size_t stack_space_size)
 {
+  (void) stack_space_size;
+
   _Heap_Initialize(
     &bsp_stack_heap,
     bsp_section_stack_begin,

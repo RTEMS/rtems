@@ -127,6 +127,8 @@ int BSP_remove_rtems_irq_handler(const rtems_irq_connect_data *cd)
  */
 int BSP_rtems_irq_mngt_set(rtems_irq_global_settings *config)
 {
+  (void) config;
+
   return 0;
 }
 

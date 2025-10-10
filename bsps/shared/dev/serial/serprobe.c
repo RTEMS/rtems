@@ -4,6 +4,8 @@
 
 bool libchip_serial_default_probe(int minor)
 {
+  (void) minor;
+
   /*
    * If the configuration dependent probe has located the device then
    * assume it is there

@@ -60,6 +60,8 @@ static void m48t08_initialize(
   int minor
 )
 {
+  (void) minor;
+
 }
 
 /*

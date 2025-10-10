@@ -43,6 +43,9 @@
 
 static int bsp_interrupt_shell_main(int argc, char **argv)
 {
+  (void) argc;
+  (void) argv;
+
   rtems_printer printer;
   rtems_print_printer_printf(&printer);
   bsp_interrupt_report_with_plugin(&printer);

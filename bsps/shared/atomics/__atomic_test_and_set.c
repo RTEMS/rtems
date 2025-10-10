@@ -47,6 +47,8 @@
 
 bool __atomic_test_and_set( volatile void *mem, int access )
 {
+  (void) access;
+
   volatile uint8_t     *lock = (volatile uint8_t *) mem;
   rtems_interrupt_level level;
   uint8_t               value;

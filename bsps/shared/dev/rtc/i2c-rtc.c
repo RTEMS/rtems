@@ -295,6 +295,8 @@ static void i2c_rtc_init(int minor)
 
 bool i2c_rtc_probe(int minor)
 {
+  (void) minor;
+
   return true;
 }
 

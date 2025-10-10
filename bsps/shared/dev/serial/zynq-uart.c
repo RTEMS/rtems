@@ -67,6 +67,9 @@ static bool zynq_uart_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
   zynq_uart_context *ctx = (zynq_uart_context *) base;
   volatile zynq_uart *regs = ctx->regs;
 #ifdef ZYNQ_CONSOLE_USE_INTERRUPTS
@@ -103,6 +106,8 @@ static void zynq_uart_last_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   zynq_uart_context *ctx = (zynq_uart_context *) base;
 
   rtems_interrupt_handler_remove(ctx->irq, zynq_uart_interrupt, tty);

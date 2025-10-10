@@ -43,6 +43,9 @@ void MPCI_Fatal(
   rtems_fatal_code   error
 )
 {
+  (void) source;
+  (void) always_set_to_false;
+
    /*   Eventually need to attempt to broadcast a K_FATAL message
     *   without checking for all possible errors (do not want to
     *   recurse).

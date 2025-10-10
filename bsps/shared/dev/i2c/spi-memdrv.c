@@ -135,6 +135,8 @@ rtems_status_code spi_memdrv_write
 |    o = ok or error code                                                   |
 \*=========================================================================*/
 {
+  (void) major;
+
   rtems_status_code          rc = RTEMS_SUCCESSFUL;
   rtems_libio_rw_args_t *rwargs = arg;
   off_t                     off = rwargs->offset;
@@ -321,6 +323,8 @@ rtems_status_code spi_memdrv_read
 |    o = ok or error code                                                   |
 \*=========================================================================*/
 {
+  (void) major;
+
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   rtems_libio_rw_args_t *rwargs = arg;
   off_t                     off = rwargs->offset;

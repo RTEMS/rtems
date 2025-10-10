@@ -311,6 +311,9 @@ int ns16550_open(
   void *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
   struct rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
   console_tbl *c = Console_Port_Tbl [minor];
@@ -344,6 +347,9 @@ int ns16550_close(
   void    * arg
 )
 {
+  (void) major;
+  (void) arg;
+
   console_tbl *c = Console_Port_Tbl [minor];
 
   /*
@@ -792,6 +798,8 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
         rtems_fatal_error_occurred( 0xdeadbeef);
       }
     }
+  #else
+    (void) minor;
   #endif
 }
 
@@ -824,6 +832,8 @@ NS16550_STATIC void ns16550_cleanup_interrupts(int minor)
       printk("%s: Error: Remove interrupt handler\n", __func__);
       rtems_fatal_error_occurred(0xdeadbeef);
     }
+  #else
+    (void) minor;
   #endif
 }
 

@@ -36,6 +36,8 @@ void *clock_driver_sim_idle_body(
   uintptr_t   ignored
 )
 {
+  (void) ignored;
+
   for( ; ; ) {
     Per_CPU_Control *cpu = _Thread_Dispatch_disable();
     _ISR_Nest_level++;

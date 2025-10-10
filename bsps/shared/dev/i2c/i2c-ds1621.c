@@ -60,6 +60,9 @@ static rtems_status_code
 ds1621_init (rtems_device_major_number major, rtems_device_minor_number minor,
              void *arg)
 {
+  (void) major;
+  (void) arg;
+
   int sc;
   unsigned char csr[2] = { DS1621_CMD_CSR_ACCESS, 0 }, cmd;
 
@@ -97,6 +100,8 @@ static rtems_status_code
 ds1621_read (rtems_device_major_number major, rtems_device_minor_number minor,
              void *arg)
 {
+  (void) major;
+
   int sc;
   rtems_libio_rw_args_t *rwargs = arg;
   unsigned char cmd = DS1621_CMD_READ_TEMP;

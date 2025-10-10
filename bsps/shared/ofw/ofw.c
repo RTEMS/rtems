@@ -511,6 +511,8 @@ static phandle_t rtems_ofw_get_effective_phandle(
   phandle_t xref
 )
 {
+  (void) node;
+
   phandle_t child;
   phandle_t ref;
   int node_offset;

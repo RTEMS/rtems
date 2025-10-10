@@ -514,6 +514,8 @@ ata_non_data_request_done(ata_req_t *areq,
                           rtems_device_minor_number ctrl_minor,
                           rtems_status_code status, int info)
 {
+    (void) ctrl_minor;
+
 #if ATA_DEBUG
     ata_printf("ata_non_data_request_done: entry\n");
 #endif
@@ -629,6 +631,7 @@ static void ata_interrupt_handler(rtems_irq_hdl_param handle)
 
 static void ata_interrupt_on(const rtems_irq_connect_data *ptr)
   {
+    (void) ptr;
 
     /* enable ATA device interrupt */
     ide_controller_write_register(0,
@@ -640,6 +643,7 @@ static void ata_interrupt_on(const rtems_irq_connect_data *ptr)
 
 static void ata_interrupt_off(const rtems_irq_connect_data *ptr)
   {
+    (void) ptr;
 
     /* disable ATA device interrupt */
     ide_controller_write_register(0,
@@ -651,6 +655,8 @@ static void ata_interrupt_off(const rtems_irq_connect_data *ptr)
 
 static int ata_interrupt_isOn(const rtems_irq_connect_data *ptr)
   {
+  (void) ptr;
+
   uint16_t byte; /* emphasize that only 8 low bits is meaningful */
 
     /* return int. status od ATA device */
@@ -794,6 +800,8 @@ ata_pio_out_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 static rtems_task
 ata_queue_task(rtems_task_argument arg)
 {
+    (void) arg;
+
     ata_queue_msg_t            msg;
     size_t                     size;
     ata_req_t                 *areq;
@@ -1060,6 +1068,8 @@ static void ata_execute_device_diagnostic(
   else
 #endif
   {
+    (void) sector_buffer;
+
     ATA_DEV_INFO(ctrl_minor, 0).present = true;
     ATA_DEV_INFO(ctrl_minor,1).present = true;
   }
@@ -1083,6 +1093,10 @@ rtems_ata_initialize(rtems_device_major_number major,
                      rtems_device_minor_number minor_arg,
                      void *args)
 {
+    (void) major;
+    (void) minor_arg;
+    (void) args;
+
     uint32_t           ctrl_minor;
     rtems_status_code  status;
     uint16_t          *buffer;

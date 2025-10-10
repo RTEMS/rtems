@@ -45,6 +45,9 @@ rtems_device_driver console_initialize(
   void                      *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   bool console_device_done = false;
 
   rtems_termios_initialize();

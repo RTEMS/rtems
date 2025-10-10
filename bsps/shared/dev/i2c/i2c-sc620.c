@@ -43,6 +43,8 @@ static rtems_status_code i2c_sc620_write(
   void *arg
 )
 {
+  (void) major;
+
   rtems_status_code sc = RTEMS_IO_ERROR;
   rtems_libio_rw_args_t *rw = arg;
   unsigned char *buf = (unsigned char *) &rw->buffer[0];
@@ -69,6 +71,8 @@ static rtems_status_code i2c_sc620_read(
   void *arg
 )
 {
+  (void) major;
+
   rtems_status_code sc = RTEMS_IO_ERROR;
   rtems_libio_rw_args_t *rw = arg;
   unsigned char *buf = (unsigned char *) &rw->buffer[0];

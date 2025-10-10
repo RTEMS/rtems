@@ -298,6 +298,8 @@ rtems_device_driver console_close(
   void                    * arg
 )
 {
+  (void) major;
+
   rtems_libio_open_close_args_t *args = arg;
   struct rtems_termios_tty      *current_tty;
   console_tbl                   *cptr;
@@ -332,6 +334,10 @@ rtems_device_driver console_initialize(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor_arg;
+  (void) arg;
+
   rtems_status_code          status;
   rtems_device_minor_number  minor;
   console_tbl               *port;
@@ -407,6 +413,9 @@ rtems_device_driver console_read(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_read (arg);
 }
 
@@ -421,5 +430,8 @@ rtems_device_driver console_write(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_write (arg);
 }

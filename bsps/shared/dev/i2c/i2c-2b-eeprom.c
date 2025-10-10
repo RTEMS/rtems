@@ -83,6 +83,8 @@ static rtems_status_code
 i2c_2b_eeprom_write (rtems_device_major_number major,
                      rtems_device_minor_number minor, void *arg)
 {
+  (void) major;
+
   rtems_libio_rw_args_t *rwargs = arg;
   unsigned off = rwargs->offset;
   int cnt = rwargs->count;
@@ -131,6 +133,8 @@ static rtems_status_code
 i2c_2b_eeprom_read (rtems_device_major_number major,
                     rtems_device_minor_number minor, void *arg)
 {
+  (void) major;
+
   int sc;
   rtems_libio_rw_args_t *rwargs = arg;
 

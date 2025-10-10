@@ -275,6 +275,10 @@ static void QspiPsuHandler(
   unsigned int ByteCount
 )
 {
+  (void) CallBackRef;
+  (void) StatusEvent;
+  (void) ByteCount;
+
   /* Indicate the transfer on the QSPIPSU bus is no longer in progress */
   if (StatusEvent == XST_SPI_TRANSFER_DONE) {
     (void) rtems_event_transient_send(TransferTask);
@@ -2331,5 +2335,7 @@ u32 QspiPsu_NOR_Get_Page_Size(XQspiPsu *QspiPsuPtr)
 
 u32 QspiPsu_NOR_Get_JEDEC_ID(XQspiPsu *QspiPsuPtr)
 {
+  (void) QspiPsuPtr;
+
   return Flash_Config_Table[FCTIndex].jedec_id;
 }

@@ -215,6 +215,8 @@ Z85C30_STATIC int z85c30_open(
   void *arg
 )
 {
+  (void) major;
+  (void) arg;
 
   z85c30_initialize_port(minor);
 
@@ -239,6 +241,9 @@ Z85C30_STATIC int z85c30_close(
   void *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   /*
    * Negate DTR
    */

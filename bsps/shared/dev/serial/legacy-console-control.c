@@ -60,5 +60,8 @@ rtems_device_driver console_control(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_ioctl (arg);
 }

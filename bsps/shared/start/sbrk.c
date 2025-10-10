@@ -42,6 +42,8 @@
 
 void * sbrk(ptrdiff_t incr)
 {
+  (void) incr;
+
   errno = ENOMEM;
   return (void *)-1;
 }

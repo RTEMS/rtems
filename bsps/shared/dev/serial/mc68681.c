@@ -290,6 +290,9 @@ MC68681_STATIC int mc68681_open(
   void    *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   uint32_t               pMC68681;
   uint32_t               pMC68681_port;
   unsigned int           baud;
@@ -347,6 +350,9 @@ MC68681_STATIC int mc68681_close(
   void    *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   uint32_t        pMC68681_port;
   setRegister_f   setReg;
 

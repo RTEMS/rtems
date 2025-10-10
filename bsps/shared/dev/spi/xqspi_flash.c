@@ -41,6 +41,8 @@ static int xqspi_get_flash_type(
   rtems_flashdev_flash_type *type
 )
 {
+  (void) flash;
+
   *type = RTEMS_FLASHDEV_NOR;
   return 0;
 }
@@ -52,6 +54,8 @@ static int xqspi_read_wrapper(
     void *buffer
 )
 {
+  (void) flash;
+
   XQspiPsu *flash_driver = (XQspiPsu*)flash->driver;
   return QspiPsu_NOR_Read(flash_driver, (uint32_t)offset, (uint32_t)count, buffer);
 }

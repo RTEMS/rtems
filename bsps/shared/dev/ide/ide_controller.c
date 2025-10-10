@@ -48,6 +48,10 @@ ide_controller_initialize(rtems_device_major_number  major,
                           rtems_device_minor_number  minor_arg,
                           void                      *args)
 {
+    (void) major;
+    (void) minor_arg;
+    (void) args;
+
     unsigned long       minor;
 
     /* FIXME: may be it should be done on compilation phase */

@@ -181,6 +181,9 @@ rtems_cache_flush_multiple_data_lines( const void * d_addr, size_t n_bytes )
     d_addr = (void *)((size_t)d_addr + CPU_DATA_CACHE_ALIGNMENT);
   }
 #endif
+#else
+  (void) d_addr;
+  (void) n_bytes;
 #endif
 }
 
@@ -215,6 +218,9 @@ rtems_cache_invalidate_multiple_data_lines( const void * d_addr, size_t n_bytes 
     d_addr = (void *)((size_t)d_addr + CPU_DATA_CACHE_ALIGNMENT);
   }
 #endif
+#else
+  (void) d_addr;
+  (void) n_bytes;
 #endif
 }
 
@@ -268,6 +274,8 @@ rtems_cache_get_data_cache_size( uint32_t level )
 #if defined(CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS)
   return _CPU_cache_get_data_cache_size( level );
 #else
+  (void) level;
+
   return 0;
 #endif
 }
@@ -406,6 +414,9 @@ rtems_cache_invalidate_multiple_instruction_lines(
 #else
   _CPU_cache_invalidate_instruction_range( i_addr, n_bytes );
 #endif
+#else
+  (void) i_addr;
+  (void) n_bytes;
 #endif
 }
 
@@ -444,6 +455,8 @@ rtems_cache_get_instruction_cache_size( uint32_t level )
 #if defined(CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS)
   return _CPU_cache_get_instruction_cache_size( level );
 #else
+  (void) level;
+
   return 0;
 #endif
 }

@@ -302,6 +302,8 @@ static int cadence_spi_check_messages(
   const spi_ioc_transfer *msg,
   uint32_t size)
 {
+  (void) bus;
+
   while(size > 0) {
     if (msg->bits_per_word != 8) {
       return -EINVAL;

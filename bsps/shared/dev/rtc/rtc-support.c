@@ -60,6 +60,10 @@ rtems_device_driver rtc_initialize(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor_arg;
+  (void) arg;
+
   rtems_device_minor_number minor;
   rtems_status_code status;
 
@@ -132,6 +136,9 @@ rtems_device_driver rtc_read(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   int rv = 0;
   rtems_libio_rw_args_t *rw = arg;
   rtems_time_of_day *tod = (rtems_time_of_day *) rw->buffer;
@@ -166,6 +173,9 @@ rtems_device_driver rtc_write(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   int rv = 0;
   rtems_libio_rw_args_t *rw = arg;
   const rtems_time_of_day *tod = (const rtems_time_of_day *) rw->buffer;
@@ -200,6 +210,10 @@ rtems_device_driver rtc_open(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -209,6 +223,10 @@ rtems_device_driver rtc_close(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -218,6 +236,10 @@ rtems_device_driver rtc_control(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_NOT_IMPLEMENTED;
 }
 

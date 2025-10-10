@@ -112,6 +112,8 @@ static void bsp_interrupt_server_per_handler_routine(
   void *handler_arg
 )
 {
+  (void) info;
+
   if (handler == bsp_interrupt_server_trigger) {
     bsp_interrupt_server_iterate_entry *ie = iterate_arg;
 
@@ -379,6 +381,8 @@ rtems_status_code rtems_interrupt_server_handler_install(
   void *arg
 )
 {
+  (void) info;
+
   rtems_status_code sc;
   rtems_interrupt_server_control *s;
 

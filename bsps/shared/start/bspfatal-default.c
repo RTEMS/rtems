@@ -50,6 +50,8 @@ void bsp_fatal_extension(
   rtems_fatal_code code
 )
 {
+  (void) always_set_to_false;
+
   #if defined(RTEMS_SMP)
     if (
       source == RTEMS_FATAL_SOURCE_SMP &&

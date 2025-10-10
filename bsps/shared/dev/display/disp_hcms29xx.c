@@ -13,6 +13,7 @@
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
+ *
  * 1. Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
@@ -529,6 +530,8 @@ static rtems_timer_service_routine disp_hcms29xx_timer_sr
 |    <none used>                                                            |
 \*=========================================================================*/
 {
+  (void) id;
+
   disp_hcms29xx_drv_t *softc_ptr = arg;
 
   rtems_event_send(softc_ptr->disp_param.task_id, DISP_HCMS29XX_EVENT_TIMER);
@@ -552,6 +555,8 @@ static rtems_task disp_hcms29xx_update_task
 |    <never exits>                                                          |
 \*=========================================================================*/
 {
+  (void) argument;
+
   rtems_event_set  my_events;
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   int disp_offset = 0;
@@ -748,6 +753,10 @@ rtems_device_driver disp_hcms29xx_dev_initialize
  * Initialize and register the device
  */
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   disp_hcms29xx_drv_t *softc_ptr = &disp_hcms29xx_drv_tbl;
 
@@ -825,6 +834,10 @@ rtems_device_driver disp_hcms29xx_dev_open
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   disp_hcms29xx_drv_t *softc_ptr = &disp_hcms29xx_drv_tbl;
   /*
    * ensure, that disp_hcms29xx device is assumed to be empty
@@ -854,6 +867,9 @@ rtems_device_driver disp_hcms29xx_dev_write
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_rw_args_t *args = arg;
   uint32_t cnt;
   disp_hcms29xx_drv_t *softc_ptr = &disp_hcms29xx_drv_tbl;
@@ -909,6 +925,9 @@ rtems_device_driver disp_hcms29xx_dev_close
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
 
   return RTEMS_SUCCESSFUL;
 }

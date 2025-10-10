@@ -43,6 +43,8 @@
 
 static void BSP_output_char_f(char c)
 {
+  (void) c;
+
   /* the character just needs to disappear */
 }
 
