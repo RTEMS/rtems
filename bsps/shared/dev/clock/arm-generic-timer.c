@@ -110,6 +110,8 @@ static void arm_gt_clock_handler_install(rtems_interrupt_handler handler)
 
 static uint32_t arm_gt_clock_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   return (uint32_t) arm_gt_clock_get_count();
 }
 
@@ -134,6 +136,8 @@ static void arm_gt_clock_secondary_initialization(uint64_t cval)
 {
 #if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
   _SMP_Broadcast_action(arm_gt_clock_secondary_action, &cval);
+#else
+   (void) cval;
 #endif
 }
 

@@ -382,6 +382,8 @@ static bool arm_pl011_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   arm_pl011_context *context = (arm_pl011_context *) base;
 #ifdef BSP_CONSOLE_USE_INTERRUPTS
   rtems_status_code sc;
@@ -414,6 +416,8 @@ static void arm_pl011_last_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   const arm_pl011_context *context = (void *) base;
   (void) rtems_interrupt_handler_remove(
     context->irq,
