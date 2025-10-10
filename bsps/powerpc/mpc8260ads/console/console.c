@@ -131,6 +131,8 @@ static rtems_status_code do_poll_read(
   void                    * arg
 )
 {
+  (void) major;
+
   rtems_libio_rw_args_t *rw_args = arg;
   int c;
 
@@ -171,6 +173,8 @@ static rtems_status_code do_poll_write(
   void                    * arg
 )
 {
+  (void) major;
+
   rtems_libio_rw_args_t *rw_args = arg;
   uint32_t   i;
   char cr ='\r';
@@ -219,6 +223,10 @@ rtems_device_driver console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
   rtems_device_minor_number console_minor;
 
@@ -355,6 +363,10 @@ rtems_device_driver console_open(
 #endif
 
 #else /* UARTS_USE_TERMIOS != 1 */
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   /* no termios -- default to polled I/O */
   sc = RTEMS_SUCCESSFUL;
 #endif /* UARTS_USE_TERMIOS != 1 */
@@ -372,6 +384,9 @@ rtems_device_driver console_close(
   void *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
@@ -433,6 +448,9 @@ rtems_device_driver console_control(
   void *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 

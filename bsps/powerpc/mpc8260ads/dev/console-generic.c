@@ -335,6 +335,8 @@ m8xx_uart_setAttributes(
 static void
 m8xx_scc1_interrupt_handler (rtems_irq_hdl_param unused)
 {
+  (void) unused;
+
   /*
    * Buffer received?
    */
@@ -377,6 +379,8 @@ m8xx_scc1_interrupt_handler (rtems_irq_hdl_param unused)
 static void
 m8xx_scc2_interrupt_handler (rtems_irq_hdl_param unused)
 {
+  (void) unused;
+
   /*
    * Buffer received?
    */
@@ -419,6 +423,8 @@ m8xx_scc2_interrupt_handler (rtems_irq_hdl_param unused)
 static void
 m8xx_scc3_interrupt_handler (rtems_irq_hdl_param unused)
 {
+  (void) unused;
+
   /*
    * Buffer received?
    */
@@ -462,6 +468,8 @@ m8xx_scc3_interrupt_handler (rtems_irq_hdl_param unused)
 static void
 m8xx_scc4_interrupt_handler (rtems_irq_hdl_param unused)
 {
+  (void) unused;
+
   /*
    * Buffer received?
    */
@@ -504,6 +512,8 @@ m8xx_scc4_interrupt_handler (rtems_irq_hdl_param unused)
 static void
 m8xx_smc1_interrupt_handler (rtems_irq_hdl_param unused)
 {
+  (void) unused;
+
   /*
    * Buffer received?
    */
@@ -546,6 +556,8 @@ m8xx_smc1_interrupt_handler (rtems_irq_hdl_param unused)
 static void
 m8xx_smc2_interrupt_handler (rtems_irq_hdl_param unused)
 {
+  (void) unused;
+
   /*
    * Buffer received?
    */
