@@ -134,6 +134,7 @@ void _CPU_Context_Initialize(
 )
 {
   (void) new_level;
+  (void) is_fp;
 
   the_context->register_sp = (uintptr_t) stack_area_begin + stack_area_size;
   the_context->register_lr = (uintptr_t) entry_point;

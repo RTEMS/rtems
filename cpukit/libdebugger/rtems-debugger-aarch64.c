@@ -450,6 +450,8 @@ static const char *aarch64_mode_label( int mode )
 
 static int aarch64_debug_probe( rtems_debugger_target *target )
 {
+  (void) target;
+
   int                debug_version;
   uint64_t           val;
   const char        *vl = "[Invalid version]";
@@ -750,6 +752,8 @@ int rtems_debugger_target_configure( rtems_debugger_target *target )
 
 static void target_print_frame( CPU_Exception_frame *frame )
 {
+  (void) frame;
+
   EXC_FRAME_PRINT( target_printk, "[} ", frame );
 }
 
@@ -1736,6 +1740,11 @@ int rtems_debugger_target_hwbreak_control(
   DB_UINT                          kind
 )
 {
+  (void) wp;
+  (void) insert;
+  (void) addr;
+  (void) kind;
+
   /* To do. */
   return 0;
 }
