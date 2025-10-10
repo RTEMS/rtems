@@ -133,6 +133,9 @@ int32_t MT25TL01G_Exit4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25TL01G_Inter
   */
 int32_t MT25TL01G_AutoPollingMemReady(QSPI_HandleTypeDef *Ctx, MT25TL01G_Interface_t Mode)
 {
+#ifdef __rtems__
+    (void) Mode;
+#endif
 
   QSPI_CommandTypeDef     s_command;
   QSPI_AutoPollingTypeDef s_config;
@@ -1013,6 +1016,9 @@ int32_t MT25TL01G_ReleaseFromDeepPowerDown(QSPI_HandleTypeDef *Ctx, MT25TL01G_In
   */
 int32_t MT25TL01G_ReadSPBLockRegister(QSPI_HandleTypeDef *Ctx, MT25TL01G_Interface_t Mode, uint8_t *SPBRegister)
 {
+#ifdef __rtems__
+    (void) Mode;
+#endif
   QSPI_CommandTypeDef s_command;
 
   /* Initialize the reading of SPB lock register command */

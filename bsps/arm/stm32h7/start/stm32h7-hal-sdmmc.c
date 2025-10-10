@@ -78,6 +78,8 @@ static const stm32h7_gpio_config gpiod = {
 void
 HAL_SD_MspInit(SD_HandleTypeDef *hsd)
 {
+  (void) hsd;
+
   stm32h7_clk_enable(STM32H7_MODULE_SDMMC1);
   stm32h7_gpio_init(&gpiob);
   stm32h7_gpio_init(&gpioc_af12);

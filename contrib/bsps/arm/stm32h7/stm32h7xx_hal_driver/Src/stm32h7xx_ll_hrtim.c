@@ -55,6 +55,10 @@
   */
 ErrorStatus LL_HRTIM_DeInit(HRTIM_TypeDef *HRTIMx)
 {
+#ifdef __rtems__
+  (void) HRTIMx;
+#endif
+
   ErrorStatus result = SUCCESS;
 
   /* Check the parameters */

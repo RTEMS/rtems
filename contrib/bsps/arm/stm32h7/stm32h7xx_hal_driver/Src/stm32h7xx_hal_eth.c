@@ -1225,6 +1225,8 @@ static void ETH_UpdateDescriptor(ETH_HandleTypeDef *heth)
     heth->RxDescList.RxBuildDescIdx = descidx;
     heth->RxDescList.RxBuildDescCnt = desccount;
   }
+#else
+  (void) heth;
 #endif /* ! __rtems__ */
 }
 
@@ -3011,6 +3013,8 @@ static void ETH_DMATxDescListInit(ETH_HandleTypeDef *heth)
 
   /* Set Transmit Descriptor Tail pointer */
   WRITE_REG(heth->Instance->DMACTDTPR, (uint32_t) heth->Init.TxDesc);
+#else
+  (void) heth;
 #endif /* __rtems__ */
 }
 
@@ -3057,6 +3061,8 @@ static void ETH_DMARxDescListInit(ETH_HandleTypeDef *heth)
 
   /* Set Receive Descriptor Tail pointer Address */
   WRITE_REG(heth->Instance->DMACRDTPR, ((uint32_t)(heth->Init.RxDesc + (uint32_t)(ETH_RX_DESC_CNT - 1U))));
+#else
+  (void) heth;
 #endif /* __rtems__ */
 }
 

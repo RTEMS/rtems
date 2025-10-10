@@ -86,6 +86,8 @@ static const stm32h7_gpio_config gpiob = {
 void
 HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
 {
+  (void) heth;
+
   stm32h7_clk_enable(STM32H7_MODULE_ETH1MAC);
   stm32h7_clk_enable(STM32H7_MODULE_ETH1TX);
   stm32h7_clk_enable(STM32H7_MODULE_ETH1RX);
