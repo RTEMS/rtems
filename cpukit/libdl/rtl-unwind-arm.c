@@ -5,6 +5,10 @@ rtems_rtl_elf_unwind_parse (const rtems_rtl_obj* obj,
                             const char*          name,
                             uint32_t             flags)
 {
+  (void) obj;
+  (void) name;
+  (void) flags;
+
   /*
    * We location the EH sections in section flags.
    */
@@ -14,6 +18,8 @@ rtems_rtl_elf_unwind_parse (const rtems_rtl_obj* obj,
 bool
 rtems_rtl_elf_unwind_register (rtems_rtl_obj* obj)
 {
+  (void) obj;
+
   return true;
 }
 

@@ -546,6 +546,8 @@ arm_debug_authentication(uint32_t dbgauthstatus)
 static int
 arm_debug_cp14_enable(rtems_debugger_target* target)
 {
+  (void) target;
+
   uint32_t val;
   ARM_CP14_READ(val, 7, 14, 6);
   if (!arm_debug_authentication(val))
@@ -856,6 +858,8 @@ arm_debug_rom_discover(uint32_t* rom, uint32_t comp, uint32_t** addr, int* index
 static int
 arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
 {
+  (void) target;
+
   uint32_t val;
   int      rc = -1;
 
@@ -1220,6 +1224,8 @@ arm_debug_set_context_id(const uint32_t id)
 {
 #if ARM_CP15
   ARM_CP15_WRITE(id, 0, 13, 0, 1);
+#else
+  (void) id;
 #endif
 }
 
@@ -1333,6 +1339,8 @@ rtems_debugger_target_configure(rtems_debugger_target* target)
 static void
 target_print_frame(CPU_Exception_frame* frame)
 {
+  (void) frame;
+
   EXC_FRAME_PRINT(target_printk, "[} ", frame);
 }
 

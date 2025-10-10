@@ -73,6 +73,8 @@ static void _ARM_VFP_context_print( const ARM_VFP_context *vfp_context )
       printk( "D%02i = 0x%08" PRIx32 "%08" PRIx32 "\n", i, high, low );
     }
   }
+#else
+  (void) vfp_context;
 #endif
 }
 

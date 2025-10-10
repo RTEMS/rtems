@@ -48,6 +48,9 @@ void __attribute__((naked)) _CPU_Context_switch(
   Context_Control *heir
 )
 {
+  (void) executing;
+  (void) heir;
+
   __asm__ volatile (
     "movw r2, #:lower16:_Per_CPU_Information\n"
     "movt r2, #:upper16:_Per_CPU_Information\n"

@@ -43,6 +43,8 @@
 
 void _CPU_ISR_Set_level( uint32_t level )
 {
+  (void) level;
+
   _ARMV7M_Set_basepri( 0 );
 }
 

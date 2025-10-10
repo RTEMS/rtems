@@ -43,6 +43,8 @@
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
+  (void) ignored;
+
   while ( true ) {
 #ifdef ARM_MULTILIB_HAS_WFI
     __asm__ volatile ("wfi");

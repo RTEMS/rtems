@@ -56,6 +56,9 @@ void _CPU_Context_Initialize(
   void *tls_area
 )
 {
+  (void) new_level;
+  (void) is_fp;
+
   char *stack_area_end = (char *) stack_area_begin + stack_area_size;
 
   memset(context, 0, sizeof(*context));

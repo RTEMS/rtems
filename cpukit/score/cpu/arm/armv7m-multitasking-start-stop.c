@@ -46,6 +46,8 @@ void __attribute__((naked)) _ARMV7M_Start_multitasking(
   Context_Control *heir
 )
 {
+  (void) heir;
+
   __asm__ volatile (
     /* Restore heir context */
     "ldr r2, [r0, %[spctxoff]]\n"

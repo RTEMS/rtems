@@ -158,6 +158,8 @@ uint32_t
 rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
                              const Elf_Shdr*      shdr)
 {
+  (void) obj;
+
   uint32_t flags = 0;
   if (shdr->sh_type == SHT_ARM_EXIDX)
     flags = RTEMS_RTL_OBJ_SECT_EH | RTEMS_RTL_OBJ_SECT_LOAD;
@@ -199,6 +201,8 @@ rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
 bool
 rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
 {
+  (void) type;
+
   return true;
 }
 
@@ -247,6 +251,9 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
                          const Elf_Word            symvalue,
                          const bool                parsing)
 {
+  (void) symname;
+  (void) syminfo;
+
   Elf_Addr *where;
   Elf_Addr tmp;
   Elf_Word insn, addend;
