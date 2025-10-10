@@ -416,6 +416,9 @@ static rtems_status_code bsp_spi_sel_addr
  int rw                                  /* 0=write,1=read                 */
 )
 {
+  (void) bh;
+  (void) rw;
+
   if (addr != 0)
     return RTEMS_NOT_IMPLEMENTED;
 
@@ -432,6 +435,8 @@ static rtems_status_code bsp_spi_send_start_dummy
  rtems_libi2c_bus_t *bh                  /* bus specifier structure        */
 )
 {
+  (void) bh;
+
 #if defined(DEBUG)
   printk("bsp_spi_send_start_dummy OK\r\n");
 #endif
@@ -449,6 +454,8 @@ static rtems_status_code bsp_spi_send_stop
  rtems_libi2c_bus_t *bh                  /* bus specifier structure        */
 )
 {
+  (void) bh;
+
 #if defined(DEBUG)
   printk("bsp_spi_send_stop called... ");
 #endif

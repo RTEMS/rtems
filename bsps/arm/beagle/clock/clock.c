@@ -187,6 +187,8 @@ omap3_frclock_init(void)
 static uint32_t
 beagle_clock_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   return mmio_read(fr_timer->base + fr_timer->regs->TCRR);
 }
 

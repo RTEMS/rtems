@@ -392,26 +392,42 @@ bool beagle_pwmss_is_running(unsigned int pwmss_id)
  */
 bool beagle_pwm_init(BBB_PWMSS pwmss_id)
 {
+  (void) pwmss_id;
+
   return false;
 }
 bool beagle_pwm_disable(BBB_PWMSS pwmid)
 {
+  (void) pwmid;
+
   return false;
 }
 bool beagle_pwm_enable(BBB_PWMSS pwmid)
 {
+  (void) pwmid;
+
   return false;
 }
 int beagle_pwm_configure(BBB_PWMSS pwm_id, float pwm_freq, float duty_a, float duty_b)
 {
+  (void) pwm_id;
+  (void) pwm_freq;
+  (void) duty_a;
+  (void) duty_b;
+
   return -1;
 }
 bool beagle_pwm_pinmux_setup(bbb_pwm_pin_t pin_no, BBB_PWMSS pwm_id)
 {
+  (void) pin_no;
+  (void) pwm_id;
+
   return false;
 }
 bool beagle_pwmss_is_running(unsigned int pwmss_id)
 {
-return false;
+  (void) pwmss_id;
+
+  return false;
 }
 #endif

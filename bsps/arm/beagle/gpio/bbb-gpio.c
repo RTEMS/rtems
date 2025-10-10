@@ -113,6 +113,8 @@ rtems_status_code rtems_gpio_bsp_select_input(
   uint32_t pin,
   void *bsp_specific
 ) {
+  (void) bsp_specific;
+
   return bbb_select_pin_function(bank, pin, BBB_DIGITAL_IN);
 }
 
@@ -121,6 +123,8 @@ rtems_status_code rtems_gpio_bsp_select_output(
   uint32_t pin,
   void *bsp_specific
 ) {
+  (void) bsp_specific;
+
   return bbb_select_pin_function(bank, pin, BBB_DIGITAL_OUT);
 }
 
@@ -130,6 +134,11 @@ rtems_status_code rtems_gpio_bsp_select_specific_io(
   uint32_t function,
   void *pin_data
 ) {
+  (void) bank;
+  (void) pin;
+  (void) function;
+  (void) pin_data;
+
   return RTEMS_NOT_DEFINED;
 }
 
@@ -138,6 +147,10 @@ rtems_status_code rtems_gpio_bsp_set_resistor_mode(
   uint32_t pin,
   rtems_gpio_pull_mode mode
 ) {
+  (void) bank;
+  (void) pin;
+  (void) mode;
+
   /* TODO: Add support for setting up resistor mode */
   return RTEMS_NOT_DEFINED;
 }
@@ -311,6 +324,12 @@ rtems_status_code rtems_gpio_bsp_specific_group_operation(
   uint32_t pin_count,
   void *arg
 ) {
+  (void) bank;
+  (void) pins;
+  (void) pin_count;
+  (void) arg;
+
+
   return RTEMS_NOT_DEFINED;
 }
 
@@ -326,31 +345,49 @@ rtems_status_code rtems_gpio_bsp_specific_group_operation(
 
 rtems_status_code rtems_gpio_bsp_multi_set(uint32_t bank, uint32_t bitmask)
 {
+  (void) bank;
+  (void) bitmask;
+
   return RTEMS_NOT_DEFINED;
 }
 
 rtems_status_code rtems_gpio_bsp_multi_clear(uint32_t bank, uint32_t bitmask)
 {
+  (void) bank;
+  (void) bitmask;
+
   return RTEMS_NOT_DEFINED;
 }
 
 uint32_t rtems_gpio_bsp_multi_read(uint32_t bank, uint32_t bitmask)
 {
+  (void) bank;
+  (void) bitmask;
+
   return -1;
 }
 
 rtems_status_code rtems_gpio_bsp_set(uint32_t bank, uint32_t pin)
 {
+  (void) bank;
+  (void) pin;
+
   return RTEMS_NOT_DEFINED;
 }
 
 rtems_status_code rtems_gpio_bsp_clear(uint32_t bank, uint32_t pin)
 {
+  (void) bank;
+  (void) pin;
+
   return RTEMS_NOT_DEFINED;
 }
 
 uint32_t rtems_gpio_bsp_get_value(uint32_t bank, uint32_t pin)
 {
+  (void) bank;
+  (void) pin;
+
   return -1;
 }
 
@@ -359,6 +396,10 @@ rtems_status_code rtems_gpio_bsp_select_input(
   uint32_t pin,
   void *bsp_specific
 ) {
+  (void) bank;
+  (void) pin;
+  (void) bsp_specific;
+
   return RTEMS_NOT_DEFINED;
 }
 
@@ -367,6 +408,10 @@ rtems_status_code rtems_gpio_bsp_select_output(
   uint32_t pin,
   void *bsp_specific
 ) {
+  (void) bank;
+  (void) pin;
+  (void) bsp_specific;
+
   return RTEMS_NOT_DEFINED;
 }
 
@@ -376,6 +421,11 @@ rtems_status_code rtems_gpio_bsp_select_specific_io(
   uint32_t function,
   void *pin_data
 ) {
+  (void) bank;
+  (void) pin;
+  (void) function;
+  (void) pin_data;
+
   return RTEMS_NOT_DEFINED;
 }
 
@@ -384,16 +434,24 @@ rtems_status_code rtems_gpio_bsp_set_resistor_mode(
   uint32_t pin,
   rtems_gpio_pull_mode mode
 ) {
+  (void) bank;
+  (void) pin;
+  (void) mode;
+
   return RTEMS_NOT_DEFINED;
 }
 
 rtems_vector_number rtems_gpio_bsp_get_vector(uint32_t bank)
 {
+  (void) bank;
+
   return -1;
 }
 
 uint32_t rtems_gpio_bsp_interrupt_line(rtems_vector_number vector)
 {
+  (void) vector;
+
   return -1;
 }
 
@@ -402,6 +460,10 @@ rtems_status_code rtems_gpio_bsp_enable_interrupt(
   uint32_t pin,
   rtems_gpio_interrupt interrupt
 ) {
+  (void) bank;
+  (void) pin;
+  (void) interrupt;
+
   return RTEMS_NOT_DEFINED;
 }
 
@@ -410,6 +472,10 @@ rtems_status_code rtems_gpio_bsp_disable_interrupt(
   uint32_t pin,
   rtems_gpio_interrupt interrupt
 ) {
+  (void) bank;
+  (void) pin;
+  (void) interrupt;
+
   return RTEMS_NOT_DEFINED;
 }
 
@@ -418,6 +484,10 @@ rtems_status_code rtems_gpio_bsp_multi_select(
   uint32_t pin_count,
   uint32_t select_bank
 ) {
+  (void) pins;
+  (void) pin_count;
+  (void) select_bank;
+
   return RTEMS_NOT_DEFINED;
 }
 
@@ -427,6 +497,11 @@ rtems_status_code rtems_gpio_bsp_specific_group_operation(
   uint32_t pin_count,
   void *arg
 ) {
+  (void) bank;
+  (void) pins;
+  (void) pin_count;;
+  (void) arg;
+
   return RTEMS_NOT_DEFINED;
 }
 

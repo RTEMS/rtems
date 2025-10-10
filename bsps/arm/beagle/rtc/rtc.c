@@ -46,6 +46,8 @@ void am335x_rtc_debug(void);
  */
 static bool am335x_rtc_probe (int minor)
 {
+  (void) minor;
+
   return true;
 }
 
@@ -103,6 +105,8 @@ static void rtc_clk_init(void)
 
 void rtc_init(int minor)
 {
+  (void) minor;
+
   uint32_t a = 0x0;
 
   rtc_clk_init();
