@@ -384,6 +384,8 @@ static void mscan_interrupts_enable(mscan *m)
  */
 static void mpc5200_mscan_a_on(const rtems_irq_connect_data * ptr)
 {
+  (void) ptr;
+
   mscan *m = (&chan_info[MSCAN_A])->regs;
 
   mscan_interrupts_enable(m);
@@ -397,6 +399,8 @@ static void mpc5200_mscan_a_on(const rtems_irq_connect_data * ptr)
  */
 static void mpc5200_mscan_a_off(const rtems_irq_connect_data * ptr)
 {
+  (void) ptr;
+
   mscan *m = (&chan_info[MSCAN_A])->regs;
 
   mscan_interrupts_disable(m);
@@ -410,6 +414,8 @@ static void mpc5200_mscan_a_off(const rtems_irq_connect_data * ptr)
  */
 static int mpc5200_mscan_a_isOn(const rtems_irq_connect_data * ptr)
 {
+  (void) ptr;
+
   mscan *m = (&chan_info[MSCAN_A])->regs;
 
   if ((m->rier & RIER_CSCIE) && (m->rier & RIER_RXFIE))
@@ -426,6 +432,8 @@ static int mpc5200_mscan_a_isOn(const rtems_irq_connect_data * ptr)
  */
 static void mpc5200_mscan_b_on(const rtems_irq_connect_data * ptr)
 {
+  (void) ptr;
+
   mscan *m = (&chan_info[MSCAN_B])->regs;
 
   mscan_interrupts_enable(m);
@@ -439,6 +447,8 @@ static void mpc5200_mscan_b_on(const rtems_irq_connect_data * ptr)
  */
 static void mpc5200_mscan_b_off(const rtems_irq_connect_data * ptr)
 {
+  (void) ptr;
+
   mscan *m = (&chan_info[MSCAN_B])->regs;
 
   mscan_interrupts_disable(m);
@@ -452,6 +462,8 @@ static void mpc5200_mscan_b_off(const rtems_irq_connect_data * ptr)
  */
 static int mpc5200_mscan_b_isOn(const rtems_irq_connect_data * ptr)
 {
+  (void) ptr;
+
   mscan *m = (&chan_info[MSCAN_B])->regs;
 
   if ((m->rier & RIER_CSCIE) && (m->rier & RIER_RXFIE))
@@ -499,6 +511,7 @@ static rtems_irq_connect_data mpc5200_mscan_irq_data[MPC5200_CAN_NO] = {
  */
 void mpc5200_mscan_wait_sync(mscan *m)
 {
+  (void) m;
 
   /* Control Register 0 -------------------------------------------- */
   /*    [07]:RXFRM       0 : Recv. Frame, Flag Bit (rd.&clear only) */
@@ -801,6 +814,9 @@ rtems_status_code mscan_channel_initialize(rtems_device_major_number major,
 rtems_device_driver mscan_initialize(rtems_device_major_number major,
                                      rtems_device_minor_number minor, void *arg)
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   /* Initialization requested via RTEMS */
@@ -830,6 +846,9 @@ rtems_device_driver mscan_initialize(rtems_device_major_number major,
 rtems_device_driver mscan_open(rtems_device_major_number major,
                                rtems_device_minor_number minor, void *arg)
 {
+  (void) major;
+  (void) arg;
+
   rtems_status_code status = RTEMS_SUCCESSFUL;
   struct mscan_channel_info *chan = NULL;
 
@@ -862,6 +881,9 @@ rtems_device_driver mscan_open(rtems_device_major_number major,
 rtems_device_driver mscan_close(rtems_device_major_number major,
                                 rtems_device_minor_number minor, void *arg)
 {
+  (void) major;
+  (void) arg;
+
   rtems_status_code status;
 
   switch (minor) {
@@ -888,6 +910,8 @@ rtems_device_driver mscan_close(rtems_device_major_number major,
 rtems_device_driver mscan_read(rtems_device_major_number major,
                                rtems_device_minor_number minor, void *arg)
 {
+  (void) major;
+
   rtems_status_code status;
   size_t message_size = 0;
   rtems_libio_rw_args_t *parms = (rtems_libio_rw_args_t *) arg;
@@ -939,6 +963,8 @@ rtems_device_driver mscan_read(rtems_device_major_number major,
 rtems_device_driver mscan_write(rtems_device_major_number major,
                                 rtems_device_minor_number minor, void *arg)
 {
+  (void) major;
+
   rtems_status_code status;
   rtems_libio_rw_args_t *parms = (rtems_libio_rw_args_t *) arg;
   struct mscan_tx_parms *tx_parms = (struct mscan_tx_parms *) (parms->buffer);
@@ -998,6 +1024,8 @@ rtems_device_driver mscan_write(rtems_device_major_number major,
 rtems_device_driver mscan_control(rtems_device_major_number major,
                                   rtems_device_minor_number minor, void *arg)
 {
+  (void) major;
+
   rtems_status_code status;
   uint16_t tx_id;
   rtems_libio_ioctl_args_t *parms = (rtems_libio_ioctl_args_t *) arg;

@@ -250,6 +250,8 @@ static inline uint16_t *ata_sg_get_sector_data_begin(const ata_sg_context *self,
 
 static inline uint16_t *ata_sg_get_sector_data_end(const ata_sg_context *self, uint16_t *begin)
 {
+  (void) self;
+
   return begin + ATA_SECTOR_SIZE / 2;
 }
 

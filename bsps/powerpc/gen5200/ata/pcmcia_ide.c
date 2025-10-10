@@ -100,6 +100,8 @@ void mpc5200_pcmciaide_dma_blockop(
  */
 static bool mpc5200_pcmciaide_probe(int minor)
   {
+  (void) minor;
+
   bool ide_card_plugged = false; /* assume: we don't have a card plugged in */
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[GPT2]);
 
@@ -143,6 +145,8 @@ static bool mpc5200_pcmciaide_probe(int minor)
 
 static rtems_status_code mpc5200_pcmciaide_config_io_speed(int minor, uint16_t modes_avail)
   {
+  (void) minor;
+
   uint8_t pio_t0, pio_t2_8, pio_t2_16, pio_t4, pio_t1, pio_ta;
 
   if((modes_avail & ATA_MODES_PIO4) != 0)
@@ -183,6 +187,8 @@ static rtems_status_code mpc5200_pcmciaide_config_io_speed(int minor, uint16_t m
 
 static void mpc5200_pcmciaide_read_reg(int minor, int reg, uint16_t *value)
   {
+  (void) minor;
+
   volatile uint32_t *ata_reg = mpc5200_ata_drive_regs[reg];
 
   if(reg == IDE_REGISTER_DATA_WORD)
@@ -194,6 +200,8 @@ static void mpc5200_pcmciaide_read_reg(int minor, int reg, uint16_t *value)
 
 static void mpc5200_pcmciaide_write_reg(int minor, int reg, uint16_t value)
   {
+  (void) minor;
+
   volatile uint32_t *ata_reg = mpc5200_ata_drive_regs[reg];
 
   if(reg == IDE_REGISTER_DATA_WORD)
@@ -421,6 +429,13 @@ void mpc5200_pcmciaide_dma_blockop(bool is_write,
              (nxt_bd_idx != TASK_ERR_BD_BUSY)       &&
   	         (bufs_from_dma < bufs_to_dma));
   }
+#else
+  (void) is_write;
+  (void) minor;
+  (void) block_size;
+  (void) bufs;
+  (void) cbuf;
+  (void) pos;
 #endif /* IDE_USE_DMA */
 }
 
@@ -595,6 +610,10 @@ static void mpc5200_pcmciaide_write_block(int minor, uint32_t block_size,
 
 static int mpc5200_pcmciaide_control(int  minor, uint32_t cmd, void * arg)
   {
+  (void) minor;
+  (void) cmd;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
   }
 

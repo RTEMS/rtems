@@ -169,6 +169,8 @@ int TasksInitAPI_VM(uint8 *MBarRef, uint8 *MBarPhys)
  */
 int TasksAttachImage(sdma_regs *sdma)
 {
+	(void) sdma;
+
 	return TASK_ERR_NO_ERR;
 }
 

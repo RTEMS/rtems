@@ -157,6 +157,8 @@ static void bestcomm_glue_irq_dispatcher
 |    none                                                                   |
 \*=========================================================================*/
 {
+  (void) arg;
+
   uint32_t pending;
   int curr_taskno;
 

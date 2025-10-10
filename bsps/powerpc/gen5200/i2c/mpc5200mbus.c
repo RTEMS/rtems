@@ -163,6 +163,9 @@ mpc5200mbus_get_event(mpc5200mbus *bus)
 static void
 mpc5200mbus_machine_error(mpc5200mbus *bus, i2c_event event)
 {
+    (void) bus;
+    (void) event;
+
     return;
 }
 

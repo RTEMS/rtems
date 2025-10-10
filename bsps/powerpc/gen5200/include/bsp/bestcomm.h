@@ -115,6 +115,8 @@ static inline void bestcomm_irq_wakeup_event_task(const bestcomm_irq *self)
 
 static inline void bestcomm_irq_wait(const bestcomm_irq *self)
 {
+  (void) self;
+
   rtems_event_set events;
   rtems_status_code sc = rtems_event_receive(
     BESTCOMM_IRQ_EVENT,
@@ -129,6 +131,8 @@ static inline void bestcomm_irq_wait(const bestcomm_irq *self)
 
 static inline bool bestcomm_irq_peek(const bestcomm_irq *self)
 {
+  (void) self;
+
   rtems_event_set events;
   rtems_status_code sc = rtems_event_receive(0, 0, 0, &events);
   assert(sc == RTEMS_SUCCESSFUL);

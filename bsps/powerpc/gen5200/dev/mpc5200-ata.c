@@ -192,6 +192,8 @@ void ata_driver_destroy(ata_driver *self)
 
 static bool transfer_pio_polled(ata_driver *self, bool read, rtems_blkdev_sg_buffer *sg, size_t sg_count)
 {
+  (void) self;
+
   bool ok = true;
 
   ata_sg_context sg_context;

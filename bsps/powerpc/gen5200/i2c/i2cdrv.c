@@ -94,6 +94,8 @@ static void i2cdrv_unload(void);
 static void
 i2cdrv_done(void * arg_ptr)
 {
+    (void) arg_ptr;
+
     rtems_interrupt_level level;
     i2c_qel *qel = tqueue + tqueue_tail;
     qel->done(qel->done_arg_ptr);
@@ -204,6 +206,10 @@ i2cdrv_initialize(rtems_device_major_number major,
                   rtems_device_minor_number minor,
                   void *arg)
 {
+    (void) major;
+    (void) minor;
+    (void) arg;
+
     int i;
     rtems_status_code sc;
     mbus_busy = false;

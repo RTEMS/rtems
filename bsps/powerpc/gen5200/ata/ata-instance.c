@@ -42,6 +42,10 @@ rtems_status_code rtems_ata_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor_arg;
+  (void) arg;
+
   rtems_status_code sc = rtems_bdbuf_init();
 
   if (sc == RTEMS_SUCCESSFUL) {

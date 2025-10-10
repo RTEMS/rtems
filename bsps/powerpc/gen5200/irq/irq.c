@@ -325,6 +325,9 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  (void) vector;
+  (void) attributes;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -333,6 +336,8 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
   *pending = false;
@@ -341,12 +346,16 @@ rtems_status_code bsp_interrupt_is_pending(
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -356,6 +365,8 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bool               *enabled
 )
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
   *enabled = false;
@@ -434,6 +445,9 @@ rtems_status_code bsp_interrupt_set_priority(
   uint32_t priority
 )
 {
+  (void) vector;
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -443,6 +457,9 @@ rtems_status_code bsp_interrupt_get_priority(
   uint32_t *priority
 )
 {
+  (void) vector;
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(priority != NULL);
   return RTEMS_UNSATISFIED;
@@ -507,6 +524,8 @@ static void dispatch(uint32_t irq, uint32_t offset, volatile uint32_t *maskreg)
   #if (ALLOW_IRQ_NESTING == 1)
     uint32_t msr;
     uint32_t mask = *maskreg;
+  #else
+    (void) maskreg;
   #endif
 
   irq += offset;
@@ -531,6 +550,9 @@ static void dispatch(uint32_t irq, uint32_t offset, volatile uint32_t *maskreg)
  */
 static int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
 {
+  (void) frame;
+  (void) excNum;
+
   uint32_t irq;
   uint32_t pmce;
 

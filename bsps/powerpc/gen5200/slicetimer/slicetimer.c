@@ -109,6 +109,7 @@ void mpc5200_slt_isr(uint32_t slt_no)
 
 rtems_isr mpc5200_slt0_isr(rtems_irq_hdl_param unused)
   {
+  (void) unused;
 
   mpc5200_slt_isr(SLT0);
 
@@ -117,6 +118,7 @@ rtems_isr mpc5200_slt0_isr(rtems_irq_hdl_param unused)
 
 rtems_isr mpc5200_slt1_isr(rtems_irq_hdl_param unused)
   {
+  (void) unused;
 
   mpc5200_slt_isr(SLT1);
 
@@ -295,6 +297,9 @@ rtems_device_driver slt_initialize
   void *pargp
   )
   {
+  (void) major;
+  (void) minor;
+  (void) pargp;
 
   /* force minor according to definitions in bsp.h */
   if(USE_SLICETIMER_0)

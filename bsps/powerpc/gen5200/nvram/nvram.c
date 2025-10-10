@@ -394,6 +394,9 @@ void m93cxx_write_byte(uint32_t offset, uint8_t byte2write)
  */
 rtems_device_driver nvram_driver_initialize(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
   {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code sc;
 
   /* enable PSC3_6/PSC3_7 as general purpose pins */
@@ -460,6 +463,9 @@ rtems_device_driver nvram_driver_initialize(rtems_device_major_number major, rte
  */
 rtems_device_driver nvram_driver_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
   {
+  (void) major;
+  (void) minor;
+  (void) arg;
 
   return RTEMS_SUCCESSFUL;
 
@@ -471,6 +477,9 @@ rtems_device_driver nvram_driver_open(rtems_device_major_number major, rtems_dev
  */
 rtems_device_driver nvram_driver_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
   {
+  (void) major;
+  (void) minor;
+  (void) arg;
 
   return RTEMS_SUCCESSFUL;
 
@@ -482,6 +491,9 @@ rtems_device_driver nvram_driver_close(rtems_device_major_number major, rtems_de
  */
 rtems_device_driver nvram_driver_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
   {
+  (void) major;
+  (void) minor;
+
   rtems_libio_rw_args_t *args = arg;
   uint32_t count, i;
 
@@ -519,6 +531,9 @@ rtems_device_driver nvram_driver_read(rtems_device_major_number major, rtems_dev
  */
 rtems_device_driver nvram_driver_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
   {
+  (void) major;
+  (void) minor;
+
   rtems_libio_rw_args_t *args = arg;
   uint32_t count, i;
 
