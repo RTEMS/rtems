@@ -48,6 +48,10 @@ ACPI_STATUS AcpiOsTableOverride(
   ACPI_TABLE_HEADER** NewTable
 )
 {
+#ifdef __rtems__
+    (void) ExistingTable;
+    (void) NewTable;
+#endif
   return (AE_SUPPORT);
 }
 
@@ -57,5 +61,10 @@ ACPI_STATUS AcpiOsPhysicalTableOverride(
   UINT32* NewTableLength
 )
 {
+#ifdef __rtems__
+    (void) ExistingTable;
+    (void) NewAddress;
+    (void) NewTableLength;
+#endif
   return (AE_SUPPORT);
 }

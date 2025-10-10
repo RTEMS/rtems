@@ -438,6 +438,10 @@ AcpiEvMatchGpeMethod (
     void                    *Context,
     void                    **ReturnValue)
 {
+#ifdef __rtems__
+    (void) Level;
+    (void) ReturnValue;
+#endif
     ACPI_NAMESPACE_NODE     *MethodNode = ACPI_CAST_PTR (ACPI_NAMESPACE_NODE, ObjHandle);
     ACPI_GPE_WALK_INFO      *WalkInfo = ACPI_CAST_PTR (ACPI_GPE_WALK_INFO, Context);
     ACPI_GPE_EVENT_INFO     *GpeEventInfo;

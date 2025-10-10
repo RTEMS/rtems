@@ -678,6 +678,9 @@ AcpiEvAttachRegion (
     ACPI_OPERAND_OBJECT     *RegionObj,
     BOOLEAN                 AcpiNsIsLocked)
 {
+#ifdef __rtems__
+    (void) AcpiNsIsLocked;
+#endif
 
     ACPI_FUNCTION_TRACE (EvAttachRegion);
 
@@ -941,6 +944,10 @@ AcpiEvRegRun (
     void                    *Context,
     void                    **ReturnValue)
 {
+#ifdef __rtems__
+    (void) Level;
+    (void) ReturnValue;
+#endif
     ACPI_OPERAND_OBJECT     *ObjDesc;
     ACPI_NAMESPACE_NODE     *Node;
     ACPI_STATUS             Status;

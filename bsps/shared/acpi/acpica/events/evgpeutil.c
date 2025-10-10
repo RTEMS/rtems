@@ -240,6 +240,9 @@ AcpiEvGetGpeDevice (
     ACPI_GPE_BLOCK_INFO     *GpeBlock,
     void                    *Context)
 {
+#ifdef __rtems__
+    (void) GpeXruptInfo;
+#endif
     ACPI_GPE_DEVICE_INFO    *Info = Context;
 
 
@@ -449,6 +452,10 @@ AcpiEvDeleteGpeHandlers (
     ACPI_GPE_BLOCK_INFO     *GpeBlock,
     void                    *Context)
 {
+#ifdef __rtems__
+    (void) GpeXruptInfo;
+    (void) Context;
+#endif
     ACPI_GPE_EVENT_INFO     *GpeEventInfo;
     ACPI_GPE_NOTIFY_INFO    *Notify;
     ACPI_GPE_NOTIFY_INFO    *Next;

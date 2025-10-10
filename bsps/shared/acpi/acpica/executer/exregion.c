@@ -185,6 +185,9 @@ AcpiExSystemMemorySpaceHandler (
     void                    *HandlerContext,
     void                    *RegionContext)
 {
+#ifdef __rtems__
+    (void) HandlerContext;
+#endif
     ACPI_STATUS             Status = AE_OK;
     void                    *LogicalAddrPtr = NULL;
     ACPI_MEM_SPACE_CONTEXT  *MemInfo = RegionContext;
@@ -453,6 +456,10 @@ AcpiExSystemIoSpaceHandler (
     void                    *HandlerContext,
     void                    *RegionContext)
 {
+#ifdef __rtems__
+    (void) HandlerContext;
+    (void) RegionContext;
+#endif
     ACPI_STATUS             Status = AE_OK;
     UINT32                  Value32;
 
@@ -518,6 +525,9 @@ AcpiExPciConfigSpaceHandler (
     void                    *HandlerContext,
     void                    *RegionContext)
 {
+#ifdef __rtems__
+    (void) HandlerContext;
+#endif
     ACPI_STATUS             Status = AE_OK;
     ACPI_PCI_ID             *PciId;
     UINT16                  PciRegister;
@@ -599,6 +609,14 @@ AcpiExCmosSpaceHandler (
     void                    *HandlerContext,
     void                    *RegionContext)
 {
+#ifdef __rtems__
+    (void) Function;
+    (void) Address;
+    (void) BitWidth;
+    (void) Value;
+    (void) HandlerContext;
+    (void) RegionContext;
+#endif
     ACPI_STATUS             Status = AE_OK;
 
 
@@ -636,6 +654,14 @@ AcpiExPciBarSpaceHandler (
     void                    *HandlerContext,
     void                    *RegionContext)
 {
+#ifdef __rtems__
+    (void) Function;
+    (void) Address;
+    (void) BitWidth;
+    (void) Value;
+    (void) HandlerContext;
+    (void) RegionContext;
+#endif
     ACPI_STATUS             Status = AE_OK;
 
 
@@ -673,6 +699,9 @@ AcpiExDataTableSpaceHandler (
     void                    *HandlerContext,
     void                    *RegionContext)
 {
+#ifdef __rtems__
+    (void) HandlerContext;
+#endif
     ACPI_DATA_TABLE_MAPPING *Mapping;
     char                    *Pointer;
 

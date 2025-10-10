@@ -539,6 +539,9 @@ AcpiUtAllocateObjectDescDbg (
     UINT32                  LineNumber,
     UINT32                  ComponentId)
 {
+#ifdef __rtems__
+    (void) ComponentId;
+#endif
     ACPI_OPERAND_OBJECT     *Object;
 
 

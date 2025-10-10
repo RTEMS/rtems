@@ -591,6 +591,9 @@ AcpiEvInitializeGpeBlock (
     ACPI_GPE_BLOCK_INFO     *GpeBlock,
     void                    *Context)
 {
+#ifdef __rtems__
+    (void) GpeXruptInfo;
+#endif
     ACPI_STATUS             Status;
     ACPI_GPE_EVENT_INFO     *GpeEventInfo;
     UINT32                  GpeEnabledCount;

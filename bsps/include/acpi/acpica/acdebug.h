@@ -199,6 +199,14 @@ typedef struct acpi_db_execute_walk
 #define EX_ALL                          4
 
 
+#ifdef __rtems__
+/*
+ * The debug output includes multple ugly macro instantiations which
+ * generates unused parameter warnings.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif /* rtems */
 /*
  * dbxface - external debugger interfaces
  */
@@ -623,4 +631,8 @@ void
 AcpiDbGenerateInterrupt (
     char                    *GsivArg);
 
+#ifdef __rtems__
+/* Reenable unused parameter warnings. */
+#pragma GCC diagnostic pop
+#endif /* rtems */
 #endif  /* __ACDEBUG_H__ */

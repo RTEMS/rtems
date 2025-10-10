@@ -292,6 +292,11 @@ AcpiExTracePoint (
     UINT8                   *Aml,
     char                    *Pathname)
 {
+#ifdef __rtems__
+    (void) Type;
+    (void) Begin;
+    (void) Aml;
+#endif
 
     ACPI_FUNCTION_NAME (ExTracePoint);
 
@@ -334,6 +339,9 @@ AcpiExStartTraceMethod (
     ACPI_OPERAND_OBJECT     *ObjDesc,
     ACPI_WALK_STATE         *WalkState)
 {
+#ifdef __rtems__
+    (void) WalkState;
+#endif
     char                    *Pathname = NULL;
     BOOLEAN                 Enabled = FALSE;
 
@@ -400,6 +408,9 @@ AcpiExStopTraceMethod (
     ACPI_OPERAND_OBJECT     *ObjDesc,
     ACPI_WALK_STATE         *WalkState)
 {
+#ifdef __rtems__
+    (void) WalkState;
+#endif
     char                    *Pathname = NULL;
     BOOLEAN                 Enabled;
 
@@ -462,6 +473,10 @@ AcpiExStartTraceOpcode (
     ACPI_PARSE_OBJECT       *Op,
     ACPI_WALK_STATE         *WalkState)
 {
+#ifdef __rtems__
+    (void) Op;
+    (void) WalkState;
+#endif
 
     ACPI_FUNCTION_NAME (ExStartTraceOpcode);
 
@@ -494,6 +509,10 @@ AcpiExStopTraceOpcode (
     ACPI_PARSE_OBJECT       *Op,
     ACPI_WALK_STATE         *WalkState)
 {
+#ifdef __rtems__
+    (void) Op;
+    (void) WalkState;
+#endif
 
     ACPI_FUNCTION_NAME (ExStopTraceOpcode);
 

@@ -315,6 +315,9 @@ ACPI_STATUS
 AcpiHwExtendedWakePrep (
     UINT8                   SleepState)
 {
+#ifdef __rtems__
+    (void) SleepState;
+#endif
     UINT8                   SleepTypeValue;
 
 

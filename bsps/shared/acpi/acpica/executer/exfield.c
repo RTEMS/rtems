@@ -257,6 +257,9 @@ AcpiExReadDataFromField (
     ACPI_OPERAND_OBJECT     *ObjDesc,
     ACPI_OPERAND_OBJECT     **RetBufferDesc)
 {
+#ifdef __rtems__
+    (void) WalkState;
+#endif
     ACPI_STATUS             Status;
     ACPI_OPERAND_OBJECT     *BufferDesc;
     void                    *Buffer;

@@ -518,6 +518,9 @@ AcpiNsRepairNullElement (
     UINT32                  PackageIndex,
     ACPI_OPERAND_OBJECT     **ReturnObjectPtr)
 {
+#ifdef __rtems__
+    (void) PackageIndex;
+#endif
     ACPI_OPERAND_OBJECT     *ReturnObject = *ReturnObjectPtr;
     ACPI_OPERAND_OBJECT     *NewObject;
 
@@ -606,6 +609,9 @@ AcpiNsRemoveNullElements (
     UINT8                   PackageType,
     ACPI_OPERAND_OBJECT     *ObjDesc)
 {
+#ifdef __rtems__
+    (void) Info;
+#endif
     ACPI_OPERAND_OBJECT     **Source;
     ACPI_OPERAND_OBJECT     **Dest;
     UINT32                  Count;

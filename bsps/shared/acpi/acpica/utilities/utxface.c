@@ -376,6 +376,9 @@ AcpiInstallInitializationHandler (
     ACPI_INIT_HANDLER       Handler,
     UINT32                  Function)
 {
+#ifdef __rtems__
+    (void) Function;
+#endif
 
     if (!Handler)
     {

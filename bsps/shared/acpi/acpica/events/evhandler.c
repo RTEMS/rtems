@@ -331,6 +331,10 @@ AcpiEvInstallHandler (
     void                    *Context,
     void                    **ReturnValue)
 {
+#ifdef __rtems__
+    (void) Level;
+    (void) ReturnValue;
+#endif
     ACPI_OPERAND_OBJECT     *HandlerObj;
     ACPI_OPERAND_OBJECT     *NextHandlerObj;
     ACPI_OPERAND_OBJECT     *ObjDesc;

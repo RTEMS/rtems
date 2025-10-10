@@ -197,6 +197,9 @@ AcpiExDoConcatenate (
     ACPI_OPERAND_OBJECT     **ActualReturnDesc,
     ACPI_WALK_STATE         *WalkState)
 {
+#ifdef __rtems__
+    (void) WalkState;
+#endif
     ACPI_OPERAND_OBJECT     *LocalOperand0 = Operand0;
     ACPI_OPERAND_OBJECT     *LocalOperand1 = Operand1;
     ACPI_OPERAND_OBJECT     *TempOperand1 = NULL;
@@ -500,6 +503,9 @@ AcpiExConcatTemplate (
     ACPI_OPERAND_OBJECT     **ActualReturnDesc,
     ACPI_WALK_STATE         *WalkState)
 {
+#ifdef __rtems__
+    (void) WalkState;
+#endif
     ACPI_STATUS             Status;
     ACPI_OPERAND_OBJECT     *ReturnDesc;
     UINT8                   *NewBuf;

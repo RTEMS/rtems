@@ -480,6 +480,9 @@ AcpiDsInitPackageElement (
     ACPI_GENERIC_STATE      *State,
     void                    *Context)
 {
+#ifdef __rtems__
+    (void) ObjectType;
+#endif
     ACPI_OPERAND_OBJECT     **ElementPtr;
 
 

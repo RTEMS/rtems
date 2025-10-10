@@ -83,6 +83,12 @@ ACPI_STATUS AcpiOsReadPciConfiguration(
   UINT32 Width
 )
 {
+#ifdef __rtems__
+    (void) PciId;
+    (void) Register;
+    (void) Value;
+    (void) Width;
+#endif
   return (AE_SUPPORT);
 }
 
@@ -93,5 +99,11 @@ ACPI_STATUS AcpiOsWritePciConfiguration(
   UINT32 Width
 )
 {
+#ifdef __rtems__
+    (void) PciId;
+    (void) Register;
+    (void) Value;
+    (void) Width;
+#endif
   return (AE_SUPPORT);
 }

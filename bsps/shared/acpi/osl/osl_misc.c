@@ -60,5 +60,10 @@ ACPI_STATUS AcpiOsEnterSleep(
   UINT32 RegbValue
 )
 {
+#ifdef __rtems__
+    (void) SleepState;
+    (void) RegaValue;
+    (void) RegbValue;
+#endif
   return (AE_OK);
 }

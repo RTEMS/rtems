@@ -220,6 +220,9 @@ AcpiNsCheckReturnValue (
     ACPI_STATUS                 ReturnStatus,
     ACPI_OPERAND_OBJECT         **ReturnObjectPtr)
 {
+#ifdef __rtems__
+    (void) UserParamCount;
+#endif
     ACPI_STATUS                 Status;
     const ACPI_PREDEFINED_INFO  *Predefined;
 

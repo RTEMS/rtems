@@ -181,6 +181,9 @@ AcpiExGetObjectReference (
     ACPI_OPERAND_OBJECT     **ReturnDesc,
     ACPI_WALK_STATE         *WalkState)
 {
+#ifdef __rtems__
+    (void) WalkState;
+#endif
     ACPI_OPERAND_OBJECT     *ReferenceObj;
     ACPI_OPERAND_OBJECT     *ReferencedObj;
 

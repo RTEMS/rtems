@@ -41,6 +41,11 @@ ACPI_STATUS AcpiOsExecute(
   void* Context
 )
 {
+#ifdef __rtems__
+    (void) Type;
+    (void) Function;
+    (void) Context;
+#endif
   return (AE_SUPPORT);
 }
 

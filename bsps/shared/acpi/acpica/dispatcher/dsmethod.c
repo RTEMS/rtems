@@ -275,6 +275,9 @@ AcpiDsDetectNamedOpcodes (
     ACPI_WALK_STATE         *WalkState,
     ACPI_PARSE_OBJECT       **OutOp)
 {
+#ifdef __rtems__
+    (void) OutOp;
+#endif
 
     ACPI_FUNCTION_NAME (AcpiDsDetectNamedOpcodes);
 
@@ -641,6 +644,9 @@ AcpiDsCallControlMethod (
     ACPI_WALK_STATE         *ThisWalkState,
     ACPI_PARSE_OBJECT       *Op)
 {
+#ifdef __rtems__
+    (void) Op;
+#endif
     ACPI_STATUS             Status;
     ACPI_NAMESPACE_NODE     *MethodNode;
     ACPI_WALK_STATE         *NextWalkState = NULL;

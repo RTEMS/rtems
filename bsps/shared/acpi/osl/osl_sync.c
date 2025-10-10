@@ -277,6 +277,9 @@ ACPI_CPU_FLAGS AcpiOsAcquireLock(ACPI_SPINLOCK Handle)
 
 void AcpiOsReleaseLock(ACPI_SPINLOCK Handle, ACPI_CPU_FLAGS Flags)
 {
+#ifdef __rtems__
+    (void) Flags;
+#endif
   acpi_spinlock* lock = (acpi_spinlock*) Handle;
 
   if (lock == NULL) {

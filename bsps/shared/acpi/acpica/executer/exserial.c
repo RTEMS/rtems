@@ -231,6 +231,9 @@ AcpiExWriteGpio (
     ACPI_OPERAND_OBJECT     *ObjDesc,
     ACPI_OPERAND_OBJECT     **ReturnBuffer)
 {
+#ifdef __rtems__
+    (void) ReturnBuffer;
+#endif
     ACPI_STATUS             Status;
     void                    *Buffer;
 

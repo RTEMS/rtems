@@ -342,6 +342,9 @@ ACPI_STATUS
 AcpiHwLegacyWakePrep (
     UINT8                   SleepState)
 {
+#ifdef __rtems__
+    (void) SleepState;
+#endif
     ACPI_STATUS             Status = AE_OK;
     ACPI_BIT_REGISTER_INFO  *SleepTypeRegInfo;
     ACPI_BIT_REGISTER_INFO  *SleepEnableRegInfo;

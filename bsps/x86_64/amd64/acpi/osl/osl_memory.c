@@ -51,12 +51,19 @@ void AcpiOsFree(void* Memory)
 
 void* AcpiOsMapMemory(ACPI_PHYSICAL_ADDRESS PhysicalAddress, ACPI_SIZE Length)
 {
+#ifdef __rtems__
+    (void) Length;
+#endif
   /* We have an identity map set up, simply return the address */
   return (void*) PhysicalAddress;
 }
 
 void AcpiOsUnmapMemory(void* LogicalAddress, ACPI_SIZE Length)
 {
+#ifdef __rtems__
+    (void) LogicalAddress;
+    (void) Length;
+#endif
   /* We have an identity map set up, do nothing */
   return;
 }
@@ -73,11 +80,19 @@ ACPI_STATUS AcpiOsGetPhysicalAddress(
 
 BOOLEAN AcpiOsReadable(void* Pointer, ACPI_SIZE Length)
 {
+#ifdef __rtems__
+    (void) Pointer;
+    (void) Length;
+#endif
   return (TRUE);
 }
 
 BOOLEAN AcpiOsWritable(void* Pointer, ACPI_SIZE Length)
 {
+#ifdef __rtems__
+    (void) Pointer;
+    (void) Length;
+#endif
   return (TRUE);
 }
 

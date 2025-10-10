@@ -299,6 +299,9 @@ AcpiDsBuildInternalBufferObj (
     UINT32                  BufferLength,
     ACPI_OPERAND_OBJECT     **ObjDescPtr)
 {
+#ifdef __rtems__
+    (void) WalkState;
+#endif
     ACPI_PARSE_OBJECT       *Arg;
     ACPI_OPERAND_OBJECT     *ObjDesc;
     ACPI_PARSE_OBJECT       *ByteList;

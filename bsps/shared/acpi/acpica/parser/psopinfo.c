@@ -289,6 +289,9 @@ AcpiPsGetOpcodeName (
     return (Op->Name);
 
 #else
+#ifdef __rtems__
+    (void) Opcode;
+#endif
     return ("OpcodeName unavailable");
 
 #endif

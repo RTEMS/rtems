@@ -43,6 +43,11 @@ ACPI_STATUS AcpiOsInstallInterruptHandler(
   void* Context
 )
 {
+#ifdef __rtems__
+    (void) InterruptNumber;
+    (void) ServiceRoutine;
+    (void) Context;
+#endif
   /* TODO: We currently don't have I/O APIC support implemented */
   return (AE_SUPPORT);
 }
@@ -52,6 +57,10 @@ ACPI_STATUS AcpiOsRemoveInterruptHandler(
   ACPI_OSD_HANDLER ServiceRoutine
 )
 {
+#ifdef __rtems__
+    (void) InterruptNumber;
+    (void) ServiceRoutine;
+#endif
   /* TODO: We currently don't have I/O APIC support implemented */
   return (AE_SUPPORT);
 }

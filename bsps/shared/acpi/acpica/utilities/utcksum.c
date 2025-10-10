@@ -239,6 +239,9 @@ AcpiUtVerifyCdatChecksum (
     ACPI_TABLE_CDAT         *CdatTable,
     UINT32                  Length)
 {
+#ifdef __rtems__
+    (void) Length;
+#endif
     UINT8                   Checksum;
 
 

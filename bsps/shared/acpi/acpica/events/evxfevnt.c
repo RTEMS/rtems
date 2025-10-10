@@ -299,6 +299,9 @@ AcpiEnableEvent (
     UINT32                  Event,
     UINT32                  Flags)
 {
+#ifdef __rtems__
+    (void) Flags;
+#endif
     ACPI_STATUS             Status = AE_OK;
     UINT32                  Value;
 
@@ -372,6 +375,9 @@ AcpiDisableEvent (
     UINT32                  Event,
     UINT32                  Flags)
 {
+#ifdef __rtems__
+    (void) Flags;
+#endif
     ACPI_STATUS             Status = AE_OK;
     UINT32                  Value;
 

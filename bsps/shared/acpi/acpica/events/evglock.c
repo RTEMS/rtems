@@ -276,6 +276,9 @@ static UINT32
 AcpiEvGlobalLockHandler (
     void                    *Context)
 {
+#ifdef __rtems__
+    (void) Context;
+#endif
     ACPI_STATUS             Status;
     ACPI_CPU_FLAGS          Flags;
 

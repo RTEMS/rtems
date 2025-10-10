@@ -209,6 +209,9 @@ AcpiNsSearchOneScope (
     ACPI_OBJECT_TYPE        Type,
     ACPI_NAMESPACE_NODE     **ReturnNode)
 {
+#ifdef __rtems__
+    (void) Type;
+#endif
     ACPI_NAMESPACE_NODE     *Node;
 
 

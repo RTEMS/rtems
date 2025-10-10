@@ -984,6 +984,9 @@ AcpiUtCopyIelementToIelement (
     ACPI_GENERIC_STATE      *State,
     void                    *Context)
 {
+#ifdef __rtems__
+    (void) Context;
+#endif
     ACPI_STATUS             Status = AE_OK;
     UINT32                  ThisIndex;
     ACPI_OPERAND_OBJECT     **ThisTargetPtr;

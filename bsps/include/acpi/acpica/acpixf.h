@@ -1391,7 +1391,10 @@ AcpiBiosWarning (
 
 
 #ifdef __rtems__
-/* The debug output is ugly macro code which generates unused parameter warnings. */
+/*
+ * The debug output is ugly macro code which generates unused
+ * parameter warnings.
+ */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif /* rtems */

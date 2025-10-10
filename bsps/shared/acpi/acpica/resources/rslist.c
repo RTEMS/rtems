@@ -180,6 +180,10 @@ AcpiRsConvertAmlToResources (
     UINT8                   ResourceIndex,
     void                    **Context)
 {
+#ifdef __rtems__
+    (void) Length;
+    (void) Offset;
+#endif
     ACPI_RESOURCE           **ResourcePtr = ACPI_CAST_INDIRECT_PTR (
                                 ACPI_RESOURCE, Context);
     ACPI_RESOURCE           *Resource;

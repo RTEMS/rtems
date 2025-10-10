@@ -455,6 +455,9 @@ AcpiNsConvertToUnicode (
     ACPI_OPERAND_OBJECT     *OriginalObject,
     ACPI_OPERAND_OBJECT     **ReturnObject)
 {
+#ifdef __rtems__
+    (void) Scope;
+#endif
     ACPI_OPERAND_OBJECT     *NewObject;
     char                    *AsciiString;
     UINT16                  *UnicodeBuffer;
@@ -530,6 +533,9 @@ AcpiNsConvertToResource (
     ACPI_OPERAND_OBJECT     *OriginalObject,
     ACPI_OPERAND_OBJECT     **ReturnObject)
 {
+#ifdef __rtems__
+    (void) Scope;
+#endif
     ACPI_OPERAND_OBJECT     *NewObject;
     UINT8                   *Buffer;
 

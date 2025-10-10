@@ -430,6 +430,11 @@ AcpiNsInitOnePackage (
     void                    *Context,
     void                    **ReturnValue)
 {
+#ifdef __rtems__
+    (void) Level;
+    (void) Context;
+    (void) ReturnValue;
+#endif
     ACPI_STATUS             Status;
     ACPI_OPERAND_OBJECT     *ObjDesc;
     ACPI_NAMESPACE_NODE     *Node = (ACPI_NAMESPACE_NODE *) ObjHandle;
@@ -493,6 +498,9 @@ AcpiNsInitOneObject (
     void                    *Context,
     void                    **ReturnValue)
 {
+#ifdef __rtems__
+    (void) ReturnValue;
+#endif
     ACPI_OBJECT_TYPE        Type;
     ACPI_STATUS             Status = AE_OK;
     ACPI_INIT_WALK_INFO     *Info = (ACPI_INIT_WALK_INFO *) Context;
@@ -633,6 +641,10 @@ AcpiNsFindIniMethods (
     void                    *Context,
     void                    **ReturnValue)
 {
+#ifdef __rtems__
+    (void) NestingLevel;
+    (void) ReturnValue;
+#endif
     ACPI_DEVICE_WALK_INFO   *Info = ACPI_CAST_PTR (ACPI_DEVICE_WALK_INFO, Context);
     ACPI_NAMESPACE_NODE     *Node;
     ACPI_NAMESPACE_NODE     *ParentNode;
@@ -706,6 +718,10 @@ AcpiNsInitOneDevice (
     void                    *Context,
     void                    **ReturnValue)
 {
+#ifdef __rtems__
+    (void) NestingLevel;
+    (void) ReturnValue;
+#endif
     ACPI_DEVICE_WALK_INFO   *WalkInfo = ACPI_CAST_PTR (ACPI_DEVICE_WALK_INFO, Context);
     ACPI_EVALUATE_INFO      *Info = WalkInfo->EvaluateInfo;
     UINT32                  Flags;

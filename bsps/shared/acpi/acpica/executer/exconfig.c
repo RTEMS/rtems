@@ -454,6 +454,9 @@ AcpiExLoadOp (
     ACPI_OPERAND_OBJECT     *Target,
     ACPI_WALK_STATE         *WalkState)
 {
+#ifdef __rtems__
+    (void) WalkState;
+#endif
     ACPI_OPERAND_OBJECT     *DdbHandle;
     ACPI_TABLE_HEADER       *TableHeader;
     ACPI_TABLE_HEADER       *Table;

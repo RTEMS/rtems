@@ -181,6 +181,9 @@ AcpiEvSystemMemoryRegionSetup (
     void                    *HandlerContext,
     void                    **RegionContext)
 {
+#ifdef __rtems__
+    (void) HandlerContext;
+#endif
     ACPI_OPERAND_OBJECT     *RegionDesc = (ACPI_OPERAND_OBJECT *) Handle;
     ACPI_MEM_SPACE_CONTEXT  *LocalRegionContext;
     ACPI_MEM_MAPPING        *Mm;
@@ -250,6 +253,9 @@ AcpiEvIoSpaceRegionSetup (
     void                    *HandlerContext,
     void                    **RegionContext)
 {
+#ifdef __rtems__
+    (void) Handle;
+#endif
     ACPI_FUNCTION_TRACE (EvIoSpaceRegionSetup);
 
 
@@ -290,6 +296,9 @@ AcpiEvPciConfigRegionSetup (
     void                    *HandlerContext,
     void                    **RegionContext)
 {
+#ifdef __rtems__
+    (void) HandlerContext;
+#endif
     ACPI_STATUS             Status = AE_OK;
     UINT64                  PciValue;
     ACPI_PCI_ID             *PciId = *RegionContext;
@@ -561,6 +570,12 @@ AcpiEvPciBarRegionSetup (
     void                    *HandlerContext,
     void                    **RegionContext)
 {
+#ifdef __rtems__
+    (void) Handle;
+    (void) Function;
+    (void) HandlerContext;
+    (void) RegionContext;
+#endif
     ACPI_FUNCTION_TRACE (EvPciBarRegionSetup);
 
 
@@ -592,6 +607,12 @@ AcpiEvCmosRegionSetup (
     void                    *HandlerContext,
     void                    **RegionContext)
 {
+#ifdef __rtems__
+    (void) Handle;
+    (void) Function;
+    (void) HandlerContext;
+    (void) RegionContext;
+#endif
     ACPI_FUNCTION_TRACE (EvCmosRegionSetup);
 
 
@@ -623,6 +644,9 @@ AcpiEvDataTableRegionSetup (
     void                    *HandlerContext,
     void                    **RegionContext)
 {
+#ifdef __rtems__
+    (void) HandlerContext;
+#endif
     ACPI_OPERAND_OBJECT     *RegionDesc = (ACPI_OPERAND_OBJECT *) Handle;
     ACPI_DATA_TABLE_MAPPING *LocalRegionContext;
 
@@ -679,6 +703,9 @@ AcpiEvDefaultRegionSetup (
     void                    *HandlerContext,
     void                    **RegionContext)
 {
+#ifdef __rtems__
+    (void) Handle;
+#endif
     ACPI_FUNCTION_TRACE (EvDefaultRegionSetup);
 
 

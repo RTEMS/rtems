@@ -197,6 +197,10 @@ AcpiDsInitOneObject (
     void                    *Context,
     void                    **ReturnValue)
 {
+#ifdef __rtems__
+    (void) Level;
+    (void) ReturnValue;
+#endif
     ACPI_INIT_WALK_INFO     *Info = (ACPI_INIT_WALK_INFO *) Context;
     ACPI_NAMESPACE_NODE     *Node = (ACPI_NAMESPACE_NODE *) ObjHandle;
     ACPI_STATUS             Status;

@@ -474,6 +474,10 @@ AcpiHwDisableGpeBlock (
     ACPI_GPE_BLOCK_INFO     *GpeBlock,
     void                    *Context)
 {
+#ifdef __rtems__
+    (void) GpeXruptInfo;
+    (void) Context;
+#endif
     UINT32                  i;
     ACPI_STATUS             Status;
 
@@ -514,6 +518,10 @@ AcpiHwClearGpeBlock (
     ACPI_GPE_BLOCK_INFO     *GpeBlock,
     void                    *Context)
 {
+#ifdef __rtems__
+    (void) GpeXruptInfo;
+    (void) Context;
+#endif
     UINT32                  i;
     ACPI_STATUS             Status;
 
@@ -555,6 +563,10 @@ AcpiHwEnableRuntimeGpeBlock (
     ACPI_GPE_BLOCK_INFO     *GpeBlock,
     void                    *Context)
 {
+#ifdef __rtems__
+    (void) GpeXruptInfo;
+    (void) Context;
+#endif
     UINT32                  i;
     ACPI_STATUS             Status;
     ACPI_GPE_REGISTER_INFO  *GpeRegisterInfo;
@@ -608,6 +620,10 @@ AcpiHwEnableWakeupGpeBlock (
     ACPI_GPE_BLOCK_INFO     *GpeBlock,
     void                    *Context)
 {
+#ifdef __rtems__
+    (void) GpeXruptInfo;
+    (void) Context;
+#endif
     UINT32                  i;
     ACPI_STATUS             Status;
     ACPI_GPE_REGISTER_INFO  *GpeRegisterInfo;
@@ -654,6 +670,9 @@ AcpiHwGetGpeBlockStatus(
     ACPI_GPE_BLOCK_INFO     *GpeBlock,
     void *RetPtr)
 {
+#ifdef __rtems__
+    (void) GpeXruptInfo;
+#endif
     ACPI_GPE_REGISTER_INFO  *GpeRegisterInfo;
     UINT64                  InEnable;
     UINT64                  InStatus;

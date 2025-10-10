@@ -359,6 +359,11 @@ AcpiDsDumpMethodStack (
     ACPI_WALK_STATE         *WalkState,
     ACPI_PARSE_OBJECT       *Op)
 {
+#ifdef __rtems__
+    (void) Status;
+    (void) WalkState;
+    (void) Op;
+#endif
     return;
 }
 

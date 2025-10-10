@@ -986,6 +986,9 @@ AcpiNsCheckSortedList (
     UINT8                   SortDirection,
     char                    *SortKeyName)
 {
+#ifdef __rtems__
+    (void) SortKeyName;
+#endif
     UINT32                  OuterElementCount;
     ACPI_OPERAND_OBJECT     **OuterElements;
     ACPI_OPERAND_OBJECT     **Elements;

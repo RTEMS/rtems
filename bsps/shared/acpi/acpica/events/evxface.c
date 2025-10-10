@@ -895,6 +895,9 @@ AcpiRemoveFixedEventHandler (
     UINT32                  Event,
     ACPI_EVENT_HANDLER      Handler)
 {
+#ifdef __rtems__
+    (void) Handler;
+#endif
     ACPI_STATUS             Status = AE_OK;
 
 
