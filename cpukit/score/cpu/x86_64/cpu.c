@@ -43,6 +43,7 @@
 
 void _CPU_Exception_frame_print(const CPU_Exception_frame *ctx)
 {
+  (void) ctx;
 }
 
 Context_Control_fp _CPU_Null_fp_context;
