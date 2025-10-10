@@ -57,6 +57,8 @@ int console_inbyte_nonblocking(
   int port
 )
 {
+  (void) port;
+
   char ch;
 
   /*
@@ -75,6 +77,8 @@ void console_outbyte_polled(
   char ch
 )
 {
+  (void) port;
+
   altera_avalon_jtag_uart_regs *ajur = NIOS2_IO_BASE(JTAG_UART_BASE);
 
   /*

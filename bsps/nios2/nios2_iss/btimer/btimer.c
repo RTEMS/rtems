@@ -38,6 +38,8 @@ static rtems_interrupt_entry timer_interrupt;
 
 static rtems_isr timerisr(void *vector)
 {
+  (void) vector;
+
   TIMER_REGS->status = 0;
   Timer_interrupts++;
 }
