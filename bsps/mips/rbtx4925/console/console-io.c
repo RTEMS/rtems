@@ -50,6 +50,9 @@ rtems_device_driver console_initialize(
   void                      *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   status = rtems_io_register_name(
@@ -111,6 +114,10 @@ rtems_device_driver console_open(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -123,6 +130,10 @@ rtems_device_driver console_close(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -135,6 +146,9 @@ rtems_device_driver console_read(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_rw_args_t *rw_args;
   char *buffer;
   int maximum;
@@ -166,6 +180,9 @@ rtems_device_driver console_write(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   int count;
   int maximum;
   rtems_libio_rw_args_t *rw_args;
@@ -196,6 +213,10 @@ rtems_device_driver console_control(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
