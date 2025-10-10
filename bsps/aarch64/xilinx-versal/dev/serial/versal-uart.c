@@ -169,6 +169,9 @@ static bool versal_uart_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
 #ifdef BSP_CONSOLE_USE_INTERRUPTS
   versal_pl011_context *ctx = (versal_pl011_context *) base;
   volatile arm_pl011_uart *regs = (volatile arm_pl011_uart *) ctx->pl011_ctx.regs;
@@ -210,6 +213,8 @@ static void versal_uart_last_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   versal_pl011_context *ctx = (versal_pl011_context *) base;
   rtems_interrupt_handler_remove(ctx->pl011_ctx.irq, versal_uart_interrupt, tty);
 }

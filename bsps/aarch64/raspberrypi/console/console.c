@@ -157,6 +157,10 @@ rtems_device_driver console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   const raspberrypi_console_device* device = &devices[BSP_CONSOLE_PORT];
   rtems_status_code status = raspberrypi_uart_init(BSP_CONSOLE_PORT);
   if (status != RTEMS_SUCCESSFUL) {
