@@ -134,6 +134,7 @@ rtems_vector_number imx_get_irq_of_node(
 
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
+  (void) icells;
   return intr[0];
 }
 

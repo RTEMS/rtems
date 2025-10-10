@@ -272,6 +272,8 @@ static void imxrt_lpspi_next_rx_msg(
   volatile LPSPI_Type *regs
 )
 {
+  (void) regs;
+
   if (bus->rx_msg_todo > 0) {
     const spi_ioc_transfer *msg;
 

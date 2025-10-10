@@ -276,6 +276,8 @@ static bool imxrt_lpuart_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
 #ifdef BSP_CONSOLE_USE_INTERRUPTS
   rtems_status_code sc;
 #endif
@@ -312,6 +314,8 @@ static void imxrt_lpuart_last_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   imxrt_lpuart_context *ctx = imxrt_lpuart_get_context(base);
 
   LPUART_Deinit((LPUART_Type *)ctx->regs);
@@ -446,6 +450,10 @@ rtems_status_code console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   const void *fdt;
   int stdout_node;
   int node;
