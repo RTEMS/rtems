@@ -57,6 +57,8 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t          cpu_num;
   rtems_status_code sc;
   char              name[5];
@@ -96,6 +98,9 @@ static rtems_timer_service_routine TimerMethod(
   void     *arg
 )
 {
+  (void) timer;
+  (void) arg;
+
   /*
    * Set flag and release the semaphore, allowing the blocked tasks to start.
    */
@@ -108,6 +113,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int                cpu_num;
   rtems_id           id;
   rtems_status_code  status;

@@ -16,6 +16,8 @@ const char rtems_test_name[] = "SMPFATAL 3";
 
 static void bad( rtems_id timer_id, void *arg )
 {
+  (void) timer_id;
+
   rtems_id *sem_id;
 
   sem_id = arg;
@@ -26,6 +28,8 @@ static void bad( rtems_id timer_id, void *arg )
 
 static void Init( rtems_task_argument arg )
 {
+  (void) arg;
+
   rtems_status_code sc;
   rtems_id          timer_id;
   rtems_id          sem_id;

@@ -102,6 +102,8 @@ static void assert_cpu(uint32_t expected_cpu)
 
 static void test_task_get_priority_not_defined(test_context *ctx)
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_id scheduler_id;
   rtems_task_priority priority;
@@ -428,6 +430,8 @@ static void assert_prio_by_scheduler(
 
 static void helper(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
 
   while (true) {
@@ -449,6 +453,8 @@ static void helper(rtems_task_argument arg)
 
 static void worker(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   task_id id = arg;
 
@@ -1101,6 +1107,8 @@ static void test(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
   test(&test_instance);
   TEST_END();

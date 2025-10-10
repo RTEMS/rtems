@@ -60,6 +60,8 @@ static void resume(size_t i)
 
 static void task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_task_priority task_priority;
   rtems_status_code sc;
 
@@ -198,6 +200,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

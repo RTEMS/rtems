@@ -65,6 +65,8 @@ static void wait(test_context *ctx, SMP_barrier_State *bs)
 
 static void timer_isr(rtems_id id, void *arg)
 {
+  (void) id;
+
   test_context *ctx = arg;
 
   /* (B) */
@@ -73,6 +75,8 @@ static void timer_isr(rtems_id id, void *arg)
 
 static void timer_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) arg;
   rtems_status_code sc;
   rtems_id timer_id;
@@ -168,6 +172,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_resource_snapshot snapshot;
 
   TEST_BEGIN();

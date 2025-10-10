@@ -48,6 +48,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   int               i;
   char              ch;
   uint32_t          cpu_num;

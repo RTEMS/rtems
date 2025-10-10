@@ -49,6 +49,8 @@ static SMP_barrier_Control barrier = SMP_BARRIER_CONTROL_INITIALIZER;
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   assert(0);
 }
 
@@ -102,6 +104,10 @@ static rtems_status_code test_driver_init(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   uint32_t self = rtems_scheduler_get_processor();
   uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu;

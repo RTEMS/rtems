@@ -50,6 +50,8 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   while (1)
     ;
   /* XXX something goes here */
@@ -59,6 +61,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t           i;
   char               ch;
   uint32_t           cpu_num;

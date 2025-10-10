@@ -54,6 +54,8 @@ void *Thread_1(void *unused);
 
 void *Thread_1(void *unused)
 {
+  (void) unused;
+
   while(1);
 }
 
@@ -221,6 +223,8 @@ void *POSIX_Init(
   void *ignored
 )
 {
+  (void) ignored;
+
   TEST_BEGIN();
 
   /* Initialize thread id */

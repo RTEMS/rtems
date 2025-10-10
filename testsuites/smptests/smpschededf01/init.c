@@ -44,6 +44,8 @@ static test_context test_instance;
 
 static void t(test_context *ctx, rtems_interval p, long nanoseconds)
 {
+  (void) ctx;
+
   rtems_status_code sc;
   rtems_id period;
   rtems_name name;
@@ -126,6 +128,8 @@ static void test(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
 
   TEST_BEGIN();

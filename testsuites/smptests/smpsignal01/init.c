@@ -73,6 +73,8 @@ static test_context ctx_instance = {
 
 static void signal_handler(rtems_signal_set signal)
 {
+  (void) signal;
+
   test_context *ctx = &ctx_instance;
 
   rtems_test_assert(_ISR_Get_level() == 0);
@@ -177,6 +179,8 @@ static void test_two_processors(test_context *ctx)
 
 static void isr_level_timer(rtems_id timer, void *arg)
 {
+  (void) timer;
+
   test_context *ctx = arg;
   rtems_status_code sc;
 
@@ -186,6 +190,8 @@ static void isr_level_timer(rtems_id timer, void *arg)
 
 static void isr_level_handler(rtems_signal_set signal)
 {
+  (void) signal;
+
   test_context *ctx = &ctx_instance;
 
   rtems_test_assert(_ISR_Get_level() == 0);
@@ -227,6 +233,8 @@ static void test_isr_level(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &ctx_instance;
 
   TEST_BEGIN();

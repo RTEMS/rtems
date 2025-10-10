@@ -161,6 +161,8 @@ static uint32_t add_number_wrapper(uint32_t a, uint32_t b)
  */
 static void task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
   uint32_t i;
 
@@ -295,6 +297,8 @@ static void locate_clock_interrupt_handler(
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
   uint32_t i;
   uint32_t cpu;

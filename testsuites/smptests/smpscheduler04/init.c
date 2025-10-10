@@ -58,6 +58,8 @@ static test_context test_instance;
 
 static void migration_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) arg;
   uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index = rtems_scheduler_get_processor();
@@ -178,6 +180,8 @@ static void test(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_resource_snapshot snapshot;
 
   TEST_BEGIN();

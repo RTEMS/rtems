@@ -66,6 +66,8 @@ static rtems_task_priority migration_task_prio(uint32_t task_index)
 
 static void migration_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   uint32_t task_index = arg;
   rtems_task_priority prio = migration_task_prio(task_index);
@@ -140,6 +142,8 @@ static void test_migrations(test_context *ctx)
 
 static void busy_loop_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   while (true) {
     /* Do nothing */
   }
@@ -274,6 +278,8 @@ static void init_scheduler_ids(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_resource_snapshot snapshot;
 

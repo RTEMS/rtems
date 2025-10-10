@@ -213,6 +213,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
   cpu_set_t cpu_set;
 

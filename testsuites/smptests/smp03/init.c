@@ -65,6 +65,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t          i;
   char              ch = '0';
   rtems_id          id;

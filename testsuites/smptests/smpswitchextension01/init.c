@@ -120,6 +120,8 @@ static void toggler(rtems_task_argument self)
 
 static void switcher(rtems_task_argument self)
 {
+  (void) self;
+
   test_context *ctx = &ctx_instance;
 
   while (true) {
@@ -236,6 +238,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   if (rtems_scheduler_get_processor_maximum() >= 2) {

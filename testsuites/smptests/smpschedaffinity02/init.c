@@ -126,6 +126,8 @@ static void init_verify( int expect )
 
 static void task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code   sc;
 
   /* Never block and continually get core id  */
@@ -218,6 +220,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

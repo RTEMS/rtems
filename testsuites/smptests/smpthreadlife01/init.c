@@ -82,6 +82,8 @@ static void delete_extension(
 
 static void terminate_extension(Thread_Control *executing)
 {
+  (void) executing;
+
   test_context *ctx = &test_instance;
 
   ctx->terminated = true;
@@ -89,6 +91,8 @@ static void terminate_extension(Thread_Control *executing)
 
 static void switch_extension(Thread_Control *executing, Thread_Control *heir)
 {
+  (void) heir;
+
   test_context *ctx = &test_instance;
 
   if (ctx->delay_switch_for_executing == executing) {
@@ -276,6 +280,8 @@ static void test_set_life_protection(rtems_task_argument variant)
 
 static void delay_switch_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
 
   ctx->delay_switch_for_executing = _Thread_Get_executing();
@@ -497,6 +503,8 @@ static void test_operation_with_delete_in_progress(test_op op)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   if (rtems_scheduler_get_processor_maximum() >= CPU_COUNT) {

@@ -36,6 +36,8 @@ rtems_task Test_task(
   rtems_task_argument unused
 )
 {
+  (void) unused;
+
   rtems_id          tid;
   rtems_time_of_day time;
   uint32_t    task_index;

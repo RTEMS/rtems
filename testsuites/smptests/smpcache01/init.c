@@ -172,6 +172,8 @@ static void all_tests( void )
 
 static void worker_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code sc;
 
   all_tests();
@@ -209,6 +211,8 @@ static void test_smp_cache_manager( void )
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test_smp_cache_manager();
@@ -223,6 +227,9 @@ static void fatal_extension(
   rtems_fatal_code error
 )
 {
+  (void) always_set_to_false;
+  (void) error;
+
   uint32_t self = rtems_scheduler_get_processor();
 
   if (source == RTEMS_FATAL_SOURCE_EXCEPTION && ctx.do_longjmp[self]) {

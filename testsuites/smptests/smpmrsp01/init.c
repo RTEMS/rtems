@@ -294,6 +294,8 @@ static void create_mrsp_sema(
 
 static void run_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   volatile bool *run = (volatile bool *) arg;
 
   *run = true;
@@ -305,6 +307,8 @@ static void run_task(rtems_task_argument arg)
 
 static void obtain_and_release_worker(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
@@ -546,6 +550,8 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
 
 static void obtain_after_migration_worker(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
@@ -568,6 +574,8 @@ static void obtain_after_migration_worker(rtems_task_argument arg)
 
 static void obtain_after_migration_high(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
@@ -795,6 +803,8 @@ static void test_mrsp_nested_obtain_error(test_context *ctx)
 
 static void deadlock_timer(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+
   test_context *ctx = arg;
 
   change_prio(ctx->main_task_id, 1);
@@ -802,6 +812,8 @@ static void deadlock_timer(rtems_id timer_id, void *arg)
 
 static void deadlock_worker(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
 
@@ -988,6 +1000,8 @@ static void test_mrsp_multiple_obtain(test_context *ctx)
 
 static void ready_unlock_worker(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
@@ -1015,6 +1029,8 @@ static void ready_unlock_worker(rtems_task_argument arg)
 
 static void unblock_ready_timer(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+
   test_context *ctx = arg;
   rtems_status_code sc;
 
@@ -1062,6 +1078,8 @@ static void unblock_ready_owner(test_context *ctx)
 
 static void unblock_owner_before_rival_timer(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+
   test_context *ctx = arg;
   rtems_status_code sc;
 
@@ -1074,6 +1092,8 @@ static void unblock_owner_before_rival_timer(rtems_id timer_id, void *arg)
 
 static void unblock_owner_after_rival_timer(rtems_id timer_id, void *arg)
 {
+  (void) timer_id;
+
   test_context *ctx = arg;
   rtems_status_code sc;
 
@@ -1356,6 +1376,8 @@ static void test_mrsp_obtain_and_sleep_and_release(test_context *ctx)
 
 static void help_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
 
@@ -1564,6 +1586,8 @@ static void load_worker(rtems_task_argument index)
 
 static void migration_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
@@ -1743,6 +1767,8 @@ static void test_mrsp_load(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   rtems_resource_snapshot snapshot;

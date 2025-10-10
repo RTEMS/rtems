@@ -41,6 +41,8 @@ const char rtems_test_name[] = "SMPFATAL 4";
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   assert(0);
 }
 

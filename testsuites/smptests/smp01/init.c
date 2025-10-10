@@ -47,6 +47,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t           i;
   char               ch;
   uint32_t           cpu_self;

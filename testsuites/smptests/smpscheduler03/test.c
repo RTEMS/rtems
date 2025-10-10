@@ -82,6 +82,8 @@ static void change_priority(
 
 static void task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_test_assert(0);
 }
 
@@ -491,6 +493,8 @@ static void test_case_unblock_op(
   Scheduler_SMP_Node_state new_state
 )
 {
+  (void) other;
+
   Per_CPU_Control *cpu_self;
 
   cpu_self = _Thread_Dispatch_disable();
@@ -560,6 +564,8 @@ static void test_unblock_op(void)
 
 void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_resource_snapshot snapshot;
   rtems_status_code sc;
   rtems_id task_id;

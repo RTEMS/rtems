@@ -353,6 +353,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   if (rtems_scheduler_get_processor_maximum() == CPU_COUNT) {

@@ -199,6 +199,8 @@ static void unpin(bool blocked)
 
 static void event_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx;
 
   ctx = (test_context *) arg;
@@ -581,6 +583,8 @@ static void test(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   if (rtems_scheduler_get_processor_maximum() == CPU_COUNT) {

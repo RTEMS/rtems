@@ -37,6 +37,8 @@ const char rtems_test_name[] = "SMPFATAL 6";
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_interrupt_level level;
 
   TEST_BEGIN();

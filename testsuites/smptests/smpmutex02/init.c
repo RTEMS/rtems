@@ -89,6 +89,8 @@ typedef struct {
 
 static void release(test_context *ctx, worker_context *wc, size_t nest_level)
 {
+  (void) nest_level;
+
   rtems_status_code sc;
   size_t i;
 
@@ -311,6 +313,8 @@ static void tear_down(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx;
   rtems_resource_snapshot snapshot;
 

@@ -70,6 +70,8 @@ static test_context ctx_instance = {
 
 static void signal_handler(int signum)
 {
+  (void) signum;
+
   test_context *ctx = &ctx_instance;
 
   switch (ctx->state) {
@@ -175,6 +177,8 @@ static void test(void)
 
 static void *POSIX_Init(void *arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   if (rtems_scheduler_get_processor_maximum() >= 2) {

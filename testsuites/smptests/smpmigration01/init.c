@@ -237,6 +237,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_print_printer_fprintf_putc(&rtems_test_printer);
   TEST_BEGIN();
 

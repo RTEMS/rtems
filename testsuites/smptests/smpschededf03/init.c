@@ -147,6 +147,8 @@ static void test(test_context *ctx)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
   test(&test_instance);
   TEST_END();

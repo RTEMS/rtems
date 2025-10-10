@@ -155,6 +155,8 @@ void *POSIX_Init(
   void *ignored
 )
 {
+  (void) ignored;
+
   TEST_BEGIN();
 
   /* Initialize thread id */

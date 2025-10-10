@@ -38,6 +38,8 @@ rtems_task Test_task(
   rtems_task_argument task_index
 )
 {
+  (void) task_index;
+
   uint32_t          cpu_num;
   char              name[5];
   char             *p;

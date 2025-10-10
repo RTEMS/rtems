@@ -124,6 +124,9 @@ static rtems_interval test_atomic_add_init(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   _Atomic_Init_ulong(&ctx->atomic_value, 0);
@@ -138,6 +141,9 @@ static void test_atomic_add_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   unsigned long counter = 0;
 
@@ -155,6 +161,9 @@ static void test_atomic_add_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   test_fini(ctx, "add", true);
@@ -166,6 +175,9 @@ static rtems_interval test_atomic_flag_init(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   _Atomic_Flag_clear(&ctx->global_flag, ATOMIC_ORDER_RELEASE);
@@ -181,6 +193,9 @@ static void test_atomic_flag_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   unsigned long counter = 0;
 
@@ -204,6 +219,9 @@ static void test_atomic_flag_fini(
   size_t active_workers
   )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   test_fini(ctx, "flag", false);
@@ -215,6 +233,9 @@ static rtems_interval test_atomic_sub_init(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   _Atomic_Init_ulong(&ctx->atomic_value, 0);
@@ -229,6 +250,9 @@ static void test_atomic_sub_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   unsigned long counter = 0;
 
@@ -246,6 +270,9 @@ static void test_atomic_sub_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   test_fini(ctx, "sub", true);
@@ -257,6 +284,9 @@ static rtems_interval test_atomic_compare_exchange_init(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   _Atomic_Init_ulong(&ctx->atomic_value, 0);
@@ -272,6 +302,9 @@ static void test_atomic_compare_exchange_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   unsigned long counter = 0;
 
@@ -305,6 +338,9 @@ static void test_atomic_compare_exchange_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   test_fini(ctx, "compare exchange", false);
@@ -316,6 +352,9 @@ static rtems_interval test_atomic_or_and_init(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   _Atomic_Init_ulong(&ctx->atomic_value, 0);
@@ -330,6 +369,9 @@ static void test_atomic_or_and_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   unsigned long the_bit = 1UL << worker_index;
   unsigned long current_bit = 0;
@@ -365,6 +407,9 @@ static void test_atomic_or_and_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   test_fini(ctx, "or/and", true);
@@ -376,6 +421,9 @@ static rtems_interval test_atomic_fence_init(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   ctx->normal_value = 0;
@@ -392,6 +440,9 @@ static void test_atomic_fence_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   if (rtems_test_parallel_is_master_worker(worker_index)) {
@@ -423,6 +474,9 @@ static void test_atomic_fence_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   printf(
@@ -439,6 +493,8 @@ static rtems_interval test_atomic_store_load_rmw_init(
   size_t active_workers
 )
 {
+  (void) arg;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   size_t i;
 
@@ -468,6 +524,8 @@ static void test_atomic_store_load_rmw_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   uint32_t cpu_self_index;
   sbintime_t t;
@@ -554,6 +612,8 @@ static void test_atomic_store_load_rmw_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   size_t i;
   struct bintime bt;
@@ -598,6 +658,9 @@ static rtems_interval test_seqlock_init(
   size_t active_workers
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
   ctx->normal_value = 0;
@@ -641,6 +704,10 @@ static void test_single_writer_seqlock_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+  (void) worker_index;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   uint32_t cpu_self_index;
   unsigned long counter;
@@ -682,6 +749,8 @@ static void test_single_writer_seqlock_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   size_t i;
 
@@ -703,6 +772,10 @@ static void test_multi_writer_seqlock_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+  (void) worker_index;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   uint32_t cpu_self_index;
   unsigned long counter;
@@ -751,6 +824,8 @@ static void test_multi_writer_seqlock_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   smpatomic01_context *ctx = (smpatomic01_context *) base;
   size_t i;
 
@@ -811,6 +886,9 @@ static void setup_worker(
   rtems_id worker_id
 )
 {
+  (void) base;
+  (void) worker_index;
+
   rtems_status_code sc;
   rtems_task_priority prio;
 
@@ -820,6 +898,8 @@ static void setup_worker(
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   smpatomic01_context *ctx = &test_instance;
 
   TEST_BEGIN();

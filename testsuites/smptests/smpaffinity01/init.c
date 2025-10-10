@@ -48,6 +48,8 @@ void Validate_affinity(void);
 
 void Task_1(rtems_task_argument arg)
 {
+  (void) arg;
+
   while(1);
 }
 
@@ -227,6 +229,8 @@ void Validate_affinity(void )
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   int                  sc;
 
   TEST_BEGIN();

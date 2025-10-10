@@ -157,6 +157,8 @@ static void test(test_context *ctx)
 
 static void *POSIX_Init(void *arg)
 {
+  (void) arg;
+
   rtems_resource_snapshot snapshot;
 
   TEST_BEGIN();

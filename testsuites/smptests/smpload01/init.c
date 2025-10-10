@@ -90,6 +90,8 @@ static uint32_t simple_random(uint32_t v)
 
 static void inherit_obtain_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
@@ -125,6 +127,8 @@ static void inherit_obtain_task(rtems_task_argument arg)
 
 static void inherit_release_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   rtems_status_code sc;
 
@@ -166,6 +170,8 @@ static void inherit_release_task(rtems_task_argument arg)
 
 static void load_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   size_t data_size;
   volatile int *data;
   volatile int dummy;
@@ -192,6 +198,8 @@ static void load_task(rtems_task_argument arg)
 
 static void sem_worker_task(rtems_task_argument arg)
 {
+  (void) arg;
+
   test_context *ctx = &test_instance;
   uint32_t v = arg;
 
@@ -392,6 +400,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

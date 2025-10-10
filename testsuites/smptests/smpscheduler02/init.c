@@ -55,9 +55,9 @@ static volatile bool ready;
 
 static void task(rtems_task_argument arg)
 {
-  rtems_status_code sc;
-
   (void) arg;
+
+  rtems_status_code sc;
 
   rtems_test_assert(rtems_scheduler_get_processor() == 1);
   rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
@@ -422,6 +422,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_resource_snapshot snapshot;
 
   TEST_BEGIN();

@@ -276,6 +276,10 @@ static rtems_interval test_broadcast_init(
   size_t active_workers
 )
 {
+  (void) base;
+  (void) arg;
+  (void) active_workers;
+
   return test_duration();
 }
 
@@ -286,6 +290,9 @@ static void test_broadcast_body(
   size_t worker_index
 )
 {
+  (void) arg;
+  (void) active_workers;
+
   test_context *ctx;
 
   ctx = (test_context *) base;
@@ -306,6 +313,10 @@ static void test_broadcast_fini(
   size_t active_workers
 )
 {
+  (void) base;
+  (void) arg;
+  (void) active_workers;
+
   /* Do nothing */
 }
 
@@ -433,16 +444,22 @@ static Per_CPU_Job job_order_jobs[TEST_JOB_ORDER_JOBS];
 
 static void job_order_handler_0(void *arg)
 {
+  (void) arg;
+
   T_step(1);
 }
 
 static void job_order_handler_1(void *arg)
 {
+  (void) arg;
+
   T_step(2);
 }
 
 static void job_order_handler_2(void *arg)
 {
+  (void) arg;
+
   T_step(3);
 }
 
@@ -476,12 +493,16 @@ static Per_CPU_Job add_job_in_job_jobs[TEST_ADD_JOB_IN_JOB_JOBS];
 
 static void add_job_in_job_handler_0(void *arg)
 {
+  (void) arg;
+
   T_step(1);
   _Per_CPU_Add_job(_Per_CPU_Get(), &add_job_in_job_jobs[1]);
 }
 
 static void add_job_in_job_handler_1(void *arg)
 {
+  (void) arg;
+
   T_step(3);
 }
 
@@ -544,6 +565,8 @@ T_TEST_CASE(BroadcastDuringMultitaskingDispatchDisabled)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   T_register();
   T_run_all();
 

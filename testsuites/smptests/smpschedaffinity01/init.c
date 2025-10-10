@@ -82,6 +82,8 @@ static void test_delay(int ticks)
 
 static void task(rtems_task_argument arg)
 {
+  (void) arg;
+
   uint32_t cpu;
   cpu_set_t cpuset;
 
@@ -180,6 +182,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

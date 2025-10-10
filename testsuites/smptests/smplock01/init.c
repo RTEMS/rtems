@@ -83,6 +83,10 @@ static rtems_interval test_init(
   size_t active_workers
 )
 {
+  (void) base;
+  (void) arg;
+  (void) active_workers;
+
   return test_duration();
 }
 
@@ -158,6 +162,8 @@ static void test_0_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 0;
   unsigned long counter = 0;
@@ -178,6 +184,8 @@ static void test_0_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -197,6 +205,8 @@ static void test_1_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 1;
   unsigned long counter = 0;
@@ -217,6 +227,8 @@ static void test_1_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -236,6 +248,8 @@ static void test_2_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 2;
   unsigned long counter = 0;
@@ -257,6 +271,8 @@ static void test_2_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -276,6 +292,8 @@ static void test_3_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 3;
   unsigned long counter = 0;
@@ -297,6 +315,8 @@ static void test_3_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -316,6 +336,8 @@ static void test_4_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 4;
   unsigned long counter = 0;
@@ -341,6 +363,8 @@ static void test_4_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -360,6 +384,8 @@ static void test_5_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 5;
   unsigned long counter = 0;
@@ -390,6 +416,8 @@ static void test_5_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -409,6 +437,8 @@ static void test_6_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 6;
   unsigned long counter = 0;
@@ -438,6 +468,8 @@ static void test_6_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -457,6 +489,8 @@ static void test_7_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 7;
   unsigned long counter = 0;
@@ -491,6 +525,8 @@ static void test_7_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -519,6 +555,8 @@ static void test_8_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 8;
   unsigned long counter = 0;
@@ -540,6 +578,8 @@ static void test_8_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -559,6 +599,8 @@ static void test_9_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 9;
   unsigned long counter = 0;
@@ -580,6 +622,8 @@ static void test_9_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -599,6 +643,8 @@ static void test_10_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 10;
   unsigned long counter = 0;
@@ -642,6 +688,8 @@ static void test_10_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -661,6 +709,8 @@ static void test_11_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 11;
   unsigned long counter = 0;
@@ -683,6 +733,8 @@ static void test_11_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -702,6 +754,8 @@ static void test_12_body(
   size_t worker_index
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
   size_t test = 12;
   unsigned long counter = 0;
@@ -726,6 +780,8 @@ static void test_12_fini(
   size_t active_workers
 )
 {
+  (void) arg;
+
   test_context *ctx = (test_context *) base;
 
   test_fini(
@@ -819,6 +875,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   TEST_BEGIN();
 
   test();

@@ -103,6 +103,8 @@ void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   assert(0);
 }
 

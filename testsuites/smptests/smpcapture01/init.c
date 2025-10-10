@@ -89,6 +89,8 @@ static void test_delay(int ticks)
 
 static void task(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code   sc;
 
   while (true) {
@@ -211,6 +213,8 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
+  (void) arg;
+
   rtems_status_code   sc;
   rtems_name          to_name = rtems_build_name('I', 'D', 'L', 'E');;
   uint32_t            i;
