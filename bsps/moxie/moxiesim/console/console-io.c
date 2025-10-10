@@ -70,6 +70,8 @@ void console_outbyte_polled(
   char ch
 )
 {
+  (void) port;
+
   _sys_write( 1, &ch, 1 );
 }
 
@@ -83,6 +85,8 @@ int console_inbyte_nonblocking(
   int port
 )
 {
+  (void) port;
+
   return -1;
 }
 
