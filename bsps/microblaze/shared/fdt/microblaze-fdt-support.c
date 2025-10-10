@@ -75,6 +75,8 @@ const void *bsp_fdt_get(void)
 
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
+  (void) icells;
+
   return intr[0];
 }
 #endif /* BSP_MICROBLAZE_FPGA_USE_FDT */

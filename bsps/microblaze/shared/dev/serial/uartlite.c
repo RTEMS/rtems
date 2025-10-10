@@ -64,6 +64,9 @@ static bool uart_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
   uart_lite_context *ctx = (uart_lite_context *) base;
 #ifdef BSP_MICROBLAZE_FPGA_CONSOLE_INTERRUPTS
   rtems_status_code sc;
@@ -98,7 +101,14 @@ static void uart_last_close(
 )
 {
 #ifdef BSP_MICROBLAZE_FPGA_CONSOLE_INTERRUPTS
+  (void) base;
+  (void) args;
+
   rtems_interrupt_handler_remove( 1, microblaze_uart_interrupt, tty );
+#else
+  (void) tty;
+  (void) base;
+  (void) arg;
 #endif
 }
 

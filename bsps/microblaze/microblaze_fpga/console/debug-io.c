@@ -60,6 +60,8 @@ static void output_char( char c )
 
 static int xUartLite_RecvByte( int minor )
 {
+  (void) minor;
+
   if (mblaze_uart_base == 0 ) {
     mblaze_uart_base = try_get_prop_from_device_tree(
       "xlnx,xps-uartlite-1.00.a",

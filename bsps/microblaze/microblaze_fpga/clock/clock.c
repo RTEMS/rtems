@@ -46,11 +46,15 @@ static volatile Microblaze_Timer *mblaze_timer;
 
 static uint32_t microblaze_tc_get( rtems_timecounter_simple *tc )
 {
+  (void) tc;
+
   return mblaze_timer->tcr0;
 }
 
 static bool microblaze_tc_is_pending( rtems_timecounter_simple *tc )
 {
+  (void) tc;
+
   return ( mblaze_timer->tcsr0 & MICROBLAZE_TIMER_TCSR0_T0INT ) != 0;
 }
 
@@ -111,6 +115,8 @@ static void microblaze_clock_initialize( void )
 
 static void microblaze_clock_at_tick( rtems_timecounter_simple *tc )
 {
+  (void) tc;
+
   if ( ( mblaze_timer->tcsr0 & MICROBLAZE_TIMER_TCSR0_T0INT ) == 0 ) {
     return;
   }

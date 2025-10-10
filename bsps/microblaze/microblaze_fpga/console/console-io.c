@@ -142,6 +142,10 @@ rtems_device_driver console_initialize(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   uint32_t port;
   uint32_t stdout_port = BSP_MICROBLAZE_FPGA_CONSOLE_UART;
 
