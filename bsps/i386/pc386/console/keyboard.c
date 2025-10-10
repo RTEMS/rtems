@@ -465,6 +465,8 @@ static void SAK(void)
 
 static void do_ignore(unsigned char value, char up_flag)
 {
+  (void) value;
+  (void) up_flag;
 }
 
 static void do_null()
@@ -488,6 +490,8 @@ static void do_spec(unsigned char value, char up_flag)
 
 static void do_lowercase(unsigned char value, char up_flag)
 {
+  (void) value;
+  (void) up_flag;
 }
 
 static void do_self(unsigned char value, char up_flag)
@@ -562,6 +566,8 @@ unsigned char handle_diacr(unsigned char ch)
 
 static void do_cons(unsigned char value, char up_flag)
 {
+  (void) value;
+
   if (up_flag)
     return;
 }

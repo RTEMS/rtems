@@ -186,6 +186,8 @@ static bool pc386_ide_probe
 |    true, when flash disk available                                        |
 \*=========================================================================*/
 {
+  (void) minor;
+
   bool ide_card_plugged = true; /* assume: we have a disk here */
 
   return ide_card_plugged;
@@ -694,6 +696,10 @@ static int pc386_ide_control
 |    <none>                                                                 |
 \*=========================================================================*/
 {
+  (void) minor;
+  (void) cmd;
+  (void) arg;
+
   return 0;
 }
 
@@ -716,6 +722,9 @@ static rtems_status_code pc386_ide_config_io_speed
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
+  (void) minor;
+  (void) modes_avail;
+
   return RTEMS_SUCCESSFUL;
 }
 

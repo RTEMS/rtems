@@ -68,6 +68,8 @@ int BSPBaseBaud;
 
 static bool gdb_port_probe(int minor)
 {
+  (void) minor;
+
   /* Return false as GDB has claimed the port */
   return false;
 }

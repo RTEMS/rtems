@@ -384,6 +384,8 @@ static unsigned char handle_kbd_event(void)
 
 void keyboard_interrupt(void *unused)
 {
+	(void) unused;
+
 	handle_kbd_event();
 }
 
@@ -449,6 +451,9 @@ void pckbd_leds(unsigned char leds)
 /* for "kbd-reset" cmdline param */
 void kbd_reset_setup(char *str, int *ints)
 {
+	(void) str;
+	(void) ints;
+
 	kbd_startup_reset = 1;
 }
 

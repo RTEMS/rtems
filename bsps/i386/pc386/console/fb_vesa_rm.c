@@ -853,6 +853,9 @@ frame_buffer_initialize(
     void                      *arg
 )
 {
+    (void) minor;
+    (void) arg;
+
     rtems_status_code status;
 
     printk(FB_VESA_NAME " frame buffer -- driver initializing..\n" );
@@ -883,6 +886,10 @@ frame_buffer_open(
     void                      *arg
 )
 {
+    (void) major;
+    (void) minor;
+    (void) arg;
+
     printk( FB_VESA_NAME " open device\n" );
 
     if (_Atomic_Flag_test_and_set(&driver_mutex, ATOMIC_ORDER_ACQUIRE) != 0 )
@@ -906,6 +913,10 @@ frame_buffer_close(
     void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   printk( FB_VESA_NAME " close device\n" );
   _Atomic_Flag_clear(&driver_mutex, ATOMIC_ORDER_RELEASE);
   /* restore previous state.  for VGA this means return to text mode.
@@ -926,6 +937,9 @@ frame_buffer_read(
     void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   printk( FB_VESA_NAME " read device\n" );
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   rw_args->bytes_moved =
@@ -947,6 +961,9 @@ frame_buffer_write(
     void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   printk( FB_VESA_NAME " write device\n" );
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   rw_args->bytes_moved =
@@ -981,6 +998,9 @@ frame_buffer_control(
     void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_ioctl_args_t *args = arg;
 
   printk( FB_VESA_NAME " ioctl called, cmd=%lx\n", (uintptr_t) args->command  );

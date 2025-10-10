@@ -63,6 +63,8 @@ rtems_device_driver console_control(
 )
 {
 #if BSP_ENABLE_VGA
+  (void) major;
+
   if (minor == 0) {
     rtems_libio_ioctl_args_t *args = arg;
 
@@ -85,6 +87,9 @@ rtems_device_driver console_control(
     args->ioctl_return = 0;
     return RTEMS_SUCCESSFUL;
   }
+#else
+  (void) major;
+  (void) minor;
 #endif
   return rtems_termios_ioctl (arg);
 }

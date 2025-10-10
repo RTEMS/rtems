@@ -513,6 +513,7 @@ static inline void show_console(void)
 
 static inline void set_console(int nr)
 {
+  (void) nr;
 }
 
 void set_leds(void);

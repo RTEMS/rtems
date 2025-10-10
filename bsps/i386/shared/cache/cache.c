@@ -47,8 +47,14 @@ void _CPU_enable_cache(void)
  */
 
 #if defined(I386_CACHE_ALIGNMENT)
-static void _CPU_cache_flush_1_data_line(const void *d_addr) {}
-static void _CPU_cache_invalidate_1_data_line(const void *d_addr) {}
+static void _CPU_cache_flush_1_data_line(const void *d_addr)
+{
+  (void) d_addr;
+}
+static void _CPU_cache_invalidate_1_data_line(const void *d_addr)
+{
+  (void) d_addr;
+}
 static void _CPU_cache_freeze_data(void) {}
 static void _CPU_cache_unfreeze_data(void) {}
 static void _CPU_cache_flush_entire_data(void)
@@ -68,6 +74,8 @@ static void _CPU_cache_invalidate_entire_instruction(void)
 
 static void _CPU_cache_invalidate_1_instruction_line(const void *i_addr)
 {
+  (void) i_addr;
+
   _CPU_cache_invalidate_entire_instruction();
 }
 

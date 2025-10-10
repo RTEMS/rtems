@@ -54,6 +54,7 @@ extern void default_raw_idt_handler(void);
  */
 static void raw_nop_func(const struct __rtems_raw_irq_connect_data__ *unused)
 {
+  (void) unused;
 }
 
 /*
@@ -63,6 +64,8 @@ static int raw_not_connected(
   const struct __rtems_raw_irq_connect_data__ *unused
 )
 {
+  (void) unused;
+
   return 0;
 }
 

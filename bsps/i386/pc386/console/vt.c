@@ -61,6 +61,8 @@ unsigned char keyboard_type = KB_101;
 static void
 kd_nosound(unsigned long ignored)
 {
+  (void) ignored;
+
   /* disable counter 2 */
   outb(inb_p(0x61)&0xFC, 0x61);
   return;
@@ -69,6 +71,8 @@ kd_nosound(unsigned long ignored)
 static void
 _kd_mksound(unsigned int hz, unsigned int ticks)
 {
+  (void) ticks;
+
   unsigned int          count = 0;
   rtems_interrupt_lock_context lock_context;
 
@@ -116,6 +120,8 @@ void (*kd_mksound)(unsigned int hz, unsigned int ticks) = _kd_mksound;
 static inline int
 do_kdsk_ioctl(int cmd, struct kbentry *user_kbe, int perm, struct kbd_struct *kbd)
 {
+  (void) perm;
+
   struct kbentry tmp;
   ushort *key_map, val;
 
@@ -171,6 +177,10 @@ do_kbkeycode_ioctl(int cmd, struct kbkeycode *user_kbkc, int perm)
 static inline int
 do_kdgkb_ioctl(int cmd, struct kbsentry *user_kdgkb, int perm)
 {
+  (void) cmd;
+  (void) user_kdgkb;
+  (void) perm;
+
   return -EINVAL;
 }
 

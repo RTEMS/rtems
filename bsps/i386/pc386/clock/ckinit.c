@@ -105,11 +105,15 @@ extern volatile uint32_t Clock_driver_ticks;
 
 static uint32_t pc386_get_timecount_tsc(struct timecounter *tc)
 {
+  (void) tc;
+
   return (uint32_t)rdtsc();
 }
 
 static uint32_t pc386_get_timecount_i8254(struct timecounter *tc)
 {
+  (void) tc;
+
   uint32_t                 irqs;
   uint8_t                  lsb, msb;
   rtems_interrupt_lock_context lock_context;

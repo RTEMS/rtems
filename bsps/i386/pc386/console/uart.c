@@ -498,6 +498,8 @@ BSP_uart_termios_set(int uart, void *ttyp)
 int
 BSP_uart_termios_read_com1(int uart)
 {
+  (void) uart;
+
   int     off = (int)0;
   char    buf[40];
 
@@ -521,6 +523,8 @@ BSP_uart_termios_read_com1(int uart)
 int
 BSP_uart_termios_read_com2(int uart)
 {
+  (void) uart;
+
   int     off = (int)0;
   char    buf[40];
 
@@ -544,6 +548,8 @@ BSP_uart_termios_read_com2(int uart)
 ssize_t
 BSP_uart_termios_write_com1(int minor, const char *buf, size_t len)
 {
+  (void) minor;
+
   if(len <= 0)
     {
       return 0;
@@ -578,6 +584,8 @@ BSP_uart_termios_write_com1(int minor, const char *buf, size_t len)
 ssize_t
 BSP_uart_termios_write_com2(int minor, const char *buf, size_t len)
 {
+  (void) minor;
+
   if(len <= 0)
     {
       return 0;
@@ -612,6 +620,8 @@ BSP_uart_termios_write_com2(int minor, const char *buf, size_t len)
 void
 BSP_uart_termios_isr_com1(void *ignored)
 {
+  (void) ignored;
+
   unsigned char buf[40];
   unsigned char val;
   int      off, ret, vect;
@@ -708,6 +718,8 @@ BSP_uart_termios_isr_com1(void *ignored)
 void
 BSP_uart_termios_isr_com2(void *ignored)
 {
+  (void) ignored;
+
   unsigned char buf[40];
   unsigned char val;
   int      off, ret, vect;

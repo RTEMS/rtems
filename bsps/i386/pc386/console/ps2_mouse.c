@@ -71,6 +71,8 @@ static void ps2_set_driver_handler(
   mouse_parser_enqueue_handler handler
 )
 {
+  (void) port;
+
   driver_input_handler_ps2 = handler;
 }
 
@@ -204,6 +206,8 @@ static unsigned char handle_kbd_event(void)
 
 static void ps2_mouse_interrupt(void * unused)
 {
+  (void) unused;
+
   handle_kbd_event();
 }
 
@@ -370,6 +374,8 @@ size_t read_aux(char * buffer, size_t count )
  */
 static int write_aux( int minor, const char * buffer, int count )
 {
+  (void) minor;
+
   int retval = 0;
 
   if (count) {
@@ -422,6 +428,9 @@ rtems_device_driver paux_initialize(
   rtems_device_minor_number minor,
   void                      *arg)
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   /*
@@ -449,6 +458,10 @@ rtems_device_driver paux_initialize(
 
 static int paux_last_close(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   release_aux();
   return 0;
 }
@@ -460,6 +473,10 @@ static int paux_last_close(int major, int minor, void *arg)
  */
 static ssize_t write_aux_echo( int minor, const char * buffer, size_t count )
 {
+  (void) minor;
+  (void) buffer;
+  (void) count;
+
   return 0;
 }
 
@@ -497,6 +514,9 @@ rtems_device_driver paux_close(
   rtems_device_minor_number minor,
   void                      *arg)
 {
+  (void) major;
+  (void) minor;
+
   return (rtems_termios_close (arg));
 }
 
@@ -509,6 +529,9 @@ rtems_device_driver paux_read(
   rtems_device_minor_number minor,
   void                      *arg)
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_read (arg);
 } /* tty_read */
 
@@ -521,6 +544,8 @@ rtems_device_driver  paux_write(
   rtems_device_minor_number minor,
   void                      *arg)
 {
+  (void) major;
+
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   char                  *buffer  = rw_args->buffer;
   int                    maximum  = rw_args->count;
@@ -537,6 +562,8 @@ rtems_device_driver paux_control(
   void                      *arg
 )
 {
+  (void) major;
+
   rtems_libio_ioctl_args_t *args = arg;
 
   switch( args->command ) {

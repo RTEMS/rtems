@@ -25,6 +25,8 @@
 /* adds a kbd message to the queue */
 static void kbd_parser( void *ptr, unsigned short keycode, unsigned long mods )
 {
+  (void) mods;
+
   struct MW_UID_MESSAGE m;
   struct kbd_struct * kbd = (struct kbd_struct *)ptr;
 
@@ -39,10 +41,15 @@ static void kbd_parser( void *ptr, unsigned short keycode, unsigned long mods )
 
 void register_kbd_msg_queue( char *q_name, int port )
 {
+  (void) q_name;
+  (void) port;
+
   kbd_set_driver_handler( kbd_parser );
 }
 
 void unregister_kbd_msg_queue( int port )
 {
+  (void) port;
+
    kbd_set_driver_handler( NULL );
 }

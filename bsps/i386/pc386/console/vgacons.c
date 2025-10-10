@@ -51,6 +51,8 @@
  */
 VGACONS_STATIC void vgacons_init(int minor)
 {
+  (void) minor;
+
   /*
    * Note:  We do not initialize the KBD interface here since
    *        it was initialized regardless of whether the
@@ -72,6 +74,10 @@ VGACONS_STATIC int vgacons_open(
   void    *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -86,6 +92,10 @@ VGACONS_STATIC int vgacons_close(
   void    *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return(RTEMS_SUCCESSFUL);
 }
 
@@ -99,6 +109,8 @@ VGACONS_STATIC void vgacons_write_polled(
   char  c
 )
 {
+  (void) minor;
+
   _IBMPC_outch( c );
   if( c == '\n')
     _IBMPC_outch( '\r' );            /* LF = LF + CR */
@@ -141,6 +153,8 @@ VGACONS_STATIC int vgacons_inbyte_nonblocking_polled(
   int minor
 )
 {
+  (void) minor;
+
   if( rtems_kbpoll() ) {
     int c = getch();
     return c;
@@ -160,6 +174,9 @@ VGACONS_STATIC int vgacons_set_attributes(
   const struct termios *t
 )
 {
+  (void) minor;
+  (void) t;
+
   return 0;
 }
 
@@ -167,6 +184,8 @@ bool vgacons_probe(
   int minor
 )
 {
+  (void) minor;
+
   rtems_status_code status;
   static bool firstTime = true;
 

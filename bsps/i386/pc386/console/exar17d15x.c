@@ -114,10 +114,14 @@ static void xr17d15x_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 
 rtems_device_driver exar17d15x_initialize(
   rtems_device_major_number  major,
-  rtems_device_minor_number  minor_arg,
+  rtems_device_minor_number  minor,
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   // int  pbus, pdev, pfun;
   exar17d15x_conf_t  conf[MAX_BOARDS];
   int              boards = 0;

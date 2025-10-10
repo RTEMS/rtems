@@ -69,10 +69,14 @@ void rtd316_com_set_register(uintptr_t addr, uint8_t reg, uint8_t val)
 
 rtems_device_driver rtd316_initialize(
   rtems_device_major_number  major,
-  rtems_device_minor_number  minor_arg,
+  rtems_device_minor_number  minor,
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   int           p;
   console_tbl  *ports;
   console_tbl  *port_p;

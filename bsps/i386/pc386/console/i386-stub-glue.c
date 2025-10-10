@@ -126,11 +126,14 @@ int i386_gdb_uart_ctrl_c_check(void)
 static void
 nop(const rtems_raw_irq_connect_data* notused)
 {
+  (void) notused;
 }
 
 static int
 isOn(const rtems_raw_irq_connect_data* notused)
 {
+  (void) notused;
+
   return 1;
 }
 

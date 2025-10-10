@@ -49,6 +49,9 @@ tty1_initialize(rtems_device_major_number major,
                    rtems_device_minor_number minor,
                    void                      *arg)
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   /* Check if this port is not been used as console */
@@ -92,6 +95,10 @@ tty1_initialize(rtems_device_major_number major,
 
 static int tty1_last_close(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   status = rtems_interrupt_handler_remove(
@@ -163,9 +170,10 @@ tty_close(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void                      *arg)
 {
+  (void) major;
+  (void) minor;
 
   return (rtems_termios_close (arg));
-
 } /* tty_close */
 
 /*
@@ -177,6 +185,9 @@ tty_read(rtems_device_major_number major,
              rtems_device_minor_number minor,
              void                      *arg)
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_read (arg);
 } /* tty_read */
 
@@ -189,6 +200,9 @@ tty_write(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void                    * arg)
 {
+    (void) major;
+    (void) minor;
+
     return rtems_termios_write (arg);
 
 } /* tty_write */
@@ -199,6 +213,8 @@ tty_write(rtems_device_major_number major,
  */
 static rtems_device_driver tty_control( int port, void  *arg )
 {
+  (void) port;
+
 	rtems_libio_ioctl_args_t *args = arg;
 	switch( args->command )
 	{
@@ -219,12 +235,17 @@ tty1_control(rtems_device_major_number major,
 		void                      * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return tty_control( BSP_UART_COM1, arg );
 }
 
 static int
 conSetAttr(int port, int minor, const struct termios *t)
 {
+  (void) minor;
+
   unsigned long baud, databits, parity, stopbits;
 
   baud = rtems_termios_baud_to_number(t->c_ospeed);
@@ -287,6 +308,9 @@ tty2_initialize(rtems_device_major_number major,
                    rtems_device_minor_number minor,
                    void                      *arg)
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   /* Check if this port is not been used as console */
@@ -331,6 +355,10 @@ tty2_initialize(rtems_device_major_number major,
 
 static int tty2_last_close(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   status = rtems_interrupt_handler_remove(
@@ -403,7 +431,10 @@ tty2_control(rtems_device_major_number major,
 		void                      * arg
 )
 {
-   return tty_control( BSP_UART_COM2, arg );
+  (void) major;
+  (void) minor;
+
+  return tty_control( BSP_UART_COM2, arg );
 }
 
 static int
