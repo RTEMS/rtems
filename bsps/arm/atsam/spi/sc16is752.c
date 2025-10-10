@@ -40,6 +40,8 @@ static void atsam_sc16i752_irqs_handler(void *arg)
 
 static void atsam_sc16i752_interrupt(const Pin *pin, void *arg)
 {
+  (void) pin;
+
   atsam_sc16is752_spi_context *ctx = arg;
 
   if(PIO_ItIsActive(&ctx->irq_pin)) {

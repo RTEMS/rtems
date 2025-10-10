@@ -357,6 +357,8 @@ static bool atsam_uart_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   atsam_uart_context *ctx = (atsam_uart_context *) base;
   Uart *regs = ctx->regs;
 #ifdef ATSAM_CONSOLE_USE_INTERRUPTS
@@ -394,6 +396,8 @@ static void atsam_uart_last_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   atsam_uart_context *ctx = (atsam_uart_context *) base;
 
 #ifdef ATSAM_CONSOLE_USE_INTERRUPTS
@@ -461,6 +465,8 @@ static int atsam_uart_ioctl(
   void                         *buffer
 )
 {
+  (void) buffer;
+
   atsam_uart_context *ctx = (atsam_uart_context *) base;
   rtems_status_code sc;
 
@@ -501,6 +507,10 @@ rtems_status_code console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   size_t i;
 
   rtems_termios_initialize();

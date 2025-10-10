@@ -416,6 +416,8 @@ static void atsam_spi_setup_transfer(atsam_spi_bus *bus)
 
 static void atsam_spi_dma_callback(uint32_t ch, void *arg, uint32_t status)
 {
+  (void) ch;
+
   atsam_spi_bus *bus;
   uint32_t dma_errors;
 

@@ -57,6 +57,8 @@ void atsam_rtc_get_time(rtems_time_of_day *tod)
 
 static void atsam_rtc_device_initialize(int minor)
 {
+  (void) minor;
+
   Rtc *rtc = RTC;
 
   RTC_DisableIt(rtc, 0x1F);
@@ -64,6 +66,8 @@ static void atsam_rtc_device_initialize(int minor)
 
 static int atsam_rtc_device_get_time(int minor, rtems_time_of_day *tod)
 {
+  (void) minor;
+
   atsam_rtc_get_time(tod);
 
   return 0;
@@ -71,6 +75,8 @@ static int atsam_rtc_device_get_time(int minor, rtems_time_of_day *tod)
 
 static int atsam_rtc_device_set_time(int minor, const rtems_time_of_day *tod)
 {
+  (void) minor;
+
   Rtc *rtc = RTC;
   uint8_t hour;
   uint8_t minute;
@@ -96,6 +102,8 @@ static int atsam_rtc_device_set_time(int minor, const rtems_time_of_day *tod)
 
 static bool atsam_rtc_device_probe(int minor)
 {
+  (void) minor;
+
   return true;
 }
 
