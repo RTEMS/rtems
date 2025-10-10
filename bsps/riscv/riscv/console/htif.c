@@ -79,6 +79,8 @@ static void __set_tohost(uintptr_t dev, uintptr_t cmd, uintptr_t data)
 
 int htif_console_getchar(rtems_termios_device_context *base)
 {
+  (void) base;
+
   __check_fromhost();
   int ch = htif_console_buf;
   if (ch >= 0) {
@@ -91,6 +93,8 @@ int htif_console_getchar(rtems_termios_device_context *base)
 
 void htif_console_putchar(rtems_termios_device_context *base, char c)
 {
+  (void) base;
+
   __set_tohost(1, 1, c);
 }
 
@@ -120,6 +124,8 @@ void htif_console_context_init(
   int device_tree_node
 )
 {
+  (void) device_tree_node;
+
   rtems_termios_device_context_initialize(base, "HTIF");
 }
 
@@ -130,6 +136,11 @@ static bool htif_console_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) tty;
+  (void) base;
+  (void) term;
+  (void) args;
+
   return true;
 }
 

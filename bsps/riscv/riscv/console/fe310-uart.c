@@ -78,6 +78,9 @@ static bool fe310_uart_first_open (
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
   fe310_uart_context * ctx;
   rtems_status_code sc;
 

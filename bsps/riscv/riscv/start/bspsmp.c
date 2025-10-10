@@ -51,6 +51,8 @@ uint32_t _CPU_SMP_Initialize(void)
 
 bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 {
+  (void) cpu_index;
+
   return true;
 }
 

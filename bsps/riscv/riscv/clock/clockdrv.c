@@ -179,6 +179,10 @@ static void riscv_clock_secondary_initialization(
   if (cmpval - riscv_clock_read_mtime(&clint->mtime) >= interval) {
     bsp_fatal(RISCV_FATAL_CLOCK_SMP_INIT);
   }
+#else
+  (void) clint;
+  (void) cmpval;
+  (void) interval;
 #endif
 }
 

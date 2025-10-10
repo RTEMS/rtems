@@ -281,6 +281,10 @@ rtems_status_code console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
 #ifdef RISCV_ENABLE_HTIF_SUPPORT
   rtems_termios_device_context *base;
   char htif_path[] = "/dev/ttyShtif";

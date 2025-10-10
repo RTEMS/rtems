@@ -446,6 +446,8 @@ rtems_status_code bsp_interrupt_raise_on(
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
