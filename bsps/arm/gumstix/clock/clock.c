@@ -39,6 +39,8 @@ static unsigned long period_num;
  */
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {
+  (void) unused;
+
   /*Clear the interrupt bit */
   XSCALE_OS_TIMER_TSR = 0x1;
 
@@ -61,6 +63,8 @@ static void clock_isr_on(const rtems_irq_connect_data *unused)
  */
 static void clock_isr_off(const rtems_irq_connect_data *unused)
 {
+  (void) unused;
+
   /*Clear the interrupt bit */
   XSCALE_OS_TIMER_TSR = 0x1;
   /* disable timer interrupt*/
@@ -75,6 +79,8 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
  */
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
+  (void) irq;
+
   /* check timer interrupt */
   return XSCALE_OS_TIMER_IER & 0x1;
 }

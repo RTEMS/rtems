@@ -98,6 +98,9 @@ frame_buffer_initialize(rtems_device_major_number major,
 		    rtems_device_minor_number minor,
 		    void                      *arg)
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   printk( "FBSKYEYE -- driver initializing..\n" );
@@ -119,6 +122,10 @@ frame_buffer_open( rtems_device_major_number major,
 	       rtems_device_minor_number minor,
 	       void                      *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   if (pthread_mutex_trylock(&mutex)== 0){
       /* restore previous state.  for VGA this means return to text mode.
        * leave out if graphics hardware has been initialized in
@@ -138,6 +145,10 @@ frame_buffer_close(rtems_device_major_number major,
 	       rtems_device_minor_number minor,
 	       void                      *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   if (pthread_mutex_unlock(&mutex) == 0){
     /* restore previous state.  for VGA this means return to text mode.
      * leave out if graphics hardware has been initialized in
@@ -155,6 +166,9 @@ frame_buffer_read( rtems_device_major_number major,
 	       rtems_device_minor_number minor,
 	       void                      *arg)
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
   memcpy(rw_args->buffer, (const void *) (fb_fix.smem_start + rw_args->offset), rw_args->bytes_moved);
@@ -166,6 +180,9 @@ frame_buffer_write( rtems_device_major_number major,
 		rtems_device_minor_number minor,
 		void                    * arg)
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
   memcpy( (void *) (fb_fix.smem_start + rw_args->offset), rw_args->buffer, rw_args->bytes_moved);
@@ -209,6 +226,9 @@ frame_buffer_control( rtems_device_major_number major,
 		  void                      * arg
 		  )
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_ioctl_args_t *args = arg;
   printk(
     "FBSKYEYE ioctl called, cmd=%" PRIdioctl_command_t "\n",
