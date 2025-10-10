@@ -53,6 +53,8 @@ void Shm_Get_configuration(
   shm_config_table **shmcfg
 )
 {
+   (void) localnode;
+
    BSP_shm_cfgtbl.base         = (uint32_t*)PSIM.SharedMemory;
    BSP_shm_cfgtbl.length       = sizeof(PSIM.SharedMemory);
    BSP_shm_cfgtbl.format       = SHM_BIG;

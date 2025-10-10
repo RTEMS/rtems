@@ -48,6 +48,8 @@ void Shm_Initialize_lock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
+  (void) lq_cb;
+
   /* nothing required -- done implicitly by device tree */
 }
 
@@ -64,6 +66,8 @@ void Shm_Lock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
+  (void) lq_cb;
+
   rtems_interrupt_disable( level );
     (void) PSIM.Semaphore.lock;
 }
@@ -78,6 +82,8 @@ void Shm_Unlock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
+  (void) lq_cb;
+
     (void) PSIM.Semaphore.unlock;
   rtems_interrupt_enable( level );
 }

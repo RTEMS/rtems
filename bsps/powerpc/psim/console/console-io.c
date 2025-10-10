@@ -64,6 +64,8 @@ void console_outbyte_polled(
   char ch
 )
 {
+  (void) port;
+
   outbyte( ch );
 }
 
@@ -77,6 +79,8 @@ int console_inbyte_nonblocking(
   int port
 )
 {
+  (void) port;
+
   char c;
 
   c = inbyte();

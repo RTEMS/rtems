@@ -47,6 +47,8 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
    */
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
+  (void) cpuId;
+
   int i;
 
   /*
@@ -97,6 +99,9 @@ static int psim_exception_handler(
   unsigned exception_number
 )
 {
+  (void) frame;
+  (void) exception_number;
+
   rtems_panic("Unexpected interrupt occured");
   return 0;
 }
@@ -109,6 +114,9 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  (void) vector;
+  (void) attributes;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -117,6 +125,8 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
   *pending = false;
@@ -125,12 +135,16 @@ rtems_status_code bsp_interrupt_is_pending(
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -140,6 +154,8 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bool               *enabled
 )
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
   *enabled = false;
@@ -148,6 +164,8 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 
 rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqnum)
 {
+  (void) irqnum;
+
   /* FIXME: do something */
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(irqnum));
   return RTEMS_SUCCESSFUL;
@@ -155,6 +173,8 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqnum)
 
 rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
 {
+  (void) irqnum;
+
   /* FIXME: do something */
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(irqnum));
   return RTEMS_SUCCESSFUL;
@@ -165,6 +185,9 @@ rtems_status_code bsp_interrupt_set_priority(
   uint32_t priority
 )
 {
+  (void) vector;
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -174,6 +197,9 @@ rtems_status_code bsp_interrupt_get_priority(
   uint32_t *priority
 )
 {
+  (void) vector;
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(priority != NULL);
   return RTEMS_UNSATISFIED;
