@@ -45,5 +45,9 @@ rtems_status_code aarch64_mmu_map(
   uint64_t flags
 )
 {
+  (void) addr;
+  (void) size;
+  (void) flags;
+
   return RTEMS_SUCCESSFUL;
 }
