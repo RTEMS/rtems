@@ -630,6 +630,8 @@ static void ppc_set_dbcr0(uint32_t dbcr)
 
 static int ppc_debug_probe(rtems_debugger_target* target)
 {
+  (void) target;
+
   if (ppc_probe_cpu_type() != 0) {
     return -1;
   }
@@ -1191,6 +1193,11 @@ rtems_debugger_target_hwbreak_control(rtems_debugger_target_watchpoint wp,
                                       uintptr_t                        addr,
                                       DB_UINT                          kind)
 {
+  (void) wp;
+  (void) insert;
+  (void) addr;
+  (void) kind;
+
   target_printk("]] rtems-db: powerpc: %s\n", __func__);
   /*
    * To do.

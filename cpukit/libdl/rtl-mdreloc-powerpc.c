@@ -120,6 +120,9 @@ uint32_t
 rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
                              const Elf_Shdr*      shdr)
 {
+  (void) obj;
+  (void) shdr;
+
   return 0;
 }
 
@@ -130,6 +133,11 @@ rtems_rtl_elf_arch_parse_section (const rtems_rtl_obj* obj,
                                   const Elf_Shdr*      shdr,
                                   const uint32_t       flags)
 {
+  (void) obj;
+  (void) section;
+  (void) name;
+  (void) shdr;
+
 #if !_ARCH_PPC64
   struct {
     const char* label;
@@ -154,6 +162,9 @@ bool
 rtems_rtl_elf_arch_section_alloc (const rtems_rtl_obj* obj,
                                   rtems_rtl_obj_sect*  sect)
 {
+  (void) obj;
+  (void) sect;
+
 #if _ARCH_PPC64
     rtems_rtl_set_error (ENOMEM, ".sdata no supported by ABI");
     return false;
@@ -192,6 +203,9 @@ bool
 rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
                                   rtems_rtl_obj_sect*  sect)
 {
+  (void) obj;
+  (void) sect;
+
 #if !_ARCH_PPC64
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
     printf ("rtl: section: arch: free: name=%s size=%zu\n", sect->name, sect->size);
@@ -204,6 +218,8 @@ rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
 bool
 rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
 {
+  (void) type;
+
   return true;
 }
 
@@ -270,6 +286,10 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
                           const Elf_Word            symvalue,
                           const bool                parsing)
 {
+  (void) symname;
+  (void) syminfo;
+  (void) symvalue;
+
   Elf_Addr* where;
   Elf_Word tmp;
   uint32_t mask = 0;
