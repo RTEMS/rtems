@@ -60,6 +60,9 @@ void _CPU_Context_Initialize(
   void *tls_area
 )
 {
+  (void) new_level;
+  (void) is_fp;
+
   uint32_t stack = (uint32_t) stack_area_begin;
   uint32_t stack_high = stack + stack_area_size;
 
@@ -173,6 +176,8 @@ void _CPU_ISR_install_vector(
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
+  (void) ignored;
+
   while ( true ) {
   }
 }

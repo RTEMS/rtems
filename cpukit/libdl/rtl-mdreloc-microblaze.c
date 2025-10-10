@@ -135,6 +135,9 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
                           const Elf_Byte            syminfo,
                           const Elf_Word            symvalue,
                           const bool                parsing) {
+  (void) symname;
+  (void) syminfo;
+
   Elf_Word *where;
   Elf_Word addend = (Elf_Word)rela->r_addend;
   Elf_Addr target;
@@ -276,6 +279,14 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const char*               symname,
                             const Elf_Byte            syminfo,
                             const Elf_Word            symvalue) {
+
+  (void) obj;
+  (void) rel;
+  (void) sect;
+  (void) symname;
+  (void) syminfo;
+  (void) symvalue;
+
   rtems_rtl_set_error (EINVAL, "rel type record not supported");
   return rtems_rtl_elf_rel_failure;
 }

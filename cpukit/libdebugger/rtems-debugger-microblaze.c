@@ -391,6 +391,8 @@ static void target_printk( const char *format, ... )
 
 static int microblaze_debug_probe( rtems_debugger_target *target )
 {
+  (void) target;
+
   uint32_t    msr;
   uint32_t    pvr0;
   uint32_t    pvr3;
@@ -482,6 +484,8 @@ int rtems_debugger_target_configure( rtems_debugger_target *target )
 
 static void target_print_frame( CPU_Exception_frame *frame )
 {
+  (void) frame;
+
   EXC_FRAME_PRINT( target_printk, "[} ", frame );
 }
 
@@ -602,6 +606,8 @@ static bool tid_is_excluded( const rtems_id tid )
 
 static void mb_thread_switch( Thread_Control *executing, Thread_Control *heir )
 {
+  (void) executing;
+
   if ( tid_is_excluded( heir->Object.id ) == true ) {
     rtems_debugger_target_swbreak_remove();
     return;
@@ -1374,6 +1380,11 @@ int rtems_debugger_target_hwbreak_control(
   DB_UINT                          kind
 )
 {
+  (void) wp;
+  (void) insert;
+  (void) addr;
+  (void) kind;
+
   return 0;
 }
 
