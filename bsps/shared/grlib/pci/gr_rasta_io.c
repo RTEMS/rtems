@@ -720,6 +720,8 @@ int ambapp_rasta_io_int_register(
 	drvmgr_isr handler,
 	void *arg)
 {
+	(void) info;
+
 	struct gr_rasta_io_priv *priv = dev->parent->dev->priv;
 	SPIN_IRQFLAGS(irqflags);
 	int status;

@@ -669,6 +669,8 @@ static int ambapp_dev_register_fixup(struct ambapp_dev *dev, struct ambapp_dev_r
 /* Register one AMBA device */
 static int ambapp_dev_register(struct ambapp_dev *dev, int index, void *arg)
 {
+	(void) index;
+
 	struct ambapp_dev_reg_struct *p = arg;
 
 #ifdef DEBUG
@@ -827,6 +829,8 @@ static int ambapp_bus_init1(struct drvmgr_bus *bus)
 
 static int ambapp_bus_remove(struct drvmgr_bus *bus)
 {
+	(void) bus;
+
 	return DRVMGR_OK;
 }
 

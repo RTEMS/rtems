@@ -336,6 +336,10 @@ static uint8_t pcif_bus0_irq_map(pci_dev_t dev, int irq_pin)
 
 static int pcif_translate(uint32_t *address, int type, int dir)
 {
+	(void) address;
+	(void) type;
+	(void) dir;
+
 	/* No address translation implmented at this point */
 	return 0;
 }

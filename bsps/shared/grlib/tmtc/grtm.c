@@ -887,6 +887,9 @@ static rtems_device_driver grtm_open(
 	rtems_device_minor_number minor, 
 	void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	struct grtm_priv *pDev;
 	struct drvmgr_dev *dev;
 
@@ -937,6 +940,9 @@ static rtems_device_driver grtm_open(
 
 static rtems_device_driver grtm_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	struct grtm_priv *pDev;
 	struct drvmgr_dev *dev;
 
@@ -967,12 +973,20 @@ static rtems_device_driver grtm_close(rtems_device_major_number major, rtems_dev
 
 static rtems_device_driver grtm_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	FUNCDBG();
 	return RTEMS_NOT_IMPLEMENTED;
 }
 
 static rtems_device_driver grtm_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	FUNCDBG();
 	return RTEMS_NOT_IMPLEMENTED;
 }
@@ -1255,6 +1269,8 @@ static inline void grtm_release_txlock(struct grtm_priv *pDev)
 
 static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+
 	struct grtm_priv *pDev;
 	struct drvmgr_dev *dev;
 	rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t *)arg;
@@ -1615,10 +1631,14 @@ procceed_processing_interrupts:
 
 static rtems_device_driver grtm_initialize(
   rtems_device_major_number major, 
-  rtems_device_minor_number unused,
+  rtems_device_minor_number minor,
   void *arg
   )
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	/* Device Semaphore created with count = 1 */
 	if ( rtems_semaphore_create(rtems_build_name('G', 'R', 'T', 'M'),
 		1,

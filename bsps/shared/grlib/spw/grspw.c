@@ -838,6 +838,10 @@ static rtems_device_driver grspw_initialize(
 	void *arg
 )
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	/* Initialize device-common data structures here */
 	return RTEMS_SUCCESSFUL;
 }
@@ -848,6 +852,9 @@ static rtems_device_driver grspw_open(
         void * arg
         ) 
 {
+	(void) major;
+	(void) arg;
+
 	GRSPW_DEV *pDev;
 	struct drvmgr_dev *dev;
 	SPACEWIRE_DBGC(DBGSPW_IOCALLS, "open [%i,%i]\n", major, minor);
@@ -908,6 +915,9 @@ static rtems_device_driver grspw_close(
 	void * arg
 	)
 {	
+	(void) major;
+	(void) arg;
+
 	GRSPW_DEV *pDev;
 	struct drvmgr_dev *dev;
 
@@ -936,6 +946,8 @@ static rtems_device_driver grspw_read(
 	void		    * arg
 	)
 {
+	(void) major;
+
 	rtems_libio_rw_args_t *rw_args;
 	unsigned int count = 0;
 	GRSPW_DEV *pDev;
@@ -1003,6 +1015,8 @@ static rtems_device_driver grspw_write(
 	void		    * arg
 )
 {
+	(void) major;
+
 	rtems_libio_rw_args_t *rw_args;
 	GRSPW_DEV *pDev;
 	struct drvmgr_dev *dev;
@@ -1042,6 +1056,8 @@ static rtems_device_driver grspw_control(
 	void		    * arg
 	)
 {
+	(void) major;
+
 	spw_ioctl_pkt_send *args;
 	spw_ioctl_packetsize *ps;
 	int status;
@@ -2017,6 +2033,8 @@ static void check_rx_errors(GRSPW_DEV *pDev, int ctrl)
 
 static void grspw_print_dev(struct drvmgr_dev *dev, int options)
 {
+	(void) options;
+
 	GRSPW_DEV *pDev = dev->priv;
 
 	/* Print */

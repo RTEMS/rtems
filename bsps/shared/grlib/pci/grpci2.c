@@ -280,6 +280,9 @@ int __attribute__((weak)) grpci2dma_init(void * regs, void isr_register( void (*
 
 int grpci2dma_init(void * regs, void isr_register( void (*isr)(void *), void * arg))
 {
+	(void) regs;
+	(void) isr_register;
+
 	return 0;
 }
 

@@ -1035,13 +1035,20 @@ static int occan_set_speedregs(occan_priv *priv, occan_speed_regs *timing)
 	return 0;
 }
 
-static rtems_device_driver occan_initialize(rtems_device_major_number major, rtems_device_minor_number unused, void *arg)
+static rtems_device_driver occan_initialize(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	return RTEMS_SUCCESSFUL;
 }
 
 static rtems_device_driver occan_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	occan_priv *can;
 	struct drvmgr_dev *dev;
 
@@ -1102,6 +1109,9 @@ static rtems_device_driver occan_open(rtems_device_major_number major, rtems_dev
 
 static rtems_device_driver occan_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	occan_priv *can;
 	struct drvmgr_dev *dev;
 
@@ -1133,6 +1143,8 @@ static rtems_device_driver occan_close(rtems_device_major_number major, rtems_de
 
 static rtems_device_driver occan_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+
 	occan_priv *can;
 	struct drvmgr_dev *dev;
 	rtems_libio_rw_args_t *rw_args=(rtems_libio_rw_args_t *) arg;
@@ -1236,6 +1248,8 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 
 static rtems_device_driver occan_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+
 	occan_priv *can;
 	struct drvmgr_dev *dev;
 	rtems_libio_rw_args_t *rw_args=(rtems_libio_rw_args_t *) arg;
@@ -1388,6 +1402,8 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 
 static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+
 	int ret;
 	struct grlib_canbtrs_timing timing;
 	occan_priv *can;

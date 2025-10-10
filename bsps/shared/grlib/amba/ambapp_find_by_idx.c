@@ -44,6 +44,8 @@
  */
 int ambapp_find_by_idx(struct ambapp_dev *dev, int index, void *pcount)
 {
+  (void) index;
+
   int *pi = pcount;
 
   if (pi) {

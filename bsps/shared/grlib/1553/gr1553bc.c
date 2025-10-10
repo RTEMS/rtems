@@ -1264,6 +1264,9 @@ void gr1553bc_register(void)
 
 static void gr1553bc_isr_std(union gr1553bc_bd *bd, void *data)
 {
+	(void) bd;
+	(void) data;
+
 	/* Do nothing */
 }
 
@@ -1684,6 +1687,8 @@ void gr1553bc_status(void *bc, struct gr1553bc_status *status)
 
 void gr1553bc_show_list(struct gr1553bc_list *list, int options)
 {
+	(void) options;
+
 	struct gr1553bc_major *major;
 	struct gr1553bc_minor *minor;
 	int i, j, minor_cnt, timefree;

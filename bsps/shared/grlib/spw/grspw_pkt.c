@@ -493,7 +493,8 @@ void __attribute__((weak)) grspw_work_event(
 	enum grspw_worktask_ev ev,
 	unsigned int msg)
 {
-
+	(void) ev;
+	(void) msg;
 }
 
 /* USER OVERRIDABLE - The work task priority. Set to -1 to disable creating
@@ -3277,6 +3278,9 @@ void grspw_work_cfg(void *d, struct grspw_work_config *wc)
 #ifdef RTEMS_SMP
 int grspw_isr_affinity(void *d, const cpu_set_t *cpus)
 {
+	(void) d;
+	(void) cpus;
+
 	return -1; /* BSP support only static configured IRQ affinity */
 }
 #endif

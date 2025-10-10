@@ -190,11 +190,15 @@ static int ambapp_grlib_init1(struct drvmgr_dev *dev)
 
 static int ambapp_grlib_init2(struct drvmgr_dev *dev)
 {
+	(void) dev;
+
 	return 0;
 }
 
 static int ambapp_grlib_remove(struct drvmgr_dev *dev)
 {
+	(void) dev;
+
 	return 0;
 }
 
@@ -207,6 +211,8 @@ static int ambapp_grlib_int_register
 	void *arg
 	)
 {
+	(void) dev;
+
 	return rtems_interrupt_handler_install(irq, info,
 			RTEMS_INTERRUPT_SHARED, isr, arg);
 }
@@ -219,6 +225,8 @@ static int ambapp_grlib_int_unregister
 	void *arg
 	)
 {
+	(void) dev;
+
 	return rtems_interrupt_handler_remove(irq, isr, arg);
 }
 
@@ -227,6 +235,8 @@ static int ambapp_grlib_int_clear
 	struct drvmgr_dev *dev,
 	int irq)
 {
+	(void) dev;
+
 	if (rtems_interrupt_clear(irq) != RTEMS_SUCCESSFUL) {
 		return DRVMGR_FAIL;
 	}
@@ -240,6 +250,8 @@ static int ambapp_grlib_int_mask
 	int irq
 	)
 {
+	(void) dev;
+
 	if (rtems_interrupt_vector_disable(irq) != RTEMS_SUCCESSFUL) {
 		return DRVMGR_FAIL;
 	}
@@ -253,6 +265,8 @@ static int ambapp_grlib_int_unmask
 	int irq
 	)
 {
+	(void) dev;
+
 	if (rtems_interrupt_vector_enable(irq) != RTEMS_SUCCESSFUL) {
 		return DRVMGR_FAIL;
 	}
@@ -268,6 +282,8 @@ static int ambapp_grlib_int_set_affinity
 	const Processor_mask *cpus
 	)
 {
+	(void) dev;
+
 	bsp_interrupt_set_affinity(irq, cpus);
 	return DRVMGR_OK;
 }
@@ -275,6 +291,8 @@ static int ambapp_grlib_int_set_affinity
 
 static int ambapp_grlib_get_params(struct drvmgr_dev *dev, struct drvmgr_bus_params *params)
 {
+	(void) dev;
+
 	/* Leave params->freq_hz untouched for default */
 	params->dev_prefix = "";
 	return 0;

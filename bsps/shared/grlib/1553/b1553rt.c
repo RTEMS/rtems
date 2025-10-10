@@ -243,6 +243,8 @@ int b1553rt_init3(struct drvmgr_dev *dev)
 
 int b1553rt_remove(struct drvmgr_dev *dev)
 {
+    (void) dev;
+
     /* Stop more tasks to open driver */
 
     /* Throw out all tasks using this driver */
@@ -419,12 +421,12 @@ static int odd_parity(unsigned int data)
 
 static void start_operation(rt_priv *rt)
 {
-
+    (void) rt;
 }
 
 static void stop_operation(rt_priv *rt)
 {
-
+    (void) rt;
 }
 
 static void set_extmdata_en(rt_priv *rt, int extmdata)
@@ -494,10 +496,17 @@ static rtems_device_driver rt_init(rt_priv *rt)
 
 static rtems_device_driver rt_initialize(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+    (void) major;
+    (void) minor;
+    (void) arg;
+
     return RTEMS_SUCCESSFUL;
 }
 
 static rtems_device_driver rt_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg) {
+    (void) major;
+    (void) arg;
+
     rt_priv *rt;
     struct drvmgr_dev *dev;
 
@@ -531,6 +540,9 @@ static rtems_device_driver rt_open(rtems_device_major_number major, rtems_device
  
 static rtems_device_driver rt_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+    (void) major;
+    (void) arg;
+
     rt_priv *rt;
     struct drvmgr_dev *dev;
 
@@ -571,6 +583,8 @@ static int get_messages(rt_priv *rt, void *buf, unsigned int msg_count)
 }
 static rtems_device_driver rt_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+    (void) major;
+
     rtems_libio_rw_args_t *rw_args;
     int count = 0;
     rt_priv *rt;
@@ -601,6 +615,8 @@ static rtems_device_driver rt_read(rtems_device_major_number major, rtems_device
 
 static rtems_device_driver rt_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+    (void) major;
+
     rtems_libio_rw_args_t *rw_args;
     struct rt_msg *source;
     rt_priv *rt;
@@ -637,6 +653,8 @@ static rtems_device_driver rt_write(rtems_device_major_number major, rtems_devic
 
 static rtems_device_driver rt_control(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+    (void) major;
+
     rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t *) arg;
     unsigned int *data;
 
@@ -847,6 +865,8 @@ static void b1553rt_interrupt(void *arg)
 
 void b1553rt_print_dev(struct drvmgr_dev *dev, int options)
 {
+    (void) options;
+
     rt_priv *pDev = dev->priv;
 
     /* Print */

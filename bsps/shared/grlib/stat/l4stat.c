@@ -638,6 +638,9 @@ int l4stat_counter_print(unsigned int counter)
 	/* DEBUG print */
 	DBG("L4STAT COUNTER[%d], Event: %s, Count: %d [0x%08x]\n", 
 		counter, l4stat_event_names[event],val,val);
+#else
+	(void) counter;
+
 #endif /* DEBUG */
 
 	return L4STAT_ERR_OK;

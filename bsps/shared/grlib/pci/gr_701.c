@@ -444,6 +444,8 @@ int ambapp_gr701_int_register(
 	drvmgr_isr handler,
 	void *arg)
 {
+	(void) info;
+
 	struct gr701_priv *priv = dev->parent->dev->priv;
 	SPIN_IRQFLAGS(irqflags);
 	int status;

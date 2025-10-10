@@ -427,6 +427,8 @@ int ambapp_tmtc_1553_int_register(
 	drvmgr_isr handler,
 	void *arg)
 {
+	(void) info;
+
 	struct gr_tmtc_1553_priv *priv = dev->parent->dev->priv;
 	SPIN_IRQFLAGS(irqflags);
 	int status;

@@ -150,6 +150,7 @@ static int ASCS_get_sysfreq(void) {
 		the associated semaphore
 */
 static rtems_isr ASCS_irqhandler(void *v) {
+  (void) v;
 
   if(cfg->regs->sts & GRASCS_STS_TCDONE) {
     /* Clear TC done bit */

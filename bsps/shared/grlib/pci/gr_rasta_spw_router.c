@@ -529,6 +529,8 @@ int ambapp_rasta_spw_router_int_register(
 	drvmgr_isr handler,
 	void *arg)
 {
+	(void) info;
+
 	struct gr_rasta_spw_router_priv *priv = dev->parent->dev->priv;
 	SPIN_IRQFLAGS(irqflags);
 	int status;

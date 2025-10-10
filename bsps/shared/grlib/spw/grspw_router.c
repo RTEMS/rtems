@@ -496,6 +496,8 @@ STATIC void router_hwinfo(struct router_priv *priv,
 
 STATIC void router_hwinfo_print(struct router_hw_info *hwinfo)
 {
+	(void) hwinfo;
+
 	DBG(" -PORTS= SPW: %d, AMBA: %d, FIFO: %d\n", hwinfo->nports_spw,
 			hwinfo->nports_amba, hwinfo->nports_fifo);
 	DBG(" -Static routing: %s, Timers: %s\n",

@@ -79,6 +79,9 @@ static rtems_device_driver canmux_initialize(rtems_device_major_number major, rt
 
 static rtems_device_driver canmux_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+
 	rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t*)arg;
 	
 	DBG("CAN_MUX:  IOCTL %d\n\r", ioarg->command);
@@ -97,6 +100,9 @@ static rtems_device_driver canmux_ioctl(rtems_device_major_number major, rtems_d
 
 static rtems_device_driver canmux_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+
 	rtems_libio_rw_args_t *rw_args=(rtems_libio_rw_args_t*)arg;
 	
 	rw_args->bytes_moved = 0;
@@ -106,6 +112,9 @@ static rtems_device_driver canmux_write(rtems_device_major_number major, rtems_d
 
 static rtems_device_driver canmux_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+
 	rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t*)arg;
 	
 	rw_args->bytes_moved = 0;
@@ -116,6 +125,10 @@ static rtems_device_driver canmux_read(rtems_device_major_number major, rtems_de
 
 static rtems_device_driver canmux_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	DBG("CAN_MUX: Closing %d\n\r",minor);
 
 	priv->open = 0;
@@ -125,6 +138,10 @@ static rtems_device_driver canmux_close(rtems_device_major_number major, rtems_d
 
 static rtems_device_driver canmux_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	DBG("CAN_MUX: Opening %d\n\r",minor);
 	
 	rtems_semaphore_obtain(priv->devsem,RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -142,6 +159,8 @@ static rtems_device_driver canmux_open(rtems_device_major_number major, rtems_de
 
 static rtems_device_driver canmux_initialize(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) arg;
+
 	struct ambapp_apb_info d;
 	char fs_name[20];
 	rtems_status_code status;

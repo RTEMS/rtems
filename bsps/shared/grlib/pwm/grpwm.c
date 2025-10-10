@@ -572,11 +572,18 @@ static void grpwm_isr(void *arg)
 
 static rtems_device_driver grpwm_initialize(rtems_device_major_number  major, rtems_device_minor_number  minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	return RTEMS_SUCCESSFUL;
 }
 
 static rtems_device_driver grpwm_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	struct grpwm_priv *priv;
 	rtems_device_driver ret;
 	struct drvmgr_dev *dev;
@@ -610,6 +617,9 @@ out:
 
 static rtems_device_driver grpwm_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	struct grpwm_priv *priv;
 	struct drvmgr_dev *dev;
 
@@ -629,16 +639,25 @@ static rtems_device_driver grpwm_close(rtems_device_major_number major, rtems_de
 
 static rtems_device_driver grpwm_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	return RTEMS_UNSATISFIED;
 }
 
 static rtems_device_driver grpwm_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	return RTEMS_UNSATISFIED;
 }
 
 static rtems_device_driver grpwm_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
 
 	struct grpwm_priv *priv;
 	struct drvmgr_dev *dev;

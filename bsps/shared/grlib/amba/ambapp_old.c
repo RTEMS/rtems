@@ -40,6 +40,8 @@ struct ambapp_dev_find_match_arg {
 /* AMBA PP find routines */
 static int ambapp_dev_find_match(struct ambapp_dev *dev, int index, void *arg)
 {
+  (void) index;
+
   struct ambapp_dev_find_match_arg *p = arg;
 
   if (p->index == 0) {

@@ -257,6 +257,8 @@ static int SLINK_getsysfreq(void)
  */
 static rtems_isr SLINK_interrupt_handler(void *v)
 {
+	(void) v;
+
 	unsigned int sts;
 	unsigned int wrd;
 

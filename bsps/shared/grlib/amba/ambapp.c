@@ -132,6 +132,8 @@ static void ambapp_apb_dev_init(
   int ahbidx
   )
 {
+  (void) mmaps;
+
   struct ambapp_apb_info *apb_info;
 
   /* Setup device struct */

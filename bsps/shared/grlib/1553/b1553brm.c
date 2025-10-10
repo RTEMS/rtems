@@ -386,6 +386,8 @@ int b1553brm_init3(struct drvmgr_dev *dev)
 
 int b1553brm_remove(struct drvmgr_dev *dev)
 {
+	(void) dev;
+
 	/* Stop more tasks to open driver */
 
 	/* Throw out all tasks using this driver */
@@ -804,10 +806,17 @@ static rtems_device_driver bm_init(brm_priv *brm) {
 
 static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	return RTEMS_SUCCESSFUL;
 }
 
 static rtems_device_driver brm_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg) {
+	(void) major;
+	(void) arg;
+
 	brm_priv *brm;
 	struct drvmgr_dev *dev;
 
@@ -840,6 +849,9 @@ static rtems_device_driver brm_open(rtems_device_major_number major, rtems_devic
  
 static rtems_device_driver brm_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	brm_priv *brm;
 	struct drvmgr_dev *dev;
 
@@ -897,6 +909,8 @@ static int get_bm_messages(brm_priv *brm, void *buf, unsigned int msg_count)
 
 static rtems_device_driver brm_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+
 	rtems_libio_rw_args_t *rw_args;
 	int count = 0;
 	brm_priv *brm;
@@ -937,6 +951,8 @@ static rtems_device_driver brm_read(rtems_device_major_number major, rtems_devic
 
 static rtems_device_driver brm_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+
 	rtems_libio_rw_args_t *rw_args;
 	struct rt_msg *source;
 	unsigned int count=0, current, next, descriptor, wc, suba;
@@ -1006,6 +1022,7 @@ static rtems_device_driver brm_write(rtems_device_major_number major, rtems_devi
 
 static rtems_device_driver brm_control(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
     
 	unsigned int i=0;
 	unsigned short ctrl, oper, cw1, cw2;
@@ -1495,6 +1512,8 @@ static void b1553brm_interrupt(void *arg)
 
 void b1553brm_print_dev(struct drvmgr_dev *dev, int options)
 {
+	(void) options;
+
 	brm_priv *pDev = dev->priv;
 	struct brm_reg *regs = pDev->regs;
 

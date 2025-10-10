@@ -420,6 +420,8 @@ static int gptimer_tlib_set_freq(struct tlib_dev *hand, unsigned int tickrate)
 
 static void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *data, int flags)
 {
+	(void) flags;
+
 	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
 	struct gptimer_priv *priv = priv_from_timer(timer);
 	uint32_t tctrl;

@@ -173,6 +173,8 @@ static void almalloc(unsigned char **alptr, void **ptr, int sz)
 
 static rtems_isr satcan_interrupt_handler(void *v)
 {
+	(void) v;
+
 	unsigned int irq;
 	unsigned int fifo;
 	
@@ -217,6 +219,9 @@ static rtems_isr satcan_interrupt_handler(void *v)
 
 static rtems_device_driver satcan_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+
 	rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t*)arg;
 	int *value;
 	rtems_interval *timeout;
@@ -406,6 +411,9 @@ static rtems_device_driver satcan_ioctl(rtems_device_major_number major, rtems_d
 
 static rtems_device_driver satcan_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+
 	int i;
 	int doff;
 	int msgindex;
@@ -494,6 +502,9 @@ static rtems_device_driver satcan_write(rtems_device_major_number major, rtems_d
 
 static rtems_device_driver satcan_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+
 	char *buf;
 	int i;
 	int canid;
@@ -546,6 +557,10 @@ static rtems_device_driver satcan_read(rtems_device_major_number major, rtems_de
 
 static rtems_device_driver satcan_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	DBG("SatCAN: Closing %d\n\r",minor);
 
 	if (priv->open) {
@@ -566,6 +581,10 @@ static rtems_device_driver satcan_close(rtems_device_major_number major, rtems_d
 
 static rtems_device_driver satcan_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	DBG("SatCAN: Opening %d\n\r",minor);
 	
 	rtems_semaphore_obtain(priv->devsem,RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -595,6 +614,8 @@ static rtems_device_driver satcan_open(rtems_device_major_number major, rtems_de
 
 static rtems_device_driver satcan_initialize(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) arg;
+
 	struct ambapp_ahb_info d;
 	char fs_name[20];
 	rtems_status_code status;

@@ -217,6 +217,8 @@ static int mctrl_init1(struct drvmgr_dev *dev)
 
 static int mctrl_remove(struct drvmgr_dev *dev)
 {
+	(void) dev;
+
 	/* Nothing to be done */
 	DBG("Removing %s\n", dev->name);
 	return DRVMGR_OK;
@@ -225,6 +227,8 @@ static int mctrl_remove(struct drvmgr_dev *dev)
 /* Standard Operations */
 static void mctrl_set_std(struct mctrl_priv *priv, int index, void *regs, unsigned int regval)
 {
+	(void) priv;
+
 	struct mctrl_regs *pregs = regs;
 
 	/* Store new value */

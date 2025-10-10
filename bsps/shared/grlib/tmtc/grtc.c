@@ -511,6 +511,8 @@ static __inline__ int grtc_hw_data_avail_upper(unsigned int rrp, unsigned rwp, u
 /* bufsize is given in bytes */
 static __inline__ int grtc_hw_data_avail_lower(unsigned int rrp, unsigned rwp, unsigned int bufsize)
 {
+	(void) bufsize;
+
 	if ( rrp == rwp )
 		return 0;
 
@@ -799,6 +801,9 @@ static rtems_device_driver grtc_open(
 	rtems_device_minor_number minor, 
 	void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	struct grtc_priv *pDev;
 	struct drvmgr_dev *dev;
 
@@ -856,6 +861,9 @@ static rtems_device_driver grtc_open(
 
 static rtems_device_driver grtc_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	struct grtc_priv *pDev;
 	struct drvmgr_dev *dev; 
 
@@ -881,6 +889,8 @@ static rtems_device_driver grtc_close(rtems_device_major_number major, rtems_dev
 
 static rtems_device_driver grtc_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+
 	struct grtc_priv *pDev;
 	struct drvmgr_dev *dev;
 	int count;
@@ -959,6 +969,10 @@ read_from_buffer:
 
 static rtems_device_driver grtc_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	FUNCDBG();
 	return RTEMS_NOT_IMPLEMENTED;
 }
@@ -1552,6 +1566,8 @@ static int process_dma(struct grtc_priv *pDev)
 
 static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	(void) major;
+
 	struct grtc_priv *pDev;
 	struct drvmgr_dev *dev;
 	rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t *)arg;
@@ -1992,10 +2008,14 @@ out:
 
 static rtems_device_driver grtc_initialize(
   rtems_device_major_number major, 
-  rtems_device_minor_number unused,
+  rtems_device_minor_number minor,
   void *arg
   )
 {
+	(void) major;
+	(void) minor;
+	(void) arg;
+
 	/* Device Semaphore created with count = 1 */
 	if ( rtems_semaphore_create(rtems_build_name('G', 'R', 'T', 'C'),
 		1,

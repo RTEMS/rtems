@@ -202,6 +202,9 @@ static bool apbuart_first_open_polled(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) tty;
+  (void) args;
+
   struct apbuart_context *uart = (struct apbuart_context *) base;
   uint32_t ctrl;
 
@@ -223,6 +226,8 @@ static bool apbuart_first_open_interrupt(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   struct apbuart_context *uart = (struct apbuart_context *) base;
   rtems_status_code sc;
   uint32_t ctrl;
@@ -256,6 +261,8 @@ static void apbuart_last_close_interrupt(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   struct apbuart_context *uart = (struct apbuart_context *) base;
   rtems_interrupt_lock_context lock_context;
   uint32_t ctrl;

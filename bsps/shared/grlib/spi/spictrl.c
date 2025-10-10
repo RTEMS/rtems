@@ -668,6 +668,8 @@ STATIC rtems_status_code spictrl_libi2c_init(rtems_libi2c_bus_t *bushdl)
 /* Nothing to be done in start */
 STATIC rtems_status_code spictrl_libi2c_send_start(rtems_libi2c_bus_t *bushdl)
 {
+	(void) bushdl;
+
 	DBG("SPICTRL: spictrl_libi2c_send_start\n");
 
 	return 0;
@@ -693,6 +695,8 @@ STATIC rtems_status_code spictrl_libi2c_send_stop(rtems_libi2c_bus_t *bushdl)
 STATIC rtems_status_code spictrl_libi2c_send_addr(rtems_libi2c_bus_t *bushdl,
 					     uint32_t addr, int rw)
 {
+	(void) rw;
+
 	struct spictrl_priv *priv = (struct spictrl_priv *)bushdl;
 
 	DBG("SPICTRL: spictrl_libi2c_send_addr, %d\n", addr);

@@ -371,6 +371,9 @@ static int apbuart_info(
 	void (*print_line)(void *p, char *str),
 	void *p, int argc, char *argv[])
 {
+	(void) argc;
+	(void) argv;
+
 	struct apbuart_priv *priv = dev->priv;
 	char *str1;
 	char buf[64];
@@ -413,6 +416,8 @@ static bool first_open(
 	rtems_libio_open_close_args_t *args
 )
 {
+	(void) args;
+
 	struct apbuart_priv *uart = base_get_priv(base);
 	apbuart *regs = uart->regs;
 	uint32_t ctrl;
@@ -462,6 +467,8 @@ static void last_close(
 	rtems_libio_open_close_args_t *args
 )
 {
+	(void) args;
+
 	struct apbuart_priv *uart = base_get_priv(base);
 	apbuart *regs = uart->regs;
 	rtems_interrupt_lock_context lock_context;
