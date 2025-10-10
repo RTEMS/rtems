@@ -65,6 +65,9 @@ static bool pl050_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
   arm_pl050_context *ctx = (arm_pl050_context *) base;
   volatile pl050 *regs = pl050_get_regs(base);
   rtems_status_code sc;
@@ -91,6 +94,8 @@ static void pl050_last_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   arm_pl050_context *ctx = (arm_pl050_context *) base;
   volatile pl050 *regs = pl050_get_regs(base);
   rtems_status_code sc;

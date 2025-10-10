@@ -97,6 +97,8 @@ static uint64_t a9mpcore_clock_get_counter(volatile a9mpcore_gt *gt)
 
 static uint32_t a9mpcore_clock_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   volatile a9mpcore_gt *gt = A9MPCORE_GT;
 
   return gt->cntrlower;
@@ -150,6 +152,10 @@ static void a9mpcore_clock_secondary_initialization(
   if (cmpval - a9mpcore_clock_get_counter(gt) >= interval) {
     bsp_fatal(BSP_ARM_A9MPCORE_FATAL_CLOCK_SMP_INIT);
   }
+#else
+  (void) gt;
+  (void) cmpval;
+  (void) interval;
 #endif
 }
 

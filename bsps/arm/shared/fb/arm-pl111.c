@@ -179,6 +179,9 @@ rtems_device_driver frame_buffer_initialize(
   void *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code sc;
   pl111_fb_context *ctx = &pl111_fb_instance;
 
@@ -207,6 +210,10 @@ rtems_device_driver frame_buffer_open(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   rtems_status_code sc;
   pl111_fb_context *ctx = &pl111_fb_instance;
 
@@ -231,6 +238,10 @@ rtems_device_driver frame_buffer_close(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   const pl111_fb_context *ctx = &pl111_fb_instance;
 
   pl111_fb_destroy(ctx);
@@ -245,6 +256,10 @@ rtems_device_driver frame_buffer_read(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_IO_ERROR;
 }
 
@@ -254,6 +269,10 @@ rtems_device_driver frame_buffer_write(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_IO_ERROR;
 }
 
@@ -263,6 +282,9 @@ rtems_device_driver frame_buffer_control(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_ioctl_args_t *ioctl_arg = arg;
   int eno = 0;
 

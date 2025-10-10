@@ -51,6 +51,8 @@ static struct timecounter lpc_clock_tc;
 
 static uint32_t lpc_clock_tc_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   return lpc_timecounter->tc;
 }
 

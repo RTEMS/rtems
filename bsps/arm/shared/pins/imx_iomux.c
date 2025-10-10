@@ -184,6 +184,8 @@ static int
 imx_iomux_getencprop_alloc(const char *fdt, int node, const char *name,
     size_t elsz, void **buf)
 {
+	(void) name;
+
 	int len;
 	const uint32_t *val;
 	int i;

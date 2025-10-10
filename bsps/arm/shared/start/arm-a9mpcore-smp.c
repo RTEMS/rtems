@@ -41,6 +41,8 @@
 
 static void bsp_inter_processor_interrupt(void *arg)
 {
+  (void) arg;
+
   _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
 }
 
@@ -58,6 +60,8 @@ static rtems_interrupt_entry arm_a9mpcore_ipi_entry =
 
 void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
 {
+  (void) cpu_count;
+
   rtems_status_code sc;
 
   sc = rtems_interrupt_entry_install(
