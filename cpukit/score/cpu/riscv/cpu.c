@@ -192,6 +192,8 @@ uint32_t _CPU_ISR_Get_level( void )
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
+  (void) ignored;
+
   while ( true ) {
     __asm__ volatile ( "wfi" );
   }

@@ -52,6 +52,9 @@
 uint32_t
 rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
                              const Elf_Shdr*      shdr) {
+  (void) obj;
+  (void) shdr;
+
   return 0;
 }
 
@@ -86,6 +89,8 @@ rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
 
 bool
 rtems_rtl_elf_rel_resolve_sym (Elf_Word type) {
+  (void) type;
+
   return true;
 }
 
@@ -160,6 +165,8 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
                           const Elf_Byte            syminfo,
                           const Elf_Word            symvalue,
                           const bool parsing) {
+  (void) symname;
+
   Elf_Addr *where;
 
   char bits = (sizeof(Elf_Word) * 8);
@@ -415,6 +422,13 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*      obj,
                             const char*               symname,
                             const Elf_Byte            syminfo,
                             const Elf_Word            symvalue) {
+  (void) obj;
+  (void) rel;
+  (void) sect;
+  (void) symname;
+  (void) syminfo;
+  (void) symvalue;
+
   rtems_rtl_set_error (EINVAL, "rel type record not supported");
   return rtems_rtl_elf_rel_failure;
 }

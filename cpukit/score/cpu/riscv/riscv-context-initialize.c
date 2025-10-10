@@ -47,6 +47,9 @@ void _CPU_Context_Initialize(
   void            *tls_area
 )
 {
+  (void) new_level;
+  (void) is_fp;
+
   void *stack;
 
   stack = _Addresses_Add_offset( stack_area_begin, stack_area_size );
