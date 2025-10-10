@@ -58,6 +58,10 @@ rtems_status_code console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   size_t i;
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(zynqmp_uart_instances); ++i) {
