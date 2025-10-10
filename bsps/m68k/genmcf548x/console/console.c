@@ -535,6 +535,9 @@ IntUartInterruptWrite (int minor, const char *buf, size_t len)
 static int
 IntUartInterruptOpen(int major, int minor, void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	struct IntUartInfoStruct   *info = &IntUartInfo[minor];
 
 	/* enable the uart */
@@ -567,6 +570,9 @@ IntUartInterruptOpen(int major, int minor, void *arg)
 static int
 IntUartInterruptClose(int major, int minor, void *arg)
 {
+	(void) major;
+	(void) arg;
+
 	struct IntUartInfoStruct   *info = &IntUartInfo[minor];
 
 	/* disable the interrupts and the uart */
@@ -685,6 +691,8 @@ rtems_device_driver console_initialize(
 	rtems_device_minor_number  minor,
 	void  *arg )
 {
+	(void) arg;
+
 	rtems_status_code status;
 
 
@@ -805,6 +813,9 @@ rtems_device_driver console_close(
 	rtems_device_minor_number minor,
 	void   * arg)
 {
+    (void) major;
+    (void) minor;
+
     return(rtems_termios_close (arg));
 }
 
@@ -818,6 +829,9 @@ rtems_device_driver console_read(
 	rtems_device_minor_number minor,
 	void  * arg)
 {
+    (void) major;
+    (void) minor;
+
     return(rtems_termios_read (arg));
 }
 
@@ -831,6 +845,9 @@ rtems_device_driver console_write(
 	rtems_device_minor_number minor,
 	void  * arg)
 {
+    (void) major;
+    (void) minor;
+
     return(rtems_termios_write (arg));
 }
 
@@ -844,5 +861,8 @@ rtems_device_driver console_control(
 	rtems_device_minor_number minor,
 	void  * arg)
 {
+    (void) major;
+    (void) minor;
+
     return( rtems_termios_ioctl (arg) );
 }

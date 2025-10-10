@@ -162,6 +162,8 @@ static rtems_isr mcdma_glue_irq_dispatcher
 |    none                                                                   |
 \*=========================================================================*/
 {
+  (void) v;
+
   uint32_t pending;
   int curr_channo;
 
