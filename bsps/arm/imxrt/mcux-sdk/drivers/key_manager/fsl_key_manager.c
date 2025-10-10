@@ -212,6 +212,9 @@ status_t KEYMGR_SlotControl(KEY_MANAGER_Type *base, domain_slot_config_t *config
  */
 void KEYMGR_Init(KEY_MANAGER_Type *base)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_EnableClock(kCLOCK_Key_Manager);
 #endif

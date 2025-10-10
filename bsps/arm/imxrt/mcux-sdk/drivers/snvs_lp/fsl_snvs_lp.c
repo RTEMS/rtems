@@ -270,6 +270,10 @@ void SNVS_LP_Deinit(SNVS_Type *base)
      defined(SNVS_LP_CLOCKS))
     uint32_t instance = SNVS_LP_GetInstance(base);
     CLOCK_DisableClock(s_snvsLpClock[instance]);
+#else
+#ifdef __rtems__
+    (void) base;
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 

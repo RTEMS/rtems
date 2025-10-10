@@ -1005,6 +1005,9 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
 
 static bool LPSPI_MasterTransferClearTCR(LPSPI_Type *base, lpspi_transfer_blocking_param_t *stateParams)
 {
+#ifdef __rtems__
+    (void) stateParams;
+#endif
 #if SPI_RETRY_TIMES
     uint32_t waitTimes = SPI_RETRY_TIMES;
     while ((LPSPI_GetTxFifoCount(base) == LPSPI_GetRxFifoSize(base)) && (--waitTimes != 0U))
@@ -1062,6 +1065,9 @@ static bool LPSPI_MasterTransferReadDataInFifo(LPSPI_Type *base,
 
 static bool LPSPI_MasterTransferReadDataInFifoNoBuf(LPSPI_Type *base, lpspi_transfer_blocking_param_t *stateParams)
 {
+#ifdef __rtems__
+    (void) stateParams;
+#endif
 #if SPI_RETRY_TIMES
     uint32_t waitTimes = SPI_RETRY_TIMES;
     while (((LPSPI_GetStatusFlags(base) & (uint32_t)kLPSPI_TransferCompleteFlag) == 0U) && (--waitTimes != 0U))
@@ -1495,6 +1501,9 @@ static void LPSPI_MasterTransferComplete(LPSPI_Type *base, lpspi_master_handle_t
  */
 status_t LPSPI_MasterTransferGetCount(LPSPI_Type *base, lpspi_master_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     if (NULL == count)
@@ -1928,6 +1937,9 @@ static void LPSPI_SlaveTransferComplete(LPSPI_Type *base, lpspi_slave_handle_t *
  */
 status_t LPSPI_SlaveTransferGetCount(LPSPI_Type *base, lpspi_slave_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     if (NULL == count)

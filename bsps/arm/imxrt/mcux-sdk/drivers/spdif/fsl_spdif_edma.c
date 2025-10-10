@@ -85,6 +85,11 @@ static void SPDIF_RxEDMACallback(edma_handle_t *handle, void *userData, bool don
  ******************************************************************************/
 static void SPDIF_TxEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) handle;
+    (void) done;
+    (void) tcds;
+#endif
     spdif_edma_private_handle_t *privHandle = (spdif_edma_private_handle_t *)userData;
     spdif_edma_handle_t *spdifHandle        = privHandle->handle;
 
@@ -105,6 +110,11 @@ static void SPDIF_TxEDMACallback(edma_handle_t *handle, void *userData, bool don
 
 static void SPDIF_RxEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) handle;
+    (void) done;
+    (void) tcds;
+#endif
     spdif_edma_private_handle_t *privHandle = (spdif_edma_private_handle_t *)userData;
     spdif_edma_handle_t *spdifHandle        = privHandle->handle;
 
@@ -550,6 +560,9 @@ void SPDIF_TransferAbortReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handl
  */
 status_t SPDIF_TransferGetSendCountEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     status_t status = kStatus_Success;
@@ -579,6 +592,9 @@ status_t SPDIF_TransferGetSendCountEDMA(SPDIF_Type *base, spdif_edma_handle_t *h
  */
 status_t SPDIF_TransferGetReceiveCountEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     status_t status = kStatus_Success;

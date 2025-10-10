@@ -1336,6 +1336,9 @@ void FLEXIO_I2C_MasterTransferAbort(FLEXIO_I2C_Type *base, flexio_i2c_master_han
  */
 status_t FLEXIO_I2C_MasterTransferGetCount(FLEXIO_I2C_Type *base, flexio_i2c_master_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     if (NULL == count)
     {
         return kStatus_InvalidArgument;

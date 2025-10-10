@@ -361,6 +361,9 @@ status_t FLEXIO_UART_TransferGetReceiveCountEDMA(FLEXIO_UART_Type *base,
                                                  flexio_uart_edma_handle_t *handle,
                                                  size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
     assert(handle->rxEdmaHandle != NULL);
     assert(count != NULL);
@@ -390,6 +393,9 @@ status_t FLEXIO_UART_TransferGetReceiveCountEDMA(FLEXIO_UART_Type *base,
  */
 status_t FLEXIO_UART_TransferGetSendCountEDMA(FLEXIO_UART_Type *base, flexio_uart_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
     assert(handle->txEdmaHandle != NULL);
     assert(count != NULL);

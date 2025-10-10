@@ -1129,6 +1129,9 @@ status_t ENET_MDIOC45Read(ENET_Type *base, uint8_t portAddr, uint8_t devAddr, ui
  */
 static inline void ENET_SetRGMIIClockDelay(ENET_Type *base, bool txEnabled, bool rxEnabled)
 {
+#ifdef __rtems__
+    (void) rxEnabled;
+#endif
     uint32_t ecrReg = base->ECR;
 
 #if defined(FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY) && FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY

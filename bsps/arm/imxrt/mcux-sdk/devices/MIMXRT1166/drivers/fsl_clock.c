@@ -1648,6 +1648,10 @@ uint32_t CLOCK_GetFreqFromObs(uint32_t obsSigIndex, uint32_t obsIndex)
  */
 bool CLOCK_EnableUsbhs0Clock(clock_usb_src_t src, uint32_t freq)
 {
+#ifdef __rtems__
+    (void) src;
+    (void) freq;
+#endif
     return true;
 }
 /*! brief Enable USB HS PHY PLL clock.
@@ -1661,6 +1665,9 @@ bool CLOCK_EnableUsbhs0Clock(clock_usb_src_t src, uint32_t freq)
  */
 bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
 {
+#ifdef __rtems__
+    (void) src;
+#endif
     uint32_t phyPllDiv  = 0U;
     uint16_t multiplier = 0U;
     bool err            = false;
@@ -1768,10 +1775,17 @@ void CLOCK_DisableUsbhs0PhyPllClock(void)
 }
 bool CLOCK_EnableUsbhs1Clock(clock_usb_src_t src, uint32_t freq)
 {
+#ifdef __rtems__
+    (void) src;
+    (void) freq;
+#endif
     return true;
 }
 bool CLOCK_EnableUsbhs1PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
 {
+#ifdef __rtems__
+    (void) src;
+#endif
     uint32_t phyPllDiv  = 0U;
     uint16_t multiplier = 0U;
     bool err            = false;

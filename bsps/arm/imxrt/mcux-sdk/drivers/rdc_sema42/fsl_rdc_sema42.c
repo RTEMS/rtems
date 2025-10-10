@@ -91,6 +91,14 @@ void RDC_SEMA42_Init(RDC_SEMAPHORE_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 #if defined(RDC_SEMA42_CLOCKS)
     CLOCK_EnableClock(s_sema42Clocks[RDC_SEMA42_GetInstance(base)]);
+#else
+#ifdef __rtems__
+    (void) base;
+#endif
+#endif
+#else
+#ifdef __rtems__
+    (void) base;
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
@@ -107,6 +115,14 @@ void RDC_SEMA42_Deinit(RDC_SEMAPHORE_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 #if defined(RDC_SEMA42_CLOCKS)
     CLOCK_DisableClock(s_sema42Clocks[RDC_SEMA42_GetInstance(base)]);
+#else
+#ifdef __rtems__
+    (void) base;
+#endif
+#endif
+#else
+#ifdef __rtems__
+    (void) base;
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }

@@ -143,6 +143,9 @@ void FLEXSPI_TransferUpdateSizeEDMA(FLEXSPI_Type *base,
                                     flexspi_edma_handle_t *handle,
                                     flexspi_edma_transfer_nsize_t nsize)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     handle->nsize = nsize;
 }
 

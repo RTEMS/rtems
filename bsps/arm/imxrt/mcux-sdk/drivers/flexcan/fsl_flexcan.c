@@ -1563,6 +1563,9 @@ static void FLEXCAN_GetSegments(CAN_Type *base,
                                 uint32_t tqNum,
                                 flexcan_timing_config_t *pTimingConfig)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     uint32_t ideal_sp;
     uint32_t seg1Max, proSegMax;
     uint32_t seg1Temp;
@@ -2027,6 +2030,9 @@ bool FLEXCAN_FDCalculateImprovedTimingValues(CAN_Type *base,
                                              uint32_t sourceClock_Hz,
                                              flexcan_timing_config_t *pTimingConfig)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     /* Observe bit rate maximums */
     assert(bitRate <= MAX_CANFD_BITRATE);
     assert(bitRateFD <= MAX_CANFD_BITRATE);
@@ -3735,6 +3741,9 @@ status_t FLEXCAN_TransferReceiveFifoNonBlocking(CAN_Type *base,
 
 status_t FLEXCAN_TransferGetReceiveFifoCount(CAN_Type *base, flexcan_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(NULL != handle);
 
     status_t result = kStatus_Success;

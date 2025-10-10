@@ -831,6 +831,10 @@ void DSI_GetDphyDefaultConfig(dsi_dphy_config_t *config, uint32_t txHsBitClk_Hz,
 void DSI_SetApbPacketControl(
     const MIPI_DSI_Type *base, uint16_t wordCount, uint8_t virtualChannel, dsi_tx_data_type_t dataType, uint8_t flags)
 {
+#ifdef __rtems__
+    (void) base;
+    (void) virtualChannel;
+#endif
     uint32_t pktCtrl = PKT_CONTROL_WORD_COUNT(wordCount) | PKT_CONTROL_HEADER_TYPE(dataType);
 
 #if defined(DSI_HOST_PKT_CONTROL_VC)
@@ -1375,6 +1379,9 @@ void DSI_TransferAbort(const MIPI_DSI_Type *base, dsi_handle_t *handle)
  */
 void DSI_TransferHandleIRQ(const MIPI_DSI_Type *base, dsi_handle_t *handle)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(NULL != handle);
 
     status_t status;

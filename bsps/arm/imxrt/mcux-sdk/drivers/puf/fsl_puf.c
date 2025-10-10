@@ -80,6 +80,9 @@ static status_t puf_waitForInit(PUF_Type *base)
 static void puf_powerOn(PUF_Type *base, puf_config_t *conf)
 {
 #if defined(FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL) && (FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL > 0)
+#ifdef __rtems__
+    (void) conf;
+#endif
     /* RT6xxs */
     base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_CK_DIS_MASK);
     base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_CK_DIS_MASK | PUF_PWRCTRL_RAMINIT_MASK);
@@ -91,6 +94,9 @@ static void puf_powerOn(PUF_Type *base, puf_config_t *conf)
     {
     }
 #else  /* !FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL */
+#ifdef __rtems__
+    (void) conf;
+#endif
     /* LPCXpresso55s69 & LPCXpresso54S018 */
     base->PWRCTRL = PUF_PWRCTRL_RAMON_MASK;
     while (0U == (PUF_PWRCTRL_RAMSTAT_MASK & base->PWRCTRL))

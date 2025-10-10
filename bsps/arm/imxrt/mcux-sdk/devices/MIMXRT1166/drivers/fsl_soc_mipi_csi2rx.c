@@ -29,6 +29,9 @@
 
 void MIPI_CSI2RX_SoftwareReset(MIPI_CSI2RX_Type *base, bool reset)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     if (reset)
     {
         IOMUXC_GPR->GPR59 &= ~IOMUXC_GPR_GPR59_MIPI_CSI_SOFT_RST_N_MASK;
@@ -41,6 +44,9 @@ void MIPI_CSI2RX_SoftwareReset(MIPI_CSI2RX_Type *base, bool reset)
 
 void MIPI_CSI2RX_InitInterface(MIPI_CSI2RX_Type *base, uint8_t tHsSettle_EscClk)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     /* Pixel link control */
     VIDEO_MUX->PLM_CTRL.RW = 0U;
 
@@ -64,6 +70,9 @@ void MIPI_CSI2RX_InitInterface(MIPI_CSI2RX_Type *base, uint8_t tHsSettle_EscClk)
 
 void MIPI_CSI2RX_DeinitInterface(MIPI_CSI2RX_Type *base)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     IOMUXC_GPR->GPR59 = (IOMUXC_GPR->GPR59 & (~IOMUXC_GPR_GPR59_MIPI_CSI_RX_ENABLE_MASK)) | IOMUXC_GPR_GPR59_MIPI_CSI_PD_RX_MASK;
 
     /* Pixel link control */

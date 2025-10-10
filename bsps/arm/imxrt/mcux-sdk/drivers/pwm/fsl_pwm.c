@@ -1171,6 +1171,9 @@ status_t PWM_SetOutputToIdle(PWM_Type *base, pwm_channels_t pwmChannel, pwm_subm
  */
 uint8_t PWM_GetPwmChannelState(PWM_Type *base, pwm_submodule_t subModule, pwm_channels_t pwmChannel)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     return s_pwmGetPwmDutyCycle[subModule][pwmChannel];
 }
 

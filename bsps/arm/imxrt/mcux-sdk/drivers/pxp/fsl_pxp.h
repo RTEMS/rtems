@@ -1313,6 +1313,9 @@ static inline uint8_t PXP_GetAxiErrorId(PXP_Type *base, uint8_t axiIndex)
         return (uint8_t)((base->STAT & PXP_STAT_AXI_ERROR_ID_1_MASK) >> PXP_STAT_AXI_ERROR_ID_1_SHIFT);
     }
 #else
+#ifdef __rtems__
+    (void) axiIndex;
+#endif
     return (uint8_t)((base->STAT & PXP_STAT_AXI_ERROR_ID_MASK) >> PXP_STAT_AXI_ERROR_ID_SHIFT);
 #endif
 }

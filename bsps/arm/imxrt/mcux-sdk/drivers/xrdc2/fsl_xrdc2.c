@@ -79,6 +79,9 @@ static void XRDC2_MakeDXACP(const xrdc2_access_policy_t policy[FSL_FEATURE_XRDC2
  */
 void XRDC2_Init(XRDC2_Type *base)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
 }
 
 /*!
@@ -90,6 +93,9 @@ void XRDC2_Init(XRDC2_Type *base)
  */
 void XRDC2_Deinit(XRDC2_Type *base)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
 }
 
 /*!

@@ -468,6 +468,9 @@ static void ENET_SetHandler(ENET_Type *base,
                             const enet_buffer_config_t *bufferConfig,
                             uint32_t srcClock_Hz)
 {
+#ifdef __rtems__
+    (void) srcClock_Hz;
+#endif
     uint8_t count;
     uint32_t instance                   = ENET_GetInstance(base);
     const enet_buffer_config_t *buffCfg = bufferConfig;
@@ -526,6 +529,9 @@ static void ENET_SetMacController(ENET_Type *base,
                                   uint8_t *macAddr,
                                   uint32_t srcClock_Hz)
 {
+#ifdef __rtems__
+    (void) handle;
+#endif
 #if defined(FSL_FEATURE_ENET_HAS_AVB) && FSL_FEATURE_ENET_HAS_AVB
     if (FSL_FEATURE_ENET_INSTANCE_HAS_AVBn(base) == 1)
     {
@@ -786,6 +792,9 @@ static void ENET_SetTxBufferDescriptors(enet_handle_t *handle,
                                         const enet_config_t *config,
                                         const enet_buffer_config_t *bufferConfig)
 {
+#ifdef __rtems__
+    (void) handle;
+#endif
     assert(config != NULL);
     assert(bufferConfig != NULL);
 
@@ -852,6 +861,9 @@ static void ENET_SetRxBufferDescriptors(enet_handle_t *handle,
                                         const enet_config_t *config,
                                         const enet_buffer_config_t *bufferConfig)
 {
+#ifdef __rtems__
+    (void) handle;
+#endif
     assert(config != NULL);
     assert(bufferConfig != NULL);
 
@@ -1716,6 +1728,9 @@ status_t ENET_GetRxFrameSize(enet_handle_t *handle, uint32_t *length, uint8_t ri
 status_t ENET_ReadFrame(
     ENET_Type *base, enet_handle_t *handle, uint8_t *data, uint32_t length, uint8_t ringId, uint32_t *ts)
 {
+#ifdef __rtems__
+    (void) ts;
+#endif
     assert(handle != NULL);
     assert(FSL_FEATURE_ENET_INSTANCE_QUEUEn(base) != -1);
     assert(ringId < (uint8_t)FSL_FEATURE_ENET_INSTANCE_QUEUEn(base));
@@ -1871,6 +1886,9 @@ status_t ENET_SendFrame(ENET_Type *base,
                         bool tsFlag,
                         void *context)
 {
+#ifdef __rtems__
+    (void) tsFlag;
+#endif
     assert(handle != NULL);
     assert(data != NULL);
     assert(FSL_FEATURE_ENET_INSTANCE_QUEUEn(base) != -1);
@@ -2186,6 +2204,10 @@ status_t ENET_GetRxBuffer(ENET_Type *base,
                           bool *isLastBuff,
                           uint32_t *ts)
 {
+#ifdef __rtems__
+    (void) base;
+    (void) ts;
+#endif
     assert(handle != NULL);
     assert(ringId < (uint8_t)FSL_FEATURE_ENET_QUEUE);
     assert(handle->rxBdRing[ringId].rxBdBase != NULL);
@@ -2808,6 +2830,9 @@ status_t ENET_SendFrameZeroCopy(ENET_Type *base,
                                 bool tsFlag,
                                 void *context)
 {
+#ifdef __rtems__
+    (void) tsFlag;
+#endif
     assert(handle != NULL);
     assert(data != NULL);
     assert(ringId < (uint8_t)FSL_FEATURE_ENET_QUEUE);

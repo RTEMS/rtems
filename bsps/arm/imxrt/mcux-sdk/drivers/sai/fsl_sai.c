@@ -1851,6 +1851,9 @@ void SAI_TxSetFormat(I2S_Type *base,
                      uint32_t mclkSourceClockHz,
                      uint32_t bclkSourceClockHz)
 {
+#ifdef __rtems__
+    (void) mclkSourceClockHz;
+#endif
     assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) != -1);
 
     uint32_t bclk = 0;
@@ -1994,6 +1997,9 @@ void SAI_RxSetFormat(I2S_Type *base,
                      uint32_t mclkSourceClockHz,
                      uint32_t bclkSourceClockHz)
 {
+#ifdef __rtems__
+    (void) mclkSourceClockHz;
+#endif
     assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) != -1);
 
     uint32_t bclk = 0;
@@ -2562,6 +2568,9 @@ status_t SAI_TransferReceiveNonBlocking(I2S_Type *base, sai_handle_t *handle, sa
  */
 status_t SAI_TransferGetSendCount(I2S_Type *base, sai_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     status_t status           = kStatus_Success;
@@ -2590,6 +2599,9 @@ status_t SAI_TransferGetSendCount(I2S_Type *base, sai_handle_t *handle, size_t *
  */
 status_t SAI_TransferGetReceiveCount(I2S_Type *base, sai_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     status_t status           = kStatus_Success;

@@ -31,6 +31,9 @@
  */
 void IEE_APC_GlobalEnable(IEE_APC_Type *base)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     /* APC_x bits in GPR2 to GPR25 only take effect when this bit is set high */
     IOMUXC_LPSR_GPR->GPR25 |= IOMUXC_LPSR_GPR_GPR25_APC_VALID_MASK;
     __DSB();
@@ -46,6 +49,9 @@ void IEE_APC_GlobalEnable(IEE_APC_Type *base)
  */
 void IEE_APC_GlobalDisable(IEE_APC_Type *base)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     /* APC_x bits in GPR2 to GPR25 only take effect when this bit is set high */
     IOMUXC_LPSR_GPR->GPR25 &= ~IOMUXC_LPSR_GPR_GPR25_APC_VALID_MASK;
     __DSB();
@@ -64,6 +70,9 @@ void IEE_APC_GlobalDisable(IEE_APC_Type *base)
  */
 status_t IEE_APC_SetRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, uint32_t startAddr, uint32_t endAddr)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     /* bit[2:0] of adress must be zero
      *
      * Note: For i.MXRT1170, region is [bot:top), the end is open interval. So the bit[2:0] of the end address must
@@ -148,6 +157,9 @@ status_t IEE_APC_SetRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, ui
  */
 status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, iee_apc_domain_t domain)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     if (region == kIEE_APC_Region0)
     {
         /* Locks write into APC Region 0 BOT address */
@@ -354,6 +366,9 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
  */
 void IEE_APC_RegionEnable(IEE_APC_Type *base, iee_apc_region_t region)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     if (region == kIEE_APC_Region0)
     {
         IOMUXC_LPSR_GPR->GPR18 |= IOMUXC_LPSR_GPR_GPR18_APC_R0_ENCRYPT_ENABLE_MASK;

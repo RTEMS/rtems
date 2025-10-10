@@ -64,6 +64,11 @@ static void FLEXIO_I2S_RxEDMACallback(edma_handle_t *handle, void *userData, boo
  ******************************************************************************/
 static void FLEXIO_I2S_TxEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) handle;
+    (void) done;
+    (void) tcds;
+#endif
     flexio_i2s_edma_private_handle_t *privHandle = (flexio_i2s_edma_private_handle_t *)userData;
     flexio_i2s_edma_handle_t *flexio_i2sHandle   = privHandle->handle;
 
@@ -84,6 +89,11 @@ static void FLEXIO_I2S_TxEDMACallback(edma_handle_t *handle, void *userData, boo
 
 static void FLEXIO_I2S_RxEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) handle;
+    (void) done;
+    (void) tcds;
+#endif
     flexio_i2s_edma_private_handle_t *privHandle = (flexio_i2s_edma_private_handle_t *)userData;
     flexio_i2s_edma_handle_t *flexio_i2sHandle   = privHandle->handle;
 
@@ -397,6 +407,9 @@ void FLEXIO_I2S_TransferAbortReceiveEDMA(FLEXIO_I2S_Type *base, flexio_i2s_edma_
  */
 status_t FLEXIO_I2S_TransferGetSendCountEDMA(FLEXIO_I2S_Type *base, flexio_i2s_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     status_t status = kStatus_Success;
@@ -426,6 +439,9 @@ status_t FLEXIO_I2S_TransferGetSendCountEDMA(FLEXIO_I2S_Type *base, flexio_i2s_e
  */
 status_t FLEXIO_I2S_TransferGetReceiveCountEDMA(FLEXIO_I2S_Type *base, flexio_i2s_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     status_t status = kStatus_Success;

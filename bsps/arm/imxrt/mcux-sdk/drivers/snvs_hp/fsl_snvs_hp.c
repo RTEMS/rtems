@@ -249,6 +249,10 @@ void SNVS_HP_Init(SNVS_Type *base)
      defined(SNVS_HP_CLOCKS))
     uint32_t instance = SNVS_HP_GetInstance(base);
     CLOCK_EnableClock(s_snvsHpClock[instance]);
+#else
+#ifdef __rtems__
+    (void) base;
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -263,6 +267,10 @@ void SNVS_HP_Deinit(SNVS_Type *base)
      defined(SNVS_HP_CLOCKS))
     uint32_t instance = SNVS_HP_GetInstance(base);
     CLOCK_DisableClock(s_snvsHpClock[instance]);
+#else
+#ifdef __rtems__
+    (void) base;
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 

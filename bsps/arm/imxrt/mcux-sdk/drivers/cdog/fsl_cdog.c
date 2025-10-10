@@ -300,6 +300,9 @@ status_t CDOG_Init(CDOG_Type *base, cdog_config_t *conf)
  */
 void CDOG_Deinit(CDOG_Type *base)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     NVIC_DisableIRQ(CDOG_IRQn);
 
 #if !(defined(FSL_FEATURE_CDOG_HAS_NO_RESET) && FSL_FEATURE_CDOG_HAS_NO_RESET)

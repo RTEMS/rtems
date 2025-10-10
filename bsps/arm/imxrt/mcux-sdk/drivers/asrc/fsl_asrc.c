@@ -847,6 +847,9 @@ status_t ASRC_TransferNonBlocking(ASRC_Type *base, asrc_handle_t *handle, asrc_t
  */
 status_t ASRC_TransferGetConvertedCount(ASRC_Type *base, asrc_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     status_t status = kStatus_Success;

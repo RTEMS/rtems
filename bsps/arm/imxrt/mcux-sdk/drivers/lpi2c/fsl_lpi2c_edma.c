@@ -438,6 +438,9 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
  */
 status_t LPI2C_MasterTransferGetCountEDMA(LPI2C_Type *base, lpi2c_master_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     if (NULL == count)
@@ -523,6 +526,11 @@ status_t LPI2C_MasterTransferAbortEDMA(LPI2C_Type *base, lpi2c_master_edma_handl
 
 static void LPI2C_MasterEDMACallback(edma_handle_t *dmaHandle, void *userData, bool isTransferDone, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) dmaHandle;
+    (void) isTransferDone;
+    (void) tcds;
+#endif
     lpi2c_master_edma_handle_t *handle = (lpi2c_master_edma_handle_t *)userData;
 
     if (NULL == handle)

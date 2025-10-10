@@ -1096,6 +1096,9 @@ static inline void IOMUXC_SetPinMux(uint32_t muxRegister,
                                     uint32_t configRegister,
                                     uint32_t inputOnfield)
 {
+#ifdef __rtems__
+    (void) configRegister;
+#endif
     *((volatile uint32_t *)muxRegister) =
         IOMUXC_SW_MUX_CTL_PAD_MUX_MODE(muxMode) | IOMUXC_SW_MUX_CTL_PAD_SION(inputOnfield);
 
@@ -1128,6 +1131,12 @@ static inline void IOMUXC_SetPinConfig(uint32_t muxRegister,
                                        uint32_t configRegister,
                                        uint32_t configValue)
 {
+#ifdef __rtems__
+    (void) muxRegister;
+    (void) muxMode;
+    (void) inputRegister;
+    (void) inputDaisy;
+#endif
     if (configRegister != 0UL)
     {
         *((volatile uint32_t *)configRegister) = configValue;

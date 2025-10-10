@@ -964,6 +964,9 @@ static status_t dcp_hash_check_context(dcp_hash_ctx_internal_t *ctxInternal, con
  */
 static status_t dcp_hash_engine_init(DCP_Type *base, dcp_hash_ctx_internal_t *ctxInternal)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     status_t status;
 
     status = kStatus_InvalidArgument;

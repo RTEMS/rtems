@@ -143,6 +143,9 @@ static void OCOTP_SetWriteTiming(OCOTP_Type *base, ocotp_timing_t timingConfig)
 /* Initializes OCOTP controller. */
 void OCOTP_Init(OCOTP_Type *base, uint32_t srcClock_Hz)
 {
+#ifdef __rtems__
+    (void) srcClock_Hz;
+#endif
     assert(NULL != base);
 #if (defined(FSL_FEATURE_OCOTP_HAS_TIMING_CTRL) && FSL_FEATURE_OCOTP_HAS_TIMING_CTRL)
     assert(0UL != srcClock_Hz);

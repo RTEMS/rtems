@@ -424,6 +424,9 @@ void LPUART_TransferAbortReceiveEDMA(LPUART_Type *base, lpuart_edma_handle_t *ha
  */
 status_t LPUART_TransferGetReceiveCountEDMA(LPUART_Type *base, lpuart_edma_handle_t *handle, uint32_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(NULL != handle);
     assert(NULL != handle->rxEdmaHandle);
     assert(NULL != count);
@@ -455,6 +458,9 @@ status_t LPUART_TransferGetReceiveCountEDMA(LPUART_Type *base, lpuart_edma_handl
  */
 status_t LPUART_TransferGetSendCountEDMA(LPUART_Type *base, lpuart_edma_handle_t *handle, uint32_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(NULL != handle);
     assert(NULL != handle->txEdmaHandle);
     assert(NULL != count);

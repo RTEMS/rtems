@@ -523,6 +523,10 @@ static void EDMA_LpspiMasterCallback(edma_handle_t *edmaHandle,
                                      bool transferDone,
                                      uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) transferDone;
+    (void) tcds;
+#endif
     assert(edmaHandle != NULL);
     assert(g_lpspiEdmaPrivateHandle != NULL);
 
@@ -593,6 +597,9 @@ void LPSPI_MasterTransferAbortEDMA(LPSPI_Type *base, lpspi_master_edma_handle_t 
  */
 status_t LPSPI_MasterTransferGetCountEDMA(LPSPI_Type *base, lpspi_master_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     if (NULL == count)
@@ -956,6 +963,10 @@ static void EDMA_LpspiSlaveCallback(edma_handle_t *edmaHandle,
                                     bool transferDone,
                                     uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) transferDone;
+    (void) tcds;
+#endif
     assert(edmaHandle != NULL);
     assert(g_lpspiEdmaPrivateHandle != NULL);
 
@@ -1026,6 +1037,9 @@ void LPSPI_SlaveTransferAbortEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *h
  */
 status_t LPSPI_SlaveTransferGetCountEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     if (NULL == count)

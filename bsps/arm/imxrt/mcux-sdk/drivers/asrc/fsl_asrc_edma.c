@@ -55,6 +55,11 @@ static void ASRC_OutEDMACallback(edma_handle_t *handle, void *userData, bool don
  ******************************************************************************/
 static void ASRC_InEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) handle;
+    (void) done;
+    (void) tcds;
+#endif
     asrc_edma_private_handle_t *privHandle = (asrc_edma_private_handle_t *)userData;
     asrc_edma_handle_t *asrcHandle         = privHandle->handle;
     asrc_in_edma_handle_t *asrcInHandle    = &(privHandle->handle->in);
@@ -78,6 +83,11 @@ static void ASRC_InEDMACallback(edma_handle_t *handle, void *userData, bool done
 
 static void ASRC_OutEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) handle;
+    (void) done;
+    (void) tcds;
+#endif
     asrc_edma_private_handle_t *privHandle = (asrc_edma_private_handle_t *)userData;
     asrc_edma_handle_t *asrcHandle         = privHandle->handle;
     asrc_out_edma_handle_t *asrcOutHandle  = &(privHandle->handle->out);
@@ -375,6 +385,9 @@ status_t ASRC_TransferEDMA(ASRC_Type *base, asrc_edma_handle_t *handle, asrc_tra
  */
 void ASRC_TransferInAbortEDMA(ASRC_Type *base, asrc_edma_handle_t *handle)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     /* Disable dma */
@@ -399,6 +412,10 @@ void ASRC_TransferInAbortEDMA(ASRC_Type *base, asrc_edma_handle_t *handle)
  */
 void ASRC_TransferOutAbortEDMA(ASRC_Type *base, asrc_edma_handle_t *handle)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
+    assert(handle != NULL);
     assert(handle != NULL);
 
     /* Disable dma */

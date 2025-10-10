@@ -76,6 +76,9 @@ static flexio_spi_master_edma_private_handle_t s_edmaPrivateHandle[FLEXIO_SPI_HA
 
 static void FLEXIO_SPI_TxEDMACallback(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) handle;
+#endif
     tcds                                                      = tcds;
     flexio_spi_master_edma_private_handle_t *spiPrivateHandle = (flexio_spi_master_edma_private_handle_t *)param;
 
@@ -101,6 +104,9 @@ static void FLEXIO_SPI_TxEDMACallback(edma_handle_t *handle, void *param, bool t
 
 static void FLEXIO_SPI_RxEDMACallback(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) handle;
+#endif
     tcds                                                      = tcds;
     flexio_spi_master_edma_private_handle_t *spiPrivateHandle = (flexio_spi_master_edma_private_handle_t *)param;
 
@@ -433,6 +439,9 @@ status_t FLEXIO_SPI_MasterTransferGetCountEDMA(FLEXIO_SPI_Type *base,
                                                flexio_spi_master_edma_handle_t *handle,
                                                size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     if (NULL == count)

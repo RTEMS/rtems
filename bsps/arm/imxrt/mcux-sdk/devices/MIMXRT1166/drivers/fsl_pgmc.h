@@ -633,6 +633,9 @@ static inline void PGMC_MIF_LockLowPowerConfigurationFields(PGMC_MIF_Type *base)
  */
 static inline void PGMC_PPC_TriggerPMICStandbySoftMode(PGMC_PPC_Type *base, bool enable)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     if (enable)
     {
         PGMC_PPC0->PPC_STBY_CM_CTRL |= PGMC_PPC_PPC_STBY_CM_CTRL_STBY_ON_SOFT_MASK;

@@ -751,6 +751,9 @@ void QTMR_SetPwmOutputToIdle(TMR_Type *base, qtmr_channel_selection_t channel, b
  */
 uint8_t QTMR_GetPwmChannelStatus(TMR_Type *base, qtmr_channel_selection_t channel)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     return s_qtmrGetPwmDutyCycle[channel];
 }
 

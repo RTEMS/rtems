@@ -96,8 +96,14 @@ uint32_t SEMA4_GetInstance(SEMA4_Type *base)
 void SEMA4_Init(SEMA4_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-#if defined(SEMA4_CLOCKS)
-    CLOCK_EnableClock(s_sema4Clocks[SEMA4_GetInstance(base)]);
+  #if defined(SEMA4_CLOCKS)
+      CLOCK_EnableClock(s_sema4Clocks[SEMA4_GetInstance(base)]);
+  #else
+      (void) base;
+  #endif
+#else
+#ifdef __rtems__
+    (void) base;
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
@@ -114,6 +120,14 @@ void SEMA4_Deinit(SEMA4_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 #if defined(SEMA4_CLOCKS)
     CLOCK_DisableClock(s_sema4Clocks[SEMA4_GetInstance(base)]);
+#else
+  #ifdef __rtems__
+      (void) base;
+  #endif
+#endif
+#else
+#ifdef __rtems__
+    (void) base;
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }

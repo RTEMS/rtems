@@ -499,6 +499,9 @@ void PMU_StaticEnableLpsrAnaLdoBypassMode(ANADIG_LDO_SNVS_Type *base, bool enabl
  */
 static inline bool PMU_StaticCheckLpsrAnaLdoBypassMode(ANADIG_LDO_SNVS_Type *base)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     return ((ANADIG_LDO_SNVS->PMU_LDO_LPSR_ANA & ANADIG_LDO_SNVS_PMU_LDO_LPSR_ANA_BYPASS_MODE_EN_MASK) != 0UL);
 }
 
@@ -565,6 +568,9 @@ void PMU_StaticEnableLpsrDigLdoBypassMode(ANADIG_LDO_SNVS_Type *base, bool enabl
  */
 static inline bool PMU_StaticCheckLpsrDigLdoBypassMode(ANADIG_LDO_SNVS_Type *base)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     return ((ANADIG_LDO_SNVS->PMU_LDO_LPSR_DIG & ANADIG_LDO_SNVS_PMU_LDO_LPSR_DIG_BYPASS_MODE_MASK) != 0UL);
 }
 

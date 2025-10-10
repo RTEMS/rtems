@@ -94,6 +94,9 @@ static uint32_t SAI_GetInstance(I2S_Type *base)
 
 static void SAI_TxEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) done;
+#endif
     sai_edma_private_handle_t *privHandle = (sai_edma_private_handle_t *)userData;
     sai_edma_handle_t *saiHandle          = privHandle->handle;
     status_t status                       = kStatus_SAI_TxBusy;
@@ -132,6 +135,9 @@ static void SAI_TxEDMACallback(edma_handle_t *handle, void *userData, bool done,
 
 static void SAI_RxEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) done;
+#endif
     sai_edma_private_handle_t *privHandle = (sai_edma_private_handle_t *)userData;
     sai_edma_handle_t *saiHandle          = privHandle->handle;
     status_t status                       = kStatus_SAI_RxBusy;
@@ -959,6 +965,9 @@ void SAI_TransferTerminateReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle)
  */
 status_t SAI_TransferGetSendCountEDMA(I2S_Type *base, sai_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     status_t status = kStatus_Success;
@@ -988,6 +997,9 @@ status_t SAI_TransferGetSendCountEDMA(I2S_Type *base, sai_edma_handle_t *handle,
  */
 status_t SAI_TransferGetReceiveCountEDMA(I2S_Type *base, sai_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     status_t status = kStatus_Success;
@@ -1019,6 +1031,9 @@ status_t SAI_TransferGetReceiveCountEDMA(I2S_Type *base, sai_edma_handle_t *hand
  */
 uint32_t SAI_TransferGetValidTransferSlotsEDMA(I2S_Type *base, sai_edma_handle_t *handle)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     uint32_t validSlot = 0U;
 
     for (uint32_t i = 0U; i < (uint32_t)SAI_XFER_QUEUE_SIZE; i++)

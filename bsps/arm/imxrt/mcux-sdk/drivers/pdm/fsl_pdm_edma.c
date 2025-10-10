@@ -86,6 +86,10 @@ static edma_modulo_t PDM_TransferMappingChannel(uint32_t *channel)
 
 static void PDM_EDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
+#ifdef __rtems__
+    (void) done;
+    (void) tcds;
+#endif
     pdm_edma_private_handle_t *privHandle = (pdm_edma_private_handle_t *)userData;
     pdm_edma_handle_t *pdmHandle          = privHandle->handle;
 
@@ -451,6 +455,9 @@ void PDM_TransferTerminateReceiveEDMA(PDM_Type *base, pdm_edma_handle_t *handle)
  */
 status_t PDM_TransferGetReceiveCountEDMA(PDM_Type *base, pdm_edma_handle_t *handle, size_t *count)
 {
+#ifdef __rtems__
+    (void) base;
+#endif
     assert(handle != NULL);
 
     *count = handle->receivedBytes;
