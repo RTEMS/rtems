@@ -208,11 +208,15 @@ int ambapp_leon2_init1(struct drvmgr_dev *dev)
 
 int ambapp_leon2_init2(struct drvmgr_dev *dev)
 {
+	(void) dev;
+
 	return 0;
 }
 
 int ambapp_leon2_remove(struct drvmgr_dev *dev)
 {
+	(void) dev;
+
 	return 0;
 }
 
@@ -278,6 +282,8 @@ int ambapp_leon2_int_unmask
 
 int ambapp_leon2_get_params(struct drvmgr_dev *dev, struct drvmgr_bus_params *params)
 {
+	(void) dev;
+
 	params->dev_prefix = "";
 	return 0;
 }

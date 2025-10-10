@@ -635,6 +635,8 @@ int ambapp_leon4_n2x_int_register(
 	drvmgr_isr handler,
 	void *arg)
 {
+	(void) info;
+
 	struct gr_cpci_leon4_n2x_priv *priv = dev->parent->dev->priv;
 	SPIN_IRQFLAGS(irqflags);
 	int status;

@@ -33,6 +33,8 @@
 
 static inline int bsp_irq_cpu(int irq)
 {
+  (void) irq;
+
   return 0;
 }
 
@@ -147,6 +149,9 @@ rtems_status_code bsp_interrupt_set_priority(
   uint32_t priority
 )
 {
+  (void) vector;
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -156,6 +161,9 @@ rtems_status_code bsp_interrupt_get_priority(
   uint32_t *priority
 )
 {
+  (void) vector;
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(priority != NULL);
   return RTEMS_UNSATISFIED;

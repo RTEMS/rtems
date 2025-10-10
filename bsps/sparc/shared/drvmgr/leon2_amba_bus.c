@@ -169,6 +169,8 @@ static int leon2_amba_dev_register(
 	struct leon2_core *core,
 	int index)
 {
+	(void) index;
+
 	struct drvmgr_dev *newdev;
 	struct leon2_amba_dev_info *info;
 	union drvmgr_key_value *value;
@@ -256,11 +258,15 @@ static int leon2_amba_init1(struct drvmgr_dev *dev)
 
 static int leon2_amba_init2(struct drvmgr_dev *dev)
 {
+	(void) dev;
+
 	return DRVMGR_OK;
 }
 
 static int leon2_amba_remove(struct drvmgr_dev *dev)
 {
+	(void) dev;
+
 	return DRVMGR_OK;
 }
 
