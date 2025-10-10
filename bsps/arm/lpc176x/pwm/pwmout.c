@@ -125,6 +125,8 @@ static void set_period(
   const lpc176x_microseconds period
 )
 {
+  (void) pwm;
+
   pwm_device->TCR = PWM_TCR_RESET;
   pwm_device->MR0 = period * PWM_PRESCALER_USECOND;
   pwm_device->LER |= PWM_LER_LATCH_MATCH_0;

@@ -181,6 +181,8 @@ static void check_for_interrupt(
  */
 static inline void lpc176x_gpio_isr( void *arg )
 {
+  (void) arg;
+
   unsigned int i;
 
   for ( i = 0; i < function_vector_size; ++i ) {

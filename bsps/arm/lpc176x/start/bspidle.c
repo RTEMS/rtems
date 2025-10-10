@@ -38,6 +38,8 @@
 
 void*bsp_idle_thread( const uintptr_t ignored )
 {
+  (void) ignored;
+
   while ( true ) {
   }
 }

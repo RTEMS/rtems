@@ -42,6 +42,8 @@ static bool     lpc176x_dma_status_table[ GPDMA_CH_NUMBER ];
 
 static void lpc176x_dma_copy_handler( void *arg )
 {
+  (void) arg;
+
   /* Get interrupt status */
   uint32_t tc = GPDMA_INT_TCSTAT;
   uint32_t err = GPDMA_INT_ERR_STAT;

@@ -407,6 +407,8 @@ static inline void search_and_call_int( const lpc176x_can_number number )
  */
 static void can_isr( void *arg )
 {
+  (void) arg;
+
   lpc176x_can_number i;
 
   for ( i = CAN_0; i < CAN_DEVICES_NUMBER; ++i ) {
