@@ -108,6 +108,8 @@ rtems_isr Clock_isr(
   rtems_vector_number vector
 )
 {
+   (void) vector;
+
 /*
  * bump the number of clock driver ticks since initialization
  *
@@ -131,6 +133,8 @@ rtems_isr User_Clock_isr(
   rtems_vector_number vector
 )
 {
+   (void) vector;
+
    if (user_callback)
       user_callback();
 }
@@ -146,6 +150,8 @@ void Install_clock(
   rtems_isr_entry clock_isr
 )
 {
+  (void) clock_isr;
+
   /*
   *  Initialize the clock tick device driver variables
   */
