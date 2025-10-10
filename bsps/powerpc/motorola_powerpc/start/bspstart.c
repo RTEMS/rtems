@@ -104,6 +104,9 @@ char *save_boot_params(
   char *cmdline_end
 )
 {
+  (void) r4;
+  (void) r5;
+  (void) cmdline_end;
 
   residualCopy = *(RESIDUAL *)r3;
   strncpy(loaderParam, cmdline_start, MAX_LOADER_ADD_PARM);

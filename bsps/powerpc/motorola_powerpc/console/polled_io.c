@@ -451,6 +451,8 @@ int debug_tstc(void)
 #define vidmem ((__io_ptr)(ptr_mem_map->isa_mem_base+0xb8000))
 
 static void vacuum_putc(u_char c) {
+	(void) c;
+
 	console_global_data.vacuum_sent++;
 }
 
@@ -493,12 +495,16 @@ static int global_index = 0;
 
 static void *__palloc(int s)
 {
+  (void) s;
+
   if (global_index ==( STATIC_LOG_DATA_PAGE_NB - 1) ) return (void*) 0;
   return  (void*) &(log_page_pool [PAGE_SIZE * global_index++]);
 }
 
 static void pfree(void* p)
 {
+  (void) p;
+
   --global_index;
 }
 #endif
