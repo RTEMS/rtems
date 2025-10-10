@@ -90,6 +90,8 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 
 void mips_vector_exceptions( CPU_Interrupt_frame *frame )
 {
+  (void) frame;
+
   uint32_t   cause;
   uint32_t   exc;
 
