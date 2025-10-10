@@ -91,10 +91,13 @@ void C_default_exception_handler(CPU_Exception_frame* excPtr)
 
 static void nop_except_enable(const rtems_raw_except_connect_data* ptr)
 {
+  (void) ptr;
 }
 
 static int except_always_enabled(const rtems_raw_except_connect_data* ptr)
 {
+  (void) ptr;
+
   return 1;
 }
 

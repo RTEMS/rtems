@@ -94,6 +94,8 @@ m5xx_uart_firstOpen(
   void *arg
 )
 {
+  (void) major;
+
   rtems_libio_open_close_args_t *args = arg;
   sci_desc* desc = &sci_descs[minor];
   struct rtems_termios_tty *tty = args->iop->data1;
@@ -112,6 +114,9 @@ m5xx_uart_lastClose(
   void* arg
 )
 {
+  (void) major;
+  (void) arg;
+
   sci_desc* desc = &sci_descs[minor];
 
   desc->regs->sccr1 &= ~(QSMCM_SCI_RIE | QSMCM_SCI_TIE);  /* disable all */
@@ -241,6 +246,8 @@ m5xx_uart_setAttributes(
 static void
 m5xx_sci_interrupt_handler (rtems_irq_hdl_param unused)
 {
+  (void) unused;
+
   int minor;
 
   for ( minor = 0; minor < NUM_PORTS; minor++ ) {
@@ -267,10 +274,13 @@ m5xx_sci_interrupt_handler (rtems_irq_hdl_param unused)
 
 static void m5xx_sci_nop(const rtems_irq_connect_data* ptr)
 {
+  (void) ptr;
 }
 
 static int m5xx_sci_isOn(const rtems_irq_connect_data* ptr)
 {
+  (void) ptr;
+
   return 1;
 }
 

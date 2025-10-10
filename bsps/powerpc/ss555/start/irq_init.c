@@ -35,25 +35,35 @@ volatile unsigned int ppc_cached_irq_mask;
  */
 static void nop_hdl(rtems_irq_hdl_param ignored)
 {
+  (void) ignored;
+
 }
 
 static void nop_irq_enable(const struct __rtems_irq_connect_data__*ignored)
 {
+  (void) ignored;
+
 }
 
 static void nop_raw_enable(
   const struct __rtems_raw_except_connect_data__*ignored
 )
 {
+  (void) ignored;
+
 }
 
 static int irq_is_connected(const struct __rtems_irq_connect_data__*ignored)
 {
+  (void) ignored;
+
   return 0;
 }
 
 static int raw_is_connected(const struct __rtems_raw_except_connect_data__*ignored)
 {
+  (void) ignored;
+
   return 0;
 }
 
@@ -115,6 +125,8 @@ static void CPU_UIMB_irq_init(void)
 
 void CPU_rtems_irq_mng_init(unsigned cpuId)
 {
+  (void) cpuId;
+
   rtems_raw_except_connect_data vectorDesc;
   int i;
 

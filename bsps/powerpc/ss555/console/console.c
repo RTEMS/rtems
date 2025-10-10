@@ -82,7 +82,7 @@ static void _BSP_output_char( char c );
 static rtems_status_code do_poll_read( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);
 static rtems_status_code do_poll_write( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);
 
-static void _BSP_null_char( char c ) {return;}
+static void _BSP_null_char( char c ) {(void) c; return;}
 
 BSP_output_char_function_type     BSP_output_char = _BSP_null_char;
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
@@ -116,6 +116,8 @@ static rtems_status_code do_poll_read(
   void                    * arg
 )
 {
+  (void) major;
+
   rtems_libio_rw_args_t *rw_args = arg;
   int c;
 
@@ -155,6 +157,8 @@ static rtems_status_code do_poll_write(
   void                    * arg
 )
 {
+  (void) major;
+
   rtems_libio_rw_args_t *rw_args = arg;
   uint32_t i;
   char cr ='\r';
@@ -204,6 +208,9 @@ rtems_device_driver console_initialize(
   void *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   /*
@@ -245,6 +252,9 @@ rtems_device_driver console_open(
   void *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   rtems_status_code sc;
 
   if ( minor > NUM_PORTS - 1 )
@@ -303,12 +313,16 @@ rtems_device_driver console_close(
   void *arg
 )
 {
+  (void) major;
+
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
   #if UARTS_USE_TERMIOS == 1
     return rtems_termios_close( arg );
   #else
+    (void) arg;
+
     return RTEMS_SUCCESSFUL;
   #endif
 }
@@ -345,6 +359,8 @@ rtems_device_driver console_write(
     return RTEMS_INVALID_NUMBER;
 
   #if UARTS_USE_TERMIOS == 1
+    (void) major;
+
     return rtems_termios_write( arg );
   #else
     return do_poll_write( major, minor, arg );
@@ -360,6 +376,9 @@ rtems_device_driver console_control(
   void *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 

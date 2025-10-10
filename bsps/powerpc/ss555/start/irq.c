@@ -392,6 +392,8 @@ int CPU_rtems_irq_mngt_get(rtems_irq_global_settings** config)
  */
 void C_dispatch_irq_handler (MPC5XX_Interrupt_frame *frame, unsigned int excNum)
 {
+  (void) frame;
+
   register unsigned int irq;
   register unsigned uimbIntr;                 /* boolean */
   register unsigned oldMask;		      /* old siu pic masks */

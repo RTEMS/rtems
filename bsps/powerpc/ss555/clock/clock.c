@@ -71,6 +71,8 @@ rtems_isr Clock_isr(void *unused)
 
 void clockOn(void* unused)
 {
+  (void) unused;
+
   unsigned desiredLevel;
   uint32_t pit_value;
 
@@ -104,6 +106,8 @@ void clockOn(void* unused)
 
 void clockOff(void* unused)
 {
+  (void) unused;
+
   /* disable PIT and PIT interrupts */
   usiu.piscrk = USIU_UNLOCK_KEY;
   usiu.piscr &= ~(USIU_PISCR_PTE | USIU_PISCR_PIE);
@@ -112,6 +116,8 @@ void clockOff(void* unused)
 
 int clockIsOn(void* unused)
 {
+  (void) unused;
+
   if (usiu.piscr & USIU_PISCR_PIE)
     return 1;
   return 0;
