@@ -279,6 +279,8 @@ uint8_t ccr;
 
 static void i2c_isr(rtems_irq_hdl_param arg)
 {
+	(void) arg;
+
 	/* disable irq */
 	i2c_clr( I2CCR, I2CCR_MIEN );
 	/* release task */
@@ -290,6 +292,8 @@ static void i2c_isr(rtems_irq_hdl_param arg)
 STATIC rtems_status_code
 i2c_init(rtems_libi2c_bus_t *bh)
 {
+	(void) bh;
+
 rtems_status_code sc;
 
 	/* compute more accurate timeout */
@@ -335,6 +339,8 @@ rtems_status_code sc;
 STATIC rtems_status_code
 i2c_start(rtems_libi2c_bus_t *bh)
 {
+	(void) bh;
+
 uint8_t           v;
 rtems_status_code sc = RTEMS_SUCCESSFUL;
 
@@ -364,6 +370,8 @@ rtems_status_code sc = RTEMS_SUCCESSFUL;
 STATIC rtems_status_code
 i2c_stop(rtems_libi2c_bus_t *bh)
 {
+	(void) bh;
+
 	rd1byte_noack();
 
 	/* STOP */
@@ -380,6 +388,8 @@ i2c_stop(rtems_libi2c_bus_t *bh)
 STATIC rtems_status_code
 i2c_send_addr(rtems_libi2c_bus_t *bh, uint32_t addr, int rw)
 {
+	(void) bh;
+
 uint8_t           buf[2];
 int               l = 0;
 uint8_t           read_mask = rw ? 1 : 0;
@@ -423,12 +433,16 @@ rtems_status_code sc;
 STATIC int
 i2c_read_bytes(rtems_libi2c_bus_t *bh, unsigned char *buf, int len)
 {
+	(void) bh;
+
 	return i2c_xfer( 1, buf, len );
 }
 
 STATIC int
 i2c_write_bytes(rtems_libi2c_bus_t *bh, unsigned char *buf, int len)
 {
+	(void) bh;
+
 	return i2c_xfer( 0, buf, len );
 }
 

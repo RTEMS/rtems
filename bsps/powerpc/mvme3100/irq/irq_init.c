@@ -30,6 +30,8 @@
 
 static void nop_func(void *unused)
 {
+	(void) unused;
+
 	printk("Unhandled IRQ\n");
 }
 
@@ -66,6 +68,8 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
    */
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
+	(void) cpuId;
+
 	/* We should really have a way to find the number of sources
 	 * the driver will use so that the size of the polarity-array
 	 * matches the driver's idea of it.

@@ -122,6 +122,10 @@ char *save_boot_params(
   char *cmdline_end
 )
 {
+  (void) r3;
+  (void) r4;
+  (void) r5;
+  (void) cmdline_end;
 
   strncpy(cmdline_buf, cmdline_start, CMDLINE_BUF_SIZE);
   cmdline_buf[CMDLINE_BUF_SIZE - 1] ='\0';

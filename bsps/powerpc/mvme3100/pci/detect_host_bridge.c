@@ -59,6 +59,8 @@
 static int
 fixup_irq_line(int bus, int slot, int fun, void *uarg)
 {
+	(void) uarg;
+
 unsigned char line;
 	pci_read_config_byte( bus, slot, fun, PCI_INTERRUPT_LINE, &line);
 	if ( line >= BSP_EXT_IRQ_NUMBER ) {
@@ -86,6 +88,8 @@ dump_dev_cb(
    void *uarg
 )
 {
+  (void) uarg;
+
   uint16_t vi,di;
   uint16_t cd,st;
   uint32_t b1,b2;
