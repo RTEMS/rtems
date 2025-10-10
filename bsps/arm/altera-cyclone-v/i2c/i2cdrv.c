@@ -92,6 +92,9 @@ rtems_device_driver i2cdrv_initialize(
   void *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   for ( size_t i = 0; i < CYCLONE_V_NO_I2C; ++i ) {
@@ -130,6 +133,9 @@ rtems_device_driver i2cdrv_open(
   void *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   i2cdrv_entry *e = &i2cdrv_table[minor];
 
@@ -143,6 +149,9 @@ rtems_device_driver i2cdrv_close(
   void *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   i2cdrv_entry *e = &i2cdrv_table[minor];
 
@@ -156,6 +165,8 @@ rtems_device_driver i2cdrv_read(
   void *arg
 )
 {
+  (void) major;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   i2cdrv_entry *e = &i2cdrv_table[minor];
   rtems_libio_rw_args_t *rw  = arg;
@@ -178,6 +189,8 @@ rtems_device_driver i2cdrv_write(
   void *arg
 )
 {
+  (void) major;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   i2cdrv_entry *e = &i2cdrv_table[minor];
   rtems_libio_rw_args_t *rw  = arg;
@@ -217,6 +230,8 @@ rtems_device_driver i2cdrv_ioctl(
   void *arg
 )
 {
+  (void) major;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   i2cdrv_entry *e = &i2cdrv_table[minor];
   rtems_libio_ioctl_args_t *args = arg;

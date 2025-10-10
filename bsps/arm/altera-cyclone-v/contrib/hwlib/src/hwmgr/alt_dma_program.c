@@ -97,6 +97,10 @@ ALT_STATUS_CODE alt_dma_program_init(ALT_DMA_PROGRAM_t * pgm)
 
 ALT_STATUS_CODE alt_dma_program_uninit(ALT_DMA_PROGRAM_t * pgm)
 {
+#ifdef __rtems__
+    (void) pgm;
+#endif
+
     return ALT_E_SUCCESS;
 }
 
@@ -111,6 +115,11 @@ ALT_STATUS_CODE alt_dma_program_clear(ALT_DMA_PROGRAM_t * pgm)
 
 __attribute__((weak)) ALT_STATUS_CODE alt_cache_system_clean(void * address, size_t length)
 {
+#ifdef __rtems__
+    (void) address;
+    (void) length;
+#endif
+
     return ALT_E_SUCCESS;
 }
 

@@ -43,6 +43,8 @@
 #ifdef BSP_FDT_IS_SUPPORTED
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
+  (void) icells;
+
   return intr[1] + 32;
 }
 

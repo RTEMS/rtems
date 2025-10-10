@@ -318,6 +318,7 @@ static rtems_status_code  ds1339_write(uint8_t addr, void* buf, size_t size)
 
 static void altera_cyclone_v_ds1339_initialize(int minor)
 {
+  (void) minor;
 
   rtems_status_code  sc = RTEMS_SUCCESSFUL;
   uint8_t            status = 0;
@@ -349,6 +350,7 @@ static void altera_cyclone_v_ds1339_initialize(int minor)
 
 static int altera_cyclone_v_ds1339_get_time(int minor, rtems_time_of_day* tod)
 {
+  (void) minor;
 
   ds1339_time_t      time;
   rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -377,6 +379,7 @@ static int altera_cyclone_v_ds1339_get_time(int minor, rtems_time_of_day* tod)
 
 static int  altera_cyclone_v_ds1339_set_time(int minor, const rtems_time_of_day* tod)
 {
+  (void) minor;
 
   ds1339_time_t      time;
   rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -398,6 +401,7 @@ static int  altera_cyclone_v_ds1339_set_time(int minor, const rtems_time_of_day*
 
 static bool  altera_cyclone_v_ds1339_probe(int minor)
 {
+  (void) minor;
 
   rtems_status_code  sc = RTEMS_SUCCESSFUL;
   uint8_t            buf;
@@ -701,6 +705,7 @@ static rtems_status_code  m41st87_write(uint8_t addr, void* buf, size_t size)
 
 static void  altera_cyclone_v_m41st87_initialize(int minor)
 {
+  (void) minor;
 
   m41st87_time_t     time;
   rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -732,6 +737,7 @@ static void  altera_cyclone_v_m41st87_initialize(int minor)
 
 static int  altera_cyclone_v_m41st87_get_time(int minor, rtems_time_of_day* tod)
 {
+  (void) minor;
 
   m41st87_time_t     time;
   rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -759,6 +765,7 @@ static int  altera_cyclone_v_m41st87_get_time(int minor, rtems_time_of_day* tod)
 
 static int  altera_cyclone_v_m41st87_set_time(int minor, const rtems_time_of_day* tod)
 {
+  (void) minor;
 
   m41st87_time_t     time;
   rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -785,6 +792,7 @@ static int  altera_cyclone_v_m41st87_set_time(int minor, const rtems_time_of_day
 
 static bool  altera_cyclone_v_m41st87_probe(int minor)
 {
+  (void) minor;
 
   rtems_status_code  sc = RTEMS_SUCCESSFUL;
   uint8_t            buf;
