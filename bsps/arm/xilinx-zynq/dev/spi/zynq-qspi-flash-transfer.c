@@ -38,10 +38,12 @@ rtems_id transfer_task;
 
 __attribute__((weak)) void zqspi_write_unlock(zqspiflash *driver)
 {
+  (void) driver;
 }
 
 __attribute__((weak)) void zqspi_write_lock(zqspiflash *driver)
 {
+  (void) driver;
 }
 
 static void qspi_flash_rx(void) {

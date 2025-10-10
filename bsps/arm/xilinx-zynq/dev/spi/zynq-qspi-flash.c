@@ -83,6 +83,9 @@ void zqspi_transfer_trace(
     }
     printf("\n");
   }
+#else
+  (void) message;
+  (void) transfer;
 #endif
 }
 

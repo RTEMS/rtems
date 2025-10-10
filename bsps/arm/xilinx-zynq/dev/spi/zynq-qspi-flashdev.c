@@ -43,6 +43,8 @@ static int zqspi_get_flash_type(
   rtems_flashdev_flash_type *type
 )
 {
+  (void) flash;
+
   *type = RTEMS_FLASHDEV_NOR;
   return 0;
 }
@@ -100,6 +102,8 @@ static int zqspi_write_block_size(
   size_t *write_block_size
 )
 {
+  (void) flash;
+
   *write_block_size = 1u;
   return 0;
 }
