@@ -61,6 +61,8 @@ const char rtems_test_name[] = "DEBUGGER01";
 
 rtems_task Init(rtems_task_argument argument)
 {
+  (void) argument;
+
   TEST_BEGIN();
 
   test();
