@@ -59,6 +59,9 @@ uint32_t bsp_clicks_per_usec;
 /* Default decrementer exception handler */
 static int mpc83xx_decrementer_exception_handler( BSP_Exception_frame *frame, unsigned number)
 {
+  (void) frame;
+  (void) number;
+
   ppc_set_decrementer_register(UINT32_MAX);
 
   return 0;

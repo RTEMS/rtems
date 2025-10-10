@@ -76,6 +76,8 @@ static rtems_status_code bsp_spi_sel_addr
 {
 
 #if defined( MPC83XX_BOARD_MPC8313ERDB)
+  (void) bh;
+  (void) rw;
 
   /* Check address */
   if (addr > 0) {
@@ -86,6 +88,8 @@ static rtems_status_code bsp_spi_sel_addr
   mpc83xx.gpio [0].gpdat &= ~0x20000000;
 
 #elif defined( MPC83XX_BOARD_MPC8349EAMDS)
+  (void) bh;
+  (void) rw;
 
   /*
    * check device address for valid range
@@ -101,6 +105,8 @@ static rtems_status_code bsp_spi_sel_addr
   mpc83xx.gpio[0].gpdat &= ~(1 << (31- 0));
 
 #elif defined( MPC83XX_BOARD_HSC_CM01)
+  (void) bh;
+  (void) rw;
 
   /*
    * check device address for valid range
@@ -125,6 +131,10 @@ static rtems_status_code bsp_spi_sel_addr
    */
   mpc83xx.gpio[0].gpdat |= (1 << (31- 27));
 
+#else
+  (void) bh;
+  (void) addr;
+  (void) rw;
 #endif
 
   return  RTEMS_SUCCESSFUL;
@@ -148,6 +158,7 @@ static rtems_status_code bsp_spi_send_start_dummy
 |    o = ok or error code                                                   |
 \*=========================================================================*/
 {
+  (void) bh;
 
 #if defined( MPC83XX_BOARD_MPC8313ERDB)
 
@@ -193,6 +204,8 @@ static rtems_status_code bsp_spi_send_stop
 |    o = ok or error code                                                   |
 \*=========================================================================*/
 {
+  (void) bh;
+
 #if defined(DEBUG)
   printk("bsp_spi_send_stop called... ");
 #endif

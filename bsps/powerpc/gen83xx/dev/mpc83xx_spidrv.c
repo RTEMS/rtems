@@ -270,6 +270,7 @@ static void mpc83xx_spi_irq_on_off
 |    <none>                                                                 |
 \*=========================================================================*/
 {
+  (void) irq_conn_data;
 }
 
 
@@ -292,6 +293,8 @@ static int mpc83xx_spi_irq_isOn
 |    TRUE, if enabled                                                       |
 \*=========================================================================*/
 {
+  (void) irq_conn_data;
+
   return (TRUE);
 }
 

@@ -46,6 +46,9 @@ static rtems_interrupt_handler tm27_interrupt_handler;
 
 static int tm27_exception_handler( BSP_Exception_frame *frame, unsigned number)
 {
+	(void) frame;
+	(void) number;
+
 	(*tm27_interrupt_handler)( NULL);
 
 	return 0;
