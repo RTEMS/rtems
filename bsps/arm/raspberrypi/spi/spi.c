@@ -473,6 +473,8 @@ static rtems_status_code rpi_libi2c_spi_init(rtems_libi2c_bus_t * bushdl)
  */
 static rtems_status_code rpi_libi2c_spi_send_start(rtems_libi2c_bus_t * bushdl)
 {
+  (void) bushdl;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -528,6 +530,8 @@ static rtems_status_code rpi_libi2c_spi_send_addr(
   uint32_t addr,
   int rw
 ) {
+  (void) rw;
+
   rpi_spi_softc_t *softc_ptr = &(((rpi_spi_desc_t *)(bushdl))->softc);
 
   /* Calculates the bit corresponding to the received address

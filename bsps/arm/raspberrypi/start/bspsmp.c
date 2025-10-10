@@ -62,6 +62,8 @@ uint32_t _CPU_SMP_Initialize(void)
 
 void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
 {
+  (void) cpu_count;
+
   /* Do nothing */
 }
 

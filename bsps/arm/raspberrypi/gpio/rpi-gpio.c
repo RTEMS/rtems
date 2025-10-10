@@ -56,6 +56,8 @@ static rtems_status_code rpi_select_pin_function(
   uint32_t pin,
   uint32_t type
 ) {
+  (void) bank;
+
   /* Calculate the pin function select register address. */
   volatile uint32_t *pin_addr = (uint32_t *) BCM2835_GPIO_REGS_BASE +
                                              (pin / 10);
@@ -75,6 +77,8 @@ static rtems_status_code rpi_select_pin_function(
 
 rtems_status_code rtems_gpio_bsp_multi_set(uint32_t bank, uint32_t bitmask)
 {
+  (void) bank;
+
   BCM2835_REG(BCM2835_GPIO_GPSET0) = bitmask;
 
   return RTEMS_SUCCESSFUL;
@@ -82,6 +86,8 @@ rtems_status_code rtems_gpio_bsp_multi_set(uint32_t bank, uint32_t bitmask)
 
 rtems_status_code rtems_gpio_bsp_multi_clear(uint32_t bank, uint32_t bitmask)
 {
+  (void) bank;
+
   BCM2835_REG(BCM2835_GPIO_GPCLR0) = bitmask;
 
   return RTEMS_SUCCESSFUL;
@@ -89,11 +95,15 @@ rtems_status_code rtems_gpio_bsp_multi_clear(uint32_t bank, uint32_t bitmask)
 
 uint32_t rtems_gpio_bsp_multi_read(uint32_t bank, uint32_t bitmask)
 {
+  (void) bank;
+
   return (BCM2835_REG(BCM2835_GPIO_GPLEV0) & bitmask);
 }
 
 rtems_status_code rtems_gpio_bsp_set(uint32_t bank, uint32_t pin)
 {
+  (void) bank;
+
   BCM2835_REG(BCM2835_GPIO_GPSET0) = (1 << pin);
 
   return RTEMS_SUCCESSFUL;
@@ -101,6 +111,8 @@ rtems_status_code rtems_gpio_bsp_set(uint32_t bank, uint32_t pin)
 
 rtems_status_code rtems_gpio_bsp_clear(uint32_t bank, uint32_t pin)
 {
+  (void) bank;
+
   BCM2835_REG(BCM2835_GPIO_GPCLR0) = (1 << pin);
 
   return RTEMS_SUCCESSFUL;
@@ -108,6 +120,8 @@ rtems_status_code rtems_gpio_bsp_clear(uint32_t bank, uint32_t pin)
 
 uint32_t rtems_gpio_bsp_get_value(uint32_t bank, uint32_t pin)
 {
+  (void) bank;
+
   return (BCM2835_REG(BCM2835_GPIO_GPLEV0) & (1 << pin));
 }
 
@@ -116,6 +130,8 @@ rtems_status_code rtems_gpio_bsp_select_input(
   uint32_t pin,
   void *bsp_specific
 ) {
+  (void) bsp_specific;
+
   return rpi_select_pin_function(bank, pin, RPI_DIGITAL_IN);
 }
 
@@ -124,6 +140,8 @@ rtems_status_code rtems_gpio_bsp_select_output(
   uint32_t pin,
   void *bsp_specific
 ) {
+  (void) bsp_specific;
+
   return rpi_select_pin_function(bank, pin, RPI_DIGITAL_OUT);
 }
 
@@ -133,6 +151,8 @@ rtems_status_code rtems_gpio_bsp_select_specific_io(
   uint32_t function,
   void *pin_data
 ) {
+  (void) pin_data;
+
   return rpi_select_pin_function(bank, pin, function);
 }
 
@@ -141,6 +161,8 @@ rtems_status_code rtems_gpio_bsp_set_resistor_mode(
   uint32_t pin,
   rtems_gpio_pull_mode mode
 ) {
+  (void) bank;
+
   /* Set control signal. */
   switch ( mode ) {
     case PULL_UP:
@@ -175,11 +197,15 @@ rtems_status_code rtems_gpio_bsp_set_resistor_mode(
 
 rtems_vector_number rtems_gpio_bsp_get_vector(uint32_t bank)
 {
+  (void) bank;
+
   return BCM2835_IRQ_ID_GPIO_0;
 }
 
 uint32_t rtems_gpio_bsp_interrupt_line(rtems_vector_number vector)
 {
+  (void) vector;
+
   uint32_t event_status;
 
   /* Retrieve the interrupt event status. */
@@ -196,6 +222,8 @@ rtems_status_code rtems_gpio_bsp_enable_interrupt(
   uint32_t pin,
   rtems_gpio_interrupt interrupt
 ) {
+  (void) bank;
+
   switch ( interrupt ) {
     case FALLING_EDGE:
       /* Enables asynchronous falling edge detection. */
@@ -240,6 +268,8 @@ rtems_status_code rtems_gpio_bsp_disable_interrupt(
   uint32_t pin,
   rtems_gpio_interrupt interrupt
 ) {
+  (void) bank;
+
   switch ( interrupt ) {
     case FALLING_EDGE:
       /* Disables asynchronous falling edge detection. */
@@ -333,5 +363,10 @@ rtems_status_code rtems_gpio_bsp_specific_group_operation(
   uint32_t pin_count,
   void *arg
 ) {
+  (void) bank;
+  (void) pins;
+  (void) pin_count;
+  (void) arg;
+
   return RTEMS_NOT_DEFINED;
 }

@@ -46,6 +46,11 @@ static bool fbcons_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) tty;
+  (void) base;
+  (void) term;
+  (void) args;
+
   return true;
 }
 
@@ -60,6 +65,9 @@ static void fbcons_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) tty;
+  (void) base;
+  (void) args;
 }
 
 /*
@@ -72,6 +80,8 @@ void fbcons_write_polled(
   char c
 )
 {
+  (void) base;
+
   rpi_fb_outch( c );
 
   if ( c == '\n' )
@@ -110,6 +120,8 @@ static int fbcons_inbyte_nonblocking_polled(
   rtems_termios_device_context *base
 )
 {
+  (void) base;
+
   // if( rtems_kbpoll() ) {
   //   int c = getch();
   //   return c;
@@ -129,6 +141,9 @@ static bool fbcons_set_attributes(
   const struct termios *t
 )
 {
+  (void) base;
+  (void) t;
+
   return true;
 }
 
@@ -136,6 +151,8 @@ bool fbcons_probe(
   rtems_termios_device_context *context
 )
 {
+  (void) context;
+
   // rtems_status_code status;
   static bool firstTime = true;
   static bool ret = false;

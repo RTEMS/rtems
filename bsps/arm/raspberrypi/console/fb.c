@@ -295,6 +295,9 @@ rtems_device_driver frame_buffer_initialize(
   void                     *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   /* register the devices */
@@ -319,6 +322,10 @@ rtems_device_driver frame_buffer_open(
   void                     *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   if ( _Atomic_Flag_test_and_set( &driver_mutex,
          ATOMIC_ORDER_ACQUIRE ) != 0 ) {
     printk( "RaspberryPi framebuffer could not lock driver_mutex\n" );
@@ -349,6 +356,10 @@ rtems_device_driver frame_buffer_close(
   void                     *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   /* restore previous state.  for VGA this means return to text mode.
    * leave out if graphics hardware has been initialized in
    * frame_buffer_initialize() */
@@ -367,6 +378,9 @@ rtems_device_driver frame_buffer_read(
   void                     *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) arg;
 
   rw_args->bytes_moved =
@@ -388,6 +402,9 @@ rtems_device_driver frame_buffer_write(
   void                     *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) arg;
 
   rw_args->bytes_moved =
@@ -409,6 +426,9 @@ rtems_device_driver frame_buffer_control(
   void                     *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   rtems_libio_ioctl_args_t *args = arg;
 
   /* XXX check minor */

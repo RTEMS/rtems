@@ -107,6 +107,8 @@ void *raspberrypi_get_reg_of_node(const void *fdt, int node)
 #ifdef BSP_FDT_IS_SUPPORTED
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
+  (void) icells;
+
   uint32_t controller = intr[0];
   uint32_t source = intr[1];
 
