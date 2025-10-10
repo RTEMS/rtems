@@ -65,8 +65,24 @@ console_tbl Console_Configuration_Ports[] = {
         0                                 /* ulIntVector */
     }};
 
-static int     uart_first_open(int major, int minor, void *arg) {return 0;}
-static int     uart_last_close(int major, int minor, void *arg) {return 0;}
+static int     uart_first_open(int major, int minor, void *arg)
+{
+  (void) major;
+  (void) minor;
+  (void) arg;
+
+  return 0;
+}
+
+static int     uart_last_close(int major, int minor, void *arg)
+{
+  (void) major;
+  (void) minor;
+  (void) arg;
+
+  return 0;
+}
+
 static int     uart_read(int minor)
 {
     return uart_poll_read(minor);
@@ -79,6 +95,9 @@ static void    uart_write_polled(int minor, char c)
 
 static int     uart_set_attributes(int minor, const struct termios *t)
 {
+    (void) minor;
+    (void) t;
+
     return 0;
 }
 
