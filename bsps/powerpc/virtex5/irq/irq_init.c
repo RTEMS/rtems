@@ -49,6 +49,8 @@ rtems_irq_global_settings* BSP_rtems_irq_config;
  */
 static void BSP_irq_nop_func(const rtems_irq_connect_data *unused)
 {
+  (void) unused;
+
   /*
    * nothing to do
    */
@@ -56,6 +58,8 @@ static void BSP_irq_nop_func(const rtems_irq_connect_data *unused)
 
 static void BSP_irq_nop_hdl(void *hdl)
 {
+  (void) hdl;
+
   /*
    * nothing to do
    */
@@ -63,6 +67,8 @@ static void BSP_irq_nop_hdl(void *hdl)
 
 static int BSP_irq_isOn_func(const rtems_irq_connect_data *unused)
 {
+  (void) unused;
+
   /*
    * nothing to do
    */
@@ -78,6 +84,8 @@ static int BSP_irq_isOn_func(const rtems_irq_connect_data *unused)
  */
 void BSP_irqexc_on_fnc(const rtems_irq_connect_data *conn_data)
 {
+  (void) conn_data;
+
   uint32_t msr_value;
   /*
    * get current MSR value
@@ -90,6 +98,8 @@ void BSP_irqexc_on_fnc(const rtems_irq_connect_data *conn_data)
 
 void BSP_irqexc_off_fnc(const rtems_irq_connect_data *unused)
 {
+  (void) unused;
+
   uint32_t msr_value;
   /*
    * get current MSR value
@@ -104,6 +114,9 @@ SPR_RW(BOOKE_TSR)
 
 static int C_dispatch_dec_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
+  (void) frame;
+  (void) excNum;
+
   /* Acknowledge the interrupt */
   _write_BOOKE_TSR( BOOKE_TSR_DIS );
 
@@ -119,6 +132,8 @@ static int C_dispatch_dec_handler (BSP_Exception_frame *frame, unsigned int excN
  */
 static int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
+  (void) frame;
+
   /*
    * Handle interrupt
    */
@@ -328,6 +343,8 @@ static rtems_irq_global_settings initialConfig = {
 
 void BSP_rtems_irq_mngt_init(unsigned cpuId)
 {
+  (void) cpuId;
+
   int i;
 
   /*

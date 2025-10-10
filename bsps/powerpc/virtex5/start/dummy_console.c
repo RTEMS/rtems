@@ -12,6 +12,8 @@ ssize_t __bsp_memory_write(int minor, const char* buf, size_t len);
 
 ssize_t __bsp_memory_write(int minor, const char* buf, size_t len)
 {
+  (void) minor;
+
   const char* const last = buf+len;
   while (buf < last)
   {
@@ -35,6 +37,9 @@ rtems_device_driver console_initialize(rtems_device_major_number major,
                                        rtems_device_minor_number minor,
                                        void*                     arg)
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   rtems_termios_initialize();
@@ -60,6 +65,9 @@ rtems_device_driver console_close(rtems_device_major_number major,
                                   rtems_device_minor_number minor,
                                   void*                     arg)
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_close(arg);
 }
 
@@ -67,6 +75,9 @@ rtems_device_driver console_read(rtems_device_major_number major,
                                  rtems_device_minor_number minor,
                                  void*                     arg)
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_read(arg);
 }
 
@@ -74,6 +85,9 @@ rtems_device_driver console_write(rtems_device_major_number major,
                                   rtems_device_minor_number minor,
                                   void*                     arg)
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_write(arg);
 }
 
@@ -81,5 +95,8 @@ rtems_device_driver console_control(rtems_device_major_number major,
                                     rtems_device_minor_number minor,
                                     void*                     arg)
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_ioctl(arg);
 }
