@@ -506,6 +506,11 @@ rtems_debugger_target_hwbreak_control(rtems_debugger_target_watchpoint wp,
                                       uintptr_t                        addr,
                                       DB_UINT                          kind)
 {
+  (void) wp;
+  (void) insert;
+  (void) addr;
+  (void) kind;
+
   /*
    * To do.
    */
@@ -515,6 +520,8 @@ rtems_debugger_target_hwbreak_control(rtems_debugger_target_watchpoint wp,
 int
 rtems_debugger_target_cache_sync(rtems_debugger_target_swbreak* swbreak)
 {
+  (void) swbreak;
+
   /*
    * Nothing to do on an i386.
    */
