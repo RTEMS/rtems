@@ -51,6 +51,8 @@ void _CPU_Context_Initialize(
   void *tls_area
 )
 {
+  (void) is_fp;
+
   const Nios2_MPU_Configuration *mpu_config = _Nios2_MPU_Get_configuration();
   uint32_t stack = (uint32_t) stack_area_begin + stack_area_size - 4;
 

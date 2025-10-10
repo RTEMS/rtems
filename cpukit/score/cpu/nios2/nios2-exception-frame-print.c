@@ -33,5 +33,7 @@
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
+  (void) frame;
+
   /* TODO */
 }
