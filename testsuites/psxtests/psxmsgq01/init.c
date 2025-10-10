@@ -956,6 +956,10 @@ void wait_for_signal(
     fatal_int_service_status( signo, -1, "error return status");
     fatal_posix_service_status( errno, EAGAIN, "errno EAGAIN");
   }
+#else
+  (void) waitset;
+  (void) sec;
+  (void) expect_signal;
 #endif
 }
 

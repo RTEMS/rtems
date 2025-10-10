@@ -45,12 +45,16 @@ const char rtems_test_name[] = "PSXSIGNAL 9";
 
 static void Handler_1( int signo )
 {
+  (void) signo;
+
   TEST_END();
   rtems_test_exit(0);
 }
 
 void *POSIX_Init( void *argument )
 {
+  (void) argument;
+
   int              status;
   struct sigaction act;
 
