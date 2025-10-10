@@ -114,6 +114,9 @@ static rtems_status_code m8xx_spi_char_mode
 |    o = ok or error code                                                   |
 \*=========================================================================*/
 {
+  (void) softc_ptr;
+  (void) lsb_first;
+
   uint16_t tmpmode;
 
   /*
@@ -233,16 +236,20 @@ static rtems_isr m8xx_spi_irq_handler
 static void
 mpc8xx_spi_irq_on(const rtems_irq_connect_data *irq)
 {
+  (void) irq;
 }
 
 static void
 mpc8xx_spi_irq_off(const rtems_irq_connect_data *irq)
 {
+  (void) irq;
 }
 
 static int
 mpc8xx_spi_irq_isOn(const rtems_irq_connect_data *irq)
 {
+  (void) irq;
+
   return 1;
 }
 
@@ -265,6 +272,8 @@ static void m8xx_spi_install_irq_handler
 |    <none>                                                                 |
 \*=========================================================================*/
 {
+  (void) install;
+
   rtems_status_code rc = RTEMS_SUCCESSFUL;
 
   /*
@@ -656,6 +665,8 @@ static rtems_status_code bsp_spi_send_start
 |    o = ok or error code                                                   |
 \*=========================================================================*/
 {
+  (void) bh;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -679,6 +690,10 @@ static rtems_status_code bsp_spi_sel_addr
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {			    
+  (void) bh;
+  (void) addr;
+  (void) rw;
+
 #if defined(PGHPLUS)
   pbdat_val = m8xx.pbdat | (PGHPLUS_SPI_PB_DISP4_RS_MSK |
 			    PGHPLUS_SPI_PB_DISP4_CE_MSK |
@@ -726,6 +741,8 @@ static rtems_status_code bsp_spi_send_stop
 |    o = ok or error code                                                   |
 \*=========================================================================*/
 {
+  (void) bh;
+
 #if defined(DEBUG)
   printk("bsp_spi_send_stop called... ");
 #endif

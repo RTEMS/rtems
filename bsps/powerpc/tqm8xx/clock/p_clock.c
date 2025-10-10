@@ -46,6 +46,8 @@ int BSP_disconnect_clock_handler (void)
 
 int BSP_connect_clock_handler (rtems_irq_hdl hdl)
 {
+  (void) hdl;
+
   rtems_status_code sc;
   /*
    * install interrupt handler

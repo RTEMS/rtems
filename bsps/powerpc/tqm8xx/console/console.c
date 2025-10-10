@@ -836,6 +836,9 @@ static bool m8xx_console_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
   m8xx_console_chan_desc_t *cd = (m8xx_console_chan_desc_t *)base;
 
   if (cd->mode == TERMIOS_IRQ_DRIVEN) {
@@ -877,10 +880,14 @@ static const rtems_termios_device_handler m8xx_console_handler_irq_driven = {
  * Initialize and register the device
  */
 rtems_device_driver console_initialize(rtems_device_major_number  major,
-				       rtems_device_minor_number  minor,/* ignored */
+				       rtems_device_minor_number  minor,
 				       void                      *arg
 				       )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status = RTEMS_SUCCESSFUL;
   int entry,ttynum;
   char tty_name[] = "/dev/tty00";
