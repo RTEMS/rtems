@@ -95,6 +95,9 @@ rtems_device_driver console_initialize(
     void                      *arg
 )
 {
+    (void) minor;
+    (void) arg;
+
     rtems_status_code status;
     int i;
 
@@ -148,7 +151,10 @@ rtems_device_driver console_close(
     void                    * arg
 )
 {
-    return rtems_termios_close(arg);
+  (void) major;
+  (void) minor;
+
+  return rtems_termios_close(arg);
 }
 
 rtems_device_driver console_read(
@@ -157,6 +163,9 @@ rtems_device_driver console_read(
     void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_read(arg);
 }
 
@@ -166,6 +175,9 @@ rtems_device_driver console_write(
     void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_write(arg);
 }
 
@@ -175,6 +187,9 @@ rtems_device_driver console_control(
     void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_ioctl(arg);
 }
 
@@ -222,6 +237,8 @@ static void imx_uart_init(int minor)
 
 static int imx_uart_first_open(int major, int minor, void *arg)
 {
+    (void) major;
+
     rtems_libio_open_close_args_t *args = arg;
     rtems_status_code status = RTEMS_SUCCESSFUL;
 
@@ -257,6 +274,9 @@ static int imx_uart_first_open(int major, int minor, void *arg)
 static int imx_uart_last_close(int major, int minor, void *arg)
 {
 #if USE_INTERRUPTS
+    (void) major;
+    (void) arg;
+
     rtems_status_code status = RTEMS_SUCCESSFUL;
 
     imx_uart_isr_off(imx_uart_name_transmit(minor));
@@ -274,6 +294,10 @@ static int imx_uart_last_close(int major, int minor, void *arg)
         &imx_uart_data[minor]
     );
     assert(status == RTEMS_SUCCESSFUL);
+#else
+    (void) major;
+    (void) minor;
+    (void) arg;
 #endif
 
     return 0;
