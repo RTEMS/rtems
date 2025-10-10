@@ -52,6 +52,9 @@ uint32_t
 rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
                              const Elf_Shdr*      shdr)
 {
+  (void) obj;
+  (void) shdr;
+
   return 0;
 }
 
@@ -90,6 +93,8 @@ rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
 bool
 rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
 {
+  (void) type;
+
   return true;
 }
 
@@ -133,6 +138,10 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Byte            syminfo,
                              const Elf_Word            symvalue)
 {
+  (void) obj;
+  (void) symname;
+  (void) syminfo;
+
   Elf_Addr *where;
   Elf_Sword tmp;
 
