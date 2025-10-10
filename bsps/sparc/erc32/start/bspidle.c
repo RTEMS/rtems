@@ -22,6 +22,8 @@
 
 void *bsp_idle_thread( uintptr_t ignored )
 {
+  (void) ignored;
+
   while (1) {
     ERC32_MEC.Power_Down = 0;   /* value is irrelevant */
   }

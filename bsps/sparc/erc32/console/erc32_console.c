@@ -137,6 +137,8 @@ unsigned long Console_Configuration_Count = ERC32_UART_COUNT;
 
 static int erc32_console_first_open(int major, int minor, void *arg)
 {
+  (void) major;
+
   /* Check minor number */
   if (minor < 0 || minor > 1) {
     return -1;
