@@ -194,6 +194,9 @@ void _CPU_Context_Initialize(
   void             *tls_area
 )
 {
+  (void) is_fp;
+  (void) tls_area;
+
   uintptr_t             stack_tmp;
   __MIPS_REGISTER_TYPE  intlvl = new_level & 0xff;
   __MIPS_REGISTER_TYPE  c0_sr;
@@ -236,6 +239,8 @@ void _CPU_Context_Initialize(
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
+  (void) ignored;
+
 #if (__mips == 3) || (__mips == 32)
    for( ; ; )
      __asm__ volatile("wait"); /* use wait to enter low power mode */
