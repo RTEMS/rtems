@@ -15,11 +15,15 @@ static rtems_timecounter_simple mcf5329_tc;
 
 static uint32_t mcf5329_tc_get(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   return MCF_PIT3_PCNTR;
 }
 
 static bool mcf5329_tc_is_pending(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   return (MCF_PIT3_PCSR & MCF_PIT_PCSR_PIF) != 0;
 }
 
@@ -34,6 +38,8 @@ static uint32_t mcf5329_tc_get_timecount(struct timecounter *tc)
 
 static void mcf5329_tc_at_tick(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   MCF_PIT3_PCSR |= MCF_PIT_PCSR_PIF;
 }
 
