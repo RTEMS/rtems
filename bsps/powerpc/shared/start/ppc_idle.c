@@ -73,6 +73,8 @@ SPR_RW(HID0)
 void *
 bsp_ppc_idle_task_body(uintptr_t ignored)
 {
+(void) ignored;
+
 uint32_t msr;
 
 	switch ( current_ppc_cpu ) {

@@ -1583,11 +1583,15 @@ int					lvl;
 
 static void
 my_no_op(const rtems_irq_connect_data * arg)
-{}
+{
+	(void) arg;
+}
 
 static int
 my_isOn(const rtems_irq_connect_data *arg)
 {
+	(void) arg;
+
 		return (int)(TSI_RD(THEBASE, TSI_INTEO_REG) & TSI_RD(THEBASE, TSI_INTEN_REG));
 }
 

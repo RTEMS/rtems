@@ -54,6 +54,10 @@ void mvmertc_set_register(
   uint32_t  value
 )
 {
+  (void) base;
+  (void) reg;
+  (void) value;
+
   printk( "RTC SUPPORT NOT IMPLEMENTED ON THIS BOARD\n");
 }
 
@@ -62,6 +66,9 @@ uint32_t mvmertc_get_register(
   uint8_t   reg
 )
 {
+  (void) base;
+  (void) reg;
+
   printk( "RTC SUPPORT NOT IMPLEMENTED ON THIS BOARD\n");
   return 0;
 }

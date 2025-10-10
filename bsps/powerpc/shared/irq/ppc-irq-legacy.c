@@ -47,6 +47,8 @@ SPR_RW(PPC405_TSR)
  */
 static int C_dispatch_dec_handler_bookE (BSP_Exception_frame *frame, unsigned int excNum)
 {
+	(void) excNum;
+
 	/* clear interrupt; we must do this
 	 * before C_dispatch_irq_handler()
 	 * re-enables MSR_EE.

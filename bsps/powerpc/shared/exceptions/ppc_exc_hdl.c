@@ -46,6 +46,9 @@ uint32_t ppc_exc_msr_bits = MSR_IR | MSR_DR | MSR_RI;
 
 int ppc_exc_handler_default(BSP_Exception_frame *f, unsigned int vector)
 {
+  (void) f;
+  (void) vector;
+
   return -1;
 }
 

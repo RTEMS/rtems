@@ -94,6 +94,8 @@ static inline uint32_t get_itimer(void)
  */
 static void Clock_isr(void* handle)
 {
+  (void) handle;
+
   uint32_t clicks_til_next_interrupt;
 #if defined(BSP_PPC403_CLOCK_ISR_IRQ_LEVEL)
   uint32_t l_orig = _ISR_Get_level();
@@ -158,6 +160,8 @@ static void Clock_isr(void* handle)
 
 static int ClockIsOn(const rtems_irq_connect_data* unused)
 {
+  (void) unused;
+
   register uint32_t tcr;
 
   __asm__ volatile ("mfspr %0, 0x3da" : "=r" ((tcr)));               /* TCR */
@@ -167,6 +171,8 @@ static int ClockIsOn(const rtems_irq_connect_data* unused)
 
 static void ClockOff(const rtems_irq_connect_data* unused)
 {
+  (void) unused;
+
   register uint32_t tcr;
 
   __asm__ volatile ("mfspr %0, 0x3da" : "=r" ((tcr)));               /* TCR */
@@ -176,6 +182,8 @@ static void ClockOff(const rtems_irq_connect_data* unused)
 
 static void ClockOn(const rtems_irq_connect_data* unused)
 {
+  (void) unused;
+
   uint32_t          iocr;
   register uint32_t tcr;
 #ifndef ppc405

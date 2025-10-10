@@ -252,6 +252,8 @@ uint32_t then, now, sta;
 STATIC void
 flash_array_mode_intel(struct bankdesc *b, uint32_t a)
 {
+	(void) b;
+
 	BSP_flashReadRaw(F_CMD_RD_ARR, a);
 }
 
@@ -259,6 +261,8 @@ flash_array_mode_intel(struct bankdesc *b, uint32_t a)
 STATIC void
 flash_print_stat_intel(struct bankdesc *b, uint32_t sta, int verbose)
 {
+(void) b;
+
 int ch;
 	if ( sta & STA_ERROR ) {
 		ch = ':';

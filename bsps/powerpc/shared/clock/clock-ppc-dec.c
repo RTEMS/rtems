@@ -57,11 +57,15 @@ static struct timecounter Clock_TC;
 
 static uint32_t Clock_Get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   return ppc_time_base();
 }
 
 void clockOff(void* unused)
 {
+  (void) unused;
+
   rtems_interrupt_level l;
 
   if ( ppc_cpu_is_bookE() ) {
@@ -78,6 +82,8 @@ void clockOff(void* unused)
 
 void clockOn(void* unused)
 {
+  (void) unused;
+
   rtems_interrupt_level l;
 
   PPC_Set_decrementer( Clock_Decrementer_value );
@@ -143,6 +149,8 @@ static void (*clock_handler)(void);
  */
 void clockIsr(void *unused)
 {
+  (void) unused;
+
   int decr;
 
   /*
@@ -177,6 +185,8 @@ void clockIsr(void *unused)
  */
 void clockIsrBookE(void *unused)
 {
+  (void) unused;
+
   /* Note: TSR bit has already been cleared in the exception handler */
 
   /*
@@ -193,6 +203,8 @@ void clockIsrBookE(void *unused)
 
 int clockIsOn(void* unused)
 {
+  (void) unused;
+
   uint32_t   msr_value;
 
   _CPU_MSR_GET( msr_value );

@@ -451,6 +451,8 @@ BSP_poll_char_via_serial()
 static void
 uart_noop(const rtems_irq_connect_data *unused)
 {
+	(void) unused;
+
   return;
 }
 
@@ -747,12 +749,16 @@ BSP_uart_termios_isr_com(int uart)
 void
 BSP_uart_termios_isr_com1(void *unused)
 {
+	(void) unused;
+
 	BSP_uart_termios_isr_com(BSP_UART_COM1);
 }
 
 void
 BSP_uart_termios_isr_com2(void *unused)
 {
+	(void) unused;
+
 	BSP_uart_termios_isr_com(BSP_UART_COM2);
 }
 

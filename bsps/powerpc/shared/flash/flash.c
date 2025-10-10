@@ -120,6 +120,8 @@ union bconv	{
 static void
 rd_par(struct bankdesc *b, union bconv *pv, uint32_t a)
 {
+	(void) b;
+
 	if ( 4 == FLASH_STRIDE(b) ) {
 		pv->u    = *(_u32_a_t*)a;
 	} else if ( 2 == FLASH_STRIDE(b) ) {

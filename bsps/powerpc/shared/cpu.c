@@ -64,6 +64,8 @@ void _CPU_Context_Initialize(
   void             *tls_area
 )
 {
+  (void) is_fp;
+
   ppc_context *the_ppc_context;
   uint32_t   msr_value = 0;
   uintptr_t  sp;

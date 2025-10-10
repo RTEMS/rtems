@@ -200,6 +200,8 @@ uint32_t              rval;
 static inline void
 fl_wr32(struct bankdesc *b, uint32_t a, uint32_t v)
 {
+(void) b;
+
 volatile union bconv *p = (volatile union bconv*)a;
 	if ( 4 == FLASH_STRIDE(b) ) {
 		p->u    = v;
@@ -216,6 +218,8 @@ volatile union bconv *p = (volatile union bconv*)a;
 static inline uint32_t
 fl_splat32(struct bankdesc *b, uint32_t x)
 {
+	(void) b;
+
 	if ( 4 == FLASH_STRIDE(b) ) {
 		if ( 1 == b->width ) {
 			x = (x << 8) | x;
@@ -231,6 +235,8 @@ fl_splat32(struct bankdesc *b, uint32_t x)
 static inline uint32_t
 fl_x32(struct bankdesc *b, union bconv *pv)
 {
+	(void) b;
+
 	if ( 4 == FLASH_STRIDE(b) )
 		return pv->u;
 	else if ( 2 == FLASH_STRIDE(b) )
@@ -353,11 +359,15 @@ uint32_t dev_id[3], x, i;
 STATIC void
 flash_lock_block_s160(struct bankdesc *b, uint32_t addr)
 {
+	(void) b;
+	(void) addr;
 }
 
 STATIC void
 flash_unlock_block_s160(struct bankdesc *b, uint32_t addr)
 {
+	(void) b;
+	(void) addr;
 }
 
 STATIC uint32_t
@@ -422,6 +432,9 @@ rtems_interval p,i;
 STATIC void
 flash_print_stat_s160(struct bankdesc *b, uint32_t sta, int verbose)
 {
+	(void) b;
+	(void) verbose;
+
 	fprintf(stderr,"Flash Spansion 160 error %"PRIi32"\n", sta);
 }
 

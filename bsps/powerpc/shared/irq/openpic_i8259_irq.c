@@ -233,6 +233,8 @@ unsigned BSP_spuriousIntr = 0;
  */
 int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
+  (void) frame;
+
   register unsigned int irq;
 #if BSP_ISA_IRQ_NUMBER > 0
   register unsigned isaIntr;                  /* boolean */

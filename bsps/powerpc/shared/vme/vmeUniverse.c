@@ -505,6 +505,9 @@ unsigned long vdw =0;
 static int
 disableUniversePort(int ismaster, int portno, volatile unsigned long *preg, void *param)
 {
+(void) portno;
+(void) param;
+
 unsigned long cntrl;
 	cntrl=READ_LE0(preg);
 	cntrl &= ~(ismaster ? UNIV_MCTL_EN : UNIV_SCTL_EN);
@@ -844,6 +847,9 @@ hasPWENWindow(
 		volatile LERegister *preg,
 		void		*parm)
 {
+(void) portno;
+(void) parm;
+
 unsigned long cntrl = READ_LE0(preg);
 unsigned long mask  = ismaster ? (UNIV_MCTL_EN|UNIV_MCTL_PWEN) : (UNIV_SCTL_EN|UNIV_SCTL_PWEN);
 	return (cntrl & mask) == mask ? -1 : 0;
@@ -1654,6 +1660,8 @@ LERegister1            dctl;
 static int      uni_desc_start
 (volatile void *controller_addr, int channel, DmaDescriptor p)
 {
+(void) channel;
+
 volatile LERegister *base = controller_addr;
 uint32_t			dgcs;
 
@@ -2013,11 +2021,15 @@ unsigned long 		linten;
 /* STUPID API */
 static void
 my_no_op(const rtems_irq_connect_data * arg)
-{}
+{
+	(void) arg;
+}
 
 static int
 my_isOn(const rtems_irq_connect_data *arg)
 {
+	(void) arg;
+
 		return (int)vmeUniverseReadReg(UNIV_REGOFF_LINT_EN);
 }
 

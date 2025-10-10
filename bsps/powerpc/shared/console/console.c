@@ -97,6 +97,8 @@ rtems_device_driver console_initialize(
   void                      *arg
 )
 {
+  (void) arg;
+
   rtems_status_code status;
 
   /*
@@ -148,6 +150,8 @@ rtems_device_driver console_initialize(
 #if !defined(USE_POLLED_IO)
 static int console_first_open(int major, int minor, void *arg)
 {
+  (void) major;
+
   rtems_status_code status;
 
   /* must not open a minor device we have no ISR for */
@@ -177,6 +181,10 @@ static int console_first_open(int major, int minor, void *arg)
 #if !defined(USE_POLLED_IO)
 static int console_last_close(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   BSP_uart_remove_isr(minor, ttyS[minor].isr);
   return 0;
 }
@@ -241,6 +249,9 @@ console_close(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   rtems_device_driver res = RTEMS_SUCCESSFUL;
 
   res =  rtems_termios_close (arg);
@@ -259,6 +270,9 @@ rtems_device_driver console_read(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_read (arg);
 } /* console_read */
 
@@ -273,6 +287,9 @@ rtems_device_driver console_write(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_write (arg);
 } /* console_write */
 
@@ -285,6 +302,8 @@ rtems_device_driver console_control(
   void                      *arg
 )
 {
+  (void) major;
+
 /* does the BSP support break callbacks ? */
 #if defined(BIOCSETBREAKCB) && defined(BIOCGETBREAKCB)
   rtems_libio_ioctl_args_t  *ioa=arg;
@@ -293,6 +312,9 @@ rtems_device_driver console_control(
     case BIOCGETBREAKCB: return BSP_uart_get_break_cb(minor, ioa);
     default:             break;
   }
+#else
+  (void) minor;
+  (void) arg;
 #endif
   return rtems_termios_ioctl (arg);
 }

@@ -359,6 +359,8 @@ void          *carg;
 static unsigned short
 tsi_clear_errors(int quiet)
 {
+(void) quiet;
+
 unsigned long	v;
 unsigned short	rval;
 	v = vmeTsi148ClearVMEBusErrors(0);

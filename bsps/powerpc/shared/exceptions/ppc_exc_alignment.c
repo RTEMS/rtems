@@ -30,6 +30,8 @@
 
 int ppc_exc_alignment_handler(BSP_Exception_frame *frame, unsigned excNum)
 {
+  (void) excNum;
+
   unsigned opcode = *(unsigned *) frame->EXC_SRR0;
 
   /* Do we have a dcbz instruction? */

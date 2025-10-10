@@ -64,6 +64,8 @@ static struct timecounter ppc_tc;
 
 static uint32_t ppc_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   return ppc_time_base();
 }
 
@@ -79,6 +81,9 @@ static int ppc_clock_exception_handler(
   unsigned number
 )
 {
+  (void) frame;
+  (void) number;
+
   uint32_t delta = ppc_clock_decrementer_value;
   uint32_t next = ppc_clock_next_time_base;
   uint32_t dec = 0;
@@ -138,6 +143,9 @@ static int ppc_clock_exception_handler_booke(
   unsigned number
 )
 {
+  (void) frame;
+  (void) number;
+
   uint32_t msr;
 
   /* Acknowledge decrementer request */
@@ -160,6 +168,9 @@ static int ppc_clock_exception_handler_booke(
 
 static int ppc_clock_exception_handler_ppc405(BSP_Exception_frame *frame, unsigned number)
 {
+  (void) frame;
+  (void) number;
+
   uint32_t msr;
 
   /* Acknowledge PIT request */

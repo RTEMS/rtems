@@ -47,14 +47,18 @@ static pci_isa_bridge_device bridge;
  */
 static void nop_hdl(rtems_irq_hdl_param ignored)
 {
+  (void) ignored;
 }
 
 static void nop_irq_enable(const struct __rtems_irq_connect_data__*ignored)
 {
+  (void) ignored;
 }
 
 static int irq_is_connected(const struct __rtems_irq_connect_data__*ignored)
 {
+  (void) ignored;
+
   return 0;
 }
 
@@ -278,6 +282,8 @@ loop_exit:
    */
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
+  (void) cpuId;
+
 #if BSP_ISA_IRQ_NUMBER > 0 && !defined(mot_ppc_mvme2100)
   int known_cpi_isa_bridge = 0;
 #endif
