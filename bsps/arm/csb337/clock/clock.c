@@ -50,6 +50,8 @@
  */
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {
+  (void) unused;
+
   /* enable timer interrupt */
   ST_REG(ST_IER) = ST_SR_PITS;
 }
@@ -61,6 +63,8 @@ static void clock_isr_on(const rtems_irq_connect_data *unused)
  */
 static void clock_isr_off(const rtems_irq_connect_data *unused)
 {
+  (void) unused;
+
   /* disable timer interrupt */
   ST_REG(ST_IDR) = ST_SR_PITS;
 }
@@ -73,6 +77,8 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
  */
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
+  (void) irq;
+
   /* check timer interrupt */
   return ST_REG(ST_IMR) & ST_SR_PITS;
 }

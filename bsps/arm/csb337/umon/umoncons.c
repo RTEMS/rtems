@@ -69,6 +69,10 @@ const console_fns umoncons_fns =
 */
 static int umoncons_first_open(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return 0;
 }
 
@@ -80,6 +84,10 @@ static int umoncons_first_open(int major, int minor, void *arg)
 */
 static int umoncons_last_close(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return 0;
 }
 
@@ -92,6 +100,8 @@ static int umoncons_last_close(int major, int minor, void *arg)
 */
 static int umoncons_read(int minor)
 {
+  (void) minor;
+
   if ( !mon_gotachar() )
     return -1;
   return mon_getchar();
@@ -105,6 +115,8 @@ static int umoncons_read(int minor)
 */
 static ssize_t umoncons_write(int minor, const char *buf, size_t len)
 {
+  (void) minor;
+
   size_t i;
 
   for ( i=0 ; i<len ; i++ )
@@ -117,18 +129,25 @@ static ssize_t umoncons_write(int minor, const char *buf, size_t len)
 /* Set up the uMon driver. */
 static void umoncons_init(int minor)
 {
+  (void) minor;
+
   rtems_umon_connect();
 }
 
 /* This is used for putchark support */
 static void umoncons_write_polled(int minor, char c)
 {
+  (void) minor;
+
   mon_putchar( c );
 }
 
 /* This is for setting baud rate, bits, etc. */
 static int umoncons_set_attributes(int minor, const struct termios *t)
 {
+  (void) minor;
+  (void) t;
+
   return 0;
 }
 
@@ -144,6 +163,8 @@ static int umoncons_set_attributes(int minor, const struct termios *t)
 */
 int umoncons_poll_read(int minor)
 {
+  (void) minor;
+
   if (!mon_gotachar())
     return -1;
   return mon_getchar();

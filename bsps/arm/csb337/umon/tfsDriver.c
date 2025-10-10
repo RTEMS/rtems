@@ -109,6 +109,8 @@ static int rtems_tfs_mount_me(
   const void                           *data
 )
 {
+  (void) data;
+
   char *root_path = strdup("/");
 
   if (root_path == NULL) {
@@ -268,6 +270,8 @@ static int rtems_tfs_open_worker(
   mode_t         mode
 )
 {
+  (void) iop;
+
   static int beenhere = 0;
   long flagmode;
   int  tfdidx, tfd;
@@ -447,6 +451,8 @@ static int rtems_tfs_open(
   mode_t         mode
 )
 {
+  (void) new_name;
+
   char *full_path_name;
   int err;
 
@@ -611,6 +617,8 @@ static int rtems_tfs_ioctl(
   void            *buf
 )
 {
+  (void) iop;
+
   int ret;
 
   ret = mon_tfsctrl(cmd,(long)buf,0);

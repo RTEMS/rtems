@@ -80,6 +80,9 @@ at91rm9200_usart_regs_t *usart_get_base(int minor)
  */
 static int usart_first_open(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) arg;
+
   at91rm9200_usart_regs_t *usart;
 
   usart = usart_get_base(minor);
@@ -100,6 +103,9 @@ static int usart_first_open(int major, int minor, void *arg)
  */
 static int usart_last_close(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) arg;
+
   at91rm9200_usart_regs_t *usart;
 
   usart = usart_get_base(minor);

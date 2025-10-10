@@ -82,6 +82,10 @@ const console_fns dbgu_fns =
  */
 static int dbgu_first_open(int major, int minor, void *arg)
 {
+    (void) major;
+    (void) minor;
+    (void) arg;
+
     return 0;
 }
 
@@ -93,6 +97,10 @@ static int dbgu_first_open(int major, int minor, void *arg)
  */
 static int dbgu_last_close(int major, int minor, void *arg)
 {
+    (void) major;
+    (void) minor;
+    (void) arg;
+
     return 0;
 }
 
@@ -209,6 +217,9 @@ static void dbgu_write_polled(int minor, char c)
 /* This is for setting baud rate, bits, etc. */
 static int dbgu_set_attributes(int minor, const struct termios *t)
 {
+    (void) minor;
+    (void) t;
+
     return 0;
 }
 
