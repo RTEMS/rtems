@@ -81,6 +81,8 @@ static void lpc32xx_rtc_reset(void)
 
 static void lpc32xx_rtc_initialize(int minor)
 {
+  (void) minor;
+
   uint32_t up_first = 0;
   uint32_t up_second = 0;
   uint32_t down_first = 0;
@@ -104,6 +106,8 @@ static void lpc32xx_rtc_initialize(int minor)
 
 static int lpc32xx_rtc_get_time(int minor, rtems_time_of_day *tod)
 {
+  (void) minor;
+
   struct timeval now = {
     .tv_sec = lpc32xx.rtc.ucount,
     .tv_usec = 0
@@ -125,6 +129,8 @@ static int lpc32xx_rtc_get_time(int minor, rtems_time_of_day *tod)
 
 static int lpc32xx_rtc_set_time(int minor, const rtems_time_of_day *tod)
 {
+  (void) minor;
+
   lpc32xx_rtc_set(_TOD_To_seconds(tod));
 
   return 0;
@@ -132,6 +138,8 @@ static int lpc32xx_rtc_set_time(int minor, const rtems_time_of_day *tod)
 
 static bool lpc32xx_rtc_probe(int minor)
 {
+  (void) minor;
+
   return true;
 }
 

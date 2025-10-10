@@ -39,6 +39,8 @@
 
 void *bsp_idle_thread(uintptr_t arg)
 {
+  (void) arg;
+
   while (true) {
     arm_cp15_wait_for_interrupt();
   }

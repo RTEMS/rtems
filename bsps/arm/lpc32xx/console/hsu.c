@@ -117,6 +117,9 @@ static bool lpc32xx_hsu_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
   lpc32xx_hsu_context *ctx = (lpc32xx_hsu_context *) base;
   volatile lpc32xx_hsu *hsu = ctx->hsu;
   rtems_status_code sc;
@@ -145,6 +148,8 @@ static void lpc32xx_hsu_last_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   lpc32xx_hsu_context *ctx = (lpc32xx_hsu_context *) base;
   volatile lpc32xx_hsu *hsu = ctx->hsu;
 
