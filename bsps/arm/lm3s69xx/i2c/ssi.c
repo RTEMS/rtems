@@ -43,6 +43,8 @@ static rtems_status_code lm3s69xx_ssi_init(rtems_libi2c_bus_t *bus)
 
 static rtems_status_code lm3s69xx_ssi_send_start(rtems_libi2c_bus_t *bus)
 {
+  (void) bus;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -62,6 +64,8 @@ static rtems_status_code lm3s69xx_ssi_send_stop(rtems_libi2c_bus_t *bus)
 static rtems_status_code lm3s69xx_ssi_send_addr(rtems_libi2c_bus_t *bus,
         uint32_t addr, int rw)
 {
+  (void) rw;
+
   lm3s69xx_ssi_bus_entry *e = (lm3s69xx_ssi_bus_entry *)bus;
   e->cs_pin = addr;
   lm3s69xx_gpio_set_pin(e->cs_pin, false);
@@ -114,6 +118,10 @@ static int lm3s69xx_ssi_write(rtems_libi2c_bus_t *bus, unsigned char *out, int n
 
 static int lm3s69xx_ssi_ioctl(rtems_libi2c_bus_t *bus, int cmd, void *arg)
 {
+  (void) bus;
+  (void) cmd;
+  (void) arg;
+
   return -RTEMS_NOT_DEFINED;
 }
 

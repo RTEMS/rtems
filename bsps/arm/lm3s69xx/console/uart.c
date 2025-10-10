@@ -94,6 +94,8 @@ static void initialize(int minor)
 
 static int first_open(int major, int minor, void *arg)
 {
+  (void) major;
+
   rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
   struct rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
   console_data *cd = &Console_Port_Data [minor];
@@ -113,6 +115,9 @@ static int first_open(int major, int minor, void *arg)
 
 static int last_close(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) arg;
+
   volatile lm3s69xx_uart *uart = get_uart_regs(minor);
   uart->im = 0;
 
@@ -147,6 +152,9 @@ static ssize_t write_support_polled(
 
 static int set_attribues(int minor, const struct termios *term)
 {
+  (void) minor;
+  (void) term;
+
   return -1;
 }
 
