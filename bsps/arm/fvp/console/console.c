@@ -70,6 +70,10 @@ rtems_status_code console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   rtems_termios_initialize();
 
   (void) rtems_termios_device_install(
