@@ -54,6 +54,8 @@ extern void Clock_isr(void *param);
 
 static uint32_t amd64_clock_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   return Clock_driver_ticks;
 }
 

@@ -88,6 +88,8 @@ static bool wait_for_ap(uint32_t timeout_ms)
 
 static void bsp_inter_processor_interrupt(void* arg)
 {
+  (void) arg;
+
   _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
   lapic_eoi();
 }
@@ -118,6 +120,8 @@ uint32_t _CPU_SMP_Initialize(void)
 
 void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
 {
+  (void) cpu_count;
+
   rtems_status_code sc = rtems_interrupt_handler_install(
     BSP_VECTOR_IPI,
     "IPI",

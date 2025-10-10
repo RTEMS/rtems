@@ -59,6 +59,9 @@ efi_clock_tick_notify(EFI_EVENT e, VOID* ctx);
 EFIAPI void
 efi_clock_tick_notify(EFI_EVENT e, VOID* ctx)
 {
+    (void) e;
+    (void) ctx;
+
     Clock_isr(NULL);
 }
 

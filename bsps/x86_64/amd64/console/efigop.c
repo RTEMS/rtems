@@ -95,6 +95,9 @@ frame_buffer_initialize
  rtems_device_minor_number minor,
  void *arg)
 {
+    (void) minor;
+    (void) arg;
+
     rtems_status_code status;
 
     status = rtems_io_register_name(FRAMEBUFFER_DEVICE_0_NAME, major, 0);
@@ -117,6 +120,10 @@ frame_buffer_open
  rtems_device_minor_number minor,
  void *arg)
 {
+    (void) major;
+    (void) minor;
+    (void) arg;
+
     if (_Atomic_Flag_test_and_set(&driver_mutex, ATOMIC_ORDER_ACQUIRE) != 0) {
         printf("EFI/GOP: error: can't lock device mutex.\n" );
         return RTEMS_UNSATISFIED;
@@ -136,6 +143,10 @@ frame_buffer_close
  rtems_device_minor_number minor,
  void *arg)
 {
+    (void) major;
+    (void) minor;
+    (void) arg;
+
     _Atomic_Flag_clear( &driver_mutex, ATOMIC_ORDER_RELEASE );
     return RTEMS_SUCCESSFUL;
 }
@@ -146,6 +157,9 @@ frame_buffer_read
  rtems_device_minor_number minor,
  void *arg)
 {
+    (void) major;
+    (void) minor;
+
     rtems_libio_rw_args_t* rw_args = (rtems_libio_rw_args_t*)arg;
 
     rw_args->bytes_moved =
@@ -163,6 +177,9 @@ frame_buffer_write
  rtems_device_minor_number minor,
  void *arg)
 {
+    (void) major;
+    (void) minor;
+
     rtems_libio_rw_args_t* rw_args = (rtems_libio_rw_args_t*)arg;
 
     rw_args->bytes_moved =
@@ -180,6 +197,9 @@ frame_buffer_control
  rtems_device_minor_number minor,
  void *arg)
 {
+    (void) major;
+    (void) minor;
+
     rtems_libio_ioctl_args_t* args = (rtems_libio_ioctl_args_t*)arg;
 
     switch (args->command) {

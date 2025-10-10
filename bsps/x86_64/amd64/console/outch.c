@@ -46,6 +46,9 @@ static void wr_cursor(
   int           c
 )
 {
+  (void) r;
+  (void) c;
+
   /* dummy function for now */
 }
 

@@ -159,6 +159,8 @@ void bsp_interrupt_facility_initialize(void)
 
 rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
+  (void) vector;
+
   /* XXX: Should be implemented once I/O APIC support is added */
   return RTEMS_SUCCESSFUL;
 }
@@ -168,6 +170,8 @@ rtems_status_code bsp_interrupt_set_priority(
   uint32_t priority
 )
 {
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -187,6 +191,9 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  (void) vector;
+  (void) attributes;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -226,6 +233,8 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
+  (void) vector;
+
   /* XXX: Should be implemented once I/O APIC support is added */
   return RTEMS_SUCCESSFUL;
 }
@@ -258,6 +267,9 @@ rtems_status_code bsp_interrupt_raise_on(
   uint32_t            cpu_index
 )
 {
+  (void) vector;
+  (void) cpu_index;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
