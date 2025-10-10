@@ -108,6 +108,9 @@ static void call_vectored_isr(
     void *ctrlr
     )
 {
+    (void) frame;
+    (void) cause;
+
     uint32_t src;
     uint32_t mask;
     int index;

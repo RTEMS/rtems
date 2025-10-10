@@ -59,6 +59,8 @@ void console_outbyte_polled(
   char ch
 )
 {
+    (void) port;
+
     /* wait for the fifo to make room */
     while ((uart0->linestat & 0x20) == 0) {
         continue;
@@ -77,6 +79,8 @@ int console_inbyte_nonblocking(
   int port
 )
 {
+  (void) port;
+
   unsigned char c;
 
   if (uart0->linestat & 1) {
