@@ -66,6 +66,9 @@ uint32_t BSP_mem_size = (uint32_t)RamSize;
 /* Default decrementer exception handler */
 static int default_decrementer_exception_handler( BSP_Exception_frame *frame, unsigned number)
 {
+  (void) frame;
+  (void) number;
+
   ppc_set_decrementer_register(UINT32_MAX);
 
   return 0;

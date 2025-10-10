@@ -70,6 +70,8 @@ void console_outbyte_polled(
   char ch
 )
 {
+  (void) port;
+
   __outb(0x3f8 + 0x00, ch);
 }
 
@@ -82,6 +84,7 @@ int console_inbyte_nonblocking(
   int port
 )
 {
+  (void) port;
 
   if ( __inb(0x3f8 + 0x05) & 0x01 )
     return __inb(0x3f8 + 0x00);
