@@ -30,6 +30,9 @@
 
 void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
+    (void) source;
+    (void) code;
+
     /* ecall is currently used to halt the griscv cpu */
     asm ("ecall");
     RTEMS_UNREACHABLE();

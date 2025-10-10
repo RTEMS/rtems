@@ -165,6 +165,8 @@ uint32_t _CPU_Counter_frequency( void )
 
 static uint32_t _RISCV_Get_timecount_csr(struct timecounter *tc)
 {
+  (void) tc;
+
   return read_csr(time);
 }
 

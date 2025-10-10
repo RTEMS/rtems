@@ -79,6 +79,9 @@ static rtems_termios_device_context *grlib_console_get_context(int index)
 /* AMBA PP find routine. Extract AMBA PnP information into data structure. */
 static int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg)
 {
+  (void) index;
+  (void) arg;
+
   struct ambapp_apb_info *apb = (struct ambapp_apb_info *)dev->devinfo;
 
   /* Extract needed information of one APBUART */
@@ -112,6 +115,10 @@ rtems_device_driver console_initialize(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   const rtems_termios_device_handler *handler =
 #if CONSOLE_USE_INTERRUPTS
     &apbuart_handler_interrupt;

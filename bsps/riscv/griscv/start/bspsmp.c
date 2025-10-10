@@ -32,6 +32,8 @@
 
 static rtems_isr bsp_inter_processor_interrupt( void *v )
 {
+  (void) v;
+
   _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
 }
 
