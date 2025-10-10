@@ -46,6 +46,8 @@ rtems_task Test_task1(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   char              receive_buffer[16];
   size_t            size;
   rtems_status_code status;

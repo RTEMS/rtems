@@ -44,6 +44,8 @@ rtems_task Semaphore_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t    count;
   rtems_status_code status;
   uint32_t    yield_count;

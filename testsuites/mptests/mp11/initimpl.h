@@ -54,6 +54,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id          junk_id;
   rtems_status_code status;
 

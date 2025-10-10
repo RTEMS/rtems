@@ -45,6 +45,8 @@ rtems_task Test_task2(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   puts( "Getting SMID of semaphore" );

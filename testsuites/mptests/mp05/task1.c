@@ -51,6 +51,9 @@ static rtems_timer_service_routine Stop_Test_TSR(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   Stop_Test = true;
 }
 
@@ -58,6 +61,8 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_status_code status;
 
   Stop_Test = false;

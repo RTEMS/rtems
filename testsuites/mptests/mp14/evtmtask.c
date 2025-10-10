@@ -45,6 +45,8 @@ rtems_task Delayed_events_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   uint32_t          count;
   uint32_t          previous_mode;
   rtems_status_code status;

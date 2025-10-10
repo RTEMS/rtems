@@ -44,6 +44,8 @@ rtems_timer_service_routine Delayed_send_event(
   void     *id_ptr
 )
 {
+  (void) timer_id;
+
   rtems_status_code status;
   rtems_id          id = *(rtems_id *)id_ptr;
 

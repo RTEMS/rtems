@@ -46,6 +46,9 @@ rtems_timer_service_routine Delayed_send_event(
   void     *ignored_address
 )
 {
+  (void) ignored_id;
+  (void) ignored_address;
+
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_16 );

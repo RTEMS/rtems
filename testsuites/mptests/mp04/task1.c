@@ -45,6 +45,8 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
+  (void) argument;
+
   rtems_id            tid;
   rtems_status_code   status;
   uint32_t      remote_node;
