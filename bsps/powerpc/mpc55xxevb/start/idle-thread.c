@@ -39,6 +39,8 @@
 
 void *bsp_idle_thread(uintptr_t arg)
 {
+  (void) arg;
+
   while (true) {
     mpc55xx_wait_for_interrupt();
   }

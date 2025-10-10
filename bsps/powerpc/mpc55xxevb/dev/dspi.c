@@ -293,11 +293,15 @@ static rtems_status_code mpc55xx_dspi_send_start( rtems_libi2c_bus_t *bus)
 
 static rtems_status_code mpc55xx_dspi_send_stop( rtems_libi2c_bus_t *bus)
 {
+	(void) bus;
+
 	return RTEMS_SUCCESSFUL;
 }
 
 static rtems_status_code mpc55xx_dspi_send_addr( rtems_libi2c_bus_t *bus, uint32_t addr, int rw)
 {
+	(void) rw;
+
 	mpc55xx_dspi_bus_entry *e = (mpc55xx_dspi_bus_entry *) bus;
 	union DSPI_SR_tag sr = MPC55XX_ZERO_FLAGS;
 

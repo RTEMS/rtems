@@ -73,6 +73,8 @@ static unsigned edma_channel_index_of_tcd(volatile struct tcd_t *edma_tcd)
 static volatile struct EDMA_tag *edma_get_regs_by_module(unsigned module)
 {
 #if EDMA_MODULE_COUNT == 1
+  (void) module;
+
   return &EDMA;
 #elif EDMA_MODULE_COUNT == 2
   return module == 0 ? &EDMA_A : &EDMA_B;
@@ -114,6 +116,8 @@ static void edma_interrupt_handler(void *arg)
 
 static void edma_interrupt_error_handler(void *arg)
 {
+  (void) arg;
+
   rtems_chain_control *chain = &edma_channel_chain;
   rtems_chain_node *node = rtems_chain_first(chain);
   uint32_t error_channels [] = {

@@ -49,11 +49,15 @@ static rtems_timecounter_simple mpc55xx_tc;
 
 static uint32_t mpc55xx_tc_get(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   return EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CCNTR.R;
 }
 
 static bool mpc55xx_tc_is_pending(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   return EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CSR.B.FLAG != 0;
 }
 
@@ -68,6 +72,8 @@ static uint32_t mpc55xx_tc_get_timecount(struct timecounter *tc)
 
 static void mpc55xx_tc_at_tick(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   union EMIOS_CSR_tag csr = MPC55XX_ZERO_FLAGS;
   csr.B.FLAG = 1;
   EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CSR.R = csr.R;
@@ -162,11 +168,15 @@ static void mpc55xx_clock_initialize(void)
 
 static uint32_t mpc55xx_tc_get(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   return PIT_RTI.CHANNEL [MPC55XX_CLOCK_PIT_CHANNEL].CVAL.R;
 }
 
 static bool mpc55xx_tc_is_pending(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   return PIT_RTI.CHANNEL [MPC55XX_CLOCK_PIT_CHANNEL].TFLG.B.TIF != 0;
 }
 
@@ -181,6 +191,8 @@ static uint32_t mpc55xx_tc_get_timecount(struct timecounter *tc)
 
 static void mpc55xx_tc_at_tick(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   volatile PIT_RTI_CHANNEL_tag *channel =
     &PIT_RTI.CHANNEL [MPC55XX_CLOCK_PIT_CHANNEL];
   PIT_RTI_TFLG_32B_tag tflg = { .B = { .TIF = 1 } };

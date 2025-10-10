@@ -85,6 +85,8 @@ rtems_device_driver console_initialize(
   void *arg
 )
 {
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   const console_generic_info *info_table = console_generic_info_table;
   rtems_device_minor_number count = console_generic_info_count;
@@ -146,6 +148,9 @@ rtems_device_driver console_close(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_close(arg);
 }
 
@@ -155,6 +160,9 @@ rtems_device_driver console_read(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_read(arg);
 }
 
@@ -164,6 +172,9 @@ rtems_device_driver console_write(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_write(arg);
 }
 
@@ -173,6 +184,9 @@ rtems_device_driver console_control(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   return rtems_termios_ioctl(arg);
 }
 

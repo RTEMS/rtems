@@ -273,6 +273,8 @@ static int mpc55xx_esci_set_attributes(int minor, const struct termios *t)
 
 static int mpc55xx_esci_first_open(int major, int minor, void *arg)
 {
+  (void) major;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   int rv = 0;
   mpc55xx_esci_context *self = console_generic_get_context(minor);
@@ -310,6 +312,9 @@ static int mpc55xx_esci_first_open(int major, int minor, void *arg)
 
 static int mpc55xx_esci_last_close(int major, int minor, void* arg)
 {
+  (void) major;
+  (void) arg;
+
   mpc55xx_esci_context *self = console_generic_get_context(minor);
 
   mpc55xx_esci_interrupts_disable(self);

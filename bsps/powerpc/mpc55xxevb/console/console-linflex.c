@@ -255,6 +255,8 @@ static int mpc55xx_linflex_set_attributes(int minor, const struct termios *t)
 
 static int mpc55xx_linflex_first_open(int major, int minor, void *arg)
 {
+  (void) major;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   int rv = 0;
   mpc55xx_linflex_context *self = console_generic_get_context(minor);
@@ -326,6 +328,9 @@ static int mpc55xx_linflex_first_open(int major, int minor, void *arg)
 
 static int mpc55xx_linflex_last_close(int major, int minor, void* arg)
 {
+  (void) major;
+  (void) arg;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   mpc55xx_linflex_context *self = console_generic_get_context(minor);
   volatile LINFLEX_tag *regs = self->regs;
