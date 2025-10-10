@@ -47,6 +47,8 @@ void t32mppc_decrementer_dispatch(void)
 
 static uint32_t t32mppc_clock_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   return ppc_time_base();
 }
 

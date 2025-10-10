@@ -54,6 +54,10 @@ static bool t32_console_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) base;
+  (void) term;
+  (void) args;
+
   rtems_termios_set_initial_baud(tty, 115200);
 
   return true;
@@ -102,6 +106,8 @@ static void t32_console_write_polled(
   size_t n
 )
 {
+  (void) base;
+
   size_t i;
 
   for (i = 0; i < n; ++i) {
@@ -122,6 +128,10 @@ rtems_device_driver console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   t32_console_context *ctx = &t32_console_instance;
 
   rtems_termios_initialize();
