@@ -40,6 +40,8 @@ static stm32f4_rcc_index i2c_get_rcc_index(stm32f4_i2c_bus_entry *e)
 
 static uint32_t i2c_get_pclk(stm32f4_i2c_bus_entry *e)
 {
+  (void) e;
+
   return STM32F4_PCLK1;
 }
 

@@ -177,6 +177,8 @@ static void usart_initialize(int minor)
 
 static int usart_first_open(int major, int minor, void *arg)
 {
+  (void) major;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
   rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
@@ -199,6 +201,8 @@ static int usart_first_open(int major, int minor, void *arg)
 
 static int usart_last_close(int major, int minor, void *arg)
 {
+  (void) major;
+
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 #ifdef BSP_CONSOLE_USE_INTERRUPTS
   rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
@@ -206,6 +210,9 @@ static int usart_last_close(int major, int minor, void *arg)
   const console_tbl *ct = Console_Port_Tbl [minor];
 
   sc = rtems_interrupt_handler_remove(ct->ulIntVector, stm32f4_usart_interrupt, tty);
+#else
+  (void) minor;
+  (void) arg;
 #endif
   return sc;
 }
