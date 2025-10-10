@@ -126,6 +126,9 @@ rtems_device_driver console_initialize(
   void                      *arg
 )
 {
+  (void) major;
+  (void) arg;
+
   rtems_status_code sc;
 #if CONSOLE_USE_INTERRUPTS
   const rtems_termios_device_handler *handler = &tms570_sci_handler_interrupt;
@@ -490,6 +493,9 @@ static bool tms570_sci_poll_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) tty;
+  (void) args;
+
   bool ok;
 
   rtems_termios_set_best_baud(term, TMS570_SCI_BAUD_RATE);
@@ -557,6 +563,10 @@ static void tms570_sci_poll_last_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) tty;
+  (void) base;
+  (void) args;
+
   ;
 }
 

@@ -99,6 +99,8 @@ RTEMS_SYSINIT_ITEM(
 
 static uint32_t tms570_rti_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   return TMS570_RTI.CNT[0].FRCx;
 }
 

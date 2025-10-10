@@ -47,6 +47,7 @@
 
 void bsp_selftest_fail_notification( uint32_t flag )
 {
+  (void) flag;
 }
 
 void tms570_memory_port0_fail_notification(
@@ -56,4 +57,8 @@ void tms570_memory_port0_fail_notification(
   uint32_t data
 )
 {
+  (void) groupSelect;
+  (void) dataSelect;
+  (void) address;
+  (void) data;
 }

@@ -537,6 +537,8 @@ void tms570_pbist_fail( void )
 /* Requirements : HL_SR396 */
 __attribute__((__naked__)) void tms570_memory_init( uint32_t ram )
 {
+  (void) ram;
+
   __asm__ volatile (
     /* Load memory controller base address */
     "ldr r1, =#0xffffff00\n"
