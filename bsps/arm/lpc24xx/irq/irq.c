@@ -54,6 +54,8 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  (void) vector;
+
   attributes->maximum_priority = LPC24XX_IRQ_PRIORITY_VALUE_MAX;
   attributes->can_get_priority = true;
   attributes->can_set_priority = true;

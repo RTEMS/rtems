@@ -58,6 +58,8 @@ static const lpc24xx_pin_range tft_16_bit_5_6_5_pins[] = {
 
 static void fb_set_up(const pl111_fb_config *cfg)
 {
+  (void) cfg;
+
   rtems_status_code sc;
 
   sc = lpc24xx_module_enable(LPC24XX_MODULE_LCD, LPC24XX_MODULE_PCLK_DEFAULT);
@@ -78,6 +80,8 @@ static void fb_set_up(const pl111_fb_config *cfg)
 
 static void fb_pins_set_up(const pl111_fb_config *cfg)
 {
+  (void) cfg;
+
   rtems_status_code sc;
 
   sc = lpc24xx_pin_config(tft_16_bit_5_6_5_pins, LPC24XX_PIN_SET_FUNCTION);
@@ -88,6 +92,8 @@ static void fb_pins_set_up(const pl111_fb_config *cfg)
 
 static void fb_pins_tear_down(const pl111_fb_config *cfg)
 {
+  (void) cfg;
+
   rtems_status_code sc;
 
   sc = lpc24xx_pin_config(tft_16_bit_5_6_5_pins, LPC24XX_PIN_SET_INPUT);
@@ -98,6 +104,8 @@ static void fb_pins_tear_down(const pl111_fb_config *cfg)
 
 static void fb_tear_down(const pl111_fb_config *cfg)
 {
+  (void) cfg;
+
   rtems_status_code sc;
 
   #ifdef ARM_MULTILIB_ARCH_V4

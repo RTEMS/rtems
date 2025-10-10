@@ -400,6 +400,9 @@ lpc24xx_pin_set_function(
   uint32_t fio_bit
 )
 {
+  (void) fio_dir;
+  (void) fio_bit;
+
   #ifdef ARM_MULTILIB_ARCH_V4
     rtems_interrupt_level level;
 
@@ -448,6 +451,9 @@ static BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_check_function(
   uint32_t fio_bit
 )
 {
+  (void) fio_dir;
+  (void) fio_bit;
+
   #ifdef ARM_MULTILIB_ARCH_V4
     if ((*pinsel & pinsel_mask) == pinsel_value) {
       return RTEMS_SUCCESSFUL;
@@ -455,6 +461,9 @@ static BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_check_function(
       return RTEMS_IO_ERROR;
     }
   #else
+    (void) iocon;
+    (void) pin_range;
+
     /* TODO */
     return RTEMS_IO_ERROR;
   #endif
@@ -474,6 +483,14 @@ lpc24xx_pin_set_input(
   uint32_t fio_bit
 )
 {
+#ifdef ARM_MULTILIB_ARCH_V4
+  (void) pinsel_value;
+#else
+  (void) pin_range;
+#endif
+  (void) fio_dir;
+  (void) fio_bit;
+
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
@@ -501,6 +518,11 @@ static BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_check_input(
   uint32_t fio_bit
 )
 {
+#ifdef ARM_MULTILIB_ARCH_V4
+  (void) pinsel_value;
+#else
+  (void) pin_range;
+#endif
   rtems_status_code sc = RTEMS_IO_ERROR;
   bool is_input = (*fio_dir & fio_bit) == 0;
 

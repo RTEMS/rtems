@@ -41,6 +41,8 @@
 
 static void lpc24xx_rtc_initialize(int minor)
 {
+  (void) minor;
+
   /* Enable module power */
   lpc24xx_module_enable(LPC24XX_MODULE_RTC, LPC24XX_MODULE_PCLK_DEFAULT);
 
@@ -58,6 +60,8 @@ static void lpc24xx_rtc_initialize(int minor)
 
 static int lpc24xx_rtc_get_time(int minor, rtems_time_of_day *tod)
 {
+  (void) minor;
+
   tod->ticks = 0;
   tod->second = RTC_SEC;
   tod->minute = RTC_MIN;
@@ -71,6 +75,8 @@ static int lpc24xx_rtc_get_time(int minor, rtems_time_of_day *tod)
 
 static int lpc24xx_rtc_set_time(int minor, const rtems_time_of_day *tod)
 {
+  (void) minor;
+
   RTC_SEC = tod->second;
   RTC_MIN = tod->minute;
   RTC_HOUR = tod->hour;
@@ -83,6 +89,8 @@ static int lpc24xx_rtc_set_time(int minor, const rtems_time_of_day *tod)
 
 static bool lpc24xx_rtc_probe(int minor)
 {
+  (void) minor;
+
   return true;
 }
 
