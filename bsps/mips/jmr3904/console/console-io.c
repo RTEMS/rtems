@@ -99,6 +99,8 @@ void console_outbyte_polled(
   char ch
 )
 {
+  (void) port;
+
   unsigned short disr;
 
   for (;;) {
@@ -121,6 +123,8 @@ int console_inbyte_nonblocking(
   int port
 )
 {
+  (void) port;
+
   unsigned char c;
   unsigned short disr;
 

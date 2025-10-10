@@ -41,6 +41,8 @@
 
 void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 {
+  (void) frame;
+
   unsigned int sr;
   unsigned int cause;
 

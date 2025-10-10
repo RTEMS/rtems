@@ -73,6 +73,8 @@ void bsp_start( void )
  */
 void clear_cache( void *address, size_t n )
 {
+  (void) address;
+  (void) n;
 }
 
 
