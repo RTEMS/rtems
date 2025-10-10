@@ -40,11 +40,15 @@ static rtems_timecounter_simple uC5282_tc;
 
 static uint32_t uC5282_tc_get(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   return MCF5282_PIT3_PCNTR;
 }
 
 static bool uC5282_tc_is_pending(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   return (MCF5282_PIT3_PCSR & MCF5282_PIT_PCSR_PIF) != 0;
 }
 
@@ -59,6 +63,8 @@ static uint32_t uC5282_tc_get_timecount(struct timecounter *tc)
 
 static void uC5282_tc_at_tick(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   unsigned idle = IDLE_COUNTER;
   IDLE_COUNTER = 0;
   if (idle > MAX_IDLE_COUNT)
@@ -146,6 +152,8 @@ static void uC5282_tc_tick(void)
  */
 void * bsp_idle_thread(uintptr_t ignored)
 {
+  (void) ignored;
+
   /* Atomic increment */
   for(;;)
     __asm__ volatile ("addq.l #1,%0"::"m"(IDLE_COUNTER));

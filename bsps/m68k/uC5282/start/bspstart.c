@@ -467,8 +467,20 @@ __asm__ (
  */
 
 rtems_status_code bspExtInit(void) { return RTEMS_SUCCESSFUL; }
-int BSP_enableVME_int_lvl(unsigned int level) { return 0; }
-int BSP_disableVME_int_lvl(unsigned int level) { return 0; }
+
+int BSP_enableVME_int_lvl(unsigned int level)
+{
+  (void) level;
+
+  return 0;
+}
+
+int BSP_disableVME_int_lvl(unsigned int level)
+{
+  (void) level;
+
+  return 0;
+}
 
 /*
  * 'VME' interrupt support
