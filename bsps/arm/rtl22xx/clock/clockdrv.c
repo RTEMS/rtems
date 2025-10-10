@@ -30,11 +30,15 @@ static rtems_timecounter_simple lpc22xx_tc;
 
 static uint32_t lpc22xx_tc_get(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   return T0TC;
 }
 
 static bool lpc22xx_tc_is_pending(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   return (T0IR & 0x1) != 0;
 }
 
@@ -54,6 +58,8 @@ static uint32_t lpc22xx_tc_get_timecount(struct timecounter *tc)
  */
 static void lpc22xx_tc_at_tick(rtems_timecounter_simple *tc)
 {
+  (void) tc;
+
   if (!(T0IR & 0x01))
     return;
   T0IR = 0x01;
@@ -135,6 +141,8 @@ rtems_irq_connect_data clock_isr_data = {
  */
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {
+  (void) unused;
+
   T0IR&=0x01;
 }
 
@@ -145,6 +153,8 @@ static void clock_isr_on(const rtems_irq_connect_data *unused)
  */
 static void clock_isr_off(const rtems_irq_connect_data *unused)
 {
+  (void) unused;
+
   T0IR=0x00;
 }
 
@@ -156,6 +166,8 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
  */
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
+  (void) irq;
+
   return T0IR & 0x01;  /* MR0 mask */
 }
 
