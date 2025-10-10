@@ -411,6 +411,10 @@ static uint8_t at697pci_bus0_irq_map(pci_dev_t dev, int irq_pin)
 
 static int at697pci_translate(uint32_t *address, int type, int dir)
 {
+	(void) address;
+	(void) type;
+	(void) dir;
+
 	/* No address translation implmented at this point */
 	return 0;
 }
@@ -636,6 +640,8 @@ int at697pci_init1(struct drvmgr_dev *dev)
 
 int at697pci_init2(struct drvmgr_dev *dev)
 {
+	(void) dev;
+
 #if 0
 	struct at697pci_priv *priv = dev->priv;
 #endif

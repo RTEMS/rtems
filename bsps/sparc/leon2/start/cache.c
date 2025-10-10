@@ -27,6 +27,9 @@ static inline void _CPU_cache_invalidate_instruction_range(
   size_t      n_bytes
 )
 {
+  (void) i_addr;
+  (void) n_bytes;
+
   __asm__ volatile ("flush");
 }
 

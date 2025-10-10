@@ -307,6 +307,9 @@ rtems_device_driver console_initialize(
   void                      *arg
 )
 {
+  (void) minor;
+  (void) arg;
+
   rtems_status_code status;
 
   rtems_termios_initialize();
@@ -393,6 +396,10 @@ rtems_device_driver console_close(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return rtems_termios_close (arg);
 }
 
@@ -402,6 +409,10 @@ rtems_device_driver console_read(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return rtems_termios_read (arg);
 }
 
@@ -411,6 +422,10 @@ rtems_device_driver console_write(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return rtems_termios_write (arg);
 }
 
@@ -420,5 +435,9 @@ rtems_device_driver console_control(
   void                    * arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return rtems_termios_ioctl (arg);
 }

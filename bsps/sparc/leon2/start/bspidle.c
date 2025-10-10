@@ -28,6 +28,8 @@
 
 void *bsp_idle_thread( uintptr_t ignored )
 {
+  (void) ignored;
+
   while (1) {
     /* make sure on load follows store to power-down reg */
     LEON_REG.Power_Down = LEON_REG.Power_Down;
