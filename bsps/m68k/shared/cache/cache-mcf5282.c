@@ -48,7 +48,11 @@ static void _CPU_cache_unfreeze_instruction(void) {}
 /*
  * Write-through data cache -- flushes are unnecessary
  */
-static void _CPU_cache_flush_1_data_line(const void *d_addr) {}
+static void _CPU_cache_flush_1_data_line(const void *d_addr)
+{
+  (void) d_addr;
+
+}
 static void _CPU_cache_flush_entire_data(void) {}
 
 static void _CPU_cache_enable_instruction(void)

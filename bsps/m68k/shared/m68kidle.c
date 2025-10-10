@@ -38,6 +38,8 @@
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
+  (void) ignored;
+
   for( ; ; ) {
     /* supervisor mode, all interrupts on */
     __asm__ volatile( "stop #0x3000":::"cc" );
