@@ -77,6 +77,8 @@ static void uart_set_baud(int baud)
 
 static void uart_initialize(int minor)
 {
+  (void) minor;
+
   /* Set baud rate */
   uart_set_baud(OR1K_UART_DEFAULT_BAUD);
 
@@ -97,6 +99,8 @@ static void uart_initialize(int minor)
 
 static int uart_first_open(int major, int minor, void *arg)
 {
+  (void) major;
+
   rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
   struct rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
   const console_tbl *ct = Console_Port_Tbl [minor];
@@ -110,11 +114,17 @@ static int uart_first_open(int major, int minor, void *arg)
 
 static int uart_last_close(int major, int minor, void *arg)
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return 0;
 }
 
 static int uart_read_polled(int minor)
 {
+  (void) minor;
+
   unsigned char lsr;
 
  /* Get a character when avaiable */
@@ -128,6 +138,8 @@ static int uart_read_polled(int minor)
 
 static void uart_write_polled(int minor, char c)
 {
+  (void) minor;
+
   unsigned char lsr;
 
   /* Wait until there is no pending data in the transmitter FIFO (empty) */
@@ -155,6 +167,9 @@ static ssize_t uart_write(
 
 static int uart_set_attributes(int minor, const struct termios *term)
 {
+  (void) minor;
+  (void) term;
+
   return -1;
 }
 

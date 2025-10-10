@@ -85,6 +85,8 @@ static void generic_or1k_clock_handler_install(CPU_ISR_handler new_isr)
 
 static uint32_t or1ksim_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   uint32_t ticks_since_last_timer_interrupt;
 
   ticks_since_last_timer_interrupt = _OR1K_mfspr(CPU_OR1K_SPR_TTCR);
