@@ -108,6 +108,7 @@ rtems_irq_connect_data clock_isr_data = {
  */
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {
+  (void) unused;
 }
 
 /**
@@ -117,7 +118,7 @@ static void clock_isr_on(const rtems_irq_connect_data *unused)
  */
 static void clock_isr_off(const rtems_irq_connect_data *unused)
 {
-    return;
+  (void) unused;
 }
 
 /**
@@ -128,6 +129,8 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
  */
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
+  (void) irq;
+
   return 1;
 }
 

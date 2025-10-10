@@ -17,6 +17,8 @@
 
 void *bsp_idle_thread(uintptr_t ignored)
 {
+  (void) ignored;
+
   while(1) {
     __asm__ volatile ("MCR p15,0,r0,c7,c0,4     \n");
   }

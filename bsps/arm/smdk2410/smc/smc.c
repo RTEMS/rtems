@@ -360,6 +360,8 @@ smc_read(rtems_blkdev_request *req)
 static int
 smc_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 {
+    (void) dd;
+
     switch (req)
     {
         case RTEMS_BLKIO_REQUEST:
@@ -402,6 +404,10 @@ smc_initialize(
     rtems_device_minor_number minor,
     void *arg)
 {
+    (void) major;
+    (void) minor;
+    (void) arg;
+
     rtems_status_code rc;
     uint32_t block_num;
 

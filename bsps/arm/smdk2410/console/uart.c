@@ -124,6 +124,10 @@ console_tbl Console_Configuration_Ports[] = {
  */
 static int uart_first_open(int major, int minor, void *arg)
 {
+    (void) major;
+    (void) minor;
+    (void) arg;
+
     return 0;
 }
 
@@ -135,6 +139,10 @@ static int uart_first_open(int major, int minor, void *arg)
  */
 static int uart_last_close(int major, int minor, void *arg)
 {
+    (void) major;
+    (void) minor;
+    (void) arg;
+
     return 0;
 }
 
@@ -194,6 +202,8 @@ static ssize_t uart_write(int minor, const char *buf, size_t len)
 /* Set up the UART. */
 static void uart_init(int minor)
 {
+	(void) minor;
+
 	int i;
 	unsigned int reg = 0;
 
@@ -228,6 +238,9 @@ static void    uart_write_polled(int minor, char c)
 /* This is for setting baud rate, bits, etc. */
 static int     uart_set_attributes(int minor, const struct termios *t)
 {
+    (void) minor;
+    (void) t;
+
     return 0;
 }
 
