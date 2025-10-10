@@ -981,6 +981,8 @@ void pci_memory_enable(
   unsigned char function
 )
 {
+  (void) bus;
+
   uint16_t data;
 
   pci_read_config_word(0, slot, function, PCI_COMMAND, &data);
@@ -995,6 +997,8 @@ void pci_io_enable(
   unsigned char function
 )
 {
+  (void) bus;
+
   uint16_t data;
 
   pci_read_config_word(0, slot, function, PCI_COMMAND, &data);
@@ -1008,6 +1012,8 @@ void pci_busmaster_enable(
   unsigned char function
 )
 {
+  (void) bus;
+
   uint16_t data;
 
   pci_read_config_word(0, slot, function, PCI_COMMAND, &data);
