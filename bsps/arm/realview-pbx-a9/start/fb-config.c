@@ -30,21 +30,29 @@
 
 static void fb_set_up(const pl111_fb_config *cfg)
 {
+  (void) cfg;
+
   /* TODO */
 }
 
 static void fb_pins_set_up(const pl111_fb_config *cfg)
 {
+  (void) cfg;
+
   /* TODO */
 }
 
 static void fb_pins_tear_down(const pl111_fb_config *cfg)
 {
+  (void) cfg;
+
   /* TODO */
 }
 
 static void fb_tear_down(const pl111_fb_config *cfg)
 {
+  (void) cfg;
+
   /* TODO */
 }
 
