@@ -197,6 +197,10 @@ rtems_status_code console_initialize(
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   rtems_termios_device_context *base;
   char jtag_uart_path[] = "/dev/ttyJtagUart";
 
@@ -267,6 +271,9 @@ static bool jtag_uart_console_first_open(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) term;
+  (void) args;
+
   jtag_uart_context *ctx = (jtag_uart_context *)base;
 
   ctx->tty = tty;
@@ -289,6 +296,8 @@ static void jtag_uart_close(
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) args;
+
   jtag_uart_context *ctx = (jtag_uart_context *) base;
 
   /* disable interrupts */

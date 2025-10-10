@@ -73,6 +73,8 @@ rtems_device_driver system_initialize (
   void *arg
 )
 {
+  (void) arg;
+
   /* Local Variables */
   rtems_status_code status;
   file_header_t fhead;
@@ -113,6 +115,10 @@ rtems_device_driver system_open (
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -133,6 +139,10 @@ rtems_device_driver system_close (
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -153,6 +163,10 @@ rtems_device_driver system_read (
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -173,6 +187,10 @@ rtems_device_driver system_write (
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -193,6 +211,9 @@ rtems_device_driver system_control (
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   /* Local Varaibles */
   rtems_libio_ioctl_args_t *args = arg;
   system_control_t *ctrl;

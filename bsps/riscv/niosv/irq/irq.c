@@ -37,6 +37,8 @@
 
 void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
 {
+  (void) cpu_self;
+
   uint32_t exception_code = (mcause & ~NIOSV_MCAUSE_INTERRUPT_MASK);
 
   if (exception_code == RISCV_INTERRUPT_TIMER_MACHINE) {
@@ -133,6 +135,8 @@ rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -213,6 +217,9 @@ rtems_status_code bsp_interrupt_set_priority(
   uint32_t priority
 )
 {
+  (void) vector;
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -222,6 +229,9 @@ rtems_status_code bsp_interrupt_get_priority(
   uint32_t *priority
 )
 {
+  (void) vector;
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(priority != NULL);
   return RTEMS_UNSATISFIED;

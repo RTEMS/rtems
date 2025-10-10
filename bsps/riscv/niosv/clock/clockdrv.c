@@ -88,6 +88,8 @@ static uint32_t niosv_timer_read( void )
 
 static uint32_t niosv_tc_get_timecount(struct timecounter *tc)
 {
+  (void) tc;
+
   return niosv_timer_read();
 }
 

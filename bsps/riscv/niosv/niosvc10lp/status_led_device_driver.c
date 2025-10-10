@@ -64,6 +64,8 @@ rtems_device_driver status_led_initialize (
   void *arg
 )
 {
+  (void) arg;
+
   /* Local Variables */
   rtems_status_code status;
 
@@ -93,6 +95,10 @@ rtems_device_driver status_led_open (
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -113,6 +119,10 @@ rtems_device_driver status_led_close (
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -133,6 +143,10 @@ rtems_device_driver status_led_read (
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -153,6 +167,10 @@ rtems_device_driver status_led_write (
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -173,6 +191,9 @@ rtems_device_driver status_led_control (
   void *arg
 )
 {
+  (void) major;
+  (void) minor;
+
   /* Local Varaibles */
   rtems_libio_ioctl_args_t *args = arg;
   status_led_control_t *ctrl;

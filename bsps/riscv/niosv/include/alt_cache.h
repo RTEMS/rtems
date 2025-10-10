@@ -100,6 +100,9 @@ static inline void alt_icache_flush (const void* start, uint32_t len)
 {
 #if ALT_CPU_ICACHE_SIZE > 0
   __asm__ volatile(".option arch, +zifencei\n" "fence.i" ::: "memory");
+#else
+  (void) start;
+  (void) len;
 #endif
 }
 
@@ -127,6 +130,9 @@ static inline void alt_dcache_flush (const void* start, uint32_t len)
   if (((uint32_t)start) & (ALT_CPU_DCACHE_LINE_SIZE - 1)) {
     ALT_FLUSH_DATA(i);
   }
+#else
+  (void) start;
+  (void) len;
 #endif
 }
 
@@ -157,6 +163,9 @@ static inline void alt_dcache_flush_no_writeback (
   if (((uint32_t)start) & (ALT_CPU_DCACHE_LINE_SIZE - 1)) {
     ALT_INVALIDATE_DATA(i);
   }
+#else
+  (void) start;
+  (void) len;
 #endif
 }
 

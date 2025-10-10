@@ -130,11 +130,15 @@ static inline void _CPU_cache_disable_instruction(void)
 
 static inline size_t _CPU_cache_get_data_cache_size(uint32_t level)
 {
+  (void) level;
+
   return ALT_CPU_DCACHE_SIZE;
 }
 
 static inline size_t _CPU_cache_get_instruction_cache_size(uint32_t level)
 {
+  (void) level;
+
   return ALT_CPU_ICACHE_SIZE;
 }
 
