@@ -90,6 +90,14 @@ struct pci_id {
 	int		regshft;
 };
 
+#ifdef __rtems__
+/*
+ * This structure initialization was taken directly from FreeBSD and
+ * generates missing field initializers warnings.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif /* rtems */
 static const struct pci_id pci_ns8250_ids[] = {
 { 0x1028, 0x0008, 0xffff, 0, "Dell Remote Access Card III", 0x14,
 	128 * DEFAULT_RCLK },
@@ -169,6 +177,10 @@ static const struct pci_id pci_ns8250_ids[] = {
 { 0xdeaf, 0x9051, 0xffff, 0, "Middle Digital PC Weasel Serial Port", 0x10 },
 { 0xffff, 0, 0xffff, 0, NULL, 0, 0}
 };
+#ifdef __rtems__
+/* Reenable missing field initializer warnings. */
+#pragma GCC diagnostic pop
+#endif /* rtems */
 
 #ifndef __rtems__
 const static struct pci_id *
