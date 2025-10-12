@@ -29,8 +29,13 @@
 static rtems_irq_connect_data      rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings   initial_config;
 static rtems_irq_connect_data      defaultIrq = {
-  /* vectorIdex, hdl  , handle  , on  , off , isOn */
-      0,          NULL, NULL    , NULL, NULL, NULL
+  .name = 0,
+  .hdl = NULL,
+  .handle = NULL,
+  .on = NULL,
+  .off = NULL,
+  .isOn = NULL,
+  .next_handler = NULL
 };
 static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
   /*

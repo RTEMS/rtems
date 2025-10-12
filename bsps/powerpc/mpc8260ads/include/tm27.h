@@ -30,11 +30,12 @@
 #define Install_tm27_vector( handler ) \
    do { \
 	static rtems_irq_connect_data scIrqData = { \
-	  PPC_IRQ_SCALL, \
-	  handler, \
-	  NULL, \
-	  NULL, \
-	  NULL  \
+	  .name = PPC_IRQ_SCALL, \
+	  .hdl = handler, \
+	  .handle = NULL, \
+	  .on = NULL, \
+	  .off = NULL, \
+	  .isOn = NULL \
 	}; \
 	BSP_install_rtems_irq_handler (&scIrqData); \
    } while(0)

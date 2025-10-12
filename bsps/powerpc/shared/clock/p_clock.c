@@ -23,12 +23,13 @@
 
 static rtems_irq_connect_data clockIrqData;
 static rtems_irq_connect_data clockIrqData = {
-  BSP_DECREMENTER,
-  clockIsr,
-  NULL,
-  (rtems_irq_enable)clockOn,
-  (rtems_irq_disable)clockOff,
-  (rtems_irq_is_enabled) clockIsOn
+  .name = BSP_DECREMENTER,
+  .hdl = clockIsr,
+  .handle = NULL,
+  .on = (rtems_irq_enable)clockOn,
+  .off = (rtems_irq_disable)clockOff,
+  .isOn = (rtems_irq_is_enabled) clockIsOn,
+  .next_handler = NULL
 };
 
 int BSP_disconnect_clock_handler(void)

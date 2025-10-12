@@ -46,12 +46,13 @@ static int stub_rtems_irq_is_enabled(
 }
 
 static rtems_irq_connect_data clockIrqData = {
-  BSP_DECREMENTER,
-  0,
-  0,
-  stub_rtems_irq_enable,
-  stub_rtems_irq_disable,
-  stub_rtems_irq_is_enabled
+  .name = BSP_DECREMENTER,
+  .hdl = 0,
+  .handle = 0,
+  .on = stub_rtems_irq_enable,
+  .off = stub_rtems_irq_disable,
+  .isOn = stub_rtems_irq_is_enabled,
+  .next_handler = NULL
 };
 
 static inline void Install_tm27_vector( rtems_interrupt_handler handler )

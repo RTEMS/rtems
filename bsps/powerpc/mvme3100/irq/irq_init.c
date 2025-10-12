@@ -38,8 +38,13 @@ static void nop_func(void *unused)
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings    initial_config;
 static rtems_irq_connect_data     	defaultIrq = {
-  /* vectorIdex,	 hdl		, handle	, on		, off		, isOn */
-  0, 			 nop_func	, NULL		, 0	, 0	, 0
+	.name = 0,
+	.hdl = nop_func,
+	.handle = NULL,
+	.on = NULL,
+	.off = NULL,
+	.isOn = NULL,
+	.next_handler = NULL
 };
 
 static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
