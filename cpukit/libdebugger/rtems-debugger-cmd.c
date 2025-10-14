@@ -215,13 +215,13 @@ static int rtems_shell_main_debugger(int argc, char *argv[])
 }
 
 rtems_shell_cmd_t rtems_shell_DEBUGGER_Command = {
-  "debugger",                               /* name */
-  "debugger [start/stop] [options ...]",    /* usage */
-  "misc",                                   /* topic */
-  rtems_shell_main_debugger,                /* command */
-  NULL,                                     /* alias */
-  NULL,                                     /* next */
-  0755,
-  0,
-  0
+  .name = "debugger",
+  .usage = "debugger [start/stop] [options ...]",
+  .topic = "misc",
+  .command = rtems_shell_main_debugger,
+  .alias = NULL,
+  .next = NULL,
+  .mode = 0755,
+  .uid = 0,
+  .gid = 0
 };
