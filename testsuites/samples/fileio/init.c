@@ -1223,17 +1223,17 @@ static int main_usercmd(int argc, char **argv)
 }
 
 static rtems_shell_cmd_t Shell_USERCMD_Command = {
-  "usercmd",                                       /* name */
-  "usercmd n1 [n2 [n3...]]     # echo arguments",  /* usage */
-  "user",                                          /* topic */
-  main_usercmd,                                    /* command */
-  NULL,                                            /* alias */
-  NULL                                             /* next */
+  .name = "usercmd",
+  .usage = "usercmd n1 [n2 [n3...]]     # echo arguments",
+  .topic = "user",
+  .command = main_usercmd,
+  .alias = NULL,
+  .next = NULL
 };
 
 static rtems_shell_alias_t Shell_USERECHO_Alias = {
-  "usercmd",                 /* command */
-  "userecho"                 /* alias */
+  .name = "usercmd",
+  .alias = "userecho"
 };
 
 
