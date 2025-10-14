@@ -4945,6 +4945,14 @@ const uint16_t utf8proc_stage2table[] = {
   3440, 3440, 3440, 3440, 3440, 3440, 3440, 0, 
   0, };
 
+#ifdef __rtems__
+/*
+ * The first line deliberately is incomplete. Turn off the missing
+ * field initializer warning.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif /* rtems */
 const utf8proc_property_t utf8proc_properties[] = {
   {0, 0, 0, 0, NULL, false, -1, -1, -1, -1, -1, false},
   {UTF8PROC_CATEGORY_CC, 0, UTF8PROC_BIDI_CLASS_BN, 0, NULL, false, -1, -1, -1, -1, -1, false, true, true, false, NULL},
@@ -10565,6 +10573,10 @@ const utf8proc_property_t utf8proc_properties[] = {
   {UTF8PROC_CATEGORY_LO, 0, UTF8PROC_BIDI_CLASS_L, 0, utf8proc_sequences + 5902, false, -1, -1, -1, -1, -1, false, false, false, false, NULL},
   {UTF8PROC_CATEGORY_LO, 0, UTF8PROC_BIDI_CLASS_L, 0, utf8proc_sequences + 11502, false, -1, -1, -1, -1, -1, false, false, false, false, NULL},
 };
+#ifdef __rtems__
+/* Reenable missing field initializers warnings. */
+#pragma GCC diagnostic pop
+#endif /* rtems */
 
 const int32_t utf8proc_combinations[] = {
   192, 193, 194, 195, 196, 197, -1, 
