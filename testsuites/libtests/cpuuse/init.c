@@ -44,14 +44,15 @@
 const char rtems_test_name[] = "CPUUSE";
 
 rtems_extensions_table Extensions = {
-  NULL,                      /* task create user extension */
-  NULL,                      /* task start user extension */
-  NULL,                      /* task restart user extension */
-  NULL,                      /* task delete user extension */
-  Task_switch,               /* task switch user extension */
-  NULL,                      /* task begin user extension */
-  NULL,                      /* task exitted user extension */
-  NULL                       /* fatal error user extension */
+  .thread_create = NULL,         /* task create user extension */
+  .thread_start = NULL,          /* task start user extension */
+  .thread_restart = NULL,        /* task restart user extension */
+  .thread_delete = NULL,         /* task delete user extension */
+  .thread_switch = Task_switch,  /* task switch user extension */
+  .thread_begin = NULL,          /* task begin user extension */
+  .thread_exitted = NULL,        /* task exitted user extension */
+  .fatal = NULL,                 /* fatal error user extension */
+  .thread_terminate = NULL       /* fatal error user extension */
 };
 
 rtems_task Init(

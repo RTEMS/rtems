@@ -56,14 +56,15 @@ bool task_create(
 }
 
 rtems_extensions_table Extensions = {
-  task_create,               /* task create user extension */
-  NULL,                      /* task start user extension */
-  NULL,                      /* task restart user extension */
-  NULL,                      /* task delete user extension */
-  NULL,                      /* task switch user extension */
-  NULL,                      /* task begin user extension */
-  NULL,                      /* task exitted user extension */
-  NULL                       /* fatal error user extension */
+  .thread_create = task_create,
+  .thread_start = NULL,
+  .thread_restart = NULL,
+  .thread_delete = NULL,
+  .thread_switch = NULL,
+  .thread_begin = NULL,
+  .thread_exitted = NULL,
+  .fatal = NULL,
+  .thread_terminate = NULL
 };
 
 rtems_task Init(

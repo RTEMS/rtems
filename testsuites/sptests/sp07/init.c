@@ -67,25 +67,27 @@ static bool Task_harmless_extension_true_two(
 }
 
 static const rtems_extensions_table Harmless_extensions = {
-  Task_harmless_extension_true_two,
-  Task_harmless_extension_two,
-  Task_harmless_extension_two,
-  Task_harmless_extension_two,
-  Task_harmless_extension_two,
-  Task_harmless_extension_one,
-  Task_harmless_extension_one,
-  NULL
+  .thread_create = Task_harmless_extension_true_two,
+  .thread_start = Task_harmless_extension_two,
+  .thread_restart = Task_harmless_extension_two,
+  .thread_delete = Task_harmless_extension_two,
+  .thread_switch = Task_harmless_extension_two,
+  .thread_begin = Task_harmless_extension_one,
+  .thread_exitted = Task_harmless_extension_one,
+  .fatal = NULL,
+  .thread_terminate = NULL
 };
 
 rtems_extensions_table Extensions = {
-  Task_create_extension,     /* task create user extension */
-  Task_start_extension,      /* task start user extension */
-  Task_restart_extension,    /* task restart user extension */
-  Task_delete_extension,     /* task delete user extension */
-  NULL,                      /* task switch user extension */
-  NULL,                      /* begin user extension */
-  Task_exit_extension,       /* task exitted user extension */
-  NULL                       /* fatal error extension */
+  .thread_create = Task_create_extension,
+  .thread_start = Task_start_extension,
+  .thread_restart = Task_restart_extension,
+  .thread_delete = Task_delete_extension,
+  .thread_switch = NULL,
+  .thread_begin = NULL,
+  .thread_exitted = Task_exit_extension,
+  .fatal = NULL,
+  .thread_terminate = NULL
 };
 
 rtems_task Init(

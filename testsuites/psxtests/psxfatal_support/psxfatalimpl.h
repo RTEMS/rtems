@@ -114,14 +114,15 @@ static void Fatal_extension(
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
   { \
-    NULL,                    /* create  */ \
-    NULL,                    /* start   */ \
-    NULL,                    /* restart */ \
-    NULL,                    /* delete  */ \
-    NULL,                    /* switch  */ \
-    NULL,                    /* begin   */ \
-    NULL,                    /* exitted */ \
-    Fatal_extension          /* fatal   */ \
+    .thread_create = NULL, \
+    .thread_start = NULL, \
+    .thread_restart = NULL, \
+    .thread_delete = NULL, \
+    .thread_switch = NULL, \
+    .thread_begin = NULL, \
+    .thread_exitted = NULL, \
+    .fatal = Fatal_extension, \
+    .thread_terminate = NULL \
   }, \
   RTEMS_TEST_INITIAL_EXTENSION
 
