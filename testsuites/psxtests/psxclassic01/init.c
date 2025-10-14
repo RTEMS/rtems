@@ -50,7 +50,10 @@
 const char rtems_test_name[] = "PSXCLASSIC 1";
 
 static int       Caught_signo = -1;
-static siginfo_t Caught_siginfo = { -1, -1, };
+static siginfo_t Caught_siginfo = {
+  .si_signo = -1,
+  .si_code = -1
+};
 
 static void handler(int signo)
 {
