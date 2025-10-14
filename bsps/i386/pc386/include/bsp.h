@@ -237,7 +237,7 @@ void init_remote_gdb( void );
 void i386_stub_glue_init(int uart);
 void i386_stub_glue_init_breakin(void);
 int i386_stub_glue_uart(void);
-void breakpoint(void);
+void rtems_pc386_breakpoint(void);
 
 /*
  * Debug helper methods

@@ -185,7 +185,7 @@ void pc386_parse_gdb_arguments(void)
 
     if ( halt ) {
       printk("GDB stub: waiting for remote connection..\n");
-      breakpoint();
+      rtems_pc386_breakpoint();
     }
   }
 }

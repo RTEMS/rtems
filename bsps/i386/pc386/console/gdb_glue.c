@@ -75,6 +75,6 @@ void init_remote_gdb( void )
   i386_stub_glue_init_breakin();
 
   /* Put breakpoint in */
-  /* breakpoint();     */
+  /* rtems_pc386_breakpoint();     */
   /* BREAKPOINT();     */
 }

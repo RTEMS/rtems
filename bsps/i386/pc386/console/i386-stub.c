@@ -40,8 +40,8 @@
  *  call to set_debug_traps() is necessary in order to allow any breakpoints
  *  or error conditions to be properly intercepted and reported to gdb.
  *  Two, a breakpoint needs to be generated to begin communication.  This
- *  is most easily accomplished by a call to breakpoint().  Breakpoint()
- *  simulates a breakpoint by executing a trap #1.
+ *  is most easily accomplished by a call to rtems_pc386_breakpoint().i
+ *  rtems_pc386_breakpoint() simulates a breakpoint by executing a trap #1.
  *
  *  The external function exceptionHandler() is
  *  used to attach a specific handler to a specific 386 vector number.
@@ -110,7 +110,7 @@
 /*
  * Prototypes we need to avoid warnings but not going into public space.
  */
-void breakpoint (void);
+void rtems_pc386_breakpoint (void);
 void set_debug_traps(void);
 void set_mem_err(void);
 void _returnFromException(void);
@@ -1154,7 +1154,7 @@ set_debug_traps (void)
    the debugger. */
 
 void
-breakpoint (void)
+rtems_pc386_breakpoint (void)
 {
   if (initialized)
     {
