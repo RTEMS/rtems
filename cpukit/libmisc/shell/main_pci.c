@@ -511,7 +511,7 @@ static struct shell_pci_modifier shell_pci_modifiers[MODIFIER_NUM] =
   {"pcfg", shell_pci_pcfg, 0},
   {"getdev", shell_pci_getdev, 0},
   {"infodev", shell_pci_infodev, 0},
-  {"--help", shell_pci_usage},
+  {"--help", shell_pci_usage, 0},
 };
 
 static struct shell_pci_modifier *shell_pci_find_modifier(char *name)
