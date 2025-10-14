@@ -55,20 +55,29 @@ typedef struct test_case {
   struct tm  tm;
 } testcase_t;
 
+#define TM(_sec, _min, _hour, _mday, _mon, _year ) \
+  { \
+    .tm_sec = (_sec), \
+    .tm_min = (_min), \
+    .tm_hour = (_hour), \
+    .tm_mday = (_mday), \
+    .tm_mon = (_mon), \
+    .tm_year = (_year) \
+  }
 testcase_t Cases[] = {
   /* should not trigger hooks when time not set */
-  { false, false, false, false, { 0, 0, 9, 31, 11, 88 } },
-  { false, false, true,  true,  { 0, 0, 9, 24, 5,  95 }  },
+  { false, false, false, false, TM( 0, 0, 9, 31, 11, 88 ) },
+  { false, false, true,  true,  TM( 0, 0, 9, 24, 5,  95 )  },
   /* should trigger hook when time is set with Classic API rtems_clock_set */
-  { true,  false, false, false, { 0, 0, 9, 24, 5,   95 }  },
-  { true,  false, false, false, { 0, 0, 9, 31, 11,  88 }  },
-  { true,  false, true,  false, { 0, 0, 9, 31, 11,  88 }  },
-  { true,  false, true,  true,  { 0, 0, 9, 24, 5,  105 }  },
+  { true,  false, false, false, TM( 0, 0, 9, 24, 5,   95 ) },
+  { true,  false, false, false, TM( 0, 0, 9, 31, 11,  88 ) },
+  { true,  false, true,  false, TM( 0, 0, 9, 31, 11,  88 ) },
+  { true,  false, true,  true,  TM( 0, 0, 9, 24, 5,  105 ) },
   /* should trigger hook when time is set with POSIX API clock_settime */
-  { true,  true,  false, false, { 0, 0, 9, 24, 5,   95 }  },
-  { true,  true,  false, false, { 0, 9, 6, 14, 2,  114 }  },
-  { true,  true,  true,  false, { 0, 0, 9, 31, 11,  88 }  },
-  { true,  true,  true,  true,  { 0, 0, 9, 24, 5,  105 }  },
+  { true,  true,  false, false, TM( 0, 0, 9, 24, 5,   95 ) },
+  { true,  true,  false, false, TM( 0, 9, 6, 14, 2,  114 ) },
+  { true,  true,  true,  false, TM( 0, 0, 9, 31, 11,  88 ) },
+  { true,  true,  true,  true,  TM( 0, 0, 9, 24, 5,  105 ) },
 };
 
 #define NUM_CASES (sizeof(Cases)/sizeof(testcase_t))
