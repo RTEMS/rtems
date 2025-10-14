@@ -28,8 +28,7 @@ static rtems_irq_connect_data clockIrqData = {
   .handle = NULL,
   .on = (rtems_irq_enable)clockOn,
   .off = (rtems_irq_disable)clockOff,
-  .isOn = (rtems_irq_is_enabled) clockIsOn,
-  .next_handler = NULL
+  .isOn = (rtems_irq_is_enabled) clockIsOn
 };
 
 int BSP_disconnect_clock_handler(void)
