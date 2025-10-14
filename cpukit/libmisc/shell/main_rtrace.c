@@ -725,10 +725,10 @@ rtems_shell_main_rtrace (int argc, char* argv[])
 }
 
 rtems_shell_cmd_t rtems_shell_RTRACE_Command = {
-  "rtrace",                      /* name */
-  "rtrace [-l]",                 /* usage */
-  "misc",                        /* topic */
-  rtems_shell_main_rtrace,       /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "rtrace",
+  .usage = "rtrace [-l]",
+  .topic = "misc",
+  .command = rtems_shell_main_rtrace,
+  .alias = NULL,
+  .next = NULL
 };

@@ -130,10 +130,10 @@ static int rtems_shell_main_echo(
 }
 
 rtems_shell_cmd_t rtems_shell_ECHO_Command = {
-  "echo",                        /* name */
-  "echo [args]",                 /* usage */
-  "misc",                        /* topic */
-  rtems_shell_main_echo,         /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "echo",
+  .usage = "echo [args]",
+  .topic = "misc",
+  .command = rtems_shell_main_echo,
+  .alias = NULL,
+  .next = NULL
 };

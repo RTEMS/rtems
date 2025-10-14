@@ -40,6 +40,6 @@
 #include "internal.h"
 
 rtems_shell_alias_t rtems_shell_CD_Alias = {
-  "chdir",                   /* command */
-  "cd"                       /* alias */
+  .name = "chdir",
+  .alias = "cd"
 };

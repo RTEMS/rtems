@@ -70,10 +70,10 @@ static int rtems_shell_main_cat(int argc, char *argv[])
 }
 
 rtems_shell_cmd_t rtems_shell_CAT_Command = {
-  "cat",                                           /* name */
-  "cat n1 [n2 [n3...]] # show the ascii contents", /* usage */
-  "files",                                         /* topic */
-  rtems_shell_main_cat ,                           /* command */
-  NULL,                                            /* alias */
-  NULL                                             /* next */
+  .name = "cat",
+  .usage = "cat n1 [n2 [n3...]] # show the ascii contents",
+  .topic = "files",
+  .command = rtems_shell_main_cat ,
+  .alias = NULL,
+  .next = NULL
 };

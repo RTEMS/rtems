@@ -169,19 +169,19 @@ static int rtems_shell_main_msdos_format(
 #define OPTIONS "[-V label] [-s sectors/cluster] [-r size] [-v]"
 
 rtems_shell_cmd_t rtems_shell_MSDOSFMT_Command = {
-  "mkdos",                                   /* name */
-  "mkdos " OPTIONS " path # format disk",    /* usage */
-  "files",                                   /* topic */
-  rtems_shell_main_msdos_format,             /* command */
-  NULL,                                      /* alias */
-  NULL                                       /* next */
+  .name = "mkdos",
+  .usage = "mkdos " OPTIONS " path # format disk",
+  .topic = "files",
+  .command = rtems_shell_main_msdos_format,
+  .alias = NULL,
+  .next = NULL
 };
 
 rtems_shell_cmd_t rtems_shell_MSDOSFMT_Alias = {
-  "msdosfmt",                                /* name */
-  NULL,                                      /* usage */
-  "files",                                   /* topic */
-  rtems_shell_main_msdos_format,             /* command */
-  &rtems_shell_MSDOSFMT_Command,             /* alias */
-  NULL                                       /* next */
+  .name = "msdosfmt",
+  .usage = NULL,
+  .topic = "files",
+  .command = rtems_shell_main_msdos_format,
+  .alias = &rtems_shell_MSDOSFMT_Command,
+  .next = NULL
 };

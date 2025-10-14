@@ -153,12 +153,12 @@ static int rtems_shell_main_df(int argc, char **argv)
 
 rtems_shell_cmd_t rtems_shell_DF_Command =
 {
-    "df", /* name */
-    "[-hB]\n"
-    " -h  human-readable output\n"
-    " -B  scale sizes by SIZE before printing them\n", /* usage */
-    "files", /* topic */
-    rtems_shell_main_df, /* command */
-    NULL, /* alias */
-    NULL /* next */
+    .name = "df",
+    .usage = "[-hB]\n"
+             " -h  human-readable output\n"
+             " -B  scale sizes by SIZE before printing them\n",
+    .topic = "files",
+    .command = rtems_shell_main_df,
+    .alias = NULL,
+    .next = NULL
 };

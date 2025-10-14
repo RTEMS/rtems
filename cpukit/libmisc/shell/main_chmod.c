@@ -83,10 +83,10 @@ static int rtems_shell_main_chmod(
 }
 
 rtems_shell_cmd_t rtems_shell_CHMOD_Command = {
-  "chmod",                                      /* name */
-  "chmod 0777 n1 n2... # change filemode",      /* usage */
-  "files",                                      /* topic */
-  rtems_shell_main_chmod,                       /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "chmod",
+  .usage = "chmod 0777 n1 n2... # change filemode",
+  .topic = "files",
+  .command = rtems_shell_main_chmod,
+  .alias = NULL,
+  .next = NULL
 };

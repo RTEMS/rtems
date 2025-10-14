@@ -55,10 +55,10 @@ static int rtems_shell_main_pwd(
 }
 
 rtems_shell_cmd_t rtems_shell_PWD_Command = {
-  "pwd",                                        /* name */
-  "pwd          # print work directory",        /* usage */
-  "files",                                      /* topic */
-  rtems_shell_main_pwd,                         /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "pwd",
+  .usage = "pwd          # print work directory",
+  .topic = "files",
+  .command = rtems_shell_main_pwd,
+  .alias = NULL,
+  .next = NULL
 };

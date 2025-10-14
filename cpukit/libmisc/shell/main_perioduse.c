@@ -77,10 +77,10 @@ static int rtems_shell_main_perioduse(
 }
 
 rtems_shell_cmd_t rtems_shell_PERIODUSE_Command = {
-  "perioduse",                            /* name */
-  "[-r] print or reset per period usage", /* usage */
-  "rtems",                                /* topic */
-  rtems_shell_main_perioduse,             /* command */
-  NULL,                                   /* alias */
-  NULL                                    /* next */
+  .name = "perioduse",
+  .usage = "[-r] print or reset per period usage",
+  .topic = "rtems",
+  .command = rtems_shell_main_perioduse,
+  .alias = NULL,
+  .next = NULL
 };

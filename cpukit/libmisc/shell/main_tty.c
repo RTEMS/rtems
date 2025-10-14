@@ -54,10 +54,10 @@ static int rtems_shell_main_tty(
 }
 
 rtems_shell_cmd_t rtems_shell_TTY_Command = {
-  "tty",                                      /* name */
-  "show ttyname",                             /* usage */
-  "misc",                                     /* topic */
-  rtems_shell_main_tty,                       /* command */
-  NULL,                                       /* alias */
-  NULL                                        /* next */
+  .name = "tty",
+  .usage = "show ttyname",
+  .topic = "misc",
+  .command = rtems_shell_main_tty,
+  .alias = NULL,
+  .next = NULL
 };

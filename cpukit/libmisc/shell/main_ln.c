@@ -302,10 +302,10 @@ usage(rtems_shell_ln_globals* globals)
 }
 
 rtems_shell_cmd_t rtems_shell_LN_Command = {
-  "ln",                                         /* name */
-  "ln ln [-fhinsv] source_file [target_file]",  /* usage */
-  "files",                                      /* topic */
-  rtems_shell_main_ln,                          /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "ln",
+  .usage = "ln ln [-fhinsv] source_file [target_file]",
+  .topic = "files",
+  .command = rtems_shell_main_ln,
+  .alias = NULL,
+  .next = NULL
 };

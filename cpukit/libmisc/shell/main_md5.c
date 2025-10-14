@@ -127,10 +127,10 @@ static int rtems_shell_main_md5(
 }
 
 rtems_shell_cmd_t rtems_shell_MD5_Command = {
-  "md5",                 /* name */
-  "md5 [file ...]",      /* usage */
-  "files",               /* topic */
-  rtems_shell_main_md5,  /* command */
-  NULL,                  /* alias */
-  NULL                   /* next */
+  .name = "md5",
+  .usage = "md5 [file ...]",
+  .topic = "files",
+  .command = rtems_shell_main_md5,
+  .alias = NULL,
+  .next = NULL
 };

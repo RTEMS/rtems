@@ -40,6 +40,6 @@
 #include "internal.h"
 
 rtems_shell_alias_t rtems_shell_EXIT_Alias = {
-  "logoff",                   /* command */
-  "exit"                      /* alias */
+  .name = "logoff",
+  .alias = "exit"
 };

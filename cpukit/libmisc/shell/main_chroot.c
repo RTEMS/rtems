@@ -63,10 +63,10 @@ static int rtems_shell_main_chroot(
 }
 
 rtems_shell_cmd_t rtems_shell_CHROOT_Command = {
-  "chroot",                                     /* name */
-  "chroot [dir] # change the root directory",   /* usage */
-  "files",                                      /* topic */
-  rtems_shell_main_chroot,                      /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "chroot",
+  .usage = "chroot [dir] # change the root directory",
+  .topic = "files",
+  .command = rtems_shell_main_chroot,
+  .alias = NULL,
+  .next = NULL
 };

@@ -145,10 +145,10 @@ static int rtems_shell_main_mount(
 }
 
 rtems_shell_cmd_t rtems_shell_MOUNT_Command = {
-  "mount",                                                  /* name */
-  "mount [-t type] [-r] [-L] [-o options] source target",   /* usage */
-  "files",                                                  /* topic */
-  rtems_shell_main_mount,                                   /* command */
-  NULL,                                                     /* alias */
-  NULL                                                      /* next */
+  .name = "mount",
+  .usage = "mount [-t type] [-r] [-L] [-o options] source target",
+  .topic = "files",
+  .command = rtems_shell_main_mount,
+  .alias = NULL,
+  .next = NULL
 };

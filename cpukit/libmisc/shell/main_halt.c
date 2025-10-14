@@ -52,10 +52,10 @@ static int rtems_shell_main_shutdown(
 }
 
 rtems_shell_cmd_t rtems_shell_SHUTDOWN_Command = {
-  "shutdown",                                /* name */
-  "shutdown",                                /* usage */
-  "rtems",                                   /* topic */
-  rtems_shell_main_shutdown,                 /* command */
-  NULL,                                      /* alias */
-  NULL                                       /* next */
+  .name = "shutdown",
+  .usage = "shutdown",
+  .topic = "rtems",
+  .command = rtems_shell_main_shutdown,
+  .alias = NULL,
+  .next = NULL
 };

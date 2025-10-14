@@ -57,10 +57,10 @@ static int rtems_shell_main_stackuse(
 }
 
 rtems_shell_cmd_t rtems_shell_STACKUSE_Command = {
-  "stackuse",                                 /* name */
-  "print per thread stack usage",             /* usage */
-  "rtems",                                    /* topic */
-  rtems_shell_main_stackuse,                  /* command */
-  NULL,                                       /* alias */
-  NULL                                        /* next */
+  .name = "stackuse",
+  .usage = "print per thread stack usage",
+  .topic = "rtems",
+  .command = rtems_shell_main_stackuse,
+  .alias = NULL,
+  .next = NULL
 };

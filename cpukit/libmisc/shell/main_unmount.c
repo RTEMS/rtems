@@ -84,10 +84,10 @@ static int rtems_shell_main_unmount(
 }
 
 rtems_shell_cmd_t rtems_shell_UNMOUNT_Command = {
-  "unmount",                     /* name */
-  "unmount path # unmount disk", /* usage */
-  "files",                       /* topic */
-  rtems_shell_main_unmount,      /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "unmount",
+  .usage = "unmount path # unmount disk",
+  .topic = "files",
+  .command = rtems_shell_main_unmount,
+  .alias = NULL,
+  .next = NULL
 };

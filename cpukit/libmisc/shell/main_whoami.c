@@ -58,10 +58,10 @@ static int rtems_shell_main_whoami(
 }
 
 rtems_shell_cmd_t rtems_shell_WHOAMI_Command = {
-  "whoami",                                   /* name */
-  "show current user",                        /* usage */
-  "misc",                                     /* topic */
-  rtems_shell_main_whoami,                    /* command */
-  NULL,                                       /* alias */
-  NULL                                        /* next */
+  .name = "whoami",
+  .usage = "show current user",
+  .topic = "misc",
+  .command = rtems_shell_main_whoami,
+  .alias = NULL,
+  .next = NULL
 };

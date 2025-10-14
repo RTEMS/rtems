@@ -92,10 +92,10 @@ static int rtems_shell_main_setenv(int argc, char *argv[])
 }
 
 rtems_shell_cmd_t rtems_shell_SETENV_Command = {
-  "setenv",                      /* name */
-  "setenv [var] [string]",       /* usage */
-  "misc",                        /* topic */
-  rtems_shell_main_setenv,       /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "setenv",
+  .usage = "setenv [var] [string]",
+  .topic = "misc",
+  .command = rtems_shell_main_setenv,
+  .alias = NULL,
+  .next = NULL
 };

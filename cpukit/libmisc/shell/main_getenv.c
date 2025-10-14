@@ -69,10 +69,10 @@ static int rtems_shell_main_getenv(int argc, char *argv[])
 }
 
 rtems_shell_cmd_t rtems_shell_GETENV_Command = {
-  "getenv",                      /* name */
-  "getenv [var]",                /* usage */
-  "misc",                        /* topic */
-  rtems_shell_main_getenv,       /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "getenv",
+  .usage = "getenv [var]",
+  .topic = "misc",
+  .command = rtems_shell_main_getenv,
+  .alias = NULL,
+  .next = NULL
 };

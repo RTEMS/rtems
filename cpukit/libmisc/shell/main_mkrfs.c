@@ -51,10 +51,10 @@
 #define OPTIONS "[-v] [-s blksz] [-b grpblk] [-i grpinode] [-I] [-o %inode]"
 
 rtems_shell_cmd_t rtems_shell_MKRFS_Command = {
-  "mkrfs",                                   /* name */
-  "mkrfs " OPTIONS " dev",                   /* usage */
-  "files",                                   /* topic */
-  rtems_shell_rfs_format,                    /* command */
-  NULL,                                      /* alias */
-  NULL                                       /* next */
+  .name = "mkrfs",
+  .usage = "mkrfs " OPTIONS " dev",
+  .topic = "files",
+  .command = rtems_shell_rfs_format,
+  .alias = NULL,
+  .next = NULL
 };

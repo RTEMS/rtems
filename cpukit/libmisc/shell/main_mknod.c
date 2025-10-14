@@ -454,10 +454,10 @@ major_from_name(const char *name, mode_t mode)
 #endif
 
 rtems_shell_cmd_t rtems_shell_MKNOD_Command = {
-  "mknod",                                                   /* name */
-  "mknod mknod [-rR] [-F fmt] [-m mode] name [c | b] minor", /* usage */
-  "files",                                                   /* topic */
-  rtems_shell_main_mknod,                                    /* command */
-  NULL,                                                      /* alias */
-  NULL                                                       /* next */
+  .name = "mknod",
+  .usage = "mknod mknod [-rR] [-F fmt] [-m mode] name [c | b] minor",
+  .topic = "files",
+  .command = rtems_shell_main_mknod,
+  .alias = NULL,
+  .next = NULL
 };

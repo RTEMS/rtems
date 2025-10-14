@@ -87,10 +87,10 @@ static int rtems_shell_main_mfill(
 }
 
 rtems_shell_cmd_t rtems_shell_MFILL_Command = {
-  "mfill",                                      /* name */
-  "mfill address size value",                   /* usage */
-  "mem",                                        /* topic */
-  rtems_shell_main_mfill,                       /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "mfill",
+  .usage = "mfill address size value",
+  .topic = "mem",
+  .command = rtems_shell_main_mfill,
+  .alias = NULL,
+  .next = NULL
 };

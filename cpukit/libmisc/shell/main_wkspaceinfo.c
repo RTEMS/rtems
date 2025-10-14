@@ -69,10 +69,10 @@ static int rtems_shell_main_wkspace_info(
 }
 
 rtems_shell_cmd_t rtems_shell_WKSPACE_INFO_Command = {
-  "wkspace",                                  /* name */
-  "Report on RTEMS Executive Workspace",      /* usage */
-  "rtems",                                    /* topic */
-  rtems_shell_main_wkspace_info,              /* command */
-  NULL,                                       /* alias */
-  NULL                                        /* next */
+  .name = "wkspace",
+  .usage = "Report on RTEMS Executive Workspace",
+  .topic = "rtems",
+  .command = rtems_shell_main_wkspace_info,
+  .alias = NULL,
+  .next = NULL
 };

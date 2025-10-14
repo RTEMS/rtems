@@ -91,10 +91,10 @@ static const char rtems_medit_shell_usage[] =
   "\tValues must not exceed 255 or 0xff\n";
 
 rtems_shell_cmd_t rtems_shell_MEDIT_Command = {
-  "medit",                                      /* name */
-  rtems_medit_shell_usage,                      /* usage */
-  "mem",                                        /* topic */
-  rtems_shell_main_medit,                       /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "medit",
+  .usage = rtems_medit_shell_usage,
+  .topic = "mem",
+  .command = rtems_shell_main_medit,
+  .alias = NULL,
+  .next = NULL
 };

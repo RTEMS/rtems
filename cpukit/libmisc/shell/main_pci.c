@@ -557,10 +557,10 @@ static int rtems_shell_main_pci(
 }
 
 rtems_shell_cmd_t rtems_shell_PCI_Command = {
-  "pci",                         /* name */
-  pci_usage_str,                 /* usage */
-  "system",                      /* topic */
-  rtems_shell_main_pci,          /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "pci",
+  .usage = pci_usage_str,
+  .topic = "system",
+  .command = rtems_shell_main_pci,
+  .alias = NULL,
+  .next = NULL
 };

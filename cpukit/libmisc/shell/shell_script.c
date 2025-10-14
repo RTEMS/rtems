@@ -243,12 +243,12 @@ static int rtems_shell_main_joel(
 }
 
 rtems_shell_cmd_t rtems_shell_JOEL_Command = {
-  "joel",                        /* name */
-  "joel [args] SCRIPT",          /* usage */
-  "misc",                        /* topic */
-  rtems_shell_main_joel,         /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "joel",
+  .usage = "joel [args] SCRIPT",
+  .topic = "misc",
+  .command = rtems_shell_main_joel,
+  .alias = NULL,
+  .next = NULL
 };
 
 /*

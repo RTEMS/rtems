@@ -61,10 +61,10 @@ static int rtems_shell_main_rmdir (int argc, char *argv[])
 }
 
 rtems_shell_cmd_t rtems_shell_RMDIR_Command = {
-  "rmdir",                                      /* name */
-  "rmdir  dir   # remove directory",            /* usage */
-  "files",                                      /* topic */
-  rtems_shell_main_rmdir,                       /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "rmdir",
+  .usage = "rmdir  dir   # remove directory",
+  .topic = "files",
+  .command = rtems_shell_main_rmdir,
+  .alias = NULL,
+  .next = NULL
 };

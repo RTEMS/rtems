@@ -581,12 +581,16 @@ mastercmp(const FTSENT **a, const FTSENT **b)
 	return (0);
 }
 
+/*
+ * This command internally defines a macro with the same name.
+ */
+#undef usage
 rtems_shell_cmd_t rtems_shell_CP_Command = {
-  "cp",                                                /* name */
-  "cp [-R [-H | -L | -P]] [-f | -i] [-pv] src target", /* usage */
-  "files",                                             /* topic */
-  rtems_shell_main_cp,                                 /* command */
-  NULL,                                                /* alias */
-  NULL                                                 /* next */
+  .name = "cp",
+  .usage = "cp [-R [-H | -L | -P]] [-f | -i] [-pv] src target",
+  .topic = "files",
+  .command = rtems_shell_main_cp,
+  .alias = NULL,
+  .next = NULL
 };
 

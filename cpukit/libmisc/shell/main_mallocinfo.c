@@ -66,11 +66,11 @@ static int rtems_shell_main_malloc_info(
 }
 
 rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command = {
-  "malloc",                                   /* name */
-  "malloc [walk]",                            /* usage */
-  "mem",                                      /* topic */
-  rtems_shell_main_malloc_info,               /* command */
-  NULL,                                       /* alias */
-  NULL                                        /* next */
+  .name = "malloc",
+  .usage = "malloc [walk]",
+  .topic = "mem",
+  .command = rtems_shell_main_malloc_info,
+  .alias = NULL,
+  .next = NULL
 };
 

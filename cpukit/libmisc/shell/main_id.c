@@ -76,10 +76,10 @@ static int rtems_shell_main_id(
 }
 
 rtems_shell_cmd_t rtems_shell_ID_Command = {
-  "id",                                      /* name */
-  "show uid, gid, euid, and egid",           /* usage */
-  "misc",                                    /* topic */
-  rtems_shell_main_id,                       /* command */
-  NULL,                                      /* alias */
-  NULL                                       /* next */
+  .name = "id",
+  .usage = "show uid",
+  .topic = "misc",
+  .command = rtems_shell_main_id,
+  .alias = NULL,
+  .next = NULL
 };

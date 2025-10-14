@@ -120,5 +120,5 @@ rtems_shell_cmd_t rtems_shell_I2CSET_Command = {
   .name = "i2cset",
   .usage = rtems_i2cset_shell_usage,
   .topic = "misc",
-  .command = rtems_i2cset_shell_main,
+  .command = rtems_i2cset_shell_main
 };

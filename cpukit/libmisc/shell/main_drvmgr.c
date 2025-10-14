@@ -459,10 +459,10 @@ static int rtems_shell_main_drvmgr(
 }
 
 rtems_shell_cmd_t rtems_shell_DRVMGR_Command = {
-  "drvmgr",                      /* name */
-  drvmgr_usage_str,              /* usage */
-  "system",                      /* topic */
-  rtems_shell_main_drvmgr,       /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "drvmgr",
+  .usage = drvmgr_usage_str,
+  .topic = "system",
+  .command = rtems_shell_main_drvmgr,
+  .alias = NULL,
+  .next = NULL
 };

@@ -85,10 +85,10 @@ static int rtems_shell_main_sleep(
 }
 
 rtems_shell_cmd_t rtems_shell_SLEEP_Command = {
-  "sleep",                       /* name */
-  "sleep seconds [nanoseconds]", /* usage */
-  "misc",                        /* topic */
-  rtems_shell_main_sleep,        /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "sleep",
+  .usage = "sleep seconds [nanoseconds]",
+  .topic = "misc",
+  .command = rtems_shell_main_sleep,
+  .alias = NULL,
+  .next = NULL
 };

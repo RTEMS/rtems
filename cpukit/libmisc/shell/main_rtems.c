@@ -144,13 +144,13 @@ static int rtems_shell_main_rtems(
   "rtems <command> (eg. help)"
 
 rtems_shell_cmd_t rtems_shell_RTEMS_Command = {
-  "rtems",                             /* name */
-  HELP_LINE,                           /* usage */
-  "rtems",                             /* topic */
-  rtems_shell_main_rtems,              /* command */
-  NULL,                                /* alias */
-  NULL,                                /* next */
-  0500,                                /* mode */
-  0,                                   /* uid */
-  0                                    /* gid */
+  .name = "rtems",
+  .usage = HELP_LINE,
+  .topic = "rtems",
+  .command = rtems_shell_main_rtems,
+  .alias = NULL,
+  .next = NULL,
+  .mode = 0500,
+  .uid = 0,
+  .gid = 0
 };

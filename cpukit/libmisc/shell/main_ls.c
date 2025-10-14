@@ -771,11 +771,15 @@ mastercmp_listdir(const FTSENT **a, const FTSENT **b)
 	return (sortfcn(*a, *b));
 }
 
+/*
+ * This command internally defines a macro with the same name.
+ */
+#undef usage
 rtems_shell_cmd_t rtems_shell_LS_Command = {
-  "ls",                                         /* name */
-  "ls [dir]     # list files in the directory", /* usage */
-  "files",                                      /* topic */
-  rtems_shell_main_ls,                          /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "ls",
+  .usage = "ls [dir]     # list files in the directory",
+  .topic = "files",
+  .command = rtems_shell_main_ls,
+  .alias = NULL,
+  .next = NULL
 };

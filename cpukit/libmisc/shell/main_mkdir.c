@@ -65,10 +65,10 @@ static int rtems_shell_main_mkdir(
 }
 
 rtems_shell_cmd_t rtems_shell_MKDIR_Command = {
-  "mkdir",                                      /* name */
-  "mkdir  dir   # make a directory",            /* usage */
-  "files",                                      /* topic */
-  rtems_shell_main_mkdir,                       /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "mkdir",
+  .usage = "mkdir  dir   # make a directory",
+  .topic = "files",
+  .command = rtems_shell_main_mkdir,
+  .alias = NULL,
+  .next = NULL
 };

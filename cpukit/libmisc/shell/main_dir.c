@@ -40,6 +40,6 @@
 #include "internal.h"
 
 rtems_shell_alias_t rtems_shell_DIR_Alias = {
-  "ls",                      /* command */
-  "dir"                      /* alias */
+  .name = "ls",
+  .alias = "dir"
 };

@@ -87,10 +87,10 @@ static int rtems_shell_main_mmove(
 }
 
 rtems_shell_cmd_t rtems_shell_MMOVE_Command = {
-  "mmove",                                      /* name */
-  "mmove dst src length",                       /* usage */
-  "mem",                                        /* topic */
-  rtems_shell_main_mmove,                       /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "mmove",
+  .usage = "mmove dst src length",
+  .topic = "mem",
+  .command = rtems_shell_main_mmove,
+  .alias = NULL,
+  .next = NULL
 };

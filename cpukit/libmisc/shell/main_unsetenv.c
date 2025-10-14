@@ -63,10 +63,10 @@ static int rtems_shell_main_unsetenv(int argc, char *argv[])
 }
 
 rtems_shell_cmd_t rtems_shell_UNSETENV_Command = {
-  "unsetenv",                    /* name */
-  "unsetenv [var]",              /* usage */
-  "misc",                        /* topic */
-  rtems_shell_main_unsetenv,     /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "unsetenv",
+  .usage = "unsetenv [var]",
+  .topic = "misc",
+  .command = rtems_shell_main_unsetenv,
+  .alias = NULL,
+  .next = NULL
 };

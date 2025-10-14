@@ -88,10 +88,10 @@ static int rtems_shell_main_blksync(
 }
 
 rtems_shell_cmd_t rtems_shell_BLKSYNC_Command = {
-  "blksync",                                 /* name */
-  "blksync driver # sync the block driver",  /* usage */
-  "files",                                   /* topic */
-  rtems_shell_main_blksync,                  /* command */
-  NULL,                                      /* alias */
-  NULL                                       /* next */
+  .name = "blksync",
+  .usage = "blksync driver # sync the block driver",
+  .topic = "files",
+  .command = rtems_shell_main_blksync,
+  .alias = NULL,
+  .next = NULL
 };

@@ -224,33 +224,30 @@ void mdumpC(void* addr, int m)
     printf("%c", isprint(pb[n]) ? pb[n] : '.');
 }
 
-
 rtems_shell_cmd_t rtems_shell_MDUMP_Command = {
-  "mdump",                                      /* name */
-  "mdump [address [length [size]]]",            /* usage */
-  "mem",                                        /* topic */
-  rtems_shell_main_mdump,                       /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "mdump",
+  .usage = "mdump [address [length [size]]]",
+  .topic = "mem",
+  .command = rtems_shell_main_mdump,
+  .alias = NULL,
+  .next = NULL
 };
-
 
 rtems_shell_cmd_t rtems_shell_WDUMP_Command = {
-  "wdump",                                      /* name */
-  "wdump [address [length]]",                   /* usage */
-  "mem",                                        /* topic */
-  rtems_shell_main_wdump,                       /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "wdump",
+  .usage = "wdump [address [length]]",
+  .topic = "mem",
+  .command = rtems_shell_main_wdump,
+  .alias = NULL,
+  .next = NULL
 };
 
-
 rtems_shell_cmd_t rtems_shell_LDUMP_Command = {
-  "ldump",                                      /* name */
-  "ldump [address [length]]",                   /* usage */
-  "mem",                                        /* topic */
-  rtems_shell_main_ldump,                       /* command */
-  NULL,                                         /* alias */
-  NULL                                          /* next */
+  .name = "ldump",
+  .usage = "ldump [address [length]]",
+  .topic = "mem",
+  .command = rtems_shell_main_ldump,
+  .alias = NULL,
+  .next = NULL
 };
 

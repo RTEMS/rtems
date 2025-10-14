@@ -704,10 +704,10 @@ usage_rm(rtems_shell_rm_globals* globals)
 }
 
 rtems_shell_cmd_t rtems_shell_RM_Command = {
-  "rm",                                      /* name */
-  "[-f | -i] [-dIPRrvW] file ...",           /* usage */
-  "files",                                   /* topic */
-  rtems_shell_main_rm,                       /* command */
-  NULL,                                      /* alias */
-  NULL                                       /* next */
+  .name = "rm",
+  .usage = "[-f | -i] [-dIPRrvW] file ...",
+  .topic = "files",
+  .command = rtems_shell_main_rm,
+  .alias = NULL,
+  .next = NULL
 };

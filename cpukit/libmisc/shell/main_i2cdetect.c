@@ -103,5 +103,5 @@ rtems_shell_cmd_t rtems_shell_I2CDETECT_Command = {
   .name = "i2cdetect",
   .usage = rtems_i2cdetect_shell_usage,
   .topic = "misc",
-  .command = rtems_i2cdetect_shell_main,
+  .command = rtems_i2cdetect_shell_main
 };

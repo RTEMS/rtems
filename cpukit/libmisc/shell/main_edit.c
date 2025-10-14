@@ -2259,10 +2259,10 @@ static int rtems_shell_main_edit(int argc, char *argv[])
 }
 
 rtems_shell_cmd_t rtems_shell_EDIT_Command = {
-  "edit",                /* name */
-  "edit [file ...]",     /* usage */
-  "files",               /* topic */
-  rtems_shell_main_edit, /* command */
-  NULL,                  /* alias */
-  NULL                   /* next */
+  .name = "edit",
+  .usage = "edit [file ...]",
+  .topic = "files",
+  .command = rtems_shell_main_edit,
+  .alias = NULL,
+  .next = NULL
 };

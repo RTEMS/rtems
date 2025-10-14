@@ -57,10 +57,10 @@ static int rtems_shell_main_logoff(
 }
 
 rtems_shell_cmd_t rtems_shell_LOGOFF_Command = {
-  "logoff",                                  /* name */
-  "logoff from the system",                  /* usage */
-  "misc",                                    /* topic */
-  rtems_shell_main_logoff,                   /* command */
-  NULL,                                      /* alias */
-  NULL                                       /* next */
+  .name = "logoff",
+  .usage = "logoff from the system",
+  .topic = "misc",
+  .command = rtems_shell_main_logoff,
+  .alias = NULL,
+  .next = NULL
 };

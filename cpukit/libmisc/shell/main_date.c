@@ -92,10 +92,10 @@ static int rtems_shell_main_date(
 }
 
 rtems_shell_cmd_t rtems_shell_DATE_Command = {
-  "date",                        /* name */
-  "date [YYYY-MM-DD HH:MM:SS]",  /* usage */
-  "misc",                        /* topic */
-  rtems_shell_main_date,         /* command */
-  NULL,                          /* alias */
-  NULL                           /* next */
+  .name = "date",
+  .usage = "date [YYYY-MM-DD HH:MM:SS]",
+  .topic = "misc",
+  .command = rtems_shell_main_date,
+  .alias = NULL,
+  .next = NULL
 };

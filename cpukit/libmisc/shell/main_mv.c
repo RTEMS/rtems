@@ -486,10 +486,10 @@ usage_mv(rtems_shell_mv_globals* globals)
 }
 
 rtems_shell_cmd_t rtems_shell_MV_Command = {
-  "mv",                                      /* name */
-  "[-fiv] source target ...",                /* usage */
-  "files",                                   /* topic */
-  rtems_shell_main_mv,                       /* command */
-  NULL,                                      /* alias */
-  NULL                                       /* next */
+  .name = "mv",
+  .usage = "[-fiv] source target ...",
+  .topic = "files",
+  .command = rtems_shell_main_mv,
+  .alias = NULL,
+  .next = NULL
 };

@@ -76,10 +76,10 @@ static int rtems_shell_main_top(
 }
 
 rtems_shell_cmd_t rtems_shell_TOP_Command = {
-  "top",                                      /* name */
-  "[-r] print or reset per thread cpu usage", /* usage */
-  "rtems",                                    /* topic */
-  rtems_shell_main_top,                       /* command */
-  NULL,                                       /* alias */
-  NULL                                        /* next */
+  .name = "top",
+  .usage = "[-r] print or reset per thread cpu usage",
+  .topic = "rtems",
+  .command = rtems_shell_main_top,
+  .alias = NULL,
+  .next = NULL
 };

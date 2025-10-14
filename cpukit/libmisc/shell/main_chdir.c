@@ -64,10 +64,10 @@ static int rtems_shell_main_chdir(
 }
 
 rtems_shell_cmd_t rtems_shell_CHDIR_Command = {
-  "chdir",                                        /* name */
-  "chdir [dir]  # change the current directory",  /* usage */
-  "files",                                        /* topic */
-  rtems_shell_main_chdir,                         /* command */
-  NULL,                                           /* alias */
-  NULL                                            /* next */
+  .name = "chdir",
+  .usage = "chdir [dir]  # change the current directory",
+  .topic = "files",
+  .command = rtems_shell_main_chdir,
+  .alias = NULL,
+  .next = NULL
 };

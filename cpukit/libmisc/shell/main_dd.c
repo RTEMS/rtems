@@ -577,10 +577,10 @@ dd_out(rtems_shell_dd_globals* globals, int force)
 }
 
 rtems_shell_cmd_t rtems_shell_DD_Command = {
-  "dd",                                                /* name */
-  "dd [OPERAND]...",                                   /* usage */
-  "files",                                             /* topic */
-  rtems_shell_main_dd,                                 /* command */
-  NULL,                                                /* alias */
-  NULL                                                 /* next */
+  .name = "dd",
+  .usage = "dd [OPERAND]...",
+  .topic = "files",
+  .command = rtems_shell_main_dd,
+  .alias = NULL,
+  .next = NULL
 };

@@ -76,10 +76,10 @@ static int rtems_shell_main_cpuuse(
 }
 
 rtems_shell_cmd_t rtems_shell_CPUUSE_Command = {
-  "cpuuse",                                   /* name */
-  "[-r] print or reset per thread cpu usage", /* usage */
-  "rtems",                                    /* topic */
-  rtems_shell_main_cpuuse,                    /* command */
-  NULL,                                       /* alias */
-  NULL                                        /* next */
+  .name = "cpuuse",
+  .usage = "[-r] print or reset per thread cpu usage",
+  .topic = "rtems",
+  .command = rtems_shell_main_cpuuse,
+  .alias = NULL,
+  .next = NULL
 };

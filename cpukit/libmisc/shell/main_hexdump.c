@@ -158,13 +158,18 @@ main_hexdump(rtems_shell_hexdump_globals* globals, int argc, char *argv[])
   return exitval;
 }
 
+/*
+ * This command internally defines a macro with the same name.
+ */
+#undef next
+#undef usage
 rtems_shell_cmd_t rtems_shell_HEXDUMP_Command = {
-  "hexdump",                                                /* name */
-  "hexdump [-bcCdovx] [-e fmt] [-f fmt_file] [-n length]\n" /* usage */
-  "        [-s skip] [file ...]",
-  "files",                                                  /* topic */
-  rtems_shell_main_hexdump,                                 /* command */
-  NULL,                                                     /* alias */
-  NULL                                                      /* next */
+  .name = "hexdump",
+  .usage = "hexdump [-bcCdovx] [-e fmt] [-f fmt_file] [-n length]\n"
+           "        [-s skip] [file ...]",
+  .topic = "files",
+  .command = rtems_shell_main_hexdump,
+  .alias = NULL,
+  .next = NULL
 };
 

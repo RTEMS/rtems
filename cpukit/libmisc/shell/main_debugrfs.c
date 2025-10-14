@@ -51,10 +51,10 @@
 #define OPTIONS "[-h]"
 
 rtems_shell_cmd_t rtems_shell_DEBUGRFS_Command = {
-  "debugrfs",                                /* name */
-  "debugrfs " OPTIONS,                       /* usage */
-  "files",                                   /* topic */
-  rtems_shell_debugrfs,                      /* command */
-  NULL,                                      /* alias */
-  NULL                                       /* next */
+  .name = "debugrfs",
+  .usage = "debugrfs " OPTIONS,
+  .topic = "files",
+  .command = rtems_shell_debugrfs,
+  .alias = NULL,
+  .next = NULL
 };

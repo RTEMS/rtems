@@ -72,10 +72,10 @@ static int rtems_shell_main_umask(
 }
 
 rtems_shell_cmd_t rtems_shell_UMASK_Command = {
-  "umask",                                    /* name */
-  "umask [new_umask]",                        /* usage */
-  "misc",                                     /* topic */
-  rtems_shell_main_umask,                     /* command */
-  NULL,                                       /* alias */
-  NULL                                        /* next */
+  .name = "umask",
+  .usage = "umask [new_umask]",
+  .topic = "misc",
+  .command = rtems_shell_main_umask,
+  .alias = NULL,
+  .next = NULL
 };
