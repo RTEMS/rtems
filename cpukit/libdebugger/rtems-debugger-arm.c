@@ -1344,7 +1344,7 @@ target_print_frame(CPU_Exception_frame* frame)
   EXC_FRAME_PRINT(target_printk, "[} ", frame);
 }
 
-static const size_t
+static size_t
 target_exc_offset(CPU_Exception_frame* frame)
 {
   size_t thumb = (FRAME_SR(frame) & (1 << 5)) == 0 ? 0 : 1;
@@ -1975,7 +1975,7 @@ rtems_debugger_set_int_reg(rtems_debugger_thread* thread,
   memcpy(&thread->registers[offset], &value, sizeof(uint32_t));
 }
 
-static const uint32_t
+static uint32_t
 rtems_debugger_get_int_reg(rtems_debugger_thread* thread, size_t reg)
 {
   const size_t offset = arm_reg_offsets[reg];

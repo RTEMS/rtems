@@ -1027,7 +1027,7 @@ static void rtems_debugger_set_int_reg(
   memcpy( &thread->registers[ offset ], &value, sizeof( uint64_t ) );
 }
 
-static const uint64_t rtems_debugger_get_int_reg(
+static uint64_t rtems_debugger_get_int_reg(
   rtems_debugger_thread *thread,
   size_t                 reg
 )
@@ -1050,7 +1050,7 @@ static void rtems_debugger_set_halfint_reg(
   memcpy( &thread->registers[ offset ], &value, sizeof( uint32_t ) );
 }
 
-static const uint32_t rtems_debugger_get_halfint_reg(
+static uint32_t rtems_debugger_get_halfint_reg(
   rtems_debugger_thread *thread,
   size_t                 reg
 )
@@ -1073,7 +1073,7 @@ static void rtems_debugger_set_fp_reg(
   memcpy( &thread->registers[ offset ], &value, sizeof( uint128_t ) );
 }
 
-static const uint128_t rtems_debugger_get_fp_reg(
+static uint128_t rtems_debugger_get_fp_reg(
   rtems_debugger_thread *thread,
   size_t                 reg
 )

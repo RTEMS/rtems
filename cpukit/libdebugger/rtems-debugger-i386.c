@@ -251,7 +251,7 @@ rtems_debugger_set_int_reg(rtems_debugger_thread* thread,
   memcpy(&thread->registers[offset], &value, sizeof(uint32_t));
 }
 
-static const uint32_t
+static uint32_t
 rtems_debugger_get_int_reg(rtems_debugger_thread* thread, size_t reg)
 {
   const size_t offset = i386_reg_offsets[reg];

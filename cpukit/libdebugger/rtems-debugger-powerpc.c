@@ -840,7 +840,7 @@ rtems_debugger_set_int_reg(rtems_debugger_thread* thread,
   memcpy(&thread->registers[offset], &value, sizeof(uintptr_t));
 }
 
-static const uintptr_t
+static uintptr_t
 rtems_debugger_get_int_reg(rtems_debugger_thread* thread, const size_t reg)
 {
   const size_t offset = ppc_reg_offsets[reg];

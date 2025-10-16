@@ -566,7 +566,7 @@ static void rtems_debugger_set_int_reg(
   memcpy( &thread->registers[ offset ], &value, sizeof( uint32_t ) );
 }
 
-static const uint32_t rtems_debugger_get_int_reg(
+static uint32_t rtems_debugger_get_int_reg(
   rtems_debugger_thread *thread,
   size_t                 reg
 )
