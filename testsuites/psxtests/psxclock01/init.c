@@ -45,7 +45,7 @@ void *POSIX_Init(void *argument)
 
   start = clock();
   end = 0;
-  if ( start >= 0 ) {
+  if ( start > 0 ) {
     do {
       end = clock();
       diff = (int)(end - start)/CLOCKS_PER_SEC;

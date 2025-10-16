@@ -461,7 +461,7 @@ static rtems_task Init(rtems_task_argument argument)
     };
     char *path = get_posix_name('M', 'S', 'Q', i);
     mqd_t mq = mq_open(path, oflag, mode, &attr);
-    rtems_test_assert(mq >= 0);
+    rtems_test_assert((int) mq >= 0);
   }
   rtems_resource_snapshot_take(&snapshot);
   rtems_test_assert(
