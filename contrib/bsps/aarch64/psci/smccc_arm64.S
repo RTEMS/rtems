@@ -30,9 +30,20 @@
  * SUCH DAMAGE.
  */
 
+#ifndef __rtems__
 #include <sys/elf_common.h>
 
 #include <machine/asm.h>
+#else
+
+#define LENTRY(sym)           \
+    .text; .align 2; .type sym,#function; sym:    \
+      .cfi_startproc
+#define ENTRY(sym)            \
+    .globl sym; LENTRY(sym)
+#define LEND(sym) .ltorg; .cfi_endproc; .size sym, . - sym
+#define END(sym) LEND(sym)
+#endif /* __rtems__ */
 
 .macro arm_smccc_1_0	insn
 ENTRY(arm_smccc_\insn)
@@ -88,4 +99,6 @@ END(arm_smccc_1_2_\insn)
 arm_smccc_1_2	hvc
 arm_smccc_1_2	smc
 
+#ifndef __rtems__
 GNU_PROPERTY_AARCH64_FEATURE_1_NOTE(GNU_PROPERTY_AARCH64_FEATURE_1_VAL)
+#endif /* __rtems__ */

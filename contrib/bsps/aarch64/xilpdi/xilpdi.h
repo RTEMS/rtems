@@ -88,10 +88,14 @@ extern "C" {
 #endif
 
 /***************************** Include Files *********************************/
+#ifndef __rtems__
 #include "xil_types.h"
 #include "xstatus.h"
 #include "xil_printf.h"
 #include "xil_io.h"
+#else /* __rtems__ */
+#include <bsp/xil-compat.h>
+#endif /* __rtems__ */
 #include "xilpdi_plat.h"
 
 /************************** Constant Definitions *****************************/
@@ -584,10 +588,12 @@ static inline u8 XilPdi_IsEncEnabled(const XilPdi_ImgHdrTbl *ImgHdrTblPtr)
  * @return	Encryption Key source
  *
  *****************************************************************************/
+#ifndef __rtems__
 static inline u32 XilPdi_GetPlmKeySrc(void)
 {
 	return Xil_In32(XIH_BH_PRAM_ADDR + XIH_BH_AES_KEYSRC_OFFSET);
 }
+#endif /* __rtems__ */
 
 /************************** Function Prototypes ******************************/
 int XilPdi_ValidatePrtnHdr(const XilPdi_PrtnHdr *PrtnHdr);

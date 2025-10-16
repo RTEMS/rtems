@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2025 Aaron Nyholm
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes:
+- contrib/bsps/aarch64/
+install:
+- destination: ${BSP_INCLUDEDIR}/dev/pm
+  source:
+  - bsps/aarch64/include/dev/pm/pm-image.h
+  - bsps/aarch64/include/dev/pm/pm-trace.h
+  - bsps/aarch64/include/dev/pm/pm.h
+  - contrib/bsps/aarch64/xilpdi/xilpdi.h
+  - contrib/bsps/aarch64/xilpdi/xilpdi_plat.h
+  - contrib/bsps/aarch64/psci/smccc.h
+links: []
+source:
+- bsps/aarch64/shared/pm/pm-image.c
+- bsps/aarch64/shared/pm/pm-shell.c
+- bsps/aarch64/shared/pm/pm.c
+- bsps/aarch64/shared/pm/smccc.c
+- contrib/bsps/aarch64/psci/smccc_arm64.S
+type: build

@@ -149,4 +149,9 @@ int arm_smccc_1_2_hvc(const struct arm_smccc_1_2_regs *args,
     struct arm_smccc_1_2_regs *res);
 int arm_smccc_1_2_smc(const struct arm_smccc_1_2_regs *args,
     struct arm_smccc_1_2_regs *res);
+
+#ifdef __rtems__
+void rtems_smccc_init(void);
+#endif /* __rtems__ */
+
 #endif /* _PSCI_SMCCC_H_ */
