@@ -44,20 +44,20 @@ struct uart_data
 static struct uart_data uart_data[2] = {
 	{
 #ifdef	BSP_UART_IOBASE_COM1
-		BSP_UART_IOBASE_COM1,
-		BSP_UART_COM1_IRQ,
+		.ioBase = BSP_UART_IOBASE_COM1,
+		.irq = BSP_UART_COM1_IRQ,
 #else
-		UART_UNSUPP,
-		-1,
+		.ioBase = UART_UNSUPP,
+		.irq = -1,
 #endif
 	},
 	{
 #ifdef	BSP_UART_IOBASE_COM2
-		BSP_UART_IOBASE_COM2,
-		BSP_UART_COM2_IRQ,
+		.ioBase = BSP_UART_IOBASE_COM2,
+		.irq = BSP_UART_COM2_IRQ,
 #else
-		UART_UNSUPP,
-		-1,
+		.ioBase = UART_UNSUPP,
+		.irq = -1,
 #endif
 	},
 };
