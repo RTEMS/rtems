@@ -62,25 +62,25 @@ static          int openpic_src_offst = 0;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wframe-address"
 #define check_arg_ipi(ipi) \
-    if (ipi < 0 || ipi >= OPENPIC_NUM_IPI) \
+    if (ipi >= OPENPIC_NUM_IPI) \
 	printk("openpic.c:%d: illegal ipi %d\n", __LINE__, ipi);
 #define check_arg_timer(timer) \
-    if (timer < 0 || timer >= OPENPIC_NUM_TIMERS) \
+    if (timer >= OPENPIC_NUM_TIMERS) \
 	printk("openpic.c:%d: illegal timer %d\n", __LINE__, timer);
 #define check_arg_vec(vec) \
-    if (vec < 0 || vec >= OPENPIC_NUM_VECTORS) \
+    if (vec >= OPENPIC_NUM_VECTORS) \
 	printk("openpic.c:%d: illegal vector %d\n", __LINE__, vec);
 #define check_arg_pri(pri) \
-    if (pri < 0 || pri >= OPENPIC_NUM_PRI) \
+    if (pri >= OPENPIC_NUM_PRI) \
 	printk("openpic.c:%d: illegal priority %d\n", __LINE__, pri);
 #define check_arg_irq(irq) \
-    if (irq < 0 || irq >= NumSources) \
+    if (irq >= NumSources) \
 	printk("openpic.c:%d: illegal irq %d from 0x%08" PRIxPTR ",[0x%08" PRIxPTR "],[[0x%08" PRIxPTR "]]\n", \
 	       __LINE__, irq, (uintptr_t) __builtin_return_address(0), \
 	       (uintptr_t) __builtin_return_address(1), (uintptr_t) __builtin_return_address(2) \
 	       );
 #define check_arg_cpu(cpu) \
-    if (cpu < 0 || cpu >= NumProcessors) \
+    if (cpu >= NumProcessors) \
 	printk("openpic.c:%d: illegal cpu %d\n", __LINE__, cpu);
 #else
 #define check_arg_ipi(ipi)	do {} while (0)
@@ -540,7 +540,7 @@ int openpic_disable_irq(unsigned int irq)
 int           rval;
 unsigned long flags;
     check_arg_irq(irq);
-	if ( irq < 0 || irq >=NumSources )
+	if ( irq >=NumSources )
 		return -1;
 	rtems_interrupt_disable(flags);
 	rval = openpic_readfield(&OpenPIC->SOURCE(irq).Vector_Priority, OPENPIC_MASK) ? 0 : 1;
