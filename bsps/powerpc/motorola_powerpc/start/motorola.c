@@ -334,7 +334,7 @@ static const mot_info_t mot_boards[] = {
   {0x1E0, 0xFD, PPC_UNKNOWN, "MVME 3600 with MVME712M", NULL, NULL},
   {0x1E0, 0xFE, PPC_UNKNOWN, "MVME 3600 with MVME761", NULL, NULL},
   {0x1E0, 0xFF, PPC_UNKNOWN, "MVME 1600-001 or 1600-011", NULL, NULL},
-  {0x000, 0x00, PPC_UNKNOWN, ""},   /* end of probeable values for automatic scan */
+  {0x000, 0x00, PPC_UNKNOWN, "", NULL, NULL},   /* end of probeable values for automatic scan */
   {0x000, 0x00, PPC_UNKNOWN, "MVME 2100", mvme2100_intmap, prep_pci_swizzle},
 };
 
