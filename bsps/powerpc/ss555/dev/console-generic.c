@@ -72,12 +72,12 @@ int init_calls = 0;
  * Default configuration.
  */
 static struct termios default_termios = {
-  0, 					/* input mode flags */
-  0, 					/* output mode flags */
-  0, 					/* local mode flags */
-  0,					/* line discipline */
-  { 0 },				/* control characters */
-  CS8 | CREAD | CLOCAL | B9600, 	/* control mode flags */
+  .c_iflag = 0, 				/* input mode flags */
+  .c_oflag = 0, 				/* output mode flags */
+  .c_cflag = 0, 				/* local mode flags */
+  .c_lflag = 0,					/* line discipline */
+  .c_cc = { 0 },				/* control characters */
+  .c_ispeed = CS8 | CREAD | CLOCAL | B9600,	/* control mode flags */
 };
 
 
