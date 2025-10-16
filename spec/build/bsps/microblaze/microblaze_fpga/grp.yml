@@ -55,8 +55,6 @@ links:
 - role: build-dependency
   uid: optuartirq
 - role: build-dependency
-  uid: optuartirq
-- role: build-dependency
   uid: optconsoleuart
 - role: build-dependency
   uid: optusefdt
