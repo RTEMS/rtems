@@ -167,13 +167,13 @@ static struct devdesc intelDevs[] = {
 	{ 0x0017, "J3 64Mb",	     8*1024*1024,   0x20, 0x20000 },
 	{ 0x0018, "J3 128Mb",	    16*1024*1024,   0x20, 0x20000 },
 	{ 0x001d, "J3 256Mb",	    32*1024*1024,   0x20, 0x20000 },
-	{ 0, 0, 0, 0}
+	{ 0, 0, 0, 0, 0 }
 };
 
 struct vendesc BSP_flash_vendor_intel[] =
 {
 	{ 0x89, "Intel", intelDevs, &intelOps },
-	{ 0, 0}
+	{ 0, 0, 0, 0 }
 };
 
 /********* Helper Subroutines ******************/

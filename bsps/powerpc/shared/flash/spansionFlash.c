@@ -123,12 +123,12 @@ static struct devdesc spansionDevs[] = {
 	{ 0x007e2101, "S29GL128N", 0x01000000, 32, 0x20000 }, /* 16MB */
 	{ 0x007e2201, "S29GL256N", 0x02000000, 32, 0x20000 }, /* 32MB */
 	{ 0x007e2301, "S29GL512N", 0x04000000, 32, 0x20000 }, /* 64MB */
-	{ 0, 0, 0, 0}
+	{ 0, 0, 0, 0, 0 }
 };
 
 struct vendesc BSP_flash_vendor_spansion[] = {
 	{ 0x01, "Spansion/AMD", spansionDevs, &spansionOps },
-	{ 0, 0}
+	{ 0, 0, 0, 0 }
 };
 
 /********* Register Definitions ****************/
