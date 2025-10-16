@@ -206,12 +206,12 @@ static void generic_bank_isr(void *arg)
   uint32_t bank_number;
   uint32_t bank_start_pin;
   uint8_t handled_count;
-  uint8_t rv;
+  int rv;
   uint8_t i;
 
   bank_number = *((uint32_t*) arg);
 
-  assert ( bank_number >= 0 && bank_number < GPIO_BANK_COUNT );
+  assert ( bank_number < GPIO_BANK_COUNT );
 
   /* Calculate bank start address in the pin_state array. */
   bank_start_pin = bank_number * BSP_GPIO_PINS_PER_BANK;
@@ -315,7 +315,7 @@ static rtems_status_code get_pin_bitmask(
   for ( i = 0; i < pin_count; ++i ) {
     pin_number = pins[i];
 
-    if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+    if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
       return RTEMS_INVALID_ID;
     }
 
@@ -488,7 +488,7 @@ static rtems_status_code gpio_multi_select(
   for ( i = 0; i < pin_count; ++i ) {
     pin_number = pins[i].pin_number;
 
-    if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+    if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
       return RTEMS_INVALID_ID;
     }
 
@@ -608,7 +608,7 @@ static rtems_status_code gpio_multi_select(
   for ( i = 0; i < pin_count; ++i ) {
     pin_number = pins[i].pin_number;
 
-    if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+    if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
       return RTEMS_INVALID_ID;
     }
 
@@ -1014,7 +1014,7 @@ rtems_status_code rtems_gpio_update_configuration(
   rtems_status_code sc;
   uint32_t bank;
 
-  if ( conf->pin_number < 0 || conf->pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( conf->pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -1177,7 +1177,7 @@ rtems_status_code rtems_gpio_set(uint32_t pin_number)
   uint32_t bank;
   uint32_t pin;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -1217,7 +1217,7 @@ rtems_status_code rtems_gpio_clear(uint32_t pin_number)
   uint32_t bank;
   uint32_t pin;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -1257,7 +1257,7 @@ int rtems_gpio_get_value(uint32_t pin_number)
   uint32_t pin;
   uint32_t rv;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return -1;
   }
 
@@ -1310,7 +1310,7 @@ rtems_status_code rtems_gpio_request_pin(
   uint32_t bank;
   uint32_t pin;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -1389,7 +1389,7 @@ rtems_status_code rtems_gpio_resistor_mode(
   uint32_t bank;
   uint32_t pin;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -1432,7 +1432,7 @@ rtems_status_code rtems_gpio_release_pin(uint32_t pin_number)
   rtems_status_code sc;
   uint32_t bank;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -1570,7 +1570,7 @@ rtems_status_code rtems_gpio_debounce_switch(uint32_t pin_number, int ticks)
   gpio_pin_interrupt_state *interrupt_state;
   uint32_t bank;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -1609,7 +1609,7 @@ rtems_status_code rtems_gpio_interrupt_handler_install(
   gpio_handler_node *isr_node;
   uint32_t bank;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -1677,7 +1677,7 @@ rtems_status_code rtems_gpio_enable_interrupt(
   uint32_t bank;
   uint32_t pin;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -1836,7 +1836,7 @@ rtems_status_code rtems_gpio_interrupt_handler_remove(
   gpio_handler_node *isr_node;
   uint32_t bank;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -1897,7 +1897,7 @@ rtems_status_code rtems_gpio_disable_interrupt(uint32_t pin_number)
   uint32_t bank;
   uint32_t pin;
 
-  if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
+  if ( pin_number >= BSP_GPIO_PIN_COUNT ) {
     return RTEMS_INVALID_ID;
   }
 
