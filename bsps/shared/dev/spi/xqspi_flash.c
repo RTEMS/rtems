@@ -32,6 +32,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ * @brief Struct allocating memory space for flash regions. Used by
+ * rtems_flashdev to store region allocations.
+ */
+typedef struct xqspi_flash_region_table {
+  rtems_flashdev_region xqspi_flash_regions[XQSPI_FLASH_MAX_REGIONS];
+  uint32_t xqspi_flash_bit_allocator;
+} xqspi_flash_region_table;
+
 static uint32_t xqspi_get_jedec_id(rtems_flashdev *flash) {
   return QspiPsu_NOR_Get_JEDEC_ID(flash->driver);
 }

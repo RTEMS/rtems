@@ -45,13 +45,4 @@
 */
 rtems_flashdev* zqspi_flashdev_init(zqspiflash *bmdriver);
 
-/*
- * @brief Struct allocating memory space for flash regions. Used by
- * rtems_flashdev to store region allocations.
- */
-typedef struct zqspi_flash_region_table {
-  rtems_flashdev_region zqspi_flash_regions[ZQSPI_FLASH_MAX_REGIONS];
-  uint32_t zqspi_flash_bit_allocator;
-} zqspi_flash_region_table;
-
 #endif /* _ZYNQ_QSPI_FLASHDEV_H */
