@@ -74,14 +74,14 @@ read_us_timer(void);
 
 /* motload memory map   */
 static struct bankdesc mvme5500Flash[] = {
-	{ 0, 2                   }, /* first entry gives number of entries */
+	{ 0, 2, 0, 0, NULL, 0, 0, 0 }, /* first entry gives number of entries */
 	{ 0xf2000000, 0x08000000, 0x20000*2, 2, BSP_flash_vendor_intel, 0, 0, 0, },
 	{ 0xff800000, 0x00800000, 0x20000*2, 2, BSP_flash_vendor_intel, 0, 0, 0, },
 };
 
 /* motload memory map */
 static struct bankdesc mvme6100Flash[] = {
-	{ 0, 2                   }, /* first entry gives number of entries */
+	{ 0, 2, 0, 0, NULL, 0, 0, 0 }, /* first entry gives number of entries */
 	{ 0xf4000000, 0x04000000, 0x20000*2, 2, BSP_flash_vendor_intel, 0, 0, 0, },
 	{ 0xf8000000, 0x04000000, 0x20000*2, 2, BSP_flash_vendor_intel, 0, 0, 0, },
 };
