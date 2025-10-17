@@ -285,19 +285,21 @@ static void ThreadQueueDeadlock(
   longjmp( ctx->before_enqueue, 1 );
 }
 
-/*
- * This warning flags when the caller of setjmp() is assuming a local
- * variable survives the longjmp() back. In this specific case, this
- * assumption is OK because it never returns from the thread body and
- * the variable "events" is preserved.
- */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wclobbered"
+static void EnqueueFatal( TQContext * const ctx, TQWorkerKind const worker )
+{
+   SetFatalHandler( ThreadQueueDeadlock, ctx );
+
+   if ( setjmp( ctx->before_enqueue ) == 0 ) {
+     ctx->status[ worker ] = STATUS_MINUS_ONE;
+     Enqueue( ctx, worker, ctx->wait );
+   } else {
+     ctx->status[ worker ] = STATUS_DEADLOCK;
+   }
+}
 
 static void Worker( rtems_task_argument arg, TQWorkerKind worker )
 {
   TQContext *ctx;
-
 
   ctx = (TQContext *) arg;
 
@@ -332,14 +334,7 @@ static void Worker( rtems_task_argument arg, TQWorkerKind worker )
     }
 
     if ( ( events & TQ_EVENT_ENQUEUE_FATAL ) != 0 ) {
-      SetFatalHandler( ThreadQueueDeadlock, ctx );
-
-      if ( setjmp( ctx->before_enqueue ) == 0 ) {
-        ctx->status[ worker ] = STATUS_MINUS_ONE;
-        Enqueue( ctx, worker, ctx->wait );
-      } else {
-        ctx->status[ worker ] = STATUS_DEADLOCK;
-      }
+      EnqueueFatal( ctx, worker );
     }
 
     if ( ( events & TQ_EVENT_TIMEOUT ) != 0 ) {
@@ -454,8 +449,6 @@ static void Worker( rtems_task_argument arg, TQWorkerKind worker )
     ctx->done[ worker ] = true;
   }
 }
-
-#pragma GCC diagnostic pop
 
 static void BlockerA( rtems_task_argument arg )
 {
@@ -644,20 +637,15 @@ Status_Control TQEnqueue( TQContext *ctx, TQWait wait )
   return ( *ctx->enqueue )( ctx, wait );
 }
 
-Status_Control TQEnqueueFatal( TQContext *ctx )
+Status_Control TQEnqueueFatal( TQContext * const ctx )
 {
-  Status_Control status;
-
   SetFatalHandler( ThreadQueueDeadlock, ctx );
-  status = STATUS_MINUS_ONE;
 
   if ( setjmp( ctx->before_enqueue ) == 0 ) {
-    status = TQEnqueue( ctx, ctx->wait );
-  } else {
-    status = STATUS_DEADLOCK;
+    return TQEnqueue( ctx, ctx->wait );
   }
 
-  return status;
+  return STATUS_DEADLOCK;
 }
 
 void TQEnqueueDone( TQContext *ctx )

@@ -675,6 +675,15 @@ static void ResumeThreadDispatch(
   longjmp( ctx->thread_dispatch_context, 1 );
 }
 
+static void DeleteAndJumpBack( Context * const ctx )
+{
+  if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
+    ctx->status = rtems_task_delete( ctx->id );
+  } else {
+    _Thread_Dispatch_unnest( _Per_CPU_Get() );
+  }
+}
+
 static void Delete( void *arg )
 {
   Context         *ctx;
@@ -716,12 +725,7 @@ static void Delete( void *arg )
   log = T_scheduler_record_10( &ctx->scheduler_log );
   T_null( log );
 
-  if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
-    ctx->status = rtems_task_delete( ctx->id );
-  } else {
-    _Thread_Dispatch_unnest( _Per_CPU_Get() );
-  }
-
+  DeleteAndJumpBack( ctx );
   CaptureWorkerState( ctx );
 
   if ( ctx->dispatch_disabled ) {
@@ -763,6 +767,18 @@ static void BlockDone( Context *ctx )
   }
 }
 
+static void BlockAndJumpBack(
+  Context         * const ctx,
+  Per_CPU_Control * const cpu_self
+)
+{
+  if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
+    Block( ctx );
+  } else {
+    _Thread_Dispatch_unnest( cpu_self );
+  }
+}
+
 static void Signal( rtems_signal_set signals )
 {
   Context *ctx;
@@ -780,12 +796,7 @@ static void Signal( rtems_signal_set signals )
         SetFatalHandler( ResumeThreadDispatch, ctx );
         cpu_self = _Thread_Dispatch_disable();
 
-        if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
-          Block( ctx );
-        } else {
-          _Thread_Dispatch_unnest( cpu_self );
-        }
-
+        BlockAndJumpBack( ctx, cpu_self );
         CallWithinISR( Delete, ctx );
 
         _Thread_Dispatch_direct( cpu_self );

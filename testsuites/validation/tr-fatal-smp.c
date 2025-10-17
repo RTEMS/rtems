@@ -210,10 +210,9 @@ static void ScoreSmpValFatal_Action_0( ScoreSmpValFatal_Context *ctx )
  */
 static void ScoreSmpValFatal_Action_1( ScoreSmpValFatal_Context *ctx )
 {
-  Per_CPU_Control *cpu;
+  Per_CPU_Control * const cpu = _Per_CPU_Get_by_index( 0 );
 
   SetFatalHandler( FatalRecordAndJump, ctx );
-  cpu = _Per_CPU_Get_by_index( 0 );
   _Per_CPU_Submit_job( cpu, &job );
 
   if ( setjmp( fatal_before ) == 0 ) {
@@ -240,16 +239,14 @@ static void ScoreSmpValFatal_Action_1( ScoreSmpValFatal_Context *ctx )
  */
 static void ScoreSmpValFatal_Action_2( ScoreSmpValFatal_Context *ctx )
 {
-  Per_CPU_Control *cpu;
-
-  SetFatalHandler( FatalRecordAndJump, ctx );
-
   /*
    * This element is outside the array.  This is not an issue since
    * _SMP_Start_multitasking_on_secondary_processor() does not access the
    * structure.
    */
-  cpu = _Per_CPU_Get_by_index( 3 );
+  Per_CPU_Control * const cpu = _Per_CPU_Get_by_index( 3 );
+
+  SetFatalHandler( FatalRecordAndJump, ctx );
 
   if ( setjmp( fatal_before ) == 0 ) {
     _SMP_Start_multitasking_on_secondary_processor( cpu );
@@ -275,10 +272,9 @@ static void ScoreSmpValFatal_Action_2( ScoreSmpValFatal_Context *ctx )
  */
 static void ScoreSmpValFatal_Action_3( ScoreSmpValFatal_Context *ctx )
 {
-  Per_CPU_Control *cpu;
+  Per_CPU_Control * const cpu = _Per_CPU_Get_by_index( 2 );
 
   SetFatalHandler( FatalRecordAndJump, ctx );
-  cpu = _Per_CPU_Get_by_index( 2 );
 
   if ( setjmp( fatal_before ) == 0 ) {
     _SMP_Start_multitasking_on_secondary_processor( cpu );
