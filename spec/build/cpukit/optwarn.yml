@@ -12,7 +12,20 @@ default:
 - enabled-by: true
   value:
   - -Wall
-  - -Wempty-body
+  - -Wextra
+# We currently have not addressed all of the cases for these warnings.
+# Use -Wno- for the ones remaining. There are ~50 left to resolve
+# Afor -Wextra
+#     -Wclobbered is issue #5364
+#     -Wmissing-field-initializers is resolved by MR801
+  - -Wno-cast-function-type
+  - -Wno-clobbered
+  - -Wno-enum-conversion
+  - -Wno-ignored-qualifiers
+  - -Wno-missing-field-initializers
+  - -Wno-shift-negative-value
+  - -Wno-sign-compare
+  - -Wno-type-limits
   - -Werror
 description: |
   Warning flags passed to the C and C++ compiler
