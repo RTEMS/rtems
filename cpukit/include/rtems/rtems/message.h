@@ -674,9 +674,17 @@ rtems_status_code rtems_message_queue_urgent(
  *   rtems_message_queue_construct().
  *
  * @par Notes
+ * @parblock
  * The execution time of this directive is directly related to the number of
  * tasks waiting on the message queue, although it is more efficient than the
  * equivalent number of invocations of rtems_message_queue_send().
+ *
+ * This directive unblocks receivers in a non-atomic way.  Meaning, it will not
+ * only unblock those receivers it finds waiting at the queue when it is
+ * invoked but also any new receivers which start waiting for messages after it
+ * is invoked and before it returns.  This may lead to infinite unblocking
+ * loops.
+ * @endparblock
  *
  * @par Constraints
  * @parblock
