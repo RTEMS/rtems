@@ -776,8 +776,8 @@ static void RtemsMessageReqBroadcast_Post_Receivers_Check(
        * unblock all receivers waiting for a message at the message queue.
        *
        * Note: Currently, rtems_message_queue_broadcast() unblocks receivers in
-       * a none-atomic way. Meaning, it will not only unblock those receivers
-       * it finds waiting at the queue when rtems_message_queue_broadcast() is
+       * a non-atomic way. Meaning, it will not only unblock those receivers it
+       * finds waiting at the queue when rtems_message_queue_broadcast() is
        * invoked but also any new receivers which start waiting for messages
        * after rtems_message_queue_broadcast() is invoked and before it
        * returns. This may lead to infinite unblocking loops.
