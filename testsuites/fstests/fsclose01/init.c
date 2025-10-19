@@ -547,7 +547,7 @@ static void test_close(test_context *ctx)
         rtems_test_assert(rv == -1);
         rtems_test_assert(errno == EBADF);
         flags = rtems_libio_iop_flags(iop);
-        expected_flags = LIBIO_FLAGS_READ_WRITE;
+        expected_flags = LIBIO_FLAGS_REFERENCE_INC | LIBIO_FLAGS_READ_WRITE;
         rtems_test_assert(flags == expected_flags);
         rtems_test_assert((iops_free - 1) == free_iops());
         break;
