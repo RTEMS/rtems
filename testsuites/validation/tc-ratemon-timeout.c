@@ -785,12 +785,8 @@ static void RtemsRatemonReqTimeout_Action(
   }
 }
 
-static void RtemsRatemonReqTimeout_Cleanup(
-  RtemsRatemonReqTimeout_Context *ctx
-)
+static void RtemsRatemonReqTimeout_Cleanup( void )
 {
-  (void) ctx;
-
   ClockTick();
   Yield();
 }
@@ -954,7 +950,7 @@ T_TEST_CASE_FIXTURE( RtemsRatemonReqTimeout, &RtemsRatemonReqTimeout_Fixture )
 
         RtemsRatemonReqTimeout_SetPreConditionStates( ctx );
         RtemsRatemonReqTimeout_TestVariant( ctx );
-        RtemsRatemonReqTimeout_Cleanup( ctx );
+        RtemsRatemonReqTimeout_Cleanup();
       }
     }
   }

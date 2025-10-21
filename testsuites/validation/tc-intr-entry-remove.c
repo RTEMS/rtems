@@ -776,12 +776,9 @@ static void RtemsIntrReqEntryRemove_Pre_ISR_Prepare(
 }
 
 static void RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare(
-  RtemsIntrReqEntryRemove_Context       *ctx,
   RtemsIntrReqEntryRemove_Pre_CanDisable state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Pre_CanDisable_Yes: {
       /*
@@ -1391,7 +1388,7 @@ static void RtemsIntrReqEntryRemove_TestVariant(
   RtemsIntrReqEntryRemove_Pre_EntryObj_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsIntrReqEntryRemove_Pre_Init_Prepare( ctx, ctx->Map.pcs[ 4 ] );
   RtemsIntrReqEntryRemove_Pre_ISR_Prepare( ctx, ctx->Map.pcs[ 5 ] );
-  RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare( ctx, ctx->Map.pcs[ 6 ] );
+  RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare( ctx->Map.pcs[ 6 ] );
   RtemsIntrReqEntryRemove_Pre_First_Prepare( ctx, ctx->Map.pcs[ 7 ] );
   RtemsIntrReqEntryRemove_Pre_Last_Prepare( ctx, ctx->Map.pcs[ 8 ] );
   RtemsIntrReqEntryRemove_Action( ctx );

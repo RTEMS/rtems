@@ -715,12 +715,9 @@ static void RtemsMessageReqUrgentSend_Pre_Directive_Prepare(
 }
 
 static void RtemsMessageReqUrgentSend_Pre_Storage_Prepare(
-  RtemsMessageReqUrgentSend_Context    *ctx,
   RtemsMessageReqUrgentSend_Pre_Storage state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsMessageReqUrgentSend_Pre_Storage_Nop: {
       /*
@@ -1087,7 +1084,7 @@ static void RtemsMessageReqUrgentSend_TestVariant(
   RtemsMessageReqUrgentSend_Pre_MsgQueue_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsMessageReqUrgentSend_Pre_Receiver_Prepare( ctx, ctx->Map.pcs[ 4 ] );
   RtemsMessageReqUrgentSend_Pre_Directive_Prepare( ctx, ctx->Map.pcs[ 5 ] );
-  RtemsMessageReqUrgentSend_Pre_Storage_Prepare( ctx, ctx->Map.pcs[ 6 ] );
+  RtemsMessageReqUrgentSend_Pre_Storage_Prepare( ctx->Map.pcs[ 6 ] );
   RtemsMessageReqUrgentSend_Action( ctx );
   RtemsMessageReqUrgentSend_Post_Status_Check(
     ctx,

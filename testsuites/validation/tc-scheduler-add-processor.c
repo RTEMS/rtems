@@ -571,12 +571,12 @@ static void RtemsSchedulerReqAddProcessor_Prepare(
   RtemsSchedulerReqAddProcessor_Context *ctx
 )
 {
-#if defined(RTEMS_SMP)
+  #if defined(RTEMS_SMP)
   ctx->add_cpu_to_scheduler_b = false;
   ctx->online = _Per_CPU_Is_processor_online( ctx->cpu );
-#else
+  #else
   (void) ctx;
-#endif
+  #endif
 }
 
 static void RtemsSchedulerReqAddProcessor_Action(
@@ -598,7 +598,7 @@ static void RtemsSchedulerReqAddProcessor_Cleanup(
   RtemsSchedulerReqAddProcessor_Context *ctx
 )
 {
-#if defined(RTEMS_SMP)
+  #if defined(RTEMS_SMP)
   rtems_status_code sc;
 
   ctx->cpu->online = ctx->online;
@@ -612,9 +612,9 @@ static void RtemsSchedulerReqAddProcessor_Cleanup(
     sc = rtems_scheduler_add_processor( ctx->scheduler_b_id, CPU_TO_ADD );
     T_rsc_success( sc );
   }
-#else
+  #else
   (void) ctx;
-#endif
+  #endif
 }
 
 static const RtemsSchedulerReqAddProcessor_Entry

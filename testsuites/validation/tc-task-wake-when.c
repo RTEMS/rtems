@@ -263,12 +263,9 @@ static void Worker( rtems_task_argument arg )
 }
 
 static void RtemsTaskReqWakeWhen_Pre_TODSet_Prepare(
-  RtemsTaskReqWakeWhen_Context   *ctx,
   RtemsTaskReqWakeWhen_Pre_TODSet state
 )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_time_of_day tod;
 
@@ -616,7 +613,7 @@ static void RtemsTaskReqWakeWhen_TestVariant(
   RtemsTaskReqWakeWhen_Context *ctx
 )
 {
-  RtemsTaskReqWakeWhen_Pre_TODSet_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsTaskReqWakeWhen_Pre_TODSet_Prepare( ctx->Map.pcs[ 0 ] );
   RtemsTaskReqWakeWhen_Pre_TOD_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   RtemsTaskReqWakeWhen_Pre_TODObj_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsTaskReqWakeWhen_Action( ctx );

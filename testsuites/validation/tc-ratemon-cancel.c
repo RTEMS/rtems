@@ -572,12 +572,9 @@ static void RtemsRatemonReqCancel_Post_Postponed_Check(
 }
 
 static void RtemsRatemonReqCancel_Post_Scheduler_Check(
-  RtemsRatemonReqCancel_Context       *ctx,
   RtemsRatemonReqCancel_Post_Scheduler state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsRatemonReqCancel_Post_Scheduler_Called: {
       /*
@@ -828,10 +825,7 @@ static void RtemsRatemonReqCancel_TestVariant(
     ctx,
     ctx->Map.entry.Post_Postponed
   );
-  RtemsRatemonReqCancel_Post_Scheduler_Check(
-    ctx,
-    ctx->Map.entry.Post_Scheduler
-  );
+  RtemsRatemonReqCancel_Post_Scheduler_Check( ctx->Map.entry.Post_Scheduler );
 }
 
 /**

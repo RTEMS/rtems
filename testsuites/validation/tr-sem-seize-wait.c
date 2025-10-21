@@ -260,12 +260,9 @@ static void ScoreSemReqSeizeWait_Post_Count_Check(
 }
 
 static void ScoreSemReqSeizeWait_Post_Timer_Check(
-  ScoreSemReqSeizeWait_Context   *ctx,
   ScoreSemReqSeizeWait_Post_Timer state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case ScoreSemReqSeizeWait_Post_Timer_Optional: {
       /*
@@ -303,10 +300,8 @@ static void ScoreSemReqSeizeWait_Prepare( ScoreSemReqSeizeWait_Context *ctx )
   ctx->tq_ctx->base.get_properties = GetProperties;
 }
 
-static void ScoreSemReqSeizeWait_Action( ScoreSemReqSeizeWait_Context *ctx )
+static void ScoreSemReqSeizeWait_Action( void )
 {
-  (void) ctx;
-
   /* Action performed by Status post-condition */
 }
 
@@ -364,10 +359,10 @@ static void ScoreSemReqSeizeWait_TestVariant(
 )
 {
   ScoreSemReqSeizeWait_Pre_Count_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  ScoreSemReqSeizeWait_Action( ctx );
+  ScoreSemReqSeizeWait_Action();
   ScoreSemReqSeizeWait_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   ScoreSemReqSeizeWait_Post_Count_Check( ctx, ctx->Map.entry.Post_Count );
-  ScoreSemReqSeizeWait_Post_Timer_Check( ctx, ctx->Map.entry.Post_Timer );
+  ScoreSemReqSeizeWait_Post_Timer_Check( ctx->Map.entry.Post_Timer );
 }
 
 static T_fixture_node ScoreSemReqSeizeWait_Node;

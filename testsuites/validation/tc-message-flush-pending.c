@@ -537,12 +537,9 @@ static void RtemsMessageReqFlushPending_Pre_Directive_Prepare(
 }
 
 static void RtemsMessageReqFlushPending_Pre_Storage_Prepare(
-  RtemsMessageReqFlushPending_Context    *ctx,
   RtemsMessageReqFlushPending_Pre_Storage state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsMessageReqFlushPending_Pre_Storage_Nop: {
       /*
@@ -899,7 +896,7 @@ static void RtemsMessageReqFlushPending_TestVariant(
   RtemsMessageReqFlushPending_Pre_MsgQueue_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsMessageReqFlushPending_Pre_Receivers_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsMessageReqFlushPending_Pre_Directive_Prepare( ctx, ctx->Map.pcs[ 4 ] );
-  RtemsMessageReqFlushPending_Pre_Storage_Prepare( ctx, ctx->Map.pcs[ 5 ] );
+  RtemsMessageReqFlushPending_Pre_Storage_Prepare( ctx->Map.pcs[ 5 ] );
   RtemsMessageReqFlushPending_Action( ctx );
   RtemsMessageReqFlushPending_Post_Status_Check(
     ctx,

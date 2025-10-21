@@ -770,12 +770,9 @@ static void RtemsIntrReqEntryInstall_Pre_ISR_Prepare(
 }
 
 static void RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare(
-  RtemsIntrReqEntryInstall_Context      *ctx,
   RtemsIntrReqEntryInstall_Pre_CanEnable state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqEntryInstall_Pre_CanEnable_Yes: {
       /*
@@ -1405,7 +1402,7 @@ static void RtemsIntrReqEntryInstall_TestVariant(
   RtemsIntrReqEntryInstall_Pre_Routine_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsIntrReqEntryInstall_Pre_Init_Prepare( ctx, ctx->Map.pcs[ 4 ] );
   RtemsIntrReqEntryInstall_Pre_ISR_Prepare( ctx, ctx->Map.pcs[ 5 ] );
-  RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare( ctx, ctx->Map.pcs[ 6 ] );
+  RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare( ctx->Map.pcs[ 6 ] );
   RtemsIntrReqEntryInstall_Pre_Installed_Prepare( ctx, ctx->Map.pcs[ 7 ] );
   RtemsIntrReqEntryInstall_Action( ctx );
   RtemsIntrReqEntryInstall_Post_Status_Check(

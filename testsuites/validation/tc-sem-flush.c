@@ -347,13 +347,8 @@ static void RtemsSemReqFlush_Pre_Discipline_Prepare(
   }
 }
 
-static void RtemsSemReqFlush_Pre_Id_Prepare(
-  RtemsSemReqFlush_Context *ctx,
-  RtemsSemReqFlush_Pre_Id   state
-)
+static void RtemsSemReqFlush_Pre_Id_Prepare( RtemsSemReqFlush_Pre_Id state )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsSemReqFlush_Pre_Id_Valid: {
       /*
@@ -582,7 +577,7 @@ static void RtemsSemReqFlush_TestVariant( RtemsSemReqFlush_Context *ctx )
 {
   RtemsSemReqFlush_Pre_Class_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsSemReqFlush_Pre_Discipline_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsSemReqFlush_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsSemReqFlush_Pre_Id_Prepare( ctx->Map.pcs[ 2 ] );
   RtemsSemReqFlush_Action( ctx );
   RtemsSemReqFlush_Post_Action_Check( ctx, ctx->Map.entry.Post_Action );
 }

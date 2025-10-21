@@ -546,8 +546,6 @@ static inline RtemsUserextReqCreate_Entry RtemsUserextReqCreate_PopEntry(
   RtemsUserextReqCreate_Context *ctx
 )
 {
-  (void) ctx;
-
   size_t index;
 
   index = ctx->Map.index;

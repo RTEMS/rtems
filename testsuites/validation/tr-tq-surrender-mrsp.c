@@ -392,7 +392,6 @@ static void ScoreTqReqSurrenderMrsp_Pre_WaitState_Prepare(
 }
 
 static void ScoreTqReqSurrenderMrsp_Post_Dequeue_Check(
-  ScoreTqReqSurrenderMrsp_Context     *ctx,
   ScoreTqReqSurrenderMrsp_Post_Dequeue state
 )
 {
@@ -616,9 +615,7 @@ static void ScoreTqReqSurrenderMrsp_Setup_Wrap( void *arg )
   ScoreTqReqSurrenderMrsp_Setup( ctx );
 }
 
-static void ScoreTqReqSurrenderMrsp_Teardown(
-  ScoreTqReqSurrenderMrsp_Context *ctx
-)
+static void ScoreTqReqSurrenderMrsp_Teardown( void )
 {
   SetSelfScheduler( SCHEDULER_A_ID, PRIO_NORMAL );
 }
@@ -629,7 +626,7 @@ static void ScoreTqReqSurrenderMrsp_Teardown_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  ScoreTqReqSurrenderMrsp_Teardown( ctx );
+  ScoreTqReqSurrenderMrsp_Teardown();
 }
 
 static void ScoreTqReqSurrenderMrsp_Prepare(
@@ -946,10 +943,7 @@ static void ScoreTqReqSurrenderMrsp_TestVariant(
   ScoreTqReqSurrenderMrsp_Pre_Suspended_Prepare( ctx, ctx->Map.pcs[ 4 ] );
   ScoreTqReqSurrenderMrsp_Pre_WaitState_Prepare( ctx, ctx->Map.pcs[ 5 ] );
   ScoreTqReqSurrenderMrsp_Action( ctx );
-  ScoreTqReqSurrenderMrsp_Post_Dequeue_Check(
-    ctx,
-    ctx->Map.entry.Post_Dequeue
-  );
+  ScoreTqReqSurrenderMrsp_Post_Dequeue_Check( ctx->Map.entry.Post_Dequeue );
   ScoreTqReqSurrenderMrsp_Post_Unblock_Check(
     ctx,
     ctx->Map.entry.Post_Unblock

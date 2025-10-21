@@ -404,8 +404,6 @@ static void RtemsTimerReqReset_Pre_Id_Prepare(
   RtemsTimerReqReset_Pre_Id   state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsTimerReqReset_Pre_Id_Valid: {
       /*
@@ -433,8 +431,6 @@ static void RtemsTimerReqReset_Pre_Context_Prepare(
   RtemsTimerReqReset_Pre_Context state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsTimerReqReset_Pre_Context_None: {
       /*
@@ -856,10 +852,8 @@ static void RtemsTimerReqReset_Post_UserData_Check(
   }
 }
 
-static void RtemsTimerReqReset_Setup( RtemsTimerReqReset_Context *ctx )
+static void RtemsTimerReqReset_Setup( void )
 {
-  (void) ctx;
-
   rtems_status_code status;
   status = rtems_timer_initiate_server(
     RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
@@ -875,17 +869,15 @@ static void RtemsTimerReqReset_Setup_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  RtemsTimerReqReset_Setup( ctx );
+  RtemsTimerReqReset_Setup();
 }
 
 /**
  * @brief Make sure the timer server is not running and the realtime clock is
  *   not set after this test.
  */
-static void RtemsTimerReqReset_Teardown( RtemsTimerReqReset_Context *ctx )
+static void RtemsTimerReqReset_Teardown( void )
 {
-  (void) ctx;
-
   DeleteTimerServer();
   UnsetClock();
 }
@@ -896,7 +888,7 @@ static void RtemsTimerReqReset_Teardown_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  RtemsTimerReqReset_Teardown( ctx );
+  RtemsTimerReqReset_Teardown();
 }
 
 static void RtemsTimerReqReset_Prepare( RtemsTimerReqReset_Context *ctx )

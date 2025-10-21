@@ -330,30 +330,26 @@ static void DeadlockWorkerE( rtems_task_argument arg )
   (void) ReceiveAnyEvents();
 }
 
-static void ScoreTqValSmp_Setup( ScoreTqValSmp_Context *ctx )
+static void ScoreTqValSmp_Setup( void )
 {
   SetSelfPriority( PRIO_NORMAL );
 }
 
 static void ScoreTqValSmp_Setup_Wrap( void *arg )
 {
-  ScoreTqValSmp_Context *ctx;
-
-  ctx = arg;
-  ScoreTqValSmp_Setup( ctx );
+  (void) arg;
+  ScoreTqValSmp_Setup();
 }
 
-static void ScoreTqValSmp_Teardown( ScoreTqValSmp_Context *ctx )
+static void ScoreTqValSmp_Teardown( void )
 {
   RestoreRunnerPriority();
 }
 
 static void ScoreTqValSmp_Teardown_Wrap( void *arg )
 {
-  ScoreTqValSmp_Context *ctx;
-
-  ctx = arg;
-  ScoreTqValSmp_Teardown( ctx );
+  (void) arg;
+  ScoreTqValSmp_Teardown();
 }
 
 static T_fixture ScoreTqValSmp_Fixture = {

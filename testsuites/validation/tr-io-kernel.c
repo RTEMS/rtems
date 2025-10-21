@@ -112,7 +112,7 @@ static void RtemsIoValKernel_Action_1( void )
 
 void RtemsIoValKernel_Run( void )
 {
-  T_case_begin( "RtemsIoValKernel", &T_empty_fixture );
+  (void) T_case_begin( "RtemsIoValKernel", &T_empty_fixture );
 
   T_plan( 1 );
 

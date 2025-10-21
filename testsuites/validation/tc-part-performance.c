@@ -238,15 +238,10 @@ static void RtemsPartReqPerfGetBuffer_Body_Wrap( void *arg )
  */
 static bool RtemsPartReqPerfGetBuffer_Teardown(
   RtemsPartValPerf_Context *ctx,
-  T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   rtems_status_code sc;
 
   T_quiet_rsc_success( ctx->status );
@@ -268,7 +263,9 @@ static bool RtemsPartReqPerfGetBuffer_Teardown_Wrap(
   RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsPartReqPerfGetBuffer_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsPartReqPerfGetBuffer_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -314,15 +311,10 @@ static void RtemsPartReqPerfGetNoBuffer_Body_Wrap( void *arg )
  */
 static bool RtemsPartReqPerfGetNoBuffer_Teardown(
   RtemsPartValPerf_Context *ctx,
-  T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc( ctx->status, RTEMS_UNSATISFIED );
 
   return tic == toc;
@@ -339,7 +331,9 @@ static bool RtemsPartReqPerfGetNoBuffer_Teardown_Wrap(
   RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsPartReqPerfGetNoBuffer_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsPartReqPerfGetNoBuffer_Teardown( ctx, tic, toc );
 }
 
 /**
@@ -404,15 +398,10 @@ static void RtemsPartReqPerfReturnBuffer_Body_Wrap( void *arg )
  */
 static bool RtemsPartReqPerfReturnBuffer_Teardown(
   RtemsPartValPerf_Context *ctx,
-  T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   return tic == toc;
@@ -429,7 +418,9 @@ static bool RtemsPartReqPerfReturnBuffer_Teardown_Wrap(
   RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsPartReqPerfReturnBuffer_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsPartReqPerfReturnBuffer_Teardown( ctx, tic, toc );
 }
 
 /** @} */

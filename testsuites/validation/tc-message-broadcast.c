@@ -633,12 +633,9 @@ static void RtemsMessageReqBroadcast_Pre_Receivers_Prepare(
 }
 
 static void RtemsMessageReqBroadcast_Pre_Storage_Prepare(
-  RtemsMessageReqBroadcast_Context    *ctx,
   RtemsMessageReqBroadcast_Pre_Storage state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsMessageReqBroadcast_Pre_Storage_Nop: {
       /*
@@ -1110,7 +1107,7 @@ static void RtemsMessageReqBroadcast_TestVariant(
   RtemsMessageReqBroadcast_Pre_MsgSize_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsMessageReqBroadcast_Pre_MsgQueue_Prepare( ctx, ctx->Map.pcs[ 4 ] );
   RtemsMessageReqBroadcast_Pre_Receivers_Prepare( ctx, ctx->Map.pcs[ 5 ] );
-  RtemsMessageReqBroadcast_Pre_Storage_Prepare( ctx, ctx->Map.pcs[ 6 ] );
+  RtemsMessageReqBroadcast_Pre_Storage_Prepare( ctx->Map.pcs[ 6 ] );
   RtemsMessageReqBroadcast_Action( ctx );
   RtemsMessageReqBroadcast_Post_Status_Check(
     ctx,

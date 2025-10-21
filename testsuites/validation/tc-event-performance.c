@@ -240,12 +240,9 @@ static bool RtemsEventReqPerfIsrPreempt_Teardown(
   RtemsEventValPerf_Context *ctx,
   T_ticks                   *delta,
   uint32_t                   tic,
-  uint32_t                   toc,
-  unsigned int               retry
+  uint32_t                   toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -264,7 +261,8 @@ static bool RtemsEventReqPerfIsrPreempt_Teardown_Wrap(
   RtemsEventValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsEventReqPerfIsrPreempt_Teardown( ctx, delta, tic, toc, retry );
+  (void) retry;
+  return RtemsEventReqPerfIsrPreempt_Teardown( ctx, delta, tic, toc );
 }
 
 /** @} */
@@ -313,15 +311,10 @@ static void RtemsEventReqPerfOther_Body_Wrap( void *arg )
  */
 static bool RtemsEventReqPerfOther_Teardown(
   RtemsEventValPerf_Context *ctx,
-  T_ticks                   *delta,
   uint32_t                   tic,
-  uint32_t                   toc,
-  unsigned int               retry
+  uint32_t                   toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   SetPriority( ctx->worker_id, PRIO_HIGH );
@@ -340,7 +333,9 @@ static bool RtemsEventReqPerfOther_Teardown_Wrap(
   RtemsEventValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsEventReqPerfOther_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsEventReqPerfOther_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -385,8 +380,7 @@ static bool RtemsEventReqPerfOtherCpu_Teardown(
   RtemsEventValPerf_Context *ctx,
   T_ticks                   *delta,
   uint32_t                   tic,
-  uint32_t                   toc,
-  unsigned int               retry
+  uint32_t                   toc
 )
 {
   T_quiet_rsc_success( ctx->status );
@@ -408,7 +402,8 @@ static bool RtemsEventReqPerfOtherCpu_Teardown_Wrap(
   RtemsEventValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsEventReqPerfOtherCpu_Teardown( ctx, delta, tic, toc, retry );
+  (void) retry;
+  return RtemsEventReqPerfOtherCpu_Teardown( ctx, delta, tic, toc );
 }
 
 /**
@@ -453,15 +448,10 @@ static void RtemsEventReqPerfOtherNotSatisfied_Body_Wrap( void *arg )
  */
 static bool RtemsEventReqPerfOtherNotSatisfied_Teardown(
   RtemsEventValPerf_Context *ctx,
-  T_ticks                   *delta,
   uint32_t                   tic,
-  uint32_t                   toc,
-  unsigned int               retry
+  uint32_t                   toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   Send( ctx, EVENT_END );
@@ -480,13 +470,9 @@ static bool RtemsEventReqPerfOtherNotSatisfied_Teardown_Wrap(
   RtemsEventValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsEventReqPerfOtherNotSatisfied_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) delta;
+  (void) retry;
+  return RtemsEventReqPerfOtherNotSatisfied_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -525,12 +511,9 @@ static bool RtemsEventReqPerfOtherPreempt_Teardown(
   RtemsEventValPerf_Context *ctx,
   T_ticks                   *delta,
   uint32_t                   tic,
-  uint32_t                   toc,
-  unsigned int               retry
+  uint32_t                   toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -549,7 +532,8 @@ static bool RtemsEventReqPerfOtherPreempt_Teardown_Wrap(
   RtemsEventValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsEventReqPerfOtherPreempt_Teardown( ctx, delta, tic, toc, retry );
+  (void) retry;
+  return RtemsEventReqPerfOtherPreempt_Teardown( ctx, delta, tic, toc );
 }
 
 /** @} */

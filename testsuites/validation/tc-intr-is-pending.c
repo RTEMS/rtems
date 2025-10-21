@@ -408,12 +408,9 @@ static void RtemsIntrReqIsPending_Pre_Pending_Prepare(
 }
 
 static void RtemsIntrReqIsPending_Pre_IsPending_Prepare(
-  RtemsIntrReqIsPending_Context      *ctx,
   RtemsIntrReqIsPending_Pre_IsPending state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqIsPending_Pre_IsPending_Yes: {
       /*
@@ -630,7 +627,7 @@ static void RtemsIntrReqIsPending_TestVariant(
 {
   RtemsIntrReqIsPending_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsIntrReqIsPending_Pre_Pending_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsIntrReqIsPending_Pre_IsPending_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsIntrReqIsPending_Pre_IsPending_Prepare( ctx->Map.pcs[ 2 ] );
   RtemsIntrReqIsPending_Action( ctx );
   RtemsIntrReqIsPending_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsIntrReqIsPending_Post_IsPending_Check(

@@ -159,24 +159,32 @@ static void Fatal(
   }
 }
 
-static void CompilerUnitBuiltins_Setup( void *ctx )
+static void CompilerUnitBuiltins_Setup( void )
 {
-  (void) ctx;
-
   SetFatalHandler( Fatal, exception_return_context );
 }
 
-static void CompilerUnitBuiltins_Teardown( void *ctx )
+static void CompilerUnitBuiltins_Setup_Wrap( void *arg )
 {
-  (void) ctx;
+  (void) arg;
+  CompilerUnitBuiltins_Setup();
+}
 
+static void CompilerUnitBuiltins_Teardown( void )
+{
   SetFatalHandler( NULL, NULL );
 }
 
+static void CompilerUnitBuiltins_Teardown_Wrap( void *arg )
+{
+  (void) arg;
+  CompilerUnitBuiltins_Teardown();
+}
+
 static T_fixture CompilerUnitBuiltins_Fixture = {
-  .setup = CompilerUnitBuiltins_Setup,
+  .setup = CompilerUnitBuiltins_Setup_Wrap,
   .stop = NULL,
-  .teardown = CompilerUnitBuiltins_Teardown,
+  .teardown = CompilerUnitBuiltins_Teardown_Wrap,
   .scope = NULL,
   .initial_context = NULL
 };

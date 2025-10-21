@@ -284,12 +284,9 @@ static void RtemsSemReqRelease_Pre_Discipline_Prepare(
 }
 
 static void RtemsSemReqRelease_Pre_Id_Prepare(
-  RtemsSemReqRelease_Context *ctx,
-  RtemsSemReqRelease_Pre_Id   state
+  RtemsSemReqRelease_Pre_Id state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsSemReqRelease_Pre_Id_Valid: {
       /*
@@ -569,7 +566,7 @@ static void RtemsSemReqRelease_TestVariant( RtemsSemReqRelease_Context *ctx )
 {
   RtemsSemReqRelease_Pre_Class_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsSemReqRelease_Pre_Discipline_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsSemReqRelease_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsSemReqRelease_Pre_Id_Prepare( ctx->Map.pcs[ 2 ] );
   RtemsSemReqRelease_Action( ctx );
   RtemsSemReqRelease_Post_Action_Check( ctx, ctx->Map.entry.Post_Action );
 }

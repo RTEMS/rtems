@@ -362,10 +362,8 @@ static void ScoreTqReqTimeout_Teardown_Wrap( void *arg )
   ScoreTqReqTimeout_Teardown( ctx );
 }
 
-static void ScoreTqReqTimeout_Action( ScoreTqReqTimeout_Context *ctx )
+static void ScoreTqReqTimeout_Action( void )
 {
-  (void) ctx;
-
   /*
    * The action is performed by the `WaitState` pre-condition preparation.
    */
@@ -422,7 +420,7 @@ static inline ScoreTqReqTimeout_Entry ScoreTqReqTimeout_PopEntry(
 static void ScoreTqReqTimeout_TestVariant( ScoreTqReqTimeout_Context *ctx )
 {
   ScoreTqReqTimeout_Pre_WaitState_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  ScoreTqReqTimeout_Action( ctx );
+  ScoreTqReqTimeout_Action();
   ScoreTqReqTimeout_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   ScoreTqReqTimeout_Post_Unblock_Check( ctx, ctx->Map.entry.Post_Unblock );
 }

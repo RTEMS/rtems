@@ -901,12 +901,9 @@ static void RtemsMessageReqReceive_Pre_MsgQueue_Prepare(
 }
 
 static void RtemsMessageReqReceive_Pre_Storage_Prepare(
-  RtemsMessageReqReceive_Context    *ctx,
   RtemsMessageReqReceive_Pre_Storage state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsMessageReqReceive_Pre_Storage_Nop: {
       /*
@@ -1390,7 +1387,7 @@ static void RtemsMessageReqReceive_TestVariant(
   RtemsMessageReqReceive_Pre_TaskQueue_Prepare( ctx, ctx->Map.pcs[ 4 ] );
   RtemsMessageReqReceive_Pre_Wait_Prepare( ctx, ctx->Map.pcs[ 5 ] );
   RtemsMessageReqReceive_Pre_MsgQueue_Prepare( ctx, ctx->Map.pcs[ 6 ] );
-  RtemsMessageReqReceive_Pre_Storage_Prepare( ctx, ctx->Map.pcs[ 7 ] );
+  RtemsMessageReqReceive_Pre_Storage_Prepare( ctx->Map.pcs[ 7 ] );
   RtemsMessageReqReceive_Action( ctx );
   RtemsMessageReqReceive_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsMessageReqReceive_Post_Delay_Check( ctx, ctx->Map.entry.Post_Delay );

@@ -394,12 +394,9 @@ static void RtemsIntrReqVectorDisable_Pre_Vector_Prepare(
 }
 
 static void RtemsIntrReqVectorDisable_Pre_IsEnabled_Prepare(
-  RtemsIntrReqVectorDisable_Context      *ctx,
   RtemsIntrReqVectorDisable_Pre_IsEnabled state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqVectorDisable_Pre_IsEnabled_Yes: {
       /*
@@ -431,12 +428,9 @@ static void RtemsIntrReqVectorDisable_Pre_IsEnabled_Prepare(
 }
 
 static void RtemsIntrReqVectorDisable_Pre_CanDisable_Prepare(
-  RtemsIntrReqVectorDisable_Context       *ctx,
   RtemsIntrReqVectorDisable_Pre_CanDisable state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqVectorDisable_Pre_CanDisable_Yes: {
       /*
@@ -524,12 +518,9 @@ static void RtemsIntrReqVectorDisable_Post_Status_Check(
 }
 
 static void RtemsIntrReqVectorDisable_Post_IsEnabled_Check(
-  RtemsIntrReqVectorDisable_Context       *ctx,
   RtemsIntrReqVectorDisable_Post_IsEnabled state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqVectorDisable_Post_IsEnabled_Nop: {
       /*
@@ -681,15 +672,14 @@ static void RtemsIntrReqVectorDisable_TestVariant(
 )
 {
   RtemsIntrReqVectorDisable_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  RtemsIntrReqVectorDisable_Pre_IsEnabled_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsIntrReqVectorDisable_Pre_CanDisable_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsIntrReqVectorDisable_Pre_IsEnabled_Prepare( ctx->Map.pcs[ 1 ] );
+  RtemsIntrReqVectorDisable_Pre_CanDisable_Prepare( ctx->Map.pcs[ 2 ] );
   RtemsIntrReqVectorDisable_Action( ctx );
   RtemsIntrReqVectorDisable_Post_Status_Check(
     ctx,
     ctx->Map.entry.Post_Status
   );
   RtemsIntrReqVectorDisable_Post_IsEnabled_Check(
-    ctx,
     ctx->Map.entry.Post_IsEnabled
   );
 }

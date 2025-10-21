@@ -546,24 +546,32 @@ void *IdleBody( uintptr_t arg )
   return (void *) arg;
 }
 
-static void RtemsUserextValUserext_Setup( void *ctx )
+static void RtemsUserextValUserext_Setup( void )
 {
-  (void) ctx;
-
   SetSelfPriority( PRIO_NORMAL );
 }
 
-static void RtemsUserextValUserext_Teardown( void *ctx )
+static void RtemsUserextValUserext_Setup_Wrap( void *arg )
 {
-  (void) ctx;
+  (void) arg;
+  RtemsUserextValUserext_Setup();
+}
 
+static void RtemsUserextValUserext_Teardown( void )
+{
   RestoreRunnerPriority();
 }
 
+static void RtemsUserextValUserext_Teardown_Wrap( void *arg )
+{
+  (void) arg;
+  RtemsUserextValUserext_Teardown();
+}
+
 static T_fixture RtemsUserextValUserext_Fixture = {
-  .setup = RtemsUserextValUserext_Setup,
+  .setup = RtemsUserextValUserext_Setup_Wrap,
   .stop = NULL,
-  .teardown = RtemsUserextValUserext_Teardown,
+  .teardown = RtemsUserextValUserext_Teardown_Wrap,
   .scope = NULL,
   .initial_context = NULL
 };

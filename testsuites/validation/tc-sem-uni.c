@@ -121,34 +121,26 @@ static void ObtainReleaseMrsPTask( rtems_task_argument arg )
   (void) ReceiveAnyEvents();
 }
 
-static void RtemsSemValUni_Setup( RtemsSemValUni_Context *ctx )
+static void RtemsSemValUni_Setup( void )
 {
-  (void) ctx;
-
   SetSelfPriority( PRIO_NORMAL );
 }
 
 static void RtemsSemValUni_Setup_Wrap( void *arg )
 {
-  RtemsSemValUni_Context *ctx;
-
-  ctx = arg;
-  RtemsSemValUni_Setup( ctx );
+  (void) arg;
+  RtemsSemValUni_Setup();
 }
 
-static void RtemsSemValUni_Teardown( RtemsSemValUni_Context *ctx )
+static void RtemsSemValUni_Teardown( void )
 {
-  (void) ctx;
-
   RestoreRunnerPriority();
 }
 
 static void RtemsSemValUni_Teardown_Wrap( void *arg )
 {
-  RtemsSemValUni_Context *ctx;
-
-  ctx = arg;
-  RtemsSemValUni_Teardown( ctx );
+  (void) arg;
+  RtemsSemValUni_Teardown();
 }
 
 static T_fixture RtemsSemValUni_Fixture = {

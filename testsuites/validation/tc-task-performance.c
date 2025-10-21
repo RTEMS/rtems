@@ -187,10 +187,8 @@ static void RtemsTaskValPerf_Setup_Context( RtemsTaskValPerf_Context *ctx )
 /**
  * @brief Set the runner priority.
  */
-static void RtemsTaskValPerf_Setup( RtemsTaskValPerf_Context *ctx )
+static void RtemsTaskValPerf_Setup( void )
 {
-  (void) ctx;
-
   SetSelfPriority( PRIO_NORMAL );
 }
 
@@ -200,25 +198,21 @@ static void RtemsTaskValPerf_Setup_Wrap( void *arg )
 
   ctx = arg;
   RtemsTaskValPerf_Setup_Context( ctx );
-  RtemsTaskValPerf_Setup( ctx );
+  RtemsTaskValPerf_Setup();
 }
 
 /**
  * @brief Restore the runner priority.
  */
-static void RtemsTaskValPerf_Teardown( RtemsTaskValPerf_Context *ctx )
+static void RtemsTaskValPerf_Teardown( void )
 {
-  (void) ctx;
-
   RestoreRunnerPriority();
 }
 
 static void RtemsTaskValPerf_Teardown_Wrap( void *arg )
 {
-  RtemsTaskValPerf_Context *ctx;
-
-  ctx = arg;
-  RtemsTaskValPerf_Teardown( ctx );
+  (void) arg;
+  RtemsTaskValPerf_Teardown();
 }
 
 static T_fixture RtemsTaskValPerf_Fixture = {
@@ -256,15 +250,10 @@ static void RtemsTaskReqPerfConstruct_Body_Wrap( void *arg )
  */
 static bool RtemsTaskReqPerfConstruct_Teardown(
   RtemsTaskValPerf_Context *ctx,
-  T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   DeleteTask( ctx->worker_id );
@@ -284,7 +273,9 @@ static bool RtemsTaskReqPerfConstruct_Teardown_Wrap(
   RtemsTaskValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsTaskReqPerfConstruct_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsTaskReqPerfConstruct_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -328,15 +319,10 @@ static void RtemsTaskReqPerfRestart_Body_Wrap( void *arg )
  */
 static bool RtemsTaskReqPerfRestart_Teardown(
   RtemsTaskValPerf_Context *ctx,
-  T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   return tic == toc;
@@ -353,7 +339,9 @@ static bool RtemsTaskReqPerfRestart_Teardown_Wrap(
   RtemsTaskValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsTaskReqPerfRestart_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsTaskReqPerfRestart_Teardown( ctx, tic, toc );
 }
 
 /**
@@ -414,12 +402,9 @@ static bool RtemsTaskReqPerfRestartPreempt_Teardown(
   RtemsTaskValPerf_Context *ctx,
   T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -438,13 +423,8 @@ static bool RtemsTaskReqPerfRestartPreempt_Teardown_Wrap(
   RtemsTaskValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsTaskReqPerfRestartPreempt_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) retry;
+  return RtemsTaskReqPerfRestartPreempt_Teardown( ctx, delta, tic, toc );
 }
 
 /**
@@ -500,12 +480,9 @@ static bool RtemsTaskReqPerfRestartSelf_Teardown(
   RtemsTaskValPerf_Context *ctx,
   T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -524,7 +501,8 @@ static bool RtemsTaskReqPerfRestartSelf_Teardown_Wrap(
   RtemsTaskValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsTaskReqPerfRestartSelf_Teardown( ctx, delta, tic, toc, retry );
+  (void) retry;
+  return RtemsTaskReqPerfRestartSelf_Teardown( ctx, delta, tic, toc );
 }
 
 /**
@@ -550,9 +528,7 @@ static void RtemsTaskReqPerfRestartSelf_Cleanup(
 /**
  * @brief Set the runner affinity.
  */
-static void RtemsTaskReqPerfSetSchedulerMove_Prepare(
-  RtemsTaskValPerf_Context *ctx
-)
+static void RtemsTaskReqPerfSetSchedulerMove_Prepare( void )
 {
   SetSelfAffinityAll();
 }
@@ -584,10 +560,8 @@ static void RtemsTaskReqPerfSetSchedulerMove_Body_Wrap( void *arg )
  */
 static bool RtemsTaskReqPerfSetSchedulerMove_Teardown(
   RtemsTaskValPerf_Context *ctx,
-  T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
   T_quiet_rsc_success( ctx->status );
@@ -608,21 +582,15 @@ static bool RtemsTaskReqPerfSetSchedulerMove_Teardown_Wrap(
   RtemsTaskValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsTaskReqPerfSetSchedulerMove_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) delta;
+  (void) retry;
+  return RtemsTaskReqPerfSetSchedulerMove_Teardown( ctx, tic, toc );
 }
 
 /**
  * @brief Restore the runner affinity.
  */
-static void RtemsTaskReqPerfSetSchedulerMove_Cleanup(
-  RtemsTaskValPerf_Context *ctx
-)
+static void RtemsTaskReqPerfSetSchedulerMove_Cleanup( void )
 {
   SetSelfAffinityOne( 0 );
 }
@@ -664,15 +632,10 @@ static void RtemsTaskReqPerfSetSchedulerNop_Body_Wrap( void *arg )
  */
 static bool RtemsTaskReqPerfSetSchedulerNop_Teardown(
   RtemsTaskValPerf_Context *ctx,
-  T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   return tic == toc;
@@ -689,13 +652,9 @@ static bool RtemsTaskReqPerfSetSchedulerNop_Teardown_Wrap(
   RtemsTaskValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsTaskReqPerfSetSchedulerNop_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) delta;
+  (void) retry;
+  return RtemsTaskReqPerfSetSchedulerNop_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -748,10 +707,8 @@ static void RtemsTaskReqPerfSetSchedulerOther_Body_Wrap( void *arg )
  */
 static bool RtemsTaskReqPerfSetSchedulerOther_Teardown(
   RtemsTaskValPerf_Context *ctx,
-  T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
   T_quiet_rsc_success( ctx->status );
@@ -772,13 +729,9 @@ static bool RtemsTaskReqPerfSetSchedulerOther_Teardown_Wrap(
   RtemsTaskValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsTaskReqPerfSetSchedulerOther_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) delta;
+  (void) retry;
+  return RtemsTaskReqPerfSetSchedulerOther_Teardown( ctx, tic, toc );
 }
 
 /**
@@ -875,8 +828,7 @@ static bool RtemsTaskReqPerfSetSchedulerPreempt_Teardown(
   RtemsTaskValPerf_Context *ctx,
   T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
   T_quiet_rsc_success( ctx->status );
@@ -898,13 +850,8 @@ static bool RtemsTaskReqPerfSetSchedulerPreempt_Teardown_Wrap(
   RtemsTaskValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsTaskReqPerfSetSchedulerPreempt_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) retry;
+  return RtemsTaskReqPerfSetSchedulerPreempt_Teardown( ctx, delta, tic, toc );
 }
 
 /**
@@ -969,15 +916,10 @@ static void RtemsTaskReqPerfStart_Body_Wrap( void *arg )
  */
 static bool RtemsTaskReqPerfStart_Teardown(
   RtemsTaskValPerf_Context *ctx,
-  T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   DeleteTask( ctx->worker_id );
@@ -996,7 +938,9 @@ static bool RtemsTaskReqPerfStart_Teardown_Wrap(
   RtemsTaskValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsTaskReqPerfStart_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsTaskReqPerfStart_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -1053,12 +997,9 @@ static bool RtemsTaskReqPerfStartPreempt_Teardown(
   RtemsTaskValPerf_Context *ctx,
   T_ticks                  *delta,
   uint32_t                  tic,
-  uint32_t                  toc,
-  unsigned int              retry
+  uint32_t                  toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -1078,7 +1019,8 @@ static bool RtemsTaskReqPerfStartPreempt_Teardown_Wrap(
   RtemsTaskValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsTaskReqPerfStartPreempt_Teardown( ctx, delta, tic, toc, retry );
+  (void) retry;
+  return RtemsTaskReqPerfStartPreempt_Teardown( ctx, delta, tic, toc );
 }
 
 /** @} */
@@ -1123,13 +1065,13 @@ T_TEST_CASE_FIXTURE( RtemsTaskValPerf, &RtemsTaskValPerf_Fixture )
   RtemsTaskReqPerfRestartSelf_Cleanup( ctx );
 
   #if defined(RTEMS_SMP)
-  RtemsTaskReqPerfSetSchedulerMove_Prepare( ctx );
+  RtemsTaskReqPerfSetSchedulerMove_Prepare();
   ctx->request.name = "RtemsTaskReqPerfSetSchedulerMove";
   ctx->request.setup = NULL;
   ctx->request.body = RtemsTaskReqPerfSetSchedulerMove_Body_Wrap;
   ctx->request.teardown = RtemsTaskReqPerfSetSchedulerMove_Teardown_Wrap;
   T_measure_runtime( ctx->context, &ctx->request );
-  RtemsTaskReqPerfSetSchedulerMove_Cleanup( ctx );
+  RtemsTaskReqPerfSetSchedulerMove_Cleanup();
   #endif
 
   ctx->request.name = "RtemsTaskReqPerfSetSchedulerNop";

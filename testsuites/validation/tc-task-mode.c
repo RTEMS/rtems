@@ -1233,10 +1233,8 @@ static void RtemsTaskReqMode_Action( RtemsTaskReqMode_Context *ctx )
   ctx->signal_counter_after = ctx->signal_counter;
 }
 
-static void RtemsTaskReqMode_Cleanup( RtemsTaskReqMode_Context *ctx )
+static void RtemsTaskReqMode_Cleanup( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_mode        mode;
 
@@ -2002,7 +2000,7 @@ T_TEST_CASE_FIXTURE( RtemsTaskReqMode, &RtemsTaskReqMode_Fixture )
 
                             RtemsTaskReqMode_Prepare( ctx );
                             RtemsTaskReqMode_TestVariant( ctx );
-                            RtemsTaskReqMode_Cleanup( ctx );
+                            RtemsTaskReqMode_Cleanup();
                           }
                         }
                       }

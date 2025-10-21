@@ -404,30 +404,26 @@ Thread_queue_Deadlock_status __wrap__Thread_queue_Path_acquire(
   );
 }
 
-static void ScoreThreadValSmp_Setup( ScoreThreadValSmp_Context *ctx )
+static void ScoreThreadValSmp_Setup( void )
 {
   SetSelfPriority( PRIO_NORMAL );
 }
 
 static void ScoreThreadValSmp_Setup_Wrap( void *arg )
 {
-  ScoreThreadValSmp_Context *ctx;
-
-  ctx = arg;
-  ScoreThreadValSmp_Setup( ctx );
+  (void) arg;
+  ScoreThreadValSmp_Setup();
 }
 
-static void ScoreThreadValSmp_Teardown( ScoreThreadValSmp_Context *ctx )
+static void ScoreThreadValSmp_Teardown( void )
 {
   RestoreRunnerPriority();
 }
 
 static void ScoreThreadValSmp_Teardown_Wrap( void *arg )
 {
-  ScoreThreadValSmp_Context *ctx;
-
-  ctx = arg;
-  ScoreThreadValSmp_Teardown( ctx );
+  (void) arg;
+  ScoreThreadValSmp_Teardown();
 }
 
 static T_fixture ScoreThreadValSmp_Fixture = {

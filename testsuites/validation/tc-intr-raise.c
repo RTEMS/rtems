@@ -375,12 +375,9 @@ static void RtemsIntrReqRaise_Pre_Vector_Prepare(
 }
 
 static void RtemsIntrReqRaise_Pre_CanRaise_Prepare(
-  RtemsIntrReqRaise_Context     *ctx,
   RtemsIntrReqRaise_Pre_CanRaise state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqRaise_Pre_CanRaise_Yes: {
       /*
@@ -450,12 +447,9 @@ static void RtemsIntrReqRaise_Post_Status_Check(
 }
 
 static void RtemsIntrReqRaise_Post_Pending_Check(
-  RtemsIntrReqRaise_Context     *ctx,
   RtemsIntrReqRaise_Post_Pending state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqRaise_Post_Pending_Yes: {
       /*
@@ -576,10 +570,10 @@ static void RtemsIntrReqRaise_SetPreConditionStates(
 static void RtemsIntrReqRaise_TestVariant( RtemsIntrReqRaise_Context *ctx )
 {
   RtemsIntrReqRaise_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  RtemsIntrReqRaise_Pre_CanRaise_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsIntrReqRaise_Pre_CanRaise_Prepare( ctx->Map.pcs[ 1 ] );
   RtemsIntrReqRaise_Action( ctx );
   RtemsIntrReqRaise_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
-  RtemsIntrReqRaise_Post_Pending_Check( ctx, ctx->Map.entry.Post_Pending );
+  RtemsIntrReqRaise_Post_Pending_Check( ctx->Map.entry.Post_Pending );
 }
 
 /**

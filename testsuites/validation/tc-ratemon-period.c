@@ -880,12 +880,9 @@ static void RtemsRatemonReqPeriod_Post_Delay_Check(
 }
 
 static void RtemsRatemonReqPeriod_Post_Scheduler_Check(
-  RtemsRatemonReqPeriod_Context       *ctx,
   RtemsRatemonReqPeriod_Post_Scheduler state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsRatemonReqPeriod_Post_Scheduler_Called: {
       /*
@@ -1207,10 +1204,7 @@ static void RtemsRatemonReqPeriod_TestVariant(
     ctx->Map.entry.Post_Postponed
   );
   RtemsRatemonReqPeriod_Post_Delay_Check( ctx, ctx->Map.entry.Post_Delay );
-  RtemsRatemonReqPeriod_Post_Scheduler_Check(
-    ctx,
-    ctx->Map.entry.Post_Scheduler
-  );
+  RtemsRatemonReqPeriod_Post_Scheduler_Check( ctx->Map.entry.Post_Scheduler );
 }
 
 /**
