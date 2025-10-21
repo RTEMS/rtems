@@ -136,18 +136,18 @@ typedef struct {
 
 static bool TaskVisitor( rtems_tcb *tcb, void *arg )
 {
-  TaskIterateContext *ctx;
+  TaskIterateContext *iter_ctx;
 
-  ctx = arg;
-  ++ctx->counter_all;
+  iter_ctx = arg;
+  ++iter_ctx->counter_all;
 
   if ( rtems_task_self() == tcb->Object.id ) {
-    ++ctx->counter_self;
+    ++iter_ctx->counter_self;
   }
 
-  ctx->owner_in_visitor = _RTEMS_Allocator_is_owner();
+  iter_ctx->owner_in_visitor = _RTEMS_Allocator_is_owner();
 
-  return ctx->done;
+  return iter_ctx->done;
 }
 
 /**
@@ -171,7 +171,7 @@ static void RtemsTaskValTask_Action_0( void )
  */
 static void RtemsTaskValTask_Action_1( void )
 {
-  TaskIterateContext ctx;
+  TaskIterateContext iter_ctx;
   uint32_t           task_count;
 
   task_count = rtems_scheduler_get_processor_maximum();
@@ -182,10 +182,10 @@ static void RtemsTaskValTask_Action_1( void )
 
   ++task_count;
 
-  memset( &ctx, 0, sizeof( ctx ) );
-  ctx.owner_before = _RTEMS_Allocator_is_owner();
-  rtems_task_iterate( TaskVisitor, &ctx );
-  ctx.owner_after = _RTEMS_Allocator_is_owner();
+  memset( &iter_ctx, 0, sizeof( iter_ctx ) );
+  iter_ctx.owner_before = _RTEMS_Allocator_is_owner();
+  rtems_task_iterate( TaskVisitor, &iter_ctx );
+  iter_ctx.owner_after = _RTEMS_Allocator_is_owner();
 
   /*
    * Check that the all counter is equal to the count of tasks.  Check that the
@@ -193,17 +193,17 @@ static void RtemsTaskValTask_Action_1( void )
    * rtems_task_iterate() used the parameters specified by ``visitor`` and
    * ``arg``. Secondly, this shows that the iteration was done over all tasks.
    */
-  T_step_eq_u32( 1, ctx.counter_all, task_count );
-  T_step_eq_u32( 2, ctx.counter_self, 1 );
+  T_step_eq_u32( 1, iter_ctx.counter_all, task_count );
+  T_step_eq_u32( 2, iter_ctx.counter_self, 1 );
 
   /*
    * Check that the object alloctor mutex was not owned before and after the
    * call.  Check that the object alloctor mutex was owned during the
    * iteration.
    */
-  T_step_false( 3, ctx.owner_before );
-  T_step_true( 4, ctx.owner_in_visitor );
-  T_step_false( 5, ctx.owner_after );
+  T_step_false( 3, iter_ctx.owner_before );
+  T_step_true( 4, iter_ctx.owner_in_visitor );
+  T_step_false( 5, iter_ctx.owner_after );
 }
 
 /**
@@ -211,17 +211,17 @@ static void RtemsTaskValTask_Action_1( void )
  */
 static void RtemsTaskValTask_Action_2( void )
 {
-  TaskIterateContext ctx;
+  TaskIterateContext iter_ctx;
 
-  memset( &ctx, 0, sizeof( ctx ) );
-  ctx.done = true;
-  rtems_task_iterate( TaskVisitor, &ctx );
+  memset( &iter_ctx, 0, sizeof( iter_ctx ) );
+  iter_ctx.done = true;
+  rtems_task_iterate( TaskVisitor, &iter_ctx );
 
   /*
    * Check that the all counter is equal to one.  This shows that the iteration
    * stops when the visitor returns true.
    */
-  T_step_eq_u32( 6, ctx.counter_all, 1 );
+  T_step_eq_u32( 6, iter_ctx.counter_all, 1 );
 }
 
 /**
