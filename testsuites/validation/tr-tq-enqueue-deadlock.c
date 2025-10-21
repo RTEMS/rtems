@@ -200,12 +200,9 @@ static void ScoreTqReqEnqueueDeadlock_Pre_Deadlock_Prepare(
 }
 
 static void ScoreTqReqEnqueueDeadlock_Post_Result_Check(
-  ScoreTqReqEnqueueDeadlock_Context    *ctx,
   ScoreTqReqEnqueueDeadlock_Post_Result state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case ScoreTqReqEnqueueDeadlock_Post_Result_Status: {
       /*
@@ -399,10 +396,7 @@ static void ScoreTqReqEnqueueDeadlock_TestVariant(
 
   ScoreTqReqEnqueueDeadlock_Pre_Deadlock_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   ScoreTqReqEnqueueDeadlock_Action( ctx );
-  ScoreTqReqEnqueueDeadlock_Post_Result_Check(
-    ctx,
-    ctx->Map.entry.Post_Result
-  );
+  ScoreTqReqEnqueueDeadlock_Post_Result_Check( ctx->Map.entry.Post_Result );
 }
 
 static T_fixture_node ScoreTqReqEnqueueDeadlock_Node;

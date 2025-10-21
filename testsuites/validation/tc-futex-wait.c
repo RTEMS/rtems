@@ -322,10 +322,8 @@ static void NewlibReqFutexWait_Prepare( NewlibReqFutexWait_Context *ctx )
   ctx->state = 0;
 }
 
-static void NewlibReqFutexWait_Action( NewlibReqFutexWait_Context *ctx )
+static void NewlibReqFutexWait_Action( void )
 {
-  (void) ctx;
-
   /* The action is performed in the post-conditions. */
 }
 
@@ -384,7 +382,7 @@ static inline NewlibReqFutexWait_Entry NewlibReqFutexWait_PopEntry(
 static void NewlibReqFutexWait_TestVariant( NewlibReqFutexWait_Context *ctx )
 {
   NewlibReqFutexWait_Pre_State_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  NewlibReqFutexWait_Action( ctx );
+  NewlibReqFutexWait_Action();
   NewlibReqFutexWait_Post_Result_Check( ctx, ctx->Map.entry.Post_Result );
   NewlibReqFutexWait_Post_Enqueue_Check( ctx, ctx->Map.entry.Post_Enqueue );
 }

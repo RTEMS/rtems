@@ -397,12 +397,8 @@ static void RtemsIntrReqGetPriority_Post_PriorityObj_Check(
   }
 }
 
-static void RtemsIntrReqGetPriority_Action(
-  RtemsIntrReqGetPriority_Context *ctx
-)
+static void RtemsIntrReqGetPriority_Action( void )
 {
-  (void) ctx;
-
   /* Action carried out by CheckGetPriority() */
 }
 
@@ -520,7 +516,7 @@ static void RtemsIntrReqGetPriority_TestVariant(
   RtemsIntrReqGetPriority_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsIntrReqGetPriority_Pre_Priority_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   RtemsIntrReqGetPriority_Pre_CanGetPriority_Prepare( ctx, ctx->Map.pcs[ 2 ] );
-  RtemsIntrReqGetPriority_Action( ctx );
+  RtemsIntrReqGetPriority_Action();
   RtemsIntrReqGetPriority_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsIntrReqGetPriority_Post_PriorityObj_Check(
     ctx,

@@ -143,12 +143,8 @@ static T_fixture RtemsConfigUnitConfig_Fixture = {
  *   argument to enter an if-branch only accessed when unlimited objects are
  *   configured.
  */
-static void RtemsConfigUnitConfig_Action_0(
-  RtemsConfigUnitConfig_Context *ctx
-)
+static void RtemsConfigUnitConfig_Action_0( void )
 {
-  (void) ctx;
-
   uint32_t max = rtems_configuration_get_maximum_semaphores();
 
   /*
@@ -163,11 +159,7 @@ static void RtemsConfigUnitConfig_Action_0(
  */
 T_TEST_CASE_FIXTURE( RtemsConfigUnitConfig, &RtemsConfigUnitConfig_Fixture )
 {
-  RtemsConfigUnitConfig_Context *ctx;
-
-  ctx = T_fixture_context();
-
-  RtemsConfigUnitConfig_Action_0( ctx );
+  RtemsConfigUnitConfig_Action_0();
 }
 
 /** @} */

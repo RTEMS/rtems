@@ -383,12 +383,9 @@ static void RtemsIntrReqClear_Pre_Vector_Prepare(
 }
 
 static void RtemsIntrReqClear_Pre_CanClear_Prepare(
-  RtemsIntrReqClear_Context     *ctx,
   RtemsIntrReqClear_Pre_CanClear state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqClear_Pre_CanClear_Yes: {
       /*
@@ -458,12 +455,9 @@ static void RtemsIntrReqClear_Post_Status_Check(
 }
 
 static void RtemsIntrReqClear_Post_Cleared_Check(
-  RtemsIntrReqClear_Context     *ctx,
   RtemsIntrReqClear_Post_Cleared state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqClear_Post_Cleared_Yes: {
       /*
@@ -586,10 +580,10 @@ static void RtemsIntrReqClear_SetPreConditionStates(
 static void RtemsIntrReqClear_TestVariant( RtemsIntrReqClear_Context *ctx )
 {
   RtemsIntrReqClear_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  RtemsIntrReqClear_Pre_CanClear_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsIntrReqClear_Pre_CanClear_Prepare( ctx->Map.pcs[ 1 ] );
   RtemsIntrReqClear_Action( ctx );
   RtemsIntrReqClear_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
-  RtemsIntrReqClear_Post_Cleared_Check( ctx, ctx->Map.entry.Post_Cleared );
+  RtemsIntrReqClear_Post_Cleared_Check( ctx->Map.entry.Post_Cleared );
 }
 
 /**

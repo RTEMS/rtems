@@ -305,13 +305,8 @@ static void RtemsSemReqObtain_Pre_Discipline_Prepare(
   }
 }
 
-static void RtemsSemReqObtain_Pre_Id_Prepare(
-  RtemsSemReqObtain_Context *ctx,
-  RtemsSemReqObtain_Pre_Id   state
-)
+static void RtemsSemReqObtain_Pre_Id_Prepare( RtemsSemReqObtain_Pre_Id state )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsSemReqObtain_Pre_Id_Valid: {
       /*
@@ -680,7 +675,7 @@ static void RtemsSemReqObtain_TestVariant( RtemsSemReqObtain_Context *ctx )
 {
   RtemsSemReqObtain_Pre_Class_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsSemReqObtain_Pre_Discipline_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsSemReqObtain_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsSemReqObtain_Pre_Id_Prepare( ctx->Map.pcs[ 2 ] );
   RtemsSemReqObtain_Pre_Wait_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsSemReqObtain_Action( ctx );
   RtemsSemReqObtain_Post_Action_Check( ctx, ctx->Map.entry.Post_Action );

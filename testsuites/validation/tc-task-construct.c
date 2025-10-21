@@ -1377,12 +1377,9 @@ static void RtemsTaskReqConstruct_Post_StorageFree_Check(
 }
 
 static void RtemsTaskReqConstruct_Post_FloatingPoint_Check(
-  RtemsTaskReqConstruct_Context           *ctx,
   RtemsTaskReqConstruct_Post_FloatingPoint state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsTaskReqConstruct_Post_FloatingPoint_Yes: {
       /*
@@ -4823,7 +4820,6 @@ static void RtemsTaskReqConstruct_TestVariant(
     ctx->Map.entry.Post_StorageFree
   );
   RtemsTaskReqConstruct_Post_FloatingPoint_Check(
-    ctx,
     ctx->Map.entry.Post_FloatingPoint
   );
   RtemsTaskReqConstruct_Post_Preempt_Check( ctx, ctx->Map.entry.Post_Preempt );

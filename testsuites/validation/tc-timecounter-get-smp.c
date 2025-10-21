@@ -397,6 +397,8 @@ struct timehands {
 
 static void NtpUpdateSecond( int64_t *adjustment, time_t *newsec )
 {
+  (void) newsec;
+
   Timecounter      *tc;
   struct timehands *th;
 

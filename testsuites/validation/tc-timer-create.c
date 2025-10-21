@@ -217,8 +217,6 @@ static void RtemsTimerReqCreate_Pre_Name_Prepare(
   RtemsTimerReqCreate_Pre_Name state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsTimerReqCreate_Pre_Name_Valid: {
       /*

@@ -425,12 +425,9 @@ static void TimerServiceRoutineCover(
 }
 
 static void RtemsTimerReqServerFireAfter_Pre_Server_Prepare(
-  RtemsTimerReqServerFireAfter_Context   *ctx,
   RtemsTimerReqServerFireAfter_Pre_Server state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsTimerReqServerFireAfter_Pre_Server_Init: {
       /*
@@ -1009,12 +1006,8 @@ static void RtemsTimerReqServerFireAfter_Post_UserData_Check(
 /**
  * @brief Make sure the realtime clock is not set after this test.
  */
-static void RtemsTimerReqServerFireAfter_Teardown(
-  RtemsTimerReqServerFireAfter_Context *ctx
-)
+static void RtemsTimerReqServerFireAfter_Teardown( void )
 {
-  (void) ctx;
-
   UnsetClock();
 }
 
@@ -1024,7 +1017,7 @@ static void RtemsTimerReqServerFireAfter_Teardown_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  RtemsTimerReqServerFireAfter_Teardown( ctx );
+  RtemsTimerReqServerFireAfter_Teardown();
 }
 
 static void RtemsTimerReqServerFireAfter_Prepare(
@@ -1199,7 +1192,7 @@ static void RtemsTimerReqServerFireAfter_TestVariant(
   RtemsTimerReqServerFireAfter_Context *ctx
 )
 {
-  RtemsTimerReqServerFireAfter_Pre_Server_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsTimerReqServerFireAfter_Pre_Server_Prepare( ctx->Map.pcs[ 0 ] );
   RtemsTimerReqServerFireAfter_Pre_Ticks_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   RtemsTimerReqServerFireAfter_Pre_Routine_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsTimerReqServerFireAfter_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 3 ] );

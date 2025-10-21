@@ -782,12 +782,8 @@ static void RtemsSemReqSetPriority_Setup_Wrap( void *arg )
   RtemsSemReqSetPriority_Setup( ctx );
 }
 
-static void RtemsSemReqSetPriority_Teardown(
-  RtemsSemReqSetPriority_Context *ctx
-)
+static void RtemsSemReqSetPriority_Teardown( void )
 {
-  (void) ctx;
-
   RestoreRunnerPriority();
 }
 
@@ -797,7 +793,7 @@ static void RtemsSemReqSetPriority_Teardown_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  RtemsSemReqSetPriority_Teardown( ctx );
+  RtemsSemReqSetPriority_Teardown();
 }
 
 static void RtemsSemReqSetPriority_Prepare(

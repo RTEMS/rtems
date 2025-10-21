@@ -268,15 +268,10 @@ static void RtemsSemReqPerfMtxPiObtain_Body_Wrap( void *arg )
  */
 static bool RtemsSemReqPerfMtxPiObtain_Teardown(
   RtemsSemValPerf_Context *ctx,
-  T_ticks                 *delta,
   uint32_t                 tic,
-  uint32_t                 toc,
-  unsigned int             retry
+  uint32_t                 toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   ReleaseMutex( ctx->mutex_id );
@@ -295,7 +290,9 @@ static bool RtemsSemReqPerfMtxPiObtain_Teardown_Wrap(
   RtemsSemValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsSemReqPerfMtxPiObtain_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsSemReqPerfMtxPiObtain_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -344,15 +341,10 @@ static void RtemsSemReqPerfMtxPiRelease_Body_Wrap( void *arg )
  */
 static bool RtemsSemReqPerfMtxPiRelease_Teardown(
   RtemsSemValPerf_Context *ctx,
-  T_ticks                 *delta,
   uint32_t                 tic,
-  uint32_t                 toc,
-  unsigned int             retry
+  uint32_t                 toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   return tic == toc;
@@ -369,7 +361,9 @@ static bool RtemsSemReqPerfMtxPiRelease_Teardown_Wrap(
   RtemsSemValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsSemReqPerfMtxPiRelease_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsSemReqPerfMtxPiRelease_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -430,15 +424,10 @@ static void RtemsSemReqPerfMtxPiReleaseOne_Body_Wrap( void *arg )
  */
 static bool RtemsSemReqPerfMtxPiReleaseOne_Teardown(
   RtemsSemValPerf_Context *ctx,
-  T_ticks                 *delta,
   uint32_t                 tic,
-  uint32_t                 toc,
-  unsigned int             retry
+  uint32_t                 toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   SetSelfPriority( PRIO_NORMAL );
@@ -457,13 +446,9 @@ static bool RtemsSemReqPerfMtxPiReleaseOne_Teardown_Wrap(
   RtemsSemValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsSemReqPerfMtxPiReleaseOne_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) delta;
+  (void) retry;
+  return RtemsSemReqPerfMtxPiReleaseOne_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -533,8 +518,7 @@ static bool RtemsSemReqPerfMtxPiReleaseOtherCpu_Teardown(
   RtemsSemValPerf_Context *ctx,
   T_ticks                 *delta,
   uint32_t                 tic,
-  uint32_t                 toc,
-  unsigned int             retry
+  uint32_t                 toc
 )
 {
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
@@ -556,13 +540,8 @@ static bool RtemsSemReqPerfMtxPiReleaseOtherCpu_Teardown_Wrap(
   RtemsSemValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsSemReqPerfMtxPiReleaseOtherCpu_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) retry;
+  return RtemsSemReqPerfMtxPiReleaseOtherCpu_Teardown( ctx, delta, tic, toc );
 }
 
 /**
@@ -631,12 +610,9 @@ static bool RtemsSemReqPerfMtxPiReleasePreempt_Teardown(
   RtemsSemValPerf_Context *ctx,
   T_ticks                 *delta,
   uint32_t                 tic,
-  uint32_t                 toc,
-  unsigned int             retry
+  uint32_t                 toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   *delta = ctx->end - ctx->begin;
@@ -655,13 +631,8 @@ static bool RtemsSemReqPerfMtxPiReleasePreempt_Teardown_Wrap(
   RtemsSemValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsSemReqPerfMtxPiReleasePreempt_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) retry;
+  return RtemsSemReqPerfMtxPiReleasePreempt_Teardown( ctx, delta, tic, toc );
 }
 
 /** @} */
@@ -701,15 +672,10 @@ static void RtemsSemReqPerfMtxPiTry_Body_Wrap( void *arg )
  */
 static bool RtemsSemReqPerfMtxPiTry_Teardown(
   RtemsSemValPerf_Context *ctx,
-  T_ticks                 *delta,
   uint32_t                 tic,
-  uint32_t                 toc,
-  unsigned int             retry
+  uint32_t                 toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc( ctx->status, RTEMS_UNSATISFIED );
 
   return tic == toc;
@@ -726,7 +692,9 @@ static bool RtemsSemReqPerfMtxPiTry_Teardown_Wrap(
   RtemsSemValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsSemReqPerfMtxPiTry_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsSemReqPerfMtxPiTry_Teardown( ctx, tic, toc );
 }
 
 /**
@@ -797,12 +765,9 @@ static bool RtemsSemReqPerfMtxPiWaitForever_Teardown(
   RtemsSemValPerf_Context *ctx,
   T_ticks                 *delta,
   uint32_t                 tic,
-  uint32_t                 toc,
-  unsigned int             retry
+  uint32_t                 toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   *delta = ctx->end - ctx->begin;
@@ -823,13 +788,8 @@ static bool RtemsSemReqPerfMtxPiWaitForever_Teardown_Wrap(
   RtemsSemValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsSemReqPerfMtxPiWaitForever_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) retry;
+  return RtemsSemReqPerfMtxPiWaitForever_Teardown( ctx, delta, tic, toc );
 }
 
 /** @} */
@@ -888,12 +848,9 @@ static bool RtemsSemReqPerfMtxPiWaitTimed_Teardown(
   RtemsSemValPerf_Context *ctx,
   T_ticks                 *delta,
   uint32_t                 tic,
-  uint32_t                 toc,
-  unsigned int             retry
+  uint32_t                 toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
 
   *delta = ctx->end - ctx->begin;
@@ -914,7 +871,8 @@ static bool RtemsSemReqPerfMtxPiWaitTimed_Teardown_Wrap(
   RtemsSemValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsSemReqPerfMtxPiWaitTimed_Teardown( ctx, delta, tic, toc, retry );
+  (void) retry;
+  return RtemsSemReqPerfMtxPiWaitTimed_Teardown( ctx, delta, tic, toc );
 }
 
 /** @} */

@@ -210,8 +210,6 @@ static void RtemsEventValEventConstant_Action_0(
   RtemsEventValEventConstant_Context *ctx
 )
 {
-  (void) ctx;
-
   /* No action */
 
   /*
@@ -235,12 +233,8 @@ static void RtemsEventValEventConstant_Action_0(
  * @brief Get all pending events of the Classic event set of the executing
  *   task.
  */
-static void RtemsEventValEventConstant_Action_1(
-  RtemsEventValEventConstant_Context *ctx
-)
+static void RtemsEventValEventConstant_Action_1( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -266,12 +260,8 @@ static void RtemsEventValEventConstant_Action_1(
 /**
  * @brief Get all pending events of the system event set of the executing task.
  */
-static void RtemsEventValEventConstant_Action_2(
-  RtemsEventValEventConstant_Context *ctx
-)
+static void RtemsEventValEventConstant_Action_2( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -298,12 +288,8 @@ static void RtemsEventValEventConstant_Action_2(
  * @brief Receive all pending events of the Classic event set of the executing
  *   task.
  */
-static void RtemsEventValEventConstant_Action_3(
-  RtemsEventValEventConstant_Context *ctx
-)
+static void RtemsEventValEventConstant_Action_3( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -330,12 +316,8 @@ static void RtemsEventValEventConstant_Action_3(
  * @brief Receive all pending events of the system event set of the executing
  *   task.
  */
-static void RtemsEventValEventConstant_Action_4(
-  RtemsEventValEventConstant_Context *ctx
-)
+static void RtemsEventValEventConstant_Action_4( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -409,12 +391,8 @@ static void RtemsEventValEventConstant_Action_6(
 /**
  * @brief Get all pending events of the system event set of the executing task.
  */
-static void RtemsEventValEventConstant_Action_7(
-  RtemsEventValEventConstant_Context *ctx
-)
+static void RtemsEventValEventConstant_Action_7( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -470,12 +448,8 @@ static void RtemsEventValEventConstant_Action_8(
 /**
  * @brief Receive any event of the system event set of the executing task.
  */
-static void RtemsEventValEventConstant_Action_9(
-  RtemsEventValEventConstant_Context *ctx
-)
+static void RtemsEventValEventConstant_Action_9( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -519,12 +493,8 @@ static void RtemsEventValEventConstant_Action_10(
  * @brief Get all pending events of the Classic event set of the executing
  *   task.
  */
-static void RtemsEventValEventConstant_Action_11(
-  RtemsEventValEventConstant_Context *ctx
-)
+static void RtemsEventValEventConstant_Action_11( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -580,12 +550,8 @@ static void RtemsEventValEventConstant_Action_12(
 /**
  * @brief Receive any event of the Classic event set of the executing task.
  */
-static void RtemsEventValEventConstant_Action_13(
-  RtemsEventValEventConstant_Context *ctx
-)
+static void RtemsEventValEventConstant_Action_13( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -642,12 +608,8 @@ static void RtemsEventValEventConstant_Action_14(
  * @brief Get all pending events of the Classic event set of the executing
  *   task.
  */
-static void RtemsEventValEventConstant_Action_15(
-  RtemsEventValEventConstant_Context *ctx
-)
+static void RtemsEventValEventConstant_Action_15( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -673,12 +635,8 @@ static void RtemsEventValEventConstant_Action_15(
 /**
  * @brief Get all pending events of the system event set of the executing task.
  */
-static void RtemsEventValEventConstant_Action_16(
-  RtemsEventValEventConstant_Context *ctx
-)
+static void RtemsEventValEventConstant_Action_16( void )
 {
-  (void) ctx;
-
   rtems_status_code sc;
   rtems_event_set   out;
 
@@ -724,22 +682,22 @@ void RtemsEventValEventConstant_Run( rtems_event_set event, int number )
   T_plan( 32 );
 
   RtemsEventValEventConstant_Action_0( ctx );
-  RtemsEventValEventConstant_Action_1( ctx );
-  RtemsEventValEventConstant_Action_2( ctx );
-  RtemsEventValEventConstant_Action_3( ctx );
-  RtemsEventValEventConstant_Action_4( ctx );
+  RtemsEventValEventConstant_Action_1();
+  RtemsEventValEventConstant_Action_2();
+  RtemsEventValEventConstant_Action_3();
+  RtemsEventValEventConstant_Action_4();
   RtemsEventValEventConstant_Action_5( ctx );
   RtemsEventValEventConstant_Action_6( ctx );
-  RtemsEventValEventConstant_Action_7( ctx );
+  RtemsEventValEventConstant_Action_7();
   RtemsEventValEventConstant_Action_8( ctx );
-  RtemsEventValEventConstant_Action_9( ctx );
+  RtemsEventValEventConstant_Action_9();
   RtemsEventValEventConstant_Action_10( ctx );
-  RtemsEventValEventConstant_Action_11( ctx );
+  RtemsEventValEventConstant_Action_11();
   RtemsEventValEventConstant_Action_12( ctx );
-  RtemsEventValEventConstant_Action_13( ctx );
+  RtemsEventValEventConstant_Action_13();
   RtemsEventValEventConstant_Action_14( ctx );
-  RtemsEventValEventConstant_Action_15( ctx );
-  RtemsEventValEventConstant_Action_16( ctx );
+  RtemsEventValEventConstant_Action_15();
+  RtemsEventValEventConstant_Action_16();
 
   T_add_remark( &RtemsEventValEventConstant_Remark );
   T_pop_fixture();

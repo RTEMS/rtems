@@ -461,12 +461,9 @@ static void RtemsRatemonReqGetStatus_Pre_State_Prepare(
 }
 
 static void RtemsRatemonReqGetStatus_Pre_Elapsed_Prepare(
-  RtemsRatemonReqGetStatus_Context    *ctx,
   RtemsRatemonReqGetStatus_Pre_Elapsed state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsRatemonReqGetStatus_Pre_Elapsed_Time: {
       /*
@@ -885,8 +882,6 @@ static void RtemsRatemonReqGetStatus_Prepare(
   RtemsRatemonReqGetStatus_Context *ctx
 )
 {
-  (void) ctx;
-
   rtems_status_code status;
   status =  rtems_rate_monotonic_create(
     rtems_build_name( 'R', 'M', 'O', 'N' ),
@@ -1085,7 +1080,7 @@ static void RtemsRatemonReqGetStatus_TestVariant(
   RtemsRatemonReqGetStatus_Pre_StatusAddr_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsRatemonReqGetStatus_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   RtemsRatemonReqGetStatus_Pre_State_Prepare( ctx, ctx->Map.pcs[ 2 ] );
-  RtemsRatemonReqGetStatus_Pre_Elapsed_Prepare( ctx, ctx->Map.pcs[ 3 ] );
+  RtemsRatemonReqGetStatus_Pre_Elapsed_Prepare( ctx->Map.pcs[ 3 ] );
   RtemsRatemonReqGetStatus_Pre_Consumed_Prepare( ctx, ctx->Map.pcs[ 4 ] );
   RtemsRatemonReqGetStatus_Pre_Postponed_Prepare( ctx, ctx->Map.pcs[ 5 ] );
   RtemsRatemonReqGetStatus_Action( ctx );

@@ -208,30 +208,26 @@ static void ObtainRelease2Task( rtems_task_argument arg )
   SuspendSelf();
 }
 
-static void RtemsSemValSmp_Setup( RtemsSemValSmp_Context *ctx )
+static void RtemsSemValSmp_Setup( void )
 {
   SetSelfPriority( PRIO_NORMAL );
 }
 
 static void RtemsSemValSmp_Setup_Wrap( void *arg )
 {
-  RtemsSemValSmp_Context *ctx;
-
-  ctx = arg;
-  RtemsSemValSmp_Setup( ctx );
+  (void) arg;
+  RtemsSemValSmp_Setup();
 }
 
-static void RtemsSemValSmp_Teardown( RtemsSemValSmp_Context *ctx )
+static void RtemsSemValSmp_Teardown( void )
 {
   RestoreRunnerPriority();
 }
 
 static void RtemsSemValSmp_Teardown_Wrap( void *arg )
 {
-  RtemsSemValSmp_Context *ctx;
-
-  ctx = arg;
-  RtemsSemValSmp_Teardown( ctx );
+  (void) arg;
+  RtemsSemValSmp_Teardown();
 }
 
 static T_fixture RtemsSemValSmp_Fixture = {

@@ -376,10 +376,8 @@ static void ScoreThreadValThread_Action_1( ScoreThreadValThread_Context *ctx )
 /**
  * @brief Validate the global construction.  Mark that the test case executed.
  */
-static void ScoreThreadValThread_Action_2( ScoreThreadValThread_Context *ctx )
+static void ScoreThreadValThread_Action_2( void )
 {
-  (void) ctx;
-
   test_case_executed = true;
 
   /*
@@ -441,7 +439,7 @@ T_TEST_CASE_FIXTURE( ScoreThreadValThread, &ScoreThreadValThread_Fixture )
 
   ScoreThreadValThread_Action_0( ctx );
   ScoreThreadValThread_Action_1( ctx );
-  ScoreThreadValThread_Action_2( ctx );
+  ScoreThreadValThread_Action_2();
   ScoreThreadValThread_Action_3( ctx );
 }
 

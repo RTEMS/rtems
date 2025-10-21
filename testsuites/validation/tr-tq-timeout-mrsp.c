@@ -364,7 +364,7 @@ static void ScoreTqReqTimeoutMrsp_Prepare( ScoreTqReqTimeoutMrsp_Context *ctx )
   ctx->restore_scheduler = false;
 }
 
-static void ScoreTqReqTimeoutMrsp_Action( ScoreTqReqTimeoutMrsp_Context *ctx )
+static void ScoreTqReqTimeoutMrsp_Action( void )
 {
   /*
    * The action is performed by the `WaitState` pre-condition preparation.
@@ -432,7 +432,7 @@ static void ScoreTqReqTimeoutMrsp_TestVariant(
 {
   ScoreTqReqTimeoutMrsp_Pre_Scheduler_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   ScoreTqReqTimeoutMrsp_Pre_WaitState_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  ScoreTqReqTimeoutMrsp_Action( ctx );
+  ScoreTqReqTimeoutMrsp_Action();
   ScoreTqReqTimeoutMrsp_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   ScoreTqReqTimeoutMrsp_Post_Unblock_Check( ctx, ctx->Map.entry.Post_Unblock );
 }

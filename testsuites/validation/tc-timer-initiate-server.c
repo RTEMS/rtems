@@ -359,12 +359,9 @@ static void RtemsTimerReqInitiateServer_Pre_Stack_Prepare(
 }
 
 static void RtemsTimerReqInitiateServer_Pre_Started_Prepare(
-  RtemsTimerReqInitiateServer_Context    *ctx,
   RtemsTimerReqInitiateServer_Pre_Started state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsTimerReqInitiateServer_Pre_Started_Yes: {
       /*
@@ -483,12 +480,9 @@ static void RtemsTimerReqInitiateServer_Post_Status_Check(
 }
 
 static void RtemsTimerReqInitiateServer_Post_Started_Check(
-  RtemsTimerReqInitiateServer_Context     *ctx,
   RtemsTimerReqInitiateServer_Post_Started state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsTimerReqInitiateServer_Post_Started_Yes: {
       /*
@@ -625,12 +619,8 @@ static void RtemsTimerReqInitiateServer_Setup_Wrap( void *arg )
 /**
  * @brief Make sure the time server in not running after this test.
  */
-static void RtemsTimerReqInitiateServer_Teardown(
-  RtemsTimerReqInitiateServer_Context *ctx
-)
+static void RtemsTimerReqInitiateServer_Teardown( void )
 {
-  (void) ctx;
-
   DeleteTimerServer();
 }
 
@@ -640,7 +630,7 @@ static void RtemsTimerReqInitiateServer_Teardown_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  RtemsTimerReqInitiateServer_Teardown( ctx );
+  RtemsTimerReqInitiateServer_Teardown();
 }
 
 static void RtemsTimerReqInitiateServer_Action(
@@ -751,7 +741,7 @@ static void RtemsTimerReqInitiateServer_TestVariant(
 {
   RtemsTimerReqInitiateServer_Pre_Priority_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsTimerReqInitiateServer_Pre_Stack_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsTimerReqInitiateServer_Pre_Started_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsTimerReqInitiateServer_Pre_Started_Prepare( ctx->Map.pcs[ 2 ] );
   RtemsTimerReqInitiateServer_Pre_TaskObj_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsTimerReqInitiateServer_Action( ctx );
   RtemsTimerReqInitiateServer_Post_Status_Check(
@@ -759,7 +749,6 @@ static void RtemsTimerReqInitiateServer_TestVariant(
     ctx->Map.entry.Post_Status
   );
   RtemsTimerReqInitiateServer_Post_Started_Check(
-    ctx,
     ctx->Map.entry.Post_Started
   );
   RtemsTimerReqInitiateServer_Post_TaskPrio_Check(

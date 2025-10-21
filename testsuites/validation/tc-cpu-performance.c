@@ -133,36 +133,22 @@ static T_fixture ScoreCpuValPerf_Fixture = {
 /**
  * @brief Do nothing and just return.
  */
-static void ScoreCpuReqPerfEmpty_Body( ScoreCpuValPerf_Context *ctx )
+static void ScoreCpuReqPerfEmpty_Body( void )
 {
-  (void) ctx;
-
   /* No code */
 }
 
 static void ScoreCpuReqPerfEmpty_Body_Wrap( void *arg )
 {
-  ScoreCpuValPerf_Context *ctx;
-
-  ctx = arg;
-  ScoreCpuReqPerfEmpty_Body( ctx );
+  (void) arg;
+  ScoreCpuReqPerfEmpty_Body();
 }
 
 /**
  * @brief Discard samples interrupted by a clock tick.
  */
-static bool ScoreCpuReqPerfEmpty_Teardown(
-  ScoreCpuValPerf_Context *ctx,
-  T_ticks                 *delta,
-  uint32_t                 tic,
-  uint32_t                 toc,
-  unsigned int             retry
-)
+static bool ScoreCpuReqPerfEmpty_Teardown( uint32_t tic, uint32_t toc )
 {
-  (void) ctx;
-  (void) delta;
-  (void) retry;
-
   return tic == toc;
 }
 
@@ -174,10 +160,10 @@ static bool ScoreCpuReqPerfEmpty_Teardown_Wrap(
   unsigned int retry
 )
 {
-  ScoreCpuValPerf_Context *ctx;
-
-  ctx = arg;
-  return ScoreCpuReqPerfEmpty_Teardown( ctx, delta, tic, toc, retry );
+  (void) arg;
+  (void) delta;
+  (void) retry;
+  return ScoreCpuReqPerfEmpty_Teardown( tic, toc );
 }
 
 /** @} */
@@ -191,10 +177,8 @@ static bool ScoreCpuReqPerfEmpty_Teardown_Wrap(
 /**
  * @brief Execute exactly 1000 no-operation instructions.
  */
-static void ScoreCpuReqPerfNops_Body( ScoreCpuValPerf_Context *ctx )
+static void ScoreCpuReqPerfNops_Body( void )
 {
-  (void) ctx;
-
   #define NOPS_10 \
     _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
     _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
@@ -217,27 +201,15 @@ static void ScoreCpuReqPerfNops_Body( ScoreCpuValPerf_Context *ctx )
 
 static void ScoreCpuReqPerfNops_Body_Wrap( void *arg )
 {
-  ScoreCpuValPerf_Context *ctx;
-
-  ctx = arg;
-  ScoreCpuReqPerfNops_Body( ctx );
+  (void) arg;
+  ScoreCpuReqPerfNops_Body();
 }
 
 /**
  * @brief Discard samples interrupted by a clock tick.
  */
-static bool ScoreCpuReqPerfNops_Teardown(
-  ScoreCpuValPerf_Context *ctx,
-  T_ticks                 *delta,
-  uint32_t                 tic,
-  uint32_t                 toc,
-  unsigned int             retry
-)
+static bool ScoreCpuReqPerfNops_Teardown( uint32_t tic, uint32_t toc )
 {
-  (void) ctx;
-  (void) delta;
-  (void) retry;
-
   return tic == toc;
 }
 
@@ -249,10 +221,10 @@ static bool ScoreCpuReqPerfNops_Teardown_Wrap(
   unsigned int retry
 )
 {
-  ScoreCpuValPerf_Context *ctx;
-
-  ctx = arg;
-  return ScoreCpuReqPerfNops_Teardown( ctx, delta, tic, toc, retry );
+  (void) arg;
+  (void) delta;
+  (void) retry;
+  return ScoreCpuReqPerfNops_Teardown( tic, toc );
 }
 
 /** @} */

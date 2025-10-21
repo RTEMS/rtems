@@ -617,10 +617,8 @@ static void RtemsTimerReqCancel_Post_State_Check(
   }
 }
 
-static void RtemsTimerReqCancel_Setup( RtemsTimerReqCancel_Context *ctx )
+static void RtemsTimerReqCancel_Setup( void )
 {
-  (void) ctx;
-
   rtems_status_code status;
   status = rtems_timer_initiate_server(
     RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
@@ -636,17 +634,15 @@ static void RtemsTimerReqCancel_Setup_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  RtemsTimerReqCancel_Setup( ctx );
+  RtemsTimerReqCancel_Setup();
 }
 
 /**
  * @brief Make sure the timer server is not running and the realtime clock is
  *   not set after this test.
  */
-static void RtemsTimerReqCancel_Teardown( RtemsTimerReqCancel_Context *ctx )
+static void RtemsTimerReqCancel_Teardown( void )
 {
-  (void) ctx;
-
   DeleteTimerServer();
   UnsetClock();
 }
@@ -657,7 +653,7 @@ static void RtemsTimerReqCancel_Teardown_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  RtemsTimerReqCancel_Teardown( ctx );
+  RtemsTimerReqCancel_Teardown();
 }
 
 static void RtemsTimerReqCancel_Prepare( RtemsTimerReqCancel_Context *ctx )

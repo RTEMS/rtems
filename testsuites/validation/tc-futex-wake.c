@@ -203,12 +203,9 @@ static uint32_t Flush( TQContext *tq_ctx, uint32_t thread_count, bool all )
 }
 
 static void NewlibReqFutexWake_Pre_Count_Prepare(
-  NewlibReqFutexWake_Context  *ctx,
   NewlibReqFutexWake_Pre_Count state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case NewlibReqFutexWake_Pre_Count_NegativeOrZero: {
       /*
@@ -232,12 +229,9 @@ static void NewlibReqFutexWake_Pre_Count_Prepare(
 }
 
 static void NewlibReqFutexWake_Post_Result_Check(
-  NewlibReqFutexWake_Context    *ctx,
   NewlibReqFutexWake_Post_Result state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case NewlibReqFutexWake_Post_Result_Count: {
       /*
@@ -324,10 +318,8 @@ static void NewlibReqFutexWake_Prepare( NewlibReqFutexWake_Context *ctx )
   _Futex_Initialize( &ctx->futex );
 }
 
-static void NewlibReqFutexWake_Action( NewlibReqFutexWake_Context *ctx )
+static void NewlibReqFutexWake_Action( void )
 {
-  (void) ctx;
-
   /* The action is performed in the `Flush` post-condition `All` state. */
 }
 
@@ -385,9 +377,9 @@ static inline NewlibReqFutexWake_Entry NewlibReqFutexWake_PopEntry(
 
 static void NewlibReqFutexWake_TestVariant( NewlibReqFutexWake_Context *ctx )
 {
-  NewlibReqFutexWake_Pre_Count_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  NewlibReqFutexWake_Action( ctx );
-  NewlibReqFutexWake_Post_Result_Check( ctx, ctx->Map.entry.Post_Result );
+  NewlibReqFutexWake_Pre_Count_Prepare( ctx->Map.pcs[ 0 ] );
+  NewlibReqFutexWake_Action();
+  NewlibReqFutexWake_Post_Result_Check( ctx->Map.entry.Post_Result );
   NewlibReqFutexWake_Post_Flush_Check( ctx, ctx->Map.entry.Post_Flush );
 }
 

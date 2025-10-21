@@ -317,15 +317,10 @@ static void RtemsMessageReqPerfReceiveTry_Body_Wrap( void *arg )
  */
 static bool RtemsMessageReqPerfReceiveTry_Teardown(
   RtemsMessageValPerf_Context *ctx,
-  T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc( ctx->status, RTEMS_UNSATISFIED );
 
   return tic == toc;
@@ -342,7 +337,9 @@ static bool RtemsMessageReqPerfReceiveTry_Teardown_Wrap(
   RtemsMessageValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsMessageReqPerfReceiveTry_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsMessageReqPerfReceiveTry_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -409,12 +406,9 @@ static bool RtemsMessageReqPerfReceiveWaitForever_Teardown(
   RtemsMessageValPerf_Context *ctx,
   T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -434,13 +428,8 @@ static bool RtemsMessageReqPerfReceiveWaitForever_Teardown_Wrap(
   RtemsMessageValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsMessageReqPerfReceiveWaitForever_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) retry;
+  return RtemsMessageReqPerfReceiveWaitForever_Teardown( ctx, delta, tic, toc );
 }
 
 /** @} */
@@ -507,12 +496,9 @@ static bool RtemsMessageReqPerfReceiveWaitTimed_Teardown(
   RtemsMessageValPerf_Context *ctx,
   T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -532,13 +518,8 @@ static bool RtemsMessageReqPerfReceiveWaitTimed_Teardown_Wrap(
   RtemsMessageValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsMessageReqPerfReceiveWaitTimed_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) retry;
+  return RtemsMessageReqPerfReceiveWaitTimed_Teardown( ctx, delta, tic, toc );
 }
 
 /** @} */
@@ -575,15 +556,10 @@ static void RtemsMessageReqPerfSend_Body_Wrap( void *arg )
  */
 static bool RtemsMessageReqPerfSend_Teardown(
   RtemsMessageValPerf_Context *ctx,
-  T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   rtems_status_code sc;
   uint32_t          count;
 
@@ -607,7 +583,9 @@ static bool RtemsMessageReqPerfSend_Teardown_Wrap(
   RtemsMessageValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsMessageReqPerfSend_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsMessageReqPerfSend_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -666,15 +644,10 @@ static void RtemsMessageReqPerfSendOther_Body_Wrap( void *arg )
  */
 static bool RtemsMessageReqPerfSendOther_Teardown(
   RtemsMessageValPerf_Context *ctx,
-  T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   SetPriority( ctx->worker_id, PRIO_HIGH );
@@ -693,7 +666,9 @@ static bool RtemsMessageReqPerfSendOther_Teardown_Wrap(
   RtemsMessageValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsMessageReqPerfSendOther_Teardown( ctx, delta, tic, toc, retry );
+  (void) delta;
+  (void) retry;
+  return RtemsMessageReqPerfSendOther_Teardown( ctx, tic, toc );
 }
 
 /** @} */
@@ -766,8 +741,7 @@ static bool RtemsMessageReqPerfSendOtherCpu_Teardown(
   RtemsMessageValPerf_Context *ctx,
   T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
   T_quiet_rsc_success( ctx->status );
@@ -789,13 +763,8 @@ static bool RtemsMessageReqPerfSendOtherCpu_Teardown_Wrap(
   RtemsMessageValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsMessageReqPerfSendOtherCpu_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) retry;
+  return RtemsMessageReqPerfSendOtherCpu_Teardown( ctx, delta, tic, toc );
 }
 
 /**
@@ -867,12 +836,9 @@ static bool RtemsMessageReqPerfSendPreempt_Teardown(
   RtemsMessageValPerf_Context *ctx,
   T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -891,13 +857,8 @@ static bool RtemsMessageReqPerfSendPreempt_Teardown_Wrap(
   RtemsMessageValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsMessageReqPerfSendPreempt_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) retry;
+  return RtemsMessageReqPerfSendPreempt_Teardown( ctx, delta, tic, toc );
 }
 
 /** @} */

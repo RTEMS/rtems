@@ -902,10 +902,8 @@ static void RtemsTimerReqFireAfter_Post_UserData_Check(
   }
 }
 
-static void RtemsTimerReqFireAfter_Setup( RtemsTimerReqFireAfter_Context *ctx )
+static void RtemsTimerReqFireAfter_Setup( void )
 {
-  (void) ctx;
-
   rtems_status_code status;
   status = rtems_timer_initiate_server(
     RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
@@ -921,19 +919,15 @@ static void RtemsTimerReqFireAfter_Setup_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  RtemsTimerReqFireAfter_Setup( ctx );
+  RtemsTimerReqFireAfter_Setup();
 }
 
 /**
  * @brief Make sure the timer server is not running and the realtime clock is
  *   not set after this test.
  */
-static void RtemsTimerReqFireAfter_Teardown(
-  RtemsTimerReqFireAfter_Context *ctx
-)
+static void RtemsTimerReqFireAfter_Teardown( void )
 {
-  (void) ctx;
-
   DeleteTimerServer();
   UnsetClock();
 }
@@ -944,7 +938,7 @@ static void RtemsTimerReqFireAfter_Teardown_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  RtemsTimerReqFireAfter_Teardown( ctx );
+  RtemsTimerReqFireAfter_Teardown();
 }
 
 static void RtemsTimerReqFireAfter_Prepare(

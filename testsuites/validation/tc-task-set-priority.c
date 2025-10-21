@@ -586,12 +586,8 @@ static void RtemsTaskReqSetPriority_Setup_Wrap( void *arg )
   RtemsTaskReqSetPriority_Setup( ctx );
 }
 
-static void RtemsTaskReqSetPriority_Teardown(
-  RtemsTaskReqSetPriority_Context *ctx
-)
+static void RtemsTaskReqSetPriority_Teardown( void )
 {
-  (void) ctx;
-
   RestoreRunnerPriority();
 }
 
@@ -601,7 +597,7 @@ static void RtemsTaskReqSetPriority_Teardown_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  RtemsTaskReqSetPriority_Teardown( ctx );
+  RtemsTaskReqSetPriority_Teardown();
 }
 
 static void RtemsTaskReqSetPriority_Prepare(

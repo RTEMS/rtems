@@ -375,10 +375,8 @@ static void RtemsClockReqGetTod_Action( RtemsClockReqGetTod_Context *ctx )
   }
 }
 
-static void RtemsClockReqGetTod_Cleanup( RtemsClockReqGetTod_Context *ctx )
+static void RtemsClockReqGetTod_Cleanup( void )
 {
-  (void) ctx;
-
   UnsetClock();
 }
 
@@ -464,7 +462,7 @@ T_TEST_CASE_FIXTURE( RtemsClockReqGetTod, &RtemsClockReqGetTod_Fixture )
       ctx->Map.entry = RtemsClockReqGetTod_PopEntry( ctx );
       RtemsClockReqGetTod_Prepare( ctx );
       RtemsClockReqGetTod_TestVariant( ctx );
-      RtemsClockReqGetTod_Cleanup( ctx );
+      RtemsClockReqGetTod_Cleanup();
     }
   }
 }

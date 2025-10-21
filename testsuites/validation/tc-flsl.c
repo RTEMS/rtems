@@ -130,13 +130,8 @@ static const char * const * const CReqFlsl_PreDesc[] = {
   NULL
 };
 
-static void CReqFlsl_Pre_Value_Prepare(
-  CReqFlsl_Context  *ctx,
-  CReqFlsl_Pre_Value state
-)
+static void CReqFlsl_Pre_Value_Prepare( CReqFlsl_Pre_Value state )
 {
-  (void) ctx;
-
   switch ( state ) {
     case CReqFlsl_Pre_Value_Zero: {
       /*
@@ -159,13 +154,8 @@ static void CReqFlsl_Pre_Value_Prepare(
   }
 }
 
-static void CReqFlsl_Post_Result_Check(
-  CReqFlsl_Context    *ctx,
-  CReqFlsl_Post_Result state
-)
+static void CReqFlsl_Post_Result_Check( CReqFlsl_Post_Result state )
 {
-  (void) ctx;
-
   int    expected_result;
   long   value;
   size_t i;
@@ -200,10 +190,8 @@ static void CReqFlsl_Post_Result_Check(
   }
 }
 
-static void CReqFlsl_Action( CReqFlsl_Context *ctx )
+static void CReqFlsl_Action( void )
 {
-  (void) ctx;
-
   /* The action is performed in the post-condition states */
 }
 
@@ -252,9 +240,9 @@ static inline CReqFlsl_Entry CReqFlsl_PopEntry( CReqFlsl_Context *ctx )
 
 static void CReqFlsl_TestVariant( CReqFlsl_Context *ctx )
 {
-  CReqFlsl_Pre_Value_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  CReqFlsl_Action( ctx );
-  CReqFlsl_Post_Result_Check( ctx, ctx->Map.entry.Post_Result );
+  CReqFlsl_Pre_Value_Prepare( ctx->Map.pcs[ 0 ] );
+  CReqFlsl_Action();
+  CReqFlsl_Post_Result_Check( ctx->Map.entry.Post_Result );
 }
 
 /**

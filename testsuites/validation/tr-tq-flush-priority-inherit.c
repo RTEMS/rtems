@@ -337,12 +337,9 @@ static void ScoreTqReqFlushPriorityInherit_Post_Extract_Check(
 }
 
 static void ScoreTqReqFlushPriorityInherit_Post_PriorityUpdate_Check(
-  ScoreTqReqFlushPriorityInherit_Context            *ctx,
   ScoreTqReqFlushPriorityInherit_Post_PriorityUpdate state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case ScoreTqReqFlushPriorityInherit_Post_PriorityUpdate_No: {
       /*
@@ -530,7 +527,6 @@ static void ScoreTqReqFlushPriorityInherit_TestVariant(
     ctx->Map.entry.Post_Extract
   );
   ScoreTqReqFlushPriorityInherit_Post_PriorityUpdate_Check(
-    ctx,
     ctx->Map.entry.Post_PriorityUpdate
   );
 }

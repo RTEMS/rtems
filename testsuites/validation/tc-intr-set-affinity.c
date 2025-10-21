@@ -462,12 +462,9 @@ static void RtemsIntrReqSetAffinity_Pre_CPUSet_Prepare(
 }
 
 static void RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Prepare(
-  RtemsIntrReqSetAffinity_Context           *ctx,
   RtemsIntrReqSetAffinity_Pre_CanSetAffinity state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Yes: {
       /*
@@ -549,12 +546,9 @@ static void RtemsIntrReqSetAffinity_Post_Status_Check(
 }
 
 static void RtemsIntrReqSetAffinity_Post_SetAffinity_Check(
-  RtemsIntrReqSetAffinity_Context         *ctx,
   RtemsIntrReqSetAffinity_Post_SetAffinity state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case RtemsIntrReqSetAffinity_Post_SetAffinity_Set: {
       /*
@@ -779,11 +773,10 @@ static void RtemsIntrReqSetAffinity_TestVariant(
   RtemsIntrReqSetAffinity_Pre_CPUSetOnline_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsIntrReqSetAffinity_Pre_CPUSetHuge_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsIntrReqSetAffinity_Pre_CPUSet_Prepare( ctx, ctx->Map.pcs[ 4 ] );
-  RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Prepare( ctx, ctx->Map.pcs[ 5 ] );
+  RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Prepare( ctx->Map.pcs[ 5 ] );
   RtemsIntrReqSetAffinity_Action( ctx );
   RtemsIntrReqSetAffinity_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsIntrReqSetAffinity_Post_SetAffinity_Check(
-    ctx,
     ctx->Map.entry.Post_SetAffinity
   );
 }

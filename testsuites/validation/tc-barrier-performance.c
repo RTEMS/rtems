@@ -207,15 +207,10 @@ static void RtemsBarrierReqPerfReleaseAuto_Body_Wrap( void *arg )
  */
 static bool RtemsBarrierReqPerfReleaseAuto_Teardown(
   RtemsBarrierValPerf_Context *ctx,
-  T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   return tic == toc;
@@ -232,13 +227,9 @@ static bool RtemsBarrierReqPerfReleaseAuto_Teardown_Wrap(
   RtemsBarrierValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsBarrierReqPerfReleaseAuto_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) delta;
+  (void) retry;
+  return RtemsBarrierReqPerfReleaseAuto_Teardown( ctx, tic, toc );
 }
 
 /**
@@ -314,8 +305,7 @@ static bool RtemsBarrierReqPerfReleaseAutoOtherCpu_Teardown(
   RtemsBarrierValPerf_Context *ctx,
   T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
   T_quiet_rsc_success( ctx->status );
@@ -337,13 +327,8 @@ static bool RtemsBarrierReqPerfReleaseAutoOtherCpu_Teardown_Wrap(
   RtemsBarrierValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsBarrierReqPerfReleaseAutoOtherCpu_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) retry;
+  return RtemsBarrierReqPerfReleaseAutoOtherCpu_Teardown( ctx, delta, tic, toc );
 }
 
 /**
@@ -396,21 +381,15 @@ static void RtemsBarrierReqPerfReleaseManual_Prepare(
 /**
  * @brief Make sure the worker task is fully blocked on the barrier.
  */
-static void RtemsBarrierReqPerfReleaseManual_Setup(
-  RtemsBarrierValPerf_Context *ctx
-)
+static void RtemsBarrierReqPerfReleaseManual_Setup( void )
 {
-  (void) ctx;
-
   Yield();
 }
 
 static void RtemsBarrierReqPerfReleaseManual_Setup_Wrap( void *arg )
 {
-  RtemsBarrierValPerf_Context *ctx;
-
-  ctx = arg;
-  RtemsBarrierReqPerfReleaseManual_Setup( ctx );
+  (void) arg;
+  RtemsBarrierReqPerfReleaseManual_Setup();
 }
 
 /**
@@ -438,15 +417,10 @@ static void RtemsBarrierReqPerfReleaseManual_Body_Wrap( void *arg )
  */
 static bool RtemsBarrierReqPerfReleaseManual_Teardown(
   RtemsBarrierValPerf_Context *ctx,
-  T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
-  (void) delta;
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   return tic == toc;
@@ -463,13 +437,9 @@ static bool RtemsBarrierReqPerfReleaseManual_Teardown_Wrap(
   RtemsBarrierValPerf_Context *ctx;
 
   ctx = arg;
-  return RtemsBarrierReqPerfReleaseManual_Teardown(
-    ctx,
-    delta,
-    tic,
-    toc,
-    retry
-  );
+  (void) delta;
+  (void) retry;
+  return RtemsBarrierReqPerfReleaseManual_Teardown( ctx, tic, toc );
 }
 
 /**
@@ -549,12 +519,9 @@ static bool RtemsBarrierReqPerfReleaseManualPreempt_Teardown(
   RtemsBarrierValPerf_Context *ctx,
   T_ticks                     *delta,
   uint32_t                     tic,
-  uint32_t                     toc,
-  unsigned int                 retry
+  uint32_t                     toc
 )
 {
-  (void) retry;
-
   T_quiet_rsc_success( ctx->status );
 
   *delta = ctx->end - ctx->begin;
@@ -573,12 +540,12 @@ static bool RtemsBarrierReqPerfReleaseManualPreempt_Teardown_Wrap(
   RtemsBarrierValPerf_Context *ctx;
 
   ctx = arg;
+  (void) retry;
   return RtemsBarrierReqPerfReleaseManualPreempt_Teardown(
     ctx,
     delta,
     tic,
-    toc,
-    retry
+    toc
   );
 }
 

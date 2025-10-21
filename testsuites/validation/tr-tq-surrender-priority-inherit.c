@@ -733,8 +733,6 @@ static void CleanupSticky( Context *ctx )
   }
 
   T_eq_u32( rtems_scheduler_get_processor(), 0 );
-#else
-  (void) ctx;
 #endif
 }
 
@@ -978,12 +976,9 @@ static void ScoreTqReqSurrenderPriorityInherit_Pre_WaitState_Prepare(
 }
 
 static void ScoreTqReqSurrenderPriorityInherit_Post_Dequeue_Check(
-  ScoreTqReqSurrenderPriorityInherit_Context     *ctx,
   ScoreTqReqSurrenderPriorityInherit_Post_Dequeue state
 )
 {
-  (void) ctx;
-
   switch ( state ) {
     case ScoreTqReqSurrenderPriorityInherit_Post_Dequeue_Priority: {
       /*
@@ -1284,12 +1279,8 @@ static void ScoreTqReqSurrenderPriorityInherit_Setup_Wrap( void *arg )
   ScoreTqReqSurrenderPriorityInherit_Setup( ctx );
 }
 
-static void ScoreTqReqSurrenderPriorityInherit_Teardown(
-  ScoreTqReqSurrenderPriorityInherit_Context *ctx
-)
+static void ScoreTqReqSurrenderPriorityInherit_Teardown( void )
 {
-  (void) ctx;
-
   SetSelfScheduler( SCHEDULER_A_ID, PRIO_NORMAL );
 }
 
@@ -1299,7 +1290,7 @@ static void ScoreTqReqSurrenderPriorityInherit_Teardown_Wrap( void *arg )
 
   ctx = arg;
   ctx->Map.in_action_loop = false;
-  ScoreTqReqSurrenderPriorityInherit_Teardown( ctx );
+  ScoreTqReqSurrenderPriorityInherit_Teardown();
 }
 
 static void ScoreTqReqSurrenderPriorityInherit_Prepare(
@@ -2418,7 +2409,6 @@ static void ScoreTqReqSurrenderPriorityInherit_TestVariant(
   );
   ScoreTqReqSurrenderPriorityInherit_Action( ctx );
   ScoreTqReqSurrenderPriorityInherit_Post_Dequeue_Check(
-    ctx,
     ctx->Map.entry.Post_Dequeue
   );
   ScoreTqReqSurrenderPriorityInherit_Post_Unblock_Check(
