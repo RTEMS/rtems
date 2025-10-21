@@ -304,12 +304,16 @@ test-prepare: |
 test-setup:
   brief: null
   code: |
+    (void) ctx;
+
     SetSelfPriority( PRIO_ULTRA_HIGH );
   description: null
 test-stop: null
 test-support: |
   static void Worker( rtems_task_argument arg )
   {
+    (void) arg;
+
     (void) ReceiveAnyEvents();
     (void) ReceiveAnyEvents();
   }

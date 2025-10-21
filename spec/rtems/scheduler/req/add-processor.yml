@@ -225,6 +225,8 @@ test-cleanup: |
     sc = rtems_scheduler_add_processor( ctx->scheduler_b_id, CPU_TO_ADD );
     T_rsc_success( sc );
   }
+  #else
+  (void) ctx;
   #endif
 test-context:
 - brief: |
@@ -301,6 +303,8 @@ test-prepare: |
   #if defined(RTEMS_SMP)
   ctx->add_cpu_to_scheduler_b = false;
   ctx->online = _Per_CPU_Is_processor_online( ctx->cpu );
+  #else
+  (void) ctx;
   #endif
 test-setup:
   brief: null

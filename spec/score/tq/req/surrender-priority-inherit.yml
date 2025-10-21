@@ -804,6 +804,8 @@ test-support: |
     );
     TQSetPriority( ctx->tq_ctx, NEW_OWNER_NEW_HELPER, PRIO_VERY_HIGH );
     TQSetPriority( ctx->tq_ctx, PREV_OWNER, PRIO_NORMAL );
+  #else
+    (void) ctx;
   #endif
   }
 
@@ -891,6 +893,8 @@ test-support: |
       ctx->tq_ctx->worker_tcb[ NEW_OWNER ]
     );
     ctx->priority_after = TQGetPriority( ctx->tq_ctx, PREV_OWNER );
+  #else
+    (void) ctx;
   #endif
   }
 

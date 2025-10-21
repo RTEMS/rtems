@@ -349,6 +349,8 @@ test-support: |
     void *user_data
   )
   {
+    (void) timer_id;
+
     RtemsTimerReqCancel_Context *ctx = user_data;
     ++( ctx->invocations );
   }

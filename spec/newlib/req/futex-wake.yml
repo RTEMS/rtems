@@ -114,6 +114,8 @@ test-support: |
 
   static Status_Control Enqueue( TQContext *tq_ctx, TQWait wait )
   {
+    (void) wait;
+
     Context *ctx;
     int      count;
     int      eno;

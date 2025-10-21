@@ -549,6 +549,8 @@ test-setup:
     StartTask( ctx->worker_id[ WORKER_B ], WorkerB, ctx );
 
     WrapThreadQueueInitialize( &ctx->wrap_tq_ctx, RequestISR, ctx );
+    #else
+    (void) ctx;
     #endif
   description: null
 test-stop: null
@@ -812,6 +814,8 @@ test-teardown:
 
     RestoreRunnerPriority();
     SetSelfAffinityAll();
+    #else
+    (void) ctx;
     #endif
   description: null
 text: ${.:text-template}

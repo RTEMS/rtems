@@ -526,6 +526,8 @@ test-support: |
     void *user_data
   )
   {
+    (void) timer_id;
+
     RtemsTimerReqReset_Context *ctx =
       *(RtemsTimerReqReset_Context **) user_data;
     ++( ctx->invocations_a );
@@ -537,6 +539,8 @@ test-support: |
     void *user_data
   )
   {
+    (void) timer_id;
+
     RtemsTimerReqReset_Context *ctx =
       *(RtemsTimerReqReset_Context **) user_data;
     ++( ctx->invocations_b );

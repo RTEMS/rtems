@@ -120,6 +120,8 @@ test-stop: null
 test-support: |
   static void Worker( rtems_task_argument arg )
   {
+    (void) arg;
+
     while ( true ) {
       /* Do nothing */
     }

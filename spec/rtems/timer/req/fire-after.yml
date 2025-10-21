@@ -529,6 +529,8 @@ test-support: |
     void *user_data
   )
   {
+    (void) timer_id;
+
     RtemsTimerReqFireAfter_Context *ctx = user_data;
     ++( ctx->invocations );
     ctx->routine_user_data = user_data;

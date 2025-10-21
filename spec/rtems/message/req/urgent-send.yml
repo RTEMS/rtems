@@ -449,6 +449,9 @@ test-support: |
   )
   {
     (void) ctx;
+    (void) message_buffer;
+    (void) message_size;
+
     T_rsc( status, RTEMS_UNSATISFIED  );
   }
 
@@ -538,7 +541,9 @@ test-support: |
   }
 
   static void CheckForNoMessageInQueue( void *ctx_in )
-  {}
+  {
+    (void) ctx_in;
+  }
 
   static void CheckForOneMessageInQueue( void *ctx_in )
   {

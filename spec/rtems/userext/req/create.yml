@@ -220,6 +220,8 @@ test-support: |
 
   static rtems_status_code Create( void *arg, uint32_t *id )
   {
+    (void) arg;
+
     static const rtems_extensions_table table;
 
     return rtems_extension_create(
