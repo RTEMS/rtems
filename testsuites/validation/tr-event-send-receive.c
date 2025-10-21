@@ -387,19 +387,14 @@ static bool IntendsToBlockForEvent( Context *ctx, Thread_Wait_flags flags )
   return flags == ( ctx->wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
 }
 
-static bool IsReady( Context *ctx, Thread_Wait_flags flags )
+static bool IsReady( Thread_Wait_flags flags )
 {
-  (void) ctx;
-
   return flags == THREAD_WAIT_STATE_READY;
 }
 
 static bool IsSatisfiedFlags( Context *ctx )
 {
-  return IsReady(
-    ctx,
-    _Thread_Wait_flags_get( ctx->runner_thread )
-  );
+  return IsReady( _Thread_Wait_flags_get( ctx->runner_thread ) );
 }
 
 static bool IsSatisfiedState( Context *ctx )
