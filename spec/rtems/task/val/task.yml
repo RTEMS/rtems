@@ -24,7 +24,7 @@ test-actions:
     Call ${../if/iterate:/name} with a visitor which always returns
     ${/c/if/false:/name}.
   action-code: |
-    TaskIterateContext ctx;
+    TaskIterateContext iter_ctx;
     uint32_t           task_count;
 
     task_count = rtems_scheduler_get_processor_maximum();
@@ -35,10 +35,10 @@ test-actions:
 
     ++task_count;
 
-    memset( &ctx, 0, sizeof( ctx ) );
-    ctx.owner_before = _RTEMS_Allocator_is_owner();
-    rtems_task_iterate( TaskVisitor, &ctx );
-    ctx.owner_after = _RTEMS_Allocator_is_owner();
+    memset( &iter_ctx, 0, sizeof( iter_ctx ) );
+    iter_ctx.owner_before = _RTEMS_Allocator_is_owner();
+    rtems_task_iterate( TaskVisitor, &iter_ctx );
+    iter_ctx.owner_after = _RTEMS_Allocator_is_owner();
   checks:
   - brief: |
       Check that the all counter is equal to the count of tasks.  Check that
@@ -47,8 +47,8 @@ test-actions:
       ${../if/iterate:/params[0]/name} and ${../if/iterate:/params[1]/name}.
       Secondly, this shows that the iteration was done over all tasks.
     code: |
-      T_step_eq_u32( ${.:/step}, ctx.counter_all, task_count );
-      T_step_eq_u32( ${.:/step}, ctx.counter_self, 1 );
+      T_step_eq_u32( ${.:/step}, iter_ctx.counter_all, task_count );
+      T_step_eq_u32( ${.:/step}, iter_ctx.counter_self, 1 );
     links:
     - role: validation
       uid: ../req/iterate-visit
@@ -59,9 +59,9 @@ test-actions:
       call.  Check that the object alloctor mutex was owned during the
       iteration.
     code: |
-      T_step_false( ${.:/step}, ctx.owner_before );
-      T_step_true( ${.:/step}, ctx.owner_in_visitor );
-      T_step_false( ${.:/step}, ctx.owner_after );
+      T_step_false( ${.:/step}, iter_ctx.owner_before );
+      T_step_true( ${.:/step}, iter_ctx.owner_in_visitor );
+      T_step_false( ${.:/step}, iter_ctx.owner_after );
     links:
     - role: validation
       uid: ../req/iterate-start
@@ -74,17 +74,17 @@ test-actions:
     Call ${../if/iterate:/name} with a visitor which returns
     ${/c/if/true:/name}.
   action-code: |
-    TaskIterateContext ctx;
+    TaskIterateContext iter_ctx;
 
-    memset( &ctx, 0, sizeof( ctx ) );
-    ctx.done = true;
-    rtems_task_iterate( TaskVisitor, &ctx );
+    memset( &iter_ctx, 0, sizeof( iter_ctx ) );
+    iter_ctx.done = true;
+    rtems_task_iterate( TaskVisitor, &iter_ctx );
   checks:
   - brief: |
       Check that the all counter is equal to one.  This shows that the
       iteration stops when the visitor returns ${/c/if/true:/name}.
     code: |
-      T_step_eq_u32( ${.:/step}, ctx.counter_all, 1 );
+      T_step_eq_u32( ${.:/step}, iter_ctx.counter_all, 1 );
     links:
     - role: validation
       uid: ../req/iterate-stop
@@ -228,18 +228,18 @@ test-support: |
 
   static bool TaskVisitor( rtems_tcb *tcb, void *arg )
   {
-    TaskIterateContext *ctx;
+    TaskIterateContext *iter_ctx;
 
-    ctx = arg;
-    ++ctx->counter_all;
+    iter_ctx = arg;
+    ++iter_ctx->counter_all;
 
     if ( rtems_task_self() == tcb->Object.id ) {
-      ++ctx->counter_self;
+      ++iter_ctx->counter_self;
     }
 
-    ctx->owner_in_visitor = _RTEMS_Allocator_is_owner();
+    iter_ctx->owner_in_visitor = _RTEMS_Allocator_is_owner();
 
-    return ctx->done;
+    return iter_ctx->done;
   }
 test-target: testsuites/validation/tc-task.c
 test-teardown: null
