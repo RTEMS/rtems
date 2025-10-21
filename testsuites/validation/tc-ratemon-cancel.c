@@ -270,14 +270,10 @@ static const rtems_task_priority background_task_priority = 100;
 static const rtems_task_priority foreground_task_priority = 10;
 static const rtems_event_set wake_main_task_event = RTEMS_EVENT_17;
 
-static void TickTheClock(
-  RtemsRatemonReqCancel_Context *ctx,
-  uint32_t ticks
-)
+static void TickTheClock( uint32_t ticks )
 {
-  (void) ctx;
-
   uint32_t i;
+
   for ( i = 0; i < ticks; ++i ) {
     TimecounterTick();
   }
@@ -327,14 +323,16 @@ static void CreatePostponedJobs(
 )
 {
   rtems_status_code status;
+
   ctx->postponed_jobs_count = jobs_count;
+
   if ( ctx->previous_state == RATE_MONOTONIC_ACTIVE ) {
-    TickTheClock( ctx, ( jobs_count + 1 ) * period_length );
+    TickTheClock( ( jobs_count + 1 ) * period_length );
     status = rtems_rate_monotonic_period( ctx->period_id, period_length );
     T_rsc( status, RTEMS_TIMEOUT );
   } else {
     /* ctx->previous_state == RATE_MONOTONIC_INACTIVE || _EXPIRED */
-    TickTheClock( ctx, jobs_count * period_length );
+    TickTheClock( jobs_count * period_length );
   }
 }
 

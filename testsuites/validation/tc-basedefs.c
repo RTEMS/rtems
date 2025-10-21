@@ -527,11 +527,9 @@ RTEMS_CONST static int const_func( int arg )
 }
 
 RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
-  static void compiler_no_return_attribute_func( int i );
-static void compiler_no_return_attribute_func( int i )
+  static void compiler_no_return_attribute_func( void );
+static void compiler_no_return_attribute_func( void )
 {
-  (void) i;
-
   while ( true ) {
     /* Loop forever */
   }
@@ -577,10 +575,8 @@ RTEMS_NO_INLINE static int no_inline_func( void )
   return 75;
 }
 
-RTEMS_NO_RETURN static void no_return_func( int i )
+RTEMS_NO_RETURN static void no_return_func( void )
 {
-  (void) i;
-
   while ( true ) {
     /* Loop forever */
   }
