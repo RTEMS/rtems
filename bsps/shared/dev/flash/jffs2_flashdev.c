@@ -179,10 +179,17 @@ static uint32_t do_get_oob_size(
   rtems_jffs2_flash_control *super
 )
 {
+  int rv;
   int fd = fileno(get_flash_control( super )->handle);
   size_t bytes_per_page = 0;
 
-  return ioctl(fd, RTEMS_FLASHDEV_IOCTL_OOB_BYTES_PER_PAGE, &bytes_per_page);
+  rv = ioctl(fd, RTEMS_FLASHDEV_IOCTL_OOB_BYTES_PER_PAGE, &bytes_per_page);
+
+  if (rv != 0) {
+    return 0;
+  }
+
+  return bytes_per_page;
 }
 
 static void do_destroy( rtems_jffs2_flash_control *super )
