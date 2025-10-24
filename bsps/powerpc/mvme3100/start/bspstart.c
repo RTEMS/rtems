@@ -448,7 +448,7 @@ static void mvme3100_i2c_initialize(void)
 
 RTEMS_SYSINIT_ITEM(
   mvme3100_i2c_initialize,
-  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_DEVICE_DRIVERS,
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 
