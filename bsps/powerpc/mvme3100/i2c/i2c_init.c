@@ -86,13 +86,12 @@ BSP_i2c_initialize(void)
 {
 int busno, succ = 0;
 
-	/* Initialize the library */
-	if ( rtems_libi2c_initialize() ) {
-		safe_printf("Initializing I2C library failed\n");
+	/* Register our bus driver */
+	if (!rtems_libi2c_is_initialized){
+		safe_printf("LIBI2C NOT INITIALIZED\n");
 		return -1;
 	}
 
-	/* Register our bus driver */
 	if ( (busno=rtems_libi2c_register_bus(
 					BSP_I2C_BUS0_NAME,
 					BSP_I2C_BUS_DESCRIPTOR) ) < 0 ) {
