@@ -355,8 +355,6 @@ rtems_status_code jffs2_flashdev_mount(
     mount_data
   );
   if ( status != 0 ) {
-    free(mount_data);
-    free(instance);
     return status;
   }
 
