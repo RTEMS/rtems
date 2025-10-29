@@ -1091,8 +1091,8 @@ test-support: |
   }
 
   static void TriggerNestedRequestViaSelfRestart(
-    Context         *ctx,
-    Per_CPU_Control *cpu_self
+    Context         * const ctx,
+    Per_CPU_Control * const cpu_self
   )
   {
     WrapThreadQueueExtract( &ctx->wrap_tq_ctx, ctx->worker_tcb );
@@ -1103,6 +1103,18 @@ test-support: |
         RTEMS_SELF,
         (rtems_task_argument) ctx
       );
+    } else {
+      _Thread_Dispatch_unnest( cpu_self );
+    }
+  }
+
+  static void BlockAndJumpBack(
+    Context         * const ctx,
+    Per_CPU_Control * const cpu_self
+  )
+  {
+    if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
+      Block( ctx );
     } else {
       _Thread_Dispatch_unnest( cpu_self );
     }
@@ -1125,12 +1137,7 @@ test-support: |
         if ( ctx->blocked ) {
           SetFatalHandler( ResumeThreadDispatch, ctx );
           cpu_self = _Thread_Dispatch_disable();
-
-          if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
-            Block( ctx );
-          } else {
-            _Thread_Dispatch_unnest( cpu_self );
-          }
+          BlockAndJumpBack( ctx, cpu_self );
 
           if ( ctx->interrupt ) {
             CallWithinISR( Restart, ctx );
