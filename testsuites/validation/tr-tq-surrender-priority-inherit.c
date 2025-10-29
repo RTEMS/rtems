@@ -733,6 +733,8 @@ static void CleanupSticky( Context *ctx )
   }
 
   T_eq_u32( rtems_scheduler_get_processor(), 0 );
+#else
+  (void) ctx;
 #endif
 }
 
