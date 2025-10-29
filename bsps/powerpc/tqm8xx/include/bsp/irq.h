@@ -51,30 +51,29 @@
 /*
  * Peripheral IRQ handlers related definitions
  */
-#define BSP_SIU_PER_IRQ_NUMBER	 16
-#define BSP_SIU_IRQ_LOWEST_OFFSET 0
+#define BSP_SIU_PER_IRQ_NUMBER	 16U
+#define BSP_SIU_IRQ_LOWEST_OFFSET 0U
 #define BSP_SIU_IRQ_MAX_OFFSET   (BSP_SIU_IRQ_LOWEST_OFFSET\
-                                  +BSP_SIU_PER_IRQ_NUMBER-1)
+                                  +BSP_SIU_PER_IRQ_NUMBER-1U)
 
-#define BSP_IS_SIU_IRQ(irqnum)				\
-          (((irqnum) >= BSP_SIU_IRQ_LOWEST_OFFSET) &&	\
-	   ((irqnum) <= BSP_SIU_IRQ_MAX_OFFSET))
+#define BSP_IS_SIU_IRQ(irqnum) \
+  (((unsigned)(irqnum) - BSP_SIU_IRQ_LOWEST_OFFSET) < BSP_SIU_PER_IRQ_NUMBER)
 
-#define BSP_CPM_PER_IRQ_NUMBER	 32
-#define BSP_CPM_IRQ_LOWEST_OFFSET (BSP_SIU_IRQ_MAX_OFFSET+1)
+#define BSP_CPM_PER_IRQ_NUMBER	 32U
+#define BSP_CPM_IRQ_LOWEST_OFFSET (BSP_SIU_IRQ_MAX_OFFSET+1U)
 #define BSP_CPM_IRQ_MAX_OFFSET   (BSP_CPM_IRQ_LOWEST_OFFSET\
-                                  +BSP_CPM_PER_IRQ_NUMBER-1)
+                                  +BSP_CPM_PER_IRQ_NUMBER-1U)
 
-#define BSP_IS_CPM_IRQ(irqnum)				\
-          (((irqnum) >= BSP_CPM_IRQ_LOWEST_OFFSET) &&	\
-	   ((irqnum) <= BSP_CPM_IRQ_MAX_OFFSET))
+#define BSP_IS_CPM_IRQ(irqnum) \
+  (((unsigned)(irqnum) - BSP_CPM_IRQ_LOWEST_OFFSET) < BSP_CPM_PER_IRQ_NUMBER)
+
 /*
  * Processor IRQ handlers related definitions
  */
-#define BSP_PROCESSOR_IRQ_NUMBER        1
-#define BSP_PROCESSOR_IRQ_LOWEST_OFFSET	(BSP_CPM_IRQ_MAX_OFFSET+1)
+#define BSP_PROCESSOR_IRQ_NUMBER        1U
+#define BSP_PROCESSOR_IRQ_LOWEST_OFFSET	(BSP_CPM_IRQ_MAX_OFFSET+1U)
 #define BSP_PROCESSOR_IRQ_MAX_OFFSET	(BSP_PROCESSOR_IRQ_LOWEST_OFFSET\
-                                         +BSP_PROCESSOR_IRQ_NUMBER-1)
+                                         +BSP_PROCESSOR_IRQ_NUMBER-1U)
 
 #define BSP_IS_PROCESSOR_IRQ(irqnum)				\
           (((irqnum) >= BSP_PROCESSOR_IRQ_LOWEST_OFFSET) &&	\
@@ -82,7 +81,7 @@
 /*
  * Summary
  */
-#define BSP_IRQ_NUMBER                  (BSP_PROCESSOR_IRQ_MAX_OFFSET+1)
+#define BSP_IRQ_NUMBER                  (BSP_PROCESSOR_IRQ_MAX_OFFSET+1U)
 #define BSP_LOWEST_OFFSET		BSP_SIU_IRQ_LOWEST_OFFSET
 #define BSP_MAX_OFFSET                  BSP_PROCESSOR_IRQ_MAX_OFFSET
 
@@ -159,7 +158,7 @@ extern "C" {
 #define BSP_PERIODIC_TIMER	BSP_SIU_INT_IRQ_6
 #define BSP_FAST_ETHERNET_CTRL	BSP_SIU_INT_IRQ_3
 
-#define BSP_INTERRUPT_VECTOR_COUNT (BSP_MAX_OFFSET + 1)
+#define BSP_INTERRUPT_VECTOR_COUNT (BSP_MAX_OFFSET + 1U)
 
 extern int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine);
 

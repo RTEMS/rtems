@@ -242,7 +242,7 @@ static int BSP_irq_handle_at_siu( unsigned excNum)
        * if this is the CPM interrupt, mask lower prio interrupts at SIU
        * else mask lower and same priority interrupts
        */
-      m8xx.simask &= ~0 << (32
+      m8xx.simask &= ~0U << (32
 			    - sivecnum
 			    - ((is_cpm_irq) ? 1 : 0));
 
@@ -259,7 +259,7 @@ static int BSP_irq_handle_at_siu( unsigned excNum)
 	/*
 	 * clear pending bit, if edge triggered interrupt input
 	 */
-	m8xx.sipend = 1 << (31 - sivecnum);
+	m8xx.sipend = 1U << (31 - sivecnum);
       }
 
 
