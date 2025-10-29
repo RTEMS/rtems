@@ -68,12 +68,7 @@ extern "C" {
 #endif
 
 #ifndef BSP_INTERRUPT_DISPATCH_TABLE_SIZE
-  #if BSP_INTERRUPT_VECTOR_COUNT == 0
-    /* Avoid array subscript index is outside array bounds warnings */
-    #define BSP_INTERRUPT_DISPATCH_TABLE_SIZE 1
-  #else
-    #define BSP_INTERRUPT_DISPATCH_TABLE_SIZE BSP_INTERRUPT_VECTOR_COUNT
-  #endif
+  #define BSP_INTERRUPT_DISPATCH_TABLE_SIZE BSP_INTERRUPT_VECTOR_COUNT
 #endif
 
 #if !defined(BSP_IRQ_HAVE_GET_SET_AFFINITY) && defined(RTEMS_SMP)

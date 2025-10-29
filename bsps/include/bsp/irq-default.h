@@ -50,7 +50,7 @@ extern "C" {
  * By default, no interrupt vectors are supported and all related directives
  * return RTEMS_INVALID_ID.
  */
-#define BSP_INTERRUPT_VECTOR_COUNT 0
+#define BSP_INTERRUPT_VECTOR_COUNT 1
 
 /** @} */
 

@@ -45,7 +45,7 @@ rtems_status_code bsp_interrupt_get_attributes(
   (void) vector;
   (void) attributes;
 
-  return RTEMS_SUCCESSFUL;
+  return RTEMS_UNSATISFIED;
 }
 
 rtems_status_code bsp_interrupt_is_pending(
