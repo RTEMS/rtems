@@ -42,6 +42,8 @@ typedef struct {
 typedef flash_definition* flash_def;
 
 flash_definition flash_dev_table[] = {
+  {0x20BA18, 0x10000, 0x100, 0x1000000, 1, "MT25QL128ABA"},
+  {0x20BB18, 0x10000, 0x100, 0x1000000, 1, "MT25QL128ABB"},
   {0x012018, 0x10000, 0x100, 0x1000000, 1, "S25FL128P_64K"},
   {0x010218, 0x400000, 0x200, 0x4000000, 1, "S25FL512P_256K"},
   {0x0, 0x0, 0x0, 0x0, 0, "end of table"}
