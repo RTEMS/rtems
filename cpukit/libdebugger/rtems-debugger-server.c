@@ -1632,15 +1632,21 @@ remote_read_memory(uint8_t* buffer, int size)
     uintptr_t addr;
     DB_UINT length;
     int     r;
-    addr = hex_decode_addr(&buffer[1]);
-    length = hex_decode_uint((const uint8_t*) comma + 1);
     remote_packet_out_reset();
-    r = rtems_debugger_target_start_memory_access();
-    if (r == 0) {
+    /*
+     * This call is actually a macro that contains a setjmp() and the result of
+     * a setjmp() assigned to a variable is undefined behavior. The result must
+     * be used directly in a conditional.
+     */
+    if (rtems_debugger_target_start_memory_access() == 0) {
+      addr = hex_decode_addr(&buffer[1]);
+      length = hex_decode_uint((const uint8_t*) comma + 1);
       /*
        * There should be specific target access for 8, 16, 32 and 64 bit reads.
        */
       r = remote_packet_out_append_hex((const uint8_t*) addr, length);
+    } else {
+      r = 0;
     }
     rtems_debugger_target_end_memory_access();
     if (r < 0)
@@ -1664,15 +1670,22 @@ remote_write_memory(uint8_t* buffer, int size)
     uintptr_t addr;
     DB_UINT length;
     int     r;
-    addr = hex_decode_addr(&buffer[1]);
-    length = hex_decode_uint((const uint8_t*) comma + 1);
-    r = rtems_debugger_target_start_memory_access();
-    if (r == 0) {
+    /*
+     * This call is actually a macro that contains a setjmp() and the result of
+     * a setjmp() assigned to a variable is undefined behavior. The result must
+     * be used directly in a conditional.
+     */
+    if (rtems_debugger_target_start_memory_access() == 0) {
+      addr = hex_decode_addr(&buffer[1]);
+      length = hex_decode_uint((const uint8_t*) comma + 1);
       r = rtems_debugger_remote_packet_in_hex((uint8_t*) addr,
                                               colon + 1,
                                               length);
+    } else {
+      r = 0;
     }
     rtems_debugger_target_end_memory_access();
+    response = r_E01;
     if (r == 0)
       response = r_OK;
   }
