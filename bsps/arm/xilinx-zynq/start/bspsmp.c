@@ -46,6 +46,7 @@ bool _CPU_SMP_Start_processor(uint32_t cpu_index)
   volatile uint32_t* const kick_address = (uint32_t*) 0xfffffff0UL;
 
   _Assert(cpu_index == 1);
+  (void) cpu_index;
 
   /*
    * Enable the second CPU.
