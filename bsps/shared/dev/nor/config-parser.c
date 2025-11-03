@@ -122,10 +122,12 @@ rtems_status_code rtems_flash_CFI_parse_from_buffer(
 )
 {
   int datalen;
+  int region;
   uint16_t num_sectors_sub;
   uint16_t page_power;
   uint16_t sector_base;
   uint8_t bufbyte;
+  uint8_t num_regions;
 
   memset(data, 0, sizeof(rtems_flash_NOR_config_data));
 
@@ -163,22 +165,33 @@ rtems_status_code rtems_flash_CFI_parse_from_buffer(
   if (read_config_byte(cfi_raw, cfi_raw_len, datalen, 0x2c, &bufbyte)) {
     return RTEMS_INVALID_ADDRESS;
   }
-  /* this parser only supports one erase block region */
-  if (bufbyte != 1) {
-    return RTEMS_TOO_MANY;
+
+  /* Get largest block */
+  num_regions = bufbyte;
+  data->sector_size = 0;
+  for (region = 0; region < num_regions; ++region) {
+    if (read_config_short(cfi_raw, cfi_raw_len, datalen, 0x2d + (region * 4),
+          &num_sectors_sub)) {
+      return RTEMS_INVALID_ADDRESS;
+    }
+
+    if (read_config_short(cfi_raw, cfi_raw_len, datalen, 0x2f + (region * 4),
+          &sector_base)) {
+      return RTEMS_INVALID_ADDRESS;
+    }
+
+    if (data->sector_size < (sector_base * 256UL)) {
+      data->num_sectors = num_sectors_sub + 1;
+      data->sector_size = sector_base * 256UL;
+    }
   }
 
-  if (read_config_short(cfi_raw, cfi_raw_len, datalen, 0x2d, &num_sectors_sub)) {
-    return RTEMS_INVALID_ADDRESS;
+  if (num_regions == 1) {
+    /* Device size for at least s25fl512s is off by 1, calculate with sectors */
+    data->device_size = data->num_sectors * data->sector_size;
+  } else {
+    data->num_sectors = data->device_size / data->sector_size;
   }
-  data->num_sectors = num_sectors_sub + 1;
-
-  if (read_config_short(cfi_raw, cfi_raw_len, datalen, 0x2f, &sector_base)) {
-    return RTEMS_INVALID_ADDRESS;
-  }
-  data->sector_size = sector_base * 256UL;
-
-  data->device_size = data->num_sectors * data->sector_size;
 
   return RTEMS_SUCCESSFUL;
 }
