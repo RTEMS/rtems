@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include <dev/nor/config-parser.h>
 #include <dev/spi/zynq-qspi-flash.h>
 #include <dev/spi/zynq-qspi-flash-defs.h>
 #include <dev/spi/jedec_flash.h>
@@ -750,6 +751,8 @@ zqspi_error zqspi_readid(zqspiflash *driver, uint32_t *jedec_id)
   zqspi_error fe;
   uint8_t value = 0;
   int index = 0;
+  bool use_cfi = true;
+  size_t cfi_raw_len = 0;
 
   if (driver->jedec_id != 0) {
     if (jedec_id != NULL) {
@@ -759,9 +762,9 @@ zqspi_error zqspi_readid(zqspiflash *driver, uint32_t *jedec_id)
   }
 
   zqspi_transfer_buffer_clear(&driver->buf);
-  zqspi_transfer_buffer_set_length(&driver->buf, 1 + 3);
+  zqspi_transfer_buffer_set_length(&driver->buf, 1 + 4);
   zqspi_transfer_buffer_set8(&driver->buf, ZQSPI_FLASH_READ_ID);
-  zqspi_transfer_buffer_fill(&driver->buf, 0x00, 3);
+  zqspi_transfer_buffer_fill(&driver->buf, 0x00, 4);
   zqspi_transfer_buffer_set_dir(&driver->buf, ZQSPI_FLASH_RX_TRANS);
   zqspi_transfer_buffer_set_command_len(&driver->buf, ZQSPI_FLASH_COMMAND_SIZE);
 
@@ -776,19 +779,58 @@ zqspi_error zqspi_readid(zqspiflash *driver, uint32_t *jedec_id)
   zqspi_transfer_buffer_get8(&driver->buf, &value);
   driver->jedec_id |= value;
 
+  zqspi_transfer_buffer_get8(&driver->buf, &value);
+  cfi_raw_len = value + 4;
+
   if (jedec_id != NULL) {
     *jedec_id = driver->jedec_id;
   }
 
-  while (flash_dev_table[index].jedec_id != driver->jedec_id) {
-    if (flash_dev_table[index].jedec_id == 0) {
-      return ZQSPI_FLASH_INVALID_DEVICE;
+  while (flash_dev_table[index].jedec_id != 0) {
+    if (flash_dev_table[index].jedec_id == driver->jedec_id) {
+      use_cfi = false;
+      driver->flash_size = flash_dev_table[index].flash_size;
+      driver->flash_erase_sector_size = flash_dev_table[index].sec_size;
+      driver->flash_page_size = flash_dev_table[index].page_size;
+      break;
     }
     index++;
   }
-  driver->flash_size = flash_dev_table[index].flash_size;
-  driver->flash_erase_sector_size = flash_dev_table[index].sec_size;
-  driver->flash_page_size = flash_dev_table[index].page_size;
+
+  if (use_cfi) {
+    rtems_status_code sc;
+    rtems_flash_NOR_config_data nor_config;
+    uint8_t cfi_data[256];
+
+    if (cfi_raw_len > sizeof(cfi_data)) {
+      return ZQSPI_FLASH_INVALID_DEVICE;
+    }
+
+    zqspi_transfer_buffer_clear(&driver->buf);
+    zqspi_transfer_buffer_set_length(&driver->buf, 1 + cfi_raw_len);
+    zqspi_transfer_buffer_set8(&driver->buf, ZQSPI_FLASH_READ_ID);
+    zqspi_transfer_buffer_fill(&driver->buf, 0x00, cfi_raw_len);
+    zqspi_transfer_buffer_set_dir(&driver->buf, ZQSPI_FLASH_RX_TRANS);
+    zqspi_transfer_buffer_set_command_len(&driver->buf, ZQSPI_FLASH_COMMAND_SIZE);
+
+    fe = zqspi_transfer(&driver->buf, &driver->initialised);
+    if (fe != ZQSPI_FLASH_NO_ERROR)
+      return fe;
+
+    fe = zqspi_transfer_buffer_copy_out(&driver->buf, cfi_data, cfi_raw_len);
+    if (fe != ZQSPI_FLASH_NO_ERROR)
+      return fe;
+
+    sc = rtems_flash_CFI_parse_from_buffer(cfi_data, cfi_raw_len, &nor_config);
+    if (sc != RTEMS_SUCCESSFUL) {
+      return ZQSPI_FLASH_INVALID_DEVICE;
+    }
+
+    driver->flash_size = nor_config.device_size;
+    driver->flash_erase_sector_size = nor_config.sector_size;
+    driver->flash_page_size = nor_config.page_size;
+  }
+
 #if ZQSPI_FLASH_FAST_READ
   driver->flash_read_dummies = 1;
 #endif
