@@ -106,7 +106,7 @@ ppc_exc_interrupt:
 	 * Save high order part of SCRATCH_1_REGISTER here.  The low order part
 	 * was saved in the minimal prologue.
 	 */
-	evmergehi	SCRATCH_1_REGISTER, SCRATCH_1_REGISTER, FRAME_REGISTER
+	evmergehi	FRAME_REGISTER, SCRATCH_1_REGISTER, SCRATCH_1_REGISTER
 	PPC_REG_STORE	FRAME_REGISTER, GPR3_OFFSET(r1)
 #endif
 
