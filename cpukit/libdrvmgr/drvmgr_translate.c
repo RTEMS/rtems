@@ -60,7 +60,7 @@ unsigned int drvmgr_translate_bus(
 	void *dst, *from_adr, *to_adr;
 	struct drvmgr_map_entry *map;
 	struct drvmgr_bus *bus;
-	unsigned int sz;
+	ssize_t sz;
 	struct drvmgr_bus *bus_bot, *bus_top;
 
 	dst = src_address;
