@@ -212,7 +212,7 @@ MC68681_STATIC void mc68681_initialize_context(
   mc68681_context  *pmc68681Context
 )
 {
-  int          port;
+  unsigned long port;
   unsigned int pMC68681;
   unsigned int pMC68681_port;
 
@@ -432,7 +432,7 @@ MC68681_STATIC rtems_isr mc68681_isr(
   rtems_vector_number vector
 )
 {
-  int     minor;
+  unsigned long minor;
 
   for(minor=0 ; minor<Console_Port_Count ; minor++) {
     if(Console_Port_Tbl[minor]->ulIntVector == vector &&
@@ -517,7 +517,7 @@ MC68681_STATIC ssize_t mc68681_write_support_polled(
   size_t      len
 )
 {
-  int nwrite = 0;
+  size_t nwrite = 0;
 
   /*
    * poll each byte in the string out of the port.

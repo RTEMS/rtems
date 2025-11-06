@@ -662,7 +662,7 @@ Z85C30_STATIC rtems_isr z85c30_isr(
   rtems_vector_number vector
 )
 {
-  int                 minor;
+  unsigned long       minor;
   uint32_t            ulCtrlPort;
   volatile uint8_t    ucIntPend;
   volatile uint8_t    ucIntPendPort;
@@ -847,7 +847,7 @@ Z85C30_STATIC ssize_t z85c30_write_support_polled(
   const char *buf,
   size_t len)
 {
-  int nwrite=0;
+  size_t nwrite=0;
 
   /*
    * poll each byte in the string out of the port.
