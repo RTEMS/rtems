@@ -50,7 +50,7 @@
 #include <tmacros.h>
 
 /* forward declarations to avoid warnings */
-void test_cat(char *file, int offset_arg, int length);
+void test_cat(char *file, int offset_arg, size_t length);
 
 /*
  *  test_cat routine
@@ -59,15 +59,15 @@ void test_cat(char *file, int offset_arg, int length);
 unsigned char test_cat_buffer[ 1024 ];
 
 void test_cat(
-  char *file,
-  int   offset_arg,
-  int   length
+  char   *file,
+  int     offset_arg,
+  size_t  length
 )
 {
   int            fd;
   int            status;
   int            is_printable = 0;
-  int            my_length;
+  size_t         my_length;
   int            i;
   unsigned char  c;
   int            count = 0;

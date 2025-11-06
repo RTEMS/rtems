@@ -83,10 +83,10 @@ void *POSIX_Init(
 
   puts( "Init - Open message queue" );
   Queue = mq_open( "Qsend", O_CREAT | O_RDWR, 0x777, &attr );
-  if ( Queue == (-1) ) {
+  if ( Queue == (mqd_t)(-1) ) {
     perror( "mq_open failed" );
   }
-  rtems_test_assert( Queue != (-1) );
+  rtems_test_assert( Queue != (mqd_t)(-1) );
 
   puts( "Init - send to message queue" );
   status = mq_send( Queue, (const char *)&status, sizeof(int), 1 );
