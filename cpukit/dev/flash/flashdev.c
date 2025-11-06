@@ -783,7 +783,7 @@ static int rtems_flashdev_ioctl_create_region(
   rtems_flashdev_region *region_in
 )
 {
-  int i;
+  uint32_t i;
   rtems_flashdev_region_table *table = flash->region_table;
 
   /* Find unallocated region slot */
@@ -1260,7 +1260,7 @@ static uint32_t rtems_flashdev_find_unallocated_region(
 )
 {
   int array_index = 0;
-  int bit_index = 0;
+  uint32_t bit_index = 0;
   int shift;
 
   while ( bit_index < region_table->max_regions) {

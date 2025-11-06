@@ -268,7 +268,7 @@ typedef struct rtems_flashdev_region_table {
   /**
    * @brief The maximum regions that can be defined at once.
    */
-  int max_regions;
+  uint32_t max_regions;
 
   /**
    * @brief Pointer to array of rtems_flashdev_region of length
