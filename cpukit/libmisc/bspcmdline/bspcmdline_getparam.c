@@ -46,7 +46,7 @@ static void copy_string(
   size_t      length
 )
 {
-  int         i;
+  size_t      i;
   int         quotes;
   const char *p = start;
 
