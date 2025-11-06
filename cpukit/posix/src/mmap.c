@@ -286,7 +286,7 @@ void *mmap(
        */
       r = read( fildes, mapping->addr, len );
 
-      if ( r != len ) {
+      if ( r != (ssize_t) len ) {
         mmap_mappings_lock_release( );
         if ( !map_fixed ) {
           free( mapping->addr );
