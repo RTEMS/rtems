@@ -54,7 +54,7 @@ rtems_task Low_task(
 
 extern void test_init(void);
 
-int operation_count = OPERATION_COUNT;
+uint32_t operation_count = OPERATION_COUNT;
 
 rtems_task Init(
   rtems_task_argument argument
@@ -76,7 +76,7 @@ void test_init(void)
   rtems_status_code   status;
   rtems_task_entry    task_entry;
   rtems_task_priority priority;
-  uint32_t      index;
+  uint32_t            index;
 
   priority = RTEMS_MAXIMUM_PRIORITY - 1;
 
