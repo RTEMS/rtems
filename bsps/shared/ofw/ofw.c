@@ -187,7 +187,7 @@ ssize_t rtems_ofw_get_prop(
   const void *prop;
   int offset;
   int len;
-  int copy_len;
+  size_t copy_len;
   uint32_t cpuid;
 
   offset = rtems_fdt_phandle_to_offset(node);
@@ -251,7 +251,7 @@ ssize_t rtems_ofw_get_enc_prop(
     return rv;
   }
 
-  for (int i = 0; i < (len / 4); i++) {
+  for (size_t i = 0; i < (len / 4); i++) {
     buf[i] = fdt32_to_cpu(buf[i]);
   }
 
@@ -540,7 +540,8 @@ phandle_t rtems_ofw_node_from_xref( phandle_t xref )
 {
   phandle_t node;
 
-  if ((node = rtems_ofw_get_effective_phandle(rtems_ofw_peer(0), xref)) == -1)
+  node = rtems_ofw_get_effective_phandle(rtems_ofw_peer(0), xref);
+  if (node == (phandle_t)-1)
     return xref;
 
   return node;
