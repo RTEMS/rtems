@@ -520,7 +520,7 @@ static int read_task(rtems_termios_device_context *base)
 	rtems_interrupt_lock_context lock_context;
 	struct apbuart_priv *uart = base_get_priv(base);
 	apbuart *regs = uart->regs;
-	int cnt;
+	size_t cnt;
 	char buf[33];
 	struct rtems_termios_tty *tty;
 	uint32_t ctrl;
@@ -683,7 +683,7 @@ static void write_polled(
 )
 {
 	struct apbuart_priv *uart = base_get_priv(base);
-	int nwrite = 0;
+	size_t nwrite = 0;
 
 	while (nwrite < len) {
 		apbuart_outbyte_polled(uart->regs, *buf++);
@@ -699,7 +699,7 @@ static void write_interrupt(
 {
 	struct apbuart_priv *uart = base_get_priv(base);
 	apbuart *regs = uart->regs;
-	int sending;
+	size_t sending;
 	unsigned int ctrl;
 
 	ctrl = grlib_load_32(&regs->ctrl);
@@ -752,7 +752,7 @@ static void apbuart_cons_isr(void *arg)
 	apbuart *regs = uart->regs;
 	unsigned int status;
 	char buf[33];
-	int cnt;
+	size_t cnt;
 
 	if (uart->mode == TERMIOS_TASK_DRIVEN) {
 		if ((status = grlib_load_32(&regs->status)) & APBUART_STATUS_DR) {
