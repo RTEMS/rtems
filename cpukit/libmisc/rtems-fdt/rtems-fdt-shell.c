@@ -189,7 +189,7 @@ rtems_fdt_shell_ls (int argc, char *argv[])
   size_t path_len = 0;
   int    total_entries = 0;
   int    num_entries = 0;
-  int    max_name_len = 0;
+  size_t max_name_len = 0;
   int    name_offset = 0;
   int    i = 0;
 
