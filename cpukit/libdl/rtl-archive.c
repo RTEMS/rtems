@@ -109,7 +109,7 @@ rtems_rtl_seek_read (int fd, off_t off, size_t len, uint8_t* buffer)
 {
   if (lseek (fd, off, SEEK_SET) < 0)
     return false;
-  if (read (fd, buffer, len) != len)
+  if (read (fd, buffer, len) != (ssize_t)len)
     return false;
   return true;
 }

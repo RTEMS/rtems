@@ -184,7 +184,7 @@ rtems_rtl_symbol_global_add (rtems_rtl_obj*              obj,
       void*   voidp;
     } copy_voidp;
     const rtems_rtl_tls_offset* tls_off;
-    int b;
+    size_t b;
 
     sym->name = (const char*) &esyms[s];
     s += strlen (sym->name) + 1;

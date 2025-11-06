@@ -201,7 +201,7 @@ static uint32_t
 rtems_rtl_rap_get_uint32 (const uint8_t* buffer)
 {
   uint32_t value = 0;
-  int      b;
+  size_t b;
   for (b = 0; b < sizeof (uint32_t); ++b)
   {
     value <<= 8;
@@ -471,8 +471,8 @@ rtems_rtl_rap_load_linkmap (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
   section_detail*  tmp2;
   uint32_t         obj_detail_size;
   uint32_t         pos = 0;
-  int              i;
-  int              j;
+  uint32_t         i;
+  uint32_t         j;
 
   obj_detail_size = sizeof (struct link_map) * obj->obj_num;
 
@@ -600,7 +600,7 @@ static bool
 rtems_rtl_rap_load_symbols (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
 {
   rtems_rtl_obj_sym* gsym;
-  int                sym;
+  uint32_t           sym;
 
   obj->global_size =
     rap->symbols * sizeof (rtems_rtl_obj_sym) + rap->strtab_size;

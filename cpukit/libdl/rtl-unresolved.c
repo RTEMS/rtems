@@ -137,7 +137,7 @@ rtems_rtl_unresolved_rec_is_last (rtems_rtl_unresolv_block* block,
   int index = rtems_rtl_unresolved_rec_index (block, rec);
   return (rec == NULL ||
           (index < 0) ||
-          (index >= block->recs) ||
+          (index >= (int) block->recs) ||
           (rec->type == rtems_rtl_unresolved_empty));
 }
 

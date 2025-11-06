@@ -443,7 +443,7 @@ rtems_rtl_elf_relocate_worker (rtems_rtl_obj*              obj,
   rtems_rtl_obj_sect*  strtab;
   bool                 is_rela;
   size_t               reloc_size;
-  int                  reloc;
+  size_t               reloc;
 
   /*
    * First check if the section the relocations are for exists. If it does not
@@ -690,7 +690,7 @@ rtems_rtl_elf_common (rtems_rtl_obj*      obj,
 {
   rtems_rtl_elf_common_data* common = (rtems_rtl_elf_common_data*) data;
   rtems_rtl_obj_cache*       symbols;
-  int                        sym;
+  size_t                     sym;
 
   rtems_rtl_obj_caches (&symbols, NULL, NULL);
 
@@ -887,7 +887,7 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
   rtems_rtl_obj_sym*   gsym;
   char*                gstring;
   size_t               common_offset;
-  int                  sym;
+  size_t               sym;
 
   strtab = rtems_rtl_obj_find_section (obj, ".strtab");
   if (!strtab)
@@ -1218,7 +1218,7 @@ rtems_rtl_elf_symbols_locate (rtems_rtl_obj*      obj,
   (void) sect;
   (void) data;
 
-  int sym;
+  size_t sym;
 
   for (sym = 0; sym < obj->local_syms; ++sym)
   {

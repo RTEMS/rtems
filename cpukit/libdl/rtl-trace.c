@@ -102,7 +102,7 @@ rtems_rtl_trace_shell_command (const rtems_printer* printer,
   rtems_rtl_trace_mask clear_value = 0;
   bool                 set = true;
   int                  arg;
-  int                  t;
+  size_t               t;
 
   for (arg = 1; arg < argc; arg++)
   {

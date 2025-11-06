@@ -100,8 +100,8 @@ rtems_rtl_obj_summary_iterator (rtems_chain_node* node, void* data)
 static int
 rtems_rtl_count_symbols (rtems_rtl_data* rtl)
 {
-  int count;
-  int bucket;
+  size_t count;
+  size_t bucket;
   for (count = 0, bucket = 0; bucket < rtl->globals.nbuckets; ++bucket)
     count += rtems_rtl_chain_count (&rtl->globals.buckets[bucket]);
   return count;
@@ -178,7 +178,7 @@ typedef struct
 static bool
 rtems_rtl_parse_opt (const char opt, int argc, char *argv[])
 {
-  size_t arg;
+  int arg;
   for (arg = 1; arg < argc; ++arg)
   {
     if (argv[arg][0] == '-')
@@ -200,7 +200,7 @@ rtems_rtl_check_opts (const rtems_printer* printer,
                       char*                argv[])
 {
   size_t olen = strlen (opts);
-  size_t arg;
+  int arg;
   for (arg = 1; arg < argc; ++arg)
   {
     if (argv[arg][0] == '-')
@@ -347,7 +347,7 @@ rtems_rtl_print_symbols (rtems_rtl_obj_print* print,
 {
   regex_t rege;
   int     max_len = 0;
-  int     s;
+  size_t  s;
 
   if (print->re_symbol != NULL &&
       !rtems_rtl_regx_compile (print->printer,
@@ -700,7 +700,7 @@ rtems_rtl_shell_sym (const rtems_printer* printer, int argc, char* argv[])
 int
 rtems_rtl_shell_object (const rtems_printer* printer, int argc, char* argv[])
 {
-  size_t arg;
+  int arg;
 
   --argc;
   ++argv;
@@ -1055,7 +1055,7 @@ rtems_rtl_shell_call (const rtems_printer* printer, int argc, char* argv[])
   {
     if (args_s)
     {
-      size_t arg;
+      int arg;
       for (arg = label + 1; arg < argc; ++arg)
       {
         size_t o = strlen (values.s);
@@ -1071,8 +1071,8 @@ rtems_rtl_shell_call (const rtems_printer* printer, int argc, char* argv[])
     }
     else if (args_u || args_i)
     {
-      size_t arg;
-      size_t i;
+      int arg;
+      int i;
       if (argc > (label + 1 + CALL_ARG_COUNT))
       {
         rtems_printf (printer, "error: too many args\n");
@@ -1216,7 +1216,7 @@ rtems_rtl_shell_command (int argc, char* argv[])
 
   rtems_printer printer;
   int           arg;
-  int           t;
+  size_t        t;
 
   rtems_print_printer_printf (&printer);
 

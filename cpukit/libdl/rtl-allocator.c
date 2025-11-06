@@ -61,7 +61,7 @@ static const char* tag_labels[6] =
 void
 rtems_rtl_alloc_initialise (rtems_rtl_alloc_data* data)
 {
-  int c;
+  size_t c;
   data->allocator = rtems_rtl_alloc_heap;
   for (c = 0; c < RTEMS_RTL_ALLOC_TAGS; ++c)
     rtems_chain_initialize_empty (&data->indirects[c]);

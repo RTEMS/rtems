@@ -68,7 +68,7 @@ _rtld_linkmap_add (rtems_rtl_obj* obj)
   struct link_map* l = obj->linkmap;
   struct link_map* prev;
   uint32_t         obj_num = obj->obj_num;
-  int              i;
+  size_t           i;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
     printf ("rtl: linkmap_add\n");

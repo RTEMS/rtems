@@ -1357,7 +1357,7 @@ rtems_rtl_obj_run_cdtors (rtems_rtl_obj* obj, uint32_t mask)
     {
       rtems_rtl_cdtor* handler;
       size_t           handlers = sect->size / sizeof (rtems_rtl_cdtor);
-      int              c;
+      size_t           c;
       for (c = 0, handler = sect->base; c < handlers; ++c)
         if (*handler)
           (*handler) ();
@@ -1407,7 +1407,7 @@ rtems_rtl_obj_run_dtors (rtems_rtl_obj* obj)
 static bool
 rtems_rtl_obj_file_load (rtems_rtl_obj* obj, int fd)
 {
-  int l;
+  size_t l;
 
   for (l = 0; l < (sizeof (loaders) / sizeof (rtems_rtl_loader_table)); ++l)
   {
