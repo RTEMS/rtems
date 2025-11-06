@@ -233,7 +233,7 @@ void test_untar_from_file(void)
   rtems_test_assert( fd != -1 );
 
   n = write( fd, TARFILE_START, TARFILE_SIZE );
-  rtems_test_assert( n == TARFILE_SIZE );
+  rtems_test_assert( n == (ssize_t) TARFILE_SIZE );
   close( fd );
 
   /* make a directory to untar it into */
