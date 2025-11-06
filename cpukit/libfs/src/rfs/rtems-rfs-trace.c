@@ -117,7 +117,7 @@ rtems_rfs_trace_shell_command (int argc, char *argv[])
   rtems_rfs_trace_mask clear_value = 0;
   bool                 set = true;
   int                  arg;
-  int                  t;
+  size_t               t;
 
   for (arg = 1; arg < argc; arg++)
   {

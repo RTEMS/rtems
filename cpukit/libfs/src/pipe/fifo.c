@@ -353,7 +353,10 @@ ssize_t pipe_write(
   rtems_libio_t  *iop
 )
 {
-  int chunk, chunk1, written = 0, ret = 0;
+  int ret = 0;
+  size_t chunk1;
+  size_t written = 0;
+  size_t chunk;
 
   if (!pipe)
     return -EPIPE;

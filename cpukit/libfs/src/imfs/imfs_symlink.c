@@ -80,7 +80,7 @@ ssize_t IMFS_readlink(
 )
 {
   IMFS_sym_link_t   *sym_link;
-  ssize_t            i;
+  size_t             i;
 
   sym_link = loc->node_access;
 
