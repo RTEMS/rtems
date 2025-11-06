@@ -360,7 +360,7 @@ static int rtems_shell_line_editor(
 
     extended_key = rtems_shell_getchar(in);
 
-    if (extended_key == EOF)
+    if ((int)extended_key == EOF)
       return -2;
 
     c = extended_key & RTEMS_SHELL_KEYS_NORMAL_MASK;
@@ -451,7 +451,7 @@ static int rtems_shell_line_editor(
 
         case 4:                         /* Control-D */
           if (strlen(line)) {
-            if (col < strlen(line)) {
+            if (col < (int)strlen(line)) {
               rtems_shell_move_left(line + col, 1);
               if (out != NULL) {
                 int bs;
@@ -620,7 +620,7 @@ static int rtems_shell_line_editor(
           if (col > 0)
           {
             char tmp;
-            if (col == strlen(line)) {
+            if (col == (int)strlen(line)) {
               col--;
               if (out != NULL)
                 fprintf(out,"\b");
@@ -643,7 +643,7 @@ static int rtems_shell_line_editor(
             /* strlen() returns size_t but fprintf("%*...") below requires
              * int! */
             int clen = (int) strlen (line);
-            int bs;
+            size_t bs;
 
             rtems_shell_move_left(line, col);
             if (out != NULL) {
@@ -1105,7 +1105,7 @@ static bool shell_main_loop(
   }
 
   if (cmd_argv && cmds[0]) {
-    size_t cmd;
+    ssize_t cmd;
 
     memset (cmds[0], 0, cmd_count * RTEMS_SHELL_CMD_SIZE);
 

@@ -149,7 +149,7 @@ static int rtems_shell_help(
       if (!col){
         col = printf("  %s",topic->topic);
       } else {
-        if ((col+strlen(topic->topic)+2)>(cols - 2)){
+        if ((col+(int)strlen(topic->topic)+2)>(cols - 2)){
           printf("\n");
           col = printf("  %s",topic->topic);
         } else {
@@ -165,7 +165,7 @@ static int rtems_shell_help(
   shell_cmd = rtems_shell_first_cmd;
   while (shell_cmd) {
     size_t len = strlen(shell_cmd->name);
-    if (len > indent) {
+    if ((int)len > indent) {
       indent = len;
     }
     shell_cmd = shell_cmd->next;

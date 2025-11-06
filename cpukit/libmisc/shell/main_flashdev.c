@@ -213,7 +213,7 @@ int flashdev_shell_read(
 
   /* Print buffer out in 32bit blocks */
   printf("Reading %s at 0x%08x for 0x%x bytes\n", dev_path, address, bytes);
-  for (int i = 0; i < (bytes/4); i++) {
+  for (size_t i = 0; i < (bytes/4); i++) {
     printf("%08x ", ((uint32_t*)buffer)[i]);
     if ((i+1)%4 == 0) {
       printf("\n");

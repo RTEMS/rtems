@@ -39,7 +39,7 @@ static unsigned rtems_shell_df_parse_size(const char *str)
 {
   unsigned result;
   char suffix;
-  int i;
+  size_t i;
 
   if (sscanf(str, "%d%c", &result, &suffix) == 2)
   {
@@ -61,7 +61,7 @@ static unsigned rtems_shell_df_parse_size(const char *str)
 static char *rtems_shell_df_humanize_size(uint64_t block_size, char *buf,
     size_t size)
 {
-  int i = 0;
+  size_t i = 0;
 
   while (block_size >= 1024 && i < sizeof(suffixes) / sizeof(suffixes[0]) - 1)
   {

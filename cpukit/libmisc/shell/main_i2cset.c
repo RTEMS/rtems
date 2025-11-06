@@ -54,7 +54,7 @@ rtems_i2cset_shell_main(int argc, char *argv[])
   /* Necessary: data-address and values. This will be a bit more. */
   uint8_t writebuff[argc];
   size_t len;
-  size_t i;
+  int i;
   i2c_msg msgs[] = {{
     .flags = 0,
     .buf = writebuff,

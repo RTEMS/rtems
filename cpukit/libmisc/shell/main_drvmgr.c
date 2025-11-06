@@ -354,7 +354,7 @@ static int shell_drvmgr_translate(int argc, char *argv[])
   rc = drvmgr_translate((struct drvmgr_dev *)obj, up | rev, (void *)src, &dst);
   if (rc == 0)
     printf(" Address %p could not be translated\n", (void *)src);
-  else if (rc == 0xffffffff)
+  else if (rc == (int) 0xffffffffU)
     printf(" %p => %p  (no translation required)\n", (void *)src, dst);
   else
     printf(" %p => %p  (map size 0x%x)\n", (void *)src, dst, rc);

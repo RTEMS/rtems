@@ -516,8 +516,12 @@ display(rtems_shell_ls_globals* globals, FTSENT *p, FTSENT *list)
 	DISPLAY d;
 	FTSENT *cur;
 	NAMES *np;
-	u_int64_t btotal, stotal, maxblock, maxsize;
-	int maxinode, maxnlink, maxmajor, maxminor;
+	u_int64_t btotal, stotal, maxsize;
+	blkcnt_t maxblock;
+	ino_t maxinode;
+	rtems_device_major_number maxmajor;
+	rtems_device_minor_number maxminor;
+	int maxnlink;
 	int bcfile, entries, flen, glen, ulen, maxflags, maxgroup, maxlen;
 	int maxuser, needstats;
 	const char *user, *group;
@@ -666,7 +670,7 @@ display(rtems_shell_ls_globals* globals, FTSENT *p, FTSENT *list)
 		}
 		d.s_flags = maxflags;
 		d.s_group = maxgroup;
-		(void)snprintf(buf, sizeof(buf), "%u", maxinode);
+		(void)snprintf(buf, sizeof(buf), "%llu", maxinode);
 		d.s_inode = strlen(buf);
 		(void)snprintf(buf, sizeof(buf), "%u", maxnlink);
 		d.s_nlink = strlen(buf);
