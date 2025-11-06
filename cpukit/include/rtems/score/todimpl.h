@@ -106,22 +106,22 @@ extern "C" {
 /**
  *  This constant represents the number of millisecond in a second.
  */
-#define TOD_MILLISECONDS_PER_SECOND     (uint32_t)1000
+#define TOD_MILLISECONDS_PER_SECOND     1000
 
 /**
  *  This constant represents the number of microseconds in a second.
  */
-#define TOD_MICROSECONDS_PER_SECOND     (uint32_t)1000000
+#define TOD_MICROSECONDS_PER_SECOND     1000000L
 
 /**
  *  This constant represents the number of nanoseconds in a second.
  */
-#define TOD_NANOSECONDS_PER_SECOND      (uint32_t)1000000000
+#define TOD_NANOSECONDS_PER_SECOND      1000000000L
 
 /**
  *  This constant represents the number of nanoseconds in a mircosecond.
  */
-#define TOD_NANOSECONDS_PER_MICROSECOND (uint32_t)1000
+#define TOD_NANOSECONDS_PER_MICROSECOND 1000
 
 /**@}*/
 
