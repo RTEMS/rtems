@@ -99,6 +99,28 @@ static int xqspi_page_count(
   return 0;
 }
 
+static int xqspi_sector_count(
+  rtems_flashdev *flash,
+  int *sector_count
+)
+{
+  *sector_count = QspiPsu_NOR_Get_Device_Size(flash->driver) /
+                  QspiPsu_NOR_Get_Sector_Size(flash->driver);
+  return 0;
+}
+
+static int xqspi_sector_info_by_off(
+  rtems_flashdev *flash,
+  off_t search_offset,
+  off_t *sector_offset,
+  size_t *sector_size
+)
+{
+  *sector_size = QspiPsu_NOR_Get_Sector_Size(flash->driver);
+  *sector_offset = search_offset - (search_offset%((off_t)(*sector_size)));
+  return 0;
+}
+
 static int xqspi_write_block_size(
   rtems_flashdev *flash,
   size_t *write_block_size
@@ -177,6 +199,8 @@ rtems_flashdev* xqspi_flash_init(XQspiPsu *xQspiDev)
   flash->page_info_by_index = &xqspi_page_info_by_index;
   flash->page_count = &xqspi_page_count;
   flash->write_block_size = &xqspi_write_block_size;
+  flash->sector_count = &xqspi_sector_count;
+  flash->sector_info_by_offset = &xqspi_sector_info_by_off;
   flash->region_table = ftable;
 
   return flash;
