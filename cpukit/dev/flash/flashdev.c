@@ -104,7 +104,7 @@ static uint32_t rtems_flashdev_ioctl_jedec_id(
   rtems_flashdev *flash
 );
 
-static uint32_t rtems_flashdev_ioctl_flash_type(
+static int rtems_flashdev_ioctl_flash_type(
   rtems_flashdev *flash,
   void *arg
 );
@@ -734,7 +734,7 @@ static int rtems_flashdev_ioctl_erase(
   int status;
 
   if ( flash->erase == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   }
 
   erase_args_1 = (rtems_flashdev_region *) arg;
@@ -890,14 +890,14 @@ static uint32_t rtems_flashdev_ioctl_jedec_id( rtems_flashdev *flash )
   }
 }
 
-static uint32_t rtems_flashdev_ioctl_flash_type(
+static int rtems_flashdev_ioctl_flash_type(
   rtems_flashdev *flash,
   void *arg
 )
 {
   rtems_flashdev_flash_type *type = (rtems_flashdev_flash_type*)arg;
   if ( flash->flash_type == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     return ( *flash->flash_type )( flash, type );
   }
@@ -914,7 +914,7 @@ static int rtems_flashdev_ioctl_pageinfo_offset(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->page_info_by_offset == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     page_info = (rtems_flashdev_ioctl_page_info *) arg;
     return ( *flash->page_info_by_offset )( flash,
@@ -933,7 +933,7 @@ static int rtems_flashdev_ioctl_pageinfo_index( rtems_flashdev *flash,
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->page_info_by_index == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     page_info = (rtems_flashdev_ioctl_page_info *) arg;
     return ( *flash->page_info_by_index )( flash,
@@ -949,7 +949,7 @@ static int rtems_flashdev_ioctl_page_count( rtems_flashdev *flash, void *arg )
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->page_count == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     return ( *flash->page_count )( flash, ( (int *) arg ) );
   }
@@ -964,7 +964,7 @@ static int rtems_flashdev_ioctl_write_block_size(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->write_block_size == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     return ( *flash->write_block_size )( flash, ( (size_t *) arg ) );
   }
@@ -981,7 +981,7 @@ static int rtems_flashdev_ioctl_sectorinfo_offset(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->sector_info_by_offset == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     sector_info = (rtems_flashdev_ioctl_sector_info *) arg;
     return ( *flash->sector_info_by_offset )( flash,
@@ -997,7 +997,7 @@ static int rtems_flashdev_ioctl_sector_count( rtems_flashdev *flash, void *arg )
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->sector_count == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     return ( *flash->sector_count )( flash, ( (int *) arg ) );
   }
@@ -1048,7 +1048,7 @@ static int rtems_flashdev_ioctl_oob_bytes_per_page(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->oob_bytes_per_page == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     return ( *flash->oob_bytes_per_page )( flash, ( (size_t *) arg ) );
   }
@@ -1061,7 +1061,7 @@ static int rtems_flashdev_ioctl_oob_read( rtems_flashdev *flash, void *arg )
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->oob_read == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     rw_info = (rtems_flashdev_ioctl_oob_rw_info *) arg;
     return ( *flash->oob_read )(
@@ -1160,7 +1160,7 @@ static int rtems_flashdev_ioctl_oob_write( rtems_flashdev *flash, void *arg )
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->oob_write == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     rw_info = (rtems_flashdev_ioctl_oob_rw_info *) arg;
     return ( *flash->oob_write )(
@@ -1199,7 +1199,7 @@ static int rtems_flashdev_ioctl_sector_mark_bad(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->sector_mark_bad == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     return ( *flash->sector_mark_bad)( flash, *(uintptr_t *) arg );
   }
@@ -1235,7 +1235,7 @@ static int rtems_flashdev_ioctl_sectorhealth(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   if ( flash->sector_health == NULL ) {
-    return 0;
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   } else {
     sector_health = arg;
     return ( *flash->sector_health)( flash, sector_health->location, &sector_health->sector_bad );
