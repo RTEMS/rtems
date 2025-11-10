@@ -28,6 +28,8 @@ links:
 - role: build-dependency
   uid: librfs
 - role: build-dependency
+  uid: libfatfs
+- role: build-dependency
   uid: fsbdpart01
 - role: build-dependency
   uid: fsclose01
@@ -41,6 +43,8 @@ links:
   uid: fsdosfssync01
 - role: build-dependency
   uid: fsdosfswrite01
+- role: build-dependency
+  uid: fsfatfssync01
 - role: build-dependency
   uid: fsfseeko01
 - role: build-dependency
@@ -221,6 +225,32 @@ links:
   uid: mrfsfstime
 - role: build-dependency
   uid: tftpfs
+- role: build-dependency
+  uid: fsfatfsformat01
+- role: build-dependency
+  uid: fatfsfsrdwr
+- role: build-dependency
+  uid: fatfsfserror
+- role: build-dependency
+  uid: fatfsfspatheval
+- role: build-dependency
+  uid: fatfsfsrename
+- role: build-dependency
+  uid: fatfsfsrenameexisting
+- role: build-dependency
+  uid: fatfsfsrenamelongname
+- role: build-dependency
+  uid: fatfsfsrenamemaxlinks
+- role: build-dependency
+  uid: fatfsfsrmdirparent
+- role: build-dependency
+  uid: fatfsfsscandir01
+- role: build-dependency
+  uid: fatfsfsstatvfs
+- role: build-dependency
+  uid: fatfsfstime
+- role: build-dependency
+  uid: fatfsfsclose01
 type: build
 use-after: []
 use-before:

@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: library
+cflags: []
+copyrights:
+- Copyright (C) 2025 Sepehr Ganji <sepehrganji79@gmail.com>
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes:
+- testsuites/fstests/fatfs_support
+install: []
+install-path: null
+links: []
+source:
+- testsuites/fstests/fatfs_support/fs_support.c
+- testsuites/fstests/support/fstest_support.c
+- testsuites/fstests/support/ramdisk_support.c
+target: testfatfs
+type: build

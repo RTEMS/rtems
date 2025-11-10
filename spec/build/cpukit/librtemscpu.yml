@@ -4,7 +4,30 @@ cflags:
 - ${COVERAGE_COMPILER_FLAGS}
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
-cppflags: []
+cppflags:
+- -Ddisk_status=rtems_fatfs_disk_status
+- -Ddisk_initialize=rtems_fatfs_disk_initialize
+- -Ddisk_read=rtems_fatfs_disk_read
+- -Ddisk_write=rtems_fatfs_disk_write
+- -Ddisk_ioctl=rtems_fatfs_disk_ioctl
+- -Dget_fattime=rtems_fatfs_get_fattime
+- -DFFCONF_DEF=5385
+- -DFF_VOLUMES=1
+- -DFF_USE_MKFS=1
+- -DFF_USE_CHMOD=1
+- -DFF_USE_LFN=1
+- -DFF_FS_RPATH=2
+- -DFF_FS_EXFAT=1
+- -DFF_MAX_SS=512
+- -DFF_MIN_SS=512
+- -DFF_LFN_BUF=255
+- -DFF_SFN_BUF=12
+- -DFF_MAX_LFN=255
+- -DFF_USE_LABEL=0
+- -DFF_STR_VOLUME_ID=0
+- -DFF_MULTI_PARTITION=0
+- -DFF_FS_READONLY=0
+- -DFF_LBA64=0
 cxxflags:
 - ${COVERAGE_COMPILER_FLAGS}
 enabled-by: true
@@ -118,6 +141,7 @@ install:
   - cpukit/include/rtems/devzero.h
   - cpukit/include/rtems/diskdevs.h
   - cpukit/include/rtems/dosfs.h
+  - cpukit/include/rtems/fatfs.h
   - cpukit/include/rtems/dumpbuf.h
   - cpukit/include/rtems/endian.h
   - cpukit/include/rtems/error.h
@@ -861,6 +885,13 @@ source:
 - cpukit/libfs/src/dosfs/msdos_rename.c
 - cpukit/libfs/src/dosfs/msdos_rmnod.c
 - cpukit/libfs/src/dosfs/msdos_statvfs.c
+- cpukit/libfs/src/fatfs/ff.c
+- cpukit/libfs/src/fatfs/ffunicode.c
+- cpukit/libfs/src/fatfs/ffsystem.c
+- cpukit/libfs/src/fatfs/rtems-diskio.c
+- cpukit/libfs/src/fatfs/rtems-fatfs-init.c
+- cpukit/libfs/src/fatfs/rtems-fatfs-file.c
+- cpukit/libfs/src/fatfs/rtems-fatfs-dir.c
 - cpukit/libfs/src/imfs/deviceio.c
 - cpukit/libfs/src/imfs/imfs_add_node.c
 - cpukit/libfs/src/imfs/imfs_chown.c

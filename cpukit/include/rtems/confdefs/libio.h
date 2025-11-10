@@ -48,6 +48,7 @@
 
 #ifdef CONFIGURE_FILESYSTEM_ALL
   #define CONFIGURE_FILESYSTEM_DOSFS
+  #define CONFIGURE_FILESYSTEM_FATFS
   #define CONFIGURE_FILESYSTEM_FTPFS
   #define CONFIGURE_FILESYSTEM_IMFS
   #define CONFIGURE_FILESYSTEM_JFFS2
@@ -108,6 +109,10 @@
     #error "CONFIGURE_APPLICATION_DISABLE_FILESYSTEM cannot be used together with CONFIGURE_FILESYSTEM_DOSFS"
   #endif
 
+  #ifdef CONFIGURE_FILESYSTEM_FATFS
+    #error "CONFIGURE_APPLICATION_DISABLE_FILESYSTEM cannot be used together with CONFIGURE_FILESYSTEM_FATFS"
+  #endif
+
   #ifdef CONFIGURE_FILESYSTEM_FTPFS
     #error "CONFIGURE_APPLICATION_DISABLE_FILESYSTEM cannot be used together with CONFIGURE_FILESYSTEM_FTPFS"
   #endif
@@ -137,6 +142,10 @@
 
 #ifdef CONFIGURE_FILESYSTEM_DOSFS
 #include <rtems/dosfs.h>
+#endif
+
+#ifdef CONFIGURE_FILESYSTEM_FATFS
+#include <rtems/fatfs.h>
 #endif
 
 #ifdef CONFIGURE_FILESYSTEM_FTPFS
@@ -296,6 +305,9 @@ const rtems_filesystem_table_t rtems_filesystem_table[] = {
   { "/", IMFS_initialize_support },
   #ifdef CONFIGURE_FILESYSTEM_DOSFS
     { RTEMS_FILESYSTEM_TYPE_DOSFS, rtems_dosfs_initialize },
+  #endif
+  #ifdef CONFIGURE_FILESYSTEM_FATFS
+    { RTEMS_FILESYSTEM_TYPE_FATFS, rtems_fatfs_initialize },
   #endif
   #ifdef CONFIGURE_FILESYSTEM_FTPFS
     { RTEMS_FILESYSTEM_TYPE_FTPFS, rtems_ftpfs_initialize },

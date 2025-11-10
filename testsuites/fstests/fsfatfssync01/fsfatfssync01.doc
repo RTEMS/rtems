@@ -1,0 +1,17 @@
+This file documents the test fsfatfssync01.
+
+test set name: fsfatfssync01
+
+test purpose:
+  Verify FatFS auto-sync behavior and explicit fsync() functionality.
+
+test description:
+  Tests FatFS's synchronization behavior by:
+  - Creating a file and verifying it persists after disk cache purge
+  - Writing data without explicit fsync() and verifying it persists after disk cache purge
+    (demonstrates FatFS auto-syncs on file close)
+  - Writing additional data with explicit fsync() and verifying it persists after disk cache purge
+  
+  Note: Unlike traditional POSIX filesystems, FatFS automatically calls f_sync() during 
+  f_close(), ensuring all writes are immediately persisted to disk regardless of whether
+  fsync() was explicitly called.

@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2025 Sepehr Ganji <sepehrganji79@gmail.com>
+cppflags:
+- -DTEST_STATE_EXPECTED_FAIL=1
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes:
+- testsuites/fstests/fatfs_support
+ldflags: []
+links: []
+source:
+- testsuites/fstests/fsrenameexisting/test.c
+stlib: []
+target: testsuites/fstests/fatfs_fsrenameexisting.exe
+type: build
+use-after: []
+use-before:
+- testfatfs
