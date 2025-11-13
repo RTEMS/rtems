@@ -58,7 +58,7 @@ i2c_transfer_poll_done_func(void *arg)
  *     RTEMS_SUCCESSFUL, if tranfer finished successfully,
  *     or RTEMS status code if semaphore operations has failed.
  */
-static i2c_message_status
+static rtems_status_code
 i2c_transfer_wait_sema(i2c_bus_number bus, i2c_message *msg, int nmsg)
 {
     rtems_status_code sc;
@@ -72,7 +72,7 @@ i2c_transfer_wait_sema(i2c_bus_number bus, i2c_message *msg, int nmsg)
         &sema
     );
     if (sc != RTEMS_SUCCESSFUL)
-        return I2C_RESOURCE_NOT_AVAILABLE;
+        return RTEMS_UNSATISFIED;
     sc = i2c_transfer(bus, nmsg, msg,
 		      i2c_transfer_sema_done_func, &sema);
     if (sc != RTEMS_SUCCESSFUL)
