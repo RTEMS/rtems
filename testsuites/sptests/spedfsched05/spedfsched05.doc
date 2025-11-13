@@ -1,0 +1,26 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spedfsched05
+
+directives:
+
+  - rtems_task_get_affinity()
+  - rtems_task_set_affinity()
+  - pthread_getaffinity_np()
+  - pthread_setaffinity_np()
+  - rtems_task_get_scheduler()
+  - rtems_task_set_scheduler()
+  - rtems_scheduler_ident()
+  - rtems_scheduler_get_processor_set()
+  - rtems_task_get_priority()
+
+concepts:
+
+  - Ensure that the task set/get affinity functions work on uni-processor
+    configurations with the EDF scheduler.
+  - Ensure that the task set/get scheduler functions work on uni-processor
+    configurations with the EDF scheduler.
+  - Ensure that the scheduler functions work on uni-processor configurations
+    with the EDF scheduler.
+  - Ensure that the task get priority function works on uni-processor
+    configurations with the EDF scheduler.

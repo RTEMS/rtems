@@ -59,7 +59,11 @@ Priority_Control _Scheduler_EDF_Unmap_priority(
 {
   (void) scheduler;
 
-  return SCHEDULER_PRIORITY_UNMAP( priority & ~SCHEDULER_EDF_PRIO_MSB );
+  return SCHEDULER_PRIORITY_UNMAP(
+      priority & SCHEDULER_EDF_PRIO_MSB
+          ? priority & ~SCHEDULER_EDF_PRIO_MSB
+          : 0
+  );
 }
 
 void _Scheduler_EDF_Release_job(

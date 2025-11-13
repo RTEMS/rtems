@@ -72,6 +72,10 @@ extern "C" {
   #define CONFIGURE_MAXIMUM_PRIORITY PRIORITY_DEFAULT_MAXIMUM
 #endif
 
+#if !defined(CONFIGURE_SCHEDULER_EDF) && \
+    !defined(CONFIGURE_SCHEDULER_EDF_SMP) && \
+    !defined(CONFIGURE_SCHEDULER_CBS)
+
 #if CONFIGURE_MAXIMUM_PRIORITY != 3 \
   && CONFIGURE_MAXIMUM_PRIORITY != 7 \
   && CONFIGURE_MAXIMUM_PRIORITY != 15 \
@@ -84,6 +88,8 @@ extern "C" {
 
 #if CONFIGURE_MAXIMUM_PRIORITY > PRIORITY_DEFAULT_MAXIMUM
   #error "CONFIGURE_SCHEDULER_PRIORITY must be less than or equal to the architecture defined maximum priority"
+#endif
+
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_PRIORITY
