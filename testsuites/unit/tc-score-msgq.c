@@ -163,7 +163,7 @@ static rtems_status_code SubmitMessage(
   unsigned int posix_piority
 )
 {
-  rtems_status_code status;
+  Status_Control status;
   Thread_queue_Context queue_context;
   Message_queue_Control *the_message_queue;
 
