@@ -61,7 +61,9 @@ static void task(rtems_task_argument arg)
 
   rtems_test_assert(rtems_scheduler_get_processor() == 1);
   rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
-  rtems_test_assert(sched_get_priority_max(SCHED_RR) == INT_MAX - 1);
+  rtems_test_assert(
+      sched_get_priority_max(SCHED_RR) == PRIORITY_DEFAULT_MAXIMUM - 1
+  );
 
   sc = rtems_semaphore_obtain(cmtx_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_NOT_DEFINED);
