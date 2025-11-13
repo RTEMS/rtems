@@ -43,6 +43,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <rtems/inttypes.h>
 #include <rtems/shell.h>
 #include <rtems/rtems-fdt-shell.h>
 
@@ -301,7 +302,7 @@ rtems_fdt_shell_ls (int argc, char *argv[])
         print_name = &name[path_len + name_offset + 1];
       }
 
-      printf ("%-*s", max_name_len, print_name);
+      printf ("%-*s", (int) max_name_len, print_name);
 
       if (debug)
       {
