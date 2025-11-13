@@ -717,7 +717,7 @@ rtems_rtl_elf_common (rtems_rtl_obj*      obj,
          (ELF_ST_TYPE (symbol.st_info) == STT_COMMON)))
     {
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-        printf ("rtl: com:elf:%-2d bind:%-2d type:%-2d size:%d value:%d name:%d\n",
+        printf ("rtl: com:elf:%-2zd bind:%-2d type:%-2d size:%d value:%d name:%d\n",
                 sym, (int) ELF_ST_BIND (symbol.st_info),
                 (int) ELF_ST_TYPE (symbol.st_info),
                 (int) symbol.st_size, (int) symbol.st_value,
@@ -937,7 +937,7 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
      * we need to make sure there is a valid seciton.
      */
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-      printf ("rtl: sym:elf:%-4d name:%-4d: %-20s: bind:%-2d:%-12s " \
+      printf ("rtl: sym:elf:%-4zd name:%-4d: %-20s: bind:%-2d:%-12s " \
               "type:%-2d:%-10s sect:%-5d size:%-5d value:%d\n",
               sym, (int) symbol.st_name, name,
               (int) ELF_ST_BIND (symbol.st_info),
@@ -995,7 +995,7 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
           else
           {
             if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-              printf ("rtl: sym:elf:%-4d name:%-4d: %-20s: global\n",
+              printf ("rtl: sym:elf:%-4zd name:%-4d: %-20s: global\n",
                       sym, (int) symbol.st_name, name);
             ++globals;
             global_string_space += strlen (name) + 1;
@@ -1004,7 +1004,7 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
         else if (ELF_ST_BIND (symbol.st_info) == STB_LOCAL)
         {
           if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-            printf ("rtl: sym:elf:%-4d name:%-4d: %-20s: local\n",
+            printf ("rtl: sym:elf:%-4zd name:%-4d: %-20s: local\n",
                     sym, (int) symbol.st_name, name);
           ++locals;
           local_string_space += strlen (name) + 1;
@@ -1194,7 +1194,7 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
         osym->data = symbol.st_shndx;
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-          printf ("rtl: sym:add:%-4d name:%-4d: %-20s: bind:%-2d " \
+          printf ("rtl: sym:add:%-4zd name:%-4d: %-20s: bind:%-2d " \
                   "type:%-2d val:%-8p sect:%-3d size:%d\n",
                   sym, (int) symbol.st_name, osym->name,
                   (int) ELF_ST_BIND (symbol.st_info),
@@ -1229,7 +1229,7 @@ rtems_rtl_elf_symbols_locate (rtems_rtl_obj*      obj,
       {
         osym->value += (intptr_t) symsect->base;
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-          printf ("rtl: sym:locate:local :%-4d name: %-20s val:%-8p sect:%-3d (%s, %p)\n",
+          printf ("rtl: sym:locate:local :%-4zd name: %-20s val:%-8p sect:%-3d (%s, %p)\n",
                   sym, osym->name, osym->value, osym->data,
                   symsect->name, symsect->base);
       }
@@ -1244,7 +1244,7 @@ rtems_rtl_elf_symbols_locate (rtems_rtl_obj*      obj,
       {
         osym->value += (intptr_t) symsect->base;
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-          printf ("rtl: sym:locate:global:%-4d name: %-20s val:%-8p sect:%-3d (%s, %p)\n",
+          printf ("rtl: sym:locate:global:%-4zd name: %-20s val:%-8p sect:%-3d (%s, %p)\n",
                   sym, osym->name, osym->value, osym->data,
                   symsect->name, symsect->base);
       }
