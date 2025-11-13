@@ -100,16 +100,17 @@ rtems_task Init(
   (void) argument;
 
   rtems_status_code   status;
+  Status_Control      score_status;
 
   TEST_BEGIN();
 
-  status = _Objects_Name_to_id_u32(
+  score_status = _Objects_Name_to_id_u32(
     rtems_build_name( 'I', 'D', 'L', 'E' ),
     RTEMS_SEARCH_LOCAL_NODE,
     &Idle_id,
     &_Thread_Information.Objects
   );
-  rtems_test_assert( status == RTEMS_SUCCESSFUL );
+  rtems_test_assert( score_status == STATUS_SUCCESSFUL );
 
   /*
    * Create the semaphore. Then obtain and release the
