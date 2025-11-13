@@ -225,7 +225,7 @@ static void RtemsSchedulerValSmpOnly_Action_2( void )
    */
   sc = rtems_scheduler_get_maximum_priority( id_by_cpu, &priority );
   T_step_rsc_success( 15, sc );
-  T_step_eq_u32( 16, priority, (uint32_t) INT_MAX );
+  T_step_eq_u32( 16, priority, (uint32_t) PRIORITY_DEFAULT_MAXIMUM );
 
   /*
    * Check that processor 2 has scheduler C assigned if it is present.

@@ -292,7 +292,7 @@ static void RtemsSchedulerReqGetMaximumPriority_Post_PrioObj_Check(
        * rtems_scheduler_get_maximum_priority() call.
        */
       #if defined(RTEMS_SMP)
-      T_eq_u32( ctx->priority_obj, INT_MAX );
+      T_eq_u32( ctx->priority_obj, PRIORITY_DEFAULT_MAXIMUM );
       #else
       T_eq_u32( ctx->priority_obj, 127 );
       #endif
