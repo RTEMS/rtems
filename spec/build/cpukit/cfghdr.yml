@@ -59,6 +59,8 @@ links:
 - role: build-dependency
   uid: cfgsystypes
 - role: build-dependency
+  uid: cfgszino
+- role: build-dependency
   uid: cfgszoff
 - role: build-dependency
   uid: cfgszsize

@@ -53,6 +53,7 @@ __RCSID("$NetBSD: ls.c,v 1.58 2005/10/26 02:24:22 jschauma Exp $");
 #endif
 
 #include <rtems.h>
+#include <rtems/inttypes.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
 #define __need_getopt_newlib
@@ -670,7 +671,7 @@ display(rtems_shell_ls_globals* globals, FTSENT *p, FTSENT *list)
 		}
 		d.s_flags = maxflags;
 		d.s_group = maxgroup;
-		(void)snprintf(buf, sizeof(buf), "%llu", maxinode);
+		(void)snprintf(buf, sizeof(buf), "%" PRIdino_t, maxinode);
 		d.s_inode = strlen(buf);
 		(void)snprintf(buf, sizeof(buf), "%u", maxnlink);
 		d.s_nlink = strlen(buf);

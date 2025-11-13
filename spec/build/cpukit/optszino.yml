@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-value: 8
+- env-assign: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2025 OAR Corporation
+default: []
+description: ''
+enabled-by: true
+links: []
+name: __RTEMS_SIZEOF_INO_T__
+type: build

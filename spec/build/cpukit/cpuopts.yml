@@ -64,6 +64,8 @@ links:
 - role: build-dependency
   uid: optszblksize
 - role: build-dependency
+  uid: optszino
+- role: build-dependency
   uid: optszmode
 - role: build-dependency
   uid: optszoff

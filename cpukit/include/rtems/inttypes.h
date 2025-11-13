@@ -55,7 +55,16 @@ extern "C" {
  * in the C and POSIX standard.
  */
 
-/** Helper macro to print "modet" in octal */
+/** Helper macro to print "ino_t" in decimal */
+#if __RTEMS_SIZEOF_INO_T__ == 8
+#define PRIdino_t PRId64
+#elif __RTEMS_SIZEOF_INO_T__ == 4
+#define PRIdino_t PRId32
+#else
+#error "PRIdino_t: unsupported size of ino_t"
+#endif
+
+/** Helper macro to print "mode_t" in octal */
 #if __RTEMS_SIZEOF_MODE_T__ == 8
 #define PRIomode_t PRIo64
 #elif __RTEMS_SIZEOF_MODE_T__ == 4
