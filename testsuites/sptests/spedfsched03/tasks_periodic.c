@@ -7,7 +7,8 @@
  */
 
 /*
- *  Copyright (C) 2011 Petr Benes.
+ * Copyright (C) 2025 Gedare Bloom
+ * Copyright (C) 2011 Petr Benes
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -43,7 +44,12 @@ rtems_task Tasks_Periodic(
 {
   rtems_id          rmid;
   rtems_id          test_rmid;
+  rtems_id          task_id;
+  rtems_id          sched_id;
   rtems_status_code status;
+
+  rtems_task_priority prio_cur;
+  rtems_task_priority prio_max;
 
   int start, stop, now;
 
@@ -65,6 +71,14 @@ rtems_task Tasks_Periodic(
      rtems_test_exit( 0 );
   }
 
+  task_id = Task_id[ argument ];
+  status = rtems_task_get_scheduler( task_id, &sched_id);
+  rtems_test_assert( status == RTEMS_SUCCESSFUL );
+
+  status = rtems_scheduler_get_maximum_priority( sched_id, &prio_max );
+  rtems_test_assert( status == RTEMS_SUCCESSFUL );
+  rtems_test_assert( prio_max == CONFIGURE_MAXIMUM_PRIORITY );
+
   put_name( Task_name[ argument ], FALSE );
   printf( "- (0x%08" PRIxrtems_id ") period %" PRIu32 "\n",
           rmid, Periods[ argument ] );
@@ -75,6 +89,10 @@ rtems_task Tasks_Periodic(
   while (FOREVER) {
     if (rtems_rate_monotonic_period(rmid, Periods[argument])==RTEMS_TIMEOUT)
       printf("P%" PRIdPTR " - Deadline miss\n", argument);
+
+    status = rtems_task_get_priority( task_id, sched_id, &prio_cur );
+    rtems_test_assert( status == RTEMS_SUCCESSFUL );
+    rtems_test_assert( prio_cur == 0 );
 
     start = rtems_clock_get_ticks_since_boot();
     printf("P%" PRIdPTR "-S ticks:%d\n", argument, start);

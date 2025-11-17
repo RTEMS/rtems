@@ -55,6 +55,7 @@ rtems_task Tasks_Aperiodic(
 
 #define CONFIGURE_MAXIMUM_TASKS               7
 #define CONFIGURE_MAXIMUM_PERIODS             10
+#define CONFIGURE_MAXIMUM_PRIORITY            512
 
 #define CONFIGURE_INIT_TASK_PRIORITY          100
 #define CONFIGURE_INIT_TASK_INITIAL_MODES     RTEMS_NO_PREEMPT
