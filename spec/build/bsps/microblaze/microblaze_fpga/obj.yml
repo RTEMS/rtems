@@ -37,11 +37,11 @@ source:
 - bsps/microblaze/microblaze_fpga/start/microblaze_invalidate_dcache.S
 - bsps/microblaze/microblaze_fpga/start/microblaze_invalidate_icache.S
 - bsps/microblaze/microblaze_fpga/start/microblaze_invalidate_dcache_range.S
+- bsps/microblaze/shared/btimer/btimer.c
 - bsps/microblaze/shared/dev/serial/uartlite.c
 - bsps/microblaze/shared/dev/serial/uartlite_l.c
 - bsps/microblaze/shared/fdt/microblaze-fdt-support.c
 - bsps/shared/cache/nocache.c
-- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/cpucounter/cpucounterfrequency.c
 - bsps/shared/dev/cpucounter/cpucounterread.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
