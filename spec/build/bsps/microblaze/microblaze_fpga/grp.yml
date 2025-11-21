@@ -21,6 +21,12 @@ links:
 - role: build-dependency
   uid: optconsoleinterrupts
 - role: build-dependency
+  uid: optvectoraddress
+- role: build-dependency
+  uid: optstartaddress
+- role: build-dependency
+  uid: optbramlen
+- role: build-dependency
   uid: optdcachebaseaddress
 - role: build-dependency
   uid: optdcachelinelen

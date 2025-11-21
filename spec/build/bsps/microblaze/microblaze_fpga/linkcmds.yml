@@ -30,11 +30,12 @@ content: |
 
   ENTRY (_start)
   STARTUP (start.o)
-  _TEXT_START_ADDR = DEFINED(_TEXT_START_ADDR) ? _TEXT_START_ADDR : 0x80000000;
+  _TEXT_START_ADDR = ${BSP_MICROBLAZE_FPGA_START_ADDR};
+  _VECTOR_START_ADDR = ${BSP_MICROBLAZE_FPGA_VECTOR_ADDR};
 
   MEMORY
     {
-        BRAM     (AIW) : ORIGIN = 0x00000000, LENGTH = 0x10000
+        BRAM     (AIW) : ORIGIN = 0x00000000, LENGTH = ${BSP_MICROBLAZE_FPGA_BRAM_LENGTH}
         RAM   : ORIGIN = _TEXT_START_ADDR, LENGTH = ${BSP_MICROBLAZE_FPGA_RAM_LENGTH}
     }
 
@@ -54,11 +55,11 @@ content: |
 
   SECTIONS
   {
-    .vectors.reset 0x0 : { KEEP (*(.vectors.reset)) } = 0
-    .vectors.sw_exception 0x8 : { KEEP (*(.vectors.sw_exception)) } = 0
-    .vectors.interrupt 0x10 : { KEEP (*(.vectors.interrupt)) } = 0
-    .vectors.debug_sw_break 0x18 : { KEEP (*(.vectors.debug_sw_break)) } = 0
-    .vectors.hw_exception 0x20 : { KEEP (*(.vectors.hw_exception)) } = 0
+    .vectors.reset _VECTOR_START_ADDR + 0x0 : { KEEP (*(.vectors.reset)) } = 0
+    .vectors.sw_exception _VECTOR_START_ADDR + 0x8 : { KEEP (*(.vectors.sw_exception)) } = 0
+    .vectors.interrupt _VECTOR_START_ADDR + 0x10 : { KEEP (*(.vectors.interrupt)) } = 0
+    .vectors.debug_sw_break _VECTOR_START_ADDR + 0x18 : { KEEP (*(.vectors.debug_sw_break)) } = 0
+    .vectors.hw_exception _VECTOR_START_ADDR + 0x20 : { KEEP (*(.vectors.hw_exception)) } = 0
     . = _TEXT_START_ADDR;
     .text : ALIGN_WITH_INPUT {
       bsp_section_text_begin = .;

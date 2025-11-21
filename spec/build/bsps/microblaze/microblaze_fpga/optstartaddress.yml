@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
+default: 
+- enabled-by: true
+  value: 0x80000000
+default-by-variant: []
+description: |
+  start address of the .text section
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: BSP_MICROBLAZE_FPGA_START_ADDR
+type: build
