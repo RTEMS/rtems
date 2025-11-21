@@ -80,62 +80,74 @@ void _CPU_Context_Initialize(
   }
 }
 
+typedef struct {
+  int         id;
+  const char *text;
+} _CPU_esr_ec_code;
+
+/* See ug984-vivado-microblaze-ref Exception Status Register (ESR) */
+static _CPU_esr_ec_code esr_ec_codes[] = {
+  { 0, "Stream Exception" },
+  { 1, "Unaligned data access exception" },
+  { 2, "Illegal op-code exception" },
+  { 3, "Instruction bus error exception" },
+  { 4, "Data bus error exception" },
+  { 5, "Divide exception" },
+  { 6, "Floating point unit exception" },
+  /* Xilinx docs have 2 errors for id 7 */
+  { 7, "Privileged instruction or Stack protection violation exception" },
+  { 16, "Data storage exception" },
+  { 17, "Instruction storage exception" },
+  { 18, "Data TLB miss exception" },
+  { 19, "Instruction TLB miss exception" } };
+
 void _CPU_Exception_frame_print( const CPU_Exception_frame *ctx )
 {
-  printk(
-    "\n"
-    "R0   = 0x%08" PRIx32  " R17  = %p\n"
-    "R1   = 0x%08" PRIx32  " R18  = 0x%08" PRIx32 "\n"
-    "R2   = 0x%08" PRIx32  " R19  = 0x%08" PRIx32 "\n"
-    "R3   = 0x%08" PRIx32  " R20  = 0x%08" PRIx32 "\n"
-    "R4   = 0x%08" PRIx32  " R21  = 0x%08" PRIx32 "\n"
-    "R5   = 0x%08" PRIx32  " R22  = 0x%08" PRIx32 "\n"
-    "R6   = 0x%08" PRIx32  " R23  = 0x%08" PRIx32 "\n"
-    "R7   = 0x%08" PRIx32  " R24  = 0x%08" PRIx32 "\n"
-    "R8   = 0x%08" PRIx32  " R25  = 0x%08" PRIx32 "\n"
-    "R9   = 0x%08" PRIx32  " R26  = 0x%08" PRIx32 "\n"
-    "R10  = 0x%08" PRIx32  " R27  = 0x%08" PRIx32 "\n"
-    "R11  = 0x%08" PRIx32  " R28  = 0x%08" PRIx32 "\n"
-    "R12  = 0x%08" PRIx32  " R29  = 0x%08" PRIx32 "\n"
-    "R13  = 0x%08" PRIx32  " R30  = 0x%08" PRIx32 "\n"
-    "R14  = %p"            " R31  = 0x%08" PRIx32 "\n"
-    "R15  = %p"            " ESR  = 0x%08" PRIx32 "\n"
-    "R16  = %p"            " EAR  = %p\n",
-    0,  ctx->r17,
-    ctx->r1,  ctx->r18,
-    ctx->r2,  ctx->r19,
-    ctx->r3,  ctx->r20,
-    ctx->r4,  ctx->r21,
-    ctx->r5,  ctx->r22,
-    ctx->r6,  ctx->r23,
-    ctx->r7,  ctx->r24,
-    ctx->r8,  ctx->r25,
-    ctx->r9,  ctx->r26,
-    ctx->r10, ctx->r27,
-    ctx->r11, ctx->r28,
-    ctx->r12, ctx->r29,
-    ctx->r13, ctx->r30,
-    ctx->r14, ctx->r31,
-    ctx->r15, ctx->esr,
-    ctx->r16, ctx->ear
-  );
 
-  printk(
-    "MSR  = 0x%08" PRIx32 " %s%s%s%s%s%s%s%s%s%s%s%s\n",
-    ctx->msr,
-    ( ctx->msr & MICROBLAZE_MSR_VM ) ? "VM " : "",
-    ( ctx->msr & MICROBLAZE_MSR_UM ) ? "UM " : "",
-    ( ctx->msr & MICROBLAZE_MSR_PVR ) ? "PVR " : "",
-    ( ctx->msr & MICROBLAZE_MSR_EIP ) ? "EiP " : "",
-    ( ctx->msr & MICROBLAZE_MSR_EE ) ? "EE " : "",
-    ( ctx->msr & MICROBLAZE_MSR_DCE ) ? "DCE " : "",
-    ( ctx->msr & MICROBLAZE_MSR_DZO ) ? "DZO " : "",
-    ( ctx->msr & MICROBLAZE_MSR_ICE ) ? "ICE " : "",
-    ( ctx->msr & MICROBLAZE_MSR_FSL ) ? "FSL " : "",
-    ( ctx->msr & MICROBLAZE_MSR_BIP ) ? "BiP " : "",
-    ( ctx->msr & MICROBLAZE_MSR_C ) ? "C " : "",
-    ( ctx->msr & MICROBLAZE_MSR_IE ) ? "IE " : ""
-  );
+  printk( "\nR0   = 0x%08" PRIx32 " R17  = %p <- PC fault\n", 0, ctx->r17 );
+  printk( "R1   = 0x%08" PRIx32 " R18  = 0x%08" PRIx32 "\n", ctx->r1, ctx->r18 );
+  printk( "R2   = 0x%08" PRIx32 " R19  = 0x%08" PRIx32 "\n", ctx->r2, ctx->r19 );
+  printk( "R3   = 0x%08" PRIx32 " R20  = 0x%08" PRIx32 "\n", ctx->r3, ctx->r20 );
+  printk( "R4   = 0x%08" PRIx32 " R21  = 0x%08" PRIx32 "\n", ctx->r4, ctx->r21 );
+  printk( "R5   = 0x%08" PRIx32 " R22  = 0x%08" PRIx32 "\n", ctx->r5, ctx->r22 );
+  printk( "R6   = 0x%08" PRIx32 " R23  = 0x%08" PRIx32 "\n", ctx->r6, ctx->r23 );
+  printk( "R7   = 0x%08" PRIx32 " R24  = 0x%08" PRIx32 "\n", ctx->r7, ctx->r24 );
+  printk( "R8   = 0x%08" PRIx32 " R25  = 0x%08" PRIx32 "\n", ctx->r8, ctx->r25 );
+  printk( "R9   = 0x%08" PRIx32 " R26  = 0x%08" PRIx32 "\n", ctx->r9, ctx->r26 );
+  printk( "R10  = 0x%08" PRIx32 " R27  = 0x%08" PRIx32 "\n", ctx->r10, ctx->r27 );
+  printk( "R11  = 0x%08" PRIx32 " R28  = 0x%08" PRIx32 "\n", ctx->r11, ctx->r28 );
+  printk( "R12  = 0x%08" PRIx32 " R29  = 0x%08" PRIx32 "\n", ctx->r12, ctx->r29 );
+  printk( "R13  = 0x%08" PRIx32 " R30  = 0x%08" PRIx32 "\n", ctx->r13, ctx->r30 );
+  printk( "R14  = %p R31  = 0x%08" PRIx32 "\n", ctx->r14, ctx->r31 );
+  printk( "R15  = %p ESR  = 0x%08" PRIx32 "\n", ctx->r15, ctx->esr );
+  printk( "R16  = %p EAR  = %p\n", ctx->r16, ctx->ear );
+
+  printk( "MSR  = 0x%08" PRIx32 " %s%s%s%s%s%s%s%s%s%s%s%s\n",
+          ctx->msr,
+          ( ctx->msr & MICROBLAZE_MSR_VM ) ? "VM " : "",
+          ( ctx->msr & MICROBLAZE_MSR_UM ) ? "UM " : "",
+          ( ctx->msr & MICROBLAZE_MSR_PVR ) ? "PVR " : "",
+          ( ctx->msr & MICROBLAZE_MSR_EIP ) ? "EiP " : "",
+          ( ctx->msr & MICROBLAZE_MSR_EE ) ? "EE " : "",
+          ( ctx->msr & MICROBLAZE_MSR_DCE ) ? "DCE " : "",
+          ( ctx->msr & MICROBLAZE_MSR_DZO ) ? "DZO " : "",
+          ( ctx->msr & MICROBLAZE_MSR_ICE ) ? "ICE " : "",
+          ( ctx->msr & MICROBLAZE_MSR_FSL ) ? "FSL " : "",
+          ( ctx->msr & MICROBLAZE_MSR_BIP ) ? "BiP " : "",
+          ( ctx->msr & MICROBLAZE_MSR_C ) ? "C " : "",
+          ( ctx->msr & MICROBLAZE_MSR_IE ) ? "IE " : "" );
+
+  const char *esr_ec_txt = "?";
+  int         exception_ind = 0;
+  int         esr_ec = ctx->esr & 0x1f;
+  for ( ; exception_ind < sizeof( esr_ec_codes ) / sizeof( esr_ec_codes[ 0 ] );
+        exception_ind++ ) {
+    if ( esr_ec_codes[ exception_ind ].id == esr_ec ) {
+      esr_ec_txt = esr_ec_codes[ exception_ind ].text;
+    }
+  }
+  printk( "ESR: %s\n", esr_ec_txt );
+  printk( "PC:  %p\n", ctx->r17 );
 }
 
 void _CPU_ISR_Set_level( uint32_t level )
@@ -147,7 +159,7 @@ void _CPU_ISR_Set_level( uint32_t level )
   if ( level == 0 ) {
     microblaze_switch_reg |= MICROBLAZE_MSR_IE;
   } else {
-    microblaze_switch_reg &= ~(MICROBLAZE_MSR_IE);
+    microblaze_switch_reg &= ~( MICROBLAZE_MSR_IE );
   }
 
   _CPU_MSR_SET( microblaze_switch_reg );
