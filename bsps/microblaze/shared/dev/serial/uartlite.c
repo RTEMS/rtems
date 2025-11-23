@@ -108,7 +108,7 @@ static void uart_last_close(
 #else
   (void) tty;
   (void) base;
-  (void) arg;
+  (void) args;
 #endif
 }
 
