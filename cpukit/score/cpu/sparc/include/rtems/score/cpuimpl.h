@@ -249,12 +249,11 @@ static inline void _CPU_Use_thread_local_storage(
   const Context_Control *context
 )
 {
-   register uint32_t g7 __asm__( "g7" );
-
-   g7 = context->g7;
-
-   /* Make sure that the register assignment is not optimized away */
-   __asm__ volatile ( "" : : "r" ( g7 ) );
+  /* Load the thread pointer into g7 */
+  __asm__ volatile( "mov %0, %%g7"
+                    :
+                    : "r"( context->g7 )
+                    : "g7" );
 }
 
 static inline void *_CPU_Get_TLS_thread_pointer(
