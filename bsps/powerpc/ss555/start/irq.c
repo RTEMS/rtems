@@ -30,7 +30,13 @@
  */
 int CPU_irq_level_from_symbolic_name(const rtems_irq_number name)
 {
-  if (CPU_USIU_EXT_IRQ_0 <= name && name <= CPU_USIU_INT_IRQ_7)
+  /*
+   * The GCC warning -Wtype-limits flagged that the 
+   * (CPU_USIU_EXT_IRQ_0 <= name * part of the expression was
+   * not needed because name is unsigned and CPU_USIU_EXT_IRQ_0
+   * is 0.
+   */
+  if (name <= CPU_USIU_INT_IRQ_7)
     return (name - CPU_USIU_EXT_IRQ_0) / 2;
 
   if (CPU_UIMB_IRQ_8 <= name && name <= CPU_UIMB_IRQ_31)
