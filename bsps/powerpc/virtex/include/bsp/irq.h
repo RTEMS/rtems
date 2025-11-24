@@ -52,8 +52,7 @@
                                          +BSP_OPBINTC_PER_IRQ_NUMBER-1)
 
 #define BSP_IS_OPBINTC_IRQ(irqnum)				\
-          (((irqnum) >= BSP_OPBINTC_IRQ_LOWEST_OFFSET) &&	\
-	   ((irqnum) <= BSP_OPBINTC_IRQ_MAX_OFFSET))
+	   ((irqnum) <= BSP_OPBINTC_IRQ_MAX_OFFSET)
 /*
  * Processor IRQ handlers related definitions
  */
