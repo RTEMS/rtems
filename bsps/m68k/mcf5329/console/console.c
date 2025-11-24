@@ -595,7 +595,7 @@ rtems_device_driver console_open(rtems_device_major_number major,
   };
 
   /* open the port depending on the minor device number */
-  if ((minor >= 0) && (minor < MAX_UART_INFO)) {
+  if (minor < MAX_UART_INFO) {
     info = &IntUartInfo[minor];
     switch (info->iomode) {
       case TERMIOS_POLLED:
