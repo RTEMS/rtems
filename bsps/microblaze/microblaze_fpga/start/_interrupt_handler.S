@@ -62,7 +62,9 @@
 	mfs r3, rmsr
 	swi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_MSR
 
-	/* Indicate unknown interrupt source */
+	/* Indicate unknown interrupt source; 0xFF tells _ISR_Handler to query the INTC. */
+	/* Use addik so MSR flags stay unchanged before calling the handler. */
+	/* braid has a delay slot; addik will occur prior to the branch. */
 	braid _ISR_Handler
 	addik r5, r0, 0xFF
 #endif /* __rtems__ */

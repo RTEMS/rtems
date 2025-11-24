@@ -159,11 +159,14 @@ void bsp_interrupt_facility_initialize( void )
    * Enable HW interrupts on the interrupt controller. This happens before
    * interrupts are enabled on the processor.
    */
-   mblaze_intc = (volatile Microblaze_INTC *) try_get_prop_from_device_tree(
+  mblaze_intc = (volatile Microblaze_INTC *) try_get_prop_from_device_tree(
     "xlnx,xps-intc-1.00.a",
     "reg",
     BSP_MICROBLAZE_FPGA_INTC_BASE
    );
+
+  /* Mask off all interrupt sources to prevent spurious interrupts */
+  mblaze_intc->ier = 0;
 
   mblaze_intc->mer = MICROBLAZE_INTC_MER_ME | MICROBLAZE_INTC_MER_HIE;
 }
