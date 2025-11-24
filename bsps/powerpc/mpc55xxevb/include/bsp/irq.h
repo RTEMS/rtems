@@ -441,13 +441,9 @@ extern "C" {
 #define MPC55XX_IRQ_LINFLEX_TXI(mod) (MPC55XX_IRQ_LINFLEX_BASE(mod) + 1U)
 #define MPC55XX_IRQ_LINFLEX_ERR(mod) (MPC55XX_IRQ_LINFLEX_BASE(mod) + 2U)
 
-/* Checks */
-#define MPC55XX_IRQ_IS_VALID(v) \
-  ((v) >= MPC55XX_IRQ_MIN && \
-   (v) <= MPC55XX_IRQ_MAX)
-#define MPC55XX_IRQ_IS_SOFTWARE(v) \
-  ((v) >= MPC55XX_IRQ_SOFTWARE_MIN && \
-   (v) <= MPC55XX_IRQ_SOFTWARE_MAX)
+/* Checks -- MIN is 0, lower end check is not needed */
+#define MPC55XX_IRQ_IS_VALID(v) ((v) <= MPC55XX_IRQ_MAX)
+#define MPC55XX_IRQ_IS_SOFTWARE(v) ((v) <= MPC55XX_IRQ_SOFTWARE_MAX)
 
 /*
  * Interrupt controller
