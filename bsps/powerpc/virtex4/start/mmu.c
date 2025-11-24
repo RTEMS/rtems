@@ -387,23 +387,26 @@ bsp_mmu_write(bsp_tlb_idx_t idx, uint32_t ea, uint32_t pa, uint sz,
     return -1;
   }
 
-  if ( sz >=0 ) {
-    lkup = bsp_mmu_match(ea, sz, tid);
+  /*
+   * The GCC warning -Wtype-limits flagged that (sz >= 0) was not needed
+   * because sz is unsigned. It is always >= 0.
+   */
 
-    if ( lkup < -1 ) {
-      /* some error */
-      return lkup;
-    }
-    if ( (lkup >= 0) && (lkup != idx) && (bsp_mmu_cache[lkup].hi.v != 0) ) {
-      myprintf(stderr,"TLB #%i overlaps with requested mapping\n", lkup);
-      bsp_mmu_update( lkup, false, stderr);
-      return lkup+1;
-    }
+  lkup = bsp_mmu_match(ea, sz, tid);
+
+  if ( lkup < -1 ) {
+    /* some error */
+    return lkup;
+  }
+  if ( (lkup >= 0) && (lkup != idx) && (bsp_mmu_cache[lkup].hi.v != 0) ) {
+    myprintf(stderr,"TLB #%i overlaps with requested mapping\n", lkup);
+    bsp_mmu_update( lkup, false, stderr);
+    return lkup+1;
   }
 
   /* OK to proceed */
   tlb.id.tid  = tid;
-  tlb.hi.v    = sz >= 0;
+  tlb.hi.v    = 1; /* sz always >= 0 */
   tlb.hi.size = sz;
   tlb.hi.epn  = (ea & (0xfffffc00 << (sz + sz))) >> 10;
   tlb.lo.rpn  = (pa & (0xfffffc00 << (sz + sz))) >> 10;
