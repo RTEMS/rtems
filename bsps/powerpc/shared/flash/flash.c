@@ -777,7 +777,7 @@ struct stat     sb;
 uint32_t	    sz;
 int			    rval = -1;
 char		   *buf  = 0;
-uint32_t	    got;
+int		    got;
 struct bankdesc *b;
 unsigned        f    = 0;
 
