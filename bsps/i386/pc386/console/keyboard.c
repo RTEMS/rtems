@@ -577,11 +577,11 @@ static void do_fn(unsigned char value, char up_flag)
   if (up_flag)
     return;
 
-  if (value < SIZE(func_table)) {
-    if (func_table[value])
-      puts_queue(func_table[value]);
-  } else
-    printk( "do_fn called with value=%d\n", value);
+  /*
+   * No need to range check value because the array has 256 entries.
+   */
+  if (func_table[value])
+    puts_queue(func_table[value]);
 }
 
 static void do_pad(unsigned char value, char up_flag)
