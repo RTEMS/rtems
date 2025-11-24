@@ -19,7 +19,9 @@ install:
   - bsps/include/dev/nand/xnandpsu.h
   - bsps/include/dev/nand/xnandpsu_hw.h
   - bsps/include/dev/nand/xnandpsu_onfi.h
-links: []
+links:
+- role: build-dependency
+  uid: optnandpsuchips
 source:
 - bsps/shared/dev/nand/xnandpsu_bbm.c
 - bsps/shared/dev/nand/xnandpsu.c

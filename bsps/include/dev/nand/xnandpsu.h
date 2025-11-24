@@ -189,7 +189,7 @@ extern "C" {
 #define XNANDPSU_DEBUG
 
 #ifdef __rtems__
-#define XNANDPSU_MAX_TARGETS		2U	/**< ce_n0, ce_n1 */
+#define XNANDPSU_MAX_TARGETS		BSP_NANDPSU_TOTAL_CHIPS
 #else
 #define XNANDPSU_MAX_TARGETS		1U	/**< ce_n0, ce_n1 */
 #endif

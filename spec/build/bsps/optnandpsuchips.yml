@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- env-enable: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2025 On-Line Applications Research (OAR) Corporation
+default:
+- enabled-by:
+  - aarch64/zynqmp_cfc400x
+  value: 2
+- enabled-by: true
+  value: 1
+description: |
+  Set the number of NAND chips expected to be attached to the NAND controller
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_NANDPSU_TOTAL_CHIPS
+type: build
