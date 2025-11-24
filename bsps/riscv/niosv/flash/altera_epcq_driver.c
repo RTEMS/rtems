@@ -834,9 +834,7 @@ static inline int alt_epcq_validate_read_write_arguments (
   /* make sure start and end address is less then the end address of the flash */
   if (
     start_address >= epcq_flash_info->data_end ||
-    end_address > epcq_flash_info->data_end ||
-    offset < 0 ||
-    length < 0
+    end_address > epcq_flash_info->data_end
   ) {
     return -EINVAL;
   }
