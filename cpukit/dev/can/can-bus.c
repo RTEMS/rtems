@@ -230,12 +230,12 @@ static int can_bus_ioctl_create_queue(
     return -EINVAL;
   }
 
-  /* Check whether correct dlen_max and buffer_size is to be set. */
-  if (
-    queue.dlen_max > CAN_FRAME_MAX_DLEN ||
-    queue.dlen_max < 0 ||
-    queue.buffer_size < 0
-  ) {
+  /*
+   * Check whether correct dlen_max and buffer_size is to be set.
+   * Note that dlen_max and buffer_size are unsigned and do not need to
+   * be checked for < 0.
+   */
+  if ( queue.dlen_max > CAN_FRAME_MAX_DLEN ) {
     return -EINVAL;
   }
 
@@ -248,8 +248,11 @@ static int can_bus_ioctl_create_queue(
     queue.buffer_size = RTEMS_CAN_FIFO_SIZE;
   }
 
-  /* Check whether correct queue priority is to be set. */
-  if ( queue.priority < 0 || queue.priority > RTEMS_CAN_QUEUE_PRIO_NR ) {
+  /*
+   * Check whether correct queue priority is to be set.
+   * Note that priority is unsigned and does not need to be checked for < 0.
+   */
+  if ( queue.priority > RTEMS_CAN_QUEUE_PRIO_NR ) {
     return -EINVAL;
   }
 
