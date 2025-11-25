@@ -872,7 +872,7 @@ static int alt_epcq_poll_for_write_in_progress (
   /* we'll want to implement timeout if a timeout value is specified */
 #if ALTERA_EPCQ_CONTROLLER2_1US_TIMEOUT_VALUE > 0
   uint32_t timeout = ALTERA_EPCQ_CONTROLLER2_1US_TIMEOUT_VALUE;
-  uint16_t counter = 0;
+  uint32_t counter = 0;
 #endif
 
   /* return -EINVAL if epcq_flash_info is NULL */
