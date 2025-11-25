@@ -353,7 +353,7 @@ static void NtpUpdateAdjustmentFaster( int64_t *adjustment, time_t *newsec )
 
 static void NtpUpdateAdjustmentSlower( int64_t *adjustment, time_t *newsec )
 {
-  *adjustment = -( (int64_t) 5000 ) << 32;
+  *adjustment = -(( (int64_t) 5000 ) << 32);
   (void) newsec;
 }
 
