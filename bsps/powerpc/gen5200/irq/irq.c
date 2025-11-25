@@ -105,9 +105,13 @@ static inline bool is_processor_irq( rtems_vector_number irqLine)
  */
 static inline bool is_siu_irq( rtems_vector_number irqLine)
 {
-
-  return ((irqLine <= BSP_SIU_IRQ_MAX_OFFSET)
-    && (irqLine >= BSP_SIU_IRQ_LOWEST_OFFSET));
+  /*
+   * The GCC warning -Wtype-limits flagged that the 
+   * ((irqLine <= BSP_SIU_IRQ_MAX_OFFSET) part of the expression was
+   * not needed because irqLine is unsigned and BSP_SIU_IRQ_MAX_OFFSET
+   * is 0.
+   */
+  return (irqLine <= BSP_SIU_IRQ_MAX_OFFSET);
 }
 
 /*
