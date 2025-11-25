@@ -55,9 +55,13 @@
 #define BSP_PROCESSOR_IRQ_MAX_OFFSET    (BSP_PROCESSOR_IRQ_LOWEST_OFFSET\
                                          +BSP_PROCESSOR_IRQ_NUMBER-1)
 
-#define BSP_IS_PROCESSOR_IRQ(irqnum)                 \
-  (((irqnum) >= BSP_PROCESSOR_IRQ_LOWEST_OFFSET) &&  \
-   ((irqnum) <= BSP_PROCESSOR_IRQ_MAX_OFFSET))
+/*
+ * The GCC warning -Wtype-limits flagged that the 
+ * ((irqnum) >= BSP_PROCESSOR_IRQ_LOWEST_OFFSET) part of the expression was
+ * not needed because irqLine is unsigned and BSP_SIU_IRQ_MAX_OFFSET is 0.
+*/
+#define BSP_IS_PROCESSOR_IRQ(irqnum) \
+   ((irqnum) <= BSP_PROCESSOR_IRQ_MAX_OFFSET)
 
 /*
  * Summary
