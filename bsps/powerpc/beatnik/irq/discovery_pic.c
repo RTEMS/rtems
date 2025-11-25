@@ -212,10 +212,14 @@ static void discovery_dump_picregs(void)
 static inline int
 validIrqNo(rtems_irq_number irq)
 {
-	return
-		   irq >= BSP_PCI_IRQ_LOWEST_OFFSET
-		&& irq <= BSP_PCI_IRQ_MAX_OFFSET
-		&& ! (IMH_GPP_SUM & (1<<(irq-32)));
+	/*
+	 * The GCC warning -Wtype-limits flagged that the 
+	 * (irq >= BSP_PCI_IRQ_LOWEST_OFFSET) * part of the expression
+	 * was * not needed because irq is unsigned and
+	 * BSP_PCI_IRQ_LOWEST_OFFSET is 0.
+	 */
+	return (irq <= BSP_PCI_IRQ_MAX_OFFSET
+		&& ! (IMH_GPP_SUM & (1<<(irq-32))));
 }
 
 /* return 0 if a given priority is outside the valid range          */
