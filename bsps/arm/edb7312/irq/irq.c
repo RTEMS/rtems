@@ -86,7 +86,11 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
     bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-    if(vector >= BSP_EXTFIQ && vector <= BSP_SSEOTI)
+    /*
+     * BSP_EXTFIQ is 0 and vector is unsigned. There is no need to check
+     * it for being >= 0. Flag by the GCC -Wtype-limits warning.
+     */
+    if(vector <= BSP_SSEOTI)
     {
         /* interrupt managed by INTMR1 and INTSR1 */
         *EP7312_INTMR1 |= (1 << vector);
@@ -114,7 +118,11 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
     bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-    if(vector >= BSP_EXTFIQ && vector <= BSP_SSEOTI)
+    /*
+     * BSP_EXTFIQ is 0 and vector is unsigned. There is no need to check
+     * it for being >= 0. Flag by the GCC -Wtype-limits warning.
+     */
+    if(vector <= BSP_SSEOTI)
     {
         /* interrupt managed by INTMR1 and INTSR1 */
         *EP7312_INTMR1 &= ~(1 << vector);
