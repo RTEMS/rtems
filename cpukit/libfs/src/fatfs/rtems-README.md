@@ -12,6 +12,20 @@ Any new file added must have `rtems-` prefix, and any changes made to the import
 
 ______________________________________________________________________
 
+## [R0.15] - 2025-07-22
+
+### Hash
+
+67cb748f312f1bc3c95558372576dddcb3ab90d5030ecdd40f8090b42a11f3cd
+
+### Added
+
+`FF_PATH_DEPTH` has been added to the `ffconf.h` and to cppflags.
+
+### Changed
+
+`FFCONF_DEF` (Revision ID) for the new version has been updated.
+
 ## [R0.15b] - 2025-06-21
 
 ### Hash

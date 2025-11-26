@@ -11,7 +11,7 @@ cppflags:
 - -Ddisk_write=rtems_fatfs_disk_write
 - -Ddisk_ioctl=rtems_fatfs_disk_ioctl
 - -Dget_fattime=rtems_fatfs_get_fattime
-- -DFFCONF_DEF=5385
+- -DFFCONF_DEF=80386
 - -DFF_VOLUMES=1
 - -DFF_USE_MKFS=1
 - -DFF_USE_CHMOD=1
@@ -24,6 +24,7 @@ cppflags:
 - -DFF_SFN_BUF=12
 - -DFF_MAX_LFN=255
 - -DFF_USE_LABEL=0
+- -DFF_PATH_DEPTH=10
 - -DFF_STR_VOLUME_ID=0
 - -DFF_MULTI_PARTITION=0
 - -DFF_FS_READONLY=0
