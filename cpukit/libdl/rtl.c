@@ -583,6 +583,9 @@ rtems_rtl_load_object (const char* name, int mode)
      */
     if (!rtems_rtl_obj_find_file (obj, name))
     {
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_WARNING)){
+        printf ("rtl: load failed '%s': file not found\n", name);
+      }
       rtems_rtl_obj_free (obj);
       rtems_rtl_obj_caches_flush ();
       return NULL;
@@ -590,6 +593,13 @@ rtems_rtl_load_object (const char* name, int mode)
 
     if (!rtems_rtl_obj_load (obj))
     {
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_WARNING))
+      {
+        const char* last = rtems_rtl_last_error_unprotected ();
+        printf ("rtl: load failed '%s': %s\n",
+                name,
+                last != NULL ? last : "unknown error");
+      }
       rtems_chain_extract (&obj->link);
       rtems_rtl_obj_free (obj);
       rtems_rtl_obj_caches_flush ();

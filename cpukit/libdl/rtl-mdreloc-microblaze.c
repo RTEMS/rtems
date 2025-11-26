@@ -127,6 +127,18 @@ static uint32_t read32le(void *loc) {
   return *((uint32_t *) loc);
 }
 
+/*
+* If reviewing / debugging the following links are helpful.
+* Relocations table
+* https://github.com/bminor/binutils-gdb/blob/master/include/elf/microblaze.h
+* Relocations implementations
+* https://github.com/bminor/binutils-gdb/blob/master/bfd/elf32-microblaze.c
+* Xilinx microblaze reference
+* https://docs.amd.com/r/2024.2-English/ug984-vivado-microblaze-ref/Relocations
+* There is some disagreement between microblaze reference, and the binutils reference.
+*  5	R_MICROBLAZE_32_PCREL_LO vs   RELOC_NUMBER (R_MICROBLAZE_64, 5)
+*  
+*/
 static rtems_rtl_elf_rel_status
 rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
                           const Elf_Rela*           rela,
@@ -229,11 +241,49 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
     write16le(where, (read16le(where) & 0xFFFF0000) | (pcrel_val & 0xFFFF));
     break;
 
+  /*
+   *  GNU binutils (include/elf/microblaze.h) defines:
+   *    #define R_MICROBLAZE_32_NONE 33
+   *
+   *  Comment from binutils:
+   *    "This is a 32 bit reloc that stores the 32 bit pc relative value
+   *     in two words (with an imm instruction). No relocation is done
+   *     here -- only used for relaxing."
+   */
+  case 33: /* R_MICROBLAZE_32_NONE */
+    break;
+
+  /*
+   * R_MICROBLAZE_32_LO: low 16 bits of (S + A).
+   * See binutils bfd/elf32-microblaze.c HOWTO entry.
+   * Place holder incase needed, untested.
+  case 6:
+    write16le(where, (read16le(where) & 0xFFFF0000) | (target & 0xFFFF));
+    break;
+   */
+  /*
+   * R_MICROBLAZE_32_SYM_OP_SYM is defined but binutils treats it as a noop
+   * (see elf32-microblaze.c switch). We mirror that.
+   * Place holder incase needed, untested.
+  case 10:
+    break;
+   */
+
+  /* GNU vtable metadata relocs: ignore like binutils. 
+   * Place holder incase needed, untested.
+  */
+  /* case 11:  R_MICROBLAZE_GNU_VTINHERIT */
+  /* case 12:  R_MICROBLAZE_GNU_VTENTRY 
+      break;
+    */
   default:
     rtems_rtl_set_error (EINVAL,
-                         "%s: Unsupported relocation type %d "
-                         "in non-PLT relocations",
-                         sect->name, (uint32_t) ELF_R_TYPE(rela->r_info));
+                         "%s: unsupported relocation type %u "
+                         "at 0x%lx (sym %s) in non-PLT relocations",
+                         sect->name,
+                         (unsigned int) ELF_R_TYPE (rela->r_info),
+                         (unsigned long) rela->r_offset,
+                         symname != NULL ? symname : "<local>");
     return rtems_rtl_elf_rel_failure;
   }
 
