@@ -126,6 +126,7 @@ rtems_status_code bsp_interrupt_raise_on(
   uint32_t            cpu_index
 )
 {
+  (void) vector;
   (void) cpu_index;
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
