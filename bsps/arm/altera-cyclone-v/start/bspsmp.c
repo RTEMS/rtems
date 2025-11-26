@@ -43,6 +43,8 @@
 
 bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 {
+  (void) cpu_index;
+
   _Assert(cpu_index == 1);
 
   alt_write_word(
