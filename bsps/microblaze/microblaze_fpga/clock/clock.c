@@ -35,26 +35,25 @@
 
 #include <bsp.h>
 #include <bsp/fatal.h>
-#include <bsp/timer.h>
-
+#include <bsp/microblaze-timer.h>
 #include <rtems.h>
 #include <rtems/irq-extension.h>
 #include <rtems/timecounter.h>
 
-static rtems_timecounter_simple mblaze_tc;
+static void                       microblaze_clock_handler ( void *data );
+static rtems_timecounter_simple   mblaze_tc;
+static rtems_interrupt_handler    mblaze_clock_isr = NULL;
 static volatile Microblaze_Timer *mblaze_timer;
 
-static uint32_t microblaze_tc_get( rtems_timecounter_simple *tc )
+static uint32_t microblaze_tc_get ( rtems_timecounter_simple *tc )
 {
   (void) tc;
-
   return mblaze_timer->tcr0;
 }
 
-static bool microblaze_tc_is_pending( rtems_timecounter_simple *tc )
+static bool microblaze_tc_is_pending ( rtems_timecounter_simple *tc )
 {
   (void) tc;
-
   return ( mblaze_timer->tcsr0 & MICROBLAZE_TIMER_TCSR0_T0INT ) != 0;
 }
 
@@ -102,18 +101,17 @@ static void microblaze_clock_initialize( void )
   uint32_t control_status_reg = mblaze_timer->tcsr0;
   /* Load the reset value into the counter register */
   mblaze_timer->tcsr0 = MICROBLAZE_TIMER_TCSR0_LOAD0;
+
+  rtems_timecounter_simple_install ( &mblaze_tc,
+                                     counter_frequency_in_hz,
+                                     counter_ticks_per_clock_tick,
+                                     microblaze_tc_get_timecount );
+
   /* Enable the timer */
   mblaze_timer->tcsr0 = control_status_reg | MICROBLAZE_TIMER_TCSR0_ENT0;
-
-  rtems_timecounter_simple_install(
-    &mblaze_tc,
-    counter_frequency_in_hz,
-    counter_ticks_per_clock_tick,
-    microblaze_tc_get_timecount
-  );
 }
 
-static void microblaze_clock_at_tick( rtems_timecounter_simple *tc )
+static void microblaze_clock_at_tick ( rtems_timecounter_simple *tc )
 {
   (void) tc;
 
@@ -126,40 +124,47 @@ static void microblaze_clock_at_tick( rtems_timecounter_simple *tc )
 
 static void microblaze_tc_tick( rtems_timecounter_simple *tc )
 {
-  rtems_timecounter_simple_downcounter_tick(
-    tc,
-    microblaze_tc_get,
-    microblaze_clock_at_tick
-  );
+  rtems_timecounter_simple_downcounter_tick (
+    tc, microblaze_tc_get, microblaze_clock_at_tick );
 }
 
-static void microblaze_clock_handler_install( rtems_interrupt_handler isr )
+static void microblaze_clock_handler ( void *data )
+{
+  if ( ( mblaze_timer->tcsr0 & MICROBLAZE_TIMER_TCSR0_T0INT ) != 0 )
+  {
+    if ( mblaze_clock_isr != NULL )
+    {
+      mblaze_clock_isr ( data );
+    }
+  }
+}
+
+static void microblaze_clock_handler_install ( rtems_interrupt_handler isr )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  uint32_t clock_irq_num = try_get_prop_from_device_tree(
-    "xlnx,xps-timer-1.00.a",
-    "interrupts",
-    0
-  );
+  mblaze_clock_isr = isr;
 
-  sc = rtems_interrupt_handler_install(
-    clock_irq_num,
-    "Clock",
-    RTEMS_INTERRUPT_UNIQUE,
-    isr,
-    &mblaze_tc
-  );
+  uint32_t clock_irq_num =
+    try_get_prop_from_device_tree ( "xlnx,xps-timer-1.00.a", "interrupts", 0 );
+
+  sc = rtems_interrupt_handler_install ( clock_irq_num,
+                                         "Clock",
+                                         RTEMS_INTERRUPT_SHARED,
+                                         microblaze_clock_handler,
+                                         &mblaze_tc );
 
   if ( sc != RTEMS_SUCCESSFUL ) {
     bsp_fatal( MICROBLAZE_FATAL_CLOCK_IRQ_INSTALL );
   }
 }
 
-#define Clock_driver_support_initialize_hardware() microblaze_clock_initialize()
-#define Clock_driver_support_install_isr( isr ) \
-  microblaze_clock_handler_install( isr )
-#define Clock_driver_timecounter_tick(arg) microblaze_tc_tick(arg)
+#define Clock_driver_support_initialize_hardware()                            \
+  microblaze_clock_initialize ()
+#define Clock_driver_support_install_isr( isr )                               \
+  microblaze_clock_handler_install ( ( rtems_interrupt_handler ) ( isr ) )
+#define Clock_driver_timecounter_tick( arg )                                  \
+  microblaze_tc_tick ( (rtems_timecounter_simple *) ( arg ) )
 
 /* Include shared source clock driver code */
 #include "../../shared/dev/clock/clockimpl.h"

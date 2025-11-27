@@ -39,26 +39,59 @@
 #include <bspopts.h>
 
 #include <bsp/utility.h>
+/* References
+ * https://docs.xilinx.com/v/u/en-US/pg079-axi-timer
+ */
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif /* __cplusplus */
 
-typedef struct {
-#define MICROBLAZE_TIMER_TCSR0_T0INT BSP_BIT32(8)
-#define MICROBLAZE_TIMER_TCSR0_ENT0 BSP_BIT32(7)
-#define MICROBLAZE_TIMER_TCSR0_ENIT0 BSP_BIT32(6)
-#define MICROBLAZE_TIMER_TCSR0_LOAD0 BSP_BIT32(5)
-#define MICROBLAZE_TIMER_TCSR0_ARHT0 BSP_BIT32(4)
-#define MICROBLAZE_TIMER_TCSR0_GENT0 BSP_BIT32(2)
-#define MICROBLAZE_TIMER_TCSR0_UDT0 BSP_BIT32(1)
-  /* Control/Status register */
-  uint32_t tcsr0;
-  /* Load register */
-  uint32_t tlr0;
-  /* Timer counter register */
-  uint32_t tcr0;
-} Microblaze_Timer;
+  typedef struct
+  {
+#define MICROBLAZE_TIMER_TCSR0_T0INT BSP_BIT32 ( 8 )
+#define MICROBLAZE_TIMER_TCSR0_ENT0 BSP_BIT32 ( 7 )
+#define MICROBLAZE_TIMER_TCSR0_ENIT0 BSP_BIT32 ( 6 )
+#define MICROBLAZE_TIMER_TCSR0_LOAD0 BSP_BIT32 ( 5 )
+#define MICROBLAZE_TIMER_TCSR0_ARHT0 BSP_BIT32 ( 4 )
+#define MICROBLAZE_TIMER_TCSR0_GENT0 BSP_BIT32 ( 2 )
+#define MICROBLAZE_TIMER_TCSR0_UDT0 BSP_BIT32 ( 1 )
+    /* Control/Status register
+     * Offset 0x0
+     */
+    uint32_t tcsr0;
+    /* Load register
+     * Offset 0x4
+     */
+    uint32_t tlr0;
+    /* Timer counter register
+     * Offset 0x8
+     */
+    uint32_t tcr0;
+
+    /* Reserved
+     * Offset 0xc
+     */
+    uint32_t rsvd0;
+
+    /* Control/Status register
+     * Offset 0x10
+     */
+    uint32_t tcsr1;
+    /* Load register
+     * Offset 0x14
+     */
+    uint32_t tlr1;
+    /* Timer counter register
+     * Offset 0x18
+     */
+    uint32_t tcr1;
+    /* Reserved
+     * Offset 0x1c
+     */
+    uint32_t rsvd1;
+  } Microblaze_Timer;
 
 #ifdef __cplusplus
 }

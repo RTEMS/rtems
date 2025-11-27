@@ -15,6 +15,7 @@ install:
   source:
   - bsps/microblaze/microblaze_fpga/include/bsp/irq.h
   - bsps/microblaze/microblaze_fpga/include/bsp/jffs2_qspi.h
+  - bsps/microblaze/microblaze_fpga/include/bsp/microblaze-timer.h
   - bsps/microblaze/microblaze_fpga/include/bsp/microblaze-gpio.h
   - bsps/microblaze/include/bsp/microblaze-fdt-support.h
 links: []
