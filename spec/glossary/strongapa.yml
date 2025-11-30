@@ -16,5 +16,5 @@ text: |
   processor mapping that does not violate the priority ordering and to provide
   a thread to processor mapping with a higher total priority of the threads
   allocated a processor.  Similar analysis is done when a thread blocks.  See
-  also :cite:`Cerqueira:2014:LPA`.
+  also ${/ref/research/cerqueira-2014-lpa:/cite}.
 type: glossary

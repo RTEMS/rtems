@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+author: The RTEMS Project contributors
+copyrights:
+- Copyright (C) 2025 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+organization: The RTEMS Project
+reference-type: manual
+title: RTEMS CPU Architecture Supplement, Git Commit ${/pkg/source/rtems-docs:/commit}
+type: reference
+work-hash: null
+work-url: ${.:/component/deployment-directory}/doc/rtems/cpu-supplement.pdf
+year: '2026'

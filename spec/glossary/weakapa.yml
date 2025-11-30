@@ -13,5 +13,5 @@ text: |
   for execution, it is allocated a processor if there is an idle processor, or
   a processor executing a lower priority thread in its affinity set.  Unlike
   ${strongapa:/term}, no thread is migrated from its processor to find a thread
-  to processor mapping.  See also :cite:`Cerqueira:2014:LPA`.
+  to processor mapping.  See also ${/ref/research/cerqueira-2014-lpa:/cite}.
 type: glossary

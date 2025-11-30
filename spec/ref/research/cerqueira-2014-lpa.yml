@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+author:
+- Cerqueira, Felipe
+- Gujarati, Arpan
+- Brandenburg, Björn B.
+booktitle: Proceedings of the 35th IEEE Real-Time Systems Symposium (RTSS 2014)
+copyrights:
+- Copyright (C) 2025 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+reference-type: inproceedings
+title: 'Linux’s Processor Affinity API, Refined: Shifting Real-Time Tasks towards
+  Higher Schedulability'
+type: reference
+work-hash: null
+work-url: http://www.mpi-sws.org/~bbb/papers/pdf/rtss14f.pdf
+year: '2014'
