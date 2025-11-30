@@ -439,7 +439,7 @@ static char *ambapp_get_devname(ambapp_device_name *devs, int id)
   return NULL;
 }
 
-char *ambapp_device_id2str(int vendor, int id)
+char *ambapp_device_id2str(unsigned int vendor, int id)
 {
   ambapp_vendor_devnames *ven = &vendors[0];
 
@@ -451,7 +451,7 @@ char *ambapp_device_id2str(int vendor, int id)
   return NULL;
 }
 
-char *ambapp_vendor_id2str(int vendor)
+char *ambapp_vendor_id2str(unsigned int vendor)
 {
   ambapp_vendor_devnames *ven = &vendors[0];
 
@@ -463,7 +463,7 @@ char *ambapp_vendor_id2str(int vendor)
   return NULL;
 }
 
-int ambapp_vendev_id2str(int vendor, int id, char *buf)
+int ambapp_vendev_id2str(unsigned int vendor, int id, char *buf)
 {
   char *dstr, *vstr;
 
