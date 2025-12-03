@@ -6,7 +6,7 @@
  * @brief Console driver for AT91RM9200 DBGU port
  *
  *  This driver uses the shared console driver in
- *  ...../libbsp/shared/console.c
+ *  bsps/shared/dev/serial/legacy-console.c
  */
 
 /*
