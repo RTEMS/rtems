@@ -15,7 +15,7 @@
  *  SS555 port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from c/src/lib/libbsp/powerpc/mbx8xx/startup/bspstart.c:
+ *  Derived from bspstart.c in the historical powerpc/mbx8xx/startup:
  *
  *  Modifications for MBX860:
  *  Copyright (c) 1999, National Research Council of Canada
@@ -49,10 +49,10 @@ uint32_t _CPU_Counter_frequency(void)
  *  bsp_start()
  *
  *  Board-specific initialization code. Called from the generic boot_card()
- *  function defined in rtems/c/src/lib/libbsp/shared/main.c. That function
+ *  function defined in bsps/shared/start/bootcard.c. That function
  *  does some of the board independent initialization. It is called from the
  *  SS555 entry point _start() defined in
- *  rtems/c/src/lib/libbsp/powerpc/ss555/start/start.S
+ *  bsps/powerpc/ss555/start/start.S
  *
  *  _start() has set up a stack, has zeroed the .bss section, has set up the
  *  .data section from contents stored in ROM, has turned off interrupts,

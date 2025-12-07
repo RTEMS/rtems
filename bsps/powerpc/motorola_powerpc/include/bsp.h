@@ -207,9 +207,9 @@ extern void *bsp_ppc_idle_task_body(uintptr_t arg);
 /* BSP_PIC_DO_EOI is optionally used by the 'vmeUniverse' driver
  * to implement VME IRQ priorities in software.
  * Note that this requires support by the interrupt controller
- * driver (cf. libbsp/shared/powerpc/irq/openpic_i8259_irq.c)
+ * driver (cf. bsps/powerpc/shared/irq/openpic_i8259_irq.c)
  * and the BSP-specific universe initialization/configuration
- * (cf. libbsp/shared/powerpc/vme/VMEConfig.h vme_universe.c)
+ * (cf. bsps/powerpc/motorola_powerpc/include/bsp/VMEConfig.h bsps/powerpc/shared/vme/vme_universe.c)
  *
  * ********* IMPORTANT NOTE ********
  * When deriving from this file (new BSPs)

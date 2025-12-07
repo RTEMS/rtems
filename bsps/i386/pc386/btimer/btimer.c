@@ -422,7 +422,7 @@ retry:
   if (res < emptyCall) {
     printk(
       "Problem #1 in offset computation in Calibrate_loop_1ms "
-        " in file libbsp/i386/pc386/timer/timer.c\n"
+        " in file bsps/i386/pc386/btimer/btimer.c\n"
     );
     goto retry;
   }
@@ -436,7 +436,7 @@ retry:
   if (res < offset + emptyCall) {
     printk(
       "Problem #2 in offset computation in Calibrate_loop_1ms "
-        " in file libbsp/i386/pc386/timer/timer.c\n"
+        " in file bsps/i386/pc386/btimer/btimer.c\n"
     );
     goto retry;
   }
@@ -445,7 +445,7 @@ retry:
   if (slowLoopGranularity == 0) {
     printk(
       "Problem #3 in offset computation in Calibrate_loop_1ms "
-        " in file libbsp/i386/pc386/timer/timer.c\n"
+        " in file bsps/i386/pc386/btimer/btimer.c\n"
     );
     goto retry;
   }

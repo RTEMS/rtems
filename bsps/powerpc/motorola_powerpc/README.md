@@ -623,7 +623,7 @@ to port (604 proc or above and raven host bridge...).
 Joel> Then we just have to add README.BOARD_MODEL and TIMES.BOARD_MODEL
 
 I should also make a README to explain that some file containing
-switch statement should be completed (e.g libbsp/powerpc/shared/irq_init.c 
+switch statement should be completed (e.g bsps/powerpc/shared/irq_init.c
 [NOTE: This is that README. :) ]
 
 ```c
@@ -632,12 +632,12 @@ switch statement should be completed (e.g libbsp/powerpc/shared/irq_init.c
     known_cpi_isa_bridge = 1;
   }
   if (!known_cpi_isa_bridge) {
-    printk("Please add code for PCI/ISA bridge init to libbsp/shared/irq/irq_init.c\n");
+    printk("Please add code for PCI/ISA bridge init to bsps/shared/irq/irq_init.c\n");
     printk("If your card works correctly please add a test and set known_cpi_isa_bridge to true\n");
   }
 ```
 
-and libbsp/powerpc/mpc6xx/execeptions/raw_exception.c
+and bsps/powerpc/exceptions/
 
 ```c
 int mpc604_vector_is_valid(rtems_vector vector)

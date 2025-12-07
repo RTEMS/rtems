@@ -28,7 +28,7 @@
  *  Author: Jay Monkman (jmonkman@frasca.com)
  *  Copyright (C) 1998 by Frasca International, Inc.
  *
- *  Derived from c/src/lib/libbsp/m68k/gen360/console/console.c written by:
+ *  Derived from the console driver in the historical m68k/gen360 BSP written by:
  *    Eric Norum <eric.norum.ca>
  *
  *  COPYRIGHT (c) 1989-1998.

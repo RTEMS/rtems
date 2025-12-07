@@ -13,7 +13,7 @@
  *  SS555 port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from c/src/lib/libbsp/powerpc/mbx8xx/clock/p_clock.c:
+ *  Derived from p_clock.c in the historical powerpc/mbx8xx/clock:
  *
  *  Modified to support the MPC750.
  *  Modifications Copyright (c) 1999 Eric Valette eric.valette@free.fr

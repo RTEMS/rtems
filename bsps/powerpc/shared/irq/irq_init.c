@@ -329,7 +329,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   }
 
   if (!known_cpi_isa_bridge) {
-    printk("Please add code for PCI/ISA bridge init to libbsp/powerpc/shared/irq/irq_init.c\n");
+    printk("Please add code for PCI/ISA bridge init to bsps/powerpc/shared/irq/irq_init.c\n");
     printk("If your card works correctly please add a test and set known_cpi_isa_bridge to true\n");
     printk("currentBoard = %i\n", currentBoard);
   }

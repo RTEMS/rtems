@@ -14,7 +14,7 @@ to 'interrupts'. Interrupts simply are asynchronous
 exceptions such as 'external' exceptions or 'decrementer'
 /'timer' exceptions.
 
-Traditionally (in the libbsp/powerpc/shared implementation),
+Traditionally (in the bsps/powerpc/shared implementation),
 synchronous exceptions are handled entirely in the context
 of the interrupted task, i.e., the exception handlers use
 the task's stack and leave thread-dispatching enabled,
@@ -41,19 +41,19 @@ The result has been a Darwinian evolution of variants
 of this code which is very hard to maintain. Mostly,
 the four files
 
-libbsp/powerpc/shared/vectors/vectors.S
+(Historical) libbsp/powerpc/shared/vectors/vectors.S
   (low-level handlers for 'normal' or 'synchronous'
   exceptions. This code saves all registers on
   the interrupted task's stack and calls a
   'global' C (high-level) exception handler.
 
-libbsp/powerpc/shared/vectors/vectors_init.c
+(Historical) libbsp/powerpc/shared/vectors/vectors_init.c
   (default implementation of the 'global' C
   exception handler and initialization of the
   vector table with trampoline code that ends up
   calling the 'global' handler.
 
-libbsp/powerpc/shared/irq/irq_asm.S
+(Historical) libbsp/powerpc/shared/irq/irq_asm.S
   (low-level handlers for 'IRQ'-type or 'asynchronous'
   exceptions. This code is very similar to vectors.S
   but does slightly more: after saving (only
@@ -67,7 +67,7 @@ libbsp/powerpc/shared/irq/irq_asm.S
   is re-enabled, signals are delivered and a context
   switch is initiated if necessary.
 
-libbsp/powerpc/shared/irq/irq.c
+bsps/powerpc/shared/irq/ppc-irq-legacy.c
   implementation of the RTEMS ('new') IRQ API defined
   in cpukit/include/rtems/irq.h.
 
@@ -235,7 +235,7 @@ USAGE
 	Makefile.am:
 		- make sure the Makefile.am does NOT use any of the files
 			vectors.S, vectors.h, vectors_init.c, irq_asm.S, irq.c
-		  from 'libbsp/powerpc/shared' NOR must the BSP implement
+		  from 'bsps/powerpc/shared' NOR must the BSP implement
 		  any functionality that is provided by those files (and
 		  now the middleware).
 
@@ -269,7 +269,7 @@ The code currently assumes that the MMU translations
 for the task and interrupt stacks as well as some
 variables in the data-area MATCH THE DEFAULT CACHING
 ATTRIBUTES (this assumption also holds for the old code
-in libbsp/powepc/shared/vectors ../irq).
+in (Historical)libbsp/powerpc/shared/vectors ../irq).
 
 During initialization of exception handling, a crude test
 is performed to check if memory seems to have the write-back

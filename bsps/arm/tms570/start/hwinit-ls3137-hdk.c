@@ -60,7 +60,7 @@ enum tms570_system_clock_source {
 
 /*
  * Definition of fuctions for all pins of TMS570LS3137.
- * This setup correctponds to TMS570LS31x HDK Kit
+ * This setup corresponds to TMS570LS31x HDK Kit
  */
 
 #define TMS570_PINMMR_INIT_LIST( per_pin_action, common_arg ) \

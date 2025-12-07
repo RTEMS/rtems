@@ -17,7 +17,7 @@
  * Author: Jay Monkman (jmonkman@frasca.com)
  * Copyright (C) 1998 by Frasca International, Inc.
  *
- * Derived from c/src/lib/libbsp/m68k/gen360/console/console.c
+ * Derived from console.c in the historical bsps/m68k/gen68360/console
  * Author: W. Eric Norum <eric@norum.ca>
  *
  * COPYRIGHT (c) 1989, 2008.

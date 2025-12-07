@@ -543,10 +543,10 @@ follow the instructions indicated before the definition of RELOCADDR).
 
     After you make any changes to RELOCADDR and if you are using
 NetLoader, you'll have to recompile the
-'c/src/lib/libbsp/i386/pc386/start/start16.s' file. The easiest way to
+'bsps/i386/pc386/start/startAP.S' file. The easiest way to
 achieve this is just to 'make clean' and the 'make all' again. The
 quickest way is to change to
-'<build_point>/c/src/lib/libbsp/i386/pc386/start' and 'make
+'<build_point>bsps/i386/pc386/start' and 'make
 RTEMS_BSP=pc386 clean all'.
 
     When programming interrupt handlers take into account that the PIC

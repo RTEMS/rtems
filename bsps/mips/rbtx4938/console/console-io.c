@@ -20,7 +20,7 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  Derived from c/src/lib/libbsp/no_cpu/no_bsp/console/console.c:
+ *  Derived from bsps/no_cpu/no_bsp/console/console.c:
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

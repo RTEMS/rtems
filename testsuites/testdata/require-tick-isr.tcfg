@@ -1,7 +1,7 @@
 #
 # These tests require that the BSP have a real clock tick ISR. Some
 # simulator BSPs do not have any interrupt sources and use the file
-# libbsp/shared/clock_driver_simidle.c.
+# bsps/shared/dev/clock/clock_simidle.c.
 #
 # Tests which do not work with this clock driver tend to have the
 # one of the following characteristics:

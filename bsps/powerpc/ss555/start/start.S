@@ -78,7 +78,7 @@
 
 .section 	.debug_sfnames
 .L_sfnames_b:
-	.byte "rtems/c/src/lib/libbsp/powerpc/ss555/startup/"
+	.byte "bsps/powerpc/ss555/startup/"
 	.byte 0
 .L_F0:
 	.byte "start.S"
@@ -153,7 +153,7 @@
 	.2byte	0x106	/* AT_stmt_list */
 	.4byte	.L_line_b
 	.2byte	0x1b8	/* AT_comp_dir */
-	.byte "rtems/c/src/lib/libbsp/powerpc/ss555/startup/"
+	.byte "bsps/powerpc/ss555/start/"
 	.byte 0
 	.2byte	0x8006	/* AT_sf_names */
 	.4byte	.L_sfnames_b

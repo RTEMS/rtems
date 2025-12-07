@@ -6,7 +6,7 @@
  * @brief Console driver for for KIT637_V6 (CSB637)
  *
  *  This driver uses the shared console driver in
- *  ...../libbsp/shared/console.c
+ *  bsps/shared/dev/serial/legacy-console.c
  */
 
 /*

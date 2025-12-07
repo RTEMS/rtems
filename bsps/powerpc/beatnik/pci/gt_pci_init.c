@@ -11,7 +11,7 @@
  */
 
 /*
- * Original file header of libbsp/shared/pci.c where this file is based upon.
+ * Original file header of bsps/powerpc/shared/pci/pci.c where this file is based upon.
  *
  *  Copyright (C) 1999 eric.valette@free.fr
  *

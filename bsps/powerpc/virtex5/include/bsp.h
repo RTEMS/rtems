@@ -60,7 +60,7 @@
  *
  *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
- *  Derived from c/src/lib/libbsp/no_cpu/no_bsp/include/bsp.h
+ *  Derived from bsps/no_cpu/no_bsp/include/bsp.h
  */
 
 #ifndef LIBBSP_POWERPC_VIRTEX5_BSP_H

@@ -116,12 +116,12 @@ to the list of individual pins functions is included.
 Pins function definition can be found and altered
 in a file
 
- `rtems/c/src/lib/libbsp/arm/tms570/hwinit/init_pinmux.c`
+ `bsps/arm/tms570/start/hwinit-ls3137-hdk.c`
 
 Complete "database" of all possible pin functions for
 a chip is provided in a file
 
-  `rtems/c/src/lib/libbsp/arm/tms570/include/tms570<MODEL>-pins.h`
+  `bsps/arm/tms570/include/bsp/tms570<MODEL>-pins.h`
 
 If another package or chip is considered then tools found
 in next repository can be used or extended to generate header

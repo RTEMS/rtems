@@ -78,17 +78,17 @@ interface, for example.
 For adapting this BSP to other boards, the following files should be
 modified:
 
-- c/src/lib/libbsp/powerpc/virtex4/startup/linkcmds
+- bsps/powerpc/virtex4/start/linkcmds
 	for the memory layout required
 
-- c/src/lib/libbsp/powerpc/virtex4/startup/bspstart.c
+- bsps/powerpc/virtex4/start/bspstart.c
 	Here you can select the clock source for the timers and the
         serial interface (system clock or external clock pin), the
         clock rates, etc.
 
-- c/src/lib/libbsp/powerpc/virtex4/include/bsp.h
+- bsps/powerpc/virtex4/include/bsp.h
 	some BSP-related constants
 
-- c/src/lib/libbsp/powerpc/virtex4/*
+- bsps/powerpc/virtex4/*
 	well, they should be generic, so there _should_ be no reason
 	to mess around there (but who knows...)

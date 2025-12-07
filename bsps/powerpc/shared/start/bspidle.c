@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- *  Moved to libbsp/powerpc/shared by Joel Sherrill (9 Sept 09).
+ *  Moved to bsps/powerpc/shared by Joel Sherrill (9 Sept 09).
  */
 
 /*

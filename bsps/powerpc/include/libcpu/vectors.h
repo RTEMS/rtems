@@ -10,7 +10,7 @@
  *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from libbsp/powerpc/mbx8xx/vectors/vectors.h:
+ *  Derived from vector.h in the historical powerpc/mbx8xx:
  *
  *  CopyRight (C) 1999 eric.valette@free.fr
  *

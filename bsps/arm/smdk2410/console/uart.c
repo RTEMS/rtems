@@ -6,7 +6,7 @@
  * @brief  console driver for S3C2400 UARTs
  *
  *  This driver uses the shared console driver in
- *  ...../libbsp/shared/console.c
+ *  bsps/shared/dev/serial/legacy-console.c
  *
  *  If you want the driver to be interrupt driven, you
  *  need to write the ISR, and in the ISR insert the

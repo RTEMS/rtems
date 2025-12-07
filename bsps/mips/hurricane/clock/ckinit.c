@@ -22,7 +22,7 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  Derived from c/src/lib/libbsp/no_cpu/no_bsp/clock/ckinit.c
+ *  Derived from bsps/no_cpu/no_bsp/clock/ckinit.c
  *
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).

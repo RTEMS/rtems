@@ -122,7 +122,7 @@ void tms570_pom_remap(void)
    * instructions followed by eight words with actual exception
    * service routines target addresses. This is case of RTEMS default
    * table found in
-   *   c/src/lib/libbsp/arm/shared/start/start.S
+   *   bsps/arm/shared/start/start.S
    */
   rtems_cache_invalidate_multiple_data_lines(addr_tab, 64);
   memcpy(vec_overlay_start, addr_tab, 64);

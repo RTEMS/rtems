@@ -14,7 +14,7 @@
  *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from libbsp/powerpc/mbx8xx/irq/irq_asm.S:
+ *  Derived from irq_asm.S in the historical powerpc/mbx8xx/irq:
  *
  *  Modified to support the MCP750.
  *  Modifications Copyright (C) 1999 Eric Valette. eric.valette@free.fr

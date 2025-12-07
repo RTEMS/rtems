@@ -31,9 +31,9 @@ BUILD INFO
 
   prepare:
   - get up-to date RTEMS release
-  - untar beatnik.tgz into c/src/lib/libbsp/powerpc
+  - untar beatnik.tgz into bsps/powerpc
   - copy beatnik.cfg into make/custom
-  - patch c/src/lib/libsp/powerpc/acinclude.ac
+  - patch bsps/powerpc/acinclude.ac
   - run 'bootstrap' from top directory; make sure RTEMS
     autoXXX are found first in your PATH
   configure:

@@ -356,7 +356,7 @@ void bsp_interrupt_facility_initialize(void)
 
     Call to setup of interrupt entry in CPU level exception vectors table
     is not used (necessary/possible) because the table is provided
-    by c/src/lib/libbsp/arm/shared/start/start.S and POM overlay
+    by bsps/arm/shared/start/start.S and POM overlay
     solution remaps that to address zero.
   */
 

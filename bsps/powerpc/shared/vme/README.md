@@ -1,9 +1,9 @@
 vme
 ===
 
-libbsp/shared/vmeUniverse/VME.h: VME API; BSP and bridge-chip independent
-VMEConfig.h:    defines BSP specific constants for VME configuration
-vmeconfig.c     configures the VME bridge using the VME.h API calls
+bsps/powerpc/include/bsp/VME.h: VME API; BSP and bridge-chip independent
+bsps/powerpc/beatnik/include/VMEConfig.h:    defines BSP specific constants for VME configuration
+bsps/powerpc/beatnik/vme/vmeconfig.c     configures the VME bridge using the VME.h API calls
                 and BSP specific constants from VMEConfig.h.
                 Independent of the bridge chip, however.
 vme_universe.c: implements VME.h for the vmeUniverse driver.
@@ -21,9 +21,9 @@ NOTE: (T.S, 2007/1) The information in this file is outdated
 	  can be found in
 
 	  	README.universe,
-		libbsp/powerpc/shared/vme/VMEConfig.h,
+		bsps/powerpc/beatnik/include/bsp/VMEConfig.h,
 
-		source files in this directory and libbsp/powerpc/shared/vme
+		source files in this directory and bsps/powerpc/shared/vme
 
 The vmeUniverse driver needs some support from the BSP for
 
@@ -54,7 +54,7 @@ I looked through the ppcn_60x BSP. Here's what I found:
         a) a routine 'pciFindDevice' (need to be macro-aliased
            to the proper routine/wrapper of your BSP) who scans
            PCI config space for the universe bridge.
-           You could add 'libbsp/powerpc/shared/pci/pcifinddevice.c'
+           You could add 'bsps/powerpc/shared/pci/pcifinddevice.c'
            to your BSP substituting the pci_read_config_xxx calls
            by the ones present on your BSP (see step 2))
         b) routines to read PCI config registers (byte and longword)
@@ -107,7 +107,7 @@ be performed:
                                  * version of this routine here
                                  */
 
-For an example of init/setup, consult libbsp/powerpc/shared/vme/vmeconfig.c
+For an example of init/setup, consult bsps/powerpc/beatnik/vme/vmeconfig.c
 
 
 Universe
@@ -122,9 +122,9 @@ Till Straumann <strauman@slac.stanford.edu> 1/2002, 2005, 2007
 
 A BSP that wants to use these drivers
 must implement the following headers / functionality:
- - <bsp/pci.h> offering an API like 'libbsp/powerpc/shared/pci'
+ - <bsp/pci.h> offering an API like 'bsps/powerpc/shared/pci'
  - <bsp/irq.h> offering the 'new style' RTEMS irq API
-   (like 'libbsp/powerpc/shared/irq').
+   (like 'bsps/powerpc/shared/irq').
  - <libcpu/io.h>   for the I/O operations (out_le32,in_le32, ..., out_be32,...)
  - <libcpu/byteorder.h> for byte-swapping (st_le32, ld_le32, ..., st_be32,...)
  - glue code that implements the 'VME.h' and 'VMEDMA.h' APIs
@@ -136,14 +136,14 @@ must implement the following headers / functionality:
    parts of linked-list DMA.
 
    Boards with a 'universe' chip may use a pretty generic version of
-   the glue code that is defined in libbsp/powerpc/shared/vmeconfig.c,
-   libbsp/powerpc/shared/vme_universe.c, and 
-   libbsp/powerpc/shared/vme_universe_dma.c. The board-specific parameters
+   the glue code that is defined in bsps/powerpc/shared/vme/vmeconfig.c,
+   bsps/powerpc/shared/vme/vme_universe.c, and
+   bsps/powerpc/shared/vme_universe_dma.c. The board-specific parameters
    are defined in a single BSP-specific file 'VMEConfig.h'. That's where
    the actual addresses of VME/PCI windows are configured and where
    interrupt wires can be assigned etc.
 
-   Read libbsp/powerpc/shared/VMEConfig.h for more information and use
+   Read bsp/powerpc/beatnik/include/bsp/VMEConfig.h for more information and use
    it as a template. Note that BSP implementors should try *not* to
    clone 'vmeconfig.c' but use the constants in VMEConfig.h
 

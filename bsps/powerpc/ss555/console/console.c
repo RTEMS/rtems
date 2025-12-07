@@ -58,7 +58,7 @@
  *  SS555 port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from c/src/lib/libbsp/powerpc/mbx8xx/console/console.c:
+ *  Derived from console.c in the historical powerpc/mbx8xx/console:
  *
  *  Based on code (alloc860.c in eth_comm port) by
  *  Jay Monkman (jmonkman@frasca.com),

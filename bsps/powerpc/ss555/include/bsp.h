@@ -16,7 +16,7 @@
  *  SS555 port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from c/src/lib/libbsp/powerpc/mbx8xx/include/bsp.h:
+ *  Derived from bsp.h in the historical powerpc/mbx8xx/include:
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).

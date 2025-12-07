@@ -5,7 +5,7 @@
  * @ingroup RTEMSBSPsSPARCLEON2
  * @brief Interrupts definitions
  *
- * Based on libbsp/shared/include/irq.h.
+ * Based on bsps/sparc/leon2/include/bsp/irq.h.
  */
 
 /*

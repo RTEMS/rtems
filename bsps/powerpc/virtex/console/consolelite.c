@@ -6,7 +6,7 @@
  *  Author: Keith Robertson <kjrobert@alumni.uwaterloo.ca>
  *  COPYRIGHT (c) 2005 by Linn Products Ltd, Scotland.
  *
- *  Derived from libbsp/no_cpu/no_bsp/console.c and therefore also:
+ *  Derived from bsps/no_cpu/no_bsp/console/console.c and therefore also:
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
