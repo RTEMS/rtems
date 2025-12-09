@@ -44,8 +44,6 @@ clock_t _times(struct tms  *ptms);
 
 static void test_times_functions( void )
 {
-  (void) argument;
-
   clock_t    start;
   clock_t    end;
   clock_t    now;
