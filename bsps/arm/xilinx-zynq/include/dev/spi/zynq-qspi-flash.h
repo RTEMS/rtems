@@ -34,19 +34,11 @@
 /*
  * Driver configuration.
  */
-#define ZQSPI_FLASH_4BYTE_ADDRESSING  1
-#define ZQSPI_FLASH_FAST_READ         1
-
 #define ZQSPI_FLASH_COMMAND_OFFSET    (0) /* FLASH instruction */
 #define ZQSPI_FLASH_ADDRESS_1_OFFSET  (1) /* Bits 31-24 of the address */
 #define ZQSPI_FLASH_ADDRESS_2_OFFSET  (2) /* Bits 23-16 of the address */
 #define ZQSPI_FLASH_ADDRESS_3_OFFSET  (3) /* Bits 16-8 of the address */
-#if ZQSPI_FLASH_4BYTE_ADDRESSING
- #define ZQSPI_FLASH_ADDRESS_4_OFFSET (4) /* Bits 8-0 of the address */
- #define ZQSPI_FLASH_DATA_OFFSET      (5) /* Start of Data for Read/Write */
-#else
- #define ZQSPI_FLASH_DATA_OFFSET      (4) /* Start of Data for Read/Write */
-#endif
+#define ZQSPI_FLASH_ADDRESS_4_OFFSET  (4) /* Bits 8-0 of the address */
 #define ZQSPI_FLASH_SPI_MAX_PADDING   (4) /* Maximum amount of padding. */
 
 #define ZQSPI_FLASH_TX_TRANS 0
@@ -108,13 +100,23 @@ typedef struct
   bool      start;
 } zqspi_transfer_buffer;
 
+typedef struct
+{
+  uint8_t fast_read;
+  uint8_t read;
+  uint8_t page_program;
+  uint8_t sector_erase;
+} zqspi_flash_commands;
+
 /*
  * A flash driver instance
  */
 typedef struct
 {
   zqspi_transfer_buffer buf;
+  zqspi_flash_commands  commands;
   bool                  initialised;
+  bool                  addr_4_byte;
   uint32_t              jedec_id;
   uint64_t              flash_size;
   uint32_t              flash_read_dummies;

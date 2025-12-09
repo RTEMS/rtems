@@ -240,12 +240,13 @@ static zqspi_error zqspi_transfer_buffer_copy_in(
 
 static void zqspi_transfer_buffer_set_addr(
   zqspi_transfer_buffer* transfer,
+  bool addr_4_byte,
   uint32_t address
 )
 {
-#if ZQSPI_FLASH_4BYTE_ADDRESSING
-  zqspi_transfer_buffer_set8(transfer, (address >> 24) & 0xff);
-#endif
+  if (addr_4_byte) {
+    zqspi_transfer_buffer_set8(transfer, (address >> 24) & 0xff);
+  }
   zqspi_transfer_buffer_set8(transfer, (address >> 16) & 0xff);
   zqspi_transfer_buffer_set8(transfer, (address >> 8) & 0xff);
   zqspi_transfer_buffer_set8(transfer, address & 0xff);
@@ -417,11 +418,12 @@ zqspi_error zqspi_read(
     zqspi_transfer_buffer_clear(&driver->buf);
     zqspi_transfer_buffer_set_length(
       &driver->buf,
-      ZQSPI_FLASH_COMMAND_SIZE + ZQSPI_FLASH_ADDRESS_SIZE +
+      ZQSPI_FLASH_COMMAND_SIZE + (driver->addr_4_byte ? 4 : 3) +
         driver->flash_read_dummies + size
     );
-    zqspi_transfer_buffer_set8(&driver->buf, ZQSPI_FLASH_READ_CMD);
-    zqspi_transfer_buffer_set_addr(&driver->buf, address);
+    zqspi_transfer_buffer_set8(&driver->buf, driver->commands.fast_read);
+    zqspi_transfer_buffer_set_addr(&driver->buf, driver->addr_4_byte,
+        address);
     fe = zqspi_transfer_buffer_fill(&driver->buf, 0,
            driver->flash_read_dummies + size);
     if (fe != ZQSPI_FLASH_NO_ERROR) {
@@ -429,7 +431,7 @@ zqspi_error zqspi_read(
     }
     zqspi_transfer_buffer_set_dir(&driver->buf, ZQSPI_FLASH_RX_TRANS);
     zqspi_transfer_buffer_set_command_len(&driver->buf,
-        ZQSPI_FLASH_COMMAND_SIZE + ZQSPI_FLASH_ADDRESS_SIZE +
+        ZQSPI_FLASH_COMMAND_SIZE + (driver->addr_4_byte ? 4 : 3) +
         driver->flash_read_dummies);
 
     fe = zqspi_transfer(&driver->buf, &driver->initialised);
@@ -438,7 +440,7 @@ zqspi_error zqspi_read(
     }
 
     zqspi_transfer_buffer_skip(&driver->buf,
-      ZQSPI_FLASH_ADDRESS_SIZE + driver->flash_read_dummies);
+      (driver->addr_4_byte ? 4 : 3) + driver->flash_read_dummies);
 
     fe = zqspi_transfer_buffer_copy_out(&driver->buf, data, size);
     if (fe != ZQSPI_FLASH_NO_ERROR) {
@@ -476,10 +478,11 @@ zqspi_error zqspi_blank(zqspiflash *driver, uint32_t address, size_t length)
 
     zqspi_transfer_buffer_clear(&driver->buf);
     zqspi_transfer_buffer_set_length(&driver->buf,
-                     ZQSPI_FLASH_COMMAND_SIZE + ZQSPI_FLASH_ADDRESS_SIZE
+                     ZQSPI_FLASH_COMMAND_SIZE + (driver->addr_4_byte ? 4 : 3)
                      + driver->flash_read_dummies + size);
-    zqspi_transfer_buffer_set8(&driver->buf, ZQSPI_FLASH_READ_CMD);
-    zqspi_transfer_buffer_set_addr(&driver->buf, address);
+    zqspi_transfer_buffer_set8(&driver->buf, driver->commands.fast_read);
+    zqspi_transfer_buffer_set_addr(&driver->buf, driver->addr_4_byte,
+        address);
     fe = zqspi_transfer_buffer_fill(&driver->buf, 0,
       driver->flash_read_dummies + size);
     if (fe != ZQSPI_FLASH_NO_ERROR) {
@@ -487,7 +490,7 @@ zqspi_error zqspi_blank(zqspiflash *driver, uint32_t address, size_t length)
     }
     zqspi_transfer_buffer_set_dir(&driver->buf, ZQSPI_FLASH_RX_TRANS);
     zqspi_transfer_buffer_set_command_len(&driver->buf,
-      ZQSPI_FLASH_COMMAND_SIZE + ZQSPI_FLASH_ADDRESS_SIZE
+      ZQSPI_FLASH_COMMAND_SIZE + (driver->addr_4_byte ? 4 : 3)
       + driver->flash_read_dummies);
 
     fe = zqspi_transfer(&driver->buf, &driver->initialised);
@@ -495,7 +498,7 @@ zqspi_error zqspi_blank(zqspiflash *driver, uint32_t address, size_t length)
       return fe;
     }
 
-    zqspi_transfer_buffer_skip(&driver->buf, ZQSPI_FLASH_ADDRESS_SIZE);
+    zqspi_transfer_buffer_skip(&driver->buf, (driver->addr_4_byte ? 4 : 3));
 
     length -= size;
     address += size;
@@ -570,12 +573,13 @@ zqspi_error zqspi_erase_sector(zqspiflash *driver, uint32_t address)
 
   zqspi_transfer_buffer_clear(&driver->buf);
   zqspi_transfer_buffer_set_length(&driver->buf, ZQSPI_FLASH_COMMAND_SIZE
-    + ZQSPI_FLASH_ADDRESS_SIZE);
-  zqspi_transfer_buffer_set8(&driver->buf, ZQSPI_FLASH_SEC_ERASE_CMD);
-  zqspi_transfer_buffer_set_addr(&driver->buf, address);
+    + (driver->addr_4_byte ? 4 : 3));
+  zqspi_transfer_buffer_set8(&driver->buf, driver->commands.sector_erase);
+  zqspi_transfer_buffer_set_addr(&driver->buf, driver->addr_4_byte,
+      address);
   zqspi_transfer_buffer_set_dir(&driver->buf, ZQSPI_FLASH_TX_TRANS);
   zqspi_transfer_buffer_set_command_len(&driver->buf, ZQSPI_FLASH_COMMAND_SIZE
-    + ZQSPI_FLASH_ADDRESS_SIZE);
+    + (driver->addr_4_byte ? 4 : 3));
 
   fe = zqspi_transfer(&driver->buf, &driver->initialised);
   if (fe != ZQSPI_FLASH_NO_ERROR)
@@ -619,7 +623,8 @@ zqspi_error zqspi_erase_device(zqspiflash *driver)
   zqspi_transfer_buffer_set_length(&driver->buf, 1);
   zqspi_transfer_buffer_set8(&driver->buf, ZQSPI_FLASH_BULK_ERASE_CMD);
   zqspi_transfer_buffer_set_dir(&driver->buf, ZQSPI_FLASH_TX_TRANS);
-  zqspi_transfer_buffer_set_command_len(&driver->buf, ZQSPI_FLASH_COMMAND_SIZE + ZQSPI_FLASH_ADDRESS_SIZE);
+  zqspi_transfer_buffer_set_command_len(&driver->buf,
+      ZQSPI_FLASH_COMMAND_SIZE + (driver->addr_4_byte ? 4 : 3));
 
   fe = zqspi_transfer(&driver->buf, &driver->initialised);
   if (fe != ZQSPI_FLASH_NO_ERROR)
@@ -706,12 +711,13 @@ zqspi_error zqspi_write(
 
       zqspi_transfer_buffer_clear(&driver->buf);
       zqspi_transfer_buffer_set_length(&driver->buf, ZQSPI_FLASH_COMMAND_SIZE
-          + ZQSPI_FLASH_ADDRESS_SIZE + size);
-      zqspi_transfer_buffer_set8(&driver->buf, ZQSPI_FLASH_WRITE_CMD);
-      zqspi_transfer_buffer_set_addr(&driver->buf, address);
+          + (driver->addr_4_byte ? 4 : 3) + size);
+      zqspi_transfer_buffer_set8(&driver->buf, driver->commands.page_program);
+      zqspi_transfer_buffer_set_addr(&driver->buf, driver->addr_4_byte,
+          address);
       zqspi_transfer_buffer_set_dir(&driver->buf, ZQSPI_FLASH_TX_TRANS);
       zqspi_transfer_buffer_set_command_len(&driver->buf,
-        ZQSPI_FLASH_COMMAND_SIZE + ZQSPI_FLASH_ADDRESS_SIZE);
+        ZQSPI_FLASH_COMMAND_SIZE + (driver->addr_4_byte ? 4 : 3));
       fe = zqspi_transfer_buffer_copy_in(&driver->buf, data, size);
       if (fe != ZQSPI_FLASH_NO_ERROR)
       {
@@ -831,9 +837,13 @@ zqspi_error zqspi_readid(zqspiflash *driver, uint32_t *jedec_id)
     driver->flash_page_size = nor_config.page_size;
   }
 
-#if ZQSPI_FLASH_FAST_READ
-  driver->flash_read_dummies = 1;
-#endif
+  if (driver->flash_size > 16 * 1024 * 1024) {
+    driver->addr_4_byte = true;
+    driver->commands.fast_read = ZQSPI_FLASH_4B_FAST_READ_CMD;
+    driver->commands.read = ZQSPI_FLASH_4B_READ_CMD;
+    driver->commands.page_program = ZQSPI_FLASH_4B_WRITE_CMD;
+    driver->commands.sector_erase = ZQSPI_FLASH_4B_SEC_ERASE_CMD;
+  }
 
   return ZQSPI_FLASH_NO_ERROR;
 }
@@ -868,11 +878,16 @@ zqspi_error zqspi_init(zqspiflash *driver)
   driver->buf.sending = 0;
   driver->buf.start = false;
   driver->initialised = false;
+  driver->addr_4_byte = false;
   driver->jedec_id = 0;
   driver->flash_size = 0;
-  driver->flash_read_dummies = 0;
+  driver->flash_read_dummies = 1;
   driver->flash_erase_sector_size = 0;
   driver->flash_page_size = 0;
+  driver->commands.fast_read = ZQSPI_FLASH_3B_FAST_READ_CMD;
+  driver->commands.read = ZQSPI_FLASH_3B_READ_CMD;
+  driver->commands.page_program = ZQSPI_FLASH_3B_WRITE_CMD;
+  driver->commands.sector_erase = ZQSPI_FLASH_3B_SEC_ERASE_CMD;
 
   sc = rtems_interrupt_handler_install(
     ZQPSI_ZYNQ_QSPI_IRQ,
