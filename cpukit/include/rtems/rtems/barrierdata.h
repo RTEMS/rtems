@@ -9,7 +9,6 @@
  *   and the @ref RTEMSImplApplConfig to define ::_Barrier_Information.
  */
 
-
 /* COPYRIGHT (c) 1989-2008.
  * On-Line Applications Research Corporation (OAR).
  *
