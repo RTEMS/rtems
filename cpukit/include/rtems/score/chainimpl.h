@@ -159,11 +159,17 @@ static inline void _Chain_Initialize_node( Chain_Node *the_node )
  * @retval true The @a node is off chain.
  * @retval false The @a node is not off chain.
  */
-static inline bool _Chain_Is_node_off_chain(
-  const Chain_Node *node
-)
+static inline bool _Chain_Is_node_off_chain( const Chain_Node *node )
 {
-  return node->next == NULL;
+  if ( node->next == NULL ) {
+#if defined( RTEMS_DEBUG )
+    return node->previous == NULL;
+#else
+    return true;
+#endif
+  }
+
+  return false;
 }
 
 /**
