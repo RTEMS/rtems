@@ -846,7 +846,6 @@ T_verbosity T_set_verbosity(T_verbosity);
  * @{
  */
 
-
 #define T_eq_str(a, e) T_flags_eq_str(a, e, 0)
 #define T_assert_eq_str(a, e) T_flags_eq_str(a, e, T_CHECK_STOP)
 #define T_quiet_eq_str(a, e) T_flags_eq_str(a, e, T_CHECK_QUIET)

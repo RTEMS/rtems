@@ -188,6 +188,7 @@ RTEMS_SYSINIT_ITEM(
 #endif /* _CONFIGURE_HAS_IO_DRIVERS) ||
   CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER ||
   CONFIGURE_MAXIMUM_DRIVERS */
+
 /*
  * If any flavor of console driver is configured, then configure the post
  * driver hook which opens /dev/console as stdin, stdout, and stderr.

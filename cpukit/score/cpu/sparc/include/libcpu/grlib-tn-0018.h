@@ -57,7 +57,6 @@
          andn   \out1, CCTRL_ICS, \out2
 .endm
 
-
 .macro TN0018_WRITE_PSR src
         wr      \src, %psr
 .endm

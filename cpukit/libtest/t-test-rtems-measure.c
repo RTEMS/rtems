@@ -167,7 +167,6 @@ destroy(void *ptr)
 
 		lctx = &ctx->load_contexts[load];
 
-
 		if (lctx->id != 0) {
 			sc = rtems_task_delete(lctx->id);
 			_Assert(sc == RTEMS_SUCCESSFUL);
@@ -269,7 +268,6 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 		if (sc != RTEMS_SUCCESSFUL) {
 			continue;
 		}
-
 
 		sc = rtems_task_create(rtems_build_name('L', 'O', 'A', 'D'),
 		    1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,

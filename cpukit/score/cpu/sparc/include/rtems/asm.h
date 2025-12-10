@@ -86,7 +86,6 @@
  *  Define macros to handle section beginning and ends.
  */
 
-
 #define BEGIN_CODE_DCL .text
 #define END_CODE_DCL
 #define BEGIN_DATA_DCL .data
