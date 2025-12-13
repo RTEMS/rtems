@@ -142,7 +142,7 @@ static int ctucanfd_check_state(
   const char *where
 )
 {
-  int i;
+  unsigned int i;
   int ret = 0;
   int prio = 0;
   unsigned int idx_limit = 0;
@@ -397,7 +397,7 @@ static int ctucanfd_set_btr(
 )
 {
   struct ctucanfd_internal *internal = chip->internal;
-  int max_ph1_len = 31;
+  unsigned int max_ph1_len = 31;
   uint32_t btr = 0;
   uint32_t prop_seg = bt->prop_seg;
   uint32_t phase_seg1 = bt->phase_seg1;
@@ -979,7 +979,7 @@ static void ctucanfd_txb_add(
   unsigned int txb_order_idx,
   unsigned int prio
 ) {
-  int i;
+  unsigned int i;
   internal->txb_order = ctucanfd_txb_slot_promote(
     internal->txb_order,
     txb_order_idx,
@@ -1719,7 +1719,7 @@ struct rtems_can_chip *rtems_ctucanfd_initialize(
   uintptr_t addr,
   rtems_vector_number irq,
   rtems_task_priority worker_priority,
-  int ntxbufs,
+  unsigned int ntxbufs,
   rtems_option irq_option,
   unsigned long can_clk_rate
 )
@@ -1730,10 +1730,6 @@ struct rtems_can_chip *rtems_ctucanfd_initialize(
   struct ctucanfd_internal *internal;
   uint32_t txb_count;
   int ret;
-
-  if ( ntxbufs < 0 ) {
-    return NULL;
-  }
 
   internal = calloc( 1, sizeof( struct ctucanfd_internal ) );
   if ( internal == NULL ) {

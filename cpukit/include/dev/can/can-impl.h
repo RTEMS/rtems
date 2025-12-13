@@ -66,7 +66,7 @@
  */
 static inline int rtems_can_queue_fifo_test_flag(
   struct rtems_can_queue_fifo *fifo,
-  int flag
+  unsigned int flag
 )
 {
   return ( atomic_load( &fifo->fifo_flags ) & flag ) == flag;

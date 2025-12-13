@@ -78,7 +78,7 @@ struct rtems_can_chip *rtems_ctucanfd_initialize(
   uintptr_t addr,
   rtems_vector_number irq,
   rtems_task_priority worker_priority,
-  int ntxbufs,
+  unsigned int ntxbufs,
   rtems_option irq_option,
   unsigned long can_clk_rate
 );
