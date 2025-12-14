@@ -25,22 +25,6 @@ if_em [freebsd port]). Consult individual file headers for copyright
 and authorship information.
 
 
-BUILD INFO
-----------
-(relevant only if you received this BSP unbundled from the RTEMS distribution)
-
-  prepare:
-  - get up-to date RTEMS release
-  - untar beatnik.tgz into bsps/powerpc
-  - copy beatnik.cfg into make/custom
-  - patch bsps/powerpc/acinclude.ac
-  - run 'bootstrap' from top directory; make sure RTEMS
-    autoXXX are found first in your PATH
-  configure:
-  - configure with your favorite options. BSP name is 'beatnik'
-    I recommend passing RTEMS_CFLAGS=-g to 'configure'
-
-
 TARGET
 ------
 Even though this BSP is binary compatible with the MVME5500 it's primary
