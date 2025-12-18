@@ -50,27 +50,29 @@ rtems_task Init(rtems_task_argument argument)
 {
   int TestFd, rv;
 
+  (void) argument;
+
   TEST_BEGIN();
 
-  puts( "open(" FILE_NAME ") - OK ");
+  puts( "open(" FILE_NAME ") - OK " );
   TestFd = open( FILE_NAME, O_CREAT | O_RDWR, 0777 );
-  rtems_test_assert(TestFd != -1);
+  rtems_test_assert( TestFd != -1 );
 
-  puts( "close(" FILE_NAME ") - OK ");
-  rv = close(TestFd);
-  rtems_test_assert(rv == 0);
+  puts( "close(" FILE_NAME ") - OK " );
+  rv = close( TestFd );
+  rtems_test_assert( rv == 0 );
 
   struct statvfs imfs_statvfs;
-  puts( "statvfs(" FILE_NAME ") - OK ");
-  rv = statvfs(FILE_NAME, &imfs_statvfs);
-  rtems_test_assert(imfs_statvfs.f_bsize == BLOCK_SIZE);
+  puts( "statvfs(" FILE_NAME ") - OK " );
+  rv = statvfs( FILE_NAME, &imfs_statvfs );
+  rtems_test_assert( imfs_statvfs.f_bsize == BLOCK_SIZE );
 
   rv = unlink( FILE_NAME );
-  rtems_test_assert(rv == 0);
+  rtems_test_assert( rv == 0 );
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */

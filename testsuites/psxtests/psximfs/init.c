@@ -222,38 +222,36 @@ void unlink_it(void)
   rtems_test_assert( rc == 0 );
 }
 
-void statvfs_helper(void)
+void statvfs_helper( void )
 {
   struct statvfs imfs_statvfs;
   puts( "statvfs(" FILE_NAME ") - OK " );
-  int rc = statvfs(FILE_NAME, &imfs_statvfs);
-  rtems_test_assert(rc == 0);
-  //rtems_test_assert(imfs_statvfs.f_bsize == BLOCK_SIZE);
-  rtems_test_assert(imfs_statvfs.f_files == 2);
+  int rc = statvfs( FILE_NAME, &imfs_statvfs );
+  rtems_test_assert( rc == 0 );
+  // rtems_test_assert(imfs_statvfs.f_bsize == BLOCK_SIZE);
+  rtems_test_assert( imfs_statvfs.f_files == 2 );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
-  int i;
-  void *alloc_ptr = (void *)0;
-  off_t position;
-  off_t new_position;
-  char buf [1];
+  int     i;
+  void   *alloc_ptr = (void *) 0;
+  off_t   position;
+  off_t   new_position;
+  char    buf[ 1 ];
   ssize_t n;
+
+  (void) argument;
 
   TEST_BEGIN();
 
-  if (init_memory)
-  {
+  if ( init_memory ) {
     init_memory();
   }
 
-  for (i=0 ; i<sizeof(Buffer) ; i++ )
-    Buffer[i] = (uint8_t) i;
+  for ( i = 0; i < sizeof( Buffer ); i++ ) Buffer[ i ] = (uint8_t) i;
 
-  open_it(false, true);
+  open_it( false, true );
 
   statvfs_helper();
 
