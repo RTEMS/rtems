@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2025 Allan N. Hessenflow
+default:
+- enabled-by: true
+  value: -1
+description: |
+  ttys6 cts pin alt function location (disabled -1)
+enabled-by: true
+format: '{}'
+links: []
+name: EFM32GG11_TTYS6_CTS_LOC
+type: build

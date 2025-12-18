@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  MEMORY {
+    INTFLASH : ORIGIN = 0x00000000, LENGTH = ${EFM32GG11_MEMORY_INTFLASH_SIZE}
+    INTSRAM  : ORIGIN = 0x20000000, LENGTH = ${EFM32GG11_MEMORY_INTSRAM_SIZE}
+  }
+copyrights:
+- Copyright (C) 2025 Allan N. Hessenflow
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds.memory
+type: build

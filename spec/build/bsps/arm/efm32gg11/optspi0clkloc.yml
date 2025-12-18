@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2025 Allan N. Hessenflow
+default:
+- enabled-by: true
+  value: 3
+description: |
+  spi-0 clk pin alt function location (default 3)
+enabled-by: true
+format: '{}'
+links: []
+name: EFM32GG11_SPI_0_CLK_LOC
+type: build

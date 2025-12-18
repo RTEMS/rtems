@@ -1,0 +1,57 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMEFM32GG11
+ *
+ * @brief EFM32GG11 Clock Configuration
+ */
+
+/*
+ * Copyright (C) 2025 Allan N. Hessenflow
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifndef LIBBSP_ARM_EFM32GG11_CLOCK_H
+#define LIBBSP_ARM_EFM32GG11_CLOCK_H
+
+#include <bspopts.h>
+
+extern struct efm32gg11_clock_s {
+  uint32_t hfclk;
+  uint32_t hfcoreclk;
+  uint32_t hfbusclk;
+  uint32_t hfperclk;
+  uint32_t hfperbclk;
+  uint32_t hfpercclk;
+  uint32_t hfexpclk;
+  uint16_t lfaclk;
+  uint16_t lfbclk;
+  uint16_t lfcclk;
+  uint16_t lfeclk;
+} efm32gg11_clock;
+
+void efm32gg11_clock_init(void);
+
+#endif /* LIBBSP_ARM_EFM32GG11_CLOCK_H */

@@ -1,0 +1,123 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2025 Allan N. Hessenflow
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/efm32gg11/include/bsp.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/efm32gg11/include/bsp/i2c.h
+  - bsps/arm/efm32gg11/include/bsp/irq.h
+  - bsps/arm/efm32gg11/include/bsp/spi.h
+  - bsps/arm/efm32gg11/include/bsp/efm32gg11_clock.h
+  - bsps/arm/efm32gg11/include/bsp/efm32gg11_dma.h
+  - bsps/arm/efm32gg11/include/bsp/efm32gg11_gpio.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b110f2048gm64.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b120f2048gm64.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b310f2048gl112.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b320f2048gl112.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b420f2048gl120.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b510f2048gl120.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b520f2048gl120.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b820f2048gl192.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b840f1024gl192.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_acmp.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_adc.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_af_pins.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_af_ports.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_can.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_can_mir.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_cmu.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_cryotimer.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_crypto.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_csen.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_devinfo.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_dma_descriptor.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_dmareq.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_ebi.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_emu.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_eth.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_etm.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_fpueh.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_gpcrc.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_gpio.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_gpio_p.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_i2c.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_idac.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_lcd.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_ldma_ch.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_ldma.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_lesense_buf.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_lesense_ch.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_lesense.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_lesense_st.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_letimer.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_leuart.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_msc.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_pcnt.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_prs_ch.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_prs.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_prs_signals.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_qspi.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_rmu.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_romtable.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_rtcc_cc.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_rtcc.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_rtc_comp.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_rtcc_ret.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_rtc.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_sdio.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_smu.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_timer_cc.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_timer.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_trng.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_uart.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_usart.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_usb_diep.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_usb_doep.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_usb.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_usb_hc.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_vdac.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_vdac_opa.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_wdog.h
+  - contrib/bsps/arm/efm32gg11/efm32gg11b_wdog_pch.h
+  - contrib/bsps/arm/efm32gg11/system_efm32gg11b.h
+  - bsps/arm/efm32gg11/include/bsp/processor.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/efm32gg11/start/linkcmds.intflash
+  - bsps/arm/efm32gg11/start/linkcmds.intsram
+links: []
+source:
+- bsps/arm/efm32gg11/console/console.c
+- bsps/arm/efm32gg11/dma/efm32gg11_dma.c
+- bsps/arm/efm32gg11/gpio/efm32gg11_gpio.c
+- bsps/arm/efm32gg11/i2c/i2c.c
+- bsps/arm/efm32gg11/spi/spi.c
+- bsps/arm/efm32gg11/start/bspreset.c
+- bsps/arm/efm32gg11/start/bspstart.c
+- bsps/arm/efm32gg11/start/bspstarthook.c
+- bsps/arm/efm32gg11/start/efm32gg11_clock.c
+- bsps/arm/efm32gg11/trng/efm32gg11_trng.c
+- bsps/arm/shared/clock/clock-armv7m.c
+- bsps/arm/shared/irq/irq-armv7m.c
+- bsps/arm/shared/irq/irq-dispatch-armv7m.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/shared/start/bspstarthook0-empty.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/gettargethash-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

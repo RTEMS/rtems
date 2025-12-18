@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    reason: null
+    state: exclude
+    tests:
+    - fsfatfssync01
+    - fsfatfsformat01
+    - fatfsfserror
+    - fatfsfspatheval
+    - fatfsfsrdwr
+    - fatfsfsrename
+    - fatfsfsrenamelongname
+    - fatfsfsrenameexisting
+    - fatfsfsrenamemaxlinks
+    - fatfsfsrmdirparent
+    - fatfsfsscandir01
+    - fatfsfsstatvfs
+    - fatfsfstime
+build-type: option
+copyrights:
+- Copyright (C) 2025 Allan N. Hessenflow
+default: []
+description: ''
+enabled-by: true
+links: []
+type: build

@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define-unquoted: null
+- script: |
+    c = (0x00200000, 0x00080000)
+    chips = {
+        "EFM32GG11B110": (0x00200000, 0x00060000),
+        "EFM32GG11B120": (0x00200000, 0x00080000),
+        "EFM32GG11B310": (0x00200000, 0x00060000),
+        "EFM32GG11B320": (0x00200000, 0x00080000),
+        "EFM32GG11B420": (0x00200000, 0x00080000),
+        "EFM32GG11B510": (0x00200000, 0x00060000),
+        "EFM32GG11B520": (0x00200000, 0x00080000),
+        "EFM32GG11B820": c,
+        "EFM32GG11B840": (0x00100000, 0x00080000),
+    }
+    if value:
+        try:
+            c = chips[value]
+        except:
+            conf.fatal("Unknown chip variant '{}'".format(value))
+    conf.env["EFM32GG11_MEMORY_INTFLASH_SIZE"] = c[0]
+    conf.env["EFM32GG11_MEMORY_INTSRAM_SIZE"] = c[1]
+build-type: option
+copyrights:
+- Copyright (C) 2025 Allan N. Hessenflow
+default:
+- enabled-by: true
+  value: EFM32GG11B820
+description: |
+  Device type
+enabled-by: true
+format: '{}'
+links: []
+name: EFM32GG11_DEVICE
+type: build

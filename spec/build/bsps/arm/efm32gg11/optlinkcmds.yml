@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- env-assign: null
+build-type: option
+copyrights:
+- Copyright (C) 2025 Allan N. Hessenflow
+default:
+- enabled-by: true
+  value: linkcmds.intflash
+description: |
+  The default linker command file.  Must be linkcmds.intflash or
+  inkcmds.intsram.
+enabled-by: true
+format: '{}'
+links: []
+name: EFM32GG11_DEFAULT_LINKCMDS
+type: build

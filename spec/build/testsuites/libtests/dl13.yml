@@ -29,6 +29,7 @@ enabled-by:
   - BUILD_LIBDL
   - arm
   - not: bsps/arm/atsam
+  - not: bsps/arm/efm32gg11
   - not: bsps/arm/imxrt
   - not: bsps/arm/lm3s69xx
   - not: bsps/arm/lpc176x

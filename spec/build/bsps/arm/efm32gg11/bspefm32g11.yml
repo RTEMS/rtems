@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: efm32gg11
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2025 Allan N. Hessenflow
+cppflags: []
+enabled-by: true
+family: efm32gg11
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../tstsmallmem
+- role: build-dependency
+  uid: tstefm32gg11
+- role: build-dependency
+  uid: grp
+source: []
+type: build
