@@ -1824,9 +1824,9 @@ extern uint8 __IPSBAR[];
 #define MCF5282_PIT3_PMR		(*(vuint16 *)(&__IPSBAR[0x180002]))
 #define MCF5282_PIT3_PCNTR		(*(vuint16 *)(&__IPSBAR[0x180004]))
 
-#define MCF5282_PIT_PCSR(x)		(*(vuint16 *)(&__IPSBAR[0x150000+(0x1000*(x))]))
-#define MCF5282_PIT_PMR(x)		(*(vuint16 *)(&__IPSBAR[0x150002+(0x1000*(x))]))
-#define MCF5282_PIT_PCNTR(x)	(*(vuint16 *)(&__IPSBAR[0x150004+(0x1000*(x))]))
+#define MCF5282_PIT_PCSR(x)		(*(vuint16 *)(&__IPSBAR[0x150000+(0x10000*(x))]))
+#define MCF5282_PIT_PMR(x)		(*(vuint16 *)(&__IPSBAR[0x150002+(0x10000*(x))]))
+#define MCF5282_PIT_PCNTR(x)	(*(vuint16 *)(&__IPSBAR[0x150004+(0x10000*(x))]))
 
 /* Bit level definitions and macros */
 #define MCF5282_PIT_PCSR_PRE(x)				(((x)&0x000F)<<8)
