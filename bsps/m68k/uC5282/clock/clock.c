@@ -16,6 +16,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/error.h>
 #include <rtems/timecounter.h>
 #include <bsp.h>
 #include <mcf5282/mcf5282.h>
@@ -82,17 +83,32 @@ static void uC5282_tc_tick(void)
   );
 }
 
+static void
+uC5282_install_clock_isr(void* _new)
+{
+  rtems_status_code r;
+
+  r = rtems_interrupt_handler_install(
+    CLOCK_VECTOR,
+    "Install clock interrupt",
+    RTEMS_INTERRUPT_UNIQUE,
+    _new,
+    NULL
+  );
+
+  if (r != RTEMS_SUCCESSFUL) {
+    rtems_panic(
+      "Could not install clock ISR: %s\n",
+      rtems_status_text(r)
+    );
+  }
+}
+
 /*
  * Attach clock interrupt handler
  */
 #define Clock_driver_support_install_isr( _new ) \
-    rtems_interrupt_handler_install( \
-        CLOCK_VECTOR, \
-        "Install clock interrupt", \
-        RTEMS_INTERRUPT_UNIQUE, \
-        (void *)_new, \
-        NULL \
-    );
+  uC5282_install_clock_isr((void*) _new)
 
 /*
  * Set up the clock hardware
