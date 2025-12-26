@@ -212,9 +212,9 @@ extern rtems_aio_queue aio_request_queue;
 #define AIO_MAX_THREADS 5
 #endif
 
-#ifndef AIO_LISTIO_MAX
+/* Override AIO_LISTIO_MAX from newlib */
+#undef AIO_LISTIO_MAX
 #define AIO_LISTIO_MAX 20
-#endif
 
 #ifndef RTEMS_AIO_MAX
 #define RTEMS_AIO_MAX 100
