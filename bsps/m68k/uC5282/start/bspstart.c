@@ -17,6 +17,7 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <bsp/irq-generic.h>
 #include <rtems/error.h>
 #include <errno.h>
 #include <stdio.h>
@@ -322,32 +323,13 @@ void bsp_start( void )
       "System clock speed: %" PRIu32 "Hz\n", bsp_get_CPU_clock_speed()
     );
   }
+
+  bsp_interrupt_initialize();
 }
 
 uint32_t bsp_get_CPU_clock_speed(void)
 {
   return( BSP_sys_clk_speed );
-}
-
-/*
- * Interrupt controller allocation
- */
-rtems_status_code
-bsp_allocate_interrupt(int level, int priority)
-{
-  static char used[7];
-  rtems_interrupt_level l;
-  rtems_status_code ret = RTEMS_RESOURCE_IN_USE;
-
-  if ((level < 1) || (level > 7) || (priority < 0) || (priority > 7))
-    return RTEMS_INVALID_NUMBER;
-  rtems_interrupt_disable(l);
-  if ((used[level-1] & (1 << priority)) == 0) {
-    used[level-1] |= (1 << priority);
-    ret = RTEMS_SUCCESSFUL;
-  }
-  rtems_interrupt_enable(l);
-  return ret;
 }
 
 /*
@@ -479,190 +461,6 @@ int BSP_disableVME_int_lvl(unsigned int level)
 {
   (void) level;
 
-  return 0;
-}
-
-/*
- * 'VME' interrupt support
- * Interrupt vectors 192-255 are set aside for use by external logic which
- * drives IRQ1*.  The actual interrupt source is read from the external
- * logic at FPGA_IRQ_INFO.  The most-significant bit of the least-significant
- * byte read from this location is set as long as the external logic has
- * interrupts to be serviced.  The least-significant six bits indicate the
- * interrupt source within the external logic and are used to select the
- * specified interupt handler.
- */
-#define NVECTOR 256
-#define FPGA_VECTOR (64+1)  /* IRQ1* pin connected to external FPGA */
-#define FPGA_IRQ_INFO    *((vuint16 *)(0x31000000 + 0xfffffe))
-
-static struct handlerTab {
-  BSP_VME_ISR_t func;
-  void         *arg;
-} handlerTab[NVECTOR];
-
-BSP_VME_ISR_t
-BSP_getVME_isr(unsigned long vector, void **pusrArg)
-{
-  if (vector >= NVECTOR)
-    return (BSP_VME_ISR_t)NULL;
-  if (pusrArg)
-    *pusrArg = handlerTab[vector].arg;
-  return handlerTab[vector].func;
-}
-
-static rtems_isr
-fpga_trampoline (rtems_vector_number v)
-{
-  /*
-   * Handle FPGA interrupts until all have been consumed
-   */
-  int loopcount = 0;
-  while (((v = FPGA_IRQ_INFO) & 0x80) != 0) {
-    v = 192 + (v & 0x3f);
-    if (++loopcount >= 50) {
-      rtems_interrupt_level level;
-      rtems_interrupt_disable(level);
-      printk(
-        "\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%x) -- "
-        "DISABLING ALL FPGA INTERRUPTS.\n",
-        v & 0x3f
-      );
-      MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
-      rtems_interrupt_enable(level);
-      return;
-    }
-    if (handlerTab[v].func)  {
-      (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
-    }
-    else {
-      rtems_interrupt_level level;
-      rtems_vector_number nv;
-      rtems_interrupt_disable(level);
-      printk("\nSPURIOUS FPGA INTERRUPT (0x%x).\n", v & 0x3f);
-      if ((((nv = FPGA_IRQ_INFO) & 0x80) != 0)
-          && ((nv & 0x3f) == (v & 0x3f))) {
-        printk("DISABLING ALL FPGA INTERRUPTS.\n");
-        MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
-      }
-      rtems_interrupt_enable(level);
-      return;
-    }
-  }
-}
-
-static rtems_isr
-trampoline (rtems_vector_number v)
-{
-    if (handlerTab[v].func)
-        (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
-}
-
-static void
-enable_irq(unsigned source)
-{
-rtems_interrupt_level level;
-  rtems_interrupt_disable(level);
-  if (source >= 32)
-    MCF5282_INTC0_IMRH &= ~(1 << (source - 32));
-  else
-    MCF5282_INTC0_IMRL &= ~((1 << source) |
-        MCF5282_INTC_IMRL_MASKALL);
-  rtems_interrupt_enable(level);
-}
-
-static int
-init_intc0_bit(unsigned long vector)
-{
-rtems_interrupt_level level;
-
-    /*
-     * Find an unused level/priority if this is an on-chip (INTC0)
-     * source and this is the first time the source is being used.
-     * Interrupt sources 1 through 7 are fixed level/priority
-     */
-
-    if ((vector >= 65) && (vector <= 127)) {
-        int l, p;
-        int source = vector - 64;
-        static unsigned char installed[8];
-
-        rtems_interrupt_disable(level);
-        if (installed[source/8] & (1 << (source % 8))) {
-            rtems_interrupt_enable(level);
-            return 0;
-        }
-        installed[source/8] |= (1 << (source % 8));
-        rtems_interrupt_enable(level);
-        for (l = 1 ; l < 7 ; l++) {
-            for (p = 0 ; p < 8 ; p++) {
-                if ((source < 8)
-                 || (bsp_allocate_interrupt(l,p) == RTEMS_SUCCESSFUL)) {
-                    if (source < 8)
-                        MCF5282_EPORT_EPIER |= 1 << source;
-                    else
-                        *(&MCF5282_INTC0_ICR1 + (source - 1)) =
-                                                       MCF5282_INTC_ICR_IL(l) |
-                                                       MCF5282_INTC_ICR_IP(p);
-          enable_irq(source);
-                    return 0;
-                }
-            }
-        }
-        return -1;
-    }
-  return 0;
-}
-
-int
-BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
-{
-  rtems_isr_entry old_handler;
-  rtems_interrupt_level level;
-
-  /*
-   * Register the handler information
-   */
-  if (vector >= NVECTOR)
-    return -1;
-  handlerTab[vector].func = handler;
-  handlerTab[vector].arg = usrArg;
-
-  /*
-   * If this is an external FPGA ('VME') vector set up the real IRQ.
-   */
-  if ((vector >= 192) && (vector <= 255)) {
-    int i;
-    static volatile int setupDone;
-    rtems_interrupt_disable(level);
-    if (setupDone) {
-      rtems_interrupt_enable(level);
-      return 0;
-    }
-    setupDone = 1;
-    rtems_interrupt_catch(fpga_trampoline, FPGA_VECTOR, &old_handler);
-    i = init_intc0_bit(FPGA_VECTOR);
-    rtems_interrupt_enable(level);
-    return i;
-  }
-
-  /*
-   * Make the connection between the interrupt and the local handler
-   */
-  rtems_interrupt_catch(trampoline, vector, &old_handler);
-
-  return init_intc0_bit(vector);
-}
-
-int
-BSP_removeVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
-{
-  if (vector >= NVECTOR)
-    return -1;
-  if ((handlerTab[vector].func != handler)
-     || (handlerTab[vector].arg != usrArg))
-    return -1;
-  handlerTab[vector].func = (BSP_VME_ISR_t)NULL;
   return 0;
 }
 
