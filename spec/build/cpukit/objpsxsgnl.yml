@@ -48,6 +48,5 @@ source:
 - cpukit/posix/src/timergetoverrun.c
 - cpukit/posix/src/timergettime.c
 - cpukit/posix/src/timersettime.c
-- cpukit/posix/src/timespecget.c
 - cpukit/posix/src/ualarm.c
 type: build

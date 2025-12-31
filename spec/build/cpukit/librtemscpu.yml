@@ -1645,6 +1645,7 @@ source:
 - cpukit/score/src/timespecdividebyinteger.c
 - cpukit/score/src/timespecfromticks.c
 - cpukit/score/src/timespecgetasnanoseconds.c
+- cpukit/posix/src/timespecget.c
 - cpukit/score/src/timespecisvalid.c
 - cpukit/score/src/timespeclessthan.c
 - cpukit/score/src/timespecsubtract.c
