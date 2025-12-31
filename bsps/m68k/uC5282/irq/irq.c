@@ -154,6 +154,9 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  (void) vector;
+  (void) attributes;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -162,6 +165,8 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
   *pending = false;
@@ -191,6 +196,8 @@ rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -200,6 +207,8 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bool               *enabled
 )
 {
+  (void) vector;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
   *enabled = false;
@@ -236,6 +245,9 @@ rtems_status_code bsp_interrupt_set_priority(
   uint32_t priority
 )
 {
+  (void) vector;
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
@@ -245,6 +257,9 @@ rtems_status_code bsp_interrupt_get_priority(
   uint32_t *priority
 )
 {
+  (void) vector;
+  (void) priority;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(priority != NULL);
   return RTEMS_UNSATISFIED;
@@ -292,7 +307,7 @@ void uC5282_interrupt_vector_remove(rtems_vector_number vector)
  * byte read from this location is set as long as the external logic has
  * interrupts to be serviced.  The least-significant six bits indicate the
  * interrupt source within the external logic and are used to select the
- * specified interupt handler.
+ * specified interrupt handler.
  */
 #define FPGA_VECTOR (64+1)  /* IRQ1* pin connected to external FPGA */
 #define FPGA_IRQ_INFO    *((vuint16 *)(0x31000000 + 0xfffffe))
