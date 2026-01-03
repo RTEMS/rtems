@@ -60,21 +60,21 @@ void *empty_space(void);
 void fill_space(void *);
 void validate_data_blocks_count(void);
 
-#define MEMORY_SIZE 1000000000
+#define MEMORY_SIZE 8000
 
-char memory[MEMORY_SIZE];
-static int alloc_blocks_count = 0;
-block *freelist = NULL;
+char g_memory[MEMORY_SIZE];
+static int g_alloc_blocks_count = 0;
+block *g_freelist = NULL;
 
 void *allocator(void)
 {
-  if (!freelist) {
+  if (NULL == g_freelist) {
     return NULL;
   }
-  block *blk = freelist;
-  freelist = blk->next;
+  block *blk = g_freelist;
+  g_freelist = blk->next;
   memset(blk, 0, BLOCK_SIZE);
-  alloc_blocks_count ++;
+  g_alloc_blocks_count++;
   return blk;
 }
 
@@ -84,46 +84,46 @@ void deallocator(
 {
   block *blk = (block *)memory;
 
-  if (!blk) {
+  if (NULL == blk) {
     return;
   }
 
   memset(blk, 0, BLOCK_SIZE);
-  blk->next = freelist;
-  freelist = blk;
-  alloc_blocks_count --;
+  blk->next = g_freelist;
+  g_freelist = blk;
+  g_alloc_blocks_count--;
 }
 
 size_t free_space(void)
 {
-  return MEMORY_SIZE - alloc_blocks_count * BLOCK_SIZE;
+  return MEMORY_SIZE - g_alloc_blocks_count * BLOCK_SIZE;
 }
 
 void init_memory(void)
 {
   rtems_test_assert( sizeof(block) == BLOCK_SIZE );
 
-  block *first = (block *)memory;
-  const char *last = memory + sizeof(memory);
+  block *first = (block *)g_memory;
+  const char *last = g_memory + sizeof(g_memory);
 
   while ( first + 1 <= (block *)last ) {
-    first->next = freelist;
-    freelist = first;
+    first->next = g_freelist;
+    g_freelist = first;
     first += 1;
   }
-  alloc_blocks_count = 0;
+  g_alloc_blocks_count = 0;
 }
 
-void *empty_space()
+void *empty_space(void)
 {
-  block *memory = freelist;
-  freelist = NULL;
+  block *memory = g_freelist;
+  g_freelist = NULL;
   return memory;
 }
 
 void fill_space(void *memory)
 {
-  freelist = memory;
+  g_freelist = memory;
 }
 
 void validate_data_blocks_count(void)
@@ -135,7 +135,7 @@ void validate_data_blocks_count(void)
   expected_data_blocks_counts += double_indirect_block_count;
   expected_data_blocks_counts += triple_indirect_block_count;
 
-  rtems_test_assert( expected_data_blocks_counts == alloc_blocks_count );
+  rtems_test_assert( expected_data_blocks_counts == g_alloc_blocks_count );
 }
 
 /* configuration information */
