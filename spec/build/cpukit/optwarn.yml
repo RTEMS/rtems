@@ -13,19 +13,15 @@ default:
   value:
   - -Wall
   - -Wextra
-# We currently have not addressed all of the cases for these warnings.
-# Use -Wno- for the ones remaining. There are ~50 left to resolve
-# Afor -Wextra
-#     -Wclobbered is issue #5364
-#     -Wmissing-field-initializers is resolved by MR801
-  - -Wno-cast-function-type
+# We currently have not addressed all of the cases for -Wextra warnings.
+# We are using -Wno- for the ones remaining.
+#     (4 cases) -Wclobbered is issue #5364
+#     (23 cases) -Wcast-function-type usually requires changing a function
+#       signature or adding a wrapper function
+#     (699 cases) -Wsign-compare is case by case
   - -Wno-clobbered
-  - -Wno-enum-conversion
-  - -Wno-ignored-qualifiers
-  - -Wno-missing-field-initializers
-  - -Wno-shift-negative-value
+  - -Wno-cast-function-type
   - -Wno-sign-compare
-  - -Wno-type-limits
   - -Werror
 description: |
   Warning flags passed to the C and C++ compiler
