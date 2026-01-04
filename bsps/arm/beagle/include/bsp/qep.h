@@ -340,13 +340,6 @@ rtems_status_code beagle_qep_set_count_mode(
 );
 
 /**
- * @brief Gets the currently configured count mode for the eQEP module.
- * @param pwmss_id Identifies which PWMSS module to set the eQEP count mode for.
- * @return An enum value representing the current count mode.
- */
-BBB_QEP_COUNT_MODE beagle_qep_get_count_mode(BBB_PWMSS pwmss_id);
-
-/**
  * @brief Returns the currently configured quadrature mode - either absolute,
  * or relative.
  * @param pwmss_id Identifies which PWMSS module to get the eQEP quadrature

@@ -343,16 +343,6 @@ rtems_status_code beagle_qep_set_count_mode(
   return RTEMS_SUCCESSFUL;
 }
 
-BBB_QEP_COUNT_MODE beagle_qep_get_count_mode(BBB_PWMSS pwmss_id)
-{
-  if ( pwmss_id >= BBB_PWMSS_COUNT ) {
-    return RTEMS_INVALID_ID;
-  }
-  const bbb_eqep* eqep = &bbb_eqep_table[pwmss_id];
-
-  return eqep->count_mode;
-}
-
 rtems_status_code beagle_qep_set_quadrature_mode(
     BBB_PWMSS pwmss_id,
     BBB_QEP_QUADRATURE_MODE mode
