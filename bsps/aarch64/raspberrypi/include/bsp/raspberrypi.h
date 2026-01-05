@@ -413,35 +413,6 @@ extern "C" {
 /** @} */
 
 /**
- * @name Mailbox Channels
- *
- * @{
- */
-
-/* Power Manager channel */
-#define BCM2711_MBOX_CHANNEL_PM 0
-/* Framebuffer channel */
-#define BCM2711_MBOX_CHANNEL_FB 1
-/* Virtual UART channel */
-#define BCM2711_MBOX_CHANNEL_VUART 2
-/* VCHIQ channel */
-#define BCM2711_MBOX_CHANNEL_VCHIQ 3
-/* LEDs channel */
-#define BCM2711_MBOX_CHANNEL_LED 4
-/* Button channel */
-#define BCM2711_MBOX_CHANNEL_BUTTON 5
-/* Touch screen channel */
-#define BCM2711_MBOX_CHANNEL_TOUCHS 6
-
-#define BCM2711_MBOX_CHANNEL_COUNT 7
-/* Property tags (ARM <-> VC) channel */
-#define BCM2711_MBOX_CHANNEL_PROP_AVC 8
-/* Property tags (VC <-> ARM) channel */
-#define BCM2711_MBOX_CHANNEL_PROP_VCA 9
-
-/** @} */
-
-/**
  * @name Raspberry Pi 2 Interrupt Register Defines
  *
  * @{
