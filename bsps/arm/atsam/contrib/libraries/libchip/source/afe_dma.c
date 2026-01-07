@@ -70,7 +70,12 @@ static uint32_t afeDmaRxChannel;
  * \param channel DMA channel.
  * \param pArg Pointer to callback argument - Pointer to AfeDma instance.
  */
+#ifdef __rtems__
+static void Afe_Rx_Cb(uint32_t channel, AfeDma *pArg,
+       uint32_t ignored RTEMS_UNUSED)
+#else
 static void Afe_Rx_Cb(uint32_t channel, AfeDma *pArg)
+#endif
 {
 	AfeCmd *pAfedCmd = pArg->pCurrentCommand;
 

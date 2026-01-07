@@ -70,7 +70,12 @@
  * \param channel DMA channel.
  * \param pArg Pointer to callback argument - Pointer to Spid instance.
  */
+#ifdef __rtems__
+static void QSPID_Spi_Cb(uint32_t channel, QspiDma_t *pArg,
+       uint32_t ignored RTEMS_UNUSED)
+#else
 static void QSPID_Spi_Cb(uint32_t channel, QspiDma_t *pArg)
+#endif
 {
 	Qspi *pQspiHw = pArg->Qspid.pQspiHw;
 
@@ -92,7 +97,12 @@ static void QSPID_Spi_Cb(uint32_t channel, QspiDma_t *pArg)
  * \param channel DMA channel.
  * \param pArg Pointer to callback argument - Pointer to Spid instance.
  */
+#ifdef __rtems__
+static void QSPID_qspiTx_Cb(uint32_t channel, QspiDma_t *pArg,
+       uint32_t ignored RTEMS_UNUSED)
+#else
 static void QSPID_qspiTx_Cb(uint32_t channel, QspiDma_t *pArg)
+#endif
 {
 	Qspi *pQspiHw = pArg->Qspid.pQspiHw;
 
@@ -115,7 +125,12 @@ static void QSPID_qspiTx_Cb(uint32_t channel, QspiDma_t *pArg)
  * \param channel DMA channel.
  * \param pArg Pointer to callback argument - Pointer to Spid instance.
  */
+#ifdef __rtems__
+static void QSPID_qspiRx_Cb(uint32_t channel, QspiDma_t *pArg,
+       uint32_t ignored RTEMS_UNUSED)
+#else
 static void QSPID_qspiRx_Cb(uint32_t channel, QspiDma_t *pArg)
+#endif
 {
 	Qspi *pQspiHw = pArg->Qspid.pQspiHw;
 

@@ -71,7 +71,12 @@
 * \param channel DMA channel.
 * \param pArg Pointer to callback argument - Pointer to UARTDma instance.
 */
+#ifdef __rtems__
+static void UARTD_Rx_Cb(uint32_t channel, UartDma *pArg,
+       uint32_t ignored RTEMS_UNUSED)
+#else
 static void UARTD_Rx_Cb(uint32_t channel, UartDma *pArg)
+#endif
 {
 
 	UartChannel *pUartdCh = pArg->pRxChannel;
@@ -91,7 +96,12 @@ static void UARTD_Rx_Cb(uint32_t channel, UartDma *pArg)
  * \param channel DMA channel.
  * \param pArg Pointer to callback argument - Pointer to USARTDma instance.
  */
+#ifdef __rtems__
+static void UARTD_Tx_Cb(uint32_t channel, UartDma *pArg,
+       uint32_t ignored RTEMS_UNUSED)
+#else
 static void UARTD_Tx_Cb(uint32_t channel, UartDma *pArg)
+#endif
 {
 	UartChannel *pUartdCh = pArg->pTxChannel;
 

@@ -63,7 +63,11 @@ extern "C" {
  *----------------------------------------------------------------------------*/
 
 /** UART transfer complete callback. */
+#ifdef __rtems__
+typedef XdmadTransferCallback UartdCallback;
+#else
 typedef void (*UartdCallback)(uint8_t, void *);
+#endif
 
 /** \brief usart Transfer Request prepared by the application upper layer.
  *

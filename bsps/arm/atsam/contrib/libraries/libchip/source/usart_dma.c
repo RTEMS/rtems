@@ -65,7 +65,12 @@
  * \param channel DMA channel.
  * \param pArg Pointer to callback argument - Pointer to USARTDma instance.
  */
+#ifdef __rtems__
+static void USARTD_Rx_Cb(uint32_t channel, UsartDma *pArg,
+       uint32_t ignored RTEMS_UNUSED)
+#else
 static void USARTD_Rx_Cb(uint32_t channel, UsartDma *pArg)
+#endif
 {
 
 	UsartChannel *pUsartdCh = pArg->pRxChannel;
@@ -86,7 +91,12 @@ static void USARTD_Rx_Cb(uint32_t channel, UsartDma *pArg)
  * \param channel DMA channel.
  * \param pArg Pointer to callback argument - Pointer to USARTDma instance.
  */
+#ifdef __rtems__
+static void USARTD_Tx_Cb(uint32_t channel, UsartDma *pArg,
+       uint32_t ignored RTEMS_UNUSED)
+#else
 static void USARTD_Tx_Cb(uint32_t channel, UsartDma *pArg)
+#endif
 {
 	UsartChannel *pUsartdCh = pArg->pTxChannel;
 

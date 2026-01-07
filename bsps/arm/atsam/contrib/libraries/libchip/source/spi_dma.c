@@ -91,7 +91,12 @@ static uint32_t spiDmaRxChannel;
  * \param channel DMA channel.
  * \param pArg Pointer to callback argument - Pointer to Spid instance.
  */
+#ifdef __rtems__
+static void SPID_Rx_Cb(uint32_t channel, Spid *pArg,
+       uint32_t ignored RTEMS_UNUSED)
+#else
 static void SPID_Rx_Cb(uint32_t channel, Spid *pArg)
+#endif
 {
 	SpidCmd *pSpidCmd = pArg->pCurrentCommand;
 	Spi *pSpiHw = pArg->pSpiHw;
