@@ -64,6 +64,16 @@ static void *ambapp_plb_alloc( size_t size )
   return _Memory_Allocate( _Memory_Get(), size, CPU_HEAP_ALIGNMENT );
 }
 
+static void *ambapp_memcpy(
+  void *dest,
+  const void *src,
+  int n,
+  struct ambapp_bus *abus RTEMS_UNUSED
+)
+{
+  return memcpy(dest, src, n);
+}
+
 struct ambapp_bus *ambapp_plb( void )
 {
   struct ambapp_bus *plb;
@@ -73,7 +83,7 @@ struct ambapp_bus *ambapp_plb( void )
   if ( plb->root == NULL ) {
     struct ambapp_context ctx;
 
-    ctx.copy_from_device = (ambapp_memcpy_t) memcpy;
+    ctx.copy_from_device = ambapp_memcpy;
     ctx.alloc = ambapp_plb_alloc;
 
     /* Scan AMBA Plug&Play read-only information. The routine builds a PnP

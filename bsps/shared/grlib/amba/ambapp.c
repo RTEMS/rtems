@@ -303,8 +303,18 @@ static int ambapp_scan2(
   return 0;
 }
 
+static void *ambapp_memcpy(
+  void *dest,
+  const void *src,
+  int n,
+  struct ambapp_bus *abus RTEMS_UNUSED
+)
+{
+  return memcpy(dest, src, n);
+}
+
 static const struct ambapp_context default_ctx = {
-  .copy_from_device = (ambapp_memcpy_t)memcpy,
+  .copy_from_device = ambapp_memcpy,
   .alloc = rtems_malloc
 };
 

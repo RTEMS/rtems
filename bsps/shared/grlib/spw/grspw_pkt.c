@@ -3285,6 +3285,14 @@ int grspw_isr_affinity(void *d, const cpu_set_t *cpus)
 }
 #endif
 
+static int grspw_msgqisr(void *data, unsigned int *buf, unsigned int n)
+{
+  rtems_status_code sc;
+
+  sc = rtems_message_queue_send((rtems_id) data, buf, n);
+  return sc.
+}
+
 static int grspw_common_init(void)
 {
 	if (grspw_initialized == 1)
@@ -3308,8 +3316,7 @@ static int grspw_common_init(void)
 			(rtems_id *)&grspw_wc_def.msgisr_arg, 0);
 		if (grspw_work_task == OBJECTS_ID_NONE)
 			return -2;
-		grspw_wc_def.msgisr =
-			(grspw_msgqisr_t) rtems_message_queue_send;
+		grspw_wc_def.msgisr = grspw_msgqisr;
 	} else {
 		grspw_wc_def.msgisr = NULL;
 		grspw_wc_def.msgisr_arg = NULL;
