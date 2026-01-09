@@ -1,8 +1,16 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
- *  Put this variable in a separate file so it is only linked in when needed.
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsSPARCERC32
+ *
+ * @brief This file contains the ERC32 Memory Error Controller (MEC) support.
+ *
+ * Put this variable in a separate file so it is only linked in when needed.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,7 +1,11 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
- *  ERC32 BSP Delay Method
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCERC32
+ *
+ * @brief This file contains the implementation of the delay mechanisms for ERC32.
  */
 
 /*

@@ -1,10 +1,17 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*  timer.c
+/**
+ *  @file
+ *
+ *  @ingroup RTEMSBSPsSPARCERC32
+ *
+ *  @brief This file contains the Benchmark Timer support for the ERC32 BSP.
  *
  *  This file implements a benchmark timer using the General Purpose Timer on
  *  the MEC.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

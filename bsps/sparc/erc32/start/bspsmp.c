@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCERC32
+ *
+ * @brief This file contains the Symmetric Multiprocessing (SMP) support for ERC32.
+ */
+
 /*
  * Copyright (C) 2019 embedded brains GmbH & Co. KG
  *

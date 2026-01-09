@@ -1,6 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*  Installs the BSP pre-driver hook
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCERC32
+ *
+ * @brief This file contains the shared BSP startup code for ERC32.
+ *
+ * Installs the BSP pre-driver hook.
  */
 
 /*

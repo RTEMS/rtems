@@ -1,8 +1,14 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
- *  ERC32 Idle Thread with power-down function
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsSPARCERC32
+ *
+ * @brief This file contains the idle thread with power-down function.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
