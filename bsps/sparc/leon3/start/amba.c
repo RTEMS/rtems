@@ -1,10 +1,18 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSparcLeon3
+ *
+ * @brief This file contains AMBA bus initialization and configuration for LEON3.
+ *
  *  AMBA Plug & Play Bus Driver
  *
  *  This driver hook performs bus scanning.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 2011.
  *  Aeroflex Gaisler
  *

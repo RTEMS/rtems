@@ -1,8 +1,16 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*
- *  Default BSP drivers when Driver Manager enabled
+/**
+ * @file
  *
+ * @ingroup RTEMSBSPsSparcLeon3
+ *
+ * @brief This file defines the default driver manager configuration for LEON3.
+ *
+ *  Default BSP drivers when Driver Manager enabled
+ */
+
+/*
  *  COPYRIGHT (c) 2019.
  *  Cobham Gaisler
  *
@@ -45,3 +53,4 @@ drvmgr_drv_reg_func drvmgr_drivers[] __attribute__((weak)) =
 };
 
 #endif
+
