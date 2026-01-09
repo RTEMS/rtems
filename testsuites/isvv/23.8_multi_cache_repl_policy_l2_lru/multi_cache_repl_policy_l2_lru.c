@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup TestsuitesISVV
+ *
+ * @brief This file is related to the ISVV test suites.
+ */
+
 /*
  * Copyright (C) 2022 Critical Software SA
  *

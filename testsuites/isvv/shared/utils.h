@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup TestsuitesISVV
+ *
+ * @brief This file is related to the ISVV test suites.
+ */
+
 /*
  * Copyright (C) 2022 Critical Software SA
  *
@@ -23,6 +31,14 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/**
+ * @defgroup TestsuitesISVV ISVV Test Suites
+ *
+ * @ingroup RTEMSTestSuites
+ *
+ * @brief This group contains the test suites related to the ISVV activity.
  */
 
 /* 
