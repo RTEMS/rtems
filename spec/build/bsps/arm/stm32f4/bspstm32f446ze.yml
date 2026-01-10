@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: stm32f446ze
+build-type: bsp
+cflags: []
+cppflags: []
+enabled-by: true
+family: stm32f4
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../tstsmallmem
+- role: build-dependency
+  uid: grp
+source: []
+type: build

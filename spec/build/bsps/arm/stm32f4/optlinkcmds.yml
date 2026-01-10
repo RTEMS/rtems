@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- env-assign: null
+build-type: option
+default:
+- enabled-by: arm/stm32f446ze
+  value: linkcmds.stm32f446ze
+- enabled-by: arm/stm32f105rc
+  value: linkcmds.stm32f105rc
+- enabled-by: true
+  value: linkcmds.stm32f4
+description: |
+  The default linker command file based on the BSP variant.
+enabled-by: true
+format: '{}'
+links: []
+name: STM32F4_LINKCMDS
+type: build

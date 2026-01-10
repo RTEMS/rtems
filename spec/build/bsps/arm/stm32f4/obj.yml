@@ -37,6 +37,8 @@ install:
   source:
   - bsps/arm/stm32f4/start/linkcmds.stm32f105rc
   - bsps/arm/stm32f4/start/linkcmds.stm32f4
+  - bsps/arm/stm32f4/start/linkcmds.stm32f446ze
+
 links: []
 source:
 - bsps/arm/shared/clock/clock-armv7m.c
