@@ -414,6 +414,7 @@ rtems_flashdev *flash_sim_flashdev_init(
 
   ntable->area = flashdev_malloc( &ntable->attr, total_pages * ntable->attr.page_size_bytes );
   if ( ntable->area == NULL ) {
+    free( ftable );
     free_nand_priv( ntable );
     return NULL;
   }
@@ -422,6 +423,7 @@ rtems_flashdev *flash_sim_flashdev_init(
   if ( ntable->attr.type == RTEMS_FLASHDEV_NAND ) {
     ntable->oob = flashdev_malloc( &ntable->attr, total_pages * ntable->attr.page_oob_bytes );
     if ( ntable->oob == NULL ) {
+      free( ftable );
       free_nand_priv( ntable );
       return NULL;
     }
