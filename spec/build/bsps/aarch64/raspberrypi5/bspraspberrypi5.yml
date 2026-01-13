@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: aarch64
+bsp: raspberrypi5
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2026 Preetam Das <riki10112001@gmail.com>
+cppflags: []
+enabled-by: true
+family: raspberrypi5
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/aarch64/raspberrypi5/include/bsp.h
+  - bsps/aarch64/raspberrypi5/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/aarch64/raspberrypi5/include/bsp/irq.h
+  - bsps/aarch64/raspberrypi5/include/bsp/raspberrypi5.h
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: ../optmmupages
+- role: build-dependency
+  uid: ../optgtusevirt
+- role: build-dependency
+  uid: ../optgtuseps
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: ../../optcachedata
+- role: build-dependency
+  uid: ../../optcacheinst
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../bspopts
+- role: build-dependency
+  uid: linkercmds
+- role: build-dependency
+  uid: ../../dev/irq/objarmgicv2
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: objclock
+- role: build-dependency
+  uid: objconsole
+source:
+- bsps/aarch64/raspberrypi5/start/bspstart.c
+- bsps/aarch64/raspberrypi5/start/bspstarthooks.c
+- bsps/aarch64/raspberrypi5/start/bspstartmmu.c
+- bsps/aarch64/raspberrypi5/start/mmu-config.c
+- bsps/aarch64/shared/cache/cache.c
+- bsps/aarch64/shared/mmu/mmu-setup.c
+- bsps/aarch64/shared/mmu/vmsav8-64.c
+- bsps/aarch64/shared/start/start-cpu-mpidr.S
+- bsps/shared/dev/irq/arm-gicv2-get-attributes.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/gettargethash-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/wkspaceinitone.c
+- bsps/shared/start/mallocinitmulti.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-loop.c
+type: build

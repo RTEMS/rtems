@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2026 Preetam Das <riki10112001@gmail.com>
+type: build
+enabled-by:
+  not: BSP_CLOCK_USE_SYSTEMTIMER
+
+build-type: objects
+cflags: []
+cppflags:
+- -DAARCH64_GENERIC_TIMER_USE_VIRTUAL
+cxxflags: []
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/dev/clock
+  source:
+  - bsps/include/dev/clock/arm-generic-timer.h
+
+source:
+- bsps/aarch64/shared/clock/arm-generic-timer-aarch64.c
+- bsps/shared/dev/clock/arm-generic-timer.c
+
+links:
+- role: build-dependency
+  uid: ../optgtusevirt
+- role: build-dependency
+  uid: ../optgtuseps
+- role: build-dependency
+  uid: optsystemtimer

@@ -15,6 +15,7 @@ default:
   value: 64
 - enabled-by:
   - aarch64/raspberrypi4b
+  - aarch64/raspberrypi5
   value: 32
 description: |
   Set the size of UART FIFO
