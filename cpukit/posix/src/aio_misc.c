@@ -203,6 +203,7 @@ rtems_aio_request *init_write_req( struct aiocb* aiocbp )
   req->aiocbp = aiocbp;
   req->op_type = AIO_OP_WRITE;
   req->listcbp = NULL;
+  req->suspendcbp = NULL;
 
   return req;
 }
@@ -250,6 +251,7 @@ rtems_aio_request *init_read_req( struct aiocb* aiocbp )
   req->aiocbp = aiocbp;
   req->op_type = AIO_OP_READ;
   req->listcbp = NULL;
+  req->suspendcbp = NULL;
 
   return req;
 }
