@@ -396,7 +396,7 @@ Untar_FromMemory(
   size_t  size
 )
 {
-  return Untar_FromMemory_Print(tar_buf, size, false);
+  return Untar_FromMemory_Print(tar_buf, size, NULL);
 }
 
 /*
