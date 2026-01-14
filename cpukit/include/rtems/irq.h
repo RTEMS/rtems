@@ -2,19 +2,20 @@
 
 /**
  * @file
+ * @brief Interrupt Handler Support
  *
  * This include file describe the data structure and the functions implemented
  * by rtems to write interrupt handlers.
+ *
+ * This code is heavily inspired by the public specification of STREAM V2
+ * that can be found at:
+ *
+ *  - <http://www.chorus.com/Documentation/index.html> by following
+ *  the STREAM API Specification Document link.
  */
 
 /*
- *  CopyRight (C) 1998 eric.valette@free.fr
- *
- *  This code is heavilly inspired by the public specification of STREAM V2
- *  that can be found at :
- *
- *      <http://www.chorus.com/Documentation/index.html> by following
- *  the STREAM API Specification Document link.
+ * Copyright (c) 1998 Eric Valette <eric.valette@free.fr>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
