@@ -223,6 +223,9 @@ aarch64_mmu_enable( const aarch64_mmu_control *control )
   sctlr = _AArch64_Read_sctlr_el1();
   sctlr |= AARCH64_SCTLR_EL1_I | AARCH64_SCTLR_EL1_C | AARCH64_SCTLR_EL1_M;
   _AArch64_Write_sctlr_el1( sctlr );
+
+  /* Ensure write to sctlr_el1 is complete before returning */
+  _AARCH64_Instruction_synchronization_barrier();
 }
 
 BSP_START_TEXT_SECTION static inline void
