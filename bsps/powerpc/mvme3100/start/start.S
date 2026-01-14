@@ -1,16 +1,17 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
+/**
+ * @file
+ * @brief RTEMS entry point
+ */
+
 /*
- *  start.S :	  RTEMS entry point
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
+ * Modified for mvme3100 by T. Straumann, 2007.
  *
- *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
- *
- *  Modified for mvme3100 by T. Straumann, 2007.
- *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems/asm.h>

@@ -1,24 +1,26 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
- * vectors_init.c Exception hanlding initialisation (and generic handler).
+/**
+ * @file
+ * @brief Exception hanlding initialisation (and generic handler).
  *
- *  This include file describe the data structure and the functions implemented
- *  by rtems to handle exceptions.
+ * This include file describe the data structure and the functions implemented
+ * by RTEMS to handle exceptions.
  */
 
 /*
- *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
- *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
+ * MPC5xx port sponsored by Defence Research and Development Canada - Suffield
+ * Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from vectors_init.c in the historical powerpc/mbx8xx/vectors:
+ * Derived from vectors_init.c in the historical powerpc/mbx8xx/vectors:
  *
- *  CopyRight (C) 1999 eric.valette@free.fr
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
+
 #include <inttypes.h>
 #include <rtems/bspIo.h>
 #include <libcpu/vectors.h>

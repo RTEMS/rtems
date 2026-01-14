@@ -1,18 +1,21 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
+/**
+ * @file
+ * @brief OpenPIC Interrupt Handling
+ */
+
 /*
- *  openpic.c -- OpenPIC Interrupt Handling
+ * Copyright (C) 1997 Geert Uytterhoeven
  *
- *  Copyright (C) 1997 Geert Uytterhoeven
+ * Modified to compile in RTEMS development environment
+ * by Eric Valette
  *
- *  Modified to compile in RTEMS development environment
- *  by Eric Valette
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
- *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 /*

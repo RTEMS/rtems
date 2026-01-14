@@ -1,22 +1,24 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
+/**
+ * @file
+ * @brief Clock Tick interrupt connection code.
+ */
+
 /*
- *  Clock Tick interrupt conexion code.
+ * Copyright (c) 1989-1997 On-Line Applications Research Corporation (OAR).
  *
- *  COPYRIGHT (c) 1989-1997.
- *  On-Line Applications Research Corporation (OAR).
+ * SS555 port sponsored by Defence Research and Development Canada - Suffield
+ * Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  The license and distribution terms for this file may in
- *  the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * Derived from p_clock.c in the historical powerpc/mbx8xx/clock:
  *
- *  SS555 port sponsored by Defence Research and Development Canada - Suffield
- *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
+ * Modified to support the MPC750.
+ * Modifications Copyright (c) 1999 Eric Valette eric.valette@free.fr
  *
- *  Derived from p_clock.c in the historical powerpc/mbx8xx/clock:
- *
- *  Modified to support the MPC750.
- *  Modifications Copyright (c) 1999 Eric Valette eric.valette@free.fr
+ * The license and distribution terms for this file may in
+ * the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <bsp.h>

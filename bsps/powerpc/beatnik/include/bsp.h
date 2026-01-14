@@ -9,19 +9,15 @@
  */
 
 /*
- *  bsp.h  -- contain BSP API definition.
- */
-
-/*
- *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
+ * Copyright (c) 1998 Eric Valette <eric.valette@free.fr>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  *
- *  S. Kate Feng 2003-2007 : Modified it to support the mvme5500 BSP.
+ * S. Kate Feng 2003-2007 : Modified it to support the mvme5500 BSP.
  *
- *  Modified for the 'beatnik' BSP by T. Straumann, 2005-2007.
+ * Modified for the 'beatnik' BSP by T. Straumann, 2005-2007.
  */
 
 #ifndef LIBBSP_BEATNIK_BSP_H

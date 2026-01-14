@@ -1,11 +1,15 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/* irq_init.c
+/**
+ * @file
+ * @breif MVME3100 Interrupt Initialization
  *
- *  This file contains the implementation of rtems initialization
- *  related to interrupt handling.
- *
- *  CopyRight (C) 1999 eric.valette@free.fr
+ * This file contains the implementation of rtems initialization
+ * related to interrupt handling.
+ */
+
+/*
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
  * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
  * to make it valid for MVME2300 Motorola boards.
@@ -15,9 +19,9 @@
  *
  * Adapted for the mvme3100 BSP by T. Straumann, 2007.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <libcpu/io.h>

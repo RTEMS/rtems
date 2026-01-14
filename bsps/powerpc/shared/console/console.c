@@ -1,12 +1,15 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
+/**
+ * @file
+ * @brief console I/O package
+ */
+
 /*
- *  console.c  -- console I/O package
- *
- *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
  * This code is based on the pc386 BSP console.c so the following
- * copyright also applies :
+ * copyright also applies:
  *
  * (C) Copyright 1997 -
  * - NavIST Group - Real-Time Distributed Systems and Industrial Automation
@@ -15,9 +18,10 @@
  * separate BSP specific stuff from generics...
  *
  * Instituto Superior Tecnico * Lisboa * PORTUGAL
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <stdlib.h>

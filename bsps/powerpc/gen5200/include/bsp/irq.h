@@ -8,8 +8,8 @@
  * References: MPC8260ads CPU interrupt header file.
  * Comment for that:
  *
- *   This code is heavilly inspired by the public specification of
- *   STREAM V2 that can be found at:
+ *   This code is heavily inspired by the public specification of
+ *   STREAM V2 that can b found at:
  *
  *   <http://www.chorus.com/Documentation/index.html> by following
  *   the STREAM API Specification Document link.

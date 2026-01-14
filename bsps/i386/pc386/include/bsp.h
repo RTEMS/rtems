@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+/* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
  * @file
@@ -8,41 +8,34 @@
  * @brief Global BSP definitions.
  */
 
-/*-------------------------------------------------------------------------+
-| bsp.h v1.1 - PC386 BSP - 1997/08/07
-+--------------------------------------------------------------------------+
-| This include file contains definitions related to the PC386 BSP.
-+--------------------------------------------------------------------------+
-| (C) Copyright 1997 -
-| - NavIST Group - Real-Time Distributed Systems and Industrial Automation
-|
-| Instituto Superior Tecnico * Lisboa * PORTUGAL
-+--------------------------------------------------------------------------+
-| Modified by Eric Valette the 20/05/98 in order to add definitions used
-| to enhance video putchar capabilities.
-|
-| Copyright (C) 1998  eric.valette@free.fr
-|
-| Canon Centre Recherche France.
-|
-+--------------------------------------------------------------------------+
-| Disclaimer:
-|
-| This file is provided "AS IS" without warranty of any kind, either
-| expressed or implied.
-+--------------------------------------------------------------------------+
-| This code is based on:
-|   bsp.h,v 1.5 1995/12/19 20:07:30 joel Exp - go32 BSP
-| With the following copyright notice:
-| **************************************************************************
-| *  COPYRIGHT (c) 1989-1999.
-| *  On-Line Applications Research Corporation (OAR).
-| *
-| *  The license and distribution terms for this file may be
-| *  found in the file LICENSE in this distribution or at
-| *  http://www.rtems.org/license/LICENSE.
-| **************************************************************************
-+--------------------------------------------------------------------------*/
+/*
+ * Copyright (c) 1994 Joel Sherrill <joel@rtems.org>
+ * Copyright (c) 1998 Eric Valette <eric.valette@free.fr>
+ * Copyright (c) 1997 NavIST Group - Real-Time Distributed Systems
+ *                    and Industrial Automation
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
 
 #ifndef LIBBSP_I386_PC386_BSP_H
 #define LIBBSP_I386_PC386_BSP_H

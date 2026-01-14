@@ -14,8 +14,8 @@
  *
  *  CopyRight (C) 1999 eric.valette@free.fr
  *
- *  This code is heavilly inspired by the public specification of STREAM V2
- *  that can be found at :
+ *  This code is heavily inspired by the public specification of STREAM V2
+ *  that can be found at:
  *
  *      <http://www.chorus.com/Documentation/index.html> by following
  *  the STREAM API Specification Document link.

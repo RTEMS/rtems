@@ -6,14 +6,14 @@
  */
 
 /*
- *  Copyright (C) 1999 eric.valette@free.fr
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
- *  Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
- *  to make it valid for MVME2300 Motorola boards.
+ * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
+ * to make it valid for MVME2300 Motorola boards.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <libcpu/io.h>

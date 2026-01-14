@@ -1,20 +1,23 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
- *  This file contains the implementation of the function described in irq.h
+/**
+ * @file
+ * @brief Interrupt Handler Support
+ *
+ * This file contains the implementation of the function described in irq.h
  */
 
 /*
- *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
- *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
+ * MPC5xx port sponsored by Defence Research and Development Canada - Suffield
+ * Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from irq.c in the historical powerpc/mbx8xx/irq:
+ * Derived from irq.c in the historical powerpc/mbx8xx/irq:
  *
- *  Copyright (C) 1998, 1999 eric.valette@free.fr
+ * Copyright (c) 1998-1999 Eric Valette <eric.valette@free.fr>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems.h>

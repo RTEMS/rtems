@@ -1,22 +1,25 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
+/**
+ * @file
+ * @brief Basic PCI I/O functions.
+ *
+ * This code is heavily inspired by the public specification of STREAM V2
+ * that can be found at:
+ *
+ * - <http://www.chorus.com/Documentation/index.html> by following
+ * the STREAM API Specification Document link.
+ */
+
 /*
- * pci.c :  this file contains basic PCI Io functions.
- *
- *  Copyright (C) 1999 eric.valette@free.fr
- *
- *  This code is heavily inspired by the public specification of STREAM V2
- *  that can be found at :
- *
- *      <http://www.chorus.com/Documentation/index.html> by following
- *  the STREAM API Specification Document link.
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
  *  Till Straumann, <strauman@slac.stanford.edu>, 1/2002
  *   - separated bridge detection code out of this file
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems.h>

@@ -6,7 +6,7 @@
  * Some ideas are borrowed from the powerpc/shared/bootloader
  * by
  *  Copyright (C) 1998, 1999 Gabriel Paubert, paubert@iram.es
- *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
+ *  Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
  * The SMON firmware is unable to load the RTEMS image below
  * 0x2000 (I believe their stack is growing below 0x1000).

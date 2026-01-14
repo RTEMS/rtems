@@ -1,21 +1,25 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/* irq.h
+/**
+ * @file
+ * @brief Interrupt Handling Specification
  *
- *  This include file describe the data structure and the functions implemented
- *  by rtems to write interrupt handlers.
+ * This include file describe the data structure and the functions implemented
+ * by RTEMS to write interrupt handlers.
  *
- *  CopyRight (C) 1999 eric.valette@free.fr
+ * This code is heavily inspired by the public specification of STREAM V2
+ * that can be found at:
  *
- *  This code is heavilly inspired by the public specification of STREAM V2
- *  that can be found at :
+ * - <http://www.chorus.com/Documentation/index.html> by following
+ * the STREAM API Specification Document link.
+ */
+
+/*
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
- *      <http://www.chorus.com/Documentation/index.html> by following
- *  the STREAM API Specification Document link.
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  *
  * Modified by T. Straumann for the beatnik BSP, 2005-2007
  * Some information may be based on mvme5500/irq/irq.h by K. Feng.

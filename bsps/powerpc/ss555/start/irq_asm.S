@@ -1,27 +1,29 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
- * irq_asm.S
+/**
+ * @file
+ * @brief PowerPC IRQ Veneers
  *
- *  This file contains the assembly code for the PowerPC
- *  IRQ veneers for RTEMS.
+ * This file contains the assembly code for the PowerPC
+ * IRQ veneers for RTEMS.
+ */
+
+/*
+ * MPC5xx port sponsored by Defence Research and Development Canada - Suffield
+ * Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
+ *
+ * Derived from irq_asm.S in the historical powerpc/mbx8xx/irq:
+ *
+ * Modified to support the MCP750.
+ * Modifications Copyright (c) 1998-1999 Eric Valette <eric.valette@free.fr>
+ *
+ * Till Straumann <strauman@slac.stanford.edu>, 2003/7:
+ *    - store isr nesting level in _ISR_Nest_level rather than
+ *      SPRG0 - RTEMS relies on that variable.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
- *
- *
- *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
- *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
- *
- *  Derived from irq_asm.S in the historical powerpc/mbx8xx/irq:
- *
- *  Modified to support the MCP750.
- *  Modifications Copyright (C) 1999 Eric Valette. eric.valette@free.fr
- *
- *  Till Straumann <strauman@slac.stanford.edu>, 2003/7:
- *    - store isr nesting level in _ISR_Nest_level rather than
- *      SPRG0 - RTEMS relies on that variable.
  */
 
 #include <rtems/asm.h>

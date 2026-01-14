@@ -1,16 +1,24 @@
+/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+
+/**
+ * @file
+ * @brief SS555 Vectors
+ *
+ * This file contains the assembly code for the PowerPC exception veneers
+ * for RTEMS.
+ */
+
 /*
- * vectors.S
+ * MPC5xx port sponsored by Defence Research and Development Canada - Suffield
+ * Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  This file contains the assembly code for the PowerPC exception veneers
- *  for RTEMS.
+ * Derived from vector.S in the historical powerpc/mbx8xx/vectors,
  *
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
- *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
- *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
- *
- *  Derived from vector.S in the historical powerpc/mbx8xx/vectors,
- *
- *  (c) 1999, Eric Valette eric.valette@free.fr
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems/asm.h>

@@ -27,11 +27,11 @@
  *  Modified to compile in RTEMS development environment
  *  by Eric Valette
  *
- *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #ifndef _RTEMS_OPENPIC_H

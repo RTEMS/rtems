@@ -5,28 +5,26 @@
  *
  *  @ingroup powerpc_irq
  *
- *  @brief This include file describe the data structure and the functions
+ *  @brief Interrupt Handler Support
+ *
+ *  This include file describe the data structure and the functions
  *  implemented by RTEMS to write interrupt handlers.
- */
-
-/* irq.h
  *
- *  This include file describe the data structure and the functions implemented
- *  by RTEMS to write interrupt handlers.
+ *  This code is heavily inspired by the public specification of STREAM V2
+ *  that can be found at:
  *
- *  Copyright (C) 1999 eric.valette@free.fr
- *
- *  This code is heavilly inspired by the public specification of STREAM V2
- *  that can be found at :
- *
- *      <http://www.chorus.com/Documentation/index.html> by following
+ *  - <http://www.chorus.com/Documentation/index.html> by following
  *  the STREAM API Specification Document link.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ */
+
+/*
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
+ * Adapted for the mvme3100 BSP by T. Straumann, 2007.
  *
- *  Adapted for the mvme3100 BSP by T. Straumann, 2007.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #ifndef BSP_POWERPC_IRQ_H

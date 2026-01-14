@@ -9,13 +9,12 @@
  */
 
 /*
- *  Copyright (C) 1999 Eric Valette. eric.valette@free.fr
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
+ * Adapted for the mvme3100 BSP by T. Straumann, 2007.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
- *
- *  Adapted for the mvme3100 BSP by T. Straumann, 2007.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 #ifndef LIBBSP_POWERPC_MVME3100_BSP_H
 #define LIBBSP_POWERPC_MVME3100_BSP_H

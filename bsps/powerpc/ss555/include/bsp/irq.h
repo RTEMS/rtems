@@ -1,27 +1,30 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/* irq.h
+/**
+ * @file
+ * @brief Interrupt Handling Support
  *
- *  This include file describe the data structure and the functions implemented
- *  by rtems to write interrupt handlers.
+ * This include file describe the data structure and the functions implemented
+ * by rtems to write interrupt handlers.
  *
+ * This code is heavily inspired by the public specification of STREAM V2
+ * that can be found at:
  *
- *  SS555 port sponsored by Defence Research and Development Canada - Suffield
- *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
+ * - <http://www.chorus.com/Documentation/index.html> by following
+ * the STREAM API Specification Document link.
+ */
+
+/*
+ * SS555 port sponsored by Defence Research and Development Canada - Suffield
+ * Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from irq.h in the historical powerpc/mbx8xx/irq:
+ * Derived from irq.h in the historical powerpc/mbx8xx/irq:
  *
- *  CopyRight (C) 1999 eric.valette@free.fr
+ * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
  *
- *  This code is heavilly inspired by the public specification of STREAM V2
- *  that can be found at :
- *
- *      <http://www.chorus.com/Documentation/index.html> by following
- *  the STREAM API Specification Document link.
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #ifndef LIBBSP_POWERPC_SS555_IRQ_IRQ_H

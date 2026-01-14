@@ -1,23 +1,24 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
- * irq_init.c
+/**
+ * @file
+ * @brief Interrupt Handling Initialization
  *
- *  This file contains the implementation of rtems initialization
- *  related to interrupt handling.
+ * This file contains the implementation of RTEMS initialization
+ * related to interrupt handling.
  */
 
 /*
- *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
- *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
+ * MPC5xx port sponsored by Defence Research and Development Canada - Suffield
+ * Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
- *  Derived from irq_init.c in the historical powerpc/mbx8xx/irq:
+ * Derived from irq_init.c in the historical powerpc/mbx8xx/irq:
  *
- *  CopyRight (C) 2001 eric.valette@free.fr
+ * Copyright (c) 2001 Eric Valette <eric.valette@free.fr>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems.h>
