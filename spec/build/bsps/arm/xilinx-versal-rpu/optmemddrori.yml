@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Airbus Defence and Space
+default:
+- enabled-by: VERSAL_RPU_SPLIT_INDEX_1
+  value: 0x3f000000
+- enabled-by: true
+  value: 0x3e000000
+description: |
+  This option defines the address of the DDR memory area used by the RPU. If
+  the non-cacheable memory area is located in the DDR memory, then this area
+  shall be excluded from the area specified by this option.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: VERSAL_MEMORY_DDR_ORIGIN
+type: build

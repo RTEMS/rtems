@@ -1,0 +1,50 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  INCLUDE linkcmds.memory
+
+  REGION_ALIAS ("REGION_START",          ATCM);
+  REGION_ALIAS ("REGION_VECTOR",         ATCM);
+  REGION_ALIAS ("REGION_TEXT",           DDR);
+  REGION_ALIAS ("REGION_TEXT_LOAD",      DDR);
+  REGION_ALIAS ("REGION_RODATA",         DDR);
+  REGION_ALIAS ("REGION_RODATA_LOAD",    DDR);
+  REGION_ALIAS ("REGION_DATA",           DDR);
+  REGION_ALIAS ("REGION_DATA_LOAD",      DDR);
+  REGION_ALIAS ("REGION_FAST_TEXT",      DDR);
+  REGION_ALIAS ("REGION_FAST_TEXT_LOAD", DDR);
+  REGION_ALIAS ("REGION_FAST_DATA",      DDR);
+  REGION_ALIAS ("REGION_FAST_DATA_LOAD", DDR);
+  REGION_ALIAS ("REGION_BSS",            DDR);
+  REGION_ALIAS ("REGION_WORK",           DDR);
+  REGION_ALIAS ("REGION_STACK",          DDR);
+  REGION_ALIAS ("REGION_NOCACHE",        NOCACHE);
+  REGION_ALIAS ("REGION_NOCACHE_LOAD",   NOCACHE);
+
+  bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
+
+  bsp_vector_table_in_start_section = 1;
+
+  /* define symbols required by xil_cache.c */
+  _stack_end = bsp_section_stack_end;
+  __undef_stack = bsp_section_stack_begin;
+
+  /*
+   * Please note that the OCM may be also used by bootloaders or the
+   * ARM Trusted Firmware (ATF).  You have to make sure that the OCM is shared
+   * without conflicts.
+   */
+  SECTIONS {
+    .ocm : {
+      *(SORT(.ocm*));
+    } > OCM AT > OCM
+  }
+
+  INCLUDE linkcmds.armv4
+copyrights:
+- Copyright (C) 2026 Airbus Defence and Space
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds
+type: build

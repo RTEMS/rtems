@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  MEMORY {
+    ATCM : ORIGIN = ${VERSAL_MEMORY_ATCM_ORIGIN:#010x}, LENGTH = ${VERSAL_MEMORY_ATCM_LENGTH:#010x}
+    BTCM : ORIGIN = ${VERSAL_MEMORY_BTCM_ORIGIN:#010x}, LENGTH = ${VERSAL_MEMORY_BTCM_LENGTH:#010x}
+    DDR : ORIGIN = ${VERSAL_MEMORY_DDR_ORIGIN:#010x}, LENGTH = ${VERSAL_MEMORY_DDR_LENGTH:#010x}
+    NOCACHE : ORIGIN = ${VERSAL_MEMORY_NOCACHE_ORIGIN:#010x}, LENGTH = ${VERSAL_MEMORY_NOCACHE_LENGTH:#010x}
+    DEVPS : ORIGIN = ${VERSAL_MEMORY_DEVPS_ORIGIN:#010x}, LENGTH = ${VERSAL_MEMORY_DEVPS_LENGTH:#010x}
+    OCM : ORIGIN = ${VERSAL_MEMORY_OCM_ORIGIN:#010x}, LENGTH = ${VERSAL_MEMORY_OCM_LENGTH:#010x}
+  }
+
+  versal_memory_atcm_begin = ORIGIN (ATCM);
+  versal_memory_atcm_end = ORIGIN (ATCM) + LENGTH (ATCM);
+  versal_memory_atcm_size = LENGTH (ATCM);
+
+  versal_memory_btcm_begin = ORIGIN (BTCM);
+  versal_memory_btcm_end = ORIGIN (BTCM) + LENGTH (BTCM);
+  versal_memory_btcm_size = LENGTH (BTCM);
+
+  versal_memory_ddr_begin = ORIGIN (DDR);
+  versal_memory_ddr_end = ORIGIN (DDR) + LENGTH (DDR);
+  versal_memory_ddr_size = LENGTH (DDR);
+
+  versal_memory_nocache_begin = ORIGIN (NOCACHE);
+  versal_memory_nocache_end = ORIGIN (NOCACHE) + LENGTH (NOCACHE);
+  versal_memory_nocache_size = LENGTH (NOCACHE);
+
+  versal_memory_devps_begin = ORIGIN (DEVPS);
+  versal_memory_devps_end = ORIGIN (DEVPS) + LENGTH (DEVPS);
+  versal_memory_devps_size = LENGTH (DEVPS);
+
+  versal_memory_ocm_begin = ORIGIN (OCM);
+  versal_memory_ocm_end = ORIGIN (OCM) + LENGTH (OCM);
+  versal_memory_ocm_size = LENGTH (OCM);
+copyrights:
+- Copyright (C) 2026 Airbus Defence and Space
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds.memory
+type: build

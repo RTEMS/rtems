@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+- env-enable: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Airbus Defence and Space
+default:
+- enabled-by:
+  - arm/versal_rpu_split_0
+  - arm/versal_rpu_split_1
+  value: false
+- enabled-by: true
+  value: true
+description: |
+  If this option is true, then the Cortex-R5F cores of the RPU shall operate in
+  lock-step mode, otherwise they shall operate in split mode.
+enabled-by: true
+format: '{}'
+links: []
+name: VERSAL_RPU_LOCK_STEP_MODE
+type: build

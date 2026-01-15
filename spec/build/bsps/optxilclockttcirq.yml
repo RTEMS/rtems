@@ -8,6 +8,10 @@ copyrights:
 default:
 - enabled-by: ZYNQMP_RPU_SPLIT_INDEX_1
   value: 69
+- enabled-by: VERSAL_RPU_SPLIT_INDEX_1
+  value: 79
+- enabled-by: bsps/arm/xilinx-versal-rpu
+  value: 78
 - enabled-by: true
   value: 68
 description: |

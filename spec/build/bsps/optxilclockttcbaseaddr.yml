@@ -8,6 +8,8 @@ copyrights:
 default:
 - enabled-by: ZYNQMP_RPU_SPLIT_INDEX_1
   value: 0xff110004
+- enabled-by: VERSAL_RPU_SPLIT_INDEX_1
+  value: 0xff110004
 - enabled-by: true
   value: 0xff110000
 description: |

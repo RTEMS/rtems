@@ -1,0 +1,87 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+cflags: []
+copyrights:
+- Copyright (C) 2026 Airbus Defence and Space
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: optlockstep
+- role: build-dependency
+  uid: optsplitindex
+- role: build-dependency
+  uid: optmematcmori
+- role: build-dependency
+  uid: optmematcmlen
+- role: build-dependency
+  uid: optmembtcmori
+- role: build-dependency
+  uid: optmembtcmlen
+- role: build-dependency
+  uid: optmemocmori
+- role: build-dependency
+  uid: optmemocmlen
+- role: build-dependency
+  uid: optmemddrori
+- role: build-dependency
+  uid: optmemddrlen
+- role: build-dependency
+  uid: optmemnocacheori
+- role: build-dependency
+  uid: optmemnocachelen
+- role: build-dependency
+  uid: optmemdevpsori
+- role: build-dependency
+  uid: optmemdevpslen
+- role: build-dependency
+  uid: optclkuart
+- role: build-dependency
+  uid: optconsoleirq
+- role: build-dependency
+  uid: optconminor
+- role: build-dependency
+  uid: ../../optxilclockttcbaseaddr
+- role: build-dependency
+  uid: ../../optxilclockttcirq
+- role: build-dependency
+  uid: ../../optxilclockttcrefclk
+- role: build-dependency
+  uid: optresetvec
+- role: build-dependency
+  uid: obj
+- role: build-dependency
+  uid: ../../dev/irq/objarmgicv2
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../objdevserialarmpl011
+- role: build-dependency
+  uid: ../../objdevspizynq
+- role: build-dependency
+  uid: ../../objdevspixil
+- role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: linkcmds
+- role: build-dependency
+  uid: linkcmdsmemory
+- role: build-dependency
+  uid: ../../bspopts
+type: build
+use-after: []
+use-before: []

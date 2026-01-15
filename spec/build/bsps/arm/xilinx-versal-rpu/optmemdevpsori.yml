@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Airbus Defence and Space
+default:
+- enabled-by: true
+  value: 0xc0000000
+description: |
+  This option defines the address of the PS devices memory area.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: VERSAL_MEMORY_DEVPS_ORIGIN
+type: build

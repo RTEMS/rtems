@@ -179,17 +179,25 @@ static void xil_ttc_clock_driver_support_at_tick(xil_ttc_timecounter *tc)
 
 static rtems_interrupt_entry xil_ttc_interrupt_entry;
 
+#if (!defined(ZYNQMP_RPU_LOCK_STEP_MODE) && ZYNQMP_RPU_SPLIT_INDEX != 0)
+#define XILINX_RPU_SPLIT_INDEX ZYNQMP_RPU_SPLIT_INDEX
+#endif
+
+#if (!defined(VERSAL_RPU_LOCK_STEP_MODE) && VERSAL_RPU_SPLIT_INDEX != 0)
+#define XILINX_RPU_SPLIT_INDEX VERSAL_RPU_SPLIT_INDEX
+#endif
+
 static void xil_ttc_clock_driver_support_install_isr(
   rtems_interrupt_handler handler
 )
 {
   rtems_status_code sc;
 
-#if !defined(ZYNQMP_RPU_LOCK_STEP_MODE) && ZYNQMP_RPU_SPLIT_INDEX != 0
+#ifdef XILINX_RPU_SPLIT_INDEX
   Processor_mask affinity;
   _Processor_mask_From_uint32_t(
     &affinity,
-    UINT32_C(1) << ZYNQMP_RPU_SPLIT_INDEX,
+    UINT32_C(1) << XILINX_RPU_SPLIT_INDEX,
     0
   );
   (void) bsp_interrupt_set_affinity(XIL_CLOCK_TTC_IRQ, &affinity);
