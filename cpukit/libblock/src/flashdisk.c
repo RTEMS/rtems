@@ -1868,17 +1868,34 @@ static int rtems_fdisk_recover_block_mappings( rtems_flashdisk *fd )
               );
               sc->pages_bad++;
             } else {
-              /**
-               * @todo
-               * Add start up crc checks here.
-               */
-              fd->blocks[ pd->block ].segment = sc;
-              fd->blocks[ pd->block ].page = page;
+              uint8_t buffer[fd->block_size];
+              uint16_t cs;
+              ret = rtems_fdisk_seg_read_page( fd, sc,
+                                              page + sc->pages_desc,
+                                              buffer );
 
-              /*
-               * The page is active.
-               */
-              sc->pages_active++;
+              if( ret ) {
+#if RTEMS_FDISK_TRACE
+                rtems_fdisk_info( fd,
+                                  "read-block:%02d-%03d-%03d: read page failed: %s (%d)",
+                                  sc->device, sc->segment, fd->blocks[pd->block].page,
+                                  strerror( ret ), ret );
+#endif
+                return ret;
+              }
+
+              cs = rtems_fdisk_page_checksum( buffer, fd->block_size );
+              if( cs != pd->crc ) {
+                sc->pages_bad++;
+              } else {
+                fd->blocks[pd->block].segment = sc;
+                fd->blocks[pd->block].page    = page;
+
+                /*
+                * The page is active.
+                */
+                sc->pages_active++;
+              }
             }
           } else {
             sc->pages_bad++;
