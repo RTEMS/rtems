@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-assign: null
+- env-append: CFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2026 On-Line Applications Research Corporation
+default:
+- enabled-by: true
+  value:
+  - -std=gnu23 -D_BSD_SOURCE
+description: |
+  Specifies the C Language version and additional APIs available to
+  the program. gnuNN allows GCC extensions and POSIX APIs. Switching
+  to stdNN requires the addition of -D_POSIX_C_SOURCE=202405L to
+  compit le for POSIX Issue 8 that RTEMS is aligned to.
+enabled-by: true
+links: []
+name: CC_STD_VERSION_FLAGS
+type: build
