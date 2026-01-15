@@ -19,7 +19,7 @@ install:
   - bsps/include/bsp/xil-compat-common.h
 - destination: ${BSP_INCLUDEDIR}/dev/serial
   source:
-  - bsps/aarch64/xilinx-versal/include/dev/serial/versal-uart.h
+  - bsps/include/dev/serial/versal-uart.h
 links: []
 source:
 - bsps/aarch64/shared/cache/cache.c
@@ -27,7 +27,7 @@ source:
 - bsps/aarch64/shared/mmu/vmsav8-64.c
 - bsps/aarch64/shared/start/start-cpu-mpidr.S
 - bsps/aarch64/xilinx-versal/console/console.c
-- bsps/aarch64/xilinx-versal/dev/serial/versal-uart.c
+- bsps/shared/dev/serial/versal-uart.c
 - bsps/aarch64/xilinx-versal/start/bspstart.c
 - bsps/aarch64/xilinx-versal/start/bspstarthooks.c
 - bsps/aarch64/xilinx-versal/start/bspstartmmu.c
