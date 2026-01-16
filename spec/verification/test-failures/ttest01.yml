@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+acceptable-test-errors:
+- no-end-of-test-message
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: verification
+  uid: /build/testsuites/libtests/ttest01
+text: |
+  This test is known to fail and needs a fix.
+type: verification
+verification-type: test-failure

@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+acceptable-test-errors:
+- no-begin-of-test-message
+- no-end-of-test-message
+- unexpected-tools
+- unexpected-build
+- unexpected-version
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: verification
+  uid: /build/testsuites/samples/minimum
+- role: verification-member
+  uid: default
+text: |
+  This test intentionally prints out no test-specific information.  The purpose
+  of this test is to show that a reduced application configuration runs
+  properly to the multitasking state and then through the system termination
+  process.
+type: verification
+verification-type: test-failure
