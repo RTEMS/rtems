@@ -151,13 +151,13 @@ rtems_rtl_bit_alloc_open (void* base, size_t size, size_t block_size, size_t use
   if (size == 0)
   {
     rtems_rtl_set_error (ENOMEM, "bit allocator size is 0");
-    return false;
+    return NULL;
   }
 
   if (used > size)
   {
     rtems_rtl_set_error (ENOMEM, "bad bit allocator used value");
-    return false;
+    return NULL;
   }
 
   balloc = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
