@@ -8,6 +8,10 @@ build-type: option
 copyrights:
 - Copyright (C) 2026 On-Line Applications Research Corporation
 default:
+- enabled-by:
+  - microblaze
+  value:
+  - -std=gnu2x -D_BSD_SOURCE
 - enabled-by: true
   value:
   - -std=gnu23 -D_BSD_SOURCE
