@@ -57,8 +57,8 @@ void write_helper(
   const char *c
 )
 {
-  size_t   len;
-  int      rc;
+  ssize_t  len;
+  ssize_t  rc;
   
   len = strlen( c );
   printf( "Writing: %s", c );

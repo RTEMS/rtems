@@ -121,7 +121,7 @@ void read_it( ssize_t expected )
   ssize_t rc;
   char    buf[32];
 
-  rtems_test_assert( expected <= sizeof(buf) );
+  rtems_test_assert( (size_t)expected <= sizeof(buf) );
 
   printf( "read - %zd expected\n", expected );
   rc = read( Test_fd, buf, expected ); 

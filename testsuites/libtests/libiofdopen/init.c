@@ -51,7 +51,7 @@ static void Init(rtems_task_argument arg)
   (void) arg;
 
   int fd[10];
-  int i;
+  size_t i;
   int base_count;
 
   TEST_BEGIN();
@@ -71,13 +71,15 @@ static void Init(rtems_task_argument arg)
   for (i = 0; i < 5; ++i) {
     fd[i] = open("/x123", O_RDONLY);
     rtems_test_assert(fd[i] >= 0);
-    rtems_test_assert(rtems_libio_count_open_iops() == base_count + i + 1);
+    rtems_test_assert(rtems_libio_count_open_iops() == 
+                      (int)(base_count + i + 1));
   }
 
   for (i = 5; i < 10; ++i) {
     fd[i] = open("/x123", O_RDONLY);
     rtems_test_assert(fd[i] >= 0);
-    rtems_test_assert(rtems_libio_count_open_iops() == base_count + i + 1);
+    rtems_test_assert(rtems_libio_count_open_iops() ==
+                      (int)(base_count + i + 1));
   }
 
   for (i = 0; i < 10; ++i) {

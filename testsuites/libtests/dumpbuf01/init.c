@@ -38,15 +38,15 @@ const char rtems_test_name[] = "DUMPBUF 1";
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
-void do_test(int length);
+void do_test(size_t length);
 
 unsigned char Buffer[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890\n";
 
 void do_test(
-  int length
+  size_t length
 )
 {
-  printf( "====== Printing %d Bytes ======\n", length );
+  printf( "====== Printing %zu Bytes ======\n", length );
   rtems_print_buffer( Buffer, length );
   printf( "===============================\n\n" );
 }
@@ -57,7 +57,7 @@ rtems_task Init(
 {
   (void) argument;
 
-  int i;
+  size_t i;
 
   TEST_BEGIN();
 

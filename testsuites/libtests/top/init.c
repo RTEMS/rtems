@@ -59,7 +59,7 @@ void add_some(
   uint32_t *next
 )
 {
-  int i;
+  uint32_t i;
 
   for ( i=0 ; i<per_loop ; i++ ) {
     *sum += *next;

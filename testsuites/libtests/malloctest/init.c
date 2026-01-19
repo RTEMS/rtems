@@ -1288,7 +1288,7 @@ static void test_posix_memalign(void)
   void **p2;
   size_t i;
   int sc;
-  int maximumShift;
+  size_t maximumShift;
 
   /*
    * posix_memalign() is declared as never having a NULL first parameter.

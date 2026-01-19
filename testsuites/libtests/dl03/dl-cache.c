@@ -55,7 +55,7 @@ static void dl_cache_create_file(void)
 {
   uint16_t* p;
   int       fd;
-  int       i;
+  size_t    i;
   rtems_test_assert((contents = malloc(CACHE_BUFFER_SIZE)) != NULL);
   memset(contents, 0, CACHE_BUFFER_SIZE);
   p = (uint16_t*) contents;

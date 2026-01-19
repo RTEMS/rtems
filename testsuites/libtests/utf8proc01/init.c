@@ -154,7 +154,7 @@ test_utf8proc_decompose ( void )
     &string_decomposed[0],
     sizeof ( string_decomposed ),
     UTF8PROC_NULLTERM | UTF8PROC_STABLE | UTF8PROC_DECOMPOSE );
-  rtems_test_assert ( chars_written == strlen ( string_simple ) );
+  rtems_test_assert ( (size_t) chars_written == strlen ( string_simple ) );
   /* Our source string contains only very simple characters. Thus the above
    * decomposition should result in exactly the same string
    */
@@ -181,13 +181,13 @@ test_utf8proc_reencode ( void )
     &string_decomposed[0],
     sizeof ( string_decomposed ),
     UTF8PROC_NULLTERM | UTF8PROC_STABLE | UTF8PROC_DECOMPOSE );
-  rtems_test_assert ( chars_written == strlen ( string_simple ) );
+  rtems_test_assert ( (size_t) chars_written == strlen ( string_simple ) );
 
   chars_written = utf8proc_reencode (
     &string_decomposed[0],
     chars_written,
     UTF8PROC_NULLTERM | UTF8PROC_STABLE | UTF8PROC_DECOMPOSE );
-  rtems_test_assert ( chars_written == strlen ( string_simple ) );
+  rtems_test_assert ( (size_t) chars_written == strlen ( string_simple ) );
   /* Our source string contains only very simple characters. Thus the above
    * decomposition should result in exactly the same string
    */
@@ -203,14 +203,14 @@ test_utf8proc_map ( void )
   uint8_t     *string_simple_utf8 = (uint8_t*)(&string_simple[0]);
   uint8_t     *dest               = NULL;
   ssize_t      chars_written;
-  unsigned int index;
+  ssize_t      index;
 
   chars_written = utf8proc_map(
     string_simple_utf8,
     sizeof ( string_simple ),
     &dest,
     UTF8PROC_NULLTERM | UTF8PROC_STABLE | UTF8PROC_DECOMPOSE );
-  rtems_test_assert ( chars_written == strlen ( string_simple ) );
+  rtems_test_assert ( (size_t) chars_written == strlen ( string_simple ) );
   rtems_test_assert ( dest != NULL);
 
   /* Our source string contains only very simple characters. Thus the above

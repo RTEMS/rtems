@@ -614,7 +614,7 @@ static void test_eeprom(test_bus *bus)
 
   for (i = 0; i < sizeof(out); ++i) {
     off = lseek(fd_out, 0, SEEK_CUR);
-    rtems_test_assert(off == i);
+    rtems_test_assert(off == (off_t)i);
 
     out[i] = (uint8_t) i;
 

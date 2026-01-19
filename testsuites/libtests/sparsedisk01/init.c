@@ -103,7 +103,7 @@ static void test_writing(
   const uint32_t          block_size,
   const rtems_blkdev_bnum blocks_allocated )
 {
-  int               rv;
+  off_t             rv;
   rtems_blkdev_bnum block_count = 0;
   unsigned int      byte_count;
   off_t             file_pos;
@@ -143,7 +143,7 @@ static void test_reading(
   const rtems_blkdev_bnum blocks_allocated,
   const uint8_t           fill_pattern )
 {
-  int               rv;
+  ssize_t           rv;
   rtems_blkdev_bnum block_count = 0;
   unsigned int      byte_count;
   off_t             file_pos;
@@ -161,7 +161,7 @@ static void test_reading(
     rtems_test_assert( file_pos == value );
 
     rv = read( file_descriptor, &buff, block_size );
-    rtems_test_assert( block_size <= rv );
+    rtems_test_assert( block_size <= (uint32_t) rv );
 
     for ( byte_count = 0;
           byte_count < ( block_size / sizeof( byte_count ) );
@@ -179,7 +179,7 @@ static void test_reading(
   rtems_test_assert( file_pos == rv );
 
   rv = read( file_descriptor, buff, block_size );
-  rtems_test_assert( block_size == rv );
+  rtems_test_assert( block_size == (uint32_t)rv );
 
   for ( byte_count = 0; byte_count < block_size; ++byte_count )
     rtems_test_assert( fill_pattern == buff[byte_count] );

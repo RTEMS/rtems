@@ -73,7 +73,7 @@ void Task_switch(
       fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL,
                                          "rtems_clock_get_tod" );
 
-      if (taskSwitchLogIndex <
+      if ((size_t) taskSwitchLogIndex <
           (sizeof taskSwitchLog / sizeof taskSwitchLog[0])) {
         taskSwitchLog[taskSwitchLogIndex].taskIndex = index;
         taskSwitchLog[taskSwitchLogIndex].when = time;

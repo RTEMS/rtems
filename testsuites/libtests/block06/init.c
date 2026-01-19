@@ -395,7 +395,7 @@ static bool
 bdbuf_disk_ioctl_process (bdbuf_disk* bdd, rtems_blkdev_request* req)
 {
   bool result = true;
-  int  b;
+  uint32_t  b;
 
   /*
    * Perform the requested action.
@@ -1725,7 +1725,7 @@ bdbuf_tester (void)
 {
   bdbuf_task_control        tasks[BDBUF_TEST_TASKS];
   rtems_task_priority       old_priority;
-  int                       t;
+  size_t                    t;
   bool                      passed = true;
   rtems_status_code         sc;
 
@@ -1773,9 +1773,9 @@ bdbuf_tester (void)
    */
   for (t = 0; (t < BDBUF_TEST_NUM) && passed; t++)
   {
-    printf ("test %d: %s\n", t + 1, bdbuf_tests[t].label);
+    printf ("test %zu: %s\n", t + 1, bdbuf_tests[t].label);
     passed = bdbuf_tests[t].test (tasks);
-    printf ("test %d: %s\n", t + 1, passed ? "passed" : "failed");
+    printf ("test %zu: %s\n", t + 1, passed ? "passed" : "failed");
   }
 }
 

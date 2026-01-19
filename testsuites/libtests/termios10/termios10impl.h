@@ -63,7 +63,7 @@ static void read_it(ssize_t expected, int expected_intr)
   ssize_t rc;
   char    buf[32];
 
-  rtems_test_assert( expected <= sizeof(buf) );
+  rtems_test_assert( (size_t) expected <= sizeof(buf) );
 
   rc = read( Test_fd, buf, expected ); 
   if (expected_intr) {
