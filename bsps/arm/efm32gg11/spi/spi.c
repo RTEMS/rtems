@@ -100,7 +100,7 @@ static struct spi_context_s {
   uint32_t tx_dma_req;
   uint32_t rx_dma_req;
   struct spi_cs_pin_s *cs_pins;
-  int cs_pin_count;
+  unsigned int cs_pin_count;
   int clk_pin_loc;
   int clk_port;
   int clk_pin;
@@ -446,7 +446,7 @@ static void usart_init(struct spi_context_s *ctx)
 static void pins_init(struct spi_context_s *ctx)
 {
   USART_TypeDef *regs = ctx->regs;
-  int i;
+  unsigned int i;
   uint32_t r;
 
   for (i = 0; i < ctx->cs_pin_count; i++) {
