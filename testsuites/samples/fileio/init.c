@@ -263,7 +263,7 @@ disk_test_write_blocks (const char *name, int start, int count, size_t size)
   int                 block;
   uint32_t*           ip;
   uint32_t            value = 0;
-  int                 i;
+  size_t              i;
   rtems_bdbuf_buffer* bd;
   rtems_status_code   sc;
   int                 rv = 0;
