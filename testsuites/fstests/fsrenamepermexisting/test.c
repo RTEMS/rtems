@@ -127,7 +127,7 @@ static void rename_write_permission_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "../%s/%s", dir01, name02);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_ERROR (EACCES, rename, name01, path01);
 
   /*
@@ -144,16 +144,16 @@ static void rename_write_permission_test (void)
   EXPECT_EQUAL (0, unlink, name01);
 
   rv = snprintf (path01, sizeof(path01), "../%s", dir01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   status = chmod (path01, mode);
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "../%s/%s", dir01, name01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_EQUAL (0, unlink, path01);
 
   rv = snprintf (path01, sizeof(path01), "../%s/%s", dir01, name02);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_EQUAL (0, unlink, path01);
 
   status = chdir ("..");
@@ -218,14 +218,14 @@ static void rename_search_permission_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   fd = creat (path01, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
   rtems_test_assert (status == 0);
 
   rv = snprintf (path02, sizeof(path02), "%s/%s", dir01, name02);
-  rtems_test_assert (rv < sizeof(path02));
+  rtems_test_assert (rv < (int) sizeof(path02));
   fd = creat (path02, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
@@ -249,7 +249,7 @@ static void rename_search_permission_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir02, name01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_ERROR (EACCES, rename, path01, path02);
 
   /*
@@ -269,7 +269,7 @@ static void rename_search_permission_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_EQUAL (0, unlink, path01);
   EXPECT_EQUAL (0, unlink, path02);
   EXPECT_EQUAL (0, rmdir, dir01);
@@ -326,7 +326,7 @@ static void rename_permission03 (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   fd = creat (path01, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
@@ -370,7 +370,7 @@ static void rename_permission03 (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   fd = creat (path01, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);

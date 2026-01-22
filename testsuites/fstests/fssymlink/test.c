@@ -61,7 +61,7 @@ static void symlink_test01(void )
   int   status;
   struct stat statbuf;
   size_t   len=strlen(file01);
-  size_t   name_len;
+  ssize_t  name_len;
 
 
   printf("Create a file named %s\n",file01);
@@ -86,7 +86,7 @@ static void symlink_test01(void )
 
   puts("call readlink ");
   name_len=readlink(symlink_file01,name,sizeof(name)-1);
-  rtems_test_assert(name_len!=-1);
+  rtems_test_assert(name_len != -1);
   name[name_len]='\0';
   rtems_test_assert(!strncmp(name,file01,name_len));
   puts(name);
@@ -298,11 +298,11 @@ static void symlink_rename_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/test", symlink01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_ERROR (ELOOP, rename, path01, name01);
 
   rv = snprintf (path01, sizeof(path01), "%s/test", symlink02);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_ERROR (ELOOP, rename, path01, name01);
 
   /*
@@ -331,11 +331,11 @@ static void symlink_rename_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/test", symlink01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_ERROR (ELOOP, rename, name01, path01);
 
   rv = snprintf (path01, sizeof(path01), "%s/test", symlink02);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_ERROR (ELOOP, rename, name01, path01);
 
   /*
@@ -402,7 +402,7 @@ static void symlink_rename_self (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name02);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   status = link (name01, path01);
   rtems_test_assert (status == 0);
 

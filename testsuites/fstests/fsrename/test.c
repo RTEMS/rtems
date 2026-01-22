@@ -91,7 +91,7 @@ static void rename_opened_file_test (void)
   fd1 = open (name01, O_RDWR | O_CREAT, mode);
   rtems_test_assert (fd1 >= 0);
   result = write (fd1, message, strlen (message));
-  rtems_test_assert (result == strlen (message));
+  rtems_test_assert (result == (int) strlen (message));
 
   EXPECT_EQUAL (0, rename, name01, name02);
 
@@ -148,7 +148,7 @@ static void directory_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir02, name02);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   fd = creat (path01, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
@@ -246,7 +246,7 @@ static void arg_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s/%s", dir01, name01, name02);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_ERROR (ENOENT, rename, path01, name01);
 
   /*
@@ -329,7 +329,7 @@ static void filesystem_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", BASE_FOR_TEST, name02);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_ERROR (EXDEV, rename, name01, path01);
 
   EXPECT_EQUAL (-1, unlink, path01);

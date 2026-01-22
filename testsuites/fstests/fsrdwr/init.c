@@ -238,7 +238,7 @@ truncate_test03 (void)
 
   char data;
   int n;
-  int i;
+  size_t i;
 
   char *readbuf;
   off_t good_size = 100;

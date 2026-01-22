@@ -290,13 +290,13 @@ static void test_permission01(void )
   fd=open(file01,O_WRONLY);
   rtems_test_assert(fd >= 0);
   n=write(fd,test_data,len);
-  rtems_test_assert(n==len);
+  rtems_test_assert(n==(int)len);
   status=close(fd);
   rtems_test_assert(status==0);
 
   fd=open(file02,O_WRONLY);
   n=write(fd,test_data,len);
-  rtems_test_assert(n==len);
+  rtems_test_assert(n==(int)len);
   status=close(fd);
   rtems_test_assert(status==0);
 
@@ -307,7 +307,7 @@ static void test_permission01(void )
   fd=open(file01,O_RDWR);
   rtems_test_assert(fd >= 0);
   n=read(fd,data_buf,len);
-  rtems_test_assert(n==len);
+  rtems_test_assert(n==(int)len);
   status=close(fd);
   rtems_test_assert(status==0);
 
@@ -344,7 +344,7 @@ static void test_permission01(void )
   fd=open(file01,O_WRONLY);
   rtems_test_assert(fd >= 0);
   n=write(fd,test_data,len);
-  rtems_test_assert(n==len);
+  rtems_test_assert(n==(int)len);
   status=close(fd);
   rtems_test_assert(status==0);
 
@@ -558,14 +558,14 @@ static void rename_search_permission_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   fd = creat (path01, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
   rtems_test_assert (status == 0);
 
   rv = snprintf (path02, sizeof(path02), "%s/%s", dir01, name02);
-  rtems_test_assert (rv < sizeof(path02));
+  rtems_test_assert (rv < (int) sizeof(path02));
   fd = creat (path02, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
@@ -583,7 +583,7 @@ static void rename_search_permission_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_EQUAL (0, unlink, path01);
   EXPECT_EQUAL (0, unlink, path02);
   EXPECT_EQUAL (0, rmdir, dir01);

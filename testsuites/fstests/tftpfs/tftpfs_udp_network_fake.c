@@ -221,7 +221,7 @@ static void log_hex_dump( const void *buf, size_t len )
   char hex[2 * per_line + 4];
   char chars[per_line + 1];
   char *hexpos;
-  int i;
+  size_t i;
 
   chars[per_line] = '\0';
   do {
@@ -750,7 +750,7 @@ struct hostent *gethostbyname( const char *name )
   };
   struct hostent *result = NULL;
   uint8_t *ipv4_addr;
-  int i;
+  size_t i;
 
   for ( i = 0; i < RTEMS_ARRAY_SIZE( hosts ); ++i ) {
     if ( strcmp( hosts[i].h_name, name ) == 0 ) {
@@ -897,7 +897,7 @@ int setsockopt(
     sockfd,
     ( level == SOL_SOCKET    ) ? "SOL_SOCKET"  : "UNKONWN",
     ( optname == SO_RCVTIMEO ) ? "SO_RCVTIMEO" : "UNKONWN",
-    ( i < MAX_SOCKET_FD ) ? control->receive_timeout_ms[i] : -1,
+    ( i < MAX_SOCKET_FD ) ? (int) control->receive_timeout_ms[i] : -1,
     result
   );
 

@@ -260,7 +260,7 @@ static void directory_test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir02, dir01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   status = mkdir (path01, mode);
   rtems_test_assert (status == 0);
 

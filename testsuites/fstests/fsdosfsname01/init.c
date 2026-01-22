@@ -443,7 +443,7 @@ static void test_creating_invalid_directories( void )
                     "%s/%s",
                     MOUNT_DIR,
                     DIRECTORY_NAMES_INVALID[index] );
-    rtems_test_assert( len < sizeof( dirname ) );
+    rtems_test_assert( len < (int) sizeof( dirname ) );
     rc = mkdir( dirname, S_IRWXU | S_IRWXG | S_IRWXO );
     rtems_test_assert( rc == -1 );
   }
@@ -925,10 +925,10 @@ static void compare_directories(
 
   while ( dp != NULL ) {
     rc = snprintf(path[0], PATH_LENGTH, "%s/%s", dir0, dp->d_name);
-    rtems_test_assert( rc < PATH_LENGTH );
+    rtems_test_assert( rc < (int) PATH_LENGTH );
     rtems_test_assert( rc >= 0 );
     rc = snprintf(path[1], PATH_LENGTH, "%s/%s", dir1, dp->d_name);
-    rtems_test_assert( rc < PATH_LENGTH );
+    rtems_test_assert( rc < (int) PATH_LENGTH );
     rtems_test_assert( rc >= 0 );
 
     rc = stat( path[0] , &stat_buf[0] );

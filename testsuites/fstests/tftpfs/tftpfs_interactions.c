@@ -321,7 +321,7 @@ static bool interact_sendto_common( Tftp_Action *act, void *data )
     return false;
   }
 
-  act->data.sendto.result = d->result ? act->data.sendto.len : -1;
+  act->data.sendto.result = d->result ? (int) act->data.sendto.len : -1;
   return true;
 }
 
@@ -710,7 +710,7 @@ static bool interact_recvfrom_common(
   act->data.recvfrom.src_addr_str[
     sizeof( act->data.recvfrom.src_addr_str ) - 1] = '\0';
   act->data.recvfrom.src_port = d->src_port;
-  act->data.recvfrom.result = d->result ? actual_size : -1;
+  act->data.recvfrom.result = d->result ? (int) actual_size : -1;
   return true;
 }
 

@@ -345,7 +345,7 @@ static int read_tftp_file(
   if ( *fd >= 0 ) {
     data_buffer = malloc( buffer_size );
 
-    while ( bytes > 0 && max_bytes >= bytes ) {
+    while ( bytes > 0 && (ssize_t) max_bytes >= bytes ) {
       errno = 0;
       bytes = read(
         *fd,
@@ -491,7 +491,7 @@ static int write_tftp_file(
         );
         break;
       }
-    } while( bytes_total < file_size );
+    } while( (size_t) bytes_total < file_size );
 
     free( data_buffer );
   } /* if */
@@ -635,8 +635,8 @@ static int rdwt_tftp_client_file(
 
       /* Write file */
       do { /* Try also to write files with 0 bytes size */
-        bytes = ( file_size - bytes_total >= buffer_size ) ?
-          buffer_size : file_size - bytes_total;
+        bytes = ( (size_t) (file_size - bytes_total) >= buffer_size ) ?
+          buffer_size : (size_t) (file_size - bytes_total);
         for ( i = 0; i < bytes; ++i ) {
           data_buffer[i] = get_file_content( bytes_total + i );
         }
@@ -5315,7 +5315,7 @@ T_TEST_CASE_FIXTURE( read_file_windowsize_trouble, &fixture_small_opt_size )
     tftpfs_ipv4_loopback,
     true
   );
-  for ( i = 0; i < RTEMS_ARRAY_SIZE( pkg_sequence ); ++i ) {
+  for ( i = 0; i < (int) RTEMS_ARRAY_SIZE( pkg_sequence ); ++i ) {
     if ( pkg_sequence[i] == 0 ) {
       block_num = pkg_sequence[i];
       _Tftp_Add_interaction_recv_nothing(
@@ -5892,7 +5892,7 @@ T_TEST_CASE_FIXTURE( write_file_windowsize_trouble, &fixture_small_opt_size )
     sizeof( options ),
     true
   );
-  for ( i = 0; i < RTEMS_ARRAY_SIZE( pkg_sequence ); ++i ) {
+  for ( i = 0; i < (int) RTEMS_ARRAY_SIZE( pkg_sequence ); ++i ) {
     if ( pkg_sequence[i] == 0 ) {
       _Tftp_Add_interaction_recv_nothing(
         TFTP_FIRST_FD,

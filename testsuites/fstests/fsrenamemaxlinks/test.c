@@ -91,7 +91,7 @@ void test (void)
   for(i = statbuf.st_nlink; i < LINK_MAX_val; i++)
   {
     rv = snprintf (link_name, sizeof(link_name), "%s/%d", dir01, i);
-    rtems_test_assert (rv < sizeof(link_name));
+    rtems_test_assert (rv < (int) sizeof(link_name));
 
     status = mkdir (link_name, mode);
     rtems_test_assert (status == 0);
@@ -101,7 +101,7 @@ void test (void)
   rtems_test_assert (status == 0);
 
   rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, dir01);
-  rtems_test_assert (rv < sizeof(path01));
+  rtems_test_assert (rv < (int) sizeof(path01));
   EXPECT_ERROR (EMLINK, rename, dir02, path01);
 
   /*
@@ -111,7 +111,7 @@ void test (void)
   for(i = statbuf.st_nlink; i < LINK_MAX_val; i++)
   {
     rv = snprintf (link_name, sizeof(link_name), "%s/%d", dir01, i);
-    rtems_test_assert (rv < sizeof(link_name));
+    rtems_test_assert (rv < (int) sizeof(link_name));
 
     status = rmdir (link_name);
     rtems_test_assert (status == 0);
