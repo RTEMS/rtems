@@ -45,5 +45,5 @@ int test( void )
 
   clock_ticks = clock();
 
-  return (clock_ticks != -1);
+  return ((int) clock_ticks != -1);
 }

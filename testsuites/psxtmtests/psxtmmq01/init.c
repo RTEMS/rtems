@@ -62,7 +62,7 @@ static void benchmark_mq_open(int printable)
   benchmark_timer_initialize();
     queue = mq_open( q_name, O_CREAT | O_RDWR , 0x777, &attr );
   end_time = benchmark_timer_read();
-  rtems_test_assert( queue != (-1) );
+  rtems_test_assert( (int) queue != (-1) );
 
   if (printable == 1)
     put_time(
@@ -85,7 +85,7 @@ static void benchmark_mq_open_second(int printable)
   benchmark_timer_initialize();
     queue2 =mq_open( q_name, O_RDONLY | O_CREAT , 0x777, &attr);
   end_time = benchmark_timer_read();
-  rtems_test_assert( queue2 != (-1) );
+  rtems_test_assert( (int) queue2 != (-1) );
 
   if (printable == 1)
     put_time(

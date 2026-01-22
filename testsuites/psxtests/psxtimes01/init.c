@@ -51,18 +51,18 @@ static void test_times_functions( void )
   clock_t    difference;
   struct tms start_tm;
   struct tms end_tm;
-  int        interval = 5;
+  clock_t    interval = 5;
 
   puts( "\n*** Testing times() functions ***" );
 
   puts( "times( NULL ) -- EFAULT" );
   sc = times( NULL );
-  rtems_test_assert( sc == -1 );
+  rtems_test_assert( (int) sc == -1 );
   rtems_test_assert( errno == EFAULT );
 
   puts( "_times_r( NULL, NULL ) -- EFAULT" );
   start = _times_r( NULL, NULL );
-  rtems_test_assert( sc == -1 );
+  rtems_test_assert( (int) sc == -1 );
   rtems_test_assert( errno == EFAULT );
 
   while ( rtems_clock_get_ticks_since_boot() <= 2 )

@@ -66,7 +66,7 @@ void *POSIX_Init(
   int                 sc;
   pthread_mutexattr_t attr;
   int                 type;
-  int                 i;
+  size_t              i;
 
   TEST_BEGIN();
 

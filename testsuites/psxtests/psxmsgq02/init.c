@@ -76,7 +76,7 @@ void *POSIX_Init(
   attr.mq_msgsize = MSGSIZE;
   puts("Init: mq_open - Workspace not available - ENOMEM");
   mq = mq_open( Get_Longest_Name(), O_CREAT, 0x777, &attr );
-  fatal_posix_service_status_errno(mq, ENOMEM, "no workspace available");
+  fatal_posix_service_status_errno((int)mq, ENOMEM, "no workspace available");
 
   TEST_END();
   rtems_test_exit( 0 );

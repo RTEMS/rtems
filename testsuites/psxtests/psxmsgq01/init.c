@@ -193,7 +193,7 @@ void open_test_queues(void)
     else
       Test_q[que].mq = mq_open( tq->name, tq->oflag, 0x777, &attr );
 
-    rtems_test_assert( Test_q[que].mq != (-1) );
+    rtems_test_assert( (int) Test_q[que].mq != (-1) );
   }
 
   status = mq_close( Test_q[NUMBER_OF_TEST_QUEUES].mq );
@@ -282,7 +282,7 @@ void validate_mq_open_error_codes(void)
   puts( "Init: mq_open - Create an Existing mq (EEXIST)" );
   open_mq[0] = mq_open(
     Build_Queue_Name(0), O_CREAT | O_RDWR | O_NONBLOCK, 0x777, NULL );
-  rtems_test_assert( open_mq[0] != (-1) );
+  rtems_test_assert( (int) open_mq[0] != (-1) );
 
   n_mq2 = mq_open(
     Build_Queue_Name(0), O_CREAT | O_EXCL | O_RDONLY, 0x777, NULL);
@@ -303,7 +303,7 @@ void validate_mq_open_error_codes(void)
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES; i++) {
     open_mq[i] = mq_open(
       Build_Queue_Name(i), O_CREAT | O_RDWR | O_NONBLOCK, 0x777, NULL );
-    rtems_test_assert( open_mq[i] != (-1) );
+    rtems_test_assert( (int) open_mq[i] != (-1) );
     rtems_test_assert( open_mq[i] );
     /*XXX - Isn't there a more general check */
 /* JRS     printf( "mq_open 0x%x %s\n", open_mq[i], Build_Queue_Name(i) ); */
@@ -758,7 +758,7 @@ void verify_unlink_functionality(void)
   fatal_posix_service_status( status, 0, "mq_unlink locked message queue");
 
   n_mq = mq_open( DEFAULT_NAME, DEFAULT_ATTR, 0x777, NULL );
-  rtems_test_assert( n_mq != (-1) );
+  rtems_test_assert( (int) n_mq != (-1) );
   rtems_test_assert( n_mq != Test_q[ DEFAULT_RW ].mq );
 
 

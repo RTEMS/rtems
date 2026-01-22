@@ -234,7 +234,7 @@ void statvfs_helper( void )
 
 rtems_task Init( rtems_task_argument argument )
 {
-  int     i;
+  size_t  i;
   void   *alloc_ptr = (void *) 0;
   off_t   position;
   off_t   new_position;

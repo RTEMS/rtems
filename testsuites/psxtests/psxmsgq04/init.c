@@ -68,15 +68,15 @@ void *POSIX_Init(
 
   puts( "Init - Open message queue instance 1" );
   Queue = mq_open( "Queue", O_CREAT | O_RDWR, 0x777, &attr );
-  if ( Queue == (-1) )
+  if ( (int) Queue == (-1) )
     perror( "mq_open failed" );
-  rtems_test_assert( Queue != (-1) );
+  rtems_test_assert( (int) Queue != (-1) );
 
   puts( "Init - Open message queue instance 2 - FAIL - ENFILE " );
   second_Queue = mq_open( "Queue2", O_CREAT | O_RDWR, 0x777, &attr );
-  if ( second_Queue != (-1) )
+  if ( (int) second_Queue != (-1) )
     puts( "mq_open did not failed" );
-  rtems_test_assert( second_Queue == (-1) );
+  rtems_test_assert( (int) second_Queue == (-1) );
   rtems_test_assert( errno == ENFILE );
 
   puts( "Init - Unlink message queue instance 1" );
@@ -121,7 +121,7 @@ void *POSIX_Init(
     rtems_workspace_free( alloced );
 
     to_alloc -= 4;
-  } while ( second_Queue == -1 );
+  } while ( (int) second_Queue == -1 );
 
   puts( "Init - Message Queue created" );
 
