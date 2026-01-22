@@ -214,11 +214,11 @@ static void arg_test (void)
   rtems_test_assert (status == 0);
 
   /*
-   * The new argument points to a non existant file and
+   * The new argument points to a nonexistent file and
    * the old argument points to a file.
    */
 
-  puts ("\nRename file with non existant file\n");
+  puts ("\nRename file with nonexistent file\n");
 
   fd = creat (name01, mode);
   rtems_test_assert (fd >= 0);
@@ -235,12 +235,12 @@ static void arg_test (void)
   EXPECT_EQUAL (0, unlink, name02);
 
   /*
-   * The new argument points to a non existant file and
+   * The new argument points to a nonexistent file and
    * the old argument points to a file where a component of the
    * filepath does not exist.
    */
 
-  puts ("\nRename file with non existant filepath\n");
+  puts ("\nRename file with nonexistent filepath\n");
 
   status = mkdir (dir01, mode);
   rtems_test_assert (status == 0);
@@ -257,11 +257,11 @@ static void arg_test (void)
   EXPECT_EQUAL (0, rmdir, dir01);
 
   /*
-   * The new argument points to a non existant directory and
+   * The new argument points to a nonexistent directory and
    * the old argument points to a directory.
    */
 
-  puts ("\nRename directory with non existant directory\n");
+  puts ("\nRename directory with nonexistent directory\n");
 
   status = mkdir (dir01, mode);
   rtems_test_assert (status == 0);

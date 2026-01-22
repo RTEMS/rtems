@@ -373,7 +373,7 @@ lseek_test (void)
   rtems_test_assert (pos == total_written);
 
   /*
-   * ftruncate shall not change the posistion
+   * ftruncate shall not change the position
    */
   status = ftruncate (fd, total_written + 1);
   rtems_test_assert (status == 0);
@@ -447,7 +447,7 @@ lseek_test (void)
   rtems_test_assert (status == 0);
 
   /*
-   * Open the file withe O_RDWR and check the lseek
+   * Open the file with O_RDWR and check the lseek
    */
 
   fd = open (name01, O_RDWR);

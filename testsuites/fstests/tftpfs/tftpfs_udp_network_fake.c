@@ -202,7 +202,7 @@ const char *_Tftp_Get_error_str( uint16_t error_code )
     "Unknown transfer ID",
     "File already exists",
     "No such user",
-    "Option negociation failed",
+    "Option negotiation failed",
   };
   const char *result = unknown_str;
 
@@ -660,7 +660,7 @@ static void set_ip_addr_from_str(
       bytes + 2,
       bytes + 3
     );
-    T_quiet_true( res == 4, "Connot parse IPv4 address: \"%s\"", addr_str );
+    T_quiet_true( res == 4, "Cannot parse IPv4 address: \"%s\"", addr_str );
   } else {
     /* IPv6 address */
     struct sockaddr_in6 *ipv6_addr = (struct sockaddr_in6 *) addr;
@@ -686,7 +686,7 @@ static void set_ip_addr_from_str(
       words + 6,
       words + 7
     );
-    T_quiet_true( res == 8, "Connot parse IPv6 address: \"%s\"", addr_str );
+    T_quiet_true( res == 8, "Cannot parse IPv6 address: \"%s\"", addr_str );
     for ( i = 0; i < 8; ++i ) {
       words[i] = htons( words[i] );
     }
@@ -856,8 +856,8 @@ int setsockopt(
     T_VERBOSE,
     "setsockopt(sockfd=%d, level=%s, optname=%s, optval=%dms )",
     sockfd,
-    ( level == SOL_SOCKET    ) ? "SOL_SOCKET"  : "UNKONWN",
-    ( optname == SO_RCVTIMEO ) ? "SO_RCVTIMEO" : "UNKONWN",
+    ( level == SOL_SOCKET    ) ? "SOL_SOCKET"  : "UNKNOWN",
+    ( optname == SO_RCVTIMEO ) ? "SO_RCVTIMEO" : "UNKNOWN",
     ( optname == SO_RCVTIMEO ) ?
       (int) ( tv->tv_sec * 1000 + tv->tv_usec / 1000 ) : -1
   );
@@ -895,8 +895,8 @@ int setsockopt(
     T_VERBOSE,
     "[setsockopt(sockfd=%d, level=%s, optname=%s, optval=%"PRIu32"ms )] = %d",
     sockfd,
-    ( level == SOL_SOCKET    ) ? "SOL_SOCKET"  : "UNKONWN",
-    ( optname == SO_RCVTIMEO ) ? "SO_RCVTIMEO" : "UNKONWN",
+    ( level == SOL_SOCKET    ) ? "SOL_SOCKET"  : "UNKNOWN",
+    ( optname == SO_RCVTIMEO ) ? "SO_RCVTIMEO" : "UNKNOWN",
     ( i < MAX_SOCKET_FD ) ? (int) control->receive_timeout_ms[i] : -1,
     result
   );

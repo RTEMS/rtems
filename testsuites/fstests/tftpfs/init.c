@@ -71,7 +71,7 @@
 #define SMALL_WINDOW_SIZE           4
 #define T_no_more_interactions() T_assert_true( \
   _Tftp_Has_no_more_interactions(), \
-  "The TFTP client skiped some final network interactions." \
+  "The TFTP client skipped some final network interactions." \
 )
 
 /*
@@ -608,7 +608,7 @@ static int rdwt_tftp_client_file(
             if ( data_buffer[i] != get_file_content( bytes_total + i ) ) {
               T_true(
                 false,
-                "FTP Client: wrong file content '%c' (expected '%c') at positon %zd",
+                "FTP Client: wrong file content '%c' (expected '%c') at position %zd",
                 (int) ( isprint( (int) data_buffer[i] ) ? data_buffer[i] : '?' ),
                 (int) get_file_content( bytes_total + i ),
                 bytes_total + i

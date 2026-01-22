@@ -210,7 +210,7 @@ static void symlink_rename_test (void)
    * the old argument points to a symbolic link to another file.
    */
 
-  puts ("\nOld is a simbolic link and rename operates on the simbolic link itself\n");
+  puts ("\nOld is a symbolic link and rename operates on the symbolic link itself\n");
 
   fd = creat (name01, mode);
   rtems_test_assert (fd >= 0);
@@ -249,7 +249,7 @@ static void symlink_rename_test (void)
    * the old argument points to a file.
    */
 
-  puts ("\nNew is a simbolic link and rename operates on the simbolic link itself\n");
+  puts ("\nNew is a symbolic link and rename operates on the symbolic link itself\n");
 
   fd = creat (name01, mode);
   rtems_test_assert (fd >= 0);
