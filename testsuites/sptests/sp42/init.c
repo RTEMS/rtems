@@ -66,7 +66,7 @@ static const rtems_task_priority Priorities_Low[MAX_TASKS] = {
   12, 12, 12, 12,       /* backward - multple on 2-n chain */
 };
 
-static const int Obtain_order[2][MAX_TASKS] = {
+static const rtems_task_argument Obtain_order[2][MAX_TASKS] = {
   { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 },
   { 4, 5, 6, 7, 9, 10, 11, 12, 13, 8, 16, 17, 18, 19, 0, 1, 2, 3, 15, 14 }
 };

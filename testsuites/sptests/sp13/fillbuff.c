@@ -48,7 +48,8 @@ void Fill_buffer(
 )
 {
   char *p;
-  int i, j;
+  size_t i;
+  int j;
 
   p = source;
   for ( i = 0 ; i < MESSAGE_SIZE / sizeof(long) ; i++ ) {

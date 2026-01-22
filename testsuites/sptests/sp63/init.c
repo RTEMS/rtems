@@ -111,7 +111,8 @@ void test_case_three(void)
 #if 0
   Heap_Resize_status hc;
 #endif
-  int pg, al, alloc, sz;
+  size_t alloc;
+  int pg, al, sz;
 
   puts( "Init - _Heap_Allocate_aligned - request impossible - not OK");
 

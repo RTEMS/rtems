@@ -200,7 +200,7 @@ static void test_posix_init(test_context *ctx)
   attr.mq_msgsize = sizeof(char);
 
   ctx->pmq = mq_open("mq", O_CREAT | O_RDWR, 0x777, &attr);
-  rtems_test_assert(ctx->mq != -1);
+  rtems_test_assert(ctx->pmq != (mqd_t) -1);
 }
 
 static void test_context_init(test_context *ctx)

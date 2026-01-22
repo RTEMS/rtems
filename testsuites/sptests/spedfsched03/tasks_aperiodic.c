@@ -42,9 +42,9 @@ rtems_task Tasks_Aperiodic(
 )
 {
   rtems_status_code   status;
-  int                 start;
-  int                 stop;
-  int                 now;
+  rtems_interval      start;
+  rtems_interval      stop;
+  rtems_interval      now;
 
   put_name( Task_name[ argument ], FALSE );
 

@@ -252,7 +252,7 @@ rtems_task Init (rtems_task_argument ignored)
         __LINE__,
         rtems_status_text (sc)
       );
-    } else if (diff < (int) (2 * ticksPerSecond)) {
+    } else if (diff < (rtems_interval) (2 * ticksPerSecond)) {
       printf(
         "%d: Obtained obtain non-recursive-lock semaphore too quickly -- %"
           PRIdrtems_interval " ticks not %" PRIdrtems_interval " ticks\n",

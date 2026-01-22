@@ -51,7 +51,7 @@ rtems_task Tasks_Periodic(
   rtems_task_priority prio_cur;
   rtems_task_priority prio_max;
 
-  int start, stop, now;
+  rtems_interval start, stop, now;
 
   status = rtems_rate_monotonic_create( argument, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );

@@ -292,7 +292,7 @@ static void test_every_day(void)
     for (every_day.year = 1988; every_day.year <= 2099; ++every_day.year) {
         int leap_year = test_year_is_leap_year(every_day.year) ? 1 : 0;
         for (every_day.month = 1; every_day.month <= 12; ++every_day.month) {
-            int days = days_per_month[leap_year][every_day.month - 1];
+            uint32_t days = days_per_month[leap_year][every_day.month - 1];
             for (every_day.day = 1; every_day.day <= days; ++every_day.day) {
                 sc = rtems_clock_set(&every_day);
                 ASSERT_SC(sc);

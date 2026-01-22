@@ -50,7 +50,7 @@ rtems_task Init(
 
   rtems_status_code status;
   rtems_id          id;
-  long              created;
+  size_t            created;
 
   TEST_BEGIN();
 
@@ -70,7 +70,7 @@ rtems_task Init(
   } while (1);
 
   printf(
-    "%ld ports created using %d per allocation -- need %ld\n",
+    "%zu ports created using %d per allocation -- need %ld\n",
     created,
     PER_ALLOCATION,
     (long) OBJECTS_ID_FINAL_INDEX

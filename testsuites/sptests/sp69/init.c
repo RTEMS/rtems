@@ -50,7 +50,7 @@ rtems_task Init(
   rtems_rate_monotonic_period_status      period_status;
   rtems_status_code                       status;
   rtems_rate_monotonic_period_statistics  statistics;
-  int                                     i;
+  uint32_t                                i;
 
   period_name = rtems_build_name('P','E','R','1');
 

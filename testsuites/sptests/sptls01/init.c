@@ -48,7 +48,7 @@ static volatile uint32_t read_write_small = 0xdeadbeefUL;
 
 static const volatile uint32_t read_only_small = 0x601dc0feUL;
 
-static void check_tls_item(uint32_t expected)
+static void check_tls_item(char expected)
 {
   printk("TLS item = %i\n", tls_item);
   rtems_test_assert(tls_item == expected);

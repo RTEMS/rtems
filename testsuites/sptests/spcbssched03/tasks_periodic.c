@@ -59,7 +59,7 @@ rtems_task Tasks_Periodic(
   rtems_status_code status;
   bool              scenario_done = 0;
 
-  int start, stop, now;
+  rtems_interval start, stop, now;
 
   rtems_cbs_server_id server_id, tsid;
   rtems_cbs_parameters params, tparams;

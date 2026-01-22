@@ -36,7 +36,7 @@ rtems_task Tasks_Aperiodic(
 )
 {
   rtems_status_code status;
-  int start, stop, now;
+  rtems_interval start, stop, now;
 
   put_name( Task_name[ argument ], FALSE );
 
