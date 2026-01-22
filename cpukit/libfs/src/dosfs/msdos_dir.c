@@ -81,7 +81,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
     uint32_t           start = 0;
     ssize_t            ret = 0;
     ssize_t            cmpltd = 0;
-    uint32_t           j = 0, i = 0;
+    ssize_t            j = 0, i = 0;
     uint32_t           bts2rd = 0;
     uint32_t           cur_cln = 0;
     uint32_t           lfn_start = FAT_FILE_SHORT_NAME;

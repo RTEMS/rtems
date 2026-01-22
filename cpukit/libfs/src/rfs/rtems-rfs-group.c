@@ -347,14 +347,16 @@ rtems_rfs_group_bitmap_test (rtems_rfs_file_system* fs,
 
   if (inode)
   {
-    if ((no < RTEMS_RFS_ROOT_INO) || (no > rtems_rfs_fs_inodes (fs)))
+    if ((no < RTEMS_RFS_ROOT_INO) ||
+        ((uint32_t) no > rtems_rfs_fs_inodes (fs)))
         return EINVAL;
     no -= RTEMS_RFS_ROOT_INO;
     size = fs->group_inodes;
   }
   else
   {
-    if ((no < RTEMS_RFS_ROOT_INO) || (no >= rtems_rfs_fs_blocks (fs)))
+    if ((no < RTEMS_RFS_ROOT_INO) ||
+        ((uint32_t) no >= rtems_rfs_fs_blocks (fs)))
         return EINVAL;
     no -= RTEMS_RFS_ROOT_INO;
     size = fs->group_blocks;

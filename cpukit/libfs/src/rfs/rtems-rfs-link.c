@@ -287,7 +287,7 @@ rtems_rfs_symlink (rtems_rfs_file_system* fs,
       printf ("%c", link[c]);
   }
 
-  if (link_length >= rtems_rfs_fs_block_size (fs))
+  if ((size_t) link_length >= rtems_rfs_fs_block_size (fs))
     return ENAMETOOLONG;
 
   rc = rtems_rfs_inode_create (fs, parent, name, strlen (name),
@@ -305,7 +305,7 @@ rtems_rfs_symlink (rtems_rfs_file_system* fs,
    * place the link into the data area else allocate a block and write the link
    * to that.
    */
-  if (link_length < RTEMS_RFS_INODE_DATA_NAME_SIZE)
+  if ((size_t) link_length < RTEMS_RFS_INODE_DATA_NAME_SIZE)
   {
     memset (inode.node->data.name, 0, RTEMS_RFS_INODE_DATA_NAME_SIZE);
     memcpy (inode.node->data.name, link, link_length);

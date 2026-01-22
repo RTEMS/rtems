@@ -220,7 +220,7 @@ rtems_rfs_bitmap_map_set (rtems_rfs_bitmap_control* control,
   if (rc > 0)
     return rc;
 
-  if (bit >= control->size)
+  if ((size_t) bit >= control->size)
     return EINVAL;
 
   search_map = control->search_bits;
@@ -266,7 +266,7 @@ rtems_rfs_bitmap_map_clear (rtems_rfs_bitmap_control* control,
   if (rc > 0)
     return rc;
 
-  if (bit >= control->size)
+  if ((size_t) bit >= control->size)
     return EINVAL;
 
   search_map = control->search_bits;
@@ -304,7 +304,7 @@ rtems_rfs_bitmap_map_test (rtems_rfs_bitmap_control* control,
   rc = rtems_rfs_bitmap_load_map (control, &map);
   if (rc > 0)
     return rc;
-  if (bit >= control->size)
+  if ((size_t) bit >= control->size)
     return EINVAL;
   index = rtems_rfs_bitmap_map_index (bit);
   *state = rtems_rfs_bitmap_test (map[index], bit);
@@ -316,7 +316,7 @@ rtems_rfs_bitmap_map_set_all (rtems_rfs_bitmap_control* control)
 {
   rtems_rfs_bitmap_map map;
   size_t               elements;
-  int                  e;
+  size_t               e;
   int                  rc;
 
   rc = rtems_rfs_bitmap_load_map (control, &map);
@@ -346,7 +346,7 @@ rtems_rfs_bitmap_map_clear_all (rtems_rfs_bitmap_control* control)
   rtems_rfs_bitmap_map map;
   rtems_rfs_bitmap_bit last_search_bit;
   size_t               elements;
-  int                  e;
+  size_t               e;
   int                  rc;
 
   rc = rtems_rfs_bitmap_load_map (control, &map);
@@ -419,7 +419,7 @@ rtems_rfs_search_map_for_clear_bit (rtems_rfs_bitmap_control* control,
 
   if (end_bit < 0)
     end_bit = 0;
-  else if (end_bit >= control->size)
+  else if ((size_t) end_bit >= control->size)
     end_bit = control->size - 1;
 
   map_index     = rtems_rfs_bitmap_map_index (test_bit);
@@ -571,13 +571,13 @@ rtems_rfs_bitmap_map_alloc (rtems_rfs_bitmap_control* control,
    * be balanced for the upper or lower seeds. We move to the limits, search
    * then return false if no clear bits are found.
    */
-  while (((upper_seed >= 0) && (upper_seed < control->size))
-         || ((lower_seed >= 0) && (lower_seed < control->size)))
+  while (((upper_seed >= 0) && ((size_t) upper_seed < control->size))
+         || ((lower_seed >= 0) && ((size_t) lower_seed < control->size)))
   {
     /*
      * Search up first so bits allocated in succession are grouped together.
      */
-    if (upper_seed < control->size)
+    if ((size_t) upper_seed < control->size)
     {
       *bit = upper_seed;
       rc = rtems_rfs_search_map_for_clear_bit (control, bit, allocated,
@@ -599,7 +599,7 @@ rtems_rfs_bitmap_map_alloc (rtems_rfs_bitmap_control* control,
      * Do not bound the limits at the edges of the map. Do not update if an
      * edge has been passed.
      */
-    if (upper_seed < control->size)
+    if ((size_t) upper_seed < control->size)
       upper_seed += window;
     if (lower_seed >= 0)
       lower_seed -= window;

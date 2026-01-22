@@ -351,8 +351,8 @@ static void IMFS_memfile_destroy(
 )
 {
   IMFS_memfile_t  *memfile;
-  int              i;
-  int              j;
+  size_t           i;
+  size_t           j;
   unsigned int     to_free;
   block_p         *p;
 

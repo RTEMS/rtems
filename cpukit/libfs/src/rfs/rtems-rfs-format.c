@@ -98,7 +98,7 @@ static int
 rtems_rfs_inode_overhead (rtems_rfs_file_system* fs)
 {
   int blocks;
-  int bits_per_block;
+  size_t bits_per_block;
   blocks = rtems_rfs_rup_quotient(fs->group_inodes * RTEMS_RFS_INODE_SIZE,
                                   rtems_rfs_fs_block_size (fs));
   bits_per_block = rtems_rfs_bits_per_block (fs);

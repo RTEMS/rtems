@@ -212,7 +212,7 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_INODE_CREATE))
   {
     const char* type = "unknown";
-    int         c;
+    size_t      c;
     if (RTEMS_RFS_S_ISDIR (mode))
       type = "dir";
     else if (RTEMS_RFS_S_ISCHR (mode))

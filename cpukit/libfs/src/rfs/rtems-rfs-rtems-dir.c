@@ -132,7 +132,7 @@ rtems_rfs_rtems_dir_read (rtems_libio_t* iop,
   rtems_rfs_inode_handle inode;
   struct dirent*         dirent;
   ssize_t                bytes_transferred;
-  int                    d;
+  size_t                 d;
   int                    rc;
 
   count  = count / sizeof (struct dirent);

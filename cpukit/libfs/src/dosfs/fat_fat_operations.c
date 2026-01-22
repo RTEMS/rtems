@@ -121,7 +121,7 @@ fat_scan_fat_for_free_clusters(
                 ssize_t bytes_written =
                     fat_cluster_set(fs_info, cl4find, 0, fs_info->vol.bpc, 0);
 
-                if (fs_info->vol.bpc != bytes_written)
+                if (fs_info->vol.bpc != (size_t) bytes_written)
                 {
                     rc = -1;
                     goto cleanup;
@@ -238,7 +238,7 @@ fat_get_fat_cluster(
     int                     rc = RC_OK;
     uint8_t                *sec_buf;
     uint32_t                sec = 0;
-    uint32_t                ofs = 0;
+    int32_t                 ofs = 0;
 
     /* sanity check */
     if ( (cln < 2) || (cln > (fs_info->vol.data_cls + 1)) )
@@ -320,7 +320,7 @@ fat_set_fat_cluster(
 {
     int                 rc = RC_OK;
     uint32_t            sec = 0;
-    uint32_t            ofs = 0;
+    int32_t             ofs = 0;
     uint16_t            fat16_clv = 0;
     uint32_t            fat32_clv = 0;
     uint8_t            *sec_buf = NULL;

@@ -87,7 +87,7 @@ extern IMFS_memfile_ops_t imfs_memfile_ops;
  *  @endcode
  */
 #define IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK     128
-  extern const int imfs_memfile_bytes_per_block;
+  extern const size_t imfs_memfile_bytes_per_block;
 
 #define IMFS_MEMFILE_BYTES_PER_BLOCK imfs_memfile_bytes_per_block
 #define IMFS_MEMFILE_BLOCK_SLOTS \

@@ -164,7 +164,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
       while (map.bpos.boff < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE))
       {
         uint32_t ehash;
-        int      elength;
+        size_t   elength;
 
         ehash  = rtems_rfs_dir_entry_hash (entry);
         elength = rtems_rfs_dir_entry_length (entry);
@@ -177,7 +177,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
         {
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
             printf ("rtems-rfs: dir-lookup-ino: "
-                    "bad length or ino for ino %" PRIu32 ": %u/%" PRId32 " @ %04" PRIx32 "\n",
+                    "bad length or ino for ino %" PRIu32 ": %zd/%" PRId32 " @ %04" PRIx32 "\n",
                     rtems_rfs_inode_ino (inode), elength, *ino, map.bpos.boff);
           rc = EIO;
           break;
@@ -188,7 +188,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO_CHECK))
             printf ("rtems-rfs: dir-lookup-ino: "
                     "checking entry for ino %" PRId32 ": bno=%04" PRIx32 "/off=%04" PRIx32
-                    " length:%d ino:%" PRId32 "\n",
+                    " length:%zd ino:%" PRId32 "\n",
                     rtems_rfs_inode_ino (inode), map.bpos.bno, map.bpos.boff,
                     elength, rtems_rfs_dir_entry_ino (entry));
 
@@ -254,7 +254,7 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_ADD_ENTRY))
   {
-    int c;
+    size_t c;
     printf ("rtems-rfs: dir-add-entry: dir=%" PRId32 ", name=",
             rtems_rfs_inode_ino (dir));
     for (c = 0; c < length; c++)
@@ -282,7 +282,7 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
   {
     rtems_rfs_block_no block;
     uint8_t*           entry;
-    int                offset;
+    size_t             offset;
     bool               read = true;
 
     /*
@@ -340,7 +340,7 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
     while (offset < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE))
     {
       rtems_rfs_ino eino;
-      int           elength;
+      size_t        elength;
 
       elength = rtems_rfs_dir_entry_length (entry);
       eino    = rtems_rfs_dir_entry_ino (entry);
@@ -370,7 +370,7 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_ADD_ENTRY))
           printf ("rtems-rfs: dir-add-entry: "
-                  "bad length or ino for ino %" PRIu32 ": %u/%" PRId32 " @ %04x\n",
+                  "bad length or ino for ino %" PRIu32 ": %zu/%" PRId32 " @ %04zx\n",
                   rtems_rfs_inode_ino (dir), elength, eino, offset);
         rtems_rfs_buffer_handle_close (fs, &buffer);
         rtems_rfs_block_map_close (fs, &map);
@@ -431,7 +431,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
   while (rc == 0)
   {
     uint8_t* entry;
-    int      eoffset;
+    size_t   eoffset;
 
     rc = rtems_rfs_buffer_handle_request (fs, &buffer, block, true);
     if (rc > 0)
@@ -457,7 +457,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
     while (eoffset < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE))
     {
       rtems_rfs_ino eino;
-      int           elength;
+      size_t        elength;
 
       elength = rtems_rfs_dir_entry_length (entry);
       eino    = rtems_rfs_dir_entry_ino (entry);
@@ -469,8 +469,8 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
           printf ("rtems-rfs: dir-del-entry: "
-                  "bad length or ino for ino %" PRIu32 ": %u/%" PRId32
-                  " @ %" PRIu32 ".%04x\n",
+                  "bad length or ino for ino %" PRIu32 ": %zd/%" PRId32
+                  " @ %" PRIu32 ".%04zx\n",
                   rtems_rfs_inode_ino (dir), elength, eino, block, eoffset);
         rc = EIO;
         break;
@@ -494,8 +494,8 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
 
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
           printf ("rtems-rfs: dir-del-entry: "
-                  "last block free for ino %" PRIu32 ": elength=%i block=%" PRIu32
-                  " offset=%d last=%s\n",
+                  "last block free for ino %" PRIu32 ": elength=%zd block=%" PRIu32
+                  " offset=%zd last=%s\n",
                   ino, elength, block, eoffset,
                   rtems_rfs_block_map_last (&map) ? "yes" : "no");
 
@@ -592,7 +592,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
   {
     uint8_t*      entry;
     rtems_rfs_ino eino;
-    int           elength;
+    size_t        elength;
     int           remaining;
 
     rc = rtems_rfs_buffer_handle_request (fs, &buffer, block, true);
@@ -615,7 +615,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
           printf ("rtems-rfs: dir-read: "
-                  "bad length or ino for ino %" PRIu32 ": %u/%" PRId32 " @ %04" PRIx32 "\n",
+                  "bad length or ino for ino %" PRIu32 ": %zu/%" PRId32 " @ %04" PRIx32 "\n",
                   rtems_rfs_inode_ino (dir), elength, eino, map.bpos.boff);
         rc = EIO;
         break;
@@ -704,7 +704,7 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
   while (empty)
   {
     uint8_t* entry;
-    int      offset;
+    size_t   offset;
 
     rc = rtems_rfs_buffer_handle_request (fs, &buffer, block, true);
     if (rc > 0)
@@ -716,7 +716,7 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
     while (offset < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE))
     {
       rtems_rfs_ino eino;
-      int           elength;
+      size_t        elength;
 
       elength = rtems_rfs_dir_entry_length (entry);
       eino    = rtems_rfs_dir_entry_ino (entry);
@@ -728,7 +728,7 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_EMPTY))
           printf ("rtems-rfs: dir-empty: "
-                  "bad length or ino for ino %" PRIu32 ": %u/%" PRIu32 " @ %04x\n",
+                  "bad length or ino for ino %" PRIu32 ": %zd/%" PRIu32 " @ %04zx\n",
                   rtems_rfs_inode_ino (dir), elength, eino, offset);
         rc = EIO;
         break;

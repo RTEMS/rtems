@@ -427,7 +427,7 @@ rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
                           size_t                 blocks,
                           rtems_rfs_block_no*    new_block)
 {
-  int b;
+  size_t b;
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_GROW))
     printf ("rtems-rfs: block-map-grow: entry: blocks=%zd count=%" PRIu32 "\n",

@@ -191,7 +191,7 @@ rtems_rfs_shell_block (rtems_rfs_file_system* fs, int argc, char *argv[])
   rtems_rfs_block_no      block;
   uint8_t*                data;
   bool                    state;
-  int                     b;
+  size_t                  b;
   int                     rc;
 
   if (argc <= 1)
@@ -243,7 +243,7 @@ rtems_rfs_shell_block (rtems_rfs_file_system* fs, int argc, char *argv[])
     {
       if (b)
         printf ("\n");
-      printf ("%04x ", b);
+      printf ("%04zx ", b);
     }
     if (mod == 8)
       printf (" ");
@@ -449,7 +449,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
   uint8_t*                data;
   bool                    state;
   int                     entry;
-  int                     b;
+  size_t                  b;
   int                     rc;
 
   if (argc <= 1)
@@ -499,9 +499,9 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
   while (b < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE - 1))
   {
     rtems_rfs_ino eino;
-    int           elength;
-    int           length;
-    int           c;
+    size_t        elength;
+    size_t        length;
+    size_t        c;
 
     eino    = rtems_rfs_dir_entry_ino (data);
     elength = rtems_rfs_dir_entry_length (data);
@@ -512,7 +512,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
     if ((elength < RTEMS_RFS_DIR_ENTRY_SIZE) ||
         (elength >= rtems_rfs_fs_max_name (fs)))
     {
-      printf (" %5d: entry length appears corrupt: %d\n", entry, elength);
+      printf (" %5d: entry length appears corrupt: %zd\n", entry, elength);
       break;
     }
 
@@ -524,7 +524,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
 
     length = elength - RTEMS_RFS_DIR_ENTRY_SIZE;
 
-    printf (" %5d: %04x inode=%-6" PRIu32 " hash=%08" PRIx32 " name[%03u]=",
+    printf (" %5d: %04zx inode=%-6" PRIu32 " hash=%08x name[%03zd]=",
             entry, b,
             rtems_rfs_dir_entry_ino (data),
             rtems_rfs_dir_entry_hash (data),
@@ -642,7 +642,7 @@ rtems_shell_debugrfs (int argc, char *argv[])
   };
 
   int arg;
-  int t;
+  size_t t;
 
   for (arg = 1; arg < argc; arg++)
   {

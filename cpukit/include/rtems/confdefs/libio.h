@@ -199,7 +199,8 @@ extern "C" {
   #error "CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK must be a power of two between 16 and 1024"
 #endif
 
-const int imfs_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
+const size_t imfs_memfile_bytes_per_block =
+    CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
 
 /*
  * Using the default ops if user doesn't configure ops
