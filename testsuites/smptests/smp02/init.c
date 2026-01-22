@@ -50,7 +50,7 @@ rtems_task Init(
 {
   (void) argument;
 
-  int               i;
+  uint32_t          i;
   char              ch;
   uint32_t          cpu_num;
   rtems_id          id;

@@ -123,7 +123,7 @@ void Validate_affinity(void )
   cpu_set_t            cpuset0;
   cpu_set_t            cpuset1;
   cpu_set_t            cpuset2;
-  uint32_t             i;
+  int                  i;
   int                  sc;
   int                  cpu_count;
   struct sched_param   param;

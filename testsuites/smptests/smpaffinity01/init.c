@@ -119,7 +119,7 @@ void Validate_affinity(void )
   cpu_set_t            cpuset0;
   cpu_set_t            cpuset1;
   cpu_set_t            cpuset2;
-  uint32_t             i;
+  int                  i;
   int                  sc;
   int                  cpu_count;
   rtems_task_priority  priority;
@@ -231,7 +231,7 @@ static void Init(rtems_task_argument arg)
 {
   (void) arg;
 
-  int                  sc;
+  rtems_status_code sc;
 
   TEST_BEGIN();
 

@@ -58,7 +58,7 @@ rtems_id           task_sem;
 
 static void task(rtems_task_argument arg);
 
-static void test_delay(int ticks)
+static void test_delay(rtems_interval ticks)
 { 
   rtems_interval start, stop;
   start = rtems_clock_get_ticks_since_boot();
@@ -91,8 +91,8 @@ static void test(void)
 {
   rtems_status_code   sc;
   uint32_t            cpu_count;
-  int                 cpu;
-  int                 i;
+  uint32_t            cpu;
+  uint32_t            i;
   cpu_set_t           cpuset;
 
   /* Get the number of processors that we are using. */

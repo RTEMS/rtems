@@ -79,7 +79,7 @@ static void verify_tasks(void);
  * Spin loop to allow tasks to delay without yeilding the
  * processor.
  */
-static void test_delay(int ticks)
+static void test_delay(rtems_interval ticks)
 {
   rtems_interval start, stop;
   start = rtems_clock_get_ticks_since_boot();

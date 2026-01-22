@@ -43,7 +43,7 @@ const char rtems_test_name[] = "SMPSCHEDAFFINITY 3";
 #define NUM_CPUS   4
 #define TASK_COUNT NUM_CPUS
 
-static void test_delay(int ticks)
+static void test_delay(rtems_interval ticks)
 { 
   rtems_interval start, stop;
   start = rtems_clock_get_ticks_since_boot();
