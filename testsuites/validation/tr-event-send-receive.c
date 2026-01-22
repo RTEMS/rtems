@@ -247,7 +247,7 @@ typedef struct {
    * @brief This member contains a copy of the corresponding
    *   RtemsEventReqSendReceive_Run() parameter.
    */
-  int waiting_for_event;
+  States_Control waiting_for_event;
 
   struct {
     /**
