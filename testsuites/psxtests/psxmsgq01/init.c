@@ -1331,7 +1331,7 @@ static void verify_blocking_mq_timedsend( void )
 
   /*
    * Create and suspend the receive thread early so that we don't overwrite the
-   * ETIMEDOUT in executing->Wait.return_code.  This verifies the succesful
+   * ETIMEDOUT in executing->Wait.return_code.  This verifies the successful
    * mq_timedreceive() later.
    */
 

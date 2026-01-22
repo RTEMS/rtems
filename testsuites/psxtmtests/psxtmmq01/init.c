@@ -296,7 +296,7 @@ void *POSIX_Init(
   benchmark_mq_unlink();
   /* closing the first queue */
   benchmark_mq_close(0);
-  /* now repeat basically the same, but for the timed-send/recive */
+  /* now repeat basically the same, but for the timed-send/receive */
   /* open the first queue */
   benchmark_mq_open(0);
   /* send message using the first queue */
