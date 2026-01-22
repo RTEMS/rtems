@@ -54,7 +54,8 @@ int _Scheduler_CBS_Destroy_server (
   if ( !_Scheduler_CBS_Server_list[server_id].initialized )
     return SCHEDULER_CBS_ERROR_NOSERVER;
 
-  if ( (tid = _Scheduler_CBS_Server_list[server_id].task_id) != -1 )
+  tid = _Scheduler_CBS_Server_list[server_id].task_id;
+  if ( tid != (rtems_id)-1 )
     ret = _Scheduler_CBS_Detach_thread ( server_id, tid );
 
   _Scheduler_CBS_Server_list[server_id].initialized = false;

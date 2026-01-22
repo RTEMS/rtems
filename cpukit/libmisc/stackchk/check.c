@@ -297,12 +297,10 @@ void rtems_stack_checker_reporter_print_details(
   }
 
   #if defined(RTEMS_MULTIPROCESSING)
-    if (rtems_configuration_get_user_multiprocessing_table()) {
-      printk(
-        "node: 0x%08" PRIxPTR "\n",
-          (intptr_t) rtems_configuration_get_user_multiprocessing_table()->node
-      );
-    }
+    printk(
+      "node: 0x%08" PRIxPTR "\n",
+	(intptr_t) rtems_configuration_get_user_multiprocessing_table()->node
+    );
   #endif
 
   rtems_fatal(

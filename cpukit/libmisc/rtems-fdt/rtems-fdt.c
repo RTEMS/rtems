@@ -1097,7 +1097,7 @@ rtems_fdt_prop_map(const char* const path,
       return length;
     }
 
-    if (length > sizeof (uintptr_t))
+    if ((size_t) length > sizeof (uintptr_t))
     {
       rtems_fdt_release_handle (&fdt);
       return -RTEMS_FDT_ERR_BADPATH;
@@ -1115,7 +1115,7 @@ rtems_fdt_get_offset_len_uintptr (const void* prop, int offset, int len)
   const uint8_t* p = prop;
   uintptr_t      value = 0;
   int            b;
-  if (len <= sizeof(uintptr_t)) {
+  if ((size_t) len <= sizeof(uintptr_t)) {
     for (b = 0; b < len; ++b) {
       value = (value << 8) | (uintptr_t) p[offset++];
     }
@@ -1304,14 +1304,14 @@ int rtems_fdt_getprop_address_map(rtems_fdt_handle*      handle,
   switch (addr_map->address_cells)
   {
     case 1:
-      if (plen < sizeof(uint32_t))
+      if ((size_t) plen < sizeof(uint32_t))
         return -RTEMS_FDT_ERR_BADLENGTH;
       addr_map->address = rtems_fdt_get_offset_uint32(prop, poff);
       poff += 1;
       plen -= sizeof(uint32_t);
       break;
     case 2:
-      if (plen < sizeof(uint64_t))
+      if ((size_t) plen < sizeof(uint64_t))
         return -RTEMS_FDT_ERR_BADLENGTH;
       addr_map->address = rtems_fdt_get_offset_uint64(prop, poff);
       poff += 2;
@@ -1327,14 +1327,14 @@ int rtems_fdt_getprop_address_map(rtems_fdt_handle*      handle,
       addr_map->size = sizeof(uint32_t);
       break;
     case 1:
-      if (plen < sizeof(uint32_t))
+      if ((size_t) plen < sizeof(uint32_t))
         return -RTEMS_FDT_ERR_BADLENGTH;
       addr_map->size = rtems_fdt_get_offset_uint32(prop, poff);
       poff += 1;
       plen -= sizeof(uint32_t);
       break;
     case 2:
-      if (plen < sizeof(uint64_t))
+      if ((size_t) plen < sizeof(uint64_t))
         return -RTEMS_FDT_ERR_BADLENGTH;
       addr_map->size = rtems_fdt_get_offset_uint64(prop, poff);
       poff += 2;

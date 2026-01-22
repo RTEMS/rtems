@@ -802,7 +802,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
       if (!trigger_set)
       {
         bool found = false;
-        int  t;
+        size_t  t;
 
         for (t = 0; t < RTEMS_CAPTURE_CLI_TRIGGERS_NUM; t++)
           if (strcmp (argv[arg], rtems_capture_cli_trigger[t].name) == 0)

@@ -75,6 +75,8 @@ static rtems_status_code spi_memdrv_minor2param_ptr
   rtems_status_code   rc = RTEMS_SUCCESSFUL;
   spi_memdrv_t *drv_ptr;
 
+  *param_ptr = NULL;
+
   if (rc == RTEMS_SUCCESSFUL) {
     rc = -rtems_libi2c_ioctl(minor,
 			     RTEMS_LIBI2C_IOCTL_GET_DRV_T,
@@ -140,7 +142,7 @@ rtems_status_code spi_memdrv_write
   rtems_status_code          rc = RTEMS_SUCCESSFUL;
   rtems_libio_rw_args_t *rwargs = arg;
   off_t                     off = rwargs->offset;
-  int                       cnt = rwargs->count;
+  uint32_t                  cnt = rwargs->count;
   unsigned char            *buf = (unsigned char *)rwargs->buffer;
   int                bytes_sent = 0;
   int                  curr_cnt;
@@ -159,9 +161,7 @@ rtems_status_code spi_memdrv_write
   /*
    * get mem parameters
    */
-  if (rc == RTEMS_SUCCESSFUL) {
-    rc = spi_memdrv_minor2param_ptr(minor,&mem_param_ptr);
-  }
+  rc = spi_memdrv_minor2param_ptr(minor,&mem_param_ptr);
   /*
    * check arguments
    */
@@ -176,7 +176,7 @@ rtems_status_code spi_memdrv_write
     }
   }
   while ((rc == RTEMS_SUCCESSFUL) &&
-	 (cnt > bytes_sent)) {
+	 ((int) cnt > bytes_sent)) {
     curr_cnt = cnt - bytes_sent;
     if ((mem_param_ptr->page_size > 0) &&
 	(off              / mem_param_ptr->page_size) !=
@@ -328,7 +328,7 @@ rtems_status_code spi_memdrv_read
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   rtems_libio_rw_args_t *rwargs = arg;
   off_t                     off = rwargs->offset;
-  int                       cnt = rwargs->count;
+  uint32_t                  cnt = rwargs->count;
   unsigned char            *buf = (unsigned char *)rwargs->buffer;
   unsigned char         cmdbuf[4];
   int                   ret_cnt = 0;

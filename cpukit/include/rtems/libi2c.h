@@ -162,7 +162,7 @@ extern const rtems_driver_address_table rtems_libi2c_io_ops;
 typedef struct rtems_libi2c_bus_t_
 {
   const struct rtems_libi2c_bus_ops_ *ops;
-  int size;                     /* size of whole structure */
+  size_t size;                     /* size of whole structure */
 } rtems_libi2c_bus_t;
 
 /* Access functions a low level driver must provide;
@@ -296,7 +296,7 @@ extern rtems_device_major_number rtems_libi2c_major;
 typedef struct rtems_libi2c_drv_t_
 {
   const rtems_driver_address_table *ops;      /* the driver ops */
-  int size;                     /* size of whole structure (including appended private data) */
+  size_t size;  /* size of whole structure (including appended private data) */
 } rtems_libi2c_drv_t;
 
 /*

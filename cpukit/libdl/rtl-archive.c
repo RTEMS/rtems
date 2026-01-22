@@ -782,7 +782,7 @@ rtems_rtl_archives_load (rtems_rtl_archives* archives)
 bool
 rtems_rtl_archives_refresh (rtems_rtl_archives* archives)
 {
-  size_t   config_path = 0;
+  ssize_t  config_path = 0;
   uint32_t flags = RTEMS_RTL_ARCHIVE_REMOVE;
 
   /*

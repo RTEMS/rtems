@@ -82,9 +82,9 @@ typedef struct
   Timestamp_Control      uptime;
   Timestamp_Control      last_uptime;
   Timestamp_Control      period;
-  int                    task_count;        /* Number of tasks. */
-  int                    last_task_count;   /* Number of tasks in the previous sample. */
-  int                    task_size;         /* The size of the arrays */
+  uint32_t               task_count;        /* Number of tasks. */
+  uint32_t               last_task_count;   /* Number of tasks in the previous sample. */
+  uint32_t               task_size;         /* The size of the arrays */
   Thread_Control**       tasks;             /* List of tasks in this sample. */
   Thread_Control**       last_tasks;        /* List of tasks in the last sample. */
   Timestamp_Control*     usage;             /* Usage of task's in this sample. */
@@ -195,7 +195,7 @@ task_usage(Thread_Control* thread, void* arg)
   rtems_cpu_usage_data* data = (rtems_cpu_usage_data*) arg;
   Timestamp_Control     usage;
   Timestamp_Control     current = data->zero;
-  int                   j;
+  uint32_t              j;
 
   data->stack_size += thread->Start.Initial_stack.size;
 
@@ -231,7 +231,7 @@ task_usage(Thread_Control* thread, void* arg)
   {
     if (data->tasks[j])
     {
-      int k;
+      uint32_t k;
 
       /*
        * Sort on the current load.
@@ -295,10 +295,10 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
 {
   rtems_cpu_usage_data*  data = (rtems_cpu_usage_data*) arg;
   char                   name[13];
-  int                    i;
+  uint32_t               i;
   Heap_Information_block wksp;
   uint32_t               ival, fval;
-  int                    task_count;
+  uint32_t               task_count;
   rtems_event_set        out;
   rtems_status_code      sc;
   bool                   first_time = true;

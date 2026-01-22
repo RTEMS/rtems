@@ -512,12 +512,6 @@ rtems_monitor_command_read(char *command,
   /*
    * put node number in the prompt if we are multiprocessing
    */
-#if defined(RTEMS_MULTIPROCESSING)
-  if (!rtems_configuration_get_user_multiprocessing_table ())
-    snprintf (monitor_prompt, sizeof(monitor_prompt), "%s",
-             (env_prompt == NULL) ? MONITOR_PROMPT: env_prompt);
-  else /* .... */
-#endif
   if (rtems_monitor_default_node != rtems_monitor_node)
     snprintf (monitor_prompt, sizeof(monitor_prompt),
               "%" PRId32 "-%s-%" PRId32 "", rtems_monitor_node,

@@ -72,7 +72,7 @@ void _Scheduler_CBS_Unblock(
     uint32_t deadline_left = the_thread->CPU_budget.available;
     Priority_Control budget_left = priority - _Watchdog_Ticks_since_boot;
 
-    if ( deadline * budget_left > budget * deadline_left ) {
+    if ( (time_t) (deadline * budget_left) > budget * deadline_left ) {
       Thread_queue_Context queue_context;
 
       /* Put late unblocked task to background until the end of period. */

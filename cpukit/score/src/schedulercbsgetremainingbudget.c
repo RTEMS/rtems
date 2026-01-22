@@ -61,7 +61,7 @@ int _Scheduler_CBS_Get_remaining_budget (
     return SCHEDULER_CBS_ERROR_NOSERVER;
   }
 
-  if ( server->task_id == -1 ) {
+  if ( server->task_id == (rtems_id) -1 ) {
     *remaining_budget = server->parameters.budget;
     return SCHEDULER_CBS_OK;
   }
