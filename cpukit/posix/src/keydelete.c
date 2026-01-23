@@ -52,8 +52,9 @@ static void _POSIX_Keys_Destroy( POSIX_Keys_Control *the_key )
     ISR_lock_Context           lock_context;
     Thread_Control            *the_thread;
 
-    key_value_pair = (POSIX_Keys_Key_value_pair *)
-      _Chain_First( &the_key->Key_value_pairs );
+    key_value_pair = (POSIX_Keys_Key_value_pair *) _Chain_First(
+      &the_key->Key_value_pairs
+    );
 
     the_thread = key_value_pair->thread;
     _POSIX_Keys_Key_value_acquire( the_thread, &lock_context );
@@ -72,9 +73,7 @@ static void _POSIX_Keys_Destroy( POSIX_Keys_Control *the_key )
 /*
  *  17.1.3 Thread-Specific Data Key Deletion, P1003.1c/Draft 10, p. 167
  */
-int pthread_key_delete(
-  pthread_key_t  key
-)
+int pthread_key_delete( pthread_key_t key )
 {
   POSIX_Keys_Control *the_key;
   int                 eno;

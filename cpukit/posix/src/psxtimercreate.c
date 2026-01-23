@@ -51,9 +51,7 @@
 #include <rtems/seterr.h>
 #include <rtems/sysinit.h>
 
-RTEMS_WEAK int _POSIX_Timer_Is_allowed(
-  clockid_t clock_id
-)
+RTEMS_WEAK int _POSIX_Timer_Is_allowed( clockid_t clock_id )
 {
   int rc = 0;
 
@@ -67,9 +65,9 @@ RTEMS_WEAK int _POSIX_Timer_Is_allowed(
    * is overridden by <rtems/confdefs/timer.h>.
    */
 
-  if (  clock_id != CLOCK_REALTIME ) {
+  if ( clock_id != CLOCK_REALTIME ) {
     if ( clock_id != CLOCK_MONOTONIC ) {
-      rc  = EINVAL;
+      rc = EINVAL;
     }
   }
 
@@ -77,39 +75,45 @@ RTEMS_WEAK int _POSIX_Timer_Is_allowed(
 }
 
 int timer_create(
-  clockid_t        clock_id,
+  clockid_t clock_id,
   struct sigevent *__restrict evp,
-  timer_t         *__restrict timerid
+  timer_t *__restrict timerid
 )
 {
   POSIX_Timer_Control *ptimer;
   int                  rc;
 
   rc = _POSIX_Timer_Is_allowed( clock_id );
-  if ( rc != 0 )
+  if ( rc != 0 ) {
     rtems_set_errno_and_return_minus_one( rc );
+  }
 
-  if ( !timerid )
+  if ( !timerid ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
- /*
+  /*
   *  The data of the structure evp are checked in order to verify if they
   *  are coherent.
   */
 
-  if (evp != NULL) {
+  if ( evp != NULL ) {
     /* The structure has data */
-    if ( ( evp->sigev_notify != SIGEV_NONE ) &&
-         ( evp->sigev_notify != SIGEV_SIGNAL ) ) {
-       /* The value of the field sigev_notify is not valid */
-       rtems_set_errno_and_return_minus_one( EINVAL );
-     }
+    if (
+      ( evp->sigev_notify != SIGEV_NONE ) &&
+      ( evp->sigev_notify != SIGEV_SIGNAL )
+    ) {
+      /* The value of the field sigev_notify is not valid */
+      rtems_set_errno_and_return_minus_one( EINVAL );
+    }
 
-     if ( !evp->sigev_signo )
-       rtems_set_errno_and_return_minus_one( EINVAL );
+    if ( !evp->sigev_signo ) {
+      rtems_set_errno_and_return_minus_one( EINVAL );
+    }
 
-     if ( !is_valid_signo(evp->sigev_signo) )
-       rtems_set_errno_and_return_minus_one( EINVAL );
+    if ( !is_valid_signo( evp->sigev_signo ) ) {
+      rtems_set_errno_and_return_minus_one( EINVAL );
+    }
   }
 
   /*
@@ -123,27 +127,27 @@ int timer_create(
 
   /* The data of the created timer are stored to use them later */
 
-  ptimer->state     = POSIX_TIMER_STATE_CREATE_NEW;
+  ptimer->state = POSIX_TIMER_STATE_CREATE_NEW;
   ptimer->thread_id = _Thread_Get_executing()->Object.id;
 
   if ( evp != NULL ) {
     ptimer->inf.sigev_notify = evp->sigev_notify;
-    ptimer->inf.sigev_signo  = evp->sigev_signo;
-    ptimer->inf.sigev_value  = evp->sigev_value;
+    ptimer->inf.sigev_signo = evp->sigev_signo;
+    ptimer->inf.sigev_value = evp->sigev_value;
   }
 
-  ptimer->overrun  = 0;
-  ptimer->timer_data.it_value.tv_sec     = 0;
-  ptimer->timer_data.it_value.tv_nsec    = 0;
-  ptimer->timer_data.it_interval.tv_sec  = 0;
+  ptimer->overrun = 0;
+  ptimer->timer_data.it_value.tv_sec = 0;
+  ptimer->timer_data.it_value.tv_nsec = 0;
+  ptimer->timer_data.it_interval.tv_sec = 0;
   ptimer->timer_data.it_interval.tv_nsec = 0;
   ptimer->clock_type = clock_id;
 
   _Watchdog_Preinitialize( &ptimer->Timer, _Per_CPU_Get_snapshot() );
   _Watchdog_Initialize( &ptimer->Timer, _POSIX_Timer_TSR );
-  _Objects_Open_u32(&_POSIX_Timer_Information, &ptimer->Object, 0);
+  _Objects_Open_u32( &_POSIX_Timer_Information, &ptimer->Object, 0 );
 
-  *timerid  = ptimer->Object.id;
+  *timerid = ptimer->Object.id;
   _Objects_Allocator_unlock();
   return 0;
 }

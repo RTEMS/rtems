@@ -42,12 +42,11 @@
 #include <errno.h>
 #include <stdbool.h>
 
-int pthread_attr_destroy(
-  pthread_attr_t  *attr
-)
+int pthread_attr_destroy( pthread_attr_t *attr )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized ) {
     return EINVAL;
+  }
 
   attr->is_initialized = false;
   return 0;

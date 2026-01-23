@@ -57,9 +57,7 @@
  *  15.2.2 Close a Message Queue, P1003.1b-1993, p. 275
  */
 
-int mq_close(
-  mqd_t  mqdes
-)
+int mq_close( mqd_t mqdes )
 {
   POSIX_Message_queue_Control *the_mq;
   Thread_queue_Context         queue_context;

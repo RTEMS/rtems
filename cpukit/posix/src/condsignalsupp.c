@@ -48,8 +48,8 @@
  */
 
 int _POSIX_Condition_variables_Signal_support(
-  pthread_cond_t            *cond,
-  bool                       is_broadcast
+  pthread_cond_t *cond,
+  bool            is_broadcast
 )
 {
   POSIX_Condition_variables_Control *the_cond;

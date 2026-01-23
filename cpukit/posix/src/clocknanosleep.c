@@ -49,17 +49,18 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/posix/posixapi.h>
 
-static Thread_queue_Control _Nanosleep_Pseudo_queue =
-  THREAD_QUEUE_INITIALIZER( "Nanosleep" );
+static Thread_queue_Control _Nanosleep_Pseudo_queue = THREAD_QUEUE_INITIALIZER(
+  "Nanosleep"
+);
 
 /*
  * High Resolution Sleep with Specifiable Clock, IEEE Std 1003.1, 2001
  */
 int clock_nanosleep(
-  clockid_t               clock_id,
-  int                     flags,
-  const struct timespec  *rqtp,
-  struct timespec        *rmtp
+  clockid_t              clock_id,
+  int                    flags,
+  const struct timespec *rqtp,
+  struct timespec       *rmtp
 )
 {
   Thread_queue_Context queue_context;

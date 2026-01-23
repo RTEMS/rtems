@@ -99,10 +99,10 @@ static void _POSIX_Condition_variables_Enqueue_with_timeout_by_clock_id(
 }
 
 int _POSIX_Condition_variables_Wait_support(
-  pthread_cond_t            *cond,
-  pthread_mutex_t           *mutex,
-  const struct timespec     *abstime,
-  clockid_t                 clock_id
+  pthread_cond_t        *cond,
+  pthread_mutex_t       *mutex,
+  const struct timespec *abstime,
+  clockid_t              clock_id
 )
 {
   (void) clock_id;
@@ -127,9 +127,9 @@ int _POSIX_Condition_variables_Wait_support(
     );
 
     _Thread_queue_Context_set_enqueue_callout(
-        &queue_context,
-        _POSIX_Condition_variables_Enqueue_with_timeout_by_clock_id
-      );
+      &queue_context,
+      _POSIX_Condition_variables_Enqueue_with_timeout_by_clock_id
+    );
   } else {
     _Thread_queue_Context_set_enqueue_callout(
       &queue_context,
@@ -140,8 +140,8 @@ int _POSIX_Condition_variables_Wait_support(
   executing = _POSIX_Condition_variables_Acquire( the_cond, &queue_context );
 
   if (
-    the_cond->mutex != POSIX_CONDITION_VARIABLES_NO_MUTEX
-      && the_cond->mutex != mutex
+    the_cond->mutex != POSIX_CONDITION_VARIABLES_NO_MUTEX &&
+    the_cond->mutex != mutex
   ) {
     _POSIX_Condition_variables_Release( the_cond, &queue_context );
     return EINVAL;

@@ -43,13 +43,11 @@
 #include <errno.h>
 #include <rtems/seterr.h>
 
-int getitimer(
-  int               which,
-  struct itimerval *value
-)
+int getitimer( int which, struct itimerval *value )
 {
-  if ( !value )
+  if ( !value ) {
     rtems_set_errno_and_return_minus_one( EFAULT );
+  }
 
   switch ( which ) {
     case ITIMER_REAL:
@@ -61,4 +59,3 @@ int getitimer(
   }
   rtems_set_errno_and_return_minus_one( EINVAL );
 }
-

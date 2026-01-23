@@ -51,8 +51,9 @@ int pthread_mutexattr_getpshared(
   int                       *pshared
 )
 {
-  if ( attr == NULL || !attr->is_initialized || pshared == NULL )
+  if ( attr == NULL || !attr->is_initialized || pshared == NULL ) {
     return EINVAL;
+  }
 
   *pshared = attr->process_shared;
   return 0;

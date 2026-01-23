@@ -41,9 +41,9 @@
 #include <rtems/posix/mqueueimpl.h>
 
 int mq_setattr(
-  mqd_t                 mqdes,
+  mqd_t mqdes,
   const struct mq_attr *__restrict mqstat,
-  struct mq_attr       *__restrict omqstat
+  struct mq_attr *__restrict omqstat
 )
 {
   POSIX_Message_queue_Control *the_mq;
@@ -74,9 +74,9 @@ int mq_setattr(
    */
 
   if ( omqstat != NULL ) {
-    omqstat->mq_flags   = the_mq->oflag;
+    omqstat->mq_flags = the_mq->oflag;
     omqstat->mq_msgsize = the_mq->Message_queue.maximum_message_size;
-    omqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
+    omqstat->mq_maxmsg = the_mq->Message_queue.maximum_pending_messages;
     omqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;
   }
 

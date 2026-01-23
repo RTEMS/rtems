@@ -48,18 +48,20 @@
 #include <rtems/seterr.h>
 
 int sigaction(
-  int                     sig,
+  int sig,
   const struct sigaction *__restrict act,
-  struct sigaction       *__restrict oact
+  struct sigaction *__restrict oact
 )
 {
   Thread_queue_Context queue_context;
 
-  if ( !sig )
+  if ( !sig ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
-  if ( !is_valid_signo(sig) )
+  if ( !is_valid_signo( sig ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   /*
    *  Some signals cannot be ignored (P1003.1b-1993, pp. 70-72 and references.
@@ -68,14 +70,16 @@ int sigaction(
    *        contradicts the POSIX specification.
    */
 
-  if ( sig == SIGKILL )
+  if ( sig == SIGKILL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   _Thread_queue_Context_initialize( &queue_context );
   _POSIX_signals_Acquire( &queue_context );
 
-  if ( oact )
+  if ( oact ) {
     *oact = _POSIX_signals_Vectors[ sig ];
+  }
 
   /*
    *  Evaluate the new action structure and set the global signal vector
@@ -83,7 +87,6 @@ int sigaction(
    */
 
   if ( act ) {
-
     /*
      *  Unless the user is installing the default signal actions, then
      *  we can just copy the provided sigaction structure into the vectors.
@@ -92,8 +95,8 @@ int sigaction(
     if ( act->sa_handler == SIG_DFL ) {
       _POSIX_signals_Vectors[ sig ] = _POSIX_signals_Default_vectors[ sig ];
     } else {
-       _POSIX_signals_Clear_process_signals( sig );
-       _POSIX_signals_Vectors[ sig ] = *act;
+      _POSIX_signals_Clear_process_signals( sig );
+      _POSIX_signals_Vectors[ sig ] = *act;
     }
   }
 

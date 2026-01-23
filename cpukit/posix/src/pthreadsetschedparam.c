@@ -58,7 +58,7 @@ static int _POSIX_Set_sched_param(
   Thread_queue_Context       *queue_context
 )
 {
-#if !defined(RTEMS_POSIX_API)
+#if !defined( RTEMS_POSIX_API )
   (void) policy;
 #endif
 
@@ -67,10 +67,10 @@ static int _POSIX_Set_sched_param(
   bool                                valid;
   Priority_Control                    core_normal_prio;
   const Thread_CPU_budget_operations *cpu_budget_operations;
-#if defined(RTEMS_POSIX_API)
-  POSIX_API_Control                  *api;
-  int                                 low_prio;
-  Priority_Control                    core_low_prio;
+#if defined( RTEMS_POSIX_API )
+  POSIX_API_Control *api;
+  int                low_prio;
+  Priority_Control   core_low_prio;
 #endif
 
   normal_prio = param->sched_priority;
@@ -82,11 +82,11 @@ static int _POSIX_Set_sched_param(
     return EINVAL;
   }
 
-#if defined(RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS)
+#if defined( RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS )
   the_thread->is_scheduler_change_inhibited = ( policy == SCHED_SPORADIC );
 #endif
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
   if ( policy == SCHED_SPORADIC ) {
     low_prio = param->sched_ss_low_priority;
   } else {
@@ -105,7 +105,7 @@ static int _POSIX_Set_sched_param(
 
   _Priority_Node_set_priority( &the_thread->Real_priority, core_normal_prio );
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
   if ( !_Priority_Node_is_active( &the_thread->Real_priority ) ) {
     _Thread_Priority_add(
       the_thread,
@@ -125,7 +125,7 @@ static int _POSIX_Set_sched_param(
       PRIORITY_GROUP_LAST,
       queue_context
     );
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
   }
 #endif
 
@@ -136,7 +136,7 @@ static int _POSIX_Set_sched_param(
     ( *cpu_budget_operations->initialize )( the_thread );
   }
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
   _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );
   api->Sporadic.sched_ss_repl_period = param->sched_ss_repl_period;
   api->Sporadic.sched_ss_init_budget = param->sched_ss_init_budget;
@@ -151,12 +151,12 @@ static int _POSIX_Set_sched_param(
 }
 
 int pthread_setschedparam(
-  pthread_t                 thread,
-  int                       policy,
+  pthread_t thread,
+  int       policy,
 #ifdef HAVE_PTHREAD_SETSCHEDPARAM_CONST
   const struct sched_param *param
 #else
-  struct sched_param       *param
+  struct sched_param *param
 #endif
 )
 {

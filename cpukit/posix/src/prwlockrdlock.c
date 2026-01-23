@@ -41,9 +41,7 @@
 #include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/posixapi.h>
 
-int pthread_rwlock_rdlock(
-  pthread_rwlock_t  *rwlock
-)
+int pthread_rwlock_rdlock( pthread_rwlock_t *rwlock )
 {
   POSIX_RWLock_Control *the_rwlock;
   Thread_queue_Context  queue_context;
@@ -56,7 +54,7 @@ int pthread_rwlock_rdlock(
   _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
   status = _CORE_RWLock_Seize_for_reading(
     &the_rwlock->RWLock,
-    true,                 /* we are willing to wait forever */
+    true, /* we are willing to wait forever */
     &queue_context
   );
   return _POSIX_Get_error( status );

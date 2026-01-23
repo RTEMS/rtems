@@ -51,21 +51,21 @@
 #include <rtems/timespec.h>
 
 int aio_suspend(
-  const struct aiocb  * const list[],
-  int                     nent,
-  const struct timespec  *timeout
+  const struct aiocb *const list[],
+  int                       nent,
+  const struct timespec    *timeout
 )
 {
-  rtems_chain_control *idle_req_chain = &aio_request_queue.idle_req;
-  rtems_chain_control *work_req_chain = &aio_request_queue.work_req;
-  rtems_aio_suspendcb *suspendcbp;
+  rtems_chain_control     *idle_req_chain = &aio_request_queue.idle_req;
+  rtems_chain_control     *work_req_chain = &aio_request_queue.work_req;
+  rtems_aio_suspendcb     *suspendcbp;
   rtems_aio_request_chain *r_chain;
-  rtems_aio_request *request;
-  rtems_event_set event_out;
-  int result, op_num, i;
+  rtems_aio_request       *request;
+  rtems_event_set          event_out;
+  int                      result, op_num, i;
 
   /* Controls over invalid parameters */
-  if ( list == NULL ){
+  if ( list == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
@@ -98,16 +98,20 @@ int aio_suspend(
 
   /* Iterate over each request */
   for ( i = 0; i < nent; i++ ) {
-    if ( list[i] == NULL ) {
+    if ( list[ i ] == NULL ) {
       continue;
     }
 
     /* Search fd_chain in work_req_chain */
-    r_chain = rtems_aio_search_fd( work_req_chain, list[i]->aio_fildes, 0 );
-    
+    r_chain = rtems_aio_search_fd( work_req_chain, list[ i ]->aio_fildes, 0 );
+
     /* If not found search in idle_req_chain */
     if ( r_chain == NULL ) {
-      r_chain = rtems_aio_search_fd( idle_req_chain, list[i]->aio_fildes, 0 );
+      r_chain = rtems_aio_search_fd(
+        idle_req_chain,
+        list[ i ]->aio_fildes,
+        0
+      );
     }
 
     /* If not found continue */
@@ -116,8 +120,8 @@ int aio_suspend(
     }
 
     /* Search request in fd_chain */
-    request = rtems_aio_search_in_chain( list[i], &r_chain->perfd );
-      
+    request = rtems_aio_search_in_chain( list[ i ], &r_chain->perfd );
+
     if ( request != NULL ) {
       if ( request->suspendcbp == NULL ) {
         request->suspendcbp = suspendcbp;
@@ -132,7 +136,7 @@ int aio_suspend(
           request->suspendcbp = suspendcbp;
           suspendcbp->requests_left++;
 
-        } else{
+        } else {
           pthread_mutex_unlock( &request->suspendcbp->mutex );
         }
       }
@@ -157,25 +161,25 @@ int aio_suspend(
   result = rtems_event_system_receive(
     RTEMS_EVENT_SYSTEM_AIO_SUSPENSION_TERMINATED,
     RTEMS_WAIT,
-    ( timeout == NULL )? RTEMS_NO_TIMEOUT : rtems_timespec_to_ticks( timeout ),
+    ( timeout == NULL ) ? RTEMS_NO_TIMEOUT
+                        : rtems_timespec_to_ticks( timeout ),
     &event_out
-  ); 
+  );
 
   /* Timeout control */
-  if (result == RTEMS_TIMEOUT) {
+  if ( result == RTEMS_TIMEOUT ) {
     rtems_set_errno_and_return_minus_one( EAGAIN );
   }
 
   /* Control to ensure at least one operation completed */
-  for ( i = 0; i < nent; i++) {
-    if ( list[i] != NULL && list[i]->error_code == EINPROGRESS ) {
-      op_num --;
+  for ( i = 0; i < nent; i++ ) {
+    if ( list[ i ] != NULL && list[ i ]->error_code == EINPROGRESS ) {
+      op_num--;
     }
   }
   if ( op_num <= 0 ) {
-    rtems_set_errno_and_return_minus_one( EINTR ); 
+    rtems_set_errno_and_return_minus_one( EINTR );
   }
 
   return 0;
 }
-

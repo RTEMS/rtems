@@ -53,47 +53,46 @@
  * #error so if they ever are not equal, we will immediately know and
  * fix the code. It now assumes they are equal.
  */
-#if (O_DSYNC != O_SYNC)
+#if ( O_DSYNC != O_SYNC )
   #error "Implementation assumes O_DSYNC == O_SYNC. Update if this changes."
 #endif
 
-int aio_fsync(
-  int            op,
-  struct aiocb  *aiocbp
-)
+int aio_fsync( int op, struct aiocb *aiocbp )
 {
   rtems_aio_request *req;
-  int mode;
+  int                mode;
 
-
-  if ( 1 + atomic_load( &aio_request_queue.queued_requests ) > RTEMS_AIO_MAX ) {
+  if (
+    1 + atomic_load( &aio_request_queue.queued_requests ) > RTEMS_AIO_MAX
+  ) {
     rtems_set_errno_and_return_minus_one( EAGAIN );
   }
 
-  if ( aiocbp == NULL )
+  if ( aiocbp == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   /*
    * If O_SYNC != O_DSYNC, then this code needs to check for each individually.
    */
-  if ( op != O_DSYNC )
+  if ( op != O_DSYNC ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
-  if ( rtems_aio_check_sigevent( &aiocbp->aio_sigevent ) == 0 )
+  if ( rtems_aio_check_sigevent( &aiocbp->aio_sigevent ) == 0 ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
-  
+  }
+
   mode = fcntl( aiocbp->aio_fildes, F_GETFL );
-  if (
-    !(
-      ((mode & O_ACCMODE) == O_WRONLY) ||
-      ((mode & O_ACCMODE) == O_RDWR)
-    )
-  )
+  if ( !( ( ( mode & O_ACCMODE ) == O_WRONLY ) ||
+          ( ( mode & O_ACCMODE ) == O_RDWR ) ) ) {
     rtems_set_errno_and_return_minus_one( EBADF );
+  }
 
   req = (rtems_aio_request *) calloc( 1, sizeof( *req ) );
-  if ( req == NULL )
+  if ( req == NULL ) {
     rtems_set_errno_and_return_minus_one( EAGAIN );
+  }
 
   /*
    * If O_SYNC != O_DSYNC, then this code needs to check for each individually.
@@ -101,7 +100,6 @@ int aio_fsync(
   req->aiocbp = aiocbp;
   req->op_type = AIO_OP_SYNC;
   req->listcbp = NULL;
-  
+
   return rtems_aio_enqueue( req );
 }
-

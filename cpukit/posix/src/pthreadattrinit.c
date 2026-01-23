@@ -43,12 +43,11 @@
 /**
  * 16.1.1 Thread Creation Attributes, P1003.1c/Draft 10, p, 140
  */
-int pthread_attr_init(
-  pthread_attr_t  *attr
-)
+int pthread_attr_init( pthread_attr_t *attr )
 {
-  if ( !attr )
+  if ( !attr ) {
     return EINVAL;
+  }
 
   _POSIX_Threads_Initialize_attributes( attr );
 

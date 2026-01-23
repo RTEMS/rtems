@@ -52,10 +52,10 @@
 
 static int _POSIX_Threads_Join( pthread_t thread, void **value_ptr )
 {
-  Thread_Control       *the_thread;
-  Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
-  Status_Control        status;
+  Thread_Control      *the_thread;
+  Thread_queue_Context queue_context;
+  Thread_Control      *executing;
+  Status_Control       status;
 
   _Thread_queue_Context_initialize( &queue_context );
   the_thread = _Thread_Get( thread, &queue_context.Lock_context.Lock_context );
@@ -70,7 +70,10 @@ static int _POSIX_Threads_Join( pthread_t thread, void **value_ptr )
   );
 
   if ( !_Thread_Is_joinable( the_thread ) ) {
-    _Thread_State_release( the_thread, &queue_context.Lock_context.Lock_context );
+    _Thread_State_release(
+      the_thread,
+      &queue_context.Lock_context.Lock_context
+    );
     return EINVAL;
   }
 

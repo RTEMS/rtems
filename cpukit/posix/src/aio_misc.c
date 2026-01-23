@@ -43,7 +43,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
-#include <signal.h> 
+#include <signal.h>
 #include <rtems/posix/aio_misc.h>
 #include <rtems/score/assert.h>
 #include <errno.h>
@@ -83,7 +83,7 @@ static void rtems_aio_move_to_work( rtems_aio_request_chain *r_chain );
  */
 static void rtems_aio_insert_prio(
   rtems_chain_control *chain,
-  rtems_aio_request *req 
+  rtems_aio_request   *req
 );
 
 /**
@@ -118,7 +118,7 @@ int rtems_aio_init( void )
   int result = 0;
 
   result = pthread_attr_init( &aio_request_queue.attr );
-  if ( result != 0 ){
+  if ( result != 0 ) {
     return -1;
   }
 
@@ -160,21 +160,18 @@ int rtems_aio_init( void )
   return 0;
 }
 
-rtems_aio_request *init_write_req( struct aiocb* aiocbp )
+rtems_aio_request *init_write_req( struct aiocb *aiocbp )
 {
   rtems_aio_request *req;
-  int mode;
+  int                mode;
 
   if ( aiocbp == NULL ) {
     errno = EINVAL;
     return NULL;
   }
-  
+
   mode = fcntl( aiocbp->aio_fildes, F_GETFL );
-  if (
-    ( mode&O_ACCMODE ) != O_WRONLY &&
-    ( mode&O_ACCMODE ) != O_RDWR 
-  ) {
+  if ( ( mode & O_ACCMODE ) != O_WRONLY && ( mode & O_ACCMODE ) != O_RDWR ) {
     errno = EBADF;
     return NULL;
   }
@@ -208,10 +205,10 @@ rtems_aio_request *init_write_req( struct aiocb* aiocbp )
   return req;
 }
 
-rtems_aio_request *init_read_req( struct aiocb* aiocbp )
+rtems_aio_request *init_read_req( struct aiocb *aiocbp )
 {
   rtems_aio_request *req;
-  int mode;
+  int                mode;
 
   if ( aiocbp == NULL ) {
     errno = EINVAL;
@@ -219,10 +216,7 @@ rtems_aio_request *init_read_req( struct aiocb* aiocbp )
   }
 
   mode = fcntl( aiocbp->aio_fildes, F_GETFL );
-  if (
-      ( mode&O_ACCMODE ) != O_RDONLY &&
-      ( mode&O_ACCMODE ) != O_RDWR
-  ) {
+  if ( ( mode & O_ACCMODE ) != O_RDONLY && ( mode & O_ACCMODE ) != O_RDWR ) {
     errno = EBADF;
     return NULL;
   }
@@ -258,12 +252,13 @@ rtems_aio_request *init_read_req( struct aiocb* aiocbp )
 
 void rtems_aio_completed_list_op( listcb *listcbp )
 {
-  if (listcbp == NULL)
+  if ( listcbp == NULL ) {
     return;
+  }
 
   pthread_mutex_lock( &listcbp->mutex );
 
-  if( --listcbp->requests_left == 0 ){
+  if ( --listcbp->requests_left == 0 ) {
     switch ( listcbp->notification_type ) {
       case AIO_LIO_NO_NOTIFY:
         break;
@@ -287,17 +282,17 @@ void rtems_aio_completed_list_op( listcb *listcbp )
 
 void rtems_aio_update_suspendcbp( rtems_aio_suspendcb *suspendcbp )
 {
-  
-  int send_event = 0;
-  int finished = 0;
+  int      send_event = 0;
+  int      finished = 0;
   rtems_id id;
-  if ( suspendcbp == NULL )
+  if ( suspendcbp == NULL ) {
     return;
+  }
 
   pthread_mutex_lock( &suspendcbp->mutex );
-  
+
   id = suspendcbp->task_id;
-  
+
   if ( --suspendcbp->requests_left == 0 ) {
     finished = 1;
   }
@@ -306,7 +301,7 @@ void rtems_aio_update_suspendcbp( rtems_aio_suspendcb *suspendcbp )
     send_event = 1;
     suspendcbp->notified = AIO_SIGNALED;
   }
-  
+
   pthread_mutex_unlock( &suspendcbp->mutex );
 
   if ( send_event ) {
@@ -316,7 +311,7 @@ void rtems_aio_update_suspendcbp( rtems_aio_suspendcb *suspendcbp )
     );
   }
 
-  if( finished ) {
+  if ( finished ) {
     pthread_mutex_destroy( &suspendcbp->mutex );
     free( suspendcbp );
   }
@@ -324,12 +319,12 @@ void rtems_aio_update_suspendcbp( rtems_aio_suspendcb *suspendcbp )
 
 rtems_aio_request_chain *rtems_aio_search_fd(
   rtems_chain_control *chain,
-  int fildes,
-  int create
+  int                  fildes,
+  int                  create
 )
 {
   rtems_aio_request_chain *r_chain;
-  rtems_chain_node *node;
+  rtems_chain_node        *node;
 
   node = rtems_chain_first( chain );
   r_chain = (rtems_aio_request_chain *) node;
@@ -353,10 +348,11 @@ rtems_aio_request_chain *rtems_aio_search_fd(
       rtems_chain_initialize_empty( &r_chain->perfd );
       rtems_chain_initialize_node( &r_chain->next_fd );
 
-      if ( rtems_chain_is_empty( chain ) )
+      if ( rtems_chain_is_empty( chain ) ) {
         rtems_chain_prepend( chain, &r_chain->next_fd );
-      else
+      } else {
         rtems_chain_insert( rtems_chain_previous( node ), &r_chain->next_fd );
+      }
 
       r_chain->new_fd = 1;
       r_chain->fildes = fildes;
@@ -367,9 +363,9 @@ rtems_aio_request_chain *rtems_aio_search_fd(
 
 static void rtems_aio_move_to_work( rtems_aio_request_chain *r_chain )
 {
-  rtems_chain_control *work_req_chain = &aio_request_queue.work_req;
+  rtems_chain_control     *work_req_chain = &aio_request_queue.work_req;
   rtems_aio_request_chain *temp;
-  rtems_chain_node *node;
+  rtems_chain_node        *node;
 
   node = rtems_chain_first( work_req_chain );
   temp = (rtems_aio_request_chain *) node;
@@ -387,7 +383,7 @@ static void rtems_aio_move_to_work( rtems_aio_request_chain *r_chain )
 
 static void rtems_aio_insert_prio(
   rtems_chain_control *chain,
-  rtems_aio_request *req
+  rtems_aio_request   *req
 )
 {
   rtems_chain_node *node;
@@ -399,20 +395,18 @@ static void rtems_aio_insert_prio(
     AIO_printf( "First in chain \n" );
     rtems_chain_prepend( chain, &req->next_prio );
   } else {
-
     if ( req->op_type == AIO_OP_SYNC ) {
       AIO_printf( "Sync request. Append to end of chain \n" );
       rtems_chain_append( chain, &req->next_prio );
     } else {
       AIO_printf( "Add by priority \n" );
-      int prio = ((rtems_aio_request *) node)->aiocbp->aio_reqprio;
+      int prio = ( (rtems_aio_request *) node )->aiocbp->aio_reqprio;
 
       while (
-        req->aiocbp->aio_reqprio > prio &&
-        !rtems_chain_is_tail( chain, node )
+        req->aiocbp->aio_reqprio > prio && !rtems_chain_is_tail( chain, node )
       ) {
         node = rtems_chain_next( node );
-        prio = ((rtems_aio_request *) node)->aiocbp->aio_reqprio;
+        prio = ( (rtems_aio_request *) node )->aiocbp->aio_reqprio;
       }
 
       rtems_chain_insert( node->previous, &req->next_prio );
@@ -423,10 +417,10 @@ static void rtems_aio_insert_prio(
 void rtems_aio_remove_fd( rtems_aio_request_chain *r_chain )
 {
   rtems_chain_control *chain;
-  rtems_chain_node *node;
+  rtems_chain_node    *node;
   chain = &r_chain->perfd;
   node = rtems_chain_first( chain );
-  
+
   while ( !rtems_chain_is_tail( chain, node ) ) {
     rtems_aio_request *req = (rtems_aio_request *) node;
     node = rtems_chain_next( node );
@@ -441,14 +435,15 @@ void rtems_aio_remove_fd( rtems_aio_request_chain *r_chain )
 
 int rtems_aio_remove_req( rtems_chain_control *chain, struct aiocb *aiocbp )
 {
-  if ( rtems_chain_is_empty( chain ) )
+  if ( rtems_chain_is_empty( chain ) ) {
     return AIO_ALLDONE;
-  
+  }
+
   rtems_aio_request *request = rtems_aio_search_in_chain( aiocbp, chain );
   if ( request == NULL ) {
     return AIO_NOTCANCELED;
   }
-  
+
   rtems_chain_node *node = (rtems_chain_node *) request;
   rtems_chain_extract( node );
 
@@ -465,10 +460,10 @@ int rtems_aio_remove_req( rtems_chain_control *chain, struct aiocb *aiocbp )
 int rtems_aio_enqueue( rtems_aio_request *req )
 {
   rtems_aio_request_chain *r_chain;
-  rtems_chain_control *chain;
-  pthread_t thid;
-  int result, policy;
-  struct sched_param param;
+  rtems_chain_control     *chain;
+  pthread_t                thid;
+  int                      result, policy;
+  struct sched_param       param;
 
   /* The queue should be initialized */
   AIO_assert( aio_request_queue.initialized == AIO_QUEUE_INITIALIZED );
@@ -534,13 +529,12 @@ int rtems_aio_enqueue( rtems_aio_request *req )
       req->aiocbp->aio_fildes,
       0
     );
-    if (r_chain != NULL) {
+    if ( r_chain != NULL ) {
       pthread_mutex_lock( &r_chain->mutex );
       rtems_aio_insert_prio( &r_chain->perfd, req );
       pthread_cond_signal( &r_chain->cond );
       pthread_mutex_unlock( &r_chain->mutex );
     } else {
-
       /* or to the idle chain */
       chain = &aio_request_queue.idle_req;
       r_chain = rtems_aio_search_fd( chain, req->aiocbp->aio_fildes, 1 );
@@ -553,12 +547,14 @@ int rtems_aio_enqueue( rtems_aio_request *req )
         r_chain->new_fd = 0;
         pthread_mutex_init( &r_chain->mutex, NULL );
         pthread_cond_init( &r_chain->cond, NULL );
-      } else
+      } else {
         /* just insert the request in the existing fd chain */
         rtems_aio_insert_prio( &r_chain->perfd, req );
+      }
 
-      if ( aio_request_queue.idle_threads > 0 )
+      if ( aio_request_queue.idle_threads > 0 ) {
         pthread_cond_signal( &aio_request_queue.new_req );
+      }
     }
   }
 
@@ -595,16 +591,16 @@ int rtems_aio_check_sigevent( struct sigevent *sigp )
 
 static void *rtems_aio_notify_function_wrapper( void *args )
 {
-  struct sigevent *sig = ( struct sigevent * ) args;
-  void (*notify_function)( union sigval ) = sig->sigev_notify_function;  
-  union sigval param = ( union sigval ) sig->sigev_value;
+  struct sigevent *sig = (struct sigevent *) args;
+  void ( *notify_function )( union sigval ) = sig->sigev_notify_function;
+  union sigval param = (union sigval) sig->sigev_value;
 
   notify_function( param );
 
   pthread_exit( NULL );
 }
 
-static void rtems_aio_notify( struct sigevent *sigp ) 
+static void rtems_aio_notify( struct sigevent *sigp )
 {
   int result;
 
@@ -613,33 +609,26 @@ static void rtems_aio_notify( struct sigevent *sigp )
   switch ( sigp->sigev_notify ) {
 #ifdef RTEMS_POSIX_API
     case SIGEV_SIGNAL:
-      result = sigqueue(
-        getpid(),
-        sigp->sigev_signo,
-        sigp->sigev_value
-      );
+      result = sigqueue( getpid(), sigp->sigev_signo, sigp->sigev_value );
       _Assert_Unused_variable_equals( result, 0 );
       break;
 #endif
     case SIGEV_THREAD:
-      pthread_t thread;
-      pthread_attr_t attr;
+      pthread_t       thread;
+      pthread_attr_t  attr;
       pthread_attr_t *attrp = sigp->sigev_notify_attributes;
-      
+
       if ( attrp == NULL ) {
         attrp = &attr;
 
         result = pthread_attr_init( attrp );
         _Assert_Unused_variable_equals( result, 0 );
 
-        result = pthread_attr_setdetachstate(
-          attrp, 
-          PTHREAD_CREATE_DETACHED
-        );
+        result = pthread_attr_setdetachstate( attrp, PTHREAD_CREATE_DETACHED );
         _Assert_Unused_variable_equals( result, 0 );
       }
 
-      result = pthread_create( 
+      result = pthread_create(
         &thread,
         attrp,
         rtems_aio_notify_function_wrapper,
@@ -653,24 +642,24 @@ static void rtems_aio_notify( struct sigevent *sigp )
 static void *rtems_aio_handle( void *arg )
 {
   rtems_aio_request_chain *r_chain = arg;
-  rtems_aio_request *req;
-  rtems_chain_control *chain;
-  rtems_chain_node *node;
-  int result, policy;
-  struct sched_param param;
+  rtems_aio_request       *req;
+  rtems_chain_control     *chain;
+  rtems_chain_node        *node;
+  int                      result, policy;
+  struct sched_param       param;
 
   AIO_printf( "Thread started\n" );
 
-  while (1) {
-
+  while ( 1 ) {
     /* acquire the mutex of the current fd chain.
        we don't need to lock the queue mutex since we can
        add requests to idle fd chains or even active ones
        if the working request has been extracted from the
        chain */
     result = pthread_mutex_lock( &r_chain->mutex );
-    if ( result != 0 )
+    if ( result != 0 ) {
       return NULL;
+    }
 
     chain = &r_chain->perfd;
 
@@ -679,18 +668,13 @@ static void *rtems_aio_handle( void *arg )
        the request, in this way the user can supply more
        requests to this fd chain */
     if ( !rtems_chain_is_empty( chain ) ) {
-
-      AIO_printf( "Get new request from not empty chain\n" );	
+      AIO_printf( "Get new request from not empty chain\n" );
       node = rtems_chain_first( chain );
       req = (rtems_aio_request *) node;
 
       /* See _POSIX_PRIORITIZE_IO and _POSIX_PRIORITY_SCHEDULING
          discussion in rtems_aio_enqueue() */
-      pthread_getschedparam(
-        pthread_self(),
-        &policy,
-        &param
-      );
+      pthread_getschedparam( pthread_self(), &policy, &param );
       param.sched_priority = req->priority;
       pthread_setschedparam( pthread_self(), req->policy, &param );
 
@@ -716,7 +700,7 @@ static void *rtems_aio_handle( void *arg )
       req->listcbp = NULL;
       req->suspendcbp = NULL;
 
-      free(req);
+      free( req );
 
     } else {
       /* If the fd chain is empty we unlock the fd chain and we lock
@@ -785,7 +769,7 @@ static void *rtems_aio_handle( void *arg )
                 is added, in the next iteration of the loop
                 handling requests, the queue stays empty, and
                 the thread waits again. */
-                
+
             result = pthread_cond_timedwait(
               &aio_request_queue.new_req,
               &aio_request_queue.mutex,
@@ -812,13 +796,11 @@ static void *rtems_aio_handle( void *arg )
 
           r_chain = (rtems_aio_request_chain *) node;
           rtems_aio_move_to_work( r_chain );
-
         }
       }
       /* If there was a request added in the initial fd chain then release
          the mutex and process it */
       pthread_mutex_unlock( &aio_request_queue.mutex );
-
     }
   }
 
@@ -836,7 +818,8 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
       result = pread(
         req->aiocbp->aio_fildes,
         (void *) req->aiocbp->aio_buf,
-        req->aiocbp->aio_nbytes, req->aiocbp->aio_offset
+        req->aiocbp->aio_nbytes,
+        req->aiocbp->aio_offset
       );
       break;
 
@@ -845,7 +828,8 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
       result = pwrite(
         req->aiocbp->aio_fildes,
         (void *) req->aiocbp->aio_buf,
-        req->aiocbp->aio_nbytes, req->aiocbp->aio_offset
+        req->aiocbp->aio_nbytes,
+        req->aiocbp->aio_offset
       );
       break;
 
@@ -853,7 +837,7 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
       AIO_printf( "sync\n" );
       result = fsync( req->aiocbp->aio_fildes );
       break;
-    
+
     case AIO_OP_DSYNC:
       AIO_printf( "data sync\n" );
       result = fdatasync( req->aiocbp->aio_fildes );
@@ -872,22 +856,24 @@ static void rtems_aio_handle_helper( rtems_aio_request *req )
   }
 }
 
-rtems_aio_request * rtems_aio_search_in_chain(
-  const struct aiocb* aiocbp,
+rtems_aio_request *rtems_aio_search_in_chain(
+  const struct aiocb  *aiocbp,
   rtems_chain_control *fd_chain
 )
 {
   rtems_aio_request *current;
-  rtems_chain_node *node;
+  rtems_chain_node  *node;
 
   node = rtems_chain_first( fd_chain );
   current = (rtems_aio_request *) node;
 
-  while ( !rtems_chain_is_tail( fd_chain, node ) && current->aiocbp != aiocbp ) {
+  while (
+    !rtems_chain_is_tail( fd_chain, node ) && current->aiocbp != aiocbp
+  ) {
     node = rtems_chain_next( node );
     current = (rtems_aio_request *) node;
   }
-      
+
   if ( rtems_chain_is_tail( fd_chain, node ) ) {
     return NULL;
   }

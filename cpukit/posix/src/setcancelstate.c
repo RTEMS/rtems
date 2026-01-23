@@ -50,10 +50,7 @@
  *  18.2.2 Setting Cancelability State, P1003.1c/Draft 10, p. 183
  */
 
-int pthread_setcancelstate(
-  int  state,
-  int *oldstate
-)
+int pthread_setcancelstate( int state, int *oldstate )
 {
   Thread_Life_state new_life_protection;
   Thread_Life_state previous_life_state;

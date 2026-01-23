@@ -57,7 +57,7 @@
 #include <stdarg.h>
 #include <fcntl.h>
 
-#define MQ_OPEN_FAILED ((mqd_t) -1)
+#define MQ_OPEN_FAILED ( ( mqd_t ) - 1 )
 
 /*
  *  There is no real basis for the default values.  They will work
@@ -77,17 +77,17 @@ static mqd_t _POSIX_Message_queue_Create(
   const struct mq_attr *attr
 )
 {
-  POSIX_Message_queue_Control  *the_mq;
-  char                         *name;
-  Status_Control                status;
+  POSIX_Message_queue_Control *the_mq;
+  char                        *name;
+  Status_Control               status;
 
   /* length of name has already been validated */
 
-  if ( attr->mq_maxmsg <= 0 ){
+  if ( attr->mq_maxmsg <= 0 ) {
     rtems_set_errno_and_return_value( EINVAL, MQ_OPEN_FAILED );
   }
 
-  if ( attr->mq_msgsize <= 0 ){
+  if ( attr->mq_msgsize <= 0 ) {
     rtems_set_errno_and_return_value( EINVAL, MQ_OPEN_FAILED );
   }
 
@@ -198,7 +198,6 @@ mqd_t mq_open(
 
     status = _POSIX_Message_queue_Create( name, name_len, oflag, attr );
   } else {
-
     /*
      * Check for existence with creation.
      */

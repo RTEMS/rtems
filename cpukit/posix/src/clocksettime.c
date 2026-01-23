@@ -47,15 +47,13 @@
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
  */
 
-int clock_settime(
-  clockid_t              clock_id,
-  const struct timespec *tp
-)
+int clock_settime( clockid_t clock_id, const struct timespec *tp )
 {
   Status_Control status;
 
-  if ( !tp )
+  if ( !tp ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   if ( clock_id == CLOCK_REALTIME ) {
     ISR_lock_Context lock_context;
@@ -67,7 +65,7 @@ int clock_settime(
 
     _TOD_Lock();
     _TOD_Acquire( &lock_context );
-      status = _TOD_Set( tp, &lock_context );
+    status = _TOD_Set( tp, &lock_context );
     _TOD_Unlock();
 
     if ( status != STATUS_SUCCESSFUL ) {

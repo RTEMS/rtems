@@ -65,10 +65,7 @@ bool _POSIX_Condition_variables_Auto_initialization(
  *  11.4.4 Waiting on a Condition, P1003.1c/Draft 10, p. 105
  */
 
-int pthread_cond_wait(
-  pthread_cond_t     *cond,
-  pthread_mutex_t    *mutex
-)
+int pthread_cond_wait( pthread_cond_t *cond, pthread_mutex_t *mutex )
 {
   return _POSIX_Condition_variables_Wait_support(
     cond,

@@ -43,7 +43,7 @@
 
 int pthread_condattr_getclock(
   const pthread_condattr_t *__restrict attr,
-  clockid_t                *__restrict clock
+  clockid_t *__restrict clock
 )
 {
   if ( attr == NULL ) {

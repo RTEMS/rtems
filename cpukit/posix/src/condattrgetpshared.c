@@ -41,14 +41,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-
-int pthread_condattr_getpshared(
-  const pthread_condattr_t *attr,
-  int                      *pshared
-)
+int pthread_condattr_getpshared( const pthread_condattr_t *attr, int *pshared )
 {
-  if ( !attr )
+  if ( !attr ) {
     return EINVAL;
+  }
 
   *pshared = attr->process_shared;
   return 0;

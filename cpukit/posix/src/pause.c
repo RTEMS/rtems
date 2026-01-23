@@ -47,8 +47,8 @@
  */
 int pause( void )
 {
-  sigset_t  all_signals;
-  int       status;
+  sigset_t all_signals;
+  int      status;
 
   (void) sigfillset( &all_signals );
 

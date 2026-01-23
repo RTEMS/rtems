@@ -47,12 +47,11 @@
  *  RWLock Initialization Attributes
  */
 
-int pthread_rwlockattr_destroy(
-  pthread_rwlockattr_t *attr
-)
+int pthread_rwlockattr_destroy( pthread_rwlockattr_t *attr )
 {
-  if ( attr == NULL || !attr->is_initialized )
+  if ( attr == NULL || !attr->is_initialized ) {
     return EINVAL;
+  }
 
   attr->is_initialized = false;
   return 0;

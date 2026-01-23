@@ -46,13 +46,14 @@
 #include <errno.h>
 
 int pthread_attr_setstack(
-  pthread_attr_t  *attr,
-  void            *stackaddr,
-  size_t           stacksize
+  pthread_attr_t *attr,
+  void           *stackaddr,
+  size_t          stacksize
 )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized ) {
     return EINVAL;
+  }
 
   attr->stacksize = stacksize;
   attr->stackaddr = stackaddr;

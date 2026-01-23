@@ -45,14 +45,13 @@
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/seterr.h>
 
-int sigpending(
-  sigset_t  *set
-)
+int sigpending( sigset_t *set )
 {
-  POSIX_API_Control  *api;
+  POSIX_API_Control *api;
 
-  if ( !set )
+  if ( !set ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
 

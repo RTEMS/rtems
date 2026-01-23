@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define  _GNU_SOURCE
+#define _GNU_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,9 +46,9 @@
 #include <errno.h>
 
 int pthread_attr_setaffinity_np(
-  pthread_attr_t    *attr,
-  size_t             cpusetsize,
-  const cpu_set_t   *cpuset
+  pthread_attr_t  *attr,
+  size_t           cpusetsize,
+  const cpu_set_t *cpuset
 )
 {
   if ( attr == NULL || !attr->is_initialized ) {

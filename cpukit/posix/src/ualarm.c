@@ -46,8 +46,9 @@
 #include <rtems/config.h>
 
 #if ISR_LOCK_NEEDS_OBJECT
-static ISR_lock_Control _POSIX_signals_Ualarm_lock =
-  ISR_LOCK_INITIALIZER( "POSIX Ualarm" );
+static ISR_lock_Control _POSIX_signals_Ualarm_lock = ISR_LOCK_INITIALIZER(
+  "POSIX Ualarm"
+);
 #endif
 
 static uint32_t _POSIX_signals_Ualarm_interval;
@@ -59,14 +60,14 @@ static void _POSIX_signals_Ualarm_TSR( Watchdog_Control *the_watchdog )
 
   status = kill( getpid(), SIGALRM );
 
-  #if defined(RTEMS_DEBUG)
-    /*
+  #if defined( RTEMS_DEBUG )
+  /*
      *  There is no reason to think this might fail but we should be
      *  cautious.
      */
-    _Assert(status == 0);
+  _Assert( status == 0 );
   #else
-    (void) status;
+  (void) status;
   #endif
 
   _ISR_lock_ISR_disable_and_acquire(
@@ -102,10 +103,7 @@ static uint32_t _POSIX_signals_Ualarm_us_to_ticks( useconds_t us )
   return ( us + us_per_tick - 1 ) / us_per_tick;
 }
 
-useconds_t ualarm(
-  useconds_t useconds,
-  useconds_t interval
-)
+useconds_t ualarm( useconds_t useconds, useconds_t interval )
 {
   useconds_t        remaining;
   Watchdog_Control *the_watchdog;

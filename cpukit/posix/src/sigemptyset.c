@@ -43,12 +43,11 @@
 #include <rtems/posix/sigset.h>
 #include <rtems/seterr.h>
 
-int sigemptyset(
-  sigset_t   *set
-)
+int sigemptyset( sigset_t *set )
 {
-  if ( !set )
+  if ( !set ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   *set = 0;
   return 0;

@@ -50,13 +50,14 @@ static const rtems_filesystem_file_handlers_r shm_handlers;
 
 static int shm_fstat(
   const rtems_filesystem_location_info_t *loc,
-  struct stat *buf
+  struct stat                            *buf
 )
 {
   POSIX_Shm_Control *shm = loc_to_shm( loc );
 
-  if ( shm == NULL )
+  if ( shm == NULL ) {
     rtems_set_errno_and_return_minus_one( EIO );
+  }
 
   /* mandatory for shm objects */
   buf->st_uid = shm->uid;
@@ -75,14 +76,14 @@ static int shm_fstat(
 /* read() is unspecified for shared memory objects */
 static ssize_t shm_read( rtems_libio_t *iop, void *buffer, size_t count )
 {
-  ssize_t bytes_read;
+  ssize_t            bytes_read;
   POSIX_Shm_Control *shm = iop_to_shm( iop );
 
   _Objects_Allocator_lock();
-  bytes_read = (*shm->shm_object.ops->object_read)(
-      &shm->shm_object,
-      buffer,
-      count
+  bytes_read = ( *shm->shm_object.ops->object_read )(
+    &shm->shm_object,
+    buffer,
+    count
   );
   _POSIX_Shm_Update_atime( shm );
 
@@ -92,12 +93,12 @@ static ssize_t shm_read( rtems_libio_t *iop, void *buffer, size_t count )
 
 static int shm_ftruncate( rtems_libio_t *iop, off_t length )
 {
-  int err;
+  int                err;
   POSIX_Shm_Control *shm = iop_to_shm( iop );
 
   _Objects_Allocator_lock();
 
-  err = (*shm->shm_object.ops->object_resize)( &shm->shm_object, length );
+  err = ( *shm->shm_object.ops->object_resize )( &shm->shm_object, length );
 
   if ( err != 0 ) {
     _Objects_Allocator_unlock();
@@ -113,11 +114,11 @@ static int shm_ftruncate( rtems_libio_t *iop, off_t length )
 static int shm_close( rtems_libio_t *iop )
 {
   POSIX_Shm_Control *shm = iop_to_shm( iop );
-  int err;
+  int                err;
 
   err = 0;
 
-  POSIX_Shm_Attempt_delete(shm);
+  POSIX_Shm_Attempt_delete( shm );
   iop->pathinfo.node_access = NULL;
 
   if ( err != 0 ) {
@@ -128,23 +129,28 @@ static int shm_close( rtems_libio_t *iop )
 
 static int shm_mmap(
   rtems_libio_t *iop,
-  void** addr,
-  size_t len,
-  int prot,
-  off_t off
+  void         **addr,
+  size_t         len,
+  int            prot,
+  off_t          off
 )
 {
   POSIX_Shm_Control *shm = iop_to_shm( iop );
 
   _Objects_Allocator_lock();
 
-  *addr = (*shm->shm_object.ops->object_mmap)( &shm->shm_object, len, prot, off);
+  *addr = ( *shm->shm_object.ops->object_mmap )(
+    &shm->shm_object,
+    len,
+    prot,
+    off
+  );
   if ( *addr != NULL ) {
     /* Keep a reference in the shared memory to prevent its removal. */
     ++shm->reference_count;
 
     /* Update atime */
-    _POSIX_Shm_Update_atime(shm);
+    _POSIX_Shm_Update_atime( shm );
   } else {
     _Objects_Allocator_unlock();
     rtems_set_errno_and_return_minus_one( ENOMEM );
@@ -157,18 +163,18 @@ static int shm_mmap(
 
 static inline POSIX_Shm_Control *shm_allocate(
   const char *name_arg,
-  size_t name_len,
-  int oflag,
-  mode_t mode,
-  int *error
+  size_t      name_len,
+  int         oflag,
+  mode_t      mode,
+  int        *error
 )
 {
   POSIX_Shm_Control *shm;
-  char *name;
-  struct timeval tv;
+  char              *name;
+  struct timeval     tv;
 
   /* Reject any name without a leading slash. */
-  if ( name_arg[0] != '/' ) {
+  if ( name_arg[ 0 ] != '/' ) {
     *error = EINVAL;
     return NULL;
   }
@@ -215,7 +221,7 @@ static inline bool shm_access_ok( POSIX_Shm_Control *shm, int oflag )
 {
   int flags;
 
-  if ( (oflag & O_ACCMODE) == O_RDONLY ) {
+  if ( ( oflag & O_ACCMODE ) == O_RDONLY ) {
     flags = RTEMS_FS_PERMS_READ;
   } else {
     flags = RTEMS_FS_PERMS_WRITE;
@@ -241,13 +247,13 @@ static inline int shm_check_oflag( int oflag )
 
 int shm_open( const char *name, int oflag, mode_t mode )
 {
-  int err = 0;
-  int fd;
-  rtems_libio_t *iop;
-  POSIX_Shm_Control *shm;
-  size_t len;
+  int                       err = 0;
+  int                       fd;
+  rtems_libio_t            *iop;
+  POSIX_Shm_Control        *shm;
+  size_t                    len;
   Objects_Get_by_name_error obj_err;
-  unsigned int flags;
+  unsigned int              flags;
 
   if ( shm_check_oflag( oflag ) != 0 ) {
     return -1;
@@ -273,7 +279,7 @@ int shm_open( const char *name, int oflag, mode_t mode )
 
       case OBJECTS_GET_BY_NAME_NO_OBJECT:
       default:
-        shm = shm_allocate(name, len, oflag, mode, &err);
+        shm = shm_allocate( name, len, oflag, mode, &err );
         break;
     }
   } else { /* shm exists */
@@ -306,7 +312,7 @@ int shm_open( const char *name, int oflag, mode_t mode )
   rtems_filesystem_location_add_to_mt_entry( &iop->pathinfo );
 
   flags = LIBIO_FLAGS_OPEN | LIBIO_FLAGS_CLOSE_ON_EXEC;
-  if ( (oflag & O_ACCMODE) == O_RDONLY ) {
+  if ( ( oflag & O_ACCMODE ) == O_RDONLY ) {
     flags |= LIBIO_FLAGS_READ;
   } else {
     flags |= LIBIO_FLAGS_READ_WRITE;

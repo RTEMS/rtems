@@ -52,8 +52,9 @@ Priority_Control _POSIX_Priority_To_core(
   core_posix_priority = (Priority_Control) posix_priority;
   core_priority = scheduler->maximum_priority - core_posix_priority;
 
-  *valid = ( posix_priority >= POSIX_SCHEDULER_MINIMUM_PRIORITY
-    && core_posix_priority < scheduler->maximum_priority );
+  *valid =
+    ( posix_priority >= POSIX_SCHEDULER_MINIMUM_PRIORITY &&
+      core_posix_priority < scheduler->maximum_priority );
 
   return _Scheduler_Map_priority( scheduler, core_priority );
 }

@@ -42,12 +42,13 @@
 #include <errno.h>
 
 int pthread_attr_getinheritsched(
-  const pthread_attr_t  *attr,
-  int                   *inheritsched
+  const pthread_attr_t *attr,
+  int                  *inheritsched
 )
 {
-  if ( !attr || !attr->is_initialized || !inheritsched )
+  if ( !attr || !attr->is_initialized || !inheritsched ) {
     return EINVAL;
+  }
 
   *inheritsched = attr->inheritsched;
   return 0;

@@ -50,11 +50,13 @@ int pthread_barrierattr_getpshared(
   int                         *pshared
 )
 {
-  if ( !attr )
+  if ( !attr ) {
     return EINVAL;
+  }
 
-  if ( !attr->is_initialized )
+  if ( !attr->is_initialized ) {
     return EINVAL;
+  }
 
   *pshared = attr->process_shared;
   return 0;

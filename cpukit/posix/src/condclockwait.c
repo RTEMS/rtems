@@ -51,8 +51,7 @@ int pthread_cond_clockwait(
     return EINVAL;
   }
 
-  if ( !_POSIX_Is_valid_clock_id( clock_id ) )
-  {
+  if ( !_POSIX_Is_valid_clock_id( clock_id ) ) {
     return EINVAL;
   }
 

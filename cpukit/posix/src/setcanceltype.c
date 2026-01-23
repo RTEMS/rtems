@@ -50,10 +50,7 @@
  *  18.2.2 Setting Cancelability State, P1003.1c/Draft 10, p. 183
  */
 
-int pthread_setcanceltype(
-  int  type,
-  int *oldtype
-)
+int pthread_setcanceltype( int type, int *oldtype )
 {
   Thread_Life_state set_life_state;
   Thread_Life_state previous_life_state;

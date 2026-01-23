@@ -41,9 +41,7 @@
 #include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/posixapi.h>
 
-int pthread_rwlock_trywrlock(
-  pthread_rwlock_t  *rwlock
-)
+int pthread_rwlock_trywrlock( pthread_rwlock_t *rwlock )
 {
   POSIX_RWLock_Control *the_rwlock;
   Thread_queue_Context  queue_context;
@@ -55,7 +53,7 @@ int pthread_rwlock_trywrlock(
   _Thread_queue_Context_initialize( &queue_context );
   status = _CORE_RWLock_Seize_for_writing(
     &the_rwlock->RWLock,
-    false,                 /* we are not willing to wait */
+    false, /* we are not willing to wait */
     &queue_context
   );
   return _POSIX_Get_error( status );

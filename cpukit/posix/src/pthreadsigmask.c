@@ -51,12 +51,12 @@
 #include <rtems/seterr.h>
 
 int pthread_sigmask(
-  int               how,
-  const sigset_t   *__restrict set,
-  sigset_t         *__restrict oset
+  int how,
+  const sigset_t *__restrict set,
+  sigset_t *__restrict oset
 )
 {
-  POSIX_API_Control  *api;
+  POSIX_API_Control *api;
 
   if ( !set && !oset ) {
     return EINVAL;
@@ -64,11 +64,13 @@ int pthread_sigmask(
 
   api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
 
-  if ( oset )
+  if ( oset ) {
     *oset = ~api->signals_unblocked;
+  }
 
-  if ( !set )
+  if ( !set ) {
     return 0;
+  }
 
   switch ( how ) {
     case SIG_BLOCK:
@@ -88,8 +90,9 @@ int pthread_sigmask(
 
   /* XXX evaluate the new set */
 
-  if ( api->signals_unblocked &
-       (api->signals_pending | _POSIX_signals_Pending) ) {
+  if (
+    api->signals_unblocked & ( api->signals_pending | _POSIX_signals_Pending )
+  ) {
     _Thread_Dispatch();
   }
 

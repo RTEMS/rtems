@@ -41,10 +41,10 @@
 
 int sem_trywait( sem_t *_sem )
 {
-  Sem_Control          *sem;
-  Thread_queue_Context  queue_context;
-  ISR_Level             level;
-  unsigned int          count;
+  Sem_Control         *sem;
+  Thread_queue_Context queue_context;
+  ISR_Level            level;
+  unsigned int         count;
 
   POSIX_SEMAPHORE_VALIDATE_OBJECT( _sem );
 

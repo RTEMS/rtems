@@ -49,7 +49,7 @@ bool _POSIX_Mutex_Auto_initialization( POSIX_Mutex_Control *the_mutex )
   /* We cannot use memset() and memcmp() due to structure internal padding */
   zero = 0;
   zero |= the_mutex->flags;
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   zero |= _Atomic_Load_uint(
     &the_mutex->Recursive.Mutex.Queue.Queue.Lock.next_ticket,
     ATOMIC_ORDER_RELAXED
@@ -66,12 +66,16 @@ bool _POSIX_Mutex_Auto_initialization( POSIX_Mutex_Control *the_mutex )
   zero |= (unsigned long) the_mutex->Recursive.Mutex.Queue.Queue.owner;
   zero |= (unsigned long) the_mutex->Recursive.Mutex.Queue.Queue.name;
   zero |= the_mutex->Recursive.nest_level;
-  zero |= (unsigned long) the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_left;
-  zero |= (unsigned long) the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_right;
-  zero |= (unsigned long) the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_parent;
-  zero |= (unsigned long) the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_color;
+  zero |= (unsigned long)
+            the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_left;
+  zero |= (unsigned long)
+            the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_right;
+  zero |= (unsigned long)
+            the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_parent;
+  zero |= (unsigned long)
+            the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_color;
   zero |= (unsigned long) the_mutex->Priority_ceiling.priority;
-  zero |= (unsigned long) (the_mutex->Priority_ceiling.priority >> 32);
+  zero |= (unsigned long) ( the_mutex->Priority_ceiling.priority >> 32 );
   zero |= (unsigned long) the_mutex->scheduler;
 
   if ( zero != 0 ) {
@@ -90,15 +94,13 @@ bool _POSIX_Mutex_Auto_initialization( POSIX_Mutex_Control *the_mutex )
  *  NOTE: P1003.4b/D8 adds pthread_mutex_timedlock(), p. 29
  */
 
-int pthread_mutex_unlock(
-  pthread_mutex_t           *mutex
-)
+int pthread_mutex_unlock( pthread_mutex_t *mutex )
 {
-  POSIX_Mutex_Control  *the_mutex;
-  unsigned long         flags;
-  Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
-  Status_Control        status;
+  POSIX_Mutex_Control *the_mutex;
+  unsigned long        flags;
+  Thread_queue_Context queue_context;
+  Thread_Control      *executing;
+  Status_Control       status;
 
   the_mutex = _POSIX_Mutex_Get( mutex );
   POSIX_MUTEX_VALIDATE_OBJECT( the_mutex, flags );

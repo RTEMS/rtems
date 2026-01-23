@@ -43,13 +43,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_attr_setinheritsched(
-  pthread_attr_t  *attr,
-  int              inheritsched
-)
+int pthread_attr_setinheritsched( pthread_attr_t *attr, int inheritsched )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized ) {
     return EINVAL;
+  }
 
   switch ( inheritsched ) {
     case PTHREAD_INHERIT_SCHED:

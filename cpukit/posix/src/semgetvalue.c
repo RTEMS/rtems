@@ -40,14 +40,11 @@
 
 #include <rtems/posix/semaphoreimpl.h>
 
-int sem_getvalue(
-  sem_t  *__restrict _sem,
-  int    *__restrict sval
-)
+int sem_getvalue( sem_t *__restrict _sem, int *__restrict sval )
 {
-  Sem_Control          *sem;
-  ISR_Level             level;
-  Thread_queue_Context  queue_context;
+  Sem_Control         *sem;
+  ISR_Level            level;
+  Thread_queue_Context queue_context;
 
   POSIX_SEMAPHORE_VALIDATE_OBJECT( _sem );
 

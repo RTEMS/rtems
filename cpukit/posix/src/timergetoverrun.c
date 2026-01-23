@@ -44,9 +44,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/posix/timerimpl.h>
 
-int timer_getoverrun(
-  timer_t   timerid
-)
+int timer_getoverrun( timer_t timerid )
 {
   POSIX_Timer_Control *ptimer;
   ISR_lock_Context     lock_context;

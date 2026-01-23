@@ -72,12 +72,7 @@ void _POSIX_Threads_Initialize_user_thread( void )
   eno = pthread_attr_setstacksize( &attr, user_thread->stack_size );
   _Assert( eno == 0 );
 
-  eno = pthread_create(
-    &thread_id,
-    &attr,
-    user_thread->thread_entry,
-    NULL
-  );
+  eno = pthread_create( &thread_id, &attr, user_thread->thread_entry, NULL );
   if ( eno != 0 ) {
     _Internal_error( INTERNAL_ERROR_POSIX_INIT_THREAD_CREATE_FAILED );
   }

@@ -47,9 +47,9 @@
 #include <limits.h>
 
 static sem_t *_POSIX_Semaphore_Create_support(
-  const char   *name_arg,
-  size_t        name_len,
-  unsigned int  value
+  const char  *name_arg,
+  size_t       name_len,
+  unsigned int value
 )
 {
   POSIX_Semaphore_Control *the_semaphore;
@@ -123,20 +123,20 @@ sem_t *sem_open(
    * have it because we have to work through the variable
    * arguments to get to attr.
    */
-  mode_t                     mode RTEMS_UNUSED;
+  mode_t mode RTEMS_UNUSED;
 
-  va_list                    arg;
-  unsigned int               value = 0;
-  POSIX_Semaphore_Control   *the_semaphore;
-  size_t                     name_len;
-  Objects_Get_by_name_error  error;
-  sem_t                     *sem;
+  va_list                   arg;
+  unsigned int              value = 0;
+  POSIX_Semaphore_Control  *the_semaphore;
+  size_t                    name_len;
+  Objects_Get_by_name_error error;
+  sem_t                    *sem;
 
   if ( oflag & O_CREAT ) {
-    va_start(arg, oflag);
+    va_start( arg, oflag );
     mode = va_arg( arg, mode_t );
     value = va_arg( arg, unsigned int );
-    va_end(arg);
+    va_end( arg );
   }
 
   _Objects_Allocator_lock();
@@ -150,13 +150,12 @@ sem_t *sem_open(
    */
 
   if ( the_semaphore == NULL ) {
-
     /*
      * Unless provided a valid name that did not already exist
      * and we are willing to create then it is an error.
      */
 
-    if ( !( error == OBJECTS_GET_BY_NAME_NO_OBJECT && (oflag & O_CREAT) ) ) {
+    if ( !( error == OBJECTS_GET_BY_NAME_NO_OBJECT && ( oflag & O_CREAT ) ) ) {
       _Objects_Allocator_unlock();
       rtems_set_errno_and_return_value(
         _POSIX_Get_by_name_error( error ),
@@ -164,12 +163,11 @@ sem_t *sem_open(
       );
     }
   } else {
-
     /*
      * Check for existence with creation.
      */
 
-    if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
+    if ( ( oflag & ( O_CREAT | O_EXCL ) ) == ( O_CREAT | O_EXCL ) ) {
       _Objects_Allocator_unlock();
       rtems_set_errno_and_return_value( EEXIST, SEM_FAILED );
     }
@@ -184,11 +182,7 @@ sem_t *sem_open(
    *  checked. We should go ahead and create a semaphore.
    */
 
-  sem = _POSIX_Semaphore_Create_support(
-    name,
-    name_len,
-    value
-  );
+  sem = _POSIX_Semaphore_Create_support( name, name_len, value );
 
   _Objects_Allocator_unlock();
   return sem;

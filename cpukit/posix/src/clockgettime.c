@@ -53,16 +53,14 @@
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
  */
 
-int clock_gettime(
-  clockid_t        clock_id,
-  struct timespec *tp
-)
+int clock_gettime( clockid_t clock_id, struct timespec *tp )
 {
-  if ( !tp )
+  if ( !tp ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   if ( clock_id == CLOCK_REALTIME ) {
-    _TOD_Get(tp);
+    _TOD_Get( tp );
     return 0;
   }
 

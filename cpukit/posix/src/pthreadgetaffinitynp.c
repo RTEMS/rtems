@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define  _GNU_SOURCE
+#define _GNU_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,9 +55,9 @@ int pthread_getaffinity_np(
   cpu_set_t *cpuset
 )
 {
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
-  Status_Control    status;
+  Thread_Control  *the_thread;
+  ISR_lock_Context lock_context;
+  Status_Control   status;
 
   if ( cpuset == NULL ) {
     return EFAULT;
@@ -71,11 +71,7 @@ int pthread_getaffinity_np(
 
   _Thread_State_acquire_critical( the_thread, &lock_context );
 
-  status = _Scheduler_Get_affinity(
-    the_thread,
-    cpusetsize,
-    cpuset
-  );
+  status = _Scheduler_Get_affinity( the_thread, cpusetsize, cpuset );
 
   _Thread_State_release( the_thread, &lock_context );
   return _POSIX_Get_error( status );

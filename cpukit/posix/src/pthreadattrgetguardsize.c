@@ -42,13 +42,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_attr_getguardsize(
-  const pthread_attr_t  *attr,
-  size_t                *guardsize
-)
+int pthread_attr_getguardsize( const pthread_attr_t *attr, size_t *guardsize )
 {
-  if ( !attr || !attr->is_initialized || !guardsize )
+  if ( !attr || !attr->is_initialized || !guardsize ) {
     return EINVAL;
+  }
 
   *guardsize = attr->guardsize;
   return 0;

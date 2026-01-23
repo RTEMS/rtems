@@ -48,12 +48,11 @@
  *            P1003.1c/Draft 10, p. 96
  */
 
-int pthread_condattr_init(
-  pthread_condattr_t *attr
-)
+int pthread_condattr_init( pthread_condattr_t *attr )
 {
-  if ( attr == NULL )
+  if ( attr == NULL ) {
     return EINVAL;
+  }
 
   *attr = _POSIX_Condition_variables_Default_attributes;
   return 0;

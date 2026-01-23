@@ -53,7 +53,9 @@ int aio_read( struct aiocb *aiocbp )
 {
   rtems_aio_request *req;
 
-  if ( 1 + atomic_load( &aio_request_queue.queued_requests ) > RTEMS_AIO_MAX ) {
+  if (
+    1 + atomic_load( &aio_request_queue.queued_requests ) > RTEMS_AIO_MAX
+  ) {
     rtems_set_errno_and_return_minus_one( EAGAIN );
   }
 
@@ -65,4 +67,3 @@ int aio_read( struct aiocb *aiocbp )
     return -1;
   }
 }
-

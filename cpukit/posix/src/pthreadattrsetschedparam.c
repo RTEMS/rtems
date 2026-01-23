@@ -46,8 +46,9 @@ int pthread_attr_setschedparam(
   const struct sched_param *param
 )
 {
-  if ( !attr || !attr->is_initialized || !param )
+  if ( !attr || !attr->is_initialized || !param ) {
     return EINVAL;
+  }
 
   attr->schedparam = *param;
   return 0;

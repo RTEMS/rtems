@@ -43,13 +43,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_attr_setscope(
-  pthread_attr_t  *attr,
-  int              contentionscope
-)
+int pthread_attr_setscope( pthread_attr_t *attr, int contentionscope )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized ) {
     return EINVAL;
+  }
 
   switch ( contentionscope ) {
     case PTHREAD_SCOPE_PROCESS:

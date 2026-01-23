@@ -41,13 +41,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_attr_getstacksize(
-  const pthread_attr_t  *attr,
-  size_t                *stacksize
-)
+int pthread_attr_getstacksize( const pthread_attr_t *attr, size_t *stacksize )
 {
-  if ( !attr || !attr->is_initialized || !stacksize )
+  if ( !attr || !attr->is_initialized || !stacksize ) {
     return EINVAL;
+  }
 
   *stacksize = attr->stacksize;
   return 0;

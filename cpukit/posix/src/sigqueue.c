@@ -44,11 +44,7 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
 
-int sigqueue(
-  pid_t               pid,
-  int                 signo,
-  const union sigval  value
-)
+int sigqueue( pid_t pid, int signo, const union sigval value )
 {
   return _POSIX_signals_Send( pid, signo, &value );
 }

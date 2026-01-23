@@ -41,10 +41,7 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_condattr_setclock(
-  pthread_condattr_t *attr,
-  clockid_t           clock
-)
+int pthread_condattr_setclock( pthread_condattr_t *attr, clockid_t clock )
 {
   if ( attr == NULL ) {
     return EINVAL;

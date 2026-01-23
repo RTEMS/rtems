@@ -48,15 +48,15 @@
  */
 
 int sem_timedwait(
-  sem_t                 *__restrict _sem,
+  sem_t *__restrict _sem,
   const struct timespec *__restrict abstime
 )
 {
-  Sem_Control          *sem;
-  Thread_queue_Context  queue_context;
-  ISR_Level             level;
-  Thread_Control       *executing;
-  unsigned int          count;
+  Sem_Control         *sem;
+  Thread_queue_Context queue_context;
+  ISR_Level            level;
+  Thread_Control      *executing;
+  unsigned int         count;
 
   POSIX_SEMAPHORE_VALIDATE_OBJECT( _sem );
 

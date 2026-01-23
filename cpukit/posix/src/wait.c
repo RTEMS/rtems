@@ -43,9 +43,7 @@
 #include <errno.h>
 #include <rtems/seterr.h>
 
-int wait(
-  int   *stat_loc
-)
+int wait( int *stat_loc )
 {
   (void) stat_loc;
 

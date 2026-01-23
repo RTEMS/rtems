@@ -46,9 +46,7 @@
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
-int sched_get_priority_max(
-  int  policy
-)
+int sched_get_priority_max( int policy )
 {
   const Scheduler_Control *scheduler;
 

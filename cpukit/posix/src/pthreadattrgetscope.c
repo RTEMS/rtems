@@ -43,13 +43,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_attr_getscope(
-  const pthread_attr_t  *attr,
-  int                   *contentionscope
-)
+int pthread_attr_getscope( const pthread_attr_t *attr, int *contentionscope )
 {
-  if ( !attr || !attr->is_initialized || !contentionscope )
+  if ( !attr || !attr->is_initialized || !contentionscope ) {
     return EINVAL;
+  }
 
   *contentionscope = attr->contentionscope;
   return 0;

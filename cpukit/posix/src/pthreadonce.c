@@ -46,12 +46,13 @@
 #include <rtems/score/onceimpl.h>
 
 int pthread_once(
-  pthread_once_t  *once_control,
-  void           (*init_routine)(void)
+  pthread_once_t *once_control,
+  void ( *init_routine )( void )
 )
 {
-  if ( !once_control || !init_routine )
+  if ( !once_control || !init_routine ) {
     return EINVAL;
+  }
 
   return _Once( &once_control->_flags, init_routine );
 }

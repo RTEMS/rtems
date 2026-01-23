@@ -45,20 +45,20 @@
 #include <rtems/posix/sigset.h>
 #include <rtems/seterr.h>
 
-int sigaddset(
-  sigset_t   *set,
-  int         signo
-)
+int sigaddset( sigset_t *set, int signo )
 {
-  if ( !set )
+  if ( !set ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
-  if ( !signo )
+  if ( !signo ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
-  if ( !is_valid_signo(signo) )
+  if ( !is_valid_signo( signo ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
-  *set |= signo_to_mask(signo);
+  *set |= signo_to_mask( signo );
   return 0;
 }

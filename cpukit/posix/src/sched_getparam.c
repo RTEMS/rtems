@@ -48,8 +48,8 @@
  * 13.3.2 Set Scheduling Parameters, P1003.1b-1993, p. 253
  */
 int sched_getparam(
-  pid_t                     pid RTEMS_UNUSED,
-  struct sched_param       *param RTEMS_UNUSED
+  pid_t pid                 RTEMS_UNUSED,
+  struct sched_param *param RTEMS_UNUSED
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

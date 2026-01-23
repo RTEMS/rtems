@@ -30,7 +30,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <sys/cdefs.h>
 #include <sys/param.h>
 #include <errno.h>
@@ -42,66 +41,79 @@
 * this block is added to raise error if the flags value change
 */
 
-#if (_CS_POSIX_V6_ILP32_OFF32_CFLAGS != _CS_POSIX_V7_ILP32_OFF32_CFLAGS)
-#error "_CS_POSIX_V6_ILP32_OFF32_CFLAGS and _CS_POSIX_V7_ILP32_OFF32_CFLAGS flag values not equal"
+#if ( _CS_POSIX_V6_ILP32_OFF32_CFLAGS != _CS_POSIX_V7_ILP32_OFF32_CFLAGS )
+#error \
+  "_CS_POSIX_V6_ILP32_OFF32_CFLAGS and _CS_POSIX_V7_ILP32_OFF32_CFLAGS flag values not equal"
 #endif
 
-#if (_CS_POSIX_V6_ILP32_OFF32_LDFLAGS != _CS_POSIX_V7_ILP32_OFF32_LDFLAGS)
-#error "_CS_POSIX_V6_ILP32_OFF32_LDFLAGS and _CS_POSIX_V7_ILP32_OFF32_LDFLAGS flag values not equal"
+#if ( _CS_POSIX_V6_ILP32_OFF32_LDFLAGS != _CS_POSIX_V7_ILP32_OFF32_LDFLAGS )
+#error \
+  "_CS_POSIX_V6_ILP32_OFF32_LDFLAGS and _CS_POSIX_V7_ILP32_OFF32_LDFLAGS flag values not equal"
 #endif
 
-#if (_CS_POSIX_V6_ILP32_OFF32_LIBS!= _CS_POSIX_V7_ILP32_OFF32_LIBS)
-#error "_CS_POSIX_V6_ILP32_OFF32_LIBS and _CS_POSIX_V7_ILP32_OFF32_LIBS flag values not equal"
+#if ( _CS_POSIX_V6_ILP32_OFF32_LIBS != _CS_POSIX_V7_ILP32_OFF32_LIBS )
+#error \
+  "_CS_POSIX_V6_ILP32_OFF32_LIBS and _CS_POSIX_V7_ILP32_OFF32_LIBS flag values not equal"
 #endif
 
-#if (_CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS != _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS)
-#error "_CS_POSIX_V6_LPBIG_OFFBIG_CFLAG and _CS_POSIX_V7_LPBIG_OFFBIG_CFLAG flag values not equal"
+#if ( _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS != _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS )
+#error \
+  "_CS_POSIX_V6_LPBIG_OFFBIG_CFLAG and _CS_POSIX_V7_LPBIG_OFFBIG_CFLAG flag values not equal"
 #endif
 
-#if (_CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS != _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS)
-#error "_CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS and _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS flag values not equal"
+#if ( _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS != _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS )
+#error \
+  "_CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS and _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS flag values not equal"
 #endif
 
-#if (_CS_POSIX_V7_LPBIG_OFFBIG_LIBS != _CS_POSIX_V7_LPBIG_OFFBIG_LIBS)
-#error "_CS_POSIX_V6_LPBIG_OFFBIG_LIBS and _CS_POSIX_V7_LPBIG_OFFBIG_LIBS flag values not equal"
+#if ( _CS_POSIX_V7_LPBIG_OFFBIG_LIBS != _CS_POSIX_V7_LPBIG_OFFBIG_LIBS )
+#error \
+  "_CS_POSIX_V6_LPBIG_OFFBIG_LIBS and _CS_POSIX_V7_LPBIG_OFFBIG_LIBS flag values not equal"
 #endif
 
-#if (_CS_POSIX_V6_ILP32_OFFBIG_CFLAGS != _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS)
-#error "_CS_POSIX_V6_ILP32_OFFBIG_CFLAGS and _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS flag values not equal"
+#if ( _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS != _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS )
+#error \
+  "_CS_POSIX_V6_ILP32_OFFBIG_CFLAGS and _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS flag values not equal"
 #endif
 
-#if (_CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS != _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS)
-#error "_CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS and _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS flag values not equal"
+#if ( _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS != _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS )
+#error \
+  "_CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS and _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS flag values not equal"
 #endif
 
-#if (_CS_POSIX_V7_ILP32_OFFBIG_LIBS != _CS_POSIX_V7_ILP32_OFFBIG_LIBS)
-#error "_CS_POSIX_V6_ILP32_OFFBIG_LIBS and _CS_POSIX_V7_ILP32_OFFBIG_LIBS flag values not equal"
+#if ( _CS_POSIX_V7_ILP32_OFFBIG_LIBS != _CS_POSIX_V7_ILP32_OFFBIG_LIBS )
+#error \
+  "_CS_POSIX_V6_ILP32_OFFBIG_LIBS and _CS_POSIX_V7_ILP32_OFFBIG_LIBS flag values not equal"
 #endif
 
-#if (_CS_POSIX_V6_LP64_OFF64_CFLAGS != _CS_POSIX_V7_LP64_OFF64_CFLAGS)
-#error "_CS_POSIX_V6_LP64_OFF64_CFLAGS and _CS_POSIX_V7_LP64_OFF64_CFLAGS flag values not equal"
+#if ( _CS_POSIX_V6_LP64_OFF64_CFLAGS != _CS_POSIX_V7_LP64_OFF64_CFLAGS )
+#error \
+  "_CS_POSIX_V6_LP64_OFF64_CFLAGS and _CS_POSIX_V7_LP64_OFF64_CFLAGS flag values not equal"
 #endif
 
-#if (_CS_POSIX_V6_LP64_OFF64_LDFLAGS != _CS_POSIX_V7_LP64_OFF64_LDFLAGS)
-#error "_CS_POSIX_V6_LP64_OFF64_LDFLAGS and _CS_POSIX_V7_LP64_OFF64_LDFLAGS flag values not equal"
+#if ( _CS_POSIX_V6_LP64_OFF64_LDFLAGS != _CS_POSIX_V7_LP64_OFF64_LDFLAGS )
+#error \
+  "_CS_POSIX_V6_LP64_OFF64_LDFLAGS and _CS_POSIX_V7_LP64_OFF64_LDFLAGS flag values not equal"
 #endif
 
-#if (_CS_POSIX_V7_LP64_OFF64_LIBS != _CS_POSIX_V7_LP64_OFF64_LIBS)
-#error "_CS_POSIX_V6_LP64_OFF64_LIBS and _CS_POSIX_V7_LP64_OFF64_LIBS flag values not equal"
+#if ( _CS_POSIX_V7_LP64_OFF64_LIBS != _CS_POSIX_V7_LP64_OFF64_LIBS )
+#error \
+  "_CS_POSIX_V6_LP64_OFF64_LIBS and _CS_POSIX_V7_LP64_OFF64_LIBS flag values not equal"
 #endif
 
-#if (_CS_V6_ENV != _CS_V7_ENV)
+#if ( _CS_V6_ENV != _CS_V7_ENV )
 #error "_CS_V6_ENV and _CS_V7_ENV flag values not equal"
 #endif
 
-size_t confstr(int name, char *buf, size_t len){
+size_t confstr( int name, char *buf, size_t len )
+{
   const char *p;
-  const char UPE[] = "unsupported programming environment";
+  const char  UPE[] = "unsupported programming environment";
 
-  switch (name) {
+  switch ( name ) {
     case _CS_PATH:
       errno = EINVAL;
-      return (0);
+      return ( 0 );
     case _CS_POSIX_V7_ILP32_OFF32_CFLAGS:
     case _CS_POSIX_V7_ILP32_OFF32_LDFLAGS:
     case _CS_POSIX_V7_ILP32_OFF32_LIBS:
@@ -116,12 +128,12 @@ size_t confstr(int name, char *buf, size_t len){
     case _CS_POSIX_V7_LP64_OFF64_LIBS:
     case _CS_V7_ENV:
       p = UPE;
-      if (len != 0 && buf != NULL){
-        strlcpy(buf, p, len);
+      if ( len != 0 && buf != NULL ) {
+        strlcpy( buf, p, len );
       }
-      return (strlen(p) + 1);
+      return ( strlen( p ) + 1 );
     default:
       errno = EINVAL;
-      return (0);
+      return ( 0 );
   }
 }

@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define  _GNU_SOURCE
+#define _GNU_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,10 +51,7 @@
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 
-int pthread_getattr_np(
-  pthread_t       thread,
-  pthread_attr_t *attr
-)
+int pthread_getattr_np( pthread_t thread, pthread_attr_t *attr )
 {
   Thread_Control                     *the_thread;
   ISR_lock_Context                    lock_context;
@@ -119,8 +116,9 @@ int pthread_getattr_np(
     scheduler,
     priority
   );
-  attr->schedpolicy =
-    _POSIX_Thread_Translate_to_sched_policy( cpu_budget_operations );
+  attr->schedpolicy = _POSIX_Thread_Translate_to_sched_policy(
+    cpu_budget_operations
+  );
 
   return _POSIX_Get_error( status );
 }

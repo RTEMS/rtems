@@ -39,16 +39,16 @@
 
 int pthread_getname_np( pthread_t thread, char *name, size_t len )
 {
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
-  size_t            actual_len;
+  Thread_Control  *the_thread;
+  ISR_lock_Context lock_context;
+  size_t           actual_len;
 
   _Objects_Allocator_lock();
   the_thread = _Thread_Get( thread, &lock_context );
 
   if ( the_thread == NULL ) {
     _Objects_Allocator_unlock();
-    strlcpy(name, "", len);
+    strlcpy( name, "", len );
     return ESRCH;
   }
 

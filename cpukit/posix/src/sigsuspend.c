@@ -47,14 +47,12 @@
 
 #include <rtems/seterr.h>
 
-int sigsuspend(
-  const sigset_t  *sigmask
-)
+int sigsuspend( const sigset_t *sigmask )
 {
-  sigset_t            saved_signals_blocked;
-  sigset_t            current_unblocked_signals;
-#if defined(RTEMS_DEBUG)
-    int                 status;
+  sigset_t saved_signals_blocked;
+  sigset_t current_unblocked_signals;
+#if defined( RTEMS_DEBUG )
+  int status;
 #endif
 
   /*
@@ -66,21 +64,21 @@ int sigsuspend(
    *  defined to either terminate or return -1 with errno set to
    *  EINTR.
    */
-#if defined(RTEMS_DEBUG)
-    status =
+#if defined( RTEMS_DEBUG )
+  status =
 #else
   (void)
 #endif
-      sigprocmask( SIG_BLOCK, sigmask, &saved_signals_blocked );
+    sigprocmask( SIG_BLOCK, sigmask, &saved_signals_blocked );
 
-  current_unblocked_signals = ~(*sigmask);
+  current_unblocked_signals = ~( *sigmask );
 
-  #if defined(RTEMS_DEBUG)
-    status =
+  #if defined( RTEMS_DEBUG )
+  status =
 #else
   (void)
 #endif
-      sigtimedwait( &current_unblocked_signals, NULL, NULL );
+    sigtimedwait( &current_unblocked_signals, NULL, NULL );
 
   (void) sigprocmask( SIG_SETMASK, &saved_signals_blocked, NULL );
 
@@ -88,8 +86,8 @@ int sigsuspend(
    * sigtimedwait() returns the signal number while sigsuspend()
    * is supposed to return -1 and EINTR when a signal is caught.
    */
-  #if defined(RTEMS_DEBUG)
-    assert( status != -1 );
+  #if defined( RTEMS_DEBUG )
+  assert( status != -1 );
   #endif
 
   rtems_set_errno_and_return_minus_one( EINTR );

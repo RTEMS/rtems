@@ -56,20 +56,18 @@
  *            between the current time and the initialization time.
  */
 
-int timer_gettime(
-  timer_t            timerid,
-  struct itimerspec *value
-)
+int timer_gettime( timer_t timerid, struct itimerspec *value )
 {
   POSIX_Timer_Control *ptimer;
-  ISR_lock_Context lock_context;
-  Per_CPU_Control *cpu;
-  struct timespec now;
-  struct timespec expire;
-  struct timespec result;
+  ISR_lock_Context     lock_context;
+  Per_CPU_Control     *cpu;
+  struct timespec      now;
+  struct timespec      expire;
+  struct timespec      result;
 
-  if ( !value )
+  if ( !value ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   ptimer = _POSIX_Timer_Get( timerid, &lock_context );
   if ( ptimer == NULL ) {
@@ -80,20 +78,19 @@ int timer_gettime(
   rtems_timespec_from_ticks( ptimer->Timer.expire, &expire );
 
   if ( ptimer->clock_type == CLOCK_MONOTONIC ) {
-  _Timecounter_Nanouptime(&now);
-  } else  if (ptimer->clock_type == CLOCK_REALTIME) {
-    _TOD_Get(&now);
+    _Timecounter_Nanouptime( &now );
+  } else if ( ptimer->clock_type == CLOCK_REALTIME ) {
+    _TOD_Get( &now );
   } else {
     _POSIX_Timer_Release( cpu, &lock_context );
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-
- if ( rtems_timespec_less_than( &now, &expire ) ) {
-      rtems_timespec_subtract( &now, &expire, &result );
+  if ( rtems_timespec_less_than( &now, &expire ) ) {
+    rtems_timespec_subtract( &now, &expire, &result );
   } else {
     result.tv_nsec = 0;
-    result.tv_sec  = 0;
+    result.tv_sec = 0;
   }
 
   value->it_value = result;

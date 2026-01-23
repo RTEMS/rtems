@@ -52,10 +52,10 @@
 
 int pthread_cancel( pthread_t thread )
 {
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
-  Thread_Control   *executing;
-  Per_CPU_Control  *cpu_self;
+  Thread_Control  *the_thread;
+  ISR_lock_Context lock_context;
+  Thread_Control  *executing;
+  Per_CPU_Control *cpu_self;
 
   the_thread = _Thread_Get( thread, &lock_context );
 
@@ -66,10 +66,7 @@ int pthread_cancel( pthread_t thread )
   cpu_self = _Per_CPU_Get();
   executing = _Per_CPU_Get_executing( cpu_self );
 
-  if (
-    the_thread == executing &&
-    !_Per_CPU_Is_ISR_in_progress( cpu_self )
-  ) {
+  if ( the_thread == executing && !_Per_CPU_Is_ISR_in_progress( cpu_self ) ) {
     _ISR_lock_ISR_enable( &lock_context );
     _Thread_Exit( PTHREAD_CANCELED, THREAD_LIFE_TERMINATING );
   } else {

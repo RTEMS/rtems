@@ -46,9 +46,9 @@
 #include <rtems/score/userextimpl.h>
 
 void _pthread_cleanup_push(
-  struct _pthread_cleanup_context   *context,
-  void                            ( *routine )( void * ),
-  void                              *arg
+  struct _pthread_cleanup_context *context,
+  void ( *routine )( void * ),
+  void *arg
 )
 {
   ISR_Level       level;

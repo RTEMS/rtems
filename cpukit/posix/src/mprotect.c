@@ -57,7 +57,7 @@ int mprotect(
   void *addr,
 #endif
   size_t len,
-  int prot
+  int    prot
 )
 {
   (void) addr;

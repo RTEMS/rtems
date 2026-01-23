@@ -47,9 +47,7 @@
 #include <rtems/seterr.h>
 #include <rtems/posix/priorityimpl.h>
 
-int sched_getscheduler(
-  pid_t                     pid RTEMS_UNUSED
-)
+int sched_getscheduler( pid_t pid RTEMS_UNUSED )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }

@@ -49,14 +49,14 @@ int pthread_mutex_getprioceiling(
 #ifdef HAVE_PTHREAD_MUTEX_GETCEILING_CONST
   const pthread_mutex_t *mutex,
 #else
-  pthread_mutex_t       *mutex,
+  pthread_mutex_t *mutex,
 #endif
-  int                   *prioceiling
+  int *prioceiling
 )
 {
-  POSIX_Mutex_Control  *the_mutex;
-  unsigned long         flags;
-  Thread_queue_Context  queue_context;
+  POSIX_Mutex_Control *the_mutex;
+  unsigned long        flags;
+  Thread_queue_Context queue_context;
 
   if ( prioceiling == NULL ) {
     return EINVAL;

@@ -42,14 +42,16 @@
 
 int pthread_rwlockattr_getpshared(
   const pthread_rwlockattr_t *attr,
-  int                         *pshared
+  int                        *pshared
 )
 {
-  if ( !attr )
+  if ( !attr ) {
     return EINVAL;
+  }
 
-  if ( !attr->is_initialized )
+  if ( !attr->is_initialized ) {
     return EINVAL;
+  }
 
   *pshared = attr->process_shared;
   return 0;

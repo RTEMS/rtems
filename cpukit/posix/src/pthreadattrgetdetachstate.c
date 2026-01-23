@@ -43,13 +43,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_attr_getdetachstate(
-  const pthread_attr_t  *attr,
-  int                   *detachstate
-)
+int pthread_attr_getdetachstate( const pthread_attr_t *attr, int *detachstate )
 {
-  if ( !attr || !attr->is_initialized || !detachstate )
+  if ( !attr || !attr->is_initialized || !detachstate ) {
     return EINVAL;
+  }
 
   *detachstate = attr->detachstate;
   return 0;

@@ -46,9 +46,9 @@
  */
 
 int pthread_mutex_setprioceiling(
-  pthread_mutex_t   *mutex,
-  int                prioceiling,
-  int               *old_ceiling
+  pthread_mutex_t *mutex,
+  int              prioceiling,
+  int             *old_ceiling
 )
 {
   POSIX_Mutex_Control *the_mutex;
@@ -72,8 +72,8 @@ int pthread_mutex_setprioceiling(
   the_mutex = _POSIX_Mutex_Get( mutex );
 
   if (
-    _POSIX_Mutex_Get_protocol( the_mutex->flags )
-      == POSIX_MUTEX_PRIORITY_CEILING
+    _POSIX_Mutex_Get_protocol( the_mutex->flags ) ==
+    POSIX_MUTEX_PRIORITY_CEILING
   ) {
     const Scheduler_Control *scheduler;
     bool                     valid;
@@ -86,16 +86,12 @@ int pthread_mutex_setprioceiling(
 
     new_priority = _POSIX_Priority_To_core( scheduler, prioceiling, &valid );
     if ( valid ) {
-      Thread_queue_Context  queue_context;
-      Per_CPU_Control      *cpu_self;
+      Thread_queue_Context queue_context;
+      Per_CPU_Control     *cpu_self;
 
       _Thread_queue_Context_initialize( &queue_context );
       _Thread_queue_Context_clear_priority_updates( &queue_context );
-      _POSIX_Mutex_Set_priority(
-        the_mutex,
-        new_priority,
-        &queue_context
-      );
+      _POSIX_Mutex_Set_priority( the_mutex, new_priority, &queue_context );
       cpu_self = _Thread_Dispatch_disable();
       _Thread_Priority_update( &queue_context );
       _Thread_Dispatch_enable( cpu_self );

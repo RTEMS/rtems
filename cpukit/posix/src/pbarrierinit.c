@@ -46,26 +46,26 @@
 #include <rtems/posix/posixapi.h>
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Barrier_Control, flags )
-    == offsetof( pthread_barrier_t, _flags ),
+  offsetof( POSIX_Barrier_Control, flags ) ==
+    offsetof( pthread_barrier_t, _flags ),
   POSIX_BARRIER_CONTROL_FLAGS
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Barrier_Control, count )
-    == offsetof( pthread_barrier_t, _count ),
+  offsetof( POSIX_Barrier_Control, count ) ==
+    offsetof( pthread_barrier_t, _count ),
   POSIX_BARRIER_CONTROL_COUNT
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Barrier_Control, waiting_threads )
-    == offsetof( pthread_barrier_t, _waiting_threads ),
+  offsetof( POSIX_Barrier_Control, waiting_threads ) ==
+    offsetof( pthread_barrier_t, _waiting_threads ),
   POSIX_BARRIER_CONTROL_WAITING_THREADS
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Barrier_Control, Queue )
-    == offsetof( pthread_barrier_t, _Queue ),
+  offsetof( POSIX_Barrier_Control, Queue ) ==
+    offsetof( pthread_barrier_t, _Queue ),
   POSIX_BARRIER_CONTROL_QUEUE
 );
 
@@ -99,8 +99,9 @@ int pthread_barrier_init(
     /*
      * Now start error checking the attributes that we are going to use
      */
-    if ( !attr->is_initialized )
+    if ( !attr->is_initialized ) {
       return EINVAL;
+    }
 
     if ( !_POSIX_Is_valid_pshared( attr->process_shared ) ) {
       return EINVAL;

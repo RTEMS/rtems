@@ -84,12 +84,14 @@ void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog )
   ptimer->overrun = ptimer->overrun + 1;
 
   /* The timer must be reprogrammed */
-  if ( ( ptimer->timer_data.it_interval.tv_sec  != 0 ) ||
-       ( ptimer->timer_data.it_interval.tv_nsec != 0 ) ) {
+  if (
+    ( ptimer->timer_data.it_interval.tv_sec != 0 ) ||
+    ( ptimer->timer_data.it_interval.tv_nsec != 0 )
+  ) {
     _POSIX_Timer_Insert( ptimer, cpu, ptimer->ticks );
   } else {
-   /* Indicates that the timer is stopped */
-   ptimer->state = POSIX_TIMER_STATE_CREATE_STOP;
+    /* Indicates that the timer is stopped */
+    ptimer->state = POSIX_TIMER_STATE_CREATE_STOP;
   }
 
   _POSIX_Timer_Release( cpu, &lock_context );
@@ -99,7 +101,7 @@ void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog )
    * specified for that signal is simulated
    */
 
-  if ( pthread_kill ( ptimer->thread_id, ptimer->inf.sigev_signo ) ) {
+  if ( pthread_kill( ptimer->thread_id, ptimer->inf.sigev_signo ) ) {
     _Assert( FALSE );
     /*
      * TODO: What if an error happens at run-time? This should never
@@ -117,10 +119,10 @@ void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog )
 }
 
 int timer_settime(
-  timer_t                  timerid,
-  int                      flags,
+  timer_t timerid,
+  int     flags,
   const struct itimerspec *__restrict value,
-  struct itimerspec       *__restrict ovalue
+  struct itimerspec *__restrict ovalue
 )
 {
   POSIX_Timer_Control *ptimer;
@@ -128,17 +130,18 @@ int timer_settime(
   uint32_t             initial_period;
   struct itimerspec    normalize;
 
-  if ( !value )
+  if ( !value ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   /* 
    * First, it verifies if the structure "value" is correct   
    * if the number of nanoseconds is not correct return EINVAL
    */
-  if ( !_Timespec_Is_valid( &(value->it_value) ) ) {
+  if ( !_Timespec_Is_valid( &( value->it_value ) ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
-  if ( !_Timespec_Is_valid( &(value->it_interval) ) ) {
+  if ( !_Timespec_Is_valid( &( value->it_interval ) ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
@@ -149,12 +152,13 @@ int timer_settime(
   normalize = *value;
 
   /* Convert absolute to relative time */
-  if (flags == TIMER_ABSTIME) {
+  if ( flags == TIMER_ABSTIME ) {
     struct timespec now;
     _TOD_Get( &now );
     /* Check for seconds in the past */
-    if ( _Timespec_Greater_than( &now, &normalize.it_value ) )
+    if ( _Timespec_Greater_than( &now, &normalize.it_value ) ) {
       rtems_set_errno_and_return_minus_one( EINVAL );
+    }
     _Timespec_Subtract( &now, &normalize.it_value, &normalize.it_value );
   }
 
@@ -178,8 +182,9 @@ int timer_settime(
     /* First, it verifies if the timer must be stopped */
     if ( normalize.it_value.tv_sec == 0 && normalize.it_value.tv_nsec == 0 ) {
       /* The old data of the timer are returned */
-      if ( ovalue )
+      if ( ovalue ) {
         *ovalue = ptimer->timer_data;
+      }
       /* The new data are set */
       ptimer->timer_data = normalize;
       /* Indicates that the timer is created and stopped */
@@ -190,7 +195,7 @@ int timer_settime(
     }
 
     /* Convert from seconds and nanoseconds to ticks */
-    ptimer->ticks  = _Timespec_To_ticks( &value->it_interval );
+    ptimer->ticks = _Timespec_To_ticks( &value->it_interval );
     initial_period = _Timespec_To_ticks( &normalize.it_value );
 
     _POSIX_Timer_Insert( ptimer, cpu, initial_period );
@@ -199,8 +204,9 @@ int timer_settime(
      * The timer has been started and is running.  So we return the
      * old ones in "ovalue"
      */
-    if ( ovalue )
+    if ( ovalue ) {
       *ovalue = ptimer->timer_data;
+    }
     ptimer->timer_data = normalize;
     _POSIX_Timer_Release( cpu, &lock_context );
     return 0;

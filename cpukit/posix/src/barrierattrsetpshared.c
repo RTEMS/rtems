@@ -40,16 +40,15 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_barrierattr_setpshared(
-  pthread_barrierattr_t *attr,
-  int                    pshared
-)
+int pthread_barrierattr_setpshared( pthread_barrierattr_t *attr, int pshared )
 {
-  if ( !attr )
+  if ( !attr ) {
     return EINVAL;
+  }
 
-  if ( !attr->is_initialized )
+  if ( !attr->is_initialized ) {
     return EINVAL;
+  }
 
   switch ( pshared ) {
     case PTHREAD_PROCESS_SHARED:

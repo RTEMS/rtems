@@ -42,8 +42,5 @@
 
 #include <errno.h>
 
-const int _POSIX_Get_by_name_error_table[ 3 ] = {
-  EINVAL,
-  ENAMETOOLONG,
-  ENOENT
-};
+const int _POSIX_Get_by_name_error_table[ 3 ] =
+  { EINVAL, ENAMETOOLONG, ENOENT };

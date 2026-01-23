@@ -51,9 +51,9 @@
  *  recommendation to return 0 when multiple processes are not supported.
  */
 int pthread_atfork(
-  void (*prepare)(void),
-  void (*parent)(void),
-  void (*child)(void)
+  void ( *prepare )( void ),
+  void ( *parent )( void ),
+  void ( *child )( void )
 )
 {
   (void) prepare;

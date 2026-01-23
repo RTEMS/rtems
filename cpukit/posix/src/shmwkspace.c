@@ -40,7 +40,7 @@
 
 int _POSIX_Shm_Object_create_from_workspace(
   POSIX_Shm_Object *shm_obj,
-  size_t size
+  size_t            size
 )
 {
   shm_obj->handle = _Workspace_Allocate( size );
@@ -65,7 +65,7 @@ int _POSIX_Shm_Object_delete_from_workspace( POSIX_Shm_Object *shm_obj )
 
 int _POSIX_Shm_Object_resize_from_workspace(
   POSIX_Shm_Object *shm_obj,
-  size_t size
+  size_t            size
 )
 {
   int err;
@@ -83,12 +83,13 @@ int _POSIX_Shm_Object_resize_from_workspace(
 
 int _POSIX_Shm_Object_read_from_workspace(
   POSIX_Shm_Object *shm_obj,
-  void *buf,
-  size_t count
+  void             *buf,
+  size_t            count
 )
 {
-  if ( shm_obj == NULL || shm_obj->handle == NULL )
+  if ( shm_obj == NULL || shm_obj->handle == NULL ) {
     return 0;
+  }
 
   if ( shm_obj->size < count ) {
     count = shm_obj->size;
@@ -99,23 +100,23 @@ int _POSIX_Shm_Object_read_from_workspace(
   return count;
 }
 
-void * _POSIX_Shm_Object_mmap_from_workspace(
+void *_POSIX_Shm_Object_mmap_from_workspace(
   POSIX_Shm_Object *shm_obj,
-  size_t len,
-  int prot,
-  off_t off
+  size_t            len,
+  int               prot,
+  off_t             off
 )
 {
   (void) prot;
 
-  if ( shm_obj == NULL || shm_obj->handle == NULL )
+  if ( shm_obj == NULL || shm_obj->handle == NULL ) {
     return 0;
+  }
 
   /* This is already checked by mmap. Maybe make it a debug assert? */
   if ( shm_obj->size < len + off ) {
     return NULL;
   }
 
-  return (char*)shm_obj->handle + off;
+  return (char *) shm_obj->handle + off;
 }
-

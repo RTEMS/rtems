@@ -44,26 +44,26 @@
 #include <rtems/posix/posixapi.h>
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_RWLock_Control, flags )
-    == offsetof( pthread_rwlock_t, _flags ),
+  offsetof( POSIX_RWLock_Control, flags ) ==
+    offsetof( pthread_rwlock_t, _flags ),
   POSIX_RWLOCK_CONTROL_FLAGS
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_RWLock_Control, RWLock.current_state )
-    == offsetof( pthread_rwlock_t, _current_state ),
+  offsetof( POSIX_RWLock_Control, RWLock.current_state ) ==
+    offsetof( pthread_rwlock_t, _current_state ),
   POSIX_RWLOCK_CONTROL_CURRENT_STATE
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_RWLock_Control, RWLock.number_of_readers )
-    == offsetof( pthread_rwlock_t, _number_of_readers ),
+  offsetof( POSIX_RWLock_Control, RWLock.number_of_readers ) ==
+    offsetof( pthread_rwlock_t, _number_of_readers ),
   POSIX_RWLOCK_CONTROL_NUMBER_OF_READERS
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_RWLock_Control, RWLock.Queue )
-    == offsetof( pthread_rwlock_t, _Queue ),
+  offsetof( POSIX_RWLock_Control, RWLock.Queue ) ==
+    offsetof( pthread_rwlock_t, _Queue ),
   POSIX_RWLOCK_CONTROL_QUEUE
 );
 

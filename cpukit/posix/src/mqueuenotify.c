@@ -63,10 +63,7 @@ static void _POSIX_Message_queue_Notify_handler(
   kill( getpid(), signo );
 }
 
-int mq_notify(
-  mqd_t                  mqdes,
-  const struct sigevent *notification
-)
+int mq_notify( mqd_t mqdes, const struct sigevent *notification )
 {
   POSIX_Message_queue_Control *the_mq;
   Thread_queue_Context         queue_context;

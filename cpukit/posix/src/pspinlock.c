@@ -42,7 +42,7 @@
 #include <rtems/posix/spinlockimpl.h>
 
 RTEMS_STATIC_ASSERT(
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   offsetof( POSIX_Spinlock_Control, Lock.next_ticket )
 #else
   offsetof( POSIX_Spinlock_Control, reserved[ 0 ] )
@@ -52,7 +52,7 @@ RTEMS_STATIC_ASSERT(
 );
 
 RTEMS_STATIC_ASSERT(
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   offsetof( POSIX_Spinlock_Control, Lock.now_serving )
 #else
   offsetof( POSIX_Spinlock_Control, reserved[ 1 ] )
@@ -62,8 +62,8 @@ RTEMS_STATIC_ASSERT(
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Spinlock_Control, interrupt_state )
-    == offsetof( pthread_spinlock_t, _interrupt_state ),
+  offsetof( POSIX_Spinlock_Control, interrupt_state ) ==
+    offsetof( pthread_spinlock_t, _interrupt_state ),
   POSIX_SPINLOCK_T_INTERRUPT_STATE
 );
 
@@ -76,14 +76,14 @@ int pthread_spin_lock( pthread_spinlock_t *spinlock )
 {
   POSIX_Spinlock_Control *the_spinlock;
   ISR_Level               level;
-#if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
-  SMP_lock_Stats          unused_stats;
-  SMP_lock_Stats_context  unused_context;
+#if defined( RTEMS_SMP ) && defined( RTEMS_PROFILING )
+  SMP_lock_Stats         unused_stats;
+  SMP_lock_Stats_context unused_context;
 #endif
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock );
   _ISR_Local_disable( level );
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _SMP_ticket_lock_Acquire(
     &the_spinlock->Lock,
     &unused_stats,
@@ -94,5 +94,6 @@ int pthread_spin_lock( pthread_spinlock_t *spinlock )
   return 0;
 }
 
-int pthread_spin_trylock( pthread_spinlock_t *spinlock )
-  RTEMS_ALIAS( pthread_spin_lock );
+int pthread_spin_trylock( pthread_spinlock_t *spinlock ) RTEMS_ALIAS(
+  pthread_spin_lock
+);

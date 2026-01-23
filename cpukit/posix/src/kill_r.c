@@ -46,15 +46,11 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <reent.h>
 
-int _kill_r(
-  struct _reent *ptr,
-  pid_t          pid,
-  int            sig
-)
+int _kill_r( struct _reent *ptr, pid_t pid, int sig )
 {
   (void) ptr;
 

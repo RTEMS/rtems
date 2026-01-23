@@ -48,12 +48,11 @@
  *            P1003.1c/Draft 10, p. 96
  */
 
-int pthread_condattr_destroy(
-  pthread_condattr_t *attr
-)
+int pthread_condattr_destroy( pthread_condattr_t *attr )
 {
-  if ( attr == NULL || !attr->is_initialized )
+  if ( attr == NULL || !attr->is_initialized ) {
     return EINVAL;
+  }
 
   attr->is_initialized = false;
   return 0;

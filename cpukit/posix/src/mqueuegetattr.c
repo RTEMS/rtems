@@ -56,10 +56,7 @@
  *  15.2.8 Get Message Queue Attributes, P1003.1b-1993, p. 283
  */
 
-int mq_getattr(
-  mqd_t           mqdes,
-  struct mq_attr *mqstat
-)
+int mq_getattr( mqd_t mqdes, struct mq_attr *mqstat )
 {
   POSIX_Message_queue_Control *the_mq;
   Thread_queue_Context         queue_context;
@@ -87,9 +84,9 @@ int mq_getattr(
   /*
    *  Return the old values.
    */
-  mqstat->mq_flags   = the_mq->oflag;
+  mqstat->mq_flags = the_mq->oflag;
   mqstat->mq_msgsize = the_mq->Message_queue.maximum_message_size;
-  mqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
+  mqstat->mq_maxmsg = the_mq->Message_queue.maximum_pending_messages;
   mqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;
 
   _CORE_message_queue_Release( &the_mq->Message_queue, &queue_context );

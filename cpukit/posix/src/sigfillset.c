@@ -43,12 +43,11 @@
 #include <rtems/posix/sigset.h>
 #include <rtems/seterr.h>
 
-int sigfillset(
-  sigset_t   *set
-)
+int sigfillset( sigset_t *set )
 {
-  if ( !set )
+  if ( !set ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   *set = SIGNAL_ALL_MASK;
   return 0;

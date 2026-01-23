@@ -47,13 +47,11 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/isr.h>
 
-static int _POSIX_signals_Get_lowest(
-  sigset_t   set
-)
+static int _POSIX_signals_Get_lowest( sigset_t set )
 {
   int signo;
 
-  for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
+  for ( signo = SIGRTMIN; signo <= SIGRTMAX; signo++ ) {
     if ( set & signo_to_mask( signo ) ) {
       goto found_it;
     }
@@ -63,10 +61,10 @@ static int _POSIX_signals_Get_lowest(
    *  We assume SIGHUP == 1 and is the first non-real-time signal.
    */
 
-  #if (SIGHUP != 1)
+  #if ( SIGHUP != 1 )
     #error "Assumption that SIGHUP==1 violated!!"
   #endif
-  for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
+  for ( signo = SIGHUP; signo <= __SIGLASTNOTRT; signo++ ) {
     if ( set & signo_to_mask( signo ) ) {
       goto found_it;
     }
@@ -85,24 +83,25 @@ found_it:
  *  3.3.8 Synchronously Accept a Signal, P1003.1b-1993, p. 76
  */
 int sigtimedwait(
-  const sigset_t         *__restrict set,
-  siginfo_t              *__restrict info,
-  const struct timespec  *__restrict timeout
+  const sigset_t *__restrict set,
+  siginfo_t *__restrict info,
+  const struct timespec *__restrict timeout
 )
 {
-  Thread_Control       *executing;
-  POSIX_API_Control    *api;
-  siginfo_t             signal_information;
-  siginfo_t            *the_info;
-  int                   signo;
-  Thread_queue_Context  queue_context;
-  int                   error;
+  Thread_Control      *executing;
+  POSIX_API_Control   *api;
+  siginfo_t            signal_information;
+  siginfo_t           *the_info;
+  int                  signo;
+  Thread_queue_Context queue_context;
+  int                  error;
 
   /*
    *  Error check parameters before disabling interrupts.
    */
-  if ( !set )
+  if ( !set ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   _Thread_queue_Context_initialize( &queue_context );
 
@@ -169,7 +168,7 @@ int sigtimedwait(
 
   the_info->si_signo = -1;
 
-  executing->Wait.option          = *set;
+  executing->Wait.option = *set;
   executing->Wait.return_argument = the_info;
   _Thread_queue_Context_set_thread_state(
     &queue_context,
@@ -194,7 +193,7 @@ int sigtimedwait(
    * the signal.
    */
 
-  if ( error == EINTR )
+  if ( error == EINTR ) {
     _POSIX_signals_Clear_signals(
       api,
       the_info->si_signo,
@@ -203,10 +202,10 @@ int sigtimedwait(
       false,
       true
     );
+  }
 
   if (
-    error != EINTR
-     || ( *set & signo_to_mask( the_info->si_signo ) ) == 0
+    error != EINTR || ( *set & signo_to_mask( the_info->si_signo ) ) == 0
   ) {
     if ( error == ETIMEDOUT ) {
       error = EAGAIN;

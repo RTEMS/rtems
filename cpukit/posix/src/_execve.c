@@ -51,11 +51,7 @@
 #include <rtems/seterr.h>
 #include <sys/unistd.h>
 
-int _execve(
-  const char *path,
-  char *const argv[],
-  char *const envp[]
-)
+int _execve( const char *path, char *const argv[], char *const envp[] )
 {
   (void) path;
   (void) argv;

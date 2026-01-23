@@ -50,9 +50,9 @@
  */
 int pthread_detach( pthread_t thread )
 {
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
-  Per_CPU_Control  *cpu_self;
+  Thread_Control  *the_thread;
+  ISR_lock_Context lock_context;
+  Per_CPU_Control *cpu_self;
 
   the_thread = _Thread_Get( thread, &lock_context );
 
@@ -60,7 +60,7 @@ int pthread_detach( pthread_t thread )
     return ESRCH;
   }
 
-  if (the_thread->Life.state & THREAD_LIFE_DETACHED) {
+  if ( the_thread->Life.state & THREAD_LIFE_DETACHED ) {
     _ISR_lock_ISR_enable( &lock_context );
     return EINVAL;
   }

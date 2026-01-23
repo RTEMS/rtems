@@ -48,14 +48,12 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <stdio.h>
 
-void _POSIX_signals_Set_process_signals(
-  sigset_t   mask
-)
+void _POSIX_signals_Set_process_signals( sigset_t mask )
 {
   Thread_queue_Context queue_context;
 
   _Thread_queue_Context_initialize( &queue_context );
   _POSIX_signals_Acquire( &queue_context );
-    _POSIX_signals_Pending |= mask;
+  _POSIX_signals_Pending |= mask;
   _POSIX_signals_Release( &queue_context );
 }

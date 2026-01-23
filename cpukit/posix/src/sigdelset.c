@@ -49,20 +49,20 @@
  *  3.3.3 Manipulate Signal Sets, P1003.1b-1993, p. 69
  */
 
-int sigdelset(
-  sigset_t   *set,
-  int         signo
-)
+int sigdelset( sigset_t *set, int signo )
 {
-  if ( !set )
+  if ( !set ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
-  if ( !signo )
+  if ( !signo ) {
     return 0;
+  }
 
-  if ( !is_valid_signo(signo) )
+  if ( !is_valid_signo( signo ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
-  *set &= ~signo_to_mask(signo);
+  *set &= ~signo_to_mask( signo );
   return 0;
 }

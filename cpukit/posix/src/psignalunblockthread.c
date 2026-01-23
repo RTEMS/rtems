@@ -52,32 +52,42 @@
 #include <stdio.h>
 
 static void _POSIX_signals_Check_signal(
-  POSIX_API_Control  *api,
-  int                 signo,
-  bool                is_global
+  POSIX_API_Control *api,
+  int                signo,
+  bool               is_global
 )
 {
   siginfo_t siginfo_struct;
   sigset_t  saved_signals_unblocked;
 
-  if ( ! _POSIX_signals_Clear_signals( api, signo, &siginfo_struct,
-                                       is_global, true, true ) )
+  if ( !_POSIX_signals_Clear_signals(
+         api,
+         signo,
+         &siginfo_struct,
+         is_global,
+         true,
+         true
+       ) ) {
     return;
+  }
 
   /*
    *  Since we made a union of these, only one test is necessary but this is
    *  safer.
    */
-  #if defined(RTEMS_DEBUG)
-    assert( _POSIX_signals_Vectors[ signo ].sa_handler ||
-            _POSIX_signals_Vectors[ signo ].sa_sigaction );
+  #if defined( RTEMS_DEBUG )
+  assert(
+    _POSIX_signals_Vectors[ signo ].sa_handler ||
+    _POSIX_signals_Vectors[ signo ].sa_sigaction
+  );
   #endif
 
   /*
    *  Just to prevent sending a signal which is currently being ignored.
    */
-  if ( _POSIX_signals_Vectors[ signo ].sa_handler == SIG_IGN )
+  if ( _POSIX_signals_Vectors[ signo ].sa_handler == SIG_IGN ) {
     return;
+  }
 
   /*
    *  Block the signals requested in sa_mask
@@ -90,14 +100,14 @@ static void _POSIX_signals_Check_signal(
    */
   switch ( _POSIX_signals_Vectors[ signo ].sa_flags ) {
     case SA_SIGINFO:
-      (*_POSIX_signals_Vectors[ signo ].sa_sigaction)(
+      ( *_POSIX_signals_Vectors[ signo ].sa_sigaction )(
         signo,
         &siginfo_struct,
-        NULL        /* context is undefined per 1003.1b-1993, p. 66 */
+        NULL /* context is undefined per 1003.1b-1993, p. 66 */
       );
       break;
     default:
-      (*_POSIX_signals_Vectors[ signo ].sa_handler)( signo );
+      ( *_POSIX_signals_Vectors[ signo ].sa_handler )( signo );
       break;
   }
 
@@ -133,8 +143,8 @@ static void _POSIX_signals_Action_handler(
    *  that uses the thread wait information, then this is a kernel bug.
    */
   _Assert(
-    ( _Thread_Wait_flags_get( executing )
-      & ( THREAD_WAIT_STATE_BLOCKED | THREAD_WAIT_STATE_INTEND_TO_BLOCK ) ) == 0
+    ( _Thread_Wait_flags_get( executing ) &
+      ( THREAD_WAIT_STATE_BLOCKED | THREAD_WAIT_STATE_INTEND_TO_BLOCK ) ) == 0
   );
 
   /*
@@ -145,25 +155,25 @@ static void _POSIX_signals_Action_handler(
    *  The first thing done is to check there are any signals to be
    *  processed at all.  No point in doing this loop otherwise.
    */
-  while (1) {
+  while ( 1 ) {
     Thread_queue_Context queue_context;
 
     _Thread_queue_Context_initialize( &queue_context );
     _POSIX_signals_Acquire( &queue_context );
-      if ( !(api->signals_unblocked &
-            (api->signals_pending | _POSIX_signals_Pending)) ) {
-       _POSIX_signals_Release( &queue_context );
-       break;
-     }
+    if ( !( api->signals_unblocked &
+            ( api->signals_pending | _POSIX_signals_Pending ) ) ) {
+      _POSIX_signals_Release( &queue_context );
+      break;
+    }
     _POSIX_signals_Release( &queue_context );
 
-    for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
+    for ( signo = SIGRTMIN; signo <= SIGRTMAX; signo++ ) {
       _POSIX_signals_Check_signal( api, signo, false );
       _POSIX_signals_Check_signal( api, signo, true );
     }
     /* Unfortunately - nothing like __SIGFIRSTNOTRT in newlib signal .h */
 
-    for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
+    for ( signo = SIGHUP; signo <= __SIGLASTNOTRT; signo++ ) {
       _POSIX_signals_Check_signal( api, signo, false );
       _POSIX_signals_Check_signal( api, signo, true );
     }
@@ -194,14 +204,14 @@ static bool _POSIX_signals_Unblock_thread_done(
 }
 
 bool _POSIX_signals_Unblock_thread(
-  Thread_Control  *the_thread,
-  int              signo,
-  siginfo_t       *info
+  Thread_Control *the_thread,
+  int             signo,
+  siginfo_t      *info
 )
 {
-  POSIX_API_Control  *api;
-  sigset_t            mask;
-  siginfo_t          *the_info = NULL;
+  POSIX_API_Control *api;
+  sigset_t           mask;
+  siginfo_t         *the_info = NULL;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
@@ -212,8 +222,9 @@ bool _POSIX_signals_Unblock_thread(
    */
 
   if ( _States_Is_interruptible_signal( the_thread->current_state ) ) {
-
-    if ( (the_thread->Wait.option & mask) || (api->signals_unblocked & mask) ) {
+    if (
+      ( the_thread->Wait.option & mask ) || ( api->signals_unblocked & mask )
+    ) {
       the_info = (siginfo_t *) the_thread->Wait.return_argument;
 
       if ( !info ) {
@@ -239,7 +250,6 @@ bool _POSIX_signals_Unblock_thread(
    *  Thread is not waiting due to a sigwait.
    */
   if ( api->signals_unblocked & mask ) {
-
     /*
      *  The thread is interested in this signal.  We are going
      *  to post it.  We have a few broad cases:

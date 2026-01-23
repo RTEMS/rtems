@@ -43,13 +43,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_attr_setschedpolicy(
-  pthread_attr_t  *attr,
-  int              policy
-)
+int pthread_attr_setschedpolicy( pthread_attr_t *attr, int policy )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized ) {
     return EINVAL;
+  }
 
   switch ( policy ) {
     case SCHED_OTHER:

@@ -45,13 +45,14 @@
 #include <errno.h>
 
 int pthread_attr_getstack(
-  const pthread_attr_t   *attr,
-  void                  **stackaddr,
-  size_t                 *stacksize
+  const pthread_attr_t *attr,
+  void                **stackaddr,
+  size_t               *stacksize
 )
 {
-  if ( !attr || !attr->is_initialized || !stackaddr || !stacksize )
+  if ( !attr || !attr->is_initialized || !stackaddr || !stacksize ) {
     return EINVAL;
+  }
 
   *stackaddr = attr->stackaddr;
   *stacksize = attr->stacksize;

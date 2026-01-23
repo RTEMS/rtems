@@ -44,9 +44,7 @@
  *  15.2.2 Remove a Message Queue, P1003.1b-1993, p. 276
  */
 
-int mq_unlink(
-  const char *name
-)
+int mq_unlink( const char *name )
 {
   POSIX_Message_queue_Control *the_mq;
   Objects_Get_by_name_error    error;

@@ -44,12 +44,13 @@
 #include <errno.h>
 
 int pthread_attr_getschedparam(
-  const pthread_attr_t   *attr,
-  struct sched_param     *param
+  const pthread_attr_t *attr,
+  struct sched_param   *param
 )
 {
-  if ( !attr || !attr->is_initialized || !param )
+  if ( !attr || !attr->is_initialized || !param ) {
     return EINVAL;
+  }
 
   *param = attr->schedparam;
   return 0;

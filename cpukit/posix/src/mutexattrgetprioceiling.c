@@ -47,12 +47,13 @@
  */
 
 int pthread_mutexattr_getprioceiling(
-  const pthread_mutexattr_t   *attr,
-  int                         *prioceiling
+  const pthread_mutexattr_t *attr,
+  int                       *prioceiling
 )
 {
-  if ( attr == NULL || !attr->is_initialized || prioceiling == NULL)
+  if ( attr == NULL || !attr->is_initialized || prioceiling == NULL ) {
     return EINVAL;
+  }
 
   *prioceiling = attr->prio_ceiling;
   return 0;

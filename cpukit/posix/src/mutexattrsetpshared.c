@@ -50,13 +50,11 @@
  *  11.3.1 Mutex Initialization Attributes, P1003.1c/Draft 10, p. 81
  */
 
-int pthread_mutexattr_setpshared(
-  pthread_mutexattr_t *attr,
-  int                  pshared
-)
+int pthread_mutexattr_setpshared( pthread_mutexattr_t *attr, int pshared )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized ) {
     return EINVAL;
+  }
 
   switch ( pshared ) {
     case PTHREAD_PROCESS_SHARED:

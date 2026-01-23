@@ -41,13 +41,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_condattr_setpshared(
-  pthread_condattr_t *attr,
-  int                 pshared
-)
+int pthread_condattr_setpshared( pthread_condattr_t *attr, int pshared )
 {
-  if ( !attr )
+  if ( !attr ) {
     return EINVAL;
+  }
 
   switch ( pshared ) {
     case PTHREAD_PROCESS_SHARED:

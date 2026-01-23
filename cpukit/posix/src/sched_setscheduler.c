@@ -46,8 +46,8 @@
 #include <rtems/posix/priorityimpl.h>
 
 int sched_setscheduler(
-  pid_t                     pid RTEMS_UNUSED,
-  int                       policy RTEMS_UNUSED,
+  pid_t pid                       RTEMS_UNUSED,
+  int policy                      RTEMS_UNUSED,
   const struct sched_param *param RTEMS_UNUSED
 )
 {

@@ -48,14 +48,12 @@
 
 static int pthread_concurrency_level;
 
-int pthread_getconcurrency(void)
+int pthread_getconcurrency( void )
 {
   return pthread_concurrency_level;
 }
 
-int pthread_setconcurrency(
-  int new_level
-)
+int pthread_setconcurrency( int new_level )
 {
   pthread_concurrency_level = new_level;
   return 0;

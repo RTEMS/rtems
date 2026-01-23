@@ -46,9 +46,7 @@
 /**
  *  13.3.6 Get Scheduling Parameter Limits, P1003.1b-1993, p. 258
  */
-int sched_get_priority_min(
-  int  policy
-)
+int sched_get_priority_min( int policy )
 {
   switch ( policy ) {
     case SCHED_OTHER:

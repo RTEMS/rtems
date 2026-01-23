@@ -43,13 +43,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_attr_setstackaddr(
-  pthread_attr_t  *attr,
-  void            *stackaddr
-)
+int pthread_attr_setstackaddr( pthread_attr_t *attr, void *stackaddr )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized ) {
     return EINVAL;
+  }
 
   attr->stackaddr = stackaddr;
   return 0;

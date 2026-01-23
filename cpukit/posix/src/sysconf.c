@@ -52,9 +52,7 @@
  *  4.8.1 Get Configurable System Variables, P1003.1b-1993, p. 95
  */
 
-long sysconf(
-  int name
-)
+long sysconf( int name )
 {
   switch ( name ) {
     case _SC_CLK_TCK:

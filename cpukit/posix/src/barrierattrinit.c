@@ -40,12 +40,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_barrierattr_init(
-  pthread_barrierattr_t *attr
-)
+int pthread_barrierattr_init( pthread_barrierattr_t *attr )
 {
-  if ( !attr )
+  if ( !attr ) {
     return EINVAL;
+  }
 
   attr->is_initialized = 1;
   attr->process_shared = PTHREAD_PROCESS_PRIVATE;

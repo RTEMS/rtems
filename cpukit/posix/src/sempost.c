@@ -43,11 +43,11 @@
 
 int sem_post( sem_t *_sem )
 {
-  Sem_Control          *sem;
-  ISR_Level             level;
-  Thread_queue_Context  queue_context;
-  Thread_queue_Heads   *heads;
-  unsigned int          count;
+  Sem_Control         *sem;
+  ISR_Level            level;
+  Thread_queue_Context queue_context;
+  Thread_queue_Heads  *heads;
+  unsigned int         count;
 
   POSIX_SEMAPHORE_VALIDATE_OBJECT( _sem );
 

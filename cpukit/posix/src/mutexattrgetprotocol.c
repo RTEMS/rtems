@@ -47,12 +47,13 @@
  */
 
 int pthread_mutexattr_getprotocol(
-  const pthread_mutexattr_t   *attr,
-  int                         *protocol
+  const pthread_mutexattr_t *attr,
+  int                       *protocol
 )
 {
-  if ( attr == NULL || !attr->is_initialized || protocol == NULL )
+  if ( attr == NULL || !attr->is_initialized || protocol == NULL ) {
     return EINVAL;
+  }
 
   *protocol = attr->protocol;
   return 0;

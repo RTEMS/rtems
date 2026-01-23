@@ -59,9 +59,7 @@ bool _POSIX_RWLock_Auto_initialization( POSIX_RWLock_Control *the_rwlock )
   return true;
 }
 
-int pthread_rwlock_unlock(
-  pthread_rwlock_t  *rwlock
-)
+int pthread_rwlock_unlock( pthread_rwlock_t *rwlock )
 {
   POSIX_RWLock_Control *the_rwlock;
   Status_Control        status;

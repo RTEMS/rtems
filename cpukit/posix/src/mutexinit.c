@@ -46,26 +46,26 @@
 #include <limits.h>
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Mutex_Control, flags )
-    == offsetof( pthread_mutex_t, _flags ),
+  offsetof( POSIX_Mutex_Control, flags ) ==
+    offsetof( pthread_mutex_t, _flags ),
   POSIX_MUTEX_CONTROL_FLAGS
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Mutex_Control, Recursive )
-    == offsetof( pthread_mutex_t, _Recursive ),
+  offsetof( POSIX_Mutex_Control, Recursive ) ==
+    offsetof( pthread_mutex_t, _Recursive ),
   POSIX_MUTEX_CONTROL_RECURSIVE
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Mutex_Control, Priority_ceiling )
-    == offsetof( pthread_mutex_t, _Priority_ceiling ),
+  offsetof( POSIX_Mutex_Control, Priority_ceiling ) ==
+    offsetof( pthread_mutex_t, _Priority_ceiling ),
   POSIX_MUTEX_CONTROL_PRIORITY_CEILING
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Mutex_Control, scheduler )
-    == offsetof( pthread_mutex_t, _scheduler ),
+  offsetof( POSIX_Mutex_Control, scheduler ) ==
+    offsetof( pthread_mutex_t, _scheduler ),
   POSIX_MUTEX_CONTROL_SCHEDULER
 );
 
@@ -75,14 +75,14 @@ RTEMS_STATIC_ASSERT(
 );
 
 const pthread_mutexattr_t _POSIX_Mutex_Default_attributes = {
-#if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
-  .type           = PTHREAD_MUTEX_DEFAULT,
+#if defined( _UNIX98_THREAD_MUTEX_ATTRIBUTES )
+  .type = PTHREAD_MUTEX_DEFAULT,
 #endif
   .is_initialized = true,
   .process_shared = PTHREAD_PROCESS_PRIVATE,
-  .prio_ceiling   = INT_MAX,
-  .protocol       = PTHREAD_PRIO_NONE,
-  .recursive      = false
+  .prio_ceiling = INT_MAX,
+  .protocol = PTHREAD_PRIO_NONE,
+  .recursive = false
 };
 
 /**
@@ -104,12 +104,16 @@ int pthread_mutex_init(
   Priority_Control           priority;
   const Scheduler_Control   *scheduler;
 
-  if ( attr ) the_attr = attr;
-  else        the_attr = &_POSIX_Mutex_Default_attributes;
+  if ( attr ) {
+    the_attr = attr;
+  } else {
+    the_attr = &_POSIX_Mutex_Default_attributes;
+  }
 
   /* Check for NULL mutex */
-  if ( !mutex )
+  if ( !mutex ) {
     return EINVAL;
+  }
 
   /*
    *  The POSIX specification says:
@@ -124,8 +128,9 @@ int pthread_mutex_init(
    *  Thus, we do not look at *mutex.
    */
 
-  if ( !the_attr->is_initialized )
+  if ( !the_attr->is_initialized ) {
     return EINVAL;
+  }
 
   if ( !_POSIX_Is_valid_pshared( the_attr->process_shared ) ) {
     return EINVAL;
@@ -148,7 +153,7 @@ int pthread_mutex_init(
       return EINVAL;
   }
 
-#if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
+#if defined( _UNIX98_THREAD_MUTEX_ATTRIBUTES )
   /*
    *  Validate the mutex type and set appropriate SuperCore mutex
    *  attributes.

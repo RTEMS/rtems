@@ -49,12 +49,9 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/posix/timerimpl.h>
 
-
-int timer_delete(
-  timer_t timerid
-)
+int timer_delete( timer_t timerid )
 {
- /*
+  /*
   * IDEA: This function must probably stop the timer first and then delete it
   *
   *       It will have to do a call to rtems_timer_cancel and then another

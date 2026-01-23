@@ -48,20 +48,19 @@
 #include <rtems/config.h>
 #include <rtems/seterr.h>
 
-int sched_rr_get_interval(
-  pid_t             pid,
-  struct timespec  *interval
-)
+int sched_rr_get_interval( pid_t pid, struct timespec *interval )
 {
   /*
    *  Only supported for the "calling process" (i.e. this node).
    */
 
-  if ( pid && pid != getpid() )
+  if ( pid && pid != getpid() ) {
     rtems_set_errno_and_return_minus_one( ESRCH );
+  }
 
-  if ( !interval )
+  if ( !interval ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   _Timespec_From_ticks(
     rtems_configuration_get_ticks_per_timeslice(),

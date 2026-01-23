@@ -54,11 +54,11 @@
  * seeing "maybe used uninitialized" for queue_context.
  */
 static bool _POSIX_signals_Clear_signals_helper(
-  POSIX_API_Control  *api,
-  int                 signo,
-  siginfo_t          *info,
-  bool                is_global,
-  bool                check_blocked
+  POSIX_API_Control *api,
+  int                signo,
+  siginfo_t         *info,
+  bool               is_global,
+  bool               check_blocked
 )
 {
   sigset_t                    mask;
@@ -78,39 +78,42 @@ static bool _POSIX_signals_Clear_signals_helper(
    * insures that no signals are blocked and all are checked.
    */
 
-  if ( check_blocked )
+  if ( check_blocked ) {
     signals_unblocked = api->signals_unblocked;
-  else
+  } else {
     signals_unblocked = SIGNAL_ALL_MASK;
+  }
 
   /* XXX is this right for siginfo type signals? */
   /* XXX are we sure they can be cleared the same way? */
 
   if ( is_global ) {
-     if ( mask & (_POSIX_signals_Pending & signals_unblocked) ) {
-       if ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) {
-         psiginfo = (POSIX_signals_Siginfo_node *)
-           _Chain_Get_unprotected( &_POSIX_signals_Siginfo[ signo ] );
-         _POSIX_signals_Clear_process_signals( signo );
-         /*
+    if ( mask & ( _POSIX_signals_Pending & signals_unblocked ) ) {
+      if ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) {
+        psiginfo = (POSIX_signals_Siginfo_node *) _Chain_Get_unprotected(
+          &_POSIX_signals_Siginfo[ signo ]
+        );
+        _POSIX_signals_Clear_process_signals( signo );
+        /*
           *  It may be impossible to get here with an empty chain
           *  BUT until that is proven we need to be defensive and
           *  protect against it.
           */
-         if ( psiginfo ) {
-           *info = psiginfo->Info;
-           _Chain_Append_unprotected(
-             &_POSIX_signals_Inactive_siginfo,
-             &psiginfo->Node
-           );
-         } else
-           do_callout = false;
-       }
-       _POSIX_signals_Clear_process_signals( signo );
-       do_callout = true;
-     }
+        if ( psiginfo ) {
+          *info = psiginfo->Info;
+          _Chain_Append_unprotected(
+            &_POSIX_signals_Inactive_siginfo,
+            &psiginfo->Node
+          );
+        } else {
+          do_callout = false;
+        }
+      }
+      _POSIX_signals_Clear_process_signals( signo );
+      do_callout = true;
+    }
   } else {
-    if ( mask & (api->signals_pending & signals_unblocked) ) {
+    if ( mask & ( api->signals_pending & signals_unblocked ) ) {
       api->signals_pending &= ~mask;
       do_callout = true;
     }
@@ -123,16 +126,16 @@ static bool _POSIX_signals_Clear_signals_helper(
  */
 
 bool _POSIX_signals_Clear_signals(
-  POSIX_API_Control  *api,
-  int                 signo,
-  siginfo_t          *info,
-  bool                is_global,
-  bool                check_blocked,
-  bool                do_signals_acquire_release
+  POSIX_API_Control *api,
+  int                signo,
+  siginfo_t         *info,
+  bool               is_global,
+  bool               check_blocked,
+  bool               do_signals_acquire_release
 )
 {
   bool                 retval;
-  Thread_queue_Context  queue_context;
+  Thread_queue_Context queue_context;
 
   if ( do_signals_acquire_release ) {
     _Thread_queue_Context_initialize( &queue_context );

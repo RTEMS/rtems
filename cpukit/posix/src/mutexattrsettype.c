@@ -45,14 +45,12 @@
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/priorityimpl.h>
 
-#if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
-int pthread_mutexattr_settype(
-  pthread_mutexattr_t *attr,
-  int                  type
-)
+#if defined( _UNIX98_THREAD_MUTEX_ATTRIBUTES )
+int pthread_mutexattr_settype( pthread_mutexattr_t *attr, int type )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized ) {
     return EINVAL;
+  }
 
   switch ( type ) {
     case PTHREAD_MUTEX_NORMAL:

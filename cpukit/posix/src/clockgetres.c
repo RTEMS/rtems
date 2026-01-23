@@ -49,17 +49,14 @@
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
  */
 
-int clock_getres(
-  clockid_t        clock_id,
-  struct timespec *res
-)
+int clock_getres( clockid_t clock_id, struct timespec *res )
 {
-  if ( !res )
+  if ( !res ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   switch ( clock_id ) {
-
-    /*
+      /*
      *  All time in rtems is based on the same clock tick.
      */
 
@@ -68,14 +65,13 @@ int clock_getres(
     case CLOCK_THREAD_CPUTIME_ID:
       if ( res ) {
         res->tv_sec = rtems_configuration_get_microseconds_per_tick() /
-            TOD_MICROSECONDS_PER_SECOND;
+                      TOD_MICROSECONDS_PER_SECOND;
         res->tv_nsec = rtems_configuration_get_nanoseconds_per_tick();
       }
       break;
 
     default:
       rtems_set_errno_and_return_minus_one( EINVAL );
-
   }
   return 0;
 }

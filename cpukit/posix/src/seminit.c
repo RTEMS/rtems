@@ -46,11 +46,7 @@
  *  11.2.1 Initialize an Unnamed Semaphore, P1003.1b-1993, p.219
  */
 
-int sem_init(
-  sem_t         *sem,
-  int            pshared,
-  unsigned int   value
-)
+int sem_init( sem_t *sem, int pshared, unsigned int value )
 {
   (void) pshared;
 

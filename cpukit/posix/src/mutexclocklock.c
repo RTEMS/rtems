@@ -57,7 +57,7 @@ int pthread_mutex_clocklock(
       abstime,
       _Thread_queue_Add_timeout_monotonic_timespec
     );
-  } 
-  
+  }
+
   return EINVAL;
 }

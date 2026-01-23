@@ -57,12 +57,12 @@ THREAD_QUEUE_OBJECT_ASSERT(
  */
 
 ssize_t _POSIX_Message_queue_Receive_support(
-  mqd_t                         mqdes,
-  char                         *msg_ptr,
-  size_t                        msg_len,
-  unsigned int                 *msg_prio,
-  const struct timespec        *abstime,
-  Thread_queue_Enqueue_callout  enqueue_callout
+  mqd_t                        mqdes,
+  char                        *msg_ptr,
+  size_t                       msg_len,
+  unsigned int                *msg_prio,
+  const struct timespec       *abstime,
+  Thread_queue_Enqueue_callout enqueue_callout
 )
 {
   POSIX_Message_queue_Control *the_mq;

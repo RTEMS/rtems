@@ -40,7 +40,7 @@
 
 int _POSIX_Shm_Object_create_from_heap(
   POSIX_Shm_Object *shm_obj,
-  size_t size
+  size_t            size
 )
 {
   void *p = calloc( 1, size ); /* get zero'd memory */
@@ -65,22 +65,22 @@ int _POSIX_Shm_Object_delete_from_heap( POSIX_Shm_Object *shm_obj )
 
 int _POSIX_Shm_Object_resize_from_heap(
   POSIX_Shm_Object *shm_obj,
-  size_t size
+  size_t            size
 )
 {
   void *p;
-  int err = 0;
+  int   err = 0;
 
   if ( size < shm_obj->size ) {
     /* zero out if shrinking */
-    p = (void*)((uintptr_t)shm_obj->handle + (uintptr_t)size);
+    p = (void *) ( (uintptr_t) shm_obj->handle + (uintptr_t) size );
     memset( p, 0, shm_obj->size - size );
   }
   p = realloc( shm_obj->handle, size );
   if ( p != NULL ) {
     shm_obj->handle = p;
     if ( size > shm_obj->size ) {
-      /* initialize added memory */ 
+      /* initialize added memory */
       memset( p, 0, size - shm_obj->size );
     }
     shm_obj->size = size;
@@ -93,12 +93,13 @@ int _POSIX_Shm_Object_resize_from_heap(
 /* This is identical to _POSIX_Shm_Object_read_from_wkspace */
 int _POSIX_Shm_Object_read_from_heap(
   POSIX_Shm_Object *shm_obj,
-  void *buf,
-  size_t count
+  void             *buf,
+  size_t            count
 )
 {
-  if ( shm_obj == NULL || shm_obj->handle == NULL )
+  if ( shm_obj == NULL || shm_obj->handle == NULL ) {
     return 0;
+  }
 
   if ( shm_obj->size < count ) {
     count = shm_obj->size;
@@ -110,23 +111,23 @@ int _POSIX_Shm_Object_read_from_heap(
 }
 
 /* This is identical to _POSIX_Shm_Object_mmap_from_wkspace */
-void * _POSIX_Shm_Object_mmap_from_heap(
+void *_POSIX_Shm_Object_mmap_from_heap(
   POSIX_Shm_Object *shm_obj,
-  size_t len,
-  int prot,
-  off_t off
+  size_t            len,
+  int               prot,
+  off_t             off
 )
 {
   (void) prot;
 
-  if ( shm_obj == NULL || shm_obj->handle == NULL )
+  if ( shm_obj == NULL || shm_obj->handle == NULL ) {
     return 0;
+  }
 
   /* This is already checked by mmap. Maybe make it a debug assert? */
   if ( shm_obj->size < len + off ) {
     return NULL;
   }
 
-  return (char*)shm_obj->handle + off;
+  return (char *) shm_obj->handle + off;
 }
-

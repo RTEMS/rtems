@@ -41,13 +41,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-int pthread_attr_getstackaddr(
-  const pthread_attr_t   *attr,
-  void                  **stackaddr
-)
+int pthread_attr_getstackaddr( const pthread_attr_t *attr, void **stackaddr )
 {
-  if ( !attr || !attr->is_initialized || !stackaddr )
+  if ( !attr || !attr->is_initialized || !stackaddr ) {
     return EINVAL;
+  }
 
   *stackaddr = attr->stackaddr;
   return 0;

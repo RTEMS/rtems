@@ -41,17 +41,15 @@
 #include <pthread.h>
 #include <errno.h>
 
-
 /*
  *  RWLock Attributes Initialization
  */
 
-int pthread_rwlockattr_init(
-  pthread_rwlockattr_t *attr
-)
+int pthread_rwlockattr_init( pthread_rwlockattr_t *attr )
 {
-  if ( !attr )
+  if ( !attr ) {
     return EINVAL;
+  }
 
   attr->is_initialized = 1;
   attr->process_shared = PTHREAD_PROCESS_PRIVATE;

@@ -61,10 +61,10 @@
  */
 
 ssize_t mq_timedreceive(
-  mqd_t                  mqdes,
-  char                  *__restrict msg_ptr,
-  size_t                 msg_len,
-  unsigned int          *__restrict msg_prio,
+  mqd_t mqdes,
+  char *__restrict msg_ptr,
+  size_t msg_len,
+  unsigned int *__restrict msg_prio,
   const struct timespec *__restrict abstime
 )
 {

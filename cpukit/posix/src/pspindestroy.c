@@ -43,7 +43,7 @@
 
 int pthread_spin_destroy( pthread_spinlock_t *spinlock )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   POSIX_Spinlock_Control *the_spinlock;
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock );

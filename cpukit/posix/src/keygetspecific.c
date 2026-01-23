@@ -46,9 +46,7 @@
  *  17.1.2 Thread-Specific Data Management, P1003.1c/Draft 10, p. 165
  */
 
-void *pthread_getspecific(
-  pthread_key_t  key
-)
+void *pthread_getspecific( pthread_key_t key )
 {
   Thread_Control            *executing;
   ISR_lock_Context           lock_context;

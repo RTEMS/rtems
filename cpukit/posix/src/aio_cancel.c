@@ -47,12 +47,12 @@
 #include <stdlib.h>
 #include <rtems/seterr.h>
 
-int aio_cancel( int fildes, struct aiocb  *aiocbp )
+int aio_cancel( int fildes, struct aiocb *aiocbp )
 {
-  rtems_chain_control *idle_req_chain = &aio_request_queue.idle_req;
-  rtems_chain_control *work_req_chain = &aio_request_queue.work_req;
+  rtems_chain_control     *idle_req_chain = &aio_request_queue.idle_req;
+  rtems_chain_control     *work_req_chain = &aio_request_queue.work_req;
   rtems_aio_request_chain *r_chain;
-  int result;
+  int                      result;
 
   pthread_mutex_lock( &aio_request_queue.mutex );
 
@@ -103,16 +103,16 @@ int aio_cancel( int fildes, struct aiocb  *aiocbp )
   } else {
     AIO_printf( "Cancel request\n" );
 
-    if( aiocbp->aio_fildes != fildes ) {
+    if ( aiocbp->aio_fildes != fildes ) {
       pthread_mutex_unlock( &aio_request_queue.mutex );
       rtems_set_errno_and_return_minus_one( EINVAL );
     }
-      
+
     r_chain = rtems_aio_search_fd( work_req_chain, fildes, 0 );
     if ( r_chain == NULL ) {
       if ( !rtems_chain_is_empty( idle_req_chain ) ) {
         r_chain = rtems_aio_search_fd( idle_req_chain, fildes, 0 );
-        if (r_chain == NULL) { 
+        if ( r_chain == NULL ) {
           pthread_mutex_unlock( &aio_request_queue.mutex );
           rtems_set_errno_and_return_minus_one( EINVAL );
         }
@@ -138,4 +138,3 @@ int aio_cancel( int fildes, struct aiocb  *aiocbp )
   }
   return AIO_ALLDONE;
 }
-

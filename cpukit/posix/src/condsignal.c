@@ -42,9 +42,7 @@
 /**
  *  11.4.3 Broadcasting and Signaling a Condition, P1003.1c/Draft 10, p. 101
  */
-int pthread_cond_signal(
-  pthread_cond_t   *cond
-)
+int pthread_cond_signal( pthread_cond_t *cond )
 {
   return _POSIX_Condition_variables_Signal_support( cond, false );
 }

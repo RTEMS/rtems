@@ -48,8 +48,9 @@
 #include <rtems/score/watchdogimpl.h>
 
 #if ISR_LOCK_NEEDS_OBJECT
-static ISR_lock_Control _POSIX_signals_Alarm_lock =
-  ISR_LOCK_INITIALIZER( "POSIX Alarm" );
+static ISR_lock_Control _POSIX_signals_Alarm_lock = ISR_LOCK_INITIALIZER(
+  "POSIX Alarm"
+);
 #endif
 
 static void _POSIX_signals_Alarm_TSR( Watchdog_Control *the_watchdog )
@@ -60,14 +61,14 @@ static void _POSIX_signals_Alarm_TSR( Watchdog_Control *the_watchdog )
 
   status = kill( getpid(), SIGALRM );
 
-  #if defined(RTEMS_DEBUG)
-    /*
+  #if defined( RTEMS_DEBUG )
+  /*
      *  There is no reason to think this might fail but we should be
      *  cautious.
      */
-    _Assert(status == 0);
+  _Assert( status == 0 );
   #else
-    (void) status;
+  (void) status;
   #endif
 }
 
@@ -75,9 +76,7 @@ static Watchdog_Control _POSIX_signals_Alarm_watchdog = WATCHDOG_INITIALIZER(
   _POSIX_signals_Alarm_TSR
 );
 
-unsigned int alarm(
-  unsigned int seconds
-)
+unsigned int alarm( unsigned int seconds )
 {
   unsigned int      remaining;
   Watchdog_Control *the_watchdog;

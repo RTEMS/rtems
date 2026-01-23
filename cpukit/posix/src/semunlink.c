@@ -42,8 +42,8 @@
 
 int sem_unlink( const char *name )
 {
-  POSIX_Semaphore_Control   *the_semaphore;
-  Objects_Get_by_name_error  error;
+  POSIX_Semaphore_Control  *the_semaphore;
+  Objects_Get_by_name_error error;
 
   _Objects_Allocator_lock();
 

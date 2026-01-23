@@ -49,11 +49,13 @@ int setitimer(
   struct itimerval       *ovalue
 )
 {
-  if ( !value )
+  if ( !value ) {
     rtems_set_errno_and_return_minus_one( EFAULT );
+  }
 
-  if ( !ovalue )
+  if ( !ovalue ) {
     rtems_set_errno_and_return_minus_one( EFAULT );
+  }
 
   switch ( which ) {
     case ITIMER_REAL:
@@ -65,4 +67,3 @@ int setitimer(
   }
   rtems_set_errno_and_return_minus_one( EINVAL );
 }
-

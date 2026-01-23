@@ -41,20 +41,20 @@
 #include <rtems/posix/posixapi.h>
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Condition_variables_Control, flags )
-    == offsetof( pthread_cond_t, _flags ),
+  offsetof( POSIX_Condition_variables_Control, flags ) ==
+    offsetof( pthread_cond_t, _flags ),
   POSIX_CONDITION_VARIABLES_CONTROL_FLAGS
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Condition_variables_Control, mutex )
-    == offsetof( pthread_cond_t, _mutex ),
+  offsetof( POSIX_Condition_variables_Control, mutex ) ==
+    offsetof( pthread_cond_t, _mutex ),
   POSIX_CONDITION_VARIABLES_CONTROL_COUNT
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( POSIX_Condition_variables_Control, Queue )
-    == offsetof( pthread_cond_t, _Queue ),
+  offsetof( POSIX_Condition_variables_Control, Queue ) ==
+    offsetof( pthread_cond_t, _Queue ),
   POSIX_CONDITION_VARIABLES_CONTROL_QUEUE
 );
 
@@ -67,10 +67,7 @@ RTEMS_STATIC_ASSERT(
  *  11.4.2 Initializing and Destroying a Condition Variable,
  *         P1003.1c/Draft 10, p. 87
  */
-int pthread_cond_init(
-  pthread_cond_t           *cond,
-  const pthread_condattr_t *attr
-)
+int pthread_cond_init( pthread_cond_t *cond, const pthread_condattr_t *attr )
 {
   POSIX_Condition_variables_Control *the_cond;
 

@@ -39,9 +39,9 @@
 
 int pthread_setname_np( pthread_t thread, const char *name )
 {
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
-  Status_Control    status;
+  Thread_Control  *the_thread;
+  ISR_lock_Context lock_context;
+  Status_Control   status;
 
   _Objects_Allocator_lock();
   the_thread = _Thread_Get( thread, &lock_context );

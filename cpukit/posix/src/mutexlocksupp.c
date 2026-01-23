@@ -72,22 +72,22 @@ Status_Control _POSIX_Mutex_Seize_slow(
 }
 
 int _POSIX_Mutex_Lock_support(
-  pthread_mutex_t              *mutex,
-  const struct timespec        *abstime,
-  Thread_queue_Enqueue_callout  enqueue_callout
+  pthread_mutex_t             *mutex,
+  const struct timespec       *abstime,
+  Thread_queue_Enqueue_callout enqueue_callout
 )
 {
-  POSIX_Mutex_Control  *the_mutex;
-  unsigned long         flags;
-  Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
-  Status_Control        status;
+  POSIX_Mutex_Control *the_mutex;
+  unsigned long        flags;
+  Thread_queue_Context queue_context;
+  Thread_Control      *executing;
+  Status_Control       status;
 
   the_mutex = _POSIX_Mutex_Get( mutex );
   POSIX_MUTEX_VALIDATE_OBJECT( the_mutex, flags );
 
   executing = _POSIX_Mutex_Acquire( the_mutex, &queue_context );
-  _Thread_queue_Context_set_enqueue_callout( &queue_context, enqueue_callout);
+  _Thread_queue_Context_set_enqueue_callout( &queue_context, enqueue_callout );
   _Thread_queue_Context_set_timeout_argument( &queue_context, abstime, true );
 
   switch ( _POSIX_Mutex_Get_protocol( flags ) ) {

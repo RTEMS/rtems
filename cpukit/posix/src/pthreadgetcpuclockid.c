@@ -45,10 +45,7 @@
 
 #include <rtems/seterr.h>
 
-int pthread_getcpuclockid(
-  pthread_t    pid,
-  clockid_t   *clock_id
-)
+int pthread_getcpuclockid( pthread_t pid, clockid_t *clock_id )
 {
   (void) pid;
   (void) clock_id;

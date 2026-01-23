@@ -44,11 +44,7 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
 
-int kill(
-  pid_t pid,
-  int   sig
-)
+int kill( pid_t pid, int sig )
 {
   return _POSIX_signals_Send( pid, sig, NULL );
 }
-

@@ -38,9 +38,7 @@
 
 #include <rtems/posix/rwlockimpl.h>
 
-int pthread_rwlock_destroy(
-  pthread_rwlock_t *_rwlock
-)
+int pthread_rwlock_destroy( pthread_rwlock_t *_rwlock )
 {
   POSIX_RWLock_Control *the_rwlock;
   Thread_queue_Context  queue_context;

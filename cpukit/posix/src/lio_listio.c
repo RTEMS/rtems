@@ -51,15 +51,15 @@
 #include <rtems/seterr.h>
 
 int lio_listio(
-  int              mode,
-  struct aiocb    *__restrict const  list[__restrict],
-  int              nent,
+  int mode,
+  struct aiocb *__restrict const list[ __restrict ],
+  int nent,
   struct sigevent *__restrict sig
 )
 {
-#ifdef RTEMS_POSIX_API 
-  int result, error;
-  listcb *listcbp;
+#ifdef RTEMS_POSIX_API
+  int                result, error;
+  listcb            *listcbp;
   rtems_aio_request *req;
 
   /* Errors on parameters */
@@ -75,7 +75,9 @@ int lio_listio(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  if ( nent + atomic_load( &aio_request_queue.queued_requests ) > RTEMS_AIO_MAX ) {
+  if (
+    nent + atomic_load( &aio_request_queue.queued_requests ) > RTEMS_AIO_MAX
+  ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
@@ -99,7 +101,6 @@ int lio_listio(
     listcbp->lio_notification.task_id = rtems_task_self();
 
   } else if ( mode == LIO_NOWAIT ) {
-
     if ( sig == NULL ) {
       listcbp->notification_type = AIO_LIO_NO_NOTIFY;
     } else {
@@ -112,23 +113,23 @@ int lio_listio(
       listcbp->lio_notification.sigp = sig;
     }
   }
-  
+
   /* Initialize and enqueue each request */
   error = 0;
 
-  for( int i = 0; i < nent; i++ ) { 
-    if ( list[i] == NULL ) {
+  for ( int i = 0; i < nent; i++ ) {
+    if ( list[ i ] == NULL ) {
       continue;
     }
 
-    switch ( list[i]->aio_lio_opcode ) {
+    switch ( list[ i ]->aio_lio_opcode ) {
       case LIO_READ:
-        req = init_read_req( list[i] );
+        req = init_read_req( list[ i ] );
         if ( req == NULL ) {
           error = 1;
-          list[i]->return_value = -1;
-          list[i]->error_code = errno;
-          list[i]->return_status = AIO_NOTRETURNED;
+          list[ i ]->return_value = -1;
+          list[ i ]->error_code = errno;
+          list[ i ]->return_status = AIO_NOTRETURNED;
           break;
         }
 
@@ -136,9 +137,9 @@ int lio_listio(
         result = rtems_aio_enqueue( req );
         if ( result != 0 ) {
           error = 1;
-          list[i]->return_value = -1;
-          list[i]->error_code = EAGAIN;
-          list[i]->return_status = AIO_NOTRETURNED;
+          list[ i ]->return_value = -1;
+          list[ i ]->error_code = EAGAIN;
+          list[ i ]->return_status = AIO_NOTRETURNED;
           break;
         }
 
@@ -146,22 +147,22 @@ int lio_listio(
         break;
 
       case LIO_WRITE:
-        req = init_write_req( list[i] );
+        req = init_write_req( list[ i ] );
         if ( req == NULL ) {
           error = 1;
-          list[i]->error_code = errno;
-          list[i]->return_value = -1;
-          list[i]->return_status = AIO_NOTRETURNED;
+          list[ i ]->error_code = errno;
+          list[ i ]->return_value = -1;
+          list[ i ]->return_status = AIO_NOTRETURNED;
           break;
         }
-        
+
         req->listcbp = listcbp;
         result = rtems_aio_enqueue( req );
         if ( result != 0 ) {
           error = 1;
-          list[i]->return_value = -1;
-          list[i]->error_code = EAGAIN;
-          list[i]->return_status = AIO_NOTRETURNED;
+          list[ i ]->return_value = -1;
+          list[ i ]->error_code = EAGAIN;
+          list[ i ]->return_status = AIO_NOTRETURNED;
           break;
         }
 
@@ -173,10 +174,10 @@ int lio_listio(
 
   if ( mode == LIO_NOWAIT ) {
     if ( error == 1 ) {
-      rtems_set_errno_and_return_minus_one( EIO ); 
+      rtems_set_errno_and_return_minus_one( EIO );
     }
   } else if ( mode == LIO_WAIT ) {
-    rtems_event_set event_out; 
+    rtems_event_set event_out;
     rtems_event_system_receive(
       RTEMS_EVENT_SYSTEM_LIO_LIST_COMPLETED,
       RTEMS_DEFAULT_OPTIONS,
@@ -184,13 +185,13 @@ int lio_listio(
       &event_out
     );
 
-    for ( int i = 0; i < nent; i++ ) { 
-      if ( list[i] != NULL ) {
+    for ( int i = 0; i < nent; i++ ) {
+      if ( list[ i ] != NULL ) {
         if (
-          list[i]->aio_lio_opcode == LIO_READ ||
-          list[i]->aio_lio_opcode == LIO_WRITE 
+          list[ i ]->aio_lio_opcode == LIO_READ ||
+          list[ i ]->aio_lio_opcode == LIO_WRITE
         ) {
-          switch ( list[i]->error_code ) {
+          switch ( list[ i ]->error_code ) {
             case 0:
               break;
             case EINPROGRESS:
@@ -214,4 +215,3 @@ int lio_listio(
   rtems_set_errno_and_return_minus_one( ENOSYS );
 #endif
 }
-

@@ -49,12 +49,9 @@
 /**
  *  17.1.1 Thread-Specific Data Key Create, P1003.1c/Draft 10, p. 163
  */
-int pthread_key_create(
-  pthread_key_t  *key,
-  void          (*destructor)( void * )
-)
+int pthread_key_create( pthread_key_t *key, void ( *destructor )( void * ) )
 {
-  POSIX_Keys_Control  *the_key;
+  POSIX_Keys_Control *the_key;
 
   the_key = _POSIX_Keys_Allocate();
 
@@ -78,8 +75,8 @@ static uint32_t _POSIX_Keys_Get_keypool_bump_count( void )
   uint32_t max;
 
   max = _POSIX_Keys_Key_value_pair_maximum;
-  return _Objects_Is_unlimited( max ) ?
-    _Objects_Maximum_per_allocation( max ) : 0;
+  return _Objects_Is_unlimited( max ) ? _Objects_Maximum_per_allocation( max )
+                                      : 0;
 }
 
 static uint32_t _POSIX_Keys_Get_initial_keypool_size( void )
@@ -100,7 +97,7 @@ static void _POSIX_Keys_Initialize_keypool( void )
   );
 }
 
-POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_allocate( void )
+POSIX_Keys_Key_value_pair *_POSIX_Keys_Key_value_allocate( void )
 {
   return (POSIX_Keys_Key_value_pair *) _Freechain_Get(
     &_POSIX_Keys_Keypool,
@@ -113,8 +110,8 @@ POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_allocate( void )
 static void _POSIX_Keys_Run_destructors( Thread_Control *the_thread )
 {
   while ( true ) {
-    ISR_lock_Context  lock_context;
-    RBTree_Node      *node;
+    ISR_lock_Context lock_context;
+    RBTree_Node     *node;
 
     _Objects_Allocator_lock();
     _POSIX_Keys_Key_value_acquire( the_thread, &lock_context );
@@ -125,7 +122,7 @@ static void _POSIX_Keys_Run_destructors( Thread_Control *the_thread )
       pthread_key_t              key;
       void                      *value;
       POSIX_Keys_Control        *the_key;
-      void                    ( *destructor )( void * );
+      void ( *destructor )( void * );
 
       key_value_pair = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node );
       key = key_value_pair->key;
@@ -174,7 +171,7 @@ static User_extensions_Control _POSIX_Keys_Extensions = {
 /**
  * @brief This routine performs the initialization necessary for this manager.
  */
-static void _POSIX_Keys_Manager_initialization(void)
+static void _POSIX_Keys_Manager_initialization( void )
 {
   _Objects_Initialize_information( &_POSIX_Keys_Information );
   _POSIX_Keys_Initialize_keypool();

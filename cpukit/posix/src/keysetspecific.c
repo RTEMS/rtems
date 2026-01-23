@@ -55,9 +55,9 @@ static int _POSIX_Keys_Set_value(
 }
 
 static int _POSIX_Keys_Create_value(
-  pthread_key_t       key,
-  const void         *value,
-  Thread_Control     *executing
+  pthread_key_t   key,
+  const void     *value,
+  Thread_Control *executing
 )
 {
   POSIX_Keys_Control *the_key;
@@ -147,13 +147,10 @@ static int _POSIX_Keys_Delete_value(
  *  17.1.2 Thread-Specific Data Management, P1003.1c/Draft 10, p. 165
  */
 
-int pthread_setspecific(
-  pthread_key_t  key,
-  const void    *value
-)
+int pthread_setspecific( pthread_key_t key, const void *value )
 {
-  Thread_Control   *executing;
-  int               eno;
+  Thread_Control *executing;
+  int             eno;
 
   executing = _Thread_Get_executing();
 

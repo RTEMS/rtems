@@ -69,10 +69,10 @@
  */
 
 int mq_send(
-  mqd_t         mqdes,
-  const char   *msg_ptr,
-  size_t        msg_len,
-  unsigned int  msg_prio
+  mqd_t        mqdes,
+  const char  *msg_ptr,
+  size_t       msg_len,
+  unsigned int msg_prio
 )
 {
   return _POSIX_Message_queue_Send_support(

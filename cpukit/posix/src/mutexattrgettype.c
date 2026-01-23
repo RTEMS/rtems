@@ -42,17 +42,14 @@
 #include <pthread.h>
 #include <stddef.h>
 
-#if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
-int pthread_mutexattr_gettype(
-  const pthread_mutexattr_t *attr,
-  int                       *type
-)
+#if defined( _UNIX98_THREAD_MUTEX_ATTRIBUTES )
+int pthread_mutexattr_gettype( const pthread_mutexattr_t *attr, int *type )
 {
-  if ( attr == NULL || !attr->is_initialized || type == NULL )
+  if ( attr == NULL || !attr->is_initialized || type == NULL ) {
     return EINVAL;
+  }
 
   *type = attr->type;
   return 0;
 }
 #endif
-

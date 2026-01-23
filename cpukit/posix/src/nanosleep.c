@@ -47,10 +47,7 @@
 /*
  *  14.2.5 High Resolution Sleep, P1003.1b-1993, p. 269
  */
-int nanosleep(
-  const struct timespec  *rqtp,
-  struct timespec        *rmtp
-)
+int nanosleep( const struct timespec *rqtp, struct timespec *rmtp )
 {
   int eno;
 

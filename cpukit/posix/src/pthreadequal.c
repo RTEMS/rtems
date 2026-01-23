@@ -46,10 +46,7 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/score/threadimpl.h>
 
-int pthread_equal(
-  pthread_t  t1,
-  pthread_t  t2
-)
+int pthread_equal( pthread_t t1, pthread_t t2 )
 {
   /*
    *  If the system is configured for debug, then we will do everything we
@@ -60,10 +57,10 @@ int pthread_equal(
 #ifndef RTEMS_DEBUG
   return _Objects_Are_ids_equal( t1, t2 );
 #else
-  ISR_lock_Context  lock_context_1;
-  ISR_lock_Context  lock_context_2;
-  Thread_Control   *thread_1;
-  Thread_Control   *thread_2;
+  ISR_lock_Context lock_context_1;
+  ISR_lock_Context lock_context_2;
+  Thread_Control  *thread_1;
+  Thread_Control  *thread_2;
 
   thread_1 = _Thread_Get( t1, &lock_context_1 );
   thread_2 = _Thread_Get( t2, &lock_context_2 );

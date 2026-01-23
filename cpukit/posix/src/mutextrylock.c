@@ -45,9 +45,7 @@
  *
  * NOTE: P1003.4b/D8 adds pthread_mutex_timedlock(), p. 29
  */
-int pthread_mutex_trylock(
-  pthread_mutex_t           *mutex
-)
+int pthread_mutex_trylock( pthread_mutex_t *mutex )
 {
   int eno;
 

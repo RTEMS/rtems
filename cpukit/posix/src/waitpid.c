@@ -42,11 +42,7 @@
 #include <errno.h>
 #include <rtems/seterr.h>
 
-int waitpid(
-  pid_t pid,
-  int *stat_loc,
-  int options
-)
+int waitpid( pid_t pid, int *stat_loc, int options )
 {
   (void) pid;
   (void) stat_loc;

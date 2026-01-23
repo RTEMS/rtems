@@ -47,16 +47,16 @@
  * NOTE: P1003.1c/D10, p. 37 adds pthread_sigmask().
  */
 int sigprocmask(
-  int               how,
-  const sigset_t   *__restrict set,
-  sigset_t         *__restrict oset
+  int how,
+  const sigset_t *__restrict set,
+  sigset_t *__restrict oset
 )
 {
   /*
    *  P1003.1c/Draft 10, p. 38 maps sigprocmask to pthread_sigmask.
    */
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
   int status;
 
   status = pthread_sigmask( how, set, oset );

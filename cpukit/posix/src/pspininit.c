@@ -44,14 +44,11 @@
 
 #include <rtems/posix/spinlockimpl.h>
 
-int pthread_spin_init(
-  pthread_spinlock_t  *spinlock,
-  int                  pshared
-)
+int pthread_spin_init( pthread_spinlock_t *spinlock, int pshared )
 {
   (void) pshared;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   POSIX_Spinlock_Control *the_spinlock;
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock );

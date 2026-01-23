@@ -56,7 +56,7 @@ int _POSIX_Thread_Translate_to_sched_policy(
     return SCHED_RR;
   }
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
   if ( operations == &_POSIX_Threads_Sporadic_budget ) {
     return SCHED_SPORADIC;
   }
@@ -89,19 +89,28 @@ int _POSIX_Thread_Translate_sched_param(
     return 0;
   }
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
   if ( policy == SCHED_SPORADIC ) {
-    if ( (param->sched_ss_repl_period.tv_sec == 0) &&
-         (param->sched_ss_repl_period.tv_nsec == 0) )
+    if (
+      ( param->sched_ss_repl_period.tv_sec == 0 ) &&
+      ( param->sched_ss_repl_period.tv_nsec == 0 )
+    ) {
       return EINVAL;
+    }
 
-    if ( (param->sched_ss_init_budget.tv_sec == 0) &&
-         (param->sched_ss_init_budget.tv_nsec == 0) )
+    if (
+      ( param->sched_ss_init_budget.tv_sec == 0 ) &&
+      ( param->sched_ss_init_budget.tv_nsec == 0 )
+    ) {
       return EINVAL;
+    }
 
-    if ( _Timespec_To_ticks( &param->sched_ss_repl_period ) <
-	 _Timespec_To_ticks( &param->sched_ss_init_budget ) )
+    if (
+      _Timespec_To_ticks( &param->sched_ss_repl_period ) <
+      _Timespec_To_ticks( &param->sched_ss_init_budget )
+    ) {
       return EINVAL;
+    }
 
     config->cpu_budget_operations = &_POSIX_Threads_Sporadic_budget;
     return 0;

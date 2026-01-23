@@ -42,18 +42,16 @@
 #include <signal.h>
 #include <errno.h>
 
-int sigwait(
-  const sigset_t  *__restrict set,
-  int             *__restrict sig
-)
+int sigwait( const sigset_t *__restrict set, int *__restrict sig )
 {
   int status;
 
   status = sigtimedwait( set, NULL, NULL );
 
   if ( status != -1 ) {
-    if ( sig )
+    if ( sig ) {
       *sig = status;
+    }
     return 0;
   }
 
