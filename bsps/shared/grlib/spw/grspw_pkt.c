@@ -3290,7 +3290,7 @@ static int grspw_msgqisr(void *data, unsigned int *buf, unsigned int n)
   rtems_status_code sc;
 
   sc = rtems_message_queue_send((rtems_id) data, buf, n);
-  return sc.
+  return sc;
 }
 
 static int grspw_common_init(void)
