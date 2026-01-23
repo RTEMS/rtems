@@ -42,9 +42,6 @@ const char rtems_test_name[] = "STRINGTO 1";
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
-#define __STRING(x)     #x              /* stringify without expanding x */
-#define __XSTRING(x)    __STRING(x)     /* expand x, then stringify */
-
 static int get_base_10_or_16(const char *s)
 {
   return (s[0] == '0' && s[1] == 'x') ? 16 : 10;
