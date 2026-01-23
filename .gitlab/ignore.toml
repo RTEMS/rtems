@@ -1,6 +1,9 @@
 ["defaults"]
 exclude = ["format", "spell"]
 
+[[ignore."contrib"]]
+files = ["contrib/*"]
+
 [[ignore."cpukit/dev"]]
 files = ["cpukit/dev/iovprintf.c"]
 
