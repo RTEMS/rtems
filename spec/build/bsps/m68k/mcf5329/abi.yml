@@ -10,6 +10,7 @@ default:
 - enabled-by: true
   value:
   - -mcpu=5307
+  - -D_LDBL_EQ_DBL=1
 description: |
   ABI flags
 enabled-by: true
