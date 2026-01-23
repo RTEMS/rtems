@@ -11,6 +11,7 @@ default:
   value:
   - -mcfv4e
   - -Wa,-memac
+  - -D_LDBL_EQ_DBL=1
 description: |
   ABI flags
 enabled-by: true
