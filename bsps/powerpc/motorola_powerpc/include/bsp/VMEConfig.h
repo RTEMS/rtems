@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMotorola
+ *
+ * @brief Motorola PowerPC VME Configuration
+ */
+
 #ifndef RTEMS_BSP_VME_CONFIG_H
 #define RTEMS_BSP_VME_CONFIG_H
 

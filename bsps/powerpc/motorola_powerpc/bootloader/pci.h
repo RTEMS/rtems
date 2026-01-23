@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMotorola
+ *
+ * @brief Motorola PowerPC PCI Support
+ */
+
 /*
  *	PCI defines and function prototypes
  *	Copyright 1994, Drew Eckhardt

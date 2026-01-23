@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMVME3100
+ *
+ * @brief MVME3100 Miscellaneous Support
+ */
+
 /* Miscellaneous small BSP routines; reboot, board CSR, ... */
 
 /*

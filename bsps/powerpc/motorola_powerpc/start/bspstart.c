@@ -2,6 +2,9 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMotorola
+ *
  * @brief Motorola PowerPC BSP Start
  *
  * This routine does the bulk of the system initialization.
@@ -252,7 +255,7 @@ static void bsp_early( void )
   printk("-----------------------------------------\n");
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Residuals are located at %x\n", (unsigned) &residualCopy);
-  printk("Additionnal boot options are %s\n", loaderParam);
+  printk("Additional boot options are %s\n", loaderParam);
   printk("-----------------------------------------\n");
 #endif
 

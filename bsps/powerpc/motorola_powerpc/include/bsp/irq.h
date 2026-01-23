@@ -2,6 +2,9 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMotorola
+ *
  * @brief Interrupt Handler Support
  *
  * This include file describe the data structure and the functions implemented
@@ -213,7 +216,7 @@ int BSP_irq_enable_at_i8259s		(const rtems_irq_number irqLine);
 /*
  * function to acknowledge a particular irq at 8259 level. After calling
  * this function, if a device asserts an enabled interrupt line it will
- * be propagated further to the processor. Mainly usefull for people
+ * be propagated further to the processor. Mainly useful for people
  * writing raw handlers as this is automagically done for RTEMS managed
  * handlers.
  */

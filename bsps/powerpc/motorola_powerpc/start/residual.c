@@ -2,6 +2,9 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMotorola
+ *
  * @brief Function used to parse residual data
  *
  * This code is heavily inspired by the public specification of STREAM V2

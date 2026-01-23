@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMotorola
+ *
+ * @brief Motorola PowerPC Reset Support
+ */
+
 #include <bsp.h>
 #include <rtems/bspIo.h>
 #include <libcpu/stackTrace.h>

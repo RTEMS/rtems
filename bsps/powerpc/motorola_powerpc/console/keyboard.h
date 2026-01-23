@@ -2,7 +2,10 @@
 
 /**
  * @file
- * @brief Keyboard Definitions
+ *
+ * @ingroup RTEMSBSPsPowerPCMotorola
+ *
+ * @brief Motorola PowerPC Keyboard Support
  */
 
 /*

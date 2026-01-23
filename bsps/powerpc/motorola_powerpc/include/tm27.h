@@ -1,8 +1,10 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
+/**
  * @file
- * @ingroup powerpc_motorola_powerpc
+ *
+ * @ingroup RTEMSBSPsPowerPCMotorola
+ *
  * @brief Implementations for interrupt mechanisms for Time Test 27
  */
 

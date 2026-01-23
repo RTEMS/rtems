@@ -1,7 +1,13 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
- *  This routine does the bulk of the system initialization.
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMVME3100
+ *
+ * @brief MVME3100 BSP Start
+ *
+ * This routine does the bulk of the system initialization.
  */
 
 /*
@@ -362,7 +368,7 @@ VpdBufRec          vpdData [] = {
   bsp_clicks_per_usec = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
   /*
-   * Initalize RTEMS IRQ system
+   * Initialize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
 

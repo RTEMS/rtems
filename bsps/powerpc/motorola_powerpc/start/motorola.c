@@ -2,6 +2,9 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMotorola
+ *
  * @brief Motorola (MVME) Board Identification
  *
  * This include file describe the data structure and the functions implemented
@@ -42,7 +45,7 @@
 
 /*
 ** Board-specific table that maps interrupt names to onboard PCI
-** peripherals as well as local PCI busses.  This table is used at
+** peripherals as well as local PCI buses.  This table is used at
 ** bspstart() to configure the interrupt name & pin for all devices that
 ** do not have it already specified.  If the device is already
 ** configured, we leave it alone but sanity check & print a warning if
@@ -65,7 +68,7 @@
 **   controller interrupt pin- so it is quite reasonable for a device on
 **   bus 1 signalling interrupt pin 1 to show up at the interrupt
 **   controller as pin 4- this is why the int pin field varies for
-**   bridged pci busses.
+**   bridged pci buses.
 **
 **
 ** opts = bitmap of options that control the configuration of this
