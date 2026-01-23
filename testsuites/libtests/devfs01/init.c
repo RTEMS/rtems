@@ -34,14 +34,14 @@
 
 const char rtems_test_name[] = "DEVFS 1";
 
-static void Init(rtems_task_argument argument)
+static void Init( rtems_task_argument argument )
 {
   (void) argument;
 
   TEST_BEGIN();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER

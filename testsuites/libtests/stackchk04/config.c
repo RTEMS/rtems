@@ -43,7 +43,8 @@ const char rtems_test_name[] = "STACKCHK04";
 /* configuration information */
 #define CONFIGURE_STACK_CHECKER_ENABLED
 
-#define CONFIGURE_STACK_CHECKER_REPORTER  rtems_stack_checker_reporter_print_details
+#define CONFIGURE_STACK_CHECKER_REPORTER \
+  rtems_stack_checker_reporter_print_details
 
 #define CONFIGURE_INIT
 #include "../stackchk/system.h"

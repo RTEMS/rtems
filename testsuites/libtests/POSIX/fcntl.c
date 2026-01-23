@@ -13,14 +13,14 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int main (void)
+int main( void )
 {
   int rc;
 
-  rc = fcntl (42, 43);
+  rc = fcntl( 42, 43 );
   (void) rc;
- 
-  rc = fcntl (42, 43, 44);
+
+  rc = fcntl( 42, 43, 44 );
 
   return rc;
 }

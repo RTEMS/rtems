@@ -25,9 +25,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(_DL_ARM_MODE_H_)
+#if !defined( _DL_ARM_MODE_H_ )
 #define _DL_ARM_MODE_H_
 
-void arm_mode_func (void)__attribute__((target("arm")));
+void arm_mode_func( void ) __attribute__(( target( "arm" ) ));
 
 #endif

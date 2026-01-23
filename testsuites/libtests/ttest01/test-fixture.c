@@ -4,179 +4,173 @@ static int initial_value = 3;
 
 static int counter;
 
-static void
-setup(void *ctx)
+static void setup( void *ctx )
 {
-	int *c;
+  int *c;
 
-	T_log(T_QUIET, "setup begin");
-	T_eq_ptr(ctx, &initial_value);
-	T_eq_ptr(ctx, T_fixture_context());
-	c = ctx;
-	counter = *c;
-	T_set_fixture_context(&counter);
-	T_eq_ptr(&counter, T_fixture_context());
-	T_log(T_QUIET, "setup end");
+  T_log( T_QUIET, "setup begin" );
+  T_eq_ptr( ctx, &initial_value );
+  T_eq_ptr( ctx, T_fixture_context() );
+  c = ctx;
+  counter = *c;
+  T_set_fixture_context( &counter );
+  T_eq_ptr( &counter, T_fixture_context() );
+  T_log( T_QUIET, "setup end" );
 }
 
-static void
-stop(void *ctx)
+static void stop( void *ctx )
 {
-	int *c;
+  int *c;
 
-	T_log(T_QUIET, "stop begin");
-	T_eq_ptr(ctx, &counter);
-	c = ctx;
-	++(*c);
-	T_log(T_QUIET, "stop end");
+  T_log( T_QUIET, "stop begin" );
+  T_eq_ptr( ctx, &counter );
+  c = ctx;
+  ++( *c );
+  T_log( T_QUIET, "stop end" );
 }
 
-static void
-teardown(void *ctx)
+static void teardown( void *ctx )
 {
-	int *c;
+  int *c;
 
-	T_log(T_QUIET, "teardown begin");
-	T_eq_ptr(ctx, &counter);
-	c = ctx;
-	T_eq_int(*c, 4);
-	T_log(T_QUIET, "teardown end");
+  T_log( T_QUIET, "teardown begin" );
+  T_eq_ptr( ctx, &counter );
+  c = ctx;
+  T_eq_int( *c, 4 );
+  T_log( T_QUIET, "teardown end" );
 }
 
-static size_t
-scope(void *ctx, char *buf, size_t n)
+static size_t scope( void *ctx, char *buf, size_t n )
 {
-	(void) ctx;
+  (void) ctx;
 
-	return T_str_copy(buf, "/More", n);
+  return T_str_copy( buf, "/More", n );
 }
 
 static const T_fixture fixture = {
-	.setup = setup,
-	.stop = stop,
-	.teardown = teardown,
-	.scope = scope,
-	.initial_context = &initial_value
+  .setup = setup,
+  .stop = stop,
+  .teardown = teardown,
+  .scope = scope,
+  .initial_context = &initial_value
 };
 
 static int initial_value_2 = 7;
 
 static int counter_2;
 
-static void
-setup_2(void *ctx)
+static void setup_2( void *ctx )
 {
-	int *c;
+  int *c;
 
-	T_log(T_QUIET, "setup 2 begin");
-	T_eq_ptr(ctx, &initial_value_2);
-	T_eq_ptr(ctx, T_fixture_context());
-	c = ctx;
-	counter_2 = *c;
-	T_set_fixture_context(&counter_2);
-	T_eq_ptr(&counter_2, T_fixture_context());
-	T_log(T_QUIET, "setup 2 end");
+  T_log( T_QUIET, "setup 2 begin" );
+  T_eq_ptr( ctx, &initial_value_2 );
+  T_eq_ptr( ctx, T_fixture_context() );
+  c = ctx;
+  counter_2 = *c;
+  T_set_fixture_context( &counter_2 );
+  T_eq_ptr( &counter_2, T_fixture_context() );
+  T_log( T_QUIET, "setup 2 end" );
 }
 
-static void
-stop_2(void *ctx)
+static void stop_2( void *ctx )
 {
-	int *c;
+  int *c;
 
-	T_log(T_QUIET, "stop 2 begin");
-	T_eq_ptr(ctx, &counter_2);
-	c = ctx;
-	++(*c);
-	T_log(T_QUIET, "stop 2 end");
+  T_log( T_QUIET, "stop 2 begin" );
+  T_eq_ptr( ctx, &counter_2 );
+  c = ctx;
+  ++( *c );
+  T_log( T_QUIET, "stop 2 end" );
 }
 
-static void
-teardown_2(void *ctx)
+static void teardown_2( void *ctx )
 {
-	int *c;
+  int *c;
 
-	T_log(T_QUIET, "teardown 2 begin");
-	T_eq_ptr(ctx, &counter_2);
-	c = ctx;
-	T_eq_int(*c, 8);
-	T_log(T_QUIET, "teardown 2 end");
+  T_log( T_QUIET, "teardown 2 begin" );
+  T_eq_ptr( ctx, &counter_2 );
+  c = ctx;
+  T_eq_int( *c, 8 );
+  T_log( T_QUIET, "teardown 2 end" );
 }
 
-static size_t
-scope_2(void *ctx, char *buf, size_t n)
+static size_t scope_2( void *ctx, char *buf, size_t n )
 {
-	(void) ctx;
+  (void) ctx;
 
-	return T_str_copy(buf, "/AndMore", n);
+  return T_str_copy( buf, "/AndMore", n );
 }
 
 static const T_fixture fixture_2 = {
-	.setup = setup_2,
-	.stop = stop_2,
-	.teardown = teardown_2,
-	.scope = scope_2,
-	.initial_context = &initial_value_2
+  .setup = setup_2,
+  .stop = stop_2,
+  .teardown = teardown_2,
+  .scope = scope_2,
+  .initial_context = &initial_value_2
 };
 
 static T_fixture_node node;
 
-T_TEST_CASE_FIXTURE(fixture, &fixture)
+T_TEST_CASE_FIXTURE( fixture, &fixture )
 {
-	void *ctx;
+  void *ctx;
 
-	T_assert_true(true, "all right");
-	ctx = T_push_fixture(&node, &fixture_2);
-	T_eq_ptr(ctx, &initial_value_2);
-	++counter_2;
-	T_pop_fixture();
-	ctx = T_push_fixture(&node, &fixture_2);
-	T_eq_ptr(ctx, &initial_value_2);
-	T_assert_true(false, "test fails and we stop the test case");
-	T_log(T_QUIET, "not reached");
+  T_assert_true( true, "all right" );
+  ctx = T_push_fixture( &node, &fixture_2 );
+  T_eq_ptr( ctx, &initial_value_2 );
+  ++counter_2;
+  T_pop_fixture();
+  ctx = T_push_fixture( &node, &fixture_2 );
+  T_eq_ptr( ctx, &initial_value_2 );
+  T_assert_true( false, "test fails and we stop the test case" );
+  T_log( T_QUIET, "not reached" );
 }
 
 #include "t-self-test.h"
 
-T_TEST_OUTPUT(fixture,
-"B:fixture\n"
-"L:setup begin\n"
-"P:0:0:UI1/More:test-fixture.c:13\n"
-"P:1:0:UI1/More:test-fixture.c:14\n"
-"P:2:0:UI1/More:test-fixture.c:18\n"
-"L:setup end\n"
-"P:3:0:UI1/More:test-fixture.c:125\n"
-"L:setup 2 begin\n"
-"P:4.0:0:UI1/More/AndMore:test-fixture.c:71\n"
-"P:4.1:0:UI1/More/AndMore:test-fixture.c:72\n"
-"P:4.2:0:UI1/More/AndMore:test-fixture.c:76\n"
-"L:setup 2 end\n"
-"P:4.3:0:UI1/More/AndMore:test-fixture.c:127\n"
-"L:teardown 2 begin\n"
-"P:4.4:0:UI1/More/AndMore:test-fixture.c:98\n"
-"P:4.5:0:UI1/More/AndMore:test-fixture.c:100\n"
-"L:teardown 2 end\n"
-"L:setup 2 begin\n"
-"P:4.0:0:UI1/More/AndMore:test-fixture.c:71\n"
-"P:4.1:0:UI1/More/AndMore:test-fixture.c:72\n"
-"P:4.2:0:UI1/More/AndMore:test-fixture.c:76\n"
-"L:setup 2 end\n"
-"P:4.3:0:UI1/More/AndMore:test-fixture.c:131\n"
-"F:4.4:0:UI1/More/AndMore:test-fixture.c:132:test fails and we stop the test case\n"
-"L:stop 2 begin\n"
-"P:4.5:0:UI1/More/AndMore:test-fixture.c:86\n"
-"L:stop 2 end\n"
-"L:stop begin\n"
-"P:4.6:0:UI1/More/AndMore:test-fixture.c:28\n"
-"L:stop end\n"
-"L:teardown 2 begin\n"
-"P:4.7:0:UI1/More/AndMore:test-fixture.c:98\n"
-"P:4.8:0:UI1/More/AndMore:test-fixture.c:100\n"
-"L:teardown 2 end\n"
-"L:teardown begin\n"
-"P:4:0:UI1/More:test-fixture.c:40\n"
-"P:5:0:UI1/More:test-fixture.c:42\n"
-"L:teardown end\n"
-"E:fixture:N:21:F:1:D:0.001000\n");
+T_TEST_OUTPUT(
+  fixture,
+  "B:fixture\n"
+  "L:setup begin\n"
+  "P:0:0:UI1/More:test-fixture.c:13\n"
+  "P:1:0:UI1/More:test-fixture.c:14\n"
+  "P:2:0:UI1/More:test-fixture.c:18\n"
+  "L:setup end\n"
+  "P:3:0:UI1/More:test-fixture.c:125\n"
+  "L:setup 2 begin\n"
+  "P:4.0:0:UI1/More/AndMore:test-fixture.c:71\n"
+  "P:4.1:0:UI1/More/AndMore:test-fixture.c:72\n"
+  "P:4.2:0:UI1/More/AndMore:test-fixture.c:76\n"
+  "L:setup 2 end\n"
+  "P:4.3:0:UI1/More/AndMore:test-fixture.c:127\n"
+  "L:teardown 2 begin\n"
+  "P:4.4:0:UI1/More/AndMore:test-fixture.c:98\n"
+  "P:4.5:0:UI1/More/AndMore:test-fixture.c:100\n"
+  "L:teardown 2 end\n"
+  "L:setup 2 begin\n"
+  "P:4.0:0:UI1/More/AndMore:test-fixture.c:71\n"
+  "P:4.1:0:UI1/More/AndMore:test-fixture.c:72\n"
+  "P:4.2:0:UI1/More/AndMore:test-fixture.c:76\n"
+  "L:setup 2 end\n"
+  "P:4.3:0:UI1/More/AndMore:test-fixture.c:131\n"
+  "F:4.4:0:UI1/More/AndMore:test-fixture.c:132:test fails and we stop the test case\n"
+  "L:stop 2 begin\n"
+  "P:4.5:0:UI1/More/AndMore:test-fixture.c:86\n"
+  "L:stop 2 end\n"
+  "L:stop begin\n"
+  "P:4.6:0:UI1/More/AndMore:test-fixture.c:28\n"
+  "L:stop end\n"
+  "L:teardown 2 begin\n"
+  "P:4.7:0:UI1/More/AndMore:test-fixture.c:98\n"
+  "P:4.8:0:UI1/More/AndMore:test-fixture.c:100\n"
+  "L:teardown 2 end\n"
+  "L:teardown begin\n"
+  "P:4:0:UI1/More:test-fixture.c:40\n"
+  "P:5:0:UI1/More:test-fixture.c:42\n"
+  "L:teardown end\n"
+  "E:fixture:N:21:F:1:D:0.001000\n"
+);
 
 /*
  * The license is at the end of the file to be able to use the test code and

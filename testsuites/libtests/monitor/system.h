@@ -35,18 +35,14 @@
 /* types */
 
 struct counters {
-  uint32_t   count[6];
+  uint32_t count[ 6 ];
 };
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1_through_5(
-  rtems_task_argument argument
-);
+rtems_task Task_1_through_5( rtems_task_argument argument );
 
 void Get_all_counters( void );
 
@@ -55,24 +51,24 @@ void Get_all_counters( void );
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               7
-#define CONFIGURE_MAXIMUM_PERIODS             10
+#define CONFIGURE_MAXIMUM_TASKS   7
+#define CONFIGURE_MAXIMUM_PERIODS 10
 
-#define CONFIGURE_INIT_TASK_PRIORITY          10
-#define CONFIGURE_INIT_TASK_INITIAL_MODES     RTEMS_DEFAULT_MODES
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INIT_TASK_PRIORITY      10
+#define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
+#define CONFIGURE_INITIAL_EXTENSIONS      RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS \
-  (6 * (3 * RTEMS_MINIMUM_STACK_SIZE)) /* our tasks */ + \
-  (1 * RTEMS_MINIMUM_STACK_SIZE)       /* monitor tasks */
+#define CONFIGURE_EXTRA_TASK_STACKS                          \
+  ( 6 * ( 3 * RTEMS_MINIMUM_STACK_SIZE ) ) /* our tasks */ + \
+    ( 1 * RTEMS_MINIMUM_STACK_SIZE ) /* monitor tasks */
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 6 ];     /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 6 ];   /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 6 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 6 ]; /* array of task names */
 
 /* end of include file */

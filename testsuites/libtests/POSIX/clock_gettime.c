@@ -12,10 +12,9 @@
 
 #include <time.h>
 
-int
-main (void)
+int main( void )
 {
   struct timespec mytime;
 
-  return clock_gettime(CLOCK_REALTIME,&mytime);
+  return clock_gettime( CLOCK_REALTIME, &mytime );
 }

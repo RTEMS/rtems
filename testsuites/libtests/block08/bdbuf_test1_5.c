@@ -50,121 +50,114 @@
 
 #include "bdbuf_tests.h"
 
-static rtems_task bdbuf_test1_5_thread1(rtems_task_argument arg);
-static rtems_task bdbuf_test1_5_thread2(rtems_task_argument arg);
+static rtems_task bdbuf_test1_5_thread1( rtems_task_argument arg );
+static rtems_task bdbuf_test1_5_thread2( rtems_task_argument arg );
 
 #define TEST_BLK_NUM 50
 
-void
-bdbuf_test1_5_main()
+void bdbuf_test1_5_main()
 {
-    bdbuf_test_msg msg;
+  bdbuf_test_msg msg;
 
-    TEST_START("Test 1.5");
+  TEST_START( "Test 1.5" );
 
-    START_THREAD(1, bdbuf_test1_5_thread1);
-    START_THREAD(2, bdbuf_test1_5_thread2);
+  START_THREAD( 1, bdbuf_test1_5_thread1 );
+  START_THREAD( 2, bdbuf_test1_5_thread2 );
 
-    /*
+  /*
      * Step 1:
      * Thread #1 calls rtems_bdbuf_read() and successfully
      * get requested buffer.
      */
-    WAIT_DRV_MSG(&msg);
-    SEND_DRV_MSG(0, 0, RTEMS_SUCCESSFUL, 0);
+  WAIT_DRV_MSG( &msg );
+  SEND_DRV_MSG( 0, 0, RTEMS_SUCCESSFUL, 0 );
 
-    WAIT_THREAD_SYNC(1);
-    TEST_CHECK_RESULT("1");
+  WAIT_THREAD_SYNC( 1 );
+  TEST_CHECK_RESULT( "1" );
 
-    /*
+  /*
      * Step 2:
      * Thread #2 calls rtems_bdbuf_read() and blocks
      * on this call because thread #1 owns a buffer.
      */
-    CONTINUE_THREAD(2);
+  CONTINUE_THREAD( 2 );
 
-    /* Make sure thread #2 managed to block on a read request. */
-    CHECK_THREAD_BLOCKED(2);
+  /* Make sure thread #2 managed to block on a read request. */
+  CHECK_THREAD_BLOCKED( 2 );
 
-    /*
+  /*
      * Step 3:
      * Now thread #1 releases a buffer.
      */
-    CONTINUE_THREAD(1);
+  CONTINUE_THREAD( 1 );
 
-    /*
+  /*
      * Step 4:
      * Thread #2 should unblock now and get the buffer.
      */
-    WAIT_THREAD_SYNC(2);
-    TEST_CHECK_RESULT("4");
+  WAIT_THREAD_SYNC( 2 );
+  TEST_CHECK_RESULT( "4" );
 
-    /*
+  /*
      * Step 5:
      * Thread #2 release buffer.
      */
-    CONTINUE_THREAD(2);
+  CONTINUE_THREAD( 2 );
 
-    TEST_STOP();
+  TEST_STOP();
 }
 
-static rtems_task
-bdbuf_test1_5_thread1(rtems_task_argument arg)
+static rtems_task bdbuf_test1_5_thread1( rtems_task_argument arg )
 {
-    (void) arg;
+  (void) arg;
 
-    rtems_status_code   rc;
-    rtems_bdbuf_buffer *bd = NULL;
+  rtems_status_code   rc;
+  rtems_bdbuf_buffer *bd = NULL;
 
-    /*
+  /*
      * Step 1:
      * read blk #N on thread #1
      */
-    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        TEST_FAILED();
-    }
-    CONTINUE_MAIN(1);
+  rc = rtems_bdbuf_read( test_dd, TEST_BLK_NUM, &bd );
+  if ( rc != RTEMS_SUCCESSFUL ) {
+    TEST_FAILED();
+  }
+  CONTINUE_MAIN( 1 );
 
-    /*
+  /*
      * Step 3:
      * Release buffer returned on step 1.
      */
-    rc = rtems_bdbuf_release(bd);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        TEST_FAILED();
-    }
-    THREAD_END();
+  rc = rtems_bdbuf_release( bd );
+  if ( rc != RTEMS_SUCCESSFUL ) {
+    TEST_FAILED();
+  }
+  THREAD_END();
 }
 
-static rtems_task
-bdbuf_test1_5_thread2(rtems_task_argument arg)
+static rtems_task bdbuf_test1_5_thread2( rtems_task_argument arg )
 {
-    (void) arg;
+  (void) arg;
 
-    rtems_status_code   rc;
-    rtems_bdbuf_buffer *bd = NULL;
+  rtems_status_code   rc;
+  rtems_bdbuf_buffer *bd = NULL;
 
-    WAIT_MAIN_SYNC(2);
+  WAIT_MAIN_SYNC( 2 );
 
-    /*
+  /*
      * Step 2:
      * Try to read block #N. Right now thread #1 owns
      * this buffer, so we will block waiting for buffer.
      */
-    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        TEST_FAILED();
-    }
-    CONTINUE_MAIN(2);
+  rc = rtems_bdbuf_read( test_dd, TEST_BLK_NUM, &bd );
+  if ( rc != RTEMS_SUCCESSFUL ) {
+    TEST_FAILED();
+  }
+  CONTINUE_MAIN( 2 );
 
-    rc = rtems_bdbuf_release(bd);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        TEST_FAILED();
-    }
-    THREAD_END();
+  rc = rtems_bdbuf_release( bd );
+  if ( rc != RTEMS_SUCCESSFUL ) {
+    TEST_FAILED();
+  }
+  THREAD_END();
 }

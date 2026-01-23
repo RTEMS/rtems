@@ -36,18 +36,18 @@
 
 const char rtems_test_name[] = "BLOCK 17";
 
-static void test(void)
+static void test( void )
 {
   rtems_status_code sc;
 
   sc = rtems_bdbuf_init();
-  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+  rtems_test_assert( sc == RTEMS_INVALID_NUMBER );
 
-  sc = rtems_blkdev_create(NULL, 0, 0, NULL, NULL);
-  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
+  sc = rtems_blkdev_create( NULL, 0, 0, NULL, NULL );
+  rtems_test_assert( sc == RTEMS_INCORRECT_STATE );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -57,14 +57,14 @@ static void Init(rtems_task_argument arg)
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
-#define CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS (64UL * 1024UL)
+#define CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS ( 64UL * 1024UL )
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 

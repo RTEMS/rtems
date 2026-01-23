@@ -51,18 +51,19 @@ const char rtems_test_name[] = "libdl (RTL) 10";
 #define TARFILE_START dl10_tar
 #define TARFILE_SIZE  dl10_tar_size
 
-static int test(void)
+static int test( void )
 {
 #if USE_SHELL_CMD
   int ret;
   ret = dl_load_test();
-  if (ret)
-    rtems_test_exit(ret);
+  if ( ret ) {
+    rtems_test_exit( ret );
+  }
 #endif
   return 0;
 }
 
-static void notification(int fd, int seconds_remaining, void *arg)
+static void notification( int fd, int seconds_remaining, void *arg )
 {
   (void) fd;
   (void) arg;
@@ -73,57 +74,53 @@ static void notification(int fd, int seconds_remaining, void *arg)
   );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
-  int e;
+  int               e;
   rtems_status_code sc;
 
   TEST_BEGIN();
 
-  e = rtems_tarfs_load("/", (void *)TARFILE_START, (size_t)TARFILE_SIZE);
-  if (e != 0)
-  {
-    printf ("error: untar failed: %d\n", e);
-    rtems_test_exit (1);
-    exit (1);
+  e = rtems_tarfs_load( "/", (void *) TARFILE_START, (size_t) TARFILE_SIZE );
+  if ( e != 0 ) {
+    printf( "error: untar failed: %d\n", e );
+    rtems_test_exit( 1 );
+    exit( 1 );
   }
 
   test();
 
-  rtems_shell_init_environment ();
+  rtems_shell_init_environment();
 
-  printf ("RTL (libdl) commands: dl, rtl\n\n");
+  printf( "RTL (libdl) commands: dl, rtl\n\n" );
 
-  if (rtems_shell_add_cmd ("rtl",
-                           "rtl",
-                           "rtl -l",
-                           rtems_rtl_shell_command) == NULL)
-  {
-    printf("command add failed\n");
-    rtems_test_exit(1);
-    exit (1);
+  if (
+    rtems_shell_add_cmd( "rtl", "rtl", "rtl -l", rtems_rtl_shell_command ) ==
+    NULL
+  ) {
+    printf( "command add failed\n" );
+    rtems_test_exit( 1 );
+    exit( 1 );
   }
 
-
-  sc = rtems_shell_wait_for_input (STDIN_FILENO,
-                                   20,
-                                   notification,
-                                   NULL);
-  if (sc == RTEMS_SUCCESSFUL) {
-    rtems_shell_init ("SHLL",
-                      RTEMS_MINIMUM_STACK_SIZE * 4,
-                      100,
-                      "/dev/foobar",
-                      false,
-                      true,
-                      NULL);
+  sc = rtems_shell_wait_for_input( STDIN_FILENO, 20, notification, NULL );
+  if ( sc == RTEMS_SUCCESSFUL ) {
+    rtems_shell_init(
+      "SHLL",
+      RTEMS_MINIMUM_STACK_SIZE * 4,
+      100,
+      "/dev/foobar",
+      false,
+      true,
+      NULL
+    );
   }
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_SHELL_COMMANDS_INIT
@@ -153,9 +150,11 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_INIT_TASK_STACK_SIZE (CONFIGURE_MINIMUM_TASK_STACK_SIZE + (4U * 1024U))
+#define CONFIGURE_INIT_TASK_STACK_SIZE \
+  ( CONFIGURE_MINIMUM_TASK_STACK_SIZE + ( 4U * 1024U ) )
 
-#define CONFIGURE_INIT_TASK_ATTRIBUTES   (RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT)
+#define CONFIGURE_INIT_TASK_ATTRIBUTES \
+  ( RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT )
 
 #define CONFIGURE_UNIFIED_WORK_AREAS
 

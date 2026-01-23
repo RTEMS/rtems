@@ -45,17 +45,12 @@
  #else
   #define TRACE_GLOBAL_SYMBOL 0
  #endif
- #define DEBUG_TRACE (RTEMS_RTL_TRACE_DETAIL | \
-                      RTEMS_RTL_TRACE_WARNING | \
-                      RTEMS_RTL_TRACE_LOAD | \
-                      RTEMS_RTL_TRACE_UNLOAD | \
-                      TRACE_GLOBAL_SYMBOL | \
-                      RTEMS_RTL_TRACE_SYMBOL | \
-                      RTEMS_RTL_TRACE_RELOC | \
-                      RTEMS_RTL_TRACE_ALLOCATOR | \
-                      RTEMS_RTL_TRACE_UNRESOLVED | \
-                      RTEMS_RTL_TRACE_ARCHIVES | \
-                      RTEMS_RTL_TRACE_DEPENDENCY)
+ #define DEBUG_TRACE                                                          \
+  ( RTEMS_RTL_TRACE_DETAIL | RTEMS_RTL_TRACE_WARNING | RTEMS_RTL_TRACE_LOAD | \
+    RTEMS_RTL_TRACE_UNLOAD | TRACE_GLOBAL_SYMBOL | RTEMS_RTL_TRACE_SYMBOL |   \
+    RTEMS_RTL_TRACE_RELOC | RTEMS_RTL_TRACE_ALLOCATOR |                       \
+    RTEMS_RTL_TRACE_UNRESOLVED | RTEMS_RTL_TRACE_ARCHIVES |                   \
+    RTEMS_RTL_TRACE_DEPENDENCY )
  #define DL_DEBUG_TRACE DEBUG_TRACE /* RTEMS_RTL_TRACE_ALL */
  #define DL_RTL_CMDS    1
 #else
@@ -63,42 +58,40 @@
  #define DL_RTL_CMDS    0
 #endif
 
-static void dl_load_dump (void)
+static void dl_load_dump( void )
 {
 #if DL_RTL_CMDS
-  char* list[] = { "rtl", "list", NULL };
-  char* sym[] = { "rtl", "sym", NULL };
-  printf ("RTL List:\n");
-  rtems_rtl_shell_command (2, list);
-  printf ("RTL Sym:\n");
-  rtems_rtl_shell_command (2, sym);
+  char *list[] = { "rtl", "list", NULL };
+  char *sym[] = { "rtl", "sym", NULL };
+  printf( "RTL List:\n" );
+  rtems_rtl_shell_command( 2, list );
+  printf( "RTL Sym:\n" );
+  rtems_rtl_shell_command( 2, sym );
 #endif
 }
 
-typedef int (*int_call_t)(void);
-typedef int* (*ptr_call_t)(void);
+typedef int ( *int_call_t )( void );
+typedef int *( *ptr_call_t )( void );
 
-void* get_errno_ptr(void);
-int get_errno(void);
+void *get_errno_ptr( void );
+int   get_errno( void );
 
 int_call_t int_call;
 ptr_call_t ptr_call;
-static int perform_test(void)
+static int perform_test( void )
 {
-  int    int_call_ret;
-  int*   ptr_call_ret;
-  ptr_call_ret = ptr_call ();
-  if (ptr_call_ret != get_errno_ptr())
-  {
-    printf("dlsym ptr_call failed: ret value bad\n");
+  int  int_call_ret;
+  int *ptr_call_ret;
+  ptr_call_ret = ptr_call();
+  if ( ptr_call_ret != get_errno_ptr() ) {
+    printf( "dlsym ptr_call failed: ret value bad\n" );
     return 1;
   }
 
   errno = 12345;
-  int_call_ret = int_call ();
-  if (int_call_ret != get_errno())
-  {
-    printf("dlsym int_call failed: ret value bad\n");
+  int_call_ret = int_call();
+  if ( int_call_ret != get_errno() ) {
+    printf( "dlsym int_call failed: ret value bad\n" );
     return 1;
   }
   errno = 0;
@@ -106,91 +99,88 @@ static int perform_test(void)
   return 0;
 }
 
-static void *secondary_thread(void *arg)
+static void *secondary_thread( void *arg )
 {
   (void) arg;
 
-  printf("Running test on secondary thread\n");
-  if (perform_test()) {
-    printf("Test failed on secondary task\n");
+  printf( "Running test on secondary thread\n" );
+  if ( perform_test() ) {
+    printf( "Test failed on secondary task\n" );
     return (void *) 1;
   }
 
   return NULL;
 }
 
-static void start_secondary(void)
+static void start_secondary( void )
 {
   /* Run the test on a secondary thread */
   pthread_t threadId;
-  int status;
-  void *ret;
+  int       status;
+  void     *ret;
   status = pthread_create( &threadId, NULL, secondary_thread, NULL );
   rtems_test_assert( !status );
 
   /* Wait on thread to exit */
-  status = pthread_join(threadId, &ret);
+  status = pthread_join( threadId, &ret );
   rtems_test_assert( !status );
   rtems_test_assert( ret == NULL );
 }
 
-int dl_load_test(void)
+int dl_load_test( void )
 {
-  void*  handle;
-  int    unresolved;
-  char*  message = "loaded";
+  void *handle;
+  int   unresolved;
+  char *message = "loaded";
 
 #if DL_DEBUG_TRACE
-  rtems_rtl_trace_set_mask (DL_DEBUG_TRACE);
+  rtems_rtl_trace_set_mask( DL_DEBUG_TRACE );
 #endif
 
-  printf("load: /dl11-o1.o\n");
+  printf( "load: /dl11-o1.o\n" );
 
-  handle = dlopen ("/dl11-o1.o", RTLD_NOW | RTLD_GLOBAL);
-  if (!handle)
-  {
-    printf("dlopen failed: %s\n", dlerror());
+  handle = dlopen( "/dl11-o1.o", RTLD_NOW | RTLD_GLOBAL );
+  if ( !handle ) {
+    printf( "dlopen failed: %s\n", dlerror() );
     return 1;
   }
 
-  if (dlinfo (handle, RTLD_DI_UNRESOLVED, &unresolved) < 0)
+  if ( dlinfo( handle, RTLD_DI_UNRESOLVED, &unresolved ) < 0 ) {
     message = "dlinfo error checking unresolved status";
-  else if (unresolved)
+  } else if ( unresolved ) {
     message = "has unresolved externals";
+  }
 
-  printf ("handle: %p %s\n", handle, message);
+  printf( "handle: %p %s\n", handle, message );
 
-  dl_load_dump ();
+  dl_load_dump();
 
-  ptr_call = dlsym (handle, "get_errno_ptr");
-  if (ptr_call == NULL)
-  {
-    printf("dlsym failed: symbol get_errno_ptr not found\n");
+  ptr_call = dlsym( handle, "get_errno_ptr" );
+  if ( ptr_call == NULL ) {
+    printf( "dlsym failed: symbol get_errno_ptr not found\n" );
     return 1;
   }
 
-  int_call = dlsym (handle, "get_errno_val");
-  if (int_call == NULL)
-  {
-    printf("dlsym failed: symbol get_errno_val not found\n");
+  int_call = dlsym( handle, "get_errno_val" );
+  if ( int_call == NULL ) {
+    printf( "dlsym failed: symbol get_errno_val not found\n" );
     return 1;
   }
 
   /* Run the test on the init thread */
-  printf("Running test on init task\n");
-  if (perform_test()) {
+  printf( "Running test on init task\n" );
+  if ( perform_test() ) {
     return 1;
   }
 
   start_secondary();
 
-  if (dlclose (handle) < 0)
-  {
-    printf("dlclose failed: %s\n", dlerror());
+  if ( dlclose( handle ) < 0 ) {
+    printf( "dlclose failed: %s\n", dlerror() );
     return 1;
   }
 
-  printf ("handle: %p closed\n", handle);
+  printf( "handle: %p closed\n", handle );
 
   return 0;
 }
@@ -198,12 +188,12 @@ int dl_load_test(void)
 /*
  * Disasseble these to see how the platform accesses TLS
  */
-void* get_errno_ptr(void)
+void *get_errno_ptr( void )
 {
   return &errno;
 }
 
-int get_errno(void)
+int get_errno( void )
 {
   return errno;
 }

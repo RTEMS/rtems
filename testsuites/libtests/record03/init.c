@@ -33,11 +33,11 @@
 #include <rtems/test.h>
 #include <rtems/test-info.h>
 
-#define CHECK_ITEM(item, expected_event, expected_data)                        \
-  do {                                                                         \
-    T_eq_u32(RTEMS_RECORD_GET_EVENT((item)->event), expected_event);           \
-    T_eq_ulong((item)->data, expected_data);                                   \
-  } while (0)
+#define CHECK_ITEM( item, expected_event, expected_data )                  \
+  do {                                                                     \
+    T_eq_u32( RTEMS_RECORD_GET_EVENT( ( item )->event ), expected_event ); \
+    T_eq_ulong( ( item )->data, expected_data );                           \
+  } while ( 0 )
 
 #ifdef RTEMS_SMP
 #define COUNT 17
@@ -45,141 +45,146 @@
 #define COUNT 18
 #endif
 
-static void
-check_other_cpu(rtems_record_fetch_control *control) {
+static void check_other_cpu( rtems_record_fetch_control *control )
+{
 #ifdef RTEMS_SMP
   rtems_record_fetch_status status;
-  rtems_record_item items_2[3];
-  rtems_record_item *storage_items;
-  size_t storage_item_count;
+  rtems_record_item         items_2[ 3 ];
+  rtems_record_item        *storage_items;
+  size_t                    storage_item_count;
 
-  memset(&items_2, 0xff, sizeof(items_2));
+  memset( &items_2, 0xff, sizeof( items_2 ) );
   storage_items = control->internal.storage_items;
   storage_item_count = control->internal.storage_item_count;
   control->internal.storage_items = items_2;
-  control->internal.storage_item_count = RTEMS_ARRAY_SIZE(items_2);
-  status = rtems_record_fetch(control);
-  T_eq_int(status, RTEMS_RECORD_FETCH_CONTINUE);
-  T_eq_ptr(control->fetched_items, &items_2[1]);
-  T_eq_sz(control->fetched_count, 1);
-  CHECK_ITEM(&items_2[1], RTEMS_RECORD_PROCESSOR, 0);
+  control->internal.storage_item_count = RTEMS_ARRAY_SIZE( items_2 );
+  status = rtems_record_fetch( control );
+  T_eq_int( status, RTEMS_RECORD_FETCH_CONTINUE );
+  T_eq_ptr( control->fetched_items, &items_2[ 1 ] );
+  T_eq_sz( control->fetched_count, 1 );
+  CHECK_ITEM( &items_2[ 1 ], RTEMS_RECORD_PROCESSOR, 0 );
   control->internal.storage_items = storage_items;
   control->internal.storage_item_count = storage_item_count;
 #else
-  (void)control;
+  (void) control;
 #endif
 }
 
-static uint32_t set_affinity(uint32_t cpu) {
+static uint32_t set_affinity( uint32_t cpu )
+{
 #ifdef RTEMS_SMP
   rtems_status_code sc;
-  cpu_set_t set;
+  cpu_set_t         set;
 
-  CPU_ZERO(&set);
-  CPU_SET((int)cpu, &set);
-  sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(set), &set);
-  T_rsc_success(sc);
+  CPU_ZERO( &set );
+  CPU_SET( (int) cpu, &set );
+  sc = rtems_task_set_affinity( RTEMS_SELF, sizeof( set ), &set );
+  T_rsc_success( sc );
 #else
   cpu = 0;
 #endif
   return cpu;
 }
 
-T_TEST_CASE(RecordFetch) {
+T_TEST_CASE( RecordFetch )
+{
   rtems_record_fetch_control control;
-  rtems_record_fetch_status status;
-  rtems_record_item items[COUNT];
-  uint32_t i;
-  uint32_t cpu;
+  rtems_record_fetch_status  status;
+  rtems_record_item          items[ COUNT ];
+  uint32_t                   i;
+  uint32_t                   cpu;
 
-  T_eq_sz(rtems_record_get_item_count_for_fetch(), RTEMS_ARRAY_SIZE(items));
+  T_eq_sz(
+    rtems_record_get_item_count_for_fetch(),
+    RTEMS_ARRAY_SIZE( items )
+  );
 
-  memset(&control, 0xff, sizeof(control));
-  rtems_record_fetch_initialize(&control, items, RTEMS_ARRAY_SIZE(items));
+  memset( &control, 0xff, sizeof( control ) );
+  rtems_record_fetch_initialize( &control, items, RTEMS_ARRAY_SIZE( items ) );
 #ifdef RTEMS_SMP
-  T_eq_u32(control.internal.cpu_index, 0);
+  T_eq_u32( control.internal.cpu_index, 0 );
 #endif
-  T_eq_sz(control.internal.cpu_todo, 0);
-  T_null(control.fetched_items);
-  T_eq_sz(control.fetched_count, 0);
+  T_eq_sz( control.internal.cpu_todo, 0 );
+  T_null( control.fetched_items );
+  T_eq_sz( control.fetched_count, 0 );
 
   control.internal.storage_item_count = 2;
-  status = rtems_record_fetch(&control);
-  control.internal.storage_item_count = RTEMS_ARRAY_SIZE(items);
-  T_eq_int(status, RTEMS_RECORD_FETCH_INVALID_ITEM_COUNT);
+  status = rtems_record_fetch( &control );
+  control.internal.storage_item_count = RTEMS_ARRAY_SIZE( items );
+  T_eq_int( status, RTEMS_RECORD_FETCH_INVALID_ITEM_COUNT );
 
-  cpu = set_affinity(0);
+  cpu = set_affinity( 0 );
 
   /*
    * Fetch the initial uptime events produced by
    * _Record_Initialize_watchdogs().
    */
-  memset(&items, 0xff, sizeof(items));
-  status = rtems_record_fetch(&control);
+  memset( &items, 0xff, sizeof( items ) );
+  status = rtems_record_fetch( &control );
 #ifdef RTEMS_SMP
-  T_eq_int(status, RTEMS_RECORD_FETCH_CONTINUE);
+  T_eq_int( status, RTEMS_RECORD_FETCH_CONTINUE );
 #else
-  T_eq_int(status, RTEMS_RECORD_FETCH_DONE);
+  T_eq_int( status, RTEMS_RECORD_FETCH_DONE );
 #endif
-  T_eq_ptr(control.fetched_items, &items[1]);
-  T_eq_sz(control.fetched_count, 3);
-  CHECK_ITEM(&items[1], RTEMS_RECORD_PROCESSOR, 0);
-  CHECK_ITEM(&items[2], RTEMS_RECORD_UPTIME_LOW, 0);
-  CHECK_ITEM(&items[3], RTEMS_RECORD_UPTIME_HIGH, 1);
+  T_eq_ptr( control.fetched_items, &items[ 1 ] );
+  T_eq_sz( control.fetched_count, 3 );
+  CHECK_ITEM( &items[ 1 ], RTEMS_RECORD_PROCESSOR, 0 );
+  CHECK_ITEM( &items[ 2 ], RTEMS_RECORD_UPTIME_LOW, 0 );
+  CHECK_ITEM( &items[ 3 ], RTEMS_RECORD_UPTIME_HIGH, 1 );
 #ifdef RTEMS_SMP
-  status = rtems_record_fetch(&control);
-  T_eq_int(status, RTEMS_RECORD_FETCH_DONE);
-  T_eq_ptr(control.fetched_items, &items[1]);
-  T_eq_sz(control.fetched_count, 1);
-  CHECK_ITEM(&items[1], RTEMS_RECORD_PROCESSOR, 1);
+  status = rtems_record_fetch( &control );
+  T_eq_int( status, RTEMS_RECORD_FETCH_DONE );
+  T_eq_ptr( control.fetched_items, &items[ 1 ] );
+  T_eq_sz( control.fetched_count, 1 );
+  CHECK_ITEM( &items[ 1 ], RTEMS_RECORD_PROCESSOR, 1 );
 #endif
 
-  cpu = set_affinity(1);
+  cpu = set_affinity( 1 );
 
   /* Fetch with no events available */
-  memset(&items, 0xff, sizeof(items));
-  check_other_cpu(&control);
-  status = rtems_record_fetch(&control);
-  T_eq_int(status, RTEMS_RECORD_FETCH_DONE);
-  T_eq_ptr(control.fetched_items, &items[1]);
-  T_eq_sz(control.fetched_count, 1);
-  CHECK_ITEM(&items[1], RTEMS_RECORD_PROCESSOR, cpu);
+  memset( &items, 0xff, sizeof( items ) );
+  check_other_cpu( &control );
+  status = rtems_record_fetch( &control );
+  T_eq_int( status, RTEMS_RECORD_FETCH_DONE );
+  T_eq_ptr( control.fetched_items, &items[ 1 ] );
+  T_eq_sz( control.fetched_count, 1 );
+  CHECK_ITEM( &items[ 1 ], RTEMS_RECORD_PROCESSOR, cpu );
 
   /* Fetch with overflow */
 
-  for (i = 0; i < COUNT - 1; ++i) {
-    rtems_record_produce(2 * i, 2 * i + 1);
+  for ( i = 0; i < COUNT - 1; ++i ) {
+    rtems_record_produce( 2 * i, 2 * i + 1 );
   }
 
-  memset(&items, 0xff, sizeof(items));
-  check_other_cpu(&control);
+  memset( &items, 0xff, sizeof( items ) );
+  check_other_cpu( &control );
   control.internal.storage_item_count = 4;
-  status = rtems_record_fetch(&control);
-  control.internal.storage_item_count = RTEMS_ARRAY_SIZE(items);
-  T_eq_int(status, RTEMS_RECORD_FETCH_CONTINUE);
-  T_eq_ptr(control.fetched_items, &items[0]);
-  T_eq_sz(control.fetched_count, 4);
-  CHECK_ITEM(&items[0], RTEMS_RECORD_PROCESSOR, cpu);
-  CHECK_ITEM(&items[1], RTEMS_RECORD_PER_CPU_OVERFLOW, 1);
-  CHECK_ITEM(&items[2], 2, 3);
-  CHECK_ITEM(&items[3], 4, 5);
+  status = rtems_record_fetch( &control );
+  control.internal.storage_item_count = RTEMS_ARRAY_SIZE( items );
+  T_eq_int( status, RTEMS_RECORD_FETCH_CONTINUE );
+  T_eq_ptr( control.fetched_items, &items[ 0 ] );
+  T_eq_sz( control.fetched_count, 4 );
+  CHECK_ITEM( &items[ 0 ], RTEMS_RECORD_PROCESSOR, cpu );
+  CHECK_ITEM( &items[ 1 ], RTEMS_RECORD_PER_CPU_OVERFLOW, 1 );
+  CHECK_ITEM( &items[ 2 ], 2, 3 );
+  CHECK_ITEM( &items[ 3 ], 4, 5 );
 
-  status = rtems_record_fetch(&control);
-  T_eq_int(status, RTEMS_RECORD_FETCH_DONE);
-  T_eq_ptr(control.fetched_items, &items[1]);
-  T_eq_sz(control.fetched_count, COUNT - 3);
-  CHECK_ITEM(&items[1], RTEMS_RECORD_PROCESSOR, cpu);
+  status = rtems_record_fetch( &control );
+  T_eq_int( status, RTEMS_RECORD_FETCH_DONE );
+  T_eq_ptr( control.fetched_items, &items[ 1 ] );
+  T_eq_sz( control.fetched_count, COUNT - 3 );
+  CHECK_ITEM( &items[ 1 ], RTEMS_RECORD_PROCESSOR, cpu );
 
-  for (i = 0; i < COUNT - 4; ++i) {
-    CHECK_ITEM(&items[i + 2], 2 * i + 6, 2 * i + 7);
+  for ( i = 0; i < COUNT - 4; ++i ) {
+    CHECK_ITEM( &items[ i + 2 ], 2 * i + 6, 2 * i + 7 );
   }
 }
 
 const char rtems_test_name[] = "RECORD 3";
 
-static void Init(rtems_task_argument argument)
+static void Init( rtems_task_argument argument )
 {
-  rtems_test_run(argument, TEST_STATE);
+  rtems_test_run( argument, TEST_STATE );
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER

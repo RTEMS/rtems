@@ -29,15 +29,15 @@
 
 #include <rtems/test-printer.h>
 
-#define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__);
+#define printf( ... ) rtems_printf( &rtems_test_printer, __VA_ARGS__ );
 
-const void *dl_o1_func (void);
+const void *dl_o1_func( void );
 
-const void *dl_o1_func (void)
+const void *dl_o1_func( void )
 {
   const char *str = "string_from_dl_o1_func";
 
-  printf(str);
+  printf( str );
 
   return str;
 }

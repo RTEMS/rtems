@@ -32,103 +32,93 @@
 
 #include <rtems/seterr.h>
 
-#define TEST_DATA_SIZE (PAGE_SIZE * PAGE_COUNT)
-#define PAGE_COUNT 16
-#define PAGE_SIZE 128
-#define SECTOR_COUNT 4
-#define SECTOR_SIZE (TEST_DATA_SIZE / SECTOR_COUNT)
-#define WB_SIZE 1
+#define TEST_DATA_SIZE  ( PAGE_SIZE * PAGE_COUNT )
+#define PAGE_COUNT      16
+#define PAGE_SIZE       128
+#define SECTOR_COUNT    4
+#define SECTOR_SIZE     ( TEST_DATA_SIZE / SECTOR_COUNT )
+#define WB_SIZE         1
 #define MAX_NUM_REGIONS 48
-#define BITALLOC_SIZE 32
-#define NUM_BITALLOC ((MAX_NUM_REGIONS + BITALLOC_SIZE - 1) / BITALLOC_SIZE)
+#define BITALLOC_SIZE   32
+#define NUM_BITALLOC \
+  ( ( MAX_NUM_REGIONS + BITALLOC_SIZE - 1 ) / BITALLOC_SIZE )
 
 /**
  * This flash device driver is for testing flashdev
  * API calls.
  */
 typedef struct test_flashdev {
-  char* data;
-  uint32_t jedec_id;
-  uint32_t bit_allocator[NUM_BITALLOC];
-  rtems_flashdev_region regions[MAX_NUM_REGIONS];
+  char                 *data;
+  uint32_t              jedec_id;
+  uint32_t              bit_allocator[ NUM_BITALLOC ];
+  rtems_flashdev_region regions[ MAX_NUM_REGIONS ];
 } test_flashdev;
 
 int test_flashdev_page_by_off(
   rtems_flashdev *flash,
-  off_t search_offset,
-  off_t *page_offset,
-  size_t *page_size
+  off_t           search_offset,
+  off_t          *page_offset,
+  size_t         *page_size
 );
 
 int test_flashdev_page_by_index(
   rtems_flashdev *flash,
-  off_t search_index,
-  off_t *page_offset,
-  size_t *page_size
+  off_t           search_index,
+  off_t          *page_offset,
+  size_t         *page_size
 );
 
-int test_flashdev_page_count(
-  rtems_flashdev *flash,
-  int *page_count
-);
+int test_flashdev_page_count( rtems_flashdev *flash, int *page_count );
 
-int test_flashdev_wb_size(
-  rtems_flashdev *flash,
-  size_t *write_block_size
-);
+int test_flashdev_wb_size( rtems_flashdev *flash, size_t *write_block_size );
 
 int test_flashdev_sector_by_off(
   rtems_flashdev *flash,
-  off_t search_offset,
-  off_t *sector_offset,
-  size_t *sector_size
+  off_t           search_offset,
+  off_t          *sector_offset,
+  size_t         *sector_size
 );
 
-int test_flashdev_sector_count(
-  rtems_flashdev *flash,
-  int *sector_count
-);
+int test_flashdev_sector_count( rtems_flashdev *flash, int *sector_count );
 
-uint32_t test_flashdev_jedec_id(
-  rtems_flashdev* flash
-);
+uint32_t test_flashdev_jedec_id( rtems_flashdev *flash );
 
 int test_flashdev_type(
-  rtems_flashdev* flash,
-  rtems_flashdev_flash_type* type
+  rtems_flashdev            *flash,
+  rtems_flashdev_flash_type *type
 );
 
 int test_flashdev_read(
-  rtems_flashdev* flash,
-  uintptr_t offset,
-  size_t count,
-  void* buffer
+  rtems_flashdev *flash,
+  uintptr_t       offset,
+  size_t          count,
+  void           *buffer
 );
 
 int test_flashdev_write(
-  rtems_flashdev* flash,
-  uintptr_t offset,
-  size_t count,
-  const void* buffer
+  rtems_flashdev *flash,
+  uintptr_t       offset,
+  size_t          count,
+  const void     *buffer
 );
 
 int test_flashdev_erase(
-  rtems_flashdev* flash,
-  uintptr_t offset,
-  size_t count
+  rtems_flashdev *flash,
+  uintptr_t       offset,
+  size_t          count
 );
 
 /* Find page info by offset handler */
 int test_flashdev_page_by_off(
   rtems_flashdev *flash,
-  off_t search_offset,
-  off_t *page_offset,
-  size_t *page_size
+  off_t           search_offset,
+  off_t          *page_offset,
+  size_t         *page_size
 )
 {
   (void) flash;
 
-  *page_offset = search_offset - (search_offset%PAGE_SIZE);
+  *page_offset = search_offset - ( search_offset % PAGE_SIZE );
   *page_size = PAGE_SIZE;
   return 0;
 }
@@ -136,9 +126,9 @@ int test_flashdev_page_by_off(
 /* Find page by index handler */
 int test_flashdev_page_by_index(
   rtems_flashdev *flash,
-  off_t search_index,
-  off_t *page_offset,
-  size_t *page_size
+  off_t           search_index,
+  off_t          *page_offset,
+  size_t         *page_size
 )
 {
   (void) flash;
@@ -149,10 +139,7 @@ int test_flashdev_page_by_index(
 }
 
 /* Page count handler */
-int test_flashdev_page_count(
-  rtems_flashdev *flash,
-  int *page_count
-)
+int test_flashdev_page_count( rtems_flashdev *flash, int *page_count )
 {
   (void) flash;
 
@@ -161,10 +148,7 @@ int test_flashdev_page_count(
 }
 
 /* Write block size handler */
-int test_flashdev_wb_size(
-  rtems_flashdev *flash,
-  size_t *write_block_size
-)
+int test_flashdev_wb_size( rtems_flashdev *flash, size_t *write_block_size )
 {
   (void) flash;
 
@@ -174,21 +158,20 @@ int test_flashdev_wb_size(
 
 int test_flashdev_sector_by_off(
   rtems_flashdev *flash,
-  off_t search_offset,
-  off_t *sector_offset,
-  size_t *sector_size
-) {
+  off_t           search_offset,
+  off_t          *sector_offset,
+  size_t         *sector_size
+)
+{
   (void) flash;
 
-  *sector_offset = search_offset - (search_offset%SECTOR_SIZE);
+  *sector_offset = search_offset - ( search_offset % SECTOR_SIZE );
   *sector_size = SECTOR_SIZE;
   return 0;
 }
 
-int test_flashdev_sector_count(
-  rtems_flashdev *flash,
-  int *sector_count
-) {
+int test_flashdev_sector_count( rtems_flashdev *flash, int *sector_count )
+{
   (void) flash;
 
   *sector_count = SECTOR_COUNT;
@@ -198,19 +181,17 @@ int test_flashdev_sector_count(
 /* JEDEC ID handler, this would normally require a READID
  * call to the physical flash device.
  */
-uint32_t test_flashdev_jedec_id(
-  rtems_flashdev* flash
-)
+uint32_t test_flashdev_jedec_id( rtems_flashdev *flash )
 {
   (void) flash;
 
-  test_flashdev* driver = flash->driver;
+  test_flashdev *driver = flash->driver;
   return driver->jedec_id;
 }
 
 /* Function to identify what kind of flash is attached. */
 int test_flashdev_type(
-  rtems_flashdev *flash,
+  rtems_flashdev            *flash,
   rtems_flashdev_flash_type *type
 )
 {
@@ -223,97 +204,102 @@ int test_flashdev_type(
 /* Read flash call. Any offset or count protections are
  * required to be done in the driver function. */
 int test_flashdev_read(
-  rtems_flashdev* flash,
-  uintptr_t offset,
-  size_t count,
-  void* buffer
+  rtems_flashdev *flash,
+  uintptr_t       offset,
+  size_t          count,
+  void           *buffer
 )
 {
-  test_flashdev* driver = flash->driver;
+  test_flashdev *driver = flash->driver;
 
-  if (offset + count > TEST_DATA_SIZE) {
+  if ( offset + count > TEST_DATA_SIZE ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  memcpy(buffer, &driver->data[offset], count);
+  memcpy( buffer, &driver->data[ offset ], count );
   return 0;
 }
 
 /* Write Flash call. Any offset or count protections are
  * required to be done in the driver function. */
 int test_flashdev_write(
-  rtems_flashdev* flash,
-  uintptr_t offset,
-  size_t count,
-  const void* buffer
+  rtems_flashdev *flash,
+  uintptr_t       offset,
+  size_t          count,
+  const void     *buffer
 )
 {
-  test_flashdev* driver = flash->driver;
+  test_flashdev *driver = flash->driver;
 
-  if (offset + count > TEST_DATA_SIZE) {
+  if ( offset + count > TEST_DATA_SIZE ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  memcpy(&driver->data[offset], buffer, count);
+  memcpy( &driver->data[ offset ], buffer, count );
   return 0;
 }
 
 /* Erase Flash call. Any offset or count protections are
  * required to be done in the driver function. */
 int test_flashdev_erase(
-  rtems_flashdev* flash,
-  uintptr_t offset,
-  size_t count
+  rtems_flashdev *flash,
+  uintptr_t       offset,
+  size_t          count
 )
 {
-  test_flashdev* driver = flash->driver;
+  test_flashdev *driver = flash->driver;
 
-  if (offset + count > TEST_DATA_SIZE) {
+  if ( offset + count > TEST_DATA_SIZE ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  if (offset%PAGE_SIZE || count%PAGE_SIZE) {
+  if ( offset % PAGE_SIZE || count % PAGE_SIZE ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  memset(&driver->data[offset], 0, count);
+  memset( &driver->data[ offset ], 0, count );
   return 0;
 }
 
-static void test_flashdev_priv_destroy(rtems_flashdev *flash)
+static void test_flashdev_priv_destroy( rtems_flashdev *flash )
 {
-  test_flashdev* flash_driver = flash->driver;
-  free(flash_driver->data);
-  free(flash->driver);
-  free(flash->region_table);
+  test_flashdev *flash_driver = flash->driver;
+  free( flash_driver->data );
+  free( flash->driver );
+  free( flash->region_table );
 }
 
 /* Initialize Flashdev and underlying driver. */
-rtems_flashdev* test_flashdev_init(void)
+rtems_flashdev *test_flashdev_init( void )
 {
-  rtems_flashdev *flash = rtems_flashdev_alloc_and_init(sizeof(rtems_flashdev));
+  rtems_flashdev *flash = rtems_flashdev_alloc_and_init(
+    sizeof( rtems_flashdev )
+  );
 
-  if (flash == NULL) {
+  if ( flash == NULL ) {
     return NULL;
   }
 
-  test_flashdev* flash_driver = calloc(1, sizeof(test_flashdev));
+  test_flashdev *flash_driver = calloc( 1, sizeof( test_flashdev ) );
 
-  if (flash_driver == NULL) {
-    rtems_flashdev_destroy_and_free(flash);
+  if ( flash_driver == NULL ) {
+    rtems_flashdev_destroy_and_free( flash );
     return NULL;
   }
 
-  flash_driver->data = calloc(1, TEST_DATA_SIZE);
-  if (flash_driver->data == NULL) {
-    free(flash_driver);
-    rtems_flashdev_destroy_and_free(flash);
+  flash_driver->data = calloc( 1, TEST_DATA_SIZE );
+  if ( flash_driver->data == NULL ) {
+    free( flash_driver );
+    rtems_flashdev_destroy_and_free( flash );
     return NULL;
   }
 
   flash_driver->jedec_id = 0x00ABCDEF;
 
-  rtems_flashdev_region_table *ftable = calloc(1, sizeof(rtems_flashdev_region_table));
+  rtems_flashdev_region_table *ftable = calloc(
+    1,
+    sizeof( rtems_flashdev_region_table )
+  );
   ftable->max_regions = MAX_NUM_REGIONS;
   ftable->regions = flash_driver->regions;
   ftable->bit_allocator = flash_driver->bit_allocator;

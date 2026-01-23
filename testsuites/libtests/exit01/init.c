@@ -44,79 +44,77 @@ const char rtems_test_name[] = "EXIT 1";
 
 static int counter;
 
-static void atexit_0(void)
+static void atexit_0( void )
 {
-  assert(counter == 0);
+  assert( counter == 0 );
   ++counter;
 }
 
-static void atexit_1(void)
+static void atexit_1( void )
 {
-  assert(counter == 1);
+  assert( counter == 1 );
   ++counter;
 }
 
-static void atexit_2(void)
+static void atexit_2( void )
 {
-  assert(counter == 2);
+  assert( counter == 2 );
   ++counter;
 }
 
 static void fatal_extension(
   rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code error
+  bool               always_set_to_false,
+  rtems_fatal_code   error
 )
 {
   if (
-    source == RTEMS_FATAL_SOURCE_EXIT
-      && !always_set_to_false
-      && error == EXIT_STATUS
-      && counter == 3
+    source == RTEMS_FATAL_SOURCE_EXIT && !always_set_to_false &&
+    error == EXIT_STATUS && counter == 3
   ) {
     TEST_END();
   }
 }
 
-static void exit_task(rtems_task_argument arg)
+static void exit_task( rtems_task_argument arg )
 {
   (void) arg;
 
   int rv;
 
-  rv = atexit(atexit_2);
-  assert(rv == 0);
+  rv = atexit( atexit_2 );
+  assert( rv == 0 );
 
-  rv = atexit(atexit_1);
-  assert(rv == 0);
+  rv = atexit( atexit_1 );
+  assert( rv == 0 );
 
-  rv = atexit(atexit_0);
-  assert(rv == 0);
+  rv = atexit( atexit_0 );
+  assert( rv == 0 );
 
-  exit(EXIT_STATUS);
+  exit( EXIT_STATUS );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   TEST_BEGIN();
 
   sc = rtems_task_create(
-    rtems_build_name('E', 'X', 'I', 'T'),
+    rtems_build_name( 'E', 'X', 'I', 'T' ),
     RTEMS_MINIMUM_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_start(id, exit_task, 0);
-  assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_start( id, exit_task, 0 );
+  assert( sc == RTEMS_SUCCESSFUL );
 
   rtems_task_exit();
 }
@@ -125,8 +123,7 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = fatal_extension }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .fatal = fatal_extension }, RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 

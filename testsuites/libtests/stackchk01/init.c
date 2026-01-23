@@ -54,7 +54,7 @@ static rtems_task Init( rtems_task_argument argument )
 
   puts( "stack_checker_is_blown - NOT BLOWN" );
   blown = rtems_stack_checker_is_blown();
-  rtems_test_assert(!blown);
+  rtems_test_assert( !blown );
 
   rtems_task_wake_after( 2 );
   used = 0;
@@ -69,7 +69,7 @@ static rtems_task Init( rtems_task_argument argument )
   rtems_test_assert( used <= limit );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -77,7 +77,7 @@ static rtems_task Init( rtems_task_argument argument )
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -86,4 +86,3 @@ static rtems_task Init( rtems_task_argument argument )
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
-

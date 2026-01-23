@@ -28,7 +28,7 @@
 
 #include <stdint.h>
 
-#if !defined(DL05_H)
+#if !defined( DL05_H )
 #define DL05_H
 
 /*

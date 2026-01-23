@@ -12,10 +12,10 @@
 
 #include <sys/time.h>
 
-int main(void)
+int main( void )
 {
-  struct timeval tv;
+  struct timeval  tv;
   struct timezone tz;
 
-  return gettimeofday(&tv, &tz);
+  return gettimeofday( &tv, &tz );
 }

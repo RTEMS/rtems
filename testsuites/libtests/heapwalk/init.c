@@ -47,25 +47,30 @@
 
 const char rtems_test_name[] = "HEAPWALK";
 
-#define TEST_HEAP_SIZE 1024
+#define TEST_HEAP_SIZE        1024
 #define TEST_DEFAULT_PAGESIZE 128
-#define DUMP false
+#define DUMP                  false
 
-unsigned TestHeapMemory[TEST_HEAP_SIZE];
+unsigned     TestHeapMemory[ TEST_HEAP_SIZE ];
 Heap_Control TestHeap;
 
 static void test_heap_init_with_page_size( uintptr_t page_size )
 {
-  memset( TestHeapMemory, 0xFF, sizeof(TestHeapMemory) );
-  _Heap_Initialize( &TestHeap, TestHeapMemory, sizeof(TestHeapMemory), page_size );
+  memset( TestHeapMemory, 0xFF, sizeof( TestHeapMemory ) );
+  _Heap_Initialize(
+    &TestHeap,
+    TestHeapMemory,
+    sizeof( TestHeapMemory ),
+    page_size
+  );
 }
 
-static void test_heap_init_default(void)
+static void test_heap_init_default( void )
 {
   test_heap_init_with_page_size( 0 );
 }
 
-static void test_heap_init_custom(void)
+static void test_heap_init_custom( void )
 {
   test_heap_init_with_page_size( TEST_DEFAULT_PAGESIZE );
 }
@@ -76,12 +81,12 @@ static void test_call_heap_walk( bool expectet_retval )
   rtems_test_assert( retval == expectet_retval );
 }
 
-static void *test_allocate_block(void)
+static void *test_allocate_block( void )
 {
   return _Heap_Allocate_aligned_with_boundary( &TestHeap, 1, 0, 0 );
 }
 
-static void test_create_heap_with_gaps(void)
+static void test_create_heap_with_gaps( void )
 {
   void *p1 = test_allocate_block();
   /* void *p2 = */ test_allocate_block();
@@ -97,7 +102,7 @@ static void test_create_heap_with_gaps(void)
   _Heap_Protection_free_all_delayed_blocks( &TestHeap );
 }
 
-static void *test_fill_heap(void)
+static void *test_fill_heap( void )
 {
   void *p1 = NULL;
   void *p2 = NULL;
@@ -105,12 +110,12 @@ static void *test_fill_heap(void)
   do {
     p2 = p1;
     p1 = test_allocate_block();
-  }while( p1 != NULL );
+  } while ( p1 != NULL );
 
   return p2;
 }
 
-static void test_system_not_up(void)
+static void test_system_not_up( void )
 {
   rtems_interrupt_level level;
 
@@ -124,7 +129,7 @@ static void test_system_not_up(void)
   rtems_interrupt_local_enable( level );
 }
 
-static void test_check_control(void)
+static void test_check_control( void )
 {
   puts( "testing the _Heap_Walk_check_control() function" );
 
@@ -135,7 +140,7 @@ static void test_check_control(void)
 
   puts( "\tset page size to a not CPU-aligned value" );
   test_heap_init_default();
-  TestHeap.page_size = 3 * (CPU_ALIGNMENT) / 2;
+  TestHeap.page_size = 3 * ( CPU_ALIGNMENT ) / 2;
   test_call_heap_walk( false );
 
   puts( "\tset minimal block size to a not page aligned value" );
@@ -145,7 +150,8 @@ static void test_check_control(void)
 
   puts( "\tset allocation area of the first block to be non page-aligned" );
   test_heap_init_custom();
-  TestHeap.first_block = (Heap_Block *) ((char *) TestHeap.first_block + CPU_ALIGNMENT);
+  TestHeap.first_block = (Heap_Block *) ( (char *) TestHeap.first_block +
+                                          CPU_ALIGNMENT );
   test_call_heap_walk( false );
 
   puts( "\tclear the previous used flag of the first block" );
@@ -164,9 +170,9 @@ static void test_check_control(void)
   test_call_heap_walk( false );
 }
 
-static void test_check_free_list(void)
+static void test_check_free_list( void )
 {
-  void *p1 = NULL;
+  void       *p1 = NULL;
   Heap_Block *first_free_block = NULL;
   Heap_Block *secound_free_block = NULL;
   Heap_Block *third_free_block = NULL;
@@ -201,7 +207,9 @@ static void test_check_free_list(void)
   test_heap_init_custom();
   test_create_heap_with_gaps();
   first_free_block = _Heap_Free_list_first( &TestHeap );
-  first_free_block->next = (Heap_Block *) ((uintptr_t) first_free_block->next + CPU_ALIGNMENT);
+  first_free_block->next = (Heap_Block *) ( (uintptr_t)
+                                              first_free_block->next +
+                                            CPU_ALIGNMENT );
   first_free_block->next->prev = first_free_block;
   test_call_heap_walk( false );
 
@@ -215,17 +223,17 @@ static void test_check_free_list(void)
   test_call_heap_walk( false );
 }
 
-static void test_freshly_initialized(void)
+static void test_freshly_initialized( void )
 {
   puts( "Walk freshly initialized heap" );
   test_heap_init_default();
   test_call_heap_walk( true );
 }
 
-static void test_main_loop(void)
+static void test_main_loop( void )
 {
-  void *p1 = NULL;
-  void *p2 = NULL;
+  void       *p1 = NULL;
+  void       *p2 = NULL;
   Heap_Block *block = NULL;
   Heap_Block *next_block = NULL;
 
@@ -236,10 +244,13 @@ static void test_main_loop(void)
   /* use all blocks */
   p1 = test_fill_heap();
   block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size );
-  block->size_and_flag = ( 2 * _Heap_Block_size( block ) ) | HEAP_PREV_BLOCK_USED;
+  block->size_and_flag = ( 2 * _Heap_Block_size( block ) ) |
+                         HEAP_PREV_BLOCK_USED;
   test_call_heap_walk( false );
 
-  puts( "\twalk a heap with blocks with different states of the previous-used flag" );
+  puts(
+    "\twalk a heap with blocks with different states of the previous-used flag"
+  );
   test_heap_init_custom();
   test_create_heap_with_gaps();
   test_allocate_block(); /* fill one gap */
@@ -251,7 +262,8 @@ static void test_main_loop(void)
   p2 = test_allocate_block();
   _Heap_Free( &TestHeap, p1 );
   block = _Heap_Block_of_alloc_area( (uintptr_t) p2, TestHeap.page_size );
-  block->size_and_flag = (3 * TestHeap.page_size / 2) & ~HEAP_PREV_BLOCK_USED;
+  block->size_and_flag = ( 3 * TestHeap.page_size / 2 ) &
+                         ~HEAP_PREV_BLOCK_USED;
   test_call_heap_walk( false );
 
   puts( "\tcreate a block with a size smaller than the min_block_size" );
@@ -263,50 +275,59 @@ static void test_main_loop(void)
   block->size_and_flag = 0;
   test_call_heap_walk( false );
 
-  puts( "\tmake a block with a size, so that the block reaches into the next block" );
+  puts(
+    "\tmake a block with a size, so that the block reaches into the next block"
+  );
   test_heap_init_default();
   p1 = test_allocate_block();
   p2 = test_allocate_block();
-  block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size  );
-  block->size_and_flag = ( 3 * _Heap_Block_size( block ) / 2 ) | HEAP_PREV_BLOCK_USED;
+  block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size );
+  block->size_and_flag = ( 3 * _Heap_Block_size( block ) / 2 ) |
+                         HEAP_PREV_BLOCK_USED;
   test_call_heap_walk( false );
 
   puts( "\tcreate a block with invalid successor" );
   test_heap_init_default();
   test_allocate_block();
   p1 = test_allocate_block();
-  block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size  );
-  block->size_and_flag = (0 - TestHeap.page_size) | HEAP_PREV_BLOCK_USED;
+  block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size );
+  block->size_and_flag = ( 0 - TestHeap.page_size ) | HEAP_PREV_BLOCK_USED;
   test_call_heap_walk( false );
 
   puts( "\tmake a block with a size, so that it includes the next block" );
   test_heap_init_default();
   p1 = test_allocate_block();
   p2 = test_allocate_block();
-  block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size  );
+  block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size );
   next_block = _Heap_Block_at( block, _Heap_Block_size( block ) );
-  block->size_and_flag = ( _Heap_Block_size( block ) + _Heap_Block_size( next_block ) ) | HEAP_PREV_BLOCK_USED;
+  block->size_and_flag = ( _Heap_Block_size( block ) +
+                           _Heap_Block_size( next_block ) ) |
+                         HEAP_PREV_BLOCK_USED;
   test_call_heap_walk( true );
 }
 
-static void test_check_free_block(void)
+static void test_check_free_block( void )
 {
   Heap_Block *block = NULL;
   Heap_Block *next_block = NULL;
   Heap_Block *first_free_block = NULL;
   Heap_Block *secound_free_block = NULL;
-  void *p1 = NULL;
+  void       *p1 = NULL;
 
   puts( "test the _Heap_Walk_check_free_block() function" );
 
-  puts( "\tset a previous size for the next block which is not equal to the size of the actual block" );
+  puts(
+    "\tset a previous size for the next block which is not equal to the size of the actual block"
+  );
   test_heap_init_default();
   block = _Heap_Free_list_first( &TestHeap );
   next_block = _Heap_Block_at( block, _Heap_Block_size( block ) );
   next_block->prev_size = _Heap_Block_size( block ) - 1;
   test_call_heap_walk( false );
 
-  puts( "\tclear the previous_used flag of the first free block after an used block" );
+  puts(
+    "\tclear the previous_used flag of the first free block after an used block"
+  );
   test_heap_init_default();
   p1 = test_allocate_block();
   block = _Heap_Block_of_alloc_area( (uintptr_t) p1, TestHeap.page_size );
@@ -325,7 +346,7 @@ static void test_check_free_block(void)
   test_call_heap_walk( false );
 }
 
-static void test_output(void)
+static void test_output( void )
 {
   puts( "test the output-function for the _Heap_Walk()" );
   puts( "therefore use the (already tested) case with a page size of 0" );
@@ -333,12 +354,10 @@ static void test_output(void)
   test_heap_init_default();
   TestHeap.page_size = 0;
   test_call_heap_walk( false );
-   _Heap_Walk( &TestHeap, 0, true );
+  _Heap_Walk( &TestHeap, 0, true );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -353,5 +372,5 @@ rtems_task Init(
   test_output();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }

@@ -25,9 +25,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(_DL_CACHE_H_)
+#if !defined( _DL_CACHE_H_ )
 #define _DL_CACHE_H_
 
-int dl_cache_test(void);
+int dl_cache_test( void );
 
 #endif

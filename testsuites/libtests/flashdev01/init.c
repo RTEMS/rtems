@@ -39,190 +39,190 @@
 #define TEST_NAME_LENGTH 10
 
 #define TEST_DATA_SIZE ( PAGE_SIZE * PAGE_COUNT )
-#define PAGE_COUNT 16
-#define PAGE_SIZE 128
-#define SECTOR_COUNT 4
-#define SECTOR_SIZE ( TEST_DATA_SIZE / SECTOR_COUNT )
-#define WB_SIZE 1
+#define PAGE_COUNT     16
+#define PAGE_SIZE      128
+#define SECTOR_COUNT   4
+#define SECTOR_SIZE    ( TEST_DATA_SIZE / SECTOR_COUNT )
+#define WB_SIZE        1
 
 const char rtems_test_name[] = "FLASHDEV 1";
 
-static void run_test(void) {
-
-  char buff[TEST_DATA_SIZE] = {0};
-  FILE *file;
-  int fd;
-  rtems_flashdev* flash;
-  int status;
-  char* read_data;
-  rtems_flashdev_region e_args;
-  rtems_flashdev_ioctl_page_info pg_info;
+static void run_test( void )
+{
+  char                             buff[ TEST_DATA_SIZE ] = { 0 };
+  FILE                            *file;
+  int                              fd;
+  rtems_flashdev                  *flash;
+  int                              status;
+  char                            *read_data;
+  rtems_flashdev_region            e_args;
+  rtems_flashdev_ioctl_page_info   pg_info;
   rtems_flashdev_ioctl_sector_info sec_info;
-  rtems_flashdev_region region;
-  uint32_t jedec;
-  int page_count;
-  int sector_count;
-  int type;
-  size_t wb_size;
-  rtems_resource_snapshot snapshot;
+  rtems_flashdev_region            region;
+  uint32_t                         jedec;
+  int                              page_count;
+  int                              sector_count;
+  int                              type;
+  size_t                           wb_size;
+  rtems_resource_snapshot          snapshot;
 
   /* Check resource usage on creation and deletion */
-  rtems_resource_snapshot_take(&snapshot);
+  rtems_resource_snapshot_take( &snapshot );
 
   flash = test_flashdev_init();
-  rtems_test_assert(flash != NULL);
+  rtems_test_assert( flash != NULL );
 
-  rtems_flashdev_destroy(flash);
+  rtems_flashdev_destroy( flash );
   flash = NULL;
 
-  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+  rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 
   /* Check resource usage on registration */
-  rtems_resource_snapshot_take(&snapshot);
+  rtems_resource_snapshot_take( &snapshot );
 
   flash = test_flashdev_init();
-  rtems_test_assert(flash != NULL);
+  rtems_test_assert( flash != NULL );
 
-  status = rtems_flashdev_register(flash, "dev/flashdev0");
-  rtems_test_assert(!status);
+  status = rtems_flashdev_register( flash, "dev/flashdev0" );
+  rtems_test_assert( !status );
 
-  status = rtems_flashdev_unregister("dev/flashdev0");
-  rtems_test_assert(!status);
+  status = rtems_flashdev_unregister( "dev/flashdev0" );
+  rtems_test_assert( !status );
 
-  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+  rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 
   /* Initalize the flash device driver and flashdev */
   flash = test_flashdev_init();
-  rtems_test_assert(flash != NULL);
+  rtems_test_assert( flash != NULL );
 
   /* Register the flashdev as a device */
-  status = rtems_flashdev_register(flash, "dev/flashdev0");
-  rtems_test_assert(!status);
+  status = rtems_flashdev_register( flash, "dev/flashdev0" );
+  rtems_test_assert( !status );
 
   /* Open the flashdev */
-  file = fopen("dev/flashdev0", "r+");
-  rtems_test_assert(file != NULL);
-  fd = fileno(file);
+  file = fopen( "dev/flashdev0", "r+" );
+  rtems_test_assert( file != NULL );
+  fd = fileno( file );
 
   /* Initial read to establish cached buffers */
-  read_data = fgets(buff, TEST_DATA_SIZE, file);
-  rtems_test_assert(read_data != NULL);
+  read_data = fgets( buff, TEST_DATA_SIZE, file );
+  rtems_test_assert( read_data != NULL );
 
-  rtems_resource_snapshot_take(&snapshot);
+  rtems_resource_snapshot_take( &snapshot );
 
   /* Read data from flash */
-  read_data = fgets(buff, TEST_DATA_SIZE, file);
-  rtems_test_assert(read_data != NULL);
+  read_data = fgets( buff, TEST_DATA_SIZE, file );
+  rtems_test_assert( read_data != NULL );
 
   /* Fseek to start of flash */
-  status = fseek(file, 0x0, SEEK_SET);
-  rtems_test_assert(!status);
+  status = fseek( file, 0x0, SEEK_SET );
+  rtems_test_assert( !status );
 
   /* Write the test name to the flash */
-  status = fwrite(rtems_test_name, TEST_NAME_LENGTH, 1, file);
-  rtems_test_assert(status == 1);
+  status = fwrite( rtems_test_name, TEST_NAME_LENGTH, 1, file );
+  rtems_test_assert( status == 1 );
 
   /* Fseek to start of flash and read again */
-  status = fseek(file, 0x0, SEEK_SET);
-  rtems_test_assert(!status);
-  fgets(buff, TEST_DATA_SIZE, file);
-  rtems_test_assert(!strncmp(buff, rtems_test_name, TEST_NAME_LENGTH));
+  status = fseek( file, 0x0, SEEK_SET );
+  rtems_test_assert( !status );
+  fgets( buff, TEST_DATA_SIZE, file );
+  rtems_test_assert( !strncmp( buff, rtems_test_name, TEST_NAME_LENGTH ) );
 
   /* Test Erasing */
   e_args.offset = 0x0;
   e_args.size = PAGE_SIZE;
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_ERASE, &e_args);
-  rtems_test_assert(!status);
+  status = ioctl( fd, RTEMS_FLASHDEV_IOCTL_ERASE, &e_args );
+  rtems_test_assert( !status );
 
-  fseek(file, 0x0, SEEK_SET);
-  fgets(buff, TEST_DATA_SIZE, file);
-  rtems_test_assert(buff[0] == 0);
+  fseek( file, 0x0, SEEK_SET );
+  fgets( buff, TEST_DATA_SIZE, file );
+  rtems_test_assert( buff[ 0 ] == 0 );
 
   /* Test getting JEDEC ID */
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_JEDEC_ID, &jedec);
-  rtems_test_assert(!status);
-  rtems_test_assert(jedec == 0x00ABCDEF);
+  status = ioctl( fd, RTEMS_FLASHDEV_IOCTL_JEDEC_ID, &jedec );
+  rtems_test_assert( !status );
+  rtems_test_assert( jedec == 0x00ABCDEF );
 
   /* Test getting flash type */
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_TYPE, &type);
-  rtems_test_assert(!status);
-  rtems_test_assert(type == RTEMS_FLASHDEV_NOR);
+  status = ioctl( fd, RTEMS_FLASHDEV_IOCTL_TYPE, &type );
+  rtems_test_assert( !status );
+  rtems_test_assert( type == RTEMS_FLASHDEV_NOR );
 
   /* Test getting page info from offset */
-  pg_info.location = PAGE_SIZE + PAGE_SIZE/2;
+  pg_info.location = PAGE_SIZE + PAGE_SIZE / 2;
 
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_PAGEINFO_BY_OFFSET, &pg_info);
-  rtems_test_assert(!status);
-  rtems_test_assert(pg_info.page_info.offset == PAGE_SIZE);
-  rtems_test_assert(pg_info.page_info.size == PAGE_SIZE);
+  status = ioctl( fd, RTEMS_FLASHDEV_IOCTL_PAGEINFO_BY_OFFSET, &pg_info );
+  rtems_test_assert( !status );
+  rtems_test_assert( pg_info.page_info.offset == PAGE_SIZE );
+  rtems_test_assert( pg_info.page_info.size == PAGE_SIZE );
 
   /* Test getting page info from index */
   pg_info.location = 2;
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_PAGEINFO_BY_INDEX, &pg_info);
-  rtems_test_assert(!status);
-  rtems_test_assert(pg_info.page_info.offset == 2*PAGE_SIZE);
-  rtems_test_assert(pg_info.page_info.size == PAGE_SIZE);
+  status = ioctl( fd, RTEMS_FLASHDEV_IOCTL_PAGEINFO_BY_INDEX, &pg_info );
+  rtems_test_assert( !status );
+  rtems_test_assert( pg_info.page_info.offset == 2 * PAGE_SIZE );
+  rtems_test_assert( pg_info.page_info.size == PAGE_SIZE );
 
   /* Test getting page count */
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_PAGE_COUNT, &page_count);
-  rtems_test_assert(!status);
-  rtems_test_assert(page_count == PAGE_COUNT);
+  status = ioctl( fd, RTEMS_FLASHDEV_IOCTL_PAGE_COUNT, &page_count );
+  rtems_test_assert( !status );
+  rtems_test_assert( page_count == PAGE_COUNT );
 
   /* Test getting sector info from offset */
-  sec_info.location = SECTOR_SIZE + SECTOR_SIZE/2;
+  sec_info.location = SECTOR_SIZE + SECTOR_SIZE / 2;
 
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_SECTORINFO_BY_OFFSET, &sec_info);
-  rtems_test_assert(!status);
-  rtems_test_assert(sec_info.sector_info.offset == SECTOR_SIZE);
-  rtems_test_assert(sec_info.sector_info.size == SECTOR_SIZE);
+  status = ioctl( fd, RTEMS_FLASHDEV_IOCTL_SECTORINFO_BY_OFFSET, &sec_info );
+  rtems_test_assert( !status );
+  rtems_test_assert( sec_info.sector_info.offset == SECTOR_SIZE );
+  rtems_test_assert( sec_info.sector_info.size == SECTOR_SIZE );
 
   /* Test getting sector count */
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_SECTOR_COUNT, &sector_count);
-  rtems_test_assert(!status);
-  rtems_test_assert(sector_count == SECTOR_COUNT);
+  status = ioctl( fd, RTEMS_FLASHDEV_IOCTL_SECTOR_COUNT, &sector_count );
+  rtems_test_assert( !status );
+  rtems_test_assert( sector_count == SECTOR_COUNT );
 
   /* Test getting write block size */
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_WRITE_BLOCK_SIZE, &wb_size);
-  rtems_test_assert(!status);
-  rtems_test_assert(wb_size == WB_SIZE);
+  status = ioctl( fd, RTEMS_FLASHDEV_IOCTL_WRITE_BLOCK_SIZE, &wb_size );
+  rtems_test_assert( !status );
+  rtems_test_assert( wb_size == WB_SIZE );
 
   /* Test Regions */
   region.offset = 0x400;
   region.size = 0x200;
-  status = ioctl(fd, RTEMS_FLASHDEV_IOCTL_REGION_SET, &region);
-  rtems_test_assert(!status);
+  status = ioctl( fd, RTEMS_FLASHDEV_IOCTL_REGION_SET, &region );
+  rtems_test_assert( !status );
 
   /* Test read to larger then region */
-  fseek(file, 0x0, SEEK_SET);
-  read_data = fgets(buff, 2048, file);
-  rtems_test_assert(read_data == NULL);
+  fseek( file, 0x0, SEEK_SET );
+  read_data = fgets( buff, 2048, file );
+  rtems_test_assert( read_data == NULL );
 
   /* Test fseek outside of region */
-  status = fseek(file, 0x201, SEEK_SET);
-  rtems_test_assert(status);
+  status = fseek( file, 0x201, SEEK_SET );
+  rtems_test_assert( status );
 
   /* Write to base unset region and check the writes location */
-  fseek(file, 0x0, SEEK_SET);
-  fwrite("HELLO WORLD", 11, 1, file);
-  ioctl(fd, RTEMS_FLASHDEV_IOCTL_REGION_UNSET, NULL);
-  fseek(file, 0x400, SEEK_SET);
-  fgets(buff, 11, file);
-  rtems_test_assert(strncmp(buff, "HELLO WORLD", 11));
+  fseek( file, 0x0, SEEK_SET );
+  fwrite( "HELLO WORLD", 11, 1, file );
+  ioctl( fd, RTEMS_FLASHDEV_IOCTL_REGION_UNSET, NULL );
+  fseek( file, 0x400, SEEK_SET );
+  fgets( buff, 11, file );
+  rtems_test_assert( strncmp( buff, "HELLO WORLD", 11 ) );
 
-  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+  rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 
-  status = fclose(file);
-  rtems_test_assert(!status);
+  status = fclose( file );
+  rtems_test_assert( !status );
 
-  status = rtems_flashdev_unregister("dev/flashdev0");
-  rtems_test_assert(!status);
+  status = rtems_flashdev_unregister( "dev/flashdev0" );
+  rtems_test_assert( !status );
 }
 
 static void run_flash_sim_test( void )
 {
-  FILE *file;
-  rtems_flashdev* flash;
-  int status;
+  FILE                   *file;
+  rtems_flashdev         *flash;
+  int                     status;
   rtems_resource_snapshot snapshot;
 
   /* Check resource usage on creation and deletion */
@@ -259,7 +259,7 @@ static void run_flash_sim_test( void )
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -269,7 +269,7 @@ static void Init(rtems_task_argument arg)
   run_flash_sim_test();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_MICROSECONDS_PER_TICK 2000

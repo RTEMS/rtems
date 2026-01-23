@@ -45,36 +45,30 @@
 const char rtems_test_name[] = "TERMIOS 7";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void write_helper(int fd, const char *c);
-void read_helper(int fd, const char *expected);
-void open_it(void);
-void close_it(void);
-void change_iflag(const char *desc, int mask, int new);
+rtems_task Init( rtems_task_argument argument );
+void       write_helper( int fd, const char *c );
+void       read_helper( int fd, const char *expected );
+void       open_it( void );
+void       close_it( void );
+void       change_iflag( const char *desc, int mask, int new );
 
-void write_helper(
-  int        fd,
-  const char *c
-)
+void write_helper( int fd, const char *c )
 {
-  ssize_t  len;
-  ssize_t  rc;
-  
+  ssize_t len;
+  ssize_t rc;
+
   len = strlen( c );
   printf( "Writing: %s", c );
 
   rc = write( fd, c, len );
   rtems_test_assert( rc == len );
 
-  termios_test_driver_dump_tx("Transmitted");
+  termios_test_driver_dump_tx( "Transmitted" );
 }
 
-uint8_t read_helper_buffer[256];
+uint8_t read_helper_buffer[ 256 ];
 
-void read_helper(
-  int         fd,
-  const char *expected
-)
+void read_helper( int fd, const char *expected )
 {
   int    rc;
   size_t len;
@@ -83,20 +77,20 @@ void read_helper(
 
   termios_test_driver_set_rx( expected, len );
   printf( "\nReading (expected):\n" );
-  rtems_print_buffer( (unsigned char *)expected, len-1 );
+  rtems_print_buffer( (unsigned char *) expected, len - 1 );
 
-  rc = read( fd, read_helper_buffer, sizeof(read_helper_buffer) );
+  rc = read( fd, read_helper_buffer, sizeof( read_helper_buffer ) );
   rtems_test_assert( rc != -1 );
 
   printf( "Read %d bytes from read(2)\n", rc );
   rtems_print_buffer( read_helper_buffer, rc );
 
-  termios_test_driver_dump_tx("As Read");
+  termios_test_driver_dump_tx( "As Read" );
 }
 
 int Test_fd;
 
-void open_it(void)
+void open_it( void )
 {
   /* open the file */
   puts( "open(" TERMIOS_TEST_DRIVER_DEVICE_NAME ") - OK " );
@@ -104,7 +98,7 @@ void open_it(void)
   rtems_test_assert( Test_fd != -1 );
 }
 
-void close_it(void)
+void close_it( void )
 {
   int rc;
 
@@ -132,20 +126,17 @@ void change_iflag( const char *desc, int mask, int new )
 const char XON_String[] = "\021";
 const char XOFF_String[] = "\023";
 
-const char ExpectedOutput_1[] =
-"0123456789012345678901234567890123456789"
-"0123456789012345678901234567890123456789"
-"0123456789012345678901234567890123456789"
-"0123456789012345678901234567890123456789"
-"0123456789012345678901234567890123456789";
+const char ExpectedOutput_1[] = "0123456789012345678901234567890123456789"
+                                "0123456789012345678901234567890123456789"
+                                "0123456789012345678901234567890123456789"
+                                "0123456789012345678901234567890123456789"
+                                "0123456789012345678901234567890123456789";
 #if 0
 const char ExpectedInput_1[] = "Blocking interrupt driven read.\n";
 const char ExpectedInput_2[] = "Non-Blocking interrupt driven read.\n";
 #endif
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -154,12 +145,12 @@ rtems_task Init(
   TEST_BEGIN();
 
   puts( "rtems_termios_bufsize( 64, 64, 64 ) - OK" );
-  sc = rtems_termios_bufsize ( 64, 64, 64 );
+  sc = rtems_termios_bufsize( 64, 64, 64 );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   open_it();
 
-  change_iflag( "Set XON/XOFF", IXON|IXOFF, IXON|IXOFF );
+  change_iflag( "Set XON/XOFF", IXON | IXOFF, IXON | IXOFF );
 
   termios_test_driver_set_rx( XOFF_String, 1 );
   sc = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
@@ -179,21 +170,20 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_EXTRA_DRIVERS \
-  TERMIOS_TEST_DRIVER_TABLE_ENTRY
+#define CONFIGURE_APPLICATION_EXTRA_DRIVERS TERMIOS_TEST_DRIVER_TABLE_ENTRY
 
 /* we need to be able to open the test device */
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
-#define CONFIGURE_MAXIMUM_TASKS                  1
-#define CONFIGURE_MAXIMUM_TIMERS                 2
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_MAXIMUM_TASKS            1
+#define CONFIGURE_MAXIMUM_TIMERS           2
+#define CONFIGURE_INITIAL_EXTENSIONS       RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

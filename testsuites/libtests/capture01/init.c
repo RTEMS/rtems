@@ -47,44 +47,43 @@
 #include <assert.h>
 #include <tmacros.h>
 
-#define ASSERT_SC(sc) assert((sc) == RTEMS_SUCCESSFUL)
+#define ASSERT_SC( sc ) assert( ( sc ) == RTEMS_SUCCESSFUL )
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
 const char rtems_test_name[] = "CAPTURE 1";
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
   rtems_status_code   sc;
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
-  rtems_name          to_name = rtems_build_name('I', 'D', 'L', 'E');;
+  rtems_name          to_name = rtems_build_name( 'I', 'D', 'L', 'E' );
+  ;
 
-  rtems_print_printer_fprintf_putc(&rtems_test_printer);
+  rtems_print_printer_fprintf_putc( &rtems_test_printer );
 
   TEST_BEGIN();
 
-  rtems_task_set_priority(RTEMS_SELF, 20, &old_priority);
-  rtems_task_mode(RTEMS_PREEMPT,  RTEMS_PREEMPT_MASK, &old_mode);
+  rtems_task_set_priority( RTEMS_SELF, 20, &old_priority );
+  rtems_task_mode( RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &old_mode );
 
-  sc = rtems_capture_open (5000, NULL);
-  ASSERT_SC(sc);
+  sc = rtems_capture_open( 5000, NULL );
+  ASSERT_SC( sc );
 
-  sc = rtems_capture_watch_ceiling (100);
-  ASSERT_SC(sc);
+  sc = rtems_capture_watch_ceiling( 100 );
+  ASSERT_SC( sc );
 
-  sc = rtems_capture_watch_floor (102);
-  ASSERT_SC(sc);
+  sc = rtems_capture_watch_floor( 102 );
+  ASSERT_SC( sc );
 
-  sc = rtems_capture_watch_global (true);
-  ASSERT_SC(sc);
+  sc = rtems_capture_watch_global( true );
+  ASSERT_SC( sc );
 
-  sc = rtems_capture_set_trigger (
+  sc = rtems_capture_set_trigger(
     0,
     0,
     to_name,
@@ -92,20 +91,20 @@ rtems_task Init(
     rtems_capture_from_any,
     rtems_capture_switch
   );
-  ASSERT_SC(sc);
+  ASSERT_SC( sc );
 
   rtems_capture_print_watch_list();
 
-  sc = rtems_capture_set_control (true);
-  ASSERT_SC(sc);
+  sc = rtems_capture_set_control( true );
+  ASSERT_SC( sc );
 
   capture_test_1();
 
-  sc = rtems_capture_set_control (false);
-  ASSERT_SC(sc);
+  sc = rtems_capture_set_control( false );
+  ASSERT_SC( sc );
 
-  rtems_capture_print_trace_records ( 22, false );
-  rtems_capture_print_trace_records ( 22, false );
+  rtems_capture_print_trace_records( 22, false );
+  rtems_capture_print_trace_records( 22, false );
 
   TEST_END();
   exit( 0 );

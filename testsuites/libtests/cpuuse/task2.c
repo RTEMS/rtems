@@ -43,27 +43,24 @@
 
 #include <rtems/cpuuse.h>
 
-static void
-showTaskSwitches (void)
+static void showTaskSwitches( void )
 {
   int i;
   int switches = taskSwitchLogIndex;
 
-  for (i = 0 ; i < switches ; i++) {
-      put_name( Task_name[taskSwitchLog[i].taskIndex], FALSE );
-      print_time( "- ", &taskSwitchLog[i].when, "\n" );
+  for ( i = 0; i < switches; i++ ) {
+    put_name( Task_name[ taskSwitchLog[ i ].taskIndex ], FALSE );
+    print_time( "- ", &taskSwitchLog[ i ].when, "\n" );
   }
 }
 
-rtems_task Task_2(
-  rtems_task_argument argument
-)
+rtems_task Task_2( rtems_task_argument argument )
 {
   (void) argument;
 
   while ( !testsFinished );
 
-  showTaskSwitches ();
+  showTaskSwitches();
   puts( "" );
   rtems_cpu_usage_report();
   puts( "" );

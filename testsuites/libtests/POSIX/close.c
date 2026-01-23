@@ -12,8 +12,7 @@
 
 #include <unistd.h>
 
-int
-main (void)
+int main( void )
 {
-  return close(42);
+  return close( 42 );
 }

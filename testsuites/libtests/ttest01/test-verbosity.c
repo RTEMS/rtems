@@ -1,29 +1,31 @@
 #include <rtems/test.h>
 
-T_TEST_CASE(verbosity_changes)
+T_TEST_CASE( verbosity_changes )
 {
-	T_verbosity verbosity;
+  T_verbosity verbosity;
 
-	verbosity = T_set_verbosity(T_QUIET);
-	T_true(true, "quiet: check passes -> no output");
-	T_true(false, "quiet: check fails -> no output");
-	T_set_verbosity(T_NORMAL);
-	T_true(true, "normal: check passes -> no output");
-	T_true(false, "normal: check fails -> with output");
-	T_set_verbosity(T_VERBOSE);
-	T_true(true, "verbose: check passes -> with output");
-	T_true(false, "verbose: check fails -> with output");
-	T_set_verbosity(verbosity);
+  verbosity = T_set_verbosity( T_QUIET );
+  T_true( true, "quiet: check passes -> no output" );
+  T_true( false, "quiet: check fails -> no output" );
+  T_set_verbosity( T_NORMAL );
+  T_true( true, "normal: check passes -> no output" );
+  T_true( false, "normal: check fails -> with output" );
+  T_set_verbosity( T_VERBOSE );
+  T_true( true, "verbose: check passes -> with output" );
+  T_true( false, "verbose: check fails -> with output" );
+  T_set_verbosity( verbosity );
 }
 
 #include "t-self-test.h"
 
-T_TEST_OUTPUT(verbosity_changes,
-"B:verbosity_changes\n"
-"F:3:0:UI1:test-verbosity.c:12:normal: check fails -> with output\n"
-"P:4:0:UI1:test-verbosity.c:14\n"
-"F:5:0:UI1:test-verbosity.c:15:verbose: check fails -> with output\n"
-"E:verbosity_changes:N:6:F:3:D:0.001000\n");
+T_TEST_OUTPUT(
+  verbosity_changes,
+  "B:verbosity_changes\n"
+  "F:3:0:UI1:test-verbosity.c:12:normal: check fails -> with output\n"
+  "P:4:0:UI1:test-verbosity.c:14\n"
+  "F:5:0:UI1:test-verbosity.c:15:verbose: check fails -> with output\n"
+  "E:verbosity_changes:N:6:F:3:D:0.001000\n"
+);
 
 /*
  * The license is at the end of the file to be able to use the test code and

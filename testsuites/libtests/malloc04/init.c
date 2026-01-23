@@ -44,7 +44,7 @@ const char rtems_test_name[] = "MALLOC 4";
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -54,10 +54,7 @@ const char rtems_test_name[] = "MALLOC 4";
 /* end of configuration */
 
 #ifndef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-void *rtems_heap_null_extend(
-  Heap_Control *heap,
-  size_t alloc_size
-)
+void *rtems_heap_null_extend( Heap_Control *heap, size_t alloc_size )
 {
   return rtems_heap_extend_via_sbrk( heap, alloc_size );
 }
@@ -74,7 +71,7 @@ Heap_Control TempHeap;
 
 size_t offset;
 
-void * sbrk(ptrdiff_t incr)
+void *sbrk( ptrdiff_t incr )
 {
   void *p = (void *) -1;
 
@@ -82,7 +79,7 @@ void * sbrk(ptrdiff_t incr)
   if ( sbrk_count == -1 ) {
     p = (void *) -2;
     sbrk_count = 0;
-  } else if ( offset + incr <= sizeof(Malloc_Heap) ) {
+  } else if ( offset + incr <= sizeof( Malloc_Heap ) ) {
     p = &Malloc_Heap[ offset ];
     offset += incr;
   }
@@ -92,16 +89,14 @@ void * sbrk(ptrdiff_t incr)
   return p;
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  Heap_Control *real_heap;
+  Heap_Control             *real_heap;
   const Memory_Information *mem;
-  Memory_Area *area;
-  size_t i;
+  Memory_Area              *area;
+  size_t                    i;
 
   void *p;
 
@@ -125,7 +120,7 @@ rtems_task Init(
   puts( "No sbrk() amount" );
 
   sbrk_count = 0;
-  offset     = 256;
+  offset = 256;
   _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
 
   /* Some BSPs provide multiple memory areas.  Make them empty. */
@@ -146,22 +141,22 @@ rtems_task Init(
   puts( "Misaligned extend" );
 
   sbrk_count = 0;
-  offset     = 256;
+  offset = 256;
   _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
   _Malloc_Initialize();
 
-  p = malloc(1);
+  p = malloc( 1 );
   rtems_test_assert( p != NULL );
   rtems_test_assert( sbrk_count == 0 );
 
-  p = malloc(257);
+  p = malloc( 257 );
   rtems_test_assert( p != NULL );
   rtems_test_assert( sbrk_count == 1 );
 
   puts( "Not enough sbrk() space" );
 
   sbrk_count = 0;
-  offset     = 256;
+  offset = 256;
   _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
   _Malloc_Initialize();
 
@@ -174,7 +169,7 @@ rtems_task Init(
   puts( "Valid heap extend" );
 
   sbrk_count = 0;
-  offset     = 256;
+  offset = 256;
   _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
   _Malloc_Initialize();
 
@@ -189,7 +184,7 @@ rtems_task Init(
   puts( "Invalid heap extend" );
 
   sbrk_count = -1;
-  offset     = 256;
+  offset = 256;
   _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
   _Malloc_Initialize();
 
@@ -204,7 +199,7 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* end of file */

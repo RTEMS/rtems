@@ -12,9 +12,9 @@
 
 #include <stdlib.h>
 
-int main(void)
+int main( void )
 {
-  void *p = realloc(NULL, 42);
+  void *p = realloc( NULL, 42 );
 
-  return (p == NULL);
+  return ( p == NULL );
 }

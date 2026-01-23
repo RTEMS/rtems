@@ -12,13 +12,13 @@
 
 #include <sys/uio.h>
 
-int main(void)
+int main( void )
 {
   struct iovec iov = { 0 };
-  int count = 4;
-  ssize_t ret;
+  int          count = 4;
+  ssize_t      ret;
 
-  ret = writev(0, &iov, count);
+  ret = writev( 0, &iov, count );
 
   return ret;
 }

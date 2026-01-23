@@ -35,16 +35,19 @@
 const char rtems_test_name[] = "MALLOC 2";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_timer_service_routine test_operation_from_isr(rtems_id timer, void *arg);
+rtems_task                  Init( rtems_task_argument argument );
+rtems_timer_service_routine test_operation_from_isr(
+  rtems_id timer,
+  void    *arg
+);
 
 volatile bool operation_performed_from_tsr;
 
 void *Pointer1;
 
 rtems_timer_service_routine test_operation_from_isr(
-  rtems_id  timer,
-  void     *arg
+  rtems_id timer,
+  void    *arg
 )
 {
   (void) timer;
@@ -56,15 +59,13 @@ rtems_timer_service_routine test_operation_from_isr(
   operation_performed_from_tsr = true;
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code     status;
-  rtems_id              timer;
-  void                 *pointer2;
+  rtems_status_code status;
+  rtems_id          timer;
+  void             *pointer2;
 
   TEST_BEGIN();
 
@@ -74,7 +75,10 @@ rtems_task Init(
   /*
    *  Timer used in multiple ways
    */
-  status = rtems_timer_create( rtems_build_name('T', 'M', 'R', '0'), &timer );
+  status = rtems_timer_create(
+    rtems_build_name( 'T', 'M', 'R', '0' ),
+    &timer
+  );
   directive_failed( status, "rtems_timer_create" );
 
   operation_performed_from_tsr = false;
@@ -96,7 +100,7 @@ rtems_task Init(
 
   puts( "Free from ISR successfully processed" );
   puts( "Now malloc'ing more memory to process the free" );
-  pointer2 = malloc(20);
+  pointer2 = malloc( 20 );
   rtems_test_assert( pointer2 );
 
   TEST_END();
@@ -113,10 +117,9 @@ rtems_task Init(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MAXIMUM_TASKS             1
-#define CONFIGURE_MAXIMUM_TIMERS            1
+#define CONFIGURE_MAXIMUM_TASKS  1
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
 /* end of file */
-

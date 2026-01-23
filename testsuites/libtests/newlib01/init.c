@@ -44,7 +44,7 @@
 #include "tmacros.h"
 
 #ifndef _REENT_CLEANUP
-#define _REENT_CLEANUP(ptr) ((ptr)->__cleanup)
+#define _REENT_CLEANUP( ptr ) ( ( ptr )->__cleanup )
 #endif
 
 const char rtems_test_name[] = "NEWLIB 1";
@@ -53,37 +53,32 @@ static const char stdio_file_path[] = "/stdio-file";
 
 static const char non_stdio_file_path[] = "/non-stdio-file";
 
-typedef enum {
-  INIT,
-  OPEN,
-  WRITTEN,
-  CLOSED
-} test_state;
+typedef enum { INIT, OPEN, WRITTEN, CLOSED } test_state;
 
 typedef struct {
-  rtems_id main_task_id;
-  rtems_id worker_task_id;
+  rtems_id   main_task_id;
+  rtems_id   worker_task_id;
   test_state current;
-  FILE *non_stdio_file;
-  int non_stdio_fd;
+  FILE      *non_stdio_file;
+  int        non_stdio_fd;
 } test_context;
 
 static test_context test_instance;
 
-static void wake_up_main(const test_context *ctx)
+static void wake_up_main( const test_context *ctx )
 {
   rtems_status_code sc;
 
-  sc = rtems_event_transient_send(ctx->main_task_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_event_transient_send( ctx->main_task_id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void wait(void)
+static void wait( void )
 {
   rtems_status_code sc;
 
-  sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_event_transient_receive( RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
 /*
@@ -92,24 +87,24 @@ static void wait(void)
  * srand() generates the same sequence as when srand() is first called with a
  * seed value of 1.
  */
-static void test_rand(void)
+static void test_rand( void )
 {
   int rv;
 
   rv = rand();
-  rtems_test_assert(rv == 1481765933);
+  rtems_test_assert( rv == 1481765933 );
   rv = rand();
-  rtems_test_assert(rv == 1085377743);
+  rtems_test_assert( rv == 1085377743 );
   rv = rand();
-  rtems_test_assert(rv == 1270216262);
+  rtems_test_assert( rv == 1270216262 );
 
-  srand(1);
+  srand( 1 );
   rv = rand();
-  rtems_test_assert(rv == 1481765933);
+  rtems_test_assert( rv == 1481765933 );
   rv = rand();
-  rtems_test_assert(rv == 1085377743);
+  rtems_test_assert( rv == 1085377743 );
   rv = rand();
-  rtems_test_assert(rv == 1270216262);
+  rtems_test_assert( rv == 1270216262 );
 }
 
 /*
@@ -118,84 +113,84 @@ static void test_rand(void)
  * call to srand48() uses default constant initializer values set in the _seed
  * member of struct _rand48.
  */
-static void test_lrand48(void)
+static void test_lrand48( void )
 {
   long rv;
 
   rv = lrand48();
-  rtems_test_assert(rv == 851401618);
+  rtems_test_assert( rv == 851401618 );
   rv = lrand48();
-  rtems_test_assert(rv == 1804928587);
+  rtems_test_assert( rv == 1804928587 );
   rv = lrand48();
-  rtems_test_assert(rv == 758783491);
+  rtems_test_assert( rv == 758783491 );
 }
 
-static void stdio_file_worker(rtems_task_argument arg)
+static void stdio_file_worker( rtems_task_argument arg )
 {
   (void) arg;
 
   test_context *ctx = &test_instance;
-  FILE *output;
-  char buf[1] = { 'x' };
-  size_t n;
+  FILE         *output;
+  char          buf[ 1 ] = { 'x' };
+  size_t        n;
 
   test_rand();
   test_lrand48();
 
-  rtems_test_assert(_REENT_CLEANUP(_REENT) == NULL);
+  rtems_test_assert( _REENT_CLEANUP( _REENT ) == NULL );
 
-  output = stdout = fopen(&stdio_file_path[0], "r+");
-  rtems_test_assert(stdout != NULL);
+  output = stdout = fopen( &stdio_file_path[ 0 ], "r+" );
+  rtems_test_assert( stdout != NULL );
 
   /*
    * Check newlib's __sinit does not touch our assigned file pointer.
    */
-  rtems_test_assert(_REENT_CLEANUP(_REENT) == NULL);
-  rtems_test_assert(fflush(stdout) == 0);
-  rtems_test_assert(_REENT_CLEANUP(_REENT) != NULL);
-  rtems_test_assert(stdout == output);
+  rtems_test_assert( _REENT_CLEANUP( _REENT ) == NULL );
+  rtems_test_assert( fflush( stdout ) == 0 );
+  rtems_test_assert( _REENT_CLEANUP( _REENT ) != NULL );
+  rtems_test_assert( stdout == output );
 
-  n = fwrite(&buf[0], sizeof(buf), 1, stdout);
-  rtems_test_assert(n == 1);
+  n = fwrite( &buf[ 0 ], sizeof( buf ), 1, stdout );
+  rtems_test_assert( n == 1 );
 
-  rtems_test_assert(ctx->current == OPEN);
+  rtems_test_assert( ctx->current == OPEN );
 
-  wake_up_main(ctx);
+  wake_up_main( ctx );
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 }
 
-static void non_stdio_file_worker(rtems_task_argument arg)
+static void non_stdio_file_worker( rtems_task_argument arg )
 {
   (void) arg;
 
   test_context *ctx = &test_instance;
-  FILE *fp;
-  char buf[1] = { 'y' };
-  size_t n;
-  int fd;
+  FILE         *fp;
+  char          buf[ 1 ] = { 'y' };
+  size_t        n;
+  int           fd;
 
-  fp = ctx->non_stdio_file = fopen(&non_stdio_file_path[0], "w");
-  rtems_test_assert(fp != NULL);
+  fp = ctx->non_stdio_file = fopen( &non_stdio_file_path[ 0 ], "w" );
+  rtems_test_assert( fp != NULL );
 
   /* Get file descriptor of new global file stream, store it in text context */
-  fd = fileno(fp);
-  rtems_test_assert(fd != -1);
+  fd = fileno( fp );
+  rtems_test_assert( fd != -1 );
   ctx->non_stdio_fd = fd;
 
-  n = fwrite(&buf[0], sizeof(buf), 1, fp);
-  rtems_test_assert(n == 1);
+  n = fwrite( &buf[ 0 ], sizeof( buf ), 1, fp );
+  rtems_test_assert( n == 1 );
 
-  wake_up_main(ctx);
+  wake_up_main( ctx );
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 }
 
 static int handler_open(
   rtems_libio_t *iop,
-  const char *path,
-  int oflag,
-  mode_t mode
+  const char    *path,
+  int            oflag,
+  mode_t         mode
 )
 {
   (void) iop;
@@ -205,52 +200,46 @@ static int handler_open(
 
   test_context *ctx = &test_instance;
 
-  rtems_test_assert(ctx->current == INIT);
+  rtems_test_assert( ctx->current == INIT );
   ctx->current = OPEN;
 
   return 0;
 }
 
-static int handler_close(
-  rtems_libio_t *iop
-)
+static int handler_close( rtems_libio_t *iop )
 {
   (void) iop;
 
   test_context *ctx = &test_instance;
 
-  rtems_test_assert(ctx->current == WRITTEN);
+  rtems_test_assert( ctx->current == WRITTEN );
   ctx->current = CLOSED;
 
   return 0;
 }
 
-static ssize_t handler_read(
-  rtems_libio_t *iop,
-  void *buffer,
-  size_t count
-)
+static ssize_t handler_read( rtems_libio_t *iop, void *buffer, size_t count )
 {
   (void) iop;
   (void) buffer;
   (void) count;
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 
   return 0;
 }
 
 static ssize_t handler_write(
   rtems_libio_t *iop,
-  const void *buffer,
-  size_t count
+  const void    *buffer,
+  size_t         count
 )
 {
   (void) buffer;
 
   test_context *ctx = &test_instance;
 
-  rtems_test_assert(ctx->current == OPEN);
+  rtems_test_assert( ctx->current == OPEN );
   ctx->current = WRITTEN;
 
   iop->offset += count;
@@ -259,88 +248,74 @@ static ssize_t handler_write(
 }
 
 static int handler_ioctl(
-  rtems_libio_t *iop,
+  rtems_libio_t  *iop,
   ioctl_command_t request,
-  void *buffer
+  void           *buffer
 )
 {
   (void) iop;
   (void) request;
   (void) buffer;
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 
   return 0;
 }
 
-static off_t handler_lseek(
-  rtems_libio_t *iop,
-  off_t length,
-  int whence
-)
+static off_t handler_lseek( rtems_libio_t *iop, off_t length, int whence )
 {
   (void) iop;
   (void) length;
   (void) whence;
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 
   return 0;
 }
 
-static int handler_ftruncate(
-  rtems_libio_t *iop,
-  off_t length
-)
+static int handler_ftruncate( rtems_libio_t *iop, off_t length )
 {
   (void) iop;
   (void) length;
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 
   return 0;
 }
 
-static int handler_fsync(
-  rtems_libio_t *iop
-)
+static int handler_fsync( rtems_libio_t *iop )
 {
   (void) iop;
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 
   return 0;
 }
 
-static int handler_fdatasync(
-  rtems_libio_t *iop
-)
+static int handler_fdatasync( rtems_libio_t *iop )
 {
   (void) iop;
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 
   return 0;
 }
 
-static int handler_fcntl(
-  rtems_libio_t *iop,
-  int cmd
-)
+static int handler_fcntl( rtems_libio_t *iop, int cmd )
 {
   (void) iop;
   (void) cmd;
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 
   return 0;
 }
 
 static ssize_t handler_readv(
-  rtems_libio_t *iop,
+  rtems_libio_t      *iop,
   const struct iovec *iov,
-  int iovcnt,
-  ssize_t total
+  int                 iovcnt,
+  ssize_t             total
 )
 {
   (void) iop;
@@ -348,16 +323,16 @@ static ssize_t handler_readv(
   (void) iovcnt;
   (void) total;
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 
   return 0;
 }
 
 static ssize_t handler_writev(
-  rtems_libio_t *iop,
+  rtems_libio_t      *iop,
   const struct iovec *iov,
-  int iovcnt,
-  ssize_t total
+  int                 iovcnt,
+  ssize_t             total
 )
 {
   (void) iop;
@@ -365,7 +340,7 @@ static ssize_t handler_writev(
   (void) iovcnt;
   (void) total;
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 
   return 0;
 }
@@ -392,63 +367,63 @@ static const IMFS_node_control node_control = IMFS_GENERIC_INITIALIZER(
   IMFS_node_destroy_default
 );
 
-static void create_and_run_worker(test_context *ctx, rtems_task_entry entry)
+static void create_and_run_worker( test_context *ctx, rtems_task_entry entry )
 {
   rtems_status_code sc;
 
   sc = rtems_task_create(
-    rtems_build_name('W', 'O', 'R', 'K'),
+    rtems_build_name( 'W', 'O', 'R', 'K' ),
     2,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &ctx->worker_task_id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_start(ctx->worker_task_id, entry, 0);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_start( ctx->worker_task_id, entry, 0 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   wait();
 
-  sc = rtems_task_delete(ctx->worker_task_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_delete( ctx->worker_task_id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
 /*
  * Check that a FILE opened by a task and assigned to a stdio stream is closed
  * during thread termination. Ensure that resources are returned to the system.
  */
-static void test_stdio_file(test_context *ctx)
+static void test_stdio_file( test_context *ctx )
 {
-  int rv;
+  int                     rv;
   rtems_resource_snapshot snapshot;
 
-  rtems_resource_snapshot_take(&snapshot);
+  rtems_resource_snapshot_take( &snapshot );
 
   rv = IMFS_make_generic_node(
-    &stdio_file_path[0],
+    &stdio_file_path[ 0 ],
     S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
     &node_control,
     NULL
   );
-  rtems_test_assert(rv == 0);
+  rtems_test_assert( rv == 0 );
 
-  create_and_run_worker(ctx, stdio_file_worker);
+  create_and_run_worker( ctx, stdio_file_worker );
 
-  rv = unlink(&stdio_file_path[0]);
-  rtems_test_assert(rv == 0);
+  rv = unlink( &stdio_file_path[ 0 ] );
+  rtems_test_assert( rv == 0 );
 
-  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+  rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 }
 
 /*
  * Open a global FILE object from a task but do not assign it to a stdio
  * stream. The FILE is not closed upon thread termination.
  */
-static void test_non_stdio_file(test_context *ctx)
+static void test_non_stdio_file( test_context *ctx )
 {
-  create_and_run_worker(ctx, non_stdio_file_worker);
+  create_and_run_worker( ctx, non_stdio_file_worker );
 }
 
 /*
@@ -457,46 +432,46 @@ static void test_non_stdio_file(test_context *ctx)
  * handler has not yet run, so the stdio FILE objects themselves are still
  * open.
  */
-static void check_after_libio_exit(void)
+static void check_after_libio_exit( void )
 {
   test_context *ctx = &test_instance;
-  struct stat unused;
-  int rv;
+  struct stat   unused;
+  int           rv;
 
   errno = 0;
-  rv = fstat(0, &unused);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EBADF);
+  rv = fstat( 0, &unused );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EBADF );
 
   errno = 0;
-  rv = fstat(1, &unused);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EBADF);
+  rv = fstat( 1, &unused );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EBADF );
 
   errno = 0;
-  rv = fstat(2, &unused);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EBADF);
+  rv = fstat( 2, &unused );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EBADF );
 
-  rtems_test_assert(stdin->_flags != 0);
-  rtems_test_assert(stdout->_flags != 0);
-  rtems_test_assert(stderr->_flags != 0);
+  rtems_test_assert( stdin->_flags != 0 );
+  rtems_test_assert( stdout->_flags != 0 );
+  rtems_test_assert( stderr->_flags != 0 );
 
   /*
    * The non-stdio file and its file descriptor should be still open at this
    * point.
    */
-  rv = fstat(ctx->non_stdio_fd, &unused);
-  rtems_test_assert(rv == 0);
-  rtems_test_assert(ctx->non_stdio_file->_flags != 0);
+  rv = fstat( ctx->non_stdio_fd, &unused );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( ctx->non_stdio_file->_flags != 0 );
 }
 
-static void register_exit_handler_before_libio_exit(void)
+static void register_exit_handler_before_libio_exit( void )
 {
   int rv;
 
-  rv = atexit(check_after_libio_exit);
-  rtems_test_assert(rv == 0);
+  rv = atexit( check_after_libio_exit );
+  rtems_test_assert( rv == 0 );
 }
 
 /*
@@ -504,51 +479,54 @@ static void register_exit_handler_before_libio_exit(void)
  * check_after_libio_exit() is called after rtems_libio_exit().  The exit()
  * handlers are in a LIFO list.
  */
-RTEMS_SYSINIT_ITEM(register_exit_handler_before_libio_exit,
-    RTEMS_SYSINIT_STD_FILE_DESCRIPTORS, RTEMS_SYSINIT_ORDER_FIRST);
+RTEMS_SYSINIT_ITEM(
+  register_exit_handler_before_libio_exit,
+  RTEMS_SYSINIT_STD_FILE_DESCRIPTORS,
+  RTEMS_SYSINIT_ORDER_FIRST
+);
 
 /*
  * At this point, neither the functions registered with atexit() nor the Newlib
  * cleanup procedures have been called. Therefore, stdio file descriptors
  * should be open and stdio FILE object flags should be non-zero.
  */
-static void test_exit_handling(test_context *ctx)
+static void test_exit_handling( test_context *ctx )
 {
   struct stat unused;
-  int rv;
+  int         rv;
 
-  rv = fstat(0, &unused);
-  rtems_test_assert(rv == 0);
+  rv = fstat( 0, &unused );
+  rtems_test_assert( rv == 0 );
 
-  rv = fstat(1, &unused);
-  rtems_test_assert(rv == 0);
+  rv = fstat( 1, &unused );
+  rtems_test_assert( rv == 0 );
 
-  rv = fstat(2, &unused);
-  rtems_test_assert(rv == 0);
+  rv = fstat( 2, &unused );
+  rtems_test_assert( rv == 0 );
 
-  rtems_test_assert(stdin->_flags != 0);
-  rtems_test_assert(stdout->_flags != 0);
-  rtems_test_assert(stderr->_flags != 0);
+  rtems_test_assert( stdin->_flags != 0 );
+  rtems_test_assert( stdout->_flags != 0 );
+  rtems_test_assert( stderr->_flags != 0 );
 
   /*
    * The file descriptor of the non-stdio file should still be open; the FILE
    * object flags should still be non-zero.
    */
-  rv = fstat(ctx->non_stdio_fd, &unused);
-  rtems_test_assert(rv == 0);
-  rtems_test_assert(ctx->non_stdio_file->_flags != 0);
+  rv = fstat( ctx->non_stdio_fd, &unused );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( ctx->non_stdio_file->_flags != 0 );
 
   /* Run exit handlers and Newlib cleanup procedures */
-  exit(0);
+  exit( 0 );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
   test_context *ctx = &test_instance;
-  FILE *file;
-  int rv;
+  FILE         *file;
+  int           rv;
 
   TEST_BEGIN();
   test_rand();
@@ -557,60 +535,58 @@ static void Init(rtems_task_argument arg)
   ctx->main_task_id = rtems_task_self();
 
   /* Fill dynamic file pool in Newlib */
-  file = fopen(CONSOLE_DEVICE_NAME, "r+");
-  rtems_test_assert(file != NULL);
-  rv = fclose(file);
-  rtems_test_assert(rv == 0);
+  file = fopen( CONSOLE_DEVICE_NAME, "r+" );
+  rtems_test_assert( file != NULL );
+  rv = fclose( file );
+  rtems_test_assert( rv == 0 );
 
-  test_stdio_file(ctx);
-  test_non_stdio_file(ctx);
-  test_exit_handling(ctx);
+  test_stdio_file( ctx );
+  test_non_stdio_file( ctx );
+  test_exit_handling( ctx );
 }
 
 static void fatal_extension(
   rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code error
+  bool               always_set_to_false,
+  rtems_fatal_code   error
 )
 {
   if (
-    source == RTEMS_FATAL_SOURCE_EXIT
-      && !always_set_to_false
-      && error == 0
+    source == RTEMS_FATAL_SOURCE_EXIT && !always_set_to_false && error == 0
   ) {
     /*
      * Final conditions check after exit handlers and Newlib cleanup procedures
      * have run. File descriptors and FILE objects themselves are closed.
      */
-    struct stat unused;
-    int rv;
+    struct stat   unused;
+    int           rv;
     test_context *ctx = &test_instance;
 
     errno = 0;
-    rv = fstat(0, &unused);
-    rtems_test_assert(rv == -1);
-    rtems_test_assert(errno == EBADF);
+    rv = fstat( 0, &unused );
+    rtems_test_assert( rv == -1 );
+    rtems_test_assert( errno == EBADF );
 
     errno = 0;
-    rv = fstat(1, &unused);
-    rtems_test_assert(rv == -1);
-    rtems_test_assert(errno == EBADF);
+    rv = fstat( 1, &unused );
+    rtems_test_assert( rv == -1 );
+    rtems_test_assert( errno == EBADF );
 
     errno = 0;
-    rv = fstat(2, &unused);
-    rtems_test_assert(rv == -1);
-    rtems_test_assert(errno == EBADF);
+    rv = fstat( 2, &unused );
+    rtems_test_assert( rv == -1 );
+    rtems_test_assert( errno == EBADF );
 
-    rtems_test_assert(stdin->_flags == 0);
-    rtems_test_assert(stdout->_flags == 0);
-    rtems_test_assert(stderr->_flags == 0);
+    rtems_test_assert( stdin->_flags == 0 );
+    rtems_test_assert( stdout->_flags == 0 );
+    rtems_test_assert( stderr->_flags == 0 );
 
     /* The non-stdio file and its file descriptor should be closed */
     errno = 0;
-    rv = fstat(ctx->non_stdio_fd, &unused);
-    rtems_test_assert(rv == -1);
-    rtems_test_assert(errno == EBADF);
-    rtems_test_assert(ctx->non_stdio_file->_flags == 0);
+    rv = fstat( ctx->non_stdio_fd, &unused );
+    rtems_test_assert( rv == -1 );
+    rtems_test_assert( errno == EBADF );
+    rtems_test_assert( ctx->non_stdio_file->_flags == 0 );
 
     TEST_END();
   }
@@ -624,8 +600,7 @@ static void fatal_extension(
 #define CONFIGURE_MAXIMUM_TASKS 2
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = fatal_extension }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .fatal = fatal_extension }, RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

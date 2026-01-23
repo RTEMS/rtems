@@ -37,16 +37,11 @@
 extern "C" {
 #endif
 
-void termios_test_driver_set_rx(
-  const void *p,
-  size_t      len
-);
+void termios_test_driver_set_rx( const void *p, size_t len );
 
-void termios_test_driver_set_rx_enqueue_now(
-  bool value
-);
+void termios_test_driver_set_rx_enqueue_now( bool value );
 
-void termios_test_driver_dump_tx(const char *c);
+void termios_test_driver_dump_tx( const char *c );
 
 /**
  *  This macro defines the standard name for the Termios Test device
@@ -59,9 +54,12 @@ void termios_test_driver_dump_tx(const char *c);
  *  a Termios Test device driver.
  */
 #define TERMIOS_TEST_DRIVER_TABLE_ENTRY \
-  { termios_test_driver_initialize, termios_test_driver_open, \
-    termios_test_driver_close, termios_test_driver_read, \
-    termios_test_driver_write, termios_test_driver_control }
+  { termios_test_driver_initialize,     \
+    termios_test_driver_open,           \
+    termios_test_driver_close,          \
+    termios_test_driver_read,           \
+    termios_test_driver_write,          \
+    termios_test_driver_control }
 
 /**
  *  @brief Console Initialization Entry Point
@@ -76,9 +74,9 @@ void termios_test_driver_dump_tx(const char *c);
  *          the device driver is successfully initialized.
  */
 rtems_device_driver termios_test_driver_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -95,9 +93,9 @@ rtems_device_driver termios_test_driver_initialize(
  *          the device driver is successfully opened.
  */
 rtems_device_driver termios_test_driver_open(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -114,9 +112,9 @@ rtems_device_driver termios_test_driver_open(
  *          the device is successfully closed.
  */
 rtems_device_driver termios_test_driver_close(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -133,9 +131,9 @@ rtems_device_driver termios_test_driver_close(
  *          the device is successfully read from.
  */
 rtems_device_driver termios_test_driver_read(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -152,9 +150,9 @@ rtems_device_driver termios_test_driver_read(
  *          the device is successfully written.
  */
 rtems_device_driver termios_test_driver_write(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -172,9 +170,9 @@ rtems_device_driver termios_test_driver_write(
  *          successfully performed.
  */
 rtems_device_driver termios_test_driver_control(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 #ifdef __cplusplus

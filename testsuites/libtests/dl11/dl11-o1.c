@@ -27,15 +27,15 @@
 
 #include <errno.h>
 
-int get_errno_val (void);
-int *get_errno_ptr (void);
+int  get_errno_val( void );
+int *get_errno_ptr( void );
 
-int get_errno_val (void)
+int get_errno_val( void )
 {
   return errno;
 }
 
-int *get_errno_ptr (void)
+int *get_errno_ptr( void )
 {
   return &errno;
 }

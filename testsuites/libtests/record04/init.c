@@ -35,84 +35,96 @@
 
 #define ITEM_CAPACITY 512
 
-#define RECOMMENDED_ITEM_COUNT (ITEM_CAPACITY + 2)
+#define RECOMMENDED_ITEM_COUNT ( ITEM_CAPACITY + 2 )
 
 typedef struct {
-  bool early;
-  bool late;
-  bool interrupt;
-  bool good;
-  uint32_t how_many;
-  rtems_record_item items[RECOMMENDED_ITEM_COUNT];
+  bool              early;
+  bool              late;
+  bool              interrupt;
+  bool              good;
+  uint32_t          how_many;
+  rtems_record_item items[ RECOMMENDED_ITEM_COUNT ];
 } RecordFetchConcurrentContext;
 
-static void action(void *arg) {
+static void action( void *arg )
+{
   RecordFetchConcurrentContext *ctx;
-  rtems_record_fetch_control control;
+  rtems_record_fetch_control    control;
 
   ctx = arg;
-  rtems_record_fetch_initialize(&control, &ctx->items[0],
-                                RTEMS_ARRAY_SIZE(ctx->items));
+  rtems_record_fetch_initialize(
+    &control,
+    &ctx->items[ 0 ],
+    RTEMS_ARRAY_SIZE( ctx->items )
+  );
   ctx->early = false;
-  (void)rtems_record_fetch(&control);
+  (void) rtems_record_fetch( &control );
   ctx->late = true;
 
-  if (control.fetched_count < ITEM_CAPACITY) {
+  if ( control.fetched_count < ITEM_CAPACITY ) {
     size_t i;
 
     ctx->good = true;
-    T_eq_u32(RTEMS_RECORD_GET_EVENT(control.fetched_items[0].event),
-             RTEMS_RECORD_PROCESSOR);
-    T_eq_ulong(control.fetched_items[0].data, 0);
-    T_eq_u32(RTEMS_RECORD_GET_EVENT(control.fetched_items[1].event),
-             RTEMS_RECORD_PER_CPU_OVERFLOW);
+    T_eq_u32(
+      RTEMS_RECORD_GET_EVENT( control.fetched_items[ 0 ].event ),
+      RTEMS_RECORD_PROCESSOR
+    );
+    T_eq_ulong( control.fetched_items[ 0 ].data, 0 );
+    T_eq_u32(
+      RTEMS_RECORD_GET_EVENT( control.fetched_items[ 1 ].event ),
+      RTEMS_RECORD_PER_CPU_OVERFLOW
+    );
 
-    for (i = 2; i < control.fetched_count; ++i) {
+    for ( i = 2; i < control.fetched_count; ++i ) {
       rtems_record_event event;
 
-      event = RTEMS_RECORD_GET_EVENT(control.fetched_items[i].event);
-      T_true(event == RTEMS_RECORD_USER_0 || event == RTEMS_RECORD_UPTIME_LOW ||
-             event == RTEMS_RECORD_UPTIME_HIGH);
+      event = RTEMS_RECORD_GET_EVENT( control.fetched_items[ i ].event );
+      T_true(
+        event == RTEMS_RECORD_USER_0 || event == RTEMS_RECORD_UPTIME_LOW ||
+        event == RTEMS_RECORD_UPTIME_HIGH
+      );
     }
   }
 }
 
-static void prepare(void *arg) {
+static void prepare( void *arg )
+{
   RecordFetchConcurrentContext *ctx;
-  uint32_t i;
+  uint32_t                      i;
 
   ctx = arg;
   ctx->early = true;
   ctx->late = false;
   ctx->interrupt = false;
 
-  for (i = 0; i < RECOMMENDED_ITEM_COUNT - 2; ++i) {
-    rtems_record_produce(RTEMS_RECORD_USER_0, 0);
+  for ( i = 0; i < RECOMMENDED_ITEM_COUNT - 2; ++i ) {
+    rtems_record_produce( RTEMS_RECORD_USER_0, 0 );
   }
 }
 
-static T_interrupt_test_state interrupt(void *arg) {
+static T_interrupt_test_state interrupt( void *arg )
+{
   RecordFetchConcurrentContext *ctx;
 
   ctx = arg;
 
-  if (ctx->good) {
+  if ( ctx->good ) {
     return T_INTERRUPT_TEST_DONE;
   }
 
-  if (ctx->early) {
+  if ( ctx->early ) {
     return T_INTERRUPT_TEST_EARLY;
   }
 
-  if (ctx->late) {
+  if ( ctx->late ) {
     return T_INTERRUPT_TEST_LATE;
   }
 
-  if (!ctx->interrupt) {
+  if ( !ctx->interrupt ) {
     uint32_t i;
 
-    for (i = 0; i < ctx->how_many; ++i) {
-      rtems_record_produce(RTEMS_RECORD_USER_1, 0);
+    for ( i = 0; i < ctx->how_many; ++i ) {
+      rtems_record_produce( RTEMS_RECORD_USER_1, 0 );
     }
   }
 
@@ -120,29 +132,33 @@ static T_interrupt_test_state interrupt(void *arg) {
   return T_INTERRUPT_TEST_CONTINUE;
 }
 
-static const T_interrupt_test_config config = {.prepare = prepare,
-                                               .action = action,
-                                               .interrupt = interrupt,
-                                               .max_iteration_count = 10000};
+static const T_interrupt_test_config config = {
+  .prepare = prepare,
+  .action = action,
+  .interrupt = interrupt,
+  .max_iteration_count = 10000
+};
 
-T_TEST_CASE(RecordFetchConcurrent) {
+T_TEST_CASE( RecordFetchConcurrent )
+{
   RecordFetchConcurrentContext ctx;
 
-  memset(&ctx, 0, sizeof(ctx));
+  memset( &ctx, 0, sizeof( ctx ) );
   ctx.how_many = ITEM_CAPACITY + 1;
-  T_interrupt_test(&config, &ctx);
-  T_true(ctx.good);
+  T_interrupt_test( &config, &ctx );
+  T_true( ctx.good );
 
-  memset(&ctx, 0, sizeof(ctx));
+  memset( &ctx, 0, sizeof( ctx ) );
   ctx.how_many = ITEM_CAPACITY / 2;
-  T_interrupt_test(&config, &ctx);
-  T_true(ctx.good);
+  T_interrupt_test( &config, &ctx );
+  T_true( ctx.good );
 }
 
 const char rtems_test_name[] = "RECORD 4";
 
-static void Init(rtems_task_argument argument) {
-  rtems_test_run(argument, TEST_STATE);
+static void Init( rtems_task_argument argument )
+{
+  rtems_test_run( argument, TEST_STATE );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

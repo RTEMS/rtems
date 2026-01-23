@@ -30,11 +30,11 @@
 
 #include "dl13-arm_mode.h"
 
-void arm_mode_func (void)
+void arm_mode_func( void )
 {
   static uint8_t count = 0;
 
   count++;
 
-  printf("%s call count: %d\n", __func__, count);
+  printf( "%s call count: %d\n", __func__, count );
 }

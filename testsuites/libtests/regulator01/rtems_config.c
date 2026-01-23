@@ -31,10 +31,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <rtems.h>
 
-rtems_task test_regulator(rtems_task_argument);
+rtems_task test_regulator( rtems_task_argument );
 
 #include <bsp.h> /* for device driver prototypes */
 
@@ -44,16 +43,16 @@ rtems_task test_regulator(rtems_task_argument);
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_INIT_TASK_ENTRY_POINT test_regulator
-#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
+#define CONFIGURE_INIT_TASK_ATTRIBUTES  RTEMS_FLOATING_POINT
 
 /* Use hard limits to make it easier to trip object creation errors */
-#define CONFIGURE_MAXIMUM_TASKS 2
+#define CONFIGURE_MAXIMUM_TASKS          2
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
-#define CONFIGURE_MAXIMUM_PARTITIONS 1
-#define CONFIGURE_MAXIMUM_PERIODS 1
+#define CONFIGURE_MAXIMUM_PARTITIONS     1
+#define CONFIGURE_MAXIMUM_PERIODS        1
 
 #define CONFIGURE_UNIFIED_WORK_AREAS
-#define CONFIGURE_MINIMUM_TASK_STACK_SIZE (8 * 1024)
+#define CONFIGURE_MINIMUM_TASK_STACK_SIZE ( 8 * 1024 )
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

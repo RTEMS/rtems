@@ -44,33 +44,43 @@
 #include <stdlib.h>
 
 const char rtems_test_name[] = "TZTEST";
- 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void tztester(void);
 
-void tztester(void)
+/* forward declarations to avoid warnings */
+rtems_task Init( rtems_task_argument argument );
+void       tztester( void );
+
+void tztester( void )
 {
   struct tm *tm;
-  time_t now;
+  time_t     now;
 
-  printf("TZ:\"%s\"\n", getenv("TZ"));
+  printf( "TZ:\"%s\"\n", getenv( "TZ" ) );
 
-  time(&now);
-  tm = localtime(&now);
-  printf ("%4.4d-%2.2d-%2.2d %2.2d:%2.2d:%2.2d\n",
-     1900+tm->tm_year, tm->tm_mon+1, tm->tm_mday,
-     tm->tm_hour, tm->tm_min, tm->tm_sec);
+  time( &now );
+  tm = localtime( &now );
+  printf(
+    "%4.4d-%2.2d-%2.2d %2.2d:%2.2d:%2.2d\n",
+    1900 + tm->tm_year,
+    tm->tm_mon + 1,
+    tm->tm_mday,
+    tm->tm_hour,
+    tm->tm_min,
+    tm->tm_sec
+  );
 
-  tm = gmtime(&now);
-  printf ("%4.4d-%2.2d-%2.2d %2.2d:%2.2d:%2.2d\n",
-     1900+tm->tm_year, tm->tm_mon+1, tm->tm_mday,
-     tm->tm_hour, tm->tm_min, tm->tm_sec);
+  tm = gmtime( &now );
+  printf(
+    "%4.4d-%2.2d-%2.2d %2.2d:%2.2d:%2.2d\n",
+    1900 + tm->tm_year,
+    tm->tm_mon + 1,
+    tm->tm_mday,
+    tm->tm_hour,
+    tm->tm_min,
+    tm->tm_sec
+  );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -90,9 +100,8 @@ rtems_task Init(
   tztester();
 
   TEST_END();
-  exit(0);
+  exit( 0 );
 }
-
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

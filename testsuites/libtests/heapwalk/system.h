@@ -36,13 +36,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1_through_5(
-  rtems_task_argument argument
-);
+rtems_task Task_1_through_5( rtems_task_argument argument );
 
 void blow_stack( void );
 
@@ -51,10 +47,10 @@ void blow_stack( void );
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE*3)
+#define TASK_STACK_SIZE ( RTEMS_MINIMUM_STACK_SIZE * 3 )
 
-#define CONFIGURE_EXTRA_TASK_STACKS  ((TASK_STACK_SIZE)*5)
-#define CONFIGURE_MAXIMUM_TASKS               6
+#define CONFIGURE_EXTRA_TASK_STACKS ( ( TASK_STACK_SIZE ) * 5 )
+#define CONFIGURE_MAXIMUM_TASKS     6
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
@@ -64,7 +60,7 @@ void blow_stack( void );
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 6 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 6 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 6 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 6 ]; /* array of task names */
 
 /* end of include file */

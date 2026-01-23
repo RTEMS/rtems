@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(DL04_H)
+#if !defined( DL04_H )
 #define DL04_H
 
 /*
@@ -39,8 +39,8 @@
 extern int         dl04_unresolv_1;
 extern float       dl04_unresolv_2;
 extern char        dl04_unresolv_3;
-extern char*       dl04_unresolv_4;
+extern char       *dl04_unresolv_4;
 extern const int   dl04_unresolv_5;
-extern const char* dl04_unresolv_6;
+extern const char *dl04_unresolv_6;
 
 #endif

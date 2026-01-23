@@ -13,10 +13,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-int main(void)
+int main( void )
 {
   pid_t pid;
   pid = vfork();
 
-  return (pid != 0);
+  return ( pid != 0 );
 }

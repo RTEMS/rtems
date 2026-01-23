@@ -48,10 +48,7 @@
 
 extern const char *Mouse_Type_Short;
 
-bool bsp_get_serial_mouse_device(
-  const char **name,
-  const char **type
-)
+bool bsp_get_serial_mouse_device( const char **name, const char **type )
 {
   *name = TERMIOS_TEST_DRIVER_DEVICE_NAME;
   *type = Mouse_Type_Short;

@@ -25,9 +25,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(_DL_BIT_ALLOC_H_)
+#if !defined( _DL_BIT_ALLOC_H_ )
 #define _DL_BIT_ALLOC_H_
 
-int dl_bit_alloc_test(void);
+int dl_bit_alloc_test( void );
 
 #endif

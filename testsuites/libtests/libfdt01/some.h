@@ -10,6 +10,6 @@
 #include <sys/types.h>
 
 extern const unsigned char some_bin[];
-extern const size_t some_bin_size;
+extern const size_t        some_bin_size;
 
 #endif

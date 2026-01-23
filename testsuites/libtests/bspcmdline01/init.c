@@ -36,16 +36,16 @@
 const char rtems_test_name[] = "BSPCMDLINE 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void test_errors(void);
-void test_search(bool null_expected, const char *cmdline, const char *param);
+rtems_task Init( rtems_task_argument argument );
+void       test_errors( void );
+void test_search( bool null_expected, const char *cmdline, const char *param );
 
 extern const char *bsp_boot_cmdline;
 
-void test_errors(void)
+void test_errors( void )
 {
   const char *p;
-  char        result[32];
+  char        result[ 32 ];
 
   bsp_boot_cmdline = NULL;
 
@@ -72,36 +72,34 @@ void test_errors(void)
   rtems_test_assert( p == NULL );
 
   puts(
-    "rtems_bsp_cmdline_get_param_raw - bsp_boot_cmdline=NULL - returns NULL" );
+    "rtems_bsp_cmdline_get_param_raw - bsp_boot_cmdline=NULL - returns NULL"
+  );
   p = rtems_bsp_cmdline_get_param_raw( "name" );
   rtems_test_assert( p == NULL );
-  
+
   bsp_boot_cmdline = "edit";
-  puts (
+  puts(
     "rtems_bsp_cmdline_get_param - bsp_boot_cmdline = edit name = "
-      "edit -no error" );
-  p = rtems_bsp_cmdline_get_param("edit", result, 5);
+    "edit -no error"
+  );
+  p = rtems_bsp_cmdline_get_param( "edit", result, 5 );
   rtems_test_assert( p != NULL );
 
   bsp_boot_cmdline = "joel=123456789";
   puts( "rtems_bsp_cmdline_get_param - too short buffer" );
-  p = rtems_bsp_cmdline_get_param("joel", result, 5);
+  p = rtems_bsp_cmdline_get_param( "joel", result, 5 );
   rtems_test_assert( p != NULL );
 
   bsp_boot_cmdline = "--arg1=X`";
   puts( "rtems_bsp_cmdline_get_param_rhs - short match" );
-  p = rtems_bsp_cmdline_get_param_rhs("arg", result, 10);
+  p = rtems_bsp_cmdline_get_param_rhs( "arg", result, 10 );
   rtems_test_assert( p == NULL );
 }
 
-void test_search(
-  bool        null_expected,
-  const char *cmdline,
-  const char *param
-)
+void test_search( bool null_expected, const char *cmdline, const char *param )
 {
   const char *p;
-  char        value[80];
+  char        value[ 80 ];
   size_t      length;
 
   bsp_boot_cmdline = cmdline;
@@ -111,53 +109,58 @@ void test_search(
     "Testing for param=(%s)%s\n"
     "  Command Line : (%s)\n",
     param,
-    ((null_expected) ? " - Expect NULL" : ""),
+    ( ( null_expected ) ? " - Expect NULL" : "" ),
     cmdline
   );
 
   printf( "rtems_bsp_cmdline_get_param_raw(%s)\n", param );
   p = rtems_bsp_cmdline_get_param_raw( param );
   if ( null_expected ) {
-    if ( p )
+    if ( p ) {
       puts( "ERROR - rtems_bsp_cmdline_get_param_raw did not return NULL" );
-    else
+    } else {
       printf( "rtems_bsp_cmdline_get_param_raw(%s) returned NULL\n", param );
+    }
     rtems_test_assert( !p );
   } else {
-    if ( p )
-      printf( "rtems_bsp_cmdline_get_param_raw(%s) returned (%s)\n", param, p );
-    else
+    if ( p ) {
+      printf(
+        "rtems_bsp_cmdline_get_param_raw(%s) returned (%s)\n",
+        param,
+        p
+      );
+    } else {
       printf( "rtems_bsp_cmdline_get_param_raw(%s) returned NULL\n", param );
+    }
 
     rtems_test_assert( p );
   }
 
   printf( "rtems_bsp_cmdline_get_param_rhs(%s)\n", param );
-  length = sizeof(value);
+  length = sizeof( value );
   p = rtems_bsp_cmdline_get_param_rhs( param, value, length );
   if ( null_expected ) {
-    if ( p )
+    if ( p ) {
       puts( "ERROR - rtems_bsp_cmdline_get_param_rhs did not return NULL" );
-    else
+    } else {
       printf( "rtems_bsp_cmdline_get_param_rhs(%s) returned NULL\n", param );
+    }
     rtems_test_assert( !p );
   } else {
-    if ( !p )
+    if ( !p ) {
       puts( "ERROR - rtems_bsp_cmdline_get_param_rhs returned NULL" );
+    }
     rtems_test_assert( p );
     printf(
       "rtems_bsp_cmdline_get_param_rhs(%s) returned (%s) value=(%s)\n",
       param,
-      ((*p == '\0') ? "ZERO_LENGTH_STRING" : p ),
-      ((*value == '\0') ? "ZERO_LENGTH_STRING" : value )
+      ( ( *p == '\0' ) ? "ZERO_LENGTH_STRING" : p ),
+      ( ( *value == '\0' ) ? "ZERO_LENGTH_STRING" : value )
     );
   }
-
 }
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -187,10 +190,10 @@ rtems_task Init(
     false,
     "--ip=192.168.1.151 --name=\"joel and michele\" --cpu=fast",
     "-name"
-    );
+  );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -198,7 +201,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS         1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

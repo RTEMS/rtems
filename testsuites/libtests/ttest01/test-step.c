@@ -1,18 +1,20 @@
 #include <rtems/test.h>
 
-T_TEST_CASE(step)
+T_TEST_CASE( step )
 {
-	T_step_true(0, true, "all right");
-	T_step_true(2, true, "not the right step");
+  T_step_true( 0, true, "all right" );
+  T_step_true( 2, true, "not the right step" );
 }
 
 #include "t-self-test.h"
 
-T_TEST_OUTPUT(step,
-"B:step\n"
-"P:0:0:UI1:test-step.c:5\n"
-"F:1:0:UI1:test-step.c:6:planned step (2)\n"
-"E:step:N:2:F:1:D:0.001000\n");
+T_TEST_OUTPUT(
+  step,
+  "B:step\n"
+  "P:0:0:UI1:test-step.c:5\n"
+  "F:1:0:UI1:test-step.c:6:planned step (2)\n"
+  "E:step:N:2:F:1:D:0.001000\n"
+);
 
 /*
  * The license is at the end of the file to be able to use the test code and

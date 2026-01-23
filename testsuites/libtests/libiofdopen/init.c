@@ -44,46 +44,48 @@
 
 const char rtems_test_name[] = "LIBIO FD OPEN";
 
-#define NUMOF(_a) (sizeof(_a) / sizeof(_a[0]))
+#define NUMOF( _a ) ( sizeof( _a ) / sizeof( _a[ 0 ] ) )
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
-  int fd[10];
+  int    fd[ 10 ];
   size_t i;
-  int base_count;
+  int    base_count;
 
   TEST_BEGIN();
 
-  for (i = 0; i < NUMOF(fd); i++) {
-    fd[i] = -1;
+  for ( i = 0; i < NUMOF( fd ); i++ ) {
+    fd[ i ] = -1;
   }
 
   base_count = rtems_libio_count_open_iops();
 
-  fd[0] = open("/x123", O_WRONLY | O_TRUNC | O_CREAT, 0x777);
-  rtems_test_assert(fd[0] != -1);
-  rtems_test_assert(rtems_libio_count_open_iops() == 3 + 1);
-  rtems_test_assert(write(fd[0], "0123456789\n", 11) == 11);
-  rtems_test_assert(close(fd[0]) == 0);
+  fd[ 0 ] = open( "/x123", O_WRONLY | O_TRUNC | O_CREAT, 0x777 );
+  rtems_test_assert( fd[ 0 ] != -1 );
+  rtems_test_assert( rtems_libio_count_open_iops() == 3 + 1 );
+  rtems_test_assert( write( fd[ 0 ], "0123456789\n", 11 ) == 11 );
+  rtems_test_assert( close( fd[ 0 ] ) == 0 );
 
-  for (i = 0; i < 5; ++i) {
-    fd[i] = open("/x123", O_RDONLY);
-    rtems_test_assert(fd[i] >= 0);
-    rtems_test_assert(rtems_libio_count_open_iops() == 
-                      (int)(base_count + i + 1));
+  for ( i = 0; i < 5; ++i ) {
+    fd[ i ] = open( "/x123", O_RDONLY );
+    rtems_test_assert( fd[ i ] >= 0 );
+    rtems_test_assert(
+      rtems_libio_count_open_iops() == (int) ( base_count + i + 1 )
+    );
   }
 
-  for (i = 5; i < 10; ++i) {
-    fd[i] = open("/x123", O_RDONLY);
-    rtems_test_assert(fd[i] >= 0);
-    rtems_test_assert(rtems_libio_count_open_iops() ==
-                      (int)(base_count + i + 1));
+  for ( i = 5; i < 10; ++i ) {
+    fd[ i ] = open( "/x123", O_RDONLY );
+    rtems_test_assert( fd[ i ] >= 0 );
+    rtems_test_assert(
+      rtems_libio_count_open_iops() == (int) ( base_count + i + 1 )
+    );
   }
 
-  for (i = 0; i < 10; ++i) {
-    rtems_test_assert(close(fd[i]) == 0);
+  for ( i = 0; i < 10; ++i ) {
+    rtems_test_assert( close( fd[ i ] ) == 0 );
   }
 
   TEST_END();

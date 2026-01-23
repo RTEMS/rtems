@@ -37,23 +37,19 @@
 const char rtems_test_name[] = "DUMPBUF 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void do_test(size_t length);
+rtems_task Init( rtems_task_argument argument );
+void       do_test( size_t length );
 
 unsigned char Buffer[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890\n";
 
-void do_test(
-  size_t length
-)
+void do_test( size_t length )
 {
   printf( "====== Printing %zu Bytes ======\n", length );
   rtems_print_buffer( Buffer, length );
   printf( "===============================\n\n" );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -61,14 +57,14 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  for ( i = 0 ; i < sizeof(Buffer) ; i++ ) {
+  for ( i = 0; i < sizeof( Buffer ); i++ ) {
     do_test( i );
   }
   do_test( -1 );
-  
+
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -76,7 +72,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

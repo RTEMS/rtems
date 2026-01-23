@@ -34,28 +34,28 @@
 extern "C" {
 #endif /* __cplusplus */
 
-typedef int (*test_file_system_mount_handler)(
+typedef int ( *test_file_system_mount_handler )(
   const char *disk_path,
   const char *mount_path,
-  void *arg
+  void       *arg
 );
 
-typedef int (*test_file_system_format_handler)(
+typedef int ( *test_file_system_format_handler )(
   const char *disk_path,
-  void *arg
+  void       *arg
 );
 
 typedef struct {
-  test_file_system_mount_handler mount;
+  test_file_system_mount_handler  mount;
   test_file_system_format_handler format;
 } test_file_system_handler;
 
 void test_file_system_with_handler(
-  unsigned index,
-  const char *disk_path,
-  const char *mount_path,
+  unsigned                        index,
+  const char                     *disk_path,
+  const char                     *mount_path,
   const test_file_system_handler *handler,
-  void *handler_arg
+  void                           *handler_arg
 );
 
 #ifdef __cplusplus

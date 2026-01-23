@@ -32,26 +32,23 @@
 
 #include <rtems/test-printer.h>
 
-#define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__);
+#define printf( ... ) rtems_printf( &rtems_test_printer, __VA_ARGS__ );
 
 /*
  * Call function that are not part of the RTEMS kernel base image.
  */
 
-void dl_o2_func1 (unsigned short s[7])
+void dl_o2_func1( unsigned short s[ 7 ] )
 {
-  printf("libm: lcong48\n")
-  lcong48 (s);
+  printf( "libm: lcong48\n" ) lcong48( s );
 }
 
-double dl_o2_func2 (double d1, double d2)
+double dl_o2_func2( double d1, double d2 )
 {
-  printf("libm: atan2\n")
-  return atan2 (d1, d2);
+  printf( "libm: atan2\n" ) return atan2( d1, d2 );
 }
 
-double dl_o2_func3 (double d)
+double dl_o2_func3( double d )
 {
-  printf("libm: tan\n")
-  return tan (d);
+  printf( "libm: tan\n" ) return tan( d );
 }

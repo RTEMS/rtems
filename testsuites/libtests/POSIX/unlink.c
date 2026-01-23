@@ -12,11 +12,10 @@
 
 #include <unistd.h>
 
-int
-main (void)
+int main( void )
 {
   int status;
-  status = unlink("/tmp/foo");
+  status = unlink( "/tmp/foo" );
 
   return status;
 }

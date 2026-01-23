@@ -40,26 +40,29 @@
 
 #include "system.h"
 
-static void test(void)
+static void test( void )
 {
-  rtems_test_assert(rtems_debugger_start("test", "something",
-                                         3, 10, &rtems_test_printer) < 0);
-  rtems_test_assert(rtems_debugger_register_test_remote() == 0);
-  rtems_test_assert(rtems_debugger_start("test", "something",
-                                         3, 10, &rtems_test_printer) == 0);
-  rtems_debugger_set_verbose(true);
-  rtems_test_assert(rtems_debugger_remote_debug(true) == 0);
+  rtems_test_assert(
+    rtems_debugger_start( "test", "something", 3, 10, &rtems_test_printer ) < 0
+  );
+  rtems_test_assert( rtems_debugger_register_test_remote() == 0 );
+  rtems_test_assert(
+    rtems_debugger_start( "test", "something", 3, 10, &rtems_test_printer ) ==
+    0
+  );
+  rtems_debugger_set_verbose( true );
+  rtems_test_assert( rtems_debugger_remote_debug( true ) == 0 );
 
   /*
    * This thread is suspended when the debugger is active until the debugger
    * disconnects.
    */
-  sleep(1);
+  sleep( 1 );
 }
 
 const char rtems_test_name[] = "DEBUGGER01";
 
-rtems_task Init(rtems_task_argument argument)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 

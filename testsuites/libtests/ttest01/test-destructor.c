@@ -1,26 +1,27 @@
 #include <rtems/test.h>
 
-static void
-destroy(T_destructor *dtor)
+static void destroy( T_destructor *dtor )
 {
-	(void)dtor;
-	T_step(0);
+  (void) dtor;
+  T_step( 0 );
 }
 
-T_TEST_CASE(destructor)
+T_TEST_CASE( destructor )
 {
-	static T_destructor dtor;
+  static T_destructor dtor;
 
-	T_plan(1);
-	T_add_destructor(&dtor, destroy);
+  T_plan( 1 );
+  T_add_destructor( &dtor, destroy );
 }
 
 #include "t-self-test.h"
 
-T_TEST_OUTPUT(destructor,
-"B:destructor\n"
-"P:0:0:UI1:test-destructor.c:7\n"
-"E:destructor:N:1:F:0:D:0.001000\n");
+T_TEST_OUTPUT(
+  destructor,
+  "B:destructor\n"
+  "P:0:0:UI1:test-destructor.c:7\n"
+  "E:destructor:N:1:F:0:D:0.001000\n"
+);
 
 /*
  * The license is at the end of the file to be able to use the test code and

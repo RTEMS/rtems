@@ -32,15 +32,16 @@
 
 #include <rtems/test-printer.h>
 
-#define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__);
+#define printf( ... ) rtems_printf( &rtems_test_printer, __VA_ARGS__ );
 
-typedef void (*func1_t)(unsigned short s[7]);
+typedef void ( *func1_t )( unsigned short s[ 7 ] );
 
-static void* find_sym(const char* name)
+static void *find_sym( const char *name )
 {
-  void* sym = dlsym(RTLD_DEFAULT, name);
-  if (sym == NULL)
-    printf("dlsym failed: not found: %s\n", name);
+  void *sym = dlsym( RTLD_DEFAULT, name );
+  if ( sym == NULL ) {
+    printf( "dlsym failed: not found: %s\n", name );
+  }
   return sym;
 }
 
@@ -48,31 +49,31 @@ static void* find_sym(const char* name)
  * Yes a decl in the source. This is a modules main and I could not find which
  * header main is defined in.
  */
-int rtems_main (int argc, const char* argv[]);
+int rtems_main( int argc, const char *argv[] );
 
-int rtems_main (int argc, const char* argv[])
+int rtems_main( int argc, const char *argv[] )
 {
   (void) argc;
   (void) argv;
 
   func1_t        f1;
   double         d;
-  unsigned short s[7] = { 12, 34, 56, 78, 90, 13, 57 };
+  unsigned short s[ 7 ] = { 12, 34, 56, 78, 90, 13, 57 };
 
-  printf("Loaded module: argc:%d [%s]\n", argc, __FILE__);
+  printf( "Loaded module: argc:%d [%s]\n", argc, __FILE__ );
 
-  f1 = find_sym ("dl_o2_func1");
-  if (f1 == NULL)
+  f1 = find_sym( "dl_o2_func1" );
+  if ( f1 == NULL ) {
     return 0;
+  }
 
-  f1 (s);
+  f1( s );
 
-  d = dl_o2_func2 (7.1, 33.0);
+  d = dl_o2_func2( 7.1, 33.0 );
   (void) d;
 
-  d = dl_o2_func3 (0.778899);
+  d = dl_o2_func3( 0.778899 );
   (void) d;
-
 
   return argc;
 }

@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(DL02_H)
+#if !defined( DL02_H )
 #define DL02_H
 
 /*
@@ -34,8 +34,8 @@
  */
 
 extern int   dl02_bss1;
-extern float dl02_bss2[7];
-extern char  dl02_bss3[21];
+extern float dl02_bss2[ 7 ];
+extern char  dl02_bss3[ 21 ];
 extern int   dl02_data1;
 extern float dl02_data2;
 

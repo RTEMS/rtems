@@ -12,18 +12,18 @@
 
 #include <iconv.h>
 
-int main(void)
+int main( void )
 {
   iconv_t cd = NULL;
-  char inbuf[42];
-  size_t isize;
-  char outbuf[42];
-  size_t osize;
-  size_t ret;
+  char    inbuf[ 42 ];
+  size_t  isize;
+  char    outbuf[ 42 ];
+  size_t  osize;
+  size_t  ret;
 
   char *i = inbuf;
   char *o = outbuf;
-  ret = iconv(cd, &i, &isize, &o, &osize);
+  ret = iconv( cd, &i, &isize, &o, &osize );
 
   return ret;
 }

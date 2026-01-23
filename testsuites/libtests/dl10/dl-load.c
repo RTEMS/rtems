@@ -28,23 +28,18 @@
 
 #define TEST_TRACE 0
 #if TEST_TRACE
- #define DEBUG_TRACE (RTEMS_RTL_TRACE_DETAIL | \
-                      RTEMS_RTL_TRACE_WARNING | \
-                      RTEMS_RTL_TRACE_LOAD | \
-                      RTEMS_RTL_TRACE_UNLOAD | \
-                      RTEMS_RTL_TRACE_SYMBOL | \
-                      RTEMS_RTL_TRACE_RELOC | \
-                      RTEMS_RTL_TRACE_LOAD_SECT | \
-                      RTEMS_RTL_TRACE_ALLOCATOR | \
-                      RTEMS_RTL_TRACE_UNRESOLVED | \
-                      RTEMS_RTL_TRACE_ARCHIVES | \
-                      RTEMS_RTL_TRACE_DEPENDENCY)
- /* RTEMS_RTL_TRACE_ALL */
+ #define DEBUG_TRACE                                                          \
+  ( RTEMS_RTL_TRACE_DETAIL | RTEMS_RTL_TRACE_WARNING | RTEMS_RTL_TRACE_LOAD | \
+    RTEMS_RTL_TRACE_UNLOAD | RTEMS_RTL_TRACE_SYMBOL | RTEMS_RTL_TRACE_RELOC | \
+    RTEMS_RTL_TRACE_LOAD_SECT | RTEMS_RTL_TRACE_ALLOCATOR |                   \
+    RTEMS_RTL_TRACE_UNRESOLVED | RTEMS_RTL_TRACE_ARCHIVES |                   \
+    RTEMS_RTL_TRACE_DEPENDENCY )
+/* RTEMS_RTL_TRACE_ALL */
 #define DL_DEBUG_TRACE DEBUG_TRACE
 #define DL_DEBUG_CMD   1
 #else
 #define DL_DEBUG_TRACE 0
-#define DL_DEBUG_CMD    0
+#define DL_DEBUG_CMD   0
 #endif
 
 #include <dlfcn.h>
@@ -56,83 +51,80 @@
 #include <rtems/rtl/rtl-shell.h>
 #include <rtems/rtl/rtl-trace.h>
 
-typedef int (*call_sig)(void);
+typedef int ( *call_sig )( void );
 
-static void dl_load_dump (void)
+static void dl_load_dump( void )
 {
 #if DL_DEBUG_CMD
-  char* list[] = { "rtl", "list", NULL };
-  char* sym[] = { "rtl", "sym", NULL };
-  printf ("RTL List:\n");
-  rtems_rtl_shell_command (2, list);
-  printf ("RTL Sym:\n");
-  rtems_rtl_shell_command (2, sym);
+  char *list[] = { "rtl", "list", NULL };
+  char *sym[] = { "rtl", "sym", NULL };
+  printf( "RTL List:\n" );
+  rtems_rtl_shell_command( 2, list );
+  printf( "RTL Sym:\n" );
+  rtems_rtl_shell_command( 2, sym );
 #endif
 }
 
-static bool dl_check_resolved(void* handle, bool has_unresolved)
+static bool dl_check_resolved( void *handle, bool has_unresolved )
 {
   int unresolved = 0;
-  if (dlinfo (handle, RTLD_DI_UNRESOLVED, &unresolved) == 0)
+  if ( dlinfo( handle, RTLD_DI_UNRESOLVED, &unresolved ) == 0 ) {
     return 1;
-  if (has_unresolved)
-  {
-    if (unresolved == 0)
-    {
+  }
+  if ( has_unresolved ) {
+    if ( unresolved == 0 ) {
+      dl_load_dump();
+      return false;
+    }
+  } else {
+    if ( unresolved != 0 ) {
       dl_load_dump();
       return false;
     }
   }
-  else
-  {
-    if (unresolved != 0)
-    {
-      dl_load_dump();
-      return false;
-    }
-  }
-  printf ("handel: %p: no unresolved externals\n", handle);
+  printf( "handel: %p: no unresolved externals\n", handle );
   return true;
 }
 
-static void* dl_load_obj(const char* name, bool has_unresolved)
+static void *dl_load_obj( const char *name, bool has_unresolved )
 {
-  void* handle;
+  void *handle;
 
-  printf("load: %s\n", name);
+  printf( "load: %s\n", name );
 
-  handle = dlopen (name, RTLD_NOW | RTLD_GLOBAL);
-  if (!handle)
-  {
-    printf("dlopen failed: %s\n", dlerror());
+  handle = dlopen( name, RTLD_NOW | RTLD_GLOBAL );
+  if ( !handle ) {
+    printf( "dlopen failed: %s\n", dlerror() );
     return NULL;
   }
 
-  dl_check_resolved (handle, has_unresolved);
+  dl_check_resolved( handle, has_unresolved );
 
-  printf ("handle: %p loaded\n", handle);
+  printf( "handle: %p loaded\n", handle );
 
   return handle;
 }
 
-int dl_load_test(void)
+int dl_load_test( void )
 {
-  void* o1;
+  void *o1;
 
-  printf ("Test source (link in strstr): %s\n", dl_localise_file (__FILE__));
+  printf( "Test source (link in strstr): %s\n", dl_localise_file( __FILE__ ) );
 
 #if DL_DEBUG_TRACE
-  rtems_rtl_trace_set_mask (DL_DEBUG_TRACE);
+  rtems_rtl_trace_set_mask( DL_DEBUG_TRACE );
 #endif
 
-  o1 = dl_load_obj("/dl10-o1.o", false);
-  if (!o1)
+  o1 = dl_load_obj( "/dl10-o1.o", false );
+  if ( !o1 ) {
     return 1;
+  }
 
-  if (!dl_check_resolved (o1, false))
+  if ( !dl_check_resolved( o1, false ) ) {
     return 1;
+  }
 
-  dl_load_dump ();
+  dl_load_dump();
 
   return 0;
 }

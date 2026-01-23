@@ -1,88 +1,97 @@
 #include <rtems/test.h>
 
-T_TEST_CASE(malloc_free)
+T_TEST_CASE( malloc_free )
 {
-	void *p;
+  void *p;
 
-	p = T_malloc(1);
-	T_assert_not_null(p);
-	T_free(p);
+  p = T_malloc( 1 );
+  T_assert_not_null( p );
+  T_free( p );
 }
 
-T_TEST_CASE(malloc_auto)
+T_TEST_CASE( malloc_auto )
 {
-	void *p;
+  void *p;
 
-	p = T_malloc(1);
-	T_assert_not_null(p);
+  p = T_malloc( 1 );
+  T_assert_not_null( p );
 }
 
-static void
-destroy(void *p)
+static void destroy( void *p )
 {
-	int *i;
+  int *i;
 
-	i = p;
-	T_step_eq_int(2, *i, 1);
+  i = p;
+  T_step_eq_int( 2, *i, 1 );
 }
 
-T_TEST_CASE(zalloc_auto)
+T_TEST_CASE( zalloc_auto )
 {
-	int *i;
+  int *i;
 
-	T_plan(3);
-	i = T_zalloc(sizeof(*i), destroy);
-	T_step_assert_not_null(0, i);
-	T_step_eq_int(1, *i, 0);
-	*i = 1;
+  T_plan( 3 );
+  i = T_zalloc( sizeof( *i ), destroy );
+  T_step_assert_not_null( 0, i );
+  T_step_eq_int( 1, *i, 0 );
+  *i = 1;
 }
 
-T_TEST_CASE(malloc_huge)
+T_TEST_CASE( malloc_huge )
 {
-	void *p;
+  void *p;
 
-	p = T_malloc(SIZE_MAX);
-	T_null(p);
+  p = T_malloc( SIZE_MAX );
+  T_null( p );
 }
 
-T_TEST_CASE(calloc_auto)
+T_TEST_CASE( calloc_auto )
 {
-	int *i;
+  int *i;
 
-	i = T_calloc(1, sizeof(*i));
-	T_assert_not_null(i);
-	T_eq_int(*i, 0);
+  i = T_calloc( 1, sizeof( *i ) );
+  T_assert_not_null( i );
+  T_eq_int( *i, 0 );
 }
 
 #include "t-self-test.h"
 
-T_TEST_OUTPUT(malloc_free,
-"B:malloc_free\n"
-"P:0:0:UI1:test-malloc.c:8\n"
-"E:malloc_free:N:1:F:0:D:0.001000\n");
+T_TEST_OUTPUT(
+  malloc_free,
+  "B:malloc_free\n"
+  "P:0:0:UI1:test-malloc.c:8\n"
+  "E:malloc_free:N:1:F:0:D:0.001000\n"
+);
 
-T_TEST_OUTPUT(malloc_auto,
-"B:malloc_auto\n"
-"P:0:0:UI1:test-malloc.c:17\n"
-"E:malloc_auto:N:1:F:0:D:0.001000\n");
+T_TEST_OUTPUT(
+  malloc_auto,
+  "B:malloc_auto\n"
+  "P:0:0:UI1:test-malloc.c:17\n"
+  "E:malloc_auto:N:1:F:0:D:0.001000\n"
+);
 
-T_TEST_OUTPUT(zalloc_auto,
-"B:zalloc_auto\n"
-"P:0:0:UI1:test-malloc.c:35\n"
-"P:1:0:UI1:test-malloc.c:36\n"
-"P:2:0:UI1:test-malloc.c:26\n"
-"E:zalloc_auto:N:3:F:0:D:0.001000\n");
+T_TEST_OUTPUT(
+  zalloc_auto,
+  "B:zalloc_auto\n"
+  "P:0:0:UI1:test-malloc.c:35\n"
+  "P:1:0:UI1:test-malloc.c:36\n"
+  "P:2:0:UI1:test-malloc.c:26\n"
+  "E:zalloc_auto:N:3:F:0:D:0.001000\n"
+);
 
-T_TEST_OUTPUT(malloc_huge,
-"B:malloc_huge\n"
-"P:0:0:UI1:test-malloc.c:45\n"
-"E:malloc_huge:N:1:F:0:D:0.001000\n");
+T_TEST_OUTPUT(
+  malloc_huge,
+  "B:malloc_huge\n"
+  "P:0:0:UI1:test-malloc.c:45\n"
+  "E:malloc_huge:N:1:F:0:D:0.001000\n"
+);
 
-T_TEST_OUTPUT(calloc_auto,
-"B:calloc_auto\n"
-"P:0:0:UI1:test-malloc.c:53\n"
-"P:1:0:UI1:test-malloc.c:54\n"
-"E:calloc_auto:N:2:F:0:D:0.001000\n");
+T_TEST_OUTPUT(
+  calloc_auto,
+  "B:calloc_auto\n"
+  "P:0:0:UI1:test-malloc.c:53\n"
+  "P:1:0:UI1:test-malloc.c:54\n"
+  "E:calloc_auto:N:2:F:0:D:0.001000\n"
+);
 
 /*
  * The license is at the end of the file to be able to use the test code and

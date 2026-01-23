@@ -25,11 +25,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(DL06_02_H)
+#if !defined( DL06_02_H )
 #define DL06_02_H
 
-void dl_o2_func1 (unsigned short s[7]);
-double dl_o2_func2 (double d1, double d2);
-double dl_o2_func3 (double d);
+void   dl_o2_func1( unsigned short s[ 7 ] );
+double dl_o2_func2( double d1, double d2 );
+double dl_o2_func3( double d );
 
 #endif

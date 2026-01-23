@@ -29,16 +29,16 @@
 
 #include <rtems/test-printer.h>
 
-#define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__);
+#define printf( ... ) rtems_printf( &rtems_test_printer, __VA_ARGS__ );
 
 /*
  * Yes a decl in the source. This is a modules main and I could not find which
  * header main is defined in.
  */
-void dl_o1_func (void);
-void dl_o1_func (void)
+void dl_o1_func( void );
+void dl_o1_func( void )
 {
-  printf("About to call arm_mode_func from %s\n", __func__);
+  printf( "About to call arm_mode_func from %s\n", __func__ );
 
   /*
    * Non-trailing calls to arm_mode_func generate an offset prefix and BLX via
@@ -46,7 +46,10 @@ void dl_o1_func (void)
    */
   arm_mode_func();
 
-  printf("About to call arm_mode_func from %s as a trailing call\n", __func__);
+  printf(
+    "About to call arm_mode_func from %s as a trailing call\n",
+    __func__
+  );
 
   /*
    * Trailing calls to arm_mode_func generate a b.w instruction via THM_JUMP24

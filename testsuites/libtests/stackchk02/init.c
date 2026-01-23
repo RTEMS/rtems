@@ -42,9 +42,9 @@
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE*3)
+#define TASK_STACK_SIZE ( RTEMS_MINIMUM_STACK_SIZE * 3 )
 
-#define CONFIGURE_MAXIMUM_TASKS               1
+#define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -54,9 +54,7 @@
 
 const char rtems_test_name[] = "STACKCHK02";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 

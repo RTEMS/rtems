@@ -12,10 +12,10 @@
 
 #include <stdlib.h>
 
-void* p;
+void *p;
 
-int main (void)
+int main( void )
 {
-  free(p);
+  free( p );
   return 0;
 }

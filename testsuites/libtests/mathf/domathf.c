@@ -19,7 +19,7 @@
 #endif
 
 #define SUFFIX f
-#define FTYPE float
-#define PRI "%f"
+#define FTYPE  float
+#define PRI    "%f"
 
 #include <domath.h>

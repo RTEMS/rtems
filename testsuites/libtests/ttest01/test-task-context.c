@@ -2,17 +2,19 @@
 
 #include <rtems/score/threaddispatch.h>
 
-T_TEST_CASE(check_task_context)
+T_TEST_CASE( check_task_context )
 {
-	_Thread_Dispatch_disable();
+  _Thread_Dispatch_disable();
 }
 
 #include "t-self-test.h"
 
-T_TEST_OUTPUT(check_task_context,
-"B:check_task_context\n"
-"F:*:0:UI1:*:*:Wrong thread dispatch disabled level (1)\n"
-"E:check_task_context:N:0:F:1:D:0.001000\n");
+T_TEST_OUTPUT(
+  check_task_context,
+  "B:check_task_context\n"
+  "F:*:0:UI1:*:*:Wrong thread dispatch disabled level (1)\n"
+  "E:check_task_context:N:0:F:1:D:0.001000\n"
+);
 
 /*
  * The license is at the end of the file to be able to use the test code and

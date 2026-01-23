@@ -1,81 +1,82 @@
 #include <rtems/test.h>
 
-T_TEST_CASE(assert)
+T_TEST_CASE( assert )
 {
-	T_assert_true(true, "nix");
-	T_assert_true(false, "test fails and we stop the test case");
-	T_log(T_QUIET, "not reached");
+  T_assert_true( true, "nix" );
+  T_assert_true( false, "test fails and we stop the test case" );
+  T_log( T_QUIET, "not reached" );
 }
 
 static int counter;
 
-static void
-setup(void *ctx)
+static void setup( void *ctx )
 {
-	int *c;
+  int *c;
 
-	T_log(T_QUIET, "setup");
-	T_eq_ptr(ctx, &counter);
-	c = ctx;
-	*c = 0;
+  T_log( T_QUIET, "setup" );
+  T_eq_ptr( ctx, &counter );
+  c = ctx;
+  *c = 0;
 }
 
-static void
-stop(void *ctx)
+static void stop( void *ctx )
 {
-	int *c;
+  int *c;
 
-	T_log(T_QUIET, "stop");
-	T_eq_ptr(ctx, &counter);
-	c = ctx;
-	++(*c);
+  T_log( T_QUIET, "stop" );
+  T_eq_ptr( ctx, &counter );
+  c = ctx;
+  ++( *c );
 }
 
-static void
-teardown(void *ctx)
+static void teardown( void *ctx )
 {
-	int *c;
+  int *c;
 
-	T_log(T_QUIET, "teardown");
-	T_eq_ptr(ctx, &counter);
-	c = ctx;
-	T_eq_int(*c, 1);
+  T_log( T_QUIET, "teardown" );
+  T_eq_ptr( ctx, &counter );
+  c = ctx;
+  T_eq_int( *c, 1 );
 }
 
 static const T_fixture fixture = {
-	.setup = setup,
-	.stop = stop,
-	.teardown = teardown,
-	.initial_context = &counter
+  .setup = setup,
+  .stop = stop,
+  .teardown = teardown,
+  .initial_context = &counter
 };
 
-T_TEST_CASE_FIXTURE(assert2, &fixture)
+T_TEST_CASE_FIXTURE( assert2, &fixture )
 {
-	T_assert_true(true, "nix");
-	T_assert_true(false, "test fails and we stop the test case");
-	T_log(T_QUIET, "not reached");
+  T_assert_true( true, "nix" );
+  T_assert_true( false, "test fails and we stop the test case" );
+  T_log( T_QUIET, "not reached" );
 }
 
 #include "t-self-test.h"
 
-T_TEST_OUTPUT(assert,
-"B:assert\n"
-"P:0:0:UI1:test-assert.c:5\n"
-"F:1:0:UI1:test-assert.c:6:test fails and we stop the test case\n"
-"E:assert:N:2:F:1:D:0.001000\n");
+T_TEST_OUTPUT(
+  assert,
+  "B:assert\n"
+  "P:0:0:UI1:test-assert.c:5\n"
+  "F:1:0:UI1:test-assert.c:6:test fails and we stop the test case\n"
+  "E:assert:N:2:F:1:D:0.001000\n"
+);
 
-T_TEST_OUTPUT(assert2,
-"B:assert2\n"
-"L:setup\n"
-"P:0:0:UI1:test-assert.c:18\n"
-"P:1:0:UI1:test-assert.c:54\n"
-"F:2:0:UI1:test-assert.c:55:test fails and we stop the test case\n"
-"L:stop\n"
-"P:3:0:UI1:test-assert.c:29\n"
-"L:teardown\n"
-"P:4:0:UI1:test-assert.c:40\n"
-"P:5:0:UI1:test-assert.c:42\n"
-"E:assert2:N:6:F:1:D:0.001000\n");
+T_TEST_OUTPUT(
+  assert2,
+  "B:assert2\n"
+  "L:setup\n"
+  "P:0:0:UI1:test-assert.c:18\n"
+  "P:1:0:UI1:test-assert.c:54\n"
+  "F:2:0:UI1:test-assert.c:55:test fails and we stop the test case\n"
+  "L:stop\n"
+  "P:3:0:UI1:test-assert.c:29\n"
+  "L:teardown\n"
+  "P:4:0:UI1:test-assert.c:40\n"
+  "P:5:0:UI1:test-assert.c:42\n"
+  "E:assert2:N:6:F:1:D:0.001000\n"
+);
 
 /*
  * The license is at the end of the file to be able to use the test code and

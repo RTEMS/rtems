@@ -69,4 +69,4 @@ RTEMS_ALIGNED(8) const unsigned char some_bin[] = {
   0x70, 0x74, 0x73, 0x00, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x00, 
 };
 
-const size_t some_bin_size = sizeof(some_bin);
+const size_t some_bin_size = sizeof( some_bin );

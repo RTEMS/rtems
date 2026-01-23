@@ -44,13 +44,11 @@
 const char rtems_test_name[] = "RCXX 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-void rcxx_run_test(void);
+void rcxx_run_test( void );
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -71,16 +69,16 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 5
 
-#define CONFIGURE_MEMORY_OVERHEAD (2024)
+#define CONFIGURE_MEMORY_OVERHEAD ( 2024 )
 
-#define CONFIGURE_MAXIMUM_TASKS  1
+#define CONFIGURE_MAXIMUM_TASKS         1
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 5
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_INIT_TASK_STACK_SIZE (10U * 1024U)
+#define CONFIGURE_INIT_TASK_STACK_SIZE ( 10U * 1024U )
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 

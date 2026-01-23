@@ -12,11 +12,11 @@
 
 #include <stdio.h>
 
-int main(void)
+int main( void )
 {
   FILE *file = NULL;
-  int ret;
+  int   ret;
 
-  ret = ftrylockfile(file);
+  ret = ftrylockfile( file );
   return ret;
 }

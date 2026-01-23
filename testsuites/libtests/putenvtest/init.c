@@ -49,18 +49,16 @@
 
 const char rtems_test_name[] = "PUTENVTEST";
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE*3)
+#define TASK_STACK_SIZE ( RTEMS_MINIMUM_STACK_SIZE * 3 )
 
-#define CONFIGURE_MAXIMUM_TASKS               1
+#define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
@@ -68,18 +66,16 @@ rtems_task Init(
 
 #include <rtems/confdefs.h>
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   TEST_BEGIN();
 
   puts( "putenv(\"FOO=BAR\") - expected to work" );
-  putenv ("FOO=BAR");
-  printf ("getenv(\"FOO\") ==> \"%s\"\n", getenv ("FOO"));
+  putenv( "FOO=BAR" );
+  printf( "getenv(\"FOO\") ==> \"%s\"\n", getenv( "FOO" ) );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }

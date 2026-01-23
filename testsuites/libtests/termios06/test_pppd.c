@@ -36,24 +36,22 @@
 #include <rtems/dumpbuf.h>
 
 /* forward declarations to avoid warnings */
-void ppp_test_driver_set_rx(const char *expected, size_t len);
-void pppasyncattach(void);
-int  pppopen(struct rtems_termios_tty *tty);
-int  pppclose(struct rtems_termios_tty *tty);
-int  pppread(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args);
-int  pppwrite(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args);
-int  pppioctl(struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args);
-int  pppinput(int c, struct rtems_termios_tty *tty);
-int  pppstart(struct rtems_termios_tty *tp, int len);
+void ppp_test_driver_set_rx( const char *expected, size_t len );
+void pppasyncattach( void );
+int  pppopen( struct rtems_termios_tty *tty );
+int  pppclose( struct rtems_termios_tty *tty );
+int  pppread( struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args );
+int  pppwrite( struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args );
+int  pppioctl( struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args );
+int  pppinput( int c, struct rtems_termios_tty *tty );
+int  pppstart( struct rtems_termios_tty *tp, int len );
 
 /*
  * Define the PPP line discipline.
  */
 
-static struct rtems_termios_linesw pppdisc = {
-  pppopen, pppclose, pppread, pppwrite,
-  pppinput, pppstart, pppioctl, NULL
-};
+static struct rtems_termios_linesw pppdisc =
+  { pppopen, pppclose, pppread, pppwrite, pppinput, pppstart, pppioctl, NULL };
 
 const char *RXExpected;
 size_t      RXLength;
@@ -61,15 +59,15 @@ size_t      RXLength;
 void ppp_test_driver_set_rx( const char *expected, size_t len )
 {
   RXExpected = expected;
-  RXLength   = len;
+  RXLength = len;
 }
 
-void pppasyncattach(void)
+void pppasyncattach( void )
 {
-  rtems_termios_linesw[PPPDISC] = pppdisc;
+  rtems_termios_linesw[ PPPDISC ] = pppdisc;
 }
 
-int  pppopen(struct rtems_termios_tty *tty)
+int pppopen( struct rtems_termios_tty *tty )
 {
   (void) tty;
 
@@ -77,7 +75,7 @@ int  pppopen(struct rtems_termios_tty *tty)
   return 0;
 }
 
-int  pppclose(struct rtems_termios_tty *tty)
+int pppclose( struct rtems_termios_tty *tty )
 {
   (void) tty;
 
@@ -85,23 +83,23 @@ int  pppclose(struct rtems_termios_tty *tty)
   return 0;
 }
 
-int  pppread(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args)
+int pppread( struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args )
 {
   (void) rw_args;
 
   puts( "pppread called" );
-  
-  rtems_termios_enqueue_raw_characters( tty, (char *)RXExpected, RXLength );
-  
+
+  rtems_termios_enqueue_raw_characters( tty, (char *) RXExpected, RXLength );
+
   RXExpected = NULL;
   RXLength = 0;
   return 0;
 }
 
-int  pppwrite(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args)
+int pppwrite( struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args )
 {
-  int                           maximum    = rw_args->count;
-  char                         *out_buffer = rw_args->buffer; 
+  int   maximum = rw_args->count;
+  char *out_buffer = rw_args->buffer;
 
   printf( "pppwrite called - %d bytes\n", maximum );
   rtems_print_buffer( (unsigned char *) out_buffer, maximum );
@@ -110,7 +108,7 @@ int  pppwrite(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args)
   return 0;
 }
 
-int  pppioctl(struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args)
+int pppioctl( struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args )
 {
   (void) tty;
   (void) args;
@@ -119,7 +117,7 @@ int  pppioctl(struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args)
   return 0;
 }
 
-int  pppinput(int c, struct rtems_termios_tty *tty)
+int pppinput( int c, struct rtems_termios_tty *tty )
 {
   (void) tty;
 
@@ -127,7 +125,7 @@ int  pppinput(int c, struct rtems_termios_tty *tty)
   return 0;
 }
 
-int  pppstart(struct rtems_termios_tty *tp, int len)
+int pppstart( struct rtems_termios_tty *tp, int len )
 {
   (void) tp;
   (void) len;
@@ -135,5 +133,3 @@ int  pppstart(struct rtems_termios_tty *tp, int len)
   puts( "pppstart called" );
   return 0;
 }
-
-

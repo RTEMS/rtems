@@ -42,23 +42,21 @@
 
 #include "system.h"
 
-rtems_task Task_3(
-  rtems_task_argument argument
-)
+rtems_task Task_3( rtems_task_argument argument )
 {
   rtems_status_code status;
-  uint32_t sum;
-  uint32_t next;
-  uint32_t per_loop;
+  uint32_t          sum;
+  uint32_t          next;
+  uint32_t          per_loop;
 
-  sum  = 0;
+  sum = 0;
   next = 0;
   per_loop = argument * 1000;
 
-  while( FOREVER ) {
+  while ( FOREVER ) {
     add_some( per_loop, &sum, &next );
 
-    status = rtems_task_wake_after (TicksPerSecond * 1);
+    status = rtems_task_wake_after( TicksPerSecond * 1 );
     directive_failed( status, "rtems_task_wake_after" );
- }
+  }
 }

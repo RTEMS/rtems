@@ -1,90 +1,102 @@
 #include <rtems/test.h>
 
-T_TEST_CASE(wrong_step)
+T_TEST_CASE( wrong_step )
 {
-	T_plan(2);
-	T_step_true(0, true, "all right");
-	T_step_true(2, true, "wrong step");
+  T_plan( 2 );
+  T_step_true( 0, true, "all right" );
+  T_step_true( 2, true, "wrong step" );
 }
 
-T_TEST_CASE(plan_ok)
+T_TEST_CASE( plan_ok )
 {
-	T_plan(1);
-	T_step_true(0, true, "all right");
+  T_plan( 1 );
+  T_step_true( 0, true, "all right" );
 }
 
-T_TEST_CASE(plan_failed)
+T_TEST_CASE( plan_failed )
 {
-	T_plan(2);
-	T_step_true(0, true, "not enough steps");
-	T_quiet_true(true, "quiet test do not count");
+  T_plan( 2 );
+  T_step_true( 0, true, "not enough steps" );
+  T_quiet_true( true, "quiet test do not count" );
 }
 
-T_TEST_CASE(double_plan)
+T_TEST_CASE( double_plan )
 {
-	T_plan(99);
-	T_plan(2);
+  T_plan( 99 );
+  T_plan( 2 );
 }
 
-T_TEST_CASE(steps)
+T_TEST_CASE( steps )
 {
-	T_step(0);
-	T_plan(3);
-	T_step(1);
-	T_step(2);
+  T_step( 0 );
+  T_plan( 3 );
+  T_step( 1 );
+  T_step( 2 );
 }
 
 static T_fixture_node nested_plan_node;
 
-T_TEST_CASE(nested_plan)
+T_TEST_CASE( nested_plan )
 {
-	T_plan(2);
-	T_step(0);
-	T_push_plan(&nested_plan_node, 2);
-	T_step(0);
-	T_step(1);
-	T_pop_plan();
-	T_step(1);
+  T_plan( 2 );
+  T_step( 0 );
+  T_push_plan( &nested_plan_node, 2 );
+  T_step( 0 );
+  T_step( 1 );
+  T_pop_plan();
+  T_step( 1 );
 }
 
 #include "t-self-test.h"
 
-T_TEST_OUTPUT(wrong_step,
-"B:wrong_step\n"
-"P:0:0:UI1:test-plan.c:6\n"
-"F:1:0:UI1:test-plan.c:7:planned step (2)\n"
-"E:wrong_step:N:2:F:1:D:0.001000\n");
+T_TEST_OUTPUT(
+  wrong_step,
+  "B:wrong_step\n"
+  "P:0:0:UI1:test-plan.c:6\n"
+  "F:1:0:UI1:test-plan.c:7:planned step (2)\n"
+  "E:wrong_step:N:2:F:1:D:0.001000\n"
+);
 
-T_TEST_OUTPUT(plan_ok,
-"B:plan_ok\n"
-"P:0:0:UI1:test-plan.c:13\n"
-"E:plan_ok:N:1:F:0:D:0.001000\n");
+T_TEST_OUTPUT(
+  plan_ok,
+  "B:plan_ok\n"
+  "P:0:0:UI1:test-plan.c:13\n"
+  "E:plan_ok:N:1:F:0:D:0.001000\n"
+);
 
-T_TEST_OUTPUT(plan_failed,
-"B:plan_failed\n"
-"P:0:0:UI1:test-plan.c:19\n"
-"F:*:0:UI1:*:*:actual steps (1), planned steps (2)\n"
-"E:plan_failed:N:1:F:1:D:0.001000\n");
+T_TEST_OUTPUT(
+  plan_failed,
+  "B:plan_failed\n"
+  "P:0:0:UI1:test-plan.c:19\n"
+  "F:*:0:UI1:*:*:actual steps (1), planned steps (2)\n"
+  "E:plan_failed:N:1:F:1:D:0.001000\n"
+);
 
-T_TEST_OUTPUT(double_plan,
-"B:double_plan\n"
-"F:*:0:UI1:*:*:planned steps (99) already set\n"
-"E:double_plan:N:0:F:1:D:0.001000\n");
+T_TEST_OUTPUT(
+  double_plan,
+  "B:double_plan\n"
+  "F:*:0:UI1:*:*:planned steps (99) already set\n"
+  "E:double_plan:N:0:F:1:D:0.001000\n"
+);
 
-T_TEST_OUTPUT(steps,
-"B:steps\n"
-"P:0:0:UI1:test-plan.c:31\n"
-"P:1:0:UI1:test-plan.c:33\n"
-"P:2:0:UI1:test-plan.c:34\n"
-"E:steps:N:3:F:0:D:0.001000\n");
+T_TEST_OUTPUT(
+  steps,
+  "B:steps\n"
+  "P:0:0:UI1:test-plan.c:31\n"
+  "P:1:0:UI1:test-plan.c:33\n"
+  "P:2:0:UI1:test-plan.c:34\n"
+  "E:steps:N:3:F:0:D:0.001000\n"
+);
 
-T_TEST_OUTPUT(nested_plan,
-"B:nested_plan\n"
-"P:0:0:UI1:test-plan.c:42\n"
-"P:1.0:0:UI1:test-plan.c:44\n"
-"P:1.1:0:UI1:test-plan.c:45\n"
-"P:1:0:UI1:test-plan.c:47\n"
-"E:nested_plan:N:4:F:0:D:0.001000\n");
+T_TEST_OUTPUT(
+  nested_plan,
+  "B:nested_plan\n"
+  "P:0:0:UI1:test-plan.c:42\n"
+  "P:1.0:0:UI1:test-plan.c:44\n"
+  "P:1.1:0:UI1:test-plan.c:45\n"
+  "P:1:0:UI1:test-plan.c:47\n"
+  "E:nested_plan:N:4:F:0:D:0.001000\n"
+);
 
 /*
  * The license is at the end of the file to be able to use the test code and

@@ -14,13 +14,13 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-int main(void)
+int main( void )
 {
   int fd1;
   int fd2;
 
-  fd1 = open("/tmp/foo1", O_RDWR | O_APPEND);
-  fd2 = open("/tmp/foo2", O_CREAT, S_IWUSR);
+  fd1 = open( "/tmp/foo1", O_RDWR | O_APPEND );
+  fd2 = open( "/tmp/foo2", O_CREAT, S_IWUSR );
 
-  return (fd1 != fd2);
+  return ( fd1 != fd2 );
 }

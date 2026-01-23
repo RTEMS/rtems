@@ -46,16 +46,14 @@
 /**
  * Remote data.
  */
-typedef struct
-{
+typedef struct {
   int    connect_count;
   bool   connected;
   size_t out;
   size_t in;
 } rtems_debugger_remote_test;
 
-static const char* out[] =
-{
+static const char *out[] = {
   "+",
   "xxxxx",
   "$x#aa",
@@ -98,8 +96,7 @@ static const char* out[] =
   "+"
 };
 
-static const char* in[] =
-{
+static const char *in[] = {
   /*  0 */
   "-",
 
@@ -154,22 +151,24 @@ static const char* in[] =
   "$OK#9a"
 };
 
-static int
-test_remote_begin(rtems_debugger_remote* remote, const char* device)
+static int test_remote_begin(
+  rtems_debugger_remote *remote,
+  const char            *device
+)
 {
-  rtems_debugger_remote_test* test;
+  rtems_debugger_remote_test *test;
 
-  rtems_debugger_printf("error: rtems-db: test remote: begin\n");
+  rtems_debugger_printf( "error: rtems-db: test remote: begin\n" );
 
   rtems_debugger_lock();
 
   /*
    * Check the device.
    */
-  rtems_test_assert(strcmp(device, "something") == 0);
+  rtems_test_assert( strcmp( device, "something" ) == 0 );
 
-  test = malloc(sizeof(rtems_debugger_remote_test));
-  rtems_test_assert(test != NULL);
+  test = malloc( sizeof( rtems_debugger_remote_test ) );
+  rtems_test_assert( test != NULL );
 
   remote->data = test;
 
@@ -183,46 +182,48 @@ test_remote_begin(rtems_debugger_remote* remote, const char* device)
   return 0;
 }
 
-static int
-test_remote_end(rtems_debugger_remote* remote)
+static int test_remote_end( rtems_debugger_remote *remote )
 {
-  rtems_debugger_remote_test* test;
+  rtems_debugger_remote_test *test;
 
-  rtems_debugger_printf("error: rtems-db: test remote: end\n");
+  rtems_debugger_printf( "error: rtems-db: test remote: end\n" );
 
   rtems_debugger_lock();
 
-  rtems_test_assert(remote != NULL);
-  rtems_test_assert(remote->data != NULL);
-  test = (rtems_debugger_remote_test*) remote->data;
+  rtems_test_assert( remote != NULL );
+  rtems_test_assert( remote->data != NULL );
+  test = (rtems_debugger_remote_test *) remote->data;
 
   test->connected = false;
 
-  free(test);
+  free( test );
 
   rtems_debugger_unlock();
 
   return 0;
 }
 
-static int
-test_remote_connect(rtems_debugger_remote* remote)
+static int test_remote_connect( rtems_debugger_remote *remote )
 {
-  rtems_debugger_remote_test* test;
+  rtems_debugger_remote_test *test;
 
-  rtems_test_assert(remote != NULL);
-  rtems_test_assert(remote->data != NULL);
-  test = (rtems_debugger_remote_test*) remote->data;
+  rtems_test_assert( remote != NULL );
+  rtems_test_assert( remote->data != NULL );
+  test = (rtems_debugger_remote_test *) remote->data;
 
-  if (test->connect_count > 0) {
+  if ( test->connect_count > 0 ) {
     rtems_event_set out = 0;
-    rtems_test_assert(rtems_event_receive(RTEMS_EVENT_1,
-                                          RTEMS_EVENT_ALL | RTEMS_WAIT,
-                                          RTEMS_NO_TIMEOUT,
-                                          &out) == RTEMS_SUCCESSFUL);
+    rtems_test_assert(
+      rtems_event_receive(
+        RTEMS_EVENT_1,
+        RTEMS_EVENT_ALL | RTEMS_WAIT,
+        RTEMS_NO_TIMEOUT,
+        &out
+      ) == RTEMS_SUCCESSFUL
+    );
   }
 
-  rtems_debugger_printf("error: rtems-db: test remote: connect\n");
+  rtems_debugger_printf( "error: rtems-db: test remote: connect\n" );
 
   ++test->connect_count;
   test->connected = true;
@@ -232,20 +233,19 @@ test_remote_connect(rtems_debugger_remote* remote)
   return 0;
 }
 
-static int
-test_remote_disconnect(rtems_debugger_remote* remote)
+static int test_remote_disconnect( rtems_debugger_remote *remote )
 {
-  rtems_debugger_remote_test* test;
+  rtems_debugger_remote_test *test;
 
-  rtems_test_assert(remote != NULL);
-  rtems_test_assert(remote->data != NULL);
-  test = (rtems_debugger_remote_test*) remote->data;
+  rtems_test_assert( remote != NULL );
+  rtems_test_assert( remote->data != NULL );
+  test = (rtems_debugger_remote_test *) remote->data;
 
-  rtems_debugger_printf("rtems-db: test remote: disconnect host\n");
+  rtems_debugger_printf( "rtems-db: test remote: disconnect host\n" );
 
   rtems_debugger_lock();
 
-  rtems_test_assert(test->connected == true);
+  rtems_test_assert( test->connected == true );
 
   test->connected = false;
 
@@ -254,75 +254,82 @@ test_remote_disconnect(rtems_debugger_remote* remote)
   return 0;
 }
 
-static bool
-test_remote_isconnected(rtems_debugger_remote* remote)
+static bool test_remote_isconnected( rtems_debugger_remote *remote )
 {
-  rtems_debugger_remote_test* test;
+  rtems_debugger_remote_test *test;
   bool                        isconnected;
-  rtems_test_assert(remote != NULL);
-  rtems_test_assert(remote->data != NULL);
-  test = (rtems_debugger_remote_test*) remote->data;
+  rtems_test_assert( remote != NULL );
+  rtems_test_assert( remote->data != NULL );
+  test = (rtems_debugger_remote_test *) remote->data;
   isconnected = test != NULL && test->connected;
-  rtems_debugger_printf("rtems-db: test remote: isconnected: %s\n",
-                        isconnected ? "connected" : "not-connected");
+  rtems_debugger_printf(
+    "rtems-db: test remote: isconnected: %s\n",
+    isconnected ? "connected" : "not-connected"
+  );
   return isconnected;
 }
 
-static void
-test_remote_print(const char* label, const char* buf, size_t size)
+static void test_remote_print(
+  const char *label,
+  const char *buf,
+  size_t      size
+)
 {
-  printf(" remote: %s: ", label);
-  while (size-- > 0) {
-    printf("%c", *buf++);
+  printf( " remote: %s: ", label );
+  while ( size-- > 0 ) {
+    printf( "%c", *buf++ );
   }
-  printf("\n");
+  printf( "\n" );
 }
 
-static ssize_t
-test_remote_receive(rtems_debugger_remote* remote,
-                    void*                  buf,
-                    size_t                 nbytes)
+static ssize_t test_remote_receive(
+  rtems_debugger_remote *remote,
+  void                  *buf,
+  size_t                 nbytes
+)
 {
-  rtems_debugger_remote_test* test;
+  rtems_debugger_remote_test *test;
   size_t                      len;
-  rtems_test_assert(remote != NULL);
-  rtems_test_assert(remote->data != NULL);
-  test = (rtems_debugger_remote_test*) remote->data;
-  rtems_test_assert(test->out < RTEMS_DEBUGGER_NUMOF(out));
-  len = strlen(out[test->out]);
-  printf(" remote: rx: message=%zu length=%zu\n", test->out, len);
-  test_remote_print("rx", out[test->out], len);
-  rtems_test_assert(len < nbytes);
-  memcpy(buf, out[test->out++], len);
+  rtems_test_assert( remote != NULL );
+  rtems_test_assert( remote->data != NULL );
+  test = (rtems_debugger_remote_test *) remote->data;
+  rtems_test_assert( test->out < RTEMS_DEBUGGER_NUMOF( out ) );
+  len = strlen( out[ test->out ] );
+  printf( " remote: rx: message=%zu length=%zu\n", test->out, len );
+  test_remote_print( "rx", out[ test->out ], len );
+  rtems_test_assert( len < nbytes );
+  memcpy( buf, out[ test->out++ ], len );
   return len;
 }
 
-static ssize_t
-test_remote_send(rtems_debugger_remote* remote,
-                const void*            buf,
-                size_t                 nbytes)
+static ssize_t test_remote_send(
+  rtems_debugger_remote *remote,
+  const void            *buf,
+  size_t                 nbytes
+)
 {
-  rtems_debugger_remote_test* test;
+  rtems_debugger_remote_test *test;
   size_t                      len;
   bool                        no_match;
-  rtems_test_assert(remote != NULL);
-  rtems_test_assert(remote->data != NULL);
-  test = (rtems_debugger_remote_test*) remote->data;
-  rtems_test_assert(test->in < RTEMS_DEBUGGER_NUMOF(in));
-  len = strlen(in[test->in]);
-  no_match = len == 2 && strcmp(in[test->in], "**") == 0;
-  printf(" remote: tx: message=%zu length=%zu\n", test->in, len);
-  if (!no_match)
-    rtems_test_assert(len == nbytes);
-  test_remote_print("tx", buf, nbytes);
-  if (!no_match)
-    rtems_test_assert(memcmp(buf, in[test->in], nbytes) == 0);
+  rtems_test_assert( remote != NULL );
+  rtems_test_assert( remote->data != NULL );
+  test = (rtems_debugger_remote_test *) remote->data;
+  rtems_test_assert( test->in < RTEMS_DEBUGGER_NUMOF( in ) );
+  len = strlen( in[ test->in ] );
+  no_match = len == 2 && strcmp( in[ test->in ], "**" ) == 0;
+  printf( " remote: tx: message=%zu length=%zu\n", test->in, len );
+  if ( !no_match ) {
+    rtems_test_assert( len == nbytes );
+  }
+  test_remote_print( "tx", buf, nbytes );
+  if ( !no_match ) {
+    rtems_test_assert( memcmp( buf, in[ test->in ], nbytes ) == 0 );
+  }
   test->in++;
   return nbytes;
 }
 
-static rtems_debugger_remote remote_test =
-{
+static rtems_debugger_remote remote_test = {
   .name = "test",
   .begin = test_remote_begin,
   .end = test_remote_end,
@@ -333,8 +340,7 @@ static rtems_debugger_remote remote_test =
   .write = test_remote_send
 };
 
-int
-rtems_debugger_register_test_remote(void)
+int rtems_debugger_register_test_remote( void )
 {
-  return rtems_debugger_remote_register(&remote_test);
+  return rtems_debugger_remote_register( &remote_test );
 }

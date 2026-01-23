@@ -30,7 +30,7 @@
 
 #include <inttypes.h>
 
-int rtems_main_o5 (void)
+int rtems_main_o5( void )
 {
   /* duplicate symbol in archive */
   return 0;

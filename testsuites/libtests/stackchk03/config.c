@@ -41,15 +41,14 @@
 /* functions */
 void stackchk03_blown_stack_reporter(
   const Thread_Control *running,
-  bool pattern_ok
+  bool                  pattern_ok
 );
 
 const char rtems_test_name[] = "STACKCHK03";
 
 /* configuration information */
 #define CONFIGURE_STACK_CHECKER_ENABLED
-#define CONFIGURE_STACK_CHECKER_REPORTER  stackchk03_blown_stack_reporter
-
+#define CONFIGURE_STACK_CHECKER_REPORTER stackchk03_blown_stack_reporter
 
 #define CONFIGURE_INIT
 #include "../stackchk/system.h"

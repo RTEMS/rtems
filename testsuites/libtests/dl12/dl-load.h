@@ -25,9 +25,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(_DL_LOAD_H_)
+#if !defined( _DL_LOAD_H_ )
 #define _DL_LOAD_H_
 
-int dl_load_test(void);
+int dl_load_test( void );
 
 #endif

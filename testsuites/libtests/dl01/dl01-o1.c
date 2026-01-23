@@ -31,19 +31,20 @@
 
 #include <rtems/test-printer.h>
 
-#define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__);
+#define printf( ... ) rtems_printf( &rtems_test_printer, __VA_ARGS__ );
 
 /*
  * Yes a decl in the source. This is a modules main and I could not find which
  * header main is defined in.
  */
-int rtems_main (int argc, char* argv[]);
+int rtems_main( int argc, char *argv[] );
 
-int rtems_main (int argc, char* argv[])
+int rtems_main( int argc, char *argv[] )
 {
   int arg;
-  printf("Loaded module: argc:%d [%s]\n", argc, __FILE__);
-  for (arg = 0; arg < argc; ++arg)
-    printf("  %d: %s\n", arg, argv[arg]);
+  printf( "Loaded module: argc:%d [%s]\n", argc, __FILE__ );
+  for ( arg = 0; arg < argc; ++arg ) {
+    printf( "  %d: %s\n", arg, argv[ arg ] );
+  }
   return argc;
 }

@@ -40,20 +40,20 @@
 
 void stackchk03_blown_stack_reporter(
   const Thread_Control *running,
-  bool pattern_ok
+  bool                  pattern_ok
 );
 
 void stackchk03_blown_stack_reporter(
   const Thread_Control *running,
-  bool pattern_ok
+  bool                  pattern_ok
 )
 {
   (void) pattern_ok;
 
   /* custom stack report funtion to be implemented here */
-  printk("RTEMS STACKCHK03 CUSTOM REPORTER !!!\n");
+  printk( "RTEMS STACKCHK03 CUSTOM REPORTER !!!\n" );
   rtems_fatal(
     RTEMS_FATAL_SOURCE_STACK_CHECKER,
     running->Object.name.name_u32
-    );
+  );
 }

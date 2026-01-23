@@ -37,7 +37,7 @@
 /* 
  * The test driver routines are mostly derived from the null driver routines.
  */
-uint32_t   TEST_major;
+uint32_t    TEST_major;
 static char initialized;
 
 /*  testDriver_initialize
@@ -53,9 +53,9 @@ static char initialized;
  *    rval       - RTEMS_SUCCESSFUL
  */
 rtems_device_driver testDriver_initialize(
-  rtems_device_major_number major,
+  rtems_device_major_number       major,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp RTEMS_UNUSED
+  void *pargp                     RTEMS_UNUSED
 )
 {
   rtems_device_driver status;
@@ -69,8 +69,9 @@ rtems_device_driver testDriver_initialize(
       (rtems_device_minor_number) 0
     );
 
-    if (status != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred(status);
+    if ( status != RTEMS_SUCCESSFUL ) {
+      rtems_fatal_error_occurred( status );
+    }
 
     TEST_major = major;
   }
@@ -93,7 +94,7 @@ rtems_device_driver testDriver_initialize(
 rtems_device_driver testDriver_open(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp RTEMS_UNUSED
+  void *pargp                     RTEMS_UNUSED
 )
 {
   return RTEMS_SUCCESSFUL;
@@ -114,7 +115,7 @@ rtems_device_driver testDriver_open(
 rtems_device_driver testDriver_close(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp RTEMS_UNUSED
+  void *pargp                     RTEMS_UNUSED
 )
 {
   return RTEMS_SUCCESSFUL;
@@ -135,20 +136,20 @@ rtems_device_driver testDriver_close(
 rtems_device_driver testDriver_read(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp
+  void                           *pargp
 )
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) pargp;
 
   if ( rw_args ) {
-    if( rw_args->count == 5 )
+    if ( rw_args->count == 5 ) {
       rw_args->bytes_moved = 0;
-    else {
+    } else {
       rw_args->bytes_moved = 0;
       return RTEMS_NOT_IMPLEMENTED;
     }
   }
-  
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -167,15 +168,15 @@ rtems_device_driver testDriver_read(
 rtems_device_driver testDriver_write(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp
+  void                           *pargp
 )
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) pargp;
 
   if ( rw_args ) {
-    if( rw_args->count == 5 )
+    if ( rw_args->count == 5 ) {
       return null_write( 0, 0, pargp );
-    else {
+    } else {
       rw_args->bytes_moved = 0;
       return RTEMS_NOT_IMPLEMENTED;
     }
@@ -200,7 +201,7 @@ rtems_device_driver testDriver_write(
 rtems_device_driver testDriver_control(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp RTEMS_UNUSED
+  void *pargp                     RTEMS_UNUSED
 )
 {
   return RTEMS_NOT_IMPLEMENTED;

@@ -74,8 +74,10 @@ static void fatal_extension(
   rtems_fatal_code   error
 )
 {
-  if ( source == RTEMS_FATAL_SOURCE_EXIT && !always_set_to_false &&
-       error == EXIT_STATUS && counter == 3 ) {
+  if (
+    source == RTEMS_FATAL_SOURCE_EXIT && !always_set_to_false &&
+    error == EXIT_STATUS && counter == 3
+  ) {
     TEST_END();
   }
 }
@@ -132,7 +134,7 @@ static void Init( rtems_task_argument arg )
 #define CONFIGURE_INITIAL_EXTENSIONS \
   { .fatal = fatal_extension }, RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS         1
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 
 #define CONFIGURE_UNIFIED_WORK_AREAS

@@ -53,21 +53,17 @@ const char rtems_test_name[] = "TOP";
  * of the task.
  */
 
-void add_some(
-  uint32_t  per_loop,
-  uint32_t *sum,
-  uint32_t *next
-)
+void add_some( uint32_t per_loop, uint32_t *sum, uint32_t *next )
 {
   uint32_t i;
 
-  for ( i=0 ; i<per_loop ; i++ ) {
+  for ( i = 0; i < per_loop; i++ ) {
     *sum += *next;
     *next += 1;
   }
 }
 
-static void notification(int fd, int seconds_remaining, void *arg)
+static void notification( int fd, int seconds_remaining, void *arg )
 {
   (void) fd;
   (void) arg;
@@ -78,9 +74,7 @@ static void notification(int fd, int seconds_remaining, void *arg)
   );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -89,12 +83,7 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  status = rtems_shell_wait_for_input(
-    STDIN_FILENO,
-    20,
-    notification,
-    NULL
-  );
+  status = rtems_shell_wait_for_input( STDIN_FILENO, 20, notification, NULL );
   if ( status != RTEMS_SUCCESSFUL ) {
     TEST_END();
 
@@ -107,37 +96,37 @@ rtems_task Init(
   directive_failed( status, "rtems_clock_set" );
 
   TicksPerSecond = rtems_clock_get_ticks_per_second();
-  if (TicksPerSecond <= 0) {
+  if ( TicksPerSecond <= 0 ) {
     printf(
       "Invalid ticks per second: %" PRIdrtems_interval "\n",
       TicksPerSecond
     );
-    exit (1);
+    exit( 1 );
   }
 
   /* Create and start the task to run top command. */
-  Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '0', '2' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '0', '2' );
   status = rtems_task_create(
-     Task_name[ 2 ],
-     2,
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_TIMESLICE,
-     RTEMS_FLOATING_POINT,
-     &Task_id[ 2 ]
+    Task_name[ 2 ],
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_TIMESLICE,
+    RTEMS_FLOATING_POINT,
+    &Task_id[ 2 ]
   );
   directive_failed( status, "rtems_task_create of TA02" );
   status = rtems_task_start( Task_id[ 2 ], Task_2, 0 );
   directive_failed( status, "rtems_task_start of TA2" );
 
   /* Create and start task to run the test. */
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '0', '1' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '0', '1' );
   status = rtems_task_create(
-     Task_name[ 1 ],
-     2,
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_TIMESLICE,
-     RTEMS_FLOATING_POINT,
-     &Task_id[ 1 ]
+    Task_name[ 1 ],
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_TIMESLICE,
+    RTEMS_FLOATING_POINT,
+    &Task_id[ 1 ]
   );
   directive_failed( status, "rtems_task_create of TA01" );
   status = rtems_task_start( Task_id[ 1 ], Task_1, 0 );

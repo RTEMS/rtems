@@ -12,11 +12,10 @@
 
 #include <unistd.h>
 
-int
-main (void)
+int main( void )
 {
   int oldfd = 42;
   int newfd = 43;
 
-  return dup2 (oldfd, newfd);
+  return dup2( oldfd, newfd );
 }

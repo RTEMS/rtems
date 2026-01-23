@@ -35,11 +35,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-void capture_test_1(void);
+void capture_test_1( void );
 
 /* configuration information */
 
@@ -50,12 +48,13 @@ void capture_test_1(void);
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
-#define TASK_ALLOCATION_SIZE     (5)
-#define CONFIGURE_MAXIMUM_TASKS  rtems_resource_unlimited(TASK_ALLOCATION_SIZE)
-#define CONFIGURE_EXTRA_TASK_STACKS (75 * RTEMS_MINIMUM_STACK_SIZE)
+#define TASK_ALLOCATION_SIZE ( 5 )
+#define CONFIGURE_MAXIMUM_TASKS \
+  rtems_resource_unlimited( TASK_ALLOCATION_SIZE )
+#define CONFIGURE_EXTRA_TASK_STACKS  ( 75 * RTEMS_MINIMUM_STACK_SIZE )
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS (5)
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS ( 5 )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

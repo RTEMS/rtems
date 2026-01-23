@@ -54,94 +54,92 @@
 
 #include "bdbuf_tests.h"
 
-static rtems_task bdbuf_test1_3_thread1(rtems_task_argument arg);
-static rtems_task bdbuf_test1_3_thread2(rtems_task_argument arg);
+static rtems_task bdbuf_test1_3_thread1( rtems_task_argument arg );
+static rtems_task bdbuf_test1_3_thread2( rtems_task_argument arg );
 
 #define TEST_BLK_NUM 30
 
-void
-bdbuf_test1_3_main()
+void bdbuf_test1_3_main()
 {
-    bdbuf_test_msg msg;
+  bdbuf_test_msg msg;
 
-    TEST_START("Test 1.3");
+  TEST_START( "Test 1.3" );
 
-    START_THREAD(1, bdbuf_test1_3_thread1);
-    START_THREAD(2, bdbuf_test1_3_thread2);
+  START_THREAD( 1, bdbuf_test1_3_thread1 );
+  START_THREAD( 2, bdbuf_test1_3_thread2 );
 
-    /*
+  /*
      * Step 1:
      * Thread #1 calls rtems_bdbuf_read() and we block
      * this thread on data transfer operation.
      */
-    WAIT_DRV_MSG(&msg);
+  WAIT_DRV_MSG( &msg );
 
-    /*
+  /*
      * Step 2:
      * Thread #2 calls rtems_bdbuf_read() for the same
      * block number, as the result it shall block waiting
      * on buffer state change.
      */
-    CONTINUE_THREAD(2);
+  CONTINUE_THREAD( 2 );
 
-    /* Make sure thread #2 managed to block on the buffer. */
-    CHECK_THREAD_BLOCKED(2);
+  /* Make sure thread #2 managed to block on the buffer. */
+  CHECK_THREAD_BLOCKED( 2 );
 
-    /*
+  /*
      * Step 3:
      * Unblock thread #1 by reporting erroneous data transfer result.
      */
-    SEND_DRV_MSG(0, 0, RTEMS_IO_ERROR, EFAULT);
+  SEND_DRV_MSG( 0, 0, RTEMS_IO_ERROR, EFAULT );
 
-    /*
+  /*
      * Wait for sync from thread #1.
      */
-    WAIT_THREAD_SYNC(1);
-    CONTINUE_THREAD(1);
-    TEST_CHECK_RESULT("3");
+  WAIT_THREAD_SYNC( 1 );
+  CONTINUE_THREAD( 1 );
+  TEST_CHECK_RESULT( "3" );
 
-    /* Check thread #2 is still blocked */
-    CHECK_THREAD_BLOCKED(2);
+  /* Check thread #2 is still blocked */
+  CHECK_THREAD_BLOCKED( 2 );
 
-    /*
+  /*
      * Step 4:
      * For thread #2 bdbuf shall try to re-read data.
      * As the result we will get read call to device driver.
      */
-    WAIT_DRV_MSG(&msg);
+  WAIT_DRV_MSG( &msg );
 
-    /*
+  /*
      * Step 5:
      * This time report success from the driver and
      * rtems_bdbuf_read() in thread #2 shall return
      * RTEMS_SUCCESSFUL.
      */
-    SEND_DRV_MSG(0, 0, RTEMS_SUCCESSFUL, 0);
+  SEND_DRV_MSG( 0, 0, RTEMS_SUCCESSFUL, 0 );
 
-    /*
+  /*
      * Wait for sync from thread #2.
      */
-    WAIT_THREAD_SYNC(2);
-    TEST_CHECK_RESULT("5");
+  WAIT_THREAD_SYNC( 2 );
+  TEST_CHECK_RESULT( "5" );
 
-    /*
+  /*
      * Step 6:
      * Release buffer in thread #2
      */
-    CONTINUE_THREAD(2);
+  CONTINUE_THREAD( 2 );
 
-    TEST_STOP();
+  TEST_STOP();
 }
 
-static rtems_task
-bdbuf_test1_3_thread1(rtems_task_argument arg)
+static rtems_task bdbuf_test1_3_thread1( rtems_task_argument arg )
 {
-    (void) arg;
+  (void) arg;
 
-    rtems_status_code   rc;
-    rtems_bdbuf_buffer *bd = NULL;
+  rtems_status_code   rc;
+  rtems_bdbuf_buffer *bd = NULL;
 
-    /*
+  /*
      * Step 1 - 3:
      * Try to read blk #N on thread #1
      * We will block on this read and meanwhile
@@ -150,28 +148,26 @@ bdbuf_test1_3_thread1(rtems_task_argument arg)
      * driver will notify about an error, and as the
      * result this call will return an error.
      */
-    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
-    if (rc != RTEMS_IO_ERROR || bd != NULL)
-    {
-        TEST_FAILED();
-    }
+  rc = rtems_bdbuf_read( test_dd, TEST_BLK_NUM, &bd );
+  if ( rc != RTEMS_IO_ERROR || bd != NULL ) {
+    TEST_FAILED();
+  }
 
-    CONTINUE_MAIN(1);
+  CONTINUE_MAIN( 1 );
 
-    THREAD_END();
+  THREAD_END();
 }
 
-static rtems_task
-bdbuf_test1_3_thread2(rtems_task_argument arg)
+static rtems_task bdbuf_test1_3_thread2( rtems_task_argument arg )
 {
-    (void) arg;
+  (void) arg;
 
-    rtems_status_code   rc;
-    rtems_bdbuf_buffer *bd = NULL;
+  rtems_status_code   rc;
+  rtems_bdbuf_buffer *bd = NULL;
 
-    WAIT_MAIN_SYNC(2);
+  WAIT_MAIN_SYNC( 2 );
 
-    /*
+  /*
      * Step 2:
      * Try to read block #N. Right now thread #1 is waiting
      * on data transfer operation, so we will block here as well.
@@ -181,21 +177,19 @@ bdbuf_test1_3_thread2(rtems_task_argument arg)
      * number, bdbuf library should ask for re-read data again.
      * Time time main task will tell driver to report success.
      */
-    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
-    if (rc != RTEMS_SUCCESSFUL || bd == NULL)
-    {
-        TEST_FAILED();
-    }
-    CONTINUE_MAIN(2);
+  rc = rtems_bdbuf_read( test_dd, TEST_BLK_NUM, &bd );
+  if ( rc != RTEMS_SUCCESSFUL || bd == NULL ) {
+    TEST_FAILED();
+  }
+  CONTINUE_MAIN( 2 );
 
-    /*
+  /*
      * Step 6:
      * Release buffer.
      */
-    rc = rtems_bdbuf_release(bd);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        TEST_FAILED();
-    }
-    THREAD_END();
+  rc = rtems_bdbuf_release( bd );
+  if ( rc != RTEMS_SUCCESSFUL ) {
+    TEST_FAILED();
+  }
+  THREAD_END();
 }

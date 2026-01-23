@@ -44,7 +44,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern void domath(void);
+extern void domath( void );
 
 #if __rtems__
 #include <tmacros.h>
@@ -55,8 +55,8 @@ const char rtems_test_name[] = "MATH";
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS           1
-#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_FLOATING_POINT
+#define CONFIGURE_MAXIMUM_TASKS        1
+#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
@@ -65,9 +65,7 @@ const char rtems_test_name[] = "MATH";
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 #else
 int main( void )
 #endif
@@ -75,7 +73,7 @@ int main( void )
 #if __rtems__
   (void) ignored;
 
-  rtems_print_printer_fprintf_putc(&rtems_test_printer);
+  rtems_print_printer_fprintf_putc( &rtems_test_printer );
   TEST_BEGIN();
 #endif
 

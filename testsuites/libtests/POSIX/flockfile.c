@@ -12,10 +12,10 @@
 
 #include <stdio.h>
 
-int main(void)
+int main( void )
 {
   FILE *file = NULL;
 
-  flockfile(file);
+  flockfile( file );
   return 0;
 }

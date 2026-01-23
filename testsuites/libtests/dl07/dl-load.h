@@ -27,14 +27,14 @@
 
 #include <string.h>
 
-#if !defined(_DL_LOAD_H_)
+#if !defined( _DL_LOAD_H_ )
 #define _DL_LOAD_H_
 
-static inline const char* dl_localise_file (const char* file)
+static inline const char *dl_localise_file( const char *file )
 {
-  return (const char*) strstr (file, "testsuites");
+  return (const char *) strstr( file, "testsuites" );
 }
 
-int dl_load_test(void);
+int dl_load_test( void );
 
 #endif

@@ -46,41 +46,44 @@
 /*
  *  Only require 8 task switches on sis/gdb.  --joel 2 Feb 2011
  */
-struct taskSwitchLog taskSwitchLog[25];
-int taskSwitchLogIndex;
-volatile int testsFinished;
+struct taskSwitchLog taskSwitchLog[ 25 ];
+int                  taskSwitchLogIndex;
+volatile int         testsFinished;
 
-void Task_switch(
-  rtems_tcb *unused,
-  rtems_tcb *heir
-)
+void Task_switch( rtems_tcb *unused, rtems_tcb *heir )
 {
   (void) unused;
 
-  uint32_t    index;
+  uint32_t          index;
   rtems_time_of_day time;
   rtems_status_code status;
 
   index = task_number( heir->Object.id );
 
-  switch( index ) {
+  switch ( index ) {
     case 1:
     case 2:
     case 3:
       Run_count[ index ] += 1;
 
       status = rtems_clock_get_tod( &time );
-      fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL,
-                                         "rtems_clock_get_tod" );
+      fatal_directive_check_status_only(
+        status,
+        RTEMS_SUCCESSFUL,
+        "rtems_clock_get_tod"
+      );
 
-      if ((size_t) taskSwitchLogIndex <
-          (sizeof taskSwitchLog / sizeof taskSwitchLog[0])) {
-        taskSwitchLog[taskSwitchLogIndex].taskIndex = index;
-        taskSwitchLog[taskSwitchLogIndex].when = time;
+      if (
+        (size_t) taskSwitchLogIndex <
+        ( sizeof taskSwitchLog / sizeof taskSwitchLog[ 0 ] )
+      ) {
+        taskSwitchLog[ taskSwitchLogIndex ].taskIndex = index;
+        taskSwitchLog[ taskSwitchLogIndex ].when = time;
         taskSwitchLogIndex++;
       }
-      if ( time.second >= 16 )
+      if ( time.second >= 16 ) {
         testsFinished = 1;
+      }
 
       break;
 
@@ -89,4 +92,3 @@ void Task_switch(
       break;
   }
 }
-

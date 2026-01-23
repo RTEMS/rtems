@@ -54,37 +54,37 @@
 
 const char rtems_test_name[] = "BLOCK 9";
 
-#define ASSERT_SC(sc) assert((sc) == RTEMS_SUCCESSFUL)
+#define ASSERT_SC( sc ) assert( ( sc ) == RTEMS_SUCCESSFUL )
 
-#define BLOCK_SIZE sizeof(char)
+#define BLOCK_SIZE sizeof( char )
 
 #define BLOCK_COUNT 4
 
-#define BLOCK_READ_IO_ERROR 0
+#define BLOCK_READ_IO_ERROR    0
 #define BLOCK_READ_UNSATISFIED 1
-#define BLOCK_READ_SUCCESSFUL 2
-#define BLOCK_WRITE_IO_ERROR 3
+#define BLOCK_READ_SUCCESSFUL  2
+#define BLOCK_WRITE_IO_ERROR   3
 
 #define DISK_PATH "/disk"
 
-static char disk_data [BLOCK_COUNT];
+static char disk_data[ BLOCK_COUNT ];
 
-static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
+static int disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  if (req == RTEMS_BLKIO_REQUEST) {
+  if ( req == RTEMS_BLKIO_REQUEST ) {
     rtems_blkdev_request *r = arg;
-    uint32_t i = 0;
+    uint32_t              i = 0;
 
-    for (i = 0; i < r->bufnum; ++i) {
-      rtems_blkdev_sg_buffer *sg = &r->bufs [i];
-      char *buf = sg->buffer;
+    for ( i = 0; i < r->bufnum; ++i ) {
+      rtems_blkdev_sg_buffer *sg = &r->bufs[ i ];
+      char                   *buf = sg->buffer;
 
-      if (sg->length == 1) {
-        switch (r->req) {
+      if ( sg->length == 1 ) {
+        switch ( r->req ) {
           case RTEMS_BLKDEV_REQ_READ:
-            switch (sg->block) {
+            switch ( sg->block ) {
               case BLOCK_READ_IO_ERROR:
                 sc = RTEMS_IO_ERROR;
                 break;
@@ -93,7 +93,7 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
                 break;
               case BLOCK_READ_SUCCESSFUL:
               case BLOCK_WRITE_IO_ERROR:
-                *buf = disk_data [sg->block];
+                *buf = disk_data[ sg->block ];
                 break;
               default:
                 sc = RTEMS_IO_ERROR;
@@ -101,11 +101,11 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
             }
             break;
           case RTEMS_BLKDEV_REQ_WRITE:
-            switch (sg->block) {
+            switch ( sg->block ) {
               case BLOCK_READ_IO_ERROR:
               case BLOCK_READ_UNSATISFIED:
               case BLOCK_READ_SUCCESSFUL:
-                disk_data [sg->block] = *buf;
+                disk_data[ sg->block ] = *buf;
                 break;
               case BLOCK_WRITE_IO_ERROR:
                 sc = RTEMS_IO_ERROR;
@@ -124,23 +124,23 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
       }
     }
 
-    rtems_blkdev_request_done(r, sc);
+    rtems_blkdev_request_done( r, sc );
 
     return 0;
   } else {
-    return rtems_blkdev_ioctl(dd, req, arg);
+    return rtems_blkdev_ioctl( dd, req, arg );
   }
 }
 
 static void disk_register(
-  uint32_t block_size,
-  rtems_blkdev_bnum block_count,
+  uint32_t            block_size,
+  rtems_blkdev_bnum   block_count,
   rtems_disk_device **dd
 )
 {
   rtems_status_code sc;
-  int fd;
-  int rv;
+  int               fd;
+  int               rv;
 
   sc = rtems_blkdev_create(
     DISK_PATH,
@@ -149,85 +149,85 @@ static void disk_register(
     disk_ioctl,
     NULL
   );
-  ASSERT_SC(sc);
+  ASSERT_SC( sc );
 
-  fd = open(DISK_PATH, O_RDWR);
-  rtems_test_assert(fd >= 0);
+  fd = open( DISK_PATH, O_RDWR );
+  rtems_test_assert( fd >= 0 );
 
-  rv = rtems_disk_fd_get_disk_device(fd, dd);
-  rtems_test_assert(rv == 0);
+  rv = rtems_disk_fd_get_disk_device( fd, dd );
+  rtems_test_assert( rv == 0 );
 
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 }
 
 static void check_read(
   rtems_disk_device *dd,
-  rtems_blkdev_bnum block,
-  rtems_status_code expected_sc
+  rtems_blkdev_bnum  block,
+  rtems_status_code  expected_sc
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_status_code   sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
-  sc = rtems_bdbuf_read(dd, block, &bd);
-  assert(sc == expected_sc);
+  sc = rtems_bdbuf_read( dd, block, &bd );
+  assert( sc == expected_sc );
 
-  if (sc == RTEMS_SUCCESSFUL) {
-    sc = rtems_bdbuf_release(bd);
-    ASSERT_SC(sc);
+  if ( sc == RTEMS_SUCCESSFUL ) {
+    sc = rtems_bdbuf_release( bd );
+    ASSERT_SC( sc );
   }
 }
 
-static rtems_task Init(rtems_task_argument argument)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_status_code   sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
-  rtems_disk_device *dd = NULL;
+  rtems_disk_device  *dd = NULL;
 
   TEST_BEGIN();
 
-  disk_register(BLOCK_SIZE, BLOCK_COUNT, &dd);
+  disk_register( BLOCK_SIZE, BLOCK_COUNT, &dd );
 
-  check_read(dd, BLOCK_READ_IO_ERROR, RTEMS_IO_ERROR);
-  check_read(dd, BLOCK_READ_UNSATISFIED, RTEMS_UNSATISFIED);
-  check_read(dd, BLOCK_READ_SUCCESSFUL, RTEMS_SUCCESSFUL);
-  check_read(dd, BLOCK_WRITE_IO_ERROR, RTEMS_SUCCESSFUL);
+  check_read( dd, BLOCK_READ_IO_ERROR, RTEMS_IO_ERROR );
+  check_read( dd, BLOCK_READ_UNSATISFIED, RTEMS_UNSATISFIED );
+  check_read( dd, BLOCK_READ_SUCCESSFUL, RTEMS_SUCCESSFUL );
+  check_read( dd, BLOCK_WRITE_IO_ERROR, RTEMS_SUCCESSFUL );
 
   /* Check write IO error */
 
-  sc = rtems_bdbuf_read(dd, BLOCK_WRITE_IO_ERROR, &bd);
-  ASSERT_SC(sc);
+  sc = rtems_bdbuf_read( dd, BLOCK_WRITE_IO_ERROR, &bd );
+  ASSERT_SC( sc );
 
-  bd->buffer [0] = 1;
+  bd->buffer[ 0 ] = 1;
 
-  sc = rtems_bdbuf_sync(bd);
-  ASSERT_SC(sc);
+  sc = rtems_bdbuf_sync( bd );
+  ASSERT_SC( sc );
 
-  sc = rtems_bdbuf_read(dd, BLOCK_WRITE_IO_ERROR, &bd);
-  ASSERT_SC(sc);
+  sc = rtems_bdbuf_read( dd, BLOCK_WRITE_IO_ERROR, &bd );
+  ASSERT_SC( sc );
 
-  assert(bd->buffer [0] == 0);
+  assert( bd->buffer[ 0 ] == 0 );
 
-  sc = rtems_bdbuf_release(bd);
-  ASSERT_SC(sc);
+  sc = rtems_bdbuf_release( bd );
+  ASSERT_SC( sc );
 
   /* Check write to deleted disk */
 
-  sc = rtems_bdbuf_read(dd, BLOCK_READ_SUCCESSFUL, &bd);
-  ASSERT_SC(sc);
+  sc = rtems_bdbuf_read( dd, BLOCK_READ_SUCCESSFUL, &bd );
+  ASSERT_SC( sc );
 
-  sc = unlink(DISK_PATH);
-  ASSERT_SC(sc);
+  sc = unlink( DISK_PATH );
+  ASSERT_SC( sc );
 
-  sc = rtems_bdbuf_sync(bd);
-  ASSERT_SC(sc);
+  sc = rtems_bdbuf_sync( bd );
+  ASSERT_SC( sc );
 
   TEST_END();
 
-  exit(0);
+  exit( 0 );
 }
 
 #define CONFIGURE_INIT
@@ -244,8 +244,8 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_BDBUF_BUFFER_MIN_SIZE BLOCK_SIZE
-#define CONFIGURE_BDBUF_BUFFER_MAX_SIZE BLOCK_SIZE
-#define CONFIGURE_BDBUF_CACHE_MEMORY_SIZE (BLOCK_SIZE * BLOCK_COUNT)
+#define CONFIGURE_BDBUF_BUFFER_MIN_SIZE   BLOCK_SIZE
+#define CONFIGURE_BDBUF_BUFFER_MAX_SIZE   BLOCK_SIZE
+#define CONFIGURE_BDBUF_CACHE_MEMORY_SIZE ( BLOCK_SIZE * BLOCK_COUNT )
 
 #include <rtems/confdefs.h>

@@ -56,102 +56,100 @@
 
 #include "bdbuf_tests.h"
 
-static rtems_task bdbuf_test2_2_thread1(rtems_task_argument arg);
-static rtems_task bdbuf_test2_2_thread2(rtems_task_argument arg);
+static rtems_task bdbuf_test2_2_thread1( rtems_task_argument arg );
+static rtems_task bdbuf_test2_2_thread2( rtems_task_argument arg );
 
 /* Block number used in the test */
 #define TEST_BLK_NUM 70
 
-void
-bdbuf_test2_2_main()
+void bdbuf_test2_2_main()
 {
-    bdbuf_test_msg msg;
+  bdbuf_test_msg msg;
 
-    TEST_START("Test 2.2");
+  TEST_START( "Test 2.2" );
 
-    START_THREAD(1, bdbuf_test2_2_thread1);
-    START_THREAD(2, bdbuf_test2_2_thread2);
+  START_THREAD( 1, bdbuf_test2_2_thread1 );
+  START_THREAD( 2, bdbuf_test2_2_thread2 );
 
-    /*
+  /*
      * Step 1:
      * Thread #1 calls rtems_bdbuf_read() and we block
      * this thread on data transfer operation.
      */
-    WAIT_DRV_MSG(&msg);
+  WAIT_DRV_MSG( &msg );
 
-    /*
+  /*
      * Step 2:
      * Thread #2 calls rtems_bdbuf_read() for the same
      * block number, as the result it shall block waiting
      * on buffer state change (waiting on TRANSFER state).
      */
-    CONTINUE_THREAD(2);
+  CONTINUE_THREAD( 2 );
 
-    /* Make sure thread #2 managed to block on the buffer. */
-    CHECK_THREAD_BLOCKED(2);
+  /* Make sure thread #2 managed to block on the buffer. */
+  CHECK_THREAD_BLOCKED( 2 );
 
-    /*
+  /*
      * Step 3:
      * Unblock thread #1 by reporting successful data transfer result.
      */
-    SEND_DRV_MSG(0, 0, RTEMS_SUCCESSFUL, 0);
+  SEND_DRV_MSG( 0, 0, RTEMS_SUCCESSFUL, 0 );
 
-    /*
+  /*
      * Wait for sync from thread #1.
      */
-    WAIT_THREAD_SYNC(1);
-    TEST_CHECK_RESULT("3");
+  WAIT_THREAD_SYNC( 1 );
+  TEST_CHECK_RESULT( "3" );
 
-    /* Check thread #2 is still blocked */
-    CHECK_THREAD_BLOCKED(2);
+  /* Check thread #2 is still blocked */
+  CHECK_THREAD_BLOCKED( 2 );
 
-    /*
+  /*
      * Step 4:
      * Thread #1 releases buffer with bdbuf_release_modified() call.
      */
-    CONTINUE_THREAD(1);
+  CONTINUE_THREAD( 1 );
 
-    /*
+  /*
      * Step 5:
      * On buffer release operation, we should have unblock
      * of thread #2 that is waiting on read buffer operation.
      */
-    WAIT_THREAD_SYNC(2);
-    TEST_CHECK_RESULT("5");
+  WAIT_THREAD_SYNC( 2 );
+  TEST_CHECK_RESULT( "5" );
 
-   /*
+  /*
     * Step 6:
     * Wait swapout period and check that there is no
     * request to flush buffer onto a disk.
     */
-    CHECK_NO_DRV_MSG();
+  CHECK_NO_DRV_MSG();
 
-    /*
+  /*
      * Step 7:
      * Thread #2 releases buffer with bdbuf_release_modified() call.
      */
-    CONTINUE_THREAD(2);
+  CONTINUE_THREAD( 2 );
 
-    /*
+  /*
      * Step 8:
      * Check that in swapout interval disk device
      * driver is requested to flush buffer.
      */
-    WAIT_DRV_MSG_WR(&msg);
-    SEND_DRV_MSG(0, 0, RTEMS_SUCCESSFUL, 0);
+  WAIT_DRV_MSG_WR( &msg );
+  SEND_DRV_MSG( 0, 0, RTEMS_SUCCESSFUL, 0 );
 
-    TEST_STOP();
+  TEST_STOP();
 }
 
-static rtems_task
-bdbuf_test2_2_thread1(rtems_task_argument arg)
+static rtems_task bdbuf_test2_2_thread1( rtems_task_argument arg )
 {
-    (void) arg;
+  (void) arg;
 
-    rtems_status_code   rc;
-    rtems_bdbuf_buffer *bd = NULL;
+  rtems_status_code   rc;
+  rtems_bdbuf_buffer *bd = NULL;
 
-    /*
+  /*
      * Step 1 - 3:
      * Try to read blk #N on thread #1
      * We will block on this read and meanwhile
@@ -161,36 +159,33 @@ bdbuf_test2_2_thread1(rtems_task_argument arg)
      * date transfer, and as the result this call
      * will return valid buffer.
      */
-    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        TEST_FAILED();
-    }
-    CONTINUE_MAIN(1);
+  rc = rtems_bdbuf_read( test_dd, TEST_BLK_NUM, &bd );
+  if ( rc != RTEMS_SUCCESSFUL ) {
+    TEST_FAILED();
+  }
+  CONTINUE_MAIN( 1 );
 
-    /*
+  /*
      * Step 4:
      * Release buffer returned on the previous step.
      */
-    rc = rtems_bdbuf_release_modified(bd);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        TEST_FAILED();
-    }
-    THREAD_END();
+  rc = rtems_bdbuf_release_modified( bd );
+  if ( rc != RTEMS_SUCCESSFUL ) {
+    TEST_FAILED();
+  }
+  THREAD_END();
 }
 
-static rtems_task
-bdbuf_test2_2_thread2(rtems_task_argument arg)
+static rtems_task bdbuf_test2_2_thread2( rtems_task_argument arg )
 {
-    (void) arg;
+  (void) arg;
 
-    rtems_status_code   rc;
-    rtems_bdbuf_buffer *bd = NULL;
+  rtems_status_code   rc;
+  rtems_bdbuf_buffer *bd = NULL;
 
-    WAIT_MAIN_SYNC(2);
+  WAIT_MAIN_SYNC( 2 );
 
-    /*
+  /*
      * Step 2:
      * Try to read block #N. Right now thread #1 is waiting
      * on data transfer operation, so we will block here as well.
@@ -199,21 +194,19 @@ bdbuf_test2_2_thread2(rtems_task_argument arg)
      * On step 4 thread #1 releases buffer and as the result
      * our read operation should finish with success.
      */
-    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        TEST_FAILED();
-    }
-    CONTINUE_MAIN(2);
+  rc = rtems_bdbuf_read( test_dd, TEST_BLK_NUM, &bd );
+  if ( rc != RTEMS_SUCCESSFUL ) {
+    TEST_FAILED();
+  }
+  CONTINUE_MAIN( 2 );
 
-    /*
+  /*
      * Step 7:
      * Release buffer.
      */
-    rc = rtems_bdbuf_release_modified(bd);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        TEST_FAILED();
-    }
-    THREAD_END();
+  rc = rtems_bdbuf_release_modified( bd );
+  if ( rc != RTEMS_SUCCESSFUL ) {
+    TEST_FAILED();
+  }
+  THREAD_END();
 }

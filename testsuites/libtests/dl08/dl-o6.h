@@ -28,9 +28,9 @@
 
 #include <stdint.h>
 
-#if !defined(DL06_H)
+#if !defined( DL06_H )
 #define DL06_H
 
-int rtems_main_o6 (void);
+int rtems_main_o6( void );
 
 #endif

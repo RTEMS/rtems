@@ -37,24 +37,24 @@
 
 const char rtems_test_name[] = "DEFAULTCONFIG 1";
 
-static void install_bsp_extension(void)
+static void install_bsp_extension( void )
 {
 #ifdef BSP_INITIAL_EXTENSION
   static const rtems_extensions_table bsp_ext = BSP_INITIAL_EXTENSION;
 
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   sc = rtems_extension_create(
-    rtems_build_name('B', 'S', 'P', ' '),
+    rtems_build_name( 'B', 'S', 'P', ' ' ),
     &bsp_ext,
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 #endif
 }
 
-int main(int argc, char **argv)
+int main( int argc, char **argv )
 {
   int i;
 
@@ -62,8 +62,8 @@ int main(int argc, char **argv)
 
   install_bsp_extension();
 
-  for (i = 0; i < argc; ++i) {
-    printf("argv[%i] = %s\n", i, argv[i]);
+  for ( i = 0; i < argc; ++i ) {
+    printf( "argv[%i] = %s\n", i, argv[ i ] );
   }
 
   TEST_END();

@@ -19,6 +19,6 @@
 #endif
 
 #define FTYPE double
-#define PRI "%f"
+#define PRI   "%f"
 
 #include <domath.h>

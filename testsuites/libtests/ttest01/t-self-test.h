@@ -34,10 +34,10 @@
 extern "C" {
 #endif /* __cplusplus */
 
-RTEMS_LINKER_ROSET_DECLARE(t_self_test, const char *);
+RTEMS_LINKER_ROSET_DECLARE( t_self_test, const char * );
 
-#define T_TEST_OUTPUT(name, output) \
-    RTEMS_LINKER_ROSET_ITEM(t_self_test, const char *, name) = #name ":" output
+#define T_TEST_OUTPUT( name, output ) \
+  RTEMS_LINKER_ROSET_ITEM( t_self_test, const char *, name ) = #name ":" output
 
 #ifdef __cplusplus
 }

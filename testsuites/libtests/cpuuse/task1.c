@@ -41,19 +41,17 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    seconds;
-  uint32_t    old_seconds;
+  uint32_t          seconds;
+  uint32_t          old_seconds;
   rtems_mode        previous_mode;
   rtems_time_of_day time;
   rtems_status_code status;
-  uint32_t    start_time;
-  uint32_t    end_time;
+  uint32_t          start_time;
+  uint32_t          end_time;
 
   puts( "TA1 - rtems_task_suspend - on Task 2" );
   status = rtems_task_suspend( Task_id[ 2 ] );
@@ -68,12 +66,13 @@ rtems_task Task_1(
 
   puts( "TA1 - killing time" );
 
-  for ( ; ; ) {
+  for ( ;; ) {
     status = rtems_clock_get_seconds_since_epoch( &end_time );
     directive_failed( status, "rtems_clock_get_seconds_since_epoch" );
 
-    if ( end_time > (start_time + 2) )
+    if ( end_time > ( start_time + 2 ) ) {
       break;
+    }
   }
 
   puts( "TA1 - rtems_task_resume - on Task 2" );
@@ -100,7 +99,7 @@ rtems_task Task_1(
 
       old_seconds = time.second;
 
-      for ( seconds = 0 ; seconds < 6 ; ) {
+      for ( seconds = 0; seconds < 6; ) {
         status = rtems_clock_get_tod( &time );
         directive_failed( status, "rtems_clock_get_tod" );
 

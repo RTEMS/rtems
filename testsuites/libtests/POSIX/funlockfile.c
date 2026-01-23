@@ -12,10 +12,10 @@
 
 #include <stdio.h>
 
-int main(void)
+int main( void )
 {
   FILE *file = NULL;
 
-  funlockfile(file);
+  funlockfile( file );
   return 0;
 }

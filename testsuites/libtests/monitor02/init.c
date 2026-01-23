@@ -45,31 +45,25 @@ const char rtems_test_name[] = "MONITOR 2";
 
 #define MAX_ARGS 128
 
-char        *Commands[] = {
-  "task",
-  "task 32",
-  NULL
-};
-rtems_task Init(
-  rtems_task_argument argument
-)
+char      *Commands[] = { "task", "task 32", NULL };
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  int                i;
-  int                argc;
-  char               *argv[MAX_ARGS];
-  char               tmp[256];
+  int   i;
+  int   argc;
+  char *argv[ MAX_ARGS ];
+  char  tmp[ 256 ];
 
   TEST_BEGIN();
 
-  for (i=0; i < MAX_ARGS && Commands[i] ; i++) {
-    strcpy( tmp, Commands[i] );
-    if (!rtems_shell_make_args(tmp, &argc, argv, MAX_ARGS) ) {
-      printf( "===> %s\n", Commands[i] );
-      rtems_shell_main_monitor(argc, argv);
+  for ( i = 0; i < MAX_ARGS && Commands[ i ]; i++ ) {
+    strcpy( tmp, Commands[ i ] );
+    if ( !rtems_shell_make_args( tmp, &argc, argv, MAX_ARGS ) ) {
+      printf( "===> %s\n", Commands[ i ] );
+      rtems_shell_main_monitor( argc, argv );
     }
   }
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }

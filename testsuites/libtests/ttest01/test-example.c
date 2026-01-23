@@ -1,27 +1,29 @@
 #include <rtems/test.h>
 
-T_TEST_CASE(example)
+T_TEST_CASE( example )
 {
-	T_true(true, "test passes, no message output");
-	T_true(false, "test fails");
-	T_quiet_true(true, "quiet test passes, no output at all");
-	T_quiet_true(false, "quiet test fails");
-	T_step_true(2, true, "step test passes, no message output");
-	T_step_true(3, false, "step test fails");
-	T_assert_false(true, "this is a format %s", "string");
+  T_true( true, "test passes, no message output" );
+  T_true( false, "test fails" );
+  T_quiet_true( true, "quiet test passes, no output at all" );
+  T_quiet_true( false, "quiet test fails" );
+  T_step_true( 2, true, "step test passes, no message output" );
+  T_step_true( 3, false, "step test fails" );
+  T_assert_false( true, "this is a format %s", "string" );
 }
 
 #include "t-self-test.h"
 
-T_TEST_OUTPUT(example,
-"B:example\n"
-"P:0:0:UI1:test-example.c:5\n"
-"F:1:0:UI1:test-example.c:6:test fails\n"
-"F:*:0:UI1:test-example.c:8:quiet test fails\n"
-"P:2:0:UI1:test-example.c:9\n"
-"F:3:0:UI1:test-example.c:10:step test fails\n"
-"F:4:0:UI1:test-example.c:11:this is a format string\n"
-"E:example:N:5:F:4:D:0.001000\n");
+T_TEST_OUTPUT(
+  example,
+  "B:example\n"
+  "P:0:0:UI1:test-example.c:5\n"
+  "F:1:0:UI1:test-example.c:6:test fails\n"
+  "F:*:0:UI1:test-example.c:8:quiet test fails\n"
+  "P:2:0:UI1:test-example.c:9\n"
+  "F:3:0:UI1:test-example.c:10:step test fails\n"
+  "F:4:0:UI1:test-example.c:11:this is a format string\n"
+  "E:example:N:5:F:4:D:0.001000\n"
+);
 
 /*
  * The license is at the end of the file to be able to use the test code and

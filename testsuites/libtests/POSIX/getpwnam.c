@@ -13,11 +13,11 @@
 #include <sys/types.h>
 #include <pwd.h>
 
-int main(void)
+int main( void )
 {
   struct passwd *pass;
 
-  pass = getpwnam("root");
+  pass = getpwnam( "root" );
 
-  return (pass != NULL);
+  return ( pass != NULL );
 }

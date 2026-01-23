@@ -32,15 +32,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define FATAL_ERROR_TEST_NAME            "/DEV/NULL 1"
-#define FATAL_ERROR_DESCRIPTION          "/dev/null already registered"
-#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_RTEMS_API
-#define FATAL_ERROR_EXPECTED_ERROR       RTEMS_TOO_MANY
+#define FATAL_ERROR_TEST_NAME       "/DEV/NULL 1"
+#define FATAL_ERROR_DESCRIPTION     "/dev/null already registered"
+#define FATAL_ERROR_EXPECTED_SOURCE INTERNAL_ERROR_RTEMS_API
+#define FATAL_ERROR_EXPECTED_ERROR  RTEMS_TOO_MANY
 
 #include <rtems/devnull.h>
 #include "tmacros.h"
 
-static void force_error(void)
+static void force_error( void )
 {
   int status;
 

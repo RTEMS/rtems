@@ -46,13 +46,16 @@
 static void create_and_start( uint32_t i )
 {
   rtems_status_code status;
-  char              str[30];
-  char              name[6];
+  char              str[ 30 ];
+  char              name[ 6 ];
 
-  sprintf(name, "TA%02" PRId32 " ", i);
+  sprintf( name, "TA%02" PRId32 " ", i );
 
-  Task_name[ i ] =  rtems_build_name(
-    name[0], name[1], name[2], name[3]
+  Task_name[ i ] = rtems_build_name(
+    name[ 0 ],
+    name[ 1 ],
+    name[ 2 ],
+    name[ 3 ]
   );
 
   status = rtems_task_create(
@@ -63,40 +66,37 @@ static void create_and_start( uint32_t i )
     RTEMS_FLOATING_POINT,
     &Task_id[ i ]
   );
-  sprintf(str,"rtems_task_create of %s", name);
+  sprintf( str, "rtems_task_create of %s", name );
   directive_failed( status, str );
 
   status = rtems_task_start( Task_id[ i ], Task_3, i );
-  sprintf(str, "rtems_task_start of %s", name);
-  directive_failed( status, str);
+  sprintf( str, "rtems_task_start of %s", name );
+  directive_failed( status, str );
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
-  char              str[80];
-  uint32_t          i,j;
+  char              str[ 80 ];
+  uint32_t          i, j;
 
-  for(j=0; j<2; j++) {
-
-    for( i=3; i<TASK_COUNT; i++) {
-      create_and_start(i);
-      status = rtems_task_wake_after (TicksPerSecond * 5);
+  for ( j = 0; j < 2; j++ ) {
+    for ( i = 3; i < TASK_COUNT; i++ ) {
+      create_and_start( i );
+      status = rtems_task_wake_after( TicksPerSecond * 5 );
       directive_failed( status, "rtems_task_wake_after" );
     }
 
-    status = rtems_task_wake_after (TicksPerSecond * 10);
+    status = rtems_task_wake_after( TicksPerSecond * 10 );
     directive_failed( status, "rtems_task_wake_after" );
 
-    for( i=3; i<TASK_COUNT; i++) {
-      status = rtems_task_delete( Task_id[i] );
-      sprintf(str, "task delete TA%02" PRId32 "", i);
+    for ( i = 3; i < TASK_COUNT; i++ ) {
+      status = rtems_task_delete( Task_id[ i ] );
+      sprintf( str, "task delete TA%02" PRId32 "", i );
       directive_failed( status, str );
-      status = rtems_task_wake_after (TicksPerSecond * 5);
+      status = rtems_task_wake_after( TicksPerSecond * 5 );
       directive_failed( status, "rtems_task_wake_after" );
     }
   }

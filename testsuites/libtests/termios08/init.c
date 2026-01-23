@@ -45,17 +45,17 @@
 const char rtems_test_name[] = "TERMIOS 8";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void open_it(void);
-void close_it(void);
-void write_it(void);
-void change_lflag( const char *desc, int mask, int new );
-void change_vmin_vtime( const char *desc, int min, int time );
-void read_it(ssize_t expected);
+rtems_task Init( rtems_task_argument argument );
+void       open_it( void );
+void       close_it( void );
+void       write_it( void );
+void       change_lflag( const char *desc, int mask, int new );
+void       change_vmin_vtime( const char *desc, int min, int time );
+void       read_it( ssize_t expected );
 
 int Test_fd;
 
-void open_it(void)
+void open_it( void )
 {
   /* open the file */
   puts( "open(" TERMIOS_TEST_DRIVER_DEVICE_NAME ") - OK " );
@@ -63,7 +63,7 @@ void open_it(void)
   rtems_test_assert( Test_fd != -1 );
 }
 
-void close_it(void)
+void close_it( void )
 {
   int rc;
 
@@ -72,17 +72,17 @@ void close_it(void)
   rtems_test_assert( rc == 0 );
 }
 
-void write_it(void)
+void write_it( void )
 {
   ssize_t sc;
-  char    ch[10] = "PPPD TEST";
+  char    ch[ 10 ] = "PPPD TEST";
 
   puts( "write(PPPD TEST) - OK " );
-  sc = write(Test_fd, ch, sizeof(ch));
-  rtems_test_assert( sc == sizeof(ch) );
+  sc = write( Test_fd, ch, sizeof( ch ) );
+  rtems_test_assert( sc == sizeof( ch ) );
 }
 
-uint8_t read_helper_buffer[256];
+uint8_t read_helper_buffer[ 256 ];
 
 void change_lflag( const char *desc, int mask, int new )
 {
@@ -109,8 +109,8 @@ void change_vmin_vtime( const char *desc, int min, int time )
   rc = tcgetattr( Test_fd, &attr );
   rtems_test_assert( rc == 0 );
 
-  attr.c_cc[VMIN] = min;
-  attr.c_cc[VTIME] = time;
+  attr.c_cc[ VMIN ] = min;
+  attr.c_cc[ VTIME ] = time;
 
   rc = tcsetattr( Test_fd, TCSANOW, &attr );
   rtems_test_assert( rc == 0 );
@@ -119,20 +119,19 @@ void change_vmin_vtime( const char *desc, int min, int time )
 void read_it( ssize_t expected )
 {
   ssize_t rc;
-  char    buf[32];
+  char    buf[ 32 ];
 
-  rtems_test_assert( (size_t)expected <= sizeof(buf) );
+  rtems_test_assert( (size_t) expected <= sizeof( buf ) );
 
   printf( "read - %zd expected\n", expected );
-  rc = read( Test_fd, buf, expected ); 
-  if ( expected != rc )
+  rc = read( Test_fd, buf, expected );
+  if ( expected != rc ) {
     printf( "ERROR - expected=%zd rc=%zd\n", expected, rc );
+  }
   rtems_test_assert( expected == rc );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -163,10 +162,10 @@ rtems_task Init(
   read_it( 2 );
 
   close_it();
-  
+
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -178,7 +177,7 @@ rtems_task Init(
 /* we need to be able to open the test device */
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

@@ -43,13 +43,11 @@
 
 #include <rtems/cpuuse.h>
 
-uint32_t      Periods[6]    = { 0,   2,   2,   2,   2, 100 };
-uint32_t      Iterations[6] = { 0,  50,  50,  50,  50,   1 };
-rtems_task_priority Priorities[6] = { 0,   1,   1,   3,   4,   5 };
+uint32_t            Periods[ 6 ] = { 0, 2, 2, 2, 2, 100 };
+uint32_t            Iterations[ 6 ] = { 0, 50, 50, 50, 50, 1 };
+rtems_task_priority Priorities[ 6 ] = { 0, 1, 1, 3, 4, 5 };
 
-rtems_task Task_1_through_5(
-  rtems_task_argument argument
-)
+rtems_task Task_1_through_5( rtems_task_argument argument )
 {
   rtems_id          rmid;
   rtems_id          test_rmid;
@@ -66,15 +64,26 @@ rtems_task Task_1_through_5(
   status = rtems_rate_monotonic_ident( argument, &test_rmid );
   directive_failed( status, "rtems_rate_monotonic_ident" );
   put_name( Task_name[ argument ], FALSE );
-  printf( "- rtems_rate_monotonic_ident id = 0x%08" PRIxrtems_id "\n", test_rmid );
+  printf(
+    "- rtems_rate_monotonic_ident id = 0x%08" PRIxrtems_id "\n",
+    test_rmid
+  );
 
   if ( rmid != test_rmid ) {
-     printf( "RMID's DO NOT MATCH (0x%" PRIxrtems_id " and 0x%" PRIxrtems_id ")\n", rmid, test_rmid );
-     rtems_test_exit( 0 );
+    printf(
+      "RMID's DO NOT MATCH (0x%" PRIxrtems_id " and 0x%" PRIxrtems_id ")\n",
+      rmid,
+      test_rmid
+    );
+    rtems_test_exit( 0 );
   }
 
   put_name( Task_name[ argument ], FALSE );
-  printf( "- (0x%08" PRIxrtems_id ") period %" PRIu32 "\n", rmid, Periods[ argument ] );
+  printf(
+    "- (0x%08" PRIxrtems_id ") period %" PRIu32 "\n",
+    rmid,
+    Periods[ argument ]
+  );
 
   status = rtems_task_wake_after( 2 );
   directive_failed( status, "rtems_task_wake_after" );
@@ -91,7 +100,7 @@ rtems_task Task_1_through_5(
       }
       break;
     case 5:
-      pass   = 0;
+      pass = 0;
       failed = 0;
 
       status = rtems_rate_monotonic_period( rmid, Periods[ argument ] );
@@ -105,20 +114,22 @@ rtems_task Task_1_through_5(
 
         Get_all_counters();
 
-        for( index = 1 ; index <= 4 ; index++ ) {
+        for ( index = 1; index <= 4; index++ ) {
           if ( Temporary_count.count[ index ] != Iterations[ index ] ) {
             puts_nocr( "FAIL -- " );
-            put_name ( Task_name[ index ], FALSE );
-            printf   ( " Actual=%" PRIu32 ", Expected=%" PRIu32 "\n",
-                       Temporary_count.count[ index ],
-                       Iterations[ index ]
-                     );
+            put_name( Task_name[ index ], FALSE );
+            printf(
+              " Actual=%" PRIu32 ", Expected=%" PRIu32 "\n",
+              Temporary_count.count[ index ],
+              Iterations[ index ]
+            );
             failed += 1;
           }
         }
 
-        if ( failed == 5 )
+        if ( failed == 5 ) {
           rtems_test_exit( 0 );
+        }
 
         pass += 1;
 
@@ -145,7 +156,6 @@ rtems_task Task_1_through_5(
 
           rtems_test_exit( 0 );
         }
-
       }
       break;
   }

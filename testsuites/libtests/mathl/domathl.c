@@ -22,7 +22,7 @@
 #endif
 
 #define SUFFIX l
-#define FTYPE long double
-#define PRI "%Lf"
+#define FTYPE  long double
+#define PRI    "%Lf"
 
 #include <domath.h>

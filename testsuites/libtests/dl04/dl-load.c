@@ -39,18 +39,19 @@
 
 #include "dl-load.h"
 
-int dl_load_test(void)
+int dl_load_test( void )
 {
-  void*       handle;
-  const char* err;
+  void       *handle;
+  const char *err;
 
-  rtems_rtl_trace_set_mask(RTEMS_RTL_TRACE_ALL);
-  handle = dlopen("/dl04-o4.o", RTLD_GLOBAL | RTLD_NOW);
+  rtems_rtl_trace_set_mask( RTEMS_RTL_TRACE_ALL );
+  handle = dlopen( "/dl04-o4.o", RTLD_GLOBAL | RTLD_NOW );
   err = dlerror();
-  if (err != NULL)
-    printf("dlopen: %s\n", err);
-  rtems_test_assert(handle != NULL);
-  rtems_test_assert(dlclose(handle) == 0);
+  if ( err != NULL ) {
+    printf( "dlopen: %s\n", err );
+  }
+  rtems_test_assert( handle != NULL );
+  rtems_test_assert( dlclose( handle ) == 0 );
 
   return 0;
 }

@@ -28,7 +28,7 @@
 
 #include <stdint.h>
 
-#if !defined(DL05_H)
+#if !defined( DL05_H )
 #define DL05_H
 
 /*
@@ -44,6 +44,6 @@ extern uint32_t dl05_unresolv_3;
 extern uint8_t  dl05_unresolv_4;
 extern int64_t  dl05_unresolv_5;
 
-int rtems_main_o5 (void);
+int rtems_main_o5( void );
 
 #endif

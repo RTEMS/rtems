@@ -34,8 +34,12 @@ extern "C" {
 #endif
 
 #define TEST_DRIVER_TABLE_ENTRY \
-  { testDriver_initialize, testDriver_open, testDriver_close, testDriver_read, \
-    testDriver_write, testDriver_control }
+  { testDriver_initialize,      \
+    testDriver_open,            \
+    testDriver_close,           \
+    testDriver_read,            \
+    testDriver_write,           \
+    testDriver_control }
 
 rtems_device_driver testDriver_initialize(
   rtems_device_major_number,

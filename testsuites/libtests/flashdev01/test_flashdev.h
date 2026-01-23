@@ -30,6 +30,6 @@
 
 #include <dev/flash/flashdev.h>
 
-rtems_flashdev* test_flashdev_init(void);
+rtems_flashdev *test_flashdev_init( void );
 
 #endif /* __TEST_FLASHDEV_H */

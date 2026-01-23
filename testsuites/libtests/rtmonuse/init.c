@@ -47,9 +47,7 @@
 
 const char rtems_test_name[] = "RTMONUSE";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -60,34 +58,34 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  period =  rtems_build_name( 'I', 'G', 'N', 'R' );
+  period = rtems_build_name( 'I', 'G', 'N', 'R' );
   status = rtems_rate_monotonic_create( period, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );
   printf(
-    "INIT - rtems_rate_monotonic_create id = 0x%08" PRIxrtems_id " (stays inactive)\n",
+    "INIT - rtems_rate_monotonic_create id = 0x%08" PRIxrtems_id
+    " (stays inactive)\n",
     rmid
   );
 
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
+  Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
+  Task_name[ 4 ] = rtems_build_name( 'T', 'A', '4', ' ' );
+  Task_name[ 5 ] = rtems_build_name( 'T', 'A', '5', ' ' );
 
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ] =  rtems_build_name( 'T', 'A', '3', ' ' );
-  Task_name[ 4 ] =  rtems_build_name( 'T', 'A', '4', ' ' );
-  Task_name[ 5 ] =  rtems_build_name( 'T', 'A', '5', ' ' );
-
-  for ( index = 1 ; index <= 5 ; index++ ) {
+  for ( index = 1; index <= 5; index++ ) {
     status = rtems_task_create(
       Task_name[ index ],
       Priorities[ index ],
       RTEMS_MINIMUM_STACK_SIZE * 4,
       RTEMS_DEFAULT_MODES,
-      (index == 5) ? RTEMS_FLOATING_POINT : RTEMS_DEFAULT_ATTRIBUTES,
+      ( index == 5 ) ? RTEMS_FLOATING_POINT : RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ index ]
     );
     directive_failed( status, "rtems_task_create loop" );
   }
 
-  for ( index = 1 ; index <= 5 ; index++ ) {
+  for ( index = 1; index <= 5; index++ ) {
     status = rtems_task_start( Task_id[ index ], Task_1_through_5, index );
     directive_failed( status, "rtems_task_start loop" );
   }

@@ -12,12 +12,11 @@
 
 #include <stdlib.h>
 
-int
-main (void)
+int main( void )
 {
-  void *foo = calloc (42, 43);
-  int rc = (foo != NULL);
-  free(foo);
+  void *foo = calloc( 42, 43 );
+  int   rc = ( foo != NULL );
+  free( foo );
 
   return rc;
 }

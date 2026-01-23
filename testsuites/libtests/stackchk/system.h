@@ -36,13 +36,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1_through_3(
-  rtems_task_argument argument
-);
+rtems_task Task_1_through_3( rtems_task_argument argument );
 
 void blow_stack( void );
 
@@ -51,10 +47,10 @@ void blow_stack( void );
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE*3)
+#define TASK_STACK_SIZE ( RTEMS_MINIMUM_STACK_SIZE * 3 )
 
-#define CONFIGURE_MAXIMUM_TASKS               4
-#define CONFIGURE_EXTRA_TASK_STACKS (3 * (RTEMS_MINIMUM_STACK_SIZE * 2))
+#define CONFIGURE_MAXIMUM_TASKS     4
+#define CONFIGURE_EXTRA_TASK_STACKS ( 3 * ( RTEMS_MINIMUM_STACK_SIZE * 2 ) )
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -67,24 +63,22 @@ void Fatal_extension(
 );
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { \
-    .thread_create = NULL, \
-    .thread_start = NULL, \
-    .thread_restart = NULL, \
-    .thread_delete = NULL, \
-    .thread_switch = NULL, \
-    .thread_begin = NULL, \
-    .thread_exitted = NULL, \
-    .fatal = Fatal_extension, \
-    .thread_terminate = NULL \
-  }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .thread_create = NULL,           \
+    .thread_start = NULL,            \
+    .thread_restart = NULL,          \
+    .thread_delete = NULL,           \
+    .thread_switch = NULL,           \
+    .thread_begin = NULL,            \
+    .thread_exitted = NULL,          \
+    .fatal = Fatal_extension,        \
+    .thread_terminate = NULL },      \
+    RTEMS_TEST_INITIAL_EXTENSION
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
 /* end of include file */

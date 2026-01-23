@@ -44,23 +44,24 @@
 const char rtems_test_name[] = "libdl (RTL) 4";
 
 /* forward declarations to avoid warnings */
-static rtems_task Init(rtems_task_argument argument);
+static rtems_task Init( rtems_task_argument argument );
 
 #include "dl04-tar.h"
 
 #define TARFILE_START dl04_tar
 #define TARFILE_SIZE  dl04_tar_size
 
-static int test(void)
+static int test( void )
 {
   int ret;
   ret = dl_load_test();
-  if (ret)
-    rtems_test_exit(ret);
+  if ( ret ) {
+    rtems_test_exit( ret );
+  }
   return 0;
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -68,19 +69,18 @@ static void Init(rtems_task_argument arg)
 
   TEST_BEGIN();
 
-  te = rtems_tarfs_load("/", (void *)TARFILE_START, (size_t)TARFILE_SIZE);
-  if (te != 0)
-  {
-    printf("untar failed: %d\n", te);
-    rtems_test_exit(1);
-    exit (1);
+  te = rtems_tarfs_load( "/", (void *) TARFILE_START, (size_t) TARFILE_SIZE );
+  if ( te != 0 ) {
+    printf( "untar failed: %d\n", te );
+    rtems_test_exit( 1 );
+    exit( 1 );
   }
 
   test();
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -96,7 +96,8 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_INIT_TASK_STACK_SIZE (CONFIGURE_MINIMUM_TASK_STACK_SIZE + (4U * 1024U))
+#define CONFIGURE_INIT_TASK_STACK_SIZE \
+  ( CONFIGURE_MINIMUM_TASK_STACK_SIZE + ( 4U * 1024U ) )
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 

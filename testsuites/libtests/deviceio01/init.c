@@ -43,22 +43,20 @@
 
 const char rtems_test_name[] = "DEVICEIO 1";
 
-static rtems_task Init(
-  rtems_task_argument argument
-)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  int status;
-  int fdr = 0, fdw = 0;
-  char buf[10];
+  int  status;
+  int  fdr = 0, fdw = 0;
+  char buf[ 10 ];
 
   TEST_BEGIN();
 
   puts( "Init - attempt to open the /dev/test WR mode -- OK" );
   fdw = open( "/dev/test", O_WRONLY );
   rtems_test_assert( fdw != -1 );
-  
+
   puts( "Init - attempt to write to /dev/test - expect ENOSYS" );
   status = write( fdw, "data", 10 );
   rtems_test_assert( status == -1 );
@@ -79,7 +77,7 @@ static rtems_task Init(
   rtems_test_assert( errno == ENOSYS );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -90,7 +88,7 @@ static rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 5
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

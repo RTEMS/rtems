@@ -38,36 +38,34 @@
 const char rtems_test_name[] = "TERMIOS 2";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
-  int sc;
+  int   sc;
   pid_t pid;
   char *term_name_p;
-  char term_name[32];
+  char  term_name[ 32 ];
 
   TEST_BEGIN();
 
   puts( "tcdrain(12) - EBADF" );
-  sc = tcdrain(12);
+  sc = tcdrain( 12 );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EBADF );
 
   puts( "tcdrain(stdin) - OK" );
-  sc = tcdrain(0);
+  sc = tcdrain( 0 );
   rtems_test_assert( !sc );
 
   puts( "tcdrain(stdout) - OK" );
-  tcdrain(1);
+  tcdrain( 1 );
   rtems_test_assert( !sc );
 
   puts( "tcdrain(stderr) - OK" );
-  tcdrain(2);
+  tcdrain( 2 );
   rtems_test_assert( !sc );
 
   puts( "" );
@@ -132,7 +130,7 @@ rtems_task Init(
 
   /***** TEST TCGETPGRP *****/
   puts( "tcgetpgrp( 1 ) - OK" );
-  pid = tcgetpgrp(1);
+  pid = tcgetpgrp( 1 );
   rtems_test_assert( pid == getpid() );
 
   puts( "tcsetpgrp( 1, 3 ) - OK" );
@@ -163,12 +161,11 @@ rtems_task Init(
   exit( 0 );
 }
 
-
 /* NOTICE: the clock driver is explicitly disabled */
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS            1
+#define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

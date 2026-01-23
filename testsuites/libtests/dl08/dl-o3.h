@@ -26,9 +26,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(DL03_H)
+#if !defined( DL03_H )
 #define DL03_H
 
-int rtems_main_o3 (void);
+int rtems_main_o3( void );
 
 #endif
