@@ -100,6 +100,9 @@ rtems_shell_mknod_exit (rtems_shell_mknod_globals* globals, int code)
 
 #include "mknod-pack_dev.c"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclobbered"
+
 static int
 rtems_shell_main_mknod(int argc, char *argv[])
 {
@@ -111,6 +114,8 @@ rtems_shell_main_mknod(int argc, char *argv[])
     return main_mknod (globals, argc, argv);
   return mknod_globals.exit_code;
 }
+
+#pragma GCC diagnostic pop
 
 #define getprogname() "mknod"
 
