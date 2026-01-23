@@ -46,9 +46,9 @@ static const IMFS_node_control IMFS_node_control_sym_link;
 
 int IMFS_symlink(
   const rtems_filesystem_location_info_t *parentloc,
-  const char *name,
-  size_t namelen,
-  const char *target
+  const char                             *name,
+  size_t                                  namelen,
+  const char                             *target
 )
 {
   IMFS_jnode_t *new_node;
@@ -62,7 +62,7 @@ int IMFS_symlink(
     sizeof( IMFS_sym_link_t ) + strlen( target ) + 1,
     name,
     namelen,
-    ( S_IFLNK | ( S_IRWXU | S_IRWXG | S_IRWXO )),
+    ( S_IFLNK | ( S_IRWXU | S_IRWXG | S_IRWXO ) ),
     RTEMS_DECONST( char *, target )
   );
 
@@ -75,24 +75,25 @@ int IMFS_symlink(
 
 ssize_t IMFS_readlink(
   const rtems_filesystem_location_info_t *loc,
-  char *buf,
-  size_t bufsize
+  char                                   *buf,
+  size_t                                  bufsize
 )
 {
-  IMFS_sym_link_t   *sym_link;
-  size_t             i;
+  IMFS_sym_link_t *sym_link;
+  size_t           i;
 
   sym_link = loc->node_access;
 
-  for( i=0; ((i<bufsize) && (sym_link->name[i] != '\0')); i++ )
-    buf[i] = sym_link->name[i];
+  for ( i = 0; ( ( i < bufsize ) && ( sym_link->name[ i ] != '\0' ) ); i++ ) {
+    buf[ i ] = sym_link->name[ i ];
+  }
 
   return i;
 }
 
 static int IMFS_stat_sym_link(
   const rtems_filesystem_location_info_t *loc,
-  struct stat *buf
+  struct stat                            *buf
 )
 {
   const IMFS_sym_link_t *sym_link = loc->node_access;
@@ -123,7 +124,7 @@ static const rtems_filesystem_file_handlers_r IMFS_link_handlers = {
 
 static IMFS_jnode_t *IMFS_node_initialize_sym_link(
   IMFS_jnode_t *node,
-  void *arg
+  void         *arg
 )
 {
   IMFS_sym_link_t *sym_link = (IMFS_sym_link_t *) node;

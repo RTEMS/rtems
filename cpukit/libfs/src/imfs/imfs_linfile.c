@@ -46,17 +46,18 @@ static ssize_t IMFS_linfile_read(
   size_t         count
 )
 {
-  IMFS_file_t *file = IMFS_iop_to_file( iop );
-  off_t start = iop->offset;
-  size_t size = file->File.size;
+  IMFS_file_t         *file = IMFS_iop_to_file( iop );
+  off_t                start = iop->offset;
+  size_t               size = file->File.size;
   const unsigned char *data = file->Linearfile.direct;
 
-  if (count > size - start)
+  if ( count > size - start ) {
     count = size - start;
+  }
 
   IMFS_update_atime( &file->Node );
   iop->offset = start + count;
-  memcpy(buffer, &data[start], count);
+  memcpy( buffer, &data[ start ], count );
 
   return (ssize_t) count;
 }
@@ -79,21 +80,24 @@ static int IMFS_linfile_open(
   /*
    * Perform 'copy on write' for linear files
    */
-  if (rtems_libio_iop_is_writeable(iop)) {
-    uint32_t count = file->File.size;
+  if ( rtems_libio_iop_is_writeable( iop ) ) {
+    uint32_t             count = file->File.size;
     const unsigned char *buffer = file->Linearfile.direct;
 
-    file->Node.control            = &IMFS_mknod_control_memfile.node_control;
-    file->File.size               = 0;
-    file->Memfile.indirect        = 0;
+    file->Node.control = &IMFS_mknod_control_memfile.node_control;
+    file->File.size = 0;
+    file->Memfile.indirect = 0;
     file->Memfile.doubly_indirect = 0;
     file->Memfile.triply_indirect = 0;
 
     IMFS_Set_handlers( &iop->pathinfo );
 
-    if ((count != 0)
-     && (IMFS_memfile_write(&file->Memfile, 0, buffer, count) == -1))
-        return -1;
+    if (
+      ( count != 0 ) &&
+      ( IMFS_memfile_write( &file->Memfile, 0, buffer, count ) == -1 )
+    ) {
+      return -1;
+    }
   }
 
   return 0;
@@ -123,7 +127,7 @@ static IMFS_jnode_t *IMFS_node_initialize_linfile(
   void         *arg
 )
 {
-  IMFS_linearfile_t *linfile;
+  IMFS_linearfile_t       *linfile;
   IMFS_linearfile_context *ctx;
 
   linfile = (IMFS_linearfile_t *) node;

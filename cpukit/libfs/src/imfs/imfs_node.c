@@ -44,12 +44,12 @@
 #include <rtems/imfsimpl.h>
 
 IMFS_jnode_t *IMFS_initialize_node(
-  IMFS_jnode_t *node,
+  IMFS_jnode_t            *node,
   const IMFS_node_control *node_control,
-  const char *name,
-  size_t namelen,
-  mode_t mode,
-  void *arg
+  const char              *name,
+  size_t                   namelen,
+  mode_t                   mode,
+  void                    *arg
 )
 {
   time_t now;
@@ -85,7 +85,7 @@ IMFS_jnode_t *IMFS_initialize_node(
   node->stat_mtime = now;
   node->stat_ctime = now;
 
-  return (*node_control->node_initialize)( node, arg );
+  return ( *node_control->node_initialize )( node, arg );
 }
 
 int IMFS_node_clone( rtems_filesystem_location_info_t *loc )
@@ -101,7 +101,7 @@ void IMFS_node_destroy( IMFS_jnode_t *node )
 {
   IMFS_assert( node->reference_count == 0 );
 
-  (*node->control->node_destroy)( node );
+  ( *node->control->node_destroy )( node );
 }
 
 void IMFS_node_free( const rtems_filesystem_location_info_t *loc )
@@ -115,9 +115,7 @@ void IMFS_node_free( const rtems_filesystem_location_info_t *loc )
   }
 }
 
-IMFS_jnode_t *IMFS_node_remove_default(
-  IMFS_jnode_t *node
-)
+IMFS_jnode_t *IMFS_node_remove_default( IMFS_jnode_t *node )
 {
   return node;
 }

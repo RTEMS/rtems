@@ -38,10 +38,7 @@
 
 #include <rtems/imfs.h>
 
-IMFS_jnode_t *IMFS_node_initialize_directory(
-  IMFS_jnode_t *node,
-  void *arg
-)
+IMFS_jnode_t *IMFS_node_initialize_directory( IMFS_jnode_t *node, void *arg )
 {
   (void) arg;
 

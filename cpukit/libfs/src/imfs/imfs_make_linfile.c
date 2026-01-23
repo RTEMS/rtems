@@ -38,10 +38,7 @@ int IMFS_make_linearfile(
   size_t      size
 )
 {
-  IMFS_linearfile_context ctx = {
-    .data = data,
-    .size = size
-  };
+  IMFS_linearfile_context ctx = { .data = data, .size = size };
 
   return IMFS_make_node(
     path,

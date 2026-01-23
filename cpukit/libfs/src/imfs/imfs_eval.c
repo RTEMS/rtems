@@ -47,13 +47,13 @@
 
 static bool IMFS_eval_is_directory(
   rtems_filesystem_eval_path_context_t *ctx,
-  void *arg
+  void                                 *arg
 )
 {
   (void) arg;
 
-  rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_get_currentloc( ctx );
+  rtems_filesystem_location_info_t
+               *currentloc = rtems_filesystem_eval_path_get_currentloc( ctx );
   IMFS_jnode_t *node = currentloc->node_access;
 
   return IMFS_is_directory( node );
@@ -61,8 +61,8 @@ static bool IMFS_eval_is_directory(
 
 static IMFS_jnode_t *IMFS_search_in_directory(
   IMFS_directory_t *dir,
-  const char *token,
-  size_t tokenlen
+  const char       *token,
+  size_t            tokenlen
 )
 {
   if ( rtems_filesystem_is_current_directory( token, tokenlen ) ) {
@@ -72,13 +72,13 @@ static IMFS_jnode_t *IMFS_search_in_directory(
       return dir->Node.Parent;
     } else {
       rtems_chain_control *entries = &dir->Entries;
-      rtems_chain_node *current = rtems_chain_first( entries );
-      rtems_chain_node *tail = rtems_chain_tail( entries );
+      rtems_chain_node    *current = rtems_chain_first( entries );
+      rtems_chain_node    *tail = rtems_chain_tail( entries );
 
       while ( current != tail ) {
         IMFS_jnode_t *entry = (IMFS_jnode_t *) current;
-        bool match = entry->namelen == tokenlen
-          && memcmp( entry->name, token, tokenlen ) == 0;
+        bool          match = entry->namelen == tokenlen &&
+                              memcmp( entry->name, token, tokenlen ) == 0;
 
         if ( match ) {
           return entry;
@@ -94,7 +94,7 @@ static IMFS_jnode_t *IMFS_search_in_directory(
 
 static rtems_filesystem_global_location_t **IMFS_is_mount_point(
   IMFS_jnode_t *node,
-  mode_t mode
+  mode_t        mode
 )
 {
   rtems_filesystem_global_location_t **fs_root_ptr = NULL;
@@ -112,19 +112,19 @@ static rtems_filesystem_global_location_t **IMFS_is_mount_point(
 
 static rtems_filesystem_eval_path_generic_status IMFS_eval_token(
   rtems_filesystem_eval_path_context_t *ctx,
-  void *arg,
-  const char *token,
-  size_t tokenlen
+  void                                 *arg,
+  const char                           *token,
+  size_t                                tokenlen
 )
 {
   (void) arg;
 
-  rtems_filesystem_eval_path_generic_status status =
-    RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_DONE;
-  rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_get_currentloc( ctx );
+  rtems_filesystem_eval_path_generic_status
+    status = RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_DONE;
+  rtems_filesystem_location_info_t
+    *currentloc = rtems_filesystem_eval_path_get_currentloc( ctx );
   IMFS_directory_t *dir = currentloc->node_access;
-  bool access_ok = rtems_filesystem_eval_path_check_access(
+  bool              access_ok = rtems_filesystem_eval_path_check_access(
     ctx,
     RTEMS_FS_PERMS_EXEC,
     dir->Node.st_mode,
@@ -137,9 +137,9 @@ static rtems_filesystem_eval_path_generic_status IMFS_eval_token(
 
     if ( entry != NULL ) {
       bool terminal = !rtems_filesystem_eval_path_has_path( ctx );
-      int eval_flags = rtems_filesystem_eval_path_get_flags( ctx );
-      bool follow_hard_link = (eval_flags & RTEMS_FS_FOLLOW_HARD_LINK) != 0;
-      bool follow_sym_link = (eval_flags & RTEMS_FS_FOLLOW_SYM_LINK) != 0;
+      int  eval_flags = rtems_filesystem_eval_path_get_flags( ctx );
+      bool follow_hard_link = ( eval_flags & RTEMS_FS_FOLLOW_HARD_LINK ) != 0;
+      bool follow_sym_link = ( eval_flags & RTEMS_FS_FOLLOW_SYM_LINK ) != 0;
       mode_t mode = entry->st_mode;
 
       rtems_filesystem_eval_path_clear_token( ctx );
@@ -152,19 +152,22 @@ static rtems_filesystem_eval_path_generic_status IMFS_eval_token(
 
       if ( S_ISLNK( mode ) && ( follow_sym_link || !terminal ) ) {
         const IMFS_sym_link_t *sym_link = (const IMFS_sym_link_t *) entry;
-        const char *target = sym_link->name;
+        const char            *target = sym_link->name;
 
         rtems_filesystem_eval_path_recursive( ctx, target, strlen( target ) );
       } else {
-        rtems_filesystem_global_location_t **fs_root_ptr =
-          IMFS_is_mount_point( entry, mode );
+        rtems_filesystem_global_location_t **fs_root_ptr = IMFS_is_mount_point(
+          entry,
+          mode
+        );
 
         if ( fs_root_ptr == NULL ) {
           --dir->Node.reference_count;
           ++entry->reference_count;
           currentloc->node_access = entry;
-          currentloc->node_access_2 =
-            IMFS_generic_get_context_by_node( entry );
+          currentloc->node_access_2 = IMFS_generic_get_context_by_node(
+            entry
+          );
           IMFS_Set_handlers( currentloc );
 
           if ( !terminal ) {

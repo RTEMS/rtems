@@ -45,8 +45,8 @@ static const IMFS_node_control IMFS_node_control_hard_link;
 int IMFS_link(
   const rtems_filesystem_location_info_t *parentloc,
   const rtems_filesystem_location_info_t *targetloc,
-  const char *name,
-  size_t namelen
+  const char                             *name,
+  size_t                                  namelen
 )
 {
   IMFS_jnode_t *new_node;
@@ -57,8 +57,9 @@ int IMFS_link(
   /*
    *  Verify this node can be linked to.
    */
-  if ( target->st_nlink >= LINK_MAX )
+  if ( target->st_nlink >= LINK_MAX ) {
     rtems_set_errno_and_return_minus_one( EMLINK );
+  }
 
   /*
    *  Create a new link node.
@@ -73,8 +74,9 @@ int IMFS_link(
     target
   );
 
-  if ( !new_node )
+  if ( !new_node ) {
     rtems_set_errno_and_return_minus_one( ENOMEM );
+  }
 
   /*
    * Increment the link count of the node being pointed to.
@@ -88,16 +90,16 @@ int IMFS_link(
 
 static int IMFS_stat_hard_link(
   const rtems_filesystem_location_info_t *loc,
-  struct stat *buf
+  struct stat                            *buf
 )
 {
-  const IMFS_link_t *hard_link = loc->node_access;
+  const IMFS_link_t               *hard_link = loc->node_access;
   rtems_filesystem_location_info_t targetloc = *loc;
 
   targetloc.node_access = hard_link->link_node;
   IMFS_Set_handlers( &targetloc );
 
-  return (targetloc.handlers->fstat_h)( &targetloc, buf );
+  return ( targetloc.handlers->fstat_h )( &targetloc, buf );
 }
 
 static const rtems_filesystem_file_handlers_r IMFS_link_handlers = {
@@ -121,7 +123,7 @@ static const rtems_filesystem_file_handlers_r IMFS_link_handlers = {
 
 static IMFS_jnode_t *IMFS_node_initialize_hard_link(
   IMFS_jnode_t *node,
-  void *arg
+  void         *arg
 )
 {
   IMFS_link_t *hard_link = (IMFS_link_t *) node;
@@ -131,17 +133,15 @@ static IMFS_jnode_t *IMFS_node_initialize_hard_link(
   return node;
 }
 
-static IMFS_jnode_t *IMFS_node_remove_hard_link(
-  IMFS_jnode_t *node
-)
+static IMFS_jnode_t *IMFS_node_remove_hard_link( IMFS_jnode_t *node )
 {
-  IMFS_link_t *hard_link = (IMFS_link_t *) node;
+  IMFS_link_t  *hard_link = (IMFS_link_t *) node;
   IMFS_jnode_t *target = hard_link->link_node;
 
   _Assert( target != NULL );
 
   if ( target->st_nlink == 1 ) {
-    target = (*target->control->node_remove)( target );
+    target = ( *target->control->node_remove )( target );
     if ( target == NULL ) {
       node = NULL;
     }

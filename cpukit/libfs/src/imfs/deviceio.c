@@ -61,24 +61,14 @@ int device_open(
   );
 }
 
-int device_close(
-  rtems_libio_t *iop
-)
+int device_close( rtems_libio_t *iop )
 {
   const IMFS_device_t *device = IMFS_iop_to_device( iop );
 
-  return rtems_deviceio_close(
-    iop,
-    device->major,
-    device->minor
-  );
+  return rtems_deviceio_close( iop, device->major, device->minor );
 }
 
-ssize_t device_read(
-  rtems_libio_t *iop,
-  void          *buffer,
-  size_t         count
-)
+ssize_t device_read( rtems_libio_t *iop, void *buffer, size_t count )
 {
   const IMFS_device_t *device = IMFS_iop_to_device( iop );
 
@@ -91,11 +81,7 @@ ssize_t device_read(
   );
 }
 
-ssize_t device_write(
-  rtems_libio_t *iop,
-  const void    *buffer,
-  size_t         count
-)
+ssize_t device_write( rtems_libio_t *iop, const void *buffer, size_t count )
 {
   const IMFS_device_t *device = IMFS_iop_to_device( iop );
 
@@ -108,11 +94,7 @@ ssize_t device_write(
   );
 }
 
-int device_ioctl(
-  rtems_libio_t   *iop,
-  ioctl_command_t  command,
-  void            *buffer
-)
+int device_ioctl( rtems_libio_t *iop, ioctl_command_t command, void *buffer )
 {
   const IMFS_device_t *device = IMFS_iop_to_device( iop );
 
@@ -125,10 +107,7 @@ int device_ioctl(
   );
 }
 
-int device_ftruncate(
-  rtems_libio_t *iop,
-  off_t          length
-)
+int device_ftruncate( rtems_libio_t *iop, off_t length )
 {
   (void) iop;
   (void) length;

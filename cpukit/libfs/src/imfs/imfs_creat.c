@@ -44,12 +44,12 @@
 
 IMFS_jnode_t *IMFS_create_node(
   const rtems_filesystem_location_info_t *parentloc,
-  const IMFS_node_control *node_control,
-  size_t node_size,
-  const char *name,
-  size_t namelen,
-  mode_t mode,
-  void *arg
+  const IMFS_node_control                *node_control,
+  size_t                                  node_size,
+  const char                             *name,
+  size_t                                  namelen,
+  mode_t                                  mode,
+  void                                   *arg
 )
 {
   IMFS_jnode_t *allocated_node;
@@ -87,4 +87,3 @@ IMFS_jnode_t *IMFS_create_node(
 
   return node;
 }
-

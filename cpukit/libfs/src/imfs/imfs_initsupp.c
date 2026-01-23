@@ -53,9 +53,9 @@ int IMFS_initialize_support(
   const IMFS_node_control *node_control;
   IMFS_jnode_t            *root_node;
 
-  _Assert(imfs_memfile_ops.allocate_block != NULL);
-  _Assert(imfs_memfile_ops.free_block != NULL);
-  _Assert(imfs_memfile_ops.get_free_space != NULL);
+  _Assert( imfs_memfile_ops.allocate_block != NULL );
+  _Assert( imfs_memfile_ops.free_block != NULL );
+  _Assert( imfs_memfile_ops.get_free_space != NULL );
 
   mount_data = data;
 
@@ -76,7 +76,7 @@ int IMFS_initialize_support(
     node_control,
     "",
     0,
-    (S_IFDIR | 0755),
+    ( S_IFDIR | 0755 ),
     NULL
   );
   IMFS_assert( root_node != NULL );
@@ -86,7 +86,7 @@ int IMFS_initialize_support(
 
 static IMFS_jnode_t *IMFS_node_initialize_enosys(
   IMFS_jnode_t *node,
-  void *arg
+  void         *arg
 )
 {
   (void) node;
@@ -97,10 +97,7 @@ static IMFS_jnode_t *IMFS_node_initialize_enosys(
   return NULL;
 }
 
-IMFS_jnode_t *IMFS_node_initialize_default(
-  IMFS_jnode_t *node,
-  void *arg
-)
+IMFS_jnode_t *IMFS_node_initialize_default( IMFS_jnode_t *node, void *arg )
 {
   (void) arg;
 

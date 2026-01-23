@@ -43,7 +43,7 @@
 
 typedef struct {
   uint8_t len;
-  char name[3];
+  char    name[ 3 ];
 } IMFS_devfs_dir;
 
 static const IMFS_devfs_dir IMFS_devfs_dirs[] = {
@@ -68,8 +68,8 @@ static IMFS_jnode_t *IMFS_devfs_is_dir(
   for ( i = 0; i < RTEMS_ARRAY_SIZE( IMFS_devfs_dirs ); ++i ) {
     bool match;
 
-    match = IMFS_devfs_dirs[ i ].len == pathlen
-      && memcmp( IMFS_devfs_dirs[ i ].name, path, pathlen ) == 0;
+    match = IMFS_devfs_dirs[ i ].len == pathlen &&
+            memcmp( IMFS_devfs_dirs[ i ].name, path, pathlen ) == 0;
 
     if ( match ) {
       int eval_flags;
@@ -107,8 +107,8 @@ static IMFS_jnode_t *IMFS_devfs_search(
     bool          match;
 
     entry = (IMFS_jnode_t *) current;
-    match = entry->namelen == pathlen
-      && memcmp( entry->name, path, pathlen ) == 0;
+    match = entry->namelen == pathlen &&
+            memcmp( entry->name, path, pathlen ) == 0;
 
     if ( match ) {
       return entry;

@@ -50,11 +50,11 @@ int IMFS_rmnod(
 {
   (void) parentloc;
 
-  int rv = 0;
-  IMFS_jnode_t *node = loc->node_access;
+  int             rv = 0;
+  IMFS_jnode_t   *node = loc->node_access;
   IMFS_fs_info_t *fs_info = loc->mt_entry->fs_info;
 
-  node = (*node->control->node_remove)( node );
+  node = ( *node->control->node_remove )( node );
   if ( node != NULL ) {
     --node->reference_count;
     --node->st_nlink;

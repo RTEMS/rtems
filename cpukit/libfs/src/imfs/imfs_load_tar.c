@@ -49,15 +49,15 @@ int rtems_tarfs_load(
   size_t      tar_size
 )
 {
-  rtems_filesystem_eval_path_context_t  eval_ctx;
-  int                                   eval_flags;
-  rtems_filesystem_location_info_t     *loc;
-  bool                                  is_imfs;
-  char                                  buf[ 156 + UNTAR_FILE_NAME_SIZE ];
-  size_t                                len;
-  Untar_HeaderContext                   ctx;
-  unsigned long                         ptr;
-  const uint8_t                        *image;
+  rtems_filesystem_eval_path_context_t eval_ctx;
+  int                                  eval_flags;
+  rtems_filesystem_location_info_t    *loc;
+  bool                                 is_imfs;
+  char                                 buf[ 156 + UNTAR_FILE_NAME_SIZE ];
+  size_t                               len;
+  Untar_HeaderContext                  ctx;
+  unsigned long                        ptr;
+  const uint8_t                       *image;
 
   len = strlen( mountpoint );
   if ( len >= sizeof( buf ) - UNTAR_FILE_NAME_SIZE - 2 ) {
@@ -75,7 +75,7 @@ int rtems_tarfs_load(
   ctx.printer = NULL;
   ctx.file_path = memcpy( buf, mountpoint, len );
 
-  if ( len > 0 && ctx.file_path[ len - 1 ] != '/') {
+  if ( len > 0 && ctx.file_path[ len - 1 ] != '/' ) {
     ctx.file_path[ len ] = '/';
     ctx.file_name = ctx.file_path + len + 1;
   } else {

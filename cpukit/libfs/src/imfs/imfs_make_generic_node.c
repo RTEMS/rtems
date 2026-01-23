@@ -41,10 +41,7 @@
 
 #include <string.h>
 
-IMFS_jnode_t *IMFS_node_initialize_generic(
-  IMFS_jnode_t *node,
-  void *arg
-)
+IMFS_jnode_t *IMFS_node_initialize_generic( IMFS_jnode_t *node, void *arg )
 {
   IMFS_generic_t *generic = (IMFS_generic_t *) node;
 
@@ -81,7 +78,7 @@ int IMFS_make_node(
 
   mode &= ~rtems_filesystem_umask;
 
-  switch (mode & S_IFMT) {
+  switch ( mode & S_IFMT ) {
     case S_IFBLK:
     case S_IFCHR:
     case S_IFIFO:
@@ -96,11 +93,9 @@ int IMFS_make_node(
 
   if ( rv == 0 ) {
     rtems_filesystem_eval_path_context_t ctx;
-    int eval_flags = RTEMS_FS_FOLLOW_LINK
-      | RTEMS_FS_MAKE
-      | RTEMS_FS_EXCLUSIVE;
-    const rtems_filesystem_location_info_t *currentloc =
-      rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+    int eval_flags = RTEMS_FS_FOLLOW_LINK | RTEMS_FS_MAKE | RTEMS_FS_EXCLUSIVE;
+    const rtems_filesystem_location_info_t
+      *currentloc = rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
     if ( IMFS_is_imfs_instance( currentloc ) ) {
       IMFS_jnode_t *new_node = IMFS_create_node(

@@ -43,15 +43,15 @@
 
 int IMFS_utimens(
   const rtems_filesystem_location_info_t *loc,
-  struct timespec times[2]
+  struct timespec                         times[ 2 ]
 )
 {
   IMFS_jnode_t *the_jnode;
 
   the_jnode = (IMFS_jnode_t *) loc->node_access;
 
-  the_jnode->stat_atime = times[0].tv_sec;
-  the_jnode->stat_mtime = times[1].tv_sec;
+  the_jnode->stat_atime = times[ 0 ].tv_sec;
+  the_jnode->stat_mtime = times[ 1 ].tv_sec;
   the_jnode->stat_ctime = time( NULL );
 
   return 0;

@@ -50,7 +50,7 @@ int IMFS_add_node( const char *path, IMFS_jnode_t *node, void *arg )
   mode = node->st_mode;
   mode &= ~rtems_filesystem_umask;
 
-  switch (mode & S_IFMT) {
+  switch ( mode & S_IFMT ) {
     case S_IFBLK:
     case S_IFCHR:
     case S_IFIFO:

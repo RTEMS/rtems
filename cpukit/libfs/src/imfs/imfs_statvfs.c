@@ -40,15 +40,17 @@
 
 int IMFS_statvfs(
   const rtems_filesystem_location_info_t *loc,
-  struct statvfs *buf
+  struct statvfs                         *buf
 )
 {
   IMFS_fs_info_t *fs_info = loc->mt_entry->fs_info;
   buf->f_bsize = IMFS_MEMFILE_BYTES_PER_BLOCK;
   buf->f_frsize = IMFS_MEMFILE_BYTES_PER_BLOCK;
   buf->f_blocks = UINT_MAX / IMFS_MEMFILE_BYTES_PER_BLOCK;
-  buf->f_bfree = imfs_memfile_ops.get_free_space() / IMFS_MEMFILE_BYTES_PER_BLOCK;
-  buf->f_bavail = imfs_memfile_ops.get_free_space() / IMFS_MEMFILE_BYTES_PER_BLOCK;
+  buf->f_bfree = imfs_memfile_ops.get_free_space() /
+                 IMFS_MEMFILE_BYTES_PER_BLOCK;
+  buf->f_bavail = imfs_memfile_ops.get_free_space() /
+                  IMFS_MEMFILE_BYTES_PER_BLOCK;
   buf->f_files = fs_info->jnode_count;
   buf->f_fsid = 1;
   buf->f_flag = loc->mt_entry->writeable;

@@ -44,9 +44,9 @@
 #include <stdlib.h>
 
 typedef struct {
-  IMFS_node_control Base;
+  IMFS_node_control        Base;
   const IMFS_node_control *replaced;
-  char name[ RTEMS_ZERO_LENGTH_ARRAY ];
+  char                     name[ RTEMS_ZERO_LENGTH_ARRAY ];
 } IMFS_renamed_control;
 
 static void IMFS_restore_replaced_control( IMFS_jnode_t *node )
@@ -70,8 +70,8 @@ int IMFS_rename(
   const rtems_filesystem_location_info_t *oldparentloc,
   const rtems_filesystem_location_info_t *oldloc,
   const rtems_filesystem_location_info_t *newparentloc,
-  const char *name,
-  size_t namelen
+  const char                             *name,
+  size_t                                  namelen
 )
 {
   (void) oldparentloc;

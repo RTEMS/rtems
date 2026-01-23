@@ -40,7 +40,7 @@
 
 int IMFS_stat_file(
   const rtems_filesystem_location_info_t *loc,
-  struct stat *buf
+  struct stat                            *buf
 )
 {
   const IMFS_file_t *file = loc->node_access;

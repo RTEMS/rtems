@@ -46,8 +46,8 @@
 
 int IMFS_chown(
   const rtems_filesystem_location_info_t *loc,
-  uid_t owner,
-  gid_t group
+  uid_t                                   owner,
+  gid_t                                   group
 )
 {
   IMFS_jnode_t *jnode;

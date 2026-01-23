@@ -40,12 +40,9 @@
 
 #include <rtems/imfsimpl.h>
 
-int IMFS_fchmod(
-  const rtems_filesystem_location_info_t *loc,
-  mode_t mode
-)
+int IMFS_fchmod( const rtems_filesystem_location_info_t *loc, mode_t mode )
 {
-  IMFS_jnode_t  *jnode;
+  IMFS_jnode_t *jnode;
 
   jnode = loc->node_access;
 
