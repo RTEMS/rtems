@@ -37,32 +37,31 @@
 #include <rtems/bspIo.h>
 #include <rtems/counter.h>
 
-static rtems_id locked_print_semaphore;      /* synchronisation semaphore */
+static rtems_id locked_print_semaphore; /* synchronisation semaphore */
 
-static int locked_printf_plugin(void *context, const char *fmt, va_list ap)
+static int locked_printf_plugin( void *context, const char *fmt, va_list ap )
 {
   (void) context;
-  return locked_vprintf(fmt, ap);
+  return locked_vprintf( fmt, ap );
 }
 
-void locked_print_initialize(void)
+void locked_print_initialize( void )
 {
   rtems_status_code sc;
-  static            bool initted = false;
+  static bool       initted = false;
 
-  if ( initted )
+  if ( initted ) {
     return;
+  }
 
   initted = true;
 
   /* Create/verify synchronisation semaphore */
   sc = rtems_semaphore_create(
-    rtems_build_name ('S', 'E', 'M', '1'),
+    rtems_build_name( 'S', 'E', 'M', '1' ),
     1,
-    RTEMS_LOCAL                   |
-    RTEMS_BINARY_SEMAPHORE |
-    RTEMS_PRIORITY_CEILING |
-    RTEMS_PRIORITY,
+    RTEMS_LOCAL | RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING |
+      RTEMS_PRIORITY,
     1,
     &locked_print_semaphore
   );
@@ -75,9 +74,9 @@ void locked_print_initialize(void)
   rtems_test_printer.printer = locked_printf_plugin;
 }
 
-int locked_vprintf(const char *fmt, va_list ap)
+int locked_vprintf( const char *fmt, va_list ap )
 {
-  int rv;
+  int               rv;
   rtems_status_code sc;
 
   locked_print_initialize();
@@ -86,7 +85,7 @@ int locked_vprintf(const char *fmt, va_list ap)
   sc = rtems_semaphore_obtain( locked_print_semaphore, RTEMS_NO_WAIT, 0 );
 
   if ( sc != RTEMS_SUCCESSFUL ) {
-    uint8_t e;
+    uint8_t             e;
     rtems_counter_ticks w;
 
     /* Use exponential backoff to avoid a livelock */
@@ -98,10 +97,10 @@ int locked_vprintf(const char *fmt, va_list ap)
       rtems_counter_delay_ticks( w );
       w *= 2;
       sc = rtems_semaphore_obtain( locked_print_semaphore, RTEMS_NO_WAIT, 0 );
-    } while (sc != RTEMS_SUCCESSFUL );
+    } while ( sc != RTEMS_SUCCESSFUL );
   }
 
-  rv = vprintk(fmt, ap);
+  rv = vprintk( fmt, ap );
 
   /* Release the semaphore  */
   rtems_semaphore_release( locked_print_semaphore );
@@ -109,14 +108,14 @@ int locked_vprintf(const char *fmt, va_list ap)
   return rv;
 }
 
-int locked_printf(const char *fmt, ...)
+int locked_printf( const char *fmt, ... )
 {
-  int               rv;
-  va_list           ap;       /* points to each unnamed argument in turn */
+  int     rv;
+  va_list ap; /* points to each unnamed argument in turn */
 
-  va_start(ap, fmt); /* make ap point to 1st unnamed arg */
-  rv = locked_vprintf(fmt, ap);
-  va_end(ap);        /* clean up when done */
+  va_start( ap, fmt ); /* make ap point to 1st unnamed arg */
+  rv = locked_vprintf( fmt, ap );
+  va_end( ap ); /* clean up when done */
 
   return rv;
 }

@@ -47,8 +47,8 @@
 extern "C" {
 #endif
 
-#define TEST_BEGIN() rtems_test_begin(rtems_test_name, TEST_STATE)
-#define TEST_END()   rtems_test_end(rtems_test_name)
+#define TEST_BEGIN() rtems_test_begin( rtems_test_name, TEST_STATE )
+#define TEST_END()   rtems_test_end( rtems_test_name )
 
 #ifdef __cplusplus
 };

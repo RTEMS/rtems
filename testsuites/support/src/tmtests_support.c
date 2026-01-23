@@ -37,34 +37,28 @@
 #include "tmtests_empty_function.h"
 
 void rtems_time_test_measure_operation(
-  const char               *description,
-  rtems_time_test_method_t  operation,
-  void                     *argument,
-  int                       iterations,
-  int                       overhead
+  const char              *description,
+  rtems_time_test_method_t operation,
+  void                    *argument,
+  int                      iterations,
+  int                      overhead
 )
 {
-  int  i;
+  int      i;
   uint32_t loop_overhead;
   uint32_t end_time;
 
   benchmark_timer_initialize();
-    for (i=0 ; i<iterations ; i++ ) {
-      benchmark_timer_empty_operation( i, argument );
-    }
+  for ( i = 0; i < iterations; i++ ) {
+    benchmark_timer_empty_operation( i, argument );
+  }
   loop_overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for (i=0 ; i<iterations ; i++ ) {
-      (*operation)( i, argument );
-    }
+  for ( i = 0; i < iterations; i++ ) {
+    ( *operation )( i, argument );
+  }
   end_time = benchmark_timer_read();
 
-  put_time(
-    description,
-    end_time,
-    iterations,
-    loop_overhead,
-    overhead
-  );
+  put_time( description, end_time, iterations, loop_overhead, overhead );
 }

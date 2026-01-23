@@ -36,7 +36,7 @@
 /*
  *  Burn CPU for specified number of ticks
  */
-void rtems_test_spin_for_ticks(rtems_interval ticks)
+void rtems_test_spin_for_ticks( rtems_interval ticks )
 {
   rtems_interval start;
   rtems_interval now;

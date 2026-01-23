@@ -17,9 +17,6 @@
 
 extern rtems_status_code benchmark_timer_empty_function( void );
 
-extern void benchmark_timer_empty_operation(
-  int    iteration,
-  void  *argument
-);
+extern void benchmark_timer_empty_operation( int iteration, void *argument );
 
 #endif /* _TMTESTS_EMPTY_FUNCTION_H */

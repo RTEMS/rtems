@@ -36,25 +36,27 @@
 #include "test_support.h"
 #include <rtems/libcsupport.h>
 
-static char  Too_Long_Name[PATH_MAX + 2];
-static char  Longest_Name[PATH_MAX + 1];
+static char Too_Long_Name[ PATH_MAX + 2 ];
+static char Longest_Name[ PATH_MAX + 1 ];
 
-const char *Get_Too_Long_Name(void)
+const char *Get_Too_Long_Name( void )
 {
   int i;
 
-  for ( i=0; i <= PATH_MAX; i++ )
-    Too_Long_Name[i] = 'E';
-  Too_Long_Name[i] = '\0';
+  for ( i = 0; i <= PATH_MAX; i++ ) {
+    Too_Long_Name[ i ] = 'E';
+  }
+  Too_Long_Name[ i ] = '\0';
   return Too_Long_Name;
 }
 
-const char *Get_Longest_Name(void)
+const char *Get_Longest_Name( void )
 {
   int i;
 
-  for ( i=0; i < PATH_MAX-1; i++ )
-    Longest_Name[i] = 'L';
-  Longest_Name[i] = '\0';
+  for ( i = 0; i < PATH_MAX - 1; i++ ) {
+    Longest_Name[ i ] = 'L';
+  }
+  Longest_Name[ i ] = '\0';
   return Longest_Name;
 }
