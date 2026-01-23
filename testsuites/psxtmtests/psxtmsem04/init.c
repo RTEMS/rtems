@@ -43,38 +43,38 @@
 const char rtems_test_name[] = "PSXTMSEM 04";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Blocker(void *argument);
+void *POSIX_Init( void *argument );
+void *Blocker( void *argument );
 
-#define MAX_SEMS  2
+#define MAX_SEMS 2
 
-sem_t           sem1;
-sem_t           *n_sem1;
+sem_t  sem1;
+sem_t *n_sem1;
 
-void *Blocker( void *argument)
+void *Blocker( void *argument )
 {
   (void) argument;
 
-  (void) sem_wait(&sem1);
+  (void) sem_wait( &sem1 );
   /* should never return */
   rtems_test_assert( FALSE );
 
   return NULL;
 }
 
-void *POSIX_Init(void *argument)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int        status;
-  pthread_t  threadId;
+  int               status;
+  pthread_t         threadId;
   benchmark_timer_t end_time;
 
   TEST_BEGIN();
 
   status = pthread_create( &threadId, NULL, Blocker, NULL );
   rtems_test_assert( status == 0 );
-  
+
   /*
    * Deliberately create the semaphore after the threads.  This way if the
    * threads do run before we intend, they will get an error.
@@ -86,7 +86,7 @@ void *POSIX_Init(void *argument)
    * Ensure the semaphore is unavailable so the other threads block.
    * Lock semaphore resource to ensure thread blocks.
    */
-  status = sem_wait(&sem1);
+  status = sem_wait( &sem1 );
   rtems_test_assert( status == 0 );
 
   /*
@@ -94,20 +94,14 @@ void *POSIX_Init(void *argument)
    * is accounted for.  When we return, we can start the benchmark.
    */
   sched_yield();
-    /* let other thread run */
+  /* let other thread run */
 
   benchmark_timer_initialize();
-    status = sem_post( &sem1 ); /* semaphore unblocking operation */
+  status = sem_post( &sem1 ); /* semaphore unblocking operation */
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
-  put_time(
-    "sem_post: thread waiting no preempt",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "sem_post: thread waiting no preempt", end_time, 1, 0, 0 );
 
   TEST_END();
   rtems_test_exit( 0 );
@@ -120,10 +114,10 @@ void *POSIX_Init(void *argument)
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-  /* end of file */
+/* end of file */

@@ -43,24 +43,22 @@
 const char rtems_test_name[] = "PSXTMSEM 05";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Middle(void *argument);
-void *Low(void *argument);
+void *POSIX_Init( void *argument );
+void *Middle( void *argument );
+void *Low( void *argument );
 
-#define MAX_SEMS  2
+#define MAX_SEMS 2
 
-sem_t   sem1;
+sem_t sem1;
 
-void *Low(
-  void *argument
-)
+void *Low( void *argument )
 {
   (void) argument;
 
-  int      status;
+  int               status;
   benchmark_timer_t end_time;
 
-    status = sem_wait(&sem1); /* semaphore blocks */
+  status = sem_wait( &sem1 ); /* semaphore blocks */
   end_time = benchmark_timer_read();
 
   rtems_test_assert( status == 0 );
@@ -78,40 +76,36 @@ void *Low(
   return NULL;
 }
 
-void *Middle(
-  void *argument
-)
+void *Middle( void *argument )
 {
   (void) argument;
 
   int status;
 
-    status = sem_wait(&sem1); /* semaphore blocks */
+  status = sem_wait( &sem1 ); /* semaphore blocks */
   rtems_test_assert( status == 0 );
 
-    /* thread switch occurs */
+  /* thread switch occurs */
 
-    status = sem_post(&sem1);
+  status = sem_post( &sem1 );
   rtems_test_assert( status == 0 );
 
-    /* thread switch occurs */
+  /* thread switch occurs */
 
   /* should never return */
   rtems_test_assert( FALSE );
   return NULL;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int                 i;
-  int                 status;
-  pthread_t           threadId;
-  pthread_attr_t      attr;
-  struct sched_param  param;
+  int                i;
+  int                status;
+  pthread_t          threadId;
+  pthread_attr_t     attr;
+  struct sched_param param;
 
   TEST_BEGIN();
 
@@ -148,8 +142,7 @@ void *POSIX_Init(
    * And create rest of threads as more important than we are.  They
    * will preempt us as they are created and block.
    */
-  for ( i=0 ; i < OPERATION_COUNT ; i++ ) {
-
+  for ( i = 0; i < OPERATION_COUNT; i++ ) {
     param.sched_priority = 3 + i;
     status = pthread_attr_setschedparam( &attr, &param );
     rtems_test_assert( status == 0 );
@@ -157,20 +150,20 @@ void *POSIX_Init(
     status = pthread_create(
       &threadId,
       &attr,
-      (i == OPERATION_COUNT - 1) ? Low : Middle,
+      ( i == OPERATION_COUNT - 1 ) ? Low : Middle,
       NULL
     );
     rtems_test_assert( status == 0 );
   }
-  
+
   /*
    * Now start the timer which will be stopped in Low.
    * Release the semaphore so threads unblock and preempt.
    */
   benchmark_timer_initialize();
 
-    status = sem_post( &sem1 );
-      /* thread switch occurs */
+  status = sem_post( &sem1 );
+  /* thread switch occurs */
 
   /* should never return */
   rtems_test_assert( FALSE );
@@ -182,10 +175,10 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     OPERATION_COUNT + 2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS OPERATION_COUNT + 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-  /* end of file */
+/* end of file */

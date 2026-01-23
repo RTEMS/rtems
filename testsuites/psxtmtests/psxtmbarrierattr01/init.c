@@ -25,7 +25,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -42,11 +42,11 @@
 const char rtems_test_name[] = "PSXTMBARRIERATTR01";
 
 /* forward declarations to avoid warnings */
-static void *POSIX_Init(void *argument);
+static void *POSIX_Init( void *argument );
 
 static pthread_barrierattr_t attr;
 
-static void benchmark_create_barrierattr(void)
+static void benchmark_create_barrierattr( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -59,14 +59,13 @@ static void benchmark_create_barrierattr(void)
   put_time(
     "pthread_barrierattr_init: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_barrierattr_setpshared(void)
+static void benchmark_barrierattr_setpshared( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -79,14 +78,13 @@ static void benchmark_barrierattr_setpshared(void)
   put_time(
     "pthread_barrierattr_setpshared: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_barrierattr_getpshared(void)
+static void benchmark_barrierattr_getpshared( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -101,14 +99,13 @@ static void benchmark_barrierattr_getpshared(void)
   put_time(
     "pthread_barrierattr_getpshared: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_destroy_barrierattr(void)
+static void benchmark_destroy_barrierattr( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -121,16 +118,13 @@ static void benchmark_destroy_barrierattr(void)
   put_time(
     "pthread_barrierattr_destroy: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void *POSIX_Init(
-  void *argument
-)
+static void *POSIX_Init( void *argument )
 {
   (void) argument;
 
@@ -142,7 +136,7 @@ static void *POSIX_Init(
   benchmark_destroy_barrierattr();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -150,7 +144,7 @@ static void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

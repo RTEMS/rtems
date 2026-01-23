@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -44,15 +44,13 @@
 const char rtems_test_name[] = "PSXTMBARRIER 03";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Blocker(void *argument);
+void *POSIX_Init( void *argument );
+void *Blocker( void *argument );
 
-#define N  2
-pthread_barrier_t     barrier;
+#define N 2
+pthread_barrier_t barrier;
 
-void *Blocker(
-  void *argument
-)
+void *Blocker( void *argument )
 {
   (void) argument;
 
@@ -61,14 +59,12 @@ void *Blocker(
   return NULL;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int        status;
-  pthread_t  threadId;
+  int               status;
+  pthread_t         threadId;
   benchmark_timer_t end_time;
 
   TEST_BEGIN();
@@ -89,7 +85,7 @@ void *POSIX_Init(
    * is accounted for.  When we return, we can start the benchmark.
    */
   sched_yield();
-    /* let other thread run */
+  /* let other thread run */
 
   /*
    * Because this is the Nth thread at the barrier, this is an
@@ -104,13 +100,7 @@ void *POSIX_Init(
    */
   rtems_test_assert( status == PTHREAD_BARRIER_SERIAL_THREAD );
 
-  put_time(
-    "pthread_barrier_wait: releasing no preempt",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "pthread_barrier_wait: releasing no preempt", end_time, 1, 0, 0 );
 
   TEST_END();
   rtems_test_exit( 0 );
@@ -123,7 +113,7 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

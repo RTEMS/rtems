@@ -25,7 +25,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -42,29 +42,29 @@
 const char rtems_test_name[] = "PSXTMCLEANUP01";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
 int status = 1;
 
-static void routine(void *arg)
+static void routine( void *arg )
 {
   (void) arg;
 }
 
-static void benchmark_pthread_cleanup_push_pull(void)
+static void benchmark_pthread_cleanup_push_pull( void )
 {
   benchmark_timer_t end_time;
-  int execute = 1;
+  int               execute = 1;
   status = 0;
 
   benchmark_timer_initialize();
-  pthread_cleanup_push(routine, NULL);
+  pthread_cleanup_push( routine, NULL );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
   put_time(
     "pthread_cleanup_push : only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
@@ -76,16 +76,13 @@ static void benchmark_pthread_cleanup_push_pull(void)
   put_time(
     "pthread_cleanup_pop : only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
@@ -94,7 +91,7 @@ void *POSIX_Init(
   benchmark_pthread_cleanup_push_pull();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -102,7 +99,7 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

@@ -40,14 +40,12 @@
 const char rtems_test_name[] = "PSXTMMUTEX 05";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Blocker(void *argument);
+void *POSIX_Init( void *argument );
+void *Blocker( void *argument );
 
 pthread_mutex_t MutexId;
 
-void *Blocker(
-  void *argument
-)
+void *Blocker( void *argument )
 {
   (void) argument;
 
@@ -58,21 +56,19 @@ void *Blocker(
   return NULL;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int        status;
-  pthread_t  threadId;
+  int               status;
+  pthread_t         threadId;
   benchmark_timer_t end_time;
 
   TEST_BEGIN();
 
   status = pthread_create( &threadId, NULL, Blocker, NULL );
   rtems_test_assert( status == 0 );
-  
+
   /*
    * Deliberately create the mutex after the threads.  This way if the
    * threads do run before we intend, they will get an error.
@@ -91,10 +87,10 @@ void *POSIX_Init(
    * is accounted for.  When we return, we can start the benchmark.
    */
   sched_yield();
-    /* let other thread run */
+  /* let other thread run */
 
   benchmark_timer_initialize();
-    status = pthread_mutex_unlock( &MutexId );
+  status = pthread_mutex_unlock( &MutexId );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
@@ -117,10 +113,10 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-  /* end of file */
+/* end of file */

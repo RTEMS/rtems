@@ -37,9 +37,9 @@
 const char rtems_test_name[] = "PSXTMKEY 02";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void benchmark_pthread_setspecific(void *value_p);
-void benchmark_pthread_getspecific( void *expected );
+void *POSIX_Init( void *argument );
+void  benchmark_pthread_setspecific( void *value_p );
+void  benchmark_pthread_getspecific( void *expected );
 
 pthread_key_t Key;
 int           Value1;
@@ -47,49 +47,46 @@ int           Value1;
 void benchmark_pthread_setspecific( void *value_p )
 {
   benchmark_timer_t end_time;
-  int  status;
+  int               status;
 
   benchmark_timer_initialize();
-    status = pthread_setspecific( Key, value_p );
+  status = pthread_setspecific( Key, value_p );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
   put_time(
     "pthread_setspecific: only case: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
 void benchmark_pthread_getspecific( void *expected )
 {
   benchmark_timer_t end_time;
-  void *value_p;
+  void             *value_p;
 
   benchmark_timer_initialize();
-    value_p = pthread_getspecific( Key );
+  value_p = pthread_getspecific( Key );
   end_time = benchmark_timer_read();
   rtems_test_assert( value_p == expected );
 
   put_time(
     "pthread_getspecific: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int  status;
+  int status;
 
   TEST_BEGIN();
 
@@ -106,7 +103,7 @@ void *POSIX_Init(
   rtems_test_assert( status == 0 );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -114,8 +111,8 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS  2
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
+#define CONFIGURE_MAXIMUM_POSIX_KEYS    1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

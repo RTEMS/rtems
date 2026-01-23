@@ -39,13 +39,11 @@
 const char rtems_test_name[] = "PSXTMSLEEP 02";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Middle(void *argument);
-void *Low(void *argument);
+void *POSIX_Init( void *argument );
+void *Middle( void *argument );
+void *Low( void *argument );
 
-void *Low(
-  void *argument
-)
+void *Low( void *argument )
 {
   (void) argument;
 
@@ -53,13 +51,7 @@ void *Low(
 
   end_time = benchmark_timer_read();
 
-  put_time(
-    "sleep: blocking",
-    end_time,
-    OPERATION_COUNT,
-    0,
-    0
-  );
+  put_time( "sleep: blocking", end_time, OPERATION_COUNT, 0, 0 );
 
   TEST_END();
 
@@ -67,29 +59,25 @@ void *Low(
   return NULL;
 }
 
-void *Middle(
-  void *argument
-)
+void *Middle( void *argument )
 {
   (void) argument;
 
-  sleep(1);
+  sleep( 1 );
   return NULL;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int        i;
-  int        status;
-  pthread_t  threadId;
+  int       i;
+  int       status;
+  pthread_t threadId;
 
   TEST_BEGIN();
 
-  for ( i=0 ; i < OPERATION_COUNT - 1 ; i++ ) {
+  for ( i = 0; i < OPERATION_COUNT - 1; i++ ) {
     status = pthread_create( &threadId, NULL, Middle, NULL );
     rtems_test_assert( !status );
   }
@@ -99,7 +87,7 @@ void *POSIX_Init(
 
   /* start the timer and switch through all the other tasks */
   benchmark_timer_initialize();
-  sleep(1);
+  sleep( 1 );
   return NULL;
 }
 
@@ -108,10 +96,10 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     OPERATION_COUNT + 2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS OPERATION_COUNT + 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-  /* end of file */
+/* end of file */

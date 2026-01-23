@@ -38,45 +38,42 @@
 const char rtems_test_name[] = "PSXTMCOND 05";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void benchmark_broadcast(void);
+void *POSIX_Init( void *argument );
+void  benchmark_broadcast( void );
 
 pthread_cond_t CondID;
 
-void benchmark_broadcast(void)
+void benchmark_broadcast( void )
 {
   uint32_t end_time;
   int      status;
 
   benchmark_timer_initialize();
-  status = pthread_cond_broadcast(&CondID);
+  status = pthread_cond_broadcast( &CondID );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
   put_time(
     "pthread_cond_broadcast: no threads waiting",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
   TEST_BEGIN();
 
-  pthread_cond_init(&CondID, NULL);
+  pthread_cond_init( &CondID, NULL );
 
   benchmark_broadcast();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -84,7 +81,7 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

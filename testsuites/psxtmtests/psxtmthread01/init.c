@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -43,25 +43,19 @@
 const char rtems_test_name[] = "PSXTMTHREAD 01";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *TestThread(void *argument);
+void *POSIX_Init( void *argument );
+void *TestThread( void *argument );
 
 pthread_t ThreadId;
 
-void *TestThread(
-  void *argument
-)
+void *TestThread( void *argument )
 {
   (void) argument;
 
   return NULL;
 }
 
-
-static void benchmark_pthread_create(
-  int    iteration,
-  void  *argument
-)
+static void benchmark_pthread_create( int iteration, void *argument )
 {
   (void) iteration;
   (void) argument;
@@ -72,9 +66,7 @@ static void benchmark_pthread_create(
   rtems_test_assert( !status );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
@@ -88,10 +80,9 @@ void *POSIX_Init(
     0
   );
 
-
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -99,7 +90,7 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     OPERATION_COUNT + 2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS OPERATION_COUNT + 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

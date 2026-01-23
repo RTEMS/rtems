@@ -39,51 +39,37 @@
 const char rtems_test_name[] = "PSXTMMUTEX 01";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
 pthread_mutex_t MutexId;
 
-static void test_mutex_create(void)
+static void test_mutex_create( void )
 {
   benchmark_timer_t end_time;
-  int  status;
+  int               status;
 
   benchmark_timer_initialize();
-    status = pthread_mutex_init( &MutexId, NULL );
+  status = pthread_mutex_init( &MutexId, NULL );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
-  put_time(
-    "pthread_mutex_init: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "pthread_mutex_init: only case", end_time, 1, 0, 0 );
 }
 
-static void test_mutex_destroy(void)
+static void test_mutex_destroy( void )
 {
   benchmark_timer_t end_time;
-  int  status;
+  int               status;
 
   benchmark_timer_initialize();
-    status = pthread_mutex_destroy( &MutexId );
+  status = pthread_mutex_destroy( &MutexId );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
-  put_time(
-    "pthread_mutex_destroy: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "pthread_mutex_destroy: only case", end_time, 1, 0, 0 );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
@@ -94,7 +80,7 @@ void *POSIX_Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -102,7 +88,7 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

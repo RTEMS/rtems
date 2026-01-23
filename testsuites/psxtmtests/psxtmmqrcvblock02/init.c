@@ -42,40 +42,38 @@
 const char rtems_test_name[] = "PSXTMMQRCVBLOCK 02";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Middle(void *argument);
-void *Low(void *argument);
+void *POSIX_Init( void *argument );
+void *Middle( void *argument );
+void *Low( void *argument );
 
-#define MQ_MAXMSG     1
-#define MQ_MSGSIZE    sizeof(int)
+#define MQ_MAXMSG  1
+#define MQ_MSGSIZE sizeof( int )
 
-static mqd_t queue;
-int message[MQ_MAXMSG];
-const char *q_name;
-unsigned int priority;
+static mqd_t    queue;
+int             message[ MQ_MAXMSG ];
+const char     *q_name;
+unsigned int    priority;
 struct timespec timeout;
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int              i;
-  int              status;
-  int              oflag = O_CREAT |O_RDWR;
-  pthread_t        threadId;
-  struct mq_attr   attr;
+  int            i;
+  int            status;
+  int            oflag = O_CREAT | O_RDWR;
+  pthread_t      threadId;
+  struct mq_attr attr;
 
   priority = 0;
-  timeout.tv_sec  = 0;
+  timeout.tv_sec = 0;
   timeout.tv_nsec = 0;
-  attr.mq_maxmsg  = MQ_MAXMSG;
+  attr.mq_maxmsg = MQ_MAXMSG;
   attr.mq_msgsize = MQ_MSGSIZE;
 
   TEST_BEGIN();
 
-  for ( i=0 ; i < OPERATION_COUNT - 1 ; i++ ) {
+  for ( i = 0; i < OPERATION_COUNT - 1; i++ ) {
     status = pthread_create( &threadId, NULL, Middle, NULL );
     rtems_test_assert( !status );
   }
@@ -91,29 +89,35 @@ void *POSIX_Init(
   /* now run the benchmark */
   benchmark_timer_initialize();
   status = mq_timedreceive(
-		  queue, (char *)message, MQ_MSGSIZE, &priority, &timeout);
+    queue,
+    (char *) message,
+    MQ_MSGSIZE,
+    &priority,
+    &timeout
+  );
   return NULL;
 }
 
-void *Middle(
-  void *argument
-)
+void *Middle( void *argument )
 {
   (void) argument;
 
   sched_yield();
 
-    /* let other threads run */
+  /* let other threads run */
 
-    (void) mq_timedreceive(
-      queue, (char *)message, MQ_MSGSIZE, &priority, &timeout);
+  (void) mq_timedreceive(
+    queue,
+    (char *) message,
+    MQ_MSGSIZE,
+    &priority,
+    &timeout
+  );
 
   return NULL;
 }
 
-void *Low(
-  void *argument
-)
+void *Low( void *argument )
 {
   (void) argument;
 
@@ -142,10 +146,10 @@ void *Low(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     OPERATION_COUNT + 2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS OPERATION_COUNT + 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-  /* end of file */
+/* end of file */

@@ -39,11 +39,9 @@ const char rtems_test_name[] = "PSXTMONCE01";
 
 static pthread_once_t once_control = PTHREAD_ONCE_INIT;
 
-static void initRoutine(void)
-{
-}
+static void initRoutine( void ) {}
 
-static void benchmark_first_time(void)
+static void benchmark_first_time( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -56,15 +54,13 @@ static void benchmark_first_time(void)
   put_time(
     "pthread_once: first time",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
 }
 
-static void *POSIX_Init(
-  void *argument
-)
+static void *POSIX_Init( void *argument )
 {
   (void) argument;
 
@@ -72,7 +68,7 @@ static void *POSIX_Init(
   benchmark_first_time();
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -80,7 +76,7 @@ static void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

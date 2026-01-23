@@ -39,11 +39,11 @@
 const char rtems_test_name[] = "PSXTMMUTEXATTR01";
 
 /* forward declarations to avoid warnings */
-static void *POSIX_Init(void *argument);
+static void *POSIX_Init( void *argument );
 
 static pthread_mutexattr_t attr;
 
-static void benchmark_create_pthread_mutexattr(void)
+static void benchmark_create_pthread_mutexattr( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -56,56 +56,53 @@ static void benchmark_create_pthread_mutexattr(void)
   put_time(
     "pthread_mutexattr_init: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_pthread_mutexattr_setprioceiling(void)
+static void benchmark_pthread_mutexattr_setprioceiling( void )
 {
   benchmark_timer_t end_time;
   int               status;
 
   benchmark_timer_initialize();
-  status = pthread_mutexattr_setprioceiling( &attr, SCHED_FIFO);
+  status = pthread_mutexattr_setprioceiling( &attr, SCHED_FIFO );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
   put_time(
     "pthread_mutexattr_setprioceiling: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_pthread_mutexattr_getprioceiling(void)
+static void benchmark_pthread_mutexattr_getprioceiling( void )
 {
   benchmark_timer_t end_time;
   int               status;
   int               prioceiling;
 
   benchmark_timer_initialize();
-  status = pthread_mutexattr_getprioceiling( &attr, &prioceiling);
+  status = pthread_mutexattr_getprioceiling( &attr, &prioceiling );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
-  rtems_test_assert( prioceiling == SCHED_FIFO);
+  rtems_test_assert( prioceiling == SCHED_FIFO );
 
   put_time(
     "pthread_mutexattr_getprioceiling: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_pthread_mutexattr_setprotocol(void)
+static void benchmark_pthread_mutexattr_setprotocol( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -118,14 +115,13 @@ static void benchmark_pthread_mutexattr_setprotocol(void)
   put_time(
     "pthread_mutexattr_setprotocol: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_pthread_mutexattr_getprotocol(void)
+static void benchmark_pthread_mutexattr_getprotocol( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -140,14 +136,13 @@ static void benchmark_pthread_mutexattr_getprotocol(void)
   put_time(
     "pthread_mutexattr_getprotocol: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_pthread_mutexattr_setpshared(void)
+static void benchmark_pthread_mutexattr_setpshared( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -160,14 +155,13 @@ static void benchmark_pthread_mutexattr_setpshared(void)
   put_time(
     "pthread_mutexattr_setpshared: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_pthread_mutexattr_getpshared(void)
+static void benchmark_pthread_mutexattr_getpshared( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -182,14 +176,13 @@ static void benchmark_pthread_mutexattr_getpshared(void)
   put_time(
     "pthread_mutexattr_getpshared: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_pthread_mutexattr_settype(void)
+static void benchmark_pthread_mutexattr_settype( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -202,14 +195,13 @@ static void benchmark_pthread_mutexattr_settype(void)
   put_time(
     "pthread_mutexattr_settype: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_pthread_mutexattr_gettype(void)
+static void benchmark_pthread_mutexattr_gettype( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -224,14 +216,13 @@ static void benchmark_pthread_mutexattr_gettype(void)
   put_time(
     "pthread_mutexattr_gettype: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_destroy_pthread_mutexattr(void)
+static void benchmark_destroy_pthread_mutexattr( void )
 {
   benchmark_timer_t end_time;
   int               status;
@@ -244,16 +235,13 @@ static void benchmark_destroy_pthread_mutexattr(void)
   put_time(
     "pthread_mutexattr_destroy: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
@@ -271,7 +259,7 @@ void *POSIX_Init(
   benchmark_destroy_pthread_mutexattr();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -279,8 +267,7 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

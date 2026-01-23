@@ -30,35 +30,33 @@
 
 const char rtems_test_name[] = "PSXTMMQRCVBLOCK 01";
 
-void *POSIX_Init(void *argument);
-void *Middle(void *argument);
-void *Low(void *argument);
+void *POSIX_Init( void *argument );
+void *Middle( void *argument );
+void *Low( void *argument );
 
-#define MQ_MAXMSG     1
-#define MQ_MSGSIZE    sizeof(int)
+#define MQ_MAXMSG  1
+#define MQ_MSGSIZE sizeof( int )
 
-mqd_t     queue;
-int       message[MQ_MAXMSG];
+mqd_t       queue;
+int         message[ MQ_MAXMSG ];
 const char *q_name;
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int        i;
-  int        status;
-  int        oflag= O_CREAT |O_RDWR;
-  pthread_t  threadId;
+  int            i;
+  int            status;
+  int            oflag = O_CREAT | O_RDWR;
+  pthread_t      threadId;
   struct mq_attr attr;
 
-  attr.mq_maxmsg  = MQ_MAXMSG;
+  attr.mq_maxmsg = MQ_MAXMSG;
   attr.mq_msgsize = MQ_MSGSIZE;
 
   TEST_BEGIN();
 
-  for ( i=0 ; i < OPERATION_COUNT - 1 ; i++ ) {
+  for ( i = 0; i < OPERATION_COUNT - 1; i++ ) {
     status = pthread_create( &threadId, NULL, Middle, NULL );
     rtems_test_assert( !status );
   }
@@ -66,36 +64,31 @@ void *POSIX_Init(
   status = pthread_create( &threadId, NULL, Low, NULL );
   rtems_test_assert( !status );
 
-  queue = mq_open( "queue" , oflag , 0x777, &attr );
+  queue = mq_open( "queue", oflag, 0x777, &attr );
 
   /* let other threads run */
   sched_yield();
 
   /* now run the benchmark */
   benchmark_timer_initialize();
-  status = mq_receive( queue, (char *)message , MQ_MSGSIZE, 0 );
+  status = mq_receive( queue, (char *) message, MQ_MSGSIZE, 0 );
   return NULL;
 }
 
-
-void *Middle(
-  void *argument
-)
+void *Middle( void *argument )
 {
   (void) argument;
 
   sched_yield();
 
-    /* let other threads run */
+  /* let other threads run */
 
-    (void) mq_receive( queue, (char *)message , MQ_MSGSIZE, 0 );
+  (void) mq_receive( queue, (char *) message, MQ_MSGSIZE, 0 );
 
   return NULL;
 }
 
-void *Low(
-  void *argument
-)
+void *Low( void *argument )
 {
   (void) argument;
 
@@ -124,10 +117,10 @@ void *Low(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     OPERATION_COUNT + 2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS OPERATION_COUNT + 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-  /* end of file */
+/* end of file */

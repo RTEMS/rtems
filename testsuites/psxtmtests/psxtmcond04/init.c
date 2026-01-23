@@ -40,64 +40,54 @@
 const char rtems_test_name[] = "PSXTMCOND 04";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Blocker(void *argument);
+void *POSIX_Init( void *argument );
+void *Blocker( void *argument );
 
 pthread_mutex_t MutexID;
-pthread_cond_t CondID;
+pthread_cond_t  CondID;
 
-void *Blocker(
-  void *argument
-)
+void *Blocker( void *argument )
 {
   (void) argument;
 
-  uint32_t end_time;
-  struct   sched_param param;
-  int      policy;
-  int      status;
+  uint32_t           end_time;
+  struct sched_param param;
+  int                policy;
+  int                status;
 
-  status = pthread_mutex_lock(&MutexID);
+  status = pthread_mutex_lock( &MutexID );
   rtems_test_assert( status == 0 );
-  status = pthread_getschedparam(pthread_self(), &policy, &param);
+  status = pthread_getschedparam( pthread_self(), &policy, &param );
   rtems_test_assert( status == 0 );
-  param.sched_priority = sched_get_priority_max(policy) - 1;
-  status = pthread_setschedparam(pthread_self(), policy, &param);
+  param.sched_priority = sched_get_priority_max( policy ) - 1;
+  status = pthread_setschedparam( pthread_self(), policy, &param );
   /* Thread blocks, unlocks mutex, waits for CondID to be signaled */
-  pthread_cond_wait(&CondID,&MutexID);
+  pthread_cond_wait( &CondID, &MutexID );
 
   /* Once signaled, this thread preempts POSIX_Init thread */
   end_time = benchmark_timer_read();
-  put_time(
-    "pthread_cond_signal: thread waiting preempt",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "pthread_cond_signal: thread waiting preempt", end_time, 1, 0, 0 );
   TEST_END();
   rtems_test_exit( 0 );
   return NULL;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int        status;
-  pthread_t  threadId;
+  int       status;
+  pthread_t threadId;
 
   TEST_BEGIN();
 
   status = pthread_create( &threadId, NULL, Blocker, NULL );
   rtems_test_assert( status == 0 );
-  
-  status = pthread_mutex_init(&MutexID, NULL);
+
+  status = pthread_mutex_init( &MutexID, NULL );
   rtems_test_assert( status == 0 );
 
-  status = pthread_cond_init(&CondID, NULL); /* Create condition variable */
+  status = pthread_cond_init( &CondID, NULL ); /* Create condition variable */
   rtems_test_assert( status == 0 );
 
   /*
@@ -109,8 +99,8 @@ void *POSIX_Init(
 
   /* Other thread is blocked and waiting on condition to be signaled */
   benchmark_timer_initialize();
-  status = pthread_cond_signal(&CondID);
-  rtems_test_assert ( status == 0 );
+  status = pthread_cond_signal( &CondID );
+  rtems_test_assert( status == 0 );
   return NULL;
 }
 
@@ -119,10 +109,10 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-  /* end of file */
+/* end of file */

@@ -39,16 +39,16 @@
 const char rtems_test_name[] = "PSXTMTHREAD 04";
 
 /* forward declarations to avoid warnings */
-void benchmark_pthread_setschedparam(void);
-void benchmark_pthread_getschedparam(void);
-void *POSIX_Init(void *argument);
+void  benchmark_pthread_setschedparam( void );
+void  benchmark_pthread_getschedparam( void );
+void *POSIX_Init( void *argument );
 
-void benchmark_pthread_getschedparam(void)
+void benchmark_pthread_getschedparam( void )
 {
-  uint32_t            end_time;
-  int                 status;
-  int                 policy;
-  struct sched_param  param;
+  uint32_t           end_time;
+  int                status;
+  int                policy;
+  struct sched_param param;
 
   benchmark_timer_initialize();
   status = pthread_getschedparam( pthread_self(), &policy, &param );
@@ -58,19 +58,18 @@ void benchmark_pthread_getschedparam(void)
   put_time(
     "pthread_getschedparam: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-void benchmark_pthread_setschedparam(void)
+void benchmark_pthread_setschedparam( void )
 {
-  uint32_t            end_time;
-  int                 status;
-  int                 policy;
-  struct sched_param  param;
+  uint32_t           end_time;
+  int                status;
+  int                policy;
+  struct sched_param param;
 
   status = pthread_getschedparam( pthread_self(), &policy, &param );
   rtems_test_assert( status == 0 );
@@ -83,17 +82,15 @@ void benchmark_pthread_setschedparam(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-     "pthread_setschedparam: no thread switch",
-     end_time,
-     1,       /* Only executed once */
-     0,
-     0
+    "pthread_setschedparam: no thread switch",
+    end_time,
+    1, /* Only executed once */
+    0,
+    0
   );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
@@ -103,7 +100,7 @@ void *POSIX_Init(
   benchmark_pthread_setschedparam();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -111,7 +108,7 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

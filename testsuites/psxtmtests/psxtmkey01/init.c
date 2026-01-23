@@ -39,51 +39,49 @@
 const char rtems_test_name[] = "PSXTMKEY 01";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
 pthread_key_t Key;
 
-static void benchmark_pthread_key_create(void)
+static void benchmark_pthread_key_create( void )
 {
   benchmark_timer_t end_time;
-  int  status;
+  int               status;
 
   benchmark_timer_initialize();
-    status = pthread_key_create(&Key, NULL);
+  status = pthread_key_create( &Key, NULL );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
   put_time(
     "pthread_key_create: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-static void benchmark_pthread_key_delete(void)
+static void benchmark_pthread_key_delete( void )
 {
   benchmark_timer_t end_time;
-  int  status;
+  int               status;
 
   benchmark_timer_initialize();
-    status = pthread_key_delete(Key);
+  status = pthread_key_delete( Key );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
   put_time(
     "pthread_key_delete: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
-
 }
 
-void *POSIX_Init(void *argument)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
@@ -97,7 +95,7 @@ void *POSIX_Init(void *argument)
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -105,8 +103,8 @@ void *POSIX_Init(void *argument)
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     2
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
+#define CONFIGURE_MAXIMUM_POSIX_KEYS    1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

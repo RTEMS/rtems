@@ -40,34 +40,30 @@
 const char rtems_test_name[] = "PSXTMRWLOCK 06";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Blocker(void *argument);
+void *POSIX_Init( void *argument );
+void *Blocker( void *argument );
 
-pthread_rwlock_t     rwlock;
+pthread_rwlock_t rwlock;
 
-void *Blocker(
-  void *argument
-)
+void *Blocker( void *argument )
 {
   (void) argument;
 
-  (void) pthread_rwlock_wrlock(&rwlock);
+  (void) pthread_rwlock_wrlock( &rwlock );
   /* should never return */
   rtems_test_assert( FALSE );
 
   return NULL;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int                   status;
-  pthread_t             threadId;
-  benchmark_timer_t end_time;
-  pthread_rwlockattr_t  attr;
+  int                  status;
+  pthread_t            threadId;
+  benchmark_timer_t    end_time;
+  pthread_rwlockattr_t attr;
 
   TEST_BEGIN();
 
@@ -79,7 +75,7 @@ void *POSIX_Init(
    */
 
   /* creating rwlock */
-    status = pthread_rwlockattr_init( &attr );
+  status = pthread_rwlockattr_init( &attr );
   rtems_test_assert( status == 0 );
   status = pthread_rwlock_init( &rwlock, &attr );
   rtems_test_assert( status == 0 );
@@ -88,7 +84,7 @@ void *POSIX_Init(
    * Ensure the rwlock is unavailable so the other threads block.
    */
   /* lock rwlock to ensure thread blocks */
-  status = pthread_rwlock_wrlock(&rwlock);
+  status = pthread_rwlock_wrlock( &rwlock );
   rtems_test_assert( status == 0 );
 
   /*
@@ -96,10 +92,10 @@ void *POSIX_Init(
    * is accounted for.  When we return, we can start the benchmark.
    */
   sched_yield();
-    /* let other thread run */
+  /* let other thread run */
 
   benchmark_timer_initialize();
-    status = pthread_rwlock_unlock(&rwlock); /*  unlock the rwlock */
+  status = pthread_rwlock_unlock( &rwlock ); /*  unlock the rwlock */
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
@@ -122,10 +118,10 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-  /* end of file */
+/* end of file */

@@ -39,59 +39,57 @@
 const char rtems_test_name[] = "PSXTMMUTEX 07";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void test_mutex_setprioceiling(void);
-void test_mutex_getprioceiling(void);
+void *POSIX_Init( void *argument );
+void  test_mutex_setprioceiling( void );
+void  test_mutex_getprioceiling( void );
 
 pthread_mutex_t MutexId;
 
-void test_mutex_setprioceiling(void)
+void test_mutex_setprioceiling( void )
 {
   benchmark_timer_t end_time;
-  int  status;
-  int  old_ceiling;
+  int               status;
+  int               old_ceiling;
 
   benchmark_timer_initialize();
-    status = pthread_mutex_setprioceiling( &MutexId, 5, &old_ceiling );
+  status = pthread_mutex_setprioceiling( &MutexId, 5, &old_ceiling );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
   put_time(
     "pthread_mutex_setprioceiling: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
 }
 
-void test_mutex_getprioceiling(void)
+void test_mutex_getprioceiling( void )
 {
   benchmark_timer_t end_time;
-  int  status;
-  int  current_ceiling;
+  int               status;
+  int               current_ceiling;
 
   benchmark_timer_initialize();
-    status = pthread_mutex_getprioceiling( &MutexId, &current_ceiling );
+  status = pthread_mutex_getprioceiling( &MutexId, &current_ceiling );
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
   put_time(
     "pthread_mutex_getprioceiling: only case",
     end_time,
-    1,        /* Only executed once */
+    1, /* Only executed once */
     0,
     0
   );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int  status;
+  int status;
 
   TEST_BEGIN();
   /* create mutex*/
@@ -108,16 +106,15 @@ void *POSIX_Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
-
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

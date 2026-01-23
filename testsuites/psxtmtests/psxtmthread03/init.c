@@ -40,13 +40,11 @@
 const char rtems_test_name[] = "PSXTMTHREAD 03";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Middle(void *argument);
-void *Low(void *argument);
+void *POSIX_Init( void *argument );
+void *Middle( void *argument );
+void *Low( void *argument );
 
-void *Low(
-  void *argument
-)
+void *Low( void *argument )
 {
   (void) argument;
 
@@ -58,26 +56,18 @@ void *Low(
    * finish the benchmark.
    */
   sched_yield();
-    /* let other threads run */
+  /* let other threads run */
 
   end_time = benchmark_timer_read();
 
-  put_time(
-    "pthread_exit: only case",
-    end_time,
-    OPERATION_COUNT,
-    0,
-    0
-  );
+  put_time( "pthread_exit: only case", end_time, OPERATION_COUNT, 0, 0 );
 
   TEST_END();
   rtems_test_exit( 0 );
   return NULL;
 }
 
-void *Middle(
-  void *argument
-)
+void *Middle( void *argument )
 {
   (void) argument;
 
@@ -87,29 +77,27 @@ void *Middle(
    * finish the benchmark.
    */
   sched_yield();
-    /* let other threads run */
+  /* let other threads run */
 
   pthread_exit( NULL );
   return NULL;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int        i;
-  int        status;
-  pthread_t  threadId;
+  int       i;
+  int       status;
+  pthread_t threadId;
 
   TEST_BEGIN();
 
-  for ( i=0 ; i < OPERATION_COUNT - 1 ; i++ ) {
+  for ( i = 0; i < OPERATION_COUNT - 1; i++ ) {
     status = pthread_create( &threadId, NULL, Middle, NULL );
     rtems_test_assert( !status );
   }
-  
+
   status = pthread_create( &threadId, NULL, Low, NULL );
   rtems_test_assert( !status );
 
@@ -118,7 +106,7 @@ void *POSIX_Init(
    * is accounted for.  When we return, we can start the benchmark.
    */
   sched_yield();
-    /* let other threads run */
+  /* let other threads run */
 
   /* start the timer and switch through all the other tasks */
   benchmark_timer_initialize();
@@ -131,10 +119,10 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     OPERATION_COUNT + 2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS OPERATION_COUNT + 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-  /* end of file */
+/* end of file */
