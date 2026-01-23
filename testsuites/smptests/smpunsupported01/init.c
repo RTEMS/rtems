@@ -34,51 +34,51 @@
 
 const char rtems_test_name[] = "SMPUNSUPPORTED 1";
 
-static void test(void)
+static void test( void )
 {
   rtems_status_code sc;
-  rtems_mode mode;
-  rtems_id id;
+  rtems_mode        mode;
+  rtems_id          id;
 
-  sc = rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &mode);
-  rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
+  sc = rtems_task_mode( RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &mode );
+  rtems_test_assert( sc == RTEMS_NOT_IMPLEMENTED );
 
   sc = rtems_task_create(
-    rtems_build_name('T', 'A', 'S', 'K'),
+    rtems_build_name( 'T', 'A', 'S', 'K' ),
     RTEMS_MINIMUM_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_NO_PREEMPT,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+  rtems_test_assert( sc == RTEMS_UNSATISFIED );
 
-  mode = RTEMS_INTERRUPT_LEVEL(0);
-  if (mode == 0) {
-    sc = rtems_task_mode(mode, RTEMS_INTERRUPT_MASK, &mode);
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  mode = RTEMS_INTERRUPT_LEVEL( 0 );
+  if ( mode == 0 ) {
+    sc = rtems_task_mode( mode, RTEMS_INTERRUPT_MASK, &mode );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   }
 
-  mode = RTEMS_INTERRUPT_LEVEL(1);
-  if (mode != 0) {
-    sc = rtems_task_mode(mode, RTEMS_INTERRUPT_MASK, &mode);
-    rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
+  mode = RTEMS_INTERRUPT_LEVEL( 1 );
+  if ( mode != 0 ) {
+    sc = rtems_task_mode( mode, RTEMS_INTERRUPT_MASK, &mode );
+    rtems_test_assert( sc == RTEMS_NOT_IMPLEMENTED );
 
     sc = rtems_task_create(
-      rtems_build_name('T', 'A', 'S', 'K'),
+      rtems_build_name( 'T', 'A', 'S', 'K' ),
       RTEMS_MINIMUM_PRIORITY,
       RTEMS_MINIMUM_STACK_SIZE,
       mode,
       RTEMS_DEFAULT_ATTRIBUTES,
       &id
     );
-    rtems_test_assert(sc == RTEMS_UNSATISFIED);
+    rtems_test_assert( sc == RTEMS_UNSATISFIED );
   } else {
-    puts("RTEMS_INTERRUPT_LEVEL(1) not supported on this platform");
+    puts( "RTEMS_INTERRUPT_LEVEL(1) not supported on this platform" );
   }
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -87,7 +87,7 @@ static void Init(rtems_task_argument arg)
   test();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

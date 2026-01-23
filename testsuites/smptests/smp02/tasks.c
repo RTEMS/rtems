@@ -33,22 +33,21 @@
 #include "system.h"
 
 static void LogSemaphore(
-  bool      obtained,
-  uint32_t  cpu_num,
-  uint32_t  task_index
-){
-  if (Log_index < LOG_SIZE) { 
+  bool     obtained,
+  uint32_t cpu_num,
+  uint32_t task_index
+)
+{
+  if ( Log_index < LOG_SIZE ) {
     /* Log the information */
-    Log[ Log_index ].IsLocked   = obtained;
-    Log[ Log_index ].cpu_num    = cpu_num;
+    Log[ Log_index ].IsLocked = obtained;
+    Log[ Log_index ].cpu_num = cpu_num;
     Log[ Log_index ].task_index = task_index;
     Log_index++;
   }
 }
 
-rtems_task Test_task(
-  rtems_task_argument task_index
-)
+rtems_task Test_task( rtems_task_argument task_index )
 {
   uint32_t          cpu_num;
   rtems_status_code sc;
@@ -56,15 +55,14 @@ rtems_task Test_task(
   cpu_num = rtems_scheduler_get_processor();
 
   do {
-
     /* Poll to obtain the synchronization semaphore */
     do {
       sc = rtems_semaphore_obtain( Semaphore, RTEMS_NO_WAIT, 0 );
-    } while (sc != RTEMS_SUCCESSFUL );
+    } while ( sc != RTEMS_SUCCESSFUL );
 
-    LogSemaphore(true, cpu_num, task_index);
-    LogSemaphore(false, cpu_num, task_index);
-  
+    LogSemaphore( true, cpu_num, task_index );
+    LogSemaphore( false, cpu_num, task_index );
+
     rtems_semaphore_release( Semaphore );
-  } while(1);
+  } while ( 1 );
 }

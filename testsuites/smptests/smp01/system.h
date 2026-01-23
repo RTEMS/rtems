@@ -31,23 +31,18 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Test_task(
-  rtems_task_argument argument
-);
+rtems_task Test_task( rtems_task_argument argument );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS   4 
+#define CONFIGURE_MAXIMUM_PROCESSORS 4
 
-#define CONFIGURE_MAXIMUM_TASKS            \
-    (1 + CONFIGURE_MAXIMUM_PROCESSORS)
+#define CONFIGURE_MAXIMUM_TASKS      ( 1 + CONFIGURE_MAXIMUM_PROCESSORS )
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

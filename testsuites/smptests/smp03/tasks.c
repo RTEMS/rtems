@@ -32,19 +32,16 @@
 
 #include "system.h"
 
-rtems_task Test_task(
-  rtems_task_argument task_index
-)
+rtems_task Test_task( rtems_task_argument task_index )
 {
-  char              task_name[5];
+  char task_name[ 5 ];
 
   /* Show that this task is running on cpu X */
   sprintf( task_name, "TA%" PRIuPTR, task_index );
   PrintTaskInfo( task_name );
 
-  TaskRan[task_index] = true;
+  TaskRan[ task_index ] = true;
 
   /* Wait for the test to end without giving up this processor */
-  while(1)
-    ;
+  while ( 1 );
 }

@@ -32,17 +32,15 @@
 
 #include "system.h"
 
-rtems_task Test_task(
-  rtems_task_argument unused
-)
+rtems_task Test_task( rtems_task_argument unused )
 {
   (void) unused;
 
   rtems_id          tid;
   rtems_time_of_day time;
-  uint32_t    task_index;
+  uint32_t          task_index;
   rtems_status_code status;
-  char              name[5];
+  char              name[ 5 ];
   char             *p;
 
   /* Get the task name */
@@ -52,7 +50,7 @@ rtems_task Test_task(
   status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   rtems_test_assert( status == RTEMS_SUCCESSFUL );
   task_index = task_number( tid );
-  for ( ; ; ) {
+  for ( ;; ) {
     status = rtems_clock_get_tod( &time );
     rtems_test_assert( status == RTEMS_SUCCESSFUL );
     if ( time.second >= 35 ) {
@@ -66,7 +64,8 @@ rtems_task Test_task(
 
     PrintTaskInfo( p, &time );
     status = rtems_task_wake_after(
-      task_index * 5 * rtems_clock_get_ticks_per_second() );
+      task_index * 5 * rtems_clock_get_ticks_per_second()
+    );
     rtems_test_assert( status == RTEMS_SUCCESSFUL );
   }
 }

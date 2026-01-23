@@ -30,7 +30,7 @@
 #include "config.h"
 #endif
 
-#define  _GNU_SOURCE
+#define _GNU_SOURCE
 
 #include <tmacros.h>
 #include <errno.h>
@@ -41,19 +41,19 @@ const char rtems_test_name[] = "SMPPSXAFFINITY 1";
 
 #define CPU_COUNT 4
 
-pthread_t           Init_id;
+pthread_t Init_id;
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void Validate_attrgetaffinity_errors(void);
-void Validate_attrsetaffinity_errors(void);
-void Validate_attr(void);
+void *POSIX_Init( void *argument );
+void  Validate_attrgetaffinity_errors( void );
+void  Validate_attrsetaffinity_errors( void );
+void  Validate_attr( void );
 
-void Validate_attrgetaffinity_errors(void)
+void Validate_attrgetaffinity_errors( void )
 {
-  int                 sc;
-  cpu_set_t           cpuset;
-  pthread_attr_t      attr;
+  int            sc;
+  cpu_set_t      cpuset;
+  pthread_attr_t attr;
 
   sc = pthread_attr_init( &attr );
   rtems_test_assert( sc == 0 );
@@ -70,7 +70,7 @@ void Validate_attrgetaffinity_errors(void)
 
   /* Verify pthread_attr_getaffinity_np validates cpusetsize */
   puts( "Init - pthread_attr_getaffinity_np - Invalid cpusetsize - EINVAL" );
-  sc = pthread_attr_getaffinity_np( &attr, sizeof( cpuset ) * 2 , &cpuset );
+  sc = pthread_attr_getaffinity_np( &attr, sizeof( cpuset ) * 2, &cpuset );
   rtems_test_assert( sc == EINVAL );
 
   sc = pthread_attr_destroy( &attr );
@@ -81,11 +81,11 @@ void Validate_attrgetaffinity_errors(void)
   rtems_test_assert( sc == EINVAL );
 }
 
-void Validate_attrsetaffinity_errors(void)
+void Validate_attrsetaffinity_errors( void )
 {
-  int                 sc;
-  cpu_set_t           cpuset;
-  pthread_attr_t      attr;
+  int            sc;
+  cpu_set_t      cpuset;
+  pthread_attr_t attr;
 
   sc = pthread_attr_init( &attr );
   rtems_test_assert( sc == 0 );
@@ -102,33 +102,32 @@ void Validate_attrsetaffinity_errors(void)
 
   /* Verify pthread_attr_setaffinity_np validates cpusetsize */
   puts( "Init - pthread_attr_setaffinity_np - Invalid cpusetsize - EINVAL" );
-  sc = pthread_attr_setaffinity_np( &attr, sizeof( cpuset ) * 2 , &cpuset );
+  sc = pthread_attr_setaffinity_np( &attr, sizeof( cpuset ) * 2, &cpuset );
   rtems_test_assert( sc == EINVAL );
 
   sc = pthread_attr_destroy( &attr );
   rtems_test_assert( sc == 0 );
 
   puts( "Init - pthread_attr_setaffinity_np - Not initialized attr - EINVAL" );
-  sc = pthread_attr_setaffinity_np( &attr, sizeof( cpuset ), &cpuset  );
+  sc = pthread_attr_setaffinity_np( &attr, sizeof( cpuset ), &cpuset );
   rtems_test_assert( sc == EINVAL );
 }
 
-void Validate_attr(void )
+void Validate_attr( void )
 {
-  int                 sc;
-  pthread_attr_t      attr;
-  uint32_t            cpus;
-  cpu_set_t           cpuset1;
-  cpu_set_t           cpuset2;
-  int                 i;
-  int                 priority;
+  int            sc;
+  pthread_attr_t attr;
+  uint32_t       cpus;
+  cpu_set_t      cpuset1;
+  cpu_set_t      cpuset2;
+  int            i;
+  int            priority;
 
   sc = pthread_getattr_np( Init_id, &attr );
   rtems_test_assert( sc == 0 );
 
   priority = sched_get_priority_min( SCHED_FIFO );
   rtems_test_assert( priority != -1 );
-
 
   cpus = rtems_scheduler_get_processor_maximum();
   puts(
@@ -137,23 +136,21 @@ void Validate_attr(void )
   );
 
   /* Set each cpu seperately in the affinity set */
-  for ( i=0; i<cpus; i++ ){
-    CPU_ZERO(&cpuset1);
-    CPU_SET(i, &cpuset1);
+  for ( i = 0; i < cpus; i++ ) {
+    CPU_ZERO( &cpuset1 );
+    CPU_SET( i, &cpuset1 );
 
-    sc = pthread_attr_setaffinity_np( &attr, sizeof(cpu_set_t), &cpuset1 );
+    sc = pthread_attr_setaffinity_np( &attr, sizeof( cpu_set_t ), &cpuset1 );
     rtems_test_assert( sc == 0 );
 
-    sc = pthread_attr_getaffinity_np( &attr, sizeof(cpu_set_t), &cpuset2 );
+    sc = pthread_attr_getaffinity_np( &attr, sizeof( cpu_set_t ), &cpuset2 );
     rtems_test_assert( sc == 0 );
 
-    rtems_test_assert( CPU_EQUAL(&cpuset1, &cpuset2) );
+    rtems_test_assert( CPU_EQUAL( &cpuset1, &cpuset2 ) );
   }
 }
 
-void *POSIX_Init(
-  void *ignored
-)
+void *POSIX_Init( void *ignored )
 {
   (void) ignored;
 
@@ -167,7 +164,7 @@ void *POSIX_Init(
   Validate_attr();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -179,7 +176,7 @@ void *POSIX_Init(
 
 #define CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS  1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

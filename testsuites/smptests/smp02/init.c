@@ -38,15 +38,13 @@
 
 const char rtems_test_name[] = "SMP 2";
 
-static void success(void)
+static void success( void )
 {
   TEST_END();
   rtems_test_exit( 0 );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -55,7 +53,7 @@ rtems_task Init(
   uint32_t          cpu_num;
   rtems_id          id;
   rtems_status_code status;
-  char              str[80];
+  char              str[ 80 ];
 
   TEST_BEGIN();
 
@@ -67,21 +65,19 @@ rtems_task Init(
 
   /* Create/verify synchronisation semaphore */
   status = rtems_semaphore_create(
-    rtems_build_name ('S', 'E', 'M', '1'),
-    1,                                             
-    RTEMS_LOCAL                   |
-    RTEMS_SIMPLE_BINARY_SEMAPHORE |
-    RTEMS_PRIORITY,
+    rtems_build_name( 'S', 'E', 'M', '1' ),
     1,
-    &Semaphore);
+    RTEMS_LOCAL | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_PRIORITY,
+    1,
+    &Semaphore
+  );
   directive_failed( status, "rtems_semaphore_create" );
 
   /* Lock semaphore */
-  status = rtems_semaphore_obtain( Semaphore, RTEMS_WAIT, 0);
-  directive_failed( status,"rtems_semaphore_obtain of SEM1\n");
+  status = rtems_semaphore_obtain( Semaphore, RTEMS_WAIT, 0 );
+  directive_failed( status, "rtems_semaphore_obtain of SEM1\n" );
 
-  for ( i=1; i < rtems_scheduler_get_processor_maximum(); i++ ){
-
+  for ( i = 1; i < rtems_scheduler_get_processor_maximum(); i++ ) {
     /* Create and start tasks for each CPU */
     ch = '0' + i;
 
@@ -95,8 +91,8 @@ rtems_task Init(
     );
 
     cpu_num = rtems_scheduler_get_processor();
-    locked_printf(" CPU %" PRIu32 " start task TA%c\n", cpu_num, ch);
-    status = rtems_task_start( id, Test_task, i+1 );
+    locked_printf( " CPU %" PRIu32 " start task TA%c\n", cpu_num, ch );
+    status = rtems_task_start( id, Test_task, i + 1 );
     directive_failed( status, str );
   }
 
@@ -104,27 +100,25 @@ rtems_task Init(
    * Release the semaphore, allowing the blocked tasks to start.
    */
   status = rtems_semaphore_release( Semaphore );
-  directive_failed( status,"rtems_semaphore_release of SEM1\n");
-  
+  directive_failed( status, "rtems_semaphore_release of SEM1\n" );
 
   /* 
    * Wait for log full. print the log and end the program.
-   */  
-  while (Log_index < LOG_SIZE)
-    ;
- 
-  for (i=0; i< LOG_SIZE; i++) {
-    if ( Log[i].IsLocked ) {
+   */
+  while ( Log_index < LOG_SIZE );
+
+  for ( i = 0; i < LOG_SIZE; i++ ) {
+    if ( Log[ i ].IsLocked ) {
       locked_printf(
-        " CPU %d Task TA%" PRIu32 " Obtain\n", 
-        Log[i].cpu_num,
-        Log[i].task_index
+        " CPU %d Task TA%" PRIu32 " Obtain\n",
+        Log[ i ].cpu_num,
+        Log[ i ].task_index
       );
     } else {
       locked_printf(
-        " CPU %d Task TA%" PRIu32 " Release\n", 
-        Log[i].cpu_num,
-        Log[i].task_index
+        " CPU %d Task TA%" PRIu32 " Release\n",
+        Log[ i ].cpu_num,
+        Log[ i ].task_index
       );
     }
   }

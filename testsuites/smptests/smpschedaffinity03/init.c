@@ -43,53 +43,52 @@ const char rtems_test_name[] = "SMPSCHEDAFFINITY 3";
 #define NUM_CPUS   4
 #define TASK_COUNT NUM_CPUS
 
-static void test_delay(rtems_interval ticks)
-{ 
+static void test_delay( rtems_interval ticks )
+{
   rtems_interval start, stop;
   start = rtems_clock_get_ticks_since_boot();
   do {
     stop = rtems_clock_get_ticks_since_boot();
-  } while ( (stop - start) < ticks );
+  } while ( ( stop - start ) < ticks );
 }
 
-static void test(void)
+static void test( void )
 {
-  rtems_status_code   sc;
-  rtems_id            id;
-  uint32_t            cpu_count;
-  int                 cpu;
-  int                 i;
-  cpu_set_t           cpuset;
+  rtems_status_code sc;
+  rtems_id          id;
+  uint32_t          cpu_count;
+  int               cpu;
+  int               i;
+  cpu_set_t         cpuset;
 
   /* Get the number of processors that we are using. */
   cpu_count = rtems_scheduler_get_processor_maximum();
- 
+
   id = rtems_task_self();
 
   /* 
    * The Init task comes up on the maximum core so start at
    * that core and walk the affinity down to core 0.
    */
-  for( i=cpu_count-1; i >= 0; i--) {
-    
+  for ( i = cpu_count - 1; i >= 0; i-- ) {
     /* Move the affinity to the current core - 1 */
-    CPU_ZERO(&cpuset);
-    CPU_SET(i, &cpuset);
-    printf("Set Affinity for cpu %d\n", i);
-    sc = rtems_task_set_affinity( id, sizeof(cpuset), &cpuset );
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    CPU_ZERO( &cpuset );
+    CPU_SET( i, &cpuset );
+    printf( "Set Affinity for cpu %d\n", i );
+    sc = rtems_task_set_affinity( id, sizeof( cpuset ), &cpuset );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
     /* Wait 100 clock ticks */
-    test_delay(100);
+    test_delay( 100 );
 
     /* Check the cpu the Init task is running on */
     cpu = rtems_scheduler_get_processor();
-    printf("On cpu %d\n", cpu);
-    rtems_test_assert(cpu == i);
+    printf( "On cpu %d\n", cpu );
+    rtems_test_assert( cpu == i );
   }
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -98,7 +97,7 @@ static void Init(rtems_task_argument arg)
   test();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -108,11 +107,11 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_PROCESSORS NUM_CPUS
 
-#define CONFIGURE_MAXIMUM_TASKS          TASK_COUNT
+#define CONFIGURE_MAXIMUM_TASKS TASK_COUNT
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-  #define CONFIGURE_INIT_TASK_PRIORITY      8
+  #define CONFIGURE_INIT_TASK_PRIORITY 8
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

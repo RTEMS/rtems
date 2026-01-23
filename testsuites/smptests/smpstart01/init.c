@@ -40,32 +40,32 @@
 const char rtems_test_name[] = "SMPSTART 1";
 
 typedef struct {
-  const rtems_tcb *main_tcb;
+  const rtems_tcb    *main_tcb;
   SMP_barrier_Control barrier;
-  Per_CPU_Job job;
+  Per_CPU_Job         job;
 } test_context;
 
 static test_context test_instance;
 
-static void barrier(test_context *ctx)
+static void barrier( test_context *ctx )
 {
   SMP_barrier_State bs;
 
-  _SMP_barrier_State_initialize(&bs);
-  _SMP_barrier_Wait(&ctx->barrier, &bs, 2);
+  _SMP_barrier_State_initialize( &bs );
+  _SMP_barrier_Wait( &ctx->barrier, &bs, 2 );
 }
 
-static void prepare_second_cpu(void *arg)
+static void prepare_second_cpu( void *arg )
 {
-  test_context *ctx;
+  test_context    *ctx;
   Per_CPU_Control *cpu_self;
 
   ctx = arg;
   cpu_self = _Per_CPU_Get();
 
-  barrier(ctx);
+  barrier( ctx );
 
-  while (cpu_self->heir != ctx->main_tcb) {
+  while ( cpu_self->heir != ctx->main_tcb ) {
     RTEMS_COMPILER_MEMORY_BARRIER();
   }
 }
@@ -75,15 +75,15 @@ static const Per_CPU_Job_context job_context = {
   .arg = &test_instance
 };
 
-static void submit_job(void)
+static void submit_job( void )
 {
   test_context *ctx;
 
   ctx = &test_instance;
-  _SMP_barrier_Control_initialize(&ctx->barrier);
+  _SMP_barrier_Control_initialize( &ctx->barrier );
   ctx->job.context = &job_context;
 
-  _Per_CPU_Submit_job(_Per_CPU_Get_by_index(1), &ctx->job);
+  _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 1 ), &ctx->job );
 }
 
 RTEMS_SYSINIT_ITEM(
@@ -92,28 +92,28 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 
-static void test(void)
+static void test( void )
 {
-  test_context *ctx;
+  test_context     *ctx;
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   ctx = &test_instance;
   ctx->main_tcb = _Thread_Get_executing();
 
-  barrier(ctx);
+  barrier( ctx );
 
-  sc = rtems_scheduler_ident_by_processor(1, &id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_scheduler_ident_by_processor( 1, &id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_set_scheduler(RTEMS_SELF, id, 1);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_set_scheduler( RTEMS_SELF, id, 1 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  rtems_test_assert(rtems_scheduler_get_processor() == 1);
-  rtems_test_assert(_ISR_Get_level() == 0);
+  rtems_test_assert( rtems_scheduler_get_processor() == 1 );
+  rtems_test_assert( _ISR_Get_level() == 0 );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -122,7 +122,7 @@ static void Init(rtems_task_argument arg)
   test();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
@@ -134,17 +134,20 @@ static void Init(rtems_task_argument arg)
 
 #include <rtems/scheduler.h>
 
-RTEMS_SCHEDULER_EDF_SMP(a);
+RTEMS_SCHEDULER_EDF_SMP( a );
 
-RTEMS_SCHEDULER_EDF_SMP(b);
+RTEMS_SCHEDULER_EDF_SMP( b );
 
-#define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-  RTEMS_SCHEDULER_TABLE_EDF_SMP(a, rtems_build_name('A', ' ', ' ', ' ')), \
-  RTEMS_SCHEDULER_TABLE_EDF_SMP(b, rtems_build_name('B', ' ', ' ', ' '))
+#define CONFIGURE_SCHEDULER_TABLE_ENTRIES                                     \
+  RTEMS_SCHEDULER_TABLE_EDF_SMP( a, rtems_build_name( 'A', ' ', ' ', ' ' ) ), \
+    RTEMS_SCHEDULER_TABLE_EDF_SMP(                                            \
+      b,                                                                      \
+      rtems_build_name( 'B', ' ', ' ', ' ' )                                  \
+    )
 
-#define CONFIGURE_SCHEDULER_ASSIGNMENTS \
-  RTEMS_SCHEDULER_ASSIGN(0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
-  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY)
+#define CONFIGURE_SCHEDULER_ASSIGNMENTS                                    \
+  RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
+    RTEMS_SCHEDULER_ASSIGN( 1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 

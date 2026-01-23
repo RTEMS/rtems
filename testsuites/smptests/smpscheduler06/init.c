@@ -32,7 +32,7 @@
 #include <rtems.h>
 #include <rtems/test-info.h>
 
-void Init(rtems_task_argument arg);
+void Init( rtems_task_argument arg );
 
 const char rtems_test_name[] = "SMPSCHEDULER 6";
 
@@ -47,19 +47,16 @@ const char rtems_test_name[] = "SMPSCHEDULER 6";
 
 #include <rtems/scheduler.h>
 
-RTEMS_SCHEDULER_PRIORITY_AFFINITY_SMP(
-  a,
-  CONFIGURE_MAXIMUM_PRIORITY + 1
-);
+RTEMS_SCHEDULER_PRIORITY_AFFINITY_SMP( a, CONFIGURE_MAXIMUM_PRIORITY + 1 );
 
-#define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
+#define CONFIGURE_SCHEDULER_TABLE_ENTRIES      \
   RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( \
-    a, \
-    rtems_build_name('T', 'E', 'S', 'T') \
+    a,                                         \
+    rtems_build_name( 'T', 'E', 'S', 'T' )     \
   )
 
 #define CONFIGURE_SCHEDULER_ASSIGNMENTS \
-  RTEMS_SCHEDULER_ASSIGN(0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY)
+  RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
 
 #define CONFIGURE_MAXIMUM_TASKS 3
 

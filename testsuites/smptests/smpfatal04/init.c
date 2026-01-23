@@ -39,31 +39,30 @@
 
 const char rtems_test_name[] = "SMPFATAL 4";
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
-  assert(0);
+  assert( 0 );
 }
 
 static void fatal_extension(
   rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code code
+  bool               always_set_to_false,
+  rtems_fatal_code   code
 )
 {
   TEST_BEGIN();
 
   if (
-    source == RTEMS_FATAL_SOURCE_SMP
-      && !always_set_to_false
-      && code == SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER
+    source == RTEMS_FATAL_SOURCE_SMP && !always_set_to_false &&
+    code == SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER
   ) {
     rtems_status_code sc;
-    rtems_id id;
+    rtems_id          id;
 
-    sc = rtems_scheduler_ident_by_processor(0, &id);
-    assert(sc == RTEMS_INCORRECT_STATE);
+    sc = rtems_scheduler_ident_by_processor( 0, &id );
+    assert( sc == RTEMS_INCORRECT_STATE );
 
     TEST_END();
   }
@@ -73,8 +72,7 @@ static void fatal_extension(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = fatal_extension }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .fatal = fatal_extension }, RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_SCHEDULER_TABLE_ENTRIES
 

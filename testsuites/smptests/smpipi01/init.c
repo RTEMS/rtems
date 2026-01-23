@@ -43,17 +43,17 @@ const char rtems_test_name[] = "SMPIPI 1";
 
 typedef struct {
   uint32_t value;
-  uint32_t cache_line_separation[31];
+  uint32_t cache_line_separation[ 31 ];
 } test_counter;
 
 typedef struct {
-  test_counter counters[CPU_COUNT];
-  uint32_t copy_counters[CPU_COUNT];
+  test_counter        counters[ CPU_COUNT ];
+  uint32_t            copy_counters[ CPU_COUNT ];
   SMP_barrier_Control barrier;
-  SMP_barrier_State main_barrier_state;
-  SMP_barrier_State worker_barrier_state;
-  Per_CPU_Job jobs[CPU_COUNT][2];
-  Per_CPU_Job sync_jobs[2];
+  SMP_barrier_State   main_barrier_state;
+  SMP_barrier_State   worker_barrier_state;
+  Per_CPU_Job         jobs[ CPU_COUNT ][ 2 ];
+  Per_CPU_Job         sync_jobs[ 2 ];
 } test_context;
 
 static test_context test_instance = {
@@ -62,24 +62,21 @@ static test_context test_instance = {
   .worker_barrier_state = SMP_BARRIER_STATE_INITIALIZER
 };
 
-static void barrier(
-  test_context *ctx,
-  SMP_barrier_State *state
-)
+static void barrier( test_context *ctx, SMP_barrier_State *state )
 {
-  _SMP_barrier_Wait(&ctx->barrier, state, 2);
+  _SMP_barrier_Wait( &ctx->barrier, state, 2 );
 }
 
-static void barrier_1_handler(void *arg)
+static void barrier_1_handler( void *arg )
 {
-  test_context *ctx = arg;
-  uint32_t cpu_index_self = _SMP_Get_current_processor();
+  test_context      *ctx = arg;
+  uint32_t           cpu_index_self = _SMP_Get_current_processor();
   SMP_barrier_State *bs = &ctx->worker_barrier_state;
 
-  ++ctx->counters[cpu_index_self].value;
+  ++ctx->counters[ cpu_index_self ].value;
 
   /* (D) */
-  barrier(ctx, bs);
+  barrier( ctx, bs );
 }
 
 static const Per_CPU_Job_context barrier_1_job_context = {
@@ -87,25 +84,25 @@ static const Per_CPU_Job_context barrier_1_job_context = {
   .arg = &test_instance
 };
 
-static void barrier_0_handler(void *arg)
+static void barrier_0_handler( void *arg )
 {
-  test_context *ctx = arg;
-  uint32_t cpu_index_self = _SMP_Get_current_processor();
+  test_context      *ctx = arg;
+  uint32_t           cpu_index_self = _SMP_Get_current_processor();
   SMP_barrier_State *bs = &ctx->worker_barrier_state;
 
-  ++ctx->counters[cpu_index_self].value;
+  ++ctx->counters[ cpu_index_self ].value;
 
   /* (A) */
-  barrier(ctx, bs);
+  barrier( ctx, bs );
 
   /* (B) */
-  barrier(ctx, bs);
+  barrier( ctx, bs );
 
   /* (C) */
-  barrier(ctx, bs);
+  barrier( ctx, bs );
 
-  ctx->jobs[0][1].context = &barrier_1_job_context;
-  _Per_CPU_Add_job(_Per_CPU_Get(), &ctx->jobs[0][1]);
+  ctx->jobs[ 0 ][ 1 ].context = &barrier_1_job_context;
+  _Per_CPU_Add_job( _Per_CPU_Get(), &ctx->jobs[ 0 ][ 1 ] );
 }
 
 static const Per_CPU_Job_context barrier_0_job_context = {
@@ -115,73 +112,79 @@ static const Per_CPU_Job_context barrier_0_job_context = {
 
 static void test_send_message_while_processing_a_message(
   test_context *ctx,
-  uint32_t cpu_index_self,
-  uint32_t cpu_count
+  uint32_t      cpu_index_self,
+  uint32_t      cpu_count
 )
 {
   SMP_barrier_State *bs = &ctx->main_barrier_state;
-  uint32_t cpu_index;
-  rtems_status_code sc;
-  cpu_set_t cpuset;
+  uint32_t           cpu_index;
+  rtems_status_code  sc;
+  cpu_set_t          cpuset;
 
-  rtems_test_assert(cpu_index_self < CPU_SETSIZE);
-  CPU_ZERO(&cpuset);
-  CPU_SET((int) cpu_index_self, &cpuset);
-  sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(cpuset), &cpuset);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( cpu_index_self < CPU_SETSIZE );
+  CPU_ZERO( &cpuset );
+  CPU_SET( (int) cpu_index_self, &cpuset );
+  sc = rtems_task_set_affinity( RTEMS_SELF, sizeof( cpuset ), &cpuset );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
-    if (cpu_index != cpu_index_self) {
+  for ( cpu_index = 0; cpu_index < cpu_count; ++cpu_index ) {
+    if ( cpu_index != cpu_index_self ) {
       Per_CPU_Control *cpu_self;
 
-      ctx->jobs[0][0].context = &barrier_0_job_context;
-      _Per_CPU_Submit_job(_Per_CPU_Get_by_index(cpu_index), &ctx->jobs[0][0]);
+      ctx->jobs[ 0 ][ 0 ].context = &barrier_0_job_context;
+      _Per_CPU_Submit_job(
+        _Per_CPU_Get_by_index( cpu_index ),
+        &ctx->jobs[ 0 ][ 0 ]
+      );
 
       /* (A) */
-      barrier(ctx, bs);
+      barrier( ctx, bs );
 
-      rtems_test_assert(ctx->counters[cpu_index].value == 1);
+      rtems_test_assert( ctx->counters[ cpu_index ].value == 1 );
       _SMP_Send_message(
-        _Per_CPU_Get_by_index(cpu_index),
+        _Per_CPU_Get_by_index( cpu_index ),
         SMP_MESSAGE_PERFORM_JOBS
       );
 
       /* (B) */
-      barrier(ctx, bs);
+      barrier( ctx, bs );
 
-      rtems_test_assert(ctx->counters[cpu_index].value == 1);
+      rtems_test_assert( ctx->counters[ cpu_index ].value == 1 );
 
       /* (C) */
-      barrier(ctx, bs);
+      barrier( ctx, bs );
 
       /* (D) */
-      barrier(ctx, bs);
+      barrier( ctx, bs );
 
-      rtems_test_assert(ctx->counters[cpu_index].value == 2);
+      rtems_test_assert( ctx->counters[ cpu_index ].value == 2 );
 
-      ctx->counters[cpu_index].value = 0;
+      ctx->counters[ cpu_index ].value = 0;
 
       /* Ensure that the second job is done and can be reused */
       cpu_self = _Thread_Dispatch_disable();
-      _Per_CPU_Wait_for_job(_Per_CPU_Get_by_index(cpu_index), &ctx->jobs[0][1]);
-      _Thread_Dispatch_enable(cpu_self);
+      _Per_CPU_Wait_for_job(
+        _Per_CPU_Get_by_index( cpu_index ),
+        &ctx->jobs[ 0 ][ 1 ]
+      );
+      _Thread_Dispatch_enable( cpu_self );
     }
   }
 }
 
-static void counter_handler(void *arg, size_t next_job)
+static void counter_handler( void *arg, size_t next_job )
 {
-  test_context *ctx = arg;
+  test_context    *ctx = arg;
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
-  uint32_t cpu_index_self = _Per_CPU_Get_index(cpu_self);
+  uint32_t         cpu_index_self = _Per_CPU_Get_index( cpu_self );
 
-  ++ctx->counters[cpu_index_self].value;
-  _Per_CPU_Add_job(cpu_self, &ctx->jobs[cpu_index_self][next_job]);
+  ++ctx->counters[ cpu_index_self ].value;
+  _Per_CPU_Add_job( cpu_self, &ctx->jobs[ cpu_index_self ][ next_job ] );
 }
 
-static void counter_0_handler(void *arg)
+static void counter_0_handler( void *arg )
 {
-  counter_handler(arg, 1);
+  counter_handler( arg, 1 );
 }
 
 static const Per_CPU_Job_context counter_0_job_context = {
@@ -189,9 +192,9 @@ static const Per_CPU_Job_context counter_0_job_context = {
   .arg = &test_instance
 };
 
-static void counter_1_handler(void *arg)
+static void counter_1_handler( void *arg )
 {
-  counter_handler(arg, 0);
+  counter_handler( arg, 0 );
 }
 
 static const Per_CPU_Job_context counter_1_job_context = {
@@ -199,22 +202,22 @@ static const Per_CPU_Job_context counter_1_job_context = {
   .arg = &test_instance
 };
 
-static void sync_0_handler(void *arg)
+static void sync_0_handler( void *arg )
 {
   test_context *ctx = arg;
 
-  _Per_CPU_Submit_job(_Per_CPU_Get(), &ctx->sync_jobs[1]);
+  _Per_CPU_Submit_job( _Per_CPU_Get(), &ctx->sync_jobs[ 1 ] );
 
   /* (E) */
-  barrier(ctx, &ctx->worker_barrier_state);
+  barrier( ctx, &ctx->worker_barrier_state );
 }
 
-static void sync_1_handler(void *arg)
+static void sync_1_handler( void *arg )
 {
   test_context *ctx = arg;
 
   /* (F) */
-  barrier(ctx, &ctx->worker_barrier_state);
+  barrier( ctx, &ctx->worker_barrier_state );
 }
 
 static const Per_CPU_Job_context sync_0_context = {
@@ -227,13 +230,13 @@ static const Per_CPU_Job_context sync_1_context = {
   .arg = &test_instance
 };
 
-static void wait_for_ipi_done(test_context *ctx, Per_CPU_Control *cpu)
+static void wait_for_ipi_done( test_context *ctx, Per_CPU_Control *cpu )
 {
   unsigned long done;
 
-  ctx->sync_jobs[0].context = &sync_0_context;
-  ctx->sync_jobs[1].context = &sync_1_context;
-  _Per_CPU_Submit_job(cpu, &ctx->sync_jobs[0]);
+  ctx->sync_jobs[ 0 ].context = &sync_0_context;
+  ctx->sync_jobs[ 1 ].context = &sync_1_context;
+  _Per_CPU_Submit_job( cpu, &ctx->sync_jobs[ 0 ] );
 
   /*
    * (E)
@@ -243,98 +246,100 @@ static void wait_for_ipi_done(test_context *ctx, Per_CPU_Control *cpu)
    * will no longer make this IPI pending after this point.  Let the
    * sync_0_handler() make it pending again to go to (F).
    */
-  barrier(ctx, &ctx->main_barrier_state);
+  barrier( ctx, &ctx->main_barrier_state );
 
   /* (F) */
-  barrier(ctx, &ctx->main_barrier_state);
+  barrier( ctx, &ctx->main_barrier_state );
 
   /* Make sure that a potential counter_handler() finished */
-  while (cpu->isr_nest_level != 0) {
+  while ( cpu->isr_nest_level != 0 ) {
     RTEMS_COMPILER_MEMORY_BARRIER();
   }
 
-  done = _Atomic_Load_ulong( &ctx->sync_jobs[1].done, ATOMIC_ORDER_ACQUIRE );
+  done = _Atomic_Load_ulong( &ctx->sync_jobs[ 1 ].done, ATOMIC_ORDER_ACQUIRE );
   rtems_test_assert( done == PER_CPU_JOB_DONE );
 }
 
-static void test_send_message_flood(
-  test_context *ctx,
-  uint32_t cpu_count
-)
+static void test_send_message_flood( test_context *ctx, uint32_t cpu_count )
 {
   uint32_t cpu_index_self = rtems_scheduler_get_processor();
   uint32_t cpu_index;
 
-  for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
-    Per_CPU_Control *cpu = _Per_CPU_Get_by_index(cpu_index);
+  for ( cpu_index = 0; cpu_index < cpu_count; ++cpu_index ) {
+    Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    ctx->jobs[cpu_index][0].context = &counter_0_job_context;
-    ctx->jobs[cpu_index][1].context = &counter_1_job_context;
-    _Per_CPU_Add_job(cpu, &ctx->jobs[cpu_index][0]);
+    ctx->jobs[ cpu_index ][ 0 ].context = &counter_0_job_context;
+    ctx->jobs[ cpu_index ][ 1 ].context = &counter_1_job_context;
+    _Per_CPU_Add_job( cpu, &ctx->jobs[ cpu_index ][ 0 ] );
   }
 
-  for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+  for ( cpu_index = 0; cpu_index < cpu_count; ++cpu_index ) {
     Per_CPU_Control *cpu;
-    uint32_t i;
+    uint32_t         i;
 
-    cpu = _Per_CPU_Get_by_index(cpu_index);
+    cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    for (i = 0; i < cpu_count; ++i) {
-      if (i != cpu_index) {
-        ctx->copy_counters[i] = ctx->counters[i].value;
+    for ( i = 0; i < cpu_count; ++i ) {
+      if ( i != cpu_index ) {
+        ctx->copy_counters[ i ] = ctx->counters[ i ].value;
       }
     }
 
-    for (i = 0; i < 100000; ++i) {
-      _SMP_Send_message(cpu, SMP_MESSAGE_PERFORM_JOBS);
+    for ( i = 0; i < 100000; ++i ) {
+      _SMP_Send_message( cpu, SMP_MESSAGE_PERFORM_JOBS );
     }
 
-    if (cpu_index != cpu_index_self) {
-      wait_for_ipi_done(ctx, cpu);
+    if ( cpu_index != cpu_index_self ) {
+      wait_for_ipi_done( ctx, cpu );
     }
 
-    for (i = 0; i < cpu_count; ++i) {
-      if (i != cpu_index) {
-        rtems_test_assert(ctx->copy_counters[i] == ctx->counters[i].value);
+    for ( i = 0; i < cpu_count; ++i ) {
+      if ( i != cpu_index ) {
+        rtems_test_assert(
+          ctx->copy_counters[ i ] == ctx->counters[ i ].value
+        );
       }
     }
   }
 
-  for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+  for ( cpu_index = 0; cpu_index < cpu_count; ++cpu_index ) {
     rtems_test_assert(
-      _Processor_mask_Is_set(_SMP_Get_online_processors(), cpu_index)
+      _Processor_mask_Is_set( _SMP_Get_online_processors(), cpu_index )
     );
 
     printf(
-      "inter-processor interrupts for processor %"
-        PRIu32 "%s: %" PRIu32 "\n",
+      "inter-processor interrupts for processor %" PRIu32 "%s: %" PRIu32 "\n",
       cpu_index,
       cpu_index == cpu_index_self ? " (main)" : "",
-      ctx->counters[cpu_index].value
+      ctx->counters[ cpu_index ].value
     );
   }
 
-  for (; cpu_index < CPU_COUNT; ++cpu_index) {
+  for ( ; cpu_index < CPU_COUNT; ++cpu_index ) {
     rtems_test_assert(
-      !_Processor_mask_Is_set(_SMP_Get_online_processors(), cpu_index)
+      !_Processor_mask_Is_set( _SMP_Get_online_processors(), cpu_index )
     );
   }
 }
 
-static void test(void)
+static void test( void )
 {
   test_context *ctx = &test_instance;
-  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
-  uint32_t cpu_index_self;
+  uint32_t      cpu_count = rtems_scheduler_get_processor_maximum();
+  uint32_t      cpu_index_self;
 
-  for (cpu_index_self = 0; cpu_index_self < cpu_count; ++cpu_index_self) {
-    test_send_message_while_processing_a_message(ctx, cpu_index_self, cpu_count);
+  for ( cpu_index_self = 0; cpu_index_self < cpu_count; ++cpu_index_self ) {
+    test_send_message_while_processing_a_message(
+      ctx,
+      cpu_index_self,
+      cpu_count
+    );
   }
 
-  test_send_message_flood(ctx, cpu_count);
+  test_send_message_flood( ctx, cpu_count );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -343,7 +348,7 @@ static void Init(rtems_task_argument arg)
   test();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER

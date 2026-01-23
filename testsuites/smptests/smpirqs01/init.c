@@ -36,43 +36,43 @@
 #include <rtems/irq-extension.h>
 #include <rtems/malloc.h>
 
-static void ensure_server_termination(void)
+static void ensure_server_termination( void )
 {
-  rtems_status_code sc;
+  rtems_status_code   sc;
   rtems_task_priority prio;
-  rtems_id id;
-  uint32_t cpu_self;
-  uint32_t cpu_other;
+  rtems_id            id;
+  uint32_t            cpu_self;
+  uint32_t            cpu_other;
 
   prio = 0;
-  sc = rtems_task_set_priority(RTEMS_SELF, 124, &prio);
-  T_rsc_success(sc);
+  sc = rtems_task_set_priority( RTEMS_SELF, 124, &prio );
+  T_rsc_success( sc );
 
   cpu_self = rtems_scheduler_get_processor();
-  cpu_other = (cpu_self + 1) % 2;
+  cpu_other = ( cpu_self + 1 ) % 2;
 
-  sc = rtems_scheduler_ident_by_processor(cpu_other, &id);
-  T_rsc_success(sc);
+  sc = rtems_scheduler_ident_by_processor( cpu_other, &id );
+  T_rsc_success( sc );
 
-  sc = rtems_task_set_scheduler(RTEMS_SELF, id, 124);
-  T_rsc_success(sc);
+  sc = rtems_task_set_scheduler( RTEMS_SELF, id, 124 );
+  T_rsc_success( sc );
 
-  sc = rtems_scheduler_ident_by_processor(cpu_self, &id);
-  T_rsc_success(sc);
+  sc = rtems_scheduler_ident_by_processor( cpu_self, &id );
+  T_rsc_success( sc );
 
-  sc = rtems_task_set_scheduler(RTEMS_SELF, id, prio);
-  T_rsc_success(sc);
+  sc = rtems_task_set_scheduler( RTEMS_SELF, id, prio );
+  T_rsc_success( sc );
 }
 
-T_TEST_CASE(InterruptServerSMPInitializeIncorrectState)
+T_TEST_CASE( InterruptServerSMPInitializeIncorrectState )
 {
   rtems_status_code sc;
-  uint32_t server_count;
+  uint32_t          server_count;
 
-  T_assert_eq_u32(rtems_scheduler_get_processor_maximum(), 2);
+  T_assert_eq_u32( rtems_scheduler_get_processor_maximum(), 2 );
 
-  sc = rtems_interrupt_server_delete(0);
-  T_rsc(sc, RTEMS_INVALID_ID);
+  sc = rtems_interrupt_server_delete( 0 );
+  T_rsc( sc, RTEMS_INVALID_ID );
 
   server_count = 456;
   sc = rtems_interrupt_server_initialize(
@@ -82,8 +82,8 @@ T_TEST_CASE(InterruptServerSMPInitializeIncorrectState)
     RTEMS_DEFAULT_ATTRIBUTES,
     &server_count
   );
-  T_rsc_success(sc);
-  T_eq_u32(server_count, 2);
+  T_rsc_success( sc );
+  T_eq_u32( server_count, 2 );
 
   server_count = 456;
   sc = rtems_interrupt_server_initialize(
@@ -93,24 +93,24 @@ T_TEST_CASE(InterruptServerSMPInitializeIncorrectState)
     RTEMS_DEFAULT_ATTRIBUTES,
     &server_count
   );
-  T_rsc(sc, RTEMS_INCORRECT_STATE);
-  T_eq_u32(server_count, 0);
+  T_rsc( sc, RTEMS_INCORRECT_STATE );
+  T_eq_u32( server_count, 0 );
 
-  sc = rtems_interrupt_server_delete(0);
-  T_rsc_success(sc);
+  sc = rtems_interrupt_server_delete( 0 );
+  T_rsc_success( sc );
   ensure_server_termination();
 
-  sc = rtems_interrupt_server_delete(1);
-  T_rsc_success(sc);
+  sc = rtems_interrupt_server_delete( 1 );
+  T_rsc_success( sc );
   ensure_server_termination();
 }
 
-T_TEST_CASE(InterruptServerSMPInitializeInvalidPriority)
+T_TEST_CASE( InterruptServerSMPInitializeInvalidPriority )
 {
   rtems_status_code sc;
-  uint32_t server_count;
+  uint32_t          server_count;
 
-  T_assert_eq_u32(rtems_scheduler_get_processor_maximum(), 2);
+  T_assert_eq_u32( rtems_scheduler_get_processor_maximum(), 2 );
 
   server_count = 456;
   sc = rtems_interrupt_server_initialize(
@@ -120,8 +120,8 @@ T_TEST_CASE(InterruptServerSMPInitializeInvalidPriority)
     RTEMS_DEFAULT_ATTRIBUTES,
     &server_count
   );
-  T_rsc(sc, RTEMS_INVALID_PRIORITY);
-  T_eq_u32(server_count, 0);
+  T_rsc( sc, RTEMS_INVALID_PRIORITY );
+  T_eq_u32( server_count, 0 );
 
   server_count = 456;
   sc = rtems_interrupt_server_initialize(
@@ -131,27 +131,27 @@ T_TEST_CASE(InterruptServerSMPInitializeInvalidPriority)
     RTEMS_DEFAULT_ATTRIBUTES,
     &server_count
   );
-  T_rsc_success(sc);
-  T_eq_u32(server_count, 2);
+  T_rsc_success( sc );
+  T_eq_u32( server_count, 2 );
 
-  sc = rtems_interrupt_server_delete(0);
-  T_rsc_success(sc);
+  sc = rtems_interrupt_server_delete( 0 );
+  T_rsc_success( sc );
   ensure_server_termination();
 
-  sc = rtems_interrupt_server_delete(1);
-  T_rsc_success(sc);
+  sc = rtems_interrupt_server_delete( 1 );
+  T_rsc_success( sc );
   ensure_server_termination();
 }
 
-T_TEST_CASE(InterruptServerSMPInitializeNoMemory)
+T_TEST_CASE( InterruptServerSMPInitializeNoMemory )
 {
   rtems_status_code sc;
-  uint32_t server_count;
-  void *greedy;
+  uint32_t          server_count;
+  void             *greedy;
 
-  T_assert_eq_u32(rtems_scheduler_get_processor_maximum(), 2);
+  T_assert_eq_u32( rtems_scheduler_get_processor_maximum(), 2 );
 
-  greedy = rtems_heap_greedy_allocate(NULL, 0);
+  greedy = rtems_heap_greedy_allocate( NULL, 0 );
 
   server_count = 456;
   sc = rtems_interrupt_server_initialize(
@@ -161,35 +161,35 @@ T_TEST_CASE(InterruptServerSMPInitializeNoMemory)
     RTEMS_DEFAULT_ATTRIBUTES,
     &server_count
   );
-  T_rsc(sc, RTEMS_NO_MEMORY);
-  T_eq_u32(server_count, 1);
+  T_rsc( sc, RTEMS_NO_MEMORY );
+  T_eq_u32( server_count, 1 );
 
-  rtems_heap_greedy_free(greedy);
+  rtems_heap_greedy_free( greedy );
 
-  sc = rtems_interrupt_server_delete(0);
-  T_rsc_success(sc);
+  sc = rtems_interrupt_server_delete( 0 );
+  T_rsc_success( sc );
   ensure_server_termination();
 
-  sc = rtems_interrupt_server_delete(1);
-  T_rsc(sc, RTEMS_INVALID_ID);
+  sc = rtems_interrupt_server_delete( 1 );
+  T_rsc( sc, RTEMS_INVALID_ID );
 }
 
-T_TEST_CASE(InterruptServerSMPInitializeNoScheduler)
+T_TEST_CASE( InterruptServerSMPInitializeNoScheduler )
 {
-  rtems_status_code sc;
-  uint32_t server_count;
-  rtems_id scheduler_id;
+  rtems_status_code   sc;
+  uint32_t            server_count;
+  rtems_id            scheduler_id;
   rtems_task_priority prio;
 
-  T_assert_eq_u32(rtems_scheduler_get_processor_maximum(), 2);
+  T_assert_eq_u32( rtems_scheduler_get_processor_maximum(), 2 );
 
   scheduler_id = 0;
-  sc = rtems_scheduler_ident_by_processor(1, &scheduler_id);
-  T_rsc_success(sc);
-  T_ne_u32(scheduler_id, 0);
+  sc = rtems_scheduler_ident_by_processor( 1, &scheduler_id );
+  T_rsc_success( sc );
+  T_ne_u32( scheduler_id, 0 );
 
-  sc = rtems_scheduler_remove_processor(scheduler_id, 1);
-  T_rsc_success(sc);
+  sc = rtems_scheduler_remove_processor( scheduler_id, 1 );
+  T_rsc_success( sc );
 
   server_count = 456;
   sc = rtems_interrupt_server_initialize(
@@ -199,31 +199,31 @@ T_TEST_CASE(InterruptServerSMPInitializeNoScheduler)
     RTEMS_DEFAULT_ATTRIBUTES,
     &server_count
   );
-  T_rsc_success(sc);
-  T_eq_u32(server_count, 2);
+  T_rsc_success( sc );
+  T_eq_u32( server_count, 2 );
 
-  sc = rtems_interrupt_server_delete(0);
-  T_rsc_success(sc);
+  sc = rtems_interrupt_server_delete( 0 );
+  T_rsc_success( sc );
 
-  sc = rtems_interrupt_server_delete(1);
-  T_rsc_success(sc);
+  sc = rtems_interrupt_server_delete( 1 );
+  T_rsc_success( sc );
 
   prio = 0;
-  sc = rtems_task_set_priority(RTEMS_SELF, 124, &prio);
-  T_rsc_success(sc);
+  sc = rtems_task_set_priority( RTEMS_SELF, 124, &prio );
+  T_rsc_success( sc );
 
-  sc = rtems_task_set_priority(RTEMS_SELF, prio, &prio);
-  T_rsc_success(sc);
+  sc = rtems_task_set_priority( RTEMS_SELF, prio, &prio );
+  T_rsc_success( sc );
 
-  sc = rtems_scheduler_add_processor(scheduler_id, 1);
-  T_rsc_success(sc);
+  sc = rtems_scheduler_add_processor( scheduler_id, 1 );
+  T_rsc_success( sc );
 }
 
 const char rtems_test_name[] = "SMPIRQS 1";
 
-static void Init(rtems_task_argument argument)
+static void Init( rtems_task_argument argument )
 {
-  rtems_test_run(argument, TEST_STATE);
+  rtems_test_run( argument, TEST_STATE );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -241,17 +241,20 @@ static void Init(rtems_task_argument argument)
 
 #include <rtems/scheduler.h>
 
-RTEMS_SCHEDULER_EDF_SMP(a);
+RTEMS_SCHEDULER_EDF_SMP( a );
 
-RTEMS_SCHEDULER_EDF_SMP(b);
+RTEMS_SCHEDULER_EDF_SMP( b );
 
-#define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-  RTEMS_SCHEDULER_TABLE_EDF_SMP(a, rtems_build_name('A', ' ', ' ', ' ')), \
-  RTEMS_SCHEDULER_TABLE_EDF_SMP(b, rtems_build_name('B', ' ', ' ', ' '))
+#define CONFIGURE_SCHEDULER_TABLE_ENTRIES                                     \
+  RTEMS_SCHEDULER_TABLE_EDF_SMP( a, rtems_build_name( 'A', ' ', ' ', ' ' ) ), \
+    RTEMS_SCHEDULER_TABLE_EDF_SMP(                                            \
+      b,                                                                      \
+      rtems_build_name( 'B', ' ', ' ', ' ' )                                  \
+    )
 
-#define CONFIGURE_SCHEDULER_ASSIGNMENTS \
-  RTEMS_SCHEDULER_ASSIGN(0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
-  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL)
+#define CONFIGURE_SCHEDULER_ASSIGNMENTS                                    \
+  RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
+    RTEMS_SCHEDULER_ASSIGN( 1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL )
 
 #define CONFIGURE_INIT
 

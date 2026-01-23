@@ -34,33 +34,30 @@
 
 #include <inttypes.h>
 
-rtems_task Test_task(
-  rtems_task_argument task_index
-)
+rtems_task Test_task( rtems_task_argument task_index )
 {
   (void) task_index;
 
-  uint32_t          cpu_num;
-  char              name[5];
-  char             *p;
+  uint32_t cpu_num;
+  char     name[ 5 ];
+  char    *p;
 
   /* Get the task name */
   p = rtems_object_get_name( RTEMS_SELF, 5, name );
   rtems_test_assert( p != NULL );
 
-   /* Get the CPU Number */
+  /* Get the CPU Number */
   cpu_num = rtems_scheduler_get_processor();
 
   /* Print that the task is up and running. */
   Loop();
-  locked_printf(" CPU %" PRIu32 " running Task %s\n", cpu_num, name);
+  locked_printf( " CPU %" PRIu32 " running Task %s\n", cpu_num, name );
 
   /* Set the flag that the task is up and running */
-  TaskRan[cpu_num] = true;
-
+  TaskRan[ cpu_num ] = true;
 
   /* Drop into a loop which will keep this task on
    * running on the cpu.
    */
-  while(1);
+  while ( 1 );
 }

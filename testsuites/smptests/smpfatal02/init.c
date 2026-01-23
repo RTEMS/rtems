@@ -47,61 +47,61 @@ static uint32_t main_cpu;
 
 static SMP_barrier_Control barrier = SMP_BARRIER_CONTROL_INITIALIZER;
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
-  assert(0);
+  assert( 0 );
 }
 
 static void fatal_extension(
   rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code code
+  bool               always_set_to_false,
+  rtems_fatal_code   code
 )
 {
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
-  uint32_t self = rtems_scheduler_get_processor();
-  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
+  uint32_t          self = rtems_scheduler_get_processor();
+  uint32_t          cpu_count = rtems_scheduler_get_processor_maximum();
 
-  assert(!always_set_to_false);
+  assert( !always_set_to_false );
 
   if ( source == RTEMS_FATAL_SOURCE_APPLICATION ) {
     uint32_t cpu;
 
-    assert(self == main_cpu);
-    assert(code == 0xdeadbeef);
+    assert( self == main_cpu );
+    assert( code == 0xdeadbeef );
 
     _SMP_Request_shutdown();
-    _SMP_barrier_Wait(&barrier, &barrier_state, cpu_count);
+    _SMP_barrier_Wait( &barrier, &barrier_state, cpu_count );
 
-    for (cpu = 0; cpu < cpu_count; ++cpu) {
+    for ( cpu = 0; cpu < cpu_count; ++cpu ) {
       const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
-      Per_CPU_State state = _Per_CPU_Get_state(per_cpu);
+      Per_CPU_State          state = _Per_CPU_Get_state( per_cpu );
 
-      assert(state == PER_CPU_STATE_SHUTDOWN);
+      assert( state == PER_CPU_STATE_SHUTDOWN );
     }
 
-    for (cpu = cpu_count; cpu < MAX_CPUS; ++cpu) {
+    for ( cpu = cpu_count; cpu < MAX_CPUS; ++cpu ) {
       const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
-      Per_CPU_State state = _Per_CPU_Get_state(per_cpu);
+      Per_CPU_State          state = _Per_CPU_Get_state( per_cpu );
 
-      assert(state == PER_CPU_STATE_INITIAL);
+      assert( state == PER_CPU_STATE_INITIAL );
     }
 
     TEST_END();
   } else if ( source == RTEMS_FATAL_SOURCE_SMP ) {
-    assert(self != main_cpu);
-    assert(code == SMP_FATAL_SHUTDOWN_RESPONSE);
-    _SMP_barrier_Wait(&barrier, &barrier_state, cpu_count);
-    _SMP_barrier_Wait(&barrier, &barrier_state, cpu_count);
+    assert( self != main_cpu );
+    assert( code == SMP_FATAL_SHUTDOWN_RESPONSE );
+    _SMP_barrier_Wait( &barrier, &barrier_state, cpu_count );
+    _SMP_barrier_Wait( &barrier, &barrier_state, cpu_count );
   }
 }
 
 static rtems_status_code test_driver_init(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 )
 {
   (void) major;
@@ -114,31 +114,31 @@ static rtems_status_code test_driver_init(
 
   TEST_BEGIN();
 
-  assert(rtems_configuration_get_maximum_processors() == MAX_CPUS);
+  assert( rtems_configuration_get_maximum_processors() == MAX_CPUS );
 
   main_cpu = self;
 
-  for (cpu = 0; cpu < MAX_CPUS; ++cpu) {
+  for ( cpu = 0; cpu < MAX_CPUS; ++cpu ) {
     const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
-    Per_CPU_State state = _Per_CPU_Get_state(per_cpu);
+    Per_CPU_State          state = _Per_CPU_Get_state( per_cpu );
 
-    if (cpu == self) {
-      assert(state == PER_CPU_STATE_INITIAL);
-    } else if (cpu < cpu_count) {
+    if ( cpu == self ) {
+      assert( state == PER_CPU_STATE_INITIAL );
+    } else if ( cpu < cpu_count ) {
       assert(
-        state == PER_CPU_STATE_INITIAL
-          || state == PER_CPU_STATE_READY_TO_START_MULTITASKING
+        state == PER_CPU_STATE_INITIAL ||
+        state == PER_CPU_STATE_READY_TO_START_MULTITASKING
       );
     } else {
-      assert(state == PER_CPU_STATE_INITIAL);
+      assert( state == PER_CPU_STATE_INITIAL );
     }
   }
 
-  if (cpu_count > 1) {
-    rtems_fatal(RTEMS_FATAL_SOURCE_APPLICATION, 0xdeadbeef);
+  if ( cpu_count > 1 ) {
+    rtems_fatal( RTEMS_FATAL_SOURCE_APPLICATION, 0xdeadbeef );
   } else {
     TEST_END();
-    exit(0);
+    exit( 0 );
   }
 
   return RTEMS_SUCCESSFUL;
@@ -151,8 +151,7 @@ static rtems_status_code test_driver_init(
   { .initialization_entry = test_driver_init }
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = fatal_extension }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .fatal = fatal_extension }, RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_PROCESSORS MAX_CPUS
 

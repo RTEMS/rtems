@@ -37,7 +37,7 @@ static void Init( rtems_task_argument arg )
   TEST_BEGIN();
 
   sc = rtems_semaphore_create(
-    rtems_build_name('M', 'R', 'S', 'P'),
+    rtems_build_name( 'M', 'R', 'S', 'P' ),
     1,
     RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
       RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
@@ -46,10 +46,7 @@ static void Init( rtems_task_argument arg )
   );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_timer_create(
-    rtems_build_name( 'E', 'V', 'I', 'L' ),
-    &timer_id
-  );
+  sc = rtems_timer_create( rtems_build_name( 'E', 'V', 'I', 'L' ), &timer_id );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   sc = rtems_semaphore_obtain( sem_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
@@ -64,14 +61,13 @@ static void Init( rtems_task_argument arg )
 
 static void fatal_extension(
   rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code code
+  bool               always_set_to_false,
+  rtems_fatal_code   code
 )
 {
   if (
-    source == INTERNAL_ERROR_CORE
-      && !always_set_to_false
-      && code == INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_STICKY_FROM_BAD_STATE
+    source == INTERNAL_ERROR_CORE && !always_set_to_false &&
+    code == INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_STICKY_FROM_BAD_STATE
   ) {
     TEST_END();
   }
@@ -81,11 +77,10 @@ static void fatal_extension(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = fatal_extension }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .fatal = fatal_extension }, RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS 1
-#define CONFIGURE_MAXIMUM_TIMERS 1
+#define CONFIGURE_MAXIMUM_TASKS      1
+#define CONFIGURE_MAXIMUM_TIMERS     1
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

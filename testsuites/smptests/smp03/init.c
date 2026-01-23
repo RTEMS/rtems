@@ -38,32 +38,29 @@
 
 const char rtems_test_name[] = "SMP 3";
 
-static void success(void)
+static void success( void )
 {
   TEST_END();
   rtems_test_exit( 0 );
 }
 
-void Loop() {
+void Loop()
+{
   volatile int i;
 
-  for (i=0; i<300000; i++);
+  for ( i = 0; i < 300000; i++ );
 }
 
-void PrintTaskInfo(
-  const char *task_name
-)
+void PrintTaskInfo( const char *task_name )
 {
   uint32_t cpu_num;
 
   cpu_num = rtems_scheduler_get_processor();
 
-  locked_printf("  CPU %" PRIu32 " running task %s\n", cpu_num, task_name );
+  locked_printf( "  CPU %" PRIu32 " running task %s\n", cpu_num, task_name );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -85,22 +82,21 @@ rtems_task Init(
   }
 
   /* Initialize the TaskRan array */
-  TaskRan[0] = true;
-  for ( i=1; i<cpu_max ; i++ ) {
-    TaskRan[i] = false;
+  TaskRan[ 0 ] = true;
+  for ( i = 1; i < cpu_max; i++ ) {
+    TaskRan[ i ] = false;
   }
 
   /* Show that the init task is running on this cpu */
   PrintTaskInfo( "Init" );
 
   /* for each remaining cpu create and start a task */
-  for ( i=1; i < cpu_max; i++ ){
-
+  for ( i = 1; i < cpu_max; i++ ) {
     ch = '0' + i;
 
     status = rtems_task_create(
       rtems_build_name( 'T', 'A', ch, ' ' ),
-      CONFIGURE_INIT_TASK_PRIORITY + (2*i),
+      CONFIGURE_INIT_TASK_PRIORITY + ( 2 * i ),
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_PREEMPT,
       RTEMS_FLOATING_POINT,
@@ -109,12 +105,11 @@ rtems_task Init(
     directive_failed( status, "rtems_task_create" );
     status = rtems_task_start( id, Test_task, i );
     directive_failed( status, "rtems_task_start" );
-    
+
     /* Allow task to start before starting next task.
      * This is necessary on some simulators.
-     */ 
-    while (TaskRan[i] == false)
-      ;
+     */
+    while ( TaskRan[ i ] == false );
   }
 
   /* Create/Start an aditional task with the highest priority */
@@ -127,20 +122,21 @@ rtems_task Init(
     &id
   );
   directive_failed( status, "rtems_task_create" );
-  status = rtems_task_start(id,Test_task,cpu_max);
+  status = rtems_task_start( id, Test_task, cpu_max );
   directive_failed( status, "rtems_task_start" );
 
   /* Wait on all tasks to run */
-  while (1) {
+  while ( 1 ) {
     TestFinished = true;
-    for ( i=1; i < (cpu_max+1) ; i++ ) {
-      if (TaskRan[i] == false)
+    for ( i = 1; i < ( cpu_max + 1 ); i++ ) {
+      if ( TaskRan[ i ] == false ) {
         TestFinished = false;
+      }
     }
-    if (TestFinished) {
+    if ( TestFinished ) {
       success();
     }
   }
 
-  rtems_test_exit( 0 );    
+  rtems_test_exit( 0 );
 }

@@ -35,7 +35,7 @@
 
 const char rtems_test_name[] = "SMPFATAL 6";
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -43,21 +43,20 @@ static void Init(rtems_task_argument arg)
 
   TEST_BEGIN();
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   (void) level;
-  rtems_task_wake_after(1);
+  rtems_task_wake_after( 1 );
 }
 
 static void fatal_extension(
   rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code code
+  bool               always_set_to_false,
+  rtems_fatal_code   code
 )
 {
   if (
-    source == INTERNAL_ERROR_CORE
-      && !always_set_to_false
-      && code == INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
+    source == INTERNAL_ERROR_CORE && !always_set_to_false &&
+    code == INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
   ) {
     TEST_END();
   }
@@ -67,8 +66,7 @@ static void fatal_extension(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = fatal_extension }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .fatal = fatal_extension }, RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 2
 

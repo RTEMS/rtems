@@ -35,10 +35,7 @@
 
 const char rtems_test_name[] = "SMP 8";
 
-void PrintTaskInfo(
-  const char         *task_name,
-  rtems_time_of_day  *_tb 
-)
+void PrintTaskInfo( const char *task_name, rtems_time_of_day *_tb )
 {
   uint32_t cpu_num;
 
@@ -47,48 +44,48 @@ void PrintTaskInfo(
   /* Print the cpu number and task name */
   locked_printf(
     "  CPU %" PRIu32 " running task %s - rtems_clock_get_tod "
-    "%02" PRId32 ":%02" PRId32 ":%02" PRId32 "   %02" PRId32 
-        "/%02" PRId32 "/%04" PRId32 "\n",
+    "%02" PRId32 ":%02" PRId32 ":%02" PRId32 "   %02" PRId32 "/%02" PRId32
+    "/%04" PRId32 "\n",
     cpu_num,
     task_name,
-    _tb->hour, _tb->minute, _tb->second, 
-    _tb->month, _tb->day, _tb->year
-  ); 
+    _tb->hour,
+    _tb->minute,
+    _tb->second,
+    _tb->month,
+    _tb->day,
+    _tb->year
+  );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
   rtems_time_of_day time;
   uint32_t          i;
-  char              ch[4];
+  char              ch[ 4 ];
   rtems_id          id;
 
   TEST_BEGIN();
- 
+
   locked_print_initialize();
 
-  time.year   = 1988;
-  time.month  = 12;
-  time.day    = 31;
-  time.hour   = 9;
+  time.year = 1988;
+  time.month = 12;
+  time.day = 31;
+  time.hour = 9;
   time.minute = 0;
   time.second = 0;
-  time.ticks  = 0;
+  time.ticks = 0;
 
   status = rtems_clock_set( &time );
 
   /* Create/verify synchronisation semaphore */
   status = rtems_semaphore_create(
-    rtems_build_name ('S', 'E', 'M', '1'),
-    1,                                             
-    RTEMS_LOCAL                   |
-    RTEMS_SIMPLE_BINARY_SEMAPHORE |
-    RTEMS_PRIORITY,
+    rtems_build_name( 'S', 'E', 'M', '1' ),
+    1,
+    RTEMS_LOCAL | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_PRIORITY,
     1,
     &Semaphore
   );
@@ -97,11 +94,10 @@ rtems_task Init(
   /* Show that the init task is running on this cpu */
   PrintTaskInfo( "Init", &time );
 
-  for ( i=1; i <= rtems_scheduler_get_processor_maximum() *3; i++ ) {
-
-    sprintf(ch, "%02" PRIu32, i );
+  for ( i = 1; i <= rtems_scheduler_get_processor_maximum() * 3; i++ ) {
+    sprintf( ch, "%02" PRIu32, i );
     status = rtems_task_create(
-      rtems_build_name( 'T', 'A', ch[0], ch[1] ),
+      rtems_build_name( 'T', 'A', ch[ 0 ], ch[ 1 ] ),
       2,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
@@ -110,7 +106,7 @@ rtems_task Init(
     );
     directive_failed( status, "task create" );
 
-    status = rtems_task_start( id, Test_task, i+1 );
+    status = rtems_task_start( id, Test_task, i + 1 );
     directive_failed( status, "task start" );
   }
 

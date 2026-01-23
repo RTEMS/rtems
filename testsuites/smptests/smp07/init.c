@@ -39,46 +39,45 @@ volatile bool TaskRan = false;
 volatile bool TSRFired = false;
 rtems_id      Semaphore;
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Test_task(
-  rtems_task_argument argument
-);
+rtems_task Test_task( rtems_task_argument argument );
 
-static void success(void)
+static void success( void )
 {
-  TEST_END( );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
   uint32_t          cpu_num;
   rtems_status_code sc;
-  char              name[5];
+  char              name[ 5 ];
   char             *p;
 
   /* Get the task name */
   p = rtems_object_get_name( RTEMS_SELF, 5, name );
   rtems_test_assert( p != NULL );
 
-   /* Get the CPU Number */
+  /* Get the CPU Number */
   cpu_num = rtems_scheduler_get_processor();
 
   /* Print that the task is up and running. */
-  locked_printf(" CPU %" PRIu32 " runnng Task %s and blocking\n", cpu_num, name);
+  locked_printf(
+    " CPU %" PRIu32 " runnng Task %s and blocking\n",
+    cpu_num,
+    name
+  );
 
   sc = rtems_semaphore_obtain( Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-  directive_failed( sc,"obtain in test task");
+  directive_failed( sc, "obtain in test task" );
 
-  if ( !TSRFired )
+  if ( !TSRFired ) {
     locked_printf( "*** ERROR TSR DID NOT FIRE BUT TEST TASK AWAKE***" );
+  }
 
   /* Print that the task is up and running. */
   locked_printf(
@@ -92,11 +91,7 @@ rtems_task Test_task(
   rtems_task_exit();
 }
 
-
-static rtems_timer_service_routine TimerMethod(
-  rtems_id  timer,
-  void     *arg
-)
+static rtems_timer_service_routine TimerMethod( rtems_id timer, void *arg )
 {
   (void) timer;
   (void) arg;
@@ -109,18 +104,16 @@ static rtems_timer_service_routine TimerMethod(
   rtems_semaphore_release( Semaphore );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  int                cpu_num;
-  rtems_id           id;
-  rtems_status_code  status;
-  rtems_interval     per_second;
-  rtems_interval     then;
-  rtems_id           Timer;
+  int               cpu_num;
+  rtems_id          id;
+  rtems_status_code status;
+  rtems_interval    per_second;
+  rtems_interval    then;
+  rtems_id          Timer;
 
   locked_print_initialize();
   TEST_BEGIN();
@@ -131,19 +124,17 @@ rtems_task Init(
 
   /* Create/verify semaphore */
   status = rtems_semaphore_create(
-    rtems_build_name ('S', 'E', 'M', '1'),
+    rtems_build_name( 'S', 'E', 'M', '1' ),
     1,
-    RTEMS_LOCAL                   |
-    RTEMS_SIMPLE_BINARY_SEMAPHORE |
-    RTEMS_PRIORITY,
+    RTEMS_LOCAL | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_PRIORITY,
     1,
     &Semaphore
   );
   directive_failed( status, "rtems_semaphore_create" );
 
   /* Lock semaphore */
-  status = rtems_semaphore_obtain( Semaphore, RTEMS_WAIT, 0);
-  directive_failed( status,"rtems_semaphore_obtain of SEM1\n");
+  status = rtems_semaphore_obtain( Semaphore, RTEMS_WAIT, 0 );
+  directive_failed( status, "rtems_semaphore_obtain of SEM1\n" );
 
   /* Create and Start test task. */
   status = rtems_task_create(
@@ -157,18 +148,21 @@ rtems_task Init(
   directive_failed( status, "task create" );
 
   cpu_num = rtems_scheduler_get_processor();
-  locked_printf(" CPU %d start task TA1\n", cpu_num );
+  locked_printf( " CPU %d start task TA1\n", cpu_num );
   status = rtems_task_start( id, Test_task, 1 );
   directive_failed( status, "task start" );
 
   /* Create and start TSR */
-  locked_printf(" CPU %d create and start timer\n", cpu_num );
-  status = rtems_timer_create( rtems_build_name( 'T', 'M', 'R', '1' ), &Timer);
+  locked_printf( " CPU %d create and start timer\n", cpu_num );
+  status = rtems_timer_create(
+    rtems_build_name( 'T', 'M', 'R', '1' ),
+    &Timer
+  );
   directive_failed( status, "rtems_timer_create" );
 
   per_second = rtems_clock_get_ticks_per_second();
   status = rtems_timer_fire_after( Timer, 2 * per_second, TimerMethod, NULL );
-  directive_failed( status, "rtems_timer_fire_after");
+  directive_failed( status, "rtems_timer_fire_after" );
 
   /*
    *  Wait long enough that TSR should have fired.
@@ -176,20 +170,23 @@ rtems_task Init(
    *  Spin so CPU 0 is consumed.  This forces task to run on CPU 1.
    */
   then = rtems_clock_get_ticks_since_boot() + 4 * per_second;
-  while (1) {
-    if ( rtems_clock_get_ticks_since_boot() > then )
+  while ( 1 ) {
+    if ( rtems_clock_get_ticks_since_boot() > then ) {
       break;
-    if ( TSRFired && TaskRan )
+    }
+    if ( TSRFired && TaskRan ) {
       break;
+    }
   };
 
   /* Validate the timer fired and that the task ran */
-  if ( !TSRFired )
+  if ( !TSRFired ) {
     locked_printf( "*** ERROR TSR DID NOT FIRE ***" );
+  }
 
   if ( !TaskRan ) {
     locked_printf( "*** ERROR TASK DID NOT RUN ***" );
-    rtems_test_exit(0);
+    rtems_test_exit( 0 );
   }
 
   /* End the program */
@@ -201,14 +198,14 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS   2
-#define CONFIGURE_MAXIMUM_TIMERS           1
+#define CONFIGURE_MAXIMUM_PROCESSORS 2
+#define CONFIGURE_MAXIMUM_TIMERS     1
 
-#define CONFIGURE_MAXIMUM_TASKS            2
+#define CONFIGURE_MAXIMUM_TASKS      2
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MAXIMUM_SEMAPHORES       2
+#define CONFIGURE_MAXIMUM_SEMAPHORES 2
 
 #define CONFIGURE_INIT
 

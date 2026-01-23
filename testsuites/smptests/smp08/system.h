@@ -31,13 +31,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Test_task(
-  rtems_task_argument argument
-);
+rtems_task Test_task( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -46,25 +42,21 @@ rtems_task Test_task(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS   4 
+#define CONFIGURE_MAXIMUM_PROCESSORS 4
 
-#define CONFIGURE_MAXIMUM_TASKS            \
-    (1 + (CONFIGURE_MAXIMUM_PROCESSORS*3) )
+#define CONFIGURE_MAXIMUM_TASKS ( 1 + ( CONFIGURE_MAXIMUM_PROCESSORS * 3 ) )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
-#define CONFIGURE_MAXIMUM_SEMAPHORES          2
-  
+#define CONFIGURE_EXTRA_TASK_STACKS  ( 3 * RTEMS_MINIMUM_STACK_SIZE )
+#define CONFIGURE_MAXIMUM_SEMAPHORES 2
+
 #include <rtems/confdefs.h>
 
-TEST_EXTERN rtems_id       Semaphore;      /* synchronisation semaphore */ 
+TEST_EXTERN rtems_id Semaphore; /* synchronisation semaphore */
 
-void PrintTaskInfo(
-  const char         *task_name,
-  rtems_time_of_day  *_tb 
-);
+void PrintTaskInfo( const char *task_name, rtems_time_of_day *_tb );
 
 /* end of include file */

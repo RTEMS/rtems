@@ -31,36 +31,30 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Test_task(
-  rtems_task_argument argument
-);
+rtems_task Test_task( rtems_task_argument argument );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS   4 
+#define CONFIGURE_MAXIMUM_PROCESSORS 4
 
-#define CONFIGURE_MAXIMUM_TASKS            \
-    (1 + CONFIGURE_MAXIMUM_PROCESSORS)
+#define CONFIGURE_MAXIMUM_TASKS ( 1 + CONFIGURE_MAXIMUM_PROCESSORS )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_INIT_TASK_STACK_SIZE \
-    (3 * CONFIGURE_MINIMUM_TASK_STACK_SIZE)
+  ( 3 * CONFIGURE_MINIMUM_TASK_STACK_SIZE )
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MAXIMUM_SEMAPHORES          2
+#define CONFIGURE_MAXIMUM_SEMAPHORES 2
 
 #include <rtems/confdefs.h>
-
 
 /* global variables */
 
@@ -74,11 +68,11 @@ typedef struct {
   uint32_t task_index;
 } Log_t;
 
-#define           LOG_SIZE   20
+#define LOG_SIZE 20
 
-TEST_EXTERN rtems_id   Semaphore;      /* synchronisation semaphore */ 
-TEST_EXTERN Log_t      Log[LOG_SIZE];  /* A log of locks/unlocks */
-TEST_EXTERN volatile uint32_t   Log_index;      /* Index into log */
+TEST_EXTERN rtems_id          Semaphore;       /* synchronisation semaphore */
+TEST_EXTERN Log_t             Log[ LOG_SIZE ]; /* A log of locks/unlocks */
+TEST_EXTERN volatile uint32_t Log_index;       /* Index into log */
 
 /*
  *  Handy macros and static inline functions

@@ -37,46 +37,40 @@ const char rtems_test_name[] = "SMP 5";
 
 static volatile bool init_task_done;
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Test_task(
-  rtems_task_argument argument
-);
+rtems_task Test_task( rtems_task_argument argument );
 
-
-static void success(void)
+static void success( void )
 {
   TEST_END();
   rtems_test_exit( 0 );
 }
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  while (!init_task_done) {
+  while ( !init_task_done ) {
     /* Wait */
   }
 
-  locked_printf( "Shut down from CPU %" PRIu32 "\n", rtems_scheduler_get_processor() );
+  locked_printf(
+    "Shut down from CPU %" PRIu32 "\n",
+    rtems_scheduler_get_processor()
+  );
   success();
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t           i;
-  char               ch;
-  uint32_t           cpu_num;
-  rtems_id           id;
-  rtems_status_code  status;
+  uint32_t          i;
+  char              ch;
+  uint32_t          cpu_num;
+  rtems_id          id;
+  rtems_status_code status;
 
   locked_print_initialize();
   TEST_BEGIN();
@@ -85,7 +79,7 @@ rtems_task Init(
     success();
   }
 
-  for ( i=0; i<rtems_scheduler_get_processor_maximum() ; i++ ) {
+  for ( i = 0; i < rtems_scheduler_get_processor_maximum(); i++ ) {
     ch = '1' + i;
 
     status = rtems_task_create(
@@ -99,16 +93,15 @@ rtems_task Init(
     directive_failed( status, "task create" );
 
     cpu_num = rtems_scheduler_get_processor();
-    locked_printf(" CPU %" PRIu32 " start task TA%c\n", cpu_num, ch);
+    locked_printf( " CPU %" PRIu32 " start task TA%c\n", cpu_num, ch );
 
-    status = rtems_task_start( id, Test_task, i+1 );
+    status = rtems_task_start( id, Test_task, i + 1 );
     directive_failed( status, "task start" );
   }
 
   init_task_done = true;
 
-  while (1)
-    ;
+  while ( 1 );
 }
 
 /* configuration information */
@@ -116,10 +109,9 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS   2
+#define CONFIGURE_MAXIMUM_PROCESSORS 2
 
-#define CONFIGURE_MAXIMUM_TASKS            \
-    (1 + CONFIGURE_MAXIMUM_PROCESSORS)
+#define CONFIGURE_MAXIMUM_TASKS      ( 1 + CONFIGURE_MAXIMUM_PROCESSORS )
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
