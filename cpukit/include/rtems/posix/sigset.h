@@ -45,21 +45,17 @@
  *  Currently 32 signals numbered 1-32 are defined
  */
 
-#define SIGNAL_EMPTY_MASK  0x00000000L
-#define SIGNAL_ALL_MASK    0xffffffffL
+#define SIGNAL_EMPTY_MASK 0x00000000L
+#define SIGNAL_ALL_MASK   0xffffffffL
 
-static inline sigset_t signo_to_mask(
-  uint32_t sig
-)
+static inline sigset_t signo_to_mask( uint32_t sig )
 {
-  return 1u << (sig - 1);
+  return 1u << ( sig - 1 );
 }
 
-static inline bool is_valid_signo(
-  int signo
-)
+static inline bool is_valid_signo( int signo )
 {
-  return ((signo) >= 1 && (signo) <= 32 );
+  return ( ( signo ) >= 1 && ( signo ) <= 32 );
 }
 
 #endif

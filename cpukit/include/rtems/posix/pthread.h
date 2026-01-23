@@ -61,9 +61,9 @@ extern "C" {
  */
 typedef struct {
   /** This is the entry point for a POSIX initialization thread. */
-  void       *(*thread_entry)(void *);
+  void *( *thread_entry )( void * );
   /** This is the stack size for a POSIX initialization thread. */
-  int       stack_size;
+  int stack_size;
 } posix_initialization_threads_table;
 
 extern const size_t _POSIX_Threads_Minimum_stack_size;

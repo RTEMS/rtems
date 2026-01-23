@@ -77,12 +77,12 @@ void _POSIX_Message_queue_Delete(
  * @note This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open time.
  */
 ssize_t _POSIX_Message_queue_Receive_support(
-  mqd_t                         mqdes,
-  char                         *msg_ptr,
-  size_t                        msg_len,
-  unsigned int                 *msg_prio,
-  const struct timespec        *abstime,
-  Thread_queue_Enqueue_callout  enqueue_callout
+  mqd_t                        mqdes,
+  char                        *msg_ptr,
+  size_t                       msg_len,
+  unsigned int                *msg_prio,
+  const struct timespec       *abstime,
+  Thread_queue_Enqueue_callout enqueue_callout
 );
 
 /**
@@ -91,19 +91,20 @@ ssize_t _POSIX_Message_queue_Receive_support(
  *  This routine posts a message to a specified message queue.
  */
 int _POSIX_Message_queue_Send_support(
-  mqd_t                         mqdes,
-  const char                   *msg_ptr,
-  size_t                        msg_len,
-  unsigned int                  msg_prio,
-  const struct timespec        *abstime,
-  Thread_queue_Enqueue_callout  enqueue_callout
+  mqd_t                        mqdes,
+  const char                  *msg_ptr,
+  size_t                       msg_len,
+  unsigned int                 msg_prio,
+  const struct timespec       *abstime,
+  Thread_queue_Enqueue_callout enqueue_callout
 );
 
 static inline POSIX_Message_queue_Control *
-  _POSIX_Message_queue_Allocate_unprotected( void )
+_POSIX_Message_queue_Allocate_unprotected( void )
 {
-  return (POSIX_Message_queue_Control *)
-    _Objects_Allocate_unprotected( &_POSIX_Message_queue_Information );
+  return (POSIX_Message_queue_Control *) _Objects_Allocate_unprotected(
+    &_POSIX_Message_queue_Information
+  );
 }
 
 /**
@@ -118,7 +119,6 @@ static inline void _POSIX_Message_queue_Free(
 {
   _Objects_Free( &_POSIX_Message_queue_Information, &the_mq->Object );
 }
-
 
 static inline POSIX_Message_queue_Control *_POSIX_Message_queue_Get(
   Objects_Id            id,
@@ -140,13 +140,10 @@ static inline POSIX_Message_queue_Control *_POSIX_Message_queue_Get(
  *  by the Score.
  */
 static inline CORE_message_queue_Submit_types
-  _POSIX_Message_queue_Priority_to_core(
-  unsigned int priority
-)
+_POSIX_Message_queue_Priority_to_core( unsigned int priority )
 {
   return (CORE_message_queue_Submit_types) priority * -1;
 }
-
 
 /*
  *  @brief POSIX Message Queue Convert Message Priority from Score
@@ -159,13 +156,13 @@ static inline unsigned int _POSIX_Message_queue_Priority_from_core(
 )
 {
   /* absolute value without a library dependency */
-  return (unsigned int) ((priority >= 0) ? priority : -priority);
+  return (unsigned int) ( ( priority >= 0 ) ? priority : -priority );
 }
 
 /**
  *  @brief POSIX Message Queue Remove from Namespace
  */
-static inline void _POSIX_Message_queue_Namespace_remove (
+static inline void _POSIX_Message_queue_Namespace_remove(
   POSIX_Message_queue_Control *the_mq
 )
 {
@@ -175,8 +172,7 @@ static inline void _POSIX_Message_queue_Namespace_remove (
   );
 }
 
-static inline POSIX_Message_queue_Control *
-_POSIX_Message_queue_Get_by_name(
+static inline POSIX_Message_queue_Control *_POSIX_Message_queue_Get_by_name(
   const char                *name,
   size_t                    *name_length_p,
   Objects_Get_by_name_error *error

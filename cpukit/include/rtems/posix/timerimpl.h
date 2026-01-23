@@ -47,26 +47,26 @@ extern "C" {
 #endif
 
 /** Timer is free */
-#define POSIX_TIMER_STATE_FREE        0x01
+#define POSIX_TIMER_STATE_FREE 0x01
 
 /** Created timer but not running */
-#define POSIX_TIMER_STATE_CREATE_NEW  0x02
+#define POSIX_TIMER_STATE_CREATE_NEW 0x02
 
 /** Created timer and running */
-#define POSIX_TIMER_STATE_CREATE_RUN  0x03
+#define POSIX_TIMER_STATE_CREATE_RUN 0x03
 
 /** Created, ran and stopped timer */
 #define POSIX_TIMER_STATE_CREATE_STOP 0x04
 
 /** Indicates that the fire time is relative to the current one */
-#define POSIX_TIMER_RELATIVE       0
+#define POSIX_TIMER_RELATIVE 0
 
 /*
  * POSIX defines TIMER_ABSTIME but no constant for relative.  So
  * we have one internally but we need to be careful it has a different
  * value.
  */
-#if (POSIX_TIMER_RELATIVE == TIMER_ABSTIME)
+#if ( POSIX_TIMER_RELATIVE == TIMER_ABSTIME )
 #error "POSIX_TIMER_RELATIVE == TIMER_ABSTIME"
 #endif
 
@@ -78,7 +78,9 @@ extern "C" {
  */
 static inline POSIX_Timer_Control *_POSIX_Timer_Allocate( void )
 {
-  return (POSIX_Timer_Control *) _Objects_Allocate( &_POSIX_Timer_Information );
+  return (POSIX_Timer_Control *) _Objects_Allocate(
+    &_POSIX_Timer_Information
+  );
 }
 
 /**
@@ -87,9 +89,7 @@ static inline POSIX_Timer_Control *_POSIX_Timer_Allocate( void )
  *  This routine frees a timer control block to the
  *  inactive chain of free timer control blocks.
  */
-static inline void _POSIX_Timer_Free (
-  POSIX_Timer_Control *the_timer
-)
+static inline void _POSIX_Timer_Free( POSIX_Timer_Control *the_timer )
 {
   _Objects_Free( &_POSIX_Timer_Information, &the_timer->Object );
 }
@@ -105,16 +105,14 @@ void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog );
  *  is set to OBJECTS_LOCAL.  Otherwise, location is set
  *  to OBJECTS_ERROR and the returned value is undefined.
  */
-static inline POSIX_Timer_Control *_POSIX_Timer_Get (
-  timer_t            id,
-  ISR_lock_Context  *lock_context
+static inline POSIX_Timer_Control *_POSIX_Timer_Get(
+  timer_t           id,
+  ISR_lock_Context *lock_context
 )
 {
-  return (POSIX_Timer_Control *) _Objects_Get(
-    (Objects_Id) id,
-    lock_context,
-    &_POSIX_Timer_Information
-  );
+  return (
+    POSIX_Timer_Control *
+  ) _Objects_Get( (Objects_Id) id, lock_context, &_POSIX_Timer_Information );
 }
 
 static inline Per_CPU_Control *_POSIX_Timer_Acquire_critical(

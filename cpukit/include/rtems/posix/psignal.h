@@ -46,9 +46,9 @@
  */
 
 typedef struct {
-  Chain_Node  Node;
-  siginfo_t   Info;
-}  POSIX_signals_Siginfo_node;
+  Chain_Node Node;
+  siginfo_t  Info;
+} POSIX_signals_Siginfo_node;
 
 extern const uint32_t _POSIX_signals_Maximum_queued_signals;
 

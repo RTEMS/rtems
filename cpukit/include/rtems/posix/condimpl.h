@@ -47,9 +47,9 @@ extern "C" {
 #endif
 
 typedef struct {
-  unsigned long flags;
+  unsigned long              flags;
   Thread_queue_Syslock_queue Queue;
-  pthread_mutex_t *mutex;
+  pthread_mutex_t           *mutex;
 } POSIX_Condition_variables_Control;
 
 #define POSIX_CONDITION_VARIABLES_CLOCK_MONOTONIC 0x1UL
@@ -67,17 +67,15 @@ typedef struct {
 #define POSIX_CONDITION_VARIABLES_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
 
 #define POSIX_CONDITION_VARIABLE_OF_THREAD_QUEUE_QUEUE( queue ) \
-  RTEMS_CONTAINER_OF( \
-    queue, POSIX_Condition_variables_Control, Queue.Queue )
+  RTEMS_CONTAINER_OF( queue, POSIX_Condition_variables_Control, Queue.Queue )
 
 /**
  *  The default condition variable attributes structure.
  */
 extern const pthread_condattr_t _POSIX_Condition_variables_Default_attributes;
 
-static inline POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get(
-  pthread_cond_t *cond
-)
+static inline POSIX_Condition_variables_Control *
+_POSIX_Condition_variables_Get( pthread_cond_t *cond )
 {
   return (POSIX_Condition_variables_Control *) cond;
 }
@@ -158,8 +156,8 @@ static inline void _POSIX_Condition_variables_Release(
  * wake up version of the "signal" operation.
  */
 int _POSIX_Condition_variables_Signal_support(
-  pthread_cond_t            *cond,
-  bool                       is_broadcast
+  pthread_cond_t *cond,
+  bool            is_broadcast
 );
 
 /**
@@ -169,31 +167,31 @@ int _POSIX_Condition_variables_Signal_support(
  * timed wait version of condition variable wait routines.
  */
 int _POSIX_Condition_variables_Wait_support(
-  pthread_cond_t            *cond,
-  pthread_mutex_t           *mutex,
-  const struct timespec     *abstime,
-  clockid_t                  clock_id
+  pthread_cond_t        *cond,
+  pthread_mutex_t       *mutex,
+  const struct timespec *abstime,
+  clockid_t              clock_id
 );
 
 bool _POSIX_Condition_variables_Auto_initialization(
   POSIX_Condition_variables_Control *the_cond
 );
 
-#define POSIX_CONDITION_VARIABLES_VALIDATE_OBJECT( the_cond, flags ) \
-  do { \
-    if ( ( the_cond ) == NULL ) { \
-      return EINVAL; \
-    } \
-    flags = ( the_cond )->flags; \
-    if ( \
-      ( ( (uintptr_t) ( the_cond ) ^ POSIX_CONDITION_VARIABLES_MAGIC ) \
-          & ~POSIX_CONDITION_VARIABLES_FLAGS_MASK ) \
-        != ( flags & ~POSIX_CONDITION_VARIABLES_FLAGS_MASK ) \
-    ) { \
+#define POSIX_CONDITION_VARIABLES_VALIDATE_OBJECT( the_cond, flags )       \
+  do {                                                                     \
+    if ( ( the_cond ) == NULL ) {                                          \
+      return EINVAL;                                                       \
+    }                                                                      \
+    flags = ( the_cond )->flags;                                           \
+    if (                                                                   \
+      ( ( (uintptr_t) ( the_cond ) ^ POSIX_CONDITION_VARIABLES_MAGIC ) &   \
+        ~POSIX_CONDITION_VARIABLES_FLAGS_MASK ) !=                         \
+      ( flags & ~POSIX_CONDITION_VARIABLES_FLAGS_MASK )                    \
+    ) {                                                                    \
       if ( !_POSIX_Condition_variables_Auto_initialization( the_cond ) ) { \
-        return EINVAL; \
-      } \
-    } \
+        return EINVAL;                                                     \
+      }                                                                    \
+    }                                                                      \
   } while ( 0 )
 
 #ifdef __cplusplus

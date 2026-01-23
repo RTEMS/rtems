@@ -53,11 +53,13 @@ extern "C" {
  */
 #define POSIX_SEMAPHORE_MAGIC 0x5d367fe7UL
 
-static inline POSIX_Semaphore_Control *
-  _POSIX_Semaphore_Allocate_unprotected( void )
+static inline POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate_unprotected(
+  void
+)
 {
-  return (POSIX_Semaphore_Control *)
-    _Objects_Allocate_unprotected( &_POSIX_Semaphore_Information );
+  return (POSIX_Semaphore_Control *) _Objects_Allocate_unprotected(
+    &_POSIX_Semaphore_Information
+  );
 }
 
 /**
@@ -66,16 +68,14 @@ static inline POSIX_Semaphore_Control *
  *  This routine frees a semaphore control block to the
  *  inactive chain of free semaphore control blocks.
  */
-static inline void _POSIX_Semaphore_Free (
+static inline void _POSIX_Semaphore_Free(
   POSIX_Semaphore_Control *the_semaphore
 )
 {
   _Objects_Free( &_POSIX_Semaphore_Information, &the_semaphore->Object );
 }
 
-static inline POSIX_Semaphore_Control *_POSIX_Semaphore_Get(
-  sem_t *sem
-)
+static inline POSIX_Semaphore_Control *_POSIX_Semaphore_Get( sem_t *sem )
 {
   return RTEMS_CONTAINER_OF( sem, POSIX_Semaphore_Control, Semaphore );
 }
@@ -91,9 +91,9 @@ static inline bool _POSIX_Semaphore_Is_busy( const sem_t *sem )
 }
 
 static inline void _POSIX_Semaphore_Initialize(
-  sem_t        *sem,
-  const char   *name,
-  unsigned int  value
+  sem_t       *sem,
+  const char  *name,
+  unsigned int value
 )
 {
   sem->_flags = (uintptr_t) sem ^ POSIX_SEMAPHORE_MAGIC;
@@ -116,7 +116,7 @@ void _POSIX_Semaphore_Delete( POSIX_Semaphore_Control *the_semaphore );
 /**
  *  @brief POSIX Semaphore Namespace Remove
  */
-static inline void _POSIX_Semaphore_Namespace_remove (
+static inline void _POSIX_Semaphore_Namespace_remove(
   POSIX_Semaphore_Control *the_semaphore
 )
 {
@@ -140,14 +140,14 @@ static inline POSIX_Semaphore_Control *_POSIX_Semaphore_Get_by_name(
   );
 }
 
-#define POSIX_SEMAPHORE_VALIDATE_OBJECT( sem ) \
-  do { \
-    if ( \
-      ( sem ) == NULL \
-        || ( (uintptr_t) ( sem ) ^ POSIX_SEMAPHORE_MAGIC ) != ( sem )->_flags \
-    ) { \
-      rtems_set_errno_and_return_minus_one( EINVAL ); \
-    } \
+#define POSIX_SEMAPHORE_VALIDATE_OBJECT( sem )                           \
+  do {                                                                   \
+    if (                                                                 \
+      ( sem ) == NULL ||                                                 \
+      ( (uintptr_t) ( sem ) ^ POSIX_SEMAPHORE_MAGIC ) != ( sem )->_flags \
+    ) {                                                                  \
+      rtems_set_errno_and_return_minus_one( EINVAL );                    \
+    }                                                                    \
   } while ( 0 )
 
 #ifdef __cplusplus

@@ -74,13 +74,13 @@ extern "C" {
  */
 
 typedef struct {
-   Objects_Control             Object;
-   CORE_message_queue_Control  Message_queue;
-   bool                        linked;
-   uint32_t                    open_count;
-   struct sigevent             notification;
-   int                         oflag;
-}  POSIX_Message_queue_Control;
+  Objects_Control            Object;
+  CORE_message_queue_Control Message_queue;
+  bool                       linked;
+  uint32_t                   open_count;
+  struct sigevent            notification;
+  int                        oflag;
+} POSIX_Message_queue_Control;
 
 /**
  * @brief The POSIX Message Queue objects information.
@@ -97,14 +97,14 @@ extern Objects_Information _POSIX_Message_queue_Information;
  * may be set).
  */
 #define POSIX_MESSAGE_QUEUE_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _POSIX_Message_queue, \
-    OBJECTS_POSIX_API, \
-    OBJECTS_POSIX_MESSAGE_QUEUES, \
-    POSIX_Message_queue_Control, \
-    max, \
-    _POSIX_PATH_MAX, \
-    NULL \
+  OBJECTS_INFORMATION_DEFINE(                         \
+    _POSIX_Message_queue,                             \
+    OBJECTS_POSIX_API,                                \
+    OBJECTS_POSIX_MESSAGE_QUEUES,                     \
+    POSIX_Message_queue_Control,                      \
+    max,                                              \
+    _POSIX_PATH_MAX,                                  \
+    NULL                                              \
   )
 
 /** @} */

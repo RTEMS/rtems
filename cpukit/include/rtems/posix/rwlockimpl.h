@@ -50,7 +50,7 @@ extern "C" {
 #define POSIX_RWLOCK_MAGIC 0x9621dabdUL
 
 typedef struct {
-  unsigned long flags;
+  unsigned long       flags;
   CORE_RWLock_Control RWLock;
 } POSIX_RWLock_Control;
 
@@ -63,16 +63,16 @@ static inline POSIX_RWLock_Control *_POSIX_RWLock_Get(
 
 bool _POSIX_RWLock_Auto_initialization( POSIX_RWLock_Control *the_rwlock );
 
-#define POSIX_RWLOCK_VALIDATE_OBJECT( rw ) \
-  do { \
-    if ( ( rw ) == NULL ) { \
-      return EINVAL; \
-    } \
+#define POSIX_RWLOCK_VALIDATE_OBJECT( rw )                                \
+  do {                                                                    \
+    if ( ( rw ) == NULL ) {                                               \
+      return EINVAL;                                                      \
+    }                                                                     \
     if ( ( (uintptr_t) ( rw ) ^ POSIX_RWLOCK_MAGIC ) != ( rw )->flags ) { \
-      if ( !_POSIX_RWLock_Auto_initialization( rw ) ) { \
-        return EINVAL; \
-      } \
-    } \
+      if ( !_POSIX_RWLock_Auto_initialization( rw ) ) {                   \
+        return EINVAL;                                                    \
+      }                                                                   \
+    }                                                                     \
   } while ( 0 )
 
 #ifdef __cplusplus

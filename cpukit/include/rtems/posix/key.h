@@ -111,16 +111,16 @@ extern const uint32_t _POSIX_Keys_Key_value_pair_maximum;
  * @brief The data structure used to manage a POSIX key.
  */
 typedef struct {
-   /** This field is the Object control structure. */
-   Objects_Control     Object;
-   /** This field is the data destructor. */
-   void (*destructor) (void *);
+  /** This field is the Object control structure. */
+  Objects_Control Object;
+  /** This field is the data destructor. */
+  void ( *destructor )( void * );
 
-   /**
+  /**
     * @brief Key value pairs of this key.
     */
-   Chain_Control Key_value_pairs;
- }  POSIX_Keys_Control;
+  Chain_Control Key_value_pairs;
+} POSIX_Keys_Control;
 
 /**
  * @brief The POSIX Key objects information.
@@ -136,14 +136,14 @@ extern Objects_Information _POSIX_Keys_Information;
  * may be set).
  */
 #define POSIX_KEYS_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _POSIX_Keys, \
-    OBJECTS_POSIX_API, \
-    OBJECTS_POSIX_KEYS, \
-    POSIX_Keys_Control, \
-    max, \
-    OBJECTS_NO_STRING_NAME, \
-    NULL \
+  OBJECTS_INFORMATION_DEFINE(                \
+    _POSIX_Keys,                             \
+    OBJECTS_POSIX_API,                       \
+    OBJECTS_POSIX_KEYS,                      \
+    POSIX_Keys_Control,                      \
+    max,                                     \
+    OBJECTS_NO_STRING_NAME,                  \
+    NULL                                     \
   )
 
 /** @} */

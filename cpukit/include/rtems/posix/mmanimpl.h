@@ -50,7 +50,7 @@ extern "C" {
  */
 typedef struct mmap_mappings_s {
   rtems_chain_node   node;  /**< The mapping chain's node */
-  void*              addr;  /**< The address of the mapped memory */
+  void              *addr;  /**< The address of the mapped memory */
   size_t             len;   /**< The length of memory mapped */
   int                flags; /**< The mapping flags */
   POSIX_Shm_Control *shm;   /**< The shared memory object or NULL */

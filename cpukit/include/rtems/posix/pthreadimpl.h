@@ -60,14 +60,15 @@ extern "C" {
  */
 #define PTHREAD_MINIMUM_STACK_SIZE _POSIX_Threads_Minimum_stack_size
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
 static inline void _POSIX_Threads_Sporadic_timer_insert(
   Thread_Control    *the_thread,
   POSIX_API_Control *api
 )
 {
-  the_thread->CPU_budget.available =
-    _Timespec_To_ticks( &api->Sporadic.sched_ss_init_budget );
+  the_thread->CPU_budget.available = _Timespec_To_ticks(
+    &api->Sporadic.sched_ss_init_budget
+  );
 
   _Watchdog_Per_CPU_insert_ticks(
     &api->Sporadic.Timer,
@@ -109,14 +110,15 @@ int _POSIX_Thread_Translate_sched_param(
   Thread_Configuration     *config
 );
 
-static inline Thread_Control *_POSIX_Threads_Allocate(void)
+static inline Thread_Control *_POSIX_Threads_Allocate( void )
 {
   _Objects_Allocator_lock();
 
   _Thread_Kill_zombies();
 
-  return (Thread_Control *)
-    _Objects_Allocate_unprotected( &_POSIX_Threads_Information.Objects );
+  return (Thread_Control *) _Objects_Allocate_unprotected(
+    &_POSIX_Threads_Information.Objects
+  );
 }
 
 /** @} */

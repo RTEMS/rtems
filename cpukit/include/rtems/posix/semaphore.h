@@ -61,11 +61,11 @@ extern "C" {
  */
 
 typedef struct {
-   Objects_Control Object;
-   sem_t           Semaphore;
-   bool            linked;
-   uint32_t        open_count;
-}  POSIX_Semaphore_Control;
+  Objects_Control Object;
+  sem_t           Semaphore;
+  bool            linked;
+  uint32_t        open_count;
+} POSIX_Semaphore_Control;
 
 /**
  * @brief The POSIX Semaphore objects information.
@@ -82,14 +82,14 @@ extern Objects_Information _POSIX_Semaphore_Information;
  * may be set).
  */
 #define POSIX_SEMAPHORE_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _POSIX_Semaphore, \
-    OBJECTS_POSIX_API, \
-    OBJECTS_POSIX_SEMAPHORES, \
-    POSIX_Semaphore_Control, \
-    max, \
-    _POSIX_PATH_MAX, \
-    NULL \
+  OBJECTS_INFORMATION_DEFINE(                     \
+    _POSIX_Semaphore,                             \
+    OBJECTS_POSIX_API,                            \
+    OBJECTS_POSIX_SEMAPHORES,                     \
+    POSIX_Semaphore_Control,                      \
+    max,                                          \
+    _POSIX_PATH_MAX,                              \
+    NULL                                          \
   )
 
 /** @} */

@@ -49,9 +49,9 @@ extern "C" {
 #endif
 
 typedef struct {
-  unsigned long flags;
-  Mutex_recursive_Control Recursive;
-  Priority_Node Priority_ceiling;
+  unsigned long            flags;
+  Mutex_recursive_Control  Recursive;
+  Priority_Node            Priority_ceiling;
   const Scheduler_Control *scheduler;
 } POSIX_Mutex_Control;
 
@@ -123,12 +123,10 @@ static inline POSIX_Mutex_Protocol _POSIX_Mutex_Get_protocol(
   unsigned long flags
 )
 {
-  return (POSIX_Mutex_Protocol) (flags & POSIX_MUTEX_PROTOCOL_MASK);
+  return (POSIX_Mutex_Protocol) ( flags & POSIX_MUTEX_PROTOCOL_MASK );
 }
 
-static inline bool _POSIX_Mutex_Is_recursive(
-  unsigned long flags
-)
+static inline bool _POSIX_Mutex_Is_recursive( unsigned long flags )
 {
   return ( flags & POSIX_MUTEX_RECURSIVE ) != 0;
 }
@@ -176,7 +174,6 @@ static Status_Control _POSIX_Mutex_Lock_nested(
   unsigned long        flags
 )
 {
-
   if ( _POSIX_Mutex_Is_recursive( flags ) ) {
     ++the_mutex->Recursive.nest_level;
     return STATUS_SUCCESSFUL;
@@ -269,10 +266,10 @@ static inline const Scheduler_Control *_POSIX_Mutex_Get_scheduler(
   const POSIX_Mutex_Control *the_mutex
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return the_mutex->scheduler;
 #else
-   (void) the_mutex;
+  (void) the_mutex;
   return &_Scheduler_Table[ 0 ];
 #endif
 }
@@ -315,17 +312,17 @@ static inline Status_Control _POSIX_Mutex_Ceiling_set_owner(
   Thread_queue_Context *queue_context
 )
 {
-  ISR_lock_Context  lock_context;
-  Scheduler_Node   *scheduler_node;
-  Per_CPU_Control  *cpu_self;
+  ISR_lock_Context lock_context;
+  Scheduler_Node  *scheduler_node;
+  Per_CPU_Control *cpu_self;
 
   _Thread_Wait_acquire_default_critical( owner, &lock_context );
 
   scheduler_node = _Thread_Scheduler_get_home_node( owner );
 
   if (
-    _Priority_Get_priority( &scheduler_node->Wait.Priority )
-      < the_mutex->Priority_ceiling.priority
+    _Priority_Get_priority( &scheduler_node->Wait.Priority ) <
+    the_mutex->Priority_ceiling.priority
   ) {
     _Thread_Wait_release_default_critical( owner, &lock_context );
     _POSIX_Mutex_Release( the_mutex, queue_context );
@@ -334,11 +331,7 @@ static inline Status_Control _POSIX_Mutex_Ceiling_set_owner(
 
   _POSIX_Mutex_Set_owner( the_mutex, owner );
   _Thread_Resource_count_increment( owner );
-  _Thread_Priority_add(
-    owner,
-    &the_mutex->Priority_ceiling,
-    queue_context
-  );
+  _Thread_Priority_add( owner, &the_mutex->Priority_ceiling, queue_context );
   _Thread_Wait_release_default_critical( owner, &lock_context );
 
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );
@@ -361,10 +354,10 @@ static inline Status_Control _POSIX_Mutex_Ceiling_seize(
   owner = _POSIX_Mutex_Get_owner( the_mutex );
 
   if ( owner == NULL ) {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     if (
-      _Thread_Scheduler_get_home( executing )
-        != _POSIX_Mutex_Get_scheduler( the_mutex )
+      _Thread_Scheduler_get_home( executing ) !=
+      _POSIX_Mutex_Get_scheduler( the_mutex )
     ) {
       _POSIX_Mutex_Release( the_mutex, queue_context );
       return STATUS_NOT_DEFINED;
@@ -426,38 +419,35 @@ static inline Status_Control _POSIX_Mutex_Ceiling_surrender(
   );
 }
 
-#define POSIX_MUTEX_ABSTIME_TRY_LOCK ((uintptr_t) 1)
+#define POSIX_MUTEX_ABSTIME_TRY_LOCK ( (uintptr_t) 1 )
 
 int _POSIX_Mutex_Lock_support(
-  pthread_mutex_t              *mutex,
-  const struct timespec        *abstime,
-  Thread_queue_Enqueue_callout  enqueue_callout
+  pthread_mutex_t             *mutex,
+  const struct timespec       *abstime,
+  Thread_queue_Enqueue_callout enqueue_callout
 );
 
-static inline POSIX_Mutex_Control *_POSIX_Mutex_Get(
-  pthread_mutex_t *mutex
-)
+static inline POSIX_Mutex_Control *_POSIX_Mutex_Get( pthread_mutex_t *mutex )
 {
   return (POSIX_Mutex_Control *) mutex;
 }
 
 bool _POSIX_Mutex_Auto_initialization( POSIX_Mutex_Control *the_mutex );
 
-#define POSIX_MUTEX_VALIDATE_OBJECT( the_mutex, flags ) \
-  do { \
-    if ( ( the_mutex ) == NULL ) { \
-      return EINVAL; \
-    } \
-    flags = ( the_mutex )->flags; \
-    if ( \
-      ( ( (uintptr_t) ( the_mutex ) ^ POSIX_MUTEX_MAGIC ) \
-          & ~POSIX_MUTEX_FLAGS_MASK ) \
-        != ( flags & ~POSIX_MUTEX_FLAGS_MASK ) \
-    ) { \
-      if ( !_POSIX_Mutex_Auto_initialization( the_mutex ) ) { \
-        return EINVAL; \
-      } \
-    } \
+#define POSIX_MUTEX_VALIDATE_OBJECT( the_mutex, flags )                  \
+  do {                                                                   \
+    if ( ( the_mutex ) == NULL ) {                                       \
+      return EINVAL;                                                     \
+    }                                                                    \
+    flags = ( the_mutex )->flags;                                        \
+    if (                                                                 \
+      ( ( (uintptr_t) ( the_mutex ) ^ POSIX_MUTEX_MAGIC ) &              \
+        ~POSIX_MUTEX_FLAGS_MASK ) != ( flags & ~POSIX_MUTEX_FLAGS_MASK ) \
+    ) {                                                                  \
+      if ( !_POSIX_Mutex_Auto_initialization( the_mutex ) ) {            \
+        return EINVAL;                                                   \
+      }                                                                  \
+    }                                                                    \
   } while ( 0 )
 
 #ifdef __cplusplus

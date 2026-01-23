@@ -54,7 +54,7 @@
 extern "C" {
 #endif
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
 /**
  * This defines the POSIX API support structure associated with
  * each thread in a system with POSIX configured.
@@ -98,14 +98,14 @@ typedef struct {
   } Sporadic;
 
   /** This is the set of signals which are currently unblocked. */
-  sigset_t                signals_unblocked;
+  sigset_t signals_unblocked;
   /** This is the set of signals which are currently pending. */
-  sigset_t                signals_pending;
+  sigset_t signals_pending;
 
   /**
    * @brief Signal post-switch action in case signals are pending.
    */
-  Thread_Action           Signal_action;
+  Thread_Action Signal_action;
 } POSIX_API_Control;
 #endif
 

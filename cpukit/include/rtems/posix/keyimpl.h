@@ -81,17 +81,16 @@ static inline POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
  * This routine frees a keys control block to the
  * inactive chain of free keys control blocks.
  */
-static inline void _POSIX_Keys_Free(
-  POSIX_Keys_Control *the_key
-)
+static inline void _POSIX_Keys_Free( POSIX_Keys_Control *the_key )
 {
   _Objects_Free( &_POSIX_Keys_Information, &the_key->Object );
 }
 
 static inline POSIX_Keys_Control *_POSIX_Keys_Get( pthread_key_t key )
 {
-  return (POSIX_Keys_Control *)
-    _Objects_Get_no_protection( (Objects_Id) key, &_POSIX_Keys_Information );
+  return (
+    POSIX_Keys_Control *
+  ) _Objects_Get_no_protection( (Objects_Id) key, &_POSIX_Keys_Information );
 }
 
 static inline void _POSIX_Keys_Key_value_acquire(
@@ -101,7 +100,7 @@ static inline void _POSIX_Keys_Key_value_acquire(
 {
   _ISR_lock_ISR_disable_and_acquire( &the_thread->Keys.Lock, lock_context );
 #ifndef RTEMS_SMP
-   (void) the_thread;
+  (void) the_thread;
 #endif
 }
 
@@ -112,11 +111,11 @@ static inline void _POSIX_Keys_Key_value_release(
 {
   _ISR_lock_Release_and_ISR_enable( &the_thread->Keys.Lock, lock_context );
 #ifndef RTEMS_SMP
-   (void) the_thread;
+  (void) the_thread;
 #endif
 }
 
-POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_allocate( void );
+POSIX_Keys_Key_value_pair *_POSIX_Keys_Key_value_allocate( void );
 
 static inline void _POSIX_Keys_Key_value_free(
   POSIX_Keys_Key_value_pair *key_value_pair

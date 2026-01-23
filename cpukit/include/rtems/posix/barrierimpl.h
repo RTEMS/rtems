@@ -55,10 +55,10 @@ extern "C" {
 #define POSIX_BARRIER_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
 
 typedef struct {
-  unsigned long flags;
+  unsigned long              flags;
   Thread_queue_Syslock_queue Queue;
-  unsigned int count;
-  unsigned int waiting_threads;
+  unsigned int               count;
+  unsigned int               waiting_threads;
 } POSIX_Barrier_Control;
 
 static inline POSIX_Barrier_Control *_POSIX_Barrier_Get(
@@ -100,14 +100,14 @@ static inline void _POSIX_Barrier_Queue_release(
   );
 }
 
-#define POSIX_BARRIER_VALIDATE_OBJECT( bar ) \
-  do { \
-    if ( \
-      ( bar ) == NULL \
-        || ( (uintptr_t) ( bar ) ^ POSIX_BARRIER_MAGIC ) != ( bar )->_flags \
-    ) { \
-      return EINVAL; \
-    } \
+#define POSIX_BARRIER_VALIDATE_OBJECT( bar )                           \
+  do {                                                                 \
+    if (                                                               \
+      ( bar ) == NULL ||                                               \
+      ( (uintptr_t) ( bar ) ^ POSIX_BARRIER_MAGIC ) != ( bar )->_flags \
+    ) {                                                                \
+      return EINVAL;                                                   \
+    }                                                                  \
   } while ( 0 )
 
 #ifdef __cplusplus

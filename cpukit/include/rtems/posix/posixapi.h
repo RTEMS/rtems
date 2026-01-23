@@ -59,11 +59,11 @@
 
 extern const int _POSIX_Get_by_name_error_table[ 3 ];
 
-static inline int _POSIX_Get_by_name_error(
-  Objects_Get_by_name_error error
-)
+static inline int _POSIX_Get_by_name_error( Objects_Get_by_name_error error )
 {
-  _Assert( (size_t) error < RTEMS_ARRAY_SIZE( _POSIX_Get_by_name_error_table ) );
+  _Assert(
+    (size_t) error < RTEMS_ARRAY_SIZE( _POSIX_Get_by_name_error_table )
+  );
   return _POSIX_Get_by_name_error_table[ error ];
 }
 
@@ -79,9 +79,7 @@ static inline int _POSIX_Get_error_after_wait(
   return _POSIX_Get_error( _Thread_Wait_get_status( executing ) );
 }
 
-static inline int _POSIX_Zero_or_minus_one_plus_errno(
-  Status_Control status
-)
+static inline int _POSIX_Zero_or_minus_one_plus_errno( Status_Control status )
 {
   if ( status == STATUS_SUCCESSFUL ) {
     return 0;
@@ -100,7 +98,7 @@ static inline int _POSIX_Zero_or_minus_one_plus_errno(
 static inline bool _POSIX_Is_valid_pshared( int pshared )
 {
   return pshared == PTHREAD_PROCESS_PRIVATE ||
-    pshared == PTHREAD_PROCESS_SHARED;
+         pshared == PTHREAD_PROCESS_SHARED;
 }
 
 /**

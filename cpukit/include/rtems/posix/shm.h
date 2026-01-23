@@ -52,7 +52,7 @@ extern "C" {
  * @{
  */
 typedef struct POSIX_Shm_Object_operations POSIX_Shm_Object_operations;
-extern const POSIX_Shm_Object_operations _POSIX_Shm_Object_operations;
+extern const POSIX_Shm_Object_operations   _POSIX_Shm_Object_operations;
 
 /**
  * @brief Encapsulation for the storage and manipulation of shm objects.
@@ -61,18 +61,18 @@ typedef struct {
   /**
    * @brief The handle is private for finding object storage.
    */
-  void                               *handle;
+  void *handle;
 
   /**
    * @brief The number of bytes allocated to the object. A size of 0 with
    * a handle of NULL means no object is allocated.
    */
-  size_t                              size;
+  size_t size;
 
   /**
    * @brief Implementation-specific operations on shm objects.
    */
-  const POSIX_Shm_Object_operations  *ops;
+  const POSIX_Shm_Object_operations *ops;
 } POSIX_Shm_Object;
 
 /**
@@ -86,7 +86,7 @@ struct POSIX_Shm_Object_operations {
    *
    * Returns 0 for success.
    */
-  int ( *object_create ) ( POSIX_Shm_Object *shm_obj, size_t size );
+  int ( *object_create )( POSIX_Shm_Object *shm_obj, size_t size );
 
   /**
    * @brief Changes the @a shm_obj size to @a size.
@@ -95,7 +95,7 @@ struct POSIX_Shm_Object_operations {
    *
    * Returns 0 for success.
    */
-  int ( *object_resize ) ( POSIX_Shm_Object *shm_obj, size_t size );
+  int ( *object_resize )( POSIX_Shm_Object *shm_obj, size_t size );
 
   /**
    * @brief Deletes the @a shm_obj.
@@ -104,14 +104,14 @@ struct POSIX_Shm_Object_operations {
    *
    * Returns 0 for success.
    */
-  int ( *object_delete ) ( POSIX_Shm_Object *shm_obj );
+  int ( *object_delete )( POSIX_Shm_Object *shm_obj );
 
   /**
    * @brief Copies up to @count bytes of the @a shm_obj data into @a buf.
    *
    * Returns the number of bytes read (copied) into @a buf.
    */
-  int ( *object_read ) ( POSIX_Shm_Object *shm_obj, void *buf, size_t count );
+  int ( *object_read )( POSIX_Shm_Object *shm_obj, void *buf, size_t count );
 
   /**
    * @brief Maps a shared memory object.
@@ -121,28 +121,33 @@ struct POSIX_Shm_Object_operations {
    *
    * Returns the mapped address of the object.
    */
-  void * ( *object_mmap ) ( POSIX_Shm_Object *shm_obj, size_t len, int prot, off_t off);
+  void *( *object_mmap )(
+    POSIX_Shm_Object *shm_obj,
+    size_t            len,
+    int               prot,
+    off_t             off
+  );
 };
 
 /**
  * @brief Control for a POSIX Shared Memory Object
  */
 typedef struct {
-   Objects_Control      Object;
-   Thread_queue_Control Wait_queue;
+  Objects_Control      Object;
+  Thread_queue_Control Wait_queue;
 
-   int                  reference_count;
+  int reference_count;
 
-   POSIX_Shm_Object     shm_object;
+  POSIX_Shm_Object shm_object;
 
-   uid_t                uid;
-   gid_t                gid;
-   mode_t               mode;
-   int                  oflag;
+  uid_t  uid;
+  gid_t  gid;
+  mode_t mode;
+  int    oflag;
 
-   time_t               atime;
-   time_t               mtime;
-   time_t               ctime;
+  time_t atime;
+  time_t mtime;
+  time_t ctime;
 } POSIX_Shm_Control;
 
 /**
@@ -160,14 +165,14 @@ extern Objects_Information _POSIX_Shm_Information;
  * may be set).
  */
 #define POSIX_SHM_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _POSIX_Shm, \
-    OBJECTS_POSIX_API, \
-    OBJECTS_POSIX_SHMS, \
-    POSIX_Shm_Control, \
-    max, \
-    _POSIX_PATH_MAX, \
-    NULL \
+  OBJECTS_INFORMATION_DEFINE(               \
+    _POSIX_Shm,                             \
+    OBJECTS_POSIX_API,                      \
+    OBJECTS_POSIX_SHMS,                     \
+    POSIX_Shm_Control,                      \
+    max,                                    \
+    _POSIX_PATH_MAX,                        \
+    NULL                                    \
   )
 
 /**
@@ -175,20 +180,22 @@ extern Objects_Information _POSIX_Shm_Information;
  */
 extern int _POSIX_Shm_Object_create_from_workspace(
   POSIX_Shm_Object *shm_obj,
-  size_t size
+  size_t            size
 );
 
 /**
  * @brief object_delete operation for shm objects stored in RTEMS Workspace.
  */
-extern int _POSIX_Shm_Object_delete_from_workspace( POSIX_Shm_Object *shm_obj );
+extern int _POSIX_Shm_Object_delete_from_workspace(
+  POSIX_Shm_Object *shm_obj
+);
 
 /**
  * @brief object_resize operation for shm objects stored in RTEMS Workspace.
  */
 extern int _POSIX_Shm_Object_resize_from_workspace(
   POSIX_Shm_Object *shm_obj,
-  size_t size
+  size_t            size
 );
 
 /**
@@ -196,18 +203,18 @@ extern int _POSIX_Shm_Object_resize_from_workspace(
  */
 extern int _POSIX_Shm_Object_read_from_workspace(
   POSIX_Shm_Object *shm_obj,
-  void *buf,
-  size_t count
+  void             *buf,
+  size_t            count
 );
 
 /**
  * @brief object_mmap operation for shm objects stored in RTEMS Workspace.
  */
-extern void * _POSIX_Shm_Object_mmap_from_workspace(
+extern void *_POSIX_Shm_Object_mmap_from_workspace(
   POSIX_Shm_Object *shm_obj,
-  size_t len,
-  int prot,
-  off_t off
+  size_t            len,
+  int               prot,
+  off_t             off
 );
 
 /**
@@ -215,7 +222,7 @@ extern void * _POSIX_Shm_Object_mmap_from_workspace(
  */
 extern int _POSIX_Shm_Object_create_from_heap(
   POSIX_Shm_Object *shm_obj,
-  size_t size
+  size_t            size
 );
 
 /**
@@ -228,7 +235,7 @@ extern int _POSIX_Shm_Object_delete_from_heap( POSIX_Shm_Object *shm_obj );
  */
 extern int _POSIX_Shm_Object_resize_from_heap(
   POSIX_Shm_Object *shm_obj,
-  size_t size
+  size_t            size
 );
 
 /**
@@ -236,18 +243,18 @@ extern int _POSIX_Shm_Object_resize_from_heap(
  */
 extern int _POSIX_Shm_Object_read_from_heap(
   POSIX_Shm_Object *shm_obj,
-  void *buf,
-  size_t count
+  void             *buf,
+  size_t            count
 );
 
 /**
  * @brief object_mmap operation for shm objects stored in C program heap.
  */
-extern void * _POSIX_Shm_Object_mmap_from_heap(
+extern void *_POSIX_Shm_Object_mmap_from_heap(
   POSIX_Shm_Object *shm_obj,
-  size_t len,
-  int prot,
-  off_t off
+  size_t            len,
+  int               prot,
+  off_t             off
 );
 
 /** @} */

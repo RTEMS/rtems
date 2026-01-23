@@ -42,7 +42,7 @@
 #define _AIO_MISC_H
 
 #include <string.h>
-#include <signal.h> 
+#include <signal.h>
 #include <aio.h>
 #include <pthread.h>
 #include <stdatomic.h>
@@ -61,23 +61,23 @@ extern "C" {
 /** Constants to identify op type */
 
 /** Needed by aio_fsync() */
-#define AIO_OP_READ        0
+#define AIO_OP_READ 0
 
 /** Needed by aio_fsync() */
-#define AIO_OP_WRITE       1
+#define AIO_OP_WRITE 1
 
 /** Needed by aio_fsync() */
-#define AIO_OP_SYNC        2
+#define AIO_OP_SYNC 2
 
 /** Needed by aio_fsync() */
-#define AIO_OP_DSYNC       3
+#define AIO_OP_DSYNC 3
 
 /*
  * Constants to track return status
  */
 
 /** The aio operation return value has been retrieved */
-#define AIO_RETURNED    0
+#define AIO_RETURNED 0
 
 /** The aio operation return value has not been retrieved */
 #define AIO_NOTRETURNED 1
@@ -85,25 +85,24 @@ extern "C" {
 /** Constants to identify list completion notification */
 
 /** No notification required */
-#define AIO_LIO_NO_NOTIFY  0
+#define AIO_LIO_NO_NOTIFY 0
 
 /** Notification via sigevent */
-#define AIO_LIO_SIGEV      1
+#define AIO_LIO_SIGEV 1
 
 /** Notification via event delivery */
-#define AIO_LIO_EVENT      2
+#define AIO_LIO_EVENT 2
 
 /* Constants needed by aio_suspend() */
 
 /** Signal generated for suspend call */
-#define AIO_SIGNALED   1
+#define AIO_SIGNALED 1
 
 /**
  * @brief holds a pointer to a sigevent struct or a thread id 
  *  
  */
-typedef union
-{
+typedef union {
   /** @brief pointer to the sigevent for notification */
   struct sigevent *sigp;
 
@@ -115,8 +114,7 @@ typedef union
 /**
  * @brief Control block for every list enqueued with lio_listio()
  */
-typedef struct
-{
+typedef struct {
   pthread_mutex_t mutex;
 
   /** @brief number of requests left to complete the list */
@@ -133,8 +131,7 @@ typedef struct
 /**
  * @brief Control block for every list involved in a aio_suspend() call.
  */
-typedef struct
-{
+typedef struct {
   pthread_mutex_t mutex;
 
   /** @brief number of requests left to complete the list */
@@ -151,12 +148,11 @@ typedef struct
 /**
  * @brief The request being processed
  */
-typedef struct
-{
+typedef struct {
   /** @brief Chain requests in order of priority */
   rtems_chain_node next_prio;
 
-  /** @brief If _POSIX_PRIORITIZED_IO and _POSIX_PRIORITY_SCHEDULING are defined */ 
+  /** @brief If _POSIX_PRIORITIZED_IO and _POSIX_PRIORITY_SCHEDULING are defined */
   int policy;
 
   /** @brief see above */
@@ -182,8 +178,7 @@ typedef struct
 /**
  * @brief A chain of requests for the same FD
  */
-typedef struct
-{
+typedef struct {
   /** @brief Order fd chains in queue */
   rtems_chain_node next_fd;
 
@@ -197,25 +192,24 @@ typedef struct
   int new_fd;
 
   pthread_mutex_t mutex;
-  pthread_cond_t cond;
+  pthread_cond_t  cond;
 
 } rtems_aio_request_chain;
 
 /**
  * @brief The queue of all the requests in progress and waiting to be processed
  */
-typedef struct
-{
+typedef struct {
   pthread_mutex_t mutex;
-  pthread_cond_t new_req;
-  pthread_attr_t attr;
+  pthread_cond_t  new_req;
+  pthread_attr_t  attr;
 
   /** @brief Chains being worked by active threads */
   rtems_chain_control work_req;
 
   /** @brief Chains waiting to be processed */
   rtems_chain_control idle_req;
-  
+
   /** @brief Specific value if queue is initialized */
   unsigned int initialized;
 
@@ -278,8 +272,8 @@ int rtems_aio_enqueue( rtems_aio_request *req );
  */
 rtems_aio_request_chain *rtems_aio_search_fd(
   rtems_chain_control *chain,
-  int fildes,
-  int create
+  int                  fildes,
+  int                  create
 );
 
 /**
@@ -298,10 +292,7 @@ void rtems_aio_remove_fd( rtems_aio_request_chain *r_chain );
  * @retval AIO_CANCELED The request was canceled.
  * @retval AIO_NOTCANCELED The request was not canceled.
  */
-int rtems_aio_remove_req(
-  rtems_chain_control *chain,
-	struct aiocb *aiocbp
-);
+int rtems_aio_remove_req( rtems_chain_control *chain, struct aiocb *aiocbp );
 
 /**
  * @brief Checks the validity of a sigevent struct
@@ -322,7 +313,7 @@ int rtems_aio_check_sigevent( struct sigevent *sigp );
  *          - 
  * @return rtems_aio_request* a pointer to the newly created request.
  */
-rtems_aio_request *init_write_req( struct aiocb* aiocbp );
+rtems_aio_request *init_write_req( struct aiocb *aiocbp );
 
 /**
  * @brief initializes a write rtems_aio_request
@@ -332,7 +323,7 @@ rtems_aio_request *init_write_req( struct aiocb* aiocbp );
  *          - 
  * @return rtems_aio_request* a pointer to the newly created request.
  */
-rtems_aio_request *init_read_req( struct aiocb* aiocbp );
+rtems_aio_request *init_read_req( struct aiocb *aiocbp );
 
 /**
  * @brief updates listcb after op completion
@@ -355,19 +346,19 @@ void rtems_aio_update_suspendcbp( rtems_aio_suspendcb *suspendcbp );
  * @retval NULL The request identified by aiocbp is not present in fd_chain.
  * @return A pointer to the rtems_aio_request referenced by aiocbp.
  */
-rtems_aio_request * rtems_aio_search_in_chain(
-  const struct aiocb* aiocbp,
+rtems_aio_request *rtems_aio_search_in_chain(
+  const struct aiocb  *aiocbp,
   rtems_chain_control *fd_chain
 );
 
 #ifdef RTEMS_DEBUG
 #include <assert.h>
 
-#define AIO_assert(_x) assert(_x)
-#define AIO_printf(_x) printf(_x)
+#define AIO_assert( _x ) assert( _x )
+#define AIO_printf( _x ) printf( _x )
 #else
-#define AIO_assert(_x)
-#define AIO_printf(_x)
+#define AIO_assert( _x )
+#define AIO_printf( _x )
 #endif
 
 #ifdef __cplusplus
@@ -375,4 +366,3 @@ rtems_aio_request * rtems_aio_search_in_chain(
 #endif
 
 #endif
-

@@ -52,8 +52,9 @@ extern "C" {
 
 static inline POSIX_Shm_Control *_POSIX_Shm_Allocate_unprotected( void )
 {
-  return (POSIX_Shm_Control *)
-    _Objects_Allocate_unprotected( &_POSIX_Shm_Information );
+  return (POSIX_Shm_Control *) _Objects_Allocate_unprotected(
+    &_POSIX_Shm_Information
+  );
 }
 
 /**
@@ -61,9 +62,7 @@ static inline POSIX_Shm_Control *_POSIX_Shm_Allocate_unprotected( void )
  *
  * This routine frees a shm control block.
  */
-static inline void _POSIX_Shm_Free (
-  POSIX_Shm_Control *the_shm
-)
+static inline void _POSIX_Shm_Free( POSIX_Shm_Control *the_shm )
 {
   _Objects_Free( &_POSIX_Shm_Information, &the_shm->Object );
 }
@@ -82,18 +81,14 @@ static inline POSIX_Shm_Control *_POSIX_Shm_Get_by_name(
   );
 }
 
-static inline void _POSIX_Shm_Update_atime(
-  POSIX_Shm_Control *shm
-)
+static inline void _POSIX_Shm_Update_atime( POSIX_Shm_Control *shm )
 {
   struct timeval now;
   gettimeofday( &now, 0 );
   shm->atime = now.tv_sec;
 }
 
-static inline void _POSIX_Shm_Update_mtime_ctime(
-  POSIX_Shm_Control *shm
-)
+static inline void _POSIX_Shm_Update_mtime_ctime( POSIX_Shm_Control *shm )
 {
   struct timeval now;
   gettimeofday( &now, 0 );
@@ -101,32 +96,30 @@ static inline void _POSIX_Shm_Update_mtime_ctime(
   shm->ctime = now.tv_sec;
 }
 
-static inline POSIX_Shm_Control* iop_to_shm( rtems_libio_t *iop )
+static inline POSIX_Shm_Control *iop_to_shm( rtems_libio_t *iop )
 {
-  return (POSIX_Shm_Control*) iop->data1;
+  return (POSIX_Shm_Control *) iop->data1;
 }
 
-static inline POSIX_Shm_Control* loc_to_shm(
-    const rtems_filesystem_location_info_t *loc
+static inline POSIX_Shm_Control *loc_to_shm(
+  const rtems_filesystem_location_info_t *loc
 )
 {
-  return (POSIX_Shm_Control*) loc->node_access;
+  return (POSIX_Shm_Control *) loc->node_access;
 }
 
-static inline int POSIX_Shm_Attempt_delete(
-    POSIX_Shm_Control* shm
-)
+static inline int POSIX_Shm_Attempt_delete( POSIX_Shm_Control *shm )
 {
-  Objects_Control       *obj;
-  ISR_lock_Context       lock_ctx;
-  int err;
+  Objects_Control *obj;
+  ISR_lock_Context lock_ctx;
+  int              err;
 
   err = 0;
 
   _Objects_Allocator_lock();
   --shm->reference_count;
   if ( shm->reference_count == 0 ) {
-    if ( (*shm->shm_object.ops->object_delete)( &shm->shm_object ) != 0 ) {
+    if ( ( *shm->shm_object.ops->object_delete )( &shm->shm_object ) != 0 ) {
       err = EIO;
     }
   }

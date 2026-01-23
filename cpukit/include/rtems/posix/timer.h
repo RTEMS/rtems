@@ -84,14 +84,14 @@ extern Objects_Information _POSIX_Timer_Information;
  * may be set).
  */
 #define POSIX_TIMER_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _POSIX_Timer, \
-    OBJECTS_POSIX_API, \
-    OBJECTS_POSIX_TIMERS, \
-    POSIX_Timer_Control, \
-    max, \
-    OBJECTS_NO_STRING_NAME, \
-    NULL \
+  OBJECTS_INFORMATION_DEFINE(                 \
+    _POSIX_Timer,                             \
+    OBJECTS_POSIX_API,                        \
+    OBJECTS_POSIX_TIMERS,                     \
+    POSIX_Timer_Control,                      \
+    max,                                      \
+    OBJECTS_NO_STRING_NAME,                   \
+    NULL                                      \
   )
 
 /**
@@ -107,10 +107,7 @@ extern Objects_Information _POSIX_Timer_Information;
  *
  * @return 0 if @a clock_id is allowed for use. Otherwise an errno value.
  */
-int _POSIX_Timer_Is_allowed(
-  clockid_t clock_id
-);
-
+int _POSIX_Timer_Is_allowed( clockid_t clock_id );
 
 /** @} */
 

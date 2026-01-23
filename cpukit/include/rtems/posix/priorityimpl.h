@@ -58,7 +58,7 @@ extern "C" {
 /**
  *  This is the numerically least important POSIX priority.
  */
-#define POSIX_SCHEDULER_MINIMUM_PRIORITY (1)
+#define POSIX_SCHEDULER_MINIMUM_PRIORITY ( 1 )
 
 /**
  * @brief Gets the maximum POSIX API priority for this scheduler instance.

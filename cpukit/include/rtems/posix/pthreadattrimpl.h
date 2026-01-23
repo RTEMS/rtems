@@ -61,25 +61,20 @@ extern "C" {
 extern const pthread_attr_t _POSIX_Threads_Default_attributes;
 
 static inline void _POSIX_Threads_Copy_attributes(
-  pthread_attr_t        *dst_attr,
-  const pthread_attr_t  *src_attr
+  pthread_attr_t       *dst_attr,
+  const pthread_attr_t *src_attr
 )
 {
   *dst_attr = *src_attr;
   _Assert(
-    dst_attr->affinitysetsize == sizeof(dst_attr->affinitysetpreallocated)
+    dst_attr->affinitysetsize == sizeof( dst_attr->affinitysetpreallocated )
   );
   dst_attr->affinityset = &dst_attr->affinitysetpreallocated;
 }
 
-static inline void _POSIX_Threads_Initialize_attributes(
-  pthread_attr_t  *attr
-)
+static inline void _POSIX_Threads_Initialize_attributes( pthread_attr_t *attr )
 {
-  _POSIX_Threads_Copy_attributes(
-    attr,
-    &_POSIX_Threads_Default_attributes
-  );
+  _POSIX_Threads_Copy_attributes( attr, &_POSIX_Threads_Default_attributes );
 }
 
 static inline void _POSIX_Threads_Get_sched_param_sporadic(
@@ -88,10 +83,11 @@ static inline void _POSIX_Threads_Get_sched_param_sporadic(
   struct sched_param      *param
 )
 {
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
   const POSIX_API_Control *api;
 
-  api = (const POSIX_API_Control*) the_thread->API_Extensions[ THREAD_API_POSIX ];
+  api = (const POSIX_API_Control *)
+          the_thread->API_Extensions[ THREAD_API_POSIX ];
   param->sched_ss_low_priority = _POSIX_Priority_From_core(
     scheduler,
     api->Sporadic.Low_priority.priority

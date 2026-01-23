@@ -44,7 +44,7 @@
 
 #include <rtems/score/isrlevel.h>
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 #include <rtems/score/percpu.h>
 #include <rtems/score/smplockticket.h>
 #endif
@@ -54,7 +54,7 @@ extern "C" {
 #endif
 
 typedef struct {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   SMP_ticket_lock_Control Lock;
 #else
   unsigned int reserved[ 2 ];
