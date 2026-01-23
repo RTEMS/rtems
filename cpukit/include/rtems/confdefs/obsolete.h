@@ -59,135 +59,167 @@
  */
 
 #ifdef CONFIGURE_BDBUF_BUFFER_SIZE
-  #error "The CONFIGURE_BDBUF_BUFFER_SIZE configuration option is obsolete since RTEMS 4.10.0"
+  #error \
+    "The CONFIGURE_BDBUF_BUFFER_SIZE configuration option is obsolete since RTEMS 4.10.0"
 #endif
 
 #ifdef CONFIGURE_BDBUF_BUFFER_COUNT
-  #error "The CONFIGURE_BDBUF_BUFFER_COUNT configuration option is obsolete since RTEMS 4.10.0"
+  #error \
+    "The CONFIGURE_BDBUF_BUFFER_COUNT configuration option is obsolete since RTEMS 4.10.0"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_DEVICES
-  #warning "The CONFIGURE_MAXIMUM_DEVICES configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_DEVICES configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_ENABLE_GO
-  #warning "The CONFIGURE_ENABLE_GO configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_ENABLE_GO configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_GNAT_RTEMS
-  #warning "The CONFIGURE_GNAT_RTEMS configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_GNAT_RTEMS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
-  #error "The CONFIGURE_HAS_OWN_CONFIGURATION_TABLE configuration option is obsolete since RTEMS 5.1"
+  #error \
+    "The CONFIGURE_HAS_OWN_CONFIGURATION_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_BDBUF_TABLE
-  #error "The CONFIGURE_HAS_BDBUF_TABLE configuration option is obsolete since RTEMS 4.10.0"
+  #error \
+    "The CONFIGURE_HAS_BDBUF_TABLE configuration option is obsolete since RTEMS 4.10.0"
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
-  #error "The CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE configuration option is obsolete since RTEMS 5.1"
+  #error \
+    "The CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
-  #error "The CONFIGURE_HAS_OWN_FILESYSTEM_TABLE configuration option is obsolete since RTEMS 5.1"
+  #error \
+    "The CONFIGURE_HAS_OWN_FILESYSTEM_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_INIT_TABLE
-  #error "The CONFIGURE_HAS_OWN_INIT_TABLE configuration option is obsolete since RTEMS 5.1"
+  #error \
+    "The CONFIGURE_HAS_OWN_INIT_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_MOUNT_TABLE
-  #error "The CONFIGURE_HAS_OWN_MOUNT_TABLE configuration option is obsolete since RTEMS 5.1"
+  #error \
+    "The CONFIGURE_HAS_OWN_MOUNT_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE
-  #error "The CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE configuration option is obsolete since RTEMS 5.1"
+  #error \
+    "The CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
-  #warning "CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS has been renamed to CONFIGURE_MAXIMUM_FILE_DESCRIPTORS since RTEMS 5.1"
-  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
+  #warning \
+    "CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS has been renamed to CONFIGURE_MAXIMUM_FILE_DESCRIPTORS since RTEMS 5.1"
+  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS \
+  CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_ADA_TASKS
-  #warning "The CONFIGURE_MAXIMUM_ADA_TASKS configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_ADA_TASKS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
-  #warning "The CONFIGURE_MAXIMUM_FAKE_ADA_TASKS configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_FAKE_ADA_TASKS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_FIFOS
-  #warning "CONFIGURE_MAXIMUM_FIFOS is obsolete since RTEMS 5.1; use CONFIGURE_IMFS_ENABLE_MKFIFO instead"
+  #warning \
+    "CONFIGURE_MAXIMUM_FIFOS is obsolete since RTEMS 5.1; use CONFIGURE_IMFS_ENABLE_MKFIFO instead"
   #if CONFIGURE_MAXIMUM_FIFOS > 0
     #define CONFIGURE_IMFS_ENABLE_MKFIFO
   #endif
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_GOROUTINES
-  #warning "The CONFIGURE_MAXIMUM_GOROUTINES configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_GOROUTINES configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_GO_CHANNELS
-  #warning "The CONFIGURE_MAXIMUM_GO_CHANNELS configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_GO_CHANNELS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_MRSP_SEMAPHORES
-  #warning "The CONFIGURE_MAXIMUM_MRSP_SEMAPHORES configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_MRSP_SEMAPHORES configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_PIPES
-  #warning "CONFIGURE_MAXIMUM_PIPES is obsolete since RTEMS 5.1; use CONFIGURE_IMFS_ENABLE_MKFIFO instead"
+  #warning \
+    "CONFIGURE_MAXIMUM_PIPES is obsolete since RTEMS 5.1; use CONFIGURE_IMFS_ENABLE_MKFIFO instead"
   #if CONFIGURE_MAXIMUM_PIPES > 0
     #define CONFIGURE_IMFS_ENABLE_MKFIFO
   #endif
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_BARRIERS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_BARRIERS configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_POSIX_BARRIERS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
-  #warning "The CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_MUTEXES
-  #warning "The CONFIGURE_MAXIMUM_POSIX_MUTEXES configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_POSIX_MUTEXES configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_RWLOCKS configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_POSIX_RWLOCKS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_SPINLOCKS configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_POSIX_SPINLOCKS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_PTYS
-  #warning "The CONFIGURE_MAXIMUM_PTYS configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_MAXIMUM_PTYS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
-  #warning "The CONFIGURE_NUMBER_OF_TERMIOS_PORTS configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_NUMBER_OF_TERMIOS_PORTS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
-  #error "The CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE configuration option is obsolete since RTEMS 5.1"
+  #error \
+    "The CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_CONTEXT
-  #warning "CONFIGURE_SCHEDULER_CONTEXT has been renamed to CONFIGURE_SCHEDULER since RTEMS 5.1"
+  #warning \
+    "CONFIGURE_SCHEDULER_CONTEXT has been renamed to CONFIGURE_SCHEDULER since RTEMS 5.1"
   #define CONFIGURE_SCHEDULER CONFIGURE_SCHEDULER_CONTEXT
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_CONTROLS
-  #warning "CONFIGURE_SCHEDULER_CONTROLS has been renamed to CONFIGURE_SCHEDULER_TABLE_ENTRIES since RTEMS 5.1"
+  #warning \
+    "CONFIGURE_SCHEDULER_CONTROLS has been renamed to CONFIGURE_SCHEDULER_TABLE_ENTRIES since RTEMS 5.1"
   #define CONFIGURE_SCHEDULER_TABLE_ENTRIES CONFIGURE_SCHEDULER_CONTROLS
 #endif
 
@@ -196,41 +228,50 @@
 #endif
 
 #ifdef CONFIGURE_SMP_MAXIMUM_PROCESSORS
-  #warning "CONFIGURE_SMP_MAXIMUM_PROCESSORS has been renamed to CONFIGURE_MAXIMUM_PROCESSORS since RTEMS 5.1"
+  #warning \
+    "CONFIGURE_SMP_MAXIMUM_PROCESSORS has been renamed to CONFIGURE_MAXIMUM_PROCESSORS since RTEMS 5.1"
   #define CONFIGURE_MAXIMUM_PROCESSORS CONFIGURE_SMP_MAXIMUM_PROCESSORS
 #endif
 
 #ifdef CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS
-  #warning "CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS has been renamed to CONFIGURE_SCHEDULER_ASSIGNMENTS since RTEMS 5.1"
+  #warning \
+    "CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS has been renamed to CONFIGURE_SCHEDULER_ASSIGNMENTS since RTEMS 5.1"
   #define CONFIGURE_SCHEDULER_ASSIGNMENTS CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS
 #endif
 
 #ifdef CONFIGURE_TERMIOS_DISABLED
-  #warning "The CONFIGURE_TERMIOS_DISABLED configuration option is obsolete since RTEMS 5.1"
+  #warning \
+    "The CONFIGURE_TERMIOS_DISABLED configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
-  #error "The CONFIGURE_TEST_NEEDS_CLOCK_DRIVER configuration option is obsolete since at least RTEMS 4.5.0"
+  #error \
+    "The CONFIGURE_TEST_NEEDS_CLOCK_DRIVER configuration option is obsolete since at least RTEMS 4.5.0"
 #endif
 
 #ifdef CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
-  #error "The CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER configuration option is obsolete at least RTEMS 4.5.0"
+  #error \
+    "The CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER configuration option is obsolete at least RTEMS 4.5.0"
 #endif
 
 #ifdef CONFIGURE_TEST_NEEDS_RTC_DRIVER
-  #error "The CONFIGURE_TEST_NEEDS_RTC_DRIVER configuration option is obsolete at least RTEMS 4.5.0"
+  #error \
+    "The CONFIGURE_TEST_NEEDS_RTC_DRIVER configuration option is obsolete at least RTEMS 4.5.0"
 #endif
 
 #ifdef CONFIGURE_TEST_NEEDS_STUB_DRIVER
-  #error "The CONFIGURE_TEST_NEEDS_STUB_DRIVER configuration option is obsolete at least RTEMS 4.5.0"
+  #error \
+    "The CONFIGURE_TEST_NEEDS_STUB_DRIVER configuration option is obsolete at least RTEMS 4.5.0"
 #endif
 
 #ifdef CONFIGURE_TEST_NEEDS_TIMER_DRIVER
-  #error "The CONFIGURE_TEST_NEEDS_TIMER_DRIVER configuration option is obsolete at least RTEMS 4.5.0"
+  #error \
+    "The CONFIGURE_TEST_NEEDS_TIMER_DRIVER configuration option is obsolete at least RTEMS 4.5.0"
 #endif
 
 #ifdef STACK_CHECKER_ON
-  #warning "STACK_CHECKER_ON has been renamed to CONFIGURE_STACK_CHECKER_ENABLED since RTEMS 4.10.0"
+  #warning \
+    "STACK_CHECKER_ON has been renamed to CONFIGURE_STACK_CHECKER_ENABLED since RTEMS 4.10.0"
   #define CONFIGURE_STACK_CHECKER_ENABLED
 #endif
 

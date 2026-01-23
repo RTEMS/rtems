@@ -47,8 +47,9 @@
 #ifdef CONFIGURE_INIT
 
 #define _CONFIGURE_ASSERT_NOT_NULL( _type, _value ) \
-  ( ( _value ) != NULL ? ( _value ) : \
-    ( _type ) sizeof( int[ ( _value ) != NULL ? 1 : -1 ] ) )
+  ( ( _value ) != NULL                              \
+      ? ( _value )                                  \
+      : (_type) sizeof( int[ ( _value ) != NULL ? 1 : -1 ] ) )
 
 #ifdef CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -83,13 +84,13 @@ extern "C" {
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_ENTRY_POINT
-  rtems_task Init( rtems_task_argument );
+rtems_task Init( rtems_task_argument );
   #define CONFIGURE_INIT_TASK_ENTRY_POINT Init
 
   #ifndef CONFIGURE_INIT_TASK_ARGUMENTS
-    extern const char *bsp_boot_cmdline;
+extern const char *bsp_boot_cmdline;
     #define CONFIGURE_INIT_TASK_ARGUMENTS \
-      ( (rtems_task_argument) &bsp_boot_cmdline )
+  ( ( rtems_task_argument ) & bsp_boot_cmdline )
   #endif
 #endif
 
@@ -114,17 +115,20 @@ extern "C" {
 #ifdef CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
 
 #ifdef CONFIGURE_INIT_TASK_STACK_SIZE
-  #error "CONFIGURE_INIT_TASK_STACK_SIZE and CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE are mutually exclusive"
+  #error \
+    "CONFIGURE_INIT_TASK_STACK_SIZE and CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE are mutually exclusive"
 #endif
 
 RTEMS_STATIC_ASSERT(
-  CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE >= CONFIGURE_MINIMUM_TASK_STACK_SIZE,
+  CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE >=
+    CONFIGURE_MINIMUM_TASK_STACK_SIZE,
   CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE_IS_TOO_SMALL
 );
 
-static RTEMS_SECTION( ".rtemsstack.userinit" )
-RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
-char _RTEMS_tasks_User_task_storage[ CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE ];
+static RTEMS_SECTION( ".rtemsstack.userinit" ) RTEMS_ALIGNED(
+  RTEMS_TASK_STORAGE_ALIGNMENT
+) char _RTEMS_tasks_User_task_storage
+  [ CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE ];
 
 const RTEMS_tasks_User_task_config _RTEMS_tasks_User_task_config = {
   {
@@ -155,12 +159,13 @@ RTEMS_SYSINIT_ITEM(
 #ifndef CONFIGURE_INIT_TASK_STACK_SIZE
   #define CONFIGURE_INIT_TASK_STACK_SIZE CONFIGURE_MINIMUM_TASK_STACK_SIZE
 #elif CONFIGURE_INIT_TASK_STACK_SIZE < CONFIGURE_MINIMUM_TASK_STACK_SIZE
-  #error "CONFIGURE_INIT_TASK_STACK_SIZE must be greater than or equal to CONFIGURE_MINIMUM_TASK_STACK_SIZE"
+  #error \
+    "CONFIGURE_INIT_TASK_STACK_SIZE must be greater than or equal to CONFIGURE_MINIMUM_TASK_STACK_SIZE"
 #endif
 
 #if CONFIGURE_INIT_TASK_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE
   #define _CONFIGURE_INIT_TASK_STACK_EXTRA \
-    ( CONFIGURE_INIT_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE )
+  ( CONFIGURE_INIT_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE )
 #endif
 
 const rtems_initialization_tasks_table _RTEMS_tasks_User_task_table = {

@@ -80,28 +80,26 @@
 #endif
 
 #if CONFIGURE_MP_NODE_NUMBER > CONFIGURE_MP_MAXIMUM_NODES
-  #error "CONFIGURE_MP_NODE_NUMBER must be less than or equal to CONFIGURE_MP_MAXIMUM_NODES"
+  #error \
+    "CONFIGURE_MP_NODE_NUMBER must be less than or equal to CONFIGURE_MP_MAXIMUM_NODES"
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-Objects_MP_Control _Objects_MP_Controls[
-  CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
-];
+Objects_MP_Control _Objects_MP_Controls[ CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS ];
 
 struct Thread_Configured_proxy_control {
-  Thread_Proxy_control Control;
+  Thread_Proxy_control          Control;
   Thread_queue_Configured_heads Heads;
 };
 
-static Thread_Configured_proxy_control _Thread_MP_Configured_proxies[
-  CONFIGURE_MP_MAXIMUM_PROXIES
-];
+static Thread_Configured_proxy_control
+  _Thread_MP_Configured_proxies[ CONFIGURE_MP_MAXIMUM_PROXIES ];
 
-Thread_Configured_proxy_control * const _Thread_MP_Proxies =
-  &_Thread_MP_Configured_proxies[ 0 ];
+Thread_Configured_proxy_control *const
+  _Thread_MP_Proxies = &_Thread_MP_Configured_proxies[ 0 ];
 
 const MPCI_Configuration _MPCI_Configuration = {
   CONFIGURE_MP_NODE_NUMBER,
@@ -112,13 +110,12 @@ const MPCI_Configuration _MPCI_Configuration = {
   CONFIGURE_MP_MPCI_TABLE_POINTER
 };
 
-char _MPCI_Receive_server_stack[
-  CONFIGURE_MINIMUM_TASK_STACK_SIZE
-    + CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
-    + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK
-    + CPU_ALL_TASKS_ARE_FP * CONTEXT_FP_SIZE
-] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
-RTEMS_SECTION( ".rtemsstack.mpci" );
+char _MPCI_Receive_server_stack
+  [ CONFIGURE_MINIMUM_TASK_STACK_SIZE +
+    CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK +
+    CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK +
+    CPU_ALL_TASKS_ARE_FP *
+      CONTEXT_FP_SIZE ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT ) RTEMS_SECTION( ".rtemsstack.mpci" );
 
 #ifdef __cplusplus
 }
@@ -129,7 +126,8 @@ RTEMS_SECTION( ".rtemsstack.mpci" );
 #else /* RTEMS_MULTIPROCESSING */
 
 #ifdef CONFIGURE_MP_APPLICATION
-  #error "CONFIGURE_MP_APPLICATION must not be defined if multiprocessing is disabled"
+  #error \
+    "CONFIGURE_MP_APPLICATION must not be defined if multiprocessing is disabled"
 #endif
 
 #endif /* RTEMS_MULTIPROCESSING */

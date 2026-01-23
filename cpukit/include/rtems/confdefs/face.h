@@ -55,25 +55,23 @@
 
   #include <rtems/posix/timer.h>
 
-  int _POSIX_Timer_Is_allowed(
-    clockid_t clock_id
-  )
-  {
-    /*
+int _POSIX_Timer_Is_allowed( clockid_t clock_id )
+{
+  /*
      * Per the FACE Technical Standard, POSIX timers should not be
      * allowed on CLOCK_REALTIME for safety reasons. If the application
      * wants the FACE behavior, then this method is instantiated.
      */
-    if (  clock_id == CLOCK_REALTIME ) {
-      return EPERM;
-    }
-
-    if ( clock_id != CLOCK_MONOTONIC ) {
-      return EINVAL;
-    }
-
-    return 0;
+  if ( clock_id == CLOCK_REALTIME ) {
+    return EPERM;
   }
+
+  if ( clock_id != CLOCK_MONOTONIC ) {
+    return EINVAL;
+  }
+
+  return 0;
+}
 
 #endif /* CONFIGURE_POSIX_TIMERS_FACE_BEHAVIOR */
 

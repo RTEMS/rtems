@@ -59,14 +59,17 @@
   #define CONFIGURE_MAXIMUM_TASKS 0
 #endif
 
-#define _CONFIGURE_TASKS ( CONFIGURE_MAXIMUM_TASKS + _CONFIGURE_LIBBLOCK_TASKS )
+#define _CONFIGURE_TASKS \
+  ( CONFIGURE_MAXIMUM_TASKS + _CONFIGURE_LIBBLOCK_TASKS )
 
 #ifndef CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE
   #define CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE 0
 #endif
 
-#if CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE > CONFIGURE_MAXIMUM_TASKS
-  #error "CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE shall be less than or equal to CONFIGURE_MAXIMUM_TASKS"
+#if CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE > \
+  CONFIGURE_MAXIMUM_TASKS
+  #error \
+    "CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE shall be less than or equal to CONFIGURE_MAXIMUM_TASKS"
 #endif
 
 #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
@@ -77,16 +80,17 @@
   #include <rtems/posix/pthread.h>
 #endif
 
-#if !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION) \
-  && CONFIGURE_MAXIMUM_TASKS == 0 \
-  && CONFIGURE_MAXIMUM_POSIX_THREADS == 0
-  #error "You must define one of CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION, CONFIGURE_MAXIMUM_TASKS, and CONFIGURE_MAXIMUM_POSIX_THREADS"
+#if !defined( CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION ) && \
+  CONFIGURE_MAXIMUM_TASKS == 0 && CONFIGURE_MAXIMUM_POSIX_THREADS == 0
+  #error \
+    "You must define one of CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION, CONFIGURE_MAXIMUM_TASKS, and CONFIGURE_MAXIMUM_POSIX_THREADS"
 #endif
 
-#if !defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) \
-  && !defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) \
-  && !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION)
-  #error "You must define one of CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION, CONFIGURE_RTEMS_INIT_TASKS_TABLE, and CONFIGURE_POSIX_INIT_THREAD_TABLE"
+#if !defined( CONFIGURE_RTEMS_INIT_TASKS_TABLE ) && \
+  !defined( CONFIGURE_POSIX_INIT_THREAD_TABLE ) &&  \
+  !defined( CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION )
+  #error \
+    "You must define one of CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION, CONFIGURE_RTEMS_INIT_TASKS_TABLE, and CONFIGURE_POSIX_INIT_THREAD_TABLE"
 #endif
 
 #ifndef CONFIGURE_MAXIMUM_THREAD_NAME_SIZE
@@ -104,47 +108,48 @@ extern "C" {
 typedef union {
   Scheduler_Node Base;
   #ifdef CONFIGURE_SCHEDULER_CBS
-    Scheduler_CBS_Node CBS;
+  Scheduler_CBS_Node CBS;
   #endif
   #ifdef CONFIGURE_SCHEDULER_EDF
-    Scheduler_EDF_Node EDF;
+  Scheduler_EDF_Node EDF;
   #endif
   #ifdef CONFIGURE_SCHEDULER_EDF_SMP
-    Scheduler_EDF_SMP_Node EDF_SMP;
+  Scheduler_EDF_SMP_Node EDF_SMP;
   #endif
   #ifdef CONFIGURE_SCHEDULER_PRIORITY
-    Scheduler_priority_Node Priority;
+  Scheduler_priority_Node Priority;
   #endif
   #ifdef CONFIGURE_SCHEDULER_SIMPLE_SMP
-    Scheduler_SMP_Node Simple_SMP;
+  Scheduler_SMP_Node Simple_SMP;
   #endif
   #ifdef CONFIGURE_SCHEDULER_PRIORITY_SMP
-    Scheduler_priority_SMP_Node Priority_SMP;
+  Scheduler_priority_SMP_Node Priority_SMP;
   #endif
   #ifdef CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
-    Scheduler_priority_affinity_SMP_Node Priority_affinity_SMP;
+  Scheduler_priority_affinity_SMP_Node Priority_affinity_SMP;
   #endif
   #ifdef CONFIGURE_SCHEDULER_STRONG_APA
-    Scheduler_strong_APA_Node Strong_APA;
+  Scheduler_strong_APA_Node Strong_APA;
   #endif
   #ifdef CONFIGURE_SCHEDULER_USER_PER_THREAD
-    CONFIGURE_SCHEDULER_USER_PER_THREAD User;
+  CONFIGURE_SCHEDULER_USER_PER_THREAD User;
   #endif
 } Configuration_Scheduler_node;
 
 #ifdef RTEMS_SMP
-  const size_t _Scheduler_Node_size = sizeof( Configuration_Scheduler_node );
+const size_t _Scheduler_Node_size = sizeof( Configuration_Scheduler_node );
 #endif
 
 const size_t _Thread_Maximum_name_size = CONFIGURE_MAXIMUM_THREAD_NAME_SIZE;
 
 RTEMS_STATIC_ASSERT(
-  CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE % RTEMS_TASK_STORAGE_ALIGNMENT == 0,
+  CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE % RTEMS_TASK_STORAGE_ALIGNMENT ==
+    0,
   CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE
 );
 
-const size_t _Thread_Maximum_TLS_size =
-  CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE;
+const size_t
+  _Thread_Maximum_TLS_size = CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE;
 
 struct Thread_Configured_control {
 /*
@@ -157,92 +162,82 @@ struct Thread_Configured_control {
 #pragma GCC diagnostic pop
 
   #if CONFIGURE_MAXIMUM_USER_EXTENSIONS > 0
-    void *extensions[ CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1 ];
+  void *extensions[ CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1 ];
   #endif
   Configuration_Scheduler_node Scheduler_nodes[ _CONFIGURE_SCHEDULER_COUNT ];
-  RTEMS_API_Control API_RTEMS;
+  RTEMS_API_Control            API_RTEMS;
   #ifdef RTEMS_POSIX_API
-    POSIX_API_Control API_POSIX;
+  POSIX_API_Control API_POSIX;
   #endif
   #if CONFIGURE_MAXIMUM_THREAD_NAME_SIZE > 1
-    char name[ CONFIGURE_MAXIMUM_THREAD_NAME_SIZE ];
+  char name[ CONFIGURE_MAXIMUM_THREAD_NAME_SIZE ];
   #endif
-  #if defined(_CONFIGURE_ENABLE_NEWLIB_REENTRANCY) && \
-    !defined(_REENT_THREAD_LOCAL)
-    struct _reent Newlib;
+  #if defined( _CONFIGURE_ENABLE_NEWLIB_REENTRANCY ) && \
+    !defined( _REENT_THREAD_LOCAL )
+  struct _reent Newlib;
   #endif
 };
 
 const Thread_Control_add_on _Thread_Control_add_ons[] = {
-  {
-    offsetof( Thread_Configured_control, Control.Scheduler.nodes ),
-    offsetof( Thread_Configured_control, Scheduler_nodes )
-  }, {
-    offsetof(
+  { offsetof( Thread_Configured_control, Control.Scheduler.nodes ),
+    offsetof( Thread_Configured_control, Scheduler_nodes ) },
+  { offsetof(
       Thread_Configured_control,
       Control.API_Extensions[ THREAD_API_RTEMS ]
     ),
-    offsetof( Thread_Configured_control, API_RTEMS )
-  }
-  #if defined(_CONFIGURE_ENABLE_NEWLIB_REENTRANCY) && \
-    !defined(_REENT_THREAD_LOCAL)
-    , {
-      offsetof(
-        Thread_Configured_control,
-        Control.libc_reent
-      ),
-      offsetof( Thread_Configured_control, Newlib )
-    }
+    offsetof( Thread_Configured_control, API_RTEMS ) }
+  #if defined( _CONFIGURE_ENABLE_NEWLIB_REENTRANCY ) && \
+    !defined( _REENT_THREAD_LOCAL )
+  ,
+  { offsetof( Thread_Configured_control, Control.libc_reent ),
+    offsetof( Thread_Configured_control, Newlib ) }
   #endif
   #if CONFIGURE_MAXIMUM_THREAD_NAME_SIZE > 1
-    , {
-      offsetof(
-        Thread_Configured_control,
-        Control.Join_queue.Queue.name
-      ),
-      offsetof( Thread_Configured_control, name )
-    }
+  ,
+  { offsetof( Thread_Configured_control, Control.Join_queue.Queue.name ),
+    offsetof( Thread_Configured_control, name ) }
   #endif
   #ifdef RTEMS_POSIX_API
-    , {
-      offsetof(
-        Thread_Configured_control,
-        Control.API_Extensions[ THREAD_API_POSIX ]
-      ),
-      offsetof( Thread_Configured_control, API_POSIX )
-    }
+  ,
+  { offsetof(
+      Thread_Configured_control,
+      Control.API_Extensions[ THREAD_API_POSIX ]
+    ),
+    offsetof( Thread_Configured_control, API_POSIX ) }
   #endif
 };
 
-const size_t _Thread_Control_add_on_count =
-  RTEMS_ARRAY_SIZE( _Thread_Control_add_ons );
+const size_t _Thread_Control_add_on_count = RTEMS_ARRAY_SIZE(
+  _Thread_Control_add_ons
+);
 
 #ifdef RTEMS_SMP
-  struct Thread_queue_Configured_heads {
+struct Thread_queue_Configured_heads {
 /*
  * This was put in to address the following warning.
  * warning: invalid use of structure with flexible array member
  */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-    Thread_queue_Heads Heads;
+  Thread_queue_Heads Heads;
 #pragma GCC diagnostic pop
-      Thread_queue_Priority_queue Priority[ _CONFIGURE_SCHEDULER_COUNT ];
-  };
+  Thread_queue_Priority_queue Priority[ _CONFIGURE_SCHEDULER_COUNT ];
+};
 
-  const size_t _Thread_queue_Heads_size =
-    sizeof( Thread_queue_Configured_heads );
+const size_t _Thread_queue_Heads_size = sizeof(
+  Thread_queue_Configured_heads
+);
 #endif
 
 const size_t _Thread_Initial_thread_count =
-#if !defined(CONFIGURE_IDLE_TASK_STORAGE_SIZE) && \
-  !defined(CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE)
+#if !defined( CONFIGURE_IDLE_TASK_STORAGE_SIZE ) && \
+  !defined( CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE )
   _CONFIGURE_MAXIMUM_PROCESSORS +
 #endif
   rtems_resource_maximum_per_allocation( _CONFIGURE_TASKS ) +
   rtems_resource_maximum_per_allocation( CONFIGURE_MAXIMUM_POSIX_THREADS );
 
-#if defined(RTEMS_MULTIPROCESSING) && defined(CONFIGURE_MP_APPLICATION)
+#if defined( RTEMS_MULTIPROCESSING ) && defined( CONFIGURE_MP_APPLICATION )
   #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 1
 #else
   #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
@@ -256,24 +251,24 @@ THREAD_INFORMATION_DEFINE(
 );
 
 #if _CONFIGURE_TASKS > 0
-  THREAD_INFORMATION_DEFINE(
-    _RTEMS_tasks,
-    OBJECTS_CLASSIC_API,
-    OBJECTS_RTEMS_TASKS,
-    _CONFIGURE_TASKS
-  );
+THREAD_INFORMATION_DEFINE(
+  _RTEMS_tasks,
+  OBJECTS_CLASSIC_API,
+  OBJECTS_RTEMS_TASKS,
+  _CONFIGURE_TASKS
+);
 #endif
 
 #if CONFIGURE_MAXIMUM_POSIX_THREADS > 0
-  const size_t _POSIX_Threads_Minimum_stack_size =
-    CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE;
+const size_t _POSIX_Threads_Minimum_stack_size =
+  CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE;
 
-  THREAD_INFORMATION_DEFINE(
-    _POSIX_Threads,
-    OBJECTS_POSIX_API,
-    OBJECTS_POSIX_THREADS,
-    CONFIGURE_MAXIMUM_POSIX_THREADS
-  );
+THREAD_INFORMATION_DEFINE(
+  _POSIX_Threads,
+  OBJECTS_POSIX_API,
+  OBJECTS_POSIX_THREADS,
+  CONFIGURE_MAXIMUM_POSIX_THREADS
+);
 #endif
 
 #ifdef __cplusplus

@@ -41,7 +41,7 @@
 #error "Do not include this file directly, use <rtems/confdefs.h> instead"
 #endif
 
-#if defined(CONFIGURE_INIT) && !defined(CONFIGURE_DISABLE_BSP_SETTINGS)
+#if defined( CONFIGURE_INIT ) && !defined( CONFIGURE_DISABLE_BSP_SETTINGS )
 #include <bsp.h>
 #endif
 

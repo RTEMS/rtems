@@ -46,7 +46,7 @@
 
 #ifdef CONFIGURE_INIT
 
-#if defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
+#if defined( RTEMS_NEWLIB ) && !defined( CONFIGURE_DISABLE_NEWLIB_REENTRANCY )
   #include <rtems/score/percpu.h>
   #include <rtems/score/thread.h>
   #include <sys/reent.h>
@@ -57,12 +57,12 @@
 extern "C" {
 #endif
 
-#if defined(_CONFIGURE_ENABLE_NEWLIB_REENTRANCY) && \
-  !defined(_REENT_THREAD_LOCAL)
-  struct _reent *__getreent( void )
-  {
-    return _Thread_Get_executing()->libc_reent;
-  }
+#if defined( _CONFIGURE_ENABLE_NEWLIB_REENTRANCY ) && \
+  !defined( _REENT_THREAD_LOCAL )
+struct _reent *__getreent( void )
+{
+  return _Thread_Get_executing()->libc_reent;
+}
 #endif
 
 #ifdef __cplusplus

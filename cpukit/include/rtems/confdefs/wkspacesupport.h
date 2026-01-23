@@ -48,17 +48,18 @@
 #define _Configure_Zero_or_one( _number ) ( ( _number ) != 0 ? 1 : 0 )
 
 #define _Configure_Align_up( _val, _align ) \
-  ( ( ( _val ) + ( _align ) - 1) - ( ( _val ) + ( _align ) - 1 ) % ( _align ) )
+  ( ( ( _val ) + ( _align ) - 1 ) -         \
+    ( ( _val ) + ( _align ) - 1 ) % ( _align ) )
 
 #define _CONFIGURE_HEAP_MIN_BLOCK_SIZE \
   _Configure_Align_up( sizeof( Heap_Block ), CPU_HEAP_ALIGNMENT )
 
-#define _Configure_From_workspace( _size ) \
-  ( (uintptr_t) ( _Configure_Zero_or_one( _size ) \
-    * _Configure_Align_up( \
-       _size + HEAP_BLOCK_HEADER_SIZE, \
-      _CONFIGURE_HEAP_MIN_BLOCK_SIZE \
-    ) ) )
+#define _Configure_From_workspace( _size )          \
+  ( (uintptr_t) ( _Configure_Zero_or_one( _size ) * \
+                  _Configure_Align_up(              \
+                    _size + HEAP_BLOCK_HEADER_SIZE, \
+                    _CONFIGURE_HEAP_MIN_BLOCK_SIZE  \
+                  ) ) )
 
 #endif /* CONFIGURE_INIT */
 

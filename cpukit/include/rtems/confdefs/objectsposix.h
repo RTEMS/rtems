@@ -52,8 +52,8 @@
 #include <limits.h>
 
 #define _Configure_Memory_for_named_objects( _number, _size ) \
-  ( rtems_resource_maximum_per_allocation( _number ) \
-    * _Configure_From_workspace( _POSIX_PATH_MAX + 1 ) )
+  ( rtems_resource_maximum_per_allocation( _number ) *        \
+    _Configure_From_workspace( _POSIX_PATH_MAX + 1 ) )
 
 #ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
   #define CONFIGURE_MAXIMUM_POSIX_KEYS 0
@@ -61,21 +61,24 @@
 
 #ifndef CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
   #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
-    ( CONFIGURE_MAXIMUM_POSIX_KEYS * \
-     ( CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS ) )
+  ( CONFIGURE_MAXIMUM_POSIX_KEYS *                \
+    ( CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS ) )
 #endif
 
-#if CONFIGURE_MAXIMUM_POSIX_KEYS > 0 \
-  && CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS < CONFIGURE_MAXIMUM_POSIX_KEYS
-  #error "CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS must be greater than or equal to CONFIGURE_MAXIMUM_POSIX_KEYS"
+#if CONFIGURE_MAXIMUM_POSIX_KEYS > 0 && \
+  CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS < CONFIGURE_MAXIMUM_POSIX_KEYS
+  #error \
+    "CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS must be greater than or equal to CONFIGURE_MAXIMUM_POSIX_KEYS"
 #endif
 
-#if CONFIGURE_MAXIMUM_POSIX_KEYS == 0 \
-  && CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS > 0
-  #warning "If CONFIGURE_MAXIMUM_POSIX_KEYS is zero, then CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS should be zero as well"
+#if CONFIGURE_MAXIMUM_POSIX_KEYS == 0 && \
+  CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS > 0
+  #warning \
+    "If CONFIGURE_MAXIMUM_POSIX_KEYS is zero, then CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS should be zero as well"
 #endif
 
-#if CONFIGURE_MAXIMUM_POSIX_KEYS > 0 || CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS > 0
+#if CONFIGURE_MAXIMUM_POSIX_KEYS > 0 || \
+  CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS > 0
   #include <rtems/posix/key.h>
 #endif
 
@@ -104,94 +107,96 @@ extern "C" {
 #endif
 
 #if CONFIGURE_MAXIMUM_POSIX_KEYS > 0
-  POSIX_KEYS_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_KEYS );
+POSIX_KEYS_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_KEYS );
 #endif
 
 #if CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS > 0
-  POSIX_Keys_Key_value_pair _POSIX_Keys_Key_value_pairs[
-    rtems_resource_maximum_per_allocation(
-      CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
-    )
-  ];
+POSIX_Keys_Key_value_pair
+  _POSIX_Keys_Key_value_pairs[ rtems_resource_maximum_per_allocation(
+    CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
+  ) ];
 
-  const uint32_t _POSIX_Keys_Key_value_pair_maximum =
-    CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS;
+const uint32_t
+  _POSIX_Keys_Key_value_pair_maximum = CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS;
 #endif
 
 #if CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES > 0
-  POSIX_MESSAGE_QUEUE_INFORMATION_DEFINE(
-    CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
-  );
+POSIX_MESSAGE_QUEUE_INFORMATION_DEFINE(
+  CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
+);
 
   #define _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES \
-    _Configure_Memory_for_named_objects( \
-       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES, \
-       sizeof( POSIX_Message_queue_Control ) \
-     )
+  _Configure_Memory_for_named_objects(               \
+    CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,          \
+    sizeof( POSIX_Message_queue_Control )            \
+  )
 #else
   #define _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES 0
 #endif
 
 #if CONFIGURE_MAXIMUM_POSIX_SEMAPHORES > 0
-  POSIX_SEMAPHORE_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_SEMAPHORES );
+POSIX_SEMAPHORE_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_SEMAPHORES );
 
   #define _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES \
-    _Configure_Memory_for_named_objects( \
-       CONFIGURE_MAXIMUM_POSIX_SEMAPHORES, \
-       sizeof( POSIX_Semaphore_Control ) \
-     )
+  _Configure_Memory_for_named_objects(           \
+    CONFIGURE_MAXIMUM_POSIX_SEMAPHORES,          \
+    sizeof( POSIX_Semaphore_Control )            \
+  )
 #else
   #define _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES 0
 #endif
 
 #if CONFIGURE_MAXIMUM_POSIX_SHMS > 0
-  POSIX_SHM_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_SHMS );
+POSIX_SHM_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_SHMS );
 
   #define _CONFIGURE_MEMORY_FOR_POSIX_SHMS \
-    _Configure_Memory_for_named_objects( \
-       CONFIGURE_MAXIMUM_POSIX_SHMS, \
-       sizeof( POSIX_Shm_Control ) \
-     )
+  _Configure_Memory_for_named_objects(     \
+    CONFIGURE_MAXIMUM_POSIX_SHMS,          \
+    sizeof( POSIX_Shm_Control )            \
+  )
 #else
   #define _CONFIGURE_MEMORY_FOR_POSIX_SHMS 0
 #endif
 
 #if CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS > 0
   #ifndef RTEMS_POSIX_API
-    #error "CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS must be zero if POSIX API is disabled"
+    #error \
+      "CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS must be zero if POSIX API is disabled"
   #endif
 
-  const uint32_t _POSIX_signals_Maximum_queued_signals =
-    CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS;
+const uint32_t _POSIX_signals_Maximum_queued_signals =
+  CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS;
 
-  POSIX_signals_Siginfo_node _POSIX_signals_Siginfo_nodes[
-    CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
-  ];
+POSIX_signals_Siginfo_node
+  _POSIX_signals_Siginfo_nodes[ CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ];
 
   #define _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS \
-    _Configure_From_workspace( CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS \
-      * sizeof( POSIX_signals_Siginfo_node ) )
+  _Configure_From_workspace(                         \
+    CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS *         \
+    sizeof( POSIX_signals_Siginfo_node )             \
+  )
 #else
   #define _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS 0
 #endif
 
 #if CONFIGURE_MAXIMUM_POSIX_TIMERS > 0
   #ifndef RTEMS_POSIX_API
-    #error "CONFIGURE_MAXIMUM_POSIX_TIMERS must be zero if POSIX API is disabled"
+    #error \
+      "CONFIGURE_MAXIMUM_POSIX_TIMERS must be zero if POSIX API is disabled"
   #endif
 
-  POSIX_TIMER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_TIMERS );
+POSIX_TIMER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_TIMERS );
 #endif
 
 #ifdef __cplusplus
 }
 #endif
 
-#define _CONFIGURE_MEMORY_FOR_POSIX_OBJECTS \
-  ( _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES \
-    + _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS \
-    + _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES \
-    + _CONFIGURE_MEMORY_FOR_POSIX_SHMS )
+#define _CONFIGURE_MEMORY_FOR_POSIX_OBJECTS      \
+  ( _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES + \
+    _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS + \
+    _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES +     \
+    _CONFIGURE_MEMORY_FOR_POSIX_SHMS )
 
 #endif /* CONFIGURE_INIT */
 

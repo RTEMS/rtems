@@ -45,12 +45,13 @@
 
 #include <rtems/confdefs/bsp.h>
 
-#if !defined(CONFIGURE_DISABLE_BSP_SETTINGS) && \
-  defined(CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK)
+#if !defined( CONFIGURE_DISABLE_BSP_SETTINGS ) && \
+  defined( CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK )
 #define _CONFIGURE_HEAP_EXTEND_VIA_SBRK
 #endif
 
-#if defined(_CONFIGURE_HEAP_EXTEND_VIA_SBRK) || defined(CONFIGURE_MALLOC_DIRTY)
+#if defined( _CONFIGURE_HEAP_EXTEND_VIA_SBRK ) || \
+  defined( CONFIGURE_MALLOC_DIRTY )
 #include <rtems/malloc.h>
 #endif
 
@@ -59,13 +60,12 @@ extern "C" {
 #endif
 
 #ifdef _CONFIGURE_HEAP_EXTEND_VIA_SBRK
-const rtems_heap_extend_handler rtems_malloc_extend_handler =
-  rtems_heap_extend_via_sbrk;
+const rtems_heap_extend_handler
+  rtems_malloc_extend_handler = rtems_heap_extend_via_sbrk;
 #endif
 
 #ifdef CONFIGURE_MALLOC_DIRTY
-rtems_malloc_dirtier_t rtems_malloc_dirty_helper =
-  rtems_malloc_dirty_memory;
+rtems_malloc_dirtier_t rtems_malloc_dirty_helper = rtems_malloc_dirty_memory;
 #endif
 
 #ifdef __cplusplus

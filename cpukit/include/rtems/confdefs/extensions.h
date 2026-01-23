@@ -62,7 +62,10 @@
 #endif
 
 #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0
-  #if (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS & (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS - 1)) != 0
+  #if (                                          \
+    CONFIGURE_RECORD_PER_PROCESSOR_ITEMS &       \
+    ( CONFIGURE_RECORD_PER_PROCESSOR_ITEMS - 1 ) \
+  ) != 0
     #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be a power of two"
   #endif
 
@@ -70,9 +73,9 @@
     #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be at least 16"
   #endif
 
-  #if defined(CONFIGURE_RECORD_EXTENSIONS_ENABLED) \
-    || defined(CONFIGURE_RECORD_FATAL_DUMP_BASE64) \
-    || defined(CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB)
+  #if defined( CONFIGURE_RECORD_EXTENSIONS_ENABLED ) || \
+    defined( CONFIGURE_RECORD_FATAL_DUMP_BASE64 ) ||    \
+    defined( CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB )
     #define _CONFIGURE_RECORD_NEED_EXTENSION
   #endif
 
@@ -80,13 +83,16 @@
   #include <rtems/record.h>
 #else
   #ifdef CONFIGURE_RECORD_EXTENSIONS_ENABLED
-    #warning "CONFIGURE_RECORD_EXTENSIONS_ENABLED defined without CONFIGURE_RECORD_PER_PROCESSOR_ITEMS"
+    #warning \
+      "CONFIGURE_RECORD_EXTENSIONS_ENABLED defined without CONFIGURE_RECORD_PER_PROCESSOR_ITEMS"
   #endif
   #ifdef CONFIGURE_RECORD_FATAL_DUMP_BASE64
-    #warning "CONFIGURE_RECORD_FATAL_DUMP_BASE64 defined without CONFIGURE_RECORD_PER_PROCESSOR_ITEMS"
+    #warning \
+      "CONFIGURE_RECORD_FATAL_DUMP_BASE64 defined without CONFIGURE_RECORD_PER_PROCESSOR_ITEMS"
   #endif
   #ifdef CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB
-    #warning "CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB defined without CONFIGURE_RECORD_PER_PROCESSOR_ITEMS"
+    #warning \
+      "CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB defined without CONFIGURE_RECORD_PER_PROCESSOR_ITEMS"
   #endif
 #endif
 
@@ -102,129 +108,135 @@
 extern "C" {
 #endif
 
-#if defined(_CONFIGURE_RECORD_NEED_EXTENSION) \
-  || defined(_CONFIGURE_ENABLE_NEWLIB_REENTRANCY) \
-  || defined(CONFIGURE_STACK_CHECKER_ENABLED) \
-  || defined(CONFIGURE_INITIAL_EXTENSIONS) \
-  || defined(BSP_INITIAL_EXTENSION)
-  const User_extensions_Table _User_extensions_Initial_extensions[] = {
+#if defined( _CONFIGURE_RECORD_NEED_EXTENSION ) ||  \
+  defined( _CONFIGURE_ENABLE_NEWLIB_REENTRANCY ) || \
+  defined( CONFIGURE_STACK_CHECKER_ENABLED ) ||     \
+  defined( CONFIGURE_INITIAL_EXTENSIONS ) || defined( BSP_INITIAL_EXTENSION )
+const User_extensions_Table _User_extensions_Initial_extensions[] = {
     #ifdef CONFIGURE_EXCEPTION_TO_SIGNAL_MAPPING
-      { .fatal = _Exception_Raise_signal },
+  { .fatal = _Exception_Raise_signal },
     #endif
     #ifdef _CONFIGURE_RECORD_NEED_EXTENSION
-      {
+  {
         #ifdef CONFIGURE_RECORD_EXTENSIONS_ENABLED
-          _Record_Thread_create,
-          _Record_Thread_start,
-          _Record_Thread_restart,
-          _Record_Thread_delete,
-          _Record_Thread_switch,
-          _Record_Thread_begin,
-          _Record_Thread_exitted,
+    _Record_Thread_create,
+    _Record_Thread_start,
+    _Record_Thread_restart,
+    _Record_Thread_delete,
+    _Record_Thread_switch,
+    _Record_Thread_begin,
+    _Record_Thread_exitted,
         #else
-           NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
         #endif
         #ifdef CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB
-          _Record_Fatal_dump_base64_zlib,
-        #elif defined(CONFIGURE_RECORD_FATAL_DUMP_BASE64)
-          _Record_Fatal_dump_base64,
+    _Record_Fatal_dump_base64_zlib,
+        #elif defined( CONFIGURE_RECORD_FATAL_DUMP_BASE64 )
+    _Record_Fatal_dump_base64,
         #else
-          NULL,
+    NULL,
         #endif
         #ifdef CONFIGURE_RECORD_EXTENSIONS_ENABLED
-          _Record_Thread_terminate
+    _Record_Thread_terminate
         #else
-          NULL
+    NULL
         #endif
-      },
+  },
     #endif
     #ifdef _CONFIGURE_ENABLE_NEWLIB_REENTRANCY
-      RTEMS_NEWLIB_EXTENSION,
+  RTEMS_NEWLIB_EXTENSION,
     #endif
     #ifdef CONFIGURE_STACK_CHECKER_ENABLED
-      RTEMS_STACK_CHECKER_EXTENSION,
+  RTEMS_STACK_CHECKER_EXTENSION,
     #endif
     #ifdef CONFIGURE_INITIAL_EXTENSIONS
-      CONFIGURE_INITIAL_EXTENSIONS,
+  CONFIGURE_INITIAL_EXTENSIONS,
     #endif
-    #if !defined(CONFIGURE_DISABLE_BSP_SETTINGS) && \
-      defined(BSP_INITIAL_EXTENSION)
-      BSP_INITIAL_EXTENSION
+    #if !defined( CONFIGURE_DISABLE_BSP_SETTINGS ) && \
+      defined( BSP_INITIAL_EXTENSION )
+  BSP_INITIAL_EXTENSION
     #endif
-  };
+};
 
-  const size_t _User_extensions_Initial_count =
-    RTEMS_ARRAY_SIZE( _User_extensions_Initial_extensions );
+const size_t _User_extensions_Initial_count = RTEMS_ARRAY_SIZE(
+  _User_extensions_Initial_extensions
+);
 
-  User_extensions_Switch_control _User_extensions_Initial_switch_controls[
-    RTEMS_ARRAY_SIZE( _User_extensions_Initial_extensions )
-  ];
+User_extensions_Switch_control _User_extensions_Initial_switch_controls
+  [ RTEMS_ARRAY_SIZE( _User_extensions_Initial_extensions ) ];
 
-  RTEMS_SYSINIT_ITEM(
-    _User_extensions_Handler_initialization,
-    RTEMS_SYSINIT_INITIAL_EXTENSIONS,
-    RTEMS_SYSINIT_ORDER_MIDDLE
-  );
+RTEMS_SYSINIT_ITEM(
+  _User_extensions_Handler_initialization,
+  RTEMS_SYSINIT_INITIAL_EXTENSIONS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 #endif
 
 #if CONFIGURE_MAXIMUM_USER_EXTENSIONS > 0
-  EXTENSION_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_USER_EXTENSIONS );
+EXTENSION_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_USER_EXTENSIONS );
 #endif
 
 #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0
-  typedef struct {
-    Record_Control    Control;
-    rtems_record_item Items[ CONFIGURE_RECORD_PER_PROCESSOR_ITEMS ];
-  } Record_Configured_control;
+typedef struct {
+  Record_Control    Control;
+  rtems_record_item Items[ CONFIGURE_RECORD_PER_PROCESSOR_ITEMS ];
+} Record_Configured_control;
 
-  static Record_Configured_control _Record_Controls[ _CONFIGURE_MAXIMUM_PROCESSORS ];
+static Record_Configured_control
+  _Record_Controls[ _CONFIGURE_MAXIMUM_PROCESSORS ];
 
-  const Record_Configuration _Record_Configuration = {
-    CONFIGURE_RECORD_PER_PROCESSOR_ITEMS,
-    &_Record_Controls[ 0 ].Control
-  };
+const Record_Configuration _Record_Configuration = {
+  CONFIGURE_RECORD_PER_PROCESSOR_ITEMS,
+  &_Record_Controls[ 0 ].Control
+};
 
-  RTEMS_SYSINIT_ITEM(
-    _Record_Initialize,
-    RTEMS_SYSINIT_RECORD,
-    RTEMS_SYSINIT_ORDER_MIDDLE
-  );
+RTEMS_SYSINIT_ITEM(
+  _Record_Initialize,
+  RTEMS_SYSINIT_RECORD,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
   #ifdef CONFIGURE_RECORD_INTERRUPTS_ENABLED
-    rtems_interrupt_entry **bsp_interrupt_get_dispatch_table_slot(
-      rtems_vector_number index
-    );
+rtems_interrupt_entry **bsp_interrupt_get_dispatch_table_slot(
+  rtems_vector_number index
+);
 
-    rtems_interrupt_entry **bsp_interrupt_get_dispatch_table_slot(
-      rtems_vector_number index
-    )
-    {
-      return &_Record_Interrupt_dispatch_table[ index ];
-    }
+rtems_interrupt_entry **bsp_interrupt_get_dispatch_table_slot(
+  rtems_vector_number index
+)
+{
+  return &_Record_Interrupt_dispatch_table[ index ];
+}
 
-    RTEMS_SYSINIT_ITEM(
-      _Record_Interrupt_initialize,
-      RTEMS_SYSINIT_LAST,
-      RTEMS_SYSINIT_ORDER_MIDDLE
-    );
+RTEMS_SYSINIT_ITEM(
+  _Record_Interrupt_initialize,
+  RTEMS_SYSINIT_LAST,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
   #endif
 #endif
 
 #ifdef CONFIGURE_VERBOSE_SYSTEM_INITIALIZATION
-  RTEMS_SYSINIT_ITEM(
-    _Sysinit_Verbose,
-    RTEMS_SYSINIT_RECORD,
-    RTEMS_SYSINIT_ORDER_LAST
-  );
+RTEMS_SYSINIT_ITEM(
+  _Sysinit_Verbose,
+  RTEMS_SYSINIT_RECORD,
+  RTEMS_SYSINIT_ORDER_LAST
+);
 #endif
 
 #ifdef CONFIGURE_STACK_CHECKER_ENABLED
   #ifdef CONFIGURE_STACK_CHECKER_REPORTER
-    const Stack_checker_Reporter_handler Stack_checker_Reporter =
-      CONFIGURE_STACK_CHECKER_REPORTER;
+const Stack_checker_Reporter_handler
+  Stack_checker_Reporter = CONFIGURE_STACK_CHECKER_REPORTER;
   #else
-    const Stack_checker_Reporter_handler Stack_checker_Reporter =
-      rtems_stack_checker_reporter_quiet;
+const Stack_checker_Reporter_handler
+  Stack_checker_Reporter = rtems_stack_checker_reporter_quiet;
   #endif
 #endif
 
