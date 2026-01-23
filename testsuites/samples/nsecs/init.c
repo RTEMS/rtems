@@ -57,9 +57,9 @@ const char rtems_test_name[] = "NANOSECOND CLOCK";
 
 static char *my_ctime( time_t t )
 {
-  static char b[32];
-  ctime_r(&t, b);
-  b[ strlen(b) - 1] = '\0';
+  static char b[ 32 ];
+  ctime_r( &t, b );
+  b[ strlen( b ) - 1 ] = '\0';
   return b;
 }
 
@@ -74,35 +74,32 @@ static void subtract_em(
   _Timespec_Subtract( start, stop, t );
 }
 
-
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
   rtems_time_of_day time;
-  int index;
+  int               index;
 
   TEST_BEGIN();
 
-  time.year   = 2007;
-  time.month  = 03;
-  time.day    = 24;
-  time.hour   = 11;
+  time.year = 2007;
+  time.month = 03;
+  time.day = 24;
+  time.hour = 11;
   time.minute = 15;
   time.second = 0;
-  time.ticks  = 0;
+  time.ticks = 0;
 
   status = rtems_clock_set( &time );
-  directive_failed( status, "clock set" ); 
+  directive_failed( status, "clock set" );
 
   /*
    *  Iterate 10 times showing difference in TOD
    */
   printf( "10 iterations of getting TOD\n" );
-  for (index=0 ; index <10 ; index++ ) {
+  for ( index = 0; index < 10; index++ ) {
     struct timespec start, stop;
     struct timespec diff;
 
@@ -110,9 +107,12 @@ rtems_task Init(
     clock_gettime( CLOCK_REALTIME, &stop );
 
     subtract_em( &start, &stop, &diff );
-    printf( "Start: %s:%ld\nStop : %s:%ld",
-      my_ctime(start.tv_sec), start.tv_nsec,
-      my_ctime(stop.tv_sec), stop.tv_nsec
+    printf(
+      "Start: %s:%ld\nStop : %s:%ld",
+      my_ctime( start.tv_sec ),
+      start.tv_nsec,
+      my_ctime( stop.tv_sec ),
+      stop.tv_nsec
     );
 
     printf( " --> %" PRIdtime_t ":%ld\n", diff.tv_sec, diff.tv_nsec );
@@ -122,46 +122,54 @@ rtems_task Init(
    *  Iterate 10 times showing difference in Uptime
    */
   printf( "\n10 iterations of getting Uptime\n" );
-  for (index=0 ; index <10 ; index++ ) {
+  for ( index = 0; index < 10; index++ ) {
     struct timespec start, stop;
     struct timespec diff;
     rtems_clock_get_uptime( &start );
     rtems_clock_get_uptime( &stop );
 
     subtract_em( &start, &stop, &diff );
-    printf( "%" PRIdtime_t ":%ld %" PRIdtime_t ":%ld --> %" PRIdtime_t ":%ld\n",
-      start.tv_sec, start.tv_nsec,
-      stop.tv_sec, stop.tv_nsec,
-      diff.tv_sec, diff.tv_nsec
-   );
+    printf(
+      "%" PRIdtime_t ":%ld %" PRIdtime_t ":%ld --> %" PRIdtime_t ":%ld\n",
+      start.tv_sec,
+      start.tv_nsec,
+      stop.tv_sec,
+      stop.tv_nsec,
+      diff.tv_sec,
+      diff.tv_nsec
+    );
   }
 
   /*
    *  Iterate 10 times showing difference in Uptime with different counts
    */
   printf( "\n10 iterations of getting Uptime with different loop values\n" );
-  for (index=1 ; index <=10 ; index++ ) {
+  for ( index = 1; index <= 10; index++ ) {
     struct timespec start, stop;
     struct timespec diff;
-    long j, max = (index * 10000L);
+    long            j, max = ( index * 10000L );
     rtems_clock_get_uptime( &start );
-      for (j=0 ; j<max ; j++ )
-        dummy_function_empty_body_to_force_call();
+    for ( j = 0; j < max; j++ ) {
+      dummy_function_empty_body_to_force_call();
+    }
     rtems_clock_get_uptime( &stop );
 
     subtract_em( &start, &stop, &diff );
-    printf( "loop of %ld %" PRIdtime_t
-              ":%ld %" PRIdtime_t ":%ld --> %" PRIdtime_t ":%ld\n",
+    printf(
+      "loop of %ld %" PRIdtime_t ":%ld %" PRIdtime_t ":%ld --> %" PRIdtime_t
+      ":%ld\n",
       max,
-      start.tv_sec, start.tv_nsec,
-      stop.tv_sec, stop.tv_nsec,
-      diff.tv_sec, diff.tv_nsec
-   );
+      start.tv_sec,
+      start.tv_nsec,
+      stop.tv_sec,
+      stop.tv_nsec,
+      diff.tv_sec,
+      diff.tv_nsec
+    );
   }
 
-  sleep(1);
+  sleep( 1 );
 
   TEST_END();
-  exit(0);
+  exit( 0 );
 }
-

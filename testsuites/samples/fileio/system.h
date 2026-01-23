@@ -36,12 +36,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
 /* global variables */
-
 
 /* configuration information */
 
@@ -49,8 +46,8 @@ rtems_task Init(
 
 #define FILEIO_BUILD 1
 
-#if defined(RTEMS_BSP_HAS_IDE_DRIVER)
-#include <libchip/ata.h> /* for ata driver prototype */
+#if defined( RTEMS_BSP_HAS_IDE_DRIVER )
+#include <libchip/ata.h>      /* for ata driver prototype */
 #include <libchip/ide_ctrl.h> /* for general ide driver prototype */
 #endif
 
@@ -59,14 +56,14 @@ rtems_task Init(
 #ifdef RTEMS_BSP_HAS_IDE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
-#define CONFIGURE_ATA_DRIVER_TASK_PRIORITY  14
+#define CONFIGURE_ATA_DRIVER_TASK_PRIORITY 14
 #endif
 
 #if FILEIO_BUILD
   #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
-  #define CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS  2
-  #define CONFIGURE_BDBUF_MAX_WRITE_BLOCKS       8
-  #define CONFIGURE_SWAPOUT_TASK_PRIORITY        15
+  #define CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS 2
+  #define CONFIGURE_BDBUF_MAX_WRITE_BLOCKS      8
+  #define CONFIGURE_SWAPOUT_TASK_PRIORITY       15
   #define CONFIGURE_FILESYSTEM_RFS
   #define CONFIGURE_FILESYSTEM_DOSFS
 #endif

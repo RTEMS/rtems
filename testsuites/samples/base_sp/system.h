@@ -35,13 +35,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Application_task(
-  rtems_task_argument argument
-);
+rtems_task Application_task( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -50,7 +46,7 @@ rtems_task Application_task(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS            2
+#define CONFIGURE_MAXIMUM_TASKS 2
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

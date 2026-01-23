@@ -44,17 +44,19 @@
 
 #include "tmacros.h"
 
-rtems_task Application_task(
-  rtems_task_argument node
-)
+rtems_task Application_task( rtems_task_argument node )
 {
   rtems_id          tid;
   rtems_status_code status;
 
   rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   (void) status;
-  printf( "This task was invoked with the node argument (%" PRIdrtems_task_argument ")\n", node );
-  printf( "This task has the id of 0x%" PRIxrtems_id "\n",  tid );
+  printf(
+    "This task was invoked with the node argument (%" PRIdrtems_task_argument
+    ")\n",
+    node
+  );
+  printf( "This task has the id of 0x%" PRIxrtems_id "\n", tid );
   TEST_END();
   exit( 0 );
 }

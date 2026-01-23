@@ -45,9 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-rtems_task Application_task(
-  rtems_task_argument argument
-)
+rtems_task Application_task( rtems_task_argument argument )
 {
   rtems_id          tid;
   rtems_status_code status;
@@ -58,7 +56,9 @@ rtems_task Application_task(
 
   printf(
     "Application task was invoked with argument (%d) "
-    "and has id of 0x%" PRIxrtems_id "\n", a, tid
+    "and has id of 0x%" PRIxrtems_id "\n",
+    a,
+    tid
   );
 
   TEST_END();

@@ -34,26 +34,17 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task test_task(
-  rtems_task_argument my_number
-);
+rtems_task test_task( rtems_task_argument my_number );
 
-void
-destroy_all_tasks(
-  const char *who
-);
+void destroy_all_tasks( const char *who );
 
-bool status_code_bad(
-  rtems_status_code status_code
-);
+bool status_code_bad( rtems_status_code status_code );
 
-extern void test1(void);
-extern void test2(void);
-extern void test3(void);
+extern void test1( void );
+extern void test2( void );
+extern void test3( void );
 
 /* configuration information */
 
@@ -66,10 +57,9 @@ extern void test3(void);
 #define CONFIGURE_UNIFIED_WORK_AREAS
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define TASK_ALLOCATION_SIZE     (5)
+#define TASK_ALLOCATION_SIZE ( 5 )
 #define CONFIGURE_UNLIMITED_OBJECTS
 #define CONFIGURE_UNLIMITED_ALLOCATION_SIZE TASK_ALLOCATION_SIZE
-
 
 #include <rtems/confdefs.h>
 
@@ -77,34 +67,32 @@ extern void test3(void);
  * Keep track of the task id's created, use a large array.
  */
 
-#define MAX_TASKS         (1000)
-#define TASK_INDEX_OFFSET (1)
+#define MAX_TASKS         ( 1000 )
+#define TASK_INDEX_OFFSET ( 1 )
 
-extern rtems_id task_id[MAX_TASKS];
+extern rtems_id task_id[ MAX_TASKS ];
 
 /*
  * Increment the task name.
  */
 
-#define NEXT_TASK_NAME(c1, c2, c3, c4)  \
-                 if (c4 == '9') {       \
-                   if (c3 == '9') {     \
-                     if (c2 == 'z') {   \
-                       if (c1 == 'z') { \
-                         printf("not enough task letters for names !!!\n"); \
-                         exit( 1 );     \
-                       } else           \
-                         c1++;          \
-                       c2 = 'a';        \
-                     } else             \
-                      c2++;             \
-                     c3 = '0';          \
-                   } else               \
-                     c3++;              \
-                   c4 = '0';            \
-                 }                      \
-                 else                   \
-                   c4++                 \
-
+#define NEXT_TASK_NAME( c1, c2, c3, c4 )                       \
+  if ( c4 == '9' ) {                                           \
+    if ( c3 == '9' ) {                                         \
+      if ( c2 == 'z' ) {                                       \
+        if ( c1 == 'z' ) {                                     \
+          printf( "not enough task letters for names !!!\n" ); \
+          exit( 1 );                                           \
+        } else                                                 \
+          c1++;                                                \
+        c2 = 'a';                                              \
+      } else                                                   \
+        c2++;                                                  \
+      c3 = '0';                                                \
+    } else                                                     \
+      c3++;                                                    \
+    c4 = '0';                                                  \
+  } else                                                       \
+    c4++
 
 /* end of include file */

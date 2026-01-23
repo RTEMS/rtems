@@ -40,9 +40,7 @@
 
 #include "system.h"
 
-rtems_task Test_task(
-  rtems_task_argument unused
-)
+rtems_task Test_task( rtems_task_argument unused )
 {
   (void) unused;
 
@@ -52,10 +50,10 @@ rtems_task Test_task(
   rtems_status_code status;
 
   status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
-  directive_failed( status, "task ident" ); 
+  directive_failed( status, "task ident" );
 
   task_index = task_number( tid );
-  for ( ; ; ) {
+  for ( ;; ) {
     status = rtems_clock_get_tod( &time );
     if ( time.second >= 35 ) {
       TEST_END();
@@ -66,6 +64,6 @@ rtems_task Test_task(
     status = rtems_task_wake_after(
       task_index * 5 * rtems_clock_get_ticks_per_second()
     );
-    directive_failed( status, "wake after" ); 
+    directive_failed( status, "wake after" );
   }
 }

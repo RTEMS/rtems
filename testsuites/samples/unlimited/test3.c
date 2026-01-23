@@ -49,66 +49,76 @@
 
 void test3()
 {
-  rtems_status_code   result;
-  uint32_t      remove_task;
-  uint32_t      block;
-  uint32_t      task_count = 0;
+  rtems_status_code result;
+  uint32_t          remove_task;
+  uint32_t          block;
+  uint32_t          task_count = 0;
 
-  char               c1 = 'a';
-  char               c2 = 'a';
-  char               c3 = '0';
-  char               c4 = '0';
+  char c1 = 'a';
+  char c2 = 'a';
+  char c3 = '0';
+  char c4 = '0';
 
-  printf( "\n TEST3 : free more than 3 x allocation size, but not the same block,\n"
-            "         then free a block\n");
+  printf(
+    "\n TEST3 : free more than 3 x allocation size, but not the same block,\n"
+    "         then free a block\n"
+  );
 
   /*
    *  Check the value of the allocation unit
    */
 
-  if (TASK_ALLOCATION_SIZE < 4)
-  {
-    printf( " FAIL3 : task allocation size must be greater than 4.\n");
+  if ( TASK_ALLOCATION_SIZE < 4 ) {
+    printf( " FAIL3 : task allocation size must be greater than 4.\n" );
     exit( 1 );
   }
 
-   /*
+  /*
    *  Allocate as many tasks as possible.
    */
 
-  while (task_count < MAX_TASKS)
-  {
+  while ( task_count < MAX_TASKS ) {
     rtems_name name;
 
-    printf(" TEST3 : creating task '%c%c%c%c', ", c1, c2, c3, c4);
+    printf( " TEST3 : creating task '%c%c%c%c', ", c1, c2, c3, c4 );
 
-    name = rtems_build_name(c1, c2, c3, c4);
+    name = rtems_build_name( c1, c2, c3, c4 );
 
-    result = rtems_task_create(name,
-                               10,
-                               RTEMS_MINIMUM_STACK_SIZE,
-                               RTEMS_DEFAULT_ATTRIBUTES,
-                               RTEMS_LOCAL,
-                               &task_id[task_count]);
+    result = rtems_task_create(
+      name,
+      10,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      RTEMS_LOCAL,
+      &task_id[ task_count ]
+    );
 
-    if (status_code_bad(result))
+    if ( status_code_bad( result ) ) {
       break;
+    }
 
-    printf("number = %3" PRIi32 ", id = %08" PRIxrtems_id ", starting, ", task_count, task_id[task_count]);
-    fflush(stdout);
+    printf(
+      "number = %3" PRIi32 ", id = %08" PRIxrtems_id ", starting, ",
+      task_count,
+      task_id[ task_count ]
+    );
+    fflush( stdout );
 
-    result = rtems_task_start(task_id[task_count],
-                              test_task,
-                              (rtems_task_argument) task_count);
+    result = rtems_task_start(
+      task_id[ task_count ],
+      test_task,
+      (rtems_task_argument) task_count
+    );
 
-    if (status_code_bad(result))
+    if ( status_code_bad( result ) ) {
       break;
+    }
 
     /*
      *  Update the name.
      */
 
-    NEXT_TASK_NAME(c1, c2, c3, c4);
+    NEXT_TASK_NAME( c1, c2, c3, c4 );
 
     task_count++;
   }
@@ -118,31 +128,38 @@ void test3()
    *  allocation size number of blocks.
    */
 
-  if (task_count < (TASK_ALLOCATION_SIZE * 11))
-  {
-    printf( " FAIL3 : not enough tasks created -\n"
-            "         task created = %" PRIi32 ", required number = %i\n",
-            task_count, (TASK_ALLOCATION_SIZE * 11));
+  if ( task_count < ( TASK_ALLOCATION_SIZE * 11 ) ) {
+    printf(
+      " FAIL3 : not enough tasks created -\n"
+      "         task created = %" PRIi32 ", required number = %i\n",
+      task_count,
+      ( TASK_ALLOCATION_SIZE * 11 )
+    );
     exit( 1 );
   }
 
-  for (block = 0; block < TASK_ALLOCATION_SIZE; block++)
-  {
-    for (remove_task = ((block * TASK_ALLOCATION_SIZE) - TASK_INDEX_OFFSET);
-         remove_task < (((block * TASK_ALLOCATION_SIZE) + 3) - TASK_INDEX_OFFSET);
-         remove_task++)
-    {
-      if (!task_id[remove_task])
-      {
-        printf( " FAIL3 : remove task has a 0 id -\n"
-                "         task number = %" PRIi32 "\n",
-                remove_task);
+  for ( block = 0; block < TASK_ALLOCATION_SIZE; block++ ) {
+    for (
+      remove_task = ( ( block * TASK_ALLOCATION_SIZE ) - TASK_INDEX_OFFSET );
+      remove_task <
+      ( ( ( block * TASK_ALLOCATION_SIZE ) + 3 ) - TASK_INDEX_OFFSET );
+      remove_task++
+    ) {
+      if ( !task_id[ remove_task ] ) {
+        printf(
+          " FAIL3 : remove task has a 0 id -\n"
+          "         task number = %" PRIi32 "\n",
+          remove_task
+        );
         exit( 1 );
       }
 
-      printf(" TEST3 : remove, signal task %08" PRIxrtems_id ", ", task_id[remove_task]);
-      rtems_event_send(task_id[remove_task], 1);
-      task_id[remove_task] = 0;
+      printf(
+        " TEST3 : remove, signal task %08" PRIxrtems_id ", ",
+        task_id[ remove_task ]
+      );
+      rtems_event_send( task_id[ remove_task ], 1 );
+      task_id[ remove_task ] = 0;
     }
   }
 
@@ -151,19 +168,22 @@ void test3()
    *  allocator's free routine
    */
 
-  for (remove_task = (TASK_ALLOCATION_SIZE - TASK_INDEX_OFFSET);
-       remove_task < ((TASK_ALLOCATION_SIZE * 2) - - TASK_INDEX_OFFSET);
-       remove_task++)
-  {
-    if (task_id[remove_task])
-    {
-      printf(" TEST3 : remove, signal task %08" PRIxrtems_id ", ", task_id[remove_task]);
-      rtems_event_send(task_id[remove_task], 1);
-      task_id[remove_task] = 0;
+  for (
+    remove_task = ( TASK_ALLOCATION_SIZE - TASK_INDEX_OFFSET );
+    remove_task < ( ( TASK_ALLOCATION_SIZE * 2 ) - -TASK_INDEX_OFFSET );
+    remove_task++
+  ) {
+    if ( task_id[ remove_task ] ) {
+      printf(
+        " TEST3 : remove, signal task %08" PRIxrtems_id ", ",
+        task_id[ remove_task ]
+      );
+      rtems_event_send( task_id[ remove_task ], 1 );
+      task_id[ remove_task ] = 0;
     }
   }
 
-  destroy_all_tasks("TEST3");
+  destroy_all_tasks( "TEST3" );
 
   printf( " TEST3 : completed\n" );
 }
