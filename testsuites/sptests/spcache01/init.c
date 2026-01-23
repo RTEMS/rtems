@@ -185,6 +185,15 @@ static uint64_t store(void)
   return rtems_counter_ticks_to_nanoseconds(d);
 }
 
+static bool cache_invalidate_wrapper(void)
+{
+  if (setjmp(instruction_invalidate_return_context) == 0) {
+    rtems_cache_invalidate_multiple_instruction_lines(do_some_work, 4096);
+    return false;
+  }
+  return true;
+}
+
 static void test_timing(void)
 {
   RTEMS_INTERRUPT_LOCK_DECLARE(, lock)
@@ -381,12 +390,7 @@ static void test_timing(void)
 
   do_longjmp = true;
 
-  if (setjmp(instruction_invalidate_return_context) == 0) {
-    rtems_cache_invalidate_multiple_instruction_lines(do_some_work, 4096);
-    exception = false;
-  } else {
-    exception = true;
-  }
+  exception = cache_invalidate_wrapper();
 
   do_longjmp = false;
 
