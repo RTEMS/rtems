@@ -39,12 +39,12 @@
 
 #include <sys/socket.h>
 
-ssize_t test(void);
+ssize_t test( void );
 
-ssize_t test(void)
+ssize_t test( void )
 {
-  int     sockfd = 4;
-  int     backlog = 7;
+  int sockfd = 4;
+  int backlog = 7;
 
-  return listen(sockfd, backlog);
+  return listen( sockfd, backlog );
 }

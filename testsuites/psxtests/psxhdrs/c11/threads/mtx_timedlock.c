@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  mtx_t mtx;
+  mtx_t           mtx;
   struct timespec time_point;
-  int result;
+  int             result;
 
   time_point.tv_nsec = 0;
 

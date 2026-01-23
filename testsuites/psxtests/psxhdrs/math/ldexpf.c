@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 34.67 , result ;
-  int  exp = 3 ;
+  float x = 34.67, result;
+  int   exp = 3;
 
-  result = ldexpf(x,exp) ;
+  result = ldexpf( x, exp );
 
-  return (result);
+  return ( result );
 }

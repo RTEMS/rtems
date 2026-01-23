@@ -48,7 +48,7 @@ static void Handler_1( int signo )
   (void) signo;
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 void *POSIX_Init( void *argument )
@@ -62,7 +62,7 @@ void *POSIX_Init( void *argument )
 
   /* Hook signals that can be generated from machine exceptions */
   act.sa_handler = Handler_1;
-  act.sa_flags   = 0;
+  act.sa_flags = 0;
   status = sigaction( SIGFPE, &act, NULL );
   rtems_test_assert( !status );
   status = sigaction( SIGILL, &act, NULL );

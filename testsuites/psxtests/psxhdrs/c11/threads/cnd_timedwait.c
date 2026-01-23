@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  cnd_t cv;
-  mtx_t mtx;
+  cnd_t           cv;
+  mtx_t           mtx;
   struct timespec ts;
-  int result;
+  int             result;
 
   ts.tv_nsec = 0;
 

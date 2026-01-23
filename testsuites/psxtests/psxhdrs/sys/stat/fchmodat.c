@@ -41,12 +41,12 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int fd = 1;
-	char *path = "/";
-	mode_t mode = S_ISUID;
-	int flag = AT_SYMLINK_NOFOLLOW;
+  int    return_value;
+  int    fd = 1;
+  char  *path = "/";
+  mode_t mode = S_ISUID;
+  int    flag = AT_SYMLINK_NOFOLLOW;
 
-	return_value = fchmodat(fd, path, mode, flag);
-	return (return_value != -1);
+  return_value = fchmodat( fd, path, mode, flag );
+  return ( return_value != -1 );
 }

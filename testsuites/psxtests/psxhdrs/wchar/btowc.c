@@ -36,12 +36,12 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int number;
-  
+
   number = 0;
-  return (btowc(number));
+  return ( btowc( number ) );
 }

@@ -40,22 +40,22 @@
 
 int test( void );
 
-#define MQ_MAXMSG     1
-#define MQ_MSGSIZE    sizeof(int)
+#define MQ_MAXMSG  1
+#define MQ_MSGSIZE sizeof( int )
 
 int test( void )
 {
-  mqd_t mqdes;
-  struct mq_attr mqstat;
-  const char *q_name;
+  mqd_t           mqdes;
+  struct mq_attr  mqstat;
+  const char     *q_name;
   struct timespec abs_timeout;
-  unsigned int msg_prio;
-  int msg_ptr;
-  int result;
+  unsigned int    msg_prio;
+  int             msg_ptr;
+  int             result;
 
-  mqstat.mq_maxmsg  = MQ_MAXMSG;
+  mqstat.mq_maxmsg = MQ_MAXMSG;
   mqstat.mq_msgsize = MQ_MSGSIZE;
-  abs_timeout.tv_sec  = 0;
+  abs_timeout.tv_sec = 0;
   abs_timeout.tv_nsec = 1;
   msg_ptr = 5;
   msg_prio = 1;
@@ -63,7 +63,12 @@ int test( void )
 
   mqdes = mq_open( q_name, O_CREAT | O_RDWR, 0x777, &mqstat );
   result = mq_timedsend(
-	   mqdes, (const char *)&msg_ptr, MQ_MSGSIZE, msg_prio, &abs_timeout);
+    mqdes,
+    (const char *) &msg_ptr,
+    MQ_MSGSIZE,
+    msg_prio,
+    &abs_timeout
+  );
 
   return result;
 }

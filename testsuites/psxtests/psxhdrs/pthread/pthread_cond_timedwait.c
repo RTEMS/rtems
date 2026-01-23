@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  pthread_cond_t  cond  = PTHREAD_COND_INITIALIZER;
+  pthread_cond_t  cond = PTHREAD_COND_INITIALIZER;
   pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
   struct timespec abstime = { 0 };
-  int result;
+  int             result;
 
   result = pthread_cond_timedwait( &cond, &mutex, &abstime );
 

@@ -39,17 +39,17 @@
 
 #include <sys/socket.h>
 
-ssize_t test(void);
+ssize_t test( void );
 
-ssize_t test(void)
+ssize_t test( void )
 {
-  int     sockfd = 4;
-  int     how;
+  int sockfd = 4;
+  int how;
 
   /* use all values */
   how = SHUT_RD;
   how = SHUT_WR;
   how = SHUT_RDWR;
 
-  return shutdown(sockfd, how);
+  return shutdown( sockfd, how );
 }

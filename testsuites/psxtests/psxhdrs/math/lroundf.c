@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 34.3456 ;
-  long int result ;
+  float    x = 34.3456;
+  long int result;
 
-  result = lroundf(x) ;
+  result = lroundf( x );
 
-  return (result);
+  return ( result );
 }

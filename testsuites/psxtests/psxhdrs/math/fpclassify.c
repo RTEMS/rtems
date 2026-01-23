@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 0 ;
-  int  result ;
+  double x = 0;
+  int    result;
 
-  result = fpclassify(x) ;
+  result = fpclassify( x );
 
-  return (result);
+  return ( result );
 }

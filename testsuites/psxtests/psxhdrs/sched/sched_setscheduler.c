@@ -45,10 +45,10 @@ int test( void );
 
 int test( void )
 {
-  pid_t  pid;
-  int    policy;
+  pid_t              pid;
+  int                policy;
   struct sched_param param;
-  int    result;
+  int                result;
 
   pid = 0;
 

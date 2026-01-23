@@ -41,8 +41,8 @@ int test( void );
 int test( void )
 {
   FILE *stream;
-  char buffer[] = "Hello World";
-  int result;
+  char  buffer[] = "Hello World";
+  int   result;
 
   stream = fopen( "myfile.dat", "w" );
   result = fputs( buffer, stream );

@@ -48,20 +48,17 @@ void Test_init_routine( void )
   puts( "Test_init_routine: invoked" );
 }
 
-
-void *Task_1_through_3(
-  void *argument
-)
+void *Task_1_through_3( void *argument )
 {
   (void) argument;
 
-  int            status;
+  int status;
 
   puts( "Task_1: sched_yield to Init" );
   status = sched_yield();
   rtems_test_assert( !status );
 
-    /* switch to Task_1 */
+  /* switch to Task_1 */
 
   /* now do some real testing */
 
@@ -75,13 +72,15 @@ void *Task_1_through_3(
   /* exercise pthread_equal */
 
   status = pthread_equal( Task_id, Task_id );
-  if ( status )
+  if ( status ) {
     puts( "Task_1: pthread_equal - match case passed" );
+  }
   rtems_test_assert( status );
 
   status = pthread_equal( Init_id, Task_id );
-  if ( !status )
+  if ( !status ) {
     puts( "Task_1: pthread_equal - different case passed" );
+  }
   rtems_test_assert( !status );
 
   puts( "Task_1: pthread_equal - first id bad" );

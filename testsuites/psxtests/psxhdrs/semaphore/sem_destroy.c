@@ -43,9 +43,9 @@ int test( void );
 int test( void )
 {
   sem_t *sem1;
-  int oflag = O_CREAT;
-  int result;
-  int value;
+  int    oflag = O_CREAT;
+  int    result;
+  int    value;
 
   value = 1;
 

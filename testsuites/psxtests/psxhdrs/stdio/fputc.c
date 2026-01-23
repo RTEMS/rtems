@@ -41,11 +41,11 @@ int test( void );
 int test( void )
 {
   FILE *stream;
-  char buffer[] = "Hello world";
-  int result;
+  char  buffer[] = "Hello world";
+  int   result;
 
   stream = fopen( "myfile.dat", "w" );
-  result = fputc( buffer[3], stream );
+  result = fputc( buffer[ 3 ], stream );
 
   return result;
 }

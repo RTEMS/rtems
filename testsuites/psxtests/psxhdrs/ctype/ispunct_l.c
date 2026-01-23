@@ -36,13 +36,13 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int punct;
+  int      punct;
   locale_t locale;
 
   punct = 0;
-  return (ispunct_l(punct, locale));
+  return ( ispunct_l( punct, locale ) );
 }

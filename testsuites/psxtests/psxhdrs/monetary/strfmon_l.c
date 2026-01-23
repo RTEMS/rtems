@@ -41,11 +41,11 @@ int test( void );
 
 int test( void )
 {
-  ssize_t return_value;
-  char s[5];
-  char *format = "1234";
-  locale_t loc = newlocale(LC_ALL_MASK, "C", (locale_t) 0);
+  ssize_t  return_value;
+  char     s[ 5 ];
+  char    *format = "1234";
+  locale_t loc = newlocale( LC_ALL_MASK, "C", (locale_t) 0 );
 
-  return_value = strfmon_l(s, 5, loc, format);
-  return (return_value != -1);
+  return_value = strfmon_l( s, 5, loc, format );
+  return ( return_value != -1 );
 }

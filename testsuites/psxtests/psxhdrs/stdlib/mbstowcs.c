@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	size_t return_value;
-	wchar_t *pwcs = malloc(7 * sizeof(wchar_t));
+  size_t   return_value;
+  wchar_t *pwcs = malloc( 7 * sizeof( wchar_t ) );
 
-	return_value = mbstowcs(pwcs, "string", 6);
-	return (return_value != (size_t)-1);
+  return_value = mbstowcs( pwcs, "string", 6 );
+  return ( return_value != (size_t) -1 );
 }

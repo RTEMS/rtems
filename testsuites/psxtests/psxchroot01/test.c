@@ -48,7 +48,7 @@
 const char rtems_test_name[] = "PSXCHROOT 1";
 
 /* forward declarations to avoid warnings */
-int test_main(void);
+int test_main( void );
 
 static void touch( char *file )
 {
@@ -56,7 +56,7 @@ static void touch( char *file )
 
   rtems_test_assert( file );
 
-  fd = open( file, O_RDWR|O_CREAT, 0777 );
+  fd = open( file, O_RDWR | O_CREAT, 0777 );
   rtems_test_assert( fd != -1 );
   close( fd );
 }
@@ -77,24 +77,21 @@ static int fileexists( char *file )
   return 1;
 }
 
-#if defined(__rtems__)
-int test_main(void)
+#if defined( __rtems__ )
+int test_main( void )
 #else
-int main(
-  int argc,
-  char **argv
-)
+int main( int argc, char **argv )
 #endif
 {
-  static const uintptr_t global_location_size [] = {
-    sizeof(rtems_filesystem_global_location_t)
+  static const uintptr_t global_location_size[] = {
+    sizeof( rtems_filesystem_global_location_t )
   };
 
-  int status;
-  void *opaque;
+  int         status;
+  void       *opaque;
   struct stat st;
 
-/*
+  /*
  *  This test is the C equivalent of this sequence.
 #mkdir /one
 #mkdir /one/one
@@ -112,13 +109,13 @@ int main(
 
   TEST_BEGIN();
 
-  status = mkdir( "/one", 0777);
+  status = mkdir( "/one", 0777 );
   rtems_test_assert( status == 0 );
 
-  status = mkdir( "/one/one", 0777);
+  status = mkdir( "/one/one", 0777 );
   rtems_test_assert( status == 0 );
 
-  status = mkdir( "/one/two", 0777);
+  status = mkdir( "/one/two", 0777 );
   rtems_test_assert( status == 0 );
 
   touch( "/one/one.test" );
@@ -152,20 +149,20 @@ int main(
   rtems_test_assert( status == 0 );
 
   status = fileexists( "/one/one.test" );
-  printf( "%s on /one/one.test\n", (!status) ? "SUCCESS" : "FAILURE" );
+  printf( "%s on /one/one.test\n", ( !status ) ? "SUCCESS" : "FAILURE" );
 
   status = fileexists( "/two/two.test" );
-  printf( "%s on /two/two.test\n", (status) ? "SUCCESS" : "FAILURE" );
+  printf( "%s on /two/two.test\n", ( status ) ? "SUCCESS" : "FAILURE" );
 
   puts( "Go back to global environment" );
   rtems_libio_use_global_env();
 
   status = fileexists( "/one/one.test" );
-  printf( "%s on /one/one.test\n", ( status) ? "SUCCESS" : "FAILURE" );
+  printf( "%s on /one/one.test\n", ( status ) ? "SUCCESS" : "FAILURE" );
 
   status = fileexists( "/two/two.test" );
-  printf( "%s on /two/two.test\n", (!status) ? "SUCCESS" : "FAILURE" );
+  printf( "%s on /two/two.test\n", ( !status ) ? "SUCCESS" : "FAILURE" );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }

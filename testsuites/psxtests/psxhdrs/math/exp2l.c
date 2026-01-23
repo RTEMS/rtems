@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 23 ;
-  long double result ;
+  long double x = 23;
+  long double result;
 
-  result = exp2l(x) ;
+  result = exp2l( x );
 
-  return (result);
+  return ( result );
 }
 #endif

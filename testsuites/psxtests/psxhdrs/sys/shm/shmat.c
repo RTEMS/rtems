@@ -25,15 +25,15 @@
 
 #include <sys/shm.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int shmid = 0;
 
   int shmflg = 1;
 
-  shmat(shmid, '\0', shmflg);
+  shmat( shmid, '\0', shmflg );
 
-  return (0);
+  return ( 0 );
 }

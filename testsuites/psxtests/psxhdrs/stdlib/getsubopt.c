@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-    int return_value;
-    char *optionp = "test";
-    char *const tokens[] = {"token", NULL};
-    char *valuep;
-    return_value = getsubopt(&optionp, tokens, &valuep);
-    return return_value;
+  int         return_value;
+  char       *optionp = "test";
+  char *const tokens[] = { "token", NULL };
+  char       *valuep;
+  return_value = getsubopt( &optionp, tokens, &valuep );
+  return return_value;
 }

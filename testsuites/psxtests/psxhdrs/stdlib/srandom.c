@@ -40,7 +40,7 @@ int test( void );
 
 int test( void )
 {
-	unsigned seed = 1;
-	srandom(seed);
-	return 1;
+  unsigned seed = 1;
+  srandom( seed );
+  return 1;
 }

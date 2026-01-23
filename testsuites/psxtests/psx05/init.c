@@ -43,15 +43,9 @@ const char rtems_test_name[] = "PSX 5";
 
 #define MUTEX_BAD_ID 0xfffffffe
 
-void Print_mutexattr(
-  char                *msg,
-  pthread_mutexattr_t *attr
-);
+void Print_mutexattr( char *msg, pthread_mutexattr_t *attr );
 
-void Print_mutexattr(
-  char                *msg,
-  pthread_mutexattr_t *attr
-)
+void Print_mutexattr( char *msg, pthread_mutexattr_t *attr )
 {
   int status;
   int protocol;
@@ -111,19 +105,18 @@ static void calculate_abstimeout(
   long             nanoseconds
 )
 {
-  struct timeval       tv1;
-  struct timezone      tz1;
+  struct timeval  tv1;
+  struct timezone tz1;
 
   gettimeofday( &tv1, &tz1 );
 
-  times->tv_sec  = seconds     + tv1.tv_sec;
-  times->tv_nsec = nanoseconds + (tv1.tv_usec * 1000);
+  times->tv_sec = seconds + tv1.tv_sec;
+  times->tv_nsec = nanoseconds + ( tv1.tv_usec * 1000 );
 
   while ( times->tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
     times->tv_sec++;
     times->tv_nsec -= TOD_NANOSECONDS_PER_SECOND;
   }
-
 }
 
 static void test_get_priority( void )
@@ -170,7 +163,7 @@ static void test_get_priority( void )
   rtems_test_assert( status == 0 );
 }
 
-static void *counter_task(void *arg)
+static void *counter_task( void *arg )
 {
   (void) arg;
 
@@ -179,7 +172,7 @@ static void *counter_task(void *arg)
   counter = arg;
 
   while ( *counter >= 0 ) {
-    ++(*counter);
+    ++( *counter );
 
     sched_yield();
   }
@@ -189,19 +182,19 @@ static void *counter_task(void *arg)
 
 static void test_set_priority( void )
 {
-  int                 status;
-  int                 policy;
-  struct sched_param  param;
-  pthread_t           thread;
-  int                 counter;
-  void               *exit_code;
+  int                status;
+  int                policy;
+  struct sched_param param;
+  pthread_t          thread;
+  int                counter;
+  void              *exit_code;
 
   counter = 0;
 
   status = pthread_getschedparam( pthread_self(), &policy, &param );
   rtems_test_assert( status == 0 );
 
-  status = pthread_create( &thread, NULL, counter_task, &counter);
+  status = pthread_create( &thread, NULL, counter_task, &counter );
   rtems_test_assert( status == 0 );
 
   ++param.sched_priority;
@@ -254,47 +247,47 @@ static void test_errors_pthread_setschedprio( void )
   rtems_test_assert( status == 0 );
 }
 
-static void test_mutex_pshared_init(void)
+static void test_mutex_pshared_init( void )
 {
-  pthread_mutex_t mutex;
+  pthread_mutex_t     mutex;
   pthread_mutexattr_t attr;
-  int eno;
+  int                 eno;
 
-  eno = pthread_mutexattr_init(&attr);
-  rtems_test_assert(eno == 0);
+  eno = pthread_mutexattr_init( &attr );
+  rtems_test_assert( eno == 0 );
 
-  eno = pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_PRIVATE);
-  rtems_test_assert(eno == 0);
+  eno = pthread_mutexattr_setpshared( &attr, PTHREAD_PROCESS_PRIVATE );
+  rtems_test_assert( eno == 0 );
 
-  eno = pthread_mutex_init(&mutex, &attr);
-  rtems_test_assert(eno == 0);
+  eno = pthread_mutex_init( &mutex, &attr );
+  rtems_test_assert( eno == 0 );
 
-  eno = pthread_mutex_destroy(&mutex);
-  rtems_test_assert(eno == 0);
+  eno = pthread_mutex_destroy( &mutex );
+  rtems_test_assert( eno == 0 );
 
-  eno = pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_SHARED);
-  rtems_test_assert(eno == 0);
+  eno = pthread_mutexattr_setpshared( &attr, PTHREAD_PROCESS_SHARED );
+  rtems_test_assert( eno == 0 );
 
-  eno = pthread_mutex_init(&mutex, &attr);
-  rtems_test_assert(eno == 0);
+  eno = pthread_mutex_init( &mutex, &attr );
+  rtems_test_assert( eno == 0 );
 
-  eno = pthread_mutex_destroy(&mutex);
-  rtems_test_assert(eno == 0);
+  eno = pthread_mutex_destroy( &mutex );
+  rtems_test_assert( eno == 0 );
 
   attr.process_shared = -1;
 
-  eno = pthread_mutex_init(&mutex, &attr);
-  rtems_test_assert(eno == EINVAL);
+  eno = pthread_mutex_init( &mutex, &attr );
+  rtems_test_assert( eno == EINVAL );
 
-  eno = pthread_mutexattr_destroy(&attr);
-  rtems_test_assert(eno == 0);
+  eno = pthread_mutexattr_destroy( &attr );
+  rtems_test_assert( eno == 0 );
 }
 
 static void test_mutex_null( void )
 {
   struct timespec to;
-  int eno;
-  clockid_t clock_id;
+  int             eno;
+  clockid_t       clock_id;
 
   eno = pthread_mutex_destroy( NULL );
   rtems_test_assert( eno == EINVAL );
@@ -325,8 +318,8 @@ static void test_mutex_not_initialized( void )
 {
   pthread_mutex_t mutex;
   struct timespec to;
-  int eno;
-  clockid_t clock_id;
+  int             eno;
+  clockid_t       clock_id;
 
   memset( &mutex, 0xff, sizeof( mutex ) );
 
@@ -357,8 +350,8 @@ static void test_mutex_invalid_copy( void )
   pthread_mutex_t mutex;
   pthread_mutex_t mutex2;
   struct timespec to;
-  int eno;
-  clockid_t clock_id;
+  int             eno;
+  clockid_t       clock_id;
 
   eno = pthread_mutex_init( &mutex, NULL );
   rtems_test_assert( eno == 0 );
@@ -393,8 +386,8 @@ static void test_mutex_invalid_copy( void )
 static void test_mutex_auto_initialization( void )
 {
   struct timespec to;
-  int eno;
-  clockid_t clock_id;
+  int             eno;
+  clockid_t       clock_id;
 
   {
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -455,12 +448,12 @@ static void test_mutex_auto_initialization( void )
 
 static void test_mutex_prio_protect_with_cv( void )
 {
-  pthread_mutex_t mutex;
+  pthread_mutex_t     mutex;
   pthread_mutexattr_t attr;
-  pthread_cond_t cond;
-  int eno;
-  struct timespec timeout;
-  clockid_t       clock_id;
+  pthread_cond_t      cond;
+  int                 eno;
+  struct timespec     timeout;
+  clockid_t           clock_id;
 
   eno = pthread_mutexattr_init( &attr );
   rtems_test_assert( eno == 0 );
@@ -500,24 +493,22 @@ static void test_mutex_prio_protect_with_cv( void )
   rtems_test_assert( eno == 0 );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int                  status;
-  pthread_mutexattr_t  attr;
-  pthread_mutexattr_t  destroyed_attr;
-  struct timespec      times;
-  struct sched_param   param;
-  int                  pshared;
-  int                  policy;
-  int                  protocol;
-  int                  ceiling;
-  int                  old_ceiling;
-  int                  priority;
-  clockid_t            clock_id;
+  int                 status;
+  pthread_mutexattr_t attr;
+  pthread_mutexattr_t destroyed_attr;
+  struct timespec     times;
+  struct sched_param  param;
+  int                 pshared;
+  int                 policy;
+  int                 protocol;
+  int                 ceiling;
+  int                 old_ceiling;
+  int                 priority;
+  clockid_t           clock_id;
 
   Mutex_bad_id = NULL;
 
@@ -645,11 +636,15 @@ void *POSIX_Init(
   status = pthread_mutexattr_setprioceiling( NULL, 128 );
   rtems_test_assert( status == EINVAL );
 
-  puts( "Init: pthread_mutexattr_setprioceiling - SUCCESSFUL (priority INT_MAX)" );
+  puts(
+    "Init: pthread_mutexattr_setprioceiling - SUCCESSFUL (priority INT_MAX)"
+  );
   status = pthread_mutexattr_setprioceiling( &attr, INT_MAX );
   rtems_test_assert( status == 0 );
 
-  puts( "Init: pthread_mutexattr_setprioceiling - SUCCESSFUL (priority INT_MIN)" );
+  puts(
+    "Init: pthread_mutexattr_setprioceiling - SUCCESSFUL (priority INT_MIN)"
+  );
   status = pthread_mutexattr_setprioceiling( &attr, INT_MIN );
   rtems_test_assert( status == 0 );
 
@@ -732,7 +727,7 @@ void *POSIX_Init(
 
   status = pthread_mutexattr_setprioceiling(
     &attr,
-    (sched_get_priority_max(SCHED_FIFO) / 2) + 1
+    ( sched_get_priority_max( SCHED_FIFO ) / 2 ) + 1
   );
   rtems_test_assert( !status );
 
@@ -755,15 +750,18 @@ void *POSIX_Init(
 
   puts( "Init: pthread_mutex_init - SUCCESSFUL" );
   status = pthread_mutex_init( &Mutex_id, &attr );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   /*
    *  This is not required to be an error and when it is, there are
    *  behavioral conflicts with other implementations.
    */
-  puts( "Init: pthread_mutex_init - EBUSY (reinitialize an existing mutex) - skipped" );
+  puts(
+    "Init: pthread_mutex_init - EBUSY (reinitialize an existing mutex) - skipped"
+  );
 
 #if 0
   status = pthread_mutex_init( &Mutex_id, &attr );
@@ -774,81 +772,92 @@ void *POSIX_Init(
 
   puts( "Init: pthread_mutex_trylock - EINVAL (illegal ID)" );
   status = pthread_mutex_trylock( Mutex_bad_id );
-  if ( status != EINVAL )
+  if ( status != EINVAL ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EINVAL );
 
   puts( "Init: pthread_mutex_trylock - SUCCESSFUL" );
   status = pthread_mutex_trylock( &Mutex_id );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   puts( "Init: pthread_mutex_trylock - EDEADLK (already locked)" );
   status = pthread_mutex_trylock( &Mutex_id );
-  if ( status != EBUSY )
+  if ( status != EBUSY ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EBUSY );
 
   puts( "Init: pthread_mutex_lock - EINVAL (NULL id)" );
   status = pthread_mutex_lock( NULL );
-  if ( status != EINVAL )
+  if ( status != EINVAL ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EINVAL );
 
   puts( "Init: pthread_mutex_unlock - EINVAL (NULL id)" );
   status = pthread_mutex_unlock( NULL );
-  if ( status != EINVAL )
+  if ( status != EINVAL ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EINVAL );
 
   puts( "Init: pthread_mutex_lock - EDEADLK (already locked)" );
   status = pthread_mutex_lock( &Mutex_id );
-  if ( status != EDEADLK )
+  if ( status != EDEADLK ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EDEADLK );
 
   puts( "Init: Sleep 1 second" );
 
   sleep( 1 );
 
-     /* switch to task 1 */
+  /* switch to task 1 */
 
   puts( "Init: pthread_mutex_unlock - EINVAL (invalid id)" );
   status = pthread_mutex_unlock( Mutex_bad_id );
-  if ( status != EINVAL )
+  if ( status != EINVAL ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EINVAL );
 
   puts( "Init: pthread_mutex_unlock - SUCCESSFUL" );
   status = pthread_mutex_unlock( &Mutex_id );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   puts( "Init: pthread_mutex_unlock - EPERM (not owner)" );
   status = pthread_mutex_unlock( &Mutex_id );
-  if ( status != EPERM )
+  if ( status != EPERM ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EPERM );
 
   puts( "Init: pthread_mutex_timedlock - time out in 1/2 second" );
-  calculate_abstimeout( &times, 0, (TOD_NANOSECONDS_PER_SECOND / 2) );
+  calculate_abstimeout( &times, 0, ( TOD_NANOSECONDS_PER_SECOND / 2 ) );
 
   status = pthread_mutex_timedlock( &Mutex_id, &times );
-  if ( status != ETIMEDOUT )
+  if ( status != ETIMEDOUT ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == ETIMEDOUT );
 
   puts( "Init: pthread_mutex_timedlock - time out in the past" );
-  calculate_abstimeout( &times, -1, (TOD_NANOSECONDS_PER_SECOND / 2) );
+  calculate_abstimeout( &times, -1, ( TOD_NANOSECONDS_PER_SECOND / 2 ) );
 
   status = pthread_mutex_timedlock( &Mutex_id, &times );
-  if ( status != ETIMEDOUT )
+  if ( status != ETIMEDOUT ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == ETIMEDOUT );
 
-     /* switch to idle */
+  /* switch to idle */
 
   puts( "Init: pthread_mutex_timedlock - EAGAIN (timeout)" );
 
@@ -856,22 +865,24 @@ void *POSIX_Init(
 
   clock_id = CLOCK_REALTIME;
   puts( "Init: pthread_mutex_clocklock - time out in 1/2 second" );
-  calculate_abstimeout( &times, 0, (TOD_NANOSECONDS_PER_SECOND / 2) );
+  calculate_abstimeout( &times, 0, ( TOD_NANOSECONDS_PER_SECOND / 2 ) );
 
-  status = pthread_mutex_clocklock( &Mutex_id, clock_id,&times );
-  if ( status != ETIMEDOUT )
+  status = pthread_mutex_clocklock( &Mutex_id, clock_id, &times );
+  if ( status != ETIMEDOUT ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == ETIMEDOUT );
 
   puts( "Init: pthread_mutex_clocklock - time out in the past" );
-  calculate_abstimeout( &times, -1, (TOD_NANOSECONDS_PER_SECOND / 2) );
+  calculate_abstimeout( &times, -1, ( TOD_NANOSECONDS_PER_SECOND / 2 ) );
 
   status = pthread_mutex_clocklock( &Mutex_id, clock_id, &times );
-  if ( status != ETIMEDOUT )
+  if ( status != ETIMEDOUT ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == ETIMEDOUT );
 
-     /* switch to idle */
+  /* switch to idle */
 
   puts( "Init: pthread_mutex_clocklock - EAGAIN (timeout)" );
 
@@ -881,8 +892,9 @@ void *POSIX_Init(
 
   puts( "Init: pthread_mutex_init - SUCCESSFUL" );
   status = pthread_mutex_init( &Mutex2_id, &attr );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   puts( "Init: pthread_mutex_init - SUCCESSFUL" );
@@ -919,14 +931,16 @@ void *POSIX_Init(
 
   puts( "Init: pthread_mutex_trylock - SUCCESSFUL" );
   status = pthread_mutex_trylock( &Mutex2_id );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   puts( "Init: pthread_mutex_destroy - EBUSY (already locked)" );
   status = pthread_mutex_destroy( &Mutex2_id );
-  if ( status != EBUSY )
+  if ( status != EBUSY ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EBUSY );
 
   puts( "Init: pthread_mutex_unlock - SUCCESSFUL" );
@@ -976,7 +990,10 @@ void *POSIX_Init(
 
   status = pthread_getschedparam( pthread_self(), &policy, &param );
   rtems_test_assert( !status );
-  printf( "Init: pthread_getschedparam - priority = %d\n", param.sched_priority);
+  printf(
+    "Init: pthread_getschedparam - priority = %d\n",
+    param.sched_priority
+  );
 
   puts( "Init: pthread_mutex_unlock - SUCCESSFUL" );
   status = pthread_mutex_unlock( &Mutex2_id );
@@ -1035,19 +1052,24 @@ void *POSIX_Init(
   /* normal cases of set priority ceiling */
 
   priority = sched_get_priority_max( SCHED_FIFO );
-  priority = (priority == 254) ? 200 : 13;
+  priority = ( priority == 254 ) ? 200 : 13;
 
-  printf( "Init: pthread_mutex_setprioceiling - new ceiling = %d\n", priority );
+  printf(
+    "Init: pthread_mutex_setprioceiling - new ceiling = %d\n",
+    priority
+  );
   status = pthread_mutex_setprioceiling( &Mutex2_id, priority, &old_ceiling );
   rtems_test_assert( !status );
   printf(
-    "Init: pthread_mutex_setprioceiling - old ceiling = %d\n",old_ceiling
+    "Init: pthread_mutex_setprioceiling - old ceiling = %d\n",
+    old_ceiling
   );
 
   status = pthread_getschedparam( pthread_self(), &policy, &param );
   rtems_test_assert( !status );
   printf(
-    "Init: pthread_getschedparam - priority = %d\n", param.sched_priority
+    "Init: pthread_getschedparam - priority = %d\n",
+    param.sched_priority
   );
 
   puts( "Init: pthread_mutex_trylock - SUCCESSFUL" );
@@ -1057,7 +1079,8 @@ void *POSIX_Init(
   status = pthread_getschedparam( pthread_self(), &policy, &param );
   rtems_test_assert( !status );
   printf(
-    "Init: pthread_getschedparam - priority = %d\n", param.sched_priority
+    "Init: pthread_getschedparam - priority = %d\n",
+    param.sched_priority
   );
 
   /* create a thread at a higher priority */
@@ -1091,7 +1114,7 @@ void *POSIX_Init(
 
   /* set priority of Init to highest priority */
 
-  param.sched_priority = sched_get_priority_max(SCHED_FIFO);
+  param.sched_priority = sched_get_priority_max( SCHED_FIFO );
 
   status = pthread_setschedparam( Init_id, SCHED_FIFO, &param );
   rtems_test_assert( !status );
@@ -1099,8 +1122,9 @@ void *POSIX_Init(
 
   puts( "Init: pthread_mutex_lock - EINVAL (priority ceiling violation)" );
   status = pthread_mutex_lock( &Mutex2_id );
-  if ( status != EINVAL )
+  if ( status != EINVAL ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EINVAL );
 
   /* mutexinit.c: Initialising recursive mutex */
@@ -1108,17 +1132,20 @@ void *POSIX_Init(
   puts( "Init: Recursive Mutex" );
 
   status = pthread_mutex_destroy( &Mutex2_id );
-  if( status )
+  if ( status ) {
     printf( "status mutex destroy:%d\n", status );
+  }
 
   status = pthread_mutexattr_init( &attr );
-  if( status )
+  if ( status ) {
     printf( "status mutexattr:%d\n", status );
+  }
 
-  attr.recursive=true;
+  attr.recursive = true;
   status = pthread_mutex_init( &Mutex2_id, &attr );
-  if ( status )
+  if ( status ) {
     printf( "status recursive mutex :%d\n", status );
+  }
   rtems_test_assert( !status );
 
   TEST_END();

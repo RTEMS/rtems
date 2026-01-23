@@ -46,5 +46,5 @@ int test( void )
 
   level = pthread_getconcurrency();
 
-  return (level == 0);
+  return ( level == 0 );
 }

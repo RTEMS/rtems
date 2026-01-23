@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x=(+0);
+  double x = ( +0 );
   double result;
 
-  result = asin(x);
+  result = asin( x );
 
-  return (result);
+  return ( result );
 }

@@ -42,10 +42,10 @@ int test( void );
 int test( void )
 {
   regex_t preg;
-  char *regex = "\\(sim[a-z]le\\) \\1";
-  int result;
+  char   *regex = "\\(sim[a-z]le\\) \\1";
+  int     result;
 
-  result = regcomp( &preg, regex, REG_EXTENDED|REG_NOSUB );
+  result = regcomp( &preg, regex, REG_EXTENDED | REG_NOSUB );
   regfree( &preg );
 
   return result;

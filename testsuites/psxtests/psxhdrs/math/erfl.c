@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 180 ;
-  long double result ;
+  long double x = 180;
+  long double result;
 
-  result = erfl(x) ;
+  result = erfl( x );
 
-  return (result);
+  return ( result );
 }
 #endif

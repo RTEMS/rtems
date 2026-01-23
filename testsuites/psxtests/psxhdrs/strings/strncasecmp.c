@@ -42,7 +42,7 @@ int test( void )
 {
   char *string1 = "STRING ONE";
   char *string2 = "string TWO";
-  int result;
+  int   result;
 
   result = strncasecmp( string1, string2, 6 );
 

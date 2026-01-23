@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  int return_value;
+  int            return_value;
   struct utsname name;
 
-  return_value = uname(&name);
-  return (return_value != -1);
+  return_value = uname( &name );
+  return ( return_value != -1 );
 }

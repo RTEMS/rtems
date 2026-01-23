@@ -38,9 +38,7 @@
 #include <sched.h>
 #include <tmacros.h>
 
-void *POSIX_Init(
-  void *argument
-);
+void *POSIX_Init( void *argument );
 
 /* configuration information */
 
@@ -59,4 +57,3 @@ void *POSIX_Init(
 
 #include <rtems/confdefs.h>
 /* end of include file */
-

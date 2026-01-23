@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 27.67 ;
+  float x = 27.67;
   float result;
 
-  result = sinf(x) ;
+  result = sinf( x );
 
-  return (result) ;
+  return ( result );
 }

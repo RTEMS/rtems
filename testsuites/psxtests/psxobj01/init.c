@@ -48,17 +48,15 @@ typedef struct {
 /* very fake object class to test with */
 OBJECTS_INFORMATION_DEFINE( Test, 1, 4, Test_Control, 0, 10, NULL );
 
-static rtems_task Init(
-  rtems_task_argument ignored
-)
+static rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
-  Objects_Get_by_name_error  error;
-  Objects_Control           *the_object;
-  char                       name[64];
-  size_t                     name_len;
-  Status_Control             status;
+  Objects_Get_by_name_error error;
+  Objects_Control          *the_object;
+  char                      name[ 64 ];
+  size_t                    name_len;
+  Status_Control            status;
 
   TEST_BEGIN();
 
@@ -81,7 +79,12 @@ static rtems_task Init(
   strcpy( name, "NOT FOUND" );
   name_len = 123;
   _Objects_Allocator_lock();
-  the_object = _Objects_Get_by_name( &Test_Information, name, &name_len, &error );
+  the_object = _Objects_Get_by_name(
+    &Test_Information,
+    name,
+    &name_len,
+    &error
+  );
   _Objects_Allocator_unlock();
   rtems_test_assert( the_object == NULL );
   rtems_test_assert( error == OBJECTS_GET_BY_NAME_NO_OBJECT );
@@ -99,7 +102,7 @@ static rtems_task Init(
   rtems_test_assert( status == STATUS_NO_MEMORY );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -107,7 +110,7 @@ static rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS  1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

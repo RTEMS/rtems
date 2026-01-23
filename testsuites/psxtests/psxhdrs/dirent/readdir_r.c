@@ -40,14 +40,14 @@ int test( void );
 
 int test( void )
 {
-  DIR *dirp;
+  DIR           *dirp;
   struct dirent *entry = NULL;
   struct dirent *result = NULL;
-  int pass;
+  int            pass;
 
   dirp = opendir( "/" );
-  entry = readdir(dirp);
-  pass = readdir_r( dirp,  entry, &result);
+  entry = readdir( dirp );
+  pass = readdir_r( dirp, entry, &result );
 
   return pass;
 }

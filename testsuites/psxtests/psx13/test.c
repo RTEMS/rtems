@@ -74,11 +74,11 @@ const char rtems_test_name[] = "PSX 13";
  */
 static void InitFiles( void )
 {
-  int count;
-  int rv;
+  int   count;
+  int   rv;
   FILE *fp1, *fp2, *fp3;
-  char letter;
-  int number;
+  char  letter;
+  int   number;
 
   fp1 = fopen( "testfile1.tst", "wt" );
   rtems_test_assert( fp1 != NULL );
@@ -91,23 +91,25 @@ static void InitFiles( void )
 
   letter = 'a';
 
-  for( count = 0 ; count < (26*4); ++count) {
+  for ( count = 0; count < ( 26 * 4 ); ++count ) {
     fprintf( fp1, "%c", letter );
     fprintf( fp2, "%c", letter );
 
     ++letter;
-    if( letter > 'z' )
+    if ( letter > 'z' ) {
       letter = 'a';
+    }
   }
 
   number = 0;
 
-  for( count = 0; count < 40; ++count ) {
-    fwrite( &number, 1, sizeof(int), fp3 );
+  for ( count = 0; count < 40; ++count ) {
+    fwrite( &number, 1, sizeof( int ), fp3 );
 
     ++number;
-    if( number > 9 )
+    if ( number > 9 ) {
       number = 0;
+    }
   }
 
   rv = fclose( fp1 );
@@ -228,7 +230,7 @@ static void FDataSyncTest( void )
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EBADF );
 
-  rv = close(fd);
+  rv = close( fd );
   rtems_test_assert( rv == 0 );
 
   /* Try it with a bad file descriptor */
@@ -265,10 +267,10 @@ static void UMaskTest( void )
  */
 static void UTimeTest( void )
 {
-  int rv;
-  struct utimbuf time;
+  int             rv;
+  struct utimbuf  time;
   struct timespec current_time;
-  struct stat fstat;
+  struct stat     fstat;
 
   /* ENOENT test case */
 
@@ -293,7 +295,7 @@ static void UTimeTest( void )
   /* EINVAL test cases */
 
   /* Case: Invalid access time */
-  time.actime  = -1;
+  time.actime = -1;
   time.modtime = 54321;
 
   rv = utime( "testfile1.tst", &time );
@@ -301,7 +303,7 @@ static void UTimeTest( void )
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Invalid modified time */
-  time.actime  = 12345;
+  time.actime = 12345;
   time.modtime = -1;
 
   rv = utime( "testfile1.tst", &time );
@@ -322,7 +324,7 @@ static void UTimeTest( void )
   rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
 
   /* Case: time is filled with valid values */
-  time.actime  = 12345;
+  time.actime = 12345;
   time.modtime = 54321;
 
   rv = utime( "testfile1.tst", &time );
@@ -340,15 +342,15 @@ static void UTimeTest( void )
  */
 static void UTimesTest( void )
 {
-  int rv;
-  struct timeval time[2];
+  int             rv;
+  struct timeval  time[ 2 ];
   struct timespec current_time;
-  struct stat fstat;
+  struct stat     fstat;
 
   /* ENOENT test case */
 
   /* Case: First, an invalid filename. */
-  rv = utimes( "!This is an =invalid p@thname!!! : )", NULL);
+  rv = utimes( "!This is an =invalid p@thname!!! : )", NULL );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == ENOENT );
 
@@ -368,50 +370,50 @@ static void UTimesTest( void )
   /* EINVAL test cases */
 
   /* Case: Negative access time tv_sec value */
-  time[0].tv_sec = -1;
-  time[0].tv_usec = 12345;
-  time[1].tv_sec = 54321;
-  time[1].tv_usec = 54321;
+  time[ 0 ].tv_sec = -1;
+  time[ 0 ].tv_usec = 12345;
+  time[ 1 ].tv_sec = 54321;
+  time[ 1 ].tv_usec = 54321;
 
   rv = utimes( "testfile1.tst", time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Negative modified time second value */
-  time[0].tv_sec = 12345;
-  time[1].tv_sec = -1;
+  time[ 0 ].tv_sec = 12345;
+  time[ 1 ].tv_sec = -1;
 
   rv = utimes( "testfile1.tst", time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Negative access time microsecond value */
-  time[1].tv_sec = 54321;
-  time[0].tv_usec = -1;
+  time[ 1 ].tv_sec = 54321;
+  time[ 0 ].tv_usec = -1;
 
   rv = utimes( "testfile1.tst", time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Negative modified time microsecond value */
-  time[0].tv_usec = 12345;
-  time[1].tv_usec = -1;
+  time[ 0 ].tv_usec = 12345;
+  time[ 1 ].tv_usec = -1;
 
   rv = utimes( "testfile1.tst", time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Access time microsecond value too large */
-  time[0].tv_usec = 1000000;
-  time[1].tv_usec = 54321;
+  time[ 0 ].tv_usec = 1000000;
+  time[ 1 ].tv_usec = 54321;
 
   rv = utimes( "testfile1.tst", time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Modified time microsecond value too large */
-  time[1].tv_usec = 1000000;
-  time[0].tv_usec = 12345;
+  time[ 1 ].tv_usec = 1000000;
+  time[ 0 ].tv_usec = 12345;
 
   rv = utimes( "testfile1.tst", time );
   rtems_test_assert( rv == -1 );
@@ -431,10 +433,10 @@ static void UTimesTest( void )
   rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
 
   /* Case: time is filled with valid values */
-  time[0].tv_sec = 12345;
-  time[0].tv_usec = 12345;
-  time[1].tv_sec = 54321;
-  time[1].tv_usec = 54321;
+  time[ 0 ].tv_sec = 12345;
+  time[ 0 ].tv_usec = 12345;
+  time[ 1 ].tv_sec = 54321;
+  time[ 1 ].tv_usec = 54321;
 
   rv = utimes( "testfile1.tst", time );
   rtems_test_assert( rv == 0 );
@@ -451,42 +453,27 @@ static void UTimesTest( void )
  */
 static void UTimensatTest( void )
 {
-  int rv;
-  struct timespec time[2];
+  int             rv;
+  struct timespec time[ 2 ];
   struct timespec current_time;
-  struct stat fstat;
+  struct stat     fstat;
 
   /* ENOSYS test cases */
 
   /* Case: Pass an unsupported file descriptor */
-  rv = utimensat(
-    0,
-    "!This is an =invalid p@thname!!! : )",
-    NULL,
-    0
-  );
+  rv = utimensat( 0, "!This is an =invalid p@thname!!! : )", NULL, 0 );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == ENOSYS );
 
   /* Case: Pass unsupported flag */
-  rv = utimensat(
-    AT_FDCWD,
-    "!This is an =invalid p@thname!!! : )",
-    NULL,
-    1
-  );
+  rv = utimensat( AT_FDCWD, "!This is an =invalid p@thname!!! : )", NULL, 1 );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == ENOSYS );
 
   /* ENOENT test case */
 
   /* Use an invalid filename. */
-  rv = utimensat(
-    AT_FDCWD,
-    "!This is an =invalid p@thname!!! : )",
-    NULL,
-    0
-  );
+  rv = utimensat( AT_FDCWD, "!This is an =invalid p@thname!!! : )", NULL, 0 );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == ENOENT );
 
@@ -514,8 +501,8 @@ static void UTimensatTest( void )
   rv = chmod( "testfile1.tst", 06444 );
   rtems_test_assert( rv == 0 );
 
-  _Timespec_Set( &time[0], 0, UTIME_NOW );
-  _Timespec_Set( &time[1], 0, UTIME_NOW );
+  _Timespec_Set( &time[ 0 ], 0, UTIME_NOW );
+  _Timespec_Set( &time[ 1 ], 0, UTIME_NOW );
 
   rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
   rtems_test_assert( rv == -1 );
@@ -527,48 +514,48 @@ static void UTimensatTest( void )
   /* EINVAL test cases */
 
   /* Case: Negative access time second value */
-  _Timespec_Set( &time[0], -12345, 12345 );
-  _Timespec_Set( &time[1], 54321, 54321 );
+  _Timespec_Set( &time[ 0 ], -12345, 12345 );
+  _Timespec_Set( &time[ 1 ], 54321, 54321 );
 
   rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Negative modified time second value */
-  _Timespec_Set( &time[0], 12345, 12345 );
-  _Timespec_Set( &time[1], -54321, 54321 );
+  _Timespec_Set( &time[ 0 ], 12345, 12345 );
+  _Timespec_Set( &time[ 1 ], -54321, 54321 );
 
   rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Negative access time nanosecond value */
-  _Timespec_Set( &time[0], 12345, -12345 );
-  _Timespec_Set( &time[1], 54321, 54321 );
+  _Timespec_Set( &time[ 0 ], 12345, -12345 );
+  _Timespec_Set( &time[ 1 ], 54321, 54321 );
 
   rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Negative modified time nanosecond value */
-  _Timespec_Set( &time[0], 12345, 12345 );
-  _Timespec_Set( &time[1], 54321, -54321 );
+  _Timespec_Set( &time[ 0 ], 12345, 12345 );
+  _Timespec_Set( &time[ 1 ], 54321, -54321 );
 
   rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Access time nanosecond value too large */
-  _Timespec_Set( &time[0], 12345, TOD_NANOSECONDS_PER_SECOND );
-  _Timespec_Set( &time[1], 54321, 54321 );
+  _Timespec_Set( &time[ 0 ], 12345, TOD_NANOSECONDS_PER_SECOND );
+  _Timespec_Set( &time[ 1 ], 54321, 54321 );
 
   rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Modified time nanosecond value too large */
-  _Timespec_Set( &time[0], 12345, 12345 );
-  _Timespec_Set( &time[1], 54321, TOD_NANOSECONDS_PER_SECOND );
+  _Timespec_Set( &time[ 0 ], 12345, 12345 );
+  _Timespec_Set( &time[ 1 ], 54321, TOD_NANOSECONDS_PER_SECOND );
 
   rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
   rtems_test_assert( rv == -1 );
@@ -588,8 +575,8 @@ static void UTimensatTest( void )
   rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
 
   /* Case: Running with access time nanosecond field equal to UTIME_NOW */
-  _Timespec_Set( &time[0], 12345, UTIME_NOW );
-  _Timespec_Set( &time[1], 54321, 54321 );
+  _Timespec_Set( &time[ 0 ], 12345, UTIME_NOW );
+  _Timespec_Set( &time[ 1 ], 54321, 54321 );
 
   rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
   rtems_test_assert( rv == 0 );
@@ -600,8 +587,8 @@ static void UTimensatTest( void )
   rtems_test_assert( fstat.st_mtime == 54321 );
 
   /* Case: Running with modified time nanosecond field equal to UTIME_NOW */
-  _Timespec_Set( &time[0], 12345, 12345 );
-  _Timespec_Set( &time[1], 54321, UTIME_NOW );
+  _Timespec_Set( &time[ 0 ], 12345, 12345 );
+  _Timespec_Set( &time[ 1 ], 54321, UTIME_NOW );
 
   rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
   rtems_test_assert( rv == 0 );
@@ -612,8 +599,8 @@ static void UTimensatTest( void )
   rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
 
   /* Case: Normal run */
-  _Timespec_Set( &time[0], 12345, 12345 );
-  _Timespec_Set( &time[1], 54321, 54321 );
+  _Timespec_Set( &time[ 0 ], 12345, 12345 );
+  _Timespec_Set( &time[ 1 ], 54321, 54321 );
 
   rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
   rtems_test_assert( rv == 0 );
@@ -630,17 +617,17 @@ static void UTimensatTest( void )
  */
 static void FutimensTest( void )
 {
-  int rv;
-  int fd;
-  struct timespec time[2];
+  int             rv;
+  int             fd;
+  struct timespec time[ 2 ];
   struct timespec current_time;
-  struct stat fstat;
+  struct stat     fstat;
 
   /* EBADF test case */
 
   /* Case: Pass an invalid file descriptor */
-  _Timespec_Set_to_zero( &time[0] );
-  _Timespec_Set_to_zero( &time[1] );
+  _Timespec_Set_to_zero( &time[ 0 ] );
+  _Timespec_Set_to_zero( &time[ 1 ] );
   rv = futimens( -1, time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EBADF );
@@ -669,8 +656,8 @@ static void FutimensTest( void )
   rv = chmod( "testfile1.tst", 06444 );
   rtems_test_assert( rv == 0 );
 
-  _Timespec_Set( &time[0], 0, UTIME_NOW );
-  _Timespec_Set( &time[1], 0, UTIME_NOW );
+  _Timespec_Set( &time[ 0 ], 0, UTIME_NOW );
+  _Timespec_Set( &time[ 1 ], 0, UTIME_NOW );
 
   rv = futimens( fd, time );
   rtems_test_assert( rv == -1 );
@@ -682,48 +669,48 @@ static void FutimensTest( void )
   /* EINVAL test cases */
 
   /* Case: Negative access time second value */
-  _Timespec_Set( &time[0], -12345, 12345 );
-  _Timespec_Set( &time[1], 54321, 54321 );
+  _Timespec_Set( &time[ 0 ], -12345, 12345 );
+  _Timespec_Set( &time[ 1 ], 54321, 54321 );
 
   rv = futimens( fd, time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Negative modified time second value */
-  _Timespec_Set( &time[0], 12345, 12345 );
-  _Timespec_Set( &time[1], -54321, 54321 );
+  _Timespec_Set( &time[ 0 ], 12345, 12345 );
+  _Timespec_Set( &time[ 1 ], -54321, 54321 );
 
   rv = futimens( fd, time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Negative access time nanosecond value */
-  _Timespec_Set( &time[0], 12345, -12345 );
-  _Timespec_Set( &time[1], 54321, 54321 );
+  _Timespec_Set( &time[ 0 ], 12345, -12345 );
+  _Timespec_Set( &time[ 1 ], 54321, 54321 );
 
   rv = futimens( fd, time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Negative modified time nanosecond value */
-  _Timespec_Set( &time[0], 12345, 12345 );
-  _Timespec_Set( &time[1], 54321, -54321 );
+  _Timespec_Set( &time[ 0 ], 12345, 12345 );
+  _Timespec_Set( &time[ 1 ], 54321, -54321 );
 
   rv = futimens( fd, time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Access time nanosecond value too large */
-  _Timespec_Set( &time[0], 12345, TOD_NANOSECONDS_PER_SECOND );
-  _Timespec_Set( &time[1], 54321, 54321 );
+  _Timespec_Set( &time[ 0 ], 12345, TOD_NANOSECONDS_PER_SECOND );
+  _Timespec_Set( &time[ 1 ], 54321, 54321 );
 
   rv = futimens( fd, time );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 
   /* Case: Modified time nanosecond value too large */
-  _Timespec_Set( &time[0], 12345, 12345 );
-  _Timespec_Set( &time[1], 54321, TOD_NANOSECONDS_PER_SECOND );
+  _Timespec_Set( &time[ 0 ], 12345, 12345 );
+  _Timespec_Set( &time[ 1 ], 54321, TOD_NANOSECONDS_PER_SECOND );
 
   rv = futimens( fd, time );
   rtems_test_assert( rv == -1 );
@@ -742,9 +729,9 @@ static void FutimensTest( void )
   rtems_test_assert( current_time.tv_sec <= fstat.st_atim.tv_sec );
   rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
 
-/* Case: Running with access time nanosecond field equal to UTIME_NOW */
-  _Timespec_Set( &time[0], 12345, UTIME_NOW );
-  _Timespec_Set( &time[1], 54321, 54321 );
+  /* Case: Running with access time nanosecond field equal to UTIME_NOW */
+  _Timespec_Set( &time[ 0 ], 12345, UTIME_NOW );
+  _Timespec_Set( &time[ 1 ], 54321, 54321 );
 
   rv = futimens( fd, time );
   rtems_test_assert( rv == 0 );
@@ -755,8 +742,8 @@ static void FutimensTest( void )
   rtems_test_assert( fstat.st_mtime == 54321 );
 
   /* Case: Running with modified time nanosecond field equal to UTIME_NOW */
-  _Timespec_Set( &time[0], 12345, 12345 );
-  _Timespec_Set( &time[1], 54321, UTIME_NOW );
+  _Timespec_Set( &time[ 0 ], 12345, 12345 );
+  _Timespec_Set( &time[ 1 ], 54321, UTIME_NOW );
 
   rv = futimens( fd, time );
   rtems_test_assert( rv == 0 );
@@ -767,8 +754,8 @@ static void FutimensTest( void )
   rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
 
   /* Case: Normal run */
-  _Timespec_Set( &time[0], 12345, 12345 );
-  _Timespec_Set( &time[1], 54321, 54321 );
+  _Timespec_Set( &time[ 0 ], 12345, 12345 );
+  _Timespec_Set( &time[ 1 ], 54321, 54321 );
 
   rv = futimens( fd, time );
   rtems_test_assert( rv == 0 );
@@ -872,7 +859,7 @@ static void FSyncTest( void )
   fd = open( "testfile1.tst", O_RDWR );
   rtems_test_assert( fd != -1 );
 
-  rv = fsync(fd);
+  rv = fsync( fd );
   rtems_test_assert( rv != -1 );
 
   rv = close( fd );

@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int blank;
 
   blank = 0;
-  return (isblank(blank));
+  return ( isblank( blank ) );
 }

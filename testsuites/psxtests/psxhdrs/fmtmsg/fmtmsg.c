@@ -45,13 +45,12 @@ int test( void )
 
   result = fmtmsg(
     MM_PRINT,
-     "warning:implicit variable",
-     MM_ERROR,
-     "Function not defined",
-     "Check the user manual",
-     "warning:implicit variable:001"
+    "warning:implicit variable",
+    MM_ERROR,
+    "Function not defined",
+    "Check the user manual",
+    "warning:implicit variable:001"
   );
 
   return result;
-
 }

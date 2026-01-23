@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 4 ,  result , iptr ;
+  long double x = 4, result, iptr;
 
-  result = modfl( x , &iptr ) ;
+  result = modfl( x, &iptr );
 
-  return (result);
+  return ( result );
 }
 #endif

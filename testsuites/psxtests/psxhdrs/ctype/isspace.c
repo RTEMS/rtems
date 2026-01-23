@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int space;
 
   space = 0;
-  return (isspace(space));
+  return ( isspace( space ) );
 }

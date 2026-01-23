@@ -42,30 +42,30 @@
 #include "system.h"
 #include <errno.h>
 
-void *Task_3(
-  void *argument
-)
+void *Task_3( void *argument )
 {
   (void) argument;
 
   int   status;
-  void  *return_pointer;
+  void *return_pointer;
 
   puts( "Task_3: join to Task_2" );
   status = pthread_join( Task2_id, &return_pointer );
   puts( "Task_3: returned from pthread_join" );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
-  if ( return_pointer == &Task2_id )
+  if ( return_pointer == &Task2_id ) {
     puts( "Task_3: pthread_join returned correct pointer" );
-  else
+  } else {
     printf(
       "Task_3: pthread_join returned incorrect pointer (%p != %p)\n",
       return_pointer,
       &Task2_id
     );
+  }
 
   TEST_END();
   rtems_test_exit( 0 );

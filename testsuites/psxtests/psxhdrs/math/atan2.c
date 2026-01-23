@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-    double x = 1 ;
-    double y = 0 ;
-    double result ;
+  double x = 1;
+  double y = 0;
+  double result;
 
-    result = atan2( y , x ) ;
+  result = atan2( y, x );
 
-    return (result) ;  /* This should return 0 */
+  return ( result ); /* This should return 0 */
 }

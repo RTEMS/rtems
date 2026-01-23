@@ -36,14 +36,14 @@
 
 #include <stdio.h>
 
-#define  MAX_LEN  100
+#define MAX_LEN 100
 
 int test( void );
 
 int test( void )
 {
   FILE *stream;
-  char line[MAX_LEN];
+  char  line[ MAX_LEN ];
   char *result;
 
   stream = fopen( "myfile.dat", "w" );

@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	char s[1];
-	wchar_t wchar = L'c';
+  int     return_value;
+  char    s[ 1 ];
+  wchar_t wchar = L'c';
 
-	return_value = wctomb(s, wchar);
-	return (return_value != -1);
+  return_value = wctomb( s, wchar );
+  return ( return_value != -1 );
 }

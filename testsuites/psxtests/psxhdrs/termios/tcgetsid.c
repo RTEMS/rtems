@@ -41,9 +41,9 @@ int test( void );
 int test( void )
 {
   pid_t result;
-  int fildes = 0;
+  int   fildes = 0;
 
-  result = tcgetsid(fildes);
+  result = tcgetsid( fildes );
 
   return (int) result;
 }

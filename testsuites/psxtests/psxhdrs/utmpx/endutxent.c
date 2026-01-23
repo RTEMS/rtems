@@ -25,10 +25,10 @@
 
 #include <utmpx.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   endutxent();
-  return (0);
+  return ( 0 );
 }

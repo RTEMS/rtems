@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int ascii;
 
   ascii = 0;
-  return (isascii(ascii));
+  return ( isascii( ascii ) );
 }

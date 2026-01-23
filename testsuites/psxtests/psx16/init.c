@@ -37,44 +37,42 @@
 const char rtems_test_name[] = "PSX 16";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *TestThread(void *argument);
+void *POSIX_Init( void *argument );
+void *TestThread( void *argument );
 
 int Index;
 
-void *TestThread(
-  void *argument
-)
+void *TestThread( void *argument )
 {
   (void) argument;
 
-  int *index = (int *)argument;
+  int *index = (int *) argument;
 
-  *index = 7; 
+  *index = 7;
 
   puts( "TestThread exiting" );
   return argument;
 }
 
-void *POSIX_Init(void *argument)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int             status;
-  pthread_t       id;
-  pthread_attr_t  attr;
-  void           *join_return;
+  int            status;
+  pthread_t      id;
+  pthread_attr_t attr;
+  void          *join_return;
 
   TEST_BEGIN();
 
   Index = 5;
 
   /* Initialize and set thread detached attribute */
-  pthread_attr_init(&attr);
-  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+  pthread_attr_init( &attr );
+  pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_JOINABLE );
 
   puts( "Creating TestThread" );
-  status = pthread_create( &id, &attr, TestThread, (void *)&Index );
+  status = pthread_create( &id, &attr, TestThread, (void *) &Index );
   rtems_test_assert( status == 0 );
 
   /* let test thread run and exit */
@@ -85,12 +83,12 @@ void *POSIX_Init(void *argument)
   status = pthread_join( id, &join_return );
   rtems_test_assert( status == 0 );
   rtems_test_assert( join_return == &Index );
-  rtems_test_assert( *(int *)join_return == 7 );
+  rtems_test_assert( *(int *) join_return == 7 );
   puts( "Successfully joined with TestThread" );
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -100,7 +98,7 @@ void *POSIX_Init(void *argument)
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS        2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 

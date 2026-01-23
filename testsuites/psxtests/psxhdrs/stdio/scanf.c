@@ -41,7 +41,7 @@ int test( void );
 int test( void )
 {
   char *p;
-  int result;
+  int   result;
 
   result = scanf( "%m[a-z]", &p );
 

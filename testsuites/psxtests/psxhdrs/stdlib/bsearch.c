@@ -37,19 +37,19 @@
 #include <stdlib.h>
 
 int test( void );
-int func(void *, void *);
+int func( void *, void * );
 
 int test( void )
 {
-	int *return_value;
-	int key = 3;
-	int arr[3] = {1, 2, 3};
+  int *return_value;
+  int  key = 3;
+  int  arr[ 3 ] = { 1, 2, 3 };
 
-	return_value = bsearch(&key, &arr, 3, 4, (void *)func);
-	return (return_value != NULL);
+  return_value = bsearch( &key, &arr, 3, 4, (void *) func );
+  return ( return_value != NULL );
 }
 
-int func(void *int1, void *int2)
+int func( void *int1, void *int2 )
 {
-	return (*(int *)int1 == *(int *)int2);
+  return ( *(int *) int1 == *(int *) int2 );
 }

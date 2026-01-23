@@ -41,15 +41,13 @@
 #include "system.h"
 #include <errno.h>
 
-void *Task_3(
-  void *argument
-)
+void *Task_3( void *argument )
 {
   (void) argument;
 
-  int                 status;
-  struct sched_param  param;
-  int                 policy;
+  int                status;
+  struct sched_param param;
+  int                policy;
 
   printf( "Task 3: pthread_mutex_lock unavailable (inherit case)\n" );
   status = pthread_mutex_lock( &Mutex2_id );
@@ -62,12 +60,15 @@ void *Task_3(
 
   status = pthread_getschedparam( pthread_self(), &policy, &param );
   rtems_test_assert( !status );
-  printf( "Task 3: pthread_getschedparam priority = %d\n", param.sched_priority );
+  printf(
+    "Task 3: pthread_getschedparam priority = %d\n",
+    param.sched_priority
+  );
 
   printf( "Task 3: exit\n" );
   pthread_exit( NULL );
 
-     /* switch to Init */
+  /* switch to Init */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

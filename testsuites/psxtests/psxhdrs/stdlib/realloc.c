@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	char *return_value;
-	char *ptr = malloc(1 * sizeof(char) * 1);
+  char *return_value;
+  char *ptr = malloc( 1 * sizeof( char ) * 1 );
 
-	return_value = realloc(ptr, sizeof(char) * 2);
-	return (return_value != NULL);
+  return_value = realloc( ptr, sizeof( char ) * 2 );
+  return ( return_value != NULL );
 }

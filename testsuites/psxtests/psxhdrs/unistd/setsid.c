@@ -46,5 +46,5 @@ int test( void )
 
   pid = setsid();
 
-  return (pid == -1) ? -1 : 0;
+  return ( pid == -1 ) ? -1 : 0;
 }

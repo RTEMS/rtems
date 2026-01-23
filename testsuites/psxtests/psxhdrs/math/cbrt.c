@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 343 ;
+  double x = 343;
   double result;
 
-  result = cbrt(x) ;
+  result = cbrt( x );
 
-  return (result) ;
+  return ( result );
 }

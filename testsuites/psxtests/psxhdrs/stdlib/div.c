@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-	div_t return_value;
+  div_t return_value;
 
-	return_value = div(2, 1);
-	return (return_value.quot == 2 && return_value.rem == 0);
+  return_value = div( 2, 1 );
+  return ( return_value.quot == 2 && return_value.rem == 0 );
 }

@@ -41,9 +41,7 @@
 void test( void );
 void cleanup_routine( void *argument );
 
-void cleanup_routine(
-  void *argument
-)
+void cleanup_routine( void *argument )
 {
   (void) argument;
 }

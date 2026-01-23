@@ -41,9 +41,9 @@ int test( void );
 
 int test( void )
 {
-  wint_t return_value;
-  locale_t loc = newlocale(LC_ALL_MASK, "C", (locale_t) 0);
+  wint_t   return_value;
+  locale_t loc = newlocale( LC_ALL_MASK, "C", (locale_t) 0 );
 
-  return_value = iswalnum_l('c', loc);
-  return (return_value != 0);
+  return_value = iswalnum_l( 'c', loc );
+  return ( return_value != 0 );
 }

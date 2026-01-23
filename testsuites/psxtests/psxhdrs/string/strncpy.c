@@ -35,15 +35,15 @@
  #endif
 
  #include <string.h>
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char src[] = "World";
-   char dest[ sizeof( src ) ];
-   char *result;
+int test( void )
+{
+  char  src[] = "World";
+  char  dest[ sizeof( src ) ];
+  char *result;
 
-   result = strncpy( dest, src, sizeof( dest ) );
+  result = strncpy( dest, src, sizeof( dest ) );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

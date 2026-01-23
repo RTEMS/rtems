@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-  intmax_t n = 42;
-  intmax_t denom = 5;
+  intmax_t  n = 42;
+  intmax_t  denom = 5;
   imaxdiv_t result;
 
   result = imaxdiv( n, denom );

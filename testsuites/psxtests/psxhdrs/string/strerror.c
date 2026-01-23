@@ -37,13 +37,13 @@
  #include <string.h>
  #include <errno.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char *result;
+int test( void )
+{
+  char *result;
 
-   result = strerror( errno );
+  result = strerror( errno );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

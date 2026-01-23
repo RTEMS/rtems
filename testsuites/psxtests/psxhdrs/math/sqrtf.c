@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 100 , result ;
+  float x = 100, result;
 
-  result = sqrtf( x ) ;
+  result = sqrtf( x );
 
-  return (result);
+  return ( result );
 }

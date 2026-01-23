@@ -41,8 +41,8 @@ int test( void );
 
 int test( void )
 {
-  int      signal_number;
-  int      result;
+  int signal_number;
+  int result;
 
   signal_number = SIGALRM;
 

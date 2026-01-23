@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-  double x = 2560 ;
-  int exp ;
-  double result ;
+  double x = 2560;
+  int    exp;
+  double result;
 
-  result = frexp(x,&exp) ;
+  result = frexp( x, &exp );
 
-  return (result);
+  return ( result );
 }

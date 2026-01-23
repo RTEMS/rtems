@@ -44,18 +44,18 @@
 const char rtems_test_name[] = "PSXKEY 8";
 
 static pthread_key_t Key;
-static int created_task_count, setted_task_count, got_task_count;
-static int all_thread_created;
-static rtems_id sema1, sema2;
-static rtems_name name1, name2;
+static int           created_task_count, setted_task_count, got_task_count;
+static int           all_thread_created;
+static rtems_id      sema1, sema2;
+static rtems_name    name1, name2;
 
-static rtems_task test_task(rtems_task_argument arg)
+static rtems_task test_task( rtems_task_argument arg )
 {
   (void) arg;
 
   rtems_status_code sc = 0;
-  const void *value_p;
-  const void *value_p2;
+  const void       *value_p;
+  const void       *value_p2;
 
   value_p = &sc;
   sc = pthread_setspecific( Key, value_p );
@@ -64,7 +64,7 @@ static rtems_task test_task(rtems_task_argument arg)
   sc = rtems_semaphore_release( sema1 );
 
   /* Blocked until all tasks have been created */
-  sc = rtems_semaphore_obtain( sema2 , RTEMS_WAIT, 0 );
+  sc = rtems_semaphore_obtain( sema2, RTEMS_WAIT, 0 );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   sc = rtems_semaphore_release( sema2 );
@@ -77,25 +77,26 @@ static rtems_task test_task(rtems_task_argument arg)
   rtems_task_exit();
 }
 
-static rtems_task Init(rtems_task_argument arg)
+static rtems_task Init( rtems_task_argument arg )
 {
   (void) arg;
 
-  rtems_status_code        sc;
-  int                      eno;
-  rtems_resource_snapshot  snapshot;
-  uintptr_t                max_free_size = 13 * RTEMS_MINIMUM_STACK_SIZE;
-  void                    *greedy;
+  rtems_status_code       sc;
+  int                     eno;
+  rtems_resource_snapshot snapshot;
+  uintptr_t               max_free_size = 13 * RTEMS_MINIMUM_STACK_SIZE;
+  void                   *greedy;
 
   all_thread_created = 0;
 
   TEST_BEGIN();
-  rtems_resource_snapshot_take(&snapshot);
+  rtems_resource_snapshot_take( &snapshot );
 
   puts( "Init - Semaphore 1 create - OK" );
-  name1 = rtems_build_name('S', 'E', 'M', '1');
+  name1 = rtems_build_name( 'S', 'E', 'M', '1' );
   sc = rtems_semaphore_create(
-    name1, 0,
+    name1,
+    0,
     RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_FIFO,
     0,
     &sema1
@@ -103,7 +104,7 @@ static rtems_task Init(rtems_task_argument arg)
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   puts( "Init - Semaphore 2 create - OK" );
-  name2 = rtems_build_name('S', 'E', 'M', '2');
+  name2 = rtems_build_name( 'S', 'E', 'M', '2' );
   sc = rtems_semaphore_create(
     name2,
     0,
@@ -120,11 +121,11 @@ static rtems_task Init(rtems_task_argument arg)
   /* Reduce workspace size if necessary to shorten test time */
   greedy = rtems_workspace_greedy_allocate( &max_free_size, 1 );
 
-  for ( ; ; ) {
+  for ( ;; ) {
     rtems_id task_id;
 
     sc = rtems_task_create(
-      rtems_build_name('T','A',created_task_count, ' '),
+      rtems_build_name( 'T', 'A', created_task_count, ' ' ),
       1,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
@@ -132,21 +133,20 @@ static rtems_task Init(rtems_task_argument arg)
       &task_id
     );
     rtems_test_assert(
-      (sc == RTEMS_UNSATISFIED) ||
-      (sc == RTEMS_TOO_MANY) ||
-      (sc == RTEMS_SUCCESSFUL)
+      ( sc == RTEMS_UNSATISFIED ) || ( sc == RTEMS_TOO_MANY ) ||
+      ( sc == RTEMS_SUCCESSFUL )
     );
 
     /**
      * when return is RTEMS_TOO_MANY or RTEMS_UNSATISFIED, there is not
      * enough source to create task.
      */
-    if ( (sc == RTEMS_TOO_MANY) || (sc == RTEMS_UNSATISFIED) ) {
+    if ( ( sc == RTEMS_TOO_MANY ) || ( sc == RTEMS_UNSATISFIED ) ) {
       break;
     }
     ++created_task_count;
 
-    sc = rtems_task_start( task_id,  test_task, 0 );
+    sc = rtems_task_start( task_id, test_task, 0 );
     rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
     sc = rtems_semaphore_obtain( sema1, RTEMS_WAIT, 0 );
@@ -182,21 +182,22 @@ static rtems_task Init(rtems_task_argument arg)
   sc = rtems_semaphore_delete( sema2 );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+  rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
   TEST_END();
-  exit(0);
+  exit( 0 );
 }
 
 /* configuration information */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS 14
+#define CONFIGURE_MAXIMUM_TASKS      14
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
 #define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 
-#define CONFIGURE_INIT_TASK_INITIAL_MODES \
-  (RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_ASR | RTEMS_INTERRUPT_LEVEL(0))
+#define CONFIGURE_INIT_TASK_INITIAL_MODES            \
+  ( RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_ASR | \
+    RTEMS_INTERRUPT_LEVEL( 0 ) )
 
 #define CONFIGURE_INIT_TASK_PRIORITY 4
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

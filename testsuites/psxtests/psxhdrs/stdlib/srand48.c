@@ -40,6 +40,6 @@ int test( void );
 
 int test( void )
 {
-	srand48(1);
-	return 1;
+  srand48( 1 );
+  return 1;
 }

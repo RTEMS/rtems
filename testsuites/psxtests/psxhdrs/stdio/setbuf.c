@@ -36,14 +36,14 @@
 
 #include <stdio.h>
 
-#define  BUF_SIZE  1024
+#define BUF_SIZE 1024
 
 int test( void );
 
 int test( void )
 {
   FILE *stream;
-  char buf[BUFSIZ];
+  char  buf[ BUFSIZ ];
 
   stream = fopen( "myfile.dat", "w" );
   setbuf( stream, buf );

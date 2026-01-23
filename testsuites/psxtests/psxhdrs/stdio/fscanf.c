@@ -36,18 +36,18 @@
 
 #include <stdio.h>
 
-#define  MAX_LEN  80
+#define MAX_LEN 80
 
 int test( void );
 
 int test( void )
 {
   FILE *stream;
-  char s[MAX_LEN + 1];
-  int result;
+  char  s[ MAX_LEN + 1 ];
+  int   result;
 
   stream = fopen( "myfile.dat", "w" );
-  result = fscanf( stream, "%s", &s[0] );
+  result = fscanf( stream, "%s", &s[ 0 ] );
 
   return result;
 }

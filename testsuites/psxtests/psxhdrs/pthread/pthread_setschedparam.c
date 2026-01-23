@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  pthread_t           thread = 0;
-  int                 policy;
-  struct sched_param  param;
-  int                 result;
+  pthread_t          thread = 0;
+  int                policy;
+  struct sched_param param;
+  int                result;
 
   policy = SCHED_OTHER;
   policy = SCHED_FIFO;

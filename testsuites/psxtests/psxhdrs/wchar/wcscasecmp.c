@@ -36,14 +36,14 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const wchar_t *wc;
   const wchar_t *wc1;
 
   wc = 0;
   wc1 = 0;
-  return wcscasecmp(wc, wc1);
+  return wcscasecmp( wc, wc1 );
 }

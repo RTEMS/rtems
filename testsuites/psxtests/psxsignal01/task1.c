@@ -41,9 +41,7 @@
 #include "system.h"
 #include <signal.h>
 
-void *Task_1(
-  void *argument
-)
+void *Task_1( void *argument )
 {
   (void) argument;
 
@@ -55,12 +53,12 @@ void *Task_1(
   printf( "Task_1: %d seconds left\n", seconds );
   rtems_test_assert( seconds );
 
-     /* switch to Init */
+  /* switch to Init */
 
   printf( "Task_1: exit\n" );
   pthread_exit( NULL );
 
-     /* switch to Init */
+  /* switch to Init */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

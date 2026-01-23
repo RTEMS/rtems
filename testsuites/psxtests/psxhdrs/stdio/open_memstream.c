@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  FILE *stream;
+  FILE  *stream;
   size_t len;
-  char *buf;
+  char  *buf;
 
   stream = open_memstream( &buf, &len );
 

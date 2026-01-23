@@ -34,23 +34,23 @@
 #include "config.h"
 #endif
 
-#include <sys/msg.h> 
+#include <sys/msg.h>
 
 int test( void );
 
 int test( void )
 {
   int return_value;
-  int msqid = msgget(IPC_PRIVATE, IPC_CREAT | 0660);
+  int msqid = msgget( IPC_PRIVATE, IPC_CREAT | 0660 );
   struct mymsg {
     long mtype;
-    char mtext[2];
+    char mtext[ 2 ];
   };
   struct mymsg msgp;
-  size_t msgsz = 1;
-  long msgtyp = 0;
-  int msgflg =  IPC_NOWAIT;
+  size_t       msgsz = 1;
+  long         msgtyp = 0;
+  int          msgflg = IPC_NOWAIT;
 
-  return_value = msgrcv(msqid, &msgp, msgsz, msgtyp, msgflg);
-  return (return_value != -1);
+  return_value = msgrcv( msqid, &msgp, msgsz, msgtyp, msgflg );
+  return ( return_value != -1 );
 }

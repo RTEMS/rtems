@@ -46,5 +46,5 @@ int test( void )
 
   timestruct = gmtime( &time );
 
-  return (timestruct != NULL);
+  return ( timestruct != NULL );
 }

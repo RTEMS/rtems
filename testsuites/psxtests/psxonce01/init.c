@@ -78,8 +78,8 @@ static void use_b( rtems_task_argument arg )
 static void routine_a( void )
 {
   rtems_status_code sc;
-  rtems_id id;
-  rtems_event_set events;
+  rtems_id          id;
+  rtems_event_set   events;
 
   rtems_test_assert( test_init_routine_call_counter == 1 );
   ++test_init_routine_call_counter;
@@ -112,11 +112,11 @@ static void routine_a( void )
   rtems_test_assert( test_init_routine_call_counter == 3 );
 }
 
-rtems_task Init(rtems_task_argument argument)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  int status;
+  int            status;
   pthread_once_t once = PTHREAD_ONCE_INIT;
 
   TEST_BEGIN();

@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  int result;
+  int                  result;
   const struct utimbuf buff = { 0 };
-  const char *path = "/tmp/myfile";
+  const char          *path = "/tmp/myfile";
 
-  result = utime(path, &buff);
+  result = utime( path, &buff );
 
   return result;
 }

@@ -34,17 +34,11 @@
 
 #include <pmacros.h>
 
-void *POSIX_Init(
-  void *argument
-);
+void *POSIX_Init( void *argument );
 
-void *Task_1(
-  void *argument
-);
+void *Task_1( void *argument );
 
-void *Task_2(
-  void *argument
-);
+void *Task_2( void *argument );
 
 /* configuration information */
 
@@ -53,8 +47,8 @@ void *Task_2(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS   2
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     10
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
+#define CONFIGURE_MAXIMUM_POSIX_KEYS    10
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
@@ -70,13 +64,16 @@ RTEMS_SCHEDULER_EDF_SMP( a );
 
 RTEMS_SCHEDULER_EDF_SMP( b );
 
-#define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
+#define CONFIGURE_SCHEDULER_TABLE_ENTRIES                                     \
   RTEMS_SCHEDULER_TABLE_EDF_SMP( a, rtems_build_name( 'M', 'A', 'I', 'N' ) ), \
-  RTEMS_SCHEDULER_TABLE_EDF_SMP( b, rtems_build_name( 'O', 'T', 'H', 'R' ) )
+    RTEMS_SCHEDULER_TABLE_EDF_SMP(                                            \
+      b,                                                                      \
+      rtems_build_name( 'O', 'T', 'H', 'R' )                                  \
+    )
 
-#define CONFIGURE_SCHEDULER_ASSIGNMENTS \
+#define CONFIGURE_SCHEDULER_ASSIGNMENTS                                    \
   RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
-  RTEMS_SCHEDULER_ASSIGN( 1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL )
+    RTEMS_SCHEDULER_ASSIGN( 1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL )
 
 #endif /* RTEMS_SMP */
 
@@ -90,7 +87,7 @@ RTEMS_SCHEDULER_EDF_SMP( b );
 #define TEST_EXTERN extern
 #endif
 
-TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_mutex_t  Mutex_id;
+TEST_EXTERN pthread_t       Init_id;
+TEST_EXTERN pthread_mutex_t Mutex_id;
 
 /* end of include file */

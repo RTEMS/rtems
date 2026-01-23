@@ -36,17 +36,17 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   void *s1 = NULL;
-   void *s2 = NULL;
-   int c = 2;
-   size_t n = 2;
-   void *result;
+int test( void )
+{
+  void  *s1 = NULL;
+  void  *s2 = NULL;
+  int    c = 2;
+  size_t n = 2;
+  void  *result;
 
-   result = memccpy( s1, s2, c, n );
+  result = memccpy( s1, s2, c, n );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

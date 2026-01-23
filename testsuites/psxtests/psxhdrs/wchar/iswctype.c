@@ -41,14 +41,14 @@
  above and this comment when fixed 
 */
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  wint_t wi;
+  wint_t   wi;
   wctype_t wc;
 
   wi = 0;
   wc = 0;
-  return iswctype(wi, wc);
+  return iswctype( wi, wc );
 }

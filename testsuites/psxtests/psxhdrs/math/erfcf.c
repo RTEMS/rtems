@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 0 ;
-  float result ;
+  float x = 0;
+  float result;
 
-  result = erfcf(x) ;
+  result = erfcf( x );
 
-  return (result);
+  return ( result );
 }

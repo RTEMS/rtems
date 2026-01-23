@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-    float x = 0 ;
-    float result ;
+  float x = 0;
+  float result;
 
-    result = atanf(x) ;
+  result = atanf( x );
 
-    return (result) ;  /* This should return 0 */
+  return ( result ); /* This should return 0 */
 }

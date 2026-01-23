@@ -37,11 +37,9 @@
 const char rtems_test_name[] = "PSXUSLEEP";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -81,9 +79,8 @@ rtems_task Init(
   printf( ctime( &tv.tv_sec ) );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
-
 
 /* configuration information */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
@@ -92,7 +89,7 @@ rtems_task Init(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

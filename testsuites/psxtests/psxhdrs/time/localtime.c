@@ -46,5 +46,5 @@ int test( void )
 
   timestruct = localtime( &time );
 
-  return (timestruct != NULL);
+  return ( timestruct != NULL );
 }

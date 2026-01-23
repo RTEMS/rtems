@@ -30,4 +30,4 @@
 #include <rtems/libcsupport.h>
 
 extern const IMFS_node_control node_control;
-extern char test_data[PAGE_SIZE];
+extern char                    test_data[ PAGE_SIZE ];

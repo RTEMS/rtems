@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  void *addr = NULL;
+  void  *addr = NULL;
   size_t len = 0;
-  int flags = 0;
+  int    flags = 0;
 
   return msync( addr, len, flags );
 }

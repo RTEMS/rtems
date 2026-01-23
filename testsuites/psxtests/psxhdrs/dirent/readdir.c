@@ -40,7 +40,7 @@ int test( void );
 
 int test( void )
 {
-  DIR *dirp;
+  DIR           *dirp;
   struct dirent *result;
 
   dirp = opendir( "/" );

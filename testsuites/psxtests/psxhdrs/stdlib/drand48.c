@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-	double return_value;
+  double return_value;
 
-	return_value = drand48();
-	return return_value;
+  return_value = drand48();
+  return return_value;
 }

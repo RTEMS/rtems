@@ -38,19 +38,19 @@
 const char rtems_test_name[] = "PSXKEY 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void Key_destructor(void *key_data);
+rtems_task Init( rtems_task_argument argument );
+void       Key_destructor( void *key_data );
 
-void Key_destructor(void *key_data)
+void Key_destructor( void *key_data )
 {
   (void) key_data;
 }
 
-rtems_task Init(rtems_task_argument argument)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  int    status;
+  int status;
 
   TEST_BEGIN();
 
@@ -61,8 +61,8 @@ rtems_task Init(rtems_task_argument argument)
 
   rtems_workspace_greedy_allocate( NULL, 0 );
 
-  puts("Init: pthread_key_create - OK");
-  status = pthread_key_create( &Key_id[0], Key_destructor );
+  puts( "Init: pthread_key_create - OK" );
+  status = pthread_key_create( &Key_id[ 0 ], Key_destructor );
   fatal_directive_check_status_only( status, 0, "OK" );
 
   TEST_END();

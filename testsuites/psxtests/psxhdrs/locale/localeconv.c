@@ -41,10 +41,10 @@ int test( void );
 int test( void )
 {
   struct lconv *lc;
-  int category = LC_MONETARY;
+  int           category = LC_MONETARY;
 
   setlocale( category, "" );
   lc = localeconv();
 
-  return (lc != NULL);
+  return ( lc != NULL );
 }

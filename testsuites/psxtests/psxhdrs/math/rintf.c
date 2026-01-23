@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 4.643456 ,  result ;
+  float x = 4.643456, result;
 
-  result = rintf( x ) ;
+  result = rintf( x );
 
-  return (result);
+  return ( result );
 }

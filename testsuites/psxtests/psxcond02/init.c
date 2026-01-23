@@ -38,13 +38,13 @@
 const char rtems_test_name[] = "PSXCOND 2";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
-static void test_exercise_clock_attribute_errors(void)
+static void test_exercise_clock_attribute_errors( void )
 {
-  int                 sc;
-  pthread_condattr_t  attr;
-  clockid_t           clock;
+  int                sc;
+  pthread_condattr_t attr;
+  clockid_t          clock;
 
   /* NULL attribute pointer errors */
   puts( "pthread_condattr_getclock (NULL attribute) - EINVAL" );
@@ -77,10 +77,10 @@ static void test_exercise_clock_attribute_errors(void)
   fatal_posix_service_status( sc, EINVAL, "condattr setclock" );
 }
 
-static void test_exercise_clock_attribute(void)
+static void test_exercise_clock_attribute( void )
 {
-  int                 sc;
-  pthread_condattr_t  attr;
+  int                sc;
+  pthread_condattr_t attr;
 
   puts( "pthread_condattr_init - OK" );
   sc = pthread_condattr_init( &attr );
@@ -95,9 +95,7 @@ static void test_exercise_clock_attribute(void)
   fatal_posix_service_status( sc, 0, "condattr setclock" );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 

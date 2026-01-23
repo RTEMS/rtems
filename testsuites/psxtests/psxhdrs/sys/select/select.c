@@ -40,13 +40,13 @@ int test( void );
 
 int test( void )
 {
-  int return_value;
-  int nfds = 1;
-  fd_set readfds;
-  fd_set writefds;
-  fd_set errorfds;
+  int            return_value;
+  int            nfds = 1;
+  fd_set         readfds;
+  fd_set         writefds;
+  fd_set         errorfds;
   struct timeval timeout;
 
-  return_value = select(nfds, &readfds, &writefds, &errorfds, &timeout);
+  return_value = select( nfds, &readfds, &writefds, &errorfds, &timeout );
   return return_value;
 }

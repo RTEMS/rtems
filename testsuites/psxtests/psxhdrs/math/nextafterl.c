@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 50 , y = 100 , result ;
+  long double x = 50, y = 100, result;
 
-  result = nextafterl( x , y ) ;
+  result = nextafterl( x, y );
 
-  return (result);
+  return ( result );
 }
 #endif

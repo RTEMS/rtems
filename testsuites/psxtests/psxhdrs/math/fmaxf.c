@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-  float x = 6834 ;
-  float y = 45 ;
-  float result ;
+  float x = 6834;
+  float y = 45;
+  float result;
 
-  result = fmaxf(x,y) ;
+  result = fmaxf( x, y );
 
-  return (result);
+  return ( result );
 }

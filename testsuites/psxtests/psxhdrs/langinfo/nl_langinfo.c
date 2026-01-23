@@ -42,8 +42,8 @@ int test( void );
 int test( void )
 {
   char *firstday;
-  setlocale(LC_ALL, "en_GB");
+  setlocale( LC_ALL, "en_GB" );
 
-  firstday = nl_langinfo(ABDAY_1);
-  return (firstday != NULL);
+  firstday = nl_langinfo( ABDAY_1 );
+  return ( firstday != NULL );
 }

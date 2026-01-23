@@ -42,8 +42,8 @@ int test( void );
 int test( void )
 {
   wctrans_t return_value;
-  setlocale(LC_ALL, "en_GB");
+  setlocale( LC_ALL, "en_GB" );
 
-  return_value = wctrans("toupper");
-  return (return_value != 0);
+  return_value = wctrans( "toupper" );
+  return ( return_value != 0 );
 }

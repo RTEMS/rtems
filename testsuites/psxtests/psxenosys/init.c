@@ -46,22 +46,21 @@
 
 const char rtems_test_name[] = "PSXENOSYS";
 
-void check_enosys(int status);
+void check_enosys( int status );
 
-void check_enosys(int status)
+void check_enosys( int status )
 {
-  if ( (status == -1) && (errno == ENOSYS) )
+  if ( ( status == -1 ) && ( errno == ENOSYS ) ) {
     return;
-  rtems_test_exit(0);
+  }
+  rtems_test_exit( 0 );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int             sc;
+  int sc;
 
   TEST_BEGIN();
 
@@ -73,13 +72,13 @@ void *POSIX_Init(
   sc = clock_getcpuclockid( 0, NULL );
   check_enosys( sc );
 
-  sc = execl( NULL, NULL, (char*)0 );
+  sc = execl( NULL, NULL, (char *) 0 );
   check_enosys( sc );
 
-  sc = execle( NULL, NULL, (char*)0, NULL );
+  sc = execle( NULL, NULL, (char *) 0, NULL );
   check_enosys( sc );
 
-  sc = execlp( NULL, NULL, (char*)0 );
+  sc = execlp( NULL, NULL, (char *) 0 );
   check_enosys( sc );
 
   sc = execv( NULL, NULL );

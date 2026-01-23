@@ -42,6 +42,6 @@ int test( void )
 {
   iconv_t return_value;
 
-  return_value = iconv_open("WCHAR_T", "UTF-8");
-  return (return_value != (iconv_t)-1);
+  return_value = iconv_open( "WCHAR_T", "UTF-8" );
+  return ( return_value != (iconv_t) -1 );
 }

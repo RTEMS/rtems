@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 45 ;
+  double x = 45;
   double result;
 
-  result = tan(x) ;
+  result = tan( x );
 
-  return (result) ;
+  return ( result );
 }

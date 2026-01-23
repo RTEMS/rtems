@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 34.67 , result ;
-  int  exp = 3 ;
+  double x = 34.67, result;
+  int    exp = 3;
 
-  result = ldexp(x,exp) ;
+  result = ldexp( x, exp );
 
-  return (result);
+  return ( result );
 }

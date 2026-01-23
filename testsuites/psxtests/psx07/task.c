@@ -43,9 +43,7 @@
 #include <time.h>
 #include <sched.h>
 
-void *Task_1(
-  void *argument
-)
+void *Task_1( void *argument )
 {
   (void) argument;
 
@@ -55,19 +53,17 @@ void *Task_1(
   return NULL; /* just so the compiler thinks we returned something */
 }
 
-void *Task_2(
-  void *argument
-)
+void *Task_2( void *argument )
 {
   (void) argument;
 
-  int i = 0;
+  int    i = 0;
   time_t now, start;
 
   /*
    * sleep long enough to let the init thread join with us.
    */
-  usleep(10000);
+  usleep( 10000 );
 
   /*
    *  Change our priority so we are running at a logically higher
@@ -80,12 +76,12 @@ void *Task_2(
    *
    *  DO NOT BLOCK!!!
    */
-  start = time(&start);
-  while( i <= 10 ) {
+  start = time( &start );
+  while ( i <= 10 ) {
     do {
-      now = time(&now);
-    } while (start == now);
-    start = time(&start);
+      now = time( &now );
+    } while ( start == now );
+    start = time( &start );
 
     printf( "Time elapsed Task_2: %2d (seconds)\n", i++ );
   }

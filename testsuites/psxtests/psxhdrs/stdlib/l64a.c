@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	char *return_value;
-	long value = 1;
+  char *return_value;
+  long  value = 1;
 
-	return_value = l64a(value);
-	return (return_value != NULL);
+  return_value = l64a( value );
+  return ( return_value != NULL );
 }

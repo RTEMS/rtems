@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 2 , result ;
+  float x = 2, result;
 
-  result = tgammaf(x) ;
+  result = tgammaf( x );
 
-  return (result);
+  return ( result );
 }

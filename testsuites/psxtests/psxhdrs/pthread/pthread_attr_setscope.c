@@ -42,9 +42,9 @@ int test( void );
 
 int test( void )
 {
-  pthread_attr_t  attr;
-  int             contentionscope;
-  int             result;
+  pthread_attr_t attr;
+  int            contentionscope;
+  int            result;
 
   contentionscope = PTHREAD_SCOPE_SYSTEM;
   contentionscope = PTHREAD_SCOPE_PROCESS;

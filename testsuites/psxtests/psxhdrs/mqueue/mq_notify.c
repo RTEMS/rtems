@@ -39,21 +39,21 @@
 
 int test( void );
 
-#define MQ_MAXMSG     1
-#define MQ_MSGSIZE    sizeof(int)
+#define MQ_MAXMSG  1
+#define MQ_MSGSIZE sizeof( int )
 
 int test( void )
 {
-  mqd_t mqdes;
-  struct mq_attr mqstat;
+  mqd_t           mqdes;
+  struct mq_attr  mqstat;
   struct sigevent sevp;
-  const char *q_name;
-  int result;
+  const char     *q_name;
+  int             result;
 
-  mqstat.mq_maxmsg  = MQ_MAXMSG;
+  mqstat.mq_maxmsg = MQ_MAXMSG;
   mqstat.mq_msgsize = MQ_MSGSIZE;
   sevp.sigev_notify = SIGEV_SIGNAL;
-  sevp.sigev_signo  = SIGUSR1;
+  sevp.sigev_signo = SIGUSR1;
   q_name = "queue";
 
   mqdes = mq_open( q_name, O_CREAT | O_RDWR, 0x777, &mqstat );

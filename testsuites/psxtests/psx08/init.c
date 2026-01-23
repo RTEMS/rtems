@@ -84,8 +84,8 @@ static void test_join_deadlock( void )
 }
 
 typedef struct {
-  pthread_t protected_join;
-  pthread_t deleter;
+  pthread_t         protected_join;
+  pthread_t         deleter;
   rtems_status_code delete_status;
 } delete_deadlock_context;
 
@@ -157,30 +157,28 @@ static void test_delete_deadlock( void )
   rtems_test_assert( ctx.delete_status == RTEMS_INCORRECT_STATE );
 }
 
-static void *a_thread_func(void *ignored)
+static void *a_thread_func( void *ignored )
 {
   (void) ignored;
 
-  pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+  pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, NULL );
 
   /* If the thread wasn't canceled in 10 seconds, time out */
-  sleep(10);
+  sleep( 10 );
 
-  puts("Thread couldn't be canceled (at cleanup time), timing out\n");
-  pthread_exit(0);
+  puts( "Thread couldn't be canceled (at cleanup time), timing out\n" );
+  pthread_exit( 0 );
   return NULL;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int    status;
-  void  *return_pointer;
+  int            status;
+  void          *return_pointer;
   pthread_attr_t new_attr;
-  pthread_t new_th;
+  pthread_t      new_th;
 
   TEST_BEGIN();
 
@@ -219,18 +217,20 @@ void *POSIX_Init(
   status = pthread_join( Task1_id, &return_pointer );
 
   puts( "Init: returned from pthread_join through return" );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
-  if ( return_pointer == &Task1_id )
+  if ( return_pointer == &Task1_id ) {
     puts( "Init: pthread_join returned correct pointer" );
-  else
+  } else {
     printf(
       "Init: pthread_join returned incorrect pointer (%p != %p)\n",
       return_pointer,
       &Task1_id
     );
+  }
 
   puts( "Init: creating two pthreads" );
   status = pthread_create( &Task2_id, NULL, Task_2, NULL );
@@ -244,39 +244,41 @@ void *POSIX_Init(
   /* assert is below comment */
 
   puts( "Init: returned from pthread_join through pthread_exit" );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
-  if ( return_pointer == &Task2_id )
+  if ( return_pointer == &Task2_id ) {
     puts( "Init: pthread_join returned correct pointer" );
-  else
+  } else {
     printf(
       "Init: pthread_join returned incorrect pointer (%p != %p)\n",
       return_pointer,
       &Task2_id
     );
+  }
 
   /* Initialize attribute */
-  status = pthread_attr_init(&new_attr);
-  rtems_test_assert(!status);
+  status = pthread_attr_init( &new_attr );
+  rtems_test_assert( !status );
 
   /* Set the attribute object to be detached */
-  status = pthread_attr_setdetachstate(&new_attr, PTHREAD_CREATE_DETACHED);
-  rtems_test_assert(!status);
+  status = pthread_attr_setdetachstate( &new_attr, PTHREAD_CREATE_DETACHED );
+  rtems_test_assert( !status );
 
   /* Create the thread */
-  status = pthread_create(&new_th, &new_attr, a_thread_func, NULL);
-  rtems_test_assert(!status);
+  status = pthread_create( &new_th, &new_attr, a_thread_func, NULL );
+  rtems_test_assert( !status );
 
   /* Detach the thread. */
-  status = pthread_detach(new_th);
+  status = pthread_detach( new_th );
 
   /* Cleanup and cancel the thread */
-  pthread_cancel(new_th);
+  pthread_cancel( new_th );
 
   /* Check return value of pthread_detach() */
-  rtems_test_assert(status == EINVAL);
+  rtems_test_assert( status == EINVAL );
 
   puts( "Init: exitting" );
   return NULL;

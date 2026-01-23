@@ -47,36 +47,29 @@
 const char rtems_test_name[] = "PSXIMFS 2";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  static const char mount_point [] = "dir01";
-  static const char fs_type [] = RTEMS_FILESYSTEM_TYPE_IMFS;
-  static const char slink_2_name [] = "node-slink-2";
-  static const uintptr_t mount_table_entry_size [] = {
-    sizeof( rtems_filesystem_mount_table_entry_t )
-      + sizeof( fs_type )
-      + sizeof( rtems_filesystem_global_location_t )
+  static const char      mount_point[] = "dir01";
+  static const char      fs_type[] = RTEMS_FILESYSTEM_TYPE_IMFS;
+  static const char      slink_2_name[] = "node-slink-2";
+  static const uintptr_t mount_table_entry_size[] = {
+    sizeof( rtems_filesystem_mount_table_entry_t ) + sizeof( fs_type ) +
+    sizeof( rtems_filesystem_global_location_t )
   };
-  static const uintptr_t slink_2_name_size [] = {
-    sizeof( slink_2_name )
-  };
-  static const uintptr_t some_blocks [] = {
-    MEMFILE_BYTES_PER_BLOCK * 10
-  };
-  static const char some_data[MEMFILE_BYTES_PER_BLOCK * 11];
+  static const uintptr_t slink_2_name_size[] = { sizeof( slink_2_name ) };
+  static const uintptr_t some_blocks[] = { MEMFILE_BYTES_PER_BLOCK * 10 };
+  static const char      some_data[ MEMFILE_BYTES_PER_BLOCK * 11 ];
 
-  int status = 0;
-  void *opaque;
-  char linkname_n[32] = {0};
-  char linkname_p[32] = {0};
-  int i;
-  int fd;
+  int         status = 0;
+  void       *opaque;
+  char        linkname_n[ 32 ] = { 0 };
+  char        linkname_p[ 32 ] = { 0 };
+  int         i;
+  int         fd;
   struct stat stat_buf;
 
   TEST_BEGIN();
@@ -97,13 +90,13 @@ rtems_task Init(
   status = link( "dir01", "dir01-link0" );
   rtems_test_assert( status == 0 );
 
-  for( i = 1 ; ; ++i ) {
-    sprintf( linkname_p, "dir01-link%04d", i-1 );
+  for ( i = 1;; ++i ) {
+    sprintf( linkname_p, "dir01-link%04d", i - 1 );
     sprintf( linkname_n, "dir01-link%04d", i );
     printf( "\nCreating link %s for %s\n", linkname_n, linkname_p );
     status = link( linkname_p, linkname_n );
-    if( status != 0 ) {
-      puts("Link creation failed" );
+    if ( status != 0 ) {
+      puts( "Link creation failed" );
       break;
     }
   }
@@ -113,7 +106,7 @@ rtems_task Init(
   rtems_test_assert( status == 0 );
 
   puts( "Creating link /node-link for /node" );
-  status = link( "/node" , "/node-link" );
+  status = link( "/node", "/node-link" );
   rtems_test_assert( status == 0 );
 
   puts( "Opening /node-link in WRONLY mode -- expect EACCES" );
@@ -122,10 +115,10 @@ rtems_task Init(
   rtems_test_assert( errno == EACCES );
 
   puts( "Creating a symlink /node-slink for /node" );
-  status = symlink( "/node" , "/node-slink" );
+  status = symlink( "/node", "/node-slink" );
   rtems_test_assert( status == 0 );
 
-  puts( "Opening /node-slink in WRONLY mode -- expect EACCES" );  
+  puts( "Opening /node-slink in WRONLY mode -- expect EACCES" );
   status = open( "/node-slink", O_WRONLY );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EACCES );
@@ -133,33 +126,35 @@ rtems_task Init(
   puts( "Allocate most of heap with a little bit left" );
   opaque = rtems_heap_greedy_allocate( some_blocks, 1 );
 
-  puts( "Create an empty file.");
+  puts( "Create an empty file." );
   status = mknod( "/foo", S_IFREG | S_IRWXU, 0LL );
   rtems_test_assert( status == 0 );
 
   puts( "Then increase it's size to more than remaining space" );
-  fd = open( "/foo", O_WRONLY | O_TRUNC);
+  fd = open( "/foo", O_WRONLY | O_TRUNC );
   rtems_test_assert( fd >= 0 );
-  status = write(fd, some_data, sizeof(some_data));
-  rtems_test_assert( status == -1);
+  status = write( fd, some_data, sizeof( some_data ) );
+  rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOSPC );
 
   puts( "Clean up again" );
-  status = close(fd);
-  rtems_test_assert( status == 0);
+  status = close( fd );
+  rtems_test_assert( status == 0 );
   status = remove( "/foo" );
-  rtems_test_assert( status == 0);
+  rtems_test_assert( status == 0 );
   rtems_heap_greedy_free( opaque );
 
   puts( "Allocate most of heap" );
   opaque = rtems_heap_greedy_allocate( mount_table_entry_size, 1 );
 
   printf( "Attempt to mount a fs at %s -- expect ENOMEM", mount_point );
-  status = mount( NULL,
-		  mount_point,
-		  fs_type,
-		  RTEMS_FILESYSTEM_READ_WRITE,
-		  NULL );
+  status = mount(
+    NULL,
+    mount_point,
+    fs_type,
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL
+  );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOMEM );
 
@@ -222,7 +217,7 @@ rtems_task Init(
   puts( "Creating a fifo -- OK" );
   status = mkfifo( "/fifo", S_IRWXU );
   rtems_test_assert( status == 0 );
-  
+
   puts( "chown /fifo to 10 -- OK" );
   status = chown( "/fifo", 10, 10 );
   rtems_test_assert( status == 0 );
@@ -240,7 +235,7 @@ rtems_task Init(
   rtems_test_assert( status == 0 );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -250,11 +245,11 @@ rtems_task Init(
 
 #define CONFIGURE_FILESYSTEM_IMFS
 
-#define CONFIGURE_MAXIMUM_TASKS                  1
-#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK   MEMFILE_BYTES_PER_BLOCK
+#define CONFIGURE_MAXIMUM_TASKS                1
+#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK MEMFILE_BYTES_PER_BLOCK
 #define CONFIGURE_IMFS_ENABLE_MKFIFO
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS       RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

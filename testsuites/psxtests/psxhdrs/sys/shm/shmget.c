@@ -25,13 +25,13 @@
 
 #include <sys/shm.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  key_t a = 1;
+  key_t  a = 1;
   size_t b = 2;
-  int c = 3;
+  int    c = 3;
 
-  return shmget(a, b, c);
+  return shmget( a, b, c );
 }

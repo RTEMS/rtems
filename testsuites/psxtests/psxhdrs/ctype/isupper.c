@@ -35,12 +35,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int upper;
 
   upper = 0;
-  return (isupper(upper));
+  return ( isupper( upper ) );
 }

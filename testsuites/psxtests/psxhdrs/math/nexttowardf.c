@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  float x = 50 , result ;
-  long double y = 100 ;
+  float       x = 50, result;
+  long double y = 100;
 
-  result = nexttowardf( x , y ) ;
+  result = nexttowardf( x, y );
 
-  return (result);
+  return ( result );
 }
 #endif

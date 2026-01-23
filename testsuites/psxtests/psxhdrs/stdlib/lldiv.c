@@ -39,8 +39,8 @@ int test( void );
 
 int test( void )
 {
-	lldiv_t return_value;
+  lldiv_t return_value;
 
-	return_value = lldiv(3, 4);
-	return (return_value.quot == 0 && return_value.rem == 3);
+  return_value = lldiv( 3, 4 );
+  return ( return_value.quot == 0 && return_value.rem == 3 );
 }

@@ -37,15 +37,15 @@
  #include <sys/socket.h>
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct servent *serv;
+int test( void )
+{
+  struct servent *serv;
 
-   serv = getservent();
-   setservent( 1 );
-   endservent();
+  serv = getservent();
+  setservent( 1 );
+  endservent();
 
-   return ( serv != (void *)0 );
- }
+  return ( serv != (void *) 0 );
+}

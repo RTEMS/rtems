@@ -25,9 +25,9 @@
 
 #include <sys/shm.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-   return shmdt('\0');
+  return shmdt( '\0' );
 }

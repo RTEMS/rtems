@@ -41,9 +41,9 @@ int test( void );
 int test( void )
 {
   ssize_t return_value;
-  char s[5];
-  char *format = "1234";
+  char    s[ 5 ];
+  char   *format = "1234";
 
-  return_value = strfmon(s, 5, format);
-  return (return_value != -1);
+  return_value = strfmon( s, 5, format );
+  return ( return_value != -1 );
 }

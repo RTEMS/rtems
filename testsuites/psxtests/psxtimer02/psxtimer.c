@@ -49,16 +49,14 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include "tmacros.h"
-#include <signal.h>   /* signal facilities */
-#include <unistd.h>   /* sleep facilities */
-#include <time.h>     /* time facilities */
-#include <stdio.h>    /* console facilities */
+#include <signal.h> /* signal facilities */
+#include <unistd.h> /* sleep facilities */
+#include <time.h>   /* time facilities */
+#include <stdio.h>  /* console facilities */
 
 const char rtems_test_name[] = "PSXTIMER 2";
 
-void *POSIX_Init (
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
@@ -165,7 +163,9 @@ void *POSIX_Init (
   clock_gettime( CLOCK_MONOTONIC, &now );
   itimer.it_value = now;
   itimer.it_value.tv_sec = itimer.it_value.tv_sec - 1;
-  puts( "timer_settime (monotonic) - bad itimer value - previous time - EINVAL" );
+  puts(
+    "timer_settime (monotonic) - bad itimer value - previous time - EINVAL"
+  );
   status = timer_settime( timer, TIMER_ABSTIME, &itimer, NULL );
   fatal_posix_service_status_errno( status, EINVAL, "bad itimer value #3" );
 
@@ -177,5 +177,5 @@ void *POSIX_Init (
   fatal_posix_service_status_errno( status, EINVAL, "bad id" );
 
   TEST_END();
-  rtems_test_exit (0);
+  rtems_test_exit( 0 );
 }

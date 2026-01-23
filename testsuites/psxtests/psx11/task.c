@@ -56,24 +56,22 @@ void diff_timespec(
   struct timespec *result
 )
 {
-   const long nsecs_per_sec = 1000000000;
+  const long nsecs_per_sec = 1000000000;
 
-   result->tv_sec = stop->tv_sec - start->tv_sec;
-   if ( stop->tv_nsec < start->tv_nsec ) {
-      result->tv_nsec = nsecs_per_sec - start->tv_nsec + stop->tv_nsec;
-      result->tv_sec--;
-   } else
-      result->tv_nsec = stop->tv_nsec - start->tv_nsec;
-
+  result->tv_sec = stop->tv_sec - start->tv_sec;
+  if ( stop->tv_nsec < start->tv_nsec ) {
+    result->tv_nsec = nsecs_per_sec - start->tv_nsec + stop->tv_nsec;
+    result->tv_sec--;
+  } else {
+    result->tv_nsec = stop->tv_nsec - start->tv_nsec;
+  }
 }
 
-void *Task_1(
-  void *argument
-)
+void *Task_1( void *argument )
 {
   (void) argument;
 
-  int status;
+  int             status;
   struct timespec start;
   struct timespec current;
   struct timespec difference;
@@ -89,29 +87,29 @@ void *Task_1(
 
   delay.tv_sec *= 2;
   delay.tv_nsec *= 2;
-  if ( delay.tv_nsec >= 1000000000 ) {   /* handle overflow/carry */
+  if ( delay.tv_nsec >= 1000000000 ) { /* handle overflow/carry */
     delay.tv_nsec -= 1000000000;
     delay.tv_sec++;
   }
 
-
   puts( "Task_1: killing time" );
-  for ( ; ; ) {
-
+  for ( ;; ) {
     status = clock_gettime( CLOCK_REALTIME, &current );
     rtems_test_assert( !status );
 
     diff_timespec( &start, &current, &difference );
 
-    if ( difference.tv_sec < delay.tv_sec )
+    if ( difference.tv_sec < delay.tv_sec ) {
       continue;
+    }
 
-    if ( difference.tv_sec > delay.tv_sec )
+    if ( difference.tv_sec > delay.tv_sec ) {
       break;
+    }
 
-    if ( difference.tv_nsec > delay.tv_nsec )
+    if ( difference.tv_nsec > delay.tv_nsec ) {
       break;
-
+    }
   }
 
   puts( "Task_1: exitting" );

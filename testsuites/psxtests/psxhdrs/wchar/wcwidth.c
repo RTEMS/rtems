@@ -38,12 +38,12 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   wchar_t wc;
 
   wc = 0;
-  return wcwidth(wc);
+  return wcwidth( wc );
 }

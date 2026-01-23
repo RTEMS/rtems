@@ -47,7 +47,7 @@ const char rtems_test_name[] = "PSXGETRUSAGE 1";
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -56,9 +56,7 @@ const char rtems_test_name[] = "PSXGETRUSAGE 1";
 
 #include <rtems/confdefs.h>
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -102,12 +100,14 @@ rtems_task Init(
   rtems_test_assert( sc == 0 );
 
   /* System is the 0 and user is the task time */
-  rtems_test_assert( usage.ru_utime.tv_sec != 0 ||
-		     usage.ru_utime.tv_usec != 0 );
-  rtems_test_assert( usage.ru_stime.tv_sec == 0 &&
-		     usage.ru_stime.tv_usec == 0 );
+  rtems_test_assert(
+    usage.ru_utime.tv_sec != 0 || usage.ru_utime.tv_usec != 0
+  );
+  rtems_test_assert(
+    usage.ru_stime.tv_sec == 0 && usage.ru_stime.tv_usec == 0
+  );
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }

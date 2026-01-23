@@ -45,9 +45,9 @@ rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
-  pthread_key_t    key1, key2;
-  int              sc, *value;
-  int Data_array[2] = {1, 2};
+  pthread_key_t key1, key2;
+  int           sc, *value;
+  int           Data_array[ 2 ] = { 1, 2 };
 
   TEST_BEGIN();
 
@@ -60,28 +60,28 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_test_assert( !sc );
 
   puts( "Init - key1 pthread_setspecific - OK" );
-  sc = pthread_setspecific( key1, &Data_array[0] );
+  sc = pthread_setspecific( key1, &Data_array[ 0 ] );
   rtems_test_assert( !sc );
 
   puts( "Init - key2 pthread_setspecific - OK" );
-  sc = pthread_setspecific( key2, &Data_array[1] );
+  sc = pthread_setspecific( key2, &Data_array[ 1 ] );
   rtems_test_assert( !sc );
 
   puts( "Init - key1 pthread_getspecific - OK" );
   value = pthread_getspecific( key1 );
-  rtems_test_assert( *value == Data_array[0] );
+  rtems_test_assert( *value == Data_array[ 0 ] );
 
   puts( "Init - key2 pthread_getspecific - OK" );
   value = pthread_getspecific( key2 );
-  rtems_test_assert( *value == Data_array[1] );
+  rtems_test_assert( *value == Data_array[ 1 ] );
 
   puts( "Init - key1 pthread_setspecific - OK" );
-  sc = pthread_setspecific( key1, &Data_array[1] );
+  sc = pthread_setspecific( key1, &Data_array[ 1 ] );
   rtems_test_assert( !sc );
 
   puts( "Init - key1 pthread_getspecific - OK" );
   value = pthread_getspecific( key1 );
-  rtems_test_assert( *value == Data_array[1] );
+  rtems_test_assert( *value == Data_array[ 1 ] );
 
   puts( "Init - pthread key1 delete - OK" );
   sc = pthread_key_delete( key1 );
@@ -92,7 +92,7 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_test_assert( sc == 0 );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -102,11 +102,10 @@ rtems_task Init( rtems_task_argument ignored )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS          1
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     2
+#define CONFIGURE_MAXIMUM_TASKS      1
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 2
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

@@ -36,18 +36,18 @@
 
 #include <stdlib.h>
 
-int test( void );
+int  test( void );
 void func( void );
 
 int test( void )
 {
-	int return_value;
+  int return_value;
 
-	return_value = atexit(func);
-	return (return_value == 0);
+  return_value = atexit( func );
+  return ( return_value == 0 );
 }
 
 void func( void )
 {
-	return;
+  return;
 }

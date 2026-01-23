@@ -40,13 +40,11 @@
 
 const char rtems_test_name[] = "PSXSYSCONF";
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  long  sc;
+  long sc;
 
   TEST_BEGIN();
 
@@ -55,7 +53,7 @@ void *POSIX_Init(
   fatal_posix_service_status_errno( sc, EINVAL, "bad conf name" );
 
 #if UNUSED
-/* FIXME: This test doesn't make sense.
+  /* FIXME: This test doesn't make sense.
  * On targets with sizeof(int) < sizeof(long), compilation will fail,
  * On targets with sizeof(int) == sizeof(long) the call is valid.
  */
@@ -66,42 +64,48 @@ void *POSIX_Init(
 
   sc = sysconf( _SC_CLK_TCK );
   printf( "sysconf - _SC_CLK_TCK=%ld\n", sc );
-  if ( sc == -1 )
-   rtems_test_exit(0);
+  if ( sc == -1 ) {
+    rtems_test_exit( 0 );
+  }
 
   sc = sysconf( _SC_OPEN_MAX );
   printf( "sysconf - _SC_OPEN_MAX=%ld\n", sc );
-  if ( sc == -1 )
-   rtems_test_exit(0);
+  if ( sc == -1 ) {
+    rtems_test_exit( 0 );
+  }
 
   sc = sysconf( _SC_GETPW_R_SIZE_MAX );
   printf( "sysconf - _SC_GETPW_R_SIZE_MAX=%ld\n", sc );
-  if ( sc == -1 )
-   rtems_test_exit(0);
+  if ( sc == -1 ) {
+    rtems_test_exit( 0 );
+  }
 
   sc = sysconf( _SC_PAGESIZE );
   printf( "sysconf - _SC_PAGESIZE=%ld\n", sc );
-  if ( sc == -1 )
-   rtems_test_exit(0);
+  if ( sc == -1 ) {
+    rtems_test_exit( 0 );
+  }
 
   sc = getpagesize();
   printf( "getpagesize = %ld\n", sc );
-  if ( sc == -1 )
-   rtems_test_exit(0);
+  if ( sc == -1 ) {
+    rtems_test_exit( 0 );
+  }
 
   sc = sysconf( INT_MAX );
-  printf( "sysconf - bad parameter = %ld errno=%s\n", sc, strerror(errno) );
-  if ( (sc != -1) || (errno != EINVAL) )
-   rtems_test_exit(0);
+  printf( "sysconf - bad parameter = %ld errno=%s\n", sc, strerror( errno ) );
+  if ( ( sc != -1 ) || ( errno != EINVAL ) ) {
+    rtems_test_exit( 0 );
+  }
 
   rtems_test_assert(
-    sysconf( _SC_NPROCESSORS_CONF )
-      == (long) rtems_configuration_get_maximum_processors()
+    sysconf( _SC_NPROCESSORS_CONF ) ==
+    (long) rtems_configuration_get_maximum_processors()
   );
 
   rtems_test_assert(
-    sysconf( _SC_NPROCESSORS_ONLN )
-      == (long) rtems_scheduler_get_processor_maximum()
+    sysconf( _SC_NPROCESSORS_ONLN ) ==
+    (long) rtems_scheduler_get_processor_maximum()
   );
 
   TEST_END();

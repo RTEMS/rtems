@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-  char *name = "test";
-  int oflag = 0;
+  char  *name = "test";
+  int    oflag = 0;
   mode_t mode = 0;
 
   return shm_open( name, oflag, mode );

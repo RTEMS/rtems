@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 68.567 ;
-  double result ;
+  double x = 68.567;
+  double result;
 
-  result = floor(x) ;
+  result = floor( x );
 
-  return (result);
+  return ( result );
 }

@@ -41,12 +41,12 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int fildes = 1;
-	char *path = "/";
-	struct stat buf;
-	int flag = AT_SYMLINK_NOFOLLOW;
+  int         return_value;
+  int         fildes = 1;
+  char       *path = "/";
+  struct stat buf;
+  int         flag = AT_SYMLINK_NOFOLLOW;
 
-	return_value = fstatat(fildes, path, &buf, flag);
-	return (return_value != -1);
+  return_value = fstatat( fildes, path, &buf, flag );
+  return ( return_value != -1 );
 }

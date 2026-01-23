@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  int fd = 12;
+  int   fd = 12;
   char *format = "Hello World";
-  int result;
+  int   result;
 
   result = dprintf( fd, format );
 

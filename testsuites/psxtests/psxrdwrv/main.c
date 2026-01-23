@@ -26,7 +26,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -35,12 +34,10 @@
 #include <pmacros.h>
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument ignored);
-void test_main(void);
+rtems_task Init( rtems_task_argument ignored );
+void       test_main( void );
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 

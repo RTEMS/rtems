@@ -39,7 +39,7 @@
 const char rtems_test_name[] = "PSX 15";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
 /*
  * This test case shows that post switch extension handlers must cope with
@@ -61,25 +61,25 @@ static void thread_delete_hook(
 
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  if (deleted->Object.id == task_0) {
+  if ( deleted->Object.id == task_0 ) {
     rtems_task_priority old = 0;
 
-    sc = rtems_task_set_priority(task_1, 2, &old);
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    sc = rtems_task_set_priority( task_1, 2, &old );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   }
 }
 
-static void suicide_task(rtems_task_argument arg)
+static void suicide_task( rtems_task_argument arg )
 {
   int me = (int) arg;
 
-  printf("suicide task %d\n", me);
+  printf( "suicide task %d\n", me );
 
   rtems_task_exit();
-  rtems_test_assert(false);
+  rtems_test_assert( false );
 }
 
-void Init(rtems_task_argument arg)
+void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -88,35 +88,35 @@ void Init(rtems_task_argument arg)
   TEST_BEGIN();
 
   sc = rtems_task_create(
-    rtems_build_name('T', 'S', 'K', '1'),
+    rtems_build_name( 'T', 'S', 'K', '1' ),
     5,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &task_1
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_start(task_1, suicide_task, 1);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_start( task_1, suicide_task, 1 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   sc = rtems_task_create(
-    rtems_build_name('T', 'S', 'K', '0'),
+    rtems_build_name( 'T', 'S', 'K', '0' ),
     3,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &task_0
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_start(task_0, suicide_task, 0);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_start( task_0, suicide_task, 0 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   TEST_END();
 
-  rtems_test_exit(0);
-  rtems_test_assert(false);
+  rtems_test_exit( 0 );
+  rtems_test_assert( false );
 }
 
 #define CONFIGURE_INIT
@@ -124,16 +124,15 @@ void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS 3
+#define CONFIGURE_MAXIMUM_TASKS           3
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .thread_delete = thread_delete_hook }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .thread_delete = thread_delete_hook }, RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_PREEMPT
-#define CONFIGURE_INIT_TASK_PRIORITY 4
+#define CONFIGURE_INIT_TASK_PRIORITY      4
 
 #include <rtems/confdefs.h>

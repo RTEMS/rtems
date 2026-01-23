@@ -45,5 +45,5 @@ int test( void )
   filename = dlopen( "mylib.so", RTLD_LOCAL | RTLD_LAZY );
   (void) filename;
 
-  return (filename != NULL);
+  return ( filename != NULL );
 }

@@ -42,12 +42,12 @@ int test( void );
 
 int test( void )
 {
-    long double x = 76 ;
-    long double y = -1 ;
-    long double result;
+  long double x = 76;
+  long double y = -1;
+  long double result;
 
-    result = copysign( x , y ) ;
+  result = copysign( x, y );
 
-    return (result) ;
+  return ( result );
 }
 #endif

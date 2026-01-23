@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-  double x = 6887900 ;
-  double y = 9897 ;
-  double result ;
+  double x = 6887900;
+  double y = 9897;
+  double result;
 
-  result = fdim(x,y) ;
+  result = fdim( x, y );
 
-  return (result);
+  return ( result );
 }

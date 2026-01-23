@@ -39,13 +39,11 @@
 const char rtems_test_name[] = "PSXALARM 1";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
 volatile int Signal_count;
 
-static void Signal_handler(
-  int signo
-)
+static void Signal_handler( int signo )
 {
   Signal_count++;
   printf(
@@ -56,17 +54,15 @@ static void Signal_handler(
   );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  unsigned int      remaining;
-  int               sc;
-  struct sigaction  act;
-  sigset_t          mask;
-  struct timeval    delta;
+  unsigned int     remaining;
+  int              sc;
+  struct sigaction act;
+  sigset_t         mask;
+  struct timeval   delta;
 
   TEST_BEGIN();
 
@@ -76,7 +72,7 @@ void *POSIX_Init(
   rtems_test_assert( !sc );
 
   act.sa_handler = Signal_handler;
-  act.sa_flags   = 0;
+  act.sa_flags = 0;
 
   sigaction( SIGALRM, &act, NULL );
 
@@ -131,12 +127,10 @@ void *POSIX_Init(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS        1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
-#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
-        (RTEMS_MINIMUM_STACK_SIZE * 4)
+#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE ( RTEMS_MINIMUM_STACK_SIZE * 4 )
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
-

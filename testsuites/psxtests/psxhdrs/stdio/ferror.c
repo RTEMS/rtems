@@ -41,7 +41,7 @@ int test( void );
 int test( void )
 {
   FILE *stream;
-  int result;
+  int   result;
 
   stream = fopen( "mylib/myfile", "w" );
   result = ferror( stream );

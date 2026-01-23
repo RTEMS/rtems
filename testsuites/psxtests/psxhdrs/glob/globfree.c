@@ -25,13 +25,13 @@
 
 #include <glob.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   glob_t a;
 
-  globfree(&a);
+  globfree( &a );
 
   return 0;
 }

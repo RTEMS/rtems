@@ -40,7 +40,7 @@ int test( void );
 
 int test( void )
 {
-  int result = signbit(-4.0);
+  int result = signbit( -4.0 );
 
-  return (result);
+  return ( result );
 }

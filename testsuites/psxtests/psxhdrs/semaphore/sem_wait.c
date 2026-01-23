@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  sem_t sem;
-  int pshared;
+  sem_t        sem;
+  int          pshared;
   unsigned int value;
-  int result;
+  int          result;
 
   pshared = 0;
   value = 1;

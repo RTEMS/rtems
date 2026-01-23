@@ -49,5 +49,5 @@ int test( void )
 
   rc = pthread_setconcurrency( level );
 
-  return (rc == 0);
+  return ( rc == 0 );
 }

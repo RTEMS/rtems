@@ -41,7 +41,7 @@ int test( void );
 int test( void )
 {
   FILE *stream;
-  int result;
+  int   result;
 
   stream = fopen( "myfile.dat", "w" );
   result = fseeko( stream, 0LL, SEEK_SET );

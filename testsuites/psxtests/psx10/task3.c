@@ -40,13 +40,11 @@
 
 #include "system.h"
 
-void *Task_3(
-  void *argument
-)
+void *Task_3( void *argument )
 {
   (void) argument;
 
-  int  status;
+  int status;
 
   Task_id = pthread_self();
   printf( "Task_3: ID is 0x%08" PRIxpthread_t "\n", Task_id );
@@ -56,10 +54,11 @@ void *Task_3(
 
   puts( "Task_3: pthread_cond_wait" );
   status = pthread_cond_wait( &Cond1_id, &Mutex_id );
-  if ( status != EINVAL )
+  if ( status != EINVAL ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EINVAL );
-  puts( "Task_3: pthread_cond_wait - EINVAL (mutex not locked after signal)");
+  puts( "Task_3: pthread_cond_wait - EINVAL (mutex not locked after signal)" );
 
   puts( "Task_3: task exit" );
   pthread_exit( NULL );

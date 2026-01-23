@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-	char *return_value;
+  char *return_value;
 
-	return_value = mkdtemp("directoryxxxxxx");
-	return (return_value != NULL);
+  return_value = mkdtemp( "directoryxxxxxx" );
+  return ( return_value != NULL );
 }

@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 34.3456 ;
-  long long int result ;
+  float         x = 34.3456;
+  long long int result;
 
-  result = llrintf(x) ;
+  result = llrintf( x );
 
-  return (result);
+  return ( result );
 }

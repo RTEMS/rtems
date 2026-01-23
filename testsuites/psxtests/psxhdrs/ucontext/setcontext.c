@@ -38,21 +38,21 @@
 
 #include <ucontext.h>
 
-int return_value = 0;
-ucontext_t context;
+int         return_value = 0;
+ucontext_t  context;
 ucontext_t *ucp = &context;
 
-int test( void );
+int  test( void );
 void func( void );
 
 int test( void )
 {
-  getcontext(ucp);
-  return (return_value != -1);
+  getcontext( ucp );
+  return ( return_value != -1 );
 }
 
 void func( void )
 {
-    setcontext(ucp);
-    return_value = 1;
+  setcontext( ucp );
+  return_value = 1;
 }

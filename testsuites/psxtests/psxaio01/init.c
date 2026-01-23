@@ -43,12 +43,12 @@
 
 const char rtems_test_name[] = "PSXAIO 1";
 
-#define BUFSIZE 512
+#define BUFSIZE  512
 #define WRONG_FD 404
 
 /* forward declarations to avoid warnings */
 static struct aiocb *create_aiocb( int fd );
-static void free_aiocb( struct aiocb *aiocbp );
+static void          free_aiocb( struct aiocb *aiocbp );
 
 static struct aiocb *create_aiocb( int fd )
 {
@@ -67,7 +67,7 @@ static struct aiocb *create_aiocb( int fd )
 
 static void free_aiocb( struct aiocb *aiocbp )
 {
-  free( (void*) aiocbp->aio_buf );
+  free( (void *) aiocbp->aio_buf );
   free( aiocbp );
 }
 
@@ -75,16 +75,20 @@ void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int result, fd;
+  int           result, fd;
   struct aiocb *aiocbp;
-  int status;
+  int           status;
 
   rtems_aio_init();
 
   status = mkdir( "/tmp", S_IRWXU );
   rtems_test_assert( !status );
-  
-  fd = open( "/tmp/aio_fildes", O_RDWR|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO );
+
+  fd = open(
+    "/tmp/aio_fildes",
+    O_RDWR | O_CREAT,
+    S_IRWXU | S_IRWXG | S_IRWXO
+  );
   rtems_test_assert( fd != -1 );
 
   TEST_BEGIN();
@@ -127,7 +131,7 @@ void *POSIX_Init( void *argument )
   aiocbp = create_aiocb( WRONG_FD );
 
   /* Bad file descriptor */
-  
+
   result = aio_write( aiocbp );
   status = errno;
   rtems_test_assert( result == -1 );
@@ -141,19 +145,19 @@ void *POSIX_Init( void *argument )
   rtems_test_assert( status == EBADF );
 
   /* Bad file descriptor */
-  
+
   result = aio_cancel( WRONG_FD, NULL );
   status = errno;
   rtems_test_assert( result == -1 );
   rtems_test_assert( status == EBADF );
- 
+
   /* Bad file descriptor */
 
   result = aio_fsync( O_SYNC, aiocbp );
   status = errno;
   rtems_test_assert( result == -1 );
   rtems_test_assert( status == EBADF );
-  
+
   free_aiocb( aiocbp );
 
   aiocbp = create_aiocb( fd );
@@ -207,7 +211,7 @@ void *POSIX_Init( void *argument )
   rtems_test_assert( result == -1 );
   rtems_test_assert( status == EINVAL );
   aiocbp->aio_fildes = fd;
-  
+
   /* Bad sigevent */
 
   aiocbp->aio_sigevent.sigev_notify = SIGEV_SIGNAL;

@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	unsigned short int x16v[3];
+  int                return_value;
+  unsigned short int x16v[ 3 ];
 
-	return_value = erand48(x16v);
-	return return_value;
+  return_value = erand48( x16v );
+  return return_value;
 }

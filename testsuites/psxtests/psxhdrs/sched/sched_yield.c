@@ -45,7 +45,7 @@ int test( void );
 
 int test( void )
 {
-  int    result;
+  int result;
 
   result = sched_yield();
 

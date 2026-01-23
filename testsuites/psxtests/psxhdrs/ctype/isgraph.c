@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int graph;
 
   graph = 0;
-  return (isgraph(graph));
+  return ( isgraph( graph ) );
 }

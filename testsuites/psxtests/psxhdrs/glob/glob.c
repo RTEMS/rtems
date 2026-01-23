@@ -25,9 +25,9 @@
 
 #include <glob.h>
 
-int test(void);
+int test( void );
 
-static int errfunc (const char *epath, int eerrno)
+static int errfunc( const char *epath, int eerrno )
 {
   (void) epath;
   (void) eerrno;
@@ -35,11 +35,11 @@ static int errfunc (const char *epath, int eerrno)
   return 0;
 }
 
-int test(void)
+int test( void )
 {
   const char *a = "string";
-  int b = 0;
-  glob_t e;
+  int         b = 0;
+  glob_t      e;
 
-  return glob(a, b, errfunc, &e);
+  return glob( a, b, errfunc, &e );
 }

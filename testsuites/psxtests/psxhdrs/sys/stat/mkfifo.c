@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	char *path = "/tmp/file";
-	mode_t mode = S_IRUSR;
+  int    return_value;
+  char  *path = "/tmp/file";
+  mode_t mode = S_IRUSR;
 
-	return_value = mkfifo(path, mode);
-	return (return_value != -1);
+  return_value = mkfifo( path, mode );
+  return ( return_value != -1 );
 }

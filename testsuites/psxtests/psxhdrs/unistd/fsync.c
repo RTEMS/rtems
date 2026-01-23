@@ -41,8 +41,8 @@ int test( void );
 
 int test( void )
 {
-  int    fd;
-  int    result;
+  int fd;
+  int result;
 
   fd = 4;
   result = fsync( fd );

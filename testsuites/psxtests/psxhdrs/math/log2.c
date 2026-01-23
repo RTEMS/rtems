@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  double x = 4 ,  result ;
+  double x = 4, result;
 
-  result = log2(x) ;
+  result = log2( x );
 
-  return (result);
+  return ( result );
 }

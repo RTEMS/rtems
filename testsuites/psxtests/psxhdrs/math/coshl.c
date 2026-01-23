@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 10 ;
+  long double x = 10;
   long double result;
 
-  result = coshl(x) ;
+  result = coshl( x );
 
-  return (result) ;
+  return ( result );
 }
 #endif

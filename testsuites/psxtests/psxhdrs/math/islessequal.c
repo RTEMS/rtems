@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 45 , y = 46 ;
-  int result ;
+  float x = 45, y = 46;
+  int   result;
 
-  result = islessequal(x,y);
+  result = islessequal( x, y );
 
-  return (result);
+  return ( result );
 }

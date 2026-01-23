@@ -45,68 +45,66 @@
 const char rtems_test_name[] = "PSXIMFS 3";
 #define BLOCK_SIZE 16
 
-typedef struct block{
-  struct block * next;
-  char data[BLOCK_SIZE - sizeof(struct block*)];
+typedef struct block {
+  struct block *next;
+  char          data[ BLOCK_SIZE - sizeof( struct block * ) ];
 } block;
 
 /* forward declarations to avoid warnings */
 
-void *allocator(void);
-void deallocator(void *);
-size_t free_space(void);
-void init_memory(void);
-void *empty_space(void);
-void fill_space(void *);
-void validate_data_blocks_count(void);
+void  *allocator( void );
+void   deallocator( void * );
+size_t free_space( void );
+void   init_memory( void );
+void  *empty_space( void );
+void   fill_space( void * );
+void   validate_data_blocks_count( void );
 
 #define MEMORY_SIZE 8000
 
-char g_memory[MEMORY_SIZE];
+char       g_memory[ MEMORY_SIZE ];
 static int g_alloc_blocks_count = 0;
-block *g_freelist = NULL;
+block     *g_freelist = NULL;
 
-void *allocator(void)
+void *allocator( void )
 {
-  if (NULL == g_freelist) {
+  if ( NULL == g_freelist ) {
     return NULL;
   }
   block *blk = g_freelist;
   g_freelist = blk->next;
-  memset(blk, 0, BLOCK_SIZE);
+  memset( blk, 0, BLOCK_SIZE );
   g_alloc_blocks_count++;
   return blk;
 }
 
-void deallocator(
-  void *memory
-)
+void deallocator( void *memory )
 {
-  block *blk = (block *)memory;
+  block *blk = (block *) memory;
 
-  if (NULL == blk) {
+  if ( NULL == blk ) {
     return;
   }
 
-  memset(blk, 0, BLOCK_SIZE);
+  memset( blk, 0, BLOCK_SIZE );
   blk->next = g_freelist;
   g_freelist = blk;
   g_alloc_blocks_count--;
 }
 
-size_t free_space(void)
+size_t free_space( void )
 {
   return MEMORY_SIZE - g_alloc_blocks_count * BLOCK_SIZE;
 }
 
-void init_memory(void)
+void init_memory( void )
 {
-  rtems_test_assert( sizeof(block) == BLOCK_SIZE );
+  rtems_test_assert( sizeof( block ) == BLOCK_SIZE );
 
-  block *first = (block *)g_memory;
-  const char *last = g_memory + sizeof(g_memory);
+  block      *first = (block *) g_memory;
+  const char *last = g_memory + sizeof( g_memory );
 
-  while ( first + 1 <= (block *)last ) {
+  while ( first + 1 <= (block *) last ) {
     first->next = g_freelist;
     g_freelist = first;
     first += 1;
@@ -114,23 +112,25 @@ void init_memory(void)
   g_alloc_blocks_count = 0;
 }
 
-void *empty_space(void)
+void *empty_space( void )
 {
   block *memory = g_freelist;
   g_freelist = NULL;
   return memory;
 }
 
-void fill_space(void *memory)
+void fill_space( void *memory )
 {
   g_freelist = memory;
 }
 
-void validate_data_blocks_count(void)
+void validate_data_blocks_count( void )
 {
-  int indirect_block_count = 1 + BLOCK_SIZE / sizeof(void *);
-  int double_indirect_block_count = 1 + (BLOCK_SIZE / sizeof(void *)) * indirect_block_count;
-  int triple_indirect_block_count = 1 + (BLOCK_SIZE / sizeof(void *)) * double_indirect_block_count;
+  int indirect_block_count = 1 + BLOCK_SIZE / sizeof( void * );
+  int double_indirect_block_count = 1 + ( BLOCK_SIZE / sizeof( void * ) ) *
+                                          indirect_block_count;
+  int triple_indirect_block_count = 1 + ( BLOCK_SIZE / sizeof( void * ) ) *
+                                          double_indirect_block_count;
   int expected_data_blocks_counts = indirect_block_count;
   expected_data_blocks_counts += double_indirect_block_count;
   expected_data_blocks_counts += triple_indirect_block_count;
@@ -142,11 +142,9 @@ void validate_data_blocks_count(void)
 
 #define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK BLOCK_SIZE
 #define CONFIGURE_IMFS_MEMFILE_OPS \
-  { \
-    .allocate_block = allocator, \
-    .free_block = deallocator, \
-    .get_free_space = free_space \
-  }
+  { .allocate_block = allocator,   \
+    .free_block = deallocator,     \
+    .get_free_space = free_space }
 #define CONFIGURE_INIT
 
 #include "../psximfs/system.h"

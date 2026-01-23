@@ -42,12 +42,12 @@ int test( void );
 
 int test( void )
 {
-  pthread_key_t    key;
-  void            *value;
+  pthread_key_t key;
+  void         *value;
 
   key = 0;
 
   value = pthread_getspecific( key );
 
-  return (value != 0);
+  return ( value != 0 );
 }

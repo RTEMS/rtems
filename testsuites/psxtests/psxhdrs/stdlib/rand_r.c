@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	unsigned seed[] = {12};
+  int      return_value;
+  unsigned seed[] = { 12 };
 
-	return_value = rand_r(seed);
-	return return_value;
+  return_value = rand_r( seed );
+  return return_value;
 }

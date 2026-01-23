@@ -42,7 +42,7 @@ int test( void )
 {
   cnd_t cv;
   mtx_t mtx;
-  int result;
+  int   result;
 
   cnd_init( &cv );
   mtx_init( &mtx, mtx_plain );

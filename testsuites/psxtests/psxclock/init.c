@@ -42,12 +42,13 @@
 
 const char rtems_test_name[] = "PSXCLOCK";
 
-static void check_enosys(int status)
+static void check_enosys( int status )
 {
-  if ( (status == -1) && (errno == ENOSYS) )
+  if ( ( status == -1 ) && ( errno == ENOSYS ) ) {
     return;
+  }
   puts( "ERROR -- did not return ENOSYS as expected" );
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 static void wait_ticks( rtems_interval ticks )
@@ -60,21 +61,26 @@ static void wait_ticks( rtems_interval ticks )
 
 struct clock_context;
 typedef struct clock_context clock_context;
-typedef void (*clock_sleeper)(clock_context* ctx);
+typedef void ( *clock_sleeper )( clock_context *ctx );
 struct clock_context {
-  const char* name;
-  int instance;
-  rtems_id tid;
-  int counter;
-  int result;
-  rtems_interval ticks;
+  const char     *name;
+  int             instance;
+  rtems_id        tid;
+  int             counter;
+  int             result;
+  rtems_interval  ticks;
   struct timespec tspec;
-  clock_sleeper sleeper;
+  clock_sleeper   sleeper;
 };
 
 static void clock_context_init(
-  clock_context* ctx, const char* name, int instance,
-  time_t secs, long nsecs, clock_sleeper sleeper)
+  clock_context *ctx,
+  const char    *name,
+  int            instance,
+  time_t         secs,
+  long           nsecs,
+  clock_sleeper  sleeper
+)
 {
   memset( ctx, 0, sizeof( *ctx ) );
   ctx->name = name;
@@ -84,45 +90,52 @@ static void clock_context_init(
   ctx->sleeper = sleeper;
 }
 
-static void test_nanosleep( clock_context* ctx )
+static void test_nanosleep( clock_context *ctx )
 {
-  if ( nanosleep ( &ctx->tspec, NULL ) < 0 )
-  {
+  if ( nanosleep( &ctx->tspec, NULL ) < 0 ) {
     ctx->result = errno;
   }
 }
 
-static void test_clock_nanosleep_realtime( clock_context* ctx )
+static void test_clock_nanosleep_realtime( clock_context *ctx )
 {
-  if ( clock_nanosleep ( CLOCK_REALTIME, 0, &ctx->tspec, NULL ) < 0 )
-  {
+  if ( clock_nanosleep( CLOCK_REALTIME, 0, &ctx->tspec, NULL ) < 0 ) {
     ctx->result = errno;
   }
 }
 
-static void test_clock_nanosleep_monotonic( clock_context* ctx )
+static void test_clock_nanosleep_monotonic( clock_context *ctx )
 {
-  if ( clock_nanosleep ( CLOCK_MONOTONIC, 0, &ctx->tspec, NULL ) < 0 )
-  {
+  if ( clock_nanosleep( CLOCK_MONOTONIC, 0, &ctx->tspec, NULL ) < 0 ) {
     ctx->result = errno;
   }
 }
 
-static void test_clock_check( clock_context* ctx, const rtems_interval ticks_per_sec )
+static void test_clock_check(
+  clock_context       *ctx,
+  const rtems_interval ticks_per_sec
+)
 {
-  const long tick_period_nsec = 1000000000LLU / ticks_per_sec;
-  rtems_interval ticks =
-    (((ctx->tspec.tv_sec * 1000000000LLU) + ctx->tspec.tv_nsec) / tick_period_nsec) + 1;
+  const long     tick_period_nsec = 1000000000LLU / ticks_per_sec;
+  rtems_interval ticks = ( ( ( ctx->tspec.tv_sec * 1000000000LLU ) +
+                             ctx->tspec.tv_nsec ) /
+                           tick_period_nsec ) +
+                         1;
   rtems_test_assert( ctx->result == 0 );
   printf(
-    "clock: %s: sec=%" PRIdtime_t" nsec=%li ticks=%u expected-ticks=%u\n",
-    ctx->name, ctx->tspec.tv_sec, ctx->tspec.tv_nsec, ctx->ticks, ticks);
+    "clock: %s: sec=%" PRIdtime_t " nsec=%li ticks=%u expected-ticks=%u\n",
+    ctx->name,
+    ctx->tspec.tv_sec,
+    ctx->tspec.tv_nsec,
+    ctx->ticks,
+    ticks
+  );
   rtems_test_assert( ctx->ticks == ticks );
 }
 
 static void task_clock( rtems_task_argument arg )
 {
-  clock_context* ctx = (clock_context*) arg;
+  clock_context *ctx = (clock_context *) arg;
   rtems_interval start = rtems_clock_get_ticks_since_boot();
   rtems_interval end;
   ctx->result = 0;
@@ -133,7 +146,7 @@ static void task_clock( rtems_task_argument arg )
   rtems_task_delete( RTEMS_SELF );
 }
 
-static void test_start_task( clock_context* ctx )
+static void test_start_task( clock_context *ctx )
 {
   rtems_status_code sc;
   sc = rtems_task_create(
@@ -152,7 +165,7 @@ static void test_start_task( clock_context* ctx )
 static void test_settime_and_sleeping_step( int step )
 {
   const rtems_interval ticks_per_sec = rtems_clock_get_ticks_per_second();
-  struct timespec tv;
+  struct timespec      tv;
 
   clock_context ns_ctx;
   clock_context cnr_ctx;
@@ -160,15 +173,23 @@ static void test_settime_and_sleeping_step( int step )
 
   printf( "\nClock settime while sleeping: step=%i\n", step );
 
+  clock_context_init( &ns_ctx, "nanosleep", 0, 0, 500000000, test_nanosleep );
   clock_context_init(
-    &ns_ctx, "nanosleep", 0, 0, 500000000,
-    test_nanosleep );
+    &cnr_ctx,
+    "clock_nanosleep(CLOCK_REALTIME)",
+    0,
+    0,
+    500000000,
+    test_clock_nanosleep_realtime
+  );
   clock_context_init(
-    &cnr_ctx, "clock_nanosleep(CLOCK_REALTIME)", 0, 0, 500000000,
-    test_clock_nanosleep_realtime );
-  clock_context_init(
-    &cnm_ctx, "clock_nanosleep(CLOCK_MONOTONIC)", 0, 0, 500000000,
-    test_clock_nanosleep_monotonic );
+    &cnm_ctx,
+    "clock_nanosleep(CLOCK_MONOTONIC)",
+    0,
+    0,
+    500000000,
+    test_clock_nanosleep_monotonic
+  );
 
   /* Sat, 01 Jan 2000 00:00:00 GMT */
   tv.tv_sec = 946684800;
@@ -186,22 +207,19 @@ static void test_settime_and_sleeping_step( int step )
   /*
    * Jump forwards 1 second
    */
-  if ( step != 0 )
-  {
+  if ( step != 0 ) {
     tv.tv_sec = 946684800 + step;
     tv.tv_nsec = 0;
     rtems_test_assert( clock_settime( CLOCK_REALTIME, &tv ) == 0 );
   }
 
-  while (true)
-  {
+  while ( true ) {
     int counts = 0;
-    wait_ticks( ticks_per_sec /  4 );
+    wait_ticks( ticks_per_sec / 4 );
     counts += ns_ctx.counter;
     counts += cnr_ctx.counter;
     counts += cnm_ctx.counter;
-    if (counts == 3)
-    {
+    if ( counts == 3 ) {
       break;
     }
   }
@@ -219,7 +237,7 @@ static void test_settime_and_sleeping( void )
 }
 
 typedef struct {
-  int counter;
+  int             counter;
   struct timespec delta;
 } nanosleep_contex;
 
@@ -263,9 +281,7 @@ static void test_far_future_nanosleep( void )
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static rtems_task Init(
-  rtems_task_argument argument
-)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -292,13 +308,13 @@ static rtems_task Init(
 
   puts( "Init: clock_gettime - EINVAL (invalid clockid)" );
   errno = 0;
-  sc = clock_gettime( (clockid_t)-1, &tv );
+  sc = clock_gettime( (clockid_t) -1, &tv );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init: clock_settime - EINVAL (invalid clockid)" );
   errno = 0;
-  sc = clock_settime( (clockid_t)-1, &tv );
+  sc = clock_settime( (clockid_t) -1, &tv );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
@@ -358,7 +374,11 @@ static rtems_task Init(
 
   puts( "Init: clock_getres - SUCCESSFUL" );
   sc = clock_getres( CLOCK_REALTIME, &tv );
-  printf( "Init: resolution = sec (%" PRIdtime_t "), nsec (%ld)\n", tv.tv_sec, tv.tv_nsec );
+  printf(
+    "Init: resolution = sec (%" PRIdtime_t "), nsec (%ld)\n",
+    tv.tv_sec,
+    tv.tv_nsec
+  );
   rtems_test_assert( !sc );
 
   /* set the time of day, and print our buffer in multiple ways */
@@ -417,7 +437,7 @@ static rtems_task Init(
 
   /* check the time remaining */
 
-  printf( "Init: seconds remaining (%d)\n", (int)remaining );
+  printf( "Init: seconds remaining (%d)\n", (int) remaining );
   rtems_test_assert( !remaining );
 
   test_far_future_nanosleep();
@@ -426,7 +446,7 @@ static rtems_task Init(
 
   empty_line();
   puts( "Init: nanosleep - EINVAL (NULL time)" );
-  sc = nanosleep ( NULL, &tr );
+  sc = nanosleep( NULL, &tr );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
@@ -434,7 +454,7 @@ static rtems_task Init(
   tv.tv_nsec = TOD_NANOSECONDS_PER_SECOND * 2;
   puts( "Init: nanosleep - EINVAL (too many nanoseconds)" );
   errno = 0;
-  sc = nanosleep ( &tv, &tr );
+  sc = nanosleep( &tv, &tr );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
@@ -443,7 +463,7 @@ static rtems_task Init(
   tv.tv_nsec = 0;
   puts( "Init: nanosleep - negative seconds - EINVAL" );
   errno = 0;
-  sc = nanosleep ( &tv, &tr );
+  sc = nanosleep( &tv, &tr );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
@@ -452,7 +472,7 @@ static rtems_task Init(
   tv.tv_nsec = -1;
   puts( "Init: nanosleep - negative nanoseconds - EINVAL" );
   errno = 0;
-  sc = nanosleep ( &tv, &tr );
+  sc = nanosleep( &tv, &tr );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
@@ -460,7 +480,7 @@ static rtems_task Init(
   tv.tv_sec = 0;
   tv.tv_nsec = 1;
   puts( "Init: nanosleep - delay so small results in one tick" );
-  sc = nanosleep ( &tv, &tr );
+  sc = nanosleep( &tv, &tr );
   rtems_test_assert( !sc );
   rtems_test_assert( !tr.tv_sec );
   rtems_test_assert( !tr.tv_nsec );
@@ -471,13 +491,13 @@ static rtems_task Init(
   tv.tv_nsec = 0;
 
   puts( "Init: nanosleep - yield with remaining" );
-  sc = nanosleep ( &tv, &tr );
+  sc = nanosleep( &tv, &tr );
   rtems_test_assert( !sc );
   rtems_test_assert( !tr.tv_sec );
   rtems_test_assert( !tr.tv_nsec );
 
   puts( "Init: nanosleep - yield with NULL time remaining" );
-  sc = nanosleep ( &tv, NULL );
+  sc = nanosleep( &tv, NULL );
   rtems_test_assert( !sc );
   rtems_test_assert( !tr.tv_sec );
   rtems_test_assert( !tr.tv_nsec );
@@ -488,7 +508,7 @@ static rtems_task Init(
   tv.tv_nsec = 500000;
 
   puts( "Init: nanosleep - 1.05 seconds" );
-  sc = nanosleep ( &tv, &tr );
+  sc = nanosleep( &tv, &tr );
   rtems_test_assert( !sc );
 
   /* print the current real time again */
@@ -498,7 +518,11 @@ static rtems_task Init(
 
   /* check the time remaining */
 
-  printf( "Init: sec (%" PRIdtime_t "), nsec (%ld) remaining\n", tr.tv_sec, tr.tv_nsec );
+  printf(
+    "Init: sec (%" PRIdtime_t "), nsec (%ld) remaining\n",
+    tr.tv_sec,
+    tr.tv_nsec
+  );
   rtems_test_assert( !tr.tv_sec && !tr.tv_nsec );
 
   puts( "Init: nanosleep - 1.35 seconds" );
@@ -515,29 +539,28 @@ static rtems_task Init(
   empty_line();
 
   puts( "clock_settime - CLOCK_PROCESS_CPUTIME_ID -- ENOSYS" );
-  #if defined(_POSIX_CPUTIME)
-    {
-      struct timespec tp;
-      sc = clock_settime( CLOCK_PROCESS_CPUTIME_ID, &tp );
-      check_enosys( sc );
-    }
+  #if defined( _POSIX_CPUTIME )
+  {
+    struct timespec tp;
+    sc = clock_settime( CLOCK_PROCESS_CPUTIME_ID, &tp );
+    check_enosys( sc );
+  }
   #endif
 
   puts( "clock_settime - CLOCK_THREAD_CPUTIME_ID -- ENOSYS" );
-  #if defined(_POSIX_THREAD_CPUTIME)
-    {
-      struct timespec tp;
-      sc = clock_settime( CLOCK_THREAD_CPUTIME_ID, &tp );
-      check_enosys( sc );
-    }
+  #if defined( _POSIX_THREAD_CPUTIME )
+  {
+    struct timespec tp;
+    sc = clock_settime( CLOCK_THREAD_CPUTIME_ID, &tp );
+    check_enosys( sc );
+  }
   #endif
 
-  test_settime_and_sleeping( );
+  test_settime_and_sleeping();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
-
 
 /* configuration information */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
@@ -546,7 +569,7 @@ static rtems_task Init(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MAXIMUM_TASKS             4
+#define CONFIGURE_MAXIMUM_TASKS 4
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

@@ -36,13 +36,13 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int digit;
+  int      digit;
   locale_t locale;
 
   digit = 0;
-  return (isdigit_l(digit, locale));
+  return ( isdigit_l( digit, locale ) );
 }

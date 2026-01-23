@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-	void *return_value;
+  void *return_value;
 
-	return_value = calloc(1, sizeof(int));
-	return (return_value != NULL);
+  return_value = calloc( 1, sizeof( int ) );
+  return ( return_value != NULL );
 }

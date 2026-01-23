@@ -36,15 +36,15 @@
 
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct protoent *protoc;
+int test( void )
+{
+  struct protoent *protoc;
 
-   protoc = getprotoent();
-   setprotoent( 1 );
-   endprotoent();
+  protoc = getprotoent();
+  setprotoent( 1 );
+  endprotoent();
 
-   return ( protoc != (void *)0 );
- }
+  return ( protoc != (void *) 0 );
+}

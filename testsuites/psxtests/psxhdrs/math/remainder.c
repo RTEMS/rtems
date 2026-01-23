@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  double x = 100 , y = 23 , result ;
+  double x = 100, y = 23, result;
 
-  result = remainder( x , y ) ;
+  result = remainder( x, y );
 
-  return (result);
+  return ( result );
 }

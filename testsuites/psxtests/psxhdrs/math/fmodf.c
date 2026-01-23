@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-  float x = 6835 ;
-  float y = 45 ;
-  float result ;
+  float x = 6835;
+  float y = 45;
+  float result;
 
-  result = fmodf(x,y) ;
+  result = fmodf( x, y );
 
-  return (result);
+  return ( result );
 }

@@ -46,26 +46,26 @@
 const char rtems_test_name[] = "PSXINTTYPE 01";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument ignored);
+rtems_task Init( rtems_task_argument ignored );
 
-rtems_task Init(rtems_task_argument ignored)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
-  int       base            = 10;
-  int       invalid_base    = 40;
+  int base = 10;
+  int invalid_base = 40;
 
-  char     *nptr1_p         = "123abc";
-  char 	   *nptr1_p_errange = "9999999999999999999999";
-  char     *nptr1_n         = "-123abc";
-  char 	   *nptr1_n_errange = "-9999999999999999999999";
-  char     *endptr1         = NULL;
+  char *nptr1_p = "123abc";
+  char *nptr1_p_errange = "9999999999999999999999";
+  char *nptr1_n = "-123abc";
+  char *nptr1_n_errange = "-9999999999999999999999";
+  char *endptr1 = NULL;
 
-  wchar_t  *nptr2_p         = L"123junk";
-  wchar_t  *nptr2_p_errange = L"9999999999999999999999";
-  wchar_t  *nptr2_n         = L"-123junk";
-  wchar_t  *nptr2_n_errange = L"-9999999999999999999999";
-  wchar_t  *endptr2         = NULL;
+  wchar_t *nptr2_p = L"123junk";
+  wchar_t *nptr2_p_errange = L"9999999999999999999999";
+  wchar_t *nptr2_n = L"-123junk";
+  wchar_t *nptr2_n_errange = L"-9999999999999999999999";
+  wchar_t *endptr2 = NULL;
 
   intmax_t  result_strtoimax, result_imaxabs, input_1, input_2;
   imaxdiv_t result_exp, result_imaxdiv;
@@ -76,17 +76,17 @@ rtems_task Init(rtems_task_argument ignored)
   /* Test for imaxabs */
   input_1 = -10;
   result_imaxabs = 10;
-  rtems_test_assert( imaxabs(input_1) == result_imaxabs );
+  rtems_test_assert( imaxabs( input_1 ) == result_imaxabs );
 
   input_1 = 10;
   result_imaxabs = 10;
-  rtems_test_assert( imaxabs(input_1) == result_imaxabs );
+  rtems_test_assert( imaxabs( input_1 ) == result_imaxabs );
 
   /* Test for imaxdiv */
   input_1 = 10;
   input_2 = 3;
   result_exp.quot = input_1 / input_2;
-  result_exp.rem =  input_1 % input_2;
+  result_exp.rem = input_1 % input_2;
   result_imaxdiv = imaxdiv( input_1, input_2 );
   rtems_test_assert(
     result_imaxdiv.quot == result_exp.quot &&
@@ -128,7 +128,7 @@ rtems_task Init(rtems_task_argument ignored)
   puts( "\nstrtoumax Testcases...." );
   puts( "Valid Inputs - Positive Number" );
   result_strtoumax = strtoumax( nptr1_p, &endptr1, base );
-  rtems_test_assert( result_strtoumax ==123 );
+  rtems_test_assert( result_strtoumax == 123 );
 
   puts( "Final string pointed by endptr" );
   rtems_test_assert( endptr1 == ( nptr1_p + 3 ) );
@@ -218,8 +218,7 @@ rtems_task Init(rtems_task_argument ignored)
   rtems_test_assert( errno == EINVAL );
 
   TEST_END();
-  rtems_test_exit(0);
-
+  rtems_test_exit( 0 );
 }
 
 /* NOTICE: the clock driver is explicitly disabled */
@@ -227,7 +226,7 @@ rtems_task Init(rtems_task_argument ignored)
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS            1
+#define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

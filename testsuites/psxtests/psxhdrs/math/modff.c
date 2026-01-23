@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 4 ,  result , iptr ;
+  float x = 4, result, iptr;
 
-  result = modff( x , &iptr ) ;
+  result = modff( x, &iptr );
 
-  return (result);
+  return ( result );
 }

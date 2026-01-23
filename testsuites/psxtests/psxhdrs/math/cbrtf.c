@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-    float x = 343.556 ;
-    float result;
+  float x = 343.556;
+  float result;
 
-    result = cbrtf(x) ;
+  result = cbrtf( x );
 
-    return (result) ;
+  return ( result );
 }

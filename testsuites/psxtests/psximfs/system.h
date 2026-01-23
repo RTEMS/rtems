@@ -39,25 +39,22 @@
 #include <errno.h>
 #include <rtems/libcsupport.h>
 
-
 /* macros */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS            1
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS       RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 /* functions */
 
-void *empty_space(void);
-void fill_space(void *);
+void *empty_space( void );
+void  fill_space( void * );
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
 #include <rtems/confdefs.h>
 #endif

@@ -34,19 +34,19 @@
 #include "config.h"
 #endif
 
-#include <wctype.h> 
+#include <wctype.h>
 /* 
  Corresponds to ticket #3642, please remove the line
  above and this comment when fixed 
 */
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   wint_t wi;
 
   wi = 0;
-  return towlower(wi);
+  return towlower( wi );
 }

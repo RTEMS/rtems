@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x=(1.0);
+  float x = ( 1.0 );
   float result;
 
-  result = acosf(x);
+  result = acosf( x );
 
-  return (result);
+  return ( result );
 }

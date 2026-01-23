@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-	unsigned short param[7] = {1, 2, 3, 4, 5, 6, 7};
+  unsigned short param[ 7 ] = { 1, 2, 3, 4, 5, 6, 7 };
 
-	lcong48(param);
-	return 1;
+  lcong48( param );
+  return 1;
 }

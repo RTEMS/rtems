@@ -37,13 +37,9 @@
 #include <errno.h>
 #include <sched.h>
 
-void *POSIX_Init(
-  void *argument
-);
+void *POSIX_Init( void *argument );
 
-void *Task_1_through_3(
-  void *argument
-);
+void *Task_1_through_3( void *argument );
 
 /* configuration information */
 
@@ -52,7 +48,7 @@ void *Task_1_through_3(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
@@ -60,7 +56,7 @@ void *Task_1_through_3(
 
 /* global variables */
 
-TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task_id;
+TEST_EXTERN pthread_t Init_id;
+TEST_EXTERN pthread_t Task_id;
 
 /* end of include file */

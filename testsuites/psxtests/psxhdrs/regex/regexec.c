@@ -41,14 +41,14 @@ int test( void );
 
 int test( void )
 {
-  regex_t preg;
-  size_t nmatch = 2;
-  regmatch_t pmatch[2];
-  char *string = "a very simple simple simple string";
-  char *regex = "\\(sim[a-z]le\\) \\1";
-  int result;
+  regex_t    preg;
+  size_t     nmatch = 2;
+  regmatch_t pmatch[ 2 ];
+  char      *string = "a very simple simple simple string";
+  char      *regex = "\\(sim[a-z]le\\) \\1";
+  int        result;
 
-  result = regcomp( &preg, regex, REG_EXTENDED|REG_NOSUB );
+  result = regcomp( &preg, regex, REG_EXTENDED | REG_NOSUB );
   (void) result;
 
   result = regexec( &preg, string, nmatch, pmatch, 0 );

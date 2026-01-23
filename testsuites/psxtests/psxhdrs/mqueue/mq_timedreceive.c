@@ -40,29 +40,34 @@
 
 int test( void );
 
-#define MQ_MAXMSG     1
-#define MQ_MSGSIZE    sizeof(int)
+#define MQ_MAXMSG  1
+#define MQ_MSGSIZE sizeof( int )
 
 int test( void )
 {
-  mqd_t mqdes;
-  struct mq_attr mqstat;
-  const char *q_name;
-  int message[MQ_MAXMSG];
+  mqd_t           mqdes;
+  struct mq_attr  mqstat;
+  const char     *q_name;
+  int             message[ MQ_MAXMSG ];
   struct timespec abs_timeout;
-  unsigned int msg_prio;
-  int result;
+  unsigned int    msg_prio;
+  int             result;
 
-  mqstat.mq_maxmsg  = MQ_MAXMSG;
+  mqstat.mq_maxmsg = MQ_MAXMSG;
   mqstat.mq_msgsize = MQ_MSGSIZE;
-  abs_timeout.tv_sec  = 0;
+  abs_timeout.tv_sec = 0;
   abs_timeout.tv_nsec = 0;
   msg_prio = 1;
   q_name = "queue";
 
   mqdes = mq_open( q_name, O_CREAT | O_RDWR, 0x777, &mqstat );
   result = mq_timedreceive(
-		mqdes, (char *)message, MQ_MSGSIZE, &msg_prio, &abs_timeout );
+    mqdes,
+    (char *) message,
+    MQ_MSGSIZE,
+    &msg_prio,
+    &abs_timeout
+  );
 
   return result;
 }

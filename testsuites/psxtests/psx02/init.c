@@ -38,11 +38,9 @@ const char rtems_test_name[] = "PSX 2";
 
 volatile int Signal_occurred;
 volatile int Signal_count;
-void Signal_handler( int signo );
+void         Signal_handler( int signo );
 
-void Signal_handler(
-  int signo
-)
+void Signal_handler( int signo )
 {
   Signal_count++;
   printf(
@@ -54,18 +52,16 @@ void Signal_handler(
   Signal_occurred = 1;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int               status;
-  struct timespec   tv;
-  struct timespec   tr;
-  struct sigaction  act;
-  sigset_t          mask;
-  sigset_t          pending_set;
+  int              status;
+  struct timespec  tv;
+  struct timespec  tr;
+  struct sigaction act;
+  sigset_t         mask;
+  sigset_t         pending_set;
 
   TEST_BEGIN();
 
@@ -84,7 +80,7 @@ void *POSIX_Init(
   rtems_test_assert( !status );
 
   act.sa_handler = Signal_handler;
-  act.sa_flags   = 0;
+  act.sa_flags = 0;
 
   sigaction( SIGUSR1, &act, NULL );
 
@@ -113,7 +109,6 @@ void *POSIX_Init(
   status = sigpending( &pending_set );
   rtems_test_assert( !status );
   printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
-
 
   printf( "Init: send SIGUSR1 to self\n" );
   status = pthread_kill( Init_id, SIGUSR1 );
@@ -144,7 +139,7 @@ void *POSIX_Init(
 
     Signal_occurred = 0;
 
-    status = nanosleep ( &tv, &tr );
+    status = nanosleep( &tv, &tr );
 
     if ( status == -1 ) {
       rtems_test_assert( errno == EINTR );
@@ -155,10 +150,10 @@ void *POSIX_Init(
 
     printf(
       "Init: signal was %sprocessed with %d:%d time remaining\n",
-      (Signal_occurred) ? "" : "not ",
+      ( Signal_occurred ) ? "" : "not ",
       (int) tr.tv_sec,
       (int) tr.tv_nsec
-   );
+    );
 
   } while ( tr.tv_sec || tr.tv_nsec );
 

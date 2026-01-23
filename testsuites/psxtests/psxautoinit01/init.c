@@ -37,11 +37,9 @@
 const char rtems_test_name[] = "PSXAUTOINIT 1";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 

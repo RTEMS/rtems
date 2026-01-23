@@ -50,9 +50,9 @@ int test( void )
   int             result;
   clockid_t       clock_id = 0;
 
-  pshared             = 0;
-  value               = 1;
-  abs_timeout.tv_sec  = 0;
+  pshared = 0;
+  value = 1;
+  abs_timeout.tv_sec = 0;
   abs_timeout.tv_nsec = 0;
 
   sem_init( &sem, pshared, value );

@@ -36,13 +36,13 @@
 
 #include <sys/time.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int callback;
-  struct timeval tv[2] = { 0 };
+  int            callback;
+  struct timeval tv[ 2 ] = { 0 };
 
-  callback = utimes(NULL, &tv[0]);
-  return (callback == -1);
+  callback = utimes( NULL, &tv[ 0 ] );
+  return ( callback == -1 );
 }

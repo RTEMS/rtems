@@ -25,13 +25,13 @@
 
 #include <utmpx.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  const struct utmpx b = {0};
-  struct utmpx *a;
+  const struct utmpx b = { 0 };
+  struct utmpx      *a;
 
-  a = getutxline(&b);
+  a = getutxline( &b );
   return !a;
 }

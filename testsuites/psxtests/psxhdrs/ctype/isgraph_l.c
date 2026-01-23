@@ -36,13 +36,13 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int graph;
+  int      graph;
   locale_t locale;
 
   graph = 0;
-  return (isgraph_l(graph, locale));
+  return ( isgraph_l( graph, locale ) );
 }

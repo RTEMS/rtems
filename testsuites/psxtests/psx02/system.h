@@ -35,13 +35,9 @@
 #include <pmacros.h>
 #include <errno.h>
 
-void *POSIX_Init(
-  void *argument
-);
+void *POSIX_Init( void *argument );
 
-void *Task_1_through_3(
-  void *argument
-);
+void *Task_1_through_3( void *argument );
 
 /* configuration information */
 
@@ -50,7 +46,7 @@ void *Task_1_through_3(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
@@ -64,7 +60,7 @@ void *Task_1_through_3(
 #define TEST_EXTERN extern
 #endif
 
-TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task_id;
+TEST_EXTERN pthread_t Init_id;
+TEST_EXTERN pthread_t Task_id;
 
 /* end of include file */

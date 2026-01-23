@@ -41,9 +41,9 @@ int test( void );
 
 int test( void )
 {
-	double return_value;
-	double pi = 3.14;
+  double return_value;
+  double pi = 3.14;
 
-	return_value = atof("3.14");
-	return (fabs(return_value-pi) < 0.00001);
+  return_value = atof( "3.14" );
+  return ( fabs( return_value - pi ) < 0.00001 );
 }

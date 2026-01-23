@@ -39,14 +39,10 @@
 #include <bsp.h>
 #include <pmacros.h>
 
-void test_main( void );
-rtems_task Init(
-  rtems_task_argument ignored
-);
+void       test_main( void );
+rtems_task Init( rtems_task_argument ignored );
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 

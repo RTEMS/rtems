@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-    double x = 4.5 ;
-    double result;
+  double x = 4.5;
+  double result;
 
-    result = ceil(x) ;
+  result = ceil( x );
 
-    return (result) ;
+  return ( result );
 }

@@ -43,15 +43,13 @@
 const char rtems_test_name[] = "PSXPASSWD 2";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument ignored);
-void print_passwd(struct passwd *pw);
-void print_group(struct group *gr);
+rtems_task Init( rtems_task_argument ignored );
+void       print_passwd( struct passwd *pw );
+void       print_group( struct group *gr );
 
-void print_passwd(
-  struct passwd *pw
-)
+void print_passwd( struct passwd *pw )
 {
-  printf( 
+  printf(
     "  username: %s\n"
     "  user password: %s\n"
     "  user ID: %d\n"
@@ -68,12 +66,10 @@ void print_passwd(
     pw->pw_shell
   );
 }
-  
-void print_group(
-  struct group *gr
-)
+
+void print_group( struct group *gr )
 {
-  printf( 
+  printf(
     "  group name: %s\n"
     "  group  password: %s\n"
     "  group  ID: %d\n",
@@ -84,18 +80,16 @@ void print_group(
 
   /* TBD print users in group */
 }
-  
-rtems_task Init(
-  rtems_task_argument ignored
-)
+
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
   struct passwd *pw;
   struct group  *gr;
-  int status = -1;
-  char str[100] = {0};
-  int max_int = INT_MAX;
+  int            status = -1;
+  char           str[ 100 ] = { 0 };
+  int            max_int = INT_MAX;
 
   FILE *fp = NULL;
 
@@ -104,9 +98,9 @@ rtems_task Init(
   puts( "Init - Creating /etc" );
   status = mkdir( "/etc", 0777 );
   rtems_test_assert( status == 0 );
-  
+
   puts( "Init - Creating /etc/passwd" );
-  status = mknod( "/etc/passwd", (S_IFREG | S_IRWXU), 0LL );
+  status = mknod( "/etc/passwd", ( S_IFREG | S_IRWXU ), 0LL );
   rtems_test_assert( status != -1 );
 
   fp = fopen( "/etc/passwd", "w" );
@@ -115,8 +109,8 @@ rtems_task Init(
   fclose( fp );
 
   puts( "Init - Creating /etc/group" );
-  status = mknod( "/etc/group", (S_IFREG | S_IRWXU), 0LL );
-  rtems_test_assert( status != -1);
+  status = mknod( "/etc/group", ( S_IFREG | S_IRWXU ), 0LL );
+  rtems_test_assert( status != -1 );
 
   fp = fopen( "/etc/group", "w" );
   rtems_test_assert( fp != NULL );
@@ -133,8 +127,8 @@ rtems_task Init(
   setgrent();
 
   puts( "Init - setgrent() -- OK" );
-  setgrent();  
- 
+  setgrent();
+
   puts( "Init - getpwnam(\"root\") -- expected EINVAL" );
   pw = getpwnam( "root" );
   rtems_test_assert( !pw );
@@ -147,7 +141,7 @@ rtems_task Init(
 
   puts( "Init - getpwnam(\"root\") -- expected EINVAL" );
   pw = getpwnam( "root" );
-  rtems_test_assert( !pw ); 
+  rtems_test_assert( !pw );
   rtems_test_assert( errno == EINVAL );
 
   fp = fopen( "/etc/passwd", "w" );
@@ -157,7 +151,7 @@ rtems_task Init(
 
   puts( "Init - getpwnam(\"root\") -- expected EINVAL" );
   pw = getpwnam( "root" );
-  rtems_test_assert( !pw ); 
+  rtems_test_assert( !pw );
   rtems_test_assert( errno == EINVAL );
 
   fp = fopen( "/etc/passwd", "w" );
@@ -167,10 +161,15 @@ rtems_task Init(
 
   puts( "Init - getpwnam(\"root\") -- expected EINVAL" );
   pw = getpwnam( "root" );
-  rtems_test_assert( !pw ); 
+  rtems_test_assert( !pw );
   rtems_test_assert( errno == EINVAL );
 
-  sprintf( str, "user:x:%d%d:1:dummy::/:/bin/sh\n", max_int/10, max_int%10+1 );
+  sprintf(
+    str,
+    "user:x:%d%d:1:dummy::/:/bin/sh\n",
+    max_int / 10,
+    max_int % 10 + 1
+  );
 
   fp = fopen( "/etc/passwd", "w" );
   rtems_test_assert( fp != NULL );
@@ -179,7 +178,7 @@ rtems_task Init(
 
   puts( "Init - getpwnam(\"root\") -- expected EINVAL" );
   pw = getpwnam( "root" );
-  rtems_test_assert( !pw ); 
+  rtems_test_assert( !pw );
   rtems_test_assert( errno == EINVAL );
 
   fp = fopen( "/etc/passwd", "w" );
@@ -196,7 +195,7 @@ rtems_task Init(
 
   puts( "Init - getpwnam(\"root\") -- expected EINVAL" );
   pw = getpwnam( "root" );
-  rtems_test_assert( !pw ); 
+  rtems_test_assert( !pw );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init - getgrent() -- OK" );
@@ -233,7 +232,7 @@ rtems_task Init(
   gr = getgrnam( "root" );
   rtems_test_assert( !gr );
   rtems_test_assert( errno == EINVAL );
-  
+
   TEST_END();
   rtems_test_exit( 0 );
 }
@@ -245,10 +244,10 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 6
 
-#define CONFIGURE_MAXIMUM_TASKS 1
-#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
+#define CONFIGURE_MAXIMUM_TASKS                 1
+#define CONFIGURE_MAXIMUM_POSIX_KEYS            1
 #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 1
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS            RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

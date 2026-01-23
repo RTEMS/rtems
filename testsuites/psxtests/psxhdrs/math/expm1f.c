@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 2.6 ;
-  float result ;
+  float x = 2.6;
+  float result;
 
-  result = expm1f(x) ;
+  result = expm1f( x );
 
-  return (result);
+  return ( result );
 }

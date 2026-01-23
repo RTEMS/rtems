@@ -43,7 +43,7 @@ int test( void )
   int result;
   int fildes = 0;
 
-  result = tcdrain(fildes);
+  result = tcdrain( fildes );
 
   return result;
 }

@@ -36,16 +36,16 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  wchar_t wc;
-  char *ch;
+  wchar_t    wc;
+  char      *ch;
   mbstate_t *state;
 
   wc = 0;
   ch = 0;
-  state = (void *)0;
-  return wcrtomb(ch, wc, state);
+  state = (void *) 0;
+  return wcrtomb( ch, wc, state );
 }

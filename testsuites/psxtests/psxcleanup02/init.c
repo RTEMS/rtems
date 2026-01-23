@@ -12,27 +12,27 @@
 
 #include "tmacros.h"
 
-int main(int argc, char **argv);
+int main( int argc, char **argv );
 
 const char rtems_test_name[] = "PSXCLEANUP 2";
 
-static void *POSIX_Init(void *arg)
+static void *POSIX_Init( void *arg )
 {
   (void) arg;
 
   TEST_BEGIN();
 
-  main(0, NULL);
+  main( 0, NULL );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
-#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS         2
+#define CONFIGURE_MAXIMUM_POSIX_KEYS            1
 #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 1
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE

@@ -38,9 +38,7 @@ const char rtems_test_name[] = "PSX 6";
 
 extern void Key_destructor( void *key_data );
 
-void Key_destructor(
- void *key_data
-)
+void Key_destructor( void *key_data )
 {
   (void) key_data;
 
@@ -51,19 +49,18 @@ void Key_destructor(
    *  when the key data is non null.
    */
 
-  if ( Destructor_invoked == 5 )
-     (void) pthread_setspecific( Key_id, NULL );
+  if ( Destructor_invoked == 5 ) {
+    (void) pthread_setspecific( Key_id, NULL );
+  }
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int               status;
-  unsigned int      remaining;
-  uint32_t   *key_data;
+  int          status;
+  unsigned int remaining;
+  uint32_t    *key_data;
 
   TEST_BEGIN();
 
@@ -91,8 +88,9 @@ void *POSIX_Init(
   Destructor_invoked = 0;
   puts( "Init: pthread_key_create - SUCCESSFUL" );
   status = pthread_key_create( &Key_id, Key_destructor );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   printf( "Destructor invoked %d times\n", Destructor_invoked );
@@ -115,29 +113,34 @@ void *POSIX_Init(
 
   printf( "Init: Setting the key to %d\n", 0 );
   status = pthread_setspecific( Key_id, &Data_array[ 0 ] );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
-     /* switch to task 1 */
+  /* switch to task 1 */
 
   key_data = pthread_getspecific( Key_id );
-  printf( "Init: Got the key value of %lu\n",
-          (unsigned long) ((uint32_t   *)key_data - Data_array) );
+  printf(
+    "Init: Got the key value of %lu\n",
+    (unsigned long) ( (uint32_t *) key_data - Data_array )
+  );
 
   remaining = sleep( 3 );
-  if ( remaining )
-     printf( "seconds remaining = %d\n", remaining );
+  if ( remaining ) {
+    printf( "seconds remaining = %d\n", remaining );
+  }
   rtems_test_assert( !remaining );
 
-     /* switch to task 1 */
+  /* switch to task 1 */
 
   /* delete the key */
 
   puts( "Init: pthread_key_delete - SUCCESSFUL" );
   status = pthread_key_delete( Key_id );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   printf( "Destructor invoked %d times\n", Destructor_invoked );

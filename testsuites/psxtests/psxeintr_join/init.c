@@ -41,19 +41,19 @@
 
 const char rtems_test_name[] = "PSXEINTR_JOIN";
 
-#define SIG_SUSPEND SIGUSR1
+#define SIG_SUSPEND     SIGUSR1
 #define SIG_THR_RESTART SIGUSR2
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-static void print_sig_mask(const char * str);
-void GC_suspend_handler(int sig);
-void GC_restart_handler(int sig);
-void *run(void *arg);
+void       *POSIX_Init( void *argument );
+static void print_sig_mask( const char *str );
+void        GC_suspend_handler( int sig );
+void        GC_restart_handler( int sig );
+void       *run( void *arg );
 
 sem_t GC_suspend_ack_sem;
 
-static void print_sig_mask( const char * str )
+static void print_sig_mask( const char *str )
 {
   sigset_t blocked;
   int      i;
@@ -63,9 +63,10 @@ static void print_sig_mask( const char * str )
   rtems_test_assert( status == 0 );
 
   printf( "%s blocked:\n", str );
-  for ( i = 1; i < NSIG; i++) {
-    if ( sigismember( &blocked, i ) )
+  for ( i = 1; i < NSIG; i++ ) {
+    if ( sigismember( &blocked, i ) ) {
       printf( "%d ", i );
+    }
   }
   printf( "\n" );
 }
@@ -90,7 +91,7 @@ void *run( void *arg )
   (void) arg;
 
   int       status;
-  pthread_t id = *(pthread_t *)arg;
+  pthread_t id = *(pthread_t *) arg;
 
   print_sig_mask( "New Thread" );
 
@@ -115,7 +116,7 @@ void *POSIX_Init( void *arg )
   int              status;
 
   TEST_BEGIN();
-  status = sem_init( &GC_suspend_ack_sem, 0, 0);
+  status = sem_init( &GC_suspend_ack_sem, 0, 0 );
   rtems_test_assert( status == 0 );
 
   status = sigemptyset( &act.sa_mask );
@@ -161,4 +162,3 @@ void *POSIX_Init( void *arg )
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
 /* end of file */
-

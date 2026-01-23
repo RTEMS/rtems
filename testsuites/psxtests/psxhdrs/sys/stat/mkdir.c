@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	char *path = "/tmp/directory";
-	mode_t mode = S_IRWXU;
+  int    return_value;
+  char  *path = "/tmp/directory";
+  mode_t mode = S_IRWXU;
 
-	return_value = mkdir(path, mode);
-	return (return_value != -1);
+  return_value = mkdir( path, mode );
+  return ( return_value != -1 );
 }

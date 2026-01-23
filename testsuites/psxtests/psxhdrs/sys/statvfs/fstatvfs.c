@@ -26,12 +26,12 @@
 #include <sys/statvfs.h>
 #include <sys/types.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int a = 0;
-  struct statvfs b = {0};
+  int            a = 0;
+  struct statvfs b = { 0 };
 
-  return fstatvfs(a, &b);
+  return fstatvfs( a, &b );
 }

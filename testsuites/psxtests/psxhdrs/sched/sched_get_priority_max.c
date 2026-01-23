@@ -45,8 +45,8 @@ int test( void );
 
 int test( void )
 {
-  int    policy;
-  int    result;
+  int policy;
+  int result;
 
   policy = SCHED_RR;
   policy = SCHED_FIFO;

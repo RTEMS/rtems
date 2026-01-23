@@ -41,24 +41,20 @@ const char rtems_test_name[] = "PSXUALARM";
 
 static volatile int Signal_count;
 
-static void Signal_handler(
-  int signo
-)
+static void Signal_handler( int signo )
 {
   rtems_test_assert( signo == SIGALRM );
   ++Signal_count;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int               status;
-  useconds_t        result;
-  struct sigaction  act;
-  sigset_t          mask;
+  int              status;
+  useconds_t       result;
+  struct sigaction act;
+  sigset_t         mask;
 
   TEST_BEGIN();
 
@@ -81,7 +77,7 @@ void *POSIX_Init(
 
   /* Validate ualarm is ignored if signal not caught */
   act.sa_handler = Signal_handler;
-  act.sa_flags   = 0;
+  act.sa_flags = 0;
   sigaction( SIGALRM, &act, NULL );
   puts( "Init: ualarm in 500000 us" );
   result = ualarm( 500000, 0 );
@@ -131,7 +127,7 @@ void *POSIX_Init(
   rtems_test_assert( result == 1000000 );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

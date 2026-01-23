@@ -36,7 +36,7 @@
 #include <sched.h>
 #include <semaphore.h>
 
-#if defined(__rtems__)
+#if defined( __rtems__ )
   #include <rtems.h>
   #include <rtems/libcsupport.h>
   #include <pmacros.h>
@@ -45,9 +45,9 @@
 const char rtems_test_name[] = "PSXCANCEL";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
-#if defined(__rtems__)
+#if defined( __rtems__ )
 static rtems_resource_snapshot initialSnapshot;
 #endif
 
@@ -57,62 +57,62 @@ static sem_t masterSem;
 
 static sem_t workerSem;
 
-static void countTask_cancel_handler(void *ignored)
+static void countTask_cancel_handler( void *ignored )
 {
   (void) ignored;
 
   countTask_handler = true;
 }
 
-static void *countTaskDeferred(void *ignored)
+static void *countTaskDeferred( void *ignored )
 {
   (void) ignored;
 
-  int i=0;
-  int type,state;
+  int i = 0;
+  int type, state;
   int sc;
 
-  sc = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &type);
+  sc = pthread_setcancelstate( PTHREAD_CANCEL_ENABLE, &type );
   fatal_posix_service_status( sc, 0, "cancel state deferred" );
   rtems_test_assert( type == PTHREAD_CANCEL_ENABLE );
-  sc = pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &state);
+  sc = pthread_setcanceltype( PTHREAD_CANCEL_DEFERRED, &state );
   fatal_posix_service_status( sc, 0, "cancel type deferred" );
   rtems_test_assert( state == PTHREAD_CANCEL_DEFERRED );
-  while (1) {
-    printf("countTaskDeferred: elapsed time (second): %2d\n", i++ );
-    sleep(1);
+  while ( 1 ) {
+    printf( "countTaskDeferred: elapsed time (second): %2d\n", i++ );
+    sleep( 1 );
     pthread_testcancel();
   }
 }
 
-static void *countTaskAsync(void *ignored)
+static void *countTaskAsync( void *ignored )
 {
   (void) ignored;
 
-  int i=0;
-  int type,state;
+  int i = 0;
+  int type, state;
   int sc;
 
-  sc = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &type);
+  sc = pthread_setcancelstate( PTHREAD_CANCEL_ENABLE, &type );
   fatal_posix_service_status( sc, 0, "cancel state async" );
   rtems_test_assert( type == PTHREAD_CANCEL_ENABLE );
-  sc = pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &state);
+  sc = pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, &state );
   fatal_posix_service_status( sc, 0, "cancel type async" );
   rtems_test_assert( state == PTHREAD_CANCEL_DEFERRED );
-  pthread_cleanup_push(countTask_cancel_handler, NULL);
-  while (1) {
-    printf("countTaskAsync: elapsed time (second): %2d\n", i++ );
-    sleep(1);
+  pthread_cleanup_push( countTask_cancel_handler, NULL );
+  while ( 1 ) {
+    printf( "countTaskAsync: elapsed time (second): %2d\n", i++ );
+    sleep( 1 );
   }
   countTask_handler = false;
-  pthread_cleanup_pop(1);
-  if ( countTask_handler == false ){
-    puts("countTask_cancel_handler not executed");
-    rtems_test_exit(0);
+  pthread_cleanup_pop( 1 );
+  if ( countTask_handler == false ) {
+    puts( "countTask_cancel_handler not executed" );
+    rtems_test_exit( 0 );
   }
 }
 
-static void *taskAsyncAndDetached(void *ignored)
+static void *taskAsyncAndDetached( void *ignored )
 {
   (void) ignored;
 
@@ -130,7 +130,7 @@ static void *taskAsyncAndDetached(void *ignored)
   rtems_test_assert( 0 );
 }
 
-static void *taskSelfDetach(void *ignored)
+static void *taskSelfDetach( void *ignored )
 {
   (void) ignored;
 
@@ -149,25 +149,25 @@ static void *taskSelfDetach(void *ignored)
 
 static void resourceSnapshotInit( void )
 {
-#if defined(__rtems__)
+#if defined( __rtems__ )
   rtems_resource_snapshot_take( &initialSnapshot );
 #endif
 }
 
 static void resourceSnapshotCheck( void )
 {
-#if defined(__rtems__)
+#if defined( __rtems__ )
   rtems_test_assert( rtems_resource_snapshot_check( &initialSnapshot ) );
 #endif
 }
 
-#if defined(__rtems__)
-  void *POSIX_Init(void *ignored)
+#if defined( __rtems__ )
+void *POSIX_Init( void *ignored )
 #else
-  int main(int argc, char **argv)
+int main( int argc, char **argv )
 #endif
 {
-#if defined(__rtems__)
+#if defined( __rtems__ )
   (void) ignored;
 #endif
   pthread_t task;
@@ -188,23 +188,23 @@ static void resourceSnapshotCheck( void )
 
   /* generate some error conditions */
   puts( "Init - pthread_setcancelstate - NULL oldstate" );
-  sc = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+  sc = pthread_setcancelstate( PTHREAD_CANCEL_ENABLE, NULL );
   fatal_posix_service_status( sc, 0, "cancel state NULL" );
 
   puts( "Init - pthread_setcancelstate - bad state - EINVAL" );
-  sc = pthread_setcancelstate(12, &old);
+  sc = pthread_setcancelstate( 12, &old );
   fatal_posix_service_status( sc, EINVAL, "cancel state EINVAL" );
 
   puts( "Init - pthread_setcanceltype - NULL oldtype" );
-  sc = pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
+  sc = pthread_setcanceltype( PTHREAD_CANCEL_DEFERRED, NULL );
   fatal_posix_service_status( sc, 0, "cancel type NULL" );
 
   puts( "Init - pthread_setcanceltype - bad type - EINVAL" );
-  sc = pthread_setcanceltype(12, &old);
+  sc = pthread_setcanceltype( 12, &old );
   fatal_posix_service_status( sc, EINVAL, "cancel type EINVAL" );
 
   puts( "Init - pthread_cancel - bad ID - ESRCH" );
-  sc = pthread_cancel(0x100);
+  sc = pthread_cancel( 0x100 );
   fatal_posix_service_status( sc, ESRCH, "cancel bad Id" );
 
   resourceSnapshotCheck();
@@ -246,31 +246,31 @@ static void resourceSnapshotCheck( void )
 
   /* Start countTask deferred */
   {
-    sc = pthread_create(&task, NULL, countTaskDeferred, &taskparameter);
-    if (sc) {
-      perror("pthread_create: countTask");
-      rtems_test_exit(EXIT_FAILURE);
+    sc = pthread_create( &task, NULL, countTaskDeferred, &taskparameter );
+    if ( sc ) {
+      perror( "pthread_create: countTask" );
+      rtems_test_exit( EXIT_FAILURE );
     }
     /* sleep for 5 seconds, then cancel it */
-    sleep(5);
-    sc = pthread_cancel(task);
+    sleep( 5 );
+    sc = pthread_cancel( task );
     fatal_posix_service_status( sc, 0, "cancel deferred" );
-    sc = pthread_join(task, NULL);
+    sc = pthread_join( task, NULL );
     fatal_posix_service_status( sc, 0, "join deferred" );
   }
 
   /* Start countTask asynchronous */
   {
-    sc = pthread_create(&task, NULL, countTaskAsync, &taskparameter);
-    if (sc) {
-      perror("pthread_create: countTask");
-      rtems_test_exit(EXIT_FAILURE);
+    sc = pthread_create( &task, NULL, countTaskAsync, &taskparameter );
+    if ( sc ) {
+      perror( "pthread_create: countTask" );
+      rtems_test_exit( EXIT_FAILURE );
     }
     /* sleep for 5 seconds, then cancel it */
-    sleep(5);
-    sc = pthread_cancel(task);
+    sleep( 5 );
+    sc = pthread_cancel( task );
     fatal_posix_service_status( sc, 0, "cancel async" );
-    sc = pthread_join(task, NULL);
+    sc = pthread_join( task, NULL );
     fatal_posix_service_status( sc, 0, "join async" );
   }
 
@@ -278,16 +278,16 @@ static void resourceSnapshotCheck( void )
 
   TEST_END();
 
-  #if defined(__rtems__)
-    rtems_test_exit(EXIT_SUCCESS);
-    return NULL;
+  #if defined( __rtems__ )
+  rtems_test_exit( EXIT_SUCCESS );
+  return NULL;
   #else
-    return 0;
+  return 0;
   #endif
 }
 
 /* configuration information */
-#if defined(__rtems__)
+#if defined( __rtems__ )
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -302,4 +302,3 @@ static void resourceSnapshotCheck( void )
 #include <rtems/confdefs.h>
 
 #endif /* __rtems__ */
-

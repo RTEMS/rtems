@@ -42,7 +42,7 @@ int test( void );
 int test( void )
 {
   FILE *stream;
-  char buffer[] = "foobar";
+  char  buffer[] = "foobar";
 
   stream = fmemopen( buffer, strlen( buffer ), "r" );
 

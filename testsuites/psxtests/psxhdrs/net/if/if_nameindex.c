@@ -43,5 +43,5 @@ int test( void )
   struct if_nameindex *return_value;
 
   return_value = if_nameindex();
-  return (return_value != (void *) 0);
+  return ( return_value != (void *) 0 );
 }

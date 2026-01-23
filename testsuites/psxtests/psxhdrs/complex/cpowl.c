@@ -37,9 +37,9 @@
 #define __CYGWIN__ 1 /* required until ticker 3635 fixed */
 #include <complex.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   long double complex number;
   long double complex exponent;
@@ -47,6 +47,6 @@ int test(void)
 
   number = 1.0 + 1.0 * I;
   exponent = 1.0 + 1.0 * I;
-  result = cpowl(number, exponent);
-  return (result != 0);
+  result = cpowl( number, exponent );
+  return ( result != 0 );
 }

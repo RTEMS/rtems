@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = -INFINITY ;
-  int  result ;
+  double x = -INFINITY;
+  int    result;
 
-  result = isinf(x) ;
+  result = isinf( x );
 
-  return (result);
+  return ( result );
 }

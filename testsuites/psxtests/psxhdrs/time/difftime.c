@@ -50,5 +50,5 @@ int test( void )
 
   difference = difftime( time1, time2 );
 
-  return (difference != 0.0);
+  return ( difference != 0.0 );
 }

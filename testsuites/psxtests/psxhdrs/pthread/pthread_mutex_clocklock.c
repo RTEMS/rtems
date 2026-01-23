@@ -46,9 +46,9 @@ int test( void );
 
 int test( void )
 {
-  pthread_mutex_t mutex    = PTHREAD_MUTEX_INITIALIZER;
+  pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
   clockid_t       clock_id = 0;
-  struct timespec timeout  = { 0 };
+  struct timespec timeout = { 0 };
   int             result;
 
   result = pthread_mutex_clocklock( &mutex, clock_id, &timeout );

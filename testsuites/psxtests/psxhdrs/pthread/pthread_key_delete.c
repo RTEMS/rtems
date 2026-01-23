@@ -42,8 +42,8 @@ int test( void );
 
 int test( void )
 {
-  pthread_key_t    key = 0;
-  int              result;
+  pthread_key_t key = 0;
+  int           result;
 
   result = pthread_key_delete( key );
 

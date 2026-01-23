@@ -47,5 +47,5 @@ int test( void )
   loc = telldir( dirp );
   seekdir( dirp, loc );
 
-  return ( (int)loc );
+  return ( (int) loc );
 }

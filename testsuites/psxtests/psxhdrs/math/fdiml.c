@@ -42,12 +42,12 @@ int test( void );
 
 int test( void )
 {
-  long double x = 6887900 ;
-  long double y = 9897 ;
-  long double result ;
+  long double x = 6887900;
+  long double y = 9897;
+  long double result;
 
-  result = fdiml(x,y) ;
+  result = fdiml( x, y );
 
-  return (result);
+  return ( result );
 }
 #endif

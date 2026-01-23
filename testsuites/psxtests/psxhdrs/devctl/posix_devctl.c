@@ -38,19 +38,19 @@ int test( void );
 
 int test( void )
 {
-  int     result;
-  int     fd;
-  int     dcmd;
-  void   *dev_data_ptr;
-  size_t  nbyte;
-  int     dev_info;
+  int    result;
+  int    fd;
+  int    dcmd;
+  void  *dev_data_ptr;
+  size_t nbyte;
+  int    dev_info;
 
-  fd           = -1;
-  dcmd         = 0;
+  fd = -1;
+  dcmd = 0;
   dev_data_ptr = NULL;
-  nbyte        = 0;
+  nbyte = 0;
 
-  result = posix_devctl(fd, dcmd, dev_data_ptr, nbyte, &dev_info);
+  result = posix_devctl( fd, dcmd, dev_data_ptr, nbyte, &dev_info );
 
   return result;
 }

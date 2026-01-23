@@ -35,8 +35,8 @@
 #include <errno.h>
 #include <tmacros.h>
 
-#include <fcntl.h>           /* For O_* constants */
-#include <sys/stat.h>        /* For mode constants */
+#include <fcntl.h>    /* For O_* constants */
+#include <sys/stat.h> /* For mode constants */
 #include <mqueue.h>
 
 #include "test_support.h"
@@ -44,51 +44,53 @@
 const char rtems_test_name[] = "PSXMSGQ 4";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  struct mq_attr          attr;
-  mqd_t                   Queue, second_Queue;
-  int                     sc;
-  Heap_Information_block  start;
-  size_t                  to_alloc;
-  void                   *alloced;
-  bool                    sb;
-  const char             *name;
+  struct mq_attr         attr;
+  mqd_t                  Queue, second_Queue;
+  int                    sc;
+  Heap_Information_block start;
+  size_t                 to_alloc;
+  void                  *alloced;
+  bool                   sb;
+  const char            *name;
 
   TEST_BEGIN();
 
   attr.mq_maxmsg = 1;
-  attr.mq_msgsize = sizeof(int);
+  attr.mq_msgsize = sizeof( int );
 
   puts( "Init - Open message queue instance 1" );
   Queue = mq_open( "Queue", O_CREAT | O_RDWR, 0x777, &attr );
-  if ( (int) Queue == (-1) )
+  if ( (int) Queue == ( -1 ) ) {
     perror( "mq_open failed" );
-  rtems_test_assert( (int) Queue != (-1) );
+  }
+  rtems_test_assert( (int) Queue != ( -1 ) );
 
   puts( "Init - Open message queue instance 2 - FAIL - ENFILE " );
   second_Queue = mq_open( "Queue2", O_CREAT | O_RDWR, 0x777, &attr );
-  if ( (int) second_Queue != (-1) )
+  if ( (int) second_Queue != ( -1 ) ) {
     puts( "mq_open did not failed" );
-  rtems_test_assert( (int) second_Queue == (-1) );
+  }
+  rtems_test_assert( (int) second_Queue == ( -1 ) );
   rtems_test_assert( errno == ENFILE );
 
   puts( "Init - Unlink message queue instance 1" );
   sc = mq_unlink( "Queue" );
-  if ( sc != 0 )
+  if ( sc != 0 ) {
     perror( "mq_unlink failed" );
+  }
   rtems_test_assert( sc == 0 );
 
   puts( "Init - Close message queue instance 1" );
   sc = mq_close( Queue );
-  if ( sc != 0 )
+  if ( sc != 0 ) {
     perror( "mq_close failed" );
+  }
   rtems_test_assert( sc == 0 );
 
   sb = rtems_workspace_get_information( &start );
@@ -98,8 +100,9 @@ void *POSIX_Init(
   /* find the largest we can actually allocate */
   while ( 1 ) {
     sb = rtems_workspace_allocate( to_alloc, &alloced );
-    if ( sb )
+    if ( sb ) {
       break;
+    }
     to_alloc -= 4;
   }
 
@@ -115,7 +118,7 @@ void *POSIX_Init(
     sb = rtems_workspace_allocate( to_alloc, &alloced );
     rtems_test_assert( sb );
 
-    second_Queue = mq_open(name,O_CREAT | O_RDWR, 0x777, &attr );
+    second_Queue = mq_open( name, O_CREAT | O_RDWR, 0x777, &attr );
 
     /* free the memory we snagged, then check the status */
     rtems_workspace_free( alloced );
@@ -126,16 +129,18 @@ void *POSIX_Init(
   puts( "Init - Message Queue created" );
 
   puts( "Init - Unlink message queue" );
-    sc = mq_unlink( name );
-    if ( sc != 0 )
-      perror( "mq_unlink failed" );
-    rtems_test_assert( sc == 0 );
+  sc = mq_unlink( name );
+  if ( sc != 0 ) {
+    perror( "mq_unlink failed" );
+  }
+  rtems_test_assert( sc == 0 );
 
   puts( "Init - Close message queue" );
-    sc = mq_close( second_Queue );
-    if ( sc != 0 )
-      perror( "mq_close failed" );
-    rtems_test_assert( sc == 0 );
+  sc = mq_close( second_Queue );
+  if ( sc != 0 ) {
+    perror( "mq_close failed" );
+  }
+  rtems_test_assert( sc == 0 );
 
   TEST_END();
   rtems_test_exit( 0 );
@@ -152,12 +157,12 @@ void *POSIX_Init(
 
 /* account for message buffers and string names */
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-    (2 * CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, sizeof(int)))
+  ( 2 * CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 1, sizeof( int ) ) )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS                   1
-#define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES            1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS        1
+#define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 1
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 

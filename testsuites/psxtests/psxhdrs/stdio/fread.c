@@ -38,15 +38,15 @@
 
 int test( void );
 
-#define NUM_ALPHA  26
+#define NUM_ALPHA 26
 
 int test( void )
 {
   FILE *stream;
-  int bytes_read;
-  char buffer[NUM_ALPHA + 1];
+  int   bytes_read;
+  char  buffer[ NUM_ALPHA + 1 ];
 
-  buffer[NUM_ALPHA] = '\0';
+  buffer[ NUM_ALPHA ] = '\0';
   stream = fopen( "myfile.dat", "w" );
   bytes_read = fread( buffer, sizeof( char ), NUM_ALPHA, stream );
 

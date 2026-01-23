@@ -39,18 +39,17 @@
 
 #include <sys/socket.h>
 
-ssize_t test(void);
+ssize_t test( void );
 
-ssize_t test(void)
+ssize_t test( void )
 {
-  int              sockfd = 4;
-  int              buffer;
-  void            *buf = &buffer;
-  size_t           len = sizeof(buffer);
-  int              flags = 7;
-  struct  sockaddr src_addr;
-  socklen_t        addrlen;
+  int             sockfd = 4;
+  int             buffer;
+  void           *buf = &buffer;
+  size_t          len = sizeof( buffer );
+  int             flags = 7;
+  struct sockaddr src_addr;
+  socklen_t       addrlen;
 
-
-  return recvfrom(sockfd, buf, len, flags, &src_addr, &addrlen);
+  return recvfrom( sockfd, buf, len, flags, &src_addr, &addrlen );
 }

@@ -36,16 +36,16 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const char *ch;
-  mbstate_t *state;
-  size_t si;
+  mbstate_t  *state;
+  size_t      si;
 
-  ch = (void *)0;
+  ch = (void *) 0;
   si = 0;
   state = NULL;
-  return mbrlen(ch, si, state);
+  return mbrlen( ch, si, state );
 }

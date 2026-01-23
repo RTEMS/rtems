@@ -36,16 +36,16 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const wchar_t *wc;
   const wchar_t *wc1;
-  locale_t locale;
+  locale_t       locale;
 
   wc = 0;
   wc1 = 0;
-  locale = (locale_t)0;
-  return wcscasecmp_l(wc, wc1, locale);
+  locale = (locale_t) 0;
+  return wcscasecmp_l( wc, wc1, locale );
 }

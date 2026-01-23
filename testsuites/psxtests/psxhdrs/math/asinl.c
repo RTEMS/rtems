@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 0 ;
+  long double x = 0;
   long double result;
 
-  result = asinl(x) ;
+  result = asinl( x );
 
-  return (result) ;  /* This should return 0 */
+  return ( result ); /* This should return 0 */
 }
 #endif

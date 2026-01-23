@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  char *n = "42";
+  char     *n = "42";
   uintmax_t result;
-  char *endptr;
+  char     *endptr;
 
   result = strtoumax( n, &endptr, 10 );
 

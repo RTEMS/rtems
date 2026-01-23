@@ -37,29 +37,27 @@
 const char rtems_test_name[] = "PSXMUTEXATTR 1";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
-#if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
+#if defined( _UNIX98_THREAD_MUTEX_ATTRIBUTES )
 typedef struct {
   const char *name;
-  int type;
-  int status;
+  int         type;
+  int         status;
 } ToCheck_t;
 
 ToCheck_t TypesToCheck[] = {
-  { "bad type - EINVAL",             -1,                       EINVAL },
-  { "PTHREAD_MUTEX_NORMAL - OK",     PTHREAD_MUTEX_NORMAL,     0 },
-  { "PTHREAD_MUTEX_RECURSIVE - OK",  PTHREAD_MUTEX_RECURSIVE,  0 },
+  { "bad type - EINVAL", -1, EINVAL },
+  { "PTHREAD_MUTEX_NORMAL - OK", PTHREAD_MUTEX_NORMAL, 0 },
+  { "PTHREAD_MUTEX_RECURSIVE - OK", PTHREAD_MUTEX_RECURSIVE, 0 },
   { "PTHREAD_MUTEX_ERRORCHECK - OK", PTHREAD_MUTEX_ERRORCHECK, 0 },
-  { "PTHREAD_MUTEX_DEFAULT - OK",    PTHREAD_MUTEX_DEFAULT,    0 },
+  { "PTHREAD_MUTEX_DEFAULT - OK", PTHREAD_MUTEX_DEFAULT, 0 },
 };
 
-#define TO_CHECK sizeof(TypesToCheck) / sizeof(ToCheck_t)
+#define TO_CHECK sizeof( TypesToCheck ) / sizeof( ToCheck_t )
 #endif
 
-void *POSIX_Init(
-  void *ignored
-)
+void *POSIX_Init( void *ignored )
 {
   (void) ignored;
 
@@ -70,7 +68,7 @@ void *POSIX_Init(
 
   TEST_BEGIN();
 
-#if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
+#if defined( _UNIX98_THREAD_MUTEX_ATTRIBUTES )
   puts( "Init - pthread_mutexattr_gettype - attr NULL - EINVAL" );
   sc = pthread_mutexattr_gettype( NULL, &type );
   rtems_test_assert( sc == EINVAL );
@@ -79,7 +77,7 @@ void *POSIX_Init(
   sc = pthread_mutexattr_gettype( &attr, NULL );
   rtems_test_assert( sc == EINVAL );
 
-  memset( &attr, 0, sizeof(attr) );
+  memset( &attr, 0, sizeof( attr ) );
   puts( "Init - pthread_mutexattr_gettype - attr not initialized - EINVAL" );
   sc = pthread_mutexattr_gettype( &attr, &type );
   rtems_test_assert( sc == EINVAL );
@@ -97,29 +95,35 @@ void *POSIX_Init(
   sc = pthread_mutexattr_settype( NULL, PTHREAD_MUTEX_NORMAL );
   rtems_test_assert( sc == EINVAL );
 
-  memset( &attr, 0, sizeof(attr) );
+  memset( &attr, 0, sizeof( attr ) );
   puts( "Init - pthread_mutexattr_settype - attr not initialized - EINVAL" );
   sc = pthread_mutexattr_settype( NULL, PTHREAD_MUTEX_NORMAL );
   rtems_test_assert( sc == EINVAL );
 
   /* iterate over good/bad get sets */
 
-  for (i=0 ; i<TO_CHECK ; i++ ) {
+  for ( i = 0; i < TO_CHECK; i++ ) {
     puts( "Init - pthread_mutexattr_init - OK" );
     sc = pthread_mutexattr_init( &attr );
     rtems_test_assert( sc == 0 );
 
-    printf( "Init - pthread_mutexattr_settype - %s\n", TypesToCheck[i].name );
-    sc = pthread_mutexattr_settype( &attr, TypesToCheck[i].type );
-    rtems_test_assert( sc == TypesToCheck[i].status );
+    printf(
+      "Init - pthread_mutexattr_settype - %s\n",
+      TypesToCheck[ i ].name
+    );
+    sc = pthread_mutexattr_settype( &attr, TypesToCheck[ i ].type );
+    rtems_test_assert( sc == TypesToCheck[ i ].status );
 
     type = -2;
 
-    if ( TypesToCheck[i].status == 0 ) {
-      printf( "Init - pthread_mutexattr_gettype - %s\n", TypesToCheck[i].name );
+    if ( TypesToCheck[ i ].status == 0 ) {
+      printf(
+        "Init - pthread_mutexattr_gettype - %s\n",
+        TypesToCheck[ i ].name
+      );
       sc = pthread_mutexattr_gettype( &attr, &type );
       rtems_test_assert( sc == 0 );
-      rtems_test_assert( type == TypesToCheck[i].type );
+      rtems_test_assert( type == TypesToCheck[ i ].type );
     }
   }
 #else
@@ -127,7 +131,7 @@ void *POSIX_Init(
 #endif
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -137,7 +141,7 @@ void *POSIX_Init(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS  1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 

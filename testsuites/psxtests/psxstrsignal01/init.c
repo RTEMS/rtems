@@ -42,82 +42,76 @@ typedef struct {
 } Signals_t;
 
 Signals_t Signals[] = {
-  { "SIGHUP",   SIGHUP },
-  { "SIGINT",   SIGINT },
-  { "SIGQUIT",  SIGQUIT },
-  { "SIGILL",   SIGILL },
-  { "SIGTRAP",  SIGTRAP },
-  { "SIGIOT",   SIGIOT },
-  { "SIGABRT",  SIGABRT },
+  { "SIGHUP", SIGHUP },
+  { "SIGINT", SIGINT },
+  { "SIGQUIT", SIGQUIT },
+  { "SIGILL", SIGILL },
+  { "SIGTRAP", SIGTRAP },
+  { "SIGIOT", SIGIOT },
+  { "SIGABRT", SIGABRT },
 #ifdef SIGEMT
-  { "SIGEMT",   SIGEMT },
+  { "SIGEMT", SIGEMT },
 #endif
-  { "SIGFPE",   SIGFPE },
-  { "SIGKILL",  SIGKILL },
-  { "SIGBUS",   SIGBUS },
-  { "SIGSEGV",  SIGSEGV },
-  { "SIGSYS",   SIGSYS },
-  { "SIGPIPE",  SIGPIPE },
-  { "SIGALRM",  SIGALRM },
-  { "SIGTERM",  SIGTERM },
-  { "SIGURG",   SIGURG },
-  { "SIGSTOP",  SIGSTOP },
-  { "SIGTSTP",  SIGTSTP },
-  { "SIGCONT",  SIGCONT },
-  { "SIGCHLD",  SIGCHLD },
-  { "SIGCLD",   SIGCLD },
-  { "SIGTTIN",  SIGTTIN },
-  { "SIGTTOU",  SIGTTOU },
-  { "SIGIO",    SIGIO },
-  { "SIGPOLL",  SIGPOLL },
+  { "SIGFPE", SIGFPE },
+  { "SIGKILL", SIGKILL },
+  { "SIGBUS", SIGBUS },
+  { "SIGSEGV", SIGSEGV },
+  { "SIGSYS", SIGSYS },
+  { "SIGPIPE", SIGPIPE },
+  { "SIGALRM", SIGALRM },
+  { "SIGTERM", SIGTERM },
+  { "SIGURG", SIGURG },
+  { "SIGSTOP", SIGSTOP },
+  { "SIGTSTP", SIGTSTP },
+  { "SIGCONT", SIGCONT },
+  { "SIGCHLD", SIGCHLD },
+  { "SIGCLD", SIGCLD },
+  { "SIGTTIN", SIGTTIN },
+  { "SIGTTOU", SIGTTOU },
+  { "SIGIO", SIGIO },
+  { "SIGPOLL", SIGPOLL },
   { "SIGWINCH", SIGWINCH },
-  { "SIGUSR1",  SIGUSR1 },
-  { "SIGUSR2",  SIGUSR2 },
-  { NULL,       -1 },
+  { "SIGUSR1", SIGUSR1 },
+  { "SIGUSR2", SIGUSR2 },
+  { NULL, -1 },
 };
 
-void do_test(void);
-void do_test_rt(void);
-void *POSIX_Init(void *unused);
+void  do_test( void );
+void  do_test_rt( void );
+void *POSIX_Init( void *unused );
 
-void do_test(void)
+void do_test( void )
 {
   int i;
 
   puts( "=== Normal Signals" );
-  for (i=0 ; Signals[i].sigstr ; i++) {
+  for ( i = 0; Signals[ i ].sigstr; i++ ) {
     printf(
       "signal=%s => %s\n",
-      Signals[i].sigstr,
-      strsignal(Signals[i].signal)
+      Signals[ i ].sigstr,
+      strsignal( Signals[ i ].signal )
     );
   }
 }
 
-void do_test_rt(void)
+void do_test_rt( void )
 {
   int sig;
 
   puts( "=== Real-Time Signals" );
-  for (sig=SIGRTMIN ; sig <= SIGRTMAX ; sig++) {
-    printf(
-      "signal=SIGRTMIN+%d => %s\n",
-      sig-SIGRTMIN,
-      strsignal(sig)
-    );
+  for ( sig = SIGRTMIN; sig <= SIGRTMAX; sig++ ) {
+    printf( "signal=SIGRTMIN+%d => %s\n", sig - SIGRTMIN, strsignal( sig ) );
   }
 }
 
-void *POSIX_Init(
-  void *unused
-)
+void *POSIX_Init( void *unused )
 {
   (void) unused;
 
   TEST_BEGIN();
 
   do_test();
-  puts("");
+  puts( "" );
   do_test_rt();
 
   TEST_END();

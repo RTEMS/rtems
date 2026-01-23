@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 56.7 , result ;
+  long double x = 56.7, result;
 
-  result = truncl(x) ;
+  result = truncl( x );
 
-  return (result);
+  return ( result );
 }
 #endif

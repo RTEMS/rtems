@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  void *addr = NULL;
+  void  *addr = NULL;
   size_t len = 0;
-  int advice = 0;
+  int    advice = 0;
 
   return posix_madvise( addr, len, advice );
 }

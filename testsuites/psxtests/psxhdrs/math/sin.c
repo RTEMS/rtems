@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 90 ;
+  double x = 90;
   double result;
 
-  result = sin(x) ;
+  result = sin( x );
 
-  return (result) ;
+  return ( result );
 }

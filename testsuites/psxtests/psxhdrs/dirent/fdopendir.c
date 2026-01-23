@@ -43,7 +43,7 @@ int test( void );
 
 int test( void )
 {
-  int fd;
+  int  fd;
   DIR *result;
 
   fd = open( "./", O_RDONLY );

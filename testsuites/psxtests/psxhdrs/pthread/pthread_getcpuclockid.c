@@ -42,9 +42,9 @@ int test( void );
 
 int test( void )
 {
-  pthread_t  thread;
-  clockid_t  clock_id;
-  int        result;
+  pthread_t thread;
+  clockid_t clock_id;
+  int       result;
 
   thread = 0;
 

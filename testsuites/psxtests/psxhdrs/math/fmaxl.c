@@ -42,12 +42,12 @@ int test( void );
 
 int test( void )
 {
-  long double x = 6834 ;
-  long double y = 45 ;
-  long double result ;
+  long double x = 6834;
+  long double y = 45;
+  long double result;
 
-  result = fmaxl(x,y) ;
+  result = fmaxl( x, y );
 
-  return (result);
+  return ( result );
 }
 #endif

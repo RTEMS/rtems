@@ -36,16 +36,16 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  wchar_t *wc;
+  wchar_t       *wc;
   const wchar_t *ch;
-  size_t s0;
+  size_t         s0;
 
   wc = 0;
   ch = 0;
   s0 = 0;
-  return swprintf(wc, s0, ch);
+  return swprintf( wc, s0, ch );
 }

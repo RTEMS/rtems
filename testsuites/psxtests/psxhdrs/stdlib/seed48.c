@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	unsigned short *return_value;
-	unsigned short seed16v[3];
+  unsigned short *return_value;
+  unsigned short  seed16v[ 3 ];
 
-	return_value = seed48(seed16v);
-	return (return_value != NULL);
+  return_value = seed48( seed16v );
+  return ( return_value != NULL );
 }

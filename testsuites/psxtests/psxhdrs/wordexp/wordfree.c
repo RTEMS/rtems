@@ -42,9 +42,9 @@ int test( void )
 {
   wordexp_t p;
 
-  wordexp("[a-c]*.c",&p,0);
+  wordexp( "[a-c]*.c", &p, 0 );
 
-  wordfree(&p);
+  wordfree( &p );
 
-  return (0);
+  return ( 0 );
 }

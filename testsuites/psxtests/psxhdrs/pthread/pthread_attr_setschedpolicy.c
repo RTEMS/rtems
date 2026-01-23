@@ -42,9 +42,9 @@ int test( void );
 
 int test( void )
 {
-  pthread_attr_t  attr;
-  int             policy;
-  int             result;
+  pthread_attr_t attr;
+  int            policy;
+  int            result;
 
   policy = SCHED_FIFO;
   policy = SCHED_RR;

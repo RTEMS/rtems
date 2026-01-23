@@ -43,9 +43,9 @@ int test( void )
 {
   thrd_t lhs;
   thrd_t rhs;
-  int ln = 1;
-  int rn = 1;
-  int result;
+  int    ln = 1;
+  int    rn = 1;
+  int    result;
 
   thrd_create( &lhs, th_func, &ln );
   thrd_create( &rhs, th_func, &rn );
@@ -56,6 +56,6 @@ int test( void )
 
 int th_func( void *arg )
 {
-    ++*(int*)arg;
-    return 0;
+  ++*(int *) arg;
+  return 0;
 }

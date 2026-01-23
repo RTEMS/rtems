@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 345.23 ;
-  int result ;
+  long double x = 345.23;
+  int         result;
 
-  result = ilogbl(x) ;
+  result = ilogbl( x );
 
-  return (result);
+  return ( result );
 }
 #endif

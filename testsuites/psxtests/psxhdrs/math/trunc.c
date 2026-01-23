@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  double x = 56.7 , result ;
+  double x = 56.7, result;
 
-  result = trunc(x) ;
+  result = trunc( x );
 
-  return (result);
+  return ( result );
 }

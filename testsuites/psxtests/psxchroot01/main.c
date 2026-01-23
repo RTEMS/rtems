@@ -37,7 +37,6 @@
  *  Simple test program -- simplified version of sample test hello.
  */
 
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -46,12 +45,10 @@
 #include <pmacros.h>
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-int test_main(void);
+rtems_task Init( rtems_task_argument argument );
+int        test_main( void );
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 

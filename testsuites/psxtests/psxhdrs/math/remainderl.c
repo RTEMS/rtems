@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 100 , y = 23 , result ;
+  long double x = 100, y = 23, result;
 
-  result = remainderl( x , y ) ;
+  result = remainderl( x, y );
 
-  return (result);
+  return ( result );
 }
 #endif

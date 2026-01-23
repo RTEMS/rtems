@@ -39,15 +39,13 @@
 const char rtems_test_name[] = "PSXPASSWD 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument ignored);
-void print_passwd(struct passwd *pw);
-void print_group(struct group *gr);
+rtems_task Init( rtems_task_argument ignored );
+void       print_passwd( struct passwd *pw );
+void       print_group( struct group *gr );
 
-void print_passwd(
-  struct passwd *pw
-)
+void print_passwd( struct passwd *pw )
 {
-  printf( 
+  printf(
     "  username: %s\n"
     "  user password: %s\n"
     "  user ID: %d\n"
@@ -64,12 +62,10 @@ void print_passwd(
     pw->pw_shell
   );
 }
-  
-void print_group(
-  struct group *gr
-)
+
+void print_group( struct group *gr )
 {
-  printf( 
+  printf(
     "  group name: %s\n"
     "  group  password: %s\n"
     "  group  ID: %d\n",
@@ -80,10 +76,8 @@ void print_group(
 
   /* TBD print users in group */
 }
-  
-rtems_task Init(
-  rtems_task_argument ignored
-)
+
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -150,14 +144,14 @@ rtems_task Init(
   rtems_test_assert( pw );
   print_passwd( pw );
 
-  rtems_test_assert( strcmp(pw->pw_name, "root") == 0 );
-  rtems_test_assert( strcmp(pw->pw_passwd, "") == 0 );
+  rtems_test_assert( strcmp( pw->pw_name, "root" ) == 0 );
+  rtems_test_assert( strcmp( pw->pw_passwd, "" ) == 0 );
   rtems_test_assert( pw->pw_uid == 0 );
   rtems_test_assert( pw->pw_gid == 0 );
-  rtems_test_assert( strcmp(pw->pw_comment, "") == 0 );
-  rtems_test_assert( strcmp(pw->pw_gecos, "") == 0 );
-  rtems_test_assert( strcmp(pw->pw_dir, "") == 0 );
-  rtems_test_assert( strcmp(pw->pw_shell, "") == 0 );
+  rtems_test_assert( strcmp( pw->pw_comment, "" ) == 0 );
+  rtems_test_assert( strcmp( pw->pw_gecos, "" ) == 0 );
+  rtems_test_assert( strcmp( pw->pw_dir, "" ) == 0 );
+  rtems_test_assert( strcmp( pw->pw_shell, "" ) == 0 );
 
   puts( "Init - getpwuid(4) -- result should be NULL" );
   pw = getpwuid( 4 );
@@ -165,22 +159,22 @@ rtems_task Init(
 
   /* getgrnam */
   puts( "Init - getgrnam(\"root\") -- OK" );
-  gr = getgrnam("root");
+  gr = getgrnam( "root" );
   rtems_test_assert( gr );
   print_group( gr );
 
   /* getgrgid */
   puts( "Init - getgrgid(0) -- OK" );
-  gr = getgrgid(0);
+  gr = getgrgid( 0 );
   rtems_test_assert( gr );
   print_group( gr );
 
-  rtems_test_assert( strcmp(gr->gr_name, "root") == 0 );
-  rtems_test_assert( strcmp(gr->gr_passwd, "") == 0 );
+  rtems_test_assert( strcmp( gr->gr_name, "root" ) == 0 );
+  rtems_test_assert( strcmp( gr->gr_passwd, "" ) == 0 );
   rtems_test_assert( gr->gr_gid == 0 );
-  rtems_test_assert( gr->gr_mem[0] == NULL );
+  rtems_test_assert( gr->gr_mem[ 0 ] == NULL );
 
-  puts( "Init - getgrgid(4) -- result should be NULL");
+  puts( "Init - getgrgid(4) -- result should be NULL" );
   gr = getgrgid( 4 );
   rtems_test_assert( !gr );
 
@@ -203,10 +197,10 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 6
 
-#define CONFIGURE_MAXIMUM_TASKS 1
-#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
+#define CONFIGURE_MAXIMUM_TASKS                 1
+#define CONFIGURE_MAXIMUM_POSIX_KEYS            1
 #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 1
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS            RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

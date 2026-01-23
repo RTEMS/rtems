@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x=(0.0);
+  float x = ( 0.0 );
   float result;
 
-  result = asinf(x);
+  result = asinf( x );
 
-  return (result);
+  return ( result );
 }

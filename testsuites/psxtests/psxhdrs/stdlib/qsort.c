@@ -37,19 +37,19 @@
 #include <stdlib.h>
 
 int test( void );
-int compar(const void *, const void *);
+int compar( const void *, const void * );
 
 int test( void )
 {
-	int base[] = {1, 2};
-	size_t nel = 2;
-	size_t width = sizeof(int);
+  int    base[] = { 1, 2 };
+  size_t nel = 2;
+  size_t width = sizeof( int );
 
-	qsort(base, nel, width, compar);
-	return 1;
+  qsort( base, nel, width, compar );
+  return 1;
 }
 
-int compar(const void *i, const void *j)
+int compar( const void *i, const void *j )
 {
-	return (*(int *)i > *(int *)j);
+  return ( *(int *) i > *(int *) j );
 }

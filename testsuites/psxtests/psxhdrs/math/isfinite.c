@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 34.67 ;
-  int  result ;
+  double x = 34.67;
+  int    result;
 
-  result = isfinite(x) ;
+  result = isfinite( x );
 
-  return (result);
+  return ( result );
 }

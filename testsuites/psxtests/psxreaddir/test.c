@@ -62,15 +62,15 @@
 const char rtems_test_name[] = "PSXREADDIR";
 
 /* forward declarations to avoid warnings */
-int test_main(void);
-void printdir(DIR *directory);
-void complete_printdir(char *path);
-int select1(const struct dirent *entry);
-int select2(const struct dirent *entry);
-int compare_ascending(const struct dirent **a, const struct dirent **b);
-int compare_descending( const struct dirent **a, const struct dirent **b);
-void test_across_mount(void);
-void test_across_mount(void);
+int  test_main( void );
+void printdir( DIR *directory );
+void complete_printdir( char *path );
+int  select1( const struct dirent *entry );
+int  select2( const struct dirent *entry );
+int  compare_ascending( const struct dirent **a, const struct dirent **b );
+int  compare_descending( const struct dirent **a, const struct dirent **b );
+void test_across_mount( void );
+void test_across_mount( void );
 
 DIR *directory;
 DIR *directory2;
@@ -85,7 +85,7 @@ int scandir ( const char *dirname,
 );
 */
 
-#if defined(__rtems__)
+#if defined( __rtems__ )
 #define d_type d_reclen
 #include <pmacros.h>
 #endif
@@ -94,22 +94,33 @@ void printdir( DIR *directory )
 {
   struct dirent *d;
 
-  printf( "%-20s %8s %8s %8s %4s\n",
-     "name", "    inode", " offset", "reclen", " type" );
-  d = readdir(directory);
+  printf(
+    "%-20s %8s %8s %8s %4s\n",
+    "name",
+    "    inode",
+    " offset",
+    "reclen",
+    " type"
+  );
+  d = readdir( directory );
 
-  while (d) {
-    printf( "%-20s %8" PRIuino_t " %8" PRIdoff_t " %6d   0x%04x\n",
-       d->d_name, d->d_ino, d->d_off, d->d_reclen, d->d_type );
-    d = readdir(directory);
-
+  while ( d ) {
+    printf(
+      "%-20s %8" PRIuino_t " %8" PRIdoff_t " %6d   0x%04x\n",
+      d->d_name,
+      d->d_ino,
+      d->d_off,
+      d->d_reclen,
+      d->d_type
+    );
+    d = readdir( directory );
   }
 }
 
 void complete_printdir( char *path )
 {
   DIR *the_dir;
-  int status;
+  int  status;
 
   the_dir = opendir( path );
   rtems_test_assert( the_dir );
@@ -120,107 +131,107 @@ void complete_printdir( char *path )
 }
 
 char *many_files[] = {
-	"a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-        "k",
-        "l",
-        "m",
-        "n",
-        "o",
-        "p",
-        "q",
-        "r",
-        "s",
-        "t",
-        "u",
-        "v",
-        "w",
-        "x",
-        "y",
-        "z",
-        "aa",
-        "ab",
-        "ac",
-        "ad",
-        "ae",
-        "af",
-        "ag",
-        "ah",
-        "ai",
-        "aj",
-        "ak",
-        "al",
-        "am",
-        "an",
-        "ao",
-        "ap",
-        "aq",
-        "ar"
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "v",
+  "w",
+  "x",
+  "y",
+  "z",
+  "aa",
+  "ab",
+  "ac",
+  "ad",
+  "ae",
+  "af",
+  "ag",
+  "ah",
+  "ai",
+  "aj",
+  "ak",
+  "al",
+  "am",
+  "an",
+  "ao",
+  "ap",
+  "aq",
+  "ar"
 };
 
 char *dnames[] = {
-	"a",
-	"b",
-	"c",
-	"d",
-	"e",
-	"f",
-	"c/y",
-	"c/z",
-	"c/x",
-	"c/y/a3333",
-	"c/y/j123",
-        "END"
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "c/y",
+  "c/z",
+  "c/x",
+  "c/y/a3333",
+  "c/y/j123",
+  "END"
 };
 
-int select1 ( const struct dirent *entry )
+int select1( const struct dirent *entry )
 {
-   printf("SCANDIR SELECT1 accepts  nodename: %s\n", entry->d_name );
-   return 1;
+  printf( "SCANDIR SELECT1 accepts  nodename: %s\n", entry->d_name );
+  return 1;
 }
 
-int select2 ( const struct dirent *entry )
+int select2( const struct dirent *entry )
 {
-   if( strcmp( entry->d_name, "y") == 0 ) {
-      printf("SCANDIR SELECT accepted nodename: %s\n", entry->d_name );
-      return 1;
-   }
-   printf("SCANDIR SELECT rejected nodename: %s\n", entry->d_name );
-   return 0;
+  if ( strcmp( entry->d_name, "y" ) == 0 ) {
+    printf( "SCANDIR SELECT accepted nodename: %s\n", entry->d_name );
+    return 1;
+  }
+  printf( "SCANDIR SELECT rejected nodename: %s\n", entry->d_name );
+  return 0;
 }
 
-int compare_ascending(const struct dirent **a, const struct dirent **b )
+int compare_ascending( const struct dirent **a, const struct dirent **b )
 {
-   int i;
+  int i;
 
-   i = strcmp (
-      (char *)((struct dirent *)(*a)->d_name),
-      (char *)((struct dirent *)(*b)->d_name)
-   );
-   return i;
+  i = strcmp(
+    (char *) ( (struct dirent *) ( *a )->d_name ),
+    (char *) ( (struct dirent *) ( *b )->d_name )
+  );
+  return i;
 }
 
 int compare_descending( const struct dirent **a, const struct dirent **b )
 {
-   int i;
+  int i;
 
-   i = strcmp (
-      (char *)((const struct dirent *)(*b)->d_name),
-      (char *)((const struct dirent *)(*a)->d_name)
-   );
+  i = strcmp(
+    (char *) ( (const struct dirent *) ( *b )->d_name ),
+    (char *) ( (const struct dirent *) ( *a )->d_name )
+  );
 
-   return i;
+  return i;
 }
 
-void test_across_mount(void)
+void test_across_mount( void )
 {
   int status;
 
@@ -228,51 +239,42 @@ void test_across_mount(void)
    * Verify Readdir works correctly over mount points.
    */
 
-  printf("Validate readdir across mount point\n");
+  printf( "Validate readdir across mount point\n" );
   rtems_test_assert( mkdir( "/imfs", 0777 ) == 0 );
   rtems_test_assert( mkdir( "/imfs/should_be_hidden", 0777 ) == 0 );
-  complete_printdir("/imfs" );
-  printf("Attempting to mount IMFS file system at /imfs \n");
-  status = mount(
-    "null",
-    "/imfs",
-    "imfs",
-     RTEMS_FILESYSTEM_READ_WRITE,
-     NULL );
+  complete_printdir( "/imfs" );
+  printf( "Attempting to mount IMFS file system at /imfs \n" );
+  status = mount( "null", "/imfs", "imfs", RTEMS_FILESYSTEM_READ_WRITE, NULL );
   rtems_test_assert( status == 0 );
-  printf( "create /imfs/testdir and /imfs/testdir/testsubdir\n");
+  printf( "create /imfs/testdir and /imfs/testdir/testsubdir\n" );
 
   status = mkdir( "/imfs/testdir", 0777 );
   rtems_test_assert( status == 0 );
   status = mkdir( "/imfs/testdir/testsubdir", 0777 );
   rtems_test_assert( status == 0 );
 
-  complete_printdir("/imfs" );
-  complete_printdir("/imfs/" );
-  complete_printdir("/imfs/." );
-  complete_printdir("/imfs/testdir" );
-  complete_printdir("/imfs/testdir/.." );
+  complete_printdir( "/imfs" );
+  complete_printdir( "/imfs/" );
+  complete_printdir( "/imfs/." );
+  complete_printdir( "/imfs/testdir" );
+  complete_printdir( "/imfs/testdir/.." );
 }
 
-#if defined(__rtems__)
-int test_main(void)
+#if defined( __rtems__ )
+int test_main( void )
 #else
-int main(
-  int argc,
-  char **argv
-)
+int main( int argc, char **argv )
 #endif
 {
   static const char *my_file = "/b/my_file";
 
-  int fd;
-  int i;
-  int status;
-  off_t off;
-  struct dirent *d_not;
+  int             fd;
+  int             i;
+  int             status;
+  off_t           off;
+  struct dirent  *d_not;
   struct dirent **namelist;
-  struct stat s;
-
+  struct stat     s;
 
   TEST_BEGIN();
 
@@ -281,152 +283,156 @@ int main(
   printf( "chdir() status : %d\n\n", status );
 
   printf( "\nCreating a series of directories under /\n" );
-  i=0;
-  while ( strcmp(dnames[i], "END") != 0 )
-  {
-     status = mkdir( dnames[i], 0x1c0 );
-     printf("Creating directory: %s      %d %d   ", dnames[i], status, errno );
-     if ( errno == 0 )
-        printf(" Success\n");
-     else
-        printf(" Failure\n");
+  i = 0;
+  while ( strcmp( dnames[ i ], "END" ) != 0 ) {
+    status = mkdir( dnames[ i ], 0x1c0 );
+    printf(
+      "Creating directory: %s      %d %d   ",
+      dnames[ i ],
+      status,
+      errno
+    );
+    if ( errno == 0 ) {
+      printf( " Success\n" );
+    } else {
+      printf( " Failure\n" );
+    }
 
-     i++;
+    i++;
   }
 
   /*
    * Create files under many and open the directory.
    */
 
-  printf("Create a lot of files\n");
+  printf( "Create a lot of files\n" );
   status = mkdir( "/many", 0x1c0 );
   status = chdir( "/many" );
-  for (i = 0; i<44; i++) {
-    printf("Create %s\n", many_files[i]);
-    fd = open (many_files[i], O_CREAT, S_IRWXU);
-    close (fd);
+  for ( i = 0; i < 44; i++ ) {
+    printf( "Create %s\n", many_files[ i ] );
+    fd = open( many_files[ i ], O_CREAT, S_IRWXU );
+    close( fd );
   }
-  printf("Open /many and print the directory\n");
+  printf( "Open /many and print the directory\n" );
   directory_not = opendir( "/many" );
-  printdir ( directory_not );
+  printdir( directory_not );
   d_not = readdir( directory_not );
   rtems_test_assert( d_not == 0 );
 
-  printf("open %s\n", my_file);
-  fd = open (my_file, O_CREAT, S_IRWXU);
+  printf( "open %s\n", my_file );
+  fd = open( my_file, O_CREAT, S_IRWXU );
   rtems_test_assert( fd != -1 );
-  close (fd);
+  close( fd );
 
-  printf("scandir a file status: ");
-  status = scandir(
-     my_file,
-     &namelist,
-     select1,
-     NULL
-  );
-  printf("%d\n", status);
+  printf( "scandir a file status: " );
+  status = scandir( my_file, &namelist, select1, NULL );
+  printf( "%d\n", status );
 
-  printf("Open /b/new_file\n");
-  fd  = open( "/b/new_file", O_CREAT, S_IRWXU );
+  printf( "Open /b/new_file\n" );
+  fd = open( "/b/new_file", O_CREAT, S_IRWXU );
   rtems_test_assert( fd != -1 );
 
-  printf("fcntl F_SETFD should return 0\n");
+  printf( "fcntl F_SETFD should return 0\n" );
   status = fcntl( fd, F_SETFD, 1 );
   rtems_test_assert( status == 0 );
 
-  printf("fcntl F_SETFD should return 1\n");
+  printf( "fcntl F_SETFD should return 1\n" );
   status = fcntl( fd, F_GETFD, 1 );
   rtems_test_assert( status == 1 );
 
-  printf("fcntl F_DUPFD should return a file descriptor\n");
+  printf( "fcntl F_DUPFD should return a file descriptor\n" );
   status = fcntl( fd, F_DUPFD, 0 );
-  rtems_test_assert ( status >= 0 );
+  rtems_test_assert( status >= 0 );
 
-  printf("close duplicate should return 0\n");
+  printf( "close duplicate should return 0\n" );
   status = close( status );
-  rtems_test_assert ( status == 0 );
+  rtems_test_assert( status == 0 );
 
-  printf("fcntl F_GETFL returns current flags\n");
+  printf( "fcntl F_GETFL returns current flags\n" );
   status = fcntl( fd, F_GETFL, 1 );
-  printf("fcntl F_GETFL returned 0x%x\n", status );
+  printf( "fcntl F_GETFL returned 0x%x\n", status );
   rtems_test_assert( status != -1 );
 
-  printf("fcntl F_SETFL to add O_APPEND and O_NONBLOCK\n");
-  status = fcntl( fd, F_SETFL, O_APPEND|O_NONBLOCK );
-  rtems_test_assert ( status != -1 );
-
-  printf("fcntl F_GETFL return current flags to see changes\n");
-  status = fcntl( fd, F_GETFL, 1 );
-  printf("fcntl F_GETFL returned 0x%x\n", status );
+  printf( "fcntl F_SETFL to add O_APPEND and O_NONBLOCK\n" );
+  status = fcntl( fd, F_SETFL, O_APPEND | O_NONBLOCK );
   rtems_test_assert( status != -1 );
 
-  printf("fcntl F_GETLK should return -1\n");
+  printf( "fcntl F_GETFL return current flags to see changes\n" );
+  status = fcntl( fd, F_GETFL, 1 );
+  printf( "fcntl F_GETFL returned 0x%x\n", status );
+  rtems_test_assert( status != -1 );
+
+  printf( "fcntl F_GETLK should return -1\n" );
   status = fcntl( fd, F_GETLK, 1 );
-  rtems_test_assert ( status == -1 );
-
-  printf("fcntl F_SETLK should return -1\n");
-  status = fcntl( fd, F_SETLK, 1 );
-  rtems_test_assert ( status == -1 );
-
-  printf("fcntl F_SETLKW should return -1\n");
-  status = fcntl( fd, F_SETLKW, 1 );
-  rtems_test_assert ( status == -1 );
-
-  printf("fcntl F_SETOWN should return -1\n");
-  status = fcntl( fd, F_SETOWN, 1 );
-  rtems_test_assert ( status == -1 );
-
-  printf("fcntl F_GETOWN should return -1\n");
-  status = fcntl( fd, F_GETOWN, 1 );
-  rtems_test_assert ( status == -1 );
-
-  printf("fcntl invalid argument should return -1\n");
-  status = fcntl( fd, 0xb, 1 );
-  printf("Status %d\n",status);
   rtems_test_assert( status == -1 );
 
-  printf("close should return 0\n");
-  status = close( fd );
-  rtems_test_assert ( status == 0 );
+  printf( "fcntl F_SETLK should return -1\n" );
+  status = fcntl( fd, F_SETLK, 1 );
+  rtems_test_assert( status == -1 );
 
-  printf("opendir, readdir and closedir %s\n", my_file);
+  printf( "fcntl F_SETLKW should return -1\n" );
+  status = fcntl( fd, F_SETLKW, 1 );
+  rtems_test_assert( status == -1 );
+
+  printf( "fcntl F_SETOWN should return -1\n" );
+  status = fcntl( fd, F_SETOWN, 1 );
+  rtems_test_assert( status == -1 );
+
+  printf( "fcntl F_GETOWN should return -1\n" );
+  status = fcntl( fd, F_GETOWN, 1 );
+  rtems_test_assert( status == -1 );
+
+  printf( "fcntl invalid argument should return -1\n" );
+  status = fcntl( fd, 0xb, 1 );
+  printf( "Status %d\n", status );
+  rtems_test_assert( status == -1 );
+
+  printf( "close should return 0\n" );
+  status = close( fd );
+  rtems_test_assert( status == 0 );
+
+  printf( "opendir, readdir and closedir %s\n", my_file );
 #ifdef O_DIRECTORY
   fd = open( my_file, O_RDONLY );
   rtems_test_assert( fd >= 0 );
   directory_not = fdopendir( fd );
 #else
-  directory_not = opendir (my_file);
+  directory_not = opendir( my_file );
 #endif
   rtems_test_assert( directory_not != NULL );
-  d_not = readdir(directory_not);
+  d_not = readdir( directory_not );
   rtems_test_assert( d_not == NULL );
-  status = closedir (directory_not);
-  rtems_test_assert (status == 0);
+  status = closedir( directory_not );
+  rtems_test_assert( status == 0 );
 
-  printf("opendir, readdir and closedir\n");
-  directory_not = opendir ("/a");
+  printf( "opendir, readdir and closedir\n" );
+  directory_not = opendir( "/a" );
   rtems_test_assert( directory_not != NULL );
-  d_not = readdir (directory_not);
+  d_not = readdir( directory_not );
   rtems_test_assert( d_not == NULL );
-  status = closedir (directory_not);
-  rtems_test_assert (status == 0);
+  status = closedir( directory_not );
+  rtems_test_assert( status == 0 );
 
-  printf("chdir to %s\n", my_file);
-  status = chdir (my_file);
-  rtems_test_assert (status == -1);
+  printf( "chdir to %s\n", my_file );
+  status = chdir( my_file );
+  rtems_test_assert( status == -1 );
 
-  printf( "\nPerforming stat of directory /\n");
+  printf( "\nPerforming stat of directory /\n" );
   status = stat( "/", &s );
-  printf("status for stat : %d, size of directory: %" PRIdoff_t "\n\n", status, s.st_size);
+  printf(
+    "status for stat : %d, size of directory: %" PRIdoff_t "\n\n",
+    status,
+    s.st_size
+  );
 
   puts( "\nOpen and print directory /" );
-  directory = opendir("/");
+  directory = opendir( "/" );
   rtems_test_assert( directory );
-  printdir(directory);
+  printdir( directory );
 
-  printf("\nmkdir /d/my_dir\n");
+  printf( "\nmkdir /d/my_dir\n" );
   status = mkdir( "/d/my_dir", 0x1c0 );
-  printf("Open /d/my_dir\n");
+  printf( "Open /d/my_dir\n" );
   directory_not = opendir( "/d/my_dir" );
   rtems_test_assert( directory_not );
 
@@ -438,22 +444,22 @@ int main(
   closedir( directory_not );
 
   printf( "\nOpening directory /c\n" );
-  directory2 = opendir("/c");
+  directory2 = opendir( "/c" );
 
   rtems_test_assert( directory2 );
 
-  printdir(directory2);
+  printdir( directory2 );
   status = closedir( directory2 );
 
   printf( "\nOpening directory /c/y\n" );
-  directory3 = opendir("/c/y");
+  directory3 = opendir( "/c/y" );
   rtems_test_assert( directory3 );
-  printdir(directory3);
+  printdir( directory3 );
   status = closedir( directory3 );
 
   printf( "\nLSEEK to the start of the open directory\n" );
   lseek( directory->dd_fd, 0, SEEK_SET );
-  printdir(directory);
+  printdir( directory );
 
   lseek( directory->dd_fd, 0, SEEK_CUR );
 
@@ -463,7 +469,7 @@ int main(
 
   printf( "\nRewinding directory\n" );
   rewinddir( directory );
-  printdir(directory);
+  printdir( directory );
 
 #if 0
   /* Newlib's implementation does not check for NULL */
@@ -473,91 +479,68 @@ int main(
 
   printf( "\nSeek directory\n" );
   printf( "telldir() should report only sizeof(struct dirent) increments \n" );
-  printf( "in position. Sizeof(struct dirent): %zd\n",
-                          sizeof(struct dirent) );
+  printf(
+    "in position. Sizeof(struct dirent): %zd\n",
+    sizeof( struct dirent )
+  );
   rewinddir( directory );
-  for( off=0 ; off<=200 ; off=off + sizeof(struct dirent) / 4 ) {
+  for ( off = 0; off <= 200; off = off + sizeof( struct dirent ) / 4 ) {
     seekdir( directory, off );
     printf(
-       "seeked to %2" PRIdoff_t " -- currently at %2ld\n",
-       off,
-       telldir(directory)
+      "seeked to %2" PRIdoff_t " -- currently at %2ld\n",
+      off,
+      telldir( directory )
     );
   }
 
-  printf( "Send seekdir a NULL pointer\n");
+  printf( "Send seekdir a NULL pointer\n" );
   seekdir( NULL, off );
 
   printf( "\nClosing directory\n" );
   status = closedir( directory );
 
-  printf( "\nSCANDIR TEST\n");
-  printf( "\nselection rule 1\n");
-  printf( "scanning for any entry under directory /c\n\n");
-  status = scandir(
-     "/c",
-     &namelist,
-     select1,
-     NULL
-  );
-  printf("\nscandir status: %d\n", status );
-  for ( i=0; i<status; i++)
-  {
-     printf("Selected Node Name: %s\n", namelist[i]->d_name );
+  printf( "\nSCANDIR TEST\n" );
+  printf( "\nselection rule 1\n" );
+  printf( "scanning for any entry under directory /c\n\n" );
+  status = scandir( "/c", &namelist, select1, NULL );
+  printf( "\nscandir status: %d\n", status );
+  for ( i = 0; i < status; i++ ) {
+    printf( "Selected Node Name: %s\n", namelist[ i ]->d_name );
   }
 
-  printf( "\nselection rule 2\n");
-  printf( "scanning for any entry under directory /c whose name = y\n\n");
-  status = scandir(
-     "/c",
-     &namelist,
-     select2,
-     NULL
-  );
-  printf("\nscandir status: %d\n", status );
-  for ( i=0; i<status; i++)
-  {
-     printf("Selected Node Name: %s\n", namelist[i]->d_name );
+  printf( "\nselection rule 2\n" );
+  printf( "scanning for any entry under directory /c whose name = y\n\n" );
+  status = scandir( "/c", &namelist, select2, NULL );
+  printf( "\nscandir status: %d\n", status );
+  for ( i = 0; i < status; i++ ) {
+    printf( "Selected Node Name: %s\n", namelist[ i ]->d_name );
   }
 
   printf( "\nSCANDIR with sorting\n" );
-  printf( "\nselection rule 1\n");
-  printf( "scanning for any entry under directory /c\n");
-  printf( "sort in ascending order\n\n");
-  status = scandir(
-     "/c",
-     &namelist,
-     select1,
-     compare_ascending
-  );
-  printf("\nscandir status: %d\n", status );
-  for ( i=0; i<status; i++)
-  {
-     printf("Selected and Sorted Node Name: %s\n", namelist[i]->d_name );
+  printf( "\nselection rule 1\n" );
+  printf( "scanning for any entry under directory /c\n" );
+  printf( "sort in ascending order\n\n" );
+  status = scandir( "/c", &namelist, select1, compare_ascending );
+  printf( "\nscandir status: %d\n", status );
+  for ( i = 0; i < status; i++ ) {
+    printf( "Selected and Sorted Node Name: %s\n", namelist[ i ]->d_name );
   }
-
 
   printf( "\nSCANDIR with sorting\n" );
-  printf( "\nselection rule 1\n");
-  printf( "scanning for any entry under directory /c\n");
-  printf( "sort in descending order\n\n");
-  status = scandir(
-     "/c",
-     &namelist,
-     select1,
-     compare_descending
-  );
-  printf("scandir status: %d\n", status );
-  for ( i=0; i<status; i++)
-  {
-     printf("Selected and Sorted Node Name: %s\n", namelist[i]->d_name );
+  printf( "\nselection rule 1\n" );
+  printf( "scanning for any entry under directory /c\n" );
+  printf( "sort in descending order\n\n" );
+  status = scandir( "/c", &namelist, select1, compare_descending );
+  printf( "scandir status: %d\n", status );
+  for ( i = 0; i < status; i++ ) {
+    printf( "Selected and Sorted Node Name: %s\n", namelist[ i ]->d_name );
   }
 
-  printf("unlink %s should return 0\n", my_file);
+  printf( "unlink %s should return 0\n", my_file );
   status = unlink( my_file );
-  rtems_test_assert ( status == 0 );
+  rtems_test_assert( status == 0 );
 
   test_across_mount();
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }

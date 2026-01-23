@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int notascii;
 
   notascii = 0;
-  return (toascii(notascii));
+  return ( toascii( notascii ) );
 }

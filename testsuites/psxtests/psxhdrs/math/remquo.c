@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 100 , y = 23 , result ;
-  int quo ;
+  double x = 100, y = 23, result;
+  int    quo;
 
-  result = remquo( x , y , &quo ) ;
+  result = remquo( x, y, &quo );
 
-  return (result);
+  return ( result );
 }

@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	wchar_t *pwc = malloc(sizeof(wchar_t) * 7);
+  int      return_value;
+  wchar_t *pwc = malloc( sizeof( wchar_t ) * 7 );
 
-	return_value = mbtowc(pwc, "string", 6);
-	return (return_value != -1);
+  return_value = mbtowc( pwc, "string", 6 );
+  return ( return_value != -1 );
 }

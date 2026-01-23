@@ -25,12 +25,12 @@
 
 #include <setjmp.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   sigjmp_buf a;
-  int b = 1;
-  siglongjmp(a, b);
+  int        b = 1;
+  siglongjmp( a, b );
   return 0;
 }

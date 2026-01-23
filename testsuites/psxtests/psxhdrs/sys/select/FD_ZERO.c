@@ -42,6 +42,6 @@ int test( void )
 {
   fd_set fdset;
 
-  FD_ZERO(&fdset);
+  FD_ZERO( &fdset );
   return 1;
 }

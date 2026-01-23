@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 34.3456 ;
-  long int result ;
+  long double x = 34.3456;
+  long int    result;
 
-  result = lrintl(x) ;
+  result = lrintl( x );
 
-  return (result);
+  return ( result );
 }
 #endif

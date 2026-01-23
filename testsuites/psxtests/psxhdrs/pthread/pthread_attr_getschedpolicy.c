@@ -42,9 +42,9 @@ int test( void );
 
 int test( void )
 {
-  pthread_attr_t  attr = { 0 };
-  int             policy = 0;
-  int             result;
+  pthread_attr_t attr = { 0 };
+  int            policy = 0;
+  int            result;
 
   result = pthread_attr_getschedpolicy( &attr, &policy );
 

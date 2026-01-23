@@ -34,33 +34,34 @@
 #define BLOCK_SIZE 16
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void open_it(bool readOnly, bool create);
-void write_helper(void);
-void read_helper(void);
-void truncate_helper(void);
-void extend_helper(int eno);
-void close_it(void);
-void unlink_it(void);
-void statvfs_helper(void);
-__attribute__((weak)) void init_memory(void);
-__attribute__((weak)) void validate_data_blocks_count(void);
+rtems_task                   Init( rtems_task_argument argument );
+void                         open_it( bool readOnly, bool create );
+void                         write_helper( void );
+void                         read_helper( void );
+void                         truncate_helper( void );
+void                         extend_helper( int eno );
+void                         close_it( void );
+void                         unlink_it( void );
+void                         statvfs_helper( void );
+__attribute__(( weak )) void init_memory( void );
+__attribute__(( weak )) void validate_data_blocks_count( void );
 
-int TestFd;
-uint8_t Buffer[256];
+int     TestFd;
+uint8_t Buffer[ 256 ];
 ssize_t TotalWritten;
 
 #define FILE_NAME "biggie"
 
-void open_it(bool readOnly, bool create)
+void open_it( bool readOnly, bool create )
 {
   int flag = 0;
 
-  if ( readOnly )
+  if ( readOnly ) {
     flag |= O_RDONLY;
-  else {
-    if ( create )
+  } else {
+    if ( create ) {
       flag |= O_CREAT;
+    }
     flag |= O_RDWR;
   }
 
@@ -70,14 +71,14 @@ void open_it(bool readOnly, bool create)
   rtems_test_assert( TestFd != -1 );
 }
 
-void write_helper(void)
+void write_helper( void )
 {
   ssize_t written;
 
   TotalWritten = 0;
   puts( "write(" FILE_NAME ") - OK " );
   do {
-    written = write( TestFd, Buffer, sizeof(Buffer) );
+    written = write( TestFd, Buffer, sizeof( Buffer ) );
     if ( written == -1 ) {
       if ( errno == EFBIG ) {
         printf( "Total written = %zd\n", TotalWritten );
@@ -85,33 +86,27 @@ void write_helper(void)
       }
       printf(
         "Unable to create largest IMFS file (error=%s)\n",
-        strerror(errno)
+        strerror( errno )
       );
-      rtems_test_exit(0);
+      rtems_test_exit( 0 );
     }
     TotalWritten += written;
-  } while (1);
-
+  } while ( 1 );
 }
 
-void read_helper(void)
+void read_helper( void )
 {
   uint8_t ch;
   ssize_t sc;
-  int     i=0;
+  int     i = 0;
 
   puts( "read(" FILE_NAME ") - OK " );
   do {
-    sc = read( TestFd, &ch, sizeof(ch) );
+    sc = read( TestFd, &ch, sizeof( ch ) );
     if ( sc == 1 ) {
-      if ( ch != (i%256) ) {
-        printf(
-          "MISMATCH 0x%02x != 0x%02x at offset %d\n",
-          ch,
-          i % 256,
-          i
-        );
-        rtems_test_exit(0);
+      if ( ch != ( i % 256 ) ) {
+        printf( "MISMATCH 0x%02x != 0x%02x at offset %d\n", ch, i % 256, i );
+        rtems_test_exit( 0 );
       }
       i++;
     } else if ( sc != 0 ) {
@@ -121,7 +116,7 @@ void read_helper(void)
         sc,
         strerror( errno )
       );
-      rtems_test_exit(0);
+      rtems_test_exit( 0 );
     }
   } while ( sc > 0 );
 
@@ -130,7 +125,7 @@ void read_helper(void)
   }
 }
 
-void truncate_helper(void)
+void truncate_helper( void )
 {
   off_t position;
   off_t new;
@@ -158,10 +153,10 @@ void truncate_helper(void)
     }
     rtems_test_assert( rc == 0 );
     --new;
-  } while (new > 0);
+  } while ( new > 0 );
 }
 
-void extend_helper(int eno)
+void extend_helper( int eno )
 {
   off_t position;
   off_t new;
@@ -186,17 +181,16 @@ void extend_helper(int eno)
 
     rc = ftruncate( TestFd, new );
     if ( rc != 0 ) {
-      if( errno != eno ) {
+      if ( errno != eno ) {
         printf(
           "ERROR - at offset %d - returned %d and error=%s\n",
           (int) new,
           rc,
           strerror( errno )
         );
-	break;
-      }
-      else {
-	break;
+        break;
+      } else {
+        break;
       }
     }
     rtems_test_assert( rc == 0 );
@@ -204,7 +198,7 @@ void extend_helper(int eno)
   } while ( 1 );
 }
 
-void close_it(void)
+void close_it( void )
 {
   int rc;
 
@@ -213,7 +207,7 @@ void close_it(void)
   rtems_test_assert( rc == 0 );
 }
 
-void unlink_it(void)
+void unlink_it( void )
 {
   int rc;
 
@@ -249,7 +243,9 @@ rtems_task Init( rtems_task_argument argument )
     init_memory();
   }
 
-  for ( i = 0; i < sizeof( Buffer ); i++ ) Buffer[ i ] = (uint8_t) i;
+  for ( i = 0; i < sizeof( Buffer ); i++ ) {
+    Buffer[ i ] = (uint8_t) i;
+  }
 
   open_it( false, true );
 
@@ -260,11 +256,11 @@ rtems_task Init( rtems_task_argument argument )
 
   puts( "" );
 
-  open_it(true, false);
+  open_it( true, false );
   read_helper();
   close_it();
 
-  open_it(false, false);
+  open_it( false, false );
   truncate_helper();
 
   /*
@@ -272,32 +268,31 @@ rtems_task Init( rtems_task_argument argument )
    */
   alloc_ptr = empty_space();
 
-  extend_helper(ENOSPC);
+  extend_helper( ENOSPC );
 
   /*
    * free the allocated memory
    */
-  fill_space(alloc_ptr);
+  fill_space( alloc_ptr );
 
-  extend_helper(EFBIG);
-  position = lseek( TestFd , 0, SEEK_END );
+  extend_helper( EFBIG );
+  position = lseek( TestFd, 0, SEEK_END );
   new_position = lseek( TestFd, position + 2, SEEK_SET );
   rtems_test_assert( new_position == position + 2 );
 
-  n = write( TestFd, buf, sizeof(buf) );
+  n = write( TestFd, buf, sizeof( buf ) );
   rtems_test_assert( n == -1 );
   rtems_test_assert( errno == EFBIG );
 
   close_it();
-  if (validate_data_blocks_count)
-  {
+  if ( validate_data_blocks_count ) {
     validate_data_blocks_count();
   }
   unlink_it();
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -305,10 +300,10 @@ rtems_task Init( rtems_task_argument argument )
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS                1
 #define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK BLOCK_SIZE
-#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS     4
+#define CONFIGURE_INITIAL_EXTENSIONS           RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -316,4 +311,3 @@ rtems_task Init( rtems_task_argument argument )
 
 #include <rtems/confdefs.h>
 /* end of file */
-

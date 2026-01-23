@@ -41,9 +41,9 @@ int test( void );
 
 int test( void )
 {
-  tss_t key;
+  tss_t      key;
   tss_dtor_t destructor = NULL;
-  int result;
+  int        result;
 
   tss_create( &key, destructor );
   result = tss_set( key, malloc( 4 ) );

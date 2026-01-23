@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int cntrl;
 
   cntrl = 0;
-  return (iscntrl(cntrl));
+  return ( iscntrl( cntrl ) );
 }

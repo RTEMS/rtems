@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-  int category = LC_ALL;
+  int   category = LC_ALL;
   char *locale = "loc1";
   char *ostring;
 
   ostring = setlocale( category, locale );
 
-  return (ostring != NULL);
+  return ( ostring != NULL );
 }

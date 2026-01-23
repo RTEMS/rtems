@@ -36,17 +36,17 @@
 #include "config.h"
 #endif
 
-#include <sys/msg.h> 
+#include <sys/msg.h>
 
 int test( void );
 
 int test( void )
 {
-  int return_value;
-  int msqid = msgget(IPC_PRIVATE, IPC_CREAT | 0660);
-  int cmd = IPC_STAT;
+  int             return_value;
+  int             msqid = msgget( IPC_PRIVATE, IPC_CREAT | 0660 );
+  int             cmd = IPC_STAT;
   struct msqid_ds buf;
 
-  return_value = msgctl(msqid, cmd, &buf);
-  return (return_value != -1);
+  return_value = msgctl( msqid, cmd, &buf );
+  return ( return_value != -1 );
 }

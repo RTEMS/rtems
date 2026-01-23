@@ -37,24 +37,26 @@
  #include <sys/socket.h>
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct sockaddr sa;
-   char host[1024];
-   char service[20];
-   int result;
+int test( void )
+{
+  struct sockaddr sa;
+  char            host[ 1024 ];
+  char            service[ 20 ];
+  int             result;
 
-   sa.sa_family      = AF_INET;
+  sa.sa_family = AF_INET;
 
-   result = getnameinfo( &sa,
-                        sizeof(sa),
-                        host,
-                        sizeof(host),
-                        service,
-                        sizeof(service),
-                        0 );
+  result = getnameinfo(
+    &sa,
+    sizeof( sa ),
+    host,
+    sizeof( host ),
+    service,
+    sizeof( service ),
+    0
+  );
 
-   return result;
- }
+  return result;
+}

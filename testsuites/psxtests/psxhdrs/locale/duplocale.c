@@ -42,11 +42,11 @@ int test( void )
 {
   locale_t newloc;
   locale_t locobj;
-  int category_mask = LC_CTYPE_MASK | LC_TIME_MASK;
-  char *locale = "loc1";
+  int      category_mask = LC_CTYPE_MASK | LC_TIME_MASK;
+  char    *locale = "loc1";
 
-  newloc = newlocale( category_mask, locale, (locale_t)0 );
+  newloc = newlocale( category_mask, locale, (locale_t) 0 );
   locobj = duplocale( newloc );
 
-  return (locobj != NULL);
+  return ( locobj != NULL );
 }

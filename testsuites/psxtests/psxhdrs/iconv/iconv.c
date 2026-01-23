@@ -40,15 +40,15 @@ int test( void );
 
 int test( void )
 {
-  iconv_t cd = iconv_open("ASCII", "UTF-8");
-  char inbuf[10] = "string";
-  char outbuf[10];
-  char *inptr = inbuf;
-  char *outptr = (char *)outbuf;
-  size_t inbytesLeft = 7;
-  size_t outbytesLeft = 10;
-  size_t return_value;
+  iconv_t cd = iconv_open( "ASCII", "UTF-8" );
+  char    inbuf[ 10 ] = "string";
+  char    outbuf[ 10 ];
+  char   *inptr = inbuf;
+  char   *outptr = (char *) outbuf;
+  size_t  inbytesLeft = 7;
+  size_t  outbytesLeft = 10;
+  size_t  return_value;
 
-  return_value = iconv(cd, &inptr, &inbytesLeft, &outptr, &outbytesLeft);
-  return (return_value != (size_t)-1);
+  return_value = iconv( cd, &inptr, &inbytesLeft, &outptr, &outbytesLeft );
+  return ( return_value != (size_t) -1 );
 }

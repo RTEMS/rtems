@@ -42,9 +42,9 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int fd = 1;
+  int return_value;
+  int fd = 1;
 
-	return_value = unlockpt(fd);
-	return (return_value != -1);
+  return_value = unlockpt( fd );
+  return ( return_value != -1 );
 }

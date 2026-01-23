@@ -36,20 +36,20 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  char *ch;
+  char           *ch;
   const wchar_t **wc;
-  size_t si0;
-  size_t si1;
-  mbstate_t *state;
+  size_t          si0;
+  size_t          si1;
+  mbstate_t      *state;
 
   ch = 0;
   wc = 0;
   si0 = 0;
   si1 = 0;
   state = 0;
-  return wcsnrtombs(ch, wc, si0, si1, state);
+  return wcsnrtombs( ch, wc, si0, si1, state );
 }

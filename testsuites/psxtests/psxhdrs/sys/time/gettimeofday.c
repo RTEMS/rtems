@@ -36,14 +36,14 @@
 
 #include <sys/time.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  struct timeval tv;
+  struct timeval  tv;
   struct timezone tz;
-  int callback;
+  int             callback;
 
-  callback = gettimeofday(&tv, &tz);
-  return (callback == 0);
+  callback = gettimeofday( &tv, &tz );
+  return ( callback == 0 );
 }

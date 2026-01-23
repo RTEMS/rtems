@@ -41,9 +41,7 @@
 #include "system.h"
 #include <signal.h>
 
-void *Task_2(
-  void *argument
-)
+void *Task_2( void *argument )
 {
   (void) argument;
 
@@ -53,12 +51,12 @@ void *Task_2(
   status = pthread_kill( Init_id, SIGUSR1 );
   rtems_test_assert( !status );
 
-     /* switch to Init */
+  /* switch to Init */
 
   printf( "Task_2: exit\n" );
   pthread_exit( NULL );
 
-     /* switch to Init */
+  /* switch to Init */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

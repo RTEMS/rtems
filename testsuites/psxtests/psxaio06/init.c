@@ -46,7 +46,7 @@ const char rtems_test_name[] = "PSXAIO 6";
 
 /* forward declarations to avoid warnings */
 static struct aiocb *create_aiocb( int fd );
-static void free_aiocb( struct aiocb *aiocbp );
+static void          free_aiocb( struct aiocb *aiocbp );
 
 static struct aiocb *create_aiocb( int fd )
 {
@@ -66,7 +66,7 @@ static struct aiocb *create_aiocb( int fd )
 
 static void free_aiocb( struct aiocb *aiocbp )
 {
-  free( (void*) aiocbp->aio_buf );
+  free( (void *) aiocbp->aio_buf );
   free( aiocbp );
 }
 
@@ -74,10 +74,10 @@ void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  struct aiocb *aiocbp;
+  struct aiocb   *aiocbp;
   struct timespec timespec;
-  int fd, result;
-  
+  int             fd, result;
+
   timespec.tv_sec = 0;
   timespec.tv_nsec = 1;
 
@@ -85,29 +85,29 @@ void *POSIX_Init( void *argument )
 
   result = mkdir( "/tmp", S_IRWXU );
   rtems_test_assert( result == 0 );
-  
+
   fd = open(
     "/tmp/aio_fildes",
-    O_RDWR|O_CREAT,
-    S_IRWXU|S_IRWXG|S_IRWXO
+    O_RDWR | O_CREAT,
+    S_IRWXU | S_IRWXG | S_IRWXO
   );
   rtems_test_assert( fd != -1 );
 
   TEST_BEGIN();
 
   aiocbp = create_aiocb( fd );
-  
+
   const struct aiocb *s_aiocbp = aiocbp;
 
   // EINVAL
   result = aio_suspend( NULL, 1, NULL );
   rtems_test_assert( result != 0 );
-  rtems_test_assert( errno == EINVAL );  
+  rtems_test_assert( errno == EINVAL );
 
   result = aio_suspend( &s_aiocbp, -1, NULL );
   rtems_test_assert( result != 0 );
-  rtems_test_assert( errno == EINVAL ); 
-  
+  rtems_test_assert( errno == EINVAL );
+
   //NO ERROR
   result = aio_read( aiocbp );
   rtems_test_assert( result == 0 );

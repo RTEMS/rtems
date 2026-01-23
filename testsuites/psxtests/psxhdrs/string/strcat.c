@@ -36,15 +36,15 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char dest[12] = "H";
-   char *src = "W";
-   char *result;
+int test( void )
+{
+  char  dest[ 12 ] = "H";
+  char *src = "W";
+  char *result;
 
-   result = strcat( dest, src );
+  result = strcat( dest, src );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

@@ -25,9 +25,9 @@
 
 #include <syslog.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   syslog( LOG_USER, "A sample message" );
   return 0;

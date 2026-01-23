@@ -42,9 +42,7 @@
 #include "system.h"
 #include <signal.h>
 
-void *Task_1(
-  void *argument
-)
+void *Task_1( void *argument )
 {
   (void) argument;
 
@@ -60,14 +58,12 @@ void *Task_1(
 
   pthread_exit( NULL );
 
-     /* switch to Init */
+  /* switch to Init */
 
   return NULL; /* just so the compiler thinks we returned something */
 }
 
-void *Task_2(
-  void *argument
-)
+void *Task_2( void *argument )
 {
   (void) argument;
 
@@ -83,7 +79,7 @@ void *Task_2(
 
   pthread_exit( NULL );
 
-     /* switch to Init */
+  /* switch to Init */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

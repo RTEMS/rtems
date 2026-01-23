@@ -36,17 +36,17 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  wchar_t *wc;
+  wchar_t    *wc;
   const char *ch;
-  mbstate_t state;
-  size_t si;
+  mbstate_t   state;
+  size_t      si;
 
-  ch = (void *)0;
+  ch = (void *) 0;
   wc = 0;
   si = 0;
-  return mbrtowc(wc, ch, si, &state);
+  return mbrtowc( wc, ch, si, &state );
 }

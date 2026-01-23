@@ -43,11 +43,11 @@ int test( int arg1, ... )
 {
   (void) arg1;
 
-  FILE *stream;
+  FILE   *stream;
   va_list ap;
-  int result;
+  int     result;
 
-  va_start(ap, arg1);
+  va_start( ap, arg1 );
 
   stream = fopen( "myfile.dat", "w" );
   result = vfprintf( stream, "%d", ap );

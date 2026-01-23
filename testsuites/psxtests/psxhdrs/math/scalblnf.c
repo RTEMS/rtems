@@ -41,10 +41,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 100 , result ;
-  long int exp = 2 ;
+  float    x = 100, result;
+  long int exp = 2;
 
-  result = scalblnf( x , exp ) ;
+  result = scalblnf( x, exp );
 
-  return (result);
+  return ( result );
 }

@@ -41,20 +41,20 @@
  above and this comment when fixed 
 */
 
-int test(char *fmt, ...);
+int test( char *fmt, ... );
 
-int test(char *fmt, ...)
+int test( char *fmt, ... )
 {
   (void) fmt;
 
-  wchar_t *wc;
+  wchar_t       *wc;
   const wchar_t *wc1;
-  size_t si;
-  va_list va;
+  size_t         si;
+  va_list        va;
 
   wc = 0;
   wc1 = 0;
   si = 0;
-  va_start(va, fmt);
-  return vswprintf(wc, si, wc1, va);
+  va_start( va, fmt );
+  return vswprintf( wc, si, wc1, va );
 }

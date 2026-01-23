@@ -44,17 +44,17 @@
 #define BLOCK_SIZE 16
 const char rtems_test_name[] = "PSXIMFS 1";
 
-void *empty_space(void);
-void fill_space(void *);
+void *empty_space( void );
+void  fill_space( void * );
 
 void *empty_space()
 {
   return malloc( malloc_free_space() - 4 );
 }
 
-void fill_space(void *memory)
+void fill_space( void *memory )
 {
-  free(memory);
+  free( memory );
 }
 
 /* configuration information */

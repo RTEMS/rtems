@@ -50,17 +50,14 @@
 const char rtems_test_name[] = "PSXCLASSIC 1";
 
 static int       Caught_signo = -1;
-static siginfo_t Caught_siginfo = {
-  .si_signo = -1,
-  .si_code = -1
-};
+static siginfo_t Caught_siginfo = { .si_signo = -1, .si_code = -1 };
 
-static void handler(int signo)
+static void handler( int signo )
 {
   Caught_signo = signo;
 }
 
-static void handler_info(int signo, siginfo_t *info, void *context)
+static void handler_info( int signo, siginfo_t *info, void *context )
 {
   (void) context;
 
@@ -68,21 +65,21 @@ static void handler_info(int signo, siginfo_t *info, void *context)
   Caught_siginfo = *info;
 }
 
-static rtems_task test_task(rtems_task_argument arg)
+static rtems_task test_task( rtems_task_argument arg )
 {
   (void) arg;
 
-  int sc;
-  struct sigaction new_action;
-  sigset_t mask;
-  void *addr;
-  size_t size;
-  int value;
+  int                sc;
+  struct sigaction   new_action;
+  sigset_t           mask;
+  void              *addr;
+  size_t             size;
+  int                value;
   struct sched_param param;
-  cpu_set_t set;
-  pthread_attr_t attr;
+  cpu_set_t          set;
+  pthread_attr_t     attr;
 
-  printf("test_task starting...\n");
+  printf( "test_task starting...\n" );
 
   value = -1;
   memset( &param, -1, sizeof( param ) );
@@ -106,8 +103,7 @@ static rtems_task test_task(rtems_task_argument arg)
   rtems_test_assert( addr != NULL );
   rtems_test_assert( size >= RTEMS_MINIMUM_STACK_SIZE );
   rtems_test_assert(
-    size <= RTEMS_MINIMUM_STACK_SIZE + CPU_STACK_ALIGNMENT -
-      CPU_HEAP_ALIGNMENT
+    size <= RTEMS_MINIMUM_STACK_SIZE + CPU_STACK_ALIGNMENT - CPU_HEAP_ALIGNMENT
   );
 
   value = -1;
@@ -151,37 +147,38 @@ static rtems_task test_task(rtems_task_argument arg)
   sc = pthread_attr_destroy( &attr );
   rtems_test_assert( sc == 0 );
 
-  sc = sigemptyset (&new_action.sa_mask);
+  sc = sigemptyset( &new_action.sa_mask );
   rtems_test_assert( sc == 0 );
 
-  sc = sigfillset  (&new_action.sa_mask);
+  sc = sigfillset( &new_action.sa_mask );
   rtems_test_assert( sc == 0 );
 
-  sc = sigdelset   (&new_action.sa_mask, SIGUSR1);
+  sc = sigdelset( &new_action.sa_mask, SIGUSR1 );
   rtems_test_assert( sc == 0 );
 
   new_action.sa_handler = handler;
   new_action.sa_flags = SA_SIGINFO;
   new_action.sa_sigaction = handler_info;
 
-  sc = sigaction(SIGUSR1,&new_action,NULL);
+  sc = sigaction( SIGUSR1, &new_action, NULL );
   rtems_test_assert( sc == 0 );
 
-  sc = sigemptyset(&mask);
+  sc = sigemptyset( &mask );
   rtems_test_assert( sc == 0 );
 
-  sc = sigaddset(&mask, SIGUSR1);
+  sc = sigaddset( &mask, SIGUSR1 );
   rtems_test_assert( sc == 0 );
 
-  sc = pthread_sigmask( SIG_UNBLOCK, &mask, NULL);
+  sc = pthread_sigmask( SIG_UNBLOCK, &mask, NULL );
   rtems_test_assert( sc == 0 );
 
-  printf("test_task waiting for signal...\n");
+  printf( "test_task waiting for signal...\n" );
 
-  while(1) {
-    sleep(1);
+  while ( 1 ) {
+    sleep( 1 );
     if ( Caught_siginfo.si_signo != -1 ) {
-      printf( "Signal_info: %d si_signo= %d si_code= %d value= %d\n",
+      printf(
+        "Signal_info: %d si_signo= %d si_code= %d value= %d\n",
         Caught_signo,
         Caught_siginfo.si_signo,
         Caught_siginfo.si_code,
@@ -198,14 +195,13 @@ static rtems_task test_task(rtems_task_argument arg)
   pthread_exit( (void *) 123 );
 }
 
-
 static rtems_id create_task( void )
 {
   rtems_status_code sc;
   rtems_id          task_id;
 
   sc = rtems_task_create(
-    rtems_build_name('T','E','S','T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
@@ -214,7 +210,7 @@ static rtems_id create_task( void )
   );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_start( task_id,  test_task, 0 );
+  sc = rtems_task_start( task_id, test_task, 0 );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   return task_id;
@@ -224,9 +220,9 @@ static rtems_task Init( rtems_task_argument arg )
 {
   (void) arg;
 
-  rtems_id  task_id;
-  int       status;
-  void     *retval;
+  rtems_id task_id;
+  int      status;
+  void    *retval;
 
   TEST_BEGIN();
 
@@ -235,11 +231,11 @@ static rtems_task Init( rtems_task_argument arg )
   puts( "Init - pthread_equal on Classic Ids" );
   status = pthread_equal( task_id, task_id );
   rtems_test_assert( status != 0 );
-  
+
   puts( "Init - pthread_cancel on Classic Task" );
   status = pthread_cancel( task_id );
   rtems_test_assert( status == 0 );
-  
+
   status = pthread_detach( task_id );
   rtems_test_assert( status == 0 );
 
@@ -261,7 +257,7 @@ static rtems_task Init( rtems_task_argument arg )
   rtems_test_assert( retval == (void *) 123 );
 
   TEST_END();
-  exit(0);
+  exit( 0 );
 }
 
 /* configuration information */
@@ -270,8 +266,9 @@ static rtems_task Init( rtems_task_argument arg )
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 
-#define CONFIGURE_INIT_TASK_INITIAL_MODES \
-  (RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_ASR | RTEMS_INTERRUPT_LEVEL(0))
+#define CONFIGURE_INIT_TASK_INITIAL_MODES            \
+  ( RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_ASR | \
+    RTEMS_INTERRUPT_LEVEL( 0 ) )
 
 #define CONFIGURE_INIT_TASK_PRIORITY 4
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

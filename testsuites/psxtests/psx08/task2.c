@@ -42,13 +42,11 @@
 #include "system.h"
 #include <errno.h>
 
-void *Task_2(
-  void *argument
-)
+void *Task_2( void *argument )
 {
   (void) argument;
 
-  int   status;
+  int status;
 
   puts( "Task_2: sleep 1 second" );
 
@@ -58,21 +56,23 @@ void *Task_2(
 
   puts( "Task_2: join to detached task (Init) -- EINVAL" );
   status = pthread_join( Init_id, NULL );
-  if ( status != EINVAL )
+  if ( status != EINVAL ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EINVAL );
 
   puts( "Task_2: join to self task (Init) -- EDEADLK" );
   status = pthread_join( pthread_self(), NULL );
-  if ( status != EDEADLK )
+  if ( status != EDEADLK ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EDEADLK );
 
   puts( "Task_2: exitting" );
 
   pthread_exit( &Task2_id );
 
-     /* switch to init task */
+  /* switch to init task */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

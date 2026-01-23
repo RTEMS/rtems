@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  int return_value;
+  int   return_value;
   key_t key = IPC_PRIVATE;
-  int msgflg = IPC_CREAT | 0660;
+  int   msgflg = IPC_CREAT | 0660;
 
-  return_value = msgget(key, msgflg);
-  return (return_value != -1);
+  return_value = msgget( key, msgflg );
+  return ( return_value != -1 );
 }

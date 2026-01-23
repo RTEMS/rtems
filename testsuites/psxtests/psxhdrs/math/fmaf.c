@@ -40,12 +40,12 @@ int test( void );
 
 int test( void )
 {
-  float x = 6834 ;
-  float y = 45 ;
-  float z = 6 ;
-  float result ;
+  float x = 6834;
+  float y = 45;
+  float z = 6;
+  float result;
 
-  result = fmaf(x,y,z) ;
+  result = fmaf( x, y, z );
 
-  return (result);
+  return ( result );
 }

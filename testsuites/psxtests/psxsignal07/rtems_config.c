@@ -28,15 +28,12 @@
 
 #include <stdlib.h>
 
-int main(int argc, char **argv);
+int main( int argc, char **argv );
 
-static char *argv_list[] = {
-  "psxsignal07",
-  ""
-};
-static void *POSIX_Init(void *arg)
+static char *argv_list[] = { "psxsignal07", "" };
+static void *POSIX_Init( void *arg )
 {
-  (void) arg;  /* deliberately ignored */
+  (void) arg; /* deliberately ignored */
 
   /*
    * Initialize optional services
@@ -45,7 +42,7 @@ static void *POSIX_Init(void *arg)
   /*
    * Could get arguments from command line or have a static set.
    */
-  (void) main(1, argv_list);
+  (void) main( 1, argv_list );
 
   return NULL;
 }

@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-  float x = 43779.86 ;
-  float y = 479.86 ;
-  float result ;
+  float x = 43779.86;
+  float y = 479.86;
+  float result;
 
-  result = fdimf(x,y) ;
+  result = fdimf( x, y );
 
-  return (result);
+  return ( result );
 }

@@ -45,9 +45,9 @@ int test( void );
 
 int test( void )
 {
-  pid_t  pid;
+  pid_t              pid;
   struct sched_param param;
-  int    result;
+  int                result;
 
   pid = 0;
 

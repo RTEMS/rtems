@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  struct pollfd fds[2];
-  int timeout_msecs = 0;
-  int result;
+  struct pollfd fds[ 2 ];
+  int           timeout_msecs = 0;
+  int           result;
 
   result = poll( fds, 2, timeout_msecs );
 

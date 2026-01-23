@@ -43,11 +43,11 @@
 const char rtems_test_name[] = "PSXSEM 1";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
-#define MAX_SEMS  10
+#define MAX_SEMS 10
 
-static void *sem_wait_task(void *arg)
+static void *sem_wait_task( void *arg )
 {
   (void) arg;
 
@@ -65,7 +65,7 @@ static void *sem_wait_task(void *arg)
   return NULL;
 }
 
-static void test_sem_wait_during_delete(void)
+static void test_sem_wait_during_delete( void )
 {
   sem_t     sem;
   int       rv;
@@ -104,14 +104,14 @@ static void test_sem_wait_during_delete(void)
   rtems_test_assert( rv == 0 );
 }
 
-static void test_named_sem_wait_during_delete(void)
+static void test_named_sem_wait_during_delete( void )
 {
-  sem_t     *sem;
-  sem_t     *sem2;
-  int        rv;
-  pthread_t  th;
-  int        eno;
-  int        val;
+  sem_t    *sem;
+  sem_t    *sem2;
+  int       rv;
+  pthread_t th;
+  int       eno;
+  int       val;
 
   sem = sem_open( "sem", O_CREAT | O_EXCL, 0777, 1 );
   rtems_test_assert( sem != SEM_FAILED );
@@ -154,7 +154,7 @@ static void test_named_sem_wait_during_delete(void)
   rtems_test_assert( rv == 0 );
 }
 
-static void test_sem_post_overflow(void)
+static void test_sem_post_overflow( void )
 {
   sem_t sem;
   int   rv;
@@ -186,7 +186,7 @@ static void test_sem_post_overflow(void)
   rtems_test_assert( rv == 0 );
 }
 
-static void test_sem_init_too_large_inital_value(void)
+static void test_sem_init_too_large_inital_value( void )
 {
   sem_t  sem;
   sem_t *sem2;
@@ -208,10 +208,10 @@ static void test_sem_init_too_large_inital_value(void)
   rtems_test_assert( errno == EINVAL );
 }
 
-static void test_sem_null(void)
+static void test_sem_null( void )
 {
-  int rv;
-  int val;
+  int             rv;
+  int             val;
   struct timespec to;
 
   /* This equality is important for POSIX_SEMAPHORE_VALIDATE_OBJECT() */
@@ -265,11 +265,11 @@ static void test_sem_null(void)
   rtems_test_assert( errno == EINVAL );
 }
 
-static void test_sem_not_initialized(void)
+static void test_sem_not_initialized( void )
 {
-  sem_t sem;
-  int rv;
-  int val;
+  sem_t           sem;
+  int             rv;
+  int             val;
   struct timespec to;
 
   memset( &sem, 0xff, sizeof( sem ) );
@@ -317,7 +317,7 @@ static void test_sem_not_initialized(void)
   rtems_test_assert( errno == EINVAL );
 }
 
-static void test_sem_invalid_copy(void)
+static void test_sem_invalid_copy( void )
 {
   sem_t sem;
   sem_t sem2;
@@ -348,108 +348,106 @@ static void test_sem_invalid_copy(void)
   rtems_test_assert( errno == EINVAL );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
   int             status;
   int             value;
   int             i;
-  sem_t           sems[MAX_SEMS];
+  sem_t           sems[ MAX_SEMS ];
   sem_t           sem2;
-  sem_t           *n_sem1;
-  sem_t           *n_sem2;
+  sem_t          *n_sem1;
+  sem_t          *n_sem2;
   struct timespec waittime;
-  char            failure_msg[80];
+  char            failure_msg[ 80 ];
 
   TEST_BEGIN();
 
   puts( "Init: sem_init - SUCCESSFUL" );
-  status = sem_init(&sem2, 1, 1);
-  fatal_posix_service_status( status, 0, "sem_init with pshared != 0");
+  status = sem_init( &sem2, 1, 1 );
+  fatal_posix_service_status( status, 0, "sem_init with pshared != 0" );
 
   puts( "Init: sem_destroy - SUCCESSFUL" );
-  status = sem_destroy(&sem2);
-  fatal_posix_service_status( status, 0, "sem_destroy");
+  status = sem_destroy( &sem2 );
+  fatal_posix_service_status( status, 0, "sem_destroy" );
 
   puts( "Init: sem_init - UNSUCCESSFUL (EINVAL)" );
-  status = sem_init(NULL, 0, 1);
-  fatal_posix_service_status( status, -1, "sem_init error return status");
+  status = sem_init( NULL, 0, 1 );
+  fatal_posix_service_status( status, -1, "sem_init error return status" );
   fatal_posix_service_status( errno, EINVAL, "sem_init errorno EINVAL" );
 
   puts( "Init: sem_init - SUCCESSFUL" );
-  for (i = 0; i < MAX_SEMS; i++) {
-    status = sem_init(&sems[i], 0, i);
-    sprintf(failure_msg, "sem_init %d", i );
-    fatal_posix_service_status( status, 0, failure_msg);
+  for ( i = 0; i < MAX_SEMS; i++ ) {
+    status = sem_init( &sems[ i ], 0, i );
+    sprintf( failure_msg, "sem_init %d", i );
+    fatal_posix_service_status( status, 0, failure_msg );
   }
 
   puts( "Init: sem_init - SUCCESSFUL" );
-  status = sem_init(&sem2, 0, 1);
-  fatal_posix_service_status( status, 0, "sem_init");
+  status = sem_init( &sem2, 0, 1 );
+  fatal_posix_service_status( status, 0, "sem_init" );
 
   puts( "Init: sem_destroy - SUCCESSFUL" );
-  status = sem_destroy(&sem2);
-  fatal_posix_service_status( status, 0, "sem_destroy");
+  status = sem_destroy( &sem2 );
+  fatal_posix_service_status( status, 0, "sem_destroy" );
 
-  puts( "Init: sem_getvalue - SUCCESSFUL ");
-  for (i = 0; i < MAX_SEMS; i++) {
-    status = sem_getvalue(&sems[i], &value);
+  puts( "Init: sem_getvalue - SUCCESSFUL " );
+  for ( i = 0; i < MAX_SEMS; i++ ) {
+    status = sem_getvalue( &sems[ i ], &value );
     sprintf( failure_msg, "sem_getvalue %d", i );
     fatal_posix_service_status( status, 0, failure_msg );
     fatal_posix_service_status( value, i, "sem_getvalue correct value" );
   }
-  puts( "Init: sem_getvalue - UNSUCCESSFUL ");
-  status = sem_getvalue(SEM_FAILED, &value);
-  fatal_posix_service_status( status, -1, "sem_getvalue error return status");
-  fatal_posix_service_status( errno, EINVAL, "sem_getvalue errno EINVAL");
+  puts( "Init: sem_getvalue - UNSUCCESSFUL " );
+  status = sem_getvalue( SEM_FAILED, &value );
+  fatal_posix_service_status( status, -1, "sem_getvalue error return status" );
+  fatal_posix_service_status( errno, EINVAL, "sem_getvalue errno EINVAL" );
 
   puts( "Init: sem_destroy - SUCCESSFUL" );
-  status = sem_destroy(&sems[0]);
-  fatal_posix_service_status( status, 0, "sem_destroy semaphore 0");
+  status = sem_destroy( &sems[ 0 ] );
+  fatal_posix_service_status( status, 0, "sem_destroy semaphore 0" );
 
   puts( "Init: sem_destroy - UNSUCCESSFUL (EINVAL)" );
-  status = sem_destroy(SEM_FAILED);
-  fatal_posix_service_status( status, -1, "sem_destroy error return status");
-  fatal_posix_service_status( errno, EINVAL, "sem_destroy errno EINVAL");
+  status = sem_destroy( SEM_FAILED );
+  fatal_posix_service_status( status, -1, "sem_destroy error return status" );
+  fatal_posix_service_status( errno, EINVAL, "sem_destroy errno EINVAL" );
 
   puts( "Init: sem_wait - SUCCESSFUL" );
-  status = sem_wait(&sems[1]);
-  fatal_posix_service_status( status, 0, "sem_wait semaphore 1");
+  status = sem_wait( &sems[ 1 ] );
+  fatal_posix_service_status( status, 0, "sem_wait semaphore 1" );
   /* sem[1].count = 0 */
 
   puts( "Init: sem_wait - UNSUCCESSFUL (EINVAL)" );
-  status = sem_wait(SEM_FAILED);
-  fatal_posix_service_status( status, -1, "sem_wait error return status");
-  fatal_posix_service_status( errno, EINVAL, "sem_wait errno EINVAL");
+  status = sem_wait( SEM_FAILED );
+  fatal_posix_service_status( status, -1, "sem_wait error return status" );
+  fatal_posix_service_status( errno, EINVAL, "sem_wait errno EINVAL" );
 
   puts( "Init: sem_post - SUCCESSFUL" );
-  status = sem_post(&sems[1]);
-  fatal_posix_service_status( status, 0, "sem_post semaphore 1");
+  status = sem_post( &sems[ 1 ] );
+  fatal_posix_service_status( status, 0, "sem_post semaphore 1" );
   /* sem[1].count = 1 */
 
   puts( "Init: sem_wait - SUCCESSFUL (after a sem_post)" );
-  status = sem_wait(&sems[1]);
-  fatal_posix_service_status( status, 0, "sem_wait semaphore 1");
+  status = sem_wait( &sems[ 1 ] );
+  fatal_posix_service_status( status, 0, "sem_wait semaphore 1" );
   /* sem[1].count = 0 */
 
   puts( "Init: sem_trywait - SUCCESSFUL" );
-  status = sem_trywait(&sems[2]);
-  fatal_posix_service_status( status, 0, "sem_trywait semaphore 2");
+  status = sem_trywait( &sems[ 2 ] );
+  fatal_posix_service_status( status, 0, "sem_trywait semaphore 2" );
   /* sem[2].count = 1 */
 
   puts( "Init: sem_trywait - UNSUCCESSFUL (EAGAIN)" );
-  status = sem_trywait(&sems[1]);
-  fatal_posix_service_status( status, -1, "sem_trywait error return status");
-  fatal_posix_service_status( errno, EAGAIN, "sem_trywait errno EAGAIN");
+  status = sem_trywait( &sems[ 1 ] );
+  fatal_posix_service_status( status, -1, "sem_trywait error return status" );
+  fatal_posix_service_status( errno, EAGAIN, "sem_trywait errno EAGAIN" );
   /* sem[1].count = 0 */
 
   puts( "Init: sem_trywait - UNSUCCESSFUL (EINVAL)" );
-  status = sem_trywait(SEM_FAILED);
-  fatal_posix_service_status( status, -1, "sem_trywait error return status");
-  fatal_posix_service_status( errno, EINVAL, "sem_trywait errno EINVAL");
+  status = sem_trywait( SEM_FAILED );
+  fatal_posix_service_status( status, -1, "sem_trywait error return status" );
+  fatal_posix_service_status( errno, EINVAL, "sem_trywait errno EINVAL" );
 
 #if 0
   status = sem_post(&sems[2]);
@@ -460,17 +458,24 @@ void *POSIX_Init(
 #endif
 
   puts( "Init: sem_timedwait - SUCCESSFUL" );
-  waittime.tv_sec = time(NULL) + 1;
+  waittime.tv_sec = time( NULL ) + 1;
   waittime.tv_nsec = 100;
-  status = sem_timedwait(&sems[2], &waittime);
-  fatal_posix_service_status( status, 0, "sem_timedwait semaphore 2");
+  status = sem_timedwait( &sems[ 2 ], &waittime );
+  fatal_posix_service_status( status, 0, "sem_timedwait semaphore 2" );
   /* sem[2].count = 0 */
 
   puts( "Init: sem_timedwait - UNSUCCESSFUL (ETIMEDOUT)" );
-  status = sem_timedwait(&sems[2], &waittime);
-  fatal_posix_service_status( status, -1, "sem_timedwait error return status");
+  status = sem_timedwait( &sems[ 2 ], &waittime );
   fatal_posix_service_status(
-    errno, ETIMEDOUT, "sem_timedwait errno ETIMEDOUT");
+    status,
+    -1,
+    "sem_timedwait error return status"
+  );
+  fatal_posix_service_status(
+    errno,
+    ETIMEDOUT,
+    "sem_timedwait errno ETIMEDOUT"
+  );
 
   /*
    * To do this case, we must be blocking when we want the semaphore.
@@ -483,19 +488,23 @@ void *POSIX_Init(
   puts( "Init: sem_timedwait - UNSUCCESSFUL (EINVAL)" );
   waittime.tv_sec = 0;
   waittime.tv_nsec = 0x7FFFFFFF;
-  status = sem_timedwait(&sems[2], &waittime);
-  fatal_posix_service_status( status, -1, "sem_timedwait error return status");
-  fatal_posix_service_status( errno, EINVAL, "sem_init errno EINVAL");
+  status = sem_timedwait( &sems[ 2 ], &waittime );
+  fatal_posix_service_status(
+    status,
+    -1,
+    "sem_timedwait error return status"
+  );
+  fatal_posix_service_status( errno, EINVAL, "sem_init errno EINVAL" );
 #endif
 
   puts( "Init: sem_post - UNSUCCESSFUL (EINVAL)" );
-  status = sem_post(SEM_FAILED);
-  fatal_posix_service_status( status, -1, "sem_post error return status");
-  fatal_posix_service_status( errno, EINVAL, "sem_post errno EINVAL");
+  status = sem_post( SEM_FAILED );
+  fatal_posix_service_status( status, -1, "sem_post error return status" );
+  fatal_posix_service_status( errno, EINVAL, "sem_post errno EINVAL" );
 
   puts( "Init: sem_destroy - SUCCESSFUL" );
-  for (i = 1; i < MAX_SEMS; i++) {
-    status = sem_destroy(&sems[i]);
+  for ( i = 1; i < MAX_SEMS; i++ ) {
+    status = sem_destroy( &sems[ i ] );
     sprintf( failure_msg, "sem_destroy %d", i );
     fatal_posix_service_status( status, 0, failure_msg );
   }
@@ -507,29 +516,32 @@ void *POSIX_Init(
    */
 
   puts( "Init: sem_open - UNSUCCESSFUL (ENAMETOOLONG)" );
-  n_sem1 = sem_open(Get_Too_Long_Name(), O_CREAT, 0777, 1 );
+  n_sem1 = sem_open( Get_Too_Long_Name(), O_CREAT, 0777, 1 );
   fatal_posix_sem( n_sem1, "sem_open error return status" );
   fatal_posix_service_status(
-    errno, ENAMETOOLONG, "sem_open errorno ENAMETOOLONG" );
+    errno,
+    ENAMETOOLONG,
+    "sem_open errorno ENAMETOOLONG"
+  );
 
   puts( "Init: sem_open - sem1 SUCCESSFUL" );
-  n_sem1 = sem_open( "sem1",O_CREAT, 0777, 1 );
+  n_sem1 = sem_open( "sem1", O_CREAT, 0777, 1 );
   rtems_test_assert( n_sem1 != SEM_FAILED );
 
   puts( "Init: sem_destroy - named sem1 - EINVAL" );
-  status = sem_destroy(n_sem1);
-  fatal_posix_service_status( status, -1, "sem_destroy named semaphore");
-  fatal_posix_service_status( errno, EINVAL,  "sem_destroy named semaphore");
+  status = sem_destroy( n_sem1 );
+  fatal_posix_service_status( status, -1, "sem_destroy named semaphore" );
+  fatal_posix_service_status( errno, EINVAL, "sem_destroy named semaphore" );
 
   puts( "Init: sem_open - Create an Existing sem (EEXIST)" );
-  n_sem2 = sem_open("sem1", O_CREAT | O_EXCL, 0777, 1);
+  n_sem2 = sem_open( "sem1", O_CREAT | O_EXCL, 0777, 1 );
   fatal_posix_sem( n_sem2, "sem_open error return status" );
-  fatal_posix_service_status( errno, EEXIST,  "sem_open errno EEXIST");
+  fatal_posix_service_status( errno, EEXIST, "sem_open errno EEXIST" );
 
   puts( "Init: sem_open - Open new sem without create flag (ENOENT)" );
-  n_sem2 = sem_open("sem3", O_EXCL, 0777, 1);
+  n_sem2 = sem_open( "sem3", O_EXCL, 0777, 1 );
   fatal_posix_sem( n_sem2, "sem_open error return status" );
-  fatal_posix_service_status( errno, ENOENT,  "sem_open errno EEXIST");
+  fatal_posix_service_status( errno, ENOENT, "sem_open errno EEXIST" );
 
   /*
    * XXX - Could not hit the following errors:
@@ -543,15 +555,15 @@ void *POSIX_Init(
    */
 
   puts( "Init: sem_wait on sem1" );
-  status = sem_wait(n_sem1);
-  fatal_posix_service_status( status, 0, "sem_wait opened semaphore");
+  status = sem_wait( n_sem1 );
+  fatal_posix_service_status( status, 0, "sem_wait opened semaphore" );
 
   /*
    * Validate a second open returns the same semaphore.
    */
 
   puts( "Init: sem_open - Open an existing sem ( same id )" );
-  n_sem2 = sem_open("sem1", 0 );
+  n_sem2 = sem_open( "sem1", 0 );
   rtems_test_assert( n_sem2 == n_sem1 );
 
   /*
@@ -561,10 +573,10 @@ void *POSIX_Init(
 
   puts( "Init: sem_unlink - sem1 SUCCESSFUL" );
   status = sem_unlink( "sem1" );
-  fatal_posix_service_status( status, 0, "sem_unlink locked semaphore");
+  fatal_posix_service_status( status, 0, "sem_unlink locked semaphore" );
 
   puts( "Init: sem_open - Reopen sem1 SUCCESSFUL with a different id" );
-  n_sem2 = sem_open( "sem1", O_CREAT | O_EXCL, 0777, 1);
+  n_sem2 = sem_open( "sem1", O_CREAT | O_EXCL, 0777, 1 );
   rtems_test_assert( n_sem2 != SEM_FAILED );
   rtems_test_assert( n_sem2 != n_sem1 );
 
@@ -574,7 +586,7 @@ void *POSIX_Init(
 
   puts( "Init: sem_close (1) - SUCCESSFUL" );
   status = sem_close( n_sem1 );
-  fatal_posix_service_status( status, 0, "sem_close semaphore");
+  fatal_posix_service_status( status, 0, "sem_close semaphore" );
 
   /*
    * Validate it n_sem2 (the last open for sem1 name can be
@@ -583,22 +595,21 @@ void *POSIX_Init(
 
   puts( "Init: sem_close (2) - SUCCESSFUL" );
   status = sem_close( n_sem2 );
-  fatal_posix_service_status( status, 0, "sem_close semaphore");
+  fatal_posix_service_status( status, 0, "sem_close semaphore" );
 
   puts( "Init: sem_unlink - sem1 (2) SUCCESSFUL" );
   status = sem_unlink( "sem1" );
-  fatal_posix_service_status( status, 0, "sem_unlink locked semaphore");
+  fatal_posix_service_status( status, 0, "sem_unlink locked semaphore" );
 
   puts( "Init: sem_close - UNSUCCESSFUL (EINVAL)" );
-  status = sem_close(n_sem2);
-  fatal_posix_service_status( status, -1, "sem_close error return status");
-  fatal_posix_service_status( errno, EINVAL, "sem_close errno EINVAL");
+  status = sem_close( n_sem2 );
+  fatal_posix_service_status( status, -1, "sem_close error return status" );
+  fatal_posix_service_status( errno, EINVAL, "sem_close errno EINVAL" );
 
   puts( "Init: sem_unlink - UNSUCCESSFUL (ENOENT)" );
-  status = sem_unlink("sem1");
-  fatal_posix_service_status( status, -1, "sem_unlink error return status");
-  fatal_posix_service_status( errno, ENOENT, "sem_close errno EINVAL");
-
+  status = sem_unlink( "sem1" );
+  fatal_posix_service_status( status, -1, "sem_unlink error return status" );
+  fatal_posix_service_status( errno, ENOENT, "sem_close errno EINVAL" );
 
   /*
    * Validate we can unlink (2)
@@ -606,13 +617,13 @@ void *POSIX_Init(
 
   puts( "Init: sem_unlink (NULL) - EINVAL" );
   status = sem_unlink( NULL );
-  fatal_posix_service_status( status, -1, "sem_unlink error return status");
-  fatal_posix_service_status( errno, EINVAL, "sem_unlink errno value");
+  fatal_posix_service_status( status, -1, "sem_unlink error return status" );
+  fatal_posix_service_status( errno, EINVAL, "sem_unlink errno value" );
 
   puts( "Init: sem_unlink (\"\") - ENOENT" );
   status = sem_unlink( "" );
-  fatal_posix_service_status( status, -1, "sem_unlink error return status");
-  fatal_posix_service_status( errno, ENOENT, "sem_unlink errno value");
+  fatal_posix_service_status( status, -1, "sem_unlink error return status" );
+  fatal_posix_service_status( errno, ENOENT, "sem_unlink errno value" );
 
   /*
    * XXX - Cant' create location OBJECTS_ERROR or OBJECTS_REMOTE.
@@ -620,10 +631,10 @@ void *POSIX_Init(
    */
 
   puts( "Init: sem_unlink - UNSUCCESSFUL (ENOENT)" );
-  status = sem_unlink("sem2");
-  fatal_posix_service_status( status, -1, "sem_unlink error return status");
-  fatal_posix_service_status( errno, ENOENT, "sem_unlink errno ENOENT");
-  rtems_test_assert( (status == -1) && (errno == ENOENT) );
+  status = sem_unlink( "sem2" );
+  fatal_posix_service_status( status, -1, "sem_unlink error return status" );
+  fatal_posix_service_status( errno, ENOENT, "sem_unlink errno ENOENT" );
+  rtems_test_assert( ( status == -1 ) && ( errno == ENOENT ) );
 
   test_named_sem_wait_during_delete();
   test_sem_wait_during_delete();
@@ -636,7 +647,7 @@ void *POSIX_Init(
   /* Try adding in unlinking before closing... (can we still open?) */
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }
@@ -649,12 +660,11 @@ void *POSIX_Init(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     2
-#define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES  2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS    2
+#define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 2
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
-#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
-        (RTEMS_MINIMUM_STACK_SIZE * 4)
+#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE ( RTEMS_MINIMUM_STACK_SIZE * 4 )
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

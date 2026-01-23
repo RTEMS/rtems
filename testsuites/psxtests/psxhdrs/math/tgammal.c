@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 2 , result ;
+  long double x = 2, result;
 
-  result = tgammal(x) ;
+  result = tgammal( x );
 
-  return (result);
+  return ( result );
 }
 #endif

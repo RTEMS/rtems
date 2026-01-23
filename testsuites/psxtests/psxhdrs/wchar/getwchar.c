@@ -36,9 +36,9 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   return getwchar();
 }

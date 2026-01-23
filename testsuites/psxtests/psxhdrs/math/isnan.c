@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 23  ;
-  int  result ;
+  float x = 23;
+  int   result;
 
-  result = isnan(x) ;
+  result = isnan( x );
 
-  return ((int)result);
+  return ( (int) result );
 }

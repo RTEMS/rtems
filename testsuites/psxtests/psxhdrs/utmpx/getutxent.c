@@ -25,9 +25,9 @@
 
 #include <utmpx.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   struct utmpx *a = getutxent();
   return !a;

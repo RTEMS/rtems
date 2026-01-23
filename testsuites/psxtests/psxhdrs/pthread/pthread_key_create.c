@@ -38,21 +38,18 @@
 #error "rtems is supposed to have pthread_key_create"
 #endif
 
-int test( void );
+int  test( void );
 void key_destructor( void *argument );
 
-void key_destructor(
-  void *argument
-)
+void key_destructor( void *argument )
 {
   (void) argument;
-
 }
 
 int test( void )
 {
-  pthread_key_t    key;
-  int              result;
+  pthread_key_t key;
+  int           result;
 
   result = pthread_key_create( &key, key_destructor );
 

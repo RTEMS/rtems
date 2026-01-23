@@ -36,13 +36,13 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int alpha;
+  int      alpha;
   locale_t locale;
 
   alpha = 0;
-  return (isalpha_l(alpha, locale));
+  return ( isalpha_l( alpha, locale ) );
 }

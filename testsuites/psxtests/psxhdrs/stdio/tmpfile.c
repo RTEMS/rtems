@@ -42,7 +42,7 @@ int test( void )
 {
   FILE *stream;
 
-  stream = tmpfile( );
+  stream = tmpfile();
 
   return ( stream != NULL );
 }

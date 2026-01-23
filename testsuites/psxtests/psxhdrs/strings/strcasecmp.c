@@ -42,7 +42,7 @@ int test( void )
 {
   char *string1 = "STRING";
   char *string2 = "string";
-  int result;
+  int   result;
 
   result = strcasecmp( string1, string2 );
 

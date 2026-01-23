@@ -36,15 +36,15 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char *dest = "Hello";
-   char *src = "World";
-   int result;
+int test( void )
+{
+  char *dest = "Hello";
+  char *src = "World";
+  int   result;
 
-   result = strspn( dest, src );
+  result = strspn( dest, src );
 
-   return result;
- }
+  return result;
+}

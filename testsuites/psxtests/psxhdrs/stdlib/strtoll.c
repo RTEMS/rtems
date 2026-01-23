@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	long long return_value;
-	char *nptr = "3.14";
-	char *endptr;
+  long long return_value;
+  char     *nptr = "3.14";
+  char     *endptr;
 
-	return_value = strtoll(nptr, &endptr, 10);
-	return return_value;
+  return_value = strtoll( nptr, &endptr, 10 );
+  return return_value;
 }

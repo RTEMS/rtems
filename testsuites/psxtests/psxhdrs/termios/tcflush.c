@@ -44,7 +44,7 @@ int test( void )
   int fildes = 0;
   int queue_selector = TCIFLUSH;
 
-  result = tcflush(fildes, queue_selector);
+  result = tcflush( fildes, queue_selector );
 
   return result;
 }

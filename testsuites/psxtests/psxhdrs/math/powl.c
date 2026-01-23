@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 50 , y = 5 , result ;
+  long double x = 50, y = 5, result;
 
-  result = powl( x , y ) ;
+  result = powl( x, y );
 
-  return (result);
+  return ( result );
 }
 #endif

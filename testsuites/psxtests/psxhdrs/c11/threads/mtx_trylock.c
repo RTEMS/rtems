@@ -41,7 +41,7 @@ int test( void );
 int test( void )
 {
   mtx_t mtx;
-  int result;
+  int   result;
 
   mtx_init( &mtx, mtx_plain );
   result = mtx_trylock( &mtx );

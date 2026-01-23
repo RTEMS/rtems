@@ -42,7 +42,7 @@ int test( void )
 {
   const struct dirent **d1 = NULL;
   const struct dirent **d2 = NULL;
-  int result;
+  int                   result;
 
   result = alphasort( d1, d2 );
 

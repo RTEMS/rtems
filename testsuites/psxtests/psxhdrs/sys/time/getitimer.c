@@ -36,14 +36,14 @@
 
 #include <sys/time.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int which = ITIMER_REAL;
-  int callback;
-  struct itimerval timeval = { {0,0}, {0,0} };
+  int              which = ITIMER_REAL;
+  int              callback;
+  struct itimerval timeval = { { 0, 0 }, { 0, 0 } };
 
-  callback = getitimer(which, &timeval);
-  return (callback == 0);
+  callback = getitimer( which, &timeval );
+  return ( callback == 0 );
 }

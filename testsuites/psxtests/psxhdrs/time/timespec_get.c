@@ -44,7 +44,7 @@ int test( void );
 
 int test( void )
 {
-  struct timespec ts   = { 0 };
+  struct timespec ts = { 0 };
   int             base = 0;
   int             result;
 

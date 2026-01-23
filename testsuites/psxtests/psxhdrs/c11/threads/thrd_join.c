@@ -42,9 +42,9 @@ int th_func( void *arg );
 int test( void )
 {
   thrd_t th;
-  int n = 1;
-  int res = 1;
-  int result;
+  int    n = 1;
+  int    res = 1;
+  int    result;
 
   thrd_create( &th, th_func, &n );
   result = thrd_join( th, &res );
@@ -54,6 +54,6 @@ int test( void )
 
 int th_func( void *arg )
 {
-    ++*(int*)arg;
-    return 0;
+  ++*(int *) arg;
+  return 0;
 }

@@ -40,7 +40,7 @@ int test( void );
 
 int test( void )
 {
-  void *addr = NULL;
+  void  *addr = NULL;
   size_t len = 0;
 
   return mlock( addr, len );

@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	char *return_value;
-	char *file_name = "/";
-	char *resolved_name = NULL;
+  char *return_value;
+  char *file_name = "/";
+  char *resolved_name = NULL;
 
-	return_value = realpath(file_name, resolved_name);
-	return (return_value != NULL);
+  return_value = realpath( file_name, resolved_name );
+  return ( return_value != NULL );
 }

@@ -36,16 +36,16 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   void *destination = NULL;
-   void *source = NULL;
-   size_t num = 2;
-   void *result;
+int test( void )
+{
+  void  *destination = NULL;
+  void  *source = NULL;
+  size_t num = 2;
+  void  *result;
 
-   result = memmove( destination, source, num );
+  result = memmove( destination, source, num );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

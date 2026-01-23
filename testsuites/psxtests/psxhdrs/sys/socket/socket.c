@@ -39,13 +39,13 @@
 
 #include <sys/socket.h>
 
-ssize_t test(void);
+ssize_t test( void );
 
-ssize_t test(void)
+ssize_t test( void )
 {
-  int     domain;
-  int     type;
-  int     protocol = 1;
+  int domain;
+  int type;
+  int protocol = 1;
 
   /* use primary values */
   domain = AF_UNIX;
@@ -59,5 +59,5 @@ ssize_t test(void)
   type = SOCK_RAW;
   type = SOCK_RDM;
 
-  return socket(domain, type, protocol);
+  return socket( domain, type, protocol );
 }

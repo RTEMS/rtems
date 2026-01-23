@@ -42,14 +42,14 @@ int test( void );
 int test( void )
 {
   regex_t preg;
-  size_t error;
-  char *regex = "\\(sim[a-z]le\\) \\1";
-  char buffer[100];
-  int result;
+  size_t  error;
+  char   *regex = "\\(sim[a-z]le\\) \\1";
+  char    buffer[ 100 ];
+  int     result;
 
-  result = regcomp( &preg, regex, REG_EXTENDED|REG_NOSUB );
+  result = regcomp( &preg, regex, REG_EXTENDED | REG_NOSUB );
   (void) result;
   error = regerror( result, &preg, buffer, 100 );
 
-  return (error != '\0');
+  return ( error != '\0' );
 }

@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-	ldiv_t return_value;
+  ldiv_t return_value;
 
-	return_value = ldiv(3, 4);
-	return (return_value.quot == 0 && return_value.rem == 3);
+  return_value = ldiv( 3, 4 );
+  return ( return_value.quot == 0 && return_value.rem == 3 );
 }

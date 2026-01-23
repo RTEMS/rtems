@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 4.553456 ,  result ;
+  float x = 4.553456, result;
 
-  result = roundf( x ) ;
+  result = roundf( x );
 
-  return (result);
+  return ( result );
 }

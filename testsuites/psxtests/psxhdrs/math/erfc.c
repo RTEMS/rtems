@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 0 ;
-  double result ;
+  double x = 0;
+  double result;
 
-  result = erfc(x) ;
+  result = erfc( x );
 
-  return (result);
+  return ( result );
 }

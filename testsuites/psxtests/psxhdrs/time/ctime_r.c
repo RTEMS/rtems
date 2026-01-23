@@ -41,11 +41,11 @@ int test( void );
 
 int test( void )
 {
-  char     *buffer_pointer;
-  char      buffer[ 80 ];
-  time_t    time = { 0 };
+  char  *buffer_pointer;
+  char   buffer[ 80 ];
+  time_t time = { 0 };
 
   buffer_pointer = ctime_r( &time, buffer );
 
-  return (buffer_pointer != NULL);
+  return ( buffer_pointer != NULL );
 }

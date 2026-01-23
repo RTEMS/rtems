@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  int result;
+  int       result;
   wordexp_t p;
 
-  result = wordexp("[a-c]*.c",&p,0);
+  result = wordexp( "[a-c]*.c", &p, 0 );
 
-  return (result != 0);
+  return ( result != 0 );
 }

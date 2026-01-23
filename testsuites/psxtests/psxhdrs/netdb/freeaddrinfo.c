@@ -38,24 +38,24 @@
  #include <sys/socket.h>
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct addrinfo hints;
-   struct addrinfo *finfo = (void *)0;
-   int result;
+int test( void )
+{
+  struct addrinfo  hints;
+  struct addrinfo *finfo = (void *) 0;
+  int              result;
 
-   hints.ai_family = AF_UNSPEC;    /* Allow IPv4 or IPv6 */
-   hints.ai_socktype = SOCK_DGRAM; /* Datagram socket */
-   hints.ai_flags = AI_PASSIVE;    /* For wildcard IP address */
-   hints.ai_protocol = 0;          /* Any protocol */
-   hints.ai_canonname = (void *)0;
-   hints.ai_addr = (void *)0;
-   hints.ai_next = (void *)0;
+  hints.ai_family = AF_UNSPEC;    /* Allow IPv4 or IPv6 */
+  hints.ai_socktype = SOCK_DGRAM; /* Datagram socket */
+  hints.ai_flags = AI_PASSIVE;    /* For wildcard IP address */
+  hints.ai_protocol = 0;          /* Any protocol */
+  hints.ai_canonname = (void *) 0;
+  hints.ai_addr = (void *) 0;
+  hints.ai_next = (void *) 0;
 
-   result = getaddrinfo( (void *)0, (void *)0, &hints, &finfo );
-   freeaddrinfo( finfo );
+  result = getaddrinfo( (void *) 0, (void *) 0, &hints, &finfo );
+  freeaddrinfo( finfo );
 
-   return result;
- }
+  return result;
+}

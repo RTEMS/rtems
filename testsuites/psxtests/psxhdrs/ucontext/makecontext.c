@@ -39,29 +39,29 @@
 #include <ucontext.h>
 #include <stdlib.h>
 
-#define STACK_SIZE (1<<15) // 32KiB
+#define STACK_SIZE ( 1 << 15 ) // 32KiB
 
-int test( void );
+int  test( void );
 void func( void );
 
 int test( void )
 {
   ucontext_t context;
-  context.uc_stack.ss_sp = (char *) malloc(STACK_SIZE);
+  context.uc_stack.ss_sp = (char *) malloc( STACK_SIZE );
   context.uc_stack.ss_size = STACK_SIZE;
   context.uc_link = 0;
   context.uc_stack.ss_flags = 0;
   ucontext_t *ucp = &context;
-  getcontext(ucp);
+  getcontext( ucp );
 
-  makecontext(ucp, (void *)func, 0);
+  makecontext( ucp, (void *) func, 0 );
 
-  setcontext(ucp);
+  setcontext( ucp );
   abort();
   return 0;
 }
 
 void func( void )
 {
-	return;
+  return;
 }

@@ -43,16 +43,16 @@ const char rtems_test_name[] = "PSXINTRCRITICAL 1";
 typedef struct {
   timer_t           timer;
   struct itimerspec spec;
-  volatile bool early;
-  volatile bool late;
-  long early_count;
-  long late_count;
-  long potential_hits;
+  volatile bool     early;
+  volatile bool     late;
+  long              early_count;
+  long              late_count;
+  long              potential_hits;
 } test_context;
 
 #define POSIX_TIMER_RELATIVE 0
 
-static void prepare(void *arg)
+static void prepare( void *arg )
 {
   test_context *ctx;
 
@@ -61,43 +61,43 @@ static void prepare(void *arg)
   ctx->late = false;
 }
 
-static void action(void *arg)
+static void action( void *arg )
 {
   test_context *ctx;
-  int rv;
+  int           rv;
 
   ctx = arg;
   ctx->early = true;
-  rv = timer_settime(ctx->timer, POSIX_TIMER_RELATIVE, &ctx->spec, NULL);
+  rv = timer_settime( ctx->timer, POSIX_TIMER_RELATIVE, &ctx->spec, NULL );
   ctx->late = true;
-  T_quiet_psx_success(rv);
+  T_quiet_psx_success( rv );
 
   T_interrupt_test_busy_wait_for_interrupt();
 }
 
-static T_interrupt_test_state interrupt(void *arg)
+static T_interrupt_test_state interrupt( void *arg )
 {
   test_context *ctx;
-  int rv;
+  int           rv;
 
-  if (T_interrupt_test_get_state() != T_INTERRUPT_TEST_ACTION) {
+  if ( T_interrupt_test_get_state() != T_INTERRUPT_TEST_ACTION ) {
     return T_INTERRUPT_TEST_EARLY;
   }
 
   ctx = arg;
-  rv = timer_settime(ctx->timer, POSIX_TIMER_RELATIVE, &ctx->spec, NULL);
-  T_quiet_psx_success(rv);
+  rv = timer_settime( ctx->timer, POSIX_TIMER_RELATIVE, &ctx->spec, NULL );
+  T_quiet_psx_success( rv );
 
-  if (ctx->late) {
+  if ( ctx->late ) {
     ++ctx->late_count;
     return T_INTERRUPT_TEST_LATE;
-  } else if (ctx->early) {
+  } else if ( ctx->early ) {
     ++ctx->early_count;
     return T_INTERRUPT_TEST_EARLY;
   } else {
     ++ctx->potential_hits;
 
-    if (ctx->potential_hits > 13) {
+    if ( ctx->potential_hits > 13 ) {
       return T_INTERRUPT_TEST_DONE;
     } else {
       return T_INTERRUPT_TEST_CONTINUE;
@@ -112,37 +112,37 @@ static const T_interrupt_test_config config = {
   .max_iteration_count = 10000
 };
 
-T_TEST_CASE(PSXSetTimerInterrupt)
+T_TEST_CASE( PSXSetTimerInterrupt )
 {
-  test_context ctx;
-  int sc;
+  test_context           ctx;
+  int                    sc;
   T_interrupt_test_state state;
 
-  memset(&ctx, 0, sizeof(ctx));
+  memset( &ctx, 0, sizeof( ctx ) );
 
   /* create POSIX Timer */
-  sc = timer_create (CLOCK_REALTIME, NULL, &ctx.timer);
-  T_psx_success(sc);
+  sc = timer_create( CLOCK_REALTIME, NULL, &ctx.timer );
+  T_psx_success( sc );
 
   /* we don't care if it ever fires */
-  ctx.spec.it_interval.tv_sec  = 10;
-  ctx.spec.it_value.tv_sec     = 10;
+  ctx.spec.it_interval.tv_sec = 10;
+  ctx.spec.it_value.tv_sec = 10;
 
-  state = T_interrupt_test(&config, &ctx);
-  T_eq_int(state, T_INTERRUPT_TEST_DONE);
+  state = T_interrupt_test( &config, &ctx );
+  T_eq_int( state, T_INTERRUPT_TEST_DONE );
 
-  T_log(T_NORMAL, "early count = %ld", ctx.early_count);
-  T_log(T_NORMAL, "late count = %ld", ctx.late_count);
-  T_log(T_NORMAL, "potential hits = %ld", ctx.potential_hits);
-  T_gt_int(ctx.potential_hits, 0);
+  T_log( T_NORMAL, "early count = %ld", ctx.early_count );
+  T_log( T_NORMAL, "late count = %ld", ctx.late_count );
+  T_log( T_NORMAL, "potential hits = %ld", ctx.potential_hits );
+  T_gt_int( ctx.potential_hits, 0 );
 
-  sc = timer_delete(ctx.timer);
-  T_psx_success(sc);
+  sc = timer_delete( ctx.timer );
+  T_psx_success( sc );
 }
 
-static rtems_task Init(rtems_task_argument arg)
+static rtems_task Init( rtems_task_argument arg )
 {
-  rtems_test_run(arg, TEST_STATE);
+  rtems_test_run( arg, TEST_STATE );
 }
 
 /* configuration information */
@@ -150,10 +150,10 @@ static rtems_task Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS          1
-#define CONFIGURE_MAXIMUM_POSIX_TIMERS   1
-#define CONFIGURE_MICROSECONDS_PER_TICK  1000
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_MAXIMUM_TASKS         1
+#define CONFIGURE_MAXIMUM_POSIX_TIMERS  1
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
+#define CONFIGURE_INITIAL_EXTENSIONS    RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

@@ -41,7 +41,7 @@ int test( void );
 int test( void )
 {
   cnd_t cv;
-  int result;
+  int   result;
 
   result = cnd_init( &cv );
   cnd_destroy( &cv );

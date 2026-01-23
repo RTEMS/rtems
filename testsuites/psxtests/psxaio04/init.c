@@ -43,13 +43,13 @@
 
 const char rtems_test_name[] = "PSXAIO 4";
 
-#define BUFSIZE 512
+#define BUFSIZE  512
 #define WRONG_FD 404
 
 /* forward declarations to avoid warnings */
 static struct aiocb *create_aiocb( int fd );
-static void free_aiocb( struct aiocb *aiocbp );
-static void notify( union sigval sig );
+static void          free_aiocb( struct aiocb *aiocbp );
+static void          notify( union sigval sig );
 
 static struct aiocb *create_aiocb( int fd )
 {
@@ -68,7 +68,7 @@ static struct aiocb *create_aiocb( int fd )
 
 static void free_aiocb( struct aiocb *aiocbp )
 {
-  free( (void*) aiocbp->aio_buf );
+  free( (void *) aiocbp->aio_buf );
   free( aiocbp );
 }
 
@@ -81,20 +81,20 @@ void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int fd, status, received_signal, sig;
+  int           fd, status, received_signal, sig;
   struct aiocb *aiocbp;
-  sigset_t sig_set;
+  sigset_t      sig_set;
   sig = SIGUSR1;
 
   rtems_aio_init();
 
   status = mkdir( "/tmp", S_IRWXU );
   rtems_test_assert( !status );
-  
+
   fd = open(
     "/tmp/aio_fildes",
-    O_RDWR|O_CREAT,
-    S_IRWXU|S_IRWXG|S_IRWXO
+    O_RDWR | O_CREAT,
+    S_IRWXU | S_IRWXG | S_IRWXO
   );
   rtems_test_assert( fd != -1 );
 
@@ -104,10 +104,10 @@ void *POSIX_Init( void *argument )
   aiocbp->aio_sigevent.sigev_notify = SIGEV_SIGNAL;
   aiocbp->aio_sigevent.sigev_signo = SIGUSR1;
 
-  status =sigemptyset( &sig_set );
+  status = sigemptyset( &sig_set );
   rtems_test_assert( status == 0 );
 
-  status =sigaddset( &sig_set, sig );
+  status = sigaddset( &sig_set, sig );
   rtems_test_assert( status == 0 );
 
   status = sigprocmask( SIG_BLOCK, &sig_set, NULL );
@@ -127,10 +127,10 @@ void *POSIX_Init( void *argument )
   aiocbp->aio_sigevent.sigev_notify_function = &notify;
   aiocbp->aio_sigevent.sigev_value.sival_int = sig;
 
-  status =sigemptyset( &sig_set );
+  status = sigemptyset( &sig_set );
   rtems_test_assert( status == 0 );
 
-  status =sigaddset( &sig_set, sig );
+  status = sigaddset( &sig_set, sig );
   rtems_test_assert( status == 0 );
 
   status = sigprocmask( SIG_BLOCK, &sig_set, NULL );

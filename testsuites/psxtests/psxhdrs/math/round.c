@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  double x = 4.553456 ,  result ;
+  double x = 4.553456, result;
 
-  result = round( x ) ;
+  result = round( x );
 
-  return (result);
+  return ( result );
 }

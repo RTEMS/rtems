@@ -39,16 +39,15 @@
 
 #include <sys/socket.h>
 
-ssize_t test(void);
+ssize_t test( void );
 
-ssize_t test(void)
+ssize_t test( void )
 {
-  int     sockfd = 4;
-  int     buffer = 0;
-  void   *buf = &buffer;
-  size_t  len = sizeof(buffer);
-  int     flags = 7;
+  int    sockfd = 4;
+  int    buffer = 0;
+  void  *buf = &buffer;
+  size_t len = sizeof( buffer );
+  int    flags = 7;
 
-
-  return send(sockfd, buf, len, flags);
+  return send( sockfd, buf, len, flags );
 }

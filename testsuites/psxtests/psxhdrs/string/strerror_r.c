@@ -37,14 +37,14 @@
  #include <string.h>
  #include <errno.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char *dest = "Hello";
-   int result;
+int test( void )
+{
+  char *dest = "Hello";
+  int   result;
 
-   result = strerror_r( errno, dest, 2 );
+  result = strerror_r( errno, dest, 2 );
 
-   return result;
- }
+  return result;
+}

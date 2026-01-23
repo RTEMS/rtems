@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 100 , y = 23 , result ;
-  int quo ;
+  long double x = 100, y = 23, result;
+  int         quo;
 
-  result = remquol( x , y , &quo ) ;
+  result = remquol( x, y, &quo );
 
-  return (result);
+  return ( result );
 }
 #endif

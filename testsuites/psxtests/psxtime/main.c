@@ -32,18 +32,13 @@
 #include "config.h"
 #endif
 
-
 #include <bsp.h>
-#include <tmacros.h>  /* instantiate buffering code if needed */
+#include <tmacros.h> /* instantiate buffering code if needed */
 
-void test_main( void );
-rtems_task Init(
-  rtems_task_argument ignored
-);
+void       test_main( void );
+rtems_task Init( rtems_task_argument ignored );
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 

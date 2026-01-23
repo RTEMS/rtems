@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int fildes = 1;
-	struct stat buf;
+  int         return_value;
+  int         fildes = 1;
+  struct stat buf;
 
-	return_value = fstat(fildes, &buf);
-	return (return_value != -1);
+  return_value = fstat( fildes, &buf );
+  return ( return_value != -1 );
 }

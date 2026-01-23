@@ -36,13 +36,13 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const wchar_t wc = 0;
-  wchar_t wc1;
+  wchar_t       wc1;
 
   wc1 = 0;
-  return *wcsrchr(&wc, wc1);
+  return *wcsrchr( &wc, wc1 );
 }

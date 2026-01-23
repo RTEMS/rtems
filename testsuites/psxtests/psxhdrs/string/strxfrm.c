@@ -36,15 +36,15 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char *dest = "Hello";
-   char *src = "World";
-   int result;
+int test( void )
+{
+  char *dest = "Hello";
+  char *src = "World";
+  int   result;
 
-   result = strxfrm( dest, src, 2 );
+  result = strxfrm( dest, src, 2 );
 
-   return result;
- }
+  return result;
+}

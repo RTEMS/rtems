@@ -38,14 +38,14 @@
  #include <errno.h>
  #include <locale.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   locale_t locale = NULL;
-   char *result;
+int test( void )
+{
+  locale_t locale = NULL;
+  char    *result;
 
-   result = strerror_l( errno, locale );
+  result = strerror_l( errno, locale );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

@@ -42,32 +42,34 @@
 #include "system.h"
 #include <errno.h>
 
-void *Task_1(
-  void *argument
-)
+void *Task_1( void *argument )
 {
   (void) argument;
 
-  int               status;
-  uint32_t   *key_data;
+  int       status;
+  uint32_t *key_data;
 
   printf( "Task_1: Setting the key to %d\n", 1 );
   status = pthread_setspecific( Key_id, &Data_array[ 1 ] );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   key_data = pthread_getspecific( Key_id );
-  printf( "Task_1: Got the key value of %lu\n",
-          (unsigned long) ((uint32_t   *)key_data - Data_array) );
-  if ( status )
+  printf(
+    "Task_1: Got the key value of %lu\n",
+    (unsigned long) ( (uint32_t *) key_data - Data_array )
+  );
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   puts( "Task_1: exitting" );
   pthread_exit( NULL );
 
-     /* switch to task 2 */
+  /* switch to task 2 */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-    double x = 49 ;
-    double y = -4 ;
-    double result;
+  double x = 49;
+  double y = -4;
+  double result;
 
-    result = copysign( x , y ) ;
+  result = copysign( x, y );
 
-    return (result) ;
+  return ( result );
 }

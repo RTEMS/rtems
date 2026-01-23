@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  double x = 50 , y = 3 , result ;
+  double x = 50, y = 3, result;
 
-  result = pow( x , y ) ;
+  result = pow( x, y );
 
-  return (result);
+  return ( result );
 }

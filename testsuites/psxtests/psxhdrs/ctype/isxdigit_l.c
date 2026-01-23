@@ -36,13 +36,13 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int xdigit;
+  int      xdigit;
   locale_t locale;
 
   xdigit = 0;
-  return (isxdigit_l(xdigit, locale));
+  return ( isxdigit_l( xdigit, locale ) );
 }

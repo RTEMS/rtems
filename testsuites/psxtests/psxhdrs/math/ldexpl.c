@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 34.67 , result ;
-  int  exp = 3 ;
+  long double x = 34.67, result;
+  int         exp = 3;
 
-  result = ldexpl(x,exp) ;
+  result = ldexpl( x, exp );
 
-  return (result);
+  return ( result );
 }
 #endif

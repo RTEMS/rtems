@@ -40,5 +40,5 @@ int test( void );
 
 int test( void )
 {
-	_Exit(1);
+  _Exit( 1 );
 }

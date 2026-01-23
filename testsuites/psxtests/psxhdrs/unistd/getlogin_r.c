@@ -37,14 +37,14 @@
 
 #include <sys/types.h>
 #include <unistd.h>
-#include <limits.h>   /* for LOGIN_NAME_MAX */
+#include <limits.h> /* for LOGIN_NAME_MAX */
 
 int test( void );
 
 int test( void )
 {
-  char  loginnamebuffer[ LOGIN_NAME_MAX ];
-  int   result;
+  char loginnamebuffer[ LOGIN_NAME_MAX ];
+  int  result;
 
   result = getlogin_r( loginnamebuffer, LOGIN_NAME_MAX );
 

@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-  double x = 6835 ;
-  double y = 45 ;
-  double result ;
+  double x = 6835;
+  double y = 45;
+  double result;
 
-  result = fmod(x,y) ;
+  result = fmod( x, y );
 
-  return (result);
+  return ( result );
 }

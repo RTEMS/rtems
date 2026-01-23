@@ -36,12 +36,12 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   FILE *file;
 
-  file = (void *)0;
-  return getwc(file);
+  file = (void *) 0;
+  return getwc( file );
 }

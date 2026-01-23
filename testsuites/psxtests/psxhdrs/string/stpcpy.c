@@ -36,14 +36,14 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char buffer[20];
-   void *result = buffer;
+int test( void )
+{
+  char  buffer[ 20 ];
+  void *result = buffer;
 
-   result = stpcpy( result, "foo" );
+  result = stpcpy( result, "foo" );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

@@ -37,7 +37,7 @@
 #include <stdio.h>
 #include <threads.h>
 
-int test( void );
+int  test( void );
 void do_once( void );
 
 int test( void )
@@ -49,6 +49,7 @@ int test( void )
   return 0;
 }
 
-void do_once(void) {
-    puts( "called once" );
+void do_once( void )
+{
+  puts( "called once" );
 }

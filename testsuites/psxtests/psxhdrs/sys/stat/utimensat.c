@@ -41,12 +41,12 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int fd = 1;
-	char *path = "/";
-	struct timespec times[2] = { 0 };
-	int flag = AT_SYMLINK_NOFOLLOW;
+  int             return_value;
+  int             fd = 1;
+  char           *path = "/";
+  struct timespec times[ 2 ] = { 0 };
+  int             flag = AT_SYMLINK_NOFOLLOW;
 
-	return_value = utimensat(fd, path, times, flag);
-	return (return_value != -1);
+  return_value = utimensat( fd, path, times, flag );
+  return ( return_value != -1 );
 }

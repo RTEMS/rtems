@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  double x = 4.643456 ,  result ;
+  double x = 4.643456, result;
 
-  result = rint( x ) ;
+  result = rint( x );
 
-  return (result);
+  return ( result );
 }

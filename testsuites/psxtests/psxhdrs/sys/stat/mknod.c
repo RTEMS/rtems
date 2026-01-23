@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	char *path = "/tmp/file";
-	mode_t mode = S_ISUID;
-	dev_t dev = 0;
+  int    return_value;
+  char  *path = "/tmp/file";
+  mode_t mode = S_ISUID;
+  dev_t  dev = 0;
 
-	return_value = mknod(path, mode, dev);
-	return (return_value != -1);
+  return_value = mknod( path, mode, dev );
+  return ( return_value != -1 );
 }

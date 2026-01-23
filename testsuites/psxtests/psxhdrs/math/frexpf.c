@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 2560 , result ;
-  int exp ;
+  float x = 2560, result;
+  int   exp;
 
-  result = frexpf(x,&exp) ;
+  result = frexpf( x, &exp );
 
-  return (result);
+  return ( result );
 }

@@ -44,11 +44,11 @@ int test( int arg1, ... )
   (void) arg1;
 
   va_list ap;
-  char string[128];
-  int result;
+  char    string[ 128 ];
+  int     result;
 
-  va_start(ap, arg1);
-  result = vsnprintf( string, sizeof(string), " %d %99s ", ap );
+  va_start( ap, arg1 );
+  result = vsnprintf( string, sizeof( string ), " %d %99s ", ap );
 
   return result;
 }

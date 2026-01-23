@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 100 , y = 23 , result ;
+  float x = 100, y = 23, result;
 
-  result = remainderf( x , y ) ;
+  result = remainderf( x, y );
 
-  return (result);
+  return ( result );
 }

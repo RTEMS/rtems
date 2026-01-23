@@ -36,13 +36,13 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int upper;
+  int      upper;
   locale_t locale;
 
   upper = 0;
-  return (isupper_l(upper, locale));
+  return ( isupper_l( upper, locale ) );
 }

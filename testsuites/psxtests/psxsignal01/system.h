@@ -34,22 +34,13 @@
 
 #include <pmacros.h>
 
-void *POSIX_Init(
-  void *argument
-);
+void *POSIX_Init( void *argument );
 
-void *Task_1(
-  void *argument
-);
+void *Task_1( void *argument );
 
-void *Task_2(
-  void *argument
-);
+void *Task_2( void *argument );
 
-void *Task_3(
-  void *argument
-);
-
+void *Task_3( void *argument );
 
 /* configuration information */
 
@@ -62,10 +53,9 @@ void *Task_3(
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 5
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
-#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
-        (RTEMS_MINIMUM_STACK_SIZE * 4)
+#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE ( RTEMS_MINIMUM_STACK_SIZE * 4 )
 
-#define CONFIGURE_MAXIMUM_TIMERS        1
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #include <rtems/confdefs.h>
 
@@ -76,12 +66,12 @@ void *Task_3(
 #else
 #define TEST_EXTERN extern
 #endif
-TEST_EXTERN rtems_id   Timer_id[ 1 ];     /* array of timer ids */
-TEST_EXTERN rtems_name Timer_name[ 1 ];   /* array of timer names */
+TEST_EXTERN rtems_id   Timer_id[ 1 ];   /* array of timer ids */
+TEST_EXTERN rtems_name Timer_name[ 1 ]; /* array of timer names */
 
-TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task1_id;
-TEST_EXTERN pthread_t        Task2_id;
-TEST_EXTERN pthread_t        Task3_id;
+TEST_EXTERN pthread_t Init_id;
+TEST_EXTERN pthread_t Task1_id;
+TEST_EXTERN pthread_t Task2_id;
+TEST_EXTERN pthread_t Task3_id;
 
 /* end of include file */

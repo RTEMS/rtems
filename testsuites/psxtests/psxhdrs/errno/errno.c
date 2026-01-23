@@ -40,5 +40,5 @@ int test( void );
 
 int test( void )
 {
-  return (errno == ERANGE);
+  return ( errno == ERANGE );
 }

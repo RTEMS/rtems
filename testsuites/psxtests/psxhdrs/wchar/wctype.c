@@ -37,11 +37,11 @@
 #include <wchar.h>
 #include <wctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const char ch = 0;
 
-  return wctype(&ch);
+  return wctype( &ch );
 }

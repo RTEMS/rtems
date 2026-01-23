@@ -36,14 +36,14 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char *dest = "Hello";
-   size_t result;
+int test( void )
+{
+  char  *dest = "Hello";
+  size_t result;
 
-   result = strlen( dest );
+  result = strlen( dest );
 
-   return result;
- }
+  return result;
+}

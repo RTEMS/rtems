@@ -44,7 +44,7 @@ int test( void )
 {
   struct pollfd   fds[ 2 ];
   struct timespec timeout_msecs = { 0 };
-  sigset_t        sigmask       = 0;
+  sigset_t        sigmask = 0;
   int             result;
 
   result = ppoll( fds, 2, &timeout_msecs, &sigmask );

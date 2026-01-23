@@ -36,15 +36,15 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const wchar_t wc = 0;
-  wchar_t wc1;
-  size_t si;
+  wchar_t       wc1;
+  size_t        si;
 
   wc1 = 0;
   si = 0;
-  return *wmemchr(&wc, wc1, si);
+  return *wmemchr( &wc, wc1, si );
 }

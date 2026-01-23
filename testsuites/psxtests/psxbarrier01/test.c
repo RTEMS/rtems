@@ -63,11 +63,11 @@ static void test_barrier_null( void )
 static void test_barrier_not_initialized( void )
 {
   pthread_barrier_t bar;
-  int eno;
+  int               eno;
 
   memset( &bar, 0xff, sizeof( bar ) );
 
-  eno = pthread_barrier_wait(& bar) ;
+  eno = pthread_barrier_wait( &bar );
   rtems_test_assert( eno == EINVAL );
 
   eno = pthread_barrier_destroy( &bar );
@@ -78,7 +78,7 @@ static void test_barrier_invalid_copy( void )
 {
   pthread_barrier_t bar;
   pthread_barrier_t bar2;
-  int eno;
+  int               eno;
 
   eno = pthread_barrier_init( &bar, NULL, 1 );
   rtems_test_assert( eno == 0 );
@@ -96,19 +96,24 @@ static void test_barrier_invalid_copy( void )
 }
 
 #define NUMBER_THREADS 2
-pthread_t ThreadIds[NUMBER_THREADS];
+pthread_t         ThreadIds[ NUMBER_THREADS ];
 pthread_barrier_t Barrier;
-void *BarrierThread(void *arg);
+void             *BarrierThread( void *arg );
 
-void *BarrierThread(void *arg)
+void *BarrierThread( void *arg )
 {
   pthread_t id = *(pthread_t *) arg;
   int       status;
 
-  printf( "pthread_barrier_wait( &Barrier ) for thread 0x%08" PRIxpthread_t "\n", id );
+  printf(
+    "pthread_barrier_wait( &Barrier ) for thread 0x%08" PRIxpthread_t "\n",
+    id
+  );
   status = pthread_barrier_wait( &Barrier );
   printf( "pthread_barrier_wait - 0x%08" PRIxpthread_t " released\n", id );
-  rtems_test_assert( (status == 0) || (status == PTHREAD_BARRIER_SERIAL_THREAD) );
+  rtems_test_assert(
+    ( status == 0 ) || ( status == PTHREAD_BARRIER_SERIAL_THREAD )
+  );
 
   return NULL;
 }
@@ -117,15 +122,12 @@ void *BarrierThread(void *arg)
  *  main entry point to the test
  */
 
-#if defined(__rtems__)
-int test_main(void);
+#if defined( __rtems__ )
+int test_main( void );
 
-int test_main(void)
+int test_main( void )
 #else
-int main(
-  int    argc,
-  char **argv
-)
+int main( int argc, char **argv )
 #endif
 {
   pthread_barrier_t    *bad_barrier = NULL;
@@ -172,7 +174,6 @@ int main(
   puts( "pthread_barrierattr_destroy( &attr ) -- EINVAL" );
   status = pthread_barrierattr_destroy( &attr );
   rtems_test_assert( status == EINVAL );
-
 
   /*************** ACTUALLY WORK THIS TIME *****************/
 
@@ -291,21 +292,25 @@ int main(
   status = pthread_barrier_init( &Barrier, &attr, NUMBER_THREADS );
   rtems_test_assert( status == 0 );
 
-  for (i=0 ; i<NUMBER_THREADS ; i++ ) {
-
+  for ( i = 0; i < NUMBER_THREADS; i++ ) {
     /* check for unable to destroy while threads waiting */
-    if (i == NUMBER_THREADS - 1) {
+    if ( i == NUMBER_THREADS - 1 ) {
       puts( "pthread_barrier_destroy( &Barrier ) -- EBUSY" );
       status = pthread_barrier_destroy( &Barrier );
       rtems_test_assert( status == EBUSY );
     }
 
     /* create a thread to block on the barrier */
-    printf( "Init: pthread_create - thread %d OK\n", i+1 );
-    status = pthread_create(&ThreadIds[i], NULL, BarrierThread, &ThreadIds[i]);
+    printf( "Init: pthread_create - thread %d OK\n", i + 1 );
+    status = pthread_create(
+      &ThreadIds[ i ],
+      NULL,
+      BarrierThread,
+      &ThreadIds[ i ]
+    );
     rtems_test_assert( !status );
 
-    sleep(1);
+    sleep( 1 );
   }
 
   test_barrier_null();
@@ -314,5 +319,5 @@ int main(
 
   /*************** END OF TEST *****************/
   TEST_END();
-  exit(0);
+  exit( 0 );
 }

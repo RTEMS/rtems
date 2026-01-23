@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x=45 , y = 46 ;
+  float x = 45, y = 46;
   int   result;
 
-  result = isgreaterequal(x,y);
+  result = isgreaterequal( x, y );
 
-  return (result);
+  return ( result );
 }

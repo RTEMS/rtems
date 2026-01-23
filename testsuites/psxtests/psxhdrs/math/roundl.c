@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 4.553456 ,  result ;
+  long double x = 4.553456, result;
 
-  result = roundl( x ) ;
+  result = roundl( x );
 
-  return (result);
+  return ( result );
 }
 #endif

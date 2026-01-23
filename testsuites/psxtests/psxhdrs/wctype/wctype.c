@@ -43,6 +43,6 @@ int test( void )
 {
   wctype_t return_value;
 
-  return_value = wctype("alnum");
-  return (return_value != 0);
+  return_value = wctype( "alnum" );
+  return ( return_value != 0 );
 }

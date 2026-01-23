@@ -36,12 +36,13 @@
 
 #include <fcntl.h>
 
-int test(void);
+int test( void );
 
-int test(void){
+int test( void )
+{
   int i0, i1;
 
   i0 = 0;
   i1 = 0;
-  return fcntl(i0, i1);
+  return fcntl( i0, i1 );
 }

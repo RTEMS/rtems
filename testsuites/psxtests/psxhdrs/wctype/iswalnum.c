@@ -42,6 +42,6 @@ int test( void )
 {
   wint_t return_value;
 
-  return_value = iswalnum('c');
-  return (return_value != 0);
+  return_value = iswalnum( 'c' );
+  return ( return_value != 0 );
 }

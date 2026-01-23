@@ -25,11 +25,11 @@
 
 #include <fenv.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int a = 0;
+  int             a = 0;
   const fexcept_t b;
-  return fesetexceptflag(&b, a);
+  return fesetexceptflag( &b, a );
 }

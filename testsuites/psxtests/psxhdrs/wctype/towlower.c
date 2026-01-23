@@ -42,6 +42,6 @@ int test( void )
 {
   wint_t return_value;
 
-  return_value = towlower('C');
-  return (return_value == (wint_t)'c');
+  return_value = towlower( 'C' );
+  return ( return_value == (wint_t) 'c' );
 }

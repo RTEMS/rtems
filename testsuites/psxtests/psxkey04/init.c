@@ -39,11 +39,11 @@
 const char rtems_test_name[] = "PSXKEY 4";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_task Test_Thread1(rtems_task_argument argument);
-rtems_task Test_Thread2(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
+rtems_task Test_Thread1( rtems_task_argument argument );
+rtems_task Test_Thread2( rtems_task_argument argument );
 
-int      Data_array[2] = {1, 2};
+int      Data_array[ 2 ] = { 1, 2 };
 rtems_id thread1, thread2;
 
 pthread_key_t Key;
@@ -52,12 +52,12 @@ rtems_task Test_Thread1( rtems_task_argument argument )
 {
   (void) argument;
 
-  int              sc;
-  int             *value;
-  struct timespec  delay_request;
+  int             sc;
+  int            *value;
+  struct timespec delay_request;
 
   puts( "Test_Thread 1 - pthread_setspecific - OK" );
-  sc = pthread_setspecific( Key, &Data_array[0] );
+  sc = pthread_setspecific( Key, &Data_array[ 0 ] );
   rtems_test_assert( !sc );
 
   puts( "Test_Thread 1 - sleep - let thread 2 run - OK" );
@@ -68,7 +68,7 @@ rtems_task Test_Thread1( rtems_task_argument argument )
 
   puts( "Test_Thread 1 - pthread_getspecific - OK" );
   value = pthread_getspecific( Key );
-  rtems_test_assert( *value == Data_array[0] );
+  rtems_test_assert( *value == Data_array[ 0 ] );
 
   rtems_task_exit();
 }
@@ -77,16 +77,16 @@ rtems_task Test_Thread2( rtems_task_argument argument )
 {
   (void) argument;
 
-  int sc;
+  int  sc;
   int *value;
 
   puts( "Test_Thread 2 - pthread_setspecific - OK" );
-  sc = pthread_setspecific( Key, &Data_array[1] );
+  sc = pthread_setspecific( Key, &Data_array[ 1 ] );
   rtems_test_assert( !sc );
 
   puts( "Test_Thread 2 - pthread_getspecific - OK" );
   value = pthread_getspecific( Key );
-  rtems_test_assert( *value == Data_array[1] );
+  rtems_test_assert( *value == Data_array[ 1 ] );
 
   rtems_task_exit();
 }
@@ -107,7 +107,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   puts( "Init - create - OK" );
   rc = rtems_task_create(
-    rtems_build_name( 'T', 'E', 'S', 'T' ), 
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
@@ -120,7 +120,7 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_test_assert( rc == RTEMS_SUCCESSFUL );
 
   rc = rtems_task_create(
-    rtems_build_name( 'T', 'E', 'S', 'T' ), 
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
@@ -143,7 +143,7 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_test_assert( sc == 0 );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -153,8 +153,8 @@ rtems_task Init( rtems_task_argument ignored )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS          3
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     1
+#define CONFIGURE_MAXIMUM_TASKS      3
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

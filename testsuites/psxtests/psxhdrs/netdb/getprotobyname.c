@@ -36,15 +36,15 @@
 
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct protoent *pnet;
-   char *name = "ipv4";
+int test( void )
+{
+  struct protoent *pnet;
+  char            *name = "ipv4";
 
-   pnet = getprotobyname( name );
-   (void) name;
+  pnet = getprotobyname( name );
+  (void) name;
 
-   return ( pnet != (void *)0 );
- }
+  return ( pnet != (void *) 0 );
+}

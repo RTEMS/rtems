@@ -45,10 +45,10 @@ int test( void );
 
 int test( void )
 {
-  int       how;
-  sigset_t  set;
-  sigset_t  oset;
-  int       result;
+  int      how;
+  sigset_t set;
+  sigset_t oset;
+  int      result;
 
   how = SIG_BLOCK;
   how = SIG_UNBLOCK;

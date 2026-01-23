@@ -36,14 +36,14 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  wchar_t** wc;
+  wchar_t **wc;
 
   wc = 0;
-  if(open_wmemstream(wc, 0)){
+  if ( open_wmemstream( wc, 0 ) ) {
     return 1;
   }
   return 0;

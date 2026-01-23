@@ -41,10 +41,10 @@ int test( void );
 int test( void )
 {
   void *filename;
-  int *iptr;
+  int  *iptr;
 
   filename = dlopen( "mylib.so", RTLD_LOCAL | RTLD_LAZY );
   iptr = dlsym( filename, "my_function" );
 
-  return (iptr != NULL);
+  return ( iptr != NULL );
 }

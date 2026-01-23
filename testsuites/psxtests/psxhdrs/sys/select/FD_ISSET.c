@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  int return_value;
-  int fd = 1;
+  int    return_value;
+  int    fd = 1;
   fd_set fdset;
 
-  return_value = FD_ISSET(fd, &fdset);
+  return_value = FD_ISSET( fd, &fdset );
   return return_value;
 }

@@ -25,9 +25,9 @@
 
 #include <syslog.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   closelog();
   return 0;

@@ -44,7 +44,7 @@ int test( void )
 
   stream = fopen( "myfile.dat", "w" );
   stream1 = stream;
-  stream2 = freopen("", "w+", stream1);
+  stream2 = freopen( "", "w+", stream1 );
 
   return ( stream2 != NULL );
 }

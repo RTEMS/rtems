@@ -36,13 +36,13 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int space;
+  int      space;
   locale_t locale;
 
   space = 0;
-  return (isspace_l(space, locale));
+  return ( isspace_l( space, locale ) );
 }

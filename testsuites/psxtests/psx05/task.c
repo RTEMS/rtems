@@ -42,9 +42,7 @@
 #include "system.h"
 #include <errno.h>
 
-void *Task_1(
-  void *argument
-)
+void *Task_1( void *argument )
 {
   (void) argument;
 
@@ -52,29 +50,31 @@ void *Task_1(
 
   printf( "Task: pthread_mutex_trylock already locked\n" );
   status = pthread_mutex_trylock( &Mutex_id );
-  if ( status != EBUSY )
+  if ( status != EBUSY ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EBUSY );
 
   printf( "Task: pthread_mutex_lock unavailable\n" );
   status = pthread_mutex_lock( &Mutex_id );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
-     /* switch to init */
+  /* switch to init */
 
   printf( "Task: mutex acquired\n" );
 
   printf( "Task: sleep for 2 seconds\n" );
   sleep( 2 );
 
-     /* switch to init */
+  /* switch to init */
 
   printf( "Task: exit\n" );
   pthread_exit( NULL );
 
-     /* switch to Init */
+  /* switch to Init */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

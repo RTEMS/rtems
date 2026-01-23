@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 43.8 ;
-  double result ;
+  double x = 43.8;
+  double result;
 
-  result = fabs(x) ;
+  result = fabs( x );
 
-  return (result);
+  return ( result );
 }

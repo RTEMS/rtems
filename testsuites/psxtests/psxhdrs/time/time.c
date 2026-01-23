@@ -41,9 +41,9 @@ int test( void );
 
 int test( void )
 {
-  time_t    new_time;
+  time_t new_time;
 
   new_time = time( &new_time );
 
-  return (new_time != -1);
+  return ( new_time != -1 );
 }

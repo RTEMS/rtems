@@ -47,17 +47,17 @@ static pthread_key_t Key;
 static int created_thread_count, setted_thread_count, got_thread_count;
 static int all_thread_created;
 static pthread_mutex_t mutex1, mutex2;
-static pthread_cond_t create_condition_var, set_condition_var;
+static pthread_cond_t  create_condition_var, set_condition_var;
 
-static rtems_task Test_Thread(rtems_task_argument argument)
+static rtems_task Test_Thread( rtems_task_argument argument )
 {
   (void) argument;
 
-  int sc;
+  int  sc;
   int *value_p, *value_p2;
 
   value_p = malloc( sizeof( int ) );
-  rtems_test_assert(value_p != NULL);
+  rtems_test_assert( value_p != NULL );
 
   *value_p = 123;
   sc = pthread_setspecific( Key, value_p );
@@ -72,8 +72,9 @@ static rtems_task Test_Thread(rtems_task_argument argument)
    * blocked untill all threads have been created.
    */
   pthread_mutex_lock( &mutex2 );
-  while( !all_thread_created )
+  while ( !all_thread_created ) {
     pthread_cond_wait( &create_condition_var, &mutex2 );
+  }
   pthread_mutex_unlock( &mutex2 );
 
   value_p2 = pthread_getspecific( Key );
@@ -83,16 +84,15 @@ static rtems_task Test_Thread(rtems_task_argument argument)
   rtems_task_exit();
 }
 
-static rtems_task Init(rtems_task_argument argument)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code  rc;
-  int                sc;
-  struct timespec    delay_request;
-  uintptr_t          max_free_size =
-                       ADDITIONAL_TASK_COUNT * RTEMS_MINIMUM_STACK_SIZE;
-  void              *greedy;
+  rtems_status_code rc;
+  int               sc;
+  struct timespec   delay_request;
+  uintptr_t max_free_size = ADDITIONAL_TASK_COUNT * RTEMS_MINIMUM_STACK_SIZE;
+  void     *greedy;
 
   all_thread_created = 0;
 
@@ -121,7 +121,7 @@ static rtems_task Init(rtems_task_argument argument)
   /* Reduce workspace size if necessary to shorten test time */
   greedy = rtems_workspace_greedy_allocate( &max_free_size, 1 );
 
-  for ( ; ; ) {
+  for ( ;; ) {
     rtems_id task_id;
 
     pthread_mutex_lock( &mutex1 );
@@ -135,8 +135,8 @@ static rtems_task Init(rtems_task_argument argument)
       &task_id
     );
     rtems_test_assert(
-      ( rc == RTEMS_SUCCESSFUL ) || ( rc == RTEMS_UNSATISFIED )
-        || ( rc == RTEMS_TOO_MANY )
+      ( rc == RTEMS_SUCCESSFUL ) || ( rc == RTEMS_UNSATISFIED ) ||
+      ( rc == RTEMS_TOO_MANY )
     );
 
     if ( rc == RTEMS_SUCCESSFUL ) {
@@ -158,8 +158,9 @@ static rtems_task Init(rtems_task_argument argument)
      * wait for test thread set key, the while loop here is used to
      * avoid suprious wakeup.
      */
-    while( created_thread_count > setted_thread_count )
+    while ( created_thread_count > setted_thread_count ) {
       pthread_cond_wait( &set_condition_var, &mutex1 );
+    }
     pthread_mutex_unlock( &mutex1 );
   }
 
@@ -212,7 +213,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_test_assert( !sc );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -222,10 +223,10 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS rtems_resource_unlimited(INITIAL_TASK_COUNT)
+#define CONFIGURE_MAXIMUM_TASKS rtems_resource_unlimited( INITIAL_TASK_COUNT )
 #define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
-  (INITIAL_TASK_COUNT + ADDITIONAL_TASK_COUNT)
+  ( INITIAL_TASK_COUNT + ADDITIONAL_TASK_COUNT )
 #define CONFIGURE_UNIFIED_WORK_AREAS
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

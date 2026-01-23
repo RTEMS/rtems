@@ -40,6 +40,6 @@ int test( void );
 
 int test( void )
 {
-  int return_value = fnmatch("string", "random string", FNM_PATHNAME);
-  return (return_value == 0 || return_value == FNM_NOMATCH );
+  int return_value = fnmatch( "string", "random string", FNM_PATHNAME );
+  return ( return_value == 0 || return_value == FNM_NOMATCH );
 }

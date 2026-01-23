@@ -34,9 +34,7 @@
 #include <errno.h>
 #include <sched.h>
 
-void *POSIX_Init (
-  void *arg
-);
+void *POSIX_Init( void *arg );
 
 /* configuration information */
 
@@ -47,9 +45,8 @@ void *POSIX_Init (
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS             1
-#define CONFIGURE_MAXIMUM_POSIX_TIMERS              1
-
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
+#define CONFIGURE_MAXIMUM_POSIX_TIMERS  1
 
 #include <rtems/confdefs.h>
 

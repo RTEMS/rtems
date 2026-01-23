@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-    long double x = 61884.5389318 ;
-    long double result;
+  long double x = 61884.5389318;
+  long double result;
 
-    result = ceill(x) ;
+  result = ceill( x );
 
-    return (result) ;
+  return ( result );
 }
 #endif

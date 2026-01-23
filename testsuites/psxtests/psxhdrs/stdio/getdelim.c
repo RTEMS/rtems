@@ -42,12 +42,12 @@ int test( void );
 
 int test( void )
 {
-  FILE *stream;
+  FILE   *stream;
   ssize_t read;
-  char *line = NULL;
-  size_t len = 0;
+  char   *line = NULL;
+  size_t  len = 0;
 
-  stream = fopen("/etc/motd", "r");
+  stream = fopen( "/etc/motd", "r" );
   read = getdelim( &line, &len, 1, stream );
 
   return read;

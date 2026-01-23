@@ -36,14 +36,14 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   wchar_t wc;
-  FILE *file;
+  FILE   *file;
 
   wc = L'\x3b1';
   file = (void *) 0;
-  return fputwc(wc, file);
+  return fputwc( wc, file );
 }

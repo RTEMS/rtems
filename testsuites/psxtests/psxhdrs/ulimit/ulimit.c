@@ -42,7 +42,7 @@ int test( void )
 {
   long return_value;
 
-  return_value = ulimit(UL_GETFSIZE);
+  return_value = ulimit( UL_GETFSIZE );
 
-  return ((return_value) != -1);
+  return ( ( return_value ) != -1 );
 }

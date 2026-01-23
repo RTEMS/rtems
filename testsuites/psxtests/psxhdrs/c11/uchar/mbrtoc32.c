@@ -41,10 +41,10 @@ int test( void );
 
 int test( void )
 {
-  char32_t pc32;
-  char* str = u8"Mar\u00E7al";
+  char32_t  pc32;
+  char     *str = u8"Mar\u00E7al";
   mbstate_t mbs;
-  int result;
+  int       result;
 
   result = mbrtoc32( &pc32, str, MB_CUR_MAX, &mbs );
 

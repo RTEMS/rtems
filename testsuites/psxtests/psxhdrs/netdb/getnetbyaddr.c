@@ -36,15 +36,15 @@
 
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct netent *gnet;
-   uint32_t net = 2;
-   int type = 2;
+int test( void )
+{
+  struct netent *gnet;
+  uint32_t       net = 2;
+  int            type = 2;
 
-   gnet = getnetbyaddr( net, type );
+  gnet = getnetbyaddr( net, type );
 
-   return ( gnet != (void *)0 );
- }
+  return ( gnet != (void *) 0 );
+}

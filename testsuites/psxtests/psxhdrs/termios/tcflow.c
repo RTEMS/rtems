@@ -44,7 +44,7 @@ int test( void )
   int fildes = 0;
   int action = TCOOFF;
 
-  result = tcflow(fildes, action);
+  result = tcflow( fildes, action );
 
   return result;
 }

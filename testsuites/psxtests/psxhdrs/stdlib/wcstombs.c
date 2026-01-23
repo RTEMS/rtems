@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-	size_t return_value;
-	char s[5];
-	wchar_t *pwcs = L"test";
-	size_t n = 5;
+  size_t   return_value;
+  char     s[ 5 ];
+  wchar_t *pwcs = L"test";
+  size_t   n = 5;
 
-	return_value = wcstombs(s, pwcs, n);
-	return (return_value != (size_t)-1);
+  return_value = wcstombs( s, pwcs, n );
+  return ( return_value != (size_t) -1 );
 }

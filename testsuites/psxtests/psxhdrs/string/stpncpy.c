@@ -36,15 +36,15 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char src[] = "Dude";
-   char dest[ sizeof( src ) ];
-   char *result;
+int test( void )
+{
+  char  src[] = "Dude";
+  char  dest[ sizeof( src ) ];
+  char *result;
 
-   result = stpncpy( dest, src, sizeof( dest ) );
+  result = stpncpy( dest, src, sizeof( dest ) );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

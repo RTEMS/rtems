@@ -25,10 +25,10 @@
 
 #include <fenv.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const fenv_t a;
-  return feupdateenv(&a);
+  return feupdateenv( &a );
 }

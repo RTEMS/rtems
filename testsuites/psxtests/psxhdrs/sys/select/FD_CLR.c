@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  int fd = 1;
+  int    fd = 1;
   fd_set fdset;
 
-  FD_CLR(fd, &fdset);
+  FD_CLR( fd, &fdset );
   return 1;
 }

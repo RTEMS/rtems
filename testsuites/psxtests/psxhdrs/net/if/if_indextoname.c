@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  char *return_value;
+  char    *return_value;
   unsigned ifindex = 1;
-  char ifname[IF_NAMESIZE];
+  char     ifname[ IF_NAMESIZE ];
 
-  return_value = if_indextoname(ifindex, ifname);
-  return (return_value != (void *) 0);
+  return_value = if_indextoname( ifindex, ifname );
+  return ( return_value != (void *) 0 );
 }

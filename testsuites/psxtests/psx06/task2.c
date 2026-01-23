@@ -41,34 +41,36 @@
 #include "system.h"
 #include <errno.h>
 
-void *Task_2(
-  void *argument
-)
+void *Task_2( void *argument )
 {
   (void) argument;
 
-  int               status;
-  uint32_t   *key_data;
+  int       status;
+  uint32_t *key_data;
 
   printf( "Destructor invoked %d times\n", Destructor_invoked );
 
   printf( "Task_2: Setting the key to %d\n", 2 );
   status = pthread_setspecific( Key_id, &Data_array[ 2 ] );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   key_data = pthread_getspecific( Key_id );
-  printf( "Task_2: Got the key value of %lu\n",
-          (unsigned long) ((uint32_t   *)key_data - Data_array) );
-  if ( status )
+  printf(
+    "Task_2: Got the key value of %lu\n",
+    (unsigned long) ( (uint32_t *) key_data - Data_array )
+  );
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   puts( "Task2: exitting" );
   pthread_exit( NULL );
 
-     /* switch to init task */
+  /* switch to init task */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

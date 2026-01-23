@@ -38,14 +38,14 @@
 
  #define SIZE 40
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char buffer[SIZE] = "computer";
-   char *result;
+int test( void )
+{
+  char  buffer[ SIZE ] = "computer";
+  char *result;
 
-   result = strncat( buffer, " program", sizeof( buffer ) - 1 );
+  result = strncat( buffer, " program", sizeof( buffer ) - 1 );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

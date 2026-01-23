@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	mode_t return_value;
-	mode_t cmask = S_IRWXG;
+  mode_t return_value;
+  mode_t cmask = S_IRWXG;
 
-	return_value = umask(cmask);
-	return return_value;
+  return_value = umask( cmask );
+  return return_value;
 }

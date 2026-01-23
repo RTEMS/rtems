@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 0 ;
-  double result ;
+  double x = 0;
+  double result;
 
-  result = atan(x) ;
+  result = atan( x );
 
-  return (result) ;  /* This should return 0 */
+  return ( result ); /* This should return 0 */
 }

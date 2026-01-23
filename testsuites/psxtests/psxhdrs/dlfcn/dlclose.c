@@ -41,7 +41,7 @@ int test( void );
 int test( void )
 {
   void *filename;
-  int result;
+  int   result;
 
   filename = dlopen( "mylib.so", RTLD_LOCAL | RTLD_LAZY );
   result = dlclose( filename );

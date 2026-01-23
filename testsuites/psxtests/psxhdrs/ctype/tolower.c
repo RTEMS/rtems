@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int upper;
 
   upper = 0;
-  return (tolower(upper));
+  return ( tolower( upper ) );
 }

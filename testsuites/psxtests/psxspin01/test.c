@@ -43,29 +43,26 @@
 
 #include <pthread.h>
 
-#include <rtems.h>  /* for task creation */
+#include <rtems.h> /* for task creation */
 
 const char rtems_test_name[] = "PSXSPIN 1";
 
 /* forward declarations to avoid warnings */
-int test_main(void);
+int test_main( void );
 
 /*
  *  main entry point to the test
  */
 
-#if defined(__rtems__)
-int test_main(void)
+#if defined( __rtems__ )
+int test_main( void )
 #else
-int main(
-  int    argc,
-  char **argv
-)
+int main( int argc, char **argv )
 #endif
 {
-  pthread_spinlock_t    spinlock;
-  pthread_spinlock_t    spinlock2;
-  int                   status;
+  pthread_spinlock_t spinlock;
+  pthread_spinlock_t spinlock2;
+  int                status;
 
   TEST_BEGIN();
 
@@ -152,5 +149,5 @@ int main(
   rtems_test_assert( status == 0 );
 
   TEST_END();
-  exit(0);
+  exit( 0 );
 }

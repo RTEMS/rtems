@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 2560 , result ;
-  int exp ;
+  long double x = 2560, result;
+  int         exp;
 
-  result = frexpl(x,&exp) ;
+  result = frexpl( x, &exp );
 
-  return (result);
+  return ( result );
 }
 #endif

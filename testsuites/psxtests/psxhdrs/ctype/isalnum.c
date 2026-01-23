@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int alnum;
 
   alnum = 0;
-  return (isalnum(alnum));
+  return ( isalnum( alnum ) );
 }

@@ -41,11 +41,9 @@
 const char rtems_test_name[] = "PSXFCHX 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument ignored);
+rtems_task Init( rtems_task_argument ignored );
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -69,7 +67,7 @@ rtems_task Init(
   status = fchdir( 3 );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EBADF );
-  
+
   puts( "Init - opening /newfile in write-mode -- OK" );
   fd = open( "/newfile", O_WRONLY | O_CREAT, S_IWUSR | S_IXUSR );
   rtems_test_assert( fd != -1 );
@@ -88,9 +86,9 @@ rtems_task Init(
   rtems_test_assert( status == 0 );
 
   puts( "Init - opening /newfile in read-mode -- OK" );
-  fd = open( "/newfile", O_RDONLY | O_CREAT, S_IRUSR | S_IXUSR);
+  fd = open( "/newfile", O_RDONLY | O_CREAT, S_IRUSR | S_IXUSR );
   rtems_test_assert( fd != -1 );
-  
+
   puts( "Init - fchdir on the file descriptor - expect ENOTDIR" );
   status = fchdir( fd );
   rtems_test_assert( status == -1 );
@@ -131,7 +129,7 @@ rtems_task Init(
 
   puts( "Init - attempt fchdir on the file descriptor -- expect EACCES" );
   status = fchdir( fd );
-  rtems_test_assert( status == -1);
+  rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EACCES );
 
   puts( "Init - close the file descriptor -- OK" );
@@ -163,7 +161,7 @@ rtems_task Init(
   puts( "Init - open new file: /newfile in read-only mode -- OK" );
   fd = open( "/newfile", O_RDONLY | O_CREAT, S_IRWXU );
   rtems_test_assert( fd != -1 );
-  
+
   puts( "Init - fchmod, with the opened file descriptor -- OK" );
   status = fchmod( fd, 0 );
   rtems_test_assert( status == 0 );
@@ -176,7 +174,7 @@ rtems_task Init(
   puts( "Init - open new file: /newfile in read-write mode -- OK" );
   fd = open( "/newfile", O_RDWR | O_CREAT, S_IRWXU );
   rtems_test_assert( fd != -1 );
-  
+
   puts( "Init - fchmod, with the opened file descriptor -- OK" );
   status = fchmod( fd, S_IRUSR );
   rtems_test_assert( status == 0 );
@@ -207,7 +205,7 @@ rtems_task Init(
   puts( "Init - open new file: /newfile in read-only mode -- OK" );
   fd = open( "/newfile", O_RDONLY | O_CREAT, S_IRWXU );
   rtems_test_assert( fd != -1 );
-  
+
   puts( "Init - fchown, with the opened file descriptor - OK" );
   status = fchown( fd, 0, 0 );
   rtems_test_assert( status == 0 );
@@ -220,7 +218,7 @@ rtems_task Init(
   puts( "Init - open new file: /newfile in read-write mode -- OK" );
   fd = open( "/newfile", O_RDWR | O_CREAT, S_IRWXU );
   rtems_test_assert( fd != -1 );
-  
+
   puts( "Init - fchown, with the opened file descriptor -- OK" );
   status = fchown( fd, 1, 0 );
   rtems_test_assert( status == 0 );
@@ -243,7 +241,7 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

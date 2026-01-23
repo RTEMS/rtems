@@ -41,18 +41,16 @@
 #include "system.h"
 #include <signal.h>
 
-void *Task_3(
-  void *argument
-)
+void *Task_3( void *argument )
 {
   (void) argument;
 
-  unsigned int  remaining;
-  int           status;
-  int           sig;
-  volatile union sigval  value;
-  sigset_t      mask;
-  siginfo_t     info;
+  unsigned int          remaining;
+  int                   status;
+  int                   sig;
+  volatile union sigval value;
+  sigset_t              mask;
+  siginfo_t             info;
 
   value.sival_int = SIGUSR1;
 
@@ -60,7 +58,7 @@ void *Task_3(
   status = sigqueue( getpid(), SIGUSR1, value );
   rtems_test_assert( !status );
 
-     /* catch signal with sigwaitinfo */
+  /* catch signal with sigwaitinfo */
 
   empty_line();
 
@@ -73,9 +71,9 @@ void *Task_3(
   printf( "Task_3: sigwaitinfo SIGUSR1 with value= %d\n", value.sival_int );
   status = sigwaitinfo( &mask, &info );
 
-     /* switch to Init */
+  /* switch to Init */
 
-  rtems_test_assert( !(status==-1) );
+  rtems_test_assert( !( status == -1 ) );
   printf(
     "Task_3: si_signo= %d si_code= %d value= %d\n",
     info.si_signo,
@@ -83,7 +81,7 @@ void *Task_3(
     info.si_value.sival_int
   );
 
-     /* catch signal with sigwait */
+  /* catch signal with sigwait */
 
   empty_line();
 
@@ -96,12 +94,12 @@ void *Task_3(
   printf( "Task_3: sigwait SIGUSR1\n" );
   status = sigwait( &mask, &sig );
 
-     /* switch to Init */
+  /* switch to Init */
 
   rtems_test_assert( !status );
   printf( "Task_3: signo= %d\n", sig );
 
-     /* catch signal with pause */
+  /* catch signal with pause */
 
   empty_line();
 
@@ -112,15 +110,14 @@ void *Task_3(
   rtems_test_assert( !status );
 
   printf( "Task_3: pause\n" );
-  status = pause( );
+  status = pause();
 
-     /* switch to Init */
+  /* switch to Init */
 
-  rtems_test_assert( !(status==-1) );
+  rtems_test_assert( !( status == -1 ) );
   printf( "Task_3: pause= %d\n", status );
 
-
-     /* send signal to Init task before it has pended for a signal */
+  /* send signal to Init task before it has pended for a signal */
 
   empty_line();
 
@@ -133,11 +130,11 @@ void *Task_3(
   rtems_test_assert( !status );
   rtems_test_assert( remaining == 0 );
 
-     /* end of task 3 */
+  /* end of task 3 */
   printf( "Task_3: exit\n" );
   pthread_exit( NULL );
 
-     /* switch to Init */
+  /* switch to Init */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

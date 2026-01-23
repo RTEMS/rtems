@@ -36,14 +36,14 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char *dest = "Hello";
-   char *result;
+int test( void )
+{
+  char *dest = "Hello";
+  char *result;
 
-   result = strdup( dest );
+  result = strdup( dest );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

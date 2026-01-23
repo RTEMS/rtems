@@ -42,9 +42,9 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int fildes = 1;
+  int return_value;
+  int fildes = 1;
 
-	return_value = grantpt(fildes);
-	return return_value;
+  return_value = grantpt( fildes );
+  return return_value;
 }

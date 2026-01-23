@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  auto char buffer[50];
+  auto char buffer[ 50 ];
 
   bcopy( "Hello ", buffer, 6 );
-  bcopy( "world", &buffer[6], 6 );
+  bcopy( "world", &buffer[ 6 ], 6 );
 
   return 0;
 }

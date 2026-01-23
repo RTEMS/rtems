@@ -41,18 +41,18 @@
  above and this comment when fixed 
 */
 
-int test(char *fmt, ...);
+int test( char *fmt, ... );
 
-int test(char *fmt, ...)
+int test( char *fmt, ... )
 {
   (void) fmt;
 
   const wchar_t *wc;
   const wchar_t *wc1;
-  va_list va;
+  va_list        va;
 
   wc = 0;
   wc1 = 0;
-  va_start(va, fmt);
-  return vswscanf(wc, wc1, va);
+  va_start( va, fmt );
+  return vswscanf( wc, wc1, va );
 }

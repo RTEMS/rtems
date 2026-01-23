@@ -45,8 +45,8 @@ int test( void );
 
 int test( void )
 {
-  pid_t  pid;
-  int    result;
+  pid_t pid;
+  int   result;
 
   pid = 0;
 

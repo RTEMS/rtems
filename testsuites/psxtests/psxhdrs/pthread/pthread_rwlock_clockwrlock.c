@@ -46,9 +46,9 @@ int test( void );
 
 int test( void )
 {
-  pthread_rwlock_t rwlock   = PTHREAD_RWLOCK_INITIALIZER;
+  pthread_rwlock_t rwlock = PTHREAD_RWLOCK_INITIALIZER;
   clockid_t        clock_id = 0;
-  struct timespec  timeout  = { 0 };
+  struct timespec  timeout = { 0 };
   int              result;
 
   result = pthread_rwlock_clockwrlock( &rwlock, clock_id, &timeout );

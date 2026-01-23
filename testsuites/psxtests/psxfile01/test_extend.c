@@ -54,19 +54,16 @@
 #include <pmacros.h>
 
 /* forward declarations to avoid warnings */
-void test_extend(char *file, off_t  offset);
+void test_extend( char *file, off_t offset );
 
 /*
  *  test_extend routine
  */
-void test_extend(
-  char   *file,
-  off_t  offset
-)
+void test_extend( char *file, off_t offset )
 {
-  int   fd;
-  int   status;
-  char  c = 0;
+  int  fd;
+  int  status;
+  char c = 0;
 
   fd = open( file, O_WRONLY );
   if ( fd == -1 ) {
@@ -79,13 +76,21 @@ void test_extend(
 
   status = write( fd, &c, 1 );
   if ( status == -1 ) {
-    printf( "test_extend: write( %s ) failed : %s\n", file, strerror( errno ) );
+    printf(
+      "test_extend: write( %s ) failed : %s\n",
+      file,
+      strerror( errno )
+    );
     rtems_test_exit( 0 );
   }
 
   if ( status != 1 ) {
-    printf( "test_extend: write( %s ) only wrote %d of %d bytes\n",
-            file, status, 1 );
+    printf(
+      "test_extend: write( %s ) only wrote %d of %d bytes\n",
+      file,
+      status,
+      1
+    );
     rtems_test_exit( 0 );
   }
 

@@ -30,20 +30,20 @@
 #include "config.h"
 #endif
 
-#if defined(USE_USER_SIGNALS_PROCESS)
-  #define TEST_NAME                "PSXSIGNAL 3"
-  #define TEST_STRING              "User Signals to Process"
-  #define SIGNAL_ONE               SIGUSR1
-  #define SIGNAL_TWO               SIGUSR2
-  #define SEND_SIGNAL(_sig)        kill( getpid(), _sig )
+#if defined( USE_USER_SIGNALS_PROCESS )
+  #define TEST_NAME           "PSXSIGNAL 3"
+  #define TEST_STRING         "User Signals to Process"
+  #define SIGNAL_ONE          SIGUSR1
+  #define SIGNAL_TWO          SIGUSR2
+  #define SEND_SIGNAL( _sig ) kill( getpid(), _sig )
   #define TO_PROCESS
 
-#elif defined(USE_REAL_TIME_SIGNALS_PROCESS)
-  #define TEST_NAME                "PSXSIGNAL 4"
-  #define TEST_STRING              "Real-Time Signals to Process"
-  #define SIGNAL_ONE               SIGRTMIN
-  #define SIGNAL_TWO               SIGRTMAX
-  #define SEND_SIGNAL(_sig)        kill( getpid(), _sig )
+#elif defined( USE_REAL_TIME_SIGNALS_PROCESS )
+  #define TEST_NAME           "PSXSIGNAL 4"
+  #define TEST_STRING         "Real-Time Signals to Process"
+  #define SIGNAL_ONE          SIGRTMIN
+  #define SIGNAL_TWO          SIGRTMAX
+  #define SEND_SIGNAL( _sig ) kill( getpid(), _sig )
   #define TO_PROCESS
 
 #else
@@ -59,18 +59,18 @@
 const char rtems_test_name[] = TEST_NAME;
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Test_Thread(void *arg);
-void Signal_handler(int signo, siginfo_t *info, void *arg);
-const char *signal_name(int signo);
+void       *POSIX_Init( void *argument );
+void       *Test_Thread( void *arg );
+void        Signal_handler( int signo, siginfo_t *info, void *arg );
+const char *signal_name( int signo );
 
 volatile bool      Signal_occurred;
 volatile pthread_t Signal_thread;
 
-static void block_all_signals(void)
+static void block_all_signals( void )
 {
-  int               sc;
-  sigset_t          mask;
+  int      sc;
+  sigset_t mask;
 
   sc = sigfillset( &mask );
   rtems_test_assert( !sc );
@@ -79,57 +79,58 @@ static void block_all_signals(void)
   rtems_test_assert( !sc );
 }
 
-void Signal_handler(
-  int        signo,
-  siginfo_t *info,
-  void      *arg
-)
+void Signal_handler( int signo, siginfo_t *info, void *arg )
 {
   (void) signo;
   (void) info;
   (void) arg;
 
   Signal_occurred = true;
-  Signal_thread   = pthread_self();
+  Signal_thread = pthread_self();
 }
 
-const char *signal_name(int signo)
+const char *signal_name( int signo )
 {
-  if (signo == SIGUSR1)
+  if ( signo == SIGUSR1 ) {
     return "SIGUSR1";
-  if (signo == SIGUSR2)
+  }
+  if ( signo == SIGUSR2 ) {
     return "SIGUSR2";
-  if (signo == SIGRTMIN)
+  }
+  if ( signo == SIGRTMIN ) {
     return "SIGRTMIN";
-  if (signo == SIGRTMAX)
+  }
+  if ( signo == SIGRTMAX ) {
     return "SIGRTMAX";
+  }
   return "unknown-signal";
 }
 
-void *Test_Thread(void *arg)
+void *Test_Thread( void *arg )
 {
-  bool        blocked = *((bool *)arg);
+  bool        blocked = *( (bool *) arg );
   const char *name;
   int         sc;
   sigset_t    mask;
   sigset_t    wait_mask;
   siginfo_t   info;
 
-  if ( blocked )
+  if ( blocked ) {
     name = "SignalBlocked";
-  else
+  } else {
     name = "SignalNotBlocked";
+  }
 
   /* build unblocked mask */
   sc = sigemptyset( &mask );
   rtems_test_assert( !sc );
 
-  printf( "%s - Unblock %s\n", name, signal_name(SIGNAL_ONE) );
+  printf( "%s - Unblock %s\n", name, signal_name( SIGNAL_ONE ) );
   sc = sigaddset( &mask, SIGNAL_ONE );
   rtems_test_assert( !sc );
 
   if ( !blocked ) {
-    printf( "%s - Unblock %s\n", name, signal_name(SIGNAL_TWO) );
+    printf( "%s - Unblock %s\n", name, signal_name( SIGNAL_TWO ) );
     sc = sigaddset( &mask, SIGNAL_TWO );
     rtems_test_assert( !sc );
   }
@@ -146,9 +147,9 @@ void *Test_Thread(void *arg)
   rtems_test_assert( !sc );
 
   /* wait for a signal */
-  memset( &info, 0, sizeof(info) );
+  memset( &info, 0, sizeof( info ) );
 
-  printf( "%s - Wait for %s unblocked\n", name, signal_name(SIGNAL_ONE) );
+  printf( "%s - Wait for %s unblocked\n", name, signal_name( SIGNAL_ONE ) );
   sigwaitinfo( &wait_mask, &info );
   rtems_test_assert( !sc );
 
@@ -171,18 +172,16 @@ void *Test_Thread(void *arg)
   return NULL;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int                 sc;
-  pthread_t           id;
-  struct sigaction    act;
-  bool                trueArg = true;
-  bool                falseArg = false;
-  struct timespec     delay_request;
+  int              sc;
+  pthread_t        id;
+  struct sigaction act;
+  bool             trueArg = true;
+  bool             falseArg = false;
+  struct timespec  delay_request;
 
   TEST_BEGIN();
   puts( "Init - Variation is: " TEST_STRING );
@@ -193,7 +192,7 @@ void *POSIX_Init(
 
   act.sa_handler = NULL;
   act.sa_sigaction = Signal_handler;
-  act.sa_flags   = SA_SIGINFO;
+  act.sa_flags = SA_SIGINFO;
   sigaction( SIGNAL_ONE, &act, NULL );
   sigaction( SIGNAL_TWO, &act, NULL );
 
@@ -214,31 +213,35 @@ void *POSIX_Init(
   sc = nanosleep( &delay_request, NULL );
   rtems_test_assert( !sc );
 
-  printf( "Init - sending %s - deliver to one thread\n",
-          signal_name(SIGNAL_TWO));
-  sc =  SEND_SIGNAL( SIGNAL_TWO );
+  printf(
+    "Init - sending %s - deliver to one thread\n",
+    signal_name( SIGNAL_TWO )
+  );
+  sc = SEND_SIGNAL( SIGNAL_TWO );
   rtems_test_assert( !sc );
 
-  printf( "Init - sending %s - deliver to other thread\n",
-          signal_name(SIGNAL_TWO));
-  sc =  SEND_SIGNAL( SIGNAL_TWO );
+  printf(
+    "Init - sending %s - deliver to other thread\n",
+    signal_name( SIGNAL_TWO )
+  );
+  sc = SEND_SIGNAL( SIGNAL_TWO );
   rtems_test_assert( !sc );
 
-  #if defined(TO_PROCESS)
-    printf( "Init - sending %s - expect EAGAIN\n", signal_name(SIGNAL_TWO) );
-    sc =  SEND_SIGNAL( SIGNAL_TWO );
-    rtems_test_assert( sc == -1 );
-    rtems_test_assert( errno == EAGAIN );
+  #if defined( TO_PROCESS )
+  printf( "Init - sending %s - expect EAGAIN\n", signal_name( SIGNAL_TWO ) );
+  sc = SEND_SIGNAL( SIGNAL_TWO );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == EAGAIN );
   #endif
 
   puts( "Init - sleep - let thread report if it unblocked - OK" );
-  usleep(500000);
+  usleep( 500000 );
 
   /* we are just sigwait'ing the signal, not delivering it */
   rtems_test_assert( Signal_occurred == true );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

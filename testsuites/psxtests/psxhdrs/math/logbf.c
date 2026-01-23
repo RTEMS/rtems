@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 345.23 ,  result ;
+  float x = 345.23, result;
 
-  result = logbf(x) ;
+  result = logbf( x );
 
-  return (result);
+  return ( result );
 }

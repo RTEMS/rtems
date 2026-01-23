@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int fildes = 1;
-	mode_t mode = S_ISUID;
+  int    return_value;
+  int    fildes = 1;
+  mode_t mode = S_ISUID;
 
-	return_value = fchmod(fildes, mode);
-	return (return_value != -1);
+  return_value = fchmod( fildes, mode );
+  return ( return_value != -1 );
 }

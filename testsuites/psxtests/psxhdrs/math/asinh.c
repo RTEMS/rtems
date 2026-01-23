@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x=(+0);
+  double x = ( +0 );
   double result;
 
-  result = asinh(x);
+  result = asinh( x );
 
-  return (result); /* This should return 0 */
+  return ( result ); /* This should return 0 */
 }

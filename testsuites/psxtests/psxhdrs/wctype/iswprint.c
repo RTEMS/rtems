@@ -42,6 +42,6 @@ int test( void )
 {
   wint_t return_value;
 
-  return_value = iswprint('c');
-  return (return_value != 0);
+  return_value = iswprint( 'c' );
+  return ( return_value != 0 );
 }

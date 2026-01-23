@@ -36,14 +36,14 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   FILE *file;
-  int number;
+  int   number;
 
-  file = (void *)0;
+  file = (void *) 0;
   number = 0;
-  return fwide(file, number);
+  return fwide( file, number );
 }

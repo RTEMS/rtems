@@ -40,7 +40,7 @@ int test( void );
 
 int test( void )
 {
-  assert(1 == 1);
+  assert( 1 == 1 );
 
-  return (1);
+  return ( 1 );
 }

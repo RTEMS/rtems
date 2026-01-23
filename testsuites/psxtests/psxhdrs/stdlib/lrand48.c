@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-	long return_value;
+  long return_value;
 
-	return_value = lrand48();
-	return return_value;
+  return_value = lrand48();
+  return return_value;
 }

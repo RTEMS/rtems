@@ -25,10 +25,10 @@
 
 #include <fenv.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int b = 0;
-  return fesetround(b);
+  return fesetround( b );
 }

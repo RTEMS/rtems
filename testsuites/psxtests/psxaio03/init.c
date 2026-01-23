@@ -51,10 +51,10 @@ const char rtems_test_name[] = "PSXAIO 3";
 
 /* forward declarations to avoid warnings */
 static struct aiocb *create_aiocb( int fd );
-static void free_aiocb( struct aiocb *aiocbp );
+static void          free_aiocb( struct aiocb *aiocbp );
 
 #define FD_COUNT 6
-#define BUFSIZE 128
+#define BUFSIZE  128
 
 static struct aiocb *create_aiocb( int fd )
 {
@@ -73,7 +73,7 @@ static struct aiocb *create_aiocb( int fd )
 
 static void free_aiocb( struct aiocb *aiocbp )
 {
-  free( (void*) aiocbp->aio_buf );
+  free( (void *) aiocbp->aio_buf );
   free( aiocbp );
 }
 
@@ -81,21 +81,17 @@ void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int fd[FD_COUNT];
-  struct aiocb *aiocbp[FD_COUNT+1];
-  int status, i, policy = SCHED_FIFO;
-  char filename[BUFSIZE];
+  int                fd[ FD_COUNT ];
+  struct aiocb      *aiocbp[ FD_COUNT + 1 ];
+  int                status, i, policy = SCHED_FIFO;
+  char               filename[ BUFSIZE ];
   struct sched_param param;
 
   status = rtems_aio_init();
   rtems_test_assert( status == 0 );
 
   param.sched_priority = 30;
-  status = pthread_setschedparam( 
-    pthread_self(), 
-    policy, 
-    &param 
-  );
+  status = pthread_setschedparam( pthread_self(), policy, &param );
   rtems_test_assert( status == 0 );
 
   status = mkdir( "/tmp", S_IRWXU );
@@ -103,43 +99,38 @@ void *POSIX_Init( void *argument )
 
   TEST_BEGIN();
 
-  for ( i=0; i<FD_COUNT; i++ )
-    {
-      sprintf( filename, "/tmp/aio_fildes%d",i );
-      fd[i] = open( 
-        filename, 
-        O_RDWR|O_CREAT, 
-        S_IRWXU|S_IRWXG|S_IRWXO 
-      );
-      rtems_test_assert( fd[i] != -1 );
-    }
+  for ( i = 0; i < FD_COUNT; i++ ) {
+    sprintf( filename, "/tmp/aio_fildes%d", i );
+    fd[ i ] = open( filename, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO );
+    rtems_test_assert( fd[ i ] != -1 );
+  }
 
-  aiocbp[0] = create_aiocb( fd[0] );
-  status = aio_write( aiocbp[0] );
+  aiocbp[ 0 ] = create_aiocb( fd[ 0 ] );
+  status = aio_write( aiocbp[ 0 ] );
   rtems_test_assert( status != -1 );
 
-  aiocbp[1] = create_aiocb( fd[1] );
-  status = aio_write( aiocbp[1] );
+  aiocbp[ 1 ] = create_aiocb( fd[ 1 ] );
+  status = aio_write( aiocbp[ 1 ] );
   rtems_test_assert( status != -1 );
 
-  aiocbp[2] = create_aiocb( fd[1] );
-  status = aio_read( aiocbp[2] );
+  aiocbp[ 2 ] = create_aiocb( fd[ 1 ] );
+  status = aio_read( aiocbp[ 2 ] );
   rtems_test_assert( status != -1 );
 
-  aiocbp[3] = create_aiocb( fd[2] );
-  status = aio_write( aiocbp[3] );
+  aiocbp[ 3 ] = create_aiocb( fd[ 2 ] );
+  status = aio_write( aiocbp[ 3 ] );
   rtems_test_assert( status != -1 );
 
-  aiocbp[4] = create_aiocb( fd[3] );
-  status = aio_write( aiocbp[4] );
+  aiocbp[ 4 ] = create_aiocb( fd[ 3 ] );
+  status = aio_write( aiocbp[ 4 ] );
   rtems_test_assert( status != -1 );
 
-  aiocbp[5] = create_aiocb( fd[4] );
-  status = aio_write( aiocbp[5] );
+  aiocbp[ 5 ] = create_aiocb( fd[ 4 ] );
+  status = aio_write( aiocbp[ 5 ] );
   rtems_test_assert( status != -1 );
 
-  aiocbp[6] = create_aiocb( fd[5] );
-  status = aio_read( aiocbp[6] );
+  aiocbp[ 6 ] = create_aiocb( fd[ 5 ] );
+  status = aio_read( aiocbp[ 6 ] );
   rtems_test_assert( status != -1 );
 
   sleep( 5 );
@@ -148,12 +139,11 @@ void *POSIX_Init( void *argument )
 
   TEST_END();
 
-  for( i = 0; i < FD_COUNT; i++ )
-    {
-      close( fd[i] );
-      free_aiocb( aiocbp[i] );
-    }
-  free_aiocb( aiocbp[i] );
+  for ( i = 0; i < FD_COUNT; i++ ) {
+    close( fd[ i ] );
+    free_aiocb( aiocbp[ i ] );
+  }
+  free_aiocb( aiocbp[ i ] );
   rtems_test_exit( 0 );
 
   return NULL;

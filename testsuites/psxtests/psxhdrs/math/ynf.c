@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x=45 , result ;
-  int n = 3 ;
+  float x = 45, result;
+  int   n = 3;
 
-  result = ynf(n,x);
+  result = ynf( n, x );
 
-  return (result);
+  return ( result );
 }

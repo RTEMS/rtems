@@ -42,8 +42,8 @@ int test( void );
 int test( void )
 {
   wctype_t return_value;
-  locale_t loc = newlocale(LC_ALL_MASK, "C", (locale_t) 0);
+  locale_t loc = newlocale( LC_ALL_MASK, "C", (locale_t) 0 );
 
-  return_value = wctype_l("alnum", loc);
-  return (return_value != 0);
+  return_value = wctype_l( "alnum", loc );
+  return ( return_value != 0 );
 }

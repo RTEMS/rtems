@@ -41,10 +41,10 @@ int test( void );
 
 int test( void )
 {
-  char *string = "ABC Z";
-  wchar_t  ws[81];
-  wchar_t  wc;
-  int result;
+  char   *string = "ABC Z";
+  wchar_t ws[ 81 ];
+  wchar_t wc;
+  int     result;
 
   result = sscanf( string, "%ls %lc", ws, &wc );
 

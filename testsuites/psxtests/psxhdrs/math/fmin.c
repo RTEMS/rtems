@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-  double x = 6834 ;
-  double y = 45 ;
-  double result ;
+  double x = 6834;
+  double y = 45;
+  double result;
 
-  result = fmin(x,y) ;
+  result = fmin( x, y );
 
-  return (result);
+  return ( result );
 }

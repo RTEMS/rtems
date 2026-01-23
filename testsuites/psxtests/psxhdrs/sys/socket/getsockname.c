@@ -39,13 +39,13 @@
 
 #include <sys/socket.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int              sockfd = 4;
-  struct  sockaddr addr;
-  socklen_t        addrlen;
+  int             sockfd = 4;
+  struct sockaddr addr;
+  socklen_t       addrlen;
 
-  return getsockname(sockfd, &addr, &addrlen);
+  return getsockname( sockfd, &addr, &addrlen );
 }

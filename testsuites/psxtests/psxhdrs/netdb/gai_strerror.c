@@ -38,14 +38,14 @@
  #include <sys/socket.h>
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   int ecode = 2;
-   const char *result;
+int test( void )
+{
+  int         ecode = 2;
+  const char *result;
 
-   result = gai_strerror( ecode );
+  result = gai_strerror( ecode );
 
-   return ( result != (void *)0 );
- }
+  return ( result != (void *) 0 );
+}

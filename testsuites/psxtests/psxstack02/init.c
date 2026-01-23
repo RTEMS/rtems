@@ -43,49 +43,49 @@
 const char rtems_test_name[] = "PSXSTACK 2";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Test_Thread(void *arg);
+void *POSIX_Init( void *argument );
+void *Test_Thread( void *arg );
 
 void *Stack_Low;
 void *Stack_High;
 
-void *Test_Thread(void *arg)
+void *Test_Thread( void *arg )
 {
   (void) arg;
 
-  #if defined(__GNUC__)
-    void *sp = __builtin_frame_address(0);
+  #if defined( __GNUC__ )
+  void *sp = __builtin_frame_address( 0 );
 
     #if 0
       printf( "Stack(%p - %p) and sp=%p\n", Stack_Low, Stack_High, sp );
     #endif
 
-    if ( sp >= Stack_Low && sp <= Stack_High )
-      puts( "Test_Thread - running on user provided stack - OK" );
-    else {
-      puts( "Test_Thread - ERROR running on other stack" );
-      rtems_test_exit(0);
-    }
+  if ( sp >= Stack_Low && sp <= Stack_High ) {
+    puts( "Test_Thread - running on user provided stack - OK" );
+  } else {
+    puts( "Test_Thread - ERROR running on other stack" );
+    rtems_test_exit( 0 );
+  }
   #else
-      puts( "Test_Thread - no way to get stack pointer and verify" );
+  puts( "Test_Thread - no way to get stack pointer and verify" );
   #endif
   puts( "Test_Thread - delete self" );
   return NULL;
 }
 
-void *POSIX_Init(void *argument)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int                 sc;
-  pthread_t           id;
-  pthread_attr_t      attr;
-  struct timespec     delay_request;
+  int             sc;
+  pthread_t       id;
+  pthread_attr_t  attr;
+  struct timespec delay_request;
 
   TEST_BEGIN();
 
   puts( "Init - Allocate stack from heap" );
-  Stack_Low = malloc(PTHREAD_MINIMUM_STACK_SIZE);
+  Stack_Low = malloc( PTHREAD_MINIMUM_STACK_SIZE );
   rtems_test_assert( Stack_Low );
   Stack_High = Stack_Low + PTHREAD_MINIMUM_STACK_SIZE;
 
@@ -108,7 +108,7 @@ void *POSIX_Init(void *argument)
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -118,7 +118,7 @@ void *POSIX_Init(void *argument)
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS        2
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 

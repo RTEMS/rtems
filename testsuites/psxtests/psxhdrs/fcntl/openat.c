@@ -36,14 +36,15 @@
 
 #include <fcntl.h>
 
-int test(void);
+int test( void );
 
-int test(void){
-  int i0, i1;
+int test( void )
+{
+  int  i0, i1;
   char c = '\0';
 
   i0 = 0;
   i1 = 0;
   const char *cc = &c;
-  return openat(i0, cc, i1);
+  return openat( i0, cc, i1 );
 }

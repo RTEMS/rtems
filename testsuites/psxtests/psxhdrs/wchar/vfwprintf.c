@@ -41,18 +41,18 @@
  above and this comment when fixed 
 */
 
-int test(char *fmt, ...);
+int test( char *fmt, ... );
 
-int test(char *fmt, ...)
+int test( char *fmt, ... )
 {
   (void) fmt;
 
-  FILE *file;
+  FILE          *file;
   const wchar_t *wc;
-  va_list va;
+  va_list        va;
 
   wc = 0;
-  file = (void *)0;
-  va_start(va, fmt);
-  return vfwprintf(file, wc, va);
+  file = (void *) 0;
+  va_start( va, fmt );
+  return vfwprintf( file, wc, va );
 }

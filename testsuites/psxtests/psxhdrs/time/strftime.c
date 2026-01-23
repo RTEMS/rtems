@@ -50,5 +50,5 @@ int test( void )
 
   length = strftime( buffer, max_length, "%A", &timestruct );
 
-  return (length != 0);
+  return ( length != 0 );
 }

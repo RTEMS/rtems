@@ -36,14 +36,14 @@
 
 #include <complex.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   long double complex number;
-  long double result;
+  long double         result;
 
   number = 1.0 + 1.0 * I;
-  result = creall(number);
-  return (result != 0);
+  result = creall( number );
+  return ( result != 0 );
 }

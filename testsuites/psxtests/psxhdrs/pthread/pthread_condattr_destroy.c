@@ -43,7 +43,7 @@ int test( void );
 int test( void )
 {
   pthread_condattr_t attribute;
-  int result;
+  int                result;
 
   result = pthread_condattr_destroy( &attribute );
 

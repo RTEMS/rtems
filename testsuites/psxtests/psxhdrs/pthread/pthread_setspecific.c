@@ -42,9 +42,9 @@ int test( void );
 
 int test( void )
 {
-  pthread_key_t    key;
-  int              value;
-  int              result;
+  pthread_key_t key;
+  int           value;
+  int           result;
 
   key = 0;
   value = 0;

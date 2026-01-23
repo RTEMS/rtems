@@ -33,11 +33,11 @@
 
 #include <rtems/libio.h>
 
-char test_data[PAGE_SIZE];
+char test_data[ PAGE_SIZE ];
 
 static int handler_fstat(
   const rtems_filesystem_location_info_t *loc,
-  struct stat *buf
+  struct stat                            *buf
 )
 {
   (void) loc;
@@ -48,17 +48,17 @@ static int handler_fstat(
 
 static int handler_mmap(
   rtems_libio_t *iop,
-  void **addr,
-  size_t len,
-  int prot,
-  off_t off
+  void         **addr,
+  size_t         len,
+  int            prot,
+  off_t          off
 )
 {
   (void) iop;
   (void) prot;
   (void) off;
 
-  if ( len <= sizeof(test_data) ) {
+  if ( len <= sizeof( test_data ) ) {
     *addr = test_data;
   } else {
     *addr = NULL;

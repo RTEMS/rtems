@@ -43,7 +43,7 @@ int test( void );
 int test( void )
 {
   pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
-  int result;
+  int            result;
 
   result = pthread_cond_destroy( &cond );
 

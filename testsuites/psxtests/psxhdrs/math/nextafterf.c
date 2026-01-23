@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 50 , y = 100 , result ;
+  float x = 50, y = 100, result;
 
-  result = nextafterf( x , y ) ;
+  result = nextafterf( x, y );
 
-  return (result);
+  return ( result );
 }

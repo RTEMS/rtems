@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 34.3456 ;
-  long int result ;
+  double   x = 34.3456;
+  long int result;
 
-  result = lrint(x) ;
+  result = lrint( x );
 
-  return (result);
+  return ( result );
 }

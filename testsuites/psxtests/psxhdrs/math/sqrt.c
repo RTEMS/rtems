@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  double x = 100 , result ;
+  double x = 100, result;
 
-  result = sqrt( x ) ;
+  result = sqrt( x );
 
-  return (result);
+  return ( result );
 }

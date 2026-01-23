@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	float return_value;
-	char *nptr = "3.14";
-	char *endptr;
+  float return_value;
+  char *nptr = "3.14";
+  char *endptr;
 
-	return_value = strtof(nptr, &endptr);
-	return return_value;
+  return_value = strtof( nptr, &endptr );
+  return return_value;
 }

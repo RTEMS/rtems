@@ -36,13 +36,13 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char *result;
+int test( void )
+{
+  char *result;
 
-   result = strsignal( 2 );
+  result = strsignal( 2 );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

@@ -41,9 +41,9 @@ int test( void );
 
 int test( void )
 {
-  wint_t return_value;
-  wctrans_t desc = wctrans("toupper");
+  wint_t    return_value;
+  wctrans_t desc = wctrans( "toupper" );
 
-  return_value = towctrans('c', desc);
-  return (return_value != 0);
+  return_value = towctrans( 'c', desc );
+  return ( return_value != 0 );
 }

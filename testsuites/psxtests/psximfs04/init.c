@@ -44,9 +44,9 @@ const char rtems_test_name[] = "PSXIMFS 4";
 
 #define FILE_NAME "large_file"
 
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Init(rtems_task_argument argument)
+rtems_task Init( rtems_task_argument argument )
 {
   int TestFd, rv;
 
@@ -80,10 +80,10 @@ rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS                1
 #define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK BLOCK_SIZE
-#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS     4
+#define CONFIGURE_INITIAL_EXTENSIONS           RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -91,4 +91,3 @@ rtems_task Init(rtems_task_argument argument)
 
 #include <rtems/confdefs.h>
 /* end of file */
-

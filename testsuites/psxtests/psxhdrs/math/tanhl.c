@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 45 ;
+  long double x = 45;
   long double result;
 
-  result = tanhl(x) ;
+  result = tanhl( x );
 
-  return (result) ;
+  return ( result );
 }
 #endif

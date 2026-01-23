@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	char *path = "/";
-	struct stat buf;
+  int         return_value;
+  char       *path = "/";
+  struct stat buf;
 
-	return_value = lstat(path, &buf);
-	return (return_value != -1);
+  return_value = lstat( path, &buf );
+  return ( return_value != -1 );
 }

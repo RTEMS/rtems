@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  const char *tagp = "s" ;
-  double result ;
+  const char *tagp = "s";
+  double      result;
 
-  result = nan(tagp) ;
+  result = nan( tagp );
 
-  return (result);
+  return ( result );
 }

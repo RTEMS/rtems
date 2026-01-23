@@ -37,14 +37,15 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-int test(void);
+int test( void );
 
-int test(void){
-  char cc;
+int test( void )
+{
+  char   cc;
   mode_t mt;
 
   cc = 0;
   const char *p = &cc;
   mt = 0;
-  return creat(p, mt);
+  return creat( p, mt );
 }

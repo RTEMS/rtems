@@ -38,15 +38,13 @@
 
 const char rtems_test_name[] = "PSX 14";
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  char               name[128];
-  char              *ptr;
-  rtems_status_code  status;
+  char              name[ 128 ];
+  char             *ptr;
+  rtems_status_code status;
 
   TEST_BEGIN();
 
@@ -70,22 +68,27 @@ void *POSIX_Init(
   printf( "rtems_object_get_name returned (%s) for init thread\n", ptr );
 
   /* exercise the POSIX path through some routines */
-  printf( "rtems_object_api_minimum_class(OBJECTS_POSIX_API) returned %d\n",
-          rtems_object_api_minimum_class(OBJECTS_POSIX_API) );
-  printf( "rtems_object_api_maximum_class(OBJECTS_POSIX_API) returned %d\n",
-          rtems_object_api_maximum_class(OBJECTS_POSIX_API) );
-
-  printf( "rtems_object_get_api_name(POSIX_API) = %s\n",
-     rtems_object_get_api_name(OBJECTS_POSIX_API) );
-
-  printf("rtems_object_get_api_class_name(POSIX_API, POSIX_KEYS) = %s\n",
-    rtems_object_get_api_class_name( OBJECTS_POSIX_API, OBJECTS_POSIX_KEYS)
+  printf(
+    "rtems_object_api_minimum_class(OBJECTS_POSIX_API) returned %d\n",
+    rtems_object_api_minimum_class( OBJECTS_POSIX_API )
+  );
+  printf(
+    "rtems_object_api_maximum_class(OBJECTS_POSIX_API) returned %d\n",
+    rtems_object_api_maximum_class( OBJECTS_POSIX_API )
   );
 
+  printf(
+    "rtems_object_get_api_name(POSIX_API) = %s\n",
+    rtems_object_get_api_name( OBJECTS_POSIX_API )
+  );
+
+  printf(
+    "rtems_object_get_api_class_name(POSIX_API, POSIX_KEYS) = %s\n",
+    rtems_object_get_api_class_name( OBJECTS_POSIX_API, OBJECTS_POSIX_KEYS )
+  );
 
   TEST_END();
   rtems_test_exit( 0 );
 
   return NULL;
-
 }

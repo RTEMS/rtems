@@ -42,7 +42,7 @@ int test( void );
 
 int test( void )
 {
-  pthread_t  self;
+  pthread_t self;
 
   self = pthread_self();
 

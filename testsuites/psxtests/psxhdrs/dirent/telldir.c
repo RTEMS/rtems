@@ -46,5 +46,5 @@ int test( void )
   dirp = opendir( "/" );
   loc = telldir( dirp );
 
-  return ( (int)loc );
+  return ( (int) loc );
 }

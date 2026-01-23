@@ -45,8 +45,8 @@ int test( void );
 
 int test( void )
 {
-  timer_t           timerid = 0;
-  int               result;
+  timer_t timerid = 0;
+  int     result;
 
   result = timer_getoverrun( timerid );
 

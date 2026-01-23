@@ -41,9 +41,9 @@ const char rtems_test_name[] = "PSX 9";
 
 static int get_current_prio( void )
 {
-  rtems_status_code sc;
+  rtems_status_code   sc;
   rtems_task_priority prio;
-  int max;
+  int                 max;
 
   sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
@@ -53,7 +53,7 @@ static int get_current_prio( void )
   return max + 1 - (int) prio;
 }
 
-static void *mutex_lock_task(void *arg)
+static void *mutex_lock_task( void *arg )
 {
   pthread_mutex_t *mtx;
   int              eno;
@@ -71,7 +71,7 @@ static void *mutex_lock_task(void *arg)
   return NULL;
 }
 
-static void test_destroy_locked_mutex(void)
+static void test_destroy_locked_mutex( void )
 {
   pthread_mutex_t mtx;
   pthread_t       th;
@@ -97,26 +97,24 @@ static void test_destroy_locked_mutex(void)
   rtems_test_assert( eno == 0 );
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
-  int                  status;
-  int                  passes;
-  int                  schedpolicy;
-  int                  priority;
-  struct sched_param   schedparam;
-  char                 buffer[ 80 ];
-  pthread_mutexattr_t  attr;
-  time_t               start;
-  int                  ceiling_priority;
-  int                  high_priority;
-  int                  low_priority;
-  rtems_id             scheduler_id;
-  rtems_task_priority  rtems_priority;
-  rtems_status_code    sc;
+  int                 status;
+  int                 passes;
+  int                 schedpolicy;
+  int                 priority;
+  struct sched_param  schedparam;
+  char                buffer[ 80 ];
+  pthread_mutexattr_t attr;
+  time_t              start;
+  int                 ceiling_priority;
+  int                 high_priority;
+  int                 low_priority;
+  rtems_id            scheduler_id;
+  rtems_task_priority rtems_priority;
+  rtems_status_code   sc;
 
-  if (argument != NULL ) {
+  if ( argument != NULL ) {
     /* We end up here due to the rtems_task_restart() below */
 
     ceiling_priority = sched_get_priority_max( SCHED_SPORADIC );
@@ -169,7 +167,11 @@ void *POSIX_Init(
   schedparam.sched_ss_low_priority = low_priority;
 
   puts( "Init: pthread_setschedparam - SUCCESSFUL (sporadic server)" );
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   rtems_test_assert( !status );
 
   sprintf( buffer, " - new priority = %d", get_current_prio() );
@@ -177,7 +179,7 @@ void *POSIX_Init(
 
   /* go into a loop consuming CPU time to watch our priority change */
 
-  for ( passes=0 ; passes <= 3 ; ) {
+  for ( passes = 0; passes <= 3; ) {
     int current_priority;
 
     current_priority = get_current_prio();
@@ -198,15 +200,19 @@ void *POSIX_Init(
   rtems_test_assert( !status );
 
   schedparam.sched_ss_repl_period.tv_sec = 0;
-  schedparam.sched_ss_repl_period.tv_nsec = 500000000;  /* 1/2 second */
+  schedparam.sched_ss_repl_period.tv_nsec = 500000000; /* 1/2 second */
   schedparam.sched_ss_init_budget.tv_sec = 0;
-  schedparam.sched_ss_init_budget.tv_nsec = 250000000;    /* 1/4 second */
+  schedparam.sched_ss_init_budget.tv_nsec = 250000000; /* 1/4 second */
 
   schedparam.sched_priority = high_priority;
   schedparam.sched_ss_low_priority = low_priority;
 
   puts( "Init: pthread_setschedparam - SUCCESSFUL (sporadic server)" );
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   rtems_test_assert( !status );
 
   puts( "Init: Initializing mutex attributes for priority ceiling" );
@@ -221,8 +227,9 @@ void *POSIX_Init(
 
   puts( "Init: Creating a mutex" );
   status = pthread_mutex_init( &Mutex_id, &attr );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
 
   sprintf( buffer, " - new priority = %d", get_current_prio() );
@@ -238,14 +245,16 @@ void *POSIX_Init(
 
   rtems_test_assert( get_current_prio() == high_priority );
   status = pthread_mutex_lock( &Mutex_id );
-  if ( status )
-    printf( "status = %d %s\n", status, strerror(status) );
+  if ( status ) {
+    printf( "status = %d %s\n", status, strerror( status ) );
+  }
   rtems_test_assert( !status );
   rtems_test_assert( get_current_prio() == ceiling_priority );
 
   status = pthread_mutex_unlock( &Mutex_id );
-  if ( status )
-    printf( "status = %d %s\n", status, strerror(status) );
+  if ( status ) {
+    printf( "status = %d %s\n", status, strerror( status ) );
+  }
   rtems_test_assert( !status );
   rtems_test_assert( get_current_prio() == high_priority );
 
@@ -257,14 +266,16 @@ void *POSIX_Init(
 
   rtems_test_assert( get_current_prio() == low_priority );
   status = pthread_mutex_lock( &Mutex_id );
-  if ( status )
-    printf( "status = %d %s\n", status, strerror(status) );
+  if ( status ) {
+    printf( "status = %d %s\n", status, strerror( status ) );
+  }
   rtems_test_assert( !status );
   rtems_test_assert( get_current_prio() == ceiling_priority );
 
   status = pthread_mutex_unlock( &Mutex_id );
-  if ( status )
+  if ( status ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( !status );
   rtems_test_assert( get_current_prio() == low_priority );
 
@@ -279,14 +290,22 @@ void *POSIX_Init(
 
   rtems_test_assert( get_current_prio() == low_priority );
   schedparam.sched_priority = ceiling_priority;
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   rtems_test_assert( status == 0 );
   rtems_test_assert( get_current_prio() == ceiling_priority );
 
   puts( "Init: Go into low priority and set POSIX priority" );
 
   schedparam.sched_priority = high_priority;
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   rtems_test_assert( status == 0 );
   rtems_test_assert( get_current_prio() == high_priority );
 
@@ -317,7 +336,11 @@ void *POSIX_Init(
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   schedparam.sched_priority = high_priority;
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   rtems_test_assert( status == 0 );
   rtems_test_assert( get_current_prio() == high_priority );
 
@@ -342,7 +365,11 @@ void *POSIX_Init(
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   schedparam.sched_priority = high_priority;
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   rtems_test_assert( status == 0 );
   rtems_test_assert( get_current_prio() == high_priority );
 
@@ -364,7 +391,11 @@ void *POSIX_Init(
   puts( "Init: Go into low priority and restart task" );
 
   schedparam.sched_priority = high_priority;
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   rtems_test_assert( status == 0 );
   rtems_test_assert( get_current_prio() == high_priority );
 

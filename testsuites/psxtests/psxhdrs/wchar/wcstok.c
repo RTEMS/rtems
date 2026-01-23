@@ -36,16 +36,16 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  wchar_t *wc;
+  wchar_t       *wc;
   const wchar_t *wc1;
-  wchar_t **wc2;
+  wchar_t      **wc2;
 
   wc = 0;
   wc1 = 0;
   wc2 = 0;
-  return *wcstok(wc, wc1, wc2);
+  return *wcstok( wc, wc1, wc2 );
 }

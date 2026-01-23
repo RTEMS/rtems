@@ -36,13 +36,13 @@
 
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct protoent *protoc;
+int test( void )
+{
+  struct protoent *protoc;
 
-   protoc = getprotoent();
+  protoc = getprotoent();
 
-   return ( protoc != (void *)0 );
- }
+  return ( protoc != (void *) 0 );
+}

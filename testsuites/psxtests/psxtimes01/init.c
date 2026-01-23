@@ -38,9 +38,9 @@
 const char rtems_test_name[] = "PSXTIMES 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-clock_t _times_r(struct _reent *ptr, struct tms  *ptms);
-clock_t _times(struct tms  *ptms);
+rtems_task Init( rtems_task_argument argument );
+clock_t    _times_r( struct _reent *ptr, struct tms *ptms );
+clock_t    _times( struct tms *ptms );
 
 static void test_times_functions( void )
 {
@@ -65,20 +65,19 @@ static void test_times_functions( void )
   rtems_test_assert( (int) sc == -1 );
   rtems_test_assert( errno == EFAULT );
 
-  while ( rtems_clock_get_ticks_since_boot() <= 2 )
-    ;
+  while ( rtems_clock_get_ticks_since_boot() <= 2 );
 
   puts( "_times( &start_tm ) -- OK" );
   now = _times( &start_tm );
   rtems_test_assert( start != 0 );
   rtems_test_assert( now != 0 );
-  
+
   rtems_test_spin_for_ticks( interval );
 
   puts( "_times( &end_tm ) -- OK" );
   end = _times( &end_tm );
   rtems_test_assert( end != 0 );
-  
+
   puts( "Check various values" );
   difference = end - start;
   rtems_test_assert( difference >= interval );
@@ -107,8 +106,7 @@ static void test_timespec_functions( void )
   result = timespec_get( &start_ts, 999 );
   rtems_test_assert( result == 0 );
 
-  while ( rtems_clock_get_ticks_since_boot() <= 2 )
-    ;
+  while ( rtems_clock_get_ticks_since_boot() <= 2 );
 
   puts( "timespec_get( &start_ts, TIME_UTC ) -- OK" );
   result = timespec_get( &start_ts, TIME_UTC );
@@ -121,25 +119,23 @@ static void test_timespec_functions( void )
   puts( "timespec_get( &end_ts, TIME_UTC ) -- OK" );
   result = timespec_get( &end_ts, TIME_UTC );
   rtems_test_assert( result == TIME_UTC );
-  
-  rtems_test_assert( 
-    (end_ts.tv_sec > start_ts.tv_sec) || 
-    (end_ts.tv_sec == start_ts.tv_sec && end_ts.tv_nsec > start_ts.tv_nsec)
+
+  rtems_test_assert(
+    ( end_ts.tv_sec > start_ts.tv_sec ) ||
+    ( end_ts.tv_sec == start_ts.tv_sec && end_ts.tv_nsec > start_ts.tv_nsec )
   );
 
   result = timespec_get( &start_ts, TIME_UTC );
   clock_gettime( CLOCK_REALTIME, &clock_ts );
-  
+
   rtems_test_assert( result == TIME_UTC );
-  
+
   /* timespec_get and clock_gettime should be very close */
   rtems_test_assert( start_ts.tv_sec >= clock_ts.tv_sec - 1 );
   rtems_test_assert( start_ts.tv_sec <= clock_ts.tv_sec + 1 );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -147,10 +143,10 @@ rtems_task Init(
 
   test_times_functions();
   test_timespec_functions();
-  
+
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -158,7 +154,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

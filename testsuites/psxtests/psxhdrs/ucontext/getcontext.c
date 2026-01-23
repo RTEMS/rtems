@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  int return_value;
-  ucontext_t context;
+  int         return_value;
+  ucontext_t  context;
   ucontext_t *ucp = &context;
 
-  return_value = getcontext(ucp);
-  return (return_value != -1);
+  return_value = getcontext( ucp );
+  return ( return_value != -1 );
 }

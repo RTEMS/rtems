@@ -38,14 +38,14 @@
  #include <sys/socket.h>
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct hostent *host;
-   struct in_addr ipv4addr = { 0 };
+int test( void )
+{
+  struct hostent *host;
+  struct in_addr  ipv4addr = { 0 };
 
-   host = gethostbyaddr( &ipv4addr, sizeof(ipv4addr), AF_INET );
+  host = gethostbyaddr( &ipv4addr, sizeof( ipv4addr ), AF_INET );
 
-   return ( host != (void *)0 );
- }
+  return ( host != (void *) 0 );
+}

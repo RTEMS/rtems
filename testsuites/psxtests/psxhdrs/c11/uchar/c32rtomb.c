@@ -41,10 +41,10 @@ int test( void );
 
 int test( void )
 {
-  char32_t* c32_str = U"Mar\u00E7al";
-  char out[MB_CUR_MAX];
+  char32_t *c32_str = U"Mar\u00E7al";
+  char      out[ MB_CUR_MAX ];
   mbstate_t mbs;
-  int result;
+  int       result;
 
   result = c32rtomb( out, *c32_str, &mbs );
 

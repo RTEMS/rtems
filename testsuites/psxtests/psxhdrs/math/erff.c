@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 89.7 ;
-  float result ;
+  float x = 89.7;
+  float result;
 
-  result = erff(x) ;
+  result = erff( x );
 
-  return (result);
+  return ( result );
 }

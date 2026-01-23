@@ -39,17 +39,17 @@
 const char rtems_test_name[] = "PSXKEY 10";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_task Test_Thread(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
+rtems_task Test_Thread( rtems_task_argument argument );
 
-void destructor(void *value);
+void destructor( void *value );
 
-int Data_array[1] = {1};
+int Data_array[ 1 ] = { 1 };
 
 pthread_key_t key;
 volatile bool destructor_ran;
 
-void destructor(void *value)
+void destructor( void *value )
 {
   (void) value;
 
@@ -61,7 +61,7 @@ rtems_task Test_Thread( rtems_task_argument arg )
   (void) arg;
 
   void *argument = (void *) arg;
-  int sc;
+  int   sc;
 
   puts( "Test_Thread - key pthread_setspecific - OK" );
   sc = pthread_setspecific( key, argument );
@@ -92,7 +92,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   puts( "Init - thread create - OK" );
   rc = rtems_task_create(
-    rtems_build_name( 'T', 'E', 'S', 'T' ), 
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
@@ -118,7 +118,7 @@ rtems_task Init( rtems_task_argument ignored )
   /* rtems_test_assert( sc == 0 ); */
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -128,8 +128,8 @@ rtems_task Init( rtems_task_argument ignored )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS          2
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     1
+#define CONFIGURE_MAXIMUM_TASKS      2
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

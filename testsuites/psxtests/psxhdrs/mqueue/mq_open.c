@@ -39,19 +39,19 @@
 
 int test( void );
 
-#define MQ_MAXMSG     1
-#define MQ_MSGSIZE    sizeof(int)
+#define MQ_MAXMSG  1
+#define MQ_MSGSIZE sizeof( int )
 
 int result = 1;
 
 int test( void )
 {
-  mqd_t mqdes;
+  mqd_t          mqdes;
   struct mq_attr mqstat;
-  const char *q_name;
+  const char    *q_name;
   result = 0;
 
-  mqstat.mq_maxmsg  = MQ_MAXMSG;
+  mqstat.mq_maxmsg = MQ_MAXMSG;
   mqstat.mq_msgsize = MQ_MSGSIZE;
   q_name = "queue";
 

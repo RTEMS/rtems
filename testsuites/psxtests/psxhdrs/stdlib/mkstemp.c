@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
+  int return_value;
 
-	return_value = mkstemp("directoryxxxxxx");
-	return (return_value != -1);
+  return_value = mkstemp( "directoryxxxxxx" );
+  return ( return_value != -1 );
 }

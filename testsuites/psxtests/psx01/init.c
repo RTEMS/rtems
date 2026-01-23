@@ -41,9 +41,7 @@
 
 const char rtems_test_name[] = "PSX 1";
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
@@ -69,7 +67,7 @@ void *POSIX_Init(
   printf( "Init: uts.release: %s\n", uts.release );
   printf( "Init: uts.version: %s\n", uts.version );
   printf( "Init: uts.machine: %s\n", uts.machine );
-  puts("");
+  puts( "" );
 
   /* get id of this thread */
 
@@ -134,14 +132,14 @@ void *POSIX_Init(
   status = sched_yield();
   rtems_test_assert( !status );
 
-    /* switch to Task_1 */
+  /* switch to Task_1 */
 
   /* exit this thread */
 
   puts( "Init: pthread_exit" );
   pthread_exit( NULL );
 
-    /* switch to Task_1 */
+  /* switch to Task_1 */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

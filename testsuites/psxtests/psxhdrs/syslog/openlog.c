@@ -25,11 +25,11 @@
 
 #include <syslog.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const char *a = "/var/log/sample.log";
-  openlog( a,  LOG_PID,  LOG_USER);
+  openlog( a, LOG_PID, LOG_USER );
   return 0;
 }

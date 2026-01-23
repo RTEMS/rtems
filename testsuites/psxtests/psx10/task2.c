@@ -40,13 +40,11 @@
 
 #include "system.h"
 
-void *Task_2(
-  void *argument
-)
+void *Task_2( void *argument )
 {
   (void) argument;
 
-  int  status;
+  int status;
 
   Task_id = pthread_self();
   printf( "Task_2: ID is 0x%08" PRIxpthread_t "\n", Task_id );

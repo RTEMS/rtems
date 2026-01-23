@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	char *return_value;
-	char state[] = {1};
+  char *return_value;
+  char  state[] = { 1 };
 
-	return_value = setstate(state);
-	return (return_value != NULL);
+  return_value = setstate( state );
+  return ( return_value != NULL );
 }

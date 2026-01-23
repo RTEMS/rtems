@@ -41,9 +41,7 @@
 void test( void );
 void init_routine( void );
 
-void init_routine( void )
-{
-}
+void init_routine( void ) {}
 
 void test( void )
 {

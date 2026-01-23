@@ -42,9 +42,9 @@ int test( void );
 int test( void )
 {
   wctrans_t return_value;
-  setlocale(LC_ALL, "en_GB");
-  locale_t loc = newlocale(LC_ALL_MASK, "C", (locale_t) 0);
+  setlocale( LC_ALL, "en_GB" );
+  locale_t loc = newlocale( LC_ALL_MASK, "C", (locale_t) 0 );
 
-  return_value = wctrans_l("toupper", loc);
-  return (return_value != 0);
+  return_value = wctrans_l( "toupper", loc );
+  return ( return_value != 0 );
 }

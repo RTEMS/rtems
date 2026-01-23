@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 0 ;
-  long double result ;
+  long double x = 0;
+  long double result;
 
-  result = erfcl(x) ;
+  result = erfcl( x );
 
-  return (result);
+  return ( result );
 }
 #endif

@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-    float x = 36.04 ;
-    float result;
+  float x = 36.04;
+  float result;
 
-    result = cosf(x) ;
+  result = cosf( x );
 
-    return (result) ;
+  return ( result );
 }

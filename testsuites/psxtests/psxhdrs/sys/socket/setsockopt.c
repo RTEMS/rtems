@@ -39,16 +39,16 @@
 
 #include <sys/socket.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int              sockfd = 4;
-  int              level = SOL_SOCKET;
-  int              optname = 67;
-  int              value = 0;
-  void            *optval = &value;
-  socklen_t        optlen = sizeof(value);
+  int       sockfd = 4;
+  int       level = SOL_SOCKET;
+  int       optname = 67;
+  int       value = 0;
+  void     *optval = &value;
+  socklen_t optlen = sizeof( value );
 
-  return setsockopt(sockfd, level, optname, optval, optlen);
+  return setsockopt( sockfd, level, optname, optval, optlen );
 }

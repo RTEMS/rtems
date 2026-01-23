@@ -38,7 +38,7 @@
 
 const char rtems_test_name[] = "PSXKEY 6";
 
-static int Data_array[4] = {1, 2, 3, 4};
+static int Data_array[ 4 ] = { 1, 2, 3, 4 };
 
 static pthread_key_t key1, key2, key3;
 
@@ -46,7 +46,7 @@ static rtems_id Thread_Master;
 
 static int Key3_Destructor_Counter;
 
-static void Wake_Up_Master(void)
+static void Wake_Up_Master( void )
 {
   rtems_status_code rc;
 
@@ -54,14 +54,11 @@ static void Wake_Up_Master(void)
   rtems_test_assert( rc == RTEMS_SUCCESSFUL );
 }
 
-static void Wait_For_Worker(void)
+static void Wait_For_Worker( void )
 {
   rtems_status_code rc;
 
-  rc = rtems_event_transient_receive(
-    RTEMS_WAIT,
-    RTEMS_NO_TIMEOUT
-  );
+  rc = rtems_event_transient_receive( RTEMS_WAIT, RTEMS_NO_TIMEOUT );
   rtems_test_assert( rc == RTEMS_SUCCESSFUL );
 }
 
@@ -69,16 +66,16 @@ static rtems_task Test_Thread1( rtems_task_argument argument )
 {
   (void) argument;
 
-  int sc;
-  int *value;
-  struct timespec  delay_request;
+  int             sc;
+  int            *value;
+  struct timespec delay_request;
 
   puts( "Test_Thread 1 - key1 pthread_setspecific - OK" );
-  sc = pthread_setspecific( key1, &Data_array[0] );
+  sc = pthread_setspecific( key1, &Data_array[ 0 ] );
   rtems_test_assert( !sc );
 
   puts( "Test_Thread 1 - key2 pthread_setspecific - OK" );
-  sc = pthread_setspecific( key2, &Data_array[1] );
+  sc = pthread_setspecific( key2, &Data_array[ 1 ] );
   rtems_test_assert( !sc );
 
   puts( "Test_Thread 1 - sleep - let thread2 run - OK" );
@@ -89,11 +86,11 @@ static rtems_task Test_Thread1( rtems_task_argument argument )
 
   puts( "Test_Thread 1 - key1 pthread_getspecific - OK" );
   value = pthread_getspecific( key1 );
-  rtems_test_assert( *value == Data_array[0] );
+  rtems_test_assert( *value == Data_array[ 0 ] );
 
   puts( "Test_Thread 1 - key2 pthread_getspecific - OK" );
   value = pthread_getspecific( key2 );
-  rtems_test_assert( *value == Data_array[1] );
+  rtems_test_assert( *value == Data_array[ 1 ] );
 
   rtems_task_exit();
 }
@@ -102,24 +99,24 @@ static rtems_task Test_Thread2( rtems_task_argument argument )
 {
   (void) argument;
 
-  int sc;
+  int  sc;
   int *value;
 
   puts( "Test_Thread 2 - key1 pthread_setspecific - OK" );
-  sc = pthread_setspecific( key1, &Data_array[2] );
+  sc = pthread_setspecific( key1, &Data_array[ 2 ] );
   rtems_test_assert( !sc );
 
   puts( "Test_Thread 2 - key2 pthread_setspecific - OK" );
-  sc = pthread_setspecific( key2, &Data_array[3] );
+  sc = pthread_setspecific( key2, &Data_array[ 3 ] );
   rtems_test_assert( !sc );
 
   puts( "Test_Thread 2 - key1 pthread_getspecific - OK" );
   value = pthread_getspecific( key1 );
-  rtems_test_assert( *value == Data_array[2] );
+  rtems_test_assert( *value == Data_array[ 2 ] );
 
   puts( "Test_Thread 2 - key2 pthread_getspecific - OK" );
   value = pthread_getspecific( key2 );
-  rtems_test_assert( *value == Data_array[3] );
+  rtems_test_assert( *value == Data_array[ 3 ] );
 
   rtems_task_exit();
 }
@@ -181,7 +178,7 @@ static rtems_task Init( rtems_task_argument ignored )
 
   puts( "Init - thread1 create - OK" );
   rc = rtems_task_create(
-    rtems_build_name( 'T', 'E', 'S', 'T' ), 
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
@@ -195,7 +192,7 @@ static rtems_task Init( rtems_task_argument ignored )
 
   puts( "Init - thread2 create - OK" );
   rc = rtems_task_create(
-    rtems_build_name( 'T', 'E', 'S', 'T' ), 
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
@@ -249,7 +246,7 @@ static rtems_task Init( rtems_task_argument ignored )
   rtems_test_assert( sc == 0 );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -259,8 +256,8 @@ static rtems_task Init( rtems_task_argument ignored )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS          3
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     2
+#define CONFIGURE_MAXIMUM_TASKS      3
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 2
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 100 , y = 23 , result ;
-  int  quo ;
+  float x = 100, y = 23, result;
+  int   quo;
 
-  result = remquof( x , y , &quo ) ;
+  result = remquof( x, y, &quo );
 
-  return (result);
+  return ( result );
 }

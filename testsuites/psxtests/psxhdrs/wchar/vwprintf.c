@@ -41,16 +41,16 @@
  above and this comment when fixed 
 */
 
-int test(char *fmt, ...);
+int test( char *fmt, ... );
 
-int test(char *fmt, ...)
+int test( char *fmt, ... )
 {
   (void) fmt;
 
   const wchar_t *wc;
-  va_list va;
+  va_list        va;
 
   wc = 0;
-  va_start(va, fmt);
-  return vwprintf(wc, va);
+  va_start( va, fmt );
+  return vwprintf( wc, va );
 }

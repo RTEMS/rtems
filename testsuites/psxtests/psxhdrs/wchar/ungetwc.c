@@ -36,14 +36,14 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   wint_t wi;
-  FILE *file;
+  FILE  *file;
 
   wi = 0;
-  file = (void *)0;
-  return ungetwc(wi, file);
+  file = (void *) 0;
+  return ungetwc( wi, file );
 }

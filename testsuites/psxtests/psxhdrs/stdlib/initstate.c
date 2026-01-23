@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-	char *return_value;
-	unsigned seed = 1;
-	char state[] = {1, 2, 3, 4, 5, 6, 7, 8};
-	size_t size = 8;
+  char    *return_value;
+  unsigned seed = 1;
+  char     state[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+  size_t   size = 8;
 
-	return_value = initstate(seed, state, size);
-	return (return_value != NULL);
+  return_value = initstate( seed, state, size );
+  return ( return_value != NULL );
 }

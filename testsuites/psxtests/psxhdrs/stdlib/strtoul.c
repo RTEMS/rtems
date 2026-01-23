@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	unsigned long return_value;
-	char *nptr = "3.14";
-	char *endptr;
+  unsigned long return_value;
+  char         *nptr = "3.14";
+  char         *endptr;
 
-	return_value = strtoul(nptr, &endptr, 10);
-	return return_value;
+  return_value = strtoul( nptr, &endptr, 10 );
+  return return_value;
 }

@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 2.4 , y = 3 , result ;
+  float x = 2.4, y = 3, result;
 
-  result = powf( x , y ) ;
+  result = powf( x, y );
 
-  return (result);
+  return ( result );
 }

@@ -38,19 +38,17 @@
 
 const char rtems_test_name[] = "PSX 11";
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int                  status;
-  struct sched_param   param;
-  pthread_attr_t       attr;
-  int                  priority_1;
-  int                  priority_2;
-  int                  priority_3;
-  int                  priority_4;
+  int                status;
+  struct sched_param param;
+  pthread_attr_t     attr;
+  int                priority_1;
+  int                priority_2;
+  int                priority_3;
+  int                priority_4;
 
   TEST_BEGIN();
 
@@ -65,10 +63,10 @@ void *POSIX_Init(
 
   /* exercise pthread_setschedparam */
 
-  priority_1 = sched_get_priority_max( SCHED_FIFO );      /* was 127 */
-  priority_2 = sched_get_priority_max( SCHED_FIFO ) - 2;  /* was 125 */
-  priority_3 = sched_get_priority_max( SCHED_FIFO ) - 6;  /* was 121 */
-  priority_4 = sched_get_priority_max( SCHED_FIFO ) - 7;  /* was 120 */
+  priority_1 = sched_get_priority_max( SCHED_FIFO );     /* was 127 */
+  priority_2 = sched_get_priority_max( SCHED_FIFO ) - 2; /* was 125 */
+  priority_3 = sched_get_priority_max( SCHED_FIFO ) - 6; /* was 121 */
+  priority_4 = sched_get_priority_max( SCHED_FIFO ) - 7; /* was 120 */
 
   param.sched_priority = priority_1;
 
@@ -100,7 +98,9 @@ void *POSIX_Init(
   /* create a thread as SCHED_FIFO */
 
   printf(
-    "Init: create a thread of SCHED_FIFO with priority %d\n", priority_4 );
+    "Init: create a thread of SCHED_FIFO with priority %d\n",
+    priority_4
+  );
   status = pthread_attr_init( &attr );
   rtems_test_assert( !status );
 
@@ -135,7 +135,9 @@ void *POSIX_Init(
   /* create a thread as SCHED_OTHER */
 
   printf(
-    "Init: create a thread of SCHED_OTHER with priority %d\n", priority_4 );
+    "Init: create a thread of SCHED_OTHER with priority %d\n",
+    priority_4
+  );
   status = pthread_attr_init( &attr );
   rtems_test_assert( !status );
 

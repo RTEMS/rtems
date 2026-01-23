@@ -52,34 +52,30 @@
 
 const char rtems_test_name[] = "PSXTIME";
 
-void test_adjtime(void);
-void check_a_tod(
-  rtems_time_of_day *the_tod
-);
+void test_adjtime( void );
+void check_a_tod( rtems_time_of_day *the_tod );
 
 /*
  *  List of dates and times to test.
  */
-#define NUMBER_OF_DATES   8
+#define NUMBER_OF_DATES 8
 rtems_time_of_day Dates[ NUMBER_OF_DATES ] = {
   /* YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, TICKS */
-  {  1988,   1,    1,   12,    45,     00,     0 },
-  {  1988,  12,   31,    9,    00,     00,     0 },
-  {  1999,  12,   31,   23,    55,     59,     0 },
-  {  1999,  06,   30,   00,    01,     30,     0 },
-  {  2000,   1,    1,    0,    15,     59,     0 },
-  {  2005,   2,    2,    5,    10,     59,     0 },
-  {  2010,   3,    3,   10,     5,     59,     0 },
-  {  2020,   4,    4,   15,     0,     59,     0 },
+  { 1988, 1, 1, 12, 45, 00, 0 },
+  { 1988, 12, 31, 9, 00, 00, 0 },
+  { 1999, 12, 31, 23, 55, 59, 0 },
+  { 1999, 06, 30, 00, 01, 30, 0 },
+  { 2000, 1, 1, 0, 15, 59, 0 },
+  { 2005, 2, 2, 5, 10, 59, 0 },
+  { 2010, 3, 3, 10, 5, 59, 0 },
+  { 2020, 4, 4, 15, 0, 59, 0 },
 };
 
 /*
  *  Check out a single date and time
  */
 
-void check_a_tod(
-  rtems_time_of_day *the_tod
-)
+void check_a_tod( rtems_time_of_day *the_tod )
 {
   rtems_status_code status;
   rtems_time_of_day new_tod;
@@ -101,8 +97,8 @@ void check_a_tod(
     /* now do the posix time gets */
     result = gettimeofday( &tv, 0 );
     rtems_test_assert( result == 0 );
-    a_time_t = tv.tv_sec;   /* ctime() takes a time_t */
-    printf( "gettimeofday: %s", ctime( &a_time_t) );
+    a_time_t = tv.tv_sec; /* ctime() takes a time_t */
+    printf( "gettimeofday: %s", ctime( &a_time_t ) );
 
     a_time_t = time( 0 );
     printf( "time:         %s", ctime( &a_time_t ) );
@@ -111,16 +107,16 @@ void check_a_tod(
     printf( "localtime:    %s", asctime( a_tm ) );
 
     a_tm = gmtime( &a_time_t );
-    printf( "gmtime:       %s\n",  asctime( a_tm ) );
+    printf( "gmtime:       %s\n", asctime( a_tm ) );
 
     status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
 
     i++;
 
-  } while( i <= 3 );
+  } while ( i <= 3 );
 }
 
-void test_adjtime(void)
+void test_adjtime( void )
 {
   int                sc;
   rtems_status_code  status;
@@ -130,7 +126,7 @@ void test_adjtime(void)
   rtems_time_of_day  tod;
   rtems_interval     ticks;
 
-  the_tod = &Dates[0];
+  the_tod = &Dates[ 0 ];
 
   print_time( "rtems_clock_set          ", the_tod, "\n" );
   status = rtems_clock_set( the_tod );
@@ -211,15 +207,12 @@ void test_adjtime(void)
  *  main entry point to the test
  */
 
-#if defined(__rtems__)
-int test_main(void);
+#if defined( __rtems__ )
+int test_main( void );
 
-int test_main(void)
+int test_main( void )
 #else
-int main(
-  int    argc,
-  char **argv
-)
+int main( int argc, char **argv )
 #endif
 {
   int i;
@@ -240,10 +233,10 @@ int main(
 
   i = 0;
   while ( i < NUMBER_OF_DATES ) {
-    check_a_tod( &Dates[i] );
+    check_a_tod( &Dates[ i ] );
     i++;
   }
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }

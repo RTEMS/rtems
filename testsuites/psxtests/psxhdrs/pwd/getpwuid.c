@@ -42,7 +42,7 @@ int test( void );
 int test( void )
 {
   struct passwd *pswd;
-  uid_t uid = 0;
+  uid_t          uid = 0;
 
   pswd = getpwuid( uid );
 

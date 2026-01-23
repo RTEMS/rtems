@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 3 , y = 4 , result ;
+  float x = 3, y = 4, result;
 
-  result = hypotf(x,y) ;
+  result = hypotf( x, y );
 
-  return (result);
+  return ( result );
 }

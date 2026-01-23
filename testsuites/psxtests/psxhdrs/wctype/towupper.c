@@ -42,6 +42,6 @@ int test( void )
 {
   wint_t return_value;
 
-  return_value = towupper('c');
-  return (return_value == (wint_t)'C');
+  return_value = towupper( 'c' );
+  return ( return_value == (wint_t) 'C' );
 }

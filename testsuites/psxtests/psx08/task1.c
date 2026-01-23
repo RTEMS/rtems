@@ -42,13 +42,11 @@
 #include "system.h"
 #include <errno.h>
 
-void *Task_1(
-  void *argument
-)
+void *Task_1( void *argument )
 {
   (void) argument;
 
   puts( "Task_1: exitting" );
 
-  return( &Task1_id );
+  return ( &Task1_id );
 }

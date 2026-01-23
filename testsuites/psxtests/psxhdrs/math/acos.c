@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x=1;
+  double x = 1;
   double result;
 
-  result = acos(x);
+  result = acos( x );
 
-  return (result);
+  return ( result );
 }

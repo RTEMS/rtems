@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	char *cmd = "ls";
+  int   return_value;
+  char *cmd = "ls";
 
-	return_value = system(cmd);
-	return return_value;
+  return_value = system( cmd );
+  return return_value;
 }

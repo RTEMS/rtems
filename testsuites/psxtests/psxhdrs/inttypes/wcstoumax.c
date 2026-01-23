@@ -41,9 +41,9 @@ int test( void );
 
 int test( void )
 {
-  wchar_t *n = L"42";
+  wchar_t  *n = L"42";
   uintmax_t result;
-  wchar_t *endptr;
+  wchar_t  *endptr;
 
   result = wcstoumax( n, &endptr, 10 );
 

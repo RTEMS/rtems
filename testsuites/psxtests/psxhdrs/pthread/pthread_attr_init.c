@@ -43,7 +43,7 @@ int test( void );
 int test( void )
 {
   pthread_attr_t attribute;
-  int result;
+  int            result;
 
   result = pthread_attr_init( &attribute );
 

@@ -39,16 +39,10 @@ const char rtems_test_name[] = "PSX 4";
 
 volatile int Signal_occurred;
 volatile int Signal_count;
-void Signal_handler( int signo );
-void Signal_info_handler(
-  int        signo,
-  siginfo_t *info,
-  void      *context
-);
+void         Signal_handler( int signo );
+void         Signal_info_handler( int signo, siginfo_t *info, void *context );
 
-void Signal_handler(
-  int signo
-)
+void Signal_handler( int signo )
 {
   Signal_count++;
   printf(
@@ -60,17 +54,14 @@ void Signal_handler(
   Signal_occurred = 1;
 }
 
-void Signal_info_handler(
-  int        signo,
-  siginfo_t *info,
-  void      *context
-)
+void Signal_info_handler( int signo, siginfo_t *info, void *context )
 {
   (void) context;
 
   Signal_count++;
   printf(
-    "Signal_info: %d caught by 0x%" PRIxpthread_t " (%d) si_signo= %d si_code= %d value= %d\n",
+    "Signal_info: %d caught by 0x%" PRIxpthread_t
+    " (%d) si_signo= %d si_code= %d value= %d\n",
     signo,
     pthread_self(),
     Signal_count,
@@ -81,20 +72,18 @@ void Signal_info_handler(
   Signal_occurred = 1;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  unsigned int      remaining;
-  int               status;
-  struct sigaction  act;
-  sigset_t          mask;
-  sigset_t          pending_set;
-  sigset_t          oset;
-  struct timespec   timeout;
-  siginfo_t         info;
+  unsigned int     remaining;
+  int              status;
+  struct sigaction act;
+  sigset_t         mask;
+  sigset_t         pending_set;
+  sigset_t         oset;
+  struct timespec  timeout;
+  siginfo_t        info;
 
   TEST_BEGIN();
 
@@ -110,18 +99,20 @@ void *POSIX_Init(
   /* generate some easy error cases */
 
   status = sigwait( NULL, NULL );
-  if ( status != EINVAL )
-    printf( "status = %d (%s)\n", status, strerror(status) );
+  if ( status != EINVAL ) {
+    printf( "status = %d (%s)\n", status, strerror( status ) );
+  }
   rtems_test_assert( status == EINVAL );
   puts( "Init: sigwait - EINVAL (NULL set)" );
 
   status = sigtimedwait( NULL, NULL, NULL );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigwait - EINVAL (NULL set)" );
 
-/* install a signal handler for SIGUSR1 */
+  /* install a signal handler for SIGUSR1 */
 
   status = sigemptyset( &act.sa_mask );
   rtems_test_assert( !status );
@@ -137,8 +128,10 @@ void *POSIX_Init(
 
   status = sigdelset( &act.sa_mask, SIGUSR1 );
   rtems_test_assert( !status );
-  printf( "Init: sigdelset - delete SIGUSR1 set= 0x%08x\n",
-      (unsigned int) act.sa_mask );
+  printf(
+    "Init: sigdelset - delete SIGUSR1 set= 0x%08x\n",
+    (unsigned int) act.sa_mask
+  );
 
   /* test sigismember - FALSE */
 
@@ -155,7 +148,7 @@ void *POSIX_Init(
   /* return the set to empty */
 
   act.sa_handler = Signal_handler;
-  act.sa_flags   = 0;
+  act.sa_flags = 0;
 
   sigaction( SIGUSR1, &act, NULL );
 
@@ -168,7 +161,7 @@ void *POSIX_Init(
   status = kill( getpid(), SIGUSR1 );
   rtems_test_assert( !status );
 
-/* end of install a signal handler for SIGUSR1 */
+  /* end of install a signal handler for SIGUSR1 */
 
   Signal_occurred = 0;
 
@@ -184,7 +177,7 @@ void *POSIX_Init(
 
   puts( "Init: Block SIGUSR1" );
   act.sa_handler = Signal_handler;
-  act.sa_flags   = 0;
+  act.sa_flags = 0;
 
   sigaction( SIGUSR1, &act, NULL );
 
@@ -249,7 +242,7 @@ void *POSIX_Init(
   remaining = sleep( 1 );
   rtems_test_assert( !status );
 
-     /* switch to task 1 */
+  /* switch to task 1 */
 
   puts( "Init: send SIGUSR1 to process" );
   status = kill( getpid(), SIGUSR1 );
@@ -263,7 +256,7 @@ void *POSIX_Init(
   remaining = sleep( 1 );
   rtems_test_assert( !status );
 
-     /* switch to task 1 */
+  /* switch to task 1 */
 
   /* test alarm */
 
@@ -275,7 +268,7 @@ void *POSIX_Init(
   rtems_test_assert( !status );
 
   act.sa_handler = Signal_handler;
-  act.sa_flags   = 0;
+  act.sa_flags = 0;
 
   sigaction( SIGALRM, &act, NULL );
 
@@ -370,8 +363,8 @@ void *POSIX_Init(
   rtems_test_assert( !status );
 
   /* set action on SIGUSR1 to an info case */
-  act.sa_handler   = Signal_handler;
-  act.sa_flags     = SA_SIGINFO;
+  act.sa_handler = Signal_handler;
+  act.sa_flags = SA_SIGINFO;
   act.sa_sigaction = Signal_info_handler;
 
   sigaction( SIGUSR1, &act, NULL );
@@ -380,7 +373,7 @@ void *POSIX_Init(
   remaining = sleep( 1 );
   rtems_test_assert( !status );
 
-     /* switch to task 1 */
+  /* switch to task 1 */
 
   puts( "Init: sigqueue occurred" );
 
@@ -459,38 +452,44 @@ void *POSIX_Init(
   empty_line();
 
   status = sigemptyset( NULL );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigemptyset - EINVAL (set invalid)" );
 
   status = sigfillset( NULL );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigfillset - EINVAL (set invalid)" );
 
   status = sigaddset( NULL, SIGUSR1 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigaddset - EINVAL (set invalid)" );
 
   status = sigaddset( &mask, 0 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigaddset - EINVAL (signal = 0)" );
 
   status = sigaddset( &mask, 999 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigaddset - EINVAL (set invalid)" );
 
   status = sigdelset( NULL, SIGUSR1 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigdelset - EINVAL (set invalid)" );
 
@@ -499,14 +498,16 @@ void *POSIX_Init(
   puts( "Init: sigdelset - SUCCESSFUL (signal = 0)" );
 
   status = sigdelset( &mask, 999 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigdelset - EINVAL (set invalid)" );
 
   status = sigismember( NULL, SIGUSR1 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigismember - EINVAL (set invalid)" );
 
@@ -515,58 +516,67 @@ void *POSIX_Init(
   puts( "Init: sigismember - SUCCESSFUL (signal = 0)" );
 
   status = sigismember( &mask, 999 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigismember - EINVAL (signal invalid)" );
 
   status = sigaction( 0, &act, 0 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigaction - EINVAL (signal = 0)" );
 
   status = sigaction( 999, &act, NULL );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigaction - EINVAL (signal invalid)" );
 
   status = sigaction( SIGKILL, &act, NULL );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigaction - EINVAL (SIGKILL)" );
 
   status = pthread_sigmask( SIG_BLOCK, NULL, NULL );
-  if ( status != EINVAL )
+  if ( status != EINVAL ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_sigmask - EINVAL (set and oset invalid)" );
 
   status = pthread_sigmask( 999, &pending_set, NULL );
-  if ( status != EINVAL )
+  if ( status != EINVAL ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_sigmask - EINVAL (how invalid)" );
 
   status = sigpending( NULL );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigpending - EINVAL (set invalid)" );
 
   timeout.tv_nsec = -1;
   status = sigtimedwait( &mask, &info, &timeout );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigtimedwait - EINVAL (timout->nsec invalid < 0)" );
 
   timeout.tv_nsec = 0x7fffffff;
   status = sigtimedwait( &mask, &info, &timeout );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: sigtimedwait - EINVAL (timout->nsec invalid to large)" );
 
@@ -586,20 +596,23 @@ void *POSIX_Init(
   puts( "Init: pthread_kill - SUCCESSFUL (signal = SIG_IGN)" );
 
   status = kill( INT_MAX, SIGUSR1 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == ESRCH );
   puts( "Init: kill - ESRCH (pid invalid)" );
 
   status = kill( getpid(), 0 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: kill - EINVAL (signal = 0)" );
 
   status = kill( getpid(), 999 );
-  if ( status != -1 )
+  if ( status != -1 ) {
     printf( "status = %d\n", status );
+  }
   rtems_test_assert( errno == EINVAL );
   puts( "Init: kill - EINVAL (sig invalid)" );
 

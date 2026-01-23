@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	void *memptr = NULL;
-	size_t alignment = 1;
-	size_t size = 4;
+  int    return_value;
+  void  *memptr = NULL;
+  size_t alignment = 1;
+  size_t size = 4;
 
-	return_value = posix_memalign(&memptr, alignment, size);
-	return return_value;
+  return_value = posix_memalign( &memptr, alignment, size );
+  return return_value;
 }

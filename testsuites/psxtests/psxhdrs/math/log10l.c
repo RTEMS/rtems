@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 3 ,  result ;
+  long double x = 3, result;
 
-  result = log10l(x) ;
+  result = log10l( x );
 
-  return (result);
+  return ( result );
 }
 #endif

@@ -41,12 +41,12 @@
 */
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   wint_t wi;
 
   wi = 0;
-  return towupper(wi);
+  return towupper( wi );
 }

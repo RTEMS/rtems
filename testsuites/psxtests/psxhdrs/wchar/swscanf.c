@@ -36,14 +36,14 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const wchar_t *wc;
   const wchar_t *ch;
 
   wc = 0;
   ch = 0;
-  return swscanf(wc, ch);
+  return swscanf( wc, ch );
 }

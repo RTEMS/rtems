@@ -30,4 +30,4 @@
 
 #include <tmacros.h>
 
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );

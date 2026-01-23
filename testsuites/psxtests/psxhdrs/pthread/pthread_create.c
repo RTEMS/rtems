@@ -38,26 +38,23 @@
 #error "rtems is supposed to have pthread_create"
 #endif
 
-int test( void );
-void *test_task( void * arg );
+int   test( void );
+void *test_task( void *arg );
 
-void *test_task(
-  void * arg
-)
+void *test_task( void *arg )
 {
   (void) arg;
 
-  for ( ; ; )
-    ;
+  for ( ;; );
   return NULL;
 }
 
 int test( void )
 {
-  pthread_t       thread;
-  pthread_attr_t  attribute = { 0 };
-  void           *arg = NULL;
-  int             result;
+  pthread_t      thread;
+  pthread_attr_t attribute = { 0 };
+  void          *arg = NULL;
+  int            result;
 
   result = pthread_create( &thread, &attribute, test_task, arg );
 

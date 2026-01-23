@@ -41,10 +41,10 @@ int test( void );
 
 int test( void )
 {
-  char16_t* c16_str = u"Mar\u00E7al";
-  char out[MB_CUR_MAX];
+  char16_t *c16_str = u"Mar\u00E7al";
+  char      out[ MB_CUR_MAX ];
   mbstate_t mbs;
-  int result;
+  int       result;
 
   result = c16rtomb( out, *c16_str, &mbs );
 

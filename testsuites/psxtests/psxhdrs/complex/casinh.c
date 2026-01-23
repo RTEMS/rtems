@@ -36,14 +36,14 @@
 
 #include <complex.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   double complex number;
   double complex result;
 
   number = 1.0 + 1.0 * I;
-  result = casinh(number);
-  return (result != 0);
+  result = casinh( number );
+  return ( result != 0 );
 }

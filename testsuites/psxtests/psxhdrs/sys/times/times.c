@@ -44,5 +44,5 @@ int test( void )
 
   clock_t tm = times( &buffer );
 
-  return (tm == (clock_t)-1);
+  return ( tm == (clock_t) -1 );
 }

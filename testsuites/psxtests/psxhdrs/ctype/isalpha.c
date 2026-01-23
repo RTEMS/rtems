@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int alpha;
 
   alpha = 0;
-  return (isalpha(alpha));
+  return ( isalpha( alpha ) );
 }

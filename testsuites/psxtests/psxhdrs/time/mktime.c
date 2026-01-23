@@ -56,5 +56,5 @@ int test( void )
 
   time_encoded = mktime( &timestruct );
 
-  return (time_encoded != -1);
+  return ( time_encoded != -1 );
 }

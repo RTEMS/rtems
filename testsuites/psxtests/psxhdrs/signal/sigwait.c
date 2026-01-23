@@ -41,9 +41,9 @@ int test( void );
 
 int test( void )
 {
-  sigset_t        set;
-  int             sig;
-  int             result;
+  sigset_t set;
+  int      sig;
+  int      result;
 
   (void) sigemptyset( &set );
 

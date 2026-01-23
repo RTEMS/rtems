@@ -36,14 +36,14 @@
 
 #include <complex.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   float complex number;
-  float result;
+  float         result;
 
   number = 1.0 + 1.0 * I;
-  result = crealf(number);
-  return (result != 0);
+  result = crealf( number );
+  return ( result != 0 );
 }

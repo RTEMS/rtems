@@ -27,15 +27,15 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int af = 0;
+  int            af = 0;
   struct in_addr addr = { 0 };
-  char *dst = "string";
+  char          *dst = "string";
 
-  const char *ret = inet_ntop(af, &addr, dst, sizeof(dst));
+  const char *ret = inet_ntop( af, &addr, dst, sizeof( dst ) );
 
   return *ret != '\0';
 }

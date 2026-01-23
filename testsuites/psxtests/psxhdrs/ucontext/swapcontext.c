@@ -34,31 +34,31 @@
 #include "config.h"
 #endif
 
-#define STACK_SIZE (1<<15) // 3
+#define STACK_SIZE ( 1 << 15 ) // 3
 
 #include <ucontext.h>
 #include <stdlib.h>
 
-int test( void );
+int  test( void );
 void func( void );
 
 int test( void )
 {
   ucontext_t context;
-  context.uc_stack.ss_sp = (char *) malloc(STACK_SIZE);
+  context.uc_stack.ss_sp = (char *) malloc( STACK_SIZE );
   context.uc_stack.ss_size = STACK_SIZE;
   context.uc_link = 0;
   context.uc_stack.ss_flags = 0;
   ucontext_t *ucp = &context;
-  ucontext_t context2;
+  ucontext_t  context2;
   ucontext_t *ucp2 = &context2;
-  getcontext(ucp);
-  makecontext(ucp,(void*)func, 0);
-  swapcontext(ucp2, ucp);
+  getcontext( ucp );
+  makecontext( ucp, (void *) func, 0 );
+  swapcontext( ucp2, ucp );
   return 0;
 }
 
 void func( void )
 {
-	return;
+  return;
 }

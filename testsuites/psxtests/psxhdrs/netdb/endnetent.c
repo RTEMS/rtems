@@ -36,15 +36,15 @@
 
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct netent *nent;
+int test( void )
+{
+  struct netent *nent;
 
-   nent = getnetent();
-   setnetent( 1 );
-   endnetent();
+  nent = getnetent();
+  setnetent( 1 );
+  endnetent();
 
-   return ( nent != (void *)0 );
- }
+  return ( nent != (void *) 0 );
+}

@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  const char *tagp = "s" ;
-  long double result ;
+  const char *tagp = "s";
+  long double result;
 
-  result = nanl(tagp) ;
+  result = nanl( tagp );
 
-  return (result);
+  return ( result );
 }
 #endif

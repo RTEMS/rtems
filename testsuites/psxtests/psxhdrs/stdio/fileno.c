@@ -41,8 +41,8 @@ int test( void );
 int test( void )
 {
   FILE *stream;
-  char hfs_file[]="./hfs_file";
-  int result;
+  char  hfs_file[] = "./hfs_file";
+  int   result;
 
   stream = fopen( hfs_file, "w" );
   (void) hfs_file;

@@ -45,10 +45,10 @@ int test( void )
 {
   struct passwd *pswd;
   struct passwd *resl;
-  uid_t uid = 0;
-  char *buf;
-  size_t buflen;
-  int result;
+  uid_t          uid = 0;
+  char          *buf;
+  size_t         buflen;
+  int            result;
 
   buflen = sysconf( _SC_GETPW_R_SIZE_MAX );
   buf = malloc( buflen );

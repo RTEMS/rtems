@@ -41,10 +41,10 @@ int test( void );
 int test( void )
 {
   char *s = "geeksforgeeks";
-  char buffer[50];
-  int result;
+  char  buffer[ 50 ];
+  int   result;
 
-  result = snprintf( buffer, sizeof(buffer), "%s\n", s );
+  result = snprintf( buffer, sizeof( buffer ), "%s\n", s );
 
   return result;
 }

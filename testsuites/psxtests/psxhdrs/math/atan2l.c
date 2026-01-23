@@ -42,12 +42,12 @@ int test( void );
 
 int test( void )
 {
-    long double x = 1 ;
-    long double y = 0 ;
-    long double result ;
+  long double x = 1;
+  long double y = 0;
+  long double result;
 
-    result = atan2l( y , x ) ;
+  result = atan2l( y, x );
 
-    return (result) ;  /* This should return 0 */
+  return ( result ); /* This should return 0 */
 }
 #endif

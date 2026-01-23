@@ -40,13 +40,13 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int resource = RLIMIT_CORE;
-	struct rlimit limit;
-	struct rlimit *rlp = &limit;
-	limit.rlim_cur = 0;
-	limit.rlim_max = 1;
+  int            return_value;
+  int            resource = RLIMIT_CORE;
+  struct rlimit  limit;
+  struct rlimit *rlp = &limit;
+  limit.rlim_cur = 0;
+  limit.rlim_max = 1;
 
-	return_value = setrlimit(resource, rlp);
-	return (return_value != -1);
+  return_value = setrlimit( resource, rlp );
+  return ( return_value != -1 );
 }

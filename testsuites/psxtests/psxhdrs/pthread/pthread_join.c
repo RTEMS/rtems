@@ -42,9 +42,9 @@ int test( void );
 
 int test( void )
 {
-  pthread_t   thread;
-  void       *value_ptr;
-  int         result;
+  pthread_t thread;
+  void     *value_ptr;
+  int       result;
 
   thread = 0;
 

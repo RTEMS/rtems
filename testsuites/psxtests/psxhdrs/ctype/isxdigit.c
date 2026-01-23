@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int xdigit;
 
   xdigit = 0;
-  return (isxdigit(xdigit));
+  return ( isxdigit( xdigit ) );
 }

@@ -26,14 +26,14 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  in_addr_t con;
+  in_addr_t   con;
   const char *addr = "127.0.0.1";
 
-  con = inet_addr(addr);
+  con = inet_addr( addr );
   (void) con;
 
   return 0;

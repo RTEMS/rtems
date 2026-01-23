@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 3.5662810199 ;
+  float x = 3.5662810199;
   float result;
 
-  result = ceilf(x) ;
+  result = ceilf( x );
 
-  return (result) ;
+  return ( result );
 }

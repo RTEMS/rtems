@@ -42,8 +42,8 @@ int test( void );
 
 int test( void )
 {
-  pthread_t   thread;
-  int         result;
+  pthread_t thread;
+  int       result;
 
   thread = 0;
   result = pthread_detach( thread );

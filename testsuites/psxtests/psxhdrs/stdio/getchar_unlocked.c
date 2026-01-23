@@ -42,7 +42,7 @@ int test( void )
 {
   int result;
 
-  result = getchar_unlocked( );
+  result = getchar_unlocked();
 
   return result;
 }

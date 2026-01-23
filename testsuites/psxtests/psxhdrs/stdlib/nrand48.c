@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-	long return_value;
-	unsigned short xsubi[3];
+  long           return_value;
+  unsigned short xsubi[ 3 ];
 
-	return_value = nrand48(xsubi);
-	return return_value;
+  return_value = nrand48( xsubi );
+  return return_value;
 }

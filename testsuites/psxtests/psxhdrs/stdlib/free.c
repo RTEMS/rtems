@@ -40,7 +40,7 @@ int test( void );
 
 int test( void )
 {
-	int *ptr = malloc(1 * sizeof(int));
-	free(ptr);
-	return 1;
+  int *ptr = malloc( 1 * sizeof( int ) );
+  free( ptr );
+  return 1;
 }

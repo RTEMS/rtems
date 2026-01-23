@@ -41,10 +41,10 @@ int test( void );
 
 int test( void )
 {
-  int return_value;
-  wctype_t charclass = wctype("alnum");
-  locale_t loc = newlocale(LC_ALL_MASK, "C", (locale_t) 0);
+  int      return_value;
+  wctype_t charclass = wctype( "alnum" );
+  locale_t loc = newlocale( LC_ALL_MASK, "C", (locale_t) 0 );
 
-  return_value = iswctype_l('c', charclass, loc);
-  return (return_value != 0);
+  return_value = iswctype_l( 'c', charclass, loc );
+  return ( return_value != 0 );
 }

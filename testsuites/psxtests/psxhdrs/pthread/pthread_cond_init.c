@@ -44,7 +44,7 @@ int test( void )
 {
   pthread_cond_t     cond = PTHREAD_COND_INITIALIZER;
   pthread_condattr_t attribute = { 0 };
-  int result;
+  int                result;
 
   result = pthread_cond_init( &cond, &attribute );
 

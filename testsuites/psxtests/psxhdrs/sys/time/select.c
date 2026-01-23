@@ -36,22 +36,22 @@
 
 #include <sys/time.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int callback;
-  int nfds = 0;
+  int            callback;
+  int            nfds = 0;
   struct timeval tv;
-  time_t tv_sec = 0;
-  suseconds_t tv_usec = 0;
-  fd_set readfds, writefds, errorfds;
+  time_t         tv_sec = 0;
+  suseconds_t    tv_usec = 0;
+  fd_set         readfds, writefds, errorfds;
 
   tv.tv_sec = tv_sec;
   tv.tv_usec = tv_usec;
-  FD_ZERO(&readfds);
-  FD_ZERO(&writefds);
-  FD_ZERO(&errorfds);
-  callback = select(nfds, &readfds, &writefds, &errorfds, &tv);
+  FD_ZERO( &readfds );
+  FD_ZERO( &writefds );
+  FD_ZERO( &errorfds );
+  callback = select( nfds, &readfds, &writefds, &errorfds, &tv );
   return callback;
 }

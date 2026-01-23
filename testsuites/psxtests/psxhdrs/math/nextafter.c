@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  double x = 50 , y = 100 , result ;
+  double x = 50, y = 100, result;
 
-  result = nextafter( x , y ) ;
+  result = nextafter( x, y );
 
-  return (result);
+  return ( result );
 }

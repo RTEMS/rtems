@@ -42,7 +42,7 @@ int test( void );
 
 int test( void )
 {
-  char buf[MAX];
+  char  buf[ MAX ];
   char *result;
 
   result = fgets( buf, MAX, stdin );

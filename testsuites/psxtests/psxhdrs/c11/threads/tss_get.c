@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  tss_t key;
+  tss_t      key;
   tss_dtor_t destructor = NULL;
-  void *get;
+  void      *get;
 
   tss_create( &key, destructor );
   get = tss_get( key );

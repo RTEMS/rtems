@@ -25,14 +25,13 @@
 
 #include <sys/shm.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int shmid = 0;
-  int shmflg = 1;
+  int             shmid = 0;
+  int             shmflg = 1;
   struct shmid_ds a;
 
-  return shmctl(shmid, shmflg, &a);
-
+  return shmctl( shmid, shmflg, &a );
 }

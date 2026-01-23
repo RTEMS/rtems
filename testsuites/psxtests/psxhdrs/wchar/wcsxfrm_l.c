@@ -36,18 +36,18 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  wchar_t *wc;
+  wchar_t       *wc;
   const wchar_t *wc1;
-  size_t si;
-  locale_t locale;
+  size_t         si;
+  locale_t       locale;
 
   wc = 0;
   wc1 = 0;
   si = 0;
-  locale = (locale_t)0;
-  return wcsxfrm_l(wc, wc1, si, locale);
+  locale = (locale_t) 0;
+  return wcsxfrm_l( wc, wc1, si, locale );
 }

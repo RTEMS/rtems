@@ -36,12 +36,12 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   wchar_t wc;
 
   wc = L'\x3b1';
-  return putwchar(wc);
+  return putwchar( wc );
 }

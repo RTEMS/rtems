@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int punct;
 
   punct = 0;
-  return (ispunct(punct));
+  return ( ispunct( punct ) );
 }

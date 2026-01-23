@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int who = RUSAGE_SELF;
-	struct rusage r_usage;
+  int           return_value;
+  int           who = RUSAGE_SELF;
+  struct rusage r_usage;
 
-	return_value = getrusage(who, &r_usage);
-	return(return_value != -1);
+  return_value = getrusage( who, &r_usage );
+  return ( return_value != -1 );
 }

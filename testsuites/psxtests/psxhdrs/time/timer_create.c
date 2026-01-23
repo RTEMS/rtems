@@ -45,10 +45,10 @@ int test( void );
 
 int test( void )
 {
-  clockid_t        clock_id = 0;
-  timer_t          timerid = 0;
-  struct sigevent  evp;
-  int              result;
+  clockid_t       clock_id = 0;
+  timer_t         timerid = 0;
+  struct sigevent evp;
+  int             result;
 
   evp.sigev_notify = SIGEV_NONE;
   evp.sigev_notify = SIGEV_SIGNAL;

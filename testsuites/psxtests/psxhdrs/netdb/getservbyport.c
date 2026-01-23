@@ -36,15 +36,15 @@
 
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct servent *pserv;
-   int port = 2;
-   char *proto = "ipv4";
+int test( void )
+{
+  struct servent *pserv;
+  int             port = 2;
+  char           *proto = "ipv4";
 
-   pserv = getservbyport( port, proto );
+  pserv = getservbyport( port, proto );
 
-   return ( pserv != (void *)0 );
- }
+  return ( pserv != (void *) 0 );
+}

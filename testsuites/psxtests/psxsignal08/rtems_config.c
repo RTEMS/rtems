@@ -29,15 +29,12 @@
 #include <rtems.h>
 #include <stdlib.h>
 
-int main(int argc, char **argv);
+int main( int argc, char **argv );
 
-static char *argv_list[] = {
-  "report",
-  ""
-};
-static rtems_task Init(rtems_task_argument arg)
+static char      *argv_list[] = { "report", "" };
+static rtems_task Init( rtems_task_argument arg )
 {
-  (void) arg;  /* deliberately ignored */
+  (void) arg; /* deliberately ignored */
 
   /*
    * Initialize optional services
@@ -46,9 +43,9 @@ static rtems_task Init(rtems_task_argument arg)
   /*
    * Could get arguments from command line or have a static set.
    */
-  (void) main(1, argv_list);
+  (void) main( 1, argv_list );
 
-  exit(0);
+  exit( 0 );
 }
 
 #include <bsp.h> /* for device driver prototypes */

@@ -37,12 +37,12 @@
 #include <wchar.h>
 #include <wctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   wint_t wi;
 
   wi = 0;
-  return iswspace(wi);
+  return iswspace( wi );
 }

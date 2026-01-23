@@ -25,10 +25,10 @@
 
 #include <setjmp.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   jmp_buf a;
-  return setjmp(a);
+  return setjmp( a );
 }

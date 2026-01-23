@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x=45 , result ;
-  int n = 3 ;
+  double x = 45, result;
+  int    n = 3;
 
-  result = yn(n,x);
+  result = yn( n, x );
 
-  return (result);
+  return ( result );
 }

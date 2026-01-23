@@ -41,9 +41,9 @@ int test( void );
 int test( void )
 {
   struct S {
-    char c;
+    char   c;
     double d;
   };
 
-  return offsetof(struct S, d);
+  return offsetof( struct S, d );
 }

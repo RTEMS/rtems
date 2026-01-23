@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int fd = 1;
-	char *path = "/tmp/file";
-	mode_t mode = S_IRUSR;
+  int    return_value;
+  int    fd = 1;
+  char  *path = "/tmp/file";
+  mode_t mode = S_IRUSR;
 
-	return_value = mkfifoat(fd, path, mode);
-	return (return_value != -1);
+  return_value = mkfifoat( fd, path, mode );
+  return ( return_value != -1 );
 }

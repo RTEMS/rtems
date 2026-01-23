@@ -41,9 +41,7 @@
 #include "system.h"
 #include <errno.h>
 
-void *Task_2(
-  void *argument
-)
+void *Task_2( void *argument )
 {
   (void) argument;
 
@@ -51,12 +49,13 @@ void *Task_2(
 
   printf( "Task 2: pthread_mutex_lock unavailable (inherit case)\n" );
   status = pthread_mutex_lock( &Mutex2_id );
-  if ( status )
+  if ( status ) {
     printf( "status =%d\n", status );
+  }
   rtems_test_assert( !status );
   printf( "Task 2: mutex acquired\n" );
 
-     /* switch to init */
+  /* switch to init */
 
   printf( "Task 2: unlock Mutex 2\n" );
   status = pthread_mutex_unlock( &Mutex2_id );
@@ -65,7 +64,7 @@ void *Task_2(
   printf( "Task 2: exit\n" );
   pthread_exit( NULL );
 
-     /* switch to Init */
+  /* switch to Init */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

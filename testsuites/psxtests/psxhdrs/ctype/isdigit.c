@@ -36,12 +36,12 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   int digit;
 
   digit = 0;
-  return (isdigit(digit));
+  return ( isdigit( digit ) );
 }

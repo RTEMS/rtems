@@ -44,5 +44,5 @@ int test( void )
 
   stream = fopen( "myfile.dat", "w" );
 
-  return ( stream != NULL);
+  return ( stream != NULL );
 }

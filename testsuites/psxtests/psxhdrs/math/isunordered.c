@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 45 , y = 46 ;
-  int result ;
+  float x = 45, y = 46;
+  int   result;
 
-  result = isunordered(x,y) ;
+  result = isunordered( x, y );
 
-  return (result);
+  return ( result );
 }

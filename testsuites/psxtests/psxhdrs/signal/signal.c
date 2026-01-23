@@ -41,12 +41,12 @@ int test( void );
 
 int test( void )
 {
-  void (*signal_function_pointer)(int);
-  int  signal_number;
+  void ( *signal_function_pointer )( int );
+  int signal_number;
 
   signal_number = SIGALRM;
 
   signal_function_pointer = signal( signal_number, SIG_IGN );
 
-  return (signal_function_pointer == SIG_ERR) ? -1 : 0;
+  return ( signal_function_pointer == SIG_ERR ) ? -1 : 0;
 }

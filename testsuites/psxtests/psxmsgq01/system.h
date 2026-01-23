@@ -41,10 +41,10 @@
 #include <sched.h>
 #include <tmacros.h>
 
-void *POSIX_Init(void *argument);
-void *Task_1_through_3(void *argument);
-void *Task_4(void *argument);
-void *Task_5(void *argument);
+void *POSIX_Init( void *argument );
+void *Task_1_through_3( void *argument );
+void *Task_4( void *argument );
+void *Task_5( void *argument );
 
 /* configuration information */
 
@@ -55,26 +55,26 @@ void *Task_5(void *argument);
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS         5
+#define CONFIGURE_MAXIMUM_POSIX_THREADS        5
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 10
-#if defined(RTEMS_POSIX_API)
-#define CONFIGURE_MAXIMUM_POSIX_TIMERS          4
-#define CONFIGURE_MAXIMUM_TIMERS                4
+#if defined( RTEMS_POSIX_API )
+#define CONFIGURE_MAXIMUM_POSIX_TIMERS 4
+#define CONFIGURE_MAXIMUM_TIMERS       4
 #endif
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
-        (RTEMS_MINIMUM_STACK_SIZE * 10)
+  ( RTEMS_MINIMUM_STACK_SIZE * 10 )
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task_id;
+TEST_EXTERN pthread_t Init_id;
+TEST_EXTERN pthread_t Task_id;
 
-#define MSGSIZE   9
-#define MAXMSG    4
+#define MSGSIZE 9
+#define MAXMSG  4
 
 typedef enum {
   RD_QUEUE,   /* Read only queue               */
@@ -85,10 +85,10 @@ typedef enum {
   CLOSED,     /* Created and closed queue      */
   NUMBER_OF_TEST_QUEUES
 } Test_Queue_Types;
-extern int Priority_Order[MAXMSG+1];
-void *Task_1 ( void *argument );
-void *Task_2( void *argument );
-void *Task_3( void *argument );
-void *Task_4( void *argument );
+extern int Priority_Order[ MAXMSG + 1 ];
+void      *Task_1( void *argument );
+void      *Task_2( void *argument );
+void      *Task_3( void *argument );
+void      *Task_4( void *argument );
 
 /* end of include file */

@@ -36,18 +36,18 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  wchar_t *wc;
-  const char* *ch;
-  mbstate_t state;
-  size_t s0, s1;
+  wchar_t     *wc;
+  const char **ch;
+  mbstate_t    state;
+  size_t       s0, s1;
 
   wc = 0;
   ch = 0;
   s0 = 0;
   s1 = 0;
-  return mbsnrtowcs(wc, ch, s0, s1, &state);
+  return mbsnrtowcs( wc, ch, s0, s1, &state );
 }

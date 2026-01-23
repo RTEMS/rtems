@@ -33,8 +33,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-#include <fcntl.h>           /* For O_* constants */
-#include <sys/stat.h>        /* For mode constants */
+#include <fcntl.h>    /* For O_* constants */
+#include <sys/stat.h> /* For mode constants */
 #include <mqueue.h>
 
 #include "test_support.h"
@@ -42,17 +42,14 @@
 const char rtems_test_name[] = "PSXMSGQ 3";
 
 /* forward declarations to avoid warnings */
-rtems_timer_service_routine mq_send_timer(rtems_id timer, void *arg);
+rtems_timer_service_routine mq_send_timer( rtems_id timer, void *arg );
 
-mqd_t Queue;
+mqd_t         Queue;
 volatile bool tsr_fired;
 volatile int  tsr_status;
 volatile int  tsr_errno;
 
-rtems_timer_service_routine mq_send_timer(
-  rtems_id  timer,
-  void     *arg
-)
+rtems_timer_service_routine mq_send_timer( rtems_id timer, void *arg )
 {
   (void) timer;
   (void) arg;
@@ -61,39 +58,37 @@ rtems_timer_service_routine mq_send_timer(
 
   tsr_fired = true;
 
-  tsr_status = mq_send( Queue, (const char *)&msg, sizeof(int), 1 );
+  tsr_status = mq_send( Queue, (const char *) &msg, sizeof( int ), 1 );
   tsr_errno = errno;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  struct mq_attr     attr;
-  int                status;
-  rtems_id           timer;
-  rtems_status_code  rc;
+  struct mq_attr    attr;
+  int               status;
+  rtems_id          timer;
+  rtems_status_code rc;
 
   TEST_BEGIN();
 
-  attr.mq_maxmsg  = 1;
-  attr.mq_msgsize = sizeof(int);
+  attr.mq_maxmsg = 1;
+  attr.mq_msgsize = sizeof( int );
 
   puts( "Init - Open message queue" );
   Queue = mq_open( "Qsend", O_CREAT | O_RDWR, 0x777, &attr );
-  if ( Queue == (mqd_t)(-1) ) {
+  if ( Queue == (mqd_t) ( -1 ) ) {
     perror( "mq_open failed" );
   }
-  rtems_test_assert( Queue != (mqd_t)(-1) );
+  rtems_test_assert( Queue != (mqd_t) ( -1 ) );
 
   puts( "Init - send to message queue" );
-  status = mq_send( Queue, (const char *)&status, sizeof(int), 1 );
-  if ( status == (-1) ) {
+  status = mq_send( Queue, (const char *) &status, sizeof( int ), 1 );
+  if ( status == ( -1 ) ) {
     perror( "mq_status failed" );
   }
-  rtems_test_assert( status != (-1) );
+  rtems_test_assert( status != ( -1 ) );
 
   /*
    * Now create the timer we will send to a full queue from.
@@ -113,19 +108,19 @@ void *POSIX_Init(
   );
   directive_failed( rc, "rtems_timer_fire_after" );
 
-  sleep(2);
+  sleep( 2 );
 
   if ( tsr_fired == false ) {
     puts( "ERROR -- TSR DID NOT FIRE" );
     rtems_test_exit( 0 );
   }
-  if ( (tsr_status != -1) || (tsr_errno != EAGAIN) ) {
+  if ( ( tsr_status != -1 ) || ( tsr_errno != EAGAIN ) ) {
     puts( "ERROR -- TSR DID NOT RETURN CORRECT STATUS" );
     printf(
       "status=%d errno=%d --> %s\n",
       tsr_status,
       tsr_errno,
-      strerror(tsr_errno)
+      strerror( tsr_errno )
     );
     rtems_test_exit( 0 );
   }

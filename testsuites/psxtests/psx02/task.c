@@ -42,9 +42,7 @@
 #include "system.h"
 #include <signal.h>
 
-void *Task_1_through_3(
-  void *argument
-)
+void *Task_1_through_3( void *argument )
 {
   (void) argument;
 
@@ -52,7 +50,7 @@ void *Task_1_through_3(
   int          i;
   int          status;
 
-  for ( i=0 ; i<5 ; i++ ) {
+  for ( i = 0; i < 5; i++ ) {
     print_current_time( "Task1: ", "" );
     status = pthread_kill( Init_id, SIGUSR1 );
     rtems_test_assert( !status );

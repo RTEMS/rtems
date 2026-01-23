@@ -36,9 +36,9 @@
 
 #include <complex.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   float complex number;
   float complex exponent;
@@ -46,6 +46,6 @@ int test(void)
 
   number = 1.0 + 1.0 * I;
   exponent = 1.0 + 1.0 * I;
-  result = cpowf(number, exponent);
-  return (result != 0);
+  result = cpowf( number, exponent );
+  return ( result != 0 );
 }

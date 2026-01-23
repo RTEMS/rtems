@@ -26,14 +26,13 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int af = 0;
+  int         af = 0;
   const char *src = "127.0.0.1";
-  int a = 1;
+  int         a = 1;
 
-  return inet_pton(af,src,&a);
-
+  return inet_pton( af, src, &a );
 }

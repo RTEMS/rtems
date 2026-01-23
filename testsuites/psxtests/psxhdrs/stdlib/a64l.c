@@ -40,8 +40,8 @@ int test( void );
 
 int test( void )
 {
-	long return_value;
+  long return_value;
 
-	return_value = a64l("/");
-	return (return_value == 1);
+  return_value = a64l( "/" );
+  return ( return_value == 1 );
 }

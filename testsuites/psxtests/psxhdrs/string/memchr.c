@@ -36,16 +36,16 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   void *s = "Example string";
-   int c = 2;
-   size_t n = 2;
-   void *result;
+int test( void )
+{
+  void  *s = "Example string";
+  int    c = 2;
+  size_t n = 2;
+  void  *result;
 
-   result = memchr( s, c, n );
+  result = memchr( s, c, n );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

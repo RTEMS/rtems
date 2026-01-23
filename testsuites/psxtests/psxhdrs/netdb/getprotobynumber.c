@@ -36,14 +36,14 @@
 
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct protoent *pnet;
-   int proto = 2;
+int test( void )
+{
+  struct protoent *pnet;
+  int              proto = 2;
 
-   pnet = getprotobynumber( proto );
+  pnet = getprotobynumber( proto );
 
-   return ( pnet != (void *)0 );
- }
+  return ( pnet != (void *) 0 );
+}

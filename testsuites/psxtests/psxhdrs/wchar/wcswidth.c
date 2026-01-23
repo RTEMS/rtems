@@ -38,13 +38,13 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const wchar_t wc = 0;
-  size_t si;
+  size_t        si;
 
   si = 0;
-  return wcswidth(&wc, si);
+  return wcswidth( &wc, si );
 }

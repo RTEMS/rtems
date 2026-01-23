@@ -37,15 +37,13 @@
 const char rtems_test_name[] = "PSXCONCURRENCY01";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int  sc;
+  int sc;
 
   TEST_BEGIN();
 
@@ -62,9 +60,8 @@ void *POSIX_Init(
   rtems_test_assert( sc == 2 );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
-
 
 /* configuration information */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
@@ -72,7 +69,7 @@ void *POSIX_Init(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS     1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

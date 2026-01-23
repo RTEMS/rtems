@@ -45,9 +45,9 @@ int test( void );
 
 int test( void )
 {
-  clockid_t        clock_id = 0;
-  struct timespec  res;
-  int              result;
+  clockid_t       clock_id = 0;
+  struct timespec res;
+  int             result;
 
   result = clock_getres( clock_id, &res );
 

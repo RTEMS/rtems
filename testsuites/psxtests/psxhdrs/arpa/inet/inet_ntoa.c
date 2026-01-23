@@ -26,11 +26,11 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   struct in_addr addr;
 
-  return inet_ntoa(addr) != 0;
+  return inet_ntoa( addr ) != 0;
 }

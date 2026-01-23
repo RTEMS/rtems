@@ -46,5 +46,5 @@ int test( void )
 
   pgrp = getpgrp();
 
-  return (pgrp == -1) ? -1 : 0;
+  return ( pgrp == -1 ) ? -1 : 0;
 }

@@ -41,7 +41,7 @@ int test( void );
 int test( void )
 {
   DIR *dir;
-  int result;
+  int  result;
 
   dir = opendir( "/" );
   result = closedir( dir );

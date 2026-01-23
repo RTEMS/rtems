@@ -41,12 +41,12 @@
  above and this comment when fixed 
 */
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   wint_t wi;
 
   wi = 0;
-  return iswlower(wi);
+  return iswlower( wi );
 }

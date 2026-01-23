@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 100 , result ;
+  long double x = 100, result;
 
-  result = sqrtl( x ) ;
+  result = sqrtl( x );
 
-  return (result);
+  return ( result );
 }
 #endif

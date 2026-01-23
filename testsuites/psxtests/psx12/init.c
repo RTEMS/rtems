@@ -65,9 +65,9 @@ static test_context test_instance;
 
 static int get_current_prio( pthread_t thread )
 {
-  rtems_status_code sc;
+  rtems_status_code   sc;
   rtems_task_priority prio;
-  int max;
+  int                 max;
 
   sc = rtems_task_set_priority( thread, RTEMS_CURRENT_PRIORITY, &prio );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
@@ -121,7 +121,7 @@ static void *sporadic_server( void *argument )
 
   ctx = argument;
 
-  for ( i = 0 ; i < SS_SAMPLE_PERIODS ; ++i ) {
+  for ( i = 0; i < SS_SAMPLE_PERIODS; ++i ) {
     wait_for_prio( SS_PRIO_LOW );
     ctx->samples[ i ].high = delta_in_ms( ctx );
     wait_for_prio( SS_PRIO_HIGH );
@@ -137,12 +137,12 @@ static void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  test_context       *ctx;
-  int                 status;
-  pthread_attr_t      attr;
-  pthread_t           thread;
-  struct sched_param  schedparam;
-  size_t              i;
+  test_context      *ctx;
+  int                status;
+  pthread_attr_t     attr;
+  pthread_t          thread;
+  struct sched_param schedparam;
+  size_t             i;
 
   TEST_BEGIN();
 
@@ -243,7 +243,7 @@ static void *POSIX_Init( void *argument )
   status = pthread_join( thread, NULL );
   rtems_test_assert( !status );
 
-  for ( i = 0 ; i < SS_SAMPLE_PERIODS ; ++i ) {
+  for ( i = 0; i < SS_SAMPLE_PERIODS; ++i ) {
     printf( "[%zu] H %3" PRIu32 "ms\n", i, ctx->samples[ i ].high );
     printf( "[%zu] L %3" PRIu32 "ms\n", i, ctx->samples[ i ].low );
     rtems_test_assert( ctx->samples[ i ].low / SS_REPL_PERIOD_MS == i + 1 );

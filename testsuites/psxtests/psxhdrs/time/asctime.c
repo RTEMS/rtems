@@ -41,10 +41,10 @@ int test( void );
 
 int test( void )
 {
-  char      *buffer;
-  struct tm  timestruct = { 0 };
+  char     *buffer;
+  struct tm timestruct = { 0 };
 
   buffer = asctime( &timestruct );
 
-  return (buffer != NULL);
+  return ( buffer != NULL );
 }

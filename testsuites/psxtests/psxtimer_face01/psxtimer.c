@@ -39,20 +39,18 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sched.h>
-#include <time.h>     /* time facilities */
-#include <stdio.h>    /* console facilities */
+#include <time.h>  /* time facilities */
+#include <stdio.h> /* console facilities */
 
 const char rtems_test_name[] = "PSXTIMER FACE 1";
 
-static void *POSIX_Init (
-  void *argument
-)
+static void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  struct sigevent   event;
-  int               status;
-  timer_t           timer;
+  struct sigevent event;
+  int             status;
+  timer_t         timer;
 
   /*
    *  If these are not filled in correctly, we do not execute pass the
@@ -91,7 +89,7 @@ static void *POSIX_Init (
    * Delete the previously created timer.
    */
   puts( "timer_delete - OK" );
-  status = timer_delete(  timer );
+  status = timer_delete( timer );
   posix_service_failed( status, "timer_delete ok" );
 
   /*
@@ -101,7 +99,7 @@ static void *POSIX_Init (
   posix_service_failed( status, "timer_create ok" );
 
   TEST_END();
-  rtems_test_exit (0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -113,8 +111,8 @@ static void *POSIX_Init (
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS             1
-#define CONFIGURE_MAXIMUM_POSIX_TIMERS              1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
+#define CONFIGURE_MAXIMUM_POSIX_TIMERS  1
 
 #define CONFIGURE_POSIX_TIMERS_FACE_BEHAVIOR
 

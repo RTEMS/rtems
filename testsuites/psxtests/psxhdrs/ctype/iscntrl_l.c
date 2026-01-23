@@ -36,13 +36,13 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int cntrl;
+  int      cntrl;
   locale_t locale;
 
   cntrl = 0;
-  return (iscntrl_l(cntrl, locale));
+  return ( iscntrl_l( cntrl, locale ) );
 }

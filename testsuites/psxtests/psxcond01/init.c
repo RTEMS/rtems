@@ -37,16 +37,14 @@
 const char rtems_test_name[] = "PSXCOND 1";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *BlockingThread(void *argument);
+void *POSIX_Init( void *argument );
+void *BlockingThread( void *argument );
 
 pthread_cond_t  Condition;
 pthread_mutex_t Mutex1;
 pthread_mutex_t Mutex2;
 
-void *BlockingThread(
-  void *argument
-)
+void *BlockingThread( void *argument )
 {
   (void) argument;
 
@@ -58,14 +56,14 @@ void *BlockingThread(
 
   sc = pthread_mutex_lock( &Mutex1 );
   fatal_posix_service_status( sc, 0, "mutex1 lock" );
-  
+
   puts( "BlockingThread - pthread_cond_wait on Mutex1 - OK" );
   sc = pthread_cond_wait( &Condition, &Mutex1 );
 
   printf(
     "ERROR - BlockingThread returned from pthread_cond_wait! (rc=%d/%s)\n",
     sc,
-    strerror(sc)
+    strerror( sc )
   );
   rtems_test_exit( 0 );
 
@@ -107,14 +105,12 @@ static void test_cond_auto_initialization( void )
   }
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int        sc;
-  pthread_t  Thread;
+  int       sc;
+  pthread_t Thread;
 
   TEST_BEGIN();
 
@@ -137,7 +133,7 @@ void *POSIX_Init(
   fatal_posix_service_status( sc, 0, "Thread create ok" );
 
   puts( "Init - sleep to let BlockingThread run" );
-  sleep(1);
+  sleep( 1 );
 
   puts( "Init - pthread_cond_wait on Mutex2 - EINVAL" );
   sc = pthread_cond_wait( &Condition, &Mutex2 );

@@ -39,9 +39,9 @@
 const char rtems_test_name[] = "PSXKEY 2";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument ignored);
+rtems_task Init( rtems_task_argument ignored );
 
-rtems_task Init(rtems_task_argument ignored)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -95,7 +95,7 @@ rtems_task Init(rtems_task_argument ignored)
   rtems_workspace_greedy_free( greedy );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -105,8 +105,8 @@ rtems_task Init(rtems_task_argument ignored)
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS          1
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     1
+#define CONFIGURE_MAXIMUM_TASKS      1
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

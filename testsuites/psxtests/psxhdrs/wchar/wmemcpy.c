@@ -36,16 +36,16 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  wchar_t *wc;
+  wchar_t       *wc;
   const wchar_t *wc1;
-  size_t si;
+  size_t         si;
 
   wc = 0;
   wc1 = 0;
   si = 0;
-  return *wmemcpy(wc, wc1, si);
+  return *wmemcpy( wc, wc1, si );
 }

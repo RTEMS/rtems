@@ -40,5 +40,5 @@ int test( void );
 
 int test( void )
 {
-	abort();
+  abort();
 }

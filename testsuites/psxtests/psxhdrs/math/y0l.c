@@ -42,9 +42,9 @@ int test( void );
 
 int test( void )
 {
-  long double x=45 , result;
+  long double x = 45, result;
 
-  result = y0l(x);
+  result = y0l( x );
 
-  return (result);
+  return ( result );
 }

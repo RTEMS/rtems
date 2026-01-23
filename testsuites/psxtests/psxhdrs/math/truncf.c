@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 56.7 , result ;
+  float x = 56.7, result;
 
-  result = truncf(x) ;
+  result = truncf( x );
 
-  return (result);
+  return ( result );
 }

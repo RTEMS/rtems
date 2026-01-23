@@ -40,7 +40,7 @@
 
 int test( void );
 
-static int fn(const char* str, const struct stat *ptr, int flag)
+static int fn( const char *str, const struct stat *ptr, int flag )
 {
   return 1;
 }
@@ -48,8 +48,8 @@ static int fn(const char* str, const struct stat *ptr, int flag)
 int main( void )
 {
   char *path = ".";
-  int return_value;
+  int   return_value;
 
-  return_value = ftw(path, fn, 1);
-  return (return_value != -1);
+  return_value = ftw( path, fn, 1 );
+  return ( return_value != -1 );
 }

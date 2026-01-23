@@ -49,21 +49,16 @@
 #include <pmacros.h>
 
 /* forward declarations to avoid warnings */
-void test_write(char *file, off_t offset, char *buffer);
+void test_write( char *file, off_t offset, char *buffer );
 
 /*
  *  test_write routine
  */
-void test_write(
-  char   *file,
-  off_t  offset,
-  char  *buffer
-)
+void test_write( char *file, off_t offset, char *buffer )
 {
-  int   fd;
-  int   status;
-  int   length;
-
+  int fd;
+  int status;
+  int length;
 
   length = strlen( buffer );
 
@@ -83,8 +78,12 @@ void test_write(
   }
 
   if ( status != length ) {
-    printf( "test_write: write( %s ) only wrote %d of %d bytes\n",
-            file, status, length );
+    printf(
+      "test_write: write( %s ) only wrote %d of %d bytes\n",
+      file,
+      status,
+      length
+    );
     rtems_test_exit( 0 );
   }
 

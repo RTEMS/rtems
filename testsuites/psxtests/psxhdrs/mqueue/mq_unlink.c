@@ -41,7 +41,7 @@ int test( void );
 int test( void )
 {
   const char *q_name;
-  int result;
+  int         result;
 
   q_name = "queue";
   result = mq_unlink( q_name );

@@ -34,22 +34,13 @@
 #include <errno.h>
 #include <sched.h>
 
-void *POSIX_Init (
-  void *arg
-);
+void *POSIX_Init( void *arg );
 
-void *task_a(
-  void *arg
-);
+void *task_a( void *arg );
 
-void *task_b(
-  void *arg
-);
+void *task_b( void *arg );
 
-void *task_c(
-  void *arg
-);
-
+void *task_c( void *arg );
 
 /* configuration information */
 
@@ -60,9 +51,8 @@ void *task_c(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS             4
-#define CONFIGURE_MAXIMUM_TIMERS                    4
-
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 4
+#define CONFIGURE_MAXIMUM_TIMERS        4
 
 #include <rtems/confdefs.h>
 
@@ -74,8 +64,8 @@ void *task_c(
 #define TEST_EXTERN extern
 #endif
 
-TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task_id;
+TEST_EXTERN pthread_t Init_id;
+TEST_EXTERN pthread_t Task_id;
 
 #undef TEST_EXTERN
 /* end of include file */

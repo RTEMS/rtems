@@ -44,6 +44,5 @@ int test( void )
 
   errstr = dlerror();
 
-  return (errstr != NULL);
-
+  return ( errstr != NULL );
 }

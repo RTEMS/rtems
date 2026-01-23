@@ -36,13 +36,13 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int alnum;
+  int      alnum;
   locale_t locale;
 
   alnum = 0;
-  return (isalnum_l(alnum, locale));
+  return ( isalnum_l( alnum, locale ) );
 }

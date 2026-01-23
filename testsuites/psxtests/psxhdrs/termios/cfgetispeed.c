@@ -41,9 +41,9 @@ int test( void );
 int test( void )
 {
   struct termios term = { 0 };
-  speed_t rate;
+  speed_t        rate;
 
-  rate = cfgetispeed(&term);
+  rate = cfgetispeed( &term );
 
   (void) rate;
   return 0;

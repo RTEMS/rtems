@@ -36,13 +36,13 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int lower;
+  int      lower;
   locale_t locale;
 
   lower = 0;
-  return (islower_l(lower, locale));
+  return ( islower_l( lower, locale ) );
 }

@@ -39,11 +39,9 @@ const char rtems_test_name[] = "PSX 3";
 
 volatile int Signal_occurred;
 volatile int Signal_count;
-void Signal_handler( int signo );
+void         Signal_handler( int signo );
 
-void Signal_handler(
-  int signo
-)
+void Signal_handler( int signo )
 {
   Signal_count++;
   printf(
@@ -55,19 +53,17 @@ void Signal_handler(
   Signal_occurred = 1;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int               status;
-  struct timespec   timeout;
-  struct sigaction  act;
-  sigset_t          mask;
-  sigset_t          waitset;
-  int               signo;
-  siginfo_t         siginfo;
+  int              status;
+  struct timespec  timeout;
+  struct sigaction act;
+  sigset_t         mask;
+  sigset_t         waitset;
+  int              signo;
+  siginfo_t        siginfo;
 
   TEST_BEGIN();
 
@@ -86,7 +82,7 @@ void *POSIX_Init(
   rtems_test_assert( !status );
 
   act.sa_handler = Signal_handler;
-  act.sa_flags   = 0;
+  act.sa_flags = 0;
 
   sigaction( SIGUSR1, &act, NULL );
 
@@ -114,10 +110,11 @@ void *POSIX_Init(
   signo = sigtimedwait( &waitset, &siginfo, &timeout );
   rtems_test_assert( signo == -1 );
 
-  if ( errno == EAGAIN )
+  if ( errno == EAGAIN ) {
     puts( "Init: correctly timed out waiting for SIGUSR1." );
-  else
+  } else {
     printf( "sigtimedwait returned wrong errno - %d\n", errno );
+  }
 
   Signal_occurred = 0;
 
@@ -152,12 +149,13 @@ void *POSIX_Init(
   puts( "Init: waiting on any signal for 3 seconds." );
   signo = sigtimedwait( &waitset, &siginfo, &timeout );
 
-     /* switch to Task 1 */
+  /* switch to Task 1 */
 
-  if ( errno == EAGAIN )
+  if ( errno == EAGAIN ) {
     puts( "Init: correctly timed out waiting for SIGUSR1." );
-  else
+  } else {
     printf( "sigtimedwait returned wrong errno - %d\n", errno );
+  }
   rtems_test_assert( signo == -1 );
 
   /*
@@ -190,7 +188,9 @@ void *POSIX_Init(
   rtems_test_assert( signo == SIGUSR1 );
   rtems_test_assert( siginfo.si_signo == SIGUSR1 );
   rtems_test_assert( siginfo.si_code == SI_USER );
-  rtems_test_assert( siginfo.si_value.sival_int != -1 );   /* rtems does always set this */
+  rtems_test_assert(
+    siginfo.si_value.sival_int != -1
+  ); /* rtems does always set this */
 
   /* try out a process signal */
 
@@ -218,7 +218,9 @@ void *POSIX_Init(
   rtems_test_assert( signo == SIGUSR2 );
   rtems_test_assert( siginfo.si_signo == SIGUSR2 );
   rtems_test_assert( siginfo.si_code == SI_USER );
-  rtems_test_assert( siginfo.si_value.sival_int != -1 );   /* rtems does always set this */
+  rtems_test_assert(
+    siginfo.si_value.sival_int != -1
+  ); /* rtems does always set this */
 
   /* exit this thread */
 

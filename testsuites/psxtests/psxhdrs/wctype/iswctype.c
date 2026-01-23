@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  int return_value;
-  wctype_t charclass = wctype("alnum");
+  int      return_value;
+  wctype_t charclass = wctype( "alnum" );
 
-  return_value = iswctype('c', charclass);
-  return (return_value != 0);
+  return_value = iswctype( 'c', charclass );
+  return ( return_value != 0 );
 }

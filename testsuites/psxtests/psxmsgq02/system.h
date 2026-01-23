@@ -38,9 +38,7 @@
 #include <sched.h>
 #include <tmacros.h>
 
-void *POSIX_Init(
-  void *argument
-);
+void *POSIX_Init( void *argument );
 
 /* configuration information */
 
@@ -51,21 +49,21 @@ void *POSIX_Init(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS         5
+#define CONFIGURE_MAXIMUM_POSIX_THREADS        5
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 10
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
-        (RTEMS_MINIMUM_STACK_SIZE * 10)
+  ( RTEMS_MINIMUM_STACK_SIZE * 10 )
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task_id;
+TEST_EXTERN pthread_t Init_id;
+TEST_EXTERN pthread_t Task_id;
 
-#define MSGSIZE   9
-#define MAXMSG    4
+#define MSGSIZE 9
+#define MAXMSG  4
 
 /* end of include file */

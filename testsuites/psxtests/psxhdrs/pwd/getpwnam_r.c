@@ -45,9 +45,9 @@ int test( void )
 {
   struct passwd *pswd;
   struct passwd *resl;
-  char *buf;
-  size_t bufsize;
-  int result;
+  char          *buf;
+  size_t         bufsize;
+  int            result;
 
   bufsize = sysconf( _SC_GETPW_R_SIZE_MAX );
   buf = malloc( bufsize );

@@ -41,10 +41,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 100 , result ;
-  int exp = 2 ;
+  double x = 100, result;
+  int    exp = 2;
 
-  result = scalbn( x , exp ) ;
+  result = scalbn( x, exp );
 
-  return (result);
+  return ( result );
 }

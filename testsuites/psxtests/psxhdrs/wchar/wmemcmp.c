@@ -36,14 +36,14 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const wchar_t wc = 0;
   const wchar_t wc1 = 0;
-  size_t si;
+  size_t        si;
 
   si = 0;
-  return wmemcmp(&wc, &wc1, si);
+  return wmemcmp( &wc, &wc1, si );
 }

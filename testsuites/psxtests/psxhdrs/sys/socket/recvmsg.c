@@ -39,14 +39,13 @@
 
 #include <sys/socket.h>
 
-ssize_t test(void);
+ssize_t test( void );
 
-ssize_t test(void)
+ssize_t test( void )
 {
   int           sockfd = 4;
   struct msghdr msg;
   int           flags = 7;
 
-
-  return recvmsg(sockfd, &msg, flags);
+  return recvmsg( sockfd, &msg, flags );
 }

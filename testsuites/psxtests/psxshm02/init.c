@@ -46,35 +46,33 @@
 const char rtems_test_name[] = "PSX SHM02";
 
 #define MAX_LEN 10000
-struct region {        /* Defines "structure" of shared memory */
-  int len;
-  char buf[MAX_LEN];
+struct region { /* Defines "structure" of shared memory */
+  int  len;
+  char buf[ MAX_LEN ];
 };
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
   struct region *p;
-  int fd;
-  int err;
-  char *name = "/shm";
+  int            fd;
+  int            err;
+  char          *name = "/shm";
 
   TEST_BEGIN();
 
   puts( "Init: shm_open" );
   fd = shm_open( name, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR );
   if ( fd == -1 ) {
-    printf ( "Error: %s\n", strerror(errno) );
+    printf( "Error: %s\n", strerror( errno ) );
     rtems_test_assert( fd != -1 );
   }
 
   puts( "Init: ftruncate" );
   err = ftruncate( fd, sizeof( struct region ) );
   if ( err == -1 ) {
-    printf ( "Error: %s\n", strerror(errno) );
+    printf( "Error: %s\n", strerror( errno ) );
     rtems_test_assert( err != -1 );
   }
 
@@ -82,19 +80,20 @@ void *POSIX_Init(
   p = mmap(
     NULL,
     sizeof( struct region ),
-    PROT_READ | PROT_WRITE, MAP_SHARED,
+    PROT_READ | PROT_WRITE,
+    MAP_SHARED,
     fd,
     0
   );
 
-  if( p != MAP_FAILED ) {
+  if ( p != MAP_FAILED ) {
     puts( "Init: write to mapped region" );
     p->len = MAX_LEN;
 
     puts( "Init: munmap" );
     err = munmap( p, sizeof( struct region ) );
     if ( err == -1 ) {
-      printf ( "Error: %s\n", strerror(errno) );
+      printf( "Error: %s\n", strerror( errno ) );
       rtems_test_assert( err != -1 );
     }
   } else {
@@ -104,12 +103,12 @@ void *POSIX_Init(
   puts( "Init: close" );
   err = close( fd );
   if ( err == -1 ) {
-    printf ( "Error: %s\n", strerror(errno) );
+    printf( "Error: %s\n", strerror( errno ) );
     rtems_test_assert( err != -1 );
   }
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
   return 0;
 }

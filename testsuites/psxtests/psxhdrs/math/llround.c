@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x = 34.3456 ;
-  long long int result ;
+  double        x = 34.3456;
+  long long int result;
 
-  result = llround(x) ;
+  result = llround( x );
 
-  return (result);
+  return ( result );
 }

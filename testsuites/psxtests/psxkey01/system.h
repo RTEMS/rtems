@@ -44,8 +44,8 @@
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS          1
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     1
+#define CONFIGURE_MAXIMUM_TASKS      1
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -59,9 +59,9 @@
 #define TEST_EXTERN extern
 #endif
 
-TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_key_t    Key_id[ CONFIGURE_MAXIMUM_POSIX_KEYS ];
-TEST_EXTERN uint32_t         Data_array[ CONFIGURE_MAXIMUM_TASKS ];
+TEST_EXTERN pthread_t     Init_id;
+TEST_EXTERN pthread_key_t Key_id[ CONFIGURE_MAXIMUM_POSIX_KEYS ];
+TEST_EXTERN uint32_t      Data_array[ CONFIGURE_MAXIMUM_TASKS ];
 
 #undef TEST_EXTERN
 /* end of include file */

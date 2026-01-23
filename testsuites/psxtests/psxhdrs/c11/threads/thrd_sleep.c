@@ -43,7 +43,7 @@ int test( void )
 {
   struct timespec duration;
   struct timespec remaining;
-  int result;
+  int             result;
 
   duration.tv_nsec = 0;
   remaining.tv_nsec = 1;

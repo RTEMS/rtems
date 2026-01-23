@@ -37,23 +37,21 @@
 const char rtems_test_name[] = "PSXAUTOINIT 2";
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int            sc;
-  pthread_cond_t cond1 = PTHREAD_COND_INITIALIZER;
-  pthread_cond_t cond2 = PTHREAD_COND_INITIALIZER;
-  pthread_cond_t cond3 = PTHREAD_COND_INITIALIZER;
-  pthread_cond_t cond4 = PTHREAD_COND_INITIALIZER;
-  pthread_cond_t cond5 = PTHREAD_COND_INITIALIZER;
+  int             sc;
+  pthread_cond_t  cond1 = PTHREAD_COND_INITIALIZER;
+  pthread_cond_t  cond2 = PTHREAD_COND_INITIALIZER;
+  pthread_cond_t  cond3 = PTHREAD_COND_INITIALIZER;
+  pthread_cond_t  cond4 = PTHREAD_COND_INITIALIZER;
+  pthread_cond_t  cond5 = PTHREAD_COND_INITIALIZER;
   pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
   struct timespec to;
-  clockid_t clock_id;
+  clockid_t       clock_id;
 
   TEST_BEGIN();
 

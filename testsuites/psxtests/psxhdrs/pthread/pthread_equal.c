@@ -42,9 +42,9 @@ int test( void );
 
 int test( void )
 {
-  pthread_t  id_1 = 0;
-  pthread_t  id_2 = 0;
-  int        result;
+  pthread_t id_1 = 0;
+  pthread_t id_2 = 0;
+  int       result;
 
   result = pthread_equal( id_1, id_2 );
 

@@ -41,12 +41,12 @@ int test( void );
 
 int test( void )
 {
-  char *firstday;
-  locale_t loc = newlocale(LC_ALL_MASK, "C", (locale_t) 0);
-  setlocale(LC_ALL, "en_GB");
+  char    *firstday;
+  locale_t loc = newlocale( LC_ALL_MASK, "C", (locale_t) 0 );
+  setlocale( LC_ALL, "en_GB" );
 
-  firstday = nl_langinfo_l(ABDAY_1, loc);
+  firstday = nl_langinfo_l( ABDAY_1, loc );
 
-  freelocale(loc);
-  return (firstday != NULL);
+  freelocale( loc );
+  return ( firstday != NULL );
 }

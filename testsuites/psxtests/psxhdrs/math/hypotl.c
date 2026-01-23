@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 3 , y = 4 , result ;
+  long double x = 3, y = 4, result;
 
-  result = hypotl(x,y) ;
+  result = hypotl( x, y );
 
-  return (result);
+  return ( result );
 }
 #endif

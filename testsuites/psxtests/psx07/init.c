@@ -41,48 +41,49 @@
 
 const char rtems_test_name[] = "PSX 7";
 
-void print_schedparam(
-  char               *prefix,
-  struct sched_param *schedparam
-);
+void print_schedparam( char *prefix, struct sched_param *schedparam );
 
-void print_schedparam(
-  char               *prefix,
-  struct sched_param *schedparam
-)
+void print_schedparam( char *prefix, struct sched_param *schedparam )
 {
   printf( "%ssched priority      = %d\n", prefix, schedparam->sched_priority );
-#if defined(_POSIX_SPORADIC_SERVER)
-  printf( "%ssched_ss_low_priority     = %d\n",
-     prefix, schedparam->sched_ss_low_priority );
-  printf( "%ssched_ss_replenish_period = (%" PRIdtime_t ", %ld)\n", prefix,
-     schedparam->sched_ss_repl_period.tv_sec,
-     schedparam->sched_ss_repl_period.tv_nsec );
-  printf( "%ssched_sched_ss_initial_budget = (%" PRIdtime_t ", %ld)\n", prefix,
-     schedparam->sched_ss_init_budget.tv_sec,
-     schedparam->sched_ss_init_budget.tv_nsec );
+#if defined( _POSIX_SPORADIC_SERVER )
+  printf(
+    "%ssched_ss_low_priority     = %d\n",
+    prefix,
+    schedparam->sched_ss_low_priority
+  );
+  printf(
+    "%ssched_ss_replenish_period = (%" PRIdtime_t ", %ld)\n",
+    prefix,
+    schedparam->sched_ss_repl_period.tv_sec,
+    schedparam->sched_ss_repl_period.tv_nsec
+  );
+  printf(
+    "%ssched_sched_ss_initial_budget = (%" PRIdtime_t ", %ld)\n",
+    prefix,
+    schedparam->sched_ss_init_budget.tv_sec,
+    schedparam->sched_ss_init_budget.tv_nsec
+  );
 #else
   printf( "%s_POSIX_SPORADIC_SERVER is not defined\n", prefix );
 #endif
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
-  int                 status;
-  int                 scope;
-  int                 inheritsched;
-  int                 schedpolicy;
-  size_t              stacksize;
-  size_t              guardsize;
-  void               *stackaddr;
-  int                 detachstate;
-  struct sched_param  schedparam;
-  pthread_attr_t      attr;
-  pthread_attr_t      destroyed_attr;
+  int                status;
+  int                scope;
+  int                inheritsched;
+  int                schedpolicy;
+  size_t             stacksize;
+  size_t             guardsize;
+  void              *stackaddr;
+  int                detachstate;
+  struct sched_param schedparam;
+  pthread_attr_t     attr;
+  pthread_attr_t     destroyed_attr;
 
   TEST_BEGIN();
 
@@ -107,10 +108,10 @@ void *POSIX_Init(
 
   puts( "Init - initialize and destroy an attribute - SUCCESSFUL" );
   status = pthread_attr_init( &destroyed_attr );
-  posix_service_failed( status, "pthread_attr_init");
+  posix_service_failed( status, "pthread_attr_init" );
 
   status = pthread_attr_destroy( &destroyed_attr );
-  posix_service_failed( status, "pthread_attr_destroy");
+  posix_service_failed( status, "pthread_attr_destroy" );
 
   puts( "Init - pthread_attr_destroy - EINVAL (NULL attr)" );
   status = pthread_attr_destroy( NULL );
@@ -124,11 +125,15 @@ void *POSIX_Init(
 
   puts( "Init - pthread_create - EINVAL (attr not initialized)" );
   status = pthread_create( &Task_id, &destroyed_attr, Task_1, NULL );
-  fatal_directive_check_status_only( status, EINVAL, "attribute not initialized" );
+  fatal_directive_check_status_only(
+    status,
+    EINVAL,
+    "attribute not initialized"
+  );
 
   /* junk stack address */
-  status = pthread_attr_setstackaddr( &attr, (void *)&schedparam );
-  posix_service_failed( status, "setstackaddr");
+  status = pthread_attr_setstackaddr( &attr, (void *) &schedparam );
+  posix_service_failed( status, "setstackaddr" );
 
   /* must go around pthread_attr_setstacksize to set a bad stack size */
   attr.stacksize = 0;
@@ -139,7 +144,7 @@ void *POSIX_Init(
 
   /* reset all the fields */
   status = pthread_attr_init( &attr );
-  posix_service_failed( status, "pthread_attr_init");
+  posix_service_failed( status, "pthread_attr_init" );
 
   attr.stacksize = rtems_configuration_get_work_space_size() * 10;
   puts( "Init - pthread_create - EAGAIN (stacksize too large)" );
@@ -147,55 +152,64 @@ void *POSIX_Init(
   fatal_directive_check_status_only( status, EAGAIN, "stacksize too large" );
 
   status = pthread_attr_init( &attr );
-  posix_service_failed( status, "pthread_attr_init");
+  posix_service_failed( status, "pthread_attr_init" );
 
   /* must go around pthread_attr_set routines to set a bad value */
   attr.inheritsched = -1;
 
   puts( "Init - pthread_create - EINVAL (invalid inherit scheduler)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  fatal_directive_check_status_only( status, EINVAL, "invalid inherit scheduler" );
+  fatal_directive_check_status_only(
+    status,
+    EINVAL,
+    "invalid inherit scheduler"
+  );
 
   /* check out the error case for system scope not supported */
 
   status = pthread_attr_init( &attr );
-  posix_service_failed( status, " pthread_attr_init");
+  posix_service_failed( status, " pthread_attr_init" );
 
   /* must go around pthread_attr_set routines to set a bad value */
   attr.contentionscope = PTHREAD_SCOPE_SYSTEM;
 
-  puts( "Init - pthread_create - ENOTSUP (unsupported system contention scope)" );
+  puts(
+    "Init - pthread_create - ENOTSUP (unsupported system contention scope)"
+  );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  fatal_directive_check_status_only( status, ENOTSUP,
-    "unsupported system contention scope" );
+  fatal_directive_check_status_only(
+    status,
+    ENOTSUP,
+    "unsupported system contention scope"
+  );
 
   status = pthread_attr_init( &attr );
-  posix_service_failed( status, "pthread_attr_init");
+  posix_service_failed( status, "pthread_attr_init" );
 
   /* now check out pthread_create for inherit scheduler */
 
   status = pthread_attr_setinheritsched( &attr, PTHREAD_INHERIT_SCHED );
-  posix_service_failed( status, "pthread_attr_setinheritsched");
+  posix_service_failed( status, "pthread_attr_setinheritsched" );
 
   puts( "Init - pthread_create - SUCCESSFUL (inherit scheduler)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  posix_service_failed( status, "pthread_create");
+  posix_service_failed( status, "pthread_create" );
 
   status = pthread_join( Task_id, NULL );
-  posix_service_failed( status, " pthread_join");
+  posix_service_failed( status, " pthread_join" );
 
-    /* switch to Task_1 */
+  /* switch to Task_1 */
 
   /* exercise get and set scope */
 
   empty_line();
 
   status = pthread_attr_init( &attr );
-  posix_service_failed( status, "pthread_attr_init");
+  posix_service_failed( status, "pthread_attr_init" );
 
   puts( "Init - pthread_attr_setscope - EINVAL (NULL attr)" );
   status = pthread_attr_setscope( NULL, PTHREAD_SCOPE_PROCESS );
-  fatal_directive_check_status_only( status, EINVAL , "NULL attr" );
+  fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
 
   puts( "Init - pthread_attr_setscope - ENOTSUP" );
   status = pthread_attr_setscope( &attr, PTHREAD_SCOPE_SYSTEM );
@@ -211,7 +225,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_setscope - SUCCESSFUL" );
   status = pthread_attr_setscope( &attr, PTHREAD_SCOPE_PROCESS );
-  posix_service_failed( status, "pthread_attr_setscope");
+  posix_service_failed( status, "pthread_attr_setscope" );
 
   puts( "Init - pthread_attr_getscope - EINVAL (NULL attr)" );
   status = pthread_attr_getscope( NULL, &scope );
@@ -227,7 +241,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_getscope - SUCCESSFUL" );
   status = pthread_attr_getscope( &attr, &scope );
-  posix_service_failed( status, "pthread_attr_getscope");
+  posix_service_failed( status, "pthread_attr_getscope" );
   printf( "Init - current scope attribute = %d\n", scope );
 
   /* exercise get and set inherit scheduler */
@@ -238,18 +252,24 @@ void *POSIX_Init(
   status = pthread_attr_setinheritsched( NULL, PTHREAD_INHERIT_SCHED );
   fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
 
-  puts( "Init - pthread_attr_setinheritsched - EINVAL (not initialized attr)" );
-  status =
-     pthread_attr_setinheritsched( &destroyed_attr, PTHREAD_INHERIT_SCHED );
+  puts(
+    "Init - pthread_attr_setinheritsched - EINVAL (not initialized attr)"
+  );
+  status = pthread_attr_setinheritsched(
+    &destroyed_attr,
+    PTHREAD_INHERIT_SCHED
+  );
   fatal_directive_check_status_only( status, EINVAL, "not initialized attr" );
 
-  puts( "Init - pthread_attr_setinheritsched - ENOTSUP (invalid inheritsched)" );
+  puts(
+    "Init - pthread_attr_setinheritsched - ENOTSUP (invalid inheritsched)"
+  );
   status = pthread_attr_setinheritsched( &attr, -1 );
   fatal_directive_check_status_only( status, ENOTSUP, "invalid inheritsched" );
 
   puts( "Init - pthread_attr_setinheritsched - SUCCESSFUL" );
   status = pthread_attr_setinheritsched( &attr, PTHREAD_INHERIT_SCHED );
-  posix_service_failed( status, "pthread_attr_setinheritsched");
+  posix_service_failed( status, "pthread_attr_setinheritsched" );
 
   puts( "Init - pthread_attr_getinheritsched - EINVAL (NULL attr)" );
   status = pthread_attr_getinheritsched( NULL, &inheritsched );
@@ -259,13 +279,15 @@ void *POSIX_Init(
   status = pthread_attr_getinheritsched( &attr, NULL );
   fatal_directive_check_status_only( status, EINVAL, "NULL inheritsched" );
 
-  puts( "Init - pthread_attr_getinheritsched - EINVAL (not initialized attr)" );
+  puts(
+    "Init - pthread_attr_getinheritsched - EINVAL (not initialized attr)"
+  );
   status = pthread_attr_getinheritsched( &destroyed_attr, &inheritsched );
   fatal_directive_check_status_only( status, EINVAL, "not initialized attr" );
 
   puts( "Init - pthread_attr_getinheritsched - SUCCESSFUL" );
   status = pthread_attr_getinheritsched( &attr, &inheritsched );
-  posix_service_failed( status, "pthread_attr_getinheritsched");
+  posix_service_failed( status, "pthread_attr_getinheritsched" );
   printf( "Init - current inherit scheduler attribute = %d\n", inheritsched );
 
   /* exercise get and set inherit scheduler */
@@ -277,8 +299,7 @@ void *POSIX_Init(
   fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
 
   puts( "Init - pthread_attr_setschedpolicy - EINVAL (not initialized attr)" );
-  status =
-     pthread_attr_setschedpolicy( &destroyed_attr, SCHED_OTHER );
+  status = pthread_attr_setschedpolicy( &destroyed_attr, SCHED_OTHER );
   fatal_directive_check_status_only( status, EINVAL, "not initialized attr" );
 
   puts( "Init - pthread_attr_setschedpolicy - ENOTSUP (invalid schedpolicy)" );
@@ -287,7 +308,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_setschedpolicy - SUCCESSFUL" );
   status = pthread_attr_setschedpolicy( &attr, SCHED_RR );
-  posix_service_failed( status, "pthread_attr_setschedpolicy");
+  posix_service_failed( status, "pthread_attr_setschedpolicy" );
 
   puts( "Init - pthread_attr_getschedpolicy - EINVAL (NULL attr)" );
   status = pthread_attr_getschedpolicy( NULL, &schedpolicy );
@@ -303,7 +324,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_getschedpolicy - SUCCESSFUL" );
   status = pthread_attr_getschedpolicy( &attr, &schedpolicy );
-  posix_service_failed( status, "pthread_attr_getschedpolicy");
+  posix_service_failed( status, "pthread_attr_getschedpolicy" );
   printf( "Init - current scheduler policy attribute = %d\n", schedpolicy );
 
   /* exercise get and set stack size */
@@ -315,17 +336,16 @@ void *POSIX_Init(
   fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
 
   puts( "Init - pthread_attr_setstacksize - EINVAL (not initialized attr)" );
-  status =
-     pthread_attr_setstacksize( &destroyed_attr, 0 );
+  status = pthread_attr_setstacksize( &destroyed_attr, 0 );
   fatal_directive_check_status_only( status, EINVAL, "not initialized attr" );
 
   puts( "Init - pthread_attr_setstacksize - SUCCESSFUL (low stacksize)" );
   status = pthread_attr_setstacksize( &attr, 0 );
-  posix_service_failed( status, "pthread_attr_setstacksize");
+  posix_service_failed( status, "pthread_attr_setstacksize" );
 
   puts( "Init - pthread_attr_setstacksize - SUCCESSFUL (high stacksize)" );
   status = pthread_attr_setstacksize( &attr, STACK_MINIMUM_SIZE * 2 );
-  posix_service_failed( status, "");
+  posix_service_failed( status, "" );
 
   puts( "Init - pthread_attr_getstacksize - EINVAL (NULL attr)" );
   status = pthread_attr_getstacksize( NULL, &stacksize );
@@ -341,9 +361,10 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_getstacksize - SUCCESSFUL" );
   status = pthread_attr_getstacksize( &attr, &stacksize );
-  posix_service_failed( status, "pthread_attr_getstacksize");
-  if ( stacksize == (STACK_MINIMUM_SIZE * 2) )
+  posix_service_failed( status, "pthread_attr_getstacksize" );
+  if ( stacksize == ( STACK_MINIMUM_SIZE * 2 ) ) {
     printf( "Init - current stack size attribute is OK\n" );
+  }
 
   /* exercise get and set stack address */
   empty_line();
@@ -358,7 +379,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_setstackaddr - SUCCESSFUL" );
   status = pthread_attr_setstackaddr( &attr, 0 );
-  posix_service_failed( status, "");
+  posix_service_failed( status, "" );
 
   /* get stack addr */
   puts( "Init - pthread_attr_getstackaddr - EINVAL (NULL attr)" );
@@ -375,7 +396,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_getstackaddr - SUCCESSFUL" );
   status = pthread_attr_getstackaddr( &attr, &stackaddr );
-  posix_service_failed( status, "pthread_attr_getstackaddr");
+  posix_service_failed( status, "pthread_attr_getstackaddr" );
   printf( "Init - current stack address attribute = %p\n", stackaddr );
 
   /* exercise get and set stack (as pair) */
@@ -391,11 +412,11 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_setstack- SUCCESSFUL (< min stack)" );
   status = pthread_attr_setstack( &attr, stackaddr, 0 );
-  posix_service_failed( status, "OK");
+  posix_service_failed( status, "OK" );
 
   puts( "Init - pthread_attr_setstack- SUCCESSFUL (big stack)" );
   status = pthread_attr_setstack( &attr, stackaddr, STACK_MINIMUM_SIZE * 2 );
-  posix_service_failed( status, "OK");
+  posix_service_failed( status, "OK" );
 
   puts( "Init - pthread_attr_getstack- EINVAL (NULL attr)" );
   status = pthread_attr_getstack( NULL, &stackaddr, &stacksize );
@@ -415,7 +436,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_getstack- SUCCESSFUL" );
   status = pthread_attr_getstack( &attr, &stackaddr, &stacksize );
-  posix_service_failed( status, "pthread_attr_getstack");
+  posix_service_failed( status, "pthread_attr_getstack" );
 
   /* exercise get and set detach state */
   empty_line();
@@ -430,11 +451,11 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_setguardsize - SUCCESSFUL (low guardsize)" );
   status = pthread_attr_setguardsize( &attr, 0 );
-  posix_service_failed( status, "pthread_attr_setguardsize");
+  posix_service_failed( status, "pthread_attr_setguardsize" );
 
   puts( "Init - pthread_attr_setguardsize - SUCCESSFUL (high guardsize)" );
   status = pthread_attr_setguardsize( &attr, STACK_MINIMUM_SIZE * 2 );
-  posix_service_failed( status, "");
+  posix_service_failed( status, "" );
 
   puts( "Init - pthread_attr_getguardsize - EINVAL (NULL attr)" );
   status = pthread_attr_getguardsize( NULL, &guardsize );
@@ -450,7 +471,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_getguardsize - SUCCESSFUL" );
   status = pthread_attr_getguardsize( &attr, &guardsize );
-  posix_service_failed( status, "pthread_attr_getguardsize");
+  posix_service_failed( status, "pthread_attr_getguardsize" );
 
   /* exercise get and set detach state */
   empty_line();
@@ -460,8 +481,10 @@ void *POSIX_Init(
   fatal_directive_check_status_only( status, EINVAL, "NULL attr" );
 
   puts( "Init - pthread_attr_setdetachstate - EINVAL (not initialized attr)" );
-  status =
-     pthread_attr_setdetachstate( &destroyed_attr, PTHREAD_CREATE_JOINABLE );
+  status = pthread_attr_setdetachstate(
+    &destroyed_attr,
+    PTHREAD_CREATE_JOINABLE
+  );
   fatal_directive_check_status_only( status, EINVAL, "not initialized att" );
 
   puts( "Init - pthread_attr_setdetachstate - EINVAL (invalid detachstate)" );
@@ -470,7 +493,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_setdetachstate - SUCCESSFUL" );
   status = pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_JOINABLE );
-  posix_service_failed( status, "pthread_attr_setdetachstate");
+  posix_service_failed( status, "pthread_attr_setdetachstate" );
 
   puts( "Init - pthread_attr_getdetachstate - EINVAL (NULL attr)" );
   status = pthread_attr_getdetachstate( NULL, &detachstate );
@@ -486,7 +509,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_getdetachstate - SUCCESSFUL" );
   status = pthread_attr_getdetachstate( &attr, &detachstate );
-  posix_service_failed( status, "pthread_attr_getdetachstate");
+  posix_service_failed( status, "pthread_attr_getdetachstate" );
   printf( "Init - current detach state attribute = %d\n", detachstate );
 
   /* exercise get and set scheduling parameters */
@@ -495,7 +518,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_getschedparam - SUCCESSFUL" );
   status = pthread_attr_getschedparam( &attr, &schedparam );
-  posix_service_failed( status, "pthread_attr_getschedparam");
+  posix_service_failed( status, "pthread_attr_getschedparam" );
 
   print_schedparam( "Init - ", &schedparam );
 
@@ -513,11 +536,15 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_setschedparam - SUCCESSFUL" );
   status = pthread_attr_setschedparam( &attr, &schedparam );
-  posix_service_failed( status, "pthread_attr_setschedparam");
+  posix_service_failed( status, "pthread_attr_setschedparam" );
 
   puts( "Init - pthread_attr_getschedparam - EINVAL (NULL attr)" );
   status = pthread_attr_getschedparam( NULL, &schedparam );
-  fatal_directive_check_status_only( status, EINVAL, "pthread_attr_getschedparam" );
+  fatal_directive_check_status_only(
+    status,
+    EINVAL,
+    "pthread_attr_getschedparam"
+  );
 
   puts( "Init - pthread_attr_getschedparam - EINVAL (not initialized attr)" );
   status = pthread_attr_getschedparam( &destroyed_attr, &schedparam );
@@ -545,7 +572,7 @@ void *POSIX_Init(
 
   puts( "Init - pthread_getschedparam - SUCCESSFUL" );
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-  posix_service_failed( status, "pthread_getschedparam");
+  posix_service_failed( status, "pthread_getschedparam" );
 
   printf( "Init - policy = %d\n", schedpolicy );
 
@@ -567,7 +594,7 @@ void *POSIX_Init(
 
   /* reset sched_param */
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
-  posix_service_failed( status, "pthread_getschedparam");
+  posix_service_failed( status, "pthread_getschedparam" );
 
   puts( "Init - pthread_setschedparam - EINVAL (invalid policy)" );
   status = pthread_setschedparam( pthread_self(), -1, &schedparam );
@@ -577,7 +604,7 @@ void *POSIX_Init(
   status = pthread_setschedparam( (pthread_t) -1, SCHED_OTHER, &schedparam );
   fatal_directive_check_status_only( status, ESRCH, "invalid thread" );
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
   /* now get sporadic server errors */
 
   schedparam.sched_ss_repl_period.tv_sec = 0;
@@ -586,7 +613,11 @@ void *POSIX_Init(
   schedparam.sched_ss_init_budget.tv_nsec = 1;
 
   puts( "Init - pthread_setschedparam - EINVAL (replenish == 0)" );
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   fatal_directive_check_status_only( status, EINVAL, "replenish == 0" );
 
   schedparam.sched_ss_repl_period.tv_sec = 1;
@@ -595,7 +626,11 @@ void *POSIX_Init(
   schedparam.sched_ss_init_budget.tv_nsec = 0;
 
   puts( "Init - pthread_setschedparam - EINVAL (budget == 0)" );
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   fatal_directive_check_status_only( status, EINVAL, "budget == 0" );
 
   schedparam.sched_ss_repl_period.tv_sec = 1;
@@ -604,7 +639,11 @@ void *POSIX_Init(
   schedparam.sched_ss_init_budget.tv_nsec = 1;
 
   puts( "Init - pthread_setschedparam - EINVAL (replenish < budget)" );
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   fatal_directive_check_status_only( status, EINVAL, "replenish < budget" );
 
   schedparam.sched_ss_repl_period.tv_sec = 2;
@@ -614,7 +653,11 @@ void *POSIX_Init(
   schedparam.sched_ss_low_priority = -1;
 
   puts( "Init - pthread_setschedparam - EINVAL (invalid priority)" );
-  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  status = pthread_setschedparam(
+    pthread_self(),
+    SCHED_SPORADIC,
+    &schedparam
+  );
   fatal_directive_check_status_only( status, EINVAL, "invalid priority" );
 
   /*
@@ -640,16 +683,16 @@ void *POSIX_Init(
 
   puts( "Init - pthread_attr_setschedpolicy - SUCCESSFUL" );
   status = pthread_attr_setschedpolicy( &attr, SCHED_SPORADIC );
-  posix_service_failed( status, "pthread_attr_setschedparam");
+  posix_service_failed( status, "pthread_attr_setschedparam" );
   puts( "Init - pthread_attr_setschedparam - SUCCESSFUL" );
   status = pthread_attr_setschedparam( &attr, &schedparam );
-  posix_service_failed( status, "pthread_attr_setschedparam");
+  posix_service_failed( status, "pthread_attr_setschedparam" );
 
   status = pthread_create( &Task2_id, &attr, Task_2, NULL );
   rtems_test_assert( !status );
 
   status = pthread_join( Task2_id, NULL );
-  posix_service_failed( status, " pthread_join");
+  posix_service_failed( status, " pthread_join" );
 #endif
 
   TEST_END();

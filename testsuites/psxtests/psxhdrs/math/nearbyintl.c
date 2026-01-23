@@ -42,10 +42,10 @@ int test( void );
 
 int test( void )
 {
-  long double x = 4.643456 ,  result ;
+  long double x = 4.643456, result;
 
-  result = nearbyintl( x ) ;
+  result = nearbyintl( x );
 
-  return (result);
+  return ( result );
 }
 #endif

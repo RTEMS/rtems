@@ -37,13 +37,13 @@
  #include <sys/socket.h>
  #include <netdb.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   struct hostent *host;
+int test( void )
+{
+  struct hostent *host;
 
-   host = gethostent();
+  host = gethostent();
 
-   return ( host != (void *)0 );
- }
+  return ( host != (void *) 0 );
+}

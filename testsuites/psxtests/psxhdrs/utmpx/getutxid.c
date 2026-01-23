@@ -25,12 +25,12 @@
 
 #include <utmpx.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  const struct utmpx b = {0};
+  const struct utmpx b = { 0 };
 
-  struct utmpx *a = getutxid(&b);
+  struct utmpx *a = getutxid( &b );
   return !a;
 }

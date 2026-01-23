@@ -37,16 +37,16 @@
  #include <string.h>
  #include <locale.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char *dest = "Hello";
-   char *src = "World";
-   locale_t locale = NULL;
-   int result;
+int test( void )
+{
+  char    *dest = "Hello";
+  char    *src = "World";
+  locale_t locale = NULL;
+  int      result;
 
-   result = strxfrm_l( dest, src, 2, locale );
+  result = strxfrm_l( dest, src, 2, locale );
 
-   return result;
- }
+  return result;
+}

@@ -46,10 +46,10 @@ int test( void );
 
 int test( void )
 {
-  pthread_cond_t  cond     = PTHREAD_COND_INITIALIZER;
-  pthread_mutex_t mutex    = PTHREAD_MUTEX_INITIALIZER;
+  pthread_cond_t  cond = PTHREAD_COND_INITIALIZER;
+  pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
   clockid_t       clock_id = 0;
-  struct timespec abstime  = { 0 };
+  struct timespec abstime = { 0 };
   int             result;
 
   result = pthread_cond_clockwait( &cond, &mutex, clock_id, &abstime );

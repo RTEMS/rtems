@@ -42,40 +42,40 @@ static int cleanup_flag;
  * Cleanup function that the thread executes when it is canceled.  So if
  * cleanup_flag is 1, it means that the thread was canceled.
  */
-static void a_cleanup_func(void *ignored)
+static void a_cleanup_func( void *ignored )
 {
   (void) ignored;
 
   cleanup_flag = 1;
 }
 
-static void *a_thread_func(void *ignored)
+static void *a_thread_func( void *ignored )
 {
   (void) ignored;
 
   int err;
 
-  err = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
-  if (err != 0) {
-    fprintf(stderr, "pthread_setcancelstate: %s", strerror(err));
+  err = pthread_setcancelstate( PTHREAD_CANCEL_ENABLE, NULL );
+  if ( err != 0 ) {
+    fprintf( stderr, "pthread_setcancelstate: %s", strerror( err ) );
     goto thread_exit_failure;
   }
 
-  err = pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
-  if (err != 0) {
-    fprintf(stderr, "pthread_setcanceltype: %s", strerror(err));
+  err = pthread_setcanceltype( PTHREAD_CANCEL_DEFERRED, NULL );
+  if ( err != 0 ) {
+    fprintf( stderr, "pthread_setcanceltype: %s", strerror( err ) );
     goto thread_exit_failure;
   }
 
   /* Set up the cleanup handler */
-  pthread_cleanup_push(a_cleanup_func, NULL);
+  pthread_cleanup_push( a_cleanup_func, NULL );
 
   /* Wait for a timeout period for the cancel request to be sent. */
-  sleep(TIMEOUT);
+  sleep( TIMEOUT );
 
   /* Should not get here, but just in case pthread_testcancel() didn't
    * work -- the cancel request timed out. */
-  pthread_cleanup_pop(0);
+  pthread_cleanup_pop( 0 );
 
 thread_exit_failure:
   cleanup_flag = -1;
@@ -84,13 +84,13 @@ thread_exit_failure:
 }
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+void *POSIX_Init( void *argument );
 
 static volatile int TSR_occurred;
 
 static volatile int TSR_status;
 
-static rtems_id  timer_id;
+static rtems_id timer_id;
 
 static pthread_t thread;
 
@@ -106,15 +106,15 @@ static void *suspend_self( void *arg )
   eno = pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, NULL );
   rtems_test_assert( eno == 0 );
 
-  status = rtems_task_suspend( RTEMS_SELF);
+  status = rtems_task_suspend( RTEMS_SELF );
   rtems_test_assert( status == RTEMS_SUCCESSFUL );
 
   return NULL;
 }
 
 static rtems_timer_service_routine Cancel_duringISR_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -125,8 +125,8 @@ static rtems_timer_service_routine Cancel_duringISR_TSR(
 }
 
 static rtems_timer_service_routine SetState_duringISR_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -139,8 +139,8 @@ static rtems_timer_service_routine SetState_duringISR_TSR(
 }
 
 static rtems_timer_service_routine SetType_duringISR_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -153,9 +153,9 @@ static rtems_timer_service_routine SetType_duringISR_TSR(
 }
 
 static void doit(
-  rtems_timer_service_routine (*TSR)(rtems_id, void *),
-  const char                   *method,
-  int                           expected_status
+  rtems_timer_service_routine ( *TSR )( rtems_id, void * ),
+  const char *method,
+  int         expected_status
 )
 {
   rtems_interval    start;
@@ -165,7 +165,7 @@ static void doit(
   printf( "Init: schedule %s from a TSR\n", method );
 
   TSR_occurred = 0;
-  TSR_status   = 0;
+  TSR_status = 0;
 
   status = rtems_timer_fire_after( timer_id, 10, TSR, NULL );
   rtems_test_assert( !status );
@@ -173,30 +173,27 @@ static void doit(
   start = rtems_clock_get_ticks_since_boot();
   do {
     end = rtems_clock_get_ticks_since_boot();
-  } while ( !TSR_occurred && ((end - start) <= 800));
+  } while ( !TSR_occurred && ( ( end - start ) <= 800 ) );
 
   if ( !TSR_occurred ) {
     printf( "%s did not occur\n", method );
-    rtems_test_exit(0);
+    rtems_test_exit( 0 );
   }
   if ( TSR_status != expected_status ) {
-    printf( "%s returned %s\n", method, strerror(TSR_status) );
-    rtems_test_exit(0);
+    printf( "%s returned %s\n", method, strerror( TSR_status ) );
+    rtems_test_exit( 0 );
   }
   printf( "%s - from ISR returns expected status - OK\n", method );
-
 }
 
-void *POSIX_Init(
-  void *argument
-)
+void *POSIX_Init( void *argument )
 {
   (void) argument;
 
   rtems_status_code status;
   int               eno;
   void             *value;
-  pthread_t new_th;
+  pthread_t         new_th;
 
   TEST_BEGIN();
 
@@ -218,19 +215,19 @@ void *POSIX_Init(
   rtems_test_assert( eno == 0 );
   rtems_test_assert( value == PTHREAD_CANCELED );
 
-  status = pthread_create(&new_th, NULL, a_thread_func, NULL);
-  rtems_test_assert( !status);
+  status = pthread_create( &new_th, NULL, a_thread_func, NULL );
+  rtems_test_assert( !status );
   /* Remove potential for race */
-  sleep(TIMEOUT / 2);
-  status = pthread_cancel(new_th);
-  rtems_test_assert( !status);
-  status  = pthread_join(new_th, NULL);
-  rtems_test_assert( !status);
+  sleep( TIMEOUT / 2 );
+  status = pthread_cancel( new_th );
+  rtems_test_assert( !status );
+  status = pthread_join( new_th, NULL );
+  rtems_test_assert( !status );
 
-  rtems_test_assert(cleanup_flag == 1);
+  rtems_test_assert( cleanup_flag == 1 );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
   return NULL; /* just so the compiler thinks we returned something */
 }
 
@@ -239,11 +236,11 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TIMERS        1
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS        4
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 4
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

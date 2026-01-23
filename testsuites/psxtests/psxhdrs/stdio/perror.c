@@ -43,7 +43,7 @@ int test( void )
   FILE *stream;
 
   stream = fopen( "myfile.dat", "w" );
-  perror("Can't Open data file");
+  perror( "Can't Open data file" );
 
   return ( stream != NULL );
 }

@@ -47,5 +47,5 @@ int test( void )
 
   timestruct_pointer = gmtime_r( &time, &timestruct );
 
-  return (timestruct_pointer != NULL);
+  return ( timestruct_pointer != NULL );
 }

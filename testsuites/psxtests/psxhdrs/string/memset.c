@@ -36,17 +36,17 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char buffer[32];
-   void *ptr = buffer;
-   int value = 3;
-   size_t num = 2;
-   void *result;
+int test( void )
+{
+  char   buffer[ 32 ];
+  void  *ptr = buffer;
+  int    value = 3;
+  size_t num = 2;
+  void  *result;
 
-   result = memset( ptr, value, num );
+  result = memset( ptr, value, num );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

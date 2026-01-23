@@ -41,10 +41,10 @@ int test( void );
 
 int test( void )
 {
-  int return_value;
-  int which = PRIO_PROCESS;
+  int  return_value;
+  int  which = PRIO_PROCESS;
   id_t who = getpid();
 
-  return_value = getpriority(which, who);
-  return(return_value != -1);
+  return_value = getpriority( which, who );
+  return ( return_value != -1 );
 }

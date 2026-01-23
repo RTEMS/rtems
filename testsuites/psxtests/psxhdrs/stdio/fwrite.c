@@ -41,11 +41,11 @@ int test( void );
 int test( void )
 {
   FILE *stream;
-  long list[] = {1,2,3,4,5};
-  int result;
+  long  list[] = { 1, 2, 3, 4, 5 };
+  int   result;
 
   stream = fopen( "myfile.dat", "w" );
-  result = fwrite( list, sizeof(long), 5, stream );
+  result = fwrite( list, sizeof( long ), 5, stream );
 
   return result;
 }

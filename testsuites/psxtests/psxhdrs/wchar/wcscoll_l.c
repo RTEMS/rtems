@@ -36,14 +36,14 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const wchar_t wc = 0;
   const wchar_t wc1 = 0;
-  locale_t locale;
+  locale_t      locale;
 
-  locale = (locale_t)0;
-  return wcscoll_l(&wc, &wc1, locale);
+  locale = (locale_t) 0;
+  return wcscoll_l( &wc, &wc1, locale );
 }

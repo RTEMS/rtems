@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	int resource = RLIMIT_CORE;
-	struct rlimit rlp;
+  int           return_value;
+  int           resource = RLIMIT_CORE;
+  struct rlimit rlp;
 
-	return_value = getrlimit(resource, &rlp);
-	return(return_value != -1);
+  return_value = getrlimit( resource, &rlp );
+  return ( return_value != -1 );
 }

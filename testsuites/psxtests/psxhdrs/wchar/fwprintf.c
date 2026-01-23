@@ -36,16 +36,16 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  FILE *file;
+  FILE          *file;
   const wchar_t *wcr;
-  wchar_t wc;
+  wchar_t        wc;
 
   wc = L'\x3b1';
   wcr = &wc;
-  file = (void *)0;
-  return fwprintf(file, wcr);
+  file = (void *) 0;
+  return fwprintf( file, wcr );
 }

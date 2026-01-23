@@ -40,11 +40,11 @@ int test( void );
 
 int test( void )
 {
-  int result;
+  int            result;
   struct termios term = { 0 };
-  speed_t speed = B0;
+  speed_t        speed = B0;
 
-  result = cfsetospeed(&term, speed);
+  result = cfsetospeed( &term, speed );
 
   return result;
 }

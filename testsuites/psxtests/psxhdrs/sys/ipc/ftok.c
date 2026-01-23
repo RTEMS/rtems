@@ -41,11 +41,11 @@ int test( void );
 
 int test( void )
 {
-  key_t result;
+  key_t       result;
   const char *path = "/tmp/myfile";
-  int id = "S";
+  int         id = "S";
 
-  result = ftok(path,id);
+  result = ftok( path, id );
 
-  return (result);
+  return ( result );
 }

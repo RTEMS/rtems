@@ -46,5 +46,5 @@ int test( void )
   stream = fopen( "myfile.dat", "w" );
   result = ftello( stream );
 
-  return ( (int)result );
+  return ( (int) result );
 }

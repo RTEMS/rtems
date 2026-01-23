@@ -51,27 +51,24 @@
 const char rtems_test_name[] = "PSXDEVCTL 1";
 
 /* forward declarations to avoid warnings */
-int test_main(void);
+int test_main( void );
 
 /*
  *  main entry point to the test
  */
 
-#if defined(__rtems__)
-int test_main(void)
+#if defined( __rtems__ )
+int test_main( void )
 #else
-int main(
-  int    argc,
-  char **argv
-)
+int main( int argc, char **argv )
 #endif
 {
-  int     status;
-  int     fd;
-  int     dcmd;
-  int     dev_data;
-  void   *dev_data_ptr;
-  size_t  nbyte;
+  int    status;
+  int    fd;
+  int    dcmd;
+  int    dev_data;
+  void  *dev_data_ptr;
+  size_t nbyte;
 
   TEST_BEGIN();
 
@@ -88,7 +85,7 @@ int main(
    * Then verify it is really closed.
    */
   puts( "posix_devctl() SOCKCLOSE on valid file descriptor -- OK" );
-  fd = open("tmp_for_close", O_CREAT | O_RDWR, S_IRWXU );
+  fd = open( "tmp_for_close", O_CREAT | O_RDWR, S_IRWXU );
   rtems_test_assert( fd != -1 );
 
   dcmd = SOCKCLOSE;
@@ -113,7 +110,7 @@ int main(
   fd = -1;
   dcmd = FIONBIO;
   dev_data_ptr = NULL;
-  nbyte = sizeof(int);
+  nbyte = sizeof( int );
   status = posix_devctl( fd, dcmd, dev_data_ptr, nbyte, NULL );
   rtems_test_assert( status == EBADF );
 
@@ -122,7 +119,7 @@ int main(
   dcmd = FIONBIO;
   dev_data = 1;
   dev_data_ptr = &dev_data;
-  nbyte = sizeof(int);
+  nbyte = sizeof( int );
   status = posix_devctl( fd, dcmd, dev_data_ptr, nbyte, NULL );
   rtems_test_assert( status == 0 );
 
@@ -131,7 +128,7 @@ int main(
   dcmd = FIONBIO;
   dev_data = 0;
   dev_data_ptr = &dev_data;
-  nbyte = sizeof(int);
+  nbyte = sizeof( int );
   status = posix_devctl( fd, dcmd, dev_data_ptr, nbyte, NULL );
   rtems_test_assert( status == 0 );
 
@@ -140,10 +137,10 @@ int main(
   dcmd = 1;
   dev_data = 0;
   dev_data_ptr = &dev_data;
-  nbyte = sizeof(int);
+  nbyte = sizeof( int );
   status = posix_devctl( fd, dcmd, dev_data_ptr, nbyte, NULL );
   rtems_test_assert( status == EBADF );
 
   TEST_END();
-  exit(0);
+  exit( 0 );
 }

@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  double x=1;
+  double x = 1;
   double result;
 
-  result = acosh(x);
+  result = acosh( x );
 
-  return (result);
+  return ( result );
 }

@@ -39,14 +39,13 @@
 
 #include <sys/socket.h>
 
-ssize_t test(void);
+ssize_t test( void );
 
-ssize_t test(void)
+ssize_t test( void )
 {
   int           sockfd = 4;
   struct msghdr msg = { 0 };
   int           flags = 7;
 
-
-  return sendmsg(sockfd, &msg, flags);
+  return sendmsg( sockfd, &msg, flags );
 }

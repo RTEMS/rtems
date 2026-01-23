@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 45 ;
+  long double x = 45;
   long double result;
 
-  result = sinl(x) ;
+  result = sinl( x );
 
-  return (result) ;
+  return ( result );
 }
 #endif

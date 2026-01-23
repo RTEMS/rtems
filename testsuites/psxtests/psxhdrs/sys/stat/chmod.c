@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-	int return_value;
-	char *path = "/";
-	mode_t mode = S_ISUID;
+  int    return_value;
+  char  *path = "/";
+  mode_t mode = S_ISUID;
 
-	return_value = chmod(path, mode);
-	return (return_value != -1);
+  return_value = chmod( path, mode );
+  return ( return_value != -1 );
 }

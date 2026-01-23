@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  iconv_t cd = iconv_open("UTF-8", "WCHAR_T");
-  int return_value;
+  iconv_t cd = iconv_open( "UTF-8", "WCHAR_T" );
+  int     return_value;
 
-  return_value = iconv_close(cd);
-  return (return_value != -1);
+  return_value = iconv_close( cd );
+  return ( return_value != -1 );
 }

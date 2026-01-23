@@ -36,14 +36,14 @@
 
 #include <complex.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   long double complex number;
   long double complex result;
 
   number = 1.0 + 1.0 * I;
-  result = catanl(number);
-  return (result != 0);
+  result = catanl( number );
+  return ( result != 0 );
 }

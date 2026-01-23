@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  FILE *stream;
+  FILE  *stream;
   fpos_t pos;
-  int result;
+  int    result;
 
   stream = fopen( "myfile.dat", "w" );
   result = fgetpos( stream, &pos );

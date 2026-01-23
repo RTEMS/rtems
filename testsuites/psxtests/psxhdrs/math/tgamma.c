@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  double x = 2 , result ;
+  double x = 2, result;
 
-  result = tgamma(x) ;
+  result = tgamma( x );
 
-  return (result);
+  return ( result );
 }

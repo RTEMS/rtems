@@ -43,11 +43,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 100 , result ;
-  int exp = 2 ;
+  long double x = 100, result;
+  int         exp = 2;
 
-  result = scalbnl( x , exp ) ;
+  result = scalbnl( x, exp );
 
-  return (result);
+  return ( result );
 }
 #endif

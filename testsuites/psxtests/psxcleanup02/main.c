@@ -16,61 +16,61 @@
 
 static int step;
 
-static void destroy(void *arg)
+static void destroy( void *arg )
 {
   (void) arg;
 
-  assert(step == 2);
+  assert( step == 2 );
   step = 3;
-  printf("destroy\n");
+  printf( "destroy\n" );
 }
 
-static void cleanup(void *arg)
+static void cleanup( void *arg )
 {
   (void) arg;
 
-  assert(step == 1);
+  assert( step == 1 );
   step = 2;
-  printf("cleanup\n");
+  printf( "cleanup\n" );
 }
 
-static void *task(void *arg)
+static void *task( void *arg )
 {
   (void) arg;
 
   pthread_key_t key;
-  int eno;
+  int           eno;
 
-  eno = pthread_key_create(&key, destroy);
-  assert(eno == 0);
+  eno = pthread_key_create( &key, destroy );
+  assert( eno == 0 );
 
-  pthread_cleanup_push(cleanup, NULL);
+  pthread_cleanup_push( cleanup, NULL );
 
-  eno = pthread_setspecific(key, &key);
-  assert(eno == 0);
+  eno = pthread_setspecific( key, &key );
+  assert( eno == 0 );
 
-  assert(step == 0);
+  assert( step == 0 );
   step = 1;
 
-  pthread_exit(NULL);
-  pthread_cleanup_pop(0);
+  pthread_exit( NULL );
+  pthread_cleanup_pop( 0 );
 
   return NULL;
 }
 
-int main(int argc, char **argv)
+int main( int argc, char **argv )
 {
   (void) argc;
   (void) argv;
 
   pthread_t t;
-  int eno;
+  int       eno;
 
-  eno = pthread_create(&t, NULL, task, NULL);
-  assert(eno == 0);
+  eno = pthread_create( &t, NULL, task, NULL );
+  assert( eno == 0 );
 
-  eno = pthread_join(t, NULL);
-  assert(eno == 0);
+  eno = pthread_join( t, NULL );
+  assert( eno == 0 );
 
   return 0;
 }

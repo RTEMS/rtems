@@ -41,10 +41,10 @@ int test( void );
 
 int test( void )
 {
-  char *string1 = "STRING";
-  char *string2 = "string";
+  char    *string1 = "STRING";
+  char    *string2 = "string";
   locale_t locale = NULL;
-  int result;
+  int      result;
 
   result = strncasecmp_l( string1, string2, 6, locale );
 

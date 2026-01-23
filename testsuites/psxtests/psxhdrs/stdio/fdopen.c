@@ -41,9 +41,9 @@ int test( void );
 int test( void )
 {
   FILE *fp;
-  int fh = 2;
+  int   fh = 2;
 
-  fp = fdopen( fh, "r");
+  fp = fdopen( fh, "r" );
 
   return ( fp != NULL );
 }

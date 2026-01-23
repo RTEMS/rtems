@@ -40,10 +40,10 @@ int test( void );
 
 int test( void )
 {
-  float x = 34.456 ;
-  float result ;
+  float x = 34.456;
+  float result;
 
-  result = fabsf(x) ;
+  result = fabsf( x );
 
-  return (result);
+  return ( result );
 }

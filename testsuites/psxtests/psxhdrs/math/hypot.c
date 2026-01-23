@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  double x = 3 , y = 4 , result ;
+  double x = 3, y = 4, result;
 
-  result = hypot(x,y) ;
+  result = hypot( x, y );
 
-  return (result);
+  return ( result );
 }

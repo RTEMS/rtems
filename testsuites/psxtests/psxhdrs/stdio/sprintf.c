@@ -41,9 +41,9 @@ int test( void );
 int test( void )
 {
   char *format = "Sum of %d and %d is %d";
-  char buffer[200];
-  int a, b, c;
-  int result;
+  char  buffer[ 200 ];
+  int   a, b, c;
+  int   result;
 
   a = 10;
   b = 20;

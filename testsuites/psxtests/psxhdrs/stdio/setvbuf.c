@@ -36,18 +36,18 @@
 
 #include <stdio.h>
 
-#define  BUF_SIZE  1024
+#define BUF_SIZE 1024
 
 int test( void );
 
 int test( void )
 {
   FILE *stream;
-  char buf[BUF_SIZE];
-  int result;
+  char  buf[ BUF_SIZE ];
+  int   result;
 
   stream = fopen( "myfile.dat", "w" );
-  result = setvbuf( stream, buf, _IOFBF, sizeof(buf) );
+  result = setvbuf( stream, buf, _IOFBF, sizeof( buf ) );
 
   return result;
 }

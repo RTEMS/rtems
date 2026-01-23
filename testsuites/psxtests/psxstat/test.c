@@ -59,30 +59,30 @@
 const char rtems_test_name[] = "PSXSTAT";
 
 /* forward declarations to avoid warnings */
-int test_main(void);
-void stat_a_file_helper(const char *file, int follow_link);
-void stat_a_file(const char *file);
-void lstat_a_file(const char *file);
-void stat_multiple_files(char **files);
-void chown_multiple_files_helper(char **files, int follow_link);
-void chown_multiple_files(char **files);
-void lchown_multiple_files(char **files);
-void make_multiple_files(char **files);
-void make_multiple_bad_files(char **files);
-void make_multiple_links(char **existing, char **new);
-void make_too_many_links(void);
-void make_a_symlink(char *existing, char *new);
-void make_multiple_symlinks(void);
-void make_many_symlinks(char  *real_file, int link_count);
-void make_multiple_directories(char **files);
-void Cause_faults(void);
-void Show_Time(void);
-void test_statvfs(void);
+int  test_main( void );
+void stat_a_file_helper( const char *file, int follow_link );
+void stat_a_file( const char *file );
+void lstat_a_file( const char *file );
+void stat_multiple_files( char **files );
+void chown_multiple_files_helper( char **files, int follow_link );
+void chown_multiple_files( char **files );
+void lchown_multiple_files( char **files );
+void make_multiple_files( char **files );
+void make_multiple_bad_files( char **files );
+void make_multiple_links( char **existing, char **new );
+void make_too_many_links( void );
+void make_a_symlink( char *existing, char *new );
+void make_multiple_symlinks( void );
+void make_many_symlinks( char *real_file, int link_count );
+void make_multiple_directories( char **files );
+void Cause_faults( void );
+void Show_Time( void );
+void test_statvfs( void );
 
-#define MAXSYMLINK 5   /* There needs to be a better way of getting this. */
-#define TIMEOUT_VALUE  ( 5 * rtems_clock_get_ticks_per_second() )
+#define MAXSYMLINK    5 /* There needs to be a better way of getting this. */
+#define TIMEOUT_VALUE ( 5 * rtems_clock_get_ticks_per_second() )
 
-int _lstat_r(struct _reent *, const char *, struct stat *);
+int _lstat_r( struct _reent *, const char *, struct stat * );
 
 /*
  *  List of files which should exist.
@@ -115,7 +115,7 @@ char *Directories[] = {
   0
 };
 
-char *Links_to_Dirs[]= {
+char *Links_to_Dirs[] = {
   "dir1/dir1/../../links/dir1",
   "links/dir2",
   "links/dir3",
@@ -126,7 +126,7 @@ char *Links_to_Dirs[]= {
   0
 };
 
-char *Links_to_Files[]= {
+char *Links_to_Files[] = {
   "links/dir1_file1",
   "links/dir1_file2",
   "links/dir1_file3",
@@ -136,7 +136,7 @@ char *Links_to_Files[]= {
   0
 };
 
-char *Links_to_dirlinks[]= {
+char *Links_to_dirlinks[] = {
   "links/links/links/links_dir1",
   "links//links_dir2",
   "links//links_dir3",
@@ -147,7 +147,7 @@ char *Links_to_dirlinks[]= {
   0
 };
 
-char *Links_to_filelinks[]= {
+char *Links_to_filelinks[] = {
   "links///links_d1_file1",
   "links///links_d1_file2",
   "links///links_d1_file3",
@@ -157,7 +157,7 @@ char *Links_to_filelinks[]= {
   0
 };
 
-char *SymLinks[]= {
+char *SymLinks[] = {
   "/my_mount_point/symlinks/a_file_symlink",
   "/my_mount_point/symlinks/a_dir_symlink",
   "/my_mount_point/symlinks/a_link_symlink",
@@ -187,7 +187,6 @@ char *Good_absolute_paths[] = {
   "/my_mount_point/\\/\\/\\/\\/\\/\\/links\\/\\/\\/\\/\\/\\",
   0
 };
-
 
 char *Bad_paths[] = {
   "/my_mount_point/links/ENAMETOOLONG________________________________________"
@@ -225,10 +224,7 @@ char *Good_relative_paths[] = {
 /*
  *  Do a stat/lstat on a single file and report the status.
  */
-void stat_a_file_helper(
-  const char *file,
-  int         follow_link
-)
+void stat_a_file_helper( const char *file, int follow_link )
 {
   int         status;
   struct stat statbuf;
@@ -236,7 +232,6 @@ void stat_a_file_helper(
   int         minor1;
   int         major2;
   int         minor2;
-
 
   rtems_test_assert( file );
 
@@ -253,33 +248,29 @@ void stat_a_file_helper(
   if ( status == -1 ) {
     printf( ": %s\n", strerror( errno ) );
   } else {
-
     rtems_filesystem_split_dev_t( statbuf.st_dev, major1, minor1 );
     rtems_filesystem_split_dev_t( statbuf.st_rdev, major2, minor2 );
 
-
-    printf("\n...st_dev     (0x%x:0x%x)\n", major1, minor1 );
-    printf(  "...st_ino     %" PRIxino_t "\n", statbuf.st_ino );
-    printf(  "...st_mode    %" PRIomode_t "\n", statbuf.st_mode );
-    printf(  "...st_nlink   %x\n", statbuf.st_nlink );
-    printf(  "...st_uid     %d\n", statbuf.st_uid );
-    printf(  "...st_gid     %d\n", statbuf.st_gid );
-    printf(  "...st_rdev    (0x%x:0x%x)\n", major2, minor2 );
-    printf(  "...st_size    %" PRIdoff_t "\n", statbuf.st_size );
-    printf(  "...st_atime   %s", ctime( &statbuf.st_atime ) );
-    printf(  "...st_mtime   %s", ctime( &statbuf.st_mtime ) );
-    printf(  "...st_ctime   %s", ctime( &statbuf.st_ctime ) );
-    printf(  "...st_blksize %" PRIxblksize_t "\n", statbuf.st_blksize );
-    printf(  "...st_blocks  %" PRIxblkcnt_t "\n", statbuf.st_blocks );
+    printf( "\n...st_dev     (0x%x:0x%x)\n", major1, minor1 );
+    printf( "...st_ino     %" PRIxino_t "\n", statbuf.st_ino );
+    printf( "...st_mode    %" PRIomode_t "\n", statbuf.st_mode );
+    printf( "...st_nlink   %x\n", statbuf.st_nlink );
+    printf( "...st_uid     %d\n", statbuf.st_uid );
+    printf( "...st_gid     %d\n", statbuf.st_gid );
+    printf( "...st_rdev    (0x%x:0x%x)\n", major2, minor2 );
+    printf( "...st_size    %" PRIdoff_t "\n", statbuf.st_size );
+    printf( "...st_atime   %s", ctime( &statbuf.st_atime ) );
+    printf( "...st_mtime   %s", ctime( &statbuf.st_mtime ) );
+    printf( "...st_ctime   %s", ctime( &statbuf.st_ctime ) );
+    printf( "...st_blksize %" PRIxblksize_t "\n", statbuf.st_blksize );
+    printf( "...st_blocks  %" PRIxblkcnt_t "\n", statbuf.st_blocks );
   }
 }
 
 /*
  *  Do a stat on a single file and report the status.
 */
-void stat_a_file(
-  const char *file
-)
+void stat_a_file( const char *file )
 {
   stat_a_file_helper( file, true );
 }
@@ -287,9 +278,7 @@ void stat_a_file(
 /*
  *  Do a lstat on a single file and report the status.
  */
-void lstat_a_file(
-  const char *file
-)
+void lstat_a_file( const char *file )
 {
   stat_a_file_helper( file, false );
 }
@@ -297,15 +286,13 @@ void lstat_a_file(
 /*
  *  stat() multiple files at a time
  */
-void stat_multiple_files(
-  char **files
-)
+void stat_multiple_files( char **files )
 {
-  int    i;
+  int i;
 
   i = 0;
-  while ( files[i] ) {
-    stat_a_file( files[i] );
+  while ( files[ i ] ) {
+    stat_a_file( files[ i ] );
     i++;
   }
 }
@@ -313,48 +300,42 @@ void stat_multiple_files(
 /*
  *  chown()/lchown() multiple files at a time
  */
-void chown_multiple_files_helper(
-  char **files,
-  int    follow_link
-)
+void chown_multiple_files_helper( char **files, int follow_link )
 {
-  int    i;
-  uid_t  st_uid;
-  gid_t  st_gid;
+  int   i;
+  uid_t st_uid;
+  gid_t st_gid;
 
   st_uid = geteuid();
   st_gid = getegid();
 
   i = 0;
-  while ( files[i] ) {
-    printf("Change group of %s\n", files[i]);
+  while ( files[ i ] ) {
+    printf( "Change group of %s\n", files[ i ] );
     if ( follow_link ) {
-      chown( files[i], st_uid, (st_gid+1) );
-      stat_a_file( files[i] );
+      chown( files[ i ], st_uid, ( st_gid + 1 ) );
+      stat_a_file( files[ i ] );
     } else {
-      lchown( files[i], st_uid, (st_gid+1) );
-      lstat_a_file( files[i] );
+      lchown( files[ i ], st_uid, ( st_gid + 1 ) );
+      lstat_a_file( files[ i ] );
     }
 
-    printf("Change owner of %s\n", files[i]);
+    printf( "Change owner of %s\n", files[ i ] );
     if ( follow_link ) {
-      chown( files[i], (st_uid+1), st_gid );
-      stat_a_file( files[i] );
+      chown( files[ i ], ( st_uid + 1 ), st_gid );
+      stat_a_file( files[ i ] );
     } else {
-      lchown( files[i], (st_uid+1), st_gid );
-      lstat_a_file( files[i] );
+      lchown( files[ i ], ( st_uid + 1 ), st_gid );
+      lstat_a_file( files[ i ] );
     }
     i++;
   }
-
 }
 
 /*
  *  chown() multiple files at a time
  */
-void chown_multiple_files(
-  char **files
-)
+void chown_multiple_files( char **files )
 {
   chown_multiple_files_helper( files, true );
 }
@@ -362,9 +343,7 @@ void chown_multiple_files(
 /*
  *  lchown() multiple files at a time
  */
-void lchown_multiple_files(
-  char **files
-)
+void lchown_multiple_files( char **files )
 {
   chown_multiple_files_helper( files, false );
 }
@@ -372,34 +351,30 @@ void lchown_multiple_files(
 /*
  *  mknod() multiple files at a time
  */
-void make_multiple_files(
-  char **files
-)
+void make_multiple_files( char **files )
 {
-  int    i;
-  int    status;
+  int i;
+  int status;
 
   i = 0;
-  while ( files[i] ) {
-    printf( "Making file %s\n", files[i] );
-    status = mknod( files[i], ( S_IFREG | S_IROTH|S_IWOTH ), 0LL );
+  while ( files[ i ] ) {
+    printf( "Making file %s\n", files[ i ] );
+    status = mknod( files[ i ], ( S_IFREG | S_IROTH | S_IWOTH ), 0LL );
     rtems_test_assert( !status );
     i++;
   }
   puts( "" );
 }
 
-void make_multiple_bad_files(
-  char **files
-)
+void make_multiple_bad_files( char **files )
 {
-  int    i;
-  int    status;
+  int i;
+  int status;
 
   i = 0;
-  while ( files[i] ) {
-    printf( "Making file %s ", files[i] );
-    status = mknod( files[i], ( S_IFREG | S_IROTH|S_IWOTH ), 0LL );
+  while ( files[ i ] ) {
+    printf( "Making file %s ", files[ i ] );
+    status = mknod( files[ i ], ( S_IFREG | S_IROTH | S_IWOTH ), 0LL );
     rtems_test_assert( status );
     printf( ": %s\n", strerror( errno ) );
     i++;
@@ -407,18 +382,15 @@ void make_multiple_bad_files(
   puts( "" );
 }
 
-void make_multiple_links(
-  char **existing,
-  char **new
-)
+void make_multiple_links( char **existing, char **new )
 {
-  int    i;
-  int    status;
+  int i;
+  int status;
 
   i = 0;
-  while ( new[i] && existing[i] ) {
-    printf( "Making file %s\n", new[i] );
-    status = link( existing[i], new[i] );
+  while ( new[ i ] && existing[ i ] ) {
+    printf( "Making file %s\n", new[ i ] );
+    status = link( existing[ i ], new[ i ] );
     rtems_test_assert( !status );
     i++;
   }
@@ -427,40 +399,36 @@ void make_multiple_links(
   status = link( "fred", "bob" );
   rtems_test_assert( status == -1 );
 
-  status = link( existing[1], "doug/bob" );
+  status = link( existing[ 1 ], "doug/bob" );
   rtems_test_assert( status == -1 );
 }
 
-void make_too_many_links(void)
+void make_too_many_links( void )
 {
-  int    i;
-  int    status;
-  char   name [20];
+  int  i;
+  int  status;
+  char name[ 20 ];
 
-  status = mkdir("/dummy", S_IRWXU );
+  status = mkdir( "/dummy", S_IRWXU );
   rtems_test_assert( status == 0 );
 
-  for (i=1; i<= LINK_MAX; i++) {
-
-    sprintf(name,"/LinkName%d",i);
+  for ( i = 1; i <= LINK_MAX; i++ ) {
+    sprintf( name, "/LinkName%d", i );
     printf( "Making file %s\n", name );
-    status = link("/dummy" , name );
-    if( i < LINK_MAX )
-       rtems_test_assert( !status );
-    else
-       rtems_test_assert( status == -1 );
-
+    status = link( "/dummy", name );
+    if ( i < LINK_MAX ) {
+      rtems_test_assert( !status );
+    } else {
+      rtems_test_assert( status == -1 );
+    }
   }
 }
 
-void make_a_symlink(
-  char *existing,
-  char *new
-)
+void make_a_symlink( char *existing, char *new )
 {
-  int    status;
-  char   buf[100];
-  int    len;
+  int  status;
+  char buf[ 100 ];
+  int  len;
 
   memset( buf, 0, 100 );
 
@@ -468,41 +436,41 @@ void make_a_symlink(
   status = symlink( existing, new );
   rtems_test_assert( !status );
 
-  printf( "Verify with readlink\n");
+  printf( "Verify with readlink\n" );
   status = readlink( new, buf, 100 );
   len = strlen( existing );
-  rtems_test_assert ( status == len );
+  rtems_test_assert( status == len );
 
   status = readlink( new, buf, 3 );
   len = strlen( existing );
-  if (len < 3 )
+  if ( len < 3 ) {
     rtems_test_assert( status == len );
-  else
+  } else {
     rtems_test_assert( status == 3 );
+  }
 
   status = strcmp( existing, buf );
   rtems_test_assert( !status );
 }
 
-void make_multiple_symlinks(void)
+void make_multiple_symlinks( void )
 {
- int  status, i;
+  int status, i;
 
- make_a_symlink( Files[0],             SymLinks[0] );
- make_a_symlink( Directories[0],       SymLinks[1] );
- make_a_symlink( Links_to_dirlinks[0], SymLinks[2] );
- make_a_symlink( "No_File",            SymLinks[3] );
- make_a_symlink( SymLinks[1],          SymLinks[4] );
- make_a_symlink( "//my_mount_point/links","/my_mount_point/symlinks/links" );
+  make_a_symlink( Files[ 0 ], SymLinks[ 0 ] );
+  make_a_symlink( Directories[ 0 ], SymLinks[ 1 ] );
+  make_a_symlink( Links_to_dirlinks[ 0 ], SymLinks[ 2 ] );
+  make_a_symlink( "No_File", SymLinks[ 3 ] );
+  make_a_symlink( SymLinks[ 1 ], SymLinks[ 4 ] );
+  make_a_symlink( "//my_mount_point/links", "/my_mount_point/symlinks/links" );
 
- for (i = 0; i < 5; i++) {
-   stat_a_file( SymLinks[i] );
-   lstat_a_file( SymLinks[i] );
- }
+  for ( i = 0; i < 5; i++ ) {
+    stat_a_file( SymLinks[ i ] );
+    lstat_a_file( SymLinks[ i ] );
+  }
 
- status = symlink(  "//links", "bob/frank" );
- rtems_test_assert (status == -1);
-
+  status = symlink( "//links", "bob/frank" );
+  rtems_test_assert( status == -1 );
 }
 /*
 void make_too_many_symlinks()
@@ -521,49 +489,43 @@ void make_too_many_symlinks()
 }
 */
 
-void make_many_symlinks(
-  char  *real_file,
-  int    link_count
-)
+void make_many_symlinks( char *real_file, int link_count )
 {
-  int  i;
-  char name1[32];
-  char name2[32];
+  int   i;
+  char  name1[ 32 ];
+  char  name2[ 32 ];
   char *link_file;
 
   /* limit the link_count to ensure filename buffer doesn't overflow */
   rtems_test_assert( link_count < 1000 );
 
   link_file = real_file;
-  for (i=1; i < link_count; i++) {
+  for ( i = 1; i < link_count; i++ ) {
     sprintf( name1, "%04d", i );
     make_a_symlink( link_file, name1 );
     strcpy( name2, name1 );
     link_file = name2;
   }
 
-  for (i=1; i < link_count; i++) {
+  for ( i = 1; i < link_count; i++ ) {
     sprintf( name1, "%04d", i );
     stat_a_file( name1 );
     lstat_a_file( name1 );
   }
-
 }
 
 /*
  *  mkdir() multiple directories at a time
  */
-void make_multiple_directories(
-  char **files
-)
+void make_multiple_directories( char **files )
 {
-  int    i;
-  int    status;
+  int i;
+  int status;
 
   i = 0;
-  while ( files[i] ) {
-    printf( "Making directory %s\n", files[i] );
-    status = mkdir( files[i], S_IRWXU );
+  while ( files[ i ] ) {
+    printf( "Making directory %s\n", files[ i ] );
+    status = mkdir( files[ i ], S_IRWXU );
     rtems_test_assert( !status );
     i++;
   }
@@ -573,11 +535,11 @@ void make_multiple_directories(
 /*
  * Cause faults.
  */
-void Cause_faults(void)
+void Cause_faults( void )
 {
-  int                                   fd;
-  int                                   status;
-  char                                  longer_name[100];
+  int  fd;
+  int  status;
+  char longer_name[ 100 ];
 
   /*
    * Verify chmod with an invalid type.
@@ -593,11 +555,11 @@ void Cause_faults(void)
    * Change file to executable then try to chdir to it.
    */
 
-  status = chmod( Files[0], S_IXUSR );
+  status = chmod( Files[ 0 ], S_IXUSR );
   rtems_test_assert( status != -1 );
 
-  printf("chdir to a file should fail with ENOTDIR\n");
-  status = chdir( Files[0] );
+  printf( "chdir to a file should fail with ENOTDIR\n" );
+  status = chdir( Files[ 0 ] );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOTDIR );
 
@@ -606,28 +568,28 @@ void Cause_faults(void)
    * Verify directory works properly.
    */
 
-  printf("Verify RWX permission on %s via access\n", Directories[0]);
-  status = access( Directories[0], ( R_OK | W_OK | X_OK )  );
+  printf( "Verify RWX permission on %s via access\n", Directories[ 0 ] );
+  status = access( Directories[ 0 ], ( R_OK | W_OK | X_OK ) );
   rtems_test_assert( status == 0 );
 
-  printf( "chmod of %s to Read/Write\n", Directories[0] );
-  status = chmod( Directories[0], (S_IXGRP | S_IXOTH) );
+  printf( "chmod of %s to Read/Write\n", Directories[ 0 ] );
+  status = chmod( Directories[ 0 ], ( S_IXGRP | S_IXOTH ) );
   rtems_test_assert( status == 0 );
 
   printf( "chmod fred should fail with ENOENT\n" );
-  status = chmod( "fred", (S_IXGRP | S_IXOTH) );
+  status = chmod( "fred", ( S_IXGRP | S_IXOTH ) );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOENT );
 
-  strcpy(longer_name, Directories[0] );
-  strcat(longer_name, "/BADNAME" );
-  printf( "Create under %s should fail with EACCES\n", Directories[0] );
-  status = mkdir( longer_name , S_IRWXU );
+  strcpy( longer_name, Directories[ 0 ] );
+  strcat( longer_name, "/BADNAME" );
+  printf( "Create under %s should fail with EACCES\n", Directories[ 0 ] );
+  status = mkdir( longer_name, S_IRWXU );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EACCES );
 
-  printf("chdir to %s should fail with EACCES\n", Directories[4] );
-  status = chdir( Directories[4] );
+  printf( "chdir to %s should fail with EACCES\n", Directories[ 4 ] );
+  status = chdir( Directories[ 4 ] );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EACCES );
 
@@ -636,32 +598,35 @@ void Cause_faults(void)
    * Verify it works properly.
    */
 
-  status = chmod( Directories[0], (S_IXGRP | S_IXOTH) );
+  status = chmod( Directories[ 0 ], ( S_IXGRP | S_IXOTH ) );
   rtems_test_assert( status == 0 );
 
-  printf("mkdir %s should fail with EACCESS\n", longer_name );
-  status = mkdir( longer_name , S_IRWXU );
+  printf( "mkdir %s should fail with EACCESS\n", longer_name );
+  status = mkdir( longer_name, S_IRWXU );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EACCES );
 
-  printf("\n%s Should exist ( access )\n",Directories[0] );
-  status = access( Directories[0], F_OK );
+  printf( "\n%s Should exist ( access )\n", Directories[ 0 ] );
+  status = access( Directories[ 0 ], F_OK );
   rtems_test_assert( status == 0 );
-  printf("\n%s Should have read  permission( access )\n",Directories[0] );
-  status = access( Directories[0], R_OK );
+  printf( "\n%s Should have read  permission( access )\n", Directories[ 0 ] );
+  status = access( Directories[ 0 ], R_OK );
   rtems_test_assert( status != 0 );
-  printf("\n%s Should have write permission( access )\n",Directories[0] );
-  status = access( Directories[0], W_OK );
+  printf( "\n%s Should have write permission( access )\n", Directories[ 0 ] );
+  status = access( Directories[ 0 ], W_OK );
   rtems_test_assert( status != 0 );
-  printf("\n%s Should not have execute permission( access )\n",Directories[0] );
-  status = access( Directories[0], X_OK );
+  printf(
+    "\n%s Should not have execute permission( access )\n",
+    Directories[ 0 ]
+  );
+  status = access( Directories[ 0 ], X_OK );
   rtems_test_assert( status != 0 );
 
-  printf("\nRestore %s to RWX\n",Directories[0] );
-  status = chmod( Directories[0], S_IRWXU );
+  printf( "\nRestore %s to RWX\n", Directories[ 0 ] );
+  status = chmod( Directories[ 0 ], S_IRWXU );
   rtems_test_assert( status == 0 );
 
-  printf("chdir to /my_mount_point \n");
+  printf( "chdir to /my_mount_point \n" );
   status = chdir( "/my_mount_point" );
   rtems_test_assert( status == 0 );
 
@@ -670,29 +635,29 @@ void Cause_faults(void)
    * Verify links to the removed directory still work.
    */
 
-  printf( "Remove %s\n", Directories[5] );
-  status = rmdir( Directories[5] );
+  printf( "Remove %s\n", Directories[ 5 ] );
+  status = rmdir( Directories[ 5 ] );
   rtems_test_assert( status == 0 );
 
-  stat_a_file( Directories[5] );
-  status = access( Directories[5], F_OK );
+  stat_a_file( Directories[ 5 ] );
+  status = access( Directories[ 5 ], F_OK );
   rtems_test_assert( status != 0 );
 
-  stat_a_file( Links_to_Dirs[5] );
-  status = readlink( Links_to_Dirs[5], longer_name, 3 );
+  stat_a_file( Links_to_Dirs[ 5 ] );
+  status = readlink( Links_to_Dirs[ 5 ], longer_name, 3 );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
-  stat_a_file( Links_to_dirlinks[5] );
-  printf("Chdir to %s\n", Links_to_Dirs[5] );
-  status = chdir( Links_to_Dirs[5] );
+  stat_a_file( Links_to_dirlinks[ 5 ] );
+  printf( "Chdir to %s\n", Links_to_Dirs[ 5 ] );
+  status = chdir( Links_to_Dirs[ 5 ] );
   rtems_test_assert( status == 0 );
 
   /*
    * Verify we cannot move up from a node with no parent node.
    */
 
-  printf("Chdir to .. should fail with ENOENT\n" );
+  printf( "Chdir to .. should fail with ENOENT\n" );
   status = chdir( ".." );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOENT );
@@ -701,16 +666,16 @@ void Cause_faults(void)
    * Create a subdirectory under the dangling node.
    */
 
-  printf("mkdir ../t should fail with ENOENT\n" );
-  status = mkdir( "../t" , S_IRWXU );
+  printf( "mkdir ../t should fail with ENOENT\n" );
+  status = mkdir( "../t", S_IRWXU );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOENT );
 
-  printf("mkdir t\n");
-  status = mkdir( "t" , S_IRWXU );
+  printf( "mkdir t\n" );
+  status = mkdir( "t", S_IRWXU );
   rtems_test_assert( status == 0 );
 
-  printf("chdir to /my_mount_point\n");
+  printf( "chdir to /my_mount_point\n" );
   status = chdir( "/my_mount_point" );
   rtems_test_assert( status == 0 );
 
@@ -718,44 +683,45 @@ void Cause_faults(void)
    * Check rmdir, rmnod, and unlink
    */
 
-  printf("rmdir %s\n", Links_to_Dirs[5] );
-  status = rmdir( Links_to_Dirs[5] );
+  printf( "rmdir %s\n", Links_to_Dirs[ 5 ] );
+  status = rmdir( Links_to_Dirs[ 5 ] );
   rtems_test_assert( status == 0 );
 
-  printf("unlink %s should fail with ENOTEMPTY\n", Links_to_dirlinks[5] );
-  status = unlink(  Links_to_dirlinks[5] );
+  printf( "unlink %s should fail with ENOTEMPTY\n", Links_to_dirlinks[ 5 ] );
+  status = unlink( Links_to_dirlinks[ 5 ] );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOTEMPTY );
 
-  strcpy( longer_name,  Links_to_dirlinks[5] );
-  strcat( longer_name, "/t");
-  printf("rmdir %s\n", longer_name );
+  strcpy( longer_name, Links_to_dirlinks[ 5 ] );
+  strcat( longer_name, "/t" );
+  printf( "rmdir %s\n", longer_name );
   status = rmdir( longer_name );
   rtems_test_assert( status == 0 );
 
-  printf("unlink %s\n", Links_to_dirlinks[5]);
-  status = unlink( Links_to_dirlinks[5] );
+  printf( "unlink %s\n", Links_to_dirlinks[ 5 ] );
+  status = unlink( Links_to_dirlinks[ 5 ] );
   rtems_test_assert( status == 0 );
 
-  status = chdir( Directories[0] );
-  status = mkdir ( "my_mount_point", S_IRWXU );
+  status = chdir( Directories[ 0 ] );
+  status = mkdir( "my_mount_point", S_IRWXU );
   rtems_test_assert( status == 0 );
 
-  printf("Attempting to mount IMFS file system at /dir1/my_mount_point \n");
+  printf( "Attempting to mount IMFS file system at /dir1/my_mount_point \n" );
   status = mount(
     "null",
     "/my_mount_point/dir1/my_mount_point",
     "imfs",
-     RTEMS_FILESYSTEM_READ_WRITE,
-     NULL );
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL
+  );
   rtems_test_assert( status == 0 );
 
-  printf("rmdir /dir1/my_mount_point should fail with EBUSY\n");
-  status = rmdir ("/my_mount_point/dir1/my_mount_point" );
+  printf( "rmdir /dir1/my_mount_point should fail with EBUSY\n" );
+  status = rmdir( "/my_mount_point/dir1/my_mount_point" );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EBUSY );
 
-  printf( "Unmount /my_mount_point/dir1/my_mount_point\n");
+  printf( "Unmount /my_mount_point/dir1/my_mount_point\n" );
   status = unmount( "/my_mount_point/dir1/my_mount_point" );
   rtems_test_assert( status == 0 );
 
@@ -763,57 +729,55 @@ void Cause_faults(void)
    * Verify write permission is checked.
    */
 
-  printf("chmod of %s to group and other execute\n", Files[0] );
-  status = chmod (Files[0], (S_IXGRP | S_IXOTH) );
+  printf( "chmod of %s to group and other execute\n", Files[ 0 ] );
+  status = chmod( Files[ 0 ], ( S_IXGRP | S_IXOTH ) );
   rtems_test_assert( status == 0 );
 
-  printf("Open %s for write should fail with EACCES\n", Files[0] );
-  fd = open (Files[0], O_WRONLY);
+  printf( "Open %s for write should fail with EACCES\n", Files[ 0 ] );
+  fd = open( Files[ 0 ], O_WRONLY );
   rtems_test_assert( fd == -1 );
   rtems_test_assert( errno == EACCES );
 
-  printf("chmod of %s to User Execute and Read\n", Directories[3] );
-  status = chmod (Directories[3], (S_IXUSR | S_IRUSR) );
+  printf( "chmod of %s to User Execute and Read\n", Directories[ 3 ] );
+  status = chmod( Directories[ 3 ], ( S_IXUSR | S_IRUSR ) );
   rtems_test_assert( status == 0 );
-  strcpy(longer_name, Directories[3] );
-  strcat(longer_name, "/NewFile" );
-  printf("Mkdir of %s should fail with EACCES\n",longer_name );
+  strcpy( longer_name, Directories[ 3 ] );
+  strcat( longer_name, "/NewFile" );
+  printf( "Mkdir of %s should fail with EACCES\n", longer_name );
   status = mkdir( longer_name, S_IRWXU );
   rtems_test_assert( status != 0 );
   rtems_test_assert( errno == EACCES );
 
-  printf("Making too many hard links.\n" );
-  make_too_many_links( );
+  printf( "Making too many hard links.\n" );
+  make_too_many_links();
 
   /*
    * The current directory MUST be restored at the end of this test.
    */
 
-  printf("chdir to /my_mount_point \n");
+  printf( "chdir to /my_mount_point \n" );
   status = chdir( "/my_mount_point" );
   rtems_test_assert( status == 0 );
-
 }
 
-void Show_Time(void)
+void Show_Time( void )
 {
   rtems_status_code sc;
   rtems_time_of_day time;
 
   sc = rtems_clock_get_tod( &time );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-  printf("--->Current Time: ");
+  printf( "--->Current Time: " );
   print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 }
 
-void test_statvfs(void)
+void test_statvfs( void )
 {
-
-  int status = 0;
+  int            status = 0;
   struct statvfs stat;
 
   puts( "statvfs, with invalid path - expect ENOENT" );
-  status = statvfs( "" , &stat );
+  status = statvfs( "", &stat );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOENT );
 
@@ -833,18 +797,15 @@ void test_statvfs(void)
  *  main entry point to the test
  */
 
-#if defined(__rtems__)
-int test_main(void)
+#if defined( __rtems__ )
+int test_main( void )
 #else
-int main(
-  int    argc,
-  char **argv
-)
+int main( int argc, char **argv )
 #endif
 {
   rtems_status_code sc;
   rtems_time_of_day time;
-  int status;
+  int               status;
 
   TEST_BEGIN();
 
@@ -858,20 +819,20 @@ int main(
    * platforms and bsp's.
    */
 
-  status = mkdir("/my_mount_point",  S_IRWXU );
+  status = mkdir( "/my_mount_point", S_IRWXU );
   rtems_test_assert( status == 0 );
   status = mount(
     "null",
     "my_mount_point",
     "imfs",
-     RTEMS_FILESYSTEM_READ_WRITE,
-     NULL );
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL
+  );
   rtems_test_assert( status == 0 );
   status = chdir( "/my_mount_point" );
   rtems_test_assert( status == 0 );
-  status = mkdir("dev",  S_IRWXU );
+  status = mkdir( "dev", S_IRWXU );
   rtems_test_assert( status == 0 );
-
 
   /*
    *  Create the files and directories for the test.
@@ -879,12 +840,12 @@ int main(
 
   make_multiple_directories( Directories );
   make_multiple_files( Files );
-  make_multiple_links( Directories,    Links_to_Dirs );
-  make_multiple_links( Files,          Links_to_Files );
+  make_multiple_links( Directories, Links_to_Dirs );
+  make_multiple_links( Files, Links_to_Files );
 
   sc = rtems_task_wake_after( TIMEOUT_VALUE );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-  make_multiple_links( Links_to_Dirs,  Links_to_dirlinks );
+  make_multiple_links( Links_to_Dirs, Links_to_dirlinks );
   sc = rtems_task_wake_after( TIMEOUT_VALUE );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   make_multiple_links( Links_to_Files, Links_to_filelinks );
@@ -910,37 +871,36 @@ int main(
    * Change directory and releative paths are now bad.
    */
 
-  puts("\nchdir to dev");
-  chdir("dev");
-  puts("\nstat relative paths that are now bad");
+  puts( "\nchdir to dev" );
+  chdir( "dev" );
+  puts( "\nstat relative paths that are now bad" );
   stat_multiple_files( Good_relative_paths );
 
   /*
    * Change directory to the link directory and follow links.
    */
 
-  puts("\nchdir to ../links");
-  chdir("../links");
-  puts("Doing the stat() on good links\n");
+  puts( "\nchdir to ../links" );
+  chdir( "../links" );
+  puts( "Doing the stat() on good links\n" );
   stat_multiple_files( Links_to_Dirs );
   stat_multiple_files( Links_to_Files );
-  stat_multiple_files( Links_to_dirlinks  );
+  stat_multiple_files( Links_to_dirlinks );
   stat_multiple_files( Links_to_filelinks );
 
   /*
    * Chmod on dir1/dir1.  This allows the error path to be hit.
    */
 
-  printf( "chmod of %s to Read/Write\n", Directories[4] );
-  chmod( Directories[4], (S_IROTH|S_IWOTH) );
+  printf( "chmod of %s to Read/Write\n", Directories[ 4 ] );
+  chmod( Directories[ 4 ], ( S_IROTH | S_IWOTH ) );
   puts( "\nDoing the stat() on all the bad paths" );
 
   stat_multiple_files( Bad_paths );
   make_multiple_bad_files( Bad_paths );
 
-  printf( "Return %s to RWX\n", Directories[4] );
-  chmod( Directories[4], S_IRWXU );
-
+  printf( "Return %s to RWX\n", Directories[ 4 ] );
+  chmod( Directories[ 4 ], S_IRWXU );
 
   /*
    * Check out symbolic links.
@@ -968,5 +928,5 @@ int main(
   test_statvfs();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }

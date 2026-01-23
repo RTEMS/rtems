@@ -41,8 +41,8 @@ int test( void );
 int test( void )
 {
   unsigned return_value;
-  char *ifname = "test";
+  char    *ifname = "test";
 
-  return_value = if_nametoindex(ifname);
-  return (return_value != 0);
+  return_value = if_nametoindex( ifname );
+  return ( return_value != 0 );
 }

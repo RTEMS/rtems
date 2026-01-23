@@ -25,9 +25,9 @@
 
 #include <syslog.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  return setlogmask(LOG_ALERT);
+  return setlogmask( LOG_ALERT );
 }

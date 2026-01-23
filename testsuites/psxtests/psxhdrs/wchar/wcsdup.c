@@ -36,11 +36,11 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const wchar_t wc = 0;
 
-  return *wcsdup(&wc);
+  return *wcsdup( &wc );
 }

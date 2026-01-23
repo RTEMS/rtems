@@ -41,16 +41,16 @@
 const char rtems_test_name[] = "PSXID 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void test_gid(void);
-void test_uid(void);
-void test_pid(void);
-void test_getlogin(void);
+rtems_task Init( rtems_task_argument argument );
+void       test_gid( void );
+void       test_uid( void );
+void       test_pid( void );
+void       test_getlogin( void );
 
-void test_gid(void)
+void test_gid( void )
 {
   gid_t gid;
-  int sc;
+  int   sc;
 
   gid = getegid();
   rtems_test_assert( gid == 0 );
@@ -61,7 +61,7 @@ void test_gid(void)
   printf( "getgid = %d\n", gid );
 
   puts( "setgid(5)" );
-  sc = setgid(5);
+  sc = setgid( 5 );
   rtems_test_assert( sc == 0 );
 
   gid = getegid();
@@ -73,7 +73,7 @@ void test_gid(void)
   printf( "getgid = %d\n", gid );
 
   puts( "setegid(5)" );
-  sc = setegid(5);
+  sc = setegid( 5 );
   rtems_test_assert( sc == 0 );
 
   gid = getegid();
@@ -85,11 +85,11 @@ void test_gid(void)
   printf( "getgid = %d\n", gid );
 
   puts( "setgid(0)" );
-  sc = setgid(0);
+  sc = setgid( 0 );
   rtems_test_assert( sc == 0 );
 
   puts( "setegid(0)" );
-  sc = setegid(0);
+  sc = setegid( 0 );
   rtems_test_assert( sc == 0 );
 
   errno = 0;
@@ -99,10 +99,10 @@ void test_gid(void)
   rtems_test_assert( errno == ENOSYS );
 }
 
-void test_uid(void)
+void test_uid( void )
 {
   uid_t uid;
-  int sc;
+  int   sc;
 
   uid = geteuid();
   rtems_test_assert( uid == 0 );
@@ -113,7 +113,7 @@ void test_uid(void)
   printf( "getuid = %d\n", uid );
 
   puts( "setuid(5)" );
-  sc = setuid(5);
+  sc = setuid( 5 );
   rtems_test_assert( sc == 0 );
 
   uid = geteuid();
@@ -125,7 +125,7 @@ void test_uid(void)
   printf( "getuid = %d\n", uid );
 
   puts( "seteuid(5)" );
-  sc = seteuid(5);
+  sc = seteuid( 5 );
   rtems_test_assert( sc == 0 );
 
   uid = geteuid();
@@ -137,18 +137,18 @@ void test_uid(void)
   printf( "getuid = %d\n", uid );
 
   puts( "seteuid(0)" );
-  sc = seteuid(0);
+  sc = seteuid( 0 );
   rtems_test_assert( sc == 0 );
 
   puts( "setuid(0)" );
-  sc = setuid(0);
+  sc = setuid( 0 );
   rtems_test_assert( sc == 0 );
 }
 
-pid_t __getpid(void);
-int issetugid(void);
+pid_t __getpid( void );
+int   issetugid( void );
 
-void test_pid(void)
+void test_pid( void )
 {
   pid_t pid;
   int   sc;
@@ -172,21 +172,21 @@ void test_pid(void)
 
   puts( "getpgrp - return local node - OK" );
   pid = getpgrp();
-  printf( "getpgrp returned %d\n", pid ); 
+  printf( "getpgrp returned %d\n", pid );
 }
 
-void test_getlogin(void)
+void test_getlogin( void )
 {
-  int sc;
+  int  sc;
   char ch;
 
   puts( "setuid(5)" );
-  sc = setuid(5);
+  sc = setuid( 5 );
   rtems_test_assert( sc == 0 );
   printf( "getlogin() -- (%s)\n", getlogin() );
 
   puts( "setuid(0)" );
-  sc = setuid(0);
+  sc = setuid( 0 );
   rtems_test_assert( sc == 0 );
   printf( "getlogin() -- (%s)\n", getlogin() );
 
@@ -199,9 +199,7 @@ void test_getlogin(void)
   rtems_test_assert( sc == ERANGE );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -220,7 +218,7 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -228,10 +226,10 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS                  1
+#define CONFIGURE_MAXIMUM_TASKS 1
 /* so we can write /etc/passwd and /etc/group */
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS       RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

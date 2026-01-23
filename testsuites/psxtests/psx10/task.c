@@ -40,15 +40,13 @@
 
 #include "system.h"
 
-void *Task_1(
-  void *argument
-)
+void *Task_1( void *argument )
 {
   (void) argument;
 
-  int  status;
+  int status;
 
-/* wait for a condition variable signal from Init */
+  /* wait for a condition variable signal from Init */
 
   Task_id = pthread_self();
   printf( "Task_1: ID is 0x%08" PRIxpthread_t "\n", Task_id );
@@ -67,7 +65,7 @@ void *Task_1(
   status = pthread_mutex_unlock( &Mutex_id );
   rtems_test_assert( !status );
 
-/* wait for a condition variable broadcast from Init */
+  /* wait for a condition variable broadcast from Init */
 
   status = pthread_mutex_lock( &Mutex_id );
   rtems_test_assert( !status );

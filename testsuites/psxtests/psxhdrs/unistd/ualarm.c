@@ -50,5 +50,5 @@ int test( void )
 
   result = ualarm( useconds, interval );
 
-  return (result == 0) ? 0 : -1;
+  return ( result == 0 ) ? 0 : -1;
 }

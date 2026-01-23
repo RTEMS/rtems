@@ -42,7 +42,7 @@ void test( void );
 
 void test( void )
 {
-  void   *status = NULL;
+  void *status = NULL;
 
   pthread_exit( status );
 }

@@ -41,7 +41,7 @@ int test( void );
 int test( void )
 {
   struct dirent **namelist;
-  int result;
+  int             result;
 
   result = scandir( ".", &namelist, NULL, alphasort );
 

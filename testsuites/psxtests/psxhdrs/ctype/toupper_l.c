@@ -36,14 +36,14 @@
 
 #include <ctype.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
-  int lower;
+  int      lower;
   locale_t locale;
 
-  locale = (locale_t)0;
+  locale = (locale_t) 0;
   lower = 0;
-  return (toupper_l(lower, locale));
+  return ( toupper_l( lower, locale ) );
 }

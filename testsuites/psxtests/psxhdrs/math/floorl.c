@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  long double x = 68.567 ;
-  long double result ;
+  long double x = 68.567;
+  long double result;
 
-  result = floorl(x) ;
+  result = floorl( x );
 
-  return (result);
+  return ( result );
 }
 #endif

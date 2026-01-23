@@ -36,16 +36,16 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   void *ptr1 = NULL;
-   void *ptr2 = NULL;
-   size_t num = 2;
-   int result;
+int test( void )
+{
+  void  *ptr1 = NULL;
+  void  *ptr2 = NULL;
+  size_t num = 2;
+  int    result;
 
-   result = memcmp( ptr1, ptr2, num );
+  result = memcmp( ptr1, ptr2, num );
 
-   return result;
- }
+  return result;
+}

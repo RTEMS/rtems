@@ -44,17 +44,17 @@
 
 const char rtems_test_name[] = "PSXAIO 5";
 
-#define BUFSIZE 512
+#define BUFSIZE  512
 #define WRONG_FD 404
 #define BAD_MODE 38576
 
 /* forward declarations to avoid warnings */
 static struct aiocb *create_aiocb( int fd );
-static void free_aiocb( struct aiocb *aiocbp );
-static void test_einval( struct aiocb** aiocbp );
-static void test_eio( struct aiocb** aiocbp );
-static void test_no_wait( struct aiocb** aiocbp );
-static void test_wait( struct aiocb** aiocbp );
+static void          free_aiocb( struct aiocb *aiocbp );
+static void          test_einval( struct aiocb **aiocbp );
+static void          test_eio( struct aiocb **aiocbp );
+static void          test_no_wait( struct aiocb **aiocbp );
+static void          test_wait( struct aiocb **aiocbp );
 
 static struct aiocb *create_aiocb( int fd )
 {
@@ -74,60 +74,60 @@ static struct aiocb *create_aiocb( int fd )
 
 static void free_aiocb( struct aiocb *aiocbp )
 {
-  free( (void*) aiocbp->aio_buf );
+  free( (void *) aiocbp->aio_buf );
   free( aiocbp );
 }
 
-static void test_einval( struct aiocb** aiocbp )
+static void test_einval( struct aiocb **aiocbp )
 {
   int status;
 
-  status = lio_listio( LIO_WAIT, NULL, 1, NULL);
+  status = lio_listio( LIO_WAIT, NULL, 1, NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
   errno = 0;
 
-  status = lio_listio( BAD_MODE, aiocbp, 1, NULL);
+  status = lio_listio( BAD_MODE, aiocbp, 1, NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
   errno = 0;
 
-  status = lio_listio( LIO_WAIT, aiocbp, -9, NULL);
+  status = lio_listio( LIO_WAIT, aiocbp, -9, NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
   errno = 0;
 
-  status = lio_listio( LIO_WAIT, aiocbp, 547, NULL);
+  status = lio_listio( LIO_WAIT, aiocbp, 547, NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
   errno = 0;
 }
 
-static void test_eio( struct aiocb** aiocbp )
+static void test_eio( struct aiocb **aiocbp )
 {
   int status;
 
-  status = lio_listio( LIO_NOWAIT, &aiocbp[4], 1, NULL);
+  status = lio_listio( LIO_NOWAIT, &aiocbp[ 4 ], 1, NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EIO );
   errno = 0;
 
-  status = lio_listio( LIO_WAIT, &aiocbp[4], 1, NULL);
+  status = lio_listio( LIO_WAIT, &aiocbp[ 4 ], 1, NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EIO );
   errno = 0;
 }
 
-static void test_no_wait( struct aiocb** aiocbp )
+static void test_no_wait( struct aiocb **aiocbp )
 {
-  int status, received_signal, sig;
+  int             status, received_signal, sig;
   struct sigevent sigev;
-  sigset_t sig_set;
-  
+  sigset_t        sig_set;
+
   sig = SIGUSR1;
   sigev.sigev_notify = SIGEV_SIGNAL;
   sigev.sigev_signo = sig;
-  sigev.sigev_value.sival_ptr  = NULL;
+  sigev.sigev_value.sival_ptr = NULL;
 
   status = sigemptyset( &sig_set );
   rtems_test_assert( status == 0 );
@@ -138,7 +138,7 @@ static void test_no_wait( struct aiocb** aiocbp )
   status = sigprocmask( SIG_BLOCK, &sig_set, NULL );
   rtems_test_assert( status == 0 );
 
-  status = lio_listio( LIO_NOWAIT, aiocbp, 4, &sigev);
+  status = lio_listio( LIO_NOWAIT, aiocbp, 4, &sigev );
   rtems_test_assert( status == 0 );
 
   status = sigwait( &sig_set, &received_signal );
@@ -149,11 +149,11 @@ static void test_no_wait( struct aiocb** aiocbp )
   rtems_test_assert( status == 0 );
 }
 
-static void test_wait( struct aiocb** aiocbp )
+static void test_wait( struct aiocb **aiocbp )
 {
   int status;
 
-  status = lio_listio( LIO_WAIT, aiocbp, 4, NULL);
+  status = lio_listio( LIO_WAIT, aiocbp, 4, NULL );
   rtems_test_assert( status == 0 );
 }
 
@@ -162,26 +162,26 @@ void *POSIX_Init( void *argument )
   (void) argument;
 
   struct aiocb *aiocbp[] = { NULL, NULL, NULL, NULL, NULL };
-  int fd, result;
+  int           fd, result;
 
   rtems_aio_init();
 
   result = mkdir( "/tmp", S_IRWXU );
   rtems_test_assert( result == 0 );
-  
+
   fd = open(
     "/tmp/aio_fildes",
-    O_RDWR|O_CREAT,
-    S_IRWXU|S_IRWXG|S_IRWXO
+    O_RDWR | O_CREAT,
+    S_IRWXU | S_IRWXG | S_IRWXO
   );
   rtems_test_assert( fd != -1 );
 
   TEST_BEGIN();
 
-  for (int i = 0; i<4; i++ ) {
-    aiocbp[i] = create_aiocb( fd );
+  for ( int i = 0; i < 4; i++ ) {
+    aiocbp[ i ] = create_aiocb( fd );
   }
-  aiocbp[4] = create_aiocb( WRONG_FD );
+  aiocbp[ 4 ] = create_aiocb( WRONG_FD );
 
   test_einval( aiocbp );
 
@@ -193,8 +193,8 @@ void *POSIX_Init( void *argument )
 
   TEST_END();
 
-  for (int i = 0; i<5; i++ ) {
-    free_aiocb(aiocbp[i]);
+  for ( int i = 0; i < 5; i++ ) {
+    free_aiocb( aiocbp[ i ] );
   }
 
   close( fd );

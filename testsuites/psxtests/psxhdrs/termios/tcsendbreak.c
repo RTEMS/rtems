@@ -44,7 +44,7 @@ int test( void )
   int fildes = 0;
   int duration = 0;
 
-  result = tcsendbreak(fildes, duration);
+  result = tcsendbreak( fildes, duration );
 
   return result;
 }

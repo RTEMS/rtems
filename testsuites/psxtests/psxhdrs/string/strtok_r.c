@@ -36,16 +36,16 @@
 
  #include <string.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   char *dest = "Hello";
-   char *src = "World";
-   char *saveptr = "Door";
-   char *result;
+int test( void )
+{
+  char *dest = "Hello";
+  char *src = "World";
+  char *saveptr = "Door";
+  char *result;
 
-   result = strtok_r( dest, src, &saveptr );
+  result = strtok_r( dest, src, &saveptr );
 
-   return ( result != NULL );
- }
+  return ( result != NULL );
+}

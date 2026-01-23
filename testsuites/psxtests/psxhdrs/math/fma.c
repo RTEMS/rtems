@@ -40,12 +40,12 @@ int test( void );
 
 int test( void )
 {
-  double x = 6834 ;
-  double y = 45 ;
-  double z = 6 ;
-  double result ;
+  double x = 6834;
+  double y = 45;
+  double z = 6;
+  double result;
 
-  result = fma(x,y,z) ;
+  result = fma( x, y, z );
 
-  return (result);
+  return ( result );
 }

@@ -43,9 +43,9 @@ int test( void );
 int test( void )
 {
   int    fildes = 0;
-  void  *buf    = NULL;
-  size_t nbyte  = 0;
-  int    flags  = 0;
+  void  *buf = NULL;
+  size_t nbyte = 0;
+  int    flags = 0;
   int    result;
 
   result = posix_getdents( fildes, buf, nbyte, flags );

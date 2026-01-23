@@ -46,5 +46,5 @@ int test( void )
 
   loginname = getlogin();
 
-  return (loginname == NULL) ? -1 : 0;
+  return ( loginname == NULL ) ? -1 : 0;
 }

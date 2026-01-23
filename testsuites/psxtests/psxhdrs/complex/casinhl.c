@@ -37,14 +37,14 @@
 #define __CYGWIN__ 1 /* required until ticker 3635 fixed */
 #include <complex.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   long double complex number;
   long double complex result;
 
   number = 1.0 + 1.0 * I;
-  result = casinhl(number);
-  return (result != 0);
+  result = casinhl( number );
+  return ( result != 0 );
 }

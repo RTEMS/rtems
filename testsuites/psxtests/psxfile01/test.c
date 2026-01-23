@@ -67,14 +67,14 @@
 const char rtems_test_name[] = "PSXFILE 1";
 
 /* forward declarations to avoid warnings */
-void test_case_reopen_append(void);
-void dump_statbuf(struct stat *buf);
-void stat_a_file(const char *file);
-int test_main(void);
+void test_case_reopen_append( void );
+void dump_statbuf( struct stat *buf );
+void stat_a_file( const char *file );
+int  test_main( void );
 
-char test_write_buffer[ 1024 ];
-rtems_filesystem_operations_table  IMFS_ops_no_evalformake;
-rtems_filesystem_operations_table  IMFS_ops_no_rename;
+char                              test_write_buffer[ 1024 ];
+rtems_filesystem_operations_table IMFS_ops_no_evalformake;
+rtems_filesystem_operations_table IMFS_ops_no_rename;
 
 static const char somefile[] = "somefile";
 
@@ -84,22 +84,11 @@ static const char somelink[] = "somelink";
  *  File test support routines.
  */
 
-void test_cat(
-  char *file,
-  int   offset_arg,
-  int   length
-);
+void test_cat( char *file, int offset_arg, int length );
 
-void test_write(
-  char   *file,
-  off_t  offset,
-  char  *buffer
-);
+void test_write( char *file, off_t offset, char *buffer );
 
-void test_extend(
-  char *file,
-  off_t new_len
-);
+void test_extend( char *file, off_t new_len );
 
 /*
  *  dump_statbuf
@@ -116,24 +105,25 @@ void dump_statbuf( struct stat *buf )
 
   printf( "....st_dev     (0x%" PRIx32 ":0x%" PRIx32 ")\n", major1, minor1 );
   printf( "....st_rdev    (0x%" PRIx32 ":0x%" PRIx32 ")\n", major2, minor2 );
-  printf( "....st_ino     %" PRIxino_t "  may vary by small amount\n", buf->st_ino );
+  printf(
+    "....st_ino     %" PRIxino_t "  may vary by small amount\n",
+    buf->st_ino
+  );
   printf( "....mode  = %08" PRIomode_t "\n", buf->st_mode );
   printf( "....nlink = %d\n", buf->st_nlink );
 
   printf( "....uid = %d\n", buf->st_uid );
   printf( "....gid = %d\n", buf->st_gid );
 
-  printf( "....atime = %s", ctime(&buf->st_atime) );
-  printf( "....mtime = %s", ctime(&buf->st_mtime) );
-  printf( "....ctime = %s", ctime(&buf->st_ctime) );
+  printf( "....atime = %s", ctime( &buf->st_atime ) );
+  printf( "....mtime = %s", ctime( &buf->st_mtime ) );
+  printf( "....ctime = %s", ctime( &buf->st_ctime ) );
 
   printf( "....st_blksize %" PRIxblksize_t "\n", buf->st_blksize );
   printf( "....st_blocks  %" PRIxblkcnt_t "\n", buf->st_blocks );
 }
 
-void stat_a_file(
-  const char *file
-)
+void stat_a_file( const char *file )
 {
   int         status;
   struct stat statbuf;
@@ -147,13 +137,12 @@ void stat_a_file(
   if ( status == -1 ) {
     printf( ": %s\n", strerror( errno ) );
   } else {
-    puts("");
+    puts( "" );
     dump_statbuf( &statbuf );
   }
-
 }
 
-static void test_open_directory(void)
+static void test_open_directory( void )
 {
   int status;
   int fd;
@@ -180,10 +169,10 @@ static void test_open_directory(void)
   rtems_test_assert( errno == ENOENT );
 }
 
-static void test_open_cloexec(void)
+static void test_open_cloexec( void )
 {
-  int status;
-  int fd;
+  int    status;
+  int    fd;
   mode_t mode;
 
   mode = O_CREAT;
@@ -207,10 +196,10 @@ static void test_open_cloexec(void)
   rtems_test_assert( errno == ENOENT );
 }
 
-static void test_open_nofollow(void)
+static void test_open_nofollow( void )
 {
-  int status;
-  int fd;
+  int         status;
+  int         fd;
   struct stat st;
 
   fd = open( somefile, O_CREAT, S_IRWXU );
@@ -265,13 +254,10 @@ static void test_open_nofollow(void)
  *  Main entry point of the test
  */
 
-#if defined(__rtems__)
-int test_main(void)
+#if defined( __rtems__ )
+int test_main( void )
 #else
-int main(
-  int argc,
-  char **argv
-)
+int main( int argc, char **argv )
 #endif
 {
   int               status;
@@ -279,7 +265,7 @@ int main(
   int               fd;
   int               i;
   struct stat       buf;
-  char              buffer[128];
+  char              buffer[ 128 ];
   FILE             *file;
   time_t            atime1;
   time_t            mtime1;
@@ -373,11 +359,11 @@ int main(
   puts( "rmdir /dev" );
   status = rmdir( "/dev" );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno ==  ENOTEMPTY);
+  rtems_test_assert( errno == ENOTEMPTY );
 
   puts( "rmdir /fred" );
-  status = rmdir ("/fred");
-  rtems_test_assert (status == -1);
+  status = rmdir( "/fred" );
+  rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOENT );
 
   puts( "rmdir /tmp/bha" );
@@ -393,15 +379,15 @@ int main(
   status = mknod( "/dev/tty/S3", S_IFCHR, 0xFF00000080LL );
   rtems_test_assert( !status );
 
-  puts ("mknod /etc/passwd");
-  status = mknod( "/etc/passwd", (S_IFREG | S_IRWXU), 0LL );
+  puts( "mknod /etc/passwd" );
+  status = mknod( "/etc/passwd", ( S_IFREG | S_IRWXU ), 0LL );
   rtems_test_assert( !status );
 
-  puts( "mkdir /tmp/my_dir");
+  puts( "mkdir /tmp/my_dir" );
   status = mkdir( "/tmp/my_dir", S_IRWXU );
   rtems_test_assert( status == 0 );
 
-  puts("mkfifo /c/my_dir" );
+  puts( "mkfifo /c/my_dir" );
   status = mkfifo( "/c/my_dir", S_IRWXU );
   rtems_test_assert( status == -1 );
 
@@ -428,7 +414,7 @@ int main(
    */
 
   puts( "open /tmp/j" );
-  fd = open( "/tmp/j", O_RDWR|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO );
+  fd = open( "/tmp/j", O_RDWR | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO );
   rtems_test_assert( fd != -1 );
   printf( "open returned file descriptor %d\n", fd );
 
@@ -452,19 +438,19 @@ int main(
    *  Simple open failure. Trying to create an existing file.
    */
 
-  puts("create and close /tmp/tom");
-  fd = open( "/tmp/tom", O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO );
+  puts( "create and close /tmp/tom" );
+  fd = open( "/tmp/tom", O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO );
   rtems_test_assert( fd != -1 );
   status = close( fd );
   rtems_test_assert( status == 0 );
 
-  puts("Attempt to recreate /tmp/tom");
-  fd = open( "/tmp/tom", O_CREAT | O_EXCL, S_IRWXU|S_IRWXG|S_IRWXO );
+  puts( "Attempt to recreate /tmp/tom" );
+  fd = open( "/tmp/tom", O_CREAT | O_EXCL, S_IRWXU | S_IRWXG | S_IRWXO );
   rtems_test_assert( fd == -1 );
   rtems_test_assert( errno == EEXIST );
 
-  puts("create /tmp/john");
-  fd = open( "/tmp/john", O_RDWR|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO );
+  puts( "create /tmp/john" );
+  fd = open( "/tmp/john", O_RDWR | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO );
   rtems_test_assert( fd != -1 );
   status = close( fd );
   rtems_test_assert( status == 0 );
@@ -501,7 +487,7 @@ int main(
    */
 
   puts( "open /tmp/bha in write only mode -- OK" );
-  fd = open( "/tmp/bha", O_CREAT | O_WRONLY, S_IRWXU|S_IRWXG|S_IRWXO );
+  fd = open( "/tmp/bha", O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO );
   rtems_test_assert( fd != -1 );
 
   puts( "attempt fcntl on opened file -- OK" );
@@ -519,7 +505,7 @@ int main(
   rtems_test_assert( status == 0 );
 
   puts( "open /tmp/bha in read only mode -- OK" );
-  fd = open( "/tmp/bha", O_CREAT | O_RDONLY, S_IRWXU|S_IRWXG|S_IRWXO );
+  fd = open( "/tmp/bha", O_CREAT | O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
   rtems_test_assert( fd != -1 );
 
   puts( "attempt to read from /tmp/bha - expect EBADF" );
@@ -550,77 +536,81 @@ int main(
    */
 
   puts( "mknod /tmp/joel" );
-  status = mknod( "/tmp/joel", (S_IFREG | S_IRWXU), 0LL );
+  status = mknod( "/tmp/joel", ( S_IFREG | S_IRWXU ), 0LL );
   test_write( "/tmp/joel", 0, "the first write!!!\n" );
   test_cat( "/tmp/joel", 0, 0 );
 
   /* Exercise _rename_r */
 
   /* Simple rename test */
-  puts( "rename /tmp/joel to /tmp/drjoel");
-  status = _rename_r(NULL,"/tmp/joel","/tmp/drjoel");
-  rtems_test_assert(status == 0);
+  puts( "rename /tmp/joel to /tmp/drjoel" );
+  status = _rename_r( NULL, "/tmp/joel", "/tmp/drjoel" );
+  rtems_test_assert( status == 0 );
 
   /* Simple rename test */
-  puts("rename /tmp/drjoel to /tmp/joel");
-  status = _rename_r(NULL,"/tmp/drjoel","/tmp/joel");
-  rtems_test_assert(status == 0);
+  puts( "rename /tmp/drjoel to /tmp/joel" );
+  status = _rename_r( NULL, "/tmp/drjoel", "/tmp/joel" );
+  rtems_test_assert( status == 0 );
 
   /* Invalid old path */
-  puts("rename /tmp/drjoel to /tmp/joel - Should result in an error \
-since old path is not valid");
-  status = _rename_r(NULL,"/tmp/drjoel","/tmp/joel");
-  rtems_test_assert(status == -1);
+  puts( "rename /tmp/drjoel to /tmp/joel - Should result in an error \
+since old path is not valid" );
+  status = _rename_r( NULL, "/tmp/drjoel", "/tmp/joel" );
+  rtems_test_assert( status == -1 );
 
   /* Invalid new path */
-  puts("rename /tmp/joel to /tmp/drjoel/joel - Should result in an error \
-since new path is not valid");
-  status = _rename_r(NULL,"/tmp/joel","/tmp/drjoel/joel");
-  rtems_test_assert(status == -1);
+  puts( "rename /tmp/joel to /tmp/drjoel/joel - Should result in an error \
+since new path is not valid" );
+  status = _rename_r( NULL, "/tmp/joel", "/tmp/drjoel/joel" );
+  rtems_test_assert( status == -1 );
 
-  puts("changing dir to /tmp");
-  status = chdir("/tmp/");
-  rtems_test_assert(status == 0);
+  puts( "changing dir to /tmp" );
+  status = chdir( "/tmp/" );
+  rtems_test_assert( status == 0 );
 
-  puts("rename joel to drjoel");
-  status = _rename_r(NULL,"joel","drjoel");
-  rtems_test_assert(status == 0);
+  puts( "rename joel to drjoel" );
+  status = _rename_r( NULL, "joel", "drjoel" );
+  rtems_test_assert( status == 0 );
 
-  puts("rename drjoel to joel");
-  status = _rename_r(NULL,"drjoel","joel");
-  rtems_test_assert(status == 0);
+  puts( "rename drjoel to joel" );
+  status = _rename_r( NULL, "drjoel", "joel" );
+  rtems_test_assert( status == 0 );
 
   /* Rename across file systems */
-  puts("creating directory /imfs");
-  status = mkdir("/imfs",0777);
-  rtems_test_assert(status == 0);
-  puts("creating directory /imfs/hidden_on_mount");
-  status = mkdir("/imfs/hidden_on_mount",0777);
-  rtems_test_assert(status == 0);
+  puts( "creating directory /imfs" );
+  status = mkdir( "/imfs", 0777 );
+  rtems_test_assert( status == 0 );
+  puts( "creating directory /imfs/hidden_on_mount" );
+  status = mkdir( "/imfs/hidden_on_mount", 0777 );
+  rtems_test_assert( status == 0 );
 
-  puts("mounting filesystem with IMFS_ops at /imfs");
-  status = mount("null", "/imfs", "imfs", RTEMS_FILESYSTEM_READ_WRITE, NULL);
-  rtems_test_assert(status == 0);
-  puts("creating directory /imfs/test (on newly mounted filesystem)");
-  status = mkdir("/imfs/test", 0777);
-  rtems_test_assert(status == 0);
+  puts( "mounting filesystem with IMFS_ops at /imfs" );
+  status = mount( "null", "/imfs", "imfs", RTEMS_FILESYSTEM_READ_WRITE, NULL );
+  rtems_test_assert( status == 0 );
+  puts( "creating directory /imfs/test (on newly mounted filesystem)" );
+  status = mkdir( "/imfs/test", 0777 );
+  rtems_test_assert( status == 0 );
 
-  puts("attempt to rename directory joel to /imfs/test/joel - should fail with EXDEV");
-  status = _rename_r(NULL, "joel", "/imfs/test/joel");
-  rtems_test_assert(status == -1);
-  rtems_test_assert(errno == EXDEV);
+  puts(
+    "attempt to rename directory joel to /imfs/test/joel - should fail with EXDEV"
+  );
+  status = _rename_r( NULL, "joel", "/imfs/test/joel" );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EXDEV );
 
-  puts("changing dir to /");
-  status = chdir("/");
-  rtems_test_assert(status == 0);
+  puts( "changing dir to /" );
+  status = chdir( "/" );
+  rtems_test_assert( status == 0 );
 
-  puts("attempt to rename across filesystem, with old path having a parent node");
-  puts("attempt to rename tmp/joel to /imfs/test/joel");
-  status = _rename_r(NULL, "tmp/joel", "/imfs/test/joel");
-  rtems_test_assert(status == -1);
-  rtems_test_assert(errno == EXDEV);
+  puts(
+    "attempt to rename across filesystem, with old path having a parent node"
+  );
+  puts( "attempt to rename tmp/joel to /imfs/test/joel" );
+  status = _rename_r( NULL, "tmp/joel", "/imfs/test/joel" );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EXDEV );
 
-  puts("End of _rename_r tests");
+  puts( "End of _rename_r tests" );
 
   /*
    *  Test simple write to a file at a non-0 offset in the first block
@@ -629,7 +619,7 @@ since new path is not valid");
   status = unlink( "/tmp/joel" );
   rtems_test_assert( !status );
 
-  status = mknod( "/tmp/joel", (S_IFREG | S_IRWXU), 0LL );
+  status = mknod( "/tmp/joel", ( S_IFREG | S_IRWXU ), 0LL );
   rtems_test_assert( !status );
 
   test_write( "/tmp/joel", 10, "the first write!!!\n" );
@@ -641,7 +631,7 @@ since new path is not valid");
    *  try to read from various offsets and lengths.
    */
 
-  puts("unlink /tmp/joel");
+  puts( "unlink /tmp/joel" );
   status = unlink( "/tmp/joel" );
   rtems_test_assert( !status );
 
@@ -651,8 +641,8 @@ since new path is not valid");
   status = unlink( "/tmp/joel" );
   rtems_test_assert( status == -1 );
 
-  puts( "mknod /tmp/joel");
-  status = mknod( "/tmp/joel", (S_IFREG | S_IRWXU), 0LL );
+  puts( "mknod /tmp/joel" );
+  status = mknod( "/tmp/joel", ( S_IFREG | S_IRWXU ), 0LL );
   rtems_test_assert( !status );
 
   test_write( "/tmp/joel", 514, "the first write!!!\n" );
@@ -676,8 +666,13 @@ since new path is not valid");
     test_extend( "/tmp/joel", max_size - 1 );
     test_cat( "/tmp/joel", max_size / 2, 1024 );
   } else {
-    printf( "Skipping maximum file size test since max_size is %zu bytes\n", max_size );
-    puts("That is likely to be bigger than the available RAM on many targets." );
+    printf(
+      "Skipping maximum file size test since max_size is %zu bytes\n",
+      max_size
+    );
+    puts(
+      "That is likely to be bigger than the available RAM on many targets."
+    );
   }
 
   stat_a_file( "/tmp/joel" );
@@ -699,7 +694,7 @@ since new path is not valid");
   rtems_test_assert( file );
 
   puts( "fprintf to /tmp/j" );
-  for (i=1 ; i<=5 ; i++) {
+  for ( i = 1; i <= 5; i++ ) {
     status = fprintf( file, "This is call %d to fprintf\n", i );
     rtems_test_assert( status );
     printf( "(%d) %d characters written to the file\n", i, status );
@@ -714,11 +709,11 @@ since new path is not valid");
   mtime2 = buf.st_mtime;
   ctime2 = buf.st_ctime;
 
-
-  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1);
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1 );
   rewind( file );
-  while ( fgets(buffer, 128, file) )
+  while ( fgets( buffer, 128, file ) ) {
     printf( "%s", buffer );
+  }
 
   /*
    * Verify only atime changed for a read.
@@ -729,9 +724,9 @@ since new path is not valid");
   atime1 = buf.st_atime;
   mtime1 = buf.st_mtime;
   ctime1 = buf.st_ctime;
-  rtems_test_assert( atime1 != atime2);
-  rtems_test_assert( mtime1 == mtime2);
-  rtems_test_assert( ctime1 == ctime2);
+  rtems_test_assert( atime1 != atime2 );
+  rtems_test_assert( mtime1 == mtime2 );
+  rtems_test_assert( ctime1 == ctime2 );
 
   unlink( "/tmp/joel" );
 
@@ -753,9 +748,9 @@ since new path is not valid");
   atime2 = buf.st_atime;
   mtime2 = buf.st_mtime;
   ctime2 = buf.st_ctime;
-  rtems_test_assert( atime1 == atime2);
-  rtems_test_assert( mtime1 != mtime2);
-  rtems_test_assert( ctime1 != ctime2);
+  rtems_test_assert( atime1 == atime2 );
+  rtems_test_assert( mtime1 != mtime2 );
+  rtems_test_assert( ctime1 != ctime2 );
 
   /* try to truncate the console and see what happens */
   errno = 0;
@@ -766,14 +761,14 @@ since new path is not valid");
   status = truncate( "/tmp/j", 0 );
   rtems_test_assert( !status );
 
-  puts( "truncate /tmp to length of 0 should fail with EISDIR\n");
+  puts( "truncate /tmp to length of 0 should fail with EISDIR\n" );
   status = truncate( "/tmp", 0 );
   rtems_test_assert( status == -1 );
   printf( "%d: %s\n", errno, strerror( errno ) );
   rtems_test_assert( errno == EISDIR );
 
   status = truncate( "/tmp/fred", 10 );
-  rtems_test_assert( status == -1);
+  rtems_test_assert( status == -1 );
 
   rtems_status = rtems_io_register_name( "/dev/not_console", 0, 0 );
   directive_failed( rtems_status, "io register" );
@@ -791,33 +786,35 @@ since new path is not valid");
  *
  */
 
-void test_file (char *filename, char *mode);
+void test_file( char *filename, char *mode );
 
-void test_case_reopen_append(void)
+void test_case_reopen_append( void )
 {
-  printf ("Writing First File\n");
-  test_file ("/one.txt", "a");
-  test_file ("/one.txt", "a");
+  printf( "Writing First File\n" );
+  test_file( "/one.txt", "a" );
+  test_file( "/one.txt", "a" );
 
   /* but not the second time - this will insert junk.
      the number of ^@'s seems to equal the number of
      actual characters in the file */
 
-  printf ("Writing Second File\n");
-  test_file ("/two.txt", "a");
-  test_file ("/two.txt", "a");
+  printf( "Writing Second File\n" );
+  test_file( "/two.txt", "a" );
+  test_file( "/two.txt", "a" );
 
   test_cat( "/one.txt", 0, 1024 );
   test_cat( "/two.txt", 0, 1024 );
 }
 
-void test_file (char *filename, char *mode)
+void test_file( char *filename, char *mode )
 {
   FILE *fp;
-  fp = fopen (filename, mode);
-  if (!fp)
-      perror ("fopen");
-  fprintf (fp, "this is a test line\n");
-  if (fclose (fp))
-      perror ("fclose");
+  fp = fopen( filename, mode );
+  if ( !fp ) {
+    perror( "fopen" );
+  }
+  fprintf( fp, "this is a test line\n" );
+  if ( fclose( fp ) ) {
+    perror( "fclose" );
+  }
 }

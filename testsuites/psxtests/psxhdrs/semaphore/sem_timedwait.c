@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  sem_t sem;
+  sem_t           sem;
   struct timespec abs_timeout;
-  int pshared;
-  unsigned int value;
-  int result;
+  int             pshared;
+  unsigned int    value;
+  int             result;
 
   pshared = 0;
   value = 1;

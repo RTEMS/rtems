@@ -36,11 +36,11 @@
 
 #include <wchar.h>
 
-int test(void);
+int test( void );
 
-int test(void)
+int test( void )
 {
   const mbstate_t state = { 0 };
 
-  return mbsinit(&state);
+  return mbsinit( &state );
 }

@@ -33,7 +33,7 @@
 #endif
 
 #include <pthread.h>
-#include <limits.h>  /* only for PTHREAD_STACK_MIN */
+#include <limits.h> /* only for PTHREAD_STACK_MIN */
 
 #ifndef _POSIX_THREADS
 #error "rtems is supposed to have pthread_setstackaddr"
@@ -47,10 +47,10 @@ int test( void );
 
 int test( void )
 {
-  pthread_attr_t  attribute;
-  void           *stackaddr;
-  size_t          stacksize;
-  int             result;
+  pthread_attr_t attribute;
+  void          *stackaddr;
+  size_t         stacksize;
+  int            result;
 
   stackaddr = NULL;
   stacksize = 1024;

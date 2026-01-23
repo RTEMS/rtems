@@ -53,8 +53,8 @@ static int fn(
 int test( void )
 {
   char *path = ".";
-  int return_value;
+  int   return_value;
 
-  return_value = nftw(path, fn, 1, FTW_MOUNT);
-  return (return_value != -1);
+  return_value = nftw( path, fn, 1, FTW_MOUNT );
+  return ( return_value != -1 );
 }

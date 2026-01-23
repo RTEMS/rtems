@@ -36,14 +36,14 @@
 
 #include <sys/mman.h>
 
-void* test( void );
+void *test( void );
 
-void* test( void )
+void *test( void )
 {
-  void *addr = NULL;
+  void  *addr = NULL;
   size_t len = 0;
-  int prot = 0, flags = 0, fildes = 0;
-  off_t off = 0;
+  int    prot = 0, flags = 0, fildes = 0;
+  off_t  off = 0;
 
   return mmap( addr, len, prot, flags, fildes, off );
 }

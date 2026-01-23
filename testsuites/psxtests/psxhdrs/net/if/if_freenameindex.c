@@ -42,6 +42,6 @@ int test( void )
 {
   struct if_nameindex *ptr = if_nameindex();
 
-  if_freenameindex(ptr);
+  if_freenameindex( ptr );
   return 1;
 }

@@ -43,7 +43,7 @@ int test( void );
 int test( void )
 {
   pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-  int result;
+  int             result;
 
   result = pthread_mutex_lock( &mutex );
 

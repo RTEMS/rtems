@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x=45 , result;
+  float x = 45, result;
 
-  result = y0f(x);
+  result = y0f( x );
 
-  return (result);
+  return ( result );
 }

@@ -40,7 +40,7 @@ int test( void );
 
 int test( void )
 {
-  char termid[100];
+  char  termid[ 100 ];
   char *ptr;
 
   ptr = ctermid( termid );

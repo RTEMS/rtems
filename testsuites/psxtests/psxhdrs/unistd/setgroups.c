@@ -42,11 +42,11 @@ int test( void );
 
 int test( void )
 {
-  gid_t grouplist[ 20 ] = { 0 } ;
+  gid_t grouplist[ 20 ] = { 0 };
   int   gidsetsize;
   int   result;
 
-  gidsetsize = sizeof(grouplist)/sizeof(grouplist[0]);
+  gidsetsize = sizeof( grouplist ) / sizeof( grouplist[ 0 ] );
 
   result = setgroups( gidsetsize, grouplist );
 

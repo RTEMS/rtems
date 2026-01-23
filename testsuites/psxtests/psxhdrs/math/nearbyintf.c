@@ -40,9 +40,9 @@ int test( void );
 
 int test( void )
 {
-  float x = 4.643456 ,  result ;
+  float x = 4.643456, result;
 
-  result = nearbyintf( x ) ;
+  result = nearbyintf( x );
 
-  return (result);
+  return ( result );
 }
