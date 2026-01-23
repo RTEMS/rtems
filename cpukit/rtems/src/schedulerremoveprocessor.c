@@ -42,7 +42,7 @@
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/config.h>
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 typedef struct {
   const Scheduler_Control *scheduler;
   rtems_status_code        status;
@@ -68,11 +68,11 @@ static bool _Scheduler_Check_processor_not_required(
   _Thread_State_acquire_critical( the_thread, &state_context );
 
   if (
-    _Thread_Scheduler_get_home( the_thread ) == iter_context->scheduler
-      && !_Processor_mask_Has_overlap(
-        &the_thread->Scheduler.Affinity,
-        _Scheduler_Get_processors( iter_context->scheduler )
-      )
+    _Thread_Scheduler_get_home( the_thread ) == iter_context->scheduler &&
+    !_Processor_mask_Has_overlap(
+      &the_thread->Scheduler.Affinity,
+      _Scheduler_Get_processors( iter_context->scheduler )
+    )
   ) {
     iter_context->status = RTEMS_RESOURCE_IN_USE;
   }
@@ -127,13 +127,13 @@ rtems_status_code rtems_scheduler_remove_processor(
   uint32_t cpu_index
 )
 {
-  const Scheduler_Control             *scheduler;
-#if defined(RTEMS_SMP)
-  Scheduler_Processor_removal_context  iter_context;
-  ISR_lock_Context                     lock_context;
-  Scheduler_Context                   *scheduler_context;
-  Per_CPU_Control                     *cpu;
-  Per_CPU_Control                     *cpu_self;
+  const Scheduler_Control *scheduler;
+#if defined( RTEMS_SMP )
+  Scheduler_Processor_removal_context iter_context;
+  ISR_lock_Context                    lock_context;
+  Scheduler_Context                  *scheduler_context;
+  Per_CPU_Control                    *cpu;
+  Per_CPU_Control                    *cpu_self;
 #endif
 
   scheduler = _Scheduler_Get_by_id( scheduler_id );
@@ -145,7 +145,7 @@ rtems_status_code rtems_scheduler_remove_processor(
     return RTEMS_INVALID_NUMBER;
   }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   iter_context.scheduler = scheduler;
   iter_context.status = RTEMS_SUCCESSFUL;
   scheduler_context = _Scheduler_Get_context( scheduler );

@@ -43,9 +43,9 @@
 #include <rtems/score/address.h>
 
 rtems_status_code rtems_port_internal_to_external(
-  rtems_id   id,
-  void      *internal,
-  void     **external
+  rtems_id id,
+  void    *internal,
+  void   **external
 )
 {
   Dual_ported_memory_Control *the_port;
@@ -62,7 +62,8 @@ rtems_status_code rtems_port_internal_to_external(
     return RTEMS_INVALID_ID;
   }
 
-  length = (uintptr_t) _Addresses_Subtract( internal, the_port->internal_base );
+  length = (uintptr_t)
+    _Addresses_Subtract( internal, the_port->internal_base );
 
   if ( length > the_port->length ) {
     *external = internal;

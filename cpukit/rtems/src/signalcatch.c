@@ -48,19 +48,18 @@
 RTEMS_STATIC_ASSERT( RTEMS_DEFAULT_MODES == 0, _ASR_Create_mode_set );
 
 rtems_status_code rtems_signal_catch(
-  rtems_asr_entry   asr_handler,
-  rtems_mode        mode_set
+  rtems_asr_entry asr_handler,
+  rtems_mode      mode_set
 )
 {
-  Thread_Control     *executing;
-  RTEMS_API_Control  *api;
-  ASR_Information    *asr;
-  ISR_lock_Context    lock_context;
+  Thread_Control    *executing;
+  RTEMS_API_Control *api;
+  ASR_Information   *asr;
+  ISR_lock_Context   lock_context;
 
-#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+#if defined( RTEMS_SMP ) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
   if (
-    asr_handler != NULL &&
-    !_Modes_Is_interrupt_level_supported( mode_set )
+    asr_handler != NULL && !_Modes_Is_interrupt_level_supported( mode_set )
   ) {
     return RTEMS_NOT_IMPLEMENTED;
   }
@@ -68,7 +67,7 @@ rtems_status_code rtems_signal_catch(
 
   executing = _Thread_State_acquire_for_executing( &lock_context );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if (
     asr_handler != NULL &&
     !_Modes_Is_preempt_mode_supported( mode_set, executing )
@@ -83,7 +82,7 @@ rtems_status_code rtems_signal_catch(
   asr->handler = asr_handler;
   asr->mode_set = mode_set;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( asr_handler == NULL ) {
     Chain_Node *node;
 

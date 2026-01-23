@@ -47,7 +47,7 @@
 #include <rtems/sysinit.h>
 
 RTEMS_STATIC_ASSERT(
-  sizeof(Partition_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
+  sizeof( Partition_MP_Packet ) <= MP_PACKET_MINIMUM_PACKET_SIZE,
   Partition_MP_Packet
 );
 
@@ -57,16 +57,16 @@ static Partition_MP_Packet *_Partition_MP_Get_packet( void )
 }
 
 static void _Partition_MP_Initialize_packet(
-  Partition_MP_Packet            *the_packet,
-  Objects_Id                      id,
-  Partition_MP_Remote_operations  operation
+  Partition_MP_Packet           *the_packet,
+  Objects_Id                     id,
+  Partition_MP_Remote_operations operation
 )
 {
-  the_packet->Prefix.the_class  = MP_PACKET_PARTITION;
-  the_packet->Prefix.length     = sizeof( *the_packet );
+  the_packet->Prefix.the_class = MP_PACKET_PARTITION;
+  the_packet->Prefix.length = sizeof( *the_packet );
   the_packet->Prefix.to_convert = sizeof( *the_packet );
-  the_packet->Prefix.id         = id;
-  the_packet->operation         = operation;
+  the_packet->Prefix.id = id;
+  the_packet->operation = operation;
 }
 
 /*
@@ -74,31 +74,31 @@ static void _Partition_MP_Initialize_packet(
  *
  */
 
-void _Partition_MP_Send_process_packet (
-  Partition_MP_Remote_operations  operation,
-  Objects_Id                      partition_id,
-  rtems_name                      name,
-  Objects_Id                      proxy_id
+void _Partition_MP_Send_process_packet(
+  Partition_MP_Remote_operations operation,
+  Objects_Id                     partition_id,
+  rtems_name                     name,
+  Objects_Id                     proxy_id
 )
 {
   Partition_MP_Packet *the_packet;
   uint32_t             node;
 
   switch ( operation ) {
-
     case PARTITION_MP_ANNOUNCE_CREATE:
     case PARTITION_MP_ANNOUNCE_DELETE:
     case PARTITION_MP_EXTRACT_PROXY:
 
       the_packet = _Partition_MP_Get_packet();
       _Partition_MP_Initialize_packet( the_packet, partition_id, operation );
-      the_packet->name     = name;
+      the_packet->name = name;
       the_packet->proxy_id = proxy_id;
 
-      if ( operation == PARTITION_MP_EXTRACT_PROXY )
-         node = _Objects_Get_node( partition_id );
-      else
-         node = MPCI_ALL_NODES;
+      if ( operation == PARTITION_MP_EXTRACT_PROXY ) {
+        node = _Objects_Get_node( partition_id );
+      } else {
+        node = MPCI_ALL_NODES;
+      }
 
       _MPCI_Send_process_packet( node, &the_packet->Prefix );
       break;
@@ -116,10 +116,10 @@ void _Partition_MP_Send_process_packet (
  *
  */
 
-static rtems_status_code _Partition_MP_Send_request_packet (
-  Objects_Id                      partition_id,
-  void                           *buffer,
-  Partition_MP_Remote_operations  operation
+static rtems_status_code _Partition_MP_Send_request_packet(
+  Objects_Id                     partition_id,
+  void                          *buffer,
+  Partition_MP_Remote_operations operation
 )
 {
   Partition_MP_Packet *the_packet;
@@ -130,7 +130,6 @@ static rtems_status_code _Partition_MP_Send_request_packet (
   }
 
   switch ( operation ) {
-
     case PARTITION_MP_GET_BUFFER_REQUEST:
     case PARTITION_MP_RETURN_BUFFER_REQUEST:
 
@@ -151,7 +150,6 @@ static rtems_status_code _Partition_MP_Send_request_packet (
     case PARTITION_MP_GET_BUFFER_RESPONSE:
     case PARTITION_MP_RETURN_BUFFER_RESPONSE:
       break;
-
   }
   /*
    *  The following line is included to satisfy compilers which
@@ -160,10 +158,7 @@ static rtems_status_code _Partition_MP_Send_request_packet (
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code _Partition_MP_Get_buffer(
-  rtems_id   id,
-  void     **buffer
-)
+rtems_status_code _Partition_MP_Get_buffer( rtems_id id, void **buffer )
 {
   _Thread_Get_executing()->Wait.return_argument = buffer;
   return _Partition_MP_Send_request_packet(
@@ -173,10 +168,7 @@ rtems_status_code _Partition_MP_Get_buffer(
   );
 }
 
-rtems_status_code _Partition_MP_Return_buffer(
-  rtems_id  id,
-  void     *buffer
-)
+rtems_status_code _Partition_MP_Return_buffer( rtems_id id, void *buffer )
 {
   return _Partition_MP_Send_request_packet(
     id,
@@ -190,10 +182,10 @@ rtems_status_code _Partition_MP_Return_buffer(
  *
  */
 
-static void _Partition_MP_Send_response_packet (
-  Partition_MP_Remote_operations  operation,
-  Objects_Id                      partition_id,
-  Thread_Control                 *the_thread
+static void _Partition_MP_Send_response_packet(
+  Partition_MP_Remote_operations operation,
+  Objects_Id                     partition_id,
+  Thread_Control                *the_thread
 )
 {
   (void) partition_id;
@@ -201,13 +193,12 @@ static void _Partition_MP_Send_response_packet (
   Partition_MP_Packet *the_packet;
 
   switch ( operation ) {
-
     case PARTITION_MP_GET_BUFFER_RESPONSE:
     case PARTITION_MP_RETURN_BUFFER_RESPONSE:
 
-      the_packet = ( Partition_MP_Packet *) the_thread->receive_packet;
+      the_packet = (Partition_MP_Packet *) the_thread->receive_packet;
 
-/*
+      /*
  *  The packet being returned already contains the class, length, and
  *  to_convert fields, therefore they are not set in this routine.
  */
@@ -226,12 +217,11 @@ static void _Partition_MP_Send_response_packet (
     case PARTITION_MP_GET_BUFFER_REQUEST:
     case PARTITION_MP_RETURN_BUFFER_REQUEST:
       break;
-
   }
 }
 
 static void _Partition_MP_Process_packet(
-  rtems_packet_prefix  *the_packet_prefix
+  rtems_packet_prefix *the_packet_prefix
 )
 {
   Partition_MP_Packet *the_packet;
@@ -240,7 +230,6 @@ static void _Partition_MP_Process_packet(
   the_packet = (Partition_MP_Packet *) the_packet_prefix;
 
   switch ( the_packet->operation ) {
-
     case PARTITION_MP_ANNOUNCE_CREATE:
 
       _Objects_MP_Allocate_and_open(
@@ -289,7 +278,7 @@ static void _Partition_MP_Process_packet(
 
       the_thread = _MPCI_Process_response( the_packet_prefix );
 
-      *(void **)the_thread->Wait.return_argument = the_packet->buffer;
+      *(void **) the_thread->Wait.return_argument = the_packet->buffer;
 
       _MPCI_Return_packet( the_packet_prefix );
       break;
@@ -314,7 +303,6 @@ static void _Partition_MP_Process_packet(
 
       _MPCI_Return_packet( the_packet_prefix );
       break;
-
   }
 }
 
@@ -331,7 +319,7 @@ static void _Partition_MP_Process_packet(
  *
  */
 
-void _Partition_MP_Send_extract_proxy (
+void _Partition_MP_Send_extract_proxy(
   Thread_Control *the_thread,
   Objects_Id      id
 )
@@ -342,7 +330,6 @@ void _Partition_MP_Send_extract_proxy (
     (rtems_name) 0,
     the_thread->Object.id
   );
-
 }
 
 static void _Partition_MP_Initialize( void )

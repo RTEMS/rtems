@@ -41,17 +41,15 @@
 
 #include <rtems/rtems/timerimpl.h>
 
-rtems_status_code rtems_timer_reset(
-  rtems_id id
-)
+rtems_status_code rtems_timer_reset( rtems_id id )
 {
-  Timer_Control    *the_timer;
-  ISR_lock_Context  lock_context;
+  Timer_Control   *the_timer;
+  ISR_lock_Context lock_context;
 
   the_timer = _Timer_Get( id, &lock_context );
   if ( the_timer != NULL ) {
-    Per_CPU_Control   *cpu;
-    rtems_status_code  status;
+    Per_CPU_Control  *cpu;
+    rtems_status_code status;
 
     cpu = _Timer_Acquire_critical( the_timer, &lock_context );
 

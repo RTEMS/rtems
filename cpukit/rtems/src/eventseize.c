@@ -48,30 +48,31 @@
 #include <rtems/score/watchdogimpl.h>
 
 rtems_status_code _Event_Seize(
-  rtems_event_set    event_in,
-  rtems_option       option_set,
-  rtems_interval     ticks,
-  rtems_event_set   *event_out,
-  Thread_Control    *executing,
-  Event_Control     *event,
-  Thread_Wait_flags  wait_class,
-  States_Control     block_state,
-  ISR_lock_Context  *lock_context
+  rtems_event_set   event_in,
+  rtems_option      option_set,
+  rtems_interval    ticks,
+  rtems_event_set  *event_out,
+  Thread_Control   *executing,
+  Event_Control    *event,
+  Thread_Wait_flags wait_class,
+  States_Control    block_state,
+  ISR_lock_Context *lock_context
 )
 {
-  rtems_event_set    seized_events;
-  rtems_event_set    pending_events;
-  bool               success;
-  Thread_Wait_flags  intend_to_block;
-  Per_CPU_Control   *cpu_self;
+  rtems_event_set   seized_events;
+  rtems_event_set   pending_events;
+  bool              success;
+  Thread_Wait_flags intend_to_block;
+  Per_CPU_Control  *cpu_self;
 
   pending_events = event->pending_events;
-  seized_events  = _Event_sets_Get( pending_events, event_in );
+  seized_events = _Event_sets_Get( pending_events, event_in );
 
-  if ( !_Event_sets_Is_empty( seized_events ) &&
-       (seized_events == event_in || _Options_Is_any( option_set )) ) {
-    event->pending_events =
-      _Event_sets_Clear( pending_events, seized_events );
+  if (
+    !_Event_sets_Is_empty( seized_events ) &&
+    ( seized_events == event_in || _Options_Is_any( option_set ) )
+  ) {
+    event->pending_events = _Event_sets_Clear( pending_events, seized_events );
     _Thread_Wait_release_default( executing, lock_context );
     *event_out = seized_events;
     return RTEMS_SUCCESSFUL;
@@ -93,9 +94,9 @@ rtems_status_code _Event_Seize(
    *  NOTE: Since interrupts are disabled, this isn't that much of an
    *        issue but better safe than sorry.
    */
-  executing->Wait.return_code     = STATUS_SUCCESSFUL;
-  executing->Wait.option          = option_set;
-  executing->Wait.count           = event_in;
+  executing->Wait.return_code = STATUS_SUCCESSFUL;
+  executing->Wait.option = option_set;
+  executing->Wait.count = event_in;
   executing->Wait.return_argument = event_out;
   _Thread_Wait_flags_set( executing, intend_to_block );
 
@@ -122,7 +123,7 @@ rtems_status_code _Event_Seize(
   return _Status_Get_after_wait( executing );
 }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 static void _Event_MP_Initialize( void )
 {
   _MPCI_Register_packet_processor( MP_PACKET_EVENT, _Event_MP_Process_packet );

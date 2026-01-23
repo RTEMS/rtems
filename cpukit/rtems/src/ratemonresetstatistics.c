@@ -41,9 +41,7 @@
 
 #include <rtems/rtems/ratemonimpl.h>
 
-rtems_status_code rtems_rate_monotonic_reset_statistics(
-  rtems_id id
-)
+rtems_status_code rtems_rate_monotonic_reset_statistics( rtems_id id )
 {
   Rate_monotonic_Control *the_period;
   ISR_lock_Context        lock_context;

@@ -41,12 +41,10 @@
 
 #include <rtems/rtems/barrierimpl.h>
 
-rtems_status_code rtems_barrier_delete(
-  rtems_id   id
-)
+rtems_status_code rtems_barrier_delete( rtems_id id )
 {
-  Barrier_Control      *the_barrier;
-  Thread_queue_Context  queue_context;
+  Barrier_Control     *the_barrier;
+  Thread_queue_Context queue_context;
 
   _Objects_Allocator_lock();
   the_barrier = _Barrier_Get( id, &queue_context );

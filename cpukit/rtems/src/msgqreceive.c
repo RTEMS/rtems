@@ -50,11 +50,11 @@ THREAD_QUEUE_OBJECT_ASSERT(
 );
 
 rtems_status_code rtems_message_queue_receive(
-  rtems_id        id,
-  void           *buffer,
-  size_t         *size,
-  rtems_option    option_set,
-  rtems_interval  timeout
+  rtems_id       id,
+  void          *buffer,
+  size_t        *size,
+  rtems_option   option_set,
+  rtems_interval timeout
 )
 {
   Message_queue_Control *the_message_queue;
@@ -73,7 +73,7 @@ rtems_status_code rtems_message_queue_receive(
   the_message_queue = _Message_queue_Get( id, &queue_context );
 
   if ( the_message_queue == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     return _Message_queue_MP_Receive( id, buffer, size, option_set, timeout );
 #else
     return RTEMS_INVALID_ID;

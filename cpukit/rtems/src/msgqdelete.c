@@ -42,9 +42,7 @@
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/attrimpl.h>
 
-rtems_status_code rtems_message_queue_delete(
-  rtems_id id
-)
+rtems_status_code rtems_message_queue_delete( rtems_id id )
 {
   Message_queue_Control *the_message_queue;
   Thread_queue_Context   queue_context;
@@ -55,7 +53,7 @@ rtems_status_code rtems_message_queue_delete(
   if ( the_message_queue == NULL ) {
     _Objects_Allocator_unlock();
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Message_queue_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }
@@ -80,7 +78,7 @@ rtems_status_code rtems_message_queue_delete(
     &queue_context
   );
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( the_message_queue->is_global ) {
     _Objects_MP_Close(
       &_Message_queue_Information,
@@ -90,7 +88,7 @@ rtems_status_code rtems_message_queue_delete(
     _Message_queue_MP_Send_process_packet(
       MESSAGE_QUEUE_MP_ANNOUNCE_DELETE,
       the_message_queue->Object.id,
-      0,                         /* Not used */
+      0, /* Not used */
       0
     );
   }

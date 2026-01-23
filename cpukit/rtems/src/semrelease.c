@@ -44,17 +44,17 @@
 
 rtems_status_code rtems_semaphore_release( rtems_id id )
 {
-  Semaphore_Control    *the_semaphore;
-  Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
-  uintptr_t             flags;
-  Semaphore_Variant     variant;
-  Status_Control        status;
+  Semaphore_Control   *the_semaphore;
+  Thread_queue_Context queue_context;
+  Thread_Control      *executing;
+  uintptr_t            flags;
+  Semaphore_Variant    variant;
+  Status_Control       status;
 
   the_semaphore = _Semaphore_Get( id, &queue_context );
 
   if ( the_semaphore == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     return _Semaphore_MP_Release( id );
 #else
     return RTEMS_INVALID_ID;
@@ -102,13 +102,12 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
         &queue_context
       );
       _Assert(
-        status == STATUS_SUCCESSFUL
-          || status == STATUS_MAXIMUM_COUNT_EXCEEDED
+        status == STATUS_SUCCESSFUL || status == STATUS_MAXIMUM_COUNT_EXCEEDED
       );
       (void) status;
       status = STATUS_SUCCESSFUL;
       break;
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     case SEMAPHORE_VARIANT_MRSP:
       status = _MRSP_Surrender(
         &the_semaphore->Core_control.MRSP,

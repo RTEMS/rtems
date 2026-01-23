@@ -41,10 +41,7 @@
 
 #include <rtems/rtems/regionimpl.h>
 
-rtems_status_code rtems_region_return_segment(
-  rtems_id  id,
-  void     *segment
-)
+rtems_status_code rtems_region_return_segment( rtems_id id, void *segment )
 {
   Region_Control *the_region;
 

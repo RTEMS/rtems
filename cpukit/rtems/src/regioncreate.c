@@ -47,16 +47,16 @@
 #include <rtems/sysinit.h>
 
 rtems_status_code rtems_region_create(
-  rtems_name          name,
-  void               *starting_address,
-  uintptr_t           length,
-  uintptr_t           page_size,
-  rtems_attribute     attribute_set,
-  rtems_id           *id
+  rtems_name      name,
+  void           *starting_address,
+  uintptr_t       length,
+  uintptr_t       page_size,
+  rtems_attribute attribute_set,
+  rtems_id       *id
 )
 {
-  rtems_status_code  return_status;
-  Region_Control    *the_region;
+  rtems_status_code return_status;
+  Region_Control   *the_region;
 
   if ( !rtems_is_name_valid( name ) ) {
     return RTEMS_INVALID_NAME;
@@ -72,37 +72,41 @@ rtems_status_code rtems_region_create(
 
   the_region = _Region_Allocate();
 
-    if ( !the_region )
-      return_status = RTEMS_TOO_MANY;
+  if ( !the_region ) {
+    return_status = RTEMS_TOO_MANY;
+  }
 
-    else {
-      _Thread_queue_Object_initialize( &the_region->Wait_queue );
+  else {
+    _Thread_queue_Object_initialize( &the_region->Wait_queue );
 
-      if ( _Attributes_Is_priority( attribute_set ) ) {
-        the_region->wait_operations = &_Thread_queue_Operations_priority;
-      } else {
-        the_region->wait_operations = &_Thread_queue_Operations_FIFO;
-      }
+    if ( _Attributes_Is_priority( attribute_set ) ) {
+      the_region->wait_operations = &_Thread_queue_Operations_priority;
+    } else {
+      the_region->wait_operations = &_Thread_queue_Operations_FIFO;
+    }
 
-      the_region->maximum_segment_size = _Heap_Initialize(
-        &the_region->Memory, starting_address, length, page_size
+    the_region->maximum_segment_size = _Heap_Initialize(
+      &the_region->Memory,
+      starting_address,
+      length,
+      page_size
+    );
+
+    if ( !the_region->maximum_segment_size ) {
+      _Region_Free( the_region );
+      return_status = RTEMS_INVALID_SIZE;
+    } else {
+      the_region->attribute_set = attribute_set;
+
+      *id = _Objects_Open_u32(
+        &_Region_Information,
+        &the_region->Object,
+        name
       );
 
-      if ( !the_region->maximum_segment_size ) {
-        _Region_Free( the_region );
-        return_status = RTEMS_INVALID_SIZE;
-      } else {
-        the_region->attribute_set = attribute_set;
-
-        *id = _Objects_Open_u32(
-          &_Region_Information,
-          &the_region->Object,
-          name
-        );
-
-        return_status = RTEMS_SUCCESSFUL;
-      }
+      return_status = RTEMS_SUCCESSFUL;
     }
+  }
 
   _Objects_Allocator_unlock();
 

@@ -48,24 +48,29 @@
 #include <rtems/sysinit.h>
 
 rtems_status_code rtems_port_create(
-  rtems_name    name,
-  void         *internal_start,
-  void         *external_start,
-  uint32_t      length,
-  rtems_id     *id
+  rtems_name name,
+  void      *internal_start,
+  void      *external_start,
+  uint32_t   length,
+  rtems_id  *id
 )
 {
   Dual_ported_memory_Control *the_port;
 
-  if ( !rtems_is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) ) {
     return RTEMS_INVALID_NAME;
+  }
 
-  if ( !id )
+  if ( !id ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
-  if ( !_Addresses_Is_aligned( internal_start ) ||
-       !_Addresses_Is_aligned( external_start ) )
+  if (
+    !_Addresses_Is_aligned( internal_start ) ||
+    !_Addresses_Is_aligned( external_start )
+  ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
   the_port = _Dual_ported_memory_Allocate();
 
@@ -76,7 +81,7 @@ rtems_status_code rtems_port_create(
 
   the_port->internal_base = internal_start;
   the_port->external_base = external_start;
-  the_port->length        = length - 1;
+  the_port->length = length - 1;
 
   *id = _Objects_Open_u32(
     &_Dual_ported_memory_Information,

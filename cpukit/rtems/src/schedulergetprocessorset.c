@@ -47,9 +47,9 @@ rtems_status_code rtems_scheduler_get_processor_set(
   cpu_set_t *cpuset
 )
 {
-  const Scheduler_Control    *scheduler;
-  const Processor_mask       *processor_set;
-  Processor_mask_Copy_status  status;
+  const Scheduler_Control   *scheduler;
+  const Processor_mask      *processor_set;
+  Processor_mask_Copy_status status;
 
   if ( cpuset == NULL ) {
     return RTEMS_INVALID_ADDRESS;

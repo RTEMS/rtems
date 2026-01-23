@@ -47,10 +47,10 @@
 #include <rtems/sysinit.h>
 
 rtems_status_code rtems_barrier_create(
-  rtems_name           name,
-  rtems_attribute      attribute_set,
-  uint32_t             maximum_waiters,
-  rtems_id            *id
+  rtems_name      name,
+  rtems_attribute attribute_set,
+  uint32_t        maximum_waiters,
+  rtems_id       *id
 )
 {
   Barrier_Control *the_barrier;

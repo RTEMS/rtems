@@ -104,29 +104,29 @@ void _Timer_server_Routine_adaptor( Watchdog_Control *the_watchdog )
  *  application before task-based timers may be initiated.  The parameter
  *  @a arg points to the corresponding timer server control block.
  */
-static rtems_task _Timer_server_Body(
-  rtems_task_argument arg
-)
+static rtems_task _Timer_server_Body( rtems_task_argument arg )
 {
   Timer_server_Control *ts = (Timer_server_Control *) arg;
-#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+#if defined( RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT )
   Thread_Control *executing = _Thread_Get_executing();
 #endif
 
   while ( true ) {
-    ISR_lock_Context  lock_context;
-    rtems_event_set   events;
+    ISR_lock_Context lock_context;
+    rtems_event_set  events;
 
     _Timer_server_Acquire( ts, &lock_context );
 
     while ( true ) {
-      Watchdog_Control                  *the_watchdog;
-      Timer_Control                     *the_timer;
-      rtems_timer_service_routine_entry  routine;
-      Objects_Id                         id;
-      void                              *user_data;
+      Watchdog_Control                 *the_watchdog;
+      Timer_Control                    *the_timer;
+      rtems_timer_service_routine_entry routine;
+      Objects_Id                        id;
+      void                             *user_data;
 
-      the_watchdog = (Watchdog_Control *) _Chain_Get_unprotected( &ts->Pending );
+      the_watchdog = (Watchdog_Control *) _Chain_Get_unprotected(
+        &ts->Pending
+      );
       if ( the_watchdog == NULL ) {
         break;
       }
@@ -141,7 +141,7 @@ static rtems_task _Timer_server_Body(
       _Timer_server_Release( ts, &lock_context );
 
       ( *routine )( id, user_data );
-#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+#if defined( RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT )
       _Assert( !_Thread_Owns_resources( executing ) );
 #endif
 
@@ -195,20 +195,20 @@ static rtems_status_code _Timer_server_Initiate(
    *  GNAT run-time is violated.
    */
   status = rtems_task_create(
-    rtems_build_name('T','I','M','E'),
+    rtems_build_name( 'T', 'I', 'M', 'E' ),
     priority,
     stack_size,
 #ifdef RTEMS_SMP
     RTEMS_DEFAULT_MODES, /* no preempt is not recommended for SMP */
 #else
-    RTEMS_NO_PREEMPT,    /* no preempt is like an interrupt */
+    RTEMS_NO_PREEMPT, /* no preempt is like an interrupt */
 #endif
     /* user may want floating point but we need */
     /*   system task specified for 0 priority */
     attribute_set | RTEMS_SYSTEM_TASK,
     &id
   );
-  if (status != RTEMS_SUCCESSFUL) {
+  if ( status != RTEMS_SUCCESSFUL ) {
     return status;
   }
 

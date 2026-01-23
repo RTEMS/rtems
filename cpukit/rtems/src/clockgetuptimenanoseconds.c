@@ -44,9 +44,9 @@
 
 uint64_t rtems_clock_get_uptime_nanoseconds( void )
 {
-  Timestamp_Control  snapshot_as_timestamp;
+  Timestamp_Control snapshot_as_timestamp;
 
-  _TOD_Get_zero_based_uptime(&snapshot_as_timestamp);
+  _TOD_Get_zero_based_uptime( &snapshot_as_timestamp );
 
-  return _Timestamp_Get_as_nanoseconds(&snapshot_as_timestamp);
+  return _Timestamp_Get_as_nanoseconds( &snapshot_as_timestamp );
 }

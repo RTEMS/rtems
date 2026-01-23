@@ -59,7 +59,7 @@ rtems_status_code _TOD_Validate(
   TOD_Ticks_validation     ticks_validation
 )
 {
-  size_t  leap_year_index;
+  size_t   leap_year_index;
   uint32_t days_in_month;
   uint32_t ticks_per_second;
   uint32_t ticks_mask;

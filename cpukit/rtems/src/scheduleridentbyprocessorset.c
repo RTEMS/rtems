@@ -48,10 +48,10 @@ rtems_status_code rtems_scheduler_ident_by_processor_set(
   rtems_id        *id
 )
 {
-  Processor_mask              set;
-  Processor_mask_Copy_status  status;
-  uint32_t                    cpu_index;
-  const Scheduler_Control    *scheduler;
+  Processor_mask             set;
+  Processor_mask_Copy_status status;
+  uint32_t                   cpu_index;
+  const Scheduler_Control   *scheduler;
 
   if ( id == NULL ) {
     return RTEMS_INVALID_ADDRESS;
@@ -72,8 +72,8 @@ rtems_status_code rtems_scheduler_ident_by_processor_set(
     return RTEMS_INVALID_NAME;
   }
 
-  scheduler = _Scheduler_Get_by_CPU( _Per_CPU_Get_by_index( cpu_index - 1) );
-#if defined(RTEMS_SMP)
+  scheduler = _Scheduler_Get_by_CPU( _Per_CPU_Get_by_index( cpu_index - 1 ) );
+#if defined( RTEMS_SMP )
   if ( scheduler == NULL ) {
     return RTEMS_INCORRECT_STATE;
   }

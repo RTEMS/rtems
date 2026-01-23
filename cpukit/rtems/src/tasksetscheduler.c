@@ -68,10 +68,13 @@ rtems_status_code rtems_task_set_scheduler(
   }
 
   _Thread_queue_Context_initialize( &queue_context );
-  the_thread = _Thread_Get( task_id, &queue_context.Lock_context.Lock_context );
+  the_thread = _Thread_Get(
+    task_id,
+    &queue_context.Lock_context.Lock_context
+  );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Thread_MP_Is_remote( task_id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }

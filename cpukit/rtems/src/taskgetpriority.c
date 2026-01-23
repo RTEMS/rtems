@@ -64,12 +64,13 @@ rtems_status_code rtems_task_get_priority(
   }
 
   _Thread_queue_Context_initialize( &queue_context );
-  the_thread = _Thread_Get( task_id,
+  the_thread = _Thread_Get(
+    task_id,
     &queue_context.Lock_context.Lock_context
   );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Thread_MP_Is_remote( task_id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }
@@ -79,13 +80,13 @@ rtems_status_code rtems_task_get_priority(
   }
 
   scheduler_node = _Thread_Scheduler_get_node_by_index(
-     the_thread,
+    the_thread,
     _Scheduler_Get_index( scheduler )
   );
 
   _Thread_Wait_acquire_critical( the_thread, &queue_context );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( _Priority_Is_empty( &scheduler_node->Wait.Priority ) ) {
     _Thread_Wait_release( the_thread, &queue_context );
     return RTEMS_NOT_DEFINED;

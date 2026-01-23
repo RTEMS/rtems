@@ -41,12 +41,10 @@
 
 #include <rtems/rtems/regionimpl.h>
 
-rtems_status_code rtems_region_delete(
-  rtems_id id
-)
+rtems_status_code rtems_region_delete( rtems_id id )
 {
-  rtems_status_code  status;
-  Region_Control    *the_region;
+  rtems_status_code status;
+  Region_Control   *the_region;
 
   _Objects_Allocator_lock();
 

@@ -57,7 +57,7 @@ rtems_status_code rtems_task_get_scheduler(
   the_thread = _Thread_Get( task_id, &lock_context );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Thread_MP_Is_remote( task_id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }

@@ -41,12 +41,10 @@
 
 #include <rtems/rtems/timerimpl.h>
 
-rtems_status_code rtems_timer_cancel(
-  rtems_id id
-)
+rtems_status_code rtems_timer_cancel( rtems_id id )
 {
-  Timer_Control    *the_timer;
-  ISR_lock_Context  lock_context;
+  Timer_Control   *the_timer;
+  ISR_lock_Context lock_context;
 
   the_timer = _Timer_Get( id, &lock_context );
   if ( the_timer != NULL ) {

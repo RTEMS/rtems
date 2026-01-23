@@ -42,9 +42,7 @@
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/attrimpl.h>
 
-rtems_status_code rtems_partition_delete(
-  rtems_id id
-)
+rtems_status_code rtems_partition_delete( rtems_id id )
 {
   Partition_Control *the_partition;
   ISR_lock_Context   lock_context;
@@ -55,7 +53,7 @@ rtems_status_code rtems_partition_delete(
   if ( the_partition == NULL ) {
     _Objects_Allocator_unlock();
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Partition_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }
@@ -75,18 +73,15 @@ rtems_status_code rtems_partition_delete(
   _Objects_Close( &_Partition_Information, &the_partition->Object );
   _Partition_Release( the_partition, &lock_context );
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( _Attributes_Is_global( the_partition->attribute_set ) ) {
-    _Objects_MP_Close(
-      &_Partition_Information,
-      the_partition->Object.id
-    );
+    _Objects_MP_Close( &_Partition_Information, the_partition->Object.id );
 
     _Partition_MP_Send_process_packet(
       PARTITION_MP_ANNOUNCE_DELETE,
       the_partition->Object.id,
-      0,                         /* Not used */
-      0                          /* Not used */
+      0, /* Not used */
+      0  /* Not used */
     );
   }
 #endif

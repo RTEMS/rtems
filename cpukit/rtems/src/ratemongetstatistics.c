@@ -63,13 +63,13 @@ rtems_status_code rtems_rate_monotonic_get_statistics(
   _Rate_monotonic_Acquire_critical( the_period, &lock_context );
 
   src = &the_period->Statistics;
-  dst->count        = src->count;
+  dst->count = src->count;
   dst->missed_count = src->missed_count;
-  _Timestamp_To_timespec( &src->min_cpu_time,    &dst->min_cpu_time );
-  _Timestamp_To_timespec( &src->max_cpu_time,    &dst->max_cpu_time );
-  _Timestamp_To_timespec( &src->total_cpu_time,  &dst->total_cpu_time );
-  _Timestamp_To_timespec( &src->min_wall_time,   &dst->min_wall_time );
-  _Timestamp_To_timespec( &src->max_wall_time,   &dst->max_wall_time );
+  _Timestamp_To_timespec( &src->min_cpu_time, &dst->min_cpu_time );
+  _Timestamp_To_timespec( &src->max_cpu_time, &dst->max_cpu_time );
+  _Timestamp_To_timespec( &src->total_cpu_time, &dst->total_cpu_time );
+  _Timestamp_To_timespec( &src->min_wall_time, &dst->min_wall_time );
+  _Timestamp_To_timespec( &src->max_wall_time, &dst->max_wall_time );
   _Timestamp_To_timespec( &src->total_wall_time, &dst->total_wall_time );
 
   _Rate_monotonic_Release( the_period, &lock_context );

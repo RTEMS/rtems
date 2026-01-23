@@ -41,12 +41,12 @@
 #include <rtems/rtems/barrierimpl.h>
 
 rtems_status_code rtems_barrier_get_number_waiting(
-  rtems_id          id,
-  uint32_t         *waiting
+  rtems_id  id,
+  uint32_t *waiting
 )
 {
-  Barrier_Control      *the_barrier;
-  Thread_queue_Context  queue_context;
+  Barrier_Control     *the_barrier;
+  Thread_queue_Context queue_context;
 
   if ( waiting == NULL ) {
     return RTEMS_INVALID_ADDRESS;

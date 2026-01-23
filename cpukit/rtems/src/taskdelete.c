@@ -43,21 +43,19 @@
 #include <rtems/rtems/statusimpl.h>
 #include <rtems/score/threadimpl.h>
 
-rtems_status_code rtems_task_delete(
-  rtems_id id
-)
+rtems_status_code rtems_task_delete( rtems_id id )
 {
-  Thread_Control       *the_thread;
-  Thread_queue_Context  queue_context;
-  Per_CPU_Control      *cpu_self;
-  Thread_Control       *executing;
-  Status_Control        status;
+  Thread_Control      *the_thread;
+  Thread_queue_Context queue_context;
+  Per_CPU_Control     *cpu_self;
+  Thread_Control      *executing;
+  Status_Control       status;
 
   _Thread_queue_Context_initialize( &queue_context );
   the_thread = _Thread_Get( id, &queue_context.Lock_context.Lock_context );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Thread_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }

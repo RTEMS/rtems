@@ -41,10 +41,7 @@
 #include <rtems/rtems/scheduler.h>
 #include <rtems/score/schedulerimpl.h>
 
-rtems_status_code rtems_scheduler_ident(
-  rtems_name  name,
-  rtems_id   *id
-)
+rtems_status_code rtems_scheduler_ident( rtems_name name, rtems_id *id )
 {
   size_t i;
 

@@ -48,15 +48,16 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/sysinit.h>
 
-#define SEMAPHORE_KIND_MASK ( RTEMS_SEMAPHORE_CLASS | RTEMS_INHERIT_PRIORITY \
-  | RTEMS_PRIORITY_CEILING | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING )
+#define SEMAPHORE_KIND_MASK                                                   \
+  ( RTEMS_SEMAPHORE_CLASS | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY_CEILING | \
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING )
 
 rtems_status_code rtems_semaphore_create(
-  rtems_name           name,
-  uint32_t             count,
-  rtems_attribute      attribute_set,
-  rtems_task_priority  priority_ceiling,
-  rtems_id            *id
+  rtems_name          name,
+  uint32_t            count,
+  rtems_attribute     attribute_set,
+  rtems_task_priority priority_ceiling,
+  rtems_id           *id
 )
 {
   Semaphore_Control       *the_semaphore;
@@ -70,13 +71,15 @@ rtems_status_code rtems_semaphore_create(
   Priority_Control         priority;
   uintptr_t                flags;
 
-  if ( !rtems_is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) ) {
     return RTEMS_INVALID_NAME;
+  }
 
-  if ( !id )
+  if ( !id ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( !_System_state_Is_multiprocessing ) {
     attribute_set = _Attributes_Clear( attribute_set, RTEMS_GLOBAL );
   }
@@ -86,8 +89,8 @@ rtems_status_code rtems_semaphore_create(
   maybe_global = attribute_set & SEMAPHORE_KIND_MASK;
 
   /* Attribute subset defining a mutex variant with a locking protocol */
-  mutex_with_protocol =
-    attribute_set & ( SEMAPHORE_KIND_MASK | RTEMS_GLOBAL | RTEMS_PRIORITY );
+  mutex_with_protocol = attribute_set & ( SEMAPHORE_KIND_MASK | RTEMS_GLOBAL |
+                                          RTEMS_PRIORITY );
 
   if ( maybe_global == RTEMS_COUNTING_SEMAPHORE ) {
     variant = SEMAPHORE_VARIANT_COUNTING;
@@ -96,20 +99,20 @@ rtems_status_code rtems_semaphore_create(
   } else if ( maybe_global == RTEMS_BINARY_SEMAPHORE ) {
     variant = SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL;
   } else if (
-    mutex_with_protocol
-      == ( RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY )
+    mutex_with_protocol ==
+    ( RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY )
   ) {
     variant = SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY;
   } else if (
-    mutex_with_protocol
-      == ( RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_PRIORITY_CEILING )
+    mutex_with_protocol ==
+    ( RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_PRIORITY_CEILING )
   ) {
     variant = SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING;
   } else if (
     mutex_with_protocol == ( RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
-      RTEMS_MULTIPROCESSOR_RESOURCE_SHARING )
+                             RTEMS_MULTIPROCESSOR_RESOURCE_SHARING )
   ) {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     variant = SEMAPHORE_VARIANT_MRSP;
 #else
     /*
@@ -135,7 +138,7 @@ rtems_status_code rtems_semaphore_create(
 
   flags = _Semaphore_Set_variant( 0, variant );
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( _Attributes_Is_global( attribute_set ) ) {
     bool ok;
 
@@ -184,7 +187,11 @@ rtems_status_code rtems_semaphore_create(
       break;
     case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
       scheduler = _Thread_Scheduler_get_home( executing );
-      priority = _RTEMS_Priority_To_core( scheduler, priority_ceiling, &valid );
+      priority = _RTEMS_Priority_To_core(
+        scheduler,
+        priority_ceiling,
+        &valid
+      );
 
       if ( valid ) {
         _CORE_ceiling_mutex_Initialize(
@@ -220,10 +227,14 @@ rtems_status_code rtems_semaphore_create(
       }
 
       break;
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     case SEMAPHORE_VARIANT_MRSP:
       scheduler = _Thread_Scheduler_get_home( executing );
-      priority = _RTEMS_Priority_To_core( scheduler, priority_ceiling, &valid );
+      priority = _RTEMS_Priority_To_core(
+        scheduler,
+        priority_ceiling,
+        &valid
+      );
 
       if ( valid ) {
         status = _MRSP_Initialize(
@@ -241,8 +252,8 @@ rtems_status_code rtems_semaphore_create(
 #endif
     default:
       _Assert(
-        variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
-          || variant == SEMAPHORE_VARIANT_COUNTING
+        variant == SEMAPHORE_VARIANT_SIMPLE_BINARY ||
+        variant == SEMAPHORE_VARIANT_COUNTING
       );
       _CORE_semaphore_Initialize(
         &the_semaphore->Core_control.Semaphore,
@@ -268,14 +279,15 @@ rtems_status_code rtems_semaphore_create(
     name
   );
 
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( _Attributes_Is_global( attribute_set ) )
+#if defined( RTEMS_MULTIPROCESSING )
+  if ( _Attributes_Is_global( attribute_set ) ) {
     _Semaphore_MP_Send_process_packet(
       SEMAPHORE_MP_ANNOUNCE_CREATE,
       the_semaphore->Object.id,
       name,
-      0                          /* Not used */
+      0 /* Not used */
     );
+  }
 #endif
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;

@@ -61,7 +61,7 @@ THREAD_QUEUE_OBJECT_ASSERT(
   SEMAPHORE_CONTROL_SEMAPHORE
 );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
   Core_control.MRSP.Wait_queue,
@@ -70,23 +70,23 @@ THREAD_QUEUE_OBJECT_ASSERT(
 #endif
 
 rtems_status_code rtems_semaphore_obtain(
-  rtems_id        id,
-  rtems_option    option_set,
-  rtems_interval  timeout
+  rtems_id       id,
+  rtems_option   option_set,
+  rtems_interval timeout
 )
 {
-  Semaphore_Control    *the_semaphore;
-  Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
-  bool                  wait;
-  uintptr_t             flags;
-  Semaphore_Variant     variant;
-  Status_Control        status;
+  Semaphore_Control   *the_semaphore;
+  Thread_queue_Context queue_context;
+  Thread_Control      *executing;
+  bool                 wait;
+  uintptr_t            flags;
+  Semaphore_Variant    variant;
+  Status_Control       status;
 
   the_semaphore = _Semaphore_Get( id, &queue_context );
 
   if ( the_semaphore == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     return _Semaphore_MP_Obtain( id, option_set, timeout );
 #else
     return RTEMS_INVALID_ID;
@@ -135,7 +135,7 @@ rtems_status_code rtems_semaphore_obtain(
         &queue_context
       );
       break;
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     case SEMAPHORE_VARIANT_MRSP:
       status = _MRSP_Seize(
         &the_semaphore->Core_control.MRSP,
@@ -147,8 +147,8 @@ rtems_status_code rtems_semaphore_obtain(
 #endif
     default:
       _Assert(
-        variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
-          || variant == SEMAPHORE_VARIANT_COUNTING
+        variant == SEMAPHORE_VARIANT_SIMPLE_BINARY ||
+        variant == SEMAPHORE_VARIANT_COUNTING
       );
       status = _CORE_semaphore_Seize(
         &the_semaphore->Core_control.Semaphore,

@@ -49,22 +49,22 @@
  *  remote event operations.
  */
 typedef enum {
-  EVENT_MP_SEND_REQUEST  =  0,
-  EVENT_MP_SEND_RESPONSE =  1
-}   Event_MP_Remote_operations;
+  EVENT_MP_SEND_REQUEST = 0,
+  EVENT_MP_SEND_RESPONSE = 1
+} Event_MP_Remote_operations;
 
 /**
  *  The following data structure defines the packet used to perform
  *  remote event operations.
  */
 typedef struct {
-  rtems_packet_prefix         Prefix;
-  Event_MP_Remote_operations  operation;
-  rtems_event_set             event_in;
-}   Event_MP_Packet;
+  rtems_packet_prefix        Prefix;
+  Event_MP_Remote_operations operation;
+  rtems_event_set            event_in;
+} Event_MP_Packet;
 
 RTEMS_STATIC_ASSERT(
-  sizeof(Event_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
+  sizeof( Event_MP_Packet ) <= MP_PACKET_MINIMUM_PACKET_SIZE,
   Event_MP_Packet
 );
 
@@ -77,10 +77,7 @@ static Event_MP_Packet *_Event_MP_Get_packet( Objects_Id id )
   return (Event_MP_Packet *) _MPCI_Get_packet();
 }
 
-rtems_status_code _Event_MP_Send(
-  rtems_id        id,
-  rtems_event_set event_in
-)
+rtems_status_code _Event_MP_Send( rtems_id id, rtems_event_set event_in )
 {
   Event_MP_Packet *the_packet;
   Status_Control   status;
@@ -90,12 +87,12 @@ rtems_status_code _Event_MP_Send(
     return RTEMS_INVALID_ID;
   }
 
-  the_packet->Prefix.the_class  = MP_PACKET_EVENT;
-  the_packet->Prefix.length     = sizeof ( *the_packet );
-  the_packet->Prefix.to_convert = sizeof ( *the_packet );
-  the_packet->operation         = EVENT_MP_SEND_REQUEST;
-  the_packet->Prefix.id         = id;
-  the_packet->event_in          = event_in;
+  the_packet->Prefix.the_class = MP_PACKET_EVENT;
+  the_packet->Prefix.length = sizeof( *the_packet );
+  the_packet->Prefix.to_convert = sizeof( *the_packet );
+  the_packet->operation = EVENT_MP_SEND_REQUEST;
+  the_packet->Prefix.id = id;
+  the_packet->event_in = event_in;
 
   status = _MPCI_Send_request_packet(
     _Objects_Get_node( id ),
@@ -105,20 +102,19 @@ rtems_status_code _Event_MP_Send(
   return _Status_Get( status );
 }
 
-static void _Event_MP_Send_response_packet (
-  Event_MP_Remote_operations  operation,
-  Thread_Control             *the_thread
+static void _Event_MP_Send_response_packet(
+  Event_MP_Remote_operations operation,
+  Thread_Control            *the_thread
 )
 {
   Event_MP_Packet *the_packet;
 
   switch ( operation ) {
-
     case EVENT_MP_SEND_RESPONSE:
 
-      the_packet = ( Event_MP_Packet *) the_thread->receive_packet;
+      the_packet = (Event_MP_Packet *) the_thread->receive_packet;
 
-/*
+      /*
  *  The packet being returned already contains the class, length, and
  *  to_convert fields, therefore they are not set in this routine.
  */
@@ -133,20 +129,16 @@ static void _Event_MP_Send_response_packet (
 
     case EVENT_MP_SEND_REQUEST:
       break;
-
   }
 }
 
-void _Event_MP_Process_packet (
-  rtems_packet_prefix  *the_packet_prefix
-)
+void _Event_MP_Process_packet( rtems_packet_prefix *the_packet_prefix )
 {
   Event_MP_Packet *the_packet;
 
   the_packet = (Event_MP_Packet *) the_packet_prefix;
 
   switch ( the_packet->operation ) {
-
     case EVENT_MP_SEND_REQUEST:
 
       the_packet->Prefix.return_code = rtems_event_send(
@@ -166,7 +158,6 @@ void _Event_MP_Process_packet (
 
       break;
     }
-
   }
 }
 

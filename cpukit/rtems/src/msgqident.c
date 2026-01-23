@@ -43,9 +43,9 @@
 #include <rtems/rtems/objectimpl.h>
 
 rtems_status_code rtems_message_queue_ident(
-  rtems_name  name,
-  uint32_t    node,
-  rtems_id   *id
+  rtems_name name,
+  uint32_t   node,
+  rtems_id  *id
 )
 {
   return _RTEMS_Name_to_id( name, node, id, &_Message_queue_Information );

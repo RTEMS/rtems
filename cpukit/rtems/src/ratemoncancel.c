@@ -50,8 +50,8 @@ void _Rate_monotonic_Cancel(
 {
   (void) owner;
 
-  Per_CPU_Control      *cpu_self;
-  Thread_queue_Context  queue_context;
+  Per_CPU_Control     *cpu_self;
+  Thread_queue_Context queue_context;
 
   _Rate_monotonic_Acquire_critical( the_period, lock_context );
 
@@ -70,9 +70,7 @@ void _Rate_monotonic_Cancel(
   _Thread_Dispatch_enable( cpu_self );
 }
 
-rtems_status_code rtems_rate_monotonic_cancel(
-  rtems_id id
-)
+rtems_status_code rtems_rate_monotonic_cancel( rtems_id id )
 {
   Rate_monotonic_Control *the_period;
   ISR_lock_Context        lock_context;

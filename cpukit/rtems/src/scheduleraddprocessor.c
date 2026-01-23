@@ -48,10 +48,10 @@ rtems_status_code rtems_scheduler_add_processor(
   uint32_t cpu_index
 )
 {
-  uint32_t                 scheduler_index;
-#if defined(RTEMS_SMP)
-  Per_CPU_Control         *cpu;
-  rtems_status_code        status;
+  uint32_t scheduler_index;
+#if defined( RTEMS_SMP )
+  Per_CPU_Control  *cpu;
+  rtems_status_code status;
 #endif
 
   scheduler_index = _Scheduler_Get_index_by_id( scheduler_id );
@@ -64,7 +64,7 @@ rtems_status_code rtems_scheduler_add_processor(
     return RTEMS_NOT_CONFIGURED;
   }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   cpu = _Per_CPU_Get_by_index( cpu_index );
 
   if ( _Scheduler_Initial_assignments[ cpu_index ].scheduler == NULL ) {
@@ -88,8 +88,10 @@ rtems_status_code rtems_scheduler_add_processor(
 
     scheduler = &_Scheduler_Table[ scheduler_index ];
     scheduler_context = _Scheduler_Get_context( scheduler );
-    idle_priority =
-      _Scheduler_Map_priority( scheduler, scheduler->maximum_priority );
+    idle_priority = _Scheduler_Map_priority(
+      scheduler,
+      scheduler->maximum_priority
+    );
 
     idle = cpu->Scheduler.idle_if_online_and_unused;
     _Assert( idle != NULL );
@@ -97,8 +99,10 @@ rtems_status_code rtems_scheduler_add_processor(
 
     idle->Scheduler.home_scheduler = scheduler;
     idle->Start.initial_priority = idle_priority;
-    scheduler_node =
-      _Thread_Scheduler_get_node_by_index( idle, scheduler_index );
+    scheduler_node = _Thread_Scheduler_get_node_by_index(
+      idle,
+      scheduler_index
+    );
     _Priority_Node_set_priority( &idle->Real_priority, idle_priority );
     _Priority_Initialize_one(
       &scheduler_node->Wait.Priority,

@@ -51,22 +51,22 @@
  *  remote signal operations.
  */
 typedef enum {
-  SIGNAL_MP_SEND_REQUEST  = 0,
+  SIGNAL_MP_SEND_REQUEST = 0,
   SIGNAL_MP_SEND_RESPONSE = 1
-}   Signal_MP_Remote_operations;
+} Signal_MP_Remote_operations;
 
 /**
  *  The following data structure defines the packet used to perform
  *  remote signal operations.
  */
 typedef struct {
-  rtems_packet_prefix          Prefix;
-  Signal_MP_Remote_operations  operation;
-  rtems_signal_set             signal_set;
-}   Signal_MP_Packet;
+  rtems_packet_prefix         Prefix;
+  Signal_MP_Remote_operations operation;
+  rtems_signal_set            signal_set;
+} Signal_MP_Packet;
 
 RTEMS_STATIC_ASSERT(
-  sizeof(Signal_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
+  sizeof( Signal_MP_Packet ) <= MP_PACKET_MINIMUM_PACKET_SIZE,
   Signal_MP_Packet
 );
 
@@ -87,10 +87,7 @@ static Signal_MP_Packet *_Signal_MP_Get_packet( Objects_Id id )
  *
  */
 
-rtems_status_code _Signal_MP_Send(
-  rtems_id         id,
-  rtems_signal_set signal_set
-)
+rtems_status_code _Signal_MP_Send( rtems_id id, rtems_signal_set signal_set )
 {
   Signal_MP_Packet *the_packet;
   Status_Control    status;
@@ -100,12 +97,12 @@ rtems_status_code _Signal_MP_Send(
     return RTEMS_INVALID_ID;
   }
 
-  the_packet->Prefix.the_class  = MP_PACKET_SIGNAL;
-  the_packet->Prefix.length     = sizeof( *the_packet );
+  the_packet->Prefix.the_class = MP_PACKET_SIGNAL;
+  the_packet->Prefix.length = sizeof( *the_packet );
   the_packet->Prefix.to_convert = sizeof( *the_packet );
-  the_packet->operation         = SIGNAL_MP_SEND_REQUEST;
-  the_packet->Prefix.id         = id;
-  the_packet->signal_set        = signal_set;
+  the_packet->operation = SIGNAL_MP_SEND_REQUEST;
+  the_packet->Prefix.id = id;
+  the_packet->signal_set = signal_set;
 
   status = _MPCI_Send_request_packet(
     _Objects_Get_node( id ),
@@ -115,20 +112,19 @@ rtems_status_code _Signal_MP_Send(
   return _Status_Get( status );
 }
 
-static void _Signal_MP_Send_response_packet (
-  Signal_MP_Remote_operations  operation,
-  Thread_Control              *the_thread
+static void _Signal_MP_Send_response_packet(
+  Signal_MP_Remote_operations operation,
+  Thread_Control             *the_thread
 )
 {
   Signal_MP_Packet *the_packet;
 
   switch ( operation ) {
-
     case SIGNAL_MP_SEND_RESPONSE:
 
-      the_packet = ( Signal_MP_Packet *) the_thread->receive_packet;
+      the_packet = (Signal_MP_Packet *) the_thread->receive_packet;
 
-/*
+      /*
  *  The packet being returned already contains the class, length, and
  *  to_convert fields, therefore they are not set in this routine.
  */
@@ -143,20 +139,16 @@ static void _Signal_MP_Send_response_packet (
 
     case SIGNAL_MP_SEND_REQUEST:
       break;
-
   }
 }
 
-void _Signal_MP_Process_packet (
-  rtems_packet_prefix  *the_packet_prefix
-)
+void _Signal_MP_Process_packet( rtems_packet_prefix *the_packet_prefix )
 {
   Signal_MP_Packet *the_packet;
 
   the_packet = (Signal_MP_Packet *) the_packet_prefix;
 
   switch ( the_packet->operation ) {
-
     case SIGNAL_MP_SEND_REQUEST:
 
       the_packet->Prefix.return_code = rtems_signal_send(
@@ -175,7 +167,6 @@ void _Signal_MP_Process_packet (
       _MPCI_Process_response( the_packet_prefix );
       _MPCI_Return_packet( the_packet_prefix );
       break;
-
   }
 }
 

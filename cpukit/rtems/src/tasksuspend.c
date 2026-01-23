@@ -42,19 +42,17 @@
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/threadimpl.h>
 
-rtems_status_code rtems_task_suspend(
-  rtems_id id
-)
+rtems_status_code rtems_task_suspend( rtems_id id )
 {
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
-  Per_CPU_Control  *cpu_self;
-  States_Control    previous_state;
+  Thread_Control  *the_thread;
+  ISR_lock_Context lock_context;
+  Per_CPU_Control *cpu_self;
+  States_Control   previous_state;
 
   the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     return _RTEMS_tasks_MP_Suspend( id );
 #else
     return RTEMS_INVALID_ID;
@@ -67,6 +65,6 @@ rtems_status_code rtems_task_suspend(
   previous_state = _Thread_Set_state( the_thread, STATES_SUSPENDED );
 
   _Thread_Dispatch_enable( cpu_self );
-  return _States_Is_suspended( previous_state ) ?
-    RTEMS_ALREADY_SUSPENDED : RTEMS_SUCCESSFUL;
+  return _States_Is_suspended( previous_state ) ? RTEMS_ALREADY_SUSPENDED
+                                                : RTEMS_SUCCESSFUL;
 }

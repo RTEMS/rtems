@@ -41,10 +41,7 @@
 
 #include <rtems/rtems/messageimpl.h>
 
-rtems_status_code rtems_message_queue_flush(
-  rtems_id  id,
-  uint32_t *count
-)
+rtems_status_code rtems_message_queue_flush( rtems_id id, uint32_t *count )
 {
   Message_queue_Control *the_message_queue;
   Thread_queue_Context   queue_context;
@@ -56,7 +53,7 @@ rtems_status_code rtems_message_queue_flush(
   the_message_queue = _Message_queue_Get( id, &queue_context );
 
   if ( the_message_queue == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     return _Message_queue_MP_Flush( id, count );
 #else
     return RTEMS_INVALID_ID;

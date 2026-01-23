@@ -45,9 +45,9 @@
 #include <rtems/score/percpu.h>
 
 rtems_status_code rtems_task_ident(
-  rtems_name  name,
-  uint32_t    node,
-  rtems_id   *id
+  rtems_name name,
+  uint32_t   node,
+  rtems_id  *id
 )
 {
   if ( id == NULL ) {

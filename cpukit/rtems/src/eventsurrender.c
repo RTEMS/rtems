@@ -45,10 +45,10 @@
 #include <rtems/score/watchdogimpl.h>
 
 static void _Event_Satisfy(
-  Thread_Control  *the_thread,
-  Event_Control   *event,
-  rtems_event_set  pending_events,
-  rtems_event_set  seized_events
+  Thread_Control *the_thread,
+  Event_Control  *event,
+  rtems_event_set pending_events,
+  rtems_event_set seized_events
 )
 {
   event->pending_events = _Event_sets_Clear( pending_events, seized_events );
@@ -80,16 +80,17 @@ static bool _Event_Is_satisfied(
   event_condition = the_thread->Wait.count;
   *seized_events = _Event_sets_Get( pending_events, event_condition );
 
-  return !_Event_sets_Is_empty( *seized_events )
-    && ( *seized_events == event_condition || _Options_Is_any( option_set ) );
+  return !_Event_sets_Is_empty( *seized_events ) &&
+         ( *seized_events == event_condition ||
+           _Options_Is_any( option_set ) );
 }
 
 rtems_status_code _Event_Surrender(
-  Thread_Control    *the_thread,
-  rtems_event_set    event_in,
-  Event_Control     *event,
-  Thread_Wait_flags  wait_class,
-  ISR_lock_Context  *lock_context
+  Thread_Control   *the_thread,
+  rtems_event_set   event_in,
+  Event_Control    *event,
+  Thread_Wait_flags wait_class,
+  ISR_lock_Context *lock_context
 )
 {
   rtems_event_set pending_events;
@@ -102,8 +103,8 @@ rtems_status_code _Event_Surrender(
   pending_events = event->pending_events;
 
   if (
-    _Event_Is_blocking_on_event( the_thread, wait_class )
-      && _Event_Is_satisfied( the_thread, pending_events, &seized_events )
+    _Event_Is_blocking_on_event( the_thread, wait_class ) &&
+    _Event_Is_satisfied( the_thread, pending_events, &seized_events )
   ) {
     bool success;
 
@@ -119,8 +120,8 @@ rtems_status_code _Event_Surrender(
       unblock = false;
     } else {
       _Assert(
-        _Thread_Wait_flags_get( the_thread )
-          == ( wait_class | THREAD_WAIT_STATE_BLOCKED )
+        _Thread_Wait_flags_get( the_thread ) ==
+        ( wait_class | THREAD_WAIT_STATE_BLOCKED )
       );
       _Thread_Wait_flags_set( the_thread, THREAD_WAIT_STATE_READY );
       unblock = true;

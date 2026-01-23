@@ -50,11 +50,11 @@ static rtems_status_code _Semaphore_Set_priority(
   Thread_queue_Context    *queue_context
 )
 {
-  bool               valid;
-  Priority_Control   core_priority;
-  Priority_Control   old_priority;
-  Per_CPU_Control   *cpu_self;
-  Semaphore_Variant  variant;
+  bool              valid;
+  Priority_Control  core_priority;
+  Priority_Control  old_priority;
+  Per_CPU_Control  *cpu_self;
+  Semaphore_Variant variant;
 
   core_priority = _RTEMS_Priority_To_core( scheduler, new_priority, &valid );
   if ( new_priority != RTEMS_CURRENT_PRIORITY && !valid ) {
@@ -71,11 +71,10 @@ static rtems_status_code _Semaphore_Set_priority(
 
   switch ( variant ) {
     case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
       if (
-        scheduler != _CORE_ceiling_mutex_Get_scheduler(
-          &the_semaphore->Core_control.Mutex
-        )
+        scheduler !=
+        _CORE_ceiling_mutex_Get_scheduler( &the_semaphore->Core_control.Mutex )
       ) {
         _Thread_queue_Release(
           &the_semaphore->Core_control.Wait_queue,
@@ -98,7 +97,7 @@ static rtems_status_code _Semaphore_Set_priority(
       }
 
       break;
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     case SEMAPHORE_VARIANT_MRSP:
       old_priority = _MRSP_Get_priority(
         &the_semaphore->Core_control.MRSP,
@@ -117,10 +116,10 @@ static rtems_status_code _Semaphore_Set_priority(
 #endif
     default:
       _Assert(
-        variant == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY
-          || variant == SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL
-          || variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
-          || variant == SEMAPHORE_VARIANT_COUNTING
+        variant == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY ||
+        variant == SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL ||
+        variant == SEMAPHORE_VARIANT_SIMPLE_BINARY ||
+        variant == SEMAPHORE_VARIANT_COUNTING
       );
       _Thread_queue_Release(
         &the_semaphore->Core_control.Wait_queue,
@@ -165,7 +164,7 @@ rtems_status_code rtems_semaphore_set_priority(
   the_semaphore = _Semaphore_Get( semaphore_id, &queue_context );
 
   if ( the_semaphore == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Semaphore_MP_Is_remote( semaphore_id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }

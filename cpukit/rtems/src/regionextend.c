@@ -42,14 +42,14 @@
 #include <rtems/rtems/regionimpl.h>
 
 rtems_status_code rtems_region_extend(
-  rtems_id   id,
-  void      *starting_address,
-  uintptr_t  length
+  rtems_id  id,
+  void     *starting_address,
+  uintptr_t length
 )
 {
-  rtems_status_code  status;
-  Region_Control    *the_region;
-  uintptr_t          amount_extended;
+  rtems_status_code status;
+  Region_Control   *the_region;
+  uintptr_t         amount_extended;
 
   if ( starting_address == NULL ) {
     return RTEMS_INVALID_ADDRESS;

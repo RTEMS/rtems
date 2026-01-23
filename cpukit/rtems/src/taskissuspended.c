@@ -44,14 +44,14 @@
 
 rtems_status_code rtems_task_is_suspended( rtems_id id )
 {
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
-  States_Control    current_state;
+  Thread_Control  *the_thread;
+  ISR_lock_Context lock_context;
+  States_Control   current_state;
 
   the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Thread_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }
@@ -61,7 +61,7 @@ rtems_status_code rtems_task_is_suspended( rtems_id id )
   }
 
   current_state = the_thread->current_state;
-  _ISR_lock_ISR_enable( &lock_context);
-  return _States_Is_suspended( current_state ) ?
-    RTEMS_ALREADY_SUSPENDED : RTEMS_SUCCESSFUL;
+  _ISR_lock_ISR_enable( &lock_context );
+  return _States_Is_suspended( current_state ) ? RTEMS_ALREADY_SUSPENDED
+                                               : RTEMS_SUCCESSFUL;
 }

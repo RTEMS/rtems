@@ -42,18 +42,19 @@
 #include <rtems/rtems/timerimpl.h>
 
 rtems_status_code rtems_timer_server_fire_when(
-  rtems_id                           id,
-  const rtems_time_of_day            *wall_time,
-  rtems_timer_service_routine_entry  routine,
-  void                              *user_data
+  rtems_id                          id,
+  const rtems_time_of_day          *wall_time,
+  rtems_timer_service_routine_entry routine,
+  void                             *user_data
 )
 {
   Timer_server_Control *timer_server;
 
   timer_server = _Timer_server;
 
-  if ( !timer_server )
+  if ( !timer_server ) {
     return RTEMS_INCORRECT_STATE;
+  }
 
   return _Timer_Fire_when(
     id,

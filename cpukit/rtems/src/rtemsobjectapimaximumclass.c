@@ -42,9 +42,7 @@
 #include <rtems/rtems/object.h>
 #include <rtems/score/objectimpl.h>
 
-int rtems_object_api_maximum_class(
-  int api
-)
+int rtems_object_api_maximum_class( int api )
 {
-  return _Objects_API_maximum_class(api);
+  return _Objects_API_maximum_class( api );
 }

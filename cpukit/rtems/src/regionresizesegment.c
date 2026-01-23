@@ -42,17 +42,17 @@
 #include <rtems/rtems/regionimpl.h>
 
 rtems_status_code rtems_region_resize_segment(
-  rtems_id    id,
-  void       *segment,
-  uintptr_t   size,
-  uintptr_t  *old_size
+  rtems_id   id,
+  void      *segment,
+  uintptr_t  size,
+  uintptr_t *old_size
 )
 {
-  uintptr_t           avail_size;
-  uintptr_t           osize;
-  rtems_status_code   status;
-  Heap_Resize_status  resize_status;
-  Region_Control     *the_region;
+  uintptr_t          avail_size;
+  uintptr_t          osize;
+  rtems_status_code  status;
+  Heap_Resize_status resize_status;
+  Region_Control    *the_region;
 
   if ( old_size == NULL ) {
     return RTEMS_INVALID_ADDRESS;

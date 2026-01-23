@@ -58,7 +58,7 @@ rtems_status_code rtems_scheduler_ident_by_processor(
   }
 
   scheduler = _Scheduler_Get_by_CPU( _Per_CPU_Get_by_index( cpu_index ) );
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( scheduler == NULL ) {
     return RTEMS_INCORRECT_STATE;
   }

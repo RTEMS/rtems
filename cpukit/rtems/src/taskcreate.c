@@ -64,12 +64,12 @@ static rtems_status_code _RTEMS_tasks_Allocate_and_prepare_stack(
 }
 
 rtems_status_code rtems_task_create(
-  rtems_name           name,
-  rtems_task_priority  initial_priority,
-  size_t               stack_size,
-  rtems_mode           initial_modes,
-  rtems_attribute      attribute_set,
-  rtems_id            *id
+  rtems_name          name,
+  rtems_task_priority initial_priority,
+  size_t              stack_size,
+  rtems_mode          initial_modes,
+  rtems_attribute     attribute_set,
+  rtems_id           *id
 )
 {
   rtems_task_config config;

@@ -47,8 +47,8 @@ rtems_status_code rtems_region_get_segment_size(
   uintptr_t *size
 )
 {
-  rtems_status_code  status;
-  Region_Control    *the_region;
+  rtems_status_code status;
+  Region_Control   *the_region;
 
   if ( segment == NULL ) {
     return RTEMS_INVALID_ADDRESS;

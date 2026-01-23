@@ -41,12 +41,10 @@
 
 #include <rtems/rtems/timerimpl.h>
 
-rtems_status_code rtems_timer_delete(
-  rtems_id id
-)
+rtems_status_code rtems_timer_delete( rtems_id id )
 {
-  Timer_Control    *the_timer;
-  ISR_lock_Context  lock_context;
+  Timer_Control   *the_timer;
+  ISR_lock_Context lock_context;
 
   _Objects_Allocator_lock();
 

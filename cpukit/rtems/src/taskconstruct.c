@@ -54,10 +54,10 @@
 
 #include <string.h>
 
-#define STATUS_ASSERT( status ) \
-  RTEMS_STATIC_ASSERT( \
+#define STATUS_ASSERT( status )                            \
+  RTEMS_STATIC_ASSERT(                                     \
     (int) STATUS_CLASSIC_##status == (int) RTEMS_##status, \
-    status \
+    status                                                 \
   )
 
 STATUS_ASSERT( INCORRECT_STATE );
@@ -130,22 +130,22 @@ rtems_status_code rtems_task_construct(
 }
 
 rtems_status_code _RTEMS_tasks_Create(
-  const rtems_task_config   *config,
-  rtems_id                  *id,
-  RTEMS_tasks_Prepare_stack  prepare_stack
+  const rtems_task_config  *config,
+  rtems_id                 *id,
+  RTEMS_tasks_Prepare_stack prepare_stack
 )
 {
-  Thread_Control          *the_thread;
-  Thread_Configuration     thread_config;
-#if defined(RTEMS_MULTIPROCESSING)
-  Objects_MP_Control      *the_global_object = NULL;
-  bool                     is_global;
+  Thread_Control      *the_thread;
+  Thread_Configuration thread_config;
+#if defined( RTEMS_MULTIPROCESSING )
+  Objects_MP_Control *the_global_object = NULL;
+  bool                is_global;
 #endif
-  rtems_status_code        status;
-  rtems_attribute          attributes;
-  bool                     valid;
-  RTEMS_API_Control       *api;
-  ASR_Information         *asr;
+  rtems_status_code  status;
+  rtems_attribute    attributes;
+  bool               valid;
+  RTEMS_API_Control *api;
+  ASR_Information   *asr;
 
   if ( !rtems_is_name_valid( config->name ) ) {
     return RTEMS_INVALID_NAME;
@@ -173,7 +173,9 @@ rtems_status_code _RTEMS_tasks_Create(
   attributes = _Attributes_Clear( attributes, ATTRIBUTES_NOT_SUPPORTED );
 
   memset( &thread_config, 0, sizeof( thread_config ) );
-  thread_config.isr_level =  _Modes_Get_interrupt_level( config->initial_modes );
+  thread_config.isr_level = _Modes_Get_interrupt_level(
+    config->initial_modes
+  );
   thread_config.name = config->name;
   thread_config.is_fp = _Attributes_Is_floating_point( attributes );
   thread_config.is_preemptible = _Modes_Is_preempt( config->initial_modes );
@@ -194,8 +196,9 @@ rtems_status_code _RTEMS_tasks_Create(
     }
   }
 
-  thread_config.scheduler =
-    _Thread_Scheduler_get_home( _Thread_Get_executing() );
+  thread_config.scheduler = _Thread_Scheduler_get_home(
+    _Thread_Get_executing()
+  );
 
   thread_config.priority = _RTEMS_Priority_To_core(
     thread_config.scheduler,
@@ -206,7 +209,7 @@ rtems_status_code _RTEMS_tasks_Create(
     return RTEMS_INVALID_PRIORITY;
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( !_System_state_Is_multiprocessing ) {
     attributes = _Attributes_Clear( attributes, RTEMS_GLOBAL );
   }
@@ -230,7 +233,7 @@ rtems_status_code _RTEMS_tasks_Create(
     return RTEMS_TOO_MANY;
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( is_global ) {
     the_global_object = _Objects_MP_Allocate_global_object();
 
@@ -262,9 +265,10 @@ rtems_status_code _RTEMS_tasks_Create(
   }
 
   if ( status != RTEMS_SUCCESSFUL ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( is_global )
+#if defined( RTEMS_MULTIPROCESSING )
+    if ( is_global ) {
       _Objects_MP_Free_global_object( the_global_object );
+    }
 #endif
     _Objects_Allocator_unlock();
     return status;
@@ -277,10 +281,9 @@ rtems_status_code _RTEMS_tasks_Create(
 
   *id = the_thread->Object.id;
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   the_thread->is_global = is_global;
   if ( is_global ) {
-
     _Objects_MP_Open(
       &_RTEMS_tasks_Information.Objects,
       the_global_object,
@@ -293,8 +296,7 @@ rtems_status_code _RTEMS_tasks_Create(
       the_thread->Object.id,
       config->name
     );
-
-   }
+  }
 #endif
 
   _Objects_Allocator_unlock();
@@ -316,7 +318,7 @@ static void _RTEMS_tasks_Start_extension(
   _Event_Initialize( &api->System_event );
 }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 static void _RTEMS_tasks_Terminate_extension( Thread_Control *executing )
 {
   if ( executing->is_global ) {
@@ -327,7 +329,7 @@ static void _RTEMS_tasks_Terminate_extension( Thread_Control *executing )
     _RTEMS_tasks_MP_Send_process_packet(
       RTEMS_TASKS_MP_ANNOUNCE_DELETE,
       executing->Object.id,
-      0                                /* Not used */
+      0 /* Not used */
     );
   }
 }
@@ -335,11 +337,11 @@ static void _RTEMS_tasks_Terminate_extension( Thread_Control *executing )
 
 static User_extensions_Control _RTEMS_tasks_User_extensions = {
   .Callouts = {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     .thread_terminate = _RTEMS_tasks_Terminate_extension,
 #endif
-    .thread_start     = _RTEMS_tasks_Start_extension,
-    .thread_restart   = _RTEMS_tasks_Start_extension
+    .thread_start = _RTEMS_tasks_Start_extension,
+    .thread_restart = _RTEMS_tasks_Start_extension
   }
 };
 

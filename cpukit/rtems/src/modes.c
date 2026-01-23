@@ -46,9 +46,7 @@
 
 const uint32_t rtems_interrupt_mask = RTEMS_INTERRUPT_MASK;
 
-rtems_mode rtems_interrupt_level_body(
-  uint32_t   level
-)
+rtems_mode rtems_interrupt_level_body( uint32_t level )
 {
-  return RTEMS_INTERRUPT_LEVEL(level);
+  return RTEMS_INTERRUPT_LEVEL( level );
 }

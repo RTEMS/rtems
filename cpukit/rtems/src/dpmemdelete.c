@@ -41,9 +41,7 @@
 
 #include <rtems/rtems/dpmemimpl.h>
 
-rtems_status_code rtems_port_delete(
-  rtems_id id
-)
+rtems_status_code rtems_port_delete( rtems_id id )
 {
   Dual_ported_memory_Control *the_port;
   ISR_lock_Context            lock_context;

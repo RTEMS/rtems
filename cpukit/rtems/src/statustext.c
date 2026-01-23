@@ -75,11 +75,11 @@ static const char *const status_code_text[] = {
 
 const char *rtems_status_text( rtems_status_code code )
 {
-  size_t i = code;
+  size_t      i = code;
   const char *text = "?";
 
   if ( i < RTEMS_ARRAY_SIZE( status_code_text ) ) {
-    text = status_code_text [i];
+    text = status_code_text[ i ];
   }
 
   return text;

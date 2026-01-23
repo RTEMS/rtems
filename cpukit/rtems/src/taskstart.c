@@ -51,16 +51,11 @@ rtems_status_code rtems_task_start(
 {
   Thread_Entry_information entry = {
     .adaptor = _Thread_Entry_adaptor_numeric,
-    .Kinds = {
-      .Numeric = {
-        .entry = entry_point,
-        .argument = argument
-      }
-    }
+    .Kinds = { .Numeric = { .entry = entry_point, .argument = argument } }
   };
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
-  Status_Control    status;
+  Thread_Control  *the_thread;
+  ISR_lock_Context lock_context;
+  Status_Control   status;
 
   if ( entry_point == NULL ) {
     return RTEMS_INVALID_ADDRESS;
@@ -69,7 +64,7 @@ rtems_status_code rtems_task_start(
   the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Thread_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }

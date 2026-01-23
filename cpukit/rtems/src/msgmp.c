@@ -57,41 +57,40 @@ static Message_queue_MP_Packet *_Message_queue_MP_Get_packet( void )
   return (Message_queue_MP_Packet *) _MPCI_Get_packet();
 }
 
-
 /*
  *  _Message_queue_MP_Send_process_packet
  *
  */
 
-void _Message_queue_MP_Send_process_packet (
-  Message_queue_MP_Remote_operations  operation,
-  Objects_Id                          message_queue_id,
-  rtems_name                          name,
-  Objects_Id                          proxy_id
+void _Message_queue_MP_Send_process_packet(
+  Message_queue_MP_Remote_operations operation,
+  Objects_Id                         message_queue_id,
+  rtems_name                         name,
+  Objects_Id                         proxy_id
 )
 {
   Message_queue_MP_Packet *the_packet;
   uint32_t                 node;
 
   switch ( operation ) {
-
     case MESSAGE_QUEUE_MP_ANNOUNCE_CREATE:
     case MESSAGE_QUEUE_MP_ANNOUNCE_DELETE:
     case MESSAGE_QUEUE_MP_EXTRACT_PROXY:
 
-      the_packet                    = _Message_queue_MP_Get_packet();
-      the_packet->Prefix.the_class  = MP_PACKET_MESSAGE_QUEUE;
-      the_packet->Prefix.length     = MESSAGE_QUEUE_MP_PACKET_SIZE;
+      the_packet = _Message_queue_MP_Get_packet();
+      the_packet->Prefix.the_class = MP_PACKET_MESSAGE_QUEUE;
+      the_packet->Prefix.length = MESSAGE_QUEUE_MP_PACKET_SIZE;
       the_packet->Prefix.to_convert = MESSAGE_QUEUE_MP_PACKET_SIZE;
-      the_packet->operation         = operation;
-      the_packet->Prefix.id         = message_queue_id;
-      the_packet->name              = name;
-      the_packet->proxy_id          = proxy_id;
+      the_packet->operation = operation;
+      the_packet->Prefix.id = message_queue_id;
+      the_packet->name = name;
+      the_packet->proxy_id = proxy_id;
 
-      if ( operation == MESSAGE_QUEUE_MP_EXTRACT_PROXY )
-         node = _Objects_Get_node( message_queue_id );
-      else
-         node = MPCI_ALL_NODES;
+      if ( operation == MESSAGE_QUEUE_MP_EXTRACT_PROXY ) {
+        node = _Objects_Get_node( message_queue_id );
+      } else {
+        node = MPCI_ALL_NODES;
+      }
 
       _MPCI_Send_process_packet( node, &the_packet->Prefix );
       break;
@@ -109,7 +108,6 @@ void _Message_queue_MP_Send_process_packet (
     case MESSAGE_QUEUE_MP_GET_NUMBER_PENDING_REQUEST:
     case MESSAGE_QUEUE_MP_GET_NUMBER_PENDING_RESPONSE:
       break;
-
   }
 }
 
@@ -118,13 +116,13 @@ void _Message_queue_MP_Send_process_packet (
  *
  */
 
-static rtems_status_code _Message_queue_MP_Send_request_packet (
-  Objects_Id                          message_queue_id,
-  const void                         *buffer,
-  size_t                             *size_p,
-  rtems_option                        option_set,
-  rtems_interval                      timeout,
-  Message_queue_MP_Remote_operations  operation
+static rtems_status_code _Message_queue_MP_Send_request_packet(
+  Objects_Id                         message_queue_id,
+  const void                        *buffer,
+  size_t                            *size_p,
+  rtems_option                       option_set,
+  rtems_interval                     timeout,
+  Message_queue_MP_Remote_operations operation
 )
 {
   Message_queue_MP_Packet *the_packet;
@@ -135,18 +133,18 @@ static rtems_status_code _Message_queue_MP_Send_request_packet (
   }
 
   switch ( operation ) {
-
     case MESSAGE_QUEUE_MP_SEND_REQUEST:
     case MESSAGE_QUEUE_MP_URGENT_REQUEST:
     case MESSAGE_QUEUE_MP_BROADCAST_REQUEST:
     case MESSAGE_QUEUE_MP_FLUSH_REQUEST:
     case MESSAGE_QUEUE_MP_GET_NUMBER_PENDING_REQUEST:
 
-      the_packet                    = _Message_queue_MP_Get_packet();
-      the_packet->Prefix.the_class  = MP_PACKET_MESSAGE_QUEUE;
-      the_packet->Prefix.length     = MESSAGE_QUEUE_MP_PACKET_SIZE;
-      if ( size_p )
-        the_packet->Prefix.length     += *size_p;
+      the_packet = _Message_queue_MP_Get_packet();
+      the_packet->Prefix.the_class = MP_PACKET_MESSAGE_QUEUE;
+      the_packet->Prefix.length = MESSAGE_QUEUE_MP_PACKET_SIZE;
+      if ( size_p ) {
+        the_packet->Prefix.length += *size_p;
+      }
       the_packet->Prefix.to_convert = MESSAGE_QUEUE_MP_PACKET_SIZE;
 
       /*
@@ -155,32 +153,29 @@ static rtems_status_code _Message_queue_MP_Send_request_packet (
        * we are about to slam in the payload
        */
 
-      if (the_packet->Prefix.length > _MPCI_table->maximum_packet_size) {
-          return RTEMS_INVALID_SIZE;
+      if ( the_packet->Prefix.length > _MPCI_table->maximum_packet_size ) {
+        return RTEMS_INVALID_SIZE;
       }
 
-      if (! _Options_Is_no_wait(option_set))
-          the_packet->Prefix.timeout = timeout;
+      if ( !_Options_Is_no_wait( option_set ) ) {
+        the_packet->Prefix.timeout = timeout;
+      }
 
-      the_packet->operation  = operation;
-      the_packet->Prefix.id  = message_queue_id;
+      the_packet->operation = operation;
+      the_packet->Prefix.id = message_queue_id;
       the_packet->option_set = option_set;
 
       /*
        * Copy the data into place if needed
        */
 
-      if (buffer) {
-          the_packet->size = *size_p;
-          _CORE_message_queue_Copy_buffer(
-            buffer,
-            the_packet->buffer,
-            *size_p
-          );
+      if ( buffer ) {
+        the_packet->size = *size_p;
+        _CORE_message_queue_Copy_buffer( buffer, the_packet->buffer, *size_p );
       }
 
       status = _MPCI_Send_request_packet(
-        _Objects_Get_node(message_queue_id),
+        _Objects_Get_node( message_queue_id ),
         &the_packet->Prefix,
         STATES_WAITING_FOR_MESSAGE
       );
@@ -188,24 +183,25 @@ static rtems_status_code _Message_queue_MP_Send_request_packet (
 
     case MESSAGE_QUEUE_MP_RECEIVE_REQUEST:
 
-      the_packet                    = _Message_queue_MP_Get_packet();
-      the_packet->Prefix.the_class  = MP_PACKET_MESSAGE_QUEUE;
-      the_packet->Prefix.length     = MESSAGE_QUEUE_MP_PACKET_SIZE;
+      the_packet = _Message_queue_MP_Get_packet();
+      the_packet->Prefix.the_class = MP_PACKET_MESSAGE_QUEUE;
+      the_packet->Prefix.length = MESSAGE_QUEUE_MP_PACKET_SIZE;
       the_packet->Prefix.to_convert = MESSAGE_QUEUE_MP_PACKET_SIZE;
 
-      if (! _Options_Is_no_wait(option_set))
-          the_packet->Prefix.timeout = timeout;
+      if ( !_Options_Is_no_wait( option_set ) ) {
+        the_packet->Prefix.timeout = timeout;
+      }
 
-      the_packet->operation  = MESSAGE_QUEUE_MP_RECEIVE_REQUEST;
-      the_packet->Prefix.id  = message_queue_id;
+      the_packet->operation = MESSAGE_QUEUE_MP_RECEIVE_REQUEST;
+      the_packet->Prefix.id = message_queue_id;
       the_packet->option_set = option_set;
-      the_packet->size       = 0;        /* just in case of an error */
+      the_packet->size = 0; /* just in case of an error */
 
       _Thread_Executing->Wait.return_argument_second.immutable_object = buffer;
       _Thread_Executing->Wait.return_argument = size_p;
 
       status = _MPCI_Send_request_packet(
-        _Objects_Get_node(message_queue_id),
+        _Objects_Get_node( message_queue_id ),
         &the_packet->Prefix,
         STATES_WAITING_FOR_MESSAGE
       );
@@ -244,10 +240,7 @@ rtems_status_code _Message_queue_MP_Broadcast(
   );
 }
 
-rtems_status_code _Message_queue_MP_Flush(
-  rtems_id  id,
-  uint32_t *count
-)
+rtems_status_code _Message_queue_MP_Flush( rtems_id id, uint32_t *count )
 {
   _Thread_Get_executing()->Wait.return_argument = count;
   return _Message_queue_MP_Send_request_packet(
@@ -277,11 +270,11 @@ rtems_status_code _Message_queue_MP_Get_number_pending(
 }
 
 rtems_status_code _Message_queue_MP_Receive(
-  rtems_id        id,
-  void           *buffer,
-  size_t         *size,
-  rtems_option    option_set,
-  rtems_interval  timeout
+  rtems_id       id,
+  void          *buffer,
+  size_t        *size,
+  rtems_option   option_set,
+  rtems_interval timeout
 )
 {
   return _Message_queue_MP_Send_request_packet(
@@ -331,10 +324,10 @@ rtems_status_code _Message_queue_MP_Urgent(
  *
  */
 
-static void _Message_queue_MP_Send_response_packet (
-  Message_queue_MP_Remote_operations  operation,
-  Objects_Id                          message_queue_id,
-  Thread_Control                     *the_thread
+static void _Message_queue_MP_Send_response_packet(
+  Message_queue_MP_Remote_operations operation,
+  Objects_Id                         message_queue_id,
+  Thread_Control                    *the_thread
 )
 {
   (void) message_queue_id;
@@ -342,7 +335,6 @@ static void _Message_queue_MP_Send_response_packet (
   Message_queue_MP_Packet *the_packet;
 
   switch ( operation ) {
-
     case MESSAGE_QUEUE_MP_RECEIVE_RESPONSE:
     case MESSAGE_QUEUE_MP_SEND_RESPONSE:
     case MESSAGE_QUEUE_MP_URGENT_RESPONSE:
@@ -350,9 +342,9 @@ static void _Message_queue_MP_Send_response_packet (
     case MESSAGE_QUEUE_MP_FLUSH_RESPONSE:
     case MESSAGE_QUEUE_MP_GET_NUMBER_PENDING_RESPONSE:
 
-      the_packet = ( Message_queue_MP_Packet *) the_thread->receive_packet;
+      the_packet = (Message_queue_MP_Packet *) the_thread->receive_packet;
 
-/*
+      /*
  *  The packet being returned already contains the class, length, and
  *  to_convert fields, therefore they are not set in this routine.
  *
@@ -362,8 +354,9 @@ static void _Message_queue_MP_Send_response_packet (
       the_packet->operation = operation;
       the_packet->Prefix.id = the_packet->Prefix.source_tid;
 
-      if (operation == MESSAGE_QUEUE_MP_RECEIVE_RESPONSE)
-          the_packet->Prefix.length += the_packet->size;
+      if ( operation == MESSAGE_QUEUE_MP_RECEIVE_RESPONSE ) {
+        the_packet->Prefix.length += the_packet->size;
+      }
 
       _MPCI_Send_response_packet(
         _Objects_Get_node( the_packet->Prefix.source_tid ),
@@ -381,12 +374,11 @@ static void _Message_queue_MP_Send_response_packet (
     case MESSAGE_QUEUE_MP_FLUSH_REQUEST:
     case MESSAGE_QUEUE_MP_GET_NUMBER_PENDING_REQUEST:
       break;
-
   }
 }
 
-static void _Message_queue_MP_Process_packet (
-  rtems_packet_prefix   *the_packet_prefix
+static void _Message_queue_MP_Process_packet(
+  rtems_packet_prefix *the_packet_prefix
 )
 {
   Message_queue_MP_Packet *the_packet;
@@ -395,7 +387,6 @@ static void _Message_queue_MP_Process_packet (
   the_packet = (Message_queue_MP_Packet *) the_packet_prefix;
 
   switch ( the_packet->operation ) {
-
     case MESSAGE_QUEUE_MP_ANNOUNCE_CREATE:
 
       _Objects_MP_Allocate_and_open(
@@ -436,21 +427,21 @@ static void _Message_queue_MP_Process_packet (
         the_packet->Prefix.timeout
       );
 
-      if ( the_packet->Prefix.return_code != RTEMS_PROXY_BLOCKING )
+      if ( the_packet->Prefix.return_code != RTEMS_PROXY_BLOCKING ) {
         _Message_queue_MP_Send_response_packet(
           MESSAGE_QUEUE_MP_RECEIVE_RESPONSE,
           the_packet->Prefix.id,
           _Thread_Executing
         );
+      }
       break;
 
     case MESSAGE_QUEUE_MP_RECEIVE_RESPONSE:
 
       the_thread = _MPCI_Process_response( the_packet_prefix );
 
-      if (the_packet->Prefix.return_code == RTEMS_SUCCESSFUL) {
-        *(size_t *) the_thread->Wait.return_argument =
-           the_packet->size;
+      if ( the_packet->Prefix.return_code == RTEMS_SUCCESSFUL ) {
+        *(size_t *) the_thread->Wait.return_argument = the_packet->size;
 
         _CORE_message_queue_Copy_buffer(
           the_packet->buffer,
@@ -554,7 +545,6 @@ static void _Message_queue_MP_Process_packet (
         _Thread_Executing
       );
       break;
-
   }
 }
 
@@ -563,7 +553,7 @@ static void _Message_queue_MP_Process_packet (
  *
  */
 
-void _Message_queue_MP_Send_object_was_deleted (
+void _Message_queue_MP_Send_object_was_deleted(
   Thread_Control *the_proxy,
   Objects_Id      mp_id
 )
@@ -582,7 +572,7 @@ void _Message_queue_MP_Send_object_was_deleted (
  *
  */
 
-void _Message_queue_MP_Send_extract_proxy (
+void _Message_queue_MP_Send_extract_proxy(
   Thread_Control *the_thread,
   Objects_Id      id
 )
@@ -595,7 +585,7 @@ void _Message_queue_MP_Send_extract_proxy (
   );
 }
 
-void  _Message_queue_Core_message_queue_mp_support(
+void _Message_queue_Core_message_queue_mp_support(
   Thread_Control *the_thread,
   Objects_Id      id
 )

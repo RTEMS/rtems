@@ -47,15 +47,15 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/malloc.h>
 
-#define SBRK_ALLOC_SIZE (128 * 1024UL * 1024UL)
+#define SBRK_ALLOC_SIZE ( 128 * 1024UL * 1024UL )
 
 void *rtems_workspace_greedy_allocate(
   const uintptr_t *block_sizes,
-  size_t block_count
+  size_t           block_count
 )
 {
   Heap_Control *heap = &_Workspace_Area;
-  void *opaque;
+  void         *opaque;
 
   rtems_heap_sbrk_greedy_allocate( heap, SBRK_ALLOC_SIZE );
 
@@ -71,15 +71,12 @@ void *rtems_workspace_greedy_allocate_all_except_largest(
 )
 {
   Heap_Control *heap = &_Workspace_Area;
-  void *opaque;
+  void         *opaque;
 
   rtems_heap_sbrk_greedy_allocate( heap, SBRK_ALLOC_SIZE );
 
   _RTEMS_Lock_allocator();
-  opaque = _Heap_Greedy_allocate_all_except_largest(
-    heap,
-    allocatable_size
-  );
+  opaque = _Heap_Greedy_allocate_all_except_largest( heap, allocatable_size );
   _RTEMS_Unlock_allocator();
 
   return opaque;

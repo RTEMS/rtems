@@ -82,16 +82,16 @@ rtems_status_code rtems_message_queue_construct(
 }
 
 rtems_status_code _Message_queue_Create(
-  const rtems_message_queue_config    *config,
-  rtems_id                            *id,
-  CORE_message_queue_Allocate_buffers  allocate_buffers
+  const rtems_message_queue_config   *config,
+  rtems_id                           *id,
+  CORE_message_queue_Allocate_buffers allocate_buffers
 )
 {
-  Message_queue_Control          *the_message_queue;
-  CORE_message_queue_Disciplines  discipline;
-  Status_Control                  status;
-#if defined(RTEMS_MULTIPROCESSING)
-  bool                            is_global;
+  Message_queue_Control         *the_message_queue;
+  CORE_message_queue_Disciplines discipline;
+  Status_Control                 status;
+#if defined( RTEMS_MULTIPROCESSING )
+  bool is_global;
 #endif
 
   if ( !rtems_is_name_valid( config->name ) ) {
@@ -110,7 +110,7 @@ rtems_status_code _Message_queue_Create(
     return RTEMS_INVALID_SIZE;
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( _System_state_Is_multiprocessing ) {
     is_global = _Attributes_Is_global( config->attributes );
   } else {
@@ -124,8 +124,8 @@ rtems_status_code _Message_queue_Create(
    * and then just send smaller msgs from remote (or all) nodes.
    */
   if ( is_global ) {
-    size_t max_packet_payload_size = _MPCI_table->maximum_packet_size
-      - MESSAGE_QUEUE_MP_PACKET_SIZE;
+    size_t max_packet_payload_size = _MPCI_table->maximum_packet_size -
+                                     MESSAGE_QUEUE_MP_PACKET_SIZE;
 
     if ( config->maximum_message_size > max_packet_payload_size ) {
       return RTEMS_INVALID_SIZE;
@@ -141,15 +141,14 @@ rtems_status_code _Message_queue_Create(
     return RTEMS_TOO_MANY;
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if (
-    is_global
-      && !_Objects_MP_Allocate_and_open(
-            &_Message_queue_Information,
-            config->name,
-            the_message_queue->Object.id,
-            false
-          )
+    is_global && !_Objects_MP_Allocate_and_open(
+                   &_Message_queue_Information,
+                   config->name,
+                   the_message_queue->Object.id,
+                   false
+                 )
   ) {
     _Message_queue_Free( the_message_queue );
     _Objects_Allocator_unlock();
@@ -175,10 +174,13 @@ rtems_status_code _Message_queue_Create(
   );
 
   if ( status != STATUS_SUCCESSFUL ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( is_global )
-        _Objects_MP_Close(
-          &_Message_queue_Information, the_message_queue->Object.id);
+#if defined( RTEMS_MULTIPROCESSING )
+    if ( is_global ) {
+      _Objects_MP_Close(
+        &_Message_queue_Information,
+        the_message_queue->Object.id
+      );
+    }
 #endif
 
     _Message_queue_Free( the_message_queue );
@@ -192,14 +194,15 @@ rtems_status_code _Message_queue_Create(
     config->name
   );
 
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( is_global )
+#if defined( RTEMS_MULTIPROCESSING )
+  if ( is_global ) {
     _Message_queue_MP_Send_process_packet(
       MESSAGE_QUEUE_MP_ANNOUNCE_CREATE,
       the_message_queue->Object.id,
       config->name,
       0
     );
+  }
 #endif
 
   _Objects_Allocator_unlock();
@@ -208,7 +211,7 @@ rtems_status_code _Message_queue_Create(
 
 static void _Message_queue_Manager_initialization( void )
 {
-  _Objects_Initialize_information( &_Message_queue_Information);
+  _Objects_Initialize_information( &_Message_queue_Information );
 }
 
 RTEMS_SYSINIT_ITEM(

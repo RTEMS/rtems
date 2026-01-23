@@ -42,7 +42,7 @@
 #include <rtems/rtems/mp.h>
 #include <rtems/score/mpciimpl.h>
 
-void rtems_multiprocessing_announce ( void )
+void rtems_multiprocessing_announce( void )
 {
   _MPCI_Announce();
 }

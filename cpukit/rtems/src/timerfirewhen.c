@@ -42,10 +42,10 @@
 #include <rtems/rtems/timerimpl.h>
 
 rtems_status_code rtems_timer_fire_when(
-  rtems_id                            id,
-  const rtems_time_of_day            *wall_time,
-  rtems_timer_service_routine_entry   routine,
-  void                               *user_data
+  rtems_id                          id,
+  const rtems_time_of_day          *wall_time,
+  rtems_timer_service_routine_entry routine,
+  void                             *user_data
 )
 {
   return _Timer_Fire_when(

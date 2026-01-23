@@ -74,7 +74,11 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
   ISR_lock_Context        lock_context;
   Thread_Wait_flags       wait_flags;
 
-  the_period = RTEMS_CONTAINER_OF( the_watchdog, Rate_monotonic_Control, Timer );
+  the_period = RTEMS_CONTAINER_OF(
+    the_watchdog,
+    Rate_monotonic_Control,
+    Timer
+  );
   owner = the_period->owner;
 
   _ISR_lock_ISR_disable( &lock_context );
@@ -82,8 +86,8 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
   wait_flags = _Thread_Wait_flags_get( owner );
 
   if (
-    ( wait_flags & THREAD_WAIT_CLASS_PERIOD ) != 0
-      && owner->Wait.return_argument == the_period
+    ( wait_flags & THREAD_WAIT_CLASS_PERIOD ) != 0 &&
+    owner->Wait.return_argument == the_period
   ) {
     bool unblock;
     bool success;

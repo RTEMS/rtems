@@ -42,9 +42,9 @@
 #include <rtems/score/schedulerimpl.h>
 
 rtems_status_code rtems_scheduler_map_priority_to_posix(
-  rtems_id             scheduler_id,
-  rtems_task_priority  priority,
-  int                 *posix_priority
+  rtems_id            scheduler_id,
+  rtems_task_priority priority,
+  int                *posix_priority
 )
 {
   const Scheduler_Control *scheduler;

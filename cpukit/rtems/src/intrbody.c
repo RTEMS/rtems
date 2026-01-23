@@ -44,7 +44,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
 
-#if !defined(RTEMS_SMP)
+#if !defined( RTEMS_SMP )
 
 /*
  *  Undefine all of these is normally a macro and we want a real body in
@@ -73,16 +73,12 @@ rtems_interrupt_level rtems_interrupt_disable( void )
   return previous_level;
 }
 
-void rtems_interrupt_enable(
-  rtems_interrupt_level previous_level
-)
+void rtems_interrupt_enable( rtems_interrupt_level previous_level )
 {
   _ISR_Local_enable( previous_level );
 }
 
-void rtems_interrupt_flash(
-  rtems_interrupt_level previous_level
-)
+void rtems_interrupt_flash( rtems_interrupt_level previous_level )
 {
   _ISR_Local_flash( previous_level );
 }

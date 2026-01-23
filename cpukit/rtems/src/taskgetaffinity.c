@@ -50,9 +50,9 @@ rtems_status_code rtems_task_get_affinity(
   cpu_set_t *cpuset
 )
 {
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
-  Status_Control    status;
+  Thread_Control  *the_thread;
+  ISR_lock_Context lock_context;
+  Status_Control   status;
 
   if ( cpuset == NULL ) {
     return RTEMS_INVALID_ADDRESS;
@@ -61,7 +61,7 @@ rtems_status_code rtems_task_get_affinity(
   the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Thread_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }
@@ -72,11 +72,7 @@ rtems_status_code rtems_task_get_affinity(
 
   _Thread_State_acquire_critical( the_thread, &lock_context );
 
-  status = _Scheduler_Get_affinity(
-    the_thread,
-    cpusetsize,
-    cpuset
-  );
+  status = _Scheduler_Get_affinity( the_thread, cpusetsize, cpuset );
 
   _Thread_State_release( the_thread, &lock_context );
   return _Status_Get( status );

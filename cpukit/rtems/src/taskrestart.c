@@ -48,15 +48,15 @@ rtems_status_code rtems_task_restart(
   rtems_task_argument argument
 )
 {
-  Thread_Control           *the_thread;
-  ISR_lock_Context          lock_context;
-  Thread_Entry_information  entry;
-  Status_Control            status;
+  Thread_Control          *the_thread;
+  ISR_lock_Context         lock_context;
+  Thread_Entry_information entry;
+  Status_Control           status;
 
   the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( _Thread_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     }

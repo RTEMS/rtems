@@ -100,7 +100,7 @@ rtems_status_code rtems_task_set_priority(
   the_thread = _Thread_Get( id, &queue_context.Lock_context.Lock_context );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     return _RTEMS_tasks_MP_Set_priority( id, new_priority, old_priority_p );
 #else
     return RTEMS_INVALID_ID;

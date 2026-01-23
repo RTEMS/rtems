@@ -47,18 +47,17 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/sysinit.h>
 
-rtems_status_code rtems_rate_monotonic_create(
-  rtems_name  name,
-  rtems_id   *id
-)
+rtems_status_code rtems_rate_monotonic_create( rtems_name name, rtems_id *id )
 {
   Rate_monotonic_Control *the_period;
 
-  if ( !rtems_is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) ) {
     return RTEMS_INVALID_NAME;
+  }
 
-  if ( !id )
+  if ( !id ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
   the_period = _Rate_monotonic_Allocate();
 

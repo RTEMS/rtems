@@ -155,10 +155,7 @@ static void _Signal_Action_handler(
   }
 }
 
-rtems_status_code rtems_signal_send(
-  rtems_id          id,
-  rtems_signal_set  signal_set
-)
+rtems_status_code rtems_signal_send( rtems_id id, rtems_signal_set signal_set )
 {
   Thread_Control    *the_thread;
   ISR_lock_Context   lock_context;
@@ -172,7 +169,7 @@ rtems_status_code rtems_signal_send(
   the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     return _Signal_MP_Send( id, signal_set );
 #else
     return RTEMS_INVALID_ID;
@@ -210,7 +207,7 @@ rtems_status_code rtems_signal_send(
   return RTEMS_SUCCESSFUL;
 }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 static void _Signal_MP_Initialize( void )
 {
   _MPCI_Register_packet_processor(
