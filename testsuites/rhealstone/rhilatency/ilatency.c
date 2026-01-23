@@ -21,7 +21,7 @@
 /* configuration information */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
-#define CONFIGURE_MAXIMUM_TASKS              2
+#define CONFIGURE_MAXIMUM_TASKS 2
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_SCHEDULER_PRIORITY
 
@@ -36,37 +36,33 @@ const char rtems_test_name[] = "RHILATENCY";
 
 #define BENCHMARKS 50000
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-uint32_t   Interrupt_nest;
-uint32_t   timer_overhead;
-uint32_t   Interrupt_enter_time;
+uint32_t Interrupt_nest;
+uint32_t timer_overhead;
+uint32_t Interrupt_enter_time;
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
-  rtems_id Task_id;
+  rtems_id          Task_id;
 
   Print_Warning();
 
   TEST_BEGIN();
 
   if (
-    _Scheduler_Table[ 0 ].Operations.initialize
-      != _Scheduler_priority_Initialize
+    _Scheduler_Table[ 0 ].Operations.initialize !=
+    _Scheduler_priority_Initialize
   ) {
     puts( "  Error ==> " );
     puts( "Test only supported for deterministic priority scheduler\n" );
     rtems_test_exit( 0 );
   }
 
-#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1u)
+#define LOW_PRIORITY ( RTEMS_MAXIMUM_PRIORITY - 1u )
   status = rtems_task_create(
     rtems_build_name( 'T', 'A', '1', ' ' ),
     LOW_PRIORITY,
@@ -101,13 +97,11 @@ static void Isr_handler( void *arg )
   Clear_tm27_intr();
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  Install_tm27_vector( Isr_handler ) ;
+  Install_tm27_vector( Isr_handler );
   Interrupt_nest = 0;
 
   /* Benchmark code */
@@ -118,7 +112,7 @@ rtems_task Task_1(
   put_time(
     "Rhealstone: Interrupt Latency",
     Interrupt_enter_time,
-    1,                             /* Only Rhealstone that isn't an average */
+    1, /* Only Rhealstone that isn't an average */
     timer_overhead,
     0
   );
