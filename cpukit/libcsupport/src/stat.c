@@ -65,22 +65,22 @@ int _STAT_NAME( const char *path, struct stat *buf );
  */
 int _STAT_NAME( const char *path, struct stat *buf )
 {
-  int rv = 0;
+  int                                  rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = _STAT_FOLLOW_LINKS;
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+  int                                  eval_flags = _STAT_FOLLOW_LINKS;
+  const rtems_filesystem_location_info_t
+    *currentloc = rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
   memset( buf, 0, sizeof( *buf ) );
 
-  rv = (*currentloc->handlers->fstat_h)( currentloc, buf );
+  rv = ( *currentloc->handlers->fstat_h )( currentloc, buf );
 
   rtems_filesystem_eval_path_cleanup( &ctx );
 
   return rv;
 }
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <reent.h>
 
@@ -89,8 +89,8 @@ int _STAT_NAME( const char *path, struct stat *buf )
  */
 int _STAT_R_NAME(
   struct _reent *ptr RTEMS_UNUSED,
-  const char    *path,
-  struct stat   *buf
+  const char        *path,
+  struct stat       *buf
 );
 
 /**
@@ -98,8 +98,8 @@ int _STAT_R_NAME(
  */
 int _STAT_R_NAME(
   struct _reent *ptr RTEMS_UNUSED,
-  const char    *path,
-  struct stat   *buf
+  const char        *path,
+  struct stat       *buf
 )
 {
   return _STAT_NAME( path, buf );

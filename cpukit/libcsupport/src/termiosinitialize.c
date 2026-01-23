@@ -24,24 +24,22 @@
 
 #include <rtems/termiosdevice.h>
 
-void
-rtems_termios_device_lock_acquire_default(
+void rtems_termios_device_lock_acquire_default(
   rtems_termios_device_context *ctx,
   rtems_interrupt_lock_context *lock_context
 )
 {
   (void) ctx;
 
-  rtems_interrupt_lock_acquire (&ctx->lock.interrupt, lock_context);
+  rtems_interrupt_lock_acquire( &ctx->lock.interrupt, lock_context );
 }
 
-void
-rtems_termios_device_lock_release_default(
+void rtems_termios_device_lock_release_default(
   rtems_termios_device_context *ctx,
   rtems_interrupt_lock_context *lock_context
 )
 {
   (void) ctx;
 
-  rtems_interrupt_lock_release (&ctx->lock.interrupt, lock_context);
+  rtems_interrupt_lock_release( &ctx->lock.interrupt, lock_context );
 }

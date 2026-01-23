@@ -37,14 +37,11 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__FREE_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__FREE_R )
 #include <sys/reent.h>
 #include <stdlib.h>
 
-void _free_r(
-  struct _reent *ignored,
-  void          *ptr
-)
+void _free_r( struct _reent *ignored, void *ptr )
 {
   (void) ignored;
   free( ptr );

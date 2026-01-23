@@ -40,7 +40,7 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__RENAME_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__RENAME_R )
 
 #include <stdio.h>
 
@@ -51,18 +51,17 @@
  */
 int _rename_r(
   struct _reent *ptr RTEMS_UNUSED,
-  const char    *old,
-  const char    *new
+  const char        *old,
+  const char *new
 )
 {
-  int rv = 0;
+  int                                  rv = 0;
   rtems_filesystem_eval_path_context_t old_ctx;
-  int old_eval_flags = 0;
-  rtems_filesystem_location_info_t old_parentloc;
-  int old_parent_eval_flags = RTEMS_FS_PERMS_WRITE
-    | RTEMS_FS_FOLLOW_HARD_LINK;
-  const rtems_filesystem_location_info_t *old_currentloc =
-    rtems_filesystem_eval_path_start_with_parent(
+  int                                  old_eval_flags = 0;
+  rtems_filesystem_location_info_t     old_parentloc;
+  int old_parent_eval_flags = RTEMS_FS_PERMS_WRITE | RTEMS_FS_FOLLOW_HARD_LINK;
+  const rtems_filesystem_location_info_t
+    *old_currentloc = rtems_filesystem_eval_path_start_with_parent(
       &old_ctx,
       old,
       old_eval_flags,
@@ -72,9 +71,8 @@ int _rename_r(
   rtems_filesystem_eval_path_context_t new_ctx;
 
   /* FIXME: This is not POSIX conform */
-  int new_eval_flags = RTEMS_FS_FOLLOW_HARD_LINK
-    | RTEMS_FS_MAKE
-    | RTEMS_FS_EXCLUSIVE;
+  int new_eval_flags = RTEMS_FS_FOLLOW_HARD_LINK | RTEMS_FS_MAKE |
+                       RTEMS_FS_EXCLUSIVE;
 
   const rtems_filesystem_location_info_t *new_currentloc =
     rtems_filesystem_eval_path_start( &new_ctx, new, new_eval_flags );
@@ -84,7 +82,7 @@ int _rename_r(
     new_currentloc
   );
   if ( rv == 0 ) {
-    rv = (*new_currentloc->mt_entry->ops->rename_h)(
+    rv = ( *new_currentloc->mt_entry->ops->rename_h )(
       &old_parentloc,
       old_currentloc,
       new_currentloc,

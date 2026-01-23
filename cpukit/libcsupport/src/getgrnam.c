@@ -29,27 +29,25 @@
 /*
  * Static, thread-unsafe, buffers
  */
-static char grbuf[200];
+static char         grbuf[ 200 ];
 static struct group grent;
 
-struct group *getgrnam(
-  const char *name
-)
+struct group *getgrnam( const char *name )
 {
   struct group *p;
 
-  if(getgrnam_r(name, &grent, grbuf, sizeof grbuf, &p))
+  if ( getgrnam_r( name, &grent, grbuf, sizeof grbuf, &p ) ) {
     return NULL;
+  }
   return p;
 }
 
-struct group *getgrgid(
-  gid_t gid
-)
+struct group *getgrgid( gid_t gid )
 {
   struct group *p;
 
-  if(getgrgid_r(gid, &grent, grbuf, sizeof grbuf, &p))
+  if ( getgrgid_r( gid, &grent, grbuf, sizeof grbuf, &p ) ) {
     return NULL;
+  }
   return p;
 }

@@ -43,19 +43,13 @@
 #include <rtems/printer.h>
 #include <rtems/bspIo.h>
 
-int rtems_printk_printer(
-  void *ignored,
-  const char *format,
-  va_list ap
-)
+int rtems_printk_printer( void *ignored, const char *format, va_list ap )
 {
   (void) ignored;
   return vprintk( format, ap );
 }
 
-void rtems_print_printer_printk(
-  rtems_printer *printer
-)
+void rtems_print_printer_printk( rtems_printer *printer )
 {
   printer->context = NULL;
   printer->printer = rtems_printk_printer;

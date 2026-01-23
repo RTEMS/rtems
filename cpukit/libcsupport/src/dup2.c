@@ -45,29 +45,28 @@
 /**
  *  POSIX 1003.1b 6.2.1 Duplicate an Open File Descriptor
  */
-int dup2(
-  int fildes,
-  int fildes2
-)
+int dup2( int fildes, int fildes2 )
 {
-  int          status;
-  struct stat  buf;
+  int         status;
+  struct stat buf;
 
   /*
    *  If fildes is not valid, then fildes2 should not be closed.
    */
 
   status = fstat( fildes, &buf );
-  if ( status == -1 )
+  if ( status == -1 ) {
     return -1;
+  }
 
   /*
    *  If fildes2 is not valid, then we should not do anything either.
    */
 
   status = fstat( fildes2, &buf );
-  if ( status == -1 )
+  if ( status == -1 ) {
     return -1;
+  }
 
   /*
    *  This fcntl handles everything else.

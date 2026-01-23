@@ -38,16 +38,14 @@
 #endif
 
 #include <rtems.h>
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
 #include <termios.h>
 
-speed_t cfgetispeed(
-  const struct termios *tp
-)
+speed_t cfgetispeed( const struct termios *tp )
 {
   return tp->c_ispeed;
 }

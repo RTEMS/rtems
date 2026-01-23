@@ -47,7 +47,7 @@
  *  gcc 2.8.1 plus gnat 3.13p and gcc 3.0.1 require it to be there and
  *  return a reasonable value.
  */
-int getpagesize(void)
+int getpagesize( void )
 {
   return PAGE_SIZE;
 }

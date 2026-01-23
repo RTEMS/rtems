@@ -38,7 +38,7 @@
 #endif
 
 #include <rtems.h>
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -48,9 +48,7 @@
 
 #include <rtems/libio.h>
 
-int tcsendbreak (
-  int fd RTEMS_UNUSED,
-  int duration RTEMS_UNUSED )
+int tcsendbreak( int fd RTEMS_UNUSED, int duration RTEMS_UNUSED )
 {
   return 0;
 }

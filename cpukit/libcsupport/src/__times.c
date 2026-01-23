@@ -58,24 +58,23 @@
 /**
  *  POSIX 1003.1b 4.5.2 - Get Process Times
  */
-clock_t _times(
-   struct tms  *ptms
-)
+clock_t _times( struct tms *ptms )
 {
   uint32_t   tick_interval;
   sbintime_t uptime;
   sbintime_t cpu_time_used;
 
-  if ( !ptms )
+  if ( !ptms ) {
     rtems_set_errno_and_return_minus_one( EFAULT );
+  }
 
-  tick_interval = (uint32_t)
-    (SBT_1US * rtems_configuration_get_microseconds_per_tick());
+  tick_interval =
+    (uint32_t) ( SBT_1US * rtems_configuration_get_microseconds_per_tick() );
 
   ptms = memset( ptms, 0, sizeof( *ptms ) );
 
   _TOD_Get_zero_based_uptime( &uptime );
-  ptms->tms_stime = ((clock_t) uptime) / tick_interval;
+  ptms->tms_stime = ( (clock_t) uptime ) / tick_interval;
 
   /*
    *  RTEMS technically has no notion of system versus user time
@@ -84,9 +83,10 @@ clock_t _times(
    *  of ticks since boot and the number of ticks executed by this
    *  this thread.
    */
-  cpu_time_used =
-    _Thread_Get_CPU_time_used_after_last_reset( _Thread_Get_executing() );
-  ptms->tms_utime = ((clock_t) cpu_time_used) / tick_interval;
+  cpu_time_used = _Thread_Get_CPU_time_used_after_last_reset(
+    _Thread_Get_executing()
+  );
+  ptms->tms_utime = ( (clock_t) cpu_time_used ) / tick_interval;
 
   return ptms->tms_stime;
 }
@@ -94,24 +94,19 @@ clock_t _times(
 /**
  *  times() system call wrapper for _times() above.
  */
-clock_t times(
-   struct tms  *ptms
-)
+clock_t times( struct tms *ptms )
 {
   return _times( ptms );
 }
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <reent.h>
 
 /**
  *  This is the Newlib dependent reentrant version of times().
  */
-clock_t _times_r(
-   struct _reent *ptr RTEMS_UNUSED,
-   struct tms  *ptms
-)
+clock_t _times_r( struct _reent *ptr RTEMS_UNUSED, struct tms *ptms )
 {
   return _times( ptms );
 }

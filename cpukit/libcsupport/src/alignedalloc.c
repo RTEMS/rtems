@@ -42,6 +42,7 @@ void *aligned_alloc( size_t alignment, size_t size )
   return rtems_heap_allocate_aligned_with_boundary( size, alignment, 0 );
 }
 
-void *memalign( size_t, size_t ) RTEMS_ALIAS( aligned_alloc ) __malloc_like
-  __alloc_align(1) __alloc_size(2) __result_use_check
-  __attribute__((__nothrow__));
+void *memalign( size_t, size_t ) RTEMS_ALIAS(
+  aligned_alloc
+) __malloc_like __alloc_align( 1 ) __alloc_size( 2 ) __result_use_check
+  __attribute__(( __nothrow__ ));

@@ -31,8 +31,8 @@
 #include <rtems/score/assert.h>
 
 typedef struct {
-  FILE *fp;
-  char buf[256];
+  FILE        *fp;
+  char         buf[ 256 ];
   struct group grp;
 } grp_context;
 
@@ -40,48 +40,57 @@ static pthread_once_t grp_once = PTHREAD_ONCE_INIT;
 
 static pthread_key_t grp_key;
 
-static void grp_init(void)
+static void grp_init( void )
 {
-  pthread_key_create(&grp_key, free);
+  pthread_key_create( &grp_key, free );
 }
 
-static grp_context *grp_get_context(void)
+static grp_context *grp_get_context( void )
 {
-  pthread_once(&grp_once, grp_init);
+  pthread_once( &grp_once, grp_init );
 
-  return pthread_getspecific(grp_key);
+  return pthread_getspecific( grp_key );
 }
 
-struct group *getgrent(void)
+struct group *getgrent( void )
 {
   grp_context *ctx = grp_get_context();
 
-  if (ctx == NULL)
+  if ( ctx == NULL ) {
     return NULL;
+  }
 
-  if (ctx->fp == NULL)
+  if ( ctx->fp == NULL ) {
     return NULL;
+  }
 
-  if (!_libcsupport_scangr(ctx->fp, &ctx->grp, ctx->buf, sizeof(ctx->buf)))
+  if ( !_libcsupport_scangr(
+         ctx->fp,
+         &ctx->grp,
+         ctx->buf,
+         sizeof( ctx->buf )
+       ) ) {
     return NULL;
+  }
 
   return &ctx->grp;
 }
 
-void setgrent(void)
+void setgrent( void )
 {
   grp_context *ctx = grp_get_context();
 
-  if (ctx == NULL) {
+  if ( ctx == NULL ) {
     int eno;
 
-    ctx = calloc(1, sizeof(*ctx));
-    if (ctx == NULL)
+    ctx = calloc( 1, sizeof( *ctx ) );
+    if ( ctx == NULL ) {
       return;
+    }
 
-    eno = pthread_setspecific(grp_key, ctx);
-    if (eno != 0) {
-      free(ctx);
+    eno = pthread_setspecific( grp_key, ctx );
+    if ( eno != 0 ) {
+      free( ctx );
 
       return;
     }
@@ -89,25 +98,27 @@ void setgrent(void)
 
   _libcsupport_pwdgrp_init();
 
-  if (ctx->fp != NULL)
-    fclose(ctx->fp);
+  if ( ctx->fp != NULL ) {
+    fclose( ctx->fp );
+  }
 
-  ctx->fp = fopen("/etc/group", "r");
+  ctx->fp = fopen( "/etc/group", "r" );
 }
 
-void endgrent(void)
+void endgrent( void )
 {
   grp_context *ctx = grp_get_context();
   int          sc;
 
-  if (ctx == NULL)
+  if ( ctx == NULL ) {
     return;
-
-  if (ctx->fp != NULL) {
-    fclose(ctx->fp);
   }
 
-  free(ctx);
-  sc = pthread_setspecific(grp_key, NULL);
-  _Assert_Unused_variable_equals(sc, 0);
+  if ( ctx->fp != NULL ) {
+    fclose( ctx->fp );
+  }
+
+  free( ctx );
+  sc = pthread_setspecific( grp_key, NULL );
+  _Assert_Unused_variable_equals( sc, 0 );
 }

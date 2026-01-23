@@ -29,52 +29,54 @@
 /*
  * Static, thread-unsafe, buffers
  */
-static FILE *passwd_fp;
-static char pwbuf[200];
+static FILE         *passwd_fp;
+static char          pwbuf[ 200 ];
 static struct passwd pwent;
 
-struct passwd *getpwnam(
-  const char *name
-)
+struct passwd *getpwnam( const char *name )
 {
   struct passwd *p;
 
-  if(getpwnam_r(name, &pwent, pwbuf, sizeof pwbuf, &p))
+  if ( getpwnam_r( name, &pwent, pwbuf, sizeof pwbuf, &p ) ) {
     return NULL;
+  }
   return p;
 }
 
-struct passwd *getpwuid(
-  uid_t uid
-)
+struct passwd *getpwuid( uid_t uid )
 {
   struct passwd *p;
 
-  if(getpwuid_r(uid, &pwent, pwbuf, sizeof pwbuf, &p))
+  if ( getpwuid_r( uid, &pwent, pwbuf, sizeof pwbuf, &p ) ) {
     return NULL;
+  }
   return p;
 }
 
-struct passwd *getpwent(void)
+struct passwd *getpwent( void )
 {
-  if (passwd_fp == NULL)
+  if ( passwd_fp == NULL ) {
     return NULL;
-  if (!_libcsupport_scanpw(passwd_fp, &pwent, pwbuf, sizeof pwbuf))
+  }
+  if ( !_libcsupport_scanpw( passwd_fp, &pwent, pwbuf, sizeof pwbuf ) ) {
     return NULL;
+  }
   return &pwent;
 }
 
-void setpwent(void)
+void setpwent( void )
 {
   _libcsupport_pwdgrp_init();
 
-  if (passwd_fp != NULL)
-    fclose(passwd_fp);
-  passwd_fp = fopen("/etc/passwd", "r");
+  if ( passwd_fp != NULL ) {
+    fclose( passwd_fp );
+  }
+  passwd_fp = fopen( "/etc/passwd", "r" );
 }
 
-void endpwent(void)
+void endpwent( void )
 {
-  if (passwd_fp != NULL)
-    fclose(passwd_fp);
+  if ( passwd_fp != NULL ) {
+    fclose( passwd_fp );
+  }
 }

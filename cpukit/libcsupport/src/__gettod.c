@@ -37,7 +37,7 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 /*
  *  Needed to get the prototype for the newlib helper method
  */
@@ -49,7 +49,7 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/seterr.h>
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE_GETTIMEOFDAY)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE_GETTIMEOFDAY )
 
 /** 
  *  SVR4 and BSD4.3 extension required by Newlib
@@ -62,8 +62,9 @@ int gettimeofday(
 )
 {
   /* struct timezone* tzp = (struct timezone*) __tz; */
-  if ( !tp )
+  if ( !tp ) {
     rtems_set_errno_and_return_minus_one( EFAULT );
+  }
 
   /*
    *  POSIX does not seem to allow for not having a TOD so we just
@@ -81,7 +82,7 @@ int gettimeofday(
 }
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__GETTIMEOFDAY_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__GETTIMEOFDAY_R )
 
 #include <sys/reent.h>
 
@@ -89,9 +90,9 @@ int gettimeofday(
  *  "Reentrant" version
  */
 int _gettimeofday_r(
-  struct _reent   *ignored_reentrancy_stuff RTEMS_UNUSED,
-  struct timeval  *tp,
-  void           *__tz
+  struct _reent *ignored_reentrancy_stuff RTEMS_UNUSED,
+  struct timeval                         *tp,
+  void                                   *__tz
 )
 {
   struct timezone *tzp = __tz;

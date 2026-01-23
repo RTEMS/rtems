@@ -30,17 +30,13 @@
 
 #include "consolesimple.h"
 
-ssize_t _Console_simple_Read(
-  rtems_libio_t *iop,
-  void          *buffer,
-  size_t         count
-)
+ssize_t _Console_simple_Read( rtems_libio_t *iop, void *buffer, size_t count )
 {
   (void) iop;
 
-  char    *buf;
-  ssize_t  i;
-  ssize_t  n;
+  char   *buf;
+  ssize_t i;
+  ssize_t n;
 
   buf = buffer;
   n = (ssize_t) count;

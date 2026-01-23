@@ -38,7 +38,7 @@
 #endif
 
 #include <rtems.h>
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -53,33 +53,28 @@
 /**
  *  POSIX 1003.1b 7.2.1 - Get and Set State
  */
-int tcsetattr(
-  int                   fd,
-  int                   opt,
-  const struct termios *tp
-)
+int tcsetattr( int fd, int opt, const struct termios *tp )
 {
   struct termios localterm;
 
-  if (opt & TCSASOFT) {
+  if ( opt & TCSASOFT ) {
     localterm = *tp;
     localterm.c_cflag |= CIGNORE;
     tp = &localterm;
   }
 
-  switch (opt & ~TCSASOFT) {
+  switch ( opt & ~TCSASOFT ) {
+    case TCSANOW:
+      return ioctl( fd, TIOCSETA, tp );
 
-  case TCSANOW:
-    return ioctl( fd, TIOCSETA, tp );
+    case TCSADRAIN:
+      return ioctl( fd, TIOCSETAW, tp );
 
-  case TCSADRAIN:
-    return ioctl( fd, TIOCSETAW, tp );
+    case TCSAFLUSH:
+      return ioctl( fd, TIOCSETAF, tp );
 
-  case TCSAFLUSH:
-    return ioctl( fd, TIOCSETAF, tp );
-
-  default:
-    rtems_set_errno_and_return_minus_one( EINVAL );
+    default:
+      rtems_set_errno_and_return_minus_one( EINVAL );
   }
 }
 #endif

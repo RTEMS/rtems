@@ -81,7 +81,7 @@ void *rtems_heap_allocate_aligned_with_boundary(
 )
 {
   Heap_Control *heap = RTEMS_Malloc_Heap;
-  void *p;
+  void         *p;
 
   switch ( _Malloc_System_state() ) {
     case MALLOC_SYSTEM_STATE_NORMAL:
@@ -111,14 +111,15 @@ void *rtems_heap_allocate_aligned_with_boundary(
   }
 
   if ( p == NULL && alignment == 0 && boundary == 0 ) {
-    p = (*rtems_malloc_extend_handler)( heap, size );
+    p = ( *rtems_malloc_extend_handler )( heap, size );
   }
 
   /*
    *  If the user wants us to dirty the allocated memory, then do it.
    */
-  if ( p != NULL && rtems_malloc_dirty_helper != NULL )
-    (*rtems_malloc_dirty_helper)( p, size );
+  if ( p != NULL && rtems_malloc_dirty_helper != NULL ) {
+    ( *rtems_malloc_dirty_helper )( p, size );
+  }
 
   return p;
 }

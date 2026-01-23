@@ -46,11 +46,7 @@
  *  This routine writes count bytes from from buffer pointed to by buffer
  *  to the file associated with the open file descriptor, fildes.
  */
-ssize_t write(
-  int         fd,
-  const void *buffer,
-  size_t      count
-)
+ssize_t write( int fd, const void *buffer, size_t count )
 {
   rtems_libio_t *iop;
   ssize_t        n;
@@ -63,7 +59,7 @@ ssize_t write(
   /*
    *  Now process the write() request.
    */
-  n = (*iop->pathinfo.handlers->write_h)( iop, buffer, count );
+  n = ( *iop->pathinfo.handlers->write_h )( iop, buffer, count );
   rtems_libio_iop_drop( iop );
   return n;
 }

@@ -34,15 +34,15 @@
 #include <sys/ioctl.h>
 #include <rtems/seterr.h>
 
-#include  <unistd.h>
-#include  <fcntl.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 int posix_devctl(
-  int              fd,
-  int              dcmd,
+  int fd,
+  int dcmd,
   void *__restrict dev_data_ptr,
-  size_t           nbyte,
-  int *__restrict  dev_info_ptr
+  size_t nbyte,
+  int *__restrict dev_info_ptr
 )
 {
   int rv = 0;
@@ -77,15 +77,14 @@ int posix_devctl(
    * is not going to be passed down. Fill it in with zero so the behavior
    * is defined.
    */
-  if (dev_info_ptr != NULL) {
+  if ( dev_info_ptr != NULL ) {
     *dev_info_ptr = 0;
   }
 
   /*
    *
    */
-  switch (dcmd) {
-
+  switch ( dcmd ) {
     /*
      * The FACE Technical Standard Edition 3.0 and newer requires the SOCKCLOSE
      * ioctl command. This is because the Security Profile does not include
@@ -94,8 +93,8 @@ int posix_devctl(
      * requirement but also lets the application close other file types.
      */
     case SOCKCLOSE:
-      if (close(fd) != 0) {
-        rv    = errno;
+      if ( close( fd ) != 0 ) {
+        rv = errno;
         errno = errno_copy;
 
         return rv;
@@ -110,32 +109,32 @@ int posix_devctl(
       int tmp_flag;
       int flag;
 
-      if (nbyte != sizeof(int)) {
+      if ( nbyte != sizeof( int ) ) {
         return EINVAL;
       }
 
-      tmp_flag = fcntl(fd, F_GETFL, 0);
-      if (tmp_flag == -1) {
+      tmp_flag = fcntl( fd, F_GETFL, 0 );
+      if ( tmp_flag == -1 ) {
         rv = errno;
         errno = errno_copy;
 
         return rv;
       }
 
-      flag = *(int *)dev_data_ptr;
+      flag = *(int *) dev_data_ptr;
 
-      if (flag != 0) {
+      if ( flag != 0 ) {
         tmp_flag |= O_NONBLOCK;
       } else {
         tmp_flag &= ~O_NONBLOCK;
       }
 
-      (void) fcntl(fd, F_SETFL, tmp_flag);
+      (void) fcntl( fd, F_SETFL, tmp_flag );
       break;
     }
 
     default:
-      if (ioctl(fd, dcmd, dev_data_ptr) != 0) {
+      if ( ioctl( fd, dcmd, dev_data_ptr ) != 0 ) {
         rv = errno;
         errno = errno_copy;
 

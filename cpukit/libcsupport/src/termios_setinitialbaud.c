@@ -41,11 +41,11 @@
 
 int rtems_termios_set_initial_baud(
   struct rtems_termios_tty *tty,
-  rtems_termios_baud_t baud
+  rtems_termios_baud_t      baud
 )
 {
-  int rv = 0;
-  speed_t spd = rtems_termios_number_to_baud(baud);
+  int     rv = 0;
+  speed_t spd = rtems_termios_number_to_baud( baud );
 
   if ( spd != 0 ) {
     tty->termios.c_ispeed = spd;

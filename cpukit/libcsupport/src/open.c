@@ -49,14 +49,14 @@
 
 static void create_regular_file(
   rtems_filesystem_eval_path_context_t *ctx,
-  mode_t mode
+  mode_t                                mode
 )
 {
   int rv = 0;
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_get_currentloc( ctx );
+  const rtems_filesystem_location_info_t
+             *currentloc = rtems_filesystem_eval_path_get_currentloc( ctx );
   const char *token = rtems_filesystem_eval_path_get_token( ctx );
-  size_t tokenlen = rtems_filesystem_eval_path_get_tokenlen( ctx );
+  size_t      tokenlen = rtems_filesystem_eval_path_get_tokenlen( ctx );
 
   rv = rtems_filesystem_mknod(
     currentloc,
@@ -79,33 +79,32 @@ static void create_regular_file(
 
 static int do_open(
   rtems_libio_t *iop,
-  const char *path,
-  int oflag,
-  mode_t mode
+  const char    *path,
+  int            oflag,
+  mode_t         mode
 )
 {
-  int rv = 0;
-  int fd = rtems_libio_iop_to_descriptor( iop );
-  int rwflag = oflag + 1;
-  bool read_access = (rwflag & _FREAD) == _FREAD;
-  bool write_access = (rwflag & _FWRITE) == _FWRITE;
-  bool make = (oflag & O_CREAT) == O_CREAT;
-  bool exclusive = (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL);
-  bool truncate = (oflag & O_TRUNC) == O_TRUNC;
+  int  rv = 0;
+  int  fd = rtems_libio_iop_to_descriptor( iop );
+  int  rwflag = oflag + 1;
+  bool read_access = ( rwflag & _FREAD ) == _FREAD;
+  bool write_access = ( rwflag & _FWRITE ) == _FWRITE;
+  bool make = ( oflag & O_CREAT ) == O_CREAT;
+  bool exclusive = ( oflag & ( O_CREAT | O_EXCL ) ) == ( O_CREAT | O_EXCL );
+  bool truncate = ( oflag & O_TRUNC ) == O_TRUNC;
   bool open_dir;
 #ifdef O_NOFOLLOW
-  int follow = (oflag & O_NOFOLLOW) == O_NOFOLLOW ? 0 : RTEMS_FS_FOLLOW_LINK;
+  int follow = ( oflag & O_NOFOLLOW ) == O_NOFOLLOW ? 0 : RTEMS_FS_FOLLOW_LINK;
 #else
   int follow = RTEMS_FS_FOLLOW_LINK;
 #endif
-  int eval_flags = follow
-    | (read_access ? RTEMS_FS_PERMS_READ : 0)
-    | (write_access ? RTEMS_FS_PERMS_WRITE : 0)
-    | (make ? RTEMS_FS_MAKE : 0)
-    | (exclusive ?  RTEMS_FS_EXCLUSIVE : 0);
-  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = follow | ( read_access ? RTEMS_FS_PERMS_READ : 0 ) |
+                   ( write_access ? RTEMS_FS_PERMS_WRITE : 0 ) |
+                   ( make ? RTEMS_FS_MAKE : 0 ) |
+                   ( exclusive ? RTEMS_FS_EXCLUSIVE : 0 );
+  rtems_filesystem_eval_path_context_t    ctx;
   const rtems_filesystem_location_info_t *currentloc;
-  bool create_reg_file;
+  bool                                    create_reg_file;
 
   rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
@@ -139,7 +138,7 @@ static int do_open(
 
   rtems_libio_iop_flags_set( iop, rtems_libio_from_fcntl_flags( oflag ) );
 
-  rv = (*iop->pathinfo.handlers->open_h)( iop, path, oflag, mode );
+  rv = ( *iop->pathinfo.handlers->open_h )( iop, path, oflag, mode );
 
   if ( rv == 0 ) {
     /*
@@ -149,14 +148,14 @@ static int do_open(
      */
     if ( truncate ) {
       if ( write_access ) {
-        rv = (*iop->pathinfo.handlers->ftruncate_h)( iop, 0 );
+        rv = ( *iop->pathinfo.handlers->ftruncate_h )( iop, 0 );
       } else {
         rv = -1;
         errno = EINVAL;
       }
 
       if ( rv != 0 ) {
-        (*iop->pathinfo.handlers->close_h)( iop );
+        ( *iop->pathinfo.handlers->close_h )( iop );
       }
     }
 
@@ -176,9 +175,9 @@ static int do_open(
 */
 int open( const char *path, int oflag, ... )
 {
-  int rv = 0;
-  va_list ap;
-  mode_t mode = 0;
+  int            rv = 0;
+  va_list        ap;
+  mode_t         mode = 0;
   rtems_libio_t *iop = NULL;
 
   va_start( ap, oflag );
@@ -201,9 +200,7 @@ int open( const char *path, int oflag, ... )
   return rv;
 }
 
-
-
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__OPEN_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__OPEN_R )
 
 #include <reent.h>
 
@@ -212,9 +209,9 @@ int open( const char *path, int oflag, ... )
  */
 int _open_r(
   struct _reent *ptr RTEMS_UNUSED,
-  const char    *buf,
-  int            oflag,
-  int            mode
+  const char        *buf,
+  int                oflag,
+  int                mode
 )
 {
   return open( buf, oflag, mode );

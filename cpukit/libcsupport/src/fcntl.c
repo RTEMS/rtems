@@ -53,7 +53,7 @@ static int duplicate_iop( rtems_libio_t *iop )
   oflag = rtems_libio_to_fcntl_flags( rtems_libio_iop_flags( iop ) );
   diop = rtems_libio_allocate();
 
-  if (diop != NULL) {
+  if ( diop != NULL ) {
     rtems_filesystem_instance_lock( &iop->pathinfo );
     rtems_filesystem_location_clone( &diop->pathinfo, &iop->pathinfo );
     rtems_filesystem_instance_unlock( &iop->pathinfo );
@@ -64,7 +64,7 @@ static int duplicate_iop( rtems_libio_t *iop )
      *
      * FIXME: What to do with the path?
      */
-    rv = (*diop->pathinfo.handlers->open_h)( diop, NULL, oflag, 0 );
+    rv = ( *diop->pathinfo.handlers->open_h )( diop, NULL, oflag, 0 );
     if ( rv == 0 ) {
       rtems_libio_iop_flags_set( diop, LIBIO_FLAGS_OPEN );
       rv = rtems_libio_iop_to_descriptor( diop );
@@ -89,15 +89,14 @@ static int duplicate2_iop( rtems_libio_t *iop, int fd2 )
 
   iop2 = rtems_libio_iop( fd2 );
 
-  if (iop != iop2)
-  {
+  if ( iop != iop2 ) {
     int oflag;
 
-    if ((rtems_libio_iop_flags( iop2 ) & LIBIO_FLAGS_OPEN) != 0) {
-      rv = (*iop2->pathinfo.handlers->close_h)( iop2 );
+    if ( ( rtems_libio_iop_flags( iop2 ) & LIBIO_FLAGS_OPEN ) != 0 ) {
+      rv = ( *iop2->pathinfo.handlers->close_h )( iop2 );
     }
 
-    if (rv == 0) {
+    if ( rv == 0 ) {
       oflag = rtems_libio_to_fcntl_flags( rtems_libio_iop_flags( iop ) );
       rtems_libio_iop_flags_set( iop2, rtems_libio_from_fcntl_flags( oflag ) );
 
@@ -111,7 +110,7 @@ static int duplicate2_iop( rtems_libio_t *iop, int fd2 )
        *
        * FIXME: What to do with the path?
        */
-      rv = (*iop2->pathinfo.handlers->open_h)( iop2, NULL, oflag, 0 );
+      rv = ( *iop2->pathinfo.handlers->open_h )( iop2, NULL, oflag, 0 );
       if ( rv == 0 ) {
         rv = fd2;
       }
@@ -121,11 +120,7 @@ static int duplicate2_iop( rtems_libio_t *iop, int fd2 )
   return rv;
 }
 
-static int vfcntl(
-  int fd,
-  int cmd,
-  va_list ap
-)
+static int vfcntl( int fd, int cmd, va_list ap )
 {
   rtems_libio_t *iop;
   int            fd2;
@@ -144,20 +139,21 @@ static int vfcntl(
    */
 
   switch ( cmd ) {
-    case F_DUPFD:        /* dup */
+    case F_DUPFD: /* dup */
       ret = duplicate_iop( iop );
       break;
 
-    case F_DUP2FD:       /* dup2 */
+    case F_DUP2FD: /* dup2 */
       fd2 = va_arg( ap, int );
       ret = duplicate2_iop( iop, fd2 );
       break;
 
-    case F_GETFD:        /* get f_flags */
-      ret = ((rtems_libio_iop_flags(iop) & LIBIO_FLAGS_CLOSE_ON_EXEC) != 0);
+    case F_GETFD: /* get f_flags */
+      ret =
+        ( ( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_CLOSE_ON_EXEC ) != 0 );
       break;
 
-    case F_SETFD:        /* set f_flags */
+    case F_SETFD: /* set f_flags */
       /*
        *  Interpret the third argument as the "close on exec()" flag.
        *  If this argument is 1, then the file descriptor is to be closed
@@ -166,13 +162,14 @@ static int vfcntl(
        *  F_GETFD work.
        */
 
-      if ( va_arg( ap, int ) )
+      if ( va_arg( ap, int ) ) {
         rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_CLOSE_ON_EXEC );
-      else
+      } else {
         rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_CLOSE_ON_EXEC );
+      }
       break;
 
-    case F_GETFL:        /* more flags (cloexec) */
+    case F_GETFL: /* more flags (cloexec) */
       ret = rtems_libio_to_fcntl_flags( rtems_libio_iop_flags( iop ) );
       break;
 
@@ -203,12 +200,12 @@ static int vfcntl(
       ret = -1;
       break;
 
-    case F_SETOWN:       /*  for sockets. */
+    case F_SETOWN: /*  for sockets. */
       errno = ENOTSUP;
       ret = -1;
       break;
 
-    case F_GETOWN:       /*  for sockets. */
+    case F_GETOWN: /*  for sockets. */
       errno = ENOTSUP;
       ret = -1;
       break;
@@ -224,12 +221,12 @@ static int vfcntl(
    *  filesystem specific handler a chance to process this.
    */
 
-  if (ret >= 0) {
-    int err = (*iop->pathinfo.handlers->fcntl_h)( iop, cmd );
-    if (err == 0 && !rtems_libio_iop_is_open( iop ) ) {
+  if ( ret >= 0 ) {
+    int err = ( *iop->pathinfo.handlers->fcntl_h )( iop, cmd );
+    if ( err == 0 && !rtems_libio_iop_is_open( iop ) ) {
       err = EBADF;
     }
-    if (err != 0) {
+    if ( err != 0 ) {
       errno = err;
       ret = -1;
     }
@@ -239,20 +236,15 @@ static int vfcntl(
   return ret;
 }
 
-int fcntl(
-  int fd,
-  int cmd,
-  ...
-)
+int fcntl( int fd, int cmd, ... )
 {
-  int            ret;
-  va_list        ap;
+  int     ret;
+  va_list ap;
   va_start( ap, cmd );
-  ret = vfcntl(fd,cmd,ap);
-  va_end(ap);
+  ret = vfcntl( fd, cmd, ap );
+  va_end( ap );
   return ret;
 }
-
 
 /*
  *  _fcntl_r
@@ -260,16 +252,11 @@ int fcntl(
  *  This is the Newlib dependent reentrant version of fcntl().
  */
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE_FCNTL_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE_FCNTL_R )
 
 #include <reent.h>
 
-int _fcntl_r(
-  struct _reent *ptr RTEMS_UNUSED,
-  int fd,
-  int cmd,
-  int arg
-)
+int _fcntl_r( struct _reent *ptr RTEMS_UNUSED, int fd, int cmd, int arg )
 {
   return fcntl( fd, cmd, arg );
 }

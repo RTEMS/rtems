@@ -37,7 +37,7 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE_CALLOC)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE_CALLOC )
 #include <stdlib.h>
 
 #include <errno.h>
@@ -45,13 +45,10 @@
 
 #include <rtems/score/basedefs.h>
 
-void *calloc(
-  size_t nelem,
-  size_t elsize
-)
+void *calloc( size_t nelem, size_t elsize )
 {
-  void   *cptr;
-  size_t  length;
+  void  *cptr;
+  size_t length;
 
   if ( nelem == 0 ) {
     return NULL;

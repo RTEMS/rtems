@@ -46,17 +46,15 @@
 /**
  *  POSIX 1003.1b - 5.7.1 - Configurable Pathname Varables
  */
-long pathconf(
-  const char *path,
-  int         name
-)
+long pathconf( const char *path, int name )
 {
   int status;
   int fd;
 
   fd = open( path, O_RDONLY );
-  if ( fd == -1 )
+  if ( fd == -1 ) {
     return -1;
+  }
 
   status = fpathconf( fd, name );
 

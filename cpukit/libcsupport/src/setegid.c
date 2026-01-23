@@ -47,9 +47,7 @@
  *  4.2.1 Get Real User, Effective User, Ral Group, and Effective Group IDs,
  *        P1003.1b-1993, p. 84
  */
-int setegid(
-  gid_t  gid
-)
+int setegid( gid_t gid )
 {
   _POSIX_types_Egid = gid;
   return 0;

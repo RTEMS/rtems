@@ -42,7 +42,7 @@
 #include <rtems.h>
 #include <rtems/assoc.h>
 
-#include <string.h>             /* strcat, strcmp */
+#include <string.h> /* strcat, strcmp */
 
 uint32_t rtems_assoc_remote_by_name(
   const rtems_assoc_t *ap,
@@ -51,9 +51,10 @@ uint32_t rtems_assoc_remote_by_name(
 {
   const rtems_assoc_t *nap;
 
-  nap = rtems_assoc_ptr_by_name(ap, name);
-  if (nap)
+  nap = rtems_assoc_ptr_by_name( ap, name );
+  if ( nap ) {
     return nap->remote_value;
+  }
 
   return 0;
 }

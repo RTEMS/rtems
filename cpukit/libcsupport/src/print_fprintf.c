@@ -39,12 +39,12 @@
 
 #include <rtems/printer.h>
 
-static int rtems_fprintf_plugin(void *context, const char *fmt, va_list ap)
+static int rtems_fprintf_plugin( void *context, const char *fmt, va_list ap )
 {
-  return vfprintf(context, fmt, ap);
+  return vfprintf( context, fmt, ap );
 }
 
-void rtems_print_printer_fprintf(rtems_printer *printer, FILE *file)
+void rtems_print_printer_fprintf( rtems_printer *printer, FILE *file )
 {
   printer->context = file;
   printer->printer = rtems_fprintf_plugin;

@@ -43,17 +43,17 @@
 
 int rtems_filesystem_mknod(
   const rtems_filesystem_location_info_t *parentloc,
-  const char *name,
-  size_t namelen,
-  mode_t mode,
-  dev_t dev
+  const char                             *name,
+  size_t                                  namelen,
+  mode_t                                  mode,
+  dev_t                                   dev
 )
 {
   int rv = 0;
 
   mode &= ~rtems_filesystem_umask;
 
-  switch (mode & S_IFMT) {
+  switch ( mode & S_IFMT ) {
     case S_IFBLK:
     case S_IFCHR:
     case S_IFDIR:
@@ -65,11 +65,11 @@ int rtems_filesystem_mknod(
       rv = -1;
       break;
   }
-  
+
   if ( rv == 0 ) {
     const rtems_filesystem_operations_table *ops = parentloc->mt_entry->ops;
 
-    rv = (*ops->mknod_h)( parentloc, name, namelen, mode, dev );
+    rv = ( *ops->mknod_h )( parentloc, name, namelen, mode, dev );
   }
 
   return rv;
@@ -82,14 +82,13 @@ int rtems_filesystem_mknod(
  */
 int mknod( const char *path, mode_t mode, dev_t dev )
 {
-  int rv = 0;
+  int                                  rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_FOLLOW_LINK
-    | RTEMS_FS_MAKE
-    | RTEMS_FS_EXCLUSIVE
-    | (S_ISDIR(mode) ? RTEMS_FS_ACCEPT_RESIDUAL_DELIMITERS : 0);
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+  int eval_flags = RTEMS_FS_FOLLOW_LINK | RTEMS_FS_MAKE | RTEMS_FS_EXCLUSIVE |
+                   ( S_ISDIR( mode ) ? RTEMS_FS_ACCEPT_RESIDUAL_DELIMITERS
+                                     : 0 );
+  const rtems_filesystem_location_info_t
+    *currentloc = rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
   rv = rtems_filesystem_mknod(
     currentloc,

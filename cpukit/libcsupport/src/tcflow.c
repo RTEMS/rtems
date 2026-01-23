@@ -37,20 +37,17 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 #include <termios.h>
 #include <unistd.h>
 #include <errno.h>
 #include <rtems/seterr.h>
 
-int tcflow (
-  int fd,
-  int action
-)
+int tcflow( int fd, int action )
 {
   (void) fd;
 
-  switch (action) {
+  switch ( action ) {
     case TCOOFF:
     case TCOON:
     case TCIOFF:

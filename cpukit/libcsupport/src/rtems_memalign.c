@@ -43,19 +43,16 @@
 #include <stdlib.h>
 #include <errno.h>
 
-int rtems_memalign(
-  void   **pointer,
-  size_t   alignment,
-  size_t   size
-)
+int rtems_memalign( void **pointer, size_t alignment, size_t size )
 {
   void *return_this;
 
   /*
    *  Parameter error checks
    */
-  if ( !pointer )
+  if ( !pointer ) {
     return EINVAL;
+  }
 
   *pointer = NULL;
 
@@ -66,9 +63,14 @@ int rtems_memalign(
   /*
    *  Perform the aligned allocation requested
    */
-  return_this = rtems_heap_allocate_aligned_with_boundary( size, alignment, 0 );
-  if ( !return_this )
+  return_this = rtems_heap_allocate_aligned_with_boundary(
+    size,
+    alignment,
+    0
+  );
+  if ( !return_this ) {
     return ENOMEM;
+  }
 
   *pointer = return_this;
   return 0;

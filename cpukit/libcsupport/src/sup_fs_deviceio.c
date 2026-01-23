@@ -41,10 +41,10 @@
 #include <rtems/rtems/status.h>
 
 int rtems_deviceio_open(
-  rtems_libio_t *iop,
-  const char *path,
-  int oflag,
-  mode_t mode,
+  rtems_libio_t            *iop,
+  const char               *path,
+  int                       oflag,
+  mode_t                    mode,
   rtems_device_major_number major,
   rtems_device_minor_number minor
 )
@@ -52,7 +52,7 @@ int rtems_deviceio_open(
   (void) path;
   (void) oflag;
 
-  rtems_status_code status;
+  rtems_status_code             status;
   rtems_libio_open_close_args_t args;
 
   args.iop = iop;
@@ -65,12 +65,12 @@ int rtems_deviceio_open(
 }
 
 int rtems_deviceio_close(
-  rtems_libio_t *iop,
+  rtems_libio_t            *iop,
   rtems_device_major_number major,
   rtems_device_minor_number minor
 )
 {
-  rtems_status_code status;
+  rtems_status_code             status;
   rtems_libio_open_close_args_t args;
 
   args.iop = iop;
@@ -83,14 +83,14 @@ int rtems_deviceio_close(
 }
 
 ssize_t rtems_deviceio_read(
-  rtems_libio_t *iop,
-  void *buf,
-  size_t nbyte,
+  rtems_libio_t            *iop,
+  void                     *buf,
+  size_t                    nbyte,
   rtems_device_major_number major,
   rtems_device_minor_number minor
 )
 {
-  rtems_status_code status;
+  rtems_status_code     status;
   rtems_libio_rw_args_t args;
 
   args.iop = iop;
@@ -111,14 +111,14 @@ ssize_t rtems_deviceio_read(
 }
 
 ssize_t rtems_deviceio_write(
-  rtems_libio_t *iop,
-  const void *buf,
-  size_t nbyte,
+  rtems_libio_t            *iop,
+  const void               *buf,
+  size_t                    nbyte,
   rtems_device_major_number major,
   rtems_device_minor_number minor
 )
 {
-  rtems_status_code status;
+  rtems_status_code     status;
   rtems_libio_rw_args_t args;
 
   args.iop = iop;
@@ -139,14 +139,14 @@ ssize_t rtems_deviceio_write(
 }
 
 int rtems_deviceio_control(
-  rtems_libio_t *iop,
-  ioctl_command_t command,
-  void *buffer,
+  rtems_libio_t            *iop,
+  ioctl_command_t           command,
+  void                     *buffer,
   rtems_device_major_number major,
   rtems_device_minor_number minor
 )
 {
-  rtems_status_code status;
+  rtems_status_code        status;
   rtems_libio_ioctl_args_t args;
 
   args.iop = iop;
@@ -157,6 +157,6 @@ int rtems_deviceio_control(
   if ( status == RTEMS_SUCCESSFUL ) {
     return args.ioctl_return;
   } else {
-    return rtems_status_code_to_errno(status);
+    return rtems_status_code_to_errno( status );
   }
 }

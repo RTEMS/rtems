@@ -49,4 +49,3 @@ uid_t getuid( void )
 {
   return _POSIX_types_Uid;
 }
-

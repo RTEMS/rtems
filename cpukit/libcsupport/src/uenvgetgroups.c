@@ -36,10 +36,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void rtems_current_user_env_getgroups(void)
+void rtems_current_user_env_getgroups( void )
 {
   rtems_user_env_t *uenv = rtems_current_user_env_get();
-  int ngroups = (int) RTEMS_ARRAY_SIZE( uenv->groups );
+  int               ngroups = (int) RTEMS_ARRAY_SIZE( uenv->groups );
 
   ngroups = getgroups( ngroups, &uenv->groups[ 0 ] );
   if ( ngroups > 0 ) {

@@ -57,28 +57,30 @@
  * Returns 1 if a directory has been created,
  * 2 if it already existed, and 0 on failure.
  */
-static int
-build(char *path, mode_t omode)
+static int build( char *path, mode_t omode )
 {
   struct stat sb;
-  mode_t numask, oumask;
-  int first, last, retval;
-  char *p;
+  mode_t      numask, oumask;
+  int         first, last, retval;
+  char       *p;
 
   p = path;
   oumask = 0;
   retval = 1;
-  if (p[0] == '/')    /* Skip leading '/'. */
+  if ( p[ 0 ] == '/' ) { /* Skip leading '/'. */
     ++p;
-  for (first = 1, last = 0; !last ; ++p) {
-    if (p[0] == '\0')
+  }
+  for ( first = 1, last = 0; !last; ++p ) {
+    if ( p[ 0 ] == '\0' ) {
       last = 1;
-    else if (p[0] != '/')
+    } else if ( p[ 0 ] != '/' ) {
       continue;
+    }
     *p = '\0';
-    if (!last && p[1] == '\0')
+    if ( !last && p[ 1 ] == '\0' ) {
       last = 1;
-    if (first) {
+    }
+    if ( first ) {
       /*
        * POSIX 1003.2:
        * For each dir operand that does not name an existing
@@ -91,50 +93,54 @@ build(char *path, mode_t omode)
        * We change the user's umask and then restore it,
        * instead of doing chmod's.
        */
-      oumask = umask(0);
-      numask = oumask & ~(S_IWUSR | S_IXUSR);
-      (void)umask(numask);
+      oumask = umask( 0 );
+      numask = oumask & ~( S_IWUSR | S_IXUSR );
+      (void) umask( numask );
       first = 0;
     }
-    if (last)
-      (void)umask(oumask);
-    if (mkdir(path, last ? omode : S_IRWXU | S_IRWXG | S_IRWXO) < 0) {
-      if (errno == EEXIST || errno == EISDIR) {
-        if (stat(path, &sb) < 0) {
+    if ( last ) {
+      (void) umask( oumask );
+    }
+    if ( mkdir( path, last ? omode : S_IRWXU | S_IRWXG | S_IRWXO ) < 0 ) {
+      if ( errno == EEXIST || errno == EISDIR ) {
+        if ( stat( path, &sb ) < 0 ) {
           retval = 0;
           break;
-        } else if (!S_ISDIR(sb.st_mode)) {
-          if (last)
+        } else if ( !S_ISDIR( sb.st_mode ) ) {
+          if ( last ) {
             errno = EEXIST;
-          else
+          } else {
             errno = ENOTDIR;
+          }
           retval = 0;
           break;
         }
-        if (last)
+        if ( last ) {
           retval = 2;
+        }
       } else {
         retval = 0;
         break;
       }
     }
-    if (!last)
-        *p = '/';
+    if ( !last ) {
+      *p = '/';
+    }
   }
-  if (!first && !last)
-    (void)umask(oumask);
-  return (retval);
+  if ( !first && !last ) {
+    (void) umask( oumask );
+  }
+  return ( retval );
 }
 
-int
-rtems_mkdir(const char *path, mode_t mode)
+int rtems_mkdir( const char *path, mode_t mode )
 {
-  int success = 0;
-  char *dup_path = strdup(path);
+  int   success = 0;
+  char *dup_path = strdup( path );
 
-  if (dup_path != NULL) {
-    success = build(dup_path, mode);
-    free(dup_path);
+  if ( dup_path != NULL ) {
+    success = build( dup_path, mode );
+    free( dup_path );
   }
 
   return success != 0 ? 0 : -1;

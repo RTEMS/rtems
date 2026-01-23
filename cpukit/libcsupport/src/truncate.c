@@ -46,17 +46,15 @@
  *  commonly supported on most UNIX and POSIX systems.  It is provided
  *  for compatibility.
  */
-int truncate(
-  const char  *path,
-  off_t        length
-)
+int truncate( const char *path, off_t length )
 {
   int status;
   int fd;
 
   fd = open( path, O_WRONLY );
-  if ( fd == -1 )
+  if ( fd == -1 ) {
     return -1;
+  }
 
   status = ftruncate( fd, length );
 

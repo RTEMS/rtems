@@ -44,11 +44,9 @@
 
 #include "malloc_p.h"
 
-void *malloc(
-  size_t  size
-)
+void *malloc( size_t size )
 {
-  void        *return_this;
+  void *return_this;
 
   if ( size == 0 ) {
     return NULL;
@@ -63,13 +61,11 @@ void *malloc(
   return return_this;
 }
 
-size_t malloc_usable_size(
-  void *area
-)
+size_t malloc_usable_size( void *area )
 {
-  Heap_Block* block = NULL;
-  size_t size = 0;
-  bool needs_lock;
+  Heap_Block *block = NULL;
+  size_t      size = 0;
+  bool        needs_lock;
 
   if ( area == NULL ) {
     return 0;
@@ -82,12 +78,12 @@ size_t malloc_usable_size(
   }
 
   block = _Heap_Block_of_alloc_area(
-    (uintptr_t)area,
+    (uintptr_t) area,
     RTEMS_Malloc_Heap->page_size
   );
 
-  if (block) {
-    size = _Heap_Block_size(block);
+  if ( block ) {
+    size = _Heap_Block_size( block );
   }
 
   if ( needs_lock ) {

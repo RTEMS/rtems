@@ -44,10 +44,10 @@ typedef struct {
   IMFS_jnode_t Node;
   RTEMS_INTERRUPT_LOCK_MEMBER( buf_lock )
   rtems_mutex output_mutex;
-  rtems_id task;
-  size_t head;
-  size_t tail;
-  char buf[ CONSOLE_SIMPLE_TASK_BUFFER_SIZE ];
+  rtems_id    task;
+  size_t      head;
+  size_t      tail;
+  char        buf[ CONSOLE_SIMPLE_TASK_BUFFER_SIZE ];
 } Console_simple_task_Control;
 
 static Console_simple_task_Control _Console_simple_task_Instance;
@@ -144,7 +144,7 @@ static void _Console_simple_task_Put_chars( Console_simple_task_Control *cons )
 
   rtems_interrupt_lock_release( &cons->buf_lock, &lock_context );
 
-  for ( i = 0; i < available; ++i) {
+  for ( i = 0; i < available; ++i ) {
     rtems_putc( cons->buf[ tail ] );
     tail = ( tail + 1 ) % CONSOLE_SIMPLE_TASK_BUFFER_SIZE;
   }
@@ -186,11 +186,11 @@ static const rtems_filesystem_file_handlers_r _Console_simple_task_Handlers = {
 };
 
 static const IMFS_node_control
-_Console_simple_task_Node_control = IMFS_NODE_CONTROL_INITIALIZER(
-  &_Console_simple_task_Handlers,
-  IMFS_node_initialize_default,
-  IMFS_do_nothing_destroy
-);
+  _Console_simple_task_Node_control = IMFS_NODE_CONTROL_INITIALIZER(
+    &_Console_simple_task_Handlers,
+    IMFS_node_initialize_default,
+    IMFS_do_nothing_destroy
+  );
 
 static void _Console_simple_task_Task( rtems_task_argument arg )
 {
@@ -217,7 +217,7 @@ static const char _Console_simple_task_Name[] = "console";
 void _Console_simple_task_Initialize( void )
 {
   Console_simple_task_Control *cons;
-  rtems_status_code status;
+  rtems_status_code            status;
 
   cons = &_Console_simple_task_Instance;
 
@@ -235,19 +235,19 @@ void _Console_simple_task_Initialize( void )
   IMFS_add_node( "/dev", &cons->Node, NULL );
 
   status = rtems_task_create(
-    rtems_build_name('C', 'O', 'N', 'S'),
+    rtems_build_name( 'C', 'O', 'N', 'S' ),
     RTEMS_MAXIMUM_PRIORITY - 1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     RTEMS_DEFAULT_MODES,
     &cons->task
   );
-  _Assert_Unused_variable_equals(status, RTEMS_SUCCESSFUL);
+  _Assert_Unused_variable_equals( status, RTEMS_SUCCESSFUL );
 
   status = rtems_task_start(
     cons->task,
     _Console_simple_task_Task,
     (rtems_task_argument) cons
   );
-  _Assert_Unused_variable_equals(status, RTEMS_SUCCESSFUL);
+  _Assert_Unused_variable_equals( status, RTEMS_SUCCESSFUL );
 }

@@ -47,9 +47,9 @@
 
 static int null_handler_open(
   rtems_libio_t *iop,
-  const char *path,
-  int oflag,
-  mode_t mode
+  const char    *path,
+  int            oflag,
+  mode_t         mode
 )
 {
   (void) iop;
@@ -62,7 +62,7 @@ static int null_handler_open(
 
 static int null_handler_fstat(
   const rtems_filesystem_location_info_t *pathloc,
-  struct stat *buf
+  struct stat                            *buf
 )
 {
   (void) pathloc;
@@ -101,10 +101,10 @@ static void null_op_lock_or_unlock(
 
 static int null_op_mknod(
   const rtems_filesystem_location_info_t *parentloc,
-  const char *name,
-  size_t namelen,
-  mode_t mode,
-  dev_t dev
+  const char                             *name,
+  size_t                                  namelen,
+  mode_t                                  mode,
+  dev_t                                   dev
 )
 {
   (void) parentloc;
@@ -130,8 +130,8 @@ static int null_op_rmnod(
 static int null_op_link(
   const rtems_filesystem_location_info_t *parentloc,
   const rtems_filesystem_location_info_t *targetloc,
-  const char *name,
-  size_t namelen
+  const char                             *name,
+  size_t                                  namelen
 )
 {
   (void) parentloc;
@@ -144,7 +144,7 @@ static int null_op_link(
 
 static int null_op_fchmod(
   const rtems_filesystem_location_info_t *pathloc,
-  mode_t mode
+  mode_t                                  mode
 )
 {
   (void) pathloc;
@@ -155,8 +155,8 @@ static int null_op_fchmod(
 
 static int null_op_chown(
   const rtems_filesystem_location_info_t *loc,
-  uid_t owner,
-  gid_t group
+  uid_t                                   owner,
+  gid_t                                   group
 )
 {
   (void) loc;
@@ -166,9 +166,7 @@ static int null_op_chown(
   return -1;
 }
 
-static int null_op_clonenode(
-  rtems_filesystem_location_info_t *loc
-)
+static int null_op_clonenode( rtems_filesystem_location_info_t *loc )
 {
   (void) loc;
 
@@ -177,7 +175,7 @@ static int null_op_clonenode(
 
 static int null_op_mount(
   rtems_filesystem_mount_table_entry_t *mt_entry,
-  const void *data
+  const void                           *data
 )
 {
   (void) mt_entry;
@@ -186,9 +184,7 @@ static int null_op_mount(
   return -1;
 }
 
-static int null_op_unmount(
-  rtems_filesystem_mount_table_entry_t *mt_entry
-)
+static int null_op_unmount( rtems_filesystem_mount_table_entry_t *mt_entry )
 {
   (void) mt_entry;
 
@@ -206,7 +202,7 @@ static void null_op_fsunmount_me(
 
 static int null_op_utimens(
   const rtems_filesystem_location_info_t *loc,
-  struct timespec times[2]
+  struct timespec                         times[ 2 ]
 )
 {
   (void) loc;
@@ -217,9 +213,9 @@ static int null_op_utimens(
 
 static int null_op_symlink(
   const rtems_filesystem_location_info_t *parentloc,
-  const char *name,
-  size_t namelen,
-  const char *target
+  const char                             *name,
+  size_t                                  namelen,
+  const char                             *target
 )
 {
   (void) parentloc;
@@ -232,8 +228,8 @@ static int null_op_symlink(
 
 static ssize_t null_op_readlink(
   const rtems_filesystem_location_info_t *loc,
-  char *buf,
-  size_t bufsize
+  char                                   *buf,
+  size_t                                  bufsize
 )
 {
   (void) loc;
@@ -247,8 +243,8 @@ static int null_op_rename(
   const rtems_filesystem_location_info_t *oldparentloc,
   const rtems_filesystem_location_info_t *oldloc,
   const rtems_filesystem_location_info_t *newparentloc,
-  const char *name,
-  size_t namelen
+  const char                             *name,
+  size_t                                  namelen
 )
 {
   (void) oldparentloc;
@@ -306,13 +302,12 @@ rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry = {
 };
 
 rtems_filesystem_global_location_t rtems_filesystem_global_location_null = {
-  .location = {
-    .mt_entry_node = RTEMS_CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN(
-      &rtems_filesystem_null_mt_entry.location_chain
-    ),
-    .handlers = &rtems_filesystem_null_handlers,
-    .mt_entry = &rtems_filesystem_null_mt_entry
-  },
+  .location =
+    { .mt_entry_node = RTEMS_CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN(
+        &rtems_filesystem_null_mt_entry.location_chain
+      ),
+      .handlers = &rtems_filesystem_null_handlers,
+      .mt_entry = &rtems_filesystem_null_mt_entry },
 
   /*
    * The initial reference count accounts for the following references
@@ -330,12 +325,12 @@ rtems_user_env_t rtems_global_user_env = {
   .umask = S_IWGRP | S_IWOTH
 };
 
-rtems_user_env_t *rtems_current_user_env_get(void)
+rtems_user_env_t *rtems_current_user_env_get( void )
 {
-  Thread_Control *executing = _Thread_Get_executing();
+  Thread_Control   *executing = _Thread_Get_executing();
   rtems_user_env_t *env = executing->user_environment;
 
-  if (env == NULL) {
+  if ( env == NULL ) {
     return &rtems_global_user_env;
   }
 

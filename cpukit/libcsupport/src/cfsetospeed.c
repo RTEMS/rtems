@@ -38,7 +38,7 @@
 #endif
 
 #include <rtems.h>
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -50,13 +50,11 @@
 /**
  *  POSIX 1003.1b 7.1.3 - Baud Rate Functions
  */
-int cfsetospeed(
-  struct termios *tp,
-  speed_t         speed
-)
+int cfsetospeed( struct termios *tp, speed_t speed )
 {
-  if ( rtems_termios_baud_to_index( speed ) == -1 )
+  if ( rtems_termios_baud_to_index( speed ) == -1 ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   tp->c_ospeed = speed;
   return 0;

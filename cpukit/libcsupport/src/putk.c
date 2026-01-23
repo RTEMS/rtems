@@ -43,13 +43,14 @@
 /**
  * Kernel putk (e.g. puts) function requiring minimal infrastrure.
  */
-int putk(const char *s)
+int putk( const char *s )
 {
   const char *p;
-  int len_out = 0;
+  int         len_out = 0;
 
-  for (p=s ; *p ; p++, len_out++ )
-    rtems_putc(*p);
-  rtems_putc('\n');
+  for ( p = s; *p; p++, len_out++ ) {
+    rtems_putc( *p );
+  }
+  rtems_putc( '\n' );
   return len_out + 1;
 }

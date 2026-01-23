@@ -37,18 +37,15 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__ISATTY_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__ISATTY_R )
 
- /**
+/**
  *  This is the Newlib dependent reentrant version of isatty().
  */
 #include <unistd.h>
 #include <reent.h>
 
-int _isatty_r(
-  struct _reent *ptr,
-  int            fd
-)
+int _isatty_r( struct _reent *ptr, int fd )
 {
   (void) ptr;
   return isatty( fd );

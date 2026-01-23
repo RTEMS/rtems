@@ -38,7 +38,7 @@
 #endif
 
 #include <rtems.h>
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <stdio.h>
 #include <string.h>
@@ -49,12 +49,11 @@ static char *ctermid_name = "/dev/console";
 /**
  *  ctermid() - POSIX 1003.1b 4.7.1 - Generate Terminal Pathname
  */
-char *ctermid(
-  char *s
-)
+char *ctermid( char *s )
 {
-  if ( !s )
+  if ( !s ) {
     return ctermid_name;
+  }
 
   /*
    *  We have no way of knowing the length of the user provided buffer.

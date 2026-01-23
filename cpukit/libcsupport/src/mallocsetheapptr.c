@@ -41,9 +41,7 @@
 #include <rtems/libcsupport.h>
 #include "malloc_p.h"
 
-void malloc_set_heap_pointer(
-  Heap_Control *new_heap
-)
+void malloc_set_heap_pointer( Heap_Control *new_heap )
 {
   RTEMS_Malloc_Heap = new_heap;
 }

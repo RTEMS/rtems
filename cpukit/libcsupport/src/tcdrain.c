@@ -38,7 +38,7 @@
 #endif
 
 #include <rtems.h>
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -51,9 +51,7 @@
 /**
  *  POSIX 1003.1b 7.2.2 - Line Control Functions
  */
-int tcdrain(
-  int fd
-)
+int tcdrain( int fd )
 {
   return ioctl( fd, TIOCDRAIN, 0 );
 }

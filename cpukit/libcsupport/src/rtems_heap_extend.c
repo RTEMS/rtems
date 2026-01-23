@@ -40,14 +40,11 @@
 #ifdef RTEMS_NEWLIB
 #include "malloc_p.h"
 
-rtems_status_code rtems_heap_extend(
-  void *area_begin,
-  uintptr_t area_size
-)
+rtems_status_code rtems_heap_extend( void *area_begin, uintptr_t area_size )
 {
-  bool ok = _Protected_heap_Extend(RTEMS_Malloc_Heap, area_begin, area_size);
+  bool ok = _Protected_heap_Extend( RTEMS_Malloc_Heap, area_begin, area_size );
 
-  if (ok) {
+  if ( ok ) {
     return RTEMS_SUCCESSFUL;
   } else {
     return RTEMS_INVALID_ADDRESS;

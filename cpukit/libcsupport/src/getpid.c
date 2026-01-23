@@ -49,16 +49,14 @@ pid_t getpid( void )
   return rtems_object_get_local_node();
 }
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__GETPID_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__GETPID_R )
 
 #include <reent.h>
 
 /**
  *  This is the Newlib dependent reentrant version of getpid().
  */
-pid_t _getpid_r(
-  struct _reent *ptr RTEMS_UNUSED
-)
+pid_t _getpid_r( struct _reent *ptr RTEMS_UNUSED )
 {
   return getpid();
 }

@@ -38,9 +38,7 @@
  *
  *  4.2.2 Set User and Group IDs, P1003.1b-1993, p. 84
  */
-int setuid(
-  uid_t  uid
-)
+int setuid( uid_t uid )
 {
   _POSIX_types_Uid = uid;
   return 0;

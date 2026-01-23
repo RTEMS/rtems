@@ -58,11 +58,7 @@ static ssize_t readv_adapter(
  *
  *  http://www.opengroup.org/onlinepubs/009695399/functions/readv.html
  */
-ssize_t readv(
-  int                 fd,
-  const struct iovec *iov,
-  int                 iovcnt
-)
+ssize_t readv( int fd, const struct iovec *iov, int iovcnt )
 {
   return rtems_libio_iovec_eval(
     fd,

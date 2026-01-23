@@ -61,9 +61,7 @@ static bool usage_visitor( Thread_Control *the_thread, void *arg )
   return false;
 }
 
-static int getrusage_RUSAGE_SELF(
-  struct rusage *usage
-)
+static int getrusage_RUSAGE_SELF( struct rusage *usage )
 {
   /*
    *  RTEMS only has a single process so there are no children. The
@@ -84,13 +82,11 @@ static int getrusage_RUSAGE_SELF(
   return 0;
 }
 
-static int getrusage_RUSAGE_THREAD(
-  struct rusage *usage
-)
+static int getrusage_RUSAGE_THREAD( struct rusage *usage )
 {
-  Thread_Control    *the_thread;
-  ISR_lock_Context   lock_context;
-  Timestamp_Control  used;
+  Thread_Control   *the_thread;
+  ISR_lock_Context  lock_context;
+  Timestamp_Control used;
   the_thread = _Thread_Get( OBJECTS_ID_OF_SELF, &lock_context );
   used = _Thread_Get_CPU_time_used( the_thread );
   _ISR_lock_ISR_enable( &lock_context );
@@ -100,22 +96,21 @@ static int getrusage_RUSAGE_THREAD(
   return 0;
 }
 
-int getrusage(
-  int who, struct rusage *usage
-)
+int getrusage( int who, struct rusage *usage )
 {
-  if ( !usage )
+  if ( !usage ) {
     rtems_set_errno_and_return_minus_one( EFAULT );
+  }
 
   switch ( who ) {
-  case RUSAGE_SELF:
-    return getrusage_RUSAGE_SELF( usage );
-  case RUSAGE_THREAD:
-    return getrusage_RUSAGE_THREAD( usage );
-  case RUSAGE_CHILDREN:
-    rtems_set_errno_and_return_minus_one( ENOSYS );
-  default:
-    break;
+    case RUSAGE_SELF:
+      return getrusage_RUSAGE_SELF( usage );
+    case RUSAGE_THREAD:
+      return getrusage_RUSAGE_THREAD( usage );
+    case RUSAGE_CHILDREN:
+      rtems_set_errno_and_return_minus_one( ENOSYS );
+    default:
+      break;
   }
 
   rtems_set_errno_and_return_minus_one( EINVAL );

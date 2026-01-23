@@ -64,26 +64,26 @@ char *getlogin( void )
  *
  *  @note P1003.1c/D10, p. 49 adds getlogin_r().
  */
-int getlogin_r(
-  char   *name,
-  size_t  namesize
-)
+int getlogin_r( char *name, size_t namesize )
 {
   struct passwd *pw;
   char          *pname;
 
-  if ( !name ) 
+  if ( !name ) {
     return EFAULT;
+  }
 
-  if ( namesize < LOGIN_NAME_MAX )
+  if ( namesize < LOGIN_NAME_MAX ) {
     return ERANGE;
+  }
 
   /* Set the pointer to a default name */
   pname = "";
 
-  pw = getpwuid(getuid());
-  if ( pw )
-   pname = pw->pw_name;
+  pw = getpwuid( getuid() );
+  if ( pw ) {
+    pname = pw->pw_name;
+  }
 
   strncpy( name, pname, LOGIN_NAME_MAX );
   return 0;

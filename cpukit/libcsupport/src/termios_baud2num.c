@@ -39,7 +39,7 @@
 
 #include <rtems/termiostypes.h>
 
-rtems_termios_baud_t rtems_termios_baud_to_number(speed_t spd)
+rtems_termios_baud_t rtems_termios_baud_to_number( speed_t spd )
 {
-  return rtems_assoc_local_by_remote(rtems_termios_baud_table, spd);
+  return rtems_assoc_local_by_remote( rtems_termios_baud_table, spd );
 }

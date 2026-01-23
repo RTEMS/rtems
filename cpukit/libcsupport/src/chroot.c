@@ -50,12 +50,11 @@
 
 int chroot( const char *path )
 {
-  int rv = 0;
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  int                                  rv = 0;
+  rtems_status_code                    sc = RTEMS_SUCCESSFUL;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_PERMS_EXEC
-    | RTEMS_FS_FOLLOW_LINK;
-  rtems_filesystem_location_info_t loc;
+  int eval_flags = RTEMS_FS_PERMS_EXEC | RTEMS_FS_FOLLOW_LINK;
+  rtems_filesystem_location_info_t    loc;
   rtems_filesystem_global_location_t *new_current_loc;
 
   /*
@@ -80,7 +79,7 @@ int chroot( const char *path )
 
     if ( S_ISDIR( type ) ) {
       sc = rtems_libio_set_private_env();
-      if (sc == RTEMS_SUCCESSFUL) {
+      if ( sc == RTEMS_SUCCESSFUL ) {
         rtems_filesystem_global_location_assign(
           &rtems_filesystem_root,
           new_root_loc
@@ -90,7 +89,7 @@ int chroot( const char *path )
           new_current_loc
         );
       } else {
-        if (sc != RTEMS_UNSATISFIED) {
+        if ( sc != RTEMS_UNSATISFIED ) {
           errno = ENOMEM;
         }
         rv = -1;

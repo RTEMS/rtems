@@ -38,7 +38,7 @@
 #endif
 
 #include <rtems.h>
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -48,10 +48,7 @@
 
 #include <rtems/libio.h>
 
-int tcgetattr(
-  int fd,
-  struct termios *tp
-)
+int tcgetattr( int fd, struct termios *tp )
 {
   return ioctl( fd, TIOCGETA, tp );
 }

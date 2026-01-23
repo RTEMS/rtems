@@ -50,7 +50,7 @@
  * These guidelines come from the description of the EINVAL errors on
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/futimens.html
  */
-bool rtems_filesystem_utime_tv_nsec_valid(struct timespec time)
+bool rtems_filesystem_utime_tv_nsec_valid( struct timespec time )
 {
   if ( time.tv_nsec == UTIME_NOW ) {
     return true;
@@ -73,15 +73,15 @@ bool rtems_filesystem_utime_tv_nsec_valid(struct timespec time)
 
 /* Determine whether the access and modified timestamps can be updated */
 int rtems_filesystem_utime_check_permissions(
-  const rtems_filesystem_location_info_t * currentloc,
-  const struct timespec times[2]
+  const rtems_filesystem_location_info_t *currentloc,
+  const struct timespec                   times[ 2 ]
 )
 {
   struct stat st = {};
-  int rv;
-  bool write_access;
+  int         rv;
+  bool        write_access;
 
-  rv = (*currentloc->handlers->fstat_h)( currentloc, &st );
+  rv = ( *currentloc->handlers->fstat_h )( currentloc, &st );
   if ( rv != 0 ) {
     rtems_set_errno_and_return_minus_one( ENOENT );
   }
@@ -97,13 +97,17 @@ int rtems_filesystem_utime_check_permissions(
    * The logic for the EACCES error is an inverted subset of the EPERM
    * conditional according to the POSIX standard.
    */
-  if ( (times == NULL) ||
-     ( (times[0].tv_nsec == UTIME_NOW) && (times[1].tv_nsec == UTIME_NOW) )) {
-      if ( !write_access ) {
-        rtems_set_errno_and_return_minus_one( EACCES );
-      }
+  if (
+    ( times == NULL ) || ( ( times[ 0 ].tv_nsec == UTIME_NOW ) &&
+                           ( times[ 1 ].tv_nsec == UTIME_NOW ) )
+  ) {
+    if ( !write_access ) {
+      rtems_set_errno_and_return_minus_one( EACCES );
+    }
   } else {
-    if ( times[0].tv_nsec != UTIME_OMIT || times[1].tv_nsec != UTIME_OMIT ) {
+    if (
+      times[ 0 ].tv_nsec != UTIME_OMIT || times[ 1 ].tv_nsec != UTIME_OMIT
+    ) {
       if ( !write_access ) {
         rtems_set_errno_and_return_minus_one( EPERM );
       }
@@ -118,11 +122,11 @@ int rtems_filesystem_utime_check_permissions(
  * whether the values in times are valid.
  */
 int rtems_filesystem_utime_update(
-  const struct timespec times[2],
-  struct timespec new_times[2]
+  const struct timespec times[ 2 ],
+  struct timespec       new_times[ 2 ]
 )
 {
-  bool got_time = false;
+  bool            got_time = false;
   struct timespec now;
 
   /*
@@ -130,39 +134,39 @@ int rtems_filesystem_utime_update(
    * elements
    */
   if ( times == NULL ) {
-    _Timespec_Set( &new_times[0], 0, UTIME_NOW );
-    _Timespec_Set( &new_times[1], 0, UTIME_NOW );
+    _Timespec_Set( &new_times[ 0 ], 0, UTIME_NOW );
+    _Timespec_Set( &new_times[ 1 ], 0, UTIME_NOW );
   } else {
-    new_times[0] = times[0];
-    new_times[1] = times[1];
+    new_times[ 0 ] = times[ 0 ];
+    new_times[ 1 ] = times[ 1 ];
   }
 
-  if ( new_times[0].tv_nsec == UTIME_NOW ) {
+  if ( new_times[ 0 ].tv_nsec == UTIME_NOW ) {
     clock_gettime( CLOCK_REALTIME, &now );
-    new_times[0] = now;
+    new_times[ 0 ] = now;
     got_time = true;
   }
 
-  if ( new_times[1].tv_nsec == UTIME_NOW ) {
+  if ( new_times[ 1 ].tv_nsec == UTIME_NOW ) {
     if ( !got_time ) {
       clock_gettime( CLOCK_REALTIME, &now );
     }
-    new_times[1] = now;
+    new_times[ 1 ] = now;
   }
 
-  if ( !_Timespec_Is_non_negative( &new_times[0] ) ) {
+  if ( !_Timespec_Is_non_negative( &new_times[ 0 ] ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  if ( !_Timespec_Is_non_negative( &new_times[1] ) ) {
+  if ( !_Timespec_Is_non_negative( &new_times[ 1 ] ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  if ( !rtems_filesystem_utime_tv_nsec_valid( new_times[0] ) ) {
+  if ( !rtems_filesystem_utime_tv_nsec_valid( new_times[ 0 ] ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  if ( !rtems_filesystem_utime_tv_nsec_valid( new_times[1] ) ) {
+  if ( !rtems_filesystem_utime_tv_nsec_valid( new_times[ 1 ] ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
@@ -175,17 +179,17 @@ int rtems_filesystem_utime_update(
  *  Set file access and modification times
  */
 int utimensat(
-  int                    fd,
-  const char            *path,
-  const struct timespec  times[2],
-  int                    flag
+  int                   fd,
+  const char           *path,
+  const struct timespec times[ 2 ],
+  int                   flag
 )
 {
-  int rv = 0;
-  rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_FOLLOW_LINK;
+  int                                     rv = 0;
+  rtems_filesystem_eval_path_context_t    ctx;
+  int                                     eval_flags = RTEMS_FS_FOLLOW_LINK;
   const rtems_filesystem_location_info_t *currentloc = NULL;
-  struct timespec new_times[2];
+  struct timespec                         new_times[ 2 ];
 
   /*
    * RTEMS does not currently support operating on a real file descriptor
@@ -214,10 +218,7 @@ int utimensat(
     return rv;
   }
 
-  rv = (*currentloc->mt_entry->ops->utimens_h)(
-    currentloc,
-    new_times
-  );
+  rv = ( *currentloc->mt_entry->ops->utimens_h )( currentloc, new_times );
 
   rtems_filesystem_eval_path_cleanup( &ctx );
 

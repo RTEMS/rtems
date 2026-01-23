@@ -43,8 +43,8 @@
 
 void *rtems_calloc( size_t nelem, size_t elsize )
 {
-  size_t  length;
-  void   *p;
+  size_t length;
+  void  *p;
 
   if ( nelem == 0 ) {
     return NULL;

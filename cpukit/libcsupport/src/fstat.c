@@ -39,10 +39,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int fstat(
-  int          fd,
-  struct stat *sbuf
-)
+int fstat( int fd, struct stat *sbuf )
 {
   rtems_libio_t *iop;
   int            rv;
@@ -50,8 +47,9 @@ int fstat(
   /*
    *  Check to see if we were passed a valid pointer.
    */
-  if ( !sbuf )
+  if ( !sbuf ) {
     rtems_set_errno_and_return_minus_one( EFAULT );
+  }
 
   /*
    *  Now process the stat() request.
@@ -62,10 +60,10 @@ int fstat(
    *  Zero out the stat structure so the various support
    *  versions of stat don't have to.
    */
-  memset( sbuf, 0, sizeof(struct stat) );
+  memset( sbuf, 0, sizeof( struct stat ) );
 
-  rv = (*iop->pathinfo.handlers->fstat_h)( &iop->pathinfo, sbuf );
-  if (rv == 0 && !rtems_libio_iop_is_open( iop ) ) {
+  rv = ( *iop->pathinfo.handlers->fstat_h )( &iop->pathinfo, sbuf );
+  if ( rv == 0 && !rtems_libio_iop_is_open( iop ) ) {
     errno = EBADF;
     rv = -1;
   }
@@ -79,15 +77,11 @@ int fstat(
  *  This is the Newlib dependent reentrant version of fstat().
  */
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE_FSTAT_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE_FSTAT_R )
 
 #include <reent.h>
 
-int _fstat_r(
-  struct _reent *ptr RTEMS_UNUSED,
-  int            fd,
-  struct stat   *buf
-)
+int _fstat_r( struct _reent *ptr RTEMS_UNUSED, int fd, struct stat *buf )
 {
   return fstat( fd, buf );
 }

@@ -38,15 +38,11 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__REALLOC_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__REALLOC_R )
 #include <sys/reent.h>
 #include <stdlib.h>
 
-void *_realloc_r(
-  struct _reent *ignored,
-  void          *ptr,
-  size_t         size
-)
+void *_realloc_r( struct _reent *ignored, void *ptr, size_t size )
 {
   (void) ignored;
   return realloc( ptr, size );

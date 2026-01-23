@@ -33,7 +33,7 @@
 
 void *rtems_heap_null_extend(
   Heap_Control *heap RTEMS_UNUSED,
-  size_t alloc_size RTEMS_UNUSED
+  size_t alloc_size  RTEMS_UNUSED
 )
 {
   return NULL;

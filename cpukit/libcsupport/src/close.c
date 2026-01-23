@@ -40,9 +40,7 @@
 
 #include <rtems/libio_.h>
 
-int close(
-  int  fd
-)
+int close( int fd )
 {
   rtems_libio_t *iop;
   int            rc;
@@ -54,7 +52,7 @@ int close(
   LIBIO_GET_IOP( fd, iop );
 
   while ( true ) {
-    unsigned int   flags;
+    unsigned int flags;
     unsigned int desired;
     bool         success;
     flags = rtems_libio_iop_flags( iop );
@@ -87,13 +85,15 @@ int close(
       break;
     }
 
-    if ( ( flags & LIBIO_FLAGS_REFERENCE_MASK ) != LIBIO_FLAGS_REFERENCE_INC ) {
+    if (
+      ( flags & LIBIO_FLAGS_REFERENCE_MASK ) != LIBIO_FLAGS_REFERENCE_INC
+    ) {
       rtems_libio_iop_drop( iop );
       rtems_set_errno_and_return_minus_one( EBUSY );
     }
   }
 
-  rc = (*iop->pathinfo.handlers->close_h)( iop );
+  rc = ( *iop->pathinfo.handlers->close_h )( iop );
 
   rtems_libio_iop_drop( iop );
 
@@ -106,14 +106,11 @@ int close(
  *  This is the Newlib dependent reentrant version of close().
  */
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__CLOSE_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__CLOSE_R )
 
 #include <reent.h>
 
-int _close_r(
-  struct _reent *ptr RTEMS_UNUSED,
-  int            fd
-)
+int _close_r( struct _reent *ptr RTEMS_UNUSED, int fd )
 {
   return close( fd );
 }

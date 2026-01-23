@@ -40,7 +40,7 @@
 #include <rtems/bspIo.h>
 #include <rtems.h>
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE___ASSERT_FUNC)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE___ASSERT_FUNC )
 #include <assert.h>
 
 /**
@@ -61,12 +61,13 @@ void __assert_func(
     .failed_expression = failedexpr
   };
 
-  printk("assertion \"%s\" failed: file \"%s\", line %d%s%s\n",
+  printk(
+    "assertion \"%s\" failed: file \"%s\", line %d%s%s\n",
     failedexpr,
     file,
     line,
-    (func) ? ", function: " : "",
-    (func) ? func : ""
+    ( func ) ? ", function: " : "",
+    ( func ) ? func : ""
   );
   rtems_fatal( RTEMS_FATAL_SOURCE_ASSERT, (rtems_fatal_code) &assert_context );
 }

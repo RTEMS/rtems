@@ -42,7 +42,7 @@ void *rtems_cache_aligned_malloc( size_t nbytes )
     /* Assume that the cache line size is a power of two */
     size_t m = line_size - 1;
 
-    nbytes = (nbytes + m) & ~m;
+    nbytes = ( nbytes + m ) & ~m;
   }
 
   return rtems_heap_allocate_aligned_with_boundary( nbytes, line_size, 0 );

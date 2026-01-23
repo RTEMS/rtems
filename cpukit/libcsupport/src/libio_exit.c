@@ -39,9 +39,9 @@
 
 #include <rtems/libio.h>
 
-void rtems_libio_exit(void)
+void rtems_libio_exit( void )
 {
-  (void)close(0);
-  (void)close(1);
-  (void)close(2);
+  (void) close( 0 );
+  (void) close( 1 );
+  (void) close( 2 );
 }

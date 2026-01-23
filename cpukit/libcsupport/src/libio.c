@@ -62,31 +62,31 @@
 #undef ACCEPT_O_NDELAY_ALIAS
 
 static const rtems_assoc_t access_modes_assoc[] = {
-  { "READ",       LIBIO_FLAGS_READ,  O_RDONLY },
-  { "WRITE",      LIBIO_FLAGS_WRITE, O_WRONLY },
+  { "READ", LIBIO_FLAGS_READ, O_RDONLY },
+  { "WRITE", LIBIO_FLAGS_WRITE, O_WRONLY },
   { "READ/WRITE", LIBIO_FLAGS_READ_WRITE, O_RDWR },
   { 0, 0, 0 },
 };
 
 static const rtems_assoc_t status_flags_assoc[] = {
 #ifdef ACCEPT_O_NDELAY_ALIAS
-  { "NO DELAY",  LIBIO_FLAGS_NO_DELAY,  O_NDELAY },
+  { "NO DELAY", LIBIO_FLAGS_NO_DELAY, O_NDELAY },
 #endif
-  { "NONBLOCK",  LIBIO_FLAGS_NO_DELAY,  O_NONBLOCK },
-  { "APPEND",    LIBIO_FLAGS_APPEND,    O_APPEND },
+  { "NONBLOCK", LIBIO_FLAGS_NO_DELAY, O_NONBLOCK },
+  { "APPEND", LIBIO_FLAGS_APPEND, O_APPEND },
   { 0, 0, 0 },
 };
 
 unsigned int rtems_libio_from_fcntl_flags( int fcntl_flags )
 {
-  unsigned int   flags = 0;
-  uint32_t   access_modes;
+  unsigned int flags = 0;
+  uint32_t     access_modes;
 
   /*
    * Access mode is a small integer
    */
 
-  access_modes = (unsigned int) (fcntl_flags & O_ACCMODE);
+  access_modes = (unsigned int) ( fcntl_flags & O_ACCMODE );
   fcntl_flags &= ~O_ACCMODE;
   flags = rtems_assoc_local_by_remote( access_modes_assoc, access_modes );
 
@@ -94,7 +94,7 @@ unsigned int rtems_libio_from_fcntl_flags( int fcntl_flags )
    * Everything else is single bits
    */
 
-  flags |= (unsigned int ) rtems_assoc_local_by_remote_bitfield(
+  flags |= (unsigned int) rtems_assoc_local_by_remote_bitfield(
     status_flags_assoc,
     (uint32_t) fcntl_flags
   );
@@ -106,19 +106,19 @@ int rtems_libio_to_fcntl_flags( unsigned int flags )
 {
   int fcntl_flags = 0;
 
-  if ( (flags & LIBIO_FLAGS_READ_WRITE) == LIBIO_FLAGS_READ_WRITE ) {
+  if ( ( flags & LIBIO_FLAGS_READ_WRITE ) == LIBIO_FLAGS_READ_WRITE ) {
     fcntl_flags |= O_RDWR;
-  } else if ( (flags & LIBIO_FLAGS_READ) == LIBIO_FLAGS_READ) {
+  } else if ( ( flags & LIBIO_FLAGS_READ ) == LIBIO_FLAGS_READ ) {
     fcntl_flags |= O_RDONLY;
-  } else if ( (flags & LIBIO_FLAGS_WRITE) == LIBIO_FLAGS_WRITE) {
+  } else if ( ( flags & LIBIO_FLAGS_WRITE ) == LIBIO_FLAGS_WRITE ) {
     fcntl_flags |= O_WRONLY;
   }
 
-  if ( (flags & LIBIO_FLAGS_NO_DELAY) == LIBIO_FLAGS_NO_DELAY ) {
+  if ( ( flags & LIBIO_FLAGS_NO_DELAY ) == LIBIO_FLAGS_NO_DELAY ) {
     fcntl_flags |= O_NONBLOCK;
   }
 
-  if ( (flags & LIBIO_FLAGS_APPEND) == LIBIO_FLAGS_APPEND ) {
+  if ( ( flags & LIBIO_FLAGS_APPEND ) == LIBIO_FLAGS_APPEND ) {
     fcntl_flags |= O_APPEND;
   }
 
@@ -151,9 +151,7 @@ rtems_libio_t *rtems_libio_allocate( void )
   return iop;
 }
 
-void rtems_libio_free_iop(
-  rtems_libio_t *iop
-)
+void rtems_libio_free_iop( rtems_libio_t *iop )
 {
   size_t zero;
 
@@ -181,18 +179,16 @@ void rtems_libio_free_iop(
   rtems_libio_unlock();
 }
 
-int rtems_libio_count_open_iops(
-  void
-)
+int rtems_libio_count_open_iops( void )
 {
   int open = 0;
   uint32_t i;
   /*
    * No locking needed to count the open iops
    */
-  for (i = 0; i < rtems_libio_number_iops; ++i) {
+  for ( i = 0; i < rtems_libio_number_iops; ++i ) {
     const rtems_libio_t *iop = &rtems_libio_iops[ i ];
-    if (( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_OPEN ) != 0 ) {
+    if ( ( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_OPEN ) != 0 ) {
       ++open;
     }
   }

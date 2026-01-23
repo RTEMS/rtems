@@ -31,12 +31,12 @@
 /**
  *  Kernel printf function requiring minimal infrastructure.
  */
-int printk(const char *fmt, ...)
+int printk( const char *fmt, ... )
 {
-  va_list ap;       /* points to each unnamed argument in turn */
+  va_list ap; /* points to each unnamed argument in turn */
   int     len;
-  va_start(ap, fmt); /* make ap point to 1st unnamed arg */
-  len = vprintk(fmt, ap);
-  va_end(ap);        /* clean up when done */
+  va_start( ap, fmt ); /* make ap point to 1st unnamed arg */
+  len = vprintk( fmt, ap );
+  va_end( ap ); /* clean up when done */
   return len;
 }

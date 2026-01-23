@@ -44,27 +44,28 @@
 
 int rtems_filesystem_chmod(
   const rtems_filesystem_location_info_t *loc,
-  mode_t mode
+  mode_t                                  mode
 )
 {
   const rtems_filesystem_mount_table_entry_t *mt_entry = loc->mt_entry;
-  int rv;
+  int                                         rv;
 
   if ( mt_entry->writeable || rtems_filesystem_location_is_null( loc ) ) {
     struct stat st;
 
-    memset( &st, 0, sizeof(st) );
+    memset( &st, 0, sizeof( st ) );
 
-    rv = (*loc->handlers->fstat_h)( loc, &st );
+    rv = ( *loc->handlers->fstat_h )( loc, &st );
     if ( rv == 0 ) {
       uid_t uid = geteuid();
 
       if ( uid == 0 || st.st_uid == uid ) {
-        mode_t mask = S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX;
+        mode_t mask = S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID |
+                      S_ISVTX;
 
-        mode = (st.st_mode & ~mask) | (mode & mask);
+        mode = ( st.st_mode & ~mask ) | ( mode & mask );
 
-        rv = (*mt_entry->ops->fchmod_h)( loc, mode );
+        rv = ( *mt_entry->ops->fchmod_h )( loc, mode );
       } else {
         errno = EPERM;
         rv = -1;
@@ -83,7 +84,7 @@ int rtems_filesystem_chmod(
  */
 int fchmod( int fd, mode_t mode )
 {
-  int rv;
+  int            rv;
   rtems_libio_t *iop;
 
   LIBIO_GET_IOP( fd, iop );

@@ -46,13 +46,10 @@
 /**
  *  POSIX 1003.1b - 5.7.1 - Configurable Pathname Varables
  */
-long fpathconf(
-  int   fd,
-  int   name
-)
+long fpathconf( int fd, int name )
 {
-  long                                    return_value;
-  rtems_libio_t                          *iop;
+  long                                         return_value;
+  rtems_libio_t                               *iop;
   const rtems_filesystem_limits_and_options_t *the_limits;
 
   LIBIO_GET_IOP( fd, iop );

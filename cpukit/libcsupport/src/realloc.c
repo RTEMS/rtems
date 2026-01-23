@@ -67,10 +67,10 @@ static void *new_alloc( void *old_ptr, size_t new_size, size_t old_size )
 
 void *realloc( void *ptr, size_t size )
 {
-  Heap_Control       *heap;
-  Heap_Resize_status  status;
-  uintptr_t           old_size;
-  uintptr_t           avail_size;
+  Heap_Control      *heap;
+  Heap_Resize_status status;
+  uintptr_t          old_size;
+  uintptr_t          avail_size;
 
   if ( ptr == NULL ) {
     return malloc( size );

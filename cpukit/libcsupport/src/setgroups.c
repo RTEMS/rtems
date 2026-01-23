@@ -27,13 +27,13 @@
 
 #include <unistd.h>
 
-int setgroups(int size, const gid_t *list)
+int setgroups( int size, const gid_t *list )
 {
-	/* FIXME: Implement this function properly. Currently it only returns a
+  /* FIXME: Implement this function properly. Currently it only returns a
 	 * success. */
 
-	(void) size;
-	(void) list;
+  (void) size;
+  (void) list;
 
-	return 0;
+  return 0;
 }

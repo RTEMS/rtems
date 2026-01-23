@@ -41,10 +41,7 @@
 typedef struct {
   rtems_chain_node node;
 
-  enum {
-    ACTION_WRITE,
-    ACTION_DRAIN
-  } action_kind;
+  enum { ACTION_WRITE, ACTION_DRAIN } action_kind;
 
   union {
     size_t   size;
@@ -81,8 +78,8 @@ static printer_task_buffer *printer_task_get_buffer(
 {
   (void) ctx;
 
-  rtems_interrupt_lock_context  lock_context;
-  printer_task_buffer          *buffer;
+  rtems_interrupt_lock_context lock_context;
+  printer_task_buffer         *buffer;
 
   printer_task_acquire( ctx, &lock_context );
   buffer = (printer_task_buffer *) rtems_chain_get_unprotected( chain );
@@ -162,10 +159,10 @@ static void printer_task( rtems_task_argument arg )
           printer_task_append_buffer( ctx, &ctx->free_buffers, buffer );
           break;
         case ACTION_DRAIN:
-          err = fsync(fd);
-          _Assert_Unused_variable_equals(err, 0);
+          err = fsync( fd );
+          _Assert_Unused_variable_equals( err, 0 );
           sc = rtems_event_transient_send( buffer->action_data.task );
-          _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
+          _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
           break;
       }
     }
@@ -184,7 +181,7 @@ int rtems_print_printer_task(
   }
 
   sc = rtems_task_create(
-    rtems_build_name( 'P', 'R', 'N', 'T'),
+    rtems_build_name( 'P', 'R', 'N', 'T' ),
     ctx->task_priority,
     ctx->task_stack_size,
     RTEMS_DEFAULT_MODES,
@@ -209,7 +206,7 @@ int rtems_print_printer_task(
   printer->printer = printer_task_printer;
 
   sc = rtems_task_start( ctx->task, printer_task, (rtems_task_argument) ctx );
-  _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
   return 0;
 }

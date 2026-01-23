@@ -44,24 +44,24 @@
 
 int rtems_filesystem_chown(
   const rtems_filesystem_location_info_t *loc,
-  uid_t owner,
-  gid_t group
+  uid_t                                   owner,
+  gid_t                                   group
 )
 {
   const rtems_filesystem_mount_table_entry_t *mt_entry = loc->mt_entry;
-  int rv;
+  int                                         rv;
 
   if ( mt_entry->writeable || rtems_filesystem_location_is_null( loc ) ) {
     struct stat st;
 
-    memset( &st, 0, sizeof(st) );
+    memset( &st, 0, sizeof( st ) );
 
-    rv = (*loc->handlers->fstat_h)( loc, &st );
+    rv = ( *loc->handlers->fstat_h )( loc, &st );
     if ( rv == 0 ) {
       uid_t uid = geteuid();
 
       if ( uid == 0 || st.st_uid == uid ) {
-        rv = (*mt_entry->ops->chown_h)( loc, owner, group );
+        rv = ( *mt_entry->ops->chown_h )( loc, owner, group );
       } else {
         errno = EPERM;
         rv = -1;
@@ -80,7 +80,7 @@ int rtems_filesystem_chown(
  */
 int fchown( int fd, uid_t owner, gid_t group )
 {
-  int rv;
+  int            rv;
   rtems_libio_t *iop;
 
   LIBIO_GET_IOP( fd, iop );

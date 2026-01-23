@@ -53,11 +53,7 @@ static ssize_t writev_adapter(
   return ( *iop->pathinfo.handlers->writev_h )( iop, iov, iovcnt, total );
 }
 
-ssize_t writev(
-  int                 fd,
-  const struct iovec *iov,
-  int                 iovcnt
-)
+ssize_t writev( int fd, const struct iovec *iov, int iovcnt )
 {
   return rtems_libio_iovec_eval(
     fd,

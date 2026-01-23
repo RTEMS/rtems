@@ -37,17 +37,17 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE_ISSETUGID)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE_ISSETUGID )
 
 /*
  *  Prototype to avoid warnings
  */
-int issetugid (void);
+int issetugid( void );
 
 /**
  *  Dummy version of BSD routine
  */
-int issetugid (void)
+int issetugid( void )
 {
   return 0;
 }

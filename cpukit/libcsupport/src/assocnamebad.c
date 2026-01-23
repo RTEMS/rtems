@@ -43,23 +43,27 @@
 #include <rtems/assoc.h>
 
 #include <inttypes.h>
-#include <stdio.h>              /* sprintf */
+#include <stdio.h> /* sprintf */
 
-const char *
-rtems_assoc_name_bad(
+const char *rtems_assoc_name_bad(
 #ifdef RTEMS_DEBUG
-    uint32_t   bad_value
+  uint32_t bad_value
 #else
-    uint32_t   bad_value RTEMS_UNUSED
+  uint32_t bad_value RTEMS_UNUSED
 #endif
 )
 {
 #ifdef RTEMS_DEBUG
-    static char bad_buffer[32];
+  static char bad_buffer[ 32 ];
 
-    sprintf(bad_buffer, "< %" PRId32 "[0x%" PRIx32 " ] >", bad_value, bad_value);
+  sprintf(
+    bad_buffer,
+    "< %" PRId32 "[0x%" PRIx32 " ] >",
+    bad_value,
+    bad_value
+  );
 #else
-    static char bad_buffer[40] = "<assocnamebad.c: : BAD NAME>";
+  static char bad_buffer[ 40 ] = "<assocnamebad.c: : BAD NAME>";
 #endif
-    return bad_buffer;
+  return bad_buffer;
 }

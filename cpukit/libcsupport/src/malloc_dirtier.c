@@ -44,10 +44,7 @@
 #include <errno.h>
 #include <string.h>
 
-void rtems_malloc_dirty_memory(
-  void   *start,
-  size_t  size
-)
+void rtems_malloc_dirty_memory( void *start, size_t size )
 {
-  (void) memset(start, 0xCF, size);
+  (void) memset( start, 0xCF, size );
 }

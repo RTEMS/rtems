@@ -51,7 +51,7 @@ RTEMS_INTERRUPT_LOCK_DEFINE( static, _Malloc_GC_lock, "Malloc GC" )
 static void *_Malloc_Get_deferred_free( void )
 {
   rtems_interrupt_lock_context lock_context;
-  void *p;
+  void                        *p;
 
   rtems_interrupt_lock_acquire( &_Malloc_GC_lock, &lock_context );
   p = rtems_chain_get_unprotected( &_Malloc_GC_list );
@@ -75,7 +75,7 @@ void _Malloc_Process_deferred_frees( void )
 static void _Malloc_Deferred_free( void *p )
 {
   rtems_interrupt_lock_context lock_context;
-  rtems_chain_node *node;
+  rtems_chain_node            *node;
 
   node = (rtems_chain_node *) p;
 
@@ -85,23 +85,25 @@ static void _Malloc_Deferred_free( void *p )
   rtems_interrupt_lock_release( &_Malloc_GC_lock, &lock_context );
 }
 
-void free(
-  void *ptr
-)
+void free( void *ptr )
 {
-  if ( !ptr )
+  if ( !ptr ) {
     return;
+  }
 
   /*
    *  Do not attempt to free memory if in a critical section or ISR.
    */
   if ( _Malloc_System_state() != MALLOC_SYSTEM_STATE_NORMAL ) {
-      _Malloc_Deferred_free(ptr);
-      return;
+    _Malloc_Deferred_free( ptr );
+    return;
   }
 
   if ( !_Protected_heap_Free( RTEMS_Malloc_Heap, ptr ) ) {
-    rtems_fatal( RTEMS_FATAL_SOURCE_INVALID_HEAP_FREE, (rtems_fatal_code) ptr );
+    rtems_fatal(
+      RTEMS_FATAL_SOURCE_INVALID_HEAP_FREE,
+      (rtems_fatal_code) ptr
+    );
   }
 }
 #endif

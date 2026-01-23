@@ -48,27 +48,23 @@
 
 #include <unistd.h>
 
-int ioctl(
-  int  fd,
-  ioctl_command_t  command,
-  ...
-)
+int ioctl( int fd, ioctl_command_t command, ... )
 {
-  va_list            ap;
-  int                rc;
-  rtems_libio_t     *iop;
-  void              *buffer;
+  va_list        ap;
+  int            rc;
+  rtems_libio_t *iop;
+  void          *buffer;
 
   LIBIO_GET_IOP( fd, iop );
 
-  va_start(ap, command);
+  va_start( ap, command );
 
-  buffer = va_arg(ap, void *);
+  buffer = va_arg( ap, void * );
 
   /*
    *  Now process the ioctl().
    */
-  rc = (*iop->pathinfo.handlers->ioctl_h)( iop, command, buffer );
+  rc = ( *iop->pathinfo.handlers->ioctl_h )( iop, command, buffer );
 
   va_end( ap );
   rtems_libio_iop_drop( iop );

@@ -42,7 +42,7 @@
 
 #include <stdlib.h>
 
-bool malloc_walk(int source, bool printf_enabled)
+bool malloc_walk( int source, bool printf_enabled )
 {
   return _Protected_heap_Walk( RTEMS_Malloc_Heap, source, printf_enabled );
 }

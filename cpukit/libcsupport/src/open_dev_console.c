@@ -45,7 +45,7 @@
 /*
  *  This is a replaceable stub which opens the console, if present.
  */
-void rtems_libio_post_driver(void)
+void rtems_libio_post_driver( void )
 {
   int fd = 0;
   /*
@@ -77,6 +77,5 @@ void rtems_libio_post_driver(void)
     _Internal_error( INTERNAL_ERROR_LIBIO_STDERR_FD_OPEN_FAILED );
   }
 
-  atexit(rtems_libio_exit);
+  atexit( rtems_libio_exit );
 }
-

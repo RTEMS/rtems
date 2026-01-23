@@ -38,9 +38,7 @@
 #include <unistd.h>
 #include <rtems/userenv.h>
 
-int setgid(
-  gid_t  gid
-)
+int setgid( gid_t gid )
 {
   _POSIX_types_Gid = gid;
   return 0;

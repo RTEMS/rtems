@@ -40,15 +40,15 @@
 
 int statvfs( const char *__restrict path, struct statvfs *__restrict buf )
 {
-  int rv = 0;
+  int                                  rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_FOLLOW_LINK;
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+  int                                  eval_flags = RTEMS_FS_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t
+    *currentloc = rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
   memset( buf, 0, sizeof( *buf ) );
 
-  rv = (*currentloc->mt_entry->ops->statvfs_h)( currentloc, buf );
+  rv = ( *currentloc->mt_entry->ops->statvfs_h )( currentloc, buf );
 
   rtems_filesystem_eval_path_cleanup( &ctx );
 

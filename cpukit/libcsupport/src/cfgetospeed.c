@@ -38,7 +38,7 @@
 #endif
 
 #include <rtems.h>
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -48,9 +48,7 @@
 /**
  *  POSIX 1003.1b 7.1.3 - Baud Rate Functions
  */
-speed_t cfgetospeed(
-  const struct termios *tp
-)
+speed_t cfgetospeed( const struct termios *tp )
 {
   return tp->c_ospeed;
 }

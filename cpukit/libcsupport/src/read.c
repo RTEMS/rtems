@@ -43,11 +43,7 @@
 /**
  *  POSIX 1003.1b 6.4.1 - Read From a File
  */
-ssize_t read(
-  int         fd,
-  void       *buffer,
-  size_t      count
-)
+ssize_t read( int fd, void *buffer, size_t count )
 {
   rtems_libio_t *iop;
   ssize_t        n;
@@ -60,12 +56,12 @@ ssize_t read(
   /*
    *  Now process the read().
    */
-  n = (*iop->pathinfo.handlers->read_h)( iop, buffer, count );
+  n = ( *iop->pathinfo.handlers->read_h )( iop, buffer, count );
   rtems_libio_iop_drop( iop );
   return n;
 }
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__READ_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__READ_R )
 
 #include <reent.h>
 
@@ -74,9 +70,9 @@ ssize_t read(
  */
 ssize_t _read_r(
   struct _reent *ptr RTEMS_UNUSED,
-  int            fd,
-  void          *buf,
-  size_t         nbytes
+  int                fd,
+  void              *buf,
+  size_t             nbytes
 )
 {
   return read( fd, buf, nbytes );

@@ -46,11 +46,11 @@
  */
 int chmod( const char *path, mode_t mode )
 {
-  int rv = 0;
+  int                                  rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_FOLLOW_LINK;
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+  int                                  eval_flags = RTEMS_FS_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t
+    *currentloc = rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
   rv = rtems_filesystem_chmod( currentloc, mode );
 

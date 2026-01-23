@@ -42,5 +42,5 @@ clock_t clock( void )
 
   _Timecounter_Microuptime( &tv );
 
-  return (clock_t) (tv.tv_sec - 1) * CLOCKS_PER_SEC + tv.tv_usec;
+  return (clock_t) ( tv.tv_sec - 1 ) * CLOCKS_PER_SEC + tv.tv_usec;
 }

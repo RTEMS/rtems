@@ -42,8 +42,7 @@
 #include <rtems.h>
 #include <rtems/assoc.h>
 
-#include <string.h>             /* strcat, strcmp */
-
+#include <string.h> /* strcat, strcmp */
 
 const rtems_assoc_t *rtems_assoc_ptr_by_name(
   const rtems_assoc_t *ap,
@@ -52,12 +51,15 @@ const rtems_assoc_t *rtems_assoc_ptr_by_name(
 {
   const rtems_assoc_t *default_ap = 0;
 
-  if (rtems_assoc_is_default(ap))
+  if ( rtems_assoc_is_default( ap ) ) {
     default_ap = ap++;
+  }
 
-  for ( ; ap->name; ap++)
-    if (strcmp(ap->name, name) == 0)
-	return ap;
+  for ( ; ap->name; ap++ ) {
+    if ( strcmp( ap->name, name ) == 0 ) {
+      return ap;
+    }
+  }
 
   return default_ap;
 }

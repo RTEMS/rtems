@@ -22,7 +22,7 @@
 
 #include <rtems.h>
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <sys/reent.h>
 #include <stdlib.h>
@@ -34,25 +34,25 @@
 #ifndef _REENT_THREAD_LOCAL
 bool newlib_create_hook(
   rtems_tcb *current_task RTEMS_UNUSED,
-  rtems_tcb *creating_task
+  rtems_tcb              *creating_task
 )
 {
-  _REENT_INIT_PTR((creating_task->libc_reent)); /* GCC extension: structure constants */
+  _REENT_INIT_PTR(
+    ( creating_task->libc_reent )
+  ); /* GCC extension: structure constants */
 
   return true;
 }
 #endif
 
-void newlib_terminate_hook(
-  rtems_tcb *current_task
-)
+void newlib_terminate_hook( rtems_tcb *current_task )
 {
 #ifdef _REENT_THREAD_LOCAL
   (void) current_task;
 
-  _reclaim_reent(NULL);
+  _reclaim_reent( NULL );
 #else
-  _reclaim_reent(current_task->libc_reent);
+  _reclaim_reent( current_task->libc_reent );
 #endif
 }
 

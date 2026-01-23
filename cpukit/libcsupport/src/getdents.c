@@ -46,11 +46,7 @@
 /*
  *  Prototypes to avoid warnings
  */
-int getdents(
-  int   dd_fd,
-  char *dd_buf,
-  int   dd_len
-);
+int getdents( int dd_fd, char *dd_buf, int dd_len );
 
 /**
  *  SVR4 and SVID extension required by Newlib readdir() family.
@@ -59,15 +55,11 @@ int getdents(
  *  the current directory position index. These entries will be placed in
  *  character array pointed to by -dd_buf-
  */
-int getdents(
-  int   dd_fd,
-  char *dd_buf,
-  int   dd_len
-)
+int getdents( int dd_fd, char *dd_buf, int dd_len )
 {
   rtems_libio_t *iop;
-  mode_t type;
-  int result;
+  mode_t         type;
+  int            result;
 
   /*
    *  Get the file control block structure associated with the file descriptor
@@ -87,7 +79,7 @@ int getdents(
    *  Return the number of bytes that were actually transfered as a result
    *  of the read attempt.
    */
-  result = (*iop->pathinfo.handlers->read_h)( iop, dd_buf, dd_len  );
+  result = ( *iop->pathinfo.handlers->read_h )( iop, dd_buf, dd_len );
   rtems_libio_iop_drop( iop );
   return result;
 }

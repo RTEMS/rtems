@@ -39,14 +39,14 @@
 
 #include <rtems/termiostypes.h>
 
-tcflag_t rtems_termios_number_to_baud(rtems_termios_baud_t baud)
+tcflag_t rtems_termios_number_to_baud( rtems_termios_baud_t baud )
 {
   uint32_t remote_value = rtems_assoc_remote_by_local(
     rtems_termios_baud_table,
     baud
   );
 
-  if (remote_value == 0) {
+  if ( remote_value == 0 ) {
     remote_value = B0;
   }
 

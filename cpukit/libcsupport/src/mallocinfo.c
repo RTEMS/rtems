@@ -40,12 +40,11 @@
 #include <rtems/malloc.h>
 #include <rtems/score/protectedheap.h>
 
-int malloc_info(
-  Heap_Information_block *the_info
-)
+int malloc_info( Heap_Information_block *the_info )
 {
-  if ( !the_info )
+  if ( !the_info ) {
     return -1;
+  }
 
   _Protected_heap_Get_information( RTEMS_Malloc_Heap, the_info );
   return 0;

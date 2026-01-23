@@ -38,7 +38,7 @@
 #endif
 
 #include <rtems.h>
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -51,9 +51,7 @@
 /**
  *  POSIX 1003.1b 7.2.4 - Set Foreground Process Group ID
  */
-int tcsetpgrp(
-  int fd RTEMS_UNUSED,
-  pid_t pid RTEMS_UNUSED )
+int tcsetpgrp( int fd RTEMS_UNUSED, pid_t pid RTEMS_UNUSED )
 {
   return 0;
 }

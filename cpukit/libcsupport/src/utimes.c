@@ -47,26 +47,23 @@
  *
  *  Set file access and modification times
  */
-int utimes(
-  const char           *path,
-  const struct timeval  times[2]
-)
+int utimes( const char *path, const struct timeval times[ 2 ] )
 {
-  struct timespec new_times[2];
+  struct timespec new_times[ 2 ];
 
   if ( times == NULL ) {
-    return utimensat( AT_FDCWD, path, NULL , 0 );
+    return utimensat( AT_FDCWD, path, NULL, 0 );
   }
 
   _Timespec_Set(
-    &new_times[0],
-    times[0].tv_sec,
-    times[0].tv_usec * TOD_NANOSECONDS_PER_MICROSECOND
+    &new_times[ 0 ],
+    times[ 0 ].tv_sec,
+    times[ 0 ].tv_usec * TOD_NANOSECONDS_PER_MICROSECOND
   );
   _Timespec_Set(
-    &new_times[1],
-    times[1].tv_sec,
-    times[1].tv_usec * TOD_NANOSECONDS_PER_MICROSECOND
+    &new_times[ 1 ],
+    times[ 1 ].tv_sec,
+    times[ 1 ].tv_usec * TOD_NANOSECONDS_PER_MICROSECOND
   );
 
   return utimensat( AT_FDCWD, path, new_times, 0 );

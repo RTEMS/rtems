@@ -41,9 +41,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int dup(
-  int fildes
-)
+int dup( int fildes )
 {
   return fcntl( fildes, F_DUPFD, 0 );
 }

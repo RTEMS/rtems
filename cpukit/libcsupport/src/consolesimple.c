@@ -75,11 +75,11 @@ static const rtems_filesystem_file_handlers_r _Console_simple_Handlers = {
 };
 
 static const IMFS_node_control
-_Console_simple_Node_control = IMFS_NODE_CONTROL_INITIALIZER(
-  &_Console_simple_Handlers,
-  IMFS_node_initialize_default,
-  IMFS_do_nothing_destroy
-);
+  _Console_simple_Node_control = IMFS_NODE_CONTROL_INITIALIZER(
+    &_Console_simple_Handlers,
+    IMFS_node_initialize_default,
+    IMFS_do_nothing_destroy
+  );
 
 static const char _Console_simple_Name[] = "console";
 

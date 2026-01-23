@@ -31,14 +31,11 @@
 
 #include <rtems/termiostypes.h>
 
-void rtems_termios_set_best_baud(
-  struct termios *term,
-  uint32_t        baud
-)
+void rtems_termios_set_best_baud( struct termios *term, uint32_t baud )
 {
   const rtems_assoc_t *current = &rtems_termios_baud_table[ 0 ];
   const rtems_assoc_t *last = current;
-  speed_t spd;
+  speed_t              spd;
 
   while ( current->name != NULL && current->local_value < baud ) {
     last = current;
@@ -46,7 +43,8 @@ void rtems_termios_set_best_baud(
   }
 
   if ( current->name != NULL ) {
-    uint32_t mid = (last->local_value + current->local_value) / UINT32_C( 2 );
+    uint32_t mid = ( last->local_value + current->local_value ) /
+                   UINT32_C( 2 );
 
     spd = baud <= mid ? last->remote_value : current->remote_value;
   } else {

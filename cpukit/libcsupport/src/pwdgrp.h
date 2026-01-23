@@ -36,20 +36,20 @@
 extern "C" {
 #endif /* __cplusplus */
 
-void _libcsupport_pwdgrp_init(void);
+void _libcsupport_pwdgrp_init( void );
 
 int _libcsupport_scanpw(
-  FILE *fp,
+  FILE          *fp,
   struct passwd *pwd,
-  char *buffer,
-  size_t bufsize
+  char          *buffer,
+  size_t         bufsize
 );
 
 int _libcsupport_scangr(
-  FILE *fp,
+  FILE         *fp,
   struct group *grp,
-  char *buffer,
-  size_t bufsize
+  char         *buffer,
+  size_t        bufsize
 );
 
 #ifdef __cplusplus

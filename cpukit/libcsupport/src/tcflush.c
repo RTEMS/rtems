@@ -47,18 +47,18 @@ int tcflush( int fd, int which )
 {
   int com;
 
-  switch (which) {
-  case TCIFLUSH:
-    com = FREAD;
-    break;
-  case TCOFLUSH:
-    com = FWRITE;
-    break;
-  case TCIOFLUSH:
-    com = FREAD | FWRITE;
-    break;
-  default:
-    rtems_set_errno_and_return_minus_one( EINVAL );
+  switch ( which ) {
+    case TCIFLUSH:
+      com = FREAD;
+      break;
+    case TCOFLUSH:
+      com = FWRITE;
+      break;
+    case TCIOFLUSH:
+      com = FREAD | FWRITE;
+      break;
+    default:
+      rtems_set_errno_and_return_minus_one( EINVAL );
   }
   return ioctl( fd, TIOCFLUSH, &com );
 }

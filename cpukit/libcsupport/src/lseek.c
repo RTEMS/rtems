@@ -46,7 +46,7 @@ off_t lseek( int fd, off_t offset, int whence )
 
   LIBIO_GET_IOP( fd, iop );
 
-  rv = (*iop->pathinfo.handlers->lseek_h)( iop, offset, whence );
+  rv = ( *iop->pathinfo.handlers->lseek_h )( iop, offset, whence );
   rtems_libio_iop_drop( iop );
   return rv;
 }
@@ -57,15 +57,15 @@ off_t lseek( int fd, off_t offset, int whence )
  *  This is the Newlib dependent reentrant version of lseek().
  */
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__LSEEK_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__LSEEK_R )
 
 #include <reent.h>
 
 off_t _lseek_r(
   struct _reent *ptr RTEMS_UNUSED,
-  int            fd,
-  off_t          offset,
-  int            whence
+  int                fd,
+  off_t              offset,
+  int                whence
 )
 {
   return lseek( fd, offset, whence );

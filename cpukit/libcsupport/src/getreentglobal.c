@@ -12,11 +12,11 @@
 
 #include <rtems.h>
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 #include <sys/reent.h>
 
 #ifndef _REENT_THREAD_LOCAL
-struct _reent *__getreent(void)
+struct _reent *__getreent( void )
 {
   return _GLOBAL_REENT;
 }

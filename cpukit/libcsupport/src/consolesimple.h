@@ -25,8 +25,4 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-ssize_t _Console_simple_Read(
-  rtems_libio_t *iop,
-  void          *buffer,
-  size_t         count
-);
+ssize_t _Console_simple_Read( rtems_libio_t *iop, void *buffer, size_t count );

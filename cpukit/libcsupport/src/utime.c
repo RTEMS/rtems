@@ -47,19 +47,16 @@
  *
  *  Set file access and modification times
  */
-int utime(
-  const char *path,
-  const struct utimbuf *times
-)
+int utime( const char *path, const struct utimbuf *times )
 {
-  struct timespec new_times[2];
+  struct timespec new_times[ 2 ];
 
   if ( times == NULL ) {
-    return utimensat(AT_FDCWD, path, NULL, 0);
+    return utimensat( AT_FDCWD, path, NULL, 0 );
   }
 
-  _Timespec_Set(&new_times[0], times->actime, 0);
-  _Timespec_Set(&new_times[1], times->modtime, 0);
+  _Timespec_Set( &new_times[ 0 ], times->actime, 0 );
+  _Timespec_Set( &new_times[ 1 ], times->modtime, 0 );
 
-  return utimensat(AT_FDCWD, path, new_times, 0);
+  return utimensat( AT_FDCWD, path, new_times, 0 );
 }

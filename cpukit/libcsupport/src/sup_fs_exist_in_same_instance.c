@@ -46,8 +46,8 @@ int rtems_filesystem_location_exists_in_same_instance_as(
   int rv = -1;
 
   if (
-    !rtems_filesystem_location_is_null( a )
-      && !rtems_filesystem_location_is_null( b )
+    !rtems_filesystem_location_is_null( a ) &&
+    !rtems_filesystem_location_is_null( b )
   ) {
     if ( a->mt_entry == b->mt_entry ) {
       rv = 0;

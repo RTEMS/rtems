@@ -31,5 +31,5 @@
 
 #include <rtems/malloc.h>
 
-const rtems_heap_extend_handler rtems_malloc_extend_handler =
-  rtems_heap_null_extend;
+const rtems_heap_extend_handler
+  rtems_malloc_extend_handler = rtems_heap_null_extend;

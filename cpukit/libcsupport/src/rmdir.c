@@ -46,15 +46,14 @@
  */
 int rmdir( const char *path )
 {
-  int rv = 0;
+  int                                  rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_REJECT_TERMINAL_DOT;
+  int                              eval_flags = RTEMS_FS_REJECT_TERMINAL_DOT;
   rtems_filesystem_location_info_t parentloc;
-  int parent_eval_flags = RTEMS_FS_PERMS_WRITE
-    | RTEMS_FS_PERMS_EXEC
-    | RTEMS_FS_FOLLOW_LINK;
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_start_with_parent(
+  int parent_eval_flags = RTEMS_FS_PERMS_WRITE | RTEMS_FS_PERMS_EXEC |
+                          RTEMS_FS_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t
+    *currentloc = rtems_filesystem_eval_path_start_with_parent(
       &ctx,
       path,
       eval_flags,
@@ -66,7 +65,7 @@ int rmdir( const char *path )
 
   if ( S_ISDIR( type ) ) {
     if ( !rtems_filesystem_location_is_instance_root( currentloc ) ) {
-      rv = (*ops->rmnod_h)( &parentloc, currentloc );
+      rv = ( *ops->rmnod_h )( &parentloc, currentloc );
     } else {
       rtems_filesystem_eval_path_error( &ctx, EBUSY );
       rv = -1;

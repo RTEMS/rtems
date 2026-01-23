@@ -42,29 +42,30 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-int access(
-  const char *path,
-  int         amode
-)
+int access( const char *path, int amode )
 {
   struct stat statbuf;
 
-  if ( stat(path, &statbuf) )
+  if ( stat( path, &statbuf ) ) {
     return -1;
+  }
 
   if ( amode & R_OK ) {
-    if (!( statbuf.st_mode & S_IREAD ))
+    if ( !( statbuf.st_mode & S_IREAD ) ) {
       return -1;
+    }
   }
 
   if ( amode & W_OK ) {
-    if ( !( statbuf.st_mode & S_IWRITE ) )
+    if ( !( statbuf.st_mode & S_IWRITE ) ) {
       return -1;
+    }
   }
 
   if ( amode & X_OK ) {
-    if ( !( statbuf.st_mode & S_IEXEC ) )
+    if ( !( statbuf.st_mode & S_IEXEC ) ) {
       return -1;
+    }
   }
 
   return 0;

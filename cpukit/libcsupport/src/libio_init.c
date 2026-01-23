@@ -66,19 +66,18 @@ void **rtems_libio_iop_free_tail = &rtems_libio_iop_free_head;
 
 static void rtems_libio_init( void )
 {
-    uint32_t i;
-    rtems_libio_t *iop;
+  uint32_t       i;
+  rtems_libio_t *iop;
 
-    if (rtems_libio_number_iops > 0)
-    {
-        iop = rtems_libio_iop_free_head = &rtems_libio_iops[0];
-        for (i = 0 ; (i + 1) < rtems_libio_number_iops ; i++, iop++) {
-          rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_FREE );
-          iop->data1 = iop + 1;
-        }
-        iop->data1 = NULL;
-        rtems_libio_iop_free_tail = &iop->data1;
+  if ( rtems_libio_number_iops > 0 ) {
+    iop = rtems_libio_iop_free_head = &rtems_libio_iops[ 0 ];
+    for ( i = 0; ( i + 1 ) < rtems_libio_number_iops; i++, iop++ ) {
+      rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_FREE );
+      iop->data1 = iop + 1;
     }
+    iop->data1 = NULL;
+    rtems_libio_iop_free_tail = &iop->data1;
+  }
 }
 
 RTEMS_SYSINIT_ITEM(

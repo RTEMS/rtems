@@ -44,19 +44,22 @@
 /**
  *  POSIX 1003.1b - X.X.X - XXX
  */
-ssize_t readlink( const char *__restrict path, char *__restrict buf,
-                  size_t bufsize )
+ssize_t readlink(
+  const char *__restrict path,
+  char *__restrict buf,
+  size_t bufsize
+)
 {
-  ssize_t rv = 0;
+  ssize_t                              rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_FOLLOW_HARD_LINK;
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+  int                                  eval_flags = RTEMS_FS_FOLLOW_HARD_LINK;
+  const rtems_filesystem_location_info_t
+    *currentloc = rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
   const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
   mode_t type = rtems_filesystem_location_type( currentloc );
 
   if ( S_ISLNK( type ) ) {
-    rv = (*ops->readlink_h)( currentloc, buf, bufsize );
+    rv = ( *ops->readlink_h )( currentloc, buf, bufsize );
   } else {
     rtems_filesystem_eval_path_error( &ctx, EINVAL );
     rv = -1;

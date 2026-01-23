@@ -42,25 +42,19 @@
 #include <rtems/libio.h>
 
 int mount_and_make_target_path(
-  const char *source,
-  const char *target,
-  const char *filesystemtype,
+  const char                *source,
+  const char                *target,
+  const char                *filesystemtype,
   rtems_filesystem_options_t options,
-  const void *data
+  const void                *data
 )
 {
   int rv = -1;
 
-  if (target != NULL) {
-    rv = rtems_mkdir(target, S_IRWXU | S_IRWXG | S_IRWXO);
-    if (rv == 0) {
-      rv = mount(
-        source,
-        target,
-        filesystemtype,
-        options,
-        data
-      );
+  if ( target != NULL ) {
+    rv = rtems_mkdir( target, S_IRWXU | S_IRWXG | S_IRWXO );
+    if ( rv == 0 ) {
+      rv = mount( source, target, filesystemtype, options, data );
     }
   } else {
     errno = EINVAL;

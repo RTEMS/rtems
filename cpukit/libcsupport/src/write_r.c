@@ -47,15 +47,15 @@
  *  This is the Newlib dependent reentrant version of write().
  */
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <reent.h>
 
 _ssize_t _write_r(
   struct _reent *ptr RTEMS_UNUSED,
-  int            fd,
-  const void    *buf,
-  size_t         nbytes
+  int                fd,
+  const void        *buf,
+  size_t             nbytes
 )
 {
   return write( fd, buf, nbytes );

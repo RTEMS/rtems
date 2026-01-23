@@ -37,15 +37,11 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__CALLOC_R)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE__CALLOC_R )
 #include <sys/reent.h>
 #include <stdlib.h>
 
-void *_calloc_r(
-  struct _reent *ignored,
-  size_t         elements,
-  size_t         size
-)
+void *_calloc_r( struct _reent *ignored, size_t elements, size_t size )
 {
   (void) ignored;
   return calloc( elements, size );

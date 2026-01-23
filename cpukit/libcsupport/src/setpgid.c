@@ -44,10 +44,7 @@
 /**
  *  4.3.3 Set Process Group ID for Job Control, P1003.1b-1993, p. 89
  */
-int setpgid(
-  pid_t  pid,
-  pid_t  pgid
-)
+int setpgid( pid_t pid, pid_t pgid )
 {
   (void) pid;
   (void) pgid;

@@ -58,7 +58,7 @@ size_t rtems_assoc_32_to_string(
 
   len = 0;
 
-  for ( i = 0; i < pair_count ; ++i ) {
+  for ( i = 0; i < pair_count; ++i ) {
     const rtems_assoc_32_pair *p;
 
     p = &pairs[ i ];

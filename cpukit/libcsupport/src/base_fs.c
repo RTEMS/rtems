@@ -51,8 +51,8 @@
 void rtems_filesystem_initialize( void )
 {
   int rv = 0;
-  const rtems_filesystem_mount_configuration *root_config =
-    &rtems_filesystem_root_configuration;
+  const rtems_filesystem_mount_configuration
+    *root_config = &rtems_filesystem_root_configuration;
 
   rv = mount(
     root_config->source,
@@ -61,8 +61,9 @@ void rtems_filesystem_initialize( void )
     root_config->options,
     root_config->data
   );
-  if ( rv != 0 )
+  if ( rv != 0 ) {
     rtems_fatal_error_occurred( 0xABCD0002 );
+  }
 
   /*
    *  Traditionally RTEMS devices are under "/dev" so install this directory.
@@ -71,8 +72,9 @@ void rtems_filesystem_initialize( void )
    */
 
   rv = mkdir( "/dev", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
-  if ( rv != 0 )
+  if ( rv != 0 ) {
     rtems_fatal_error_occurred( 0xABCD0003 );
+  }
 
   /*
    *  You can't mount another filesystem properly until the mount point

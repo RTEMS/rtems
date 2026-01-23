@@ -49,9 +49,9 @@
  */
 int fchdir( int fd )
 {
-  int rv = 0;
-  rtems_libio_t *iop;
-  struct stat st;
+  int                              rv = 0;
+  rtems_libio_t                   *iop;
+  struct stat                      st;
   rtems_filesystem_location_info_t loc;
 
   st.st_mode = 0;
@@ -61,7 +61,7 @@ int fchdir( int fd )
   LIBIO_GET_IOP( fd, iop );
 
   rtems_filesystem_instance_lock( &iop->pathinfo );
-  rv = (*iop->pathinfo.handlers->fstat_h)( &iop->pathinfo, &st );
+  rv = ( *iop->pathinfo.handlers->fstat_h )( &iop->pathinfo, &st );
   if ( rv == 0 ) {
     bool access_ok = rtems_filesystem_check_access(
       RTEMS_FS_PERMS_EXEC,

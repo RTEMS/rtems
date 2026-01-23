@@ -50,7 +50,7 @@ mode_t umask( mode_t cmask )
 
   rtems_libio_lock();
   old_mask = rtems_filesystem_umask;
-  rtems_filesystem_umask = cmask & (S_IRWXU | S_IRWXG | S_IRWXO);
+  rtems_filesystem_umask = cmask & ( S_IRWXU | S_IRWXG | S_IRWXO );
   rtems_libio_unlock();
 
   return old_mask;

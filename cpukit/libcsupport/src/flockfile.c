@@ -16,14 +16,14 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE_FLOCKFILE)
+#if defined( RTEMS_NEWLIB ) && !defined( HAVE_FLOCKFILE )
 
 #include <stdio.h>
 
 /**
  *  This is a non-functional stub 
  */
-void flockfile(FILE* file)
+void flockfile( FILE *file )
 {
   (void) file;
 }

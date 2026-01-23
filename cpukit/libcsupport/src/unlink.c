@@ -46,15 +46,14 @@
  */
 int unlink( const char *path )
 {
-  int rv = 0;
+  int                                  rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_REJECT_TERMINAL_DOT;
+  int                              eval_flags = RTEMS_FS_REJECT_TERMINAL_DOT;
   rtems_filesystem_location_info_t parentloc;
-  int parent_eval_flags = RTEMS_FS_PERMS_WRITE
-    | RTEMS_FS_PERMS_EXEC
-    | RTEMS_FS_FOLLOW_LINK;
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_start_with_parent(
+  int parent_eval_flags = RTEMS_FS_PERMS_WRITE | RTEMS_FS_PERMS_EXEC |
+                          RTEMS_FS_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t
+    *currentloc = rtems_filesystem_eval_path_start_with_parent(
       &ctx,
       path,
       eval_flags,
@@ -65,7 +64,7 @@ int unlink( const char *path )
   if ( !rtems_filesystem_location_is_instance_root( currentloc ) ) {
     const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
 
-    rv = (*ops->rmnod_h)( &parentloc, currentloc );
+    rv = ( *ops->rmnod_h )( &parentloc, currentloc );
   } else {
     rtems_filesystem_eval_path_error( &ctx, EBUSY );
     rv = -1;
@@ -76,17 +75,14 @@ int unlink( const char *path )
   return rv;
 }
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 
 #include <reent.h>
 
 /**
  *  This is the Newlib dependent reentrant version of unlink().
  */
-int _unlink_r(
-  struct _reent *ptr RTEMS_UNUSED,
-  const char    *path
-)
+int _unlink_r( struct _reent *ptr RTEMS_UNUSED, const char *path )
 {
   return unlink( path );
 }

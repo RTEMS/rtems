@@ -46,10 +46,7 @@
 /**
  *  POSIX 1003.1b 5.4.1 - Make a Directory
  */
-int mkdir(
-  const char *pathname,
-  mode_t      mode
-)
+int mkdir( const char *pathname, mode_t mode )
 {
-  return mknod( pathname, mode | S_IFDIR, 0LL);
+  return mknod( pathname, mode | S_IFDIR, 0LL );
 }

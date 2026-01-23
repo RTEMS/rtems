@@ -45,10 +45,10 @@ static bool contains_root_or_current_directory(
   const rtems_filesystem_mount_table_entry_t *mt_entry
 )
 {
-  const rtems_filesystem_location_info_t *root =
-    &rtems_filesystem_root->location;
-  const rtems_filesystem_location_info_t *current =
-    &rtems_filesystem_current->location;
+  const rtems_filesystem_location_info_t
+    *root = &rtems_filesystem_root->location;
+  const rtems_filesystem_location_info_t
+    *current = &rtems_filesystem_current->location;
 
   return mt_entry == root->mt_entry || mt_entry == current->mt_entry;
 }
@@ -61,19 +61,19 @@ static bool contains_root_or_current_directory(
  */
 int unmount( const char *path )
 {
-  int rv = 0;
+  int                                  rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_FOLLOW_LINK;
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+  int                                  eval_flags = RTEMS_FS_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t
+    *currentloc = rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
   rtems_filesystem_mount_table_entry_t *mt_entry = currentloc->mt_entry;
 
   if ( rtems_filesystem_location_is_instance_root( currentloc ) ) {
     if ( !contains_root_or_current_directory( mt_entry ) ) {
-      const rtems_filesystem_operations_table *mt_point_ops =
-        mt_entry->mt_point_node->location.mt_entry->ops;
+      const rtems_filesystem_operations_table
+        *mt_point_ops = mt_entry->mt_point_node->location.mt_entry->ops;
 
-      rv = (*mt_point_ops->unmount_h)( mt_entry );
+      rv = ( *mt_point_ops->unmount_h )( mt_entry );
       if ( rv == 0 ) {
         rtems_id self_task_id = rtems_task_self();
         rtems_filesystem_mt_entry_declare_lock_context( lock_context );

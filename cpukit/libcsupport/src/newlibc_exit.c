@@ -15,31 +15,31 @@
 
 #include <rtems.h>
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 #include <stdio.h>
 #include <unistd.h>
 
-  #if defined(__USE_INIT_FINI__)
+  #if defined( __USE_INIT_FINI__ )
     #if CPU_USE_LIBC_INIT_FINI_ARRAY == TRUE
       #define FINI_SYMBOL __libc_fini_array
     #else
       #define FINI_SYMBOL _fini
     #endif
 
-    extern void FINI_SYMBOL( void );
+extern void FINI_SYMBOL( void );
   #endif
 
-void _exit(int status)
+void _exit( int status )
 {
   /*
    *  If the toolset uses init/fini sections, then we need to
    *  run the global destructors now.
    */
-  #if defined(FINI_SYMBOL)
-    FINI_SYMBOL();
+  #if defined( FINI_SYMBOL )
+  FINI_SYMBOL();
   #endif
 
-  rtems_shutdown_executive(status);
+  rtems_shutdown_executive( status );
   /* does not return */
 }
 

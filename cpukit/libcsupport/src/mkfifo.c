@@ -44,10 +44,7 @@
 /**
  *  POSIX 1003.1b 5.4.1 - Make a FIFO Special File
  */
-int mkfifo(
-  const  char *path,
-  mode_t       mode
-)
+int mkfifo( const char *path, mode_t mode )
 {
   return mknod( path, mode | S_IFIFO, 0LL );
 }

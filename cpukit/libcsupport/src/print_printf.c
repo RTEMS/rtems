@@ -52,11 +52,7 @@ int rtems_vprintf(
   return len;
 }
 
-int rtems_printf(
-  const rtems_printer *printer,
-  const char          *format,
-  ...
-)
+int rtems_printf( const rtems_printer *printer, const char *format, ... )
 {
   int len = 0;
   if ( rtems_print_printer_valid( printer ) ) {

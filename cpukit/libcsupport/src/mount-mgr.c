@@ -49,24 +49,24 @@
 #include <rtems/libio_.h>
 
 typedef struct {
-  rtems_chain_node node;
+  rtems_chain_node         node;
   rtems_filesystem_table_t entry;
 } filesystem_node;
 
-static RTEMS_CHAIN_DEFINE_EMPTY(filesystem_chain);
+static RTEMS_CHAIN_DEFINE_EMPTY( filesystem_chain );
 
 bool rtems_filesystem_iterate(
   rtems_per_filesystem_routine routine,
-  void *routine_arg
+  void                        *routine_arg
 )
 {
-  rtems_chain_control *chain = &filesystem_chain;
-  const rtems_filesystem_table_t *table_entry = &rtems_filesystem_table [0];
-  rtems_chain_node *node = NULL;
-  bool stop = false;
+  rtems_chain_control            *chain = &filesystem_chain;
+  const rtems_filesystem_table_t *table_entry = &rtems_filesystem_table[ 0 ];
+  rtems_chain_node               *node = NULL;
+  bool                            stop = false;
 
   while ( table_entry->type && !stop ) {
-    stop = (*routine)( table_entry, routine_arg );
+    stop = ( *routine )( table_entry, routine_arg );
     ++table_entry;
   }
 
@@ -79,7 +79,7 @@ bool rtems_filesystem_iterate(
     ) {
       const filesystem_node *fsn = (filesystem_node *) node;
 
-      stop = (*routine)( &fsn->entry, routine_arg );
+      stop = ( *routine )( &fsn->entry, routine_arg );
     }
     rtems_libio_unlock();
   }
@@ -88,11 +88,11 @@ bool rtems_filesystem_iterate(
 }
 
 typedef struct {
-  const char *type;
+  const char              *type;
   rtems_filesystem_mount_t mount_h;
 } find_arg;
 
-static bool find_handler(const rtems_filesystem_table_t *entry, void *arg)
+static bool find_handler( const rtems_filesystem_table_t *entry, void *arg )
 {
   find_arg *fa = arg;
 
@@ -105,15 +105,9 @@ static bool find_handler(const rtems_filesystem_table_t *entry, void *arg)
   }
 }
 
-rtems_filesystem_mount_t
-rtems_filesystem_get_mount_handler(
-  const char *type
-)
+rtems_filesystem_mount_t rtems_filesystem_get_mount_handler( const char *type )
 {
-  find_arg fa = {
-    .type = type,
-    .mount_h = NULL
-  };
+  find_arg fa = { .type = type, .mount_h = NULL };
 
   if ( type != NULL ) {
     rtems_filesystem_iterate( find_handler, &fa );
@@ -122,22 +116,22 @@ rtems_filesystem_get_mount_handler(
   return fa.mount_h;
 }
 
-int
-rtems_filesystem_register(
-  const char               *type,
-  rtems_filesystem_mount_t  mount_h
+int rtems_filesystem_register(
+  const char              *type,
+  rtems_filesystem_mount_t mount_h
 )
 {
   rtems_chain_control *chain = &filesystem_chain;
-  size_t type_size = strlen(type) + 1;
-  size_t fsn_size = sizeof( filesystem_node ) + type_size;
-  filesystem_node *fsn = malloc( fsn_size );
-  char *type_storage = (char *) fsn + sizeof( *fsn );
+  size_t               type_size = strlen( type ) + 1;
+  size_t               fsn_size = sizeof( filesystem_node ) + type_size;
+  filesystem_node     *fsn = malloc( fsn_size );
+  char                *type_storage = (char *) fsn + sizeof( *fsn );
 
-  if ( fsn == NULL )
+  if ( fsn == NULL ) {
     rtems_set_errno_and_return_minus_one( ENOMEM );
+  }
 
-  memcpy(type_storage, type, type_size);
+  memcpy( type_storage, type, type_size );
   fsn->entry.type = type_storage;
   fsn->entry.mount_h = mount_h;
 
@@ -156,13 +150,10 @@ rtems_filesystem_register(
   return 0;
 }
 
-int
-rtems_filesystem_unregister(
-  const char *type
-)
+int rtems_filesystem_unregister( const char *type )
 {
   rtems_chain_control *chain = &filesystem_chain;
-  rtems_chain_node *node = NULL;
+  rtems_chain_node    *node = NULL;
 
   if ( type == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
@@ -170,8 +161,7 @@ rtems_filesystem_unregister(
 
   rtems_libio_lock();
   for (
-    node = rtems_chain_first( chain );
-    !rtems_chain_is_tail( chain, node );
+    node = rtems_chain_first( chain ); !rtems_chain_is_tail( chain, node );
     node = rtems_chain_next( node )
   ) {
     filesystem_node *fsn = (filesystem_node *) node;

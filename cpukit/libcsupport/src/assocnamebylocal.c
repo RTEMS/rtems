@@ -42,7 +42,7 @@
 #include <rtems.h>
 #include <rtems/assoc.h>
 
-#include <string.h>             /* strcat, strcmp */
+#include <string.h> /* strcat, strcmp */
 
 const char *rtems_assoc_name_by_local(
   const rtems_assoc_t *ap,
@@ -51,9 +51,10 @@ const char *rtems_assoc_name_by_local(
 {
   const rtems_assoc_t *nap;
 
-  nap = rtems_assoc_ptr_by_local(ap, local_value);
-  if (nap)
+  nap = rtems_assoc_ptr_by_local( ap, local_value );
+  if ( nap ) {
     return nap->name;
+  }
 
-  return rtems_assoc_name_bad(local_value);
+  return rtems_assoc_name_bad( local_value );
 }

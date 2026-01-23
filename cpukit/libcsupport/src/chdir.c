@@ -48,8 +48,8 @@
 int rtems_filesystem_chdir( rtems_filesystem_location_info_t *loc )
 {
   int rv = 0;
-  rtems_filesystem_global_location_t *global_loc =
-    rtems_filesystem_location_transform_to_global( loc );
+  rtems_filesystem_global_location_t
+        *global_loc = rtems_filesystem_location_transform_to_global( loc );
   mode_t type = rtems_filesystem_location_type( &global_loc->location );
 
   if ( S_ISDIR( type ) ) {
@@ -68,10 +68,9 @@ int rtems_filesystem_chdir( rtems_filesystem_location_info_t *loc )
 
 int chdir( const char *path )
 {
-  int rv = 0;
+  int                                  rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_PERMS_EXEC
-    | RTEMS_FS_FOLLOW_LINK;
+  int eval_flags = RTEMS_FS_PERMS_EXEC | RTEMS_FS_FOLLOW_LINK;
   rtems_filesystem_location_info_t pathloc;
 
   rtems_filesystem_eval_path_start( &ctx, path, eval_flags );

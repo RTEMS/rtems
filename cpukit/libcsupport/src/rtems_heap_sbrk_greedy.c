@@ -45,18 +45,15 @@
 
 #include "malloc_p.h"
 
-void rtems_heap_sbrk_greedy_allocate(
-  Heap_Control *heap,
-  size_t alloc_size
-)
+void rtems_heap_sbrk_greedy_allocate( Heap_Control *heap, size_t alloc_size )
 {
   while ( alloc_size > 0 ) {
-    void *p = (*rtems_malloc_extend_handler)( heap, alloc_size );
+    void *p = ( *rtems_malloc_extend_handler )( heap, alloc_size );
     if ( p == NULL ) {
       alloc_size >>= 1;
     } else {
       if ( rtems_malloc_dirty_helper != NULL ) {
-	(*rtems_malloc_dirty_helper)( p, alloc_size );
+        ( *rtems_malloc_dirty_helper )( p, alloc_size );
       }
     }
   }

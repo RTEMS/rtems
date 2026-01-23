@@ -33,7 +33,7 @@
  *  These are directly supported (and completely correct) in the posix api.
  */
 
-#if !defined(RTEMS_POSIX_API)
+#if !defined( RTEMS_POSIX_API )
 int kill( pid_t pid, int sig )
 {
   (void) pid;
@@ -42,7 +42,7 @@ int kill( pid_t pid, int sig )
   return 0;
 }
 
-#if defined(RTEMS_NEWLIB)
+#if defined( RTEMS_NEWLIB )
 #include <reent.h>
 
 int _kill_r( struct _reent *ptr, pid_t pid, int sig )

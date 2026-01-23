@@ -43,9 +43,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int fdatasync(
-  int     fd
-)
+int fdatasync( int fd )
 {
   rtems_libio_t *iop;
   int            rv;
@@ -56,7 +54,7 @@ int fdatasync(
    *  Now process the fdatasync().
    */
 
-  rv = (*iop->pathinfo.handlers->fdatasync_h)( iop );
+  rv = ( *iop->pathinfo.handlers->fdatasync_h )( iop );
   rtems_libio_iop_drop( iop );
   return rv;
 }
