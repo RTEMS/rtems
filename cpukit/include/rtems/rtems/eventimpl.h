@@ -84,15 +84,15 @@ extern "C" {
  *   specified timeout interval.
  */
 rtems_status_code _Event_Seize(
-  rtems_event_set    event_in,
-  rtems_option       option_set,
-  rtems_interval     ticks,
-  rtems_event_set   *event_out,
-  Thread_Control    *executing,
-  Event_Control     *event,
-  Thread_Wait_flags  wait_class,
-  States_Control     block_state,
-  ISR_lock_Context  *lock_context
+  rtems_event_set   event_in,
+  rtems_option      option_set,
+  rtems_interval    ticks,
+  rtems_event_set  *event_out,
+  Thread_Control   *executing,
+  Event_Control    *event,
+  Thread_Wait_flags wait_class,
+  States_Control    block_state,
+  ISR_lock_Context *lock_context
 );
 
 /**
@@ -111,11 +111,11 @@ rtems_status_code _Event_Seize(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  */
 rtems_status_code _Event_Surrender(
-  Thread_Control    *the_thread,
-  rtems_event_set    event_in,
-  Event_Control     *event,
-  Thread_Wait_flags  wait_class,
-  ISR_lock_Context  *lock_context
+  Thread_Control   *the_thread,
+  rtems_event_set   event_in,
+  Event_Control    *event,
+  Thread_Wait_flags wait_class,
+  ISR_lock_Context *lock_context
 );
 
 /**
@@ -136,9 +136,7 @@ static inline void _Event_Initialize( Event_Control *event )
  * @return Returns true, if there are no posted events in the event set,
  *   otherwise false.
  */
-static inline bool _Event_sets_Is_empty(
-  rtems_event_set the_event_set
-)
+static inline bool _Event_sets_Is_empty( rtems_event_set the_event_set )
 {
   return ( the_event_set == 0 );
 }
@@ -173,7 +171,7 @@ static inline rtems_event_set _Event_sets_Get(
   rtems_event_set the_event_condition
 )
 {
-   return ( the_event_set & the_event_condition );
+  return ( the_event_set & the_event_condition );
 }
 
 /**
@@ -187,11 +185,11 @@ static inline rtems_event_set _Event_sets_Get(
  *   mask.
  */
 static inline rtems_event_set _Event_sets_Clear(
- rtems_event_set the_event_set,
- rtems_event_set the_mask
+  rtems_event_set the_event_set,
+  rtems_event_set the_mask
 )
 {
-   return ( the_event_set & ~(the_mask) );
+  return ( the_event_set & ~( the_mask ) );
 }
 
 /**@}*/
@@ -200,7 +198,7 @@ static inline rtems_event_set _Event_sets_Clear(
 }
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 #include <rtems/rtems/eventmp.h>
 #endif
 

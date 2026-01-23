@@ -918,10 +918,10 @@ rtems_status_code rtems_message_queue_flush( rtems_id id, uint32_t *count );
  * Use this macro to define the message buffer storage area for
  * rtems_message_queue_construct().
  */
-#define RTEMS_MESSAGE_QUEUE_BUFFER( _maximum_message_size ) \
-  struct { \
-    CORE_message_queue_Buffer _buffer; \
-    char _message[ _maximum_message_size ]; \
+#define RTEMS_MESSAGE_QUEUE_BUFFER( _maximum_message_size )      \
+  struct {                                                       \
+    CORE_message_queue_Buffer _buffer;                           \
+    char                      _message[ _maximum_message_size ]; \
   }
 
 #ifdef __cplusplus

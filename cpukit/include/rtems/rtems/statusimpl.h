@@ -63,9 +63,7 @@ extern "C" {
  * @{
  */
 
-static inline rtems_status_code _Status_Get(
-  Status_Control status
-)
+static inline rtems_status_code _Status_Get( Status_Control status )
 {
   return (rtems_status_code) STATUS_GET_CLASSIC( status );
 }

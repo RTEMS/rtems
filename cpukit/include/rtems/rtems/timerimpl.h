@@ -93,23 +93,19 @@ static inline Timer_Control *_Timer_Allocate( void )
  *  This routine frees a timer control block to the
  *  inactive chain of free timer control blocks.
  */
-static inline void _Timer_Free (
-  Timer_Control *the_timer
-)
+static inline void _Timer_Free( Timer_Control *the_timer )
 {
   _Objects_Free( &_Timer_Information, &the_timer->Object );
 }
 
 static inline Timer_Control *_Timer_Get(
-  Objects_Id         id,
-  ISR_lock_Context  *lock_context
+  Objects_Id        id,
+  ISR_lock_Context *lock_context
 )
 {
-  return (Timer_Control *) _Objects_Get(
-    id,
-    lock_context,
-    &_Timer_Information
-  );
+  return (
+    Timer_Control *
+  ) _Objects_Get( id, lock_context, &_Timer_Information );
 }
 
 static inline Per_CPU_Control *_Timer_Acquire_critical(
@@ -134,9 +130,7 @@ static inline void _Timer_Release(
   _ISR_lock_ISR_enable( lock_context );
 }
 
-static inline bool _Timer_Is_interval_class(
-  Timer_Classes the_class
-)
+static inline bool _Timer_Is_interval_class( Timer_Classes the_class )
 {
   uint32_t mask;
 
@@ -144,9 +138,7 @@ static inline bool _Timer_Is_interval_class(
   return ( the_class & mask ) == TIMER_CLASS_BIT_NOT_DORMANT;
 }
 
-static inline bool _Timer_Is_on_task_class(
-  Timer_Classes the_class
-)
+static inline bool _Timer_Is_on_task_class( Timer_Classes the_class )
 {
   uint32_t mask;
 
@@ -169,30 +161,30 @@ static inline Watchdog_Interval _Timer_Get_CPU_ticks(
 }
 
 rtems_status_code _Timer_Fire(
-  rtems_id                           id,
-  rtems_interval                     interval,
-  rtems_timer_service_routine_entry  routine,
-  void                              *user_data,
-  Timer_Classes                      the_class,
-  Watchdog_Service_routine_entry     adaptor
+  rtems_id                          id,
+  rtems_interval                    interval,
+  rtems_timer_service_routine_entry routine,
+  void                             *user_data,
+  Timer_Classes                     the_class,
+  Watchdog_Service_routine_entry    adaptor
 );
 
 rtems_status_code _Timer_Fire_after(
-  rtems_id                           id,
-  rtems_interval                     ticks,
-  rtems_timer_service_routine_entry  routine,
-  void                              *user_data,
-  Timer_Classes                      the_class,
-  Watchdog_Service_routine_entry     adaptor
+  rtems_id                          id,
+  rtems_interval                    ticks,
+  rtems_timer_service_routine_entry routine,
+  void                             *user_data,
+  Timer_Classes                     the_class,
+  Watchdog_Service_routine_entry    adaptor
 );
 
 rtems_status_code _Timer_Fire_when(
-  rtems_id                           id,
-  const rtems_time_of_day           *wall_time,
-  rtems_timer_service_routine_entry  routine,
-  void                              *user_data,
-  Timer_Classes                      the_class,
-  Watchdog_Service_routine_entry     adaptor
+  rtems_id                          id,
+  const rtems_time_of_day          *wall_time,
+  rtems_timer_service_routine_entry routine,
+  void                             *user_data,
+  Timer_Classes                     the_class,
+  Watchdog_Service_routine_entry    adaptor
 );
 
 void _Timer_Cancel( Per_CPU_Control *cpu, Timer_Control *the_timer );
@@ -208,7 +200,7 @@ static inline void _Timer_server_Acquire_critical(
 {
   _ISR_lock_Acquire( &timer_server->Lock, lock_context );
 #ifndef RTEMS_SMP
-   (void) timer_server;
+  (void) timer_server;
 #endif
 }
 
@@ -219,7 +211,7 @@ static inline void _Timer_server_Release_critical(
 {
   _ISR_lock_Release( &timer_server->Lock, lock_context );
 #ifndef RTEMS_SMP
-   (void) timer_server;
+  (void) timer_server;
 #endif
 }
 

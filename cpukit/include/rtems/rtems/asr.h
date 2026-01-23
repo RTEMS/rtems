@@ -94,9 +94,7 @@ typedef uint32_t rtems_signal_set;
  * @brief This type defines the prototype of routines which are used to process
  *   asynchronous signals.
  */
-typedef rtems_asr ( *rtems_asr_entry )(
-  rtems_signal_set
-);
+typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
 
 /* Generated from spec:/rtems/signal/if/signal-00 */
 

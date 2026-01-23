@@ -62,16 +62,16 @@ extern "C" {
  *  This attribute constant indicates the attributes that are not
  *  supportable given the hardware configuration.
  */
-#define ATTRIBUTES_NOT_SUPPORTED       0
+#define ATTRIBUTES_NOT_SUPPORTED 0
 
 /**
  *  This attribute constant indicates the attributes that are
  *  required given the hardware configuration.
  */
 #if ( CPU_ALL_TASKS_ARE_FP == TRUE )
-#define ATTRIBUTES_REQUIRED            RTEMS_FLOATING_POINT
+#define ATTRIBUTES_REQUIRED RTEMS_FLOATING_POINT
 #else
-#define ATTRIBUTES_REQUIRED            0
+#define ATTRIBUTES_REQUIRED 0
 #endif
 
 /**
@@ -80,9 +80,9 @@ extern "C" {
  *  This function sets the requested new_attributes in the attribute_set
  *  passed in.  The result is returned to the user.
  */
-static inline rtems_attribute _Attributes_Set (
-   rtems_attribute new_attributes,
-   rtems_attribute attribute_set
+static inline rtems_attribute _Attributes_Set(
+  rtems_attribute new_attributes,
+  rtems_attribute attribute_set
 )
 {
   return attribute_set | new_attributes;
@@ -95,9 +95,9 @@ static inline rtems_attribute _Attributes_Set (
  *  This function clears the requested new_attributes in the attribute_set
  *  passed in.  The result is returned to the user.
  */
-static inline rtems_attribute _Attributes_Clear (
-   rtems_attribute attribute_set,
-   rtems_attribute mask
+static inline rtems_attribute _Attributes_Clear(
+  rtems_attribute attribute_set,
+  rtems_attribute mask
 )
 {
   return attribute_set & ~mask;
@@ -114,10 +114,10 @@ static inline bool _Attributes_Is_floating_point(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_FLOATING_POINT ) ? true : false;
+  return ( attribute_set & RTEMS_FLOATING_POINT ) ? true : false;
 }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 /**
  *  @brief Checks if the global object attribute is enabled in
  *  the attribute_set.
@@ -125,11 +125,9 @@ static inline bool _Attributes_Is_floating_point(
  *  This function returns TRUE if the global object attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-static inline bool _Attributes_Is_global(
-  rtems_attribute attribute_set
-)
+static inline bool _Attributes_Is_global( rtems_attribute attribute_set )
 {
-   return ( attribute_set & RTEMS_GLOBAL ) ? true : false;
+  return ( attribute_set & RTEMS_GLOBAL ) ? true : false;
 }
 #endif
 
@@ -139,11 +137,9 @@ static inline bool _Attributes_Is_global(
  *  This function returns TRUE if the priority attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-static inline bool _Attributes_Is_priority(
-  rtems_attribute attribute_set
-)
+static inline bool _Attributes_Is_priority( rtems_attribute attribute_set )
 {
-   return ( attribute_set & RTEMS_PRIORITY ) ? true : false;
+  return ( attribute_set & RTEMS_PRIORITY ) ? true : false;
 }
 
 /**
@@ -157,7 +153,9 @@ static inline bool _Attributes_Is_binary_semaphore(
   rtems_attribute attribute_set
 )
 {
-  return ((attribute_set & RTEMS_SEMAPHORE_CLASS) == RTEMS_BINARY_SEMAPHORE);
+  return (
+    ( attribute_set & RTEMS_SEMAPHORE_CLASS ) == RTEMS_BINARY_SEMAPHORE
+  );
 }
 
 /**
@@ -171,8 +169,9 @@ static inline bool _Attributes_Is_simple_binary_semaphore(
   rtems_attribute attribute_set
 )
 {
-  return
-    ((attribute_set & RTEMS_SEMAPHORE_CLASS) == RTEMS_SIMPLE_BINARY_SEMAPHORE);
+  return (
+    ( attribute_set & RTEMS_SEMAPHORE_CLASS ) == RTEMS_SIMPLE_BINARY_SEMAPHORE
+  );
 }
 
 /**
@@ -186,7 +185,9 @@ static inline bool _Attributes_Is_counting_semaphore(
   rtems_attribute attribute_set
 )
 {
-  return ((attribute_set & RTEMS_SEMAPHORE_CLASS) == RTEMS_COUNTING_SEMAPHORE);
+  return (
+    ( attribute_set & RTEMS_SEMAPHORE_CLASS ) == RTEMS_COUNTING_SEMAPHORE
+  );
 }
 
 /**
@@ -200,7 +201,7 @@ static inline bool _Attributes_Is_inherit_priority(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_INHERIT_PRIORITY ) ? true : false;
+  return ( attribute_set & RTEMS_INHERIT_PRIORITY ) ? true : false;
 }
 
 /**
@@ -214,8 +215,8 @@ static inline bool _Attributes_Has_at_most_one_protocol(
   rtems_attribute attribute_set
 )
 {
-  attribute_set &= RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY_CEILING
-    | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+  attribute_set &= RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY_CEILING |
+                   RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
 
   return ( attribute_set & ( attribute_set - 1 ) ) == 0;
 }
@@ -231,7 +232,7 @@ static inline bool _Attributes_Is_priority_ceiling(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_PRIORITY_CEILING ) ? true : false;
+  return ( attribute_set & RTEMS_PRIORITY_CEILING ) ? true : false;
 }
 
 /**
@@ -259,7 +260,7 @@ static inline bool _Attributes_Is_barrier_automatic(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_BARRIER_AUTOMATIC_RELEASE ) ? true : false;
+  return ( attribute_set & RTEMS_BARRIER_AUTOMATIC_RELEASE ) ? true : false;
 }
 
 /**
@@ -269,11 +270,9 @@ static inline bool _Attributes_Is_barrier_automatic(
  *  This function returns TRUE if the system task attribute
  *  is enabled in the attribute_set and FALSE otherwise.
  */
-static inline bool _Attributes_Is_system_task(
-  rtems_attribute attribute_set
-)
+static inline bool _Attributes_Is_system_task( rtems_attribute attribute_set )
 {
-   return ( attribute_set & RTEMS_SYSTEM_TASK ) ? true : false;
+  return ( attribute_set & RTEMS_SYSTEM_TASK ) ? true : false;
 }
 
 /**@}*/

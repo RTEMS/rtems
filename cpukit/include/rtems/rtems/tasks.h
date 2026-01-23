@@ -382,12 +382,12 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  */
 #if CPU_ALL_TASKS_ARE_FP == TRUE
   #define RTEMS_TASK_STORAGE_SIZE( _size, _attributes ) \
-    ( ( _size ) + CONTEXT_FP_SIZE )
+  ( ( _size ) + CONTEXT_FP_SIZE )
 #else
-  #define RTEMS_TASK_STORAGE_SIZE( _size, _attributes ) \
-    ( ( _size ) + \
-      ( ( ( _attributes ) & RTEMS_FLOATING_POINT ) != 0 ? \
-        CONTEXT_FP_SIZE : 0 ) )
+  #define RTEMS_TASK_STORAGE_SIZE( _size, _attributes )           \
+  ( ( _size ) + ( ( ( _attributes ) & RTEMS_FLOATING_POINT ) != 0 \
+                    ? CONTEXT_FP_SIZE                             \
+                    : 0 ) )
 #endif
 
 /* Generated from spec:/rtems/task/if/tcb */
@@ -407,7 +407,7 @@ typedef struct _Thread_Control rtems_tcb;
  * @brief Visitor routines invoked by rtems_task_iterate() shall have this
  *   type.
  */
-typedef bool( *rtems_task_visitor )( rtems_tcb *, void * );
+typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
 
 /* Generated from spec:/rtems/task/if/yield-processor */
 

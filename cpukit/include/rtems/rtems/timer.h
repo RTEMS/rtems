@@ -128,22 +128,22 @@ typedef enum {
    *   interval timer which will fire in the context of the Timer Server task.
    */
   TIMER_INTERVAL_ON_TASK = TIMER_CLASS_BIT_NOT_DORMANT |
-    TIMER_CLASS_BIT_ON_TASK,
+                           TIMER_CLASS_BIT_ON_TASK,
 
   /**
    * @brief This timer class indicates that the timer is currently in use as an
    *   time of day timer which will fire in the context of the clock tick ISR.
    */
   TIMER_TIME_OF_DAY = TIMER_CLASS_BIT_NOT_DORMANT |
-    TIMER_CLASS_BIT_TIME_OF_DAY,
+                      TIMER_CLASS_BIT_TIME_OF_DAY,
 
   /**
    * @brief This timer class indicates that the timer is currently in use as an
    *   time of day timer which will fire in the context of the Timer Server task.
    */
   TIMER_TIME_OF_DAY_ON_TASK = TIMER_CLASS_BIT_NOT_DORMANT |
-    TIMER_CLASS_BIT_TIME_OF_DAY |
-    TIMER_CLASS_BIT_ON_TASK
+                              TIMER_CLASS_BIT_TIME_OF_DAY |
+                              TIMER_CLASS_BIT_ON_TASK
 } Timer_Classes;
 
 /* Generated from spec:/rtems/timer/if/information */
@@ -234,7 +234,7 @@ rtems_status_code rtems_timer_get_information(
  * When given this priority, a special high priority not accessible via the
  * Classic API is used.
  */
-#define RTEMS_TIMER_SERVER_DEFAULT_PRIORITY ( (rtems_task_priority) -1 )
+#define RTEMS_TIMER_SERVER_DEFAULT_PRIORITY ( ( rtems_task_priority ) - 1 )
 
 /* Generated from spec:/rtems/timer/if/service-routine */
 
@@ -256,7 +256,10 @@ typedef void rtems_timer_service_routine;
  * @brief This type defines the prototype of routines which can be fired by
  *   directives of the Timer Manager.
  */
-typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )( rtems_id, void * );
+typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
+  rtems_id,
+  void *
+);
 
 /* Generated from spec:/rtems/timer/if/create */
 

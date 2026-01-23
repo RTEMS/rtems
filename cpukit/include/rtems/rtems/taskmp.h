@@ -38,7 +38,8 @@
 #define _RTEMS_RTEMS_TASKMP_H
 
 #ifndef _RTEMS_RTEMS_TASKSIMPL_H
-# error "Never use <rtems/rtems/taskmp.h> directly; include <rtems/rtems/tasksimpl.h> instead."
+# error \
+  "Never use <rtems/rtems/taskmp.h> directly; include <rtems/rtems/tasksimpl.h> instead."
 #endif
 
 #include <rtems/score/mpciimpl.h>
@@ -64,15 +65,15 @@ extern "C" {
  *  remote task operations.
  */
 typedef enum {
-  RTEMS_TASKS_MP_ANNOUNCE_CREATE       =  0,
-  RTEMS_TASKS_MP_ANNOUNCE_DELETE       =  1,
-  RTEMS_TASKS_MP_SUSPEND_REQUEST       =  2,
-  RTEMS_TASKS_MP_SUSPEND_RESPONSE      =  3,
-  RTEMS_TASKS_MP_RESUME_REQUEST        =  4,
-  RTEMS_TASKS_MP_RESUME_RESPONSE       =  5,
-  RTEMS_TASKS_MP_SET_PRIORITY_REQUEST  =  6,
-  RTEMS_TASKS_MP_SET_PRIORITY_RESPONSE =  7,
-}   RTEMS_tasks_MP_Remote_operations;
+  RTEMS_TASKS_MP_ANNOUNCE_CREATE = 0,
+  RTEMS_TASKS_MP_ANNOUNCE_DELETE = 1,
+  RTEMS_TASKS_MP_SUSPEND_REQUEST = 2,
+  RTEMS_TASKS_MP_SUSPEND_RESPONSE = 3,
+  RTEMS_TASKS_MP_RESUME_REQUEST = 4,
+  RTEMS_TASKS_MP_RESUME_RESPONSE = 5,
+  RTEMS_TASKS_MP_SET_PRIORITY_REQUEST = 6,
+  RTEMS_TASKS_MP_SET_PRIORITY_RESPONSE = 7,
+} RTEMS_tasks_MP_Remote_operations;
 
 /**
  *  @brief RTEMS Tasks MP Send Process Packet
@@ -82,7 +83,7 @@ typedef enum {
  *  This routine performs a remote procedure call so that a
  *  process operation can be performed on another node.
  */
-void _RTEMS_tasks_MP_Send_process_packet (
+void _RTEMS_tasks_MP_Send_process_packet(
   RTEMS_tasks_MP_Remote_operations operation,
   Objects_Id                       task_id,
   rtems_name                       name

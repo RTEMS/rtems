@@ -56,7 +56,7 @@ extern "C" {
 }
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 #include <rtems/rtems/signalmp.h>
 #endif
 

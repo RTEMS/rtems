@@ -38,7 +38,8 @@
 #define _RTEMS_RTEMS_SEMMP_H
 
 #ifndef _RTEMS_RTEMS_SEMIMPL_H
-# error "Never use <rtems/rtems/semmp.h> directly; include <rtems/rtems/semimpl.h> instead."
+# error \
+  "Never use <rtems/rtems/semmp.h> directly; include <rtems/rtems/semimpl.h> instead."
 #endif
 
 #ifdef __cplusplus
@@ -62,26 +63,26 @@ extern "C" {
  *  remote semaphore operations.
  */
 typedef enum {
-  SEMAPHORE_MP_ANNOUNCE_CREATE  =  0,
-  SEMAPHORE_MP_ANNOUNCE_DELETE  =  1,
-  SEMAPHORE_MP_EXTRACT_PROXY    =  2,
-  SEMAPHORE_MP_OBTAIN_REQUEST   =  3,
-  SEMAPHORE_MP_OBTAIN_RESPONSE  =  4,
-  SEMAPHORE_MP_RELEASE_REQUEST  =  5,
-  SEMAPHORE_MP_RELEASE_RESPONSE =  6
-}   Semaphore_MP_Remote_operations;
+  SEMAPHORE_MP_ANNOUNCE_CREATE = 0,
+  SEMAPHORE_MP_ANNOUNCE_DELETE = 1,
+  SEMAPHORE_MP_EXTRACT_PROXY = 2,
+  SEMAPHORE_MP_OBTAIN_REQUEST = 3,
+  SEMAPHORE_MP_OBTAIN_RESPONSE = 4,
+  SEMAPHORE_MP_RELEASE_REQUEST = 5,
+  SEMAPHORE_MP_RELEASE_RESPONSE = 6
+} Semaphore_MP_Remote_operations;
 
 /**
  *  The following data structure defines the packet used to perform
  *  remote semaphore operations.
  */
 typedef struct {
-  rtems_packet_prefix             Prefix;
-  Semaphore_MP_Remote_operations  operation;
-  rtems_name                      name;
-  rtems_option                    option_set;
-  Objects_Id                      proxy_id;
-}   Semaphore_MP_Packet;
+  rtems_packet_prefix            Prefix;
+  Semaphore_MP_Remote_operations operation;
+  rtems_name                     name;
+  rtems_option                   option_set;
+  Objects_Id                     proxy_id;
+} Semaphore_MP_Packet;
 
 static inline bool _Semaphore_MP_Is_remote( Objects_Id id )
 {
@@ -94,7 +95,7 @@ static inline bool _Semaphore_MP_Is_remote( Objects_Id id )
  *  This routine performs a remote procedure call so that a
  *  process operation can be performed on another node.
  */
-void _Semaphore_MP_Send_process_packet (
+void _Semaphore_MP_Send_process_packet(
   Semaphore_MP_Remote_operations operation,
   Objects_Id                     semaphore_id,
   rtems_name                     name,
@@ -105,9 +106,9 @@ void _Semaphore_MP_Send_process_packet (
  * @brief Issues a remote rtems_semaphore_obtain() request.
  */
 rtems_status_code _Semaphore_MP_Obtain(
-  rtems_id        id,
-  rtems_option    option_set,
-  rtems_interval  timeout
+  rtems_id       id,
+  rtems_option   option_set,
+  rtems_interval timeout
 );
 
 /**
@@ -122,7 +123,7 @@ rtems_status_code _Semaphore_MP_Release( rtems_id id );
  *  when a proxy has been removed from the thread queue and
  *  the remote node must be informed of this.
  */
-void _Semaphore_MP_Send_object_was_deleted (
+void _Semaphore_MP_Send_object_was_deleted(
   Thread_Control *the_proxy,
   Objects_Id      mp_id
 );
@@ -137,7 +138,7 @@ void _Semaphore_MP_Send_object_was_deleted (
  * @param[in] the_thread the remote thread the semaphore was surrendered to
  * @param[in] id is the id of the surrendered semaphore
  */
-void  _Semaphore_Core_mutex_mp_support (
+void _Semaphore_Core_mutex_mp_support(
   Thread_Control *the_thread,
   Objects_Id      id
 );
@@ -152,7 +153,7 @@ void  _Semaphore_Core_mutex_mp_support (
  * @param[in] the_thread the remote thread the semaphore was surrendered to
  * @param[in] id is the id of the surrendered semaphore
  */
-void  _Semaphore_Core_semaphore_mp_support (
+void _Semaphore_Core_semaphore_mp_support(
   Thread_Control *the_thread,
   Objects_Id      id
 );

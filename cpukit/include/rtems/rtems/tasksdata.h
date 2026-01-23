@@ -62,17 +62,17 @@ extern "C" {
  */
 typedef struct {
   /** This field contains the event control for this task. */
-  Event_Control            Event;
+  Event_Control   Event;
   /** This field contains the system event control for this task. */
-  Event_Control            System_event;
+  Event_Control   System_event;
   /** This field contains the Classic API Signal information for this task. */
-  ASR_Information          Signal;
+  ASR_Information Signal;
 
   /**
    * @brief Signal post-switch action in case signals are pending.
    */
-  Thread_Action            Signal_action;
-}  RTEMS_API_Control;
+  Thread_Action Signal_action;
+} RTEMS_API_Control;
 
 /**
  * @brief Initialization table for the first user task.

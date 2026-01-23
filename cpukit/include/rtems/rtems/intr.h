@@ -131,9 +131,9 @@ typedef ISR_Handler rtems_isr;
  *   have this type.
  */
 #if CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE
-  typedef ISR_Handler_entry rtems_isr_entry;
+typedef ISR_Handler_entry rtems_isr_entry;
 #else
-  typedef void ( *rtems_isr_entry )( void * );
+typedef void ( *rtems_isr_entry )( void * );
 #endif
 
 /* Generated from spec:/rtems/intr/if/catch */
@@ -191,7 +191,7 @@ rtems_status_code rtems_interrupt_catch(
   rtems_isr_entry    *old_isr_handler
 );
 
-#if !defined(RTEMS_SMP)
+#if !defined( RTEMS_SMP )
   /* Generated from spec:/rtems/intr/if/disable */
 
   /**
@@ -261,10 +261,11 @@ rtems_status_code rtems_interrupt_catch(
    *   directives are available in all build configurations.
    * @endparblock
    */
-  #define rtems_interrupt_disable( _isr_cookie ) _ISR_Local_disable( _isr_cookie )
+  #define rtems_interrupt_disable( _isr_cookie ) \
+  _ISR_Local_disable( _isr_cookie )
 #endif
 
-#if !defined(RTEMS_SMP)
+#if !defined( RTEMS_SMP )
   /* Generated from spec:/rtems/intr/if/enable */
 
   /**
@@ -308,10 +309,11 @@ rtems_status_code rtems_interrupt_catch(
    *   directives are available in all build configurations.
    * @endparblock
    */
-  #define rtems_interrupt_enable( _isr_cookie ) _ISR_Local_enable( _isr_cookie )
+  #define rtems_interrupt_enable( _isr_cookie ) \
+  _ISR_Local_enable( _isr_cookie )
 #endif
 
-#if !defined(RTEMS_SMP)
+#if !defined( RTEMS_SMP )
   /* Generated from spec:/rtems/intr/if/flash */
 
   /**
@@ -527,9 +529,9 @@ rtems_status_code rtems_interrupt_catch(
  * @endparblock
  */
 #if ISR_LOCK_NEEDS_OBJECT
-  typedef ISR_lock_Control rtems_interrupt_lock;
+typedef ISR_lock_Control rtems_interrupt_lock;
 #else
-  typedef char rtems_interrupt_lock;
+typedef char rtems_interrupt_lock;
 #endif
 
 /* Generated from spec:/rtems/intr/if/lock-needs-object */
@@ -755,13 +757,12 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 #if ISR_LOCK_NEEDS_OBJECT
   #define rtems_interrupt_lock_acquire_isr( _lock, _lock_context ) \
-    _SMP_lock_Acquire( \
-      &( _lock )->Lock, \
-      &( _lock_context )->Lock_context \
-    )
+  _SMP_lock_Acquire( &( _lock )->Lock, &( _lock_context )->Lock_context )
 #else
   #define rtems_interrupt_lock_acquire_isr( _lock, _lock_context ) \
-    do { (void) _lock_context; } while ( 0 )
+  do {                                                             \
+    (void) _lock_context;                                          \
+  } while ( 0 )
 #endif
 
 /* Generated from spec:/rtems/intr/if/lock-release-isr */
@@ -801,13 +802,12 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 #if ISR_LOCK_NEEDS_OBJECT
   #define rtems_interrupt_lock_release_isr( _lock, _lock_context ) \
-    _SMP_lock_Release( \
-      &( _lock )->Lock, \
-      &( _lock_context )->Lock_context \
-    )
+  _SMP_lock_Release( &( _lock )->Lock, &( _lock_context )->Lock_context )
 #else
   #define rtems_interrupt_lock_release_isr( _lock, _lock_context ) \
-    do { (void) _lock_context; } while ( 0 )
+  do {                                                             \
+    (void) _lock_context;                                          \
+  } while ( 0 )
 #endif
 
 /* Generated from spec:/rtems/intr/if/lock-isr-disable */
@@ -852,7 +852,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 #if ISR_LOCK_NEEDS_OBJECT
   #define RTEMS_INTERRUPT_LOCK_DECLARE( _specifier, _designator ) \
-    _specifier rtems_interrupt_lock _designator;
+  _specifier rtems_interrupt_lock _designator;
 #else
   #define RTEMS_INTERRUPT_LOCK_DECLARE( _specifier, _designator )
 #endif
@@ -883,7 +883,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 #if ISR_LOCK_NEEDS_OBJECT
   #define RTEMS_INTERRUPT_LOCK_DEFINE( _specifier, _designator, _name ) \
-    _specifier rtems_interrupt_lock _designator = ISR_LOCK_INITIALIZER( _name );
+  _specifier rtems_interrupt_lock _designator = ISR_LOCK_INITIALIZER( _name );
 #else
   #define RTEMS_INTERRUPT_LOCK_DEFINE( _specifier, _designator, _name )
 #endif
@@ -904,7 +904,8 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * RTEMS_INTERRUPT_LOCK_DEFINE().
  */
 #if ISR_LOCK_NEEDS_OBJECT
-  #define RTEMS_INTERRUPT_LOCK_INITIALIZER( _name ) ISR_LOCK_INITIALIZER( _name )
+  #define RTEMS_INTERRUPT_LOCK_INITIALIZER( _name ) \
+  ISR_LOCK_INITIALIZER( _name )
 #else
   #define RTEMS_INTERRUPT_LOCK_INITIALIZER( _name ) 0
 #endif
@@ -923,7 +924,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 #if ISR_LOCK_NEEDS_OBJECT
   #define RTEMS_INTERRUPT_LOCK_MEMBER( _designator ) \
-    rtems_interrupt_lock _designator;
+  rtems_interrupt_lock _designator;
 #else
   #define RTEMS_INTERRUPT_LOCK_MEMBER( _designator )
 #endif
@@ -944,7 +945,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 #if ISR_LOCK_NEEDS_OBJECT
   #define RTEMS_INTERRUPT_LOCK_REFERENCE( _designator, _target ) \
-    rtems_interrupt_lock *_designator = _target;
+  rtems_interrupt_lock *_designator = _target;
 #else
   #define RTEMS_INTERRUPT_LOCK_REFERENCE( _designator, _target )
 #endif
@@ -2335,11 +2336,11 @@ rtems_status_code rtems_interrupt_handler_iterate(
  * @endparblock
  */
 typedef struct rtems_interrupt_server_control {
-  #if defined(RTEMS_SMP)
-    /**
+  #if defined( RTEMS_SMP )
+  /**
      * @brief This member is the ISR lock protecting the server control state.
      */
-    rtems_interrupt_lock lock;
+  rtems_interrupt_lock lock;
   #endif
 
   /**

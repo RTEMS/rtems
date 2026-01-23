@@ -57,21 +57,21 @@ extern "C" {
  */
 typedef struct {
   /** This field is the inherited object characteristics. */
-  Objects_Control             Object;
+  Objects_Control            Object;
   /** This field is the instance of the SuperCore Message Queue. */
-  CORE_message_queue_Control  message_queue;
-#if defined(RTEMS_MULTIPROCESSING)
+  CORE_message_queue_Control message_queue;
+#if defined( RTEMS_MULTIPROCESSING )
   /** This field is true if the message queue is offered globally */
-  bool                        is_global;
+  bool is_global;
 #endif
-}   Message_queue_Control;
+} Message_queue_Control;
 
 /**
  * @brief The Classic Message Queue objects information.
  */
 extern Objects_Information _Message_queue_Information;
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 /**
  *  @brief _Message_queue_MP_Send_extract_proxy
  *
@@ -79,7 +79,7 @@ extern Objects_Information _Message_queue_Information;
  *  has a proxy which must be removed from a thread queue and
  *  the remote node must be informed of this.
  */
-void _Message_queue_MP_Send_extract_proxy (
+void _Message_queue_MP_Send_extract_proxy(
   Thread_Control *the_thread,
   Objects_Id      id
 );
@@ -95,14 +95,14 @@ void _Message_queue_MP_Send_extract_proxy (
  * may be set).
  */
 #define MESSAGE_QUEUE_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _Message_queue, \
-    OBJECTS_CLASSIC_API, \
-    OBJECTS_RTEMS_MESSAGE_QUEUES, \
-    Message_queue_Control, \
-    max, \
-    OBJECTS_NO_STRING_NAME, \
-    _Message_queue_MP_Send_extract_proxy \
+  OBJECTS_INFORMATION_DEFINE(                   \
+    _Message_queue,                             \
+    OBJECTS_CLASSIC_API,                        \
+    OBJECTS_RTEMS_MESSAGE_QUEUES,               \
+    Message_queue_Control,                      \
+    max,                                        \
+    OBJECTS_NO_STRING_NAME,                     \
+    _Message_queue_MP_Send_extract_proxy        \
   )
 
 /** @} */

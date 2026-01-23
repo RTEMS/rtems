@@ -38,7 +38,8 @@
 #define _RTEMS_RTEMS_SIGNALMP_H
 
 #ifndef _RTEMS_RTEMS_SIGNALIMPL_H
-# error "Never use <rtems/rtems/signalmp.h> directly; include <rtems/rtems/signalimpl.h> instead."
+# error \
+  "Never use <rtems/rtems/signalmp.h> directly; include <rtems/rtems/signalimpl.h> instead."
 #endif
 
 #include <rtems/score/mpciimpl.h>
@@ -72,10 +73,7 @@ extern "C" {
 /**
  * @brief Issues a remote rtems_signal_send() request.
  */
-rtems_status_code _Signal_MP_Send(
-  rtems_id         id,
-  rtems_signal_set signal_set
-);
+rtems_status_code _Signal_MP_Send( rtems_id id, rtems_signal_set signal_set );
 
 /**
  *  @brief Signal MP Process Packet
@@ -83,9 +81,7 @@ rtems_status_code _Signal_MP_Send(
  *  This routine performs the actions specific to this package for
  *  the request from another node.
  */
-void _Signal_MP_Process_packet (
-  rtems_packet_prefix *the_packet_prefix
-);
+void _Signal_MP_Process_packet( rtems_packet_prefix *the_packet_prefix );
 
 /*
  *  @brief Signal_MP_Send_object_was_deleted

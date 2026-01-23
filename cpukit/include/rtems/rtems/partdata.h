@@ -60,7 +60,7 @@ typedef struct {
    */
   Objects_Control Object;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief This lock protects the chain of unallocated buffers and the number
    *   of allocated buffers.
@@ -115,7 +115,7 @@ typedef struct {
  */
 extern Objects_Information _Partition_Information;
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 struct _Thread_Control;
 
 /**
@@ -127,7 +127,7 @@ struct _Thread_Control;
  * @param[in, out] the_thread is the thread proxy.
  * @param id is the partition identifier.
  */
-void _Partition_MP_Send_extract_proxy (
+void _Partition_MP_Send_extract_proxy(
   struct _Thread_Control *the_thread,
   Objects_Id              id
 );
@@ -142,14 +142,14 @@ void _Partition_MP_Send_extract_proxy (
  *   flag may be set).
  */
 #define PARTITION_INFORMATION_DEFINE( _max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _Partition, \
-    OBJECTS_CLASSIC_API, \
-    OBJECTS_RTEMS_PARTITIONS, \
-    Partition_Control, \
-    _max, \
-    OBJECTS_NO_STRING_NAME, \
-    _Partition_MP_Send_extract_proxy \
+  OBJECTS_INFORMATION_DEFINE(                \
+    _Partition,                              \
+    OBJECTS_CLASSIC_API,                     \
+    OBJECTS_RTEMS_PARTITIONS,                \
+    Partition_Control,                       \
+    _max,                                    \
+    OBJECTS_NO_STRING_NAME,                  \
+    _Partition_MP_Send_extract_proxy         \
   )
 
 /** @} */

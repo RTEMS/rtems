@@ -59,9 +59,9 @@ extern "C" {
  */
 typedef struct {
   /** This field contains the number of periods executed. */
-  uint32_t     count;
+  uint32_t count;
   /** This field contains the number of periods missed. */
-  uint32_t     missed_count;
+  uint32_t missed_count;
 
   /** This field contains the least amount of CPU time used in a period. */
   Timestamp_Control min_cpu_time;
@@ -76,7 +76,7 @@ typedef struct {
   Timestamp_Control max_wall_time;
   /** This field contains the total amount of CPU time used in a period. */
   Timestamp_Control total_wall_time;
-}  Rate_monotonic_Statistics;
+} Rate_monotonic_Statistics;
 
 /**
  * @brief The following structure defines the control block used to manage each
@@ -88,69 +88,69 @@ typedef struct {
  */
 typedef struct {
   /** This field is the object management portion of a Period instance. */
-  Objects_Control                         Object;
+  Objects_Control Object;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Protects the rate monotonic period state.
    */
-  ISR_lock_Control                        Lock;
+  ISR_lock_Control Lock;
 #endif
 
   /** This is the timer used to provide the unblocking mechanism. */
-  Watchdog_Control                        Timer;
+  Watchdog_Control Timer;
 
   /** This field indicates the current state of the period. */
-  rtems_rate_monotonic_period_states      state;
+  rtems_rate_monotonic_period_states state;
 
   /**
    * @brief A priority node for use by the scheduler job release and cancel
    * operations.
    */
-  Priority_Node                           Priority;
+  Priority_Node Priority;
 
   /**
    * This field contains the length of the next period to be
    * executed.
    */
-  uint32_t                                next_length;
+  uint32_t next_length;
 
   /**
    * This field contains a pointer to the TCB for the thread
    * which owns and uses this period instance.
    */
-  Thread_Control                         *owner;
+  Thread_Control *owner;
 
   /**
    * This field contains the cpu usage value of the owning thread when
    * the period was initiated.  It is used to compute the period's
    * statistics.
    */
-  Timestamp_Control                       cpu_usage_period_initiated;
+  Timestamp_Control cpu_usage_period_initiated;
 
   /**
    * This field contains the wall time value when the period
    * was initiated.  It is used to compute the period's statistics.
    */
-  Timestamp_Control                       time_period_initiated;
+  Timestamp_Control time_period_initiated;
 
   /**
    * This field contains the statistics maintained for the period.
    */
-  Rate_monotonic_Statistics               Statistics;
+  Rate_monotonic_Statistics Statistics;
 
   /**
    * This field contains the number of postponed jobs.
    * When the watchdog timeout, this variable will be increased immediately.
    */
-  uint32_t                                postponed_jobs;
+  uint32_t postponed_jobs;
 
   /**
    *  This field contains the tick of the latest deadline decided by the period
    *  watchdog.
   */
-  uint64_t                                latest_deadline;
-}   Rate_monotonic_Control;
+  uint64_t latest_deadline;
+} Rate_monotonic_Control;
 
 /**
  * @brief The Classic Rate Monotonic objects information.
@@ -167,14 +167,14 @@ extern Objects_Information _Rate_monotonic_Information;
  * may be set).
  */
 #define RATE_MONOTONIC_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _Rate_monotonic, \
-    OBJECTS_CLASSIC_API, \
-    OBJECTS_RTEMS_PERIODS, \
-    Rate_monotonic_Control, \
-    max, \
-    OBJECTS_NO_STRING_NAME, \
-    NULL \
+  OBJECTS_INFORMATION_DEFINE(                    \
+    _Rate_monotonic,                             \
+    OBJECTS_CLASSIC_API,                         \
+    OBJECTS_RTEMS_PERIODS,                       \
+    Rate_monotonic_Control,                      \
+    max,                                         \
+    OBJECTS_NO_STRING_NAME,                      \
+    NULL                                         \
   )
 
 /** @} */

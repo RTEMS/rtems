@@ -61,11 +61,11 @@ extern "C" {
  *  This routine allocates a port control block from the inactive chain
  *  of free port control blocks.
  */
-static inline Dual_ported_memory_Control
-   *_Dual_ported_memory_Allocate ( void )
+static inline Dual_ported_memory_Control *_Dual_ported_memory_Allocate( void )
 {
-  return (Dual_ported_memory_Control *)
-     _Objects_Allocate( &_Dual_ported_memory_Information );
+  return (Dual_ported_memory_Control *) _Objects_Allocate(
+    &_Dual_ported_memory_Information
+  );
 }
 
 /**
@@ -75,8 +75,8 @@ static inline Dual_ported_memory_Control
  *  This routine frees a port control block to the inactive chain
  *  of free port control blocks.
  */
-static inline void _Dual_ported_memory_Free (
-   Dual_ported_memory_Control *the_port
+static inline void _Dual_ported_memory_Free(
+  Dual_ported_memory_Control *the_port
 )
 {
   _Objects_Free( &_Dual_ported_memory_Information, &the_port->Object );
@@ -87,8 +87,9 @@ static inline Dual_ported_memory_Control *_Dual_ported_memory_Get(
   ISR_lock_Context *lock_context
 )
 {
-  return (Dual_ported_memory_Control *)
-    _Objects_Get( id, lock_context, &_Dual_ported_memory_Information );
+  return (
+    Dual_ported_memory_Control *
+  ) _Objects_Get( id, lock_context, &_Dual_ported_memory_Information );
 }
 
 /**@}*/

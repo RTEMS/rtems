@@ -70,19 +70,20 @@ typedef rtems_status_code ( *RTEMS_tasks_Prepare_stack )(
 );
 
 rtems_status_code _RTEMS_tasks_Create(
-  const rtems_task_config   *config,
-  rtems_id                  *id,
-  RTEMS_tasks_Prepare_stack  prepare_stack
+  const rtems_task_config  *config,
+  rtems_id                 *id,
+  RTEMS_tasks_Prepare_stack prepare_stack
 );
 
-static inline Thread_Control *_RTEMS_tasks_Allocate(void)
+static inline Thread_Control *_RTEMS_tasks_Allocate( void )
 {
   _Objects_Allocator_lock();
 
   _Thread_Kill_zombies();
 
-  return (Thread_Control *)
-    _Objects_Allocate_unprotected( &_RTEMS_tasks_Information.Objects );
+  return (Thread_Control *) _Objects_Allocate_unprotected(
+    &_RTEMS_tasks_Information.Objects
+  );
 }
 
 /**
@@ -124,8 +125,9 @@ static inline rtems_task_priority _RTEMS_Priority_From_core(
   Priority_Control         priority
 )
 {
-  return (rtems_task_priority)
-    _Scheduler_Unmap_priority( scheduler, priority );
+  return (
+    rtems_task_priority
+  ) _Scheduler_Unmap_priority( scheduler, priority );
 }
 
 /**@}*/
@@ -138,7 +140,7 @@ static inline rtems_task_priority _RTEMS_Priority_From_core(
  * @brief This group contains the Scheduler Manager implementation.
  */
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 #include <rtems/rtems/taskmp.h>
 #endif
 

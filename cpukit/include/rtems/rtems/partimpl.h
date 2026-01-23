@@ -63,15 +63,13 @@ extern "C" {
  * @return See _Objects_Get().
  */
 static inline Partition_Control *_Partition_Get(
-  Objects_Id         id,
-  ISR_lock_Context  *lock_context
+  Objects_Id        id,
+  ISR_lock_Context *lock_context
 )
 {
-  return (Partition_Control *) _Objects_Get(
-    id,
-    lock_context,
-    &_Partition_Information
-  );
+  return (
+    Partition_Control *
+  ) _Objects_Get( id, lock_context, &_Partition_Information );
 }
 
 /**
@@ -88,7 +86,7 @@ static inline void _Partition_Acquire_critical(
 {
   _ISR_lock_Acquire( &the_partition->Lock, lock_context );
 #ifndef RTEMS_SMP
-   (void) the_partition;
+  (void) the_partition;
 #endif
 }
 
@@ -106,7 +104,7 @@ static inline void _Partition_Release(
 {
   _ISR_lock_Release_and_ISR_enable( &the_partition->Lock, lock_context );
 #ifndef RTEMS_SMP
-   (void) the_partition;
+  (void) the_partition;
 #endif
 }
 
@@ -116,7 +114,7 @@ static inline void _Partition_Release(
 }
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 #include <rtems/rtems/partmp.h>
 #endif
 

@@ -73,9 +73,7 @@ static inline Barrier_Control *_Barrier_Allocate( void )
  *  This routine frees a barrier control block to the
  *  inactive chain of free barrier control blocks.
  */
-static inline void _Barrier_Free (
-  Barrier_Control *the_barrier
-)
+static inline void _Barrier_Free( Barrier_Control *the_barrier )
 {
   _CORE_barrier_Destroy( &the_barrier->Barrier );
   _Objects_Free( &_Barrier_Information, &the_barrier->Object );

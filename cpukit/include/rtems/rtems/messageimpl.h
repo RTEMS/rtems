@@ -65,13 +65,13 @@ typedef enum {
    *  This value indicates the user wants to send the message using the
    *  normal message insertion protocol (FIFO or priority).
    */
-  MESSAGE_QUEUE_SEND_REQUEST   = 0,
+  MESSAGE_QUEUE_SEND_REQUEST = 0,
   /**
    *  This value indicates the user considers the message to be urgent
    *  and wants it inserted at the head of the pending message queue.
    */
   MESSAGE_QUEUE_URGENT_REQUEST = 1
-}  Message_queue_Submit_types;
+} Message_queue_Submit_types;
 
 /**
  *  @brief Message_queue_Submit
@@ -84,10 +84,10 @@ typedef enum {
  *  which will be inserted at the front of the queue.
  */
 rtems_status_code _Message_queue_Submit(
-  rtems_id                    id,
-  const void                 *buffer,
-  size_t                      size,
-  Message_queue_Submit_types  submit_type
+  rtems_id                   id,
+  const void                *buffer,
+  size_t                     size,
+  Message_queue_Submit_types submit_type
 );
 
 /**
@@ -97,7 +97,7 @@ rtems_status_code _Message_queue_Submit(
  *  This routine deallocates a message queue control block into
  *  the inactive chain of free message queue control blocks.
  */
-static inline void _Message_queue_Free (
+static inline void _Message_queue_Free(
   Message_queue_Control *the_message_queue
 )
 {
@@ -119,8 +119,9 @@ static inline Message_queue_Control *_Message_queue_Get(
 
 static inline Message_queue_Control *_Message_queue_Allocate( void )
 {
-  return (Message_queue_Control *)
-    _Objects_Allocate( &_Message_queue_Information );
+  return (Message_queue_Control *) _Objects_Allocate(
+    &_Message_queue_Information
+  );
 }
 
 /**
@@ -135,9 +136,9 @@ static inline Message_queue_Control *_Message_queue_Allocate( void )
  *   handler.
  */
 rtems_status_code _Message_queue_Create(
-  const rtems_message_queue_config    *config,
-  rtems_id                            *id,
-  CORE_message_queue_Allocate_buffers  allocate_buffers
+  const rtems_message_queue_config   *config,
+  rtems_id                           *id,
+  CORE_message_queue_Allocate_buffers allocate_buffers
 );
 
 /**@}*/
@@ -146,7 +147,7 @@ rtems_status_code _Message_queue_Create(
 }
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 #include <rtems/rtems/msgmp.h>
 #endif
 

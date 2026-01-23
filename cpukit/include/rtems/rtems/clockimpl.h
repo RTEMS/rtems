@@ -101,9 +101,7 @@ rtems_status_code _TOD_Validate(
  * @retval This method returns the number of seconds since epoch represented
  *         by @a the_tod
  */
-Watchdog_Interval _TOD_To_seconds(
-  const rtems_time_of_day *the_tod
-);
+Watchdog_Interval _TOD_To_seconds( const rtems_time_of_day *the_tod );
 
 /** @} */
 

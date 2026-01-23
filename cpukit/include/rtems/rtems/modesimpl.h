@@ -64,11 +64,9 @@ extern "C" {
  *  This function returns TRUE if mode_set indicates that Asynchronous
  *  Signal Processing is disabled, and FALSE otherwise.
  */
-static inline bool _Modes_Is_asr_disabled (
-  rtems_mode mode_set
-)
+static inline bool _Modes_Is_asr_disabled( rtems_mode mode_set )
 {
-   return (mode_set & RTEMS_ASR_MASK) == RTEMS_NO_ASR;
+  return ( mode_set & RTEMS_ASR_MASK ) == RTEMS_NO_ASR;
 }
 
 /**
@@ -77,11 +75,9 @@ static inline bool _Modes_Is_asr_disabled (
  *  This function returns TRUE if mode_set indicates that preemption
  *  is enabled, and FALSE otherwise.
  */
-static inline bool _Modes_Is_preempt (
-  rtems_mode mode_set
-)
+static inline bool _Modes_Is_preempt( rtems_mode mode_set )
 {
-   return (mode_set & RTEMS_PREEMPT_MASK) == RTEMS_PREEMPT;
+  return ( mode_set & RTEMS_PREEMPT_MASK ) == RTEMS_PREEMPT;
 }
 
 /**
@@ -90,11 +86,9 @@ static inline bool _Modes_Is_preempt (
  *  This function returns TRUE if mode_set indicates that timeslicing
  *  is enabled, and FALSE otherwise.
  */
-static inline bool _Modes_Is_timeslice (
-  rtems_mode mode_set
-)
+static inline bool _Modes_Is_timeslice( rtems_mode mode_set )
 {
-  return (mode_set & RTEMS_TIMESLICE_MASK) == RTEMS_TIMESLICE;
+  return ( mode_set & RTEMS_TIMESLICE_MASK ) == RTEMS_TIMESLICE;
 }
 
 /**
@@ -102,14 +96,12 @@ static inline bool _Modes_Is_timeslice (
  *
  *  This function returns the interrupt level portion of the mode_set.
  */
-static inline ISR_Level _Modes_Get_interrupt_level (
-  rtems_mode mode_set
-)
+static inline ISR_Level _Modes_Get_interrupt_level( rtems_mode mode_set )
 {
   return ( mode_set & RTEMS_INTERRUPT_MASK );
 }
 
-#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+#if defined( RTEMS_SMP ) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
 /**
  * @brief Checks if support for the interrupt level is implemented.
  *
@@ -119,19 +111,17 @@ static inline ISR_Level _Modes_Get_interrupt_level (
  * @return Returns true, if support for the interrupt level is implemented,
  *   otherwise returns false.
  */
-static inline bool _Modes_Is_interrupt_level_supported(
-  rtems_mode mode_set
-)
+static inline bool _Modes_Is_interrupt_level_supported( rtems_mode mode_set )
 {
   return _Modes_Get_interrupt_level( mode_set ) == 0
 #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
-    || !_SMP_Need_inter_processor_interrupts()
+         || !_SMP_Need_inter_processor_interrupts()
 #endif
     ;
 }
 #endif
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief Checks if support for the preempt mode is implemented.
  *
@@ -148,9 +138,9 @@ static inline bool _Modes_Is_preempt_mode_supported(
 )
 {
   return _Modes_Is_preempt( mode_set ) ||
-    _Scheduler_Is_non_preempt_mode_supported(
-      _Thread_Scheduler_get_home( the_thread )
-    );
+         _Scheduler_Is_non_preempt_mode_supported(
+           _Thread_Scheduler_get_home( the_thread )
+         );
 }
 #endif
 

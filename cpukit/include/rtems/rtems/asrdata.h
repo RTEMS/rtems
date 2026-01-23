@@ -56,14 +56,14 @@ extern "C" {
  */
 typedef struct {
   /** This field indicates if are ASRs enabled currently. */
-  bool              is_enabled;
+  bool             is_enabled;
   /** This field indicates if address of the signal handler function. */
-  rtems_asr_entry   handler;
+  rtems_asr_entry  handler;
   /** This field indicates if the task mode the signal will run with. */
-  rtems_mode        mode_set;
+  rtems_mode       mode_set;
   /** This field indicates the signal set that is pending. */
-  rtems_signal_set  signals_pending;
-}   ASR_Information;
+  rtems_signal_set signals_pending;
+} ASR_Information;
 
 /** @} */
 

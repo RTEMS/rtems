@@ -77,9 +77,7 @@ static inline Region_Control *_Region_Allocate( void )
  *  This routine frees a region control block to the
  *  inactive chain of free region control blocks.
  */
-static inline void _Region_Free (
-  Region_Control *the_region
-)
+static inline void _Region_Free( Region_Control *the_region )
 {
   _Thread_queue_Destroy( &the_region->Wait_queue );
   _Objects_Free( &_Region_Information, &the_region->Object );
@@ -116,7 +114,7 @@ static inline void _Region_Unlock( Region_Control *the_region )
  *  If successful, it returns the address of the allocated segment.
  *  Otherwise, it returns NULL.
  */
-static inline void *_Region_Allocate_segment (
+static inline void *_Region_Allocate_segment(
   Region_Control *the_region,
   uintptr_t       size
 )
@@ -129,7 +127,7 @@ static inline void *_Region_Allocate_segment (
  *
  *  This function frees the_segment to the_region.
  */
-static inline bool _Region_Free_segment (
+static inline bool _Region_Free_segment(
   Region_Control *the_region,
   void           *the_segment
 )
@@ -146,7 +144,7 @@ static inline bool _Region_Free_segment (
  *
  *  @param[in] the_region is the the region
  */
-extern void _Region_Process_queue(Region_Control *the_region);
+extern void _Region_Process_queue( Region_Control *the_region );
 
 /**@}*/
 

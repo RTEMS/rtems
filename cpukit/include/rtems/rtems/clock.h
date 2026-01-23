@@ -1073,8 +1073,8 @@ static inline rtems_interval rtems_clock_tick_later_usec(
    * Add one additional tick, since we do not know the time to the clock
    * next tick.
    */
-  return _Watchdog_Ticks_since_boot + 1
-    + ( delta_in_usec + us_per_tick - 1 ) / us_per_tick;
+  return _Watchdog_Ticks_since_boot + 1 +
+         ( delta_in_usec + us_per_tick - 1 ) / us_per_tick;
 }
 
 /* Generated from spec:/rtems/clock/if/tick-before */

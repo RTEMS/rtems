@@ -38,7 +38,8 @@
 #define _RTEMS_RTEMS_EVENTMP_H
 
 #ifndef _RTEMS_RTEMS_EVENTIMPL_H
-# error "Never use <rtems/rtems/eventmp.h> directly; include <rtems/rtems/eventimpl.h> instead."
+# error \
+  "Never use <rtems/rtems/eventmp.h> directly; include <rtems/rtems/eventimpl.h> instead."
 #endif
 
 #include <rtems/score/mpciimpl.h>
@@ -74,10 +75,7 @@ extern "C" {
 /**
  * @brief Issues a remote rtems_event_send() request.
  */
-rtems_status_code _Event_MP_Send(
-  rtems_id        id,
-  rtems_event_set event_in
-);
+rtems_status_code _Event_MP_Send( rtems_id id, rtems_event_set event_in );
 
 /**
  *  @brief Event MP Packet Process
@@ -85,9 +83,7 @@ rtems_status_code _Event_MP_Send(
  *  This routine performs the actions specific to this package for
  *  the request from another node.
  */
-void _Event_MP_Process_packet (
-  rtems_packet_prefix *the_packet_prefix
-);
+void _Event_MP_Process_packet( rtems_packet_prefix *the_packet_prefix );
 
 /*
  *  @brief Event_MP_Send_object_was_deleted

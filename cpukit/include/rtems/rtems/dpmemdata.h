@@ -58,14 +58,14 @@ extern "C" {
  */
 typedef struct {
   /** This field is the object management portion of a Port instance. */
-  Objects_Control  Object;
+  Objects_Control Object;
   /** This field is the base internal address of the port. */
-  void            *internal_base;
+  void           *internal_base;
   /** This field is the base external address of the port. */
-  void            *external_base;
+  void           *external_base;
   /** This field is the length of dual-ported area of the port. */
-  uint32_t         length;
-}   Dual_ported_memory_Control;
+  uint32_t        length;
+} Dual_ported_memory_Control;
 
 /**
  * @brief The Classic Dual Ported Memory objects information.
@@ -82,14 +82,14 @@ extern Objects_Information _Dual_ported_memory_Information;
  * may be set).
  */
 #define DUAL_PORTED_MEMORY_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _Dual_ported_memory, \
-    OBJECTS_CLASSIC_API, \
-    OBJECTS_RTEMS_PORTS, \
-    Dual_ported_memory_Control, \
-    max, \
-    OBJECTS_NO_STRING_NAME, \
-    NULL \
+  OBJECTS_INFORMATION_DEFINE(                        \
+    _Dual_ported_memory,                             \
+    OBJECTS_CLASSIC_API,                             \
+    OBJECTS_RTEMS_PORTS,                             \
+    Dual_ported_memory_Control,                      \
+    max,                                             \
+    OBJECTS_NO_STRING_NAME,                          \
+    NULL                                             \
   )
 
 /** @} */

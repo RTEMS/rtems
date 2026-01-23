@@ -60,27 +60,27 @@ extern "C" {
  */
 typedef struct {
   /** This field is the object management portion of a Timer instance. */
-  Objects_Control  Object;
+  Objects_Control                   Object;
   /** This field is the Watchdog instance which will be the scheduled. */
-  Watchdog_Control Ticker;
+  Watchdog_Control                  Ticker;
   /** This field indicates what type of timer this currently is. */
-  Timer_Classes    the_class;
+  Timer_Classes                     the_class;
   /** This field is the timer service routine. */
   rtems_timer_service_routine_entry routine;
   /** This field is the timer service routine user data. */
-  void *user_data;
+  void                             *user_data;
   /** This field is the timer interval in ticks or seconds. */
-  Watchdog_Interval initial;
+  Watchdog_Interval                 initial;
   /** This field is the timer start time point in ticks. */
-  Watchdog_Interval start_time;
+  Watchdog_Interval                 start_time;
   /** This field is the timer stop time point in ticks. */
-  Watchdog_Interval stop_time;
-}   Timer_Control;
+  Watchdog_Interval                 stop_time;
+} Timer_Control;
 
 /**
  * @brief The Classic Timer objects information.
  */
-extern Objects_Information  _Timer_Information;
+extern Objects_Information _Timer_Information;
 
 /**
  * @brief Macro to define the objects information for the Classic Timer
@@ -92,14 +92,14 @@ extern Objects_Information  _Timer_Information;
  * may be set).
  */
 #define TIMER_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _Timer, \
-    OBJECTS_CLASSIC_API, \
-    OBJECTS_RTEMS_TIMERS, \
-    Timer_Control, \
-    max, \
-    OBJECTS_NO_STRING_NAME, \
-    NULL \
+  OBJECTS_INFORMATION_DEFINE(           \
+    _Timer,                             \
+    OBJECTS_CLASSIC_API,                \
+    OBJECTS_RTEMS_TIMERS,               \
+    Timer_Control,                      \
+    max,                                \
+    OBJECTS_NO_STRING_NAME,             \
+    NULL                                \
   )
 
 /** @} */

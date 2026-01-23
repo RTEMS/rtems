@@ -38,7 +38,8 @@
 #define _RTEMS_RTEMS_MSGMP_H
 
 #ifndef _RTEMS_RTEMS_MESSAGEIMPL_H
-# error "Never use <rtems/rtems/msgmp.h> directly; include <rtems/rtems/messageimpl.h> instead."
+# error \
+  "Never use <rtems/rtems/msgmp.h> directly; include <rtems/rtems/messageimpl.h> instead."
 #endif
 
 #include <rtems/score/mpciimpl.h>
@@ -64,22 +65,22 @@ extern "C" {
  *  remote message queue operations.
  */
 typedef enum {
-  MESSAGE_QUEUE_MP_ANNOUNCE_CREATE             =  0,
-  MESSAGE_QUEUE_MP_ANNOUNCE_DELETE             =  1,
-  MESSAGE_QUEUE_MP_EXTRACT_PROXY               =  2,
-  MESSAGE_QUEUE_MP_RECEIVE_REQUEST             =  3,
-  MESSAGE_QUEUE_MP_RECEIVE_RESPONSE            =  4,
-  MESSAGE_QUEUE_MP_SEND_REQUEST                =  5,
-  MESSAGE_QUEUE_MP_SEND_RESPONSE               =  6,
-  MESSAGE_QUEUE_MP_URGENT_REQUEST              =  7,
-  MESSAGE_QUEUE_MP_URGENT_RESPONSE             =  8,
-  MESSAGE_QUEUE_MP_BROADCAST_REQUEST           =  9,
-  MESSAGE_QUEUE_MP_BROADCAST_RESPONSE          = 10,
-  MESSAGE_QUEUE_MP_FLUSH_REQUEST               = 11,
-  MESSAGE_QUEUE_MP_FLUSH_RESPONSE              = 12,
-  MESSAGE_QUEUE_MP_GET_NUMBER_PENDING_REQUEST  = 13,
+  MESSAGE_QUEUE_MP_ANNOUNCE_CREATE = 0,
+  MESSAGE_QUEUE_MP_ANNOUNCE_DELETE = 1,
+  MESSAGE_QUEUE_MP_EXTRACT_PROXY = 2,
+  MESSAGE_QUEUE_MP_RECEIVE_REQUEST = 3,
+  MESSAGE_QUEUE_MP_RECEIVE_RESPONSE = 4,
+  MESSAGE_QUEUE_MP_SEND_REQUEST = 5,
+  MESSAGE_QUEUE_MP_SEND_RESPONSE = 6,
+  MESSAGE_QUEUE_MP_URGENT_REQUEST = 7,
+  MESSAGE_QUEUE_MP_URGENT_RESPONSE = 8,
+  MESSAGE_QUEUE_MP_BROADCAST_REQUEST = 9,
+  MESSAGE_QUEUE_MP_BROADCAST_RESPONSE = 10,
+  MESSAGE_QUEUE_MP_FLUSH_REQUEST = 11,
+  MESSAGE_QUEUE_MP_FLUSH_RESPONSE = 12,
+  MESSAGE_QUEUE_MP_GET_NUMBER_PENDING_REQUEST = 13,
   MESSAGE_QUEUE_MP_GET_NUMBER_PENDING_RESPONSE = 14
-}   Message_queue_MP_Remote_operations;
+} Message_queue_MP_Remote_operations;
 
 /**
  *  The following data structure defines the packet used to perform
@@ -94,10 +95,10 @@ typedef struct {
   uint32_t                           count;
   uint32_t                           size;
   uint32_t                           buffer[ RTEMS_ZERO_LENGTH_ARRAY ];
-}   Message_queue_MP_Packet;
+} Message_queue_MP_Packet;
 
 #define MESSAGE_QUEUE_MP_PACKET_SIZE \
-  offsetof(Message_queue_MP_Packet, buffer)
+  offsetof( Message_queue_MP_Packet, buffer )
 
 static inline bool _Message_queue_MP_Is_remote( Objects_Id id )
 {
@@ -113,7 +114,7 @@ static inline bool _Message_queue_MP_Is_remote( Objects_Id id )
  *
  *  Output parameters: NONE
  */
-void  _Message_queue_Core_message_queue_mp_support (
+void _Message_queue_Core_message_queue_mp_support(
   Thread_Control *the_thread,
   rtems_id        id
 );
@@ -124,7 +125,7 @@ void  _Message_queue_Core_message_queue_mp_support (
  *  This routine performs a remote procedure call so that a
  *  process operation can be performed on another node.
  */
-void _Message_queue_MP_Send_process_packet (
+void _Message_queue_MP_Send_process_packet(
   Message_queue_MP_Remote_operations operation,
   Objects_Id                         message_queue_id,
   rtems_name                         name,
@@ -144,10 +145,7 @@ rtems_status_code _Message_queue_MP_Broadcast(
 /**
  * @brief Issues a remote rtems_message_queue_flush() request.
  */
-rtems_status_code _Message_queue_MP_Flush(
-  rtems_id  id,
-  uint32_t *count
-);
+rtems_status_code _Message_queue_MP_Flush( rtems_id id, uint32_t *count );
 
 /**
  * @brief Issues a remote rtems_message_queue_get_number_pending() request.
@@ -161,11 +159,11 @@ rtems_status_code _Message_queue_MP_Get_number_pending(
  * @brief Issues a remote rtems_message_queue_receive() request.
  */
 rtems_status_code _Message_queue_MP_Receive(
-  rtems_id        id,
-  void           *buffer,
-  size_t         *size,
-  rtems_option    option_set,
-  rtems_interval  timeout
+  rtems_id       id,
+  void          *buffer,
+  size_t        *size,
+  rtems_option   option_set,
+  rtems_interval timeout
 );
 
 /**
@@ -193,7 +191,7 @@ rtems_status_code _Message_queue_MP_Urgent(
  *  when a proxy has been removed from the thread queue and
  *  the remote node must be informed of this.
  */
-void _Message_queue_MP_Send_object_was_deleted (
+void _Message_queue_MP_Send_object_was_deleted(
   Thread_Control *the_proxy,
   Objects_Id      mp_id
 );

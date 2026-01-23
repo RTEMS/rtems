@@ -56,12 +56,12 @@ extern "C" {
  */
 typedef struct {
   /** This is used to manage a barrier as an object. */
-  Objects_Control          Object;
+  Objects_Control      Object;
   /** This is used to implement the barrier. */
-  CORE_barrier_Control     Barrier;
+  CORE_barrier_Control Barrier;
   /** This is used to specify the attributes of a barrier. */
-  rtems_attribute          attribute_set;
-}   Barrier_Control;
+  rtems_attribute      attribute_set;
+} Barrier_Control;
 
 /**
  * @brief The Classic Barrier objects information.
@@ -78,14 +78,14 @@ extern Objects_Information _Barrier_Information;
  * may be set).
  */
 #define BARRIER_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _Barrier, \
-    OBJECTS_CLASSIC_API, \
-    OBJECTS_RTEMS_BARRIERS, \
-    Barrier_Control, \
-    max, \
-    OBJECTS_NO_STRING_NAME, \
-    NULL \
+  OBJECTS_INFORMATION_DEFINE(             \
+    _Barrier,                             \
+    OBJECTS_CLASSIC_API,                  \
+    OBJECTS_RTEMS_BARRIERS,               \
+    Barrier_Control,                      \
+    max,                                  \
+    OBJECTS_NO_STRING_NAME,               \
+    NULL                                  \
   )
 
 /** @} */

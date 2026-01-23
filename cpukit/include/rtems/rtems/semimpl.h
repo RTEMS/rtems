@@ -67,7 +67,7 @@ typedef enum {
   SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL,
   SEMAPHORE_VARIANT_SIMPLE_BINARY,
   SEMAPHORE_VARIANT_COUNTING
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   ,
   SEMAPHORE_VARIANT_MRSP
 #endif
@@ -95,9 +95,7 @@ static inline void _Semaphore_Set_flags(
   the_semaphore->Object.Node.previous = (Chain_Node *) flags;
 }
 
-static inline Semaphore_Variant _Semaphore_Get_variant(
-  uintptr_t flags
-)
+static inline Semaphore_Variant _Semaphore_Get_variant( uintptr_t flags )
 {
   return (Semaphore_Variant) ( flags & 0x7 );
 }
@@ -110,9 +108,7 @@ static inline uintptr_t _Semaphore_Set_variant(
   return flags | variant;
 }
 
-static inline Semaphore_Discipline _Semaphore_Get_discipline(
-  uintptr_t flags
-)
+static inline Semaphore_Discipline _Semaphore_Get_discipline( uintptr_t flags )
 {
   return (Semaphore_Discipline) ( ( flags >> 3 ) & 0x1 );
 }
@@ -125,10 +121,8 @@ static inline uintptr_t _Semaphore_Set_discipline(
   return flags | ( discipline << 3 );
 }
 
-#if defined(RTEMS_MULTIPROCESSING)
-static inline bool _Semaphore_Is_global(
-  uintptr_t flags
-)
+#if defined( RTEMS_MULTIPROCESSING )
+static inline bool _Semaphore_Is_global( uintptr_t flags )
 {
   return ( flags & 0x10 ) != 0;
 }
@@ -175,9 +169,7 @@ static inline Semaphore_Control *_Semaphore_Allocate( void )
  *  This routine frees a semaphore control block to the
  *  inactive chain of free semaphore control blocks.
  */
-static inline void _Semaphore_Free (
-  Semaphore_Control *the_semaphore
-)
+static inline void _Semaphore_Free( Semaphore_Control *the_semaphore )
 {
   _Objects_Free( &_Semaphore_Information, &the_semaphore->Object );
 }

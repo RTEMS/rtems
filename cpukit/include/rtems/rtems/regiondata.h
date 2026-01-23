@@ -58,13 +58,13 @@ extern "C" {
  */
 
 typedef struct {
-  Objects_Control       Object;
-  Thread_queue_Control  Wait_queue;            /* waiting threads        */
+  Objects_Control                Object;
+  Thread_queue_Control           Wait_queue; /* waiting threads        */
   const Thread_queue_Operations *wait_operations;
-  uintptr_t             maximum_segment_size;  /* in bytes               */
-  rtems_attribute       attribute_set;
-  Heap_Control          Memory;
-}  Region_Control;
+  uintptr_t       maximum_segment_size; /* in bytes               */
+  rtems_attribute attribute_set;
+  Heap_Control    Memory;
+} Region_Control;
 
 /**
  * @brief The Classic Region objects information.
@@ -81,14 +81,14 @@ extern Objects_Information _Region_Information;
  * may be set).
  */
 #define REGION_INFORMATION_DEFINE( max ) \
-  OBJECTS_INFORMATION_DEFINE( \
-    _Region, \
-    OBJECTS_CLASSIC_API, \
-    OBJECTS_RTEMS_REGIONS, \
-    Region_Control, \
-    max, \
-    OBJECTS_NO_STRING_NAME, \
-    NULL \
+  OBJECTS_INFORMATION_DEFINE(            \
+    _Region,                             \
+    OBJECTS_CLASSIC_API,                 \
+    OBJECTS_RTEMS_REGIONS,               \
+    Region_Control,                      \
+    max,                                 \
+    OBJECTS_NO_STRING_NAME,              \
+    NULL                                 \
   )
 
 /** @} */

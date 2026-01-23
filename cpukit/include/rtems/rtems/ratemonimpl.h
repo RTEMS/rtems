@@ -76,8 +76,9 @@ extern "C" {
  */
 static inline Rate_monotonic_Control *_Rate_monotonic_Allocate( void )
 {
-  return (Rate_monotonic_Control *)
-    _Objects_Allocate( &_Rate_monotonic_Information );
+  return (Rate_monotonic_Control *) _Objects_Allocate(
+    &_Rate_monotonic_Information
+  );
 }
 
 static inline void _Rate_monotonic_Acquire_critical(
@@ -87,7 +88,7 @@ static inline void _Rate_monotonic_Acquire_critical(
 {
   _ISR_lock_Acquire( &the_period->Lock, lock_context );
 #ifndef RTEMS_SMP
-   (void) the_period;
+  (void) the_period;
 #endif
 }
 
@@ -98,7 +99,7 @@ static inline void _Rate_monotonic_Release(
 {
   _ISR_lock_Release_and_ISR_enable( &the_period->Lock, lock_context );
 #ifndef RTEMS_SMP
-   (void) the_period;
+  (void) the_period;
 #endif
 }
 
@@ -107,8 +108,9 @@ static inline Rate_monotonic_Control *_Rate_monotonic_Get(
   ISR_lock_Context *lock_context
 )
 {
-  return (Rate_monotonic_Control *)
-    _Objects_Get( id, lock_context, &_Rate_monotonic_Information );
+  return (
+    Rate_monotonic_Control *
+  ) _Objects_Get( id, lock_context, &_Rate_monotonic_Information );
 }
 
 void _Rate_monotonic_Timeout( Watchdog_Control *watchdog );
