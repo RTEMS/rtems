@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -44,19 +44,13 @@ const char rtems_test_name[] = "TIME TEST 15";
 bool     time_set;
 uint32_t eventout;
 
-rtems_task High_tasks(
-  rtems_task_argument argument
-);
+rtems_task High_tasks( rtems_task_argument argument );
 
-rtems_task Low_task(
-  rtems_task_argument argument
-);
+rtems_task Low_task( rtems_task_argument argument );
 
-void test_init(void);
+void test_init( void );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -69,10 +63,10 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-void test_init(void)
+void test_init( void )
 {
   rtems_id          id;
-  uint32_t    index;
+  uint32_t          index;
   rtems_event_set   event_out;
   rtems_status_code status;
 
@@ -91,7 +85,7 @@ void test_init(void)
   status = rtems_task_start( id, Low_task, 0 );
   directive_failed( status, "rtems_task_start LOW" );
 
-  for ( index = 1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'H', 'I', 'G', 'H' ),
       5,
@@ -107,20 +101,20 @@ void test_init(void)
   }
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-    {
-        (void) rtems_event_receive(
-                 RTEMS_PENDING_EVENTS,
-                 RTEMS_DEFAULT_OPTIONS,
-                 RTEMS_NO_TIMEOUT,
-                 &event_out
-               );
-    }
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_event_receive(
+      RTEMS_PENDING_EVENTS,
+      RTEMS_DEFAULT_OPTIONS,
+      RTEMS_NO_TIMEOUT,
+      &event_out
+    );
+  }
 
   end_time = benchmark_timer_read();
 
@@ -132,17 +126,15 @@ void test_init(void)
     0
   );
 
-
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-    {
-      (void) rtems_event_receive(
-               RTEMS_ALL_EVENTS,
-               RTEMS_NO_WAIT,
-               RTEMS_NO_TIMEOUT,
-               &event_out
-             );
-    }
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_event_receive(
+      RTEMS_ALL_EVENTS,
+      RTEMS_NO_WAIT,
+      RTEMS_NO_TIMEOUT,
+      &event_out
+    );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -154,14 +146,12 @@ void test_init(void)
   );
 }
 
-rtems_task Low_task(
-  rtems_task_argument argument
-)
+rtems_task Low_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    index;
-  rtems_event_set   event_out;
+  uint32_t        index;
+  rtems_event_set event_out;
 
   end_time = benchmark_timer_read();
 
@@ -174,13 +164,15 @@ rtems_task Low_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_event_send( RTEMS_SELF, RTEMS_EVENT_16 );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_event_send( RTEMS_SELF, RTEMS_EVENT_16 );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -192,25 +184,20 @@ rtems_task Low_task(
   );
 
   benchmark_timer_initialize();
-    (void) rtems_event_receive(
-             RTEMS_EVENT_16,
-             RTEMS_DEFAULT_OPTIONS,
-             RTEMS_NO_TIMEOUT,
-             &event_out
-           );
+  (void) rtems_event_receive(
+    RTEMS_EVENT_16,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT,
+    &event_out
+  );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_event_receive: available",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_event_receive: available", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_event_send( Task_id[ index ], RTEMS_EVENT_16 );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_event_send( Task_id[ index ], RTEMS_EVENT_16 );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -225,20 +212,18 @@ rtems_task Low_task(
   rtems_test_exit( 0 );
 }
 
-rtems_task High_tasks(
-  rtems_task_argument argument
-)
+rtems_task High_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
-  if ( time_set )
+  if ( time_set ) {
     (void) rtems_event_receive(
       RTEMS_EVENT_16,
       RTEMS_DEFAULT_OPTIONS,
       RTEMS_NO_TIMEOUT,
       &eventout
     );
-  else {
+  } else {
     time_set = true;
     /* start blocking rtems_event_receive time */
     benchmark_timer_initialize();

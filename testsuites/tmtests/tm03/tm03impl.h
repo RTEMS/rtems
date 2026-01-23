@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -39,49 +39,40 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-#if defined(TM03)
+#if defined( TM03 )
 const char rtems_test_name[] = "TIME TEST 3";
-#define SEMAPHORE_ATTRIBUTES (RTEMS_COUNTING_SEMAPHORE | RTEMS_FIFO)
-#define ATTR_DESC "counting/FIFO"
+#define SEMAPHORE_ATTRIBUTES ( RTEMS_COUNTING_SEMAPHORE | RTEMS_FIFO )
+#define ATTR_DESC            "counting/FIFO"
 
-#elif defined(TM32)
+#elif defined( TM32 )
 const char rtems_test_name[] = "TIME TEST 32";
-#define SEMAPHORE_ATTRIBUTES (RTEMS_COUNTING_SEMAPHORE | RTEMS_PRIORITY)
-#define ATTR_DESC "counting/priority"
+#define SEMAPHORE_ATTRIBUTES ( RTEMS_COUNTING_SEMAPHORE | RTEMS_PRIORITY )
+#define ATTR_DESC            "counting/priority"
 
-#elif defined(TM34)
+#elif defined( TM34 )
 const char rtems_test_name[] = "TIME TEST 34";
 #define SEMAPHORE_ATTRIBUTES RTEMS_BINARY_SEMAPHORE
-#define ATTR_DESC "binary/FIFO"
+#define ATTR_DESC            "binary/FIFO"
 
-#elif defined(TM36)
+#elif defined( TM36 )
 const char rtems_test_name[] = "TIME TEST 36";
-#define SEMAPHORE_ATTRIBUTES (RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY)
-#define ATTR_DESC "binary/priority"
+#define SEMAPHORE_ATTRIBUTES ( RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY )
+#define ATTR_DESC            "binary/priority"
 
 #else
 #error "Unknown test configuration"
 #endif
 
+rtems_id   Semaphore_id;
+rtems_task test_init( rtems_task_argument argument );
 
-rtems_id Semaphore_id;
-rtems_task test_init(
-  rtems_task_argument argument
-);
+rtems_task Middle_tasks( rtems_task_argument argument );
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-);
-
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
 int operation_count = OPERATION_COUNT;
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -107,9 +98,7 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task test_init(
-  rtems_task_argument argument
-)
+rtems_task test_init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -121,7 +110,7 @@ rtems_task test_init(
   priority = RTEMS_MAXIMUM_PRIORITY - 2u;
 
   status = rtems_semaphore_create(
-    rtems_build_name( 'S', 'M', '1', '\0'),
+    rtems_build_name( 'S', 'M', '1', '\0' ),
     0,
     SEMAPHORE_ATTRIBUTES,
     RTEMS_NO_PRIORITY,
@@ -129,9 +118,10 @@ rtems_task test_init(
   );
   directive_failed( status, "rtems_semaphore_create of SM1" );
 
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u )
-    operation_count =  (int) (RTEMS_MAXIMUM_PRIORITY - 2u);
-  for ( index = 2 ; index < operation_count ; index ++ ) {
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u ) {
+    operation_count = (int) ( RTEMS_MAXIMUM_PRIORITY - 2u );
+  }
+  for ( index = 2; index < operation_count; index++ ) {
     rtems_task_create(
       rtems_build_name( 'M', 'I', 'D', ' ' ),
       priority,
@@ -161,13 +151,11 @@ rtems_task test_init(
   status = rtems_task_start( task_id, High_task, 0 );
   directive_failed( status, "rtems_task_start of high task" );
 
-  benchmark_timer_initialize();                          /* start the timer */
+  benchmark_timer_initialize(); /* start the timer */
   status = rtems_semaphore_release( Semaphore_id );
 }
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-)
+rtems_task Middle_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -180,9 +168,7 @@ rtems_task Middle_tasks(
   (void) rtems_semaphore_release( Semaphore_id );
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 

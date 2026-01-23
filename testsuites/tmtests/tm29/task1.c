@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -43,24 +43,18 @@ const char rtems_test_name[] = "TIME TEST 29";
 
 rtems_name Period_name;
 
-rtems_task Tasks(
-  rtems_task_argument argument
-);
+rtems_task Tasks( rtems_task_argument argument );
 
-rtems_task Low_task(
-  rtems_task_argument argument
-);
+rtems_task Low_task( rtems_task_argument argument );
 
-uint32_t   Task_count;
+uint32_t Task_count;
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_id          id;
-  uint32_t    index;
+  uint32_t          index;
   rtems_status_code status;
 
   Print_Warning();
@@ -70,19 +64,13 @@ rtems_task Init(
   Period_name = rtems_build_name( 'P', 'R', 'D', ' ' );
 
   benchmark_timer_initialize();
-    (void) rtems_rate_monotonic_create( Period_name, &id );
+  (void) rtems_rate_monotonic_create( Period_name, &id );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_rate_monotonic_create: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_rate_monotonic_create: only case", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-    (void) rtems_rate_monotonic_period( id, 10 );
+  (void) rtems_rate_monotonic_period( id, 10 );
   end_time = benchmark_timer_read();
 
   put_time(
@@ -94,40 +82,22 @@ rtems_task Init(
   );
 
   benchmark_timer_initialize();
-    (void) rtems_rate_monotonic_period( id, RTEMS_PERIOD_STATUS );
+  (void) rtems_rate_monotonic_period( id, RTEMS_PERIOD_STATUS );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_rate_monotonic_period: obtain status",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_rate_monotonic_period: obtain status", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-    (void) rtems_rate_monotonic_cancel( id );
+  (void) rtems_rate_monotonic_cancel( id );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_rate_monotonic_cancel: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_rate_monotonic_cancel: only case", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-    (void) rtems_rate_monotonic_delete( id );
+  (void) rtems_rate_monotonic_delete( id );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_rate_monotonic_delete: inactive",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_rate_monotonic_delete: inactive", end_time, 1, 0, 0 );
 
   status = rtems_rate_monotonic_create( Period_name, &id );
   directive_failed( status, "rtems_rate_monotonic_create" );
@@ -136,19 +106,13 @@ rtems_task Init(
   directive_failed( status, "rtems_rate_monotonic_period" );
 
   benchmark_timer_initialize();
-    rtems_rate_monotonic_delete( id );
+  rtems_rate_monotonic_delete( id );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_rate_monotonic_delete: active",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_rate_monotonic_delete: active", end_time, 1, 0, 0 );
 
-#define LOOP_TASK_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2u) + 1u)
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+#define LOOP_TASK_PRIORITY ( ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u )
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'E', 'S', 'T' ),
       LOOP_TASK_PRIORITY,
@@ -163,7 +127,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_start LOOP" );
   }
 
-#define MIDDLE_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 2u)
+#define MIDDLE_PRIORITY ( RTEMS_MAXIMUM_PRIORITY - 2u )
   status = rtems_task_create(
     rtems_build_name( 'L', 'O', 'W', ' ' ),
     MIDDLE_PRIORITY,
@@ -182,9 +146,7 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task Tasks(
-  rtems_task_argument argument
-)
+rtems_task Tasks( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -207,25 +169,25 @@ rtems_task Tasks(
 
   Task_count++;
 
-  if ( Task_count == 1 )
+  if ( Task_count == 1 ) {
     benchmark_timer_initialize();
+  }
 
   (void) rtems_rate_monotonic_period( id, 100 );
 }
 
-rtems_task Low_task(
-  rtems_task_argument argument
-)
+rtems_task Low_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t   index;
+  uint32_t index;
 
   end_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   put_time(

@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -43,32 +43,24 @@ const char rtems_test_name[] = "TIME TEST 13";
 
 rtems_id Queue_id;
 
-long Buffer[4];
+long Buffer[ 4 ];
 
-rtems_task test_init(
-  rtems_task_argument argument
-);
+rtems_task test_init( rtems_task_argument argument );
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-);
+rtems_task Middle_tasks( rtems_task_argument argument );
 
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
-#define MESSAGE_SIZE (sizeof(long) * 4)
+#define MESSAGE_SIZE ( sizeof( long ) * 4 )
 
 int operation_count = OPERATION_COUNT;
 
-void Init(
-  rtems_task_argument argument
-)
+void Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
-  rtems_id id;
+  rtems_id          id;
 
   Print_Warning();
 
@@ -90,9 +82,7 @@ void Init(
   rtems_task_exit();
 }
 
-rtems_task test_init(
-  rtems_task_argument argument
-)
+rtems_task test_init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -102,13 +92,13 @@ rtems_task test_init(
   rtems_id            task_id;
   rtems_status_code   status;
 
-/*  As each task is started, it preempts this task and
+  /*  As each task is started, it preempts this task and
  *  performs a blocking rtems_message_queue_receive.  Upon completion of
  *  this loop all created tasks are blocked.
  */
 
   status = rtems_message_queue_create(
-    rtems_build_name( 'M', 'Q', '1', ' '  ),
+    rtems_build_name( 'M', 'Q', '1', ' ' ),
     OPERATION_COUNT,
     MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -118,12 +108,13 @@ rtems_task test_init(
 
   priority = RTEMS_MAXIMUM_PRIORITY - 2u;
 
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u )
-    operation_count =  (int)(RTEMS_MAXIMUM_PRIORITY - 2u);
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u ) {
+    operation_count = (int) ( RTEMS_MAXIMUM_PRIORITY - 2u );
+  }
 
-  for( index = 0; index < operation_count ; index++ ) {
+  for ( index = 0; index < operation_count; index++ ) {
     status = rtems_task_create(
-      rtems_build_name( 'T', 'I', 'M', 'E'  ),
+      rtems_build_name( 'T', 'I', 'M', 'E' ),
       priority,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
@@ -134,51 +125,51 @@ rtems_task test_init(
 
     priority--;
 
-    if ( index==operation_count-1 ) task_entry = High_task;
-    else                            task_entry = Middle_tasks;
+    if ( index == operation_count - 1 ) {
+      task_entry = High_task;
+    } else {
+      task_entry = Middle_tasks;
+    }
 
     status = rtems_task_start( task_id, task_entry, 0 );
     directive_failed( status, "rtems_task_start LOOP" );
   }
 
   benchmark_timer_initialize();
-    (void) rtems_message_queue_urgent( Queue_id, Buffer, MESSAGE_SIZE );
+  (void) rtems_message_queue_urgent( Queue_id, Buffer, MESSAGE_SIZE );
 }
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-)
+rtems_task Middle_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
-  size_t  size;
+  size_t size;
 
   (void) rtems_message_queue_receive(
-           Queue_id,
-           (long (*)[4]) Buffer,
-           &size,
-           RTEMS_DEFAULT_OPTIONS,
-           RTEMS_NO_TIMEOUT
-         );
+    Queue_id,
+    (long ( * )[ 4 ]) Buffer,
+    &size,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT
+  );
 
-  (void) rtems_message_queue_urgent( Queue_id, (long (*)[4]) Buffer, size );
+  (void)
+    rtems_message_queue_urgent( Queue_id, (long ( * )[ 4 ]) Buffer, size );
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  size_t  size;
+  size_t size;
 
   (void) rtems_message_queue_receive(
-           Queue_id,
-           (long (*)[4]) Buffer,
-           &size,
-           RTEMS_DEFAULT_OPTIONS,
-           RTEMS_NO_TIMEOUT
-         );
+    Queue_id,
+    (long ( * )[ 4 ]) Buffer,
+    &size,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT
+  );
 
   end_time = benchmark_timer_read();
 

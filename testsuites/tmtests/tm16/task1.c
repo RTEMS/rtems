@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -41,25 +41,17 @@
 
 const char rtems_test_name[] = "TIME TEST 16";
 
-uint32_t   Task_count;
+uint32_t Task_count;
 
-rtems_task test_init(
-  rtems_task_argument argument
-);
+rtems_task test_init( rtems_task_argument argument );
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-);
+rtems_task Middle_tasks( rtems_task_argument argument );
 
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
 int operation_count = OPERATION_COUNT;
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -86,9 +78,7 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task test_init(
-  rtems_task_argument argument
-)
+rtems_task test_init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -97,16 +87,17 @@ rtems_task test_init(
   int                 index;
   rtems_task_entry    task_entry;
 
-/*  As each task is started, it preempts this task and
+  /*  As each task is started, it preempts this task and
  *  performs a blocking rtems_event_receive.  Upon completion of
  *  this loop all created tasks are blocked.
  */
 
   priority = RTEMS_MAXIMUM_PRIORITY - 2u;
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u )
-    operation_count =  (int) (RTEMS_MAXIMUM_PRIORITY - 2u);
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u ) {
+    operation_count = (int) ( RTEMS_MAXIMUM_PRIORITY - 2u );
+  }
 
-  for( index = 0 ; index < operation_count ; index++ ) {
+  for ( index = 0; index < operation_count; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'M', 'I', 'D', ' ' ),
       priority,
@@ -117,8 +108,11 @@ rtems_task test_init(
     );
     directive_failed( status, "rtems_task_create LOOP" );
 
-    if (  index == operation_count-1 ) task_entry = High_task;
-    else                               task_entry = Middle_tasks;
+    if ( index == operation_count - 1 ) {
+      task_entry = High_task;
+    } else {
+      task_entry = Middle_tasks;
+    }
 
     status = rtems_task_start( Task_id[ index ], task_entry, 0 );
     directive_failed( status, "rtems_task_start LOOP" );
@@ -129,13 +123,11 @@ rtems_task test_init(
   Task_count = 0;
 
   benchmark_timer_initialize();
-    (void) rtems_event_send( Task_id[ Task_count ], RTEMS_EVENT_16 );
+  (void) rtems_event_send( Task_id[ Task_count ], RTEMS_EVENT_16 );
   /* preempts task */
 }
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-)
+rtems_task Middle_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -156,9 +148,7 @@ rtems_task Middle_tasks(
   );
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 

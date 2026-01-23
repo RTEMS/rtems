@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -43,27 +43,19 @@ const char rtems_test_name[] = "TIME TEST 14";
 
 rtems_id Queue_id;
 
-long Buffer[4];
+long Buffer[ 4 ];
 
-rtems_task test_init(
-  rtems_task_argument argument
-);
+rtems_task test_init( rtems_task_argument argument );
 
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
-rtems_task Low_tasks(
-  rtems_task_argument argument
-);
+rtems_task Low_tasks( rtems_task_argument argument );
 
-#define MESSAGE_SIZE (sizeof(long) * 4)
+#define MESSAGE_SIZE ( sizeof( long ) * 4 )
 
 int operation_count = OPERATION_COUNT;
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -90,17 +82,15 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task test_init(
-  rtems_task_argument argument
-)
+rtems_task test_init( rtems_task_argument argument )
 {
   (void) argument;
 
-  int                  index;
-  rtems_task_entry     task_entry;
-  rtems_task_priority  priority;
-  rtems_id             task_id;
-  rtems_status_code    status;
+  int                 index;
+  rtems_task_entry    task_entry;
+  rtems_task_priority priority;
+  rtems_id            task_id;
+  rtems_status_code   status;
 
   status = rtems_message_queue_create(
     rtems_build_name( 'M', 'Q', '1', ' ' ),
@@ -112,10 +102,11 @@ rtems_task test_init(
   directive_failed( status, "rtems_message_queue_create" );
 
   priority = RTEMS_MAXIMUM_PRIORITY - 2u;
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u )
-    operation_count =  (int) (RTEMS_MAXIMUM_PRIORITY - 2u);
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u ) {
+    operation_count = (int) ( RTEMS_MAXIMUM_PRIORITY - 2u );
+  }
 
-  for( index = 0; index < operation_count ; index++ ) {
+  for ( index = 0; index < operation_count; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       priority,
@@ -128,30 +119,33 @@ rtems_task test_init(
 
     priority--;
 
-    if ( index==operation_count-1 ) task_entry = High_task;
-    else                            task_entry = Low_tasks;
+    if ( index == operation_count - 1 ) {
+      task_entry = High_task;
+    } else {
+      task_entry = Low_tasks;
+    }
 
     status = rtems_task_start( task_id, task_entry, 0 );
     directive_failed( status, "rtems_task_start LOOP" );
   }
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  int  index;
+  int index;
 
   benchmark_timer_initialize();
-    for ( index=1 ; index < operation_count ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index < operation_count; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= operation_count ; index++ )
-      (void) rtems_message_queue_urgent( Queue_id, Buffer, MESSAGE_SIZE );
+  for ( index = 1; index <= operation_count; index++ ) {
+    (void) rtems_message_queue_urgent( Queue_id, Buffer, MESSAGE_SIZE );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -166,19 +160,17 @@ rtems_task High_task(
   rtems_test_exit( 0 );
 }
 
-rtems_task Low_tasks(
-  rtems_task_argument argument
-)
+rtems_task Low_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
-  size_t  size;
+  size_t size;
 
   (void) rtems_message_queue_receive(
-           Queue_id,
-           (long (*)[4]) Buffer,
-           &size,
-           RTEMS_DEFAULT_OPTIONS,
-           RTEMS_NO_TIMEOUT
-         );
+    Queue_id,
+    (long ( * )[ 4 ]) Buffer,
+    &size,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT
+  );
 }

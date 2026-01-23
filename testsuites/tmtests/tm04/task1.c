@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -41,32 +41,22 @@
 
 const char rtems_test_name[] = "TIME TEST 4";
 
-rtems_id         Semaphore_id;
-rtems_id         Task_id[OPERATION_COUNT+1];
-uint32_t         task_count;
-rtems_id         Highest_id;
+rtems_id Semaphore_id;
+rtems_id Task_id[ OPERATION_COUNT + 1 ];
+uint32_t task_count;
+rtems_id Highest_id;
 
-rtems_task Low_tasks(
-  rtems_task_argument argument
-);
+rtems_task Low_tasks( rtems_task_argument argument );
 
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
-rtems_task Highest_task(
-  rtems_task_argument argument
-);
+rtems_task Highest_task( rtems_task_argument argument );
 
-rtems_task Restart_task(
-  rtems_task_argument argument
-);
+rtems_task Restart_task( rtems_task_argument argument );
 
-void test_init(void);
+void test_init( void );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -79,15 +69,14 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-void test_init(void)
+void test_init( void )
 {
   rtems_status_code status;
   int               index;
 
   task_count = OPERATION_COUNT;
 
-  for ( index = 1 ; index <= OPERATION_COUNT ; index++ ) {
-
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       10,
@@ -112,9 +101,7 @@ void test_init(void)
   directive_failed( status, "rtems_semaphore_create of SM1" );
 }
 
-rtems_task Highest_task(
-  rtems_task_argument argument
-)
+rtems_task Highest_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -122,7 +109,6 @@ rtems_task Highest_task(
   rtems_status_code   status;
 
   if ( argument == 1 ) {
-
     end_time = benchmark_timer_read();
 
     put_time(
@@ -140,9 +126,8 @@ rtems_task Highest_task(
     );
     directive_failed( status, "rtems_task_set_priority" );
 
- } else if ( argument == 2 ) {
-
-  end_time = benchmark_timer_read();
+  } else if ( argument == 2 ) {
+    end_time = benchmark_timer_read();
 
     put_time(
       "rtems_task_restart: ready task -- preempts caller",
@@ -153,42 +138,42 @@ rtems_task Highest_task(
     );
 
     rtems_task_exit();
-  } else
+  } else {
     (void) rtems_semaphore_obtain(
       Semaphore_id,
       RTEMS_DEFAULT_OPTIONS,
       RTEMS_NO_TIMEOUT
     );
-
+  }
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code   status;
-  uint32_t      index;
+  uint32_t            index;
   rtems_name          name;
   rtems_task_priority old_priority;
 
   benchmark_timer_initialize();
-    (void) rtems_task_restart( Highest_id, 1 );
+  (void) rtems_task_restart( Highest_id, 1 );
   /* preempted by Higher_task */
 
   benchmark_timer_initialize();
-    (void) rtems_task_restart( Highest_id, 2 );
+  (void) rtems_task_restart( Highest_id, 2 );
   /* preempted by Higher_task */
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      rtems_semaphore_release( Semaphore_id );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    rtems_semaphore_release( Semaphore_id );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -201,21 +186,22 @@ rtems_task High_task(
 
   name = rtems_build_name( 'T', 'I', 'M', 'E' );
 
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
-    status = rtems_task_delete( Task_id[index] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    status = rtems_task_delete( Task_id[ index ] );
     directive_failed( status, "rtems_task_delete" );
   }
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-     rtems_task_create(
-        name,
-        10,
-        RTEMS_MINIMUM_STACK_SIZE,
-        RTEMS_NO_PREEMPT,
-        RTEMS_DEFAULT_ATTRIBUTES,
-        &Task_id[ index ]
-      );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    rtems_task_create(
+      name,
+      10,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_NO_PREEMPT,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &Task_id[ index ]
+    );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -227,8 +213,9 @@ rtems_task High_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      rtems_task_start( Task_id[ index ], Low_tasks, 0 );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    rtems_task_start( Task_id[ index ], Low_tasks, 0 );
+  }
 
   end_time = benchmark_timer_read();
 
@@ -240,12 +227,12 @@ rtems_task High_task(
     0
   );
 
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_delete( Task_id[ index ] );
     directive_failed( status, "rtems_task_delete" );
   }
 
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_create(
       name,
       RTEMS_MAXIMUM_PRIORITY - 4u,
@@ -264,8 +251,9 @@ rtems_task High_task(
   }
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_restart( Task_id[ index ], 0 );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_restart( Task_id[ index ], 0 );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -276,12 +264,14 @@ rtems_task High_task(
     0
   );
 
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ )
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     (void) rtems_task_suspend( Task_id[ index ] );
+  }
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_delete( Task_id[ index ] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_delete( Task_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -292,7 +282,7 @@ rtems_task High_task(
     0
   );
 
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_create(
       name,
       RTEMS_MAXIMUM_PRIORITY - 4u,
@@ -308,8 +298,9 @@ rtems_task High_task(
   }
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_restart( Task_id[ index ], 1 );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_restart( Task_id[ index ], 1 );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -320,7 +311,7 @@ rtems_task High_task(
     0
   );
 
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_set_priority( Task_id[ index ], 5, &old_priority );
     directive_failed( status, "rtems_task_set_priority loop" );
   }
@@ -330,8 +321,9 @@ rtems_task High_task(
   directive_failed( status, "rtems_task_wake_after" );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_restart( Task_id[ index ], 1 );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_restart( Task_id[ index ], 1 );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -347,8 +339,9 @@ rtems_task High_task(
   directive_failed( status, "rtems_task_wake_after" );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_delete( Task_id[ index ] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_delete( Task_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -363,9 +356,7 @@ rtems_task High_task(
   rtems_test_exit( 0 );
 }
 
-rtems_task Low_tasks(
-  rtems_task_argument argument
-)
+rtems_task Low_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -401,7 +392,6 @@ rtems_task Low_tasks(
 
     status = rtems_task_start( Highest_id, Highest_task, 0 );
     directive_failed( status, "rtems_task_start HIGH" );
-
   }
   (void) rtems_semaphore_obtain(
     Semaphore_id,
@@ -409,19 +399,18 @@ rtems_task Low_tasks(
     RTEMS_NO_TIMEOUT
   );
 
-  rtems_task_mode(RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &prev);
+  rtems_task_mode( RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &prev );
 }
 
-rtems_task Restart_task(
-  rtems_task_argument argument
-)
+rtems_task Restart_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  if ( argument == 1 )
+  if ( argument == 1 ) {
     (void) rtems_semaphore_obtain(
       Semaphore_id,
       RTEMS_DEFAULT_OPTIONS,
       RTEMS_NO_TIMEOUT
     );
+  }
 }

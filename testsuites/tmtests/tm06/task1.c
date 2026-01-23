@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -43,21 +43,15 @@ const char rtems_test_name[] = "TIME TEST 6";
 
 rtems_id Task_id[ OPERATION_COUNT + 1 ];
 
-uint32_t   Task_restarted;
+uint32_t Task_restarted;
 
-rtems_task null_task(
-  rtems_task_argument argument
-);
+rtems_task null_task( rtems_task_argument argument );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
 void test_init( void );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -79,7 +73,7 @@ void test_init( void )
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', 'E' ),
-    (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
+    ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -91,28 +85,29 @@ void test_init( void )
   directive_failed( status, "rtems_task_start" );
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
-  uint32_t    index;
+  uint32_t          index;
 
-  if ( Task_restarted == OPERATION_COUNT )
-     benchmark_timer_initialize();
+  if ( Task_restarted == OPERATION_COUNT ) {
+    benchmark_timer_initialize();
+  }
 
   Task_restarted--;
 
-  if ( Task_restarted != 0 )
+  if ( Task_restarted != 0 ) {
     (void) rtems_task_restart( RTEMS_SELF, 0 );
+  }
 
   end_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   put_time(
@@ -123,7 +118,7 @@ rtems_task Task_1(
     0
   );
 
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       RTEMS_MAXIMUM_PRIORITY - 1u,
@@ -139,8 +134,9 @@ rtems_task Task_1(
   }
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_suspend( Task_id[ index ] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_suspend( Task_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -152,8 +148,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_resume( Task_id[ index ] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_resume( Task_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -165,28 +162,20 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_delete( Task_id[ index ] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_delete( Task_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_task_delete: ready task",
-    end_time,
-    OPERATION_COUNT,
-    0,
-    0
-  );
+  put_time( "rtems_task_delete: ready task", end_time, OPERATION_COUNT, 0, 0 );
 
   TEST_END();
   rtems_test_exit( 0 );
 }
 
-rtems_task null_task(
-  rtems_task_argument argument
-)
+rtems_task null_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  while ( FOREVER )
-    ;
+  while ( FOREVER );
 }

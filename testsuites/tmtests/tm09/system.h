@@ -29,34 +29,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <tmacros.h>
 
 /* functions */
 
-#define MESSAGE_SIZE (sizeof(long) * 4)
+#define MESSAGE_SIZE ( sizeof( long ) * 4 )
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
 #include <timesys.h>
 
-rtems_id   Task_id[ OPERATION_COUNT+1 ];   /* array of task ids */
+rtems_id Task_id[ OPERATION_COUNT + 1 ]; /* array of task ids */
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS              2
-#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     1
+#define CONFIGURE_MAXIMUM_TASKS          2
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(OPERATION_COUNT, MESSAGE_SIZE)
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( OPERATION_COUNT, MESSAGE_SIZE )
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (1 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 1 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
 

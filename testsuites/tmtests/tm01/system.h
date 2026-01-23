@@ -29,27 +29,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <tmacros.h>
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
 #include <timesys.h>
 
-rtems_name Task_name[ OPERATION_COUNT+1 ]; /* array of task names */
-rtems_id   Task_id[ OPERATION_COUNT+1 ];   /* array of task ids */
+rtems_name Task_name[ OPERATION_COUNT + 1 ]; /* array of task names */
+rtems_id   Task_id[ OPERATION_COUNT + 1 ];   /* array of task ids */
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS              2
-#define CONFIGURE_MAXIMUM_SEMAPHORES         1
+#define CONFIGURE_MAXIMUM_TASKS      2
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

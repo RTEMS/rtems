@@ -37,28 +37,20 @@
 
 const char rtems_test_name[] = "TIME TEST 5";
 
-rtems_id   Task_id[OPERATION_COUNT+1];
-uint32_t   Task_index;
+rtems_id Task_id[ OPERATION_COUNT + 1 ];
+uint32_t Task_index;
 
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-);
+rtems_task Middle_tasks( rtems_task_argument argument );
 
-rtems_task Low_task(
-  rtems_task_argument argument
-);
+rtems_task Low_task( rtems_task_argument argument );
 
-extern void test_init(void);
+extern void test_init( void );
 
 uint32_t operation_count = OPERATION_COUNT;
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -71,7 +63,7 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-void test_init(void)
+void test_init( void )
 {
   rtems_status_code   status;
   rtems_task_entry    task_entry;
@@ -80,11 +72,11 @@ void test_init(void)
 
   priority = RTEMS_MAXIMUM_PRIORITY - 1;
 
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
-    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 ) {
+    operation_count = RTEMS_MAXIMUM_PRIORITY - 2;
+  }
 
-  for( index = 0; index <= operation_count ; index++ ) {
-
+  for ( index = 0; index <= operation_count; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       priority,
@@ -97,18 +89,20 @@ void test_init(void)
 
     priority--;
 
-    if ( index==0 )                    task_entry = Low_task;
-    else if ( index==operation_count ) task_entry = High_task;
-    else                               task_entry = Middle_tasks;
+    if ( index == 0 ) {
+      task_entry = Low_task;
+    } else if ( index == operation_count ) {
+      task_entry = High_task;
+    } else {
+      task_entry = Middle_tasks;
+    }
 
     status = rtems_task_start( Task_id[ index ], task_entry, 0 );
     directive_failed( status, "rtems_task_start loop" );
   }
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -130,9 +124,7 @@ rtems_task High_task(
   rtems_test_exit( 0 );
 }
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-)
+rtems_task Middle_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -142,9 +134,7 @@ rtems_task Middle_tasks(
   (void) rtems_task_resume( Task_id[ Task_index ] );
 }
 
-rtems_task Low_task(
-  rtems_task_argument argument
-)
+rtems_task Low_task( rtems_task_argument argument )
 {
   (void) argument;
 

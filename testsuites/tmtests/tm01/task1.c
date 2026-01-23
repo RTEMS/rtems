@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -41,13 +41,9 @@
 
 const char rtems_test_name[] = "TIME TEST";
 
-rtems_task Test_task(
-  rtems_task_argument argument
-);
+rtems_task Test_task( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -63,7 +59,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     Task_name[ 1 ],
-    (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
+    ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -77,63 +73,48 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    semaphore_obtain_time;
-  uint32_t    semaphore_release_time;
-  uint32_t    semaphore_obtain_no_wait_time;
-  uint32_t    semaphore_obtain_loop_time;
-  uint32_t    semaphore_release_loop_time;
-  uint32_t    index;
-  uint32_t    iterations;
+  uint32_t          semaphore_obtain_time;
+  uint32_t          semaphore_release_time;
+  uint32_t          semaphore_obtain_no_wait_time;
+  uint32_t          semaphore_obtain_loop_time;
+  uint32_t          semaphore_release_loop_time;
+  uint32_t          index;
+  uint32_t          iterations;
   rtems_name        name;
   rtems_id          smid;
   rtems_status_code status;
 
   name = rtems_build_name( 'S', 'M', '1', ' ' );
 
-  semaphore_obtain_time          = 0;
-  semaphore_release_time         = 0;
-  semaphore_obtain_no_wait_time  = 0;
-  semaphore_obtain_loop_time     = 0;
-  semaphore_release_loop_time    = 0;
-
+  semaphore_obtain_time = 0;
+  semaphore_release_time = 0;
+  semaphore_obtain_no_wait_time = 0;
+  semaphore_obtain_loop_time = 0;
+  semaphore_release_loop_time = 0;
 
   /* Time one invocation of rtems_semaphore_create */
 
   benchmark_timer_initialize();
-    (void) rtems_semaphore_create(
-      name,
-      OPERATION_COUNT,
-      RTEMS_DEFAULT_MODES,
-      RTEMS_NO_PRIORITY,
-      &smid
-    );
-  end_time = benchmark_timer_read();
-  put_time(
-    "rtems_semaphore_create: only case",
-    end_time,
-    1,
-    0,
-    0
+  (void) rtems_semaphore_create(
+    name,
+    OPERATION_COUNT,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_NO_PRIORITY,
+    &smid
   );
+  end_time = benchmark_timer_read();
+  put_time( "rtems_semaphore_create: only case", end_time, 1, 0, 0 );
 
   /* Time one invocation of rtems_semaphore_delete */
 
   benchmark_timer_initialize();
-    (void) rtems_semaphore_delete( smid );
+  (void) rtems_semaphore_delete( smid );
   end_time = benchmark_timer_read();
-  put_time(
-    "rtems_semaphore_delete: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_semaphore_delete: only case", end_time, 1, 0, 0 );
 
   status = rtems_semaphore_create(
     name,
@@ -144,25 +125,26 @@ rtems_task Test_task(
   );
   directive_failed( status, "rtems_task_create of TA1" );
 
-  for ( iterations=OPERATION_COUNT ; iterations ; iterations-- ) {
-
+  for ( iterations = OPERATION_COUNT; iterations; iterations-- ) {
     benchmark_timer_initialize();
-      for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
-        (void) benchmark_timer_empty_function();
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      (void) benchmark_timer_empty_function();
+    }
     end_time = benchmark_timer_read();
 
-    semaphore_obtain_loop_time  += end_time;
+    semaphore_obtain_loop_time += end_time;
     semaphore_release_loop_time += end_time;
 
     /* rtems_semaphore_obtain (available) */
 
     benchmark_timer_initialize();
-      for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
-        (void) rtems_semaphore_obtain(
-          smid,
-          RTEMS_DEFAULT_OPTIONS,
-          RTEMS_NO_TIMEOUT
-        );
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      (void) rtems_semaphore_obtain(
+        smid,
+        RTEMS_DEFAULT_OPTIONS,
+        RTEMS_NO_TIMEOUT
+      );
+    }
     end_time = benchmark_timer_read();
 
     semaphore_obtain_time += end_time;
@@ -170,21 +152,24 @@ rtems_task Test_task(
     /* rtems_semaphore_release */
 
     benchmark_timer_initialize();
-      for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
-        (void) rtems_semaphore_release( smid );
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      (void) rtems_semaphore_release( smid );
+    }
     end_time = benchmark_timer_read();
 
     semaphore_release_time += end_time;
 
     /* semaphore obtain (RTEMS_NO_WAIT) */
     benchmark_timer_initialize();
-      for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
-        rtems_semaphore_obtain( smid, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT );
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      rtems_semaphore_obtain( smid, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT );
+    }
     semaphore_obtain_no_wait_time += benchmark_timer_read();
 
     benchmark_timer_initialize();
-      for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
-        rtems_semaphore_release( smid );
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      rtems_semaphore_release( smid );
+    }
     end_time = benchmark_timer_read();
 
     semaphore_release_time += end_time;

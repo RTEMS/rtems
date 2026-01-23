@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -54,59 +54,47 @@ const char rtems_test_name[] = "TIME TEST 26";
 /* TEST DATA */
 rtems_id Semaphore_id;
 
-Thread_Control *Middle_tcb;   /* uses internal RTEMS type */
+Thread_Control *Middle_tcb; /* uses internal RTEMS type */
 
-Thread_Control *Low_tcb;      /* uses internal RTEMS type */
+Thread_Control *Low_tcb; /* uses internal RTEMS type */
 
 /*
  *  Variables to hold execution times until they are printed
  *  at the end of the test.
  */
 
-uint32_t   isr_disable_time;
-uint32_t   isr_flash_time;
-uint32_t   isr_enable_time;
-uint32_t   thread_disable_dispatch_time;
-uint32_t   thread_enable_dispatch_time;
-uint32_t   thread_set_state_time;
-uint32_t   thread_dispatch_no_fp_time;
-uint32_t   context_switch_no_fp_time;
-uint32_t   context_switch_self_time;
-uint32_t   context_switch_another_task_time;
-uint32_t   context_switch_restore_1st_fp_time;
-uint32_t   context_switch_save_idle_restore_initted_time;
-uint32_t   context_switch_save_restore_idle_time;
-uint32_t   context_switch_save_restore_initted_time;
-uint32_t   thread_resume_time;
-uint32_t   thread_unblock_time;
-uint32_t   thread_ready_time;
-uint32_t   thread_get_time;
-uint32_t   semaphore_get_time;
-uint32_t   thread_get_invalid_time;
+uint32_t isr_disable_time;
+uint32_t isr_flash_time;
+uint32_t isr_enable_time;
+uint32_t thread_disable_dispatch_time;
+uint32_t thread_enable_dispatch_time;
+uint32_t thread_set_state_time;
+uint32_t thread_dispatch_no_fp_time;
+uint32_t context_switch_no_fp_time;
+uint32_t context_switch_self_time;
+uint32_t context_switch_another_task_time;
+uint32_t context_switch_restore_1st_fp_time;
+uint32_t context_switch_save_idle_restore_initted_time;
+uint32_t context_switch_save_restore_idle_time;
+uint32_t context_switch_save_restore_initted_time;
+uint32_t thread_resume_time;
+uint32_t thread_unblock_time;
+uint32_t thread_ready_time;
+uint32_t thread_get_time;
+uint32_t semaphore_get_time;
+uint32_t thread_get_invalid_time;
 
-rtems_task null_task(
-  rtems_task_argument argument
-);
+rtems_task null_task( rtems_task_argument argument );
 
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
-rtems_task Middle_task(
-  rtems_task_argument argument
-);
+rtems_task Middle_task( rtems_task_argument argument );
 
-rtems_task Low_task(
-  rtems_task_argument argument
-);
+rtems_task Low_task( rtems_task_argument argument );
 
-rtems_task Floating_point_task_1(
-  rtems_task_argument argument
-);
+rtems_task Floating_point_task_1( rtems_task_argument argument );
 
-rtems_task Floating_point_task_2(
-  rtems_task_argument argument
-);
+rtems_task Floating_point_task_2( rtems_task_argument argument );
 
 void complete_test( void );
 
@@ -154,39 +142,35 @@ static void thread_resume( Thread_Control *thread )
   _Thread_Clear_state( thread, STATES_SUSPENDED );
 }
 
-rtems_task null_task(
-  rtems_task_argument argument
-)
+rtems_task null_task( rtems_task_argument argument )
 {
   (void) argument;
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    index;
+  uint32_t          index;
   rtems_id          task_id;
   rtems_status_code status;
 
-  rtems_print_printer_fprintf_putc(&rtems_test_printer);
+  rtems_print_printer_fprintf_putc( &rtems_test_printer );
   Print_Warning();
 
   TEST_BEGIN();
 
   if (
-    _Scheduler_Table[ 0 ].Operations.initialize
-      != _Scheduler_priority_Initialize
+    _Scheduler_Table[ 0 ].Operations.initialize !=
+    _Scheduler_priority_Initialize
   ) {
-    puts("  Error ==> " );
-    puts("Test only supported for deterministic priority scheduler\n" );
+    puts( "  Error ==> " );
+    puts( "Test only supported for deterministic priority scheduler\n" );
     TEST_END();
     rtems_test_exit( 0 );
   }
 
-#define FP1_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 3u)      /* 201, */
+#define FP1_PRIORITY ( RTEMS_MAXIMUM_PRIORITY - 3u ) /* 201, */
   status = rtems_task_create(
     rtems_build_name( 'F', 'P', '1', ' ' ),
     FP1_PRIORITY,
@@ -200,7 +184,7 @@ rtems_task Init(
   status = rtems_task_start( task_id, Floating_point_task_1, 0 );
   directive_failed( status, "rtems_task_start of FP1" );
 
-#define FP2_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 2u)      /* 202, */
+#define FP2_PRIORITY ( RTEMS_MAXIMUM_PRIORITY - 2u ) /* 202, */
   status = rtems_task_create(
     rtems_build_name( 'F', 'P', '2', ' ' ),
     FP2_PRIORITY,
@@ -214,7 +198,7 @@ rtems_task Init(
   status = rtems_task_start( task_id, Floating_point_task_2, 0 );
   directive_failed( status, "rtems_task_start of FP2" );
 
-#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 4u)   /*  200, */
+#define LOW_PRIORITY ( RTEMS_MAXIMUM_PRIORITY - 4u ) /*  200, */
   status = rtems_task_create(
     rtems_build_name( 'L', 'O', 'W', ' ' ),
     LOW_PRIORITY,
@@ -228,7 +212,7 @@ rtems_task Init(
   status = rtems_task_start( task_id, Low_task, 0 );
   directive_failed( status, "rtems_task_start of LOW" );
 
-#define MIDDLE_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 5u)   /*  128, */
+#define MIDDLE_PRIORITY ( RTEMS_MAXIMUM_PRIORITY - 5u ) /*  128, */
   status = rtems_task_create(
     rtems_build_name( 'M', 'I', 'D', ' ' ),
     MIDDLE_PRIORITY,
@@ -264,10 +248,10 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_semaphore_create" );
 
-  for ( index = 1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'N', 'U', 'L', 'L' ),
-      RTEMS_MAXIMUM_PRIORITY - 1u,      /* 254, */
+      RTEMS_MAXIMUM_PRIORITY - 1u, /* 254, */
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -282,9 +266,7 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -293,60 +275,60 @@ rtems_task High_task(
   _Thread_Dispatch_disable();
 
   benchmark_timer_initialize();
-    rtems_interrupt_local_disable( level );
+  rtems_interrupt_local_disable( level );
   isr_disable_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-#if defined(RTEMS_SMP)
-    rtems_interrupt_local_enable( level );
-    rtems_interrupt_local_disable( level );
+#if defined( RTEMS_SMP )
+  rtems_interrupt_local_enable( level );
+  rtems_interrupt_local_disable( level );
 #else
-    rtems_interrupt_flash( level );
+  rtems_interrupt_flash( level );
 #endif
   isr_flash_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    rtems_interrupt_local_enable( level );
+  rtems_interrupt_local_enable( level );
   isr_enable_time = benchmark_timer_read();
 
   _Thread_Dispatch_enable( _Per_CPU_Get() );
 
   benchmark_timer_initialize();
-    _Thread_Dispatch_disable();
+  _Thread_Dispatch_disable();
   thread_disable_dispatch_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    _Thread_Dispatch_enable( _Per_CPU_Get() );
+  _Thread_Dispatch_enable( _Per_CPU_Get() );
   thread_enable_dispatch_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    _Thread_Set_state( _Thread_Get_executing(), STATES_SUSPENDED );
+  _Thread_Set_state( _Thread_Get_executing(), STATES_SUSPENDED );
   thread_set_state_time = benchmark_timer_read();
 
   set_thread_dispatch_necessary( true );
 
   benchmark_timer_initialize();
-    _Thread_Dispatch();           /* dispatches Middle_task */
+  _Thread_Dispatch(); /* dispatches Middle_task */
 }
 
-rtems_task Middle_task(
-  rtems_task_argument argument
-)
+rtems_task Middle_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  Scheduler_priority_Context *scheduler_context =
-    _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
+  Scheduler_priority_Context
+    *scheduler_context = _Scheduler_priority_Get_context(
+      _Thread_Scheduler_get_home( _Thread_Get_executing() )
+    );
 
   thread_dispatch_no_fp_time = benchmark_timer_read();
 
   _Thread_Set_state( _Thread_Get_executing(), STATES_SUSPENDED );
 
-  Middle_tcb   = _Thread_Get_executing();
+  Middle_tcb = _Thread_Get_executing();
 
-  set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY])
-  );
+  set_thread_executing( (Thread_Control *) _Chain_First(
+    &scheduler_context->Ready[ LOW_PRIORITY ]
+  ) );
 
   /* do not force context switch */
 
@@ -355,43 +337,43 @@ rtems_task Middle_task(
   _Thread_Dispatch_disable();
 
   benchmark_timer_initialize();
-    _Context_Switch(
-      &Middle_tcb->Registers,
-      &_Thread_Get_executing()->Registers
-    );
+  _Context_Switch(
+    &Middle_tcb->Registers,
+    &_Thread_Get_executing()->Registers
+  );
 
   benchmark_timer_initialize();
-    _Context_Switch(&Middle_tcb->Registers, &Low_tcb->Registers);
+  _Context_Switch( &Middle_tcb->Registers, &Low_tcb->Registers );
 }
 
-rtems_task Low_task(
-  rtems_task_argument argument
-)
+rtems_task Low_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  Scheduler_priority_Context *scheduler_context =
-    _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
-  Thread_Control             *executing;
+  Scheduler_priority_Context
+    *scheduler_context = _Scheduler_priority_Get_context(
+      _Thread_Scheduler_get_home( _Thread_Get_executing() )
+    );
+  Thread_Control *executing;
 
   context_switch_no_fp_time = benchmark_timer_read();
 
-  executing    = _Thread_Get_executing();
+  executing = _Thread_Get_executing();
 
   Low_tcb = executing;
 
   benchmark_timer_initialize();
-    _Context_Switch( &executing->Registers, &executing->Registers );
+  _Context_Switch( &executing->Registers, &executing->Registers );
 
   context_switch_self_time = benchmark_timer_read();
 
-  _Context_Switch(&executing->Registers, &Middle_tcb->Registers);
+  _Context_Switch( &executing->Registers, &Middle_tcb->Registers );
 
   context_switch_another_task_time = benchmark_timer_read();
 
-  set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler_context->Ready[FP1_PRIORITY])
-  );
+  set_thread_executing( (Thread_Control *) _Chain_First(
+    &scheduler_context->Ready[ FP1_PRIORITY ]
+  ) );
 
   /* do not force context switch */
 
@@ -400,30 +382,30 @@ rtems_task Low_task(
   _Thread_Dispatch_disable();
 
   benchmark_timer_initialize();
-    _Context_Switch(
-      &executing->Registers,
-      &_Thread_Get_executing()->Registers
-    );
+  _Context_Switch(
+    &executing->Registers,
+    &_Thread_Get_executing()->Registers
+  );
 }
 
-rtems_task Floating_point_task_1(
-  rtems_task_argument argument
-)
+rtems_task Floating_point_task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  Scheduler_priority_Context *scheduler_context =
-    _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
-  Thread_Control             *executing;
+  Scheduler_priority_Context
+    *scheduler_context = _Scheduler_priority_Get_context(
+      _Thread_Scheduler_get_home( _Thread_Get_executing() )
+    );
+  Thread_Control *executing;
   FP_DECLARE;
 
   context_switch_restore_1st_fp_time = benchmark_timer_read();
 
   executing = _Thread_Get_executing();
 
-  set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler_context->Ready[FP2_PRIORITY])
-  );
+  set_thread_executing( (Thread_Control *) _Chain_First(
+    &scheduler_context->Ready[ FP2_PRIORITY ]
+  ) );
 
   /* do not force context switch */
 
@@ -432,14 +414,14 @@ rtems_task Floating_point_task_1(
   _Thread_Dispatch_disable();
 
   benchmark_timer_initialize();
-#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
-    _Context_Save_fp( &executing->fp_context );
-    _Context_Restore_fp( &_Thread_Get_executing()->fp_context );
+#if ( CPU_HARDWARE_FP == 1 ) || ( CPU_SOFTWARE_FP == 1 )
+  _Context_Save_fp( &executing->fp_context );
+  _Context_Restore_fp( &_Thread_Get_executing()->fp_context );
 #endif
-    _Context_Switch(
-      &executing->Registers,
-      &_Thread_Get_executing()->Registers
-    );
+  _Context_Switch(
+    &executing->Registers,
+    &_Thread_Get_executing()->Registers
+  );
   /* switch to Floating_point_task_2 */
 
   context_switch_save_idle_restore_initted_time = benchmark_timer_read();
@@ -448,52 +430,52 @@ rtems_task Floating_point_task_1(
 
   executing = _Thread_Get_executing();
 
-  set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler_context->Ready[FP2_PRIORITY])
-  );
+  set_thread_executing( (Thread_Control *) _Chain_First(
+    &scheduler_context->Ready[ FP2_PRIORITY ]
+  ) );
 
   benchmark_timer_initialize();
-#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
-    _Context_Save_fp( &executing->fp_context );
-    _Context_Restore_fp( &_Thread_Get_executing()->fp_context );
+#if ( CPU_HARDWARE_FP == 1 ) || ( CPU_SOFTWARE_FP == 1 )
+  _Context_Save_fp( &executing->fp_context );
+  _Context_Restore_fp( &_Thread_Get_executing()->fp_context );
 #endif
-    _Context_Switch(
-      &executing->Registers,
-      &_Thread_Get_executing()->Registers
-    );
+  _Context_Switch(
+    &executing->Registers,
+    &_Thread_Get_executing()->Registers
+  );
   /* switch to Floating_point_task_2 */
 }
 
-rtems_task Floating_point_task_2(
-  rtems_task_argument argument
-)
+rtems_task Floating_point_task_2( rtems_task_argument argument )
 {
   (void) argument;
 
-  Scheduler_priority_Context *scheduler_context =
-    _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
-  Thread_Control             *executing;
+  Scheduler_priority_Context
+    *scheduler_context = _Scheduler_priority_Get_context(
+      _Thread_Scheduler_get_home( _Thread_Get_executing() )
+    );
+  Thread_Control *executing;
   FP_DECLARE;
 
   context_switch_save_restore_idle_time = benchmark_timer_read();
 
   executing = _Thread_Get_executing();
 
-  set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler_context->Ready[FP1_PRIORITY])
-  );
+  set_thread_executing( (Thread_Control *) _Chain_First(
+    &scheduler_context->Ready[ FP1_PRIORITY ]
+  ) );
 
   FP_LOAD( 1.0 );
 
   benchmark_timer_initialize();
-#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
-    _Context_Save_fp( &executing->fp_context );
-    _Context_Restore_fp( &_Thread_Get_executing()->fp_context );
+#if ( CPU_HARDWARE_FP == 1 ) || ( CPU_SOFTWARE_FP == 1 )
+  _Context_Save_fp( &executing->fp_context );
+  _Context_Restore_fp( &_Thread_Get_executing()->fp_context );
 #endif
-    _Context_Switch(
-      &executing->Registers,
-      &_Thread_Get_executing()->Registers
-    );
+  _Context_Switch(
+    &executing->Registers,
+    &_Thread_Get_executing()->Registers
+  );
   /* switch to Floating_point_task_1 */
 
   context_switch_save_restore_initted_time = benchmark_timer_read();
@@ -509,47 +491,48 @@ void complete_test( void )
   Thread_queue_Context queue_context;
 
   benchmark_timer_initialize();
-    thread_resume( Middle_tcb );
+  thread_resume( Middle_tcb );
   thread_resume_time = benchmark_timer_read();
 
   _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
 
   benchmark_timer_initialize();
-    _Thread_Unblock( Middle_tcb );
+  _Thread_Unblock( Middle_tcb );
   thread_unblock_time = benchmark_timer_read();
 
   _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
 
   benchmark_timer_initialize();
-    _Thread_Clear_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
+  _Thread_Clear_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
   thread_ready_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   task_id = Middle_tcb->Object.id;
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
-      (void) _Thread_Get( task_id, &lock_context );
-      _ISR_lock_ISR_enable( &lock_context );
-    }
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) _Thread_Get( task_id, &lock_context );
+    _ISR_lock_ISR_enable( &lock_context );
+  }
   thread_get_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
-      (void) _Semaphore_Get( Semaphore_id, &queue_context );
-      _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
-    }
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) _Semaphore_Get( Semaphore_id, &queue_context );
+    _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
+  }
   semaphore_get_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
-      (void) _Thread_Get( 0x3, &lock_context );
-      _ISR_lock_ISR_enable( &lock_context );
-    }
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) _Thread_Get( 0x3, &lock_context );
+    _ISR_lock_ISR_enable( &lock_context );
+  }
   thread_get_invalid_time = benchmark_timer_read();
 
   /*
@@ -564,29 +547,11 @@ void complete_test( void )
    *  Now dump all the times
    */
 
-  put_time(
-    "rtems interrupt: _ISR_Local_disable",
-    isr_disable_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems interrupt: _ISR_Local_disable", isr_disable_time, 1, 0, 0 );
 
-  put_time(
-    "rtems interrupt: _ISR_Local_flash",
-    isr_flash_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems interrupt: _ISR_Local_flash", isr_flash_time, 1, 0, 0 );
 
-  put_time(
-    "rtems interrupt: _ISR_Local_enable",
-    isr_enable_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems interrupt: _ISR_Local_enable", isr_enable_time, 1, 0, 0 );
 
   put_time(
     "rtems internal: _Thread_Dispatch_disable",
@@ -644,7 +609,7 @@ void complete_test( void )
     0
   );
 
-#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
+#if ( CPU_HARDWARE_FP == 1 ) || ( CPU_SOFTWARE_FP == 1 )
   put_time(
     "rtems internal: fp context switch restore 1st FP task",
     context_switch_restore_1st_fp_time,
@@ -677,38 +642,20 @@ void complete_test( void )
     0
   );
 #else
-    puts(
-     "rtems internal: fp context switch restore 1st FP task - NA\n"
-     "rtems internal: fp context switch save idle restore initialized - NA\n"
-     "rtems internal: fp context switch save idle restore idle - NA\n"
-     "rtems internal: fp context switch save initialized\n"
-                      " restore initialized - NA"
-   );
+  puts(
+    "rtems internal: fp context switch restore 1st FP task - NA\n"
+    "rtems internal: fp context switch save idle restore initialized - NA\n"
+    "rtems internal: fp context switch save idle restore idle - NA\n"
+    "rtems internal: fp context switch save initialized\n"
+    " restore initialized - NA"
+  );
 #endif
 
-  put_time(
-    "rtems internal: _Thread_Resume",
-    thread_resume_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems internal: _Thread_Resume", thread_resume_time, 1, 0, 0 );
 
-  put_time(
-    "rtems internal: _Thread_Unblock",
-    thread_unblock_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems internal: _Thread_Unblock", thread_unblock_time, 1, 0, 0 );
 
-  put_time(
-    "rtems internal: _Thread_Ready",
-    thread_ready_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems internal: _Thread_Ready", thread_ready_time, 1, 0, 0 );
 
   put_time(
     "rtems internal: _Thread_Get",

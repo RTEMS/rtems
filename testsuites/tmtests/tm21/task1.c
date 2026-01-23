@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -41,16 +41,12 @@
 
 const char rtems_test_name[] = "TIME TEST 21";
 
-uint8_t   Region_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
-uint8_t   Partition_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
+uint8_t Region_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
+uint8_t Partition_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -77,18 +73,16 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    index;
+  uint32_t          index;
   rtems_id          id;
   rtems_status_code status;
 
-  for( index = 1 ; index <= OPERATION_COUNT ; index++ ) {
-    status = rtems_task_create (
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    status = rtems_task_create(
       index,
       RTEMS_MAXIMUM_PRIORITY - 1u,
       RTEMS_MINIMUM_STACK_SIZE,
@@ -100,7 +94,7 @@ rtems_task Task_1(
 
     status = rtems_message_queue_create(
       index,
-      1,                       /* only going to ident this queue */
+      1, /* only going to ident this queue */
       MESSAGE_SIZE,
       RTEMS_DEFAULT_ATTRIBUTES,
       &id
@@ -153,13 +147,15 @@ rtems_task Task_1(
   }
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -171,8 +167,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_message_queue_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_message_queue_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -184,8 +181,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_semaphore_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_semaphore_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -197,8 +195,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_partition_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_partition_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -210,8 +209,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_region_ident( index, &id );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_region_ident( index, &id );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -223,8 +223,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_port_ident( index, &id );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_port_ident( index, &id );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -236,8 +237,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_ident( index, &id );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_ident( index, &id );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -249,8 +251,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_rate_monotonic_ident( index, &id );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_rate_monotonic_ident( index, &id );
+  }
   end_time = benchmark_timer_read();
 
   put_time(

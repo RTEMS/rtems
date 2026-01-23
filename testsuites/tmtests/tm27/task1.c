@@ -48,28 +48,22 @@
 
 const char rtems_test_name[] = "TIME TEST 27";
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Task_2(
-  rtems_task_argument argument
-);
+rtems_task Task_2( rtems_task_argument argument );
 
-volatile uint32_t   Interrupt_occurred;
-volatile uint32_t   Interrupt_enter_time, Interrupt_enter_nested_time;
-volatile uint32_t   Interrupt_return_time, Interrupt_return_nested_time;
-uint32_t   Interrupt_nest;
-uint32_t   timer_overhead;
+volatile uint32_t Interrupt_occurred;
+volatile uint32_t Interrupt_enter_time, Interrupt_enter_nested_time;
+volatile uint32_t Interrupt_return_time, Interrupt_return_nested_time;
+uint32_t          Interrupt_nest;
+uint32_t          timer_overhead;
 
 static void set_thread_executing( Thread_Control *thread )
 {
   _Per_CPU_Get_snapshot()->executing = thread;
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -80,16 +74,16 @@ rtems_task Init(
   TEST_BEGIN();
 
   if (
-    _Scheduler_Table[ 0 ].Operations.initialize
-      != _Scheduler_priority_Initialize
+    _Scheduler_Table[ 0 ].Operations.initialize !=
+    _Scheduler_priority_Initialize
   ) {
-    puts("  Error ==> " );
-    puts("Test only supported for deterministic priority scheduler\n" );
+    puts( "  Error ==> " );
+    puts( "Test only supported for deterministic priority scheduler\n" );
     TEST_END();
     rtems_test_exit( 0 );
   }
 
-#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1u)
+#define LOW_PRIORITY ( RTEMS_MAXIMUM_PRIORITY - 1u )
   status = rtems_task_create(
     rtems_build_name( 'T', 'A', '1', ' ' ),
     LOW_PRIORITY,
@@ -131,7 +125,6 @@ rtems_task Init(
 
 static void Isr_handler_inner( void )
 {
-
   /*enable_tracing();*/
   Clear_tm27_intr();
   switch ( Interrupt_nest ) {
@@ -146,8 +139,8 @@ static void Isr_handler_inner( void )
       benchmark_timer_initialize();
       Cause_tm27_intr();
       /* goes to a nested copy of Isr_handler */
-#if (MUST_WAIT_FOR_INTERRUPT == 1)
-       while ( Interrupt_occurred == 0 );
+#if ( MUST_WAIT_FOR_INTERRUPT == 1 )
+      while ( Interrupt_occurred == 0 );
 #endif
       Interrupt_return_nested_time = benchmark_timer_read();
       break;
@@ -173,15 +166,15 @@ static void Isr_handler( void *arg )
   Isr_handler_inner();
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  Scheduler_priority_Context *scheduler_context =
-    _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
-#if defined(RTEMS_SMP)
+  Scheduler_priority_Context
+    *scheduler_context = _Scheduler_priority_Get_context(
+      _Thread_Scheduler_get_home( _Thread_Get_executing() )
+    );
+#if defined( RTEMS_SMP )
   rtems_interrupt_level level;
 #endif
 
@@ -199,7 +192,7 @@ rtems_task Task_1(
   Cause_tm27_intr();
   /* goes to Isr_handler */
 
-#if (MUST_WAIT_FOR_INTERRUPT == 1)
+#if ( MUST_WAIT_FOR_INTERRUPT == 1 )
   while ( Interrupt_occurred == 0 );
 #endif
   Interrupt_return_time = benchmark_timer_read();
@@ -233,7 +226,7 @@ rtems_task Task_1(
   Cause_tm27_intr();
   /* goes to Isr_handler */
 
-#if (MUST_WAIT_FOR_INTERRUPT == 1)
+#if ( MUST_WAIT_FOR_INTERRUPT == 1 )
   while ( Interrupt_occurred == 0 );
 #endif
   Interrupt_return_time = benchmark_timer_read();
@@ -260,18 +253,18 @@ rtems_task Task_1(
    *  Does a preempt .. not nested
    */
 
-#if defined(RTEMS_SMP)
-  _ISR_Local_disable(level);
+#if defined( RTEMS_SMP )
+  _ISR_Local_disable( level );
 #endif
 
-  set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY])
-  );
+  set_thread_executing( (Thread_Control *) _Chain_First(
+    &scheduler_context->Ready[ LOW_PRIORITY ]
+  ) );
 
   _Thread_Dispatch_necessary = 1;
 
-#if defined(RTEMS_SMP)
-  _ISR_Local_enable(level);
+#if defined( RTEMS_SMP )
+  _ISR_Local_enable( level );
 #endif
 
   Interrupt_occurred = 0;
@@ -294,24 +287,22 @@ rtems_task Task_1(
  *         has been violated.
  */
 
-rtems_task Task_2(
-  rtems_task_argument argument
-)
+rtems_task Task_2( rtems_task_argument argument )
 {
   (void) argument;
 
-  Thread_Control *executing = _Thread_Get_executing();
+  Thread_Control             *executing = _Thread_Get_executing();
   const Scheduler_Control    *scheduler;
   Scheduler_priority_Context *scheduler_context;
-  ISR_lock_Context state_lock_context;
-  ISR_lock_Context scheduler_lock_context;
+  ISR_lock_Context            state_lock_context;
+  ISR_lock_Context            scheduler_lock_context;
 
   _Thread_State_acquire( executing, &state_lock_context );
   scheduler = _Thread_Scheduler_get_home( executing );
   scheduler_context = _Scheduler_priority_Get_context( scheduler );
   _Thread_State_release( executing, &state_lock_context );
 
-#if (MUST_WAIT_FOR_INTERRUPT == 1)
+#if ( MUST_WAIT_FOR_INTERRUPT == 1 )
   while ( Interrupt_occurred == 0 );
 #endif
   end_time = benchmark_timer_read();
@@ -341,9 +332,9 @@ rtems_task Task_2(
   _Thread_State_acquire( executing, &state_lock_context );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
-  set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY])
-  );
+  set_thread_executing( (Thread_Control *) _Chain_First(
+    &scheduler_context->Ready[ LOW_PRIORITY ]
+  ) );
 
   _Thread_Dispatch_necessary = 1;
 
@@ -351,5 +342,4 @@ rtems_task Task_2(
   _Thread_State_release( executing, &state_lock_context );
 
   _Thread_Dispatch();
-
 }

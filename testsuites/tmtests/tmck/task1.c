@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -39,7 +39,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-#if !defined(MAXIMUM_DISTRIBUTION)
+#if !defined( MAXIMUM_DISTRIBUTION )
 #define MAXIMUM_DISTRIBUTION 1000
 #endif
 
@@ -47,15 +47,11 @@ const char rtems_test_name[] = "TIME CHECKER";
 
 uint32_t Distribution[ MAXIMUM_DISTRIBUTION + 1 ];
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
 void check_read_timer( void );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -74,14 +70,14 @@ rtems_task Init(
 
   Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' ),
 
-  status = rtems_task_create(
-    1,
-    5,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &id
-  );
+               status = rtems_task_create(
+                 1,
+                 5,
+                 RTEMS_MINIMUM_STACK_SIZE,
+                 RTEMS_DEFAULT_MODES,
+                 RTEMS_DEFAULT_ATTRIBUTES,
+                 &id
+               );
   directive_failed( status, "rtems_task_create of TA1" );
 
   status = rtems_task_start( id, Task_1, 0 );
@@ -90,78 +86,50 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t   index;
+  uint32_t index;
 
   check_read_timer();
 
   benchmark_timer_initialize();
   end_time = benchmark_timer_read();
 
-  put_time(
-    "Time Check: NULL timer stopped at",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "Time Check: NULL timer stopped at", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-  for ( index = 1 ; index <= 1000 ; index++ )
+  for ( index = 1; index <= 1000; index++ ) {
     (void) benchmark_timer_empty_function();
+  }
   end_time = benchmark_timer_read();
 
-  put_time(
-    "Time Check: LOOP (1000) timer stopped at",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "Time Check: LOOP (1000) timer stopped at", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-  for ( index = 1 ; index <= 10000 ; index++ )
+  for ( index = 1; index <= 10000; index++ ) {
     (void) benchmark_timer_empty_function();
+  }
   end_time = benchmark_timer_read();
 
-  put_time(
-    "Time Check: LOOP (10000) timer stopped at",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "Time Check: LOOP (10000) timer stopped at", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-  for ( index = 1 ; index <= 50000 ; index++ )
+  for ( index = 1; index <= 50000; index++ ) {
     (void) benchmark_timer_empty_function();
+  }
   end_time = benchmark_timer_read();
 
-  put_time(
-    "Time Check: LOOP (50000) timer stopped at",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "Time Check: LOOP (50000) timer stopped at", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-  for ( index = 1 ; index <= 100000 ; index++ )
+  for ( index = 1; index <= 100000; index++ ) {
     (void) benchmark_timer_empty_function();
+  }
   end_time = benchmark_timer_read();
 
-  put_time(
-    "Time Check: LOOP (100000) timer stopped at",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "Time Check: LOOP (100000) timer stopped at", end_time, 1, 0, 0 );
 
   TEST_END();
   rtems_test_exit( 0 );
@@ -169,13 +137,14 @@ rtems_task Task_1(
 
 void check_read_timer()
 {
-  uint32_t   index;
-  uint32_t   time;
+  uint32_t index;
+  uint32_t time;
 
-  for ( index = 1 ; index <= MAXIMUM_DISTRIBUTION ; index++ )
+  for ( index = 1; index <= MAXIMUM_DISTRIBUTION; index++ ) {
     Distribution[ index ] = 0;
+  }
 
-  for ( index = 1 ; index <= OPERATION_COUNT ; ) {
+  for ( index = 1; index <= OPERATION_COUNT; ) {
     benchmark_timer_initialize();
     end_time = benchmark_timer_read();
     if ( end_time > MAXIMUM_DISTRIBUTION ) {
@@ -183,7 +152,11 @@ void check_read_timer()
        *  Under UNIX a simple process swap takes longer than we
        *  consider valid for our testing purposes.
        */
-      printf( "TOO LONG (%" PRIu32 ") at index %" PRIu32 "!!!\n", end_time, index );
+      printf(
+        "TOO LONG (%" PRIu32 ") at index %" PRIu32 "!!!\n",
+        end_time,
+        index
+      );
       continue;
     }
     Distribution[ end_time ]++;
@@ -192,10 +165,11 @@ void check_read_timer()
 
   printf( "Units may not be in microseconds for this test!!!\n" );
   time = 0;
-  for ( index = 0 ; index <= MAXIMUM_DISTRIBUTION ; index++ ) {
-    time += (Distribution[ index ] * index);
-    if ( Distribution[ index ] != 0 )
+  for ( index = 0; index <= MAXIMUM_DISTRIBUTION; index++ ) {
+    time += ( Distribution[ index ] * index );
+    if ( Distribution[ index ] != 0 ) {
       printf( "%" PRId32 " %" PRId32 "\n", index, Distribution[ index ] );
+    }
   }
   printf( "Total time = %" PRId32 "\n", time );
   printf( "Average time = %" PRId32 "\n", time / OPERATION_COUNT );

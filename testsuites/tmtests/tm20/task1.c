@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -43,39 +43,33 @@ const char rtems_test_name[] = "TIME TEST 20";
 
 rtems_device_major_number _STUB_major = 1;
 
-rtems_id         Region_id;
-rtems_name       Region_name;
+rtems_id   Region_id;
+rtems_name Region_name;
 uint8_t    Region_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
 
 #define PARTITION_SIZE         2048
-#define PARTITION_ELEMENT_SIZE  128
+#define PARTITION_ELEMENT_SIZE 128
 #define PARTITION_BUFFER_POINTERS \
-    ((PARTITION_SIZE / PARTITION_ELEMENT_SIZE) + 2)
+  ( ( PARTITION_SIZE / PARTITION_ELEMENT_SIZE ) + 2 )
 
-rtems_id         Partition_id;
-rtems_name       Partition_name;
+rtems_id   Partition_id;
+rtems_name Partition_name;
 uint8_t    Partition_area[ PARTITION_SIZE ] CPU_STRUCTURE_ALIGNMENT;
 
-void  *Buffer_address_1;
-void  *Buffer_address_2;
-void  *Buffer_address_3;
-void  *Buffer_address_4;
+void *Buffer_address_1;
+void *Buffer_address_2;
+void *Buffer_address_3;
+void *Buffer_address_4;
 
-uint32_t   buffer_count;
+uint32_t buffer_count;
 
-void  *Buffer_addresses[ PARTITION_BUFFER_POINTERS ];
+void *Buffer_addresses[ PARTITION_BUFFER_POINTERS ];
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Task_2(
-  rtems_task_argument argument
-);
+rtems_task Task_2( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -87,7 +81,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', '1' ),
-    (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
+    ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -100,7 +94,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', '2' ),
-    (RTEMS_MAXIMUM_PRIORITY / 2u) + 2u,
+    ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 2u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -114,13 +108,11 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t      index;
+  uint32_t            index;
   rtems_mode          previous_mode;
   rtems_task_priority previous_priority;
   rtems_status_code   status;
@@ -128,66 +120,49 @@ rtems_task Task_1(
   Partition_name = rtems_build_name( 'P', 'A', 'R', 'T' );
 
   benchmark_timer_initialize();
-    rtems_partition_create(
-      Partition_name,
-      Partition_area,
-      PARTITION_SIZE,
-      128,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      &Partition_id
-    );
+  rtems_partition_create(
+    Partition_name,
+    Partition_area,
+    PARTITION_SIZE,
+    128,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Partition_id
+  );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_partition_create: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_partition_create: only case", end_time, 1, 0, 0 );
 
   Region_name = rtems_build_name( 'R', 'E', 'G', 'N' );
 
   benchmark_timer_initialize();
-    rtems_region_create(
-      Region_name,
-      Region_area,
-      2048,
-      16,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      &Region_id
-    );
+  rtems_region_create(
+    Region_name,
+    Region_area,
+    2048,
+    16,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Region_id
+  );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_region_create: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_region_create: only case", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-    (void) rtems_partition_get_buffer( Partition_id, &Buffer_address_1 );
+  (void) rtems_partition_get_buffer( Partition_id, &Buffer_address_1 );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_partition_get_buffer: available",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_partition_get_buffer: available", end_time, 1, 0, 0 );
 
   buffer_count = 0;
   while ( FOREVER ) {
-
     status = rtems_partition_get_buffer(
-               Partition_id,
-               &Buffer_addresses[ buffer_count ]
-            );
+      Partition_id,
+      &Buffer_addresses[ buffer_count ]
+    );
 
-    if ( status == RTEMS_UNSATISFIED ) break;
+    if ( status == RTEMS_UNSATISFIED ) {
+      break;
+    }
 
     buffer_count++;
 
@@ -195,86 +170,60 @@ rtems_task Task_1(
   }
 
   benchmark_timer_initialize();
-    (void) rtems_partition_get_buffer( Partition_id, &Buffer_address_2 );
+  (void) rtems_partition_get_buffer( Partition_id, &Buffer_address_2 );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_partition_get_buffer: not available",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_partition_get_buffer: not available", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-    (void) rtems_partition_return_buffer( Partition_id, Buffer_address_1 );
+  (void) rtems_partition_return_buffer( Partition_id, Buffer_address_1 );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_partition_return_buffer: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_partition_return_buffer: only case", end_time, 1, 0, 0 );
 
-  for ( index = 0 ; index < buffer_count ; index++ ) {
-
+  for ( index = 0; index < buffer_count; index++ ) {
     status = rtems_partition_return_buffer(
-               Partition_id,
-               Buffer_addresses[ index ]
-             );
+      Partition_id,
+      Buffer_addresses[ index ]
+    );
     directive_failed( status, "rtems_partition_return_buffer" );
-
   }
 
   benchmark_timer_initialize();
-    (void) rtems_partition_delete( Partition_id );
+  (void) rtems_partition_delete( Partition_id );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_partition_delete: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_partition_delete: only case", end_time, 1, 0, 0 );
 
   status = rtems_region_get_segment(
-             Region_id,
-             400,
-             RTEMS_DEFAULT_OPTIONS,
-             RTEMS_NO_TIMEOUT,
-             &Buffer_address_2
-           );
+    Region_id,
+    400,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT,
+    &Buffer_address_2
+  );
   directive_failed( status, "region_get_segment" );
 
   benchmark_timer_initialize();
-    (void) rtems_region_get_segment(
-      Region_id,
-      400,
-      RTEMS_DEFAULT_OPTIONS,
-      RTEMS_NO_TIMEOUT,
-      &Buffer_address_3
-    );
+  (void) rtems_region_get_segment(
+    Region_id,
+    400,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT,
+    &Buffer_address_3
+  );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_region_get_segment: available",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_region_get_segment: available", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-    (void) rtems_region_get_segment(
-      Region_id,
-      1700,
-      RTEMS_NO_WAIT,
-      RTEMS_NO_TIMEOUT,
-      &Buffer_address_4
-    );
+  (void) rtems_region_get_segment(
+    Region_id,
+    1700,
+    RTEMS_NO_WAIT,
+    RTEMS_NO_TIMEOUT,
+    &Buffer_address_4
+  );
   end_time = benchmark_timer_read();
 
   put_time(
@@ -289,7 +238,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_region_return_segment" );
 
   benchmark_timer_initialize();
-    (void) rtems_region_return_segment( Region_id, Buffer_address_2 );
+  (void) rtems_region_return_segment( Region_id, Buffer_address_2 );
   end_time = benchmark_timer_read();
 
   put_time(
@@ -310,13 +259,13 @@ rtems_task Task_1(
   directive_failed( status, "rtems_region_get_segment" );
 
   benchmark_timer_initialize();
-    (void) rtems_region_get_segment(
-      Region_id,
-      1700,
-      RTEMS_DEFAULT_OPTIONS,
-      RTEMS_NO_TIMEOUT,
-      &Buffer_address_2
-    );
+  (void) rtems_region_get_segment(
+    Region_id,
+    1700,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT,
+    &Buffer_address_2
+  );
 
   /* execute Task_2 */
 
@@ -341,7 +290,10 @@ rtems_task Task_1(
   directive_failed( status, "rtems_task_mode" );
 
   status = rtems_task_set_priority(
-    RTEMS_SELF, RTEMS_MAXIMUM_PRIORITY - 1u, &previous_priority );
+    RTEMS_SELF,
+    RTEMS_MAXIMUM_PRIORITY - 1u,
+    &previous_priority
+  );
   directive_failed( status, "rtems_task_set_priority" );
 
   status = rtems_region_get_segment(
@@ -368,25 +320,21 @@ rtems_task Task_1(
   directive_failed( status, "rtems_region_return_segment" );
 
   benchmark_timer_initialize();
-    (void) rtems_region_delete( Region_id );
+  (void) rtems_region_delete( Region_id );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_region_delete: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_region_delete: only case", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_initialize( _STUB_major, 0, NULL );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_io_initialize( _STUB_major, 0, NULL );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -398,8 +346,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_open( _STUB_major, 0, NULL );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_io_open( _STUB_major, 0, NULL );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -411,8 +360,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_close( _STUB_major, 0, NULL );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_io_close( _STUB_major, 0, NULL );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -424,8 +374,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_read( _STUB_major, 0, NULL );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_io_read( _STUB_major, 0, NULL );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -437,8 +388,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_write( _STUB_major, 0, NULL );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_io_write( _STUB_major, 0, NULL );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -450,8 +402,9 @@ rtems_task Task_1(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_control( _STUB_major, 0, NULL );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_io_control( _STUB_major, 0, NULL );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -466,9 +419,7 @@ rtems_task Task_1(
   rtems_test_exit( 0 );
 }
 
-rtems_task Task_2(
-  rtems_task_argument argument
-)
+rtems_task Task_2( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -483,12 +434,12 @@ rtems_task Task_2(
   );
 
   benchmark_timer_initialize();
-    (void) rtems_region_return_segment( Region_id, Buffer_address_1 );
+  (void) rtems_region_return_segment( Region_id, Buffer_address_1 );
 
   /* preempt back to Task_1 */
 
   benchmark_timer_initialize();
-    (void) rtems_region_return_segment( Region_id, Buffer_address_1 );
+  (void) rtems_region_return_segment( Region_id, Buffer_address_1 );
   end_time = benchmark_timer_read();
 
   put_time(

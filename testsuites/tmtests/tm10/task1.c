@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -42,27 +42,19 @@
 const char rtems_test_name[] = "TIME TEST 10";
 
 rtems_id Queue_id;
-long Buffer[4];
+long     Buffer[ 4 ];
 
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-);
+rtems_task Middle_tasks( rtems_task_argument argument );
 
-rtems_task Low_task(
-  rtems_task_argument argument
-);
+rtems_task Low_task( rtems_task_argument argument );
 
-void test_init(void);
+void test_init( void );
 
 int operation_count = OPERATION_COUNT;
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -86,10 +78,11 @@ void test_init()
 
   priority = 2;
 
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
-    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 ) {
+    operation_count = RTEMS_MAXIMUM_PRIORITY - 2;
+  }
 
-  for( index = 0; index < operation_count ; index++ ) {
+  for ( index = 0; index < operation_count; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       priority,
@@ -102,9 +95,13 @@ void test_init()
 
     priority++;
 
-    if ( index==0 )                    task_entry = High_task;
-    else if ( index==operation_count-1 ) task_entry = Low_task;
-    else                               task_entry = Middle_tasks;
+    if ( index == 0 ) {
+      task_entry = High_task;
+    } else if ( index == operation_count - 1 ) {
+      task_entry = Low_task;
+    } else {
+      task_entry = Middle_tasks;
+    }
 
     status = rtems_task_start( task_id, task_entry, 0 );
     directive_failed( status, "rtems_task_start LOOP" );
@@ -112,7 +109,7 @@ void test_init()
 
   status = rtems_message_queue_create(
     1,
-    (uint32_t)operation_count,
+    (uint32_t) operation_count,
     16,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id
@@ -120,19 +117,21 @@ void test_init()
   directive_failed( status, "rtems_message_queue_create" );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index < operation_count ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index < operation_count; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index < operation_count ; index++ )
-      (void) rtems_message_queue_receive(
-               Queue_id,
-               (long (*)[4]) Buffer,
-               &size,
-               RTEMS_NO_WAIT,
-               RTEMS_NO_TIMEOUT
-             );
+  for ( index = 1; index < operation_count; index++ ) {
+    (void) rtems_message_queue_receive(
+      Queue_id,
+      (long ( * )[ 4 ]) Buffer,
+      &size,
+      RTEMS_NO_WAIT,
+      RTEMS_NO_TIMEOUT
+    );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -142,48 +141,40 @@ void test_init()
     overhead,
     0
   );
-
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  size_t  size;
+  size_t size;
 
   benchmark_timer_initialize();
-     (void) rtems_message_queue_receive(
-              Queue_id,
-              (long (*)[4]) Buffer,
-              &size,
-              RTEMS_DEFAULT_OPTIONS,
-              RTEMS_NO_TIMEOUT
-            );
+  (void) rtems_message_queue_receive(
+    Queue_id,
+    (long ( * )[ 4 ]) Buffer,
+    &size,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT
+  );
 }
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-)
+rtems_task Middle_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
-  size_t  size;
+  size_t size;
 
   (void) rtems_message_queue_receive(
-           Queue_id,
-           (long (*)[4]) Buffer,
-           &size,
-           RTEMS_DEFAULT_OPTIONS,
-           RTEMS_NO_TIMEOUT
-         );
+    Queue_id,
+    (long ( * )[ 4 ]) Buffer,
+    &size,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT
+  );
 }
 
-
-rtems_task Low_task(
-  rtems_task_argument argument
-)
+rtems_task Low_task( rtems_task_argument argument )
 {
   (void) argument;
 

@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -43,22 +43,16 @@ const char rtems_test_name[] = "TIME TEST 25";
 
 rtems_id Semaphore_id;
 
-rtems_task High_tasks(
-  rtems_task_argument argument
-);
+rtems_task High_tasks( rtems_task_argument argument );
 
-rtems_task Low_task(
-  rtems_task_argument argument
-);
+rtems_task Low_task( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_id          task_id;
-  uint32_t    index;
+  uint32_t          index;
   rtems_status_code status;
 
   Print_Warning();
@@ -66,7 +60,7 @@ rtems_task Init(
   TEST_BEGIN();
 
   status = rtems_semaphore_create(
-    rtems_build_name( 'S', 'M', '1', ' ') ,
+    rtems_build_name( 'S', 'M', '1', ' ' ),
     0,
     RTEMS_DEFAULT_ATTRIBUTES,
     RTEMS_NO_PRIORITY,
@@ -87,10 +81,10 @@ rtems_task Init(
   status = rtems_task_start( task_id, Low_task, 0 );
   directive_failed( status, "rtems_task_start LOW" );
 
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
-      (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
+      ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -105,36 +99,23 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task High_tasks(
-  rtems_task_argument argument
-)
+rtems_task High_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
-  (void) rtems_semaphore_obtain(
-    Semaphore_id,
-    RTEMS_DEFAULT_OPTIONS,
-    0xffffffff
-  );
+  (void)
+    rtems_semaphore_obtain( Semaphore_id, RTEMS_DEFAULT_OPTIONS, 0xffffffff );
 }
 
-rtems_task Low_task(
-  rtems_task_argument argument
-)
+rtems_task Low_task( rtems_task_argument argument )
 {
   (void) argument;
 
   benchmark_timer_initialize();
-    (void) rtems_clock_tick();
+  (void) rtems_clock_tick();
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_clock_tick: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_clock_tick: only case", end_time, 1, 0, 0 );
 
   TEST_END();
   rtems_test_exit( 0 );

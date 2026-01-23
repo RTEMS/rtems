@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -43,17 +43,11 @@ const char rtems_test_name[] = "TIME TEST 8";
 
 rtems_id Test_task_id;
 
-rtems_task test_task(
-  rtems_task_argument argument
-);
-rtems_task test_task1(
-  rtems_task_argument argument
-);
-void test_init(void);
+rtems_task test_task( rtems_task_argument argument );
+rtems_task test_task1( rtems_task_argument argument );
+void       test_init( void );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -66,13 +60,13 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-void test_init(void)
+void test_init( void )
 {
   rtems_status_code status;
 
   status = rtems_task_create(
     1,
-    (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
+    ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -97,9 +91,7 @@ void test_init(void)
   directive_failed( status, "rtems_task_start" );
 }
 
-rtems_task test_task(
-  rtems_task_argument argument
-)
+rtems_task test_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -111,17 +103,19 @@ rtems_task test_task(
   rtems_mode          desired_mode;
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_set_priority(
-               Test_task_id,
-               RTEMS_CURRENT_PRIORITY,
-               &old_priority
-             );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_set_priority(
+      Test_task_id,
+      RTEMS_CURRENT_PRIORITY,
+      &old_priority
+    );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -133,12 +127,13 @@ rtems_task test_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_set_priority(
-        Test_task_id,
-        RTEMS_MAXIMUM_PRIORITY - 2u,
-        &old_priority
-      );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_set_priority(
+      Test_task_id,
+      RTEMS_MAXIMUM_PRIORITY - 2u,
+      &old_priority
+    );
+  }
 
   end_time = benchmark_timer_read();
 
@@ -151,12 +146,10 @@ rtems_task test_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_mode(
-        RTEMS_CURRENT_MODE,
-        RTEMS_CURRENT_MODE,
-        &old_mode
-      );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void)
+      rtems_task_mode( RTEMS_CURRENT_MODE, RTEMS_CURRENT_MODE, &old_mode );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -170,18 +163,10 @@ rtems_task test_task(
   desired_mode = old_mode;
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
-      (void) rtems_task_mode(
-        RTEMS_TIMESLICE_MASK,
-        desired_mode,
-        &old_mode
-      );
-      (void) rtems_task_mode(
-        RTEMS_TIMESLICE_MASK,
-        desired_mode,
-        &old_mode
-      );
-    }
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_mode( RTEMS_TIMESLICE_MASK, desired_mode, &old_mode );
+    (void) rtems_task_mode( RTEMS_TIMESLICE_MASK, desired_mode, &old_mode );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -192,8 +177,8 @@ rtems_task test_task(
     0
   );
 
-  benchmark_timer_initialize();                 /* must be one host */
-    (void) rtems_task_mode( RTEMS_NO_ASR, RTEMS_ASR_MASK, &old_mode );
+  benchmark_timer_initialize(); /* must be one host */
+  (void) rtems_task_mode( RTEMS_NO_ASR, RTEMS_ASR_MASK, &old_mode );
   end_time = benchmark_timer_read();
 
   put_time(
@@ -212,13 +197,14 @@ rtems_task test_task(
 
   /* preempted by test_task1 */
   benchmark_timer_initialize();
-    (void) rtems_task_mode( RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &old_mode );
+  (void) rtems_task_mode( RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &old_mode );
 
   build_time( &time, 1, 1, 1988, 0, 0, 0, 0 );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_clock_set( &time );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_clock_set( &time );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -230,8 +216,9 @@ rtems_task test_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_clock_get_tod( &time );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_clock_get_tod( &time );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -246,9 +233,7 @@ rtems_task test_task(
   rtems_test_exit( 0 );
 }
 
-rtems_task test_task1(
-  rtems_task_argument argument
-)
+rtems_task test_task1( rtems_task_argument argument )
 {
   (void) argument;
 

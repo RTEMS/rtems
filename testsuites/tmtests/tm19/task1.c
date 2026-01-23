@@ -37,29 +37,17 @@
 
 const char rtems_test_name[] = "TIME TEST 19";
 
-rtems_asr Process_asr_for_pass_1(
-  rtems_signal_set signals
-);
+rtems_asr Process_asr_for_pass_1( rtems_signal_set signals );
 
-rtems_asr Process_asr_for_pass_2(
-  rtems_signal_set signals
-);
+rtems_asr Process_asr_for_pass_2( rtems_signal_set signals );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Task_2(
-  rtems_task_argument argument
-);
+rtems_task Task_2( rtems_task_argument argument );
 
-rtems_task Task_3(
-  rtems_task_argument argument
-);
+rtems_task Task_3( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -71,7 +59,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', 'E' ),
-    (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
+    ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -84,7 +72,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', 'E' ),
-    (RTEMS_MAXIMUM_PRIORITY / 2),
+    ( RTEMS_MAXIMUM_PRIORITY / 2 ),
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -97,7 +85,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', 'E' ),
-    (RTEMS_MAXIMUM_PRIORITY / 2u) - 1u,
+    ( RTEMS_MAXIMUM_PRIORITY / 2u ) - 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -111,28 +99,18 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_asr Process_asr_for_pass_1(
-  rtems_signal_set signals
-)
+rtems_asr Process_asr_for_pass_1( rtems_signal_set signals )
 {
   (void) signals;
 
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_signal_send: signal to self",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_signal_send: signal to self", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
 }
 
-rtems_asr Process_asr_for_pass_2(
-  rtems_signal_set signals
-)
+rtems_asr Process_asr_for_pass_2( rtems_signal_set signals )
 {
   (void) signals;
 
@@ -144,40 +122,26 @@ rtems_asr Process_asr_for_pass_2(
   benchmark_timer_initialize();
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
 
   benchmark_timer_initialize();
-    (void) rtems_signal_catch( Process_asr_for_pass_1, RTEMS_DEFAULT_MODES );
+  (void) rtems_signal_catch( Process_asr_for_pass_1, RTEMS_DEFAULT_MODES );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_signal_catch: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_signal_catch: only case", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-    rtems_signal_send( Task_id[ 2 ], 1 );
+  rtems_signal_send( Task_id[ 2 ], 1 );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_signal_send: returns to caller",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_signal_send: returns to caller", end_time, 1, 0, 0 );
 
   benchmark_timer_initialize();
-    (void) rtems_signal_send( RTEMS_SELF, RTEMS_SIGNAL_1 );
+  (void) rtems_signal_send( RTEMS_SELF, RTEMS_SIGNAL_1 );
 
   /* end time is done is RTEMS_ASR */
 
@@ -195,26 +159,20 @@ rtems_task Task_1(
   directive_failed( status, "rtems_signal_catch" );
 
   benchmark_timer_initialize();
-    (void) rtems_signal_send( RTEMS_SELF, RTEMS_SIGNAL_1 );
+  (void) rtems_signal_send( RTEMS_SELF, RTEMS_SIGNAL_1 );
 }
 
 /* avoid warnings for no prototype */
-rtems_asr Process_asr_for_task_2(
-  rtems_signal_set signals
-);
+rtems_asr Process_asr_for_task_2( rtems_signal_set signals );
 
-rtems_asr Process_asr_for_task_2(
-  rtems_signal_set signals
-)
+rtems_asr Process_asr_for_task_2( rtems_signal_set signals )
 {
   (void) signals;
 
   ;
 }
 
-rtems_task Task_2(
-  rtems_task_argument argument
-)
+rtems_task Task_2( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -226,9 +184,7 @@ rtems_task Task_2(
   (void) rtems_task_suspend( RTEMS_SELF );
 }
 
-rtems_task Task_3(
-  rtems_task_argument argument
-)
+rtems_task Task_3( rtems_task_argument argument )
 {
   (void) argument;
 

@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -43,14 +43,9 @@ const char rtems_test_name[] = "TIME TEST 30";
 
 rtems_id barrier[ OPERATION_COUNT ];
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-static void benchmark_barrier_create(
-  int    iteration,
-  void  *argument
-)
+static void benchmark_barrier_create( int iteration, void *argument )
 {
   (void) argument;
 
@@ -60,41 +55,33 @@ static void benchmark_barrier_create(
     iteration + 1,
     RTEMS_LOCAL | RTEMS_FIFO,
     2,
-    &barrier[iteration]
+    &barrier[ iteration ]
   );
-  directive_failed(status, "rtems_barrier_create");
+  directive_failed( status, "rtems_barrier_create" );
 }
 
-static void benchmark_barrier_ident(
-  int    iteration,
-  void  *argument
-)
+static void benchmark_barrier_ident( int iteration, void *argument )
 {
   (void) argument;
 
   rtems_status_code status;
   rtems_id          id;
 
-  status = rtems_barrier_ident( iteration+1, &id );
-  directive_failed(status, "rtems_barrier_ident");
+  status = rtems_barrier_ident( iteration + 1, &id );
+  directive_failed( status, "rtems_barrier_ident" );
 }
 
-static void benchmark_barrier_delete(
-  int    iteration,
-  void  *argument
-)
+static void benchmark_barrier_delete( int iteration, void *argument )
 {
   (void) argument;
 
   rtems_status_code status;
 
-  status = rtems_barrier_delete( barrier[iteration] );
-  directive_failed(status, "rtems_barrier_delete");
+  status = rtems_barrier_delete( barrier[ iteration ] );
+  directive_failed( status, "rtems_barrier_delete" );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -126,7 +113,7 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -134,8 +121,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
-#define CONFIGURE_MAXIMUM_BARRIERS          OPERATION_COUNT
+#define CONFIGURE_MAXIMUM_TASKS    1
+#define CONFIGURE_MAXIMUM_BARRIERS OPERATION_COUNT
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

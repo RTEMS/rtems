@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -44,23 +44,15 @@ const char rtems_test_name[] = "TIME TEST 22";
 
 rtems_id Queue_id;
 
-long Buffer[4];
+long Buffer[ 4 ];
 
-rtems_task Low_task(
-  rtems_task_argument argument
-);
+rtems_task Low_task( rtems_task_argument argument );
 
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
-rtems_task Preempt_task(
-  rtems_task_argument argument
-);
+rtems_task Preempt_task( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -72,7 +64,7 @@ rtems_task Init(
   TEST_BEGIN();
 
   status = rtems_message_queue_create(
-    rtems_build_name( 'M', 'Q', '1', ' '),
+    rtems_build_name( 'M', 'Q', '1', ' ' ),
     100,
     MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -109,22 +101,16 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    count;
+  uint32_t          count;
   rtems_status_code status;
 
   benchmark_timer_initialize();
-    (void) rtems_message_queue_broadcast(
-             Queue_id,
-             Buffer,
-             MESSAGE_SIZE,
-             &count
-           );
+  (void)
+    rtems_message_queue_broadcast( Queue_id, Buffer, MESSAGE_SIZE, &count );
   end_time = benchmark_timer_read();
 
   put_time(
@@ -135,13 +121,11 @@ rtems_task High_task(
     0
   );
 
-  status = rtems_task_suspend(RTEMS_SELF);
+  status = rtems_task_suspend( RTEMS_SELF );
   directive_failed( status, "rtems_task_suspend" );
 }
 
-rtems_task Low_task(
-  rtems_task_argument argument
-)
+rtems_task Low_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -166,7 +150,7 @@ rtems_task Low_task(
 
   status = rtems_message_queue_receive(
     Queue_id,
-    (long (*)[4]) Buffer,
+    (long ( * )[ 4 ]) Buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
@@ -174,13 +158,10 @@ rtems_task Low_task(
   directive_failed( status, "message_queu_receive" );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_message_queue_broadcast(
-               Queue_id,
-               Buffer,
-               MESSAGE_SIZE,
-               &count
-             );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void)
+      rtems_message_queue_broadcast( Queue_id, Buffer, MESSAGE_SIZE, &count );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -192,12 +173,12 @@ rtems_task Low_task(
   );
 
   (void) rtems_message_queue_receive(
-           Queue_id,
-           (long (*)[4]) Buffer,
-           &size,
-           RTEMS_DEFAULT_OPTIONS,
-           RTEMS_NO_TIMEOUT
-         );
+    Queue_id,
+    (long ( * )[ 4 ]) Buffer,
+    &size,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT
+  );
 
   /* should go to Preempt_task here */
 
@@ -215,21 +196,15 @@ rtems_task Low_task(
   rtems_test_exit( 0 );
 }
 
-rtems_task Preempt_task(
-  rtems_task_argument argument
-)
+rtems_task Preempt_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    count;
+  uint32_t count;
 
   benchmark_timer_initialize();
-    (void) rtems_message_queue_broadcast(
-             Queue_id,
-             Buffer,
-             MESSAGE_SIZE,
-             &count
-           );
+  (void)
+    rtems_message_queue_broadcast( Queue_id, Buffer, MESSAGE_SIZE, &count );
 
- /* should be preempted by low task */
+  /* should be preempted by low task */
 }

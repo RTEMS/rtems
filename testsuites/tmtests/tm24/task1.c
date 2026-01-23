@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -41,24 +41,18 @@
 
 const char rtems_test_name[] = "TIME TEST 24";
 
-uint32_t   Task_count;
+uint32_t Task_count;
 
-rtems_task Tasks(
-  rtems_task_argument argument
-);
+rtems_task Tasks( rtems_task_argument argument );
 
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_id          id;
-  uint32_t    index;
+  uint32_t          index;
   rtems_status_code status;
 
   Print_Warning();
@@ -78,10 +72,10 @@ rtems_task Init(
   status = rtems_task_start( id, High_task, 0 );
   directive_failed( status, "rtems_task_create HIGH" );
 
-  for ( index = 1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'R', 'E', 'S', 'T' ),
-      (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
+      ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -95,22 +89,22 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    index;
+  uint32_t index;
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -126,17 +120,15 @@ rtems_task High_task(
   rtems_task_exit();
 }
 
-rtems_task Tasks(
-  rtems_task_argument argument
-)
+rtems_task Tasks( rtems_task_argument argument )
 {
   (void) argument;
 
   Task_count++;
 
-  if ( Task_count == 1 )
+  if ( Task_count == 1 ) {
     benchmark_timer_initialize();
-  else if ( Task_count == OPERATION_COUNT ) {
+  } else if ( Task_count == OPERATION_COUNT ) {
     end_time = benchmark_timer_read();
 
     put_time(
@@ -147,7 +139,7 @@ rtems_task Tasks(
       0
     );
 
-  TEST_END();
+    TEST_END();
     rtems_test_exit( 0 );
   }
   (void) rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );

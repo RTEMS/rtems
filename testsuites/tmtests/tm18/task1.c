@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -41,27 +41,18 @@
 
 const char rtems_test_name[] = "TIME TEST 18";
 
-uint32_t   taskcount;
+uint32_t            taskcount;
 rtems_task_priority taskpri;
 
-extern void test_init(void);
+extern void test_init( void );
 
-rtems_task First_task(
-  rtems_task_argument argument
-);
+rtems_task First_task( rtems_task_argument argument );
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-);
+rtems_task Middle_tasks( rtems_task_argument argument );
 
-rtems_task Last_task(
-  rtems_task_argument argument
-);
+rtems_task Last_task( rtems_task_argument argument );
 
-
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -74,17 +65,17 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-void test_init(void)
+void test_init( void )
 {
   rtems_id          id;
   rtems_task_entry  task_entry;
   uint32_t          index;
   rtems_status_code status;
 
-  for ( index = 0 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 0; index <= OPERATION_COUNT; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
-      (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
+      ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -92,20 +83,20 @@ void test_init(void)
     );
     directive_failed( status, "rtems_task_create loop" );
 
-    if ( index == OPERATION_COUNT ) task_entry = Last_task;
-    else if ( index == 0 )          task_entry = First_task;
-    else                            task_entry = Middle_tasks;
-
+    if ( index == OPERATION_COUNT ) {
+      task_entry = Last_task;
+    } else if ( index == 0 ) {
+      task_entry = First_task;
+    } else {
+      task_entry = Middle_tasks;
+    }
 
     status = rtems_task_start( id, task_entry, 0 );
     directive_failed( status, "rtems_task_start loop" );
   }
-
 }
 
-rtems_task First_task(
-  rtems_task_argument argument
-)
+rtems_task First_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -114,18 +105,14 @@ rtems_task First_task(
   rtems_task_exit();
 }
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-)
+rtems_task Middle_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_task_exit();
 }
 
-rtems_task Last_task(
-  rtems_task_argument argument
-)
+rtems_task Last_task( rtems_task_argument argument )
 {
   (void) argument;
 

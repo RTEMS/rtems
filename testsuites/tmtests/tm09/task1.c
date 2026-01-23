@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -43,14 +43,10 @@ const char rtems_test_name[] = "TIME TEST 9";
 
 rtems_id Queue_id;
 
-rtems_task Test_task(
-  rtems_task_argument argument
-);
-void queue_test(void);
+rtems_task Test_task( rtems_task_argument argument );
+void       queue_test( void );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -62,7 +58,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     1,
-    (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
+    ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u,
     RTEMS_MINIMUM_STACK_SIZE * 2,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -76,140 +72,132 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-rtems_task Test_task (
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
   benchmark_timer_initialize();
-    rtems_message_queue_create(
-      1,
-      OPERATION_COUNT,
-      MESSAGE_SIZE,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      &Queue_id
-    );
+  rtems_message_queue_create(
+    1,
+    OPERATION_COUNT,
+    MESSAGE_SIZE,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Queue_id
+  );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_message_queue_create: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_message_queue_create: only case", end_time, 1, 0, 0 );
 
   queue_test();
 
   benchmark_timer_initialize();
-    rtems_message_queue_delete( Queue_id );
+  rtems_message_queue_delete( Queue_id );
   end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_message_queue_delete: only case",
-    end_time,
-    1,
-    0,
-    0
-  );
+  put_time( "rtems_message_queue_delete: only case", end_time, 1, 0, 0 );
 
   TEST_END();
   rtems_test_exit( 0 );
 }
 
-void queue_test(void)
+void queue_test( void )
 {
-  uint32_t    send_loop_time;
-  uint32_t    urgent_loop_time;
-  uint32_t    receive_loop_time;
-  uint32_t    send_time;
-  uint32_t    urgent_time;
-  uint32_t    receive_time;
-  uint32_t    empty_flush_time;
-  uint32_t    flush_time;
-  uint32_t    empty_flush_count;
-  uint32_t    flush_count;
-  uint32_t    index;
-  uint32_t    iterations;
-  long        buffer[4];
+  uint32_t          send_loop_time;
+  uint32_t          urgent_loop_time;
+  uint32_t          receive_loop_time;
+  uint32_t          send_time;
+  uint32_t          urgent_time;
+  uint32_t          receive_time;
+  uint32_t          empty_flush_time;
+  uint32_t          flush_time;
+  uint32_t          empty_flush_count;
+  uint32_t          flush_count;
+  uint32_t          index;
+  uint32_t          iterations;
+  long              buffer[ 4 ];
   rtems_status_code status;
-  size_t      size;
+  size_t            size;
 
-  send_loop_time    = 0;
-  urgent_loop_time  = 0;
+  send_loop_time = 0;
+  urgent_loop_time = 0;
   receive_loop_time = 0;
-  send_time         = 0;
-  urgent_time       = 0;
-  receive_time      = 0;
-  empty_flush_time  = 0;
-  flush_time        = 0;
-  flush_count       = 0;
+  send_time = 0;
+  urgent_time = 0;
+  receive_time = 0;
+  empty_flush_time = 0;
+  flush_time = 0;
+  flush_count = 0;
   empty_flush_count = 0;
 
-  for ( iterations = 1 ; iterations <= OPERATION_COUNT ; iterations++ ) {
-
+  for ( iterations = 1; iterations <= OPERATION_COUNT; iterations++ ) {
     benchmark_timer_initialize();
-      for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) benchmark_timer_empty_function();
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      (void) benchmark_timer_empty_function();
+    }
     send_loop_time += benchmark_timer_read();
 
     benchmark_timer_initialize();
-      for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) benchmark_timer_empty_function();
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      (void) benchmark_timer_empty_function();
+    }
     urgent_loop_time += benchmark_timer_read();
 
     benchmark_timer_initialize();
-      for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) benchmark_timer_empty_function();
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      (void) benchmark_timer_empty_function();
+    }
     receive_loop_time += benchmark_timer_read();
 
     benchmark_timer_initialize();
-      for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) rtems_message_queue_send( Queue_id, buffer, MESSAGE_SIZE );
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      (void) rtems_message_queue_send( Queue_id, buffer, MESSAGE_SIZE );
+    }
     send_time += benchmark_timer_read();
 
     benchmark_timer_initialize();
-      for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) rtems_message_queue_receive(
-                 Queue_id,
-                 (long (*)[4])buffer,
-                 &size,
-                 RTEMS_DEFAULT_OPTIONS,
-                 RTEMS_NO_TIMEOUT
-               );
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      (void) rtems_message_queue_receive(
+        Queue_id,
+        (long ( * )[ 4 ]) buffer,
+        &size,
+        RTEMS_DEFAULT_OPTIONS,
+        RTEMS_NO_TIMEOUT
+      );
+    }
     receive_time += benchmark_timer_read();
 
     benchmark_timer_initialize();
-      for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) rtems_message_queue_urgent( Queue_id, buffer, MESSAGE_SIZE );
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      (void) rtems_message_queue_urgent( Queue_id, buffer, MESSAGE_SIZE );
+    }
     urgent_time += benchmark_timer_read();
 
     benchmark_timer_initialize();
-      for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) rtems_message_queue_receive(
-                 Queue_id,
-                 (long (*)[4])buffer,
-                 &size,
-                 RTEMS_DEFAULT_OPTIONS,
-                 RTEMS_NO_TIMEOUT
-               );
+    for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+      (void) rtems_message_queue_receive(
+        Queue_id,
+        (long ( * )[ 4 ]) buffer,
+        &size,
+        RTEMS_DEFAULT_OPTIONS,
+        RTEMS_NO_TIMEOUT
+      );
+    }
     receive_time += benchmark_timer_read();
 
     benchmark_timer_initialize();
-      rtems_message_queue_flush( Queue_id, &empty_flush_count );
+    rtems_message_queue_flush( Queue_id, &empty_flush_count );
     empty_flush_time += benchmark_timer_read();
 
     /* send one message to flush */
     status = rtems_message_queue_send(
-       Queue_id,
-       (long (*)[4])buffer,
-       MESSAGE_SIZE
+      Queue_id,
+      (long ( * )[ 4 ]) buffer,
+      MESSAGE_SIZE
     );
     directive_failed( status, "rtems_message_queue_send" );
 
     benchmark_timer_initialize();
-      rtems_message_queue_flush( Queue_id, &flush_count );
+    rtems_message_queue_flush( Queue_id, &flush_count );
     flush_time += benchmark_timer_read();
   }
 
@@ -252,5 +240,4 @@ void queue_test(void)
     0,
     0
   );
-
 }

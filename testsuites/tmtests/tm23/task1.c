@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(OPERATION_COUNT)
+#if !defined( OPERATION_COUNT )
 #define OPERATION_COUNT 100
 #endif
 
@@ -41,32 +41,21 @@
 
 const char rtems_test_name[] = "TIME TEST 23";
 
-rtems_id          Timer_id[ OPERATION_COUNT+1 ];
+rtems_id Timer_id[ OPERATION_COUNT + 1 ];
 
 rtems_time_of_day time_of_day;
 
-void null_delay(
-  rtems_id  ignored_id,
-  void     *ignored_address
-);
+void null_delay( rtems_id ignored_id, void *ignored_address );
 
-rtems_task Low_task(
-  rtems_task_argument argument
-);
+rtems_task Low_task( rtems_task_argument argument );
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-);
+rtems_task Middle_tasks( rtems_task_argument argument );
 
-rtems_task High_task(
-  rtems_task_argument argument
-);
+rtems_task High_task( rtems_task_argument argument );
 
 int operation_count = OPERATION_COUNT;
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -81,15 +70,17 @@ rtems_task Init(
   TEST_BEGIN();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   priority = 2;
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
-    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 ) {
+    operation_count = RTEMS_MAXIMUM_PRIORITY - 2;
+  }
 
-  for( index=1 ; index <= operation_count ; index++ ) {
+  for ( index = 1; index <= operation_count; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       priority,
@@ -100,9 +91,13 @@ rtems_task Init(
     );
     directive_failed( status, "rtems_task_create LOOP" );
 
-    if ( index == 1 )                    task_entry = High_task;
-    else if ( index == operation_count ) task_entry = Low_task;
-    else                                 task_entry = Middle_tasks;
+    if ( index == 1 ) {
+      task_entry = High_task;
+    } else if ( index == operation_count ) {
+      task_entry = Low_task;
+    } else {
+      task_entry = Middle_tasks;
+    }
 
     status = rtems_task_start( id, task_entry, 0 );
     directive_failed( status, "rtems_task_start LOOP" );
@@ -113,33 +108,30 @@ rtems_task Init(
   rtems_task_exit();
 }
 
-void null_delay(
-  rtems_id  ignored_id,
-  void     *ignored_address
-)
+void null_delay( rtems_id ignored_id, void *ignored_address )
 {
   (void) ignored_id;
   (void) ignored_address;
 }
 
-rtems_task High_task(
-  rtems_task_argument argument
-)
+rtems_task High_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    index;
+  uint32_t          index;
   rtems_status_code status;
-  int i;
+  int               i;
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timer_empty_function();
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) benchmark_timer_empty_function();
+  }
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_create( index, &Timer_id[ index ] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_create( index, &Timer_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -151,8 +143,9 @@ rtems_task High_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_fire_after( Timer_id[ index ], 500, null_delay, NULL );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_fire_after( Timer_id[ index ], 500, null_delay, NULL );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -164,8 +157,9 @@ rtems_task High_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_fire_after( Timer_id[ index ], 500, null_delay, NULL );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_fire_after( Timer_id[ index ], 500, null_delay, NULL );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -177,8 +171,9 @@ rtems_task High_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_cancel( Timer_id[ index ] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_cancel( Timer_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -189,10 +184,12 @@ rtems_task High_task(
     0
   );
 
-  for ( benchmark_timer_initialize(), i=0 ; i<OPERATION_COUNT ; i++ )
-  benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_cancel( Timer_id[ index ] );
+  for ( benchmark_timer_initialize(), i = 0; i < OPERATION_COUNT; i++ ) {
+    benchmark_timer_initialize();
+  }
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_cancel( Timer_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -203,10 +200,12 @@ rtems_task High_task(
     0
   );
 
-  for ( benchmark_timer_initialize(), i=0 ; i<OPERATION_COUNT ; i++ )
-  benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_reset( Timer_id[ index ] );
+  for ( benchmark_timer_initialize(), i = 0; i < OPERATION_COUNT; i++ ) {
+    benchmark_timer_initialize();
+  }
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_reset( Timer_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -218,8 +217,9 @@ rtems_task High_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_reset( Timer_id[ index ] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_reset( Timer_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -230,8 +230,9 @@ rtems_task High_task(
     0
   );
 
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ )
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     (void) rtems_timer_reset( Timer_id[ index ] );
+  }
 
   build_time( &time_of_day, 12, 31, 1988, 9, 0, 0, 0 );
 
@@ -241,9 +242,14 @@ rtems_task High_task(
   time_of_day.year = 1989;
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_fire_when(
-         Timer_id[ index ], &time_of_day, null_delay, NULL );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_fire_when(
+      Timer_id[ index ],
+      &time_of_day,
+      null_delay,
+      NULL
+    );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -255,9 +261,14 @@ rtems_task High_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_fire_when(
-         Timer_id[ index ], &time_of_day, null_delay, NULL );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_fire_when(
+      Timer_id[ index ],
+      &time_of_day,
+      null_delay,
+      NULL
+    );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -269,8 +280,9 @@ rtems_task High_task(
   );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_delete( Timer_id[ index ] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_delete( Timer_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -282,11 +294,16 @@ rtems_task High_task(
   );
 
   benchmark_timer_initialize();
-  for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
     status = rtems_timer_create( index, &Timer_id[ index ] );
     directive_failed( status, "rtems_timer_create" );
 
-    status = rtems_timer_fire_after( Timer_id[ index ], 500, null_delay, NULL );
+    status = rtems_timer_fire_after(
+      Timer_id[ index ],
+      500,
+      null_delay,
+      NULL
+    );
     directive_failed( status, "rtems_timer_fire_after" );
 
     status = rtems_timer_cancel( Timer_id[ index ] );
@@ -294,8 +311,9 @@ rtems_task High_task(
   }
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_timer_delete( Timer_id[ index ] );
+  for ( index = 1; index <= OPERATION_COUNT; index++ ) {
+    (void) rtems_timer_delete( Timer_id[ index ] );
+  }
   end_time = benchmark_timer_read();
 
   put_time(
@@ -307,21 +325,17 @@ rtems_task High_task(
   );
 
   benchmark_timer_initialize();
-    (void) rtems_task_wake_when( &time_of_day );
+  (void) rtems_task_wake_when( &time_of_day );
 }
 
-rtems_task Middle_tasks(
-  rtems_task_argument argument
-)
+rtems_task Middle_tasks( rtems_task_argument argument )
 {
   (void) argument;
 
   (void) rtems_task_wake_when( &time_of_day );
 }
 
-rtems_task Low_task(
-  rtems_task_argument argument
-)
+rtems_task Low_task( rtems_task_argument argument )
 {
   (void) argument;
 
