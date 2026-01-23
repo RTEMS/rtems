@@ -44,19 +44,18 @@
 
 #include <string.h>
 
-rtems_status_code rtems_io_unregister_driver(
-  rtems_device_major_number major
-)
+rtems_status_code rtems_io_unregister_driver( rtems_device_major_number major )
 {
-  if ( rtems_interrupt_is_in_progress() )
+  if ( rtems_interrupt_is_in_progress() ) {
     return RTEMS_CALLED_FROM_ISR;
+  }
 
   if ( major < _IO_Number_of_drivers ) {
     ISR_lock_Context lock_context;
 
     _IO_Driver_registration_acquire( &lock_context );
     memset(
-      &_IO_Driver_address_table[major],
+      &_IO_Driver_address_table[ major ],
       0,
       sizeof( rtems_driver_address_table )
     );

@@ -93,7 +93,7 @@ static const char *const internal_error_text[] = {
 
 const char *rtems_internal_error_text( rtems_fatal_code error )
 {
-  size_t i = error;
+  size_t      i = error;
   const char *text = "?";
 
   if ( i < RTEMS_ARRAY_SIZE( internal_error_text ) ) {

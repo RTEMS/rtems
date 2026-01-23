@@ -42,15 +42,15 @@
 
 rtems_status_code rtems_chain_prepend_with_notification(
   rtems_chain_control *chain,
-  rtems_chain_node *node,
-  rtems_id task,
-  rtems_event_set events
+  rtems_chain_node    *node,
+  rtems_id             task,
+  rtems_event_set      events
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   bool was_empty = rtems_chain_prepend_with_empty_check( chain, node );
 
-  if (was_empty) {
+  if ( was_empty ) {
     sc = rtems_event_send( task, events );
   }
 

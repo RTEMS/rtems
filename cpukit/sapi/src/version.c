@@ -101,6 +101,6 @@ const char *rtems_version_release_label( void )
 
 bool rtems_version_release_label_is_valid( void )
 {
-  const char* release_label = rtems_version_release_label( );
+  const char *release_label = rtems_version_release_label();
   return release_label[ 0 ] != '\0';
 }

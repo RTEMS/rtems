@@ -42,8 +42,9 @@
 
 void rtems_counter_delay_nanoseconds( uint32_t nanoseconds )
 {
-  rtems_counter_ticks ticks =
-    rtems_counter_nanoseconds_to_ticks( nanoseconds );
+  rtems_counter_ticks ticks = rtems_counter_nanoseconds_to_ticks(
+    nanoseconds
+  );
 
   rtems_counter_delay_ticks( ticks );
 }

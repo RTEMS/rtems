@@ -42,9 +42,9 @@
 
 rtems_status_code rtems_chain_append_with_notification(
   rtems_chain_control *chain,
-  rtems_chain_node *node,
-  rtems_id task,
-  rtems_event_set events
+  rtems_chain_node    *node,
+  rtems_id             task,
+  rtems_event_set      events
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;

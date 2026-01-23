@@ -67,7 +67,7 @@ void rtems_chain_extract( rtems_chain_node *node )
 
 rtems_chain_node *rtems_chain_get( rtems_chain_control *chain )
 {
-  rtems_chain_node *node;
+  rtems_chain_node            *node;
   rtems_interrupt_lock_context lock_context;
 
   chain_acquire( &lock_context );
@@ -86,10 +86,7 @@ void rtems_chain_insert( rtems_chain_node *after_node, rtems_chain_node *node )
   chain_release( &lock_context );
 }
 
-void rtems_chain_append(
-  rtems_chain_control *chain,
-  rtems_chain_node *node
-)
+void rtems_chain_append( rtems_chain_control *chain, rtems_chain_node *node )
 {
   rtems_interrupt_lock_context lock_context;
 
@@ -98,10 +95,7 @@ void rtems_chain_append(
   chain_release( &lock_context );
 }
 
-void rtems_chain_prepend(
-  rtems_chain_control *chain,
-  rtems_chain_node *node
-)
+void rtems_chain_prepend( rtems_chain_control *chain, rtems_chain_node *node )
 {
   rtems_interrupt_lock_context lock_context;
 
@@ -112,10 +106,10 @@ void rtems_chain_prepend(
 
 bool rtems_chain_append_with_empty_check(
   rtems_chain_control *chain,
-  rtems_chain_node *node
+  rtems_chain_node    *node
 )
 {
-  bool was_empty;
+  bool                         was_empty;
   rtems_interrupt_lock_context lock_context;
 
   chain_acquire( &lock_context );
@@ -127,10 +121,10 @@ bool rtems_chain_append_with_empty_check(
 
 bool rtems_chain_prepend_with_empty_check(
   rtems_chain_control *chain,
-  rtems_chain_node *node
+  rtems_chain_node    *node
 )
 {
-  bool was_empty;
+  bool                         was_empty;
   rtems_interrupt_lock_context lock_context;
 
   chain_acquire( &lock_context );
@@ -142,10 +136,10 @@ bool rtems_chain_prepend_with_empty_check(
 
 bool rtems_chain_get_with_empty_check(
   rtems_chain_control *chain,
-  rtems_chain_node **node
+  rtems_chain_node   **node
 )
 {
-  bool is_empty_now;
+  bool                         is_empty_now;
   rtems_interrupt_lock_context lock_context;
 
   chain_acquire( &lock_context );

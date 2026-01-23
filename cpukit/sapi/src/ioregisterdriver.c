@@ -45,8 +45,9 @@
 #include <rtems/rtems/intr.h>
 
 #if ISR_LOCK_NEEDS_OBJECT
-ISR_lock_Control _IO_Driver_registration_lock =
-  ISR_LOCK_INITIALIZER( "IO Driver Registration" );
+ISR_lock_Control _IO_Driver_registration_lock = ISR_LOCK_INITIALIZER(
+  "IO Driver Registration"
+);
 #endif
 
 static inline bool rtems_io_is_empty_table(
@@ -68,15 +69,17 @@ static rtems_status_code rtems_io_obtain_major_number(
   for ( m = 0; m < n; ++m ) {
     rtems_driver_address_table *const table = _IO_Driver_address_table + m;
 
-    if ( rtems_io_is_empty_table( table ) )
+    if ( rtems_io_is_empty_table( table ) ) {
       break;
+    }
   }
 
   /* Assigns invalid value in case of failure */
   *major = m;
 
-  if ( m != n )
+  if ( m != n ) {
     return RTEMS_SUCCESSFUL;
+  }
 
   return RTEMS_TOO_MANY;
 }
@@ -88,25 +91,30 @@ rtems_status_code rtems_io_register_driver(
 )
 {
   rtems_device_major_number major_limit = _IO_Number_of_drivers;
-  ISR_lock_Context lock_context;
+  ISR_lock_Context          lock_context;
 
-  if ( rtems_interrupt_is_in_progress() )
+  if ( rtems_interrupt_is_in_progress() ) {
     return RTEMS_CALLED_FROM_ISR;
+  }
 
-  if ( registered_major == NULL )
+  if ( registered_major == NULL ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
   /* Set it to an invalid value */
   *registered_major = major_limit;
 
-  if ( driver_table == NULL )
+  if ( driver_table == NULL ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
-  if ( rtems_io_is_empty_table( driver_table ) )
+  if ( rtems_io_is_empty_table( driver_table ) ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
-  if ( major >= major_limit )
+  if ( major >= major_limit ) {
     return RTEMS_INVALID_NUMBER;
+  }
 
   _IO_Driver_registration_acquire( &lock_context );
 
@@ -129,7 +137,7 @@ rtems_status_code rtems_io_register_driver(
     *registered_major = major;
   }
 
-  _IO_Driver_address_table [major] = *driver_table;
+  _IO_Driver_address_table[ major ] = *driver_table;
 
   _IO_Driver_registration_release( &lock_context );
 

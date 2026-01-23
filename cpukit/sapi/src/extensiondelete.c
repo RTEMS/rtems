@@ -42,9 +42,7 @@
 #include <rtems/extensionimpl.h>
 #include <rtems/score/userextimpl.h>
 
-rtems_status_code rtems_extension_delete(
-  rtems_id id
-)
+rtems_status_code rtems_extension_delete( rtems_id id )
 {
   rtems_status_code  status;
   Extension_Control *the_extension;

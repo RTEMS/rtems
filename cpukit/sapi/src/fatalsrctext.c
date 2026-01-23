@@ -60,7 +60,7 @@ static const char *const fatal_source_text[] = {
 
 const char *rtems_fatal_source_text( rtems_fatal_source source )
 {
-  size_t i = source;
+  size_t      i = source;
   const char *text = "?";
 
   if ( i < RTEMS_ARRAY_SIZE( fatal_source_text ) ) {

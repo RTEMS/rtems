@@ -50,7 +50,7 @@ void rtems_timecounter_simple_install(
   uint32_t power_of_two = 1;
   uint32_t mask;
   uint64_t scaler;
-  int i;
+  int      i;
 
   for ( i = 0; i < 32; ++i ) {
     if ( power_of_two >= counter_ticks_per_clock_tick ) {

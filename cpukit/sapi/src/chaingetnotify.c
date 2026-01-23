@@ -42,13 +42,13 @@
 
 rtems_status_code rtems_chain_get_with_notification(
   rtems_chain_control *chain,
-  rtems_id task,
-  rtems_event_set events,
-  rtems_chain_node **node
+  rtems_id             task,
+  rtems_event_set      events,
+  rtems_chain_node   **node
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  bool is_empty = rtems_chain_get_with_empty_check( chain, node );
+  bool              is_empty = rtems_chain_get_with_empty_check( chain, node );
 
   if ( is_empty ) {
     sc = rtems_event_send( task, events );

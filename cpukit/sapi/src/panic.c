@@ -30,7 +30,7 @@ void rtems_panic( const char *fmt, ... )
 
   va_start( ap, fmt );
   vprintk( fmt, ap );
-  va_end( ap);
+  va_end( ap );
 
   _Terminate( RTEMS_FATAL_SOURCE_PANIC, (Internal_errors_t) fmt );
 }

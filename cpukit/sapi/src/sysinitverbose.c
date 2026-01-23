@@ -46,12 +46,12 @@ RTEMS_LINKER_RWSET_ITEM_DECLARE(
   _Sysinit_Verbose
 );
 
-#define SYSINIT_VERBOSE(x) \
+#define SYSINIT_VERBOSE( x )                \
   static void _Sysinit_Verbose_##x( void ); \
-  RTEMS_SYSINIT_ITEM( \
-    _Sysinit_Verbose_##x, \
-    RTEMS_SYSINIT_##x, \
-    RTEMS_SYSINIT_ORDER_LAST \
+  RTEMS_SYSINIT_ITEM(                       \
+    _Sysinit_Verbose_##x,                   \
+    RTEMS_SYSINIT_##x,                      \
+    RTEMS_SYSINIT_ORDER_LAST                \
   )
 
 SYSINIT_VERBOSE( BSP_EARLY );
@@ -124,10 +124,10 @@ static bool _Sysinit_Verbose_is_adjacent(
   return a + 1 == b;
 }
 
-#define SYSINIT_IS_ADJACENT( x, y ) \
-  _Sysinit_Verbose_is_adjacent( \
+#define SYSINIT_IS_ADJACENT( x, y )             \
+  _Sysinit_Verbose_is_adjacent(                 \
     &_Linker_set__Sysinit__Sysinit_Verbose_##x, \
-    &_Linker_set__Sysinit__Sysinit_Verbose_##y \
+    &_Linker_set__Sysinit__Sysinit_Verbose_##y  \
   )
 
 static void _Sysinit_Print_free_memory( void )
@@ -143,7 +143,7 @@ static void _Sysinit_Print_free_memory( void )
     area = _Memory_Get_area( mem, i );
     printk(
       "sysinit: memory area %zu: free begin = 0x%08" PRIxPTR
-        ", free size = 0x%08" PRIxPTR "\n",
+      ", free size = 0x%08" PRIxPTR "\n",
       i,
       (uintptr_t) _Memory_Get_free_begin( area ),
       _Memory_Get_free_size( area )
@@ -158,12 +158,10 @@ void _Sysinit_Verbose( void )
 
 static void _Sysinit_Verbose_BSP_EARLY( void )
 {
-  if (
-    !_Sysinit_Verbose_is_adjacent(
-      &_Linker_set__Sysinit__Sysinit_Verbose,
-      &_Linker_set__Sysinit__Sysinit_Verbose_BSP_EARLY
-    )
-  ) {
+  if ( !_Sysinit_Verbose_is_adjacent(
+         &_Linker_set__Sysinit__Sysinit_Verbose,
+         &_Linker_set__Sysinit__Sysinit_Verbose_BSP_EARLY
+       ) ) {
     printk( "sysinit: BSP early: done\n" );
   }
 }
@@ -190,7 +188,7 @@ static void _Sysinit_Verbose_MEMORY( void )
     area = _Memory_Get_area( mem, i );
     printk(
       "sysinit: memory area %zu: begin = 0x%08" PRIxPTR
-        ", size = 0x%08" PRIxPTR "\n",
+      ", size = 0x%08" PRIxPTR "\n",
       i,
       (uintptr_t) _Memory_Get_begin( area ),
       _Memory_Get_size( area )
@@ -359,7 +357,10 @@ static void _Sysinit_Verbose_CLASSIC_MESSAGE_QUEUE( void )
 
 static void _Sysinit_Verbose_CLASSIC_MESSAGE_QUEUE_MP( void )
 {
-  if ( !SYSINIT_IS_ADJACENT( CLASSIC_MESSAGE_QUEUE, CLASSIC_MESSAGE_QUEUE_MP ) ) {
+  if ( !SYSINIT_IS_ADJACENT(
+         CLASSIC_MESSAGE_QUEUE,
+         CLASSIC_MESSAGE_QUEUE_MP
+       ) ) {
     printk( "sysinit: CLASSIC_MESSAGE_QUEUE_MP: done\n" );
   }
 }
@@ -408,12 +409,10 @@ static void _Sysinit_Verbose_CLASSIC_DUAL_PORTED_MEMORY( void )
 
 static void _Sysinit_Verbose_CLASSIC_RATE_MONOTONIC( void )
 {
-  if (
-    !SYSINIT_IS_ADJACENT(
-      CLASSIC_DUAL_PORTED_MEMORY,
-      CLASSIC_RATE_MONOTONIC
-    )
-  ) {
+  if ( !SYSINIT_IS_ADJACENT(
+         CLASSIC_DUAL_PORTED_MEMORY,
+         CLASSIC_RATE_MONOTONIC
+       ) ) {
     printk( "sysinit: CLASSIC_RATE_MONOTONIC: done\n" );
   }
 }

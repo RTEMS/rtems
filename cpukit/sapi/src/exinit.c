@@ -68,35 +68,32 @@ RTEMS_SECTION(".rtemsroset.copyright") const char _Copyright_Notice[] =
  * scripts), by in-lining the Python script in the section.
  */
 
-asm( \
-  ".pushsection \".debug_gdb_scripts\", \"MS\",%progbits,1\n" \
-  ".byte 4\n" \
-  ".ascii \"gdb.inlined-script\\n\"\n" \
-  ".ascii \"import sys\\n\"\n" \
-  ".ascii \"import os.path\\n\"\n" \
-  ".ascii \"sys.path.append(os.path.join(gdb.PYTHONDIR, 'rtems'))\\n\"\n" \
-  ".ascii \"import rtems.pprinter as pprinter\\n\"\n" \
-  ".byte 0\n" \
-  ".popsection\n" \
-  );
+asm( ".pushsection \".debug_gdb_scripts\", \"MS\",%progbits,1\n"
+     ".byte 4\n"
+     ".ascii \"gdb.inlined-script\\n\"\n"
+     ".ascii \"import sys\\n\"\n"
+     ".ascii \"import os.path\\n\"\n"
+     ".ascii \"sys.path.append(os.path.join(gdb.PYTHONDIR, 'rtems'))\\n\"\n"
+     ".ascii \"import rtems.pprinter as pprinter\\n\"\n"
+     ".byte 0\n"
+     ".popsection\n" );
 
-
-static Objects_Information *
-_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
+static Objects_Information
+  *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
 
 static Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
 
 static Objects_Information *_POSIX_Objects[ OBJECTS_POSIX_CLASSES_LAST + 1 ];
 
-Objects_Information ** const
-_Objects_Information_table[ OBJECTS_APIS_LAST + 1 ] = {
-  NULL,
-  &_Internal_Objects[ 0 ],
-  &_RTEMS_Objects[ 0 ],
-  &_POSIX_Objects[ 0 ]
+Objects_Information
+  **const _Objects_Information_table[ OBJECTS_APIS_LAST + 1 ] = {
+    NULL,
+    &_Internal_Objects[ 0 ],
+    &_RTEMS_Objects[ 0 ],
+    &_POSIX_Objects[ 0 ]
 };
 
-static void rtems_initialize_data_structures(void)
+static void rtems_initialize_data_structures( void )
 {
   /*
    *  Dispatching and interrupts are disabled until the end of the
@@ -146,12 +143,12 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 
-void rtems_initialize_executive(void)
+void rtems_initialize_executive( void )
 {
   const rtems_sysinit_item *item;
 
   /* Invoke the registered system initialization handlers */
-  RTEMS_LINKER_SET_FOREACH( _Sysinit, item ) {
+  RTEMS_LINKER_SET_FOREACH ( _Sysinit, item ) {
     ( *item->handler )();
   }
 

@@ -62,59 +62,59 @@
 
 static uint32_t get_config_max( const Objects_Information *info )
 {
-	if ( _Objects_Is_auto_extend( info ) ) {
-		return info->objects_per_block | RTEMS_UNLIMITED_OBJECTS;
-	}
+  if ( _Objects_Is_auto_extend( info ) ) {
+    return info->objects_per_block | RTEMS_UNLIMITED_OBJECTS;
+  }
 
-	return _Objects_Get_maximum_index( info );
+  return _Objects_Get_maximum_index( info );
 }
 
 uint32_t rtems_configuration_get_maximum_barriers( void )
 {
-	return get_config_max( &_Barrier_Information );
+  return get_config_max( &_Barrier_Information );
 }
 
 uint32_t rtems_configuration_get_maximum_extensions( void )
 {
-	return get_config_max( &_Extension_Information );
+  return get_config_max( &_Extension_Information );
 }
 
 uint32_t rtems_configuration_get_maximum_message_queues( void )
 {
-	return get_config_max( &_Message_queue_Information );
+  return get_config_max( &_Message_queue_Information );
 }
 
 uint32_t rtems_configuration_get_maximum_partitions( void )
 {
-	return get_config_max( &_Partition_Information );
+  return get_config_max( &_Partition_Information );
 }
 
 uint32_t rtems_configuration_get_maximum_periods( void )
 {
-	return get_config_max( &_Rate_monotonic_Information );
+  return get_config_max( &_Rate_monotonic_Information );
 }
 
 uint32_t rtems_configuration_get_maximum_ports( void )
 {
-	return get_config_max( &_Dual_ported_memory_Information );
+  return get_config_max( &_Dual_ported_memory_Information );
 }
 
 uint32_t rtems_configuration_get_maximum_regions( void )
 {
-	return get_config_max( &_Region_Information );
+  return get_config_max( &_Region_Information );
 }
 
 uint32_t rtems_configuration_get_maximum_semaphores( void )
 {
-	return get_config_max( &_Semaphore_Information );
+  return get_config_max( &_Semaphore_Information );
 }
 
 uint32_t rtems_configuration_get_maximum_timers( void )
 {
-	return get_config_max( &_Timer_Information );
+  return get_config_max( &_Timer_Information );
 }
 
 uint32_t rtems_configuration_get_maximum_tasks( void )
 {
-	return get_config_max( &_RTEMS_tasks_Information.Objects );
+  return get_config_max( &_RTEMS_tasks_Information.Objects );
 }

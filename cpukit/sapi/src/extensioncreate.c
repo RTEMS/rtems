@@ -72,7 +72,10 @@ rtems_status_code rtems_extension_create(
     return RTEMS_TOO_MANY;
   }
 
-  _User_extensions_Add_set_with_table( &the_extension->Extension, extension_table );
+  _User_extensions_Add_set_with_table(
+    &the_extension->Extension,
+    extension_table
+  );
 
   *id = _Objects_Open_u32(
     &_Extension_Information,
@@ -85,7 +88,7 @@ rtems_status_code rtems_extension_create(
 
 static void _Extension_Manager_initialization( void )
 {
-  _Objects_Initialize_information( &_Extension_Information);
+  _Objects_Initialize_information( &_Extension_Information );
 }
 
 RTEMS_SYSINIT_ITEM(

@@ -42,7 +42,7 @@
 #include <rtems/config.h>
 #include <rtems/score/copyrt.h>
 
-const char *rtems_get_version_string(void)
+const char *rtems_get_version_string( void )
 {
   return _RTEMS_version;
 }
